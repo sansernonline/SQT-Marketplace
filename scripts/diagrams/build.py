@@ -1,62 +1,19 @@
 """สร้าง HTML ของรูป diagram ทุกใบจาก data/ + labels/ → โฟลเดอร์ที่ระบุ
 
 python scripts/diagrams/build.py <โฟลเดอร์ html>
-ได้: <plugin>-map.html · <plugin>-playbooks.html (ทุก plugin) · marketplace-overview.html · hook-lifecycle.html
-ไม่มีคำสั้นใน labels/ → ใช้ข้อความจริงตัดสั้นแทน และพิมพ์เตือน
+ได้: <plugin>-map.html (ทุก plugin) · marketplace-overview.html · hook-lifecycle.html · รูป playbook อยู่ที่ build_playbooks.py
+ไม่มี labels/<plugin>.json → พิมพ์เตือน
 """
-import glob, html, json, os, re, sys
-from datetime import date
+import glob, html, json, os, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-CSS = open(os.path.join(HERE, "style.css"), encoding="utf-8").read()
-FONTS = "https://fonts.googleapis.com/css2?family=Anuphan:wght@400;600&family=Bai+Jamjuree:wght@400;600&display=swap"
 sys.path.insert(0, HERE)
-from palette import COLOR, ICON_CSS, emblem, badge, svg_icon
-TODAY = date.today().isoformat()
-# วลีไทยที่คั่นด้วยช่องว่าง ห้ามตัดกลางวลี
-NOBREAK = "(function(){var th=/[\u0e00-\u0e7f]/,w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT),ns=[];while(w.nextNode())ns.push(w.currentNode);ns.forEach(function(n){var p=n.parentNode;if(!th.test(n.nodeValue)||p.closest('svg,script,style'))return;var f=document.createElement('span');f.className='nbw';n.nodeValue.split(/(\\s+)/).forEach(function(x){if(th.test(x)&&x.length<=20){var s=document.createElement('span');s.className='nb';s.textContent=x;f.appendChild(s);}else f.appendChild(document.createTextNode(x));});p.replaceChild(f,n);});})();"
+from palette import COLOR, emblem
 warnings = []
 
 
 def e(text):
     return html.escape(str(text), quote=False)
-
-
-def page(title, body, plugin="superuser"):
-    body = re.sub(r'"ใช้ superuser( …)?"', lambda m: f'<span class="nb">{m[0]}</span>', body)
-    return (f'<!doctype html><html lang="th"><head><meta charset="utf-8"><title>{e(title)}</title>'
-            f'<link href="{FONTS}" rel="stylesheet"><style>{CSS}{ICON_CSS}</style></head>'
-            f'<body><div id="sheet" style="--pc:{COLOR.get(plugin, COLOR["superuser"])}">{body}</div><script>{NOBREAK}</script></body></html>')
-
-
-def header(title, accent, sub, src, plugin="superuser", stats=None, extra=""):
-    """ก้อนสีหัวรูป: ป้ายเล็ก · ชื่อตัวใหญ่ · คำอธิบาย · ตัวเลขใหญ่ · ตราใหญ่มุมขวา"""
-    nums = ('<div class="stats">' + "".join(f'<div><b>{n}</b>{e(l)}</div>' for n, l in stats) + "</div>") if stats else ""
-    return (f'<div class="hero"><div class="big">{emblem(plugin, 56)}</div>'
-            f'<div class="kick">{e(accent.lstrip("— "))}</div><h1>{e(title)}</h1><p>{e(sub)}</p>{nums}{extra}'
-            f'<div class="src">{e(src)} · สร้างจากไฟล์จริง · {TODAY}</div></div>')
-
-
-def sec(no, title, sub, body):
-    return (f'<div class="sec"><div class="no">{no:02d}</div><div><h2>{e(title)}</h2>'
-            f'<div class="sub">{e(sub)}</div></div><div class="body">{body}</div></div>')
-
-
-def footer(note):
-    return f'<div class="ft"><span>{e(note)}</span><span>SQT-Marketplace · scripts/diagrams/</span></div>'
-
-
-def chips(items, cls):
-    return "".join(f'<span class="chip {cls}">{e(i)}</span>' for i in items)
-
-
-def step(n, color, title, sub, body):
-    return sec(n, title, sub, body)
-
-
-def shorten(text, limit=40):
-    text = re.sub(r"`|\*\*|\[|\]\([^)]*\)", "", text)
-    return text if len(text) <= limit else text[:limit].rstrip() + "…"
 
 
 def load(plugin):
@@ -68,324 +25,274 @@ def load(plugin):
     return data, labels
 
 
-# ---------- รูปที่ 1 · แผนผัง plugin ----------
+
+# ---------- รูปที่ 1 · แผนผัง plugin (วงกลมบนลายจุด) ----------
+# 1 รูป = 1 คำถาม: "ใน plugin นี้มีอะไร และคำขอของผู้ใช้ไปถึงตัวไหน"
+# ซ้าย → ขวา: ทางเข้า 3 ทาง รวมเข้าหัวหน้าทีม แล้วแตกไปหา agent ทุกตัว · ใต้ลงมาคือ skill
+
+from kit import kit as K  # noqa: E402  (ชิ้นส่วนกลางของรูปแนววงกลม)
 
 CORE_SKILLS = set(json.load(open(os.path.join(HERE, "data", "superuser.json"), encoding="utf-8"))["core_skills"])
 
-def agent_card(a, job):
-    plugin_skills = [s for s in a["skills"] if s not in CORE_SKILLS]
-    return (f'<div class="card agent{" core" if a["core"] else ""}"><div class="top"><span class="t">{e(a["name"])}</span>'
-            f'<span class="model {e(a["model"])}">{e(a["model"] or "—")}</span></div>'
-            f'<div class="d">{e(job)}</div><div class="chips">{chips(plugin_skills, "sk")}</div></div>')
+# CSS เฉพาะรูป map · overview · hook (kit ยังไม่มี: คอลัมน์ของ map · แถว agent · แถวของขั้น · วงกลมตรา)
+EXTRA_CSS = """<style>
+.stage{position:relative}
+.cols{display:grid;grid-template-columns:176px 200px 1fr;column-gap:72px;align-items:center;position:relative;z-index:1}
+.stack{display:flex;flex-direction:column;gap:32px;align-items:center}
+.stack.ag{align-items:stretch;gap:16px}
+.cols .node .sb{max-width:200px}
+.cols .stack:nth-child(2) .node .sb{max-width:168px}
+.arow{display:flex;gap:16px;align-items:center}
+.arow .tx{min-width:0}
+.arow .lb{font-weight:600;font-size:17px;line-height:1.4;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
+.arow .sb{font-size:15px;color:var(--ink3);line-height:1.5}
+.nb{white-space:nowrap}
+.band{position:relative;z-index:1;margin-top:48px;padding-top:24px;border-top:1px solid var(--rule)}
+.band .cap{font-size:15px;color:var(--ink3);margin-bottom:24px}
+.band .row{display:grid;gap:16px;justify-items:center;align-items:start}
+.node.wide .sb{max-width:480px}
+.node .tags{margin-top:2px}
+.step{display:grid;grid-template-columns:96px 1fr;align-items:start;position:relative}
+.step .dotcol{display:flex;justify-content:center}
+.step .tx{padding:4px 0 0 8px}
+.step .tx .lb{font-weight:600;font-size:17px;line-height:1.5}
+.step .tx .sb{font-size:15px;color:var(--ink2);line-height:1.6;max-width:700px}
+.step .tx .exit{margin-top:6px;font-size:15px;color:var(--ink3);display:flex;gap:8px;align-items:baseline}
+.dot.dec{background:#fff;color:var(--pc);box-shadow:inset 0 0 0 3px var(--pc)}
+.hookcol{display:flex;flex-direction:column;gap:40px;position:relative;z-index:1}
+.ov{position:relative;height:var(--h)}
+.ov .node{position:absolute;transform:translateX(-50%);z-index:2}
+.ov svg.arcs{color:var(--line);position:absolute;inset:0;width:100%;height:100%;overflow:visible;z-index:0}
+.ov .pn{position:absolute;display:flex;align-items:center;gap:12px;z-index:2;white-space:nowrap}
+.ov .pn.l{flex-direction:row-reverse;text-align:right}
+.ov .pn .lb{font-weight:600;font-size:17px;line-height:1.4}
+.ov .pn .sb{font-size:15px;color:var(--ink3);line-height:1.5}
+.ov .topn{position:absolute;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;text-align:center;gap:0;z-index:2;white-space:nowrap}
+.ov .topn .lb{font-weight:600;font-size:17px;line-height:1.4}
+.ov .topn .sb{font-size:15px;color:var(--ink3);line-height:1.5;margin-bottom:8px}
+.ov .lab{position:absolute;width:190px;z-index:2}
+.ov .lab.l{text-align:right}
+.ov .lab .lb{font-weight:600;font-size:17px;line-height:1.4}
+.ov .lab .sb{font-size:15px;color:var(--ink3);line-height:1.5}
+.ov .cl{background:var(--bg);padding:4px 10px;border-radius:8px}
+.dot.emb{background:var(--pc);overflow:hidden}
+.dot.emb img{width:118%;height:118%;flex:none;display:block}
+</style>"""
 
 
-def map_grouped(data, labels, jobs, by_name):
-    # software-company: 41 agent · 100+ skill → รวมเป็นกลุ่ม แล้วบอกว่ากลุ่ม agent ใช้กลุ่ม skill ไหน
-    skill_group = {s: g for g, ss in labels["skill_groups"].items() for s in ss}
-    cards = []
-    for group, names in labels["agent_groups"].items():
-        names = [n for n in names if n in by_name]  # agent กลางอยู่ใน plugin superuser ที่เดียวแล้ว
-        if not names or all(by_name[n]["core"] for n in names):
-            continue  # ทีมกลางวาดแยกในหัวข้อสุดท้าย
-        used = {}
-        for n in names:
-            for s in by_name[n]["skills"]:
-                if s in skill_group:
-                    used[skill_group[s]] = used.get(skill_group[s], 0) + 1
-        top = [g for g, _ in sorted(used.items(), key=lambda kv: -kv[1])[:4]]
-        rows = "".join(f'<div class="mini"><b>{e(n)}</b><span>{e(jobs.get(n, ""))}</span></div>' for n in names)
-        cards.append(f'<div class="card grp"><h4>{e(group)} · {len(names)}</h4>{rows}'
-                     f'<div class="small" style="margin-top:8px">ใช้ skill กลุ่ม</div><div class="chips">{chips(top, "sk")}</div></div>')
-    teams = f'<div class="grid g2">{"".join(cards)}</div>'
-    own = set(data["skills"])
-    groups = [(g, [x for x in ss if x in own]) for g, ss in labels["skill_groups"].items()]
-    skills = "".join(f'<div class="card"><div class="t">{e(g)} <span class="small">· {len(ss)}</span></div>'
-                     f'<div class="chips">{chips(ss, "sk")}</div></div>' for g, ss in groups if ss)
-    return teams, f'<div class="grid g2">{skills}</div>'
+def agent_skills(a):
+    return [s for s in a["skills"] if s not in CORE_SKILLS]
+
+
+def names_line(names, k=2):
+    """รายชื่อ agent ในบรรทัดเล็ก: แต่ละชื่อห้ามตัดที่ขีด"""
+    return " · ".join(f'<span class="nb">{e(n)}{"&nbsp;…" if len(names) > k and i == k - 1 else ""}</span>' for i, n in enumerate(names[:k]))
+
+
+def agent_row(aid, name_html, sub_html, tag_html=""):
+    return (f'<div class="arow" id="{aid}w"><div class="dot agent" id="{aid}">{K.icon("bot")}</div>'
+            f'<div class="tx"><div class="lb">{name_html}{tag_html}</div><div class="sb">{sub_html}</div></div></div>')
 
 
 def build_map(plugin):
     data, labels = load(plugin)
     jobs = labels.get("agents", {})
-    by_name = {a["name"]: a for a in data["agents"]}
-    lead = (f'<div class="lead"><div class="t">หัวหน้าทีม (skill <code>superuser</code>)</div>'
-            f'<div class="d">รับงาน → เลือก playbook → แจกงานให้ agent ตัวใหม่ทีละขั้น → ตรวจกับของจริง → ส่งงาน</div></div>')
-    commands = (f'<div class="card"><div class="t">คำสั่ง <code>/{plugin}:…</code> ({len(data["commands"])})</div>'
-                f'<div class="chips">{chips(["/" + c for c in data["commands"]] or ["—"], "cm")}</div></div>')
-    many = len(data["commands"]) > 8
-    entry = (f'<div class="grid {"g2" if many else "g3"}" style="margin-bottom:12px">'
-             f'<div class="card"><div class="t">พิมพ์ขอตรง ๆ</div><div class="d">"ใช้ superuser …" หรือเล่างาน Claude เลือก skill เอง</div></div>'
-             f'{"" if many else commands}'
-             f'<div class="card"><div class="t">เรียก agent ตรง</div><div class="d">พูดชื่อ agent หรือให้ Claude เลือกจากคำอธิบาย</div></div>'
-             f'</div>{commands + "<div style=height:12px></div>" if many else ""}{lead}')
-    domain = [a for a in data["agents"] if not a["core"]]
-    su_data, su_labels = load("superuser") if plugin != "superuser" else (data, labels)
-    core = [a for a in su_data["agents"] if a["core"]]
-    core_jobs = su_labels.get("agents", {})
+    su_data, _ = load("superuser") if plugin != "superuser" else (data, labels)
+    is_su = plugin == "superuser"
+    n_pb = sum(not p["shared"] for p in data["playbooks"])
+    n_shared = len(data["playbooks"]) - n_pb
+    n_cmd = len(data["commands"])
+    agents = data["agents"] if is_su else [a for a in data["agents"] if not a["core"]]
+
+    # คอลัมน์ 1: ทางเข้า (วงกลมเขียว = ผู้ใช้)
+    ents = [("พิมพ์ขอตรง ๆ", "เล่างานได้เลย")]
+    if n_cmd:
+        ents.append(("สั่งด้วยคำสั่ง", f'<span class="nb">/{e(plugin)}:…</span><br>มี {n_cmd} คำสั่ง'))
+    ents.append(("เรียก agent ตรง", "พูดชื่อ agent ได้เลย"))
+    col1 = "".join(f'<div class="node"><div class="dot user" id="en{i}">{K.icon("user")}</div><div class="lb">{e(t)}</div><div class="sb">{s}</div></div>'
+                   for i, (t, s) in enumerate(ents))
+    # คอลัมน์ 2: จุดเด่น = plugin สีของ plugin (หัวหน้าทีม)
+    n_ag = sum(len([n for n in v if n in {a["name"] for a in agents}]) for v in labels["agent_groups"].values()) if "agent_groups" in labels else len(agents)
+    extra_pb = f' <span class="nb">(+{n_shared} ของกลาง)</span>' if n_shared else ""
+    col2 = K.node(plugin, "pc", ico="users", size="lg", id="focal",
+                  extra=f'<div class="sb">หัวหน้าทีมรับงาน เลือกจาก {n_pb} playbook{extra_pb} แล้วส่งงานให้ agent ตัวใหม่ทีละขั้น</div>')
+    # คอลัมน์ 3: agent
+    rows, ids = "", []
     if "agent_groups" in labels:
-        teams, skill_panel = map_grouped(data, labels, jobs, by_name)
+        have = {a["name"] for a in agents}
+        for i, (g, names) in enumerate(labels["agent_groups"].items()):
+            names = [n for n in names if n in have]
+            if names:
+                ids.append(f"ag{i}")
+                rows += agent_row(f"ag{i}", e(g), f'{len(names)} agent · {names_line(names)}')
     else:
-        teams = f'<div class="grid {"g2" if len(domain) in (2, 4) else "g3"}">{"".join(agent_card(a, jobs.get(a["name"], "")) for a in domain)}</div>' if domain else ""
-        used = {s for a in data["agents"] for s in a["skills"]}
-        loose = [s for s in data["skills"] if s not in used]
-        note = (f'ชิปเส้นประ {len(loose)} ตัว = ไม่มี agent ประจำ หัวหน้าทีมเปิดใช้เอง' if loose else "ทุก skill มี agent ประจำ")
-        skill_panel = (f'<div class="card"><div class="chips">{chips([x for x in data["skills"] if x not in loose] or ([] if loose else ["—"]), "sk")}{chips(loose, "sk loose")}</div>'
-                       f'<div class="small" style="margin-top:8px">{e(note)}</div></div>')
-    core_groups = su_labels.get("skill_groups") or {"skill กลาง": data["core_skills"]}
-    core_cards = "".join(f'<div class="card"><div class="t">{e(g)} <span class="small">· {len(ss)}</span></div>'
-                         f'<div class="chips">{chips(ss, "ld")}</div></div>' for g, ss in core_groups.items())
-    core_panel = (f'<div class="grid g3">{"".join(agent_card(a, core_jobs.get(a["name"], "")) for a in core)}</div>'
-                  f'<div class="small" style="margin:12px 0 8px">skill กลาง {len(data["core_skills"])} ตัว ใช้กับงานทุกสาขา — อยู่ใน superuser ที่เดียว</div>'
-                  f'<div class="grid g2">{core_cards}</div>'
-                  f'<div class="small" style="margin-top:8px">อยู่ใน <code>plugins/superuser</code> ที่เดียว · plugin อื่นได้มาทาง <code>dependencies</code> · '
-                  f'hook <code>superuser-hook.mjs</code> จดทุกการทำงานลง <code>.claude/superuser/log/</code></div>')
-    cross = (f'<div class="card" style="margin-top:12px"><div class="t">งานข้ามสาขา → ส่งต่อ plugin อื่น</div>'
-             f'<div class="chips">{handoff(data["cross"])}</div></div>') if data["cross"] else ""
-    pbs = data["playbooks"]
-    shared = [p["name"] for p in pbs if p["shared"]]
-    pb_panel = (f'<div class="card"><div class="chips">'
-                f'{chips([p["name"] for p in pbs if not p["shared"]], "pb")}{chips([n + " (ดูที่ superuser)" for n in shared], "pb")}</div><div class="small" style="margin-top:8px">'
-                f'ขั้นตอนของแต่ละ playbook อยู่ในรูป docs/plugins/{plugin}/playbooks.png</div></div>')
-    body = header(plugin, "— แผนผัง plugin", labels.get("tagline", shorten(data["description"], 90)),
-                  f"plugins/{plugin}/ · v{data['version']}", plugin,
-                  [(len(data["agents"]), "agent"), (len(data["skills"]) + len(data["core_skills"]), "skill"),
-                   (len(data["commands"]), "คำสั่ง"), (len(data["playbooks"]), "playbook")])
-    n = 1
-    parts = [(("p", "ทางเข้า", "ผู้ใช้เริ่มงานได้ 3 ทาง ทุกทางมาจบที่หัวหน้าทีม"), entry)]
-    if teams:
-        parts.append((("b", f"ทีม agent ของสาขานี้ · {len(domain)}", "agent ที่หัวหน้าทีมส่งงานให้" + (" · ชิปเขียว = skill ที่ agent นั้นใช้" if "chip sk" in teams else "")), teams))
-    if data["skills"]:
-        parts.append((("g", f"skill ของสาขานี้ · {len(data['skills'])}", "ความรู้ที่ agent โหลดเมื่อถึงงานนั้น"), skill_panel))
-    parts.append((("a", f"playbook · {len(pbs)}", "สูตรงานที่หัวหน้าทีมคัดลง todo ทีละขั้น"), pb_panel))
-    parts.append((("", "ทีมกลางและ skill กลาง" if plugin == "superuser" else "ทีมกลางจาก SuperUser",
-                   "ใช้ได้ตัวเดียว ทุกสาขา" if plugin == "superuser" else "ได้มาจาก plugin superuser ทาง dependencies"), core_panel + cross))
-    body += '<div class="steps">' + "".join(step(i + 1, c, t, s, b) for i, ((c, t, s), b) in enumerate(parts)) + "</div>"
-    body += legend([("ld", "หัวหน้าทีม · skill กลาง"), ("ag", "agent"), ("sk", "skill"), ("pb", "playbook · plugin อื่น")])
-    body += footer(f"agent {len(data['agents'])} · skill {len(data['skills']) + len(data['core_skills'])} · "
-                   f"คำสั่ง {len(data['commands'])} · playbook {len(data['playbooks'])}")
-    return page(f"{plugin} map", body, plugin)
+        for i, a in enumerate(agents):
+            ids.append(f"ag{i}")
+            sk = agent_skills(a)
+            tg = K.tag(f"{len(sk)} skill", "skill") if sk else K.tag("ใช้ skill กลาง", "core")
+            rows += agent_row(f"ag{i}", f'<span class="nb">{e(a["name"])}</span>', e(jobs.get(a["name"], "")), tg)
+    stage = f'<div class="cols"><div class="stack">{col1}</div><div class="stack">{col2}</div><div class="stack ag">{rows}</div></div>'
 
+    # แถบ skill
+    own = data["core_skills"] if is_su else data["skills"]
+    groups = labels.get("skill_groups")
+    gtags = ""
+    if groups:
+        ownset = set(own)
+        counts = [(g, len([x for x in ss if x in ownset])) for g, ss in groups.items()]
+        placed = {x for ss in groups.values() for x in ss}
+        rest = len([x for x in own if x not in placed])  # skill ที่ labels ยังไม่จัดกลุ่ม: นับจาก data ไม่ให้ยอดหาย
+        if rest:
+            warnings.append(f"{plugin}: skill {rest} ตัวยังไม่อยู่ใน skill_groups ของ labels/{plugin}.json")
+            counts.append(("ยังไม่จัดกลุ่ม", rest))
+        gtags = '<div class="tags">' + "".join(K.tag(f"{g} · {n}") for g, n in counts if n) + "</div>"
+    sk_node = K.node(f"skill {'กลางของทุก plugin' if is_su else 'ของ plugin นี้'} {len(own)} ตัว", "skill",
+                     "แบ่งตามหน้าที่ · เลขท้ายคือจำนวน" if groups else "agent เปิดอ่านเมื่อถึงงานนั้น", extra=gtags).replace('class="node"', 'class="node wide"', 1)
+    core_node = "" if is_su else (f'<div class="node"><div class="dot emb" style="--pc:{COLOR["superuser"]}">{emblem("superuser", 56)}</div><div class="lb">ของกลางจาก superuser</div>'
+                                  f'<div class="sb">skill {len(data["core_skills"])} · agent {len([a for a in su_data["agents"] if a["core"]])} ใช้ร่วมทุก plugin</div></div>')
+    band = (f'<div class="band"><div class="cap">ความรู้: skill คือคู่มือที่ agent เปิดอ่านก่อนลงมือ</div>'
+            f'<div class="row" style="grid-template-columns:{"1fr" if is_su else "2.2fr 1fr"}">{sk_node}{core_node}</div></div>')
 
-def legend(items):
-    colors = {"ld": ("var(--ink)", "var(--ink)"), "ag": ("#fff", "var(--pc)"),
-              "sk": ("var(--skill-bg)", "var(--skill-line)"), "pb": ("#fff", "var(--rule2);border-style:dashed"),
-              "us": ("var(--gate-bg)", "var(--gate-line)")}
-    return '<div class="legend">' + "".join(
-        f'<div><span class="sw" style="background:{colors[k][0]};border-color:{colors[k][1]}"></span>{e(t)}</div>'
-        for k, t in items) + "</div>"
-
-
-# ---------- รูปที่ 2 · ขั้นตอนของทุก playbook ----------
-
-def step_box(s, label, last, eol=False):
-    who = s["who"] or {}
-    tags = (chips(["หัวหน้าทีม"], "ld") if who.get("lead") else "") + chips(who.get("agents", []), "ag") \
-        + (chips(["ผู้ใช้"], "us") if who.get("user") else "") + chips(s["skills"], "sk") \
-        + chips(["/" + c for c in s["commands"]], "cm") + chips(["→ " + p for p in s["playbooks"]], "pb")
-    cls = "st" + (" gate" if s["approval"] else "") + (" last" if last else "") + (" eol" if eol else "")
-    return f'<div class="{cls}"><div class="n">ขั้น {s["n"]}</div><div class="lb">{e(label)}</div><div class="chips">{tags}</div></div>'
-
-
-def playbook_card(p, lab):
-    steps = lab.get("steps") or []
-    if len(steps) != len(p["steps"]):
-        warnings.append(f"{p['name']}: labels มี {len(steps)} ขั้น แต่ไฟล์จริงมี {len(p['steps'])} — ใช้ข้อความจริงตัดสั้น")
-        steps = [shorten(s["text"].rpartition(" · ใคร: ")[0] or s["text"]) for s in p["steps"]]
-    # ขั้นที่มี phase ต่างกัน (เช่น รับงานต่อ / หยุดงาน) แยกเป็นรางของตัวเอง มีหัวช่วงกำกับ
-    runs = []
-    for st, l in zip(p["steps"], steps):
-        if not runs or runs[-1][0] != st.get("phase"):
-            runs.append((st.get("phase"), []))
-        runs[-1][1].append((st, l))
-    def cols(n):  # ไม่ให้เหลือขั้นเดียวโดด ๆ ในแถวสุดท้าย: 5 → 5 · 6 → 3+3 · 7 → 4+3 · 8 → 4+4
-        return -(-n // -(-n // 5))
-    boxes = "".join((f'<div class="phase">ช่วง: {e(ph)}</div>' if ph else "")
-                    + f'<div class="flow" style="grid-template-columns:repeat({cols(len(run))},minmax(0,1fr))">'
-                    + "".join(step_box(st, l, i == len(run) - 1, (i + 1) % cols(len(run)) == 0) for i, (st, l) in enumerate(run)) + "</div>"
-                    for ph, run in runs)
-    return (f'<div class="card pbcard"><div class="pbhd"><span class="name">{e(p["name"])}</span>'
-            f'<span class="t">{e(lab.get("short") or p["title"])}</span><span class="cnt"><b>{len(p["steps"])}</b>ขั้น</span></div>'
-            f'<div class="when">ใช้เมื่อ: {e(shorten(p["when"], 100000))}</div>{boxes}'
-            f'<div class="done"><b>จบเมื่อ</b><span>{e(shorten(p["done"], 100000))}</span></div></div>')
-
-
-def build_playbooks(plugin):
-    data, labels = load(plugin)
-    lab = labels.get("playbooks", {})
-    groups = {}
-    for p in data["playbooks"]:
-        if not p["shared"]:
-            groups.setdefault(lab.get(p["name"], {}).get("group", "playbook"), []).append(p)
-    shared = [p["name"] for p in data["playbooks"] if p["shared"]]
-    own = [p for g in groups.values() for p in g]
-    stats = [(len(data["playbooks"]), "playbook" + (f" · {', '.join(shared)} วาดที่ superuser" if shared else "")),
-             (sum(len(p["steps"]) for p in own), "ขั้นในรูปนี้"),
-             (sum(1 for p in own for s in p["steps"] if s["approval"]), "จุดรอผู้ใช้อนุมัติ")]
-    body = header(plugin, "ขั้นตอนของ playbook", "ทุกขั้นมาจากไฟล์ playbook จริง · ใครทำ · ใช้ skill ไหน · ตรงไหนต้องรอผู้ใช้",
-                  f"plugins/{plugin}/skills/superuser/references/", plugin, stats)
-    for g, pbs in groups.items():
-        body += f'<div class="gtitle">{e(g)}<small>{len(pbs)} playbook</small></div>'
-        body += "".join(playbook_card(p, lab.get(p["name"], {})) for p in pbs)
-    if shared:
-        body += (f'<div class="small" style="text-align:center">เหมือนต้นฉบับกลางทุกตัวอักษร ไม่วาดซ้ำ: '
-                 f'{e(" · ".join(shared))} → ดูรูป docs/plugins/superuser/playbooks.png</div>')
-    body += legend([("ld", "หัวหน้าทีมทำเอง"), ("ag", "agent ตัวใหม่"), ("us", "ผู้ใช้ · รออนุมัติ"),
-                    ("sk", "skill ที่ใช้"), ("pb", "ต่อไป playbook อื่น")])
-    body += footer("อ่านตามรางซ้าย → ขวา สุดแถวขึ้นแถวใหม่ (↵) · ป้ายเหลือง \"รอผู้ใช้อนุมัติ\" = หยุดรอผู้ใช้")
-    return page(f"{plugin} playbooks", body, plugin)
+    pairs = [(f"en{i}", "focal", "") for i in range(len(ents))] + [("focal", a, "") for a in ids]
+    stats = [(len(agents), "agent"), (len(own), "skill")]
+    if not is_su:
+        stats.append((len(data["core_skills"]), "skill กลาง (ใช้ร่วม)"))
+    if n_cmd:
+        stats.append((n_cmd, "คำสั่ง"))
+    stats.append((n_pb, "playbook" + (f" (+{n_shared} ของกลาง)" if n_shared else "")))
+    body = K.head(plugin, labels.get("tagline", ""), plugin, f"plugins/{plugin}/ · v{data['version']}", stats)
+    body += f'<div class="stage">{K.wires(pairs)}{stage}</div>{band}'
+    body += K.legend([("user", "ผู้ใช้", "user"), ("pc", "plugin · หัวหน้าทีม", "users"), ("agent", "agent", "bot"), ("skill", "skill", "book-open")]
+                     )
+    if not is_su:
+        body = body + ""
+        leg = leg_core = f'<span><div class="dot emb" style="--pc:{COLOR["superuser"]}">{emblem("superuser", 18)}</div>ของกลางจาก superuser</span>'
+        body = body[:body.rindex("</div>")] + leg + "</div>"
+    return K.page(f"{plugin} map", EXTRA_CSS + body, plugin)
 
 
 # ---------- รูปที่ 3 · ภาพรวม marketplace ----------
+# 1 รูป = 1 คำถาม: "6 plugin ใช้แกนกลางเดียวกันอย่างไร และส่งงานถึงกันที่ไหน"
 
-def handoff(names):
-    return "".join(f'<span class="chip to">{badge(n, 12)}{e(n)}</span>' for n in names)
-
-
-def receivers(plugin, plugins):
-    return [p for p in plugins if p != plugin and plugin in load(p)[0]["cross"]]
-
-
-def handoff_block(plugin, cross, plugins):
-    if cross:
-        return f'<div class="small">ส่งต่อ →</div><div class="chips">{handoff(cross)}</div>'
-    got = receivers(plugin, plugins)
-    return f'<div class="small">ไม่มีรายการส่งต่อ · รับงานจาก {len(got)} plugin ←</div><div class="chips">{handoff(got)}</div>'
-
-
-def matrix(cross):
-    """ตารางใครส่งงานให้ใคร: แถว = ต้นทาง · คอลัมน์ = ปลายทาง · จุดสีของต้นทาง"""
-    names = sorted(cross)
-    head = "".join(f'<th title="{n}">{badge(n, 16)}</th>' for n in names)
-    rows = ""
-    for a in names:
-        cells = "".join(f'<td>{"<i style=background:" + COLOR[a] + "></i>" if b in cross[a] else ("<b>·</b>" if a != b else "")}</td>' for b in names)
-        rows += f'<tr><th class="rh">{badge(a, 16)}<span>{e(a)}</span></th>{cells}<td class="sum">{len(cross[a])}</td></tr>'
-    got = "".join(f'<td class="sum">{sum(n in v for v in cross.values())}</td>' for n in names)
-    return (f'<table class="mx"><thead><tr><th class="corner">ส่งจาก ↓ · ถึง →</th>{head}<th class="sum">ส่ง</th></tr></thead>'
-            f'<tbody>{rows}<tr class="tot"><th class="rh">รับงาน</th>{got}<td></td></tr></tbody></table>')
-
-
-def network(cross):
-    """แผนภาพวงกลม: แกนกลางตรงกลาง · plugin สาขารอบวง · เส้นสี = งานที่ต้นทางส่งต่อให้ปลายทาง"""
-    import math
-    W, H, cx, cy, R, hub = 896, 480, 448, 240, 180, 64
-    names = sorted(cross)
-    pos = {n: (cx + R * math.cos(-math.pi / 2 + 2 * math.pi * i / len(names)),
-               cy + R * math.sin(-math.pi / 2 + 2 * math.pi * i / len(names))) for i, n in enumerate(names)}
-    defs, lines, nodes = [], [], []
-    for n in names:
-        c = COLOR[n]
-        defs.append(f'<marker id="m-{n}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">'
-                    f'<path d="M0 0 10 5 0 10z" fill="{c}" fill-opacity=".6"/></marker>')
-    for a in names:
-        for b in cross[a]:
-            if b not in pos:  # ปลายทางที่ไม่อยู่ในวง (เช่น superuser ที่ไม่มีตารางงานข้ามสาขา)
-                continue
-            (x1, y1), (x2, y2) = pos[a], pos[b]
-            mx, my = (x1 + x2) / 2 - cx, (y1 + y2) / 2 - cy
-            d = math.hypot(mx, my)
-            px, py = (-(y2 - y1), x2 - x1) if d < 1 else (mx, my)
-            pl = math.hypot(px, py)
-            reach = max(d, hub + 40)
-            sgn = 1 if a < b else -1  # ไปกับกลับคนละเส้น
-            ox, oy = -(y2 - y1) / math.hypot(x2 - x1, y2 - y1) * 8 * sgn, (x2 - x1) / math.hypot(x2 - x1, y2 - y1) * 8 * sgn
-            tx, ty = cx + px / pl * reach + ox, cy + py / pl * reach + oy
-            qx, qy = 2 * tx - (x1 + x2) / 2 - cx + cx, 2 * ty - (y1 + y2) / 2
-            # หยุดก่อนถึงตรา 22 px
-            def pull(x, y, fx, fy, k=26):
-                L = math.hypot(fx - x, fy - y); return x + (fx - x) / L * k, y + (fy - y) / L * k
-            sx, sy = pull(x1, y1, qx, qy, 30); ex, ey = pull(x2, y2, qx, qy, 34)
-            lines.append(f'<path d="M{sx:.1f} {sy:.1f} Q{qx:.1f} {qy:.1f} {ex:.1f} {ey:.1f}" fill="none" stroke="{COLOR[a]}" '
-                         f'stroke-width="1.5" stroke-opacity=".35" marker-end="url(#m-{a})"/>')
-    spokes = "".join(f'<line x1="{cx}" y1="{cy}" x2="{x:.1f}" y2="{y:.1f}" stroke="#B9B3A6" stroke-width="2" stroke-dasharray="4 6"/>' for x, y in pos.values())
-    for n, (x, y) in pos.items():
-        right = x >= cx + 4; left = x <= cx - 4
-        anchor, lx, ly = ("start", x + 32, y + 5) if right else ("end", x - 32, y + 5) if left else ("middle", x, y - 32)
-        nodes.append(svg_icon(n, x - 24, y - 24, 48) +
-                     f'<text x="{lx:.1f}" y="{ly:.1f}" text-anchor="{anchor}" font-size="15" font-weight="600" fill="#1A1B22">{e(n)}</text>')
-    core = (f'<circle cx="{cx}" cy="{cy}" r="{hub}" fill="{COLOR["superuser"]}"/><circle cx="{cx}" cy="{cy}" r="{hub + 6}" fill="none" stroke="{COLOR["superuser"]}" stroke-width="2"/>'
-            + svg_icon("superuser", cx - 22, cy - 40, 44) +
-            f'<text x="{cx}" y="{cy + 26}" text-anchor="middle" font-size="15" font-weight="600" fill="#fff">superuser</text>'
-            f'<text x="{cx}" y="{cy + 44}" text-anchor="middle" font-size="13" fill="#fff">แกนกลาง</text>')
-    return (f'<svg class="net" viewBox="0 0 {W} {H}" width="{W}" height="{H}" font-family="Anuphan, sans-serif">'
-            f'<defs>{"".join(defs)}</defs>{spokes}{"".join(lines)}{core}{"".join(nodes)}</svg>')
+def emblem_circle(plugin, size=80):
+    return emblem(plugin, size)
 
 
 def build_overview(plugins):
-    cards, totals = [], [0, 0, 0, 0]
-    for plugin in plugins:
-        data, labels = load(plugin)
-        nums = [len(data["agents"]), len(data["skills"]) + len(data["core_skills"]), len(data["commands"]), len(data["playbooks"])]
-        totals = [a + b for a, b in zip(totals, nums)]
-        if plugin == "superuser":
-            continue
-        cards.append(f'<div class="card plug" style="--pc:{COLOR[plugin]}"><div class="cap">{badge(plugin, 28)}'
-                     f'<span class="t">{e(plugin)}</span><span class="v">v{e(data["version"])}</span></div><div class="in">'
-                     f'<div class="d">{e(labels.get("tagline", ""))}</div>'
-                     f'<div class="nums">' + "".join(f'<div><b>{n}</b>{l}</div>' for n, l in zip(nums, ["agent", "skill", "คำสั่ง", "playbook"])) + '</div>'
-                     f'<div class="handoff">{handoff_block(plugin, data["cross"], plugins)}</div></div></div>')
-    core, _ = load("superuser")
-    cards.append(f'<div class="card hubcard"><div class="row">{badge("superuser", 28)}<div class="t">plugins/superuser — ต้นฉบับกลาง</div></div>'
-                 f'<div class="d">skill {" · ".join(core["core_skills"])} · agent brainstormer · reviewer · learning-reviewer · hook บันทึกงาน</div>'
-                 '<div class="d"><code>scripts/sync/sync-superuser.mjs</code> คัดลอกชุดนี้ไปทุก plugin</div></div>')
-    cross = {p: load(p)[0]["cross"] for p in plugins if p != "superuser"}
-    net = (f'<div class="card netcard">{network(cross)}<div class="netkey">'
-           f'<span><i class="k sync"></i>sync แกนกลางไปทุก plugin</span>'
-           f'<span><i class="k hand"></i>งานข้ามสาขา {sum(len(v) for v in cross.values())} เส้น · สีเส้น = plugin ต้นทาง · หัวลูกศรชี้ plugin ที่รับงาน</span></div>'
-           f'<div class="mxwrap"><div class="t">ใครส่งงานให้ใคร</div>{matrix(cross)}</div></div>')
-    grid = f'<div class="grid g3">{"".join(cards)}</div>'
-    metro = '<div class="metro">' + "".join(
-        f'<div class="stn"><div class="dot"></div><div class="t">{a}</div><div class="small">{b}</div></div>' for a, b in [
-            ("plugins/", "ต้นฉบับ"), ("validate", '<span class="nb">check/validate-marketplace</span>'), ("sync", "sync-docs · sync-superuser"),
-            ("dist/", "build-targets: claude.ai · Codex · Gemini"), ("ติดตั้ง", "install-marketplace.ps1")]) + "</div>"
-    strip = '<div class="strip">' + "".join(badge(p, 20) for p in plugins if p != "superuser") + "</div>"
-    body = header("SQT-Marketplace", "ภาพรวม marketplace", f"{len(plugins)} plugin ใช้แกน SuperUser เดียวกัน แต่ละตัวเติม agent · skill · playbook ของสาขาตัวเอง",
-                  "plugins/*/.claude-plugin/plugin.json", "superuser",
-                  [(totals[0], "agent"), (totals[1], "skill"), (totals[2], "คำสั่ง"), (totals[3], "playbook"), (len(plugins), "plugin")])
-    body = body.replace('<div class="hero">', '<div class="hero ink short">', 1)
-    body += sec(1, f"แกนกลางเดียว · {len(plugins) - 1} สาขาส่งงานถึงกัน", "แก้ที่ plugins/superuser ที่เดียว แล้วรัน sync · งานที่เกินสาขาตัวเอง หัวหน้าทีมส่งต่อให้ plugin ที่ถนัด", net)
-    body += sec(2, f"plugin ของแต่ละสาขา · {len(plugins) - 1}", "แถบสี + ตรา = plugin นั้น · ตัวเลข = จำนวนของในตัว (รวมของกลาง)", grid)
-    body += sec(3, "จาก plugins/ ไปถึงเครื่องผู้ใช้", "ตรวจ → sync → build ด้วย build-dist.cmd คลิกเดียว", metro)
-    body += footer("ตัวเลขในก้อนหัวรวมทุก plugin นับซ้ำของกลางในทุก plugin · ชิปตราเล็กใต้ \"ส่งต่อ\" = plugin ที่รับงานข้ามสาขา")
-    return page("marketplace overview", body)
+    """วงรอบแกนกลาง: เรียงให้ 9 เส้นส่งงานไม่ตัดกัน (ข้างใน 2 เส้นจากวงบนสุด · ข้างนอก 2 เส้นอ้อมใต้วง · ที่เหลือเป็นเส้นสั้นตามวง)"""
+    import math
+    W, cx, cy, RX, RY = 864, 432, 300, 240, 190
+    want = ["e-commerce", "personal-life", "graphic-design", "software-company", "trading-finance"]
+    ring = [p for p in want if p in plugins]
+    n = len(ring)
+    pos = [(cx + RX * math.sin(2 * math.pi * k / n), cy - RY * math.cos(2 * math.pi * k / n)) for k in range(n)]
+    D = {p: load(p)[0] for p in plugins}
+    cross = {p: [t for t in D[p]["cross"] if t in ring] for p in ring}
+    R, r = 44, 24
+
+    def trim(a, b, k):  # จุดบนขอบวง a ที่หันไปทาง b
+        l = math.hypot(b[0] - a[0], b[1] - a[1])
+        return a[0] + (b[0] - a[0]) / l * k, a[1] + (b[1] - a[1]) / l * k
+
+    marks = lambda both, to_b: (' marker-start="url(#m-g)"' if (both or not to_b) else "") + (' marker-end="url(#m-g)"' if (both or to_b) else "")
+    arcs, edges = [], sorted({tuple(sorted((ring.index(a), ring.index(b)))) for a in ring for b in cross[a]})
+    outer = {}
+    for i, j in edges:
+        a, b = ring[i], ring[j]
+        both = a in cross[b] and b in cross[a]
+        to_b = b in cross[a]
+        d = min(j - i, n - (j - i))
+        pa, pb = pos[i], pos[j]
+        if d == 1:      # เส้นสั้นตามวง โค้งออกนอกนิดหน่อย
+            mx, my = (pa[0] + pb[0]) / 2, (pa[1] + pb[1]) / 2
+            ox, oy = mx - cx, my - cy
+            ol = math.hypot(ox, oy)
+            q = (mx + ox / ol * 22, my + oy / ol * 22)
+            s, t = trim(pa, q, R), trim(pb, q, R + 4)
+            path = f"M{s[0]:.1f} {s[1]:.1f} Q{q[0]:.1f} {q[1]:.1f} {t[0]:.1f} {t[1]:.1f}"
+        elif i == 0:    # เส้นลัดข้างในจากวงบนสุด (ผ่านข้างแกนกลาง ไม่ผ่านป้าย)
+            s, t = trim(pa, pb, R), trim(pb, pa, R + 4)
+            path = f"M{s[0]:.1f} {s[1]:.1f} L{t[0]:.1f} {t[1]:.1f}"
+        else:           # เส้นอ้อมนอกวง ใต้ป้ายของวงล่าง
+            k = len(outer)
+            outer[(i, j)] = k
+            XA, XL, YA = cx + 345 + 50 * k, cx - 345 - 50 * k, cy + 305 + 40 * k
+            y0 = pa[1] + 22 - 20 * k
+            ye = pb[1] + (0 if pb[0] > cx - 200 and pb[1] > cy else 14)
+            sx = pa[0] + math.sqrt(max(R * R - (22 - 20 * k) ** 2, 0)) + 4
+            ex = pb[0] - R - 4 if pb[0] < cx else pb[0] + R + 4
+            path = (f"M{sx:.1f} {y0:.1f} H{XA - r} Q{XA} {y0:.1f} {XA} {y0 + r:.1f} V{YA - r} Q{XA} {YA} {XA - r} {YA} H{XL + r} "
+                    f"Q{XL} {YA} {XL} {YA - r} V{ye + r:.1f} Q{XL} {ye:.1f} {XL + r} {ye:.1f} H{ex:.1f}")
+        arcs.append(f'<path d="{path}" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"{marks(both, to_b)}/>')
+
+    def pbn(d):
+        return sum(not p["shared"] for p in d["playbooks"])
+    su = D["superuser"]
+    nodes = [f'<div class="node" style="left:{cx}px;top:{cy - 56}px">'
+             f'<div class="dot emb" style="width:112px;height:112px;--pc:{COLOR["superuser"]}">{emblem_circle("superuser")}</div>'
+             f'<div class="cl"><div class="lb">superuser</div><div class="sb">แกนกลาง · hook<br>skill {len(su["core_skills"])} · agent {len(su["agents"])}</div></div></div>']
+    for k, p in enumerate(ring):
+        x, y = pos[k]
+        d = D[p]
+        circ = f'<div class="dot lg emb" style="--pc:{COLOR[p]}">{emblem_circle(p)}</div>'
+        one = f'agent {len(d["agents"])} · skill {len(d["skills"])} · playbook {pbn(d)}'
+        two = f'agent {len(d["agents"])} · skill {len(d["skills"])}<br>playbook {pbn(d)}'
+        if k == 0:
+            nodes.append(f'<div class="topn" style="left:{x:.1f}px;top:{y + 40:.1f}px"><div class="lb">{e(p)}</div><div class="sb">{one}</div>{circ}</div>')
+        else:
+            nodes.append(f'<div class="node" style="left:{x:.1f}px;top:{y - 40:.1f}px">{circ}'
+                         + ("" if y > cy else "") + "</div>")
+            txt = f'<div class="lb">{e(p)}</div><div class="sb">{two}</div>'
+            if y > cy + 20:   # วงล่าง: ป้ายใต้วง
+                nodes[-1] = nodes[-1][:-6] + f'{txt}</div>'
+            elif x > cx:      # วงบนขวา: ป้ายอยู่ขวาเหนือเส้นกลางวง
+                nodes.append(f'<div class="lab" style="left:{x + 52:.1f}px;top:{y - 80:.1f}px">{txt}</div>')
+            else:
+                nodes.append(f'<div class="lab l" style="right:{W - x + 52:.1f}px;top:{y - 80:.1f}px">{txt}</div>')
+    H = cy + 365
+    n_hand = len(edges)
+    body = K.head("SQT-Marketplace", f"{len(plugins)} plugin ใช้แกนกลางเดียวกัน แต่ละสาขาเติมของสาขาตัวเอง", "superuser",
+                  "plugins/*/.claude-plugin/plugin.json",
+                  [(len(plugins), "plugin"), (len(su["core_skills"]), "skill กลาง"), (len(su["agents"]), "agent กลาง"), (n_hand, "คู่ plugin ส่งงานหากัน")])
+    defs = ('<marker id="m-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">'
+            '<path d="M1 1L9 5L1 9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>')
+    body += (f'<div class="ov" style="--h:{H}px"><svg class="arcs" viewBox="0 0 {W} {H}"><defs>{defs}</defs>{"".join(arcs)}</svg>{"".join(nodes)}</div>')
+    body += K.legend([], note="เส้นเทา = คู่ plugin ส่งงานหากัน (หัวลูกศรสองด้านคือส่งได้ทั้งสองทาง) · ตัวเลขข้างวงไม่นับของกลาง")
+    return K.page("marketplace overview", EXTRA_CSS + body, "superuser")
 
 
 # ---------- รูปที่ 4 · hook ทำงานอย่างไร (อ่านจาก superuser-hook.mjs) ----------
+# 1 รูป = 1 คำถาม: "hook ทำอะไรกับเหตุการณ์ 1 ครั้ง"
 
 def build_hook():
-    def box(cls, title, text, side=""):
-        s = f'<div class="side">{e(side)}</div>' if side else ""
-        return f'<div class="box {cls}"><div class="t">{title}</div><div class="d">{text}</div>{s}</div>'
-    down = '<div class="down">↓</div>'
-    events = '<div class="grid g4">' + "".join(box("ev", ev, e(t)) for ev, t in [
-        ("SessionStart", "เปิด session"), ("UserPromptSubmit", "ผู้ใช้ส่งข้อความ"),
-        ("PostToolUse", "เครื่องมือทำงานเสร็จ"), ("PostToolUseFailure", "เครื่องมือล้ม")]) + "</div>"
-    flow = '<div class="vflow">' + down.join([
-        box("", "รัน node superuser-hook.mjs", "รับข้อมูลเหตุการณ์ทาง stdin · ตั้งเวลาไว้ 10 วินาที"),
-        box("dec", "โปรเจกต์มี <code>.claude/superuser/</code> ไหม", "ไล่หาขึ้นไปทีละโฟลเดอร์ไม่เกิน 25 ชั้น · ข้ามโฟลเดอร์ home · รองรับ <code>.superuser/</code> แบบเก่า",
-            "ไม่มี → ออกเงียบ ๆ (hook ไม่สร้างโฟลเดอร์ทีมเอง)"),
-        box("dec", "plugin อื่นจดเหตุการณ์นี้ไปแล้วหรือยัง", "สร้างไฟล์ล็อกใน <code>_to_delete/superuser-lock/</code> จาก hash ของเหตุการณ์ · ช่วงละ 3 วินาที · ล็อกเกิน 2 นาทีลบทิ้ง",
-            "มีตัวอื่นจดแล้ว → ออก (ติดตั้งหลาย plugin ก็ไม่จดซ้ำ)"),
-        box("", "สร้างบันทึก 1 บรรทัด", "เวลา · session · agent · โมเดล · เครื่องมือ · เป้าหมาย · สำเร็จไหม · "
-            "ตัดค่าลับออกก่อน (คีย์ · token · รหัสผ่าน · JWT) · ส่งงานให้ subagent → จดบทบาทและโมเดล · "
-            "ข้อความผู้ใช้ที่มีคำอย่าง \"ไม่ใช่ · ผิด · ทำใหม่\" → ติดธง <code>correction: true</code>"),
-        box("out", "เขียนต่อท้าย <code>log/&lt;วันที่&gt;/&lt;agent&gt;.jsonl</code>", "1 ไฟล์ต่อ agent ต่อวัน · อัปเดต <code>state.json</code> (โมเดลของแต่ละ agent · inbox ที่เห็นแล้ว)"),
-        box("dec", "เป็นหัวหน้าทีม และมีเรื่องต้องบอกไหม", "เปิด session → เตือนให้อ่าน <code>CONTEXT.md</code> หัวข้อ \"รับงานต่อ\" · "
-            "มีไฟล์ใหม่ใน <code>inbox/</code> → บอกจำนวนและชื่อ", "subagent ไม่ได้รับข้อความนี้"),
-        box("out", "ส่งข้อความกลับเข้า context ของ Claude", "<code>hookSpecificOutput.additionalContext</code> · error ทุกอย่างถูกจับ แล้วออกด้วย 0 งานหลักไม่ล้มเพราะ hook"),
-    ]) + "</div>"
-    readers = '<div class="grid g3">' + "".join(box("out", a, e(b)) for a, b in [
-        ("learning-reviewer", "ตอนจบงาน อ่านบรรทัดที่ correction: true และขั้นที่ล้ม → เสนอแก้ skill ไม่เกิน 3 ข้อ"),
-        ("หัวหน้าทีม", "เปิด session ใหม่ อ่าน CONTEXT.md แล้วรับงานต่อจากที่ค้างไว้"),
-        ("ผู้ใช้", "เปิด log ดูว่า agent ไหนทำอะไร ใช้โมเดลอะไร ล้มตรงไหน")]) + "</div>"
-    body = header("SuperUser hook", "— ทำงานอย่างไร", "ไฟล์เดียวกันทุก plugin · จดทุกการทำงาน · บอกหัวหน้าทีมเมื่อมีงานรอ",
+    def step(i, role, ico, title, text, exit_=""):
+        ex = f'<div class="exit">{K.tag("ออก")}<span>{exit_}</span></div>' if exit_ else ""
+        return (f'<div class="step"><div class="dotcol">{K.dot(role, ico, "lg" if role == "pc" else "", id=f"h{i}")}</div>'
+                f'<div class="tx"><div class="lb">{title}</div><div class="sb">{text}</div>{ex}</div></div>')
+    t1 = (f'<div class="step"><div class="dotcol">{K.dot("user", "terminal", id="h0")}</div><div class="tx"><div class="lb">เหตุการณ์ 4 แบบเรียก hook (ตั้งไว้ใน hooks.json)</div>'
+          f'<div class="tags" style="justify-content:flex-start;margin-top:4px">{"".join(K.tag(x, "user") for x in ["SessionStart", "UserPromptSubmit", "PostToolUse", "PostToolUseFailure"])}</div>'
+          f'<div class="sb">เปิด session · ผู้ใช้ส่งข้อความ · เครื่องมือทำงานเสร็จ · เครื่องมือล้ม</div></div></div>')
+    steps = [
+        step(1, "pc", "workflow", "รัน superuser-hook.mjs", "รับข้อมูลเหตุการณ์ทาง stdin · ตั้งเวลาไว้ 10 วินาที"),
+        step(2, "dec", "git-branch", "โปรเจกต์มี <code>.claude/superuser/</code> ไหม", "ไล่หาขึ้นไปทีละโฟลเดอร์ไม่เกิน 25 ชั้น · ข้ามโฟลเดอร์ home",
+             "ไม่มี → hook ไม่สร้างโฟลเดอร์ทีมเอง"),
+        step(3, "dec", "git-branch", "plugin อื่นจดเหตุการณ์นี้แล้วหรือยัง", "เทียบจาก hash ของเหตุการณ์ในช่วง 3 วินาที · ไฟล์ล็อกเกิน 2 นาทีลบทิ้ง",
+             "มีตัวอื่นจดแล้ว → ติดตั้งหลาย plugin ก็ไม่จดซ้ำ"),
+        step(4, "agent", "file-text", "สร้างบันทึก 1 บรรทัด", "เวลา · session · agent · โมเดล · เครื่องมือ · เป้าหมาย · สำเร็จไหม · ตัดค่าลับ (คีย์ token รหัสผ่าน JWT) ออกก่อน · "
+             "ข้อความที่มีคำอย่าง \"ไม่ใช่ · ผิด · ทำใหม่\" ติดธง <code>correction: true</code>"),
+        step(5, "agent", "file-text", "เขียนต่อท้าย <code>log/&lt;วันที่&gt;/&lt;agent&gt;.jsonl</code>", "1 ไฟล์ต่อ agent ต่อวัน · อัปเดต <code>state.json</code> · learning-reviewer อ่านบรรทัดที่ติดธงตอนจบงาน"),
+        step(6, "dec", "git-branch", "เป็นหัวหน้าทีม และมีเรื่องต้องบอกไหม", "เปิด session → เตือนให้อ่านหัวข้อ \"รับงานต่อ\" ใน <code>CONTEXT.md</code> · มีไฟล์ใหม่ใน <code>inbox/</code> → บอกจำนวนและชื่อ",
+             "subagent ไม่ได้รับข้อความนี้"),
+        step(7, "user", "message-square", "ส่งข้อความกลับเข้า context ของ Claude", "ผ่าน <code>hookSpecificOutput.additionalContext</code> · error ทุกอย่างถูกจับแล้วออกด้วย 0 งานหลักไม่ล้มเพราะ hook"),
+    ]
+    pairs = [("h0", "h1", "main")] + [(f"h{i}", f"h{i + 1}", "main" if i in (1, 4) else "") for i in range(1, 7)]
+    body = K.head("SuperUser hook", "เหตุการณ์ 1 ครั้งผ่านอะไรบ้าง ตั้งแต่ hook เริ่มจนถึงข้อความที่ Claude ได้รับ", "superuser",
                   "plugins/*/hooks/hooks.json · superuser-hook.mjs")
-    body += '<div class="steps">'
-    body += step(1, "p", "เหตุการณ์ที่ทำให้ hook ทำงาน", "ตั้งไว้ใน hooks.json · PostToolUse ทุกเครื่องมือ (matcher *)", events)
-    body += step(2, "a", "ทางเดินของเหตุการณ์ 1 ครั้ง", "กล่องเหลือง = จุดตัดสินใจ · ตัวหนังสือเหลือง = ทางที่ออกก่อน", flow)
-    body += step(3, "g", "ใครอ่านสิ่งที่ hook จดไว้", "log คือหลักฐานของรอบเรียนรู้", readers)
-    body += "</div>" + footer("ทุกอย่างอยู่ในเครื่องผู้ใช้ ไม่มีการส่งออกนอกเครื่อง")
-    return page("superuser hook", body)
+    body += f'<div class="stage">{K.wires(pairs)}<div class="hookcol">{t1}{"".join(steps)}</div></div>'
+    body += K.legend([("user", "เหตุการณ์เข้า", "terminal"), ("pc", "hook", "workflow"), ("dec", "จุดตัดสินใจ", "git-branch"),
+                      ("agent", "จดบันทึก", "file-text"), ("user", "ข้อความกลับ", "message-square")],
+                     note="ทุกอย่างอยู่ในเครื่องผู้ใช้ ไม่ส่งออกนอกเครื่อง")
+    return K.page("superuser hook", EXTRA_CSS + body, "superuser")
 
 
 if __name__ == "__main__":
@@ -395,7 +302,6 @@ if __name__ == "__main__":
     files = {"marketplace-overview": build_overview(plugins), "hook-lifecycle": build_hook()}
     for plugin in plugins:
         files[f"{plugin}-map"] = build_map(plugin)
-        files[f"{plugin}-playbooks"] = build_playbooks(plugin)
     for name, content in files.items():
         open(os.path.join(out, f"{name}.html"), "w", encoding="utf-8").write(content)
     print(f"{len(files)} html → {out}")

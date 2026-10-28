@@ -283,7 +283,7 @@ plugins/<plugin>/
 | `playbook-review.md` | ตรวจงานที่เสร็จแล้ว | 6 |
 | `playbook-team-project.md` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม | 9 |
 | `playbook-unattended-run.md` | งานยาวไม่ต้องเฝ้า | 7 |
-| `playbook-video.md` | ทำคลิปสั้นจากสคริปต์ | 5 |
+| `playbook-video.md` | ทำคลิปสั้นจากสคริปต์ | 6 |
 
 ## personal-life
 
@@ -513,6 +513,7 @@ plugins/<plugin>/
 | `app-verifier-upkeep` | แก้สคริปต์ verify เมื่อแอปเปลี่ยนจนขั้นตอนไม่ตรง | — |
 | `spec-to-code-loop` | ลูปสร้างจากสเปก: test แดงก่อน → โค้ด → เทียบหน้าจอ → บันทึก · ติดแล้วทำอย่างไร | — |
 | `web-quality-audit` | ตรวจการเข้าถึง (WCAG 2.2 AA) และความเร็ว (Lighthouse · Core Web Vitals) ของเว็บก่อนเปิดตัว | — |
+| `test-evidence` | รัน test case แล้วเก็บหลักฐาน: GIF มีคำบรรยาย · รายงานผ่าน/ไม่ผ่าน · คอลัมน์ใน Excel | `assets/fonts/LICENSE-DejaVu.txt` · `assets/fonts/OFL-Sarabun.txt` · `assets/fonts/Sarabun-Regular.ttf` · `assets/fonts/Sarabun-SemiBold.ttf` · `assets/fonts/Symbols-DejaVuSans.ttf` · `scripts/make_evidence.py` · `scripts/record_results.py` |
 
 **ความปลอดภัยและข้อมูลส่วนตัว**
 
@@ -524,6 +525,8 @@ plugins/<plugin>/
 | `config-and-secrets` | ค่าที่ต่างกันตาม environment และค่าลับที่ห้ามเข้า git | `references/per-stack.md` |
 | `pdpa-compliance` | ซอฟต์แวร์ที่เก็บข้อมูลคนไทยตาม PDPA: ความยินยอม · สิทธิ์ · ระยะเก็บ · ข้อมูลรั่ว | — |
 | `audit-trail` | เก็บประวัติว่าใครทำอะไรเมื่อไร (อนุมัติ · เงิน · สิทธิ์ · ข้อมูลส่วนบุคคล) | — |
+| `owasp-top10` | ระบบเว็บและ API ผ่าน OWASP Top 10:2025: สิ่งที่ต้องมี · วิธีพิสูจน์ · รายงานรายข้อ A01–A10 | `assets/owasp-report.md` · `references/contract-clause.md` · `references/stack-checks.md` |
+| `security-audit` | ตรวจช่องโหว่ทั้งระบบก่อนส่งมอบ: 6 ขั้น · ผู้ยืนยันแยกจากผู้ล่า · ผล findings.json ที่เครื่องตรวจได้ | `assets/findings.schema.json` · `assets/report-th.md` · `references/attack-classes.md` · `references/classes-ai-mcp.md` · `references/classes-data-tenant.md` · `references/classes-messaging-webhook.md` · `references/classes-supply-chain.md` · `references/classes-thai.md` · `references/classes-web-auth.md` · `references/hunting.md` · `references/ledger.md` · `references/recon.md` · `references/verify.md` · `scripts/audit_lib.mjs` · `scripts/fingerprint.mjs` · `scripts/fixtures/bad-cases.json` · `scripts/fixtures/good-confirmed-only/findings.json` · `scripts/fixtures/good-confirmed-only/ledger.json` · `scripts/fixtures/good-empty/findings.json` · `scripts/fixtures/good-empty/ledger.json` · `scripts/fixtures/good-full/findings.json` · `scripts/fixtures/good-full/ledger.json` · `scripts/render_report.mjs` · `scripts/self_test.mjs` · `scripts/validate_findings.mjs` · `scripts/validate_ledger.mjs` |
 
 **เขียนโค้ดและภาษา**
 
@@ -538,6 +541,7 @@ plugins/<plugin>/
 | `commit-message-format` | รูปแบบข้อความ commit (Conventional Commits) | — |
 | `pr-description-template` | เขียนคำอธิบาย pull request | — |
 | `i18n-and-locale` | แสดงข้อความ วันที่ ตัวเลข เงิน ทั้งไทยและอังกฤษ (ปี พ.ศ. · การเรียงคำไทย) | `references/thai-text-tools.md` |
+| `stack-mql` | เขียนและตรวจ MQL4 / MQL5 (EA · indicator บน MetaTrader) และเตรียมขายบน MQL5 Market | — |
 
 **สถาปัตยกรรมและหลังบ้าน**
 
@@ -559,6 +563,10 @@ plugins/<plugin>/
 | `incident-runbook-template` | คู่มือรับมือเมื่อระบบพัง และคู่มือเวร on-call | `references/game-days.md` · `references/index-and-alert-links.md` · `references/runbook-template.md` |
 | `postmortem-template` | เขียนทบทวนหลังเหตุระบบล่มแบบไม่โทษคน | — |
 | `saas-platform` | สร้าง SaaS แบบ B2B: หลายลูกค้าในระบบเดียว · แยกข้อมูล · SSO · SCIM · เก็บเงิน | `references/agent-customer-success-engineer.md` · `references/agent-integration-engineer.md` · `references/agent-revops-analyst.md` · `references/agent-saas-architect.md` · `references/enterprise-integration.md` · `references/multi-tenancy-patterns.md` · `references/subscription-billing.md` |
+| `jenkins-pipeline` | เขียน Jenkinsfile build image · ทดสอบ · deploy staging → production ด้วย Helm โดยค่าลับไม่รั่วและมีคนอนุมัติ | `references/jenkinsfile-voice-clinic.md` |
+| `kubernetes-helm` | Dockerfile ใช้งานจริง · manifest Kubernetes · Helm chart · staging → production · GPU node pool · KEDA | `references/dockerfile.md` · `references/gpu-node-pool.md` · `references/helm-chart.md` · `references/keda-queue-scaling.md` · `references/manifest-checklist.md` |
+| `kafka-streaming` | ออกแบบ topic · producer · consumer ของ Kafka ให้ event ไม่หายไม่ซ้ำ: key · acks=all · outbox · dead letter | `references/clinic-example.md` · `references/config-table.md` |
+| `rabbitmq-messaging` | ออกแบบคิว RabbitMQ ไม่ให้ข้อความหายหรือซ้ำ: quorum queue · publisher confirms · manual ack · dead letter · delayed retry · MCP อ่านอย่างเดียว | `references/email-queue-example.md` · `references/mcp-rabbitmq.md` |
 
 **ออกแบบหน้าจอและภาพ**
 
@@ -574,6 +582,7 @@ plugins/<plugin>/
 | `software-diagrams` | แผนภาพเทคนิคแบบ Mermaid ใน Markdown README หรือ PR | `assets/diagrams-python.md` · `assets/infra-diagram.py` · `assets/mermaid-theme.md` · `scripts/check-mermaid-theme.mjs` |
 | `markdown-visuals` | ภาพในเอกสาร Markdown ที่แสดงได้ทุกที่ (หน้าจอ · ขั้นตอน · สถาปัตยกรรม) | `references/ascii-patterns.md` · `references/combining-formats.md` · `references/svg-snippets.md` |
 | `product-naming` | ตั้งชื่อสินค้า แอป โมดูล แบรนด์ และเช็กว่าคนไทยอ่านแล้วฟังเป็นอย่างไร | `assets/name-shortlist.md` · `references/formula-9-deep-dive.md` · `references/meaning-libraries.md` |
+| `design-direction-lookup` | ค้นจุดเริ่มหน้าตาจากตารางไทย: อุตสาหกรรม · ชุดสี · คู่ฟอนต์ไทย-ละติน · กฎ UX · stack แล้วร่าง 3 แนว | `data/charts.csv` · `data/font-pairs.csv` · `data/industries.csv` · `data/landing.csv` · `data/looks.csv` · `data/palettes.csv` · `data/stacks/angular.csv` · `data/stacks/aspnet-mvc.csv` · `data/stacks/blazor.csv` · `data/stacks/flutter.csv` · `data/stacks/line-liff.csv` · `data/stacks/pwa.csv` · `data/stacks/react.csv` · `data/thai-fonts.csv` · `data/ux-rules.csv` · `references/query-guide.md` · `references/relevance-cases.json` · `scripts/brand_colors.py` · `scripts/brand_palette.py` · `scripts/check_data.py` · `scripts/design_draft.py` · `scripts/design_search.py` · `scripts/fixtures/charts.csv` · `scripts/fixtures/font-pairs.csv` · `scripts/fixtures/industries.csv` · `scripts/fixtures/landing.csv` · `scripts/fixtures/looks.csv` · `scripts/fixtures/palettes.csv` · `scripts/fixtures/stacks/blazor.csv` · `scripts/fixtures/thai-fonts.csv` · `scripts/fixtures/ux-rules.csv` |
 
 **เอกสารและสไลด์**
 
@@ -589,6 +598,7 @@ plugins/<plugin>/
 | `presentation-design` | ทำสไลด์ที่คนจะนำเสนอหรืออ่าน: เรื่องเล่า · หัวข้อ · layout · ฟอนต์ไทย | `assets/slide-mockup-preview.webp` · `assets/slide-mockup.html` · `references/anti-patterns.md` |
 | `html-slide-deck` | สไลด์เป็นไฟล์ HTML ไฟล์เดียว เปิดได้ไม่ต้องต่อเน็ต มีโน้ตผู้พูด | `assets/example-logo.png` · `assets/shell.html` · `assets/slides-example-preview.webp` · `assets/slides-example.html` · `scripts/build_deck.py` · `scripts/check_deck.py` |
 | `pptx-to-html-deck` | เปลี่ยน .pptx เป็น HTML ไฟล์เดียวที่มี animation โน้ต และเมนู | `assets/interactive-page.html` · `assets/runtime.css` · `assets/runtime.js` · `scripts/check_html_deck.py` · `scripts/click_steps.py` · `scripts/pptx_to_html.py` |
+| `doc-cover-design` | ปกเอกสาร .docx ที่ไม่ซ้ำใคร 3 แบบ แล้วโหวต 2 ใน 3 | `references/cover-bakeoff.md` · `references/real-examples.md` · `references/structural-ideas.md` · `references/word-build.md` · `scripts/cover-engine/src/build_all.py` · `scripts/cover-engine/src/calibrate.py` · `scripts/cover-engine/src/capture.py` · `scripts/cover-engine/src/docx_build.py` · `scripts/cover-engine/src/fonts.py` · `scripts/cover-engine/src/render.py` · `scripts/cover-engine/src/web/cover.html` · `scripts/cover-engine/src/web/cover.js` · `scripts/cover-engine/src/web/projects.js` · `scripts/cover-engine/src/web/set.html` · `scripts/cover-engine/src/word_pdf.py` |
 
 **ความรู้เฉพาะสาขา**
 
@@ -607,23 +617,13 @@ plugins/<plugin>/
 | `developer-experience` | ประสบการณ์นักพัฒนา: เวลาถึง hello world · ข้อความ error · CLI · SDK | `references/agent-devrel-engineer.md` · `references/agent-docs-engineer.md` · `references/agent-dx-engineer.md` · `references/agent-sdk-builder.md` · `references/developer-experience.md` · `references/sdk-design-patterns.md` · `references/technical-content.md` |
 | `seo-audit-checklist` | checklist ตรวจ SEO ของเว็บก่อนเปิดตัว | `references/checklist.md` · `references/page-brief.md` · `references/report-template.md` |
 | `data-analysis` | ตอบคำถามธุรกิจจาก CSV · Excel · SQL ด้วยสคริปต์รันซ้ำได้ (ตัวเลขอ้างบรรทัดผล · ไฟล์ไทย · กราฟภาษาไทย) | `assets/analyse_sales.py` · `assets/make_sample.py` · `assets/sales-sample.csv` |
+| `voice-agent` | voice agent ภาษาไทยแบบ realtime: SIP/WebRTC · VAD · STT/TTS streaming · พูดแทรก · งบ latency · PDPA | `references/thai-speech-options.md` |
 
 **อื่น ๆ**
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
-| `design-direction-lookup` | ค้นจุดเริ่มหน้าตาจากตารางไทย: อุตสาหกรรม · ชุดสี · คู่ฟอนต์ไทย-ละติน · กฎ UX · stack แล้วร่าง 3 แนว | `data/charts.csv` · `data/font-pairs.csv` · `data/industries.csv` · `data/landing.csv` · `data/looks.csv` · `data/palettes.csv` · `data/stacks/angular.csv` · `data/stacks/aspnet-mvc.csv` · `data/stacks/blazor.csv` · `data/stacks/flutter.csv` · `data/stacks/line-liff.csv` · `data/stacks/pwa.csv` · `data/stacks/react.csv` · `data/thai-fonts.csv` · `data/ux-rules.csv` · `references/query-guide.md` · `references/relevance-cases.json` · `scripts/brand_colors.py` · `scripts/brand_palette.py` · `scripts/check_data.py` · `scripts/design_draft.py` · `scripts/design_search.py` · `scripts/fixtures/charts.csv` · `scripts/fixtures/font-pairs.csv` · `scripts/fixtures/industries.csv` · `scripts/fixtures/landing.csv` · `scripts/fixtures/looks.csv` · `scripts/fixtures/palettes.csv` · `scripts/fixtures/stacks/blazor.csv` · `scripts/fixtures/thai-fonts.csv` · `scripts/fixtures/ux-rules.csv` |
-| `doc-cover-design` | ปกเอกสาร .docx ที่ไม่ซ้ำใคร 3 แบบ แล้วโหวต 2 ใน 3 | `references/cover-bakeoff.md` · `references/real-examples.md` · `references/structural-ideas.md` · `references/word-build.md` · `scripts/cover-engine/src/build_all.py` · `scripts/cover-engine/src/calibrate.py` · `scripts/cover-engine/src/capture.py` · `scripts/cover-engine/src/docx_build.py` · `scripts/cover-engine/src/fonts.py` · `scripts/cover-engine/src/render.py` · `scripts/cover-engine/src/web/cover.html` · `scripts/cover-engine/src/web/cover.js` · `scripts/cover-engine/src/web/projects.js` · `scripts/cover-engine/src/web/set.html` · `scripts/cover-engine/src/word_pdf.py` |
-| `jenkins-pipeline` | เขียน Jenkinsfile build image · ทดสอบ · deploy staging → production ด้วย Helm โดยค่าลับไม่รั่วและมีคนอนุมัติ | `references/jenkinsfile-voice-clinic.md` |
-| `kafka-streaming` | ออกแบบ topic · producer · consumer ของ Kafka ให้ event ไม่หายไม่ซ้ำ: key · acks=all · outbox · dead letter | `references/clinic-example.md` · `references/config-table.md` |
-| `kubernetes-helm` | Dockerfile ใช้งานจริง · manifest Kubernetes · Helm chart · staging → production · GPU node pool · KEDA | `references/dockerfile.md` · `references/gpu-node-pool.md` · `references/helm-chart.md` · `references/keda-queue-scaling.md` · `references/manifest-checklist.md` |
-| `owasp-top10` | ระบบเว็บและ API ผ่าน OWASP Top 10:2025: สิ่งที่ต้องมี · วิธีพิสูจน์ · รายงานรายข้อ A01–A10 | `assets/owasp-report.md` · `references/contract-clause.md` · `references/stack-checks.md` |
-| `rabbitmq-messaging` | ออกแบบคิว RabbitMQ ไม่ให้ข้อความหายหรือซ้ำ: quorum queue · publisher confirms · manual ack · dead letter · delayed retry · MCP อ่านอย่างเดียว | `references/email-queue-example.md` · `references/mcp-rabbitmq.md` |
-| `security-audit` | ตรวจช่องโหว่ทั้งระบบก่อนส่งมอบ: 6 ขั้น · ผู้ยืนยันแยกจากผู้ล่า · ผล findings.json ที่เครื่องตรวจได้ | `assets/findings.schema.json` · `assets/report-th.md` · `references/attack-classes.md` · `references/classes-ai-mcp.md` · `references/classes-data-tenant.md` · `references/classes-messaging-webhook.md` · `references/classes-supply-chain.md` · `references/classes-thai.md` · `references/classes-web-auth.md` · `references/hunting.md` · `references/ledger.md` · `references/recon.md` · `references/verify.md` · `scripts/audit_lib.mjs` · `scripts/fingerprint.mjs` · `scripts/fixtures/bad-cases.json` · `scripts/fixtures/good-confirmed-only/findings.json` · `scripts/fixtures/good-confirmed-only/ledger.json` · `scripts/fixtures/good-empty/findings.json` · `scripts/fixtures/good-empty/ledger.json` · `scripts/fixtures/good-full/findings.json` · `scripts/fixtures/good-full/ledger.json` · `scripts/render_report.mjs` · `scripts/self_test.mjs` · `scripts/validate_findings.mjs` · `scripts/validate_ledger.mjs` |
-| `stack-mql` | เขียนและตรวจ MQL4 / MQL5 (EA · indicator บน MetaTrader) และเตรียมขายบน MQL5 Market | — |
 | `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/agents.md` · `references/approvals.md` · `references/brief-template.md` · `references/code-extensions.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-bug-fix.md` · `references/playbook-feature.md` · `references/playbook-housekeeping.md` · `references/playbook-investigation.md` · `references/playbook-learn-from-session.md` · `references/playbook-new-project.md` · `references/playbook-performance.md` · `references/playbook-pickup-and-pause.md` · `references/playbook-project-docs.md` · `references/playbook-prototype.md` · `references/playbook-refactor.md` · `references/playbook-review.md` · `references/playbook-ship.md` · `references/playbook-skill-authoring.md` · `references/playbook-team-project.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-visual-parity.md` · `references/principles.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
-| `test-evidence` | รัน test case แล้วเก็บหลักฐาน: GIF มีคำบรรยาย · รายงานผ่าน/ไม่ผ่าน · คอลัมน์ใน Excel | `assets/fonts/LICENSE-DejaVu.txt` · `assets/fonts/OFL-Sarabun.txt` · `assets/fonts/Sarabun-Regular.ttf` · `assets/fonts/Sarabun-SemiBold.ttf` · `assets/fonts/Symbols-DejaVuSans.ttf` · `scripts/make_evidence.py` · `scripts/record_results.py` |
-| `voice-agent` | voice agent ภาษาไทยแบบ realtime: SIP/WebRTC · VAD · STT/TTS streaming · พูดแทรก · งบ latency · PDPA | `references/thai-speech-options.md` |
 
 ### คำสั่ง (29) — พิมพ์ `/software-company:<ชื่อ>`
 
@@ -675,7 +675,7 @@ plugins/<plugin>/
 | `playbook-prototype.md` | ลองของก่อนตัดสินใจ | 7 |
 | `playbook-refactor.md` | จัดโค้ดใหม่ | 9 |
 | `playbook-review.md` | รีวิวโค้ด | 6 |
-| `playbook-ship.md` | ส่งมอบงาน | 8 |
+| `playbook-ship.md` | ส่งมอบงาน | 9 |
 | `playbook-skill-authoring.md` | เขียน skill ใหม่ | 8 |
 | `playbook-team-project.md` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม | 9 |
 | `playbook-unattended-run.md` | ปล่อยให้ทำเองยาว ๆ | 7 |

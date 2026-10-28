@@ -8,11 +8,11 @@ import glob, json, os
 HERE = os.path.dirname(os.path.abspath(__file__))
 DOCS = os.path.abspath(os.path.join(HERE, "..", "..", "docs", "plugins"))
 NOTE = "<!-- สร้างโดย scripts/diagrams/pages.py · แก้ที่สคริปต์ ไม่แก้ที่นี่ -->\n\n"
-IMAGES = [
-    ("flow.png", "SuperUser ทำงานอย่างไร", "หัวหน้าทีมรับงาน → เลือก playbook → แจกงานทีละขั้น → ตรวจก่อนตัดสินใจ → ส่งผล → เรียนรู้"),
-    ("map.png", "แผนผัง plugin", "มี agent ไหน ใช้ skill อะไร มีคำสั่งอะไร และส่งงานต่อให้ plugin ไหน"),
-    ("playbooks.png", "ขั้นตอนของ playbook", "แต่ละ playbook ทำกี่ขั้น ใครทำขั้นไหน ใช้ skill ไหน ตรงไหนรอผู้ใช้"),
-]
+
+
+def series(plugin, sub):
+    """รูปในโฟลเดอร์ย่อย (flow/ · playbooks/) เรียงตามชื่อไฟล์"""
+    return sorted(os.path.basename(f) for f in glob.glob(os.path.join(DOCS, plugin, sub, "*.png")))
 
 
 def load(plugin):
@@ -24,9 +24,16 @@ def load(plugin):
 def plugin_page(plugin, data, labels):
     pbs = labels.get("playbooks", {})
     shared = " (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md))"
-    rows = "\n".join(f"| `{p['name']}` | {pbs.get(p['name'], {}).get('short', p['title'])}{shared if p['shared'] else ''} | {len(p['steps'])} |"
-                     for p in data["playbooks"])
-    images = "\n\n".join(f"## {title}\n\n{text}\n\n![{title}]({file})" for file, title, text in IMAGES)
+    pngs = set(series(plugin, "playbooks"))
+    short = lambda p: pbs.get(p["name"], {}).get("short", p["title"])
+    link = lambda p: f"[`{p['name']}`](#pb-{p['name']})" if f"{p['name']}.png" in pngs else f"`{p['name']}`"
+    rows = "\n".join(f"| {link(p)} | {short(p)}{shared if p['shared'] else ''} | {len(p['steps'])} |" for p in data["playbooks"])
+    # flow/<k>-<ชื่อ>.png · ชื่อหลังเลขลำดับเป็นคำอธิบายสั้นของรูป
+    flow = "\n\n".join(f"![SuperUser ขั้น {f[:-4].replace('-', ' ', 1)}](flow/{f})" for f in series(plugin, "flow"))
+    pb_imgs = "\n\n".join(f'<a id="pb-{p["name"]}"></a>\n\n### {short(p)} · `{p["name"]}`\n\n![{short(p)}](playbooks/{p["name"]}.png)'
+                          for p in data["playbooks"] if f"{p['name']}.png" in pngs)
+    images = (f"## แผนผัง plugin\n\nเรื่องเข้ามาทางไหน ไปถึง agent ไหน ใช้ skill อะไร\n\n![แผนผัง plugin](map.png)\n\n"
+              f"## SuperUser ทำงานอย่างไร\n\nหัวหน้าทีมรับงาน → จัดขนาด → แจกงาน → ตรวจซ้ำจนผ่าน → ส่งมอบ → เรียนรู้\n\n{flow}")
     cross = " · ".join(f"[`{c}`](../{c}/README.md)" for c in data["cross"]) or "—"
     return (f"{NOTE}# {plugin}\n\n{labels.get('tagline', '')}\n\n"
             f"agent {len(data['agents'])} · skill {len(data['skills']) + len(data['core_skills'])}"
@@ -34,7 +41,7 @@ def plugin_page(plugin, data, labels):
             + " · "
             f"คำสั่ง {len(data['commands'])} · playbook {len(data['playbooks'])} · ส่งงานต่อให้ {cross}\n\n"
             f"[← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/{plugin}/`](../../../plugins/{plugin}/)\n\n"
-            f"{images}\n\n## playbook ทั้งหมด\n\n| playbook | ทำอะไร | ขั้น |\n|---|---|---|\n{rows}\n")
+            f"{images}\n\n## playbook ทั้งหมด\n\n| playbook | ทำอะไร | ขั้น |\n|---|---|---|\n{rows}\n\n{pb_imgs}\n")
 
 
 def index_page(plugins):
@@ -42,18 +49,20 @@ def index_page(plugins):
     for plugin in plugins:
         data, labels = load(plugin)
         name = f"`{plugin}` (แกนกลาง)" if plugin == "superuser" else f"`{plugin}`"
-        links = " · ".join(f"[{t}]({plugin}/{f})" for f, t in (("flow.png", "flow"), ("map.png", "map"), ("playbooks.png", "playbooks")))
+        links = f"[แผนผัง]({plugin}/map.png) · flow {len(series(plugin, 'flow'))} รูป · playbook {len(series(plugin, 'playbooks'))} รูป"
         rows.append(f"| [{name}]({plugin}/README.md) | {labels.get('tagline', '')} | {links} |")
     return (f"{NOTE}# รูปของทุก plugin\n\nรูปทั้งหมดสร้างจากไฟล์จริงใน `plugins/` ด้วย `scripts/diagrams/` · "
             f"แก้ plugin แล้วสร้างใหม่ได้ (ดู [scripts/README.md](../../scripts/README.md) หัวข้อ 6)\n\n"
             f"## ภาพรวม\n\n![ภาพรวม marketplace](marketplace-overview.png)\n\n"
             f"## hook ทำงานอย่างไร\n\n![hook](hook-lifecycle.png)\n\n"
-            f"## แต่ละ plugin\n\nแต่ละโฟลเดอร์มี 3 รูป: `flow.png` วิธีทำงานของ SuperUser · `map.png` แผนผัง plugin · "
-            f"`playbooks.png` ขั้นตอนของ playbook\n\n| plugin | ทำอะไร | รูป |\n|---|---|---|\n" + "\n".join(rows) +
+            f"## แต่ละ plugin\n\nแต่ละโฟลเดอร์มี `map.png` แผนผัง plugin · `flow/` วิธีทำงานของ SuperUser เป็นชุดรูปเรียงขั้น · "
+            f"`playbooks/` playbook ละ 1 รูป\n\n| plugin | ทำอะไร | รูป |\n|---|---|---|\n" + "\n".join(rows) +
             "\n\n## สีในรูป\n\n| สี | หมายถึง |\n|---|---|\n"
-            "| สีประจำ plugin | หัวรูป · ไอคอน · เส้นนำสายตาของ plugin นั้น |\n"
-            "| กรอบเส้นประ + ป้าย \"รอผู้ใช้อนุมัติ\" | ขั้นที่หยุดรอผู้ใช้ หรือผู้ใช้ต้องกดเอง |\n"
-            "| ชิป skill · agent · playbook | ชื่อจริงในไฟล์ ค้นใน `plugins/` ได้ตรงตัว |\n")
+            "| สีประจำ plugin | ตรา · เลขขั้น · เส้นทางหลักของ plugin นั้น |\n"
+            "| วงม่วง | ผู้ใช้ · ทางเข้าของงาน |\n"
+            "| วงกรมท่า | หัวหน้าทีม · ของกลางจาก superuser |\n"
+            "| วงฟ้า · วงเขียวอมฟ้า | agent · skill |\n"
+            "| วงกลวงขอบส้ม | ขั้นที่หยุดรอผู้ใช้อนุมัติ หรือผู้ใช้ต้องกดเอง |\n")
 
 
 if __name__ == "__main__":

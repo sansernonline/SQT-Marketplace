@@ -23,7 +23,7 @@ scripts/
 | sync | `sync/sync-file-map.mjs` + `sync/file-map-th.json` | เขียน `docs/FILE-MAP.md` แผนผังไฟล์ของทุก plugin พร้อมคำอธิบายไทย · skill หรือ agent ใหม่ที่ยังไม่มีคำอธิบายใน `file-map-th.json` → แจ้งชื่อแล้ว exit 1 · `--check` ตรวจอย่างเดียว | **หลังเพิ่มหรือลบ skill / agent / playbook** (`build-dist.cmd` รันให้แล้ว) |
 | sync | `sync/sync-prompt-rules.mjs` | เขียนบล็อกกฎร่วม `<!-- rules:begin/end -->` ในทุกไฟล์ `prompt/software-company/prompt-*.md` ให้ตรงกับ `RULES` ในสคริปต์ (ต้นฉบับที่เดียว · กฎเฉพาะไฟล์วางใต้ `rules:end`) · `--check` ตรวจอย่างเดียว · `validate-marketplace` ตรวจให้ด้วย | **หลังแก้กฎร่วมของ prompt** — แก้ `RULES` แล้วรัน |
 | **build** | `build/build-targets.mjs` | สร้าง `dist/` สำหรับ claude.ai (zip), Codex CLI, Gemini CLI และหน้าเว็บ ChatGPT / Gemini จาก `plugins/` | **หลังแก้อะไรก็ได้ใน `plugins/`** แล้ว commit `dist/` ไปด้วย |
-| **diagrams** | `diagrams/make.py` | สร้างรูป 38 รูปและหน้า README ใน `docs/plugins/` จากไฟล์จริง (ดู [หัวข้อ 6](#6--diagrams)) | **หลังเพิ่มหรือแก้ agent · skill · playbook** |
+| **diagrams** | `diagrams/make.py` | สร้างรูปราว 125 รูปและหน้า README ใน `docs/plugins/` จากไฟล์จริง (ดู [หัวข้อ 6](#6--diagrams)) | **หลังเพิ่มหรือแก้ agent · skill · playbook** |
 | **install** | `install/install-marketplace.ps1` | ติดตั้ง marketplace นี้จากโฟลเดอร์ในเครื่อง | ครั้งแรก และเมื่อเพิ่ม plugin ใหม่ |
 | install | `install/install-global-rules.ps1` / `.sh` | ติดตั้ง `CLAUDE.global.md` เป็น `~/.claude/CLAUDE.md` (สำรองไฟล์เดิมก่อน) | ครั้งแรกบนเครื่องใหม่ และหลังแก้กฎ |
 | install | `install/CLAUDE.global.md` | ต้นฉบับกฎประจำตัวระดับเครื่อง — ไม่ใช่สคริปต์ แต่เป็นไฟล์ที่ `install-global-rules` ติดตั้ง | แก้ที่นี่ที่เดียว |
@@ -193,19 +193,21 @@ bash scripts/install/install-global-rules.sh                                    
 
 ```bash
 python scripts/diagrams/make.py            # ทุกรูป → docs/plugins/
-python scripts/diagrams/make.py career     # เฉพาะ plugin เดียว (ภาพรวมกับ hook สร้างใหม่ด้วย)
+python scripts/diagrams/make.py trading-finance   # เฉพาะ plugin เดียว (ภาพรวมกับ hook สร้างใหม่ด้วย)
 ```
 
 ต้องมี `pip install playwright` และ `playwright install chromium` · ไฟล์กลางทางอยู่ใน `_to_delete/diagrams/` · รายการรูปอยู่ใน [docs/plugins/README.md](../docs/plugins/README.md)
 
 | ไฟล์ | หน้าที่ |
 |---|---|
-| `make.py` | รันทุกขั้นข้างล่างต่อกัน แล้ววางรูปลง `docs/plugins/<plugin>/` |
+| `make.py` | รันทุกขั้นข้างล่างต่อกัน แล้ววางรูปลง `docs/plugins/<plugin>/` (`map.png` · `flow/<k>-<ชื่อ>.png` · `playbooks/<playbook>.png`) |
 | `extract.py` | อ่าน agent · skill · คำสั่ง · ขั้นของ playbook (ใครทำ · skill ที่อ้าง · ขั้นที่รอผู้ใช้) จากไฟล์จริง ไม่เดา → `data/` |
 | `labels/<plugin>.json` | คำสั้นในกล่อง: หน้าที่ของ agent · ชื่อสั้นและกลุ่มของ playbook · ป้ายของแต่ละขั้น · `software-company` มีกลุ่ม agent และกลุ่ม skill เพิ่ม — **คนหรือ agent เขียน** |
-| `palette.py` | สีและตราประจำ 12 plugin — ที่เดียว ทั้ง `build.py` และ `flow/` ใช้ร่วมกัน |
-| `build.py` + `style.css` | HTML ของ `map` · `playbooks` · ภาพรวม · hook · ขั้นที่ labels ไม่มีหรือจำนวนขั้นไม่ตรง → ใช้ข้อความจริงตัดสั้น แล้วพิมพ์ `เตือน:` |
-| `flow/` | HTML ของ `flow.png` (วิธีทำงานของ SuperUser) · คำสั้นในกล่องอยู่ใน `figdata.py` · หัวภาษาอังกฤษใน `bilingual.py` |
+| `kit/` | ชิ้นส่วนกลางของทุกรูป แนว "วงกลมบนลายจุด" (ต้นแบบ Stripe docs · ผู้ใช้เลือก 2026-10-28): `kit.css` สีบทบาทและขนาด · `kit.js` วาดเส้นโค้งระหว่างวง · `kit.py` ชิ้น HTML · `icons/` ไอคอน Lucide 0.460.0 (ISC) — เปลี่ยนหน้าตาแก้ที่นี่ที่เดียว ไม่วาดไอคอนเอง |
+| `palette.py` | สีและตราประจำ plugin — ที่เดียว ทุกตัวสร้างใช้ร่วมกัน |
+| `build.py` | HTML ของ `map` · ภาพรวม · hook |
+| `build_playbooks.py` | HTML ของ playbook ละ 1 รูป · ขั้นที่ labels ไม่มีหรือจำนวนขั้นไม่ตรง → ใช้ข้อความจริงตัดสั้น แล้วพิมพ์ `เตือน:` |
+| `flow/build_flow.py` | HTML ของชุด flow 6 รูปต่อ plugin (วิธีทำงานของ SuperUser) · คำสั้นอยู่ใน `flow/figdata.py` |
 | `render.py` | HTML → PNG กว้าง 1920 px |
 | `pages.py` | เขียน `docs/plugins/README.md` และ README ของแต่ละ plugin — อย่าแก้หน้าพวกนั้นด้วยมือ |
 

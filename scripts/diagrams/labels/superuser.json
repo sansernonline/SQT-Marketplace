@@ -109,7 +109,8 @@
    "context-budget",
    "status-report",
    "decision-log",
-   "flag-and-propose"
+   "flag-and-propose",
+   "workspace-setup"
   ],
   "หลักการทำงาน": [
    "simplify",
@@ -126,14 +127,17 @@
    "parallel-attempts-pick-best",
    "adversarial-review-panel",
    "prior-art-review",
-   "research-with-sources"
+   "research-with-sources",
+   "decision-scoring",
+   "design-references"
   ],
   "เรียนรู้ · ปรับทีม": [
    "repeated-mistakes-to-checks",
    "session-lessons-to-skills",
    "owner-style-capture",
    "skill-authoring",
-   "commit-log"
+   "commit-log",
+   "model-scorecard"
   ],
   "เขียน": [
    "human-writing",
@@ -146,7 +150,8 @@
    "polished-document-style",
    "document-naming",
    "spell-out-abbreviations",
-   "polite-message-th-en"
+   "polite-message-th-en",
+   "chat-prompt-workflows"
   ]
  }
 }
