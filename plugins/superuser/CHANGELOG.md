@@ -1,5 +1,9 @@
 # Changelog — superuser
 
+## 3.15.2 — 2026-10-28
+
+- router เพิ่ม 2 แถว (คำกว้างอย่าง 1688 · ชิปปิ้ง · ย้ายที่อยู่ ต้องมีคำบริบทคู่): นำเข้าจากจีน · สั่งจาก 1688 · ต้นทุนนำเข้า ไป `e-commerce:import-landed-cost` · ย้ายบ้าน · ย้ายทะเบียนบ้าน · คืนห้องเช่า ไป `personal-life:moving-house` · self-test เพิ่มข้อความที่ต้องติดและต้องไม่ติด
+
 ## 3.15.1 — 2026-10-28
 
 - router และ `triggers.md`: งานเสียงบรรยายจากสคริปต์ (TTS) ส่งไป `graphic-design:narration-th` ที่แยกออกจาก `video-editing`
