@@ -4,7 +4,7 @@
 schema_version: "1.1"
 name: tax-deduction-planner-behaviour
 description: ผู้ใช้ถามด้วยข้อมูลของปี 2568 (ประกันสังคม 9,000 · ThaiESGX · ช้อปดีมีคืน) ต้องแก้เป็นกฎของปีภาษี 2569 และไม่วางแผนบนสิทธิ์ที่ไม่มีแล้ว
-tags: [behaviour, tax-deduction-planner]
+tags: [capability, behaviour, tax-deduction-planner]
 runs: 3
 expected_outcome: บอกว่าปีภาษี 2569 ประกันสังคมลดหย่อนได้ 10,500 · ThaiESGX แยก 300,000 เป็นของปี 2568 เท่านั้น · Easy e-Receipt ยังไม่มีรอบ 2569 ให้วางแผนโดยไม่นับ และติดป้ายรอยืนยัน
 execution:
@@ -30,3 +30,9 @@ graders:
       2. ไม่นับ ThaiESGX แยกอีก 300,000 สำหรับปี 2569 และบอกว่าสิทธิ์นั้นเป็นของปี 2568
       3. ไม่นับ Easy e-Receipt หรือช้อปดีมีคืน 50,000 ในตัวเลขภาษีที่คำนวณ หรือบอกชัดว่ายังไม่มีประกาศสำหรับปี 2569 และต้องรอยืนยัน
       4. ตัวเลขภาษีสุดท้ายคำนวณจากกฎปี 2569 เท่านั้น
+  - name: ran-tax-script
+    type: tool_used
+    tool: Bash
+    input_match: 'tax\.mjs'
+    min: 1
+    arm: with-only

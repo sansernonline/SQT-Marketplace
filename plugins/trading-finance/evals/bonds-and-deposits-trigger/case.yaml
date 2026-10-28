@@ -2,7 +2,7 @@
 schema_version: "1.1"
 name: bonds-and-deposits-trigger
 description: ผู้ใช้มีเงินก้อนและเลือกไม่ถูกระหว่างเงินฝากประจำ พันธบัตรออมทรัพย์ หุ้นกู้ ไม่เอ่ยชื่อ skill ต้องทำให้ bonds-and-deposits ถูกเปิด และได้ตารางเทียบความเสี่ยงกับการคุ้มครอง
-tags: [trigger, bonds-and-deposits]
+tags: [capability, trigger, bonds-and-deposits]
 runs: 3
 expected_outcome: เรียก Skill bonds-and-deposits · เทียบเงินฝาก พันธบัตรรัฐบาล หุ้นกู้ และกองทุนตลาดเงิน · บอกว่าเงินฝากคุ้มครอง 1 ล้านบาทต่อคนต่อธนาคาร ส่วนหุ้นกู้ไม่คุ้มครอง · ถามหรือแยกส่วนเงินสำรองฉุกเฉินก่อน
 execution:

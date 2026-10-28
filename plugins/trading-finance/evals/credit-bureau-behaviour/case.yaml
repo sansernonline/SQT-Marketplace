@@ -3,7 +3,7 @@
 schema_version: "1.1"
 name: credit-bureau-behaviour
 description: ผู้ใช้ถูกปฏิเสธสินเชื่อบ้าน ถามว่าติดแบล็กลิสต์ไหม ตรวจเครดิตบูโรเสียเท่าไร และมีคนใน LINE เสนอลบประวัติ 5,000 บาท
-tags: [behaviour, credit-bureau]
+tags: [capability, behaviour, credit-bureau]
 runs: 3
 expected_outcome: บอกว่าเครดิตบูโรไม่มีแบล็กลิสต์ ผู้ให้กู้เป็นคนตัดสิน · ขอรายงานฟรีได้ภายใน 30 วันหลังได้จดหมายปฏิเสธ · ประวัติเก็บ 3 ปี (36 เดือน) · คนเสนอลบประวัติเป็นมิจฉาชีพ แก้ได้เฉพาะรายการผิดผ่านผู้ให้กู้
 execution:

@@ -2,7 +2,7 @@
 schema_version: "1.1"
 name: rebalance-and-dca-trigger
 description: พอร์ตกองทุนหุ้นโตจนสัดส่วนเพี้ยนจากแผน ไม่เอ่ยชื่อ skill ต้องทำให้ rebalance-and-dca ถูกเปิด และได้ตารางปรับสัดส่วนที่คำนวณจริง
-tags: [trigger, rebalance-and-dca]
+tags: [capability, trigger, rebalance-and-dca]
 runs: 3
 expected_outcome: เรียก Skill rebalance-and-dca · คำนวณสัดส่วนตอนนี้เทียบเป้า · เสนอปรับด้วยเงินใหม่ก่อนขายของเดิม · บอกเรื่องค่าธรรมเนียมและเงื่อนไข RMF หรือ ThaiESG ถ้าเกี่ยว
 execution:
