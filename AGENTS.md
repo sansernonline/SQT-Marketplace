@@ -19,8 +19,8 @@ repo นี้มี AI หลายตัวแก้พร้อมกัน (
    แล้วทำงานในโฟลเดอร์นั้นทั้งหมด · โฟลเดอร์หลัก `SQT-Marketplace/` เป็นของผู้ใช้
 2. ชื่อ branch ขึ้นต้นด้วยชื่อเครื่องมือ: `codex/…` · `claude/…` · `gemini/…`
 3. ใครทำอะไรอยู่ ดูจาก `git worktree list` และ `git branch -vv` ไม่ต้องจดตารางใน `CONTEXT.md`
-4. ห้ามแตะ worktree ของตัวอื่น · ไม่ commit · ไม่ลบ · ไม่ switch branch ในโฟลเดอร์ที่ไม่ใช่ของตัวเอง · เจอไฟล์ค้างที่ตัวเองไม่ได้แก้ = ของคนอื่น ห้าม stage
-5. merge แล้วเก็บกวาด: ลบ branch (`gh pr merge <เลข> --merge --delete-branch`) แล้ว `git worktree remove <โฟลเดอร์>` · worktree ยังมีไฟล์ค้าง git จะไม่ยอมลบ ให้บอกผู้ใช้ ห้ามใส่ `--force`
+4. ห้ามแตะ worktree ของตัวอื่น · ไม่ commit · ไม่ลบ · ไม่ switch branch ในโฟลเดอร์ที่ไม่ใช่ของตัวเอง (ยกเว้นเก็บกวาดตามข้อ 5) · เจอไฟล์ค้างที่ตัวเองไม่ได้แก้ = ของคนอื่น ห้าม stage
+5. merge แล้วเก็บกวาด: ลบ branch (`gh pr merge <เลข> --merge --delete-branch`) แล้ว `git worktree remove <โฟลเดอร์>` · worktree ยังมีไฟล์ค้าง git จะไม่ยอมลบ ให้บอกผู้ใช้ ห้ามใส่ `--force` · ตอนเริ่มและจบงานไล่ดู `git worktree list` ด้วย: branch ไหนมี PR ที่ merge แล้ว (`gh pr list --head <branch> --state merged` เจอ) และ `git -C <โฟลเดอร์> status --porcelain -uall` ว่าง และไม่ได้ล็อก → `git worktree remove <โฟลเดอร์>` แล้ว `git branch -d <branch>` ได้ทันทีโดยไม่ต้องถาม แม้เป็นของ session หรือ AI ตัวอื่น · ไม่เจอ PR ที่ merge (รวม branch ที่เพิ่งแตกและยังไม่มี commit ซึ่ง `--merged` นับว่า merge แล้ว) · มีไฟล์ค้าง · `-d` ไม่ยอม → ไม่แตะ ห้าม `-D` และ `--force`
 6. ไฟล์ที่ไม่อยู่ใน git (`node_modules` · `.venv` · `.env`) ไม่ตามมาใน worktree ใหม่ ต้องติดตั้งหรือคัดลอกเอง
 
 ## git
