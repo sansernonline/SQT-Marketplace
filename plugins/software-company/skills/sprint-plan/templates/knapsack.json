@@ -1,0 +1,11 @@
+{
+  "_note": "ตัวอย่าง (ตัวเลขสมมติ) sprint-plan เลือก story ใต้ความจุ · งบ = story point ที่ทีมทำได้ · ค่าที่ได้ = RICE score",
+  "budget": 20,
+  "items": [
+    { "name": "US-01 จองนัดออนไลน์", "cost": 8, "value": 90, "must": true },
+    { "name": "US-02 แจ้งเตือน LINE", "cost": 5, "value": 60 },
+    { "name": "US-03 ส่งออกรายงาน Excel", "cost": 5, "value": 25 },
+    { "name": "US-04 ค้นหาลูกค้า", "cost": 3, "value": 30 },
+    { "name": "US-05 เปลี่ยนธีมสี", "cost": 2, "value": 4 }
+  ]
+}

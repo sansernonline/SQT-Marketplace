@@ -1,0 +1,28 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# ที่มา: กับดักที่ data-import-export/SKILL.md ข้อ 4 จดไว้ (ชื่อที่ขึ้นต้นด้วย = + - @ ส่งออกดิบแล้ว Excel รันสูตร · CSV ไทยต้องมี BOM)
+# (ยังไม่ได้รันรอบแดง · ยังไม่มีผลรันของ agent ที่ไม่มี skill ให้ยืนยันว่าพลาดจริง)
+schema_version: "1.1"
+name: data-import-export-regression
+description: ส่งออกรายชื่อลูกค้าเป็น CSV ต้อง escape ค่าที่ขึ้นต้นด้วย = + - @ และใส่ BOM ให้ภาษาไทยอ่านได้ใน Excel
+tags: [regression, data-import-export]
+runs: 3
+expected_outcome: เขียนโค้ดหรือกติกาส่งออกที่ escape ค่าขึ้นต้นด้วย = + - @ และบันทึก UTF-8 พร้อม BOM
+execution:
+  prompt: |
+    เขียนฟังก์ชัน Python ส่งออกตารางลูกค้า (ชื่อ เบอร์โทร ยอดซื้อ) เป็นไฟล์ CSV ให้เจ้าหน้าที่เปิดด้วย Excel
+    ชื่อลูกค้ามาจากแบบฟอร์มที่คนนอกกรอกได้ ตอบในแชต ไม่ต้องสร้างไฟล์ ไม่ต้องถามกลับ
+  max_turns: 6
+  timeout_seconds: 240
+graders:
+  - name: formula-injection-escaped
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ให้ผ่านเมื่อโค้ดหรือคำอธิบายป้องกันค่าที่ขึ้นต้นด้วย = + - หรือ @ (เช่นเติม ' หรือเครื่องหมายนำหน้า)
+      ก่อนเขียนลง CSV เพื่อกัน Excel รันสูตร
+  - name: utf8-bom
+    type: regex
+    pattern: "utf-8-sig|BOM|\\\\ufeff"
+    flags: i
+    match: contains
+    target: last_message

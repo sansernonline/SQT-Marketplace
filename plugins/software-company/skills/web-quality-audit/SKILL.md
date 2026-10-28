@@ -122,7 +122,7 @@ description: Use when auditing a web page for accessibility (WCAG 2.2 AA) or per
 | Lighthouse accessibility | 100 และ axe/pa11y 0 error — แล้วค่อยตรวจมือ | เกณฑ์ของเรา |
 
 - Lighthouse เป็นค่า **lab** (เครื่องเดียว รอบเดียว) · ตัวเลขที่ Google ใช้จริงคือ **field** จาก Chrome UX Report ใน Search Console หรือ PageSpeed Insights · INP มีเฉพาะ field (ยังไม่ได้ตรวจว่า Lighthouse รุ่นปัจจุบันรายงาน INP ใน lab หรือไม่) ใน lab ดู Total Blocking Time (TBT) แทนไปก่อน
-- รัน 3 รอบ ใช้ค่ากลาง — รอบเดียวแกว่งได้ 5–10 คะแนน
+- รัน 3 รอบ ใช้ค่ากลาง — รอบเดียวอาจแกว่ง (ค่าประมาณ 5–10 คะแนน ยังไม่ได้วัด ไม่มีแหล่งทางการ)
 
 ## 4 · รันกับ dev server และ prod
 

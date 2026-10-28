@@ -1,0 +1,29 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เคส "ไม่ควรเปิด" (P7): ถามเรื่องของ skill คู่ใกล้เคียง · kubernetes-helm ต้องไม่ถูกเปิด (tool_used min 0 max 0 ตาม skill-authoring/references/eval-format.md)
+# runs 5: เคสนี้ใช้ตัดสินการแก้ description ของ skill · n=3 กว้างเกินไป (ยังไม่ได้วัดช่วงจริง)
+schema_version: "1.1"
+name: kubernetes-helm-trigger-negative
+description: ผู้ใช้ขอแก้ Jenkinsfile ต้องไม่เปิด kubernetes-helm (ของ jenkins-pipeline)
+tags: [trigger, negative, kubernetes-helm]
+runs: 5
+expected_outcome: ไม่เปิด Skill kubernetes-helm · คำตอบพูดถึง stage ของ pipeline
+execution:
+  prompt: |
+    ทีมเราใช้ Jenkins อยู่แล้ว อยากให้ช่วยวางโครง Jenkinsfile สำหรับเว็บแอป Node ว่าควรมี stage อะไรบ้าง
+    ตั้งแต่ build test จนถึงปล่อย production ต้องมีคนกดอนุมัติก่อน ยังไม่ต้องเขียนไฟล์
+  max_turns: 6
+  timeout_seconds: 240
+graders:
+  - name: kubernetes-helm-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?kubernetes-helm"'
+    min: 0
+    max: 0
+    arm: with-only
+  - name: pipeline-stages-named
+    type: regex
+    pattern: "stage|pipeline|Jenkinsfile"
+    flags: i
+    match: contains
+    target: last_message

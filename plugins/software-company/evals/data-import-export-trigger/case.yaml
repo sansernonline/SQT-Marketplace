@@ -1,0 +1,26 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# runs 5: เคสนี้ใช้ตัดสินการแก้ description ของ skill · n=3 กว้างเกินไป (ยังไม่ได้วัดช่วงจริง)
+schema_version: "1.1"
+name: data-import-export-trigger
+description: ผู้ใช้ขอหน้าอัปโหลด Excel รายชื่อลูกค้า ไม่เอ่ยชื่อ skill ต้องทำให้ data-import-export ถูกเปิด และคำตอบบอกว่าตรวจให้จบก่อนเขียน
+tags: [trigger, data-import-export]
+runs: 5
+expected_outcome: เปิด Skill data-import-export แล้ววางขั้นตอนตรวจไฟล์ก่อนเขียนลงฐานข้อมูล พร้อมรายงานแถวที่ผิด
+execution:
+  prompt: |
+    ระบบสมาชิกของเราจะให้เจ้าหน้าที่อัปโหลดไฟล์ Excel รายชื่อลูกค้า 5,000 แถวเข้าฐานข้อมูล
+    ช่วยวางแนวทางหน้าอัปโหลดนี้ว่าควรทำอย่างไร ยังไม่ต้องเขียนโค้ด
+  max_turns: 6
+  timeout_seconds: 240
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?data-import-export"'
+    min: 1
+    arm: with-only
+  - name: validate-before-write-named
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ให้ผ่านเมื่อคำตอบบอกว่าต้องตรวจไฟล์ทั้งหมดให้จบก่อนเขียนลงฐานข้อมูล ไม่เขียนไปครึ่งทางแล้วหยุดที่แถวผิด

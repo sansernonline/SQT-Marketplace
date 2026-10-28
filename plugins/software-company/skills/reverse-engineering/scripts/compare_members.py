@@ -6,6 +6,7 @@ source does not (or the reverse). C# and Java. Pure stdlib.
 Usage:
   python compare_members.py <decompiled_dir> <source_dir>
   python compare_members.py <decompiled_dir> <source_dir> --ext .java
+  python compare_members.py --self-test
 """
 
 import argparse
@@ -47,12 +48,33 @@ def members(root, ext):
     return found
 
 
+def self_test():
+    """Two tiny trees: the decompiled one has an extra method and one more overload."""
+    import tempfile
+    with tempfile.TemporaryDirectory() as tmp:
+        a, b = Path(tmp, "bin_side"), Path(tmp, "src_side")
+        a.mkdir(), b.mkdir()
+        (b / "A.cs").write_text("class A {\n  public int Run(int x) {\n    if (x > 0) { return 1; }\n    return 0;\n  }\n"
+                                "  private void Old() { }\n}\n", encoding="utf-8")
+        (a / "A.cs").write_text("class A {\n  public int Run(int x) { return 1; }\n  public int Run(string s) { return 2; }\n"
+                                "  public void Hidden() { }\n}\n", encoding="utf-8")
+        got_bin, got_src = members(a, ".cs"), members(b, ".cs")
+        assert got_bin == Counter({"A.Run": 2, "A.Hidden": 1}), got_bin
+        assert got_src == Counter({"A.Run": 1, "A.Old": 1}), got_src  # `if` is not a method
+    print("self-test ok")
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("decompiled")
-    ap.add_argument("source")
+    ap.add_argument("decompiled", nargs="?")
+    ap.add_argument("source", nargs="?")
     ap.add_argument("--ext", default=".cs")
+    ap.add_argument("--self-test", action="store_true", help="run built-in checks and exit")
     args = ap.parse_args()
+    if args.self_test:
+        return self_test()
+    if not (args.decompiled and args.source):
+        ap.error("give <decompiled_dir> <source_dir>, or --self-test")
 
     binary, source = members(args.decompiled, args.ext), members(args.source, args.ext)
     if not binary or not source:

@@ -8,6 +8,7 @@ Usage:
   python triage.py <file> --strings --limit 200
   python triage.py <file> --strings --pattern 'autoconfig|oauth'   # regex filter on strings
   python triage.py <file> --strings --min-len 8                  # minimum string length (default 6)
+  python triage.py --self-test                                   # check the script on tiny built-in samples
 """
 
 import argparse
@@ -202,14 +203,54 @@ def identify(data):
     return info
 
 
+def self_test():
+    """Build tiny ELF / PE / zip samples in memory and check what the script reports."""
+    import io
+    import zipfile
+    elf = bytearray(64)
+    elf[:7] = ELF_MAGIC + bytes([2, 1, 1])
+    struct.pack_into("<HH", elf, 16, 2, 0x3E)
+    got = identify(bytes(elf))
+    assert got["format"] == "ELF (Linux/Unix)" and "64-bit LE, machine=x86-64, type=executable" in got["detail"], got
+
+    pe = bytearray(0x200)
+    pe[:2] = MZ
+    struct.pack_into("<I", pe, 0x3C, 0x80)
+    pe[0x80:0x84] = b"PE\x00\x00"
+    struct.pack_into("<HH", pe, 0x84, 0x8664, 3)
+    opt = 0x80 + 24
+    struct.pack_into("<H", pe, opt, 0x20B)
+    assert ".NET=False" in identify(bytes(pe))["detail"]
+    struct.pack_into("<II", pe, opt + 112 + 14 * 8, 0x2000, 72)  # CLI header directory
+    got = identify(bytes(pe))
+    assert got["format"] == ".NET / managed PE" and "x86-64" in got["detail"] and "PE32+" in got["detail"], got
+
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w") as z:
+        z.writestr("AndroidManifest.xml", "<manifest/>")
+    assert zip_kind(buf.getvalue())[0] == "APK (Android app)"
+
+    assert redact("Server=x;Password=hunter2;") == "Server=x;Password=***;"
+    assert "hunter2" not in redact('<add key="SMTPPass" value="hunter2"/>')
+    blob = b"\x01hello world\xff\xff" + "hi there".encode("utf-16-le") + b"\xff\xff"
+    assert "hello world" in ascii_strings(blob) and "hi there" in utf16le_strings(blob)
+    assert ascii_strings(b"abc\x00abcdefgh", 6) == ["abcdefgh"]
+    print("self-test ok")
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("file")
+    ap.add_argument("file", nargs="?")
+    ap.add_argument("--self-test", action="store_true", help="run built-in checks and exit")
     ap.add_argument("--strings", action="store_true", help="also dump strings")
     ap.add_argument("--pattern", help="regex filter for strings (e.g. 'autoconfig|oauth')")
     ap.add_argument("--limit", type=int, default=200)
     ap.add_argument("--min-len", type=int, default=6)
     args = ap.parse_args()
+    if args.self_test:
+        return self_test()
+    if not args.file:
+        ap.error("give a <file>, or --self-test")
 
     with open(args.file, "rb") as f:
         data = f.read()

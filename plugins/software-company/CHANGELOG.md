@@ -1,5 +1,16 @@
 # Changelog — software-company
 
+## 2.32.0 — 2026-10-28
+
+- `web-service-essentials` `health_py.py`: health check แบบ sync รันใน thread ตั้งแต่แรก timeout จึงตัดได้จริง เดิมเรียก `fn()` ก่อนห่อ thread จึงบล็อก event loop จนจบ
+- `--self-test` เพิ่มให้สคริปต์ 24 ตัว: md_to_docx · build-test-workbook · pptx_to_html · click_steps · check_html_deck · build_deck · check_deck · logger_py · logger.node · health_py · health.node · triage · dotnet_meta · compare_members · brandkit · brandkit_pptx · brandkit_stage · cover_art · brand_palette · docx_build · fonts · check-figure-geometry · mermaid check · make_sample · analyse_sales (ทุกตัวลองแก้ให้ผิดแล้วล้มจริง)
+- `product-roadmap`: RICE ใช้ confidence 0–1 และสั่ง `decide.mjs priority` พร้อม `templates/rice.json`
+- `sprint-plan`: เลือก story ใต้ความจุด้วย `decide.mjs knapsack` พร้อม `templates/knapsack.json`
+- `solution-architect`: ตารางเทียบทางเลือกป้อน `decide.mjs score` พร้อมกฎเหล็กและบอกอันดับนิ่ง · ตัวอย่างใน `architecture-patterns/templates/options-score.json`
+- `security-scan` ชี้ไปทำตาม `security-gate` ข้อ 2–6 · `web-quality-audit` ตัวเลขแกว่ง 5–10 คะแนนติดป้ายยังไม่ได้วัด
+- `analyse_sales.py` หยุดพร้อมข้อความบอกทางแก้เมื่อข้อมูลไม่ใช่ 2 ปีพอดี
+- evals เพิ่ม 12 โฟลเดอร์ (ไม่ควรเปิด 3 · ชุดละ 3 เคสของ security-gate, data-import-export, pdpa-compliance) · เคส trigger ตั้ง runs 5 · ยังไม่ได้รัน
+
 ## 2.31.2 — 2026-10-28
 
 - `logging-standards` logger Python และ Node: แยกชื่อ key เป็นส่วน ทิ้งส่วนที่เป็นคำธรรมดาทั้งคำ (shipping · mapping · class · address …) แล้วเทียบคำลับแบบมีอยู่ในชื่อเหมือนเดิม `shipping_address` `className` จึงไม่โดนปิด ส่วนที่เดิมจับได้ยังจับได้ครบ ยกเว้นชื่อที่คำลับคร่อมคำธรรมดา เช่น `AddressSn` ซึ่งไม่ใช่ key ลับจริง (ผู้ตรวจเทียบกับรุ่นก่อน 7,749,283 ชื่อ ไม่เจอ key ลับจริงหลุด) และ `X-Api-Key` `card_number` `citizen_id` ที่เดิมหลุดโดนปิดแล้ว · ปิดเลขบัตรที่ผ่าน Luhn ในข้อความอิสระ เลขยาวอื่นราว 1 ใน 10 ผ่าน Luhn โดยบังเอิญจึงโดนปิดด้วย
