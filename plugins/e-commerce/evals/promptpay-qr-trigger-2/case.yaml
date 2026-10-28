@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: promptpay-qr-trigger-2
+description: QR ล็อกยอดบนใบแจ้งหนี้ ต้องเปิด promptpay-qr และบอกว่าเป็น QR แบบระบุยอด · ไม่เอ่ยชื่อ skill
+tags: [trigger, regression-suite, promptpay-qr]
+runs: 3
+expected_outcome: เปิด Skill promptpay-qr แล้วตอบตรงคำถาม
+execution:
+  prompt: |
+    อยากให้ใบแจ้งหนี้มีคิวอาร์พร้อมเพย์ที่ล็อคยอดไว้เลย ลูกค้าสแกนแล้วยอด 4,280 ขึ้นเอง ใช้เลขผู้เสียภาษีของบริษัทได้มั้ย
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?promptpay-qr"'
+    min: 1
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: 'dynamic|ระบุยอด|ล็อคยอด|ล็อกยอด|010212'
+    flags: i
+    match: contains
+    target: last_message

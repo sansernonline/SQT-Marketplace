@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: doc-quotation-trigger-2
+description: บิลที่มี VAT และหัก ณ ที่จ่าย ต้องเปิด doc-quotation และได้ยอดชำระสุทธิ · ไม่เอ่ยชื่อ skill
+tags: [trigger, regression-suite, doc-quotation]
+runs: 3
+expected_outcome: เปิด Skill doc-quotation แล้วตอบตรงคำถาม
+execution:
+  prompt: |
+    ออกบิลยังไงให้บริษัทลูกค้า เค้าจะหัก ณ ที่จ่าย 3% ค่าจ้างทำวิดีโอ 20,000 บวก vat ยอดที่ต้องโอนมาเท่าไหร่
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?doc-quotation"'
+    min: 1
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: '20,?800'
+    flags: i
+    match: contains
+    target: last_message

@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: doc-quotation-trigger-3
+description: ขอใบวางบิล ต้องเปิด doc-quotation · ไม่เอ่ยชื่อ skill
+tags: [trigger, regression-suite, doc-quotation]
+runs: 3
+expected_outcome: เปิด Skill doc-quotation แล้วตอบตรงคำถาม
+execution:
+  prompt: |
+    ขอแบบฟอร์มใบวางบิลหน่อย ลูกค้าให้วางบิลทุกวันที่ 25 ตอนนี้มีใบแจ้งหนี้ค้างอยู่ 3 ใบ
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?doc-quotation"'
+    min: 1
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: 'ใบวางบิล|วางบิล'
+    flags: i
+    match: contains
+    target: last_message

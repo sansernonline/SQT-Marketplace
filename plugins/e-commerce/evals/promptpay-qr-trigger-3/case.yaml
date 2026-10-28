@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: promptpay-qr-trigger-3
+description: โปรแกรมเมอร์ทำ payload เองแล้วแอปไม่รับ ต้องเปิด promptpay-qr และพูดถึง CRC แบบที่ถูก · ไม่เอ่ยชื่อ skill
+tags: [trigger, regression-suite, promptpay-qr]
+runs: 3
+expected_outcome: เปิด Skill promptpay-qr แล้วตอบตรงคำถาม
+execution:
+  prompt: |
+    เขียนโค้ด node ทำ payload qr พร้อมเพย์เอง ลูกค้าสแกนแล้วแอปธนาคารขึ้นว่า QR ไม่ถูกต้อง ตรง crc ต้องคิดแบบไหน
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?promptpay-qr"'
+    min: 1
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: 'CRC|1021|FFFF|CCITT'
+    flags: i
+    match: contains
+    target: last_message

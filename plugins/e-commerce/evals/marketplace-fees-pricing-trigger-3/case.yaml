@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: marketplace-fees-pricing-trigger-3
+description: ตัดสินใจเข้าแคมเปญ ต้องเปิด marketplace-fees-pricing และคิดกำไรช่วงแคมเปญ · ไม่เอ่ยชื่อ skill
+tags: [trigger, regression-suite, marketplace-fees-pricing]
+runs: 3
+expected_outcome: เปิด Skill marketplace-fees-pricing แล้วตอบตรงคำถาม
+execution:
+  prompt: |
+    จะเข้าแคมเปญ 11.11 ลดเพิ่ม 10% แล้วแจกโค้ดส่งฟรี ตอนนี้กำไรชิ้นละ 30 บาท คุ้มมั้ย
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?marketplace-fees-pricing"'
+    min: 1
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: 'ขาดทุน|กำไร|ติดลบ'
+    flags: i
+    match: contains
+    target: last_message

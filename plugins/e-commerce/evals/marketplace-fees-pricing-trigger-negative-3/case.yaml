@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เคส "ไม่ควรเปิด": คำถามใกล้เคียงที่เป็นงานของ skill อื่น · tool_used min 0 max 0 ตาม skill-authoring/references/eval-format.md
+schema_version: "1.1"
+name: marketplace-fees-pricing-trigger-negative-3
+description: คนซื้อเทียบราคาของชิ้นใหญ่ ไม่ใช่ผู้ขายตั้งราคา · ต้องไม่เปิด marketplace-fees-pricing
+tags: [trigger, negative, regression-suite, marketplace-fees-pricing]
+runs: 3
+expected_outcome: ไม่เปิด Skill marketplace-fees-pricing · คำตอบยังตอบคำถามได้
+execution:
+  prompt: |
+    จะซื้อแอร์ใหม่ 1 เครื่อง ช่วยเทียบราคาใน Shopee กับในห้างหน่อย ซื้อที่ไหนคุ้มกว่า
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: marketplace-fees-pricing-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?marketplace-fees-pricing"'
+    min: 0
+    max: 0
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: 'ประกัน|ติดตั้ง|ค่าไฟ|รับประกัน'
+    flags: i
+    match: contains
+    target: last_message

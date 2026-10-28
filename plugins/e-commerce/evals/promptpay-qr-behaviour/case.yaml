@@ -1,0 +1,33 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# ตัวเลขที่คาดได้จากการรันสคริปต์ของ skill เมื่อ 2026-10-28 ด้วยโจทย์นี้ · สคริปต์หรืออัตราเปลี่ยนให้รันใหม่แล้วแก้ pattern
+# input: { "id": "089-765-4321", "amount": 2350 }
+schema_version: "1.1"
+name: promptpay-qr-behaviour
+description: ขอ payload พร้อมเพย์ระบุยอด ต้องเรียก promptpay.mjs และส่ง payload ที่ตรงกับผลสคริปต์ทุกตัวอักษร
+tags: [behaviour, capability-suite, promptpay-qr]
+runs: 3
+expected_outcome: เรียก promptpay.mjs · payload ตรงผลสคริปต์ (CRC 00F4) · บอกให้สแกนทดสอบกับแอปธนาคารและดูชื่อบัญชีก่อนพิมพ์
+execution:
+  prompt: |
+    ขอ payload คิวอาร์พร้อมเพย์สำหรับใบแจ้งหนี้ค่ะ เบอร์ร้าน 089-765-4321 ยอด 2,350 บาท
+    จะเอาสตริงไปให้โปรแกรมเมอร์ทำรูป QR ต่อ
+  max_turns: 10
+  timeout_seconds: 300
+graders:
+  - name: script-called
+    type: tool_used
+    tool: Bash
+    input_match: 'promptpay\.mjs'
+    min: 1
+    arm: with-only
+  - name: payload-matches-script
+    type: regex
+    pattern: '00020101021229370016A000000677010111011300668976543215802TH530376454072350\.00630400F4'
+    flags: i
+    match: contains
+    target: last_message
+  - name: scan-before-print
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน · ผ่านเมื่อคำตอบบอกให้ทดสอบ QR ก่อนใช้จริง เช่น สแกนด้วยแอปธนาคาร หรือดูว่าชื่อบัญชีที่แอปแสดงตรงกับชื่อร้าน อย่างใดอย่างหนึ่งก็พอ

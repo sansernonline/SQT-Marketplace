@@ -1,0 +1,63 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# skill นี้ไม่มีสคริปต์ จึงวัดกำหนดยื่น แหล่ง และตัวเลขที่ต้องตรงกับ SKILL.md หัวข้อ 2 และ 3
+# ธ.ค. 2569: กำหนดยื่นกระดาษ 7 ธ.ค. ตรงวันหยุดชดเชยวันพ่อ (thai-holidays/references/holidays-2569-2570.md:26) จึงเลื่อนไปวันทำการถัดไป · กำหนดยื่นออนไลน์ 15 และ 23 ธ.ค. ไม่ตรงวันหยุด · grader ไม่ใช้วันที่ 7 · ช่วงขยาย e-Filing 8 วันยังครอบถึง 31 ม.ค. 2570
+schema_version: "1.1"
+name: tax-vat-th-behaviour
+description: บริษัทจด VAT จ่ายฟรีแลนซ์ ค่าเช่าให้บริษัท และเงินเดือน ต้องได้แบบที่ถูก กำหนดยื่นออนไลน์ที่มีแหล่ง และยอดหัก ณ ที่จ่ายที่ไม่แต่งขึ้น
+tags: [behaviour, capability-suite, tax-vat-th]
+runs: 3
+expected_outcome: ภ.ง.ด.1 · ภ.ง.ด.3 (ฟรีแลนซ์ 450) · ภ.ง.ด.53 (ค่าเช่า 5% = 1,500) ยื่นออนไลน์ภายใน 15 ธ.ค. · ภ.พ.30 ภายใน 23 ธ.ค. · อ้างกรมสรรพากรหรือ rd.go.th
+execution:
+  prompt: |
+    บริษัทเราจด VAT แล้ว ปิดบัญชี 31 ธ.ค. ยื่นออนไลน์ทุกแบบ
+    เดือนพฤศจิกายน 2569 นี้มีจ่าย:
+    - ค่าออกแบบโลโก้ให้ฟรีแลนซ์ (บุคคลธรรมดา) 15,000
+    - ค่าเช่าโกดังให้บริษัทเจ้าของที่ 30,000
+    - เงินเดือนพนักงาน 3 คน
+    ต้องยื่นแบบอะไรบ้าง ภายในวันไหน แล้วต้องหัก ณ ที่จ่ายเท่าไหร่
+  max_turns: 8
+  timeout_seconds: 300
+graders:
+  - name: source-named
+    type: regex
+    pattern: 'rd\.go\.th|กรมสรรพากร'
+    flags: i
+    match: contains
+    target: last_message
+  - name: pp30-23-dec
+    type: regex
+    pattern: '23\s*(ธ\.?\s*ค|ธันวา)'
+    flags: i
+    match: contains
+    target: last_message
+  - name: wht-15-dec
+    type: regex
+    pattern: '15\s*(ธ\.?\s*ค|ธันวา)'
+    flags: i
+    match: contains
+    target: last_message
+  - name: freelancer-450
+    type: regex
+    pattern: '450'
+    flags: i
+    match: contains
+    target: last_message
+  - name: rent-1500
+    type: regex
+    pattern: '1,?500'
+    flags: i
+    match: contains
+    target: last_message
+  - name: no-rent-at-3pct
+    type: regex
+    pattern: '900\s*บาท'
+    flags: i
+    match: not_contains
+    target: last_message
+  - name: forms-and-caveats
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน · ผ่านเมื่อครบ 2 ข้อ:
+      1. จับคู่แบบถูก: ค่าจ้างฟรีแลนซ์บุคคลธรรมดาเข้า ภ.ง.ด.3 · ค่าเช่าที่จ่ายให้บริษัทเข้า ภ.ง.ด.53 · เงินเดือนเข้า ภ.ง.ด.1 · ภาษีขายเข้า ภ.พ.30
+      2. กำหนดวันที่ให้มามีที่มา (เช่น กรมสรรพากร หรือวันที่ตรวจ) หรือบอกให้ตรวจซ้ำหรือให้นักบัญชียืนยัน อย่างใดอย่างหนึ่งก็พอ

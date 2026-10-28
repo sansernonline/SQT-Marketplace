@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: tax-vat-th-trigger
+description: บริษัทเพิ่งจด VAT ถามสิ่งที่ต้องยื่น ต้องเปิด tax-vat-th และพูดถึง ภ.พ.30 · ไม่เอ่ยชื่อ skill
+tags: [trigger, regression-suite, tax-vat-th]
+runs: 3
+expected_outcome: เปิด Skill tax-vat-th แล้วตอบตรงคำถาม
+execution:
+  prompt: |
+    บริษัทเพิ่งจด vat เดือนนี้ ต้องยื่นอะไรบ้างทุกเดือน เดือนไหนไม่มียอดขายต้องยื่นมั้ยคะ
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?tax-vat-th"'
+    min: 1
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: 'ภ\.?พ\.?\s*30'
+    flags: i
+    match: contains
+    target: last_message

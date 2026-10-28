@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: payroll-th-trigger-3
+description: โบนัสกับภาษีหัก ณ ที่จ่าย ต้องเปิด payroll-th · ไม่เอ่ยชื่อ skill
+tags: [trigger, regression-suite, payroll-th]
+runs: 3
+expected_outcome: เปิด Skill payroll-th แล้วตอบตรงคำถาม
+execution:
+  prompt: |
+    ปีนี้จะให้โบนัสพนักงาน 1 เดือน เดือนที่จ่ายโบนัสต้องหักภาษียังไง แล้วยื่นแบบไหน
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?payroll-th"'
+    min: 1
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: 'ภ\.?ง\.?ด\.?\s*1|โบนัส'
+    flags: i
+    match: contains
+    target: last_message

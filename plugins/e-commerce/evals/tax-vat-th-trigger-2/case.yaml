@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: tax-vat-th-trigger-2
+description: ค่าเช่าที่จ่ายให้บริษัท ต้องเปิด tax-vat-th และบอกแบบ ภ.ง.ด.53 · ไม่เอ่ยชื่อ skill
+tags: [trigger, regression-suite, tax-vat-th]
+runs: 3
+expected_outcome: เปิด Skill tax-vat-th แล้วตอบตรงคำถาม
+execution:
+  prompt: |
+    จ่ายค่าเช่าโกดังให้บริษัทเจ้าของที่ เดือนละ 25,000 ต้องหัก ณ ที่จ่ายกี่% ยื่นแบบไหน
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?tax-vat-th"'
+    min: 1
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: 'ภ\.?ง\.?ด\.?\s*53'
+    flags: i
+    match: contains
+    target: last_message

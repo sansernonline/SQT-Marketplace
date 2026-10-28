@@ -6,6 +6,8 @@
 // File (tag 30, bill payment):    { "billerId": "010555000000001", "ref1": "IV26100001", "ref2": "", "name": "SHOP", "amount": 1500 }
 // Rules come from promptpay-qr/SKILL.md sections 1, 2 and Rules. Render the payload with any QR library.
 import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const AID_CREDIT_TRANSFER = 'A000000677010111'; // SKILL.md tag 29 sub-ID 00
 const AID_BILL_PAYMENT = 'A000000677010112'; // SKILL.md tag 30 sub-ID 00
@@ -129,8 +131,10 @@ function selfTest() {
   process.exit(bad ? 1 : 0);
 }
 
+// รัน CLI เฉพาะตอนเรียกไฟล์นี้ตรง ๆ · import จากสคริปต์อื่นได้โดยไม่ออก
+const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 const args = process.argv.slice(2);
-if (args.includes('--self-test')) selfTest();
+if (!isMain) { /* imported */ } else if (args.includes('--self-test')) selfTest();
 else {
   const file = args.find((a) => !a.startsWith('--'));
   if (!file) { console.error('ใช้: node promptpay.mjs <ไฟล์.json> [--json] | --self-test'); process.exit(2); }

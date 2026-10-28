@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เคส "ไม่ควรเปิด": คำถามใกล้เคียงที่เป็นงานของ skill อื่น · tool_used min 0 max 0 ตาม skill-authoring/references/eval-format.md
+schema_version: "1.1"
+name: tax-vat-th-trigger-negative
+description: ภาษีเงินได้ของผู้ขายบุคคลธรรมดา เป็นของ skill ภาษีผู้ขายออนไลน์ · ต้องไม่เปิด tax-vat-th
+tags: [trigger, negative, regression-suite, tax-vat-th]
+runs: 3
+expected_outcome: ไม่เปิด Skill tax-vat-th · คำตอบยังตอบคำถามได้
+execution:
+  prompt: |
+    ขายของออนไลน์ เป็นบุคคลธรรมดา ปีนี้ได้ 600,000 ต้องยื่นภาษีเงินได้ยังไง หักค่าใช้จ่ายเหมาได้เท่าไหร่
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: tax-vat-th-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?tax-vat-th"'
+    min: 0
+    max: 0
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: 'ภ\.?ง\.?ด\.?\s*9[04]|เหมา'
+    flags: i
+    match: contains
+    target: last_message
