@@ -4,6 +4,7 @@ python scripts/diagrams/make.py            ทุกรูป + หน้า REA
 python scripts/diagrams/make.py trading-finance   เฉพาะ plugin ที่ระบุ (ยังสร้างภาพรวมและ hook ใหม่ด้วย)
 
 ขั้น: extract.py → build.py (map · ภาพรวม · hook) + build_playbooks.py (playbook ละรูป) + flow/build_flow.py (flow เป็นชุด)
++ compare/build_compare.py (รูปตารางเทียบ → docs/<ชื่อ>.png)
 → render.py (PNG) → ย้ายเข้าโฟลเดอร์ของแต่ละ plugin → pages.py
 ผังโฟลเดอร์: docs/plugins/<plugin>/map.png · flow/<k>-<ชื่อ>.png · playbooks/<playbook>.png
 ไฟล์กลางทางอยู่ใน _to_delete/diagrams/
@@ -14,6 +15,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 WORK = os.path.join(ROOT, "_to_delete", "diagrams")
 DOCS = os.path.join(ROOT, "docs", "plugins")
+COMPARE = {os.path.basename(f)[:-5] for f in glob.glob(os.path.join(HERE, "compare", "*.json"))}
 
 
 def run(*args, cwd=ROOT):
@@ -21,7 +23,9 @@ def run(*args, cwd=ROOT):
 
 
 def target(name):
-    # ชื่อไฟล์ HTML → ที่อยู่ใน docs/plugins/
+    # ชื่อไฟล์ HTML → ที่อยู่ใน docs/plugins/ · รูปเทียบ (compare/*.json) อยู่ที่ docs/ ตรง ๆ
+    if name in COMPARE:
+        return os.path.join(ROOT, "docs", f"{name}.png")
     if name in ("marketplace-overview", "hook-lifecycle"):
         return os.path.join(DOCS, f"{name}.png")
     if "-flow-" in name:  # superuser-<plugin>-flow-<k>-<ชื่อ> · plugin core = superuser เอง
@@ -43,6 +47,7 @@ if __name__ == "__main__":
     run(os.path.join(HERE, "build.py"), html)
     run(os.path.join(HERE, "build_playbooks.py"), html)
     run(os.path.join(HERE, "flow", "build_flow.py"), ROOT, html)
+    run(os.path.join(HERE, "compare", "build_compare.py"), html)
     files = sorted(glob.glob(os.path.join(html, "*.html")))
     if only:
         keep = lambda f: any(p in os.path.basename(f) for p in only | {"marketplace-overview", "hook-lifecycle"})

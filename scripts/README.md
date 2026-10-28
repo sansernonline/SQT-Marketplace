@@ -203,11 +203,12 @@ python scripts/diagrams/make.py trading-finance   # เฉพาะ plugin เ�
 | `make.py` | รันทุกขั้นข้างล่างต่อกัน แล้ววางรูปลง `docs/plugins/<plugin>/` (`map.png` · `flow/<k>-<ชื่อ>.png` · `playbooks/<playbook>.png`) |
 | `extract.py` | อ่าน agent · skill · คำสั่ง · ขั้นของ playbook (ใครทำ · skill ที่อ้าง · ขั้นที่รอผู้ใช้) จากไฟล์จริง ไม่เดา → `data/` |
 | `labels/<plugin>.json` | คำสั้นในกล่อง: หน้าที่ของ agent · ชื่อสั้นและกลุ่มของ playbook · ป้ายของแต่ละขั้น · `software-company` มีกลุ่ม agent และกลุ่ม skill เพิ่ม — **คนหรือ agent เขียน** |
-| `kit/` | ชิ้นส่วนกลางของทุกรูป แนว "วงกลมบนลายจุด" (ต้นแบบ Stripe docs · ผู้ใช้เลือก 2026-10-28): `kit.css` สีบทบาทและขนาด · `kit.js` วาดเส้นโค้งระหว่างวง · `kit.py` ชิ้น HTML · `icons/` ไอคอน Lucide 0.460.0 (ISC) — เปลี่ยนหน้าตาแก้ที่นี่ที่เดียว ไม่วาดไอคอนเอง |
+| `kit/` | ชิ้นส่วนกลางของทุกรูป แนววงกลมไล่สีกับการ์ดขาวบนลายจุด อ่านจากบนลงล่าง (ผู้ใช้เลือก 2026-10-28: เส้นตั้งหรือนอนเท่านั้น · มีชื่อและคำอธิบายทุกขั้น): `kit.css` สีบทบาท ขนาด การ์ด · `kit.js` วาดเส้นหักมุมฉากด้วย D3 · `kit.py` ชิ้น HTML · `icons/` ไอคอน Lucide 0.460.0 (ISC) · `vendor/` D3 7.9.0 (ISC) ฝังในหน้า ไม่โหลดจากเน็ต — เปลี่ยนหน้าตาแก้ที่นี่ที่เดียว ไม่วาดไอคอนเอง |
 | `palette.py` | สีและตราประจำ plugin — ที่เดียว ทุกตัวสร้างใช้ร่วมกัน |
 | `build.py` | HTML ของ `map` · ภาพรวม · hook |
 | `build_playbooks.py` | HTML ของ playbook ละ 1 รูป · ขั้นที่ labels ไม่มีหรือจำนวนขั้นไม่ตรง → ใช้ข้อความจริงตัดสั้น แล้วพิมพ์ `เตือน:` |
 | `flow/build_flow.py` | HTML ของชุด flow 6 รูปต่อ plugin (วิธีทำงานของ SuperUser) · คำสั้นอยู่ใน `flow/figdata.py` |
+| `compare/build_compare.py` | รูปตารางเทียบ 1 รูปต่อ `compare/<ชื่อ>.json` → `docs/<ชื่อ>.png` (ตอนนี้มี `superuser-vs-pstack`) · แก้เนื้อหาที่ไฟล์ json |
 | `render.py` | HTML → PNG กว้าง 1920 px |
 | `pages.py` | เขียน `docs/plugins/README.md` และ README ของแต่ละ plugin — อย่าแก้หน้าพวกนั้นด้วยมือ |
 

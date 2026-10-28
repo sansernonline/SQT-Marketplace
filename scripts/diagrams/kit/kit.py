@@ -1,6 +1,6 @@
 """ชิ้นส่วน HTML ของรูปแนว "วงกลมบนลายจุด" — ใช้ร่วมทุกรูป (map · playbook · flow · ภาพรวม)
 
-ไอคอนจาก lucide-static 0.460.0 (ISC · kit/icons/LICENSE) · ไม่วาดไอคอนเอง
+ไอคอนจาก lucide-static 0.460.0 (ISC · kit/icons/LICENSE) · ไม่วาดไอคอนเอง · เส้นวาดด้วย D3 7.9.0 (ISC · kit/vendor/LICENSE-d3)
 """
 import html, os, sys
 from datetime import date
@@ -11,6 +11,7 @@ from palette import COLOR, emblem  # noqa: E402
 
 CSS = open(os.path.join(KIT, "kit.css"), encoding="utf-8").read()
 JS = open(os.path.join(KIT, "kit.js"), encoding="utf-8").read()
+D3 = open(os.path.join(KIT, "vendor", "d3.v7.9.0.min.js"), encoding="utf-8").read()  # ISC · vendor/LICENSE-d3 · ฝังในหน้า ไม่โหลดจากเน็ตตอนเรนเดอร์
 FONTS = "https://fonts.googleapis.com/css2?family=Anuphan:wght@400;600&family=Bai+Jamjuree:wght@600&display=swap"
 TODAY = date.today().isoformat()
 # บทบาท → ไอคอน (ใช้ชื่อเดียวกันทุกรูป)
@@ -69,4 +70,4 @@ def page(title, body, plugin="superuser"):
             f'<link href="{FONTS}" rel="stylesheet"><style>{CSS}</style></head>'
             f'<body><div id="sheet" style="--pc:{pc}">{body}'
             f'<div class="foot"><span>SQT-Marketplace</span><span>scripts/diagrams/</span></div></div>'
-            f"<script>{JS}</script></body></html>")
+            f"<script>{D3}</script><script>{JS}</script></body></html>")

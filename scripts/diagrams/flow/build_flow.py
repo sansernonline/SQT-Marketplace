@@ -118,13 +118,9 @@ def row(label, sub="", role="core", ico=None, id="", num=None, size="", rev=Fals
             f'<div><div class="lb">{e(label)}</div>' + (f'<div class="sb">{sub}</div>' if sub else "") + '</div></div>')
 
 
-def col(nd, *dets, ctr=False):
-    d = "".join(f'<p>{x}</p>' for x in dets if x)
-    return f'<div class="c">{nd}' + (f'<div class="det{" ctr" if ctr else ""}">{d}</div>' if d else "") + "</div>"
-
-
 def band(title, sub, inner, ico="layers", role="pc"):
-    return (f'<div class="band"><div class="hd2">{dot(role, ico, "sm")}<div><div class="sec">{e(title)}</div>'
+    """หัวข้อย่อยเป็นตัวหนังสืออย่างเดียว · ico role คงไว้ให้ที่เรียกเดิมไม่ต้องแก้ (ไอคอนประดับหน้าหัวข้อ = สัญญาณ AI)"""
+    return (f'<div class="band"><div class="hd2"><div><div class="sec">{e(title)}</div>'
             + (f'<div class="secsub" style="margin:0">{e(sub)}</div>' if sub else "") + f'</div></div>{inner}</div>')
 
 
@@ -142,31 +138,52 @@ def fin(title, body, plug, ctx, n, k):
     return out
 
 
-# ---------- รูปที่ 1: งานเข้ามาอย่างไร แล้วใครรับ ----------
+# ---------- ชิ้นส่วนบนลงล่าง: การ์ดมีไอคอน · ขั้นในรายการ ----------
+def icard(label, sub="", role="pc", ico=None, num=None, id="", extra="", cls=""):
+    """การ์ดขาวมีวงไอคอนในตัว · เส้นต่อเข้าขอบการ์ด (id อยู่ที่การ์ด)"""
+    at = f' id="{id}"' if id else ""
+    return (f'<div class="card icard {cls}"{at}>{dot(role, ico, "", "", num)}'
+            f'<div><div class="lb">{e(label)}</div>' + (f'<div class="sb">{sub}</div>' if sub else "") + extra + "</div></div>")
+
+
+def vstep(label, sub, id, role="pc", ico=None, num=None, dets=(), right=""):
+    """1 ขั้นในรายการบนลงล่าง: วง (id) · การ์ดชื่อขั้น คำอธิบาย รายละเอียด · ป้ายด้านขวา (ถ้ามี)"""
+    d = "".join(f"<p>{x}</p>" for x in dets if x)
+    card = f'<div class="card"><div class="lb">{e(label)}</div><div class="sb">{sub}</div>{d}</div>'
+    return f'<div class="vrow{"" if right else " wide"}">{dot(role, ico, "", id, num)}{card}' + (f"<div>{right}</div>" if right else "") + "</div>"
+
+
+def vlist(steps, pairs):
+    return f'<div class="vlist">{wires(pairs)}{"".join(steps)}</div>'
+
+
+def fan(cards, n=None):
+    return f'<div class="fan" style="grid-template-columns:repeat({n or len(cards)},minmax(0,1fr))">{"".join(cards)}</div>'
+
+
 def short(s, n=2):
     """เอา n รายการแรกของข้อความที่คั่นด้วย · หรือ <br>"""
     parts = [x.strip() for x in re.split(r"<br>| · ", re.sub(r"<(?!br)[^>]+>", "", s)) if x.strip()]
     return " · ".join(parts[:n])
 
 
+# ---------- รูปที่ 1: งานเข้ามาอย่างไร แล้วใครรับ ----------
 def f1(plug, d, r, core):
     in_t, in_s = d["inputs"][0]
     cmd = (f"{len(r['cmds'])} คำสั่ง เช่น /{r['cmds'][0]}") if r["cmds"] else "ทางลัด"
     ins = [("คำสั่งผู้ใช้", 'พิมพ์ "ใช้ superuser"', "user", "user"), ("คำสั่งลัด", cmd, "terminal", "user"), (in_t, in_s, "package", "user"),
            ("CLAUDE.global.md", "กฎประจำเครื่อง", "book-open", "pc"), ("inbox/", "ข้อความจากคนหรือ bot อื่น", "message-square", "pc")]
-    left = "".join(row(a, b, rl, i, id=f"i{n}", rev=True) for n, (a, b, i, rl) in enumerate(ins))
+    top = fan([icard(a, e(b), rl, i, id=f"i{n}", cls="col") for n, (a, b, i, rl) in enumerate(ins)])
+    lead_x = "" if core else f'<div class="sb">เปิดแกนก่อน แล้วเรียก <code>/{plug}:superuser</code></div>'
+    hub = icard("หัวหน้าทีม", "รับงานทุกทาง · แจกงาน · ประเมิน · ตรวจซ้ำ<br>อ่าน 3 ไฟล์ข้างล่างก่อนเริ่มทุกงาน", "core", "users", id="lead", extra=lead_x, cls="hub")
     reads = [("CONTEXT.md", "ความคืบหน้า · รับงานต่อ"), ("superuser-style.md", "ถ้ามี · ชนะ playbook"), ("config.json", "โมดูลไหนเปิดอยู่")]
-    right = "".join(row(a, b, "pc", num=n + 1, id=f"r{n}", size="sm") for n, (a, b) in enumerate(reads))
-    mid = f'<div class="c">{node("หัวหน้าทีม", "core", "", size="lg", id="lead")}</div>'
+    low = fan([icard(a, e(b), "pc", num=n + 1, id=f"r{n}") for n, (a, b) in enumerate(reads)])
     pairs = [(f"i{n}", "lead", "main") for n in range(5)] + [("lead", f"r{n}", "dash") for n in range(3)]
-    grid = (f'<div class="grid" style="grid-template-columns:300px 1fr 300px;align-items:center;column-gap:0">{wires(pairs)}'
-            f'<div style="display:flex;flex-direction:column;gap:24px">{left}</div>{mid}'
-            f'<div style="display:flex;flex-direction:column;gap:32px"><div class="colhd" style="text-align:left;margin:0">อ่านก่อนเริ่มทุกงาน</div>{right}</div></div>')
-    lead_det = ["แจกงาน · ประเมิน · ตรวจซ้ำ"] + ([] if core else [f"เปิดแกนก่อน แล้วเรียก <code>/{plug}:superuser</code>"])
-    chain = (f'<div class="grid g3" style="row-gap:0">{wires([("c1", "c2", "main"), ("c2", "c3", "main")])}'
-             f'{col(node("ผู้ใช้", "user", "ตัดสินรายการรออนุมัติ", id="c1", ico="user"), ctr=True)}'
-             f'{col(node("หัวหน้าทีม", "core", "1 คนต่อโฟลเดอร์งาน", id="c2", ico="users"), *lead_det, ctr=True)}'
-             f'{col(node("ลูกทีม (subagent)", "agent", "ทำเฉพาะชิ้นตามใบสั่ง", id="c3", ico="bot"), ctr=True)}</div>')
+    lead_det = "แจกงาน · ประเมิน · ตรวจซ้ำ" + ("" if core else f" · เรียก <code>/{plug}:superuser</code>")
+    chain = vlist([vstep("ผู้ใช้", "เล่างาน · ตัดสินรายการรออนุมัติ", "c1", "user", "user"),
+                   vstep("หัวหน้าทีม", f"1 คนต่อโฟลเดอร์งาน · {lead_det}", "c2", "core", "users"),
+                   vstep("ลูกทีม (subagent)", "ทำเฉพาะชิ้นตามใบสั่งงาน แล้วรายงานกลับหัวหน้า ไม่คุยกับผู้ใช้", "c3", "agent", "bot")],
+                  [("c1", "c2", "main"), ("c2", "c3", "main")])
     xs = r["cross"] or [p for p in PLUGINS if p not in ("superuser", plug)]
     if plug == "software-company":
         xs = [p for p in PLUGINS if p not in ("superuser", plug) and plug in read_plugin(p)["cross"]]
@@ -174,25 +191,27 @@ def f1(plug, d, r, core):
     else:
         sub = "ส่งต่อ /<plugin>:superuser ของสาขานั้น"
     cross = '<div class="tags">' + "".join(f'<span class="tag">{badge(c, 12)}{e(c)}</span>' for c in xs) + "</div>"
-    body = (grid + band("ผู้ใช้ · หัวหน้า · ลูกทีม", "ใครคุยกับใคร", chain, "users", "pc")
+    body = (f'<div class="layers">{wires(pairs)}{top}{hub}{low}</div>'
+            + band("ผู้ใช้ · หัวหน้า · ลูกทีม", "ใครคุยกับใคร", chain, "users", "pc")
             + band("งานข้ามสาขา", sub, cross, "git-branch"))
-    return body + legend([("core", "หัวหน้าทีม"), ("agent", "ลูกทีม (subagent)"), ("user", "ผู้ใช้", "user")])
+    return body + legend([("core", "หัวหน้าทีม", "users"), ("agent", "ลูกทีม (subagent)"), ("user", "ผู้ใช้", "user")])
 
 
 # ---------- รูปที่ 2: เข้าใจงาน จัดขนาด งบ ----------
 def f2(plug, d, r, core):
-    c1 = col(node("3 บรรทัด", "pc", "ก่อนแตะงาน", num=1, id="s1"), "<b>เป้า</b> ได้อะไร", "<b>เสร็จเมื่อ</b> ตรวจอย่างไร", "<b>เสี่ยง</b> ย้อนได้ไหม")
-    c2 = col(node("จัดขนาดงาน", "pc", "Planning", num=2, size="lg", id="s2"),
-             "<b>เล็ก</b> ทำเอง", "<b>กลาง</b> เลือก playbook", "<b>ใหญ่</b> เสนอ 2–3 ทาง", "<b>XL</b> team-project")
-    c3 = col(node("เลือกงบ", "pc", "ไม่บอกใช้สมดุล", num=3, id="s3"), "<b>เร็ว</b> ตรวจ 1 รอบ", "<b>สมดุล</b> ค่าเริ่ม", "<b>คุณภาพ</b> ขึ้น 1 ระดับ")
-    c4 = col(node("คาดไว้ก่อน", "pc", "จดก่อนแจกงาน", num=4, id="s4"), "ลูกทีม · รอบตรวจ · ระดับ", "จบแล้วเทียบกับจริง")
-    grid = f'<div class="grid g4">{wires([("s1", "s2", "main"), ("s2", "s3", "main"), ("s3", "s4", "main")])}{c1}{c2}{c3}{c4}</div>'
-    tiers = ('<div class="three">'
-             + "".join(f'<div class="tier">{dot("pc", size="sm", ico=ic)}<div><div class="lb">{e(a)}</div><div class="sb"><b>{e(m)}</b><br>{e(s)}</div></div></div>'
-                       for ic, a, m, s in [("sparkles", "ใหญ่", "opus + high", short(d["big"])),
-                                           ("layers", "กลาง · ค่าเริ่ม", "sonnet + medium", short(d.get("mid", "ร่างเอกสาร · คำนวณตามสูตร"))),
-                                           ("terminal", "เล็ก", "haiku + low", short(d.get("small", "ค้นไฟล์ · เปลี่ยนชื่อ")))])
-             + "</div>")
+    steps = [vstep("3 บรรทัดก่อนแตะงาน", "หัวหน้าเขียนก่อนเริ่มทุกงาน ไม่เกิน 1 นาที", "s1", num=1,
+                   dets=["<b>เป้า</b> ผู้ใช้จะได้อะไร · <b>เสร็จเมื่อ</b> ตรวจด้วยอะไร · <b>เสี่ยง</b> พลาดแล้วย้อนได้ไหม"]),
+             vstep("จัดขนาดงาน", "ดูจากจำนวนชิ้นและความชัดของโจทย์ (Planning)", "s2", num=2,
+                   dets=["<b>เล็ก</b> หัวหน้าทำเอง · <b>กลาง</b> เลือก playbook · <b>ใหญ่</b> เสนอ 2–3 ทางก่อน · <b>XL</b> team-project"]),
+             vstep("เลือกงบ", "ผู้ใช้ไม่บอก ใช้สมดุล", "s3", num=3,
+                   dets=["<b>เร็ว</b> ตรวจ 1 รอบ · <b>สมดุล</b> ค่าเริ่ม · <b>คุณภาพ</b> ขยับลูกทีมขึ้น 1 ระดับ"]),
+             vstep("คาดไว้ก่อน", "จด 1 บรรทัดก่อนแจกงาน", "s4", num=4,
+                   dets=["ลูกทีมกี่ตัว · ตรวจกี่รอบ · ระดับไหน แล้วตอนจบเทียบกับที่เกิดจริง"])]
+    grid = vlist(steps, [("s1", "s2", "main"), ("s2", "s3", "main"), ("s3", "s4", "main")])
+    tiers = fan([icard(a, f"<b>{e(m)}</b><br>{e(s)}", "pc", ic) for ic, a, m, s in
+                 [("sparkles", "ใหญ่", "opus + high", short(d["big"])),
+                  ("layers", "กลาง · ค่าเริ่ม", "sonnet + medium", short(d.get("mid", "ร่างเอกสาร · คำนวณตามสูตร"))),
+                  ("terminal", "เล็ก", "haiku + low", short(d.get("small", "ค้นไฟล์ · เปลี่ยนชื่อ")))]])
     pbs_all = json.load(open(os.path.join(ROOT, "scripts/diagrams/data", f"{plug}.json"), encoding="utf-8"))["playbooks"]
     own = [x["name"] for x in pbs_all if not x.get("shared")]      # ตรงกับแผนที่: เฉพาะ plugin
     extra = [x["name"] for x in pbs_all if x.get("shared")]        # ของกลางที่ plugin นี้ใช้ร่วม
@@ -202,65 +221,58 @@ def f2(plug, d, r, core):
 
 
 # ---------- รูปที่ 3: ทำ → ตรวจ → แก้ ----------
-def topnode(label, sub, role="pc", ico=None, num=None, size="", id=""):
-    """โหนดที่ป้ายอยู่เหนือวง · ใต้วงเว้นว่างให้เส้นย้อนกลับ"""
-    return f'<div class="tn"><div class="tx"><div class="lb">{e(label)}</div><div class="sb">{e(sub)}</div></div>{dot(role, ico, size, id, num)}</div>'
-
-
 def f3(plug, d, r, core):
     gate = SC["gate"] if plug == "software-company" else CORE_GATE
-    lo = lambda h: h.replace('class="det"', 'class="det lo"')
-    c1 = lo(col(topnode("ใบสั่งงาน 5 ข้อ", "หัวหน้าเขียนให้ทุกชิ้น", num=1, id="w1"), "<b>เป้า</b> · <b>ขอบเขต</b> · <b>เสร็จเมื่อ</b>", "ไม่มีใบ ไม่ส่งงาน"))
-    c2 = lo(col(topnode("ลูกทีมทำชิ้นงาน", "ตัวใหม่ทุกงาน", num=2, id="w2"), short(d["loop"][2]), "รายงาน: <b>เสร็จ</b> · <b>ขาดบริบท</b> · <b>ติด</b>"))
-    c3 = ('<div class="c">' + topnode("ตรวจซ้ำจนผ่าน", "reviewer ตัวใหม่ทุกรอบ", num=3, size="lg", id="w3")
-          + '<div class="bk">ไม่ผ่าน → แก้ แล้วตรวจใหม่</div>'
-          + '<div class="det" style="margin-top:12px"><p><b>ผ่าน</b> · <b>แก้</b> · <b>ทำใหม่</b></p><p>ไม่เกิน 3 รอบ (ใหญ่ 5)</p></div></div>')
-    c4 = lo(col(topnode("ผ่านเกณฑ์ 3 ข้อ?", "ผ่าน → ส่งผล", ico="shield-check", id="w4"), *[f"<b>{e(g)}</b>" for g, _ in gate]))
-    pairs = [("w1", "w2", "main"), ("w2", "w3", "main"), ("w3", "w4", "main"), ("w4", "w2", "back dash")]
-    grid = f'<div class="grid g4">{wires(pairs)}{c1}{c2}{c3}{c4}</div>'
-    body = grid + band(f"ลูกทีมของ plugin นี้ · {len(r['agents'])} agent", "", tags(r["agents"], "agent"), "bot", "agent")
-    return body + legend([("agent", "ลูกทีม", "bot")])
+    steps = [vstep("ใบสั่งงาน 5 ข้อ", "หัวหน้าเขียนให้ทุกชิ้น ไม่มีใบ ไม่ส่งงาน", "w1", num=1,
+                   dets=["<b>เป้า</b> · <b>ขอบเขต</b> · <b>เสร็จเมื่อ</b> · <b>กติกาเดียวกัน</b> · <b>ส่งกลับแบบไหน</b>"]),
+             vstep("ลูกทีมทำชิ้นงาน", "ลูกทีมตัวใหม่ทุกงาน ตรวจเองก่อนส่ง", "w2", "agent", num=2,
+                   dets=["" if core else short(d["loop"][2], 3), "รายงานบรรทัดแรก: <b>เสร็จ</b> · <b>เสร็จ มีข้อกังวล</b> · <b>ขาดบริบท</b> · <b>ติด</b>"]),
+             vstep("ตรวจกับของจริง", "reviewer ตัวใหม่ทุกรอบ ไม่ได้รับความเห็นของหัวหน้า", "w3", "agent", num=3,
+                   dets=["ให้คะแนน <b>ผ่าน</b> · <b>แก้</b> · <b>ทำใหม่</b>", "" if core else short(d["loop"][3], 3)]),
+             vstep("ผ่านเกณฑ์ 3 ข้อไหม", " · ".join(f"<b>{e(g)}</b> {e(w)}" for g, w in gate), "w4", "pc", "git-branch",
+                   dets=["ไม่ผ่าน → แก้ที่ต้นเหตุ แล้วกลับไปขั้น 2 (เส้นประทางซ้าย) · งานกลางไม่เกิน 3 รอบ งานใหญ่ไม่เกิน 5 รอบ"]),
+             vstep("ส่งผล", "ผ่านแล้วเท่านั้นจึงถึงมือผู้ใช้", "w5", "pc", "check")]
+    pairs = [("w1", "w2", "main"), ("w2", "w3", "main"), ("w3", "w4", "main"), ("w4", "w5", "main"), ("w4", "w2", "back dash")]
+    body = f'<div style="padding-left:24px">{vlist(steps, pairs)}</div>'
+    body += band(f"ลูกทีมของ plugin นี้ · {len(r['agents'])} agent", "", tags(r["agents"], "agent"), "bot", "agent")
+    return body + legend([("pc", "ขั้นของหัวหน้าทีม", "layers"), ("agent", "ลูกทีม", "bot")], note="เส้นประทางซ้าย = ไม่ผ่าน กลับไปแก้")
 
 
 # ---------- รูปที่ 4: ตัดสินใจ รออนุมัติ ส่งผล ----------
 def f4(plug, d, r, core):
     approvals = list(dict.fromkeys(d["appr"] + ["จ่ายเงิน", "ใส่รหัสผ่าน"] if plug != "software-company" else SC["appr"]))
-    stop = f'<p style="color:var(--r-gate);font-weight:600;margin-top:8px">หยุดทันที: {e(d["stop"])}</p>' if d.get("stop") else ""
-    opts = [
-        ("ย้อนกลับได้ → ทำเลย", "pc", "check", f'<div class="sb">{short(d["d1"], 2)}</div>'),
-        ("ไม่รู้ → ค้นเอง", "pc", "search", '<div class="sb">≥ 3 แหล่งยืนยันตรงกัน · ไม่ครบ → ทางที่ย้อนง่ายสุด + <code>(รอยืนยัน)</code></div>'),
-        ("ย้อนไม่ได้ → รออนุมัติ", "gate", "hand", '<div class="sb">เตรียมให้พร้อมกด ทำส่วนอื่นต่อ</div>'),
-    ]
-    rows = ""
-    for n, (a, rl, ic, sb) in enumerate(opts):
-        extra = tags(approvals, "gate") + stop if rl == "gate" else ""
-        rows += (f'<div class="brow">{dot(rl, ic, "", id=f"b{n}")}<div><div class="lb">{e(a)}</div>{sb}'
-                 + (f'<div style="margin-top:8px">{extra}</div>' if extra else "") + "</div></div>")
-    top = (f'<div class="grid" style="grid-template-columns:270px 1fr;align-items:center;column-gap:104px">{wires([("q", f"b{n}", "dash" if n < 2 else "main") for n in range(3)])}'
-           f'<div>{row("ต้องตัดสินใจ", "ถามครั้งเดียวตอนเริ่ม", "pc", "git-branch", id="q", size="lg", rev=True)}</div>'
-           f'<div style="display:flex;flex-direction:column;gap:40px">{rows}</div></div>')
+    stop = f'<p style="color:var(--r-gate);font-weight:600">หยุดทันที: {e(d["stop"])}</p>' if d.get("stop") else ""
+    hub = icard("ต้องตัดสินใจกลางงาน", "ถามผู้ใช้ครั้งเดียวตอนเริ่ม แล้วเลือกเองตามทางข้างล่าง · จดทุกข้อใต้ ตัดสินใจเอง", "pc", "git-branch", id="q", cls="hub")
+    opts = fan([
+        icard("ย้อนกลับได้ → ทำเลย", short(d["d1"], 3), "pc", "check", id="b0", cls="col"),
+        icard("ไม่รู้ → ค้นเอง", "≥ 3 แหล่งยืนยันตรงกัน · ไม่ครบ → ทางที่ย้อนง่ายสุด + <code>(รอยืนยัน)</code>", "pc", "search", id="b1", cls="col"),
+        icard("ย้อนไม่ได้ → รออนุมัติ", "เตรียมให้พร้อมกด แล้วทำส่วนอื่นต่อ", "gate", "hand", id="b2", cls="col",
+              extra=f'<div style="margin-top:10px">{tags(approvals, "gate")}</div>{stop}')])
+    top = f'<div class="layers">{wires([("q", "b0", "dash"), ("q", "b1", "dash"), ("q", "b2", "main")])}{hub}{opts}</div>'
     o4a, o4b = SC["o4"] if plug == "software-company" else d["o4"]
-    outs = ('<div class="grid g4">'
-            + col(node("คำตอบตอนจบ", "pc", "3 ระดับ · คาด → จริง", ico="message-square"), ctr=True)
-            + col(node("ตารางสถานะ", "pc", "เสร็จ · ทำอยู่ · ติด", ico="list-checks"), ctr=True)
-            + col(node("CONTEXT.md", "pc", "ความคืบหน้า · รับงานต่อ", ico="file-text"), ctr=True)
-            + col(node(o4a, "gate", "ผู้ใช้กดเอง", ico="hand"), ctr=True)
-            + "</div>")
+    outs = fan([icard("คำตอบตอนจบ", "3 ระดับ · คาด → จริง", "pc", "message-square", cls="col"),
+                icard("ตารางสถานะ", "เสร็จ · ทำอยู่ · ติด", "pc", "list-checks", cls="col"),
+                icard("CONTEXT.md", "ความคืบหน้า · รับงานต่อ", "pc", "file-text", cls="col"),
+                icard(o4a, "ผู้ใช้กดเอง", "gate", "hand", cls="col")])
     body = top + band("ส่งผล", "ออกพร้อมกัน · ตัวถัดไปอ่านไฟล์ก็ทำต่อได้", outs, "package", "pc")
     return body + legend([("gate", "รอผู้ใช้อนุมัติ", "hand")])
 
 
 # ---------- รูปที่ 5: เรียนรู้ ----------
 def f5(plug, d, r, core):
-    c1 = col(node("ระหว่างงาน", "pc", "หัวหน้าจดทันที", num=1, id="l1"), "แก้ชิ้นที่ผิดแบบเดียวกันให้หมด", "ของใหม่ → <code>IMPROVEMENTS.md</code>", ctr=True)
-    c2 = col(node("เทียบคาดกับจริง", "pc", "ตอนจบทุกงาน", num=2, id="l2"), "ต่างเกิน 2 เท่า → <code>LEAD-PLAYBOOK.md</code>", "ลูกทีม → <code>TEAM.md</code>", ctr=True)
-    c3 = col(node("learning-reviewer", "pc", "ตัวใหม่ ตอนจบงาน", num=3, size="lg", id="l3"), "เสนอปรับทีม ≤ 3 ข้อ", "ผู้ใช้เลือก รับ · ไม่รับ · ไว้ทีหลัง", ctr=True)
-    c4 = col(node('"รวมบทเรียน"', "user", "ผู้ใช้สั่งเอง", ico="user", id="l4"), "ซ้ำ ≥ 2 → ข้อตรวจก่อนส่ง", "แก้ SKILL.md หลังผู้ใช้เห็นด้วย", ctr=True)
-    grid = f'<div class="grid g4">{wires([("l1", "l2", "main"), ("l2", "l3", "main"), ("l3", "l4", "main")])}{c1}{c2}{c3}{c4}</div>'
-    log = ('<div class="cols2"><p><b>จดทุกการทำ</b>hook จดลง <code>.claude/superuser/log/</code></p>'
-           '<p><b>รวมตัวเลข</b><code>SUMMARY.md</code> รวม token ราย agent</p></div>')
+    steps = [vstep("ระหว่างงาน", "หัวหน้าจดทันทีที่เจอ", "l1", num=1,
+                   dets=["แก้ชิ้นที่ผิดแบบเดียวกันให้หมด · ของใหม่ที่ใช้ซ้ำได้ → <code>IMPROVEMENTS.md</code>"]),
+             vstep("เทียบคาดกับจริง", "ตอนจบทุกงาน", "l2", num=2,
+                   dets=["ต่างเกิน 2 เท่า → <code>LEAD-PLAYBOOK.md</code> · ลูกทีมถนัดหรือพลาดอะไร → <code>TEAM.md</code>"]),
+             vstep("learning-reviewer", "agent ตัวใหม่ทบทวนวิธีทำงานตอนจบงาน", "l3", "agent", "bot",
+                   dets=["เสนอปรับทีมไม่เกิน 3 ข้อ · ผู้ใช้เลือก รับ · ไม่รับ · ไว้ทีหลัง"]),
+             vstep('"รวมบทเรียน"', "ผู้ใช้สั่งเอง", "l4", "user", "user",
+                   dets=["พลาดซ้ำ ≥ 2 ครั้ง → เป็นข้อตรวจก่อนส่ง · แก้ SKILL.md หลังผู้ใช้เห็นด้วย"])]
+    grid = vlist(steps, [("l1", "l2", "main"), ("l2", "l3", "main"), ("l3", "l4", "main")])
+    log = fan([icard("จดทุกการทำ", "hook จดลง <code>.claude/superuser/log/</code>", "pc", "list-checks"),
+               icard("รวมตัวเลข", "<code>SUMMARY.md</code> รวม token ราย agent", "pc", "file-text")])
     body = grid + band("ทุกอย่างถูกบันทึก", "ในเครื่องผู้ใช้เท่านั้น · ตัดค่าลับ", log, "list-checks")
-    return body + legend([("user", "ผู้ใช้ทำเอง", "user")])
+    return body + legend([("agent", "agent", "bot"), ("user", "ผู้ใช้ทำเอง", "user")])
 
 
 # ---------- รูปที่ 6: โมดูล + ศัพท์ของ plugin ----------

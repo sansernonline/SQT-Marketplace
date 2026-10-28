@@ -1,0 +1,76 @@
+{
+  "title": "pstack กับ SuperUser",
+  "sub": "pstack ของ poteto (Cursor) กับ superuser ของ software-company มีอะไรเหมือน อะไรมีแค่ฝั่งเดียว",
+  "src": "github.com/cursor/plugins/tree/main/pstack (README) · plugins/superuser/skills/superuser/SKILL.md · plugins/software-company/skills/superuser/SKILL.md · ตรวจล่าสุด 2026-10-08",
+  "core": "SuperUser ดัดแปลงจาก pstack: ประตูเดียวเลือก playbook → คัดขั้นตอนลง todo → ทุกขั้นพิสูจน์ก่อนไปต่อ · principle หลักของ pstack มีครบแล้ว · SuperUser เพิ่มความปลอดภัย ห้องทดลอง และการไม่หยุดงาน · รับเครื่องมือเฉพาะทางของ pstack มาครบแล้ว เหลือตัวเดียวที่ผูกกับ Cursor",
+  "sections": [
+    {
+      "title": "เหมือนกัน ชิ้นต่อชิ้น",
+      "cols": ["แนวคิด", "pstack", "SuperUser (software-company)"],
+      "rows": [
+        ["ประตูเดียว เลือกแผนตามงาน", "`/poteto-mode` → 22 playbook", "`superuser` → 16 playbook (รวมตัวที่หน้าที่ซ้ำ)"],
+        ["ไม่มีแผนตรง ออกแบบแผนเอง", "`/figure-it-out`", "จัดขนาดงานก่อน · ไม่ตรงก็ประกอบเองตาม `playbook-template` · งานใหญ่ brainstorm แล้วเขียน `BRIEF.md`"],
+        ["พิสูจน์กับของจริง", "`prove-it-works` · `fix-root-causes`", "`principle-prove-it-works` · `principle-fix-root-cause`"],
+        ["ได้รูปข้อมูลก่อน ตรวจที่ขอบ", "`foundational-thinking` · `model-the-domain` · `type-system-discipline` · `boundary-discipline`", "`principle-data-shape-first`"],
+        ["ชิ้นเล็กที่ตรวจได้ทีละชิ้น", "`sequence-verifiable-units`", "`principle-small-verifiable-steps`"],
+        ["รันซ้ำได้ผลเดิม", "`make-operations-idempotent`", "`principle-safe-to-rerun`"],
+        ["ย้ายครบแล้วลบของเก่า", "`migrate-callers-then-delete-legacy-apis` · `subtract-before-you-add`", "`principle-replace-then-delete`"],
+        ["ผู้ใช้มาก่อนความสะดวกคนสร้าง", "`experience-first`", "`principle-user-experience-first`"],
+        ["แก้นิดเดียว กระทบอะไรบ้าง", "`/blast-radius`", "`blast-radius`"],
+        ["ทำเครื่องมือ แทนทำมือ", "`build-the-lever`", "`principle-build-a-tool-not-handwork`"],
+        ["บทเรียนเป็นการตรวจ ไม่ใช่ข้อความ", "`encode-lessons-in-structure`", "`repeated-mistakes-to-checks`"],
+        ["ไม่รอคน ทำต่อแล้วให้คนแก้ทาง", "`never-block-on-the-human`", "`principle-proceed-on-reversible-work`"],
+        ["รักษา context หลัก", "`guard-the-context-window`", "`context-budget`"],
+        ["โค้ดน้อย อ่านง่าย", "`laziness-protocol` · `minimize-reader-load`", "`lazy-coding` · `readable-code`"],
+        ["ลองหลายทาง แบ่งงานขนาน รีวิวหลายมุม", "`/arena` · `/swarm` · `/interrogate`", "`parallel-attempts-pick-best` · `parallel-split-and-merge` · `adversarial-review-panel`"],
+        ["เรียนจากงานที่จบ · จำสไตล์เจ้าของ", "`/reflect` · `/automate-me`", "`session-lessons-to-skills` · `owner-style-capture` · `learning-reviewer` ทุกงาน · คิวกลาง"],
+        ["skill ตรวจแอปของโปรเจกต์", "`/create-verification-skill` · `/maintain-verification-skill`", "`app-verifier-setup` · `app-verifier-upkeep`"],
+        ["บันทึกการตัดสินใจ", "`/show-me-your-work`", "`decision-log`"],
+        ["คัดบั๊กที่แจ้งเข้ามา", "automation `benny`", "`bug-inbox-triage`"],
+        ["อธิบายระบบ · ไล่หาเหตุผล · สอน", "`/how` · `/why` · `/teach`", "playbook `investigation` — ไล่หลักฐานจาก git · PR · issue · connector · โหมดสอนต่อชั้น"],
+        ["คัดคอมเมนต์ก่อนรีวิว", "`/no-comments`", "`readable-code` — ลบ · เปลี่ยนชื่อ · กลายเป็นการตรวจ · เก็บ"],
+        ["test ที่ล้มก่อนแก้บั๊ก", "`/tdd`", "playbook `bug-fix` ขั้น 3"],
+        ["ไต่ตัวเลขทีละสมมติฐาน", "playbook hillclimb", "playbook `performance` — commit ละหนึ่งการแก้ที่ชนะ"],
+        ["รีวิวด้วยโมเดลต่างค่าย", "sol · grok · fable · opus", "`adversarial-review-panel` — ใช้ CLI ค่ายอื่นได้เมื่ออนุญาตล่วงหน้า"],
+        ["ภาษาไม่มีกลิ่น AI", "`/unslop` · `/bro`", "`answer-shape` — ตารางตัดกลิ่น AI · โหมด \"พูดง่าย ๆ\""],
+        ["เลือกโมเดลตามงาน", "`/setup-pstack` ผูกบทบาทกับโมเดล", "3 ระดับ ใหญ่ · กลาง · เล็ก หัวหน้าเลือกตามงาน · สลับกลางทางได้"]
+      ]
+    },
+    {
+      "title": "มีแค่ SuperUser",
+      "cols": ["เรื่อง", "SuperUser"],
+      "rows": [
+        ["ความปลอดภัยทุก diff", "`principle-secure-by-default` + `security-gate` สแกนก่อนส่ง"],
+        ["ห้องทดลองแยกต่อโปรเจกต์", "`docker-sandbox` — ติดตั้ง ลบ รันได้เต็มที่ในห้อง"],
+        ["ไม่หยุดงาน แต่ไม่ทำของที่ย้อนไม่ได้", "รายการ **รออนุมัติ** — เตรียมคำสั่งไว้แล้วทำส่วนอื่นต่อ · อนุญาตล่วงหน้าได้บางข้อ"],
+        ["ไม่รู้ ค้นเอง", "ค้น best practice ใช้ได้เมื่ออย่างน้อย 3 แหล่งน่าเชื่อถือยืนยันตรงกัน แนบลิงก์ครบ · ไม่ครบเลือกทางที่ย้อนง่ายสุด ป้าย รอยืนยัน"],
+        ["รายงานที่เก็บลงไฟล์", "`status-report` ลง `docs/BUILD-PLAN.md` · ป้าย วัดจริง · อนุมาน · เดา · ข้อเสนอไม่เกิน 3"],
+        ["จดสิ่งที่ทีมควรรู้", "`IMPROVEMENTS.md` ที่ root โปรเจกต์ รอรวมเข้า skill และ agent"],
+        ["หัวหน้าทีม", "ตัวเดียวต่อโปรเจกต์ รับงานแทนคน สั่งและตรวจลูกทีม เขียนไฟล์กลางคนเดียว"],
+        ["log ทุกการทำ", "hook เขียน `.superuser/log/` เอง ทั้งตัวหลักและ subagent · ตัดค่าลับ"],
+        ["ส่งต่องานให้คนหรือ bot ค่ายอื่น", "`CONTEXT.md` หัวข้อ รับงานต่อ · `AGENTS.md` · `GEMINI.md` ชี้มา · สลับโมเดลกลางทางได้"],
+        ["คิวข้อความถึงทีม", "`.superuser/inbox/` — คนหรือ bot วางไฟล์ หัวหน้าหยิบทำตามลำดับ"],
+        ["เอกสารโปรเจกต์ครบชุด", "playbook `project-docs` · SRS · FSD · ADR · ดีไซน์ระบบหน้าจอ"],
+        ["ต้นฉบับกลาง", "plugin `superuser` + `sync-superuser.mjs` + `ADAPT.md`"],
+        ["เขียนโค้ดตาม stack", "`code-orientation` · `stack-*` 4 ตัว · `coding-evals`"],
+        ["หลายสาขา", "39 agent ในซอฟต์แวร์ + plugin อื่นอีก 11 ตัว รวม superuser (การเงิน ภาษี ร้านค้า สุขภาพ ฯลฯ)"]
+      ]
+    },
+    {
+      "title": "มีแค่ pstack (ไม่รับมา)",
+      "cols": ["เรื่อง", "pstack", "เหตุผล"],
+      "rows": [
+        ["ปุ่มบนหน้าเว็บสั่ง bot", "`/make-bot-ui`", "ผูกกับ Grok Bot และ webhook ของ Cursor · ใช้กับ Claude Code ตรง ๆ ไม่ได้"]
+      ]
+    },
+    {
+      "title": "ต่างกันพื้นฐาน",
+      "cols": ["เรื่อง", "pstack", "SuperUser"],
+      "rows": [
+        ["เครื่องมือ", "Cursor", "Claude Code (และ `dist/` สำหรับ large language model (LLM) อื่น)"],
+        ["จำนวน principle", "21 ข้อ ใน 5 กลุ่ม", "10 ตัว `principle-*` + skill ความเรียบง่าย · context · `blast-radius`"],
+        ["ภาษา", "อังกฤษ", "ไทยเป็นหลัก คำเทคนิคอังกฤษ"]
+      ]
+    }
+  ]
+}
