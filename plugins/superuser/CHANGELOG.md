@@ -1,5 +1,9 @@
 # Changelog — superuser
 
+## 3.12.1 — 2026-10-28
+
+- `team-files.md` หัวข้อหลาย AI ใน repo เดียว ข้อ 5: branch ที่ merge แล้วลบ worktree ที่สะอาดและ branch ได้ทันทีโดยไม่ต้องถาม แม้เป็นของ session หรือ AI ตัวอื่น · ไล่ดูตอนเริ่มและจบงาน · ยังไม่ merge ห้ามแตะ
+
 ## 3.12.0 — 2026-10-27
 
 - skill ใหม่ `decision-scoring` ตัดสินด้วยตัวเลข: `decide.mjs` คำสั่ง score (กฎเหล็กตัดก่อน → min-max → ถ่วงน้ำหนัก → ขยับน้ำหนัก ±20% ดูว่าอันดับ 1 นิ่งไหม) · payoff (ค่าคาดหวัง + minimax regret) · knapsack (ลองทุกชุดเมื่อไม่เกิน 20 รายการ · `max_items`) · priority (RICE · WSJF · Eisenhower) · pairwise (Bradley-Terry สลับตำแหน่ง) · review (ตรวจอีกรอบคุ้มไหม) · ทุกคำสั่งตรวจค่าที่ใส่ · knapsack บอกชุดรองลงมาและเพดานต่อกลุ่ม · test 19 ข้อ · eval 3 เคส (regression จากรอบแดงที่ทำสเกลก่อนตัดตัวเลือกที่ผิดกฎเหล็ก)

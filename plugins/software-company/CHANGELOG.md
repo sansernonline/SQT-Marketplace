@@ -1,5 +1,9 @@
 # Changelog — software-company
 
+## 2.31.1 — 2026-10-28
+
+- `worktree-and-branch` ข้อ 6: merge แล้วลบ worktree ที่สะอาดและ branch ได้ทันทีไม่ต้องถาม แม้เป็นของ session หรือ AI ตัวอื่น · ไล่ดูทุกครั้งที่เริ่มและจบงาน
+
 ## 2.31.0 — 2026-10-27
 
 - skill ใหม่ `rabbitmq-messaging`: เลือก RabbitMQ หรือ Kafka · quorum queue · publisher confirms · manual ack และ prefetch · กันซ้ำ · dead letter ด้วย policy · `delivery-limit` และ delayed retry (4.3 ขึ้นไป · ล้มชั่วคราวใช้ reject ไม่ใช่ nack) · ความปลอดภัยของ broker · eval 3 เคส

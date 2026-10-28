@@ -20,7 +20,7 @@ repo นี้มี AI หลายตัวแก้พร้อมกัน (
 2. ชื่อ branch ขึ้นต้นด้วยชื่อเครื่องมือ: `codex/…` · `claude/…` · `gemini/…`
 3. ใครทำอะไรอยู่ ดูจาก `git worktree list` และ `git branch -vv` ไม่ต้องจดตารางใน `CONTEXT.md`
 4. ห้ามแตะ worktree ของตัวอื่น · ไม่ commit · ไม่ลบ · ไม่ switch branch ในโฟลเดอร์ที่ไม่ใช่ของตัวเอง · เจอไฟล์ค้างที่ตัวเองไม่ได้แก้ = ของคนอื่น ห้าม stage
-5. merge แล้วเก็บกวาด: ลบ branch (`gh pr merge <เลข> --merge --delete-branch`) แล้ว `git worktree remove <โฟลเดอร์>` · worktree ยังมีไฟล์ค้าง git จะไม่ยอมลบ ให้บอกผู้ใช้ ห้ามใส่ `--force`
+5. merge แล้วเก็บกวาด: ลบ branch (`gh pr merge <เลข> --merge --delete-branch`) แล้ว `git worktree remove <โฟลเดอร์>` · worktree ยังมีไฟล์ค้าง git จะไม่ยอมลบ ให้บอกผู้ใช้ ห้ามใส่ `--force` · ตอนเริ่มและจบงานไล่ดู `git worktree list` ด้วย: branch ไหน merge แล้ว (`git branch --merged main` มีชื่อ หรือ `gh pr list --head <branch> --state merged` เจอ PR) ลบ worktree ที่สะอาดและ branch นั้นได้ทันทีโดยไม่ต้องถาม แม้เป็นของ session หรือ AI ตัวอื่น · ยังไม่ merge ห้ามแตะ
 6. ไฟล์ที่ไม่อยู่ใน git (`node_modules` · `.venv` · `.env`) ไม่ตามมาใน worktree ใหม่ ต้องติดตั้งหรือคัดลอกเอง
 
 ## git
