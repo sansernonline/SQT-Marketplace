@@ -21,6 +21,7 @@ description: Use when writing a post-incident review or blameless postmortem of 
 |---|---|
 | เหตุยังเกิดอยู่ ต้องรู้ว่าจะทำอะไรตอนนี้ | `incident-runbook-template` |
 | บั๊กธรรมดาที่ไม่ได้ทำให้ระบบจริงล่ม | `bug-report-template` |
+| action item "เพิ่ม load test" (ระบบล่มเพราะคนเยอะหรือ connection pool เต็ม) | `load-testing` — ตั้งเกณฑ์ p95 กับอัตรา error · ด่านอนุญาตก่อนยิง · smoke ใน CI |
 
 ## Core Principles
 
@@ -145,7 +146,7 @@ Use **5 Whys** technique:
 |---|--------|-------|------|----------|----------|
 | 1 | Add monitoring for X | @alice | Prevent | P1 | YYYY-MM-DD |
 | 2 | Update runbook | @bob | Mitigate | P2 | YYYY-MM-DD |
-| 3 | Add load test for endpoint | @charlie | Prevent | P1 | YYYY-MM-DD |
+| 3 | Add load test for endpoint (see `load-testing`) | @charlie | Prevent | P1 | YYYY-MM-DD |
 
 **Action types:**
 - **Prevent:** stops this from happening again

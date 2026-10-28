@@ -3134,7 +3134,7 @@ Use when building a realtime voice agent or phone bot (รับสาย, โ�
 - แก้ปัญหา agent พูดทับลูกค้า หยุดไม่ทันเมื่อถูกพูดแทรก (barge-in) หยุดเองเพราะได้ยินเสียงตัวเองสะท้อน หรือฟังชื่อ วันที่ เวลาภาษาไทยผิด
 - ผู้ใช้พูดว่า "voice bot" · "AI รับโทรศัพท์" · "callbot" · "ให้ AI คุยกับลูกค้าทางโทรศัพท์"
 
-ไม่ใช้เมื่อ: ทำเสียงบรรยายจากสคริปต์เป็นไฟล์ หรือถอดเสียงจากคลิปที่อัดไว้แล้ว → `graphic-design:video-editing` · `graphic-design:subtitles-th` · แชตบอตตัวอักษรใน LINE → `e-commerce:line-chatbot` · ออกแบบ prompt ทั่วไป RAG และ eval ของ LLM โดยไม่มีเสียง → `llm-engineering`
+ไม่ใช้เมื่อ: ทำเสียงบรรยายจากสคริปต์เป็นไฟล์ → `graphic-design:narration-th` · ถอดเสียงจากคลิปที่อัดไว้แล้ว → `graphic-design:subtitles-th` · แชตบอตตัวอักษรใน LINE → `e-commerce:line-chatbot` · ออกแบบ prompt ทั่วไป RAG และ eval ของ LLM โดยไม่มีเสียง → `llm-engineering`
 
 ## ใช้ตัวอื่นแทนหรือคู่กัน
 
@@ -3195,7 +3195,7 @@ event สายและนัด → Kafka → CRM · ระบบแจ้ง�
 
 - **Amazon Polly ไม่มีภาษาไทย** ถ้าใช้ AWS ฝั่ง STT (Transcribe รองรับไทยแบบ streaming) ฝั่ง TTS ต้องเลือกเจ้าอื่น
 - **Google Chirp 3 รองรับไทยแบบ streaming แต่ยังเป็น Preview และมีเฉพาะ region `us` กับ `eu`** เสียงจึงออกนอกประเทศ
-- **TTS ไทยแบบ streaming ที่รันเองได้ยังไม่มีตัวที่ยืนยันได้** · F5-TTS-THAI และ edge-tts ใน `video-editing` ทำทีละไฟล์ ไม่ใช่ realtime
+- **TTS ไทยแบบ streaming ที่รันเองได้ยังไม่มีตัวที่ยืนยันได้** · F5-TTS-THAI และ edge-tts ใน `narration-th` ทำทีละไฟล์ ไม่ใช่ realtime
 - STT รันเองบน GPU: Typhoon ASR Real-time (114M · CC-BY-4.0) ทำมาเพื่อ streaming ภาษาไทย · whisper_streaming หน่วง 3.3 วินาทีตามงานวิจัย ใช้ไม่ได้กับงบนี้
 - จะรันเองเมื่อ (1) เสียงห้ามออกนอกประเทศ หรือ (2) ปริมาณนาทีต่อเดือนสูงจนค่าเครื่องถูกกว่า · ให้คิดค่า GPU ที่ต้องเปิดค้างไว้รับสายตลอดเวลาทำการด้วย ไม่ใช่คิดแค่นาทีที่ใช้จริง · node pool และ autoscale ทำตาม `kubernetes-helm`
 - ใส่ราคาในเอกสารพร้อมลิงก์และวันที่ตรวจทุกครั้ง ราคาที่จำมาห้ามใช้
@@ -3320,7 +3320,7 @@ event สายและนัด → Kafka → CRM · ระบบแจ้ง�
 | Google Cloud TTS รุ่น Chirp 3 HD | ✓ streaming synthesis ส่งออก `MULAW` `ALAW` `PCM` `OGG_OPUS` | ✓ `th-TH` | ✗ | 30 (ฟรี 1 ล้านตัวอักษรแรก) | streaming ไม่รับ SSML จึงคุมการอ่านตัวเลขด้วย SSML ไม่ได้ ต้องเขียนเป็นคำก่อนส่ง · `MULAW` ใช้กับสายโทรศัพท์ได้ตรง | [Chirp 3 HD](https://docs.cloud.google.com/text-to-speech/docs/chirp3-hd) · [ราคา](https://cloud.google.com/text-to-speech/pricing) |
 | Azure AI Speech | ✓ ส่งเสียงทีละก้อน · รับข้อความแบบ streaming ผ่าน `TextStream` ที่ websocket v2 | ✓ `th-TH-PremwadeeNeural` · `th-TH-NiwatNeural` · `th-TH-AcharaNeural` · รุ่น Neural HD `th-TH-Krit` · `th-TH-Nattapong` | ✗ | 15 (S1 Neural) · 22 (Neural HD) | text streaming ไม่รับ SSML · แนะนำให้ต่อ websocket ไว้ก่อนและใช้ synthesizer ซ้ำ | [ภาษาและเสียง](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/language-support?tabs=tts) · [ลดความหน่วง](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/how-to-lower-speech-synthesis-latency) · [Azure Retail Prices API](https://prices.azure.com/api/retail/prices) |
 | Amazon Polly | — | ✗ ไม่มีภาษาไทยในรายการ | ✗ | — | ใช้ Transcribe ฝั่ง STT ได้ แต่ฝั่ง TTS ต้องเลือกเจ้าอื่น | [ภาษาของ Polly](https://docs.aws.amazon.com/polly/latest/dg/supported-languages.html) |
-| F5-TTS-THAI · edge-tts | ✗ สร้างทีละไฟล์ | ✓ | F5 รันเองได้ | ฟรี | ใช้ทำเสียงบรรยายจากสคริปต์ ไม่ใช่ realtime · F5 บน CPU ช้ากว่าเวลาจริงหลายเท่า · edge-tts ไม่มีสัญญาสำหรับนักพัฒนา (รายละเอียดใน `video-editing` หัวข้อเสียงบรรยาย) | `graphic-design:video-editing` |
+| F5-TTS-THAI · edge-tts | ✗ สร้างทีละไฟล์ | ✓ | F5 รันเองได้ | ฟรี | ใช้ทำเสียงบรรยายจากสคริปต์ ไม่ใช่ realtime · F5 บน CPU ช้ากว่าเวลาจริงหลายเท่า · edge-tts ไม่มีสัญญาสำหรับนักพัฒนา (รายละเอียดใน `narration-th`) | `graphic-design:narration-th` |
 | TTS ไทยแบบรันเองที่ streaming ได้ | (ยังไม่ได้ตรวจ) | | | | ยังไม่พบรุ่นเปิดที่ยืนยันได้ว่าส่งไบต์แรกเร็วพอ ถ้าต้องเก็บเสียงในประเทศให้วัด TTS ไบต์แรกบน GPU จริงก่อนตัดสินใจ | — |
 
 ## 3 · รุ่นที่รับเสียงและตอบเป็นเสียงในตัว (speech-to-speech)

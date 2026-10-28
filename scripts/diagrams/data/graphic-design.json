@@ -1,7 +1,7 @@
 {
  "plugin": "graphic-design",
- "version": "0.16.0",
- "description": "Creative design beyond product UI — brand kits, AI image generation and briefs with style consistency, social media formats, marketplace product images, YouTube thumbnails, print-ready files, campaign sets, LINE rich menus, video editing with Thai subtitles and narration, speaking scripts, motion basics, and a design-review checklist.",
+ "version": "0.18.0",
+ "description": "Creative design beyond product UI — brand kits, AI image generation and briefs with style consistency, social media formats, marketplace product images, YouTube thumbnails, print-ready files, campaign sets, LINE rich menus, app and UI icons, video editing with Thai subtitles and narration, speaking scripts, motion basics, and a design-review checklist.",
  "cross": [
   "software-company",
   "e-commerce"
@@ -18,6 +18,7 @@
   "line-richmenu",
   "marketplace-product-images",
   "motion-basics",
+  "narration-th",
   "print-ready-files",
   "social-formats",
   "speaking-script",
@@ -119,7 +120,8 @@
     "brief-to-image",
     "style-consistency",
     "image-editing-brief",
-    "brand-kit"
+    "brand-kit",
+    "icon-design"
    ]
   },
   {
@@ -145,6 +147,7 @@
    "skills": [
     "video-editing",
     "subtitles-th",
+    "narration-th",
     "asset-organize",
     "video-script-to-clip"
    ]
@@ -1225,7 +1228,7 @@
     },
     {
      "n": 5,
-     "text": "มีฟุตเทจหรือเสียงแล้ว: ตัด ต่อ ปรับความดัง ต่อสไลด์กับเสียง และส่งออกตาม `video-editing` · ซับไทยตาม `subtitles-th` · ไม่อัดเสียงเอง → เสียงบรรยายจากสคริปต์ตาม `video-editing` หัวข้อเสียงบรรยายจากสคริปต์ (ได้ซับและเวลาสไลด์ในรอบเดียว) · งานที่ส่งแค่ brief ข้ามขั้นนี้ · ใคร: `video-editor` ตัวใหม่",
+     "text": "มีฟุตเทจหรือเสียงแล้ว: ตัด ต่อ ปรับความดัง ต่อสไลด์กับเสียง และส่งออกตาม `video-editing` · ซับไทยตาม `subtitles-th` · ไม่อัดเสียงเอง → เสียงบรรยายจากสคริปต์ตาม `narration-th` (ได้ซับและเวลาสไลด์ในรอบเดียว) · งานที่ส่งแค่ brief ข้ามขั้นนี้ · ใคร: `video-editor` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1238,7 +1241,8 @@
      },
      "skills": [
       "video-editing",
-      "subtitles-th"
+      "subtitles-th",
+      "narration-th"
      ],
      "commands": [],
      "playbooks": [],

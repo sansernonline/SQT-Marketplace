@@ -1,5 +1,9 @@
 # Changelog — superuser
 
+## 3.15.1 — 2026-10-28
+
+- router และ `triggers.md`: งานเสียงบรรยายจากสคริปต์ (TTS) ส่งไป `graphic-design:narration-th` ที่แยกออกจาก `video-editing`
+
 ## 3.15.0 — 2026-10-28
 
 - ด่านป้องกัน (guard) กันเพิ่ม 5 แบบ: `push --force` · `commit --amend` · `git branch -D` · `git clean -f` · `git checkout -- .` / `git restore .` · กฎใส่ `"flags": ""` ได้เมื่อตัวพิมพ์มีความหมาย · ค่าเริ่มยังปิดเหมือนเดิม (P6)

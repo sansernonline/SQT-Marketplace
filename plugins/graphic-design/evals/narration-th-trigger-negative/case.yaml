@@ -1,0 +1,28 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เคส "ไม่ควรเปิด": เสียงบรรยายที่ผู้ใช้อัดเองแล้ว งานคือตัดและปรับความดัง ไม่ใช่สร้างเสียงจากสคริปต์ · ผ่านเมื่อ narration-th ไม่ถูกเปิดทุกรอบ · เตรียมไว้ ยังไม่ได้รัน (2026-10-28)
+schema_version: "1.1"
+name: narration-th-trigger-negative
+description: อัดเสียงบรรยายเองแล้ว ขอตัดช่วงเงียบและปรับความดังก่อนลง podcast ต้องไม่เปิด narration-th (งานของ video-editing)
+tags: [trigger, negative, narration-th]
+runs: 5
+expected_outcome: ไม่เปิด Skill narration-th · ตอบเรื่องตัดช่วงเงียบและปรับความดัง เช่น -16 LUFS
+execution:
+  prompt: |
+    อัดเสียงบรรยายบทเรียน podcast ตอนที่ 3 เองเสร็จแล้ว ยาว 18 นาที เป็นไฟล์ ep03.wav
+    มีช่วงเงียบยาวหลายช่วง และเสียงเบากว่าตอนก่อน ช่วยตัดช่วงเงียบและปรับเสียงก่อนอัปโหลดขึ้น Apple Podcasts
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: narration-th-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?narration-th"'
+    min: 0
+    max: 0
+    arm: with-only
+  - name: on-topic
+    type: regex
+    pattern: "LUFS|loudnorm|ความดัง|ช่วงเงียบ"
+    flags: i
+    match: contains
+    target: last_message

@@ -1,5 +1,11 @@
 # Changelog — software-company
 
+## 2.33.0 — 2026-10-28
+
+- skill ใหม่ `load-testing`: เป้าและเกณฑ์ผ่าน (p95 · อัตรา error) ก่อนยิง · ด่านอนุญาต ไม่ยิงระบบของคนอื่นหรือ production โดยไม่มีผู้อนุมัติ · เลือก k6 · Locust · JMeter · แบบ smoke · load · stress · spike · soak · สคริปต์ k6 พร้อม thresholds ที่หยุดเองเมื่อไม่มี `BASE_URL` หรือผู้อนุมัติ · วิธีอ่านผล · smoke ใน GitHub Actions · MCP `grafana/mcp-k6` (ของทดลอง ผู้ใช้ติดตั้งเอง) · eval 3 เคส (ควรเปิด · ไม่ควรเปิด · พฤติกรรม) ยังไม่ได้รัน
+- `postmortem-template` action item "เพิ่ม load test" ชี้ไป `load-testing` · agent `qa-tester` และ `devops-engineer` รู้จัก skill ใหม่ · แถวใหม่ใน triggers
+- `voice-agent` ชี้งานเสียงบรรยายจากสคริปต์ไปที่ `graphic-design:narration-th` แทน `video-editing`
+
 ## 2.32.0 — 2026-10-28
 
 - `web-service-essentials` `health_py.py`: health check แบบ sync รันใน thread ตั้งแต่แรก timeout จึงตัดได้จริง เดิมเรียก `fn()` ก่อนห่อ thread จึงบล็อก event loop จนจบ

@@ -16,7 +16,7 @@ description: Use when building a realtime voice agent or phone bot (รับส
 - แก้ปัญหา agent พูดทับลูกค้า หยุดไม่ทันเมื่อถูกพูดแทรก (barge-in) หยุดเองเพราะได้ยินเสียงตัวเองสะท้อน หรือฟังชื่อ วันที่ เวลาภาษาไทยผิด
 - ผู้ใช้พูดว่า "voice bot" · "AI รับโทรศัพท์" · "callbot" · "ให้ AI คุยกับลูกค้าทางโทรศัพท์"
 
-ไม่ใช้เมื่อ: ทำเสียงบรรยายจากสคริปต์เป็นไฟล์ หรือถอดเสียงจากคลิปที่อัดไว้แล้ว → `graphic-design:video-editing` · `graphic-design:subtitles-th` · แชตบอตตัวอักษรใน LINE → `e-commerce:line-chatbot` · ออกแบบ prompt ทั่วไป RAG และ eval ของ LLM โดยไม่มีเสียง → `llm-engineering`
+ไม่ใช้เมื่อ: ทำเสียงบรรยายจากสคริปต์เป็นไฟล์ → `graphic-design:narration-th` · ถอดเสียงจากคลิปที่อัดไว้แล้ว → `graphic-design:subtitles-th` · แชตบอตตัวอักษรใน LINE → `e-commerce:line-chatbot` · ออกแบบ prompt ทั่วไป RAG และ eval ของ LLM โดยไม่มีเสียง → `llm-engineering`
 
 ## ใช้ตัวอื่นแทนหรือคู่กัน
 
@@ -77,7 +77,7 @@ event สายและนัด → Kafka → CRM · ระบบแจ้ง�
 
 - **Amazon Polly ไม่มีภาษาไทย** ถ้าใช้ AWS ฝั่ง STT (Transcribe รองรับไทยแบบ streaming) ฝั่ง TTS ต้องเลือกเจ้าอื่น
 - **Google Chirp 3 รองรับไทยแบบ streaming แต่ยังเป็น Preview และมีเฉพาะ region `us` กับ `eu`** เสียงจึงออกนอกประเทศ
-- **TTS ไทยแบบ streaming ที่รันเองได้ยังไม่มีตัวที่ยืนยันได้** · F5-TTS-THAI และ edge-tts ใน `video-editing` ทำทีละไฟล์ ไม่ใช่ realtime
+- **TTS ไทยแบบ streaming ที่รันเองได้ยังไม่มีตัวที่ยืนยันได้** · F5-TTS-THAI และ edge-tts ใน `narration-th` ทำทีละไฟล์ ไม่ใช่ realtime
 - STT รันเองบน GPU: Typhoon ASR Real-time (114M · CC-BY-4.0) ทำมาเพื่อ streaming ภาษาไทย · whisper_streaming หน่วง 3.3 วินาทีตามงานวิจัย ใช้ไม่ได้กับงบนี้
 - จะรันเองเมื่อ (1) เสียงห้ามออกนอกประเทศ หรือ (2) ปริมาณนาทีต่อเดือนสูงจนค่าเครื่องถูกกว่า · ให้คิดค่า GPU ที่ต้องเปิดค้างไว้รับสายตลอดเวลาทำการด้วย ไม่ใช่คิดแค่นาทีที่ใช้จริง · node pool และ autoscale ทำตาม `kubernetes-helm`
 - ใส่ราคาในเอกสารพร้อมลิงก์และวันที่ตรวจทุกครั้ง ราคาที่จำมาห้ามใช้

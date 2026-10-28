@@ -67,9 +67,6 @@
     "evals/video-editing-slides-regression/case.yaml": "เคส eval: กันอาการวิดีโอยาวเกินเสียงและแผ่นสุดท้ายหาย",
     "evals/video-editing-slides-trigger/case.yaml": "เคส eval: โจทย์สไลด์กับเสียงเป็นวิดีโอที่ต้องทำให้ video-editing ถูกเปิด",
     "evals/video-editing-trigger/case.yaml": "เคส eval: โจทย์ตัดช่วงเงียบและปรับเสียงที่ต้องทำให้ video-editing ถูกเปิด",
-    "evals/video-editing-tts-behaviour/case.yaml": "เคส eval: เตรียมสคริปต์ให้เครื่องอ่าน มีไฟล์คำอ่าน ขั้นทำร่าง และกฎเสียงต้นแบบ",
-    "evals/video-editing-tts-guard/case.yaml": "เคส eval: F5 ล้มที่ libtorchcodec ต้องใช้ทางที่ไม่แก้โปรแกรมที่ติดตั้งและไม่ติดตั้งของทั้งเครื่องเอง",
-    "evals/video-editing-tts-trigger/case.yaml": "เคส eval: โจทย์ไม่อยากอัดเสียงเองที่ต้องทำให้ video-editing ถูกเปิด",
     "evals/youtube-thumbnail-trigger/case.yaml": "เคส eval: ยูทูบเบอร์ถามเรื่องภาพปกคลิปและการทดสอบหลายปก ไม่เอ่ยชื่อ skill ต้องทำให้ youtube-thumbnail ถูกเปิด …",
     "hooks/core-rules.md": "กฎประจำตัวที่ hook ส่งให้ทุก session (สำเนาของ scripts/install/CLAUDE.global.md · sync-superuser สร้าง)",
     "hooks/guard-rules.json": "รายการคำสั่งที่โมดูล guard บล็อกก่อนรัน (push · commit · reset --hard · ลบนอก _to_delete · แก้ settings) พร้อมเหตุผลและกฎที่มา",
@@ -113,6 +110,9 @@
     "evals/rabbitmq-messaging-trigger/case.yaml": "เคส eval: ขอออกแบบคิวงานด้วย RabbitMQ ต้องทำให้ rabbitmq-messaging ถูกเปิด",
     "evals/rabbitmq-messaging-behaviour/case.yaml": "เคส eval: ออกแบบคิวส่งอีเมล ต้องมี quorum queue · publisher confirms · manual ack · กันซ้ำ",
     "evals/rabbitmq-messaging-regression/case.yaml": "เคส eval: กันอาการรอบแดง ตั้ง dead letter ด้วย argument แทน policy และไม่ตั้งความปลอดภัยของ broker",
+    "evals/load-testing-trigger/case.yaml": "เคส eval: ถามว่าระบบรอด flash sale ไหม ต้องทำให้ load-testing ถูกเปิด และตั้งเกณฑ์เป็น percentile",
+    "evals/load-testing-trigger-negative/case.yaml": "เคส eval: หน้าเว็บโหลดช้าและคะแนน Lighthouse ต่ำ ต้องไม่เปิด load-testing (ของ web-quality-audit)",
+    "evals/load-testing-behaviour/case.yaml": "เคส eval: ถูกสั่งยิง production กับ payment gateway ภายนอก ต้องมี thresholds · รออนุมัติ · ใช้ mock แทน gateway",
     "evals/kubernetes-helm-trigger/case.yaml": "เคส eval: ขอ Dockerfile กับ Helm chart ขึ้น production ต้องทำให้ kubernetes-helm ถูกเปิด",
     "evals/kubernetes-helm-behaviour/case.yaml": "เคส eval: chart ต้องมี probe · requests/limits · securityContext · ค่าลับไม่อยู่ใน values.yaml",
     "evals/kubernetes-helm-regression/case.yaml": "เคส eval: กันอาการรอบแดง image ไม่ล็อก digest และไม่ปิด root filesystem กับ capabilities",
@@ -217,7 +217,11 @@
     "evals/tax-vat-th-trigger/case.yaml": "เคส eval: บริษัทเพิ่งจด VAT ถามสิ่งที่ต้องยื่น ต้องเปิด tax-vat-th และพูดถึง ภ.พ.30 · ไม่เอ่ยชื่อ skill",
     "evals/video-script-to-clip-trigger/case.yaml": "เคส eval: ขอทำคลิปสั้นขายของ ต้องเปิด video-script-to-clip และมี hook ใน 3 วินาทีแรกกับซับที่อ่านได้เมื่อปิดเสียง",
     "evals/weekly-review-trigger-negative/case.yaml": "เคส eval: ขอสรุปบันทึกการประชุมที่เพิ่งจบ ต้องไม่เปิด weekly-review",
-    "evals/youtube-thumbnail-trigger-negative/case.yaml": "เคส eval: ขอภาพโพสต์ทั่วไปของร้าน ไม่ใช่ปกคลิป ต้องไม่เปิด youtube-thumbnail"
+    "evals/youtube-thumbnail-trigger-negative/case.yaml": "เคส eval: ขอภาพโพสต์ทั่วไปของร้าน ไม่ใช่ปกคลิป ต้องไม่เปิด youtube-thumbnail",
+    "evals/narration-th-behaviour/case.yaml": "เคส eval: เตรียมสคริปต์ให้เครื่องอ่าน มีไฟล์คำอ่าน ขั้นทำร่าง และกฎเสียงต้นแบบ",
+    "evals/narration-th-guard/case.yaml": "เคส eval: F5 ล้มที่ libtorchcodec ต้องใช้ทางที่ไม่แก้โปรแกรมที่ติดตั้งและไม่ติดตั้งของทั้งเครื่องเอง",
+    "evals/narration-th-trigger/case.yaml": "เคส eval: โจทย์ไม่อยากอัดเสียงเองที่ต้องทำให้ narration-th ถูกเปิด",
+    "evals/narration-th-trigger-negative/case.yaml": "เคส eval: อัดเสียงบรรยายเองแล้ว ขอตัดช่วงเงียบและปรับความดัง เป็นของ video-editing · ต้องไม่เปิด narration-th"
   },
   "superuser_files": {
     "references/code-extensions.md": "ส่วนที่ใช้เฉพาะงานโค้ดของ skill กลางใน plugin superuser",
@@ -384,6 +388,7 @@
     "jenkins-pipeline": "เขียน Jenkinsfile build image · ทดสอบ · deploy staging → production ด้วย Helm โดยค่าลับไม่รั่วและมีคนอนุมัติ",
     "journal": "จดการเข้าหรือออกเทรดลงสมุดเทรด หรืออ่านรายการล่าสุด",
     "kafka-streaming": "ออกแบบ topic · producer · consumer ของ Kafka ให้ event ไม่หายไม่ซ้ำ: key · acks=all · outbox · dead letter",
+    "load-testing": "ทดสอบว่าระบบรับคนพร้อมกันได้ไหม: เกณฑ์ p95 กับอัตรา error ก่อนยิง · ด่านอนุญาต · k6 thresholds · smoke ใน CI",
     "rabbitmq-messaging": "ออกแบบคิว RabbitMQ ไม่ให้ข้อความหายหรือซ้ำ: quorum queue · publisher confirms · manual ack · dead letter · delayed retry · MCP อ่านอย่างเดียว",
     "kids-school": "จัดปีการศึกษาของลูก: วันเปิดเทอม · ค่าเทอม · เรียนพิเศษ · ย้ายโรงเรียน · ลดหย่อน",
     "kubernetes-helm": "Dockerfile ใช้งานจริง · manifest Kubernetes · Helm chart · staging → production · GPU node pool · KEDA",
@@ -563,7 +568,7 @@
     "user-story-writer": "เขียน user story และเกณฑ์รับงานแบบ Given-When-Then",
     "vehicle-care": "ดูแลรถยนต์และมอเตอร์ไซค์: พ.ร.บ. · ภาษีประจำปี · ตรวจสภาพ · เข้าศูนย์",
     "video": "เปลี่ยนข้อความเป็นคลิปสั้น (hook · บทถ่าย · ตัวหนังสือบนจอ · brief)",
-    "video-editing": "ตัด ต่อ ตัดช่วงเงียบ ปรับความดัง ส่งออก ต่อสไลด์กับเสียงเป็นวิดีโอ และสร้างเสียงบรรยายไทยจากสคริปต์ทีละซับ (F5-TTS-THAI · edge-tts · เสียง Windows) พร้อมวัดผล",
+    "video-editing": "ตัด ต่อ ตัดช่วงเงียบ ปรับความดัง ส่งออก และต่อสไลด์กับเสียงเป็นวิดีโอ · เสียงบรรยายจากสคริปต์อยู่ที่ narration-th",
     "video-script-to-clip": "ทำคลิปสั้น Reel TikTok: hook · รายการช็อต · ซับไทย",
     "voice-agent": "voice agent ภาษาไทยแบบ realtime: SIP/WebRTC · VAD · STT/TTS streaming · พูดแทรก · งบ latency · PDPA",
     "warranty-tracker": "เก็บใบเสร็จและบัตรรับประกัน เช็กสิทธิ์ เตรียมเคลม",
@@ -579,6 +584,7 @@
     "workspace-setup": "ตั้งโปรเจกต์ให้ agent ทำงานจนจบ: ignore .claude และ .claude-plugin · สิทธิ์ merge และลบ branch · กฎประจำตัวใน ~/.claude/CLAUDE.md",
     "worktree-and-branch": "แยกที่ทำงานให้ agent ด้วย git worktree แล้วปิด branch ให้จบ (merge · PR · ทิ้ง) พร้อมหลักฐาน",
     "year-end-filing": "ไทม์ไลน์ยื่นสิ้นปีของบริษัท (ประชุมผู้ถือหุ้น · บอจ.5 · e-Filing · ภ.ง.ด.50)",
-    "youtube-thumbnail": "ภาพปกคลิป YouTube ที่อ่านออกบนมือถือ และการทดสอบหลายปก (Test & compare)"
+    "youtube-thumbnail": "ภาพปกคลิป YouTube ที่อ่านออกบนมือถือ และการทดสอบหลายปก (Test & compare)",
+    "narration-th": "สร้างเสียงบรรยายไทยจากสคริปต์ทีละซับ (F5-TTS-THAI · edge-tts · เสียง Windows) ได้เสียง ซับ และเวลาสไลด์ในรอบเดียว พร้อมตารางเทียบเครื่องและสิทธิ์เสียง"
   }
 }

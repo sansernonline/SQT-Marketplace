@@ -25,7 +25,7 @@
 
 | กลุ่ม | เคส | สถานะ |
 |---|---|---|
-| ชุดกันถอยและ guard 6 เคส | `video-editing-guard` · `video-editing-tts-guard` และเคส regression 4 เคส (icon-design · speaking-script · subtitles-th · video-editing-slides) | ไม่มีผลรันในไฟล์นี้ · รัน 1 ครั้งแล้วบันทึกเป็นฐาน · ผ่านทั้งสองแขน = วัดอะไรไม่ได้ ให้เปลี่ยนโจทย์ |
+| ชุดกันถอยและ guard 6 เคส | `video-editing-guard` · `narration-th-guard` (เดิม `video-editing-tts-guard`) และเคส regression 4 เคส (icon-design · speaking-script · subtitles-th · video-editing-slides) | ไม่มีผลรันในไฟล์นี้ · รัน 1 ครั้งแล้วบันทึกเป็นฐาน · ผ่านทั้งสองแขน = วัดอะไรไม่ได้ ให้เปลี่ยนโจทย์ |
 | เคสไม่ควรเปิด 4 เคส (รอบละ 5) | `print-ready-files-trigger-negative` · `marketplace-product-images-trigger-negative` · `youtube-thumbnail-trigger-negative` · `social-formats-trigger-negative` | เพิ่ม 2026-10-28 ยังไม่ได้รัน (eval เรียกโมเดล เสียเงิน) |
 | skill ที่เพิ่งมี eval 5 เคส | `brief-to-image-trigger` · `brief-to-image-behaviour` · `image-generation-trigger-route` · `design-review-trigger` · `video-script-to-clip-trigger` | เพิ่ม 2026-10-28 ยังไม่ได้รัน |
 | เกณฑ์ใหม่ในเคสเดิม | `approval-before-default` ใน `line-richmenu-behaviour` | เพิ่ม 2026-10-28 ยังไม่ได้รัน |

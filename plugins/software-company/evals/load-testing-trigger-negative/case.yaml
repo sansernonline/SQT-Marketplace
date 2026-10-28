@@ -1,0 +1,29 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เคส "ไม่ควรเปิด": ถามความเร็วหน้าเว็บในเบราว์เซอร์ ซึ่งเป็นงานของ web-quality-audit · load-testing ต้องไม่ถูกเปิด (tool_used min 0 max 0 ตาม skill-authoring/references/eval-format.md)
+# runs 5: เคสนี้ใช้ตัดสินการแก้ description ของ skill · n=3 กว้างเกินไป (ยังไม่ได้วัดช่วงจริง)
+schema_version: "1.1"
+name: load-testing-trigger-negative
+description: ผู้ใช้บอกว่าหน้าแรกของเว็บโหลดช้าและคะแนน Lighthouse ต่ำ ต้องไม่เปิด load-testing (ของ web-quality-audit)
+tags: [trigger, negative, load-testing]
+runs: 5
+expected_outcome: ไม่เปิด Skill load-testing · คำตอบพูดถึง Core Web Vitals หรือ Lighthouse
+execution:
+  prompt: |
+    หน้าแรกของเว็บบริษัทเปิดบนมือถือช้ามาก รูปขึ้นช้า คะแนน Lighthouse ได้ 42
+    ช่วยบอกหน่อยว่าควรตรวจอะไรและแก้อะไรก่อน ยังไม่ต้องแก้โค้ด
+  max_turns: 6
+  timeout_seconds: 240
+graders:
+  - name: load-testing-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?load-testing"'
+    min: 0
+    max: 0
+    arm: with-only
+  - name: page-speed-named
+    type: regex
+    pattern: "LCP|Core Web Vitals|Lighthouse"
+    flags: i
+    match: contains
+    target: last_message
