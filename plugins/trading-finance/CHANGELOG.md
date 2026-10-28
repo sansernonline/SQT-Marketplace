@@ -1,5 +1,11 @@
 # Changelog — trading-finance
 
+## 0.16.1 — 2026-10-28
+
+- `trade-stats.mjs` ไม่นับช่อง violation ที่เป็น `no` `n` `none` `false` `0` `-` `ไม่` `ไม่มี` ว่าเป็นการฝ่าฝืน
+- `ticks.json` บอกว่าตารางหลัง 2026-11-16 ยังไม่ยืนยันประกาศสุดท้าย · `size.mjs` ใช้ตารางนั้นแล้วเตือนแทนหยุด
+- agent `risk-manager` เปิด `position-sizing` และรัน `size.mjs` แทนสูตรย่อที่ไม่ปัดล็อตและไม่ตรวจเพดาน
+
 ## 0.16.0 — 2026-10-28
 
 - สคริปต์ใหม่: `size.mjs` ของ `position-sizing` (จำนวนหุ้นจากงบความเสี่ยง ปัดตามล็อต ตรวจ tick ตามตารางก่อนและหลัง 2026-11-16 · ไม่มี stop-loss ไม่คำนวณ) · `trade-stats.mjs` ของ `post-trade-review` (win rate · expectancy · max drawdown · ติดป้ายเมื่อตัวอย่างน้อยกว่า 20) · `expiry.json` เพิ่มแถวของ `ticks.json` · CI รัน self-test

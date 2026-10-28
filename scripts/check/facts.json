@@ -7,6 +7,7 @@
       "note": "ฐานค่าจ้างสูงสุดประกันสังคม 17,500 บาท (เงินสมทบ 875) ตั้งแต่ 1 ม.ค. 2569",
       "files": [
         "plugins/personal-life/skills/salary-negotiation/SKILL.md",
+        "plugins/personal-life/skills/pregnancy-and-baby/SKILL.md",
         "plugins/e-commerce/skills/payroll-th/SKILL.md",
         "plugins/e-commerce/skills/payroll-th/scripts/rates.json",
         "plugins/e-commerce/skills/social-security-th/SKILL.md",

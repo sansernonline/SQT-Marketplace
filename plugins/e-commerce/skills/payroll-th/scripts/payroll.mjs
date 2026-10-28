@@ -52,7 +52,9 @@ export function progressiveTax(netIncome, brackets) {
 export function calcEmployee(e, rates) {
   const periods = e.periods ?? 12;
   // ปัดเป็นบาทตาม social-security-th/SKILL.md (ทิศการปัดไม่ระบุ ใช้ปัดครึ่งขึ้น)
-  const sso = Math.round(Math.min(Math.max(e.gross, rates.sso.wage_floor), rates.sso.wage_cap) * (rates.sso.rate_pct / 100));
+  // ฐานและเพดานประกันสังคมเป็นรายเดือน: คิดจากค่าจ้างเฉลี่ยต่อเดือน แล้วกระจายกลับเป็นต่องวด (periods 12 ได้ค่าเดิม)
+  const ssoMonthly = Math.round(Math.min(Math.max((e.gross * periods) / 12, rates.sso.wage_floor), rates.sso.wage_cap) * (rates.sso.rate_pct / 100));
+  const sso = round2((ssoMonthly * 12) / periods);
   const pvdEmployee = (e.gross * (e.pvd_employee_pct ?? 0)) / 100;
   const pvdEmployer = (e.gross * (e.pvd_employer_pct ?? 0)) / 100;
 
@@ -62,7 +64,7 @@ export function calcEmployee(e, rates) {
   const pvdAllowance = Math.min(pvdEmployee * periods, annualIncome * (rates.pvd.max_pct_of_wage / 100), rates.pvd.retirement_cap);
   const allowances = a.personal + (e.spouse ? a.spouse : 0)
     + (e.children ?? 0) * a.child + (e.children_2nd_plus ?? 0) * a.child_2nd_plus_born_2561
-    + (e.parents ?? 0) * a.parent + sso * periods + pvdAllowance + (e.other_deductions ?? 0);
+    + (e.parents ?? 0) * a.parent + ssoMonthly * 12 + pvdAllowance + (e.other_deductions ?? 0);
   const netIncome = Math.max(0, annualIncome - expense - allowances);
   const annualTax = progressiveTax(netIncome, rates.brackets);
   const wht = annualTax / periods;
@@ -128,6 +130,15 @@ function selfTest() {
   // ลดหย่อนครอบครัว: คู่สมรส 60,000 + ลูก 30,000 + ลูกคนที่ 2+ 60,000 + พ่อแม่ 2 คน 60,000
   x = one({ gross: 50000, spouse: true, children: 1, children_2nd_plus: 1, parents: 2 });
   t('ลดหย่อนครอบครัว', near(x.net_income, 429500 - 60000 - 30000 - 60000 - 60000));
+  // edge/pr4: periods 52 เคยลดหย่อนประกันสังคม 45,500 · ต้องไม่เกิน 875 x 12 = 10,500
+  const sso12 = rates.sso.wage_cap * (rates.sso.rate_pct / 100) * 12;
+  t('periods 13 ลดหย่อนประกันสังคม 10,500', near(one({ gross: 50000, periods: 13 }).allowances, 60000 + sso12));
+  t('periods 52 ลดหย่อนประกันสังคม 10,500', near(one({ gross: 50000, periods: 52 }).allowances, 60000 + sso12));
+  t('periods 1 ค่าจ้างเฉลี่ยเกินเพดาน ลดหย่อน 10,500', near(one({ gross: 600000, periods: 1 }).allowances, 60000 + sso12));
+  // รายสัปดาห์ 5,000 x 52 / 12 = 21,667 ต่อเดือน เกินเพดาน → 875 ต่อเดือน · 10,500 ต่อปี · งวดละ 201.92
+  // (สูตรเดิมใช้ 5,000 เป็นฐานรายเดือน ได้งวดละ 250 · ลดหย่อน 13,000)
+  x = one({ gross: 5000, periods: 52 });
+  t('periods 52 ฐานจากค่าจ้างต่อเดือน', near(x.allowances, 60000 + sso12) && near(x.sso, 201.92));
   // ขั้นบันได: ตรงกับตาราง SKILL.md
   const tax = (n) => progressiveTax(n, rates.brackets);
   t('ขั้น 150,000 = 0', tax(150000) === 0);
