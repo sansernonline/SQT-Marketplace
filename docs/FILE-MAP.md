@@ -8,12 +8,12 @@
 
 | plugin | ทำอะไร | agent | skill | คำสั่ง | playbook | ไฟล์ทั้งหมด |
 |---|---|---|---|---|---|---|
-| [`e-commerce`](#e-commerce) | ขายออนไลน์ ซื้ออย่างมั่นใจ และงานหลังบ้านบริษัทไทย | 8 | 33 | 14 | 18 | 114 |
+| [`e-commerce`](#e-commerce) | ขายออนไลน์ ซื้ออย่างมั่นใจ และงานหลังบ้านบริษัทไทย | 8 | 33 | 14 | 18 | 125 |
 | [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 20 | 6 | 9 | 122 |
-| [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 42 | 16 | 30 | 164 |
+| [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 42 | 16 | 30 | 167 |
 | [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 102 | 29 | 17 | 900 |
 | [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 39 | 0 | 7 | 160 |
-| [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 5 | 24 | 7 | 10 | 97 |
+| [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 5 | 24 | 7 | 10 | 102 |
 
 ## โครงของทุก plugin
 
@@ -147,21 +147,21 @@ plugins/<plugin>/
 | `dbd-annual-filing` | ยื่นงบหลังปิดปี: ประชุมผู้ถือหุ้น · งบผ่าน DBD e-Filing · บอจ.5 · ภ.ง.ด.50 | — |
 | `doc-contract-th` | ร่างหรือตรวจสัญญาไทย (จ้างงาน · เช่า · จ้างทำของ) อากรแสตมป์ · จุดเสี่ยง | `references/clause-checklists.md` |
 | `doc-leave` | ใบลาและยอดวันลา (ป่วย · พักร้อน · กิจ · คลอด) | `references/leave-forms.md` |
-| `doc-quotation` | ใบเสนอราคา ใบแจ้งหนี้ ใบวางบิล ใบเสร็จ (VAT · หัก ณ ที่จ่าย · ตัวเลขเป็นคำ) | `references/templates.md` |
+| `doc-quotation` | ใบเสนอราคา ใบแจ้งหนี้ ใบวางบิล ใบเสร็จ (VAT · หัก ณ ที่จ่าย · ตัวเลขเป็นคำ) | `references/templates.md` · `scripts/example.json` · `scripts/thai-doc-total.mjs` |
 | `doc-thai-official` | หนังสือราชการและบันทึกข้อความตามระเบียบสารบรรณ | `references/templates.md` |
-| `e-tax-invoice` | ออกหรือตรวจใบกำกับภาษี (มาตรา 86/4 · e-Tax Invoice) | — |
+| `e-tax-invoice` | ออกหรือตรวจใบกำกับภาษี (มาตรา 86/4 · e-Tax Invoice) | `scripts/example.json` · `scripts/thai-id.mjs` |
 | `hiring-th` | จ้างพนักงานฝั่งนายจ้าง: ประกาศรับสมัครไม่เลือกปฏิบัติ · ใบคัดกรอง · สัมภาษณ์ · ตรวจบุคคลอ้างอิง · จดหมายเสนองาน | — |
 | `labour-law-basics` | กฎหมายคุ้มครองแรงงาน: ทดลองงาน · OT · วันลา · บอกเลิก · ค่าชดเชย · ค่าจ้าง | `references/leave-and-severance.md` |
 | `line-broadcast` | ส่งข้อความหาเพื่อนใน LINE OA: โควตา · กลุ่มเป้าหมาย · ความถี่ | `references/broadcast-template.md` |
 | `line-chatbot` | ให้ LINE OA ตอบลูกค้าอัตโนมัติ: โควตา · คลังความรู้ · ส่งต่อคน | `references/kb-template.md` |
 | `line-oa-setup` | สร้าง LINE OA และเปิด Messaging API (token · webhook · โควตา) | `references/webhook-node.md` |
 | `live-selling-script` | เตรียมไลฟ์ขายของบน TikTok · Shopee · Lazada · Facebook | `references/host-lines.md` |
-| `marketplace-fees-pricing` | ตั้งราคาหลังหักค่าธรรมเนียมแต่ละแพลตฟอร์ม และหาว่าสินค้าไหนขาดทุน | `references/fee-structures.md` |
+| `marketplace-fees-pricing` | ตั้งราคาหลังหักค่าธรรมเนียมแต่ละแพลตฟอร์ม และหาว่าสินค้าไหนขาดทุน | `references/fee-structures.md` · `scripts/example.json` · `scripts/price-calc.mjs` |
 | `multi-shop-stock` | คุมสต็อกที่ขายหลายร้านไม่ให้ขายเกิน: ชีตสต็อกหลัก · รหัส SKU | — |
-| `payroll-th` | ทำเงินเดือนรายเดือน: หักภาษี · ประกันสังคม · กองทุนสำรองเลี้ยงชีพ · ภ.ง.ด.1 | `references/50-tawi.md` |
+| `payroll-th` | ทำเงินเดือนรายเดือน: หักภาษี · ประกันสังคม · กองทุนสำรองเลี้ยงชีพ · ภ.ง.ด.1 | `references/50-tawi.md` · `scripts/example.json` · `scripts/payroll.mjs` · `scripts/rates.json` |
 | `pdpa-workflow` | เอกสาร PDPA ของ SME: ความยินยอม · ROPA · คำขอเจ้าของข้อมูล · แจ้งข้อมูลรั่ว | `references/pdpa-templates.md` |
 | `product-listing` | เขียนหรือแก้หน้าสินค้าบน Shopee · Lazada · TikTok Shop · LINE | `references/description-template.md` · `references/prohibited-claims.md` |
-| `promptpay-qr` | QR พร้อมเพย์บนใบแจ้งหนี้หรือหน้าร้าน และวิธีสร้างข้อมูลใน QR | `references/payload.md` |
+| `promptpay-qr` | QR พร้อมเพย์บนใบแจ้งหนี้หรือหน้าร้าน และวิธีสร้างข้อมูลใน QR | `references/payload.md` · `scripts/example.json` · `scripts/promptpay.mjs` |
 | `refund-request` | ขอเงินคืน: ของเสีย ของปลอม ไม่ได้ของ ยกเลิกขายตรง รายการแปลก | `references/cancellation-notice.md` |
 | `returns-and-bad-reviews` | รับมือคืนสินค้า ขอเงินคืน ข้อพิพาท และรีวิว 1-3 ดาว | `references/review-replies.md` |
 | `seller-tax-basics` | ภาษีคนขายออนไลน์: 40(8) · หักค่าใช้จ่ายแบบเหมา · ภ.ง.ด.90/94 · VAT | — |
@@ -326,7 +326,7 @@ plugins/<plugin>/
 | `gift-idea-tracker` | จดของขวัญที่เคยให้ และคิดของขวัญตามงบ | `references/gift-registry-template.md` |
 | `goal-and-habit` | ตั้งเป้ารายไตรมาสหรือปีใหม่ เริ่มหรือเลิกนิสัย | — |
 | `home-maintenance` | ตารางดูแลบ้านตามฤดู (แอร์ · ปั๊ม · ปลวก · หลังคา) และเทียบใบเสนอราคาช่าง | `references/maintenance-calendar.md` |
-| `household-bills` | อ่านบิลไฟ น้ำ (กฟน. · กฟภ. · กปน. · กปภ. · ค่า Ft) จดบิล เช็กบิลที่พุ่ง | `references/bill-tracker-template.md` |
+| `household-bills` | อ่านบิลไฟ น้ำ (กฟน. · กฟภ. · กปน. · กปภ. · ค่า Ft) จดบิล เช็กบิลที่พุ่ง | `references/bill-tracker-template.md` · `scripts/example.json` · `scripts/power-bill.mjs` · `scripts/rates.json` |
 | `important-docs` | ทะเบียนเอกสารสำคัญ (บัตร · พาสปอร์ต · โฉนด · เล่มรถ · ประกัน) และวันหมดอายุ | `references/registry-template.md` |
 | `inbox-triage` | คัดอีเมลที่ล้น ว่าฉบับไหนต้องตอบวันนี้ | — |
 | `interview-prep` | เตรียมสัมภาษณ์งาน: เรื่องแบบ STAR · คำถามที่ HR ไทยถามบ่อย · อีเมลขอบคุณ | `references/question-bank.md` |
@@ -752,8 +752,8 @@ plugins/<plugin>/
 | `paper-trading` | ทดสอบกลยุทธ์หรือฝึกส่งคำสั่งด้วยเงินจำลอง ตามกติกาตลาดหลักทรัพย์จริง | `references/paper-ledger.md` |
 | `personal-budget` | ทำงบรายเดือนจากรายจ่ายจริง | `references/budget-worksheet.md` |
 | `portfolio-snapshot` | พอร์ตเป็นอย่างไร กำไรหรือขาดทุนเท่าไร | `references/snapshot-template.md` |
-| `position-sizing` | ก่อนเข้าเทรด: ซื้อกี่หุ้น วาง stop ตรงไหน ใหญ่เกินไหม | `references/forex-cfd-crypto.md` |
-| `post-trade-review` | ทบทวนผลเทรดรายสัปดาห์หรือรายเดือน: อัตราชนะ · ค่าคาดหวัง · drawdown · กฎใหม่ 1 ข้อ | — |
+| `position-sizing` | ก่อนเข้าเทรด: ซื้อกี่หุ้น วาง stop ตรงไหน ใหญ่เกินไหม | `references/forex-cfd-crypto.md` · `scripts/example.json` · `scripts/size.mjs` · `scripts/ticks.json` |
+| `post-trade-review` | ทบทวนผลเทรดรายสัปดาห์หรือรายเดือน: อัตราชนะ · ค่าคาดหวัง · drawdown · กฎใหม่ 1 ข้อ | `scripts/example.json` · `scripts/trade-stats.mjs` |
 | `rebalance-and-dca` | ตั้งการลงทุนรายเดือนและกฎปรับสัดส่วนพอร์ต เริ่มจากใช้เงินใหม่ก่อนขายของเดิม | — |
 | `retirement-plan` | เกษียณในไทยต้องมีเงินเท่าไร และใช้ PVD · RMF · ThaiESG อย่างไร | — |
 | `scam-check` | เช็กก่อนโอนเงินให้แอปลงทุน แอปกู้ กลุ่ม LINE หรือคนที่โทรมา | `references/red-flags-and-evidence.md` |

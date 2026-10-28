@@ -1,0 +1,8 @@
+{
+  "checked": "2026-10-26",
+  "source": "position-sizing/SKILL.md ตาราง tick · SET https://www.set.or.th/th/about/mediacenter/insights/article/795-eight-trading-measures · SET hearing result No21 (Jun 2026) · ค่าใหม่มาจากผลรับฟังความเห็น ยังไม่ได้อ่านประกาศฉบับสุดท้าย (รอยืนยัน)",
+  "effective": "2026-11-16",
+  "etf": 0.01,
+  "before": [[0, 0.01], [2, 0.02], [5, 0.05], [10, 0.1], [25, 0.25], [50, 0.25], [100, 0.5], [200, 1], [400, 2]],
+  "after": [[0, 0.01], [2, 0.02], [5, 0.02], [10, 0.05], [25, 0.1], [50, 0.25], [100, 0.5], [200, 1], [400, 2]]
+}

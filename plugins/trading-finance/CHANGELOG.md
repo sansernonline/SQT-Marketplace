@@ -1,5 +1,9 @@
 # Changelog — trading-finance
 
+## 0.16.0 — 2026-10-28
+
+- สคริปต์ใหม่: `size.mjs` ของ `position-sizing` (จำนวนหุ้นจากงบความเสี่ยง ปัดตามล็อต ตรวจ tick ตามตารางก่อนและหลัง 2026-11-16 · ไม่มี stop-loss ไม่คำนวณ) · `trade-stats.mjs` ของ `post-trade-review` (win rate · expectancy · max drawdown · ติดป้ายเมื่อตัวอย่างน้อยกว่า 20) · `expiry.json` เพิ่มแถวของ `ticks.json` · CI รัน self-test
+
 ## 0.15.0 — 2026-10-27
 
 - skill ใหม่ `copy-trade-check` ประเมินผู้ให้สัญญาณ copy trade บน MQL5 ด้วยตัวเลขก่อนตามเทรด: เตือนสถานะกฎหมายในไทยที่ยังไม่ชัด (ถาม ธปท. 1213) · กฎเหล็ก (demo · อายุสั้น · martingale · grid · deposit load) · เทียบด้วย `decision-scoring` ไม่จัดอันดับด้วย Growth · ลองเงินปลอมก่อน · ห้ามดึงหน้า mql5.com อัตโนมัติ

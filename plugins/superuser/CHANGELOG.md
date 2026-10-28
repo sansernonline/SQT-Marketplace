@@ -1,5 +1,10 @@
 # Changelog — superuser
 
+## 3.14.0 — 2026-10-28
+
+- hook: ด่านข้อมูลส่วนตัว (โมดูล `pii_gate` ค่าเริ่มเปิด) ถามก่อนเขียนเลขบัตรประชาชนที่หลักตรวจสอบถูก เลขบัตรเครดิตที่ผ่าน Luhn หรือเลขบัญชีแบบ xxx-x-xxxxx-x ลงไฟล์งาน · ไม่นับเลขนิติบุคคลที่ขึ้นต้น 0 · ข้ามไฟล์ test และ fixture · self-test 133 ข้อ
+- รุ่น 3.13.0 อยู่ใน branch `claude/superuser-value-metrics` ให้ merge branch นั้นก่อน
+
 ## 3.12.0 — 2026-10-27
 
 - skill ใหม่ `decision-scoring` ตัดสินด้วยตัวเลข: `decide.mjs` คำสั่ง score (กฎเหล็กตัดก่อน → min-max → ถ่วงน้ำหนัก → ขยับน้ำหนัก ±20% ดูว่าอันดับ 1 นิ่งไหม) · payoff (ค่าคาดหวัง + minimax regret) · knapsack (ลองทุกชุดเมื่อไม่เกิน 20 รายการ · `max_items`) · priority (RICE · WSJF · Eisenhower) · pairwise (Bradley-Terry สลับตำแหน่ง) · review (ตรวจอีกรอบคุ้มไหม) · ทุกคำสั่งตรวจค่าที่ใส่ · knapsack บอกชุดรองลงมาและเพดานต่อกลุ่ม · test 19 ข้อ · eval 3 เคส (regression จากรอบแดงที่ทำสเกลก่อนตัดตัวเลือกที่ผิดกฎเหล็ก)

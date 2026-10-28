@@ -61,6 +61,19 @@ Why ticks matter: stop and entry must sit on a valid tick, and on a 9.90-baht st
    - Total open risk across all positions ≤ 5–6% of capital.
 5. If rounding to 100 shares makes the risk exceed the budget, round down again; if size becomes 0, the stop is too wide for this account — skip the trade.
 
+## Script
+
+`size.mjs` does the arithmetic so the number is not worked out in the model's head: risk budget, risk per share (with cost), raw size, round down to the board lot, then the concentration cap (10% of capital, 20% for an ETF) and the liquidity cap (5% of average daily value, only when `avgDailyValue` is given). It reports which rule bound the size. Entry and stop must sit on a valid tick from `scripts/ticks.json` (the table above, with `checked` and `source`); the table in force follows `asOf` (default today), and a price valid under only one of the two tables gets a warning.
+
+```
+node size.mjs <file.json> [--json]     # example file: scripts/example.json
+node size.mjs --self-test
+```
+
+Input file: `{ "type": "share", "capital": 100000, "riskPct": 1, "entry": 48.5, "stop": 47.5, "costPerShare": 0.19 }` · `type` is `share` (default), `etf` (tick 0.01), `crypto` (needs `lot` = coin step, no tick check) or `forex` (`stopPips`, `pipValuePerLot`, `costPerLot`, `volumeStep`; formula in [references/forex-cfd-crypto.md](references/forex-cfd-crypto.md)). Optional: `lot` (default 100), `maxPositionPct`, `avgDailyValue`, `asOf` (`YYYY-MM-DD`). Every number must be finite; a bad field stops the script with a message naming it. **No stop = the script stops** — it never sizes without one. A `riskPct` above 2 gets a warning. Size 0 means the stop is too wide for the account: skip the trade.
+
+**Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/trading-finance/*/skills/position-sizing/scripts/size.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/trading-finance/skills/position-sizing/scripts/size.mjs` · Node only, no dependencies. When SET's tick change takes effect (16 Nov 2569), delete the old table from `ticks.json` too.
+
 ## Why the risk % stays small — drawdown and the way back
 
 A loss and the gain that undoes it are not the same number: gain needed = drawdown ÷ (1 − drawdown).

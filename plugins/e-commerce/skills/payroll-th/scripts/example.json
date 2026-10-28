@@ -1,0 +1,7 @@
+{
+  "employees": [
+    { "name": "ตัวอย่างใน SKILL.md", "gross": 50000 },
+    { "name": "เงินเดือนต่ำกว่าเกณฑ์", "gross": 10000 },
+    { "name": "มี PVD 5%", "gross": 30000, "pvd_employee_pct": 5, "pvd_employer_pct": 5 }
+  ]
+}
