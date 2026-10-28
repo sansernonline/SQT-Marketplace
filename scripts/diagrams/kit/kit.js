@@ -2,25 +2,25 @@
 // คำนำหน้า (ผู้ การ ความ ข้อ …) รวมกับคำถัดไปเป็นก้อนเดียว · ชื่อ skill · agent (a-b-c) ห้ามตัดที่ขีด (U+2011)
 (function () {
   var PRE = { "ผู้": 1, "การ": 1, "ความ": 1, "ข้อ": 1, "ต่อ": 1, "นัก": 1, "ใบ": 1, "หลัก": 1, "งบ": 1 };
-  var JOIN = { "ทีละ": 1, "ร้องเรียน": 1, "สต็อก": 1, "เช็ก": 1, "ร้านค้า": 1, "มิจฉาชีพ": 1 };
+  // คำที่ตัวตัดคำแยกผิด (เจอจริงในรูป 2026-10-28) · ห้ามตัดบรรทัดตรงจุดใดก็ตามที่อยู่กลางคำเหล่านี้ (ท่อนที่ตัวตัดคำให้มาอาจไม่ตรงขอบคำ เช่น เช็|กมิจฉา|ชีพ) · เจอคำใหม่ให้เติม
+  var JOIN = ["ทีละ", "ร้องเรียน", "สต็อก", "เช็ก", "ร้านค้า", "มิจฉาชีพ"];
   var th = /[ก-๛]/, seg = new Intl.Segmenter("th", { granularity: "word" }), nodes = [];
   var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT), n;
   while ((n = w.nextNode())) if (!n.parentNode.closest("script,style,svg")) nodes.push(n);
   nodes.forEach(function (n) {
     var t = n.nodeValue.replace(/([a-z0-9])-(?=[a-z0-9])/g, "$1‑");
     if (!th.test(t)) { n.nodeValue = t; return; }
+    var keep = [];  // ช่วง [ต้น, ปลาย) ของคำใน JOIN ที่เจอในข้อความนี้
+    JOIN.forEach(function (j) { for (var i = t.indexOf(j); i >= 0; i = t.indexOf(j, i + 1)) keep.push([i, i + j.length]); });
+    var inside = function (p) { return keep.some(function (r) { return p > r[0] && p < r[1]; }); };
     var parts = [], buf = "";
     Array.from(seg.segment(t)).forEach(function (s) {
       var x = s.segment;
       if (/^\s+$/.test(x)) { if (buf) parts.push(buf); buf = ""; parts.push(x); return; }
       buf += x;
-      if (!PRE[x]) { parts.push(buf); buf = ""; }
+      if (!PRE[x] && !inside(s.index + x.length)) { parts.push(buf); buf = ""; }
     });
     if (buf) parts.push(buf);
-    // คำที่ตัวตัดคำแยกผิดเป็น 2–3 ท่อน (เจอจริงในรูป 2026-10-28) → รวมกลับเป็นก้อนเดียว · เจอคำใหม่ให้เติมใน JOIN
-    for (var i = 0; i < parts.length; i++)
-      for (var k = 3; k >= 2; k--)
-        if (JOIN[parts.slice(i, i + k).join("")]) { parts.splice(i, k, parts.slice(i, i + k).join("")); break; }
     var f = document.createElement("span");  // ครอบทั้งข้อความ: ในกล่อง flex แต่ละคำจะไม่กลายเป็นชิ้นแยกที่มี gap คั่น
     parts.forEach(function (p) {
       if (th.test(p)) { var sp = document.createElement("span"); sp.className = "nb"; sp.textContent = p; f.appendChild(sp); }
