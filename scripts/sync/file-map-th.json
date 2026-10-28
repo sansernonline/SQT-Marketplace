@@ -30,6 +30,9 @@
     "evals/human-writing-trigger/case.yaml": "เคส eval: ข้อความที่ต้องทำให้ human-writing ถูกเปิด",
     "evals/image-generation-behaviour/case.yaml": "เคส eval: ไม่มีเครื่องมือสร้างภาพ ต้องวาด SVG แบบภาพประกอบเต็มฉากที่มีรายละเอียดจริง ไม่ใช่รูปทรงพื้นฐานวางแทน …",
     "evals/image-generation-trigger/case.yaml": "เคส eval: โจทย์หน้าเว็บที่ต้องมีรูปจริง ไม่เอ่ยชื่อ skill ต้องทำให้ image-generation ถูกเปิด และถามหรือเลือกแนวภาพ",
+    "evals/import-landed-cost-behaviour/case.yaml": "เคส eval: สั่งของจากจีน 500 ชิ้น ต้องได้ต้นทุนต่อชิ้น 86.93 และ 81.49 ตามสคริปต์ ไม่อ้างยกเว้นอากร 1,500 บาท",
+    "evals/import-landed-cost-trigger/case.yaml": "เคส eval: คนขายสั่งของจาก 1688 ถามต้นทุนต่อชิ้น ไม่เอ่ยชื่อ skill ต้องทำให้ import-landed-cost ถูกเปิด",
+    "evals/import-landed-cost-trigger-negative/case.yaml": "เคส eval: ถามเลือกจดบริษัทหรือห้างหุ้นส่วน เป็นงานของ thai-business-setup ต้องไม่เปิด import-landed-cost",
     "evals/line-richmenu-behaviour/case.yaml": "เคส eval: JSON ของ rich menu ต้องมีขนาดภาพที่ API รับ chatBarText ไม่เกิน 14 ตัว และพื้นที่กดไม่เกินขอบภาพ",
     "evals/line-richmenu-trigger/case.yaml": "เคส eval: โจทย์ทำเมนูด้านล่างแชต LINE OA ไม่เอ่ยชื่อ skill ต้องทำให้ line-richmenu ถูกเปิด และให้ขนาดภาพ 2500 × 1686",
     "evals/marketplace-product-images-trigger/case.yaml": "เคส eval: ผู้ขายถามเรื่องรูปสินค้าลง Shopee และ TikTok Shop ไม่เอ่ยชื่อ skill ต้องทำให้ marketplace-product-images …",
@@ -221,7 +224,10 @@
     "evals/narration-th-behaviour/case.yaml": "เคส eval: เตรียมสคริปต์ให้เครื่องอ่าน มีไฟล์คำอ่าน ขั้นทำร่าง และกฎเสียงต้นแบบ",
     "evals/narration-th-guard/case.yaml": "เคส eval: F5 ล้มที่ libtorchcodec ต้องใช้ทางที่ไม่แก้โปรแกรมที่ติดตั้งและไม่ติดตั้งของทั้งเครื่องเอง",
     "evals/narration-th-trigger/case.yaml": "เคส eval: โจทย์ไม่อยากอัดเสียงเองที่ต้องทำให้ narration-th ถูกเปิด",
-    "evals/narration-th-trigger-negative/case.yaml": "เคส eval: อัดเสียงบรรยายเองแล้ว ขอตัดช่วงเงียบและปรับความดัง เป็นของ video-editing · ต้องไม่เปิด narration-th"
+    "evals/narration-th-trigger-negative/case.yaml": "เคส eval: อัดเสียงบรรยายเองแล้ว ขอตัดช่วงเงียบและปรับความดัง เป็นของ video-editing · ต้องไม่เปิด narration-th",
+    "evals/moving-house-trigger/case.yaml": "เคส eval: จะย้ายจากคอนโดเช่าไปบ้านที่ซื้อใหม่ต่างจังหวัด ถามว่าต้องทำอะไรบ้าง ไม่เอ่ยชื่อ skill ต้องทำให้ moving-house ถูกเปิด",
+    "evals/moving-house-trigger-negative/case.yaml": "เคส eval: บิลค่าไฟบ้านเดิมขึ้นผิดปกติ ไม่ได้ย้ายบ้าน ต้องไม่เปิด moving-house",
+    "evals/moving-house-behaviour/case.yaml": "เคส eval: ย้ายวันที่ 15 พ.ย. ต้องตอบวันสุดท้ายย้ายทะเบียนบ้านเป็นวันที่จริง ใช้กฎคืนเงินประกัน 7 วันของ สคบ. และไม่เก็บเลขบัตรหรือเลขบัญชีเต็ม"
   },
   "superuser_files": {
     "references/code-extensions.md": "ส่วนที่ใช้เฉพาะงานโค้ดของ skill กลางใน plugin superuser",
@@ -374,6 +380,7 @@
     "image-editing-brief": "เขียนคำสั่งแก้ภาพ: ลบของ · แก้สี · เปลี่ยนพื้นหลัง · ขยายภาพ",
     "image-generation": "หาภาพจริงให้หน้าเว็บ mockup หรือสไลด์: สร้างภาพ วาด SVG หรือหารูปฟรี",
     "important-docs": "ทะเบียนเอกสารสำคัญ (บัตร · พาสปอร์ต · โฉนด · เล่มรถ · ประกัน) และวันหมดอายุ",
+    "import-landed-cost": "ต้นทุนนำเข้าจากจีนต่อชิ้น: CIF · อากร · VAT · ทางรถหรือทางเรือ · ค่าชิปปิ้ง",
     "inbox-triage": "คัดอีเมลที่ล้น ว่าฉบับไหนต้องตอบวันนี้",
     "incident-response": "คุมเหตุระบบล่มตอนเกิด คัดแยก บรรเทา แก้ แล้วทำ postmortem",
     "incident-runbook-template": "คู่มือรับมือเมื่อระบบพัง และคู่มือเวร on-call",
@@ -555,7 +562,7 @@
     "test-design": "ทำ test case ของฟีเจอร์ด้วย qa-tester",
     "test-evidence": "รัน test case แล้วเก็บหลักฐาน: GIF มีคำบรรยาย · รายงานผ่าน/ไม่ผ่าน · คอลัมน์ใน Excel",
     "testing-standards": "ตั้ง test อัตโนมัติ (.NET · Node · Python · Angular · Flutter) แก้ชุด test ที่ไม่นิ่ง",
-    "thai-business-setup": "ตั้งธุรกิจ: เลือกบุคคลธรรมดา ห้างหุ้นส่วน หรือบริษัท · จดทะเบียน DBD · เช็กลิสต์หลังจด · ต้นทุนนำเข้าจากจีน",
+    "thai-business-setup": "ตั้งธุรกิจ: เลือกบุคคลธรรมดา ห้างหุ้นส่วน หรือบริษัท · จดทะเบียน DBD · เช็กลิสต์หลังจด",
     "thai-holidays": "วันหยุดราชการและวันหยุดธนาคาร รวมวันหยุดชดเชย",
     "thesis-writing": "เขียนวิทยานิพนธ์ · IS · บทความวิจัย ตั้งแต่โครงร่างจนสอบป้องกัน",
     "threat-model": "ทำ threat model แบบ STRIDE ของฟีเจอร์หรือระบบ",
@@ -585,6 +592,7 @@
     "worktree-and-branch": "แยกที่ทำงานให้ agent ด้วย git worktree แล้วปิด branch ให้จบ (merge · PR · ทิ้ง) พร้อมหลักฐาน",
     "year-end-filing": "ไทม์ไลน์ยื่นสิ้นปีของบริษัท (ประชุมผู้ถือหุ้น · บอจ.5 · e-Filing · ภ.ง.ด.50)",
     "youtube-thumbnail": "ภาพปกคลิป YouTube ที่อ่านออกบนมือถือ และการทดสอบหลายปก (Test & compare)",
-    "narration-th": "สร้างเสียงบรรยายไทยจากสคริปต์ทีละซับ (F5-TTS-THAI · edge-tts · เสียง Windows) ได้เสียง ซับ และเวลาสไลด์ในรอบเดียว พร้อมตารางเทียบเครื่องและสิทธิ์เสียง"
+    "narration-th": "สร้างเสียงบรรยายไทยจากสคริปต์ทีละซับ (F5-TTS-THAI · edge-tts · เสียง Windows) ได้เสียง ซับ และเวลาสไลด์ในรอบเดียว พร้อมตารางเทียบเครื่องและสิทธิ์เสียง",
+    "moving-house": "ย้ายบ้านและเปลี่ยนที่อยู่: ย้ายทะเบียนบ้าน · ปิดหรือโอนค่าไฟค่าน้ำ ขอเงินประกันคืน · แจ้งที่อยู่ใหม่ · คืนห้องเช่าและทวงเงินประกัน"
   }
 }

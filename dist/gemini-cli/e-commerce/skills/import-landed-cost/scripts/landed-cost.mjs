@@ -4,7 +4,7 @@
 // File: { "qty": 200, "goods_cny": 5000, "fx_thb_per_cny": 5.0, "cn_shipping_cny": 100, "freight_thb": 2400,
 //   "insurance_pct": 1, "duty_pct": 20, "excise_thb": 0, "other_tax_thb": 0, "broker_thb": 1000, "th_delivery_thb": 300 }
 // insurance_pct คิดจากค่าสินค้าเป็นบาท · duty_pct ตามพิกัดสินค้า (ค้นทุกครั้ง ไม่มีค่าตั้งต้น) · excise_thb และ other_tax_thb ไม่บังคับ
-// สูตรตาม thai-business-setup/SKILL.md หัวข้อ 5 · อัตรา VAT อ่านจาก rates.json ข้างไฟล์นี้ พร้อมวันที่ตรวจ
+// สูตรตาม import-landed-cost/SKILL.md หัวข้อ 1 · อัตรา VAT อ่านจาก rates.json ข้างไฟล์นี้ พร้อมวันที่ตรวจ
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';

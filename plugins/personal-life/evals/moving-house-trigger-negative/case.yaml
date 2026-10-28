@@ -1,0 +1,26 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เคส "ไม่ควรเปิด" 2026-10-28 (ยังไม่ได้รัน) · บิลค่าไฟขึ้นเป็นของ household-bills แม้จะเพิ่งย้ายบ้าน
+schema_version: "1.1"
+name: moving-house-trigger-negative
+description: บิลค่าไฟบ้านที่อยู่มา 3 ปีขึ้นผิดปกติ ไม่ได้ย้ายบ้าน ต้องไม่เปิด moving-house
+tags: [trigger, negative, regression-suite, moving-house]
+runs: 5
+expected_outcome: ไม่เปิด Skill moving-house · ตอบเรื่องบิลค่าไฟขึ้น (หน่วยที่ใช้ ค่า Ft แอร์) หรือเปิด household-bills
+execution:
+  prompt: |
+    อยู่บ้านหลังนี้มา 3 ปี เดือนนี้บิลค่าไฟ กฟภ. ขึ้นจาก 2,100 เป็น 3,400 บาท ทั้งที่ใช้เหมือนเดิม เกิดจากอะไรได้บ้าง
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: moving-house-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?moving-house"'
+    min: 0
+    max: 0
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: 'หน่วย|Ft|แอร์|มิเตอร์'
+    match: contains
+    target: last_message

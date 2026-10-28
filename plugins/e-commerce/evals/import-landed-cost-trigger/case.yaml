@@ -1,0 +1,26 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: import-landed-cost-trigger
+description: คนขายสั่งของจาก 1688 ถามต้นทุนถึงร้านต่อชิ้น ต้องเปิด import-landed-cost และพูดถึงอากร · ไม่เอ่ยชื่อ skill
+tags: [trigger, regression-suite, import-landed-cost]
+runs: 3
+expected_outcome: เปิด Skill import-landed-cost แล้วตอบตรงคำถาม
+execution:
+  prompt: |
+    จะสั่งเคสมือถือจาก 1688 มาขายใน shopee ล็อตละ 300 ชิ้น ส่งผ่านชิปปิ้งทางรถ
+    ต้นทุนจริงตกชิ้นละเท่าไหร่ ต้องบวกค่าอะไรบ้างคะ
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?import-landed-cost"'
+    min: 1
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: 'อากร'
+    flags: i
+    match: contains
+    target: last_message

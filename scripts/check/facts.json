@@ -78,7 +78,7 @@
       "checked": "2026-10-23",
       "note": "ประกาศกรมศุลกากรที่ 219/2568 ยกเลิกยกเว้นอากรของนำเข้ามูลค่าไม่เกิน 1,500 บาท เหลือยกเว้นเฉพาะไม่เกิน 1 บาท ตั้งแต่ 1 ม.ค. 2569 · VAT ของนำเข้าราคาต่ำเก็บตั้งแต่ 5 ก.ค. 2567",
       "files": [
-        "plugins/e-commerce/skills/thai-business-setup/SKILL.md"
+        "plugins/e-commerce/skills/import-landed-cost/SKILL.md"
       ]
     },
     "consumer-case-act": {
@@ -116,12 +116,12 @@
     "vat-rate": {
       "value": "7%",
       "checked": "2026-10-25",
-      "note": "VAT 7% (6.3% + ภาษีท้องถิ่น) ตาม พ.ร.ฎ. ฉบับที่ 807 พ.ศ. 2569 ถึง 30 ก.ย. 2570 · rates.json ของ doc-quotation และ thai-business-setup เทียบด้วย self-test",
+      "note": "VAT 7% (6.3% + ภาษีท้องถิ่น) ตาม พ.ร.ฎ. ฉบับที่ 807 พ.ศ. 2569 ถึง 30 ก.ย. 2570 · rates.json ของ doc-quotation และ import-landed-cost เทียบด้วย self-test",
       "files": [
         "plugins/e-commerce/skills/tax-vat-th/SKILL.md",
         "plugins/e-commerce/skills/seller-tax-basics/SKILL.md",
         "plugins/e-commerce/skills/doc-quotation/SKILL.md",
-        "plugins/e-commerce/skills/thai-business-setup/SKILL.md"
+        "plugins/e-commerce/skills/import-landed-cost/SKILL.md"
       ]
     }
   },

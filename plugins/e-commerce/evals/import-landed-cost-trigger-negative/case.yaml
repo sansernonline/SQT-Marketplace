@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เคส "ไม่ควรเปิด": คำถามใกล้เคียงที่เป็นงานของ skill อื่น · tool_used min 0 max 0 ตาม skill-authoring/references/eval-format.md
+schema_version: "1.1"
+name: import-landed-cost-trigger-negative
+description: เลือกจดบริษัทหรือห้างหุ้นส่วนเพื่อเริ่มขายของ เป็นงานของ thai-business-setup · ต้องไม่เปิด import-landed-cost
+tags: [trigger, negative, regression-suite, import-landed-cost]
+runs: 3
+expected_outcome: ไม่เปิด Skill import-landed-cost · คำตอบยังตอบคำถามได้
+execution:
+  prompt: |
+    กำลังจะเปิดร้านขายของออนไลน์กับเพื่อน 2 คน ควรจดเป็นบริษัทหรือห้างหุ้นส่วนดีคะ ค่าจดเท่าไหร่
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: import-landed-cost-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?import-landed-cost"'
+    min: 0
+    max: 0
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: 'ห้างหุ้นส่วน|บริษัท'
+    flags: i
+    match: contains
+    target: last_message
