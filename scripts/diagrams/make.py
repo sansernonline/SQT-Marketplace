@@ -57,10 +57,17 @@ if __name__ == "__main__":
     for d in {os.path.dirname(target(os.path.basename(f)[:-5])) for f in files}:
         if os.path.basename(d) in ("flow", "playbooks"):
             shutil.rmtree(d, ignore_errors=True)
+    locked = []
     for f in files:
         name = os.path.basename(f)[:-5]
         dest = target(name)
         os.makedirs(os.path.dirname(dest), exist_ok=True)
-        shutil.copyfile(os.path.join(png, f"{name}.png"), dest)
+        try:
+            shutil.copyfile(os.path.join(png, f"{name}.png"), dest)
+        except OSError:  # รูปเปิดค้างในโปรแกรมดูรูป (Windows ล็อกไฟล์) → ข้ามแล้วทำต่อ ไม่ให้รูปที่เหลือหายเพราะล้างโฟลเดอร์ไปแล้ว
+            locked.append(dest)
     run(os.path.join(HERE, "pages.py"))
-    print(f"{len(files)} รูป → {DOCS}")
+    print(f"{len(files) - len(locked)} รูป → {DOCS}")
+    if locked:
+        print("เตือน: เขียนทับไม่ได้ (ปิดโปรแกรมที่เปิดรูปอยู่แล้วรันใหม่):", *locked, sep="\n  ")
+        sys.exit(1)

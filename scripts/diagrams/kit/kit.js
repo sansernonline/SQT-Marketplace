@@ -2,6 +2,7 @@
 // คำนำหน้า (ผู้ การ ความ ข้อ …) รวมกับคำถัดไปเป็นก้อนเดียว · ชื่อ skill · agent (a-b-c) ห้ามตัดที่ขีด (U+2011)
 (function () {
   var PRE = { "ผู้": 1, "การ": 1, "ความ": 1, "ข้อ": 1, "ต่อ": 1, "นัก": 1, "ใบ": 1, "หลัก": 1, "งบ": 1 };
+  var JOIN = { "ทีละ": 1, "ร้องเรียน": 1, "สต็อก": 1, "เช็ก": 1, "ร้านค้า": 1, "มิจฉาชีพ": 1 };
   var th = /[ก-๛]/, seg = new Intl.Segmenter("th", { granularity: "word" }), nodes = [];
   var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT), n;
   while ((n = w.nextNode())) if (!n.parentNode.closest("script,style,svg")) nodes.push(n);
@@ -16,6 +17,10 @@
       if (!PRE[x]) { parts.push(buf); buf = ""; }
     });
     if (buf) parts.push(buf);
+    // คำที่ตัวตัดคำแยกผิดเป็น 2–3 ท่อน (เจอจริงในรูป 2026-10-28) → รวมกลับเป็นก้อนเดียว · เจอคำใหม่ให้เติมใน JOIN
+    for (var i = 0; i < parts.length; i++)
+      for (var k = 3; k >= 2; k--)
+        if (JOIN[parts.slice(i, i + k).join("")]) { parts.splice(i, k, parts.slice(i, i + k).join("")); break; }
     var f = document.createElement("span");  // ครอบทั้งข้อความ: ในกล่อง flex แต่ละคำจะไม่กลายเป็นชิ้นแยกที่มี gap คั่น
     parts.forEach(function (p) {
       if (th.test(p)) { var sp = document.createElement("span"); sp.className = "nb"; sp.textContent = p; f.appendChild(sp); }
@@ -25,7 +30,7 @@
   });
 })();
 
-// วาดเส้นระหว่างโหนดด้วย D3 หลังฟอนต์โหลดและจัดหน้าเสร็จ (render.py เรียก draw()) · เส้นตั้งหรือนอนเท่านั้น หักมุมฉาก ไม่มีเส้นโค้งหรือเส้นเฉียง
+// วาดเส้นระหว่างโหนดด้วย D3 หลังฟอนต์โหลดและจัดหน้าเสร็จ (render.py เรียก draw()) · ช่วงตรงตั้งหรือนอนเท่านั้น มุมที่หักโค้งรัศมี 12 px ไม่มีเส้นเฉียงหรือเส้นโค้งทั้งเส้น
 // ประกาศเส้นใน HTML: <svg class="wires" data-wires='[["a","b"],["b","c","main"],["c","d","dash"]]'></svg>
 // ชนิดเส้น (ช่องที่ 3 รวมกันได้): main = สีของ plugin · dash = เส้นประ · back = ย้อนขึ้นทางช่องซ้ายของวง · t = ลำต้น (ลงตรงจากต้นทาง แล้วเลี้ยวเข้าข้างปลายทาง)
 // "a" "b" คือ id ของ .dot · แนวเดียวกัน = เส้นตรง · ปลายทางอยู่ต่ำกว่า = ลงก่อน เลี้ยวกลางทาง แล้วลงเข้าบน (หลายเส้นจากแถวเดียวกันรวมเป็นราง)
@@ -72,7 +77,19 @@ function draw() {
         .attr("markerWidth", 6).attr("markerHeight", 6).attr("orient", "auto-start-reverse")
         .append("path").attr("d", "M1 1L9 5L1 9Z").attr("fill", m[1]).attr("stroke", m[1]).attr("stroke-width", 1.2).attr("stroke-linejoin", "round");
     });
-    var line = d3.line().curve(d3.curveLinear);
+    // ช่วงตรงยังตั้งหรือนอน แต่มุมที่หักเป็นโค้งรัศมี R (ผู้ใช้ขอ 2026-10-28: ดูนุ่มนวล) · ช่วงสั้นกว่า 2R ลดรัศมีลงตาม
+    var R = 12;
+    var line = function (pts) {
+      var p = d3.path();
+      p.moveTo(pts[0][0], pts[0][1]);
+      for (var j = 1; j < pts.length - 1; j++) {
+        var a0 = pts[j - 1], c = pts[j], b0 = pts[j + 1];
+        var r = Math.min(R, Math.hypot(c[0] - a0[0], c[1] - a0[1]) / 2, Math.hypot(b0[0] - c[0], b0[1] - c[1]) / 2);
+        p.arcTo(c[0], c[1], b0[0], b0[1], r);
+      }
+      p.lineTo(pts[pts.length - 1][0], pts[pts.length - 1][1]);
+      return p.toString();
+    };
     list.forEach(function (w, i) {
       var a = document.getElementById(w[0]), b = document.getElementById(w[1]);
       if (!a || !b) { console.warn("wire: ไม่พบ", w); return; }
