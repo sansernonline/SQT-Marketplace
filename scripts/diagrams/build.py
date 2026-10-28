@@ -28,7 +28,7 @@ def load(plugin):
 
 # ---------- รูปที่ 1 · แผนผัง plugin (วงกลมบนลายจุด) ----------
 # 1 รูป = 1 คำถาม: "ใน plugin นี้มีอะไร และคำขอของผู้ใช้ไปถึงตัวไหน"
-# ซ้าย → ขวา: ทางเข้า 3 ทาง รวมเข้าหัวหน้าทีม แล้วแตกไปหา agent ทุกตัว · ใต้ลงมาคือ skill
+# บนลงล่าง จัดกลางทุกชั้น: กรอบทางเข้า → การ์ดหัวหน้าทีม → กรอบ agent (แถวเดียวกัน) · ใต้ลงมาคือ skill
 
 from kit import kit as K  # noqa: E402  (ชิ้นส่วนกลางของรูปแนววงกลม)
 
@@ -38,11 +38,11 @@ CORE_SKILLS = set(json.load(open(os.path.join(HERE, "data", "superuser.json"), e
 EXTRA_CSS = """<style>
 .stage{position:relative}
 .stage.tb{display:flex;flex-direction:column;gap:56px}
-.entry{max-width:640px}
+.entry{width:fit-content;max-width:100%;margin:0 auto}  /* จัดกลางทุกชั้น: ทางเข้า · หัวหน้าทีม · agent */
 .entry .icard{align-self:stretch;justify-content:center}
-.agg{margin-left:76px}  /* เยื้องให้ลำต้นจากวงหัวหน้าทีมลงมาทางซ้ายนอกกรอบ */
-.agl{display:flex;flex-direction:column;gap:16px}
-.vrow .lb .tag{margin-left:8px;vertical-align:middle}
+.agl{display:flex;flex-wrap:wrap;justify-content:center;gap:16px}  /* agent ทุกตัวแถวเดียวกัน ตัดแถวแล้วแถวสุดท้ายยังอยู่กลาง */
+.agl>.icard{width:calc((100% - (var(--c) - 1) * 16px) / var(--c))}
+.agl .tag{margin-top:6px}
 .nb{white-space:nowrap}
 .band{position:relative;z-index:1;margin-top:48px;padding-top:24px;border-top:1px solid var(--rule)}
 .band .cap{font-size:15px;color:var(--ink3);margin-bottom:24px}
@@ -75,9 +75,9 @@ def names_line(names, k=2):
     return " · ".join(f'<span class="nb">{e(n)}{"&nbsp;…" if len(names) > k and i == k - 1 else ""}</span>' for i, n in enumerate(names[:k]))
 
 
-def agent_row(aid, name_html, sub_html, tag_html=""):
-    return (f'<div class="vrow wide">{K.dot("agent", "bot", id=aid)}'
-            f'<div class="card"><div class="lb">{name_html}{tag_html}</div><div class="sb">{sub_html}</div></div></div>')
+def agent_card(name_html, sub_html, tag_html=""):
+    return (f'<div class="card icard col">{K.dot("agent", "bot")}'
+            f'<div><div class="lb">{name_html}</div><div class="sb">{sub_html}</div>{tag_html}</div></div>')
 
 
 def icard(label, sub, role, ico, id="", cls="col", extra=""):
@@ -101,13 +101,12 @@ def build_map(plugin):
     if n_cmd:
         ents.append(("สั่งด้วยคำสั่ง", f'<span class="nb">/{e(plugin)}:…</span><br>มี {n_cmd} คำสั่ง'))
     ents.append(("เรียก agent ตรง", "พูดชื่อ agent ได้เลย"))
-    top = K.group("ทางเข้า", f'<div class="fan" style="grid-template-columns:repeat({len(ents)},minmax(0,1fr))">'
+    top = K.group("ทางเข้า", f'<div class="fan" style="grid-template-columns:repeat({len(ents)},200px)">'
                   + "".join(icard(t, s, "user", "user", id=f"en{i}") for i, (t, s) in enumerate(ents)) + "</div>", "entry")
-    # แถวหัวหน้าทีม: วง plugin + การ์ดขอบสี plugin
+    # หัวหน้าทีม: การ์ดกลางรูป ขอบสี plugin
     extra_pb = f' <span class="nb">(+{n_shared} ของกลาง)</span>' if n_shared else ""
-    lead = (f'<div class="vrow wide">{K.dot("pc", "users", id="focal")}'
-            f'<div class="card hub" style="width:auto;margin:0"><div class="lb">{e(plugin)} · หัวหน้าทีม</div>'
-            f'<div class="sb">หัวหน้าทีมรับงาน เลือกจาก {n_pb} playbook{extra_pb} แล้วส่งงานให้ agent ตัวใหม่ทีละขั้น</div></div></div>')
+    lead = (f'<div class="card icard hub" id="focal">{K.dot("pc", "users")}<div><div class="lb">{e(plugin)} · หัวหน้าทีม</div>'
+            f'<div class="sb">รับงาน เลือกจาก {n_pb} playbook{extra_pb} แล้วส่งงานให้ agent ตัวใหม่ทีละขั้น</div></div></div>')
     # รายการ agent
     rows, ids = "", []
     if "agent_groups" in labels:
@@ -116,15 +115,17 @@ def build_map(plugin):
             names = [n for n in names if n in have]
             if names:
                 ids.append(f"ag{i}")
-                rows += agent_row(f"ag{i}", e(g), f'{len(names)} agent · {names_line(names)}')
+                rows += agent_card(e(g), f'{len(names)} agent · {names_line(names)}')
     else:
         for i, a in enumerate(agents):
             ids.append(f"ag{i}")
             sk = agent_skills(a)
             tg = K.tag(f"{len(sk)} skill", "skill") if sk else K.tag("ใช้ skill กลาง", "core")
-            rows += agent_row(f"ag{i}", f'<span class="nb">{e(a["name"])}</span>', e(jobs.get(a["name"], "")), tg)
+            rows += agent_card(f'<span class="nb">{e(a["name"])}</span>', e(jobs.get(a["name"], "")), tg)
     unit = "กลุ่ม" if "agent_groups" in labels else "ตัว"
-    stage = f'{top}{lead}' + K.group(f"agent {len(ids)} {unit}", f'<div class="agl">{rows}</div>', "agg")
+    n = len(ids)
+    cols = n if n <= 4 else (3 if n in (5, 6, 9) else 4)  # ตัดแถวให้แต่ละแถวเต็มที่สุด แถวสุดท้ายจัดกลาง
+    stage = f'{top}{lead}' + K.group(f"agent {n} {unit}", f'<div class="agl" style="--c:{cols}">{rows}</div>', id="agents")
 
     # แถบ skill
     own = data["core_skills"] if is_su else data["skills"]
@@ -146,7 +147,7 @@ def build_map(plugin):
     band = (f'<div class="band"><div class="cap">ความรู้: skill คือคู่มือที่ agent เปิดอ่านก่อนลงมือ</div>'
             + K.group("skill ที่ agent ใช้", f'<div class="row" style="grid-template-columns:{"1fr" if is_su else "2.2fr 1fr"}">{sk_node}{core_node}</div>') + "</div>")
 
-    pairs = [(f"en{i}", "focal", "main") for i in range(len(ents))] + [("focal", a, "t") for a in ids]
+    pairs = [(f"en{i}", "focal", "main") for i in range(len(ents))] + [("focal", "agents", "main")]  # หัวหน้าทีมส่งงานให้ agent ทุกตัว → เส้นเดียวเข้ากรอบ
     stats = [(len(agents), "agent"), (len(own), "skill")]
     if not is_su:
         stats.append((len(data["core_skills"]), "skill กลาง (ใช้ร่วม)"))
