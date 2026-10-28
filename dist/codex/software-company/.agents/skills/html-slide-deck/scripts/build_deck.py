@@ -7,6 +7,8 @@
 - --brand สีหลัก,สีสว่าง → แทน --accent/--accent2 และคำนวณ --accent-deep/--accent-tint ให้
 - --data ไฟล์ JSON ใส่ไว้ที่ตัวแปร DATA ในหน้า สำหรับ JS เพิ่มเติมที่อ่านข้อมูล
 ต้องมี Pillow ถ้าจะย่อรูป
+
+    python build_deck.py --self-test       # สร้างเด็คจาก assets/slides-example.html แล้วนับหน้า รูปฝัง สี ชื่อ
 """
 from __future__ import annotations
 
@@ -90,6 +92,33 @@ def build(slides: Path, out: Path, title: str, brand: str | None, data: Path | N
     return missing
 
 
+def self_test() -> int:
+    import tempfile
+    example = HERE.parent / "assets" / "slides-example.html"
+    src = example.read_text(encoding="utf-8")
+    with tempfile.TemporaryDirectory() as tmp:
+        out = Path(tmp) / "deck.html"
+        missing = build(example, out, "Self Test Deck", "2A78D6,5B9BE6", None, None, None, 1600)
+        page = out.read_text(encoding="utf-8")
+        bad = Path(tmp) / "bad.html"
+        bad.write_text('<section class="slide"><img src="no-such.png"></section>', encoding="utf-8")
+        missing_bad = build(bad, Path(tmp) / "bad-out.html", "x", None, None, None, None, 1600)
+    count = lambda h: len(re.findall(r'<section[^>]*class="slide', h))
+    checks = {
+        "จำนวนหน้าเท่าต้นฉบับ": count(page) == count(src) > 0,
+        "ชื่อเด็คอยู่ใน <title>": "<title>Self Test Deck</title>" in page,
+        "สีแบรนด์ลงใน CSS": "--accent:#2A78D6" in page and "--accent-deep:#" in page,
+        "รูปในเครื่องถูกฝังเป็น data URI": 'src="example-logo.png"' not in page and 'src="data:image/png;base64,' in page,
+        "ไม่มีรูปหาย": missing == [],
+        "รูปที่ไม่มีถูกรายงาน": missing_bad == ["no-such.png"],
+        "ไม่เหลือ placeholder": not re.search(r"<!--(TITLE|SLIDES)-->|/\*EXTRA_CSS\*/", page),
+    }
+    for name, ok in checks.items():
+        print("ok  " if ok else "FAIL", name)
+    print(f"self-test {sum(checks.values())}/{len(checks)}")
+    return 0 if all(checks.values()) else 1
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("slides", type=Path, help="ไฟล์ที่มีแต่ <section class=\"slide\"> เรียงกัน")
@@ -109,4 +138,5 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    sys.exit(self_test()) if "--self-test" in sys.argv else main()

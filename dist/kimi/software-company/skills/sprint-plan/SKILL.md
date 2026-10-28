@@ -14,7 +14,7 @@ The project manager (PM) should:
    - Verify it has acceptance criteria (AC) (if not, refer to `business-analyst`)
    - Get story point estimate (consult `developer` if needed)
    - Confirm dependencies are clear
-4. Propose sprint scope based on capacity
+4. Propose sprint scope based on capacity: when stories do not all fit, use `decision-scoring` command `knapsack` (`node decide.mjs knapsack <file.json>`; example [`templates/knapsack.json`](templates/knapsack.json)) — budget = the team's story points, cost = points, value = RICE score, `"must": true` for stories already promised. The script also names the runner-up set; if it is within 10% let the product owner choose
 5. Identify risks for this sprint
 6. Write the sprint plan to `docs/sprints/sprint-NN.md` (two-digit number, one file per sprint, never overwrite an earlier sprint) with:
    - Sprint goal (one sentence)

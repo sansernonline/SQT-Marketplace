@@ -47,15 +47,28 @@ These are the common platform defaults (Streaming, TradingView, Settrade charts 
 |---|---|
 | An indicator has fewer than 30 signals (starting value, not yet measured) | Say **"not enough data"** for it; do not use it for the choice |
 | Both have fewer than 30 | Answer "not enough data". Read RSI 14 (platform default) and say it is not measured which is more accurate for this stock |
-| Both have 30 or more and the hit rates differ by less than 5 points (starting value, not yet measured) | Too close; read both, do not choose |
-| Both have 30 or more and differ by 5 points or more | Use the one with the higher hit rate. If even the higher one is not above 50%, do not use that signal as a reason to enter |
+| Both have 30 or more and the 95% Wilson intervals of the two hit rates overlap | Too close; read both, do not choose (at 30 signals each a 5-point gap is noise: the standard error of the difference is about 13 points) |
+| Both have 30 or more and the intervals do not overlap | Use the one with the higher hit rate. If even the higher one is not above 50%, do not use that signal as a reason to enter |
 
 No price history to count on → answer "not enough data (not measured)"; never guess a hit rate. Hit rate does not give profit per trade; see `post-trade-review`. This is information; the user decides. This skill does not use `decide.mjs`.
+
+## Script
+
+`indicators.mjs` computes the indicators and the hit-rate choice above, so no number is worked out in the model's head. Input: a CSV with header `date,close,volume` (volume optional), oldest row first, from the user or a market-data plugin; the script downloads nothing. Output: last SMA 50/200, EMA 10/20, RSI 14 (Wilder), MACD 12-26-9, last volume ÷ 20-day average, and the hit rate of RSI (crossing up through 30 / down through 70) and MACD (crossing its signal line) with signal count and 95% Wilson interval, then the choice by the table above.
+
+```
+node indicators.mjs <file.csv> [--bars 10] [--json]     # example: scripts/example.csv (made-up prices, format only)
+node indicators.mjs --self-test
+```
+
+EMA and Wilder averages start from the simple average of the first n bars, so early values can differ from a charting app; give 250+ bars. Not yet compared with TradingView on real symbols.
+
+**Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/trading-finance/*/skills/technical-signals/scripts/indicators.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/trading-finance/skills/technical-signals/scripts/indicators.mjs` · Node only, no dependencies.
 
 ## Workflow
 
 1. Ask: symbol, timeframe, the user's holding period, and what they are deciding (enter / add / exit).
-2. Read **trend** (MAs) → **momentum** (RSI or MACD, chosen by hit rate, see "Choosing RSI or MACD") → **volume** on the last big move.
+2. Read **trend** (MAs) → **momentum** (RSI or MACD, chosen by hit rate, see "Choosing RSI or MACD") → **volume** on the last big move. With price history, run `indicators.mjs` (section "Script") instead of reading numbers off a chart by eye.
 3. Mark the nearest 2 supports and 2 resistances.
 4. State the read in one line each, then **the invalidation** — the price that makes the read wrong.
 5. Hand the invalidation price to `position-sizing` as the stop (same plugin).

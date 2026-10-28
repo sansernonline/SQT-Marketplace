@@ -13,7 +13,7 @@ import pandas as pd
 MONTHS = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
           "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."]
 THAI_DIGITS = str.maketrans("๐๑๒๓๔๕๖๗๘๙", "0123456789")
-ONLINE = ["Shopee", "LINE"]
+ONLINE = ["Shopee", "LINE"]   # ชื่อช่องทางออนไลน์ของข้อมูลตัวอย่าง · ข้อมูลจริงที่ชื่อช่องต่างไป แก้บรรทัดนี้ก่อนรัน
 
 
 def read_thai_csv(path):
@@ -44,6 +44,13 @@ def thai_month(ts):
     return f"{MONTHS[ts.month - 1]} {ts.year + 543}"
 
 
+def require_two_years(years):
+    """F1 กับ F2 กับหัวกราฟเทียบ "ปีแรก vs ปีที่สอง" · ข้อมูลที่ไม่ใช่ 2 ปีพอดีต้องหยุดพร้อมบอกทางแก้ ไม่ใช่ล้มกลางทาง"""
+    if len(years) != 2:
+        raise SystemExit(f"สคริปต์นี้เทียบ 2 ปีพอดี แต่ข้อมูลมี {len(years)} ปี ({', '.join(map(str, years))}) — "
+                         "กรองแถวให้เหลือ 2 ปีก่อน หรือแก้ F2 กับหัวกราฟให้เทียบปีที่ต้องการ")
+
+
 def draw_share_chart(share, title, font, out):
     """กราฟเส้นสัดส่วนออนไลน์รายเดือน 1 รูป 1 ข้อความ · ฟอนต์ไทยมาจากไฟล์ ไม่พึ่งฟอนต์ในเครื่อง"""
     import matplotlib
@@ -64,12 +71,30 @@ def draw_share_chart(share, title, font, out):
     fig.savefig(out, dpi=200, bbox_inches="tight")
 
 
+def self_test():
+    assert to_number("๑,๒๓๔") == 1234.0 and to_number("-") == 0.0 and to_number("") is None
+    assert to_month("ม.ค. 2567") == pd.Timestamp(2024, 1, 1)
+    require_two_years([2567, 2568])
+    try:
+        require_two_years([2566, 2567, 2568])
+    except SystemExit as e:
+        assert "3 ปี" in str(e)
+    else:
+        raise AssertionError("ข้อมูล 3 ปีต้องถูกปฏิเสธ")
+    print("self-test ผ่าน 3/3")
+
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("csv")
+    parser.add_argument("--self-test", action="store_true")
+    parser.add_argument("csv", nargs="?")
     parser.add_argument("--out", default=".")
     parser.add_argument("--font", help="ไฟล์ .ttf ฟอนต์ไทย เช่น Sarabun-Regular.ttf · ไม่ใส่ = ไม่วาดกราฟ")
     args = parser.parse_args()
+    if args.self_test:
+        return self_test()
+    if not args.csv:
+        parser.error("ต้องระบุไฟล์ CSV")
 
     raw, encoding = read_thai_csv(args.csv)
     df = pd.DataFrame({"month": raw["เดือน"].map(to_month),
@@ -82,6 +107,8 @@ def main():
     missing, zero = df[df["sales"].isna()], df[df["sales"] == 0]
     print(f"[ว่าง] {len(missing)} แถว ไม่นับเป็น 0: " + ", ".join(f"{c} {thai_month(m)}" for c, m in zip(missing["channel"], missing["month"])))
     print(f"[ศูนย์] {len(zero)} แถว ยอด 0 จริง: " + ", ".join(f"{c} {thai_month(m)}" for c, m in zip(zero["channel"], zero["month"])))
+
+    require_two_years(sorted(df["year"].unique()))
 
     # F1 · สัดส่วนออนไลน์ต่อปี (แถวว่างไม่ถูกนับ ยอดออนไลน์ปีที่มีช่องว่างจึงต่ำกว่าจริง)
     by_year = df.pivot_table(index="year", columns="channel", values="sales", aggfunc="sum")

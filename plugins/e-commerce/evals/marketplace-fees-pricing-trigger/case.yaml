@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: marketplace-fees-pricing-trigger
+description: ผู้ขายสงสัยว่าขาดทุน ต้องเปิด marketplace-fees-pricing และพูดถึงค่าธรรมเนียม · ไม่เอ่ยชื่อ skill
+tags: [trigger, regression-suite, marketplace-fees-pricing]
+runs: 3
+expected_outcome: เปิด Skill marketplace-fees-pricing แล้วตอบตรงคำถาม
+execution:
+  prompt: |
+    ขายเสื้อใน shopee ต้นทุนตัวละ 120 ตั้งราคา 159 ทำไมเงินเข้าน้อยจัง ขาดทุนป่าวเนี่ย
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?marketplace-fees-pricing"'
+    min: 1
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: 'ค่าธรรมเนียม|ค่าคอม'
+    flags: i
+    match: contains
+    target: last_message

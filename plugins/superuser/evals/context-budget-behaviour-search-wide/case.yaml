@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: context-budget-behaviour-search-wide
+description: ค้นการเรียกฟังก์ชันใน repo 4,000 ไฟล์ ต้องจำกัดขอบเขตการค้นและขนาดผล หรือส่งลูกทีมไปค้นแล้วรับแค่สรุป (context-budget)
+tags: [behaviour, context-budget]
+runs: 10
+expected_outcome: ค้นด้วย grep หรือ rg ที่ใส่ glob หรือโฟลเดอร์ และตัดผล (head) หรือให้ subagent ค้นแล้วส่งกลับรายการไฟล์:บรรทัด · ไม่เปิดอ่านทีละไฟล์
+execution:
+  prompt: |
+    repo นี้มีราว 4,000 ไฟล์ (TypeScript เป็นหลัก) อยากรู้ว่าฟังก์ชัน calcTax ถูกเรียกที่ไหนบ้าง
+    วางแผนการค้นให้หน่อย ยังไม่ต้องรัน
+  max_turns: 4
+  timeout_seconds: 120
+graders:
+  - name: uses-search-tool
+    type: regex
+    pattern: 'grep|rg |Grep'
+    match: contains
+    target: last_message
+  - name: scoped-search
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน · ผ่านเมื่อแผนจำกัดการค้น เช่น ใส่ glob *.ts · จำกัดโฟลเดอร์ · ตัดผลด้วย head · หรือส่ง subagent ไปค้นแล้วรับแค่รายการไฟล์:บรรทัด อย่างใดอย่างหนึ่งก็พอ
+      และไม่เสนอเปิดอ่านไฟล์ทีละไฟล์ทั้ง repo

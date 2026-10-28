@@ -1,0 +1,24 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เตรียมไว้ ยังไม่ได้รัน (2026-10-28)
+schema_version: "1.1"
+name: brief-to-image-trigger
+description: ขอเขียนคำสั่งสร้างภาพ AI หลังเลือกทางสร้างแล้ว ต้องเปิด brief-to-image
+tags: [trigger, brief-to-image]
+runs: 3
+expected_outcome: เปิด Skill brief-to-image · prompt เรียงตามลำดับ · ไม่ใส่ข้อความไทยในภาพ
+execution:
+  prompt: |
+    ผมจะใช้ AI สร้างรูปเครื่องดื่มมัทฉะสำหรับโพสต์ Instagram ตัดสินใจแล้วว่าจะสร้างด้วย AI ช่วยเขียน brief กับ prompt ให้หน่อย รอบก่อนภาพออกมามือเพี้ยน
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: brief-to-image-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?brief-to-image"'
+    min: 1
+    arm: with-only
+  - name: no-thai-text-in-image
+    type: llm
+    focus: last_message
+    criteria: ให้ผ่านเมื่อมี prompt ที่ระบุสิ่งในภาพ แสง มุมกล้อง สี และสิ่งที่ไม่เอา และบอกให้วางข้อความไทยทีหลังในเครื่องมือจัดหน้า ไม่ใส่ในภาพที่สร้าง

@@ -1,0 +1,21 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เพิ่ม 2026-10-28 จากรายงานตรวจ plugin (P16 P18) · โจทย์คิดขึ้นเอง ไม่ได้มาจากงานที่พลาดจริง · ยังไม่ได้รัน
+schema_version: "1.1"
+name: debt-payoff-trigger
+description: มีหนี้บัตรเครดิตกับบัตรกดเงินสด ถามว่าปิดก้อนไหนก่อน ไม่เอ่ยชื่อ skill ต้องทำให้ debt-payoff ถูกเปิด
+tags: [capability, trigger, debt-payoff]
+runs: 3
+expected_outcome: เรียก Skill debt-payoff · เทียบลำดับปิดหนี้เป็นตัวเลข
+execution:
+  prompt: |
+    มีหนี้บัตรเครดิต 60,000 กับบัตรกดเงินสด 90,000 เดือนนึงจ่ายหนี้ได้ 9,000
+    ควรโปะก้อนไหนก่อนดี
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?debt-payoff"'
+    min: 1
+    arm: with-only

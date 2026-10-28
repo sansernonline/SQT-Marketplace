@@ -27,7 +27,7 @@ Pick the project you will finish. A shipped small project teaches more than an a
 | **Usefulness**: someone (even only the user) will use it | ×2 | A demo nobody opens again | Used weekly |
 | **Portfolio value**: tells a reader something | ×1 | A tutorial clone | A real problem with a short write-up and a live demo |
 
-**Score = 3L + 3F + 2U + 1P** (maximum 45). Below 25 = pick another idea.
+**Score by script, not by hand** (`decision-scoring`, command `score`): `node decide.mjs score ideas.json` (a copy of [references/score-example.json](references/score-example.json) with the user's ideas). Weights 3:3:2:1 divided by 9 are a default, not yet measured; the user may change them. Iron rule (กฎเหล็ก): an idea with F below 2 is dropped, not scored. The script also moves each weight ±20% and says whether rank 1 is stable (`นิ่ง`) or not (`ยังไม่นิ่ง`, `สูสี`); if not stable, the user decides between the top two. A second iron rule (กฎเหล็ก) stays from the old hand formula: the script's 0–100 is relative among the candidates only, so also add 3L+3F+2U+1P from the raw 1–5 scores (max 45) for the winner. Below 25 = no idea is good enough, pick other ideas, even if it ranks 1 (both ideas that pass above score 39 and 35). The same formula gave the same winner as the script on the example below.
 
 ## Worked example
 

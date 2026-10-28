@@ -66,6 +66,21 @@ export function validate(raw) {
     const [a, b] = [list[i], list[j]];
     if (!before.get(a).has(b) && !before.get(b).has(a)) errors.push(`${a} กับ ${b} เป็นเจ้าของ ${f} ทั้งคู่แต่ไม่ได้รอกัน → ให้ชิ้นหนึ่งรออีกชิ้น`);
   }
+  return plan.scope === undefined ? errors : [...errors, ...coverage(plan.scope, tasks)];
+}
+
+// ขอบเขตงาน (ไม่บังคับ): ทุกข้อใน scope ต้องอยู่ใน covers ของชิ้นเดียวพอดี ไม่ซ้ำ ไม่ตก
+function coverage(scope, tasks) {
+  if (!isList(scope)) return ["scope ต้องเป็นรายการขอบเขตงาน (array ของข้อความ)"];
+  const by = new Map(scope.map((s) => [s, []])), errors = [];
+  for (const t of tasks) {
+    if (!isList(t.covers)) { errors.push(`${t.id}: covers ต้องเป็นรายการข้อจาก scope`); continue; }
+    for (const c of new Set(t.covers ?? [])) by.has(c) ? by.get(c).push(t.id) : errors.push(`${t.id}: covers "${c}" ไม่อยู่ใน scope → เพิ่มใน scope หรือแก้ชื่อให้ตรง`);
+  }
+  for (const [s, ids] of by) {
+    if (!ids.length) errors.push(`ขอบเขต "${s}" ไม่มีชิ้นไหนรับ → ใส่ใน covers ของชิ้นหนึ่ง`);
+    else if (ids.length > 1) errors.push(`ขอบเขต "${s}" ซ้ำใน ${ids.join(" กับ ")} → ให้ชิ้นเดียวรับ`);
+  }
   return errors;
 }
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // power-bill.mjs - electricity bill from units, and why it changed between 2 months (Node stdlib only)
-// Usage: node power-bill.mjs <file.json> [--json]   |   node power-bill.mjs --self-test
+// Usage: node power-bill.mjs <file.json> [--json]   |   node power-bill.mjs --history <file.json> [--json]   |   node power-bill.mjs --self-test
+// History file: { "months": [ { "label": "ก.พ.", "units": 305 }, ... 4 months, oldest first ] } - latest month vs the average of the 3 before it
 // File: { "tiers": [ { "upTo": 150, "rate": 3.0 }, { "upTo": null, "rate": 5.0 } ], "service": 25, "months": [ { "label": "เม.ย.", "units": 330, "ft": 39.72 } ] }
 // tiers = baht/unit, upTo = cumulative units (last one null). ft = satang/unit (optional, default from rates.json). Bill = (energy + service + ft x units) x 1.07
 import { readFileSync } from 'node:fs';
@@ -77,6 +78,27 @@ export function explain(a, b, vatRate = RATES.vat) {
   return { diff: b.total - a.total, ...parts };
 }
 
+// Latest month vs the average units of the 3 months before it. Flags when it is MORE than RATES.spikePct above (equal is not a spike).
+export function spike(raw, thresholdPct = RATES.spikePct) {
+  if (!Array.isArray(raw?.months) || raw.months.length !== 4) throw new Error('ช่อง months ต้องมี 4 เดือนพอดี เรียงจากเก่าไปใหม่ (3 เดือนก่อนหน้า + เดือนที่จะเช็ก)');
+  raw.months.forEach((m, i) => num(m?.units, `months[${i}].units`, 0));
+  const [a, b, c, latest] = raw.months;
+  const avg = (a.units + b.units + c.units) / 3;
+  if (avg === 0) throw new Error('ค่าเฉลี่ย 3 เดือนก่อนหน้าเป็น 0 หน่วย คิดเปอร์เซ็นต์ไม่ได้ · ตรวจว่าเดือนเหล่านั้นไม่ได้กรอกหน่วยเป็น 0 ผิดช่อง');
+  const pct = ((latest.units - avg) / avg) * 100;
+  return { label: latest.label ?? 'เดือนล่าสุด', units: latest.units, avg, pct, thresholdPct, spike: pct > thresholdPct };
+}
+
+export function spikeReport(r) {
+  return [
+    `| เดือน | หน่วย | ค่าเฉลี่ย 3 เดือนก่อนหน้า | ต่างจากค่าเฉลี่ย | เกณฑ์ | ผล |`,
+    `|---|---|---|---|---|---|`,
+    `| ${r.label} | ${fmt(r.units)} | ${fmt(r.avg)} | ${sign(r.pct)}% | เกิน ${r.thresholdPct}% | ${r.spike ? 'สูงผิดปกติ ทำรายการตรวจสาเหตุ' : 'ไม่เกินเกณฑ์'} |`,
+    '',
+    `เกณฑ์ ${r.thresholdPct}% เป็นค่าตั้งต้น ยังไม่ได้วัด (ตั้งใน rates.json ช่อง spikePct) · เทียบเป็นหน่วย ไม่ใช่บาท`,
+  ].join('\n');
+}
+
 export function compute(raw) {
   const input = validate(raw);
   const bills = input.months.map((m) => bill(m, input));
@@ -141,7 +163,7 @@ function selfTest() {
   r = compute({ ...tariff, months: [{ units: 100 }] });
   t('ft ค่าตั้งต้นจาก rates.json', near(r.bills[0].ftCharge, 16.23));
   t('report มีส่วนต่าง', report(compute({ ...tariff, months: [{ units: 150, ft: 10 }, { units: 250, ft: 10 }] })).includes('+438.70'));
-  const throwsWith = (inp, word) => { try { compute(inp); return false; } catch (e) { return e.message.includes(word); } };
+  const throwsWith = (inp, word, fn = compute) => { try { fn(inp); return false; } catch (e) { return e.message.includes(word); } };
   const M = [{ units: 100, ft: 10 }];
   t('ไม่มี tiers/service ใน input', throwsWith({ months: M }, 'tiers'));
   t('ไม่มี service', throwsWith({ tiers: tariff.tiers, months: M }, 'service'));
@@ -149,6 +171,16 @@ function selfTest() {
   t('upTo ไม่เรียง', throwsWith({ ...tariff, tiers: [{ upTo: 100, rate: 2 }, { upTo: 50, rate: 3 }, { upTo: null, rate: 4 }], months: M }, 'tiers[1].upTo'));
   t('units เป็นข้อความ', throwsWith({ ...tariff, months: [{ units: '100' }] }, 'units'));
   t('months 3 เดือน', throwsWith({ ...tariff, months: [...M, ...M, ...M] }, 'months'));
+  // spike: 3 months 300 each -> avg 300; 360 = +20% exactly (not a spike), 361 is, 240 is below, 0 avg refused
+  const H = (u) => spike({ months: [300, 300, 300, u].map((units) => ({ units })) }, 20);
+  t('เท่ากับเกณฑ์ 20% ไม่ใช่ spike', near(H(360).pct, 20) && H(360).spike === false);
+  t('เกินเกณฑ์ 361 หน่วย เป็น spike', H(361).spike === true);
+  t('ต่ำกว่าค่าเฉลี่ย ไม่ spike', near(H(240).pct, -20) && H(240).spike === false);
+  t('ค่าเฉลี่ยจาก 3 เดือนก่อน', near(spike({ months: [{ units: 100 }, { units: 200 }, { units: 300 }, { units: 400 }] }, 20).avg, 200));
+  t('ข้อมูลไม่ครบ 3 เดือน', throwsWith({ months: [{ units: 1 }, { units: 2 }, { units: 3 }] }, 'ช่อง months', spike));
+  t('ค่าเฉลี่ย 0 ปฏิเสธ', throwsWith({ months: [0, 0, 0, 50].map((units) => ({ units })) }, 'เป็น 0', spike));
+  t('หน่วยติดลบ', throwsWith({ months: [300, 300, -1, 50].map((units) => ({ units })) }, 'units', spike));
+  t('spikeReport มีผล', spikeReport(H(400)).includes('สูงผิดปกติ'));
   console.log(`self-test ${ok}/${ok + bad} ผ่าน`);
   process.exit(bad ? 1 : 0);
 }
@@ -157,10 +189,12 @@ const args = process.argv.slice(2);
 if (args.includes('--self-test')) selfTest();
 else {
   const file = args.find((a) => !a.startsWith('--'));
-  if (!file) { console.error('ใช้: node power-bill.mjs <ไฟล์.json> [--json] | --self-test'); process.exit(2); }
+  if (!file) { console.error('ใช้: node power-bill.mjs <ไฟล์.json> [--json] | --history <ไฟล์.json> | --self-test'); process.exit(2); }
   try {
-    const r = compute(JSON.parse(readFileSync(file, 'utf8')));
-    console.log(args.includes('--json') ? JSON.stringify(r, null, 2) : report(r));
+    const data = JSON.parse(readFileSync(file, 'utf8'));
+    const history = args.includes('--history');
+    const r = history ? spike(data) : compute(data);
+    console.log(args.includes('--json') ? JSON.stringify(r, null, 2) : (history ? spikeReport : report)(r));
   } catch (e) {
     console.error(`ผิดพลาด: ${e instanceof SyntaxError ? `ไฟล์ ${file} ไม่ใช่ JSON ที่ถูกต้อง (${e.message})` : e.code === 'ENOENT' ? `ไม่พบไฟล์ ${file}` : e.message}`);
     process.exit(1);

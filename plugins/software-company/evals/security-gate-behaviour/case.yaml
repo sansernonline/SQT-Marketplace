@@ -1,0 +1,38 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: security-gate-behaviour
+description: ขอขั้นตอนตรวจก่อนส่งงานของโปรเจกต์ Node + Python ต้องมีสแกนค่าลับ dependency และ static analysis ตามภาษา และไม่ตัดสินว่าผ่านจากผลว่าง
+tags: [behaviour, security-gate]
+runs: 3
+expected_outcome: มี gitleaks · dependency scan · semgrep ชุดกฎตามภาษา · ติดป้ายยืนยันทุกข้อ · เครื่องมือที่รันไม่ได้ต้องเขียนว่ายังไม่ได้ตรวจ
+execution:
+  prompt: |
+    โปรเจกต์ของผมเป็น backend Node (Express) กับสคริปต์ Python ต้องส่งมอบพรุ่งนี้ เขียนขั้นตอนตรวจความปลอดภัยก่อนส่ง
+    พร้อมคำสั่งที่จะรันจริง และบอกว่าถ้าเจอข้อที่เป็นไปได้ว่าแจ้งผิดจะทำอย่างไร ตอบในแชต ไม่ต้องสร้างไฟล์ ไม่ต้องถามกลับ
+  max_turns: 8
+  timeout_seconds: 300
+graders:
+  - name: secrets-scan
+    type: regex
+    pattern: "gitleaks"
+    flags: i
+    match: contains
+    target: last_message
+  - name: dependency-scan
+    type: regex
+    pattern: "npm audit|pip-audit|osv-scanner|trivy"
+    flags: i
+    match: contains
+    target: last_message
+  - name: static-analysis
+    type: regex
+    pattern: "semgrep"
+    flags: i
+    match: contains
+    target: last_message
+  - name: verify-before-verdict
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ให้ผ่านเมื่อคำตอบบอกว่าผลสแกนทุกข้อต้องถูกเปิดโค้ดจริงเพื่อยืนยัน (หรือติดป้ายว่าแจ้งผิด/ยังไม่ยืนยัน)
+      ก่อนตัดสิน และเครื่องมือที่รันไม่ได้ต้องถูกบันทึกว่ายังไม่ได้ตรวจ ไม่ใช่สรุปว่าผ่านเพราะไม่มีผล

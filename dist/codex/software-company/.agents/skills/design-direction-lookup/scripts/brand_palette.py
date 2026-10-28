@@ -140,3 +140,35 @@ def palette_from_roles(palette_id, roles, fetched_on):
     if problems:
         raise SystemExit(f'พาเลต "{palette_id}" ไม่ผ่าน: {problems}')
     return [{c: r[c] for c in COLUMNS['palettes.csv']} for r in rows]
+
+
+def self_test():
+    """python brand_palette.py --self-test · ตรวจ common_colors กับ palette_from_roles (build_palette มี test ใน brand_colors.py)"""
+    sites = [{'host': 'a.test', 'brand': [{'hex': '#B5462A', 'weight': 5}, {'hex': '#0E7C86', 'weight': 2}]},
+             {'host': 'b.test', 'brand': [{'hex': '#B8482C', 'weight': 3}]}]
+    groups = common_colors(sites)
+    assert groups[0]['hosts'] == ['a.test', 'b.test'] and groups[0]['hex'] == '#B5462A', groups   # สีใกล้กันรวมเป็นกลุ่มเดียว
+    primary, accent = pick_primary_and_accent(groups)
+    assert accent and accent['hex'] == '#0E7C86', accent
+    assert common_colors([{'host': 'x', 'brand': [{'hex': '#D8DFFD', 'weight': 5}]}]) == []        # สีอ่อนไม่ใช่สีปุ่ม
+    roles = {'bg': '#FAF7F2', 'surface': '#FFFFFF', 'text': '#2B1D18', 'text_muted': '#6B5A52',
+             'primary': '#B5462A', 'secondary': '#E8B04B', 'accent': '#0E7C86', 'border': '#E6DDD3'}
+    light, dark = palette_from_roles('roles-test', roles, '2026-10-28')
+    assert (light['mode'], dark['mode']) == ('light', 'dark') and light['primary'] == '#B5462A'
+    assert not palette_problems({'light': light, 'dark': dark})
+    assert contrast(light['on_primary'], light['primary']) >= 4.5 and contrast(dark['text'], dark['bg']) >= 7
+    assert '#E8B04B' in light['notes_th'] and '2026-10-28' in light['notes_th']
+    low = dict(roles, text_muted='#DDDDDD')                    # text_muted อ่านไม่ออกบนพื้น → ต้องไม่ผ่านเงียบ ๆ
+    try:
+        palette_from_roles('bad', low, '2026-10-28')
+        raise AssertionError('พาเลตที่ contrast ต่ำต้องถูกปฏิเสธ')
+    except SystemExit as stop:
+        assert 'ไม่ผ่าน' in str(stop)
+    print('self-test ok')
+
+
+if __name__ == '__main__':
+    if sys.argv[1:] == ['--self-test']:
+        self_test()
+    else:
+        print('ใช้: python brand_palette.py --self-test (ไฟล์นี้ถูกเรียกจาก brand_colors.py --palette)')

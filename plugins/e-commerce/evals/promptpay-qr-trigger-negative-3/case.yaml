@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เคส "ไม่ควรเปิด": คำถามใกล้เคียงที่เป็นงานของ skill อื่น · tool_used min 0 max 0 ตาม skill-authoring/references/eval-format.md
+schema_version: "1.1"
+name: promptpay-qr-trigger-negative-3
+description: บอตตอบแชต LINE เป็นเรื่อง LINE OA ไม่ใช่การสร้าง payload · ต้องไม่เปิด promptpay-qr
+tags: [trigger, negative, regression-suite, promptpay-qr]
+runs: 3
+expected_outcome: ไม่เปิด Skill promptpay-qr · คำตอบยังตอบคำถามได้
+execution:
+  prompt: |
+    อยากให้ LINE OA ร้านตอบแชตเองเวลาลูกค้าถามเลขบัญชีโอนเงิน ต้องตั้งค่ายังไง
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: promptpay-qr-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?promptpay-qr"'
+    min: 0
+    max: 0
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: 'LINE|ไลน์|webhook|Messaging API'
+    flags: i
+    match: contains
+    target: last_message

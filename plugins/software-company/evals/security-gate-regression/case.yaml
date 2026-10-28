@@ -1,0 +1,28 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# ที่มา: กับดักที่ security-gate/SKILL.md ข้อ 2 จดไว้ (เจอจริงในโปรเจกต์ตัวอย่าง): --config auto คู่ --metrics=off ทำให้ semgrep ไม่ยอมรัน
+# (ยังไม่ได้รันรอบแดง · ยังไม่มีผลรันของ agent ที่ไม่มี skill ให้ยืนยันว่าพลาดจริง)
+schema_version: "1.1"
+name: security-gate-regression
+description: คำสั่ง semgrep ที่แนะนำต้องไม่ใช้ --config auto คู่กับ --metrics=off และต้องเลือกชุดกฎตามภาษา
+tags: [regression, security-gate]
+runs: 3
+expected_outcome: คำสั่ง semgrep ใช้ --config ชุดกฎที่ระบุ (p/security-audit · p/secrets · ชุดภาษา) ไม่ใช้ auto คู่ metrics=off
+execution:
+  prompt: |
+    ช่วยเขียนคำสั่ง semgrep สำหรับสแกนก่อนส่งงานของ repo ที่มี TypeScript (React) กับ Dockerfile
+    ต้องปิดการส่งข้อมูลกลับ (metrics) ด้วย ตอบในแชต ไม่ต้องสร้างไฟล์ ไม่ต้องถามกลับ
+  max_turns: 6
+  timeout_seconds: 240
+graders:
+  - name: no-auto-with-metrics-off
+    type: regex
+    pattern: "--config[ =]auto[^\\n]*--metrics[ =]off|--metrics[ =]off[^\\n]*--config[ =]auto"
+    flags: i
+    match: not_contains
+    target: last_message
+  - name: language-rulesets-named
+    type: regex
+    pattern: "p/(typescript|javascript|react|dockerfile|security-audit|secrets)"
+    flags: i
+    match: contains
+    target: last_message

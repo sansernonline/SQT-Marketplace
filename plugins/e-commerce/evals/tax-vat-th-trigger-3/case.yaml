@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: tax-vat-th-trigger-3
+description: ยื่น ภ.พ.30 ช้า ต้องเปิด tax-vat-th และพูดถึงเงินเพิ่ม · ไม่เอ่ยชื่อ skill
+tags: [trigger, regression-suite, tax-vat-th]
+runs: 3
+expected_outcome: เปิด Skill tax-vat-th แล้วตอบตรงคำถาม
+execution:
+  prompt: |
+    ลืมยื่น ภพ30 เดือนที่แล้ว ตอนนี้เลยกำหนดมา 10 วัน ต้องเสียค่าปรับเท่าไหร่
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?tax-vat-th"'
+    min: 1
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: '1\.5\s*%|เงินเพิ่ม'
+    flags: i
+    match: contains
+    target: last_message

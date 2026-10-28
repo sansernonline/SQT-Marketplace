@@ -85,6 +85,17 @@ pdfinfo -box งาน.pdf    # TrimBox = ขนาดจริง · BleedBox �
 pdfinfo งาน.pdf         # บรรทัด PDF version และ Producer บอกว่า export แบบไหน
 ```
 
+ให้สคริปต์คิดแทนการอ่านด้วยตา (เรียก 1 ครั้งต่องาน · เกณฑ์อยู่ใน [`references/print-specs.json`](references/print-specs.json) ตรวจ 2026-10-26 · ร้านบอกค่าอื่นใช้ flag แทน):
+
+```bash
+python scripts/print_check.py pdf งาน.pdf --bleed-mm 3     # ระยะตัดตกทุกหน้า + ฟอนต์ฝัง (ต้องมี poppler)
+python scripts/print_check.py ppi --px 1200 --mm 100       # 304.8 ppi · ไวนิลใส่ --kind vinyl [--min-ppi 150]
+python scripts/print_check.py ink 80 70 60 90              # หมึกรวม C+M+Y+K ไม่เกิน 300%
+python scripts/print_check.py --self-test                  # 3 มม. = 8.50 pt · 1200 px ที่ 100 มม. = 304.8 ppi · 8/8
+```
+
+ผ่านแล้วยังต้องถามร้านและขอปรู๊ฟ · ไม่มี poppler → สคริปต์บอกวิธีติดตั้ง ส่วน `ppi` กับ `ink` ใช้ได้เลย
+
 รูปภาพ: ความละเอียดจริง = จำนวนพิกเซล ÷ (ขนาดพิมพ์เป็นนิ้ว) · ใช้ Python Pillow อ่านขนาดพิกเซลแล้วคำนวณ ไม่เชื่อค่า dpi ในไฟล์ · โหมดสีของรูปในไฟล์ PDF ตรวจได้ด้วย Acrobat Preflight หรือให้ร้านตรวจ (คำสั่งฟรีบนเครื่องนี้ยังไม่ได้ทดสอบ)
 
 ## ตัวอย่างจริง

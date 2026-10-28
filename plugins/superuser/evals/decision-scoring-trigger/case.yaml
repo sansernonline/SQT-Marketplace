@@ -3,7 +3,7 @@ schema_version: "1.1"
 name: decision-scoring-trigger
 description: ขอให้เลือกขนส่ง 1 เจ้าจากตัวเลขหลายเกณฑ์ ไม่เอ่ยชื่อ skill ต้องทำให้ decision-scoring ถูกเปิด
 tags: [trigger, decision-scoring]
-runs: 3
+runs: 10
 expected_outcome: เรียก Skill decision-scoring แล้วให้คะแนนด้วยเกณฑ์และน้ำหนัก ไม่ตอบจากความรู้สึก
 execution:
   prompt: |

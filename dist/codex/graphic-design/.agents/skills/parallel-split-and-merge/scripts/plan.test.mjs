@@ -3,6 +3,7 @@ import { validate, ranks, analyse, render } from "./plan.mjs";
 import { toMermaid, toHtml, levels } from "./plan-draw.mjs";
 import { actualReport, learnSpeed, predictMoves } from "./plan-actual.mjs";
 import { assign, validateAccounts, score, renderAssign } from "./plan-assign.mjs";
+import { fileURLToPath } from "node:url";
 import { fromStatusLine, fromCodexLine, applyQuota, accountName } from "./quota.mjs";
 
 // บัญชีจำลอง (หน่วยขนาด = k token · ความเร็ว = k ต่อชั่วโมง)
@@ -98,6 +99,7 @@ export function selfTest() {
     ["CPM เพชร: c และ d เผื่อได้ 0 · b เผื่อได้ 2 (เริ่มเร็วสุด 2 ช้าสุด 4)", (() => { const c = analyse(diamond).cpm; return c.get("a").float === 0 && c.get("c").float === 0 && c.get("d").float === 0 && c.get("b").early === 2 && c.get("b").late === 4 && c.get("b").float === 2; })()],
     ["CPM หลายระดับ: d e เผื่อได้ 3 · g เผื่อได้ 9 · สายวิกฤต a b c f ยาว 10", (() => { const c = analyse(layered).cpm; return ["a", "b", "c", "f"].every((x) => c.get(x).float === 0) && c.get("d").float === 3 && c.get("e").early === 4 && c.get("e").float === 3 && c.get("g").float === 9; })()],
     ["needs หรือ owns ซ้ำในชิ้นเดียว ไม่ฟ้องผิด", validate({ tasks: [{ id: "p", size: 1, owns: ["f", "f"] }, { id: "q", size: 1, needs: ["p", "p"] }] }).length === 0],
+    ["scope: ครบพอดีผ่าน · ข้อตก ข้อซ้ำ และ covers นอก scope ฟ้อง", (() => { const t = (covers) => ({ id: covers.join(""), size: 1, covers }); const ok = validate({ scope: ["x", "y"], tasks: [t(["x"]), t(["y"])] }); const bad = validate({ scope: ["x", "y", "z"], tasks: [t(["x"]), t(["x", "y"]), t(["w"])] }); return ok.length === 0 && bad.some((e) => e.includes('"z" ไม่มีชิ้นไหนรับ')) && bad.some((e) => e.includes('"x" ซ้ำ')) && bad.some((e) => e.includes('"w" ไม่อยู่ใน scope')); })()],
     ["input เพี้ยนได้ข้อความไทยที่บอกชิ้น ไม่พัง", validate({ tasks: {} })[0].includes("array") && validate({ tasks: [null] })[0].includes("object") && validate({ tasks: [{ id: "p", size: 1, needs: "a" }] })[0].startsWith("p: needs")],
   ];
   let ok = 0;
@@ -105,3 +107,6 @@ export function selfTest() {
   console.log(`\nself-test ${ok}/${cases.length} ผ่าน`);
   process.exit(ok === cases.length ? 0 : 1);
 }
+
+// รันไฟล์นี้ตรง ๆ (node plan.test.mjs) ต้องรัน test ด้วย ไม่ใช่จบเงียบ ๆ ด้วย exit 0
+if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) selfTest();

@@ -87,6 +87,8 @@ Weights are starting values the user can change (starting value, not yet measure
 
 Difference ≈ 151,000, about 30% of the index outcome, from fees alone.
 
+For the user's own funds run `node money-calc.mjs fee <file.json>` (script in `portfolio-snapshot`, see its Script path); this table is `../portfolio-snapshot/scripts/examples/fee.json` (run 2026-10-28: 505,953 / 355,135, gap 150,818). The 7% is an assumed market return, not a forecast.
+
 ## Worked example — DCA (ลงทุนสม่ำเสมอ)
 
 5,000 baht a month for 3 months; NAV 10.00, 8.00, 12.50.

@@ -11,8 +11,20 @@
  *   log.info('สร้างคำสั่งซื้อสำเร็จ', { orderId: 1042, ms: 134 });
  *
  * TypeScript: เปลี่ยนเป็น import แล้ว type ของ winston มากับแพ็กเกจอยู่แล้ว
+ *
+ * ทดสอบ:  node logger.node.js --self-test     (ต้องลง winston ก่อน · ไม่มี → ข้ามและบอกชัด)
  */
 'use strict';
+
+if (require.main === module && process.argv.includes('--self-test')) {
+  try {
+    require.resolve('winston');
+    require.resolve('winston-daily-rotate-file');
+  } catch {
+    console.log('SKIP self-test: ไม่มี winston (npm i winston winston-daily-rotate-file)');
+    process.exit(0);
+  }
+}
 
 const winston = require('winston');
 require('winston-daily-rotate-file');
@@ -128,3 +140,27 @@ function withCorrelation(cid) {
 }
 
 module.exports = { logger, withCorrelation, redact, safe };
+
+/* self-test: ตรวจฟังก์ชันปิดข้อมูลลับและกัน log injection (ไม่เขียนไฟล์ log) */
+function selfTest() {
+  const assert = require('assert');
+  const results = [];
+  const t = (name, fn) => { try { fn(); results.push([name, true]); } catch (e) { results.push([name, false, e.message]); } };
+  const r = redact({ orderId: 1042, password: 'hunter2', shipping: 'ems', nested: { apiKey: 'k', list: [{ OTP: '1' }] } });
+  t('password ถูกปิด', () => assert.strictEqual(r.password, '***'));
+  t('orderId และ shipping ไม่ถูกปิดเกิน', () => assert.deepStrictEqual([r.orderId, r.shipping], [1042, 'ems']));
+  t('key ซ้อนข้างในและใน array ก็ปิด', () => assert.deepStrictEqual([r.nested.apiKey, r.nested.list[0].OTP], ['***', '***']));
+  t('ชื่อ camelCase จับได้ (customersPin) แต่ className ไม่', () =>
+    assert.deepStrictEqual([redact({ customersPin: 1 }).customersPin, redact({ className: 'x' }).className], ['***', 'x']));
+  t('safe: ตัวขึ้นบรรทัดกลายเป็นช่องว่าง + ครอบด้วย "', () => assert.strictEqual(safe('a\nb'), '"a b"'));
+  t('safe: เครื่องหมายคำพูดข้างในเปลี่ยนเป็นฟันหนู', () => assert.strictEqual(safe('say "hi"'), `"say 'hi'"`));
+  t('safe: null เป็น -', () => assert.strictEqual(safe(null), '-'));
+  t('safe: เลขบัตรที่ผ่าน Luhn ถูกปิด', () => assert.ok(!safe('card 4111 1111 1111 1111 ok').includes('4111')));
+  t('safe: เลขยาวที่ไม่ผ่าน Luhn ไม่ถูกปิด', () => assert.strictEqual(safe('1234567890123457'), '1234567890123457'));
+  results.forEach(([n, ok, m]) => console.log(ok ? 'ok  ' : 'FAIL', n, ok ? '' : m));
+  const passed = results.filter((x) => x[1]).length;
+  console.log(`self-test ${passed}/${results.length}`);
+  process.exit(passed === results.length ? 0 : 1);
+}
+
+if (require.main === module && process.argv.includes('--self-test')) selfTest();

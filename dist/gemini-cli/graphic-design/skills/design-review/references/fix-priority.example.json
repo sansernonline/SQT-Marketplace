@@ -1,0 +1,9 @@
+{
+  "_note": "ตัวอย่างหัวข้อ B (ตัวเลขสมมติ): design-review ข้อ 5 จัดลำดับ 3 จุดแก้ · reach = ชิ้นในชุด 10 ชิ้นที่โดน · impact 0.25–3 ต่อการกระทำหลัก · effort = ชั่วโมง",
+  "method": "rice",
+  "items": [
+    { "name": "เพิ่มคอนทราสต์ตัวหนังสือบนรูป", "reach": 8, "impact": 2, "confidence": 1, "effort": 0.5 },
+    { "name": "ขยายปุ่ม CTA", "reach": 10, "impact": 1, "confidence": 0.8, "effort": 0.25 },
+    { "name": "ย้ายโลโก้พ้น safe zone", "reach": 3, "impact": 0.5, "confidence": 1, "effort": 0.5 }
+  ]
+}

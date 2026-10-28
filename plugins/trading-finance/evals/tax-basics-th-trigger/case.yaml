@@ -1,0 +1,21 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เพิ่ม 2026-10-28 จากรายงานตรวจ plugin (P16 P18) · โจทย์คิดขึ้นเอง ไม่ได้มาจากงานที่พลาดจริง · ยังไม่ได้รัน
+schema_version: "1.1"
+name: tax-basics-th-trigger
+description: ถามภาษีดอกเบี้ยเงินฝากและกำไรคริปโต ไม่เอ่ยชื่อ skill ต้องทำให้ tax-basics-th ถูกเปิด
+tags: [capability, trigger, tax-basics-th]
+runs: 3
+expected_outcome: เรียก Skill tax-basics-th · แยกตอบรายได้ทีละประเภท
+execution:
+  prompt: |
+    ปีนี้มีดอกเบี้ยฝากประจำราว 12,000 กับกำไรขายบิตคอยน์ในกระดานเทรดไทยอีกหน่อย
+    สองอย่างนี้ต้องเสียภาษียังไง ต้องยื่นเพิ่มไหม
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?tax-basics-th"'
+    min: 1
+    arm: with-only

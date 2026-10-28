@@ -14,7 +14,9 @@
         "plugins/trading-finance/skills/emergency-fund/SKILL.md",
         "plugins/trading-finance/skills/personal-budget/SKILL.md",
         "plugins/trading-finance/skills/retirement-plan/SKILL.md",
-        "plugins/trading-finance/skills/tax-deduction-planner/references/deductions-2569.md"
+        "plugins/trading-finance/skills/tax-deduction-planner/references/deductions-2569.md",
+        "plugins/trading-finance/skills/retirement-plan/scripts/sso-pension.json",
+        "plugins/trading-finance/skills/tax-deduction-planner/scripts/rates-2569.json"
       ]
     },
     "maternity-leave": {
@@ -67,7 +69,8 @@
         "plugins/e-commerce/skills/seller-tax-basics/SKILL.md",
         "plugins/e-commerce/skills/payroll-th/SKILL.md",
         "plugins/trading-finance/skills/tax-deduction-planner/references/deductions-2569.md",
-        "plugins/e-commerce/skills/thai-business-setup/SKILL.md"
+        "plugins/e-commerce/skills/thai-business-setup/SKILL.md",
+        "plugins/trading-finance/skills/tax-deduction-planner/scripts/rates-2569.json"
       ]
     },
     "import-duty-exemption": {
@@ -108,6 +111,17 @@
       "note": "Google Cloud Text-to-Speech pricing · Chirp 3: HD ฟรี 0 ถึง 1 ล้านตัวอักษรต่อเดือน เกินแล้ว 30 USD ต่อ 1 ล้าน · ต้องเปิด billing",
       "files": [
         "plugins/graphic-design/skills/video-editing/SKILL.md"
+      ]
+    },
+    "vat-rate": {
+      "value": "7%",
+      "checked": "2026-10-25",
+      "note": "VAT 7% (6.3% + ภาษีท้องถิ่น) ตาม พ.ร.ฎ. ฉบับที่ 807 พ.ศ. 2569 ถึง 30 ก.ย. 2570 · rates.json ของ doc-quotation และ thai-business-setup เทียบด้วย self-test",
+      "files": [
+        "plugins/e-commerce/skills/tax-vat-th/SKILL.md",
+        "plugins/e-commerce/skills/seller-tax-basics/SKILL.md",
+        "plugins/e-commerce/skills/doc-quotation/SKILL.md",
+        "plugins/e-commerce/skills/thai-business-setup/SKILL.md"
       ]
     }
   },

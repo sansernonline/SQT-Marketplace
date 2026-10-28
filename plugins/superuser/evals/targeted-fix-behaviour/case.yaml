@@ -1,0 +1,43 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: targeted-fix-behaviour
+description: ยอดรวมในใบเสนอราคาผิดจุดเดียว ต้องแก้แค่ยอดรวม ไม่แก้บรรทัดอื่น และแสดงก่อนกับหลังของจุดที่เปลี่ยน (targeted-fix กฎ แก้เท่าที่แจ้ง)
+tags: [behaviour, targeted-fix]
+runs: 10
+expected_outcome: ยอดรวมเป็น 12,050 · รายการ 5 บรรทัดเหมือนเดิมทุกตัวอักษร · มีก่อนกับหลังของบรรทัดรวม
+execution:
+  prompt: |
+    ลูกค้าบอกว่ายอดรวมในใบเสนอราคานี้ผิด ช่วยแก้ให้หน่อย ส่งกลับมาทั้งใบ
+
+    ใบเสนอราคา QT-2026-118
+    1. ค่าออกแบบโลโก้ 4,500 บาท
+    2. ค่าออกแบบนามบัตร 1,200 บาท
+    3. ค่าพิมพ์นามบัตร 2 กล่อง 850 บาท
+    4. ค่าออกแบบป้ายหน้าร้าน 3,000 บาท
+    5. ค่าเดินทางติดตั้ง 2,500 บาท
+    รวม 12,500 บาท
+  max_turns: 4
+  timeout_seconds: 120
+graders:
+  - name: correct-total
+    type: regex
+    pattern: '12,050|12050'
+    match: contains
+    target: last_message
+  - name: line-3-untouched
+    type: regex
+    pattern: 'ค่าพิมพ์นามบัตร 2 กล่อง 850 บาท'
+    match: contains
+    target: last_message
+  - name: line-5-untouched
+    type: regex
+    pattern: 'ค่าเดินทางติดตั้ง 2,500 บาท'
+    match: contains
+    target: last_message
+  - name: only-the-total
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน · ผ่านเมื่อครบ 2 ข้อ:
+      1. เปลี่ยนแค่บรรทัดรวม ไม่ได้จัดรูปแบบใหม่ เพิ่ม VAT หรือแก้ชื่อรายการ
+      2. บอกว่าเปลี่ยนจากเท่าไรเป็นเท่าไร (12,500 เป็น 12,050)

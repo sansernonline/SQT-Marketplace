@@ -2,7 +2,7 @@
 schema_version: "1.1"
 name: tax-deduction-planner-trigger
 description: พนักงานเงินเดือนถามปลายปีว่าจะซื้อ RMF กับ ThaiESG เท่าไรให้ภาษีลด ไม่เอ่ยชื่อ skill ต้องทำให้ tax-deduction-planner ถูกเปิด และได้ตัวเลขภาษีก่อนกับหลังของปีภาษี 2569
-tags: [trigger, tax-deduction-planner]
+tags: [capability, trigger, tax-deduction-planner]
 runs: 3
 expected_outcome: เรียก Skill tax-deduction-planner · ใช้ปีภาษี 2569 · ประกันสังคมลดหย่อน 10,500 · มีภาษีก่อน หลัง และส่วนที่ประหยัด พร้อมเตือนว่าต้องจ่ายภายใน 31 ธันวาคม
 execution:

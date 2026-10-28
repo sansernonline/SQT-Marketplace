@@ -1,0 +1,26 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# runs 5: เคสนี้ใช้ตัดสินการแก้ description ของ skill · n=3 กว้างเกินไป (ยังไม่ได้วัดช่วงจริง)
+schema_version: "1.1"
+name: pdpa-compliance-trigger
+description: ผู้ใช้ถามว่าเว็บสมัครสมาชิกต้องทำอะไรตาม PDPA ไม่เอ่ยชื่อ skill ต้องทำให้ pdpa-compliance ถูกเปิด และเริ่มที่คำถามว่าจำเป็นต้องเก็บไหม
+tags: [trigger, pdpa-compliance]
+runs: 5
+expected_outcome: เปิด Skill pdpa-compliance แล้วเริ่มจากทำรายการข้อมูลและถามว่าจำเป็นต้องเก็บไหม
+execution:
+  prompt: |
+    เรากำลังทำเว็บสมัครสมาชิกร้านขายอุปกรณ์กีฬาในไทย เก็บชื่อ เบอร์โทร ที่อยู่จัดส่ง และวันเกิด
+    ตามกฎหมายคุ้มครองข้อมูลส่วนบุคคลของไทยต้องทำอะไรในระบบบ้าง ยังไม่ต้องเขียนโค้ด
+  max_turns: 6
+  timeout_seconds: 240
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?pdpa-compliance"'
+    min: 1
+    arm: with-only
+  - name: necessity-question-named
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ให้ผ่านเมื่อคำตอบตั้งคำถามว่าแต่ละข้อมูลจำเป็นต้องเก็บหรือไม่ (เช่นวันเกิดจำเป็นไหม) ก่อนพูดถึงวิธีเก็บให้ปลอดภัย

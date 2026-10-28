@@ -38,10 +38,10 @@ What the vet commonly follows (the vet decides — use this only to know what to
 ## Workflow
 
 1. **One record per animal** — [references/pet-record.md](references/pet-record.md): ID, microchip number, vaccines with dates and sticker photos, weight log, vet contacts
-2. **Calendar** — vaccine due dates, monthly prevention, deworming; set reminders 7 days ahead
+2. **Calendar** — vaccine due dates, monthly prevention, deworming; set reminders 7 days ahead (due dates in พ.ศ. or across a year-end: `node skills/important-docs/scripts/due-dates.mjs <file.json>`, `lead_days` 7)
 3. **Before each vet visit** — write: what changed, since when, eating/drinking/toilet, weight; bring the vaccine book
 4. **After** — copy the vet's instructions exactly into the record; book the next visit before leaving
-5. **Budget** — yearly plan below; keep an emergency fund or compare pet insurance
+5. **Budget** — yearly plan below; keep an emergency fund or compare pet insurance with `decision-scoring`, command `payoff`: `node decide.mjs payoff insurance.json`, from [references/insurance-payoff-example.json](references/insurance-payoff-example.json) (made-up numbers; the user replaces the vet quotes and the chances, which are a guess). It shows expected cost and the biggest regret side by side. When the two disagree (`2 เกณฑ์ไม่ตรงกัน`) do not pick for the user: expected cost fits a choice repeated every year, least regret fits a one-off large bill the user could not pay
 6. **Travel / boarding** — pet hotels ask for the vaccine book; rabies within the last year is usually required
 
 ## Budget (plan with your own vet's prices)

@@ -1,0 +1,6 @@
+{
+  "_note": "dividend-tracker worked example · source thai-listed or thai-fund = 10% withheld · foreign needs withholdingPct checked for that country · status declared or estimated",
+  "holdings": [
+    { "symbol": "ABC", "shares": 2000, "dps": 0.80, "status": "declared", "source": "thai-listed", "price": 40.00, "dps12m": 1.80 }
+  ]
+}

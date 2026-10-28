@@ -3,7 +3,8 @@ schema_version: "1.1"
 name: voice-agent-trigger
 description: เจ้าของคลินิกขอระบบ AI รับโทรศัพท์ภาษาไทยที่ลูกค้าพูดแทรกได้ ไม่เอ่ยชื่อ skill ต้องทำให้ voice-agent ถูกเปิด และคำตอบมีงบความหน่วงแยกช่วง
 tags: [trigger, voice-agent]
-runs: 3
+# runs 5: เคสนี้ใช้ตัดสินการแก้ description ของ skill · n=3 กว้างเกินไป (ยังไม่ได้วัดช่วงจริง)
+runs: 5
 expected_outcome: เปิด Skill voice-agent แล้ววางท่อ SIP → VAD → STT → LLM → TTS แบบ streaming พร้อมตารางงบความหน่วงแยกช่วง และบอกว่าต้องแจ้งลูกค้าก่อนบันทึกเสียง
 execution:
   prompt: |

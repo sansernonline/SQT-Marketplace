@@ -101,6 +101,8 @@ When evaluating options, use comparison table from `polished-document-style`:
 Option A because <reasons aligned with NFRs>
 ```
 
+Three or more options, or the choice is contested: do not rank by feel. Put the options into a JSON file (criteria with weights and `better: low|high`; hard rules from the NFRs under `must`, e.g. data must stay in Thailand) and run `decision-scoring` command `score` (`node decide.mjs score <file.json>`; example [`architecture-patterns/templates/options-score.json`](../skills/architecture-patterns/templates/options-score.json)). Options that break a `must` are cut and named. Copy the table and the line "rank N stable / not stable" into the ADR. Numbers are your estimates: say where they came from, or mark them (not measured).
+
 ## Things You Don't Do
 
 - Write implementation code (delegate to developer)

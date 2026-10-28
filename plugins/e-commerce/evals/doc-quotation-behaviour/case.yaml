@@ -1,0 +1,48 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# ตัวเลขที่คาดได้จากการรันสคริปต์ของ skill เมื่อ 2026-10-28 ด้วยโจทย์นี้ · สคริปต์หรืออัตราเปลี่ยนให้รันใหม่แล้วแก้ pattern
+# input: 7 × 1250 + 3 × 2390 · vatMode exclusive · whtRate 3
+schema_version: "1.1"
+name: doc-quotation-behaviour
+description: ใบเสนอราคา 2 รายการที่ VAT มีสตางค์และลูกค้าหัก ณ ที่จ่าย ต้องเรียก thai-doc-total.mjs และยอดกับตัวหนังสือตรงผลสคริปต์
+tags: [behaviour, capability-suite, doc-quotation]
+runs: 3
+expected_outcome: เรียก thai-doc-total.mjs · VAT 1,114.40 · รวม 17,034.40 · หัก 477.60 · สุทธิ 16,556.80 · ตัวหนังสือ หนึ่งหมื่นเจ็ดพันสามสิบสี่บาทสี่สิบสตางค์
+execution:
+  prompt: |
+    ทำใบเสนอราคาให้บริษัทลูกค้าหน่อยค่ะ ร้านเราจด VAT แล้ว ราคายังไม่รวม VAT
+    - ถ่ายรูปสินค้า 7 ชุด ชุดละ 1,250
+    - ตัดต่อคลิปรีวิว 3 คลิป คลิปละ 2,390
+    ลูกค้าบอกจะหัก ณ ที่จ่าย 3% ขอยอดรวมทั้งสิ้น ยอดที่ลูกค้าต้องโอน แล้วก็ตัวหนังสือภาษาไทยด้วย
+  max_turns: 10
+  timeout_seconds: 300
+graders:
+  - name: script-called
+    type: tool_used
+    tool: Bash
+    input_match: 'thai-doc-total\.mjs'
+    min: 1
+    arm: with-only
+  - name: vat
+    type: regex
+    pattern: '1,?114\.40'
+    flags: i
+    match: contains
+    target: last_message
+  - name: grand-total
+    type: regex
+    pattern: '17,?034\.40'
+    flags: i
+    match: contains
+    target: last_message
+  - name: net-payment
+    type: regex
+    pattern: '16,?556\.80'
+    flags: i
+    match: contains
+    target: last_message
+  - name: total-in-words
+    type: regex
+    pattern: 'หนึ่งหมื่นเจ็ดพันสามสิบสี่บาทสี่สิบสตางค์'
+    flags: i
+    match: contains
+    target: last_message

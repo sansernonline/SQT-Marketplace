@@ -78,6 +78,10 @@ Monday, 63 unread. Ten minutes:
 - Do not set up auto-delete rules on anything that could be a bill, a tax document or a government notice
 - Reply "received, will answer by …" beats silence for anything over 2 days
 
+## Connecting your mail
+
+This plugin ships no email connector. The user connects Gmail (or another mail app) themselves, from the connectors or MCP settings of the Claude app they use, and grants read and draft access only, not send. Not checked against an official Google page, so no link is given here. No connector → the user pastes the mail text, or the subject lines and senders, into the chat; the method is the same.
+
 Related: `weekly-review` (clears `Waiting for`) · `digital-hygiene` (phishing, account takeover) · `subscription-audit` (newsletter and trial mail).
 
 
@@ -157,5 +161,9 @@ Protect: Tue/Thu 09:00–11:00 focus "Q4 plan", Wednesday morning no meetings. E
 - The audit is worthless unless next month's calendar changes before the session ends
 
 Output: split table vs target · worst three with action · events added · one-line trend vs last month.
+
+## Connecting your calendar
+
+This plugin ships no calendar connector. The user connects Google Calendar (or another calendar) themselves, from the connectors or MCP settings of the Claude app they use, with read access first; adding focus blocks (step 7) needs write access and the user's OK. Not checked against an official Google page, so no link is given here. No connector → the user pastes a 4-week export or a screenshot.
 
 Related: `weekly-review` · `meeting-prep-card` (meetings that stay should have a goal).

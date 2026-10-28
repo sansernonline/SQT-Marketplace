@@ -1,5 +1,15 @@
 # Changelog — personal-life
 
+## 0.18.0 — 2026-10-28
+
+- สคริปต์ใหม่ `important-docs/scripts/due-dates.mjs` (self-test 29 ข้อ): คิดวันครบกำหนดจากวันหมดอายุลบเวลานำ รับปี พ.ศ. หรือ ค.ศ. และโหมด `--refill` คิดวันที่ยาหมดจากฉลาก · `important-docs` `medication-schedule` `pet-care` เรียกใช้แทนการนับวันเอง
+- `power-bill.mjs` โหมด `--history` เทียบหน่วยเดือนล่าสุดกับค่าเฉลี่ย 3 เดือนก่อนหน้า (self-test เพิ่มเป็น 28 ข้อ) · เกณฑ์ 20% ย้ายไป `rates.json` ติดป้ายค่าตั้งต้น ยังไม่ได้วัด · ขั้นบันไดค่าไฟยังรับจากบิลผู้ใช้ เพราะยังไม่มีหน้าทางการที่เปิดอ่านได้
+- `side-project-picker` `annual-checkup` `pet-care` `vehicle-care` ใช้ `decision-scoring` (score และ payoff) พร้อมไฟล์ตัวอย่างใน `references/` ที่รันผ่านจริง · `vehicle-care` เพิ่มหัวข้อก่อนซื้อรถ
+- `health-organizer` และ `family-planner` ห้ามใส่ชื่อคน ผลตรวจ ชื่อยาในคำค้นเว็บ
+- `inbox-triage` `calendar-audit` บอกวิธีต่อ Gmail และปฏิทินด้วยตัวเอง (ไม่ใส่ลิงก์เพราะยังไม่ได้ตรวจหน้า Google ทางการ) · `cert-prep` ติดป้ายค่าตั้งต้น ยังไม่ได้วัด
+- `course-builder` ย้ายหัวข้อ 6–9 ไป `references/materials-feedback-online-copyright.md` (SKILL.md จาก 40,980 เหลือ 31,475 ไบต์) · `meeting` แก้ข้อความที่ชี้ผิด plugin · `triggers.md` เพิ่มตารางคำสั่งลัด 16 ตัว
+- eval ใหม่ 7 เคสยังไม่ได้รัน: สคริปต์ค่าไฟ · ไม่มีขั้นบันได · ร่างอีเมลไม่ส่งเอง · คำค้นสุขภาพไม่มีข้อมูลส่วนตัว · สคริปต์วันครบกำหนด · ไม่ควรเปิด 2 เคส
+
 ## 0.17.1 — 2026-10-28
 
 - `pregnancy-and-baby` เพดานฐานค่าจ้างเงินสงเคราะห์คลอดตรงกับ `facts.json` (17,500 บาท) และอยู่ในรายการไฟล์ที่ validator เฝ้า · เงื่อนไขส่งเงินสมทบ 5 เดือนติด (รอยืนยัน)

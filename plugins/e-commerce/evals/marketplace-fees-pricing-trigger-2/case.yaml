@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: marketplace-fees-pricing-trigger-2
+description: เทียบค่าธรรมเนียมข้ามแพลตฟอร์ม ต้องเปิด marketplace-fees-pricing · ไม่เอ่ยชื่อ skill
+tags: [trigger, regression-suite, marketplace-fees-pricing]
+runs: 3
+expected_outcome: เปิด Skill marketplace-fees-pricing แล้วตอบตรงคำถาม
+execution:
+  prompt: |
+    ของชิ้นเดียวกันลงทั้งลาซาด้ากับติ๊กต็อกช็อป ต้องตั้งราคาต่างกันมั้ย เจ้าไหนหักแพงกว่า
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?marketplace-fees-pricing"'
+    min: 1
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: 'Lazada|ลาซาด้า|TikTok|ติ๊กต็อก'
+    flags: i
+    match: contains
+    target: last_message

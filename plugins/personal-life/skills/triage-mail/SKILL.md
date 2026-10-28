@@ -5,6 +5,6 @@ argument-hint: '[--days 7]'
 disable-model-invocation: true
 ---
 
-Run the `inbox-triage` skill over the user's email via their installed email plugin: **$ARGUMENTS**
+Run the `inbox-triage` skill over the user's email via their own email connector (setup: `inbox-triage`, "Connecting your mail"): **$ARGUMENTS**
 
 Output is six buckets with counts (Verify · Today · This week · Delegate · File · Archive; Verify holds suspected phishing and comes first); answer-today items get drafted replies one by one, only on request.

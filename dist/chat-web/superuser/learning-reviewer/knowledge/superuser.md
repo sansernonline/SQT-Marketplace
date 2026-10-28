@@ -6,7 +6,7 @@ Use when a request has several steps or parts (fix then add, do all files, resea
 
 > รับงาน → จัดขนาดและงบ → ใบสั่งงาน 5 ข้อ → แจกลูกทีม → ตรวจกับของจริงวนจนผ่าน → ส่งมอบสั้น → เทียบคาดกับจริง แล้วจำ
 
-หัวหน้างาน 1 คน เก่ง 4 เรื่อง: **แจกงาน** · **ประเมินลูกน้อง** · **จัดการงาน** · **ตรวจซ้ำจนสำเร็จ** — ใช้ลูกน้อง effort ต่ำได้ เพราะใบสั่งงานชัดและมีคนตรวจ · เรียก `/superuser:superuser` หรือพูดว่า "ใช้ superuser"
+หัวหน้าทีม 1 คน เก่ง 4 เรื่อง: **แจกงาน** · **ประเมินลูกน้อง** · **จัดการงาน** · **ตรวจซ้ำจนสำเร็จ** — ใช้ลูกน้อง effort ต่ำได้ เพราะใบสั่งงานชัดและมีคนตรวจ · เรียก `/superuser:superuser` หรือพูดว่า "ใช้ superuser"
 
 **ไฟล์นี้คือแกน อ่านทุกงาน** · เปิดเพิ่มเมื่อถึงจังหวะ: [`autonomy`](references/autonomy.md) (ถามครั้งเดียว · ตัดสินใจเอง · รออนุมัติ · รู้จังหวะหยุด) · [`modules`](references/modules.md) (ไฟล์กลาง · log · รอบเรียนรู้ · inbox · config · ด่านของ hook) · plugin สาขามี `superuser` ของตัวเองที่มีเฉพาะส่วนสาขา (playbook · agent · รออนุมัติ) และบอกให้เปิดไฟล์นี้ก่อน ([`ADAPT.md`](../../ADAPT.md))
 
@@ -203,6 +203,8 @@ Use when a request has several steps or parts (fix then add, do all files, resea
 ไฟล์นี้เหมือนกันทุก plugin · ต้นฉบับอยู่ที่ plugin `superuser`
 
 ใช้เมื่องานขนาดใหญ่หรือโจทย์ไม่ชัด หลัง brainstorm และเลือกทางแล้ว ให้หัวหน้าทีมเขียน brief ก่อนลงมือ ส่งให้ผู้ใช้อ่านในคำตอบ แล้วเก็บไว้ที่ `docs/BRIEF.md` · ถ้างานเปลี่ยนทิศ ให้เขียน brief ใหม่ทับ ไม่ต่อท้าย
+
+brief คือสรุปให้ผู้ใช้อ่าน ไม่ใช่ใบสั่งงาน · คำว่า "ใบสั่งงาน" ใช้กับใบที่หัวหน้าทีมส่งให้ลูกทีม (`handoff/<id>.md` ตาม skill `handoff` หัวข้อ 3) อย่างเดียว
 
 ## กติกา
 
@@ -624,16 +626,17 @@ Use when a request has several steps or parts (fix then add, do all files, resea
 | **patterns_advanced** | `patterns_advanced` | Mixture-of-Agents (MoA) แรง 3–5 เท่า · Reranker · `parallel-attempts-pick-best` เมื่อทางเดียวอาจล็อกรูปผิด · วิธีทำ ต้นทุน กับดักใน `agent-patterns` | ใช้แค่แกน Planning → ReAct → Reflection |
 | **review_gate** | `review_gate` | ด่านรีวิวตอนจบ (hook Stop): แก้ไฟล์งาน ≥ 3 ไฟล์แต่ไม่มีผู้ตรวจตัวใหม่หลังการแก้ครั้งสุดท้าย และไม่มีบรรทัด `ข้ามรีวิว:` → ไม่ให้จบ 1 ครั้ง · **แนะนำให้เปิดไว้** เพราะเป็นตัวบังคับ "ไม่ตรวจ = ไม่จบ" | หัวหน้าต้องคุมกฎข้อ 3 เอง |
 | **split_gate** | `split_gate` | ด่านแตกงาน (hook PreToolUse): หัวหน้าเขียนชิ้นใหญ่เองไปแล้วและยังไม่ส่งลูกทีมสักตัว → ไม่ให้เขียนไฟล์โค้ดไฟล์ถัดไป ให้แตกงานก่อน | หัวหน้าต้องคุมกฎ "งานกลางขึ้นไปต้องแบ่ง" เอง |
-| **guard** | `guard` · **ค่าเริ่มปิด** | ด่านป้องกัน (hook PreToolUse เฉพาะ `Bash` ทุก agent): คำสั่งที่กฎประจำตัวห้ามอยู่แล้วถูกปฏิเสธพร้อมเหตุผล 1 บรรทัดและกฎที่มา — `git push` · `git commit` · `git reset --hard` · `git stash drop/clear` · `rm -rf` และ `Remove-Item -Recurse -Force` นอก `_to_delete/` · เขียนทับ `~/.claude/settings.json` ผ่าน shell · รายการ regex อยู่ใน `hooks/guard-rules.json` · ไม่แตะ Read/Edit/Write · ยกเว้นต่อโฟลเดอร์งานใน `.claude/superuser/guard-allow.json` `{"allow": ["git-commit", "^git push origin feature/"]}` (id = ปิดข้อนั้น · อื่น ๆ = regex ที่ถ้าตรงคำสั่งให้ผ่าน) — ผู้ใช้สั่ง commit ก็เพิ่ม `git-commit` ไว้ | ไม่มีด่านเครื่อง กฎประจำตัวยังห้ามเหมือนเดิมแต่หัวหน้าคุมเอง |
+| **guard** | `guard` · **ค่าเริ่มปิด** | ด่านป้องกัน (hook PreToolUse เฉพาะ `Bash` ทุก agent): คำสั่งที่กฎประจำตัวห้ามอยู่แล้วถูกปฏิเสธพร้อมเหตุผล 1 บรรทัดและกฎที่มา — `git push` · `push --force` · `git commit` · `commit --amend` · `git branch -D` · `git clean -f` · `git checkout -- .` และ `git restore .` · `git reset --hard` · `git stash drop/clear` · `rm -rf` และ `Remove-Item -Recurse -Force` นอก `_to_delete/` · เขียนทับ `~/.claude/settings.json` ผ่าน shell · รายการ regex อยู่ใน `hooks/guard-rules.json` · ไม่แตะ Read/Edit/Write · ยกเว้นต่อโฟลเดอร์งานใน `.claude/superuser/guard-allow.json` `{"allow": ["git-commit", "^git push origin feature/"]}` (id = ปิดข้อนั้น · อื่น ๆ = regex ที่ถ้าตรงคำสั่งให้ผ่าน) — ผู้ใช้สั่ง commit ก็เพิ่ม `git-commit` ไว้ · อ่านบรรทัด **git อัตโนมัติ** ใน `CONTEXT.md` เอง: `auto` ให้ push และ commit ผ่าน · `commit` ให้ commit ผ่าน · ไม่มีบรรทัดหรือ `manual` กันทั้งคู่ · force push · amend · push ลง main/master · ลบ ref บน remote (`:ref` · `--delete`) · `--mirror` (`git-push-main`) โดนกันเสมอ | ไม่มีด่านเครื่อง กฎประจำตัวยังห้ามเหมือนเดิมแต่หัวหน้าคุมเอง |
 | **recompact** | `recompact` · **ค่าเริ่มปิด** | หลังย่อบริบท (SessionStart `source: compact` — hook ส่งกฎประจำตัวซ้ำตรงนี้อยู่แล้ว) เติมหัวข้อ "ความคืบหน้า" และ "รับงานต่อ" ของ `CONTEXT.md` ไม่เกิน 40 บรรทัด หัวหน้าจึงไม่หลุดตำแหน่งงาน · ไม่มีไฟล์หรือไม่มีหัวข้อ = ไม่ส่ง · เอกสาร hooks (code.claude.com/docs/en/hooks ตรวจ 2026-10-23) บอกว่า `PostCompact` "has no decision control" และทิ้ง `systemMessage`/`continue` จึงใช้ส่งบริบทไม่ได้ — hook รับ `PostCompact` ไว้แค่จด log ว่าย่อเมื่อไร | หลังย่อบริบทได้กฎประจำตัวอย่างเดียว ต้องอ่าน `CONTEXT.md` เอง |
 | **ui_scan** | `ui_scan` | ด่านหน้าตา (hook PostToolUse · `hooks/ui-scan-hook.mjs`): แก้ไฟล์ UI (html · css · jsx · tsx · vue · svelte · astro) ด้วย Write/Edit แล้วรัน `slop_scan.py` ของ `no-ai-look` กับไฟล์นั้นทันที · P0/P1 ส่งกลับให้แก้ · P2 แจ้งเป็นบริบท · P3 ไม่แจ้ง · ผลเดิมไม่เตือนซ้ำ · **ทำงานแม้ไม่มีโฟลเดอร์ทีม** · ไม่มี Python = เงียบ · ข้าม `_to_delete` `node_modules` `dist` `build` `evals` | ต้องรัน `slop_scan.py` เองก่อนส่ง (`no-ai-look` ข้อ 3) |
 | **pii_gate** | `pii_gate` | ด่านข้อมูลส่วนตัว (hook PreToolUse · Write/Edit): สิ่งที่จะเขียนมีเลขบัตรประชาชนที่หลักตรวจสอบถูก (ไม่นับเลขนิติบุคคลที่ขึ้นต้น 0) เลขบัตรเครดิตที่ผ่าน Luhn หรือเลขบัญชีแบบ xxx-x-xxxxx-x → ถามผู้ใช้ก่อนเขียน ไม่ปฏิเสธ · ข้ามไฟล์ test fixture และ `_to_delete` · **ทำงานแม้ไม่มีโฟลเดอร์ทีม** · ยังไม่ตรวจคำสั่ง Bash ที่เขียนไฟล์ | ต้องคอยดูเองว่าไม่ได้เขียนเลขบัตรหรือเลขบัญชีลงไฟล์งาน |
+| **name_gate** | `name_gate` · **ค่าเริ่มปิด** | ด่านชื่อไฟล์ใหม่ (hook PreToolUse · Write ไฟล์ที่ยังไม่มี): ชื่อมีเว้นวรรค ตัวอักษรไทย อีโมจิ หรือคำว่า final · new → ถามผู้ใช้ก่อนเขียน ไม่ปฏิเสธ · ไม่ตรวจตัวพิมพ์ใหญ่ (README.md · ชื่อเอกสารส่งลูกค้าตาม `document-naming`) · ข้าม `_to_delete` test fixture | ต้องคอยดูชื่อไฟล์ใหม่เอง |
 
 `.claude/superuser/` ไม่ commit ยกเว้น `CONTEXT.md` และ `IMPROVEMENTS.md` · brief ไป `docs/BRIEF.md` · `CONTEXT.md` กับ `.superuser/` ที่รากของโปรเจกต์เก่าใช้ต่อได้
 
 ## config
 
-`.claude/superuser/config.json` ของโฟลเดอร์งาน (ไม่มีไฟล์ = ค่าเริ่ม: เปิดทุกตัว ยกเว้น `guard` และ `recompact` ที่ต้องเปิดเอง) · แม่แบบใน [`templates/config.json`](../templates/config.json) · หัวหน้าอ่านตอนเริ่ม session แล้วทำตาม · hook อ่านเองสำหรับ `log` · `inbox` · `review_gate` · `split_gate` · `guard` · `recompact` · `ui_scan` และออกทันทีเมื่อโฟลเดอร์งานไม่มี `.claude/superuser/` หรือโมดูลนั้นปิด (ยกเว้น `ui_scan` ที่ทำงานโดยไม่ต้องมีโฟลเดอร์ทีม)
+`.claude/superuser/config.json` ของโฟลเดอร์งาน (ไม่มีไฟล์ = ค่าเริ่ม: เปิดทุกตัว ยกเว้น `guard` · `recompact` · `name_gate` ที่ต้องเปิดเอง) · แม่แบบใน [`templates/config.json`](../templates/config.json) · หัวหน้าอ่านตอนเริ่ม session แล้วทำตาม · hook อ่านเองสำหรับ `log` · `inbox` · `review_gate` · `split_gate` · `guard` · `recompact` · `ui_scan` · `pii_gate` · `name_gate` และออกทันทีเมื่อโฟลเดอร์งานไม่มี `.claude/superuser/` หรือโมดูลนั้นปิด (ยกเว้น `ui_scan` ที่ทำงานโดยไม่ต้องมีโฟลเดอร์ทีม)
 
 ```json
 {
@@ -642,7 +645,7 @@ Use when a request has several steps or parts (fix then add, do all files, resea
     "context": true, "log": true, "improvements": true, "learning": true,
     "inbox": true, "handoff": true, "patterns_advanced": true,
     "review_gate": true, "split_gate": true,
-    "guard": false, "recompact": false, "ui_scan": true, "pii_gate": true
+    "guard": false, "recompact": false, "ui_scan": true, "pii_gate": true, "name_gate": false
   }
 }
 ```
@@ -973,7 +976,7 @@ Use when a request has several steps or parts (fix then add, do all files, resea
 | agent | ระดับโมเดล | ใช้เมื่อ | ไม่ใช่ |
 |---|---|---|---|
 | `brainstormer` | ใหญ่ | ก่อนเริ่มงานใหญ่หรือโจทย์ไม่ชัด — คิด 2–3 ทางบนกระดาษ ให้คะแนน 1–5 (5 = ดีสุด) | สร้างของจริงหลายชุดแล้วเลือก → `parallel-attempts-pick-best` |
-| `reviewer` | ตามตารางงบใน `SKILL.md` หัวข้อ 2 (สมดุล: รอบแรกกลาง · งานใหญ่หรือรอบสุดท้ายก่อนส่งมอบใหญ่) | ตรวจชิ้นงานที่เสร็จแล้วก่อนถึงผู้ใช้หรือคนนอก อ่านอย่างเดียว ไม่แก้ | งานเสี่ยงสูง → `adversarial-review-panel` (ใช้ `reviewer` หลายตัว) · (ถ้าติดตั้ง plugin `software-company`) โค้ด → คู่กับ `code-review-checklist` · (ถ้าติดตั้ง plugin `graphic-design`) งานภาพ → `design-critic` หรือ `design-review` · ไม่มีก็ตรวจตามเกณฑ์ใน brief |
+| `reviewer` | ตามตารางงบใน `SKILL.md` หัวข้อ 2 (สมดุล: รอบแรกกลาง · งานใหญ่หรือรอบสุดท้ายก่อนส่งมอบใหญ่) | ตรวจชิ้นงานที่เสร็จแล้วก่อนถึงผู้ใช้หรือคนนอก อ่านอย่างเดียว ไม่แก้ | งานเสี่ยงสูง → `adversarial-review-panel` (ใช้ `reviewer` หลายตัว) · (ถ้าติดตั้ง plugin `software-company`) โค้ด → คู่กับ `code-review-checklist` · (ถ้าติดตั้ง plugin `graphic-design`) งานภาพ → `design-critic` หรือ `design-review` · ไม่มีก็ตรวจตามเกณฑ์ในใบสั่งงาน |
 | `learning-reviewer` | กลาง | ตอนจบงานหลายขั้น — ตรวจวิธีทำงานของทีม ไม่ใช่ตัวงาน | — |
 
 เรียกตัวใหม่ทุกครั้ง เพราะตัวที่ทำงานไม่ตรวจงานของตัวเอง · ผู้ตรวจเฉพาะทาง (`design-critic` · `brand-keeper` · `qa-tester` · `security-engineer` · `risk-manager`) ใช้แทน `reviewer` ได้เฉพาะขั้นที่เขียนว่า "อ่านอย่างเดียว · ไม่แก้ไฟล์" (เรียกด้วย `model: opus`) · ขั้นที่ตัวนั้นเขียน test หรือแก้ของนับเป็นการลงมือ

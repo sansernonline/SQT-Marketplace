@@ -1,0 +1,30 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เพิ่ม 2026-10-28 จากรายงานตรวจ plugin (P16 P18) · โจทย์คิดขึ้นเอง ไม่ได้มาจากงานที่พลาดจริง · ยังไม่ได้รัน
+schema_version: "1.1"
+name: retirement-plan-behaviour
+description: ขอแผนเกษียณที่มี PVD และประกันสังคม ต้องรัน retire.mjs บอกข้อสมมติ และให้หลายฉาก ไม่ใช่ตัวเลขเดียว
+tags: [capability, behaviour, retirement-plan]
+runs: 3
+expected_outcome: รัน retire.mjs · เงินที่ต้องมี เงินออมต่อเดือน หักบำนาญประกันสังคมและ PVD · หลายฉาก
+execution:
+  prompt: |
+    อายุ 40 จะเกษียณตอน 60 ค่าใช้จ่ายตอนนี้เดือนละ 25,000 มีกองทุนสำรองเลี้ยงชีพ 800,000
+    ส่งประกันสังคมมา 15 ปีแล้ว ขอแผนว่าต้องออมเพิ่มเดือนละเท่าไร
+  max_turns: 8
+  timeout_seconds: 240
+graders:
+  - name: ran-retire-script
+    type: tool_used
+    tool: Bash
+    input_match: 'retire\.mjs'
+    min: 1
+    arm: with-only
+  - name: assumptions-and-range
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. บอกข้อสมมติเงินเฟ้อ ผลตอบแทน และอายุที่ต้องใช้เงินถึง เป็นตัวเลข
+      2. หักบำนาญประกันสังคมและเงิน PVD ที่มีออกก่อนคิดส่วนที่ขาด
+      3. ให้เงินออมต่อเดือนมากกว่า 1 ฉาก (ผลตอบแทนหลายค่า หรือคันโยกเกษียณช้าลง ใช้น้อยลง)
+      4. บอกว่าเป็นข้อมูลทั่วไป ผู้ใช้ตัดสิน

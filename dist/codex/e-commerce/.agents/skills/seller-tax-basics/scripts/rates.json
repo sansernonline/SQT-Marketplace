@@ -1,0 +1,24 @@
+{
+  "checked": "2026-10-06",
+  "source": "seller-tax-basics/SKILL.md ตาราง Thresholds (ตรวจล่าสุด 2026-10-06 · หักเหมา 60% ยังไม่ได้เทียบประกาศฉบับปัจจุบัน) · ขั้นบันได ลดหย่อนส่วนตัว วิธีที่ 2 คูณ 0.005 และอัตรานิติบุคคล SME ตรวจซ้ำ 2026-10-23 ใน thai-business-setup/SKILL.md หัวข้อ 2 (https://www.rd.go.th/fileadmin/tax_pdf/pit/2568/Ins90_241268.pdf · https://www.rd.go.th/26218.html · https://www.rd.go.th/841.html)",
+  "deemed_expense_pct": 60,
+  "personal_allowance": 60000,
+  "min_tax": { "rate_pct": 0.5, "applies_from_income": 120000, "exempt_up_to_tax": 5000,
+               "note": "เงินได้นอกจากเงินเดือนตั้งแต่ 120,000 คิด 0.5% ด้วย · ถ้า 0.5% ไม่เกิน 5,000 ไม่ต้องใช้ · เกินแล้วเสียวิธีที่ได้ภาษีมากกว่า" },
+  "brackets": [
+    { "up_to": 150000, "rate_pct": 0 },
+    { "up_to": 300000, "rate_pct": 5 },
+    { "up_to": 500000, "rate_pct": 10 },
+    { "up_to": 750000, "rate_pct": 15 },
+    { "up_to": 1000000, "rate_pct": 20 },
+    { "up_to": 2000000, "rate_pct": 25 },
+    { "up_to": 5000000, "rate_pct": 30 },
+    { "up_to": null, "rate_pct": 35 }
+  ],
+  "sme_company_brackets": [
+    { "up_to": 300000, "rate_pct": 0 },
+    { "up_to": 3000000, "rate_pct": 15 },
+    { "up_to": null, "rate_pct": 20 }
+  ],
+  "sme_note": "SME = ทุนชำระแล้วไม่เกิน 5 ล้าน และรายได้ขายสินค้าและบริการไม่เกิน 30 ล้าน · ไม่เข้าเกณฑ์เสีย 20% ทุกบาท"
+}

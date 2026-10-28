@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เพิ่ม 2026-10-28 จากรายงานตรวจ plugin (P16 P18) · โจทย์คิดขึ้นเอง ไม่ได้มาจากงานที่พลาดจริง · ยังไม่ได้รัน
+schema_version: "1.1"
+name: tax-deduction-planner-negative
+description: ถามภาษีกำไรขายหุ้นและปันผล ไม่ได้ถามเรื่องลดหย่อน ต้องเปิด tax-basics-th และไม่เปิด tax-deduction-planner
+tags: [capability, negative, tax-deduction-planner, tax-basics-th]
+runs: 3
+expected_outcome: เปิด Skill tax-basics-th · ไม่เปิด tax-deduction-planner
+execution:
+  prompt: |
+    ปีนี้ขายหุ้นไทยในตลาดได้กำไรราว 200,000 แล้วก็ได้ปันผลหุ้นไทยอีก 30,000 โดนหักไว้แล้ว 10%
+    ต้องเอามายื่นภาษีไหม ต้องยื่นแบบไหน
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: basics-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?tax-basics-th"'
+    min: 1
+    arm: with-only
+  - name: planner-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?tax-deduction-planner"'
+    min: 0
+    max: 0

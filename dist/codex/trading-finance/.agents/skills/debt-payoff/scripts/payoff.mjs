@@ -2,9 +2,11 @@
 // payoff.mjs - monthly debt payoff simulation, avalanche vs snowball (Node stdlib only)
 // Usage: node payoff.mjs <file.json> [--json]   |   node payoff.mjs --self-test
 // File: { "budget": 8000, "debts": [ { "name": "card", "balance": 15000, "rate": 16, "min": 1000 } ] }
+// Card minimum as % of balance: use "minPct": 8 (+ optional "minFloor": 500) instead of "min"; the minimum then falls as the balance falls.
 // rate = yearly interest in percent. Each month: add interest (balance x rate / 12), pay every minimum, put the rest of the budget on the target debt.
 import { readFileSync } from 'node:fs';
 
+// 100 years: past this a plan is not a plan, so stop and report 'not cleared' (also guards the loop when interest > payment)
 const MAX_MONTHS = 1200;
 
 // Throws a Thai message naming the bad field; returns warnings (list of strings).
@@ -20,15 +22,29 @@ export function validate(input) {
     const n = d?.name ?? `ก้อนที่ ${i + 1}`;
     num(d?.balance, `debts[${i}].balance (${n})`, 0, true);
     num(d?.rate, `debts[${i}].rate (${n})`, 0, false);
-    num(d?.min, `debts[${i}].min (${n})`, 0, false);
+    if (d?.minPct !== undefined) {
+      num(d.minPct, `debts[${i}].minPct (${n})`, 0, true);
+      if (d.minPct > 100) throw new Error(`ช่อง debts[${i}].minPct (${n}) เป็น % ของยอด ต้องไม่เกิน 100 (ได้ ${d.minPct})`);
+      if (d.minFloor !== undefined) num(d.minFloor, `debts[${i}].minFloor (${n})`, 0, false);
+      if (d.min !== undefined) throw new Error(`debts[${i}] (${n}) ใส่ได้อย่างใดอย่างหนึ่ง: min (บาทคงที่) หรือ minPct (% ของยอด) · ลบช่องหนึ่งออก`);
+    } else num(d?.min, `debts[${i}].min (${n}) หรือ minPct`, 0, false);
     if (d.rate > 0 && d.rate < 1) warnings.push(`${n}: rate ${d.rate} น้อยกว่า 1 · rate เป็น % ต่อปี (ใส่ 24 ไม่ใช่ 0.24) · ตรวจว่าไม่ได้ใส่เป็นทศนิยม`);
+  });
+  const seen = new Set();
+  input.debts.forEach((d, i) => {
+    const n = d.name ?? `ก้อนที่ ${i + 1}`;
+    if (seen.has(n)) throw new Error(`ชื่อหนี้ "${n}" ซ้ำ · ตารางจะทับกันจนหายไป 1 ก้อน · ตั้งชื่อให้ต่างกัน เช่น "${n} (2)"`);
+    seen.add(n);
   });
   return warnings;
 }
 
+// Minimum due this month: fixed baht, or % of current balance with an optional floor; never more than the balance.
+const minDue = (d) => Math.min(d.bal, d.minPct === undefined ? d.min : Math.max(d.minFloor ?? 0, (d.bal * d.minPct) / 100));
+
 function simulate(input, order) {
-  const debts = input.debts.map((d) => ({ ...d, bal: d.balance, paidMonth: null }));
-  const minTotal = debts.reduce((s, d) => s + d.min, 0);
+  const debts = input.debts.map((d, i) => ({ ...d, name: d.name ?? `ก้อนที่ ${i + 1}`, bal: d.balance, paidMonth: null }));
+  const minTotal = debts.reduce((s, d) => s + minDue(d), 0);
   if (input.budget < minTotal) throw new Error(`งบ ${input.budget} น้อยกว่าผลรวมขั้นต่ำ ${minTotal}`);
   let interest = 0;
   let month = 0;
@@ -43,10 +59,12 @@ function simulate(input, order) {
     let pool = input.budget;
     for (const d of debts) {
       if (d.bal <= 0) continue;
-      const p = Math.min(d.min, d.bal);
+      const p = minDue(d);
       d.bal -= p;
       pool -= p;
     }
+    // minPct minimums are charged after interest, so they can exceed the budget even when the opening check passed
+    if (pool < -0.005) throw new Error(`งบ ${input.budget} ไม่พอจ่ายขั้นต่ำเดือนที่ ${month} (${Math.round(input.budget - pool)} รวมดอกเบี้ยเดือนนั้น) · เพิ่มงบ`);
     const live = debts.filter((d) => d.bal > 0.005).sort(order);
     for (const d of live) {
       const p = Math.min(pool, d.bal);
@@ -152,7 +170,23 @@ function selfTest() {
   t('ไม่มี min', throwsWith({ budget: 500, debts: [{ name: 'A', balance: 1000, rate: 10 }] }, 'min'));
   t('balance เป็นข้อความ', throwsWith({ budget: 500, debts: [{ ...D, balance: '1000' }] }, 'balance'));
   t('ไม่มี debts', throwsWith({ budget: 500, debts: [] }, 'debts'));
+  t('ชื่อซ้ำ error', throwsWith({ budget: 5000, debts: [D, { ...D }] }, 'ซ้ำ'));
+  // minPct by hand: 10,000 at 12%/yr, 8% min, budget 800 -> month 1 interest 100, min 808 > budget 800 -> error
+  t('minPct งบไม่พอขั้นต่ำ error', throwsWith({ budget: 800, debts: [{ name: 'บัตร', balance: 10000, rate: 12, minPct: 8 }] }, 'ขั้นต่ำ'));
+  // 2 debts at 0%: A 1,000 min 10% floor 0, B 1,000 fixed 100, budget 300 -> snowball/avalanche tie-break by balance; minimum of A falls with balance
+  r = compare({ budget: 300, debts: [{ name: 'A', balance: 1000, rate: 0, minPct: 10 }, { name: 'B', balance: 1000, rate: 0, min: 100 }] });
+  t('minPct 0% รวม 2,000 งบ 300 = 7 เดือน', r.avalanche.months === 7 && near(r.avalanche.interest, 0));
+  // floor: 1,000 at 0%, 5% min floor 300, budget 300 -> pays 300 a month -> 4 months (300,300,300,100)
+  r = compare({ budget: 300, debts: [{ name: 'A', balance: 1000, rate: 0, minPct: 5, minFloor: 300 }] });
+  t('minFloor', r.avalanche.months === 4);
+  t('min กับ minPct พร้อมกัน error', throwsWith({ budget: 500, debts: [{ ...D, minPct: 8 }] }, 'อย่างใดอย่างหนึ่ง'));
   t('rate < 1 เตือน', compare({ budget: 500, debts: [{ ...D, rate: 0.24 }] }).warnings.length === 1);
+  const dup = (debts) => { try { compare({ budget: 5000, debts }); return null; } catch (e) { return e.message; } };
+  const nm = { balance: 1000, rate: 10, min: 100 };
+  const dupMsg = dup([{ ...nm }, { ...nm, name: 'ก้อนที่ 1' }]);
+  t('ชื่อสำรอง ก้อนที่ 1 ชนชื่อจริง = ซ้ำ ไม่ขึ้น undefined', dupMsg !== null && dupMsg.includes('ก้อนที่ 1') && !dupMsg.includes('undefined'));
+  t('ไม่มีชื่อ 2 ก้อน ไม่ถือว่าซ้ำ', dup([{ ...nm }, { ...nm }]) === null);
+  t('ไม่มีชื่อ 1 ก้อน ผ่านและใช้ชื่อสำรอง', Object.keys(compare({ budget: 5000, debts: [{ ...nm }, { ...nm, name: 'B' }] }).avalanche.paid).join() === 'ก้อนที่ 1,B');
   console.log(`self-test: ${ok} ผ่าน ${bad} ล้ม`);
   process.exit(bad ? 1 : 0);
 }

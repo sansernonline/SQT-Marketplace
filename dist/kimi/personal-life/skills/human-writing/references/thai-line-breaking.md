@@ -10,7 +10,7 @@
 
 | ไฟล์ | วิธีแก้ |
 |---|---|
-| **.docx** (สร้างเองหรือได้มา) | รัน `python scripts/thai_linebreak.py <ไฟล์>.docx` หลังสร้างไฟล์เสร็จ · ใส่จุดตัดที่มองไม่เห็น (U+200B) ระหว่างคำ · ติดป้ายภาษาไทยให้ run · ผูกตัวเลขกับคำข้าง ๆ ("4 ประเด็น" ไม่แยกบรรทัด) · เก็บต้นฉบับไว้ใน `_to_delete/` |
+| **.docx** (สร้างเองหรือได้มา) | รัน `python scripts/thai_linebreak.py <ไฟล์>.docx` หลังสร้างไฟล์เสร็จ · ใส่จุดตัดที่มองไม่เห็น (U+200B) ระหว่างคำ · ติดป้ายภาษาไทยให้ run · ผูกตัวเลขกับคำข้าง ๆ ("4 ประเด็น" ไม่แยกบรรทัด) · เก็บต้นฉบับไว้ใน `_to_delete/` · ตรวจตัวสคริปต์ด้วย `python -B scripts/thai_linebreak.py --self-test` (ไม่ต้องมี pythainlp) |
 | **.md ก่อนแปลงด้วย pandoc** | รันสคริปต์เดียวกันกับ .md · โค้ดใน `` ` `` ไม่ถูกแตะ |
 | **python-docx / docx-js** | ตั้งภาษาไทยให้ run (`w:lang w:bidi="th-TH"`) และฟอนต์ complex script (`w:rFonts w:cs="TH Sarabun New"`) ตั้งแต่ตอนสร้าง แล้วรันสคริปต์ปิดท้าย |
 | **HTML** | Chrome · Edge · Firefox ตัดคำไทยเองได้ ไม่ต้องใส่ ZWSP · ใส่ `<html lang="th">` · CSS `word-break: normal; overflow-wrap: anywhere; line-break: auto;` · เนื้อหาไทยใช้ `text-align: left` · ห้าม `word-break: break-all` (ตัดกลางคำ) |

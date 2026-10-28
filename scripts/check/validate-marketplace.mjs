@@ -388,6 +388,22 @@ function checkPlaybook(file, text, hasAgent) {
   for (const n of userSteps) err(file, `ขั้น ${n}: ผู้ใช้ทำขั้นกลางงานหรือขั้นนี้รอคำตอบผู้ใช้ — ถามรวมตอนเริ่ม หรือใส่ (รอยืนยัน) แล้วลง "รออนุมัติ" ตอนจบ`);
 }
 
+// อักขระควบคุมในไฟล์ .json และ .mjs (ไม่นับ tab และขึ้นบรรทัด) · .json ตรวจค่าที่ parse แล้วด้วย
+// เหตุการณ์จริง 2026-10-26 ครั้งที่ 5: heredoc ทำ \\ หายใน skill-router.json · regex \\b กลายเป็น \b ซึ่ง JSON อ่านเป็นอักขระ backspace ขอบคำจึงไม่ทำงาน
+const CTRL = /[\u0000-\u0008\u000B\u000C\u000E-\u001F]/;
+function controlChars(rel, text) {
+  const out = [];
+  text.split('\n').forEach((line, i) => { if (CTRL.test(line)) out.push(`${rel}:${i + 1} มีอักขระควบคุมดิบ — เขียนไฟล์ด้วยเครื่องมือแก้ไฟล์ ไม่ส่งผ่าน heredoc`); });
+  if (!rel.endsWith('.json')) return out;
+  let data; try { data = JSON.parse(text); } catch { return out; }   // JSON พัง ตัวตรวจอื่นรายงาน
+  const walk = (v, path) => {
+    if (typeof v === 'string') { if (CTRL.test(v)) out.push(`${rel} ที่ ${path || '(ราก)'} มีอักขระควบคุมหลัง parse (เช่น \\b กลายเป็น backspace) — ใน JSON ต้องเขียน \\\\ ให้ได้ \\ 1 ตัว`); }
+    else if (v && typeof v === 'object') for (const [k, x] of Object.entries(v)) walk(x, path ? `${path}.${k}` : k);
+  };
+  walk(data, '');
+  return out;
+}
+
 // ---------------------------------------------------------------- self-test
 // กฎ: ตัวตรวจที่ไม่เคยเจออะไรเลย ต้องถือว่าพัง ไม่ใช่ผ่าน
 // self-test พิสูจน์ว่ากฎแต่ละข้อยัง "ยิงโดน" เป้าของมันจริง ไม่ได้เขียว ๆ ไปวัน ๆ
@@ -592,7 +608,8 @@ function selfTest() {
   const rg = regressionNeverSeen('x-regression', '# ยังไม่เคยเห็นจริง: รอบแดงผ่าน\nname: x\n').length === 1
     && regressionNeverSeen('x-guard', '# ยังไม่เคยเห็นจริง\n').length === 0
     && regressionNeverSeen('x-regression', '# อาการที่กัน: เห็นจริง 2026-10-24\n# (ยังไม่ได้เห็นจริง) อีกจุด\n').length === 0
-    && regressionNeverSeen('x-regression', '# อาการเดิม (2026-10-23): agent เขียนผิด\n').length === 0;
+    && regressionNeverSeen('x-regression', '# อาการเดิม (2026-10-23): agent เขียนผิด\n').length === 0
+    && regressionNeverSeen('x-regression', '# อาการที่กันไว้ (2026-10-27): x\n').length === 1;
   console.log(`  ${rg ? '✅' : '❌'} -regression ที่ยังไม่เคยเห็นพลาดจริงโดนจับ · -guard และเคสที่เห็นจริงผ่าน`);
   if (rg) ok++;
   const dc = undatedClaims('| x | ✅ รันทดสอบแล้ว |\n').length === 1 && undatedClaims('| x | ✅ รันทดสอบแล้ว 2026-09-01 |\n').length === 0
@@ -661,8 +678,15 @@ function selfTest() {
   const ye = yamlEscapeTraps('pattern: "1280\\s*x"\n# "\\s ในคอมเมนต์"\npattern: \'1280\\s*x\'\npattern: "a\\\\sb \\n ok"\nx: "\u0008"\nprompt: |\n  ใน block a\\sb "x\\s"\nnext: "ok"').length === 2;
   console.log(`  ${ye ? '✅' : '❌'} case.yaml ที่มี \\s ใน "..." และอักขระควบคุมโดนจับ · '...' คอมเมนต์ block scalar และ escape ที่ YAML รับไม่โดน`);
   if (ye) ok++;
+  // ตัวอย่าง 5 แบบ: แถว router 3 แถวของเหตุการณ์จริง (ไฟล์มี \b ตัวเดียว JSON อ่านเป็น backspace) · อักขระดิบใน .mjs · \u001b ใน JSON · แถวที่เขียน \\b ถูกต้องไม่โดน
+  const cc = ['{"rows":[{"pattern":"\\bestate\\b"}]}', '{"rows":[{"pattern":"\\bflood\\b"}]}', '{"r":{"pattern":"\\bpregnancy\\b"}}']
+    .every((t) => controlChars('a.json', t).length === 1)
+    && controlChars('a.mjs', 'const a = 1;\u0008\n').length === 1 && controlChars('a.json', '{"a":"x\\u001b"}').length === 1
+    && controlChars('a.json', '{"pattern":"\\\\bflood\\\\b","t":"a\\tb\\nc"}').length === 0 && controlChars('a.mjs', 'a\tb\r\n').length === 0;
+  console.log(`  ${cc ? '✅' : '❌'} อักขระควบคุมใน .json (หลัง parse) และ .mjs โดนจับ 5 จาก 5 · \\\\b tab ขึ้นบรรทัด และ CRLF ไม่โดน`);
+  if (cc) ok++;
   errors.length = 0; warns.length = 0;
-  const total = cases.length + 24;
+  const total = cases.length + 25;
   console.log(`\nself-test ${ok}/${total} ผ่าน`);
   process.exit(ok === total ? 0 : 1);
 }
@@ -801,6 +825,9 @@ for (const p of plugins) {
   }
 }
 for (const m of bigSkills(skillSizes)) warn('plugins/*/skills/*/SKILL.md', m);
+for (const d of ['plugins', 'scripts'].filter((x) => existsSync(join(ROOT, x))))
+  for (const f of walkFiles(join(ROOT, d), ['.json', '.mjs']).filter((x) => !/[\\/](node_modules|dist|_to_delete)[\\/]/.test(x)))
+    for (const m of controlChars(relOf(f), readFileSync(f, 'utf8'))) err(m.split(' ')[0], m.slice(m.indexOf(' ') + 1));
 const contextFile = join(ROOT, '.claude', 'superuser', 'CONTEXT.md');
 if (existsSync(contextFile)) for (const m of decisionRows(readFileSync(contextFile, 'utf8'))) warn('.claude/superuser/CONTEXT.md', m);
 const expiryFile = join(ROOT, 'scripts', 'check', 'expiry.json');

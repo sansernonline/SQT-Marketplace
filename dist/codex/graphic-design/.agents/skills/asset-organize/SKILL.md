@@ -12,8 +12,8 @@ Files you cannot find do not exist. The fix is 1 folder tree, 1 naming pattern a
 1. **Inventory** — list every file with path, size, date modified. Group by campaign or use (PowerShell: `Get-ChildItem -Recurse -File | Select FullName,Length,LastWriteTime | Export-Csv inventory.csv`; Linux: `find . -type f -printf '%p,%s,%TY-%Tm-%Td\n' > inventory.csv`; Mac: use `gfind` from findutils or a spreadsheet)
 2. **Create the tree** below (template with sub-folders in [naming-and-tree.md](references/naming-and-tree.md))
 3. **Decide the tokens** (the parts of a file name) — campaign codes, asset names, platform and format codes from the code list. Write them into the brand kit README
-4. **Map old → new** in `rename-log.csv` before touching any file
-5. **Rename and move** in 1 batch. Check that the file count before and after is the same
+4. **Map old → new** in `rename-log.csv` (header `old,new`) before touching any file
+5. **Check, then copy** in 1 batch: `python scripts/apply_renames.py rename-log.csv` checks the plan and touches nothing (missing source · two rows with the same new name · new name already on disk · names that break the rules below); fix until it passes, then add `--apply`: files are copied, not moved, and the originals stay. `--undo` removes the copies (only the ones still identical to the original). Check that the file count before and after is the same · delete the old files only after the user has looked (`_to_delete/`, never `rm`) · `--self-test` (5 ข้อ)
 6. **Archive the unknown** — anything nobody can identify goes to `04-archive/<yyyy-mm>-unsorted/`, never deleted
 7. **Announce** the tree and pattern; old shared links will break, so share the log
 

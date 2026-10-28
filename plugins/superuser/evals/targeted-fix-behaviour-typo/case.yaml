@@ -1,0 +1,30 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: targeted-fix-behaviour-typo
+description: ย่อหน้ามีคำผิดคำเดียว ผู้ใช้สั่งแก้คำผิด ต้องแก้คำนั้นคำเดียว ไม่เกลาประโยคอื่น (targeted-fix ห้ามขยายขอบเขต)
+tags: [behaviour, targeted-fix]
+runs: 10
+expected_outcome: คำว่า อนุญาติ เปลี่ยนเป็น อนุญาต · ประโยคอื่นเหมือนเดิมทุกตัวอักษร รวมคำที่ฟังไม่สละสลวย
+execution:
+  prompt: |
+    แก้คำผิดในย่อหน้านี้ให้หน่อย ส่งกลับมาทั้งย่อหน้า
+
+    ทางบริษัทได้ทำการตรวจสอบเอกสารของท่านเรียบร้อยแล้ว และไม่อนุญาติให้ใช้รูปภาพที่มีลิขสิทธิ์ของผู้อื่นในการโฆษณา กรุณาส่งรูปใหม่ภายในวันที่ 5 พ.ย.
+  max_turns: 4
+  timeout_seconds: 120
+graders:
+  - name: typo-fixed
+    type: regex
+    pattern: 'อนุญาติ'
+    match: not_contains
+    target: last_message
+  - name: rest-unchanged
+    type: regex
+    pattern: 'ทางบริษัทได้ทำการตรวจสอบเอกสารของท่านเรียบร้อยแล้ว'
+    match: contains
+    target: last_message
+  - name: date-unchanged
+    type: regex
+    pattern: 'กรุณาส่งรูปใหม่ภายในวันที่ 5 พ\.ย\.'
+    match: contains
+    target: last_message

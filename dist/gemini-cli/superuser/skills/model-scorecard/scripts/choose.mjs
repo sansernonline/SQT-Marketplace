@@ -2,6 +2,7 @@ import { actualTokens, costOf, costPerRun, priceFor } from "./report.mjs";
 
 // 2 การตัดสินจากงานเก่า: ขนาดชิ้นงาน (reference class + PERT 3 จุด) · model ต่อขั้น (Thompson sampling บน Beta-Binomial)
 const THIN = 5;
+// จำนวนสุ่ม Thompson · ค่าตั้งเอง ยังไม่ได้วัดว่าน้อยกว่านี้พอไหม · ความคลาดจากการสุ่มของโอกาสชนะ = √(p(1−p)/4000) ที่ p = 0.95 ราว 0.0035
 const DRAWS = 4000;
 const SURE = 0.95;
 

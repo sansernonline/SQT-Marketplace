@@ -2,6 +2,7 @@
 
     python md_to_docx.py report.md                     # → report.docx ข้างไฟล์ต้นทาง
     python md_to_docx.py report.md -o _to_delete/Report_v1.0.docx --pdf
+    python md_to_docx.py --self-test                   # แปลงตัวอย่างเล็ก แล้วเปิด .docx กลับมานับหัวข้อ ตาราง รายการ
 
 Markdown คือต้นฉบับ แก้ที่ .md แล้วรันใหม่ · ไม่แก้ .docx ด้วยมือ
 ต้องมี python-docx >= 1.1 · ใช้ brandkit.py จาก skill branded-document-design (โฟลเดอร์ข้างกัน)
@@ -223,8 +224,57 @@ def to_pdf(docx: Path) -> Path:
     return pdf
 
 
+SAMPLE = """---
+title: ทดสอบรายงาน
+toc: no
+---
+# หัวข้อหนึ่ง
+ข้อความ **ตัวหนา** และ `โค้ด`
+## หัวข้อย่อย
+| ชื่อ | ค่า |
+|---|---|
+| ก | 1 |
+| ข | 2 |
+- รายการหนึ่ง
+- รายการสอง
+1. ขั้นหนึ่ง
+2. ขั้นสอง
+> [!WARNING] ระวังข้อมูลหาย
+"""
+
+
+def self_test() -> int:
+    """แปลง SAMPLE แล้วนับของใน .docx ที่ได้ · python-docx ไม่มี → ข้ามและบอกชัด"""
+    import tempfile
+    try:
+        import docx
+    except ImportError:
+        print("SKIP self-test: ไม่มี python-docx (pip install python-docx)")
+        return 0
+    with tempfile.TemporaryDirectory() as tmp:
+        src = Path(tmp) / "t.md"
+        src.write_text(SAMPLE, encoding="utf-8")
+        d = docx.Document(str(build(src, Path(tmp) / "t.docx")))
+    # BrandDoc ทำหัวข้อเป็นย่อหน้าธรรมดาที่ติด outlineLvl (ให้สารบัญเห็น) ไม่ใช่สไตล์ Heading
+    heads = [p.text for p in d.paragraphs if p._p.xpath("./w:pPr/w:outlineLvl")]
+    bullets = [p for p in d.paragraphs if p.style.name == "List Bullet"]
+    checks = {
+        "headings == 2": heads == ["หัวข้อหนึ่ง", "หัวข้อย่อย"],
+        "bullets == 2": len(bullets) == 2,
+        "numbered 2 ข้อ": sum(p.text.startswith(("1.", "2.")) for p in d.paragraphs) == 2,
+        "table 2 data rows": any(len(t.rows) == 3 and t.cell(2, 0).text == "ข" for t in d.tables),
+        "callout มีข้อความ": any("ระวังข้อมูลหาย" in c.text for t in d.tables for r in t.rows for c in r.cells),
+    }
+    for name, ok in checks.items():
+        print("ok  " if ok else "FAIL", name)
+    print(f"self-test {sum(checks.values())}/{len(checks)}")
+    return 0 if all(checks.values()) else 1
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    if "--self-test" in sys.argv:
+        sys.exit(self_test())
     ap.add_argument("source", type=Path, help="ไฟล์ Markdown ต้นฉบับ")
     ap.add_argument("-o", "--out", type=Path, help="ไฟล์ .docx ที่จะเขียน (ค่าเริ่มต้น: ชื่อเดียวกับต้นฉบับ)")
     ap.add_argument("--pdf", action="store_true", help="สร้าง .pdf ไว้ตรวจหน้าตาด้วย")

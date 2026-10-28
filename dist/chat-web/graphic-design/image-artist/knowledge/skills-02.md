@@ -6,7 +6,7 @@ Use when design work spans several assets (brand kit, campaign, AI image or vide
 
 > รับงาน → จัดขนาดและงบ → ใบสั่งงาน 5 ข้อ → แจกลูกทีม → ตรวจกับของจริงวนจนผ่าน → ส่งมอบสั้น → เทียบคาดกับจริง แล้วจำ
 
-หัวหน้างาน 1 คน เก่ง 4 เรื่อง: **แจกงาน** · **ประเมินลูกน้อง** · **จัดการงาน** · **ตรวจซ้ำจนสำเร็จ** — ใช้ลูกน้อง effort ต่ำได้ เพราะใบสั่งงานชัดและมีคนตรวจ · เรียก `/superuser:superuser` หรือพูดว่า "ใช้ superuser"
+หัวหน้าทีม 1 คน เก่ง 4 เรื่อง: **แจกงาน** · **ประเมินลูกน้อง** · **จัดการงาน** · **ตรวจซ้ำจนสำเร็จ** — ใช้ลูกน้อง effort ต่ำได้ เพราะใบสั่งงานชัดและมีคนตรวจ · เรียก `/superuser:superuser` หรือพูดว่า "ใช้ superuser"
 
 **ไฟล์นี้คือแกน อ่านทุกงาน** · เปิดเพิ่มเมื่อถึงจังหวะ: [`autonomy`](references/autonomy.md) (ถามครั้งเดียว · ตัดสินใจเอง · รออนุมัติ · รู้จังหวะหยุด) · [`modules`](references/modules.md) (ไฟล์กลาง · log · รอบเรียนรู้ · inbox · config · ด่านของ hook) · plugin สาขามี `superuser` ของตัวเองที่มีเฉพาะส่วนสาขา (playbook · agent · รออนุมัติ) และบอกให้เปิดไฟล์นี้ก่อน ([`ADAPT.md`](../../ADAPT.md))
 
@@ -188,7 +188,7 @@ Use when design work spans several assets (brand kit, campaign, AI image or vide
 
 ## 3 · ตัวกระตุ้น — เจอสถานการณ์นี้ เรียก skill นี้
 
-ตารางสถานการณ์ → skill (12 แถว) อยู่ใน [`triggers`](references/triggers.md) · เปิดเมื่อไม่แน่ใจว่าจะเรียก skill ไหน หรืองานข้ามไป plugin อื่น
+ตารางสถานการณ์ → skill อยู่ใน [`triggers`](references/triggers.md) · เปิดเมื่อไม่แน่ใจว่าจะเรียก skill ไหน หรืองานข้ามไป plugin อื่น
 
 ---
 
@@ -226,6 +226,8 @@ Use when design work spans several assets (brand kit, campaign, AI image or vide
 - ลบไฟล์หรือข้อมูลจริงของผู้ใช้ — ย้ายไป `_to_delete/` แทน
 - เจอ CAPTCHA — ไม่แก้ ไม่หาทางหลบ บอกผู้ใช้ให้ทำเอง
 
+**เลือกว่าจะสร้างภาพไหนใต้งบเครดิต** — ให้ผู้ใช้ให้คะแนนความสำคัญ 1–10 ต่อภาพ ภาพที่ขาดไม่ได้ใส่ `must` แล้วรัน `node <decision-scoring>/scripts/decide.mjs knapsack ไฟล์.json` (`<decision-scoring>` คือโฟลเดอร์ skill `superuser:decision-scoring`) · ได้ชุดที่ไม่เกินงบเสมอ · ตัวอย่าง [`credit-knapsack.example.json`](../campaign-set/references/credit-knapsack.example.json) (ตัวเลขสมมติ รันผ่าน 2026-10-28: ใช้ 35 จากงบ 40) · งบเป็นเพดานที่ผู้ใช้ตั้ง เกินเมื่อไรกลับไปรออนุมัติ
+
 **อนุญาตไว้ล่วงหน้า** — ผู้ใช้เขียนไว้ใน `~/.claude/superuser-style.md` หรือหัวข้อ "กติกา" ของ `CONTEXT.md` เช่น "สร้างภาพทดลองได้ไม่เกิน 20 ภาพต่องาน" ข้อนั้นจะไม่ต้องรออนุมัติ แต่เฉพาะในขอบเขตที่เขียนไว้ · **อนุญาตล่วงหน้าไม่ได้:** โพสต์หรือยิงแอดในนามผู้ใช้ · ใช้งานที่ละเมิดลิขสิทธิ์ · จ่ายหรือโอนเงิน · ใส่รหัสผ่านหรือข้อมูลบัตร · ลบข้อมูลจริง · CAPTCHA
 
 ---
@@ -260,6 +262,8 @@ Use when design work spans several assets (brand kit, campaign, AI image or vide
 ไฟล์นี้เหมือนกันทุก plugin · ต้นฉบับอยู่ที่ plugin `superuser`
 
 ใช้เมื่องานขนาดใหญ่หรือโจทย์ไม่ชัด หลัง brainstorm และเลือกทางแล้ว ให้หัวหน้าทีมเขียน brief ก่อนลงมือ ส่งให้ผู้ใช้อ่านในคำตอบ แล้วเก็บไว้ที่ `docs/BRIEF.md` · ถ้างานเปลี่ยนทิศ ให้เขียน brief ใหม่ทับ ไม่ต่อท้าย
+
+brief คือสรุปให้ผู้ใช้อ่าน ไม่ใช่ใบสั่งงาน · คำว่า "ใบสั่งงาน" ใช้กับใบที่หัวหน้าทีมส่งให้ลูกทีม (`handoff/<id>.md` ตาม skill `handoff` หัวข้อ 3) อย่างเดียว
 
 ## กติกา
 
@@ -917,7 +921,7 @@ shot list และ brief ครบทุกช็อต และซับไ�
 | agent | ระดับโมเดล | ใช้เมื่อ | ไม่ใช่ |
 |---|---|---|---|
 | `brainstormer` | ใหญ่ | ก่อนเริ่มงานใหญ่หรือโจทย์ไม่ชัด — คิด 2–3 ทางบนกระดาษ ให้คะแนน 1–5 (5 = ดีสุด) | สร้างของจริงหลายชุดแล้วเลือก → `parallel-attempts-pick-best` |
-| `reviewer` | ตามตารางงบใน `SKILL.md` หัวข้อ 2 (สมดุล: รอบแรกกลาง · งานใหญ่หรือรอบสุดท้ายก่อนส่งมอบใหญ่) | ตรวจชิ้นงานที่เสร็จแล้วก่อนถึงผู้ใช้หรือคนนอก อ่านอย่างเดียว ไม่แก้ | งานเสี่ยงสูง → `adversarial-review-panel` (ใช้ `reviewer` หลายตัว) · (ถ้าติดตั้ง plugin `software-company`) โค้ด → คู่กับ `code-review-checklist` · (ถ้าติดตั้ง plugin `graphic-design`) งานภาพ → `design-critic` หรือ `design-review` · ไม่มีก็ตรวจตามเกณฑ์ใน brief |
+| `reviewer` | ตามตารางงบใน `SKILL.md` หัวข้อ 2 (สมดุล: รอบแรกกลาง · งานใหญ่หรือรอบสุดท้ายก่อนส่งมอบใหญ่) | ตรวจชิ้นงานที่เสร็จแล้วก่อนถึงผู้ใช้หรือคนนอก อ่านอย่างเดียว ไม่แก้ | งานเสี่ยงสูง → `adversarial-review-panel` (ใช้ `reviewer` หลายตัว) · (ถ้าติดตั้ง plugin `software-company`) โค้ด → คู่กับ `code-review-checklist` · (ถ้าติดตั้ง plugin `graphic-design`) งานภาพ → `design-critic` หรือ `design-review` · ไม่มีก็ตรวจตามเกณฑ์ในใบสั่งงาน |
 | `learning-reviewer` | กลาง | ตอนจบงานหลายขั้น — ตรวจวิธีทำงานของทีม ไม่ใช่ตัวงาน | — |
 
 เรียกตัวใหม่ทุกครั้ง เพราะตัวที่ทำงานไม่ตรวจงานของตัวเอง · ผู้ตรวจเฉพาะทาง (`design-critic` · `brand-keeper` · `qa-tester` · `security-engineer` · `risk-manager`) ใช้แทน `reviewer` ได้เฉพาะขั้นที่เขียนว่า "อ่านอย่างเดียว · ไม่แก้ไฟล์" (เรียกด้วย `model: opus`) · ขั้นที่ตัวนั้นเขียน test หรือแก้ของนับเป็นการลงมือ
@@ -1001,6 +1005,7 @@ shot list และ brief ครบทุกช็อต และซับไ�
 | งานโซเชียลหรือแคมเปญหลายขนาด | `social-formats` · `campaign-set` + agent `social-creator` |
 | rich menu ของ LINE OA (ขนาดภาพ · พื้นที่กด · JSON · อัปโหลดผ่าน API) | `line-richmenu` + agent `social-creator` · ขนาดภาพอ่านจาก `social-formats` |
 | รูปสินค้าลง Shopee · Lazada · TikTok Shop (ขนาด · พื้นขาว · ข้อความบนรูป · รูปที่ถูกปฏิเสธ) | `marketplace-product-images` + agent `social-creator` · ข้อความในหน้าสินค้า → `e-commerce:product-listing` |
+| ไอคอนแอป · favicon · ชุดไอคอนบนจอ · โลโก้มาร์ก | `icon-design` + agent `design-critic` · ผู้ใช้ปฏิเสธไอคอนที่ agent วาดมือมาแล้ว ถามต้นแบบก่อนวาด |
 | ภาพปกคลิป YouTube (thumbnail) · ข้อความไทยบนปก · ทดสอบหลายปก | `youtube-thumbnail` + agent `social-creator` |
 | ส่งไฟล์ไปโรงพิมพ์หรือร้านป้าย (ใบปลิว · นามบัตร · ไวนิล · สติกเกอร์) · CMYK · ระยะตัดตก · ฟอนต์ไทยเพี้ยน | `print-ready-files` + agent `design-critic` |
 | วิดีโอสั้น · motion | `video-script-to-clip` · `motion-basics` + agent `art-director` |

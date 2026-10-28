@@ -74,4 +74,8 @@ Protect: Tue/Thu 09:00–11:00 focus "Q4 plan", Wednesday morning no meetings. E
 
 Output: split table vs target · worst three with action · events added · one-line trend vs last month.
 
+## Connecting your calendar
+
+This plugin ships no calendar connector. The user connects Google Calendar (or another calendar) themselves, from the connectors or MCP settings of the Claude app they use, with read access first; adding focus blocks (step 7) needs write access and the user's OK. Not checked against an official Google page, so no link is given here. No connector → the user pastes a 4-week export or a screenshot.
+
 Related: `weekly-review` · `meeting-prep-card` (meetings that stay should have a goal).

@@ -1,0 +1,9 @@
+{
+  "_note": "ตัวอย่าง (ตัวเลขสมมติ) product-roadmap ข้อ 4 · confidence ใช้ 0-1 ตาม decide.mjs ไม่ใช่ 50-100%",
+  "method": "rice",
+  "items": [
+    { "name": "จ่ายด้วย PromptPay", "reach": 800, "impact": 2, "confidence": 0.8, "effort": 1.5 },
+    { "name": "แอปมือถือ", "reach": 1200, "impact": 1, "confidence": 0.5, "effort": 6 },
+    { "name": "รายงานรายเดือนอัตโนมัติ", "reach": 150, "impact": 1, "confidence": 1, "effort": 0.5 }
+  ]
+}

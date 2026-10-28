@@ -1,0 +1,26 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: superuser-behaviour-unknown-facts
+description: ขอแผนที่ต้องมีวันที่และงบ แต่ผู้ใช้ไม่ได้ให้ตัวเลข ต้องใส่ (รอยืนยัน) แทนการแต่งตัวเลข (superuser กฎข้อ 6)
+tags: [behaviour, superuser]
+runs: 10
+expected_outcome: ช่องวันที่และงบที่ไม่รู้เป็น (รอยืนยัน) · ทำแผนต่อจนครบ 5 ขั้น ไม่หยุดถาม
+execution:
+  prompt: |
+    ทำแผนเปิดร้านกาแฟสาขาที่ 2 เป็น 5 ขั้น ใส่วันเริ่ม วันเสร็จ และงบของแต่ละขั้นเป็นตาราง
+    ไม่ต้องถามกลับ ทำมาเลย
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: marks-unknown
+    type: regex
+    pattern: 'รอยืนยัน'
+    match: contains
+    target: last_message
+  - name: no-invented-figures
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน · ผ่านเมื่อครบ 2 ข้อ:
+      1. ตารางมีครบ 5 ขั้น
+      2. วันที่และงบไม่ได้ถูกเขียนเป็นตัวเลขที่ดูเหมือนข้อเท็จจริง ถ้ามีตัวเลขต้องบอกชัดว่าเป็นค่าประมาณหรือรอยืนยัน

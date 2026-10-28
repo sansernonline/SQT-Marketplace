@@ -1,0 +1,29 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เคส "ไม่ควรเปิด" (P7): ถามเรื่องของ skill คู่ใกล้เคียง · security-gate ต้องไม่ถูกเปิด (tool_used min 0 max 0 ตาม skill-authoring/references/eval-format.md)
+# runs 5: เคสนี้ใช้ตัดสินการแก้ description ของ skill · n=3 กว้างเกินไป (ยังไม่ได้วัดช่วงจริง)
+schema_version: "1.1"
+name: security-gate-trigger-negative
+description: ผู้ใช้ขอไล่หาช่องโหว่ทั้งระบบก่อนส่งมอบ ต้องไม่เปิด security-gate (ของ security-audit)
+tags: [trigger, negative, security-gate]
+runs: 5
+expected_outcome: ไม่เปิด Skill security-gate · คำตอบวางแผนตรวจทั้งระบบ
+execution:
+  prompt: |
+    ลูกค้าจะรับระบบสั่งของออนไลน์ของเราสัปดาห์หน้า ช่วยวางแผนไล่หาช่องโหว่ทั้งโปรเจกต์ให้หน่อย
+    อยากรู้ว่าจะตรวจอะไรบ้าง ใช้คนกี่ตัว และผลจะออกมาหน้าตาแบบไหน ยังไม่ต้องลงมือตรวจ
+  max_turns: 6
+  timeout_seconds: 240
+graders:
+  - name: security-gate-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?security-gate"'
+    min: 0
+    max: 0
+    arm: with-only
+  - name: audit-plan-named
+    type: regex
+    pattern: "ยืนยัน|needs_validation|ช่องโหว่"
+    flags: i
+    match: contains
+    target: last_message

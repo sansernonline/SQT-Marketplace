@@ -145,6 +145,32 @@ def main():
     return [build(p, calib) for p in PAGE2]
 
 
+def self_test():
+    """python docx_build.py --self-test: one framed text block and the settings slot; no layout json, background or Word needed."""
+    block = {"x": 100, "y": 200, "w": 600, "lineHeightPx": 50,
+             "runs": [{"text": "Hello ไทย", "family": "Space Grotesk", "weight": 600, "sizePx": 40,
+                       "color": "#112233", "letterSpacingPx": 0.5}]}
+    assert style_key(block) == "Space Grotesk|600|40|50"
+    d = bk.BrandDoc()
+    p = frame_paragraph(d.doc, block, {"Space Grotesk|600|40|50": [10, 20]})
+    ppr = p._p.pPr
+    frame = ppr.find(qn("w:framePr"))
+    assert frame.get(qn("w:x")) == str(round((100 - 10) * TW)) and frame.get(qn("w:y")) == str(round((200 - 20) * TW))
+    assert frame.get(qn("w:w")) == str(round(680 * TW)) and frame.get(qn("w:hAnchor")) == "page"
+    spacing = ppr.find(qn("w:spacing"))
+    assert spacing.get(qn("w:line")) == "480" and spacing.get(qn("w:lineRule")) == "exact"
+    assert [r.text for r in p.runs] == ["Hello ", "ไทย"], [r.text for r in p.runs]
+    assert p.runs[0].font.size == Pt(19.0) and p.runs[0].font.name == "Space Grotesk SemiBold"
+    settings = bk._el("w:settings")
+    settings.append(bk._el("w:decimalSymbol", val="."))
+    no_compress(settings)
+    assert [c.tag for c in settings][0] == qn("w:doNotAutoCompressPictures")    # before decimalSymbol, schema order
+    print("self-test ok")
+
+
 if __name__ == "__main__":
+    if sys.argv[1:] == ["--self-test"]:
+        self_test()
+        sys.exit()
     for f in main():
         print("docx", f.name)

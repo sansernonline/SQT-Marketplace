@@ -60,7 +60,7 @@ Who may buy unrated or high-yield bonds is restricted by SEC rules; the exact cu
 2. Emergency part: savings and money market fund only.
 3. 1–3 year money: fixed deposits across banks (each ≤ 1 million), savings bonds of matching tenor, short government bond fund.
 4. Longer money: longer savings bonds; corporate bonds only investment grade, spread, and only what the user can hold to maturity.
-5. Show the table with after-tax interest in baht for the user's real amount (formula: amount × rate × (1 − 0.15) × years, for products with 15% withheld). Score the options that survive the hard rules below. The user picks.
+5. Show the table with after-tax interest in baht for the user's real amount (formula: amount × rate × (1 − 0.15) × years, for products with 15% withheld; run `node money-calc.mjs afterTax <file.json>`, script in `portfolio-snapshot`, see its Script path; example `../portfolio-snapshot/scripts/examples/afterTax.json`: 500,000 at 1.80% for 3 years → 22,950 after tax, 1.53% a year). Score the options that survive the hard rules below. The user picks.
 
 ## Scoring the options
 

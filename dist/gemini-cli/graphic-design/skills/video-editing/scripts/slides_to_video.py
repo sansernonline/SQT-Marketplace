@@ -16,6 +16,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from outguard import expect_refusal, refuse_overwrite
+
 SECTION = re.compile(r"<section\b([^>]*)>", re.I)
 ATTR = re.compile(r'([\w-]+)\s*=\s*"([^"]*)"')
 
@@ -79,6 +81,7 @@ def self_test() -> int:
                                capture_output=True, text=True, encoding="utf-8", errors="replace")
             sec = media_seconds(out) if out.exists() else 0.0
             checks.append((f"สร้างวิดีโอจริง ยาว {sec:.2f} วินาที (เสียง 3.00)", r.returncode == 0 and abs(sec - 3.0) < 0.15))
+            checks.append(("ไม่เขียนทับไฟล์ที่มีอยู่", expect_refusal(Path(__file__), [str(deck), str(frames), str(audio), "-o", str(out)], out)))
     for name, ok in checks:
         print(f"{name}:", "ผ่าน" if ok else "ไม่ผ่าน")
     ok = all(ok for _, ok in checks)
@@ -97,9 +100,12 @@ def main() -> None:
     ap.add_argument("audio", type=Path)
     ap.add_argument("-o", "--out", type=Path, default=Path("episode.mp4"))
     ap.add_argument("--fps", type=int, default=30)
+    ap.add_argument("--force", action="store_true", help="เขียนทับไฟล์ผลลัพธ์ที่มีอยู่ (ไม่ใส่ = ปฏิเสธ)")
     ap.add_argument("--check", action="store_true", help="พิมพ์ตารางเวลาแล้วจบ ไม่สร้างวิดีโอ")
     ap.add_argument("--self-test", action="store_true", help="ทดสอบตัวเอง (ไม่มี ffmpeg ข้ามส่วนสร้างวิดีโอจริง)")
     a = ap.parse_args()
+    if not a.check:
+        refuse_overwrite(a.out, a.force)
 
     starts = slide_starts(a.deck)
     frames = sorted(a.frames.glob("p[0-9][0-9].png"))
@@ -125,7 +131,7 @@ def main() -> None:
         lines += [f"file '{f.resolve().as_posix()}'", f"duration {e - s:.3f}"]
     lines.append(f"file '{frames[-1].resolve().as_posix()}'")  # concat demuxer ใช้ duration ของแผ่นสุดท้ายเมื่อมีไฟล์ซ้ำต่อท้าย
     listing.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+    cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", *(["-y"] if a.force else []),
            "-f", "concat", "-safe", "0", "-i", str(listing), "-i", str(a.audio),
            "-vf", f"fps={a.fps},format=yuv420p", "-c:v", "libx264", "-tune", "stillimage", "-crf", "20",
            # -t ตัดที่ความยาวเสียงพอดี · -shortest อย่างเดียวยังเหลือภาพเกินราว 1–2 วินาทีเมื่อมี filter

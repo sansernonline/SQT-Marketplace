@@ -1,0 +1,54 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# ตัวเลขที่คาดได้จากการรันสคริปต์ของ skill เมื่อ 2026-10-28 ด้วยโจทย์นี้ · สคริปต์หรืออัตราเปลี่ยนให้รันใหม่แล้วแก้ pattern
+# input: น้องแอน gross 32000 · พี่บอย gross 45000 spouse true children 1
+schema_version: "1.1"
+name: payroll-th-behaviour
+description: คิดเงินเดือน 2 คนที่ลดหย่อนต่างกัน ต้องเรียก payroll.mjs และภาษีกับเงินสุทธิต่อคนตรงผลสคริปต์
+tags: [behaviour, capability-suite, payroll-th]
+runs: 3
+expected_outcome: เรียก payroll.mjs · น้องแอน ภาษี 264.58 สุทธิ 30,860.42 · พี่บอย ภาษี 539.58 สุทธิ 43,585.42 · ประกันสังคมคนละ 875
+execution:
+  prompt: |
+    เดือนนี้จ่ายเงินเดือน 2 คนค่ะ ช่วยคิดว่าต้องหักประกันสังคม หักภาษี ณ ที่จ่าย แล้วโอนให้แต่ละคนเท่าไหร่
+    - น้องแอน เงินเดือน 32,000 โสด ไม่มีลูก
+    - พี่บอย เงินเดือน 45,000 ภรรยาไม่มีรายได้ ลูก 1 คน
+    ไม่มีกองทุนสำรองเลี้ยงชีพ ไม่มีโบนัส
+  max_turns: 10
+  timeout_seconds: 300
+graders:
+  - name: script-called
+    type: tool_used
+    tool: Bash
+    input_match: 'payroll\.mjs'
+    min: 1
+    arm: with-only
+  - name: wht-ann
+    type: regex
+    pattern: '264\.58'
+    flags: i
+    match: contains
+    target: last_message
+  - name: wht-boy
+    type: regex
+    pattern: '539\.58'
+    flags: i
+    match: contains
+    target: last_message
+  - name: net-ann
+    type: regex
+    pattern: '30,?860\.42'
+    flags: i
+    match: contains
+    target: last_message
+  - name: net-boy
+    type: regex
+    pattern: '43,?585\.42'
+    flags: i
+    match: contains
+    target: last_message
+  - name: sso-875
+    type: regex
+    pattern: '875'
+    flags: i
+    match: contains
+    target: last_message

@@ -1,0 +1,10 @@
+{
+  "_note": "mutual-fund-picker fee-drag example · grossReturnPct is an assumed market return before fees, not a forecast",
+  "amount": 100000,
+  "years": 25,
+  "grossReturnPct": 7,
+  "funds": [
+    { "name": "Index fund", "terPct": 0.3 },
+    { "name": "Active fund (matches market before fees)", "terPct": 1.8 }
+  ]
+}

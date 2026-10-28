@@ -1,0 +1,41 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# ตัวเลขที่คาดได้จากการรันสคริปต์ของ skill เมื่อ 2026-10-28 ด้วยโจทย์นี้ · สคริปต์หรืออัตราเปลี่ยนให้รันใหม่แล้วแก้ pattern
+# อัตราทุกตัวมาจากโจทย์ ไม่ใช่อัตราจริงของ Shopee
+schema_version: "1.1"
+name: marketplace-fees-pricing-behaviour
+description: ผู้ขายให้ต้นทุนและอัตราของร้านมาเอง ต้องเรียก price-calc.mjs ราคาที่ปัดกับกำไรตรงผลสคริปต์ และบอกกำไรช่วงแคมเปญ
+tags: [behaviour, capability-suite, marketplace-fees-pricing]
+runs: 3
+expected_outcome: เรียก price-calc.mjs · ราคาตามสูตร 173.63 ปัดเป็น 179 · กำไร 48.03 · ช่วงแคมเปญกำไร 30.20 · บอกให้ยืนยันอัตราใน Seller Centre
+execution:
+  prompt: |
+    ขายเคสมือถือใน Shopee ต้นทุนรวมแพ็ก 85 บาท ร้านออกค่าส่งเองชิ้นละ 20
+    ค่าคอม 10.7% ค่าธุรกรรม 3.21% ค่าคงที่ 1.07 บาทต่อออเดอร์ (ดูจากหน้าร้านวันนี้) ยังไม่จด VAT
+    อยากได้กำไร 25% ควรตั้งราคาเท่าไหร่ แล้วถ้าเข้าแคมเปญที่หักเพิ่ม 3% กับแจกโค้ดลด 15 บาท ยังได้กำไรอยู่มั้ย
+  max_turns: 10
+  timeout_seconds: 300
+graders:
+  - name: script-called
+    type: tool_used
+    tool: Bash
+    input_match: 'price-calc\.mjs'
+    min: 1
+    arm: with-only
+  - name: rounded-price
+    type: regex
+    pattern: '179'
+    flags: i
+    match: contains
+    target: last_message
+  - name: profit-at-price
+    type: regex
+    pattern: '48\.03'
+    flags: i
+    match: contains
+    target: last_message
+  - name: campaign-profit
+    type: regex
+    pattern: '30\.20?(?!\d)'
+    flags: i
+    match: contains
+    target: last_message

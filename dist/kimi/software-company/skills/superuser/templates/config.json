@@ -13,6 +13,7 @@
     "guard": false,
     "recompact": false,
     "ui_scan": true,
-    "pii_gate": true
+    "pii_gate": true,
+    "name_gate": false
   }
 }

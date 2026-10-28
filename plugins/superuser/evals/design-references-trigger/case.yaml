@@ -3,7 +3,7 @@ schema_version: "1.1"
 name: design-references-trigger
 description: เจ้าของร้านขอออกแบบหน้าเว็บ ไม่เอ่ยชื่อ skill ต้องทำให้ design-references ถูกเปิด และเสนอค้นงานจริงก่อนออกแบบ
 tags: [trigger, design-references]
-runs: 3
+runs: 10
 expected_outcome: เรียก Skill design-references แล้วเสนอเอาคำของโปรเจกต์ไปค้นในเว็บที่เก่งงานเว็บ (เช่น Awwwards · Land-book) พร้อมลิงก์ ก่อนเลือกสีหรือเลย์เอาต์
 execution:
   prompt: |

@@ -10,8 +10,20 @@ import { readFileSync } from 'node:fs';
 // (binomial standard error at 50% with N=10 is 16 points), so the numbers describe rule-following, not the strategy.
 // 20 is the cutoff written in post-trade-review/SKILL.md.
 const MIN_SAMPLE = 20;
+// Starting value, not measured: a stop that holds loses about 1R plus costs; above 1.2R suggests slipped or moved stops
 const MAX_AVG_LOSS_R = 1.2;
+// Starting value, not measured: above 1 rule break in 10 trades the results describe the breaks, not the strategy
 const MAX_VIOLATION_RATE = 0.1;
+
+// Wilson score interval, same formula as copy-trade-check/scripts/signal-check.mjs (z = 1.96 -> 95%)
+// en.wikipedia.org/wiki/Binomial_proportion_confidence_interval
+export function wilson(k, n, z = 1.96) {
+  const p = k / n;
+  const centre = p + (z * z) / (2 * n);
+  const half = (z / (2 * n)) * Math.sqrt(4 * n * p * (1 - p) + z * z);
+  const d = 1 + (z * z) / n;
+  return [(centre - half) / d, (centre + half) / d];
+}
 
 // RFC 4180-style: quoted fields may hold commas and doubled quotes
 export function parseCsv(text) {
@@ -87,7 +99,7 @@ export function statsFor(trades, capital) {
   const ddR = maxDrawdown(trades.map((t) => t.r));
   const ddBaht = hasPnl && capital ? maxDrawdown(trades.map((t) => t.pnl), capital) : null;
   return {
-    n, wins: wins.length, losses: losses.length, winRate, avgWin, avgLoss, payoff,
+    n, wins: wins.length, losses: losses.length, winRate, winRateCI: wilson(wins.length, n), avgWin, avgLoss, payoff,
     expectancy: winRate * avgWin - (1 - winRate) * avgLoss,
     profitFactor: hasPnl && grossLoss > 0 ? sum(trades.filter((t) => t.pnl > 0).map((t) => t.pnl)) / grossLoss : null,
     breakevenWinRate: payoff === null ? null : 1 / (1 + payoff),
@@ -119,9 +131,9 @@ export function report(r) {
       '',
       '| ตัวเลข | ค่า |',
       '|---|---|',
-      `| อัตราชนะ | ${pct(s.winRate)} (${s.wins}/${s.n}) |`,
+      `| อัตราชนะ | ${pct(s.winRate)} (${s.wins}/${s.n}) · ช่วง 95% ${pct(s.winRateCI[0])}–${pct(s.winRateCI[1])} |`,
       `| กำไรเฉลี่ย | ${f(s.avgWin)}R |`,
-      `| ขาดทุนเฉลี่ย | ${f(s.avgLoss)}R${f(s.avgLoss) > MAX_AVG_LOSS_R ? ' · สูงกว่า 1.2R: stop อาจหลุดหรือถูกขยับ' : ''} |`,
+      `| ขาดทุนเฉลี่ย | ${f(s.avgLoss)}R${f(s.avgLoss) > MAX_AVG_LOSS_R ? ` · สูงกว่า ${MAX_AVG_LOSS_R}R: stop อาจหลุดหรือถูกขยับ` : ''} |`,
       `| อัตราส่วนกำไรต่อขาดทุน | ${s.payoff === null ? '-' : f(s.payoff)} |`,
       `| Expectancy | ${rr(s.expectancy)} ต่อรายการ |`,
       `| อัตราชนะที่เสมอทุน | ${s.breakevenWinRate === null ? '-' : pct(s.breakevenWinRate)} |`,
@@ -129,7 +141,7 @@ export function report(r) {
       `| Max drawdown | ${f(s.maxDrawdownR)}R${s.maxDrawdownPct === null ? '' : ` (${f(s.maxDrawdownPct, 1)}% ของทุน)`} |`,
       `| ชนะติดกันยาวสุด | ${s.maxWinStreak} |`,
       `| แพ้ติดกันยาวสุด | ${s.maxLossStreak} |`,
-      `| ฝ่าฝืนกฎ | ${pct(s.violationRate)}${s.violationRate > MAX_VIOLATION_RATE ? ' · เกิน 10%: ตัวเลขนี้สะท้อนการผิดกฎ ไม่ใช่กลยุทธ์' : ''} |`,
+      `| ฝ่าฝืนกฎ | ${pct(s.violationRate)}${s.violationRate > MAX_VIOLATION_RATE ? ` · เกิน ${MAX_VIOLATION_RATE * 100}%: ตัวเลขนี้สะท้อนการผิดกฎ ไม่ใช่กลยุทธ์` : ''} |`,
       '',
     );
     if (s.smallSample) out.push(`ตัวอย่างน้อย: ใช้ดูการทำตามกฎได้ ยังตัดสินว่ากลยุทธ์ดีหรือไม่ไม่ได้`, '');
@@ -149,6 +161,8 @@ function selfTest() {
   const trades = Rs.map((r) => ({ r_multiple: r, pnl_baht: r * 1000, account: 'live' }));
   const s = analyze(trades, 100000).groups.live;
   t('อัตราชนะ 40%', near(s.winRate, 0.4) && s.wins === 4 && s.losses === 6);
+  // Wilson 4/10 by hand: centre (0.4 + 0.19208) / 1.38416 = 0.4278, half 0.196 x sqrt(9.6 + 3.8416) / 1.38416 = 0.2596 -> 16.8%-68.7%
+  t('ช่วง Wilson 4/10', near(s.winRateCI[0], 0.1682) && near(s.winRateCI[1], 0.6873));
   t('กำไรเฉลี่ย 1.75R', near(s.avgWin, 1.75));
   t('ขาดทุนเฉลี่ย 1.20R', near(s.avgLoss, 1.2));
   t('payoff 1.46 / เสมอทุน 41%', near(s.payoff, 1.458) && near(s.breakevenWinRate, 0.4068));

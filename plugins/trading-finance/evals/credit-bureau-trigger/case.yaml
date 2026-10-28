@@ -2,7 +2,7 @@
 schema_version: "1.1"
 name: credit-bureau-trigger
 description: ผู้ใช้กู้บ้านไม่ผ่านและกลัวติดแบล็กลิสต์ ไม่เอ่ยชื่อ skill ต้องทำให้ credit-bureau ถูกเปิด และได้วิธีตรวจรายงานเครดิตของตัวเองกับวิธีโต้แย้งข้อมูลผิด
-tags: [trigger, credit-bureau]
+tags: [capability, trigger, credit-bureau]
 runs: 3
 expected_outcome: เรียก Skill credit-bureau · บอกว่าเครดิตบูโรไม่มีแบล็กลิสต์ แค่รายงานประวัติ · บอกช่องทางขอรายงานเครดิตของตัวเอง · บอกวิธีโต้แย้งข้อมูลที่ผิด
 execution:

@@ -2,13 +2,20 @@
 // size.mjs - position size from risk budget, snapped to board lot and checked against SET ticks (Node stdlib only)
 // Usage: node size.mjs <file.json> [--json]   |   node size.mjs --self-test
 // type "share" | "etf" | "crypto": { capital, riskPct, entry, stop, costPerShare, lot, maxPositionPct, avgDailyValue, asOf }
-// type "forex": { capital, riskPct, stopPips, pipValuePerLot, costPerLot, volumeStep }
+// type "forex": { capital, riskPct, stopPips, pipValuePerLot, costPerLot, volumeStep } + optional margin: { price, leverage, contractSize }
+// Any type, optional: riskPctApprovedBy (required when riskPct > 2), gapMultiplier (1.5-2 for earnings/XD/weekend), openRiskPct (risk already open, % of capital)
 // No stop = error. Tick table lives in ticks.json (checked + source); entry and stop must sit on a valid tick.
 import { readFileSync } from 'node:fs';
 
 const TICKS = JSON.parse(readFileSync(new URL('./ticks.json', import.meta.url), 'utf8'));
+// SKILL.md rule (1-2% a trade): above this the script stops unless riskPctApprovedBy says who set it in CONTEXT.md
 const MAX_RISK_PCT = 2;
+// SKILL.md rule of thumb so the position can be exited in a day; starting value, not measured
 const LIQUIDITY_PCT = 5;
+// SKILL.md and forex-cfd-crypto.md: total open risk across positions <= 5-6% of capital; warn above the upper end
+const MAX_OPEN_RISK_PCT = 6;
+// forex-cfd-crypto.md section 2: one standard lot = 100,000 units of the base currency
+const STANDARD_CONTRACT = 100000;
 const todayLocal = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
 
 export const tickFor = (price, bands) => bands.filter(([from]) => price >= from).at(-1)[1];
@@ -28,13 +35,27 @@ export function validate(input) {
   num(input.capital, 'capital');
   num(input.riskPct, 'riskPct');
   const warnings = [];
-  if (input.riskPct > MAX_RISK_PCT) warnings.push(`riskPct ${input.riskPct}% เกินเพดาน ${MAX_RISK_PCT}% · ใช้ได้เมื่อผู้ใช้เขียนไว้เองใน CONTEXT.md เท่านั้น`);
+  if (input.riskPct > MAX_RISK_PCT) {
+    const by = typeof input.riskPctApprovedBy === 'string' ? input.riskPctApprovedBy.trim() : '';
+    if (!by) throw new Error(`riskPct ${input.riskPct}% เกินเพดาน ${MAX_RISK_PCT}% · ลดเป็น ${MAX_RISK_PCT} หรือต่ำกว่า หรือใส่ช่อง riskPctApprovedBy บอกว่าผู้ใช้เขียนค่านี้ไว้ที่ไหน (เช่น "CONTEXT.md 2026-10-28")`);
+    warnings.push(`riskPct ${input.riskPct}% เกินเพดาน ${MAX_RISK_PCT}% · ผู้ใช้อนุมัติไว้: ${by}`);
+  }
+  if (input.gapMultiplier !== undefined) {
+    num(input.gapMultiplier, 'gapMultiplier');
+    if (input.gapMultiplier < 1) throw new Error(`ช่อง gapMultiplier ต้องไม่น้อยกว่า 1 (ได้ ${input.gapMultiplier}) · ใช้ 1.5–2 เมื่อราคาอาจกระโดดข้าม stop`);
+  }
+  if (input.openRiskPct !== undefined) num(input.openRiskPct, 'openRiskPct', { strict: false });
   if (type === 'forex') {
     if (input.stopPips === undefined || input.stopPips === null) throw new Error('ไม่มี stop-loss (ช่อง stopPips) · ไม่คำนวณขนาดไม้โดยไม่มี stop');
     num(input.stopPips, 'stopPips');
     num(input.pipValuePerLot, 'pipValuePerLot');
     num(input.costPerLot ?? 0, 'costPerLot', { strict: false });
     num(input.volumeStep ?? 0.01, 'volumeStep');
+    if (input.leverage !== undefined || input.price !== undefined) {
+      num(input.price, 'price (ราคาเข้า ใช้คิด margin)');
+      num(input.leverage, 'leverage (เช่น 100 สำหรับ 1:100)');
+      num(input.contractSize ?? STANDARD_CONTRACT, 'contractSize');
+    }
     return warnings;
   }
   num(input.entry, 'entry');
@@ -80,7 +101,18 @@ function sizeForex(input, warnings) {
   const budget = (input.capital * input.riskPct) / 100;
   const riskPerLot = input.stopPips * input.pipValuePerLot + (input.costPerLot ?? 0);
   const size = floorTo(budget / riskPerLot, step);
-  return { type: 'forex', unit: 'lot', step, budget, riskPerUnit: riskPerLot, rawSize: budget / riskPerLot, size, value: null, valuePct: null, realRisk: size * riskPerLot, bound: size > 0 ? 'risk' : null, warnings };
+  // margin = lots x contract size x price / leverage (forex-cfd-crypto.md section 3), in the quote currency
+  const margin = input.leverage === undefined ? null : (size * (input.contractSize ?? STANDARD_CONTRACT) * input.price) / input.leverage;
+  return addRiskChecks(input, { type: 'forex', unit: 'lot', step, budget, riskPerUnit: riskPerLot, rawSize: budget / riskPerLot, size, value: null, valuePct: null, margin, realRisk: size * riskPerLot, bound: size > 0 ? 'risk' : null, warnings });
+}
+
+// Gap loss and total open risk: both are what-ifs on top of the sized trade, never change the size itself.
+function addRiskChecks(input, r) {
+  const realPct = (r.realRisk / input.capital) * 100;
+  r.gapRisk = input.gapMultiplier === undefined ? null : r.realRisk * input.gapMultiplier;
+  r.totalOpenRiskPct = input.openRiskPct === undefined ? null : input.openRiskPct + realPct;
+  if (r.totalOpenRiskPct !== null && r.totalOpenRiskPct > MAX_OPEN_RISK_PCT) r.warnings.push(`ความเสี่ยงรวมที่เปิดอยู่ ${fmt(r.totalOpenRiskPct, 2)}% เกิน ${MAX_OPEN_RISK_PCT}% ของทุน · ลดขนาดหรือปิดไม้อื่นก่อน`);
+  return r;
 }
 
 export function compute(input) {
@@ -99,7 +131,7 @@ export function compute(input) {
   if (input.avgDailyValue !== undefined) limits.push(['liquidity', floorTo((input.avgDailyValue * LIQUIDITY_PCT) / 100 / input.entry, lot)]);
   const [bound, size] = limits.reduce((a, b) => (b[1] < a[1] ? b : a));
   const value = size * input.entry;
-  return { type, step: lot, unit: type === 'crypto' ? 'เหรียญ' : 'หุ้น', side: input.stop < input.entry ? 'buy' : 'short', budget, riskPerUnit, rawSize, size, value, valuePct: (value / input.capital) * 100, realRisk: size * riskPerUnit, bound: size > 0 ? bound : null, limits: Object.fromEntries(limits), warnings };
+  return addRiskChecks(input, { type, step: lot, unit: type === 'crypto' ? 'เหรียญ' : 'หุ้น', side: input.stop < input.entry ? 'buy' : 'short', budget, riskPerUnit, rawSize, size, value, valuePct: (value / input.capital) * 100, realRisk: size * riskPerUnit, bound: size > 0 ? bound : null, limits: Object.fromEntries(limits), warnings });
 }
 
 const fmt = (n, d = 0) => n.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
@@ -121,6 +153,9 @@ export function report(input, r) {
     const value = r.value === null ? '' : ` · มูลค่า ${fmt(r.value)} บาท (${fmt(r.valuePct, 1)}% ของทุน)`;
     lines.push(`**ผล:** ${fmt(r.size, decimalsOf(r.step))} ${r.unit}${value} · ความเสี่ยงจริง ${fmt(r.realRisk, 2)} ${money} (${fmt((r.realRisk / input.capital) * 100, 2)}%)`);
     lines.push(`ข้อที่กำหนดขนาด: ${BOUND_TEXT[r.bound]}`);
+    if (r.gapRisk !== null) lines.push(`ถ้าราคากระโดดข้าม stop (x${input.gapMultiplier}): ขาดทุนได้ถึง ${fmt(r.gapRisk, 2)} ${money} (${fmt((r.gapRisk / input.capital) * 100, 2)}%)`);
+    if (r.totalOpenRiskPct !== null) lines.push(`ความเสี่ยงรวมหลังเปิดไม้นี้ ${fmt(r.totalOpenRiskPct, 2)}% ของทุน (เพดาน ${MAX_OPEN_RISK_PCT}%)`);
+    if (r.margin != null) lines.push(`margin ประมาณ ${fmt(r.margin, 2)} (สกุลราคา · แปลงเป็นสกุลบัญชีถ้าต่างกัน) = ${fmt((r.margin / input.capital) * 100, 1)}% ของทุน · margin ไม่ใช่ความเสี่ยง`);
   }
   lines.push('', 'ข้อมูลทั่วไป ไม่ใช่คำแนะนำการลงทุน');
   return lines.join('\n');
@@ -174,7 +209,18 @@ function selfTest() {
   t('riskPct เป็นข้อความ', throwsWith({ ...S, riskPct: '1' }, 'riskPct'));
   t('stop = entry', throwsWith({ ...S, stop: 48.5 }, 'stop'));
   t('type ผิด', throwsWith({ ...S, type: 'bond' }, 'type'));
-  t('riskPct > 2 เตือน', compute({ ...S, riskPct: 3 }).warnings.length === 1);
+  t('riskPct > 2 ไม่มีผู้อนุมัติ error', throwsWith({ ...S, riskPct: 3 }, 'riskPctApprovedBy'));
+  t('riskPct > 2 มีผู้อนุมัติ เตือน', compute({ ...S, riskPct: 3, riskPctApprovedBy: 'CONTEXT.md 2026-10-28' }).warnings.length === 1);
+  t('forex riskPct 50 error', throwsWith({ ...fx, riskPct: 50 }, 'riskPctApprovedBy'));
+  // forex-cfd-crypto.md worked example: 0.32 lots x 100,000 x 1.085 / 100 = 347.2
+  t('forex margin 347', near(compute({ ...fx, price: 1.085, leverage: 100 }).margin, 347.2));
+  t('forex leverage ไม่มี price error', throwsWith({ ...fx, leverage: 100 }, 'price'));
+  // gap x2 on the SKILL example: real risk 238 -> 476
+  t('gapMultiplier 2', near(compute({ ...S, gapMultiplier: 2 }).gapRisk, 476));
+  t('gapMultiplier < 1 error', throwsWith({ ...S, gapMultiplier: 0.5 }, 'gapMultiplier'));
+  // open risk 5.9% + 0.238% = 6.138% > 6 -> warn; 3% + 0.238% -> no warning
+  t('ความเสี่ยงรวมเกิน 6% เตือน', compute({ ...S, openRiskPct: 5.9 }).warnings.some((w) => w.includes('ความเสี่ยงรวม')));
+  t('ความเสี่ยงรวมไม่เกิน ไม่เตือน', compute({ ...S, openRiskPct: 3 }).warnings.length === 0 && near(compute({ ...S, openRiskPct: 3 }).totalOpenRiskPct, 3.238));
   console.log(`self-test ${ok}/${ok + bad} ผ่าน`);
   process.exit(bad ? 1 : 0);
 }

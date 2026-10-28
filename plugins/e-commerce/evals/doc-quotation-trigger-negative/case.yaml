@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เคส "ไม่ควรเปิด": คำถามใกล้เคียงที่เป็นงานของ skill อื่น · tool_used min 0 max 0 ตาม skill-authoring/references/eval-format.md
+schema_version: "1.1"
+name: doc-quotation-trigger-negative
+description: สมัคร e-Tax Invoice เป็นของ skill ใบกำกับภาษีอิเล็กทรอนิกส์ · ต้องไม่เปิด doc-quotation
+tags: [trigger, negative, regression-suite, doc-quotation]
+runs: 3
+expected_outcome: ไม่เปิด Skill doc-quotation · คำตอบยังตอบคำถามได้
+execution:
+  prompt: |
+    ลูกค้าขอใบกำกับภาษีอิเล็กทรอนิกส์ e-Tax Invoice ส่งทางอีเมล ระบบเราต้องสมัครอะไรกับสรรพากรมั้ย
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: doc-quotation-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?doc-quotation"'
+    min: 0
+    max: 0
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: 'e-Tax|สรรพากร'
+    flags: i
+    match: contains
+    target: last_message

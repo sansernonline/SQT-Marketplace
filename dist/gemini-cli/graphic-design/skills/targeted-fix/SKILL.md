@@ -32,6 +32,19 @@ things is a new bug waiting to happen and a change nobody can review.
 5. **Smallest fix.** Change only what's needed. Match the surrounding style.
 6. **Prove it.** Re-run the failing case → it passes. Re-run nearby cases → still pass. Show the before/after of the one thing that changed.
 
+## รับผลรีวิว (receiving review feedback)
+
+Review comments from `reviewer`, a person or a bot are claims, not orders. Reviewers can be wrong.
+
+1. **List every item** with its own id. Unclear item → restate it in one line before touching anything.
+2. **Check each item against the code or evidence** (file:line, test, source). Mark it: right · wrong · unsure.
+3. **Wrong → push back with evidence** (the test that passes, the line that already handles it, the spec clause). Don't apply a change just to make the comment go away, and don't agree without checking.
+4. **Unsure → verify first** (run it, read it). Still unsure → log it in `decision-log` and take the lowest-impact reading.
+5. **Fix one item at a time** with the steps above, re-run its check, then move to the next. No batch of every fix followed by one test run.
+6. **Report per item:** `id · fixed (evidence) / declined (evidence) / open (why)`.
+
+Idea from `receiving-code-review` in obra/superpowers.
+
 ## หาจุดให้เร็ว
 
 Cause known, line not found yet → search the literal wrong text, number or error string (it usually appears once). Tracing a cause (stack trace, version history, scope clues) → `principle-fix-root-cause`.

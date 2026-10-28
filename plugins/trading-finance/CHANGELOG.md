@@ -1,5 +1,21 @@
 # Changelog — trading-finance
 
+## 0.17.0 — 2026-10-28
+
+- สคริปต์ใหม่ `tax-deduction-planner/scripts/tax.mjs` คิดภาษีก่อน/หลัง/ประหยัด อัตราส่วนเพิ่ม ห้องเหลือ RMF ThaiESG วงเงินรวม 500,000 ค่า `value` ของ knapsack และเทียบรวมหรือไม่รวมปันผล · อัตราอ่านจาก `rates-2569.json` ที่มีวันตรวจ · self-test 24 ข้อ
+- สคริปต์ใหม่ `retirement-plan/scripts/retire.mjs` คิดเงินที่ต้องมี บำนาญประกันสังคม เงินออมต่อเดือน สามคันโยก และช่วงผลตอบแทน · เพดานค่าจ้างอ่านจาก `sso-pension.json` · self-test 26 ข้อ
+- สคริปต์ใหม่ `portfolio-snapshot/scripts/money-calc.mjs` 5 คำสั่ง (`snapshot` `drift` `dividend` `afterTax` `fee`) ใช้ร่วม 5 skill แทนคิดในหัว · self-test 36 ข้อ
+- สคริปต์ใหม่ `technical-signals/scripts/indicators.mjs` SMA EMA RSI MACD วอลุ่ม และ hit rate พร้อมช่วง Wilson จาก CSV ของผู้ใช้ · self-test 19 ข้อ
+- `technical-signals` เลือก RSI หรือ MACD เมื่อช่วง 95% ไม่ทับกัน แทนเกณฑ์ต่าง 5 จุดที่เล็กกว่าความคลาดเคลื่อน
+- `size.mjs` riskPct เกิน 2% หยุดถ้าไม่มี `riskPctApprovedBy` · เพิ่ม `gapMultiplier` `openRiskPct` และ margin ของ forex · ค่าคงที่มีคอมเมนต์ที่มา
+- `payoff.mjs` ชื่อหนี้ซ้ำหยุดพร้อมข้อความ · ขั้นต่ำบัตรเป็น % ของยอดด้วย `minPct` `minFloor`
+- `refinance.mjs` รับอัตราหลายช่วง (`rates`) และคำสั่ง `scenarios` ที่เขียนตารางให้ `decide.mjs payoff`
+- `trade-stats.mjs` แสดงช่วง Wilson ของ win rate · เกณฑ์ 1.2R และ 10% เป็นค่าคงที่พร้อมคอมเมนต์ว่ายังไม่ได้วัด
+- `rebalance-and-dca` มีไฟล์ตัวอย่าง `decide.mjs score` เทียบวิธีปรับสัดส่วน น้ำหนัก 0.5/0.5 ยังไม่ได้วัด
+- `tax-deduction-planner` และ `retirement-plan` มีรายการตรวจก่อนส่ง · `tax-basics-th` ชี้ไป `tax.mjs` ตอนเทียบปันผล
+- `copy-trade-check` อยู่ในตารางตัวกระตุ้นและในหน้าที่ของ agent `risk-manager`
+- eval: เคส behaviour ที่มีสคริปต์ตรวจว่ารันสคริปต์จริง · เพิ่ม 8 เคส (ไม่ควรเปิด 2 · tax-basics-th · debt-payoff · retirement-plan) · ทุกเคสติดป้าย capability หรือ regression · RESULTS.md จดแผนรอบหน้า (ยังไม่ได้รัน)
+
 ## 0.16.1 — 2026-10-28
 
 - `trade-stats.mjs` ไม่นับช่อง violation ที่เป็น `no` `n` `none` `false` `0` `-` `ไม่` `ไม่มี` ว่าเป็นการฝ่าฝืน

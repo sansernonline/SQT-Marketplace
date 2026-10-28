@@ -59,6 +59,19 @@ Gross sales ฿1,200,000 (all channels). Actual costs with receipts ฿900,000. 
 
 Actual expenses win, but only with receipts — and the 0.5% minimum lifts the bill from ฿4,500 to ฿6,000. Sales are under ฿1.8 million, so no VAT registration yet; as sales grow, check monthly.
 
+### Run the script, do not add up by hand
+
+`scripts/tax-compare.mjs` does the table above in one call: both methods, the 0.5% check and which one is cheaper. Rates live in `scripts/rates.json` with the date they were checked; the report prints that date and warns when it is older than 90 days.
+
+```bash
+node scripts/tax-compare.mjs scripts/example.json      # { "sales": 1200000, "actual_expenses": 900000 } → 19,500 vs 6,000
+node scripts/tax-compare.mjs --self-test
+```
+
+**Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/seller-tax-basics/scripts/tax-compare.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/e-commerce/skills/seller-tax-basics/scripts/tax-compare.mjs` · Node only, no dependencies.
+
+`allowances` is the year's total allowances (default: personal ฿60,000 only). Salary or other income types are out of scope — use `payroll-th` or ask an accountant. Comparing sole trader against a company: `"mode": "company"`, see `thai-business-setup` section 2.
+
 ## Who reports your sales to the Revenue Department
 
 | Reporter | Rule |

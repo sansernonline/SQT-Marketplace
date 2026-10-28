@@ -3,7 +3,8 @@ schema_version: "1.1"
 name: kafka-streaming-trigger
 description: ผู้ใช้ถามวิธีส่ง event สายโทรกับนัดหมายระหว่าง service ผ่าน Kafka ไม่เอ่ยชื่อ skill ต้องทำให้ kafka-streaming ถูกเปิด และคำตอบพูดถึงการทำซ้ำได้ของ consumer
 tags: [trigger, kafka-streaming]
-runs: 3
+# runs 5: เคสนี้ใช้ตัดสินการแก้ description ของ skill · n=3 กว้างเกินไป (ยังไม่ได้วัดช่วงจริง)
+runs: 5
 expected_outcome: เปิด Skill kafka-streaming แล้วเสนอ topic พร้อม key และบอกว่า consumer ต้องกัน event ซ้ำ
 execution:
   prompt: |
