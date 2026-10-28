@@ -61,7 +61,7 @@ jobs:
           node plugins/personal-life/skills/household-bills/scripts/power-bill.mjs --self-test
           node plugins/e-commerce/skills/seller-tax-basics/scripts/tax-compare.mjs --self-test
           node plugins/e-commerce/skills/multi-shop-stock/scripts/stock-calc.mjs --self-test
-          node plugins/e-commerce/skills/thai-business-setup/scripts/landed-cost.mjs --self-test
+          node plugins/e-commerce/skills/import-landed-cost/scripts/landed-cost.mjs --self-test
           node plugins/trading-finance/skills/tax-deduction-planner/scripts/tax.mjs --self-test
           node plugins/trading-finance/skills/retirement-plan/scripts/retire.mjs --self-test
           node plugins/trading-finance/skills/portfolio-snapshot/scripts/money-calc.mjs --self-test

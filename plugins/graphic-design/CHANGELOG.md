@@ -1,5 +1,10 @@
 # Changelog — graphic-design
 
+## 0.18.0 — 2026-10-28
+
+- skill ใหม่ `narration-th`: แยกเสียงบรรยายไทยจากสคริปต์ (text-to-speech) ออกจาก `video-editing` ตามที่ผู้ใช้เลือก (เดิมรวมไว้ 2026-10-24) · ย้ายแบบตัดแปะ ไม่เขียนเนื้อใหม่ · สคริปต์ `tts_cues.py` `f5_worker.py` `windows_tts.ps1` และ `references/tts-engine-score.example.json` ย้ายตาม · `video-editing` เหลือตัด ต่อ ความดัง สไลด์เป็นวิดีโอ และชี้มาที่ skill ใหม่
+- eval `video-editing-tts-*` เปลี่ยนชื่อเป็น `narration-th-trigger` `-behaviour` `-guard` · เพิ่มเคสไม่ควรเปิด `narration-th-trigger-negative` (เตรียมไว้ ยังไม่ได้รัน) · agent `video-editor` ชี้ skill ใหม่
+
 ## 0.17.0 — 2026-10-28
 
 - สคริปต์ตัดต่อ (`silences` `loudnorm2` `slides_to_video`) ไม่เขียนทับไฟล์ผลลัพธ์ที่มีอยู่แล้ว เว้นแต่ใส่ `--force` · เสนอชื่อใหม่ `-v02` · ตัวกันร่วมกันคือ `outguard.py` มี `--self-test`

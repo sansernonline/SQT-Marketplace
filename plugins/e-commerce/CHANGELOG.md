@@ -1,5 +1,12 @@
 # CHANGELOG — e-commerce
 
+## 1.5.0 — 2026-10-28
+
+- skill ใหม่ `import-landed-cost` แยกจาก `thai-business-setup` หัวข้อ 5 (ต้นทุนนำเข้าจากจีนต่อชิ้น · กติกาอากรปี 2569 · ทางรถหรือทางเรือ) ย้ายเนื้อหาแบบตัดแปะ ไม่เขียนใหม่ · `landed-cost.mjs` `rates.json` `example.json` ย้ายตามไปที่ `import-landed-cost/scripts/`
+- `thai-business-setup` เหลือเลือกรูปแบบ จดทะเบียน และเช็กลิสต์หลังจด แล้วชี้ไป skill ใหม่ 1 บรรทัด (269 → 182 บรรทัด)
+- agent `shop-manager` ใช้ `import-landed-cost` ก่อนตั้งราคาสินค้าที่สั่งจากจีน · แถวใหม่ใน `superuser/references/triggers.md`
+- eval 3 เคสของ `import-landed-cost` (ควรเปิด · ไม่ควรเปิด · behaviour) ยังไม่ได้รัน
+
 ## 1.4.0 — 2026-10-28
 
 - สคริปต์ใหม่ 3 ตัว: `tax-compare.mjs` ใน `seller-tax-basics` (หักเหมา 60% เทียบหักจริงพร้อมวิธีที่ 2 และโหมดบุคคลเทียบบริษัท SME ส่งต่อ `decide.mjs payoff`) · `stock-calc.mjs` ใน `multi-shop-stock` (buffer · จุดสั่งซื้อ · จำนวนสั่ง) · `landed-cost.mjs` ใน `thai-business-setup` (ต้นทุนนำเข้าต่อชิ้น 2 แบบ) · อัตราอยู่ใน `rates.json` ที่มีวันที่ตรวจ

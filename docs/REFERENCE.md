@@ -197,7 +197,7 @@
 
 ---
 
-## 🛠️ Skills (102)
+## 🛠️ Skills (103)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst, product-manager
@@ -896,6 +896,12 @@
 ### 102. rabbitmq-messaging
 **ใช้กับ:** devops-engineer
 **Description:** Use when work goes through RabbitMQ (queue, exchange, ack, DLX, ข้อความหาย/ซ้ำ). Many readers of one log → kafka-streaming
+
+---
+
+### 103. load-testing
+**ใช้กับ:** devops-engineer, qa-tester
+**Description:** Use when checking how a system holds many users at once (load, stress, spike, soak test, k6, ยิงโหลด, รับได้กี่คน). Page speed → web-quality-audit.
 
 ---
 

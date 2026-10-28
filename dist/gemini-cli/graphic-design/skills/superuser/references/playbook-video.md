@@ -1,7 +1,7 @@
 # playbook · video — วิดีโอสั้นและงาน motion
 
 ใช้เมื่อ: Reels · TikTok · Shorts · วิดีโอโฆษณา · ข้อความเคลื่อนไหว · โลโก้เคลื่อนไหว · ตัดต่อและใส่ซับจากฟุตเทจที่มี
-skill หลัก: `video-script-to-clip` · `motion-basics` · `style-consistency` · `video-editing` · `subtitles-th`
+skill หลัก: `video-script-to-clip` · `motion-basics` · `style-consistency` · `video-editing` · `narration-th` · `subtitles-th`
 
 ## ขั้นตอน (คัดลง todo ตรงตัว)
 
@@ -9,7 +9,7 @@ skill หลัก: `video-script-to-clip` · `motion-basics` · `style-consiste
 2. ทำ shot list ตาม `video-script-to-clip` — ภาพ ข้อความบนจอ เสียง เวลา · ใคร: `art-director` ตัวใหม่
 3. ตั้งจังหวะ motion ตาม `motion-basics` — กำหนดเวลาเป็นมิลลิวินาที · เลือกเส้น easing (จังหวะเร่งและชะลอ) · ข้อความบนจออยู่นานพอให้อ่านทัน · ใคร: `art-director` ตัวใหม่
 4. เขียน brief ทีละช็อตสำหรับเครื่องมือวิดีโอหรือการถ่ายด้วยมือถือ · ใคร: `art-director` ตัวใหม่
-5. มีฟุตเทจหรือเสียงแล้ว: ตัด ต่อ ปรับความดัง ต่อสไลด์กับเสียง และส่งออกตาม `video-editing` · ซับไทยตาม `subtitles-th` · ไม่อัดเสียงเอง → เสียงบรรยายจากสคริปต์ตาม `video-editing` หัวข้อเสียงบรรยายจากสคริปต์ (ได้ซับและเวลาสไลด์ในรอบเดียว) · งานที่ส่งแค่ brief ข้ามขั้นนี้ · ใคร: `video-editor` ตัวใหม่
+5. มีฟุตเทจหรือเสียงแล้ว: ตัด ต่อ ปรับความดัง ต่อสไลด์กับเสียง และส่งออกตาม `video-editing` · ซับไทยตาม `subtitles-th` · ไม่อัดเสียงเอง → เสียงบรรยายจากสคริปต์ตาม `narration-th` (ได้ซับและเวลาสไลด์ในรอบเดียว) · งานที่ส่งแค่ brief ข้ามขั้นนี้ · ใคร: `video-editor` ตัวใหม่
 6. ตรวจว่าซับไทยอ่านทันที่ความเร็วจริง ข้อความไม่ตกนอก safe zone ของแพลตฟอร์ม และไฟล์ที่ส่งออก (ถ้ามี) ยาวและดังตามที่วัดไว้ · ใคร: `design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์)
 
 ## จบเมื่อ

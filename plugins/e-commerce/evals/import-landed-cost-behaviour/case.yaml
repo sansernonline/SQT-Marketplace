@@ -1,0 +1,43 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# ตัวเลขได้จากการรัน landed-cost.mjs 2026-10-28 ด้วย input: qty 500 · goods_cny 6000 · fx 4.9 · cn_shipping_cny 200 · freight_thb 4640 · insurance_pct 1 · duty_pct 10 · broker_thb 1500 · th_delivery_thb 400 → CIF 35,314.00 · อากร 3,531.40 · VAT 2,719.18 · ต่อชิ้น 86.93 (ยังไม่จด VAT) และ 81.49 (จด VAT นำเข้าในชื่อตัวเอง)
+# ถ้าแก้สคริปต์หรือ rates.json ให้รันใหม่แล้วแก้ pattern ตาม
+schema_version: "1.1"
+name: import-landed-cost-behaviour
+description: สั่งของจากจีนล็อต 500 ชิ้น ต้องได้ต้นทุนต่อชิ้นทั้ง 2 แบบตามสคริปต์ ไม่อ้างว่าของต่ำกว่า 1,500 บาทไม่เสียอากร และไม่นับ VAT นำเข้าเป็นต้นทุนของกิจการที่จด VAT
+tags: [behaviour, capability-suite, import-landed-cost]
+runs: 3
+expected_outcome: ต้นทุนต่อชิ้น 86.93 บาท (ยังไม่จด VAT) และ 81.49 บาท (จด VAT นำเข้าในชื่อตัวเอง) · บอกให้ตรวจอัตราอากรตามพิกัดจริงหรือ Form E
+execution:
+  prompt: |
+    สั่งที่ห้อยกระเป๋าจากจีน 500 ชิ้น ราคารวม 6,000 หยวน เรท 4.9 บาท ค่าส่งในจีน 200 หยวน
+    ชิปปิ้งทางรถคิดมา 4,640 บาท ประกัน 1% ของค่าสินค้า ค่าพิธีการ 1,500 ค่าส่งในไทย 400
+    ชิปปิ้งบอกอากร 10% ร้านจด VAT แล้ว นำเข้าในชื่อร้าน
+    ตกชิ้นละเท่าไหร่ ถ้ายังไม่จด VAT จะต่างกันไหม
+  max_turns: 8
+  timeout_seconds: 300
+graders:
+  - name: per-unit-not-registered
+    type: regex
+    pattern: '86\.93'
+    flags: i
+    match: contains
+    target: last_message
+  - name: per-unit-registered
+    type: regex
+    pattern: '81\.49'
+    flags: i
+    match: contains
+    target: last_message
+  - name: no-1500-exemption-claim
+    type: regex
+    pattern: 'ไม่เกิน\s*1,?500\s*บาท\s*(ไม่ต้อง|ไม่)เสียอากร|ยกเว้นอากร\s*1,?500'
+    flags: i
+    match: not_contains
+    target: last_message
+  - name: duty-rate-caveat
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน · ผ่านเมื่อครบ 2 ข้อ:
+      1. บอกให้ตรวจอัตราอากร 10% กับพิกัดศุลกากร (HS code) ของสินค้าจริง หรือถามเรื่องสิทธิลดอากรจาก Form E อย่างใดอย่างหนึ่ง
+      2. อธิบายว่าร้านที่จด VAT และนำเข้าในชื่อตัวเองเอา VAT นำเข้าไปเป็นภาษีซื้อได้ จึงไม่นับเป็นต้นทุน

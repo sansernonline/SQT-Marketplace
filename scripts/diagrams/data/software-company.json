@@ -1,6 +1,6 @@
 {
  "plugin": "software-company",
- "version": "2.32.1",
+ "version": "2.33.0",
  "description": "Simulates a complete software development company — 38 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 95 skills and 29 slash commands for the whole SDLC.",
  "cross": [],
  "skills": [
@@ -54,6 +54,7 @@
   "legacy-spec-recovery",
   "legal-document-systems",
   "llm-engineering",
+  "load-testing",
   "logging-standards",
   "markdown-report-docx",
   "markdown-visuals",
@@ -333,6 +334,7 @@
     "cicd-and-release",
     "config-and-secrets",
     "observability-basics",
+    "load-testing",
     "project-bootstrap",
     "background-jobs",
     "kubernetes-helm",
@@ -613,6 +615,7 @@
     "principle-secure-by-default",
     "testing-standards",
     "e2e-testing-patterns",
+    "load-testing",
     "fsd-writing",
     "stack-dotnet",
     "stack-typescript",

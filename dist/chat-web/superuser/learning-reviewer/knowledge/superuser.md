@@ -1085,7 +1085,7 @@ skill เอกสารหลัก (`polished-document-style` · `document-nam
 | สไลด์ / ภาพจริงในหน้าเว็บ สไลด์ หรือเอกสาร / ตั้งชื่อสินค้าหรือแบรนด์ | `presentation-design` (plugin `software-company`) / `image-generation` (plugin `graphic-design`) / `product-naming` (plugin `software-company`) |
 | เด็คเป็นไฟล์ .html เดียว นำเสนอจากเบราว์เซอร์ / มี .pptx แล้วอยากได้ .html มี animation | `html-slide-deck` / `pptx-to-html-deck` (plugin `software-company`) |
 | เขียนสคริปต์ให้คนพูดหน้ากล้อง (คลิป influencer · รีวิว · พิธีกร · voiceover) | `speaking-script` (plugin `graphic-design`) — ภาพนำหรือคลิปตัดต่อที่ไม่มีคนพูด → `video-script-to-clip` |
-| เสียงบรรยายจากสคริปต์โดยไม่อัดเอง · ตัดต่อด้วยคำสั่ง · ซับไทยเป็นไฟล์ | `video-editing` (รวมเสียงบรรยายจากสคริปต์) · `subtitles-th` (plugin `graphic-design`) |
+| เสียงบรรยายจากสคริปต์โดยไม่อัดเอง · ตัดต่อด้วยคำสั่ง · ซับไทยเป็นไฟล์ | `narration-th` (เสียงบรรยายจากสคริปต์) · `video-editing` (ตัดต่อ) · `subtitles-th` (plugin `graphic-design`) |
 | รูปสินค้าลง marketplace · ส่งไฟล์โรงพิมพ์หรือร้านป้าย · ปกคลิป YouTube | `marketplace-product-images` · `print-ready-files` · `youtube-thumbnail` (plugin `graphic-design`) |
 | ไอคอนในแอปไม่เข้ากันหรือไม่สวย · ไอคอนแอป · favicon · ไอคอน plugin · เครื่องหมายโลโก้แบบรูป | `icon-design` (plugin `graphic-design`) · ไอคอนแบรนด์ขอตัวอย่างที่ผู้ใช้ชอบก่อนเสมอ |
 | เงินฝากประจำ พันธบัตร หุ้นกู้ · เครดิตบูโร · รีไฟแนนซ์บ้าน · DCA และปรับพอร์ต | `bonds-and-deposits` · `credit-bureau` · `home-refinance` · `rebalance-and-dca` (plugin `trading-finance`) |

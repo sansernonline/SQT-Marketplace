@@ -2164,6 +2164,7 @@ skill หลัก: skill ตรวจแอปของโปรเจกต์
 | แก้โค้ดที่ใช้ร่วมกัน (helper · type · config · schema) ก่อนส่ง | [`blast-radius`](../../blast-radius/SKILL.md) |
 | เลือกระหว่างทำง่ายกับใช้ดี · ตัด scope | `principle-user-experience-first` |
 | ผู้ใช้พูดว่า TDD · test-driven · "เขียน test ก่อน" | [`spec-to-code-loop`](../../spec-to-code-loop/SKILL.md) (red→green ต่อ 1 ข้อกำหนด) + [`testing-standards`](../../testing-standards/SKILL.md) (โครง test · คำสั่งรัน) |
+| ระบบจะรับคนเข้าพร้อมกันได้ไหม · ก่อนแคมเปญหรือเปิดระบบ · load · stress · spike · soak test · k6 · postmortem สั่งเพิ่ม load test | [`load-testing`](../../load-testing/SKILL.md) — เกณฑ์ p95 กับอัตรา error ก่อนยิง · ด่านอนุญาต (ไม่ยิงระบบคนอื่นหรือ production โดยไม่มีผู้อนุมัติ) · k6 thresholds · smoke ใน CI · ความเร็วหน้าเว็บหน้าเดียวใช้ `web-quality-audit` |
 | ตรวจเว็บก่อนเปิดตัว: การเข้าถึง (WCAG) · ความเร็ว (Lighthouse · Core Web Vitals) | [`web-quality-audit`](../../web-quality-audit/SKILL.md) · SEO ใช้ `seo-audit-checklist` รอบเดียวกัน |
 | โปรเจกต์ยังไม่มีวิธีให้ agent รันแอปและกดดูผลเอง | [`app-verifier-setup`](../../app-verifier-setup/SKILL.md) — ทำก่อนอย่างอื่น · บน Claude Code ที่มี `/verify` ติดเครื่อง skill ที่ได้ชื่อ `verify` ตาม `references/builtin-verify.md` |
 | ต้องติดตั้งของ รัน build · test · server · ฐานข้อมูลทดสอบ | ถ้าโปรเจกต์มี `.sandbox/` ให้ทำใน sandbox ผ่าน `sandbox.ps1 exec` ถ้ายังไม่มีและงานต้องติดตั้งอะไรเพิ่ม ให้เสนอ [`docker-sandbox`](../../docker-sandbox/SKILL.md) · `.sandbox/` อยู่ที่รากได้เป็นข้อยกเว้นที่ประกาศใน README ของโฟลเดอร์โค้ด (`project-doc-set` ข้อ 1) |

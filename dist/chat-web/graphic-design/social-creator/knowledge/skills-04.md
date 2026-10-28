@@ -108,7 +108,7 @@ Skill นี้อยู่ใน plugin `graphic-design` · ถ้อยคำ�
 | ไลฟ์ขายของเป็นนาทีต่อนาที | `live-selling-script` |
 | ซับไตเติล · ข้อความบนจอ · safe zone | `video-script-to-clip` หัวข้อ caption rules |
 | บทพูดงานประชุม/นำเสนอบนเวที พร้อมสไลด์ | `presentation-design` + บันทึกผู้พูด |
-| ทำเสียงจากสคริปต์โดยไม่อัดเอง (text-to-speech) | `video-editing` หัวข้อเสียงบรรยายจากสคริปต์ · เขียนบทที่นี่ก่อน แล้วส่งต่อ |
+| ทำเสียงจากสคริปต์โดยไม่อัดเอง (text-to-speech) | `narration-th` · เขียนบทที่นี่ก่อน แล้วส่งต่อ |
 
 ---
 

@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# runs 5: เคสนี้ใช้ตัดสินการแก้ description ของ skill · n=3 กว้างเกินไป (ยังไม่ได้วัดช่วงจริง)
+schema_version: "1.1"
+name: load-testing-trigger
+description: ผู้ใช้อยากรู้ว่าระบบรับคนเข้าพร้อมกันช่วง flash sale ได้ไหม ไม่เอ่ยชื่อ skill ต้องทำให้ load-testing ถูกเปิด และคำตอบตั้งเกณฑ์ผ่านเป็น percentile
+tags: [trigger, load-testing]
+runs: 5
+expected_outcome: เปิด Skill load-testing แล้วเสนอเกณฑ์ p95 กับอัตรา error ก่อนยิง
+execution:
+  prompt: |
+    ร้านออนไลน์ของเราจะจัด flash sale เที่ยงวันศุกร์นี้ ปีก่อนระบบล่มตอนคนเข้าพร้อมกัน
+    อยากรู้ก่อนว่ารอบนี้ระบบจะรอดไหม ช่วยวางแผนทดสอบให้หน่อย ยังไม่ต้องเขียนโค้ด
+  max_turns: 6
+  timeout_seconds: 240
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?load-testing"'
+    min: 1
+    arm: with-only
+  - name: percentile-criteria
+    type: regex
+    pattern: 'p\(?9[59]\)?|percentile'
+    flags: i
+    match: contains
+    target: last_message

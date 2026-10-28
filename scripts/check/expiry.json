@@ -24,7 +24,10 @@
     {"date": "2027-01-27", "file": "plugins/superuser/skills/model-scorecard/references/prices.json", "what": "ราคา Claude API ที่ model-scorecard ใช้คิดค่าใช้จ่าย ตรวจทุก 3 เดือน · เปิดหน้าราคาทางการ แก้ per_mtok และ checked", "quote": "\"checked\": \"2026-10-27\""},
     {"date": "2027-04-06", "file": "plugins/graphic-design/skills/social-formats/references/platform-sizes.md", "what": "ขนาดของ Meta (Facebook Instagram) ตรวจทุก 6 เดือน", "quote": "ครั้งหน้า 2027-04-06 · แหล่ง: https://www.facebook.com"},
     {"date": "2027-04-06", "file": "plugins/graphic-design/skills/social-formats/references/platform-sizes.md", "what": "ขนาดของ LinkedIn ตรวจทุก 6 เดือน", "quote": "ครั้งหน้า 2027-04-06 · แหล่ง: https://www.linkedin.com"},
-    {"date": "2027-04-24", "file": "plugins/graphic-design/skills/video-editing/SKILL.md", "what": "ความดังต่อแพลตฟอร์ม และราคา Azure/Google TTS ตรวจทุก 6 เดือน", "quote": "ตรวจซ้ำทุก 6 เดือน ครั้งหน้า 2027-04-24"},
-    {"date": "2027-09-30", "file": "plugins/e-commerce/skills/tax-vat-th/SKILL.md", "what": "VAT 7% ตาม พ.ร.ฎ. ฉบับที่ 807 หมดช่วง · ตรวจ พ.ร.ฎ. ฉบับใหม่ แล้วแก้ tax-vat-th · seller-tax-basics · doc-quotation · thai-business-setup และ rates.json 2 ไฟล์ (vat_pct_valid_until)", "quote": "30 Sep 2570"}
+    {"date": "2027-04-24", "file": "plugins/graphic-design/skills/video-editing/SKILL.md", "what": "ความดังต่อแพลตฟอร์ม ตรวจทุก 6 เดือน", "quote": "ตรวจซ้ำทุก 6 เดือน ครั้งหน้า 2027-04-24"},
+    {"date": "2027-04-24", "file": "plugins/graphic-design/skills/narration-th/SKILL.md", "what": "ราคา Azure/Google TTS ตรวจทุก 6 เดือน (แยกจาก video-editing 2026-10-28)", "quote": "Google Chirp 3 HD ฟรี 1 ล้านตัวอักษรต่อเดือน"},
+    {"date": "2027-09-30", "file": "plugins/e-commerce/skills/tax-vat-th/SKILL.md", "what": "VAT 7% ตาม พ.ร.ฎ. ฉบับที่ 807 หมดช่วง · ตรวจ พ.ร.ฎ. ฉบับใหม่ แล้วแก้ tax-vat-th · seller-tax-basics · doc-quotation · import-landed-cost และ rates.json 2 ไฟล์ (vat_pct_valid_until)", "quote": "30 Sep 2570"},
+    {"date": "2027-10-28", "file": "plugins/personal-life/skills/moving-house/SKILL.md", "what": "ค่าธรรมเนียมย้ายทะเบียนบ้าน และค่าปรับแจ้งเกินกำหนดที่ยังรอยืนยัน ตรวจทุกปีที่ bora.dopa.go.th · ตรวจขั้นตอน ThaID และขนส่งที่ยังรอยืนยัน", "quote": "gives the 15-day deadline but lists no fee or fine for late notice"},
+    {"date": "2027-10-28", "file": "plugins/personal-life/skills/moving-house/SKILL.md", "what": "ประกาศ สคบ. สัญญาเช่าอาคารเพื่ออยู่อาศัย 2568 (คืนเงินประกัน 7 วัน · 30 วัน · เพดาน 3 เดือน) ตรวจว่ามีฉบับใหม่แทนไหม", "quote": "ประกาศคณะกรรมการว่าด้วยสัญญา 2568"}
   ]
 }
