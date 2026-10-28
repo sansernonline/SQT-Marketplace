@@ -79,6 +79,19 @@ Breakdown of the dynamic one: `000201` · `010212` · `2937` [`0016A000000677010
 4. Quotations: amount may change — use a static QR or regenerate on the invoice. Template in `doc-quotation`; tax invoice fields in `e-tax-invoice`.
 5. Re-scan the printed PDF with 2 different bank apps before sending.
 
+## Script
+
+Run `promptpay.mjs` whenever you need a real payload string: do not type the fields, lengths or CRC by hand. It builds the payload for a mobile number, a 13-digit national/tax ID or a 15-digit e-Wallet ID (tag 29), or for a biller ID with Ref1/Ref2 (tag 30), and appends the CRC16. Leave `amount` out for a static QR; put it in for a dynamic QR. Its self-test checks the CRC of `123456789` (29B1) and both worked examples in section 3 character by character.
+
+```
+node promptpay.mjs <file.json> [--json]     # example file: scripts/example.json
+node promptpay.mjs --self-test
+```
+
+Input file: `{ "id": "081-234-5678", "amount": 1500 }` · for tag 30: `{ "billerId": "<15 digits>", "ref1": "IV26100001", "ref2": "", "name": "SHOP", "amount": 1500 }`. Dashes and spaces in `id` are ignored. A bad field stops the script with a message naming it (wrong length, Thai or other non-ASCII text in `name` or a reference, amount with more than 2 decimals, Ref1 missing). A Ref1 that is not A–Z 0–9 only gives a warning, because banks differ. The script does not draw the QR: render the payload with a QR library, then scan the printed result with 2 bank apps (section 4).
+
+**Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/promptpay-qr/scripts/promptpay.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/e-commerce/skills/promptpay-qr/scripts/promptpay.mjs` · Node only, no dependencies.
+
 ## Rules
 
 - Never alter a QR image by hand; regenerate from the payload.

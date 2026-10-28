@@ -50,6 +50,21 @@ Tote bag: `C` ฿120, seller pays `S` ฿15 shipping subsidy, target `m` 20%, no
 
 Same bag, **VAT-registered** shop on Shopee: formula price ฿228.50 → ฿229. At ฿229: commission 24.50, transaction 7.35, fixed 1.07, shipping 15, cost 120, output VAT 229 × 7/107 = 14.98 → profit ฿46.10 (20.1%). A VAT-registered shop may claim input VAT on the platform's fee invoices — ask the accountant; the formula above ignores that credit, which keeps it safe.
 
+## Script
+
+`price-calc.mjs` ใช้สูตรด้านบนกับสินค้าทีละชิ้น: ได้ราคาตามสูตร ราคาที่ปัดให้ลงท้าย 9 หรือ 0 ค่าธรรมเนียมแต่ละบรรทัด กำไรและ % ที่ราคาที่ปัด และกำไรช่วงแคมเปญถ้าใส่มา (ติดลบ = ไม่ควรร่วม)
+
+```
+node price-calc.mjs <file.json> [--json]     # example file: scripts/example.json
+node price-calc.mjs --self-test
+```
+
+ไฟล์ input: `{ "rates_checked": "2026-10-06", "items": [ { "name": "...", "cost": 120, "shipping": 15, "fixed": 1.07, "margin_pct": 20, "vat_registered": false, "fees_pct": { "commission": 10.7, "transaction": 3.21 }, "campaign": { "extra_pct": 3, "voucher": 20 } } ] }` · `fees_pct` เป็น % ที่รวม VAT แล้ว ใส่กี่ช่องก็ได้ · `campaign` ไม่บังคับ · สคริปต์ไม่มีอัตราของแพลตฟอร์มในโค้ด ต้องใส่จาก Seller Centre ของร้านเอง และ `rates_checked` คือวันที่ตรวจ สคริปต์พิมพ์ออกมาในผล · ช่องที่ผิดทำให้สคริปต์หยุดพร้อมข้อความที่ชื่อช่อง · ถ้าค่าธรรมเนียม + VAT + กำไรที่ต้องการรวมกันตั้งแต่ 100% สคริปต์บอกว่าหาราคาไม่ได้
+
+**Script path:** ติดตั้งจาก marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/marketplace-fees-pricing/scripts/price-calc.mjs | sort -V | tail -1` · ใน repo SQT-Marketplace: `plugins/e-commerce/skills/marketplace-fees-pricing/scripts/price-calc.mjs` · Node อย่างเดียว ไม่มี dependency
+
+ผลเป็นข้อมูลประกอบ ไม่ใช่คำแนะนำด้านบัญชีหรือภาษี
+
 ## Price sheet columns
 
 `SKU · platform · category · commission % · transaction % · other % · fixed ฿ · shipping ฿ · cost ฿ · VAT (Y/N) · price ฿ · profit ฿ · margin % · campaign floor ฿ · rates checked on (date)`

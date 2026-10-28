@@ -74,6 +74,20 @@ In code, use a tested library rather than writing the rules again: npm `thai-bah
 
 Templates for all 5 documents: [references/templates.md](references/templates.md).
 
+## Script
+
+Run `thai-doc-total.mjs` for every document with money on it: do not add up, take VAT or write the amount in Thai words by hand. It follows section 4: line = quantity × price − discount; VAT is rounded once on the whole document, not per line; withholding tax is taken on the amount before VAT; net payment = total − withholding. It prints the total and the net as Thai words (`…บาทถ้วน` or `…บาท…สตางค์`). Its self-test reproduces the 50,000 example in section 4 (53,500 · 1,500 · 52,000) and checks เอ็ด, ยี่สิบ, satang and million cases.
+
+```
+node thai-doc-total.mjs <file.json> [--json]     # example file: scripts/example.json
+node thai-doc-total.mjs --self-test
+```
+
+Input file: `{ "items": [ { "name": "...", "qty": 1, "price": 50000, "discount": 0 } ], "vatMode": "exclusive", "vatRate": 7, "whtRate": 3, "sellerTaxId": "...", "buyerTaxId": "..." }` · `vatMode` is `exclusive` (prices exclude VAT, the default) · `inclusive` (prices already include VAT) · `none` (seller not VAT-registered). `discount` is baht off that line. `vatRate` defaults to 7 (the rate in section 2): pass the new rate when it changes. `whtRate` defaults to 0. A tax ID that fails the check digit gives a warning, not a stop. A bad field stops the script with a message naming it.
+
+**Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/doc-quotation/scripts/thai-doc-total.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/e-commerce/skills/doc-quotation/scripts/thai-doc-total.mjs` · Node only, no dependencies.
+
+
 ## Rules
 
 - Words must match digits to the satang; check rounding of VAT per document, not per line.

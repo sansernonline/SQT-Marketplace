@@ -3,9 +3,9 @@
 ตัวตรวจ `validate-marketplace.mjs` จับได้แค่ของที่ผิดรูปแบบ prompt นี้ใช้ตรวจในเรื่องที่ต้องใช้วิจารณญาณ
 
 **วิธีใช้**
-1. เปิด Claude Code ที่รากของ repo · คัดลอกก้อนข้างล่างไปวาง
+1. เปิด Claude Code ที่รากของ repo · คัดลอกก้อนข้างล่างไปวาง · ถ้าจะตรวจหัวข้อ 8 ซึ่งแก้ไฟล์ด้วย ให้แตก worktree ของตัวเองก่อน (`git worktree add ../SQT-Marketplace-claude-audit-<plugin> -b claude/audit-<plugin> origin/main`) ตามกฎ 1 ตัว 1 worktree ใน `AGENTS.md`
 2. แก้ 3 บรรทัดบนสุด: ชื่อ plugin · หัวข้อที่จะตรวจ · คำสั่งเพิ่ม (ไม่มีก็ลบบรรทัดทิ้ง)
-3. ตรวจทีละ plugin · `software-company` ตรวจแยกตัวเดียว
+3. ตรวจทีละ plugin · เริ่มที่ `superuser` ก่อน เพราะ plugin สาขาทุกตัวพึ่งมันผ่าน `dependencies` · `software-company` ตรวจแยกตัวเดียว
 4. หัวข้อ 8 แก้ให้เลยในรอบเดียว · หัวข้ออื่นแค่รายงาน ถ้าจะแก้ต่อ พิมพ์ "แก้ข้อ 1, 2, 4" · แก้เสร็จรัน `node scripts/check/validate-marketplace.mjs` แล้วค่อย build dist
 
 **เลือกหัวข้อ**
@@ -30,10 +30,10 @@ plugin: <ชื่อ plugin>
 
 ตรวจแบบประหยัด token:
 - รัน `node scripts/check/validate-marketplace.mjs 2>&1 | tail -40` เอาแค่สรุป · ไม่ต้องเปิดอ่านตัว script
-- ตัว script ตรวจให้แล้ว ข้ามได้เลย → description แต่ละตัวเกิน 150/160 ตัวอักษร (agent 120) · SKILL.md เกิน 400/500 บรรทัด · ไฟล์อ้างอิงเกิน 100 บรรทัดไม่มีสารบัญ · name · YAML · JSON · version · MCP ล็อกรุ่น · ขั้น playbook · คำที่เลิกใช้
+- ตัว script ตรวจให้แล้ว ข้ามได้เลย → description แต่ละตัวเกิน 150/160 ตัวอักษร (agent 120) · SKILL.md เกิน 400/500 บรรทัด · ไฟล์อ้างอิงเกิน 100 บรรทัดไม่มีสารบัญ · name · YAML · JSON · version · MCP ล็อกรุ่น · ขั้น playbook · คำที่เลิกใช้ · ลิงก์ระหว่างไฟล์ .md · ตาราง markdown · ค่าใน `facts.json` · วันหมดอายุใน `expiry.json` · ชื่อ skill ใน `skill-router.json` · และของ `lesson-checks.mjs` (คำอ้างว่าทดสอบจริงที่ไม่มีวันที่ · SKILL.md เกินราว 5,000 token · ตารางการตัดสินใจใน CONTEXT.md เกิน 20 แถว)
 - ตัวเลข (จำนวนบรรทัด · ความยาว description · ผลรวม) ได้จากคำสั่งชุดเดียว เช่น wc · grep · awk ไม่ต้องเปิดไฟล์อ่าน
 - เปิดอ่านเฉพาะไฟล์ที่ต้องใช้วิจารณญาณ · อ่าน frontmatter ก่อน แล้วเปิดเนื้อหาเฉพาะตัวที่ติดธง
-- skill กลางที่ sync มาจาก plugins/superuser (superuser · agent-patterns · answer-shape · human-writing · learning-reviewer · hook) ตรวจที่ต้นทางครั้งเดียว ไม่ตรวจซ้ำใน plugin อื่น
+- ของกลาง (skill กลางทุกตัว · agent `reviewer` `brainstormer` `learning-reviewer` · hook) อยู่ใน plugins/superuser ที่เดียว รายชื่ออยู่ใน `SHARED_ONLY_IN_SUPERUSER` ของ `scripts/sync/sync-superuser.mjs` ให้ตรวจตอนตรวจ `superuser` · ส่วน plugin สาขามีแค่ `skills/superuser/` ให้ตรวจเฉพาะส่วนของสาขา แล้วข้ามไฟล์ใน `SHARED_FILES` กับบล็อก `<!-- superuser:begin … -->` ที่ sync มา
 - ไม่อ่าน dist/ กับ _to_delete/ (ยกเว้นหัวข้อ 6 ที่ต้องเทียบ dist)
 - ไฟล์ที่ต้องอ่านเกิน 10 ไฟล์ → แบ่งให้ subagent · น้อยกว่านั้นอ่านเองเร็วกว่า
 - subagent ขนาดเล็กสำหรับนับและค้น · ขนาดกลางสำหรับงานที่ต้องตัดสิน · ส่งกลับไม่เกิน 20 แถว เป็นไฟล์:บรรทัด กับข้อสรุป ไม่ยกเนื้อหาไฟล์เกิน 1 บรรทัด
@@ -59,13 +59,13 @@ plugin: <ชื่อ plugin>
    - skill หรือ command ที่ไม่มี agent หรือ playbook ไหนเรียกใช้
 
 4. คุณภาพตามเช็กลิสต์ Anthropic
-   - description เขียนเป็นบุคคลที่ 3 และบอกทั้ง "ทำอะไร" กับ "ใช้เมื่อไร"
+   - description ขึ้นต้น "Use when" หรือ "ใช้เมื่อ" และบอกสถานการณ์กับคำที่ผู้ใช้พิมพ์จริง ไม่สรุปขั้นตอน ตามแบบของ repo ใน `plugins/superuser/skills/skill-authoring/SKILL.md` หัวข้อ 1 (repo นี้เลือกแบบนี้แทน "บุคคลที่ 3 · ทำอะไร" ของ Anthropic)
    - references/ ลิงก์ตรงจาก SKILL.md ชั้นเดียว ไม่มีไฟล์อ้างอิงที่ลิงก์ต่อไปอีกไฟล์
    - ไฟล์อ้างอิงที่ยาวเกิน 100 บรรทัดมีสารบัญอยู่บนสุด
    - ลิงก์ ชื่อ skill และเลขข้อ (เช่น "ข้อ 0.1") ที่ชี้ไปที่ไม่มีอยู่จริง
    - ให้ทางเลือกเยอะเกินไป แทนที่จะบอกทางหลัก 1 ทาง กับทางสำรอง 1 ทาง
    - ความเข้มงวดตรงกับงานไหม: งานที่พลาดแล้วเสียหายต้องสั่งเป๊ะ · งานที่ทำได้หลายวิธีปล่อยให้ตัดสินเอง
-   - ตัวเลข อัตรา วันที่ ชื่อรุ่นโมเดลที่น่าจะหมดอายุ · จุด (รอยืนยัน) ที่ค้างนานเกิน 1 ปี
+   - ตัวเลข อัตรา วันที่ ชื่อรุ่นโมเดลที่น่าจะหมดอายุ แต่ยังไม่ได้ลงทะเบียนใน `facts.json` หรือ `expiry.json` (ตัวที่ลงแล้ว script เตือนเอง) ให้เสนอแถวที่ควรเพิ่ม · จุด (รอยืนยัน) ที่ค้างนานเกิน 1 ปี
    - path ใช้ / ทุกที่ ไม่มี \
    - script: จัดการ error เองในตัว · ตัวเลขทุกตัวมีเหตุผลกำกับ · บอกให้ชัดว่า "ให้รัน" หรือ "ให้อ่าน" · บอกว่าต้องติดตั้งอะไร
    - ชื่อ MCP tool เขียนเต็มแบบ Server:tool
@@ -80,12 +80,13 @@ plugin: <ชื่อ plugin>
    - plugin ที่ไม่ควรเปิดทันทีหลังติดตั้ง ตั้ง defaultEnabled: false ไว้ไหม
 
 6. การส่งมอบ
-   - รัน claude --plugin-dir plugins/<plugin> plugin details <plugin> แล้วเทียบกับที่ README บอก
+   - รัน claude --plugin-dir plugins/superuser --plugin-dir plugins/<plugin> plugin details <plugin> แล้วเทียบกับที่ README บอก (`--plugin-dir` ไม่ติดตั้ง dependencies ให้ จึงต้องส่ง superuser คู่ไปเอง)
+   - `dependencies` ใน plugin.json ของสาขายังรับรุ่นปัจจุบันของ superuser ไหม (เช่น `^3.0` กับ superuser 3.x)
    - แก้ skill แล้วเลขรุ่นใน plugin.json ขึ้นไหม · CHANGELOG มีบันทึกไหม
    - dist ตรงกับ plugins/ ไหม
 
 7. วัดผลจริง (แพง · ใช้ subagent ตัวใหม่ทุกรอบ ไม่ให้ผลปนกัน)
-   - ใช้ชุดวัดที่มีอยู่ก่อน ไม่ต้องแต่งโจทย์เอง: `scripts/evals/triggers` (เรียกถูกตัว) · `scripts/evals/coding` (คุณภาพโค้ด) · `scripts/evals/speed` (เวลา · ค่าใช้จ่าย) · แต่งโจทย์เองเฉพาะ plugin ที่ชุดวัดยังไม่ครอบคลุม
+   - ใช้ชุดวัดที่มีอยู่ก่อน ไม่ต้องแต่งโจทย์เอง (คำสั่งและราคาอยู่ใน `scripts/evals/README.md`): `scripts/evals/plugin-eval.mjs` (เคสใน `plugins/<plugin>/evals/` มีกับไม่มี skill · ตั้ง `--max-cost-usd` เสมอ) · `scripts/evals/triggers` (เรียกถูกตัว) · `scripts/evals/coding` (คุณภาพโค้ด) · `scripts/evals/speed` (เวลา · ค่าใช้จ่าย) · `scripts/evals/review-recall` (`reviewer` จับข้อผิดได้กี่ข้อ) · แต่งโจทย์เองเฉพาะ skill ที่ยังไม่มีเคส
    - เรียกถูกตัว: ประโยคที่ควรเรียก 8–10 ประโยค กับประโยคใกล้เคียงที่ไม่ควรเรียกอีก 8–10 ประโยค · นับครั้งที่พลาดทั้ง 2 ฝั่ง
    - มีกับไม่มี skill: เลือก skill หลัก 3 ตัว ตัวละ 3 โจทย์ รันทั้งแบบเปิดและปิด plugin · ให้ผู้ตรวจที่ไม่รู้ว่าผลไหนมาจากแบบไหนเลือกผลที่ดีกว่า
    - skill ที่ไม่มีก็ทำได้ดีเท่ากัน = เสนอให้ตัด
@@ -93,9 +94,9 @@ plugin: <ชื่อ plugin>
    - จด token ที่ใช้ทั้งแบบเปิดและปิด plugin · skill ที่ได้ผลเท่ากันแต่กิน token มากกว่า = เสนอให้ย่อ
 
 8. ประหยัด token
-   - โหลดทุก session: ผลรวมความยาว description ของ skill · agent · command ทั้ง plugin · และผลรวมถ้าติดตั้งครบทุก plugin (skill กลางที่ sync ไปทุก plugin นับซ้ำทุกตัว) · เสนอทางลด
+   - โหลดทุก session: ผลรวมความยาว description ของ skill · agent · command ทั้ง plugin · และผลรวมถ้าติดตั้งครบทุก plugin (`skills/superuser` มี 1 ตัวต่อ plugin จึงนับทุกตัว) · เทียบกับงบรายการ skill ราว 30,000 ตัวอักษรที่งบ 1% ค่าเริ่ม ถ้าเกิน คำอธิบายของบางตัวจะถูกตัด (ติดตั้งครบได้ 38,804 ตัวอักษร ตาม `scripts/evals/triggers/RESULTS.md`) · ทางแก้ชั่วคราวคือ `scripts/install/set-skill-budget.mjs` · เสนอทางลด
    - description ที่เขียนเป็นภาษาไทย (ไทยกิน token ต่อตัวอักษรมากกว่าอังกฤษ)
-   - hook: ข้อความที่พ่นเข้า context ต่อครั้ง วัดเป็นตัวอักษร · hook ที่ทำงานทุก prompt หรือทุก tool (UserPromptSubmit · PostToolUse) แล้วพ่นข้อความทุกรอบทั้งที่ไม่จำเป็น · hook เดียวกันที่ซ้ำกันหลาย plugin แล้วทำงานซ้อน
+   - hook (มีใน `superuser` ที่เดียว · `hooks/hooks.json`): ข้อความที่พ่นเข้า context ต่อครั้ง วัดเป็นตัวอักษร แยกตามจังหวะ SessionStart · UserPromptSubmit · PreToolUse · PostToolUse · Stop · ดู `core-rules.md` ที่ส่งตอนเริ่ม session และข้อความ "skill ที่ต้องเปิด" จาก `skill-router.json` ที่ส่งทุก prompt · จังหวะที่พ่นทุกรอบทั้งที่ไม่จำเป็น · plugin สาขาที่เพิ่ม hook ของตัวเองแล้วทำงานซ้อนกับของ superuser
    - ไฟล์ที่ skill สั่งให้อ่านทุกครั้ง (CONTEXT.md · log · IMPROVEMENTS.md): อ่านทั้งไฟล์ หรืออ่านแค่ส่วนที่ใช้ · ไฟล์ที่โตไม่หยุดมีกฎตัดหรือแยกไฟล์ไหม
    - คำสั่งที่พ่นผลไม่จำกัด (cat ไฟล์ใหญ่ · รัน test ทั้งชุด · ls -R) โดยไม่มี head · tail · grep
    - agent หรือ subagent ที่ส่งเนื้อหาไฟล์กลับแทนข้อสรุป · ไม่กำหนดขนาดคำตอบ

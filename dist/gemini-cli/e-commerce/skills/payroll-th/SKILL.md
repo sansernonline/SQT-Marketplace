@@ -47,6 +47,23 @@ Method from ม.50(1) ประมวลรัษฎากร:
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.rd.go.th (อัตราภาษีเงินได้บุคคลธรรมดา, ม.48) · SSO cap: https://www.infoquest.co.th/2025/550753
 
+### Script
+
+`payroll.mjs` ทำขั้นตอนในส่วน 2 ให้ครบ: เงินได้ทั้งปี → หักค่าใช้จ่าย → ลดหย่อน → ภาษีขั้นบันได → หาร 12 งวด พร้อมประกันสังคม (5% ของค่าจ้าง ฐานขั้นต่ำ 1,650 ถึงเพดาน ปัดเป็นบาท) และ PVD ลูกจ้าง ได้ภาษีหัก ณ ที่จ่ายต่อเดือนและเงินสุทธิต่อคน
+
+```
+node payroll.mjs <file.json> [--json]     # example file: scripts/example.json
+node payroll.mjs --self-test
+```
+
+ไฟล์ input: `{ "employees": [ { "name": "...", "gross": 50000, "pvd_employee_pct": 0, "pvd_employer_pct": 0, "spouse": false, "children": 0, "children_2nd_plus": 0, "parents": 0, "other_deductions": 0, "periods": 12 } ] }` · มีแค่ `name` กับ `gross` ก็รันได้ ที่เหลือเริ่มต้นเป็น 0 / false / 12 · ช่องที่ผิดทำให้สคริปต์หยุดพร้อมข้อความที่ชื่อช่อง · PVD ลูกจ้างเกิน 15% ของค่าจ้างสคริปต์เตือนและลดหย่อนให้แค่ 15%
+
+ขั้นบันไดภาษี เพดานประกันสังคม และค่าลดหย่อนอยู่ใน `scripts/rates.json` (มีวันที่ตรวจและแหล่ง สคริปต์พิมพ์ออกมาในผล) · เพดานประกันสังคมต้องตรงกับ `scripts/check/facts.json` ซึ่ง self-test เช็คให้ · ปีภาษีเปลี่ยนให้แก้ `rates.json` ก่อนรันเดือนมกราคม · ยังไม่รวมโบนัส พนักงานเข้ากลางปี และเงินได้ที่จ่ายไปแล้ว ให้คิดตามส่วนโบนัสด้านล่างเอง
+
+**Script path:** ติดตั้งจาก marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/payroll-th/scripts/payroll.mjs | sort -V | tail -1` · ใน repo SQT-Marketplace: `plugins/e-commerce/skills/payroll-th/scripts/payroll.mjs` · Node อย่างเดียว ไม่มี dependency
+
+ผลเป็นข้อมูลประกอบ ไม่ใช่คำแนะนำด้านภาษี
+
 ### Worked example
 
 Single employee, salary 50,000/month, no PVD.

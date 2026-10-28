@@ -60,6 +60,21 @@ Retail to consumers only, with permission. Must show: "ใบกำกับภ�
 4. For incoming invoices: check all 8 fields before booking input VAT on the ภ.พ.30 purchase report (รายงานภาษีซื้อ). If a field is missing, ask the supplier to re-issue.
 5. Add a PromptPay QR on the invoice for faster payment (`promptpay-qr`).
 
+## Script
+
+Run `thai-id.mjs` to check the 13-digit tax ID (เลขประจำตัวผู้เสียภาษีอากร) of the seller or the buyer before it goes on a tax invoice. The last digit is a check digit: `(11 − (Σ digit i × (14 − i), i = 1..12) mod 11) mod 10`. A pass means the number has no typo; it does not prove the company exists (check that on the Revenue Department site). When it fails, the output says which last digit it expected.
+
+```
+node thai-id.mjs <file.json> [--json]     # example file: scripts/example.json
+node thai-id.mjs 1234567890139 ...        # or pass the numbers directly
+node thai-id.mjs --self-test
+```
+
+Input file: `{ "ids": ["1234567890139", "1-2345-67890-13-9"] }` · dashes and spaces are allowed. Exit code is 0 when every number passes, 1 when any fails. Other scripts can `import { isValidThaiId } from './thai-id.mjs'`.
+
+**Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/e-tax-invoice/scripts/thai-id.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/e-commerce/skills/e-tax-invoice/scripts/thai-id.mjs` · Node only, no dependencies.
+
+
 ## Worked example (header block)
 
 ```

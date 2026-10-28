@@ -1,0 +1,10 @@
+{
+  "checked": "2026-10-14",
+  "source": "SKILL.md ตาราง Current value · https://www.erc.or.th/th/news-release/3458 (Ft งวด ก.ย.–ธ.ค. 2569)",
+  "ftSatang": 16.23,
+  "ftPeriod": "ก.ย.–ธ.ค. 2569",
+  "vat": 0.07,
+  "tiers": null,
+  "service": null,
+  "missing": "SKILL.md ยังไม่มีอัตราขั้นบันไดและค่าบริการ (รอยืนยัน) · ให้ใส่ tiers และ service ในไฟล์ input"
+}

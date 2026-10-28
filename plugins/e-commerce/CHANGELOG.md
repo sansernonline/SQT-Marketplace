@@ -1,5 +1,10 @@
 # CHANGELOG — e-commerce
 
+## 1.3.0 — 2026-10-28
+
+- สคริปต์ใหม่ที่คิดเลขแทน AI: `promptpay.mjs` (payload PromptPay และ CRC16 ตรงตัวอย่างใน skill ทุกตัวอักษร) · `thai-id.mjs` (หลักตรวจสอบเลขผู้เสียภาษี 13 หลัก) · `thai-doc-total.mjs` (VAT · หัก ณ ที่จ่าย · ยอดเป็นตัวหนังสือ) · `price-calc.mjs` (ราคาขายหลังค่าธรรมเนียม อัตรารับจากไฟล์ที่มีวันที่ตรวจ) · `payroll.mjs` (ภาษีหัก ณ ที่จ่ายและประกันสังคม ค่าอยู่ใน `rates.json` ผูกกับ `facts.json`) · ทุกตัวมี self-test และ CI รัน
+- `line-oa-setup` บอกวิธีติดตั้ง MCP ทางการของ LINE (`@line/line-bot-mcp-server@0.5.0` รุ่น preview) แบบล็อกรุ่นให้ผู้ใช้ติดตั้งเอง ไม่ส่งไปกับ plugin
+
 ## 1.2.0 — 2026-10-27
 
 - ตัดสินด้วยตัวเลขผ่าน `decision-scoring`: `shipping-compare` ให้คะแนนขนส่ง · `live-selling-script` และ `line-broadcast` เลือกชิ้นหรือ segment ภายใต้งบด้วย knapsack · `returns-and-bad-reviews` สู้เคลมเมื่อค่าคาดหวังเป็นบวกและมีหลักฐาน · `warranty-tracker` ประกันขยายด้วยค่าคาดหวัง · `cash-flow` ปิดช่องว่างเงินสดจากทางที่ต้นทุนต่อบาทต่ำสุด

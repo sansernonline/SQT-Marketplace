@@ -661,23 +661,66 @@ export function guardGate(name, inp = {}, teamDir = null, rules = readJson(join(
   return "";
 }
 
+// ── ด่านข้อมูลส่วนตัวในไฟล์งาน (PreToolUse Write/Edit · โมดูล pii_gate ค่าเริ่มเปิด · ทำงานแม้ไม่มีโฟลเดอร์ทีม) ──
+// กฎประจำตัว: เลขบัตร เลขบัญชี ไม่ลงไฟล์งาน เก็บได้แค่ 4 ตัวท้าย · ถาม (ask) ไม่ปฏิเสธ เพราะบางงานตั้งใจเขียน เช่นข้อมูลตัวอย่าง
+// ลดการทักผิด: เลขบัตรประชาชนนับเฉพาะที่หลักตรวจสอบถูก และไม่ขึ้นต้นด้วย 0 (เลขผู้เสียภาษีนิติบุคคลขึ้นต้น 0 และพิมพ์บนใบกำกับภาษีตามปกติ)
+// เลขบัตรเครดิตนับเฉพาะ 14–19 หลักที่ผ่าน Luhn · ไฟล์ test และ fixture ไม่ตรวจ เพราะตัวตรวจเลขต้องมีเลขตัวอย่าง
+export function thaiIdValid(d) {
+  if (!/^\d{13}$/.test(d)) return false;
+  let s = 0;
+  for (let i = 0; i < 12; i++) s += Number(d[i]) * (13 - i);
+  return (11 - (s % 11)) % 10 === Number(d[12]);
+}
+// บัตรเครดิต: เลขติดกัน 14–19 หลัก หรือกลุ่มละ 4 หลักคั่นด้วยเว้นวรรคหรือขีดแบบเดียวกัน · ต้องขึ้นต้นด้วยรหัสผู้ออกบัตร
+// (Visa 4 · Mastercard 51–55 และ 2221–2720 · Amex 34 37 · JCB 35) เพราะเลขทั่วไปผ่าน Luhn ได้ราว 1 ใน 10 · วันที่ 2026-10-28 ไม่เข้ารูปกลุ่ม 4 หลัก
+const CARD = /(?<![\d-])(?:\d{4}([ -])\d{4}\1\d{4}\1\d{1,7}|\d{4}([ -])\d{6}\2\d{5}|\d{14,19})(?![\d-])/g;   // กลุ่ม 4-6-5 คือรูปของ Amex
+const ID_LABEL = /บัตร|ประจำตัว|ประชาชน|\bID\b|national/i;
+const cardPrefix = (d) => /^(4|5[1-5]|3[457])/.test(d) || (Number(d.slice(0, 4)) >= 2221 && Number(d.slice(0, 4)) <= 2720);
+const PII_SKIP = /(^|[\\/])(tests?|fixtures?|__tests__|_to_delete)[\\/]|\.(test|spec)\.|[\\/]hooks[\\/]superuser-hook\.mjs$/i;
+export function personalDataGate(name, inp = {}) {
+  if (name !== "Write" && name !== "Edit") return "";
+  const path = String(inp.file_path ?? "");
+  if (PII_SKIP.test(path)) return "";
+  const text = String((name === "Write" ? inp.content : inp.new_string) ?? "");
+  const found = [];
+  for (const m of text.matchAll(/(?<![\d-])\d-?\d{4}-?\d{5}-?\d{2}-?\d(?![\d-])/g)) {
+    const d = m[0].replace(/-/g, "");
+    // เลขติดกัน 13 หลักผ่านหลักตรวจสอบได้ราว 1 ใน 10 (เช่น timestamp) · ทักเฉพาะที่มีขีดแบบบัตร หรือมีคำว่าบัตรหรือประจำตัวนำหน้าใน 30 ตัวอักษร
+    const labelled = m[0].includes("-") || ID_LABEL.test(text.slice(Math.max(0, m.index - 30), m.index));
+    if (d[0] !== "0" && labelled && thaiIdValid(d)) { found.push("เลขบัตรประชาชน"); break; }
+  }
+  for (const m of text.matchAll(CARD)) {
+    const d = m[0].replace(/\D/g, "");
+    if (cardPrefix(d) && luhn(d)) { found.push("เลขบัตรเครดิต"); break; }
+  }
+  if (/(?<!\d)\d{3}-\d-\d{5}-\d(?!\d)/.test(text)) found.push("เลขบัญชีธนาคาร");
+  return found.length ? `ด่านข้อมูลส่วนตัว (SuperUser): สิ่งที่จะเขียนลง ${basename(path)} มี${found.join(" · ")} · กฎ: ไม่เก็บเลขบัตรหรือเลขบัญชีลงไฟล์งาน เก็บได้แค่ 4 ตัวท้าย · ถ้าเป็นข้อมูลตัวอย่าง หรือผู้ใช้สั่งให้เก็บ อนุมัติได้ · ปิดทั้งโปรเจกต์ได้ที่ .claude/superuser/config.json {"modules": {"pii_gate": false}}` : "";
+}
+
 // ทางด่วน: ไม่มีโฟลเดอร์ทีม หรือปิด split_gate → ออกก่อนแตะ transcript · ด่านข้อความเจ้าของไม่อ่านไฟล์ จึงตรวจทุกโปรเจกต์
+// ด่านที่ปฏิเสธ (deny) ทำงานก่อน แล้วค่อยถาม (ask) เรื่องข้อมูลส่วนตัว · ถ้าถามก่อน ผู้ใช้กดอนุมัติแล้วไฟล์ที่ควรถูกปฏิเสธจะถูกเขียน
+function denyReason(input, teamDir) {
+  if (teamDir && moduleOn(teamDir, "guard", false)) { const g = guardGate(input.tool_name, input.tool_input ?? {}, teamDir); if (g) return g; }
+  if (teamDir && !moduleOn(teamDir, "split_gate")) return "";
+  const owner = ownerInboxGate(input.tool_name, input.tool_input ?? {});
+  if (owner) return owner;
+  if (!teamDir || input.agent_id || !input.transcript_path || !existsSync(input.transcript_path)) return "";
+  const current = { name: input.tool_name, input: input.tool_input ?? {} };
+  const targets = targetsOf(current.name, current.input);
+  if (!targets.length) return "";
+  const s = gateState(teamDir, input.transcript_path);
+  return targets.map((t) => splitGate(s, t, input.tool_use_id ?? null, current, input.cwd ?? process.cwd())).find(Boolean) ?? "";
+}
 function preWriteGate(input) {
   if (input.hook_event_name !== "PreToolUse" || !["Write", "Edit", "Bash"].includes(input.tool_name)) return;
   const root = findProjectRoot(input.cwd ?? process.cwd());
   const teamDir = root && teamDirOf(root);
-  const deny = (reason) => process.stdout.write(JSON.stringify({ hookSpecificOutput: { hookEventName: "PreToolUse", permissionDecision: "deny", permissionDecisionReason: reason } }));
-  if (teamDir && moduleOn(teamDir, "guard", false)) { const g = guardGate(input.tool_name, input.tool_input ?? {}, teamDir); if (g) { deny(g); return; } }
-  if (teamDir && !moduleOn(teamDir, "split_gate")) return;
-  const owner = ownerInboxGate(input.tool_name, input.tool_input ?? {});
-  if (owner) { deny(owner); return; }
-  if (!teamDir || input.agent_id || !input.transcript_path || !existsSync(input.transcript_path)) return;
-  const current = { name: input.tool_name, input: input.tool_input ?? {} };
-  const targets = targetsOf(current.name, current.input);
-  if (!targets.length) return;
-  const s = gateState(teamDir, input.transcript_path);
-  const reason = targets.map((t) => splitGate(s, t, input.tool_use_id ?? null, current, input.cwd ?? process.cwd())).find(Boolean);
-  if (reason) deny(reason);
+  const answer = (decision, reason) => process.stdout.write(JSON.stringify({ hookSpecificOutput: { hookEventName: "PreToolUse", permissionDecision: decision, permissionDecisionReason: reason } }));
+  const deny = denyReason(input, teamDir);
+  if (deny) { answer("deny", deny); return; }
+  if (teamDir && !moduleOn(teamDir, "pii_gate")) return;
+  const pii = personalDataGate(input.tool_name, input.tool_input ?? {});
+  if (pii) answer("ask", pii);
 }
 
 // ── ส่งตำแหน่งงานกลับหลังย่อบริบท (โมดูล recompact ค่าเริ่มปิด) ──────────
@@ -711,8 +754,41 @@ function readLines(file) {
 // นับครั้งเดียวต่อรอบตรวจ เทียบกับรอบล่าสุดเท่านั้น · ไล่ตามลำดับบรรทัดในไฟล์ (หัวหน้าเขียน review ลง main.jsonl ไฟล์เดียวกับข้อความผู้ใช้) · ธงแก้มาจากรายการคำ ตัวเลขนี้จึงใช้เตือน ไม่ใช่ผลวัด
 const PASSED = /^\s*(ผ่าน|pass)/i;
 
+// ── คุ้มแค่ไหน ──────────────────────────────────────────────────────────
+// ช่องว่างระหว่างการทำของหัวหน้าทีมเกิน 10 นาที ถือว่าทีมไม่ได้ทำงาน (ผู้ใช้กำลังอ่าน หรือไปทำอย่างอื่น) จึงไม่นับ
+// 10 นาทีเป็นค่าตั้งต้น ยังไม่ได้วัด · ช่วงที่ลูกทีมทำงานนับเสมอ แม้หัวหน้าจะเงียบเกิน 10 นาทีเพราะรอผล
+const ACTIVE_GAP_MS = 10 * 60000;
+
+export function activeMs(times, workerSpans = []) {
+  const t = times.filter(Number.isFinite).sort((a, b) => a - b), spans = [...workerSpans];
+  for (let i = 1; i < t.length; i++) if (t[i] - t[i - 1] <= ACTIVE_GAP_MS) spans.push([t[i - 1], t[i]]);
+  return parallelStats(spans).unionMs;
+}
+
+// [ขนาดที่หัวหน้าคาด, token ที่ใช้จริง] จาก runs.jsonl ของชิ้นที่ใบสั่งงานมีบรรทัด "ขนาด: Nk" · งานเบื้องหลังใช้ token จาก result ที่ tool_use_id ตรงกัน · ไม่มีค่าจริงไม่นับ
+export function estimates(runs) {
+  const done = new Map(runs.filter((r) => r.event === "result" && r.tool_use_id).map((r) => [r.tool_use_id, r]));
+  const est = [];
+  for (const r of runs.filter((x) => x.event === "run" && x.estimate_tokens > 0)) {
+    const actual = r.async ? done.get(r.tool_use_id)?.total_tokens : (r.tokens ? Object.values(r.tokens).reduce((s, v) => s + (v ?? 0), 0) : null);
+    if (actual > 0) est.push([r.estimate_tokens, actual]);
+  }
+  return est;
+}
+
+// sumMs = เวลาของลูกทีมทุกตัวรวมกัน · unionMs = ช่วงที่มีลูกทีมทำงานอย่างน้อย 1 ตัว · sumMs ÷ unionMs = เร็วขึ้นกี่เท่าจากการทำขนาน
+export function parallelStats(spans) {
+  let sumMs = 0, unionMs = 0, upTo = -Infinity;
+  for (const [from, to] of [...spans].sort((a, b) => a[0] - b[0])) {
+    sumMs += to - from;
+    if (to > upTo) { unionMs += to - Math.max(from, upTo); upTo = to; }
+  }
+  return { sumMs, unionMs };
+}
+
 export function countDay(dayDir) {
-  const day = { prompts: 0, corrections: 0, passedReviews: 0, correctedAfterPass: 0, actions: 0, failed: 0, spawns: [], agents: {} };
+  const day = { prompts: 0, corrections: 0, passedReviews: 0, correctedAfterPass: 0, actions: 0, failed: 0, spawns: [], agents: {}, activeMs: 0, par: { sumMs: 0, unionMs: 0 }, est: [] };
+  const leadTimes = [], workerSpans = [];   // ช่วงทำงานของลูกทีมแต่ละตัว (id) ใช้คิดว่าทำขนานได้กี่เท่า
   for (const name of readdirSync(dayDir).filter((n) => n.endsWith(".jsonl") && n !== RUNS_FILE)) {
     const entries = readLines(join(dayDir, name));
     let open = false;   // รอบตรวจล่าสุดในไฟล์นี้ผ่าน และยังไม่มีข้อความแก้ตามมา
@@ -726,6 +802,7 @@ export function countDay(dayDir) {
         continue;
       }
       if (!e.tool) continue;
+      if (agent === LEAD) leadTimes.push(Date.parse(e.ts));
       a.actions++; day.actions++;
       if (e.ok === false) { a.failed++; day.failed++; }
       if (e.ts > a.last) a.last = e.ts;
@@ -738,9 +815,15 @@ export function countDay(dayDir) {
       const t = Date.parse(e.ts), s = (spans[`${e.agent}|${e.id}`] ??= { agent: e.agent, from: t, to: t });
       s.from = Math.min(s.from, t); s.to = Math.max(s.to, t);
     }
-    for (const s of Object.values(spans)) if (day.agents[s.agent]) day.agents[s.agent].ms += s.to - s.from;
+    for (const s of Object.values(spans)) {
+      if (day.agents[s.agent]) day.agents[s.agent].ms += s.to - s.from;
+      if (s.agent !== LEAD && s.to > s.from) workerSpans.push([s.from, s.to]);
+    }
   }
   day.spawns.sort((x, y) => (x.ts < y.ts ? -1 : 1));
+  day.activeMs = activeMs(leadTimes, workerSpans);
+  day.par = parallelStats(workerSpans);
+  day.est = estimates(readLines(join(dayDir, RUNS_FILE)));
   return day;
 }
 
@@ -748,7 +831,45 @@ const fmtMin = (ms) => (ms < 60000 ? `${Math.round(ms / 1000)} วินาท�
 const cell = (s) => String(s).replace(/\|/g, "/").replace(/\n/g, " ");
 const num = (n) => n.toLocaleString("en-US");
 
-export function summaryMarkdown(days, now = new Date()) {
+const medianOf = (xs) => { const s = [...xs].sort((a, b) => a - b), m = s.length >> 1; return s.length ? (s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2) : null; };
+const speedup = (p) => (p?.unionMs > 0 ? `${(p.sumMs / p.unionMs).toFixed(1)} เท่า` : "—");
+const fmtDur = (ms) => (ms < 3600000 ? fmtMin(ms) : `${(ms / 3600000).toFixed(1)} ชม.`);
+
+// ค่าจริงจาก log กับค่าประมาณ "ถ้าไม่ใช้ superuser" = ค่าจริง ÷ อัตราส่วนจาก bench (ใช้ ÷ ไม่ใช้) · ไม่มีไฟล์ bench แสดงแค่ค่าจริง ไม่เดา
+// ช่วงของค่าประมาณกลับด้านกับช่วงของอัตราส่วน: ค่าจริง ÷ hi ถึง ค่าจริง ÷ lo
+export function valueSection(names, days, dayTokens, ratios) {
+  const last = names.slice(-30);
+  const tokens = last.reduce((s, d) => s + Object.values(dayTokens[d]).reduce((a, b) => a + b, 0), 0);
+  const active = last.reduce((s, d) => s + (days[d].activeMs ?? 0), 0);
+  const corrections = last.reduce((s, d) => s + days[d].corrections, 0);
+  const par = last.reduce((p, d) => ({ sumMs: p.sumMs + (days[d].par?.sumMs ?? 0), unionMs: p.unionMs + (days[d].par?.unionMs ?? 0) }), { sumMs: 0, unionMs: 0 });
+  const est = last.flatMap((d) => days[d].est ?? []);
+  const worse = ratios?.passAll && ratios.passAll.with < ratios.passAll.without;
+  const guess = (actual, r, fmt) => {
+    if (!r) return "ยังไม่ได้รัน bench แขน none";
+    if (worse) return "ไม่ประมาณ เพราะใน bench คุณภาพต่ำกว่าไม่ใช้";
+    const cross = (r.lo <= 1 && r.hi >= 1 ? " · แยกไม่ออกจากไม่ใช้" : "") + (r.n < 5 ? " · ตัวอย่างน้อย ช่วงหยาบ" : "");
+    return `${fmt(actual / r.ratio)} (ช่วง ${fmt(actual / r.hi)}–${fmt(actual / r.lo)})${cross}`;
+  };
+  const out = [`## คุ้มแค่ไหน — ${last.length} วันล่าสุด`, ""];
+  out.push(ratios
+    ? `> "จริง" นับจาก log · "ถ้าไม่ใช้ superuser" เป็นค่าประมาณจาก bench วันที่ ${ratios.date} (งาน ${ratios.tasks.join(", ")} · ${ratios.runs} รอบต่อแขน · ช่วง 95%) ไม่ได้แยกตามขนาดงาน เพราะ log ไม่ได้จดขนาด · ผ่าน test ครบ: ใช้ ${ratios.passAll?.with ?? "–"} · ไม่ใช้ ${ratios.passAll?.without ?? "–"}`
+    : "> \"จริง\" นับจาก log · ยังไม่มีผล bench แขน none (`run-bench.mjs --old none --save-ratios`) จึงไม่ประมาณค่าเทียบ");
+  out.push("> เวลาทำงานของทีม = ช่วงที่หัวหน้าทีมทำงานต่อเนื่อง (ช่องว่างเกิน 10 นาทีไม่นับ) รวมช่วงที่ลูกทีมทำงาน · ไม่ใช่เวลาของคุณ", "",
+    "| | จริง | ถ้าไม่ใช้ superuser (ประมาณ) |", "|---|---|---|",
+    `| token รวม (รวม cache) | ${num(tokens)} | ${guess(tokens, ratios?.tokens, (x) => num(Math.round(x)))} |`,
+    `| เวลาทำงานของทีม | ${fmtDur(active)} | ${guess(active, ratios?.wall, fmtDur)} |`,
+    `| คุณต้องแก้งาน | ${corrections} ครั้ง | ยังไม่มีข้อมูลเทียบ |`, "",
+    par.unionMs > 0
+      ? `- เร็วขึ้นจากการทำขนาน: ลูกทีมทำรวม ${fmtDur(par.sumMs)} ในเวลาจริง ${fmtDur(par.unionMs)} → ${speedup(par)} (1 = ไม่ได้ทำขนานเลย)`
+      : "- เร็วขึ้นจากการทำขนาน: ยังไม่มีลูกทีมที่ทำงานเกิน 1 การทำ",
+    est.length
+      ? `- คาดกับจริง: ${est.length} ชิ้นที่ใบสั่งงานบอกขนาด ใช้ token จริงค่ากลาง ${medianOf(est.map(([e, a]) => a / e)).toFixed(1)} เท่าของที่คาด (1 = คาดตรง)`
+      : "- คาดกับจริง: ยังไม่มีใบสั่งงานที่บอก \"ขนาด: Nk\"", "");
+  return out;
+}
+
+export function summaryMarkdown(days, now = new Date(), ratios = null) {
   const names = Object.keys(days).sort();
   const today = names[names.length - 1];
   const roles = {};
@@ -776,6 +897,7 @@ export function summaryMarkdown(days, now = new Date()) {
     `> hook เขียนไฟล์นี้เองทุกครั้งที่หัวหน้าทีมจบรอบ ห้ามแก้มือ · อัปเดต ${localStamp(now).slice(0, 16).replace("T", " ")} · log ละเอียดอยู่ใน \`<วันที่>/<agent>.jsonl\``,
     "> \"จบปกติ\" = ลูกทีมทำจนจบโดยไม่ error ไม่ใช่ผลตรวจงาน · ผลตรวจ ผ่าน/ไม่ผ่าน ดูที่ `docs/BUILD-PLAN.md` หรือ `CONTEXT.md`",
     "",
+    ...valueSection(names, days, dayTokens, ratios),
     `## ราย agent — สะสม ${names.length} วัน`,
     "",
     "> token มาจาก transcript ของ Claude Code (`message.usage`) · input token ไม่รวม cache · cache อ่าน = ส่วนที่ใช้ซ้ำจาก cache · cache สร้าง = ส่วนที่เขียนลง cache",
@@ -799,8 +921,8 @@ export function summaryMarkdown(days, now = new Date()) {
   const afterPass = (x) => (x.passedReviews ? `${x.correctedAfterPass}/${x.passedReviews} (${Math.round((100 * x.correctedAfterPass) / x.passedReviews)}%)` : "—");
   out.push("", "## รายวัน — 30 วันล่าสุด", "",
     "> \"รีวิวผ่านแล้วผู้ใช้ยังแก้\" = รอบตรวจที่ได้ผล ผ่าน แล้วผู้ใช้ยังแก้งานก่อนรอบตรวจถัดไป (นับในวันเดียวกัน) แสดงเป็น `ครั้ง/รอบที่ผ่าน (%)` · ใช้เตือนเท่านั้น เพราะธงผู้ใช้แก้จับจากคำในข้อความจึงพลาดได้ · สูงหลายวันติดกันชี้ว่าผู้ตรวจมีจุดบอด", "",
-    "| วันที่ | ข้อความผู้ใช้ | ผู้ใช้แก้งาน | รีวิวผ่านแล้วผู้ใช้ยังแก้ | ส่งงานลูกทีม | การทำ | การทำที่ล้ม | input token | output token | cache อ่าน | cache สร้าง |", "|---|---|---|---|---|---|---|---|---|---|---|",
-    ...names.slice(-30).reverse().map((d) => { const x = days[d]; return `| ${d} | ${x.prompts} | ${x.corrections} | ${afterPass(x)} | ${x.spawns.length} | ${x.actions} | ${x.failed} | ${tok(dayTokens[d])} |`; }), "");
+    "| วันที่ | ข้อความผู้ใช้ | ผู้ใช้แก้งาน | รีวิวผ่านแล้วผู้ใช้ยังแก้ | ส่งงานลูกทีม | เร็วขึ้นจากการทำขนาน | การทำ | การทำที่ล้ม | input token | output token | cache อ่าน | cache สร้าง |", "|---|---|---|---|---|---|---|---|---|---|---|---|",
+    ...names.slice(-30).reverse().map((d) => { const x = days[d]; return `| ${d} | ${x.prompts} | ${x.corrections} | ${afterPass(x)} | ${x.spawns.length} | ${speedup(x.par)} | ${x.actions} | ${x.failed} | ${tok(dayTokens[d])} |`; }), "");
   return out.join("\n");
 }
 
@@ -811,8 +933,8 @@ export function writeSummary(teamDir, now = new Date()) {
   const days = {};
   for (const d of readdirSync(logDir).filter((n) => DAY.test(n)).sort()) {
     const cache = join(logDir, d, "day.json");
-    // day.json รุ่นก่อนไม่มีตัวนับรีวิว → นับวันนั้นใหม่ครั้งเดียว
-    if (d < today && existsSync(cache)) { const c = readJson(cache, null); if (c?.passedReviews !== undefined) { days[d] = c; continue; } }
+    // day.json รุ่นก่อนไม่มีตัวนับเวลาทำงานและการขนาน → นับวันนั้นใหม่ครั้งเดียว
+    if (d < today && existsSync(cache)) { const c = readJson(cache, null); if (c?.par !== undefined) { days[d] = c; continue; } }
     days[d] = countDay(join(logDir, d));
     if (d < today) writeFileSync(cache, JSON.stringify(days[d]));
   }
@@ -820,7 +942,8 @@ export function writeSummary(teamDir, now = new Date()) {
   // token ของวันที่ผ่านไปแล้วยังเพิ่มได้ (session ข้ามเที่ยงคืน · ลูกทีมเบื้องหลัง) จึงไม่เก็บใน day.json
   for (const d of Object.keys(days)) days[d].tokens = readJson(join(logDir, d, "tokens.json"), {});
   const file = join(logDir, "SUMMARY.md");
-  writeAtomic(file, summaryMarkdown(days, now));
+  // bench-ratios.json สร้างโดย scripts/evals/speed/run-bench.mjs --old none --save-ratios · ส่งมากับ plugin
+  writeAtomic(file, summaryMarkdown(days, now, readJson(join(HERE, "bench-ratios.json"), null)));
   return file;
 }
 
@@ -1033,7 +1156,32 @@ function selfTest() {
       { ts: "2026-10-21T10:05:00+07:00", role: "software-company:developer", task: "เขียน test", ok: false }],
     agents: { main: { actions: 2, failed: 0, ms: 0, last: "2026-10-21T10:06:00+07:00" }, "software-company:developer": { actions: 3, failed: 1, ms: 120000, last: "2026-10-21T10:04:00+07:00" } } };
   const md = summaryMarkdown({ "2026-10-21": day }, new Date("2026-10-21T04:00:00Z"));
-  gates.push(["สรุป log: นับงานราย agent", [], true, () => md.includes("| `software-company:developer` | 2 | 1 | 1 | 3 | 1 | 2 นาที |") && md.includes("| 2026-10-21 | 2 | 1 | — | 2 | 5 | 1 |")]);
+  gates.push(["สรุป log: นับงานราย agent", [], true, () => md.includes("| `software-company:developer` | 2 | 1 | 1 | 3 | 1 | 2 นาที |") && md.includes("| 2026-10-21 | 2 | 1 | — | 2 | — | 5 | 1 |")]);
+  // คุ้มแค่ไหน: เวลาทำงาน · การขนาน · คาดกับจริง · ค่าประมาณจาก bench
+  const T0 = Date.parse("2026-10-21T10:00:00+07:00"), at = (min) => new Date(T0 + min * 60000).toISOString();
+  const estRuns = [
+    { event: "run", ts: at(10), tokens: { input: 100, output: 900, cacheRead: 0, cacheCreate: 0 }, estimate_tokens: 500 },
+    { event: "run", ts: at(2), async: true, tool_use_id: "t1", estimate_tokens: 4000 },
+    { event: "result", ts: at(12), tool_use_id: "t1", total_tokens: 2000 },
+    { event: "run", ts: at(30), async: true, tool_use_id: "t2", estimate_tokens: 3000 },
+  ];
+  // ลูกทีม 2 ตัว (id ต่างกัน) ทำ 10 นาทีซ้อนกันในช่วง 12 นาที · หัวหน้าทีมไม่นับ
+  const parDir = join(tmpdir(), `sqt-par-test-${process.pid}`); mkdirSync(parDir, { recursive: true });
+  const act = (agent, id, min) => JSON.stringify({ ts: at(min), agent, id, tool: "Edit", ok: true });
+  writeFileSync(join(parDir, "dev.jsonl"), [act("dev", "a", 0), act("dev", "a", 10), act("dev", "b", 2), act("dev", "b", 12)].join("\n") + "\n");
+  writeFileSync(join(parDir, "main.jsonl"), [act("main", "m", 0), act("main", "m", 30)].join("\n") + "\n");
+  const ratios = { date: "2026-11-01", tasks: ["t1", "t4"], runs: 5, tokens: { ratio: 0.8, lo: 0.7, hi: 0.9 }, wall: { ratio: 1.1, lo: 0.9, hi: 1.3 }, passAll: { with: 0.9, without: 0.8 } };
+  const valueDay = { ...day, activeMs: 3600000, par: { sumMs: 1200000, unionMs: 720000 }, tokens: { main: { input: 800, output: 0, cacheRead: 0, cacheCreate: 0 } } };
+  const mdVal = summaryMarkdown({ "2026-10-21": valueDay }, new Date("2026-10-21T04:00:00Z"), ratios);
+  gates.push(
+    ["คุ้มแค่ไหน: เวลาทำงานไม่นับช่องว่างเกิน 10 นาที", [], true, () => activeMs([T0, T0 + 5 * 60000, T0 + 40 * 60000, T0 + 41 * 60000]) === 6 * 60000],
+    ["คุ้มแค่ไหน: หัวหน้าเงียบ 15 นาทีเพราะรอลูกทีม ยังนับเป็นเวลาทำงาน", [], true, () => activeMs([T0, T0 + 15 * 60000], [[T0 + 60000, T0 + 15 * 60000]]) === 14 * 60000 && countDay(parDir).activeMs === 12 * 60000],
+    ["คุ้มแค่ไหน: คาดกับจริง · งานเบื้องหลังที่ยังไม่จบไม่นับ", [], true, () => { const e = estimates(estRuns); return e.length === 2 && e[0][1] === 1000 && e[1][1] === 2000; }],
+    ["คุ้มแค่ไหน: ลูกทีม 2 ตัวซ้อนกัน 20 นาทีใน 12 นาที · หัวหน้าไม่นับ", [], true, () => { const p = countDay(parDir).par; return p.sumMs === 20 * 60000 && p.unionMs === 12 * 60000; }],
+    ["คุ้มแค่ไหน: token ประมาณ = จริง ÷ อัตราส่วน · เวลาที่ช่วงคร่อม 1 บอกแยกไม่ออก", [], true, () => mdVal.includes("| token รวม (รวม cache) | 800 | 1,000 (ช่วง 889–1,143) |") && /เวลาทำงานของทีม \| 1\.0 ชม\. \| .*แยกไม่ออกจากไม่ใช้/.test(mdVal) && mdVal.includes("→ 1.7 เท่า")],
+    ["คุ้มแค่ไหน: ไม่มี bench ไม่ประมาณ · คุณภาพต่ำกว่าไม่ประมาณ", [], true, () => md.includes("ยังไม่ได้รัน bench แขน none")
+      && summaryMarkdown({ "2026-10-21": valueDay }, new Date(), { ...ratios, passAll: { with: 0.5, without: 0.8 } }).includes("ไม่ประมาณ เพราะใน bench คุณภาพต่ำกว่าไม่ใช้")],
+  );
   // รีวิวผ่านแล้วผู้ใช้ยังแก้: main.jsonl ชั่วคราว · R = บรรทัด review ที่หัวหน้าเขียน · P(true) = ข้อความผู้ใช้ที่ hook ติดธงแก้
   const rvDir = join(tmpdir(), `sqt-review-test-${process.pid}`); mkdirSync(rvDir, { recursive: true });
   const R = (result) => JSON.stringify({ ts: "2026-10-20T10:00:00+07:00", event: "review", agent: "main", task: "ฟอร์ม", round: 1, by: "superuser:reviewer", result, high: 0, mid: 0, low: 1 });
@@ -1046,7 +1194,7 @@ function selfTest() {
     ["รีวิวผ่านแล้วผู้ใช้ยังแก้: แก้ก่อนมีรีวิว = ไม่นับ", [], true, () => rv(P(true), R("ผ่าน")) === "0/1"],
     ["รีวิวผ่านแล้วผู้ใช้ยังแก้: รีวิว 2 รอบแล้วแก้ = นับครั้งเดียว เทียบรอบล่าสุด", [], true, () => rv(R("ผ่าน"), R("ผ่าน"), P(true), P(true)) === "1/2" && rv(R("ไม่ผ่าน"), R("ผ่าน"), P(true)) === "1/1" && rv(R("ผ่าน"), R("ไม่ผ่าน"), P(true)) === "0/1"],
     ["รีวิวผ่านแล้วผู้ใช้ยังแก้: ผ่านกฎ และ PASS นับเป็นผ่าน · ไม่ผ่าน ไม่นับ", [], true, () => rv(R("ผ่านกฎ"), P(true)) === "1/1" && rv(R("PASS"), P(true)) === "1/1" && rv(R("ไม่ผ่าน"), P(true)) === "0/0"],
-    ["สรุป log: คอลัมน์ ครั้ง/รอบที่ผ่าน (%) · ไม่มีรอบผ่าน = —", [], true, () => mdRv.includes("| 2026-10-21 | 2 | 1 | 1/3 (33%) | 2 | 5 | 1 |") && mdRv.includes("| 2026-10-20 | 2 | 1 | — | 2 |")],
+    ["สรุป log: คอลัมน์ ครั้ง/รอบที่ผ่าน (%) · ไม่มีรอบผ่าน = —", [], true, () => mdRv.includes("| 2026-10-21 | 2 | 1 | 1/3 (33%) | 2 | — | 5 | 1 |") && mdRv.includes("| 2026-10-20 | 2 | 1 | — | 2 |")],
     ["สรุป log: day.json รุ่นก่อนไม่มีตัวนับรีวิว → นับวันนั้นใหม่", [], true, () => {
       const rvTeam = join(tmpdir(), `sqt-review-sum-${process.pid}`), dd = join(rvTeam, "log", "2026-10-20"); mkdirSync(dd, { recursive: true });
       writeFileSync(join(dd, "main.jsonl"), [R("ผ่าน"), P(true)].join("\n") + "\n");
@@ -1194,6 +1342,31 @@ ${rows}
       try { preWriteGate({ hook_event_name: "PreToolUse", tool_name: "Write", agent_id: "sub-1", tool_input: { file_path: "/p/.claude/superuser/inbox/x-owner.md", content: "x" } }); }
       finally { process.stdout.write = w; }
       return /"deny"/.test(out);
+    }],
+  );
+  // ด่านข้อมูลส่วนตัว: เลขสมมุติที่หลักตรวจสอบถูก (ไม่ใช่เลขของคนจริง) · 4111… คือเลขบัตรทดสอบมาตรฐาน
+  const pii = (name, inp) => personalDataGate(name, inp);
+  gates.push(
+    ["ด่านข้อมูลส่วนตัว: หลักตรวจสอบบัตรประชาชน", [], true, () => thaiIdValid("1101700123456") && !thaiIdValid("1101700123457")],
+    ["ด่านข้อมูลส่วนตัว: เขียนเลขบัตรประชาชนลงไฟล์ → ถาม", [], true, () => pii("Write", { file_path: "/p/docs/staff.md", content: "คุณเอ 1-1017-00123-45-6" }).includes("เลขบัตรประชาชน") && pii("Write", { file_path: "/p/a.md", content: "เลขประจำตัว 1101700123456" }).includes("เลขบัตรประชาชน")],
+    ["ด่านข้อมูลส่วนตัว: timestamp 13 หลักไม่มีคำนำ → ผ่าน · Amex 4-6-5 → ถาม", [], true, () => !pii("Write", { file_path: "/p/a.md", content: "ts 1101700123456" }) && pii("Write", { file_path: "/p/a.md", content: "amex 3782 822463 10005" }).includes("เลขบัตรเครดิต")],
+    ["ด่านข้อมูลส่วนตัว: Edit ใส่เลขบัตรเครดิต และเลขบัญชี → ถาม", [], true, () => /เลขบัตรเครดิต · เลขบัญชีธนาคาร/.test(pii("Edit", { file_path: "/p/a.md", new_string: "บัตร 4111 1111 1111 1111 โอนเข้า 123-4-56789-0" }))],
+    ["ด่านข้อมูลส่วนตัว: เลขผู้เสียภาษีนิติบุคคล (ขึ้นต้น 0) · หลักตรวจสอบผิด · 4 ตัวท้าย → ผ่าน", [], false, () => pii("Write", { file_path: "/p/quote.md", content: "เลขผู้เสียภาษี 0105556000009 · 1101700123457 · บัตรลงท้าย 1111" }) || !thaiIdValid("0105556000009")],
+    ["ด่านข้อมูลส่วนตัว: ไฟล์ test และ fixture → ไม่ตรวจ", [], false, () => pii("Write", { file_path: "/p/scripts/thai-id.test.mjs", content: "1101700123456" }) || pii("Write", { file_path: "/p/tests/fixtures/a.json", content: "4111111111111111" })],
+    ["ด่านข้อมูลส่วนตัว: วันที่ 2 ตัว · เลขคำสั่งซื้อที่ไม่มีรหัสผู้ออกบัตร → ผ่าน", [], false, () => pii("Write", { file_path: "/p/a.md", content: "2026-10-28 2026-11-16 · order 99123456789012345 · 1234 5678 9012 3456" })],
+    ["ด่านข้อมูลส่วนตัว: ด่านเจ้าของ (deny) มาก่อน ask", [], true, () => {
+      const w = process.stdout.write; let out = "";
+      process.stdout.write = (s) => { out += s; return true; };
+      try { preWriteGate({ hook_event_name: "PreToolUse", tool_name: "Write", cwd: tmpdir(), tool_input: { file_path: "/p/.claude/superuser/inbox/x-owner.md", content: "1101700123456" } }); }
+      finally { process.stdout.write = w; }
+      return /"deny"/.test(out) && !/"ask"/.test(out);
+    }],
+    ["ด่านข้อมูลส่วนตัว: preWriteGate ตอบ ask ไม่ใช่ deny", [], true, () => {
+      const w = process.stdout.write; let out = "";
+      process.stdout.write = (s) => { out += s; return true; };
+      try { preWriteGate({ hook_event_name: "PreToolUse", tool_name: "Write", cwd: tmpdir(), tool_input: { file_path: join(tmpdir(), "x.md"), content: "บัตรประชาชน 1101700123456" } }); }
+      finally { process.stdout.write = w; }
+      return /"ask"/.test(out) && !/"deny"/.test(out);
     }],
   );
   // ด่านป้องกัน (guard): โปรเจกต์ชั่วคราวที่มี .claude/superuser/ · ไม่มี config = ปิด · เปิดแล้วบล็อกตามรายการ · guard-allow.json ยกเว้นได้
