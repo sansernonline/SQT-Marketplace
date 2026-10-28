@@ -286,7 +286,7 @@ def f6(plug, d, r, core):
     gl = '<div class="cols2">' + "".join(f"<p><b>{e(a)}</b>{e(b)}</p>" for a, b in gloss) + "</div>" if gloss else ""
     body = top + band("โมดูล 9 ตัว", "ไม่มีก็ทำงานได้ แต่ดีขึ้นเมื่อมี", kit.group("เปิดปิดได้ทีละตัว", mods), "layers", "pc")
     if gloss:
-        body += band("ศัพท์ของงานนี้", "", gl, "book-open", "pc")
+        body += band("ศัพท์ของงานนี้", "", kit.group(f"{len(gloss)} คำ", gl), "book-open", "pc")
     return body
 
 

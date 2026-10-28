@@ -99,3 +99,5 @@ span.nb{white-space:nowrap}
 .group>.gcap{position:absolute;top:-11px;left:12px;padding:0 8px;background:var(--bg);font-size:15px;line-height:22px;font-weight:600;color:var(--ink3)}
 .band .group{margin-top:28px}
 .group>.fan,.group>.tags,.group>.vlist,.group>.grid,.group>p.note:first-of-type{margin-top:0}
+.group>.fan{align-items:stretch}  /* การ์ดในกรอบเดียวกันสูงเท่ากัน · เส้นที่ออกจากแถวเริ่มระดับเดียวกัน */
+.group>.cols2{margin-top:0}
