@@ -41,6 +41,7 @@ jobs:
           node plugins/superuser/skills/model-scorecard/scripts/scorecard.mjs --self-test
           node plugins/superuser/skills/parallel-split-and-merge/scripts/plan.mjs --self-test
           node plugins/superuser/skills/decision-scoring/scripts/decide.mjs --self-test
+          node scripts/evals/speed/stats.mjs --self-test
           node plugins/trading-finance/skills/debt-payoff/scripts/payoff.mjs --self-test
           node plugins/trading-finance/skills/home-refinance/scripts/refinance.mjs --self-test
           node plugins/trading-finance/skills/copy-trade-check/scripts/signal-check.mjs --self-test
