@@ -18,7 +18,13 @@
     {"date": "2027-04-26", "file": "plugins/graphic-design/skills/youtube-thumbnail/SKILL.md", "what": "ขนาด thumbnail และ Test & compare ตรวจทุก 6 เดือน", "quote": "ครั้งหน้า 2027-04-26"},
     {"date": "2027-05-15", "file": "plugins/personal-life/skills/flood-prep/SKILL.md", "what": "เงินช่วยน้ำท่วม 9,000 บาทครอบเฉพาะ 15 พ.ค.–30 ก.ย. 2569 · ตรวจเกณฑ์ฤดูฝนใหม่", "quote": "Cabinet flat payment 2569 | 9,000 บาท"},
     {"date": "2027-06-30", "file": "plugins/trading-finance/skills/home-refinance/SKILL.md", "what": "มาตรการค่าจดจำนอง 0.01% สิ้นสุด 30 มิ.ย. 2570", "quote": "0.01% (homes ≤ 7 million baht, until 30 Jun 2570"},
-    {"date": "2027-09-30", "file": "plugins/e-commerce/skills/tax-vat-th/SKILL.md", "what": "VAT 7% ตาม พ.ร.ฎ. ฉบับที่ 807 ใช้ถึง 30 ก.ย. 2570", "quote": "23 ส.ค. 2569 ใช้ 1 ต.ค. 2569 – 30 ก.ย. 2570"},
-    {"date": "2028-12-31", "file": "plugins/e-commerce/skills/social-security-th/SKILL.md", "what": "เพดานค่าจ้างประกันสังคม 17,500 ขึ้นเป็น 20,000 ตั้งแต่ปี 2572 (เงินสมทบ 875 เปลี่ยน)", "quote": "| 2572 – 2574 | 20,000"}
+    {"date": "2028-12-31", "file": "plugins/e-commerce/skills/social-security-th/SKILL.md", "what": "เพดานค่าจ้างประกันสังคม 17,500 ขึ้นเป็น 20,000 ตั้งแต่ปี 2572 (เงินสมทบ 875 เปลี่ยน)", "quote": "| 2572 – 2574 | 20,000"},
+    {"date": "2026-12-31", "file": "plugins/trading-finance/skills/tax-deduction-planner/scripts/rates-2569.json", "what": "อัตราและเพดานปีภาษี 2569 สิ้นสุด · ทำ rates-2570.json จาก deductions-2570.md ที่ตรวจแล้ว แล้วแก้ tax.mjs ให้อ่านไฟล์ใหม่", "quote": "\"tax_year\": 2569"},
+    {"date": "2027-01-23", "file": "plugins/graphic-design/skills/brief-to-image/SKILL.md", "what": "รุ่นโมเดลภาพ Gemini เปลี่ยนเร็ว ตรวจทุก 3 เดือน", "quote": "ตรวจซ้ำทุก 3 เดือน ครั้งหน้า 2027-01-23"},
+    {"date": "2027-01-27", "file": "plugins/superuser/skills/model-scorecard/references/prices.json", "what": "ราคา Claude API ที่ model-scorecard ใช้คิดค่าใช้จ่าย ตรวจทุก 3 เดือน · เปิดหน้าราคาทางการ แก้ per_mtok และ checked", "quote": "\"checked\": \"2026-10-27\""},
+    {"date": "2027-04-06", "file": "plugins/graphic-design/skills/social-formats/references/platform-sizes.md", "what": "ขนาดของ Meta (Facebook Instagram) ตรวจทุก 6 เดือน", "quote": "ครั้งหน้า 2027-04-06 · แหล่ง: https://www.facebook.com"},
+    {"date": "2027-04-06", "file": "plugins/graphic-design/skills/social-formats/references/platform-sizes.md", "what": "ขนาดของ LinkedIn ตรวจทุก 6 เดือน", "quote": "ครั้งหน้า 2027-04-06 · แหล่ง: https://www.linkedin.com"},
+    {"date": "2027-04-24", "file": "plugins/graphic-design/skills/video-editing/SKILL.md", "what": "ความดังต่อแพลตฟอร์ม และราคา Azure/Google TTS ตรวจทุก 6 เดือน", "quote": "ตรวจซ้ำทุก 6 เดือน ครั้งหน้า 2027-04-24"},
+    {"date": "2027-09-30", "file": "plugins/e-commerce/skills/tax-vat-th/SKILL.md", "what": "VAT 7% ตาม พ.ร.ฎ. ฉบับที่ 807 หมดช่วง · ตรวจ พ.ร.ฎ. ฉบับใหม่ แล้วแก้ tax-vat-th · seller-tax-basics · doc-quotation · thai-business-setup และ rates.json 2 ไฟล์ (vat_pct_valid_until)", "quote": "30 Sep 2570"}
   ]
 }

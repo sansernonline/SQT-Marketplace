@@ -41,6 +41,12 @@ jobs:
           node plugins/superuser/skills/model-scorecard/scripts/scorecard.mjs --self-test
           node plugins/superuser/skills/parallel-split-and-merge/scripts/plan.mjs --self-test
           node plugins/superuser/skills/decision-scoring/scripts/decide.mjs --self-test
+          node plugins/superuser/skills/commit-log/scripts/commit-msg-check.test.mjs
+          node plugins/superuser/skills/document-naming/scripts/doc-name-check.test.mjs
+          node plugins/superuser/skills/handoff/scripts/log-to-md.test.mjs
+          node plugins/superuser/skills/temp-file-discipline/scripts/delete-plan-check.test.mjs
+          node plugins/superuser/skills/temp-file-discipline/scripts/root-check.test.mjs
+          node plugins/superuser/skills/translate-th-en/scripts/i18n-pair-check.test.mjs
           node scripts/evals/speed/stats.mjs --self-test
           node plugins/trading-finance/skills/debt-payoff/scripts/payoff.mjs --self-test
           node plugins/trading-finance/skills/home-refinance/scripts/refinance.mjs --self-test
@@ -53,6 +59,14 @@ jobs:
           node plugins/e-commerce/skills/marketplace-fees-pricing/scripts/price-calc.mjs --self-test
           node plugins/e-commerce/skills/payroll-th/scripts/payroll.mjs --self-test
           node plugins/personal-life/skills/household-bills/scripts/power-bill.mjs --self-test
+          node plugins/e-commerce/skills/seller-tax-basics/scripts/tax-compare.mjs --self-test
+          node plugins/e-commerce/skills/multi-shop-stock/scripts/stock-calc.mjs --self-test
+          node plugins/e-commerce/skills/thai-business-setup/scripts/landed-cost.mjs --self-test
+          node plugins/trading-finance/skills/tax-deduction-planner/scripts/tax.mjs --self-test
+          node plugins/trading-finance/skills/retirement-plan/scripts/retire.mjs --self-test
+          node plugins/trading-finance/skills/portfolio-snapshot/scripts/money-calc.mjs --self-test
+          node plugins/trading-finance/skills/technical-signals/scripts/indicators.mjs --self-test
+          node plugins/personal-life/skills/important-docs/scripts/due-dates.mjs --self-test
       - name: dist ที่ commit ไว้ตรงกับที่สร้างใหม่
         shell: bash
         run: |
