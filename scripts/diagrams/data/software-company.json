@@ -1,6 +1,6 @@
 {
  "plugin": "software-company",
- "version": "2.27.1",
+ "version": "2.31.1",
  "description": "Simulates a complete software development company — 38 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 95 skills and 29 slash commands for the whole SDLC.",
  "cross": [],
  "skills": [
@@ -47,6 +47,9 @@
   "infra-as-code",
   "insurance-systems",
   "iot-systems",
+  "jenkins-pipeline",
+  "kafka-streaming",
+  "kubernetes-helm",
   "lazy-coding",
   "legacy-spec-recovery",
   "legal-document-systems",
@@ -72,6 +75,7 @@
   "product-naming",
   "project-bootstrap",
   "project-doc-set",
+  "rabbitmq-messaging",
   "readable-code",
   "reference-app-research",
   "reverse-engineering",
@@ -95,6 +99,7 @@
   "testing-standards",
   "ui-craft",
   "user-story-writer",
+  "voice-agent",
   "web-app-design",
   "web-quality-audit",
   "web-service-essentials",
@@ -111,6 +116,7 @@
   "commit-log",
   "context-budget",
   "decision-log",
+  "decision-scoring",
   "design-references",
   "document-naming",
   "flag-and-propose",
@@ -183,7 +189,8 @@
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "llm-engineering"
+    "llm-engineering",
+    "voice-agent"
    ]
   },
   {
@@ -327,7 +334,12 @@
     "config-and-secrets",
     "observability-basics",
     "project-bootstrap",
-    "background-jobs"
+    "background-jobs",
+    "kubernetes-helm",
+    "kafka-streaming",
+    "rabbitmq-messaging",
+    "jenkins-pipeline",
+    "mcp-server"
    ]
   },
   {

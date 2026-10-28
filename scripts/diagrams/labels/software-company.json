@@ -225,7 +225,8 @@
     "push และเปิด PR",
     "ดูแลจน CI เขียว",
     "ตรวจ PR อีกรอบก่อน merge",
-    "รออนุมัติก่อน merge"
+    "รออนุมัติก่อน merge",
+    "merge แล้วลบ branch"
    ]
   },
   "skill-authoring": {
@@ -349,37 +350,19 @@
  },
  "skill_groups": {
   "หลักการทำงาน": [
-   "principle-build-a-tool-not-handwork",
    "principle-data-shape-first",
-   "principle-fix-root-cause",
-   "principle-proceed-on-reversible-work",
-   "principle-prove-it-works",
    "principle-replace-then-delete",
    "principle-safe-to-rerun",
    "principle-secure-by-default",
-   "principle-small-verifiable-steps",
-   "principle-user-experience-first",
    "simplicity-first",
    "lazy-coding"
   ],
   "การทำงานของทีม": [
-   "decision-log",
-   "flag-and-propose",
-   "context-budget",
-   "handoff",
-   "temp-file-discipline",
-   "owner-style-capture",
-   "parallel-attempts-pick-best",
-   "parallel-split-and-merge",
    "docker-sandbox",
-   "worktree-and-branch",
-   "status-report"
+   "worktree-and-branch"
   ],
   "เรียนรู้และปรับปรุงทีม": [
    "coding-evals",
-   "repeated-mistakes-to-checks",
-   "session-lessons-to-skills",
-   "prior-art-review",
    "reference-app-research",
    "code-gardener"
   ],
@@ -392,7 +375,6 @@
   ],
   "ตรวจและทดสอบ": [
    "code-review-checklist",
-   "adversarial-review-panel",
    "testing-standards",
    "e2e-testing-patterns",
    "test-case-template",
@@ -402,7 +384,7 @@
    "app-verifier-upkeep",
    "spec-to-code-loop",
    "web-quality-audit",
-   "targeted-fix"
+   "test-evidence"
   ],
   "ความปลอดภัยและข้อมูลส่วนตัว": [
    "security-gate",
@@ -410,7 +392,9 @@
    "auth-implementation-patterns",
    "config-and-secrets",
    "pdpa-compliance",
-   "audit-trail"
+   "audit-trail",
+   "owasp-top10",
+   "security-audit"
   ],
   "เขียนโค้ดและภาษา": [
    "stack-dotnet",
@@ -421,7 +405,8 @@
    "logging-standards",
    "commit-message-format",
    "pr-description-template",
-   "i18n-and-locale"
+   "i18n-and-locale",
+   "stack-mql"
   ],
   "สถาปัตยกรรมและหลังบ้าน": [
    "architecture-patterns",
@@ -439,7 +424,11 @@
    "infra-as-code",
    "incident-runbook-template",
    "postmortem-template",
-   "saas-platform"
+   "saas-platform",
+   "jenkins-pipeline",
+   "kubernetes-helm",
+   "kafka-streaming",
+   "rabbitmq-messaging"
   ],
   "ออกแบบหน้าจอและภาพ": [
    "ui-craft",
@@ -451,7 +440,8 @@
    "diagram-figures",
    "software-diagrams",
    "markdown-visuals",
-   "product-naming"
+   "product-naming",
+   "design-direction-lookup"
   ],
   "เอกสารและสไลด์": [
    "srs-writing",
@@ -459,14 +449,12 @@
    "user-story-writer",
    "project-doc-set",
    "project-bootstrap",
-   "document-naming",
-   "polished-document-style",
    "branded-document-design",
    "markdown-report-docx",
    "presentation-design",
    "html-slide-deck",
    "pptx-to-html-deck",
-   "spell-out-abbreviations"
+   "doc-cover-design"
   ],
   "ความรู้เฉพาะสาขา": [
    "ecommerce-patterns",
@@ -481,7 +469,8 @@
    "smart-contracts",
    "developer-experience",
    "seo-audit-checklist",
-   "data-analysis"
+   "data-analysis",
+   "voice-agent"
   ]
  }
 }

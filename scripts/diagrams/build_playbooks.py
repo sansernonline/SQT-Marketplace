@@ -1,0 +1,206 @@
+"""สร้างรูป playbook แนว "วงกลมบนลายจุด" — 1 playbook = 1 รูป
+
+python scripts/diagrams/build_playbooks.py <โฟลเดอร์ html>
+ได้: <plugin>-pb-<playbook>.html ของทุก playbook ที่ plugin นั้นเป็นเจ้าของ (shared = วาดที่ superuser)
+สีวงกลม = ผู้ลงมือ (หัวหน้าทีม navy · agent น้ำเงิน · ผู้ใช้เขียว · รออนุมัติ = วงกลวงส้ม) · สี plugin อยู่ที่เส้นหลักกับตรา
+จัดหน้า 3 แบบตามจำนวนขั้นและความยาวชื่อ skill: แถวเดียวมีคำอธิบาย (≤4 ขั้น) · ตารางวงกลม · รายการแนวตั้ง
+labels ไม่ครบจำนวนขั้น → ใช้ข้อความจริงตัดสั้นแทน และพิมพ์เตือน
+"""
+import glob, json, os, re, sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, "kit"))
+import kit  # noqa: E402
+from kit import e, tag, wires, head, legend, page  # noqa: E402
+
+warnings = []
+# ส่วนเสริมเฉพาะหน้านี้ (kit ยังไม่มี): เลขขั้นเป็นป้ายมุมวง · รายการแนวตั้ง · กิ่งไป playbook อื่น
+EXTRA_CSS = """
+.dot{position:relative}
+.dot .nb2{position:absolute;top:-6px;left:-6px;width:24px;height:24px;border-radius:50%;background:#fff;color:var(--ink);box-shadow:0 0 0 1.5px var(--ink3);font-family:var(--display);font-weight:600;font-size:15px;line-height:24px;text-align:center}
+.pbgrid{position:relative;display:grid;column-gap:16px;row-gap:56px;padding-right:40px}
+.pbgrid .node{min-width:0;padding:0 4px}
+.pbgrid .tags{max-width:100%}
+.vlist{position:relative;display:flex;flex-direction:column;gap:50px}
+.vlist .tight{margin-top:-12px}
+.vrow{position:relative;z-index:1;display:grid;grid-template-columns:56px minmax(0,1fr) 300px;gap:24px;align-items:center}
+.vrow .lb{font-weight:600;font-size:17px;line-height:1.4}.vrow .sb{font-size:15px;line-height:1.5;color:var(--ink3);margin-top:2px}
+.vrow .tags{justify-content:flex-start}
+.branch{display:flex;align-items:center;gap:8px;font-size:15px;color:var(--pc);margin-top:8px}
+.node .branch{flex-direction:column;gap:4px;margin-top:0;justify-content:center}
+.node .branch:before{content:"";width:0;height:14px;border-left:2px dashed var(--pc)}
+.branch i{width:32px;height:32px;border-radius:50%;border:2px dashed var(--pc);display:inline-flex;align-items:center;justify-content:center;flex:none;background:#fff}
+.branch svg{width:16px;height:16px}
+.phase{grid-column:1/-1;font-weight:600;font-size:17px;color:var(--ink);border-bottom:1px solid var(--rule);padding-bottom:8px;margin-top:8px}
+.endrow{margin-top:48px;display:flex;gap:16px;align-items:flex-start}
+.endrow b{display:block;font-weight:600}.endrow span{color:var(--ink2)}
+"""
+CUTS = (" · ", " (", ". ", " — ")
+
+
+def clean(text):
+    """ตัด markdown: `code` · **bold** · [ข้อความ](ลิงก์) · เส้น ---"""
+    text = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", text)
+    text = re.sub(r"(?:^|\s)-{3,}(?=\s|$)", " ", text)
+    return re.sub(r"\s+", " ", re.sub(r"`|\*\*", "", text)).strip()
+
+
+def clip(text, limit):
+    """ตัดที่ขอบวลี (· ( . —) ก่อนเกิน limit ตัวอักษร ต่อท้าย … · วลีแรกสั้นไปจึงตัดที่ช่องว่าง"""
+    text = clean(text)
+    if len(text) <= limit:
+        return text
+    best = max(text.rfind(c, 0, limit) for c in CUTS)
+    if best < limit * 0.4:
+        best = text.rfind(" ", 0, limit)
+    out = text[:best if best > 0 else limit]
+    if out.count("(") > out.count(")"):  # ไม่ทิ้งวงเล็บค้าง
+        out = out[:out.rfind("(")]
+    return out.rstrip(" ·—.,") + "…"
+
+
+def done_text(raw, limit=165):
+    """เกณฑ์จบเมื่อ: เอาย่อหน้าแรก (ก่อนเส้น --- หรือบรรทัดว่าง) · แม่แบบที่เว้นช่องกรอก (… หรือ <…>) เปลี่ยนเป็นชื่อช่อง ·
+    ยาวเกิน limit ตัดที่ขอบวลี ไม่ใส่ … (ไม่มีขอบวลีให้ใช้ข้อความเต็ม)"""
+    raw = re.split(r"\n\s*(?:---|\n)", raw.strip())[0]
+    text = clean(raw)
+    labels = re.findall(r"([^\s·:]+):\s*(?:…|<)", text)
+    if labels:
+        return f"รายงาน {len(labels)} บรรทัด: " + " · ".join(labels)
+    if len(text) <= limit:
+        return text
+    cut = max(text.rfind(" · ", 0, limit), text.rfind(". ", 0, limit))
+    return text[:cut].rstrip() if cut > 20 else text
+
+
+def desc_text(step, limit):
+    """คำอธิบายขั้น: ข้อความจริงก่อน "ใคร:" · ยาวเกิน limit ตัดที่ขอบวลี (" · " หรือ ". ") ไม่ใส่ … · ไม่มีขอบวลีให้ตัด = ไม่แสดง"""
+    text = clean(step["text"].rpartition(" · ใคร:")[0] or step["text"])
+    if len(text) <= limit:
+        return text
+    cut = max(text.rfind(" · ", 0, limit), text.rfind(". ", 0, limit))
+    colon = text.find(": ", 0, cut)
+    if colon > 12:  # จุดตัดอยู่กลางรายการหลัง ":" → ตัดก่อน ":" ไม่ให้รายการขาดบางข้อ
+        cut = colon
+    return text[:cut].rstrip() if cut > 12 else ""
+
+
+def role_of(s):
+    who = s["who"] or {}
+    if s["approval"]:
+        return "gate"
+    if who.get("agents"):
+        return "agent"
+    if who.get("user") and not who.get("lead"):
+        return "user"
+    return "core"
+
+
+def dot(s, i):
+    role = role_of(s)
+    d = kit.dot(role, id=f"s{i}")
+    return role, d[:-6] + f'<span class="nb2">{s["n"]}</span></div>'
+
+
+def tags_html(s, role):
+    who = s["who"] or {}
+    out = []
+    if who.get("lead") and role != "core":
+        out.append(tag("หัวหน้าทีม", "core"))
+    out += [tag(a, "agent") for a in who.get("agents", [])]
+    if who.get("user") and role != "user":
+        out.append(tag("ผู้ใช้", "user"))
+    out += [tag(k, "skill") for k in s["skills"]]
+    return f'<div class="tags">{"".join(out)}</div>'
+
+
+def branches(s):
+    return "".join(f'<div class="branch"><i>{kit.icon("git-branch")}</i><span>→ {e(p)}</span></div>' for p in s["playbooks"])
+
+
+def chip_width(p):
+    names = [k for s in p["steps"] for k in s["skills"] + s["who"]["agents"]]
+    return max((8.3 * len(k) + 36 for k in names), default=0)
+
+
+def pick_layout(p):
+    """(แบบ, จำนวนคอลัมน์) · h = แถวเดียวมีคำอธิบาย · g = ตาราง · v = รายการแนวตั้ง (เมื่อชื่อ skill ยาวเกินคอลัมน์)"""
+    n, w = len(p["steps"]), chip_width(p)
+    if w > 300 or n == 5:
+        return "v", 1
+    if n <= 4:
+        return ("h", 4) if w <= 186 else ("v", 1)
+    if w > 254:
+        return "v", 1
+    return "g", (4 if n in (7, 8, 10) and w <= 186 else 3)
+
+
+def build(plugin, p, lab):
+    steps = lab.get("steps") or []
+    if len(steps) != len(p["steps"]):
+        warnings.append(f"{plugin}/{p['name']}: labels มี {len(steps)} ขั้น แต่ไฟล์จริงมี {len(p['steps'])} — ใช้ข้อความจริงตัดสั้น")
+        steps = [clip(s["text"].rpartition(" · ใคร: ")[0] or s["text"], 40) for s in p["steps"]]
+    kind, cols = pick_layout(p)
+    cells, pairs, last_phase, prev_key, roles = [], [], None, None, set()
+    for i, (s, short) in enumerate(zip(p["steps"], steps)):
+        ph = s.get("phase") or None
+        if ph and ph != last_phase:
+            cells.append(f'<div class="phase">ช่วง: {e(clean(ph))}</div>')
+        last_phase = ph
+        role, d = dot(s, i)
+        roles.add(role)
+        tg = tags_html(s, role)
+        key = (role, tuple(s["who"]["agents"]))
+        if kind == "v":
+            sb = f'<div class="sb">{e(desc_text(s, 120))}</div>'
+            cells_src = p["steps"]
+            tight = " tight" if key == prev_key and role in ("agent", "core") and not s["playbooks"] else ""
+            cells.append(f'<div class="vrow{tight}">{d}<div><div class="lb">{e(short)}</div>{"" if len(cells_src) >= 9 else sb}</div><div>{tg}{branches(s)}</div></div>')
+        else:
+            desc = desc_text(s, 54) if kind == "h" else ""
+            cells.append(f'<div class="node">{d}<div class="lb">{e(short)}</div>'
+                         + (f'<div class="sb">{e(desc)}</div>' if desc else "") + tg + branches(s) + "</div>")
+        prev_key = key
+        if i:
+            pairs.append((f"s{i-1}", f"s{i}", "main"))
+    gates = sum(1 for s in p["steps"] if s["approval"])
+    stats = [(len(p["steps"]), "ขั้น")] + ([(gates, "ขั้นรอผู้ใช้อนุมัติ")] if gates else [])
+    body = head(lab.get("short") or p["title"], "ใช้เมื่อ: " + clip(p["when"], 110), plugin,
+                f"playbook-{p['name']}.md", stats)
+    if kind == "v":
+        body += f'<div class="vlist" style="gap:{42 if len(cells) >= 9 else 50}px">{wires(pairs)}{"".join(cells)}</div>'
+    else:
+        body += (f'<div class="pbgrid" style="grid-template-columns:repeat({cols},minmax(0,1fr))">'
+                 f'{wires(pairs)}{"".join(cells)}</div>')
+    body += (f'<div class="endrow">{kit.dot("pc", "check")}<div><b>จบเมื่อ</b>'
+             f'<span>{e(done_text(p["done"]))}</span></div></div>')
+    names = {"core": "หัวหน้าทีม", "agent": "agent", "user": "ผู้ใช้", "gate": "รอผู้ใช้อนุมัติ"}
+    for st in p["steps"]:  # บทบาทที่ปรากฏเป็นป้ายก็ต้องมีในคำอธิบาย
+        w = st["who"] or {}
+        roles |= {r for r, on in (("core", w.get("lead")), ("agent", w.get("agents")), ("user", w.get("user"))) if on}
+    items = [(r, names[r]) for r in ("core", "agent", "user", "gate") if r in roles]
+    if any(s["skills"] for s in p["steps"]):
+        items.append(("skill", "skill ที่ใช้"))
+    note = "วงประ = ต่อไป playbook อื่น" if any(s["playbooks"] for s in p["steps"]) else ""
+    body += legend(items, note)
+    return page(f"{plugin} · {p['name']}", body, plugin).replace("</style>", EXTRA_CSS + "</style>", 1)
+
+
+if __name__ == "__main__":
+    out = sys.argv[1]
+    os.makedirs(out, exist_ok=True)
+    count = {}
+    for f in sorted(glob.glob(os.path.join(HERE, "data", "*.json"))):
+        plugin = os.path.basename(f)[:-5]
+        data = json.load(open(f, encoding="utf-8"))
+        lp = os.path.join(HERE, "labels", f"{plugin}.json")
+        labels = json.load(open(lp, encoding="utf-8")) if os.path.exists(lp) else {}
+        for p in data["playbooks"]:
+            if p["shared"]:
+                continue
+            html = build(plugin, p, labels.get("playbooks", {}).get(p["name"], {}))
+            open(os.path.join(out, f"{plugin}-pb-{p['name']}.html"), "w", encoding="utf-8").write(html)
+            count[plugin] = count.get(plugin, 0) + 1
+    print(sum(count.values()), "html →", out, count)
+    for w in warnings:
+        print("เตือน:", w)

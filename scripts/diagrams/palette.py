@@ -1,4 +1,4 @@
-"""สีประจำ plugin + ไอคอน — นิยามที่เดียว ใช้ทั้ง build.py และ flow/build_fig.py
+"""สีประจำ plugin + ไอคอน — นิยามที่เดียว ใช้ร่วมใน kit/ · build.py · build_playbooks.py · flow/build_flow.py
 
 ไอคอนอ่านจาก plugins/<plugin>/assets/icon.svg (ไอคอนประจำ plugin ตัวจริง) · สีประจำ plugin คือสีล่างของกรอบไอคอน
 เข้มขึ้นจนตัวหนังสือขาวบนพื้นสีได้ ≥ 4.9:1 · plugin ที่ยุบไปแล้ว (ข้อมูลเก่ายังอ้างชื่อ) ใช้ของ plugin ที่รับไป
@@ -56,14 +56,3 @@ def badge(plugin, size=24, cls="badge"):
     """ไอคอนในบรรทัด · ไอคอนมีกรอบสีอยู่แล้ว จึงไม่ใส่พื้นสีซ้อน"""
     return f'<span class="{cls}" style="background:none;border:none">{emblem(plugin, size)}</span>'
 
-
-# CSS ที่ทุกหน้าต้องมี: ไอคอนเต็มกล่องที่หน้ากำหนดไว้ · หัวรูปไม่ต้องมีกรอบขาวครอบ เพราะไอคอนมีกรอบในตัว
-ICON_CSS = (".badge .emb{width:100%;height:100%}.hero .big,.hd .big{border:none!important}"
-            ".hero .big .emb,.hd .big .emb{width:96px;height:96px;filter:drop-shadow(0 6px 14px rgba(0,0,0,.28))}"
-            # ชื่อยาว (เช่น Life · Home · Health · Career · Learning) ต้องขึ้นบรรทัดใหม่ก่อนถึงไอคอน ไม่วิ่งทับ
-            ".hd h1,.hero h1{white-space:normal;text-wrap:balance;padding-right:140px}")
-
-
-def svg_icon(plugin, x, y, size):
-    """ไอคอนสำหรับวางใน SVG (ผังวงกลมของ build.py)"""
-    return f'<image href="{icon_uri(plugin)}" x="{x:.1f}" y="{y:.1f}" width="{size}" height="{size}"/>'
