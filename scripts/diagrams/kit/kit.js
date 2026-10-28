@@ -29,7 +29,7 @@
 // ประกาศเส้นใน HTML: <svg class="wires" data-wires='[["a","b"],["b","c","main"],["c","d","dash"]]'></svg>
 // ชนิดเส้น (ช่องที่ 3 รวมกันได้): main = สีของ plugin · dash = เส้นประ · back = ย้อนขึ้นทางช่องซ้ายของวง · t = ลำต้น (ลงตรงจากต้นทาง แล้วเลี้ยวเข้าข้างปลายทาง)
 // "a" "b" คือ id ของ .dot · แนวเดียวกัน = เส้นตรง · ปลายทางอยู่ต่ำกว่า = ลงก่อน เลี้ยวกลางทาง แล้วลงเข้าบน (หลายเส้นจากแถวเดียวกันรวมเป็นราง)
-function route(ra, rb, kind, box) {
+function route(ra, rb, kind, box, ga, gb) {
   var gap = 8, has = function (k) { return kind.split(" ").indexOf(k) >= 0; };
   var ax = Math.round(ra.left + ra.width / 2 - box.left), ay = Math.round(ra.top + ra.height / 2 - box.top);
   var bx = Math.round(rb.left + rb.width / 2 - box.left), by = Math.round(rb.top + rb.height / 2 - box.top);
@@ -49,7 +49,9 @@ function route(ra, rb, kind, box) {
   if (by > ay) {                                        // ปลายทางต่ำกว่า: ลง → นอน → ลง
     var y1 = ay + ha + gap, y2 = by - hb - gap;
     if (Math.abs(ax - bx) < 3) return [[ax, y1], [ax, y2]];
-    var ym = Math.round(Math.max(ay + ha + 16, by - hb - 28));  // วัดจากปลายทาง: หลายเส้นจากการ์ดสูงไม่เท่ากันรวมเป็นรางระดับเดียว
+    // รางนอนวัดจากปลายทาง (หลายเส้นจากการ์ดสูงไม่เท่ากันรวมเป็นระดับเดียว) · ต้นหรือปลายอยู่ในกรอบกลุ่ม → รางอยู่นอกกรอบ
+    var aBot = ga ? ga.bottom - box.top : ay + ha, bTop = gb ? gb.top - box.top : by - hb;
+    var ym = Math.round(Math.max(aBot + 16, bTop - (gb ? 20 : 28)));
     return [[ax, y1], [ax, ym], [bx, ym], [bx, y2]];
   }
   s = bx > ax ? 1 : -1;                                 // ปลายทางสูงกว่า (ไม่ใช่ back): นอน → ขึ้น → นอน
@@ -74,7 +76,9 @@ function draw() {
     list.forEach(function (w, i) {
       var a = document.getElementById(w[0]), b = document.getElementById(w[1]);
       if (!a || !b) { console.warn("wire: ไม่พบ", w); return; }
-      var kind = w[2] || "", pts = route(a.getBoundingClientRect(), b.getBoundingClientRect(), kind, box);
+      // กรอบกลุ่มที่ล้อมต้นทางหรือปลายทาง (ไม่นับกรอบที่ล้อมทั้งสองฝั่ง)
+      var grp = function (x, y) { var g = x.closest(".group"); return g && !g.contains(y) ? g.getBoundingClientRect() : null; };
+      var kind = w[2] || "", pts = route(a.getBoundingClientRect(), b.getBoundingClientRect(), kind, box, grp(a, b), grp(b, a));
       var main = kind.split(" ").indexOf("main") >= 0;
       svg.append("path").attr("d", line(pts)).attr("class", kind).attr("stroke", main ? pc : col)
         .attr("marker-end", "url(#ah-" + (main ? "m" : "l") + n + ")");

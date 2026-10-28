@@ -173,12 +173,12 @@ def f1(plug, d, r, core):
     cmd = (f"{len(r['cmds'])} คำสั่ง เช่น /{r['cmds'][0]}") if r["cmds"] else "ทางลัด"
     ins = [("คำสั่งผู้ใช้", 'พิมพ์ "ใช้ superuser"', "user", "user"), ("คำสั่งลัด", cmd, "terminal", "user"), (in_t, in_s, "package", "user"),
            ("CLAUDE.global.md", "กฎประจำเครื่อง", "book-open", "pc"), ("inbox/", "ข้อความจากคนหรือ bot อื่น", "message-square", "pc")]
-    top = fan([icard(a, e(b), rl, i, id=f"i{n}", cls="col") for n, (a, b, i, rl) in enumerate(ins)])
+    top = kit.group("ทางเข้า 5 ทาง", fan([icard(a, e(b), rl, i, id=f"i{n}", cls="col") for n, (a, b, i, rl) in enumerate(ins)]))
     lead_x = "" if core else f'<div class="sb">เปิดแกนก่อน แล้วเรียก <code>/{plug}:superuser</code></div>'
     hub = icard("หัวหน้าทีม", "รับงานทุกทาง · แจกงาน · ประเมิน · ตรวจซ้ำ<br>อ่าน 3 ไฟล์ข้างล่างก่อนเริ่มทุกงาน", "core", "users", id="lead", extra=lead_x, cls="hub")
     reads = [("CONTEXT.md", "ความคืบหน้า · รับงานต่อ"), ("superuser-style.md", "ถ้ามี · ชนะ playbook"), ("config.json", "โมดูลไหนเปิดอยู่")]
-    low = fan([icard(a, e(b), "pc", num=n + 1, id=f"r{n}") for n, (a, b) in enumerate(reads)])
-    pairs = [(f"i{n}", "lead", "main") for n in range(5)] + [("lead", f"r{n}", "dash") for n in range(3)]
+    low = kit.group("อ่านก่อนเริ่มทุกงาน", fan([icard(a, e(b), "pc", num=n + 1) for n, (a, b) in enumerate(reads)]), id="reads")
+    pairs = [(f"i{n}", "lead", "main") for n in range(5)] + [("lead", "reads", "dash")]
     lead_det = "แจกงาน · ประเมิน · ตรวจซ้ำ" + ("" if core else f" · เรียก <code>/{plug}:superuser</code>")
     chain = vlist([vstep("ผู้ใช้", "เล่างาน · ตัดสินรายการรออนุมัติ", "c1", "user", "user"),
                    vstep("หัวหน้าทีม", f"1 คนต่อโฟลเดอร์งาน · {lead_det}", "c2", "core", "users"),
@@ -243,11 +243,11 @@ def f4(plug, d, r, core):
     approvals = list(dict.fromkeys(d["appr"] + ["จ่ายเงิน", "ใส่รหัสผ่าน"] if plug != "software-company" else SC["appr"]))
     stop = f'<p style="color:var(--r-gate);font-weight:600">หยุดทันที: {e(d["stop"])}</p>' if d.get("stop") else ""
     hub = icard("ต้องตัดสินใจกลางงาน", "ถามผู้ใช้ครั้งเดียวตอนเริ่ม แล้วเลือกเองตามทางข้างล่าง · จดทุกข้อใต้ ตัดสินใจเอง", "pc", "git-branch", id="q", cls="hub")
-    opts = fan([
+    opts = kit.group("เลือก 1 ใน 3 ทาง", cls="capb", inner=fan([
         icard("ย้อนกลับได้ → ทำเลย", short(d["d1"], 3), "pc", "check", id="b0", cls="col"),
         icard("ไม่รู้ → ค้นเอง", "≥ 3 แหล่งยืนยันตรงกัน · ไม่ครบ → ทางที่ย้อนง่ายสุด + <code>(รอยืนยัน)</code>", "pc", "search", id="b1", cls="col"),
         icard("ย้อนไม่ได้ → รออนุมัติ", "เตรียมให้พร้อมกด แล้วทำส่วนอื่นต่อ", "gate", "hand", id="b2", cls="col",
-              extra=f'<div style="margin-top:10px">{tags(approvals, "gate")}</div>{stop}')])
+              extra=f'<div style="margin-top:10px">{tags(approvals, "gate")}</div>{stop}')]))
     top = f'<div class="layers">{wires([("q", "b0", "dash"), ("q", "b1", "dash"), ("q", "b2", "main")])}{hub}{opts}</div>'
     o4a, o4b = SC["o4"] if plug == "software-company" else d["o4"]
     outs = fan([icard("คำตอบตอนจบ", "3 ระดับ · คาด → จริง", "pc", "message-square", cls="col"),

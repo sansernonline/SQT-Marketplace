@@ -40,7 +40,8 @@ EXTRA_CSS = """<style>
 .stage.tb{display:flex;flex-direction:column;gap:56px}
 .entry{max-width:640px}
 .entry .icard{align-self:stretch;justify-content:center}
-.agl{margin-left:76px;display:flex;flex-direction:column;gap:16px}
+.agg{margin-left:76px}  /* เยื้องให้ลำต้นจากวงหัวหน้าทีมลงมาทางซ้ายนอกกรอบ */
+.agl{display:flex;flex-direction:column;gap:16px}
 .vrow .lb .tag{margin-left:8px;vertical-align:middle}
 .nb{white-space:nowrap}
 .band{position:relative;z-index:1;margin-top:48px;padding-top:24px;border-top:1px solid var(--rule)}
@@ -100,8 +101,8 @@ def build_map(plugin):
     if n_cmd:
         ents.append(("สั่งด้วยคำสั่ง", f'<span class="nb">/{e(plugin)}:…</span><br>มี {n_cmd} คำสั่ง'))
     ents.append(("เรียก agent ตรง", "พูดชื่อ agent ได้เลย"))
-    top = (f'<div class="fan entry" style="grid-template-columns:repeat({len(ents)},minmax(0,1fr))">'
-           + "".join(icard(t, s, "user", "user", id=f"en{i}") for i, (t, s) in enumerate(ents)) + "</div>")
+    top = K.group("ทางเข้า", f'<div class="fan" style="grid-template-columns:repeat({len(ents)},minmax(0,1fr))">'
+                  + "".join(icard(t, s, "user", "user", id=f"en{i}") for i, (t, s) in enumerate(ents)) + "</div>", "entry")
     # แถวหัวหน้าทีม: วง plugin + การ์ดขอบสี plugin
     extra_pb = f' <span class="nb">(+{n_shared} ของกลาง)</span>' if n_shared else ""
     lead = (f'<div class="vrow wide">{K.dot("pc", "users", id="focal")}'
@@ -122,7 +123,8 @@ def build_map(plugin):
             sk = agent_skills(a)
             tg = K.tag(f"{len(sk)} skill", "skill") if sk else K.tag("ใช้ skill กลาง", "core")
             rows += agent_row(f"ag{i}", f'<span class="nb">{e(a["name"])}</span>', e(jobs.get(a["name"], "")), tg)
-    stage = f'{top}{lead}<div class="agl">{rows}</div>'
+    unit = "กลุ่ม" if "agent_groups" in labels else "ตัว"
+    stage = f'{top}{lead}' + K.group(f"agent {len(ids)} {unit}", f'<div class="agl">{rows}</div>', "agg")
 
     # แถบ skill
     own = data["core_skills"] if is_su else data["skills"]
@@ -187,9 +189,9 @@ def build_overview(plugins):
     body = K.head("SQT-Marketplace", f"{len(plugins)} plugin ใช้แกนกลางเดียวกัน แต่ละสาขาเติมของสาขาตัวเอง", "superuser",
                   "plugins/*/.claude-plugin/plugin.json",
                   [(len(plugins), "plugin"), (len(su["core_skills"]), "skill กลาง"), (len(su["agents"]), "agent กลาง"), (n_hand, "คู่ plugin ส่งงานหากัน")])
-    pairs = [("su", f"p{k}", "main") for k in range(len(ring))]
+    pairs = [("su", "ring", "main")]  # ทุก plugin สาขาใช้แกนเดียวกัน → เส้นเดียวเข้ากรอบกลุ่ม
     fan = f'<div class="fan p5" style="grid-template-columns:repeat({len(ring)},minmax(0,1fr))">{"".join(cards)}</div>'
-    body += f'<div class="stage tb">{K.wires(pairs)}{hub}{fan}</div>'
+    body += f'<div class="stage tb">{K.wires(pairs)}{hub}{K.group(f"plugin สาขา {len(ring)} ตัว", fan, id="ring")}</div>'
     body += K.legend([], note="ในการ์ด: ส่งงานต่อให้ = plugin ที่รับงานต่อจากสาขานั้น · ตัวเลขในการ์ดไม่นับของกลาง")
     return K.page("marketplace overview", EXTRA_CSS + body, "superuser")
 

@@ -92,3 +92,8 @@ span.nb{white-space:nowrap}
 /* ขั้นในรายการ: ข้อความวางข้างวง คั่นแถวด้วยเส้นบาง แบบคู่มือเทคนิค ไม่ห่อทุกขั้นด้วยการ์ดหน้าตาเดียวกัน */
 .vrow>.card{background:none;border:0;border-bottom:1px solid var(--rule);border-radius:0;padding:6px 0 18px}
 .vlist>.vrow:last-of-type>.card{border-bottom:0}
+
+/* กลุ่มของที่อยู่ระดับเดียวกัน (ผู้ใช้ขอ 2026-10-28): กรอบเส้นเดียว ไม่มีพื้น · ชื่อกลุ่มวางทับขอบบน */
+.group{position:relative;z-index:1;border:1px solid #C3CCD6;border-radius:8px;padding:24px 16px 16px}
+.group.capb{padding:16px 16px 24px}.group.capb>.cap{top:auto;bottom:-11px}
+.group>.cap{position:absolute;top:-11px;left:12px;padding:0 8px;background:var(--bg);font-size:15px;line-height:22px;font-weight:600;color:var(--ink3)}

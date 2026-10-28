@@ -38,6 +38,13 @@ def node(label, role="core", sub="", ico=None, size="", id="", num=None, extra="
             + (f'<div class="sb">{e(sub)}</div>' if sub else "") + extra + "</div>")
 
 
+def group(label, inner, cls="", id=""):
+    """กรอบล้อมของที่อยู่ระดับเดียวกัน · ชื่อกลุ่มอยู่บนขอบบน (cls "capb" = ขอบล่าง เมื่อมีเส้นแยกเข้าหลายกล่องทางขอบบน)
+    · ใส่ id แล้วต่อเส้นเข้ากรอบได้เส้นเดียว เมื่อทุกกล่องในกลุ่มรับของเดียวกัน · เส้นที่เข้าออกกลุ่มหักมุมนอกกรอบ (kit.js)"""
+    at = f' id="{id}"' if id else ""
+    return f'<div class="group {cls}"{at}><span class="cap">{e(label)}</span>{inner}</div>'
+
+
 def tag(text, role=""):
     return f'<span class="tag {role}"><i></i>{e(text)}</span>'
 
