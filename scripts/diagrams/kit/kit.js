@@ -2,18 +2,23 @@
 // คำนำหน้า (ผู้ การ ความ ข้อ …) รวมกับคำถัดไปเป็นก้อนเดียว · ชื่อ skill · agent (a-b-c) ห้ามตัดที่ขีด (U+2011)
 (function () {
   var PRE = { "ผู้": 1, "การ": 1, "ความ": 1, "ข้อ": 1, "ต่อ": 1, "นัก": 1, "ใบ": 1, "หลัก": 1, "งบ": 1 };
+  // คำที่ตัวตัดคำแยกผิด (เจอจริงในรูป 2026-10-28) · ห้ามตัดบรรทัดตรงจุดใดก็ตามที่อยู่กลางคำเหล่านี้ (ท่อนที่ตัวตัดคำให้มาอาจไม่ตรงขอบคำ เช่น เช็|กมิจฉา|ชีพ) · เจอคำใหม่ให้เติม
+  var JOIN = ["ทีละ", "ร้องเรียน", "สต็อก", "เช็ก", "ร้านค้า", "มิจฉาชีพ"];
   var th = /[ก-๛]/, seg = new Intl.Segmenter("th", { granularity: "word" }), nodes = [];
   var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT), n;
   while ((n = w.nextNode())) if (!n.parentNode.closest("script,style,svg")) nodes.push(n);
   nodes.forEach(function (n) {
     var t = n.nodeValue.replace(/([a-z0-9])-(?=[a-z0-9])/g, "$1‑");
     if (!th.test(t)) { n.nodeValue = t; return; }
+    var keep = [];  // ช่วง [ต้น, ปลาย) ของคำใน JOIN ที่เจอในข้อความนี้
+    JOIN.forEach(function (j) { for (var i = t.indexOf(j); i >= 0; i = t.indexOf(j, i + 1)) keep.push([i, i + j.length]); });
+    var inside = function (p) { return keep.some(function (r) { return p > r[0] && p < r[1]; }); };
     var parts = [], buf = "";
     Array.from(seg.segment(t)).forEach(function (s) {
       var x = s.segment;
       if (/^\s+$/.test(x)) { if (buf) parts.push(buf); buf = ""; parts.push(x); return; }
       buf += x;
-      if (!PRE[x]) { parts.push(buf); buf = ""; }
+      if (!PRE[x] && !inside(s.index + x.length)) { parts.push(buf); buf = ""; }
     });
     if (buf) parts.push(buf);
     var f = document.createElement("span");  // ครอบทั้งข้อความ: ในกล่อง flex แต่ละคำจะไม่กลายเป็นชิ้นแยกที่มี gap คั่น
@@ -25,55 +30,75 @@
   });
 })();
 
-// วาดเส้นโค้งระหว่างโหนด หลังฟอนต์โหลดและจัดหน้าเสร็จ (render.py เรียก draw())
+// วาดเส้นระหว่างโหนดด้วย D3 หลังฟอนต์โหลดและจัดหน้าเสร็จ (render.py เรียก draw()) · ช่วงตรงตั้งหรือนอนเท่านั้น มุมที่หักโค้งรัศมี 12 px ไม่มีเส้นเฉียงหรือเส้นโค้งทั้งเส้น
 // ประกาศเส้นใน HTML: <svg class="wires" data-wires='[["a","b"],["b","c","main"],["c","d","dash"]]'></svg>
-// ชนิดเส้น (ช่องที่ 3 รวมกันได้): main = สีของ plugin · dash = เส้นประ · v = แนวตั้งบนลงล่าง · back = ย้อนกลับใต้แถว
-// "a" "b" คือ id ของ .dot · คนละคอลัมน์ = โค้ง S ซ้ายไปขวา · คอลัมน์เดียวกัน = เส้นตรงบนลงล่าง · ขึ้นแถวใหม่ = อ้อมขอบขวาแล้วเข้าทางบน
+// ชนิดเส้น (ช่องที่ 3 รวมกันได้): main = สีของ plugin · dash = เส้นประ · back = ย้อนขึ้นทางช่องซ้ายของวง · t = ลำต้น (ลงตรงจากต้นทาง แล้วเลี้ยวเข้าข้างปลายทาง)
+// "a" "b" คือ id ของ .dot · แนวเดียวกัน = เส้นตรง · ปลายทางอยู่ต่ำกว่า = ลงก่อน เลี้ยวกลางทาง แล้วลงเข้าบน (หลายเส้นจากแถวเดียวกันรวมเป็นราง)
+function route(ra, rb, kind, box, ga, gb) {
+  var gap = 8, has = function (k) { return kind.split(" ").indexOf(k) >= 0; };
+  var ax = Math.round(ra.left + ra.width / 2 - box.left), ay = Math.round(ra.top + ra.height / 2 - box.top);
+  var bx = Math.round(rb.left + rb.width / 2 - box.left), by = Math.round(rb.top + rb.height / 2 - box.top);
+  var ha = ra.height / 2, hb = rb.height / 2, wa = ra.width / 2, wb = rb.width / 2, s;
+  if (has("back")) {                                    // ออกซ้ายของต้นทาง ขึ้นตามช่องซ้าย แล้วเข้าซ้ายของปลายทาง
+    var xl = Math.min(ax - wa, bx - wb) - 28;
+    return [[ax - wa - gap, ay], [xl, ay], [xl, by], [bx - wb - gap, by]];
+  }
+  if (has("t") && Math.abs(ax - bx) > 2) {              // ลงตรงจากใต้ต้นทาง แล้วเลี้ยวเข้าข้างปลายทาง
+    s = bx > ax ? 1 : -1;
+    return [[ax, ay + ha + gap], [ax, by], [bx - s * (wb + gap), by]];
+  }
+  if (Math.abs(ay - by) < 3) {                          // แถวเดียวกัน: เส้นนอน
+    s = bx > ax ? 1 : -1;
+    return [[ax + s * (wa + gap), ay], [bx - s * (wb + gap), by]];
+  }
+  if (by > ay) {                                        // ปลายทางต่ำกว่า: ลง → นอน → ลง
+    var y1 = ay + ha + gap, y2 = by - hb - gap;
+    if (Math.abs(ax - bx) < 3) return [[ax, y1], [ax, y2]];
+    // รางนอนวัดจากปลายทาง (หลายเส้นจากการ์ดสูงไม่เท่ากันรวมเป็นระดับเดียว) · ต้นหรือปลายอยู่ในกรอบกลุ่ม → รางอยู่นอกกรอบ
+    var aBot = ga ? ga.bottom - box.top : ay + ha, bTop = gb ? gb.top - box.top : by - hb;
+    var ym = Math.round(Math.max(aBot + 16, bTop - (gb ? 20 : 28)));
+    return [[ax, y1], [ax, ym], [bx, ym], [bx, y2]];
+  }
+  s = bx > ax ? 1 : -1;                                 // ปลายทางสูงกว่า (ไม่ใช่ back): นอน → ขึ้น → นอน
+  var x1 = ax + s * (wa + gap), x2 = bx - s * (wb + gap), xm = Math.round((x1 + x2) / 2);
+  return [[x1, ay], [xm, ay], [xm, by], [x2, by]];
+}
+
 function draw() {
-  document.querySelectorAll("svg.wires").forEach(function (svg) {
-    var box = svg.parentElement.getBoundingClientRect();
-    var list = JSON.parse(svg.dataset.wires || "[]");
-    var NS = "http://www.w3.org/2000/svg", out = [];
-    var col = getComputedStyle(svg).getPropertyValue("--line").trim() || "#A3ACB9";
-    var pc = getComputedStyle(svg).getPropertyValue("--pc").trim() || col;
-    svg.innerHTML = "<defs>" + ["l", "m"].map(function (k) {
-      return '<marker id="ah-' + k + '" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">' +
-        '<path d="M1 1L9 5L1 9" fill="none" stroke="' + (k === "m" ? pc : col) + '" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>';
-    }).join("") + "</defs>";
-    list.forEach(function (w) {
+  d3.selectAll("svg.wires").each(function (_, n) {
+    var svg = d3.select(this), box = this.parentElement.getBoundingClientRect();
+    var list = JSON.parse(this.dataset.wires || "[]"), css = getComputedStyle(this);
+    var col = css.getPropertyValue("--line").trim() || "#94A3B8";
+    var pc = css.getPropertyValue("--pc").trim() || col;
+    svg.selectAll("*").remove();
+    var defs = svg.append("defs");
+    [["l", col], ["m", pc]].forEach(function (m) {
+      defs.append("marker").attr("id", "ah-" + m[0] + n).attr("viewBox", "0 0 10 10").attr("refX", 8).attr("refY", 5)
+        .attr("markerWidth", 6).attr("markerHeight", 6).attr("orient", "auto-start-reverse")
+        .append("path").attr("d", "M1 1L9 5L1 9Z").attr("fill", m[1]).attr("stroke", m[1]).attr("stroke-width", 1.2).attr("stroke-linejoin", "round");
+    });
+    // ช่วงตรงยังตั้งหรือนอน แต่มุมที่หักเป็นโค้งรัศมี R (ผู้ใช้ขอ 2026-10-28: ดูนุ่มนวล) · ช่วงสั้นกว่า 2R ลดรัศมีลงตาม
+    var R = 12;
+    var line = function (pts) {
+      var p = d3.path();
+      p.moveTo(pts[0][0], pts[0][1]);
+      for (var j = 1; j < pts.length - 1; j++) {
+        var a0 = pts[j - 1], c = pts[j], b0 = pts[j + 1];
+        var r = Math.min(R, Math.hypot(c[0] - a0[0], c[1] - a0[1]) / 2, Math.hypot(b0[0] - c[0], b0[1] - c[1]) / 2);
+        p.arcTo(c[0], c[1], b0[0], b0[1], r);
+      }
+      p.lineTo(pts[pts.length - 1][0], pts[pts.length - 1][1]);
+      return p.toString();
+    };
+    list.forEach(function (w, i) {
       var a = document.getElementById(w[0]), b = document.getElementById(w[1]);
       if (!a || !b) { console.warn("wire: ไม่พบ", w); return; }
-      var ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect(), gap = 10, d;
-      var ax = ra.left + ra.width / 2 - box.left, ay = ra.top + ra.height / 2 - box.top;
-      var bx = rb.left + rb.width / 2 - box.left, by = rb.top + rb.height / 2 - box.top;
-      var r = 14;
-      var kind0 = w[2] || "";
-      if (kind0.indexOf("v") >= 0) {                // แนวตั้ง: ออกล่างของต้นทาง โค้ง S เข้าบนของปลายทาง (แตกกิ่ง · รวมกิ่ง)
-        var ya = ay + ra.height / 2 + gap, yb = by - rb.height / 2 - gap, my = (ya + yb) / 2;
-        d = "M" + ax + " " + ya + " C" + ax + " " + my + " " + bx + " " + my + " " + bx + " " + yb;
-      } else if (kind0.indexOf("back") >= 0) {      // ย้อนกลับ: ออกล่าง วนใต้แถว แล้วเข้าล่างของปลายทาง
-        var yl = Math.max(ay + ra.height / 2, by + rb.height / 2) + 36;
-        d = "M" + ax + " " + (ay + ra.height / 2 + gap) + " C" + ax + " " + yl + " " + bx + " " + yl + " " + bx + " " + (by + rb.height / 2 + gap);
-      } else if (by - ay > ra.height && bx < ax - 2) {         // ขึ้นแถวใหม่: ออกขวา อ้อมขอบขวาของกรอบ ลงมาเหนือปลายทาง แล้วเข้าทางบน
-        var xr = box.width - 24, x0 = ax + ra.width / 2 + gap, ym = rb.top - box.top - 28, yt = by - rb.height / 2 - gap;
-        d = "M" + x0 + " " + ay + " H" + (xr - r) + " Q" + xr + " " + ay + " " + xr + " " + (ay + r) +
-            " V" + (ym - r) + " Q" + xr + " " + ym + " " + (xr - r) + " " + ym +
-            " H" + (bx + r) + " Q" + bx + " " + ym + " " + bx + " " + (ym + r) + " V" + yt;
-      } else if (Math.abs(ax - bx) > ra.width) {          // คนละคอลัมน์: ซ้าย → ขวา โค้งแบบ S
-        var s = bx > ax ? 1 : -1;
-        var x1 = ax + s * (ra.width / 2 + gap), x2 = bx - s * (rb.width / 2 + gap), mx = (x1 + x2) / 2;
-        d = "M" + x1 + " " + ay + " C" + mx + " " + ay + " " + mx + " " + by + " " + x2 + " " + by;
-      } else {                                      // คอลัมน์เดียวกัน: บน → ล่าง
-        var t = by > ay ? 1 : -1;
-        var y1 = ay + t * (ra.height / 2 + gap), y2 = by - t * (rb.height / 2 + gap);
-        d = "M" + ax + " " + y1 + " L" + bx + " " + y2;
-      }
-      var p = document.createElementNS(NS, "path");
-      p.setAttribute("d", d);
-      var kind = w[2] || "";
-      p.setAttribute("class", kind);
-      p.setAttribute("marker-end", "url(#ah-" + (kind.indexOf("main") >= 0 ? "m" : "l") + ")");
-      svg.appendChild(p);
+      // กรอบกลุ่มที่ล้อมต้นทางหรือปลายทาง (ไม่นับกรอบที่ล้อมทั้งสองฝั่ง)
+      var grp = function (x, y) { var g = x.closest(".group"); return g && !g.contains(y) ? g.getBoundingClientRect() : null; };
+      var kind = w[2] || "", pts = route(a.getBoundingClientRect(), b.getBoundingClientRect(), kind, box, grp(a, b), grp(b, a));
+      var main = kind.split(" ").indexOf("main") >= 0;
+      svg.append("path").attr("d", line(pts)).attr("class", kind).attr("stroke", main ? pc : col)
+        .attr("marker-end", "url(#ah-" + (main ? "m" : "l") + n + ")");
     });
   });
 }

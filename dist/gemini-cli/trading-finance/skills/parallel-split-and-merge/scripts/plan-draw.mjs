@@ -44,7 +44,8 @@ function dagSvg(a) {
   const width = 40 + cols.size * (W + GX) - GX, height = 40 + Math.max(...[...cols.values()].map((l) => l.length)) * (H + GY) - GY;
   const edges = a.tasks.flatMap((t) => t.needs.map((n) => {
     const p = pos.get(n), c = pos.get(t.id), x1 = p.x + W, y1 = p.y + H / 2, x2 = c.x, y2 = c.y + H / 2, mx = (x1 + x2) / 2;
-    return `<path class="edge${criticalEdge(a, n, t.id) ? " crit" : ""}" d="M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2 - 6},${y2}" marker-end="url(#arrow)"/>`;
+    // เส้นนอน → ตั้ง → นอน หักมุมฉากกลางช่อง (ไม่ใช้เส้นโค้ง อ่านง่ายกว่าเมื่อเส้นหลายเส้นเข้ากล่องเดียว)
+    return `<path class="edge${criticalEdge(a, n, t.id) ? " crit" : ""}" d="M${x1},${y1} H${mx} V${y2} H${x2 - 6}" marker-end="url(#arrow)"/>`;
   }));
   const nodes = a.tasks.map((t) => {
     const { x, y } = pos.get(t.id), f = a.cpm.get(t.id).float;

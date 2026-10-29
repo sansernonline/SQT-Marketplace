@@ -1,7 +1,7 @@
 """สีประจำ plugin + ไอคอน — นิยามที่เดียว ใช้ร่วมใน kit/ · build.py · build_playbooks.py · flow/build_flow.py
 
-ไอคอนอ่านจาก plugins/<plugin>/assets/icon.svg (ไอคอนประจำ plugin ตัวจริง) · สีประจำ plugin คือสีล่างของกรอบไอคอน
-เข้มขึ้นจนตัวหนังสือขาวบนพื้นสีได้ ≥ 4.9:1 · plugin ที่ยุบไปแล้ว (ข้อมูลเก่ายังอ้างชื่อ) ใช้ของ plugin ที่รับไป
+ไอคอนอ่านจาก plugins/<plugin>/assets/icon.svg (ไอคอนประจำ plugin ตัวจริง) · สีประจำ plugin คือสีกลางของกรอบไอคอน
+เข้มขึ้นจนไอคอนขาวบนพื้นสีได้ ≥ 3.4:1 · plugin ที่ยุบไปแล้ว (ข้อมูลเก่ายังอ้างชื่อ) ใช้ของ plugin ที่รับไป
 """
 import base64
 import os
@@ -36,7 +36,8 @@ def _on_white(h, target=4.9):
 
 def _color(plugin):
     stops = re.findall(r'stop-color="(#[0-9a-fA-F]{6})"', _icon(plugin))
-    return _on_white(stops[1])  # สีล่างของกรอบ
+    mid = "#" + "".join(f"{(int(stops[0][i:i + 2], 16) + int(stops[1][i:i + 2], 16)) // 2:02x}" for i in (1, 3, 5))
+    return _on_white(mid, 3.4)  # กลางกรอบ (สดกว่าสีล่าง) · ไอคอนและเลขตัวใหญ่สีขาวบนวงต้องการ ≥ 3:1
 
 
 COLOR = {p: _color(p) for p in PLUGINS}
