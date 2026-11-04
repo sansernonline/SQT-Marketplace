@@ -1,5 +1,14 @@
 # Changelog — software-company
 
+## 2.34.0 — 2026-11-04
+
+- บทเรียนจากโฟลเดอร์สอน Teaching_CWN2026 ที่เปิดต้นฉบับยืนยันแล้ว ตัวเลขเป็นตัวอย่างจากงานนั้น ไม่ใช่เกณฑ์ · ต้องใช้ `superuser` 3.16.0 ขึ้นไป
+- `spec-to-code-loop` ข้อ 10 ใหม่ ลูปที่ปรับตามตัวเลข (สัญญาลูป · ห้ามถอย · เพดานข้อมูล · ตัวกันโกงตัวเลข) · `test-evidence` ข้อ 5 ใหม่ ทำให้ตัวเลขน่าเชื่อ
+- `e2e-testing-patterns` ไฟล์ใหม่ `oracle-and-mutation.md` (differential · ariaSnapshot · mutation) · กติการันหลาย agent พร้อมกัน · แท็บเบื้องหลัง
+- `test-case-template` ผู้รีวิวอิสระตรวจแผน · `qa-tester` ฝังบั๊กให้ทุกชั้นผิดตรงกัน
+- `worktree-and-branch` แบ่งงานตามไฟล์ที่เป็นเจ้าของ · `reference-app-research` ถ้าได้ใช้แอปจริง · 1 explorer ต่อ 1 browser
+- `reverse-engineering` กับดัก HAR · `docker-sandbox` Playwright MCP · `mcp-server` stdout และ session · `voice-agent` Whisper ภาษาไทย · `config-and-secrets` comment ท้ายค่าใน `.env` · `llm-engineering` ข้อสอบ RAG และ ablation · `rabbitmq-messaging` prefetch และ watchdog · `load-testing` ยิงทีละขั้น
+
 ## 2.33.1 — 2026-10-29
 
 - `diagram-figures` ข้อ 7.1 จัดวางผังขั้นตอนและผังทีม (ผู้ใช้ตั้งกติกาหลังเห็นรูปจริง): อ่านบนลงล่าง · ตัวกลางอยู่กลางรูป · ของระดับเดียวกันอยู่ในกรอบเดียวกัน แถวเดียวกัน มีชื่อกลุ่ม · ทุกกล่องในกลุ่มรับของเดียวกันลากเส้นเดียวเข้ากรอบ · รางเส้นอยู่นอกกรอบ · ทุกกล่องมีชื่อและคำอธิบาย · มุมเส้นโค้ง 12 px การ์ดมน 14 px กรอบมน 20 px ให้ดูนุ่มนวล · คำไทยห้ามขาดกลางคำ · เพิ่มข้อใน Anti-patterns
