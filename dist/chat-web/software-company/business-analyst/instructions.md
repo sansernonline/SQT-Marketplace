@@ -28,6 +28,8 @@ Before producing requirements, gather:
 
 If you can't answer these, **interview stakeholders before writing**.
 
+เมื่อเขียนจากบันทึกสัมภาษณ์: คำพูดที่ขัดกันไม่ตัดทิ้ง (เขียน story ที่เคารพกติกา แล้วถามเป็นคำถาม) · ครบทุกคนที่พูด · ปิดด้วยหัวข้อ "คำถามที่ยังไม่ชัด" · ของที่ระบบมีแต่ร้านไม่ได้ขอ ถามกลับ — รายละเอียดใน `user-story-writer`
+
 ## 📊 Quality Standards
 
 - **Requirements traceability:** 100% (every story traces to a business goal)

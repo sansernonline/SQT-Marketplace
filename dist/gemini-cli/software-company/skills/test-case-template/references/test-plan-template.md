@@ -46,6 +46,8 @@
 | Functional, boundary, negative | Performance (separate plan) |
 | Integration with X | Mobile app (Phase 2) |
 
+แถว Out of Scope ทุกแถวต้องมีเหตุผลและเลขคำถาม (เช่น "ยังไม่รู้เกณฑ์ → Q13 · ทดสอบเฉพาะจุดที่รู้") ไม่ปล่อยเป็นหัวข้อเปล่า
+
 ## 3. Test Approach
 
 | Test Type | Coverage | Tool | Owner |
@@ -92,6 +94,8 @@ Every BR in the traceability table at the end of the test-case file has at least
 | Test data | Synthetic data (generator) · production copies only with anonymisation that the data owner signs off (Personal Data Protection Act, PDPA) |
 | Browsers | Chromium (every run) · WebKit/iPhone (nightly, pre-prod) · Firefox (pre-prod only, drop if users don't use it) |
 | Devices | iPhone 15, Galaxy S24, iPad Pro |
+| ข้อตกลงการรันกลาง | ทุก test reset ข้อมูลก่อนเริ่ม · `workers: 1` ต่อเว็บที่ใช้ร่วมกัน · test ที่ทดสอบ rate limit ติด tag แล้วรันท้ายสุดด้วยบัญชีของตัวเอง · กติกา `{run}` ในอีเมลและการรันขนาน ดู `e2e-testing-patterns` → `references/ci-and-parallel.md` |
+| TEST-DATA | ไฟล์ข้อมูลทดสอบที่เจ้าของงานตรวจและยืนยัน (ถือเป็น `[D]`): วัน "วันนี้" ที่ล็อก · ผู้ใช้ตัวอย่าง · ข้อมูลที่มีอยู่ก่อน · ตารางค่าขอบจากทุก BR พร้อมผลที่ถูกและวิธีคิดเงิน · ค่าที่ยังไม่ยืนยันติด `(รอยืนยัน)` · เลือกวันล็อกให้ชนขอบ (ตัวอย่างจากงานนั้น: ล็อก 10:00 ทำให้นัดพรุ่งนี้ 10:00 เป็นขอบ 24 ชม. พอดีโดยไม่ต้องสร้างข้อมูลพิเศษ) · ค่าขอบที่ทดสอบผ่านหน้าเว็บไม่ได้ ให้ระบุว่าเป็น unit test |
 
 ## 6. Schedule
 
@@ -129,6 +133,8 @@ A break with no case that fails → add a case, then add the row again.
 - ตรวจทุก TC ด้วย 6 เกณฑ์: ① ผลที่คาดหวังตรวจได้ ② ตัวเลขเงินคิดใหม่เองแล้วตรง ③ ไม่กำกวม ④ ไม่ซ้ำกับข้ออื่น ⑤ ขั้นตอนทำตามได้จริง ⑥ ระดับ ที่มา กฎ และเทคนิคถูก
 - พฤติกรรมหนึ่งเรื่อง = TC เจ้าของ 1 ข้อ ข้ออื่นที่ตรวจซ้ำให้ตัดออกหรือตัดขั้นซ้ำ ไม่งั้นบั๊กเดียวทำให้ล้มหลายข้อและระดับไม่ตรงกัน
 - นับจำนวน TC ก่อนและหลังแก้ด้วยสคริปต์ ไม่นับมือ (ตัวอย่างจากงานนั้น: 344 → 339 TC · พบ 156 เรื่อง)
+- ผลรีวิวเป็นหลักฐาน (ตัวอย่างจากงานสอน อีกชุด ตรวจเมื่อ 2026-11-04 จากตารางผลรีวิว): ผลที่คาดหวังตรวจได้ 36/40 → 42/42 · ข้อที่บอกจังหวะตรวจ (ทันที/หลังรีโหลด) 0/14 → 16/16
+- ส่วนผสมเทคนิคของชุดใหญ่หลังรีวิว (ตัวอย่างจากแผน 339 TC ไม่ใช่เกณฑ์): Happy 91 · Negative 129 · Boundary 69 · Equivalence 62 · State 87 · Security 54 (1 TC นับได้หลายเทคนิค)
 - ข้อควรระวัง: ตัวเลข "เหลือ 0 เรื่อง" ในตัวอย่างนั้นมาจาก log ของผู้แก้เอง ผู้รีวิวอิสระยังไม่ได้ตรวจรอบสอง สคริปต์ยืนยันได้แค่โครงตารางกับการโยงกฎ
 
 ## Sign-off

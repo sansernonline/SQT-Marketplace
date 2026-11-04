@@ -1,129 +1,94 @@
-# skill: user-story-writer
+# skill: simplicity-first
 
-Use when writing user stories or turning requirements into stories (Given-When-Then criteria).
+Use when shaping a software BRD, SRS, FSD, ADR, architecture or roadmap to fewest parts. Code → lazy-coding; other → simplify.
 
-# User Story Writer
+# Simplicity First
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
-> ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ ธุรกิจ
+> The best architecture has the fewest moving parts. The best plan is the one a
+> teammate can follow with no context.
 
-## เมื่อไหร่ใช้ skill นี้
+This skill covers **non-code outputs** — documents, plans, architecture, and
+designs. For code, use `lazy-coding`. The suite-wide rule for every kind of work is `simplify`; this skill is its detail for documents, plans and architecture.
 
-- ผู้ใช้ขอให้เขียน user story ใหม่
-- มี requirement เป็นข้อความยาว ต้องแตกเป็น stories
-- ต้องเขียน acceptance criteria
-- ต้อง review/refine user story เดิมที่ไม่ชัดเจน
+## Check before submitting — 5 items
 
-ไม่ใช้เมื่อ: ต้องการเอกสาร requirement เต็ม → `srs-writing` · สเปกหน้าจอ → `fsd-writing` · เขียนกรณีทดสอบ → `test-case-template`
+1. **A tired teammate gets it** in 6 months with no prior context.
+2. **Simplest thing that works** — fewest moving parts, boring proven patterns; add complexity only when something breaks.
+3. **Every new component, option or layer has evidence it is needed now**, and leaving it out would cost something real.
+4. **Nothing can be deleted without losing meaning** — deleting beats adding.
+5. **Reads in one pass** — no jargon the audience lacks, an example for every abstract claim, the whole thing fits in two sentences.
 
-## ขั้นตอนการทำงาน
+Any "no" or "not sure" → simplify before delivering.
 
-1. **เก็บข้อมูลให้ครบ** ก่อนเขียน ถ้าขาดอะไรให้ถาม:
-   - ใครคือ user (persona/role)
-   - เขาต้องการทำอะไร
-   - ทำเพื่ออะไร (business value)
-   - มีข้อจำกัด/business rule อะไรไหม
+## By output type
 
-2. **เขียน user story ตาม format**:
-   ```
-   As a <type of user>
-   I want <some goal>
-   So that <some reason / business value>
-   ```
+### Documents (BRD, FSD, ADR)
 
-3. **เขียนเกณฑ์การยอมรับ (Acceptance Criteria · AC)** แบบ Given-When-Then:
-   ```
-   Given <precondition>
-   When <action>
-   Then <expected result>
-   ```
-   - อย่างน้อย 1 happy path
-   - อย่างน้อย 1 edge case / error case
+Business Requirements Document (BRD) · Software Requirements Specification (SRS) · Functional Specification Document (FSD) · Architecture Decision Record (ADR).
 
-4. **ใส่ metadata เพิ่มเติม**:
-   - Priority (High/Medium/Low)
-   - Story Points — ใช้ Fibonacci: 1, 2, 3, 5, 8, 13 · **คนประเมินคือนักพัฒนาหรือทีม** · ผู้เขียน story (เช่น `business-analyst`) เว้นว่างไว้ หรือใส่ค่าเสนอพร้อมเขียน `(เสนอ · รอทีมประเมิน)`
-   - Dependencies (ถ้ามี)
+Do: short sentences (≤ 20 words), plain English, one idea per paragraph, an
+example for every abstract point, tables for structured data.
 
-5. **บันทึกลงไฟล์** — ดูหัวข้อถัดไป story ที่อยู่แค่ในแชตถือว่ายังไม่ได้เขียน
+Avoid: marketing-speak ("revolutionary", "best-in-class", "synergy"), undefined
+jargon, walls of text, hedging ("might possibly potentially"), acronym soup.
 
-## เขียนลงไฟล์ไหน
+### Architecture
 
-ทุก story อยู่ใน **`docs/USER-STORIES.md`** ไฟล์เดียว เริ่มจากแบบฟอร์ม [assets/user-stories.md](assets/user-stories.md)
+Do: monolith first (split only when a bottleneck is proven), familiar stack,
+standard patterns (Representational State Transfer (REST), queues, caches), single source of truth per data type.
 
-- **อ่านไฟล์ก่อนเขียนเสมอ** ถ้ามีอยู่แล้ว ให้ต่อเลข ID จากตัวสุดท้าย และแก้ story เดิมในที่เดิม ไม่สร้างซ้ำ
-- **ID ไม่นำกลับมาใช้ซ้ำ** story ที่เลิกทำแล้วให้เปลี่ยนสถานะเป็น Dropped ไม่ลบทิ้ง
-- **ตารางสารบัญด้านบนต้องตรงกับเนื้อหาเสมอ** เพิ่มหรือแก้ story แล้วต้องแก้แถวในตารางในรอบเดียวกัน `/sprint-plan` อ่านจากตารางนี้
-- **คอลัมน์อ้างอิง** ใส่ที่มาของ story เช่นข้อกำหนดในเอกสารข้อกำหนดซอฟต์แวร์ (Software Requirements Specification · SRS) (`REQ-xxx`), กฎธุรกิจ (`BR-xxx`) หรือ change request (`CR-xxx`) เพื่อให้ไล่กลับไปหาได้
-- **story ที่เริ่มทำหรือทำเสร็จแล้ว (In sprint หรือ Done) ถ้าแก้ AC** ให้บันทึกในส่วนประวัติการเปลี่ยนท้ายไฟล์ แล้วค้นใน `qa/` หา test case ที่อ้าง `US-xxx, ACn` นั้น ใส่ชื่อลงช่อง test case ที่ต้องแก้ — ไม่แก้ไฟล์ของทีมประกันคุณภาพ (Quality Assurance · QA) เอง
-- **เกิน 30 story หรือมีหลาย epic ที่แยกทีมกันทำ** ให้ย้ายเนื้อหาไปไว้ที่ `docs/stories/<epic>.md` ส่วนตารางสารบัญยังคงอยู่ใน `docs/USER-STORIES.md` ที่เดียว
+Avoid: microservices for small teams, distributed-everything, multi-master
+databases before you must, event-driven by default (sync is simpler).
 
-## INVEST Checklist (ตรวจก่อนส่ง)
+### Plans
 
-ทุก story ต้องผ่านเกณฑ์เหล่านี้:
+Do: 3-5 priorities (not 20), a named owner per item, measurable success
+criteria, realistic timelines with buffer, cut scope to fit time.
 
-- [ ] **I**ndependent — ไม่ขึ้นกับ story อื่น
-- [ ] **N**egotiable — เปิดให้คุยรายละเอียดได้
-- [ ] **V**aluable — มี business value ชัดเจน
-- [ ] **E**stimable — ประเมิน effort ได้
-- [ ] **S**mall — เล็กพอจะทำเสร็จใน 1 sprint
-- [ ] **T**estable — ทดสอบได้
+Avoid: vague goals ("improve quality"), 50-item lists (= no priority),
+aspirational dates with no buffer, plans without success metrics.
 
-## Output Template
+### Designs (user experience (UX), application programming interface (API))
 
-```markdown
-## US-XXX: <ชื่อสั้นๆ>
+Do: fewest steps to the user's goal, reuse existing patterns, stay consistent
+across screens, defaults that work for 80%, progressive disclosure.
 
-**Story**
-As a <role>
-I want <goal>
-So that <value>
+Avoid: novel interactions where a standard one works, 10-step flows when 3
+work, required fields with no smart default, hidden features needing tutorials.
 
-**Acceptance Criteria**
+## Examples
 
-AC1: <ชื่อ scenario>
-- Given <context>
-- When <action>
-- Then <result>
+**API description**
 
-AC2: <ชื่อ scenario>
-- Given ...
-- When ...
-- Then ...
+Wrong: "This sophisticated, enterprise-grade endpoint leverages state-of-the-art
+authentication to facilitate the seamless retrieval of user profile data."
 
-**Priority:** High | Medium | Low
-**Story Points:** X
-**Blocked by:** US-YYY (story ที่ต้องเสร็จก่อนถึงจะเริ่มข้อนี้ได้) · ไม่มี → เขียน `None (เริ่มได้ทันที)`
-**Notes:** ข้อมูลเพิ่มเติม / business rules
-```
+Right: "`GET /users/{id}` returns a user profile. Requires a Bearer token. Use
+`?fields=name,email` to limit the response."
 
-**Blocked by ใส่เฉพาะที่กั้นจริง** (ปรับจาก mattpocock `to-tickets` · MIT) — story A กั้น B เมื่อ B เริ่มไม่ได้ถ้า A ยังไม่เสร็จ (ต้องใช้ตาราง · API · หน้าจอของ A) ไม่ใช่แค่ "ควรทำก่อน" · เรียงลำดับใน `USER-STORIES.md` ให้ตัวที่กั้นอยู่ก่อนตัวที่ถูกกั้น · ทีมหรือ agent หยิบงานจากชุด "ทุกตัวที่กั้นเสร็จแล้ว" ซึ่งเป็นชุดที่ทำขนานกันได้ · ถ้าใช้ tracker จริง (GitHub · Linear) ให้ใช้ความสัมพันธ์ blocking ของมัน ไม่ใช่เขียนในข้อความอย่างเดียว
+**Sprint goal**
 
-## ตัวอย่าง
+Wrong: "Improve overall product quality and customer satisfaction through various
+initiatives."
 
-ดูตัวอย่างเต็มได้ที่ `examples/login-story.md`
+Right: "Reduce login errors by 50% (8% → 4%): fix timeout bug (2d), retry on
+transient errors (1d), clearer error messages (1d)."
 
-## ข้อห้าม
+**Architecture for a new feature**
 
-- อย่าเขียน technical solution ใน story (เช่น "ใช้ JWT")
-- อย่าเขียน UI detail (เช่น "ปุ่มสีฟ้า") — ให้ designer ตัดสิน
-- อย่าใช้ "user" เฉยๆ ต้องระบุ role เจาะจง (admin, customer, guest)
-- อย่าเขียน story ใหญ่เกิน 13 points — ให้แตกออก
+Wrong: "Event-sourced microservice with Command Query Responsibility Segregation (CQRS), Kafka ingestion, Redis cache, and a
+dedicated auth service."
 
----
+Right: "Add an endpoint to the existing API. One Postgres table for state. Standard
+auth middleware. Log to the existing system."
 
-## หน้าตาของเอกสาร
+## Anti-patterns to reject
 
-skill นี้ตัดสินว่า**เนื้อหาต้องมีอะไร** ไม่ได้ตัดสินว่า**หน้าตาเป็นอย่างไร** —
-โหลด skill ที่ตรงกับปลายทางก่อนเริ่มเขียน ไม่ใช่ตอนเขียนเสร็จ:
-
-| ส่งมอบเป็นอะไร | โหลด |
-|---|---|
-| markdown ที่คนอ่าน (repo · wiki · ระบบติดตามงาน) | `polished-document-style` |
-| ไฟล์ `.docx` / `.pptx` / PDF ที่ผู้มีส่วนได้เสียเซ็นรับ | `branded-document-design` |
-| ต้องมีภาพถึงจะเข้าใจ | `diagram-figures` (house style ของเอกสารโปรเจกต์) |
-
-การปล่อยรูปแบบเริ่มต้นไว้ไม่ได้ทำให้ดูเป็นกลาง คนอ่านจะมองว่างานยังไม่เสร็จ
+- **Future-proofing** — abstractions for needs that never arrive.
+- **"It might scale"** — infra for 1M users while you have 1k.
+- **Layer cake** — 6 layers where 90% just pass through.
+- **Resume-driven design** — fancy tech to look sophisticated.
+- **Buzzword stacking** — "cloud-native event-driven AI-powered".
 
 
 ---
