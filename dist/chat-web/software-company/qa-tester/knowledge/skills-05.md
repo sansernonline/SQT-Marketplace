@@ -312,6 +312,7 @@ Use when a project needs its own Docker container (untrusted code, system instal
 
 - เบราว์เซอร์ในห้องไม่มีบัญชี ไม่มีคุกกี้ ไม่มีรหัสผ่านของผู้ใช้ — ล็อกอินด้วยบัญชีทดสอบของโปรเจกต์เท่านั้น
 - ภาพและวิดีโอจากการทดสอบ คัดออกมาที่ `_to_delete/` ด้วย `docker compose cp`
+- Playwright MCP ในห้อง (ตัวอย่างจากงานสอน ยังไม่ใช่เกณฑ์): รันเป็น root ต้องใส่ `--no-sandbox` · ค่า `--browser` ต้องตรงกับ `--help` ของรุ่นที่ลง (`chromium` หรือ `chrome` ถ้าไม่ตรงจะหาเบราว์เซอร์ไม่เจอ) · ภาพ screenshot ที่ตั้งชื่อแบบ relative ไปลงที่ working directory ของ process ไม่ใช่ `--output-dir` ต้องย้ายเอง · คลิกแล้ว timeout "not visible/stable" อาจเป็นแท็บเบื้องหลัง ดู `e2e-testing-patterns`
 - เบราว์เซอร์ของผู้ใช้บนเครื่อง (Chrome ที่ล็อกอินอยู่) ใช้กับเว็บจริงที่ต้องใช้บัญชีจริงเท่านั้น และทำตามกติกาของเครื่องมือนั้น ไม่ใช่ที่ทดสอบ
 
 ## 6 · CAPTCHA

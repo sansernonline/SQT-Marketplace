@@ -2187,6 +2187,8 @@ docker build --secret id=npmrc,src=$HOME/.npmrc .
 docker run --env-file .env myapp        # ตอนรัน ส่งค่าเข้าไป
 ```
 
+ห้ามเขียน `# comment` ต่อท้ายบรรทัดค่าใน `.env` ที่ใช้กับ `--env-file`: docker เก็บ comment เป็นส่วนของค่า ทำให้ค่าผิดโดยไม่มี error (ทดลองเมื่อ 2026-11-04: `A=value # note` ได้ค่า `value # note`) · วาง comment ไว้บรรทัดของมันเอง
+
 **Kubernetes:**
 
 ```yaml

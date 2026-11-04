@@ -382,6 +382,7 @@ Use when work goes through RabbitMQ (queue, exchange, ack, DLX, ข้อคว�
 
 1. **manual ack** ส่งหลังงานเสร็จ (ส่งอีเมลแล้ว บันทึกผลแล้ว) · auto-ack ตามเอกสารไม่ปลอดภัย: consumer ตายกลางงาน ข้อความหาย
 2. **prefetch** ตั้งชัด · 100–300 ให้ throughput ดี (1 ปลอดภัยสุดแต่ช้า) · quorum จำกัดที่ 2,000 · งานที่ช้าต่อข้อความ (เรียกอีเมลภายนอก) เริ่มต่ำแล้ววัด
+   - งานหนักที่ต้องรอ backend อื่น (เช่น เซิร์ฟเวอร์โมเดล GPU): ตั้ง prefetch ให้เท่ากับจำนวนงานที่ backend ทำพร้อมกันได้จริง · ตัวอย่างจากงานสอน ไม่ใช่เกณฑ์: backend แบบ batch ที่รับ 8 งานพร้อมกัน เพิ่ม prefetch 4 → 8 ได้งานเพิ่ม 44% · backend ที่ทำทีละงาน เพิ่ม prefetch ไม่ได้อะไร แค่ย้ายแถวไปรอที่ consumer (ดู `load-testing` หัวข้อ 5)
 3. **อย่า requeue วน** เมื่อ error ชั่วคราว: เปลืองแบนด์วิดท์และ CPU ตามเอกสาร · ทำ retry แบบมีหน่วง หรือนับรอบแล้วส่งเข้า dead letter · บน quorum queue รุ่น 4.3 ขึ้นไป ล้มชั่วคราวให้ใช้ `basic.reject` (requeue) ไม่ใช่ `basic.nack` เพราะมีแค่ reject ที่นับเข้า `delivery-limit` และทำให้ `delayed-retry-type: failed` หน่วงให้ · nack ไม่นับ จึงวนได้ไม่รู้จบ (หัวข้อ 6)
 4. ข้อความที่ถอดหรือตรวจไม่ผ่าน (poison) → reject แบบไม่ requeue ให้เข้า dead letter ทันที ไม่ปล่อยให้ consumer ล้มแล้วรับซ้ำเรื่อย ๆ
 5. ค่า acknowledgement timeout ตั้งต้นของ consumer `(ยังไม่ได้ตรวจ ไม่ได้เปิดหน้า consumers)` · งานยาวกว่า timeout ให้ตรวจก่อนใช้
@@ -413,6 +414,8 @@ Use when work goes through RabbitMQ (queue, exchange, ack, DLX, ข้อคว�
 รุ่นตรวจ 2026-10-27 · ชุด 4.4 เป็นชุดปัจจุบันตามหน้า release-information · 4.3 ดูแลถึง 31 Jan 2027 · 4.4 ถึง 31 Jul 2027 · 4.2 ลงไปหมดการดูแลของชุมชนแล้ว (4.2 ตารางลง 31 Jul 2026 แต่ตารางลงรุ่น 4.2.11 วันที่ 16 Sep 2026 ซึ่งขัดกันเอง) · เลขรุ่นย่อยหน้า release-information กับ GitHub ไม่ตรงกัน (GitHub: v4.4.0 วันที่ 2026-10-19 และ v4.3.7 วันที่ 2026-10-20 · หน้า release-information: 4.4.0 วันที่ 20 Oct และ 4.3.6) · ก่อนล็อกรุ่นใน production เปิดทั้ง 2 หน้าแล้วเลือกตามที่ติดตั้งได้จริง
 
 เฝ้า: ความยาวคิว · อายุข้อความเก่าสุด · จำนวนข้อความใน DLX · connection ที่หลุดบ่อย · ดิสก์ของ stream · เกณฑ์ alert ตั้งจากปริมาณจริง `(รอยืนยัน)` · ตามหลัก `observability-basics`
+
+backend ที่ consumer เรียกอาจล้มเงียบ ๆ ตอนโหลดสูง (ตัวอย่างจากงานสอน: เซิร์ฟเวอร์โมเดลตอบ 503 อยู่ประมาณ 35 นาทีโดยไม่กลับมาเอง) · ข้อความยังอยู่ในคิวไม่หาย · ใส่ watchdog สคริปต์เล็ก ๆ เช็ก `/health` ทุก 10 วินาที ล้ม 3 ครั้งติดให้สตาร์ตใหม่
 
 ## ตัวอย่างจริง 1 ชุด
 
@@ -1034,12 +1037,16 @@ Model Context Protocol (MCP) คือโปรโตคอลเปิด (JSON
 | รัน stdio | `if __name__ == "__main__": mcp.run()` (ไม่ใส่ transport = stdio) · `uv run mcp dev server.py` เปิด Inspector | `StdioServerTransport` จาก `@modelcontextprotocol/server/stdio` |
 | เมื่อไหร่เลือก | ทีมถนัด Python · ต่อฐานข้อมูล · pandas | ลูกค้าใช้ Node อยู่แล้ว · จะแพ็กเป็น MCPB ให้ติดตั้งโดยไม่ลง runtime · Anthropic `mcp-builder` แนะนำ TypeScript เป็นหลัก |
 
+**ไลบรารีหนัก (kokoro · torch · transformers) พิมพ์ลง stdout ตอน import หรือโหลดโมเดล แล้วทำ stdio พัง** (ตัวอย่างจากงานสอน Kokoro TTS): ครอบด้วย `contextlib.redirect_stdout(sys.stderr)` เฉพาะจุดที่ import และตอนเรียกโมเดล · ห้ามครอบ `mcp.run()` เพราะโปรโตคอลตอบทาง stdout · โหลดโมเดลตอนเรียก tool ครั้งแรก ไม่โหลดตอน server เริ่ม
+
 ตัวอย่างสมบูรณ์: `assets/inventory-mcp/server.py` (113 บรรทัด · SQLite อ่านอย่างเดียว · 3 tool + 1 resource · ข้อมูลตัวอย่างสร้างเองครั้งแรก) + `assets/inventory-mcp/README.md` (วิธีผูก · `.mcp.json` · ตาราง eval) · รันกับ client จริงผ่าน stdio แล้ว 2026-10-23 (handshake · tools ครบ · error ถูกรูป · stdout สะอาด · wire log: `assets/inventory-mcp/wire-inventory-2026-10-23.jsonl`) · พฤติกรรมฝั่งโมเดลใน eval (เลือก tool ถูก · ไม่ทำตาม injection) ผ่าน 2026-10-23 **ผ่าน Codex CLI 0.163.0** (โฮสต์ MCP จริง) — ยังไม่ได้รันบน Claude Code · บทเรียน: ตอน prompt กำกวม โมเดลอาจอ่านแต่ resource แล้วตอบก่อนดู tools (รายละเอียดในตาราง eval ของ `assets/inventory-mcp/README.md`)
 
 ## 7 · ทดสอบ
 
 1. **Inspector ก่อน** — `uv run mcp dev server.py` (Python) หรือ `npx @modelcontextprotocol/inspector` · เห็น tool list · เรียกทีละตัว · ดู `structured_content` และ `is_error`
 2. **ผูกกับ Claude Code** — `claude mcp add --transport stdio <ชื่อ> -- python <path>/server.py` (ค่าเริ่มต้น scope `local` เก็บใน `~/.claude.json` · `--scope project` เขียน `.mcp.json`) · `claude mcp list` ต้องเห็นสถานะเชื่อมได้ · ใส่ env ด้วย `--env KEY=value` วางก่อนชื่อ server
+   - host โหลด MCP server ตอนเริ่ม session เท่านั้น → ลงทะเบียนหรือแก้ config แล้วต้องเริ่ม session ใหม่ · ใช้ path เต็มใน `command` และ `args` · ชื่อซ้ำจะ error ต้อง `claude mcp remove <ชื่อ>` ก่อน
+   - ทดสอบ server โดยไม่ต้องมี LLM: เขียน client script สั้น ๆ (`stdio_client`) เรียก `list_tools` และ `call_tool` แล้วบันทึกข้อความ JSON-RPC บนสายลงไฟล์ (wire log) ไว้เป็นหลักฐาน
 3. **eval 3 กรณี** ต่อ server (ลงตารางใน README ของ server พร้อมวันที่):
 
 | # | กรณี | ผ่านเมื่อ |
