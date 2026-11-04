@@ -34,6 +34,7 @@ description: Use when designing end-to-end tests with Playwright or Cypress, fix
 | [references/auth-in-e2e.md](references/auth-in-e2e.md) | ตอนวางวิธีล็อกอินในชุดทดสอบ และต้องการโค้ด `storageState` หรือการฉีด cookie ผ่าน API |
 | [references/ci-and-parallel.md](references/ci-and-parallel.md) | ตอนตั้งการรันขนานหรือแบ่งรอบการรัน E2E ใน CI และต้องรู้ว่าต้องเก็บไฟล์อะไรเมื่อเทสต์ล้ม |
 | [references/coverage-and-libraries.md](references/coverage-and-libraries.md) | ตอนทำตารางความครอบคลุมของเส้นทางผู้ใช้ หรือย้ายคำสั่งระหว่าง Playwright กับ Cypress |
+| [references/oracle-and-mutation.md](references/oracle-and-mutation.md) | ถ้ามีระบบเดิมให้เทียบ (differential) · จะเทียบโครงสร้างหน้าด้วย accessibility tree · อยากรู้ว่าชุดทดสอบจับบั๊กได้จริงไหม (mutation) · หรือต้องบันทึกแล้วเล่นซ้ำคำขอเครือข่ายให้นิ่ง |
 
 ## The Testing Pyramid (Get This Right First)
 
@@ -135,6 +136,7 @@ Most resilient ─────────────────────�
 | Order dependency | Each test fully isolated, parallelizable |
 | Auth race condition | Pre-authenticate via API, inject session |
 | Element not stable | `expect(el).toBeVisible()` before interacting |
+| Click times out "not visible/stable" but the site works | The tab may be in the background (`document.visibilityState === "hidden"`, common with Playwright MCP sharing one browser). Check with `browser_evaluate`, switch to the tab, then click. Do not retry blindly |
 
 ห้ามใช้ `page.waitForTimeout` รอแบบกำหนดเวลา ให้รอเหตุการณ์จริง เช่น response ของ API แทน โค้ดเทียบอยู่ใน [references/flaky-tests.md](references/flaky-tests.md)
 

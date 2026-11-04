@@ -1,5 +1,12 @@
 # Changelog — superuser
 
+## 3.16.0 — 2026-11-04
+
+- บทเรียนจากโฟลเดอร์สอน Teaching_CWN2026 (week 01 · 02 · 03 · AI Workflow · MCP) เฉพาะที่เปิดต้นฉบับยืนยันแล้ว ตัวเลขเป็นตัวอย่างจากงานนั้น ไม่ใช่เกณฑ์
+- `parallel-split-and-merge`: ตาราง event ของ orchestrator · สายวิกฤตกำหนดเวลา · `claude -p` เป็น worker · วัด agent ขนานจริงจาก log · 1 explorer ต่อ 1 browser
+- `principle-prove-it-works`: exit 0 ไม่ใช่หลักฐาน · `skill-authoring`: ค่าเช่า GPU ที่ซ่อนอยู่ · `principle-small-verifiable-steps`: โฟลเดอร์ใหม่ต่อรอบ
+- `chat-prompt-workflows` (`loop.md` · `graph.md`): ตรวจแค่ไวยากรณ์ไม่นับว่า render ได้ · เกณฑ์ตัวเลขต้องมีวิธีนับ · เจ้าของเกณฑ์ต่อชิ้น · `agent-patterns`: พิสูจน์ว่า "ใช้ต่อได้" จริง
+
 ## 3.15.4 — 2026-10-29
 
 - `human-writing` `thai-examples.md`: เจ้าของอ่านตัวอย่างภาษาไทย 5 คู่แล้วรับ เอาป้าย `(ชั่วคราว)` ออก

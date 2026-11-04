@@ -106,12 +106,16 @@ Model Context Protocol (MCP) คือโปรโตคอลเปิด (JSON
 | รัน stdio | `if __name__ == "__main__": mcp.run()` (ไม่ใส่ transport = stdio) · `uv run mcp dev server.py` เปิด Inspector | `StdioServerTransport` จาก `@modelcontextprotocol/server/stdio` |
 | เมื่อไหร่เลือก | ทีมถนัด Python · ต่อฐานข้อมูล · pandas | ลูกค้าใช้ Node อยู่แล้ว · จะแพ็กเป็น MCPB ให้ติดตั้งโดยไม่ลง runtime · Anthropic `mcp-builder` แนะนำ TypeScript เป็นหลัก |
 
+**ไลบรารีหนัก (kokoro · torch · transformers) พิมพ์ลง stdout ตอน import หรือโหลดโมเดล แล้วทำ stdio พัง** (ตัวอย่างจากงานสอน Kokoro TTS): ครอบด้วย `contextlib.redirect_stdout(sys.stderr)` เฉพาะจุดที่ import และตอนเรียกโมเดล · ห้ามครอบ `mcp.run()` เพราะโปรโตคอลตอบทาง stdout · โหลดโมเดลตอนเรียก tool ครั้งแรก ไม่โหลดตอน server เริ่ม
+
 ตัวอย่างสมบูรณ์: `assets/inventory-mcp/server.py` (113 บรรทัด · SQLite อ่านอย่างเดียว · 3 tool + 1 resource · ข้อมูลตัวอย่างสร้างเองครั้งแรก) + `assets/inventory-mcp/README.md` (วิธีผูก · `.mcp.json` · ตาราง eval) · รันกับ client จริงผ่าน stdio แล้ว 2026-10-23 (handshake · tools ครบ · error ถูกรูป · stdout สะอาด · wire log: `assets/inventory-mcp/wire-inventory-2026-10-23.jsonl`) · พฤติกรรมฝั่งโมเดลใน eval (เลือก tool ถูก · ไม่ทำตาม injection) ผ่าน 2026-10-23 **ผ่าน Codex CLI 0.163.0** (โฮสต์ MCP จริง) — ยังไม่ได้รันบน Claude Code · บทเรียน: ตอน prompt กำกวม โมเดลอาจอ่านแต่ resource แล้วตอบก่อนดู tools (รายละเอียดในตาราง eval ของ `assets/inventory-mcp/README.md`)
 
 ## 7 · ทดสอบ
 
 1. **Inspector ก่อน** — `uv run mcp dev server.py` (Python) หรือ `npx @modelcontextprotocol/inspector` · เห็น tool list · เรียกทีละตัว · ดู `structured_content` และ `is_error`
 2. **ผูกกับ Claude Code** — `claude mcp add --transport stdio <ชื่อ> -- python <path>/server.py` (ค่าเริ่มต้น scope `local` เก็บใน `~/.claude.json` · `--scope project` เขียน `.mcp.json`) · `claude mcp list` ต้องเห็นสถานะเชื่อมได้ · ใส่ env ด้วย `--env KEY=value` วางก่อนชื่อ server
+   - host โหลด MCP server ตอนเริ่ม session เท่านั้น → ลงทะเบียนหรือแก้ config แล้วต้องเริ่ม session ใหม่ · ใช้ path เต็มใน `command` และ `args` · ชื่อซ้ำจะ error ต้อง `claude mcp remove <ชื่อ>` ก่อน
+   - ทดสอบ server โดยไม่ต้องมี LLM: เขียน client script สั้น ๆ (`stdio_client`) เรียก `list_tools` และ `call_tool` แล้วบันทึกข้อความ JSON-RPC บนสายลงไฟล์ (wire log) ไว้เป็นหลักฐาน
 3. **eval 3 กรณี** ต่อ server (ลงตารางใน README ของ server พร้อมวันที่):
 
 | # | กรณี | ผ่านเมื่อ |

@@ -226,6 +226,8 @@ final = [doc for doc, score in ranked[:5]]
 
 > 💡 Retrieve top-20, re-rank to top-5. Big quality gain, modest cost.
 
+**พิสูจน์ว่า reranker คุ้ม ด้วย ablation (ถอดทีละชิ้น)**: ให้ปิดชิ้นส่วนด้วย env flag (เช่น `RERANK=off`) · รันซ้ำเฉพาะชุดคำถามที่เกี่ยวข้อง · ตั้งกลับเป็นเปิด · รายงานเป็นตาราง เปิด / ปิด / ผลต่าง (ตัวอย่างจากงานสอน: หน้าที่ถูกอยู่ใน 4 ย่อหน้าแรก 80.8% → 95.4% · ตอบถูก 84.0% → 91.7% ไม่ใช่เกณฑ์)
+
 ## Stage 7: Context Construction
 
 ```python

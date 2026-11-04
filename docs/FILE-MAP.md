@@ -11,7 +11,7 @@
 | [`e-commerce`](#e-commerce) | ขายออนไลน์ ซื้ออย่างมั่นใจ และงานหลังบ้านบริษัทไทย | 8 | 34 | 14 | 18 | 180 |
 | [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 21 | 6 | 9 | 143 |
 | [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 43 | 16 | 30 | 188 |
-| [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 103 | 29 | 17 | 923 |
+| [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 103 | 29 | 17 | 924 |
 | [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 39 | 0 | 7 | 205 |
 | [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 5 | 24 | 7 | 10 | 126 |
 
@@ -508,7 +508,7 @@ plugins/<plugin>/
 |---|---|---|
 | `code-review-checklist` | checklist รีวิว pull request และตรวจโค้ดตัวเองก่อนส่ง | `references/full-checklist.md` |
 | `testing-standards` | ตั้ง test อัตโนมัติ (.NET · Node · Python · Angular · Flutter) แก้ชุด test ที่ไม่นิ่ง | `references/per-stack.md` |
-| `e2e-testing-patterns` | test แบบเปิดเบราว์เซอร์จริง (Playwright · Cypress) แก้ test ที่ผลไม่นิ่ง | `references/auth-in-e2e.md` · `references/ci-and-parallel.md` · `references/coverage-and-libraries.md` · `references/flaky-tests.md` · `references/page-object-model.md` · `references/test-data-strategies.md` |
+| `e2e-testing-patterns` | test แบบเปิดเบราว์เซอร์จริง (Playwright · Cypress) แก้ test ที่ผลไม่นิ่ง | `references/auth-in-e2e.md` · `references/ci-and-parallel.md` · `references/coverage-and-libraries.md` · `references/flaky-tests.md` · `references/oracle-and-mutation.md` · `references/page-object-model.md` · `references/test-data-strategies.md` |
 | `load-testing` | ทดสอบว่าระบบรับคนพร้อมกันได้ไหม: เกณฑ์ p95 กับอัตรา error ก่อนยิง · ด่านอนุญาต · k6 thresholds · smoke ใน CI | `assets/k6-smoke.yml` · `assets/load-test.js` · `references/mcp-k6.md` · `references/reading-results.md` |
 | `test-case-template` | เขียน test case และแผนทดสอบฟีเจอร์จาก acceptance criteria | `assets/test-case.md` · `references/example-login.md` · `references/test-plan-template.md` · `scripts/build-test-workbook.py` |
 | `bug-report-template` | แบบรายงานบั๊ก 1 ตัว: วิธีทำให้เกิดซ้ำ · ความรุนแรง | `assets/bug-report.md` |
