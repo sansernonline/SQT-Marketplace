@@ -36,7 +36,8 @@ python scripts/design_search.py "ช่องวันที่ พ.ศ." --doma
 python scripts/design_search.py "ฟอร์ม validation" --domain stack --stack blazor --json
 ```
 
-- domain: `industry` · `palette` (คลังสำรอง ผลขึ้นต้นด้วยคำเตือนให้ค้นสดก่อน) · `font` · `look` · `ux` · `chart` · `landing` · `stack` · วิธีเลือกคำค้นและอ่านผล → [`references/query-guide.md`](references/query-guide.md)
+- domain: `industry` · `palette` (คลังสำรอง ผลขึ้นต้นด้วยคำเตือนให้ค้นสดก่อน) · `font` · `look` · `ux` · `chart` · `landing` · `stack`
+- domain จาก ui-ux-pro-max-skill (ภาษาอังกฤษ · [`data/upstream/uipro/README.md`](data/upstream/uipro/README.md)): `style` (88 สไตล์ มีค่าสี เงา การเคลื่อนไหว CSS ใช้กับอะไร ห้ามใช้กับอะไร) · `product` (192 ประเภทสินค้า → รูปแบบหน้า สไตล์ อารมณ์สีและตัวอักษร สิ่งที่ห้ามทำ) · `motion` · `slide` · `slide-strategy` · `slide-copy` · ใช้คู่กับ `look` และ `industry` ของเราตอนเลือก 3 แนว สีจากไฟล์ต้นทางไม่ได้ตรวจ contrast · วิธีเลือกคำค้นและอ่านผล → [`references/query-guide.md`](references/query-guide.md)
 - 1 ครั้ง 1 เจตนา 2–5 คำ · ไทย อังกฤษ หรือปนกันก็ได้ · ค้นซ้ำด้วยคำอื่นได้ 1 ครั้ง ไม่เจอให้บอกผู้ใช้
 - ตัวค้นตัดคำไทยด้วยพจนานุกรมจากคอลัมน์ keywords ของข้อมูล และขยายคำค้นด้วยตารางคำพ้องไทย-อังกฤษ จึงค้น `ร้านกาแฟมินิมอล` ได้โดยไม่ต้องเว้นวรรค
 
@@ -126,6 +127,7 @@ python scripts/design_draft.py "<โจทย์>" --out docs/DESIGN.md --html d
 
 ## ที่มา
 
+- `data/upstream/uipro/` คัดลอกไม่แก้จาก ui-ux-pro-max-skill commit `28b3b8d` (MIT · 2026-10-29) ตามที่เจ้าของสั่งให้ลอกมาปรับปรุง
 - แนวคิดชุดข้อมูลที่ค้นได้ ตัวค้น BM25 พร้อมเกณฑ์งดตอบ และตัวสร้าง design system มาจาก nextlevelbuilder/ui-ux-pro-max-skill (MIT · https://github.com/nextlevelbuilder/ui-ux-pro-max-skill · ดู 2026-10-26) · โค้ดและข้อมูลที่นี่เขียนใหม่ทั้งหมด ไม่ได้คัดลอก · ส่วนที่ทำต่างจากต้นทาง: ตัดคำไทย · 3 แนวแทน 1 คำตอบ · ตัดสีตั้งต้นของ framework · คู่ฟอนต์ไทย-ละติน
 - BM25 เป็นวิธีจัดอันดับที่เปิดเผยทั่วไป เขียนเองใน `scripts/design_search.py` · ค่า k1 1.5 และ b 0.75
 - เกณฑ์ contrast 4.5:1 และ 3:1 ตาม `ui-craft` ข้อ 5 (WCAG 2.2 ข้อ 1.4.3 และ 1.4.11)

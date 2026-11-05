@@ -1,5 +1,9 @@
 # Changelog — superuser
 
+## 3.17.2 — 2026-11-05
+
+- skill-router: แถวใหม่ส่งคำว่า แบนเนอร์ · ปก webinar · LinkedIn/Facebook cover · display ad ไปที่ `banner-design` (graphic-design 0.19.0) · ทดสอบกับ `routeSkills` 6 ประโยค ภาพปกคลิป YouTube ยังไปที่ `youtube-thumbnail`
+
 ## 3.17.1 — 2026-11-05
 
 - `design-references`: เพิ่มชนิดงาน `poster` · `product` (บรรจุภัณฑ์) · `banner` ใน `sites.csv` ชนิดละ 3 เว็บ ทุกงานออกแบบค้นต้นแบบใหม่ทุกรอบ ไม่ใช้ธีมตั้งต้น (ผู้ใช้เลือก 2026-11-05)

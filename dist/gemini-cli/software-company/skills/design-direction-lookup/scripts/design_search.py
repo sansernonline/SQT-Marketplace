@@ -33,7 +33,20 @@ DOMAINS = {
     'chart': ('charts.csv', ['keywords', 'data_shape', 'goal'], ['chart', 'thai_notes'], ['goal', 'chart']),
     'landing': ('landing.csv', ['goal_th', 'keywords'], ['sections', 'cta_th'], ['goal_th', 'sections']),
     'stack': (None, ['topic', 'keywords'], ['rule_th', 'do'], ['topic', 'rule_th']),
+    # ข้อมูลจาก ui-ux-pro-max-skill (MIT · data/upstream/uipro/README.md) · ภาษาอังกฤษ ค้นด้วยคำอังกฤษได้ผลดีกว่า
+    'style': ('UPSTREAM/styles.csv', ['Style Category', 'Keywords', 'Aliases', 'Best For'], ['AI Prompt Keywords', 'Effects & Animation'],
+              ['Style Category', 'Best For', 'Do Not Use For', 'Primary Colors', 'Effects & Animation', 'CSS/Technical Keywords']),
+    'product': ('UPSTREAM/ui-reasoning.csv', ['UI_Category', 'Style_Priority'], ['Color_Mood', 'Typography_Mood', 'Recommended_Pattern'],
+                ['UI_Category', 'Recommended_Pattern', 'Style_Priority', 'Color_Mood', 'Typography_Mood', 'Key_Effects', 'Anti_Patterns']),
+    'motion': ('UPSTREAM/motion.csv', ['Category', 'Keywords', 'Intensity Tier'], ['Trigger'], ['Category', 'Intensity Tier', 'Duration', 'Easing']),
+    'slide': ('UPSTREAM/slide-layouts.csv', ['layout_name', 'keywords', 'use_case'], ['recommended_for'],
+              ['layout_name', 'use_case', 'content_zones', 'visual_weight', 'cta_placement']),
+    'slide-strategy': ('UPSTREAM/slide-strategies.csv', ['strategy_name', 'keywords', 'goal'], ['audience', 'tone'],
+                       ['strategy_name', 'slide_count', 'structure', 'goal']),
+    'slide-copy': ('UPSTREAM/slide-copy.csv', ['formula_name', 'keywords', 'use_case'], ['emotion_trigger'],
+                   ['formula_name', 'components', 'example_template']),
 }
+DOMAINS = {k: (v[0].replace('UPSTREAM/', 'upstream/uipro/') if v[0] else None, *v[1:]) for k, v in DOMAINS.items()}
 KEYWORD_COLUMNS = {'keywords', 'keywords_th', 'keywords_en', 'name_th', 'topic', 'category', 'goal_th',
                    'data_shape', 'goal', 'thai_style'}
 
@@ -63,6 +76,8 @@ SYNONYM_GROUPS = [
     'โรงงาน|การผลิต|factory|manufacturing', 'เกษตร|ฟาร์ม|agriculture|farm', 'กฎหมาย|ทนาย|law|legal|lawyer',
     'วัด|ศาสนา|temple|religion', 'กีฬา|sport|sports', 'ดนตรี|เพลง|music', 'ข่าว|news', 'รับสมัครงาน|หางาน|job|jobs|recruitment',
     'ประกาศ|announcement', 'บริจาค|donation|charity', 'อีเวนต์|งานอีเวนต์|event', 'รถ|รถยนต์|car|automotive',
+    'สไลด์|นำเสนอ|เด็ค|slide|slides|presentation|deck|pitch', 'แบนเนอร์|banner|hero', 'นักลงทุน|investor|fundraising',
+    'กล้า|bold', 'โปร่ง|spacious|airy', 'แน่น|dense|compact',
 ]
 STOPWORDS = set('ที่ และ ของ ใน ให้ เป็น การ แบบ อยาก ได้ มี กับ สำหรับ หรือ ไม่ คือ จะ ก็ ทำ ด้วย แล้ว ซึ่ง โดย '
                 'ความ ผ่าน อยากได้ ต้องการ หน่อย ช่วย the a an of for and or to in on with my our we i is are '
@@ -244,8 +259,11 @@ class Index:
             names = sorted(p.stem for p in (corpus.data_dir / 'stacks').glob('*.csv'))
             raise SystemExit(f'ไม่มีไฟล์ stack "{stack}" · มี: {", ".join(names) or "(ยังไม่มี)"}')
         self.docs = {}
-        for row in rows:
-            doc = self.docs.setdefault(row.get('id', ''), {'rows': [], 'tf': {}})
+        for n, row in enumerate(rows):
+            if row.get('Status', '').strip().lower() == 'deprecated':  # สไตล์ที่ต้นทางเลิกใช้
+                continue
+            row.setdefault('id', row.get('Style ID') or row.get('No') or str(n + 1))
+            doc = self.docs.setdefault(row['id'], {'rows': [], 'tf': {}})
             doc['rows'].append(row)
             for col in strong + weak:
                 weight = 2 if col in strong else 1
@@ -376,6 +394,16 @@ def self_test():
     check('กราฟแนวโน้ม', top('chart', 'ยอดขายรายเดือน แนวโน้ม') == 'trend-line')
     check('ไม่พบ → งดตอบ (อังกฤษมั่ว)', corpus.search('industry', 'quantum zebra spaceship', 3) == [])
     check('ไม่พบ → งดตอบ (ไทยมั่ว)', corpus.search('industry', 'ภูเขาไฟระเบิดกลางทะเลสาบ', 3) == [])
+    real = Corpus(DATA_DIR)  # ข้อมูลต้นทาง uipro ไม่อยู่ใน fixtures · ตรวจกับไฟล์จริง
+
+    def top_real(domain, q):
+        res = real.search(domain, q, 3)
+        return res[0]['id'] if res else None
+    check('uipro style glass → glassmorphism', top_real('style', 'glass frosted blur') == 'glassmorphism')
+    check('uipro style ข้ามที่ต้นทางเลิกใช้', all(r['rows'][0].get('Status', '').lower() != 'deprecated'
+                                               for r in real.search('style', 'minimal clean', 20)))
+    check('uipro slide-strategy ไทยผ่านคำพ้อง สไลด์ขอทุน', top_real('slide-strategy', 'สไลด์ขอทุนนักลงทุน') is not None)
+    check('uipro motion scroll reveal', top_real('motion', 'scroll reveal') is not None)
     failed = [n for n, ok in checks if not ok]
     for name, ok in checks:
         print(('ผ่าน     ' if ok else 'ไม่ผ่าน  ') + name)
