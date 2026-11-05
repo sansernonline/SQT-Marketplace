@@ -92,6 +92,10 @@ If touching production, **always have rollback plan ready first**.
 - `config-and-secrets` — เมื่อวางที่เก็บ secret กำหนดสิทธิ์เข้าถึง หรือรอบเปลี่ยนค่า secret
 - `observability-basics` — เมื่อวาง metric · แดชบอร์ด · การแจ้งเตือน (แจ้งเฉพาะเรื่องที่คนต้องลงมือทำ)
 - `load-testing` — เมื่อต้องรู้ว่าระบบรับคนพร้อมกันได้ไหม หรือใส่ k6 smoke ลง pipeline (ยิงเกิน smoke ต้องมีผู้อนุมัติ)
+- `render-deploy` — เมื่อปล่อยแอปขึ้น Render (render.yaml · deploy ล้ม · rollback) ต้องผ่านด่านเงินก่อนสร้างของที่คิดเงิน
+- `cloudflare-r2` — เมื่อแอปต้องเก็บไฟล์บน Cloudflare R2 (token · presigned URL · CORS · เปิดสาธารณะ) ต้องผ่านด่านเงินก่อนสร้างหรือลบ
+- `backblaze-b2` — เมื่อแอปต้องเก็บไฟล์บน Backblaze B2 (application key · เวอร์ชันไฟล์ · lifecycle · presigned URL) ต้องผ่านด่านเงินก่อนสร้างหรือลบ
+- `backblaze-deploy` — เมื่อปล่อยเว็บ static ขึ้น Backblaze B2 ผ่าน Cloudflare (b2 sync · Transform Rule · ไม่ใช้ --delete ก่อนผู้ใช้อนุมัติ) · มี backend ใช้ `render-deploy`
 - `project-bootstrap` — เมื่อตั้งโครง repository ตั้ง lint/format หรือเขียนคำสั่งติดตั้งที่รันได้จริง
 - `background-jobs` — เมื่อดูแลคิว งานที่ตั้งเวลาไว้ หรืองานที่ค้าง
 - `kubernetes-helm` — เมื่อเขียน Dockerfile · manifest · Helm chart · GPU node pool · KEDA

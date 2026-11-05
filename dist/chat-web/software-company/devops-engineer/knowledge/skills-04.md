@@ -1,1303 +1,3 @@
-# skill: incident-runbook-template
-
-Use when writing an operational runbook, on-call guide or what-to-do-when-X-breaks playbook.
-
-# Incident Runbook Template
-
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
-
-## When to use this skill
-
-- Writing a runbook for a known failure mode
-- Documenting on-call procedures
-- Creating playbooks for common alerts
-- After a postmortem finds "we need a runbook for X"
-- Onboarding new on-call engineers
-
-## ไม่ใช้เมื่อ
-
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| เหตุจบแล้ว ต้องสรุปว่าเกิดอะไรและป้องกันยังไง | `postmortem-template` |
-| ตั้ง metric alert หรือ dashboard | `observability-basics` |
-
-## อ่านเพิ่มเมื่อ
-
-| ไฟล์ | เปิดเมื่อ |
-|---|---|
-| [references/runbook-template.md](references/runbook-template.md) | ทุกครั้งที่เริ่มเขียน runbook ใหม่ ให้คัดลอกแม่แบบเต็มจากไฟล์นี้ไปกรอก |
-| [references/index-and-alert-links.md](references/index-and-alert-links.md) | ถ้าทีมยังไม่มีหน้ารวม runbook หรือ alert ยังไม่มีลิงก์ไปหา runbook ให้เปิดดูตัวอย่างในไฟล์นี้ |
-| [references/game-days.md](references/game-days.md) | ตอนวางแผนซ้อมรับมือเหตุขัดข้องเพื่อทดสอบว่า runbook ใช้ได้จริง |
-
-## What's a Runbook?
-
-A **runbook** answers: "Alert X fired. What do I do?"
-
-It's NOT:
-- A postmortem (that analyses the incident afterwards)
-- Architecture documentation (that explains the bigger picture)
-- Training material (that goes into too much detail)
-
-It IS:
-- Step-by-step actions
-- Decision flowcharts
-- Commands to copy-paste
-- Escalation paths
-
-## Runbook Quality Standards
-
-A good runbook is:
-
-| Property | Test |
-|----------|------|
-| **Actionable** | Can a tired engineer at 3am follow it? |
-| **Concrete** | Are commands copy-pasteable? |
-| **Tested** | Has someone followed it during a real incident? |
-| **Updated** | Was it last reviewed less than 6 months ago? |
-| **Discoverable** | Can on-call find it from the alert link? |
-| **Concise** | Under 1 page for common cases |
-
-## Runbook Template
-
-แม่แบบเต็มอยู่ใน [references/runbook-template.md](references/runbook-template.md) ทุกฉบับมีส่วนตามลำดับนี้ และแต่ละส่วนต้องมีของต่อไปนี้
-
-| ส่วน | ต้องมี |
-|---|---|
-| ส่วนหัว | Severity · Service · Owner Team · Last Reviewed · Linked Alert |
-| TL;DR (30 seconds) | ย่อหน้าเดียวว่าอะไรพัง ต้องทำอะไรก่อน และต้องโทรหาใคร |
-| How to Detect | อาการที่ผู้ใช้เห็นและที่เห็นภายใน · alert ที่ดัง · dashboard ที่ต้องเปิด |
-| Diagnosis (60 seconds) | ผัง flowchart ตัดสินใจ และ quick checks ที่เป็นคำสั่งคัดลอกไปรันได้ เรียงตามลำดับ |
-| Mitigation Steps | ขั้นตอนเรียงจากความเสี่ยงต่ำไปสูง (ลำดับเดียวกับ `incident-response` Phase 3) ทุกขั้นบอก Expected effect · **VERIFY** (คำสั่งหรือกราฟที่ต้องดู และค่าที่ต้องเห็น — ไม่เห็นค่านั้นถือว่าขั้นนี้ยังไม่สำเร็จ ห้ามข้ามไปขั้นถัดไปโดยไม่รู้ว่าขั้นก่อนทำอะไร) และ Caveats หรือ If doesn't work · agent แค่เสนอคำสั่งกับผลที่คาด คน on-call เป็นคนรันหรืออนุมัติก่อนแตะ production |
-| Escalation Path | ใครต้องถูกเรียกเมื่อไหร่ เป็นนาทีที่ชัดเจน |
-| Verification | รายการตรวจว่าแก้แล้วจริง |
-| After Resolution | บันทึกในช่องเหตุการณ์ → อัปเดตหน้าสถานะ → เปิดตั๋ว postmortem → อัปเดต runbook นี้ |
-| Related Runbooks · Background | ลิงก์ไป runbook ที่เกี่ยวข้อง และที่มาของปัญหาแบบสั้น (ไม่บังคับ) |
-
-**ลำดับ mitigation ในแม่แบบ:** Reduce load (low risk) → Scale up (medium risk) → Rollback recent deploy (higher risk) → Failover to backup region (last resort)
-
-**ลำดับ escalation ในแม่แบบ:** ถ้าแก้ไม่ได้ใน 15 นาที ให้เรียก secondary on-call ถ้าสองคนแก้ไม่ได้ใน 30 นาที ให้เรียกทีมเจ้าของ service ถ้ายังเป็น SEV1 หลัง 45 นาที ให้เรียก incident commander (IC) และถ้า SEV1 เกิน 1 ชั่วโมง ให้เรียกผู้บริหารฝ่ายวิศวกรรม
-
-**ถือว่าแก้แล้วเมื่อ** error rate กลับสู่ระดับปกติ · latency p95 ต่ำกว่าเกณฑ์ · หน้าสถานะเป็น "Operational" · ไม่มี alert ใหม่ · ลูกค้าหยุดแจ้งปัญหา และเฝ้าดูต่ออีก 30 นาทีแล้ว
-
-> Use `postmortem-template` skill for the full analysis
-
-## Runbook Index and Alert Links
-
-ทำหน้ารวม runbook ไว้ที่เดียว ให้ค้นได้ทั้งตาม service ตามชื่อ alert และตามเหตุที่เกิดบ่อยใน 90 วันล่าสุด
-
-alert ทุกตัว**ต้อง**มีลิงก์ไป runbook ผ่าน annotation `runbook_url:` ของ alert และควรใส่ `dashboard:` คู่กันด้วย ส่วนตัวอย่างหน้ารวมและตัวอย่าง Prometheus alerting rule อยู่ใน [references/index-and-alert-links.md](references/index-and-alert-links.md)
-
-## What Makes Runbooks Fail
-
-| Problem | Fix |
-|---------|-----|
-| Out of date | Review every 6 months, update after every incident |
-| Too long | Split into 1 runbook per failure mode |
-| Too generic | Be specific to YOUR service |
-| No commands | Include actual copy-paste commands |
-| Not discoverable | Link it from the alert and the index page |
-| No ownership | Each runbook has a team owner |
-| Not tested | Run game days, and follow it during real incidents |
-| Commands rot silently | CI job on every change to `runbooks/`: pull every fenced `bash` block → `bash -n` (parses) · every `./scripts/*.sh` it names exists in the repo · every `kubectl` resource name exists in staging (`kubectl get ... -n staging`) · fail the build on any miss — คำสั่งที่รันไม่ได้ตอนตี 3 แย่กว่าไม่มี runbook (แนวคิดจาก wshobson/agents incident-runbook-templates) |
-
-## Game Days
-
-ทดสอบ runbook ด้วยการจำลองเหตุขัดข้องโดยตั้งใจ ทุกไตรมาสให้เลือก runbook หนึ่งฉบับ จำลองเหตุใน staging แล้วให้ on-call ทำตาม จากนั้นอัปเดต runbook ตามช่องโหว่ที่เจอ รายการตรวจเต็มอยู่ใน [references/game-days.md](references/game-days.md)
-
-## Anti-patterns
-
-- **Theoretical runbooks** written by someone who never saw the failure
-- **Long background text** before the first action
-- **"Contact the team"** without saying who or how
-- **Treating mitigation as the root-cause fix** (mitigation should be FAST; the fix comes later)
-- **Runbook in a wiki nobody can find** — link from alert
-- **Update postmortems but not runbooks** — every postmortem should lead to a runbook update
-
-## Document Look
-
-This skill decides **what goes in** the document. It does not decide **how it looks** —
-load the matching skill before writing, not after:
-
-| What is being handed over | Load |
-|---|---|
-| Markdown someone reads (repo, wiki, issue tracker) | `polished-document-style` |
-| A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `branded-document-design` |
-| The point needs a picture to land | `markdown-visuals`, then `software-diagrams` |
-
-Default formatting is not neutral — it reads as unfinished work.
-
-
-## reference: game-days.md
-
-# Game Days
-
-รายการตรวจของการซ้อมรับมือเหตุขัดข้องเพื่อทดสอบ runbook ใช้ตอนวางแผนซ้อมรายไตรมาส
-
-Test runbooks by faking failures on purpose:
-
-```markdown
-## Game Day Checklist
-
-Quarterly:
-- [ ] Pick a runbook to test
-- [ ] Simulate the failure in staging (chaos engineering)
-- [ ] On-call engineer follows runbook
-- [ ] Identify gaps
-- [ ] Update runbook based on learnings
-- [ ] Repeat with different runbook next quarter
-```
-
-
-## reference: index-and-alert-links.md
-
-# Runbook Index และการผูก runbook กับ alert
-
-ตัวอย่างหน้ารวม runbook และตัวอย่างการใส่ลิงก์ runbook ลงใน alert ใช้ตอนตั้งระบบ runbook ของทีมครั้งแรก
-
-## Runbook Index Pattern
-
-Maintain a central index (`docs/runbook-index.md`). Each runbook is one file `docs/runbook-<service>-<เรื่อง>.md` per `document-naming`:
-
-```markdown
-# Runbook Index
-
-## By Service
-- API Service
-  - [High error rate](runbook-api-high-error-rate.md)
-  - [Memory leak](runbook-api-memory-leak.md)
-- Database
-  - [Connection pool exhausted](runbook-db-conn-pool.md)
-  - [Replication lag](runbook-db-repl-lag.md)
-
-## By Alert Name
-| Alert | Runbook |
-|-------|---------|
-| `api_5xx_rate_high` | [API: High error rate](link) |
-| `db_connections_high` | [DB: Connection pool](link) |
-| `disk_full_warn` | [Generic: Disk full](link) |
-
-## Most Common Incidents (last 90 days)
-1. High error rate on payment service — [runbook](link) (12 times)
-2. DB replication lag — [runbook](link) (8 times)
-3. Cache invalidation storm — [runbook](link) (5 times)
-```
-
-## Linking Runbook to Alert
-
-Every alert MUST link to a runbook:
-
-```yaml
-# Prometheus alerting rule (rule file loaded by Prometheus; Alertmanager only routes the alert)
-- alert: APIHighErrorRate
-  # share of requests that are 5xx — needs the denominator, otherwise it is requests per second
-  expr: |
-    sum(rate(http_requests_total{status=~"5.."}[5m]))
-      / sum(rate(http_requests_total[5m])) > 0.05
-  for: 5m
-  annotations:
-    summary: "API error rate > 5%"
-    runbook_url: "https://runbooks.example.com/api/high-error-rate"
-    dashboard: "https://grafana.example.com/d/api-overview"
-```
-
-
-## reference: runbook-template.md
-
-# Runbook Template
-
-**สารบัญ:** แม่แบบเต็ม 1 บล็อก: TL;DR · How to Detect · Diagnosis · Mitigation Steps (ขั้น 1–5) · Escalation Path · Verification · After Resolution · Related Runbooks · Background
-
-- [แม่แบบทั้งไฟล์](#runbook-template) อยู่ในบล็อกเดียว ให้คัดลอกทั้งบล็อกไปเป็นไฟล์ runbook ใหม่
-
-แม่แบบเต็มของ runbook หนึ่งฉบับ ให้คัดลอกไปกรอกต่อได้ทันที ส่วนกฎว่าแต่ละส่วนต้องมีอะไรอยู่ใน `SKILL.md`
-
-````markdown
-# Runbook: <Alert Name or Failure Mode>
-
-| | |
-|--|--|
-| **Severity** | SEV1 \| SEV2 \| SEV3 \| SEV4 (table in `postmortem-template`) |
-| **Service** | service-name |
-| **Owner Team** | @team-name |
-| **Last Reviewed** | YYYY-MM-DD |
-| **Linked Alert** | [Grafana/PagerDuty link] |
-
----
-
-## TL;DR (30 seconds)
-
-> One paragraph: what's broken, what to do first, who to call.
-
-## How to Detect
-
-**Symptoms:**
-- User-facing: ...
-- Internal: ...
-
-**Alerts that fire:**
-- [Alert Name](link) — fires when ...
-- [Another Alert](link) — fires when ...
-
-**Dashboards to check:**
-- [Main Dashboard](link)
-- [Service Health](link)
-
-## Diagnosis (60 seconds)
-
-```mermaid
-flowchart TD
-    Start([Alert fires]) --> Q1{Is the service healthy in dashboard?}
-    Q1 -->|No| A[Check infrastructure]
-    Q1 -->|Yes| Q2{Are errors >5%?}
-    Q2 -->|Yes| B[Check recent deploys]
-    Q2 -->|No| Q3{Is latency high?}
-    Q3 -->|Yes| C[Check downstream services]
-    Q3 -->|No| D[Check alert config - may be false alarm]
-```
-
-### Quick checks (run in order)
-
-**1. Is service responding?**
-```bash
-curl -fsS https://api.example.com/health || echo "DOWN"
-```
-
-**2. Are recent deploys suspicious?**
-```bash
-gh release list --repo our-org/service --limit 5
-```
-
-**3. Check error rate in logs:**
-```bash
-# Last 10 min of 5xx errors
-kubectl logs -n prod deployment/api --since=10m | grep -c '"status":5'
-```
-
-**4. Check downstream dependencies:**
-- Database: [Dashboard link]
-- Redis: [Dashboard link]
-- External API: [Status page link]
-
-## Mitigation Steps
-
-> **Human approval:** an agent only proposes the command and its expected effect. A human on-call runs it or approves it before it touches production (`principle-proceed-on-reversible-work`, `incident-response` Phase 3).
-
-Try mitigations in order of risk (lowest first) — the same order as `incident-response` Phase 3:
-
-### Step 1: Disable the broken feature or reduce load (low risk)
-```bash
-# Turn off the feature flag of the suspect feature
-./scripts/flag.sh set new-checkout off --env prod
-
-# Or enable rate limiting
-kubectl set env deployment/api -n prod RATE_LIMIT_AGGRESSIVE=true
-```
-
-**Expected effect:** Error rate drops within 2 min
-**VERIFY:** `./scripts/flag.sh get new-checkout --env prod` → `off` · dashboard 5xx panel < 1% for 2 min
-**If doesn't work:** Go to Step 2
-
-### Step 2: Scale up (medium risk)
-```bash
-kubectl scale deployment/api -n prod --replicas=10
-```
-
-**Expected effect:** Latency improves within 3 min
-**VERIFY:** `kubectl get deployment/api -n prod` → READY `10/10` · p95 panel back under threshold
-**Caveats:** Will increase cost, monitor budget alerts
-
-### Step 3: Rollback recent deploy (higher risk)
-```bash
-kubectl rollout undo deployment/api -n prod
-```
-
-**Expected effect:** Reverts to previous version
-**VERIFY:** `kubectl rollout status deployment/api -n prod` → `successfully rolled out` · running image tag = previous release
-**Caveats:** Check for schema migrations before rolling back. A rollout undo does not delete data, but old code may break on a schema the new release already migrated — roll back only if the migration is backward-compatible
-
-### Step 4: Block bad traffic at the WAF or firewall (high risk)
-```bash
-# Block the abusive IP range / path at the web application firewall (WAF)
-./scripts/waf-block.sh --cidr 203.0.113.0/24 --ttl 1h
-```
-
-**Expected effect:** Abusive traffic stops reaching the service
-**VERIFY:** `./scripts/waf-block.sh list` shows the CIDR with TTL · requests from that range in access log → 0 · request rate from real users unchanged
-**Caveats:** Can block real users; set a TTL (time to live) and check the allow list
-
-### Step 5: Failover to backup region (last resort)
-```bash
-# Update DNS to point to backup region
-./scripts/failover-to-us-west.sh
-```
-
-**Expected effect:** All traffic shifts to backup
-**VERIFY:** `dig +short api.example.com` → backup region IP · backup region request rate ≈ previous primary rate · primary → 0
-**Caveats:** Some user data may need migration, full rollback complex
-
-## Escalation Path
-
-```
-You can't resolve in 15 min
-  ↓
-1. Page secondary on-call (PagerDuty group: team-secondary)
-  ↓
-You both can't in 30 min
-  ↓
-2. Page service owner team (team-owner)
-  ↓
-Still SEV1 after 45 min
-  ↓
-3. Page incident commander on-call (IC)
-  ↓
-SEV1 still active after 1h
-  ↓
-4. Page engineering leadership
-```
-
-## Verification (after mitigation)
-
-Confirm the issue is resolved:
-
-- [ ] Error rate back to baseline
-- [ ] Latency p95 < threshold
-- [ ] Status page updated to "Operational"
-- [ ] No new alerts firing
-- [ ] Customer reports stopped
-- [ ] Monitor for 30 min before considering resolved
-
-## After Resolution
-
-1. **Document in incident channel**: what happened, what you did
-2. **Update status page**: clear incident, post resolution message
-3. **Create postmortem ticket**: if SEV1/SEV2, schedule postmortem
-4. **Update this runbook**: if you learned something new
-
-> Use `postmortem-template` skill for the full analysis
-
-## Related Runbooks
-
-- [Database connection issues](link)
-- [Cache failure](link)
-- [Authentication service down](link)
-
-## Background / Why this happens
-
-Optional section: brief context on why this failure mode exists.
-Useful for new on-call engineers.
-````
-
-
----
-
-# skill: logging-standards
-
-Use when writing or reviewing code that logs (format, levels, correlation ids, redaction).
-
-# Logging Standards
-
-> **กฎข้อเดียว:** log มีไว้ให้คนอ่านตอนตี 3 ที่ระบบล่ม ไม่ใช่ตอนเขียนโค้ด
-> ถ้าบรรทัดไหนไม่ช่วยตอบว่า "เกิดอะไรขึ้น กับใคร เมื่อไหร่" ก็อย่าเขียนลงไป
-
-## เมื่อไหร่ใช้ skill นี้
-
-- เริ่มโปรเจกต์ใหม่ทุกชนิด (service, API, worker, batch, desktop, frontend)
-- มีคนขอ "ให้มี log file" หรือถามเรื่องรูปแบบและระดับของ log
-- ไล่ปัญหา production แล้วพบว่า log ที่มีอยู่ใช้ไม่ได้
-
-## เมื่อไหร่ **ไม่** ใช้
-
-- ต้องการ metrics หรือ tracing (Prometheus, OpenTelemetry) เพราะเป็นคนละเรื่องกับ log ให้ไปใช้ `observability-basics`
-- ทำ endpoint สุขภาพของ service ให้ไปใช้ `web-service-essentials`
-
----
-
-## 1 · รูปแบบบรรทัด — เหมือนกันทุกภาษา
-
-```
-2026-08-31 09:42:13.482 +07:00  INFO   [a3f9c1b2] orders  สร้างคำสั่งซื้อสำเร็จ  orderId=1042 userId=57 ms=134
-└────────── เวลา + timezone ──────────┘ └level┘  └ cid ┘ └source┘ └── ข้อความ ──┘ └──── context k=v ────┘
-```
-
-| ส่วน | กฎ |
-|---|---|
-| เวลา | `YYYY-MM-DD HH:mm:ss.SSS ±HH:MM` — **ต้องมี timezone** ไม่งั้นเทียบ log ข้ามเครื่องไม่ได้ |
-| level | ชิดซ้าย กว้าง 5 ตัวอักษร (`INFO ` `WARN ` `ERROR` `DEBUG` `FATAL`) — คอลัมน์จะได้ตรงกัน |
-| cid | correlation id 8 ตัวในวงเล็บเหลี่ยม ถ้าไม่มีให้ใส่ `[--------]` (8 ตัวเท่ากัน คอลัมน์จะได้ตรง) |
-| source | โมดูลหรือคลาสที่เขียน log ไม่ใช่ชื่อไฟล์ |
-| ข้อความ | ประโยคเดียว ไม่ฝังตัวแปรใน string |
-| context | `key=value` คั่นด้วยช่องว่าง ถ้าค่ามีช่องว่างให้ครอบด้วย `"` |
-
-**ทำไมไม่ใช่ JSON:** ไฟล์นี้มีไว้ให้คนเปิดอ่านและ `grep` เป็นหลัก รูปแบบนี้ยัง
-`grep "\[a3f9c1b2\]"` หรือ `awk` ได้อยู่ แต่ตาอ่านออกทันทีโดยไม่ต้องพึ่งเครื่องมือ
-วันที่ต้องส่งเข้าระบบรวม log อย่าง Grafana Loki หรือ Elasticsearch, Logstash, Kibana (ELK) ให้เพิ่ม sink (ปลายทางที่ส่ง log ไป) แบบ JSON อีก 1 ตัว แต่**อย่าทิ้งไฟล์ข้อความ**
-
-**1 event = 1 บรรทัด** ยกเว้น stack trace ที่ต่อท้ายโดยเยื้อง 4 ช่อง
-
----
-
-## 2 · ระดับ log — เขียนให้ตรงความหมาย
-
-| ระดับ | ใช้เมื่อ | ตัวอย่าง |
-|---|---|---|
-| `FATAL` | แอปกำลังจะตาย ทำงานต่อไม่ได้ | ต่อ DB ตอน start ไม่ได้ |
-| `ERROR` | งานนี้ล้มเหลว **และต้องมีคนมาดู** | บันทึกคำสั่งซื้อไม่สำเร็จ |
-| `WARN` | ผิดปกติแต่ระบบยังไปต่อได้ | retry ครั้งที่ 2, disk เหลือ 10% |
-| `INFO` | เหตุการณ์สำคัญทางธุรกิจ | สร้างคำสั่งซื้อ, ผู้ใช้ล็อกอิน, job เริ่ม/จบ |
-| `DEBUG` | รายละเอียดสำหรับไล่ปัญหา — **ปิดใน production** | ค่าที่คำนวณได้ระหว่างทาง |
-| `TRACE` | ละเอียดระดับทุก step — เปิดเฉพาะตอนไล่จริง ๆ | payload ดิบ |
-
-> ระวัง: **`ERROR` ที่ไม่มีใครต้องทำอะไร คือ `WARN`** — ถ้า ERROR ขึ้นทุกนาทีจนคนเลิกดู
-> คุณเพิ่งทำลายระบบเตือนภัยของตัวเอง
-
-ค่าเริ่มต้นของ dev คือ `DEBUG` ส่วน production คือ `INFO` และปรับได้ด้วย env `LOG_LEVEL` **ไม่ต้อง build ใหม่ แค่ restart (หรือ reload config)** — .NET อ่านจาก `appsettings.json` แทน (ดู `references/per-stack.md`)
-
----
-
-## 3 · Correlation id — สิ่งที่ทำให้ log ใช้งานได้จริง
-
-1 request ใช้ id เดียวตั้งแต่ต้นจนจบ ทุกบรรทัดที่เกิดจาก request นั้นจึงมี id เดียวกัน
-
-```
-Client ──X-Request-Id?── API Gateway ──┬── Service A ──┐
-                        (ไม่มีก็สร้าง)   └── Service B ──┴─→ ทุกบรรทัดมี cid เดียวกัน
-```
-
-- รับจาก header **`X-Request-Id`** เฉพาะเมื่อตรง `^[A-Za-z0-9-]{1,64}$` · ไม่มีหรือไม่ตรง → สร้างใหม่ (`uuid v4` ตัด 8 ตัวแรก) · เหตุผลดู `web-service-essentials` ข้อ 3
-- **ส่งกลับใน response header เสมอ** เพื่อให้ลูกค้าส่ง id มาตอนแจ้งปัญหา แล้วเราตามได้ทันที
-- ส่งต่อไปยัง service ปลายทางทุกครั้งที่เรียกข้ามระบบ
-- เก็บด้วยกลไกที่แยกตาม request: `AsyncLocalStorage` (Node) · `ContextVar` (Python)
-  · `IHttpContextAccessor`/`LogContext` (.NET) — **ห้ามใช้ตัวแปร global** เพราะจะปนกันทันทีที่มีหลาย request พร้อมกัน
-
----
-
-## 4 · ไฟล์ log
-
-```
-logs/
-  app-20260831.log        ทุกระดับ · หมุนเที่ยงคืน · เก็บ 30 วัน · ไฟล์ละไม่เกิน 100MB
-  error-20260831.log      เฉพาะ ERROR/FATAL · เก็บ 90 วัน
-  fatal.log               exception ที่ไม่ถูกจับ (แอปตาย)
-```
-
-- โฟลเดอร์กำหนดด้วย env `LOG_DIR` — **ห้าม hardcode path**
-- บีบไฟล์เก่า (`.gz`) และ**ต้องมี retention** ไม่อย่างนั้นดิสก์จะเต็มจนระบบล่มเพราะ log ของตัวเอง
-- ใน container ให้ log ออก stdout ด้วย (นอกเหนือจากไฟล์) เพื่อให้ `docker logs` ใช้ได้
-- `logs/` ต้องอยู่ใน `.gitignore`
-
----
-
-## 5 · สิ่งที่ห้ามลง log เด็ดขาด
-
-รหัสผ่าน · token/API key · cookie/Authorization header · OTP/PIN · เลขบัตรเครดิต/CVV ·
-**เลขบัตรประชาชน** · ข้อมูลสุขภาพ · payload เต็มที่มีข้อมูลส่วนบุคคล
-
-ตัวช่วยที่มีให้แล้ว: ฟังก์ชัน redaction (ปิดค่าลับ) ดู**ว่าชื่อคีย์มีคำต้องห้ามอยู่ข้างในไหม** (`userPassword`, `pwd`,
-`accessToken` โดนหมด) แล้วแทนค่าด้วย `***` โดยตรวจลึกลงไปได้ 4 ชั้นของ object
-
-> 🚨 **Log injection** — ค่าที่มาจากผู้ใช้อาจมี `\n` ถ้าปล่อยผ่าน ผู้ใช้จะ "แต่ง" บรรทัด log
-> ปลอมขึ้นมาเองได้ ทำให้คนอ่านเข้าใจผิดและ parser พัง โค้ดที่ให้มาจึงตัด `\r\n\t` ทิ้งจากทุกค่าและจากข้อความหลัก
-
----
-
-## 6 · โค้ดที่พร้อมใช้
-
-| ไฟล์ | สแต็ก | สถานะ |
-|---|---|---|
-| `assets/logger.node.js` | Node/TS — winston + winston-daily-rotate-file | ✓ รันทดสอบแล้ว 2026-10-25 (Node 22.23.2 · winston 3.19.0 · winston-daily-rotate-file 5.0.0 · ปิดรหัสผ่าน · correlation id · ตัดขึ้นบรรทัดในข้อความหลักและค่า) |
-| `assets/logger_py.py` | Python — stdlib ล้วน ไม่ต้องลงอะไร | ✓ รันทดสอบแล้ว 2026-10-25 (Python 3.13.5 · ชุดทดสอบเดียวกัน) |
-| `references/per-stack.md` | .NET (Serilog) + Angular | ระวัง ยังไม่ได้คอมไพล์ทดสอบ |
-
-```js
-// Node
-const { withCorrelation } = require('./logger.node');
-const log = withCorrelation(req.id).child({ source: 'orders' });
-log.info('สร้างคำสั่งซื้อสำเร็จ', { orderId: 1042, ms: 134 });
-log.error('บันทึกไม่สำเร็จ', err);          // ส่ง Error ตรง ๆ ได้ stack ให้เอง
-```
-
-```python
-# Python
-from logger_py import setup_logging, get_logger, set_correlation_id
-setup_logging(app_name="myapi")             # ครั้งเดียวตอนแอปเริ่ม
-log = get_logger("orders")
-log.info("สร้างคำสั่งซื้อสำเร็จ", extra={"ctx": {"order_id": 1042, "ms": 134}})
-log.exception("บันทึกไม่สำเร็จ")             # ใน except — ได้ stack ให้เอง
-```
-
----
-
-## 7 · ตรวจงาน
-
-```bash
-# ไม่มี print/console.log หลงเหลือในโค้ด production
-grep -rnE "console\.(log|error)|Console\.WriteLine|^\s*print\(" src/ --include="*.ts" \
-  --include="*.js" --include="*.cs" --include="*.py" | grep -v test
-
-# log ที่ออกมาอ่านได้จริงและ grep ได้
-tail -f logs/app-*.log
-grep "a3f9c1b2" logs/app-*.log          # ตาม request เดียวได้ครบทุกบรรทัดไหม
-```
-
-- [ ] ทุกบรรทัดมีครบ: เวลา+timezone · level · cid · source
-- [ ] `grep` ด้วย cid เดียวแล้วเห็นเรื่องราวของ request นั้นตั้งแต่ต้นจนจบ
-- [ ] ไม่มีความลับหลุด: ลอง log object ที่มี `password`, `token` แล้วต้องเห็น `***`
-- [ ] ยิงค่าที่มี `\n` เข้าไปแล้วไม่เกิดบรรทัดปลอม
-- [ ] ตั้ง `LOG_LEVEL=INFO` แล้ว DEBUG หายไปจริง
-- [ ] ไฟล์หมุนตามวันและมี retention (ปล่อยไว้ 1 เดือนดิสก์ต้องไม่เต็ม)
-- [ ] `logs/` อยู่ใน `.gitignore`
-- [ ] response ส่ง `X-Request-Id` กลับมาให้ลูกค้า
-
----
-
-## 8 · Anti-patterns
-
-- **`console.log` / `print()` ในโค้ดจริง** — ไม่มี level ไม่มีเวลา ไม่มี cid ไม่ลงไฟล์
-- **log ทุกอย่าง** — ไฟล์ใหญ่จนหาอะไรไม่เจอ ราคาแพง และช้า
-- **`try { } catch (e) { }` เงียบ ๆ** — ต้อง log อย่างน้อย 1 บรรทัด
-- **log แล้ว throw ต่อ** — ปัญหาเดียวจะโผล่ 3 ครั้งในไฟล์ ให้ log ที่ชั้นบนสุดซึ่งจัดการ error จริงแทน
-- **ตัวแปรฝังในข้อความ** (`` `บันทึก order ${id} ไม่สำเร็จ` ``) — ทำให้ group log ไม่ได้
-  ใช้ข้อความคงที่ + context แทน
-- **log ในลูปที่วนหลายพันรอบ** — ให้สรุปทีเดียวตอนจบลูป
-- **timestamp ไม่มี timezone** — server ใช้ UTC แต่คนไทยอ่านเป็น +07:00 จึงเทียบเวลาผิดไป 7 ชั่วโมง
-- **ไม่มี retention** — วันหนึ่งดิสก์เต็มแล้วระบบล่มเพราะ log ของตัวเอง
-
----
-
-## 9 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| endpoint health/ping/version | `web-service-essentials` |
-| เขียน test ให้ครอบคลุม | `testing-standards` |
-| runbook ตอน incident | `incident-runbook-template` |
-| postmortem หลังเหตุ | `postmortem-template` |
-
-
-## reference: per-stack.md
-
-# ตั้งค่า logger ให้ได้รูปแบบเดียวกัน — .NET และ Angular
-
-> ระวัง: โค้ดในไฟล์นี้ **ยังไม่ได้คอมไพล์ทดสอบ** (ต่างจาก `assets/logger.node.js` และ
-> `assets/logger_py.py` ที่รันจริงแล้ว) โค้ดนี้ใช้การตั้งค่ามาตรฐานของแต่ละไลบรารี
-> ตอน build ครั้งแรกให้เทียบบรรทัดที่ออกมากับรูปแบบใน SKILL.md ข้อ 1
-
----
-
-## สารบัญ
-
-1. [.NET / C# — Serilog](#net--c--serilog)
-2. [Angular / frontend](#angular--frontend)
-3. [ตารางเทียบ](#ตารางเทียบ)
-
----
-
-## .NET / C# — Serilog
-
-```bash
-dotnet add package Serilog.AspNetCore
-dotnet add package Serilog.Sinks.File
-```
-
-`appsettings.json` — เก็บการตั้งค่าไว้นอกโค้ด เปลี่ยนระดับ log ได้โดยไม่ต้อง build ใหม่:
-
-```json
-{
-  "Serilog": {
-    "MinimumLevel": {
-      "Default": "Information",
-      "Override": {
-        "Microsoft.AspNetCore": "Warning",
-        "Microsoft.EntityFrameworkCore.Database.Command": "Warning"
-      }
-    }
-  }
-}
-```
-
-`Program.cs`:
-
-```csharp
-using Serilog;
-using Serilog.Events;
-
-const string LineTemplate =
-    "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}  {Level:u5}  " +
-    "[{CorrelationId}] {SourceContext}  {Message:lj}  {Context:l}{NewLine}{Exception}";
-
-Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration)
-    .Enrich.FromLogContext()
-    .Enrich.WithProperty("CorrelationId", "--------") // ค่าตั้งต้นเมื่อไม่มี request (8 ตัว)
-    .Enrich.WithProperty("Context", "")              // ค่าว่างเมื่อไม่มี context k=v
-    .WriteTo.Console(outputTemplate: LineTemplate)
-    .WriteTo.File(
-        path: Path.Combine(Environment.GetEnvironmentVariable("LOG_DIR") ?? "logs", "app-.log"),
-        rollingInterval: RollingInterval.Day,
-        retainedFileCountLimit: 30,
-        fileSizeLimitBytes: 100 * 1024 * 1024,
-        rollOnFileSizeLimit: true,
-        outputTemplate: LineTemplate)
-    .WriteTo.File(
-        path: Path.Combine(Environment.GetEnvironmentVariable("LOG_DIR") ?? "logs", "error-.log"),
-        restrictedToMinimumLevel: LogEventLevel.Error,
-        rollingInterval: RollingInterval.Day,
-        retainedFileCountLimit: 90,
-        outputTemplate: LineTemplate)
-    .CreateLogger();
-
-builder.Host.UseSerilog();
-```
-
-> `{Level:u5}` คือตัวพิมพ์ใหญ่กว้าง 5 ตัวอักษร จึงได้ `INFO ` `WARN ` `ERROR` ตรงกับสแต็กอื่น
-> `{Message:lj}` และ `{Context:l}` คือไม่ครอบ string ด้วย `"` ซ้ำอีกชั้น
-
-### Middleware correlation id
-
-```csharp
-using System.Text.RegularExpressions;
-
-public sealed class CorrelationIdMiddleware(RequestDelegate next)
-{
-    public const string Header = "X-Request-Id";
-    // รับค่าจากลูกค้าเฉพาะตัวอักษร ตัวเลข และ - ยาวไม่เกิน 36 ตัว — กันคนยัดข้อความยาวหรือ \n เข้า log
-    private static readonly Regex Valid = new("^[A-Za-z0-9-]{1,36}$", RegexOptions.Compiled);
-
-    public async Task Invoke(HttpContext ctx)
-    {
-        var cid = ctx.Request.Headers[Header].FirstOrDefault();
-        if (cid is null || !Valid.IsMatch(cid))
-            cid = Guid.NewGuid().ToString("N")[..8];   // ไม่มีหรือไม่ผ่าน → สร้างใหม่
-
-        var logCid = cid.Length > 8 ? cid[..8] : cid;   // log ใช้ 8 ตัวแรกให้ตรงคอลัมน์ cid (เหมือน Node/Python) — header ส่งค่าเต็มกลับ
-
-        ctx.Response.Headers[Header] = cid;          // ส่งกลับให้ลูกค้าอ้างอิงได้
-
-        // LogContext ผูกกับ async flow ของ request นี้เท่านั้น — ไม่ปนกับ request อื่น
-        using (Serilog.Context.LogContext.PushProperty("CorrelationId", logCid))
-            await next(ctx);
-    }
-}
-```
-
-### เขียน log
-
-```csharp
-// ถูก: ข้อความคงที่ + ค่าไปอยู่ใน {Context} เป็น k=v ตามรูปแบบ SKILL.md ข้อ 1
-//    ผลลัพธ์: ... INFO   [a3f9c1b2] Orders  สร้างคำสั่งซื้อสำเร็จ  orderId=1042 ms=134
-using (Serilog.Context.LogContext.PushProperty("Context", $"orderId={orderId} ms={sw.ElapsedMilliseconds}"))
-    _logger.LogInformation("สร้างคำสั่งซื้อสำเร็จ");
-
-// ผิด: ตัวแปรฝังใน string — ทุกบรรทัดกลายเป็นข้อความคนละอัน group ไม่ได้
-_logger.LogInformation($"สร้างคำสั่งซื้อ {orderId} สำเร็จ");
-```
-
-### ปิดข้อมูลลับ
-
-Serilog ไม่ปิดค่าลับให้อัตโนมัติ ทางที่ชัวร์ที่สุดคือ**อย่าส่ง object ทั้งก้อนเข้า log**
-ให้เลือกเฉพาะ field ที่ต้องการ ถ้าจำเป็นต้องส่งทั้งก้อนให้เขียน `IDestructuringPolicy`
-หรือใส่ `[NotLogged]` ผ่าน `Destructure.ByTransforming<T>()`
-
----
-
-## Angular / frontend
-
-หลักการต่างจาก backend: **เบราว์เซอร์เขียนไฟล์ไม่ได้** log ที่สำคัญจึงต้องส่งขึ้น backend
-
-```ts
-// core/logger.service.ts
-import { Injectable, inject, isDevMode } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-
-type Level = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
-
-@Injectable({ providedIn: 'root' })
-export class LoggerService {
-  private http = inject(HttpClient);
-  private buffer: unknown[] = [];
-
-  private write(level: Level, message: string, ctx: Record<string, unknown> = {}) {
-    // dev: ออก console เพื่อไล่ปัญหา — prod: เงียบ ยกเว้น WARN ขึ้นไปที่ส่งขึ้น server
-    if (isDevMode()) console[level === 'ERROR' ? 'error' : 'log'](level, message, ctx);
-    if (level === 'DEBUG' || (!isDevMode() && level === 'INFO')) return;   // prod ส่งเฉพาะ WARN ขึ้นไป
-
-    this.buffer.push({ ts: new Date().toISOString(), level, message, ctx });
-    if (this.buffer.length >= 10 || level === 'ERROR') this.flush();
-  }
-
-  /** ส่งเป็นชุด ไม่ยิงทีละบรรทัด — ไม่งั้น network tab เต็มไปด้วย request ของ log เอง */
-  flush() {
-    if (!this.buffer.length) return;
-    const batch = this.buffer.splice(0);
-    this.http.post('/api/client-logs', { entries: batch }).subscribe({ error: () => {} });
-  }
-
-  debug = (m: string, c?: Record<string, unknown>) => this.write('DEBUG', m, c);
-  info  = (m: string, c?: Record<string, unknown>) => this.write('INFO', m, c);
-  warn  = (m: string, c?: Record<string, unknown>) => this.write('WARN', m, c);
-  error = (m: string, c?: Record<string, unknown>) => this.write('ERROR', m, c);
-}
-```
-
-จับ error ที่หลุดทุกตัว:
-
-```ts
-// core/global-error.handler.ts
-import { ErrorHandler, Injectable, inject, isDevMode } from '@angular/core';
-import { LoggerService } from './logger.service';
-
-@Injectable()
-export class GlobalErrorHandler implements ErrorHandler {
-  private log = inject(LoggerService);
-  handleError(err: unknown) {
-    const e = err as Error;
-    this.log.error(e?.message ?? 'unknown error', { stack: e?.stack?.slice(0, 2000) });
-    if (isDevMode()) console.error(err);
-  }
-}
-// app.config.ts → providers: [{ provide: ErrorHandler, useClass: GlobalErrorHandler }]
-```
-
-ส่ง correlation id ในทุก request เพื่อให้ log ฝั่ง client กับ server ต่อกันติด:
-
-```ts
-// core/correlation.interceptor.ts
-import { HttpInterceptorFn } from '@angular/common/http';
-
-export const correlationInterceptor: HttpInterceptorFn = (req, next) =>
-  next(req.clone({ setHeaders: { 'X-Request-Id': crypto.randomUUID().slice(0, 8) } }));
-```
-
-**ฝั่ง backend** ต้องมี endpoint `POST /api/client-logs` ที่:
-- จำกัดขนาด body และทำ rate limit ไม่อย่างนั้นจะกลายเป็นช่องให้คนยิง log ถล่ม
-- เขียนลงไฟล์แยก `logs/client-YYYYMMDD.log`
-- **ถือว่าเนื้อหาเป็นข้อมูลที่เชื่อไม่ได้** จึงต้องตัด `\r\n` ออกจากทุกค่าเหมือน log ปกติ
-
----
-
-## ตารางเทียบ
-
-| เรื่อง | .NET | Node | Python | Angular |
-|---|---|---|---|---|
-| ไลบรารี | Serilog | winston | stdlib `logging` | เขียนเอง (บาง) |
-| หมุนไฟล์ | `rollingInterval: Day` | `winston-daily-rotate-file` | `TimedRotatingFileHandler` | — (ส่งขึ้น backend) |
-| correlation | `LogContext.PushProperty` | `AsyncLocalStorage` + `child()` | `ContextVar` | header `X-Request-Id` |
-| ระดับ | `LogEventLevel` | `level` | `setLevel` | enum ของตัวเอง |
-| ตั้งค่าจากภายนอก | `appsettings.json` | env `LOG_LEVEL` | env `LOG_LEVEL` | `isDevMode()` |
-
-
----
-
-# skill: web-service-essentials
-
-Use when building or reviewing any HTTP service or backend (health endpoints, RFC 9457 errors).
-
-# Web Service Essentials
-
-> **กฎข้อเดียว:** ก่อนเขียน endpoint ธุรกิจตัวแรก service ต้องตอบได้ว่า
-> "ยังอยู่ไหม · พร้อมรับงานไหม · ตอนนี้รันเวอร์ชันอะไร" ถ้าตอบไม่ได้ วันที่ระบบล่มคุณจะต้องเดาล้วน ๆ
-
-## เมื่อไหร่ใช้ skill นี้
-
-- เริ่ม service / REST API / microservice ใหม่
-- มีคนขอ health check, ping, readiness, liveness, version endpoint
-- จะ deploy ขึ้น production ครั้งแรก หรือย้ายเข้า Docker/Kubernetes
-- ต้องกำหนดรูปแบบ error ของ API ให้เหมือนกันทั้งระบบ
-
-## เมื่อไหร่ **ไม่** ใช้
-
-- ออกแบบ endpoint ทางธุรกิจ ให้ใช้ command `/api-design`
-- รูปแบบ URL · paging · วันที่ · id ของ API ให้ใช้ `api-conventions`
-- รูปแบบ log ให้ใช้ `logging-standards`
-- เลือกสถาปัตยกรรม ให้ใช้ `architecture-patterns`
-
----
-
-## 1 · endpoint พื้นฐาน 4 ตัว
-
-| Endpoint | ตอบอะไร | auth | เช็ค dependency | ใครเรียก |
-|---|---|:---:|:---:|---|
-| `GET /ping` | `pong` (text) | ไม่ | ไม่ | load balancer ทุกวินาที |
-| `GET /health/live` | process ยังอยู่ | ไม่ | **ไม่** | orchestrator (restart ถ้าตาย) |
-| `GET /health/ready` | พร้อมรับ traffic | ไม่ | ใช่ | orchestrator (ตัดออกจาก pool) |
-| `GET /version` | รันอะไรอยู่ | ไม่* | ไม่ | คน ตอนไล่ปัญหา |
-
-> 🚨 **live ห้ามเช็ค dependency** นี่คือความผิดพลาดที่เจอบ่อยที่สุด
-> ถ้า `/health/live` เช็คฐานข้อมูล (database · DB) แล้ว DB ล่มชั่วคราว Kubernetes จะ**ฆ่า pod ทิ้งทั้งหมด**
-> ทั้งที่แอปยังปกติดี พอ DB กลับมาก็ไม่มี pod เหลือรับ traffic แล้ว
-> การเช็ค dependency ต้องอยู่ที่ `/health/ready` ซึ่งแค่ตัด pod ออกจาก pool ชั่วคราว
-
-\* ถ้าไม่อยากให้คนทั่วไปเห็น commit hash ใน `/version` ให้จำกัดให้เรียกได้เฉพาะเครือข่ายภายใน
-
-**ผูกกับ Kubernetes แบบนี้** (ปรับจาก secondsky `health-check-endpoints` · MIT) — live กับ ready ต้องชี้คนละ path ไม่งั้นข้อข้างบนไร้ความหมาย
-
-```yaml
-livenessProbe:            # ตาย → restart container
-  httpGet: { path: /health/live, port: 3000 }
-  initialDelaySeconds: 15 # ให้แอปขึ้นก่อน ไม่งั้นโดนฆ่าตั้งแต่ยังไม่ทัน listen
-  periodSeconds: 10
-  failureThreshold: 3     # พลาด 3 ครั้งติด (30 วินาที) ค่อย restart
-readinessProbe:           # ไม่พร้อม → ตัดออกจาก Service ชั่วคราว ไม่ restart
-  httpGet: { path: /health/ready, port: 3000 }
-  initialDelaySeconds: 5
-  periodSeconds: 10
-```
-
-แอปที่ warm-up นาน (โหลดโมเดล · cache ใหญ่) เพิ่ม `startupProbe` ชี้ `/health/live` พร้อม `failureThreshold` สูง แทนการยืด `initialDelaySeconds` ของ liveness
-
-### รูปร่าง response (เหมือนกันทุกภาษา)
-
-```jsonc
-// GET /health/ready → 200 ปกติ · 503 เมื่อ dependency ที่ critical ล่ม
-{
-  "status": "up",                       // up | degraded | down
-  "timestamp": "2026-08-31T09:42:13.482Z",
-  "checks": {
-    "db":    { "status": "up",   "durationMs": 12 },
-    "redis": { "status": "up",   "durationMs": 3 },
-    "mail":  { "status": "down", "durationMs": 3001, "error": "smtp timeout" }
-  }
-}
-```
-
-```jsonc
-// GET /version → 200
-{
-  "name": "orders-api", "version": "1.4.0", "commit": "abc1234",
-  "buildTime": "2026-08-31T09:00:00Z", "env": "production", "host": "pod-7f9c"
-}
-```
-
-**3 สถานะ ไม่ใช่ 2:**
-- `up` — ทุกอย่างปกติ → 200
-- `degraded` — dependency ที่**ไม่ critical** ล่ม (เช่น อีเมล) แต่ยังรับ traffic ได้ → 200
-- `down` — dependency ที่ critical ล่ม (เช่น DB) → **503**
-
-**ทุก check ต้องมี timeout** (ค่าเริ่มต้น 3 วินาที) ไม่งั้น dependency ที่ค้าง
-จะทำให้ health endpoint ค้างตาม แล้ว orchestrator ตัดสินใจผิดทั้งระบบ
-
-**ห้ามส่ง stack trace หรือ connection string ออกทาง endpoint นี้** เพราะ endpoint นี้ใครก็เรียกได้
-
----
-
-## 2 · รูปแบบ error ที่เหมือนกันทั้งระบบ
-
-ยึด **RFC 9457 (`application/problem+json`)** ซึ่งเป็นมาตรฐานจริง ไม่ต้องคิดเอง
-
-```jsonc
-// 422 — รูปแบบถูก แต่ข้อมูลไม่ผ่านกฎ (ดูตารางล่าง)
-{
-  "type": "https://api.example.com/errors/validation",
-  "title": "ข้อมูลที่ส่งมาไม่ถูกต้อง",
-  "status": 422,
-  "detail": "จำนวนสินค้าต้องมากกว่า 0",
-  "instance": "/api/v1/orders",
-  "requestId": "a3f9c1b2",              // ตรงกับ cid ใน log — ตามเรื่องได้ทันที
-  "errors": [                           // เฉพาะ validation · ครบทุกฟิลด์ในครั้งเดียว
-    { "field": "items[0].qty", "code": "min_value", "message": "ต้องมากกว่า 0" }
-  ]
-}
-```
-
-- `field` เป็นเส้นทางเต็มรวมดัชนีอาเรย์ · `code` ให้โปรแกรมอ่าน · `message` ให้คนอ่าน
-
-| สถานะ | ใช้เมื่อ |
-|---|---|
-| 400 | ข้อมูลผิดรูป |
-| 401 | ยังไม่ได้ยืนยันตัวตน |
-| 403 | ยืนยันแล้วแต่ไม่มีสิทธิ์ |
-| 404 | ไม่มีสิ่งนี้ |
-| 409 | ชนกับสถานะปัจจุบัน (ซ้ำ, แก้ทับ) |
-| 422 | รูปแบบถูกแต่ผิดกฎธุรกิจ |
-| 429 | เรียกถี่เกิน — ต้องมี `Retry-After` |
-| 500 | ฝั่งเราพัง — **ห้ามส่งรายละเอียดภายในออกไป** ส่ง `requestId` แทน |
-
-> **500 ต้องบอกแค่ "เกิดข้อผิดพลาด กรุณาแจ้ง requestId นี้"** รายละเอียดจริงอยู่ใน log
-> การส่ง stack trace ออกไปก็เหมือนแจกแผนผังระบบให้คนที่กำลังหาช่องโจมตี
-
----
-
-## 3 · Request id
-
-- รับจาก header **`X-Request-Id`** เฉพาะเมื่อตรง `^[A-Za-z0-9-]{1,64}$` · ไม่มีหรือไม่ตรง → สร้างใหม่ (uuid ตัด 8 ตัว)
-  ค่านี้ลงทุกบรรทัด log ถ้ารับมาตรง ๆ ผู้ส่งจะแทรกขึ้นบรรทัดใหม่หรือข้อความปลอมลง log ได้ (log injection)
-- **ส่งกลับใน response header ทุกครั้ง** รวมทั้งตอน error
-- ใส่ในทุกบรรทัด log (ดู `logging-standards`) และใน error body
-- ส่งต่อไป service ปลายทางทุกครั้งที่เรียกข้ามระบบ
-
-พอลูกค้าโทรมาบอกว่า "มันพัง" ก็ขอ requestId แล้ว `grep` ครั้งเดียวเจอทั้งเรื่อง
-
----
-
-## 4 · Graceful shutdown
-
-ตอน deploy ใหม่ orchestrator จะส่ง `SIGTERM` มา ถ้าแอปตายทันที request ที่ทำอยู่จะขาดกลางคัน
-
-```
-SIGTERM → 1. หยุดรับ request ใหม่ (ให้ /health/ready ตอบ down ทันที)
-          2. รอ request ที่ค้างอยู่ทำงานจบ (timeout 15–30 วิ)
-          3. ปิด DB pool / คิว / ไฟล์
-          4. exit(0)
-```
-
-> ข้อ 1 สำคัญกว่าที่คิด ต้องให้ `/health/ready` ตอบ `down` **ก่อน** ปิดจริงสัก 5 วินาที
-> เพื่อให้ load balancer ตัดเราออกจาก pool ทัน ไม่งั้นยังมี traffic วิ่งเข้ามาตอนกำลังปิด
-
----
-
-## 5 · สิ่งที่ต้องมีก่อน deploy (ไม่ใช่ทางเลือก)
-
-- **Timeout ทุกทาง** ทั้ง request เข้า การเรียกออก และ query DB ถ้าไม่มี timeout ปลายทางช้าเมื่อไร ทั้งระบบจะค้างตาม
-- **จำกัดขนาด body** (เช่น 1MB) เพื่อกัน memory ระเบิดจาก payload ใหญ่
-- **Cross-Origin Resource Sharing (CORS) ระบุ origin ชัดเจน** — `*` ใช้ได้เฉพาะ API สาธารณะที่ไม่มี cookie
-- **Rate limit** อย่างน้อยที่ endpoint ล็อกอินและที่ที่ส่งรหัสผ่านใช้ครั้งเดียว (One-Time Password · OTP)/อีเมล
-- **Security headers**: `X-Content-Type-Options: nosniff` · `Content-Security-Policy: frame-ancestors 'none'` (ตัวแทนของ `X-Frame-Options` ที่เป็น header รุ่นเก่า · ใส่ `X-Frame-Options: DENY` คู่ไว้ให้เบราว์เซอร์เก่า) ·
-  `Strict-Transport-Security` (HTTP Strict Transport Security · HSTS)
-  Node: `helmet` ตั้งครบในบรรทัดเดียว · .NET: `UseHsts()` ตั้งแค่ HSTS ที่เหลือต้องเขียน middleware สั้น ๆ หรือใช้แพ็กเกจ `NetEscapades.AspNetCore.SecurityHeaders` (ตัวอย่างใน `references/per-stack.md`)
-- **ปิดหน้าโชว์ error เต็ม ๆ ใน production** (`app.UseDeveloperExceptionPage()` เฉพาะ dev)
-- **ตั้งเวอร์ชันไว้ใน path**: `/api/v1/...` ตั้งแต่วันแรก เพราะย้ายทีหลังแพงกว่ามาก
-- **OpenAPI** ที่ generate จากโค้ดจริง ไม่ใช่เขียนมือแล้วลืมอัปเดต
-
----
-
-## 6 · โค้ดที่พร้อมใช้
-
-| ไฟล์ | สแต็ก | สถานะ |
-|---|---|---|
-| `assets/health.node.js` | Node / Express | ✓ รันทดสอบครบทั้ง 4 endpoint + เคส degraded/down/timeout |
-| `assets/health_py.py` | Python / FastAPI | ✓ รันทดสอบครบเหมือนกัน ผลตรงกันทุก field |
-| `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | ระวัง ยังไม่ได้คอมไพล์ทดสอบ |
-
-```js
-// Node
-app.use(createHealthRouter({
-  version: { name: 'orders-api', version: '1.4.0', commit: process.env.GIT_SHA },
-  checks: {
-    db:   async () => { await pool.query('SELECT 1'); },          // critical
-    mail: { critical: false, run: async () => { await smtp.verify(); } },
-  },
-}));
-```
-
-```python
-# Python
-app.include_router(make_health_router(
-    version={"name": "orders-api", "version": "1.4.0", "commit": os.getenv("GIT_SHA")},
-    checks={"db": lambda: db.execute("SELECT 1"),
-            "mail": {"critical": False, "run": smtp.verify}},
-))
-```
-
----
-
-## 7 · ตรวจงาน
-
-```bash
-curl -i localhost:8080/ping                    # 200 pong
-curl -s localhost:8080/health/live  | jq
-curl -s localhost:8080/health/ready | jq
-curl -s localhost:8080/version      | jq
-
-# ปิด DB แล้วยิงซ้ำ — ready ต้องเป็น 503 แต่ live ต้องยัง 200
-docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:8080/health/live
-```
-
-- [ ] `/health/live` **ไม่** แตะ DB — ปิด DB แล้วยังตอบ 200
-- [ ] `/health/ready` ตอบ 503 เมื่อ dependency ที่ critical ล่ม
-- [ ] dependency ที่ไม่ critical ล่มแล้วได้ `degraded` + 200 (ยังรับ traffic)
-- [ ] ทุก check มี timeout — ลองทำให้ dependency ค้าง แล้ว endpoint ต้องตอบภายใน ~3 วิ
-- [ ] `/version` ตรงกับ commit ที่ deploy จริง
-- [ ] ทุก response มี `X-Request-Id` รวมทั้งตอน 500
-- [ ] ยิง 500 แล้วไม่มี stack trace / connection string หลุดออกมา
-- [ ] `SIGTERM` แล้ว request ที่ค้างอยู่ทำงานจบก่อนแอปปิด
-- [ ] `/ping` ไม่ถูกเขียนลง log (ไม่งั้นไฟล์เต็มไปด้วย ping)
-
----
-
-## 8 · Anti-patterns
-
-- **`/health` ตัวเดียวเช็คทุกอย่าง** — orchestrator แยกไม่ออกว่าควร restart หรือแค่ตัด traffic
-- **liveness เช็ค DB** — DB สะดุด 10 วินาที = pod ตายยกแถว
-- **health check ไม่มี timeout** — dependency ค้าง แล้ว health ค้างตาม
-- **ส่ง stack trace / connection string ใน health หรือ error 500**
-- **health ต้อง login** — orchestrator ไม่มี token ให้
-- **รูปแบบ error ต่างกันทุก endpoint** — client ต้องเขียนโค้ดแกะ 5 แบบ
-- **`/ping` เขียนลง log** — ทุกวินาที × 86400 = ขยะเต็มไฟล์
-- **ไม่มี graceful shutdown** — deploy ทีไรลูกค้าเจอ error ทุกที
-- **`Access-Control-Allow-Origin: *` คู่กับ cookie** — เปิดช่องให้เว็บอื่นยิงแทนผู้ใช้
-
----
-
-## 9 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| รูปแบบ log และ correlation id | `logging-standards` |
-| test ให้ endpoint พวกนี้ | `testing-standards` |
-| ตรวจ response ตรงกับ OpenAPI ใน CI · contract กับทีม frontend · เช็ค breaking change | `api-conventions` [`references/contract-testing.md`](../api-conventions/references/contract-testing.md) |
-| ออกแบบ endpoint ธุรกิจ | command `/api-design` |
-| runbook ตอน service ล่ม | `incident-runbook-template` |
-| ตรวจความปลอดภัย | `security-engineer` + command `/security-scan` |
-
-
-## reference: per-stack.md
-
-# .NET และ Angular
-
-> ระวัง: โค้ดในไฟล์นี้ **ยังไม่ได้คอมไพล์ทดสอบ** (ต่างจาก `assets/health.node.js` และ
-> `assets/health_py.py` ที่รันจริงครบทุก endpoint แล้ว) โค้ดนี้เป็นการตั้งค่ามาตรฐานของ
-> ASP.NET Core ตอนรันครั้งแรกให้เทียบ response กับรูปร่างใน SKILL.md ข้อ 1
-
----
-
-## สารบัญ
-
-1. [ASP.NET Core — health checks](#aspnet-core--health-checks)
-2. [Angular — ฝั่งที่เรียกใช้](#angular--ฝั่งที่เรียกใช้)
-3. [ตารางเทียบ](#ตารางเทียบ)
-
----
-
-## ASP.NET Core — health checks
-
-```bash
-dotnet add package AspNetCore.HealthChecks.NpgSql
-dotnet add package AspNetCore.HealthChecks.Redis
-dotnet add package AspNetCore.HealthChecks.Network   # AddSmtpHealthCheck อยู่ในแพ็กเกจนี้
-```
-
-```csharp
-builder.Services.AddHealthChecks()
-    // tag "ready" = ตัวที่ /health/ready จะเรียก · ไม่ติด tag = ไม่ถูกเรียกที่ไหนเลย
-    .AddNpgSql(cs, name: "db", timeout: TimeSpan.FromSeconds(3), tags: ["ready", "critical"])
-    .AddRedis(redisCs, name: "redis", timeout: TimeSpan.FromSeconds(3), tags: ["ready", "critical"])
-    .AddSmtpHealthCheck(o => { }, name: "mail",
-        failureStatus: HealthStatus.Degraded,          // ไม่ critical → degraded ไม่ใช่ down
-        tags: ["ready"])
-    // ตอนกำลังปิด → Unhealthy → /health/ready ตอบ 503 (ดู "Graceful shutdown" ข้างล่าง)
-    .AddCheck<ShutdownHealthCheck>("shutdown", tags: ["ready", "critical"]);
-```
-
-```csharp
-// ---- ping: เบาที่สุด ไม่ผ่าน middleware ที่ไม่จำเป็น ----
-app.MapGet("/ping", () => Results.Text("pong")).ExcludeFromDescription();
-
-// ---- liveness: ไม่เรียก check ตัวไหนเลย (predicate = _ => false) ----
-// ถ้าเผลอให้เช็ค DB ตรงนี้ DB สะดุด = Kubernetes ฆ่า pod ยกแถว
-app.MapHealthChecks("/health/live", new HealthCheckOptions
-{
-    Predicate = _ => false,
-    ResponseWriter = WriteLive,
-});
-
-// ---- readiness: เฉพาะ check ที่ติด tag "ready" ----
-app.MapHealthChecks("/health/ready", new HealthCheckOptions
-{
-    Predicate = c => c.Tags.Contains("ready"),
-    ResponseWriter = WriteReady,
-    ResultStatusCodes =
-    {
-        [HealthStatus.Healthy]   = StatusCodes.Status200OK,
-        [HealthStatus.Degraded]  = StatusCodes.Status200OK,     // ยังรับ traffic ได้
-        [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable,
-    },
-});
-
-app.MapGet("/version", () => Results.Ok(new
-{
-    name = "orders-api",
-    version = typeof(Program).Assembly.GetName().Version?.ToString() ?? "0.0.0",
-    commit = Environment.GetEnvironmentVariable("GIT_SHA") ?? "unknown",
-    buildTime = Environment.GetEnvironmentVariable("BUILD_TIME") ?? "unknown",
-    env = app.Environment.EnvironmentName,
-    host = Environment.MachineName,
-}));
-```
-
-ให้ response ตรงรูปแบบเดียวกับสแต็กอื่น:
-
-```csharp
-static Task WriteReady(HttpContext ctx, HealthReport report)
-{
-    ctx.Response.ContentType = "application/json; charset=utf-8";
-    return ctx.Response.WriteAsJsonAsync(new
-    {
-        status = report.Status switch
-        {
-            HealthStatus.Healthy  => "up",
-            HealthStatus.Degraded => "degraded",
-            _                     => "down",
-        },
-        timestamp = DateTimeOffset.UtcNow,
-        checks = report.Entries.ToDictionary(
-            e => e.Key,
-            e => new
-            {
-                status = e.Value.Status == HealthStatus.Healthy ? "up" : "down",
-                durationMs = (int)e.Value.Duration.TotalMilliseconds,
-                // ข้อความเท่านั้น ห้ามส่ง exception เต็ม ๆ — endpoint นี้เปิดสาธารณะ
-                error = e.Value.Exception?.Message,
-            }),
-    });
-}
-
-static Task WriteLive(HttpContext ctx, HealthReport _)
-{
-    ctx.Response.ContentType = "application/json; charset=utf-8";
-    return ctx.Response.WriteAsJsonAsync(new { status = "up", timestamp = DateTimeOffset.UtcNow });
-}
-```
-
-### Error envelope (RFC 9457)
-
-ASP.NET Core มี `ProblemDetails` มาให้อยู่แล้ว ให้ใช้ของที่มี อย่าประดิษฐ์รูปแบบเอง
-
-```csharp
-builder.Services.AddProblemDetails(o => o.CustomizeProblemDetails = ctx =>
-{
-    ctx.ProblemDetails.Instance = ctx.HttpContext.Request.Path;
-    ctx.ProblemDetails.Extensions["requestId"] =
-        ctx.HttpContext.Response.Headers["X-Request-Id"].ToString();
-});
-
-app.UseExceptionHandler();      // แปลง exception ที่หลุดเป็น problem+json ให้อัตโนมัติ
-app.UseStatusCodePages();
-```
-
-### Graceful shutdown
-
-ให้ `/health/ready` ตอบ down ก่อนปิดจริงสักพัก เพื่อให้ load balancer ตัดเราออกจาก pool ทัน
-ใช้ `IHostedLifecycleService.StoppingAsync` (.NET 8 ขึ้นไป) เพราะ host เรียกมัน**ก่อน**หยุด Kestrel (หลัง `ApplicationStopping`)
-จึงรอแบบ `await Task.Delay` ได้โดยไม่บล็อกเธรด และ server ยังตอบ 503 ให้ load balancer เห็น
-
-```csharp
-// สถานะร่วม: ตัวรอปิดเขียน · health check อ่าน
-public sealed class ReadinessState { public volatile bool IsShuttingDown; }
-
-public sealed class ShutdownHealthCheck(ReadinessState state) : IHealthCheck
-{
-    public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken ct = default) =>
-        Task.FromResult(state.IsShuttingDown
-            ? HealthCheckResult.Unhealthy("shutting down")
-            : HealthCheckResult.Healthy());
-}
-
-public sealed class DrainOnShutdown(ReadinessState state) : IHostedLifecycleService
-{
-    public async Task StoppingAsync(CancellationToken ct)
-    {
-        state.IsShuttingDown = true;                       // /health/ready → 503 ทันที
-        await Task.Delay(TimeSpan.FromSeconds(5), ct);     // รอ load balancer ตัดออก
-    }
-    public Task StartingAsync(CancellationToken ct) => Task.CompletedTask;
-    public Task StartAsync(CancellationToken ct)    => Task.CompletedTask;
-    public Task StartedAsync(CancellationToken ct)  => Task.CompletedTask;
-    public Task StopAsync(CancellationToken ct)     => Task.CompletedTask;
-    public Task StoppedAsync(CancellationToken ct)  => Task.CompletedTask;
-}
-
-// ก่อน builder.Build()
-builder.Services.AddSingleton<ReadinessState>();
-builder.Services.AddHostedService<DrainOnShutdown>();
-builder.Services.Configure<HostOptions>(o =>
-    o.ShutdownTimeout = TimeSpan.FromSeconds(30));   // รวมเวลารอ 5 วินาทีข้างบน + request ที่ค้าง
-```
-
-ลำดับตอนปิดของ host (.NET 8+): `ApplicationStopping` → `StoppingAsync` → `StopAsync` ของ hosted service (รวม Kestrel) → `StoppedAsync` → `ApplicationStopped` — ตามหน้า .NET Generic Host ที่ learn.microsoft.com (ตรวจ 22 ต.ค. 2569)
-
-### สิ่งที่ต้องเปิดก่อน deploy
-
-ลงทะเบียน service ได้**ก่อน** `builder.Build()` เท่านั้น — หลัง Build รายการ service เป็นแบบอ่านอย่างเดียว เรียก `builder.Services.Add…` ตอนนั้นจะได้ `InvalidOperationException` ตอนเริ่มแอป
-
-```csharp
-// ---- ก่อน Build: ลงทะเบียน service ----
-builder.Services.Configure<KestrelServerOptions>(o => o.Limits.MaxRequestBodySize = 1_048_576);
-builder.Services.AddRateLimiter(o =>
-{
-    o.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-    // อย่างน้อยที่ /login และที่ส่งรหัสผ่านใช้ครั้งเดียว (One-Time Password · OTP)
-    o.AddFixedWindowLimiter("login", w => { w.PermitLimit = 5; w.Window = TimeSpan.FromMinutes(1); });
-});
-builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
-    p.WithOrigins("https://app.example.com")   // ระบุ origin ห้าม AllowAnyOrigin คู่กับ cookie
-     .AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
-
-var app = builder.Build();
-
-// ---- หลัง Build: ลำดับ middleware ----
-if (!app.Environment.IsDevelopment())
-    app.UseHsts();                             // ตั้งแค่ Strict-Transport-Security · ไม่ใช้ตอน dev เพราะเบราว์เซอร์จำค่าไว้
-app.UseHttpsRedirection();
-app.Use(async (ctx, next) =>                   // header ที่ UseHsts ไม่ได้ตั้งให้
-{
-    ctx.Response.Headers["X-Content-Type-Options"] = "nosniff";
-    ctx.Response.Headers["Content-Security-Policy"] = "frame-ancestors 'none'";
-    ctx.Response.Headers["X-Frame-Options"] = "DENY";   // สำหรับเบราว์เซอร์เก่า
-    await next();
-});
-app.UseCors();
-app.UseRateLimiter();
-
-app.MapPost("/api/v1/login", Login).RequireRateLimiting("login");
-```
-
-ไม่อยากเขียน middleware เอง → แพ็กเกจ `NetEscapades.AspNetCore.SecurityHeaders` (`app.UseSecurityHeaders()`) ตั้งชุด header พื้นฐานให้ครบ
-
----
-
-## Angular — ฝั่งที่เรียกใช้
-
-**Interceptor ใส่ request id ทุก request** (คู่กับ `logging-standards`):
-
-```ts
-export const requestIdInterceptor: HttpInterceptorFn = (req, next) => {
-  const id = crypto.randomUUID().slice(0, 8);
-  return next(req.clone({ setHeaders: { 'X-Request-Id': id } }));
-};
-```
-
-**แกะ problem+json ให้เป็นข้อความที่ผู้ใช้อ่านรู้เรื่อง**:
-
-```ts
-export const errorInterceptor: HttpInterceptorFn = (req, next) => {
-  const toast = inject(ToastService);
-  return next(req).pipe(
-    catchError((e: HttpErrorResponse) => {
-      const p = e.error;                       // ProblemDetails
-      // 500 ไม่มีรายละเอียดให้แสดง — โชว์ requestId เพื่อให้ผู้ใช้แจ้งทีมได้
-      const msg = p?.detail || p?.title || 'เกิดข้อผิดพลาด';
-      toast.error(p?.requestId ? `${msg} (รหัสอ้างอิง ${p.requestId})` : msg);
-      return throwError(() => e);
-    }),
-  );
-};
-```
-
-**หน้าสถานะระบบ** ให้ทีมซัพพอร์ตเปิดดูเองได้โดยไม่ต้องเรียกนักพัฒนา:
-
-```ts
-this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r));
-// r.status = 'up' | 'degraded' | 'down' → แสดงเป็น pill สีเขียว/เหลือง/แดง
-// (ใช้คลาส .pill-green / .pill-amber / .pill-red จาก web-app-design)
-```
-
----
-
-## ตารางเทียบ
-
-| เรื่อง | .NET | Node/Express | Python/FastAPI |
-|---|---|---|---|
-| health | `AddHealthChecks()` + tag | `createHealthRouter()` | `make_health_router()` |
-| error envelope | `ProblemDetails` (มีในตัว) | `express-problem-json` หรือเขียน middleware | `HTTPException` + custom handler |
-| request id | middleware + `LogContext` | `AsyncLocalStorage` | `ContextVar` + middleware |
-| graceful shutdown | `IHostedLifecycleService.StoppingAsync` | `server.close()` ใน `SIGTERM` | `lifespan` context ของ FastAPI |
-| security headers | `UseHsts()` (HTTP Strict Transport Security (HSTS) เท่านั้น) + middleware สั้น ๆ หรือ `NetEscapades.AspNetCore.SecurityHeaders` | `helmet` | `secure` middleware |
-| OpenAPI | `Microsoft.AspNetCore.OpenApi` (`AddOpenApi()` + `MapOpenApi()` · มากับ template ตั้งแต่ .NET 9) · ทางเลือก: Swashbuckle / NSwag | `swagger-jsdoc` | มีในตัว `/docs` |
-| rate limit | `AddRateLimiter` | `express-rate-limit` | `slowapi` |
-
-
----
-
 # skill: human-writing
 
 Use before writing or editing anything people read (answer, email, report, README, slide, label) in Thai or English. Look → polished-document-style.
@@ -1821,3 +521,499 @@ Use before writing or editing anything people read (answer, email, report, READM
 3. ตัวตัดคำ (pythainlp `newmm`) ตัดผิดได้บ้าง เช่น `ท่า|ทางการ` ที่ควรเป็น `ท่าทาง|การ` · จุดตัดผิดไม่ทำให้ข้อความเปลี่ยน แค่อาจขึ้นบรรทัดใหม่กลางคำ ถ้าเจอในบรรทัดจริงให้แก้มือตรงนั้น
 
 **ข้อควรรู้:** จุดตัดที่มองไม่เห็นอยู่ในไฟล์จริง ค้นคำใน Word ส่วนใหญ่ยังเจอ แต่ถ้าคัดลอกข้อความไปวางในระบบอื่นแล้วค้นไม่เจอ ให้รันสคริปต์กับสำเนาสำหรับพิมพ์เท่านั้น
+
+
+---
+
+# skill: answer-shape
+
+Use when an answer has structure (options, trade-offs, how parts connect). Prose, table or diagram.
+
+# รูปทรงของคำตอบ
+
+skill นี้บอกรูปทรงและโครง ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
+
+> **กฎข้อเดียว:** เนื้อหามีโครงสร้างอะไร คำตอบใช้รูปทรงนั้น
+> เปรียบเทียบ → ตาราง · เชื่อมโยง → รูป · เรื่องเดียว → ประโยค
+
+---
+
+## เลือกรูปทรงจากสัญญาณในคำถาม
+
+| สัญญาณ | รูปทรง |
+|---|---|
+| "แบบไหนดีกว่า" · "ต่างกันยังไง" · "มีทางเลือกอะไรบ้าง" | **ตารางเปรียบเทียบ** |
+| "อะไรต่อกับอะไร" · "ข้อมูลไหลยังไง" · "ลำดับเป็นยังไง" | **รูป** |
+| "มีอะไรบ้าง" ที่ไม่ได้เทียบกัน | **รายการหัวข้อย่อย** |
+| "ทำไม" · "แปลว่าอะไร" · เรื่องเดียวไม่มีแขนง | **ประโยคธรรมดา** |
+| ตัวเลขหลายตัวที่ต้องดูพร้อมกัน | **ตาราง** |
+| ขั้นตอนที่ต้องทำเรียงกัน | **รายการมีเลข** |
+| ทำต่อไม่ได้ · ต้องรอของจากผู้ใช้ | **รายการสั้น: ติดอะไร → ต้องการอะไร** |
+
+**สัญญาณสำคัญที่สุดคือมี "สิ่งที่ถูกเทียบ" ตั้งแต่ 2 ตัวขึ้นไป** แบบนี้ให้ใช้ตาราง
+เพราะถ้าเขียนเป็นย่อหน้า ผู้อ่านต้องจำตัวแรกไว้ในหัวระหว่างอ่านตัวที่ 2
+
+---
+
+## ตารางที่อ่านง่าย
+
+- **คอลัมน์แรกคือสิ่งที่ถูกเทียบ** คอลัมน์ถัดไปคือแง่มุมที่เทียบ
+- **3–5 คอลัมน์** เกินนี้อ่านไม่ทัน ส่วนแถวไม่เกิน 8 แถวในคำตอบแชต
+- **ทุกช่องต้องมีเนื้อ** — ช่องว่างแปลว่าคอลัมน์นั้นไม่ควรมี หรือข้อมูลยังไม่ครบ ถ้าไม่มีข้อมูลให้เขียนว่า "ไม่มี" ตรง ๆ · ช่องที่เขียน "ขึ้นอยู่กับ" ทุกช่องก็ไม่มีเนื้อ
+- **ช่องละไม่เกิน 1 บรรทัด** ถ้ายาวกว่านั้นให้ยกไปเขียนใต้ตาราง
+- **เรียงแถวตามน้ำหนัก** ตัวที่แนะนำหรือตัวที่ใช้บ่อยที่สุดอยู่บนสุด ไม่ใช่เรียงตามตัวอักษร
+- **หัวคอลัมน์เป็นคำถามที่ผู้อ่านมีในหัว** ไม่ใช่ชื่อสาขาวิชา
+
+```
+ผิด: | ตัวเลือก | ประสิทธิภาพ | ความซับซ้อน |
+ถูก: | ตัวเลือก | เร็วแค่ไหน | ต้องดูแลมากไหม |
+```
+
+**ปิดท้ายตารางด้วยข้อสรุป 1 บรรทัดเสมอ** — ตารางบอกข้อมูล ไม่ได้บอกว่าควรเลือกอะไร
+
+---
+
+## เมื่อไหร่รูปชนะตาราง
+
+ใช้รูปเมื่อ**ความสัมพันธ์คือคำตอบ** — ตารางบอกคุณสมบัติได้ แต่บอกไม่ได้ว่าอะไรต่อกับอะไร
+
+| ใช้รูป | ใช้ตาราง |
+|---|---|
+| อะไรต่อกับอะไร · อะไรอยู่ในอะไร | ตัวไหนดีกว่าตัวไหนในแง่ใด |
+| ลำดับที่มีทางแยกหรือวนกลับ | ขั้นตอนเรียงตรงไม่มีแขนง (ใช้รายการมีเลขพอ) |
+| สิ่งเดียวกันในหลายสถานะ | สิ่งต่างกันในแง่มุมเดียวกัน |
+
+ในแชต **รูปเล็ก ๆ แบบ ASCII หรือ Mermaid สั้น ๆ ก็พอ** — ไม่ต้องเปิดเครื่องมือวาด
+
+```
+กล้อง ──DICOM──▶ Orthanc ──▶ API ──▶ รายงาน
+                    │
+                    └──▶ ที่เก็บถาวร
+```
+
+รูปที่ต้องเป็นไฟล์จริงเพื่อใส่เอกสารหรือสไลด์ ให้ใช้ skill วาดรูปของ plugin นั้น (ถ้ามี)
+
+---
+
+## เมื่อไหร่ประโยคชนะทั้งคู่
+
+- คำตอบสั้นกว่า 3 บรรทัด — ตาราง 2 แถวเป็นแค่การตกแต่ง ไม่ได้อธิบายอะไร
+- คำถามที่ตอบว่า "ใช่" หรือ "ไม่ใช่" แล้วตามด้วยเหตุผล 1 ประโยค
+- เรื่องที่**เหตุผลสำคัญกว่าตัวเลือก** — ตารางจะตัดเหตุผลทิ้งเพื่อให้พอดีช่อง
+
+> ตารางที่มีแถวเดียวหรือ 2 แถวสั้น ๆ แปลว่าใช้ผิดรูปทรง · รูปที่วาดสิ่งที่ประโยคเดียวบอกได้ก็เช่นกัน
+
+---
+
+## เมื่อทำต่อไม่ได้
+
+ติดขัดเมื่อไหร่ → บอกเป็นข้อ ๆ แค่ 2 อย่าง: **ติดอะไร** และ **ต้องการอะไรจากผู้ใช้**
+
+- ข้อละ 1 บรรทัด · ไม่เกิน 4 ข้อ
+- ไม่เล่าสาเหตุยาว ไม่ตอบเรื่องข้างเคียง ไม่วางแผนงานล่วงหน้า — รอได้ของก่อนค่อยทำ
+- ถ้ามีหลายทางให้ผู้ใช้เลือก → แต่ละทางเป็น 1 ข้อ ทางที่ง่ายสุดอยู่บนสุด
+
+```
+ผิด: ย่อหน้ายาวเล่าว่า container ใหม่ · โฟลเดอร์ว่าง · OneDrive หาย · แล้ววางแผนแก้ 3 ข้อรอไว้
+ถูก: ติดอยู่ 1 เรื่อง:
+   - มองไม่เห็นไฟล์ — โฟลเดอร์ที่เชื่อมไว้ว่าง
+   ต้องการ 1 อย่าง:
+   - แนบ Mockup.html มา หรือบอก path ใหม่
+```
+
+---
+
+## ตัวย่อ
+
+ตัวย่อที่ใช้ในไฟล์นี้ · กฎเขียนตัวย่อ → `spell-out-abbreviations`
+
+- **ASCII** — American Standard Code for Information Interchange (การวาดรูปด้วยตัวอักษรธรรมดา)
+- **Mermaid** — ภาษาเขียนไดอะแกรมเป็นข้อความ แล้วให้โปรแกรมวาดให้
+- **DICOM** — Digital Imaging and Communications in Medicine (มาตรฐานไฟล์และการส่งภาพทางการแพทย์)
+- **API** — Application Programming Interface (ช่องทางที่โปรแกรมหนึ่งเรียกใช้อีกโปรแกรมหนึ่ง)
+
+
+---
+
+# skill: spell-out-abbreviations
+
+Use when text people read (report, slide, label, message) is heavy with abbreviations or jargon, or needs a glossary. Writing → human-writing.
+
+# Spell Out Abbreviations
+
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+
+> **กฎข้อ 1:** ตัวย่อทุกตัว เขียนเต็มครั้งแรก แล้ววงเล็บตัวย่อไว้ — หลังจากนั้นใช้ตัวย่อได้
+> **กฎข้อ 2:** ศัพท์เฉพาะทุกคำ วงเล็บคำอธิบายสั้น ๆ ไว้ครั้งแรก — ผู้อ่านนอกสายจะได้ไม่ต้องเดา
+
+## รูปแบบ
+
+```
+ถูก: Model Context Protocol (MCP) ทำให้ Claude ต่อกับระบบอื่นได้ ... MCP รองรับ ...
+ผิด: MCP ทำให้ Claude ต่อกับระบบอื่นได้
+```
+
+- **ครั้งแรกของแต่ละเอกสาร** เขียนเต็มแล้ววงเล็บตัวย่อ ครั้งต่อไปใช้ตัวย่อล้วน
+- เอกสารยาวที่แบ่งบท ให้เขียนเต็มใหม่**ครั้งแรกของแต่ละบท** เพราะคนมักอ่านทีละบท
+- ตารางหรือหัวข้อที่มีที่ไม่พอ ให้เขียนเต็มในบรรทัดแรกของส่วนนั้นแทน
+- เอกสารที่มีตัวย่อตั้งแต่ 5 ตัวขึ้นไป ต้องมี **อภิธานศัพท์ (glossary)** ท้ายเอกสาร
+
+### เอกสารภาษาไทย
+
+ครั้งแรกเขียน **ไทย (ชื่อเต็มอังกฤษ: ตัวย่อ)** เช่น ปัญญาประดิษฐ์ (Artificial Intelligence: AI) · ครั้งต่อไปใช้คำไทยหรือตัวย่อก็ได้ แต่ต้องเลือกแบบเดียวทั้งเอกสาร · กฎนี้เป็นที่เดียวที่กำหนดรูปแบบ `human-writing` `references/thai-grammar.md` หัวข้อ 5 แถว 4 ใช้ตามนี้
+
+## ยกเว้น — ไม่ต้องขยาย
+
+คำที่คนทั่วไปรู้จักมากกว่าชื่อเต็ม: URL, PDF, HTML, CSS, JSON, USB, Wi-Fi, ID, OK
+และนามสกุลไฟล์ (`.docx`, `.pptx`) ถ้าไม่แน่ใจ **ให้ขยาย** เพราะขยายเกินไม่เสียหาย แต่คนอ่านไม่รู้เรื่องเสียหาย
+
+## ศัพท์เฉพาะ — วงเล็บคำอธิบาย ไม่ใช่แค่ตัวย่อ
+
+ขยายตัวย่อแล้วอาจยังไม่พอ ถ้าชื่อเต็มก็ยังไม่บอกอะไร **คำที่ผู้อ่านนอกสายไม่รู้จัก
+ต้องมีคำอธิบายสั้นในวงเล็บครั้งแรก**
+
+```
+ผิด: ใช้ idempotency key กันงานซ้ำ
+ถูก: ใช้ idempotency key (รหัสกำกับคำขอ ส่งซ้ำแล้วไม่ทำงานซ้ำ) กันงานซ้ำ
+
+ผิด: ต้องดู cash flow ก่อนกู้
+ถูก: ต้องดู cash flow (เงินเข้า-ออกจริงแต่ละเดือน) ก่อนกู้
+```
+
+**คำอธิบายต้องสั้นกว่า 1 บรรทัด** ถ้ายาวกว่านั้นให้แยกเป็นประโยคของตัวเอง
+
+**วัดว่าคำไหนต้องอธิบาย** ด้วยคำถามเดียว — คนที่ทำงานคนละสายกับเรื่องนี้
+อ่านแล้วเดาความหมายได้ไหม ถ้าเดาไม่ได้ก็ต้องอธิบาย
+
+| ระดับผู้อ่าน | อธิบายแค่ไหน |
+|---|---|
+| ลูกค้า ผู้บริหาร คนนอกสาย | ศัพท์เทคนิคทุกคำ แม้แต่คำที่ช่างใช้กันทุกวัน |
+| ทีมเดียวกันแต่คนละส่วนงาน | เฉพาะคำเฉพาะของส่วนนั้น เช่น ชื่อรูปแบบ ชื่อกระบวนการ |
+| คนที่ทำเรื่องนี้อยู่แล้ว | เฉพาะคำที่เพิ่งตั้งขึ้นใหม่ในโปรเจกต์นี้ |
+
+---
+
+## ใช้กับอะไรบ้าง
+
+เอกสารทุกชนิด · สไลด์ · ป้ายและข้อความบนหน้าจอ · ข้อความขายของ · คำอธิบายไดอะแกรม · คอมเมนต์ในโค้ด ·
+คำตอบในแชต — **ทุกอย่างที่มีคนอ่าน**
+
+## ตัวอย่างที่เจอบ่อย
+
+Model Context Protocol (MCP) · Application Programming Interface (API) ·
+Key Performance Indicator (KPI) · Service Level Agreement (SLA) ·
+Return on Investment (ROI) · Stock Keeping Unit (SKU) · Value Added Tax (VAT) ·
+Cash on Delivery (COD) · Objectives and Key Results (OKR) ·
+Personally Identifiable Information (PII) · Proof of Concept (POC)
+
+ตัวย่อฝั่งโค้ด (RBAC · SSO · CI/CD · SRS · ADR ฯลฯ) → ส่วนเพิ่มใน plugin `software-company` → `superuser` → `references/code-extensions.md`
+
+## Anti-patterns
+
+- ขยายตัวย่อซ้ำทุกครั้งที่โผล่ — รกและกวนสายตา ครั้งแรกพอ
+- วงเล็บกลับด้าน — `MCP (Model Context Protocol)` อ่านสะดุดกว่าเขียนเต็มขึ้นก่อน
+- ขยายผิด — ถ้าไม่รู้ว่าย่อมาจากอะไร ให้ค้นก่อน อย่าเดา
+- ขยายตัวย่อครบแต่ปล่อยศัพท์เฉพาะลอย — `Quadratic Weighted Kappa (QWK)` ยังไม่ช่วยใครถ้าไม่บอกว่าค่านี้วัดอะไร
+- อธิบายยาวเป็นย่อหน้าในวงเล็บ — วงเล็บไว้ให้คำสั้น ๆ ถ้ายาวให้แยกประโยค
+
+
+---
+
+# skill: context-budget
+
+Use when a task will read large material (many files, long PDFs, many web pages, a codebase) or run long-output commands.
+
+# งบ context
+
+> **กฎข้อเดียว:** ตัดสินใจ**ก่อน**อ่าน ไม่ใช่อ่านแล้วค่อยเสียดาย
+> token ที่เข้า context แล้วเอาออกไม่ได้ ยกเว้น `/clear` (ทิ้งทุกอย่าง) · `/compact` (ย่อเป็นสรุป) · `/rewind` (ตัดกลับไปจุดก่อนหน้า)
+
+## เมื่อไหร่ใช้ skill นี้
+
+- กำลังจะอ่านของก้อนใหญ่: โฟลเดอร์เอกสาร · PDF ยาว · หน้าเว็บหลายหน้า · ผลค้นหา · โค้ดทั้งโปรเจกต์ · output ของคำสั่งที่อาจยาว
+- เริ่มงานกับโฟลเดอร์หรือโปรเจกต์ที่ยังไม่รู้จักโครงสร้าง
+- context เต็มเร็วผิดปกติ หรือโดน `/compact` บ่อย
+- จะวางกฎให้ทั้งทีมหรือทุกโปรเจกต์
+
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+
+| งาน | skill | |
+|---|---|---|
+| ทำให้**คำตอบ**สั้นลง | `answer-shape` | แทน |
+| เก็บสรุปงานข้ามเซสชัน | `handoff` | แทน |
+| ที่วางไฟล์ชั่วคราว | `temp-file-discipline` | แทน |
+| loop เขียนโค้ดที่ต้องรอดจากการสูญเสียบริบท | `spec-to-code-loop` (plugin `software-company`) | แทน |
+| แผนที่โปรเจกต์และโครงโฟลเดอร์ | `project-bootstrap` (plugin `software-company`) | คู่ |
+| แก้บั๊กเฉพาะจุดโดยไม่อ่านทั้งโปรเจกต์ | `targeted-fix` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+
+---
+
+## 1 · อะไรกิน context จริง ๆ
+
+| แหล่ง | ขนาดโดยประมาณ | คุมได้ไหม |
+|---|---|---|
+| **ของที่อ่านเข้ามา** (ไฟล์ · PDF · หน้าเว็บ · ผลค้น · output คำสั่ง) | ใหญ่สุด ชิ้นเดียวเป็นหมื่น token ได้ | คุมได้เต็มที่ ทั้งหน้านี้พูดถึงเรื่องนี้ |
+| tool จาก Model Context Protocol (MCP) server | โหลดแค่ชื่อ tool และคำแนะนำของ server · schema เต็มโหลดเมื่อใช้จริง | มี Command-Line Interface (CLI) ทำได้ใช้ CLI (ไม่มีรายการ tool เลย) · ปิดตัวที่ไม่ใช้ |
+| `CLAUDE.md` | ตามที่เขียน | เขียนให้สั้น |
+| description ของ skill | ~100 token ต่อ skill | ตัดให้กระชับ |
+| ประวัติบทสนทนา | โตเรื่อย ๆ | ระวัง: `/clear` เมื่อเปลี่ยนเรื่อง |
+
+> **เห็นชัดว่าควรคุมอะไรก่อน**: ตัด description ของ skill ทั้งชุดได้แค่ไม่กี่พัน token
+> แต่เปิด PDF 200 หน้า หรือ `cat` ไฟล์ 3,000 บรรทัดครั้งเดียวกินมากกว่านั้น
+> **ต้องมีวินัยที่สุดกับแถวบนสุดของตาราง**
+
+---
+
+## 2 · ต้นไม้ตัดสินใจก่อนอ่าน
+
+```
+ต้องรู้อะไรจากของก้อนนี้
+├─ รู้แล้วว่าอยู่ไฟล์ไหน หน้าไหน บรรทัดไหน → อ่านเฉพาะช่วง (ข้อ 3) · หลายชิ้น → อ่านพร้อมกันในข้อความเดียว
+├─ ต้องหาว่าอยู่ตรงไหน                   → ค้นแบบมีขอบเขต (ข้อ 3)
+├─ ต้องค้นข้ามหลายชิ้นที่ยังไม่รู้ตำแหน่ง   → ส่ง subagent (ข้อ 4)
+└─ ต้องแปลง/รวม/นับข้อมูลจำนวนมาก        → เขียนลงไฟล์แล้วอ่านเฉพาะสรุป (ข้อ 5)
+```
+
+ถ้าไม่รู้ว่าของใหญ่แค่ไหน ให้**เช็กขนาดก่อนเสมอ**: จำนวนหน้า PDF · จำนวนไฟล์และขนาดในโฟลเดอร์ (`ls -l`, `du -h`) · จำนวนบรรทัด (`wc -l`)
+
+---
+
+## 3 · อ่านเฉพาะช่วง และค้นแบบมีขอบเขต
+
+กฎตัวเลข 3 ข้อ: **ไฟล์เกิน 300 บรรทัดอ่านเฉพาะช่วง** · **`grep`/`rg` ใส่ `--glob`** · **ปิดท้ายด้วย `| head -50`** (ถ้า `CLAUDE.md` ผู้ใช้ไม่มีหัวข้อ "งบ context" ให้ใช้ 3 ข้อนี้เลย) ส่วนที่เพิ่มจากนั้น:
+
+| ของ | อ่านอย่างไร |
+|---|---|
+| โฟลเดอร์เอกสาร | ดูรายชื่อและขนาดก่อน แล้วเปิดเฉพาะไฟล์ที่ชื่อตรงกับคำถาม |
+| PDF · รายงานยาว | อ่านสารบัญก่อน แล้วระบุหน้าหรือบทที่ต้องใช้ |
+| หน้าเว็บ | ขอเฉพาะส่วนที่ต้องการ (ตัวเลข วันที่ หัวข้อเดียว) ไม่ดึงทั้งหน้า |
+| โค้ด | `rg -l` ก่อนเพื่อรู้ว่าอยู่ไฟล์ไหน แล้วค่อยเจาะ · บริบท `-C2` พอ |
+
+อ่านทั้งไฟล์ได้เมื่อ: กำลังจะเขียนทับทั้งไฟล์ · ไฟล์สั้น ๆ · ต้องเข้าใจทั้งไฟล์เพื่อแก้ให้ถูก และไม่เกิน ~300 บรรทัด
+
+---
+
+## 4 · ส่ง subagent ไปแทน
+
+**นี่คือข้อที่ประหยัดได้มากที่สุดในหน้านี้**
+
+subagent มี context ของตัวเอง จึงอ่านไป 20 ชิ้นได้
+แล้วส่งกลับมาที่บทสนทนาหลักแค่ย่อหน้าเดียว โดยเนื้อหาที่มันอ่านไม่เข้ามาด้วย
+
+| ใช้ subagent เมื่อ | ทำเองเมื่อ |
+|---|---|
+| คาดว่าต้องอ่านเกิน 20k token หรือเกิน 5 ไฟล์ที่ยังไม่รู้ตำแหน่ง (ค่าตั้งต้น ยังไม่ได้วัด · ประเมินขนาดจาก PERT ของขั้นใน `model-scorecard` ถ้ามี) · ต้องค้นข้ามหลายชิ้นเพื่อตอบคำถามเดียว | รู้ไฟล์และตำแหน่งอยู่แล้ว แม้ 4–6 ชิ้น → อ่านพร้อมกันในข้อความเดียว เร็วกว่าเปิด subagent ใหม่ |
+| สำรวจโฟลเดอร์หรือโปรเจกต์ที่ยังไม่รู้จัก | แก้ไฟล์ที่กำลังเปิดอยู่ |
+| ตรวจ/รีวิวข้ามหลายไฟล์ | งานที่ต้องเห็นรายละเอียดเต็มเพื่อทำต่อ |
+
+**สั่งให้ดีคือบอกว่าต้องการอะไรกลับมา:**
+
+```
+ผิด: "ดูสัญญา 12 ฉบับนี้ให้หน่อย"
+   → มันอาจคืนมาทั้งเนื้อหา
+
+ถูก: "หาวันหมดอายุ ค่าปรับ และเงื่อนไขต่ออายุของสัญญาแต่ละฉบับ
+    คืนกลับมาเป็นตาราง 1 บรรทัดต่อฉบับ ระบุชื่อไฟล์:หน้า
+    ไม่ต้องแปะข้อความสัญญา ไม่เกิน 15 บรรทัด"
+```
+
+(งานโค้ดก็เหมือนกัน: "คืนรายการ ไฟล์:บรรทัด ตามลำดับการเรียก ไม่ต้องแปะโค้ด")
+
+> 🚨 **กำหนดรูปแบบและความยาวของผลลัพธ์เสมอ** ถ้าไม่บอกว่าต้องการอะไร
+> subagent จะส่งรายงานยาว ๆ กลับมา แล้วก็ไม่ได้ประหยัดอะไรเลย
+
+---
+
+## 5 · เขียนลงไฟล์ แทนถือไว้ในบทสนทนา
+
+```bash
+# ผิด: output ทั้งหมดเข้า context
+<คำสั่งที่ output ยาว>
+
+# ถูก: เข้า context แค่บรรทัดสรุป
+<คำสั่งที่ output ยาว> > <โฟลเดอร์ชั่วคราว>/out.log 2>&1; tail -20 <โฟลเดอร์ชั่วคราว>/out.log
+```
+
+**ใช้กับ**: ข้อความจากเว็บหรือ PDF ที่ดึงมา · ตารางข้อมูลใหญ่ (กรองหรือนับด้วยสคริปต์ ไม่ต้องอ่านทุกแถว) · ผลรัน test · log · ผลจากการแปลงไฟล์
+ไฟล์พวกนี้วางที่ไหน → `temp-file-discipline` · เจออะไรให้จดลงไฟล์ตั้งแต่รอบแรก จะได้ไม่ต้องอ่านซ้ำ
+
+**ทำซ้ำทุกงาน → ให้ hook กรองแทนวินัย** — hook ตัดของยาวก่อนเข้า context ได้ (log หมื่น token เหลือหลักร้อย) · ตัวอย่างงานโค้ด → ส่วนเพิ่มใน plugin `software-company` → `superuser` → `references/code-extensions.md`
+
+---
+
+## 6 · ทำให้เซสชันหน้าไม่ต้องสำรวจซ้ำ
+
+งานที่กลับมาทำบ่อยต้องมี "แผนที่" สั้น ๆ ที่**โหลดอัตโนมัติ**: ของอยู่ที่ไหน · อะไรห้ามอ่าน · คำสั่งที่ใช้บ่อย
+- งานทั่วไป: หัวข้อ "ของอยู่ที่ไหน" ใน `.claude/superuser/CONTEXT.md` (`superuser` อ่านก่อนเริ่มทุกครั้ง) ไม่เกิน 40 บรรทัด
+- ไฟล์ชื่ออื่น (`notes.md`) ไม่โหลดเอง ต้องสั่งให้อ่านทุกครั้ง จึงเสียเปล่า
+- แผนที่ล้าสมัยแย่กว่าไม่มีแผนที่ เพราะพาไปผิดที่อย่างมั่นใจ ห้ามใส่รายการไฟล์ทั้งหมดหรือประวัติการเปลี่ยนแปลง
+
+งานโค้ด (`CLAUDE.md` ของโปรเจกต์และโฟลเดอร์ ตัวอย่างแผนที่) → ส่วนเพิ่มใน plugin `software-company` → `superuser` → `references/code-extensions.md`
+
+---
+
+## 7 · ค่าตั้งที่ช่วยได้อีก
+
+ปิด MCP server และ plugin ที่ไม่ใช้ · เลือกโมเดลและ effort ตั้งแต่ต้น · `/clear` เมื่อเปลี่ยนเรื่อง · `CLAUDE.md` ของโปรเจกต์ไม่เกิน 40 บรรทัด — ตารางเต็มพร้อมเหตุผลอยู่ใน [`settings`](references/settings.md) · ทำงานบน Windows (Git Bash · PowerShell) → กับดักที่เกิดจริงใน [`windows-shell`](references/windows-shell.md)
+
+**compact เองที่ราว 70% ไม่รอให้ระบบทำ** — context ใช้ไปราว 70% และเพิ่งจบขั้นหนึ่ง (test ผ่าน · ไฟล์บันทึกแล้ว · ตรวจผ่าน) → อัปเดต "รับงานต่อ" ใน `CONTEXT.md` ก่อน (`handoff` หัวข้อ 5) แล้ว `/compact` พร้อมบอกว่าให้เก็บอะไร (ไฟล์ที่แก้ · การตัดสินใจ · ขั้นถัดไป) · รอให้ระบบ compact เองมักโดนกลางขั้น ตอนที่ยังไม่มีอะไรจดไว้ (แนวคิดจาก strategic-compact ใน everything-claude-code · MIT)
+
+---
+
+## 8 · Anti-patterns
+
+- **เปิดของใหญ่ทั้งก้อนเพื่อ "ดูก่อนว่ามีอะไร"** ทั้งที่สารบัญ หน้าแรก หรือ `head -40` ตอบคำถามเดียวกันได้ด้วยต้นทุน 1%
+- **ค้นโดยไม่จำกัดขอบเขต** (`rg` ไม่ใส่ `--glob` ได้โฟลเดอร์ที่ไม่เกี่ยวมาเต็ม · ค้นเว็บแล้วเปิดทุกลิงก์)
+- **ค้นเองข้าม 10 ชิ้นเพื่อตอบคำถามเดียว** ทั้งที่ควรส่ง subagent
+- **ส่ง subagent ไปอ่านของที่รู้ตำแหน่งแล้ว** ทั้งที่อ่านพร้อมกันเองหรือค้นตรง ๆ เร็วกว่า
+- **สั่ง subagent แบบไม่บอกว่าต้องการอะไรกลับมา** ได้รายงานยาวกลับมา ไม่ได้ประหยัด
+- **ปล่อย output ยาว (test · log · ข้อความที่ดึงมา) เข้า context ทั้งก้อน**
+- **อ่านของเดิมซ้ำเพราะลืมว่าเคยอ่านแล้ว** ให้จดสิ่งที่พบลงไฟล์ตั้งแต่รอบแรก
+- **ไฟล์แผนที่ที่ไม่ได้โหลดอัตโนมัติ** · **`CLAUDE.md` ยาว 300 บรรทัด** ทุกคนในทีมต้องจ่าย token ทุกเซสชัน
+- **เปิด MCP server ไว้ครบทุกตัวตลอดเวลา**
+
+
+## reference: settings.md
+
+# ค่าตั้งที่ช่วยประหยัด context
+
+ย้ายมาจาก `SKILL.md` ข้อ 7 · เปิดเมื่อจะแนะนำผู้ใช้ปรับค่าตั้ง
+
+| ทำอะไร | ได้อะไร |
+|---|---|
+| **ปิด MCP server ที่ไม่ได้ใช้ในงานนั้น** · มี CLI ทำได้ใช้ CLI | ชื่อ tool และคำแนะนำของทุก server ยังโหลดทุกเซสชัน |
+| เลือกโมเดลและ effort ตั้งแต่ต้นเซสชัน | เปลี่ยนโมเดลกลางทางทำให้ cache หาย ต้องอ่านบทสนทนาใหม่ทั้งหมด (เปลี่ยน effort บน Opus · Sonnet · Haiku 5.5 และ Fable 5.1 ผ่าน Application Programming Interface (API) key หรือ subscription cache ไม่หาย · ผ่าน Bedrock · Agent Platform · gateway หรือการตั้งค่าพิเศษ ดูเงื่อนไขในลิงก์) · ([Claude Code: prompt caching](https://code.claude.com/docs/en/prompt-caching) · ตรวจ 21 ต.ค. 2569) |
+| fast mode — ผู้ใช้เปิดเองด้วย `/fast` ตอนต้นเซสชัน · agent ไม่เปิดเอง | Opus เท่านั้น · สร้างข้อความเร็วขึ้นสูงสุด 2.5 เท่า แต่ token แรกไม่เร็วขึ้น · ราคา 2 เท่า ผู้ใช้ subscription จ่ายจาก usage credits ไม่ใช่โควตา · คุ้มกับขั้นที่เขียนชิ้นยาว ไม่คุ้มกับขั้นสั้นที่รอ tool · เปิดกลางทางจ่ายราคา fast กับบทสนทนาทั้งหมดที่ไม่มี cache 1 ครั้ง · ([Claude Code: fast mode](https://code.claude.com/docs/en/fast-mode) · [API: fast mode](https://platform.claude.com/docs/en/build-with-claude/fast-mode) · ตรวจ 21 ต.ค. 2569) |
+| ปิดปลั๊กอินที่ไม่เกี่ยวกับงานนั้น | description ของ skill ทุกตัวอยู่ใน context เสมอ |
+| `permissions.deny` ใน `.claude/settings.json` สำหรับโฟลเดอร์ที่ไม่ควรอ่าน | ระบบกันพลาดให้ ไม่ต้องพึ่งวินัย |
+| `/clear` เมื่อเปลี่ยนเรื่อง (ไม่เสียอะไร) · `/compact <สิ่งที่ต้องเก็บ>` ที่จุดพักของงาน ไม่รอจนใกล้เต็ม · เดินผิดทาง → `/rewind` กลับจุดก่อนหน้า | คืนที่ว่าง · `/compact` ตอน cache ยังอุ่นถูก แต่หลังพักนานต้องอ่านทั้งบทสนทนาใหม่ · `/rewind` ตัดกลับไปจุดที่ cache มีอยู่แล้ว |
+| `CLAUDE.md` ของโปรเจกต์ไม่เกิน 40 บรรทัด · `~/.claude/CLAUDE.md` (ใช้ทุกโปรเจกต์) ไม่เกิน 60 บรรทัด — เป็นเพดานของชุดนี้เอง เข้มกว่าเอกสารทางการที่แนะนำไม่เกิน 200 · ตัวที่แจกใน `scripts/install/CLAUDE.global.md` ยาว 84 (เกินเพดาน รอตัด) | ทุกบรรทัดกิน token ทุกเซสชัน |
+
+
+## reference: windows-shell.md
+
+# กับดักของ shell บน Windows
+
+เปิดเมื่อทำงานบนเครื่อง Windows ผ่าน Git Bash หรือ PowerShell · ทุกข้อเกิดจริงใน repo SQT-Marketplace ระหว่าง 2026-10-23 ถึง 25 · เขียนเป็นไฟล์อ้างอิงก่อน ถ้าเกิดซ้ำอีกจึงยกเป็น skill
+
+| อาการ | เกิดจาก | ทำแบบนี้แทน |
+|---|---|---|
+| ลบโฟลเดอร์ที่ผู้ใช้สั่งเก็บไปหมด (2026-10-25) | `ls` ในเครื่องถูกตั้ง alias เป็น `ls -F` ชื่อโฟลเดอร์จึงมี `/` ต่อท้าย รายการเก็บที่เขียนด้วย regex ไม่ตรงสักชื่อ แล้ว `rm -rf` ลบทุกตัว · `rm` ใน Git Bash ไม่ผ่านถังขยะ | ทำรายการด้วย `find <dir> -mindepth 1 -maxdepth 1 -printf '%f\n'` หรือ `\ls -1A` · พิมพ์รายการลบกับรายการเก็บออกมาเทียบก่อนรัน `rm` · ย้ายเข้า `_to_delete/` แทนการลบ |
+| pattern ใน JSON หรือ regex เพี้ยน `\\b` เหลือ `\b` (2026-10-23) | ส่งโค้ด Python ผ่าน heredoc ในเครื่องมือ Bash แล้วตัว escape ถูกตีความซ้ำ | แก้ไฟล์ด้วยเครื่องมือ Edit · หรือเขียนสคริปต์ลงไฟล์ก่อนแล้วค่อยรัน · ตรวจผลด้วยการอ่านค่าที่ได้จริง · `\r` ที่กลายเป็นตัว CR จริงใน .md ตัวตรวจของ SQT-Marketplace จับได้แล้ว (2026-10-25) แต่ `\b` ที่หายยังจับไม่ได้ |
+| validator ล้มว่า "เอกสารไม่ตรงกับของจริง" ทั้งที่เนื้อหาตรง · zip ใน `dist/` เปลี่ยนทั้งที่ไม่ได้แก้ (2026-10-25) | worktree ใหม่ที่ `core.autocrlf=true` checkout ไฟล์เป็น CRLF แต่สคริปต์สร้างข้อความเป็น LF | สคริปต์ที่เทียบหรือสร้างไฟล์ต้องเปลี่ยน CRLF เป็น LF ก่อน (`sync-docs` · `writeZip` ทำแล้ว) · ไฟล์ที่ต้องเป็น CRLF ประกาศใน `.gitattributes` · ดูว่าต่างจริงไหมด้วย `git diff --ignore-cr-at-eol --stat` |
+| hook ของ plugin ไม่ทำงานเลยโดยไม่มี error (2026-10-25) | เช็กว่าเป็นไฟล์หลักด้วย `fileURLToPath(import.meta.url) === process.argv[1]` ซึ่งไม่ตรงกันบน Windows เมื่อเรียกผ่าน `${CLAUDE_PLUGIN_ROOT}/…` | เทียบแบบ `process.argv[1].replace(/\\/g, "/").endsWith("<ชื่อไฟล์>")` เหมือนใน `superuser-hook.mjs` · ทดสอบ hook ด้วยการเรียกผ่าน path จริงที่ Claude Code ใช้ |
+
+## ข้อเล็กที่ควรรู้
+
+- คำสั่ง `perl -i` หรือ `sed -i` บนไฟล์ CRLF: regex ที่ยึดท้ายบรรทัดด้วย `$` ต้องเผื่อ `\r` (`(\r?)$`) ไม่งั้นแก้ไม่ติดโดยไม่ฟ้อง
+- `cd` ใน Bash ไม่ข้ามคำสั่ง · ใช้ path เต็มที่ใส่เครื่องหมายคำพูด เพราะชื่อโฟลเดอร์มักมีช่องว่างและ `&`
+- สคริปต์ `.cmd` ที่จบด้วย `pause` จะรอปุ่มกด · รันจาก agent ให้ส่ง stdin ว่าง (`< /dev/null`) และเก็บผลลงไฟล์แล้วดูท้ายไฟล์
+
+
+---
+
+# skill: temp-file-discipline
+
+Use when a task writes temporary files (extracts, previews, backups, drafts, one-off scripts) into a project or work folder.
+
+# ระเบียบไฟล์ชั่วคราว
+
+> **กฎข้อเดียว:** อะไรที่ไม่ใช่ผลงานจริง ต้องอยู่ใน `_to_delete/` เท่านั้น
+> ห้ามวางไว้ที่รากโปรเจกต์ ห้ามวางปนกับไฟล์งาน
+
+---
+
+## เลือกที่วาง
+
+| ไฟล์นั้นคืออะไร | วางที่ |
+|---|---|
+| ของชั่วคราวของงานในโปรเจกต์ผู้ใช้ (ภาพตรวจ · log · สคริปต์ครั้งเดียว · ผลรัน) | `_to_delete/` ที่รากโปรเจกต์ ผู้ใช้จะได้ตรวจย้อนได้ |
+| ขั้นกลางที่ไม่ผูกกับโปรเจกต์ใด (ไม่ได้ทำงานในโฟลเดอร์ผู้ใช้) | พื้นที่ทำงานของเซสชัน |
+| ผลงานที่ผู้ใช้จะเก็บไว้ | โฟลเดอร์ปลายทางของงานนั้น |
+
+**รากโปรเจกต์ต้องไม่มีไฟล์ชั่วคราวเลย**
+- ถ้า agent สร้างไฟล์ชั่วคราวแล้วไปตกที่ราก (log · ภาพ · สคริปต์ลอง) ให้ย้ายเข้า `_to_delete/` ทันที
+- ถ้าไม่แน่ใจว่าผู้ใช้สร้างหรือใช้ไฟล์นั้นอยู่ ไม่ต้องย้ายเอง ให้บอกผู้ใช้
+- รันจากในโฟลเดอร์ย่อย (เช่น โฟลเดอร์โค้ด ดู `project-bootstrap` ใน plugin `software-company`) ให้เขียนของชั่วคราวไปที่ `_to_delete/` ของ**รากโปรเจกต์** ไม่สร้างซ้อน
+
+---
+
+## อะไรคือไฟล์ชั่วคราว
+
+- ไฟล์บีบอัดที่ส่งผ่านแชทเพื่อเอาไฟล์ลงเครื่อง และโฟลเดอร์ที่แตกออกมา
+- ภาพที่เรนเดอร์ไว้ตรวจงาน · ภาพหน้าจอ · ไฟล์ตัวอย่างที่ทำไว้เทียบ
+- สำเนาสำรองของไฟล์ที่กำลังแก้ · ไฟล์ `.bak` `.old` `.tmp` `ไฟล์ (1).xlsx`
+- สคริปต์ที่เขียนขึ้นใช้ครั้งเดียว · ไฟล์ log จากการรันครั้งเดียว
+- ไฟล์รูปแบบกลางระหว่างแปลง เช่น `.svg` ที่แปลงต่อเป็น `.png` แล้ว
+- **เอกสารที่แปลงรูปแบบมาเพื่อให้อ่านหรือประมวลผลง่าย** — `.docx` หรือ `.pdf` ที่แปลงเป็น `.md`
+  ต้นฉบับคือของจริง ส่วนตัวที่แปลงคือของชั่วคราว **ห้ามวางปนกันในโฟลเดอร์เอกสาร**
+  ไม่งั้นอีก 3 เดือนไม่มีใครรู้ว่าไฟล์ไหนคือฉบับที่ลูกค้าเซ็นรับ
+- เวอร์ชันเก่าของไฟล์ที่เพิ่งแทนที่ไป
+
+**ไฟล์ที่เลิกใช้แล้วก็คือไฟล์ชั่วคราว** — เมื่อแทนที่ไฟล์เก่าด้วยของใหม่แล้ว ให้ย้ายตัวเก่าเข้า `_to_delete/`
+ไม่ทิ้งไว้ข้าง ๆ กัน
+
+---
+
+## อะไรไม่ใช่
+
+- ผลงานที่ผู้ใช้ขอ
+- ไฟล์ต้นทางของผลงาน เช่น ไฟล์ออกแบบ `.psd` `.fig` · `.py` ที่ผลิตรูป · `.html` ที่เป็นแหล่งที่มาของภาพ —
+  **ปีหน้าจะแก้ก็ต้องมีไฟล์ต้นทาง** จึงเก็บไว้ในโฟลเดอร์ย่อยข้างผลงาน ไม่ใช่ `_to_delete/`
+- ไฟล์ที่ผู้ใช้วางไว้เอง แม้จะดูเหมือนขยะ — **ห้ามย้ายของผู้ใช้โดยไม่ถาม**
+- output ของเครื่องมือ build (`build/` · `node_modules/`) — ปล่อยไว้ ตรวจว่าอยู่ใน `.gitignore` และห้ามย้ายเข้า `_to_delete/`
+
+---
+
+## วิธีใช้
+
+```
+โปรเจกต์/
+├── ผลงานจริง
+└── _to_delete/
+    ├── transfer.zip
+    └── render-check/
+```
+
+- มีโฟลเดอร์เดียวที่**รากของโปรเจกต์** ไม่ต้องแยกย่อยตามวันที่ ยกเว้นของเยอะจริง
+- โฟลเดอร์ย่อยมาตรฐานที่ skill อื่นใช้ — ใช้ชื่อเดียวกันนี้เท่านั้น:
+
+  | โฟลเดอร์ย่อย | ใส่อะไร | skill ที่ใช้ |
+  |---|---|---|
+  | `drafts/` | ร่างชั่วคราวที่ยังไม่ใช่ต้นฉบับ (ต้นฉบับ markdown ที่ render ซ้ำอยู่ถาวรที่ `docs/src/<เรื่อง>.md`) | `superuser:document-naming` |
+  | `attempts-<เรื่อง>/` | งานของแต่ละตัวที่แข่งกัน | [`parallel-attempts-pick-best`](../parallel-attempts-pick-best/SKILL.md) |
+  | `screenshots/` | ภาพเรนเดอร์ของดีไซน์ mockup หรือภาพตรวจงาน | skill ออกแบบทุกตัว |
+  | `logs/` | log จากการรันครั้งเดียว | ทุกตัว |
+
+  งานโค้ด (`verify-runs/` · `security/` · `check/`) → ส่วนเพิ่มใน plugin `software-company` → `superuser` → `references/code-extensions.md`
+- ใส่ `_to_delete/` ลงใน `.gitignore` ทุกโปรเจกต์ที่ใช้ git — ตรวจก่อน ถ้ายังไม่มีให้เพิ่ม
+- โปรเจกต์ที่ README ระบุโฟลเดอร์ชั่วคราวอื่นไว้แล้ว (เช่น `tmp/` `scratch/`) → ใช้ตามนั้น แล้วจด 1 แถวในตาราง "การตัดสินใจ" · ไม่มีระบุ → `_to_delete/` · ห้ามใช้ `.cache/` (เป็นของเครื่องมือ ปนกับสถานะของเครื่องมือได้)
+
+---
+
+## ตอนจบงาน
+
+1. **บอกว่ามีอะไรค้างอยู่ใน `_to_delete/`** เป็นบรรทัดเดียว ไม่ต้องลงรายการยาว
+2. **ห้ามลบเอง** — ลบเมื่อผู้ใช้สั่งเท่านั้น การลบในโฟลเดอร์ผู้ใช้กู้คืนไม่ได้
+3. **ผู้ใช้สั่งลบ** → ย้ายเข้า `_to_delete/` ก่อน (ตามกฎกลาง) แล้วบอกผู้ใช้ · ลบจริงเฉพาะของใน `_to_delete/` เมื่อผู้ใช้สั่งตรง ๆ โดยทำ 3 ขั้น:
+   1. เขียนแผนลงไฟล์ `_to_delete/delete-plan.txt` 1 พาธต่อบรรทัด นับจากรากโปรเจกต์ (`_to_delete/render-check`)
+   2. รัน `node <โฟลเดอร์ skill นี้>/scripts/delete-plan-check.mjs _to_delete/delete-plan.txt` → พิมพ์รายการลบกับรายการเก็บมาเทียบ · พาธไหนหลุดออกนอก `_to_delete/` (`..` · พาธเต็ม · ลิงก์ชี้ออกข้างนอก) จะ exit 1 ห้ามลบ
+   3. ผ่านแล้วจึงลบตามรายการ "ลบ" ทีละบรรทัด สคริปต์ไม่ลบเอง · อย่าสร้างรายการจาก `ls` (บน Windows อาจมี `/` ต่อท้ายชื่อ ดู `context-budget` → [`windows-shell`](../context-budget/references/windows-shell.md))
+4. **ก่อนบอกว่าจบงาน** รัน `node <โฟลเดอร์ skill นี้>/scripts/root-check.mjs <รากโปรเจกต์>` → ลงรายการของที่รากนอกรายการอนุญาต (`ref` `docs` `mockup` `assets` `qa` `_to_delete` `.claude` โฟลเดอร์โค้ด และของใน `.gitignore`) · ของที่โปรเจกต์ตั้งใจวางไว้ที่ราก ใส่ `--allow README.md,LICENSE`
+
+---
+
+## Anti-patterns
+
+- **แตกไฟล์ zip ลงรากโปรเจกต์** แล้วค่อยเก็บกวาดทีหลัง — ทีหลังไม่เคยมาถึง
+- **ตั้งชื่อ `ไฟล์-v2` `ไฟล์-final` `ไฟล์-ใหม่จริง`** วางไว้ข้างของเดิม
+- **ลบไฟล์ผู้ใช้เพราะคิดว่าไม่ใช้แล้ว**
+- **ทิ้งไฟล์ชั่วคราวของงานในโปรเจกต์ไว้ในพื้นที่เซสชัน** — เซสชันจบแล้วผู้ใช้ตรวจย้อนไม่ได้
+- **ตั้งโฟลเดอร์ย่อยชื่อใหม่ให้ของเดิม** (`shots/` `img-check/`) — ใช้ชื่อในตารางข้างบน
+- **เก็บไฟล์ต้นทางของผลงานไว้ใน `_to_delete/`** — นั่นไม่ใช่ของชั่วคราว
+- **ทิ้งไฟล์ค้างโดยไม่บอก** — ผู้ใช้จะมาเจอเองอีกหลายเดือนถัดไป
+
+---
+
+ตัวย่อและศัพท์เทคนิคในข้อความถึงผู้ใช้ เขียนตาม `spell-out-abbreviations`

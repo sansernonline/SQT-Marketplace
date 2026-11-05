@@ -1,0 +1,29 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เคส "ไม่ควรเปิด": ขอโค้ด Python อัปโหลดไฟล์ขึ้น Google Cloud Storage ไม่เกี่ยวกับ Backblaze · backblaze-b2 ต้องไม่ถูกเปิด (tool_used min 0 max 0 ตาม skill-authoring/references/eval-format.md)
+# runs 5: เคสนี้ใช้ตัดสินการแก้ description ของ skill · n=3 กว้างเกินไป (ยังไม่ได้วัดช่วงจริง)
+schema_version: "1.1"
+name: backblaze-b2-trigger-negative
+description: ผู้ใช้ขอโค้ด Python อัปโหลดไฟล์ขึ้น Google Cloud Storage ต้องไม่เปิด backblaze-b2
+tags: [trigger, negative, backblaze-b2]
+runs: 5
+expected_outcome: ไม่เปิด Skill backblaze-b2 · คำตอบพูดถึง Google Cloud Storage
+execution:
+  prompt: |
+    ช่วยเขียนโค้ด Python อัปโหลดไฟล์ขึ้น Google Cloud Storage หน่อย
+    รับ path ของไฟล์กับชื่อ bucket แล้วคืน URL ของไฟล์ ยังไม่ต้องสร้างไฟล์
+  max_turns: 6
+  timeout_seconds: 240
+graders:
+  - name: backblaze-b2-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?backblaze-b2"'
+    min: 0
+    max: 0
+    arm: with-only
+  - name: gcs-named
+    type: regex
+    pattern: 'Google Cloud|GCS|google-cloud-storage'
+    flags: i
+    match: contains
+    target: last_message

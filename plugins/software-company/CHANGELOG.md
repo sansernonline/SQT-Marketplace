@@ -1,5 +1,13 @@
 # Changelog — software-company
 
+## 2.40.0 — 2026-11-05
+
+- skill ใหม่ `render-deploy`: ปล่อยแอปขึ้น Render ด้วย `render.yaml` · ฟัง `0.0.0.0:$PORT` · เขียน `plan` ทุก service · ค่าลับ `sync: false` · ด่านเงิน 4 ข้อ · แผนฟรีไม่ใช้กับงานจริง (Postgres หมดอายุ 30 วัน) · ตรวจ HTTP 200 หลังปล่อย · rollback · แม่แบบ `assets/render.yaml` · เคส eval 3 ไฟล์
+- skill ใหม่ `cloudflare-r2`: ต่อแอปเข้า R2 · token สิทธิ์ Object Read & Write เฉพาะ bucket · endpoint กับ region `auto` · presigned PUT (ไม่รองรับ POST และ custom domain) · CORS · r2.dev ไว้พัฒนา production ใช้ custom domain · ด่านเงิน 4 ข้อ · แม่แบบ `assets/cors.json` กับ `assets/r2-presign.mjs` · เคส eval 3 ไฟล์
+- skill ใหม่ `backblaze-b2`: ต่อแอปเข้า B2 · standard key เฉพาะ bucket ไม่ใช้ master key · endpoint กับลายเซ็น v4 · presigned PUT · อัปโหลดซ้ำเป็นเวอร์ชันใหม่ ค่าเริ่มต้นเก็บทุกเวอร์ชัน · lifecycle (prefix ว่างลบทั้ง bucket) · ลบแล้วต้องตรวจเวอร์ชันที่ซ่อน · ด่านเงิน 4 ข้อ · แม่แบบ `assets/b2-presign.mjs` กับ `assets/lifecycle-keep-last.json` · เคส eval 3 ไฟล์
+- skill ใหม่ `backblaze-deploy`: ปล่อยเว็บ static ที่ build แล้วขึ้น B2 เป็นปลายทางคู่กับ `render-deploy` (B2 รันโค้ดฝั่งเซิร์ฟเวอร์ไม่ได้ จึงเฉพาะ static) · `b2 sync` ไม่ใส่ `--delete` ครั้งแรก · Cloudflare CNAME กับ Transform Rule · ไม่ sync `.env` หรือ source map ขึ้น bucket สาธารณะ · ด่านเงิน 4 ข้อ · แม่แบบ `assets/deploy-b2.sh` กับ `assets/deploy-b2.yml` · เคส eval 3 ไฟล์
+- แถวใหม่ใน `triggers.md` · `devops-engineer` รู้จัก `render-deploy` `cloudflare-r2` `backblaze-b2` และ `backblaze-deploy` · `render-deploy` กับ `backblaze-b2` ชี้ไป `backblaze-deploy`
+
 ## 2.39.0 — 2026-11-05
 
 - `design-direction-lookup`: คัดลอกข้อมูล 12 ไฟล์จาก nextlevelbuilder/ui-ux-pro-max-skill commit `28b3b8d` (MIT) ไว้ที่ `data/upstream/uipro/` ไม่แก้ · domain ใหม่ 6 ตัว `style` (88 สไตล์ ข้ามที่ต้นทางเลิกใช้) · `product` (192 ประเภทสินค้า) · `motion` · `slide` · `slide-strategy` · `slide-copy` · คำพ้องไทย สไลด์ · แบนเนอร์ · นักลงทุน · self-test 18/18 · eval holdout 20/20 เท่าเดิม · สีในไฟล์ต้นทางยังไม่ได้ตรวจ contrast

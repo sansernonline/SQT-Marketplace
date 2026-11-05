@@ -1,0 +1,29 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เคส "ไม่ควรเปิด": ขอฟังก์ชันอัปโหลดไฟล์ขึ้น Azure Blob Storage ด้วย C# ไม่เกี่ยวกับ Cloudflare · cloudflare-r2 ต้องไม่ถูกเปิด (tool_used min 0 max 0 ตาม skill-authoring/references/eval-format.md)
+# runs 5: เคสนี้ใช้ตัดสินการแก้ description ของ skill · n=3 กว้างเกินไป (ยังไม่ได้วัดช่วงจริง)
+schema_version: "1.1"
+name: cloudflare-r2-trigger-negative
+description: ผู้ใช้ขอฟังก์ชัน C# อัปโหลดไฟล์ขึ้น Azure Blob Storage ต้องไม่เปิด cloudflare-r2
+tags: [trigger, negative, cloudflare-r2]
+runs: 5
+expected_outcome: ไม่เปิด Skill cloudflare-r2 · คำตอบพูดถึง Azure หรือ Blob
+execution:
+  prompt: |
+    ช่วยเขียนฟังก์ชัน C# อัปโหลดไฟล์ขึ้น Azure Blob Storage หน่อย
+    รับ stream กับชื่อไฟล์ แล้วคืน URL ของไฟล์ ยังไม่ต้องสร้างไฟล์
+  max_turns: 6
+  timeout_seconds: 240
+graders:
+  - name: cloudflare-r2-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?cloudflare-r2"'
+    min: 0
+    max: 0
+    arm: with-only
+  - name: azure-named
+    type: regex
+    pattern: 'Azure|Blob'
+    flags: i
+    match: contains
+    target: last_message

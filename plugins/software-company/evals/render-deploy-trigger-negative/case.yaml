@@ -1,0 +1,29 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เคส "ไม่ควรเปิด": ขอ Helm chart ปล่อยขึ้น Kubernetes ของบริษัท ซึ่งเป็นงานของ kubernetes-helm · render-deploy ต้องไม่ถูกเปิด (tool_used min 0 max 0 ตาม skill-authoring/references/eval-format.md)
+# runs 5: เคสนี้ใช้ตัดสินการแก้ description ของ skill · n=3 กว้างเกินไป (ยังไม่ได้วัดช่วงจริง)
+schema_version: "1.1"
+name: render-deploy-trigger-negative
+description: ผู้ใช้ขอ Helm chart ปล่อยแอปขึ้น Kubernetes ของบริษัท ต้องไม่เปิด render-deploy (ของ kubernetes-helm)
+tags: [trigger, negative, render-deploy]
+runs: 5
+expected_outcome: ไม่เปิด Skill render-deploy · คำตอบพูดถึง Helm หรือ Kubernetes
+execution:
+  prompt: |
+    บริษัทมี Kubernetes cluster ของตัวเอง อยากปล่อยเว็บ API ที่เป็น Docker image ขึ้นไป
+    ช่วยเขียน Helm chart ให้หน่อย บอกโครงไฟล์กับค่าที่ต้องตั้ง ยังไม่ต้องสร้างไฟล์
+  max_turns: 6
+  timeout_seconds: 240
+graders:
+  - name: render-deploy-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?render-deploy"'
+    min: 0
+    max: 0
+    arm: with-only
+  - name: helm-named
+    type: regex
+    pattern: 'Helm|Kubernetes'
+    flags: i
+    match: contains
+    target: last_message
