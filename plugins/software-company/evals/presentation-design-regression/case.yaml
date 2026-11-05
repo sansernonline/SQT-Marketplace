@@ -1,0 +1,39 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# อาการที่เห็นจริงในรอบแดง 2026-11-03 (general-purpose sonnet กับ software-company 2.33.1 · โจทย์เดียวกับเคสนี้):
+#   build ด้วย --brand E8344E,C4203A --css deck.css ไม่มี --theme · พื้นครีมทุกแผ่น ไม่มีหน้าสีทึบเลย
+#   ทิ้งสีหลักเหลือง FFB300 ของร้านไว้แค่เส้นและแท่ง โดยอ้างกฎเดิม "สีแบรนด์มีสีเดียว" · ผู้ใช้บอกว่าเด็คแบบนี้ไม่สดใสและไม่เข้ากับธีมงาน
+# รอบเขียววันเดียวกันกับ skill ใหม่: --theme bright --brand FFB300,996B00,E8344E · ปกเหลืองทึบ · หน้าเปิดส่วนแดงทึบ (data-tone="2")
+schema_version: "1.1"
+name: presentation-design-regression
+description: รอบแดง 2026-11-03 เด็คพื้นครีมทุกแผ่น ไม่มีหน้าสีทึบ และทิ้งสีหลักของร้าน · ต้อง build ด้วย --theme bright และใส่สีครบจากไฟล์ต้นทาง
+tags: [regression, presentation-design]
+runs: 3
+expected_outcome: build_deck ด้วย --theme bright และ --brand มี 3 สี (สีหลัก · สีเน้น · สีรอง) ที่ถอดจาก sunbite-brand.css
+execution:
+  prompt: |
+    ไฟล์ resources/sunbite-brand.css คือชุดสีของร้านอาหาร SunBite (ยอดขายเมนูใหม่ไตรมาส 3 เพิ่ม 38% ครอบครัววันหยุดเพิ่ม 2 เท่า)
+    ทำเด็ค HTML ไฟล์เดียวขอเปิดสาขาที่ 3 ให้เจ้าของร้านนำเสนอ ไม่ต้องถามกลับ
+  max_turns: 25
+  timeout_seconds: 900
+  allowed_tools: [Read, Write, Edit, Glob, Grep, Skill, Bash]
+context:
+  add_dirs: [resources]
+# trace รวมเนื้อ skill ที่ agent อ่านด้วย และในนั้นมีทั้ง --theme dark และ --theme bright · จึงจับเฉพาะคำสั่ง build จริงที่มีไฟล์ .html ตามหลัง
+# รับคำสั่งที่ต่อบรรทัดด้วย \ · ตัวอย่างใน skill มี <ที่ว่าง> อยู่ในคำสั่ง จึงห้าม < ระหว่างทาง
+graders:
+  - name: bright-theme-set
+    type: regex
+    pattern: "build_deck\\.py['\"]?\\s+\\S+\\.html(?:[^\\n<]|\\\\\\r?\\n)*--theme\\s+bright"
+    match: contains
+    target: trace
+  - name: no-dark-theme
+    type: regex
+    pattern: "build_deck\\.py['\"]?\\s+\\S+\\.html(?:[^\\n<]|\\\\\\r?\\n)*--theme\\s+dark"
+    match: not_contains
+    target: trace
+  - name: primary-and-support-from-file
+    type: regex
+    pattern: "build_deck\\.py['\"]?\\s+\\S+\\.html(?:[^\\n<]|\\\\\\r?\\n)*--brand[ =]+['\"]?FFB300,[0-9A-F]{6},E8344E"
+    flags: i
+    match: contains
+    target: trace

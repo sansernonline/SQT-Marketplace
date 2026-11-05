@@ -1,0 +1,24 @@
+/* ===== theme bright — build_deck.py --theme bright appends this after :root tokens it computes =====
+   พื้นสว่าง · การ์ดอมสีแบรนด์ · ปก หน้าเปิดส่วน หน้าปิด เป็นพื้นสีแบรนด์ทึบเต็มแผ่น (ไม่ใช่ไล่สีมืด)
+   data-tone="2" บน <section> = ใช้สีรองแทนสีหลักทั้งแผ่น (ต้องให้ --brand มีสีที่ 3) */
+.slide[data-tone="2"]{--accent:var(--accent3);--accent2:var(--accent3-hi);--on-accent:var(--on-accent3);
+  --accent-deep:var(--accent3-deep);--accent-tint:var(--accent3-tint)}
+.slide.hero,.slide.close,.divider{background:var(--accent);color:var(--on-accent);
+  --text:var(--on-accent);--accent2:var(--on-accent);--soft:var(--on-accent);--muted:var(--on-accent);--dim:var(--on-accent);
+  --panel:var(--on-accent-panel);--line:var(--on-accent-line)}
+.slide.hero .kicker,.slide.close .kicker,.divider .kicker,.divider .num,.slide.hero .big,.slide.close .big{color:var(--on-accent)}
+.slide.hero .rule,.slide.close .rule,.divider .rule{background:var(--on-accent)}
+.tag{background:var(--accent-tint);color:var(--soft)}
+.tbl td{border-bottom-color:var(--line)}
+[data-pick]:hover{border-color:var(--accent2)}
+.detail{background:var(--panel)}
+.map svg>path{stroke:var(--dim)}
+.box{background:#fff;border-color:var(--line)}
+.box.user{border-color:var(--accent);background:var(--accent-tint)}
+.layer.core{background:var(--accent-tint)}
+.phone{border-color:#1d1f24;background:#fff;box-shadow:0 20px 60px rgba(20,24,40,.18)}
+.phone .bar{background:var(--panel);border-bottom-color:var(--line)}
+.b.u{color:var(--on-accent)}
+.b.a,.typing{background:var(--panel)}
+.shot{border-color:var(--line)}
+.tag.ok{background:#e3f5ea;color:#17673a}.tag.blue{background:#e4eefc;color:#1d4f91}
