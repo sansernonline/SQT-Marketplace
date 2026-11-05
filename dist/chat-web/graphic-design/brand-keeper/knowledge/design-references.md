@@ -1,6 +1,6 @@
 # skill: design-references
 
-Use before any design work (web, app, slide, document, icon, logo, post) to find live references and colours, or says หาแรงบันดาลใจ, หาตัวอย่างดีไซน์.
+Use before any design work (web, app, slide, doc, logo, poster, product, banner, post) to search live references and colours each time, or says หาแรงบันดาลใจ.
 
 # design-references — ค้นงานจริงก่อนออกแบบ แล้วหยิบสีจากงานที่เลือก
 
@@ -31,7 +31,7 @@ Use before any design work (web, app, slide, document, icon, logo, post) to find
    ```bash
    python scripts/find_refs.py links <ประเภท> "<คำค้น>"
    ```
-   ประเภท: `web` · `app` · `dashboard` · `slide` · `document` · `icon` · `logo` · `social` · `illustration` · `color` · `font` · `motion` (รายชื่อเว็บอยู่ใน [`data/sites.csv`](data/sites.csv) ไฟล์เดียวที่ skill นี้เก็บ) · ไอคอนและภาพที่ใบอนุญาตเปิดค้นสดได้ด้วย `icons` และ `openverse`
+   ประเภท: `web` · `app` · `dashboard` · `slide` · `document` · `icon` · `logo` · `social` · `poster` · `product` · `banner` · `illustration` · `color` · `font` · `motion` (รายชื่อเว็บอยู่ใน [`data/sites.csv`](data/sites.csv) ไฟล์เดียวที่ skill นี้เก็บ) · ไอคอนและภาพที่ใบอนุญาตเปิดค้นสดได้ด้วย `icons` และ `openverse`
 3. **คัดงาน 3–6 ชิ้นที่ใกล้โปรเจกต์ที่สุด** ดูจากของจริง (เปิดหน้างานรายชิ้นหรือจับภาพ) ไม่ใช่จากชื่อ · เก็บลิงก์ไว้ในเอกสารของโปรเจกต์ ไม่ใส่ใน skill · เปิดเว็บเองไม่พอจะคัด ให้ส่งหน้า `board` ที่มีแต่ลิงก์ (ข้อ 5 ไม่ใส่ `--ref`) ให้ผู้ใช้กดดูแล้วเลือกเอง · สคริปต์แปลงคำไทยที่พบบ่อยให้ ถ้าลิงก์ยังมีคำไทยค้าง ให้ตั้งคำอังกฤษเองแล้วรันใหม่
 4. **ถอดสี 8 หน้าที่จากงานที่เลือก**
    ```bash
