@@ -1,5 +1,9 @@
 # Changelog — superuser
 
+## 3.17.1 — 2026-11-05
+
+- skill-router: แถวใหม่ส่งคำว่า แบนเนอร์ · ปก webinar · LinkedIn/Facebook cover · display ad ไปที่ `banner-design` (graphic-design 0.19.0) · ทดสอบกับ `routeSkills` 6 ประโยค ภาพปกคลิป YouTube ยังไปที่ `youtube-thumbnail`
+
 ## 3.17.0 — 2026-11-04
 
 - บทเรียนการสร้างและประเมิน skill จากโฟลเดอร์สอน Teaching_CWN2026 กับงานวิจัยที่เปิดอ่านเมื่อ 2026-11-04 (ตัวเลขจากเว็บผ่านโมเดลสรุป ระบุรุ่นกำกับ) ตัวเลขเป็นตัวอย่างจากงานนั้น ไม่ใช่เกณฑ์

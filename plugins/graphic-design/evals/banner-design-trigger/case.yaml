@@ -1,0 +1,28 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: banner-design-trigger
+description: เจ้าของบริษัทขอปกงาน webinar ไม่เอ่ยชื่อ skill ต้องทำให้ banner-design ถูกเปิด และเสนอหลายแนวพร้อมต้นแบบจริง ไม่ใช่แนวเดียวที่คิดเอง (เตรียมไว้ ยังไม่ได้รัน)
+tags: [trigger, banner-design]
+runs: 3
+expected_outcome: เรียก Skill banner-design แล้ววางแผน 3 แนวศิลป์ที่อ้างต้นแบบจริง ทำเป็น HTML ขนาดจริงแล้วเรนเดอร์ PNG และใส่ (รอยืนยัน) ให้วันเวลาที่ไม่รู้
+execution:
+  prompt: |
+    บริษัทจะจัด webinar เรื่องระบบ AI ช่วยงานเอกสาร ช่วยทำภาพปกงานไว้ลง Facebook กับ LinkedIn ให้หน่อย
+    อยากได้แบบดูโปร ไม่เหมือน AI ทำ
+  max_turns: 8
+  timeout_seconds: 300
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?banner-design"'
+    min: 1
+    arm: with-only
+  - name: three-directions-with-refs
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย · ผ่านเมื่อมีครบ 3 เรื่อง:
+      1. เสนอหรือทำแบนเนอร์มากกว่า 1 แนว (ปกติ 3 แนว) ที่ต่างกันจริง
+      2. แต่ละแนวอ้างต้นแบบจริงจากเว็บ (ร้านธีม Pinterest Behance หรือเว็บบริษัท) ไม่ใช่แค่คำคุณศัพท์
+      3. ไม่แต่งวันที่ เวลา หรือช่องทางเอง ใช้ (รอยืนยัน) หรือถามผู้ใช้

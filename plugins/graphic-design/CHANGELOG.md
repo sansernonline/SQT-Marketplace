@@ -1,5 +1,9 @@
 # Changelog — graphic-design
 
+## 0.19.0 — 2026-10-29
+
+- skill ใหม่ `banner-design`: แบนเนอร์ 3 แนวขนาดจริง (ปก webinar · หัวเพจ · hero · แบนเนอร์โฆษณา) · ขั้นตอนและไฟล์อ้างอิงขนาดกับ 22 แนวศิลป์คัดลอกจาก nextlevelbuilder/ui-ux-pro-max-skill commit `28b3b8d` (MIT · ใบอนุญาตใน `references/LICENSE-uipro`) · เพิ่มเอง: หาต้นแบบจากร้านธีมและ Pinterest · ฟอนต์ไทย · สคริปต์ `render_banner.py` (self-test 3/3 · ลองกับแบนเนอร์ทดลองจริงแล้ว) · ขั้นตรวจ `no-ai-look` และผู้ตรวจตัวใหม่ · แถวใน skill-router · eval `banner-design-trigger` (เตรียมไว้ ยังไม่ได้รัน)
+
 ## 0.18.0 — 2026-10-28
 
 - skill ใหม่ `narration-th`: แยกเสียงบรรยายไทยจากสคริปต์ (text-to-speech) ออกจาก `video-editing` ตามที่ผู้ใช้เลือก (เดิมรวมไว้ 2026-10-24) · ย้ายแบบตัดแปะ ไม่เขียนเนื้อใหม่ · สคริปต์ `tts_cues.py` `f5_worker.py` `windows_tts.ps1` และ `references/tts-engine-score.example.json` ย้ายตาม · `video-editing` เหลือตัด ต่อ ความดัง สไลด์เป็นวิดีโอ และชี้มาที่ skill ใหม่

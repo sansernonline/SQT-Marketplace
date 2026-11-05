@@ -1,5 +1,9 @@
 # Changelog — software-company
 
+## 2.36.0 — 2026-11-05
+
+- `design-direction-lookup`: คัดลอกข้อมูล 12 ไฟล์จาก nextlevelbuilder/ui-ux-pro-max-skill commit `28b3b8d` (MIT) ไว้ที่ `data/upstream/uipro/` ไม่แก้ · domain ใหม่ 6 ตัว `style` (88 สไตล์ ข้ามที่ต้นทางเลิกใช้) · `product` (192 ประเภทสินค้า) · `motion` · `slide` · `slide-strategy` · `slide-copy` · คำพ้องไทย สไลด์ · แบนเนอร์ · นักลงทุน · self-test 18/18 · eval holdout 20/20 เท่าเดิม · สีในไฟล์ต้นทางยังไม่ได้ตรวจ contrast
+
 ## 2.35.0 — 2026-11-04
 
 - บทเรียนจากโฟลเดอร์สอน Teaching_CWN2026 (บทสัมภาษณ์ → requirements · แผนทดสอบ · ผู้ตัดสิน) ตัวเลขเป็นตัวอย่างจากงานนั้น ไม่ใช่เกณฑ์ · ต้องใช้ `superuser` 3.17.0 ขึ้นไป
