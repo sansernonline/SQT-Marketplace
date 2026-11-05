@@ -43,7 +43,7 @@ TH = {
     "จองคิว": "booking appointment", "นัดหมาย": "appointment", "ขอทุน": "fundraising pitch", "ระดมทุน": "fundraising",
     "สตาร์ทอัพ": "startup", "สตาร์ทอัป": "startup", "ร้านตัดผม": "barber", "ร้านเสริมสวย": "beauty salon", "ส่งของ": "delivery",
     "ตลาด": "marketplace", "ชุมชน": "community", "องค์กร": "corporate", "โรงงาน": "manufacturing", "เกษตร": "agriculture",
-    "พลังงาน": "energy", "ประชุม": "conference event", "สัมมนา": "seminar event", "งานวิ่ง": "running event", "คอนเสิร์ต": "concert",
+    "พลังงาน": "energy", "ประชุม": "conference event", "สัมมนา": "seminar event", "เว็บบินาร์": "webinar", "แบนเนอร์": "banner", "งานวิ่ง": "running event", "คอนเสิร์ต": "concert",
     "เมนู": "menu", "ป้ายร้าน": "signage", "นามบัตร": "business card", "หน้าปก": "cover", "โบรชัวร์": "brochure", "แคตตาล็อก": "catalog",
 }
 
@@ -287,6 +287,12 @@ def fallback(query, n=8):
     return [r for s, r in scored[:n] if s]
 
 
+def shot_src(shot, out):
+    """ภาพหน้าจออยู่ใต้โฟลเดอร์ของหน้า board ใช้ path สั้น · รูปในเครื่องที่อยู่ที่อื่นใช้ file: แทน"""
+    shot, base = Path(shot).resolve(), Path(out).resolve().parent
+    return shot.relative_to(base).as_posix() if shot.is_relative_to(base) else shot.as_uri()
+
+
 def board(kind, query, refs, out):
     pals, errs = [], []
     for r in refs:
@@ -294,16 +300,17 @@ def board(kind, query, refs, out):
             pals.append(palette_from(r, Path(out).parent / "ref-shots"))
         except Exception as e:  # เว็บกันบอทหรือโหลดไม่ขึ้น บอกแล้วทำต่อ
             errs.append(f"{r}: {e}")
-    sw = "".join(f'<div class="p"><a href="{html.escape(p["source"])}">{html.escape(p["source"][:60])}</a>'
+    sw = "".join(f'<div class="p"><a href="{html.escape(p["source"])}"><b>{i}.</b> {html.escape(p["source"][:60])}</a>'
+                 f'<img src="{html.escape(shot_src(p["shot"], out))}" alt="">'
                  + "".join(f'<span><i style="background:{c}"></i>{ROLE_TH[k]}<br>{c}</span>' for k, c in p["roles"].items())
                  + f'<small>ตัวหนังสือ {p["text_contrast"]}:1 · ตัวหนังสือรอง {p["muted_contrast"]}:1 · สีหลัก {p["primary_contrast"]}:1 (เทียบพื้น)</small></div>'
-                 for p in pals)
+                 for i, p in enumerate(pals, 1))
     ln = "".join(f'<li><a href="{html.escape(l["url"])}" target="_blank">{html.escape(l["site"])}</a> · {html.escape(l["good_for"])} · <em>{html.escape(l["use"])}</em></li>'
                  for l in links(kind, query))
     er = "".join(f"<li>{html.escape(e)}</li>" for e in errs)
     page = f"""<!doctype html><meta charset="utf-8"><title>ต้นแบบ · {html.escape(query)}</title><style>
 body{{font:14px system-ui,sans-serif;margin:24px;max-width:1000px;background:#f6f5f2;color:#1b1a22}}
-div.p{{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 22px}}div.p a,div.p small{{flex-basis:100%}}div.p small{{opacity:.7}}
+div.p{{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 22px}}div.p a,div.p small,div.p img{{flex-basis:100%}}div.p img{{max-height:440px;object-fit:cover;object-position:top;border-radius:8px;box-shadow:0 1px 4px #0002}}div.p small{{opacity:.7}}
 div.p span{{width:96px;font-size:11px;opacity:.85}}div.p i{{display:block;height:44px;border-radius:6px;box-shadow:inset 0 0 0 1px #0001}}</style>
 <h1>ต้นแบบ {html.escape(kind)}: {html.escape(query)}</h1><p>คำค้น: {html.escape(keywords(query))} · ไม่มีอะไรบันทึกถาวร หน้าเว็บเปิดจากต้นทาง</p>
 <h2>สีที่ถอดจากงานที่เลือก ({len(pals)})</h2>{sw or '<p>ยังไม่ได้ใส่ --ref ให้เปิดลิงก์ด้านล่าง เลือกงาน แล้วรันใหม่พร้อม --ref</p>'}{f'<ul>{er}</ul>' if er else ''}
