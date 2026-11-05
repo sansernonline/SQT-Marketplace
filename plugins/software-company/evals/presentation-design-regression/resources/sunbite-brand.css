@@ -1,0 +1,12 @@
+/* ร้านอาหาร SunBite · ชุดสีแบรนด์ (พื้นสว่าง สีสด) */
+:root {
+  --brand-primary: #FFB300;   /* เหลืองมะนาว */
+  --brand-accent: #E8344E;    /* แดงพริก */
+  --bg: #FFF8E7;
+  --text: #2B2B2B;
+}
+body { background: var(--bg); color: var(--text); }
+h1 { color: var(--brand-accent); }
+.button { background: var(--brand-primary); color: #2B2B2B; }
+
+/* เนื้อหางาน: ยอดขายเมนูใหม่ไตรมาส 3 เพิ่ม 38% · ลูกค้าครอบครัววันหยุดเพิ่ม 2 เท่า · ขอสาขาที่ 3 */

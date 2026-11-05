@@ -1,0 +1,45 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: presentation-design-behaviour
+description: งานต้นทางเป็นไฟล์ html ที่มีสีส้มกับเขียวชัด พื้นขาว ต้องถอดสีด้วย source_palette.py แล้ว build ธีมสว่างด้วยสีจากไฟล์ ไม่ใช้สีประจำบ้าน และบอกอารมณ์ที่เลือกพร้อมเหตุผล
+tags: [behaviour, presentation-design]
+runs: 3
+expected_outcome: รัน source_palette.py กับ fitgo-brand.html · build_deck ด้วย --theme bright และ --brand ที่มี F26B1D · ไม่มี 2A78D6 · บอกอารมณ์พลังสูงพร้อมเหตุผลจากเนื้องาน
+execution:
+  prompt: |
+    ไฟล์ resources/fitgo-brand.html คือรายงานสรุปปีของฟิตเนส FitGo ช่วยทำเป็นเด็ค HTML ไฟล์เดียวให้ผมไปพรีเซนต์ขอเงินลงทุนจากหุ้นส่วน
+    ทำตามที่ skill ในชุดนี้กำหนด แล้วบอกว่าสีกับอารมณ์ของเด็คมาจากไหน ไม่ต้องถามกลับ
+  max_turns: 25
+  timeout_seconds: 900
+  allowed_tools: [Read, Write, Edit, Glob, Grep, Skill, Bash]
+context:
+  add_dirs: [resources]
+graders:
+  - name: palette-script-run
+    type: regex
+    pattern: "source_palette\\.py[^\\n]*fitgo-brand"
+    match: contains
+    target: trace
+  # trace รวมเนื้อ skill ที่ agent อ่านด้วย และในนั้นมีคำว่า --theme bright กับ 2A78D6 · จึงจับเฉพาะคำสั่ง build จริงที่มีไฟล์ .html ตามหลัง
+  - name: bright-theme
+    type: regex
+    pattern: "build_deck\\.py['\"]?\\s+\\S+\\.html(?:[^\\n<]|\\\\\\r?\\n)*--theme\\s+bright"
+    match: contains
+    target: trace
+  - name: brand-from-file
+    type: regex
+    pattern: "--brand[ =]+['\"]?F26B1D"
+    flags: i
+    match: contains
+    target: trace
+  - name: no-house-blue
+    type: regex
+    pattern: "build_deck\\.py['\"]?\\s+\\S+\\.html(?:[^\\n<]|\\\\\\r?\\n)*--brand[ =]+['\"]?2A78D6"
+    flags: i
+    match: not_contains
+    target: trace
+  - name: mood-explained
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน ผ่านเมื่อคำตอบบอกอารมณ์หรือบุคลิกของเด็ค (เช่น พลังสูง ฟิตเนส กระตุ้น อย่างใดอย่างหนึ่งก็พอ) และให้เหตุผลที่โยงกับเนื้องานหรือคนฟัง (เช่น เป็นงานฟิตเนส ขอเงินลงทุน ต้นทางใช้สีส้มเขียวพื้นขาว อย่างใดอย่างหนึ่งก็พอ)
