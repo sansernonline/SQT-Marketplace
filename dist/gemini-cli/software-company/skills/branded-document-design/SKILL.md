@@ -118,7 +118,7 @@ description: Use when a Word, PowerPoint or PDF deliverable (proposal, report, c
 
 โค้ดตัวอย่างครบ (Word · สไลด์ · เด็ค Stage) → [`references/brandkit-usage.md`](references/brandkit-usage.md) · เมธอดทั้งหมด → `references/api.md` · สคริปต์ที่รันได้ `scripts/example_srs.py` · `scripts/example_deck.py`
 
-**เด็ค Stage** (ค่าเริ่มต้นของเด็คที่ใช้พูด): สี `accent`/`bg` หาตาม `diagram-figures` ข้อ 5 · ไม่มีเลยใช้ `#2A78D6` พื้น `09090A` + `(รอยืนยัน)` · รายละเอียด → `references/brandkit-usage.md`
+**เด็ค Stage** (ค่าเริ่มต้นของเด็คที่ใช้พูด): สี `accent`/`bg` ถอดจากงานต้นทางตาม `presentation-design` `references/deck-theme.md` (`source_palette.py` พิมพ์บรรทัด `StageDeck(...)` ให้) · ต้นทางไม่มีสี ให้หาตาม `diagram-figures` ข้อ 5 · พื้นสว่าง `FFFFFF` คู่ `block=True` (ปกและหน้าคั่นบทเป็นสีหลักทึบ) เป็นค่าเริ่มต้น ใช้พื้นเข้มเมื่องานต้นทางเข้ม · ไม่มีสีเลยใช้ `#2A78D6` พื้น `FFFFFF` + `(รอยืนยัน)` · รายละเอียด → `references/brandkit-usage.md`
 
 ---
 

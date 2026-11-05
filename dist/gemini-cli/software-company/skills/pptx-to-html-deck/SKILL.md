@@ -32,7 +32,7 @@ description: Use when a .pptx should play as one animated HTML file, or both .pp
 
 ## 1 · ขั้นตอน
 
-1. **ทำ .pptx ให้เสร็จก่อน** — ยังไม่มีหน้าตา → **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `slide` แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้ · ไม่มี .pptx → สร้างด้วย `branded-document-design` (`StageDeck`) · หัวสไลด์อยู่ใน placeholder ชื่อเรื่อง (กลายเป็นชื่อในสารบัญ) · โน้ตผู้พูดใส่ใน notes · แบ่งส่วนด้วย Section ของ PowerPoint (กลายเป็นกลุ่มในสารบัญ)
+1. **ทำ .pptx ให้เสร็จก่อน** — สีและอารมณ์มาจากงานต้นทางตาม `presentation-design` [`references/deck-theme.md`](../presentation-design/references/deck-theme.md) (ถอดสีด้วย `presentation-design/scripts/source_palette.py` · พื้นสว่างเป็นค่าเริ่มต้น · หน้าเปลี่ยนส่วนเป็นสีหลักเต็มแผ่น ซึ่ง `StageDeck(..., block=True)` ทำให้) · งานต้นทางไม่มีสีและยังไม่มีหน้าตา → **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `slide` แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้ · ไม่มี .pptx → สร้างด้วย `branded-document-design` (`StageDeck`) · หัวสไลด์อยู่ใน placeholder ชื่อเรื่อง (กลายเป็นชื่อในสารบัญ) · โน้ตผู้พูดใส่ใน notes · แบ่งส่วนด้วย Section ของ PowerPoint (กลายเป็นกลุ่มในสารบัญ)
 2. **ขั้นที่อยากเปิดทีละคลิก** — ใน PowerPoint ใส่ animation แบบ On Click · สร้างด้วย python ใช้ `scripts/click_steps.py`:
    ```python
    from click_steps import add_click_steps

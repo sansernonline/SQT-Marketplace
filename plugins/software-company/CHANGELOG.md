@@ -1,8 +1,17 @@
 # Changelog — software-company
 
-## 2.37.0 — 2026-11-05
+## 2.38.0 — 2026-11-05
 
 - skill ใหม่ `design-system`: token 3 ชั้น · สเปกคอมโพเนนต์ · ตัวสร้าง CSS และตัวตรวจค่าดิบ ลอกจาก ui-ux-pro-max-skill `design-system` (MIT · commit `b7d5353`) · ไม่ลอกส่วนสไลด์ (ซ้ำกับ `design-direction-lookup` และ `presentation-design`) และตัวดึงภาพจากเน็ต · eval 3 เคส
+
+## 2.37.0 — 2026-11-05
+
+- skill สไลด์ทุกตัว (`presentation-design` · `html-slide-deck` · `pptx-to-html-deck` · เด็ค Stage ใน `branded-document-design`) ทำเด็คให้สดใส และสีกับอารมณ์มาจากงานต้นทางที่นำมาทำเด็ค (ผู้ใช้ขอ 2026-11-03): ไฟล์กลางใหม่ `presentation-design/references/deck-theme.md` (ลำดับหาสี · ตารางอารมณ์ตามเนื้องาน 8 แบบ · "สดใส" แปลงเป็นกฎที่ตรวจได้ 6 ข้อ · ตรวจก่อนส่ง)
+- สคริปต์ใหม่ `presentation-design/scripts/source_palette.py`: ถอดสีหลัก สีรองไม่เกิน 2 สี และพื้นเข้มหรือสว่างจาก .pptx .docx .xlsx .html .css .svg รูป และ .pdf · ไม่นับเทา ธีมตั้งต้นของ Office สไตล์ Word ที่ไม่ได้ใช้ และสีสถานะที่โผล่ไม่ถึง 3 ครั้ง · รวมเฉดเดียวกันที่มาจากเงาและไล่สี · พิมพ์ค่าที่ใส่ใน `build_deck.py` `StageDeck` `pptx_to_html.py` ให้ · `--self-test` 14 ข้อ
+- `html-slide-deck`: `build_deck.py --theme bright` พื้นขาว ปก หน้าเปิดส่วน หน้าปิดเป็นสีหลักทึบเต็มแผ่น ปรับสีเน้นและตัวอักษรบนพื้นทึบให้อ่านได้ 4.5:1 เอง (`assets/theme-bright.css`) · `--brand` รับสีรองเป็นสีที่ 3 และ `data-tone="2"` ใช้สีรองทั้งแผ่น · ไม่ใส่ `--theme` หน้าตาเหมือนเดิมทุกไบต์ เด็คเก่าจึงไม่เปลี่ยน · `--self-test` 13 ข้อ
+- `branded-document-design`: `StageDeck(..., block=True)` ทำปกและหน้าคั่นบทของ .pptx เป็นสีหลักทึบเต็มแผ่น ตัวอักษรบนนั้นได้ ≥ 4.5:1 · skill บอกให้ใช้ `bg="FFFFFF", block=True` เมื่องานต้นทางพื้นสว่างหรือไม่มีสีเลย (เดิมแนะนำพื้นเข้ม) · ค่าตั้งต้นในโค้ด `StageDeck(bg="09090A", block=False)` ไม่เปลี่ยน เด็คเก่าจึงเหมือนเดิม · self-test เพิ่มเคสพื้นทึบ
+- eval ใหม่ของ `presentation-design` 3 เคส (trigger · behaviour · regression) ยังไม่ได้รันผ่าน `claude plugin eval` (เสียเงิน)
+- รอบแดงและเขียวที่รันจริงด้วย subagent ตัวใหม่ 2026-11-03 โจทย์ร้าน SunBite (โจทย์เดียวกับเคส regression): ฉบับเดิมได้พื้นครีมทุกแผ่น ไม่มีหน้าสีทึบ ทิ้งสีหลักเหลืองเพราะกฎ "สีแบรนด์มีสีเดียว" · ฉบับใหม่ได้ `--theme bright` สีครบจากไฟล์ ปกเหลืองทึบ หน้าเปิดส่วนแดงทึบ
 
 ## 2.35.0 — 2026-11-04
 
