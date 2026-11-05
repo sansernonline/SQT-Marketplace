@@ -1,5 +1,9 @@
 # Changelog — software-company
 
+## 2.37.0 — 2026-11-05
+
+- skill ใหม่ `design-system`: token 3 ชั้น · สเปกคอมโพเนนต์ · ตัวสร้าง CSS และตัวตรวจค่าดิบ ลอกจาก ui-ux-pro-max-skill `design-system` (MIT · commit `b7d5353`) · ไม่ลอกส่วนสไลด์ (ซ้ำกับ `design-direction-lookup` และ `presentation-design`) และตัวดึงภาพจากเน็ต · eval 3 เคส
+
 ## 2.35.0 — 2026-11-04
 
 - บทเรียนจากโฟลเดอร์สอน Teaching_CWN2026 (บทสัมภาษณ์ → requirements · แผนทดสอบ · ผู้ตัดสิน) ตัวเลขเป็นตัวอย่างจากงานนั้น ไม่ใช่เกณฑ์ · ต้องใช้ `superuser` 3.17.0 ขึ้นไป
