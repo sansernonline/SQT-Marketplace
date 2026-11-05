@@ -27,6 +27,8 @@ Stage คือโครงหน้าและตัวอักษร ไม�
 
 from __future__ import annotations
 
+from contextlib import contextmanager
+
 from pptx import Presentation
 from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_CONNECTOR, MSO_SHAPE
@@ -141,10 +143,12 @@ def _set_fonts(run, face):
 
 class StageDeck:
     def __init__(self, accent="2A78D6", bg="09090A", project="", template=None,
-                 head_font=HEAD_FONT, body_font=BODY_FONT, **colors):
+                 head_font=HEAD_FONT, body_font=BODY_FONT, block=False, **colors):
         """accent / bg = สีหลักกับสีพื้นจากดีไซน์ของโปรเจกต์ · head_font / body_font ใช้ของโปรเจกต์ได้
+        block=True = ปกและหน้าคั่นบทเป็นพื้นสีหลักทึบเต็มแผ่น (เด็คสดใส · presentation-design references/deck-theme.md)
         colors = สีที่โปรเจกต์กำหนดไว้แล้ว เช่น text="1B2430" ทับค่าที่คำนวณ"""
         self.t = make_theme(accent, bg, **colors)
+        self.block = block
         self.project = project
         self.head_font, self.body_font = head_font, body_font
         self.prs = Presentation(template) if template else Presentation()
@@ -240,8 +244,31 @@ class StageDeck:
                    head=True, align=PP_ALIGN.RIGHT)
         return s, top
 
+    @contextmanager
+    def _on_accent(self):
+        """block=True: ปกและหน้าคั่นบทเป็นพื้นสีหลักทึบ · ตัวอักษรทุกชิ้นบนหน้านั้นใช้สีเดียวที่อ่านได้บนสีหลัก"""
+        if not self.block:
+            yield
+            return
+        saved, a = self.t, self.t["accent"]
+        on = next((c for c in ("FFFFFF", "1D1F24", "000000") if contrast(c, a) >= 4.5),
+                  max(("FFFFFF", "000000"), key=lambda c: contrast(c, a)))  # ชุดเดียวกับ build_deck.py on_colour()
+        self.t = dict(saved, bg=a, dark=is_dark(a), text=on, accent_hi=on, muted=on, faint=on, accent=on)
+        try:
+            yield
+        finally:
+            self.t = saved
+
     # -- ประเภทสไลด์ ----------------------------------------------------------
-    def cover(self, title, lines=(), meta=None, logo=None, mark=None):
+    def cover(self, *args, **kwargs):
+        with self._on_accent():
+            return self._cover(*args, **kwargs)
+
+    def section(self, *args, **kwargs):
+        with self._on_accent():
+            return self._section(*args, **kwargs)
+
+    def _cover(self, title, lines=(), meta=None, logo=None, mark=None):
         """ปก — lines[0] สีขาว · lines[1] สีหลัก (ประโยคที่อยากให้จำ)
         logo = โลโก้แนวนอนมุมซ้ายบน · mark = สัญลักษณ์แบรนด์ ใหญ่ จางทางขวา
         ไม่มี mark → วงแหวนเรขาคณิตจาง ๆ แทน"""
@@ -269,7 +296,7 @@ class StageDeck:
             self._text(s, M, Cm(14.86), Cm(25.4), Cm(2.03), meta, 14, "muted", spacing=1.5)
         return s
 
-    def section(self, number, title, note=None):
+    def _section(self, number, title, note=None):
         """คั่นบท — เลขใหญ่สีหลัก + ชื่อบท"""
         s = self._slide()
         self._text(s, M, Cm(5.2), Cm(8), Cm(3.4), f"{number:02d}" if isinstance(number, int)
@@ -456,6 +483,20 @@ def self_test():
         assert "ชื่อโปรเจกต์" in first and "บรรทัด 2" in first, first
         assert any(s.shape_type == 13 for s in back.slides[2].shapes), "ไม่มีรูปบนสไลด์ผัง"
         assert "เทียบ" in " ".join(s.text_frame.text for s in back.slides[3].shapes if s.has_text_frame)
+        bright = StageDeck(accent="E4572E", bg="FFFFFF", block=True)
+        bright.cover("ปก", ["บรรทัด"])
+        bright.section(1, "ส่วน")
+        bright.statement("หมวด", "เนื้อหา")
+        fill = lambda s: str(s.background.fill.fore_color.rgb)
+        assert [fill(s) for s in bright.prs.slides] == ["E4572E", "E4572E", "FFFFFF"], "block: ปกและคั่นบทต้องเป็นสีหลักทึบ"
+        assert bright.t["bg"] == "FFFFFF", "block: ธีมต้องคืนค่าหลังทำปก"
+        title = next(s for s in bright.prs.slides[0].shapes if s.has_text_frame and s.text_frame.text == "ปก")
+        ink = str(title.text_frame.paragraphs[0].runs[0].font.color.rgb)
+        assert contrast(ink, "E4572E") >= 4.5, ("block: ตัวอักษรบนสีหลักต้องได้ 4.5:1", ink)
+        for a in ("0E8F86", "E8344E", "2A78D6", "D9534F", "FFD166", "7B2CBF"):
+            deck = StageDeck(accent=a, bg="FFFFFF", block=True)
+            with deck._on_accent():
+                assert contrast(deck.t["text"], a) >= 4.5, ("block: ตัวอักษรบนสีหลักต้องได้ 4.5:1", a, deck.t["text"])
     print("self-test ok")
 
 

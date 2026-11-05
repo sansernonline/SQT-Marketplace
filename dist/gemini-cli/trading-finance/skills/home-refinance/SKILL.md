@@ -27,9 +27,9 @@ General information, not financial advice; every fee and rate is confirmed with 
 | MOR (Minimum Overdraft Rate) | Overdrafts to prime large companies |
 | BOT policy rate | Bank of Thailand rate; banks move MRR with it but set their own levels |
 
-Each bank sets its own MRR. Examples: Bangkok Bank 6.50% (from 26 Feb 2569), KBank 6.58% and ttb 7.105% (from 2 Mar 2569, rechecked on ttbbank.com 2026-10-26). BOT policy rate 1.00% since 25 Feb 2569 (held at 1.00% on 26 Aug 2569 per Naewna and Kaohoon news; BOT meeting page lists the next meeting on 28 Oct 2569 and then 23 Dec 2569), so read the bank's current rate table on the day.
+Each bank sets its own MRR. Examples: Bangkok Bank 6.50% (from 26 Feb 2569), KBank 6.58% and ttb 7.105% (from 2 Mar 2569, rechecked on ttbbank.com 2026-10-26). BOT policy rate 1.00% since 25 Feb 2569 (held at 1.00% again on 28 Oct 2569, unanimous 6–0, per ThaiPublica, PPTV and Thansettakij news checked 2026-11-01; next meeting 23 Dec 2569), so read the bank's current rate table on the day.
 
-ตรวจล่าสุด 2026-10-26 · แหล่ง: https://www.bangkokbank.com (ตารางอัตราดอกเบี้ยเงินให้สินเชื่อ 26 ก.พ. 2569) , https://www.kasikornbank.com/th/rate/LendingPDF/lending-02032026-th.pdf , https://www.ttbbank.com/th/rates/loan-interest-rates , https://www.infoquest.co.th/2026/572846 · ดอกเบี้ยนโยบาย https://www.bot.or.th/th/our-roles/monetary-policy/mpc-meeting.html , https://www.thaipbs.or.th/news/content/509928 · MRR ของแต่ละธนาคารมาจากตารางของธนาคารเองแหล่งเดียวต่อธนาคาร (เป็นแหล่งทางการ)
+ตรวจล่าสุด 2026-11-01 (ดอกเบี้ยนโยบาย · MRR ธนาคารยังเป็นค่าที่ตรวจ 2026-10-26) · แหล่ง: https://thaipublica.org/2026/10/mpc-28-10-2026/ , https://www.pptvhd36.com/wealth/monetary/286033 , https://www.thansettakij.com/economy/672432 , https://www.bangkokbank.com (ตารางอัตราดอกเบี้ยเงินให้สินเชื่อ 26 ก.พ. 2569) , https://www.kasikornbank.com/th/rate/LendingPDF/lending-02032026-th.pdf , https://www.ttbbank.com/th/rates/loan-interest-rates , https://www.infoquest.co.th/2026/572846 · ดอกเบี้ยนโยบาย https://www.bot.or.th/th/our-roles/monetary-policy/mpc-meeting.html , https://www.thaipbs.or.th/news/content/509928 · MRR ของแต่ละธนาคารมาจากตารางของธนาคารเองแหล่งเดียวต่อธนาคาร (เป็นแหล่งทางการ)
 
 ## 2 · The two paths
 

@@ -40,3 +40,12 @@ font,f0nt,ฟอนต์ไทย,https://www.f0nt.com/?s={q},ตรวจใ�
 font,Fonts In Use,ฟอนต์ที่งานจริงใช้ แยกตามหมวด,https://fontsinuse.com/search?terms={q},ดูเป็นต้นแบบ
 motion,Dribbble · animation,การเคลื่อนไหวในหน้าจอ,https://dribbble.com/search/{q}%20animation,ดูเป็นต้นแบบ
 motion,LottieFiles,แอนิเมชันพร้อมใช้,https://lottiefiles.com/search?q={q},ตรวจใบอนุญาตก่อนใช้
+poster,Behance · poster,โปสเตอร์ งานพิมพ์ ตัวอักษรเด่น,https://www.behance.net/search/projects?search={q}%20poster,ดูเป็นต้นแบบ
+poster,Dribbble · poster,โปสเตอร์และภาพประกอบ,https://dribbble.com/search/{q}%20poster,ดูเป็นต้นแบบ
+poster,Pinterest · poster,โปสเตอร์จากหลายแหล่ง,https://www.pinterest.com/search/pins/?q={q}%20poster,ดูเป็นต้นแบบ
+product,The Dieline,บรรจุภัณฑ์และสินค้าจริงที่วางขายแล้ว,https://thedieline.com/search?q={q},ดูเป็นต้นแบบ
+product,Behance · packaging,บรรจุภัณฑ์และภาพสินค้า,https://www.behance.net/search/projects?search={q}%20packaging,ดูเป็นต้นแบบ
+product,Dribbble · packaging,บรรจุภัณฑ์และฉลาก,https://dribbble.com/search/{q}%20packaging,ดูเป็นต้นแบบ
+banner,Behance · banner,แบนเนอร์โฆษณาและเว็บ,https://www.behance.net/search/projects?search={q}%20banner,ดูเป็นต้นแบบ
+banner,Dribbble · banner,แบนเนอร์และหัวเว็บ,https://dribbble.com/search/{q}%20banner,ดูเป็นต้นแบบ
+banner,Pinterest · banner,แบนเนอร์จากหลายแหล่ง,https://www.pinterest.com/search/pins/?q={q}%20banner,ดูเป็นต้นแบบ

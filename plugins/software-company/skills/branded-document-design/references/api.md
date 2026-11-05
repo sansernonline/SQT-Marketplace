@@ -110,8 +110,9 @@ BrandDeck(template=None)      # 16:9 (13.333 × 7.5 นิ้ว)
 
 ```python
 StageDeck(accent="2A78D6", bg="09090A", project="", template=None,
-          head_font="Chakra Petch", body_font="IBM Plex Sans Thai", **colors)
+          head_font="Chakra Petch", body_font="IBM Plex Sans Thai", block=False, **colors)
 # accent / bg = สีหลักกับสีพื้นจากดีไซน์ของโปรเจกต์ · colors = สีที่โปรเจกต์กำหนดไว้แล้ว เช่น text="1B2430"
+# block=True = cover() และ section() เป็นพื้นสีหลักทึบเต็มแผ่น ตัวอักษรบนนั้นได้ ≥ 4.5:1 (ขาว เกือบดำ หรือดำ)
 ```
 
 ทุกแผ่นยกเว้นปกและคั่นบทมี: สี่เหลี่ยมสีหลัก + ชื่อหมวด (`kicker`) · หัวสไลด์ 28 pt · เส้นท้ายกระดาษ · `PROJECT · หมวด` · เลขหน้า 2 หลัก

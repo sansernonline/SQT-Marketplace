@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: presentation-design-trigger
+description: ผู้ใช้ส่งสรุปรายงานงานฟิตเนส ขอทำเป็นสไลด์นำเสนอ ไม่เอ่ยชื่อ skill ต้องทำให้ presentation-design ถูกเปิด
+tags: [trigger, presentation-design]
+runs: 5
+expected_outcome: เปิด Skill presentation-design แล้วตอบด้วยโครงเด็คที่มีหัวข้อบอกข้อสรุป และบอกว่าสีกับอารมณ์เอามาจากงานต้นทาง
+execution:
+  prompt: |
+    ผมมีรายงานสรุปปีของฟิตเนส FitGo (ไฟล์ Word) ใจความคือ สมาชิกเพิ่มจาก 1,200 เป็น 1,860 คน อัตราต่อสัญญา 72% ขึ้นจาก 58% คลาสเย็นเต็มทุกรอบ
+    ปีหน้าจะขอเงินลงทุนจากหุ้นส่วน 3 ล้านบาทเพื่อเปิดสาขา 2 ช่วยทำเป็นสไลด์ให้ผมไปพรีเซนต์ทีหน่อย ขอโครงแผ่นต่อแผ่นกับสีที่จะใช้ ไม่ต้องถามกลับ
+  max_turns: 8
+  timeout_seconds: 300
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?presentation-design"'
+    min: 1
+    arm: with-only
+  - name: deck-outline-given
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน ผ่านเมื่อคำตอบมีโครงสไลด์เป็นลำดับแผ่น (อย่างน้อย 5 แผ่น) และตัวเลขสมาชิกหรือเงินลงทุนจากโจทย์ปรากฏในโครง

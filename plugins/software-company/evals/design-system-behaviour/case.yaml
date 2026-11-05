@@ -1,0 +1,24 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23) · ยังไม่ได้รันจริง (เสียเงิน)
+schema_version: "1.1"
+name: design-system-behaviour
+description: ออกแบบ token สามชั้น ค่าชั้น component อ้างชั้น semantic
+tags: [behaviour, design-system]
+runs: 3
+expected_outcome: ได้ 3 ชั้น · ปุ่มอ้าง semantic ไม่ใช้ hex ตรง
+execution:
+  prompt: |
+    ออกแบบ token ของปุ่มหลักและปุ่มรองให้แอปจองคิวคลินิก สีแบรนด์เขียวเข้ม ตอบในแชต ไม่ต้องถามกลับ
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: var-ref
+    type: regex
+    pattern: "var\\(--"
+    flags: i
+    match: contains
+    target: last_message
+  - name: layered
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ให้ผ่านเมื่อมี token 3 ชั้น และค่าของปุ่มอ้าง token ชั้น semantic ไม่ใส่รหัสสีตรงในชั้น component
