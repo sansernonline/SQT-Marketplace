@@ -2,7 +2,7 @@
   "_about": "ข้อเท็จจริงที่หมดอายุตามปฏิทิน · validate-marketplace.mjs เตือนเมื่อเลยวันหรือเหลือไม่ถึง 30 วัน และล้มเมื่อไฟล์ที่อ้างไม่มี · ถึงวันแล้วให้ตรวจแหล่งทางการใหม่ แก้ไฟล์ แล้วลบหรือเลื่อนแถว · date ใช้ ค.ศ. · quote = ข้อความที่ต้องพบในไฟล์ (กันแถวที่อ้างเกินกว่าที่ไฟล์เขียน)",
   "facts": [
     {"date": "2026-12-31", "file": "plugins/personal-life/skills/household-bills/SKILL.md", "what": "ค่า Ft 16.23 สตางค์/หน่วย หมดงวด ก.ย.–ธ.ค. 2569 · ตรวจ Ft งวดใหม่ แก้ SKILL.md และ scripts/rates.json", "quote": "16.23 สตางค์/หน่วย"},
-    {"date": "2026-10-29", "file": "plugins/trading-finance/skills/home-refinance/SKILL.md", "what": "ประชุม กนง. 28 ต.ค. (ครั้งถัดไป 23 ธ.ค.) · ดอกเบี้ยนโยบาย 1.00% และ MRR ของธนาคารที่ยกตัวอย่างอาจเปลี่ยน", "quote": "1.00% since 25 Feb 2569"},
+    {"date": "2026-12-24", "file": "plugins/trading-finance/skills/home-refinance/SKILL.md", "what": "ประชุม กนง. 23 ธ.ค. 2569 (28 ต.ค. คงไว้ 1.00%) · ดอกเบี้ยนโยบายและ MRR ของธนาคารที่ยกตัวอย่างอาจเปลี่ยน", "quote": "1.00% since 25 Feb 2569"},
     {"date": "2026-12-15", "file": "plugins/trading-finance/skills/bonds-and-deposits/SKILL.md", "what": "พันธบัตรออมพลัส ปีงบ 2570 รอบ 1 ปิดขาย (ตัวอย่างอัตรา 1.80/2.80%)", "quote": "ออมพลัส fiscal year 2570 round 1"},
     {"date": "2026-11-16", "file": "plugins/trading-finance/skills/position-sizing/SKILL.md", "what": "SET เปลี่ยนช่วงราคา (tick) ของหุ้น 5–50 บาท · ลบตาราง tick เดิมหลังวันนี้", "quote": "16 Nov 2569"},
     {"date": "2026-11-16", "file": "plugins/trading-finance/skills/position-sizing/scripts/ticks.json", "what": "SET เปลี่ยน tick 5–50 บาท · ลบตาราง before ใน ticks.json หลังวันนี้ (คู่กับแถวบน)", "quote": "\"effective\": \"2026-11-16\""},
