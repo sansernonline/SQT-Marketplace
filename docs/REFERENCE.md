@@ -197,7 +197,7 @@
 
 ---
 
-## 🛠️ Skills (103)
+## 🛠️ Skills (104)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst, product-manager
@@ -902,6 +902,11 @@
 ### 103. load-testing
 **ใช้กับ:** devops-engineer, qa-tester
 **Description:** Use when checking how a system holds many users at once (load, stress, spike, soak test, k6, ยิงโหลด, รับได้กี่คน). Page speed → web-quality-audit.
+
+---
+
+### 104. design-system
+**Description:** Use when authoring design tokens (primitive, semantic, component), CSS variables, state tables or a Tailwind theme. Reading existing code → ui-craft
 
 ---
 

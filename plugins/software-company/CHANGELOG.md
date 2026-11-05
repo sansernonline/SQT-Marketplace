@@ -1,5 +1,9 @@
 # Changelog — software-company
 
+## 2.38.0 — 2026-11-05
+
+- skill ใหม่ `design-system`: token 3 ชั้น · สเปกคอมโพเนนต์ · ตัวสร้าง CSS และตัวตรวจค่าดิบ ลอกจาก ui-ux-pro-max-skill `design-system` (MIT · commit `b7d5353`) · ไม่ลอกส่วนสไลด์ (ซ้ำกับ `design-direction-lookup` และ `presentation-design`) และตัวดึงภาพจากเน็ต · eval 3 เคส
+
 ## 2.37.0 — 2026-11-05
 
 - skill สไลด์ทุกตัว (`presentation-design` · `html-slide-deck` · `pptx-to-html-deck` · เด็ค Stage ใน `branded-document-design`) ทำเด็คให้สดใส และสีกับอารมณ์มาจากงานต้นทางที่นำมาทำเด็ค (ผู้ใช้ขอ 2026-11-03): ไฟล์กลางใหม่ `presentation-design/references/deck-theme.md` (ลำดับหาสี · ตารางอารมณ์ตามเนื้องาน 8 แบบ · "สดใส" แปลงเป็นกฎที่ตรวจได้ 6 ข้อ · ตรวจก่อนส่ง)
