@@ -1,0 +1,32 @@
+# ตรวจด้วย `render blueprints validate` · อ้าง https://render.com/docs/blueprint-spec ดู 2026-11-05
+# ฟรีใช้กับงานจริงไม่ได้: Postgres ฟรีหมดอายุ 30 วัน แล้วถูกลบหลังผ่อนผัน 14 วัน
+# เขียน plan ทุกครั้ง เพราะถ้าไม่เขียน Render จะใช้แผนที่คิดเงิน
+# ค่าลับห้ามอยู่ในไฟล์นี้ ใช้ generateValue หรือ sync: false แล้วกรอกในหน้า Dashboard
+services:
+  - type: web
+    name: my-app
+    runtime: node
+    plan: free
+    region: singapore # ชื่อ region ยังไม่ได้ตรวจ
+    buildCommand: npm ci && npm run build
+    # preDeployCommand ใช้ได้เฉพาะแผนเสียเงิน (หน้า deploys · 2026-11-05) · ย้ายแผนแล้วค่อยเปิดบรรทัดนี้
+    # preDeployCommand: npm run migrate
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeployTrigger: checksPass
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: my-app-db
+          property: connectionString
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: PAYMENT_API_KEY
+        sync: false
+
+databases:
+  - name: my-app-db
+    plan: free
+    region: singapore # ต้องเท่ากับ web ไม่เช่นนั้นได้ oregon และใช้ internal URL ไม่ได้

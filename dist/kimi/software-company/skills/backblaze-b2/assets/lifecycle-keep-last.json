@@ -1,0 +1,7 @@
+[
+  {
+    "fileNamePrefix": "uploads/",
+    "daysFromUploadingToHiding": null,
+    "daysFromHidingToDeleting": 1
+  }
+]

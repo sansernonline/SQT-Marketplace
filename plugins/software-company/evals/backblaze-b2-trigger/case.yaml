@@ -1,0 +1,28 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# runs 5: เคสนี้ใช้ตัดสินการแก้ description ของ skill · n=3 กว้างเกินไป (ยังไม่ได้วัดช่วงจริง)
+schema_version: "1.1"
+name: backblaze-b2-trigger
+description: ผู้ใช้มีระบบเก็บเอกสารสแกนของลูกค้า ดิสก์เซิร์ฟเวอร์ใกล้เต็ม อยากย้ายไป Backblaze B2 ให้เว็บอัปโหลดตรงจากเบราว์เซอร์ ไม่เอ่ยชื่อ skill ต้องทำให้ backblaze-b2 ถูกเปิด และแผนอ้างถึง presigned URL, application key หรือ backblazeb2.com
+tags: [trigger, backblaze-b2]
+runs: 5
+expected_outcome: เปิด Skill backblaze-b2 แล้ววางแผนย้ายโดยพูดถึง presigned URL, application key หรือ endpoint backblazeb2.com
+execution:
+  prompt: |
+    เรามีระบบเก็บเอกสารสแกนของลูกค้า ตอนนี้เก็บบนดิสก์เซิร์ฟเวอร์ ซึ่งใกล้เต็มแล้ว
+    อยากย้ายไปเก็บที่ Backblaze B2 และให้เว็บอัปโหลดตรงจากเบราว์เซอร์
+    ช่วยวางแผนหน่อยว่าต้องตั้งอะไรบ้าง ยังไม่ต้องเขียนไฟล์
+  max_turns: 6
+  timeout_seconds: 240
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?backblaze-b2"'
+    min: 1
+    arm: with-only
+  - name: b2-setup-named
+    type: regex
+    pattern: 'presign|application key|applicationKey|backblazeb2\.com'
+    flags: i
+    match: contains
+    target: last_message

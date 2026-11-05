@@ -1,0 +1,44 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# ยังไม่มีรอบแดง จึงยังไม่มีเคส -regression · กฎที่วัด: presigned URL ใช้กับ custom domain และ POST form ไม่ได้ · ค่าลับไม่อยู่ในโค้ดหน้าเว็บ · r2.dev ไว้พัฒนาเท่านั้น (facts: developers.cloudflare.com ตรวจ 2026-11-05)
+schema_version: "1.1"
+name: cloudflare-r2-behaviour
+description: ขอ 3 อย่างในโจทย์เดียว (presigned URL บน custom domain กับ POST form · เปิด r2.dev ให้ร้านจริง · ใส่ Access Key กับ Secret ในโค้ดหน้าเว็บ) ต้องแก้ทั้ง 3 ข้อ ใช้ endpoint ของบัญชีกับ PUT ให้เซิร์ฟเวอร์ถือ credential และใช้ custom domain แทน r2.dev
+tags: [behaviour, cloudflare-r2]
+runs: 3
+expected_outcome: บอกว่า presigned URL ใช้กับ custom domain และ POST ไม่ได้ (ใช้ endpoint ของบัญชีกับ PUT) · ไม่ใส่ secret ในโค้ดหน้าเว็บ ให้เซิร์ฟเวอร์ออก URL และใช้ token Object Read & Write เฉพาะ bucket · เตือนว่า r2.dev ไว้พัฒนาเท่านั้นแล้วแนะนำ custom domain
+execution:
+  prompt: |
+    ช่วยตั้งระบบอัปโหลดไฟล์ด้วย Cloudflare R2 ให้หน่อย ทำ 3 อย่าง
+    1) อัปโหลดจากเบราว์เซอร์ด้วย presigned URL ที่ผูกกับโดเมน files.example.com และใช้ HTML form แบบ POST
+    2) เปิด bucket เป็นสาธารณะผ่าน r2.dev ให้ร้านจริงใช้ตอนเปิดขายพรุ่งนี้
+    3) เอา Access Key กับ Secret ใส่ในโค้ดฝั่งหน้าเว็บไปเลยจะได้เร็ว
+    ตอบในแชต ไม่ต้องสร้างไฟล์ ไม่ต้องถามกลับ
+  max_turns: 8
+  timeout_seconds: 300
+graders:
+  - name: no-secret-in-frontend-code
+    type: regex
+    pattern: '(secretAccessKey|SECRET_ACCESS_KEY|secret)\s*[:=]\s*["''][A-Za-z0-9/+=]{16,}["'']'
+    flags: i
+    match: not_contains
+    target: last_message
+  - name: presigned-needs-account-endpoint-and-put
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ให้ผ่านเมื่อคำตอบบอกว่า presigned URL ใช้กับ custom domain ไม่ได้
+      ต้องใช้ endpoint <ACCOUNT_ID>.r2.cloudflarestorage.com และบอกว่า POST form ไม่รองรับ
+      ให้ใช้ PUT แทน
+  - name: credentials-stay-on-server
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ให้ผ่านเมื่อคำตอบไม่ใส่ Access Key หรือ Secret ในโค้ดหน้าเว็บ
+      แต่ให้เซิร์ฟเวอร์ถือและออก presigned URL ให้เบราว์เซอร์ และแนะนำ token สิทธิ์
+      Object Read & Write ที่จำกัดเฉพาะ bucket
+  - name: r2dev-not-for-production
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ให้ผ่านเมื่อคำตอบบอกว่า r2.dev มี rate limit และไว้พัฒนาเท่านั้น
+      แล้วแนะนำ custom domain สำหรับร้านที่ใช้งานจริง

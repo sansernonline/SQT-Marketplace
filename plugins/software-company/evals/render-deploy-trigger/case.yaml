@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# runs 5: เคสนี้ใช้ตัดสินการแก้ description ของ skill · n=3 กว้างเกินไป (ยังไม่ได้วัดช่วงจริง)
+schema_version: "1.1"
+name: render-deploy-trigger
+description: ผู้ใช้มี API Node กับ Postgres อยากขึ้น render.com ก่อนเปิดลูกค้าจริงเดือนหน้า ไม่เอ่ยชื่อ skill ต้องทำให้ render-deploy ถูกเปิด และแผนอ้างถึง render.yaml หรือ Blueprint
+tags: [trigger, render-deploy]
+runs: 5
+expected_outcome: เปิด Skill render-deploy แล้ววางแผนโดยให้ทุกอย่างอยู่ใน render.yaml (Blueprint)
+execution:
+  prompt: |
+    เรามี API ที่เขียนด้วย Node กับฐานข้อมูล Postgres อยากเอาขึ้น render.com
+    ก่อนเปิดให้ลูกค้าจริงใช้เดือนหน้า ช่วยวางแผนหน่อยว่าต้องเตรียมอะไรบ้าง ยังไม่ต้องเขียนไฟล์
+  max_turns: 6
+  timeout_seconds: 240
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?render-deploy"'
+    min: 1
+    arm: with-only
+  - name: blueprint-named
+    type: regex
+    pattern: 'render\.yaml|Blueprint'
+    flags: i
+    match: contains
+    target: last_message
