@@ -197,7 +197,7 @@
 
 ---
 
-## 🛠️ Skills (104)
+## 🛠️ Skills (108)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst, product-manager
@@ -907,6 +907,30 @@
 
 ### 104. design-system
 **Description:** Use when authoring design tokens (primitive, semantic, component), CSS variables, state tables or a Tailwind theme. Reading existing code → ui-craft
+
+---
+
+### 105. backblaze-b2
+**ใช้กับ:** devops-engineer
+**Description:** Use when connecting an app to Backblaze B2 file storage — S3 API, application keys, presigned upload, versions, lifecycle, cost.
+
+---
+
+### 106. backblaze-deploy
+**ใช้กับ:** devops-engineer
+**Description:** Use when deploying a static website or SPA build to Backblaze B2 — b2 sync, public bucket, Cloudflare domain, cache, rollback, cost.
+
+---
+
+### 107. cloudflare-r2
+**ใช้กับ:** devops-engineer
+**Description:** Use when connecting an app to Cloudflare R2 object storage — S3 API, presigned upload, public bucket, CORS, wrangler, cost.
+
+---
+
+### 108. render-deploy
+**ใช้กับ:** devops-engineer
+**Description:** Use when deploying to Render (render.com) — web service, worker, cron or Postgres; render.yaml Blueprint, failed deploy, rollback, free tier.
 
 ---
 
