@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23) · ยังไม่ได้รันจริง (เสียเงิน)
+schema_version: "1.1"
+name: design-system-regression
+description: ไม่ลอกสีฟ้า-ม่วงจากตัวอย่างต้นฉบับ
+tags: [regression, design-system]
+runs: 3
+expected_outcome: สีมาจากแบรนด์ที่ผู้ใช้บอก ไม่ใช่ #3B82F6 หรือ indigo ตั้งต้น
+execution:
+  prompt: |
+    ตั้ง token สำหรับร้านขายอุปกรณ์ตกปลา สีแบรนด์ส้มไหม้ #C2410C ตอบในแชต
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: brand-colour
+    type: regex
+    pattern: "C2410C"
+    flags: i
+    match: contains
+    target: last_message
+  - name: no-default-blue
+    type: regex
+    pattern: "3B82F6|6366F1"
+    flags: i
+    match: not_contains
+    target: last_message

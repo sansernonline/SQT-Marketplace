@@ -1,5 +1,9 @@
 # Changelog — graphic-design
 
+## 0.20.0 — 2026-11-05
+
+- skill ใหม่ `brand-guidelines`: คู่มือแบรนด์ฉบับเต็ม (น้ำเสียง · ข้อความหลัก · การอนุมัติ · การเก็บไฟล์) ลอกจาก ui-ux-pro-max-skill `brand` (MIT · commit `b7d5353`) · สคริปต์ Node 4 ตัวไม่ต่อเน็ต · ซิงก์สีเข้า token · ไม่ลอกตัวสร้างโลโก้ · eval 3 เคส
+
 ## 0.18.0 — 2026-10-28
 
 - skill ใหม่ `narration-th`: แยกเสียงบรรยายไทยจากสคริปต์ (text-to-speech) ออกจาก `video-editing` ตามที่ผู้ใช้เลือก (เดิมรวมไว้ 2026-10-24) · ย้ายแบบตัดแปะ ไม่เขียนเนื้อใหม่ · สคริปต์ `tts_cues.py` `f5_worker.py` `windows_tts.ps1` และ `references/tts-engine-score.example.json` ย้ายตาม · `video-editing` เหลือตัด ต่อ ความดัง สไลด์เป็นวิดีโอ และชี้มาที่ skill ใหม่

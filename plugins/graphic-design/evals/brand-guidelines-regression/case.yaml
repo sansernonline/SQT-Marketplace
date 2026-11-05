@@ -1,0 +1,24 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23) · ยังไม่ได้รันจริง (เสียเงิน)
+schema_version: "1.1"
+name: brand-guidelines-regression
+description: ไม่ซิงก์ token ทับของเดิม และไม่เสนอสร้างโลโก้เอง
+tags: [regression, brand-guidelines]
+runs: 3
+expected_outcome: บอกว่าสคริปต์หยุดเมื่อมี token เดิม ไม่ใช้ --force กับไฟล์ที่ไม่ได้ซิงก์เอง · ไม่เสนอวาดโลโก้
+execution:
+  prompt: |
+    โปรเจกต์มี :root ที่เขียนสีไว้เองแล้ว ฉันอยากซิงก์สีจาก docs/brand-guidelines.md เข้า token ทำให้หน่อยว่าต้องทำอย่างไร ตอบในแชต
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: stops
+    type: regex
+    pattern: "หยุด|stop|ตรวจ|review|รายงาน"
+    flags: i
+    match: contains
+    target: last_message
+  - name: no-force
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ให้ผ่านเมื่อคำตอบไม่สั่ง --force ทับ token เดิมที่ไม่ได้มาจากการซิงก์รอบก่อน และให้ตรวจแหล่งที่พบก่อน
