@@ -72,9 +72,17 @@ def sites(kind=None):
     return [r for r in rows if not kind or r["type"] == kind]
 
 
+def search_link(row, q):
+    """เว็บที่ติดธง search=no (ลิงก์ค้นไม่กรองหรือบล็อกบอท) ให้ลิงก์หน้าแรกแทน ไม่สร้างลิงก์ค้น"""
+    if row["search"] == "no":
+        parts = urllib.parse.urlparse(row["search_url"])
+        return f"{parts.scheme}://{parts.netloc}/"
+    return row["search_url"].replace("{q}", q)
+
+
 def links(kind, query):
     q = urllib.parse.quote(keywords(query))
-    return [{"site": r["site"], "good_for": r["good_for"], "use": r["use"], "url": r["search_url"].replace("{q}", q)}
+    return [{"site": r["site"], "good_for": r["good_for"], "use": r["use"], "url": search_link(r, q)}
             for r in sites(kind)]
 
 
@@ -195,7 +203,30 @@ def hue(h):
     return 60 * (((g - b) / d) % 6 if mx == r else (b - r) / d + 2 if mx == g else (r - g) / d + 4)
 
 
-def roles(cols):
+MIN_BRAND_AREA = 0.005  # สีหลักต้องมาจากตระกูลสีที่กินพื้นที่ภาพ ≥ 0.5%
+MIN_SHADE_AREA = 0.0005  # เฉดในตระกูลที่เล็กกว่านี้เป็นขอบตัวอักษร ไม่ใช่สีงาน
+
+
+def hue_gap(a, b):
+    return min(abs(hue(a) - hue(b)), 360 - abs(hue(a) - hue(b)))
+
+
+def brand_color(items):
+    """สีหลักของงาน = เฉดที่อิ่มที่สุดในตระกูลสี (เฉดใกล้กัน 25 องศา) ที่รวมพื้นที่ ≥ 0.5%
+    ไม่ใช้สีที่พื้นที่มากสุด เพราะหน้าเว็บส่วนใหญ่พื้นที่เป็นสีเทาหรือขาว · items = [(hex, สัดส่วน)] ก่อนตัดสีเล็กทิ้ง"""
+    families = []  # [สีตั้งต้น, พื้นที่รวม, [สมาชิก]]
+    for h, a in sorted((x for x in items if sat(x[0]) > 40), key=lambda x: x[1], reverse=True):
+        fam = next((f for f in families if hue_gap(f[0], h) <= 25), None)
+        if fam:
+            fam[1] += a
+            fam[2].append((h, a))
+        else:
+            families.append([h, a, [(h, a)]])
+    shades = [m for f in families if f[1] >= MIN_BRAND_AREA for m in f[2] if m[1] >= MIN_SHADE_AREA]
+    return max(shades, key=lambda m: sat(m[0]))[0] if shades else None
+
+
+def roles(cols, brand=None):
     """จัดสีที่ถอดได้ (เรียงตามพื้นที่) ให้เป็น 8 หน้าที่ · หน้าที่ที่ไม่มีสีตรงสร้างจากการผสมสีที่มี
     พื้น = สีที่กินที่มากสุด · ตัวหนังสือ = contrast สูงสุดกับพื้น · หลัก รอง เน้น = สีอิ่มที่สุด 3 สีที่เฉดต่างกัน"""
     hexes = [h for h, _ in cols]
@@ -204,6 +235,8 @@ def roles(cols):
     if contrast(text, bg) < 7:  # ไม่มีสีเข้มหรือสว่างพอ ใช้ดำหรือขาวอมสีพื้น
         text = mix(bg, max(("#111111", "#fafafa"), key=lambda e: contrast(e, bg)), 0.92)
     vivid = sorted((h for h in hexes if h not in (bg, text) and sat(h) > 40), key=sat, reverse=True)
+    if brand:
+        vivid = [brand] + [h for h in vivid if hue_gap(h, brand) > 25]
     picks = []
     for h in vivid:
         if all(min(abs(hue(h) - hue(p)), 360 - abs(hue(h) - hue(p))) > 25 for p in picks):
@@ -229,6 +262,13 @@ def roles(cols):
     return {k: out[k] for k in ROLES}
 
 
+def on_primary(primary, bg):
+    """ตัวหนังสือบนปุ่มสีหลัก ต้อง 4.5:1 · ใช้สีพื้นถ้าผ่าน ไม่ผ่านใช้ขาวหรือดำตัวที่ contrast สูงกว่า"""
+    if contrast(bg, primary) >= 4.5:
+        return bg
+    return max(("#ffffff", "#000000"), key=lambda c: contrast(c, primary))
+
+
 def palette_from_image(path, k=8):
     """แบ่งสีละเอียด 32 กลุ่มก่อน แล้วรวมกลุ่มที่ใกล้กัน (สีสดพื้นที่น้อยจะไม่ถูกสีพื้นกลืน)
     เก็บ k สีที่ต่างกันจริงเรียงตามพื้นที่ แล้วจัดเป็น 8 หน้าที่พร้อมค่า contrast"""
@@ -252,15 +292,18 @@ def palette_from_image(path, k=8):
             merged.append([h, c / total])
     merged.sort(key=lambda m: m[1], reverse=True)
     cols = [(h, a) for h, a in merged if a >= 0.003][:k]
-    r = roles(cols)
+    brand = brand_color([("#%02x%02x%02x" % tuple(pal[i * 3:i * 3 + 3]), c / total) for c, i in counts])
+    r = roles(cols, brand)
+    on = on_primary(r["primary"], r["bg"])
     if len(cols) < 2:
         warning = "ภาพมีสีเดียว สีอื่นทั้งหมดสร้างจากการผสม ไม่ได้ถอดจากงานจริง · ใช้ภาพงานที่มีหลายสี"
-    elif sum(a for h, a in cols if sat(h) <= 30) >= 0.97:
-        warning = ("ได้สีเทาเกือบทั้งหมด อาจติดหน้ากันบอท แบนเนอร์คุกกี้ หรือหน้ายังโหลดไม่ขึ้น · "
-                   "เปิดภาพดูก่อนใช้ หรือจับภาพหน้าจอเองแล้วส่งไฟล์ภาพ")
+    elif not brand and sum(a for h, a in cols if sat(h) <= 30) >= 0.97:
+        # หน้าติดกันบอทจับได้ที่ capture() จากข้อความบนหน้า ไม่ใช่จากสีภาพ · ข้อนี้คือภาพเทาจริง
+        warning = ("ภาพเป็นสีเทาหรือขาวเกือบทั้งหมด ไม่มีสีอิ่มตัวที่กินพื้นที่ ≥ 0.5% · งานนี้อาจเป็นขาว-ดำจริง "
+                   "หรือมีแบนเนอร์คุกกี้บังหรือหน้ายังโหลดไม่ขึ้น · เปิดภาพดูก่อนใช้")
     else:
         warning = ""
-    return {"colors": cols, "roles": r, "warning": warning, "text_contrast": round(contrast(r["text"], r["bg"]), 1),
+    return {"colors": cols, "roles": r, "on_primary": on, "on_primary_contrast": round(contrast(on, r["primary"]), 1), "warning": warning, "text_contrast": round(contrast(r["text"], r["bg"]), 1),
             "muted_contrast": round(contrast(r["text_muted"], r["bg"]), 1),
             "primary_contrast": round(contrast(r["primary"], r["bg"]), 1)}
 
@@ -325,7 +368,10 @@ def self_test():
           ("ทุกประเภทมีอย่างน้อย 2 เว็บ", all(len(sites(k)) >= 2 for k in
                                             "web app dashboard slide document icon logo social illustration color font motion".split())),
           ("ลิงก์ใส่คำค้นแล้ว", all("coffee" in l["url"] or "{q}" not in r["search_url"]
-                                   for l, r in zip(links("web", "กาแฟ"), sites("web")))),
+                                   for l, r in zip(links("web", "กาแฟ"), sites("web")) if r["search"] == "yes")),
+          ("เว็บธง search=no ไม่มีลิงก์ค้น", all("?" not in l["url"] and "{q}" not in l["url"]
+                                               for l, r in zip(links("web", "กาแฟ"), sites("web")) if r["search"] == "no")),
+          ("มีเว็บติดธง search=no", any(r["search"] == "no" for r in sites())),
           ("ไม่รับ URL ภายในเครื่อง", not public_url("http://127.0.0.1/") and not public_url("file:///c:/x.png"))]
     with tempfile.TemporaryDirectory() as d:
         from PIL import Image
@@ -340,6 +386,16 @@ def self_test():
         p = palette_from_image(Path(d) / "t.png")
         r = p["roles"]
         ok.append(("ถอดสีเป็น 8 หน้าที่ครบ", list(r) == ROLES and all(len(c) == 7 for c in r.values())))
+        # หน้าเทา 98% มีสีน้ำเงินเข้มแค่ 0.6% รวมหลายเฉด · สีหลักต้องเป็นน้ำเงิน ไม่ใช่เทาอมน้ำเงินที่พื้นที่มากกว่า
+        web = Image.new("RGB", (200, 200), "#eceff2")
+        for x in range(200):
+            for y in range(2):
+                web.putpixel((x, y), (19, 72, 222))
+        web.save(Path(d) / "w.png")
+        w = palette_from_image(Path(d) / "w.png")
+        ok.append(("หน้าเทา สีหลักคือน้ำเงินอิ่มตัวพื้นที่เล็ก", w["roles"]["primary"] == "#1348de" and not w["warning"]))
+        ok.append(("on_primary ผ่าน 4.5:1", all(contrast(on_primary(c, "#ffffff"), c) >= 4.5
+                                                  for c in ("#7484ad", "#808080", "#1348de", "#ffcc00"))))
         ok.append(("พื้นสว่าง ตัวหนังสือเข้ม สีหลักคือสีส้มที่ใส่ไว้", r["bg"].startswith("#f") and p["text_contrast"] > 10 and sat(r["primary"]) > 100))
     for name, passed in ok:
         print(f"  {'ผ่าน' if passed else 'ล้ม'} {name}")
@@ -382,6 +438,7 @@ def main():
             print("สีที่ถอดได้ (สัดส่วนพื้นที่): " + " · ".join(f"{c} {x:.0%}" for c, x in p["colors"]))
             for k, c in p["roles"].items():
                 print(f"  {k:11} {c}  {ROLE_TH[k]}")
+            print(f'ตัวหนังสือบนสีหลัก (on_primary) {p["on_primary"]} · {p["on_primary_contrast"]}:1 (ต้อง ≥ 4.5)')
             print(f'contrast เทียบพื้น: ตัวหนังสือ {p["text_contrast"]}:1 · ตัวหนังสือรอง {p["muted_contrast"]}:1 · สีหลัก {p["primary_contrast"]}:1 · ภาพ {p["shot"]}')
             print("ส่งเข้า design_draft.py: --palette \"<ชื่อ>:" + ",".join(f"{k}={c}" for k, c in p["roles"].items()) + '"')
         elif a.cmd == "fallback":

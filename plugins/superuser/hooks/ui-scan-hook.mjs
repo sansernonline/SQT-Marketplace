@@ -14,7 +14,7 @@ import { tmpdir } from "node:os";
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SCANNER = join(HERE, "..", "skills", "no-ai-look", "scripts", "slop_scan.py");
 const UI_EXT = new Set([".html", ".htm", ".css", ".scss", ".less", ".jsx", ".tsx", ".vue", ".svelte", ".astro"]);
-const SKIP_PATH = /(^|[\\/])(_to_delete|\.claude|node_modules|dist|build|\.next|out|vendor|coverage|evals)([\\/]|$)|\.min\./;
+const SKIP_PATH = /(^|[\\/])(\.claude|node_modules|dist|build|\.next|out|vendor|coverage|evals)([\\/]|$)|\.min\./;
 const PYTHONS = [["python", []], ["py", ["-3"]], ["python3", []]];
 const MAX_SHOWN = 8;
 const STATE_DIR = join(tmpdir(), "superuser-ui-scan");
@@ -99,7 +99,14 @@ function selfTest() {
   t("P2 อย่างเดียว → additionalContext", decide({ ...ev(css), session_id: "s2" }, () => [{ rule: "neon-glow", line: 1, level: "P2", hint: "h", kept: null }], state)?.hookSpecificOutput?.additionalContext?.includes("neon-glow"));
   t("ข้อที่ slop-ok → เงียบ", decide({ ...ev(css), session_id: "s3" }, () => [{ rule: "neon-glow", line: 1, level: "P2", hint: "h", kept: "ตั้งใจ" }], state) === null);
   t("ไม่ใช่ไฟล์ UI → เงียบ", targetOf(ev(join(dir, "a.py"))) === null);
-  t("_to_delete → เงียบ", targetOf(ev(join(dir, "_to_delete", "x.css"))) === null);
+  for (const skipped of ["node_modules", "dist"]) {
+    mkdirSync(join(dir, skipped), { recursive: true });
+    writeFileSync(join(dir, skipped, "x.css"), "p{}");
+    t(`${skipped} → เงียบ`, targetOf(ev(join(dir, skipped, "x.css"))) === null);
+  }
+  mkdirSync(join(dir, "_to_delete"), { recursive: true });
+  writeFileSync(join(dir, "_to_delete", "x.html"), "<p>x</p>");
+  t("_to_delete → ตรวจ (หน้าทดลองก็ต้องผ่านด่านหน้าตา)", targetOf(ev(join(dir, "_to_delete", "x.html"))) === join(dir, "_to_delete", "x.html"));
   t("Bash → เงียบ", targetOf({ tool_name: "Bash", tool_input: { command: "ls" } }) === null);
   mkdirSync(join(dir, ".claude", "superuser"), { recursive: true });
   writeFileSync(join(dir, ".claude", "superuser", "config.json"), JSON.stringify({ modules: { ui_scan: false } }));

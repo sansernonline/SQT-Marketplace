@@ -11,6 +11,7 @@
   python thai_tells.py รายงาน.md --strict   เจอแล้ว exit 1 (ใช้เป็น check ใน CI หรือ hook)
   python thai_tells.py --self-test          พิสูจน์ว่ายังจับได้จริง
 
+ไฟล์ .html .htm: ตัด <script> <style> และค่า data: ก่อนตรวจ (base64 กับ JavaScript ไม่ใช่ข้อความที่คนอ่าน)
 ข้ามข้อความใน `backtick` · บล็อกโค้ด ``` · และในเครื่องหมายคำพูด "…" (ยกมาพูดถึง) · ต้องมีแค่ Python 3.9+ ไม่ติดตั้งอะไรเพิ่ม
 """
 import re, sys
@@ -37,6 +38,17 @@ DASH = re.compile(r"\s[—–]\s|;")
 EMPTY_CELL = re.compile(r"\|\s*[—–]\s*(?=\|)")  # ขีดเดี่ยวในช่องตาราง = "ไม่มี" ไม่ใช่ขีดยาวในประโยค
 THUK = re.compile(r"ถูก(?!ต้อง|ใจ|กฎ|ลง|กว่า|ที่สุด|สุขลักษณะ|หวย|คอ|ชะตา|อก|ปาก|โฉลก|แพง)(?=[ก-๛])")
 STRIP = [re.compile(r"```.*?```", re.S), re.compile(r"`[^`\n]*`"), re.compile(r"\"[^\"\n]{1,200}\""), re.compile(r"“[^”\n]{1,200}”")]
+
+
+HTML_CODE = [re.compile(r"<script\b.*?</script>", re.S | re.I), re.compile(r"<style\b.*?</style>", re.S | re.I),
+             re.compile(r"\bdata:[^\"'\s)]+", re.I)]
+STYLE_ATTR = re.compile(r"\bstyle=(\"[^\"]*\"|'[^']*')", re.I)
+
+
+def strip_html_code(text: str) -> str:
+    for rx in HTML_CODE + [STYLE_ATTR]:
+        text = rx.sub(lambda m: re.sub(r"[^\n]", " ", m.group(0)), text)
+    return text
 
 
 def clean(text: str) -> str:
@@ -100,6 +112,11 @@ def self_test() -> int:
     good = ("ระบบตรวจแล้วพบ 3 จุด `ทำการ` \"ในยุคปัจจุบัน\" วันทำการถัดไป ดร. สมชาย พ.ศ. 2569 09.00 น. เริ่มงาน\n"
             "ต่าง ๆ โดยตรง ซึ่งตรงกับที่คาด ก่อนทำการ์ด\n"
             "| สื่อ | หัวข้อ |\n| diagram | — |\n")
+    page = ("<p>ระบบตรวจแล้วพบ 3 จุด</p>\n"
+            '<img src="data:image/png;base64,iVBOR;w0KGgo" style="a:b;c:d">\n'
+            "<script>\nconst a = 1; const b = 2;\n</script>\n"
+            "<style>p{a:b;c:d}</style>\n<p>ในยุคปัจจุบัน</p>\n")
+    html_hits = scan(strip_html_code(page))
     codes = {c for _, c, _ in scan(bad)}
     want = {"t-block", "t-padding", "t-budget", "f3", "g-yamok", "t-dash", "t-thuk"}
     missed = want - codes
@@ -109,7 +126,8 @@ def self_test() -> int:
     print("ของเสียจับได้:", sorted(codes), "| พลาด:", sorted(missed) or "-")
     print("ของดีเตือนผิด:", false or "-")
     print("เลขบรรทัดหลังบล็อกโค้ด:", after_code, "(ต้องเป็น [5])")
-    ok = not missed and not false and after_code == [5]
+    print("HTML ตัด script/style/data: แล้วเหลือแต่ข้อความจริง:", html_hits, "(ต้องเป็น t-block บรรทัด 7 อันเดียว)")
+    ok = not missed and not false and after_code == [5] and [(h[0], h[1]) for h in html_hits] == [(7, "t-block")]
     print("self-test", "ผ่าน" if ok else "ไม่ผ่าน")
     return 0 if ok else 1
 
@@ -124,7 +142,8 @@ def main(argv) -> int:
         return 0
     total = 0
     for f in files:
-        hits = scan(Path(f).read_text(encoding="utf-8"))
+        text = Path(f).read_text(encoding="utf-8")
+        hits = scan(strip_html_code(text) if f.lower().endswith((".html", ".htm")) else text)
         report(f, hits)
         total += len(hits)
     print(f"\nเจอ {total} จุด ใน {len(files)} ไฟล์ · เตือนอย่างเดียว ตัดสินด้วยการอ่านออกเสียง" if total else "ไม่เจอท่าที่สคริปต์รู้จัก · ยังต้องอ่านเองตาม thai-grammar หัวข้อ 1 และ 4")

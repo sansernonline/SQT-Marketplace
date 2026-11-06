@@ -1,0 +1,31 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: no-ai-look-no-trigger
+description: ขอเขียนฟังก์ชันแปลงวันที่ปี พ.ศ. เป็นงานโค้ดล้วน ไม่มีอะไรให้คนดู ต้องไม่เปิด no-ai-look
+tags: [no-trigger, no-ai-look]
+runs: 10
+expected_outcome: ตอบด้วยฟังก์ชัน Python ที่ใช้ได้ ไม่เรียก Skill no-ai-look
+execution:
+  prompt: |
+    เขียนฟังก์ชัน Python รับสตริงวันที่แบบ 06/11/2569 (วัน/เดือน/ปี พ.ศ.) แล้วคืนวันที่ปี ค.ศ. เป็น datetime.date
+    ถ้ารูปแบบผิดให้โยน ValueError พร้อมข้อความบอกว่าผิดตรงไหน
+  max_turns: 5
+  timeout_seconds: 180
+graders:
+  - name: not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?no-ai-look"'
+    min: 0
+    max: 0
+    arm: both
+  - name: has-function
+    type: regex
+    pattern: 'def\s+\w+\s*\('
+    match: contains
+    target: last_message
+  - name: buddhist-offset
+    type: regex
+    pattern: '543'
+    match: contains
+    target: last_message
