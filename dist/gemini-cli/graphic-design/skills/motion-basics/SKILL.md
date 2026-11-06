@@ -5,6 +5,8 @@ description: Use when a non-designer makes motion graphics, animated text, trans
 
 # Motion Basics
 
+> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+
 Motion is emphasis. Everything else is decoration. Most amateur motion has 3 faults: linear easing, everything moving at once, and text that leaves before anyone could read it.
 
 ## Workflow

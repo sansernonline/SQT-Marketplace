@@ -4,6 +4,8 @@ Use when a visual is about to ship or looks off for no clear reason. 8-point che
 
 # Design Review
 
+> **ด่านก่อนลงมือ:** งานที่ส่งมาตรวจต้องมีบรรทัด `ด่านก่อนลงมือ:` ตามหัวข้อนั้นของ `design-references` (plugin `superuser`) · ไม่มี หรือต้นแบบไม่มีลิงก์ → เป็นข้อแก้อันดับ 1 · งานที่ผู้ใช้หรือคนนอกออกแบบมาเอง ไม่ต้องมีบรรทัดนี้ แต่ยังตรวจด่านตาของ `no-ai-look`
+
 Visuals only; a second look at text, code or a plan → a new `reviewer` agent.
 
 8 points, 3 fixes, then ship. A review that lists 20 nitpicks is a redesign request. A review that only says "feels busy" is not a review.

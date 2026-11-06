@@ -1,5 +1,11 @@
 # Changelog — software-company
 
+## 2.42.0 — 2026-11-06
+
+- skill ออกแบบ 16 ตัวมีบรรทัด "ด่านก่อนลงมือ" ชี้ไปหัวข้อเดียวกันใน `design-references` (superuser 3.20.0): ui-craft · web-app-design · mobile-app-design · windows-app-design · dynamic-website · design-direction-lookup · design-system · graphic-design · presentation-design · html-slide-deck · pptx-to-html-deck · branded-document-design · doc-cover-design · diagram-figures · markdown-visuals · markdown-report-docx (`markdown-report-docx` เดิมไม่มี `no-ai-look`)
+- `presentation-design`: ทิศทางภาพค้นต้นแบบทุกเด็ค เดิมค้นเฉพาะเมื่อไม่มีสีจากงานต้นทาง
+- agent `ux-designer` · `graphic-designer` · `growth-specialist`: ผ่านด่านก่อนลงมือก่อนงานสร้างสรรค์ทุกชิ้น และโหลด `design-references`
+
 ## 2.41.0 — 2026-11-06
 
 - `design-direction-lookup`: 3 แนวในหน้าเทียบใช้โครงหน้าต่างกันจริง (editorial · bento · dense ตาม `looks`) เดิมเป็นการ์ดเดียวกันต่างแค่สี · ฟอนต์หัวไม่ซ้ำใน 3 แนว · self-test ล้มถ้าโครงหรือฟอนต์หัวซ้ำ

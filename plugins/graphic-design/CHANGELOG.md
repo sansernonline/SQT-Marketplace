@@ -1,5 +1,11 @@
 # Changelog — graphic-design
 
+## 0.22.0 — 2026-11-06
+
+- skill 17 ตัวมีบรรทัด "ด่านก่อนลงมือ" ชี้ไป `design-references` (superuser 3.20.0): banner-design · brand-kit · brand-guidelines · brief-to-image · campaign-set · icon-design · image-generation · line-richmenu · marketplace-product-images · motion-basics · social-formats · style-consistency · video-script-to-clip · youtube-thumbnail (3 แนว) · image-editing-brief (1 แนวได้) · design-review (ไม่มีบรรทัดหลักฐาน = ข้อแก้อันดับ 1) · print-ready-files (ต้องผ่านด่านก่อนส่งโรงพิมพ์) · `marketplace-product-images` และ `print-ready-files` เดิมไม่มี `no-ai-look`
+- `brief-to-image`: ค้นต้นแบบทุกครั้ง มี style lock แล้วค้นเฉพาะองค์ประกอบ (เดิมข้ามเมื่อมี style lock)
+- agent `art-director` · `brand-keeper` · `image-artist` · `social-creator`: ผ่านด่านก่อนลงมือก่อนงานสร้างสรรค์ทุกชิ้น · `design-critic`: งานไม่มีบรรทัด `ด่านก่อนลงมือ:` = ข้อแก้อันดับ 1 ยกเว้นงานที่ผู้ใช้หรือคนนอกออกแบบเอง
+
 ## 0.21.1 — 2026-11-06
 
 - `image-generation`: บรรทัดก่อนส่งบอกว่าทุกงานต้องผ่านด่านตาของ `no-ai-look` (superuser 3.19.0)

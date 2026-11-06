@@ -5,6 +5,8 @@ description: Use when a series of AI or shot images must look like one set (prod
 
 # Style Consistency
 
+> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+
 Goal: 10 assets that look like one person made them. AI images drift by default: each generation picks its own light, palette and lens unless something fixes them.
 
 ## Workflow
