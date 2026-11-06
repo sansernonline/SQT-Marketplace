@@ -8,7 +8,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from check_data import COLUMNS, TAILWIND_HEX  # noqa: E402
-from design_draft import color_distance, contrast, palette_problems, rgb  # noqa: E402
+from design_draft import best_on_primary, color_distance, contrast, luminance, palette_problems, rgb  # noqa: E402
 
 HUE_SHIFT_DEGREES = 8  # เลื่อนเฉดพอให้ไม่ใช่สีของแบรนด์ แต่ยังอยู่ในโทนเดียวกับวงการ
 SAME_COLOR_ACROSS_SITES = 48  # ระยะ RGB ที่ถือว่า 2 เว็บใช้สีเดียวกัน · หลวมกว่าการรวมสีในเว็บเดียว
@@ -120,19 +120,49 @@ def build_palette(palette_id, sites, fetched_on):
     return [{c: light[c] for c in columns}, {c: dark[c] for c in columns}]
 
 
-def palette_from_roles(palette_id, roles, fetched_on):
+def shift_hue(hex_color, degrees):
+    hue, lightness, saturation = to_hls(hex_color)
+    return to_hex(hue * 360 + degrees, lightness, saturation)
+
+
+MAX_REFIT = 0.10  # ปรับความสว่างได้ไม่เกินนี้ ไกลกว่านี้ถือว่าสีเพี้ยนจากต้นแบบ ให้พาเลตถูกตัดตามเดิม
+NEEDED_CONTRAST = {'text': 4.5, 'text_muted': 4.5, 'primary': 3.0}
+
+
+def refit_after_shift(roles):
+    """เลื่อนเฉดทำให้ความสว่างที่ตามนุษย์เห็นเปลี่ยน · สีที่ contrast ตกต่ำกว่าเกณฑ์ → ปรับความสว่างทีละ 1% (ห่างจากพื้นขึ้น) จนผ่าน"""
+    grounds = [roles['bg'], roles['surface']]
+    away = -0.01 if luminance(roles['bg']) > 0.5 else 0.01
+    fixed = dict(roles)
+    for role, need in NEEDED_CONTRAST.items():
+        hue, lightness, saturation = to_hls(roles[role])
+        for steps in range(11):
+            value = to_hex(hue * 360, min(max(lightness + away * steps, 0), 1), saturation)
+            if all(contrast(value, g) >= need for g in grounds[:1 if role == 'primary' else 2]):
+                fixed[role] = value
+                break
+    return fixed
+
+
+def palette_from_roles(palette_id, roles, fetched_on, reference_shift=None):
     """สี 8 หน้าที่ (bg surface text text_muted primary secondary accent border) ที่ถอดจากงานจริง → (light, dark)
     light ใช้สีที่ให้มาตรง ๆ · on_primary และสีสถานะคิดให้ผ่าน contrast · dark คิดจากเฉดของ primary และ accent
-    secondary ไม่มีช่องในตาราง จึงบันทึกใน notes_th"""
+    secondary ไม่มีช่องในตาราง จึงบันทึกใน notes_th
+    reference_shift: None = สีของผู้ใช้เอง · จำนวนองศา = สีแบรนด์ของต้นแบบคนอื่น เลื่อนเฉดทุกสีตามนั้นก่อนใช้"""
+    if reference_shift:
+        roles = {r: shift_hue(c, reference_shift) for r, c in roles.items()}
+        roles = refit_after_shift(roles)
     light = {r: roles[r].upper() for r in ('bg', 'surface', 'text', 'text_muted', 'primary', 'accent', 'border')}
-    light['on_primary'] = max((light['surface'], light['text']), key=lambda c: contrast(c, light['primary']))
+    light['on_primary'] = best_on_primary(light['primary'], (light['surface'], light['text'], '#FFFFFF', '#000000'))
     for role, hue in STATUS_HUES.items():
         light[role] = shift_until(hue, 0.65, 0.45, -0.01, lambda c: contrast(c, light['surface']) >= 4.6)
     p_hue, _, p_sat = to_hls(light['primary'])
     a_hue, _, a_sat = to_hls(light['accent'])
     dark = dark_row(p_hue * 360, p_sat, a_hue * 360, a_sat)
     secondary = roles.get('secondary')
-    notes = (f'สีจากงานจริงที่ผู้ใช้ส่ง วันที่ {fetched_on} · โหมดสว่างตามสีที่ส่ง · on_primary สีสถานะ และโหมดมืด'
+    source = ('สีจากงานจริงที่ผู้ใช้ส่ง' if reference_shift is None else
+              f'สีแบรนด์ของต้นแบบคนอื่น (ไม่ใช่สีของผู้ใช้) เลื่อนเฉด {reference_shift:+d} องศา')
+    notes = (f'{source} วันที่ {fetched_on} · โหมดสว่างตามสีที่ส่ง · on_primary สีสถานะ และโหมดมืด'
              f'คิดให้ผ่าน contrast' + (f' · secondary {secondary.upper()} (ไม่มีช่องในตาราง)' if secondary else ''))
     common = {'id': palette_id, 'name_th': f'สีจากงานจริง {palette_id}', 'keywords': palette_id, 'notes_th': notes}
     rows = [{**common, 'mode': 'light', **light}, {**common, 'mode': 'dark', **dark}]

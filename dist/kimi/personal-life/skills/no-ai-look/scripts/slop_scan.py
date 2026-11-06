@@ -14,7 +14,7 @@ A finding is a reason to look, not an order to change. Keep an intentional choic
 anywhere in the same file. The reason is shown in the report so reviewers can see it.
 No dependencies beyond the Python standard library.
 """
-import argparse, json, pathlib, re, sys, urllib.parse, urllib.request
+import argparse, json, pathlib, re, sys, tempfile, urllib.parse, urllib.request
 from html.parser import HTMLParser
 
 EXTS = {'.html', '.htm', '.css', '.scss', '.less', '.jsx', '.tsx', '.vue', '.svelte', '.astro'}
@@ -301,9 +301,11 @@ def files(paths):
         if p.is_file(): yield p
         elif p.is_dir():
             for f in sorted(p.rglob('*')):
-                if f.suffix.lower() in EXTS and not (set(f.parts) & SKIP_DIRS) and '.min.' not in f.name: yield f
+                inside = set(f.relative_to(p).parts)  # โฟลเดอร์ที่ผู้ใช้ชี้มาเองและที่อยู่เหนือขึ้นไปไม่นับ
+                if f.suffix.lower() in EXTS and not (inside & SKIP_DIRS) and '.min.' not in f.name: yield f
 
 MAX_FETCH = 2_000_000
+WEB_SCHEMES = ('http://', 'https://', 'file://')
 SHEET = re.compile(r"<link\b[^>]*rel=[\"']?stylesheet[^>]*>", re.I)
 
 def sheet_urls(base, html, limit=10):
@@ -311,10 +313,19 @@ def sheet_urls(base, html, limit=10):
     for tag in SHEET.findall(html):
         m = re.search(r"href=[\"']?([^\"' >]+)", tag)
         if m: out.append(urllib.parse.urljoin(base, m.group(1)))
-    return [u for u in dict.fromkeys(out) if u.startswith(('http://', 'https://'))][:limit]
+    # หน้าบนเว็บห้ามพาไปอ่านไฟล์ในเครื่อง · file:// ใช้ได้เฉพาะเมื่อหน้าที่ตรวจเป็นไฟล์ในเครื่องเอง
+    allowed = WEB_SCHEMES if base.startswith('file://') else WEB_SCHEMES[:2]
+    return [u for u in dict.fromkeys(out) if u.startswith(allowed)][:limit]
+
+def as_url(arg):
+    """path ไฟล์ในเครื่อง (มีเว้นวรรคหรือไดรฟ์ C: ได้) → file:///… · URL เดิมคงไว้"""
+    p = pathlib.Path(arg)
+    return p.resolve().as_uri() if p.is_file() else arg
 
 def fetch(url):
-    if not url.startswith(('http://', 'https://')): raise ValueError('ใช้ได้เฉพาะ http:// หรือ https://')
+    if not url.startswith(WEB_SCHEMES): raise ValueError('ใช้ได้เฉพาะ http:// https:// file:// หรือ path ไฟล์ในเครื่อง')
+    if url.startswith('file://'):
+        return pathlib.Path(urllib.request.url2pathname(urllib.parse.urlparse(url).path)).read_bytes()[:MAX_FETCH].decode('utf-8', 'replace')
     req = urllib.request.Request(url, headers={'User-Agent': 'slop-scan/1 (+no-ai-look)'})
     with urllib.request.urlopen(req, timeout=10) as r:
         return r.read(MAX_FETCH).decode(r.headers.get_content_charset() or 'utf-8', 'replace')
@@ -322,7 +333,7 @@ def fetch(url):
 def scan_url(url):
     """ตรวจหน้าเว็บที่เปิดอยู่จริง: HTML ที่เซิร์ฟเวอร์ส่งมา + stylesheet ที่หน้า <link> ไว้ ไม่รัน JavaScript
     หน้าที่วาดด้วย JavaScript ทั้งหน้า (SPA) จะเห็นแค่โครง → ตรวจโค้ดต้นทางหรือบันทึกหน้าจากเบราว์เซอร์แล้วตรวจไฟล์แทน"""
-    html = fetch(url); found = scan_text(url, html, '.html'); n = 1
+    url = as_url(url); html = fetch(url); found = scan_text(url, html, '.html'); n = 1
     for u in sheet_urls(url, html):
         try: found += scan_text(u, fetch(u), '.css'); n += 1
         except Exception as e: print(f'โหลด {u} ไม่ได้: {e}', file=sys.stderr)
@@ -334,7 +345,7 @@ def report(found, as_json, min_level):
     if as_json:
         print(json.dumps(found, ensure_ascii=False, indent=2)); return found
     if not found:
-        print('ไม่พบสัญญาณ AI slop หรือปัญหาพื้นฐาน · ยังต้องดูด้วยตา (ข้อที่ตรวจจากโค้ดไม่ได้อยู่ใน references/catalog.md)'); return found
+        print('ไม่พบสัญญาณ AI slop หรือปัญหาพื้นฐาน · สคริปต์ 0 ข้อยังไม่ใช่ผ่าน · ต่อด้วยด่านตา (SKILL.md ข้อ 3.2)'); return found
     print('| ระดับ | ไฟล์:บรรทัด | กฎ | แก้ยังไง |\n|---|---|---|---|')
     for f in found:
         hint = f['hint'] + (f" · **ตั้งใจ:** {f['kept']}" if f['kept'] else '')
@@ -417,6 +428,20 @@ def self_test():
     if not (kept and all(f['kept'] for f in kept)): print('slop-ok ไม่ทำงาน')
     urls = sheet_urls('https://a.co/p/', '<link rel="stylesheet" href="s.css"><link href="/t.css" rel=stylesheet><link rel="icon" href="i.png">')
     if urls != ['https://a.co/p/s.css', 'https://a.co/t.css']: print('sheet_urls ผิด:', urls); ok = False
+    with tempfile.TemporaryDirectory(prefix='slop dir ') as d:  # เว้นวรรคใน path ต้องใช้ได้
+        page = pathlib.Path(d) / 'a b.html'
+        page.write_text('<link rel="stylesheet" href="s.css"><p>x</p>', encoding='utf-8')
+        (pathlib.Path(d) / 's.css').write_text('p{text-align:justify}', encoding='utf-8')
+        for arg in (page.resolve().as_uri(), str(page)):
+            f, n = scan_url(arg)
+            if n != 2 or 'justified' not in {x['rule'] for x in f}: print('file:// ใช้ไม่ได้:', arg, n); ok = False
+    with tempfile.TemporaryDirectory() as d:  # โฟลเดอร์ที่ผู้ใช้ชี้มาเองต้องไม่ถูกข้าม แม้ชื่ออยู่ใน SKIP_DIRS
+        root = pathlib.Path(d); (root / '_to_delete' / 'trial').mkdir(parents=True); (root / 'node_modules').mkdir()
+        (root / '_to_delete' / 'trial' / 'a.html').write_text('<p>x</p>', encoding='utf-8')
+        (root / 'node_modules' / 'b.html').write_text('<p>x</p>', encoding='utf-8')
+        (root / 'c.html').write_text('<p>x</p>', encoding='utf-8')
+        if len(list(files([root / '_to_delete' / 'trial']))) != 1: print('ชี้ _to_delete ตรง ๆ แต่ตรวจไม่ได้'); ok = False
+        if len(list(files([root]))) != 1: print('สแกนจากราก ต้องข้าม _to_delete และ node_modules'); ok = False
     print('self-test ผ่าน' if ok else 'self-test ล้ม')
     return 0 if ok else 1
 

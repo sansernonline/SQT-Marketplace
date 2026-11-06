@@ -11,6 +11,7 @@
   python design_draft.py --self-test
 """
 import argparse
+import colorsys
 import csv
 import datetime
 import html
@@ -42,10 +43,13 @@ HYPE_WORDS = re.compile(r'ยกระดับ|ไร้รอยต่อ|ล�
 PERSONALITY = {'1': ('เครื่องมือทำงาน', 6), '2': ('การเงิน สุขภาพ ราชการ', 8), '3': ('ไลฟ์สไตล์ ช้อปปิ้ง อาหาร', 12),
                '4': ('บันเทิง โซเชียล เกมเบา', 20), '5': ('เด็ก การเรียนรู้', 20), '6': ('พรีเมียม สร้างสรรค์', 2)}
 LABELS = ['ก', 'ข', 'ค']
+AMOUNT = '฿12,450.00'
 TONE_LINE = 'ผู้ใหญ่หาผ้าใหม่ ให้สะใภ้ใช้คล้องคอ · ปฏิทิน ฎีกา ญาติ ฤดูกาล'
 
 
 MIN_PRIMARY_DISTANCE = 30  # ระยะ RGB ของสีหลักระหว่าง 2 แนว ต่ำกว่านี้ตาแยกไม่ออก
+MIN_HUE_GAP = 20  # องศา · สีที่มีสี (saturation เกิน 0.15) ห่างกันน้อยกว่านี้ถือว่าโทนเดียวกัน แม้ RGB ห่างพอ
+MIN_SATURATION = 0.15
 
 
 def rgb(hex_color):
@@ -57,6 +61,18 @@ def rgb(hex_color):
 
 def color_distance(a, b):
     return sum((x - y) ** 2 for x, y in zip(rgb(a), rgb(b))) ** 0.5
+
+
+def hue_saturation(hex_color):
+    h, _, sat = colorsys.rgb_to_hls(*(c / 255 for c in rgb(hex_color)))
+    return h * 360, sat
+
+
+def is_same_tone(a, b):
+    """สีหลัก 2 ตัวมีสีทั้งคู่และเฉดห่างกันไม่ถึง MIN_HUE_GAP · สีเทาไม่นับ เพราะไม่มีเฉด"""
+    (ha, sa), (hb, sb) = hue_saturation(a), hue_saturation(b)
+    gap = abs(ha - hb)
+    return min(sa, sb) > MIN_SATURATION and min(gap, 360 - gap) < MIN_HUE_GAP
 
 
 def luminance(hex_color):
@@ -91,6 +107,22 @@ def palette_problems(modes):
             if ratio < need:
                 problems.append(f'{mode} {fg}/{bg} {ratio:.2f}:1 ต่ำกว่า {need}:1')
     return problems
+
+
+def best_on_primary(primary, candidates=('#FFFFFF', '#000000')):
+    return max(candidates, key=lambda c: contrast(c, primary))
+
+
+def repair_on_primary(row):
+    """on_primary ที่ contrast ต่ำ → ลองขาวหรือดำตัวที่ผ่าน · ไม่ผ่านทั้งคู่ไม่ยุ่ง ให้ palette_problems ตัดทีหลัง"""
+    primary, current = (row.get('primary') or '').strip(), (row.get('on_primary') or '').strip()
+    try:
+        if contrast(current, primary) >= 4.5:
+            return row
+        better = best_on_primary(primary)
+    except ValueError:  # hex เสีย ปล่อยให้ palette_problems รายงาน
+        return row
+    return {**row, 'on_primary': better} if contrast(better, primary) >= 4.5 else row
 
 
 def families(field):
@@ -136,7 +168,7 @@ class Library:
     def add_palettes(self, rows):
         """พาเลตจากการค้นสด (--palette · --extra-palettes) · ชนะคลังสำรองเสมอ"""
         for r in rows:
-            self.palettes.setdefault(r['id'], {})[(r.get('mode') or '').strip().lower()] = r
+            self.palettes.setdefault(r['id'], {})[(r.get('mode') or '').strip().lower()] = repair_on_primary(r)
 
     def ranked(self, domain, query, preferred, pool):
         """id ที่อุตสาหกรรมระบุก่อน → ผลค้นจากคำของอุตสาหกรรม → ที่เหลือทั้งหมด (ไม่ซ้ำ)"""
@@ -182,10 +214,21 @@ def pick_directions(lib, industry):
 
     used = lambda key: [d[key] for d in directions]  # noqa: E731
 
+    def heading_of(font_id):
+        return (families(lib.fonts[font_id].get('heading')) or [''])[0].lower()
+
+    def fresh_font(candidates):
+        """ตัวแรกที่ฟอนต์หัวยังไม่มีแนวไหนใช้ · ไม่มีเลยคืนตัวแรกที่ id ยังไม่ซ้ำ"""
+        taken = {heading_of(f) for f in used('font_id')}
+        pool = [f for f in candidates if f not in used('font_id')]
+        return next((f for f in pool if heading_of(f) not in taken), pool[0] if pool else candidates[0])
+
     def distinct(pal_id):
-        """สีหลักห่างจากแนวที่เลือกแล้วพอให้ตาแยกออก · เคยได้ 2 แนวที่สีหลักต่างกันแค่ (2, 4, 15)"""
+        """สีหลักห่างจากแนวที่เลือกแล้วพอให้ตาแยกออก ทั้งระยะ RGB และเฉดสี
+        เคยได้ 2 แนวที่สีหลักต่างกันแค่ (2, 4, 15) · และ 19 อุตสาหกรรมได้ 2 แนวโทนน้ำเงินหรือน้ำตาลเดียวกัน"""
         mine = lib.palettes[pal_id]['light']['primary']
-        return all(color_distance(mine, d['palette']['light']['primary']) >= MIN_PRIMARY_DISTANCE for d in directions)
+        others = [d['palette']['light']['primary'] for d in directions]
+        return all(color_distance(mine, o) >= MIN_PRIMARY_DISTANCE and not is_same_tone(mine, o) for o in others)
 
     # คลังสำรองสลับได้เฉพาะพาเลตที่เกี่ยวกับอุตสาหกรรม · เคยสลับคลินิกทันตกรรมไปได้สีแดงเยาวราช
     relevant = set(pal_pool)
@@ -197,6 +240,11 @@ def pick_directions(lib, industry):
         if distinct(pal_id):
             return pal_id
         return next((p for p in good_pal if p in relevant and p not in used('palette_id') and distinct(p)), pal_id)
+
+    def warn_if_close(number, pal_id):
+        if not distinct(pal_id):
+            rejected.append(f'แนวที่ {number} พาเลต `{pal_id}` สีหลักใกล้แนวก่อนหน้า และไม่มีพาเลตที่เกี่ยวให้สลับ '
+                            '· ตอนทำ mockup ให้แยกด้วย accent หรือ look แทน')
 
     # รอบแรก: แนวตามลำดับที่อุตสาหกรรมกำหนด (look · พาเลต · ฟอนต์ ตำแหน่งเดียวกัน)
     for i, look_id in enumerate(looks_pref):
@@ -210,12 +258,15 @@ def pick_directions(lib, industry):
             why = 'พาเลตไม่ผ่าน' if pal_id not in good_pal else 'คู่ฟอนต์ไม่ผ่าน'
             rejected.append(f'แนวที่ {i + 1} ({look_id} · {pal_id} · {font_id}) ถูกตัด เพราะ{why}')
             continue
+        if heading_of(font_id) in {heading_of(f) for f in used('font_id')}:
+            swapped = fresh_font(good_font)
+            rejected.append(f'แนวที่ {i + 1} เปลี่ยนคู่ฟอนต์ `{font_id}` เป็น `{swapped}` เพราะฟอนต์หัวซ้ำแนวก่อนหน้า')
+            font_id = swapped
         if swap(pal_id) != pal_id:
             rejected.append(f'แนวที่ {i + 1} เปลี่ยนพาเลต `{pal_id}` เป็น `{swap(pal_id)}` เพราะสีหลักใกล้แนวก่อนหน้า')
             pal_id = swap(pal_id)
-        elif not distinct(pal_id):
-            rejected.append(f'แนวที่ {i + 1} พาเลต `{pal_id}` สีหลักใกล้แนวก่อนหน้า และไม่มีพาเลตที่เกี่ยวให้สลับ '
-                            '· ตอนทำ mockup ให้แยกด้วย accent หรือ look แทน')
+        else:
+            warn_if_close(i + 1, pal_id)
         add(look_id, pal_id, font_id)
     # รอบเติม: look ถัดไปที่ยังไม่ใช้ · พาเลตและฟอนต์ที่ยังไม่ใช้ก่อน
     for look_id in look_pool:
@@ -224,8 +275,8 @@ def pick_directions(lib, industry):
         if look_id in [d['look'].get('id') for d in directions]:
             continue
         pal_id = swap(next((p for p in good_pal if p not in used('palette_id')), good_pal[0]))
-        font_id = next((f for f in good_font if f not in used('font_id')), good_font[0])
-        add(look_id, pal_id, font_id)
+        warn_if_close(len(directions) + 1, pal_id)
+        add(look_id, pal_id, fresh_font(good_font))
     return directions, rejected
 
 
@@ -319,6 +370,7 @@ def render_markdown(brief, industry, match, directions, rules, rejected, today, 
                   f'ความแน่น {look.get("density", "-")}',
                   f'- ฟอนต์ `{d["font_id"]}`: {font_line(font)} · แบบไทย {font.get("thai_style", "-")} · '
                   f'เนื้อเล็กสุด {font.get("min_body_px", "-")}px · line-height {font.get("line_height", "-")}',
+                  '- CSS font-family: หัว `{}` · เนื้อ `{}` · ตัวเลข `{}`'.format(*css_lines(font, thai_fonts)),
                   f'- ใบอนุญาตฟอนต์: {licence_line(font, thai_fonts)}',
                   f'- ข้อห้าม: {look.get("avoid_th") or "-"}', '',
                   f'พาเลต `{d["palette_id"]}` {pal["light"].get("name_th", "")}',
@@ -358,9 +410,36 @@ def google_font_links(directions, thai_fonts):
     return '\n'.join(links)
 
 
-def css_stack(field, fallback):
-    fams = families(field)
-    return ', '.join([f'"{f}"' for f in fams] + [fallback])
+THAI_FALLBACK = 'IBM Plex Sans Thai'  # โหลดอยู่ในหัวหน้าเทียบแล้ว
+
+
+SERIF_FAMILIES = {'taviraj', 'trirong', 'pridi', 'maitree', 'fahkwang', 'chonburi'}
+
+
+def generic_family(family):
+    """ชนิดฟอนต์สำรองของ CSS ตามชื่อฟอนต์ตัวแรก · ไม่รู้จัก = sans-serif"""
+    name = family.lower()
+    if re.search(r'\b(mono|code)\b', name):
+        return 'monospace'
+    if name in SERIF_FAMILIES or ('serif' in name and 'sans' not in name):
+        return 'serif'
+    return 'sans-serif'
+
+
+def css_stack(field, thai_fonts):
+    """ฟอนต์ที่ไม่มีอักษรไทย (ไม่อยู่ใน thai-fonts.csv และชื่อไม่มี Thai) ต้องมีฟอนต์ไทยสำรองต่อท้าย · ตัวสำรองท้ายสุดตรงชนิดฟอนต์ตัวแรก"""
+    fams = list(dict.fromkeys(families(field)))
+    generic = generic_family(fams[0]) if fams else 'sans-serif'
+    if not any(f.lower() in thai_fonts or re.search(r'thai', f, re.I) for f in fams):
+        fams.append(THAI_FALLBACK)
+    return ', '.join([f'"{f}"' for f in fams] + [generic])
+
+
+def css_lines(font, thai_fonts):
+    """ค่า font-family พร้อมใช้ · ตัวเลขต่อด้วยฟอนต์เนื้อ"""
+    head, body = css_stack(font.get('heading'), thai_fonts), css_stack(font.get('body'), thai_fonts)
+    num = css_stack('; '.join(filter(None, [font.get('numeric'), font.get('body')])), thai_fonts)
+    return head, body, num
 
 
 # การ์ดของแต่ละแนวต่างกันตาม depth ของ look (คำแรกที่เจอชนะ) · เดิมทุกแนวใช้การ์ดเดียวกัน แนวที่สีใกล้กันจึงดูเหมือนกัน
@@ -388,31 +467,99 @@ def card_style(look, p, mode, radius):
     return f'border:{fill(border)};box-shadow:{fill(shadow)};border-radius:{r}px;padding:{pad}px', r
 
 
-def render_panel(d, mode, industry, brief, today, radius):
+# โครงหน้าของแต่ละแนวต่างกันตาม look (ไม่ใช่แค่การ์ดคนละสี) · แต่ละ look เรียงโครงที่เหมาะไว้ แนวถัดไปเลือกตัวที่ยังว่าง
+# editorial = ตัวอักษรใหญ่ชิดซ้าย คอลัมน์ไม่เท่ากัน · bento = กล่องหลายขนาด · dense = แถบเครื่องมือกับตาราง
+LAYOUTS = ('editorial', 'bento', 'dense')
+LAYOUT_NAMES = {'editorial': 'ตัวอักษรใหญ่ชิดซ้าย คอลัมน์ไม่เท่ากัน', 'bento': 'กล่องหลายขนาด',
+                'dense': 'แถบเครื่องมือกับตารางแน่น'}
+LOOK_LAYOUTS = {
+    'editorial': ('editorial',), 'paper-print': ('editorial', 'dense'), 'luxury': ('editorial', 'bento'),
+    'thai-craft': ('editorial', 'bento'), 'apple-hig': ('editorial', 'bento'),
+    'bento': ('bento',), 'playful': ('bento',), 'claymorphism': ('bento',), 'neobrutalism': ('bento', 'editorial'),
+    'skeuomorphic': ('bento', 'dense'),
+    'quiet-utility': ('dense', 'bento'), 'fluent-2': ('dense', 'bento'), 'material-3': ('dense', 'bento'),
+    'thai-gov': ('dense', 'editorial'), 'glass-tech': ('dense', 'bento'),
+}
+
+
+def assign_layouts(directions):
+    """โครงหน้าของแต่ละแนว · ไม่ซ้ำกัน · look ที่ไม่รู้จักได้โครงที่ยังว่างตามลำดับ editorial → bento → dense"""
+    taken = []
+    for d in directions:
+        wanted = [*LOOK_LAYOUTS.get(d['look'].get('id'), ()), *LAYOUTS]
+        taken.append(next(x for x in wanted if x not in taken))
+    return taken
+
+
+def panel_editorial(x):
+    return f'''<div class="card ed" style="background:{x['surface']};{x['card']}">
+    <p class="eyebrow" style="color:{x['muted']}">{x['date']}</p>
+    <h3 style="font-family:{x['head']};color:{x['text']}">{x['title']}</h3>
+    <div class="rule" style="border-color:{x['border']}"></div>
+    <div class="cols">
+      <div>{x['brief']}{x['tone']}</div>
+      <aside>{x['num']}<div class="col">{x['chips']}</div></aside>
+    </div>
+    <div class="row">{x['buttons']}</div>
+  </div>'''
+
+
+def panel_bento(x):
+    tile = f"background:{x['surface']};{x['card']};padding:14px"
+    return f'''<div class="bento">
+    <div class="tile wide" style="{tile};background:{x['primary']};color:{x['on_primary']};border-color:{x['primary']}">
+      <h3 style="font-family:{x['head']};color:{x['on_primary']}">{x['title']}</h3>{x['brief']}</div>
+    <div class="tile" style="{tile}"><p class="num" style="font-family:{x['num_font']}"><b>{x['amount']}</b><br>{x['when']}</p></div>
+    <div class="tile" style="{tile}">{x['tone']}</div>
+    <div class="tile wide" style="{tile}"><div class="row">{x['chips']}</div></div>
+    <div class="tile wide" style="{tile}"><div class="row">{x['buttons']}</div></div>
+  </div>'''
+
+
+def panel_dense(x):
+    line = f"border-bottom:1px solid {x['border']}"
+    rows = ''.join(f'<tr><th style="color:{x["muted"]};{line}">{k}</th><td style="{line}">{v}</td></tr>'
+                   for k, v in (('รายการ', x['brief']), ('ยอดรวม', x['num']), ('หมายเหตุ', x['tone'])))
+    return f'''<div class="card dn" style="background:{x['surface']};{x['card']};padding:12px">
+    <div class="bar" style="{line}"><h3 style="font-family:{x['head']};color:{x['text']}">{x['title']}</h3>
+      <div class="row">{x['chips']}</div></div>
+    <table>{rows}</table>
+    <div class="row">{x['buttons']}</div>
+  </div>'''
+
+
+PANELS = {'editorial': panel_editorial, 'bento': panel_bento, 'dense': panel_dense}
+
+
+def render_panel(d, mode, industry, brief, today, radius, layout, thai_fonts):
     p, font, e = d['palette'][mode], d['font'], html.escape
     card, radius = card_style(d['look'], p, mode, radius)
-    head, body = css_stack(font.get('heading'), 'serif'), css_stack(font.get('body'), 'sans-serif')
     # ฟอนต์ตัวเลขส่วนใหญ่ไม่มีอักษรไทย จึงต่อด้วยฟอนต์เนื้อ ให้คำไทยในบรรทัดเดียวกัน (ต.ค. · น.) ใช้ฟอนต์เนื้อแทนฟอนต์ของระบบ
-    num = css_stack('; '.join(filter(None, [font.get('numeric'), font.get('body')])), 'sans-serif')
+    head, body, num = css_lines(font, thai_fonts)
     swatches = ''.join(f'<span class="sw"><i style="background:{p[r]}"></i>{r}<br><code>{p[r]}</code></span>'
                        for r in ('bg', 'surface', 'text', 'primary', 'accent', 'border'))
-    status = ''.join(f'<span class="chip" style="color:{p[r]};border-color:{p[r]}">{t}</span>'
-                     for r, t in (('success', 'ชำระแล้ว'), ('warning', 'รอตรวจ'), ('danger', 'ยกเลิก')))
     lh = font.get('line_height') or '1.6'
     size = font.get('min_body_px') or '16'
+    text_style = f'font-family:{e(body)};font-size:{e(size)}px;line-height:{e(lh)}'
+
+    def button(css):
+        return f'style="{css};border-radius:{radius}px;font-family:{e(body)}"'
+
+    solid = f'background:{p["primary"]};color:{p["on_primary"]}'
+    outline = f'background:transparent;color:{p["text"]};border:1px solid {p["border"]}'
+    x = {**p, 'muted': p['text_muted'], 'head': e(head), 'card': card, 'radius': radius,
+         'title': e(industry.get('name_th', '')),
+         'date': thai_date(today),
+         'brief': f'<p style="{text_style}">{e(brief)}</p>',
+         'tone': f'<p style="{text_style};color:{p["text_muted"]}">{TONE_LINE}</p>',
+         'num': f'<p class="num" style="font-family:{e(num)}">{AMOUNT} · {thai_date(today)} · 09:30 น.</p>',
+         'num_font': e(num), 'amount': AMOUNT, 'when': f'<span>{thai_date(today)}</span> <span>09:30 น.</span>',
+         'chips': ''.join(f'<span class="chip" style="color:{p[r]};border-color:{p[r]}">{t}</span>'
+                          for r, t in (('success', 'ชำระแล้ว'), ('warning', 'รอตรวจ'), ('danger', 'ยกเลิก'))),
+         'buttons': f'<button {button(solid)}>ยืนยันคำสั่งซื้อ</button><button {button(outline)}>ดูรายละเอียด</button>'}
     return f'''<div class="panel" style="background:{p['bg']};color:{p['text']}">
   <p class="mode" style="color:{p['text_muted']}">{'สว่าง' if mode == 'light' else 'มืด'}</p>
-  <div class="card" style="background:{p['surface']};{card}">
-    <h3 style="font-family:{e(head)};color:{p['text']}">{e(industry.get('name_th', ''))}</h3>
-    <p style="font-family:{e(body)};font-size:{e(size)}px;line-height:{e(lh)}">{e(brief)}</p>
-    <p style="font-family:{e(body)};font-size:{e(size)}px;line-height:{e(lh)};color:{p['text_muted']}">{TONE_LINE}</p>
-    <p class="num" style="font-family:{e(num)}">฿12,450.00 · {thai_date(today)} · 09:30 น.</p>
-    <div class="row">
-      <button style="background:{p['primary']};color:{p['on_primary']};border-radius:{radius}px;font-family:{e(body)}">ยืนยันคำสั่งซื้อ</button>
-      <button style="background:transparent;color:{p['text']};border:1px solid {p['border']};border-radius:{radius}px;font-family:{e(body)}">ดูรายละเอียด</button>
-    </div>
-    <div class="row">{status}</div>
-  </div>
+  {PANELS[layout](x)}
   <div class="swatches" style="color:{p['text_muted']}">{swatches}</div>
 </div>'''
 
@@ -421,16 +568,17 @@ def render_html(brief, industry, directions, today, thai_fonts):
     _, radius = personality(industry)
     e = html.escape
     cols = []
-    for label, d in zip(LABELS, directions):
+    for label, d, layout in zip(LABELS, directions, assign_layouts(directions)):
         look, font = d['look'], d['font']
         cols.append(f'''<section class="dir">
   <h2>แนว {label} · {e(look.get('name_th', ''))} <small>{e(look.get('name_en', ''))}</small></h2>
-  {render_panel(d, 'light', industry, brief, today, radius)}
-  {render_panel(d, 'dark', industry, brief, today, radius)}
+  {render_panel(d, 'light', industry, brief, today, radius, layout, thai_fonts)}
+  {render_panel(d, 'dark', industry, brief, today, radius, layout, thai_fonts)}
   <dl>
     <dt>ฟอนต์</dt><dd>{e(font_line(font))}</dd>
     <dt>ความลึก · การเคลื่อนไหว</dt><dd>{e(look.get('depth', '-'))} · {e(look.get('motion', '-'))}</dd>
     <dt>ความแน่น</dt><dd>{e(look.get('density', '-'))}</dd>
+    <dt>โครงหน้า</dt><dd>{LAYOUT_NAMES[layout]}</dd>
     <dt>ข้อห้าม</dt><dd>{e(look.get('avoid_th') or '-')}</dd>
     <dt>token</dt><dd><code>{e(d['palette_id'])}</code> · <code>{e(d['font_id'])}</code> · มุมโค้ง {card_style(look, d['palette']['light'], 'light', radius)[1]}px</dd>
   </dl>
@@ -461,6 +609,26 @@ def render_html(brief, industry, directions, today, thai_fonts):
   .row {{ display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }}
   button {{ padding: 10px 16px; min-height: 44px; font-size: 15px; cursor: pointer; }}
   .chip {{ border: 1px solid; border-radius: 4px; padding: 2px 8px; font-size: 13px; }}
+  .col {{ display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }}
+  .ed .eyebrow {{ margin: 0 0 4px; font-size: 12px; letter-spacing: .08em; }}
+  .card.ed h3 {{ font-size: 36px; line-height: 1.05; margin: 0 0 16px; }}
+  .ed .rule {{ border-top: 2px solid; margin-bottom: 16px; }}
+  .ed .cols {{ display: grid; grid-template-columns: 1.8fr 1fr; gap: 20px; }}
+  .ed aside .num {{ margin-top: 0; font-size: 13px; }}
+  .bento {{ display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }}
+  .tile {{ box-sizing: border-box; min-width: 0; }}
+  .tile p {{ margin: 0; }}
+  .tile.wide {{ grid-column: span 2; }}
+  .tile h3 {{ margin: 0 0 8px; font-size: 28px; line-height: 1.15; }}
+  .tile .num b {{ font-size: 24px; font-weight: 600; }}
+  .tile .num span {{ white-space: nowrap; font-size: 13px; }}
+  .dn .bar {{ display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; padding-bottom: 8px; }}
+  .dn h3 {{ margin: 0; font-size: 16px; }}
+  .dn table {{ width: 100%; border-collapse: collapse; font-size: 13px; }}
+  .dn th {{ text-align: left; font-weight: 400; width: 64px; vertical-align: top; padding: 6px 8px 6px 0; }}
+  .dn td {{ padding: 6px 0; }}
+  .dn td p {{ margin: 0; font-size: 13px !important; line-height: 1.4 !important; }}
+  .dn button {{ min-height: 32px; padding: 4px 12px; font-size: 13px; }}
   .swatches {{ display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; font-size: 11px; }}
   .sw i {{ display: block; width: 40px; height: 24px; border: 1px solid rgba(127,127,127,.4); border-radius: 4px; }}
   dl {{ font-size: 14px; margin: 8px 0 0; }}
@@ -486,6 +654,17 @@ def custom_industry(brief):
     """อุตสาหกรรมชั่วคราวเมื่อไม่มีในข้อมูล · look และคู่ฟอนต์มาจากการค้นด้วยคำในโจทย์"""
     return {'id': 'custom', 'name_th': brief, 'name_en': 'custom', 'keywords_th': brief, 'keywords_en': '',
             'personality': '', 'looks': '', 'palette_ids': '', 'font_pair_ids': ''}
+
+
+NEAR_TIE_RATIO = 0.85  # อันดับ 2 ได้คะแนนถึงสัดส่วนนี้ของอันดับ 1 = ตัดสินจากคำค้นไม่ได้ ให้ผู้ใช้เลือกเอง
+
+
+def near_ties(match, others):
+    """id ของอันดับถัดไปที่คะแนนใกล้อันดับ 1 · --industry ข้ามการค้น จึงไม่มี"""
+    top = match.get('score')
+    if not isinstance(top, (int, float)):
+        return []
+    return [o['id'] for o in others if o['score'] >= top * NEAR_TIE_RATIO]
 
 
 def find_industry(lib, brief, industry_id):
@@ -522,17 +701,18 @@ def parse_spec(spec):
     return name.strip(), dict(zip(SPEC_ROLES, hexes)) if len(hexes) == len(SPEC_ROLES) else hexes
 
 
-def palette_from_spec(spec, today):
+def palette_from_spec(spec, today, reference_shift=None):
+    """reference_shift: None = สีของผู้ใช้เอง · จำนวนองศา = สีแบรนด์ของต้นแบบคนอื่น เลื่อนเฉดตามนั้น (ใช้กับแบบ 8 หน้าที่)"""
     from brand_palette import build_palette, palette_from_roles  # นำเข้าตอนใช้ เพราะ brand_palette นำเข้าไฟล์นี้
     name, colors = parse_spec(spec)
     if isinstance(colors, dict):
-        return palette_from_roles(name, colors, today.isoformat())
+        return palette_from_roles(name, colors, today.isoformat(), reference_shift)
     site = {'host': name, 'brand': [{'hex': h.upper(), 'weight': len(colors) - i} for i, h in enumerate(colors)]}
     return build_palette(name, [site], today.isoformat())
 
 
 def draft(brief, data_dir, out, html_path, industry_id=None, force=False, today=None,
-          palette_ids=None, extra_palettes=None, palette_specs=None):
+          palette_ids=None, extra_palettes=None, palette_specs=None, reference_shift=None):
     """คืน (directions, rejected, เส้นทางที่เขียน) · ไม่เขียนทับไฟล์ที่มีอยู่ถ้าไม่ force
     ลำดับแหล่งสี: สีจากการค้นสด (palette_specs · extra_palettes) ก่อนเสมอ · ไม่มีเลยจึงใช้คลังสำรองใน data/ พร้อมคำเตือน
     palette_ids เลือกและเรียงบางชุดจากแหล่งที่ใช้ (ค่าตั้งต้นคือทุกชุด)"""
@@ -540,8 +720,13 @@ def draft(brief, data_dir, out, html_path, industry_id=None, force=False, today=
     lib = Library(data_dir)
     if extra_palettes:
         lib.add_palettes(read_csv(Path(extra_palettes)))
+    dropped = []
     for spec in palette_specs or []:
-        lib.add_palettes(palette_from_spec(spec, today))
+        parse_spec(spec)  # รูปแบบผิดหยุดทันที · แต่สีที่ contrast ไม่ผ่านแค่ถูกตัด
+        try:
+            lib.add_palettes(palette_from_spec(spec, today, reference_shift))
+        except SystemExit as stop:
+            dropped.append(f'--palette {spec.partition(":")[0]}: {stop}')
     if not lib.palettes:
         lib.palettes, lib.is_fallback = lib.stored, True
         print(f'คำเตือน: {FALLBACK_NOTE}', file=sys.stderr)
@@ -558,8 +743,13 @@ def draft(brief, data_dir, out, html_path, industry_id=None, force=False, today=
     if existing and not force:
         raise SystemExit(f'มีไฟล์อยู่แล้ว ไม่เขียนทับ: {", ".join(existing)} · ใส่ --force ถ้าตั้งใจ')
     directions, rejected = pick_directions(lib, industry)
+    rejected = dropped + rejected
     if len(directions) < 3:
         raise SystemExit(f'ได้แนวที่ผ่านแค่ {len(directions)} แนว · ที่ตัดออก: {rejected}')
+    ties = near_ties(match, others)
+    if ties:
+        rejected.insert(0, f'อุตสาหกรรม `{industry["id"]}` กับ {" · ".join(f"`{t}`" for t in ties)} คะแนนใกล้กัน '
+                           f'· ถ้าไม่ตรงโจทย์ ใส่ --industry <id> เลือกเอง')
     rules = ux_rules(lib, brief, industry)
     md = render_markdown(brief, industry, match, directions, rules, rejected, today, lib.thai_fonts, lib.is_fallback)
     page = render_html(brief, industry, directions, today, lib.thai_fonts)
@@ -568,9 +758,33 @@ def draft(brief, data_dir, out, html_path, industry_id=None, force=False, today=
     for path, text in ((out, md), (html_path, page)):
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(text, encoding='utf-8')
-    if others:
+    if ties:
+        print(f'คะแนนใกล้กัน: {industry["id"]} · {" · ".join(ties)} → ใช้ --industry เลือก')
+    elif others:
         print('อุตสาหกรรมอันดับถัดไป: ' + ' · '.join(o['id'] for o in others))
     return directions, rejected, (out, html_path)
+
+
+def shifted_copper_primary_ok():
+    from brand_palette import palette_from_roles
+    roles = {'bg': '#FAF7F2', 'surface': '#FFFFFF', 'text': '#2B2118', 'text_muted': '#6B5A48', 'primary': '#C4703A',
+             'secondary': '#E8B04B', 'accent': '#0E7C86', 'border': '#E6DDD3'}
+    try:
+        light = palette_from_roles('copper', roles, '2026-11-06', 8)[0]
+    except SystemExit:
+        return False
+    return contrast(light['primary'], light['bg']) >= 3.0
+
+
+def no_silent_duplicate_tone_with_two_palettes():
+    specs = ['green:bg=#F7FAF7,surface=#FFFFFF,text=#1B2A1F,text_muted=#4F6355,primary=#2E7D4F,accent=#B5462A,border=#D5E0D8',
+             'plum:bg=#FAF7FA,surface=#FFFFFF,text=#2A1B2A,text_muted=#5F4F5F,primary=#8A2E6F,accent=#2F6F6A,border=#E0D5E0']
+    with tempfile.TemporaryDirectory() as tmp:
+        dirs, notes, _ = draft('dentist booking site', FIXTURES, Path(tmp, 'a.md'), Path(tmp, 'a.html'),
+                               palette_specs=specs, today=datetime.date(2026, 11, 6))
+    primaries = [d['palette']['light']['primary'] for d in dirs]
+    has_close_pair = any(is_same_tone(a, b) for i, a in enumerate(primaries) for b in primaries[i + 1:])
+    return not has_close_pair or any('สีหลักใกล้แนวก่อนหน้า' in n for n in notes)  # ซ้ำได้เมื่อไม่มีทางเลือก แต่ต้องบอก
 
 
 def self_test():
@@ -602,6 +816,8 @@ def self_test():
               != card_style({'depth': 'เงานุ่มสองชั้น', 'density': 'โปร่ง'}, p, 'light', 8)
               and 'box-shadow:none' in card_style({'depth': 'เรียบ ไม่มีเงา'}, p, 'light', 8)[0]
               and 'box-shadow:none' in card_style({'depth': 'tonal surface (แทนเงา)'}, p, 'light', 8)[0])
+        check('3 แนวในหน้าเทียบใช้โครงหน้าต่างกัน', {m for m in ('card ed', 'class="bento"', 'card dn') if m in html_text}
+              == {'card ed', 'class="bento"', 'card dn'} and len(set(assign_layouts(dirs))) == 3)
         check('HTML ไม่มี Inter และไม่มีสี Tailwind', not re.search(r'family=Inter|"Inter"', html_text)
               and not any(f'#{h}' in html_text.lower() for h in TAILWIND_DEFAULTS))
         check('ไม่มีคำโฆษณา', not HYPE_WORDS.search(md + html_text))
@@ -642,6 +858,53 @@ def self_test():
         dirs, _, _ = draft('quantum zebra spaceship', FIXTURES, Path(tmp, 'd.md'), Path(tmp, 'd.html'),
                            palette_ids=['jade-paper'], extra_palettes=test_palettes)
         check('--palettes เลือกเฉพาะ id ที่ส่งมา', {d['palette_id'] for d in dirs} == {'jade-paper'})
+    lib = Library(DATA_DIR)  # ข้อมูลจริง · ทุกอุตสาหกรรมต้องได้โครงหน้าไม่ซ้ำ และไม่มี 2 แนวที่สีหลักโทนเดียวกัน
+    lib.palettes, lib.is_fallback = lib.stored, True
+    picks = {i: pick_directions(lib, ind)[0] for i, ind in lib.industries.items()}
+    same_layout = [i for i, ds in picks.items() if len(set(assign_layouts(ds))) < 3]
+    check(f'ทุกอุตสาหกรรมได้โครงหน้า 3 แนวไม่ซ้ำ (ซ้ำ: {same_layout})', not same_layout)
+    same_tone = [i for i, ds in picks.items() for n, a in enumerate(ds) for b in ds[n + 1:]
+                 if is_same_tone(a['palette']['light']['primary'], b['palette']['light']['primary'])]
+    check(f'ไม่มีอุตสาหกรรมที่ 2 แนวสีหลักโทนเดียวกัน (พบ: {same_tone})', not same_tone)
+    check('is_same_tone แยกน้ำเงิน 2 เฉดออก และไม่นับเทา', is_same_tone('#1D4C8C', '#1B2E58')
+          and not is_same_tone('#1D4C8C', '#9E1F1A') and not is_same_tone('#1E1B1A', '#6B5A4E'))
+    heading = lambda d: families(d['font'].get('heading'))[0].lower()  # noqa: E731
+    same_heading = [i for i, ds in picks.items() if len({heading(d) for d in ds}) < 3]
+    check(f'ทุกอุตสาหกรรมได้ฟอนต์หัว 3 แนวไม่ซ้ำ (ซ้ำ: {same_heading})', not same_heading)
+    brief = 'marketplace ของ plugin Claude Code สำหรับนักพัฒนาไทย'
+    found = lib.corpus.search('industry', brief, 3)
+    check(f'โจทย์ plugin สำหรับนักพัฒนา → dev-tool ไม่ใช่ marketplace-shop (ได้ {found[0]["id"] if found else "-"})',
+          found and found[0]['id'] == 'dev-tool')
+    check('ใกล้กัน → คืนชื่อที่ 2 · ห่างกัน → ไม่คืน · --industry → ไม่คืน',
+          near_ties({'score': 10}, [{'id': 'a', 'score': 9}, {'id': 'b', 'score': 5}]) == ['a']
+          and near_ties({'score': 10}, [{'id': 'b', 'score': 5}]) == [] and near_ties({'score': '-'}, [{'id': 'a', 'score': 9}]) == [])
+    fixed = repair_on_primary({'primary': '#777777', 'on_primary': '#8A8A8A'})['on_primary']
+    check('on_primary contrast ต่ำ → ปรับเป็นขาวหรือดำที่ผ่าน', contrast(fixed, '#777777') >= 4.5)
+    with tempfile.TemporaryDirectory() as tmp:
+        bad_muted = ('bad-muted:bg=#FAF7F2,surface=#FFFFFF,text=#2B2118,text_muted=#E0E0E0,primary=#8A3B12,'
+                     'accent=#2F6F6A,border=#D8CBB8')
+        good = ('good-one:bg=#FAF7F2,surface=#FFFFFF,text=#2B2118,text_muted=#6B5A48,primary=#8A3B12,'
+                'accent=#2F6F6A,border=#D8CBB8')
+        _, notes, _ = draft('dentist booking site', FIXTURES, Path(tmp, 'a.md'), Path(tmp, 'a.html'),
+                            palette_specs=[bad_muted, good], today=datetime.date(2026, 11, 6))
+        check('--palette ที่ contrast ตกไม่หยุดคำสั่ง · จดในรายการที่ตัด', any('bad-muted' in n for n in notes))
+    mid = {'bg': '#FAF7F2', 'surface': '#FFFFFF', 'text': '#2B2118', 'text_muted': '#6B5A48', 'primary': '#B5462A',
+           'secondary': '#E8B04B', 'accent': '#0E7C86', 'border': '#E6DDD3'}
+    from brand_palette import palette_from_roles
+    own, ref = (palette_from_roles('t', mid, '2026-11-06', shift)[0] for shift in (None, 8))
+    check('สีจากต้นแบบ → เลื่อนเฉด และ notes บอกที่มาตามจริง ไม่เขียนว่าผู้ใช้ส่ง',
+          ref['primary'] != own['primary'] and 'ต้นแบบ' in ref['notes_th'] and 'ผู้ใช้ส่ง' not in ref['notes_th']
+          and 'ผู้ใช้ส่ง' in own['notes_th'])
+    th = lib.thai_fonts
+    check('ฟอนต์ที่ไม่มีไทย → ต่อฟอนต์ไทยสำรอง · ที่มีไทยแล้วไม่เติม',
+          css_stack('JetBrains Mono', th).endswith(f'"{THAI_FALLBACK}", monospace')
+          and THAI_FALLBACK not in css_stack('Taviraj', th))
+    check('ตัวสำรองตรงชนิดฟอนต์ sans → sans-serif · serif → serif · mono → monospace',
+          css_stack('IBM Plex Sans Thai', th).endswith('sans-serif') and css_stack('Noto Serif Thai; Noto Serif', th).endswith(', serif')
+          and css_stack('Taviraj', th).endswith(', serif') and css_stack('IBM Plex Mono', th).endswith('monospace'))
+    check('พาเลตที่เลื่อนเฉดแล้ว contrast ตก → ปรับความสว่างจนผ่าน ไม่ถูกตัด',
+          shifted_copper_primary_ok())
+    check('สองแนวสีโทนเดียวกันเพราะไม่มีพาเลตให้สลับ → ต้องมีข้อความเตือน ไม่ซ้ำเงียบ ๆ', no_silent_duplicate_tone_with_two_palettes())
     failed = [n for n, ok in checks if not ok]
     for name, ok in checks:
         print(('ผ่าน     ' if ok else 'ไม่ผ่าน  ') + name)
@@ -661,6 +924,9 @@ def main():
     ap.add_argument('--palette', action='append', metavar='ชื่อ:สี',
                     help='สีจากการค้นสด ใส่ซ้ำได้ · ชื่อ:bg=#..,surface=#..,text=#..,text_muted=#..,primary=#..,'
                     'secondary=#..,accent=#..,border=#.. · หรือสี 8 ตัวตามลำดับนี้ · หรือสีแบรนด์ 1-7 ตัว')
+    ap.add_argument('--reference-colors', nargs='?', type=int, const=8, metavar='องศา',
+                    help='--palette 8 หน้าที่ เป็นสีแบรนด์ของต้นแบบคนอื่น ไม่ใช่สีของผู้ใช้ · เลื่อนเฉดตามองศา (ค่าตั้งต้น 8) '
+                    'และบอกที่มาตามจริงใน DESIGN.md · ใส่ 0 = ไม่เลื่อน')
     ap.add_argument('--palettes', help='id พาเลตคั่นด้วย ; เลือกและเรียงเป็นแนว ก ข ค (ค่าตั้งต้น ทุกชุดของแหล่งที่ใช้) · '
                     'ไม่ได้ส่งสดมาเลยจะใช้คลังสำรองใน data/ พร้อมคำเตือน')
     ap.add_argument('--self-test', action='store_true')
@@ -673,7 +939,7 @@ def main():
         ap.error('ใส่โจทย์ หรือ --self-test')
     directions, rejected, paths = draft(args.brief, args.data, args.out, args.html, args.industry, args.force,
                                         palette_ids=split_values(args.palettes), extra_palettes=args.extra_palettes,
-                                        palette_specs=args.palette)
+                                        palette_specs=args.palette, reference_shift=args.reference_colors)
     for label, d in zip(LABELS, directions):
         print(f'แนว {label}: {d["look"].get("id")} · พาเลต {d["palette_id"]} · ฟอนต์ {d["font_id"]}')
     if rejected:
