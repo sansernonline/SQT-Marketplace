@@ -1,0 +1,30 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: ui-craft-trigger
+description: ขอสเปกหน้าจอรายการลูกค้าของระบบหลังบ้าน ไม่เอ่ยชื่อ skill ต้องทำให้ ui-craft ถูกเปิด และสเปกใช้สเกลระยะห่างชุดเดียว
+tags: [trigger, ui-craft]
+runs: 10
+expected_outcome: เรียก Skill ui-craft แล้วเขียนสเปกที่มีสเกลระยะห่างและขนาดตัวอักษรจำนวนจำกัด
+execution:
+  prompt: |
+    ร้านอะไหล่รถยนต์ของผมมีระบบหลังบ้านที่ทีมกำลังทำ ตอนนี้ขาดหน้าจอรายการลูกค้า (ค้นหา ดูยอดซื้อสะสม เปิดประวัติ)
+    ช่วยเขียนสเปกหน้านี้ให้ dev ทำตามได้ ใช้บนคอมพิวเตอร์ในร้านเป็นหลัก
+  max_turns: 8
+  timeout_seconds: 300
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?ui-craft"'
+    min: 1
+    arm: with-only
+  - name: spacing-scale
+    type: regex
+    pattern: '\b4\b[^\n]{0,12}\b8\b[^\n]{0,12}\b12\b[^\n]{0,12}\b16\b'
+    match: contains
+    target: last_message
+  - name: one-primary-action
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน · ผ่านเมื่อสเปกระบุว่าหน้านี้มีของสำคัญที่สุดอย่างเดียว (เช่น ช่องค้นหาหรือรายการลูกค้า) และมีปุ่มหลักไม่เกิน 1 ปุ่ม ที่เหลือเป็นปุ่มรองหรือปุ่มเปล่า

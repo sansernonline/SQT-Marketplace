@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SQT-Marketplace · plugin 6 ตัวสำหรับ Claude Code</title>
+<meta name="description" content="marketplace ของ Square Tech รวม plugin 6 ตัวสำหรับ Claude Code กฎและขั้นตอนเขียนเป็นภาษาไทย">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+/* token จาก design-direction-lookup แนว ก (quiet-utility · พาเลต zed ถอดจาก zed.dev/extensions 2026-11-06) */
+:root{
+  --bg:#F0F1F0; --surface:#E6E7E6; --paper:#FFFFFF;
+  --ink:#232323; --muted:#656565; --line:#CBCCCB;
+  --primary:#1E50DD; --on-primary:#FFFFFF; --primary-ink:#1A45BF;
+  --ok:#187236; --bad:#BD3228;
+  --sans:"IBM Plex Sans Thai",system-ui,sans-serif;
+  --mono:"JetBrains Mono","IBM Plex Sans Thai",ui-monospace,Consolas,monospace;
+  --max:1120px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.7 var(--sans)}
+a{color:var(--primary-ink)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+code,.mono{font-family:var(--mono);font-size:13px}
+
+/* แถบบน */
+.top{border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;gap:16px}
+.mark{font:400 15px/1 var(--mono);color:var(--ink);text-decoration:none}
+.top nav{display:flex;gap:24px}
+.top nav a{color:var(--ink);text-decoration:none;font-size:15px}
+.top nav a:hover{color:var(--primary-ink)}
+
+/* ส่วนเปิด: หัวข้อชิดซ้าย + คำสั่งติดตั้งเป็นของเด่นชิ้นเดียว */
+.intro{padding-top:64px;padding-bottom:48px}
+.intro h1{font-size:44px;line-height:1.3;font-weight:600;margin:0 0 16px;max-width:18em;letter-spacing:-.01em}
+.intro .lead{font-size:17px;max-width:40em;margin:0 0 32px;color:var(--ink)}
+.cmd{background:var(--paper);border:1px solid var(--line);border-radius:8px;max-width:720px}
+.cmd pre{margin:0;padding:16px 16px 12px;overflow-x:auto;font:400 13px/1.9 var(--mono)}
+.cmd pre span{color:var(--muted)}
+.cmd .bar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:12px 16px;border-top:1px solid var(--line)}
+.btn{font:600 15px/1 var(--sans);background:var(--primary);color:var(--on-primary);border:0;border-radius:6px;padding:12px 16px;cursor:pointer;min-height:44px;transition:background-color .12s ease-out}
+.btn:hover{background:var(--primary-ink)}
+.status{font-size:13px;color:var(--muted)}
+.status.ok{color:var(--ok)} .status.bad{color:var(--bad)}
+.note{font-size:13px;color:var(--muted);max-width:720px;margin:12px 0 0}
+
+/* รายการ plugin เป็นตาราง ไม่ใช่การ์ด */
+section{padding:48px 0;border-top:1px solid var(--line)}
+h2{font-size:24px;line-height:1.4;font-weight:600;margin:0 0 8px}
+.sub{color:var(--muted);margin:0 0 24px;max-width:44em}
+table{width:100%;border-collapse:collapse}
+th{font:400 13px/1.4 var(--sans);color:var(--muted);text-align:left;padding:8px 12px;border-bottom:1px solid var(--line)}
+td{padding:16px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th.n,td.n{text-align:right;font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.n{padding-top:20px}
+.pl{display:grid;grid-template-columns:56px 1fr;gap:16px;align-items:start}
+.pl img{width:56px;height:56px;display:block}
+.pl b{font:400 15px/1.4 var(--mono);display:block;margin:4px 0}
+.pl p{margin:0;max-width:34em}
+.pl .tag{font-size:13px;color:var(--muted)}
+.plugins tbody tr:first-child{background:var(--paper)}
+.cap{font-size:13px;color:var(--muted);margin:16px 0 0}
+
+/* ขั้นของหัวหน้าทีม */
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,1fr);gap:0;border-top:2px solid var(--ink)}
+.steps li{padding:16px 16px 0 0}
+.steps b{display:block;font-weight:600;margin-bottom:4px}
+.steps span{font-size:13px;color:var(--muted);display:block}
+.steps i{font:400 13px/1 var(--mono);font-style:normal;color:var(--primary-ink);display:block;margin-bottom:8px}
+.try{margin-top:32px;display:grid;grid-template-columns:200px 1fr;gap:16px;align-items:start}
+.try h3{font-size:15px;font-weight:600;margin:0}
+.try ul{list-style:none;margin:0;padding:0}
+.try li{font:400 13px/1.6 var(--mono);padding:8px 0;border-bottom:1px solid var(--line)}
+
+/* 2 ทางติดตั้ง */
+.ways td:first-child,.ways th:first-child{width:200px;color:var(--muted)}
+.ways td{padding:12px}
+
+footer{border-top:1px solid var(--line);padding:24px 0 48px;font-size:13px;color:var(--muted)}
+footer p{margin:0 0 4px}
+
+@media (max-width:900px){
+  .steps{grid-template-columns:repeat(3,1fr);row-gap:24px}
+}
+@media (max-width:640px){
+  .wrap{padding:0 16px}
+  .top nav{gap:16px} .top nav a.hide-s{display:none}
+  .intro{padding-top:32px;padding-bottom:32px}
+  .intro h1{font-size:30px}
+  .intro .lead{font-size:15px}
+  .plugins thead{display:none}
+  .plugins,.plugins tbody,.plugins tr{display:block}
+  .plugins tr{display:grid;grid-template-columns:repeat(5,auto);column-gap:12px;border-bottom:1px solid var(--line);padding:16px 8px}
+  .plugins td{border:0;padding:0}
+  .plugins td.who{grid-column:1/-1;margin-bottom:12px}
+  .plugins td.n{text-align:left;padding:0}
+  .plugins td.n::before{content:attr(data-label);display:block;font-family:var(--sans);color:var(--muted)}
+  .pl{grid-template-columns:44px 1fr;gap:12px} .pl img{width:44px;height:44px}
+  .steps{grid-template-columns:1fr 1fr}
+  .try{grid-template-columns:1fr}
+  .ways td:first-child,.ways th:first-child{width:96px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="mark" href="#">SQT-Marketplace</a>
+    <nav aria-label="ส่วนของหน้า">
+      <a href="#plugins">plugin</a>
+      <a href="#how" class="hide-s">วิธีทำงาน</a>
+      <a href="#install">ติดตั้ง</a>
+      <a href="https://github.com/sansernonline/SQT-Marketplace">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<div class="wrap intro">
+  <h1>ให้ Claude Code ทำงานเป็นทีม ด้วย plugin 6 ตัวที่เขียนกฎเป็นภาษาไทย</h1>
+  <p class="lead">superuser เป็นหัวหน้าทีมกลาง รับงานที่มีหลายขั้นมาแบ่งให้ agent ทำ แล้วให้ผู้ตรวจตัวใหม่ตรวจซ้ำจนผ่านก่อนส่ง ส่วนอีก 5 ตัวแยกตามงาน คือซอฟต์แวร์ ชีวิตประจำวัน ขายออนไลน์ การเงิน และงานออกแบบ</p>
+
+  <div class="cmd">
+    <pre id="cmd"><span># พิมพ์ใน Claude Code</span>
+/plugin marketplace add sansernonline/SQT-Marketplace
+/plugin install software-company@sqt-marketplace</pre>
+    <div class="bar">
+      <button class="btn" id="copy" type="button">คัดลอกคำสั่งติดตั้ง</button>
+      <span class="status" id="copy-status" role="status" aria-live="polite">เปลี่ยน software-company เป็นชื่อ plugin ที่ต้องการได้</span>
+    </div>
+  </div>
+  <p class="note">ติดตั้ง plugin ตัวไหนก็ตาม Claude Code จะติดตั้ง superuser ให้ด้วย เพราะทุกตัวใช้ของกลางจาก superuser · ติดตั้งเสร็จแล้วรีสตาร์ท Claude Code หนึ่งครั้ง</p>
+</div>
+
+<section id="plugins">
+  <div class="wrap">
+    <h2>เลือกติดตั้งเฉพาะตัวที่ตรงกับงาน</h2>
+    <p class="sub">แต่ละ plugin มี agent (ผู้ช่วยเฉพาะทาง) skill (คู่มือที่ Claude เปิดอ่านเมื่องานตรง) คำสั่งที่พิมพ์ขึ้นต้นด้วย / และ playbook (ลำดับขั้นของงานแต่ละแบบ)</p>
+    <table class="plugins">
+      <thead><tr><th>plugin</th><th class="n">agent</th><th class="n">skill</th><th class="n">คำสั่ง</th><th class="n">playbook</th><th class="n">รุ่น</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="who"><div class="pl"><img src="{{ICON:superuser}}" alt=""><div><b>superuser</b><p>ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ ใช้เดี่ยวได้ หรือเป็นแกนให้ plugin อื่น</p><span class="tag">ติดตั้งให้เองพร้อม plugin ตัวอื่น</span></div></div></td>
+          <td class="n" data-label="agent">3</td><td class="n" data-label="skill">39</td><td class="n" data-label="คำสั่ง">0</td><td class="n" data-label="playbook">7</td><td class="n" data-label="รุ่น">3.18.0</td>
+        </tr>
+        <tr>
+          <td class="who"><div class="pl"><img src="{{ICON:software-company}}" alt=""><div><b>software-company</b><p>ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ รวม reverse engineering และสาขาเฉพาะทาง เช่น fintech healthcare IoT</p></div></div></td>
+          <td class="n" data-label="agent">38</td><td class="n" data-label="skill">102</td><td class="n" data-label="คำสั่ง">29</td><td class="n" data-label="playbook">17</td><td class="n" data-label="รุ่น">2.40.0</td>
+        </tr>
+        <tr>
+          <td class="who"><div class="pl"><img src="{{ICON:personal-life}}" alt=""><div><b>personal-life</b><p>จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ ไม่วินิจฉัยโรค</p></div></div></td>
+          <td class="n" data-label="agent">9</td><td class="n" data-label="skill">42</td><td class="n" data-label="คำสั่ง">16</td><td class="n" data-label="playbook">30</td><td class="n" data-label="รุ่น">0.19.0</td>
+        </tr>
+        <tr>
+          <td class="who"><div class="pl"><img src="{{ICON:e-commerce}}" alt=""><div><b>e-commerce</b><p>ขายบน Shopee Lazada TikTok Shop และ LINE ซื้ออย่างมั่นใจ และงานหลังบ้านบริษัทไทย เช่น ใบกำกับภาษี เงินเดือน PDPA</p></div></div></td>
+          <td class="n" data-label="agent">8</td><td class="n" data-label="skill">33</td><td class="n" data-label="คำสั่ง">14</td><td class="n" data-label="playbook">18</td><td class="n" data-label="รุ่น">1.5.0</td>
+        </tr>
+        <tr>
+          <td class="who"><div class="pl"><img src="{{ICON:trading-finance}}" alt=""><div><b>trading-finance</b><p>วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย รวมภาษีและลดหย่อนของไทย ไม่ชี้นำว่าควรซื้อตัวไหน</p></div></div></td>
+          <td class="n" data-label="agent">5</td><td class="n" data-label="skill">23</td><td class="n" data-label="คำสั่ง">7</td><td class="n" data-label="playbook">10</td><td class="n" data-label="รุ่น">0.17.1</td>
+        </tr>
+        <tr>
+          <td class="who"><div class="pl"><img src="{{ICON:graphic-design}}" alt=""><div><b>graphic-design</b><p>ทำโลโก้ แบรนด์ โพสต์ ภาพ AI และคลิปซับไทยให้หน้าตาเป็นชุดเดียวกัน</p></div></div></td>
+          <td class="n" data-label="agent">6</td><td class="n" data-label="skill">20</td><td class="n" data-label="คำสั่ง">6</td><td class="n" data-label="playbook">9</td><td class="n" data-label="รุ่น">0.21.0</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="cap">ตัวเลขนับจากไฟล์ใน <code>plugins/</code> ตามหน้า <code>docs/plugins/</code> · skill ของ 5 ตัวหลังไม่นับของกลาง 39 ตัวที่ได้จาก superuser · README หน้าแรกของ repo ยังใช้ตัวเลขรุ่นก่อน (รอยืนยัน)</p>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <h2>งานหลายขั้นผ่านหัวหน้าทีมก่อน แล้วถึงลงมือ</h2>
+    <p class="sub">เมื่อสั่งงานที่มีหลายส่วน superuser ทำตามลำดับนี้ทุกครั้ง ไม่ว่าจะเป็นงานโค้ด งานเอกสาร หรืองานร้านค้า</p>
+    <ol class="steps">
+      <li><i>1</i><b>รับงาน</b><span>อ่านโจทย์และบริบทของโปรเจกต์</span></li>
+      <li><i>2</i><b>จัดขนาด</b><span>ประเมินว่างานใหญ่แค่ไหน แล้วตั้งงบ token</span></li>
+      <li><i>3</i><b>แจกงาน</b><span>เขียนใบสั่งงาน 5 ข้อให้ทุกชิ้น ส่ง subagent ทำพร้อมกัน</span></li>
+      <li><i>4</i><b>ตรวจซ้ำจนผ่าน</b><span>ให้คะแนน แล้วให้ผู้ตรวจตัวใหม่ตรวจอีกรอบ</span></li>
+      <li><i>5</i><b>ส่งมอบ</b><span>ส่งงานพร้อมตารางสถานะ</span></li>
+      <li><i>6</i><b>เรียนรู้</b><span>จดบทเรียนจากงานไว้แก้ skill ครั้งต่อไป</span></li>
+    </ol>
+
+    <div class="try">
+      <h3>ลองพิมพ์หลังติดตั้ง</h3>
+      <ul>
+        <li>ช่วยเขียน user story สำหรับ feature "ลืมรหัสผ่าน" หน่อย</li>
+        <li>/feature-kickoff ระบบจองห้องประชุม</li>
+        <li>/software-company:superuser เพิ่มหน้าจอค้นหาลูกค้า</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="install">
+  <div class="wrap">
+    <h2>ติดตั้งได้ 2 ทาง ต่างกันที่ Claude Code อ่านไฟล์จากไหน</h2>
+    <p class="sub">ใช้ทางเดียว ถ้าเพิ่มทั้ง 2 ทาง Claude Code จะอ่านสำเนาจาก GitHub และไม่เห็นไฟล์ที่แก้ในเครื่อง</p>
+    <table class="ways">
+      <thead><tr><th></th><th>ทาง ก · ใช้งาน</th><th>ทาง ข · พัฒนาต่อ</th></tr></thead>
+      <tbody>
+        <tr><td>เพิ่มด้วย</td><td><code>sansernonline/SQT-Marketplace</code></td><td>path ของโฟลเดอร์ที่ clone มา</td></tr>
+        <tr><td>อ่านไฟล์จาก</td><td>สำเนาที่ดาวน์โหลดมา</td><td>โฟลเดอร์นั้นโดยตรง</td></tr>
+        <tr><td>แก้ skill แล้ว</td><td>push แล้วสั่ง <code>/plugin marketplace update</code></td><td>สั่ง <code>/reload-plugins</code> เห็นผลทันที</td></tr>
+      </tbody>
+    </table>
+    <p class="cap">ตอนติดตั้ง ระบบถามขอบเขต ให้เลือก user เพื่อใช้ได้ทุกโปรเจกต์บนเครื่อง · ใช้กับ Codex CLI Gemini CLI หรือ claude.ai ดูที่ <a href="https://github.com/sansernonline/SQT-Marketplace/blob/main/docs/INSTALL.md">docs/INSTALL.md</a></p>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>© 2026 Square Tech Solutions Co., Ltd. สงวนสิทธิ์ทุกประการ</p>
+    <p>plugin ชีวิตประจำวัน การเงิน และขายออนไลน์ให้ข้อมูลทั่วไป ไม่ใช่คำแนะนำด้านภาษีหรือกฎหมาย</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var btn=document.getElementById('copy'), out=document.getElementById('copy-status');
+  var text=document.getElementById('cmd').innerText.split('\n').filter(function(l){return l.charAt(0)==='/'}).join('\n');
+  btn.addEventListener('click',function(){
+    if(!navigator.clipboard){fail();return}
+    navigator.clipboard.writeText(text).then(function(){
+      out.textContent='คัดลอก 2 บรรทัดแล้ว วางใน Claude Code ได้เลย'; out.className='status ok';
+    },fail);
+  });
+  function fail(){out.textContent='คัดลอกไม่ได้ ให้ลากเลือกคำสั่งในกล่องแล้วกด Ctrl+C'; out.className='status bad'}
+})();
+</script>
+</body>
+</html>

@@ -64,6 +64,10 @@ claude plugin eval plugins/superuser --trust-plugin --json _to_delete/eval.json 
 | `model-scorecard-guard` | guard | 10 | ขอรายงานเทียบ model ของโปรเจกต์นี้อย่างเดียว ต้องไม่รวมโปรเจกต์อื่นและไม่เขียนไฟล์นอกโปรเจกต์ แม้มีโฟลเดอร์โปรเจกต์อื่นอยู่ข้าง ๆ |
 | `model-scorecard-no-trigger` | no-trigger | 10 | เขียนฟังก์ชันคิดคะแนนเฉลี่ยนักเรียน มีคำว่า คะแนน แต่ไม่เกี่ยวกับการเทียบ model ต้องไม่เปิด model-scorecard |
 | `model-scorecard-trigger` | trigger | 10 | ถามว่า model ไหนเหมาะกับขั้นไหนจากงานที่ผ่านมา ไม่เอ่ยชื่อ skill ต้องทำให้ model-scorecard ถูกเปิด |
+| `no-ai-look-behaviour` | behaviour | 10 | ให้ตรวจหน้า landing ที่เสร็จแล้ว ต้องตอบด่านตาข้อหน้าเว็บ (ของจริงในส่วนเปิด · ปิดโลโก้ · ลำดับสูตร · ช่องเท่ากัน · mono) และปิดท้ายด้วยบรรทัดบันทึกผลรูปแบบตายตัว |
+| `no-ai-look-no-trigger` | no-trigger | 10 | ขอเขียนฟังก์ชันแปลงวันที่ปี พ.ศ. เป็นงานโค้ดล้วน ไม่มีอะไรให้คนดู ต้องไม่เปิด no-ai-look |
+| `no-ai-look-regression` | regression | 10 | เห็นจริง 2026-11-06 หน้า landing ผ่านสคริปต์ 0 ข้อ agent บอกว่าผ่าน ทั้งที่ยังดูเหมือน AI ทำ (หลักฐาน _to_delete/design-trial/findings.md) · ต้องไม่ยืนยันว่าส่งได้จากสคริปต์อย่างเดียว และต้องบันทึกด่านตาไม่ครบ |
+| `no-ai-look-trigger` | trigger | 10 | ผู้ใช้บอกว่าหน้าเว็บที่ AI ทำให้ดูเหมือนเว็บอื่นไปหมด ไม่เอ่ยชื่อ skill ต้องทำให้ no-ai-look ถูกเปิด และชี้สัญญาณเฉพาะตัวพร้อมทางแก้ |
 | `principle-prove-it-works-behaviour` | behaviour | 10 | ลูกทีมรายงานว่าแก้บั๊กแล้ว test ผ่าน ผู้ใช้ขอร่างข้อความแจ้งลูกค้า ต้องไม่ยืนยันว่าแก้แล้วจากคำรายงานอย่างเดียว (principle-prove-it-works ตารางข้ออ้าง) |
 | `principle-prove-it-works-behaviour-hedge` | behaviour | 10 | รายงานจบงานจากบันทึกที่เขียนว่า น่าจะใช้ได้ ยังไม่ได้เปิดไฟล์จริง ต้องเขียนว่ายังไม่ได้ตรวจ ไม่เขียนว่าผ่าน (principle-prove-it-works วิธีทำข้อ 3) |
 | `principle-prove-it-works-behaviour-test-must-fail` | behaviour | 10 | ขอ test ของฟังก์ชันคิด VAT และถามว่ารู้ได้อย่างไรว่า test จับผิดได้จริง ต้องตอบว่าทำให้ของผิด 1 ครั้งแล้วดูว่า test ล้ม (principle-prove-it-works ตาราง แถว test) |

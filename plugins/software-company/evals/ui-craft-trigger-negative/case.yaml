@@ -1,0 +1,33 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: ui-craft-trigger-negative
+description: ขอเขียน endpoint หลังบ้านสำหรับค้นลูกค้า เป็นงาน API ไม่มีหน้าจอ ต้องไม่เปิด ui-craft
+tags: [no-trigger, ui-craft]
+runs: 10
+expected_outcome: ออกแบบ endpoint ค้นลูกค้า (path · พารามิเตอร์ · รูปแบบผลลัพธ์) โดยไม่เรียก Skill ui-craft
+execution:
+  prompt: |
+    ระบบร้านอะไหล่ของผมต้องมี API ค้นหาลูกค้าจากชื่อหรือเบอร์โทร คืนทีละหน้า
+    ช่วยออกแบบ endpoint ให้หน่อย ระบุ path พารามิเตอร์ และหน้าตา JSON ที่ตอบกลับ
+  max_turns: 6
+  timeout_seconds: 240
+graders:
+  - name: not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?ui-craft"'
+    min: 0
+    max: 0
+    arm: both
+  - name: has-endpoint
+    type: regex
+    pattern: 'GET\s+/\S*customer'
+    flags: i
+    match: contains
+    target: last_message
+  - name: has-paging
+    type: regex
+    pattern: 'page|limit|cursor|offset'
+    flags: i
+    match: contains
+    target: last_message
