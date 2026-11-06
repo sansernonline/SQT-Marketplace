@@ -5,6 +5,8 @@ description: Use when authoring design tokens (primitive, semantic, component), 
 
 # Design System — token สามชั้นและสเปกคอมโพเนนต์
 
+> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+
 > **กฎข้อเดียว:** โค้ดหน้าจอห้ามมีสีหรือระยะดิบ ทุกค่าอ้าง token · token มี 3 ชั้น: **primitive** (ค่าดิบ `--color-blue-600`) → **semantic** (หน้าที่ `--color-primary`) → **component** (`--button-bg`) · เปลี่ยนธีมแก้ชั้นกลางที่เดียว
 
 อยู่ใน plugin `software-company` · ลอกและปรับจาก ui-ux-pro-max-skill (MIT · commit `b7d5353` · ดู 2026-11-05) · ต้นฉบับอังกฤษคงไว้ที่ `data/upstream/` ไม่แก้ · สัญญาอนุญาต `data/upstream/LICENSE`

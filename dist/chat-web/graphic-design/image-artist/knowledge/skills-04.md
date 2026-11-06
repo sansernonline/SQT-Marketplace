@@ -4,6 +4,8 @@ Use when an existing or AI image needs a change (remove object, fix colour, swap
 
 # Image Editing Brief
 
+> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสดของผลที่อยากได้ → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) · แก้ภาพเดิมทำ 1 แนวได้ · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+
 Change only what the brief names. AI edits drift: ask for a new cup and the lighting, the face and the palette change too. The keep list is the anchor.
 
 ## Workflow
@@ -125,6 +127,8 @@ Decide where the new pixels go (top for text space, bottom only if it stays outs
 Use when starting or redoing a brand, or posts look inconsistent. Logo rules, colour roles, Thai-Latin fonts.
 
 # Brand Kit
+
+> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
 
 One folder, one README, everything the brand needs to look like itself. A small shop needs a kit it can read in 5 minutes, not a 60-page brand book.
 

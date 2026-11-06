@@ -5,6 +5,8 @@ description: Use when a brand needs a written guideline (voice, messaging, appro
 
 # Brand Guidelines — เอกสารแนวทางแบรนด์ฉบับเต็ม
 
+> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+
 > **กฎข้อเดียว:** แนวทางแบรนด์ต้องเป็นไฟล์เดียว `docs/brand-guidelines.md` ที่ทุกคนและทุก agent อ่านจากที่เดียว · สีและฟอนต์ในนั้นเป็นต้นทาง ไฟล์ token ทำตามนั้น ไม่ใช่กลับกัน
 
 อยู่ใน plugin `graphic-design` · ลอกและปรับจาก ui-ux-pro-max-skill (MIT · commit `b7d5353` · ดู 2026-11-05) · เนื้อต้นฉบับอังกฤษคงไว้ที่ `data/upstream/` ไม่แก้ · สัญญาอนุญาต `data/upstream/LICENSE`

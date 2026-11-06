@@ -4,6 +4,8 @@ Use when a LINE OA needs a rich menu built (image sizes, tap areas, JSON, API ca
 
 # LINE Rich Menu
 
+> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+
 The rich menu is the shop front. 6 clear buttons work better than 12 tiny ones.
 
 ## 1. Hard limits
@@ -117,6 +119,8 @@ Grid: 3 columns × 2 rows. Column widths 833 / 834 / 833, row height 843.
 Use when a YouTube video needs a thumbnail (ภาพปกคลิป), Thai text on it reads badly on a phone, or the user wants to test several thumbnails.
 
 # youtube-thumbnail — ภาพปกคลิป YouTube ที่อ่านออกบนจอมือถือ
+
+> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
 
 อยู่ใน plugin `graphic-design` · ถ้อยคำเขียนตาม `human-writing` · เจ้าของคือ agent `social-creator` · ขนาดของทุกแพลตฟอร์มอยู่ที่ `social-formats` ไฟล์ `references/platform-sizes.md` หัวข้อ YouTube (หน้านี้คัดมาเฉพาะของ thumbnail)
 

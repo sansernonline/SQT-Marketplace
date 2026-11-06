@@ -4,6 +4,8 @@ Use when making a short video, Reel, TikTok or video ad. Hook, shot list, Thai s
 
 # Video Script to Clip
 
+> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+
 Viewers decide in the first 3 seconds, and most watch with the sound off. Write for both.
 
 ## Workflow

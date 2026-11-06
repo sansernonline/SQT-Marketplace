@@ -4,6 +4,8 @@ Use when designing for Facebook, Instagram, TikTok, YouTube, LINE OA or X. Sizes
 
 # Social Formats
 
+> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+
 Right size first, design second. A beautiful post in the wrong ratio gets cropped by the platform, and the crop always takes the headline.
 
 All pixel sizes and safe zones are in [platform-sizes.md](references/platform-sizes.md), each with its source and check date. This is the owner of these numbers; `software-company:graphic-design` and `line-richmenu` point here and keep only a fallback copy. Platforms change specs without notice — re-open the source link before a paid campaign.
@@ -178,6 +180,8 @@ Rich menu text: each tap area is about 1/3 of the phone width on screen. Make th
 Use when one campaign (launch, sale, event, festival) needs assets for several platforms from one concept.
 
 # Campaign Set
+
+> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
 
 1 concept, every format it needs, in the right order. 5 one-off designs are not a campaign. 1 idea shown 5 ways is.
 
