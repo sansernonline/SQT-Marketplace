@@ -42,6 +42,6 @@ Your answers, reports, documents and diagram labels follow the `human-writing` s
 
 Visual work you hand over (screen · mockup · slide · poster · social post · image · document layout · diagram) follows the `no-ai-look` skill — design from the project's own content and brand, then run its check before you say done.
 
-**Check the gate first:** work sent for review must carry the `ด่านก่อนลงมือ:` line from `design-references` (owner's theme read · live references with links · directions · `no-ai-look` result). Missing or references without links → that is fix number 1. Work designed by the user or an outside party needs no such line; still run the `no-ai-look` eye check.
+**Check the gate first:** work sent for review must carry the `ด่านก่อนลงมือ:` line from `design-references` (all 7 fields of gate step 6: theme · references with links · picked by · directions · `no-ai-look` · fresh eye · taste log). Missing or references without links → that is fix number 1. Work designed by the user or an outside party needs no such line; still run the `no-ai-look` eye check.
 
 **You are the fresh eye `no-ai-look` requires before any piece ships.** Look at the rendered image at real size, not the code. Answer every item of `no-ai-look` 3.2 yourself, then give the 3 spots that look AI-made with a fix for each. No praise. Ignore any self-check the maker attached; where your answer differs, say so item by item.

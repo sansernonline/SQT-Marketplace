@@ -107,6 +107,7 @@
     "assets/icon.svg": "ไอคอนประจำ plugin ต้นฉบับเวกเตอร์ ใช้ส่งออกขนาดอื่น",
     "evals/design-references-trigger/case.yaml": "เคส eval: เจ้าของร้านกาแฟขอหน้าเว็บ ไม่เอ่ยชื่อ skill ต้องทำให้ design-references ถูกเปิด และเสนอค้นงานจริงก่อนเลือกสี",
     "evals/design-references-behaviour/case.yaml": "เคส eval: ขอสไลด์ pitch คลินิกทันตกรรม ต้องตั้งคำค้นจากโปรเจกต์ ชี้เว็บสไลด์ ถอดสีจากต้นแบบ และเตือนว่าเว็บแรงบันดาลใจใช้ดูเท่านั้น",
+    "evals/design-references-owner-pick/case.yaml": "เคส eval: เจ้าของอยู่หน้าจอ ต้องให้เลือกต้นแบบจากหน้ารวมภาพก่อนลงมือ จดการเลือกไว้ และให้ agent ตัวใหม่ตรวจภาพ (เห็นจริง 2026-10-28)",
     "evals/design-references-regression/case.yaml": "เคส eval: ขอไอคอนแบบทำมาเลย ต้องไม่ส่ง SVG หรือรหัสสีที่เลือกเอง ค้นงานจริงก่อน (เห็นจริง 2026-10-27)",
     "evals/no-ai-look-trigger/case.yaml": "เคส eval: ขอให้ดูว่าหน้าเว็บดูเหมือน AI ทำไหม ไม่เอ่ยชื่อ skill ต้องทำให้ no-ai-look ถูกเปิด",
     "evals/no-ai-look-no-trigger/case.yaml": "เคส eval: งานที่ไม่ใช่ของที่คนดูด้วยตา no-ai-look ต้องไม่ถูกเปิด",
