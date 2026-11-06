@@ -155,6 +155,10 @@ def capture(url, out_png):
         if not public_url(t.url):
             b.close()
             raise ValueError(f"{url} พาไปที่อยู่ที่ไม่ใช่เว็บสาธารณะ ({t.url}) จึงไม่จับภาพ")
+        try:  # เว็บที่วาดด้วย JavaScript (Dribbble · Are.na) รอแค่ load ได้ภาพว่าง ทดสอบจริง 2026-11-06
+            t.wait_for_load_state("networkidle", timeout=8000)
+        except Exception:  # เว็บที่ส่งข้อมูลไม่หยุด ไม่รอเกิน 8 วินาที
+            pass
         t.wait_for_timeout(1500)
         text = (t.inner_text("body") or "")[:3000].lower()
         t.screenshot(path=str(out_png), full_page=True)
