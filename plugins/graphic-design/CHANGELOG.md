@@ -1,5 +1,9 @@
 # Changelog — graphic-design
 
+## 0.23.0 — 2026-11-06
+
+- agent `design-critic`: เป็นผู้ตรวจด้วยตาตัวใหม่ที่ `no-ai-look` บังคับก่อนส่งงาน (superuser 3.21.0) · ดูภาพขนาดจริง ตอบข้อ 3.2 เอง ไม่อิงผลตรวจของคนทำ
+
 ## 0.22.0 — 2026-11-06
 
 - skill 17 ตัวมีบรรทัด "ด่านก่อนลงมือ" ชี้ไป `design-references` (superuser 3.20.0): banner-design · brand-kit · brand-guidelines · brief-to-image · campaign-set · icon-design · image-generation · line-richmenu · marketplace-product-images · motion-basics · social-formats · style-consistency · video-script-to-clip · youtube-thumbnail (3 แนว) · image-editing-brief (1 แนวได้) · design-review (ไม่มีบรรทัดหลักฐาน = ข้อแก้อันดับ 1) · print-ready-files (ต้องผ่านด่านก่อนส่งโรงพิมพ์) · `marketplace-product-images` และ `print-ready-files` เดิมไม่มี `no-ai-look`
