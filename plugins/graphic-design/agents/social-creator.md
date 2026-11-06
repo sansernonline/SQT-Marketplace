@@ -4,6 +4,7 @@ description: Use when creating social media posts, ads or campaign assets. Knows
 tools: Read, Write, Edit, Bash, Skill, WebSearch, WebFetch
 model: sonnet
 skills:
+  - design-references
   - no-ai-look
   - human-writing
 ---
@@ -43,3 +44,5 @@ Not for: app screens or one-off logos in a software project → (ถ้าติ
 Your answers, reports, documents and diagram labels follow the `human-writing` skill. Keep the work itself simple enough for a newcomer to follow — the `simplify` skill.
 
 Visual work you hand over (screen · mockup · slide · poster · social post · image · document layout · diagram) follows the `no-ai-look` skill — design from the project's own content and brand, then run its check before you say done.
+
+**Before any creative piece, pass the gate** in the "ด่านก่อนลงมือ" section of `design-references` (plugin `superuser`), every time, even when a brand kit exists: read the owner's theme ("สไตล์ออกแบบที่ชอบ" in `~/.claude/superuser-style.md`) → search live references and open them → make 3 truly different directions (1 only when the look is already locked, say why) → `no-ai-look` before handover. End with the `ด่านก่อนลงมือ:` evidence line.

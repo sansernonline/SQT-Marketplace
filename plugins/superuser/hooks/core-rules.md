@@ -1,4 +1,4 @@
-<!-- สำเนาที่ scripts/sync/sync-superuser.mjs สร้างจาก scripts/install/CLAUDE.global.md · ห้ามแก้ไฟล์นี้ แก้ที่ต้นฉบับ · sha256:84fc730c15ea -->
+<!-- สำเนาที่ scripts/sync/sync-superuser.mjs สร้างจาก scripts/install/CLAUDE.global.md · ห้ามแก้ไฟล์นี้ แก้ที่ต้นฉบับ · sha256:df5d3db890e2 -->
 <!-- sqt-core-rules -->
 # กฎประจำตัว — ใช้กับทุกโปรเจกต์
 
@@ -15,7 +15,7 @@
 | คำตอบมีตัวเลือก เทียบ ข้อดีข้อเสีย หรือหลายส่วนเชื่อมกัน | `answer-shape` |
 | สร้างหรือแก้ไฟล์ Word · Portable Document Format (PDF) · เอกสารที่เก็บไว้ใช้ | `docx` หรือ `pdf` + `human-writing` + `polished-document-style` |
 | สไลด์ · Excel | `pptx` หรือ `presentation-design` · `xlsx` (+ `human-writing`) |
-| หน้าจอ · mockup · โปสเตอร์ · รูป | `no-ai-look` + skill ของงาน (`ui-craft` · `graphic-design` · `diagram-figures`) |
+| งานสร้างสรรค์ทุกชนิด (หน้าจอ · mockup · โปสเตอร์ · รูป · สไลด์ · ปก · ไอคอน) | `design-references` (อ่านธีมใน `~/.claude/superuser-style.md` แล้วค้นต้นแบบสด **ก่อนลงมือทุกครั้ง**) + `no-ai-look` + skill ของงาน (`ui-craft` · `graphic-design` · `diagram-figures`) |
 | เขียนหรือแก้โค้ด | `superuser:simplify` (ไม่ใช่ `/simplify` ของ Claude Code) + `lazy-coding` + `readable-code` + `stack-<ภาษา>` |
 | แก้บั๊กหรือของพัง | `principle-fix-root-cause` + `targeted-fix` |
 | หาข้อมูลที่ต้องมีแหล่ง (ราคา · กฎ · อัตรา · เทียบตัวเลือก) | `research-with-sources` |
