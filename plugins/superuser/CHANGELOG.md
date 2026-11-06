@@ -1,5 +1,12 @@
 # Changelog — superuser
 
+## 3.23.0 — 2026-11-06
+
+ที่มา: ผู้ใช้บอกว่าของใน `_to_delete/` ปนกันมั่ว อยากแยกตามงาน
+
+- `temp-file-discipline` หัวข้อ "วิธีใช้": `_to_delete/` แบ่ง 1 โฟลเดอร์ต่อ 1 งาน ชื่อ `YYYY-MM-DD-<เรื่อง>` ตั้งตอนเริ่มงาน · งานเดิมที่สั่งต่อใช้โฟลเดอร์เดิม · ห้ามวางไฟล์ตรง `_to_delete/` ยกเว้นของที่ hook สร้างเอง (`superuser-lock/` · `STOP`) · โฟลเดอร์ย่อยมาตรฐาน (`screenshots/` `logs/` `drafts/`) อยู่ในโฟลเดอร์งาน · path `_to_delete/<x>` ใน skill อื่นอ่านเป็น `_to_delete/<โฟลเดอร์งาน>/<x>` · ตอนจบงานบอกโฟลเดอร์งาน · ลบทั้งงานได้บรรทัดเดียว
+- `scripts/install/CLAUDE.global.md` หัวข้อ "ไฟล์และ git": กฎเดียวกัน 1 บรรทัด
+
 ## 3.22.1 — 2026-11-07
 
 - ตรวจ plugin หัวข้อ 8 (ประหยัด token): `session-lessons-to-skills` และ `adversarial-review-panel` จำกัดผลที่รีวิวเวอร์ส่งกลับไม่เกิน 40 บรรทัดต่อคน · `commit-log` ดู `git diff --stat` ก่อนแล้วค่อยเปิด diff รายไฟล์ · `deep-research` ค้นงานเก่าด้วย `grep -l` ต่อด้วย `head` · `polished-document-style` ตัด anti-pattern 2 ข้อที่ซ้ำกับกฎข้างบน
