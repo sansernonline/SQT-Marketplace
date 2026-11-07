@@ -540,7 +540,7 @@ Use when starting a repository or one is slow to run on a new machine (layout, R
 
 **ราก (โฟลเดอร์ที่ผู้ใช้เปิด) จัดตาม `project-doc-set` ข้อ 1 แบบ B** — ผังราก แบบ ecosystem และที่อยู่ไฟล์ของ SuperUser (`.claude/superuser/`) อยู่ที่นั่นที่เดียว · โค้ดอยู่ใน `<project-name>/` โครงข้างในเป็นแบบนี้:
 
-ใน `<project-name>/` (ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-`): `README.md` (ข้อ 2) · `CHANGELOG.md` · `.env.example` (เฉพาะเมื่ออ่าน environment variable จริง · `config-and-secrets`) · `.editorconfig` · `.gitattributes` · `.gitignore` (build output · ค่าลับ · `_to_delete/`) · `src/` (unit test อยู่ข้างไฟล์โค้ด · `readable-code` ข้อ 7) · `tests/` (เฉพาะ integration · e2e หรือ stack ที่เครื่องมือบังคับ ดูตารางข้อ 1) · `scripts/` (setup · seed · migrate) — ผังพร้อมคำอธิบาย [`references/code-folder.md`](references/code-folder.md) · ADR และ runbook อยู่ใน `docs/` ที่ราก ไม่ใช่ในโฟลเดอร์โค้ด (`project-doc-set` ข้อ 1)
+ใน `<project-name>/` (ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-`): `README.md` (ข้อ 2) · `CHANGELOG.md` · `ARCHITECTURE.md` · `CONTRIBUTING.md` · `LICENSE` (3 ตัวนี้เมื่อมีเงื่อนไขใน `references/readme-skeleton.md` หัวข้อ 2) · `.env.example` (เฉพาะเมื่ออ่าน environment variable จริง · `config-and-secrets`) · `.editorconfig` · `.gitattributes` · `.gitignore` (build output · ค่าลับ · `_to_delete/`) · `src/` (unit test อยู่ข้างไฟล์โค้ด · `readable-code` ข้อ 7) · `tests/` (เฉพาะ integration · e2e หรือ stack ที่เครื่องมือบังคับ ดูตารางข้อ 1) · `scripts/` (setup · seed · migrate) — ผังพร้อมคำอธิบาย [`references/code-folder.md`](references/code-folder.md) · ADR และ runbook อยู่ใน `docs/` ที่ราก ไม่ใช่ในโฟลเดอร์โค้ด (`project-doc-set` ข้อ 1)
 
 **ชื่อโฟลเดอร์โค้ด** — เอาชื่อโฟลเดอร์โปรเจกต์มาทำเป็นตัวพิมพ์เล็ก เว้นวรรคและเครื่องหมายเปลี่ยนเป็น `-` ตัวเดียว:
 `Lumio - Light Meter/` → `lumio-light-meter/`
@@ -572,17 +572,17 @@ skill อื่นที่เขียน `tests/` หรือ `test/` ให�
 
 ---
 
-## 2 · README ต้องตอบ 5 คำถาม
+## 2 · README — โครง 15 หัวข้อ ตัดที่ไม่มีของทิ้ง
 
-| # | คำถาม | ยาวแค่ไหน |
-|:--:|---|---|
-| 1 | โปรเจกต์นี้คืออะไร ทำอะไรให้ใคร | 2–3 บรรทัด |
-| 2 | ต้องมีอะไรบ้างบนเครื่อง (เวอร์ชันด้วย) | ตาราง |
-| 3 | **ติดตั้งและรันยังไง** | คำสั่งที่คัดลอกไปวางแล้วใช้ได้จริง |
-| 4 | รัน test ยังไง | 1 คำสั่ง |
-| 5 | เอกสารและคนที่ต้องถาม อยู่ที่ไหน | ลิงก์ไป `docs/README.md` |
+README เรียงตามที่คนใหม่ต้องใช้ · 9 หัวข้อมีเสมอ อีก 6 หัวข้อมีเมื่อโปรเจกต์มีของนั้น · ตารางเต็ม (ตอบอะไร · ยาวแค่ไหน · ยาวเกินย้ายไปไหน · แหล่ง) → [`references/readme-skeleton.md`](references/readme-skeleton.md)
 
-แม่แบบ README (Node · Flutter / Android) → `assets/starter-files.md` · แอปที่ไม่มี DB หรือ Docker ก็ต้องบอกของบนเครื่องให้ครบ
+| มีเสมอ | มีเมื่อโปรเจกต์มีของนั้น |
+|---|---|
+| ชื่อ + ทำอะไรให้ใคร · บรรทัดสถานะ (สถานะ · เจ้าของ · ลิงก์ `docs/README.md`) · ต้องมีบนเครื่อง (รุ่น + ไฟล์ที่ปักรุ่น) · เริ่มใช้งาน · คำสั่งที่ใช้บ่อย (test 1 คำสั่ง) · โครงโปรเจกต์ · ติดปัญหา · ติดต่อ · สัญญาอนุญาต (ท้ายสุด) | ภาพหน้าจอ · ตั้งค่า (ตารางตัวแปร · ไม่มีเขียน "ไม่มีค่าตั้งภายนอก") · สถาปัตยกรรมย่อ · build และไฟล์ที่ได้ · deploy · ร่วมพัฒนา |
+
+- **README มีแค่สิ่งที่คนใหม่ใช้ใน 30 นาทีแรก** — ยาวเกินย้ายไป `ARCHITECTURE.md` · `CONTRIBUTING.md` · `docs/runbook-deploy.md` แล้วลิงก์กลับ (ตาราง "แยกไปไฟล์อื่น" และแม่แบบ `ARCHITECTURE.md` ในไฟล์เดียวกัน)
+- **คำสั่ง ไฟล์ปักรุ่น ค่าตั้ง และหัวข้อเพิ่มของแต่ละภาษา** (Node · .NET · Python · Java · Go · Flutter · Rust · Laravel) → [`references/readme-by-stack.md`](references/readme-by-stack.md)
+- แม่แบบที่คัดลอกไปใช้ (Node · Flutter / Android) → `assets/starter-files.md` · แอปที่ไม่มี DB หรือ Docker ก็ต้องบอกของบนเครื่องให้ครบ
 
 > **ทุกคำสั่งต้องเคยรันจริงบนเครื่องเปล่า** เพราะ README ส่วนใหญ่ผิดตรงที่คนเขียน
 > มีของครบอยู่แล้วบนเครื่องตัวเอง จึงไม่เห็นว่ามีขั้นตอนที่หายไป
@@ -593,7 +593,7 @@ skill อื่นที่เขียน `tests/` หรือ `test/` ให�
 
 ## 3 · CHANGELOG
 
-รูปแบบ Keep a Changelog · หัวข้อ เพิ่ม · แก้ · เปลี่ยนที่ทำให้ของเดิมพัง · มี `[ยังไม่ปล่อย]` รอไว้เสมอ — ตัวอย่างเต็ม [`references/changelog-examples.md`](references/changelog-examples.md)
+รูปแบบ Keep a Changelog 1.1.0 · หัวข้อในแต่ละรุ่นเรียงแบบนี้ ตัดหัวข้อที่ไม่มีของ: **เปลี่ยนที่ทำให้ของเดิมพัง** (ของเราเพิ่ม อยู่บนสุดเสมอ) · เพิ่ม · เปลี่ยน · จะเลิกใช้ · เอาออก · แก้ · ความปลอดภัย · มี `[ยังไม่ปล่อย]` รอไว้บนสุดเสมอ · รุ่นใหม่อยู่บน วันที่แบบ `YYYY-MM-DD` — ตัวอย่างเต็ม [`references/changelog-examples.md`](references/changelog-examples.md)
 
 **ต้องมี CHANGELOG ไหม**
 
@@ -635,7 +635,7 @@ skill อื่นที่เขียน `tests/` หรือ `test/` ให�
 
 ติ๊ก `[x]` เฉพาะข้อที่**รันหรือเปิดดูแล้วในรอบนี้** ข้อที่ยังไม่ได้สร้างหรือยังไม่ได้รัน ให้ใส่ `[ ]` พร้อมบอกว่าค้างอะไร ส่วนข้อที่ไม่เกี่ยวกับโปรเจกต์นี้ ให้ใส่ `N/A — <เหตุผล>`
 
-- [ ] `README.md` ตอบครบ 5 คำถาม และคำสั่งเคยรันจริงบนเครื่องเปล่า
+- [ ] `README.md` มีครบ 9 หัวข้อที่มีเสมอ (ข้อ 2) และคำสั่งเคยรันจริงบนเครื่องเปล่า
 - [ ] รากตรงผังใน `project-doc-set` ข้อ 1 (repo ชื่อโปรเจกต์ตัวเล็กคั่น `-` · ecosystem ใช้ `ecosystem/`) และไม่มีไฟล์ชั่วคราวหรือ `.docx` ที่ราก
 - [ ] `.env.example` มีค่าครบทุกตัวพร้อมคอมเมนต์ ถ้าโปรเจกต์ไม่อ่าน environment variable เลย (เช่นแอปมือถือออฟไลน์) ก็ไม่ต้องสร้าง แต่ให้เขียนใน README ว่า "ไม่มีค่าตั้งภายนอก"
 - [ ] `.editorconfig` · `.gitattributes` · ตัวจัดรูปแบบ · linter ตั้งแล้ว และ CI ตรวจ
@@ -680,9 +680,31 @@ skill อื่นที่เขียน `tests/` หรือ `test/` ให�
 - `GET /orders` คืน `data` แทนอาเรย์ตรง ๆ — ดู API-CONVENTIONS.md
 ### เพิ่ม
 - แจ้งเตือนทาง LINE
+### จะเลิกใช้
+- ส่งออกรายงานเป็น CSV จะเอาออกในรุ่น 2.0 — ใช้ Excel แทน
 ### แก้
 - ยอดรวมปัดเศษผิดเมื่อมีส่วนลด
+### ความปลอดภัย
+- ผู้ใช้ที่ถูกปิดบัญชีเปิดลิงก์ใบเสร็จเก่าไม่ได้แล้ว
+
+## [1.1.1] — 2026-09-10 [ถอน]
 ```
+
+## หัวข้อและเลขรุ่น
+
+| หัวข้อ (Keep a Changelog) | ใช้กับ | ขึ้นเลขรุ่นส่วนไหน (Semantic Versioning) |
+|---|---|---|
+| เปลี่ยนที่ทำให้ของเดิมพัง (ของเราเพิ่ม) | ผู้ใช้หรือระบบที่เรียกใช้ต้องแก้ฝั่งตัวเอง | MAJOR · ช่วง `0.y.z` ขึ้น MINOR ได้ |
+| เพิ่ม (Added) | ความสามารถใหม่ | MINOR |
+| เปลี่ยน (Changed) | ของเดิมทำงานต่างไปแต่ไม่พัง | MINOR |
+| จะเลิกใช้ (Deprecated) | ยังใช้ได้ แต่จะเอาออก · บอกรุ่นที่จะเอาออกและของที่ใช้แทน | MINOR |
+| เอาออก (Removed) | เอาออกแล้ว | MAJOR |
+| แก้ (Fixed) | บั๊ก | PATCH |
+| ความปลอดภัย (Security) | ช่องโหว่ที่ปิดแล้ว · ไม่บอกวิธีโจมตี | PATCH หรือตามขนาด |
+
+คอลัมน์ขึ้นเลขรุ่นเป็นข้อเสนอของ skill นี้ · Semantic Versioning บอกไว้แค่ MAJOR = ไม่เข้ากับของเดิม · MINOR = เพิ่มหรือประกาศเลิกใช้แบบเข้ากันได้ · PATCH = แก้บั๊กแบบเข้ากันได้
+
+รุ่นที่ปล่อยไปแล้วต้องถอนเพราะบั๊กร้ายหรือช่องโหว่ → ต่อท้ายหัวรุ่นด้วย `[ถอน]` (Keep a Changelog ใช้ `[YANKED]`) ไม่ลบรุ่นนั้นทิ้ง · แหล่ง: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/) · [Semantic Versioning 2.0.0](https://semver.org/) · เปิดอ่าน 2026-11-07
 
 เขียนเป็นผลที่ผู้ใช้เห็น ไม่ใช่รายการ commit:
 
@@ -698,7 +720,7 @@ skill อื่นที่เขียน `tests/` หรือ `test/` ให�
 - ไม่ใส่ชื่อไฟล์ ชื่อฟังก์ชัน หรือเลข ticket ยกเว้นผู้อ่านเป็นนักพัฒนาที่เรียก API นั้น
 - ไม่ใส่งานที่ผู้ใช้มองไม่เห็น เช่น ปรับโครงโค้ด เพิ่ม test หรือแก้ CI · ยกเว้นทำให้เร็วขึ้นหรือเสถียรขึ้นจนรู้สึกได้ ให้เขียนเป็นผลที่ได้ ("รายงานของใกล้หมดเปิดได้ในไม่ถึง 1 วินาที")
 - ในแต่ละหัวข้อ เรียงข้อที่กระทบผู้ใช้มากที่สุดไว้บน · หัวข้อไหนไม่มีของให้ตัดหัวข้อนั้นทิ้ง
-- หัวข้อ "เปลี่ยนที่ทำให้ของเดิมพัง" ต้องอยู่**บนสุด**ของเวอร์ชันนั้นเสมอ
+- หัวข้อ "เปลี่ยนที่ทำให้ของเดิมพัง" ต้องอยู่**บนสุด**ของเวอร์ชันนั้นเสมอ · ทุกการเลิกใช้ เอาออก และเปลี่ยนที่ทำให้พัง ต้องลงทุกครั้ง แม้เป็นเรื่องเล็ก
 
 
 ## reference: code-folder.md
@@ -709,8 +731,11 @@ skill อื่นที่เขียน `tests/` หรือ `test/` ให�
 
 ```
 <project-name>/          ← ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่นด้วย `-`
-  README.md              ← ข้อ 2 · ติดตั้ง · รัน · test
+  README.md              ← ข้อ 2 · โครง 15 หัวข้อ (references/readme-skeleton.md)
   CHANGELOG.md           ← สิ่งที่เปลี่ยนในแต่ละเวอร์ชัน
+  ARCHITECTURE.md        ← แผนที่โค้ด · มีเมื่อผังใน README เกิน 15 บรรทัดหรือระบบมีหลายส่วน (references/readme-skeleton.md)
+  CONTRIBUTING.md        ← มีเมื่อหัวข้อร่วมพัฒนาใน README ยาวเกิน 5 บรรทัด
+  LICENSE                ← repo เปิดสาธารณะหรือสัญญาจ้างระบุ
   .env.example           ← ค่าที่ต้องมีทั้งหมด (ดู config-and-secrets) · มีเฉพาะเมื่อโปรเจกต์อ่าน environment variable จริง
   .editorconfig          ← ข้อ 4
   .gitattributes
@@ -719,6 +744,171 @@ skill อื่นที่เขียน `tests/` หรือ `test/` ให�
   tests/                 ← บังคับใน .NET · Flutter (`test/`) · Node และ Python ใช้เก็บเฉพาะ integration และ e2e (unit test อยู่ข้างไฟล์โค้ด) — ตาราง stack อยู่ใน `SKILL.md` ข้อ 1
   scripts/               ← setup, seed, migrate — สคริปต์ที่คนต้องรัน
 ```
+
+
+## reference: readme-by-stack.md
+
+# README ตามภาษา — คำสั่ง ไฟล์ และหัวข้อที่ต้องเพิ่ม
+
+ใช้คู่กับ [`readme-skeleton.md`](readme-skeleton.md) · ตารางนี้เป็นจุดเริ่ม ไม่ใช่คำสั่งที่ใส่ได้ทันที **ทุกคำสั่งต้องรันจริงบนเครื่องเปล่าก่อนลง README** (`SKILL.md` ข้อ 2) · ช่องที่มี ※ คือยังไม่ได้เปิดหน้าทางการยืนยันในรอบที่เขียน (2026-11-07)
+
+## 1 · รุ่น ไฟล์หลัก และค่าตั้งตาม environment
+
+ใส่ลงหัวข้อ 4 "ต้องมีบนเครื่อง" และหัวข้อ 6 "ตั้งค่า" ของ README
+
+| Stack | manifest + lock (commit ทั้งคู่) | ปักรุ่น runtime ที่ไฟล์ | ค่าตั้งตาม environment |
+|---|---|---|---|
+| Node / TypeScript | `package.json` + `package-lock.json` หรือ `pnpm-lock.yaml` (lock แบบเดียว) | `.nvmrc` (`nvm use`) · `engines` ใน `package.json` เป็นแค่คำเตือนจนกว่าจะเปิด `engine-strict` | Vite: `.env` · `.env.[mode]` · `.env.local` · มีแค่ `VITE_*` ที่ถึง browser · Angular: `src/environments/` + `ng build --configuration <ชื่อ>` |
+| .NET / C# | `.sln` หรือ `.slnx` + `.csproj` · `packages.lock.json` ไม่บังคับ ※ | `global.json` → `sdk.version` (เลขเต็ม) + `rollForward` (ใช้ lock file ให้ตั้ง `disable`) | `appsettings.json` + `appsettings.{Env}.json` · เลือกด้วย `ASPNETCORE_ENVIRONMENT` (เว็บ) หรือ `DOTNET_ENVIRONMENT` · ไม่ตั้ง = Production · ค่าลับตอน dev: `dotnet user-secrets` · `launchSettings.json` ใช้แค่เครื่อง dev |
+| Python | `pyproject.toml` + `uv.lock` · ไม่ commit `.venv` | `.python-version` (`uv python pin`) + `requires-python` | ไม่มีมาตรฐานกลาง · `.env` + environment variable หรือ settings ของ framework ※ |
+| Java / Kotlin | `pom.xml` หรือ `build.gradle.kts` + `settings.gradle.kts` | Gradle wrapper (commit `gradlew` `gradlew.bat` `gradle/wrapper/*`) · Maven wrapper `mvnw` ※ · รุ่น Java Development Kit (JDK) | Spring Boot: `application.yml` + `application-{profile}.yml` · เปิดด้วย `SPRING_PROFILES_ACTIVE` หรือ `--spring.profiles.active=prod` |
+| Go | `go.mod` + `go.sum` | บรรทัด `go 1.xx` (ขั้นต่ำ) + `toolchain` | ไม่มีมาตรฐาน · environment variable ※ |
+| Flutter / Dart | `pubspec.yaml` + `pubspec.lock` (แอป commit lock · library ไม่ commit) | `environment:` ใน pubspec ※ · FVM ถ้าใช้ (ไม่ใช่ทางการ) | flavor: Android `productFlavors` ใน `android/app/build.gradle.kts` · iOS ใช้ scheme ※ · `--dart-define` ※ |
+| Rust | `Cargo.toml` + `Cargo.lock` | `rust-toolchain.toml` (`channel` + `components`) | ไม่มีมาตรฐาน · environment variable ※ |
+| PHP / Laravel | `composer.json` + `composer.lock` | `"php": "^8.x"` ใน `require` | `.env` (ไม่ commit) + `.env.example` · `APP_ENV` เลือก `.env.[APP_ENV]` · `APP_DEBUG=false` ใน production |
+
+## 2 · คำสั่ง
+
+ใส่ลงหัวข้อ 5 "เริ่มใช้งาน" · 7 "คำสั่งที่ใช้บ่อย" · 10 "build และไฟล์ที่ได้"
+
+| Stack | ติดตั้ง | รัน | test | lint · format | build / แพ็ก → ไฟล์ที่ได้ |
+|---|---|---|---|---|---|
+| Node / TypeScript | `npm ci` (ยึด lock) · `pnpm install --frozen-lockfile` | `npm run dev` ※ | `npm test` ※ | `npm run lint` ※ · Prettier ※ | `npm run build` ※ → `dist/` |
+| .NET / C# | `dotnet restore` | `dotnet run` · `dotnet run -lp https` | `dotnet test` ※ | `dotnet format` ※ | `dotnet publish` (net8.0 ขึ้นไปเป็น Release เอง) → `bin/Release/<tfm>/publish/` · `-r <RID> --self-contained` (Runtime Identifier (RID) เช่น `linux-x64`) |
+| Python | `uv sync` | `uv run <คำสั่ง>` | `uv run pytest` ※ | `ruff check` · `ruff format` | `uv build` ※ → wheel · sdist |
+| Java / Kotlin | ดึงตอน build | `./mvnw spring-boot:run` · `./gradlew bootRun` ※ | `./mvnw test` · `./gradlew test` ※ | Spotless · Checkstyle · ktlint (ไม่มีตัวกลาง) ※ | `./mvnw package` · `./gradlew build` ※ → jar รันด้วย `java -jar` |
+| Go | `go mod download` ※ | `go run ./cmd/<ชื่อ>` ※ | `go test ./...` ※ | `gofmt` · `go vet` ※ | `go build ./...` ※ → binary ไฟล์เดียว |
+| Flutter / Dart | `flutter pub get` ※ | `flutter run --flavor <ชื่อ>` | `flutter test` ※ | `flutter analyze` · `dart format .` ※ | `flutter build appbundle` → `build/app/outputs/bundle/release/app.aab` · `flutter build ipa` ※ |
+| Rust | `cargo fetch` ※ | `cargo run` ※ | `cargo test` ※ | `cargo clippy` · `cargo fmt` ※ | `cargo build --release` ※ → `target/release/` |
+| PHP / Laravel | `composer install` · `npm ci && npm run build` (asset) ※ | `php artisan serve` ※ | `php artisan test` | Laravel Pint ※ | deploy: `php artisan config:cache` (ห้ามรันตอน dev) · `php artisan storage:link` |
+
+## 3 · หัวข้อที่ต้องเพิ่มใน README ตามภาษา
+
+| Stack | เพิ่มอะไร |
+|---|---|
+| Node / TypeScript | รุ่น Node จาก `.nvmrc` + บอกให้สั่ง `nvm use` · ใช้ npm หรือ pnpm (ห้ามมี lock 2 แบบ) · ตาราง `scripts` · ตัวแปร `VITE_*` ทุกตัวพร้อมเตือนว่าค่าถึง browser · Angular: รายชื่อ configuration |
+| .NET / C# | รุ่น Software Development Kit (SDK) ตาม `global.json` · project ไหนเป็นตัวเริ่ม · ตั้ง `ASPNETCORE_ENVIRONMENT` ที่ไหนบ้าง · ชื่อคีย์ที่ต้องใส่ผ่าน `user-secrets` (ไม่ใส่ค่า) · คำสั่ง `dotnet publish` ที่ใช้จริง · คำสั่ง migration ของ EF Core |
+| Python | รุ่นจาก `.python-version` · ใช้ uv หรือ venv + pip (ทางเดียว) · เป็น src layout ต้องติดตั้งก่อน test · ตั้งค่า ruff อยู่ไหน · ไฟล์ `.env` ที่ต้องมี |
+| Java / Kotlin | รุ่น JDK · ใช้ `./mvnw` หรือ `./gradlew` เสมอ ไม่ใช่ตัวที่ลงในเครื่อง · ตาราง profile และวิธีเปิด · ชื่อและที่อยู่ jar ที่ได้ |
+| Go | รุ่นจากบรรทัด `go` และ `toolchain` · binary ใน `cmd/` แต่ละตัวทำอะไร · environment variable ที่อ่าน |
+| Flutter / Dart | รุ่น Flutter และ Dart · ตาราง flavor (ชื่อ · applicationId · ไฟล์เริ่ม) · signing: `key.properties` และ keystore อยู่ไหน ขอจากใคร (ห้าม commit) · iOS: team และ provisioning · คำสั่ง build ต่อ flavor และที่อยู่ไฟล์ที่ได้ |
+| Rust | toolchain จาก `rust-toolchain.toml` · feature flag ที่มี · binary ใน `src/bin/` · รุ่น Rust ต่ำสุดที่รองรับ (Minimum Supported Rust Version (MSRV)) ถ้าเป็น library |
+| PHP / Laravel | รุ่น PHP และ extension ที่ต้องมี · `cp .env.example .env` → `php artisan key:generate` ※ → migrate · build asset · ขั้น deploy (`config:cache` · `storage:link` · queue worker) |
+
+## 4 · โครงโฟลเดอร์ตามแหล่งทางการ
+
+ใช้ประกอบหัวข้อ 8 "โครงโปรเจกต์" · กฎของ repo นี้ (ชื่อโฟลเดอร์โค้ด · ที่อยู่ test) อยู่ใน `SKILL.md` ข้อ 1 และชนะเมื่อขัดกัน
+
+| Stack | โครงที่เครื่องมือคาดไว้ | แหล่ง |
+|---|---|---|
+| Node / TypeScript | npm ไม่กำหนด · ใช้ตามตัวสร้างของ framework (`src/` · `public/` · `vite.config.ts` หรือ `angular.json`) ※ | — |
+| .NET / C# | ไม่มีหน้าทางการ · ที่พบบ่อย `src/<App>/` + `tests/<App>.Tests/` + `global.json` + `.slnx` ※ | — |
+| Python | src layout: `src/<package>/` · `pyproject.toml` ที่ราก | [PyPA src vs flat](https://packaging.python.org/en/latest/discussions/src-layout-vs-flat-layout/) |
+| Java / Kotlin | `src/main/java` (หรือ `kotlin`) · `src/main/resources` · `src/test/java` | [Maven Standard Directory Layout](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html) |
+| Go | `cmd/<binary>/main.go` · `internal/` · แพ็กเกจเล็กวางไฟล์ที่รากได้ · `golang-standards/project-layout` และ `pkg/` เป็นของชุมชน ไม่ใช่ของทีม Go | [Organizing a Go module](https://go.dev/doc/modules/layout) |
+| Flutter / Dart | `lib/` (`lib/src/` ส่วนภายใน) · `test/` · `android/` · `ios/` ※ | [Dart package layout](https://dart.dev/tools/pub/package-layout) |
+| Rust | `src/main.rs` · `src/lib.rs` · `src/bin/` · `tests/` · `examples/` · `benches/` | [Cargo project layout](https://doc.rust-lang.org/cargo/guide/project-layout.html) |
+| PHP / Laravel | `app/` · `config/` · `database/` · `public/` · `resources/` · `routes/` · `storage/` · `tests/` | [Laravel 13.x structure](https://laravel.com/docs/13.x/structure) |
+
+## 5 · แหล่ง (เปิดอ่าน 2026-11-07)
+
+[npm ci](https://docs.npmjs.com/cli/v10/commands/npm-ci) · [package.json engines](https://docs.npmjs.com/cli/v10/configuring-npm/package-json) · [pnpm install](https://pnpm.io/cli/install) · [nvm .nvmrc](https://github.com/nvm-sh/nvm/blob/master/README.md) · [Vite env and mode](https://vite.dev/guide/env-and-mode) · [Angular environments](https://angular.dev/tools/cli/environments) · [global.json](https://learn.microsoft.com/en-us/dotnet/core/tools/global-json) · [ASP.NET Core environments](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/environments) · [user-secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets) · [dotnet publish](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-publish) · [Writing pyproject.toml](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/) · [uv project layout](https://docs.astral.sh/uv/concepts/projects/layout/) · [uv Python versions](https://docs.astral.sh/uv/concepts/python-versions/) · [Ruff configuration](https://docs.astral.sh/ruff/configuration/) · [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) · [Spring Boot profiles](https://docs.spring.io/spring-boot/reference/features/profiles.html) · [Spring Boot Maven run](https://docs.spring.io/spring-boot/maven-plugin/run.html) · [Go toolchains](https://go.dev/doc/toolchain) · [Flutter flavors](https://docs.flutter.dev/deployment/flavors) · [Flutter Android release](https://docs.flutter.dev/deployment/android) · [Cargo FAQ](https://doc.rust-lang.org/cargo/faq.html) · [rust-toolchain.toml](https://rust-lang.github.io/rustup/overrides.html) · [Composer basic usage](https://getcomposer.org/doc/01-basic-usage.md) · [Laravel configuration](https://laravel.com/docs/12.x/configuration)
+
+รุ่นของเครื่องมือเปลี่ยนเร็ว (Laravel 13.x ออกแล้ว ณ วันที่ตรวจ) · ก่อนใช้ตารางนี้กับโปรเจกต์จริง เปิดหน้าทางการของรุ่นที่ใช้
+
+
+## reference: readme-skeleton.md
+
+# โครง README และเอกสารคู่ — ฉบับเต็ม
+
+กฎอยู่ใน `SKILL.md` ข้อ 2 · แม่แบบที่คัดลอกไปใช้ได้อยู่ใน `assets/starter-files.md` · คำสั่งและไฟล์ของแต่ละภาษาอยู่ใน [`readme-by-stack.md`](readme-by-stack.md)
+
+## 1 · หัวข้อ README เรียงตามลำดับที่คนใหม่ต้องใช้
+
+ลำดับนี้ไล่ตามที่คนเพิ่งมาถึงต้องการ: นี่คืออะไร → ติดตั้ง → รัน → แก้โค้ด → ส่งขึ้นระบบ · คอลัมน์ "แหล่ง" คือจำนวนแหล่งใน 5 แหล่งหลัก (หัวข้อ 4) ที่แนะนำหัวข้อนั้น · แถวที่รวมหลายเรื่องบอกเป็นช่วง · "—" คือไม่มีแหล่งหลักแนะนำ เป็นการตัดสินของ skill นี้
+
+| # | หัวข้อ | ตอบคำถามอะไร | มีเมื่อ | ยาวแค่ไหน · ยาวเกินย้ายไปไหน | แหล่ง |
+|:--:|---|---|---|---|:--:|
+| 1 | ชื่อ + ทำอะไรให้ใคร | นี่คืออะไร ใครใช้ | เสมอ | 2–3 บรรทัด · บรรทัดแรกไม่เกิน 120 ตัวอักษร | 5 |
+| 2 | บรรทัดสถานะ | ยังพัฒนาอยู่ไหม ใครเป็นเจ้าของ เอกสารอยู่ไหน | เสมอ | 1 บรรทัด: สถานะ · เจ้าของ · ลิงก์ `docs/README.md` | 2–4 (สถานะ 2 · เจ้าของ 4 · ลิงก์เอกสาร 4) |
+| 3 | ภาพหน้าจอหรือตัวอย่างผล | หน้าตาหรือผลลัพธ์เป็นแบบไหน | มีหน้าจอหรือผลที่ดูได้ | 1 รูป หรือคำสั่งตัวอย่างพร้อมผล | 2 (ตัวอย่างการใช้ 3) |
+| 4 | ต้องมีบนเครื่อง | ต้องลงอะไรก่อน รุ่นไหน | เสมอ | ตาราง: เครื่องมือ · รุ่น · ปักรุ่นไว้ที่ไฟล์ไหน (`.nvmrc` · `global.json`) | 3 |
+| 5 | เริ่มใช้งาน | ติดตั้งและรันยังไง | เสมอ | คำสั่งที่คัดลอกไปวางแล้วรันได้ ไม่เกิน 6 คำสั่ง · เกินนั้นทำเป็น `scripts/setup` | 4 |
+| 6 | ตั้งค่า | ต้องตั้งค่าอะไร มีกี่ environment สลับยังไง | โปรเจกต์อ่านค่าจากภายนอก | ตาราง: ชื่อตัวแปร · ใช้ทำอะไร · ต้องมีไหม · ค่าตัวอย่าง (ไม่ใส่ค่าจริง) · ค่าลับบอกแค่ชื่อและที่ขอ · ไม่มีเลยเขียน "ไม่มีค่าตั้งภายนอก" | 0 · อิง Twelve-Factor |
+| 7 | คำสั่งที่ใช้บ่อย | dev · test · lint · format · build สั่งยังไง | เสมอ | ตาราง 4–8 แถว · test ต้องเป็น 1 คำสั่ง | 2 |
+| 8 | โครงโปรเจกต์ | อะไรอยู่โฟลเดอร์ไหน | เสมอ | ผังชั้นเดียว ไม่เกิน 15 บรรทัด · เกิน → `ARCHITECTURE.md` หัวข้อแผนที่โค้ด | 1 |
+| 9 | สถาปัตยกรรมย่อ | ระบบมีกี่ส่วน คุยกันยังไง | มีมากกว่า 1 ส่วน (หน้าเว็บ + API + ฐานข้อมูล · คิว · บริการภายนอก) | 3–5 บรรทัด + รูป Mermaid ระดับ Context หรือ Container · เต็ม → `ARCHITECTURE.md` | — · อิง matklad และ C4 |
+| 10 | build และไฟล์ที่ได้ | ทำตัวส่งมอบยังไง ได้ไฟล์อะไร อยู่ไหน | มีของที่ต้อง build (เว็บ · แอป · binary · package) | คำสั่ง build ต่อเป้าหมาย + path ของไฟล์ที่ได้ | 2 (นับรวม deploy) |
+| 11 | deploy | ขึ้นระบบที่ไหน ใครกด ผ่าน Continuous Integration (CI) ตัวไหน ย้อนยังไง | ขึ้นระบบได้ | 3–5 บรรทัด · ขั้นเต็ม → `docs/runbook-deploy.md` | 2 (นับรวม build) |
+| 12 | ติดปัญหา | อาการที่เจอบ่อยและวิธีแก้ | เสมอ | ตาราง อาการ · แก้ · เริ่มจากที่เจอเองตอนเขียน README | — |
+| 13 | ร่วมพัฒนา | branch · commit · pull request (PR) · ตรวจอะไรก่อนส่ง | มีคนอื่นแก้โค้ด | 3–5 บรรทัด · ยาว → `CONTRIBUTING.md` | 4 |
+| 14 | ติดต่อและขอความช่วยเหลือ | ติดขัดถามใคร ช่องทางไหน | เสมอ | 1–2 บรรทัด | 4 |
+| 15 | สัญญาอนุญาต | เอาไปใช้ต่อได้แค่ไหน | เสมอ · เป็นหัวข้อสุดท้าย | 1 บรรทัด + ไฟล์ `LICENSE` · งานภายในเขียน "ใช้ภายใน <บริษัท> ห้ามเผยแพร่" | 2 |
+
+**กฎของโครง**
+- หัวข้อที่ไม่มีของ ตัดทิ้ง ไม่เขียนว่า "ไม่มี" · ยกเว้นหัวข้อ 6 ที่ต้องบอกว่าไม่มีค่าตั้งภายนอก
+- README มีแค่สิ่งที่คนใหม่ต้องใช้ใน 30 นาทีแรก · ของที่ยาวกว่านั้นย้ายไปไฟล์ในหัวข้อ 2 แล้วลิงก์กลับ ไม่ลบทิ้ง
+- ยาวเกิน 100 บรรทัด → ใส่สารบัญใต้บรรทัดสถานะ
+- แก้ README ใน commit เดียวกับโค้ดที่ทำให้คำสั่งหรือค่าตั้งเปลี่ยน
+- แต่ละภาษามีหัวข้อที่ต้องเพิ่ม (flavor ของ Flutter · `user-secrets` ของ .NET) → [`readme-by-stack.md`](readme-by-stack.md) หัวข้อ 3
+
+## 2 · ของที่แยกไปไฟล์อื่น
+
+| ไฟล์ | อยู่ที่ | เนื้อหา | สร้างเมื่อ |
+|---|---|---|---|
+| `ARCHITECTURE.md` | `<project-name>/` | แผนที่โค้ดสำหรับคนแก้โค้ด (หัวข้อ 3) | ผังโฟลเดอร์ใน README เกิน 15 บรรทัด หรือระบบมีมากกว่า 1 ส่วน |
+| `CHANGELOG.md` | `<project-name>/` | สิ่งที่ผู้ใช้เห็นเปลี่ยนในแต่ละรุ่น | ตามตารางใน `SKILL.md` ข้อ 3 |
+| `CONTRIBUTING.md` | `<project-name>/` | ตั้งเครื่องนักพัฒนา · branch · commit · PR · lint และ test ก่อนส่ง | หัวข้อ 13 ของ README ยาวเกิน 5 บรรทัด |
+| `LICENSE` | `<project-name>/` | ข้อความสัญญาอนุญาตเต็ม | repo เปิดสาธารณะ หรือสัญญาจ้างระบุ |
+| `SECURITY.md` | `<project-name>/` หรือ `.github/` | ช่องทางแจ้งช่องโหว่ · รุ่นที่ยังดูแล | repo เปิดสาธารณะ หรือส่งมอบให้ลูกค้าดูแลต่อ |
+| `CODEOWNERS` | `.github/` | โฟลเดอร์ไหนใครต้องตรวจ PR | มีหลายทีมหรือหลายเจ้าของ |
+| `runbook-deploy.md` | `docs/` ที่ราก | ขั้น build → release → run · ตั้งค่าแต่ละ environment · ย้อนรุ่น | ขั้น deploy ยาวเกิน 5 บรรทัด |
+| `decisions/ADR-NNNN-<slug>.md` | `docs/` ที่ราก | บันทึกการตัดสินใจ (Architecture Decision Record (ADR)) ทีละเรื่อง | ตัดสินใจเรื่องที่ย้อนยาก (`adr-writer`) |
+| Architecture ฉบับส่งมอบ | `docs/` ที่ราก | เอกสารสถาปัตยกรรมแบบ arc42 | ส่งมอบลูกค้าหรือมีผู้ตรวจรับ (`project-doc-set`) |
+
+ที่อยู่ของ `docs/` ตามผังแบบ B ใน `project-doc-set` ข้อ 1 · GitHub หา `CONTRIBUTING` และ `CODEOWNERS` ใน `.github/` ก่อน แล้วราก repo แล้ว `docs/` · เอกสารใน `docs/` แบ่งตามสิ่งที่ผู้อ่านต้องการได้ 4 แบบ (Diátaxis): เรียนรู้ (tutorial) · ทำงานให้เสร็จ (how-to เช่น runbook) · เปิดหาข้อเท็จจริง (reference เช่น ตารางค่าตั้ง API) · เข้าใจเหตุผล (explanation เช่น ARCHITECTURE · ADR)
+
+## 3 · ARCHITECTURE.md
+
+**ค่าเริ่ม: แบบสั้นของ matklad** — ผู้อ่านคือคนที่จะแก้โค้ดและอยากรู้ว่าของที่ทำ X อยู่ตรงไหน
+
+```markdown
+# สถาปัตยกรรม
+
+## ภาพรวม
+<ระบบแก้ปัญหาอะไร รับอะไรเข้า ส่งอะไรออก — 1 ย่อหน้า + รูป Context หรือ Container 1 รูป>
+
+## แผนที่โค้ด
+<แต่ละโฟลเดอร์หรือโมดูลหลักทำอะไร คุยกับใคร — ทีละย่อหน้าสั้น ๆ>
+
+## ข้อห้ามที่ต้องรักษา
+<กฎที่โค้ดต้องไม่ละเมิด เช่น "ชั้น domain ไม่ import ฐานข้อมูล" · "ทุกการเขียนเงินผ่าน ledger">
+
+## เส้นแบ่งระหว่างชั้น
+<ตรงไหนคือ API สาธารณะ ตรงไหนแก้ได้อิสระ>
+
+## เรื่องที่ตัดผ่านทุกส่วน
+<log · error · สิทธิ์ · config · การทดสอบ — ทำแบบไหน อยู่ที่ไหน>
+```
+
+- สั้น ใส่เฉพาะของที่ไม่ค่อยเปลี่ยน · เอ่ยชื่อไฟล์ โมดูล หรือ type ได้ แต่ไม่ใส่ลิงก์ เพราะลิงก์เสียเมื่อย้ายไฟล์ ให้คนค้นด้วยชื่อแทน
+- ไม่อธิบายทุกโมดูลละเอียด · ไม่ไล่แก้ทุก commit · ทบทวนปีละ 2–3 ครั้ง
+- รูปใช้แค่ 2 ระดับของ C4 คือ Context กับ Container ซึ่ง c4model.com บอกว่าพอสำหรับทีมส่วนใหญ่ · ระดับ Code ไม่วาดเก็บ · วาดด้วย Mermaid ตาม `software-diagrams`
+
+**ใช้ arc42 แทนเมื่อ** ส่งมอบให้ลูกค้าหรือทีมอื่นดูแลต่อ · มีข้อกำหนดคุณภาพ (ความเร็ว ความปลอดภัย) ที่ต้องพิสูจน์ · ต้องมีผู้ตรวจรับ — เลือกเฉพาะหัวข้อที่มีของจริงจาก 12 หัวข้อ: เป้าหมาย · ข้อจำกัด · ขอบเขตและบริบท · แนวทางแก้ · ส่วนประกอบ · การทำงานขณะรัน · การติดตั้ง (deployment) · แนวคิดที่ตัดผ่าน · การตัดสินใจ (ชี้ไป ADR) · ข้อกำหนดคุณภาพ · ความเสี่ยงและหนี้เทคนิค · อภิธานศัพท์ · ฉบับนี้อยู่ `docs/` ตาม `project-doc-set` ไม่ใช่ในโฟลเดอร์โค้ด
+
+## 4 · แหล่ง (เปิดอ่าน 2026-11-07)
+
+5 แหล่งหลักที่ใช้นับคอลัมน์ "แหล่ง" ในหัวข้อ 1:
+- [standard-readme spec](https://github.com/RichardLitt/standard-readme/blob/main/spec.md) — หัวข้อบังคับ · สัญญาอนุญาตอยู่ท้าย · สารบัญเมื่อเกิน 100 บรรทัด
+- [Make a README](https://www.makeareadme.com/) — ยาวดีกว่าสั้น ยาวเกินให้ย้าย ไม่ใช่ลบ
+- [GitHub Docs: About READMEs](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes)
+- [Google documentation guide: READMEs](https://google.github.io/styleguide/docguide/READMEs.html) · [Best practices](https://google.github.io/styleguide/docguide/best_practices.html) — แก้เอกสารพร้อมโค้ด
+- [Microsoft Engineering Playbook: Project and Repositories](https://microsoft.github.io/code-with-engineering-playbook/documentation/guidance/project-and-repositories/) — โครงโฟลเดอร์ · compile test build deploy
+
+แหล่งประกอบ: [GitHub community health files](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/creating-a-default-community-health-file) · [About code owners](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners) · [matklad: ARCHITECTURE.md](https://matklad.github.io/2021/02/06/ARCHITECTURE.md.html) · [arc42](https://arc42.org/overview) · [C4 model diagrams](https://c4model.com/diagrams) · [Diátaxis](https://diataxis.fr/) · [Twelve-Factor: Config](https://12factor.net/config) · [Build, release, run](https://12factor.net/build-release-run)
+
+ลำดับหัวข้อ · เพดาน 15 บรรทัดและ 6 คำสั่ง · ตารางตั้งค่า · หัวข้อติดปัญหาและสถาปัตยกรรมย่อ เป็นการตัดสินของ skill นี้ ไม่ใช่คำของแหล่ง
 
 
 ---

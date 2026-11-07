@@ -404,7 +404,7 @@ MkDocs Material: ผู้สร้างประกาศว่าดูแล
 
 ### README
 
-ไม่มีแม่แบบ README ที่นี่ — ใช้แม่แบบเดียวของ `project-bootstrap` (`SKILL.md` ข้อ 2 และ `assets/starter-files.md`) ที่ตอบ 5 คำถาม: คืออะไร · ต้องมีอะไรบนเครื่อง (เวอร์ชัน) · ติดตั้งและรันอย่างไร · รัน test อย่างไร · เอกสารและคนที่ต้องถามอยู่ที่ไหน
+ไม่มีแม่แบบ README ที่นี่ — ใช้แม่แบบเดียวของ `project-bootstrap` (`SKILL.md` ข้อ 2 และ `assets/starter-files.md`) โครง 15 หัวข้อ (9 มีเสมอ · 6 มีเมื่อโปรเจกต์มีของนั้น) อยู่ใน `references/readme-skeleton.md` · คำสั่งต่อภาษาใน `references/readme-by-stack.md`
 
 ### Tutorial Template
 

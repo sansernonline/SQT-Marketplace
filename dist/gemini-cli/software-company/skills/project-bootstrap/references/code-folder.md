@@ -4,8 +4,11 @@
 
 ```
 <project-name>/          ← ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่นด้วย `-`
-  README.md              ← ข้อ 2 · ติดตั้ง · รัน · test
+  README.md              ← ข้อ 2 · โครง 15 หัวข้อ (references/readme-skeleton.md)
   CHANGELOG.md           ← สิ่งที่เปลี่ยนในแต่ละเวอร์ชัน
+  ARCHITECTURE.md        ← แผนที่โค้ด · มีเมื่อผังใน README เกิน 15 บรรทัดหรือระบบมีหลายส่วน (references/readme-skeleton.md)
+  CONTRIBUTING.md        ← มีเมื่อหัวข้อร่วมพัฒนาใน README ยาวเกิน 5 บรรทัด
+  LICENSE                ← repo เปิดสาธารณะหรือสัญญาจ้างระบุ
   .env.example           ← ค่าที่ต้องมีทั้งหมด (ดู config-and-secrets) · มีเฉพาะเมื่อโปรเจกต์อ่าน environment variable จริง
   .editorconfig          ← ข้อ 4
   .gitattributes
