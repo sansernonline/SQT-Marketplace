@@ -84,6 +84,14 @@ This plugin ships no email connector. The user connects Gmail (or another mail a
 
 Related: `weekly-review` (clears `Waiting for`) · `digital-hygiene` (phishing, account takeover) · `subscription-audit` (newsletter and trial mail).
 
+## เรียกเป็นคำสั่ง
+
+`/personal-life:inbox-triage [--days 7]`
+
+Run the `inbox-triage` skill over the user's email via their own email connector (setup: `inbox-triage`, "Connecting your mail"): **$ARGUMENTS**
+
+Output is six buckets with counts (Verify · Today · This week · Delegate · File · Archive; Verify holds suspected phishing and comes first); answer-today items get drafted replies one by one, only on request.
+
 
 ---
 

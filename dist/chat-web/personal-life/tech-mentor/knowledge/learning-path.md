@@ -41,6 +41,14 @@ Use [references/path-template.md](references/path-template.md) for the plan file
 - Re-plan freely when reality differs from the plan. The path serves the learner
 - Record finished paths in a `learning-log.md` with dates — future-you will want the map
 
+## เรียกเป็นคำสั่ง
+
+`/personal-life:learning-path <technology or paper> [--depth skim|working|mastery]`
+
+With `--depth` or a technology: run `learning-path`. With a paper, RFC, or article: run `paper-to-practice`. Both with the `tech-mentor` agent: **$ARGUMENTS**
+
+Every path ends in something runnable in the user's own project.
+
 
 ## reference: path-template.md
 

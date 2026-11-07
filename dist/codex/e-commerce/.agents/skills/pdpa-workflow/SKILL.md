@@ -1,6 +1,7 @@
 ---
 name: pdpa-workflow
 description: Use when a Thai SME runs PDPA paperwork (consent, ROPA, data-subject requests, breach notice).
+argument-hint: <consent|breach|request|vendor> [details]
 ---
 
 # Personal Data Protection Act (PDPA) Workflow for Thai SMEs
@@ -80,3 +81,11 @@ Health data is sensitive, so the risk is high. Contain: delete the message, ask 
 ## Related
 
 `line-chatbot` (chat logs) · `doc-leave` (health certificates) · `payroll-th` · `doc-contract-th` (data clauses) · if installed: `pdpa-compliance`, `audit-trail` (software-company).
+
+## เรียกเป็นคำสั่ง
+
+`/e-commerce:pdpa-workflow <consent|breach|request|vendor> [details]`
+
+Run `pdpa-workflow` with the `compliance-helper` agent for: **$ARGUMENTS**
+
+General information, not legal advice; incidents with legal exposure go to a Thai lawyer.

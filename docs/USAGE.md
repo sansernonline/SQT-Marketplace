@@ -150,12 +150,12 @@ Step 4: Project Manager
 
 ### คำสั่ง
 ```
-/code-review src/auth/login.ts
+/code-review-checklist src/auth/login.ts
 ```
 
 หรือ
 ```
-/code-review PR #234 - Add password reset feature
+/code-review-checklist PR #234 - Add password reset feature
 ```
 
 ### สิ่งที่ได้
@@ -172,7 +172,7 @@ Step 4: Project Manager
 
 ### คำสั่ง
 ```
-/test-design feature การ checkout พร้อม promo code
+/test-case-template feature การ checkout พร้อม promo code
 ```
 
 ### สิ่งที่ได้
@@ -199,7 +199,7 @@ Step 4: Project Manager
 
 ### คำสั่ง
 ```
-/bug-report เวลาคลิกปุ่ม save แล้ว app crash
+/bug-report-template เวลาคลิกปุ่ม save แล้ว app crash
 ```
 
 ### สิ่งที่เกิดขึ้น
@@ -287,9 +287,9 @@ Step 4: Project Manager
 
 5. ใช้ developer implement endpoint POST /api/membership/upgrade
 
-6. /code-review src/membership/upgrade.controller.ts
+6. /code-review-checklist src/membership/upgrade.controller.ts
 
-7. /test-design การ upgrade membership
+7. /test-case-template การ upgrade membership
 
 8. ใช้ devops-engineer ตั้ง feature flag สำหรับ tier rollout
 ```
@@ -297,13 +297,13 @@ Step 4: Project Manager
 ### Scenario B: เกิด incident ใน production
 
 ```
-1. /bug-report users รายงานว่า login ไม่ได้
+1. /bug-report-template users รายงานว่า login ไม่ได้
 
 2. (qa-tester เก็บข้อมูล + จัด priority)
 
 3. ใช้ developer ช่วย debug และ fix
 
-4. /code-review ของ fix
+4. /code-review-checklist ของ fix
 
 5. ใช้ devops-engineer deploy hotfix
 
@@ -381,9 +381,9 @@ Step 4: Project Manager
 | Command | สำหรับ | ความถี่ |
 |---------|--------|--------|
 | 1. `/feature-kickoff <feature>` | เริ่ม feature ใหม่ — BA + Architect + SA + PM | 🟢 ทุก feature |
-| 2. `/code-review <file>` | Review โค้ดอย่างเป็นระบบ | 🟢 ทุก PR |
-| 3. `/test-design <feature>` | ออกแบบ test cases | 🟢 ทุก feature |
-| 4. `/bug-report <issue>` | สร้าง bug report ครบ field | 🟢 เมื่อเจอบั๊ก |
+| 2. `/code-review-checklist <file>` | Review โค้ดอย่างเป็นระบบ | 🟢 ทุก PR |
+| 3. `/test-case-template <feature>` | ออกแบบ test cases | 🟢 ทุก feature |
+| 4. `/bug-report-template <issue>` | สร้าง bug report ครบ field | 🟢 เมื่อเจอบั๊ก |
 | 5. `/api-design <feature>` | ออกแบบ API spec | 🟡 ทุก endpoint |
 | 6. `/sprint-plan <sprint>` | Sprint planning | 🟡 ทุก sprint |
 | 7. `/retrospective <sprint>` | Sprint retro | 🟡 ทุก sprint |
@@ -401,8 +401,8 @@ Step 4: Project Manager
 เช้า:        เปิด .claude/superuser/CONTEXT.md หัวข้อ "รับงานต่อ" + ดู .claude/superuser/inbox/
              /sprint-plan ถ้าวันแรกของ sprint
 
-ระหว่างวัน:  /code-review เมื่อเปิด PR
-             /bug-report เมื่อเจอบั๊ก
+ระหว่างวัน:  /code-review-checklist เมื่อเปิด PR
+             /bug-report-template เมื่อเจอบั๊ก
              /api-design ก่อนเขียน endpoint
 
 ก่อนเลิก:    หัวหน้าทีมอัปเดต "รับงานต่อ" ใน CONTEXT.md
@@ -419,7 +419,7 @@ Step 4: Project Manager
              /threat-model (ถ้ามี feature ที่กระทบ security)
 
 ปลายสัปดาห์: /retrospective (ถ้าจบ sprint)
-             /test-design (ก่อนเข้า QA)
+             /test-case-template (ก่อนเข้า QA)
 ```
 
 #### 🚀 Per Release
@@ -428,7 +428,7 @@ Step 4: Project Manager
 ก่อน release:
   /security-scan code         # ตรวจช่องโหว่
   /security-scan deps         # ตรวจ dependencies
-  /test-design <release>      # test coverage
+  /test-case-template <release>      # test coverage
   /architecture-review        # ถ้ามี breaking change
 
 ตอน release:
@@ -445,7 +445,7 @@ Step 4: Project Manager
 ```
 /product-roadmap Q1-Q4 <year>   # roadmap ใหม่
 /architecture-review            # tech debt audit
-/seo-audit                      # SEO ทบทวน
+/seo-audit-checklist                      # SEO ทบทวน
 ```
 
 ---
@@ -460,13 +460,13 @@ Step 4: Project Manager
 
 #### 🐛 "เจอบั๊ก"
 ```
-/bug-report เมื่อ click save app crashes
+/bug-report-template เมื่อ click save app crashes
 ```
 → Severity/priority + steps to reproduce + evidence
 
 #### 🔍 "ต้อง review PR"
 ```
-/code-review src/auth/login.ts
+/code-review-checklist src/auth/login.ts
 ```
 → Security + design + tests + readability checklist
 
@@ -520,80 +520,80 @@ Step 4: Project Manager
 
 #### 🏦 FinTech
 ```
-/software-company:fintech-design pci-audit <scope>                   # PCI-DSS readiness
-/software-company:fintech-design transaction-flow-design <use case>  # ออกแบบ money flow
+/software-company:fintech-payments pci-audit <scope>                   # PCI-DSS readiness
+/software-company:fintech-payments transaction-flow-design <use case>  # ออกแบบ money flow
 ```
 
 #### 🤖 AI/ML
 ```
-/software-company:llm-design rag-design <use case>               # ออกแบบ RAG system
-/software-company:llm-design llm-eval <application>              # สร้าง eval suite
+/software-company:llm-engineering rag-design <use case>               # ออกแบบ RAG system
+/software-company:llm-engineering llm-eval <application>              # สร้าง eval suite
 ```
 
 #### 🏥 Healthcare
 ```
-/software-company:healthcare-design hipaa-audit <scope>                 # HIPAA readiness
-/software-company:healthcare-design fhir-design <feature>               # FHIR API design
+/software-company:healthcare-systems hipaa-audit <scope>                 # HIPAA readiness
+/software-company:healthcare-systems fhir-design <feature>               # FHIR API design
 ```
 
 #### 🛒 E-commerce
 ```
-/software-company:ecommerce-design checkout-audit                      # วิเคราะห์ checkout
-/software-company:ecommerce-design recommendation-design               # ออกแบบ recsys
+/software-company:ecommerce-patterns checkout-audit                      # วิเคราะห์ checkout
+/software-company:ecommerce-patterns recommendation-design               # ออกแบบ recsys
 ```
 
 #### 🎮 Gaming
 ```
-/software-company:game-design game-design <game type>             # core loop + progression
-/software-company:game-design multiplayer-architecture            # netcode + matchmaking
+/software-company:game-development game-design <game type>             # core loop + progression
+/software-company:game-development multiplayer-architecture            # netcode + matchmaking
 ```
 
 #### 🌐 IoT
 ```
-/software-company:iot-design iot-architecture <use case>         # device/edge/cloud
-/software-company:iot-design device-fleet-design <fleet>         # provisioning + OTA
+/software-company:iot-systems iot-architecture <use case>         # device/edge/cloud
+/software-company:iot-systems device-fleet-design <fleet>         # provisioning + OTA
 ```
 
 #### 🔒 Cybersecurity
 ```
-/software-company:security-ops-design threat-hunt <hypothesis>            # proactive threat hunting
-/software-company:security-ops-design soc-design <org>                    # SOC architecture
+/software-company:security-operations threat-hunt <hypothesis>            # proactive threat hunting
+/software-company:security-operations soc-design <org>                    # SOC architecture
 ```
 
 #### 🏢 SaaS B2B
 ```
-/software-company:saas-design saas-architecture-review <area>     # multi-tenancy review
-/software-company:saas-design integration-design <integration>    # SSO/SCIM/webhook
+/software-company:saas-platform saas-architecture-review <area>     # multi-tenancy review
+/software-company:saas-platform integration-design <integration>    # SSO/SCIM/webhook
 ```
 
 #### 🔧 DevTools
 ```
-/software-company:dx-design sdk-design <api>                    # multi-language SDK
-/software-company:dx-design dx-audit <product>                  # developer experience
+/software-company:developer-experience sdk-design <api>                    # multi-language SDK
+/software-company:developer-experience dx-audit <product>                  # developer experience
 ```
 
 #### 📱 Mobile
 ```
-/software-company:mobile-design mobile-architecture <app>           # framework + architecture
-/software-company:mobile-design aso-audit <app>                     # App Store optimization
+/software-company:mobile-engineering mobile-architecture <app>           # framework + architecture
+/software-company:mobile-engineering aso-audit <app>                     # App Store optimization
 ```
 
 #### 🌐 Web3
 ```
-/software-company:web3-design smart-contract-audit <repo>         # security audit
-/software-company:web3-design tokenomics-design <protocol>        # token economics
+/software-company:smart-contracts smart-contract-audit <repo>         # security audit
+/software-company:smart-contracts tokenomics-design <protocol>        # token economics
 ```
 
 #### ⚖️ LegalTech
 ```
-/software-company:legal-doc-design contract-analysis-design <use>      # clause extraction system
-/software-company:legal-doc-design esignature-audit <system>           # eIDAS/ESIGN compliance
+/software-company:legal-document-systems contract-analysis-design <use>      # clause extraction system
+/software-company:legal-document-systems esignature-audit <system>           # eIDAS/ESIGN compliance
 ```
 
 #### 🛡️ InsurTech
 ```
-/software-company:insurance-design claims-flow-design <LOB>            # FNOL + triage + settlement
-/software-company:insurance-design underwriting-model-design <LOB>     # risk scoring + pricing
+/software-company:insurance-systems claims-flow-design <LOB>            # FNOL + triage + settlement
+/software-company:insurance-systems underwriting-model-design <LOB>     # risk scoring + pricing
 ```
 
 ---
@@ -650,12 +650,12 @@ Step 4: Project Manager
 3. /threat-model <feature>
    ↓ (Security ตรวจสอบ)
 
-4. /test-design <feature>
+4. /test-case-template <feature>
    ↓ (QA ออกแบบ test)
 
 5. (Dev implement)
 
-6. /code-review <files>
+6. /code-review-checklist <files>
    ↓ (review ก่อน merge)
 
 7. /release-notes <version>
@@ -666,8 +666,8 @@ Step 4: Project Manager
 
 ```
 ต้น sprint:    /sprint-plan
-ระหว่าง:        /code-review (per PR)
-                /bug-report (when found)
+ระหว่าง:        /code-review-checklist (per PR)
+                /bug-report-template (when found)
 ปลาย sprint:   /retrospective
                 /release-notes (ถ้า release)
 ```
@@ -702,8 +702,8 @@ Step 4: Project Manager
 
 #### 1. ใช้ `<args>` ให้ละเอียด
 ```
-❌ /code-review
-✅ /code-review src/auth/login.ts (focus on security)
+❌ /code-review-checklist
+✅ /code-review-checklist src/auth/login.ts (focus on security)
 ```
 ใส่ args ละเอียด → ได้ผลตรงประเด็นกว่า
 

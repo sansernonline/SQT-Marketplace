@@ -98,6 +98,14 @@ Input file: `{ "items": [ { "name": "...", "qty": 1, "price": 50000, "discount":
 
 `e-tax-invoice` · `tax-vat-th` · `promptpay-qr` · `doc-contract-th` · `seller-tax-basics`.
 
+## เรียกเป็นคำสั่ง
+
+`/e-commerce:doc-quotation <customer> <items and prices> [terms]`
+
+Run `doc-quotation` with the `thai-doc-writer` agent for: **$ARGUMENTS**
+
+Confirm VAT rate and payment terms before producing the final document; amounts in digits and Thai words must match exactly.
+
 
 ## reference: templates.md
 

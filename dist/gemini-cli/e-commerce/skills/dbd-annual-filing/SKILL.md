@@ -1,6 +1,7 @@
 ---
 name: dbd-annual-filing
 description: Use when a Thai company files after year end (AGM, audited statements via DBD e-Filing, BOJ 5, PND 50).
+argument-hint: '[company|partnership] [--year-end <date>]'
 ---
 
 # Year-End Filing — Department of Business Development (DBD) and Revenue Department
@@ -68,3 +69,11 @@ Each year end brings 4 deadlines from 2 authorities (DBD and the Revenue Departm
 ## Related
 
 `tax-vat-th` (ภ.ง.ด.50/51, surcharge) · `payroll-th` (ภ.ง.ด.1ก in February) · `doc-thai-official` (AGM notice, letters) · `thai-holidays`.
+
+## เรียกเป็นคำสั่ง
+
+`/e-commerce:dbd-annual-filing [company|partnership] [--year-end <date>]`
+
+Run `dbd-annual-filing` with the `tax-helper` agent for: **$ARGUMENTS**
+
+Shifts dates for weekends and holidays with `thai-holidays`, lists the documents per step, flags late-filing fines, and ends with the auditor and accountant handoff checklist.

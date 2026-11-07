@@ -50,7 +50,7 @@ Weights are starting values the user can change (starting value, not yet measure
 
 ## Rules
 
-- Review the full list **monthly** (`/watch review`); dead theses go out with no attachment.
+- Review the full list **monthly** (`/trading-finance:watchlist-setup review`); dead theses go out with no attachment.
 - One line per name in reviews — if it needs a paragraph, the thesis is not clear.
 - Data from whatever market-data plugin is installed; if none, say so and use free public pages (set.or.th company pages), always with the as-of date.
 
@@ -69,7 +69,19 @@ User: swing trader, 200,000 baht, SET only. Adds ABC.
 | Alerts | price ≥ 48.00 · price ≤ 44.00 · volume ≥ 2× average |
 | As of | 2026-10-06 |
 
-Command: `/watch add|review|clean`. Next steps: read the chart with `technical-signals`, size with `position-sizing`.
+Command: `/trading-finance:watchlist-setup add|review|clean`. Next steps: read the chart with `technical-signals`, size with `position-sizing`.
+
+## เรียกเป็นคำสั่ง
+
+`/trading-finance:watchlist-setup <add|review|clean> [symbol or notes]`
+
+Manage the watchlist with the `watchlist-setup` skill: **$ARGUMENTS**
+
+- `add` — ask for thesis, entry zone, invalidation; append to the watchlist
+- `review` — re-check every thesis against current data, kill dead ones
+- `clean` — delete names without a written thesis (default max 10 symbols)
+
+Always refresh data through installed market-data plugins and date every figure.
 
 
 ## reference: watchlist-template.md

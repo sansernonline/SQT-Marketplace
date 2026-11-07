@@ -40,6 +40,21 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 รวมจาก plugin `software-company-healthcare` (เดิมชื่อ clinical-workflows → `references/clinical-workflows.md` · fhir-implementation → `references/fhir-implementation.md` · hipaa-compliance → `references/hipaa-compliance.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
 
+## โหมดออกแบบ (เรียกเป็นคำสั่ง)
+
+`/software-company:healthcare-systems <fhir-design | hipaa-audit> <details>`
+
+> **ภาษา:** ถ้อยคำทุกบรรทัดในเอกสารที่ได้ เขียนตาม `human-writing` — command นี้บอกขั้นตอน ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+
+Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+
+| Mode | What it does |
+|---|---|
+| `fhir-design` | Design a Fast Healthcare Interoperability Resources (FHIR) API for healthcare interoperability using healthcare-engineer agent. Selects resources, defines profiles, designs SMART on FHIR flow. |
+| `hipaa-audit` | Run a Health Insurance Portability and Accountability Act (HIPAA) readiness audit using hipaa-officer agent. Covers all 3 safeguard categories and produces remediation roadmap. For a Thai project it also covers the Personal Data Protection Act (PDPA). |
+
+ขั้นตอนเต็มของแต่ละโหมด → [references/design-modes.md](references/design-modes.md)
+
 
 ## reference: agent-fhir-specialist.md
 
@@ -1374,6 +1389,60 @@ interface PlannedActivity {
 - [ISMP (Institute for Safe Medication Practices)](https://www.ismp.org/)
 
 
+## reference: design-modes.md
+
+# โหมดออกแบบ
+
+Use when the user asks to design a FHIR API or run a HIPAA or PDPA readiness audit. Modes — fhir-design · hipaa-audit.
+
+> **ภาษา:** ถ้อยคำทุกบรรทัดในเอกสารที่ได้ เขียนตาม `human-writing` — command นี้บอกขั้นตอน ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+
+Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+
+| Mode | What it does |
+|---|---|
+| `fhir-design` | Design a Fast Healthcare Interoperability Resources (FHIR) API for healthcare interoperability using healthcare-engineer agent. Selects resources, defines profiles, designs SMART on FHIR flow. |
+| `hipaa-audit` | Run a Health Insurance Portability and Accountability Act (HIPAA) readiness audit using hipaa-officer agent. Covers all 3 safeguard categories and produces remediation roadmap. For a Thai project it also covers the Personal Data Protection Act (PDPA). |
+
+---
+
+## Mode: `fhir-design`
+
+Use the `healthcare-engineer` agent for: **$ARGUMENTS**
+
+Workflow:
+1. **Discovery:** FHIR version (R4 default), target electronic health records (EHRs), use cases (read, write, bulk), implementation guides (US Core, IPS, local), SMART on FHIR or system-to-system, privacy needs
+2. **Apply `healthcare-systems` skill**, open `references/fhir-implementation.md`
+3. **Select resources and profiles:** map each clinical concept, keep extensions few
+4. **Design the API:** CapabilityStatement, search parameters, operations, transaction Bundles, Bulk Data if needed
+5. **Design auth:** SMART on FHIR scopes, Proof Key for Code Exchange (PKCE), token lifecycle
+6. **Plan validation:** profiles, required fields, code bindings (LOINC, SNOMED, RxNorm)
+7. **Design AuditEvent** and map legacy data (field mapping, code translation, identifiers)
+8. **Plan testing:** Inferno or Touchstone for the guide, EHR sandbox
+9. **Produce polished FHIR design** using `polished-document-style`: resource model, endpoints, SMART sequence diagram, sample resources, migration plan
+10. **Hand-off:** implementation → `developer`, HIPAA review → `hipaa-officer`, deployment → `devops-engineer`
+
+Reference for steps 3–8: anthropics/healthcare `fhir-developer` (github.com/anthropics/healthcare) has real validation code and value sets — ToS เท่านั้น ลิงก์ได้ ลอกไม่ได้
+
+---
+
+## Mode: `hipaa-audit`
+
+Use the `hipaa-officer` agent for: **$ARGUMENTS**
+
+Workflow:
+1. **Discovery:** protected health information (PHI) inventory and locations, workforce with PHI access, current business associate agreements (BAAs), past incidents, last risk assessment date, **and where the patients are** (US, Thailand, both)
+2. **Apply `healthcare-systems` skill**, open `references/hipaa-compliance.md`. Project in Thailand / Thai patients → also apply `pdpa-compliance`: health data is sensitive data, needs explicit consent, and a breach goes to the regulator within 72 hours
+3. **Assess Administrative Safeguards** with its checklist
+4. **Assess Physical Safeguards** with its checklist
+5. **Assess Technical Safeguards** with its checklist
+6. **Check BAAs** against every vendor that touches PHI
+7. **Risk-rank gaps:** Critical, High, Medium, Low
+8. **Plan remediation:** 30/60/90 days with owners
+9. **Produce polished HIPAA audit report** using `polished-document-style`: summary, PHI data flow diagram, scorecard per safeguard, findings, sign-off
+10. **Hand-off:** technical fixes → `developer`, `devops-engineer`, `security-engineer` · breach or live incident → `security-analyst` · clinical workflow changes → `healthcare-engineer`
+
+
 ## reference: fhir-implementation.md
 
 > เดิมชื่อ fhir-implementation (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-healthcare` — รวมเข้า `healthcare-systems` ใน v2.0.0
@@ -2155,6 +2224,19 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 ## ที่มา
 
 ย้ายมาจาก plugin `software-company-fintech` (เดิมชื่อ payment-gateway-integration → `references/payment-gateway-integration.md` · kyc-aml-patterns → `references/kyc-aml-patterns.md` · pci-dss-compliance → `references/pci-dss-compliance.md` ไม่ใช่ skill แยกแล้ว) และรวมเข้า `software-company` ใน v2.0.0 เนื้อหาเดิมยังอยู่ครบใน `references/`
+
+## โหมดออกแบบ (เรียกเป็นคำสั่ง)
+
+`/software-company:fintech-payments <transaction-flow-design | pci-audit> <details>`
+
+Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+
+| Mode | What it does |
+|---|---|
+| `transaction-flow-design` | Design end-to-end financial transaction flow using fintech-engineer agent. Covers idempotency, state machine, audit, reconciliation. |
+| `pci-audit` | Run a PCI-DSS readiness audit using fintech-compliance-officer agent. Identifies scope, gaps, and produces remediation plan. |
+
+ขั้นตอนเต็มของแต่ละโหมด → [references/design-modes.md](references/design-modes.md)
 
 
 ## reference: agent-fintech-compliance-officer.md
@@ -2976,6 +3058,142 @@ Predict probability of loan default within 12 months.
 | 2020 COVID | XX% | XX% |
 | 2022 Rate hike | XX% | XX% |
 ```
+
+
+## reference: design-modes.md
+
+# โหมดออกแบบ
+
+Design a financial transaction flow or run a Payment Card Industry Data Security Standard (PCI-DSS) readiness audit.
+
+## สารบัญ
+
+- [Mode: `transaction-flow-design`](#mode-transaction-flow-design)
+- [Mode: `pci-audit`](#mode-pci-audit)
+
+Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+
+| Mode | What it does |
+|---|---|
+| `transaction-flow-design` | Design end-to-end financial transaction flow using fintech-engineer agent. Covers idempotency, state machine, audit, reconciliation. |
+| `pci-audit` | Run a PCI-DSS readiness audit using fintech-compliance-officer agent. Identifies scope, gaps, and produces remediation plan. |
+
+---
+
+## Mode: `transaction-flow-design`
+
+Use the `fintech-engineer` agent to design transaction flow for: **$ARGUMENTS**
+
+The fintech engineer should:
+
+1. **Initial Discovery** — gather:
+   - Money movement type (intra-account, peer-to-peer (P2P), business-to-consumer (B2C), card, etc.)
+   - Currencies involved
+   - Settlement timing requirements
+   - Regulatory scope
+   - Reversal/refund requirements
+   - Integration partners (banks, gateways)
+
+2. **Design state machine**:
+   - All possible states (PENDING, PROCESSING, SUCCEEDED, FAILED, REVERSED, etc.)
+   - Valid transitions
+   - Terminal states
+   - Reversal mechanism (NOT update, always append)
+
+3. **Design idempotency**:
+   - Idempotency key strategy
+   - Dedup window
+   - Replay safety
+
+4. **Design double-entry ledger** entries:
+   - Debit accounts
+   - Credit accounts
+   - Settlement timing
+
+5. **Plan failure modes**:
+   - Network failure mid-transaction
+   - Partner timeout
+   - Insufficient funds
+   - Currency conversion errors
+   - Each → defined behavior + recovery
+
+6. **Design audit trail**:
+   - What's logged
+   - Where (immutable store)
+   - Retention period
+   - Access controls
+
+7. **Design reconciliation**:
+   - Daily reconciliation job
+   - Discrepancy alerting
+   - Manual reconciliation tooling
+
+8. **Produce polished design document** using `polished-document-style` skill:
+   - Sequence diagram (`diagram-figures`, house style)
+   - State machine diagram (`diagram-figures`, house style)
+   - API spec for endpoints
+   - Database schema (ledger + audit tables)
+   - Error handling table
+   - Test scenarios (happy + failure + edge)
+
+9. **Apply relevant skills**:
+   - `fintech-payments` → `references/payment-gateway-integration.md` if an external gateway is involved
+   - `fintech-payments` → `references/pci-dss-compliance.md` if cards are involved
+   - `fintech-payments` → `references/kyc-aml-patterns.md` if customer-facing (identity checks)
+
+10. **Hand-off suggestions**:
+    - Implementation → `developer`
+    - Security review → `security-engineer` (from software-company)
+    - Compliance review → `fintech-compliance-officer`
+    - Test design → `qa-tester` (from software-company)
+
+---
+
+## Mode: `pci-audit`
+
+Use the `fintech-compliance-officer` agent to perform a PCI-DSS audit on: **$ARGUMENTS**
+
+The compliance officer should:
+
+1. **Initial Discovery** — gather:
+   - Current PCI level (1-4 based on volume)
+   - Existing Self-Assessment Questionnaire (SAQ) type
+   - Recent Qualified Security Assessor (QSA) findings
+   - Data flow diagrams
+   - In-scope systems
+
+2. **Go through the 12 PCI-DSS requirements** in `fintech-payments/references/pci-dss-compliance.md`
+
+3. **Scope analysis**:
+   - Map ALL systems that touch cardholder data (CHD)
+   - **Never-store sweep first** (idea from wshobson pci-compliance): search logs, database columns, backups, analytics events, crash reports and screenshots for the data PCI-DSS forbids after authorisation — CVV/CVC (never, not even encrypted or "only in debug logs"), full magnetic-stripe or chip track data, PIN or PIN block — and for an unmasked PAN anywhere outside the tokenised vault (display is at most first 6 and last 4). One hit is a Critical gap that outranks every other finding
+   - Identify SAQ candidates (aim for A)
+   - Recommend scope reduction opportunities
+
+4. **Gap assessment** per requirement:
+   - Compliant (evidence available)
+   - Partial (in progress)
+   - Gap (not implemented)
+   - Not applicable (justified)
+
+5. **Risk-rank gaps**:
+   - Severity (impact on assessment outcome)
+   - Effort to remediate
+   - Dependencies
+
+6. **Produce polished PCI audit report** using `polished-document-style` skill:
+   - Executive summary
+   - Scope diagram (`diagram-figures`, house style)
+   - Readiness scorecard
+   - Detailed findings per requirement
+   - Remediation plan (30/60/90 day)
+   - Sign-off section
+
+7. **Hand-off suggestions**:
+   - Code/infra fixes → `developer`, `devops-engineer`
+   - Architecture changes → `solution-architect`
+   - Security implementation → `security-engineer`
+   - Payment scope review → `fintech-engineer` agent
 
 
 ## reference: kyc-aml-patterns.md

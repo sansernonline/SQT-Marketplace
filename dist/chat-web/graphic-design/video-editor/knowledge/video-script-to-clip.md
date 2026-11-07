@@ -85,6 +85,14 @@ Before handing over, run the check in `no-ai-look` (section 3): its script on HT
 - `style-consistency` — one look across shots
 - `campaign-set` — the V rows in the matrix
 
+## เรียกเป็นคำสั่ง
+
+`/graphic-design:video-script-to-clip <the message> [target platform and length]`
+
+Run `video-script-to-clip` for: **$ARGUMENTS** — `social-creator` writes the message, hook and script; `art-director` writes the shot list, motion timing and per-shot briefs.
+
+Review the storyboard as thumbnails before generating anything.
+
 
 ## reference: production-tools.md
 

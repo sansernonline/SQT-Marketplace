@@ -1,6 +1,7 @@
 ---
 name: household-bills
 description: Use when reading an electricity or water bill (MEA, PEA, MWA, PWA, Ft), tracking bills, or a bill jumped.
+argument-hint: <bill figures or "tracker"> [month]
 ---
 
 # Household Bills (Thailand)
@@ -97,3 +98,11 @@ A Bangkok house used 412 units in May against 318 / 305 / 330 in Feb–Apr (aver
 ## Related
 
 `home-maintenance` · `trading-finance` `personal-budget` (if installed) · `important-docs` (keep the meter number, electricity customer number CA/รหัสผู้ใช้ไฟ, and water account number there)
+
+## เรียกเป็นคำสั่ง
+
+`/personal-life:household-bills <bill figures or "tracker"> [month]`
+
+Run `household-bills` with the `home-manager` agent for: **$ARGUMENTS**
+
+Use the units and amounts printed on the bill, not estimates. Check the current Ft and tariff with การไฟฟ้านครหลวง (กฟน.) / การไฟฟ้าส่วนภูมิภาค (กฟภ.) / คณะกรรมการกำกับกิจการพลังงาน (กกพ.) before splitting the bill into its parts; anything unconfirmed is written as the official value + `(รอยืนยัน)`. If this month's units are more than 20% above the 3-month average in units (20% is a default, not measured), run the spike checklist. Get the percentage from `power-bill.mjs --history` (see `household-bills`), not by hand.

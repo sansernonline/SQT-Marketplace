@@ -1,6 +1,7 @@
 ---
 name: social-formats
 description: Use when designing for Facebook, Instagram, TikTok, YouTube, LINE OA or X. Sizes, ratios, safe zones.
+argument-hint: <path to master asset> [platforms needed]
 ---
 
 # Social Formats
@@ -79,3 +80,11 @@ Before handing over, run the check in `no-ai-look` (section 3): its script on HT
 - `asset-organize` — format codes in file names
 - `video-script-to-clip` — captions and safe zones in video
 - `software-company` `graphic-design` (if installed) — print sizes and LINE rich menu layout for product work
+
+## เรียกเป็นคำสั่ง
+
+`/graphic-design:social-formats <path to master asset> [platforms needed]`
+
+Run `social-formats` and `campaign-set` derivation steps on: **$ARGUMENTS**
+
+Never stretches an image. Every derived file has the platform and format in its name.

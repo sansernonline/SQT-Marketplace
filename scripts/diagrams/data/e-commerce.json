@@ -86,20 +86,7 @@
   "translate-th-en"
  ],
  "commands": [
-  "compare",
-  "complain",
-  "contract",
-  "line-bot",
-  "line-setup",
-  "listing",
-  "live-script",
-  "payroll",
-  "pdpa",
-  "price-check",
-  "quotation",
-  "reply",
-  "tax-due",
-  "year-end-filing"
+  "complain"
  ],
  "agents": [
   {

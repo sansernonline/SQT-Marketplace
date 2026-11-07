@@ -141,6 +141,14 @@ Trip card · entry decision per traveller with source and date · checklist from
 
 Related: `important-docs` (passport expiry) · `polite-message-th-en` (hotel or airline requests) · `digital-hygiene` (public Wi-Fi, SIM swap).
 
+## เรียกเป็นคำสั่ง
+
+`/personal-life:travel-prep <destination> <dates> [travelers]`
+
+Run the `travel-prep` skill for: **$ARGUMENTS**
+
+Produces the checklist plus an itinerary file with every confirmation number, and a day-before four-thing check list.
+
 
 ## reference: checklist-template.md
 

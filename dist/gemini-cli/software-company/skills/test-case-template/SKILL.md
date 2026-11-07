@@ -1,6 +1,7 @@
 ---
 name: test-case-template
 description: Use when writing test cases or a feature test plan, or turning acceptance criteria into tests.
+argument-hint: <feature or user story>
 ---
 
 # Test Case Template
@@ -190,3 +191,18 @@ load the matching skill before writing, not after:
 Default formatting is not neutral — it reads as unfinished work.
 
 **อ่านเพิ่มเมื่อต้องใช้:** [`references/test-plan-template.md`](references/test-plan-template.md) — แม่แบบ
+
+## เรียกเป็นคำสั่ง
+
+`/software-company:test-case-template <feature or user story>`
+
+Use the `qa-tester` agent to design test cases for: **$ARGUMENTS**
+
+The tester should:
+
+1. Review the feature / user story / acceptance criteria
+2. Apply the `test-case-template` skill
+3. Cover every category in `test-case-template` (Test Case Categories), noting which ones do not apply and why
+4. Mark each test case with priority (P1-P4)
+5. Indicate automation candidacy
+6. Produce a coverage summary table at the end

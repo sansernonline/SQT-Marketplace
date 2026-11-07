@@ -934,7 +934,7 @@
 
 ---
 
-## ⚡ Commands (29)
+## ⚡ Commands (11)
 
 ### 1. /feature-kickoff `<feature description>`
 **Workflow:** BA → Solution Architect → System Analyst → PM
@@ -950,21 +950,21 @@
 
 ---
 
-### 3. /code-review `<file or PR>`
+### 3. /code-review-checklist `<file or PR>`
 **Agent:** developer + code-review-checklist skill
 **Use case:** Review PR
 **Output:** Categorized findings + overall recommendation
 
 ---
 
-### 4. /test-design `<feature>`
+### 4. /test-case-template `<feature>`
 **Agent:** qa-tester + test-case-template skill
 **Use case:** ออกแบบ test cases สำหรับ feature
 **Output:** Test cases ครบทุก category + coverage summary
 
 ---
 
-### 5. /bug-report `<issue>`
+### 5. /bug-report-template `<issue>`
 **Agent:** qa-tester + bug-report-template skill
 **Use case:** รายงาน bug
 **Output:** Structured bug report พร้อม severity/priority
@@ -978,7 +978,7 @@
 
 ---
 
-### 7. /seo-audit `<url or description>`
+### 7. /seo-audit-checklist `<url or description>`
 **Agent:** seo-specialist + seo-audit-checklist skill
 **Use case:** ตรวจสุขภาพ SEO ของเว็บไซต์
 **Output:** Audit report + health score + 3-month action plan

@@ -95,3 +95,14 @@ Visit for morning headaches, 3 weeks, home blood pressure (BP) readings 150/95 o
 3. "Which signs mean I should go to the emergency room instead of waiting?"
 
 Related: `medication-schedule` · `annual-checkup` · `sleep-log` · `meeting-prep-card`.
+
+## เรียกเป็นคำสั่ง
+
+`/personal-life:doctor-visit-prep <before|after> [reason for visit]`
+
+Run the `health-organizer` agent with the `doctor-visit-prep` skill: **$ARGUMENTS**
+
+- `before` — build the one-page visit card: symptom timeline, medicine list (from `medication-schedule`), allergies, top 3 questions
+- `after` — fill the after-visit summary: what the doctor said, new prescriptions copied exactly, tests ordered, follow-up date, warning signs to watch
+
+Never diagnose or suggest doses. Emergency symptoms → 1669 first.

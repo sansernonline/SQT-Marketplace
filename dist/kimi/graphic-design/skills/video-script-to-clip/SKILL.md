@@ -1,6 +1,7 @@
 ---
 name: video-script-to-clip
 description: Use when making a short video, Reel, TikTok or video ad. Hook, shot list, Thai subtitles, shot briefs.
+argument-hint: <the message> [target platform and length]
 ---
 
 # Video Script to Clip
@@ -85,3 +86,11 @@ Before handing over, run the check in `no-ai-look` (section 3): its script on HT
 - `social-formats` — canvas and safe zones
 - `style-consistency` — one look across shots
 - `campaign-set` — the V rows in the matrix
+
+## เรียกเป็นคำสั่ง
+
+`/graphic-design:video-script-to-clip <the message> [target platform and length]`
+
+Run `video-script-to-clip` for: **$ARGUMENTS** — `social-creator` writes the message, hook and script; `art-director` writes the shot list, motion timing and per-shot briefs.
+
+Review the storyboard as thumbnails before generating anything.

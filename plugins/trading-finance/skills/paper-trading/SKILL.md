@@ -1,6 +1,7 @@
 ---
 name: paper-trading
 description: Use when testing a strategy or learning order types without real money, with real SET rules.
+argument-hint: <log|stats|setup> [trade details]
 ---
 
 # Paper Trading (พอร์ตจำลอง)
@@ -67,4 +68,14 @@ Capital 100,000 · rule `pullback-50ma` only · risk 1%. Trade #12: XYZ limit bu
 
 ## Reporting
 
-Monthly: trades, win rate, avg R, expectancy, max drawdown, violations, passed/no-fill count, one lesson — using `post-trade-review`. Command: `/paper-trade`.
+Monthly: trades, win rate, avg R, expectancy, max drawdown, violations, passed/no-fill count, one lesson — using `post-trade-review`. Command: `/trading-finance:paper-trading`.
+
+## เรียกเป็นคำสั่ง
+
+`/trading-finance:paper-trading <log|stats|setup> [trade details]`
+
+Run the virtual trading account with the `paper-trading` skill: **$ARGUMENTS**
+
+- `log` — record a planned trade (entry, stop, target, thesis) BEFORE it happens
+- `stats` — monthly summary: trades, win rate, expectancy, rule violations
+- `setup` — create or reset the ledger with virtual capital and rules

@@ -1,6 +1,7 @@
 ---
 name: developer-experience
 description: Use when the users are developers (time to hello world, error messages, CLI, SDK design, docs).
+argument-hint: <dx-audit | sdk-design> <details>
 ---
 
 # developer-experience
@@ -35,3 +36,16 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 ## ที่มา
 
 รวมจาก plugin `software-company-devtools` (เดิมชื่อ developer-experience → `references/developer-experience.md` · sdk-design-patterns → `references/sdk-design-patterns.md` · technical-content → `references/technical-content.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 และเนื้อหาเดิมอยู่ครบใน `references/`
+
+## โหมดออกแบบ (เรียกเป็นคำสั่ง)
+
+`/software-company:developer-experience <dx-audit | sdk-design> <details>`
+
+Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+
+| Mode | What it does |
+|---|---|
+| `dx-audit` | Audit developer experience using devrel-engineer agent. Measures time to first hello world (TTFHW), error UX, sample quality, onboarding flow. |
+| `sdk-design` | Design SDK using devrel-engineer agent. Covers multi-language, idioms, types, errors. |
+
+ขั้นตอนเต็มของแต่ละโหมด → [references/design-modes.md](references/design-modes.md)

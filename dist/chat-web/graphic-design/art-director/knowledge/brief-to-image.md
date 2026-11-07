@@ -114,6 +114,14 @@ Before handing over, run the check in `no-ai-look` (section 3): its script on HT
 - `image-editing-brief` — fixing an image instead of regenerating
 - `design-review` — the check before it ships
 
+## เรียกเป็นคำสั่ง
+
+`/graphic-design:brief-to-image <what the image must show> [where it will be used]`
+
+Run `brief-to-image` with the `art-director` agent for: **$ARGUMENTS**
+
+Saves the brief to the project briefs folder. Generation and the consistency check both use this same brief.
+
 
 ## reference: prompt-anatomy.md
 

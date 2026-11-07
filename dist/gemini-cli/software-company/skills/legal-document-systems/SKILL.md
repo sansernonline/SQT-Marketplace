@@ -1,6 +1,7 @@
 ---
 name: legal-document-systems
 description: Use when software handles legal documents (clause extraction, automation, e-signature, Thai ETA).
+argument-hint: <contract-analysis-design | esignature-audit> <details>
 ---
 
 # legal-document-systems
@@ -36,3 +37,16 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 ## ที่มา
 
 รวมจาก plugin `software-company-legaltech` (เดิมชื่อ contract-parsing-patterns → `references/contract-parsing-patterns.md` · document-automation-patterns → `references/document-automation-patterns.md` · e-signature-compliance → `references/e-signature-compliance.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+
+## โหมดออกแบบ (เรียกเป็นคำสั่ง)
+
+`/software-company:legal-document-systems <contract-analysis-design | esignature-audit> <details>`
+
+Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+
+| Mode | What it does |
+|---|---|
+| `contract-analysis-design` | Design contract analysis system using legaltech-engineer agent. |
+| `esignature-audit` | Audit e-signature system compliance using legaltech-engineer agent. |
+
+ขั้นตอนเต็มของแต่ละโหมด → [references/design-modes.md](references/design-modes.md)

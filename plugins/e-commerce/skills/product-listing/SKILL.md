@@ -1,6 +1,7 @@
 ---
 name: product-listing
 description: Use when writing or fixing a product listing on Shopee, Lazada, TikTok Shop, LINE or Facebook (title, banned claims).
+argument-hint: <product> <platform(s)> [key features, price, category]
 ---
 
 # Product Listing (Thai marketplaces)
@@ -101,3 +102,11 @@ Use real product photos — no AI-generated people and no text baked into images
 - `marketplace-fees-pricing`, `multi-shop-stock`, `live-selling-script` (the same claims rules apply on air)
 - `graphic-design` `social-formats` (if installed) — image and banner sizes
 - `line-oa-setup` — when the LINE shop is the channel
+
+## เรียกเป็นคำสั่ง
+
+`/e-commerce:product-listing <product> <platform(s)> [key features, price, category]`
+
+Run `product-listing` with the `shop-manager` agent for: **$ARGUMENTS**
+
+Produce one title per platform inside its length limit, the description from the template, and the photo checklist. For food, supplements or cosmetics, run the prohibited-claims check and list every phrase removed.

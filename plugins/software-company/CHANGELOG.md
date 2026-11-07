@@ -1,5 +1,10 @@
 # Changelog — software-company
 
+## 2.44.0 — 2026-11-07
+
+- เอาคำสั่งที่เป็นแค่ทางลัดไปหา skill ตัวเดียวออก 5 ตัว เรียก skill ตรงแทน เช่น `/software-company:bug-report-template` · ขั้นตอนและ `argument-hint` ของคำสั่งเดิมย้ายไปหัวข้อ "เรียกเป็นคำสั่ง" ท้าย SKILL.md ของ skill ปลายทาง: `bug-report` → `bug-report-template` · `code-review` → `code-review-checklist` · `seo-audit` → `seo-audit-checklist` · `test-design` → `test-case-template` · `legacy-onboard` → `legacy-spec-recovery`
+- รวมคำสั่งออกแบบของ 13 สาขาเข้า skill ความรู้ของสาขานั้น เรียก `/software-company:<skill> <โหมด>` เหมือนเดิม · ขั้นตอนเต็มอยู่ที่ `references/design-modes.md` ของแต่ละ skill: `fintech-design` → `fintech-payments` · `healthcare-design` → `healthcare-systems` · `insurance-design` → `insurance-systems` · `iot-design` → `iot-systems` · `legal-doc-design` → `legal-document-systems` · `llm-design` → `llm-engineering` · `mobile-design` → `mobile-engineering` · `saas-design` → `saas-platform` · `security-ops-design` → `security-operations` · `web3-design` → `smart-contracts` · `game-design` → `game-development` · `ecommerce-design` → `ecommerce-patterns` · `dx-design` → `developer-experience`
+
 ## 2.43.0 — 2026-11-07
 
 - `project-bootstrap`: README จาก 5 คำถามเป็นโครง 15 หัวข้อ (9 มีเสมอ · 6 มีเมื่อโปรเจกต์มีของนั้น) เพิ่ม ตั้งค่า · สถาปัตยกรรมย่อ · build · deploy · ร่วมพัฒนา · ติดต่อ · สัญญาอนุญาต · ไฟล์ใหม่ `references/readme-skeleton.md` (ตารางหัวข้อพร้อมจำนวนแหล่งที่แนะนำ · เมื่อไหร่แยกไป `ARCHITECTURE.md` `CONTRIBUTING.md` `docs/runbook-deploy.md` · แม่แบบ `ARCHITECTURE.md` แบบ matklad และเมื่อไหร่ใช้ arc42)

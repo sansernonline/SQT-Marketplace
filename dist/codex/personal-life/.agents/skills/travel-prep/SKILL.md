@@ -1,6 +1,7 @@
 ---
 name: travel-prep
 description: Use when a trip is one to two weeks away or a passport is near expiry. Visa, insurance, money, itinerary.
+argument-hint: <destination> <dates> [travelers]
 ---
 
 # Travel Prep (เตรียมเดินทาง)
@@ -64,3 +65,11 @@ Nok (Thai, 34) and her German husband, Tokyo 10–17 January 2027. Check on 2026
 Trip card · entry decision per traveller with source and date · checklist from the template · itinerary file `YYYY-MM-DD-destination-itinerary.md`.
 
 Related: `important-docs` (passport expiry) · `polite-message-th-en` (hotel or airline requests) · `digital-hygiene` (public Wi-Fi, SIM swap).
+
+## เรียกเป็นคำสั่ง
+
+`/personal-life:travel-prep <destination> <dates> [travelers]`
+
+Run the `travel-prep` skill for: **$ARGUMENTS**
+
+Produces the checklist plus an itinerary file with every confirmation number, and a day-before four-thing check list.

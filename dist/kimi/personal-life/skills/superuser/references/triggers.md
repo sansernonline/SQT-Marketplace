@@ -86,22 +86,22 @@
 
 | คำสั่ง | ทำอะไร | skill ที่อยู่ข้างหลัง |
 |---|---|---|
-| `bills` | อ่านบิลไฟหรือน้ำ ตรวจบิลพุ่ง | `household-bills` |
-| `checkup` | วางแผนตรวจสุขภาพประจำปี | `annual-checkup` |
-| `decide` | บันทึกการตัดสินใจใหญ่ | `decision-journal` |
-| `doctor-prep` | เตรียมพบแพทย์ | `doctor-visit-prep` |
+| `household-bills` | อ่านบิลไฟหรือน้ำ ตรวจบิลพุ่ง | `household-bills` |
+| `annual-checkup` | วางแผนตรวจสุขภาพประจำปี | `annual-checkup` |
+| `decision-journal` | บันทึกการตัดสินใจใหญ่ | `decision-journal` |
+| `doctor-visit-prep` | เตรียมพบแพทย์ | `doctor-visit-prep` |
 | `family-week` | วางสัปดาห์ครอบครัว | `meal-plan-grocery` · `kids-school` · `elder-care` · `pet-care` |
-| `interview` | เตรียมสัมภาษณ์งานหนึ่งรอบ | `interview-prep` |
-| `learn` | เรียนเทคโนโลยีผ่านหลักชัยจากงานจริง | `learning-path` |
-| `maintenance` | ตารางดูแลบ้าน 12 เดือน · เทียบราคาช่าง | `home-maintenance` |
+| `interview-prep` | เตรียมสัมภาษณ์งานหนึ่งรอบ | `interview-prep` |
+| `learning-path` | เรียนเทคโนโลยีผ่านหลักชัยจากงานจริง | `learning-path` |
+| `home-maintenance` | ตารางดูแลบ้าน 12 เดือน · เทียบราคาช่าง | `home-maintenance` |
 | `meeting` | การ์ดก่อนประชุม · สรุปหลังประชุม | `meeting-prep-card` · `meeting-summary` |
-| `negotiate` | เทียบข้อเสนองาน · ร่างคำพูดต่อรอง | `salary-negotiation` |
-| `radar` | เรดาร์เทคโนโลยีรายสัปดาห์ | `tech-radar` |
-| `resume` | เขียนหรือปรับ CV | `resume-th-en` |
-| `subscriptions` | ตรวจค่าสมาชิกรายเดือน | `subscription-audit` |
-| `travel` | เช็กลิสต์เดินทาง · แผนเดินทางไฟล์เดียว | `travel-prep` |
-| `triage-mail` | แยกอินบ็อกซ์เป็น 6 กอง | `inbox-triage` |
-| `week-review` | ทบทวนสัปดาห์ 20 นาที | `weekly-review` |
+| `salary-negotiation` | เทียบข้อเสนองาน · ร่างคำพูดต่อรอง | `salary-negotiation` |
+| `tech-radar` | เรดาร์เทคโนโลยีรายสัปดาห์ | `tech-radar` |
+| `resume-th-en` | เขียนหรือปรับ CV | `resume-th-en` |
+| `subscription-audit` | ตรวจค่าสมาชิกรายเดือน | `subscription-audit` |
+| `travel-prep` | เช็กลิสต์เดินทาง · แผนเดินทางไฟล์เดียว | `travel-prep` |
+| `inbox-triage` | แยกอินบ็อกซ์เป็น 6 กอง | `inbox-triage` |
+| `weekly-review` | ทบทวนสัปดาห์ 20 นาที | `weekly-review` |
 
 ## ใช้ร่วมกัน
 

@@ -1,6 +1,7 @@
 ---
 name: inbox-triage
 description: Use when an email inbox is overwhelming or the user asks what mail needs a reply today.
+argument-hint: '[--days 7]'
 ---
 
 # Inbox Triage
@@ -84,3 +85,11 @@ Monday, 63 unread. Ten minutes:
 This plugin ships no email connector. The user connects Gmail (or another mail app) themselves, from the connectors or MCP settings of the Claude app they use, and grants read and draft access only, not send. Not checked against an official Google page, so no link is given here. No connector → the user pastes the mail text, or the subject lines and senders, into the chat; the method is the same.
 
 Related: `weekly-review` (clears `Waiting for`) · `digital-hygiene` (phishing, account takeover) · `subscription-audit` (newsletter and trial mail).
+
+## เรียกเป็นคำสั่ง
+
+`/personal-life:inbox-triage [--days 7]`
+
+Run the `inbox-triage` skill over the user's email via their own email connector (setup: `inbox-triage`, "Connecting your mail"): **$ARGUMENTS**
+
+Output is six buckets with counts (Verify · Today · This week · Delegate · File · Archive; Verify holds suspected phishing and comes first); answer-today items get drafted replies one by one, only on request.

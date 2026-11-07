@@ -2,7 +2,7 @@
 
 Search engine optimization (SEO) audit report.
 
-Used by `seo-audit-checklist` step 5 and the `seo-audit` command. Each finding: page examples, severity, specific fix, effort vs impact.
+Used by `seo-audit-checklist` step 5 and its command form `/software-company:seo-audit-checklist`. Each finding: page examples, severity, specific fix, effort vs impact.
 
 ```markdown
 # SEO Audit Report: <site or page>

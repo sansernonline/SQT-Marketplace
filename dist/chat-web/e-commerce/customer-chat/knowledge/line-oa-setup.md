@@ -85,6 +85,14 @@ Do not put the server with a real token into the project's `.mcp.json`, because 
 
 `line-chatbot` · `line-broadcast` · `pdpa-workflow` · if installed: `line-richmenu` (graphic-design), `config-and-secrets`, `notifications` (software-company).
 
+## เรียกเป็นคำสั่ง
+
+`/e-commerce:line-oa-setup [company or OA name]`
+
+Run `line-oa-setup` with the `line-admin` agent for: **$ARGUMENTS**
+
+Ends with a verified echo test. Credentials stay in the user's LINE Developers console and environment variables, never in chat or code.
+
 
 ## reference: webhook-node.md
 

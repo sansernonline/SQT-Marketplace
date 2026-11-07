@@ -1,6 +1,7 @@
 ---
 name: weekly-review
 description: Use when the week ends, on Sunday evening, or the user feels busy but not productive. Weekly review.
+argument-hint: '[--deep]'
 ---
 
 # Weekly Review (ทบทวนประจำสัปดาห์)
@@ -70,3 +71,11 @@ Week of 2026-10-05:
 - End with the three visible where the user will see them Monday morning (calendar, phone widget, sticky note)
 
 Related: `inbox-triage` · `calendar-audit` (monthly) · `goal-and-habit` (quarterly) · `important-docs` · `subscription-audit` · `gift-idea-tracker` (occasions in the next 14 days).
+
+## เรียกเป็นคำสั่ง
+
+`/personal-life:weekly-review [--deep]`
+
+Run the `weekly-review` skill: **$ARGUMENTS**
+
+--deep adds a calendar-audit pass and a look at money/admin due next week.

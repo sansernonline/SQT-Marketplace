@@ -1,6 +1,7 @@
 ---
 name: saas-platform
 description: Use when building B2B SaaS (multi-tenancy, tenant isolation, SSO, SCIM, billing, usage metering).
+argument-hint: <saas-architecture-review | integration-design> <details>
 ---
 
 # saas-platform
@@ -35,3 +36,16 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 ## ที่มา
 
 รวมจาก plugin `software-company-saas-b2b` (เดิมชื่อ multi-tenancy-patterns → `references/multi-tenancy-patterns.md` · enterprise-integration → `references/enterprise-integration.md` · subscription-billing → `references/subscription-billing.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+
+## โหมดออกแบบ (เรียกเป็นคำสั่ง)
+
+`/software-company:saas-platform <saas-architecture-review | integration-design> <details>`
+
+Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+
+| Mode | What it does |
+|---|---|
+| `saas-architecture-review` | Review B2B SaaS architecture using solution-architect agent. Covers multi-tenancy, isolation, scaling. |
+| `integration-design` | Design enterprise integration using solution-architect agent. Covers single sign-on (SSO), System for Cross-domain Identity Management (SCIM), webhooks, application programming interface (API) client. |
+
+ขั้นตอนเต็มของแต่ละโหมด → [references/design-modes.md](references/design-modes.md)

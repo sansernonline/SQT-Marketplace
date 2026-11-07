@@ -1,6 +1,7 @@
 ---
 name: mobile-engineering
 description: Use when engineering a mobile app (Kotlin, Swift, Flutter, React Native, offline-first). Not screens.
+argument-hint: <mobile-architecture | aso-audit> <details>
 ---
 
 # mobile-engineering
@@ -35,3 +36,16 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 ## ที่มา
 
 รวมจาก plugin `software-company-mobile` (เดิมชื่อ mobile-architecture-patterns → `references/mobile-architecture-patterns.md` · mobile-performance → `references/mobile-performance.md` · app-store-optimization → `references/app-store-optimization.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`
+
+## โหมดออกแบบ (เรียกเป็นคำสั่ง)
+
+`/software-company:mobile-engineering <mobile-architecture | aso-audit> <details>`
+
+Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+
+| Mode | What it does |
+|---|---|
+| `mobile-architecture` | Design mobile app architecture using mobile-engineer agent. Covers framework choice, state management, navigation. |
+| `aso-audit` | Audit App Store / Play Store listing (App Store Optimization, ASO) using growth-specialist agent. |
+
+ขั้นตอนเต็มของแต่ละโหมด → [references/design-modes.md](references/design-modes.md)

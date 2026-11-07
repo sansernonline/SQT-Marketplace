@@ -1,6 +1,7 @@
 ---
 name: trade-journal
 description: Use when a trade was just entered or exited, or the user forgets why they traded. Logs setup, reason.
+argument-hint: <entry|exit|read> [trade details]
 ---
 
 # Trade Journal (บันทึกการเทรด)
@@ -58,3 +59,13 @@ calm · confident · FOMO (กลัวตกรถ) · revenge (เอาคื
 | Plan followed | Y |
 
 Output: append the row to `trade-journal.csv` (or the user's existing file) and reply with the R-multiple and one line — no commentary unless asked.
+
+## เรียกเป็นคำสั่ง
+
+`/trading-finance:trade-journal <entry|exit|read> [trade details]`
+
+Use the `trade-journal` skill: **$ARGUMENTS**
+
+- `entry` — log symbol, size, entry, stop, target, setup, one-sentence reason, one-word emotion
+- `exit` — log exit price, costs, R-multiple (net of costs), one-sentence what happened
+- `read` — show recent entries for review

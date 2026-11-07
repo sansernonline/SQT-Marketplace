@@ -81,6 +81,18 @@ Copy values **exactly as printed**, including the unit and the lab's reference r
 
 Related: `doctor-visit-prep` (questions about results) · `medication-schedule` · `important-docs` in `personal-life` (store the PDF reports) · `exercise-plan`.
 
+## เรียกเป็นคำสั่ง
+
+`/personal-life:annual-checkup <plan|log|trend> [age] [sex] [scheme — sso|gold|civil|private]`
+
+Run the `health-organizer` agent with the `annual-checkup` skill: **$ARGUMENTS**
+
+- `plan` — list the checkup items for the age/sex band, mark which are free under the user's scheme (verify), and draft the booking checklist
+- `log` — add this year's results (value, unit, reference range printed on the report) to the results table
+- `trend` — show the results table across years and list questions for the doctor; never label a result normal or abnormal
+
+Emergency symptoms → 1669 first.
+
 
 ## reference: results-tracker.md
 

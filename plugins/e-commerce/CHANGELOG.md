@@ -1,5 +1,9 @@
 # CHANGELOG — e-commerce
 
+## 1.6.0 — 2026-11-07
+
+- เอาคำสั่งที่เป็นแค่ทางลัดไปหา skill ตัวเดียวออก 13 ตัว เรียก skill ตรงแทน เช่น `/e-commerce:buy-compare` · ขั้นตอนและ `argument-hint` ของคำสั่งเดิมย้ายไปหัวข้อ "เรียกเป็นคำสั่ง" ท้าย SKILL.md ของ skill ปลายทาง: `compare` → `buy-compare` · `contract` → `doc-contract-th` · `line-bot` → `line-chatbot` · `line-setup` → `line-oa-setup` · `listing` → `product-listing` · `live-script` → `live-selling-script` · `payroll` → `payroll-th` · `pdpa` → `pdpa-workflow` · `price-check` → `marketplace-fees-pricing` · `quotation` → `doc-quotation` · `reply` → `chat-reply-templates` · `tax-due` → `tax-vat-th` · `year-end-filing` → `dbd-annual-filing`
+
 ## 1.5.0 — 2026-10-28
 
 - skill ใหม่ `import-landed-cost` แยกจาก `thai-business-setup` หัวข้อ 5 (ต้นทุนนำเข้าจากจีนต่อชิ้น · กติกาอากรปี 2569 · ทางรถหรือทางเรือ) ย้ายเนื้อหาแบบตัดแปะ ไม่เขียนใหม่ · `landed-cost.mjs` `rates.json` `example.json` ย้ายตามไปที่ `import-landed-cost/scripts/`

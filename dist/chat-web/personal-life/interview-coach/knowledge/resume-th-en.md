@@ -94,6 +94,17 @@ Before handing over, run the check in `no-ai-look` (section 3): its script on HT
 
 Related: `linkedin-profile` (keep CV and profile consistent) · `interview-prep` (every bullet becomes a Situation, Task, Action, Result (STAR) story) · `important-docs` in `personal-life` (store certificates and transcripts).
 
+## เรียกเป็นคำสั่ง
+
+`/personal-life:resume-th-en <th|en|both> [job post URL or text]`
+
+Run the `career-coach` agent with the `resume-th-en` skill: **$ARGUMENTS**
+
+1. Ask for the current CV (or work history) and the target job post if not given.
+2. Decide Thai-company vs international convention from the job post (see the skill's decision table).
+3. Rewrite every bullet as action + result + number; mark missing numbers `[ใส่ตัวเลข]`.
+4. Output the CV in the requested language(s), then a short list of what changed and why.
+
 
 ## reference: templates.md
 

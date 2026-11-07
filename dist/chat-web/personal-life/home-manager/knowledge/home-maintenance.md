@@ -75,6 +75,14 @@ House with 3 wall aircons (bedroom 9,000 BTU ×2, living room 18,000 BTU), clean
 
 `household-bills` (spike traced to aircon) · `vehicle-care` · `important-docs` · `trading-finance` `personal-budget` (if installed) (sinking fund: set aside 1% of house value a year for repairs — a common rule of thumb)
 
+## เรียกเป็นคำสั่ง
+
+`/personal-life:home-maintenance <"schedule" | job to quote> [house type, aircon count, car details]`
+
+Run `home-maintenance` with the `home-manager` agent for: **$ARGUMENTS**
+
+If vehicles are mentioned, add their tax, พระราชบัญญัติคุ้มครองผู้ประสบภัยจากรถ (พ.ร.บ.), สถานตรวจสภาพรถเอกชน (ตรอ.) and service dates from `vehicle-care`. Output a month-by-month table plus the jobs due in the next 90 days; quotes are compared with the contractor quote checklist.
+
 
 ## reference: maintenance-calendar.md
 

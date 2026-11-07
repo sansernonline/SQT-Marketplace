@@ -62,6 +62,14 @@ KB entry template and a handoff message set: [references/kb-template.md](referen
 
 `line-oa-setup` · `line-broadcast` · `pdpa-workflow` · `chat-reply-templates` · if installed: `line-richmenu` (graphic-design), `notifications` (software-company), `llm-engineering` (software-company) for the LLM classifier, prompts and evals.
 
+## เรียกเป็นคำสั่ง
+
+`/e-commerce:line-chatbot [what customers ask about, or "improve existing"]`
+
+Run `line-chatbot` with the `line-admin` agent for: **$ARGUMENTS**
+
+The bot answers only from the approved knowledge base and hands off to staff for anything uncertain.
+
 
 ## reference: kb-template.md
 

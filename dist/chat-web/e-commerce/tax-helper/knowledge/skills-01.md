@@ -98,6 +98,14 @@ Company pays a design agency (บริษัท) 20,000 baht + VAT 7% = 21,400.
 
 `payroll-th` (ภ.ง.ด.1, 50 ทวิ) · `e-tax-invoice` · `dbd-annual-filing` (ภ.ง.ด.50) · `social-security-th` · `thai-holidays` · `doc-quotation` · `tax-basics-th` in `trading-finance` (if installed) (personal investment tax).
 
+## เรียกเป็นคำสั่ง
+
+`/e-commerce:tax-vat-th [company|personal] [--month <n>]`
+
+Run `tax-vat-th` with the `tax-helper` agent for: **$ARGUMENTS**
+
+Verifies dates against current RD announcements rather than reusing last year's calendar, and ends with the accountant handoff checklist.
+
 
 ## reference: wht-rates.md
 
@@ -253,6 +261,14 @@ Field list and fill-in template: [references/50-tawi.md](references/50-tawi.md).
 ## Related
 
 `social-security-th` · `labour-law-basics` · `tax-vat-th` (calendar, ภ.ง.ด.3/53) · `thai-holidays` (pay day on holidays).
+
+## เรียกเป็นคำสั่ง
+
+`/e-commerce:payroll-th [month|year-end] [--employees <file>]`
+
+Run `payroll-th` with the `tax-helper` agent for: **$ARGUMENTS**
+
+Uses `social-security-th` for the SSO cap and `labour-law-basics` for OT rates. Produces the payroll register, payslip figures, and the filing dates for ภ.ง.ด.1 (7th paper / 15th e-Filing) and สปส.1-10 (15th), ending with the accountant handoff checklist.
 
 
 ## reference: 50-tawi.md

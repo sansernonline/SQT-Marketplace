@@ -1,5 +1,9 @@
 # Changelog — trading-finance
 
+## 0.18.0 — 2026-11-07
+
+- เอาคำสั่งที่เป็นแค่ทางลัดไปหา skill ตัวเดียวออก 6 ตัว เรียก skill ตรงแทน เช่น `/trading-finance:trade-journal` · ขั้นตอนและ `argument-hint` ของคำสั่งเดิมย้ายไปหัวข้อ "เรียกเป็นคำสั่ง" ท้าย SKILL.md ของ skill ปลายทาง: `journal` → `trade-journal` · `paper-trade` → `paper-trading` · `portfolio` → `portfolio-snapshot` · `review-week` → `post-trade-review` · `tax-plan` → `tax-deduction-planner` · `watch` → `watchlist-setup`
+
 ## 0.17.1 — 2026-11-01
 
 - `home-refinance`: กนง. 28 ต.ค. 2569 คงดอกเบี้ยนโยบาย 1.00% (มติ 6–0) ใส่แหล่งข่าว 3 แห่งที่ตรวจ 2026-11-01 · ครั้งถัดไป 23 ธ.ค. 2569 · เลื่อนวันตรวจใน `expiry.json` เป็น 2026-12-24
