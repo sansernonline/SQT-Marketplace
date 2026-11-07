@@ -55,7 +55,7 @@ Use `decision-scoring` command `score` (`node decide.mjs score <file.json>`) on 
 
 The script re-ranks with each weight moved ±20% and says whether rank 1 holds (`นิ่ง`); if it flips, treat the top 2 as a tie. These weights have not been compared with human rankings yet: before trusting them, have a person and the reviewer rank the same 5 real sets and count the matches.
 
-Write the 1–5 scores and who gave them next to the brief (`briefs/<asset-name>.md`) with the winning prompt. A model that reviews its own output leans toward long or flashy images: use a different reviewer, and spot-check one score by eye.
+Write the 1–5 scores and who gave them next to the brief (`briefs/<asset-name>.md`) with the winning prompt. A model that reviews its own output leans toward long or flashy images: use a different reviewer (scores with 1 reason each, at most 10 lines), and spot-check one score by eye.
 
 ## Model differences (general, check your tool's docs)
 
@@ -106,7 +106,7 @@ Gemini API users: Imagen is no longer the way — the `imagen-4.0-*` models were
 
 ## Not an AI look
 
-Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the 8-point eye check on images and other files. The full list of AI tells for every medium lives there. Every prompt carries the items in its section 4 (named style, hex, light, what to avoid).
+Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files. Every prompt carries the items in its section 4 (named style, hex, light, what to avoid).
 
 ## Related
 
@@ -316,7 +316,7 @@ Grid check of 6 images: #4 came out with blue-hour light → fails check 2 → r
 
 ## Not an AI look
 
-Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the 8-point eye check on images and other files. The full list of AI tells for every medium lives there. Lock the style against its section 4 so the whole series avoids the same AI defaults.
+Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files. Lock the style against its section 4 so the whole series avoids the same AI defaults.
 
 ## Related
 

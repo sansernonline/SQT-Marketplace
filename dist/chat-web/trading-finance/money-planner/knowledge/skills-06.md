@@ -151,13 +151,7 @@ Do not rebalance on news or after one bad month. A band of 5 points is a common 
 
 Deviation, gap and months come from `node money-calc.mjs drift <file.json>` (script in `portfolio-snapshot`, see its Script path; the worked example below is `../portfolio-snapshot/scripts/examples/drift.json` and gives 10.9 points and 20 months). `bandPoints` and `maxMonths` default to 5 and 12.
 
-The 5-point band comes from Vanguard's study of rebalancing (2010, US market, checked 2026-10-27): https://indexacapital.com/bundles/unaiadvisor/docs/papers/2010-Vanguard-Best-practices-for-portfolio-rebalancing.pdf . It is a rule of thumb for US portfolios, not a Thai rule. To compare several ways of rebalancing on cost and months to target (both `low`), use `decision-scoring`, command `score`. Script path: see `decision-scoring` (superuser plugin). Weights 0.5 cost / 0.5 months are starting values, not yet measured; the user's weights win. Selling RMF or ThaiESG early goes in `must`, not in the weights. The worked example's options A/B/C are in `references/rebalance-score.json` (its switching fee is a placeholder; replace it from the factsheet):
-
-```
-node plugins/superuser/skills/decision-scoring/scripts/decide.mjs score plugins/trading-finance/skills/rebalance-and-dca/references/rebalance-score.json
-```
-
-Run 2026-10-28: A, B and C all score 50 and the result reads `ยังไม่นิ่ง` (not stable) — cost and time trade off one for one, so the user chooses.
+The 5-point band is a rule of thumb from Vanguard's 2010 US study (checked 2026-10-27), not a Thai rule. To compare ways of rebalancing on cost and months to target (both `low`), use `decision-scoring`, command `score` (script path: see `decision-scoring`, superuser plugin); the worked example's options A/B/C are in `references/rebalance-score.json` (its switching fee is a placeholder; replace it from the factsheet). Weights 0.5 cost / 0.5 months are starting values, not yet measured; the user's weights win. Selling RMF or ThaiESG early goes in `must`, not in the weights. Source link, command and the 2026-10-28 run: [references/rebalance-example.md](references/rebalance-example.md).
 
 ## 4 · How to rebalance — cheapest way first
 
@@ -168,6 +162,38 @@ Run 2026-10-28: A, B and C all score 50 and the result reads `ยังไม่
 5. **RMF DCA must not lapse** — the 3% / 5,000 baht minimum was dropped from 1 Jan 2563, but the user must keep buying every year until age 55 and may skip at most 1 year in a row (a year with no income does not count as a skip).
 
 ตรวจล่าสุด 2026-10-26 · RMF แหล่ง: https://www.rd.go.th/39783.html , https://www.krungsri.com/th/krungsri-the-coach/life/retirement/rmf-retirement-condition , https://www.set.or.th/th/about/mediacenter/insights/article/265-rmf , https://www.innovestx.co.th/th/products/transfer-tax-funds (สับเปลี่ยน · 2 แหล่ง)
+
+## Worked example
+
+Target 60/40, equity 10.9 points over, DCA 10,000 a month → 20 months by new money alone, so switching is offered next to it with its cost: options A/B/C in [references/rebalance-example.md](references/rebalance-example.md). The user picks. Record the date and the new mix.
+
+## Check before sending
+
+- Target mix and trigger written down, with the date
+- Percentages add up to 100 and the gap is in baht
+- Months for DCA to close the deviation worked out before any sale; fees and tax-wrapper rules named before any sale or switch
+- No specific fund named as "the best"
+
+## Sources
+
+Rebalancing bands and the redirect-new-money method are common practice in personal-finance planning, not Thai regulation (ยังไม่ได้ตรวจ against a single official source). Fund fees and switching rules come from each fund's factsheet. RMF and ThaiESG rules are kept in `tax-deduction-planner/references/deductions-2569.md`.
+
+
+## reference: rebalance-example.md
+
+# Rebalance — band source, scoring command and worked example
+
+Moved from `SKILL.md` (rebalance-and-dca)
+
+## Band source and scoring command
+
+The 5-point band comes from Vanguard's study of rebalancing (2010, US market, checked 2026-10-27): https://indexacapital.com/bundles/unaiadvisor/docs/papers/2010-Vanguard-Best-practices-for-portfolio-rebalancing.pdf . It is a rule of thumb for US portfolios, not a Thai rule. To compare several ways of rebalancing on cost and months to target (both `low`), use `decision-scoring`, command `score`. Script path: see `decision-scoring` (superuser plugin). Weights 0.5 cost / 0.5 months are starting values, not yet measured; the user's weights win. Selling RMF or ThaiESG early goes in `must`, not in the weights. The worked example's options A/B/C are in `references/rebalance-score.json` (its switching fee is a placeholder; replace it from the factsheet):
+
+```
+node plugins/superuser/skills/decision-scoring/scripts/decide.mjs score plugins/trading-finance/skills/rebalance-and-dca/references/rebalance-score.json
+```
+
+Run 2026-10-28: A, B and C all score 50 and the result reads `ยังไม่นิ่ง` (not stable) — cost and time trade off one for one, so the user chooses.
 
 ## Worked example
 
@@ -187,14 +213,3 @@ Deviation 10.9 is above the 5-point band. Months for DCA (all into bonds) to clo
 | C · Half and half | Switch 60,000 now, redirect DCA for 10 months | Half the fee of B, back to target in about 10 months (60,000 ÷ 6,000) |
 
 The user picks. Record the date and the new mix.
-
-## Check before sending
-
-- Target mix and trigger written down, with the date
-- Percentages add up to 100 and the gap is in baht
-- Months for DCA to close the deviation worked out before any sale; fees and tax-wrapper rules named before any sale or switch
-- No specific fund named as "the best"
-
-## Sources
-
-Rebalancing bands and the redirect-new-money method are common practice in personal-finance planning, not Thai regulation (ยังไม่ได้ตรวจ against a single official source). Fund fees and switching rules come from each fund's factsheet. RMF and ThaiESG rules are kept in `tax-deduction-planner/references/deductions-2569.md`.

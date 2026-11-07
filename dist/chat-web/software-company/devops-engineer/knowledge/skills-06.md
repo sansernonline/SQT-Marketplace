@@ -1592,7 +1592,7 @@ thresholds: {
 
 - `abortOnFail` หยุดการยิงเมื่อเกณฑ์ไม่ผ่านระหว่างทาง ไม่ทุบระบบต่อจนจบ · `delayAbortEval` รอเก็บตัวอย่างก่อนตัดสิน
 - ตัวเลขทุกตัวในสคริปต์ (rate · VU · stages) เป็น **ค่าตั้งต้น ยังไม่ได้วัด** ปรับตามหัวข้อ 1
-- รัน: `k6 run -e TEST_TYPE=smoke -e TARGET_ENV=staging -e BASE_URL=https://staging.example.com assets/load-test.js`
+- รัน: `k6 run -e TEST_TYPE=smoke -e TARGET_ENV=staging -e BASE_URL=https://staging.example.com assets/load-test.js > _to_delete/k6.log 2>&1; tail -40 _to_delete/k6.log` (k6 พ่น progress ยาวตามเวลายิง อ่านแค่สรุปท้าย)
 
 ## 5 · อ่านผล
 

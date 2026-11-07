@@ -155,13 +155,7 @@ Use this at step 3–5, once the options and the numbers exist. Pick the command
 
 Iron rules first (กฎเหล็ก): an option that breaks a limit the user set before looking (monthly payment above a fixed share of income, no emergency fund left) is dropped, not scored. Run `node decide.mjs payoff decision.json` or `score`. Example, the job offer in the worked example below (pay in year 1, baht, higher is better; chances 0.3 / 0.4 / 0.3 are the user's guess):
 
-```json
-{"better":"high","options":["stay at A","take B","negotiate at A"],
- "scenarios":[{"name":"B bonus 0 months","p":0.3},{"name":"B bonus 1 month","p":0.4},{"name":"B bonus 2 months","p":0.3}],
- "table":{"stay at A":[624000,624000,624000],"take B":[720000,780000,840000],"negotiate at A":[672000,672000,672000]}}
-```
-
-Result when run: take B has the best expected value (780,000), the best worst case (720,000) and regret 0. That is only year-1 pay; growth, commute and the PVD loss go into a `score` run. Expected value and score disagree, or two options are close (`สูสี`) → the user decides, and writes why in the entry. Money and life decisions: supporting data, not advice.
+Example input (JSON for `payoff`) and the result when run: [references/scoring-example.md](references/scoring-example.md)
 
 ## Revisit verdict grid
 
@@ -183,16 +177,7 @@ General information, not financial advice — for money decisions of this size t
 
 ## Worked example
 
-**2026-10-06 — Accept the job offer at Company B, start 1 Dec 2026.** One-way-ish door (can return to market, cannot return to A).
-
-Options: stay at A (52,000/month) · take B (60,000) · negotiate A counter-offer.
-Facts: B base +15%; B bonus 0–2 months (no history known); A PVD match 5% vested after 5 years — I am at year 4, leaving forfeits about 125,000 plus returns (5% × 52,000 × 12 × 4 years; รอยืนยัน with HR); commute B 25 min shorter.
-Reasoning: growth in role (8), salary (5), commute (9).
-Pre-mortem: B's team lead leaves; bonus is zero. Early warning: no clear role scope by week 6.
-Prediction: by 2027-06-01, leading one project, total pay ≥ A's last year, more evenings free.
-State: excited. Revisit: 2027-06-01.
-
-Revisit (2027-06-01): leading a project ✓, bonus 0.5 month, evenings ✓. Verdict: reasoning good / outcome good. Lesson: ask for bonus history in writing at offer stage next time.
+A full dated entry with its revisit and verdict: [references/scoring-example.md](references/scoring-example.md)
 
 ## Rules
 
@@ -252,3 +237,33 @@ Confirms options considered and expected outcome, writes the dated entry, and se
 | | | | | | |
 
 A lesson that appears twice becomes a personal rule, written at the top of the journal.
+
+
+## reference: scoring-example.md
+
+# decision-journal — examples and templates
+
+## Example input for `payoff` and the result
+
+```json
+{"better":"high","options":["stay at A","take B","negotiate at A"],
+ "scenarios":[{"name":"B bonus 0 months","p":0.3},{"name":"B bonus 1 month","p":0.4},{"name":"B bonus 2 months","p":0.3}],
+ "table":{"stay at A":[624000,624000,624000],"take B":[720000,780000,840000],"negotiate at A":[672000,672000,672000]}}
+```
+
+Result when run: take B has the best expected value (780,000), the best worst case (720,000) and regret 0. That is only year-1 pay; growth, commute and the PVD loss go into a `score` run. Expected value and score disagree, or two options are close (`สูสี`) → the user decides, and writes why in the entry. Money and life decisions: supporting data, not advice.
+
+## Worked example — full dated entry with revisit
+
+## Worked example
+
+**2026-10-06 — Accept the job offer at Company B, start 1 Dec 2026.** One-way-ish door (can return to market, cannot return to A).
+
+Options: stay at A (52,000/month) · take B (60,000) · negotiate A counter-offer.
+Facts: B base +15%; B bonus 0–2 months (no history known); A PVD match 5% vested after 5 years — I am at year 4, leaving forfeits about 125,000 plus returns (5% × 52,000 × 12 × 4 years; รอยืนยัน with HR); commute B 25 min shorter.
+Reasoning: growth in role (8), salary (5), commute (9).
+Pre-mortem: B's team lead leaves; bonus is zero. Early warning: no clear role scope by week 6.
+Prediction: by 2027-06-01, leading one project, total pay ≥ A's last year, more evenings free.
+State: excited. Revisit: 2027-06-01.
+
+Revisit (2027-06-01): leading a project ✓, bonus 0.5 month, evenings ✓. Verdict: reasoning good / outcome good. Lesson: ask for bonus history in writing at offer stage next time.

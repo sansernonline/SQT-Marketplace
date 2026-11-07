@@ -49,7 +49,7 @@ Retail to consumers only, with permission. Must show: "ใบกำกับภ�
 
 - Only certain email providers registered with RD may send (รอยืนยัน — sources say Gmail/Google Workspace).
 - e-Receipt is also how a buyer gets an "e-Receipt" for tax incentives (e.g. Easy e-Receipt for individuals) — paper invoices do not qualify for those.
-- Keep electronic records for at least 5 years (longer if RD orders it during an audit), in the original format.
+- Keep electronic records for at least 5 years, 7 recommended (`sme-bookkeeping` section 2 — per a Revenue Department ruling, not yet checked against the current statute), in the original format.
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.rd.go.th/27659.html · https://etda.or.th/en/Our-Service/Digital-Trusted-services-Infrastructure/TEDA/ETAX.aspx · https://www.ktc.co.th/article/knowledge/what-is-etax-invoice
 

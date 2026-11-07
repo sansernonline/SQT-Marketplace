@@ -133,7 +133,7 @@ skill กลางอยู่ใน plugin `superuser` และเขียน
 
 ## adversarial-review-panel
 
-- **ขอบเขต** — `git diff main...HEAD` หรือ `git status --short` ถ้ายังไม่มี commit
+- **ขอบเขต** — `git diff --stat main...HEAD` แล้วเปิด diff รายไฟล์ หรือ `git status --short` ถ้ายังไม่มี commit
 - **มุมเพิ่มของงานโค้ด** — ก: ทำงานพร้อมกัน · error ที่ถูกกลืน · รันซ้ำแล้วได้ผลต่าง · ข: input ที่ไม่ได้ตรวจ · ค: test ที่ผ่านทั้งที่ผิด
 
 ### มุมรีวิวแอปมือถือ

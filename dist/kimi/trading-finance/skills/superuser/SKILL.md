@@ -254,6 +254,4 @@ description: Use when a money matter spans several steps (trades, portfolio, bud
 
 - ห้ามใส่เลขบัญชี · ยอดเงินในบัญชี · รายได้ · รหัสหรือ token ของโบรกเกอร์
 
-แม่แบบตารางอยู่ใน [`context-template`](references/context-template.md) เช่นกัน
-
 **รูปแบบการทำงาน** — หัวหน้าทีมเลือกรูปแบบตอนวางแผน · วิธีทำ ต้นทุน และกับดักอยู่ใน `agent-patterns` · ตัวอย่างในงานของ plugin นี้อยู่ใน [`examples`](references/examples.md)

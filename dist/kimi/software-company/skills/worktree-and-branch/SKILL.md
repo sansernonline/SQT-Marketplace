@@ -62,7 +62,7 @@ worktree ที่สร้างเองด้วย `git worktree add` แล
 
 1. ทำใน worktree เท่านั้น — ไม่ `cd` กลับ main checkout เพื่อ "ดูนิดเดียว" (Claude Code บล็อกให้ · มือคนต้องระวังเอง)
 2. commit ทีละขั้นที่ตรวจได้ (`principle-small-verifiable-steps`) ใน branch ของ worktree — commit ใน branch งานอยู่ใน "รออนุมัติ" เว้นแต่ผู้ใช้สั่งหรือเขียนอนุญาตไว้ (`approvals.md` ของ `superuser`) · ยังไม่ได้รับอนุญาต → เก็บเป็น diff ใน worktree แล้วเสนอ
-3. **หลักฐานก่อนปิด**: test ทั้งชุดผ่านบน branch นี้ · `git status` สะอาด · `git log main..HEAD --oneline` แสดง commit ที่จะเข้า · ถ้ามีหน้าจอ: ภาพจาก `app-verifier-setup` · จดคำสั่งและผลลง `docs/BUILD-PLAN.md` (`principle-prove-it-works`)
+3. **หลักฐานก่อนปิด**: test ทั้งชุดผ่านบน branch นี้ · `git status` สะอาด · `git log main..HEAD --oneline -n 30` แสดง commit ที่จะเข้า · ถ้ามีหน้าจอ: ภาพจาก `app-verifier-setup` · จดคำสั่งและผลลง `docs/BUILD-PLAN.md` (`principle-prove-it-works`)
 4. main ขยับระหว่างทำ → `git fetch` แล้ว `git rebase origin/main` (branch ยังไม่ push · คนเดียวใช้) หรือ `git merge origin/main` (push แล้วหรือมีคนอื่นใช้) · conflict → ข้อ 5 · test ใหม่หลังรวม
 
 ## 4 · ปิด branch — ตารางตัดสินใจ
@@ -88,7 +88,7 @@ worktree ที่สร้างเองด้วย `git worktree add` แล
 ## 5 · แก้ conflict
 
 1. **ดูสถานะก่อนแตะไฟล์** — `git status` · ไฟล์ที่ชน: `git diff --name-only --diff-filter=U` · กำลัง merge หรือ rebase (ขั้นไหน) · อย่า `git add` ทั้งหมดทันที
-2. **เข้าใจทั้ง 2 ฝั่ง** ต่อไฟล์ — ฝั่งเราทำอะไร (`git log --oneline main..HEAD -- <ไฟล์>`) · ฝั่งเขาทำอะไร (`git log --oneline HEAD..main -- <ไฟล์>`) · เจตนาของแต่ละ commit ไม่ใช่แค่บรรทัดที่ต่าง
+2. **เข้าใจทั้ง 2 ฝั่ง** ต่อไฟล์ — ฝั่งเราทำอะไร (`git log --oneline -n 30 main..HEAD -- <ไฟล์>`) · ฝั่งเขาทำอะไร (`git log --oneline -n 30 HEAD..main -- <ไฟล์>`) · เจตนาของแต่ละ commit ไม่ใช่แค่บรรทัดที่ต่าง
 3. **แก้ทีละ hunk ให้ได้ทั้ง 2 เจตนา** — ส่วนใหญ่ต้องการทั้งคู่ (ฟังก์ชันใหม่ของเขา + การแก้ของเรา) · ขัดกันจริงให้เลือกตามเป้าหมายของงานนี้แล้วจดเหตุผลใน commit · **ไม่** `git checkout --ours` / `--theirs` ทั้งไฟล์เพื่อให้ผ่านไว — นั่นคือลบงานคนอื่นเงียบ ๆ
 4. ไฟล์ที่ generate (lock file · snapshot · build output) → regenerate จากคำสั่ง ไม่แก้มือ
 5. **test ทั้งชุดหลังรวม** — conflict ที่ "แก้แล้ว" แต่ test ไม่รัน = ยังไม่แก้ · `git add <ไฟล์>` → `git merge --continue` หรือ `git rebase --continue`
@@ -119,7 +119,7 @@ git branch -d <branch>                   # -d ปฏิเสธถ้ายั�
 | คัดลอก `.env` ระบุชื่อ | `Copy-Item ..\shop-api\.env .\.env` | `cp ../shop-api/.env .env` |
 | เข้าไปทำงาน | `Set-Location ..\shop-api-fix-login` | `cd ../shop-api-fix-login` |
 | ติดตั้งแล้ววัด baseline (ผลยาว → ไฟล์) | `npm ci > ..\shop-api\_to_delete\install.txt 2>&1; npm test > ..\shop-api\_to_delete\baseline.txt 2>&1; Get-Content ..\shop-api\_to_delete\baseline.txt -Tail 20` | `npm ci > ../shop-api/_to_delete/install.txt 2>&1 && npm test > ../shop-api/_to_delete/baseline.txt 2>&1; tail -20 ../shop-api/_to_delete/baseline.txt` |
-| commit ที่จะเข้า main | `git log main..HEAD --oneline` | `git log main..HEAD --oneline` |
+| commit ที่จะเข้า main | `git log main..HEAD --oneline -n 30` | `git log main..HEAD --oneline -n 30` |
 | ไฟล์ที่ชนระหว่าง merge | `git diff --name-only --diff-filter=U` | `git diff --name-only --diff-filter=U` |
 | worktree สะอาดไหม | `git -C ..\shop-api-fix-login status --porcelain -uall` (ว่าง = สะอาด) | `git -C ../shop-api-fix-login status --porcelain -uall` |
 | ลบ worktree แล้ว prune | `git worktree remove ..\shop-api-fix-login; git worktree prune` | `git worktree remove ../shop-api-fix-login && git worktree prune` |

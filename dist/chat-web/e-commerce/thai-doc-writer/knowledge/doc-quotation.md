@@ -46,7 +46,7 @@ Full tax-invoice field list, abbreviated invoices and e-Tax: `e-tax-invoice`. VA
 
 - 1 running series per document type: `QT2610-0001`, `IV2610-0001`, `BN…`, `RC…`, tax invoices `TX2610-0001` (prefix + YYMM + running).
 - Tax invoices: 1 series **per branch**, no gaps, no reuse. To fix a wrong one, cancel it (stamp "ยกเลิก", keep all copies) and reissue with a new number that refers to the old one. Or correct it with a credit/debit note (ใบลดหนี้/ใบเพิ่มหนี้).
-- Keep copies at least 5 years (accounting and VAT rules).
+- Keep copies 5 years minimum, 7 recommended (`sme-bookkeeping` section 2 — per a Revenue Department ruling, not yet checked against the current statute).
 
 ## 4. VAT and withholding tax lines — worked example
 

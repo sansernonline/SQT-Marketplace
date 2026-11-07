@@ -34,6 +34,33 @@ An item that slipped two weeks running gets one of three decisions — never a t
 2. **Shrink** — the first 15-minute step only
 3. **Drop** — tell the person waiting, if any (`polite-message-th-en`)
 
+## Template and worked example
+
+Template (append to `weekly-reviews.md`, newest on top) and a filled week: [references/template-and-example.md](references/template-and-example.md)
+
+## Rules
+
+- Twenty minutes — when it grows, the review has become the procrastination
+- Scan the record before asking memory — steps 2 and 3 start from the calendar, sent mail, chat threads and the task list (developers: git log and merged pull requests), and the user is asked only about what the record does not show; memory keeps the loud week and drops the promises
+- Write it even when the week felt like nothing; boring weeks are data
+- Three priorities, not five; everything else is the queue
+- End with the three visible where the user will see them Monday morning (calendar, phone widget, sticky note)
+
+Related: `inbox-triage` · `calendar-audit` (monthly) · `goal-and-habit` (quarterly) · `important-docs` · `subscription-audit` · `gift-idea-tracker` (occasions in the next 14 days).
+
+## เรียกเป็นคำสั่ง
+
+`/personal-life:weekly-review [--deep]`
+
+Run the `weekly-review` skill: **$ARGUMENTS**
+
+--deep adds a calendar-audit pass and a look at money/admin due next week.
+
+
+## reference: template-and-example.md
+
+# Weekly review — template and worked example
+
 ## Template (append to `weekly-reviews.md`, newest on top)
 
 ```markdown
@@ -59,24 +86,6 @@ Week of 2026-10-05:
 - Due: card A 12,430 บาท on the 15th; car tax window open (expires 30 Nov); streaming app trial ends 12th → cancel
 - Three: 1) Finish Q4 plan (Tue/Thu 09:00 blocks) 2) Passport booking + photo 3) Cancel trial, pay card A
 - Energy 3 · Change: no meetings Wednesday morning
-
-## Rules
-
-- Twenty minutes — when it grows, the review has become the procrastination
-- Scan the record before asking memory — steps 2 and 3 start from the calendar, sent mail, chat threads and the task list (developers: git log and merged pull requests), and the user is asked only about what the record does not show; memory keeps the loud week and drops the promises
-- Write it even when the week felt like nothing; boring weeks are data
-- Three priorities, not five; everything else is the queue
-- End with the three visible where the user will see them Monday morning (calendar, phone widget, sticky note)
-
-Related: `inbox-triage` · `calendar-audit` (monthly) · `goal-and-habit` (quarterly) · `important-docs` · `subscription-audit` · `gift-idea-tracker` (occasions in the next 14 days).
-
-## เรียกเป็นคำสั่ง
-
-`/personal-life:weekly-review [--deep]`
-
-Run the `weekly-review` skill: **$ARGUMENTS**
-
---deep adds a calendar-audit pass and a look at money/admin due next week.
 
 
 ---

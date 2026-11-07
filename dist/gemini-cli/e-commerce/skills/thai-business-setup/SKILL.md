@@ -77,15 +77,15 @@ skill นี้ช่วยเลือกว่าจะทำธุรกิ�
 ที่กำไร 1,000,000 บุคคลธรรมดาถูกกว่านิดเดียว แต่ที่กำไร 3,000,000 บริษัทถูกกว่าเกือบ 2 แสน · เปลี่ยนรูปแบบกิจการแล้วย้อนยาก จึงต้องดูหลายสถานการณ์
 
 1. ถามผู้ใช้ 3 อย่าง: กำไรต่อปีแบบแย่ กลาง ดี · โอกาสของแต่ละแบบ (รวมกันได้ 1) · ค่าทำบัญชีและสอบบัญชีที่บริษัทต้องจ่ายเพิ่มจากใบเสนอราคาจริง · ห้ามใส่โอกาสหรือค่าทำบัญชีแทนผู้ใช้
-2. ใส่ลงไฟล์แบบ `seller-tax-basics/scripts/example-company.json` แล้วรัน 2 คำสั่ง
+2. ต้องมี Node · ใส่ลงไฟล์แบบ `seller-tax-basics/scripts/example-company.json` แล้วรัน 2 คำสั่ง
 
 ```bash
-node tax-compare.mjs company.json                     # ตารางภาษีทั้ง 2 แบบต่อสถานการณ์
+node <path>/tax-compare.mjs company.json            # <path> ดู Script path ข้างล่าง · ตารางภาษีทั้ง 2 แบบต่อสถานการณ์
 node tax-compare.mjs company.json --payoff > payoff.json
 node decide.mjs payoff payoff.json                    # decision-scoring: ค่าคาดหวัง · แย่สุด · เสียดายมากสุด
 ```
 
-**Script path:** ติดตั้งจาก marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/seller-tax-basics/scripts/tax-compare.mjs | sort -V | tail -1` · ใน repo SQT-Marketplace: `plugins/e-commerce/skills/seller-tax-basics/scripts/tax-compare.mjs` · `decide.mjs` อยู่ใน skill `decision-scoring` ของ plugin `superuser`
+**Script path:** ติดตั้งจาก marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/seller-tax-basics/scripts/tax-compare.mjs | sort -V | tail -1` · ใน repo SQT-Marketplace: `plugins/e-commerce/skills/seller-tax-basics/scripts/tax-compare.mjs` · `decide.mjs` อยู่ใน skill `decision-scoring` ของ plugin `superuser` (ไม่ได้ติดตั้ง → เล่าตาราง 2 แบบให้ผู้ใช้เลือกเอง)
 
 3. อ่านบรรทัดผล · ค่าคาดหวังกับเสียดายน้อยสุดชี้คนละทาง (ตัวอย่างโอกาส 0.4 · 0.4 · 0.2 และค่าทำบัญชี 60,000 ได้ "2 เกณฑ์ไม่ตรงกัน": ค่าคาดหวังเลือกบุคคลธรรมดา 172,400 ต่อ 183,000 · เสียดายน้อยสุดเลือกบริษัท 62,000 ต่อ 182,000) แปลว่าคำตอบขึ้นกับโอกาสที่ผู้ใช้ให้ · การเปลี่ยนรูปแบบย้อนยาก จึงเล่าทั้ง 2 เกณฑ์แล้วให้ผู้ใช้กับนักบัญชีตัดสิน · ทั้งหมดยังไม่รวมภาษีชั้นที่ 2 ตอนจ่ายเงินออกจากบริษัท
 

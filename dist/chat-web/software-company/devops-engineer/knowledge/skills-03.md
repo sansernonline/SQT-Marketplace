@@ -1128,10 +1128,10 @@ log.exception("บันทึกไม่สำเร็จ")             # ใ
 ```bash
 # ไม่มี print/console.log หลงเหลือในโค้ด production
 grep -rnE "console\.(log|error)|Console\.WriteLine|^\s*print\(" src/ --include="*.ts" \
-  --include="*.js" --include="*.cs" --include="*.py" | grep -v test
+  --include="*.js" --include="*.cs" --include="*.py" | grep -v test | head -30
 
 # log ที่ออกมาอ่านได้จริงและ grep ได้
-tail -f logs/app-*.log
+tail -n 50 logs/app-*.log
 grep "a3f9c1b2" logs/app-*.log          # ตาม request เดียวได้ครบทุกบรรทัดไหม
 ```
 

@@ -9,25 +9,13 @@ A listing is found by its title, chosen by its first photo, and bought because o
 ## Workflow
 
 1. **Collect facts** — product name, brand, model, size/volume/weight, colour/variants, material, who it is for, price, stock, เลข อย. (สำนักงานคณะกรรมการอาหารและยา) or เลขจดแจ้ง if food or cosmetic
-2. **Keyword research** (10 minutes, free) — see below; pick 1 main keyword + 3–5 supporting
+2. **Keyword research** (10 minutes, free) — buyer-app search suggestions, steps in [references/keyword-and-photos.md](references/keyword-and-photos.md); pick 1 main keyword (in suggestions **and** most top-seller titles) + 3–5 supporting; never a competitor brand name
 3. **Title** — apply the platform formula in the table; stay inside the length limit
-4. **Photos** — run the photo checklist
+4. **Photos** — run the photo checklist in the same reference file (photo 1 on a plain background, 1:1 at least 800 x 800 px, same main photo on every platform)
 5. **Description** — fill [the template](references/description-template.md)
 6. **Claims check** — food, supplement, cosmetic, "health" items: run [prohibited claims](references/prohibited-claims.md) and delete every hit
 7. **Variants and Stock Keeping Unit (SKU)** — name SKUs per `multi-shop-stock` before publishing, so stock syncs later
 8. **Price** — set after `marketplace-fees-pricing`, never before
-
-## Keyword research via search suggestions
-
-1. Open the buyer app (not Seller Centre), logged out or in incognito
-2. Type the product's plain Thai word, e.g. `กระเป๋าผ้า` — write down every suggestion in the drop-down
-3. Add one word at a time: `กระเป๋าผ้า ใบใหญ่`, `กระเป๋าผ้า มินิมอล` — the suggestions are what buyers actually type
-4. Repeat in English and in the transliteration buyers use (`tote bag`, `โท้ทแบค`)
-5. Search the top 3 suggestions; open the first 5 best-selling listings and note the words in their titles
-6. Keep a sheet: keyword · platform · in suggestions (Y/N) · in top-seller titles (count)
-7. TikTok Shop: also check the TikTok app search suggestions and the hashtags on the top videos
-
-Main keyword = appears in suggestions **and** in most top-seller titles. Do not use competitor brand names — it breaks every platform's listing rules.
 
 ## Title formulas
 
@@ -54,22 +42,6 @@ Description bullets — one benefit with a number per line, not a lifestyle list
 | ไม่ว่าจะเป็นสายออกกำลังกาย สายแฟชั่น หรือสายชิล ตอบโจทย์ทุกไลฟ์สไตล์ | ซักเครื่องได้ 50 ครั้งสีไม่ตก · เนื้อผ้า 180 แกรม ใส่หน้าร้อนไม่ร้อน |
 
 ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ การตลาด
-
-## Photo checklist
-
-- [ ] Photo 1: product only, white or plain background, product fills 70–85% of frame, no text over the product
-- [ ] Square 1:1, at least 800 x 800 px; 1024 x 1024 or larger preferred — check each platform's current minimum (รอยืนยัน)
-- [ ] Photo 2: in use / on a person / in a room — shows scale
-- [ ] Photo 3: size with ruler or hand; dimensions written on the image
-- [ ] Photo 4: close-up of material, stitching, or the label with เลข อย.
-- [ ] Photo 5: every colour/variant side by side, labelled exactly as the variant names
-- [ ] Photo 6: what is in the box
-- [ ] Photo 7–9: one benefit per Thai text card, or a size chart
-- [ ] Video 10–60 s — expected in practice on TikTok Shop
-- [ ] No other shop's watermark, no stock photo without rights, no before/after body photos for cosmetics or slimming
-- [ ] Same main photo on every platform so returning buyers recognise it
-
-Image sizes per platform and banner formats → `graphic-design` `social-formats` (if installed).
 
 ## Diagnose a listing that does not sell
 
@@ -159,6 +131,41 @@ Fill every line; delete a line only if it truly does not apply.
 - Copy usage and warnings from the actual label; do not add effects the label does not state
 - No LINE ID, phone number or outside link in Shopee/Lazada/TikTok descriptions — against platform rules
 - Return line must not promise less than the platform's own policy (see `returns-and-bad-reviews`)
+
+
+## reference: keyword-and-photos.md
+
+# Keyword research and photo checklist
+
+Moved from `SKILL.md`. Open at workflow step 2 (keywords) and step 4 (photos).
+
+## Keyword research via search suggestions
+
+1. Open the buyer app (not Seller Centre), logged out or in incognito
+2. Type the product's plain Thai word, e.g. `กระเป๋าผ้า` — write down every suggestion in the drop-down
+3. Add one word at a time: `กระเป๋าผ้า ใบใหญ่`, `กระเป๋าผ้า มินิมอล` — the suggestions are what buyers actually type
+4. Repeat in English and in the transliteration buyers use (`tote bag`, `โท้ทแบค`)
+5. Search the top 3 suggestions; open the first 5 best-selling listings and note the words in their titles
+6. Keep a sheet: keyword · platform · in suggestions (Y/N) · in top-seller titles (count)
+7. TikTok Shop: also check the TikTok app search suggestions and the hashtags on the top videos
+
+Main keyword = appears in suggestions **and** in most top-seller titles. Do not use competitor brand names — it breaks every platform's listing rules.
+
+## Photo checklist
+
+- [ ] Photo 1: product only, white or plain background, product fills 70–85% of frame, no text over the product
+- [ ] Square 1:1, at least 800 x 800 px; 1024 x 1024 or larger preferred — check each platform's current minimum (รอยืนยัน)
+- [ ] Photo 2: in use / on a person / in a room — shows scale
+- [ ] Photo 3: size with ruler or hand; dimensions written on the image
+- [ ] Photo 4: close-up of material, stitching, or the label with เลข อย.
+- [ ] Photo 5: every colour/variant side by side, labelled exactly as the variant names
+- [ ] Photo 6: what is in the box
+- [ ] Photo 7–9: one benefit per Thai text card, or a size chart
+- [ ] Video 10–60 s — expected in practice on TikTok Shop
+- [ ] No other shop's watermark, no stock photo without rights, no before/after body photos for cosmetics or slimming
+- [ ] Same main photo on every platform so returning buyers recognise it
+
+Image sizes per platform and banner formats → `graphic-design` `social-formats` (if installed).
 
 
 ## reference: prohibited-claims.md

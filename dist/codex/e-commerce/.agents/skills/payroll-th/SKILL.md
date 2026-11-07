@@ -21,7 +21,7 @@ Gross pay minus social security (SSO), provident fund (PVD) and personal income 
 | 7 | File **ภ.ง.ด.1** and remit WHT | RD receipt | 7th next month (paper) / 15th (e-Filing) |
 | 8 | File **สปส.1-10** and remit SSO (both shares) | SSO receipt | 15th next month |
 | 9 | Remit PVD to the fund manager | | per fund rules |
-| 10 | Archive register, payslips, receipts — keep 5 years (accounting law) | | |
+| 10 | Archive register, payslips, receipts — keep 5 years minimum, 7 recommended (`sme-bookkeeping` section 2 — per a Revenue Department ruling, not yet checked against the current statute) | | |
 
 Year end: **ภ.ง.ด.1ก** (annual summary per employee) by end of February; give every employee **50 ทวิ** for the year (by February, รอยืนยัน exact day) and within 1 month after anyone leaves (รอยืนยัน).
 
@@ -59,7 +59,7 @@ node payroll.mjs --self-test
 
 ไฟล์ input: `{ "employees": [ { "name": "...", "gross": 50000, "pvd_employee_pct": 0, "pvd_employer_pct": 0, "spouse": false, "children": 0, "children_2nd_plus": 0, "parents": 0, "other_deductions": 0, "periods": 12 } ] }` · มีแค่ `name` กับ `gross` ก็รันได้ ที่เหลือเริ่มต้นเป็น 0 / false / 12 · ช่องที่ผิดทำให้สคริปต์หยุดพร้อมข้อความที่ชื่อช่อง · ประกันสังคมคิดจากค่าจ้างเฉลี่ยต่อเดือน (`gross` × `periods` ÷ 12) แล้วกระจายเป็นต่องวด ลดหย่อนทั้งปีจึงเท่ากับ 12 เดือนเสมอ · PVD ลูกจ้างเกิน 15% ของค่าจ้างสคริปต์เตือนและลดหย่อนให้แค่ 15%
 
-ขั้นบันไดภาษี เพดานประกันสังคม และค่าลดหย่อนอยู่ใน `scripts/rates.json` (มีวันที่ตรวจและแหล่ง สคริปต์พิมพ์ออกมาในผล และเตือนเมื่อเก่ากว่า 90 วัน) · เพดานประกันสังคมและอัตราขั้นสูงสุดต้องตรงกับ `scripts/check/facts.json` ซึ่ง self-test เช็คให้ · เงินสุทธิติดลบ และ PVD ที่ใส่น้อยกว่า 1 (เช่น 0.05 แทน 5) ได้คำเตือน · ปีภาษีเปลี่ยนให้แก้ `rates.json` ก่อนรันเดือนมกราคม · ยังไม่รวมโบนัส พนักงานเข้ากลางปี และเงินได้ที่จ่ายไปแล้ว ให้คิดตามส่วนโบนัสด้านล่างเอง
+ขั้นบันไดภาษี เพดานประกันสังคม และค่าลดหย่อนอยู่ใน `scripts/rates.json` (มีวันที่ตรวจและแหล่ง สคริปต์พิมพ์ออกมาในผล และเตือนเมื่อเก่ากว่า 90 วัน) · เพดานประกันสังคมและอัตราขั้นสูงสุดถูกเช็กกับ `scripts/check/facts.json` ที่ราก repo SQT-Marketplace (ไม่ติดไปกับ plugin) · เงินสุทธิติดลบ และ PVD ที่ใส่น้อยกว่า 1 (เช่น 0.05 แทน 5) ได้คำเตือน · ปีภาษีเปลี่ยนให้แก้ `rates.json` ก่อนรันเดือนมกราคม · ยังไม่รวมโบนัส พนักงานเข้ากลางปี และเงินได้ที่จ่ายไปแล้ว ให้คิดตามส่วนโบนัสด้านล่างเอง
 
 **Script path:** ติดตั้งจาก marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/payroll-th/scripts/payroll.mjs | sort -V | tail -1` · ใน repo SQT-Marketplace: `plugins/e-commerce/skills/payroll-th/scripts/payroll.mjs` · Node อย่างเดียว ไม่มี dependency
 

@@ -28,16 +28,7 @@ These are the common platform defaults (Streaming, TradingView, Settrade charts 
 
 ## Plain-Thai meaning and false-signal warnings
 
-| Signal | ภาษาง่าย | Common false signal | What would prove it wrong |
-|---|---|---|---|
-| Price above rising 200-day | แนวโน้มใหญ่ยังเป็นขาขึ้น | In a sideways market price crosses the MA every few weeks | Close below the 200-day for several days while it turns flat/down |
-| Golden cross 50/200 | เส้นเร็วตัดขึ้นเส้นช้า แนวโน้มเปลี่ยนเป็นขึ้น | Lags badly — often fires after most of the move | Price falls back below the 50-day within weeks |
-| RSI > 70 | ราคาวิ่งเร็ว ตึงตัว | In strong uptrends RSI stays above 70 for weeks; shorting it is costly | — (it only says "stretched") |
-| RSI < 30 | ราคาลงแรง ตึงตัวขาลง | In crashes RSI stays below 30 while price keeps falling | New low with RSI still falling |
-| RSI divergence (price new high, RSI lower high) | แรงส่งเริ่มอ่อน | Can persist for months | Price and RSI both make new highs |
-| MACD cross up | แรงส่งเริ่มกลับขึ้น | Many whipsaws in sideways markets, especially below zero line | Crosses back down within a few bars |
-| Breakout on high volume | มีคนซื้อจริงหนุน | One-day spike on news, then gives back | Close back inside the old range within 3 days |
-| Breakout on low volume | ทะลุแต่ไม่มีแรงหนุน | Usually fails (false breakout) | — treat as unconfirmed |
+8 signals (MA, golden cross, RSI 70/30, divergence, MACD cross, breakout on high or low volume) with ภาษาง่าย, the common false signal and what would prove it wrong: [references/signal-meanings.md](references/signal-meanings.md) section 1. Read it for the plain-Thai line of the answer.
 
 ## Choosing RSI or MACD (by the stock's own hit rate)
 
@@ -74,7 +65,37 @@ EMA and Wilder averages start from the simple average of the first n bars, so ea
 5. Hand the invalidation price to `position-sizing` as the stop (same plugin).
 6. End with: technicals describe odds, not certainty.
 
-## Worked example (daily chart, illustrative numbers)
+## Worked example
+
+Daily chart, illustrative numbers (ABC 48.50 breakout: trend, momentum, volume, support reads and the invalidation line): [references/signal-meanings.md](references/signal-meanings.md) section 2.
+
+## Output shape
+
+Per symbol: timeframe and parameters used · one-line trend · one-line momentum · volume note · nearest support/resistance · the single thing to watch next · the invalidation price. Close with "technicals describe odds, not certainty".
+
+Related: put levels on the watchlist with `watchlist-setup`; practise the setup first with `paper-trading`.
+
+
+## reference: signal-meanings.md
+
+# Signal meanings in plain Thai and a worked example
+
+Moved from `SKILL.md` (technical-signals) · 1 · meanings and false signals · 2 · worked example
+
+## 1 · Plain-Thai meaning and false-signal warnings
+
+| Signal | ภาษาง่าย | Common false signal | What would prove it wrong |
+|---|---|---|---|
+| Price above rising 200-day | แนวโน้มใหญ่ยังเป็นขาขึ้น | In a sideways market price crosses the MA every few weeks | Close below the 200-day for several days while it turns flat/down |
+| Golden cross 50/200 | เส้นเร็วตัดขึ้นเส้นช้า แนวโน้มเปลี่ยนเป็นขึ้น | Lags badly — often fires after most of the move | Price falls back below the 50-day within weeks |
+| RSI > 70 | ราคาวิ่งเร็ว ตึงตัว | In strong uptrends RSI stays above 70 for weeks; shorting it is costly | — (it only says "stretched") |
+| RSI < 30 | ราคาลงแรง ตึงตัวขาลง | In crashes RSI stays below 30 while price keeps falling | New low with RSI still falling |
+| RSI divergence (price new high, RSI lower high) | แรงส่งเริ่มอ่อน | Can persist for months | Price and RSI both make new highs |
+| MACD cross up | แรงส่งเริ่มกลับขึ้น | Many whipsaws in sideways markets, especially below zero line | Crosses back down within a few bars |
+| Breakout on high volume | มีคนซื้อจริงหนุน | One-day spike on news, then gives back | Close back inside the old range within 3 days |
+| Breakout on low volume | ทะลุแต่ไม่มีแรงหนุน | Usually fails (false breakout) | — treat as unconfirmed |
+
+## 2 · Worked example (daily chart, illustrative numbers)
 
 Stock ABC, close 48.50. 50-day SMA 46.20 (rising), 200-day SMA 44.00 (rising). RSI(14) 66. MACD 0.42 above signal 0.31, both above zero. Today broke above the 3-month high of 48.00 on volume 2.1× the 20-day average. Swing lows at 46.00 and 44.50.
 
@@ -88,9 +109,3 @@ Stock ABC, close 48.50. 50-day SMA 46.20 (rising), 200-day SMA 44.00 (rising). R
 | **Invalidation** | Close back below 48.00 within 3 days = failed breakout; below 46.00 = trend read wrong |
 
 Plain answer: "แนวโน้มขาขึ้น ทะลุกรอบพร้อมวอลุ่มหนุน ถ้าปิดกลับใต้ 48.00 ภายใน 3 วัน ถือว่าทะลุหลอก" — then size from a stop under 48.00 or 46.00 with `position-sizing`.
-
-## Output shape
-
-Per symbol: timeframe and parameters used · one-line trend · one-line momentum · volume note · nearest support/resistance · the single thing to watch next · the invalidation price. Close with "technicals describe odds, not certainty".
-
-Related: put levels on the watchlist with `watchlist-setup`; practise the setup first with `paper-trading`.

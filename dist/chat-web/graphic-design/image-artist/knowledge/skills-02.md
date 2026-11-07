@@ -250,8 +250,6 @@ Use when design work spans several assets (brand kit, campaign, AI image or vide
 
 - ห้ามใส่ค่าลับหรือ API key ของเครื่องมือสร้างภาพ และข้อมูลลูกค้า
 
-แม่แบบตารางอยู่ใน [`context-template`](references/context-template.md) เช่นกัน
-
 **รูปแบบการทำงาน** — หัวหน้าทีมเลือกรูปแบบตอนวางแผน · วิธีทำ ต้นทุน และกับดักอยู่ใน `agent-patterns` · ตัวอย่างในงานของ plugin นี้อยู่ใน [`examples`](references/examples.md)
 
 

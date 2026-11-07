@@ -75,7 +75,7 @@ Subject · action/motion (what moves, how fast) · camera (static, pan, push-in,
 
 ## Not an AI look
 
-Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the 8-point eye check on images and other files. The full list of AI tells for every medium lives there.
+Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files.
 
 ## Related
 
