@@ -77,21 +77,7 @@ Input file: `{ "type": "share", "capital": 100000, "riskPct": 1, "entry": 48.5, 
 
 ## Why the risk % stays small — drawdown and the way back
 
-A loss and the gain that undoes it are not the same number: gain needed = drawdown ÷ (1 − drawdown).
-
-| Drawdown | Gain needed to get back to even |
-|---|---|
-| 5% | 5.3% |
-| 10% | 11.1% |
-| 20% | 25% |
-| 30% | 42.9% |
-| 40% | 66.7% |
-| 50% | 100% |
-| 60% | 150% |
-| 75% | 300% |
-| 90% | 900% |
-
-At 1% risk, 10 losses in a row cost about 9.6% (compounded) and need 10.6% back; at 5% risk the same streak costs 40% and needs 66.7%. Show this table when a user asks to raise the risk %. (Arithmetic, computed here; no external source.)
+Gain needed = drawdown ÷ (1 − drawdown): a 10% loss needs 11.1% back, 50% needs 100%. At 1% risk, 10 losses in a row cost about 9.6% (compounded) and need 10.6% back; at 5% risk the same streak costs 40% and needs 66.7%. Show the full table in [references/drawdown-recovery.md](references/drawdown-recovery.md) when a user asks to raise the risk %. (Arithmetic, computed here; no external source.)
 
 ## Worked example
 

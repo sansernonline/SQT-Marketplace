@@ -1,5 +1,9 @@
 # Changelog — trading-finance
 
+## 0.18.1 — 2026-11-07
+
+- ประหยัด token (ตรวจ plugin หัวข้อ 8): ย้ายตาราง drawdown · knapsack · ตัวอย่างและแหล่งของ copy-trade-check · rebalance · ความหมายสัญญาณ ไป references/ ของแต่ละ skill · `post-trade-review` และ playbook ให้สคริปต์อ่านบันทึกแทนเปิดทั้งไฟล์ และจำกัดคำตอบ subagent ไม่เกิน 20 บรรทัด · ตัดประโยคซ้ำใน `superuser/SKILL.md`
+
 ## 0.18.0 — 2026-11-07
 
 - เอาคำสั่งที่เป็นแค่ทางลัดไปหา skill ตัวเดียวออก 6 ตัว เรียก skill ตรงแทน เช่น `/trading-finance:trade-journal` · ขั้นตอนและ `argument-hint` ของคำสั่งเดิมย้ายไปหัวข้อ "เรียกเป็นคำสั่ง" ท้าย SKILL.md ของ skill ปลายทาง: `journal` → `trade-journal` · `paper-trade` → `paper-trading` · `portfolio` → `portfolio-snapshot` · `review-week` → `post-trade-review` · `tax-plan` → `tax-deduction-planner` · `watch` → `watchlist-setup`
