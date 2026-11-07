@@ -2,6 +2,8 @@
 
 ## README.md
 
+โครง 15 หัวข้อตาม `references/readme-skeleton.md` · ตัวอย่างนี้เป็น Node + PostgreSQL · หัวข้อที่โปรเจกต์ไม่มีของ ตัดทิ้ง · ภาษาอื่นเปลี่ยนคำสั่งตาม `references/readme-by-stack.md`
+
 ```markdown
 # <ชื่อโปรเจกต์>
 
@@ -9,11 +11,13 @@
 
 **สถานะ:** ใช้งานจริง · **เจ้าของ:** @ชื่อ · **เอกสาร:** [../docs/README.md](../docs/README.md)
 
+![หน้าหลัก](../docs/figures/screenshot.png)
+
 ## ต้องมีบนเครื่อง
 
-| เครื่องมือ | เวอร์ชัน | หมายเหตุ |
+| เครื่องมือ | เวอร์ชัน | ปักไว้ที่ |
 |---|---|---|
-| Node.js | 22.x | |
+| Node.js | 22.x | `.nvmrc` — สั่ง `nvm use` |
 | PostgreSQL | 16 | หรือใช้ Docker ตามด้านล่าง |
 | Docker | 27+ | |
 
@@ -26,6 +30,16 @@
     npm run db:migrate && npm run db:seed
     npm run dev                 # http://localhost:3000
 
+## ตั้งค่า
+
+ค่าทั้งหมดอยู่ใน `.env` (คัดลอกจาก `.env.example`) · environment มี `development` · `staging` · `production` เลือกด้วย `NODE_ENV`
+
+| ตัวแปร | ใช้ทำอะไร | ต้องมี | ค่าตัวอย่าง |
+|---|---|:--:|---|
+| `DATABASE_URL` | ต่อฐานข้อมูล | ✓ | `postgres://app:app@localhost:5432/app` |
+| `APP_SESSION_SECRET` | เข้ารหัส session · ค่าจริงขอจาก @ชื่อ | ✓ | — |
+| `LINE_TOKEN` | ส่งแจ้งเตือน LINE · ไม่ใส่ = ไม่ส่ง | | — |
+
 ## คำสั่งที่ใช้บ่อย
 
 | คำสั่ง | ทำอะไร |
@@ -34,14 +48,36 @@
 | `npm test` | รัน test ทั้งหมด |
 | `npm run lint` | ตรวจสไตล์และ lint |
 | `npm run db:migrate` | อัปเดต schema |
+| `npm run build` | build ลง `dist/` |
 
-## โครงโฟลเดอร์
+## โครงโปรเจกต์
 
     src/        โค้ดจริง — unit test อยู่ข้างไฟล์ที่ทดสอบ (`*.test.ts`)
     tests/      เฉพาะ integration และ e2e (.NET · Flutter ใช้เป็นโฟลเดอร์ทดสอบหลักตามที่เครื่องมือบังคับ)
     scripts/    สคริปต์ที่คนต้องรัน
 
-เอกสารอยู่ที่ `../docs/` ที่รากโปรเจกต์ — เริ่มที่ `../docs/README.md`
+เอกสารอยู่ที่ `../docs/` ที่รากโปรเจกต์ — เริ่มที่ `../docs/README.md` · แผนที่โค้ดเต็มใน `ARCHITECTURE.md`
+
+## สถาปัตยกรรมย่อ
+
+หน้าเว็บ React เรียก API ของโปรเจกต์นี้ · API เก็บข้อมูลใน PostgreSQL และส่งแจ้งเตือนผ่าน LINE
+
+ใน README จริงครอบรูปข้างล่างด้วย ```` ```mermaid ```` (ที่นี่ย่อหน้าไว้เพราะอยู่ในแม่แบบ)
+
+    flowchart TB
+      user[ผู้ใช้] --> web[หน้าเว็บ]
+      web --> api[API]
+      api --> db[(PostgreSQL)]
+      api --> line[LINE Messaging API]
+
+## build และไฟล์ที่ได้
+
+    npm run build               # ได้ dist/ (ไฟล์ static) และ dist/server.js
+    docker build -t <project-name>:<รุ่น> .
+
+## deploy
+
+merge เข้า `main` → CI build image แล้วขึ้น staging เอง · ขึ้น production กดอนุมัติใน CI · ย้อนรุ่นและขั้นเต็มใน `../docs/runbook-deploy.md`
 
 ## ติดปัญหา
 
@@ -49,6 +85,18 @@
 |---|---|
 | `ECONNREFUSED` ตอนรัน | ยังไม่ได้ `docker compose up -d db` |
 | `missing env APP_...` | ยังกรอก `.env` ไม่ครบ ดู `.env.example` |
+
+## ร่วมพัฒนา
+
+แตก branch จาก `main` · commit ตาม Conventional Commits · `npm run lint && npm test` ผ่านก่อนเปิด PR · รายละเอียดใน `CONTRIBUTING.md`
+
+## ติดต่อและขอความช่วยเหลือ
+
+ติดขัดถาม @ชื่อ ในกลุ่ม <ชื่อกลุ่ม> · แจ้งบั๊กเป็น issue
+
+## สัญญาอนุญาต
+
+ใช้ภายใน <บริษัท> ห้ามเผยแพร่
 ```
 
 ## README ส่วนเริ่มใช้งาน — Flutter / Android
@@ -194,6 +242,7 @@ android/key.properties
 # Changelog
 
 รูปแบบตาม Keep a Changelog · เลขเวอร์ชันตาม Semantic Versioning
+หัวข้อในรุ่น: เปลี่ยนที่ทำให้ของเดิมพัง · เพิ่ม · เปลี่ยน · จะเลิกใช้ · เอาออก · แก้ · ความปลอดภัย (ตัดที่ไม่มีของ)
 
 ## [ยังไม่ปล่อย]
 

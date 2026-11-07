@@ -28,7 +28,7 @@ description: Use when starting a repository or one is slow to run on a new machi
 
 **ราก (โฟลเดอร์ที่ผู้ใช้เปิด) จัดตาม `project-doc-set` ข้อ 1 แบบ B** — ผังราก แบบ ecosystem และที่อยู่ไฟล์ของ SuperUser (`.claude/superuser/`) อยู่ที่นั่นที่เดียว · โค้ดอยู่ใน `<project-name>/` โครงข้างในเป็นแบบนี้:
 
-ใน `<project-name>/` (ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-`): `README.md` (ข้อ 2) · `CHANGELOG.md` · `.env.example` (เฉพาะเมื่ออ่าน environment variable จริง · `config-and-secrets`) · `.editorconfig` · `.gitattributes` · `.gitignore` (build output · ค่าลับ · `_to_delete/`) · `src/` (unit test อยู่ข้างไฟล์โค้ด · `readable-code` ข้อ 7) · `tests/` (เฉพาะ integration · e2e หรือ stack ที่เครื่องมือบังคับ ดูตารางข้อ 1) · `scripts/` (setup · seed · migrate) — ผังพร้อมคำอธิบาย [`references/code-folder.md`](references/code-folder.md) · ADR และ runbook อยู่ใน `docs/` ที่ราก ไม่ใช่ในโฟลเดอร์โค้ด (`project-doc-set` ข้อ 1)
+ใน `<project-name>/` (ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-`): `README.md` (ข้อ 2) · `CHANGELOG.md` · `ARCHITECTURE.md` · `CONTRIBUTING.md` · `LICENSE` (3 ตัวนี้เมื่อมีเงื่อนไขใน `references/readme-skeleton.md` หัวข้อ 2) · `.env.example` (เฉพาะเมื่ออ่าน environment variable จริง · `config-and-secrets`) · `.editorconfig` · `.gitattributes` · `.gitignore` (build output · ค่าลับ · `_to_delete/`) · `src/` (unit test อยู่ข้างไฟล์โค้ด · `readable-code` ข้อ 7) · `tests/` (เฉพาะ integration · e2e หรือ stack ที่เครื่องมือบังคับ ดูตารางข้อ 1) · `scripts/` (setup · seed · migrate) — ผังพร้อมคำอธิบาย [`references/code-folder.md`](references/code-folder.md) · ADR และ runbook อยู่ใน `docs/` ที่ราก ไม่ใช่ในโฟลเดอร์โค้ด (`project-doc-set` ข้อ 1)
 
 **ชื่อโฟลเดอร์โค้ด** — เอาชื่อโฟลเดอร์โปรเจกต์มาทำเป็นตัวพิมพ์เล็ก เว้นวรรคและเครื่องหมายเปลี่ยนเป็น `-` ตัวเดียว:
 `Lumio - Light Meter/` → `lumio-light-meter/`
@@ -60,17 +60,17 @@ skill อื่นที่เขียน `tests/` หรือ `test/` ให�
 
 ---
 
-## 2 · README ต้องตอบ 5 คำถาม
+## 2 · README — โครง 15 หัวข้อ ตัดที่ไม่มีของทิ้ง
 
-| # | คำถาม | ยาวแค่ไหน |
-|:--:|---|---|
-| 1 | โปรเจกต์นี้คืออะไร ทำอะไรให้ใคร | 2–3 บรรทัด |
-| 2 | ต้องมีอะไรบ้างบนเครื่อง (เวอร์ชันด้วย) | ตาราง |
-| 3 | **ติดตั้งและรันยังไง** | คำสั่งที่คัดลอกไปวางแล้วใช้ได้จริง |
-| 4 | รัน test ยังไง | 1 คำสั่ง |
-| 5 | เอกสารและคนที่ต้องถาม อยู่ที่ไหน | ลิงก์ไป `docs/README.md` |
+README เรียงตามที่คนใหม่ต้องใช้ · 9 หัวข้อมีเสมอ อีก 6 หัวข้อมีเมื่อโปรเจกต์มีของนั้น · ตารางเต็ม (ตอบอะไร · ยาวแค่ไหน · ยาวเกินย้ายไปไหน · แหล่ง) → [`references/readme-skeleton.md`](references/readme-skeleton.md)
 
-แม่แบบ README (Node · Flutter / Android) → `assets/starter-files.md` · แอปที่ไม่มี DB หรือ Docker ก็ต้องบอกของบนเครื่องให้ครบ
+| มีเสมอ | มีเมื่อโปรเจกต์มีของนั้น |
+|---|---|
+| ชื่อ + ทำอะไรให้ใคร · บรรทัดสถานะ (สถานะ · เจ้าของ · ลิงก์ `docs/README.md`) · ต้องมีบนเครื่อง (รุ่น + ไฟล์ที่ปักรุ่น) · เริ่มใช้งาน · คำสั่งที่ใช้บ่อย (test 1 คำสั่ง) · โครงโปรเจกต์ · ติดปัญหา · ติดต่อ · สัญญาอนุญาต (ท้ายสุด) | ภาพหน้าจอ · ตั้งค่า (ตารางตัวแปร · ไม่มีเขียน "ไม่มีค่าตั้งภายนอก") · สถาปัตยกรรมย่อ · build และไฟล์ที่ได้ · deploy · ร่วมพัฒนา |
+
+- **README มีแค่สิ่งที่คนใหม่ใช้ใน 30 นาทีแรก** — ยาวเกินย้ายไป `ARCHITECTURE.md` · `CONTRIBUTING.md` · `docs/runbook-deploy.md` แล้วลิงก์กลับ (ตาราง "แยกไปไฟล์อื่น" และแม่แบบ `ARCHITECTURE.md` ในไฟล์เดียวกัน)
+- **คำสั่ง ไฟล์ปักรุ่น ค่าตั้ง และหัวข้อเพิ่มของแต่ละภาษา** (Node · .NET · Python · Java · Go · Flutter · Rust · Laravel) → [`references/readme-by-stack.md`](references/readme-by-stack.md)
+- แม่แบบที่คัดลอกไปใช้ (Node · Flutter / Android) → `assets/starter-files.md` · แอปที่ไม่มี DB หรือ Docker ก็ต้องบอกของบนเครื่องให้ครบ
 
 > **ทุกคำสั่งต้องเคยรันจริงบนเครื่องเปล่า** เพราะ README ส่วนใหญ่ผิดตรงที่คนเขียน
 > มีของครบอยู่แล้วบนเครื่องตัวเอง จึงไม่เห็นว่ามีขั้นตอนที่หายไป
@@ -81,7 +81,7 @@ skill อื่นที่เขียน `tests/` หรือ `test/` ให�
 
 ## 3 · CHANGELOG
 
-รูปแบบ Keep a Changelog · หัวข้อ เพิ่ม · แก้ · เปลี่ยนที่ทำให้ของเดิมพัง · มี `[ยังไม่ปล่อย]` รอไว้เสมอ — ตัวอย่างเต็ม [`references/changelog-examples.md`](references/changelog-examples.md)
+รูปแบบ Keep a Changelog 1.1.0 · หัวข้อในแต่ละรุ่นเรียงแบบนี้ ตัดหัวข้อที่ไม่มีของ: **เปลี่ยนที่ทำให้ของเดิมพัง** (ของเราเพิ่ม อยู่บนสุดเสมอ) · เพิ่ม · เปลี่ยน · จะเลิกใช้ · เอาออก · แก้ · ความปลอดภัย · มี `[ยังไม่ปล่อย]` รอไว้บนสุดเสมอ · รุ่นใหม่อยู่บน วันที่แบบ `YYYY-MM-DD` — ตัวอย่างเต็ม [`references/changelog-examples.md`](references/changelog-examples.md)
 
 **ต้องมี CHANGELOG ไหม**
 
@@ -123,7 +123,7 @@ skill อื่นที่เขียน `tests/` หรือ `test/` ให�
 
 ติ๊ก `[x]` เฉพาะข้อที่**รันหรือเปิดดูแล้วในรอบนี้** ข้อที่ยังไม่ได้สร้างหรือยังไม่ได้รัน ให้ใส่ `[ ]` พร้อมบอกว่าค้างอะไร ส่วนข้อที่ไม่เกี่ยวกับโปรเจกต์นี้ ให้ใส่ `N/A — <เหตุผล>`
 
-- [ ] `README.md` ตอบครบ 5 คำถาม และคำสั่งเคยรันจริงบนเครื่องเปล่า
+- [ ] `README.md` มีครบ 9 หัวข้อที่มีเสมอ (ข้อ 2) และคำสั่งเคยรันจริงบนเครื่องเปล่า
 - [ ] รากตรงผังใน `project-doc-set` ข้อ 1 (repo ชื่อโปรเจกต์ตัวเล็กคั่น `-` · ecosystem ใช้ `ecosystem/`) และไม่มีไฟล์ชั่วคราวหรือ `.docx` ที่ราก
 - [ ] `.env.example` มีค่าครบทุกตัวพร้อมคอมเมนต์ ถ้าโปรเจกต์ไม่อ่าน environment variable เลย (เช่นแอปมือถือออฟไลน์) ก็ไม่ต้องสร้าง แต่ให้เขียนใน README ว่า "ไม่มีค่าตั้งภายนอก"
 - [ ] `.editorconfig` · `.gitattributes` · ตัวจัดรูปแบบ · linter ตั้งแล้ว และ CI ตรวจ
