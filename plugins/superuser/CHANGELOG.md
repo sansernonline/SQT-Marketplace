@@ -1,5 +1,9 @@
 # Changelog — superuser
 
+## 3.22.1 — 2026-11-07
+
+- ตรวจ plugin หัวข้อ 8 (ประหยัด token): `session-lessons-to-skills` และ `adversarial-review-panel` จำกัดผลที่รีวิวเวอร์ส่งกลับไม่เกิน 40 บรรทัดต่อคน · `commit-log` ดู `git diff --stat` ก่อนแล้วค่อยเปิด diff รายไฟล์ · `deep-research` ค้นงานเก่าด้วย `grep -l` ต่อด้วย `head` · `polished-document-style` ตัด anti-pattern 2 ข้อที่ซ้ำกับกฎข้างบน
+
 ## 3.22.0 — 2026-11-07
 
 - `polished-document-style`: หัวข้อใหม่ "0 · หาแบบที่มีอยู่ก่อน" ใช้มาตรฐานเอกสารของลูกค้าหรือองค์กรก่อน หัวเอกสารและธีมของ skill เป็นค่าสำรอง
