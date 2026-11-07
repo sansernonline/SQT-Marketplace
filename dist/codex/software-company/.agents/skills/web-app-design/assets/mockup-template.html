@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="appstrack.css">
+<link rel="stylesheet" href="theme.css"> <!-- ค่าของงานนี้ จาก assets/theme-template.css -->
 <style>
   /* เฉพาะของหน้านี้ — ห้ามเขียนค่าสีดิบ ใช้ var(--token) เท่านั้น */
   .two-col { display: grid; grid-template-columns: 1fr 320px; gap: 12px; align-items: start; }
@@ -16,7 +17,7 @@
 </head>
 
 <!--
-  Mockup เว็บแอปสไตล์ Apps Track — คัดลอกไฟล์นี้ + appstrack.css ไปไว้คู่กัน
+  Mockup เว็บแอป — คัดลอกไฟล์นี้ + appstrack.css + theme.css ไปไว้คู่กัน (ไม่มี theme.css = หน้าตาค่าสำรอง)
   สลับธีม/สลับ sidebar ได้จากปุ่มบน topbar (มีเฉพาะใน mockup)
     body[data-theme] = ocean(ว่าง) | emerald | sunset | plum | graphite
     body[data-side]  = ว่าง(สว่าง) | dark

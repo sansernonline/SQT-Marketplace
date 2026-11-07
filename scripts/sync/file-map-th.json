@@ -262,7 +262,13 @@
     "evals/narration-th-trigger-negative/case.yaml": "เคส eval: อัดเสียงบรรยายเองแล้ว ขอตัดช่วงเงียบและปรับความดัง เป็นของ video-editing · ต้องไม่เปิด narration-th",
     "evals/moving-house-trigger/case.yaml": "เคส eval: จะย้ายจากคอนโดเช่าไปบ้านที่ซื้อใหม่ต่างจังหวัด ถามว่าต้องทำอะไรบ้าง ไม่เอ่ยชื่อ skill ต้องทำให้ moving-house ถูกเปิด",
     "evals/moving-house-trigger-negative/case.yaml": "เคส eval: บิลค่าไฟบ้านเดิมขึ้นผิดปกติ ไม่ได้ย้ายบ้าน ต้องไม่เปิด moving-house",
-    "evals/moving-house-behaviour/case.yaml": "เคส eval: ย้ายวันที่ 15 พ.ย. ต้องตอบวันสุดท้ายย้ายทะเบียนบ้านเป็นวันที่จริง ใช้กฎคืนเงินประกัน 7 วันของ สคบ. และไม่เก็บเลขบัตรหรือเลขบัญชีเต็ม"
+    "evals/moving-house-behaviour/case.yaml": "เคส eval: ย้ายวันที่ 15 พ.ย. ต้องตอบวันสุดท้ายย้ายทะเบียนบ้านเป็นวันที่จริง ใช้กฎคืนเงินประกัน 7 วันของ สคบ. และไม่เก็บเลขบัตรหรือเลขบัญชีเต็ม",
+    "evals/web-app-design-behaviour/case.yaml": "เคสวัดว่า web-app-design ค้นต้นแบบและเขียน theme.css ของงาน ไม่ใช้หน้าตาค่าสำรอง",
+    "evals/mobile-app-design-behaviour/case.yaml": "เคสวัดว่า mobile-app-design ค้นต้นแบบและเขียน theme.css ของงาน ไม่ใช้หน้าตาค่าสำรอง",
+    "evals/project-bootstrap-readme-behaviour/case.yaml": "เคสวัดว่า README มาจากการอ่านโปรเจกต์และเอกสารทางการ เลือกหัวข้อตามประเภทงาน",
+    "evals/project-bootstrap-readme-behaviour/resources/tidy-notes/deno.json": "repo ทดสอบของ eval project-bootstrap: คำสั่งจริงของ CLI ภาษา Deno",
+    "evals/project-bootstrap-readme-behaviour/resources/tidy-notes/src/main.ts": "repo ทดสอบของ eval project-bootstrap: CLI จัดชื่อไฟล์โน้ต พร้อมตัวเลือก --dir --dry-run",
+    "evals/project-bootstrap-readme-behaviour/resources/tidy-notes/src/main_test.ts": "repo ทดสอบของ eval project-bootstrap: ไฟล์ test ตัวอย่าง"
   },
   "superuser_files": {
     "references/code-extensions.md": "ส่วนที่ใช้เฉพาะงานโค้ดของ skill กลางใน plugin superuser",

@@ -1,7 +1,8 @@
 /* ------------------------------------------------------------------
-   ค่าสีใน :root เป็นชุดตัวอย่างที่ประกอบครบแล้ว — ไม่ใช่ค่ามาตรฐาน
-   เลือกสีจากเนื้องานก่อน แล้วแก้เฉพาะค่าสีหลักใน :root
-   โครงสร้าง คลาส ขนาด ระยะ และมุม คัดลอกไปใช้ได้ตามเดิม
+   ไฟล์นี้ = คลาสคอมโพเนนต์ + ค่าสำรอง (หน้าตา Apps Track)
+   ค่าใน :root ทุกตัว (สี ฟอนต์ ขนาดตัวอักษร มุม เงา ความกว้างเลย์เอาต์)
+   ให้ทับด้วย theme.css ของงานนั้น ซึ่งได้จากการค้นต้นแบบ (SKILL.md ข้อ 2)
+   ใช้ค่าในไฟล์นี้ตรง ๆ เฉพาะเมื่อค้นไม่ได้ หรือผู้ใช้สั่งให้ใช้ของเดิม
    ------------------------------------------------------------------ */
 /* =========================================================================
    appstrack.css — ระบบดีไซน์เว็บแอปสไตล์ Apps Track
@@ -104,6 +105,13 @@
 
   /* ---- ฟอนต์ ----------------------------------------------------------
      Inter ไม่มีอักษรไทย ต้องมี Noto Sans Thai ต่อท้ายเสมอ                */
+  /* ---- ขนาดตัวอักษร 5 ขั้น · ทับใน theme.css ได้ ------------------- */
+  --fs-xs: 11px;
+  --fs-sm: 12px;
+  --fs-base: 13px;
+  --fs-md: 15px;
+  --fs-xl: 22px;
+
   --font: 'Inter', 'Noto Sans Thai', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: ui-monospace, 'SFMono-Regular', 'JetBrains Mono', 'Cascadia Mono',
                Menlo, Consolas, monospace;
@@ -143,7 +151,7 @@ body {
   background: var(--bg);
   color: var(--text-body);
   font-family: var(--font);
-  font-size: 13px;
+  font-size: var(--fs-base);
   line-height: 1.6;
   letter-spacing: .1px;
   -webkit-font-smoothing: antialiased;
@@ -152,15 +160,15 @@ body {
 }
 
 h1, h2, h3, h4 { margin: 0; color: var(--text); font-weight: 500; }
-h1 { font-size: 22px; }
-h2 { font-size: 15px; }
-h3 { font-size: 13px; }
+h1 { font-size: var(--fs-xl); }
+h2 { font-size: var(--fs-md); }
+h3 { font-size: var(--fs-base); }
 
 a { color: var(--brand); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-small, .muted { color: var(--text-muted); font-size: 11px; }
-.faint { color: var(--text-faint); font-size: 11px; }
+small, .muted { color: var(--text-muted); font-size: var(--fs-xs); }
+.faint { color: var(--text-faint); font-size: var(--fs-xs); }
 .num { font-variant-numeric: tabular-nums; }
 
 :focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 4px; }
@@ -180,7 +188,7 @@ small, .muted { color: var(--text-muted); font-size: 11px; }
 .app-sidebar .brand {
   display: flex; align-items: center; gap: 9px;
   padding: 4px 8px 14px; color: var(--sidebar-text);
-  font-size: 15px; font-weight: 600;
+  font-size: var(--fs-md); font-weight: 600;
 }
 .app-sidebar .brand .mark {
   width: 26px; height: 26px; border-radius: 8px;
@@ -188,13 +196,13 @@ small, .muted { color: var(--text-muted); font-size: 11px; }
 }
 .app-sidebar .group {
   padding: 14px 10px 5px;
-  font-size: 11px; letter-spacing: .5px; text-transform: uppercase;
+  font-size: var(--fs-xs); letter-spacing: .5px; text-transform: uppercase;
   color: var(--sidebar-text-faint);
 }
 .nav-link {
   display: flex; align-items: center; gap: 9px;
   padding: 7px 10px; border-radius: var(--radius-sm);
-  color: var(--sidebar-text-muted); font-size: 13px; cursor: pointer;
+  color: var(--sidebar-text-muted); font-size: var(--fs-base); cursor: pointer;
   text-decoration: none;
 }
 .nav-link:hover { background: var(--sidebar-hover-bg); color: var(--sidebar-text); text-decoration: none; }
@@ -234,7 +242,7 @@ body.nav-open .nav-scrim { display: block; }
 .app-main > .inner { max-width: var(--content-max); margin: 0 auto; }
 
 .page-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
-.page-head .sub { color: var(--text-muted); font-size: 12px; margin-top: 2px; }
+.page-head .sub { color: var(--text-muted); font-size: var(--fs-sm); margin-top: 2px; }
 
 /* =========================== card =========================== */
 
@@ -254,19 +262,19 @@ body.nav-open .nav-scrim { display: block; }
 
 .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
 .stat { padding: 14px 16px; }
-.stat .label { color: var(--text-muted); font-size: 11px; }
+.stat .label { color: var(--text-muted); font-size: var(--fs-xs); }
 .stat .value {
-  font-size: 22px; font-weight: 600; color: var(--text);
+  font-size: var(--fs-xl); font-weight: 600; color: var(--text);
   letter-spacing: -.4px; font-variant-numeric: tabular-nums; margin-top: 2px;
 }
-.stat .foot { color: var(--text-faint); font-size: 11px; margin-top: 2px; }
+.stat .foot { color: var(--text-faint); font-size: var(--fs-xs); margin-top: 2px; }
 
 /* =========================== pill (สถานะ) =========================== */
 
 .pill {
   display: inline-flex; align-items: center; gap: 5px;
   padding: 2px 9px; border-radius: var(--radius-pill);
-  font-size: 11px; line-height: 1.7; white-space: nowrap;
+  font-size: var(--fs-xs); line-height: 1.7; white-space: nowrap;
   border: 1px solid transparent;
 }
 .pill svg { width: 11px; height: 11px; }
@@ -285,7 +293,7 @@ body.nav-open .nav-scrim { display: block; }
   padding: 6.5px 14px; border-radius: var(--radius-sm);
   border: 1px solid var(--line-strong);
   background: var(--surface); color: var(--text-body);
-  font: inherit; font-size: 12px; cursor: pointer; white-space: nowrap;
+  font: inherit; font-size: var(--fs-sm); cursor: pointer; white-space: nowrap;
   transition: background .15s, border-color .15s, box-shadow .15s, opacity .15s;
 }
 .btn:hover:not(:disabled) { background: var(--btn-hover-bg); border-color: var(--btn-hover-line); }
@@ -300,17 +308,17 @@ body.nav-open .nav-scrim { display: block; }
 .btn-ghost:hover:not(:disabled) { background: var(--btn-ghost-hover-bg); border-color: transparent; }
 .btn-danger { color: var(--btn-danger-fg); border-color: var(--btn-danger-line); background: var(--btn-danger-bg); }
 .btn-danger:hover:not(:disabled) { background: var(--btn-danger-hover-bg); border-color: var(--btn-danger-hover-line); }
-.btn-sm { padding: 4px 10px; font-size: 11px; }
+.btn-sm { padding: 4px 10px; font-size: var(--fs-xs); }
 
 /* =========================== field =========================== */
 
 .field { display: block; margin-bottom: 12px; }
-.field > label { display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+.field > label { display: block; font-size: var(--fs-xs); color: var(--text-muted); margin-bottom: 4px; }
 .input, .select, .textarea {
   width: 100%; padding: 7px 11px;
   border: 1px solid var(--line-strong); border-radius: var(--radius-sm);
   background: var(--surface); color: var(--text-body);
-  font: inherit; font-size: 13px;
+  font: inherit; font-size: var(--fs-base);
   transition: border-color .15s, box-shadow .15s;
 }
 .input:focus, .select:focus, .textarea:focus {
@@ -322,7 +330,7 @@ body.nav-open .nav-scrim { display: block; }
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235f6673' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px;
 }
-.err { color: var(--danger); font-size: 11px; margin-top: 4px; }
+.err { color: var(--danger); font-size: var(--fs-xs); margin-top: 4px; }
 
 /* =========================== table =========================== */
 
@@ -331,7 +339,7 @@ body.nav-open .nav-scrim { display: block; }
 /* min-width จำเป็น — ถ้าไม่ใส่ ตารางจะหดจนทุกเซลล์ตัดคำเป็นเสาแทนที่จะเลื่อนแนวนอน */
 .tb { width: 100%; min-width: var(--table-min); border-collapse: collapse; }
 .tb th {
-  text-align: left; font-weight: 500; font-size: 11px;
+  text-align: left; font-weight: 500; font-size: var(--fs-xs);
   color: var(--text-muted); text-transform: uppercase; letter-spacing: .4px;
   padding: 8px 14px; border-bottom: 1px solid var(--line); white-space: nowrap;
 }
@@ -346,7 +354,7 @@ body.nav-open .nav-scrim { display: block; }
 .chip {
   padding: 3.5px 11px; border-radius: var(--radius-pill);
   border: 1px solid var(--line-strong); background: var(--surface);
-  color: var(--text-muted); font-size: 11px; cursor: pointer;
+  color: var(--text-muted); font-size: var(--fs-xs); cursor: pointer;
   font-family: inherit; transition: all .15s;
 }
 .chip:hover { background: var(--chip-hover-bg); }
@@ -355,7 +363,7 @@ body.nav-open .nav-scrim { display: block; }
 .tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--line); }
 .tab {
   padding: 8px 14px; border: none; background: none; color: var(--text-muted);
-  font: inherit; font-size: 13px; cursor: pointer;
+  font: inherit; font-size: var(--fs-base); cursor: pointer;
   border-bottom: 2px solid transparent; margin-bottom: -1px;
 }
 .tab:hover { color: var(--text); }
@@ -370,9 +378,9 @@ body.nav-open .nav-scrim { display: block; }
   width: 24px; height: 24px; border-radius: 50%;
   background: var(--brand-50); color: var(--brand);
   display: inline-flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 500; flex: none; text-transform: uppercase;
+  font-size: var(--fs-xs); font-weight: 500; flex: none; text-transform: uppercase;
 }
-.ava-lg { width: 34px; height: 34px; font-size: 12px; }
+.ava-lg { width: 34px; height: 34px; font-size: var(--fs-sm); }
 
 /* =========================== markdown ที่เรนเดอร์แล้ว =========================== */
 
@@ -384,7 +392,7 @@ body.nav-open .nav-scrim { display: block; }
 .md-html ul, .md-html ol { margin: 0 0 10px; padding-left: 22px; }
 .md-html li { margin-bottom: 3px; }
 .md-html code {
-  font-family: var(--font-mono); font-size: 12px;
+  font-family: var(--font-mono); font-size: var(--fs-sm);
   background: var(--surface-raised); border: 1px solid var(--line);
   border-radius: 4px; padding: 1px 5px;
 }
@@ -409,7 +417,7 @@ body.nav-open .nav-scrim { display: block; }
   min-width: 250px; max-width: 380px; padding: 10px 14px;
   border-radius: var(--radius-sm); background: var(--surface);
   border: 1px solid var(--line-strong); box-shadow: var(--shadow-lg);
-  font-size: 12px; animation: rise .2s ease;
+  font-size: var(--fs-sm); animation: rise .2s ease;
 }
 .toast.ok  { border-left: 3px solid var(--c-teal); }
 .toast.err { border-left: 3px solid var(--c-red); }
@@ -441,7 +449,7 @@ body.nav-open .nav-scrim { display: block; }
 .mt-16 { margin-top: 16px; } .mt-24 { margin-top: 24px; }
 .mb-8 { margin-bottom: 8px; } .mb-12 { margin-bottom: 12px; } .mb-16 { margin-bottom: 16px; }
 .gap-12 { gap: 12px; } .gap-16 { gap: 16px; }
-.empty { padding: 40px 16px; text-align: center; color: var(--text-muted); font-size: 12px; }
+.empty { padding: 40px 16px; text-align: center; color: var(--text-muted); font-size: var(--fs-sm); }
 /* โหลดเนื้อหา (การ์ด ตาราง รายการ) ใช้โครงร่างเทาในรูปทรงของจริง — ui-craft ข้อ 6
    .spinner ใช้เฉพาะรอสั้น ๆ ในปุ่มหรือข้างข้อความ ไม่วางกลางจอ */
 .skeleton {

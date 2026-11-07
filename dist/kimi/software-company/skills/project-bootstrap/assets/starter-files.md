@@ -2,7 +2,7 @@
 
 ## README.md
 
-โครง 15 หัวข้อตาม `references/readme-skeleton.md` · ตัวอย่างนี้เป็น Node + PostgreSQL · หัวข้อที่โปรเจกต์ไม่มีของ ตัดทิ้ง · ภาษาอื่นเปลี่ยนคำสั่งตาม `references/readme-by-stack.md`
+ตัวอย่างค่าสำรองตาม `references/readme-skeleton.md` (หัวข้อจริงมาจากผลสำรวจใน `SKILL.md` ข้อ 2) · ตัวอย่างนี้เป็น Node + PostgreSQL · หัวข้อที่โปรเจกต์ไม่มีของ ตัดทิ้ง · ภาษาอื่นเปลี่ยนคำสั่งตาม `references/readme-by-stack.md`
 
 ```markdown
 # <ชื่อโปรเจกต์>

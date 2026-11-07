@@ -1,5 +1,12 @@
 # Changelog — software-company
 
+## 2.45.0 — 2026-11-07
+
+- `web-app-design` · `mobile-app-design`: หน้าตาของงานมาจากการค้น ไม่ยึดแม่แบบ · `appstrack.css` และ `speakgo.css` เหลือบทบาทคลาสคอมโพเนนต์ + ค่าสำรองเมื่อค้นไม่ได้ · ค่าของงาน (สี ฟอนต์ ขนาดตัวอักษร มุม เงา ความกว้างเลย์เอาต์) อยู่ใน `theme.css` ที่มีที่มาทุกบรรทัด แม่แบบ `assets/theme-template.css` · ตาราง "ค่าไหนตายตัว ค่าไหนมาจากการค้น" · โครงหน้าและรูปแบบนำทางเลือกจากต้นแบบ · ไม่ใช้ `#2A78D6` เป็นสีเริ่มเมื่อไม่มีแบรนด์อีกต่อไป (เหลือเป็นค่าสำรองติด `(รอยืนยัน)`)
+- `web-app-design`: ขนาดตัวอักษร 5 ขั้นเป็น token `--fs-xs` … `--fs-xl` ใน `appstrack.css` ทับใน `theme.css` ได้
+- `project-bootstrap`: README เป็น 3 ชั้น — โครงกว้าง (คำถามที่ README ต้องตอบ) · สำรวจก่อนเขียน (อ่านไฟล์ในโปรเจกต์ · เอกสารทางการของ stack · README ของโปรเจกต์ดังประเภทเดียวกัน จดลง `_to_delete/readme-survey.md`) · เลือกหัวข้อและคำสั่งจากผลสำรวจ · ตาราง 15 หัวข้อและตาราง 8 ภาษาเหลือบทบาทค่าสำรอง
+- eval ใหม่ 3 เคส (ยังไม่ได้รันจริง): `web-app-design-behaviour` · `mobile-app-design-behaviour` (ค้นต้นแบบ · มี `theme.css` · ไม่ส่งหน้าตาค่าสำรอง) · `project-bootstrap-readme-behaviour` (CLI ภาษา Deno ที่ไม่อยู่ในตารางสำรอง · อ่าน `deno.json` · ไม่มีคำสั่ง npm · หัวข้อเข้ากับ CLI)
+
 ## 2.44.0 — 2026-11-07
 
 - เอาคำสั่งที่เป็นแค่ทางลัดไปหา skill ตัวเดียวออก 5 ตัว เรียก skill ตรงแทน เช่น `/software-company:bug-report-template` · ขั้นตอนและ `argument-hint` ของคำสั่งเดิมย้ายไปหัวข้อ "เรียกเป็นคำสั่ง" ท้าย SKILL.md ของ skill ปลายทาง: `bug-report` → `bug-report-template` · `code-review` → `code-review-checklist` · `seo-audit` → `seo-audit-checklist` · `test-design` → `test-case-template` · `legacy-onboard` → `legacy-spec-recovery`
