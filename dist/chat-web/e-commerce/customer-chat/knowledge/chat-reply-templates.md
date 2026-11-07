@@ -6,6 +6,14 @@ Use when a Thai online seller answers buyer chat (price, stock, size, late parce
 
 Response time and chat rate count toward shop ratings on the big platforms, and a fast, polite answer is half of every sale. Templates make the answer fast; filling them with the order's real facts makes it right.
 
+## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+
+ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+
+- **ที่ดู:** น้ำเสียงของร้าน: แชตที่ร้านตอบลูกค้าจริง 10–20 ข้อความล่าสุด (ผู้ใช้วางมาหรือมีไฟล์) · คำลงท้ายที่ใช้ (ค่ะ · ครับ · คะ · จ้า) · การเรียกลูกค้า · อีโมจิ · นโยบายคืนของและเวลาส่งของร้าน
+- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
+- **ยังต้องมีทุกแบบ:** แม่แบบ T1–T5 เป็นโครงของเนื้อหา คำและน้ำเสียงใช้ของร้าน · ไม่มีตัวอย่างแชต ถามผู้ใช้ข้อเดียวว่าร้านพูดแบบไหน แล้วทำต่อ
+
 ## Workflow
 
 1. **Read the order first** — order number, items, paid or not, ship date, tracking status, chat history

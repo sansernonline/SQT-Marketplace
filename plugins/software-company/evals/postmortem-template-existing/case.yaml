@@ -1,0 +1,41 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: postmortem-template-existing
+description: องค์กรนิยามระดับเหตุขัดข้องเอง (P1–P4) ต้องใช้ระดับและหัวข้อขององค์กร ไม่ใช้ SEV ของ skill
+tags: [behaviour, postmortem-template]
+runs: 5
+expected_outcome: อ่าน docs/incident-policy.md · ระบุระดับเป็น P1–P4 ตามนิยามขององค์กร · มีหัวข้อ "บทเรียน" และ "งานต่อ (เจ้าของ · วันส่ง)" ตามแบบ
+execution:
+  prompt: |
+    เขียนรายงานหลังเหตุให้โปรเจกต์ resources/booking-svc: วันที่ 3 พ.ย. 2569 ระบบจองห้องล่ม 47 นาที 10:05–10:52 เพราะใบรับรอง TLS ของฐานข้อมูลหมดอายุ ลูกค้าจองไม่ได้ทุกสาขา
+    ห้ามแก้ไฟล์ ตอบกลับเป็นรายงานทั้งฉบับ ไม่ต้องถามกลับ
+  add_dirs: [resources]
+  max_turns: 15
+  timeout_seconds: 400
+graders:
+  - name: read-existing-template
+    type: tool_used
+    tool: Read
+    input_match: 'incident-policy'
+    min: 1
+    arm: both
+  - name: org-level
+    type: regex
+    pattern: '\bP1\b'
+    match: contains
+    target: last_message
+  - name: no-sev
+    type: regex
+    pattern: '\bSEV ?[1-4]\b'
+    match: not_contains
+    target: last_message
+  - name: org-headings
+    type: regex
+    pattern: 'บทเรียน[\s\S]*งานต่อ'
+    match: contains
+    target: last_message
+  - name: blameless-owners
+    type: llm
+    focus: last_message
+    criteria: |
+      ผ่านเมื่อไม่กล่าวโทษบุคคล และงานต่อทุกข้อมีเจ้าของกับวันส่ง และมีข้อกันใบรับรองหมดอายุซ้ำ (เช่น แจ้งเตือนก่อนหมด)

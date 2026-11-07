@@ -31,6 +31,14 @@ Test cases go in the `qa/` folder at the project root, never inside `docs/`. Use
 - Columns `test_result` (what actually happened) and `evidence` (GIF link) follow `result`, added empty if the table lacks them. After a run, `--results qa/evidence/<run-id>/results.csv` fills all three — see `test-evidence`. A workbook the user made themselves → `test-evidence/scripts/record_results.py`.
 - Check: open it in Excel; the Overview totals must equal the source row count.
 
+## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+
+ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+
+- **ที่ดู:** แบบ test case ของลูกค้าหรือทีม QA: ไฟล์ Excel/CSV ใน `docs/` หรือ `ref/` · เครื่องมือที่ใช้อยู่ (TestRail · Zephyr · Xray · Azure Test Plans) และฟิลด์บังคับของมัน · test case ชุดก่อนของโปรเจกต์ → ดูคอลัมน์ ระบบรหัส และระดับความสำคัญ
+- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
+- **ยังต้องมีทุกแบบ:** รหัสต้องต่อจากชุดเดิม · ผลที่คาดหวังต้องมาจากข้อกำหนดเหมือนเดิม
+
 ## Test Case ID Convention
 
 ```
@@ -657,6 +665,14 @@ One file per bug in `qa/bugs/BUG-<NNNN>-<slug>.md` at the project root. Attach s
 | รายงานบั๊กกองอยู่หลายเรื่อง ต้องคัด ทำซ้ำ และจัดกลุ่มก่อน | `bug-inbox-triage` แล้วใช้ skill นี้เขียนทีละใบ |
 | เขียนกรณีทดสอบล่วงหน้าจากข้อกำหนด (ยังไม่มีบั๊ก) | `test-case-template` |
 | ระบบจริงล่มหรือกระทบผู้ใช้จำนวนมาก | `incident-runbook-template` ระหว่างเหตุ · `postmortem-template` หลังเหตุ |
+
+## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+
+ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+
+- **ที่ดู:** แบบฟอร์มของระบบติดตามงานที่โปรเจกต์ใช้: `.github/ISSUE_TEMPLATE/*.yml` หรือ `*.md` · ฟิลด์บังคับของ Jira / Azure Boards / GitLab ที่ผู้ใช้แจ้ง · รายงานบั๊กเก่า 2–3 ใบใน `docs/` หรือ tracker
+- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
+- **ยังต้องมีทุกแบบ:** ระดับความรุนแรงใช้ชื่อและเกณฑ์ของทีมถ้ามี · ขั้นทำซ้ำ ผลจริง ผลที่คาดหวัง ยังต้องครบไม่ว่าใช้แบบไหน
 
 ## Severity vs Priority
 

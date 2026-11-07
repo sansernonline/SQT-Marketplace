@@ -8,6 +8,14 @@ argument-hint: <customer> <items and prices> [terms]
 
 The right documents at the right time prevent arguments about payment. This is general information, not tax advice. The company's accountant (นักบัญชี) has the final word on tax documents.
 
+## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+
+ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+
+- **ที่ดู:** ใบเสนอราคา ใบแจ้งหนี้ หรือใบเสร็จฉบับก่อนของบริษัท (ไฟล์ที่ผู้ใช้ให้ หรือใน `docs/` · `ref/`) → ดูหัวกระดาษ เลขรัน เงื่อนไขชำระเงิน และหมายเหตุท้ายเอกสาร
+- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
+- **ยังต้องมีทุกแบบ:** เลขรันต่อจากฉบับล่าสุด · ช่องที่กฎหมายบังคับในข้อ 2 ต้องครบไม่ว่าใช้แบบไหน
+
 ## 1. Which document, when
 
 | Document | Purpose | When issued | Legal weight |

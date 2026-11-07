@@ -6,6 +6,14 @@ Use when preparing a live selling session on TikTok Shop, Shopee, Lazada or Face
 
 Viewers arrive and leave every few seconds. A live that works repeats a short loop — hook, show, prove, price, call to action — so a viewer who joins at minute 23 can still buy within a minute. Unscripted lives drift into greetings and dead air.
 
+## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+
+ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+
+- **ที่ดู:** ไลฟ์ครั้งก่อนของร้าน: ยอดขายต่อช่วง จำนวนคนดูสูงสุดช่วงไหน สินค้าที่ขายดี (จากหน้าสถิติไลฟ์ของแพลตฟอร์ม) · ความยาวไลฟ์ที่ร้านทำได้จริง · ค้นไลฟ์ร้านในหมวดเดียวกัน 2–3 ร้านว่าเปิดและปิดดีลแบบไหน
+- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
+- **ยังต้องมีทุกแบบ:** run sheet 60 นาทีด้านล่างเป็นค่าสำรอง · ปรับความยาวรอบและจังหวะดีลตามตัวเลขของร้าน · ข้อกฎหมายใน Compliance ใช้ทุกแบบ
+
 ## Workflow
 
 1. **Collect**: platform, length, host, backstage person, product list (normal price, live price, stock allocated to the live), shipping offer, vouchers already set

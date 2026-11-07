@@ -1,0 +1,41 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: test-case-template-existing
+description: ลูกค้ามีแบบ test case เป็น CSV ของตัวเอง ต้องใช้คอลัมน์และระบบรหัสของลูกค้า
+tags: [behaviour, test-case-template]
+runs: 5
+expected_outcome: อ่าน ref/client-testcase.csv · ใช้คอลัมน์ รหัส,เมนู,ขั้นตอน,ผลที่ต้องได้,ผู้ทดสอบ,ผล · รหัสต่อจาก UAT-LOGIN-003 เป็น UAT-LOGIN-004 ขึ้นไป
+execution:
+  prompt: |
+    เขียน test case ให้ฟีเจอร์ "ลืมรหัสผ่าน" ของโปรเจกต์ใน resources/hr-portal สำหรับรอบ UAT ของลูกค้า 4–6 ข้อ
+    ห้ามแก้ไฟล์ ตอบกลับเป็นแถวที่พร้อมวางต่อในไฟล์ของลูกค้า ไม่ต้องถามกลับ
+  add_dirs: [resources]
+  max_turns: 15
+  timeout_seconds: 400
+graders:
+  - name: read-existing-template
+    type: tool_used
+    tool: Read
+    input_match: 'client-testcase\.csv'
+    min: 1
+    arm: both
+  - name: client-columns
+    type: regex
+    pattern: 'รหัส,เมนู,ขั้นตอน,ผลที่ต้องได้,ผู้ทดสอบ,ผล'
+    match: contains
+    target: last_message
+  - name: continues-ids
+    type: regex
+    pattern: 'UAT-LOGIN-00[4-9]'
+    match: contains
+    target: last_message
+  - name: no-own-ids
+    type: regex
+    pattern: '\bTC-[A-Z]+-\d'
+    match: not_contains
+    target: last_message
+  - name: expected-from-spec
+    type: llm
+    focus: last_message
+    criteria: |
+      ผ่านเมื่อทุกแถวมีผลที่ต้องได้ที่ตรวจได้ชัด (ไม่ใช่แค่ "ทำงานถูกต้อง") และมีกรณีลิงก์หมดอายุหรือใช้ซ้ำอย่างน้อย 1 แถว

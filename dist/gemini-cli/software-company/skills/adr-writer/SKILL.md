@@ -14,6 +14,14 @@ description: Use when recording an architecture decision or why a tech choice wa
 - Deprecating a technology or pattern
 - Documenting "why" for future team members
 
+## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+
+ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+
+- **ที่ดู:** ADR (Architecture Decision Record) ที่มีอยู่: `docs/adr/` · `docs/decisions/` · `doc/architecture/decisions/` · `adr/` · ไฟล์ `.adr-dir` → ดูรูปแบบ (Nygard · MADR · Y-statement) ชื่อไฟล์ และเลขล่าสุด
+- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
+- **ยังต้องมีทุกแบบ:** ต่อเลขจากไฟล์ล่าสุด · ใช้ชื่อสถานะเดิมของทีม
+
 ## ADR Numbering
 
 - Sequential: ADR-0001, ADR-0002, ...

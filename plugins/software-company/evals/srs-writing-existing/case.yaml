@@ -1,0 +1,31 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: srs-writing-existing
+description: TOR ของผู้ว่าจ้างกำหนดหัวข้อเอกสารความต้องการเอง ต้องใช้หัวข้อตาม TOR ไม่ใช้โครง ISO ของ skill
+tags: [behaviour, srs-writing]
+runs: 5
+expected_outcome: อ่าน ref/TOR.md · โครงเอกสารเรียงตามหัวข้อ 4.1–4.5 ของ TOR · ข้อกำหนดยังมีรหัสที่ทดสอบได้
+execution:
+  prompt: |
+    ร่างโครงเอกสารข้อกำหนดซอฟต์แวร์ (SRS) ให้โปรเจกต์ใน resources/clinic-queue พร้อมข้อกำหนดตัวอย่าง 3 ข้อของระบบเรียกคิว
+    ห้ามแก้ไฟล์ ตอบกลับเป็นโครงหัวข้อและข้อกำหนดตัวอย่าง ไม่ต้องถามกลับ
+  add_dirs: [resources]
+  max_turns: 15
+  timeout_seconds: 400
+graders:
+  - name: read-existing-template
+    type: tool_used
+    tool: Read
+    input_match: 'TOR'
+    min: 1
+    arm: both
+  - name: tor-order
+    type: regex
+    pattern: 'ภาพรวมระบบ[\s\S]*การทำงาน[\s\S]*ความปลอดภัย[\s\S]*ประสิทธิภาพ[\s\S]*ตรวจรับ'
+    match: contains
+    target: last_message
+  - name: testable-ids
+    type: llm
+    focus: last_message
+    criteria: |
+      ผ่านเมื่อข้อกำหนดตัวอย่างทั้ง 3 ข้อมีรหัส และวัดผลได้ (มีตัวเลขหรือเงื่อนไขที่ทดสอบได้) และความต้องการด้านการทำงานแยกตามกลุ่มผู้ใช้ตาม TOR

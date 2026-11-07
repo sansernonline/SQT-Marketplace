@@ -1,5 +1,9 @@
 # Changelog — graphic-design
 
+## 0.25.0 — 2026-11-07
+
+- `subtitles-th`: หัวข้อใหม่ "0 · หาแบบที่มีอยู่ก่อน" ใช้ฟอนต์และสีของแบรนด์หรือคลิปก่อนในช่องเดียวกันก่อน IBM Plex Sans Thai เป็นค่าสำรอง
+
 ## 0.24.0 — 2026-11-07
 
 - เอาคำสั่งที่เป็นแค่ทางลัดไปหา skill ตัวเดียวออก 6 ตัว เรียก skill ตรงแทน เช่น `/graphic-design:brand-kit` · ขั้นตอนและ `argument-hint` ของคำสั่งเดิมย้ายไปหัวข้อ "เรียกเป็นคำสั่ง" ท้าย SKILL.md ของ skill ปลายทาง: `brand-init` → `brand-kit` · `brief` → `brief-to-image` · `campaign` → `campaign-set` · `resize-all` → `social-formats` · `review-design` → `design-review` · `video` → `video-script-to-clip`

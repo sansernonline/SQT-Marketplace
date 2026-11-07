@@ -1,5 +1,10 @@
 # Changelog — software-company
 
+## 2.46.0 — 2026-11-07
+
+- หัวข้อใหม่ "0 · หาแบบที่มีอยู่ก่อน" ใน 9 skill: `pr-description-template` (`.github/pull_request_template.md`) · `bug-report-template` (`.github/ISSUE_TEMPLATE/` · ฟิลด์ของ tracker) · `adr-writer` (`docs/adr/` เดิม · ต่อเลข) · `srs-writing` · `fsd-writing` (TOR หรือแบบของผู้ว่าจ้าง) · `test-case-template` (แบบของลูกค้าหรือทีม QA) · `postmortem-template` · `incident-runbook-template` (ระดับความรุนแรงและ runbook ขององค์กร) · `retrospective` (เลือกรูปแบบตามรอบ) · เจอแล้วใช้ของเดิมและบอกที่มา ไม่เจอจึงใช้แม่แบบของ skill เป็นค่าสำรอง
+- eval ใหม่ 6 เคส `*-existing` (ยังไม่ได้รัน): วางแบบเดิมไว้ใน fixture แล้วตรวจว่าผลลัพธ์ทำตามแบบนั้น
+
 ## 2.45.0 — 2026-11-07
 
 - `web-app-design` · `mobile-app-design`: หน้าตาของงานมาจากการค้น ไม่ยึดแม่แบบ · `appstrack.css` และ `speakgo.css` เหลือบทบาทคลาสคอมโพเนนต์ + ค่าสำรองเมื่อค้นไม่ได้ · ค่าของงาน (สี ฟอนต์ ขนาดตัวอักษร มุม เงา ความกว้างเลย์เอาต์) อยู่ใน `theme.css` ที่มีที่มาทุกบรรทัด แม่แบบ `assets/theme-template.css` · ตาราง "ค่าไหนตายตัว ค่าไหนมาจากการค้น" · โครงหน้าและรูปแบบนำทางเลือกจากต้นแบบ · ไม่ใช้ `#2A78D6` เป็นสีเริ่มเมื่อไม่มีแบรนด์อีกต่อไป (เหลือเป็นค่าสำรองติด `(รอยืนยัน)`)

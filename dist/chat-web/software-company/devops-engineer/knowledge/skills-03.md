@@ -617,6 +617,14 @@ Use when writing an operational runbook, on-call guide or what-to-do-when-X-brea
 | [references/index-and-alert-links.md](references/index-and-alert-links.md) | ถ้าทีมยังไม่มีหน้ารวม runbook หรือ alert ยังไม่มีลิงก์ไปหา runbook ให้เปิดดูตัวอย่างในไฟล์นี้ |
 | [references/game-days.md](references/game-days.md) | ตอนวางแผนซ้อมรับมือเหตุขัดข้องเพื่อทดสอบว่า runbook ใช้ได้จริง |
 
+## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+
+ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+
+- **ที่ดู:** runbook ที่มีอยู่: `docs/runbooks/` · wiki ของทีม on-call · เครื่องมือแจ้งเตือนที่ใช้ (PagerDuty · Opsgenie · Grafana) และชื่อ alert จริง · ระดับความรุนแรงขององค์กร
+- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
+- **ยังต้องมีทุกแบบ:** ชื่อ alert คำสั่ง และ dashboard ใช้ของจริงจากระบบ ไม่แต่งตัวอย่าง
+
 ## What's a Runbook?
 
 A **runbook** answers: "Alert X fired. What do I do?"

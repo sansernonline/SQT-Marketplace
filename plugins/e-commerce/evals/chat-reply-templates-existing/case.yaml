@@ -1,0 +1,31 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: chat-reply-templates-existing
+description: ร้านมีตัวอย่างแชตจริงที่ใช้คำลงท้าย "นะคะ" และเรียกลูกค้า "คุณลูกค้า" ต้องตอบด้วยน้ำเสียงร้าน
+tags: [behaviour, chat-reply-templates]
+runs: 5
+expected_outcome: อ่าน chats/recent.md · ใช้คำลงท้ายและคำเรียกลูกค้าแบบร้าน · ใช้นโยบายส่งของ 2 วันทำการของร้าน ไม่แต่งเงื่อนไขใหม่
+execution:
+  prompt: |
+    ร้านในโฟลเดอร์ resources/kanom-shop ได้แชตจากลูกค้าใน Shopee: "สั่งไปตั้งแต่วันจันทร์ ทำไมยังไม่ส่งของคะ" (วันนี้วันพฤหัส สถานะยังเตรียมสินค้า)
+    ร่างคำตอบให้ร้าน ห้ามแก้ไฟล์ ไม่ต้องถามกลับ
+  add_dirs: [resources]
+  max_turns: 15
+  timeout_seconds: 400
+graders:
+  - name: read-existing-template
+    type: tool_used
+    tool: Read
+    input_match: 'recent\.md'
+    min: 1
+    arm: both
+  - name: shop-address
+    type: regex
+    pattern: 'คุณลูกค้า'
+    match: contains
+    target: last_message
+  - name: shop-voice-policy
+    type: llm
+    focus: last_message
+    criteria: |
+      ผ่านเมื่อครบทุกข้อ: 1. ใช้น้ำเสียงเดียวกับแชตตัวอย่างของร้าน (ลงท้าย ค่ะ/นะคะ เรียกคุณลูกค้า) 2. ขอโทษและบอกว่าเกินกำหนด 2 วันทำการของร้าน 3. ไม่แต่งส่วนลดหรือเงื่อนไขที่ร้านไม่มี ถ้าเสนอชดเชยใช้ของร้าน (แถมคุกกี้ 1 ซอง)

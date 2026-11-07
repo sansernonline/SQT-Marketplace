@@ -1,0 +1,37 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: pr-description-template-existing
+description: repo มีแม่แบบ PR ของทีมเอง ต้องใช้หัวข้อของทีม ไม่ใช้โครงของ skill
+tags: [behaviour, pr-description-template]
+runs: 5
+expected_outcome: อ่าน .github/pull_request_template.md · คำตอบใช้หัวข้อ "ทำอะไร" "ทดสอบยังไง" "ผลกระทบต่อลูกค้า" ของทีม · บอกว่าใช้แบบของ repo
+execution:
+  prompt: |
+    เขียนคำอธิบาย PR ให้การเปลี่ยนในโฟลเดอร์ resources/shop-web: เพิ่มปุ่ม "สั่งซ้ำ" ในหน้าประวัติคำสั่งซื้อ
+    ไฟล์ที่แก้: src/orders/History.tsx · src/orders/reorder.ts · test ใน src/orders/reorder.test.ts
+    ห้ามแก้ไฟล์ในโฟลเดอร์ ตอบกลับเป็นเนื้อ PR ทั้งหมด ไม่ต้องถามกลับ
+  add_dirs: [resources]
+  max_turns: 15
+  timeout_seconds: 400
+graders:
+  - name: read-existing-template
+    type: tool_used
+    tool: Read
+    input_match: 'pull_request_template'
+    min: 1
+    arm: both
+  - name: team-headings
+    type: regex
+    pattern: 'ทำอะไร[\s\S]*ทดสอบยังไง[\s\S]*ผลกระทบต่อลูกค้า'
+    match: contains
+    target: last_message
+  - name: no-skill-headings
+    type: regex
+    pattern: '^#+\s*(Summary|Type of Change|Merge Danger)\b'
+    match: not_contains
+    target: last_message
+  - name: says-source
+    type: llm
+    focus: last_message
+    criteria: |
+      ผ่านเมื่อคำตอบบอกว่าใช้แบบ PR ของ repo (pull_request_template.md) และมีช่อง checklist การแปลไทยอังกฤษของทีม

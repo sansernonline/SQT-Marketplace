@@ -1,0 +1,36 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: adr-writer-existing
+description: repo มี ADR แบบ MADR อยู่แล้ว 2 ฉบับ ต้องต่อเลข 0003 และใช้หัวข้อแบบ MADR ของทีม
+tags: [behaviour, adr-writer]
+runs: 5
+expected_outcome: อ่าน docs/adr · ใช้ชื่อไฟล์ 0003-*.md · หัวข้อ Context and Problem Statement / Considered Options / Decision Outcome ตามไฟล์เดิม
+execution:
+  prompt: |
+    บันทึกการตัดสินใจลงโปรเจกต์ resources/billing-api: เลือกใช้ PostgreSQL แทน MongoDB เพราะต้องทำธุรกรรมหลายตารางและรายงานบัญชี
+    ห้ามแก้ไฟล์ ตอบกลับเป็นชื่อไฟล์และเนื้อ ADR ไม่ต้องถามกลับ
+  add_dirs: [resources]
+  max_turns: 15
+  timeout_seconds: 400
+graders:
+  - name: read-existing-template
+    type: tool_used
+    tool: Read
+    input_match: 'docs/adr'
+    min: 1
+    arm: both
+  - name: next-number
+    type: regex
+    pattern: '0003-'
+    match: contains
+    target: last_message
+  - name: madr-headings
+    type: regex
+    pattern: 'Context and Problem Statement[\s\S]*Considered Options[\s\S]*Decision Outcome'
+    match: contains
+    target: last_message
+  - name: says-source
+    type: llm
+    focus: last_message
+    criteria: |
+      ผ่านเมื่อบอกว่าต่อจาก ADR เดิมในโฟลเดอร์ docs/adr และใช้รูปแบบเดียวกัน (MADR) และระบุทางเลือกอย่างน้อย 2 ทาง
