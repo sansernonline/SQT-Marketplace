@@ -1,0 +1,41 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: doc-quotation-existing
+description: บริษัทมีใบเสนอราคาฉบับก่อน ต้องใช้หัวกระดาษ เงื่อนไข และเลขรันต่อจากฉบับเดิม
+tags: [behaviour, doc-quotation]
+runs: 5
+expected_outcome: อ่าน docs/QT-2569-0041.md · เลขใหม่ QT-2569-0042 · เงื่อนไข "มัดจำ 50% ก่อนเริ่มงาน" และ "ยืนราคา 30 วัน" ตามฉบับเดิม · ภาษีมูลค่าเพิ่ม 7% และยอดเป็นตัวอักษรถูก
+execution:
+  prompt: |
+    ทำใบเสนอราคาใหม่ในโปรเจกต์ resources/sqt-docs ให้ลูกค้า บริษัท ทะเลทอง จำกัด: ออกแบบเว็บไซต์ 45,000 บาท · ดูแลรายปี 12,000 บาท (ราคายังไม่รวมภาษีมูลค่าเพิ่ม)
+    ห้ามแก้ไฟล์ ตอบกลับเป็นเนื้อใบเสนอราคา ไม่ต้องถามกลับ
+  add_dirs: [resources]
+  max_turns: 15
+  timeout_seconds: 400
+graders:
+  - name: read-existing-template
+    type: tool_used
+    tool: Read
+    input_match: 'QT-2569-0041'
+    min: 1
+    arm: both
+  - name: next-number
+    type: regex
+    pattern: 'QT-2569-0042'
+    match: contains
+    target: last_message
+  - name: same-terms
+    type: regex
+    pattern: 'มัดจำ 50%[\s\S]*ยืนราคา 30 วัน'
+    match: contains
+    target: last_message
+  - name: total
+    type: regex
+    pattern: '61,?990'
+    match: contains
+    target: last_message
+  - name: words-correct
+    type: llm
+    focus: last_message
+    criteria: |
+      ผ่านเมื่อยอดสุทธิ 61,990.00 บาท เขียนเป็นตัวอักษรว่า หกหมื่นหนึ่งพันเก้าร้อยเก้าสิบบาทถ้วน และหัวกระดาษใช้ชื่อบริษัทผู้ขายแบบเดียวกับฉบับเดิม

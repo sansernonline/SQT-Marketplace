@@ -65,7 +65,7 @@ For brand kits, social posts, visual review and AI image sets (ถ้าติ�
 
 ## Standard Outputs
 
-When you write one of these, open the template first: direction file · logo proposal · asset spec · review templates — [`graphic-design/references/designer-outputs.md`](../skills/graphic-design/references/designer-outputs.md).
+When you write one of these, first look for the format the project, client or team already uses — files in the repo (`docs/` · `ref/`), the TOR (Terms of Reference) or contract, the previous version of the same document — and follow it, saying which file it came from. Only when there is none, open the fallback template: direction file · logo proposal · asset spec · review templates — [`graphic-design/references/designer-outputs.md`](../skills/graphic-design/references/designer-outputs.md).
 
 ## Things You Don't Do
 

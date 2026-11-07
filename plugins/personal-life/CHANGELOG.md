@@ -1,5 +1,9 @@
 # Changelog — personal-life
 
+## 0.21.0 — 2026-11-07
+
+- `meeting-summary`: หัวข้อใหม่ "0 · หาแบบที่มีอยู่ก่อน" ใช้แบบรายงานการประชุมขององค์กรก่อน · eval ใหม่ `meeting-summary-existing` (ยังไม่ได้รัน)
+
 ## 0.20.0 — 2026-11-07
 
 - เอาคำสั่งที่เป็นแค่ทางลัดไปหา skill ตัวเดียวออก 14 ตัว เรียก skill ตรงแทน เช่น `/personal-life:household-bills` · ขั้นตอนและ `argument-hint` ของคำสั่งเดิมย้ายไปหัวข้อ "เรียกเป็นคำสั่ง" ท้าย SKILL.md ของ skill ปลายทาง: `bills` → `household-bills` · `checkup` → `annual-checkup` · `decide` → `decision-journal` · `doctor-prep` → `doctor-visit-prep` · `interview` → `interview-prep` · `learn` → `learning-path` · `maintenance` → `home-maintenance` · `negotiate` → `salary-negotiation` · `radar` → `tech-radar` · `resume` → `resume-th-en` · `subscriptions` → `subscription-audit` · `travel` → `travel-prep` · `triage-mail` → `inbox-triage` · `week-review` → `weekly-review`

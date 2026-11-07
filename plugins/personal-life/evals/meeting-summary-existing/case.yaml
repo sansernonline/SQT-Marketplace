@@ -1,0 +1,37 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: meeting-summary-existing
+description: องค์กรมีแบบรายงานการประชุมของตัวเอง ต้องเรียงหัวข้อตามแบบนั้น ไม่ใช้แบบบันทึกของ skill
+tags: [behaviour, meeting-summary]
+runs: 5
+expected_outcome: อ่าน แบบรายงานการประชุม.md · ใช้หัวข้อ "เรื่องแจ้งเพื่อทราบ" "เรื่องเพื่อพิจารณา" "มติที่ประชุม" ตามแบบ · งานที่ต้องทำมีเจ้าของและวันส่ง
+execution:
+  prompt: |
+    สรุปการประชุมลงแบบขององค์กรในโฟลเดอร์ resources/coop-office จากโน้ตนี้:
+    ประชุมกรรมการสหกรณ์ 5 พ.ย. 2569 · ประธานแจ้งยอดสมาชิกใหม่ 12 คน · พิจารณาซื้อเครื่องพิมพ์ใหม่ 18,000 บาท ที่ประชุมอนุมัติ ให้คุณสมศรีหาใบเสนอราคา 3 ร้านภายใน 15 พ.ย.
+    ห้ามแก้ไฟล์ ตอบกลับเป็นรายงานทั้งฉบับ ไม่ต้องถามกลับ
+  add_dirs: [resources]
+  max_turns: 15
+  timeout_seconds: 400
+graders:
+  - name: read-existing-template
+    type: tool_used
+    tool: Read
+    input_match: 'รายงานการประชุม'
+    min: 1
+    arm: both
+  - name: org-agenda
+    type: regex
+    pattern: 'เรื่องแจ้งเพื่อทราบ[\s\S]*เรื่องเพื่อพิจารณา'
+    match: contains
+    target: last_message
+  - name: resolution
+    type: regex
+    pattern: 'มติที่ประชุม'
+    match: contains
+    target: last_message
+  - name: owner-date
+    type: llm
+    focus: last_message
+    criteria: |
+      ผ่านเมื่อมีงานหาใบเสนอราคา 3 ร้าน ระบุเจ้าของคุณสมศรีและกำหนด 15 พ.ย. และไม่แต่งชื่อผู้เข้าประชุมที่โน้ตไม่ได้ให้ (เว้นช่องหรือใส่ (รอยืนยัน))

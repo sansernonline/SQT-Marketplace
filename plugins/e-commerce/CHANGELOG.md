@@ -1,5 +1,11 @@
 # CHANGELOG — e-commerce
 
+## 1.7.0 — 2026-11-07
+
+- agent `customer-chat`: ตอบด้วยน้ำเสียงจากแชตจริงของร้านตาม `chat-reply-templates` ข้อ 0
+- หัวข้อใหม่ "0 · หาแบบที่มีอยู่ก่อน" ใน 5 skill: `chat-reply-templates` (น้ำเสียงจากแชตจริงของร้าน) · `doc-quotation` (ใบเสนอราคาฉบับก่อน · ต่อเลขรัน) · `hiring-th` (ประกาศเดิมและประกาศตำแหน่งเดียวกันในตลาด) · `line-broadcast` · `live-selling-script` (ตัวเลขครั้งก่อนของร้าน)
+- eval ใหม่ 2 เคส `chat-reply-templates-existing` · `doc-quotation-existing` (ยังไม่ได้รัน)
+
 ## 1.6.0 — 2026-11-07
 
 - เอาคำสั่งที่เป็นแค่ทางลัดไปหา skill ตัวเดียวออก 13 ตัว เรียก skill ตรงแทน เช่น `/e-commerce:buy-compare` · ขั้นตอนและ `argument-hint` ของคำสั่งเดิมย้ายไปหัวข้อ "เรียกเป็นคำสั่ง" ท้าย SKILL.md ของ skill ปลายทาง: `compare` → `buy-compare` · `contract` → `doc-contract-th` · `line-bot` → `line-chatbot` · `line-setup` → `line-oa-setup` · `listing` → `product-listing` · `live-script` → `live-selling-script` · `payroll` → `payroll-th` · `pdpa` → `pdpa-workflow` · `price-check` → `marketplace-fees-pricing` · `quotation` → `doc-quotation` · `reply` → `chat-reply-templates` · `tax-due` → `tax-vat-th` · `year-end-filing` → `dbd-annual-filing`

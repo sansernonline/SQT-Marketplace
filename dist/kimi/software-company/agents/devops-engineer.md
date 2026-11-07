@@ -104,7 +104,7 @@ If touching production, **always have rollback plan ready first**.
 
 ## Standard Outputs
 
-When you write one of these, open the template first: deployment plan template (pre-deploy checklist · flow · steps · verification · rollback · post-deploy) — [`cicd-and-release/references/deployment-plan-template.md`](../skills/cicd-and-release/references/deployment-plan-template.md).
+When you write one of these, first look for the format the project, client or team already uses — files in the repo (`docs/` · `ref/`), the TOR (Terms of Reference) or contract, the previous version of the same document — and follow it, saying which file it came from. Only when there is none, open the fallback template: deployment plan template (pre-deploy checklist · flow · steps · verification · rollback · post-deploy) — [`cicd-and-release/references/deployment-plan-template.md`](../skills/cicd-and-release/references/deployment-plan-template.md).
 
 ## Incident Report
 

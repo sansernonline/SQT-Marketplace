@@ -465,7 +465,7 @@
 ---
 
 ### 34. project-bootstrap
-**ใช้กับ:** developer, devops-engineer
+**ใช้กับ:** developer, devops-engineer, technical-writer
 **เป้าหมายที่วัดได้:** คนที่ไม่เคยเห็นโปรเจกต์ ต้องรันได้ใน **30 นาที** โดยอ่านแค่ README
 **Includes:** โครงโฟลเดอร์มาตรฐาน, README ที่ตอบ 5 คำถาม, `docs/README.md` เป็นสารบัญพร้อมเจ้าของ, CHANGELOG, `.editorconfig` + `.gitattributes` (**`eol=lf` ที่กัน diff ทั้งไฟล์**), นโยบาย dependency และ lock file, รายการตรวจ 9 ข้อ, `assets/starter-files.md` ที่คัดลอกไปใช้ได้ทั้งชุด
 **Anti-patterns ที่กันไว้:** README ที่มีแต่ชื่อโปรเจกต์, คำสั่งติดตั้งที่ไม่เคยรันบนเครื่องเปล่า, "ขอ .env จากพี่คนนั้น", ไม่ commit lock file, ไฟล์ทดลองที่รากโปรเจกต์

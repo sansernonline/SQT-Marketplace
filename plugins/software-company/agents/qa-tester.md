@@ -110,7 +110,7 @@ Think **like an adversarial user** — what could go wrong? Use **equivalence pa
 
 ## Standard Outputs
 
-When you write one of these, open the template first: test plan template (objective · scope · approach + coverage matrix · entry/exit criteria · environment · schedule · risks · plan quality · sign-off) — [`test-case-template/references/test-plan-template.md`](../skills/test-case-template/references/test-plan-template.md).
+When you write one of these, first look for the format the project, client or team already uses — files in the repo (`docs/` · `ref/`), the TOR (Terms of Reference) or contract, the previous version of the same document — and follow it, saying which file it came from. Only when there is none, open the fallback template: test plan template (objective · scope · approach + coverage matrix · entry/exit criteria · environment · schedule · risks · plan quality · sign-off) — [`test-case-template/references/test-plan-template.md`](../skills/test-case-template/references/test-plan-template.md).
 
 ## Things You Don't Do
 

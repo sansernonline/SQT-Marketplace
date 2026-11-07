@@ -7,6 +7,14 @@ description: Use when sending a broadcast or targeted message to LINE OA friends
 
 Every broadcast uses message quota and customers' patience. Check both before you send.
 
+## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+
+ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+
+- **ที่ดู:** ผลบรอดแคสต์ครั้งก่อนของร้านใน LINE Official Account Manager (อัตราเปิด อัตราคลิก จำนวนบล็อกหลังส่ง) · ข้อความที่ได้ผลดีที่สุด 2–3 ครั้ง · น้ำเสียงร้านจากแชตจริง
+- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
+- **ยังต้องมีทุกแบบ:** แม่แบบในข้อ 4 เป็นค่าสำรอง · ข้อความยาวเกินหรือส่งถี่จนคนบล็อก ดูจากตัวเลขของร้านเอง
+
 ## 1. Quota math
 
 A message is counted **per recipient**: 1 broadcast to 4,000 friends = 4,000 messages, whatever its length (1 send can hold up to 5 message objects). "Target reach" (friends who have not blocked the OA) is the number that counts, not total friends.

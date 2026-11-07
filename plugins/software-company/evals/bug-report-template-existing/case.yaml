@@ -1,0 +1,42 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: bug-report-template-existing
+description: repo มีแบบฟอร์มบั๊กของทีม (.github/ISSUE_TEMPLATE/bug.yml) ต้องกรอกตามฟิลด์และระดับความรุนแรงของทีม
+tags: [behaviour, bug-report-template]
+runs: 5
+expected_outcome: อ่าน bug.yml · ใช้ฟิลด์ "สาขาที่เจอ" และระดับ วิกฤต/สูง/กลาง/ต่ำ ของทีม ไม่ใช้ S1–S4 · ยังมีขั้นทำซ้ำ ผลจริง ผลที่คาดหวัง
+execution:
+  prompt: |
+    เขียนรายงานบั๊กลง tracker ของโปรเจกต์ใน resources/pos-app:
+    พนักงานสาขาบางแสนกดพิมพ์ใบเสร็จแล้วยอดรวมไม่ตรงกับหน้าจอ ต่างกัน 1 บาท เกิดกับบิลที่มีส่วนลดเป็นเปอร์เซ็นต์
+    ห้ามแก้ไฟล์ ตอบกลับเป็นรายงานที่พร้อมวาง ไม่ต้องถามกลับ
+  add_dirs: [resources]
+  max_turns: 15
+  timeout_seconds: 400
+graders:
+  - name: read-existing-template
+    type: tool_used
+    tool: Read
+    input_match: 'ISSUE_TEMPLATE'
+    min: 1
+    arm: both
+  - name: team-fields
+    type: regex
+    pattern: 'สาขาที่เจอ'
+    match: contains
+    target: last_message
+  - name: team-severity
+    type: regex
+    pattern: 'ความรุนแรง[^\n]{0,20}(วิกฤต|สูง|กลาง|ต่ำ)'
+    match: contains
+    target: last_message
+  - name: no-s-levels
+    type: regex
+    pattern: '\bS[1-4]\b'
+    match: not_contains
+    target: last_message
+  - name: repro-complete
+    type: llm
+    focus: last_message
+    criteria: |
+      ผ่านเมื่อมีขั้นทำซ้ำเป็นข้อ ๆ ผลที่เกิด และผลที่ควรเป็นแยกกัน และบอกว่าใช้แบบฟอร์มของ repo

@@ -1,5 +1,18 @@
 # Changelog — software-company
 
+## 2.46.0 — 2026-11-07
+
+- agent 8 ตัว (`devops-engineer` · `graphic-designer` · `product-manager` · `qa-tester` · `solution-architect` · `technical-writer` · `business-analyst` · `project-manager`): ก่อนเปิดแม่แบบในคู่มือ ให้หาแบบที่โปรเจกต์ ลูกค้า หรือทีมใช้อยู่ก่อน · `technical-writer` เขียน README ตาม `project-bootstrap` ข้อ 2
+- หัวข้อใหม่ "0 · หาแบบที่มีอยู่ก่อน" ใน 9 skill: `pr-description-template` (`.github/pull_request_template.md`) · `bug-report-template` (`.github/ISSUE_TEMPLATE/` · ฟิลด์ของ tracker) · `adr-writer` (`docs/adr/` เดิม · ต่อเลข) · `srs-writing` · `fsd-writing` (TOR หรือแบบของผู้ว่าจ้าง) · `test-case-template` (แบบของลูกค้าหรือทีม QA) · `postmortem-template` · `incident-runbook-template` (ระดับความรุนแรงและ runbook ขององค์กร) · `retrospective` (เลือกรูปแบบตามรอบ) · เจอแล้วใช้ของเดิมและบอกที่มา ไม่เจอจึงใช้แม่แบบของ skill เป็นค่าสำรอง
+- eval ใหม่ 6 เคส `*-existing` (ยังไม่ได้รัน): วางแบบเดิมไว้ใน fixture แล้วตรวจว่าผลลัพธ์ทำตามแบบนั้น
+
+## 2.45.0 — 2026-11-07
+
+- `web-app-design` · `mobile-app-design`: หน้าตาของงานมาจากการค้น ไม่ยึดแม่แบบ · `appstrack.css` และ `speakgo.css` เหลือบทบาทคลาสคอมโพเนนต์ + ค่าสำรองเมื่อค้นไม่ได้ · ค่าของงาน (สี ฟอนต์ ขนาดตัวอักษร มุม เงา ความกว้างเลย์เอาต์) อยู่ใน `theme.css` ที่มีที่มาทุกบรรทัด แม่แบบ `assets/theme-template.css` · ตาราง "ค่าไหนตายตัว ค่าไหนมาจากการค้น" · โครงหน้าและรูปแบบนำทางเลือกจากต้นแบบ · ไม่ใช้ `#2A78D6` เป็นสีเริ่มเมื่อไม่มีแบรนด์อีกต่อไป (เหลือเป็นค่าสำรองติด `(รอยืนยัน)`)
+- `web-app-design`: ขนาดตัวอักษร 5 ขั้นเป็น token `--fs-xs` … `--fs-xl` ใน `appstrack.css` ทับใน `theme.css` ได้
+- `project-bootstrap`: README เป็น 3 ชั้น — โครงกว้าง (คำถามที่ README ต้องตอบ) · สำรวจก่อนเขียน (อ่านไฟล์ในโปรเจกต์ · เอกสารทางการของ stack · README ของโปรเจกต์ดังประเภทเดียวกัน จดลง `_to_delete/readme-survey.md`) · เลือกหัวข้อและคำสั่งจากผลสำรวจ · ตาราง 15 หัวข้อและตาราง 8 ภาษาเหลือบทบาทค่าสำรอง
+- eval ใหม่ 3 เคส (ยังไม่ได้รันจริง): `web-app-design-behaviour` · `mobile-app-design-behaviour` (ค้นต้นแบบ · มี `theme.css` · ไม่ส่งหน้าตาค่าสำรอง) · `project-bootstrap-readme-behaviour` (CLI ภาษา Deno ที่ไม่อยู่ในตารางสำรอง · อ่าน `deno.json` · ไม่มีคำสั่ง npm · หัวข้อเข้ากับ CLI)
+
 ## 2.44.0 — 2026-11-07
 
 - เอาคำสั่งที่เป็นแค่ทางลัดไปหา skill ตัวเดียวออก 5 ตัว เรียก skill ตรงแทน เช่น `/software-company:bug-report-template` · ขั้นตอนและ `argument-hint` ของคำสั่งเดิมย้ายไปหัวข้อ "เรียกเป็นคำสั่ง" ท้าย SKILL.md ของ skill ปลายทาง: `bug-report` → `bug-report-template` · `code-review` → `code-review-checklist` · `seo-audit` → `seo-audit-checklist` · `test-design` → `test-case-template` · `legacy-onboard` → `legacy-spec-recovery`

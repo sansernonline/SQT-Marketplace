@@ -1,0 +1,25 @@
+name: รายงานบั๊ก
+description: บั๊กที่เจอในร้าน
+body:
+  - type: dropdown
+    id: branch
+    attributes:
+      label: สาขาที่เจอ
+      options: [บางแสน, ศรีราชา, ระยอง, ทุกสาขา]
+  - type: dropdown
+    id: severity
+    attributes:
+      label: ความรุนแรง
+      options: [วิกฤต, สูง, กลาง, ต่ำ]
+  - type: textarea
+    id: steps
+    attributes:
+      label: ขั้นทำซ้ำ
+  - type: textarea
+    id: actual
+    attributes:
+      label: ผลที่เกิด
+  - type: textarea
+    id: expected
+    attributes:
+      label: ผลที่ควรเป็น

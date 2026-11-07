@@ -20,6 +20,14 @@ Use when writing a pull request description or preparing a PR for review.
 | Reviewing someone's PR or self-reviewing the code | `code-review-checklist` |
 | Adversarial review of a risky or contested change | `adversarial-review-panel` |
 
+## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+
+ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+
+- **ที่ดู:** แม่แบบ PR ใน repo: `.github/pull_request_template.md` · `.github/PULL_REQUEST_TEMPLATE/*.md` · `docs/pull_request_template.md` · `PULL_REQUEST_TEMPLATE.md` ที่ราก · และ PR ที่ merge ล่าสุด 3 ตัว (`gh pr list --state merged -L 3`) ว่าทีมเขียนแบบไหน
+- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
+- **ยังต้องมีทุกแบบ:** ส่วนที่ทีมไม่มีแต่ skill นี้ถือว่าต้องมี (วิธีทดสอบ · ความเสี่ยงตอน merge) เติมต่อท้ายแบบของทีม ไม่รื้อโครงของทีม
+
 ## Output Template
 
 ```markdown
