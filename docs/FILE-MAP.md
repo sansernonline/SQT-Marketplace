@@ -8,12 +8,12 @@
 
 | plugin | ทำอะไร | agent | skill | คำสั่ง | playbook | ไฟล์ทั้งหมด |
 |---|---|---|---|---|---|---|
-| [`e-commerce`](#e-commerce) | ขายออนไลน์ ซื้ออย่างมั่นใจ และงานหลังบ้านบริษัทไทย | 8 | 34 | 1 | 18 | 172 |
+| [`e-commerce`](#e-commerce) | ขายออนไลน์ ซื้ออย่างมั่นใจ และงานหลังบ้านบริษัทไทย | 8 | 34 | 1 | 18 | 183 |
 | [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 23 | 0 | 9 | 164 |
-| [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 43 | 2 | 30 | 176 |
+| [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 43 | 2 | 30 | 183 |
 | [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 108 | 11 | 17 | 1007 |
 | [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 39 | 0 | 7 | 213 |
-| [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 5 | 24 | 1 | 10 | 120 |
+| [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 5 | 24 | 1 | 10 | 125 |
 
 ## โครงของทุก plugin
 
@@ -140,8 +140,8 @@ plugins/<plugin>/
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
-| `buy-compare` | เทียบก่อนซื้อของชิ้นใหญ่: ราคารวมจริง · รีวิวที่เชื่อได้ | `templates/score-example.json` |
-| `cash-flow` | เงินจะพอจ่ายไหม: ประมาณการเงินสด 13 สัปดาห์ · ยอดโอนแพลตฟอร์มและ COD ที่ช้า · วันจ่ายภาษี · สัญญาณเตือน | `references/13-week-forecast.md` |
+| `buy-compare` | เทียบก่อนซื้อของชิ้นใหญ่: ราคารวมจริง · รีวิวที่เชื่อได้ | `references/review-trust.md` · `references/tco-example.md` · `templates/score-example.json` |
+| `cash-flow` | เงินจะพอจ่ายไหม: ประมาณการเงินสด 13 สัปดาห์ · ยอดโอนแพลตฟอร์มและ COD ที่ช้า · วันจ่ายภาษี · สัญญาณเตือน | `references/13-week-forecast.md` · `references/close-the-gap.md` |
 | `chat-reply-templates` | แบบคำตอบแชตลูกค้า: ราคา · ของหมด · ไซซ์ · พัสดุช้า | `references/templates.md` |
 | `complaint-letter-th` | เขียนจดหมายร้องเรียนร้านค้า แพลตฟอร์ม หรือ สคบ. | `references/templates.md` |
 | `dbd-annual-filing` | ยื่นงบหลังปิดปี: ประชุมผู้ถือหุ้น · งบผ่าน DBD e-Filing · บอจ.5 · ภ.ง.ด.50 | — |
@@ -150,30 +150,30 @@ plugins/<plugin>/
 | `doc-quotation` | ใบเสนอราคา ใบแจ้งหนี้ ใบวางบิล ใบเสร็จ (VAT · หัก ณ ที่จ่าย · ตัวเลขเป็นคำ) | `references/templates.md` · `scripts/example.json` · `scripts/rates.json` · `scripts/thai-doc-total.mjs` |
 | `doc-thai-official` | หนังสือราชการและบันทึกข้อความตามระเบียบสารบรรณ | `references/templates.md` |
 | `e-tax-invoice` | ออกหรือตรวจใบกำกับภาษี (มาตรา 86/4 · e-Tax Invoice) | `scripts/example.json` · `scripts/thai-id.mjs` |
-| `hiring-th` | จ้างพนักงานฝั่งนายจ้าง: ประกาศรับสมัครไม่เลือกปฏิบัติ · ใบคัดกรอง · สัมภาษณ์ · ตรวจบุคคลอ้างอิง · จดหมายเสนองาน | `references/interview-reference-check-pdpa.md` · `references/job-ad-english.md` · `references/offer-letter-first-week.md` · `templates/score-example.json` |
+| `hiring-th` | จ้างพนักงานฝั่งนายจ้าง: ประกาศรับสมัครไม่เลือกปฏิบัติ · ใบคัดกรอง · สัมภาษณ์ · ตรวจบุคคลอ้างอิง · จดหมายเสนองาน | `references/example-accountant.md` · `references/interview-reference-check-pdpa.md` · `references/job-ad-english.md` · `references/job-ad-thai.md` · `references/offer-letter-first-week.md` · `references/sources.md` · `templates/score-example.json` |
 | `import-landed-cost` | ต้นทุนนำเข้าจากจีนต่อชิ้น: CIF · อากร · VAT · ทางรถหรือทางเรือ · ค่าชิปปิ้ง | `scripts/example.json` · `scripts/landed-cost.mjs` · `scripts/rates.json` |
 | `labour-law-basics` | กฎหมายคุ้มครองแรงงาน: ทดลองงาน · OT · วันลา · บอกเลิก · ค่าชดเชย · ค่าจ้าง | `references/leave-and-severance.md` |
-| `line-broadcast` | ส่งข้อความหาเพื่อนใน LINE OA: โควตา · กลุ่มเป้าหมาย · ความถี่ | `references/broadcast-template.md` |
+| `line-broadcast` | ส่งข้อความหาเพื่อนใน LINE OA: โควตา · กลุ่มเป้าหมาย · ความถี่ | `references/broadcast-template.md` · `references/segment-knapsack.md` |
 | `line-chatbot` | ให้ LINE OA ตอบลูกค้าอัตโนมัติ: โควตา · คลังความรู้ · ส่งต่อคน | `references/kb-template.md` |
 | `line-oa-setup` | สร้าง LINE OA และเปิด Messaging API (token · webhook · โควตา) | `references/webhook-node.md` |
 | `live-selling-script` | เตรียมไลฟ์ขายของบน TikTok · Shopee · Lazada · Facebook | `references/host-lines.md` |
 | `marketplace-fees-pricing` | ตั้งราคาหลังหักค่าธรรมเนียมแต่ละแพลตฟอร์ม และหาว่าสินค้าไหนขาดทุน | `references/fee-structures.md` · `scripts/example.json` · `scripts/price-calc.mjs` |
-| `multi-shop-stock` | คุมสต็อกที่ขายหลายร้านไม่ให้ขายเกิน: ชีตสต็อกหลัก · รหัส SKU | `scripts/example.json` · `scripts/stock-calc.mjs` |
+| `multi-shop-stock` | คุมสต็อกที่ขายหลายร้านไม่ให้ขายเกิน: ชีตสต็อกหลัก · รหัส SKU | `references/reorder-point.md` · `scripts/example.json` · `scripts/stock-calc.mjs` |
 | `payroll-th` | ทำเงินเดือนรายเดือน: หักภาษี · ประกันสังคม · กองทุนสำรองเลี้ยงชีพ · ภ.ง.ด.1 | `references/50-tawi.md` · `scripts/example.json` · `scripts/payroll.mjs` · `scripts/rates.json` |
 | `pdpa-workflow` | เอกสาร PDPA ของ SME: ความยินยอม · ROPA · คำขอเจ้าของข้อมูล · แจ้งข้อมูลรั่ว | `references/pdpa-templates.md` |
-| `product-listing` | เขียนหรือแก้หน้าสินค้าบน Shopee · Lazada · TikTok Shop · LINE | `references/description-template.md` · `references/prohibited-claims.md` |
+| `product-listing` | เขียนหรือแก้หน้าสินค้าบน Shopee · Lazada · TikTok Shop · LINE | `references/description-template.md` · `references/keyword-and-photos.md` · `references/prohibited-claims.md` |
 | `promptpay-qr` | QR พร้อมเพย์บนใบแจ้งหนี้หรือหน้าร้าน และวิธีสร้างข้อมูลใน QR | `references/payload.md` · `scripts/example.json` · `scripts/promptpay.mjs` |
 | `refund-request` | ขอเงินคืน: ของเสีย ของปลอม ไม่ได้ของ ยกเลิกขายตรง รายการแปลก | `references/cancellation-notice.md` |
 | `returns-and-bad-reviews` | รับมือคืนสินค้า ขอเงินคืน ข้อพิพาท และรีวิว 1-3 ดาว | `references/review-replies.md` |
 | `seller-tax-basics` | ภาษีคนขายออนไลน์: 40(8) · หักค่าใช้จ่ายแบบเหมา · ภ.ง.ด.90/94 · VAT | `scripts/example-company.json` · `scripts/example.json` · `scripts/rates.json` · `scripts/tax-compare.mjs` |
-| `shipping-compare` | เทียบขนส่ง (Flash · Kerry · J&T · ไปรษณีย์ไทย · SPX) ตามราคา COD และน้ำหนัก | — |
+| `shipping-compare` | เทียบขนส่ง (Flash · Kerry · J&T · ไปรษณีย์ไทย · SPX) ตามราคา COD และน้ำหนัก | `references/score-example.json` |
 | `sme-bookkeeping` | ทำบัญชีร้านและ SME: รายรับรายจ่ายจากธนาคารและยอดโอนแพลตฟอร์ม · เก็บเอกสารกี่ปี · ปิดบัญชีสิ้นเดือน · เมื่อไรจ้างสำนักงานบัญชี | `references/bookkeeping-sheet.md` |
 | `social-security-th` | ประกันสังคม (ม.33 · 39 · 40) ฐานค่าจ้าง สิทธิประโยชน์ การยื่น | — |
 | `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-business-doc.md` · `references/playbook-buy-decision.md` · `references/playbook-complaint.md` · `references/playbook-customer-issue.md` · `references/playbook-learn-from-session.md` · `references/playbook-line-oa.md` · `references/playbook-live-session.md` · `references/playbook-monthly-close.md` · `references/playbook-new-product.md` · `references/playbook-pdpa-setup.md` · `references/playbook-pricing-check.md` · `references/playbook-refund.md` · `references/playbook-review.md` · `references/playbook-stock-sync.md` · `references/playbook-team-project.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-warranty-claim.md` · `references/playbook-year-end.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
 | `tax-vat-th` | เดือนนี้ต้องยื่นอะไร: VAT · หัก ณ ที่จ่าย · ค่าปรับ (ภ.พ.30 · ภ.ง.ด.3 · 53) | `references/wht-rates.md` |
 | `thai-business-setup` | ตั้งธุรกิจ: เลือกบุคคลธรรมดา ห้างหุ้นส่วน หรือบริษัท · จดทะเบียน DBD · เช็กลิสต์หลังจด | — |
 | `thai-holidays` | วันหยุดราชการและวันหยุดธนาคาร รวมวันหยุดชดเชย | `references/holidays-2569-2570.md` |
-| `warranty-tracker` | เก็บใบเสร็จและบัตรรับประกัน เช็กสิทธิ์ เตรียมเคลม | — |
+| `warranty-tracker` | เก็บใบเสร็จและบัตรรับประกัน เช็กสิทธิ์ เตรียมเคลม | `references/extended-warranty.md` |
 
 ### คำสั่ง (1) — พิมพ์ `/e-commerce:<ชื่อ>`
 
@@ -294,8 +294,8 @@ plugins/<plugin>/
 | `annual-checkup` | วางแผนตรวจสุขภาพประจำปี เช็กสิทธิ์ประกันสังคมหรือบัตรทอง เทียบแพ็กเกจ | `references/package-score-example.json` · `references/results-tracker.md` |
 | `calendar-audit` | ตรวจปฏิทินรายเดือน แล้วจองช่วงเวลาไว้ทำงานสำคัญ | — |
 | `cert-prep` | เตรียมสอบใบรับรอง (AWS · Azure · GCP · CKA · PSM) แผนรายสัปดาห์และข้อสอบลอง | `references/exam-facts.md` · `references/plan-template.md` |
-| `course-builder` | ออกแบบหลักสูตรฝั่งผู้สอน: ผลลัพธ์การเรียนรู้ · ตารางสอนพร้อมเวลา · แบบฝึก · rubric · แบบประเมิน | `references/git-one-day-example.md` · `references/materials-feedback-online-copyright.md` |
-| `decision-journal` | บันทึกการตัดสินใจใหญ่ (งาน · คอนโด · รถ · ย้ายบ้าน) แล้วกลับมาทบทวน | `references/entry-template.md` |
+| `course-builder` | ออกแบบหลักสูตรฝั่งผู้สอน: ผลลัพธ์การเรียนรู้ · ตารางสอนพร้อมเวลา · แบบฝึก · rubric · แบบประเมิน | `references/git-one-day-example.md` · `references/materials-feedback-online-copyright.md` · `references/sources.md` |
+| `decision-journal` | บันทึกการตัดสินใจใหญ่ (งาน · คอนโด · รถ · ย้ายบ้าน) แล้วกลับมาทบทวน | `references/entry-template.md` · `references/scoring-example.md` |
 | `digital-hygiene` | ล็อกบัญชีครอบครัวให้ปลอดภัย: ตัวจัดการรหัสผ่าน · 2FA · passkey · สำรองข้อมูล | `references/line-and-phone.md` · `references/scams-and-takeover.md` |
 | `doctor-visit-prep` | เตรียมพบแพทย์: ลำดับอาการ · ยาที่ใช้ · ยาที่แพ้ · คำถาม (ไม่วินิจฉัย) | — |
 | `elder-care` | ดูแลพ่อแม่สูงอายุ: นัดแพทย์ · เบี้ยผู้สูงอายุ · กันล้ม · ส่งต่อคนดูแล | `references/care-templates.md` |
@@ -304,7 +304,7 @@ plugins/<plugin>/
 | `exercise-plan` | เริ่มหรือจัดการออกกำลังกาย: เดิน · เวท · ยืดเส้นระหว่างทำงาน | — |
 | `flood-prep` | เตรียมบ้านรับน้ำท่วม แหล่งเตือนภัย ตัดไฟและแก๊ส เงินช่วยเหลือ เคลมประกันหลังน้ำลด | — |
 | `gift-idea-tracker` | จดของขวัญที่เคยให้ และคิดของขวัญตามงบ | `references/gift-registry-template.md` |
-| `goal-and-habit` | ตั้งเป้ารายไตรมาสหรือปีใหม่ เริ่มหรือเลิกนิสัย | — |
+| `goal-and-habit` | ตั้งเป้ารายไตรมาสหรือปีใหม่ เริ่มหรือเลิกนิสัย | `references/tracker-template.md` |
 | `home-maintenance` | ตารางดูแลบ้านตามฤดู (แอร์ · ปั๊ม · ปลวก · หลังคา) และเทียบใบเสนอราคาช่าง | `references/maintenance-calendar.md` |
 | `household-bills` | อ่านบิลไฟ น้ำ (กฟน. · กฟภ. · กปน. · กปภ. · ค่า Ft) จดบิล เช็กบิลที่พุ่ง | `references/bill-tracker-template.md` · `scripts/example-history.json` · `scripts/example.json` · `scripts/power-bill.mjs` · `scripts/rates.json` |
 | `important-docs` | ทะเบียนเอกสารสำคัญ (บัตร · พาสปอร์ต · โฉนด · เล่มรถ · ประกัน) และวันหมดอายุ | `references/registry-template.md` · `scripts/due-dates.mjs` · `scripts/example-docs.json` · `scripts/example-refill.json` |
@@ -313,18 +313,18 @@ plugins/<plugin>/
 | `kids-school` | จัดปีการศึกษาของลูก: วันเปิดเทอม · ค่าเทอม · เรียนพิเศษ · ย้ายโรงเรียน · ลดหย่อน | `references/school-year-planner.md` |
 | `learning-path` | วางเส้นทางเรียนภาษา framework หรือแนวคิดใหม่ ให้จบเป็นโปรเจกต์จริง | `references/path-template.md` |
 | `linkedin-profile` | เขียนหรือปรับ LinkedIn ให้เหมาะกับตลาดงานไทย | — |
-| `meal-plan-grocery` | วางเมนูรายสัปดาห์ตามงบ รายการซื้อของ ลดของเหลือทิ้ง | `references/weekly-plan-template.md` |
+| `meal-plan-grocery` | วางเมนูรายสัปดาห์ตามงบ รายการซื้อของ ลดของเหลือทิ้ง | `references/weekly-plan-template.md` · `references/worked-example.md` |
 | `medication-schedule` | ตารางกินยาจากฉลากยา เตือนเติมยา รายการยาที่แพ้ (ไม่กำหนดขนาดยา) | — |
 | `meeting-prep-card` | การ์ด 1 ใบก่อนประชุม: เป้าหมาย · 3 คำถาม · สิ่งที่จะขอ | — |
 | `meeting-summary` | สรุปประชุม: สิ่งที่ตัดสินแล้ว · งานที่ต้องทำ · รายงานการประชุมภาษาไทย | `references/thai-minutes-template.md` |
 | `moving-house` | ย้ายบ้านและเปลี่ยนที่อยู่: ย้ายทะเบียนบ้าน · ปิดหรือโอนค่าไฟค่าน้ำ ขอเงินประกันคืน · แจ้งที่อยู่ใหม่ · คืนห้องเช่าและทวงเงินประกัน | `references/notify-list.md` |
-| `paper-to-practice` | อ่าน paper · RFC · บทความยาว แล้วทำตัวอย่างที่รันได้ | `references/practice-note-template.md` |
+| `paper-to-practice` | อ่าน paper · RFC · บทความยาว แล้วทำตัวอย่างที่รันได้ | `references/bloom-filter-example.md` · `references/practice-note-template.md` |
 | `performance-self-review` | เขียนประเมินตัวเองกลางปีหรือปลายปี และเหตุผลขอขึ้นตำแหน่ง | `references/templates.md` |
 | `personal-kb` | คลังโน้ตส่วนตัว หาโน้ตที่เคยจดให้เจอ | — |
 | `pet-care` | ดูแลสุนัขแมว: วัคซีนพิษสุนัขบ้า · ขึ้นทะเบียน · ไมโครชิป · ประวัติรักษา | `references/insurance-payoff-example.json` · `references/pet-record.md` |
 | `pregnancy-and-baby` | ฝากครรภ์ สิทธิ์คลอดบุตรประกันสังคม ลาคลอด แจ้งเกิด วัคซีนเด็กเล็ก (ไม่วินิจฉัย อาการอันตรายโทร 1669) | — |
 | `resume-th-en` | เขียนหรือตรวจ CV ไทยและอังกฤษ ให้ระบบคัดกรอง (ATS) อ่านได้ | `references/templates.md` |
-| `salary-negotiation` | ต่อรองเงินเดือนและเทียบข้อเสนองาน (โบนัส · กองทุน · ประกัน) | — |
+| `salary-negotiation` | ต่อรองเงินเดือนและเทียบข้อเสนองาน (โบนัส · กองทุน · ประกัน) | `references/offer-scoring-example.md` |
 | `side-project-picker` | เลือกโปรเจกต์ฝึกมือหรือ portfolio ให้คะแนน แล้วตัดขอบเขตให้จบได้ | `references/idea-bank.md` · `references/score-example.json` |
 | `sleep-log` | บันทึกการนอนเพื่อดูรูปแบบหรือเอาไปให้แพทย์ดู (ไม่วินิจฉัย) | — |
 | `subscription-audit` | หารายการตัดเงินรายเดือนจาก statement แล้วตัดที่ไม่คุ้ม | `references/cancel-steps.md` · `references/statement-patterns.md` |
@@ -333,7 +333,7 @@ plugins/<plugin>/
 | `thesis-writing` | เขียนวิทยานิพนธ์ · IS · บทความวิจัย ตั้งแต่โครงร่างจนสอบป้องกัน | `references/citation-and-integrity.md` · `references/defense-and-review.md` · `references/literature-matrix.md` · `references/thai-academic-language.md` · `references/thai-typesetting.md` · `references/thesis-structure.md` |
 | `travel-prep` | เตรียมเดินทาง 1-2 สัปดาห์ก่อนไป: วีซ่า · ประกัน · เงิน · กำหนดการ | `references/checklist-template.md` · `references/travel-facts.md` |
 | `vehicle-care` | ดูแลรถยนต์และมอเตอร์ไซค์: พ.ร.บ. · ภาษีประจำปี · ตรวจสภาพ · เข้าศูนย์ | `references/buy-car-score-example.json` · `references/vehicle-record.md` |
-| `weekly-review` | ทบทวนประจำสัปดาห์ สำหรับคนที่ยุ่งแต่งานไม่เดิน | — |
+| `weekly-review` | ทบทวนประจำสัปดาห์ สำหรับคนที่ยุ่งแต่งานไม่เดิน | `references/template-and-example.md` |
 
 ### คำสั่ง (2) — พิมพ์ `/personal-life:<ชื่อ>`
 
@@ -695,7 +695,7 @@ plugins/<plugin>/
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
 | `bonds-and-deposits` | เทียบเงินฝาก พันธบัตรออมทรัพย์ หุ้นกู้ และกองทุนตลาดเงิน ทั้งการคุ้มครองเงินฝาก ภาษีดอกเบี้ย และการถอน | — |
-| `copy-trade-check` | ประเมินผู้ให้สัญญาณ copy trade บน MQL5 ด้วยตัวเลขก่อนตามเทรด: กฎเหล็ก · สคริปต์ตรวจประวัติดีล · เทียบด้วยคะแนน · ลองเงินปลอมก่อน | `scripts/example.csv` · `scripts/score-example.json` · `scripts/signal-check.mjs` |
+| `copy-trade-check` | ประเมินผู้ให้สัญญาณ copy trade บน MQL5 ด้วยตัวเลขก่อนตามเทรด: กฎเหล็ก · สคริปต์ตรวจประวัติดีล · เทียบด้วยคะแนน · ลองเงินปลอมก่อน | `references/example-and-sources.md` · `scripts/example.csv` · `scripts/score-example.json` · `scripts/signal-check.mjs` |
 | `credit-bureau` | ขอรายงานเครดิตบูโรของตัวเอง อ่านรหัสสถานะ โต้แย้งข้อมูลผิด และแก้ความเชื่อเรื่องแบล็กลิสต์ | — |
 | `debt-payoff` | วางแผนปิดหนี้หลายก้อน (บัตร · สินเชื่อ · จำนำทะเบียน) แบบก้อนเล็กก่อนหรือดอกสูงก่อน | `scripts/example.json` · `scripts/payoff.mjs` |
 | `dividend-tracker` | ติดตามปันผล: วัน XD · อัตราผลตอบแทน · ภาษีปันผล | `references/dividend-template.md` |
@@ -707,15 +707,15 @@ plugins/<plugin>/
 | `paper-trading` | ทดสอบกลยุทธ์หรือฝึกส่งคำสั่งด้วยเงินจำลอง ตามกติกาตลาดหลักทรัพย์จริง | `references/paper-ledger.md` |
 | `personal-budget` | ทำงบรายเดือนจากรายจ่ายจริง | `references/budget-worksheet.md` |
 | `portfolio-snapshot` | พอร์ตเป็นอย่างไร กำไรหรือขาดทุนเท่าไร | `references/snapshot-template.md` · `scripts/examples/afterTax.json` · `scripts/examples/dividend.json` · `scripts/examples/drift.json` · `scripts/examples/fee.json` · `scripts/examples/snapshot.json` · `scripts/money-calc.mjs` |
-| `position-sizing` | ก่อนเข้าเทรด: ซื้อกี่หุ้น วาง stop ตรงไหน ใหญ่เกินไหม | `references/forex-cfd-crypto.md` · `scripts/example.json` · `scripts/size.mjs` · `scripts/ticks.json` |
+| `position-sizing` | ก่อนเข้าเทรด: ซื้อกี่หุ้น วาง stop ตรงไหน ใหญ่เกินไหม | `references/drawdown-recovery.md` · `references/forex-cfd-crypto.md` · `scripts/example.json` · `scripts/size.mjs` · `scripts/ticks.json` |
 | `post-trade-review` | ทบทวนผลเทรดรายสัปดาห์หรือรายเดือน: อัตราชนะ · ค่าคาดหวัง · drawdown · กฎใหม่ 1 ข้อ | `scripts/example.json` · `scripts/trade-stats.mjs` |
-| `rebalance-and-dca` | ตั้งการลงทุนรายเดือนและกฎปรับสัดส่วนพอร์ต เริ่มจากใช้เงินใหม่ก่อนขายของเดิม | `references/rebalance-score.json` |
+| `rebalance-and-dca` | ตั้งการลงทุนรายเดือนและกฎปรับสัดส่วนพอร์ต เริ่มจากใช้เงินใหม่ก่อนขายของเดิม | `references/rebalance-example.md` · `references/rebalance-score.json` |
 | `retirement-plan` | เกษียณในไทยต้องมีเงินเท่าไร และใช้ PVD · RMF · ThaiESG อย่างไร | `scripts/example.json` · `scripts/retire.mjs` · `scripts/sso-pension.json` |
 | `scam-check` | เช็กก่อนโอนเงินให้แอปลงทุน แอปกู้ กลุ่ม LINE หรือคนที่โทรมา | `references/red-flags-and-evidence.md` |
 | `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-learn-from-session.md` · `references/playbook-money-plan.md` · `references/playbook-portfolio-check.md` · `references/playbook-pre-trade.md` · `references/playbook-review.md` · `references/playbook-scam-check.md` · `references/playbook-tax-season.md` · `references/playbook-team-project.md` · `references/playbook-template.md` · `references/playbook-trade-review.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
 | `tax-basics-th` | ภาษีจากหุ้น ปันผล ดอกเบี้ย คริปโต และเงินได้ต่างประเทศ (ภ.ง.ด.90 · 91) | `references/investment-income-rules.md` |
-| `tax-deduction-planner` | วางแผนลดหย่อนภาษีก่อนสิ้นปี ซื้อ RMF หรือ ThaiESG เท่าไร | `references/deductions-2569.md` · `scripts/example.json` · `scripts/rates-2569.json` · `scripts/tax.mjs` |
-| `technical-signals` | กราฟบอกอะไร ตอนนี้เข้าได้ไหม RSI · MACD · volume หมายถึงอะไร | `scripts/example.csv` · `scripts/indicators.mjs` |
+| `tax-deduction-planner` | วางแผนลดหย่อนภาษีก่อนสิ้นปี ซื้อ RMF หรือ ThaiESG เท่าไร | `references/deductions-2569.md` · `references/knapsack.md` · `scripts/example.json` · `scripts/rates-2569.json` · `scripts/tax.mjs` |
+| `technical-signals` | กราฟบอกอะไร ตอนนี้เข้าได้ไหม RSI · MACD · volume หมายถึงอะไร | `references/signal-meanings.md` · `scripts/example.csv` · `scripts/indicators.mjs` |
 | `trade-journal` | จดเหตุผลทุกครั้งที่เข้าหรือออกเทรด | `references/journal-template.md` |
 | `watchlist-setup` | ตั้งหรือจัด watchlist ใหม่: เหตุผลที่ติดตาม · จุดเข้า · แจ้งเตือน | `references/watchlist-template.md` |
 
