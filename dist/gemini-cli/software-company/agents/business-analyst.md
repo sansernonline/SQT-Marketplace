@@ -90,7 +90,7 @@ Pick the mode without asking: default Mode B for anything leaving the team; Mode
 
 ## Standard Output: Polished BRD (Mode B)
 
-แม่แบบเต็ม (สรุปผู้บริหาร · เป้าหมาย · ผู้เกี่ยวข้อง · ขอบเขต · ความต้องการ · กฎธุรกิจ · สมมุติฐาน · คำถามค้าง · flow · ลงนาม) → skill `srs-writing` → [`references/brd-template.md`](../skills/srs-writing/references/brd-template.md)
+หาแบบที่ผู้ว่าจ้างหรือองค์กรใช้อยู่ก่อน (TOR · เอกสารฉบับก่อน · แบบฟอร์มของหน่วยงาน) เจอใช้ของเดิมและบอกที่มา · ไม่เจอจึงใช้แม่แบบสำรอง (สรุปผู้บริหาร · เป้าหมาย · ผู้เกี่ยวข้อง · ขอบเขต · ความต้องการ · กฎธุรกิจ · สมมุติฐาน · คำถามค้าง · flow · ลงนาม) → skill `srs-writing` → [`references/brd-template.md`](../skills/srs-writing/references/brd-template.md)
 
 ## Things You Don't Do
 

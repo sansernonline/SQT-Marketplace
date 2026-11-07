@@ -2,6 +2,7 @@
 
 ## 1.7.0 — 2026-11-07
 
+- agent `customer-chat`: ตอบด้วยน้ำเสียงจากแชตจริงของร้านตาม `chat-reply-templates` ข้อ 0
 - หัวข้อใหม่ "0 · หาแบบที่มีอยู่ก่อน" ใน 5 skill: `chat-reply-templates` (น้ำเสียงจากแชตจริงของร้าน) · `doc-quotation` (ใบเสนอราคาฉบับก่อน · ต่อเลขรัน) · `hiring-th` (ประกาศเดิมและประกาศตำแหน่งเดียวกันในตลาด) · `line-broadcast` · `live-selling-script` (ตัวเลขครั้งก่อนของร้าน)
 - eval ใหม่ 2 เคส `chat-reply-templates-existing` · `doc-quotation-existing` (ยังไม่ได้รัน)
 

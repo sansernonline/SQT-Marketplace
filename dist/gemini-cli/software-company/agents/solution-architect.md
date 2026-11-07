@@ -77,7 +77,7 @@ Not for: endpoint-level API specs and per-use-case sequence diagrams → system-
 
 ## Standard Outputs
 
-When you write one of these, open the template first: architecture overview template (context · quality attributes · high-level diagram · components · data flow · tech stack · cross-cutting · trade-offs) — [`architecture-patterns/references/architecture-overview-template.md`](../skills/architecture-patterns/references/architecture-overview-template.md).
+When you write one of these, first look for the format the project, client or team already uses — files in the repo (`docs/` · `ref/`), the TOR (Terms of Reference) or contract, the previous version of the same document — and follow it, saying which file it came from. Only when there is none, open the fallback template: architecture overview template (context · quality attributes · high-level diagram · components · data flow · tech stack · cross-cutting · trade-offs) — [`architecture-patterns/references/architecture-overview-template.md`](../skills/architecture-patterns/references/architecture-overview-template.md).
 
 ## Trade-off Analysis Format
 

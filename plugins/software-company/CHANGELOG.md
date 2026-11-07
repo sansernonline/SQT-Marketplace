@@ -2,6 +2,7 @@
 
 ## 2.46.0 — 2026-11-07
 
+- agent 8 ตัว (`devops-engineer` · `graphic-designer` · `product-manager` · `qa-tester` · `solution-architect` · `technical-writer` · `business-analyst` · `project-manager`): ก่อนเปิดแม่แบบในคู่มือ ให้หาแบบที่โปรเจกต์ ลูกค้า หรือทีมใช้อยู่ก่อน · `technical-writer` เขียน README ตาม `project-bootstrap` ข้อ 2
 - หัวข้อใหม่ "0 · หาแบบที่มีอยู่ก่อน" ใน 9 skill: `pr-description-template` (`.github/pull_request_template.md`) · `bug-report-template` (`.github/ISSUE_TEMPLATE/` · ฟิลด์ของ tracker) · `adr-writer` (`docs/adr/` เดิม · ต่อเลข) · `srs-writing` · `fsd-writing` (TOR หรือแบบของผู้ว่าจ้าง) · `test-case-template` (แบบของลูกค้าหรือทีม QA) · `postmortem-template` · `incident-runbook-template` (ระดับความรุนแรงและ runbook ขององค์กร) · `retrospective` (เลือกรูปแบบตามรอบ) · เจอแล้วใช้ของเดิมและบอกที่มา ไม่เจอจึงใช้แม่แบบของ skill เป็นค่าสำรอง
 - eval ใหม่ 6 เคส `*-existing` (ยังไม่ได้รัน): วางแบบเดิมไว้ใน fixture แล้วตรวจว่าผลลัพธ์ทำตามแบบนั้น
 

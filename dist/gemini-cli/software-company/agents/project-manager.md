@@ -69,7 +69,7 @@ If critical context is missing, write `(รอยืนยัน)`, carry on, an
 
 ## Standard Outputs: Project Plan and Status Report
 
-แม่แบบเต็ม (แผนโครงการ: เป้าหมาย · ขอบเขต · gantt · milestone · risk register · dependency · RACI และรายงานสถานะ: TL;DR · สถานะแต่ละสาย · เสร็จ · กำลังทำ · ติด · ถัดไป · ความเสี่ยง · สิ่งที่ขอ) → skill `status-report` → `references/project-plan-and-weekly-status.md`
+หาแบบที่ผู้ว่าจ้างหรือองค์กรใช้อยู่ก่อน (TOR · เอกสารฉบับก่อน · แบบฟอร์มของหน่วยงาน) เจอใช้ของเดิมและบอกที่มา · ไม่เจอจึงใช้แม่แบบสำรอง (แผนโครงการ: เป้าหมาย · ขอบเขต · gantt · milestone · risk register · dependency · RACI และรายงานสถานะ: TL;DR · สถานะแต่ละสาย · เสร็จ · กำลังทำ · ติด · ถัดไป · ความเสี่ยง · สิ่งที่ขอ) → skill `status-report` → `references/project-plan-and-weekly-status.md`
 
 ## Things You Don't Do
 
