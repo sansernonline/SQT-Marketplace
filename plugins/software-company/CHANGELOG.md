@@ -1,5 +1,11 @@
 # Changelog — software-company
 
+## 2.43.0 — 2026-11-07
+
+- `project-bootstrap`: README จาก 5 คำถามเป็นโครง 15 หัวข้อ (9 มีเสมอ · 6 มีเมื่อโปรเจกต์มีของนั้น) เพิ่ม ตั้งค่า · สถาปัตยกรรมย่อ · build · deploy · ร่วมพัฒนา · ติดต่อ · สัญญาอนุญาต · ไฟล์ใหม่ `references/readme-skeleton.md` (ตารางหัวข้อพร้อมจำนวนแหล่งที่แนะนำ · เมื่อไหร่แยกไป `ARCHITECTURE.md` `CONTRIBUTING.md` `docs/runbook-deploy.md` · แม่แบบ `ARCHITECTURE.md` แบบ matklad และเมื่อไหร่ใช้ arc42)
+- `project-bootstrap`: ไฟล์ใหม่ `references/readme-by-stack.md` คำสั่ง ไฟล์ปักรุ่น ค่าตั้งตาม environment หัวข้อเพิ่ม และโครงโฟลเดอร์ทางการของ 8 stack (Node · .NET · Python · Java/Kotlin · Go · Flutter · Rust · Laravel) จากเอกสารทางการ เปิดอ่าน 2026-11-07 · ช่องที่ยังไม่ได้เปิดยืนยันติด ※
+- `project-bootstrap`: CHANGELOG ใช้ครบ 6 หัวข้อของ Keep a Changelog (เพิ่ม · เปลี่ยน · จะเลิกใช้ · เอาออก · แก้ · ความปลอดภัย) + เปลี่ยนที่ทำให้ของเดิมพังบนสุด · ตารางจับคู่หัวข้อกับเลขรุ่น · รุ่นที่ถอน · แม่แบบ README ใน `assets/starter-files.md` มีครบ 15 หัวข้อ ชื่อตรงกับโครง
+
 ## 2.42.0 — 2026-11-06
 
 - skill ออกแบบ 16 ตัวมีบรรทัด "ด่านก่อนลงมือ" ชี้ไปหัวข้อเดียวกันใน `design-references` (superuser 3.20.0): ui-craft · web-app-design · mobile-app-design · windows-app-design · dynamic-website · design-direction-lookup · design-system · graphic-design · presentation-design · html-slide-deck · pptx-to-html-deck · branded-document-design · doc-cover-design · diagram-figures · markdown-visuals · markdown-report-docx (`markdown-report-docx` เดิมไม่มี `no-ai-look`)
