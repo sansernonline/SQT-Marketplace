@@ -104,7 +104,7 @@ Use when writing a post-incident review or blameless postmortem of a production 
 
 ## When to use this skill
 
-- After any production incident: a full postmortem for SEV1 / SEV2, repeated SEV3, security, customer-facing or data-integrity incidents (see "When to Skip Postmortem"); a short writeup for any other SEV3 and for SEV4
+- After any production incident: a full postmortem for SEV1 / SEV2, repeated SEV3, security, customer-facing or data-integrity incidents; a short writeup for any other SEV3 and for SEV4
 - After a near-miss that could have been a major incident
 - After significant bugs that reached production
 - After a security incident
@@ -300,15 +300,6 @@ What can other teams learn from this?
 - Hiding postmortems — share widely for org learning
 - Blame language even when "talking about systems"
 
-## When to Skip Postmortem
-
-Almost never. SEV4 needs only a short writeup. Always do a full one for:
-- Any SEV1 / SEV2
-- Repeated SEV3+ from same root cause
-- Security incidents
-- Customer-facing incidents
-- Data integrity issues
-
 ### Quick postmortem (SEV3 not repeated · SEV4 · near-miss)
 
 One block in the incident channel or ticket, same day — no meeting. Trigger · Detection · action-item Type are the same words as the full template (แนวคิดจาก Google SRE postmortem example):
@@ -489,8 +480,6 @@ Before delivering any polished doc:
 
 ## Anti-patterns
 
-- **Emoji anywhere** — in headings, callouts, badges or tables it reads as AI-made; use bold words
-- **Nested bullets** — any bullet under a bullet; use a sub-heading or a table instead
 - **Inconsistent terminology** — "user" in one section, "customer" in next
 - **Tables of paragraphs** — if cells are >2 sentences, use headings instead
 

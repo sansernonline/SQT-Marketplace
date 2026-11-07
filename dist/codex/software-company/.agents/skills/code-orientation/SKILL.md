@@ -29,7 +29,7 @@ description: Use when about to change code not yet read this session. Maps how i
 3. **หาจุดที่ใช้ร่วม** — ฟังก์ชันหรือ type ที่จะแตะ ถูกเรียกจากที่ไหนอีก (`rg -n "ชื่อฟังก์ชัน\("`) ถ้ามีหลายจุดต้องใช้ `blast-radius` ตอนแก้
 4. **รันดูจริงถ้าทำได้** — ใส่ log ชั่วคราวหรือ breakpoint 1–2 จุด แล้วทำตามขั้นตอนของผู้ใช้ เพราะเห็นค่าจริงดีกว่าอ่านอย่างเดียว และลบ log ชั่วคราวก่อนส่ง
 
-ถ้าโค้ดยาว ให้ส่ง subagent ระดับเล็กหรือกลางไปไล่ แล้วรับแค่แผนที่กลับมา (`context-budget`)
+ถ้าโค้ดยาว ให้ส่ง subagent โมเดลเล็ก (haiku) หรือกลาง (sonnet) ไปไล่ แล้วรับแค่แผนที่กลับมาไม่เกิน 30 บรรทัด (`context-budget`)
 
 ## 2 · Why — ทำไมถึงเขียนแบบนี้
 
@@ -37,7 +37,7 @@ description: Use when about to change code not yet read this session. Maps how i
 
 | ดูที่ | คำสั่ง |
 |---|---|
-| ใครแก้บรรทัดนี้ เพราะอะไร | `git log -L <เริ่ม>,<จบ>:<ไฟล์>` · `git blame -w <ไฟล์>` แล้ว `git show <commit>` |
+| ใครแก้บรรทัดนี้ เพราะอะไร | `git log -L <เริ่ม>,<จบ>:<ไฟล์> \| head -40` · `git blame -w -L <เริ่ม>,<จบ> <ไฟล์>` แล้ว `git show <commit>` |
 | commit ที่พูดถึงเรื่องนี้ | `git log --oneline -n 20 -S "ชื่อฟังก์ชัน"` · `git log --oneline -n 20 --grep "คำค้น"` |
 | เอกสาร | `docs/` · ADR · `CONTEXT.md` · comment ที่บอก "ทำไม" |
 | test ที่ล็อกพฤติกรรมไว้ | ค้นชื่อฟังก์ชันในโฟลเดอร์ test เพราะ test บอกเจตนาได้ดีกว่า comment |

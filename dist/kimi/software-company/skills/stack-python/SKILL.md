@@ -146,7 +146,7 @@ def create_refund(body: RefundIn, db: Session = Depends(get_db)) -> RefundOut:
 - [ ] `ruff check` ไม่มีข้อผิดพลาด
 - [ ] `ruff format --check` ผ่าน (หรือ formatter ที่ repo ใช้)
 - [ ] type checker ของ repo ได้ 0 error ในไฟล์ที่แก้
-- [ ] `pytest -q` เขียวทั้งชุด ไม่ใช่แค่ไฟล์ที่แก้
+- [ ] `pytest -q` เขียวทั้งชุด ไม่ใช่แค่ไฟล์ที่แก้ (ผลยาว → `> _to_delete/test.txt 2>&1` แล้ว `tail -20`)
 - [ ] พฤติกรรมใหม่ทุกอย่างมี test ที่เคยแดงก่อนแก้
 - [ ] ไม่มี `requests` · `time.sleep` · driver sync หรือ I/O ที่บล็อกอยู่ใน `async def`
 - [ ] เปิดไฟล์ข้อความทุกจุดระบุ `encoding="utf-8"` และ datetime ที่เก็บมี timezone

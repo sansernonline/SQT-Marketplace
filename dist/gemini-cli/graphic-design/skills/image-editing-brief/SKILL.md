@@ -63,7 +63,7 @@ Verification: face of glass, layer colours, light from right, palette — all un
 
 ## Not an AI look
 
-Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the 8-point eye check on images and other files. The full list of AI tells for every medium lives there. Fix AI tells (plastic skin, teal-orange grade, warped text) as part of the edit.
+Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files. Fix AI tells (plastic skin, teal-orange grade, warped text) as part of the edit.
 
 ## Related
 

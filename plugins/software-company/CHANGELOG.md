@@ -1,5 +1,9 @@
 # Changelog — software-company
 
+## 2.46.1 — 2026-11-07
+
+- ประหยัด token (ตรวจหัวข้อ 8 ของ `audit-plugin-prompt.md`): ใส่ `head` · `tail` · `-n` · `--stat` ให้คำสั่งที่พ่นผลไม่จำกัดใน 10 skill และ playbook 3 ไฟล์ (`logging-standards` เปลี่ยน `tail -f` เป็น `tail -n 50` ดูครั้งเดียวแทนตามดูสด) · จำกัดแถวที่ subagent ส่งกลับใน code-orientation · legacy-onboard · reference-app-research · ui-craft · playbook-investigation · ระบุโมเดลเล็กให้งานนับและคัดใน code-orientation · bug-inbox-triage · legacy-spec-recovery · ตัดข้อความซ้ำในไฟล์เดียวกันใน postmortem-template · seo-audit · แก้หัวข้อเพี้ยน "Right: Phase 4" ใน incident-response
+
 ## 2.46.0 — 2026-11-07
 
 - agent 8 ตัว (`devops-engineer` · `graphic-designer` · `product-manager` · `qa-tester` · `solution-architect` · `technical-writer` · `business-analyst` · `project-manager`): ก่อนเปิดแม่แบบในคู่มือ ให้หาแบบที่โปรเจกต์ ลูกค้า หรือทีมใช้อยู่ก่อน · `technical-writer` เขียน README ตาม `project-bootstrap` ข้อ 2

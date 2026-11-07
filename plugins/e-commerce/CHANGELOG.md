@@ -1,5 +1,9 @@
 # CHANGELOG — e-commerce
 
+## 1.7.1 — 2026-11-07
+
+- ประหยัด token (audit หัวข้อ 8): ย้ายตาราง ตัวอย่าง และเช็กลิสต์ที่ใช้บางครั้งจาก SKILL.md ไป references/ ใน `hiring-th` `buy-compare` `product-listing` `cash-flow` `line-broadcast` `shipping-compare` `multi-shop-stock` `warranty-tracker` (ความหมายเดิม เพิ่มลิงก์) · `warranty-tracker` เพิ่มกฎ archive แถวหมดประกันและอ่านเฉพาะแถวที่ใกล้ครบ · `superuser/SKILL.md` ตัดประโยคซ้ำ 1 บรรทัด
+
 ## 1.7.0 — 2026-11-07
 
 - agent `customer-chat`: ตอบด้วยน้ำเสียงจากแชตจริงของร้านตาม `chat-reply-templates` ข้อ 0

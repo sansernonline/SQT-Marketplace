@@ -37,7 +37,7 @@ Each year end brings 4 deadlines from 2 authorities (DBD and the Revenue Departm
 | บริษัทมหาชนจำกัด | yes (พ.ร.บ.บริษัทมหาชน) | yes | 1 month after AGM | 150 days |
 | Foreign company branch / joint venture | no | no | within 5 months | 150 days |
 
-- Small หจก. with registered capital ≤ 5 M, assets ≤ 30 M and revenue ≤ 30 M may use a **Tax Auditor (TA)** instead of a Certified Public Accountant (CPA, ผู้สอบบัญชีรับอนุญาต) for the audit (รอยืนยัน current thresholds).
+- Small หจก. with registered capital ≤ 5 M, assets ≤ 30 M and revenue ≤ 30 M may use a **Tax Auditor (TA)** instead of a Certified Public Accountant (CPA, ผู้สอบบัญชีรับอนุญาต) for the audit (same thresholds as `thai-business-setup` section 1, which records a check against the DBD manual on 2026-10-23; not re-verified here — รอยืนยัน).
 
 ## 3. DBD e-Filing
 

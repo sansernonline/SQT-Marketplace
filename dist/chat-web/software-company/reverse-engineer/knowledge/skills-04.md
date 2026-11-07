@@ -193,7 +193,7 @@ Stack-specific locations: [references/evidence-by-stack.md](references/evidence-
 
 ### Step 1 — Inventory (one pass, no reading of logic)
 
-Count before reading. File counts by type, projects or modules, largest files, generated folders to ignore (`bin/`, `obj/`, `node_modules/`, publish output, vendored plugins). Write it to `docs/as-is/README.md` as a coverage table: every module listed, depth = none.
+Count before reading (counting work — hand it to a small-model subagent). File counts by type, projects or modules, largest files, generated folders to ignore (`bin/`, `obj/`, `node_modules/`, publish output, vendored plugins). Write it to `docs/as-is/README.md` as a coverage table: every module listed, depth = none.
 
 **Ask for the database scripts on day one.** Code calls stored procedures, views, triggers and functions whose source is usually not in the repository — and that is where tariff, tax and numbering rules live. Request a script-out of all database objects (and an export of menu and role tables if menus come from the database) before Step 2; until it arrives, those rules can only be `inferred` or `ask`, and the coverage table must say so.
 

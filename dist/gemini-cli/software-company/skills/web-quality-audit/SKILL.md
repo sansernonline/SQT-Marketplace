@@ -104,8 +104,8 @@ description: Use when auditing a web page for accessibility (WCAG 2.2 AA) or per
 | เครื่องมือ | คำสั่ง | วัดอะไร | licence |
 |---|---|---|---|
 | Lighthouse CLI | `npx lighthouse <url> --only-categories=performance,accessibility --output html --output json --output-path _to_delete/audit/home.html` · desktop เพิ่ม `--preset=desktop` · ไม่มีจอ `--chrome-flags="--headless"` | คะแนน performance · accessibility · LCP · CLS · TBT (lab) | Apache-2.0 |
-| axe-core CLI | `npx @axe-core/cli <url>` · ต้องมี Chrome และ chromedriver (`npx browser-driver-manager install chrome`) | ข้อ WCAG ที่ตรวจอัตโนมัติได้ พร้อม selector ของจุดที่ผิด | MPL-2.0 |
-| pa11y | `npx pa11y <url> --runner axe --runner htmlcs` · ค่าเริ่ม WCAG2AA · exit code 2 = มีข้อผิด | เหมือน axe + กฎ HTML_CodeSniffer · เหมาะใส่ CI | LGPL-3.0 · ต้องใช้ Node เลขคู่ ≥ 22.13 |
+| axe-core CLI | `npx @axe-core/cli <url> \| head -60` · ต้องมี Chrome และ chromedriver (`npx browser-driver-manager install chrome`) | ข้อ WCAG ที่ตรวจอัตโนมัติได้ พร้อม selector ของจุดที่ผิด | MPL-2.0 |
+| pa11y | `npx pa11y <url> --runner axe --runner htmlcs \| head -60` · ค่าเริ่ม WCAG2AA · exit code 2 = มีข้อผิด | เหมือน axe + กฎ HTML_CodeSniffer · เหมาะใส่ CI | LGPL-3.0 · ต้องใช้ Node เลขคู่ ≥ 22.13 |
 
 - `npx` **ดาวน์โหลดแพ็กเกจและเบราว์เซอร์ตอนรัน** — โปรเจกต์ต้องอนุญาตให้ติดตั้งของ และใน `.sandbox/` ต้องเปิดเครือข่ายออก (`docker-sandbox`) · ถ้าไม่ได้ ให้ใช้ทางออฟไลน์
 - **ออฟไลน์ = Chrome DevTools**: แท็บ Lighthouse (ผลเดียวกับ CLI) · Elements → Accessibility pane (contrast · accessible name) · Rendering → Emulate `prefers-reduced-motion` · Performance → บันทึกแล้วดู LCP และ layout shift · CSS Overview หาสีที่ contrast ไม่ผ่านทั้งหน้า

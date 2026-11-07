@@ -101,13 +101,9 @@ A real signal can be followed only from a real account (MQL5 article 523, checke
 
 Revenue Department order ป.161/2566 (15 Sep 2023), amended by ป.162/2566 (20 Nov 2023): a Thai tax resident with foreign-source income must include it in the tax year it is **brought into Thailand**, for income brought in from 1 Jan 2024; income earned before 1 Jan 2024 is outside it. Tax withheld abroad under a double-tax treaty can be credited (RD news 34/2566). Not confirmed: which section of section 40 forex/CFD profit falls under and whether losses offset (รอยืนยัน — ask RD on 1161) · the 180-day residence test comes from search results only (รอยืนยัน). Details → `tax-basics-th`.
 
-## Worked example
+## Worked example and sources
 
-**Ask (numbers made up — ตัวอย่าง):** "Pick the signal with the highest Growth from these 3, I'll follow with 50,000 baht." GoldRush Pro: Growth 1,240% · 14 weeks · real · drawdown 78% · max deposit load 92% · 410 trades · profit trades 97%. Steady EU: 85% · 104 weeks · real · 14% · 12% · 620 trades · Sharpe 0.21 · recovery factor 4.1. Swing FX: 210% · 40 weeks · **demo** · 33% · 25% · 95 trades. Plus Calm Yen for the scoring step: 60 weeks · real · 22% · 18% · 240 trades · Sharpe 0.28 · recovery 3.0.
-
-**Did:** legal box first · GoldRush Pro out (14 weeks, load 92%, 97% wins with 78% drawdown points to martingale — history needed to confirm) · Swing FX out (demo) · `decide.mjs score` on the rest (run 2026-10-27): Steady EU 70, Calm Yen 30, stable under ±20% weight shifts · asked for Steady EU's history to run `signal-check.mjs` before going further · sizing: the user can lose 10% → 10 ÷ (14 × 1.5) ≈ 48% of capital, equity stop at 45,000 baht equivalent · 8 weeks of paper tracking first.
-
-**Result:** "The highest Growth, GoldRush Pro, fails 2 hard rules (14 weeks · deposit load 92%) and looks like martingale; its history would confirm. Steady EU leads on the numbers, but send its trade history first, and ask BOT 1213 before moving any money. You decide."
+A made-up 3-provider example (ask · did · result) and every source with its read date: [references/example-and-sources.md](references/example-and-sources.md).
 
 ## Check before sending
 
@@ -117,6 +113,21 @@ Revenue Department order ป.161/2566 (15 Sep 2023), amended by ป.162/2566 (20
 - [ ] Every threshold without a source says "starting value, not yet measured"
 - [ ] `signal-check.mjs --self-test` passes (2026-10-27: 42/42; a fresh reviewer broke 18 formulas on purpose and the test caught 15)
 - [ ] Paper tracking comes before real money; the user decides
+
+
+## reference: example-and-sources.md
+
+# Worked example and sources — copy-trade-check
+
+Moved from `SKILL.md` (copy-trade-check)
+
+## Worked example
+
+**Ask (numbers made up — ตัวอย่าง):** "Pick the signal with the highest Growth from these 3, I'll follow with 50,000 baht." GoldRush Pro: Growth 1,240% · 14 weeks · real · drawdown 78% · max deposit load 92% · 410 trades · profit trades 97%. Steady EU: 85% · 104 weeks · real · 14% · 12% · 620 trades · Sharpe 0.21 · recovery factor 4.1. Swing FX: 210% · 40 weeks · **demo** · 33% · 25% · 95 trades. Plus Calm Yen for the scoring step: 60 weeks · real · 22% · 18% · 240 trades · Sharpe 0.28 · recovery 3.0.
+
+**Did:** legal box first · GoldRush Pro out (14 weeks, load 92%, 97% wins with 78% drawdown points to martingale — history needed to confirm) · Swing FX out (demo) · `decide.mjs score` on the rest (run 2026-10-27): Steady EU 70, Calm Yen 30, stable under ±20% weight shifts · asked for Steady EU's history to run `signal-check.mjs` before going further · sizing: the user can lose 10% → 10 ÷ (14 × 1.5) ≈ 48% of capital, equity stop at 45,000 baht equivalent · 8 weeks of paper tracking first.
+
+**Result:** "The highest Growth, GoldRush Pro, fails 2 hard rules (14 weeks · deposit load 92%) and looks like martingale; its history would confirm. Steady EU leads on the numbers, but send its trade history first, and ask BOT 1213 before moving any money. You decide."
 
 ## Sources
 

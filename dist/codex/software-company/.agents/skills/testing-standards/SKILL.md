@@ -161,7 +161,7 @@ push / PR → lint → unit (< 10 วินาที) → integration → build
 ## 7 · ตรวจงาน
 
 - [ ] ใช้ framework ของเดิมหรือที่มากับสแต็ก ถ้าลงตัวใหม่ ต้องถามแล้วหรือบันทึกไว้ใน "ตัดสินใจเอง"
-- [ ] `npm test` / `dotnet test` / `pytest` / `flutter test` รันผ่านจากเครื่องเปล่าโดยไม่ต้องตั้งค่าอะไรเพิ่ม
+- [ ] `npm test` / `dotnet test` / `pytest` / `flutter test` รันผ่านจากเครื่องเปล่าโดยไม่ต้องตั้งค่าอะไรเพิ่ม (ผลยาว → `> _to_delete/test.txt 2>&1` แล้ว `tail -20`)
 - [ ] ชุด unit รันจบใน 10 วินาที
 - [ ] ลองสลับลำดับ test แล้วยังเขียวหมด (pytest: ลง `pytest-randomly` แล้วรัน `pytest` ธรรมดา · Vitest: `--sequence.shuffle` · Jest: `--randomize` · Flutter: `--test-randomize-ordering-seed random`)
 - [ ] รันซ้ำ 3 รอบได้ผลเหมือนเดิม (ไม่ flaky)

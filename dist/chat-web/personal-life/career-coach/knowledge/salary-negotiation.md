@@ -70,15 +70,7 @@ Offer B's base is 10% higher but A is worth 54,000 more a year — before insura
 
 3. **Run:** `node decide.mjs score offers.json` (path of the script: see the `decision-scoring` skill). Input, using the table above plus a third offer that is under the walk-away:
 
-```json
-{"criteria":[{"name":"total per year","weight":0.4,"better":"high"},{"name":"commute min","weight":0.2,"better":"low"},{"name":"growth 1-5","weight":0.25,"better":"high"},{"name":"leave days","weight":0.15,"better":"high"}],
- "must":[{"criterion":"total per year","min":850000}],
- "options":[{"name":"A","values":{"total per year":912000,"commute min":90,"growth 1-5":3,"leave days":12}},
-            {"name":"B","values":{"total per year":858000,"commute min":60,"growth 1-5":4,"leave days":15}},
-            {"name":"C","values":{"total per year":800000,"commute min":30,"growth 1-5":5,"leave days":15}}]}
-```
-
-Result when run: C is dropped by the iron rule, B 60 and A 40, B stays first when each weight moves ±20%. With only 2 options every criterion becomes 0 or 100, so read the raw numbers in brackets too.
+Example input (3 offers, iron rule 850,000) and the result when run: [references/offer-scoring-example.md](references/offer-scoring-example.md)
 4. **Unstable or close** (`ยังไม่นิ่ง`, `สูสี`) → show the user the top two and the criterion that flips them; the user decides. Money and career: the score is supporting data, not advice.
 
 ## Step 3 — set three numbers
@@ -145,3 +137,18 @@ Run the `career-coach` agent with the `salary-negotiation` skill: **$ARGUMENTS**
 - `offer` — build the total-compensation table for the offer (and the current job), find the gap, draft the reply in Thai and English
 - `raise` — build the case from `performance-self-review`, pick the number, draft the meeting opener
 - `counter` — the current employer counter-offered; run the counter-offer checklist before answering
+
+
+## reference: offer-scoring-example.md
+
+# Compare offers by numbers — example input and result
+
+```json
+{"criteria":[{"name":"total per year","weight":0.4,"better":"high"},{"name":"commute min","weight":0.2,"better":"low"},{"name":"growth 1-5","weight":0.25,"better":"high"},{"name":"leave days","weight":0.15,"better":"high"}],
+ "must":[{"criterion":"total per year","min":850000}],
+ "options":[{"name":"A","values":{"total per year":912000,"commute min":90,"growth 1-5":3,"leave days":12}},
+            {"name":"B","values":{"total per year":858000,"commute min":60,"growth 1-5":4,"leave days":15}},
+            {"name":"C","values":{"total per year":800000,"commute min":30,"growth 1-5":5,"leave days":15}}]}
+```
+
+Result when run: C is dropped by the iron rule, B 60 and A 40, B stays first when each weight moves ±20%. With only 2 options every criterion becomes 0 or 100, so read the raw numbers in brackets too.

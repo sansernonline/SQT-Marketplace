@@ -27,8 +27,8 @@ Fewer than 20 trades: report the numbers but say the sample is too small to judg
 
 ## Workflow
 
-1. Load closed trades since the last review; separate `live` and `paper`.
-2. Compute the table above (show the arithmetic once, so the user can check it).
+1. Load closed trades since the last review (filter rows by `date_out` into a temp file first — the script has no date option — then pass that file to the script; do not read the whole journal into context); separate `live` and `paper`.
+2. Run `trade-stats.mjs` (section "Script") for the table above and show its output once, so the user can check it; do not compute by hand.
 3. **Group losing trades** by setup, by emotion tag, by day of week / time of day, and by violation; find the cluster with the largest total −R, not the most memorable trade.
 4. **Name one pattern** that cost the most this period, quoting 2–3 actual journal lines as evidence.
 5. **Write one rule** as a countable gate: "No entry within 15 minutes after a stop-out" or "No `breakout-volume` entry when volume < 1.5× average".

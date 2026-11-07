@@ -191,11 +191,7 @@ Few goals, measured honestly, carried by habits small enough to survive a bad we
 3. **Iron rules:** an item with a fixed deadline outside the user's control (an exam date, a tax filing) goes in with `"must": true`. Cost over the whole budget → cut or shrink the item.
 4. **Run:** `node decide.mjs knapsack goals.json` — it tries every set and returns the best one for the budget · put `"max_items": 3` in the file so it never picks more than three goals. Example input (6 free hours a week; value = impact × desire):
 
-```json
-{"budget":6,"max_items":3,"items":[{"name":"Run 5 km","cost":3,"value":12},{"name":"Emergency fund 60,000","cost":1,"value":20},{"name":"English 60 lessons","cost":4,"value":15},{"name":"Read 6 books","cost":2,"value":6}]}
-```
-
-Result when run: emergency fund + run 5 km + read 6 books (6 of 6 hours, total value 38); English is the one parked on `someday`.
+Example input (JSON for `knapsack`) and the result when run: [references/tracker-template.md](references/tracker-template.md)
 5. A close call (the "ชุดรองลงมา" line in the result is under 10% behind the best set, starting value, not yet measured; the line appears only with 20 items or fewer) or a goal the user refuses → the user decides. Impact and desire are the user's own scores; the tool only does the arithmetic. Time budget and scores are starting value, not yet measured until a quarter of weekly checks shows the real hours.
 
 ## Outcome formula
@@ -227,20 +223,7 @@ Rule: the user must be able to say **yes or no** on the date. "Better" and "more
 
 ## Tracker template
 
-```markdown
-# 2026-Q4 goals (1 Oct – 31 Dec)
-
-| # | Goal (outcome formula) | Lead habit | 2-min version | Target/week |
-|---|---|---|---|---|
-| 1 | | | | |
-| 2 | | | | |
-| 3 | | | | |
-
-## Weekly log
-| Week | Goal 1 habit (✔/✖ per day) | Goal 2 | Goal 3 | Outcome number now | Adjustment |
-|---|---|---|---|---|---|
-| W40 | ✔✖✔ | | | | |
-```
+Markdown template (quarter goals table + weekly log): [references/tracker-template.md](references/tracker-template.md)
 
 ## Failure review (blame-free, 10 minutes)
 
@@ -265,3 +248,35 @@ Rule: the user must be able to say **yes or no** on the date. "Better" and "more
 - Health goals: set the habit and the measurement; ask a doctor before strict diets or intense training
 
 Related: `weekly-review` (the weekly check), `decision-journal` (drop or continue), `personal-budget` in `trading-finance` (money goals), `learning-path` (learning goals).
+
+
+## reference: tracker-template.md
+
+# goal-and-habit — examples and templates
+
+## Example input for `knapsack` and the result
+
+```json
+{"budget":6,"max_items":3,"items":[{"name":"Run 5 km","cost":3,"value":12},{"name":"Emergency fund 60,000","cost":1,"value":20},{"name":"English 60 lessons","cost":4,"value":15},{"name":"Read 6 books","cost":2,"value":6}]}
+```
+
+Result when run: emergency fund + run 5 km + read 6 books (6 of 6 hours, total value 38); English is the one parked on `someday`.
+
+## Tracker template
+
+## Tracker template
+
+```markdown
+# 2026-Q4 goals (1 Oct – 31 Dec)
+
+| # | Goal (outcome formula) | Lead habit | 2-min version | Target/week |
+|---|---|---|---|---|
+| 1 | | | | |
+| 2 | | | | |
+| 3 | | | | |
+
+## Weekly log
+| Week | Goal 1 habit (✔/✖ per day) | Goal 2 | Goal 3 | Outcome number now | Adjustment |
+|---|---|---|---|---|---|
+| W40 | ✔✖✔ | | | | |
+```

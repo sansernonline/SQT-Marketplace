@@ -159,7 +159,7 @@ options.LogTo(Console.WriteLine, LogLevel.Information).EnableSensitiveDataLoggin
 ## 7 · ตรวจก่อนส่ง
 
 - [ ] `dotnet build -warnaserror` ได้ 0 warning (หรือไม่เพิ่ม warning จากเดิมใน repo เก่า)
-- [ ] `dotnet test` ผ่านหมด และรายงานว่าผ่านกี่ตัวจากกี่ตัว
+- [ ] `dotnet test` ผ่านหมด และรายงานว่าผ่านกี่ตัวจากกี่ตัว (ผลยาว → `> _to_delete/test.txt 2>&1` แล้ว `tail -20`)
 - [ ] `dotnet format --verify-no-changes` ไม่มีอะไรต้องแก้
 - [ ] พฤติกรรมใหม่มี test ที่เคยแดงก่อนแก้
 - [ ] ไม่มี `.Result` · `.Wait()` · `async void` ใหม่: `grep -rnE "\.Result\b|\.Wait\(\)|async void" --include=*.cs`

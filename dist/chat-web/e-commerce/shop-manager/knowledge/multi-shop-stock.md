@@ -61,23 +61,7 @@ Multi-channel tools (BigSeller, Zort, Duoke and similar) sync stock automaticall
 
 ## Reorder point
 
-```
-Reorder point = average daily sales × supplier lead time (days) + safety stock
-Safety stock  = (max daily sales × max lead time) − (average daily sales × average lead time)
-Reorder qty   = average daily sales × days of cover wanted − (available − reorder point)
-```
-
-Worked example — `BAG-TOTE-BLK-L`, all channels together:
-
-| Item | Value |
-|---|---|
-| Average daily sales (last 30 days) | 4.0 |
-| Max daily sales (normal days, excl. 11.11) | 9 |
-| Lead time average / max | 10 / 14 days |
-| Safety stock | 9 × 14 − 4 × 10 = 126 − 40 = **86** |
-| Reorder point | 4 × 10 + 86 = **126** |
-| Days of cover wanted | 45 |
-| Reorder qty when available = 126 | 4 × 45 = **180** |
+Reorder point = average daily sales × lead time + safety stock (max-demand × max-lead minus the averages); reorder qty = daily sales × days of cover wanted − (available − reorder point). Formulas and the `BAG-TOTE-BLK-L` worked example → [references/reorder-point.md](references/reorder-point.md); the script below computes them.
 
 Before a big campaign (9.9, 10.10, 11.11, 12.12, payday sales) raise average daily sales for the campaign window from last year's numbers, not this month's.
 
@@ -103,3 +87,28 @@ node scripts/stock-calc.mjs --self-test
 ## Related
 
 - `product-listing` (variant names = SKU names), `marketplace-fees-pricing` (same SKU codes), `live-selling-script` (live allocation)
+
+
+## reference: reorder-point.md
+
+# Reorder point — formulas and worked example
+
+Moved from `SKILL.md`. `scripts/stock-calc.mjs` computes all of this; open this file only to understand or check a result by hand.
+
+```
+Reorder point = average daily sales × supplier lead time (days) + safety stock
+Safety stock  = (max daily sales × max lead time) − (average daily sales × average lead time)
+Reorder qty   = average daily sales × days of cover wanted − (available − reorder point)
+```
+
+Worked example — `BAG-TOTE-BLK-L`, all channels together:
+
+| Item | Value |
+|---|---|
+| Average daily sales (last 30 days) | 4.0 |
+| Max daily sales (normal days, excl. 11.11) | 9 |
+| Lead time average / max | 10 / 14 days |
+| Safety stock | 9 × 14 − 4 × 10 = 126 − 40 = **86** |
+| Reorder point | 4 × 10 + 86 = **126** |
+| Days of cover wanted | 45 |
+| Reorder qty when available = 126 | 4 × 45 = **180** |

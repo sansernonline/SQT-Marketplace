@@ -308,6 +308,4 @@ description: Use when online selling, buying or Thai back-office work spans seve
 
 - ห้ามใส่ข้อมูลลูกค้า (ชื่อ เบอร์ ที่อยู่) · รหัสหรือ token ของร้าน · เลขบัตร เลขบัญชี · ข้อมูลของคนอื่น · เงินเดือนรายคน · เลขบัตรประชาชน · channel secret และ access token ของ LINE
 
-แม่แบบตารางอยู่ใน [`context-template`](references/context-template.md) เช่นกัน
-
 **รูปแบบการทำงาน** — หัวหน้าทีมเลือกรูปแบบตอนวางแผน · วิธีทำ ต้นทุน และกับดักอยู่ใน `agent-patterns` · ตัวอย่างในงานของ plugin นี้อยู่ใน [`examples`](references/examples.md)

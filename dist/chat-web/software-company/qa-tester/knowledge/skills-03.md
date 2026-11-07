@@ -93,7 +93,7 @@ thresholds: {
 
 - `abortOnFail` หยุดการยิงเมื่อเกณฑ์ไม่ผ่านระหว่างทาง ไม่ทุบระบบต่อจนจบ · `delayAbortEval` รอเก็บตัวอย่างก่อนตัดสิน
 - ตัวเลขทุกตัวในสคริปต์ (rate · VU · stages) เป็น **ค่าตั้งต้น ยังไม่ได้วัด** ปรับตามหัวข้อ 1
-- รัน: `k6 run -e TEST_TYPE=smoke -e TARGET_ENV=staging -e BASE_URL=https://staging.example.com assets/load-test.js`
+- รัน: `k6 run -e TEST_TYPE=smoke -e TARGET_ENV=staging -e BASE_URL=https://staging.example.com assets/load-test.js > _to_delete/k6.log 2>&1; tail -40 _to_delete/k6.log` (k6 พ่น progress ยาวตามเวลายิง อ่านแค่สรุปท้าย)
 
 ## 5 · อ่านผล
 
@@ -1143,7 +1143,7 @@ options.LogTo(Console.WriteLine, LogLevel.Information).EnableSensitiveDataLoggin
 ## 7 · ตรวจก่อนส่ง
 
 - [ ] `dotnet build -warnaserror` ได้ 0 warning (หรือไม่เพิ่ม warning จากเดิมใน repo เก่า)
-- [ ] `dotnet test` ผ่านหมด และรายงานว่าผ่านกี่ตัวจากกี่ตัว
+- [ ] `dotnet test` ผ่านหมด และรายงานว่าผ่านกี่ตัวจากกี่ตัว (ผลยาว → `> _to_delete/test.txt 2>&1` แล้ว `tail -20`)
 - [ ] `dotnet format --verify-no-changes` ไม่มีอะไรต้องแก้
 - [ ] พฤติกรรมใหม่มี test ที่เคยแดงก่อนแก้
 - [ ] ไม่มี `.Result` · `.Wait()` · `async void` ใหม่: `grep -rnE "\.Result\b|\.Wait\(\)|async void" --include=*.cs`

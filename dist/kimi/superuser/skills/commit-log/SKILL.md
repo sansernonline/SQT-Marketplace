@@ -17,7 +17,7 @@ description: Use when a step of work is finished in a git folder, or the user as
 
 ## 2 · ขั้นตอน
 
-1. `git status` · `git diff` → ดูว่าเปลี่ยนอะไร
+1. `git status` · `git diff --stat` → ดูว่าเปลี่ยนอะไร แล้ว `git diff <ไฟล์>` เฉพาะไฟล์ที่ต้องดูเนื้อ
 2. `git log -10 --oneline` → ใช้ภาษาและชื่อ scope แบบที่ repo ใช้อยู่
 3. แยกตามเรื่อง → 1 commit = 1 เรื่อง · subject ต้องใช้ "และ" เชื่อมของที่ไม่เกี่ยวกัน → แยก 2 commit (`git add <ไฟล์>` ทีละเรื่อง)
 4. ตรวจของที่ไม่ควรเข้า → ค่าลับ · `.env` · key · ไฟล์ build · ไฟล์ใหญ่ · `.claude/superuser/log/` `inbox/` `learn/` `handoff/` `state.json` · `_to_delete/` → ใส่ `.gitignore` (log กับ handoff มีชื่อไฟล์และคำสั่งภายใน)
