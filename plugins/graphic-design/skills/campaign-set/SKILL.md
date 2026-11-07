@@ -1,6 +1,7 @@
 ---
 name: campaign-set
 description: Use when one campaign (launch, sale, event, festival) needs assets for several platforms from one concept.
+argument-hint: <campaign idea in one sentence>
 ---
 
 # Campaign Set
@@ -74,3 +75,11 @@ Before handing over, run the check in `no-ai-look` (section 3): its script on HT
 - `video-script-to-clip` — V rows
 - `design-review` — the ship gate
 - `asset-organize` — names and folders
+
+## เรียกเป็นคำสั่ง
+
+`/graphic-design:campaign-set <campaign idea in one sentence>`
+
+Run `campaign-set` with the `social-creator` and `brand-keeper` agents for: **$ARGUMENTS**
+
+Delivers the asset matrix as a checklist. An asset counts as done only after it passes design-review.

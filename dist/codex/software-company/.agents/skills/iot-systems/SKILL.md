@@ -1,6 +1,7 @@
 ---
 name: iot-systems
 description: Use when building connected devices (provisioning, OTA updates, edge vs cloud, MQTT, firmware).
+argument-hint: <iot-architecture | device-fleet-design> <details>
 ---
 
 # iot-systems
@@ -35,3 +36,16 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 ## ที่มา
 
 รวมจาก plugin `software-company-iot` (เดิมชื่อ device-fleet-management → `references/device-fleet-management.md` · edge-computing-architecture → `references/edge-computing-architecture.md` · mqtt-protocol-patterns → `references/mqtt-protocol-patterns.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+
+## โหมดออกแบบ (เรียกเป็นคำสั่ง)
+
+`/software-company:iot-systems <iot-architecture | device-fleet-design> <details>`
+
+Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+
+| Mode | What it does |
+|---|---|
+| `iot-architecture` | Design IoT system architecture using the iot-engineer agent. Covers connectivity, data flow, edge tier. |
+| `device-fleet-design` | Design device fleet management — provisioning, OTA, monitoring, config. Uses iot-engineer agent. |
+
+ขั้นตอนเต็มของแต่ละโหมด → [references/design-modes.md](references/design-modes.md)

@@ -1,6 +1,7 @@
 ---
 name: salary-negotiation
 description: Use when the user gets a job offer, is asked expected salary, wants a raise or compares offers.
+argument-hint: <offer|raise|counter> [offer details]
 ---
 
 # Salary Negotiation (Thailand)
@@ -136,3 +137,13 @@ Many Thai companies, and most large ones, have a salary band (กรอบเง
 - Keep every offer letter in `important-docs`.
 
 Related: `performance-self-review` (evidence for a raise) · `interview-prep` · `personal-budget` in `trading-finance` (what the raise does to the monthly budget).
+
+## เรียกเป็นคำสั่ง
+
+`/personal-life:salary-negotiation <offer|raise|counter> [offer details]`
+
+Run the `career-coach` agent with the `salary-negotiation` skill: **$ARGUMENTS**
+
+- `offer` — build the total-compensation table for the offer (and the current job), find the gap, draft the reply in Thai and English
+- `raise` — build the case from `performance-self-review`, pick the number, draft the meeting opener
+- `counter` — the current employer counter-offered; run the counter-offer checklist before answering

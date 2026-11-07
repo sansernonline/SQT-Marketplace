@@ -1,6 +1,7 @@
 ---
 name: smart-contracts
 description: Use when building on a blockchain (Solidity or Solana contracts, audits, Foundry, DeFi, tokenomics).
+argument-hint: <smart-contract-audit | tokenomics-design> <details>
 ---
 
 # smart-contracts
@@ -29,7 +30,7 @@ description: Use when building on a blockchain (Solidity or Solana contracts, au
 | 4 เขียน invariant แล้วให้เครื่องพยายามทำลาย | จดคุณสมบัติที่ต้องจริงเสมอ (state machine · สิทธิ์ · เลขคณิตและความละเอียด · การเรียกออกนอก · มาตรฐาน) แล้วเขียนเป็น property test ให้ Echidna หรือ Medusa (fuzz) — ขั้นนี้สำคัญที่สุด | ทุก invariant มี test และ fuzz รันผ่านตามรอบที่กำหนด (ดู `references/smart-contract-testing.md`) |
 | 5 สิ่งที่เครื่องมอไม่เห็น | อ่านเองเรื่อง ความลับบน chain (ต้อง commit-reveal ไหม) · front-running และ MEV (slippage · ลำดับ) · การสุ่มและลายเซ็น · oracle และ flash loan | ทุกหัวข้อมีบันทึกว่าเจอหรือไม่เกี่ยว |
 
-ผลทั้ง 5 ขั้นเป็นหลักฐานของขั้น "Static analysis" และ "Manual review" ใน `/software-company:web3-design smart-contract-audit`
+ผลทั้ง 5 ขั้นเป็นหลักฐานของขั้น "Static analysis" และ "Manual review" ใน `/software-company:smart-contracts smart-contract-audit`
 
 ## คู่มือบทบาท
 
@@ -49,3 +50,16 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 ## ที่มา
 
 รวมจาก plugin `software-company-web3` (เดิมชื่อ solidity-security → `references/solidity-security.md` · smart-contract-testing → `references/smart-contract-testing.md` · defi-patterns → `references/defi-patterns.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+
+## โหมดออกแบบ (เรียกเป็นคำสั่ง)
+
+`/software-company:smart-contracts <smart-contract-audit | tokenomics-design> <details>`
+
+Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+
+| Mode | What it does |
+|---|---|
+| `smart-contract-audit` | Audit smart contracts using the blockchain-engineer agent. |
+| `tokenomics-design` | Design tokenomics using blockchain-engineer agent. |
+
+ขั้นตอนเต็มของแต่ละโหมด → [references/design-modes.md](references/design-modes.md)

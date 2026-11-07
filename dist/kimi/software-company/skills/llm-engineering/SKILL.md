@@ -1,6 +1,7 @@
 ---
 name: llm-engineering
 description: Use when a system calls a large language model (prompts, structured output, RAG, embeddings, evals).
+argument-hint: <rag-design | llm-eval> <details>
 ---
 
 # llm-engineering
@@ -37,3 +38,16 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 ## ที่มา
 
 รวมจาก plugin `software-company-ai` (เดิมชื่อ prompt-engineering-patterns → `references/prompt-engineering-patterns.md` · llm-evaluation-patterns → `references/llm-evaluation-patterns.md` · rag-architecture → `references/rag-architecture.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+
+## โหมดออกแบบ (เรียกเป็นคำสั่ง)
+
+`/software-company:llm-engineering <rag-design | llm-eval> <details>`
+
+Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+
+| Mode | What it does |
+|---|---|
+| `rag-design` | Design a production-grade RAG system using ai-engineer agent. Covers ingestion, chunking, embeddings, retrieval, re-ranking, and evaluation. |
+| `llm-eval` | Design or run LLM evaluation suite using ai-engineer agent. Builds eval set, defines metrics, and creates regression test framework. |
+
+ขั้นตอนเต็มของแต่ละโหมด → [references/design-modes.md](references/design-modes.md)

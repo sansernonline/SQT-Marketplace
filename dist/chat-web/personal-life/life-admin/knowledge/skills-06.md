@@ -203,6 +203,14 @@ Revisit (2027-06-01): leading a project ✓, bonus 0.5 month, evenings ✓. Verd
 
 Related: `weekly-review` (surfaces revisit dates) · `goal-and-habit`.
 
+## เรียกเป็นคำสั่ง
+
+`/personal-life:decision-journal <the decision, in one sentence>`
+
+Run the `decision-journal` skill for: **$ARGUMENTS**
+
+Confirms options considered and expected outcome, writes the dated entry, and sets the check-in reminder.
+
 
 ## reference: entry-template.md
 

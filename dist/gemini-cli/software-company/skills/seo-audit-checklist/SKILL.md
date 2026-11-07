@@ -1,6 +1,7 @@
 ---
 name: seo-audit-checklist
 description: Use when auditing a website or page for search engine optimization (SEO) or doing pre-launch SEO checks.
+argument-hint: <URL or page/site description>
 ---
 
 # SEO Audit Checklist
@@ -77,3 +78,33 @@ load the matching skill before writing, not after:
 | The point needs a picture to land | `markdown-visuals`, then `software-diagrams` |
 
 Default formatting is not neutral — it reads as unfinished work.
+
+## เรียกเป็นคำสั่ง
+
+`/software-company:seo-audit-checklist <URL or page/site description>`
+
+Use the `seo-specialist` agent to perform a search engine optimization (SEO) audit on: **$ARGUMENTS**
+
+The SEO specialist should:
+
+1. **Gather context** by asking the user once, all at the start (unknown → `(รอยืนยัน)`, keep going):
+   - What's the primary business goal? (lead gen, e-commerce, content, brand)
+   - Target market / language / region?
+   - Main competitors?
+   - Current SEO performance (if known)
+   - Specific concerns (traffic drop, low rankings, etc.)?
+
+2. **Apply the `seo-audit-checklist` skill** systematically:
+   - Technical SEO
+   - On-Page SEO
+   - Content
+   - Off-Page SEO
+   - Analytics setup
+
+3. **Write findings and the report** with the checklist's per-finding fields and report template (`seo-audit-checklist` → `references/report-template.md`).
+
+4. **Suggest next steps**:
+   - Which findings should go to `developer` (code/markup changes)
+   - Which to `technical-writer` / `ux-designer` (content / information architecture (IA))
+   - Which to `devops-engineer` (performance/infra)
+   - Which need ongoing monitoring

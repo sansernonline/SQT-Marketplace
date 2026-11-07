@@ -1,6 +1,7 @@
 ---
 name: buy-compare
 description: Use when about to buy something big in Thailand (appliance, phone, car, course). Total cost, trusted reviews.
+argument-hint: <product category> [option A] [option B] [budget]
 ---
 
 # Buy and Compare
@@ -89,3 +90,15 @@ Sort by **lowest rating** and **most recent** — patterns in 1–2 star reviews
 - Keep the tax invoice or receipt; some brands require online registration within a set time (see `warranty-tracker`).
 
 Related: `warranty-tracker` · `refund-request` · `scam-check` in `trading-finance` (if installed; deals that are too good) · `personal-budget` in `trading-finance` (if installed).
+
+## เรียกเป็นคำสั่ง
+
+`/e-commerce:buy-compare <product category> [option A] [option B] [budget]`
+
+Run the `consumer-advocate` agent with the `buy-compare` skill: **$ARGUMENTS**
+
+1. Missing must-haves, budget or how long the user plans to keep it → mark `(รอยืนยัน)` and list them; the lead asks once at the start.
+2. Build the weighted decision matrix (5–7 criteria).
+3. Calculate total cost of ownership over the expected life.
+4. Check reviews with the trust signals and fake-review red flags.
+5. Recommend one option with the reason, and note warranty terms to log in `warranty-tracker`.

@@ -79,6 +79,14 @@ Before handing over, run the check in `no-ai-look` (section 3): its script on HT
 - `video-script-to-clip` — captions and safe zones in video
 - `software-company` `graphic-design` (if installed) — print sizes and LINE rich menu layout for product work
 
+## เรียกเป็นคำสั่ง
+
+`/graphic-design:social-formats <path to master asset> [platforms needed]`
+
+Run `social-formats` and `campaign-set` derivation steps on: **$ARGUMENTS**
+
+Never stretches an image. Every derived file has the platform and format in its name.
+
 
 ## reference: platform-sizes.md
 
@@ -250,6 +258,14 @@ Before handing over, run the check in `no-ai-look` (section 3): its script on HT
 - `video-script-to-clip` — V rows
 - `design-review` — the ship gate
 - `asset-organize` — names and folders
+
+## เรียกเป็นคำสั่ง
+
+`/graphic-design:campaign-set <campaign idea in one sentence>`
+
+Run `campaign-set` with the `social-creator` and `brand-keeper` agents for: **$ARGUMENTS**
+
+Delivers the asset matrix as a checklist. An asset counts as done only after it passes design-review.
 
 
 ## reference: asset-matrix-template.md

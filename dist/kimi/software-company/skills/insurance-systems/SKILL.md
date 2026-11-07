@@ -1,6 +1,7 @@
 ---
 name: insurance-systems
 description: Use when building insurance software (policy, quotes, claims, fraud, underwriting, OIC filings).
+argument-hint: <claims-flow-design | underwriting-model-design> <details>
 ---
 
 # insurance-systems
@@ -36,3 +37,18 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 ## ที่มา
 
 รวมจาก plugin `software-company-insurtech` (เดิมชื่อ claims-workflow-patterns → `references/claims-workflow-patterns.md` · underwriting-models → `references/underwriting-models.md` · insurance-compliance → `references/insurance-compliance.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+
+## โหมดออกแบบ (เรียกเป็นคำสั่ง)
+
+`/software-company:insurance-systems <claims-flow-design | underwriting-model-design> <details>`
+
+> **ภาษา:** ถ้อยคำทุกบรรทัดในเอกสารที่ได้ เขียนตาม `human-writing` — command นี้บอกขั้นตอน ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+
+Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+
+| Mode | What it does |
+|---|---|
+| `claims-flow-design` | Design claims processing flow using insurance-engineer agent. |
+| `underwriting-model-design` | Design an underwriting model using the insurance-analyst agent. |
+
+ขั้นตอนเต็มของแต่ละโหมด → [references/design-modes.md](references/design-modes.md)

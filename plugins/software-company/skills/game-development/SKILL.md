@@ -1,6 +1,7 @@
 ---
 name: game-development
 description: Use when building a game (engine choice, ECS, netcode, matchmaking, anti-cheat, live-ops).
+argument-hint: <game-design | multiplayer-architecture> <details>
 ---
 
 # game-development
@@ -35,3 +36,18 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 ## ที่มา
 
 ย้ายมาจาก plugin `software-company-gaming` (เดิมชื่อ game-architecture → `references/game-architecture.md` · multiplayer-netcode → `references/multiplayer-netcode.md` · live-ops-patterns → `references/live-ops-patterns.md` ไม่ใช่ skill แยกแล้ว) และรวมเข้า `software-company` ใน v2.0.0 เนื้อหาเดิมยังอยู่ครบใน `references/`
+
+## โหมดออกแบบ (เรียกเป็นคำสั่ง)
+
+`/software-company:game-development <game-design | multiplayer-architecture> <details>`
+
+> **ภาษา:** ถ้อยคำทุกบรรทัดในเอกสารที่ได้ เขียนตาม `human-writing` — command นี้บอกขั้นตอน ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+
+Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+
+| Mode | What it does |
+|---|---|
+| `game-design` | Design game mechanics, loops, and progression using game-designer agent. Produces comprehensive game design document. |
+| `multiplayer-architecture` | Design multiplayer architecture using game-developer agent. Covers netcode, matchmaking, anti-cheat for the game type. |
+
+ขั้นตอนเต็มของแต่ละโหมด → [references/design-modes.md](references/design-modes.md)

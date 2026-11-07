@@ -70,6 +70,14 @@ Week of 2026-10-05:
 
 Related: `inbox-triage` · `calendar-audit` (monthly) · `goal-and-habit` (quarterly) · `important-docs` · `subscription-audit` · `gift-idea-tracker` (occasions in the next 14 days).
 
+## เรียกเป็นคำสั่ง
+
+`/personal-life:weekly-review [--deep]`
+
+Run the `weekly-review` skill: **$ARGUMENTS**
+
+--deep adds a calendar-audit pass and a look at money/admin due next week.
+
 
 ---
 
@@ -148,6 +156,14 @@ Rough saving: 299 (streamer B) + 149 (spouse's separate plan; the family plan ad
 - Do not judge anyone's spending. Show the numbers and let the user decide
 
 Related: `weekly-review` (put the trial-end reminders there), `important-docs` (contract renewal dates), and `personal-budget` and `scam-check` in the `trading-finance` plugin.
+
+## เรียกเป็นคำสั่ง
+
+`/personal-life:subscription-audit <statement files or folder> [--months 3|12]`
+
+Run the `subscription-audit` skill with the `life-admin` agent on: **$ARGUMENTS**
+
+Produces the cost-per-use table, a decision per line, cancellation steps by billing channel (App Store, Google Play, merchant, bank auto-debit), the annual-versus-monthly break-even for anything kept, and a calendar reminder 2 days before every free trial ends. The result is appended to `subscriptions.md` with the next audit date.
 
 
 ## reference: cancel-steps.md

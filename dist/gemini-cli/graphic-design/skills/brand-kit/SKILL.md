@@ -1,6 +1,7 @@
 ---
 name: brand-kit
 description: Use when starting or redoing a brand, or posts look inconsistent. Logo rules, colour roles, Thai-Latin fonts.
+argument-hint: '[brand or company name]'
 ---
 
 # Brand Kit
@@ -88,3 +89,11 @@ Before handing over, run the check in `no-ai-look` (section 3): its script on HT
 - `style-consistency` — the per-campaign style lock that sits under the kit
 - `design-review` — point 7 checks every asset against this kit
 - `asset-organize` — folder and naming
+
+## เรียกเป็นคำสั่ง
+
+`/graphic-design:brand-kit [brand or company name]`
+
+Run `brand-kit` with the `brand-keeper` agent for: **$ARGUMENTS**
+
+Ends with a README you can read in 5 minutes and a v1 version tag.

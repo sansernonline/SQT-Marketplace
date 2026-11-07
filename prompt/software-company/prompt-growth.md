@@ -29,7 +29,7 @@
 
 ## 1. ตรวจ SEO
 
-skill `seo-audit` · agent `seo-specialist` · skill `seo-audit-checklist`
+agent `seo-specialist` · skill `seo-audit-checklist`
 **ผลลัพธ์:** `docs/growth/seo-audit-<ปี-เดือน>.md`
 
 ### เว็บ (ผู้ใช้กรอก)
@@ -99,7 +99,7 @@ agent `graphic-designer` · skill `graphic-design` · `product-naming` (ถ้�
 
 ## 4. ประสบการณ์นักพัฒนา
 
-skill `dx-design` · agent `devrel-engineer` · skill `developer-experience` · `api-conventions`
+agent `devrel-engineer` · skill `developer-experience` (โหมด `dx-audit` · `sdk-design`) · `api-conventions`
 **ผลลัพธ์:** `docs/growth/dx-audit.md`
 
 ### ผลิตภัณฑ์ (ผู้ใช้กรอก)

@@ -150,9 +150,9 @@ git push -u origin main
 ควรเห็น 28 commands ของ software-company เช่น:
 - /feature-kickoff
 - /sprint-plan
-- /code-review
-- /test-design
-- /bug-report
+- /code-review-checklist
+- /test-case-template
+- /bug-report-template
 - /retrospective
 
 ### 3. ทดลอง skill
@@ -235,7 +235,7 @@ hook เขียน log เฉพาะโปรเจกต์ที่มี 
 
 `dist/claude-web/<plugin>.zip` คือ plugin ที่บีบอัดไว้ 1 ไฟล์ต่อ 1 plugin · **อัปโหลดเข้า claude.ai** แล้วใช้ skill ได้ใน Cowork และแชทบนเว็บหรือเดสก์ท็อปด้วย ไม่ใช่แค่ใน Claude Code
 
-**`software-company.zip`:** 108 skills · 38 agents · 29 commands · `plugin.json` v2.43.0 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-company/`
+**`software-company.zip`:** 108 skills · 38 agents · 11 commands · `plugin.json` v2.44.0 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-company/`
 
 ---
 
@@ -346,7 +346,7 @@ node scripts/build/build-targets.mjs          # สร้าง dist/ ทั้�
 gemini extensions install ./dist/gemini-cli/software-company
 ```
 
-- คำสั่งเรียกด้วย `/ชื่อ` เช่น `/code-review src/app.ts`
+- คำสั่งเรียกด้วย `/ชื่อ` เช่น `/code-review-checklist src/app.ts`
 - skill และ subagent ถูกโหลดเองเมื่องานตรงกับคำอธิบาย
 - Gemini ไม่รัน hook ของเรา → ช่วงที่ใช้ Gemini จะไม่มี log ใน `.claude/superuser/log/` · Gemini อ่าน `GEMINI.md` ของโปรเจกต์ แล้วตามไปอ่าน `.claude/superuser/CONTEXT.md` · ก่อนจบงานให้สั่งมันเขียนหัวข้อ "รับงานต่อ" ใน `.claude/superuser/CONTEXT.md`
 

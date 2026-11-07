@@ -63,7 +63,7 @@ superuser = แม่แบบ + skill 6 ตัว           superuser = แก�
 จำลองบริษัทซอฟต์แวร์ครบทุกขั้นของ Software Development Life Cycle (SDLC) ตั้งแต่ทีมหลัก (product · analysis · architecture · design · development · QA · DevOps · security) ไปจนถึงผู้เชี่ยวชาญเฉพาะสาขา
 
 ### มีอะไรบ้าง
-**38 agents · 108 skills · 29 commands** (ไม่นับ skill กลาง 32 ตัวจาก `superuser`)
+**38 agents · 108 skills · 11 commands** (ไม่นับ skill กลาง 32 ตัวจาก `superuser`)
 
 ### ติดตั้ง
 ```
@@ -79,24 +79,24 @@ superuser = แม่แบบ + skill 6 ตัว           superuser = แก�
 
 | เดิม (plugin) | เรื่อง | agent | skill | command |
 |---|---|---|---|---|
-| `software-company-ai` | AI / ML · LLM · RAG | `ai-engineer` · `data-engineer` | `llm-engineering` | `/software-company:llm-design` |
-| `software-company-cybersecurity` | SOC · threat hunting · incident response | `security-analyst` | `security-operations` | `/software-company:security-ops-design` |
-| `software-company-devtools` | SDK · DevRel · docs | `devrel-engineer` | `developer-experience` | `/software-company:dx-design` |
-| `software-company-ecommerce` | checkout · inventory · recommendation | `growth-specialist` · `ecommerce-engineer` · `recommendation-engineer` | `ecommerce-patterns` | `/software-company:ecommerce-design` |
-| `software-company-fintech` | payment · KYC/AML · PCI-DSS | `fintech-engineer` · `fintech-compliance-officer` · `quant-analyst` | `fintech-payments` | `/software-company:fintech-design` |
-| `software-company-gaming` | game engine · multiplayer · live-ops | `game-developer` · `game-designer` | `game-development` | `/software-company:game-design` |
-| `software-company-healthcare` | FHIR · HIPAA · clinical | `healthcare-engineer` · `hipaa-officer` · `clinical-data-analyst` | `healthcare-systems` | `/software-company:healthcare-design` |
-| `software-company-insurtech` | claims · underwriting · insurance law | `insurance-engineer` · `insurance-analyst` · `insurance-compliance-officer` | `insurance-systems` | `/software-company:insurance-design` |
-| `software-company-iot` | firmware · MQTT · edge · fleet | `iot-engineer` | `iot-systems` | `/software-company:iot-design` |
-| `software-company-legaltech` | contract · document automation · e-signature | `legaltech-engineer` · `legal-compliance-officer` | `legal-document-systems` | `/software-company:legal-doc-design` |
-| `software-company-mobile` | iOS / Android / Flutter · ASO | `growth-specialist` · `mobile-engineer` | `mobile-engineering` | `/software-company:mobile-design` |
-| `software-company-saas-b2b` | multi-tenancy · SSO/SCIM · billing | `growth-specialist` · `solution-architect` · `revops-analyst` | `saas-platform` | `/software-company:saas-design` |
-| `software-company-web3` | smart contract · DeFi · tokenomics | `blockchain-engineer` | `smart-contracts` | `/software-company:web3-design` |
+| `software-company-ai` | AI / ML · LLM · RAG | `ai-engineer` · `data-engineer` | `llm-engineering` | `/software-company:llm-engineering` |
+| `software-company-cybersecurity` | SOC · threat hunting · incident response | `security-analyst` | `security-operations` | `/software-company:security-operations` |
+| `software-company-devtools` | SDK · DevRel · docs | `devrel-engineer` | `developer-experience` | `/software-company:developer-experience` |
+| `software-company-ecommerce` | checkout · inventory · recommendation | `growth-specialist` · `ecommerce-engineer` · `recommendation-engineer` | `ecommerce-patterns` | `/software-company:ecommerce-patterns` |
+| `software-company-fintech` | payment · KYC/AML · PCI-DSS | `fintech-engineer` · `fintech-compliance-officer` · `quant-analyst` | `fintech-payments` | `/software-company:fintech-payments` |
+| `software-company-gaming` | game engine · multiplayer · live-ops | `game-developer` · `game-designer` | `game-development` | `/software-company:game-development` |
+| `software-company-healthcare` | FHIR · HIPAA · clinical | `healthcare-engineer` · `hipaa-officer` · `clinical-data-analyst` | `healthcare-systems` | `/software-company:healthcare-systems` |
+| `software-company-insurtech` | claims · underwriting · insurance law | `insurance-engineer` · `insurance-analyst` · `insurance-compliance-officer` | `insurance-systems` | `/software-company:insurance-systems` |
+| `software-company-iot` | firmware · MQTT · edge · fleet | `iot-engineer` | `iot-systems` | `/software-company:iot-systems` |
+| `software-company-legaltech` | contract · document automation · e-signature | `legaltech-engineer` · `legal-compliance-officer` | `legal-document-systems` | `/software-company:legal-document-systems` |
+| `software-company-mobile` | iOS / Android / Flutter · ASO | `growth-specialist` · `mobile-engineer` | `mobile-engineering` | `/software-company:mobile-engineering` |
+| `software-company-saas-b2b` | multi-tenancy · SSO/SCIM · billing | `growth-specialist` · `solution-architect` · `revops-analyst` | `saas-platform` | `/software-company:saas-platform` |
+| `software-company-web3` | smart contract · DeFi · tokenomics | `blockchain-engineer` | `smart-contracts` | `/software-company:smart-contracts` |
 
 **รวมแบบนี้:**
 - agent ที่ทำงานคล้ายกันรวมเป็นตัวเดียว (เช่น android · ios · cross-platform → `mobile-engineer`) — คู่มือบทบาทเดิมทุกตัวอยู่ครบใน `references/agent-<ชื่อเดิม>.md` ของ skill สาขานั้น
 - skill 3 ตัวของแต่ละสาขารวมเป็น skill เดียว — เนื้อหาเดิมอยู่ครบใน `references/<ชื่อเดิม>.md`
-- command 2 ตัวของแต่ละสาขารวมเป็นตัวเดียวที่เลือกโหมดได้ เช่น `/software-company:fintech-design pci-audit <ขอบเขต>`
+- command 2 ตัวของแต่ละสาขารวมเป็นตัวเดียวที่เลือกโหมดได้ เช่น `/software-company:fintech-payments pci-audit <ขอบเขต>`
 
 ---
 
@@ -193,7 +193,7 @@ _ร่างเมื่อ 6 ต.ค. 2569 · software-company ครอบง
 - personal-budget — บัญชีรายรับรายจ่าย+แผนออม
 - scam-check — ตรวจสัญญาณหุ้นล็อก/forexหลอก/แชร์ลูกโซ่ ก่อนโอนเงิน
 
-**Commands (6):** /watch, /paper-trade, /journal, /review-week, /alert-set, /portfolio
+**Commands (6):** /watchlist-setup, /paper-trading, /trade-journal, /post-trade-review, /alert-set, /portfolio-snapshot
 
 **ข้อมูล:** ดึงผ่าน data plugin ที่มีอยู่แล้ว (yahoo_finance, Gildata ฯลฯ) · plugin นี้ไม่มีแหล่งข้อมูลของตัวเอง · ใน skill ระบุว่าถ้าไม่มี data plugin พวกนั้น จะดึงข้อมูลจากแหล่งฟรีแทนอย่างไร
 
@@ -218,7 +218,7 @@ _ร่างเมื่อ 6 ต.ค. 2569 · software-company ครอบง
 - goal-and-habit — ตั้งเป้ารายไตรมาส สร้างหรือเลิกนิสัย
 - decision-journal — บันทึกการตัดสินใจใหญ่ รอผลแล้วกลับมาเรียนรู้
 
-**Commands (5):** /week-review, /meeting, /triage-mail, /travel, /decide
+**Commands (5):** /weekly-review, /meeting, /inbox-triage, /travel-prep, /decision-journal
 
 ---
 
@@ -242,7 +242,7 @@ _ร่างเมื่อ 6 ต.ค. 2569 · software-company ครอบง
 - thai-holidays — วันหยุดนักขัตฤกษ์+วันสำคัญธุรกิจไทย
 - social-security-th — ประกันสังคม/กองทุนสำรองเลี้ยงชีพ ฐานคำนวณ
 
-**Commands (6):** /line-setup, /line-bot, /quotation, /contract, /pdpa, /tax-due
+**Commands (6):** /line-oa-setup, /line-chatbot, /doc-quotation, /doc-contract-th, /pdpa-workflow, /tax-vat-th
 
 **ข้อจำกัดที่ต้องเขียนไว้ใน skill:** เรื่องภาษีและกฎหมายต้องบอกว่า "เบื้องต้น ไม่ใช่คำปรึกษาทนาย/นักบัญชี" และต้องอ้างกรมหรือหน่วยงานทุกครั้ง · LINE Messaging API มีค่าใช้จ่ายรายเดือนตามแพ็กเกจของ LINE
 
@@ -266,7 +266,7 @@ _ร่างเมื่อ 6 ต.ค. 2569 · software-company ครอบง
 - campaign-set — ชุดงานหลายชิ้นจากแคมเปญเดียว (feed/story/banner/ปก)
 - asset-organize — ตั้งชื่อ+จัดโฟลเดอร์ไฟล์งานดีไซน์ให้หาเจอ
 
-**Commands (6):** /brand-init, /brief, /video, /review-design, /campaign, /resize-all
+**Commands (6):** /brand-kit, /brief-to-image, /video-script-to-clip, /design-review, /campaign-set, /social-formats
 
 ---
 

@@ -1,5 +1,9 @@
 # Changelog — personal-life
 
+## 0.20.0 — 2026-11-07
+
+- เอาคำสั่งที่เป็นแค่ทางลัดไปหา skill ตัวเดียวออก 14 ตัว เรียก skill ตรงแทน เช่น `/personal-life:household-bills` · ขั้นตอนและ `argument-hint` ของคำสั่งเดิมย้ายไปหัวข้อ "เรียกเป็นคำสั่ง" ท้าย SKILL.md ของ skill ปลายทาง: `bills` → `household-bills` · `checkup` → `annual-checkup` · `decide` → `decision-journal` · `doctor-prep` → `doctor-visit-prep` · `interview` → `interview-prep` · `learn` → `learning-path` · `maintenance` → `home-maintenance` · `negotiate` → `salary-negotiation` · `radar` → `tech-radar` · `resume` → `resume-th-en` · `subscriptions` → `subscription-audit` · `travel` → `travel-prep` · `triage-mail` → `inbox-triage` · `week-review` → `weekly-review`
+
 ## 0.19.0 — 2026-10-28
 
 - skill ใหม่ `moving-house`: ย้ายบ้านและเปลี่ยนที่อยู่ · ย้ายทะเบียนบ้าน 3 แบบ (ย้ายปลายทาง 20 บาท · ภายใน 15 วันนับจากวันย้ายเข้า · ค่าแจ้งเกินกำหนด 30–500 บาท) · ปิดหรือโอนค่าไฟค่าน้ำและขอเงินประกันคืน (กฟน. กฟภ. กปน. กปภ.) · รายการหน่วยงานที่ต้องแจ้งที่อยู่ใหม่ใน `references/notify-list.md` · คืนเงินประกันห้องเช่าตามประกาศ สคบ. 2568 (ผู้ให้เช่าตั้งแต่ 3 ห้อง · ไม่เสียหายคืนใน 7 วัน · เสียหายคืนส่วนที่เหลือใน 30 วัน) · ตรวจแหล่งทางการ 2026-10-28 · ขั้นตอนขนส่งและ ThaID ยังรอยืนยัน

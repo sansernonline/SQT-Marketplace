@@ -212,6 +212,14 @@ Before handing over, run the check in `no-ai-look` (section 3): its script on HT
 - `design-review` — point 7 checks every asset against this kit
 - `asset-organize` — folder and naming
 
+## เรียกเป็นคำสั่ง
+
+`/graphic-design:brand-kit [brand or company name]`
+
+Run `brand-kit` with the `brand-keeper` agent for: **$ARGUMENTS**
+
+Ends with a README you can read in 5 minutes and a v1 version tag.
+
 
 ## reference: kit-template.md
 

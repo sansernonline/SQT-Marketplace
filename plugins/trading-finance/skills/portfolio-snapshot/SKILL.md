@@ -1,6 +1,7 @@
 ---
 name: portfolio-snapshot
 description: Use when the user asks how their portfolio looks or how much they are up or down. Allocation, P/L.
+argument-hint: '[--file <path>]'
 ---
 
 # Portfolio Snapshot (สรุปพอร์ตหน้าเดียว)
@@ -66,3 +67,11 @@ Checks firing: ABC 32.7% > 10% (a 30% fall = −29,400 baht ≈ −9.8% of portf
 ## Output
 
 Headline (total value, month return, as-of) · holdings table · allocation (asset class, sector) · YTD realised P/L and dividends · risk checks that fired · one question for the user. Command: `/portfolio`.
+
+## เรียกเป็นคำสั่ง
+
+`/trading-finance:portfolio-snapshot [--file <path>]`
+
+Run the `portfolio-snapshot` skill: **$ARGUMENTS**
+
+If no portfolio file is known, ask where holdings are tracked. Mark stale prices honestly when a data plugin is missing for a market.

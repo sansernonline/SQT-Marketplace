@@ -8,12 +8,12 @@
 
 | plugin | ทำอะไร | agent | skill | คำสั่ง | playbook | ไฟล์ทั้งหมด |
 |---|---|---|---|---|---|---|
-| [`e-commerce`](#e-commerce) | ขายออนไลน์ ซื้ออย่างมั่นใจ และงานหลังบ้านบริษัทไทย | 8 | 34 | 14 | 18 | 180 |
-| [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 23 | 6 | 9 | 170 |
-| [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 43 | 16 | 30 | 188 |
-| [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 108 | 29 | 17 | 991 |
+| [`e-commerce`](#e-commerce) | ขายออนไลน์ ซื้ออย่างมั่นใจ และงานหลังบ้านบริษัทไทย | 8 | 34 | 1 | 18 | 167 |
+| [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 23 | 0 | 9 | 164 |
+| [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 43 | 2 | 30 | 174 |
+| [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 108 | 11 | 17 | 986 |
 | [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 39 | 0 | 7 | 213 |
-| [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 5 | 24 | 7 | 10 | 126 |
+| [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 5 | 24 | 1 | 10 | 120 |
 
 ## โครงของทุก plugin
 
@@ -175,24 +175,11 @@ plugins/<plugin>/
 | `thai-holidays` | วันหยุดราชการและวันหยุดธนาคาร รวมวันหยุดชดเชย | `references/holidays-2569-2570.md` |
 | `warranty-tracker` | เก็บใบเสร็จและบัตรรับประกัน เช็กสิทธิ์ เตรียมเคลม | — |
 
-### คำสั่ง (14) — พิมพ์ `/e-commerce:<ชื่อ>`
+### คำสั่ง (1) — พิมพ์ `/e-commerce:<ชื่อ>`
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
-| `compare` | เทียบสินค้าหรือบริการก่อนซื้อด้วยตารางตัดสินใจ | — |
 | `complain` | ร่างเรื่องร้องเรียนและแผนยกระดับจนถึง สคบ. 1166 | — |
-| `contract` | ร่างสัญญาไทยพื้นฐาน (จ้าง · เช่า · บริการ) พร้อมจุดที่ควรให้ทนายดู | — |
-| `line-bot` | สร้างหรือปรับบอตตอบลูกค้าบน LINE OA (เจตนา · คำตอบ · ส่งต่อคน) | — |
-| `line-setup` | ตั้งช่อง Messaging API ครบวงจร จนทดสอบ echo ผ่าน | — |
-| `listing` | เขียนหน้าสินค้า (ชื่อ · คีย์เวิร์ด · คำที่ห้ามใช้) | — |
-| `live-script` | ทำบทไลฟ์ขายของ (hook · ลำดับสินค้า · จังหวะ flash deal) | — |
-| `payroll` | ทำเงินเดือน จากเงินเต็มถึงเงินสุทธิ หรือเอกสารสิ้นปี (ภ.ง.ด.1ก · 50 ทวิ) | — |
-| `pdpa` | งาน PDPA ของ SME (แบบขอความยินยอม · รับมือข้อมูลรั่ว · คำขอเจ้าของข้อมูล) | — |
-| `price-check` | คิดราคาขาย หรือกำไรของราคาปัจจุบัน หลังหักทุกค่าใช้จ่าย | — |
-| `quotation` | ร่างใบเสนอราคา ใบแจ้งหนี้ ใบเสร็จ เป็น .docx | — |
-| `reply` | ร่างคำตอบลูกค้าหรือรีวิวเป็นภาษาไทย | — |
-| `tax-due` | ปฏิทินยื่นภาษี: แบบไหน เดือนไหน ใช้เอกสารอะไร | — |
-| `year-end-filing` | ไทม์ไลน์ยื่นสิ้นปีของบริษัท (ประชุมผู้ถือหุ้น · บอจ.5 · e-Filing · ภ.ง.ด.50) | — |
 
 ### playbook (18) — `skills/superuser/references/`
 
@@ -263,17 +250,6 @@ plugins/<plugin>/
 | `video-editing` | ตัด ต่อ ตัดช่วงเงียบ ปรับความดัง ส่งออก และต่อสไลด์กับเสียงเป็นวิดีโอ · เสียงบรรยายจากสคริปต์อยู่ที่ narration-th | `scripts/loudnorm2.py` · `scripts/outguard.py` · `scripts/silences.py` · `scripts/slides_to_video.py` |
 | `video-script-to-clip` | ทำคลิปสั้น Reel TikTok: hook · รายการช็อต · ซับไทย | `references/production-tools.md` · `references/shot-list-template.md` |
 | `youtube-thumbnail` | ภาพปกคลิป YouTube ที่อ่านออกบนมือถือ และการทดสอบหลายปก (Test & compare) | `references/thumbnail-pairwise.example.json` |
-
-### คำสั่ง (6) — พิมพ์ `/graphic-design:<ชื่อ>`
-
-| โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
-|---|---|---|
-| `brand-init` | สร้างหรือทำชุดแบรนด์ใหม่ (โลโก้ · สี · ฟอนต์ · ภาพ · น้ำเสียง · 5 แม่แบบ) | — |
-| `brief` | เขียน brief สร้างภาพ (ตัวแบบ · สไตล์ · สี · แสง · องค์ประกอบ · สิ่งที่ห้าม) | — |
-| `campaign` | วางแผนและผลิตชุดงานแคมเปญจากแนวคิดเดียว | — |
-| `resize-all` | แตกงานต้นแบบเป็นทุกขนาดของทุกแพลตฟอร์ม | — |
-| `review-design` | ตรวจภาพหรืองานออกแบบก่อนส่ง แล้วบอก 2-3 จุดที่สำคัญที่สุด | — |
-| `video` | เปลี่ยนข้อความเป็นคลิปสั้น (hook · บทถ่าย · ตัวหนังสือบนจอ · brief) | — |
 
 ### playbook (9) — `skills/superuser/references/`
 
@@ -359,26 +335,12 @@ plugins/<plugin>/
 | `vehicle-care` | ดูแลรถยนต์และมอเตอร์ไซค์: พ.ร.บ. · ภาษีประจำปี · ตรวจสภาพ · เข้าศูนย์ | `references/buy-car-score-example.json` · `references/vehicle-record.md` |
 | `weekly-review` | ทบทวนประจำสัปดาห์ สำหรับคนที่ยุ่งแต่งานไม่เดิน | — |
 
-### คำสั่ง (16) — พิมพ์ `/personal-life:<ชื่อ>`
+### คำสั่ง (2) — พิมพ์ `/personal-life:<ชื่อ>`
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
-| `bills` | อ่านบิลไฟหรือบิลน้ำ จดไว้ แล้วเทียบกับ 3 เดือนก่อน | — |
-| `checkup` | วางแผนตรวจสุขภาพตามอายุและเพศ เช็กสิทธิ์ และจดผล | — |
-| `decide` | บันทึกการตัดสินใจใหญ่ลงสมุดตัดสินใจ | — |
-| `doctor-prep` | เตรียมก่อนพบแพทย์ หรือสรุปหลังพบแพทย์ | — |
 | `family-week` | วางแผนสัปดาห์ของครอบครัวในตารางเดียว | — |
-| `interview` | เตรียมสัมภาษณ์ 1 รอบ (คลังเรื่อง · คำถาม · ซ้อม · อีเมลขอบคุณ) | — |
-| `learn` | เรียนเทคโนโลยีใหม่ผ่านด่านที่ผูกกับโปรเจกต์จริง หรือแปลง paper เป็นโค้ด | — |
-| `maintenance` | ทำตารางดูแลบ้าน 12 เดือน หรือเทียบใบเสนอราคาช่าง | — |
 | `meeting` | เตรียมการ์ดก่อนประชุม หรือสรุปหลังประชุม | — |
-| `negotiate` | เทียบข้อเสนองานจากเงินรวมทั้งหมด แล้วร่างคำพูดต่อรอง | — |
-| `radar` | ไล่ดูว่าไลบรารีที่ติดตามเปลี่ยนอะไรในสัปดาห์นี้ | — |
-| `resume` | เขียน CV ไทย อังกฤษ หรือทั้งคู่ ให้ตรงประกาศงาน | — |
-| `subscriptions` | ตรวจค่าสมาชิก คิดต้นทุนต่อครั้ง ยกเลิก ลดแพ็กเกจ หรือเก็บไว้ | — |
-| `travel` | ทำ checklist เดินทางและกำหนดการในไฟล์เดียว | — |
-| `triage-mail` | แยกอีเมลเป็น วันนี้ · สัปดาห์นี้ · ส่งต่อ · เก็บ | — |
-| `week-review` | ทบทวนสัปดาห์ 20 นาที (เสร็จ · หลุด · ค้างใคร · 3 เรื่องหลัก) | — |
 
 ### playbook (30) — `skills/superuser/references/`
 
@@ -526,7 +488,7 @@ plugins/<plugin>/
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
 | `security-gate` | ด่านความปลอดภัยก่อนส่ง: สแกนค่าลับ · dependency · โค้ด | `assets/semgrep-offline.yml` · `references/android.md` · `references/dependency-updates.md` |
-| `security-operations` | งานปฏิบัติการความปลอดภัย: กักเหตุ · SOC · กฎ SIEM · ล่าภัยคุกคาม | `references/agent-incident-responder.md` · `references/agent-security-architect.md` · `references/agent-soc-analyst.md` · `references/agent-threat-hunter.md` · `references/security-incident-response.md` · `references/soc-operations.md` · `references/threat-detection-patterns.md` |
+| `security-operations` | งานปฏิบัติการความปลอดภัย: กักเหตุ · SOC · กฎ SIEM · ล่าภัยคุกคาม | `references/agent-incident-responder.md` · `references/agent-security-architect.md` · `references/agent-soc-analyst.md` · `references/agent-threat-hunter.md` · `references/design-modes.md` · `references/security-incident-response.md` · `references/soc-operations.md` · `references/threat-detection-patterns.md` |
 | `auth-implementation-patterns` | ทำระบบล็อกอิน: session หรือ JWT · OAuth · SSO · MFA · รีเซ็ตรหัสผ่าน | `references/api-auth-and-authorization.md` · `references/auth-flows.md` · `references/libraries-and-code.md` · `references/mfa.md` |
 | `config-and-secrets` | ค่าที่ต่างกันตาม environment และค่าลับที่ห้ามเข้า git | `references/per-stack.md` |
 | `pdpa-compliance` | ซอฟต์แวร์ที่เก็บข้อมูลคนไทยตาม PDPA: ความยินยอม · สิทธิ์ · ระยะเก็บ · ข้อมูลรั่ว | — |
@@ -568,7 +530,7 @@ plugins/<plugin>/
 | `infra-as-code` | สร้างเครื่อง ฐานข้อมูล และเครือข่ายบนคลาวด์จากโค้ด (OpenTofu · plan ใน PR · apply production รออนุมัติ · region ในไทย) | — |
 | `incident-runbook-template` | คู่มือรับมือเมื่อระบบพัง และคู่มือเวร on-call | `references/game-days.md` · `references/index-and-alert-links.md` · `references/runbook-template.md` |
 | `postmortem-template` | เขียนทบทวนหลังเหตุระบบล่มแบบไม่โทษคน | — |
-| `saas-platform` | สร้าง SaaS แบบ B2B: หลายลูกค้าในระบบเดียว · แยกข้อมูล · SSO · SCIM · เก็บเงิน | `references/agent-customer-success-engineer.md` · `references/agent-integration-engineer.md` · `references/agent-revops-analyst.md` · `references/agent-saas-architect.md` · `references/enterprise-integration.md` · `references/multi-tenancy-patterns.md` · `references/subscription-billing.md` |
+| `saas-platform` | สร้าง SaaS แบบ B2B: หลายลูกค้าในระบบเดียว · แยกข้อมูล · SSO · SCIM · เก็บเงิน | `references/agent-customer-success-engineer.md` · `references/agent-integration-engineer.md` · `references/agent-revops-analyst.md` · `references/agent-saas-architect.md` · `references/design-modes.md` · `references/enterprise-integration.md` · `references/multi-tenancy-patterns.md` · `references/subscription-billing.md` |
 | `jenkins-pipeline` | เขียน Jenkinsfile build image · ทดสอบ · deploy staging → production ด้วย Helm โดยค่าลับไม่รั่วและมีคนอนุมัติ | `references/jenkinsfile-voice-clinic.md` |
 | `kubernetes-helm` | Dockerfile ใช้งานจริง · manifest Kubernetes · Helm chart · staging → production · GPU node pool · KEDA | `references/dockerfile.md` · `references/gpu-node-pool.md` · `references/helm-chart.md` · `references/keda-queue-scaling.md` · `references/manifest-checklist.md` |
 | `kafka-streaming` | ออกแบบ topic · producer · consumer ของ Kafka ให้ event ไม่หายไม่ซ้ำ: key · acks=all · outbox · dead letter | `references/clinic-example.md` · `references/config-table.md` |
@@ -610,17 +572,17 @@ plugins/<plugin>/
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
-| `ecommerce-patterns` | สร้างซอฟต์แวร์ร้านค้า: ตะกร้า · ชำระเงิน · คำสั่งซื้อ · โปรโมชัน · สต็อก | `references/agent-cro-specialist.md` · `references/agent-ecommerce-engineer.md` · `references/agent-inventory-specialist.md` · `references/agent-recommendation-engineer.md` · `references/checkout-optimization.md` · `references/inventory-management.md` · `references/recommendation-systems.md` · `references/thai-marketplace-apis.md` |
-| `fintech-payments` | ระบบรับจ่ายเงิน (Stripe · Omise · PromptPay · webhook · คืนเงิน · KYC) | `references/agent-fintech-compliance-officer.md` · `references/agent-fintech-engineer.md` · `references/agent-payment-integration.md` · `references/agent-quant-analyst.md` · `references/kyc-aml-patterns.md` · `references/payment-gateway-integration.md` · `references/pci-dss-compliance.md` |
-| `game-development` | สร้างเกม: เลือก engine · ECS · netcode · จับคู่ผู้เล่น · กันโกง | `references/agent-game-designer.md` · `references/agent-game-developer.md` · `references/agent-live-ops-specialist.md` · `references/agent-multiplayer-engineer.md` · `references/game-architecture.md` · `references/live-ops-patterns.md` · `references/multiplayer-netcode.md` |
-| `healthcare-systems` | ซอฟต์แวร์ที่จับข้อมูลผู้ป่วย (คำสั่งแพทย์ · ยา · FHIR · EHR · HIPAA) | `references/agent-fhir-specialist.md` · `references/agent-healthcare-engineer.md` · `references/agent-hipaa-officer.md` · `references/clinical-analytics.md` · `references/clinical-workflows.md` · `references/fhir-implementation.md` · `references/hipaa-compliance.md` |
-| `insurance-systems` | ซอฟต์แวร์ประกัน: กรมธรรม์ · ใบเสนอราคา · เคลม · ฉ้อฉล · รายงาน คปภ. | `references/agent-actuarial-engineer.md` · `references/agent-claims-processing-specialist.md` · `references/agent-insurance-compliance-officer.md` · `references/agent-insurance-engineer.md` · `references/agent-underwriting-analyst.md` · `references/claims-workflow-patterns.md` · `references/insurance-compliance.md` · `references/underwriting-models.md` |
-| `iot-systems` | อุปกรณ์เชื่อมต่อ: ลงทะเบียนเครื่อง · อัปเดต OTA · edge หรือ cloud · MQTT | `references/agent-edge-architect.md` · `references/agent-firmware-engineer.md` · `references/agent-iot-engineer.md` · `references/agent-mqtt-specialist.md` · `references/device-fleet-management.md` · `references/edge-computing-architecture.md` · `references/mqtt-protocol-patterns.md` |
-| `legal-document-systems` | ซอฟต์แวร์เอกสารกฎหมาย: ดึงข้อสัญญา · สร้างเอกสาร · e-signature · พ.ร.บ.ธุรกรรมฯ | `references/agent-contract-analyzer.md` · `references/agent-document-automation-engineer.md` · `references/agent-e-signature-specialist.md` · `references/agent-legal-compliance-officer.md` · `references/agent-legaltech-engineer.md` · `references/contract-parsing-patterns.md` · `references/document-automation-patterns.md` · `references/e-signature-compliance.md` |
-| `llm-engineering` | ระบบที่เรียก LLM: prompt · ผลแบบมีโครงสร้าง · RAG · embedding · วัดผล | `references/agent-llm-architect.md` · `references/agent-ml-engineer.md` · `references/agent-mlops-engineer.md` · `references/agent-prompt-engineer.md` · `references/agent-systems.md` · `references/deep-research-system.md` · `references/llm-evaluation-patterns.md` · `references/prompt-engineering-patterns.md` · `references/rag-architecture.md` |
-| `mobile-engineering` | งานวิศวกรรมแอปมือถือ (Kotlin · Swift · Flutter · React Native · ใช้งานออฟไลน์) | `references/agent-android-engineer.md` · `references/agent-aso-specialist.md` · `references/agent-cross-platform-engineer.md` · `references/agent-ios-engineer.md` · `references/app-store-optimization.md` · `references/mobile-architecture-patterns.md` · `references/mobile-performance.md` |
-| `smart-contracts` | สร้างงานบนบล็อกเชน: สัญญา Solidity / Solana · ตรวจสัญญา · DeFi | `references/agent-blockchain-architect.md` · `references/agent-defi-engineer.md` · `references/agent-smart-contract-developer.md` · `references/agent-tokenomics-designer.md` · `references/defi-patterns.md` · `references/smart-contract-testing.md` · `references/solidity-security.md` |
-| `developer-experience` | ประสบการณ์นักพัฒนา: เวลาถึง hello world · ข้อความ error · CLI · SDK | `references/agent-devrel-engineer.md` · `references/agent-docs-engineer.md` · `references/agent-dx-engineer.md` · `references/agent-sdk-builder.md` · `references/developer-experience.md` · `references/sdk-design-patterns.md` · `references/technical-content.md` |
+| `ecommerce-patterns` | สร้างซอฟต์แวร์ร้านค้า: ตะกร้า · ชำระเงิน · คำสั่งซื้อ · โปรโมชัน · สต็อก | `references/agent-cro-specialist.md` · `references/agent-ecommerce-engineer.md` · `references/agent-inventory-specialist.md` · `references/agent-recommendation-engineer.md` · `references/checkout-optimization.md` · `references/design-modes.md` · `references/inventory-management.md` · `references/recommendation-systems.md` · `references/thai-marketplace-apis.md` |
+| `fintech-payments` | ระบบรับจ่ายเงิน (Stripe · Omise · PromptPay · webhook · คืนเงิน · KYC) | `references/agent-fintech-compliance-officer.md` · `references/agent-fintech-engineer.md` · `references/agent-payment-integration.md` · `references/agent-quant-analyst.md` · `references/design-modes.md` · `references/kyc-aml-patterns.md` · `references/payment-gateway-integration.md` · `references/pci-dss-compliance.md` |
+| `game-development` | สร้างเกม: เลือก engine · ECS · netcode · จับคู่ผู้เล่น · กันโกง | `references/agent-game-designer.md` · `references/agent-game-developer.md` · `references/agent-live-ops-specialist.md` · `references/agent-multiplayer-engineer.md` · `references/design-modes.md` · `references/game-architecture.md` · `references/live-ops-patterns.md` · `references/multiplayer-netcode.md` |
+| `healthcare-systems` | ซอฟต์แวร์ที่จับข้อมูลผู้ป่วย (คำสั่งแพทย์ · ยา · FHIR · EHR · HIPAA) | `references/agent-fhir-specialist.md` · `references/agent-healthcare-engineer.md` · `references/agent-hipaa-officer.md` · `references/clinical-analytics.md` · `references/clinical-workflows.md` · `references/design-modes.md` · `references/fhir-implementation.md` · `references/hipaa-compliance.md` |
+| `insurance-systems` | ซอฟต์แวร์ประกัน: กรมธรรม์ · ใบเสนอราคา · เคลม · ฉ้อฉล · รายงาน คปภ. | `references/agent-actuarial-engineer.md` · `references/agent-claims-processing-specialist.md` · `references/agent-insurance-compliance-officer.md` · `references/agent-insurance-engineer.md` · `references/agent-underwriting-analyst.md` · `references/claims-workflow-patterns.md` · `references/design-modes.md` · `references/insurance-compliance.md` · `references/underwriting-models.md` |
+| `iot-systems` | อุปกรณ์เชื่อมต่อ: ลงทะเบียนเครื่อง · อัปเดต OTA · edge หรือ cloud · MQTT | `references/agent-edge-architect.md` · `references/agent-firmware-engineer.md` · `references/agent-iot-engineer.md` · `references/agent-mqtt-specialist.md` · `references/design-modes.md` · `references/device-fleet-management.md` · `references/edge-computing-architecture.md` · `references/mqtt-protocol-patterns.md` |
+| `legal-document-systems` | ซอฟต์แวร์เอกสารกฎหมาย: ดึงข้อสัญญา · สร้างเอกสาร · e-signature · พ.ร.บ.ธุรกรรมฯ | `references/agent-contract-analyzer.md` · `references/agent-document-automation-engineer.md` · `references/agent-e-signature-specialist.md` · `references/agent-legal-compliance-officer.md` · `references/agent-legaltech-engineer.md` · `references/contract-parsing-patterns.md` · `references/design-modes.md` · `references/document-automation-patterns.md` · `references/e-signature-compliance.md` |
+| `llm-engineering` | ระบบที่เรียก LLM: prompt · ผลแบบมีโครงสร้าง · RAG · embedding · วัดผล | `references/agent-llm-architect.md` · `references/agent-ml-engineer.md` · `references/agent-mlops-engineer.md` · `references/agent-prompt-engineer.md` · `references/agent-systems.md` · `references/deep-research-system.md` · `references/design-modes.md` · `references/llm-evaluation-patterns.md` · `references/prompt-engineering-patterns.md` · `references/rag-architecture.md` |
+| `mobile-engineering` | งานวิศวกรรมแอปมือถือ (Kotlin · Swift · Flutter · React Native · ใช้งานออฟไลน์) | `references/agent-android-engineer.md` · `references/agent-aso-specialist.md` · `references/agent-cross-platform-engineer.md` · `references/agent-ios-engineer.md` · `references/app-store-optimization.md` · `references/design-modes.md` · `references/mobile-architecture-patterns.md` · `references/mobile-performance.md` |
+| `smart-contracts` | สร้างงานบนบล็อกเชน: สัญญา Solidity / Solana · ตรวจสัญญา · DeFi | `references/agent-blockchain-architect.md` · `references/agent-defi-engineer.md` · `references/agent-smart-contract-developer.md` · `references/agent-tokenomics-designer.md` · `references/defi-patterns.md` · `references/design-modes.md` · `references/smart-contract-testing.md` · `references/solidity-security.md` |
+| `developer-experience` | ประสบการณ์นักพัฒนา: เวลาถึง hello world · ข้อความ error · CLI · SDK | `references/agent-devrel-engineer.md` · `references/agent-docs-engineer.md` · `references/agent-dx-engineer.md` · `references/agent-sdk-builder.md` · `references/design-modes.md` · `references/developer-experience.md` · `references/sdk-design-patterns.md` · `references/technical-content.md` |
 | `seo-audit-checklist` | checklist ตรวจ SEO ของเว็บก่อนเปิดตัว | `references/checklist.md` · `references/page-brief.md` · `references/report-template.md` |
 | `data-analysis` | ตอบคำถามธุรกิจจาก CSV · Excel · SQL ด้วยสคริปต์รันซ้ำได้ (ตัวเลขอ้างบรรทัดผล · ไฟล์ไทย · กราฟภาษาไทย) | `assets/analyse_sales.py` · `assets/make_sample.py` · `assets/sales-sample.csv` |
 | `voice-agent` | voice agent ภาษาไทยแบบ realtime: SIP/WebRTC · VAD · STT/TTS streaming · พูดแทรก · งบ latency · PDPA | `references/thai-speech-options.md` |
@@ -636,39 +598,21 @@ plugins/<plugin>/
 | `render-deploy` | ปล่อยแอปขึ้น Render ด้วย render.yaml: ฟัง 0.0.0.0 กับ PORT · ทุก service เขียน plan · ค่าลับ sync false · ด่านเงิน · แผนฟรีไม่ใช้กับงานจริง · ตรวจ HTTP 200 หลังปล่อย · rollback | `assets/render.yaml` |
 | `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/agents.md` · `references/approvals.md` · `references/brief-template.md` · `references/code-extensions.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-bug-fix.md` · `references/playbook-feature.md` · `references/playbook-housekeeping.md` · `references/playbook-investigation.md` · `references/playbook-learn-from-session.md` · `references/playbook-new-project.md` · `references/playbook-performance.md` · `references/playbook-pickup-and-pause.md` · `references/playbook-project-docs.md` · `references/playbook-prototype.md` · `references/playbook-refactor.md` · `references/playbook-review.md` · `references/playbook-ship.md` · `references/playbook-skill-authoring.md` · `references/playbook-team-project.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-visual-parity.md` · `references/principles.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
 
-### คำสั่ง (29) — พิมพ์ `/software-company:<ชื่อ>`
+### คำสั่ง (11) — พิมพ์ `/software-company:<ชื่อ>`
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
 | `api-design` | ออกแบบสเปก API (endpoint · schema · error · ตัวอย่าง) | — |
 | `architecture-review` | รีวิวสถาปัตยกรรมเทียบกับข้อกำหนดที่ไม่ใช่ฟังก์ชันและความเสี่ยง | — |
-| `bug-report` | เขียนรายงานบั๊กตามแบบด้วย qa-tester | — |
-| `code-review` | รีวิวโค้ดด้วย reviewer ตัวใหม่ตาม checklist | — |
-| `dx-design` | ตรวจประสบการณ์นักพัฒนา หรือออกแบบ SDK | — |
-| `ecommerce-design` | ตรวจหน้าชำระเงิน หรือออกแบบระบบแนะนำสินค้า | — |
 | `feature-kickoff` | เริ่มฟีเจอร์ใหม่ BA → SA → สถาปนิก → วางแผน | — |
-| `fintech-design` | ออกแบบขั้นตอนธุรกรรมการเงิน หรือตรวจความพร้อม PCI-DSS | — |
-| `game-design` | เขียนเอกสารออกแบบเกม หรือสถาปัตยกรรมเกมหลายผู้เล่น | — |
-| `healthcare-design` | ออกแบบ FHIR API หรือตรวจความพร้อม HIPAA | — |
 | `incident-response` | คุมเหตุระบบล่มตอนเกิด คัดแยก บรรเทา แก้ แล้วทำ postmortem | — |
-| `insurance-design` | ออกแบบขั้นตอนเคลม หรือโมเดลพิจารณารับประกัน | — |
-| `iot-design` | ออกแบบระบบ IoT หรือการจัดการอุปกรณ์จำนวนมาก | — |
-| `legacy-onboard` | ทำสเปกสภาพปัจจุบันของระบบเก่าที่มีแต่โค้ด | — |
-| `legal-doc-design` | ออกแบบระบบวิเคราะห์สัญญา หรือตรวจความถูกต้องของ e-signature | — |
-| `llm-design` | ออกแบบระบบ RAG หรือชุดวัดผล LLM | — |
-| `mobile-design` | ออกแบบสถาปัตยกรรมแอปมือถือ หรือตรวจหน้าร้าน App Store / Play Store | — |
 | `onboard` | เอกสารรับคนเข้าทีมใหม่ 30/60/90 วัน | — |
 | `product-roadmap` | ทำ roadmap รายไตรมาส จัดลำดับด้วย RICE และตัววัดผล | `references/product-doc-templates.md` · `templates/rice.json` |
 | `release-notes` | เขียน release notes ให้ผู้ใช้อ่าน | — |
 | `retrospective` | ทบทวนหลังจบ sprint: อะไรดี อะไรไม่ดี จะทำอะไรต่อ | — |
-| `saas-design` | รีวิวสถาปัตยกรรม SaaS แบบ B2B หรือออกแบบการเชื่อมระบบองค์กร | — |
-| `security-ops-design` | ออกแบบ SOC หรือล่าภัยคุกคาม | — |
 | `security-scan` | ตรวจความปลอดภัยของโค้ด dependency และโครงสร้างพื้นฐาน | — |
-| `seo-audit` | ตรวจ SEO ด้านเทคนิค · ในหน้า · เนื้อหา · นอกหน้า | — |
 | `sprint-plan` | วางแผน sprint: เกลา backlog · จัดลำดับ · ดูกำลังทีม | `templates/knapsack.json` |
-| `test-design` | ทำ test case ของฟีเจอร์ด้วย qa-tester | — |
 | `threat-model` | ทำ threat model แบบ STRIDE ของฟีเจอร์หรือระบบ | `references/security-templates.md` |
-| `web3-design` | ตรวจ smart contract หรือออกแบบ tokenomics | — |
 
 ### playbook (17) — `skills/superuser/references/`
 
@@ -775,17 +719,11 @@ plugins/<plugin>/
 | `trade-journal` | จดเหตุผลทุกครั้งที่เข้าหรือออกเทรด | `references/journal-template.md` |
 | `watchlist-setup` | ตั้งหรือจัด watchlist ใหม่: เหตุผลที่ติดตาม · จุดเข้า · แจ้งเตือน | `references/watchlist-template.md` |
 
-### คำสั่ง (7) — พิมพ์ `/trading-finance:<ชื่อ>`
+### คำสั่ง (1) — พิมพ์ `/trading-finance:<ชื่อ>`
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
 | `alert-set` | ตั้งแจ้งเตือนราคาหรือข่าวของหุ้นที่ติดตาม พร้อมช่วงพัก | — |
-| `journal` | จดการเข้าหรือออกเทรดลงสมุดเทรด หรืออ่านรายการล่าสุด | — |
-| `paper-trade` | จดหรือทบทวนการเทรดด้วยเงินจำลอง แล้วสรุปสถิติรายเดือน | — |
-| `portfolio` | ภาพรวมพอร์ต: สัดส่วน · กำไรขาดทุน · ตัวที่กระจุก · ตัวที่พาพอร์ต | — |
-| `review-week` | ทบทวนเทรดรายสัปดาห์หรือรายเดือน หาความผิดที่ซ้ำ ตั้งกฎใหม่ 1 ข้อ | — |
-| `tax-plan` | วางแผนลดหย่อนสิ้นปี ภาษีก่อนและหลัง และวงเงิน RMF ThaiESG ที่เหลือ | — |
-| `watch` | เพิ่ม ทบทวน หรือล้าง watchlist (เหตุผล · โซนเข้า · แจ้งเตือน) | — |
 
 ### playbook (10) — `skills/superuser/references/`
 

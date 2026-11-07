@@ -68,6 +68,14 @@ Each year end brings 4 deadlines from 2 authorities (DBD and the Revenue Departm
 
 `tax-vat-th` (ภ.ง.ด.50/51, surcharge) · `payroll-th` (ภ.ง.ด.1ก in February) · `doc-thai-official` (AGM notice, letters) · `thai-holidays`.
 
+## เรียกเป็นคำสั่ง
+
+`/e-commerce:dbd-annual-filing [company|partnership] [--year-end <date>]`
+
+Run `dbd-annual-filing` with the `tax-helper` agent for: **$ARGUMENTS**
+
+Shifts dates for weekends and holidays with `thai-holidays`, lists the documents per step, flags late-filing fines, and ends with the auditor and accountant handoff checklist.
+
 
 ---
 

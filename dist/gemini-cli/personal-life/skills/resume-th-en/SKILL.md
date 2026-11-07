@@ -1,6 +1,7 @@
 ---
 name: resume-th-en
 description: Use when writing or reviewing a Thai or English CV or resume (ATS layout, what to omit, number bullets).
+argument-hint: <th|en|both> [job post URL or text]
 ---
 
 # Resume — Thai and International
@@ -94,3 +95,14 @@ Fill-in templates (English, Thai, cover email) → [references/templates.md](ref
 Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the 8-point eye check on images and other files. The full list of AI tells for every medium lives there. CVs are usually PDF or .docx, so for those only the 8-point eye check applies — the script is for HTML/CSS files. For a resume that means: no emoji headings, no bold-first bullets, no generic claims without numbers.
 
 Related: `linkedin-profile` (keep CV and profile consistent) · `interview-prep` (every bullet becomes a Situation, Task, Action, Result (STAR) story) · `important-docs` in `personal-life` (store certificates and transcripts).
+
+## เรียกเป็นคำสั่ง
+
+`/personal-life:resume-th-en <th|en|both> [job post URL or text]`
+
+Run the `career-coach` agent with the `resume-th-en` skill: **$ARGUMENTS**
+
+1. Ask for the current CV (or work history) and the target job post if not given.
+2. Decide Thai-company vs international convention from the job post (see the skill's decision table).
+3. Rewrite every bullet as action + result + number; mark missing numbers `[ใส่ตัวเลข]`.
+4. Output the CV in the requested language(s), then a short list of what changed and why.

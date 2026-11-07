@@ -1,6 +1,7 @@
 ---
 name: marketplace-fees-pricing
 description: Use when a Thai seller asks what to charge, why a product loses money, or how marketplace fees compare.
+argument-hint: <product> <cost> <platform> [current price, category, target margin]
 ---
 
 # Marketplace Fees and Pricing
@@ -85,3 +86,11 @@ node price-calc.mjs --self-test
 - `seller-tax-basics` — when to register VAT (sets `v`)
 - `multi-shop-stock` — same SKU codes in the price sheet
 - `doc-quotation` — B2B buyers who need a quotation with VAT
+
+## เรียกเป็นคำสั่ง
+
+`/e-commerce:marketplace-fees-pricing <product> <cost> <platform> [current price, category, target margin]`
+
+Run `marketplace-fees-pricing` with the `shop-manager` agent for: **$ARGUMENTS**
+
+Show the full cost table in baht and the margin %. Mark every fee rate that was not confirmed in the seller's own Seller Centre as (รอยืนยัน).

@@ -1,6 +1,7 @@
 ---
 name: tax-deduction-planner
 description: Use when cutting Thai income tax before year end, checking deductions, or how much RMF or ThaiESG to buy.
+argument-hint: '[yearly income and what you already have, e.g. "salary 60k/month, PVD 5%, life 20k"]'
 ---
 
 # Tax Deduction Planner (วางแผนลดหย่อนภาษีปลายปี)
@@ -116,7 +117,7 @@ Checks: RMF 50,000 ≤ 30% × 720,000 = 216,000; PVD 36,000 + RMF 50,000 = 86,00
 - Documents to collect by January: 50 ทวิ, insurance premium certificates (ask the insurer to send data to RD), fund tax certificates (ask the AMC to send data), home loan interest certificate, e-Donation, ล.ย.03 for parents
 - Any line marked (รอยืนยัน) stays marked
 
-Filing itself (ภ.ง.ด.90/91, deadlines): `tax-basics-th`. Run from the command `/tax-plan`.
+Filing itself (ภ.ง.ด.90/91, deadlines): `tax-basics-th`. Run as the command `/trading-finance:tax-deduction-planner`.
 
 ## Check before sending
 
@@ -124,3 +125,13 @@ Filing itself (ภ.ง.ด.90/91, deadlines): `tax-basics-th`. Run from the comm
 - `rates-2569.json` `checked` date is stated; the tax year in the answer matches `tax_year` in that file.
 - Each `คำเตือน` line from the script is either fixed in the input or repeated to the user.
 - Room left and the cash locked up (RMF to age 55, ThaiESG 5 years) are in the answer.
+
+## เรียกเป็นคำสั่ง
+
+`/trading-finance:tax-deduction-planner [yearly income and what you already have, e.g. "salary 60k/month, PVD 5%, life 20k"]`
+
+Run the `tax-deduction-planner` skill: **$ARGUMENTS**
+
+- No income given → ask for yearly salary/bonus, other income, PVD rate, and premiums already paid, in one question
+- Show tax before / after / saved, the marginal rate, and the purchase list with deadlines
+- For dividends, interest or crypto in the same return, use `tax-basics-th`; for choosing the RMF or ThaiESG fund, use `mutual-fund-picker`

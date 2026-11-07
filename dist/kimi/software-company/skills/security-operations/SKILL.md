@@ -1,6 +1,7 @@
 ---
 name: security-operations
 description: Use when running security operations (incident containment, SOC, SIEM rules, threat hunting).
+argument-hint: <soc-design | threat-hunt> <details>
 ---
 
 # security-operations
@@ -39,3 +40,16 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 ## ที่มา
 
 รวมจาก plugin `software-company-cybersecurity` (เดิมชื่อ security-incident-response → `references/security-incident-response.md` · soc-operations → `references/soc-operations.md` · threat-detection-patterns → `references/threat-detection-patterns.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+
+## โหมดออกแบบ (เรียกเป็นคำสั่ง)
+
+`/software-company:security-operations <soc-design | threat-hunt> <details>`
+
+Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+
+| Mode | What it does |
+|---|---|
+| `soc-design` | Design SOC structure, processes, and tooling using the security-analyst agent. |
+| `threat-hunt` | Conduct hypothesis-driven threat hunt using security-analyst agent. |
+
+ขั้นตอนเต็มของแต่ละโหมด → [references/design-modes.md](references/design-modes.md)

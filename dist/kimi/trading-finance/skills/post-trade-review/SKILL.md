@@ -1,6 +1,7 @@
 ---
 name: post-trade-review
 description: Use when reviewing trading results weekly or monthly. Win rate, expectancy, drawdown, one new rule.
+argument-hint: '[week|month]'
 ---
 
 # Post-Trade Review (ทบทวนผลการเทรด)
@@ -62,3 +63,11 @@ Input: the `trade-journal.csv` header as is, or JSON `[ {...} ]` / `{ "capital":
 One page: stats table (live, paper separately) · sample-size warning if N < 20 · the one pattern with quoted evidence · the one new rule · last rule's verdict. No pep talks, no list of ten lessons.
 
 Related: data format in `trade-journal`; strategy practice in `paper-trading`; sizing fixes in `position-sizing`.
+
+## เรียกเป็นคำสั่ง
+
+`/trading-finance:post-trade-review [week|month]`
+
+Run `post-trade-review` with the `trade-journal-coach` agent for: **$ARGUMENTS**
+
+Default period is this month. Output is one page: stats table, the one pattern (quoted from journal), the one new rule, previous rule verdict.

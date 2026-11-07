@@ -1,6 +1,7 @@
 ---
 name: ecommerce-patterns
 description: Use when building commerce software (checkout, cart, orders, promotions, inventory). Not running a shop.
+argument-hint: <checkout-audit | recommendation-design> <details>
 ---
 
 # ecommerce-patterns
@@ -36,3 +37,16 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 ## ที่มา
 
 รวมจาก plugin `software-company-ecommerce` (เดิมชื่อ checkout-optimization → `references/checkout-optimization.md` · inventory-management → `references/inventory-management.md` · recommendation-systems → `references/recommendation-systems.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`
+
+## โหมดออกแบบ (เรียกเป็นคำสั่ง)
+
+`/software-company:ecommerce-patterns <checkout-audit | recommendation-design> <details>`
+
+Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+
+| Mode | What it does |
+|---|---|
+| `checkout-audit` | Audit and optimize checkout flow using growth-specialist agent. Identifies friction points and produces test backlog. |
+| `recommendation-design` | Design recommendation system for e-commerce using recommendation-engineer agent. Covers algorithm selection, serving architecture, evaluation. |
+
+ขั้นตอนเต็มของแต่ละโหมด → [references/design-modes.md](references/design-modes.md)

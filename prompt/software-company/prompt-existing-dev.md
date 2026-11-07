@@ -41,7 +41,7 @@
 
 ## 1. รับช่วงโค้ด: รันได้บนเครื่อง และรู้ว่าแก้ตรงไหน
 
-agent `solution-architect` (อ่านอย่างเดียว) + `developer` · skill `code-orientation` · `app-verifier-setup` · `context-budget` · `/software-company:legacy-onboard` (เมื่อไม่มีเอกสารเลยและต้องรับ change request ต่อ)
+agent `solution-architect` (อ่านอย่างเดียว) + `developer` · skill `code-orientation` · `app-verifier-setup` · `context-budget` · `/software-company:legacy-spec-recovery` (เมื่อไม่มีเอกสารเลยและต้องรับ change request ต่อ)
 **ผลลัพธ์:** `docs/ONBOARDING-NOTES.md` — **ไม่แก้โค้ดของแอป** (ไฟล์ตั้งค่าบนเครื่องที่ไม่เข้า git แก้ได้ · สคริปต์ตรวจแอปและ skill ที่ `app-verifier-setup` สร้าง เพิ่มได้แต่ยังไม่ commit · ตรวจว่า test runner ของ repo ไม่เก็บสคริปต์นั้นไปรันด้วย)
 
 ### หัวข้อที่ต้องมี

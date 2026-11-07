@@ -130,7 +130,7 @@ GROUP BY device_type;
 |:-:|-----------|-------------------|
 | 1 | Clear value proposition | Unclear what the site sells |
 | 2 | Call to action (CTA) above the fold | CTA below the fold on mobile |
-| 3 | Page load speed | Largest Contentful Paint (LCP) > 2.5s (Core Web Vitals "good" limit, same as `ecommerce-design` and `checkout-optimization.md`) |
+| 3 | Page load speed | Largest Contentful Paint (LCP) > 2.5s (Core Web Vitals "good" limit, same as `references/design-modes.md` and `checkout-optimization.md`) |
 | 4 | Form length | Too many required fields |
 | 5 | Error handling | Errors at bottom, not next to field |
 | 6 | Trust signals | No reviews or security badges |

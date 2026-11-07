@@ -69,6 +69,14 @@ Full checklists for employment, lease and hire-of-work contracts: [references/cl
 
 `labour-law-basics` · `doc-leave` · `doc-quotation` · `tax-vat-th` · `pdpa-workflow` (personal data clauses).
 
+## เรียกเป็นคำสั่ง
+
+`/e-commerce:doc-contract-th <type> <parties> <key terms>`
+
+Run `doc-contract-th` with the `thai-doc-writer` agent for: **$ARGUMENTS**
+
+Every flagged clause stays flagged until a Thai lawyer clears it. The draft sets out what the parties want; the lawyer makes sure it protects them.
+
 
 ## reference: clause-checklists.md
 

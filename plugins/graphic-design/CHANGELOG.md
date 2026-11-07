@@ -1,5 +1,9 @@
 # Changelog — graphic-design
 
+## 0.24.0 — 2026-11-07
+
+- เอาคำสั่งที่เป็นแค่ทางลัดไปหา skill ตัวเดียวออก 6 ตัว เรียก skill ตรงแทน เช่น `/graphic-design:brand-kit` · ขั้นตอนและ `argument-hint` ของคำสั่งเดิมย้ายไปหัวข้อ "เรียกเป็นคำสั่ง" ท้าย SKILL.md ของ skill ปลายทาง: `brand-init` → `brand-kit` · `brief` → `brief-to-image` · `campaign` → `campaign-set` · `resize-all` → `social-formats` · `review-design` → `design-review` · `video` → `video-script-to-clip`
+
 ## 0.23.0 — 2026-11-06
 
 - agent `design-critic`: เป็นผู้ตรวจด้วยตาตัวใหม่ที่ `no-ai-look` บังคับก่อนส่งงาน (superuser 3.21.0) · ดูภาพขนาดจริง ตอบข้อ 3.2 เอง ไม่อิงผลตรวจของคนทำ

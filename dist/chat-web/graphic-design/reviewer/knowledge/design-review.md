@@ -95,6 +95,14 @@ Before handing over, run the check in `no-ai-look` (section 3): its script on HT
 - `style-consistency` — sibling comparison for point 7
 - `image-editing-brief` — when the fix is in the image itself
 
+## เรียกเป็นคำสั่ง
+
+`/graphic-design:design-review <path to the asset>`
+
+Run `design-review` with the `design-critic` agent on: **$ARGUMENTS**
+
+Output is pass or fix for each point, plus the top 3 fixes ranked by impact.
+
 
 ## reference: review-sheet.md
 

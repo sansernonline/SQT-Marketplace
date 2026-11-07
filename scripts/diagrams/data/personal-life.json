@@ -95,22 +95,8 @@
   "translate-th-en"
  ],
  "commands": [
-  "bills",
-  "checkup",
-  "decide",
-  "doctor-prep",
   "family-week",
-  "interview",
-  "learn",
-  "maintenance",
-  "meeting",
-  "negotiate",
-  "radar",
-  "resume",
-  "subscriptions",
-  "travel",
-  "triage-mail",
-  "week-review"
+  "meeting"
  ],
  "agents": [
   {
