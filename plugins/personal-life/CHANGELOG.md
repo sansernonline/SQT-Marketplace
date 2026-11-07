@@ -1,5 +1,9 @@
 # Changelog — personal-life
 
+## 0.21.1 — 2026-11-07
+
+- ตรวจ plugin หัวข้อ 8 (ประหยัด token): ย้ายตัวอย่างและแม่แบบที่ใช้บางครั้งจาก SKILL.md ไป references/ ของ 7 skill (`paper-to-practice` · `decision-journal` · `goal-and-habit` · `meal-plan-grocery` · `weekly-review` · `salary-negotiation` · `course-builder`) และตัดบรรทัดซ้ำใน `superuser/SKILL.md` · ความหมายและผลลัพธ์เหมือนเดิม · รายงานใน `_to_delete/audit-personal-life.md`
+
 ## 0.21.0 — 2026-11-07
 
 - `meeting-summary`: หัวข้อใหม่ "0 · หาแบบที่มีอยู่ก่อน" ใช้แบบรายงานการประชุมขององค์กรก่อน · eval ใหม่ `meeting-summary-existing` (ยังไม่ได้รัน)
