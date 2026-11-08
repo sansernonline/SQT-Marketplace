@@ -7,8 +7,11 @@ import { readFileSync, readSync, writeSync, appendFileSync, existsSync, mkdirSyn
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { join, dirname, resolve, relative, basename } from "node:path";
-import { homedir, tmpdir } from "node:os";
+import { homedir, tmpdir, userInfo } from "node:os";
 import { fileURLToPath } from "node:url";
+
+// โฟลเดอร์สถานะใน tmpdir แยกต่อผู้ใช้ · เครื่อง Linux ที่ใช้ร่วมกัน /tmp เป็นของทุกคน ชื่อตายตัวจะให้คนอื่นสร้างหรือแก้ไฟล์ล่วงหน้าได้
+const TMP_USER = (() => { try { return userInfo().username.replace(/[^\w.-]/g, "_"); } catch { return "user"; } })();
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 
@@ -370,11 +373,21 @@ export const missingEffort = (ti) => Boolean(ti?.model) && !ti?.effort;
 // คำสั่ง Bash ที่เขียนไฟล์ผ่าน heredoc แล้วไฟล์ได้อักขระควบคุม (เช่น \b กลายเป็น backspace · เกิด 5 ครั้งถึง 2026-10-26) → คืนรายชื่อไฟล์
 // อ่านเฉพาะไฟล์ปลายทางของ > หรือ >> ในคำสั่งเดียวกัน · ไม่นับ tab และขึ้นบรรทัด
 const CONTROL = /[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/;
+// path แบบ Git Bash (/c/Users/…) บน Windows แปลงเป็น C:/Users/… ก่อนอ่าน
+export const gitBashPath = (p, platform = process.platform) => (platform === "win32" ? p.replace(/^\/([a-zA-Z])\//, "$1:/") : p);
 export function heredocBrokenFiles(cmd, cwd = process.cwd()) {
-  const text = String(cmd ?? "");
-  if (!/<<-?\s*['"]?\w+/.test(text)) return [];
-  const targets = [...text.matchAll(/>>?\s*(?:"([^"]+)"|'([^']+)'|([^\s;&|<>()]+))/g)].map((m) => m[1] ?? m[2] ?? m[3]).filter((p) => !/^(&?\d|\/dev\/)/.test(p));
-  return [...new Set(targets)].filter((p) => { try { return CONTROL.test(readFileSync(resolve(cwd, p), "utf8")); } catch { return false; } });
+  // ไล่ทุกบรรทัดคำสั่ง ข้ามเนื้อ heredoc (จนถึงบรรทัดคำปิด) · ในบรรทัดที่เปิด heredoc ดูเฉพาะช่วงคำสั่ง (คั่นด้วย | ; &&) ที่มี <<
+  // ปลายท่อเช่น `cat <<EOF | gzip > x.bin` เขียน binary ไม่ใช่ข้อความจาก heredoc
+  const segs = []; let end = null;
+  for (const line of String(cmd ?? "").split("\n")) {
+    if (end !== null) { if (line.trim() === end) end = null; continue; }
+    const m = line.match(/(?<!<)<<(?!<)-?\s*['"]?(\w+)['"]?/);
+    if (!m) continue;
+    end = m[1];
+    segs.push(...line.split(/\|\|?|;|&&/).filter((s) => /(?<!<)<<(?!<)-?\s*['"]?\w+/.test(s)));
+  }
+  const targets = segs.flatMap((seg) => [...seg.matchAll(/>>?\s*(?:"([^"]+)"|'([^']+)'|([^\s;&|<>()]+))/g)].map((m) => m[1] ?? m[2] ?? m[3])).filter((p) => !/^(&?\d|\/dev\/)/.test(p));
+  return [...new Set(targets)].filter((p) => { try { return CONTROL.test(readFileSync(resolve(cwd, gitBashPath(p)), "utf8")); } catch { return false; } });
 }
 
 export function inboxNotice(teamDir, event, state, rel = ".claude/superuser") {
@@ -478,7 +491,7 @@ export const MULTISTEP_NOTE = [
 
 // zip ของ claude.ai มีสำเนา hook ในทุก plugin (ไม่มี dependencies) → ทุกสำเนาได้เหตุการณ์เดียวกัน · ให้ตัวแรกที่จองได้ส่งข้อความ ตัวอื่นเงียบ
 // จองด้วยไฟล์ใน tmp ต่อ session · เหตุการณ์ · ข้อความ · agent · ช่วงเวลา · ไฟล์เก่ากว่า 10 นาทีลบทิ้ง
-export function claimContext(input, dir = join(tmpdir(), "sqt-superuser-context"), now = Date.now()) {
+export function claimContext(input, dir = join(tmpdir(), `sqt-superuser-context-${TMP_USER}`), now = Date.now()) {
   try {
     mkdirSync(dir, { recursive: true });
     for (const name of readdirSync(dir)) {
@@ -498,7 +511,7 @@ export function claimContext(input, dir = join(tmpdir(), "sqt-superuser-context"
 // ทุกข้อความแทรกบรรทัดเตือนสั้น ๆ จนกว่า superuser จะถูกเปิดใน session นั้น (skill นี้เปิดค้างได้ทั้ง session จึงเลิกเตือน)
 // แนวเดียวกับ forced eval ของ Scott Spence ที่วัดได้ 22/22 แต่สั้นกว่ามาก ไม่ไล่ทุก skill · regex ยังใช้เป็นตัวเน้นเมื่อเจอสัญญาณชัด
 export const MULTISTEP_REMINDER = "ดูคำขอนี้เองก่อนลงมือ: ถ้ามีงานมากกว่า 1 ชิ้น ต้องแก้ตั้งแต่ 3 ไฟล์ ต้องค้นข้อมูลก่อน หรือต้องมีคนตรวจก่อนส่ง ให้เปิด skill `superuser` (หรือ `<plugin>:superuser` ของสาขานั้น) ก่อนเริ่ม · ถ้าเป็นงานเล็กหรือคำถามเดียว ทำต่อได้เลย";
-const OPEN_DIR = join(tmpdir(), "sqt-superuser-open");
+const OPEN_DIR = join(tmpdir(), `sqt-superuser-open-${TMP_USER}`);
 const sessionFile = (dir, session) => join(dir, String(session ?? "none").replace(/[^\w-]/g, "_"));
 
 /** จำว่า session นี้เปิด superuser แล้ว (เรียกตอน PostToolUse ของเครื่องมือ Skill) · ไฟล์เก่าเกิน 1 วันลบทิ้ง */
@@ -1552,8 +1565,17 @@ ${rows}
       writeFileSync(join(dir, "bad.json"), '{"p": "\bword"}'); writeFileSync(join(dir, "ok.json"), '{"p": "\\\\bword"}\n\tx');
       const bad = heredocBrokenFiles("cat > bad.json <<'EOF'\nx\nEOF", dir), ok = heredocBrokenFiles("cat > ok.json <<EOF 2>&1\nx\nEOF", dir);
       const none = heredocBrokenFiles("echo x > bad.json", dir);
+      const piped = heredocBrokenFiles("cat <<EOF | gzip > bad.json\nx\nEOF", dir); // ปลายท่อเขียน binary ไม่ใช่ heredoc
+      const abs = heredocBrokenFiles(`cat > "${join(dir, "bad.json")}" <<EOF\nx\nEOF`, tmpdir());
+      const later = heredocBrokenFiles("set -e\nmkdir -p x\ncat > bad.json <<'EOF'\n> ok.json\nEOF", dir); // heredoc ไม่อยู่บรรทัดแรก · บรรทัดในเนื้อไม่นับ
+      // แปลง path แบบ Git Bash: ทดสอบตัวแปลงตรง ๆ ทั้ง 2 ระบบ และทดสอบอ่านจริงเมื่อรันบน Windows
+      const conv = gitBashPath("/c/Users/a b/x.txt", "win32") === "c:/Users/a b/x.txt" && gitBashPath("/c/x", "linux") === "/c/x";
+      const gb = join(dir, "bad.json").replace(/\\/g, "/").replace(/^([A-Za-z]):/, (m, d) => `/${d.toLowerCase()}`);
+      const gbRead = process.platform !== "win32" || heredocBrokenFiles(`cat > "${gb}" <<EOF\nx\nEOF`, tmpdir()).length === 1;
+      const here = heredocBrokenFiles("cat <<<x > ok.json\ncat > bad.json <<EOF\nx\nEOF", dir); // herestring <<< ไม่ใช่ heredoc
       unlinkSync(join(dir, "bad.json")); unlinkSync(join(dir, "ok.json"));
-      return bad.join() === "bad.json" && ok.length === 0 && none.length === 0;
+      return bad.join() === "bad.json" && ok.length === 0 && none.length === 0 && piped.length === 0 && abs.length === 1 && later.join() === "bad.json" && conv && gbRead
+        && here.join() === "bad.json";
     }],
     ["ด่านข้อความเจ้าของ: Write ไฟล์ -owner.md → บล็อก", [], true, () => ownerInboxGate("Write", { file_path: "/p/.claude/superuser/inbox/2026-10-22-0900-owner.md", content: "x" })],
     ["ด่านข้อความเจ้าของ: Bash เขียน from: owner ลง inbox → บล็อก", [], true, () => ownerInboxGate("Bash", { command: "printf 'from: owner\\n' > .claude/superuser/inbox/a.md" })],

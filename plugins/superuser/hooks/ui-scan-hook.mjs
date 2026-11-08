@@ -9,7 +9,7 @@ import { join, dirname, extname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { tmpdir } from "node:os";
+import { tmpdir, userInfo } from "node:os";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SCANNER = join(HERE, "..", "skills", "no-ai-look", "scripts", "slop_scan.py");
@@ -17,7 +17,8 @@ const UI_EXT = new Set([".html", ".htm", ".css", ".scss", ".less", ".jsx", ".tsx
 const SKIP_PATH = /(^|[\\/])(\.claude|node_modules|dist|build|\.next|out|vendor|coverage|evals)([\\/]|$)|\.min\./;
 const PYTHONS = [["python", []], ["py", ["-3"]], ["python3", []]];
 const MAX_SHOWN = 8;
-const STATE_DIR = join(tmpdir(), "superuser-ui-scan");
+// แยกต่อผู้ใช้ เหตุผลเดียวกับ TMP_USER ใน superuser-hook.mjs
+const STATE_DIR = join(tmpdir(), `superuser-ui-scan-${(() => { try { return userInfo().username.replace(/[^\w.-]/g, "_"); } catch { return "user"; } })()}`);
 
 function readJson(path, fallback) {
   try { return JSON.parse(readFileSync(path, "utf8")); } catch { return fallback; }
