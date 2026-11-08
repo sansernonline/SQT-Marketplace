@@ -1,6 +1,6 @@
 # skill: brand-kit
 
-Use when starting a brand, posts look inconsistent, a full brand guideline is needed or colours synced to design tokens. Logo, colours, Thai fonts.
+Use when starting a brand, posts look inconsistent, a full brand guideline is needed or colours synced to design tokens. Logo, colours, Thai fonts, voice.
 
 # Brand Kit
 

@@ -45,14 +45,7 @@ Use after the refund route in SKILL.md fails or the seller will not fix, deliver
 
 ## Complaint Templates
 
-Contents
-0. Step 1 — letter to the seller
-1. Platform escalation message
-2. Complaint to สคบ. (summary to paste into the online form or attach)
-3. English version for a foreign seller or brand
-4. Follow-up after deadline
-
-## 0. Step 1 — letter to the seller
+### 0. Step 1 — letter to the seller
 
 ```
 เรื่อง  ขอให้ [ซ่อม / เปลี่ยนสินค้า / คืนเงิน] สินค้า [ชื่อสินค้า] คำสั่งซื้อเลขที่ [เลข]
@@ -81,7 +74,7 @@ Contents
 
 สิ่งที่ส่งมาด้วย sits under เรียน, the same term and position as a company letter (`doc-thai-official`); the body refers to each item as (แนบ 1) (แนบ 2).
 
-## 1. Platform escalation message
+### 1. Platform escalation message
 
 ```
 เรื่อง ขอให้แพลตฟอร์มช่วยตรวจสอบคำสั่งซื้อ [เลข]
@@ -92,7 +85,7 @@ Contents
 ขอให้แพลตฟอร์มพิจารณา [คืนเงินเต็มจำนวน / คืนสินค้าและคืนเงิน] ตามนโยบายคืนสินค้า
 ```
 
-## 2. Complaint to สคบ.
+### 2. Complaint to สคบ.
 
 Fields the online form usually asks (register at complaint.ocpb.go.th — verify): ชื่อ-ที่อยู่ผู้ร้อง · ชื่อ-ที่อยู่ผู้ถูกร้อง (business name, registered address, phone, website/shop link) · ประเภทสินค้า/บริการ · มูลค่า · รายละเอียดเรื่อง · ความประสงค์ · เอกสารแนบ.
 
@@ -106,7 +99,7 @@ Summary text:
 เอกสารแนบ: ใบเสร็จ, หลักฐานโอนเงิน, ภาพถ่าย, ประวัติแชท, หนังสือที่ส่งถึงผู้ประกอบการ, สำเนาบัตรประชาชน
 ```
 
-## 3. English version
+### 3. English version
 
 ```
 Subject: Request for [repair / replacement / refund] — order [number]
@@ -123,7 +116,7 @@ Regards,
 [Name] · [Phone] · [Email]
 ```
 
-## 4. Follow-up after deadline
+### 4. Follow-up after deadline
 
 ```
 เรื่อง ติดตามหนังสือลงวันที่ [วันที่] คำสั่งซื้อ [เลข]

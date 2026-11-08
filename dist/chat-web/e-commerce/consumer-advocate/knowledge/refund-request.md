@@ -17,7 +17,7 @@ General information, not legal advice — for large amounts, injury or a contrac
 | Paid by credit/debit card; seller won't refund or never delivered | Card dispute / chargeback via your bank | Transaction or statement date | Bank's card terms (รอยืนยัน — commonly counted from the statement date; read your card's ข้อกำหนดและเงื่อนไข and call immediately) |
 | Card charge you did not make | Report unauthorised use to the bank | When you see it | **At once** — call the bank's 24-hour line, freeze the card |
 | Paid by bank transfer / PromptPay to a fake shop | Police report + bank hold request | When you realise | **At once** — ศูนย์ Anti Online Scam Operation Center (AOC) 1441 (24 hours) and your bank |
-| Defective product, any channel | Seller's liability for defects (ป.พ.พ. มาตรา 472) | Discovering the defect | Lawsuit barred after 1 year (มาตรา 474) — see Step 3 below |
+| Defective product, any channel | Seller's liability for defects (ป.พ.พ. มาตรา 472) | Discovering the defect | Lawsuit barred after 1 year (มาตรา 474) — see Step 2 below |
 
 ## The 7-day cancellation (direct sales / direct marketing)
 
@@ -41,7 +41,7 @@ Notice template (Thai, มาตรา 33) and how to send it so the date is pro
 2. Do **not** press "ได้รับสินค้าแล้ว / Order received" until you have checked the item — on several platforms confirming releases payment to the seller and may shorten your window.
 3. Open the return/refund request from the order page, choose the exact reason, upload photos/video.
 4. Keep all communication in the platform chat — never move to LINE or phone with the seller (this is also where scams start → `scam-check` in `trading-finance` (if installed)).
-5. If rejected, escalate to platform customer service within their appeal window, then Step 3 below.
+5. If rejected, escalate to platform customer service within their appeal window, then Step 2 below.
 
 ## Card dispute (chargeback) — steps
 
@@ -56,7 +56,7 @@ Unauthorised card transactions: under the BOT fraud measures (first Oct 2564, re
 
 ตรวจล่าสุด 2026-10-14 · แหล่ง: https://www.bot.or.th/th/news-and-media/news/news-20211019.html · https://www.bot.or.th/th/news-and-media/news/news-20250428.html · https://www.thebangkokinsight.com/news/stock-finance/finance/1437029/ · https://thethaiger.com/th/news/488483/
 
-## Step 3 — refund refused? Escalate one rung at a time
+## Step 2 — refund refused? Escalate one rung at a time
 
 | Step | Who | How | Give them | Move up when |
 |---|---|---|---|---|
@@ -87,7 +87,7 @@ Bought a skincare set through a Facebook advertiser's own website (direct market
 1. Day 3 of 7 — the มาตรา 33 right applies. Send the cancellation notice by email and registered mail on 2026-10-04.
 2. Keep the set unopened for 21 days or return per the company's instructions.
 3. Refund due by 15 days from the company receiving the notice (≈ 2026-10-21 if received 2026-10-06).
-4. No refund by then → "Step 3 — refund refused?", rung 3 (สคบ. 1166), attaching the notice and postal receipt.
+4. No refund by then → "Step 2 — refund refused?", rung 3 (สคบ. 1166), attaching the notice and postal receipt.
 
 Related: `warranty-tracker` · `scam-check` in `trading-finance` (if installed) · `polite-message-th-en` (plugin `superuser`) · `important-docs` in `personal-life` (if installed).
 
@@ -164,14 +164,7 @@ Use after the refund route in SKILL.md fails or the seller will not fix, deliver
 
 ## Complaint Templates
 
-Contents
-0. Step 1 — letter to the seller
-1. Platform escalation message
-2. Complaint to สคบ. (summary to paste into the online form or attach)
-3. English version for a foreign seller or brand
-4. Follow-up after deadline
-
-## 0. Step 1 — letter to the seller
+### 0. Step 1 — letter to the seller
 
 ```
 เรื่อง  ขอให้ [ซ่อม / เปลี่ยนสินค้า / คืนเงิน] สินค้า [ชื่อสินค้า] คำสั่งซื้อเลขที่ [เลข]
@@ -200,7 +193,7 @@ Contents
 
 สิ่งที่ส่งมาด้วย sits under เรียน, the same term and position as a company letter (`doc-thai-official`); the body refers to each item as (แนบ 1) (แนบ 2).
 
-## 1. Platform escalation message
+### 1. Platform escalation message
 
 ```
 เรื่อง ขอให้แพลตฟอร์มช่วยตรวจสอบคำสั่งซื้อ [เลข]
@@ -211,7 +204,7 @@ Contents
 ขอให้แพลตฟอร์มพิจารณา [คืนเงินเต็มจำนวน / คืนสินค้าและคืนเงิน] ตามนโยบายคืนสินค้า
 ```
 
-## 2. Complaint to สคบ.
+### 2. Complaint to สคบ.
 
 Fields the online form usually asks (register at complaint.ocpb.go.th — verify): ชื่อ-ที่อยู่ผู้ร้อง · ชื่อ-ที่อยู่ผู้ถูกร้อง (business name, registered address, phone, website/shop link) · ประเภทสินค้า/บริการ · มูลค่า · รายละเอียดเรื่อง · ความประสงค์ · เอกสารแนบ.
 
@@ -225,7 +218,7 @@ Summary text:
 เอกสารแนบ: ใบเสร็จ, หลักฐานโอนเงิน, ภาพถ่าย, ประวัติแชท, หนังสือที่ส่งถึงผู้ประกอบการ, สำเนาบัตรประชาชน
 ```
 
-## 3. English version
+### 3. English version
 
 ```
 Subject: Request for [repair / replacement / refund] — order [number]
@@ -242,7 +235,7 @@ Regards,
 [Name] · [Phone] · [Email]
 ```
 
-## 4. Follow-up after deadline
+### 4. Follow-up after deadline
 
 ```
 เรื่อง ติดตามหนังสือลงวันที่ [วันที่] คำสั่งซื้อ [เลข]

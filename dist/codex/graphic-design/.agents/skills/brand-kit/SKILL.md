@@ -1,6 +1,6 @@
 ---
 name: brand-kit
-description: Use when starting a brand, posts look inconsistent, a full brand guideline is needed or colours synced to design tokens. Logo, colours, Thai fonts.
+description: Use when starting a brand, posts look inconsistent, a full brand guideline is needed or colours synced to design tokens. Logo, colours, Thai fonts, voice.
 argument-hint: '[brand or company name]'
 ---
 
