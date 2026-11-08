@@ -1,5 +1,9 @@
 # Changelog — personal-life
 
+## 0.22.1 — 2026-11-08
+
+- `meeting`: description อ่านง่ายขึ้น (แก้ใน PR #75 ขึ้นเลขรุ่นที่นี่เพื่อให้เครื่องที่ติดตั้งแล้วอัปเดตได้)
+
 ## 0.22.0 — 2026-11-08
 
 - ยุบ `meeting-prep-card` และ `meeting-summary` เข้า `meeting` · ขา 1 ก่อนประชุม · ขา 2 หลังประชุม · แม่แบบรายงานการประชุมอยู่ที่ `meeting/references/thai-minutes-template.md` · **เรียกชื่อเก่าไม่ได้แล้ว**

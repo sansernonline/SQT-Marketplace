@@ -1,5 +1,10 @@
 # Changelog — graphic-design
 
+## 0.26.1 — 2026-11-08
+
+- `brand-kit`: description มีคำว่า voice และไม่เกิน 150 ตัวอักษร
+- `banner-design` `references/uipro-banner-sizes-and-styles.md`: เพิ่มสารบัญ (ไฟล์ 119 บรรทัด)
+
 ## 0.26.0 — 2026-11-08
 
 - ยุบ `brand-guidelines` เข้า `brand-kit` หัวข้อ "เขียนเป็นเอกสาร" · ขั้นตอนเต็มอยู่ใน `references/brand-guidelines.md` · สคริปต์ `.cjs` 4 ตัวย้ายไป `brand-kit/scripts/` · **เรียกชื่อเก่าไม่ได้แล้ว** · ไฟล์ผล `docs/brand-guidelines.md` ใช้ชื่อเดิม

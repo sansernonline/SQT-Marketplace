@@ -1,5 +1,11 @@
 # Banner Sizes & Art Direction Styles Reference
 
+## Contents
+- [Complete Banner Sizes](#complete-banner-sizes) (Social Media · Web / Display Ads · Website · Print)
+- [22 Art Direction Styles](#22-art-direction-styles)
+- [Design Principles](#design-principles) (hierarchy · safe zones · CTA · typography · text-to-image · print)
+- [Pinterest Research Queries](#pinterest-research-queries)
+
 ## Complete Banner Sizes
 
 ### Social Media

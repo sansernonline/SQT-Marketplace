@@ -1,6 +1,6 @@
 ---
 name: design-references
-description: Use before any design work (web, app, slide, doc, logo, poster, product, banner, post) to search live references and colours each time, or says หาแรงบันดาลใจ.
+description: Use before any design work (web, app, slide, doc, logo, poster, product, banner, post) to search live references and colours, or says หาแรงบันดาลใจ.
 ---
 
 # design-references — ค้นงานจริงก่อนออกแบบ แล้วหยิบสีจากงานที่เลือก
