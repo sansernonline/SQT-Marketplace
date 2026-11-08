@@ -1,5 +1,9 @@
 # Changelog — trading-finance
 
+## 0.19.1 — 2026-11-08
+
+- `references/examples.md`: ตัวอย่างระดับโมเดลจัดตามกฎ 3 ข้อของ superuser 3.26.0 (งานเสี่ยง → opus · งานกลไกที่มีแบบ → haiku · ที่เหลือ → sonnet)
+
 ## 0.19.0 — 2026-11-08
 
 - ยุบ `post-trade-review` เข้า `trade-journal` (โหมด 2 ทบทวนผล) · สูตรและตัวอย่างอยู่ใน `references/review-stats.md` · สคริปต์ย้ายเป็น `trade-journal/scripts/trade-stats.mjs` · **เรียกชื่อเก่าไม่ได้แล้ว**

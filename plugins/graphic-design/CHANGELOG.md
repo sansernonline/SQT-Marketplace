@@ -1,5 +1,9 @@
 # Changelog — graphic-design
 
+## 0.26.2 — 2026-11-08
+
+- `references/examples.md`: ตัวอย่างระดับโมเดลจัดตามกฎ 3 ข้อของ superuser 3.26.0 (งานเสี่ยง → opus · งานกลไกที่มีแบบ → haiku · ที่เหลือ → sonnet)
+
 ## 0.26.1 — 2026-11-08
 
 - `brand-kit`: description มีคำว่า voice และไม่เกิน 150 ตัวอักษร
