@@ -1,5 +1,12 @@
 # Changelog — superuser
 
+## 3.27.0 — 2026-11-08
+
+- ด่าน guard: ข้อแบบ `"decision": "ask"` ให้ผู้ใช้กดยืนยันก่อนรัน `npm publish` · `gh release create` · `gh repo delete` · `git tag -d` · `git rebase` · `find -delete` · `rmtree` (จับเฉพาะต้นคำสั่ง จึงไม่ครอบคำสั่งที่นำหน้าด้วยตัวแปรหรือ sudo เช่น `FOO=1 npm publish`) · guard-allow ยกเว้นด้วย regex ได้ทั้งข้อปฏิเสธและข้อถาม
+- `workspace-setup --git-policy`: แนะนำให้เปิด guard เมื่อยังปิดอยู่ (ไม่เปิดเอง)
+- `adversarial-review-panel`: เกณฑ์เลือกคณะ 3 มุมหรือ reviewer ตัวเดียว (ค่าตั้งต้น ยังไม่ได้วัด)
+- `parallel-split-and-merge` `plan-actual.mjs`: ค่า 1.5 มีชื่อ `OVER_RATIO` และเหตุผล · ใช้ `DEFAULT_SAFETY` จาก plan-assign แทนเลขซ้ำ
+
 ## 3.26.0 — 2026-11-08
 
 - hook: เตือนครั้งเดียวต่อวันเมื่อสั่ง Agent พร้อม `model` แต่ไม่ส่ง `effort` (log 2026-10-27 ถึง 11-08 ก่อนแก้ ไม่เคยส่ง effort เลย 0/192 ครั้ง) · เตือนบรรทัด `คาด:` เมื่อยังไม่มีแถวของวันนี้ (เดิมพอมีแถวเก่าแถวเดียวก็ไม่เตือนอีก)
