@@ -1,16 +1,6 @@
----
-name: post-trade-review
-description: Use when reviewing trading results weekly or monthly. Win rate, expectancy, drawdown, one new rule.
-argument-hint: '[week|month]'
----
+# Review statistics (สถิติทบทวน)
 
-# Post-Trade Review (ทบทวนผลการเทรด)
-
-Coach tape review, not an accountant's report. Input: the journal from `trade-journal` (columns `r_multiple`, `pnl_baht`, `setup`, `emotion`, `violation`). General information, not investment advice.
-
-## Formulas
-
-Let N = closed trades, W = winners (R > 0), L = losers (R ≤ 0).
+Used by mode 2 of `trade-journal`. Let N = closed trades, W = winners (R > 0), L = losers (R ≤ 0).
 
 | Statistic | Formula | Read it as |
 |---|---|---|
@@ -27,15 +17,6 @@ Let N = closed trades, W = winners (R > 0), L = losers (R ≤ 0).
 
 Fewer than 20 trades: report the numbers but say the sample is too small to judge the strategy — judge only rule-following.
 
-## Workflow
-
-1. Load closed trades since the last review (filter rows by `date_out` into a temp file first — the script has no date option — then pass that file to the script; do not read the whole journal into context); separate `live` and `paper`.
-2. Run `trade-stats.mjs` (section "Script") for the table above and show its output once, so the user can check it; do not compute by hand.
-3. **Group losing trades** by setup, by emotion tag, by day of week / time of day, and by violation; find the cluster with the largest total −R, not the most memorable trade.
-4. **Name one pattern** that cost the most this period, quoting 2–3 actual journal lines as evidence.
-5. **Write one rule** as a countable gate: "No entry within 15 minutes after a stop-out" or "No `breakout-volume` entry when volume < 1.5× average".
-6. Verdict on last period's rule: followed how often, did it help → keep / adjust / drop.
-
 ## Script
 
 `trade-stats.mjs` computes the table above from the journal: win rate, average win and loss in R, payoff ratio, expectancy, breakeven win rate, profit factor (needs `pnl_baht` on every row), max drawdown in R (and % of capital when `capital` is given), longest winning and losing streaks, violation rate (a `violation` of blank, `no`, `n`, `none`, `false`, `0`, `-`, `ไม่` or `ไม่มี` is not a violation). `live` and `paper` rows (column `account`) are reported separately. Rows with a blank `r_multiple` are open trades and are skipped. With fewer than 20 closed trades the output carries a small-sample label.
@@ -47,7 +28,7 @@ node trade-stats.mjs --self-test
 
 Input: the `trade-journal.csv` header as is, or JSON `[ {...} ]` / `{ "capital": 100000, "trades": [ {...} ] }`. Needed per row: `r_multiple`; used when present: `account`, `pnl_baht`, `violation`. Keep rows in exit order — drawdown and streaks follow file order. A non-numeric `r_multiple` or `pnl_baht` stops the script with a message naming the row and field. The script does the numbers only; finding the pattern and writing the one rule (steps 3–6) stays with you.
 
-**Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/trading-finance/*/skills/post-trade-review/scripts/trade-stats.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/trading-finance/skills/post-trade-review/scripts/trade-stats.mjs` · Node only, no dependencies. The worked example below is `scripts/example.json` and gives the same numbers.
+**Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/trading-finance/*/skills/trade-journal/scripts/trade-stats.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/trading-finance/skills/trade-journal/scripts/trade-stats.mjs` · Node only, no dependencies. The worked example below is `scripts/example.json` and gives the same numbers.
 
 ## Worked example — 10 trades (R): +2.0, −1.0, −1.0, +3.0, −1.2, +0.5, −1.0, +1.5, −1.0, −2.0
 
@@ -57,17 +38,3 @@ Input: the `trade-journal.csv` header as is, or JSON `[ {...} ]` / `{ "capital":
 - Expectancy = 0.40 × 1.75 − 0.60 × 1.20 = 0.70 − 0.72 = **−0.02R** per trade — about breakeven
 - Equity in R, starting 0: 2, 1, 0, 3, 1.8, 2.3, 1.3, 2.8, 1.8, −0.2. Peak 3.0 → low −0.2 = drawdown **3.2R**. With 1R = 1,000 baht on 100,000 capital, from the peak of 103,000 to 99,800 = 3,200 ÷ 103,000 = **3.1%**
 - Pattern found: the −2.0R trade had violation `moved-stop`, and the −1.2R trade was tagged FOMO. Without the moved stop (−1.0 instead of −2.0), expectancy = (7.0 − 6.2) ÷ 10 = **+0.08R**. The one rule: "Stops only move toward profit — never away." Count violations next month.
-
-## Output
-
-One page: stats table (live, paper separately) · sample-size warning if N < 20 · the one pattern with quoted evidence · the one new rule · last rule's verdict. No pep talks, no list of ten lessons.
-
-Related: data format in `trade-journal`; strategy practice in `paper-trading`; sizing fixes in `position-sizing`.
-
-## เรียกเป็นคำสั่ง
-
-`/trading-finance:post-trade-review [week|month]`
-
-Run `post-trade-review` with the `trade-journal-coach` agent for: **$ARGUMENTS**
-
-Default period is this month. Output is one page: stats table, the one pattern (quoted from journal), the one new rule, previous rule verdict.

@@ -8,7 +8,7 @@ import { readFileSync } from 'node:fs';
 
 // Starting value, not measured: under 20 closed trades the win rate swings by roughly +-15 points
 // (binomial standard error at 50% with N=10 is 16 points), so the numbers describe rule-following, not the strategy.
-// 20 is the cutoff written in post-trade-review/SKILL.md.
+// 20 is the cutoff written in trade-journal/SKILL.md.
 const MIN_SAMPLE = 20;
 // Starting value, not measured: a stop that holds loses about 1R plus costs; above 1.2R suggests slipped or moved stops
 const MAX_AVG_LOSS_R = 1.2;

@@ -1,5 +1,5 @@
 # รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
-# เคส "ไม่ควรเปิด" 2026-10-28 (ยังไม่ได้รัน) · สรุปประชุมเป็นของ meeting-summary ไม่ใช่ weekly-review
+# เคส "ไม่ควรเปิด" 2026-10-28 (ยังไม่ได้รัน) · สรุปประชุมเป็นของ meeting (ขา 2) ไม่ใช่ weekly-review
 schema_version: "1.1"
 name: weekly-review-trigger-negative
 description: ขอสรุปบันทึกการประชุมที่เพิ่งจบ ต้องไม่เปิด weekly-review

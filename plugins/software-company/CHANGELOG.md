@@ -1,5 +1,14 @@
 # Changelog — software-company
 
+## 2.47.0 — 2026-11-08
+
+- ยุบ skill 3 คู่ เหลือตัวเดียว · **เรียกชื่อเก่าไม่ได้แล้ว**
+  - `backblaze-deploy` → `backblaze-b2` · การปล่อยเว็บ static อยู่ใน `references/deploy.md` · `assets/deploy-b2.sh` `deploy-b2.yml` ย้ายตาม
+  - `pptx-to-html-deck` → `html-slide-deck` · ทางเข้าจาก .pptx อยู่ใน `references/from-pptx.md` · สคริปต์ `scripts/*.py` และ `assets/runtime.*` ย้ายตาม
+  - `owasp-top10` → `security-gate` · ตาราง A01–A10 อยู่ใน `references/owasp-top10.md` · ข้อสัญญาและรายการตรวจรายภาษาเปลี่ยนชื่อเป็น `references/owasp-contract-clause.md` และ `references/owasp-stack-checks.md`
+- eval `backblaze-deploy-*` เปลี่ยนชื่อเป็น `backblaze-b2-deploy-*`
+- ที่อ้างชื่อเก่าชี้ตัวใหม่แล้ว: skill `render-deploy` · `security-audit` · `security-scan` · `principle-secure-by-default` · `code-review-checklist` · `srs-writing` · `presentation-design` · `branded-document-design` · `design-system` · `threat-model` · playbook `feature` `new-project` `ship` · triggers · agent 4 ตัว
+
 ## 2.46.1 — 2026-11-07
 
 - ประหยัด token (ตรวจหัวข้อ 8 ของ `audit-plugin-prompt.md`): ใส่ `head` · `tail` · `-n` · `--stat` ให้คำสั่งที่พ่นผลไม่จำกัดใน 10 skill และ playbook 3 ไฟล์ (`logging-standards` เปลี่ยน `tail -f` เป็น `tail -n 50` ดูครั้งเดียวแทนตามดูสด) · จำกัดแถวที่ subagent ส่งกลับใน code-orientation · legacy-onboard · reference-app-research · ui-craft · playbook-investigation · ระบุโมเดลเล็กให้งานนับและคัดใน code-orientation · bug-inbox-triage · legacy-spec-recovery · ตัดข้อความซ้ำในไฟล์เดียวกันใน postmortem-template · seo-audit · แก้หัวข้อเพี้ยน "Right: Phase 4" ใน incident-response

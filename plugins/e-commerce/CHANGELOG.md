@@ -1,5 +1,10 @@
 # CHANGELOG — e-commerce
 
+## 1.8.0 — 2026-11-08
+
+- ยุบ `complaint-letter-th` เข้า `refund-request` · ขั้นบันไดร้องเรียนและแม่แบบจดหมายอยู่ใน `references/complaint-letter.md` · **เรียกชื่อเก่าไม่ได้แล้ว**
+- คำสั่ง `/e-commerce:complain` · agent `consumer-advocate` · playbook `complaint` `refund` `review` · triggers · `warranty-tracker` ชี้ตัวใหม่
+
 ## 1.7.1 — 2026-11-07
 
 - ประหยัด token (audit หัวข้อ 8): ย้ายตาราง ตัวอย่าง และเช็กลิสต์ที่ใช้บางครั้งจาก SKILL.md ไป references/ ใน `hiring-th` `buy-compare` `product-listing` `cash-flow` `line-broadcast` `shipping-compare` `multi-shop-stock` `warranty-tracker` (ความหมายเดิม เพิ่มลิงก์) · `warranty-tracker` เพิ่มกฎ archive แถวหมดประกันและอ่านเฉพาะแถวที่ใกล้ครบ · `superuser/SKILL.md` ตัดประโยคซ้ำ 1 บรรทัด

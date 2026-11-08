@@ -1,6 +1,6 @@
 {
  "plugin": "trading-finance",
- "version": "0.17.1",
+ "version": "0.19.0",
  "description": "Trading and personal finance toolkit for Thai investors — watchlists, signals, paper trading, trade journal, position sizing, dividends, budgets and scam checks, plus Thai money skills: investment tax, year-end deduction planning (/tax-plan), mutual funds, retirement, debt payoff and คลินิกแก้หนี้, insurance review and emergency funds, credit bureau reports, bonds and deposits, rebalancing and DCA, and home refinance. Uses whatever market-data plugins you already have.",
  "cross": [
   "software-company",
@@ -22,7 +22,6 @@
   "personal-budget",
   "portfolio-snapshot",
   "position-sizing",
-  "post-trade-review",
   "rebalance-and-dca",
   "retirement-plan",
   "scam-check",
@@ -135,8 +134,7 @@
    "core": false,
    "description": "Use when reviewing past trades or a trade journal, or asking why you keep losing the same way. Finds one rule to test.",
    "skills": [
-    "trade-journal",
-    "post-trade-review"
+    "trade-journal"
    ]
   }
  ],
@@ -380,7 +378,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "อ่านรายการถือครองจากไฟล์ของผู้ใช้ และดึงราคาปัจจุบันพร้อมเวลา · ใคร: `market-analyst` ตัวใหม่",
+     "text": "อ่านรายการถือครองจากไฟล์ของผู้ใช้ และดึงราคาปัจจุบันพร้อมเวลา ส่งกลับเป็นตาราง ไม่เกิน 20 แถว · ใคร: `market-analyst` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -869,7 +867,7 @@
     },
     {
      "n": 5,
-     "text": "ตรวจ — คำนวณซ้ำด้วยสคริปต์ และทุกเพดานมีแหล่งและปี · ใคร: `reviewer` ตัวใหม่",
+     "text": "ตรวจ — คำนวณซ้ำด้วย `tax.mjs` ของ `tax-deduction-planner` และทุกเพดานมีแหล่งและปี · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -878,7 +876,9 @@
       "agents": [],
       "raw": "`reviewer` ตัวใหม่"
      },
-     "skills": [],
+     "skills": [
+      "tax-deduction-planner"
+     ],
      "commands": [],
      "playbooks": [],
      "approval": false
@@ -1047,7 +1047,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "อ่านบันทึกการเทรดของช่วงนั้นทั้งหมด · ใคร: `trade-journal-coach` ตัวใหม่",
+     "text": "อ่านบันทึกการเทรดเฉพาะช่วงนั้น (กรองตามวันปิดไม้ ไม่เปิดทั้งไฟล์) ส่งกลับสรุปไม่เกิน 20 บรรทัด · ใคร: `trade-journal-coach` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1065,7 +1065,7 @@
     },
     {
      "n": 2,
-     "text": "คำนวณ win rate expectancy และ drawdown ด้วยสคริปต์ที่รันซ้ำได้ · ใคร: `trade-journal-coach` ตัวใหม่",
+     "text": "คำนวณ win rate expectancy และ drawdown ด้วย `scripts/trade-stats.mjs` ของ `trade-journal` · ใคร: `trade-journal-coach` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1076,7 +1076,9 @@
       ],
       "raw": "`trade-journal-coach` ตัวใหม่"
      },
-     "skills": [],
+     "skills": [
+      "trade-journal"
+     ],
      "commands": [],
      "playbooks": [],
      "approval": false

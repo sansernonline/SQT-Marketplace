@@ -63,7 +63,7 @@ superuser = แม่แบบ + skill 6 ตัว           superuser = แก�
 จำลองบริษัทซอฟต์แวร์ครบทุกขั้นของ Software Development Life Cycle (SDLC) ตั้งแต่ทีมหลัก (product · analysis · architecture · design · development · QA · DevOps · security) ไปจนถึงผู้เชี่ยวชาญเฉพาะสาขา
 
 ### มีอะไรบ้าง
-**38 agents · 108 skills · 11 commands** (ไม่นับ skill กลาง 32 ตัวจาก `superuser`)
+**38 agents · 105 skills · 11 commands** (ไม่นับ skill กลาง 32 ตัวจาก `superuser`)
 
 ### ติดตั้ง
 ```
@@ -183,8 +183,7 @@ _ร่างเมื่อ 6 ต.ค. 2569 · software-company ครอบง
 - watchlist-setup — ตั้งวอทช์ลิสต์หุ้นไทย/ฮ่องกง/US พร้อมเหตุผล
 - technical-signals — RSI/MACD/MA/volume breakout อธิบายเป็นภาษาคน
 - paper-trading — เทรดจำลองก่อนด้วยเงินเสมือน เก็บสถิติ win/loss
-- trade-journal — บันทึกทุกออเดอร์: setup, เหตุผล, อารมณ์ตอนเข้า, ผลลัพธ์
-- post-trade-review — ทบทวนรายสัปดาห์ หาจุดซ้ำที่เสียเงิน
+- trade-journal — บันทึกทุกออเดอร์: setup, เหตุผล, อารมณ์ตอนเข้า, ผลลัพธ์ · ทบทวนรายสัปดาห์ หาจุดซ้ำที่เสียเงิน
 - position-sizing — คำนวณขนาดลงทุนจากเงินทุน/ความเสี่ยงต่อไม้
 - portfolio-snapshot — สรุปพอร์ตปัจจุบัน (Excel/HTML)
 - dividend-tracker — ปันผล/ดอกเบี้ยที่จะได้รับปีนี้
@@ -193,7 +192,7 @@ _ร่างเมื่อ 6 ต.ค. 2569 · software-company ครอบง
 - personal-budget — บัญชีรายรับรายจ่าย+แผนออม
 - scam-check — ตรวจสัญญาณหุ้นล็อก/forexหลอก/แชร์ลูกโซ่ ก่อนโอนเงิน
 
-**Commands (6):** /watchlist-setup, /paper-trading, /trade-journal, /post-trade-review, /alert-set, /portfolio-snapshot
+**Commands (5):** /watchlist-setup, /paper-trading, /trade-journal, /alert-set, /portfolio-snapshot
 
 **ข้อมูล:** ดึงผ่าน data plugin ที่มีอยู่แล้ว (yahoo_finance, Gildata ฯลฯ) · plugin นี้ไม่มีแหล่งข้อมูลของตัวเอง · ใน skill ระบุว่าถ้าไม่มี data plugin พวกนั้น จะดึงข้อมูลจากแหล่งฟรีแทนอย่างไร
 

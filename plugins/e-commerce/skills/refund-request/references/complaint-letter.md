@@ -1,4 +1,38 @@
-# Complaint Templates
+# Complaint Letter (Thailand)
+
+Use after the refund route in SKILL.md fails or the seller will not fix, deliver or keep a promise. Firm, dated, specific — and one rung at a time.
+
+## Evidence list
+
+- [ ] Receipt / tax invoice / order confirmation with order number
+- [ ] Product page or advertisement as it was when you bought (screenshot; the Wayback Machine if changed)
+- [ ] Chat history with the seller — export or screenshot with dates visible
+- [ ] Photos / video of the fault, unboxing video if you have it, and the parcel label
+- [ ] Delivery record (tracking, delivery photo)
+- [ ] Payment proof — bank transfer slip, card statement line
+- [ ] Warranty card, service-centre job sheets, repair receipts
+- [ ] Timeline: date — what happened — who you spoke to
+- [ ] Copy of your บัตรประชาชน (for สคบ.) — write "ใช้สำหรับร้องเรียน สคบ. เท่านั้น" across the copy and sign
+
+## Workflow
+
+1. Write the timeline and gather evidence (above).
+2. Decide what you want: repair · replacement · refund · partial refund · compensation for a specific cost. One primary request.
+3. Check time-limited rights first → ขั้น 1 ใน SKILL.md.
+4. Draft the step-1 letter with the template; send in writing (platform chat, email, or registered mail ไปรษณีย์ลงทะเบียนตอบรับ for a shop with no online channel).
+5. Diary the deadline. If it passes, move one step up, attaching the earlier letter.
+6. At สคบ.: file online or call 1166; keep the complaint number; reply quickly to any request for documents.
+
+แบบจดหมายอยู่ด้านล่างของไฟล์นี้
+
+## Tone rules
+
+- Facts and dates, no insults, no threats beyond the next lawful step.
+- One request, one deadline.
+- Public reviews: facts only ("ordered on …, received …, seller did not reply by …"). Exaggeration can expose the user to a defamation claim (หมิ่นประมาท).
+- ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ ร้องเรียน · กำหนดเวลาเขียนเป็นจำนวนวันนับจากวันที่ได้รับหนังสือ ไม่ใช่วันที่ตายตัว · ขั้นถัดไปบอกตรง ("จะร้องเรียนต่อ … โดยไม่แจ้งอีก") ไม่ใช่ "จำเป็นต้องดำเนินการ…ต่อไป"
+
+## Complaint Templates
 
 Contents
 0. Step 1 — letter to the seller

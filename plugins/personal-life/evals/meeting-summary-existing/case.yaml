@@ -2,7 +2,7 @@
 schema_version: "1.1"
 name: meeting-summary-existing
 description: องค์กรมีแบบรายงานการประชุมของตัวเอง ต้องเรียงหัวข้อตามแบบนั้น ไม่ใช้แบบบันทึกของ skill
-tags: [behaviour, meeting-summary]
+tags: [behaviour, meeting]
 runs: 5
 expected_outcome: อ่าน แบบรายงานการประชุม.md · ใช้หัวข้อ "เรื่องแจ้งเพื่อทราบ" "เรื่องเพื่อพิจารณา" "มติที่ประชุม" ตามแบบ · งานที่ต้องทำมีเจ้าของและวันส่ง
 execution:

@@ -1,10 +1,10 @@
 # รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23) · ยังไม่ได้รันจริง (เสียเงิน)
 schema_version: "1.1"
-name: brand-guidelines-trigger
-description: บริษัทขอคู่มือแบรนด์ฉบับเต็ม ไม่เอ่ยชื่อ skill ต้องเปิด brand-guidelines
-tags: [trigger, brand-guidelines]
+name: brand-kit-guidelines-trigger
+description: บริษัทขอคู่มือแบรนด์ฉบับเต็ม ไม่เอ่ยชื่อ skill ต้องเปิด brand-kit
+tags: [trigger, brand-kit]
 runs: 3
-expected_outcome: เรียก Skill brand-guidelines แล้วเสนอหัวข้อน้ำเสียง ข้อความหลัก การอนุมัติงาน
+expected_outcome: เรียก Skill brand-kit แล้วเสนอหัวข้อน้ำเสียง ข้อความหลัก การอนุมัติงาน
 execution:
   prompt: |
     บริษัทเรามีพนักงานใหม่ 20 คนและเอเจนซี่ 3 เจ้าที่ทำสื่อให้ ต่างคนต่างเขียนต่างทำ
@@ -15,7 +15,7 @@ graders:
   - name: skill-opened
     type: tool_used
     tool: Skill
-    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?brand-guidelines"'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?brand-kit"'
     min: 1
     arm: with-only
   - name: voice

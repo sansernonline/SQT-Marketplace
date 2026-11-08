@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# แม่แบบ deploy เว็บ static ขึ้น Backblaze B2 ด้วย b2 CLI · skill backblaze-deploy
+# แม่แบบ deploy เว็บ static ขึ้น Backblaze B2 ด้วย b2 CLI · skill backblaze-b2
 # ใช้: B2_BUCKET=... B2_KEY_ID=... B2_APPLICATION_KEY=... bash deploy-b2.sh [โฟลเดอร์ build=dist] [prefix ปลายทาง=ว่าง]
 # ตัวแปรเสริม: KEEP_DAYS (ค่าเริ่มต้น 30) · ALLOW_DELETE=1 · ALLOW_SOURCEMAPS=1
 # ยังไม่ได้รันกับ b2 จริง · b2 CLI ไม่มี dry-run ในเอกสาร ให้ลองกับ bucket ทดสอบก่อน

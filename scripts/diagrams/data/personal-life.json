@@ -1,6 +1,6 @@
 {
  "plugin": "personal-life",
- "version": "0.19.0",
+ "version": "0.22.0",
  "description": "Daily-life admin, five categories — life admin (weekly reviews, inbox triage, documents, travel, decisions, subscriptions, digital safety, goals), home and family (bills, maintenance, vehicle, meals, school, elder care, pets, floods, wills), health (exercise, sleep, checkups, medication, doctor visits, pregnancy — never diagnoses), career (CVs, interviews, salary, LinkedIn), and learning (learning paths, papers, tech radar, certs, side projects, thesis). General information only.",
  "cross": [
   "superuser",
@@ -34,8 +34,7 @@
   "linkedin-profile",
   "meal-plan-grocery",
   "medication-schedule",
-  "meeting-prep-card",
-  "meeting-summary",
+  "meeting",
   "moving-house",
   "paper-to-practice",
   "performance-self-review",
@@ -95,8 +94,7 @@
   "translate-th-en"
  ],
  "commands": [
-  "family-week",
-  "meeting"
+  "family-week"
  ],
  "agents": [
   {
@@ -199,8 +197,7 @@
    "core": false,
    "description": "Use before and after a meeting that matters. One-page prep card (goal, questions, context) and action-item summary.",
    "skills": [
-    "meeting-prep-card",
-    "meeting-summary"
+    "meeting"
    ]
   },
   {
@@ -1858,7 +1855,7 @@
     },
     {
      "n": 2,
-     "text": "หลังประชุม สรุปการตัดสินใจ งานพร้อมเจ้าของและวันครบกำหนด และคำถามค้าง ตาม `meeting-summary` ถ้าต้องการแบบทางการ ให้ทำเป็นรายงานการประชุมภาษาไทย · ใคร: `meeting-prep` ตัวใหม่",
+     "text": "หลังประชุม สรุปการตัดสินใจ งานพร้อมเจ้าของและวันครบกำหนด และคำถามค้าง ตาม `meeting` ขา 2 ถ้าต้องการแบบทางการ ให้ทำเป็นรายงานการประชุมภาษาไทย · ใคร: `meeting-prep` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -1870,10 +1867,12 @@
       "raw": "`meeting-prep` ตัวใหม่"
      },
      "skills": [
-      "meeting-summary"
+      "meeting"
      ],
      "commands": [],
-     "playbooks": [],
+     "playbooks": [
+      "meeting"
+     ],
      "approval": false
     },
     {

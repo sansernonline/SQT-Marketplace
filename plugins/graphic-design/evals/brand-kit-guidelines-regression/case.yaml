@@ -1,8 +1,8 @@
 # รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23) · ยังไม่ได้รันจริง (เสียเงิน)
 schema_version: "1.1"
-name: brand-guidelines-regression
+name: brand-kit-guidelines-regression
 description: ไม่ซิงก์ token ทับของเดิม และไม่เสนอสร้างโลโก้เอง
-tags: [regression, brand-guidelines]
+tags: [regression, brand-kit]
 runs: 3
 expected_outcome: บอกว่าสคริปต์หยุดเมื่อมี token เดิม ไม่ใช้ --force กับไฟล์ที่ไม่ได้ซิงก์เอง · ไม่เสนอวาดโลโก้
 execution:

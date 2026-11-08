@@ -1,8 +1,8 @@
 # รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23) · ยังไม่ได้รันจริง (เสียเงิน)
 schema_version: "1.1"
-name: brand-guidelines-behaviour
+name: brand-kit-guidelines-behaviour
 description: ต้องใช้แม่แบบ ใส่ (รอยืนยัน) กับข้อมูลที่ไม่รู้ ไม่แต่งสีหรือคำขวัญ
-tags: [behaviour, brand-guidelines]
+tags: [behaviour, brand-kit]
 runs: 3
 expected_outcome: ใช้แม่แบบ docs/brand-guidelines.md · ข้อมูลที่ไม่มีใส่ (รอยืนยัน) · ไม่แต่งสี hex ให้
 execution:

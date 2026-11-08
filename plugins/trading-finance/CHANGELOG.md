@@ -1,5 +1,10 @@
 # Changelog — trading-finance
 
+## 0.19.0 — 2026-11-08
+
+- ยุบ `post-trade-review` เข้า `trade-journal` (โหมด 2 ทบทวนผล) · สูตรและตัวอย่างอยู่ใน `references/review-stats.md` · สคริปต์ย้ายเป็น `trade-journal/scripts/trade-stats.mjs` · **เรียกชื่อเก่าไม่ได้แล้ว**
+- `paper-trading` · `technical-signals` · playbook `review` `trade-review` · triggers · agent `trade-journal-coach` ชี้ตัวใหม่ · CI (`.github/workflows/check.yml`) รัน self-test ที่ path ใหม่
+
 ## 0.18.1 — 2026-11-07
 
 - ประหยัด token (ตรวจ plugin หัวข้อ 8): ย้ายตาราง drawdown · knapsack · ตัวอย่างและแหล่งของ copy-trade-check · rebalance · ความหมายสัญญาณ ไป references/ ของแต่ละ skill · `post-trade-review` และ playbook ให้สคริปต์อ่านบันทึกแทนเปิดทั้งไฟล์ และจำกัดคำตอบ subagent ไม่เกิน 20 บรรทัด · ตัดประโยคซ้ำใน `superuser/SKILL.md`

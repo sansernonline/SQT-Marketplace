@@ -1,15 +1,9 @@
----
-name: pptx-to-html-deck
-description: Use when a .pptx should play as one animated HTML file, or both .pptx and .html are wanted — click steps, notes, menu, interactive pages.
----
+# ทางเข้าจาก .pptx → .html
 
-# PPTX → HTML Deck
+ส่วนขยายของ [`SKILL.md`](../SKILL.md) · ใช้เมื่อมี .pptx อยู่แล้ว หรือต้องส่งทั้ง .pptx และ .html จากต้นฉบับเดียว · path `scripts/` และ `assets/` ในไฟล์นี้นับจากโฟลเดอร์ `html-slide-deck/` · ทางนี้ใช้สคริปต์ `pptx_to_html.py` `check_html_deck.py` `click_steps.py` ไม่ใช้ `build_deck.py`
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **กฎข้อเดียวของทางนี้:** หน้าตามาจาก .pptx ทั้งหมด · แก้ที่ .pptx แล้วแปลงใหม่ ไม่แก้ .html ที่แปลงแล้ว
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` · โครงเรื่องและหัวสไลด์ตาม `presentation-design` — skill นี้บอกวิธีแปลงและตรวจ
-
-> **กฎข้อเดียวของ skill นี้:** หน้าตามาจาก .pptx ทั้งหมด · แก้ที่ .pptx แล้วแปลงใหม่ ไม่แก้ .html ที่แปลงแล้ว
 
 ต้นแบบมาจากเด็คนำเสนอ Independent Study (IS) "Few-shot Key Information Extraction (KIE) · Confidence-Gated Cascade" (41 หน้า + หน้าโต้ตอบ 15 หน้า): ทำ .pptx ให้เสร็จก่อน แล้วแปลงเป็น .html ไฟล์เดียวที่ทุกชิ้นเลื่อนเข้ามาทีละแถว พร้อมแถบความคืบหน้า สารบัญ โน้ตผู้พูด และนาฬิกาแบบเด็ค X Fitness
 
@@ -19,22 +13,9 @@ description: Use when a .pptx should play as one animated HTML file, or both .pp
 - ต้องส่งทั้ง .pptx (ให้คนแก้ต่อ) และ .html (ให้เปิดดูได้ทุกเครื่อง) จากต้นฉบับเดียว
 - อยากเพิ่มหน้าโต้ตอบ (พิมพ์ตัวเลขแล้วคำนวณ · เล่นทีละขั้น) แทรกระหว่างหน้า PowerPoint
 
-## เมื่อไหร่ **ไม่** ใช้
-
-| งาน | ใช้ |
-|---|---|
-| ยังไม่มี .pptx และไม่ต้องการ .pptx เลย · อยากได้แผนภาพทัวร์ แชตเล่นซ้ำ คลิกดูไฟล์ | `html-slide-deck` (เขียน HTML ตรง ๆ หน้าตา X Fitness) |
-| ยังไม่มีโครงเรื่อง | `presentation-design` ข้อ 1–3 ก่อน |
-| ต้องการแค่ .pptx | `branded-document-design` · `StageDeck` |
-| ชื่อไฟล์และเวอร์ชัน | `document-naming` |
-
-กฎเลือกชนิดไฟล์อยู่ใน `presentation-design`
-
----
-
 ## 1 · ขั้นตอน
 
-1. **ทำ .pptx ให้เสร็จก่อน** — สีและอารมณ์มาจากงานต้นทางตาม `presentation-design` [`references/deck-theme.md`](../presentation-design/references/deck-theme.md) (ถอดสีด้วย `presentation-design/scripts/source_palette.py` · พื้นสว่างเป็นค่าเริ่มต้น · หน้าเปลี่ยนส่วนเป็นสีหลักเต็มแผ่น ซึ่ง `StageDeck(..., block=True)` ทำให้) · งานต้นทางไม่มีสีและยังไม่มีหน้าตา → **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `slide` แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้ · ไม่มี .pptx → สร้างด้วย `branded-document-design` (`StageDeck`) · หัวสไลด์อยู่ใน placeholder ชื่อเรื่อง (กลายเป็นชื่อในสารบัญ) · โน้ตผู้พูดใส่ใน notes · แบ่งส่วนด้วย Section ของ PowerPoint (กลายเป็นกลุ่มในสารบัญ)
+1. **ทำ .pptx ให้เสร็จก่อน** — สีและอารมณ์มาจากงานต้นทางตาม `presentation-design` [`references/deck-theme.md`](../../presentation-design/references/deck-theme.md) (ถอดสีด้วย `presentation-design/scripts/source_palette.py` · พื้นสว่างเป็นค่าเริ่มต้น · หน้าเปลี่ยนส่วนเป็นสีหลักเต็มแผ่น ซึ่ง `StageDeck(..., block=True)` ทำให้) · งานต้นทางไม่มีสีและยังไม่มีหน้าตา → **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `slide` แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้ · ไม่มี .pptx → สร้างด้วย `branded-document-design` (`StageDeck`) · หัวสไลด์อยู่ใน placeholder ชื่อเรื่อง (กลายเป็นชื่อในสารบัญ) · โน้ตผู้พูดใส่ใน notes · แบ่งส่วนด้วย Section ของ PowerPoint (กลายเป็นกลุ่มในสารบัญ)
 2. **ขั้นที่อยากเปิดทีละคลิก** — ใน PowerPoint ใส่ animation แบบ On Click · สร้างด้วย python ใช้ `scripts/click_steps.py`:
    ```python
    from click_steps import add_click_steps
@@ -112,6 +93,4 @@ python scripts/pptx_to_html.py deck.pptx -o deck.html --insert 9:demo/flow.html 
 - **ข้อความอัดเต็มกล่องพอดี** — ฟอนต์เครื่องอื่นกว้างกว่านิดเดียวก็ล้น · เผื่อที่ว่างในกล่อง 10%
 - **กราฟเป็นรูปภาพ** — แปลงแล้วไม่มี animation และแก้ค่าไม่ได้ · ใช้กราฟของ PowerPoint
 
-## ไม่ให้ดูเหมือน AI ทำ
-
-ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ทุกงานต้องผ่านด่านตา 3.2 ด้วย (หน้าเว็บตอบเพิ่มข้อ 10–14) เพราะสคริปต์ 0 ข้อยังไม่ใช่ผ่าน · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
+ก่อนส่งไล่หัวข้อ "ไม่ให้ดูเหมือน AI ทำ" ท้าย [`SKILL.md`](../SKILL.md) เช่นเดียวกับเด็คที่เขียนตรง

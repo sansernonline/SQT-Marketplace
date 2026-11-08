@@ -53,7 +53,7 @@ playbook `weekly-reset` · agent `life-admin` · skill `weekly-review` · `inbox
 
 ## 2. ก่อน / หลังประชุม
 
-playbook `meeting` · agent `meeting-prep` · skill `meeting-prep-card` · `meeting-summary`
+playbook `meeting` · agent `meeting-prep` · skill `meeting`
 **ผลลัพธ์:** `meetings/YYYY-MM-DD_<เรื่อง>_prep.md` (ก่อน) · `meetings/YYYY-MM-DD_<เรื่อง>_summary.md` (หลัง) · **รออนุมัติ:** ส่งสรุปให้ผู้เข้าประชุม
 
 ### ข้อมูล (ผู้ใช้กรอก)

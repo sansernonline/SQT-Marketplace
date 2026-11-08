@@ -1,6 +1,6 @@
 # ธีมของเด็ค — สดใส และเข้ากับงานที่นำมาทำ
 
-ไฟล์กลางของ skill สไลด์ทุกตัว (`presentation-design` · `html-slide-deck` · `pptx-to-html-deck` · `StageDeck` ใน `branded-document-design`) · เปิดตอนข้อ 1 ขั้น 0 ก่อนเปิดโปรแกรม
+ไฟล์กลางของ skill สไลด์ทุกตัว (`presentation-design` · `html-slide-deck` (รวมทางเข้าจาก .pptx) · `StageDeck` ใน `branded-document-design`) · เปิดตอนข้อ 1 ขั้น 0 ก่อนเปิดโปรแกรม
 
 > **กฎข้อเดียว:** เด็คต้องหน้าตาเหมือนมาจากงานที่นำมาทำ ทั้งสีและอารมณ์ · คนเห็นเด็คข้างเอกสารต้นทางแล้วต้องรู้ว่าเป็นงานเดียวกัน
 
@@ -60,7 +60,7 @@
 |---|---|
 | `html-slide-deck` | `build_deck.py … --theme bright --brand <สีหลัก>,<สีสว่าง>,<สีรอง>` · หน้าที่ใช้สีรองทั้งแผ่นใส่ `data-tone="2"` ที่ `<section>` · พื้นต้นทางเข้มใช้ `--theme dark` |
 | `StageDeck` (.pptx) | `StageDeck(accent="<สีหลัก>", bg="FFFFFF", block=True)` เมื่อพื้นสว่าง (`block=True` ทำปกและหน้าคั่นบทเป็นสีหลักทึบเต็มแผ่น) · สีรองใช้กับรูปและกราฟที่ส่งเข้า (`diagram-figures` `#accent=`) |
-| `pptx-to-html-deck` | หน้าตามาจาก .pptx · ทำ .pptx ตามไฟล์นี้ก่อน แล้ว `--accent <สีหลัก>` |
+| `html-slide-deck` ทางเข้าจาก .pptx | หน้าตามาจาก .pptx · ทำ .pptx ตามไฟล์นี้ก่อน แล้ว `--accent <สีหลัก>` |
 | รูปผังในเด็ค | `diagram-figures` ด้วย `#accent=<สีหลัก>&bg=<สีพื้นเด็ค>` |
 
 ## 5 · ตรวจก่อนส่ง

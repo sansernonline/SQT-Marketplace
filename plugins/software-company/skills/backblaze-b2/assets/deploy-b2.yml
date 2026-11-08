@@ -1,4 +1,4 @@
-# GitHub Actions แม่แบบ · skill backblaze-deploy
+# GitHub Actions แม่แบบ · skill backblaze-b2
 # วางที่ .github/workflows/deploy-b2.yml · คัดลอก deploy-b2.sh ไปที่ scripts/ แล้วแก้ path ในขั้น deploy
 # ตั้ง secrets: B2_KEY_ID · B2_APPLICATION_KEY · ตั้ง vars: B2_BUCKET (ใช้ application key จำกัด bucket เดียว)
 # ยังไม่ได้รันจริง · ต้องเติม authorize() ใน deploy-b2.sh ก่อน ไม่งั้นสคริปต์หยุดเอง
