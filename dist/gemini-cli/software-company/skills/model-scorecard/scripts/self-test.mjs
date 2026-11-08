@@ -30,7 +30,7 @@ const oldDay = { "main.jsonl": [spawnLine, { ts: at(6), session: "s9", event: "U
 const newDay = [
   run(0, "s1", "software-company:developer", "code"),
   { ...review(1, "s1", null, null), async: true, spawned_id: "r1", duration_ms: null },
-  { ts: at(3), session: "s1", event: "result", spawned_id: "r1", verdict: "pass", round: 1 },
+  { ts: at(3), session: "s1", event: "result", spawned_id: "r1", verdict: "pass", round: 1, high: 0, mid: 1, low: 2 },
   { ts: at(4), session: "s1", event: "feedback", user_feedback: "accept" },
   run(10, "s2", "software-company:developer", "code"),
   review(11, "s2", "fail", 1),
@@ -59,7 +59,9 @@ export async function selfTest() {
   const c = makeProject(root, "proj-c", { "2026-10-20": { "runs.jsonl": [...newDay, { ...run(30, "s4", "software-company:developer", "code"), model: "opus" }, review(31, "s4", "fail", 1)] } });
   const mixed = aggregate(collectProject(c[1], "proj-c").runs, PRICES);
   const withUntried = contenders(mixed, "code", PRICES, ["haiku"]);
+  const r1 = collectProject(a[1], "proj-a").runs.find((r) => r.spawned_id === "r1");
   const cases = [
+    ["result ส่ง high · mid · low ของผู้ตรวจไปที่งาน", r1?.high === 0 && r1?.mid === 1 && r1?.low === 2],
     ["PERT: เร็ว P10 10k · กลาง P50 50k · ช้า P90 90k · ค่าคาด (10+200+90)÷6 = 50k · ± (90−10)÷2.56 = 31.25k", pert.o === 10000 && pert.m === 50000 && pert.p === 90000 && pert.mean === 50000 && pert.sd === 31250],
     ["Beta(3,7) สุ่ม 4000 ครั้ง เฉลี่ยใกล้ 0.3", Math.abs(draws.reduce((s, x) => s + x, 0) / draws.length - 0.3) < 0.02],
     ["Thompson: ผ่าน 20/22 ชนะ 2/22 เกิน 95%", odds.rows[0].model === "good" && odds.rows[0].pBest > 0.95],

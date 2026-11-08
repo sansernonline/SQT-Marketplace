@@ -188,11 +188,22 @@ const AGENT_MESSAGE = /^\s*<agent-message from="([^"]+)"/;
 // งานเบื้องหลังจบ: <task-notification> มี tool-use-id และ token ทั้งหมดของลูกทีม (ตรวจจาก main.jsonl 2026-10-27 ว่ามาทาง UserPromptSubmit)
 const TASK_DONE = /^\s*<task-notification>/;
 // หัวหน้าทีมประเมินขนาดชิ้นในใบสั่งงาน เช่นบรรทัด "ขนาด: 40k" (token รวมโดยประมาณ) · model-scorecard เทียบกับที่ใช้จริง
-const ESTIMATE = /^\s*[-*]?\s*\**(?:ขนาด|size)\**\s*[:：]\**\s*(\d+(?:\.\d+)?)\s*k\b/im;
+// ส่วนหน้าหัวข้อในใบสั่งงาน: "## " · "- " · "1. **" · "**1 " · "**1 · " · "**6 ขนาด" ก่อนชื่อหัวข้อ
+const HEAD = String.raw`^[ \t]*(?:#+|[-*])?[ \t]*(?:\d+[.)]?[ \t]*)?\**[ \t]*(?:\d+[.)]?[ \t]*(?:·[ \t]*)?)?`;
+// รับรูปหัวข้อแบบเดียวกับหัวข้ออื่นในใบสั่งงาน: "ขนาด: 40k" · "**ขนาด** — 40k" · "- **6 ขนาด:** ~40k" · "**6 · ขนาด:** ~25k"
+const ESTIMATE = new RegExp(HEAD + String.raw`(?:ขนาด|size)\**[ \t]*(?:[:：]|—|–|-)[ \t]*\**[ \t]*(?:~|≈|ประมาณ[ \t]*)?(\d+(?:\.\d+)?)[ \t]*k\b`, "im");
 
 export function estimateTokens(prompt) {
   const k = Number(String(prompt ?? "").match(ESTIMATE)?.[1]);
   return k > 0 ? Math.round(k * 1000) : null;
+}
+
+// หัวข้อใบสั่งงาน 5 ข้อตาม superuser หัวข้อ 5 · "ใช้อะไร" ของแม่แบบใน handoff นับเป็นช่องกติกา · เก็บแค่จำนวน ไม่เก็บข้อความ
+const BRIEF_SECTIONS = ["เป้า", "ขอบเขต", "เสร็จเมื่อ", "(?:กติกา|ใช้อะไร)", "ส่งกลับ"].map((name) => new RegExp(HEAD + name, "m"));
+
+export function briefSections(prompt) {
+  const text = String(prompt ?? "");
+  return BRIEF_SECTIONS.filter((re) => re.test(text)).length;
 }
 
 export function taskDone(prompt) {
@@ -211,11 +222,54 @@ export function classifyStep(role, description, rules) {
 
 const toVerdict = (word) => /เงื่อนไข|CONDITIONAL/i.test(word) ? "conditional" : /ไม่ผ่าน|FAIL/i.test(word) ? "fail" : "pass";
 
+// จำนวนข้อ สูง · กลาง · ต่ำ จากบรรทัดหัวรายงานผู้ตรวจ "## ผล: ผ่าน (รอบที่ 1 · สูง 0 · กลาง 0 · ต่ำ 4)" เท่านั้น · ไม่มีบนบรรทัดนั้น = null
+function severityCounts(t) {
+  const at = t.search(VERDICT_LINE);
+  const line = at < 0 ? "" : t.slice(at).split("\n")[0];
+  const n = (word) => { const m = line.match(new RegExp(`${word}\\s*(\\d+)`)); return m ? Number(m[1]) : null; };
+  return { high: n("สูง"), mid: n("กลาง"), low: n("ต่ำ") };
+}
+
 export function parseVerdict(text) {
   const t = String(text ?? "");
   const line = t.match(VERDICT_LINE)?.[1];
   const loose = line ?? t.match(/ผ่านแบบมีเงื่อนไข|ไม่ผ่าน|\bFAIL\b|\bPASS\b|\bCONDITIONAL\b/i)?.[0];
-  return { verdict: loose ? toVerdict(loose) : null, round: Number(t.match(/รอบที่\s*(\d+)/)?.[1]) || null };
+  return { verdict: loose ? toVerdict(loose) : null, round: Number(t.match(/รอบที่\s*(\d+)/)?.[1]) || null, ...severityCounts(t) };
+}
+
+// บรรทัด "คาด:" ที่หัวหน้าเพิ่งเขียนลง CONTEXT.md → ตัวเลขที่เทียบกับจริงได้ (ลูกทีม · รอบตรวจ) และคำจัดขนาด · เก็บแค่ค่าที่แยกได้ ไม่เก็บข้อความ
+const EXPECT_LINE = /คาด\s*[:：]([^\n|]*)/g;
+
+export function parseExpect(line) {
+  const t = String(line ?? "");
+  const n = (re) => { const m = t.match(re); return m ? Number(m[1]) : null; };
+  const word = (re) => t.match(re)?.[1] ?? null;
+  return {
+    size: word(/ขนาด\s*(เล็ก|กลาง|ใหญ่|XL)/i), workers: n(/ลูกทีม\s*(\d+)/), review_rounds: n(/รอบตรวจ\s*(\d+)/),
+    level: word(/ระดับ\s*(เล็ก|กลาง|ใหญ่)/), critical_k: n(/สายวิกฤต\s*(\d+(?:\.\d+)?)\s*k/), width: n(/กว้างสุด\s*(\d+)/),
+  };
+}
+
+// คืนบรรทัด คาด: ล่าสุดที่เพิ่มเข้ามาในการแก้ CONTEXT.md ครั้งนี้ · Edit · MultiEdit นับเฉพาะบรรทัดที่ไม่มีอยู่ใน old_string
+// Write และคำสั่ง Bash ที่มีทั้ง superuser/CONTEXT.md และ คาด: อาจมีบรรทัดเก่าทั้งไฟล์ จึงนับเฉพาะบรรทัดที่มีวันที่ของวันนี้ (แถวตาราง "การตัดสินใจ" ขึ้นต้นด้วยวันที่)
+const CONTEXT_FILE = /(^|[\\/])superuser[\\/]CONTEXT\.md$/;
+export function newExpect(toolName, inp = {}, today = localStamp(new Date()).slice(0, 10)) {
+  const cmd = String(inp.command ?? "");
+  const pairs = toolName === "Bash" ? (/superuser[\\/]+CONTEXT\.md/.test(cmd) ? [[cmd, null]] : [])
+    : !CONTEXT_FILE.test(String(inp.file_path ?? "")) ? []
+    : toolName === "Write" ? [[inp.content, null]]
+    : toolName === "Edit" ? [[inp.new_string, inp.old_string]]
+    : toolName === "MultiEdit" ? (inp.edits ?? []).map((e) => [e.new_string, e.old_string]) : [];
+  let last = null;
+  for (const [now, before] of pairs) {
+    for (const line of String(now ?? "").split("\n")) {
+      if (before === null && !line.includes(today)) continue;
+      for (const m of line.matchAll(EXPECT_LINE)) if (before === null || !String(before).includes(m[0])) last = m[1];
+    }
+  }
+  if (last == null) return null;
+  const e = parseExpect(last);
+  return Object.values(e).some((v) => v != null) ? e : null;
 }
 
 export function userFeedback(prompt) {
@@ -252,17 +306,24 @@ export function runEvents(input, entry, rules) {
     const feedback = userFeedback(input.prompt);
     return feedback ? [{ ...base, event: "feedback", user_feedback: feedback, inferred: true }] : [];
   }
+  const ti = input.tool_input ?? {};
+  if (entry.event === "PostToolUse" && !input.agent_id && !entry.role) {
+    const expect = newExpect(input.tool_name, ti, String(entry.ts ?? "").slice(0, 10));
+    return expect ? [{ ...base, event: "expect", ...expect }] : [];
+  }
   if (entry.event !== "PostToolUse" || !entry.role || input.agent_id) return [];
   const res = input.tool_response, text = responseText(res);
-  const isAsync = text.includes(LAUNCHED);
-  const description = input.tool_input.description ?? "";
+  // Claude Code ตั้งแต่ราว 2026-10 ส่ง tool_response ของ Agent เป็น { isAsync, status: "async_launched", agentId, resolvedModel } ไม่มีข้อความ (ตรวจจาก transcript 485 ครั้ง 2026-11-08)
+  const isAsync = res?.isAsync === true || res?.status === "async_launched" || text.includes(LAUNCHED);
+  const description = ti.description ?? "";
   const step = classifyStep(entry.role, description, rules);
   return [{
     ...base, event: "run", tool_use_id: input.tool_use_id ?? null, spawned_id: entry.spawned_id ?? null,
-    role: entry.role, model: input.tool_input.model ?? "inherit", lead_model: entry.model, effort: input.tool_input.effort ?? null,
+    role: entry.role, model: ti.model ?? "inherit", lead_model: entry.model, effort: ti.effort ?? null,
     account: accountOf(), step, description: redact(description, 80), async: isAsync, ok: entry.ok,
     duration_ms: res?.totalDurationMs ?? res?.duration_ms ?? null, tokens: runTokens(res),
-    estimate_tokens: estimateTokens(input.tool_input.prompt),
+    estimate_tokens: estimateTokens(ti.prompt),
+    resolved_model: res?.resolvedModel ?? null, brief_sections: briefSections(ti.prompt),
     ...(!isAsync && step === "review" ? parseVerdict(text) : {}),
   }];
 }
@@ -819,6 +880,18 @@ export function estimates(runs) {
   return est;
 }
 
+// จับคู่บรรทัด expect กับงานที่สั่งจริงหลังจากนั้นจนถึง expect ถัดไปในวันเดียวกัน · ลูกทีม = run ที่ไม่ใช่ขั้น review · รอบตรวจ = run ขั้น review
+// งานที่ข้ามวันนับแค่ส่วนของวันที่จด คาด: ไว้ · ตัวเลขนี้จึงเป็นค่าหยาบ ใช้ดูแนวโน้มว่าหัวหน้าคาดต่ำหรือสูงไป
+export function expectVsActual(runs) {
+  const rows = [...runs].sort((a, b) => (a.ts < b.ts ? -1 : a.ts > b.ts ? 1 : 0));
+  const out = [];
+  for (const r of rows) {
+    if (r.event === "expect") out.push({ expect: { workers: r.workers ?? null, review_rounds: r.review_rounds ?? null }, actual: { workers: 0, review_rounds: 0 } });
+    else if (r.event === "run" && out.length) out.at(-1).actual[r.step === "review" ? "review_rounds" : "workers"]++;
+  }
+  return out;
+}
+
 // sumMs = เวลาของลูกทีมทุกตัวรวมกัน · unionMs = ช่วงที่มีลูกทีมทำงานอย่างน้อย 1 ตัว · sumMs ÷ unionMs = เร็วขึ้นกี่เท่าจากการทำขนาน
 export function parallelStats(spans) {
   let sumMs = 0, unionMs = 0, upTo = -Infinity;
@@ -866,7 +939,9 @@ export function countDay(dayDir) {
   day.spawns.sort((x, y) => (x.ts < y.ts ? -1 : 1));
   day.activeMs = activeMs(leadTimes, workerSpans);
   day.par = parallelStats(workerSpans);
-  day.est = estimates(readLines(join(dayDir, RUNS_FILE)));
+  const runs = readLines(join(dayDir, RUNS_FILE));
+  day.est = estimates(runs);
+  day.plans = expectVsActual(runs);
   return day;
 }
 
@@ -887,6 +962,8 @@ export function valueSection(names, days, dayTokens, ratios) {
   const corrections = last.reduce((s, d) => s + days[d].corrections, 0);
   const par = last.reduce((p, d) => ({ sumMs: p.sumMs + (days[d].par?.sumMs ?? 0), unionMs: p.unionMs + (days[d].par?.unionMs ?? 0) }), { sumMs: 0, unionMs: 0 });
   const est = last.flatMap((d) => days[d].est ?? []);
+  const plans = last.flatMap((d) => days[d].plans ?? []);
+  const sumOf = (side, k) => plans.reduce((s, p) => s + (p[side][k] ?? 0), 0);
   const worse = ratios?.passAll && ratios.passAll.with < ratios.passAll.without;
   const guess = (actual, r, fmt) => {
     if (!r) return "ยังไม่ได้รัน bench แขน none";
@@ -908,7 +985,10 @@ export function valueSection(names, days, dayTokens, ratios) {
       : "- เร็วขึ้นจากการทำขนาน: ยังไม่มีลูกทีมที่ทำงานเกิน 1 การทำ",
     est.length
       ? `- คาดกับจริง: ${est.length} ชิ้นที่ใบสั่งงานบอกขนาด ใช้ token จริงค่ากลาง ${medianOf(est.map(([e, a]) => a / e)).toFixed(1)} เท่าของที่คาด (1 = คาดตรง)`
-      : "- คาดกับจริง: ยังไม่มีใบสั่งงานที่บอก \"ขนาด: Nk\"", "");
+      : "- คาดกับจริง: ยังไม่มีใบสั่งงานที่บอก \"ขนาด: Nk\"",
+    plans.length
+      ? `- แผนกับจริง: ${plans.length} บรรทัด "คาด:" · ลูกทีมคาด ${sumOf("expect", "workers")} สั่งจริง ${sumOf("actual", "workers")} · รอบตรวจคาด ${sumOf("expect", "review_rounds")} จริง ${sumOf("actual", "review_rounds")} (นับเฉพาะวันที่จด คาด:)`
+      : "- แผนกับจริง: ยังไม่มีบรรทัด \"คาด:\" ที่ hook จับได้จาก CONTEXT.md", "");
   return out;
 }
 
@@ -1362,6 +1442,57 @@ ${rows}
       const run = runEvents(spawn, buildEntry(spawn, { models: {} }), null)[0];
       return run.estimate_tokens === 20000 && estimateTokens("เป้า: x\n- **ขนาด:** 40k\n") === 40000 && estimateTokens("size: 1.5k token") === 1500 && estimateTokens("ขนาดชิ้นใหญ่ 40k") === null && estimateTokens("ขนาด: 40kg") === null
         && ev.event === "result" && ev.tool_use_id === "toolu_9" && ev.total_tokens === 58738 && taskDone("ทำต่อ") === null;
+    }],
+    ["runs: ขนาดเขียนแบบหัวข้อ **ขนาด** — · เลขข้อนำหน้า · ~ · คำว่าขนาดกลางประโยคไม่นับ", [], true, () => estimateTokens("**ขนาด** — 40k") === 40000
+      && estimateTokens("**6 ขนาด:** ~25k token") === 25000 && estimateTokens("- ขนาด - 3.5k") === 3500 && estimateTokens("ภาพ 2 ขนาด: 40k") === null && estimateTokens("จำกัดขนาด 40k") === null
+      && estimateTokens("**6 · ขนาด:** ~25k") === 25000 && estimateTokens("6. **ขนาด:** 25k") === 25000],
+    ["runs: หัวข้อแบบ **1 · เป้า** และ 1. **เป้า** นับครบ 5", [], true, () =>
+      briefSections("**1 · เป้า** — x\n**2 · ขอบเขต** — y\n**3 · เสร็จเมื่อ** — z\n**4 · กติกา** — w\n**5 · ส่งกลับ** — v") === 5
+      && briefSections("1. **เป้า** x\n2. **ขอบเขต** y\n3. **เสร็จเมื่อ** z\n4. **กติกา** w\n5. **ส่งกลับ** v") === 5],
+    ["runs: tool_response รูปใหม่ (isAsync · resolvedModel) → async จริง · resolved_model · effort · brief_sections", [], true, () => {
+      const brief = "**1 เป้า** — x\n**2 ขอบเขต** — y\n**3 เสร็จเมื่อ** — z\n**4 กติกา** — w\n**5 ส่งกลับ** ≤ 40 บรรทัด\nขนาด: 30k";
+      const mk = (input) => ({ hook_event_name: "PostToolUse", tool_name: "Agent", tool_use_id: "t3", tool_input: { subagent_type: "general-purpose", description: "x", ...input },
+        tool_response: { isAsync: true, status: "async_launched", agentId: "a1234567890", resolvedModel: "claude-sonnet-5-5", prompt: "x" } });
+      const run = (i) => runEvents(i, buildEntry(i, { models: {} }), null)[0];
+      const a = run(mk({ prompt: brief, model: "sonnet", effort: "high" })), b = run(mk({ prompt: "ทำ x" }));
+      return a.async === true && a.resolved_model === "claude-sonnet-5-5" && a.effort === "high" && a.brief_sections === 5 && a.estimate_tokens === 30000 && a.spawned_id === "a1234567"
+        && b.effort === null && b.model === "inherit" && b.brief_sections === 0 && b.estimate_tokens === null && !("verdict" in a);
+    }],
+    ["runs: หัวข้อใบสั่งงานนับ 0–5 · แม่แบบ handoff (## · ใช้อะไร · ส่งกลับแบบไหน) · เป้า: บรรทัดธรรมดา", [], true, () =>
+      briefSections("## เป้า\nx\n## เสร็จเมื่อ\n## ใช้อะไร\n## ขอบเขต\n## ส่งกลับแบบไหน\n") === 5 && briefSections("เป้า: x\nขอบเขต (แก้ได้เฉพาะ a)\nส่งกลับตามไฟล์") === 3
+      && briefSections("ทำให้ถึงเป้าและส่งกลับมา") === 0 && briefSections(null) === 0],
+    ["runs: ผลผู้ตรวจนับข้อ สูง · กลาง · ต่ำ จากบรรทัดหัวรายงานเท่านั้น", [], true, () => {
+      const a = parseVerdict("## ผล: ไม่ผ่าน   (รอบที่ 2 · สูง 1 · กลาง 3 · ต่ำ 4)\n\n| 1 | สูง | x |");
+      const b = parseVerdict("ผล: ผ่าน\n\nสูง 9 กลาง 9");
+      const ev = runEvents({ hook_event_name: "UserPromptSubmit", prompt: "<agent-message from=\"abcdef1234\">\n## ผล: ผ่าน (รอบที่ 1 · สูง 0 · กลาง 0 · ต่ำ 4)" }, { ts: "t", session: "s", event: "UserPromptSubmit" }, null)[0];
+      return a.verdict === "fail" && a.round === 2 && a.high === 1 && a.mid === 3 && a.low === 4
+        && b.verdict === "pass" && b.high === null && b.low === null
+        && ev.event === "result" && ev.verdict === "pass" && ev.high === 0 && ev.mid === 0 && ev.low === 4 && ev.round === 1;
+    }],
+    ["runs: หัวหน้าเขียน คาด: ลง CONTEXT.md → บรรทัด expect · บรรทัดเดิมใน old_string ไม่นับซ้ำ · ไฟล์อื่นไม่นับ", [], true, () => {
+      const line = "| 2026-11-08 | แบ่ง 3 ชิ้น | คาด: ขนาด กลาง · ลูกทีม 3 · รอบตรวจ 2 · ระดับ กลาง · สายวิกฤต 40k · กว้างสุด 2 |";
+      const ed = (file_path, new_string, old_string = "") => ({ hook_event_name: "PostToolUse", tool_name: "Edit", tool_input: { file_path, new_string, old_string }, tool_response: {} });
+      const run = (i) => runEvents(i, buildEntry(i, { models: {} }), null);
+      const [e] = run(ed("C:\\p\\.claude\\superuser\\CONTEXT.md", line));
+      return e?.event === "expect" && e.size === "กลาง" && e.workers === 3 && e.review_rounds === 2 && e.level === "กลาง" && e.critical_k === 40 && e.width === 2 && !("text" in e)
+        && run(ed("/p/.claude/superuser/CONTEXT.md", line + "\nx", line)).length === 0 && run(ed("/p/docs/CONTEXT.md", line)).length === 0
+        && newExpect("Edit", { file_path: "/p/.claude/superuser/CONTEXT.md", new_string: "คาด: เดี๋ยวค่อยคิด" }) === null;
+    }],
+    ["runs: คาด: จาก Write และ Bash นับเฉพาะแถววันนี้ · แถวเก่าในไฟล์ไม่จดซ้ำ · Bash ที่ไม่แตะ CONTEXT.md ไม่นับ", [], true, () => {
+      const body = "| 2026-11-01 | ก | คาด: ลูกทีม 1 |\n| 2026-11-08 | ข | คาด: ลูกทีม 4 · รอบตรวจ 1 |\n";
+      const w = newExpect("Write", { file_path: "/p/.claude/superuser/CONTEXT.md", content: body }, "2026-11-08");
+      const old = newExpect("Write", { file_path: "/p/.claude/superuser/CONTEXT.md", content: body }, "2026-11-09");
+      const bash = { hook_event_name: "PostToolUse", tool_name: "Bash", tool_input: { command: `cat >> .claude/superuser/CONTEXT.md <<'EOF'\n${body}EOF` }, tool_response: {} };
+      const [b] = runEvents(bash, { ...buildEntry(bash, { models: {} }), ts: "2026-11-08T11:12:07+07:00" }, null);
+      return w.workers === 4 && w.review_rounds === 1 && old === null && b?.event === "expect" && b.workers === 4
+        && newExpect("Bash", { command: `echo "| 2026-11-08 | คาด: ลูกทีม 2 |" >> notes.md` }, "2026-11-08") === null
+        && runEvents({ hook_event_name: "PostToolUse", tool_name: "Agent" }, { ts: "t", event: "PostToolUse", role: "x" }, null)[0].model === "inherit";
+    }],
+    ["runs: จับคู่ คาด: กับลูกทีมและรอบตรวจที่สั่งจริงหลังจากนั้น · run ก่อน expect แรกไม่นับ", [], true, () => {
+      const r = (ts, event, step) => ({ ts: `2026-11-08T${ts}`, event, step, workers: 2, review_rounds: 1 });
+      const p = expectVsActual([r("09:00", "run", "code"), r("10:00", "expect"), r("10:05", "run", "code"), r("10:06", "run", "research"), r("10:30", "run", "review"),
+        r("10:40", "run", "review"), r("10:41", "result"), r("11:00", "expect"), r("11:10", "run", "code")]);
+      return p.length === 2 && p[0].actual.workers === 2 && p[0].actual.review_rounds === 2 && p[0].expect.workers === 2 && p[1].actual.workers === 1 && p[1].actual.review_rounds === 0;
     }],
     ["แก้งาน: ข้อความ <agent-message / <task-notification ไม่นับว่าผู้ใช้แก้", [], true, () => !isCorrection("<agent-message from=x>ผิดที่ไฟล์ไหน ไม่ใช่ปัญหา") && !isCorrection("  <task-notification>wrong</task-notification>") && isCorrection("ไม่ใช่ แก้ใหม่") && isCorrection("it is wrong <agent-message")],
     ["คิวปรับทีม: นับเฉพาะข้อที่รับแล้วยังไม่รวม (ตาราง 1 + bullet 1)", [], true, () => pendingImprovements(qHome) === 2 && pendingImprovements(join(qHome, "none")) === 0],

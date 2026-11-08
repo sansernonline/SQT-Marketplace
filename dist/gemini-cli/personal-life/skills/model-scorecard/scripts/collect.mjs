@@ -42,6 +42,7 @@ function fromMain(entries, rules) {
 function applyResult(run, result) {
   run.verdict = result.verdict ?? run.verdict;
   run.round = result.round ?? run.round;
+  for (const k of ["high", "mid", "low"]) run[k] = result[k] ?? run[k] ?? null;
   run.total_tokens = result.total_tokens ?? run.total_tokens;
   if (run.duration_ms == null) run.duration_ms = Date.parse(result.ts) - Date.parse(run.ts);
 }
