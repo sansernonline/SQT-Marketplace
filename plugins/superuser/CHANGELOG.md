@@ -1,5 +1,11 @@
 # Changelog — superuser
 
+## 3.28.0 — 2026-11-08
+
+- hook: เตือนทันทีเมื่อคำสั่ง Bash เขียนไฟล์ผ่าน heredoc แล้วไฟล์ได้อักขระควบคุม (อาการ `\b` กลายเป็น backspace ที่เกิด 5 ครั้งถึง 2026-10-26)
+- ด่าน guard ข้อ ask: รับคำสั่งที่นำหน้าด้วย `sudo` `env` หรือตัวแปร (`FOO=1 npm publish`)
+- `adversarial-review-panel` `session-lessons-to-skills`: ใช้คำว่า "ผู้ตรวจ" แทน "รีวิวเวอร์" ให้ตรงกับไฟล์อื่น
+
 ## 3.27.0 — 2026-11-08
 
 - ด่าน guard: ข้อแบบ `"decision": "ask"` ให้ผู้ใช้กดยืนยันก่อนรัน `npm publish` · `gh release create` · `gh repo delete` · `git tag -d` · `git rebase` · `find -delete` · `rmtree` (จับเฉพาะต้นคำสั่ง จึงไม่ครอบคำสั่งที่นำหน้าด้วยตัวแปรหรือ sudo เช่น `FOO=1 npm publish`) · guard-allow ยกเว้นด้วย regex ได้ทั้งข้อปฏิเสธและข้อถาม
