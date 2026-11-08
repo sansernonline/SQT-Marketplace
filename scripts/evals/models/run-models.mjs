@@ -179,6 +179,8 @@ async function runReview(model) {
   await run("node", argv, { cwd: ROOT });
   const rs = existsSync(dir) ? readdirSync(dir).filter((f) => f.endsWith(".json")).map((f) => JSON.parse(text(join(dir, f)))) : [];
   const sum = (k) => rs.reduce((s, r) => s + (r[k] ?? 0), 0);
+  // โควตาบัญชีหมดแม้เคสเดียว → ช่องนี้ไม่ได้รัน ไม่นับเงินเพดาน (status มาจาก run-review-recall)
+  if (rs.some((r) => isQuotaHit(r.status) || /โควตาบัญชีหมด/.test(r.status ?? ""))) return { wall: Math.round((Date.now() - t0) / 1000), turns: 0, tokens: null, cost: sum("cost"), isCharged: false, isCut: true, isQuota: true, score: 0, note: `${rs.length}/${REVIEW_CASES.split(",").length} เคส` };
   const planted = sum("planted");
   const caseCount = REVIEW_CASES.split(",").length;
   // ตัวรันเดิมเขียน cost เป็น 0 เมื่อ claude ล้ม และเขียนไฟล์ผลเสมอ → เคสที่ cost ไม่เป็นบวกหรือ status ไม่ใช่ success นับเพดาน
