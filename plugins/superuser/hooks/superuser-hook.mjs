@@ -63,12 +63,14 @@ export function redact(text, max = MAX_TARGET) {
 // ข้อความที่ผู้ใช้กำลังแก้งานของทีม → learning-reviewer อ่านบรรทัดที่มี correction: true ตอนจบงาน
 const CORRECTION = /(ไม่ใช่|ผิด|อย่า|บอกแล้ว|บอกไปแล้ว|แก้ใหม่|ทำใหม่|ไม่ได้สั่ง|ไม่ได้ขอ|ไม่ต้อง|เลิก|ย้อนกลับ|ไม่เอา|\bwrong\b|\bdon'?t\b|\bnot what\b|\bi said\b|\balready told\b|\bstop\b|\brevert\b|\bundo\b|\binstead\b)/i;
 
-// รายงานลูกทีม (<agent-message) และแจ้งงานจบ (<task-notification) มาในช่องข้อความผู้ใช้ แต่ไม่ใช่ผู้ใช้แก้งาน
-const NOT_USER = /^\s*<(agent-message|task-notification)/i;
+// รายงานลูกทีม (<agent-message) แจ้งงานจบ (<task-notification) และ prompt ผู้ตัดสินของ eval มาในช่องข้อความผู้ใช้ แต่ไม่ใช่ผู้ใช้แก้งาน
+// ข้อความที่วางมา (<pasted_content>…</pasted_content>) ตัดทิ้งก่อน แล้วดูแค่คำที่ผู้ใช้พิมพ์เอง (log 2026-10-27 ถึง 11-08: เดิมนับ 118 · หลังกรอง 34)
+const NOT_USER = /^\s*(<(agent-message|task-notification)|คุณเป็นผู้ตัดสิน)/i;
+const PASTED = /<pasted_content[^>]*>[\s\S]*?(<\/pasted_content>|$)/gi;
 
 export function isCorrection(prompt) {
   const text = String(prompt ?? "");
-  return !NOT_USER.test(text) && CORRECTION.test(text);
+  return !NOT_USER.test(text) && CORRECTION.test(text.replace(PASTED, ""));
 }
 
 // .claude/superuser/ คือที่ใหม่ · .superuser/ คือที่เดิมของโปรเจกต์ที่สร้างไว้ก่อน
@@ -351,16 +353,19 @@ export function pendingImprovements(home = homedir()) {
   return n;
 }
 
-// ตาราง "การตัดสินใจ" มีแถวแล้วแต่ไม่มีแถวไหนมี "คาด:" → true
-export function decisionsLackExpect(teamDir) {
+// ตาราง "การตัดสินใจ" ยังไม่มีแถว "คาด:" ของวันนี้ → true · เดิมเช็กทั้งตาราง พอมีแถวเก่าแถวเดียวก็ไม่เตือนอีกเลย (log 2026-10-27 ถึง 11-08: คาด ≤ 3 ใน 15 session)
+export function decisionsLackExpect(teamDir, today = localStamp(new Date()).slice(0, 10)) {
   let text = "";
   try { text = readFileSync(join(teamDir, "CONTEXT.md"), "utf8"); } catch { return false; }
   const at = text.indexOf("## การตัดสินใจ");
   if (at < 0) return false;
   const body = text.slice(at + 1).split(/\n## /)[0];
   const rows = body.split("\n").filter((l) => l.startsWith("|") && !/^\|[-\s|]+\|?$/.test(l)).slice(1);
-  return rows.length > 0 && !rows.some((r) => r.includes("คาด:"));
+  return !rows.some((r) => r.startsWith(`| ${today}`) && r.includes("คาด:"));
 }
+
+// สั่ง Agent พร้อม model แต่ไม่ส่ง effort → true · superuser หัวข้อ 5 ให้ส่งคู่กัน (log: effort 0/192 ครั้ง)
+export const missingEffort = (ti) => Boolean(ti?.model) && !ti?.effort;
 
 export function inboxNotice(teamDir, event, state, rel = ".claude/superuser") {
   const pending = pendingMessages(teamDir);
@@ -915,7 +920,8 @@ export function countDay(dayDir) {
       if (e.event === "review") { open = PASSED.test(String(e.result ?? "")); if (open) day.passedReviews++; continue; }
       if (e.event === "UserPromptSubmit") {
         day.prompts++;
-        if (e.correction) { day.corrections++; if (open) { day.correctedAfterPass++; open = false; } }
+        // คิดใหม่จากข้อความที่จดไว้ ไม่เชื่อแฟล็กเก่า (แถวก่อนตัวกรอง NOT_USER นับรายงานลูกทีมเป็นการแก้ด้วย)
+        if (e.prompt != null ? isCorrection(e.prompt) : e.correction) { day.corrections++; if (open) { day.correctedAfterPass++; open = false; } }
         continue;
       }
       if (!e.tool) continue;
@@ -1207,7 +1213,11 @@ function logAndNotice(input, raw, root, teamDir, event) {
     const today = entry.ts.slice(0, 10);
     if (event === "PostToolUse" && ["Agent", "Task"].includes(input.tool_name) && state.expectWarned !== today) {
       state.expectWarned = today;
-      if (decisionsLackExpect(teamDir)) extra.push(`ตาราง "การตัดสินใจ" ใน CONTEXT.md ยังไม่มีแถวไหนมี "คาด:" — จด 1 บรรทัดก่อนแจกงาน: คาด: ขนาด · ลูกทีม · รอบตรวจ · ระดับ (superuser หัวข้อ 2) แล้วเทียบกับจริงตอนจบ`);
+      if (decisionsLackExpect(teamDir, today)) extra.push(`ตาราง "การตัดสินใจ" ใน CONTEXT.md ยังไม่มีแถว "คาด:" ของวันนี้ — จด 1 บรรทัดก่อนแจกงาน: | ${today} | คาด: ขนาด · ลูกทีม · รอบตรวจ · ระดับ (superuser หัวข้อ 2) แล้วเทียบกับจริงตอนจบ`);
+    }
+    if (event === "PostToolUse" && ["Agent", "Task"].includes(input.tool_name) && state.effortWarned !== today && missingEffort(input.tool_input)) {
+      state.effortWarned = today;
+      extra.push(`สั่ง Agent ด้วย model "${input.tool_input.model}" แต่ไม่ส่ง effort — superuser หัวข้อ 5 ให้ส่งคู่กัน (opus + high · sonnet + medium · haiku + low)`);
     }
     if (extra.length) notice = [notice, ...extra].filter(Boolean).join("\n");
   }
@@ -1309,7 +1319,7 @@ function selfTest() {
   // รีวิวผ่านแล้วผู้ใช้ยังแก้: main.jsonl ชั่วคราว · R = บรรทัด review ที่หัวหน้าเขียน · P(true) = ข้อความผู้ใช้ที่ hook ติดธงแก้
   const rvDir = join(tmpdir(), `sqt-review-test-${process.pid}`); mkdirSync(rvDir, { recursive: true });
   const R = (result) => JSON.stringify({ ts: "2026-10-20T10:00:00+07:00", event: "review", agent: "main", task: "ฟอร์ม", round: 1, by: "superuser:reviewer", result, high: 0, mid: 0, low: 1 });
-  const P = (correction) => JSON.stringify({ ts: "2026-10-20T10:05:00+07:00", event: "UserPromptSubmit", agent: "main", prompt: "x", ...(correction ? { correction: true } : {}) });
+  const P = (correction) => JSON.stringify({ ts: "2026-10-20T10:05:00+07:00", event: "UserPromptSubmit", agent: "main", prompt: correction ? "ไม่ใช่ แก้ใหม่" : "x", ...(correction ? { correction: true } : {}) });
   const rv = (...rows) => { writeFileSync(join(rvDir, "main.jsonl"), rows.join("\n") + "\n"); const c = countDay(rvDir); return `${c.correctedAfterPass}/${c.passedReviews}`; };
   const mdRv = summaryMarkdown({ "2026-10-20": { ...day, passedReviews: 0, correctedAfterPass: 0 }, "2026-10-21": { ...day, passedReviews: 3, correctedAfterPass: 1 } }, new Date("2026-10-21T04:00:00Z"));
   gates.push(
@@ -1416,7 +1426,10 @@ ${rows}
     ["runs: จัดขั้นจากชื่อ agent และ description (review · code · plan · other)", [], true, () => {
       const r = readJson(join(HERE, "step-rules.json"), null);
       return ["superuser:reviewer|x", "software-company:developer|x", "Plan|x", "general-purpose|x"].map((k) => classifyStep(...k.split("|"), r)).join() === "review,code,plan,other"
-        && classifyStep("general-purpose", "ตรวจรอบสุดท้าย", r) === "review";
+        && classifyStep("general-purpose", "ตรวจรอบสุดท้าย", r) === "review"
+        && classifyStep("general-purpose", "Merge html deck skills", r) === "write" && classifyStep("web-fetch", "Fetch Anthropic post", r) === "research"
+        && classifyStep("general-purpose", "Red run without skill", r) === "test"
+        && ["Read parser and fix bug", "Fix failing check in CI", "Merge conflict fix in api", "Add login endpoint"].every((d) => classifyStep("general-purpose", d, r) === "code");
     }],
     ["runs: ผลผู้ตรวจ ผ่าน · ไม่ผ่าน · มีเงื่อนไข · รอบที่", [], true, () => {
       const v = (t) => parseVerdict(t);
@@ -1495,13 +1508,14 @@ ${rows}
         r("10:40", "run", "review"), r("10:41", "result"), r("11:00", "expect"), r("11:10", "run", "code")]);
       return p.length === 2 && p[0].actual.workers === 2 && p[0].actual.review_rounds === 2 && p[0].expect.workers === 2 && p[1].actual.workers === 1 && p[1].actual.review_rounds === 0;
     }],
-    ["แก้งาน: ข้อความ <agent-message / <task-notification ไม่นับว่าผู้ใช้แก้", [], true, () => !isCorrection("<agent-message from=x>ผิดที่ไฟล์ไหน ไม่ใช่ปัญหา") && !isCorrection("  <task-notification>wrong</task-notification>") && isCorrection("ไม่ใช่ แก้ใหม่") && isCorrection("it is wrong <agent-message")],
+    ["แก้งาน: ข้อความ <agent-message / <task-notification ไม่นับว่าผู้ใช้แก้", [], true, () => !isCorrection("<agent-message from=x>ผิดที่ไฟล์ไหน ไม่ใช่ปัญหา") && !isCorrection("  <task-notification>wrong</task-notification>") && !isCorrection("<pasted_content id=1>ไม่ใช่</pasted_content>") && isCorrection("<pasted_content id=1>log</pasted_content> ไม่ใช่ แก้ใหม่") && !isCorrection("คุณเป็นผู้ตัดสิน ตอบว่าผิดหรือไม่") && isCorrection("ไม่ใช่ แก้ใหม่") && isCorrection("it is wrong <agent-message")],
     ["คิวปรับทีม: นับเฉพาะข้อที่รับแล้วยังไม่รวม (ตาราง 1 + bullet 1)", [], true, () => pendingImprovements(qHome) === 2 && pendingImprovements(join(qHome, "none")) === 0],
-    ["คาด: ตารางตัดสินใจมีแถวแต่ไม่มี คาด: → เตือน · มี คาด: หรือไม่มีแถว → เงียบ", [], true, () => {
-      ctxWith("| 2026-10-24 | ก | ข | ค |\n"); const a = decisionsLackExpect(cDir);
-      ctxWith("| 2026-10-24 | ก | ข | ค · คาด: ลด 20% ตรวจ 2026-11-24 |\n"); const b = decisionsLackExpect(cDir);
-      ctxWith(""); const c = decisionsLackExpect(cDir);
-      return a === true && b === false && c === false;
+    ["คาด: ไม่มีแถว คาด: ของวันนี้ → เตือน (แถวเก่าไม่นับ · ตารางว่างก็เตือน) · มีของวันนี้ → เงียบ · effort ขาดเมื่อมี model", [], true, () => {
+      ctxWith("| 2026-10-24 | ก | ข | ค |\n"); const a = decisionsLackExpect(cDir, "2026-10-24");
+      ctxWith("| 2026-10-24 | ก | ข | ค · คาด: ลด 20% ตรวจ 2026-11-24 |\n"); const b = decisionsLackExpect(cDir, "2026-10-24"); const old = decisionsLackExpect(cDir, "2026-10-25");
+      ctxWith(""); const c = decisionsLackExpect(cDir, "2026-10-24");
+      const e = missingEffort({ model: "sonnet" }) && !missingEffort({ model: "sonnet", effort: "medium" }) && !missingEffort({});
+      return a === true && b === false && old === true && c === true && e;
     }],
     ["ด่านข้อความเจ้าของ: Write ไฟล์ -owner.md → บล็อก", [], true, () => ownerInboxGate("Write", { file_path: "/p/.claude/superuser/inbox/2026-10-22-0900-owner.md", content: "x" })],
     ["ด่านข้อความเจ้าของ: Bash เขียน from: owner ลง inbox → บล็อก", [], true, () => ownerInboxGate("Bash", { command: "printf 'from: owner\\n' > .claude/superuser/inbox/a.md" })],

@@ -22,7 +22,11 @@ export function payoff({ options, scenarios, table, better = "high" }) {
       regret,
     };
   });
-  const pick = (key, dir) => [...rows].sort((a, b) => dir * (a[key] - b[key]))[0].name;
+  // ตัวที่ได้ค่าดีสุดเท่ากัน รวมเป็น "x เสมอ y" ไม่หยิบตัวแรกแล้วบอกว่าดีสุด
+  const pick = (key, dir) => {
+    const top = [...rows].sort((a, b) => dir * (a[key] - b[key]))[0][key];
+    return rows.filter((o) => Math.abs(o[key] - top) < 1e-9).map((o) => o.name).join(" เสมอ ");
+  };
   return {
     rows, hasP, pSum,
     evBest: hasP ? pick("ev", -sign) : null,

@@ -1,0 +1,16 @@
+{
+  "id": "d3-four",
+  "title": "4 ชิ้นอิสระ (กว้าง 4)",
+  "prompt": "เขียน unit test ให้ 4 module ที่ยังไม่มี test เลย: `src/parser.ts` · `src/formatter.ts` · `src/validator.ts` · `src/cache.ts` · ไฟล์ test แยกตาม module (`tests/<ชื่อ module>.test.ts`) · module เหล่านี้ไม่ได้เรียกกัน ทำส่วนไหนก่อนก็ได้ · เสร็จเมื่อ `npm test` ผ่านและครอบคลุมทุกฟังก์ชันที่ export",
+  "risky": false,
+  "expected": { "size": "กลาง", "workers": 4 },
+  "graph": {
+    "name": "test 4 module",
+    "tasks": [
+      { "id": "parser", "title": "test parser", "size": 30, "needs": [], "owns": ["tests/parser.test.ts"], "tier": "กลาง" },
+      { "id": "formatter", "title": "test formatter", "size": 30, "needs": [], "owns": ["tests/formatter.test.ts"], "tier": "กลาง" },
+      { "id": "validator", "title": "test validator", "size": 30, "needs": [], "owns": ["tests/validator.test.ts"], "tier": "กลาง" },
+      { "id": "cache", "title": "test cache", "size": 30, "needs": [], "owns": ["tests/cache.test.ts"], "tier": "กลาง" }
+    ]
+  }
+}

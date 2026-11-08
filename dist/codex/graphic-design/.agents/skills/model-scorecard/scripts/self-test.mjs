@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import { buildReport, aggregate } from "./report.mjs";
 import { collectProject } from "./collect.mjs";
+import { distributionSection, simultaneousGroups, wilson } from "./distribution.mjs";
 import { pertByStep, bestOdds, pickOnce, contenders, seeded, betaDraw } from "./choose.mjs";
 
 const SCORECARD = join(dirname(fileURLToPath(import.meta.url)), "scorecard.mjs");
@@ -39,6 +40,10 @@ const newDay = [
   run(20, "s3", "general-purpose", "research", { async: true, tool_use_id: "tu3", tokens: null, duration_ms: null, estimate_tokens: 20000 }),
   { ts: at(25), session: "s3", event: "result", tool_use_id: "tu3", total_tokens: 30000 },
 ];
+
+const sec = (second, session, extra = {}) => ({ ts: `2026-10-20T10:00:${String(second).padStart(2, "0")}+07:00`, session, event: "run", step: "code", model: "sonnet", effort: null, ...extra });
+const spread = (gap) => simultaneousGroups([sec(0, "s1"), sec(gap, "s1")]);
+const dist = (runs, expects) => distributionSection(runs, expects).join("\n");
 
 export async function selfTest() {
   const root = mkdtempSync(join(tmpdir(), "scorecard-"));
@@ -78,7 +83,7 @@ export async function selfTest() {
     ["เวลาของงานเบื้องหลังได้จากเวลาผลส่งกลับ (2.0 นาที)", report.includes("| 2.0 นาที |")],
     ["วันเก่าไม่มี runs.jsonl → แถวหยาบ inherit + ป้าย", report.includes("| inherit (claude-opus-5-5) | code | 1 |") && report.includes("1 วันไม่มี runs.jsonl")],
     ["token ของวันเก่าเป็นค่าประมาณ (~)", report.includes("~")],
-    ["ตัวอย่างน้อยกว่า 5 ติดป้ายทุกแถว", report.split("\n").filter((l) => l.startsWith("| ") && !/^\| (model|ขั้น) \|/.test(l) && !l.includes("ตัวอย่างน้อย")).length === 0],
+    ["ตัวอย่างน้อยกว่า 5 ติดป้ายทุกแถว", report.split("## การแจกงาน")[0].split("\n").filter((l) => l.startsWith("| ") && !/^\| (model|ขั้น) \|/.test(l) && !l.includes("ตัวอย่างน้อย")).length === 0],
     ["ขนาดจริงต่อประเมิน: งานเบื้องหลังได้ token จาก tool_use_id · k = 0.6 + 0.4 × 1.5 = 1.20", report.includes("| research | 1 | 1.20 |")],
     ["ไม่มีบรรทัดขนาดในใบสั่งงาน → บอกว่ายังไม่มี", buildReport([b], PRICES).includes("ยังไม่มีงานที่ใบสั่งงานมีบรรทัด")],
     ["ไม่มีราคา → ยังไม่มีราคา", buildReport([a], null).includes("ยังไม่มีราคา")],
@@ -89,6 +94,23 @@ export async function selfTest() {
     ["--out อยู่ในโปรเจกต์ที่อ่าน → ปฏิเสธ ไม่สร้างไฟล์", inside.status === 1 && !existsSync(join(root, "proj-a", "r.md"))],
     ["win32: path สัมพัทธ์ต่างตัวพิมพ์ (./proj-a กับ ./PROJ-A/r.md) → ปฏิเสธ", process.platform !== "win32" || relative.status === 1],
   ];
+  const team = [sec(0, "s1", { brief_sections: 5 }), sec(1, "s1", { brief_sections: 4, effort: "high" }), sec(2, "s1", { model: "inherit", brief_sections: 3 }), sec(3, "s1"),
+    sec(30, "s1", { step: "review" }), sec(31, "s1", { step: "review" })];
+  const reviewResults = [{ round: 1, verdict: "pass" }, { round: 1, verdict: null }, { round: 2, verdict: "pass" }];
+  const normal = dist(team, { reviewResults, expects: [{ ts: "2026-10-20T09:59:00+07:00", session: "s1", workers: 2 }] });
+  const noBrief = dist(team.map(({ brief_sections, ...r }) => r));
+  const [lo, hi] = wilson(9, 27);
+  cases.push(
+    ["การแจกงาน ค่าปกติ: ระบุ model 83% · effort 17% · พร้อมกันมากสุด 4 · ใบสั่ง 0.80 · ผ่านรอบแรก 1/2 · verdict ว่าง 1/3 · จริง ÷ คาด 2.00",
+      ["83% (5/6)", "17% (1/6)", "| 4 |", "0.80", "50% (1/2)", "1/3", "| 2.00 |"].every((t) => normal.includes(t))],
+    ["การแจกงาน log ว่าง → บอกว่ายังไม่มีงานให้นับ", dist([]).includes("ยังไม่มีงานลูกทีมให้นับ")],
+    ["การแจกงาน ไม่มีช่อง brief_sections → วัดไม่ได้ ไม่ใช่ 0%", noBrief.includes("วัดไม่ได้ — ต้องมีช่อง brief_sections")],
+    ["การแจกงาน ts ห่าง 5 วินาทีนับพร้อมกัน · ห่าง 6 วินาทีไม่นับ", Math.max(...spread(5)) === 2 && Math.max(...spread(6)) === 1],
+    ["การแจกงาน ts 0,4,8,12,16 ไม่ต่อเป็นสายชุดเดียว (ชุดใหญ่สุด ≤ 2)", Math.max(...simultaneousGroups([0, 4, 8, 12, 16].map((t) => sec(t, "s1")))) <= 2],
+    ["การแจกงาน ลูกทีม ÷ ความกว้าง: 4 ตัวพร้อมกัน ÷ กว้าง 4 = 1.00 · อยู่ในช่วง 1/1", dist(team, { expects: [{ ts: "2026-10-20T09:59:00+07:00", session: "s1", workers: 4, width: 4 }] }).includes("1.00 · 100% (1/1)")],
+    ["การแจกงาน ไม่มี expect → ยังไม่มีบรรทัด คาด: · ไม่มีกว้างสุด → บอกว่ายังไม่มี", dist(team).includes("| คาดแม่นแค่ไหน | ยังไม่มีบรรทัด คาด: |") && normal.includes("ยังไม่มีบรรทัด คาด: ที่มีกว้างสุด")],
+    ["Wilson 95% ของ 9/27 = 19%–52%", Math.round(lo * 100) === 19 && Math.round(hi * 100) === 52],
+  );
   rmSync(root, { recursive: true, force: true });
   let ok = 0;
   for (const [label, pass] of cases) { console.log(`  ${pass ? "✅" : "❌"} ${label}`); if (pass) ok++; }

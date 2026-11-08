@@ -1,0 +1,15 @@
+{
+  "id": "d6-risky-tax",
+  "title": "งานเสี่ยงเงิน: ภาษีในใบเสร็จที่ส่งลูกค้า",
+  "prompt": "ใบเสร็จที่ระบบส่งอีเมลให้ลูกค้าคิดภาษีมูลค่าเพิ่ม 7% ผิด ยอดปัดเศษไม่ตรงกับที่ฝ่ายบัญชีคิด · ต้องแก้ฟังก์ชันคำนวณภาษีใน `src/billing/vat.ts` ให้ถูกก่อน · จากนั้นแก้แม่แบบใบเสร็จ `src/billing/receipt-template.html` ให้แสดงยอดก่อนภาษี ภาษี และยอดรวมตามผลใหม่ และเขียน test ยอดตัวอย่างใน `tests/vat.test.ts` · 2 ชิ้นหลังทำพร้อมกันได้หลังแก้ฟังก์ชันเสร็จ",
+  "risky": true,
+  "expected": { "size": "กลาง", "workers": 2 },
+  "graph": {
+    "name": "แก้ภาษีในใบเสร็จ",
+    "tasks": [
+      { "id": "vat", "title": "แก้ฟังก์ชันคำนวณภาษี", "size": 30, "needs": [], "owns": ["src/billing/vat.ts"], "tier": "ใหญ่" },
+      { "id": "template", "title": "แก้แม่แบบใบเสร็จ", "size": 25, "needs": ["vat"], "owns": ["src/billing/receipt-template.html"], "tier": "ใหญ่" },
+      { "id": "test", "title": "test ยอดตัวอย่าง", "size": 25, "needs": ["vat"], "owns": ["tests/vat.test.ts"], "tier": "ใหญ่" }
+    ]
+  }
+}

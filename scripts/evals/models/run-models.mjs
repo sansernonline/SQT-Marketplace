@@ -5,9 +5,10 @@
  *   node scripts/evals/models/run-models.mjs --verify      ตรวจว่าทุกงานและตัวให้คะแนนพร้อม (ฟรี ไม่เรียก model)
  *   node scripts/evals/models/run-models.mjs --plan        ตารางงาน + ประมาณค่าใช้จ่าย + ชุดที่อยู่ในงบ (ฟรี)
  *   node scripts/evals/models/run-models.mjs --run [--steps code,review] [--models claude-haiku-5-5,...] [--skip model:step,...]
- *        [--effort medium|none|low|high|...] [--budget-total 20]
+ *        [--effort medium|none|low|high|...] [--budget-total 20] [--runs 3] [--review-cases r1,r2,...]
  *
- * ขั้น: code = speed t1 · code-quality = coding c5 · review = review-recall r1 r2 r3 · plan = งานวางแผนใน plan-task.mjs
+ * ขั้น: code = speed t1 · code-quality = coding c5 · code-hard = coding c4 · review = review-recall (ค่าเริ่ม r1–r8) · plan = งานวางแผนใน plan-task.mjs
+ * --runs N = รันซ้ำ N รอบต่อช่อง (ค่าเริ่ม 1 · แนะนำ 3) · ผ่าน = คะแนนรอบนั้น ≥ 8 · เลือกตัวถูกสุดที่ขอบล่าง Wilson ≥ 0.6 (ดู summary.mjs)
  * ไม่ใส่ --run ตัวรันจะไม่เรียก claude เลย กันเผลอเสียเงิน · รันจากถูกไปแพง หยุดเมื่อใช้ครบ --budget-total
  * ทุกรอบรัน `claude -p --model <model>` ในโฟลเดอร์ชั่วคราวนอก repo โดยไม่โหลด plugin (วัดตัว model ไม่ใช่ทีม)
  * ข้อยกเว้น: ขั้น review รันผ่าน run-review-recall.mjs ซึ่งโหลด plugin superuser และ agent superuser:reviewer (วัดทีมรีวิว ไม่ใช่ model เปล่า)
@@ -21,6 +22,7 @@ import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { run, prepare, cleanup, parseNodeTest } from "../coding/lib.mjs";
 import { PLAN_PROMPT, scorePlan, selfTest } from "./plan-task.mjs";
+import { PASS_SCORE, MIN_LOWER, modelStats, recommendation, uncountedModels } from "./summary.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const EVALS = resolve(HERE, "..");
@@ -29,15 +31,18 @@ const OUT = join(ROOT, "_to_delete", "models");
 const WORK = join(tmpdir(), "sqt-models-bench");
 const T1 = join(EVALS, "speed", "tasks", "t1");
 const C5 = join(EVALS, "coding", "tasks", "c5-csv-import");
+const C4 = join(EVALS, "coding", "tasks", "c4-subscription-leak");
 const RUN_CODING = join(EVALS, "coding", "run-coding.mjs");
 const RUN_REVIEW = join(EVALS, "review-recall", "run-review-recall.mjs");
-const REVIEW_CASES = "r1,r2,r3";
 
 const args = Object.fromEntries(process.argv.slice(2).join(" ").split(/\s*--/).filter(Boolean).map((p) => {
   const [k, ...v] = p.trim().split(/\s+/); return [k, v.join(" ") || true];
 }));
 const PRICES = JSON.parse(readFileSync(join(ROOT, "plugins", "superuser", "skills", "model-scorecard", "references", "prices.json"), "utf8")).per_mtok;
 const csv = (v) => (v && v !== true ? String(v).split(",").filter(Boolean) : []);
+const REVIEW_CASE_LIST = csv(args["review-cases"]).length ? csv(args["review-cases"]) : Array.from({ length: 8 }, (_, i) => `r${i + 1}`);
+const REVIEW_CASES = REVIEW_CASE_LIST.join(",");
+const RUNS = Math.max(1, Math.floor(Number(args.runs ?? 1)) || 1);
 const MODELS = (csv(args.models).length ? csv(args.models) : Object.keys(PRICES)).sort((a, b) => PRICES[a]?.output - PRICES[b]?.output);
 const EFFORT = args.effort ?? "medium";
 const CAP_MARGIN = 2;
@@ -67,7 +72,8 @@ const blended = (m) => Object.entries(MIX).reduce((s, [k, w]) => s + w * PRICES[
 const STEPS = {
   code: { what: "speed t1 (แก้บั๊กวันที่ไทย)", calls: 1, measured: t1Costs, assumed: 0.5 },
   "code-quality": { what: "coding c5 (นำเข้า CSV)", calls: 1, measured: c5Costs, assumed: 1.5 },
-  review: { what: `review-recall ${REVIEW_CASES}`, calls: 3, measured: () => [], assumed: 0.3 },
+  "code-hard": { what: "coding c4 (subscription ค้าง · test ซ่อน 8 ข้อ ตั้งต้นผ่านแค่ 2)", calls: 1, measured: () => [], assumed: 1.5 },
+  review: { what: `review-recall ${REVIEW_CASES}`, calls: REVIEW_CASE_LIST.length, measured: () => [], assumed: 0.1 },
   plan: { what: "แตกงานจาก spec สั้น", calls: 1, measured: () => [], assumed: 0.05 },
 };
 const stepList = csv(args.steps).length ? csv(args.steps) : Object.keys(STEPS);
@@ -86,13 +92,13 @@ const cells = () => MODELS.flatMap((model) => stepList.map((step) => ({ model, s
   .filter((c) => STEPS[c.step] && PRICES[c.model] && !SKIP.includes(`${c.model}:${c.step}`));
 
 function printPlan() {
-  const all = cells().map((c) => ({ ...c, ...estimate(c.step, c.model), cap: capPerCell(c.step, c.model) }));
+  const all = cells().map((c) => { const e = estimate(c.step, c.model); return { ...c, ...e, usd: e.usd * RUNS, cap: capPerCell(c.step, c.model) }; });
   const total = all.reduce((s, c) => s + c.usd, 0);
-  console.log("| ขั้น | งาน | model | ครั้งที่เรียก | ประมาณ ($) | เพดานช่อง ($) | ฐาน |\n|---|---|---|---|---|---|---|");
-  for (const c of all) console.log(`| ${c.step} | ${STEPS[c.step].what} | ${c.model} | ${STEPS[c.step].calls} | ${usd(c.usd)} | ${usd(c.cap)} | ${c.from} |`);
+  console.log("| ขั้น | งาน | model | ครั้งที่เรียกรวม | ประมาณรวม ($) | เพดานต่อรอบ ($) | ฐาน |\n|---|---|---|---|---|---|---|");
+  for (const c of all) console.log(`| ${c.step} | ${STEPS[c.step].what} | ${c.model} | ${STEPS[c.step].calls * RUNS} | ${usd(c.usd)} | ${usd(c.cap)} | ${c.from} |`);
   console.log(`\nรวมประมาณ ${usd(total)} · งบ ${usd(BUDGET_TOTAL)} · ${total <= BUDGET_TOTAL ? "อยู่ในงบ" : "เกินงบ"}`);
   console.log(`เพดานช่อง = max(ประมาณ × ${CAP_MARGIN}, ${usd(CAP_MIN)}) · ตัวรันข้ามช่องที่เหลืองบไม่พอเพดาน จึงไม่เกินงบรวม`);
-  console.log("วิธีประมาณ: $ ต่อครั้งบน sonnet (เฉลี่ยจาก speed/RESULTS.md ช่อง t1 และ coding/RESULTS.md บรรทัด c5 · review กับ plan ยังไม่เคยวัด ใช้ค่าสมมุติ)");
+  console.log("วิธีประมาณ: $ ต่อครั้งบน sonnet (เฉลี่ยจาก speed/RESULTS.md ช่อง t1 และ coding/RESULTS.md บรรทัด c5 · code-hard review plan ยังไม่เคยวัดในชุดเก่า ใช้ค่าสมมุติ)");
   console.log(`× ราคาเฉลี่ยถ่วงของ model ÷ ของ sonnet จาก prices.json (สัดส่วน token สมมุติ ${Object.entries(MIX).map(([k, w]) => `${k} ${w * 100}%`).join(" · ")}) · ผลเก่าไม่เก็บ token จึงประมาณจาก $ · ผิดได้เป็นเท่าตัว`);
   recommendSet(all, total);
 }
@@ -106,7 +112,7 @@ function recommendSet(all, total) {
   while (sum > limit && left.length) { const c = left.shift(); dropped.push(c); sum -= c.usd; }
   if (!dropped.length) return console.log(`ชุดแนะนำ: รันทั้งหมด (${usd(total)} ไม่เกิน ${usd(limit)} ซึ่งเป็น 80% ของงบ)`);
   console.log(`\nชุดแนะนำ: ตัดช่องที่แพงสุดออก เหลือ ${usd(sum)} ไม่เกิน ${usd(limit)} (80% ของงบ)`);
-  console.log(`node scripts/evals/models/run-models.mjs --run --skip ${dropped.map((c) => `${c.model}:${c.step}`).join(",")}`);
+  console.log(`node scripts/evals/models/run-models.mjs --run --runs ${RUNS} --models ${MODELS.join(",")} --steps ${stepList.join(",")} --skip ${dropped.map((c) => `${c.model}:${c.step}`).join(",")}`);
 }
 
 // ---- รันแต่ละช่อง ----
@@ -155,21 +161,21 @@ async function runCode(model) {
   return { ...a, score: total ? (10 * pass) / total : 0, note: `test ซ่อน ${pass}/${total}` };
 }
 
-/** ให้คะแนนด้วย run-coding.mjs --score (ไม่มีผู้ตัดสิน เต็ม 8 → ปรับเป็นเต็ม 10) */
-async function runCodeQuality(model) {
-  const work = freshDir(`code-quality-${model}`);
-  cpSync(join(C5, "repo"), work, { recursive: true });
-  cpSync(join(C5, "TASK.md"), join(work, "TASK.md"));
+/** ให้คะแนนด้วย run-coding.mjs --score (ไม่มีผู้ตัดสิน เต็ม 8 → ปรับเป็นเต็ม 10) · ใช้กับงาน coding ทุกชิ้น */
+async function runCodingTask(step, model, taskDir, taskId) {
+  const work = freshDir(`${step}-${model}`);
+  cpSync(join(taskDir, "repo"), work, { recursive: true });
+  cpSync(join(taskDir, "TASK.md"), join(work, "TASK.md"));
   startGit(work);
-  const a = await ask(model, work, CODE_PROMPT, capPerCall("code-quality", model), editTools);
-  const r = await run("node", [RUN_CODING, "--score", work, "--tasks", "c5", "--no-judge"], { cwd: ROOT });
+  const a = await ask(model, work, CODE_PROMPT, capPerCall(step, model), editTools);
+  const r = await run("node", [RUN_CODING, "--score", work, "--tasks", taskId, "--no-judge"], { cwd: ROOT });
   let s = null; try { s = JSON.parse(r.out.slice(r.out.indexOf("{"), r.out.lastIndexOf("}") + 1)); } catch { /* ให้คะแนนไม่ได้ → 0 */ }
   return { ...a, score: s ? (s.total * 10) / 8 : 0, note: s ? `test ซ่อน ${s.hidden} · diff ×${s.diffRatio}` : `ให้คะแนนไม่ได้: ${r.err.slice(-200)}` };
 }
 
 /** ให้ตัวรันเดิมทำเอง (ส่ง --model --effort ต่อ) แล้วอ่านผลรายเคสที่มันเขียนไว้ · ตัวรันเดิมไม่เก็บ token */
-async function runReview(model) {
-  const label = `models-${model}`;
+async function runReview(model, runNo) {
+  const label = `models-${model}-${runNo}`;
   const cap = capPerCall("review", model);
   const argv = [RUN_REVIEW, "--run", "--cases", REVIEW_CASES, "--model", model, "--budget", String(cap), "--parallel", "1", "--label", label];
   if (EFFORT !== "none") argv.push("--effort", EFFORT);
@@ -196,7 +202,13 @@ async function runPlan(model) {
   return { ...a, score: s.score, note: s.checks.filter((c) => !c.points).map((c) => `ตก: ${c.name}`).join(" · ") || "ผ่านครบ" };
 }
 
-const RUNNERS = { code: runCode, "code-quality": runCodeQuality, review: runReview, plan: runPlan };
+const RUNNERS = {
+  code: runCode,
+  "code-quality": (model) => runCodingTask("code-quality", model, C5, "c5"),
+  "code-hard": (model) => runCodingTask("code-hard", model, C4, "c4"),
+  review: runReview,
+  plan: runPlan,
+};
 
 async function paidRun() {
   const problems = await check();
@@ -204,45 +216,50 @@ async function paidRun() {
   mkdirSync(OUT, { recursive: true });
   const todo = cells(), rows = [];
   let spent = 0;
-  console.log(`เริ่ม ${todo.length} ช่อง · effort ${EFFORT} · งบรวม ${usd(BUDGET_TOTAL)}`);
-  for (const { model, step } of todo) {
-    // เช็กกับเพดานของช่องนี้ด้วย ไม่งั้นช่องสุดท้ายเริ่มได้ตอนใช้ไป $19.9 แล้วเกินงบที่ผู้ใช้อนุมัติไปเท่าเพดานของช่อง
+  console.log(`เริ่ม ${todo.length} ช่อง × ${RUNS} รอบ · effort ${EFFORT} · งบรวม ${usd(BUDGET_TOTAL)}`);
+  for (const { model, step } of todo) for (let runNo = 1; runNo <= RUNS; runNo++) {
+    // เช็กกับเพดานของรอบนี้ด้วย ไม่งั้นรอบสุดท้ายเริ่มได้ตอนใช้ไป $19.9 แล้วเกินงบที่ผู้ใช้อนุมัติไปเท่าเพดาน
     const cap = capPerCell(step, model);
-    if (spent + cap > BUDGET_TOTAL) { console.log(`เหลืองบ ${usd(BUDGET_TOTAL - spent)} ไม่พอเพดานช่อง ${usd(cap)} · ข้าม ${model}:${step}`); rows.push({ model, step, skipped: true }); continue; }
-    const r = { model, step, ...(await RUNNERS[step](model)) };
+    if (spent + cap > BUDGET_TOTAL) { console.log(`เหลืองบ ${usd(BUDGET_TOTAL - spent)} ไม่พอเพดาน ${usd(cap)} · ข้าม ${model}:${step} รอบ ${runNo}`); rows.push({ model, step, skipped: true }); break; }
+    const r = { model, step, run: runNo, ...(await RUNNERS[step](model, runNo)) };
     if (r.isCharged) r.note += " · ผลไม่ครบ นับ $ ตามเพดาน";
     if (r.isQuota) r.note += " · โควตาบัญชีหมด ไม่ได้รัน ต้องรันซ้ำ"; else if (r.isCut) r.note += " · ถูกตัดที่เพดานกลางงาน คะแนนนี้ไม่ใช่ฝีมือ model";
     spent += r.cost;
     rows.push(r);
-    writeFileSync(join(OUT, `${step}-${model}.json`), JSON.stringify(r, null, 2));
-    console.log(`${step.padEnd(12)} ${model.padEnd(18)} ${r.score.toFixed(1)}/10 · ${r.wall}s · ${usd(r.cost)} · ${r.note} · สะสม ${usd(spent)}`);
+    writeFileSync(join(OUT, `${step}-${model}-${runNo}.json`), JSON.stringify(r, null, 2));
+    console.log(`${step.padEnd(12)} ${model.padEnd(18)} รอบ ${runNo} ${r.score.toFixed(1)}/10 · ${r.wall}s · ${usd(r.cost)} · ${r.note} · สะสม ${usd(spent)}`);
     // --max-budget-usd ของ claude เป็นเพดานแบบอ่อน (ตัดระหว่างรอบคุย) ยอดจริงเกินเพดานได้ → หยุดทันทีที่ยอดรวมแตะงบ
-    if (spent >= BUDGET_TOTAL) { console.log(`ยอดรวม ${usd(spent)} ถึงงบ ${usd(BUDGET_TOTAL)} แล้ว หยุดช่องที่เหลือ`); break; }
+    if (spent >= BUDGET_TOTAL) { console.log(`ยอดรวม ${usd(spent)} ถึงงบ ${usd(BUDGET_TOTAL)} แล้ว หยุดที่เหลือ`); break; }
   }
   report(rows, spent);
 }
 
 // ---- สรุปผล ----
-const value = (r) => (r.cost > 0 ? r.score / r.cost : 0);
+const mean = (xs) => (xs.length ? avg(xs) : 0);
 
-/** คะแนนอยู่ในระยะ 1 จากสูงสุดของขั้น แล้วเลือกตัวที่คุ้มสุด (คะแนน ÷ $) */
-function recommend(rs) {
-  const top = Math.max(...rs.map((r) => r.score));
-  const pick = rs.filter((r) => r.score >= top - 1 && r.cost > 0).sort((a, b) => value(b) - value(a))[0] ?? rs.find((r) => r.score === top);
-  return `${pick.model} (${pick.score.toFixed(1)}/10 · ${usd(pick.cost)}${top > pick.score ? ` · สูงสุดของขั้นคือ ${top.toFixed(1)}` : ""})`;
+/** 1 แถวต่อ model: คะแนนรายรอบ · ผ่านกี่รอบ · ขอบล่าง Wilson · $ เฉลี่ยต่อครั้ง · $ ต่องานที่ผ่าน · รอบที่ถูกตัดไม่นับ */
+function stepTable(step, rs) {
+  const valid = rs.filter((r) => !r.isCut);
+  const stats = modelStats(valid);
+  const rows = stats.map((s) => {
+    const mine = rs.filter((r) => r.model === s.model);
+    const ok = valid.filter((r) => r.model === s.model);
+    const cut = mine.length - ok.length;
+    return `| ${s.model} | ${ok.map((r) => r.score.toFixed(1)).join(" · ")} | ${s.passes}/${s.n} | ${s.lower.toFixed(2)} | ${mean(ok.map((r) => r.wall)).toFixed(0)} | ${usd(s.avgCost)} | ${s.costPerPass === null ? "—" : usd(s.costPerPass)} | ${cut ? `ไม่นับ ${cut} รอบที่ถูกตัด/โควตาหมด · ` : ""}${ok.at(-1)?.note ?? ""} |`;
+  });
+  rows.push(...uncountedModels(rs, valid).map((u) => `| ${u.model} | — | 0/0 | — | — | — | — | ไม่มีรอบที่นับได้ (ไม่นับ ${u.cut} รอบที่ถูกตัด/โควตาหมด) |`));
+  return { stats, lines: [`### ${step} · ${STEPS[step].what}\n`, "| model | คะแนนรายรอบ (10) | ผ่าน (≥ " + PASS_SCORE + ") | ขอบล่าง Wilson | เวลาเฉลี่ย (วินาที) | $ เฉลี่ยต่อครั้ง | $ ต่องานที่ผ่าน | หมายเหตุ (รอบสุดท้าย) |", "|---|---|---|---|---|---|---|---|", ...rows, ""] };
 }
 
 function report(rows, spent) {
   const done = rows.filter((r) => !r.skipped);
-  const lines = [`\n## ${new Date().toISOString().slice(0, 16).replace("T", " ")} · effort ${EFFORT} · ใช้ ${usd(spent)} จากงบ ${usd(BUDGET_TOTAL)} · 1 รอบต่อช่อง (ดูแนวโน้มเท่านั้น)\n`];
+  const lines = [`\n## ${new Date().toISOString().slice(0, 16).replace("T", " ")} · effort ${EFFORT} · ใช้ ${usd(spent)} จากงบ ${usd(BUDGET_TOTAL)} · ${RUNS} รอบต่อช่อง${RUNS < 3 ? " (น้อยกว่า 3 รอบ ดูแนวโน้มเท่านั้น)" : ""}\n`];
   const steps = stepList.filter((s) => done.some((r) => r.step === s));
-  for (const step of steps) {
-    lines.push(`### ${step} · ${STEPS[step].what}\n`, "| model | คะแนน (10) | เวลา (วินาที) | รอบคุย | token | $ | ความคุ้ม (คะแนน ÷ $) | หมายเหตุ |", "|---|---|---|---|---|---|---|---|");
-    for (const r of done.filter((x) => x.step === step)) lines.push(`| ${r.model} | ${r.score.toFixed(1)} | ${r.wall} | ${r.turns ?? "—"} | ${r.tokens ?? "—"} | ${usd(r.cost)} | ${r.cost > 0 ? value(r).toFixed(1) : "—"} | ${r.note} |`);
-    lines.push("");
-  }
-  lines.push("### สรุป: แต่ละขั้นควรใช้ model ไหน\n", "| ขั้น | ควรใช้ |", "|---|---|", ...steps.map((s) => `| ${s} | ${recommend(done.filter((r) => r.step === s))} |`));
-  lines.push("", "เกณฑ์: คะแนนอยู่ในระยะ 1 จากสูงสุดของขั้นนั้น แล้วเลือกตัวที่คะแนน ÷ $ สูงสุด");
+  const tables = steps.map((s) => stepTable(s, done.filter((r) => r.step === s)));
+  tables.forEach((t) => lines.push(...t.lines));
+  lines.push("### สรุป: แต่ละขั้นควรใช้ model ไหน\n", "| ขั้น | ควรใช้ |", "|---|---|", ...steps.map((s, i) => `| ${s} | ${recommendation(tables[i].stats)} |`));
+  lines.push("", `เกณฑ์: ผ่าน = คะแนนรอบนั้น ≥ ${PASS_SCORE} · เลือกตัวถูกที่สุดที่ขอบล่าง Wilson ≥ ${MIN_LOWER} · $ ต่องานที่ผ่าน = $ เฉลี่ยต่อครั้ง ÷ อัตราผ่าน · ทุก model ผ่านหมดทุกรอบ = แยกไม่ออก (ชนเพดาน)`);
+  lines.push(`ค่า ${PASS_SCORE} กับ ${MIN_LOWER} เป็นค่าตั้งต้น ยังไม่ได้วัดว่าเหมาะกับงานชุดนี้`);
   const skipped = rows.filter((r) => r.skipped).map((r) => `${r.model}:${r.step}`);
   if (skipped.length) lines.push(`ข้ามเพราะถึงงบ: ${skipped.join(", ")}`);
   const file = join(HERE, "RESULTS.md");
@@ -266,6 +283,7 @@ async function check() {
     if (!(t.total > 0 && t.pass < t.total)) bad(`t1: โค้ดตั้งต้นต้องตก test ที่ซ่อน แต่ได้ ${t.pass}/${t.total}`);
   }
   if ((await run("node", [RUN_CODING, "--verify", "--tasks", "c5"], { cwd: ROOT })).code !== 0) bad("coding c5: --verify ไม่ผ่าน (รัน node scripts/evals/coding/run-coding.mjs --verify --tasks c5 ดูเหตุ)");
+  if ((await run("node", [RUN_CODING, "--verify", "--tasks", "c4"], { cwd: ROOT })).code !== 0) bad("coding c4: --verify ไม่ผ่าน (รัน node scripts/evals/coding/run-coding.mjs --verify --tasks c4 ดูเหตุ)");
   if ((await run("node", [RUN_REVIEW, "--verify", "--cases", REVIEW_CASES], { cwd: ROOT })).code !== 0) bad(`review-recall: --verify --cases ${REVIEW_CASES} ไม่ผ่าน`);
   return [...problems, ...selfTest().map((m) => `- ${m}`)];
 }
@@ -274,7 +292,8 @@ async function verify() {
   const problems = await check();
   console.log("| ส่วน | ตรวจอะไร |\n|---|---|");
   console.log("| claude · prices.json | มีคำสั่ง claude · ทุก model ที่เลือกมีราคา |\n| code (t1) | มี repo · TASK.md · test ซ่อน และโค้ดตั้งต้นตก test |");
-  console.log("| code-quality (c5) | `run-coding.mjs --verify --tasks c5` ผ่าน |\n| review (r1 r2 r3) | `run-review-recall.mjs --verify --cases r1,r2,r3` ผ่าน |\n| plan | ตัวให้คะแนน: แผนดีได้ 10 · แผนเสียได้ไม่เกิน 2 |");
+  console.log("| code-quality (c5) | `run-coding.mjs --verify --tasks c5` ผ่าน |\n| code-hard (c4) | `run-coding.mjs --verify --tasks c4` ผ่าน |");
+  console.log(`| review (${REVIEW_CASES}) | \`run-review-recall.mjs --verify --cases ${REVIEW_CASES}\` ผ่าน |\n| plan | ตัวให้คะแนน: แผนดีได้ 10 · แผนเสียได้ไม่เกิน 2 |`);
   console.log(problems.length ? `\nใช้ไม่ได้ ${problems.length} จุด\n${problems.join("\n")}` : `\nพร้อมรัน · ${cells().length} ช่อง · ดูค่าใช้จ่ายด้วย --plan · รันจริงด้วย --run (เสียเงิน)`);
   process.exit(problems.length ? 1 : 0);
 }

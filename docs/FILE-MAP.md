@@ -12,7 +12,7 @@
 | [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 22 | 0 | 9 | 164 |
 | [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 42 | 1 | 30 | 181 |
 | [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 105 | 11 | 17 | 1007 |
-| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 39 | 0 | 7 | 213 |
+| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 39 | 0 | 7 | 214 |
 | [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 5 | 23 | 1 | 10 | 125 |
 
 ## โครงของทุก plugin
@@ -53,7 +53,7 @@ plugins/<plugin>/
 | skill | `flag-and-propose` | เจอเรื่องกลางงานที่ต้องให้คนตัดสิน → แจ้งพร้อมทางเลือก | `references/example.md` · `templates/priority.json` |
 | skill | `handoff` | ใบสั่งงาน · ใบส่งงาน · รับงานต่อ ให้ agent คน และ bot ส่งงานต่อกันโดยไม่ต้องเดา | `references/handoff.schema.json` · `references/team-memory.md` · `scripts/log-to-md.mjs` · `scripts/log-to-md.test.mjs` |
 | skill | `human-writing` | เขียนภาษาคน ไทยหรืออังกฤษ อ่านง่าย ไม่เหมือนเครื่องเขียน | `THIRD-PARTY-NOTICES.md` · `references/headings-and-examples.md` · `references/strict-review.md` · `references/thai-examples.md` · `references/thai-grammar.md` · `references/thai-line-breaking.md` · `scripts/thai_linebreak.py` · `scripts/thai_tells.py` |
-| skill | `model-scorecard` | เทียบ model รายขั้นจาก log ของโปรเจกต์: token ความเร็ว ความคุ้ม ผลผู้ตรวจ · รวมหลายโปรเจกต์เมื่อคนสั่ง | `references/prices.json` · `scripts/choose.mjs` · `scripts/collect.mjs` · `scripts/report.mjs` · `scripts/scorecard.mjs` · `scripts/self-test.mjs` |
+| skill | `model-scorecard` | เทียบ model รายขั้นจาก log ของโปรเจกต์: token ความเร็ว ความคุ้ม ผลผู้ตรวจ · รวมหลายโปรเจกต์เมื่อคนสั่ง | `references/prices.json` · `scripts/choose.mjs` · `scripts/collect.mjs` · `scripts/distribution.mjs` · `scripts/report.mjs` · `scripts/scorecard.mjs` · `scripts/self-test.mjs` |
 | skill | `no-ai-look` | ตรวจงานที่คนต้องมอง ไม่ให้ดูเหมือน AI ทำ (มีสคริปต์สแกน) | `references/catalog.md` · `scripts/slop_scan.py` |
 | skill | `owner-style-capture` | จดวิธีทำงานที่เจ้าของชอบ ให้ agent ทำตามโดยไม่ต้องบอกซ้ำ | — |
 | skill | `parallel-attempts-pick-best` | ลองหลายแบบพร้อมกันแล้วเลือกแบบที่ดีที่สุด (ดีไซน์ · interface · mockup) | — |

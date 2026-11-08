@@ -128,6 +128,12 @@ const CASES = {
     assert.equal(tie2.cost, 3.5, "ค่าเท่ากันต้นทุนน้อยกว่าชนะ");
     assert.equal(big.runnerUp, null, "เกิน 20 รายการไม่มีชุดรองลงมา");
   },
+  "ค่าขอบจาก improve 2026-11-08: eisenhower นอกช่วง 1–5 · payoff เสมอกัน"() {
+    assert.throws(() => priority({ method: "eisenhower", items: [{ name: "a", urgent: 50, important: 1, minutes: 10 }] }), /1–5/);
+    assert.throws(() => priority({ method: "eisenhower", items: [{ name: "a", urgent: 3, important: 0, minutes: 10 }] }), /1–5/);
+    const tie = payoff({ options: ["x", "y"], scenarios: [{ name: "s1", p: 0.5 }, { name: "s2", p: 0.5 }], table: { x: [1, 2], y: [2, 1] } });
+    assert.equal(tie.evBest, "x เสมอ y"); assert.equal(tie.regretBest, "x เสมอ y");
+  },
   "สูตรที่ test รอบ 2 ยังไม่ได้ป้องกัน"() {
     const ev = payoff({ options: ["a", "b"], scenarios: [{ name: "s1", p: 0.9 }, { name: "s2", p: 0.1 }], table: { a: [10, 0], b: [0, 50] } });
     near(ev.rows[0].ev, 9, "a = 0.9 × 10"); near(ev.rows[1].ev, 5, "b = 0.1 × 50"); assert.equal(ev.evBest, "a");
