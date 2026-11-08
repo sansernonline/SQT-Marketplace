@@ -602,7 +602,7 @@
 
 ### 52. security-gate
 **ใช้กับ:** developer, qa-tester, security-engineer
-**Description:** Use when about to ship, merge or hand over code, after adding a dependency, security check, or OWASP Top 10:2025 sign-off for a web app or API.
+**Description:** Use when about to ship, merge or hand over code, after adding a dependency, user says security check, or OWASP Top 10:2025 sign-off (web app, API).
 
 ---
 
