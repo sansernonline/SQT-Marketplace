@@ -76,7 +76,7 @@ Rules for the ladder:
 - Day +10, level 3: "...ขอความกรุณาโอนชำระภายในวันศุกร์ที่ 16 ต.ค. นี้ครับ หากมีปัญหาเรื่องเอกสารแจ้งได้เลยครับ"
 - Day +20, level 4: "...หากไม่ได้รับชำระภายในวันที่ 31 ต.ค. ผมจำเป็นต้องหยุดงานส่วนที่เหลือไว้ก่อนจนกว่าจะเคลียร์ยอดนี้ครับ"
 
-Related: `meeting-summary` (plugin `personal-life` — written follow-up after a meeting). Optional, if installed: `inbox-triage` (plugin `personal-life` — which messages to answer first) · `doc-thai-official` and `doc-quotation` (plugin `e-commerce` — formal letters and quotes).
+Related: `meeting` (plugin `personal-life`, Leg 2 — written follow-up after a meeting). Optional, if installed: `inbox-triage` (plugin `personal-life` — which messages to answer first) · `doc-thai-official` and `doc-quotation` (plugin `e-commerce` — formal letters and quotes).
 
 
 ## reference: templates.md
@@ -198,7 +198,7 @@ The problem: [facts].
 I'd like a [refund/replacement/repair] by [date]. Receipt and photos attached.
 ```
 
-If the merchant does not respond, the next step is a complaint to the Office of the Consumer Protection Board (สคบ.) (hotline 1166 per news reports, checked 22 ต.ค. 2569 — not yet confirmed on the official ocpb.go.th page, รอยืนยัน; full channel list in `complaint-letter-th`, plugin `e-commerce`, if installed).
+If the merchant does not respond, the next step is a complaint to the Office of the Consumer Protection Board (สคบ.) (hotline 1166 per news reports, checked 22 ต.ค. 2569 — not yet confirmed on the official ocpb.go.th page, รอยืนยัน; full channel list in `refund-request` (`references/complaint-letter.md`), plugin `e-commerce`, if installed).
 
 ## 6. Following up after silence
 

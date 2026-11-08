@@ -239,9 +239,9 @@ Use when online selling, buying or Thai back-office work spans several steps (pr
 
 | ข้อ | ผ่านเมื่อ | skill |
 |---|---|---|
-| **มีหลักฐาน** | ทุกข้ออ้างชี้ไปที่ใบเสร็จ แชต รูป หรือหน้าคำสั่งซื้อได้ และมีวันที่ครบ | `complaint-letter-th` · `refund-request` |
-| **ถูกช่องทาง ทันเวลา** | ยื่นถูกขั้นตามลำดับขั้นบันได ก่อนวันหมดเขตของสิทธิ์ และตรวจช่องทางจากเว็บทางการแล้ว | `complaint-letter-th` |
-| **พร้อมส่ง** | ภาษาไทยสุภาพ ชัด มีสิ่งที่ต้องการและกำหนดวันตอบ และไม่มีถ้อยคำข่มขู่หรือหมิ่นประมาท | `complaint-letter-th` |
+| **มีหลักฐาน** | ทุกข้ออ้างชี้ไปที่ใบเสร็จ แชต รูป หรือหน้าคำสั่งซื้อได้ และมีวันที่ครบ | `refund-request` |
+| **ถูกช่องทาง ทันเวลา** | ยื่นถูกขั้นตามลำดับขั้นบันได ก่อนวันหมดเขตของสิทธิ์ และตรวจช่องทางจากเว็บทางการแล้ว | `refund-request` |
+| **พร้อมส่ง** | ภาษาไทยสุภาพ ชัด มีสิ่งที่ต้องการและกำหนดวันตอบ และไม่มีถ้อยคำข่มขู่หรือหมิ่นประมาท | `refund-request` |
 
 ทำทางที่ย้อนกลับได้และถูกที่สุดก่อน (คุยกับร้าน) แล้วค่อยขึ้นขั้นที่หนักขึ้น
 
@@ -696,13 +696,13 @@ skill หลัก: `buy-compare` · `warranty-tracker`
 # playbook · complaint — ร้องเรียนตามขั้นบันได
 
 ใช้เมื่อ: ร้านไม่แก้ ไม่ส่งของ หรือไม่ทำตามที่สัญญา · บริการแย่และอยากร้องเรียน
-skill หลัก: `complaint-letter-th` · `refund-request` (ถ้าต้องการเงินคืน)
+skill หลัก: `refund-request` (จดหมายร้องเรียนอยู่ใน `references/complaint-letter.md` · ขอเงินคืนอยู่ในตัว skill)
 
 ## ขั้นตอน (คัดลง todo ตรงตัว)
 
 1. เรียงเหตุการณ์เป็นไทม์ไลน์พร้อมวันที่ และทำรายการหลักฐาน ถ้าขาดชิ้นไหนให้บอกผู้ใช้ว่าต้องเก็บอะไร · ใคร: หัวหน้าทีม
 2. ระบุสิ่งที่ต้องการให้ชัด — ซ่อม · เปลี่ยน · คืนเงิน · ขอโทษ · ชดเชย ใช้คำตอบตอนเริ่ม ไม่มีให้เลือกตามความเสียหายแล้วติด `(รอยืนยัน)` · ใคร: หัวหน้าทีม
-3. วางขั้นบันไดตาม `complaint-letter-th` — ร้าน → แพลตฟอร์ม → หน่วยงานรับเรื่อง → ศาลคดีผู้บริโภค แล้วตรวจช่องทางและกรอบเวลาของแต่ละขั้นจากเว็บทางการ · ใคร: `consumer-advocate` ตัวใหม่
+3. วางขั้นบันไดตาม `refund-request` (`references/complaint-letter.md`) — ร้าน → แพลตฟอร์ม → หน่วยงานรับเรื่อง → ศาลคดีผู้บริโภค แล้วตรวจช่องทางและกรอบเวลาของแต่ละขั้นจากเว็บทางการ · ใคร: `consumer-advocate` ตัวใหม่
 4. ร่างจดหมายหรือข้อความของขั้นแรกเป็นภาษาไทยสุภาพ ชัด มีกำหนดวันตอบ · ใคร: `consumer-advocate` ตัวใหม่
 5. เตรียมร่างของขั้นถัดไปไว้ล่วงหน้า พร้อมเงื่อนไขว่าจะขึ้นขั้นเมื่อไร · ใคร: `consumer-advocate` ตัวใหม่
 6. ตรวจว่าทุกข้ออ้างชี้หลักฐานได้ วันที่ตรงกับไทม์ไลน์ และไม่มีถ้อยคำข่มขู่หรือหมิ่นประมาท · ใคร: `reviewer` ตัวใหม่
@@ -893,7 +893,7 @@ skill หลัก: `marketplace-fees-pricing` · `shipping-compare` · `seller-
 # playbook · refund — ขอเงินคืน
 
 ใช้เมื่อ: อยากได้เงินคืน — เปลี่ยนใจหลังซื้อแบบขายตรง · ของผิด ปลอม หรือพัง · จ่ายแล้วไม่ได้ของ · รายการบัตรที่ไม่รู้จักหรือซ้ำ
-skill หลัก: `refund-request` · `complaint-letter-th`
+skill หลัก: `refund-request` (จดหมายร้องเรียนอยู่ใน `references/complaint-letter.md`)
 
 ## ขั้นตอน (คัดลง todo ตรงตัว)
 
@@ -914,7 +914,7 @@ skill หลัก: `refund-request` · `complaint-letter-th`
 
 ใช้เมื่อ: ตรวจงานก่อนส่งหรือก่อนใช้จริง · "ช่วยดูหน่อยว่ามีอะไรพลาด" · ผู้ใช้ทำมาเองแล้วอยากให้ตรวจ
 ผลลัพธ์: คำตัดสินพร้อมรายการปัญหาที่ยืนยันแล้ว **ไม่แก้เองโดยอัตโนมัติ** และเป็นงานอ่านอย่างเดียว จึงไม่สร้าง `CONTEXT.md`
-skill หลัก: ฝั่งขาย `product-listing` · `marketplace-fees-pricing` · `chat-reply-templates` · ฝั่งซื้อ `complaint-letter-th` · `refund-request` · `buy-compare` · หลังบ้าน `payroll-th` · `e-tax-invoice` · `doc-contract-th` · `pdpa-workflow`
+skill หลัก: ฝั่งขาย `product-listing` · `marketplace-fees-pricing` · `chat-reply-templates` · ฝั่งซื้อ `refund-request` · `buy-compare` · หลังบ้าน `payroll-th` · `e-tax-invoice` · `doc-contract-th` · `pdpa-workflow`
 
 ## ขั้นตอน (คัดลง todo ตรงตัว)
 
@@ -1264,7 +1264,7 @@ skill หลัก: `dbd-annual-filing` · `payroll-th` · `tax-vat-th`
 | สถานการณ์ | เรียก |
 |---|---|
 | จะซื้อของชิ้นใหญ่ · เลือกไม่ถูก · สงสัยรีวิว | `buy-compare` + agent `consumer-advocate` |
-| ร้านไม่แก้ปัญหา · อยากร้องเรียน | `complaint-letter-th` |
+| ร้านไม่แก้ปัญหา · อยากร้องเรียน | `refund-request` (`references/complaint-letter.md`) |
 | อยากได้เงินคืน · รายการบัตรแปลก | `refund-request` |
 | ซื้อของมีประกัน · ของเสีย | `warranty-tracker` |
 | ต้องเขียนข้อความสุภาพหรือทวงถาม | `polite-message-th-en` (superuser) |
@@ -1296,7 +1296,7 @@ skill หลัก: `dbd-annual-filing` · `payroll-th` · `tax-vat-th`
 | พิมพ์ | ทำอะไร | skill ที่ใช้ข้างใน |
 |---|---|---|
 | `/e-commerce:buy-compare` | เทียบสินค้าหรือบริการก่อนซื้อ | `buy-compare` |
-| `/e-commerce:complain` | ร่างจดหมายร้องเรียนและแผนส่งต่อถึง สคบ. 1166 | `complaint-letter-th` · `refund-request` |
+| `/e-commerce:complain` | ร่างจดหมายร้องเรียนและแผนส่งต่อถึง สคบ. 1166 | `refund-request` |
 | `/e-commerce:doc-contract-th` | ร่างสัญญาจ้าง เช่า หรือบริการ | `doc-contract-th` |
 | `/e-commerce:line-chatbot` | สร้างหรือปรับบอตตอบลูกค้าบน LINE OA | `line-chatbot` |
 | `/e-commerce:line-oa-setup` | ตั้งค่า Messaging API ของ LINE OA ครบทุกขั้น | `line-oa-setup` |

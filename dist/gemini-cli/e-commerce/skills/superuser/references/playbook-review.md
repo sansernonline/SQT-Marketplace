@@ -2,7 +2,7 @@
 
 ใช้เมื่อ: ตรวจงานก่อนส่งหรือก่อนใช้จริง · "ช่วยดูหน่อยว่ามีอะไรพลาด" · ผู้ใช้ทำมาเองแล้วอยากให้ตรวจ
 ผลลัพธ์: คำตัดสินพร้อมรายการปัญหาที่ยืนยันแล้ว **ไม่แก้เองโดยอัตโนมัติ** และเป็นงานอ่านอย่างเดียว จึงไม่สร้าง `CONTEXT.md`
-skill หลัก: ฝั่งขาย `product-listing` · `marketplace-fees-pricing` · `chat-reply-templates` · ฝั่งซื้อ `complaint-letter-th` · `refund-request` · `buy-compare` · หลังบ้าน `payroll-th` · `e-tax-invoice` · `doc-contract-th` · `pdpa-workflow`
+skill หลัก: ฝั่งขาย `product-listing` · `marketplace-fees-pricing` · `chat-reply-templates` · ฝั่งซื้อ `refund-request` · `buy-compare` · หลังบ้าน `payroll-th` · `e-tax-invoice` · `doc-contract-th` · `pdpa-workflow`
 
 ## ขั้นตอน (คัดลง todo ตรงตัว)
 

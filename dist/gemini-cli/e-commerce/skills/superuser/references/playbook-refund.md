@@ -1,7 +1,7 @@
 # playbook · refund — ขอเงินคืน
 
 ใช้เมื่อ: อยากได้เงินคืน — เปลี่ยนใจหลังซื้อแบบขายตรง · ของผิด ปลอม หรือพัง · จ่ายแล้วไม่ได้ของ · รายการบัตรที่ไม่รู้จักหรือซ้ำ
-skill หลัก: `refund-request` · `complaint-letter-th`
+skill หลัก: `refund-request` (จดหมายร้องเรียนอยู่ใน `references/complaint-letter.md`)
 
 ## ขั้นตอน (คัดลง todo ตรงตัว)
 

@@ -7,7 +7,7 @@
 | จะซื้อหรือขาย · ซื้อกี่หุ้น | `position-sizing` + agent `risk-manager` |
 | อ่านกราฟ · สัญญาณ | `technical-signals` + agent `market-analyst` |
 | ข่าววันนี้กระทบอะไร | `news-impact` |
-| จดเทรด · ทบทวนผล | `trade-journal` · `post-trade-review` + agent `trade-journal-coach` |
+| จดเทรด · ทบทวนผล | `trade-journal` (จดเทรด · โหมดทบทวน) + agent `trade-journal-coach` |
 | ตั้งเตือนราคาหรือข่าว | agent `alert-dispatcher` |
 | เลือกสัญญาณ copy trade บน MQL5 (MT4/MT5) · จะตามสัญญาณด้วยเงินจริง | `copy-trade-check` + agent `risk-manager` |
 | เริ่มติดตามหุ้นใหม่ · จัด watchlist ที่รก | `watchlist-setup` |

@@ -73,7 +73,7 @@ For landlords with **3 or more units** for rent, the สคบ. rules (ประ
 | Electricity and water rates | not above what MEA/PEA and MWA/PWA charge the landlord | same |
 | Leaving early (tenant) | allowed after living at least half the lease term, with written notice at least 30 days ahead, and no rent owed | (รอยืนยัน) |
 
-Steps: give notice in writing (keep a photo of the signed copy) → on the last day walk through with the landlord against the move-in record, photo or video every room → hand back keys and cards against a signed note → write down the deposit due date. Late or short refund → a polite written reminder (`polite-message-th-en`), then สคบ. 1166 (or `e-commerce:complaint-letter-th` if installed).
+Steps: give notice in writing (keep a photo of the signed copy) → on the last day walk through with the landlord against the move-in record, photo or video every room → hand back keys and cards against a signed note → write down the deposit due date. Late or short refund → a polite written reminder (`polite-message-th-en`), then สคบ. 1166 (or `e-commerce:refund-request` if installed).
 
 ## Workflow
 

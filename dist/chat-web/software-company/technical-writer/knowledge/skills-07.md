@@ -1,281 +1,3 @@
-# skill: status-report
-
-Use when any task that produces or checks work ends (document, research, review, shop job, code) to report status in a table.
-
-# รายงานสถานะเมื่อจบงาน
-
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
-
-> **กฎข้อเดียว:** จบงานทุกครั้ง ต้องมีตารางสถานะในไฟล์กลางของงาน และตารางเดียวกันในคำตอบ
-> งานที่ไม่มีตารางสถานะ ถือว่ายังไม่จบ
-> **ยกเว้น** playbook ที่อ่านอย่างเดียว (`research` · `review` · software-company: `investigation`) — ใส่ตารางในคำตอบอย่างเดียว ไม่เขียนไฟล์
-
----
-
-## 1 · เขียนที่ไหน
-
-| สถานการณ์ | ทำอย่างไร |
-|---|---|
-| งานทั่วไป (**ค่าตั้งต้น**) | `.claude/superuser/CONTEXT.md` แก้เฉพาะ `## ความคืบหน้า` · หัวข้อ `## รับงานต่อ` เป็นของ `handoff` หัวข้อ 5 เขียนตามกติกาที่นั่น · ไม่แตะหัวข้ออื่น · ยังไม่มีไฟล์ → สร้างจาก [`templates/CONTEXT.md`](../superuser/templates/CONTEXT.md) |
-| โปรเจกต์มี `docs/BUILD-PLAN.md` | ใช้แบบในข้อ 3 แทน เขียนที่เดียว ไม่เขียนซ้ำสองที่ |
-| มี subagent หลายตัวทำงานพร้อมกัน | subagent **รายงานกลับ** อย่างเดียว ให้หัวหน้าทีมเขียนไฟล์คนเดียว ไม่งั้นไฟล์พัง |
-
-ที่อยู่และกติกาของไฟล์ทั้งหมดอยู่ใน [`team-files`](../superuser/references/team-files.md)
-
----
-
-## 2 · ตาราง `## ความคืบหน้า`
-
-```markdown
-## ความคืบหน้า
-| งาน | สถานะ | หลักฐาน | อัปเดต |
-|---|---|---|---|
-| สรุปยอดขายเดือนนี้ (`docs/sales-oct.xlsx`) | เสร็จ | ยอดรวมตรงใบสั่งซื้อ 212/212 · `reviewer` ตรวจแล้ว | 2026-10-21 14:20 |
-| รายงานคู่แข่ง 5 ราย | ทำอยู่ | อ่านแหล่งทางการครบ 3/5 | 2026-10-21 14:20 |
-| ใบเสนอราคาลูกค้า A | รออนุมัติ | ร่างพร้อมใน `out/quote-A.pdf` · ส่งแล้วย้อนไม่ได้ | 2026-10-21 14:20 |
-| ค่าส่งต่างประเทศ | ค้างอยู่ | รอผู้ใช้ยืนยันเรทของขนส่ง | 2026-10-21 14:20 |
-| ค้นหาสินค้า (โค้ด) | เสร็จ | test 48/48 · `reviewer` ตรวจแล้ว | 2026-10-21 14:20 |
-```
-
-หัวข้อ `## รับงานต่อ` ที่อยู่ถัดลงไป เขียนตาม `handoff` หัวข้อ 5 (แบบเดียว ใช้ทั้งตอนจบงานและตอนส่งต่อ)
-
-- สถานะใช้ 5 คำเดียวกับ `superuser`: `เสร็จ` · `ทำอยู่` · `ติด` · `รออนุมัติ` · `ค้างอยู่` (ยังไม่เริ่มใช้ `ค้างอยู่`)
-- **หลักฐานต้องมีเสมอ** เมื่อเขียนว่า `เสร็จ` — ตัวเลขที่ตรวจจริง · จำนวนข้อที่เทียบ · ชื่อไฟล์ที่เปิดดู · ผลจาก `reviewer` ถ้าไม่ได้ตรวจให้เขียน `ยังไม่ได้ตรวจ` ห้ามเขียนว่าผ่าน
-- ผู้ตรวจต้องไม่ใช่ตัวเดียวกับผู้ทำ · มี subagent → ระบุชื่อบทบาทในช่องหลักฐาน
-- ตารางมีเฉพาะงานที่ยังเปิด ไม่เกิน 15 แถว · งานที่เสร็จแล้วย้ายเป็น 1 บรรทัดใน `HISTORY.md` · เขียนทับทั้งหัวข้อ ไม่ต่อท้าย
-- **ค้างอยู่** คือสิ่งที่ agent ไปต่อเองไม่ได้ ต้องมีคนตอบหรือตัดสิน เขียนเป็นคำถามที่ตอบได้ พร้อมบอกว่าถามใคร ไม่มีให้เขียน `ไม่มี`
-- **รออนุมัติ** คืองานที่เตรียมพร้อมแล้วแต่ย้อนไม่ได้ (superuser หัวข้อ 6) บอกคำสั่งหรือไฟล์ที่พร้อมใช้ ไม่มีก็ไม่ต้องใส่
-- **ข้อเสนอ** (ในคำตอบ) คือการปรับปรุงนอกขอบเขตไม่เกิน 3 ข้อ บอกว่าได้อะไรและใช้แรงแค่ไหน ไม่มีก็ไม่ต้องใส่
-
----
-
-## 3 · แบบสำหรับโปรเจกต์ที่มี `docs/BUILD-PLAN.md`
-
-เขียน `## สถานะล่าสุด` (เขียนทับ) และ `## ประวัติสถานะ` (เพิ่มบรรทัดบนสุด) ในไฟล์นั้นแทน `CONTEXT.md` · ลำดับหัวข้อ คอลัมน์ ค่าที่ใช้ได้ และเพดานแถว อยู่ใน [`build-plan-rules`](references/build-plan-rules.md) **เปิดก่อนเขียนทุกครั้ง**
-
----
-
-## 4 · ในคำตอบ
-
-แสดง "ภาพรวม" (ถ้ามี) + ตารางเฉพาะ **แถวที่เปลี่ยนในรอบนี้** + "ค้างอยู่" + "รออนุมัติ" (ถ้ามี) + "ข้อเสนอ" (ถ้ามี) + "ถัดไป" แล้วบอกว่าตารางเต็มอยู่ที่ไหน (`CONTEXT.md` หรือ `docs/BUILD-PLAN.md`) — ไม่ต้องแปะทั้งไฟล์
-
----
-
-## 5 · รายการตรวจก่อนบอกว่าจบ
-
-- [ ] อ่านไฟล์กลางจากดิสก์ก่อนแก้ (คนอื่นอาจแก้ไปแล้ว)
-- [ ] ตารางความคืบหน้าเขียนทับ ไม่ได้ต่อท้าย และมีวันที่เวลา
-- [ ] ทุกแถวที่เขียนว่า `เสร็จ` หรือ `ผ่าน` มีหลักฐาน · ผู้ตรวจไม่ใช่ผู้ทำ
-- [ ] ไม่ได้ตั้ง `Approved` เอง
-- [ ] `## รับงานต่อ` อัปเดตตาม `handoff` หัวข้อ 5 แล้ว
-- [ ] ไม่แตะหัวข้ออื่นในไฟล์
-- [ ] แบบ BUILD-PLAN: ตัวเลขใน "ภาพรวม" ตรงตาราง · เพิ่มบรรทัดใน `## ประวัติสถานะ` 1 บรรทัด · "ทีมตอนนี้" ไม่มีแถว `ทำอยู่` ค้างของงานที่จบแล้ว
-- [ ] แบบ BUILD-PLAN: รันตัวตรวจจนผ่าน (ตัวตรวจอยู่ใน plugin `superuser`): `python <โฟลเดอร์ superuser>/skills/polished-document-style/scripts/check_outline.py assets/build-plan-status.md <path ของ docs/BUILD-PLAN.md>` — จับหัวข้อหาย หัวข้อสลับ ช่องตัวหนาหาย หัวตารางเปลี่ยน และช่องที่ยังไม่เติม · หัวข้ออื่นในไฟล์ (ตารางงาน `## ตัดสินใจเอง`) ตัวตรวจปล่อยผ่าน
-- [ ] คำตอบมีตารางเฉพาะแถวที่เปลี่ยน + ค้าง + รออนุมัติ (ถ้ามี) + ข้อเสนอ (ถ้ามี) + ถัดไป
-
----
-
-## 6 · สิ่งที่ห้ามทำ
-
-| อย่าทำ | เพราะ |
-|---|---|
-| เขียนว่า `เสร็จ` หรือ `ผ่าน` โดยไม่ได้ตรวจจริง | ตารางสถานะที่โกหกแย่กว่าไม่มีตาราง |
-| ต่อท้ายตารางทุกรอบ | ไฟล์ยาวขึ้นเรื่อย ๆ และไม่รู้ว่าแถวไหนคือปัจจุบัน |
-| สร้างไฟล์สถานะใหม่ (`STATUS.md` `progress.md`) | สถานะกระจายหลายที่ ไม่มีใครรู้ว่าดูที่ไหน |
-| ซ่อนรายการที่ไม่ผ่านไว้ในร้อยแก้ว | คนอ่านตารางแล้วเข้าใจว่าผ่านหมด |
-| ให้ subagent เขียนไฟล์กลางเอง | เขียนชนกันแล้วไฟล์พัง |
-
----
-
-## แผนโครงการและรายงานประจำสัปดาห์
-
-แม่แบบแผนโครงการ (ผังเวลา · milestone · risk register · Responsible-Accountable-Consulted-Informed (RACI)) และรายงานสถานะประจำสัปดาห์ฉบับส่งผู้เกี่ยวข้อง อยู่ใน [`references/project-plan-and-weekly-status.md`](references/project-plan-and-weekly-status.md)
-
-## เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| ตารางงานและวงรอบเขียนโค้ด ในไฟล์เดียวกัน | `spec-to-code-loop` (plugin `software-company`) |
-| ชุดเอกสารของโปรเจกต์และสถานะเอกสาร | `project-doc-set` (plugin `software-company`) |
-| บันทึกบริบทเพื่อทำต่อในรอบสนทนาหน้า | `handoff` |
-| ตารางการตัดสินใจเองในไฟล์เดียวกัน | `decision-log` |
-| เลือก playbook และจบงานทุกชนิด | `superuser` |
-| รูปแบบตารางและเอกสาร | `polished-document-style` |
-| ชื่อและสถานะของไฟล์เอกสาร | `document-naming` |
-
-
-## reference: build-plan-rules.md
-
-# แบบสำหรับโปรเจกต์ที่มี docs/BUILD-PLAN.md
-
-ย้ายมาจาก `SKILL.md` ข้อ 3 · เปิดเมื่อโปรเจกต์มี `docs/BUILD-PLAN.md`
-
-เขียน 2 หัวข้อนี้ในไฟล์นั้นแทน `CONTEXT.md` · ไม่มีไฟล์ → สร้างไฟล์ที่มีแค่ชื่อโปรเจกต์ แล้ว copy จาก [`assets/build-plan-status.md`](../assets/build-plan-status.md) (ห้ามแต่งโครงเอง) · **ห้ามแตะตารางงานหรือหัวข้ออื่น**
-ลำดับหัวข้อ: `## สถานะล่าสุด` → ตารางงาน → `## ประวัติสถานะ` → `## ตัดสินใจเอง` (`decision-log`)
-
-- `## สถานะล่าสุด` — **เขียนทับทั้งหัวข้อ** ทุกครั้ง เป็นภาพปัจจุบันภาพเดียว
-- `## ประวัติสถานะ` — **เพิ่ม 1 บรรทัดบนสุด** ต่อ 1 งาน ไม่ลบของเดิม รูปแบบ `วันที่ เวลา · งาน · สถานะ · ผล · ทำ <agent> · ตรวจ <agent> · ค้างกี่ข้อ` (ถ้ารอบนั้นตัดสินใจเองต่อท้าย `· ตัดสินใจเอง <จำนวน>`)
-
-หัวข้อ `## สถานะล่าสุด` มี: บรรทัดอัปเดต (วันที่เวลา · งานล่าสุด) · **ภาพรวม** (เสร็จ N/ทั้งหมด · ทำอยู่ · ติด · ไม่ผ่านตรวจ — นับจากตารางและต้องตรงกัน) · ตาราง `| รายการ | ประเภท | สถานะ | ใครทำ | ใครตรวจ | ผลตรวจ | ค้าง / หมายเหตุ |` · **ทีมตอนนี้** (1 แถวต่อ agent ที่ใช้รอบนี้ · ไม่มี subagent ไม่ต้องใส่ · เริ่มรอบใหม่ล้างแถวเก่า) · ค้างอยู่ · รออนุมัติ · ถัดไป (ไม่เกิน 3) · ข้อเสนอ
-
-| คอลัมน์ | ค่าที่ใช้ได้ |
-|---|---|
-| ประเภท | `เอกสาร` · `ตรวจ` · `ส่งมอบ` · `โค้ด` · `build` |
-| สถานะ (เอกสาร) | `ยังไม่เริ่ม` · `Draft` · `Review` · `Approved` · `Archived` (ชุดเดียวกับ `polished-document-style`) — `Approved` มีแต่คนที่เปลี่ยนได้ agent ตั้งได้สูงสุด `Review` |
-| สถานะ (อื่น ๆ) | 5 คำใน `SKILL.md` ข้อ 2 |
-| ผลตรวจ | `ผ่าน — <หลักฐาน>` · `ไม่ผ่าน — <สิ่งที่ไม่ผ่าน>` · `ยังไม่ได้ตรวจ` · `—` |
-
-ตารางมีทุกรายการของโปรเจกต์ ไม่ใช่แค่งานรอบนี้ (รายการที่ไม่ได้แตะคัดลอกค่าเดิม) ไม่เกิน 25 แถว
-งานโค้ด (ตัวอย่างตารางเต็ม · ประเภท `build`/`ส่งมอบ` · หลักฐานแอปมือถือ) → ส่วนเพิ่มใน plugin `software-company` → `superuser` → `references/code-extensions.md`
-
-
-## reference: project-plan-and-weekly-status.md
-
-# Project plan and weekly status — stakeholder templates
-
-แม่แบบของ agent `project-manager` — ย้ายมาจากตัว agent (2026-10-14) · ตารางสถานะท้ายงานแบบสั้นอยู่ใน SKILL.md ของ `status-report` ส่วนไฟล์นี้คือแผนโครงการและรายงานประจำสัปดาห์ฉบับส่งผู้เกี่ยวข้อง
-
-**สารบัญ:**
-
-- [Standard Output: Polished Project Plan](#standard-output-polished-project-plan)
-- [Standard Output: Polished Status Report](#standard-output-polished-status-report)
-
-## Standard Output: Polished Project Plan
-
-```markdown
-# Project Plan: <Project Name>
-
-| | |
-|--|--|
-| **Project Lead** | @pm-name |
-| **Sponsor** | @sponsor |
-| **Status** | ทำอยู่ (วางแผน) |
-| **Start Date** | YYYY-MM-DD |
-| **Target End** | YYYY-MM-DD |
-| **Budget** | ฿XX,XXX |
-
----
-
-## Objective
-
-> One-sentence goal that fits in a tweet.
-
-## Scope
-
-| In Scope | Out of Scope |
-|-------------|-----------------|
-| ... | ... |
-
-## Timeline
-
-![ผังเวลาโครงการ: Discovery → Build → Launch](figures/fig-01.png)
-
-**รูปที่ 1 —** ผังเวลาโครงการ วาดด้วย `diagram-figures` (plugin `software-company` · house style) แล้วฝังเป็นไฟล์ภาพ · ไม่ใช้ Mermaid ในแผนที่ส่งผู้เกี่ยวข้อง
-
-## Milestones
-
-| # | Milestone | Target Date | Owner | Status |
-|:-:|-----------|:-----------:|:------|:------:|
-| 1 | Requirements approved | YYYY-MM-DD | @ba | ค้างอยู่ |
-| 2 | Architecture signed off | YYYY-MM-DD | @architect | ค้างอยู่ |
-| 3 | Minimum Viable Product (MVP) feature complete | YYYY-MM-DD | @dev-lead | ค้างอยู่ |
-| 4 | User Acceptance Testing (UAT) passed | YYYY-MM-DD | @qa | ค้างอยู่ |
-| 5 | Production launch | YYYY-MM-DD | @devops | ค้างอยู่ |
-
-## Risk Register
-
-| ID | Risk | Likelihood | Impact | Score | Mitigation | Owner |
-|:--:|------|:----------:|:------:|:-----:|------------|:------|
-| R-001 | Payment vendor delay | Medium | High | 6 | Plan B vendor | @architect |
-| R-002 | Resource availability | Low | Medium | 2 | Cross-training | @pm |
-
-> **Score = Likelihood × Impact** (1-9 scale)
-
-## Dependencies
-
-| Type | Dependency | Owner | Status |
-|------|------------|:------|:------:|
-| External | Payment gateway (Application Programming Interface, API) | Vendor X | ติด |
-| Internal | Design team availability | @design-lead | ทำอยู่ |
-| Technical | New cloud account | @devops | ทำอยู่ |
-
-## Responsible-Accountable-Consulted-Informed (RACI) Matrix
-
-| Activity | PM | BA | Arch | Dev | QA | DevOps |
-|----------|:--:|:--:|:----:|:---:|:--:|:------:|
-| Requirements | A | R | C | I | C | I |
-| Architecture | A | C | R | C | I | C |
-| Implementation | A | I | C | R | C | C |
-| Testing | A | I | I | C | R | I |
-| Deployment | A | I | C | C | I | R |
-```
-
-## Standard Output: Polished Status Report
-
-```markdown
-# Status Report: <Project> — Week of YYYY-MM-DD
-
-| | |
-|--|--|
-| **Reporting Period** | YYYY-MM-DD to YYYY-MM-DD |
-| **Overall Status** | On Track |
-| **Health Trend** | Improving / Declining / Stable |
-
----
-
-## สรุปสั้นสำหรับผู้บริหาร (Too Long; Didn't Read, TL;DR)
-
-> 1-2 sentence summary for executives.
-
-## Status by Track
-
-| Track | Status | Notes |
-|-------|:------:|-------|
-| Scope | On track | On target |
-| Schedule | At risk | 3 days behind, recoverable |
-| Budget | On track | 65% spent, on track |
-| Quality | On track | 0 critical bugs open |
-| Team Morale | On track | High |
-
-> **Note:** On track / At risk / Off track คือระดับสุขภาพของแต่ละด้านสำหรับผู้อ่านต่างประเทศ ไม่ใช่สถานะของงาน · สถานะรายการงานใช้ 5 คำกลาง (เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่)
-
-## Completed This Period
-
-- ...
-- ...
-
-## In Progress
-
-| Item | Owner | Due | % Done |
-|------|:------|:---:|:------:|
-| Feature X | @alice | MM/DD | 75% |
-| Feature Y | @bob | MM/DD | 40% |
-
-## Blocked
-
-| Item | Blocker | Owner | Action |
-|------|---------|:------|--------|
-| ... | Waiting on legal review | @legal | Escalate to Chief Technology Officer (CTO) |
-
-## Upcoming (Next Period)
-
-- ...
-
-## New Risks / Issues
-
-| Severity | Item | Owner |
-|:--------:|------|:------|
-| High | ... | ... |
-
-## Asks for Stakeholders
-
-- Decision needed on X by MM/DD
-- Need 1 more QA resource starting next sprint
-```
-
-
----
-
 # skill: handoff
 
 Use when project work starts or passes on — to a subagent, next session, another model or vendor, a person or bot — or an inbox message lands.
@@ -712,3 +434,622 @@ Use when creating, renaming or filing any document a team or client keeps or sen
 - **แก้ไฟล์ที่ `APPROVED` แล้ว** แม้แต่คำผิดเดียว
 - **ไม่มีตารางประวัติการแก้ไข** — แล้วต้องเปิดเทียบทีละหน้า
 - **วันที่แบบ `25-09-2026` หรือ `250926`** — เรียงไม่ได้ และคนอ่านคนละแบบ
+
+
+---
+
+# skill: project-doc-set
+
+Use when a project needs its doc set decided (which docs, order, where they live) or DRAFT open items listed in one Excel.
+
+# ชุดเอกสารโปรเจกต์
+
+> **กฎข้อเดียว:** เอกสารทุกชิ้นต้องตอบได้ว่า **ใครอ่าน** และ **อ่านแล้วตัดสินใจอะไร**
+> ถ้าตอบไม่ได้ ก็ไม่ต้องเขียน
+
+---
+
+## เมื่อไหร่ใช้ skill นี้
+
+เปิดโปรเจกต์ใหม่แล้วต้องตัดสินว่ามีเอกสารอะไร · เอกสารกระจัดกระจายไม่รู้ว่าอันไหนตัวจริง · ลูกค้าถามว่าส่งมอบอะไรบ้าง · จะเขียนเอกสารแต่ไม่แน่ใจว่าต้องมีอะไรก่อน
+
+## เมื่อไหร่ **ไม่** ใช้
+
+| สถานการณ์ | ใช้แทน |
+|---|---|
+| โครงโฟลเดอร์ของ**โค้ด** (รวม `docs/` ในโค้ดของแบบ A) · README · CHANGELOG · linter | `project-bootstrap` |
+| ตั้ง**ชื่อไฟล์** และเลขเวอร์ชันของเอกสาร | `document-naming` |
+| ลงมือเขียนเอกสารชิ้นใดชิ้นหนึ่ง | skill ของเอกสารนั้น (ตารางข้อ 4) |
+| จัดรูปแบบหน้าเอกสารให้สวย | `branded-document-design` |
+
+---
+
+## 1 · เอกสารอยู่ในหรืออยู่นอก repo
+
+**ตัดสินข้อนี้ก่อน** (ย้ายทีหลังต้องแก้ลิงก์ทั้งโปรเจกต์) · **ค่าเริ่มต้นคือแบบ B** แม้เอกสารเป็น markdown ล้วน โค้ดอยู่ใน `<project-name>/` (ตัวพิมพ์เล็กคั่น `-`) · แบบ A เมื่อผู้ใช้ขอเท่านั้น
+
+- **แบบ B** (เอกสารนอก repo) — ใช้กับทุกขนาดชุด (S · M · L) · `.docx` / `.xlsx` / mockup / PNG ที่ลูกค้าต้องเห็นไม่ปนใน pull request · ผังรากอยู่ข้างล่าง (ข้อนี้คือเจ้าของผังราก)
+- **แบบ A** (เอกสารใน repo) — เฉพาะเมื่อผู้ใช้ขอ และเอกสารเป็น markdown ล้วน · เอกสารกับโค้ดเปลี่ยนใน pull request เดียวกัน · รากเหมือนแบบ B แต่ไม่มี `docs/` ที่ราก — `docs/` อยู่ในโฟลเดอร์โค้ด ผังข้างในเป็นของ `project-bootstrap` ข้อ 1
+- แบบ A ที่โตจนมีเอกสารส่งมอบ → ย้ายเป็นแบบ B **ทั้งชุดในครั้งเดียว** เอกสารที่อยู่ 2 ที่คือมี 2 เวอร์ชัน
+
+### โครงของแบบ B
+
+```
+<ชื่อโปรเจกต์>/
+├─ ref/                 ของที่ได้รับมา — TOR · บันทึกประชุม · ภาพหน้าจอระบบเดิม · ไฟล์จากลูกค้า  **อ่านอย่างเดียว ห้ามแก้**
+├─ docs/                เอกสารทุกชิ้นที่เราเขียน — .docx ส่งมอบ และ .md เชิงเทคนิค อยู่ด้วยกัน
+│  ├─ figures/          รูปที่ export แล้ว — .png เท่านั้น        [มีเมื่อมีรูปในเอกสารส่งมอบ]
+│  │  └─ src/           ไฟล์ต้นทางของรูป (.html · .mmd · .drawio)
+│  ├─ decisions/        ADR-NNNN-<slug>.md หนึ่งการตัดสินใจต่อไฟล์  [ทางเลือก]
+│  ├─ runbook-<เรื่อง>.md  คู่มือเมื่อระบบมีปัญหา ไฟล์ละเรื่อง        [ทางเลือก]
+│  └─ research/         research แอปต้นแบบ (`reference-app-research`) [ทางเลือก]
+├─ mockup/              .html ที่เปิดแล้วกดได้จริง
+├─ qa/                  test case · ผลทดสอบ · bugs/ รายงานบั๊ก
+├─ assets/              โลโก้ · ไอคอนทุกขนาด · favicon · wordmark (ต้นทาง .svg + ไฟล์ export)
+├─ _to_delete/          ของชั่วคราวทุกอย่าง
+├─ .claude/            skill ของโปรเจกต์ (เช่น verify) — ต้องอยู่ที่ที่เปิด Claude Code
+│  └─ superuser/        ไฟล์ทำงานของ SuperUser — CONTEXT.md · HISTORY.md · IMPROVEMENTS.md · log/ · inbox/ · learn/
+└─ <project-name>/      repo โค้ด ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-` — โครงข้างในเป็นของ `project-bootstrap`
+```
+
+**ไฟล์ของ SuperUser** (`.claude/superuser/` · `docs/BRIEF.md` · `AGENTS.md`/`GEMINI.md`) — ต้นฉบับอยู่ที่ [`superuser/references/team-files.md`](../superuser/references/team-files.md) ที่เดียว
+
+**ADR และ runbook อยู่ใน `docs/` ที่ราก ไม่ใช่ `<project-name>/docs/`** (แบบ A ย้ายทั้ง `docs/` เข้าโฟลเดอร์โค้ด ผังข้างในเหมือนกัน) (`docs/decisions/ADR-NNNN-<slug>.md` · `docs/runbook-<เรื่อง>.md`) — ข้อนี้คือที่เดียวที่กำหนด
+
+**ข้อยกเว้นของราก:** `.sandbox/` อยู่ที่รากได้เมื่อใช้ `docker-sandbox` · `AGENTS.md` / `GEMINI.md` ตามเงื่อนไขข้างบน — ทุกข้อยกเว้นต้องประกาศใน README ของโฟลเดอร์โค้ด
+
+**โฟลเดอร์สร้างเมื่อมีของจริง ไม่สร้างเผื่อ:** `ref/` เมื่อได้ไฟล์จากลูกค้าหรือระบบเดิม (ห้ามปนใน `docs/`) · `docs/figures/` เมื่อมีรูปวาดเองในเอกสารส่งมอบ (ไม่งั้นรูปติดอยู่ใน `.docx` แก้ไม่ได้) · `docs/decisions/` เมื่อมีการตัดสินใจที่ต้องอธิบายทีหลัง · `docs/research/` เมื่อผู้ใช้อยากได้แอปแบบที่มีอยู่ · `qa/` เมื่อมี test case (test case อยู่ที่นี่เสมอ `docs/test-plan.md` มีแค่แผน) · `assets/` เมื่อมีโลโก้หรือไอคอน
+
+**โปรเจกต์แบบ ecosystem** (sub-project ≥ 2 ตัว แต่ละตัวมีเอกสารชุดของตัวเอง) → โฟลเดอร์ชื่อ `ecosystem/` เสมอ (ห้าม `projects/` `modules/` `apps/`) · `ecosystem/<รหัส>-<SUB>/` มี `docs/` `mockup/` `qa/` และ repo ของตัวเอง · เอกสารที่ครอบทุกตัวอยู่ `docs/` ที่รากที่เดียว · ผังและกฎเต็ม → [`references/ecosystem.md`](references/ecosystem.md)
+
+
+**กฎของโฟลเดอร์ (ใช้ได้ทั้ง 2 แบบ):**
+
+- **`.docx` กับ `.md` อยู่ใน `docs/` เดียวกันได้** ไม่ต้องแยกโฟลเดอร์ เพราะนามสกุลบอกอยู่แล้วว่าใครอ่าน
+- **ไฟล์ต้นทางของรูปห้ามหาย** เพราะถ้าปีหน้าต้องแก้รูปแล้วเหลือแต่ PNG ก็ต้องวาดใหม่ทั้งใบ
+- **ทุกปุ่มใน mockup ต้องกดได้จริง** เพราะปุ่มหลอกทำให้รีวิวผิด
+- **`.docx` / `.xlsx` อยู่ใน `docs/` และ `qa/` เท่านั้น** ไม่กระจายไปรากโปรเจกต์
+- **ของชั่วคราวลง `_to_delete/`** (`temp-file-discipline`)
+- **`docs/README.md` เป็นสารบัญ** บอกว่าอ่านอะไรก่อนและใครเป็นเจ้าของ (แม่แบบใน `project-bootstrap` → `assets/starter-files.md`)
+
+---
+
+## 2 · เลือกชุดเอกสารตามขนาดงาน
+
+ขนาดวัดจาก **ระยะเวลา × จำนวนคนที่ต้องเห็นพ้องกัน** ไม่ใช่จำนวนบรรทัดโค้ด
+
+**S** ≤ 2 สัปดาห์ · ทีมเดียว · ไม่มีใครนอกทีมต้องเซ็น — **M** 1–3 เดือน · ผู้ว่าจ้างภายใน · ส่งมอบเป็นรอบ — **L** > 3 เดือน · ลูกค้าภายนอกเซ็นรับ · มีข้อผูกพันตามสัญญา
+
+### 2.1 · เอกสารส่งมอบ — คนอ่านและเซ็น
+
+| เอกสาร | รูปแบบ | ผู้อ่าน | S | M | L |
+|---|---|---|:-:|:-:|:-:|
+| Project Plan | `.docx` | ผู้ว่าจ้าง · ทีม | ○ | ● | ● |
+| SRS | `.docx` | dev · ผู้ว่าจ้าง | ○ | ● | ● |
+| Architecture | `.docx` | dev · ops | ○ | ● | ● |
+| Test Plan | `.docx` | QA · ผู้ว่าจ้าง | ○ | ● | ● |
+| คู่มือผู้ใช้ (`MAN`) | `.docx` → `.pdf` | ผู้ใช้ปลายทาง | ○ | ● | ● |
+| FSD | `.docx` | dev · QA | ○ | ○ | ● |
+| BRD | `.docx` | ฝ่ายธุรกิจ | ○ | ○ | ● |
+| Document Checklist | `.docx` | ทุกฝ่าย | ○ | ○ | ● |
+| Test Cases | `.xlsx` | QA | ○ | ○ | ● |
+
+● ต้องมี · ○ ไม่ต้อง เว้นแต่มีเหตุผลเฉพาะ
+**ชุด S ไม่มีเอกสารกลุ่มนี้เลย** — ถูกแล้ว
+
+---
+
+### 2.2 · เอกสารเชิงเทคนิค — ทีมและ agent ใช้ระหว่างสร้าง
+
+เป็น markdown ทั้งหมด และ**ขึ้นกับว่าโปรเจกต์มีอะไร** ไม่ใช่ขนาดงาน · ตารางเต็ม (ไฟล์ · ตอบคำถามอะไร) → [`references/technical-docs.md`](references/technical-docs.md)
+
+- **เสมอ:** `<project-name>/README.md` · `docs/BUILD-PLAN.md`
+- **มีเงื่อนไข:** USER-STORIES และ `docs/sprints/sprint-NN.md` (ทำงานเป็น sprint) · AGENT-LOOP (agent เขียนโค้ดเป็นรอบ) · API-SPEC (มี API ที่คนอื่นเรียก) · DATA-DICTIONARY (มีฐานข้อมูล) · EVALUATION-POLICY และ PROMPT-LIBRARY (ใช้ LLM) · `docs/decisions/ADR-NNNN-<slug>.md` (การตัดสินใจที่จะถูกถามซ้ำ) · `docs/runbook-<เรื่อง>.md` (ระบบรันจริงและมีคนอยู่เวร)
+- ตัวที่คนลืมบ่อยสุดคือ 4 ตัวเรื่อง LLM · API · ฐานข้อมูล แล้วต้องถาม agent ซ้ำทุกรอบว่า prompt ตัวไหนคือตัวจริง
+
+---
+
+## 3 · ลำดับการเขียน
+
+**สายส่งมอบ** — ห้ามข้ามขั้นที่อยู่ในชุดของขนาดงานนั้น (ขั้นที่ไม่อยู่ในชุด เช่น BRD · FSD ของชุด M ให้ข้ามไป)
+
+```
+Project Plan ─► BRD ─► SRS ─┬─► mockup
+                            └─► Architecture ─► FSD
+                                                 │
+              User Guide ◄─ Test Cases ◄─ Test Plan
+```
+
+**ชิ้นถัดไปเขียนต่อบนฉบับ DRAFT ของชิ้นก่อนหน้าได้** ข้อที่ยังไม่ยืนยันใส่ `(รอยืนยัน)` ไว้ทั้งสองชิ้น · ห้ามเปลี่ยนสถานะชิ้นถัดไปเป็น APPROVED ก่อนชิ้นก่อนหน้า เพราะถ้าชิ้นต้นทางเปลี่ยนต้องรื้อทั้งสาย
+ข้อยกเว้นเดียว: **mockup ทำคู่ไปกับ SRS ได้** เพราะภาพหน้าจอช่วยให้ SRS ถูกยืนยันเร็วขึ้น
+
+### 3.1 · ทะเบียนจุดค้าง — ผู้ใช้ถามว่า "ยังติดตรงไหน" ตอบเป็นไฟล์ Excel ไม่ใช่ข้อความในแชต
+
+ป้าย `(รอยืนยัน)` · `(รอวัดใน Phase 0)` และตารางคำถามกระจายอยู่ทุกเอกสาร ผู้ตัดสินใจจึงไม่เห็นภาพรวม · รวมเป็นไฟล์เดียวด้วยสคริปต์ ไม่ไล่อ่านเอง:
+
+```
+python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE>    # ทดสอบสคริปต์: --self-test
+```
+
+- อ่านทุก `.docx` ใน `docs/`: ตารางคำถาม · ตารางข้อสมมติที่ยังไม่ตัดสิน · ตารางลงนามที่ยัง "รอ" · ป้ายในเนื้อหา · ข้ามประวัติการแก้ไข สารบัญ บรรทัดอธิบายป้าย และ `(รอบหลัง)`
+- แผ่น **สรุป** นับตามเอกสาร × ประเภทด้วยสูตร · แผ่น **รายการค้าง** มีหัวข้อในเอกสาร · ใครตอบ · ตัดสินภายใน · ค่าที่ใช้ไปก่อน · ข้อที่อ้างถึงกัน · ช่อง "สถานะ" และ "คำตอบ" ให้กรอก
+- ประเภท: **เจ้าของตัดสิน** (ค้นเว็บแล้วปิดไม่ได้) · **ทีมตัดสิน** (BA · SA) · **กฎหมาย** · **วัดจริง** (ไม่มีตัวเลขเผยแพร่) · **ลงนาม** — คำถามที่อ้างคำถามของเจ้าของในเอกสารอื่นถูกนับเป็น "เจ้าของตัดสิน" ด้วย
+- **ก่อนส่ง เปิดอ่านรายการด้วยตาเอง** — สคริปต์จับจากถ้อยคำ แถวที่ตอบไปแล้วแต่เขียนไม่ตรงคำว่า "ตอบแล้ว · ปิดแล้ว · ตัดสินแล้ว" ยังติดมา · ในชุดตัวอย่างหนึ่ง (6 ฉบับ) ได้ 75 รายการ มีแถวแบบนี้ราว 3 แถว
+- ผู้ใช้กรอกคำตอบแล้ว → เติมคำตอบลงเอกสารต้นทาง ลบป้าย บันทึกในประวัติการแก้ไข แล้วรันสคริปต์ซ้ำ · ไฟล์นี้เป็นรายการงาน ไม่ใช่ต้นฉบับ อย่าแก้คำตอบในไฟล์นี้แทนเอกสาร
+
+**สายเทคนิค** — เขียนเมื่อถึงจุดที่ต้องใช้ ไม่ต้องรอใคร: README · BUILD-PLAN ก่อนโค้ดบรรทัดแรก · DATA-DICTIONARY ตอนออกแบบตารางแรก · API-SPEC ตอน endpoint แรก · PROMPT-LIBRARY ตอน prompt แรกที่ใช้จริง · ADR ตอนตัดสินใจ (ไม่ใช่ตอนสรุปท้าย เพราะเหตุผลจริงหายแล้ว) · Runbook ก่อนขึ้นระบบจริง — ตารางเต็มใน [`references/technical-docs.md`](references/technical-docs.md)
+
+---
+
+## 4 · ใครเขียนชิ้นไหน ด้วย skill อะไร
+
+ตารางเต็ม (agent · skill ต่อเอกสาร 16 ชนิด) → [`references/technical-docs.md`](references/technical-docs.md) · หลัก ๆ: SRS → `srs-writing` · FSD → `fsd-writing` · ADR → `adr-writer` · Test → `test-case-template` · mockup → `web-app-design` + `ui-craft` · README → `project-bootstrap`
+
+---
+
+## 5 · รูปในเอกสาร — เลือกให้ถูกตั้งแต่ต้น
+
+- รูปในเอกสารโปรเจกต์ทุกชนิด (BRD · SRS · FSD · ADR · ER · ผังขั้นตอน) · สไลด์ · งานพิมพ์ → `diagram-figures` (house style เดียว) เก็บ `docs/figures/` + ต้นทางใน `src/` · **Mermaid ค่าเริ่มต้นห้ามเข้าเอกสารโปรเจกต์**
+- รูปด่วนใน README · PR · โน้ตในโค้ด → Mermaid (`software-diagrams`) ฝังใน `.md` (สีสุ่มไม่มีความหมาย ไทยล้นกรอบ ย่อลง A4 แล้วอ่านไม่ออก)
+
+**หัวรูปทุกใบต้องมีครบ 6 อย่าง** — โลโก้โปรเจกต์ · ชื่อ · คำขยาย 1 บรรทัด · เลขรูป · เวอร์ชันกับวันที่ · เจ้าของ (รายละเอียดอยู่ใน `diagram-figures` ข้อ 3)
+รูปสถาปัตยกรรมถูกก๊อปไปวางในอีเมลและสไลด์แล้วอยู่ต่ออีกเป็นปี **รูปที่ไม่มีวันที่ ไม่มีใครกล้าแก้**
+
+---
+
+## 6 · ธีมสีของชุดเอกสาร
+
+ประกาศครั้งเดียวต่อโปรเจกต์ บนหัวไฟล์ต้นทางของทุกเอกสาร:
+
+```markdown
+<!-- doc-theme: accent=#2A78D6 -->
+```
+
+(ตัวอย่างใช้สีประจำบ้าน `#2A78D6` — แทนด้วยสีหลักของโปรเจกต์)
+
+`branded-document-design` · `presentation-design` · `diagram-figures`
+อ่านค่านี้แทนการเลือกสีเอง เอกสาร สไลด์ และรูปทุกใบจึงเป็นชุดเดียวกัน
+
+**สีมาจากเนื้องาน ไม่ใช่จากรสนิยม** — มีสีแบรนด์ใช้สีแบรนด์ · ยังไม่มีใช้สีประจำบ้านของ `branded-document-design` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม
+ข้อยกเว้นที่ไม่เปลี่ยนตามธีม: สีโลโก้ผู้ให้บริการ · สีเทาของเส้นโครงสร้าง · เขียว = ผ่าน / แดง = ไม่ผ่าน
+
+---
+
+## 7 · รายการตรวจก่อนส่งมอบชุดเอกสาร
+
+- [ ] ทุกไฟล์ `.docx` เปิด Navigation Pane แล้ว**เห็นหัวข้อครบ** (ใช้ Heading style จริง ไม่ใช่ตัวหนา)
+- [ ] ทุกเอกสารมีหน้าประวัติการแก้ไข · เลขเวอร์ชัน · วันที่ · ผู้จัดทำ
+- [ ] ทุกรูปมีเลขรูปและถูกอ้างในเนื้อความอย่างน้อย 1 ครั้ง
+- [ ] ไฟล์ต้นทางของทุกรูปอยู่ใน `docs/figures/src/` (ถ้ามีโฟลเดอร์นี้)
+- [ ] เอกสารเชิงเทคนิคที่เข้าเงื่อนไขในข้อ 2.2 มีครบ เช่น ถ้ามี API ต้องมี API-SPEC และถ้าใช้ LLM ต้องมี PROMPT-LIBRARY
+- [ ] ตัวย่อทุกตัวเขียนเต็มครั้งแรกที่ปรากฏ
+- [ ] ชื่อไฟล์ตรงตาม `document-naming` — ไม่มี `final2` ไม่มี `ล่าสุด`
+- [ ] เอกสารในชุดอ้างเวอร์ชันของกันและกันตรงกัน
+- [ ] รัน `scripts/open_items.py` แล้วทะเบียนจุดค้างไม่มีแถวสถานะ "เปิด" (หรือผู้ว่าจ้างรับรู้ทุกแถวที่ยังเปิด)
+- [ ] บอกผู้ใช้ว่ามีอะไรค้างใน `_to_delete/` (ไม่ลบเอง — ลบเมื่อผู้ใช้สั่งเท่านั้น)
+
+---
+
+## 8 · Anti-patterns
+
+ผิด: `.docx` ไม่มี Heading style · เก็บแต่ PNG ไม่เก็บต้นทาง · `.docx` และ mockup ใน repo โค้ด (ถึงจุดนี้ต้องย้ายเป็นแบบ B) · เอกสารอยู่ 2 ที่ (= 2 เวอร์ชัน) · FSD ก่อน SRS ยืนยัน · ใช้ LLM แต่ไม่มี PROMPT-LIBRARY · sub-project ชื่อ `projects/` `modules/` `apps/` · โฟลเดอร์ว่างสร้างเผื่อ · เอกสารชิ้นเดียวตอบทุกคำถาม
+
+---
+
+## 9 · ตัวย่อ
+
+ADR Architecture Decision Record · BRD Business Requirements Document · FSD Functional Specification Document · QA Quality Assurance · SRS Software Requirements Specification · TOC Table of Contents
+
+---
+
+## 10 · เชื่อมกับ skill อื่น
+
+นอกจากตาราง "ไม่ใช้" ด้านบน: วาดรูป → `diagram-figures` (เอกสารโปรเจกต์) · `software-diagrams` (README · PR) · ของชั่วคราว → `temp-file-discipline` · สถานะเอกสารใน `docs/BUILD-PLAN.md` → `status-report` · รายการตรวจฉบับพิมพ์ → `assets/doc-set-checklist.md`
+
+**อ่านเพิ่มเมื่อต้องใช้:** [`references/writer-templates.md`](references/writer-templates.md) — แม่แบบเอกสารของ `technical-writer` (tutorial · API reference · release notes · README ดู `project-bootstrap`)
+
+**คู่มือต้องขึ้นเว็บ ค้นได้ มีหลายรุ่น:** [`references/docs-site.md`](references/docs-site.md) · เลือก MkDocs Material · Docusaurus · Starlight · VitePress · ผลทดสอบค้นหาภาษาไทย · ที่วางเว็บ · ฟอนต์ไทย
+
+
+## reference: docs-site.md
+
+# เว็บเอกสาร (docs site)
+
+เลือกตัวสร้างเว็บเอกสารเมื่อคู่มือหรือเอกสารนักพัฒนาต้องขึ้นเว็บ ค้นหาได้ และมีหลายรุ่น · ใช้คู่กับ `SKILL.md` ข้อ 1 (เอกสารอยู่ไหน) และแม่แบบใน [`writer-templates.md`](writer-templates.md)
+ข้อเท็จจริงตรวจ 2026-10-23 จากเอกสารทางการ · npm · PyPI · GitHub และการทดสอบจริง (ตาราง "ที่มา")
+ตัวย่อ: Application Programming Interface (API) · Software Development Kit (SDK) · Architecture Decision Record (ADR) · SIL Open Font License (OFL) · Software as a Service (SaaS) · user interface (UI)
+
+## 1 · ต้องมีเว็บเอกสารไหม
+
+| สถานการณ์ | ใช้ |
+|---|---|
+| คนนอกทีมอ่านบ่อย (API สาธารณะ · SDK · คู่มือที่อัปเดตทุกรุ่น) · ต้องค้นหา · มีหลายรุ่นพร้อมกัน | เว็บเอกสาร (ไฟล์นี้) |
+| ทีมอ่านเอง | `README.md` + `docs/*.md` บน GitHub พอ |
+| ลูกค้าเซ็นรับ | `.docx` ตาม `SKILL.md` ข้อ 2.1 · เว็บเอกสารไม่แทนเอกสารส่งมอบ |
+
+## 2 · เทียบ 4 ตัว
+
+| | MkDocs Material | Docusaurus | Starlight | VitePress |
+|---|---|---|---|---|
+| ต้องมี | Python | Node · React | Node · Astro | Node · Vue |
+| รุ่นล่าสุด | 9.7.7 | 3.10.2 | 0.42.6 (ยังไม่ถึง 1.0) | 1.6.4 · รุ่น 2.0 ยังเป็น alpha |
+| ค้นหาในตัว | มี · lunr.js + lunr-languages (ตั้ง `lang: th` ได้) | ไม่มี · ตัวทางการคือ Algolia DocSearch · ค้นในเครื่องใช้ปลั๊กอินชุมชน | มี · Pagefind เปิดเองไม่ต้องตั้ง | มี · MiniSearch (`provider: 'local'`) หรือ Algolia |
+| หลายรุ่น (versioning) | ผ่าน `mike` ซึ่งเป็นเครื่องมือภายนอก | ในตัว `docusaurus docs:version` | ปลั๊กอินชุมชน `starlight-versions` | ไม่มี · issue #109 ยังเปิด |
+| หลายภาษา (i18n) | แปล UI ได้ (มี `th`) · เว็บหลายภาษา = โปรเจกต์ละภาษา + ตัวเลือกภาษา | ในตัว | ในตัว · มี UI ภาษาไทยมาให้ | ในตัว |
+| licence | MIT | MIT | MIT | MIT |
+
+MkDocs Material: ผู้สร้างประกาศว่าดูแลเฉพาะจุดวิกฤตถึง 5 พ.ค. 2027 และให้ย้ายไป Zensical (รุ่น 0.0.71 · สถานะ Alpha · MIT) · โปรเจกต์ใหม่ที่ต้องอยู่หลายปีให้เขียนเรื่องนี้ลง ADR
+เลือกเร็ว: ทีม Python → MkDocs Material (วางแผนย้าย) · ต้องหลายรุ่นในตัว → Docusaurus · อยากได้เว็บเบา ตั้งค่าน้อย → Starlight · ทีม Vue → VitePress
+
+## 3 · ค้นหาภาษาไทย ทดสอบจริง
+
+ภาษาไทยไม่เว้นวรรคระหว่างคำ ตัวค้นหาที่แยกคำด้วยช่องว่างจะหาคำกลางประโยคไม่เจอ · ทดสอบ 2026-10-23 ด้วยหน้าไทย 2 หน้า ค้น 9 คำ: ภาษี · กำกับ · สต็อก · สินค้า · ร้านค้า · ภาษีมูลค่าเพิ่ม · อิเล็กทรอนิกส์ · ตัดสต็อก · ทะเบียน
+
+| ตัวค้นหา (รุ่นที่ทดสอบ) | ใช้ใน | เอกสารบอกเรื่องไทย | เจอ |
+|---|---|---|---|
+| Pagefind 1.5.2 (สร้าง index แล้วค้นในเบราว์เซอร์) | Starlight | มี `th` · ไม่มี stemming · หัวข้อตัดคำพูดถึงแค่จีน ญี่ปุ่น เกาหลี | 6/9 · พลาด กำกับ · ทะเบียน · ภาษีมูลค่าเพิ่ม |
+| lunr 2.3.9 + lunr-languages 1.23.0 `th` (ตัดคำด้วย wordcut · ทดสอบใน Node ไม่ใช่ในธีม) | MkDocs Material · ปลั๊กอิน `@easyops-cn/docusaurus-search-local` (รับทุกภาษาของ lunr-languages) | Material รับ `lang: th` | 6/9 · พลาด ร้านค้า · ตัดสต็อก · ภาษีมูลค่าเพิ่ม |
+| MiniSearch 7.2.0 ค่าตั้งต้น (prefix + fuzzy แบบ VitePress) | VitePress | VitePress ตัดคำด้วย `Intl.Segmenter` เฉพาะจีนกับญี่ปุ่น | 0/9 |
+| MiniSearch + `tokenize` ที่ใช้ `Intl.Segmenter('th', { granularity: 'word' })` | VitePress (`options.miniSearch.options.tokenize`) | ตั้ง `tokenize` เองได้ | 9/9 (ทดสอบใน Node 22 · ยังไม่ได้ทดสอบใน VitePress ทั้งเว็บ) |
+| Algolia DocSearch | Docusaurus · Starlight · VitePress | ตารางภาษาของ Algolia: Thai segmentation "Not supported" | ไม่ได้ทดสอบ |
+
+- ผลขึ้นกับคำศัพท์ของโปรเจกต์ → ก่อนส่ง ค้นคำจริง 20 คำ แล้วจดผลใน README ของเว็บเอกสาร
+- DocSearch ฟรีเฉพาะเอกสารเทคนิคและบล็อกเทคนิคที่เปิดสาธารณะ เว็บต้องพร้อมใช้งานจริงและไม่มีเนื้อหาที่ไม่ใช่เทคนิค
+
+## 4 · ที่วาง
+
+| | GitHub Pages | Cloudflare |
+|---|---|---|
+| ราคา | ฟรี · บัญชีฟรีต้องใช้ repo public | Pages มีแผนฟรี · Workers static assets: คำขอไฟล์ static ฟรีไม่จำกัด |
+| ขีดจำกัด | เว็บ ≤ 1 GB · bandwidth 100 GB/เดือน (soft) · build 10 ครั้ง/ชม. (soft · ไม่นับ build ผ่าน GitHub Actions) · deploy เกิน 10 นาทีล้ม | Pages แผนฟรี: 500 build/เดือน · build ทีละ 1 · ไม่เกิน 20 นาที · 20,000 ไฟล์ · ไฟล์ละ ≤ 25 MiB |
+| เงื่อนไข | ห้ามใช้เป็นโฮสต์ฟรีของธุรกิจออนไลน์หรือ SaaS · เว็บเป็นสาธารณะแม้ repo เป็น private | หน้า Pages บอกให้โปรเจกต์ใหม่เริ่มที่ Workers |
+
+เอกสารที่ห้ามคนนอกเห็นไม่ขึ้นเว็บสาธารณะ เก็บเป็น `docs/*.md` ใน repo (วิธีจำกัดสิทธิ์ผู้อ่านของแต่ละเจ้ายังไม่ได้ตรวจ)
+
+## 5 · ฟอนต์ไทย
+
+- ใช้ฟอนต์เดียวกับแอป: `Inter` + `Noto Sans Thai` (`web-app-design` → `references/tokens.md`) · ตัวเลือกอื่นใน Google Fonts ที่มีอักษรไทยและเป็น OFL: Sarabun · IBM Plex Sans Thai · Anuphan
+- โหลดผ่าน Google Fonts CSS2 API ใส่ `display=swap` · API แยกบล็อก `/* thai */` ด้วย `unicode-range: U+0E01-0E5B …` ให้เอง เบราว์เซอร์จึงโหลดเฉพาะส่วนที่หน้าใช้ (ดูจาก CSS ที่ API ส่งกลับ 2026-10-23)
+- line-height ของภาษาไทยบวก 0.1 จากค่าของอังกฤษ (`ui-craft` ข้อ 2)
+- ตั้งฟอนต์ตามช่องที่ธีมเปิดให้ · ชื่อตัวตั้งค่าและตัวแปร CSS ของแต่ละธีมยังไม่ได้ตรวจ
+
+## 6 · เนื้อหาอยู่ใน repo ข้างโค้ด
+
+- ต้นฉบับของเว็บเอกสารอยู่ในโฟลเดอร์โค้ด `<project-name>/docs/` พร้อมไฟล์ตั้งค่าของตัวสร้าง (ผังแบบ A ของ `project-bootstrap` ข้อ 1) · โค้ดกับคู่มือเปลี่ยนใน pull request เดียวกัน
+- โปรเจกต์แบบ B: `.docx` ส่งมอบ · ADR · runbook · BUILD-PLAN ยังอยู่ `docs/` ที่ราก · เว็บเอกสารรับแค่ของที่คนนอกอ่าน (คู่มือ · tutorial · API reference · release notes) · เนื้อหาเดียวกันห้ามอยู่ 2 ที่
+- build ใน Continuous Integration (CI) ทุก pull request และ deploy เมื่อ merge (`cicd-and-release`)
+- ข้อยกเว้นของรากประกาศใน README ของโฟลเดอร์โค้ด (`SKILL.md` ข้อ 1)
+
+## ที่มา
+
+| เรื่อง | URL หรือหลักฐาน (2026-10-23) |
+|---|---|
+| MkDocs Material | https://squidfunk.github.io/mkdocs-material/ (สถานะ · Zensical) · .../plugins/search/ · .../setup/changing-the-language/ · .../setup/setting-up-versioning/ |
+| Docusaurus | https://docusaurus.io/docs/search · https://docusaurus.io/docs/versioning · https://docusaurus.io/docs/i18n/introduction |
+| Starlight | https://starlight.astro.build/guides/site-search/ · .../guides/i18n/ · .../resources/plugins/ |
+| VitePress | https://vitepress.dev/reference/default-theme-search · https://vitepress.dev/guide/i18n · https://github.com/vuejs/vitepress/issues/109 |
+| Pagefind | https://pagefind.app/docs/multilingual/ |
+| lunr-languages | https://github.com/MihaiValentin/lunr-languages (ไฟล์ `lunr.th.js` ใช้ wordcut) |
+| MiniSearch | https://lucaong.github.io/minisearch/types/MiniSearch.Options.html |
+| Algolia | https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/ · https://docsearch.algolia.com/docs/who-can-apply/ |
+| ปลั๊กอินค้นในเครื่องของ Docusaurus | https://github.com/easyops-cn/docusaurus-search-local |
+| รุ่นและ licence | registry.npmjs.org · pypi.org · api.github.com (Zensical: GitHub = MIT · PyPI = Alpha) |
+| GitHub Pages | https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits · .../creating-a-github-pages-site |
+| Cloudflare | https://developers.cloudflare.com/pages/platform/limits/ · https://developers.cloudflare.com/pages/ · https://developers.cloudflare.com/workers/static-assets/billing-and-limitations/ |
+| Google Fonts | https://developers.google.com/fonts/docs/css2 · `METADATA.pb` ใน https://github.com/google/fonts · CSS จริงจาก fonts.googleapis.com |
+| ทดสอบค้นไทย | Pagefind ผ่าน `npx pagefind@1.5.2` + เบราว์เซอร์ · lunr และ MiniSearch ผ่าน Node 22 · หน้าทดสอบ 2 หน้า คำค้น 9 คำในข้อ 3 |
+
+
+## reference: ecosystem.md
+
+# โปรเจกต์แบบ ecosystem — 1 ระบบ แบ่งเป็นหลาย sub-project
+
+อ่านเมื่อโปรเจกต์มี sub-project ตั้งแต่ 2 ตัวและแต่ละตัวมีเอกสารชุดของตัวเอง · กฎย่ออยู่ใน `SKILL.md` ข้อ 1
+
+ใช้เมื่อโปรเจกต์เป็นชุดผลิตภัณฑ์ที่มี sub-project ตั้งแต่ 2 ตัวขึ้นไป และแต่ละตัวมีเอกสารชุดของตัวเอง (SRS · mockup · สถาปัตยกรรม) เช่น Quanton ที่แบ่งเป็น CONNECT · LAB · INTEL · DESK
+**ชื่อโฟลเดอร์ต้องเป็น `ecosystem/` เสมอ** ห้ามใช้ `projects/` `modules/` หรือ `apps/` เพราะพอเปิดโฟลเดอร์แล้วต้องรู้ทันทีว่าทุกตัวข้างในเป็นชิ้นของระบบเดียวกัน
+
+```
+<ชื่อโปรเจกต์>/
+├─ docs/                เอกสารระดับ ecosystem — README (สารบัญ) · BUILD-PLAN · project-plan · BRD · figures/
+├─ ecosystem/
+│  └─ <รหัส>-<SUB>/     1 โฟลเดอร์ต่อ 1 sub-project เช่น QTN-CONNECT
+│     ├─ docs/          srs.md · architecture.md · decisions/ · figures/ · fsd-*.md · test-plan.md
+│     ├─ mockup/
+│     ├─ qa/
+│     └─ <sub-name>/    repo โค้ดของ sub-project นี้ (ตัวพิมพ์เล็กคั่น `-`)
+├─ ref/ · assets/ · _to_delete/ · .claude/   ใช้ร่วมกันทั้ง ecosystem (กติกาเดียวกับแบบ B)
+```
+
+- เอกสารที่ครอบทุก sub-project (BRD · แผนโครงการ · BUILD-PLAN) อยู่ใน `docs/` ที่รากที่เดียว ห้ามก๊อปไปไว้ในแต่ละ sub-project
+- สร้างโฟลเดอร์ sub-project เมื่อเริ่มเขียนเอกสารของตัวนั้นจริง ไม่สร้างเผื่อ
+- ชื่อโฟลเดอร์ sub-project = รหัสโปรเจกต์ + ชื่อ sub-project ตัวพิมพ์ใหญ่ (`QTN-CONNECT`) ใช้รหัสเดียวกับที่เอกสารอ้าง
+- โปรเจกต์ที่ใช้ `projects/` อยู่แล้ว → เปลี่ยนชื่อเป็น `ecosystem/` แล้วแก้ path ในเอกสารและสคริปต์ทุกไฟล์ในรอบเดียวกัน
+- โปรเจกต์ที่มีผลิตภัณฑ์เดียว ไม่ต้องมี `ecosystem/` ใช้แบบ B ตามปกติ
+
+
+## reference: technical-docs.md
+
+# เอกสารเชิงเทคนิค — ตาราง ลำดับเขียน และใครเขียน
+
+อ่านเมื่อเลือกชุดเอกสารเชิงเทคนิค หรือกำลังจะเขียนชิ้นใดชิ้นหนึ่ง · สรุปอยู่ใน `SKILL.md` ข้อ 2.2–4
+
+## เอกสารเชิงเทคนิค (ข้อ 2.2)
+
+กลุ่มนี้เป็น **markdown ทั้งหมด** และ**ไม่ได้ขึ้นกับขนาดงาน** แต่ขึ้นกับว่าโปรเจกต์มีอะไร
+
+| เอกสาร | ไฟล์ | ตอบคำถามว่า | ต้องมีเมื่อ |
+|---|---|---|---|
+| README | `<project-name>/README.md` | ติดตั้งและรันยังไง | **เสมอ** |
+| BUILD-PLAN | `docs/BUILD-PLAN.md` | จะสร้างอะไรก่อนหลัง · ตอนนี้ถึงไหนแล้ว | **เสมอ** |
+| USER-STORIES | `docs/USER-STORIES.md` | จะสร้างอะไรให้ใคร · story ไหนพร้อมเข้า sprint · AC คืออะไร | ทำงานเป็น sprint หรือมี backlog (`user-story-writer`) |
+| Sprint plan | `docs/sprints/sprint-NN.md` | sprint นี้รับ story ไหน · เป้าหมายคืออะไร · เสี่ยงอะไร | ทำงานเป็น sprint (`/sprint-plan`) — ไฟล์ละ sprint ไม่เขียนทับของเก่า |
+| AGENT-LOOP | `docs/AGENT-LOOP.md` | agent ทำงานเป็นวงจรแบบไหน · อะไรคือเงื่อนไขว่าจบ | ให้ agent เขียนโค้ดเป็นรอบ ๆ (`spec-to-code-loop`) |
+| API-SPEC | `docs/API-SPEC.md` | endpoint ไหนรับอะไร คืนอะไร พังยังไง | มี API ที่คนอื่นเรียก (`api-conventions`) |
+| DATA-DICTIONARY | `docs/DATA-DICTIONARY.md` | ฟิลด์นี้แปลว่าอะไร · ค่าที่เป็นไปได้มีอะไรบ้าง | มีฐานข้อมูลหรือสคีมาข้อมูล (`database-design`) |
+| EVALUATION-POLICY | `docs/EVALUATION-POLICY.md` | วัดว่าผลลัพธ์ดีพอหรือยังด้วยอะไร · เกณฑ์ผ่านเท่าไร | ผลลัพธ์มาจากโมเดลหรือ LLM ที่ไม่ได้ถูกเสมอ |
+| PROMPT-LIBRARY | `docs/PROMPT-LIBRARY.md` | prompt ตัวจริงคือตัวไหน เวอร์ชันอะไร เปลี่ยนอะไรไป | ใช้ LLM ในเส้นทางหลักของระบบ |
+| ADR | `docs/decisions/ADR-*.md` | ทำไมถึงเลือกทางนี้ ไม่เลือกทางนั้น | มีการตัดสินใจที่จะถูกถามซ้ำ (`adr-writer`) |
+| Runbook | `docs/runbook-<เรื่อง>.md` ไฟล์ละเรื่อง | ระบบล่มตอนตี 2 ต้องทำอะไร | มีระบบที่รันอยู่จริงและมีคนอยู่เวร |
+
+> **เอกสาร 4 ตัวที่มีเงื่อนไขเรื่อง LLM · API · ฐานข้อมูล คือตัวที่คนลืมบ่อยที่สุด**
+> แล้วไปจบด้วยการถาม agent ซ้ำทุกรอบว่า "prompt ตัวไหนคือตัวจริง" หรือ "ฟิลด์นี้แปลว่าอะไร"
+
+## สายเทคนิค — เขียนเมื่อไหร่ (ข้อ 3)
+
+| เขียนเมื่อ | เอกสาร |
+|---|---|
+| ก่อนเขียนโค้ดบรรทัดแรก | README · BUILD-PLAN |
+| ก่อนปล่อย agent ทำงานเป็นรอบ | AGENT-LOOP |
+| ตอนออกแบบตารางแรก | DATA-DICTIONARY |
+| ตอนออกแบบ endpoint แรก | API-SPEC |
+| ตอนเขียน prompt ตัวแรกที่จะใช้จริง | PROMPT-LIBRARY · EVALUATION-POLICY |
+| ตอนตัดสินใจเรื่องที่จะถูกถามซ้ำ | ADR |
+| ก่อนขึ้นระบบจริง | Runbook |
+
+> **ADR กับ DATA-DICTIONARY เขียนตอนที่ตัดสินใจ ไม่ใช่ตอนสรุปท้ายโปรเจกต์**
+> เขียนย้อนหลังก็ได้ แต่ตอนนั้นเหตุผลจริงหายไปแล้ว
+
+## ใครเขียนชิ้นไหน ด้วย skill อะไร (ข้อ 4)
+
+| เอกสาร | agent | skill ที่ใช้ |
+|---|---|---|
+| README · CHANGELOG | `technical-writer` | `project-bootstrap` |
+| Project Plan | `project-manager` | `branded-document-design` |
+| BRD · user story | `business-analyst` | `user-story-writer` |
+| SRS | `system-analyst` | `srs-writing` |
+| FSD | `system-analyst` | `fsd-writing` |
+| Architecture | `solution-architect` | `architecture-patterns` · `diagram-figures` |
+| ADR | `solution-architect` | `adr-writer` |
+| Test Plan · Test Cases | `qa-tester` | `test-case-template` |
+| mockups | `ux-designer` | `web-app-design` · `ui-craft` |
+| คู่มือผู้ใช้ (`MAN`) | `technical-writer` | `polished-document-style` |
+| Runbook | `devops-engineer` | `incident-runbook-template` |
+| BUILD-PLAN | `project-manager` | `simplicity-first` |
+| AGENT-LOOP | `developer` | `spec-to-code-loop` |
+| API-SPEC | `system-analyst` | `api-conventions` |
+| DATA-DICTIONARY | `system-analyst` | `database-design` |
+| PROMPT-LIBRARY · EVALUATION-POLICY | `developer` | — (คู่กับ skill `llm-engineering`) |
+
+
+## reference: writer-templates.md
+
+# แม่แบบของ technical-writer — README · tutorial · API reference · release notes
+
+**สารบัญ:** README · Tutorial Template · API Reference Template · Release Notes Template
+
+เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+
+## Standard Outputs
+
+### README
+
+ไม่มีแม่แบบ README ที่นี่ — ใช้แม่แบบเดียวของ `project-bootstrap` (`SKILL.md` ข้อ 2 และ `assets/starter-files.md`) โครง 15 หัวข้อ (9 มีเสมอ · 6 มีเมื่อโปรเจกต์มีของนั้น) อยู่ใน `references/readme-skeleton.md` · คำสั่งต่อภาษาใน `references/readme-by-stack.md`
+
+### Tutorial Template
+
+````markdown
+# Tutorial: Build Your First X in 10 Minutes
+
+> **What you'll learn:** by the end, you'll have built Y and understand Z.
+
+## What You'll Need
+
+- Node.js 22+ (Node 18 หมดอายุ 30 เม.ย. 2568, Node 20 หมด 30 เม.ย. 2569 — endoflife.date ตรวจ 22 ต.ค. 2569)
+- A free account at example.com
+- 10 minutes
+
+## Step 1: Set Up
+
+Run:
+```bash
+npx create-thing my-project
+cd my-project
+```
+
+> **What just happened?** Brief explanation.
+
+You should see:
+```
+✓ Project created
+```
+
+## Step 2: Configure
+
+...
+
+## Step 3: Run It
+
+...
+
+## Congratulations!
+
+You've built X. Try these next:
+
+- [Add feature A](#how-to-add-a) (how-to)
+- [Understand B](#concept-b) (explanation)
+- [Full API](#reference) (reference)
+````
+
+### API Reference Template (per endpoint)
+
+````markdown
+## POST `/api/v1/resource`
+
+Create a new resource.
+
+### Authentication
+
+Required. Bearer token in `Authorization` header.
+
+### Request
+
+```http
+POST /api/v1/resource HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <token>
+
+{
+  "name": "string (required)",
+  "tags": ["string (optional)"]
+}
+```
+
+### Parameters
+
+| Field | Type | Required | Description |
+|-------|------|:--------:|-------------|
+| `name` | string | ✓ | Display name, 1-100 chars |
+| `tags` | string[] | ✗ | Up to 10 tags |
+
+### Response: 201 Created
+
+```json
+{
+  "id": "res_abc123",
+  "name": "...",
+  "created_at": "2025-01-15T10:30:00Z"
+}
+```
+
+### Errors
+
+| Code | When |
+|:----:|------|
+| 400 | Validation failed (see body) |
+| 401 | Missing/invalid token |
+| 429 | Rate limit (60 req/min) |
+
+### Code Examples
+
+```typescript
+const res = await fetch('/api/v1/resource', {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ name: 'My Resource' })
+});
+```
+````
+
+### Release Notes Template
+
+> Breaking Changes ต้องอยู่ก่อนหัวข้ออื่นเสมอ (ต่อจาก Highlights) — กฎเต็มของ release notes อยู่ใน skill `release-notes`
+
+````markdown
+# Release v2.1.0 — YYYY-MM-DD
+
+## Highlights
+
+> The TL;DR for busy readers.
+
+- **New:** X feature — try it: `command`
+- **Improved:** Y is faster — <measured number only, e.g. p95 login 1.2 s → 0.7 s; drop the number if not measured>
+- **Fixed:** Z bug affecting users on platform A
+
+## Breaking Changes
+
+### `api.oldMethod()` removed
+
+**Before:**
+```typescript
+api.oldMethod(arg)
+```
+
+**After:**
+```typescript
+api.newMethod({ arg })
+```
+
+[Migration guide](#)
+
+## 🆕 New Features
+
+### Feature Name
+
+Description with user-facing benefit.
+
+```bash
+# Example usage
+command --new-flag
+```
+
+[Read the docs](#)
+
+## Improvements
+
+- Faster initial load time
+- Better error messages for X
+
+## Bug Fixes
+
+- Fix issue where ... ([#1234](#))
+- Resolve crash when ... ([#5678](#))
+
+## Contributors
+
+Thanks to: @alice, @bob, @charlie
+````
+
+### Release Notes Template (ภาษาไทย)
+
+> โครงเดียวกับฉบับอังกฤษ · ถ้อยคำใช้ระดับ ข่าว (`human-writing` `references/thai-grammar.md` หัวข้อ 4): ไม่มีบุรุษที่ 1 · แต่ละบรรทัด ประธาน + กริยา + กรรม · ตัวเลขต้องวัดจริง ไม่มีก็ไม่ใส่ · ตัวอย่าง ถูก/ผิด อยู่ใน skill `release-notes` ข้อ 4
+
+````markdown
+# เวอร์ชัน 2.1.0 — YYYY-MM-DD
+
+## สรุป
+
+- **ใหม่:** ส่งออกรายงานเป็น CSV ได้แล้ว — เมนู รายงาน → ส่งออก
+- **เร็วขึ้น:** ส่งออกรายงาน 1,000 แถวใช้เวลา 3 วินาที จาก 12 วินาที
+- **แก้แล้ว:** ลบสินค้าชิ้นสุดท้ายในตะกร้าแล้วแอปไม่ปิดตัวเองอีก
+
+## สิ่งที่ต้องแก้ก่อนอัปเดต
+
+### `api.oldMethod()` ถูกถอดออก
+
+**เดิม:** `api.oldMethod(arg)` · **ใหม่:** `api.newMethod({ arg })` · [วิธีย้าย](#)
+
+## ฟีเจอร์ใหม่
+
+### ชื่อฟีเจอร์
+
+ผู้ใช้ทำอะไรได้ 1 ประโยค แล้วตามด้วยตัวอย่างคำสั่งหรือภาพหน้าจอ
+
+## ปรับปรุง
+
+- หน้าแรกโหลดเสร็จใน 1.2 วินาที จาก 2.8 วินาที
+- ข้อความแจ้งเตือนตอนอัปโหลดไฟล์ผิดชนิด บอกชนิดที่รับได้แล้ว
+
+## แก้บั๊ก
+
+- ยอดรวมในใบเสนอราคาไม่เพี้ยนเมื่อมีส่วนลดเป็นเปอร์เซ็นต์ ([#1234](#))
+
+## ผู้ร่วมพัฒนา
+
+ขอบคุณ @alice @bob @charlie
+
+เวอร์ชัน 2.1.0 · ออก YYYY-MM-DD
+````

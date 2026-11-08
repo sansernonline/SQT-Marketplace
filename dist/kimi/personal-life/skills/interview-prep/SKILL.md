@@ -88,7 +88,7 @@ Short, specific, one thing you discussed. Templates in Thai and English → [ref
 
 ข้อความภาษาไทย (thank-you note, follow-up) → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ สมัครงาน
 
-Related: `resume-th-en` (stories must match the CV) · `salary-negotiation` · `polite-message-th-en` (follow-up messages) · `meeting-prep-card`.
+Related: `resume-th-en` (stories must match the CV) · `salary-negotiation` · `polite-message-th-en` (follow-up messages) · `meeting`.
 
 ## เรียกเป็นคำสั่ง
 

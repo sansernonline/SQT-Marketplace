@@ -22,7 +22,7 @@ The security engineer should:
 2. **Run automated scans where possible:**
 
    ### For code:
-   - Look for Open Worldwide Application Security Project (OWASP) Top 10:2025 violations (A01–A10 list and per-stack checks: skill `owasp-top10`)
+   - Look for Open Worldwide Application Security Project (OWASP) Top 10:2025 violations (A01–A10 list and per-stack checks: skill `security-gate`, `references/owasp-top10.md`)
    - SQL injection, cross-site scripting (XSS), cross-site request forgery (CSRF), server-side request forgery (SSRF)
    - Hardcoded secrets / application programming interface (API) keys
    - Insecure crypto (MD5, SHA-1, weak ciphers)

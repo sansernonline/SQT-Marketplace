@@ -1,0 +1,35 @@
+# GitHub Actions แม่แบบ · skill backblaze-b2
+# วางที่ .github/workflows/deploy-b2.yml · คัดลอก deploy-b2.sh ไปที่ scripts/ แล้วแก้ path ในขั้น deploy
+# ตั้ง secrets: B2_KEY_ID · B2_APPLICATION_KEY · ตั้ง vars: B2_BUCKET (ใช้ application key จำกัด bucket เดียว)
+# ยังไม่ได้รันจริง · ต้องเติม authorize() ใน deploy-b2.sh ก่อน ไม่งั้นสคริปต์หยุดเอง
+
+name: deploy-b2
+
+# กดรันเองเท่านั้น · เปลี่ยนเป็น push ได้ หลังรอบแรกผ่านและเจ้าของอนุมัติ
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4 # ล็อกระดับ major · ควรล็อกด้วย SHA เอง
+
+      # TODO: เติมขั้นติดตั้งและ build ของโปรเจกต์ (ผลต้องออกที่โฟลเดอร์ dist)
+      - name: Build
+        run: 'echo "TODO: build"'
+
+      # วิธีติดตั้งตามเอกสาร Backblaze: pip3 install --upgrade b2 (Python 3.7 ขึ้นไป)
+      # ยังไม่ได้ตรวจรุ่น · ควรล็อกรุ่นเอง เช่น b2==<รุ่นที่ทดสอบแล้ว>
+      - name: Install b2 CLI
+        run: pip3 install --upgrade b2
+
+      - name: Deploy to B2
+        env:
+          B2_KEY_ID: ${{ secrets.B2_KEY_ID }}
+          B2_APPLICATION_KEY: ${{ secrets.B2_APPLICATION_KEY }}
+          B2_BUCKET: ${{ vars.B2_BUCKET }}
+        run: bash scripts/deploy-b2.sh dist

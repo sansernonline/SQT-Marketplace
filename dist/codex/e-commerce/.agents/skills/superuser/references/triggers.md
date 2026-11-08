@@ -22,7 +22,7 @@
 | สถานการณ์ | เรียก |
 |---|---|
 | จะซื้อของชิ้นใหญ่ · เลือกไม่ถูก · สงสัยรีวิว | `buy-compare` + agent `consumer-advocate` |
-| ร้านไม่แก้ปัญหา · อยากร้องเรียน | `complaint-letter-th` |
+| ร้านไม่แก้ปัญหา · อยากร้องเรียน | `refund-request` (`references/complaint-letter.md`) |
 | อยากได้เงินคืน · รายการบัตรแปลก | `refund-request` |
 | ซื้อของมีประกัน · ของเสีย | `warranty-tracker` |
 | ต้องเขียนข้อความสุภาพหรือทวงถาม | `polite-message-th-en` (superuser) |
@@ -54,7 +54,7 @@
 | พิมพ์ | ทำอะไร | skill ที่ใช้ข้างใน |
 |---|---|---|
 | `/e-commerce:buy-compare` | เทียบสินค้าหรือบริการก่อนซื้อ | `buy-compare` |
-| `/e-commerce:complain` | ร่างจดหมายร้องเรียนและแผนส่งต่อถึง สคบ. 1166 | `complaint-letter-th` · `refund-request` |
+| `/e-commerce:complain` | ร่างจดหมายร้องเรียนและแผนส่งต่อถึง สคบ. 1166 | `refund-request` |
 | `/e-commerce:doc-contract-th` | ร่างสัญญาจ้าง เช่า หรือบริการ | `doc-contract-th` |
 | `/e-commerce:line-chatbot` | สร้างหรือปรับบอตตอบลูกค้าบน LINE OA | `line-chatbot` |
 | `/e-commerce:line-oa-setup` | ตั้งค่า Messaging API ของ LINE OA ครบทุกขั้น | `line-oa-setup` |

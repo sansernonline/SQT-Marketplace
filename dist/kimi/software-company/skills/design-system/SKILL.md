@@ -19,7 +19,7 @@ description: Use when authoring design tokens (primitive, semantic, component), 
 | เขียน token ใหม่ สร้าง CSS จาก JSON ตรวจว่าโค้ดไม่มีค่าดิบ | **skill นี้** |
 | สเกลระยะและขนาดตัวอักษร | `ui-craft` ข้อ 1–2 (ใช้สเกลเดียวกับ token ที่ตั้ง) |
 | เลือกสีและฟอนต์เริ่มต้น | `design-direction-lookup` |
-| สีและฟอนต์ของแบรนด์ที่มีเอกสารแล้ว | `brand-guidelines` (plugin `graphic-design`) → ซิงก์เข้าไฟล์ token ที่นี่ |
+| สีและฟอนต์ของแบรนด์ที่มีเอกสารแล้ว | `brand-kit` หัวข้อ "เขียนเป็นเอกสาร" (plugin `graphic-design`) → ซิงก์เข้าไฟล์ token ที่นี่ |
 
 ## ขั้นตอน
 

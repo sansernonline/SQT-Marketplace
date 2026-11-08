@@ -1046,12 +1046,12 @@ skill หลัก: `medication-schedule`
 # playbook · meeting — ก่อนและหลังประชุม
 
 ใช้เมื่อ: ก่อนประชุมสำคัญ · หลังประชุมมีโน้ตหรือ transcript
-skill หลัก: `meeting-prep-card` · `meeting-summary` · agent `meeting-prep`
+skill หลัก: `meeting` (ขา 1 ก่อนประชุม · ขา 2 หลังประชุม) · agent `meeting-prep`
 
 ## ขั้นตอน (คัดลง todo ตรงตัว)
 
 1. ก่อนประชุม ทำการ์ด 1 หน้า: เป้าหมาย · คำถาม 3 ข้อ · บริบทที่ต้องจำ · สิ่งที่จะขอ · จุดที่ยอมถอย · ใคร: `meeting-prep` ตัวใหม่
-2. หลังประชุม สรุปการตัดสินใจ งานพร้อมเจ้าของและวันครบกำหนด และคำถามค้าง ตาม `meeting-summary` ถ้าต้องการแบบทางการ ให้ทำเป็นรายงานการประชุมภาษาไทย · ใคร: `meeting-prep` ตัวใหม่
+2. หลังประชุม สรุปการตัดสินใจ งานพร้อมเจ้าของและวันครบกำหนด และคำถามค้าง ตาม `meeting` ขา 2 ถ้าต้องการแบบทางการ ให้ทำเป็นรายงานการประชุมภาษาไทย · ใคร: `meeting-prep` ตัวใหม่
 3. ร่างอีเมลส่งสรุปให้ผู้เข้าประชุม · ใคร: `meeting-prep` ตัวใหม่ (ผู้ใช้เป็นคนส่ง)
 4. ตรวจสรุปและอีเมลว่าทุกงานมีเจ้าของและวันที่ และไม่มีข้อความที่ไม่ได้อยู่ในโน้ตหรือ transcript · ใคร: `reviewer` ตัวใหม่
 
@@ -1147,7 +1147,7 @@ skill หลัก: `performance-self-review` · `salary-negotiation`
 
 ใช้เมื่อ: ตรวจงานก่อนส่งหรือก่อนใช้จริง · "ช่วยดูหน่อยว่ามีอะไรพลาด" · ผู้ใช้ทำมาเองแล้วอยากให้ตรวจ
 ผลลัพธ์: คำตัดสินพร้อมรายการปัญหาที่ยืนยันแล้ว **ไม่แก้เองโดยอัตโนมัติ** และเป็นงานอ่านอย่างเดียว ไม่สร้าง `CONTEXT.md`
-skill หลัก: `weekly-review` · `meeting-summary` · `important-docs` · `household-bills` · `medication-schedule` · `resume-th-en` · `learning-path` · `paper-to-practice` · `cert-prep`
+skill หลัก: `weekly-review` · `meeting` · `important-docs` · `household-bills` · `medication-schedule` · `resume-th-en` · `learning-path` · `paper-to-practice` · `cert-prep`
 
 ## ขั้นตอน (คัดลง todo ตรงตัว)
 
@@ -1549,7 +1549,7 @@ skill หลัก: `weekly-review` · `inbox-triage` · `calendar-audit`
 | ปลายสัปดาห์ · ยุ่งแต่ไม่คืบ | `weekly-review` + agent `life-admin` |
 | อินบ็อกซ์ล้น | `inbox-triage` |
 | ไม่มีเวลาทำงานจริง | `calendar-audit` |
-| ก่อนหรือหลังประชุม | `meeting-prep-card` · `meeting-summary` + agent `meeting-prep` |
+| ก่อนหรือหลังประชุม | `meeting` (ขา 1 ก่อน · ขา 2 หลัง) + agent `meeting-prep` |
 | หาโน้ตที่เคยจดไม่เจอ · อยากมีคลังความรู้ส่วนตัว | `personal-kb` + agent `life-admin` |
 | หาเอกสารไม่เจอ · ใกล้หมดอายุ | `important-docs` + agent `doc-caretaker` |
 | ค่าสมาชิกรายเดือน | `subscription-audit` |
@@ -1626,7 +1626,7 @@ skill หลัก: `weekly-review` · `inbox-triage` · `calendar-audit`
 | `interview-prep` | เตรียมสัมภาษณ์งานหนึ่งรอบ | `interview-prep` |
 | `learning-path` | เรียนเทคโนโลยีผ่านหลักชัยจากงานจริง | `learning-path` |
 | `home-maintenance` | ตารางดูแลบ้าน 12 เดือน · เทียบราคาช่าง | `home-maintenance` |
-| `meeting` | การ์ดก่อนประชุม · สรุปหลังประชุม | `meeting-prep-card` · `meeting-summary` |
+| `meeting` | การ์ดก่อนประชุม · สรุปหลังประชุม | `meeting` |
 | `salary-negotiation` | เทียบข้อเสนองาน · ร่างคำพูดต่อรอง | `salary-negotiation` |
 | `tech-radar` | เรดาร์เทคโนโลยีรายสัปดาห์ | `tech-radar` |
 | `resume-th-en` | เขียนหรือปรับ CV | `resume-th-en` |

@@ -41,7 +41,7 @@ These are the common platform defaults (Streaming, TradingView, Settrade charts 
 | Both have 30 or more and the 95% Wilson intervals of the two hit rates overlap | Too close; read both, do not choose (at 30 signals each a 5-point gap is noise: the standard error of the difference is about 13 points) |
 | Both have 30 or more and the intervals do not overlap | Use the one with the higher hit rate. If even the higher one is not above 50%, do not use that signal as a reason to enter |
 
-No price history to count on → answer "not enough data (not measured)"; never guess a hit rate. Hit rate does not give profit per trade; see `post-trade-review`. This is information; the user decides. This skill does not use `decide.mjs`.
+No price history to count on → answer "not enough data (not measured)"; never guess a hit rate. Hit rate does not give profit per trade; see `trade-journal` (Mode 2 · Review). This is information; the user decides. This skill does not use `decide.mjs`.
 
 ## Script
 
