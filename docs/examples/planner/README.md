@@ -82,4 +82,4 @@ node plan.mjs tasks.json --log log --accounts accounts.json --quota quota.json -
 2. คัดลอก [`plugins/superuser/skills/superuser/templates/accounts.json`](../../../plugins/superuser/skills/superuser/templates/accounts.json) ไปที่ `~/.claude/superuser/accounts.json` แล้วแก้ชื่อบัญชีให้ตรงกับชื่อโฟลเดอร์ของ `CLAUDE_CONFIG_DIR` (ไม่ตั้ง = `.claude`)
 3. ก่อนแจกงาน รัน `node quota.mjs snapshot --out quota.json` แล้วส่ง `--accounts` กับ `--quota` ให้ `plan.mjs`
 
-รายละเอียดสูตรและข้อจำกัดอยู่ใน [`parallel-split-and-merge/SKILL.md`](../../../plugins/superuser/skills/parallel-split-and-merge/SKILL.md) หัวข้อ planner และ "หลายบัญชี LLM" · น้ำหนัก U F R V L และค่า S/M/L เป็นค่าตั้งต้นจากคอร์ส CWN2026 ยังไม่ได้วัดกับงานจริง
+รายละเอียดสูตรและข้อจำกัดอยู่ใน [`parallel-split-and-merge/SKILL.md`](../../../plugins/superuser/skills/parallel-split-and-merge/SKILL.md) หัวข้อ planner และ [references/multi-account-and-orchestrator.md](../../../plugins/superuser/skills/parallel-split-and-merge/references/multi-account-and-orchestrator.md) (หลายบัญชี LLM) · น้ำหนัก U F R V L และค่า S/M/L เป็นค่าตั้งต้นจากคอร์ส CWN2026 ยังไม่ได้วัดกับงานจริง
