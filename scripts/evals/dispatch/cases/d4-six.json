@@ -1,0 +1,19 @@
+{
+  "id": "d4-six",
+  "title": "ของกลาง 1 ชิ้นแล้วแตก 6 หน้า (กว้าง 6)",
+  "prompt": "สร้างเว็บร้านหนังสือ 6 หน้าตาม mockup ในโฟลเดอร์ `mockup/`: หน้าแรก · รายการหนังสือ · รายละเอียดหนังสือ · ผู้เขียน · เกี่ยวกับเรา · ติดต่อ · ทุกหน้าใช้ layout และ CSS กลาง (`src/layout.tsx` · `src/theme.css`) ซึ่งยังไม่มี ต้องทำก่อน · หลังจากนั้นแต่ละหน้าอยู่คนละไฟล์ใน `src/pages/` และไม่พึ่งกัน",
+  "risky": false,
+  "expected": { "size": "กลาง", "workers": 6 },
+  "graph": {
+    "name": "เว็บร้านหนังสือ 6 หน้า",
+    "tasks": [
+      { "id": "layout", "title": "layout และ CSS กลาง", "size": 40, "needs": [], "owns": ["src/layout.tsx", "src/theme.css"], "tier": "กลาง" },
+      { "id": "home", "title": "หน้าแรก", "size": 40, "needs": ["layout"], "owns": ["src/pages/home.tsx"], "tier": "กลาง" },
+      { "id": "books", "title": "รายการหนังสือ", "size": 40, "needs": ["layout"], "owns": ["src/pages/books.tsx"], "tier": "กลาง" },
+      { "id": "book", "title": "รายละเอียดหนังสือ", "size": 40, "needs": ["layout"], "owns": ["src/pages/book.tsx"], "tier": "กลาง" },
+      { "id": "author", "title": "ผู้เขียน", "size": 40, "needs": ["layout"], "owns": ["src/pages/author.tsx"], "tier": "กลาง" },
+      { "id": "about", "title": "เกี่ยวกับเรา", "size": 40, "needs": ["layout"], "owns": ["src/pages/about.tsx"], "tier": "กลาง" },
+      { "id": "contact", "title": "ติดต่อ", "size": 40, "needs": ["layout"], "owns": ["src/pages/contact.tsx"], "tier": "กลาง" }
+    ]
+  }
+}

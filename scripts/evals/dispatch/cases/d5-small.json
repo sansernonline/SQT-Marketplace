@@ -1,0 +1,13 @@
+{
+  "id": "d5-small",
+  "title": "งานเล็กชิ้นเดียว (ไม่ส่งใคร)",
+  "prompt": "ปุ่มในหน้าตั้งค่าสะกดผิด เขียนว่า \"บันทีก\" ต้องเป็น \"บันทึก\" · อยู่ในไฟล์ `src/settings/save-button.tsx` บรรทัดเดียว แก้ให้หน่อย",
+  "risky": false,
+  "expected": { "size": "เล็ก", "workers": 0 },
+  "graph": {
+    "name": "แก้คำผิดบนปุ่ม",
+    "tasks": [
+      { "id": "typo", "title": "แก้คำผิด", "size": 5, "needs": [], "owns": ["src/settings/save-button.tsx"], "tier": "เล็ก" }
+    ]
+  }
+}

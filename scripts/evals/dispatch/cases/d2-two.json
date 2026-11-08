@@ -1,0 +1,15 @@
+{
+  "id": "d2-two",
+  "title": "2 ชิ้นอิสระแล้วรวม (กว้าง 2)",
+  "prompt": "หน้ารายงานการเข้างานของพนักงานต้องส่งออกได้ 2 แบบ: CSV ใน `src/export/csv.ts` และ PDF ใน `src/export/pdf.ts` · 2 ไฟล์นี้ไม่เกี่ยวกัน ทำแยกกันได้ · เสร็จทั้งคู่แล้วเพิ่มปุ่ม \"ส่งออก\" ใน `src/pages/attendance.tsx` ที่เลือกได้ทั้ง 2 แบบ · ทุกส่วนต้องมี test",
+  "risky": false,
+  "expected": { "size": "กลาง", "workers": 2 },
+  "graph": {
+    "name": "ส่งออกรายงานการเข้างาน",
+    "tasks": [
+      { "id": "csv", "title": "ส่งออก CSV", "size": 40, "needs": [], "owns": ["src/export/csv.ts"], "tier": "กลาง" },
+      { "id": "pdf", "title": "ส่งออก PDF", "size": 40, "needs": [], "owns": ["src/export/pdf.ts"], "tier": "กลาง" },
+      { "id": "button", "title": "ปุ่มส่งออก", "size": 15, "needs": ["csv", "pdf"], "owns": ["src/pages/attendance.tsx"], "tier": "กลาง" }
+    ]
+  }
+}

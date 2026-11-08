@@ -1,0 +1,17 @@
+{
+  "id": "d1-chain",
+  "title": "งานต่อเนื่อง 4 ขั้นที่พึ่งกัน (กว้าง 1)",
+  "prompt": "ระบบจองห้องประชุม (Node + PostgreSQL) ต้องรองรับการจองซ้ำทุกสัปดาห์ · งานต้องทำตามลำดับนี้ เพราะแต่ละขั้นใช้ผลของขั้นก่อน: 1) ออกแบบตาราง `recurring_bookings` 2) เขียน migration จากแบบตารางที่ได้ 3) แก้ `src/bookings/service.ts` ให้สร้างการจองจากตารางใหม่ 4) เขียน integration test ของ service ที่แก้แล้วใน `tests/bookings.test.ts` · ทำให้เสร็จทั้งชุด",
+  "risky": false,
+  "expected": { "size": "กลาง", "workers": 1 },
+  "accept_workers": [0, 1],
+  "graph": {
+    "name": "จองห้องประชุมซ้ำรายสัปดาห์",
+    "tasks": [
+      { "id": "schema", "title": "ออกแบบตาราง", "size": 30, "needs": [], "owns": ["docs/recurring-bookings.md"], "tier": "กลาง" },
+      { "id": "migration", "title": "เขียน migration", "size": 30, "needs": ["schema"], "owns": ["migrations/add-recurring-bookings.sql"], "tier": "กลาง" },
+      { "id": "service", "title": "แก้ service", "size": 30, "needs": ["migration"], "owns": ["src/bookings/service.ts"], "tier": "กลาง" },
+      { "id": "test", "title": "integration test", "size": 30, "needs": ["service"], "owns": ["tests/bookings.test.ts"], "tier": "กลาง" }
+    ]
+  }
+}

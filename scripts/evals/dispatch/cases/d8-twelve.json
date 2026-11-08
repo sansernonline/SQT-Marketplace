@@ -1,0 +1,24 @@
+{
+  "id": "d8-twelve",
+  "title": "12 ชิ้นอิสระ เกิน 8 ต้องแบ่งคลื่น",
+  "prompt": "แปลงสคริปต์ Python 2 จำนวน 12 ไฟล์ในโฟลเดอร์ `scripts/legacy/` ให้เป็น Python 3: `backup.py` · `cleanup.py` · `export_users.py` · `import_orders.py` · `mailer.py` · `report_daily.py` · `report_monthly.py` · `resize_images.py` · `rotate_logs.py` · `sync_ldap.py` · `thumbnail.py` · `word_count.py` · แต่ละไฟล์ทำงานแยกกัน ไม่ import กัน และมี test ของตัวเองใน `tests/legacy/` · ต้องระวังเรื่อง str กับ bytes และการหารเลขจำนวนเต็ม · เสร็จเมื่อ test ทั้ง 12 ไฟล์ผ่านบน Python 3.12",
+  "risky": false,
+  "expected": { "size": "ใหญ่", "workers": 8 },
+  "graph": {
+    "name": "แปลง Python 2 เป็น 3 จำนวน 12 ไฟล์",
+    "tasks": [
+      { "id": "backup", "size": 30, "needs": [], "owns": ["scripts/legacy/backup.py"], "tier": "กลาง" },
+      { "id": "cleanup", "size": 30, "needs": [], "owns": ["scripts/legacy/cleanup.py"], "tier": "กลาง" },
+      { "id": "export_users", "size": 30, "needs": [], "owns": ["scripts/legacy/export_users.py"], "tier": "กลาง" },
+      { "id": "import_orders", "size": 30, "needs": [], "owns": ["scripts/legacy/import_orders.py"], "tier": "กลาง" },
+      { "id": "mailer", "size": 30, "needs": [], "owns": ["scripts/legacy/mailer.py"], "tier": "กลาง" },
+      { "id": "report_daily", "size": 30, "needs": [], "owns": ["scripts/legacy/report_daily.py"], "tier": "กลาง" },
+      { "id": "report_monthly", "size": 30, "needs": [], "owns": ["scripts/legacy/report_monthly.py"], "tier": "กลาง" },
+      { "id": "resize_images", "size": 30, "needs": [], "owns": ["scripts/legacy/resize_images.py"], "tier": "กลาง" },
+      { "id": "rotate_logs", "size": 30, "needs": [], "owns": ["scripts/legacy/rotate_logs.py"], "tier": "กลาง" },
+      { "id": "sync_ldap", "size": 30, "needs": [], "owns": ["scripts/legacy/sync_ldap.py"], "tier": "กลาง" },
+      { "id": "thumbnail", "size": 30, "needs": [], "owns": ["scripts/legacy/thumbnail.py"], "tier": "กลาง" },
+      { "id": "word_count", "size": 30, "needs": [], "owns": ["scripts/legacy/word_count.py"], "tier": "กลาง" }
+    ]
+  }
+}

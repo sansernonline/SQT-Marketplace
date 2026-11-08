@@ -1,0 +1,15 @@
+{
+  "id": "d7-mechanical",
+  "title": "งานกลไกที่สคริปต์ทำไม่ได้: alt text 45 รูปตามแบบ",
+  "prompt": "รูปประกอบในคู่มือพนักงานภายในบริษัทยังไม่มีคำอธิบายรูป (alt text) · เขียน alt text ภาษาไทยสั้น ๆ ไม่เกิน 1 บรรทัด ให้รูปทั้งหมด 45 รูปใน 3 โฟลเดอร์ที่ไม่เกี่ยวกัน: `manual/onboarding/` 15 รูป · `manual/safety/` 15 รูป · `manual/it/` 15 รูป · ต้องดูรูปจริงทีละรูป · เขียนตามแบบ 3 ตัวอย่างนี้เท่านั้น: \"หน้าจอเข้าสู่ระบบ มีช่องอีเมลและรหัสผ่าน\" · \"พนักงานสวมหมวกนิรภัยยืนหน้าเครื่องจักร\" · \"แผนผังชั้น 2 ลูกศรชี้ทางหนีไฟ\" · ผลของแต่ละโฟลเดอร์ลงไฟล์ `alt-text.csv` ในโฟลเดอร์นั้น (คอลัมน์ file, alt) · เสร็จเมื่อทั้ง 3 ไฟล์มีครบ 15 แถว",
+  "risky": false,
+  "expected": { "size": "กลาง", "workers": 3 },
+  "graph": {
+    "name": "alt text คู่มือพนักงาน",
+    "tasks": [
+      { "id": "onboarding", "title": "manual/onboarding 15 รูป", "size": 30, "needs": [], "owns": ["manual/onboarding/alt-text.csv"], "tier": "เล็ก" },
+      { "id": "safety", "title": "manual/safety 15 รูป", "size": 30, "needs": [], "owns": ["manual/safety/alt-text.csv"], "tier": "เล็ก" },
+      { "id": "it", "title": "manual/it 15 รูป", "size": 30, "needs": [], "owns": ["manual/it/alt-text.csv"], "tier": "เล็ก" }
+    ]
+  }
+}
