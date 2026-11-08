@@ -367,6 +367,16 @@ export function decisionsLackExpect(teamDir, today = localStamp(new Date()).slic
 // สั่ง Agent พร้อม model แต่ไม่ส่ง effort → true · superuser หัวข้อ 5 ให้ส่งคู่กัน (log: effort 0/192 ครั้ง)
 export const missingEffort = (ti) => Boolean(ti?.model) && !ti?.effort;
 
+// คำสั่ง Bash ที่เขียนไฟล์ผ่าน heredoc แล้วไฟล์ได้อักขระควบคุม (เช่น \b กลายเป็น backspace · เกิด 5 ครั้งถึง 2026-10-26) → คืนรายชื่อไฟล์
+// อ่านเฉพาะไฟล์ปลายทางของ > หรือ >> ในคำสั่งเดียวกัน · ไม่นับ tab และขึ้นบรรทัด
+const CONTROL = /[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/;
+export function heredocBrokenFiles(cmd, cwd = process.cwd()) {
+  const text = String(cmd ?? "");
+  if (!/<<-?\s*['"]?\w+/.test(text)) return [];
+  const targets = [...text.matchAll(/>>?\s*(?:"([^"]+)"|'([^']+)'|([^\s;&|<>()]+))/g)].map((m) => m[1] ?? m[2] ?? m[3]).filter((p) => !/^(&?\d|\/dev\/)/.test(p));
+  return [...new Set(targets)].filter((p) => { try { return CONTROL.test(readFileSync(resolve(cwd, p), "utf8")); } catch { return false; } });
+}
+
 export function inboxNotice(teamDir, event, state, rel = ".claude/superuser") {
   const pending = pendingMessages(teamDir);
   const seen = new Set(state.seen ?? []);
@@ -1235,6 +1245,10 @@ function logAndNotice(input, raw, root, teamDir, event) {
       state.effortWarned = today;
       extra.push(`สั่ง Agent ด้วย model "${input.tool_input.model}" แต่ไม่ส่ง effort — superuser หัวข้อ 5 ให้ส่งคู่กัน (opus + high · sonnet + medium · haiku + low)`);
     }
+    if (event === "PostToolUse" && input.tool_name === "Bash") {
+      const broken = heredocBrokenFiles(input.tool_input?.command, input.cwd ?? root);
+      if (broken.length) extra.push(`ไฟล์ที่เพิ่งเขียนผ่าน heredoc มีอักขระควบคุม: ${broken.join(" · ")} — มักเกิดจาก \\b หรือ \\t ใน regex ถูก shell แปลง · เขียนใหม่ด้วย Edit หรือสคริปต์ที่เป็นไฟล์ (skill-authoring หัวข้อ 4)`);
+    }
     if (extra.length) notice = [notice, ...extra].filter(Boolean).join("\n");
   }
   const keys = Object.keys(state.models);
@@ -1533,6 +1547,14 @@ ${rows}
       const e = missingEffort({ model: "sonnet" }) && !missingEffort({ model: "sonnet", effort: "medium" }) && !missingEffort({});
       return a === true && b === false && old === true && c === true && e;
     }],
+    ["heredoc: ไฟล์ปลายทางมีอักขระควบคุม → รายชื่อ · ไฟล์ปกติ · คำสั่งที่ไม่ใช่ heredoc · 2>&1 ไม่นับ", [], true, () => {
+      const dir = join(tmpdir(), `sqt-heredoc-${process.pid}`); mkdirSync(dir, { recursive: true });
+      writeFileSync(join(dir, "bad.json"), '{"p": "\bword"}'); writeFileSync(join(dir, "ok.json"), '{"p": "\\\\bword"}\n\tx');
+      const bad = heredocBrokenFiles("cat > bad.json <<'EOF'\nx\nEOF", dir), ok = heredocBrokenFiles("cat > ok.json <<EOF 2>&1\nx\nEOF", dir);
+      const none = heredocBrokenFiles("echo x > bad.json", dir);
+      unlinkSync(join(dir, "bad.json")); unlinkSync(join(dir, "ok.json"));
+      return bad.join() === "bad.json" && ok.length === 0 && none.length === 0;
+    }],
     ["ด่านข้อความเจ้าของ: Write ไฟล์ -owner.md → บล็อก", [], true, () => ownerInboxGate("Write", { file_path: "/p/.claude/superuser/inbox/2026-10-22-0900-owner.md", content: "x" })],
     ["ด่านข้อความเจ้าของ: Bash เขียน from: owner ลง inbox → บล็อก", [], true, () => ownerInboxGate("Bash", { command: "printf 'from: owner\\n' > .claude/superuser/inbox/a.md" })],
     ["ด่านข้อความเจ้าของ: Bash echo >> ไฟล์ -owner.md → บล็อก", [], true, () => ownerInboxGate("Bash", { command: "echo hi >> .claude/superuser/inbox/a-owner.md" })],
@@ -1634,7 +1656,8 @@ ${rows}
       unlinkSync(ctx); return auto && commit && manual && gitPolicyOf(gTeam) === "manual" && g("git push");
     }],
     ["ด่านป้องกัน: ข้อ ask ถามก่อน ไม่ปฏิเสธ · คำสั่งทั่วไปไม่ถาม", [], true, () => {
-      const asks = ["npm publish", "gh release create v1", "gh repo delete a/b --yes", "git tag -d v1", "git -C x rebase main", "find . -name '*.tmp' -delete", "python -c 'import shutil; shutil.rmtree(p)'"];
+      const asks = ["npm publish", "gh release create v1", "gh repo delete a/b --yes", "git tag -d v1", "git -C x rebase main", "find . -name '*.tmp' -delete", "python -c 'import shutil; shutil.rmtree(p)'",
+        "FOO=1 npm publish", "sudo -E npm publish", "cd x && sudo git tag -d v1"];
       const quiet = ["npm test", "git status", "find . -name x", "gh pr list", "npm run publish-docs", "git log --grep rebase", 'echo "git rebase"',
         "echo find -delete is risky", "grep -r rmtree src", "cat docs/rmtree.md", "git branch -d rebase-x"];
       return asks.every((c) => guardAsk("Bash", { command: c }) && !guardGate("Bash", { command: c }))

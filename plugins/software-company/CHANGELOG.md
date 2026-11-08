@@ -1,5 +1,9 @@
 # Changelog — software-company
 
+## 2.47.3 — 2026-11-08
+
+- `superuser/references/code-extensions.md`: ใช้คำว่า "ผู้ตรวจ" ให้ตรงกับแกน
+
 ## 2.47.2 — 2026-11-08
 
 - `superuser/references/agents.md`: ระดับโมเดลของงานโค้ดไล่ตามกฎ 3 ข้อของ superuser 3.26.0 · root cause ที่ยากและ concurrency เริ่มที่ sonnet แล้วขยับตามบันได · แก้ชื่อหลายจุดให้เขียนสคริปต์
