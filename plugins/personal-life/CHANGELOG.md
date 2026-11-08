@@ -1,5 +1,10 @@
 # Changelog — personal-life
 
+## 0.22.0 — 2026-11-08
+
+- ยุบ `meeting-prep-card` และ `meeting-summary` เข้า `meeting` · ขา 1 ก่อนประชุม · ขา 2 หลังประชุม · แม่แบบรายงานการประชุมอยู่ที่ `meeting/references/thai-minutes-template.md` · **เรียกชื่อเก่าไม่ได้แล้ว**
+- eval `meeting-summary-existing` คงชื่อเดิม (วัดขา 2) · skill ที่ลิงก์หา (`calendar-audit` · `doctor-visit-prep` · `interview-prep` · `personal-kb` · `moving-house`) · playbook `meeting` `review` · triggers · agent `meeting-prep` ชี้ตัวใหม่
+
 ## 0.21.1 — 2026-11-07
 
 - ตรวจ plugin หัวข้อ 8 (ประหยัด token): ย้ายตัวอย่างและแม่แบบที่ใช้บางครั้งจาก SKILL.md ไป references/ ของ 7 skill (`paper-to-practice` · `decision-journal` · `goal-and-habit` · `meal-plan-grocery` · `weekly-review` · `salary-negotiation` · `course-builder`) และตัดบรรทัดซ้ำใน `superuser/SKILL.md` · ความหมายและผลลัพธ์เหมือนเดิม · รายงานใน `_to_delete/audit-personal-life.md`

@@ -197,7 +197,7 @@
 
 ---
 
-## 🛠️ Skills (108)
+## 🛠️ Skills (105)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst, product-manager
@@ -602,7 +602,7 @@
 
 ### 52. security-gate
 **ใช้กับ:** developer, qa-tester, security-engineer
-**Description:** Use when about to ship, merge or hand over code, after adding a dependency, or the user says security check.
+**Description:** Use when about to ship, merge or hand over code, after adding a dependency, user says security check, or OWASP Top 10:2025 sign-off (web app, API).
 
 ---
 
@@ -772,163 +772,145 @@
 
 ---
 
-### 81. owasp-top10
-**ใช้กับ:** developer, security-engineer
-**Description:** Use when building or handing over a web app or API that must meet OWASP Top 10:2025 (contract, security NFR, release).
-
----
-
-### 82. dynamic-website
+### 81. dynamic-website
 **Description:** Use when a marketing, event or showcase website needs chapter-by-chapter motion (GSAP, scroll, 3D background). Not an app, not a slide deck.
 
 ---
 
-### 83. branded-document-design
+### 82. branded-document-design
 **ใช้กับ:** business-analyst, devops-engineer, fintech-compliance-officer, graphic-designer, hipaa-officer, insurance-compliance-officer, legal-compliance-officer, product-manager, project-manager, qa-tester, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer
 **Description:** Use when a Word, PowerPoint or PDF deliverable (proposal, report, contract) must look designed. Whole report from one Markdown → markdown-report-docx.
 
 ---
 
-### 84. diagram-figures
+### 83. diagram-figures
 **ใช้กับ:** business-analyst, devops-engineer, solution-architect, system-analyst, ux-designer
 **Description:** Use when a document, plan, proposal, slide or print (business plan, shop process, budget flow, research, software spec) needs a designed diagram.
 
 ---
 
-### 85. html-slide-deck
+### 84. html-slide-deck
 **ใช้กับ:** technical-writer
-**Description:** Use when a slide deck is asked for as HTML or with animation — one offline file with speaker notes.
+**Description:** Use when a slide deck is asked for as HTML or with animation (one offline file, speaker notes), or a .pptx must play as animated HTML.
 
 ---
 
-### 86. markdown-report-docx
+### 85. markdown-report-docx
 **ใช้กับ:** technical-writer
 **Description:** Use when one Markdown file must become a polished Word report (business, research, test, handover). Thesis or Independent Study (IS) → thesis-writing.
 
 ---
 
-### 87. markdown-visuals
+### 86. markdown-visuals
 **ใช้กับ:** business-analyst, clinical-data-analyst, developer, devops-engineer, product-manager, project-manager, qa-tester, quant-analyst, reverse-engineer, revops-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
 **Description:** Use when a markdown doc needs a picture. Pick inline SVG, image file, ASCII or Mermaid by where it is read (GitHub drops inline SVG).
 
 ---
 
-### 88. pptx-to-html-deck
-**ใช้กับ:** technical-writer
-**Description:** Use when a .pptx should play as one animated HTML file, or both .pptx and .html are wanted — click steps, notes, menu, interactive pages.
-
----
-
-### 89. presentation-design
+### 87. presentation-design
 **ใช้กับ:** business-analyst, graphic-designer, product-manager, project-manager, technical-writer
 **Description:** Use when building a slide deck for any work (pitch, plan, report, training) that someone will present or read. Story, headlines, layouts.
 
 ---
 
-### 90. product-naming
+### 88. product-naming
 **ใช้กับ:** graphic-designer, product-manager, technical-writer
 **Description:** Use when naming a product, shop, service, app or brand, or checking how a name sounds in Thai.
 
 ---
 
-### 91. mcp-server
+### 89. mcp-server
 **ใช้กับ:** devops-engineer
 **Description:** Use when an agent must reach a real system (database, ERP, internal API) through an MCP server, or when choosing a vendor MCP over building one.
 
 ---
 
-### 92. web-quality-audit
+### 90. web-quality-audit
 **Description:** Use when auditing a web page for accessibility (WCAG 2.2 AA) or performance (Lighthouse, Core Web Vitals), or before a site launches.
 
 ---
 
-### 93. worktree-and-branch
+### 91. worktree-and-branch
 **Description:** Use when 2 or more agents edit one repo at once, a spike could break the main checkout, or a finished branch must be merged, PR-ed or discarded.
 
 ---
 
-### 94. data-analysis
+### 92. data-analysis
 **Description:** Use when a CSV, Excel or SQL export must answer a business question (sales, usage, survey) with traceable numbers, Thai charts and caveats.
 
 ---
 
-### 95. infra-as-code
+### 93. infra-as-code
 **Description:** Use when cloud servers, databases or networks should be built from code (OpenTofu, Terraform, Pulumi), drift appears, or data must stay in Thailand.
 
 ---
 
-### 96. design-direction-lookup
+### 94. design-direction-lookup
 **ใช้กับ:** ux-designer
 **Description:** Use when a new screen, app or site needs a starting look (palette, Thai-Latin fonts, industry, UX and stack rules) before ui-craft design directions.
 
 ---
 
-### 97. security-audit
+### 95. security-audit
 **ใช้กับ:** security-engineer
 **Description:** Use when auditing a whole codebase for vulnerabilities before handover, a pen test of source, or ตรวจช่องโหว่ทั้งระบบ. Pre-ship scan → security-gate.
 
 ---
 
-### 98. jenkins-pipeline
+### 96. jenkins-pipeline
 **ใช้กับ:** devops-engineer
 **Description:** Use when writing or fixing a Jenkinsfile or Jenkins pipeline (CI/CD) that builds a Docker image, tests, and deploys with Helm.
 
 ---
 
-### 99. kafka-streaming
+### 97. kafka-streaming
 **ใช้กับ:** devops-engineer
 **Description:** Use when services pass events via Kafka (topic, producer, consumer, DLQ, ส่ง event ระหว่าง service) or events get lost or doubled.
 
 ---
 
-### 100. kubernetes-helm
+### 98. kubernetes-helm
 **ใช้กับ:** devops-engineer
 **Description:** Use when writing a Dockerfile, Kubernetes (k8s) manifest or Helm chart, deploying staging to production, or running STT/TTS on GPU nodes.
 
 ---
 
-### 101. voice-agent
+### 99. voice-agent
 **ใช้กับ:** ai-engineer
 **Description:** Use when building a realtime voice agent or phone bot (รับสาย, โทรศัพท์, STT, TTS, พูดแทรก, barge-in, SIP, latency), especially in Thai.
 
 ---
 
-### 102. rabbitmq-messaging
+### 100. rabbitmq-messaging
 **ใช้กับ:** devops-engineer
 **Description:** Use when work goes through RabbitMQ (queue, exchange, ack, DLX, ข้อความหาย/ซ้ำ). Many readers of one log → kafka-streaming
 
 ---
 
-### 103. load-testing
+### 101. load-testing
 **ใช้กับ:** devops-engineer, qa-tester
 **Description:** Use when checking how a system holds many users at once (load, stress, spike, soak test, k6, ยิงโหลด, รับได้กี่คน). Page speed → web-quality-audit.
 
 ---
 
-### 104. design-system
+### 102. design-system
 **Description:** Use when authoring design tokens (primitive, semantic, component), CSS variables, state tables or a Tailwind theme. Reading existing code → ui-craft
 
 ---
 
-### 105. backblaze-b2
+### 103. backblaze-b2
 **ใช้กับ:** devops-engineer
-**Description:** Use when connecting an app to Backblaze B2 file storage — S3 API, application keys, presigned upload, versions, lifecycle, cost.
+**Description:** Use when using Backblaze B2 — app file storage (S3 API, keys, presigned upload, lifecycle, cost) or deploying a static site (b2 sync, Cloudflare).
 
 ---
 
-### 106. backblaze-deploy
-**ใช้กับ:** devops-engineer
-**Description:** Use when deploying a static website or SPA build to Backblaze B2 — b2 sync, public bucket, Cloudflare domain, cache, rollback, cost.
-
----
-
-### 107. cloudflare-r2
+### 104. cloudflare-r2
 **ใช้กับ:** devops-engineer
 **Description:** Use when connecting an app to Cloudflare R2 object storage — S3 API, presigned upload, public bucket, CORS, wrangler, cost.
 
 ---
 
-### 108. render-deploy
+### 105. render-deploy
 **ใช้กับ:** devops-engineer
 **Description:** Use when deploying to Render (render.com) — web service, worker, cron or Postgres; render.yaml Blueprint, failed deploy, rollback, free tier.
 

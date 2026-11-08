@@ -23,7 +23,7 @@ Use when reviewing a pull request, self-reviewing before submitting, or auditing
 | Writing or updating the PR description itself | `pr-description-template` |
 | Hunting misleading patterns across the codebase, not one diff | `code-gardener` |
 | Scanners, secrets or dependency check before ship or after adding a dependency | `security-gate` (run both before merge) |
-| Web app or API that must meet OWASP Top 10:2025 | `owasp-top10` (per-stack checks in its `references/stack-checks.md`) |
+| Web app or API that must meet OWASP Top 10:2025 | `security-gate` (`references/owasp-top10.md` · per-stack checks in `references/owasp-stack-checks.md`) |
 
 ## Review Process
 

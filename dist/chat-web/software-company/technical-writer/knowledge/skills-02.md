@@ -656,7 +656,7 @@ render เป็น PDF แล้วแปลงเป็นภาพ แล้�
 | สเปรดชีตส่งมอบ | `anthropic-skills:xlsx` (โทเคนสีชุดเดียวกันใช้ได้) |
 | เนื้อหาและความครบถ้วนของเอกสาร SRS | `srs-writing` (plugin `software-company`) |
 | โครงเรื่องและเลย์เอาต์ของสไลด์ | `presentation-design` |
-| เด็คนำเสนอเป็น .html ไฟล์เดียว | `html-slide-deck` · มี .pptx แล้ว → `pptx-to-html-deck` |
+| เด็คนำเสนอเป็น .html ไฟล์เดียว | `html-slide-deck` (มี .pptx แล้วใช้ทางเข้าจาก .pptx ใน skill เดียวกัน) |
 | ไดอะแกรมที่วาดด้วย Mermaid ธีมเดียวกัน | `software-diagrams` (plugin `software-company`) |
 | ที่มาของระบบสีและตัวอักษร · โลโก้ | `graphic-design` (plugin `software-company`) |
 

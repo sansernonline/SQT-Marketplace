@@ -27,7 +27,7 @@ description: Use when deploying to Render (render.com) — web service, worker, 
 | endpoint `/health` และการปิดตัวเรียบร้อย | [`web-service-essentials`](../web-service-essentials/SKILL.md) | `healthCheckPath` ชี้ไปที่ endpoint นั้น |
 | ตรวจก่อนส่งขึ้นจริง | [`security-gate`](../security-gate/SKILL.md) | สแกนความลับใน repo ก่อน push |
 | Dockerfile สำหรับ production | [`kubernetes-helm`](../kubernetes-helm/SKILL.md) ข้อ 2 | กฎ Dockerfile ใช้ร่วมกัน · Render รัน Dockerfile ได้ |
-| เว็บ static ที่ build เสร็จแล้ว ไม่มี backend (ถูกกว่า) | [`backblaze-deploy`](../backblaze-deploy/SKILL.md) | ปล่อยไฟล์ขึ้น Backblaze B2 ผ่าน Cloudflare · ต้องมี backend ใช้ skill นี้ |
+| เว็บ static ที่ build เสร็จแล้ว ไม่มี backend (ถูกกว่า) | [`backblaze-b2` ส่วน deploy](../backblaze-b2/references/deploy.md) | ปล่อยไฟล์ขึ้น Backblaze B2 ผ่าน Cloudflare · ต้องมี backend ใช้ skill นี้ |
 
 ## 1 · ค้นก่อนถาม แล้วถามรวมครั้งเดียว
 

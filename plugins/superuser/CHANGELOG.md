@@ -1,5 +1,10 @@
 # Changelog — superuser
 
+## 3.25.0 — 2026-11-08
+
+- `hooks/skill-router.json`: pattern สรุปประชุมเปิด `meeting` แทน `meeting-summary` (personal-life ยุบ skill ประชุม 2 ตัวเป็นตัวเดียว)
+- `skills/superuser/references/triggers.md` · `ADAPT.md` · `polite-message-th-en` (SKILL.md และ templates.md): ชื่อ skill ที่ยุบใน plugin อื่นชี้ตัวใหม่ (`meeting` · `html-slide-deck` · `refund-request`)
+
 ## 3.24.0 — 2026-11-08
 
 ที่มา: log จริง 176 งาน (2026-10-27 ถึง 2026-11-03) ไม่มีค่าที่ใช้วัดการแจกงานเป็นตัวเลข (`docs/SKILL-BENCHMARK-MAP.md` หัวข้อ 2 และ 4)

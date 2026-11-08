@@ -174,4 +174,4 @@ Output: split table vs target · worst three with action · events added · one-
 
 This plugin ships no calendar connector. The user connects Google Calendar (or another calendar) themselves, from the connectors or MCP settings of the Claude app they use, with read access first; adding focus blocks (step 7) needs write access and the user's OK. Not checked against an official Google page, so no link is given here. No connector → the user pastes a 4-week export or a screenshot.
 
-Related: `weekly-review` · `meeting-prep-card` (meetings that stay should have a goal).
+Related: `weekly-review` · `meeting` (Leg 1: meetings that stay should have a goal).

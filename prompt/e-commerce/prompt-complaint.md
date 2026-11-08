@@ -32,7 +32,7 @@
 
 ## 1. ร้องเรียนตามขั้นบันได
 
-playbook `complaint` · agent `consumer-advocate` · skill `complaint-letter-th`
+playbook `complaint` · agent `consumer-advocate` · skill `refund-request`
 **ผลลัพธ์:** `cases/<ปี-เดือน>-<ร้าน>/complaint.md` · `letter-<ขั้น>.docx` · **รออนุมัติ:** ส่งจดหมาย · ยื่นเรื่อง
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -56,7 +56,7 @@ playbook `complaint` · agent `consumer-advocate` · skill `complaint-letter-th`
 
 ## 2. ยกเลิกสมาชิกหรือสัญญาบริการ แต่ร้านไม่ยอม
 
-playbook `complaint` · agent `consumer-advocate` · skill `complaint-letter-th` · `refund-request`
+playbook `complaint` · agent `consumer-advocate` · skill `refund-request`
 **ผลลัพธ์:** `cases/<ปี-เดือน>-<ร้าน>/cancel.md` · `letter-cancel.docx` · **รออนุมัติ:** ส่งหนังสือบอกเลิกสัญญา · ขอธนาคารหยุดตัดบัตร · ยื่นเรื่อง
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -79,7 +79,7 @@ playbook `complaint` · agent `consumer-advocate` · skill `complaint-letter-th`
 
 ## 3. เคลมประกันภัยถูกปฏิเสธหรือจ่ายไม่ครบ
 
-playbook `complaint` · agent `consumer-advocate` · skill `complaint-letter-th`
+playbook `complaint` · agent `consumer-advocate` · skill `refund-request`
 **ผลลัพธ์:** `cases/<ปี-เดือน>-<บริษัทประกัน>/insurance-claim.md` · `letter-<ขั้น>.docx` · **รออนุมัติ:** ส่งหนังสืออุทธรณ์ถึงบริษัทประกัน · ยื่นเรื่องต่อหน่วยงานกำกับ
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -108,7 +108,7 @@ playbook `complaint` · agent `consumer-advocate` · skill `complaint-letter-th`
 
 ## 4. บ้าน คอนโด หรือผู้รับเหมาไม่ทำตามสัญญา
 
-playbook `complaint` · agent `consumer-advocate` · skill `complaint-letter-th`
+playbook `complaint` · agent `consumer-advocate` · skill `refund-request`
 **ผลลัพธ์:** `cases/<ปี-เดือน>-<โครงการ>/home.md` · `letter-<ขั้น>.docx` · **รออนุมัติ:** ส่งหนังสือทวงถามหรือบอกเลิกสัญญา · จ่ายงวดถัดไป · ยื่นเรื่อง
 
 ### ข้อมูล (ผู้ใช้กรอก)

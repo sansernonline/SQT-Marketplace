@@ -1,6 +1,6 @@
 ---
 name: html-slide-deck
-description: Use when a slide deck is asked for as HTML or with animation — one offline file with speaker notes.
+description: Use when a slide deck is asked for as HTML or with animation (one offline file, speaker notes), or a .pptx must play as animated HTML.
 ---
 
 # HTML Slide Deck
@@ -19,6 +19,7 @@ description: Use when a slide deck is asked for as HTML or with animation — on
 - นำเสนอโครงงาน · demo ระบบ · สรุปผลให้ผู้บริหาร ที่คนนำเสนอเปิดจากเครื่องตัวเอง
 - อยากให้คนดูคลิกดูรายละเอียดเองได้ (ไฟล์ โค้ด ผลทดสอบ) ซึ่ง PowerPoint ทำไม่ได้
 - ต้องส่งเด็คทางอีเมลหรือแชตแล้วเปิดได้ทุกเครื่องโดยไม่ต้องลงโปรแกรม
+- **มี .pptx อยู่แล้ว** หรือต้องส่งทั้ง .pptx และ .html หน้าตาเดียวกัน จากต้นฉบับเดียว (animation ทีละคลิก · โน้ต · สารบัญ · หน้าโต้ตอบ) → ทางเข้าจาก .pptx อ่าน [`references/from-pptx.md`](references/from-pptx.md) แทนข้อ 1 · แก้ที่ .pptx แล้วแปลงใหม่ ไม่แก้ .html ที่แปลงแล้ว
 
 ## เมื่อไหร่ **ไม่** ใช้
 
@@ -26,7 +27,6 @@ description: Use when a slide deck is asked for as HTML or with animation — on
 |---|---|
 | สั่ง "ทำ slide deck" เฉย ๆ ไม่บอกว่า html · ลูกค้าต้องได้ .pptx ไปแก้ต่อ | `branded-document-design` · `StageDeck` (หน้าตาชุดเดียวกัน ไม่มี animation) — กฎเลือกชนิดไฟล์อยู่ใน `presentation-design` |
 | ยังไม่มีโครงเรื่อง | `presentation-design` ข้อ 1–3 ก่อน แล้วค่อยกลับมา |
-| มี .pptx อยู่แล้ว หรือต้องส่งทั้ง .pptx และ .html หน้าตาเดียวกัน | `pptx-to-html-deck` (แปลงทุกหน้าพร้อม animation และเปิดทีละคลิก) |
 | รายงานคู่กันเป็น .docx | `markdown-report-docx` (ใช้สีชุดเดียวกัน) |
 
 ---
@@ -67,7 +67,7 @@ description: Use when a slide deck is asked for as HTML or with animation — on
 | `--accent` | `#e10613` | แถบใต้ชื่อปก · ฟองแชตผู้ใช้ |
 | `--accent2` | `#ff2536` | kicker · ตัวเลขใหญ่ · เลขหน้าเปิดส่วน · ของที่เลือกอยู่ |
 | `--accent-deep` · `--accent-tint` | `#2a0a0d` · `#1d0d10` | พื้นไล่สีปก/หน้าเปิดส่วน · พื้นของที่เลือก |
-| `--bg` · `--panel` · `--line` | `#09090a` · `#16161a` · `#2a2a30` | พื้น · การ์ด · เส้น — ไม่เปลี่ยนตาม `--brand` · พื้นเข้มคือค่าเริ่มต้นของ shell (ห้องนำเสนอมืด ภาพหน้าจอและแผนภาพเด่น) ไม่ใช่ข้อบังคับ (เด็คที่แปลงจาก .pptx ใช้พื้นตาม .pptx) |
+| `--bg` · `--panel` · `--line` | `#09090a` · `#16161a` · `#2a2a30` | พื้น · การ์ด · เส้น — ไม่เปลี่ยนตาม `--brand` · พื้นเข้มคือค่าเริ่มต้นของ shell (ห้องนำเสนอมืด ภาพหน้าจอและแผนภาพเด่น) ไม่ใช่ข้อบังคับ (เด็คที่แปลงจาก .pptx ใช้พื้นตาม .pptx ดู `references/from-pptx.md`) |
 
 - ตารางข้างบนคือค่าของธีม `dark` · `--brand` คำนวณ deep/tint ให้ · ธีม `dark` สีสว่างต้องอ่านชัดบนพื้นเข้มเอง (contrast ≥ 4.5:1) ส่วน `bright` สคริปต์ปรับให้
 - **ที่มาของตัวเลขคอนทราสต์ประจำบ้าน:** สีสว่างประจำบ้าน `5B9BE6` อ่านได้บนพื้นเข้ม (6.9:1) แต่บนพื้นขาวได้แค่ 2.89:1 จึงต้องเปลี่ยนเป็น `--brand 2A78D6,1F5FAF` (สีที่สองบนพื้นขาว 6.34:1 · สีหลัก `2A78D6` ได้ 4.42:1 จึงใช้กับแถบ เส้น หรือตัวใหญ่ ไม่ใช้กับข้อความเล็ก · คำนวณตามสูตร WCAG 2026-10-26)

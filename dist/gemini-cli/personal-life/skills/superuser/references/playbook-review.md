@@ -2,7 +2,7 @@
 
 ใช้เมื่อ: ตรวจงานก่อนส่งหรือก่อนใช้จริง · "ช่วยดูหน่อยว่ามีอะไรพลาด" · ผู้ใช้ทำมาเองแล้วอยากให้ตรวจ
 ผลลัพธ์: คำตัดสินพร้อมรายการปัญหาที่ยืนยันแล้ว **ไม่แก้เองโดยอัตโนมัติ** และเป็นงานอ่านอย่างเดียว ไม่สร้าง `CONTEXT.md`
-skill หลัก: `weekly-review` · `meeting-summary` · `important-docs` · `household-bills` · `medication-schedule` · `resume-th-en` · `learning-path` · `paper-to-practice` · `cert-prep`
+skill หลัก: `weekly-review` · `meeting` · `important-docs` · `household-bills` · `medication-schedule` · `resume-th-en` · `learning-path` · `paper-to-practice` · `cert-prep`
 
 ## ขั้นตอน (คัดลง todo ตรงตัว)
 

@@ -1,12 +1,12 @@
 # playbook · trade-review — ทบทวนผลเทรดรายสัปดาห์หรือรายเดือน
 
 ใช้เมื่อ: "สรุปผลเทรด" · ขาดทุนแบบเดิมซ้ำ · ครบรอบทบทวน
-skill หลัก: `post-trade-review` · `trade-journal` · agent `trade-journal-coach`
+skill หลัก: `trade-journal` (โหมด 2 ทบทวนผล) · agent `trade-journal-coach`
 
 ## ขั้นตอน (คัดลง todo ตรงตัว)
 
 1. อ่านบันทึกการเทรดเฉพาะช่วงนั้น (กรองตามวันปิดไม้ ไม่เปิดทั้งไฟล์) ส่งกลับสรุปไม่เกิน 20 บรรทัด · ใคร: `trade-journal-coach` ตัวใหม่
-2. คำนวณ win rate expectancy และ drawdown ด้วย `trade-stats.mjs` ของ `post-trade-review` · ใคร: `trade-journal-coach` ตัวใหม่
+2. คำนวณ win rate expectancy และ drawdown ด้วย `scripts/trade-stats.mjs` ของ `trade-journal` · ใคร: `trade-journal-coach` ตัวใหม่
 3. หารูปแบบความผิดพลาดที่ซ้ำมากที่สุด 1 ข้อ พร้อมตัวอย่างไม้จริง · ใคร: `trade-journal-coach` ตัวใหม่
 4. แปลงเป็นกฎใหม่ 1 ข้อที่ทดสอบได้ในเดือนหน้า และตัดสินกฎของเดือนก่อน (ใช้ต่อ · ปรับ · ทิ้ง) · ใคร: `trade-journal-coach` ตัวใหม่เสนอ แล้วลงใน "รออนุมัติ"
 5. ตรวจ — คำนวณสถิติซ้ำแล้วตรงกับบันทึก · ใคร: `reviewer` ตัวใหม่

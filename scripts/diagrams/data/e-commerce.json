@@ -1,6 +1,6 @@
 {
  "plugin": "e-commerce",
- "version": "1.5.0",
+ "version": "1.8.0",
  "description": "Thai online selling, buying and small-business back office — sell on Shopee, Lazada, TikTok Shop, LINE and Facebook (listings, pricing, stock, chat, live, returns), buy with confidence (total cost, warranty, OCPB 1166 complaints, refunds), and run the company (quotations, contracts, VAT and withholding tax, payroll, social security, year-end filing, labour law, PDPA, LINE OA, PromptPay). General information only, not tax or legal advice.",
  "cross": [
   "graphic-design",
@@ -13,7 +13,6 @@
   "buy-compare",
   "cash-flow",
   "chat-reply-templates",
-  "complaint-letter-th",
   "dbd-annual-filing",
   "doc-contract-th",
   "doc-leave",
@@ -106,7 +105,6 @@
    "skills": [
     "buy-compare",
     "warranty-tracker",
-    "complaint-letter-th",
     "refund-request",
     "superuser"
    ]
@@ -448,7 +446,7 @@
     },
     {
      "n": 3,
-     "text": "วางขั้นบันไดตาม `complaint-letter-th` — ร้าน → แพลตฟอร์ม → หน่วยงานรับเรื่อง → ศาลคดีผู้บริโภค แล้วตรวจช่องทางและกรอบเวลาของแต่ละขั้นจากเว็บทางการ · ใคร: `consumer-advocate` ตัวใหม่",
+     "text": "วางขั้นบันไดตาม `refund-request` (`references/complaint-letter.md`) — ร้าน → แพลตฟอร์ม → หน่วยงานรับเรื่อง → ศาลคดีผู้บริโภค แล้วตรวจช่องทางและกรอบเวลาของแต่ละขั้นจากเว็บทางการ · ใคร: `consumer-advocate` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -460,7 +458,7 @@
       "raw": "`consumer-advocate` ตัวใหม่"
      },
      "skills": [
-      "complaint-letter-th"
+      "refund-request"
      ],
      "commands": [],
      "playbooks": [],

@@ -394,7 +394,6 @@
    "config-and-secrets",
    "pdpa-compliance",
    "audit-trail",
-   "owasp-top10",
    "security-audit"
   ],
   "เขียนโค้ดและภาษา": [
@@ -454,7 +453,6 @@
    "markdown-report-docx",
    "presentation-design",
    "html-slide-deck",
-   "pptx-to-html-deck",
    "doc-cover-design"
   ],
   "ความรู้เฉพาะสาขา": [

@@ -94,7 +94,7 @@ Visit for morning headaches, 3 weeks, home blood pressure (BP) readings 150/95 o
 2. "Is any medicine or supplement on my list a possible cause?"
 3. "Which signs mean I should go to the emergency room instead of waiting?"
 
-Related: `medication-schedule` · `annual-checkup` · `sleep-log` · `meeting-prep-card`.
+Related: `medication-schedule` · `annual-checkup` · `sleep-log` · `meeting`.
 
 ## เรียกเป็นคำสั่ง
 

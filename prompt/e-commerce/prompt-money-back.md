@@ -55,7 +55,7 @@ playbook `refund` · agent `consumer-advocate` · skill `refund-request`
 
 ## 2. โอนเงินแล้วไม่ได้ของ / ถูกหลอกขาย
 
-playbook `refund` · agent `consumer-advocate` · skill `refund-request` · `complaint-letter-th`
+playbook `refund` · agent `consumer-advocate` · skill `refund-request`
 **ผลลัพธ์:** `cases/<ปี-เดือน>-<ร้าน>/not-delivered.md` · **รออนุมัติ:** แจ้งธนาคาร · แจ้งความ · ยื่นข้อพิพาทกับแพลตฟอร์ม · ส่งข้อความถึงผู้ขาย
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -84,7 +84,7 @@ playbook `refund` · agent `consumer-advocate` · skill `refund-request` · `com
 
 ## 3. บิลผิด หรือถูกเก็บเงินบริการที่ไม่ได้สมัคร
 
-playbook `refund` · agent `consumer-advocate` · skill `refund-request` · `complaint-letter-th`
+playbook `refund` · agent `consumer-advocate` · skill `refund-request`
 **ผลลัพธ์:** `cases/<ปี-เดือน>-<ผู้ให้บริการ>/billing.md` · **รออนุมัติ:** ส่งคำขอคืนเงินหรือยกเลิกบริการ · ยื่นข้อพิพาทบัตร · ร้องเรียนหน่วยงานกำกับ
 
 ### ข้อมูล (ผู้ใช้กรอก)

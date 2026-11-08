@@ -48,21 +48,21 @@
 | e-commerce | doc-leave | คิดวันลาคงเหลือ (ยกมา + สิทธิ - ใช้ - ขอ) (SKILL.md:45-49) | คงเหลือตรงเฉลย (ผิด 0 วัน) | ตัวอย่างใน SKILL.md:45-49 | ฟรี | ไม่มี | เติมเคส |
 | e-commerce | refund-request | เลือกช่องทางและกรอบเวลาของสิทธิ (ขายตรง บัตรเครดิต ข้อบกพร่อง 1 ปี ม.474) (SKILL.md:16-21) | ช่องทางและกำหนดถูก ÷ ทั้งหมด | ป.พ.พ. และกฎหมายขายตรง · เฉลยคนตรวจ | เรียก claude | ไม่มี | เติมเคส |
 | e-commerce | returns-and-bad-reviews | ตัดสินรับคืนหรือไม่ตามนโยบายแพลตฟอร์ม (Shopee 15 วัน TikTok 7 วัน ทั้งหมดเป็น รอยืนยัน) (SKILL.md:14-16) | ตัดสินตรงตารางเฉลย ÷ ทั้งหมด | นโยบายแพลตฟอร์มซึ่งเปลี่ยนบ่อย ต้องดึงจาก Seller Center ตามวัน (ยังไม่มีแหล่งยืนยัน) | เรียก claude | ไม่มี | เติมเคส |
-| e-commerce | complaint-letter-th | เลือกขั้นบันไดร้องเรียนและกำหนดตอบ (SKILL.md:16-20) | ขั้นถูก ÷ ทั้งหมด · จดหมายมีหลักฐานครบ ตรวจด้วย regex | ลำดับหน่วยงาน (สคบ. 1166) · เฉลยคนตรวจ | ฟรี (ตรวจโครงจดหมาย) · เรียก claude (ร่าง) | ไม่มี | เติมเคส |
+| e-commerce | refund-request (จดหมายร้องเรียน) | เลือกขั้นบันไดร้องเรียนและกำหนดตอบ (SKILL.md:16-20) | ขั้นถูก ÷ ทั้งหมด · จดหมายมีหลักฐานครบ ตรวจด้วย regex | ลำดับหน่วยงาน (สคบ. 1166) · เฉลยคนตรวจ | ฟรี (ตรวจโครงจดหมาย) · เรียก claude (ร่าง) | ไม่มี | เติมเคส |
 | e-commerce | chat-reply-templates | จับคู่คำถามลูกค้ากับแม่แบบ T1-T6 (SKILL.md:32-36) | จับคู่ตรงเฉลย ÷ ทั้งหมด | ชุดข้อความลูกค้าที่ติดป้ายแม่แบบ (ต้องเขียนเอง) | เรียก claude | evals/chat-reply-templates-existing | เติมเคส |
 | e-commerce | sme-bookkeeping | เลือกชนิดบัญชีตามประเภทกิจการ และอายุเก็บเอกสาร 5 ปี สูงสุด 7 (SKILL.md:28-30, 40-42) | เลือกถูก ÷ ทั้งหมด · ปีเก็บตรงเฉลย | พ.ร.บ.การบัญชี ม.14 ประมวลรัษฎากร ม.87/3 (อ้างใน SKILL.md:46) | เรียก claude | ไม่มี | เติมเคส |
 | e-commerce | thai-holidays | ตอบวันหยุดและวันชดเชย และขั้นต่ำ 13 วัน (SKILL.md:16) | วันที่ตรงเฉลย ÷ ทั้งหมด | ประกาศ ครม./ธปท. ประจำปี (ยังไม่ได้ตรวจ references/) | เรียก claude | ไม่มี | เติมเคส |
 | e-commerce | superuser | เลือก playbook และ agent ตามบทบาท (SKILL.md:43-60, 119) | เลือกถูก ÷ ทั้งหมด | ชุดคำขอที่ติดป้าย playbook (ต้องเขียนเอง) | เรียก claude | ไม่มี | เติมเคส |
 | e-commerce | product-listing | ตรวจชื่อสินค้าตามสูตร คำต้องห้าม รูปแรกสินค้าเต็มเฟรม 70-85% (SKILL.md:38-44, 62, 82) | ชื่อที่ผ่านกฎที่เครื่องตรงได้ (ความยาว คำต้องห้ามเช่น ถูกที่สุด / อันดับ 1) ÷ ทั้งหมด | ข้อกำหนดผู้ขายของแต่ละแพลตฟอร์ม (ความยาวชื่อจริง: ยังไม่ได้ตรวจ) | ฟรี (checker ที่ต้องเขียน) | ไม่มี | สร้างใหม่ |
 | e-commerce | doc-thai-official | ใช้รูปแบบหนังสือราชการตามระเบียบงานสารบรรณ (SKILL.md:32, 70) | ส่วนที่เครื่องตรงได้: มีหัวเรื่อง คำลงท้าย สรรพนามถูก ÷ จดหมาย | ระเบียบสำนักนายกฯ ว่าด้วยงานสารบรรณ | ฟรี (checker โครง) · คนตัดสิน (สำนวน) | ไม่มี | สร้างใหม่ |
-| e-commerce | complain | คำสั่งลัด เรียก agent consumer-advocate กับ complaint-letter-th ไม่ตัดสินเอง (SKILL.md:6-14) | ไม่มี | ไม่ต้องมี | ไม่มี | ไม่มี | ไม่คุ้ม (เป็นตัวส่งต่อ วัดที่ complaint-letter-th และ refund-request) |
+| e-commerce | complain | คำสั่งลัด เรียก agent consumer-advocate กับ refund-request ไม่ตัดสินเอง (SKILL.md:6-14) | ไม่มี | ไม่ต้องมี | ไม่มี | ไม่มี | ไม่คุ้ม (เป็นตัวส่งต่อ วัดที่ refund-request) |
 
 ## จำนวน skill ต่อระดับ
 
 | ระดับ | จำนวน | skill |
 |---|---|---|
 | วัดได้เลย | 8 | payroll-th · seller-tax-basics · marketplace-fees-pricing · import-landed-cost · doc-quotation · promptpay-qr · multi-shop-stock · buy-compare |
-| เติมเคส | 22 | e-tax-invoice · tax-vat-th · social-security-th · labour-law-basics · shipping-compare · hiring-th · live-selling-script · line-broadcast · line-oa-setup · line-chatbot · warranty-tracker · pdpa-workflow · thai-business-setup · doc-contract-th · doc-leave · refund-request · returns-and-bad-reviews · complaint-letter-th · chat-reply-templates · sme-bookkeeping · thai-holidays · superuser |
+| เติมเคส | 22 | e-tax-invoice · tax-vat-th · social-security-th · labour-law-basics · shipping-compare · hiring-th · live-selling-script · line-broadcast · line-oa-setup · line-chatbot · warranty-tracker · pdpa-workflow · thai-business-setup · doc-contract-th · doc-leave · refund-request · returns-and-bad-reviews · refund-request (จดหมายร้องเรียน) · chat-reply-templates · sme-bookkeeping · thai-holidays · superuser |
 | สร้างใหม่ | 4 | dbd-annual-filing · cash-flow · product-listing · doc-thai-official |
 | ไม่คุ้ม | 1 | complain |
 

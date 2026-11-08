@@ -5,10 +5,10 @@ argument-hint: <what happened> [seller] [amount] [date]
 disable-model-invocation: true
 ---
 
-Run the `consumer-advocate` agent with the `complaint-letter-th` skill: **$ARGUMENTS**
+Run the `consumer-advocate` agent with the `refund-request` skill: **$ARGUMENTS**
 
 1. Collect the facts and build the evidence list; anything missing → mark `(รอยืนยัน)` and list it; the lead asks once at the start.
-2. Check time-limited rights first with `refund-request` (cooling-off, platform window, card dispute).
+2. Check time-limited rights first with `refund-request` Step 1 (cooling-off, platform window, card dispute).
 3. Identify the current step on the escalation ladder.
 4. Draft the letter or message for that step in Thai (English too if the seller is foreign), with a dated deadline.
 5. Write what happens next if the deadline passes.

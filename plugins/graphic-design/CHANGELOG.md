@@ -1,5 +1,10 @@
 # Changelog — graphic-design
 
+## 0.26.0 — 2026-11-08
+
+- ยุบ `brand-guidelines` เข้า `brand-kit` หัวข้อ "เขียนเป็นเอกสาร" · ขั้นตอนเต็มอยู่ใน `references/brand-guidelines.md` · สคริปต์ `.cjs` 4 ตัวย้ายไป `brand-kit/scripts/` · **เรียกชื่อเก่าไม่ได้แล้ว** · ไฟล์ผล `docs/brand-guidelines.md` ใช้ชื่อเดิม
+- eval `brand-guidelines-*` เปลี่ยนชื่อเป็น `brand-kit-guidelines-*` · agent `brand-keeper` ชี้ตัวใหม่
+
 ## 0.25.1 — 2026-11-07
 
 - audit หัวข้อ 8: หัวข้อ "Not an AI look" ใน skill 10 ตัวเหลือลิงก์ชี้ `no-ai-look` 3.2 (ตัดเลข "8-point" ที่ไม่ตรงของจริง) · subagent ตรวจภาพใน banner-design · brief-to-image · icon-design · image-generation กำหนดขนาดคำตอบและใช้ haiku ทายภาพ · agent 4 ตัว (art-director · brand-keeper · image-artist · social-creator) มีหัวข้อ "What You Return" จำกัด 15 บรรทัด ไม่แนบเนื้อไฟล์

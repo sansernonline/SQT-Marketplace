@@ -1,6 +1,6 @@
 ---
 name: backblaze-b2
-description: Use when connecting an app to Backblaze B2 file storage — S3 API, application keys, presigned upload, versions, lifecycle, cost.
+description: Use when using Backblaze B2 — app file storage (S3 API, keys, presigned upload, lifecycle, cost) or deploying a static site (b2 sync, Cloudflare).
 ---
 
 # backblaze-b2 — ต่อแอปเข้า Backblaze B2 แบบ bucket ส่วนตัว สิทธิ์น้อยสุด และไม่ปล่อยเวอร์ชันเก่าค้างคิดเงิน
@@ -16,6 +16,7 @@ description: Use when connecting an app to Backblaze B2 file storage — S3 API,
 - ต้องย้อนเวอร์ชันไฟล์ หรือตั้งกฎลบเวอร์ชันเก่า (lifecycle)
 - เปิดไฟล์ให้คนทั่วไปโหลดจาก bucket Public
 - ถามว่า B2 ฟรีพอไหม หรือทำไมค่าเก็บโตเอง
+- ปล่อยเว็บ static หรือ build ของ SPA ขึ้น B2 แล้วผูกโดเมนผ่าน Cloudflare (`b2 sync` · rollback) → อ่าน [`references/deploy.md`](references/deploy.md) · แอปที่มี backend → `render-deploy`
 
 ไม่ใช้เมื่อ: ออกแบบว่าไฟล์ชนิดไหนรับได้และสแกนไวรัสอย่างไร → `file-upload-and-storage` · ต้องใช้ฟีเจอร์ S3 ที่ B2 ไม่รองรับ (ตารางข้อ 4) → เลือก storage อื่น
 
@@ -29,7 +30,7 @@ description: Use when connecting an app to Backblaze B2 file storage — S3 API,
 | ตรวจก่อนส่งขึ้นระบบ | [`security-gate`](../security-gate/SKILL.md) | สแกนความลับใน repo ก่อน push |
 | ตรวจข้อมูลจากภายนอกที่เข้ามา (ชื่อไฟล์ ชนิด ขนาด) | [`principle-secure-by-default`](../principle-secure-by-default/SKILL.md) | ใช้ในข้อ 5 |
 | pipeline ที่ต้องใช้ B2 ตอน build หรือ deploy | [`cicd-and-release`](../cicd-and-release/SKILL.md) | key ของ CI แยกจาก key ของแอป |
-| ปล่อยเว็บ static ขึ้น B2 ให้เปิดผ่านโดเมน | [`backblaze-deploy`](../backblaze-deploy/SKILL.md) | ที่นั่นปล่อยผล build ด้วย `b2 sync` · ที่นี่คือที่เก็บไฟล์ของแอป |
+| ปล่อยเว็บ static ขึ้น B2 ให้เปิดผ่านโดเมน | [`references/deploy.md`](references/deploy.md) | ปล่อยผล build ด้วย `b2 sync` · ส่วนที่เหลือของไฟล์นี้คือที่เก็บไฟล์ของแอป |
 
 ## 1 · ค้นก่อนถาม แล้วถามรวมครั้งเดียว
 

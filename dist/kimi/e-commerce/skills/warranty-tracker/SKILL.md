@@ -60,7 +60,7 @@ The manufacturer's warranty is a contract on top of this — read what it exclud
 3. Contact the authorised service centre (not only the shop) — get a **job/ticket number**.
 4. When handing over: get a **receipt for the item** listing condition, accessories, and serial number. Photo the item before handover.
 5. Ask the expected repair time in writing. Note every call (date, name, what was said).
-6. Repeated failure of the same fault (e.g. 3 repairs) → ask in writing for replacement or refund; if refused → `complaint-letter-th`.
+6. Repeated failure of the same fault (e.g. 3 repairs) → ask in writing for replacement or refund; if refused → `refund-request` (complaint letters in its `references/complaint-letter.md`).
 
 ## Extended warranty — decision rule
 
@@ -71,4 +71,4 @@ Buy only when a repair would hurt the budget **and** chance of failure x covered
 - Anything bought this month not in the registry?
 - Any warranty ending in the next 60 days → test the item now.
 
-Related: `buy-compare` · `complaint-letter-th` · `refund-request` · `important-docs` in `personal-life`.
+Related: `buy-compare` · `refund-request` · `important-docs` in `personal-life`.

@@ -50,7 +50,7 @@ All must be true:
 | Criterion | Threshold |
 |---|---|
 | Closed trades | ≥ 30 (≥ 20 minimum for a first look) |
-| Expectancy | > +0.2R per trade (formula in `post-trade-review`) |
+| Expectancy | > +0.2R per trade (formula in `trade-journal`, Mode 2 · Review) |
 | Violation rate | ≤ 5% |
 | Max drawdown | Within what the user says they can sit through in real money |
 | Time span | ≥ 2 months, including at least one down week for the market |
@@ -68,7 +68,7 @@ Capital 100,000 · rule `pullback-50ma` only · risk 1%. Trade #12: XYZ limit bu
 
 ## Reporting
 
-Monthly: trades, win rate, avg R, expectancy, max drawdown, violations, passed/no-fill count, one lesson — using `post-trade-review`. Command: `/trading-finance:paper-trading`.
+Monthly: trades, win rate, avg R, expectancy, max drawdown, violations, passed/no-fill count, one lesson — using `trade-journal` Mode 2 (Review). Command: `/trading-finance:paper-trading`.
 
 ## เรียกเป็นคำสั่ง
 

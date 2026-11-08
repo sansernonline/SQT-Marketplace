@@ -23,7 +23,7 @@ description: Use when auditing a whole codebase for vulnerabilities before hando
 | สถานการณ์ | ใช้ | เกี่ยวกับ skill นี้อย่างไร |
 |---|---|---|
 | ก่อน merge · ship · เพิ่ม dependency | [`security-gate`](../security-gate/SKILL.md) | ผลสแกน gitleaks · semgrep · trivy ของ gate เข้ามาเป็น candidate ในขั้น 3 |
-| สัญญาระบุ OWASP Top 10 | [`owasp-top10`](../owasp-top10/SKILL.md) | finding ทุกข้อมีช่อง `owasp` รายงานจึงสรุปแถว A01–A10 ให้ได้ทันที |
+| สัญญาระบุ OWASP Top 10 | [`security-gate` ส่วน OWASP](../security-gate/references/owasp-top10.md) | finding ทุกข้อมีช่อง `owasp` รายงานจึงสรุปแถว A01–A10 ให้ได้ทันที |
 | ออกแบบ feature ใหม่ ยังไม่มีโค้ด | [`threat-model`](../threat-model/SKILL.md) | ถ้ามี threat model อยู่แล้ว ขั้นสำรวจใช้ DFD และ non-capabilities เป็นจุดตั้งต้น |
 | คำสั่งสแกนแบบเดิม | [`security-scan`](../security-scan/SKILL.md) | ถ้าขอบเขตคือทั้ง codebase ให้มาที่นี่ |
 | ถูกเจาะแล้ว · ตามรอยเหตุ · กฎ SIEM | `security-operations` | audit หาช่องก่อนเกิดเหตุ ส่วน security-operations รับมือหลังเกิดเหตุ |
@@ -158,7 +158,7 @@ node <skill>/scripts/render_report.mjs qa/security/audit-2026-10-26            #
 - **confirmed ทุกข้อ** → playbook `bug-fix` (หาต้นเหตุ · เขียน test ที่ล้มก่อนแก้ ชื่อขึ้นต้นด้วยรหัส OWASP เช่น `A01_other_user_order_returns_404` · ค้นจุดอื่นที่เขียนแบบเดียวกัน) · ระดับ critical และ high ห้ามส่งมอบจนกว่าจะแก้ หรือลูกค้ายอมรับความเสี่ยงเป็นลายลักษณ์อักษรใน `decision-log`
 - **needs_validation** → ส่ง `NEEDS-VALIDATION.md` ให้คนที่เข้าถึง deployment ได้ ตรวจตาม `check_plan` แล้วกลับมาปิดในรอบถัดไป
 - **รอบถัดไป** → อ่าน `findings.json` และ `ledger.json` รอบก่อนทั้งหมดก่อนวางแผน · ข้อ confirmed ที่โค้ดไม่เปลี่ยนยกมาพร้อม fingerprint เดิมแต่ต้องยืนยันใหม่ · โค้ดเปลี่ยนแล้ว ตรวจหน่วยนั้นใหม่ · แก้แล้ว ให้ตัวยืนยันรัน test ที่ล้มก่อนแก้ซ้ำ ผ่านจึงเขียนว่า `ปิดแล้ว` · หน่วย `blocked` และข้อ `needs_validation` เป็นงานของรอบนี้ · รอบเดียวไม่มีทางครอบคลุมทั้งหมด รายงานต้องไม่เขียนว่าครบ
-- สรุปสถานะด้วย `status-report` ประเภท `ตรวจ` · ถ้าส่งมอบตามสัญญา OWASP ให้แนบแถว A01–A10 จากรายงานนี้ไปกับรายงานของ `owasp-top10`
+- สรุปสถานะด้วย `status-report` ประเภท `ตรวจ` · ถ้าส่งมอบตามสัญญา OWASP ให้แนบแถว A01–A10 จากรายงานนี้ไปกับรายงาน OWASP ของ `security-gate`
 
 ## ตัวอย่าง 1 ชุด
 
@@ -193,4 +193,4 @@ F-001 ไป playbook `bug-fix` · test `A01_other_user_order_returns_404` ล�
 
 - แนวคิด 6 ขั้น · การยืนยันโดยตัวใหม่ที่พยายามหักล้าง · คำตัดสิน 3 แบบ · ระดับ 5 ขั้นที่ไม่สูงกว่าผลที่พิสูจน์ · รายการครอบคลุม (coverage ledger) · รายการประเภทการโจมตี — จาก cloudflare/security-audit-skill https://github.com/cloudflare/security-audit-skill (MIT · ดู 2026-10-26) ใช้เป็นรายการตรวจความครอบคลุม เนื้อ ตาราง และ prompt ในโฟลเดอร์นี้เขียนใหม่ทั้งหมด
 - ส่วนที่เพิ่มเอง: ผลสแกนเนอร์เป็น candidate · ช่อง `owasp` · `pdpa` · `owner_impact_th` · ระบบไทยใน [`classes-thai`](references/classes-thai.md) · การส่งต่อ `bug-fix` และ `pdpa-compliance` · ตัวตรวจที่รันบน Windows
-- OWASP Top 10:2025 — ตาม [`owasp-top10`](../owasp-top10/SKILL.md)
+- OWASP Top 10:2025 — ตาม [`security-gate` ส่วน OWASP](../security-gate/references/owasp-top10.md)

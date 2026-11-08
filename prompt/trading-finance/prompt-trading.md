@@ -62,7 +62,7 @@ playbook `pre-trade` · agent `risk-manager` + `market-analyst` · skill `positi
 
 ## 2. ทบทวนผลเทรด
 
-playbook `trade-review` · agent `trade-journal-coach` · skill `post-trade-review` · `trade-journal`
+playbook `trade-review` · agent `trade-journal-coach` · skill `trade-journal`
 **ผลลัพธ์:** `reviews/YYYY-MM.md` (หรือ `YYYY-Www.md`)
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -101,7 +101,7 @@ skill `watchlist-setup` · agent `alert-dispatcher` · งานกลาง ไ
 
 ## 4. ซ้อมเทรดด้วยเงินจำลองก่อนใช้เงินจริง
 
-playbook `pre-trade` (ทำทุกขั้นกับทุกไม้จำลอง เหมือนเงินจริง) + `trade-review` (ทุกเดือน) · agent `risk-manager` + `trade-journal-coach` · skill `paper-trading` · `position-sizing` · `trade-journal` · `post-trade-review`
+playbook `pre-trade` (ทำทุกขั้นกับทุกไม้จำลอง เหมือนเงินจริง) + `trade-review` (ทุกเดือน) · agent `risk-manager` + `trade-journal-coach` · skill `paper-trading` · `position-sizing` · `trade-journal`
 **ผลลัพธ์:** บันทึกเงินจำลองใน `trade-journal.csv` (`account = paper` + คอลัมน์เงินสด) · กติกาซ้อมและเกณฑ์ผ่าน · `reviews/YYYY-MM-paper.md` · **รออนุมัติ:** ย้ายไปใช้เงินจริง
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -186,7 +186,7 @@ playbook `pre-trade` · agent `risk-manager` + `market-analyst` · skill `positi
 
 ## 7. ทำ prop firm challenge
 
-playbook `pre-trade` (ทุกไม้ใช้ฉบับ 6) + `trade-review` (ทุกสัปดาห์) · agent `risk-manager` + `trade-journal-coach` · skill `position-sizing` (ไฟล์ `references/forex-cfd-crypto.md` หัวข้อ 6) · `trade-journal` · `post-trade-review` · `scam-check`
+playbook `pre-trade` (ทุกไม้ใช้ฉบับ 6) + `trade-review` (ทุกสัปดาห์) · agent `risk-manager` + `trade-journal-coach` · skill `position-sizing` (ไฟล์ `references/forex-cfd-crypto.md` หัวข้อ 6) · `trade-journal` · `scam-check`
 **ผลลัพธ์:** `propfirm/<ชื่อบริษัท>-rules.md` — กฎของบริษัทแปลเป็นงบเสี่ยงรายวันและต่อไม้ · ตารางติดตามรายวัน · แถว `account = prop` ใน `trade-journal.csv` · **รออนุมัติ:** จ่ายค่าสมัคร challenge
 
 ### ข้อมูล (ผู้ใช้กรอก)

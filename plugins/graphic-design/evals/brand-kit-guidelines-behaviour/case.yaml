@@ -1,0 +1,24 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23) · ยังไม่ได้รันจริง (เสียเงิน)
+schema_version: "1.1"
+name: brand-kit-guidelines-behaviour
+description: ต้องใช้แม่แบบ ใส่ (รอยืนยัน) กับข้อมูลที่ไม่รู้ ไม่แต่งสีหรือคำขวัญ
+tags: [behaviour, brand-kit]
+runs: 3
+expected_outcome: ใช้แม่แบบ docs/brand-guidelines.md · ข้อมูลที่ไม่มีใส่ (รอยืนยัน) · ไม่แต่งสี hex ให้
+execution:
+  prompt: |
+    สร้าง docs/brand-guidelines.md ให้ร้านกาแฟชื่อ 'ริมคลอง' ฉันยังไม่ได้เลือกสีหรือฟอนต์ ตอบในแชต ไม่ต้องถามกลับ
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: pending
+    type: regex
+    pattern: "รอยืนยัน"
+    flags: i
+    match: contains
+    target: last_message
+  - name: no-invented-palette
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ให้ผ่านเมื่อคำตอบไม่กำหนดรหัสสี hex ของแบรนด์เองโดยไม่บอกว่าเป็นข้อเสนอ และใส่ (รอยืนยัน) ตรงสีและฟอนต์

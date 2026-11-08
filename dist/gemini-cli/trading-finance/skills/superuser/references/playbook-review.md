@@ -2,7 +2,7 @@
 
 ใช้เมื่อ: ตรวจงานก่อนส่งหรือก่อนใช้จริง · "ช่วยดูหน่อยว่ามีอะไรพลาด" · ผู้ใช้ทำมาเองแล้วอยากให้ตรวจ
 ผลลัพธ์: คำตัดสินพร้อมรายการปัญหาที่ยืนยันแล้ว **ไม่แก้เองโดยอัตโนมัติ** เป็นงานอ่านอย่างเดียว ไม่สร้าง `CONTEXT.md`
-skill หลัก: `position-sizing` · `post-trade-review` · `tax-deduction-planner`
+skill หลัก: `position-sizing` · `trade-journal` · `tax-deduction-planner`
 
 ## ขั้นตอน (คัดลง todo ตรงตัว)
 

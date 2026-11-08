@@ -1,6 +1,6 @@
 {
  "plugin": "software-company",
- "version": "2.43.0",
+ "version": "2.47.0",
  "description": "Simulates a complete software development company — 38 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 95 skills and 29 slash commands for the whole SDLC.",
  "cross": [],
  "skills": [
@@ -12,7 +12,6 @@
   "audit-trail",
   "auth-implementation-patterns",
   "backblaze-b2",
-  "backblaze-deploy",
   "background-jobs",
   "blast-radius",
   "branded-document-design",
@@ -67,10 +66,8 @@
   "mobile-engineering",
   "notifications",
   "observability-basics",
-  "owasp-top10",
   "pdpa-compliance",
   "postmortem-template",
-  "pptx-to-html-deck",
   "pr-description-template",
   "presentation-design",
   "principle-data-shape-first",
@@ -273,7 +270,6 @@
     "spec-to-code-loop",
     "app-verifier-setup",
     "security-gate",
-    "owasp-top10",
     "markdown-visuals",
     "web-service-essentials",
     "api-conventions",
@@ -325,7 +321,6 @@
     "render-deploy",
     "cloudflare-r2",
     "backblaze-b2",
-    "backblaze-deploy",
     "project-bootstrap",
     "background-jobs",
     "kubernetes-helm",
@@ -705,12 +700,11 @@
    "skills": [
     "healthcare-systems",
     "fintech-payments",
-    "owasp-top10",
+    "security-gate",
     "superuser",
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "security-gate",
     "security-audit",
     "code-review-checklist",
     "auth-implementation-patterns",
@@ -803,9 +797,9 @@
     "markdown-report-docx",
     "presentation-design",
     "html-slide-deck",
-    "pptx-to-html-deck",
     "project-doc-set",
-    "product-naming"
+    "product-naming",
+    "project-bootstrap"
    ]
   },
   {
@@ -1056,7 +1050,7 @@
      "sub": [
       "แยก 3 ชั้น (รับข้อมูลเข้า → กฎธุรกิจ → เก็บข้อมูล)",
       "ถ้าแตะ input จากภายนอก · login · ไฟล์ · เงิน · ข้อมูลส่วนบุคคล ให้เปิด [`principle-secure-by-default`](../../principle-secure-by-default/SKILL.md) ส่วนฟีเจอร์ที่เปิดสู่ภายนอก ให้ส่ง `security-engineer` ตัวใหม่ทำ STRIDE ตาม `threat-model/references/security-templates.md` ก่อนเขียน (หรือขอให้ผู้ใช้รัน `/software-company:threat-model` เอง เพราะ skill นั้นเรียกได้เฉพาะผู้ใช้)",
-      "เว็บแอปหรือ API → ทำตามคอลัมน์ \"ต้องมี\" ของ [`owasp-top10`](../../owasp-top10/SKILL.md) ในส่วนที่ฟีเจอร์แตะ และเขียน test ตามคอลัมน์ \"พิสูจน์ด้วย\" (ชื่อ test ขึ้นต้นด้วยรหัสข้อ เช่น `A01_`)"
+      "เว็บแอปหรือ API → ทำตามคอลัมน์ \"ต้องมี\" ของ [`security-gate` ส่วน OWASP](../../security-gate/references/owasp-top10.md) ในส่วนที่ฟีเจอร์แตะ และเขียน test ตามคอลัมน์ \"พิสูจน์ด้วย\" (ชื่อ test ขึ้นต้นด้วยรหัสข้อ เช่น `A01_`)"
      ],
      "phase": "",
      "who": {
@@ -1067,7 +1061,7 @@
      },
      "skills": [
       "principle-secure-by-default",
-      "owasp-top10"
+      "security-gate"
      ],
      "commands": [
       "threat-model"
@@ -1391,7 +1385,7 @@
     },
     {
      "n": 4,
-     "text": "ถาม \"ทำไม\" แล้วไล่หลักฐานจากทุกแหล่งที่เข้าถึงได้ ถ้าทำพร้อมกันได้ให้ส่ง subagent แหล่งละตัว: `git log -p` · `git blame` · ข้อความ commit · การคุยใน PR (`gh pr view <n> --comments`) · issue ที่ commit อ้างถึง · ADR ใน `docs/decisions/` · เอกสารใน `docs/` · connector ที่ต่อไว้ (issue tracker · แชตทีม · wiki) แล้วเรียงคำตอบตามน้ำหนักหลักฐาน ถ้าไม่มีหลักฐาน ให้เขียนว่า `ไม่พบหลักฐาน` ห้ามเดาเหตุผล · ใคร: `Explore` ตัวใหม่แหล่งละตัว",
+     "text": "ถาม \"ทำไม\" แล้วไล่หลักฐานจากทุกแหล่งที่เข้าถึงได้ ถ้าทำพร้อมกันได้ให้ส่ง subagent แหล่งละตัว: `git log -p -n 20 -- <ไฟล์> | head -200` · `git blame -w -L <เริ่ม>,<จบ> <ไฟล์>` · ข้อความ commit · การคุยใน PR (`gh pr view <n> --comments | head -100`) · issue ที่ commit อ้างถึง · ADR ใน `docs/decisions/` · เอกสารใน `docs/` · connector ที่ต่อไว้ (issue tracker · แชตทีม · wiki) แต่ละตัวส่งกลับไม่เกิน 10 บรรทัดพร้อมแหล่งที่มา แล้วเรียงคำตอบตามน้ำหนักหลักฐาน ถ้าไม่มีหลักฐาน ให้เขียนว่า `ไม่พบหลักฐาน` ห้ามเดาเหตุผล · ใคร: `Explore` ตัวใหม่แหล่งละตัว",
      "sub": [],
      "phase": "",
      "who": {
@@ -1756,7 +1750,7 @@
     },
     {
      "n": 7,
-     "text": "**[`security-gate`](../../security-gate/SKILL.md)** — สแกนค่าลับ dependency และโค้ด หัวหน้าทีมเก็บรายงานใน `qa/security/` · เว็บแอปหรือ API เพิ่มรายงาน [`owasp-top10`](../../owasp-top10/SKILL.md) รายข้อ A01–A10 · ใคร: `security-engineer` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์)",
+     "text": "**[`security-gate`](../../security-gate/SKILL.md)** — สแกนค่าลับ dependency และโค้ด หัวหน้าทีมเก็บรายงานใน `qa/security/` · เว็บแอปหรือ API เพิ่มรายงาน OWASP รายข้อ A01–A10 ตาม [`references/owasp-top10.md`](../../security-gate/references/owasp-top10.md) · ใคร: `security-engineer` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์)",
      "sub": [],
      "phase": "",
      "who": {
@@ -1768,8 +1762,7 @@
       "raw": "`security-engineer` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์)"
      },
      "skills": [
-      "security-gate",
-      "owasp-top10"
+      "security-gate"
      ],
      "commands": [],
      "playbooks": [],
@@ -2593,7 +2586,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "กำหนดขอบเขต — ไฟล์หรือ diff ที่ตรวจ (`git diff main...HEAD`) และไฟล์รอบข้างที่ต้องอ่านเพื่อเข้าใจ ([`code-orientation`](../../code-orientation/SKILL.md)) หาผลกระทบนอก diff ตาม [`blast-radius`](../../blast-radius/SKILL.md) · ใคร: หัวหน้าทีม",
+     "text": "กำหนดขอบเขต — ไฟล์หรือ diff ที่ตรวจ (`git diff --stat main...HEAD` แล้วเปิด diff รายไฟล์เฉพาะที่ต้องดู) และไฟล์รอบข้างที่ต้องอ่านเพื่อเข้าใจ ([`code-orientation`](../../code-orientation/SKILL.md)) หาผลกระทบนอก diff ตาม [`blast-radius`](../../blast-radius/SKILL.md) · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -2708,7 +2701,7 @@
      "text": "ตรวจว่าทุกชิ้นงานผ่านการพิสูจน์แล้ว (test · skill ตรวจแอป) ถ้ายังไม่ผ่าน ให้กลับไป playbook เดิม · ใคร: `qa-tester` ตัวใหม่",
      "sub": [
       "รัน [`security-gate`](../../security-gate/SKILL.md) — ถ้า critical หรือ high ที่ยืนยันแล้วยังค้างอยู่ ห้ามส่ง ถ้าค่าลับหลุด ให้หยุดและบอกผู้ใช้",
-      "เว็บแอปหรือ API ที่ส่งลูกค้า → รายงาน [`owasp-top10`](../../owasp-top10/SKILL.md) ครบ A01–A10 ต้องไม่มีข้อ `ไม่ผ่าน` หรือ `ยังไม่ได้ตรวจ` · ใคร: `security-engineer` ตัวใหม่ กรอก · `reviewer` ตัวใหม่ เปิดหลักฐานทุกแถวที่เขียน `ผ่าน`"
+      "เว็บแอปหรือ API ที่ส่งลูกค้า → รายงาน [`security-gate` ส่วน OWASP](../../security-gate/references/owasp-top10.md) ครบ A01–A10 ต้องไม่มีข้อ `ไม่ผ่าน` หรือ `ยังไม่ได้ตรวจ` · ใคร: `security-engineer` ตัวใหม่ กรอก · `reviewer` ตัวใหม่ เปิดหลักฐานทุกแถวที่เขียน `ผ่าน`"
      ],
      "phase": "",
      "who": {
@@ -2720,8 +2713,7 @@
       "raw": "`qa-tester` ตัวใหม่"
      },
      "skills": [
-      "security-gate",
-      "owasp-top10"
+      "security-gate"
      ],
      "commands": [],
      "playbooks": [],

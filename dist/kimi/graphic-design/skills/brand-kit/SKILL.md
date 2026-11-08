@@ -1,6 +1,6 @@
 ---
 name: brand-kit
-description: Use when starting or redoing a brand, or posts look inconsistent. Logo rules, colour roles, Thai-Latin fonts.
+description: Use when starting a brand, posts look inconsistent, a full brand guideline is needed or colours synced to design tokens. Logo, colours, Thai fonts.
 argument-hint: '[brand or company name]'
 ---
 
@@ -79,6 +79,15 @@ Draw the clear-space box on a page in the kit (`logo/usage.png`) — people foll
 - Not in the kit = not brand. A new colour enters only with a new kit version, never through a one-off post
 - Confirm every font licence from the licence file in the download, not from a blog
 - Keep the kit beside the work: `asset-organize` puts it at `00-brand-kit/`
+
+## เขียนเป็นเอกสาร (full brand guideline)
+
+ใช้เมื่อองค์กรหรือทีมต้องมีคู่มือเต็ม (น้ำเสียง ข้อความหลัก กติกาอนุมัติงาน การเก็บไฟล์) หรือต้องซิงก์สีเข้า design token · ร้านเล็กใช้ Workflow ข้างบนก็พอ
+
+- **ไฟล์เดียว:** `docs/brand-guidelines.md` ที่ทุกคนและทุก agent อ่านจากที่เดียว · สีและฟอนต์ในนั้นเป็นต้นทาง ไฟล์ token ทำตามนั้น
+- เริ่มจาก `templates/brand-guidelines-starter.md` · ข้อมูลที่ไม่มีใส่ `(รอยืนยัน)` ไม่แต่งเอง
+- ซิงก์ token: `node scripts/sync-brand-to-tokens.cjs` · ตรวจไฟล์: `scripts/validate-asset.cjs` · เทียบสีภาพ: `scripts/extract-colors.cjs` · สรุปแบรนด์แปะ prompt: `scripts/inject-brand-context.cjs`
+- ขั้นตอนเต็ม ตารางหัวข้อ/ไฟล์ต้นฉบับ ข้อจำกัด และรายการตรวจ: [references/brand-guidelines.md](references/brand-guidelines.md)
 
 ## Not an AI look
 

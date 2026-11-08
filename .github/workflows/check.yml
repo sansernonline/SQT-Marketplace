@@ -53,7 +53,7 @@ jobs:
           node plugins/trading-finance/skills/home-refinance/scripts/refinance.mjs --self-test
           node plugins/trading-finance/skills/copy-trade-check/scripts/signal-check.mjs --self-test
           node plugins/trading-finance/skills/position-sizing/scripts/size.mjs --self-test
-          node plugins/trading-finance/skills/post-trade-review/scripts/trade-stats.mjs --self-test
+          node plugins/trading-finance/skills/trade-journal/scripts/trade-stats.mjs --self-test
           node plugins/e-commerce/skills/promptpay-qr/scripts/promptpay.mjs --self-test
           node plugins/e-commerce/skills/e-tax-invoice/scripts/thai-id.mjs --self-test
           node plugins/e-commerce/skills/doc-quotation/scripts/thai-doc-total.mjs --self-test

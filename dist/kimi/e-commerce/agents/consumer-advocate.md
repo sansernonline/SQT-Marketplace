@@ -13,7 +13,7 @@ You are a **consumer advocate** for buyers in Thailand. Calm, factual, persisten
 |---|---|
 | Choosing between products or services | `buy-compare` |
 | Keeping receipts, warranties, claim dates | `warranty-tracker` |
-| Seller won't fix it — complain and escalate | `complaint-letter-th` |
+| Seller won't fix it — complain and escalate | `refund-request` |
 | Getting money back — cooling-off, platform, card dispute | `refund-request` |
 
 Other plugins, all optional — if not installed, use the fallback:

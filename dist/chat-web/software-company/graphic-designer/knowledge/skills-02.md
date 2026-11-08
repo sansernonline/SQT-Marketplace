@@ -1178,8 +1178,8 @@ Use when building a slide deck for any work (pitch, plan, report, training) that
 > |---|---|---|
 > | "ทำ slide deck" · "ทำสไลด์" · "ทำ presentation" (ไม่ระบุชนิด) | **.pptx** | `branded-document-design` · `StageDeck` |
 > | "slide deck html" · "เด็ค html" · "มี animation" · "นำเสนอจากเบราว์เซอร์" | **.html ไฟล์เดียว พร้อม animation** | `html-slide-deck` |
-> | มี .pptx อยู่แล้ว · "แปลง pptx เป็น html" · "animation แบบเด็ค IS" · มี .pptx แล้วอยากได้หน้าโต้ตอบหรือเปิดทีละคลิก | **.html ไฟล์เดียว หน้าตาเหมือน .pptx ทุกหน้า** | `pptx-to-html-deck` |
-> | ขอทั้ง 2 | .pptx + .html จากต้นฉบับเดียว | สร้าง .pptx ด้วย `StageDeck` แล้วแปลงด้วย `pptx-to-html-deck` — หน้าตาตรงกันทุกหน้า แก้ที่ .pptx ที่เดียว |
+> | มี .pptx อยู่แล้ว · "แปลง pptx เป็น html" · "animation แบบเด็ค IS" · มี .pptx แล้วอยากได้หน้าโต้ตอบหรือเปิดทีละคลิก | **.html ไฟล์เดียว หน้าตาเหมือน .pptx ทุกหน้า** | `html-slide-deck` (`references/from-pptx.md`) |
+> | ขอทั้ง 2 | .pptx + .html จากต้นฉบับเดียว | สร้าง .pptx ด้วย `StageDeck` แล้วแปลงด้วยทางเข้าจาก .pptx ของ `html-slide-deck` — หน้าตาตรงกันทุกหน้า แก้ที่ .pptx ที่เดียว |
 >
 > ไม่ถามซ้ำว่าจะเอาชนิดไหน — ไม่ระบุ = .pptx · ท้ายคำตอบบอก 1 บรรทัดว่าทำแบบ .html มี animation ได้ด้วย
 >
@@ -1396,7 +1396,7 @@ Use when building a slide deck for any work (pitch, plan, report, training) that
 |---|---|
 | สร้างไฟล์ `.pptx` จริง | `branded-document-design` |
 | เด็ค .html ไฟล์เดียว นำเสนอจากเบราว์เซอร์ (เมนู · โน้ต · นาฬิกา · คลิกดูรายละเอียด) | `html-slide-deck` |
-| แปลง .pptx เป็น .html มี animation · เปิดทีละคลิก · แทรกหน้าโต้ตอบ | `pptx-to-html-deck` |
+| แปลง .pptx เป็น .html มี animation · เปิดทีละคลิก · แทรกหน้าโต้ตอบ | `html-slide-deck` (`references/from-pptx.md`) |
 | ชุดสีของกราฟ | สีหลักของงาน + สีรองตาม `diagram-figures` → `references/colour-by-domain.md` (หน้าจอแอป: `web-app-design` ใน plugin `software-company`) |
 | ผังในสไลด์ | `diagram-figures` (ซอฟต์แวร์ใช้ `software-diagrams` (plugin `software-company`) ได้) |
 | กฎระยะห่างและลำดับสายตา (หน้าจอแอป) | `ui-craft` (plugin `software-company`) |
@@ -1441,7 +1441,7 @@ Use when building a slide deck for any work (pitch, plan, report, training) that
 
 # ธีมของเด็ค — สดใส และเข้ากับงานที่นำมาทำ
 
-ไฟล์กลางของ skill สไลด์ทุกตัว (`presentation-design` · `html-slide-deck` · `pptx-to-html-deck` · `StageDeck` ใน `branded-document-design`) · เปิดตอนข้อ 1 ขั้น 0 ก่อนเปิดโปรแกรม
+ไฟล์กลางของ skill สไลด์ทุกตัว (`presentation-design` · `html-slide-deck` (รวมทางเข้าจาก .pptx) · `StageDeck` ใน `branded-document-design`) · เปิดตอนข้อ 1 ขั้น 0 ก่อนเปิดโปรแกรม
 
 > **กฎข้อเดียว:** เด็คต้องหน้าตาเหมือนมาจากงานที่นำมาทำ ทั้งสีและอารมณ์ · คนเห็นเด็คข้างเอกสารต้นทางแล้วต้องรู้ว่าเป็นงานเดียวกัน
 
@@ -1501,7 +1501,7 @@ Use when building a slide deck for any work (pitch, plan, report, training) that
 |---|---|
 | `html-slide-deck` | `build_deck.py … --theme bright --brand <สีหลัก>,<สีสว่าง>,<สีรอง>` · หน้าที่ใช้สีรองทั้งแผ่นใส่ `data-tone="2"` ที่ `<section>` · พื้นต้นทางเข้มใช้ `--theme dark` |
 | `StageDeck` (.pptx) | `StageDeck(accent="<สีหลัก>", bg="FFFFFF", block=True)` เมื่อพื้นสว่าง (`block=True` ทำปกและหน้าคั่นบทเป็นสีหลักทึบเต็มแผ่น) · สีรองใช้กับรูปและกราฟที่ส่งเข้า (`diagram-figures` `#accent=`) |
-| `pptx-to-html-deck` | หน้าตามาจาก .pptx · ทำ .pptx ตามไฟล์นี้ก่อน แล้ว `--accent <สีหลัก>` |
+| `html-slide-deck` ทางเข้าจาก .pptx | หน้าตามาจาก .pptx · ทำ .pptx ตามไฟล์นี้ก่อน แล้ว `--accent <สีหลัก>` |
 | รูปผังในเด็ค | `diagram-figures` ด้วย `#accent=<สีหลัก>&bg=<สีพื้นเด็ค>` |
 
 ## 5 · ตรวจก่อนส่ง

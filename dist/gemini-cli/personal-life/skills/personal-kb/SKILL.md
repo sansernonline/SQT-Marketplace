@@ -71,4 +71,4 @@ User: "I wrote down how to reset the water pump last year." Search `pump` → no
 - Notes about other people: facts and preferences they shared with you, not gossip or health details they did not want written
 - Back up the `kb/` folder with the rest of the user's files (3-2-1 rule in `digital-hygiene`)
 
-Related: `meeting-summary` (files into `journal/`) · `important-docs` (documents, not notes) · `weekly-review`.
+Related: `meeting` (Leg 2 summaries file into `journal/`) · `important-docs` (documents, not notes) · `weekly-review`.
