@@ -1,6 +1,6 @@
 ---
 name: meeting
-description: Use when a meeting matters — prep card 15 minutes before, or right after or when notes or a transcript are given — decisions, actions, Thai minutes.
+description: Use when a meeting matters — a prep card 15 minutes before, or afterwards from notes or a transcript — decisions, actions, Thai minutes.
 argument-hint: <prep|summary> [meeting name or notes]
 ---
 

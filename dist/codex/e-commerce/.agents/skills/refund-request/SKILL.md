@@ -18,7 +18,7 @@ General information, not legal advice — for large amounts, injury or a contrac
 | Paid by credit/debit card; seller won't refund or never delivered | Card dispute / chargeback via your bank | Transaction or statement date | Bank's card terms (รอยืนยัน — commonly counted from the statement date; read your card's ข้อกำหนดและเงื่อนไข and call immediately) |
 | Card charge you did not make | Report unauthorised use to the bank | When you see it | **At once** — call the bank's 24-hour line, freeze the card |
 | Paid by bank transfer / PromptPay to a fake shop | Police report + bank hold request | When you realise | **At once** — ศูนย์ Anti Online Scam Operation Center (AOC) 1441 (24 hours) and your bank |
-| Defective product, any channel | Seller's liability for defects (ป.พ.พ. มาตรา 472) | Discovering the defect | Lawsuit barred after 1 year (มาตรา 474) — see Step 3 below |
+| Defective product, any channel | Seller's liability for defects (ป.พ.พ. มาตรา 472) | Discovering the defect | Lawsuit barred after 1 year (มาตรา 474) — see Step 2 below |
 
 ## The 7-day cancellation (direct sales / direct marketing)
 
@@ -42,7 +42,7 @@ Notice template (Thai, มาตรา 33) and how to send it so the date is pro
 2. Do **not** press "ได้รับสินค้าแล้ว / Order received" until you have checked the item — on several platforms confirming releases payment to the seller and may shorten your window.
 3. Open the return/refund request from the order page, choose the exact reason, upload photos/video.
 4. Keep all communication in the platform chat — never move to LINE or phone with the seller (this is also where scams start → `scam-check` in `trading-finance` (if installed)).
-5. If rejected, escalate to platform customer service within their appeal window, then Step 3 below.
+5. If rejected, escalate to platform customer service within their appeal window, then Step 2 below.
 
 ## Card dispute (chargeback) — steps
 
@@ -57,7 +57,7 @@ Unauthorised card transactions: under the BOT fraud measures (first Oct 2564, re
 
 ตรวจล่าสุด 2026-10-14 · แหล่ง: https://www.bot.or.th/th/news-and-media/news/news-20211019.html · https://www.bot.or.th/th/news-and-media/news/news-20250428.html · https://www.thebangkokinsight.com/news/stock-finance/finance/1437029/ · https://thethaiger.com/th/news/488483/
 
-## Step 3 — refund refused? Escalate one rung at a time
+## Step 2 — refund refused? Escalate one rung at a time
 
 | Step | Who | How | Give them | Move up when |
 |---|---|---|---|---|
@@ -88,6 +88,6 @@ Bought a skincare set through a Facebook advertiser's own website (direct market
 1. Day 3 of 7 — the มาตรา 33 right applies. Send the cancellation notice by email and registered mail on 2026-10-04.
 2. Keep the set unopened for 21 days or return per the company's instructions.
 3. Refund due by 15 days from the company receiving the notice (≈ 2026-10-21 if received 2026-10-06).
-4. No refund by then → "Step 3 — refund refused?", rung 3 (สคบ. 1166), attaching the notice and postal receipt.
+4. No refund by then → "Step 2 — refund refused?", rung 3 (สคบ. 1166), attaching the notice and postal receipt.
 
 Related: `warranty-tracker` · `scam-check` in `trading-finance` (if installed) · `polite-message-th-en` (plugin `superuser`) · `important-docs` in `personal-life` (if installed).

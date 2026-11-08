@@ -1,5 +1,11 @@
 # Changelog — superuser
 
+## 3.25.1 — 2026-11-08
+
+- hook `runs.jsonl`: บรรทัด `คาด:` อ่าน `เร็วขึ้น N เท่า` ได้แล้ว เก็บเป็นช่อง `speedup_x` ของ `expect` (เดิมหัวข้อ 2 ของ `superuser` สั่งให้เขียน แต่ hook ไม่เก็บ)
+- `temp-file-discipline`: แผนลบ `delete-plan.txt` อยู่ในรายการข้อยกเว้นของกฎ "ห้ามวางไฟล์ไว้ตรง `_to_delete/`" เพราะ `delete-plan-check.mjs` บังคับให้อยู่ตรงนั้น
+- `no-ai-look` `references/catalog.md`: `scripts/thai_tells.py` บอกว่าเป็นของ `human-writing`
+
 ## 3.25.0 — 2026-11-08
 
 - `hooks/skill-router.json`: pattern สรุปประชุมเปิด `meeting` แทน `meeting-summary` (personal-life ยุบ skill ประชุม 2 ตัวเป็นตัวเดียว)

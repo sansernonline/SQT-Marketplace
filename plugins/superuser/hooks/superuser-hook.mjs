@@ -247,6 +247,7 @@ export function parseExpect(line) {
   return {
     size: word(/ขนาด\s*(เล็ก|กลาง|ใหญ่|XL)/i), workers: n(/ลูกทีม\s*(\d+)/), review_rounds: n(/รอบตรวจ\s*(\d+)/),
     level: word(/ระดับ\s*(เล็ก|กลาง|ใหญ่)/), critical_k: n(/สายวิกฤต\s*(\d+(?:\.\d+)?)\s*k/), width: n(/กว้างสุด\s*(\d+)/),
+    speedup_x: n(/เร็วขึ้น\s*(\d+(?:\.\d+)?)\s*เท่า/),
   };
 }
 
@@ -1470,11 +1471,11 @@ ${rows}
         && ev.event === "result" && ev.verdict === "pass" && ev.high === 0 && ev.mid === 0 && ev.low === 4 && ev.round === 1;
     }],
     ["runs: หัวหน้าเขียน คาด: ลง CONTEXT.md → บรรทัด expect · บรรทัดเดิมใน old_string ไม่นับซ้ำ · ไฟล์อื่นไม่นับ", [], true, () => {
-      const line = "| 2026-11-08 | แบ่ง 3 ชิ้น | คาด: ขนาด กลาง · ลูกทีม 3 · รอบตรวจ 2 · ระดับ กลาง · สายวิกฤต 40k · กว้างสุด 2 |";
+      const line = "| 2026-11-08 | แบ่ง 3 ชิ้น | คาด: ขนาด กลาง · ลูกทีม 3 · รอบตรวจ 2 · ระดับ กลาง · สายวิกฤต 40k · กว้างสุด 2 · เร็วขึ้น 1.5 เท่า |";
       const ed = (file_path, new_string, old_string = "") => ({ hook_event_name: "PostToolUse", tool_name: "Edit", tool_input: { file_path, new_string, old_string }, tool_response: {} });
       const run = (i) => runEvents(i, buildEntry(i, { models: {} }), null);
       const [e] = run(ed("C:\\p\\.claude\\superuser\\CONTEXT.md", line));
-      return e?.event === "expect" && e.size === "กลาง" && e.workers === 3 && e.review_rounds === 2 && e.level === "กลาง" && e.critical_k === 40 && e.width === 2 && !("text" in e)
+      return e?.event === "expect" && e.size === "กลาง" && e.workers === 3 && e.review_rounds === 2 && e.level === "กลาง" && e.critical_k === 40 && e.width === 2 && e.speedup_x === 1.5 && !("text" in e)
         && run(ed("/p/.claude/superuser/CONTEXT.md", line + "\nx", line)).length === 0 && run(ed("/p/docs/CONTEXT.md", line)).length === 0
         && newExpect("Edit", { file_path: "/p/.claude/superuser/CONTEXT.md", new_string: "คาด: เดี๋ยวค่อยคิด" }) === null;
     }],
