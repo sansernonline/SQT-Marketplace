@@ -260,7 +260,7 @@ function runOne(c, n, dirs) {
       const peeked = out.split("\n").some((l) => l.includes('"tool_use"') && /evals[\\/]+review-recall|case\.json/.test(l));
       const r = { id: c.id, run: n, kind: c.kind, found: hits.filter((h) => h.hit).length, planted: hits.length, hits, peeked,
         rows: issueLines(report).filter((l) => SEVERITY.test(l)).length, cost: res.total_cost_usd ?? 0,
-        seconds: Math.round((Date.now() - t0) / 1000), turns: res.num_turns ?? null, status: res.subtype ?? "ไม่มีผล",
+        seconds: Math.round((Date.now() - t0) / 1000), turns: res.num_turns ?? null, status: /hit your .*limit|usage limit reached|requires usage credits/i.test(res.result ?? err) ? "โควตาบัญชีหมด ไม่ได้รัน ต้องรันซ้ำ" : (res.subtype ?? "ไม่มีผล"),
         model: init.model ?? "", models: Object.keys(res.modelUsage ?? {}), tools: init.tools ?? [], stderr: err.slice(-2000), report };
       writeFileSync(join(OUT, `${c.id}-${n}.json`), JSON.stringify(r, null, 2));
       try { rmSync(work, { recursive: true, force: true }); } catch { /* ไฟล์ยังถูกจับอยู่ ลบเองทีหลัง */ }

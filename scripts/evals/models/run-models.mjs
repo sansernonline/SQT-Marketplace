@@ -113,11 +113,15 @@ function recommendSet(all, total) {
 const claudeArgs = (model, cap, extra) => ["-p", "--model", model, ...(EFFORT === "none" ? [] : ["--effort", EFFORT]), "--setting-sources", "project",
   "--strict-mcp-config", "--output-format", "json", "--max-budget-usd", String(cap), ...extra];
 
+export const isQuotaHit = (s) => /hit your .*limit|usage limit reached|requires usage credits/i.test(String(s ?? ""));
+
 /** เรียก claude -p (prompt ทาง stdin) ใน cwd คืนตัวเลขที่วัดได้ + ข้อความตอบ · ผลไม่ครบ → นับ $ เท่าเพดาน (isCharged) เพราะอาจเสียจริงถึงเพดาน */
 async function ask(model, cwd, prompt, cap, extra = []) {
   const t0 = Date.now();
   const r = await run("claude", claudeArgs(model, cap, extra), { cwd, input: prompt });
   let j = {}; try { j = JSON.parse(r.out); } catch { /* claude ล้ม → ดู stderr ในไฟล์ผล */ }
+  // โควตาบัญชีหมด (เช่น "You've hit your 5-hour limit") → ไม่ได้เริ่มงาน ไม่เสียเงิน ไม่นับ $ เท่าเพดาน
+  if (isQuotaHit(j.result ?? r.err)) return { wall: Math.round((Date.now() - t0) / 1000), turns: 0, tokens: 0, cost: 0, isCharged: false, isCut: true, isQuota: true, result: j.result ?? "", stderr: r.err.slice(-1000) };
   const isComplete = r.code === 0 && typeof j.total_cost_usd === "number";
   // โดนตัดที่เพดานกลางงาน (subtype error_max_budget_usd) หรือ claude บอกว่าผิดพลาด → ติดป้าย ผลช่องนี้ไม่ใช่ฝีมือ model
   const isCut = j.subtype === "error_max_budget_usd" || j.is_error === true;
@@ -205,7 +209,7 @@ async function paidRun() {
     if (spent + cap > BUDGET_TOTAL) { console.log(`เหลืองบ ${usd(BUDGET_TOTAL - spent)} ไม่พอเพดานช่อง ${usd(cap)} · ข้าม ${model}:${step}`); rows.push({ model, step, skipped: true }); continue; }
     const r = { model, step, ...(await RUNNERS[step](model)) };
     if (r.isCharged) r.note += " · ผลไม่ครบ นับ $ ตามเพดาน";
-    if (r.isCut) r.note += " · ถูกตัดที่เพดานกลางงาน คะแนนนี้ไม่ใช่ฝีมือ model";
+    if (r.isQuota) r.note += " · โควตาบัญชีหมด ไม่ได้รัน ต้องรันซ้ำ"; else if (r.isCut) r.note += " · ถูกตัดที่เพดานกลางงาน คะแนนนี้ไม่ใช่ฝีมือ model";
     spent += r.cost;
     rows.push(r);
     writeFileSync(join(OUT, `${step}-${model}.json`), JSON.stringify(r, null, 2));
