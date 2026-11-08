@@ -124,7 +124,7 @@ Decide where the new pixels go (top for text space, bottom only if it stays outs
 
 # skill: brand-kit
 
-Use when starting a brand, posts look inconsistent, a full brand guideline is needed or colours synced to design tokens. Logo, colours, Thai fonts, voice.
+Use when starting a brand, posts look inconsistent, a full guideline is needed or colours synced to design tokens. Logo, colours, Thai fonts, voice.
 
 # Brand Kit
 
