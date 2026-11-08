@@ -27,7 +27,7 @@ const OUT = join(ROOT, "_to_delete", "dispatch");
 const WORK = join(tmpdir(), "sqt-dispatch");
 const PLUGIN = join(ROOT, "plugins", "superuser");
 const PLAN_MJS = join(PLUGIN, "skills", "parallel-split-and-merge", "scripts", "plan.mjs");
-const CASE_COUNT = 8;
+const CASE_COUNT = 10;
 const TIERS = ["ใหญ่", "กลาง", "เล็ก"];
 const ARMS = { plugin: "มี plugin", none: "ไม่มี plugin" };
 
@@ -58,7 +58,8 @@ const stamp = () => new Date().toISOString().slice(0, 16).replace("T", " ");
 
 function loadCases() {
   const dir = join(HERE, "cases");
-  return readdirSync(dir).filter((f) => f.endsWith(".json")).sort()
+  const only = args.only ? new RegExp(args.only) : null; // --only "^d7" รันเฉพาะเคสที่ชื่อไฟล์ตรง
+  return readdirSync(dir).filter((f) => f.endsWith(".json") && (!only || only.test(f))).sort()
     .map((f) => ({ file: f, ...JSON.parse(readFileSync(join(dir, f), "utf8")) }));
 }
 
@@ -138,7 +139,7 @@ async function paidRun() {
     console.log(`${c.id.padEnd(14)} ${arm.padEnd(6)} รอบ ${n} · ลูกทีม ${parsePlan(r.answer)?.workers_parallel_max ?? "พัง"}/${c.expected.workers} · ${s.ratio_ok ? "ตรง" : "ไม่ตรง"} · skill ${r.skills.join(",") || "–"} · ${usd(r.cost)} · สะสม ${usd(spent)}`);
   }
   writeFileSync(join(dir, "runs.json"), JSON.stringify(rows, null, 2));
-  const md = summaryMarkdown(rows, cases, `${stamp()} · model ${MODEL} · ${RUNS} รอบ · ใช้ ${usd(spent)} จากงบ ${usd(BUDGET_TOTAL)}`);
+  const md = summaryMarkdown(rows, cases, `${stamp()} · model ${MODEL} · ${RUNS} รอบ${args.only ? ` · เฉพาะ --only ${args.only}` : ""} · ใช้ ${usd(spent)} จากงบ ${usd(BUDGET_TOTAL)}`);
   const file = join(HERE, "RESULTS.md");
   if (!existsSync(file)) writeFileSync(file, "# ผลวัดการแจกงานของหัวหน้าทีม\n\nสร้างโดย `scripts/evals/dispatch/run-dispatch.mjs` · ใหม่สุดอยู่ล่างสุด\n");
   appendFileSync(file, md);
@@ -206,8 +207,10 @@ async function check() {
   const problems = [];
   if ((await run("claude", ["--version"])).code !== 0) problems.push("- ไม่พบคำสั่ง claude");
   const cases = loadCases();
-  if (cases.length !== CASE_COUNT) problems.push(`- ต้องมี ${CASE_COUNT} เคส แต่มี ${cases.length}`);
-  if (!cases.some((c) => c.risky)) problems.push("- ไม่มีเคสงานเสี่ยง");
+  // --only รันบางเคส จึงไม่ตรวจจำนวนเคสและเคสงานเสี่ยงของทั้งชุด · ผลรอบนี้เทียบกับรอบเต็มไม่ได้
+  if (!args.only && cases.length !== CASE_COUNT) problems.push(`- ต้องมี ${CASE_COUNT} เคส แต่มี ${cases.length}`);
+  if (!args.only && !cases.some((c) => c.risky)) problems.push("- ไม่มีเคสงานเสี่ยง");
+  if (!cases.length) problems.push("- --only ไม่ตรงเคสไหนเลย");
   for (const c of cases) for (const b of checkCase(c).bad) problems.push(`- ${c.file}: ${b}`);
   return problems;
 }
