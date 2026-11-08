@@ -1,6 +1,6 @@
 ---
 name: meeting
-description: Use when a meeting matters — prep card 15 minutes before, or decisions, actions and Thai minutes right after.
+description: Use when a meeting matters — prep card 15 minutes before, or right after or when notes or a transcript are given — decisions, actions, Thai minutes.
 argument-hint: <prep|summary> [meeting name or notes]
 ---
 
@@ -9,8 +9,6 @@ argument-hint: <prep|summary> [meeting name or notes]
 Two legs, one habit: walk in with a card, walk out with a summary. Pick the leg from the request: meeting soon or invite given → Leg 1 · meeting just ended, notes or transcript given → Leg 2. The next meeting's card starts from the last summary's open actions. Works with the `meeting-prep` agent.
 
 ## Leg 1 · Before the meeting (prep card)
-
-One page, fifteen minutes before you walk in. If you cannot fill the goal line, the meeting is not ready.
 
 One page, fifteen minutes before you walk in. If you cannot fill the goal line, the meeting is not ready.
 
@@ -130,18 +128,18 @@ Formal Thai minutes template: [references/thai-minutes-template.md](references/t
 # [Topic] — YYYY-MM-DD
 Attendees: ___ · Absent: ___ · Notes by: ___
 
-### Decisions
+## Decisions
 - ___ — why: ___
 
-### Action items
+## Action items
 | # | Task | Owner | Due | Status |
 |---|---|---|---|---|
 | 1 | | | | open |
 
-### Open questions
+## Open questions
 - ___ (who answers, by when)
 
-### Next meeting
+## Next meeting
 Date · what must be ready
 ```
 

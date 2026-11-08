@@ -4,7 +4,7 @@
 
 > สัญญาจ้างทำเว็บแอปเขียนได้ว่า "ต้องผ่าน OWASP Top 10:2025" แต่ไม่มีใครให้ใบรับรองแบบนี้ได้
 > สิ่งที่ส่งมอบได้จริงคือ **รายงานที่บอกทีละข้อ A01–A10 ว่าคุมด้วยอะไร ตรวจด้วยอะไร และมีหลักฐานอะไร**
-> ส่วน OWASP นี้ทำให้ทุกระบบที่ทีมสร้างมีรายงานนั้น ตั้งแต่ออกแบบจนส่งมอบ
+> ไฟล์นี้ทำให้ทุกระบบที่ทีมสร้างมีรายงานนั้น ตั้งแต่ออกแบบจนส่งมอบ
 
 Open Worldwide Application Security Project (OWASP) Top 10:2025 คือรายการความเสี่ยงของเว็บแอปที่พบบ่อยและร้ายแรงที่สุด 10 ข้อ ฉบับล่าสุด (ต้นฉบับ: owasp.org/Top10/2025)
 
@@ -31,7 +31,7 @@ Open Worldwide Application Security Project (OWASP) Top 10:2025 คือรา�
 
 **ข้อที่ไม่เกี่ยว** เขียน `ไม่เกี่ยว` พร้อมเหตุผล 1 บรรทัด เช่น A07 ในระบบที่ไม่มี login เลย · ห้ามเว้นว่าง
 
-วิธีเขียนตาม stack ที่ทีมใช้ (.NET · TypeScript/Node/Angular · Python · SQL) → [`references/owasp-stack-checks.md`](owasp-stack-checks.md)
+วิธีเขียนตาม stack ที่ทีมใช้ (.NET · TypeScript/Node/Angular · Python · SQL) → [`owasp-stack-checks.md`](owasp-stack-checks.md)
 
 ---
 
@@ -39,9 +39,9 @@ Open Worldwide Application Security Project (OWASP) Top 10:2025 คือรา�
 
 | ช่วง | ทำอะไร | ได้อะไร |
 |---|---|---|
-| รับงาน · เขียนสัญญา | ใส่ข้อกำหนดและเกณฑ์รับงานตาม [`references/contract-clause.md`](owasp-contract-clause.md) · ใส่ในเอกสารความต้องการ (Software Requirements Specification (SRS)) หมวดความปลอดภัย (`srs-writing`) | ลูกค้ากับทีมเข้าใจตรงกันว่า "ผ่าน" แปลว่าอะไร |
+| รับงาน · เขียนสัญญา | ใส่ข้อกำหนดและเกณฑ์รับงานตาม [`owasp-contract-clause.md`](owasp-contract-clause.md) · ใส่ในเอกสารความต้องการ (Software Requirements Specification (SRS)) หมวดความปลอดภัย (`srs-writing`) | ลูกค้ากับทีมเข้าใจตรงกันว่า "ผ่าน" แปลว่าอะไร |
 | ออกแบบ | threat model ส่วน login · สิทธิ์ · เงิน · ข้อมูลส่วนบุคคล (A01 · A06 · A07) · ระบุบทบาทและสิทธิ์เป็นตาราง | `docs/security/threat-model.md` |
-| เขียนโค้ด | ทำตามคอลัมน์ "ต้องมี" และ `stack-checks` · ทุกข้อที่ทำได้ให้เป็นของกลางที่ใช้ซ้ำ (ตัวตรวจสิทธิ์ตัวเดียว · ตัวจับ error ตัวเดียว · logger ตัวเดียว) | โค้ดที่ทางปลอดภัยเป็นทางที่ง่ายที่สุด |
+| เขียนโค้ด | ทำตามคอลัมน์ "ต้องมี" และ [`owasp-stack-checks.md`](owasp-stack-checks.md) · ทุกข้อที่ทำได้ให้เป็นของกลางที่ใช้ซ้ำ (ตัวตรวจสิทธิ์ตัวเดียว · ตัวจับ error ตัวเดียว · logger ตัวเดียว) | โค้ดที่ทางปลอดภัยเป็นทางที่ง่ายที่สุด |
 | test | เขียน test ตามคอลัมน์ "พิสูจน์ด้วย" ใส่ไว้ในโฟลเดอร์ test ปกติ ชื่อขึ้นต้นด้วยรหัสข้อ เช่น `A01_other_user_order_returns_404` | หลักฐานที่รันซ้ำได้ทุกครั้ง |
 | ก่อนส่งมอบ | รัน `security-gate` แล้วกรอก [`assets/owasp-report.md` (ในโฟลเดอร์ security-gate)](../assets/owasp-report.md) ทีละข้อ | `qa/security/<ปี-เดือน-วัน>-owasp.md` |
 
@@ -81,8 +81,8 @@ Open Worldwide Application Security Project (OWASP) Top 10:2025 คือรา�
 
 ---
 
-## 5 · ไม่ใช่หน้าที่ของ ส่วน OWASP นี้
+## 5 · ไม่ใช่หน้าที่ของไฟล์นี้
 
-- ทดสอบเจาะระบบจริงหรือระบบของคนอื่น — ส่วน OWASP นี้ตรวจเฉพาะโค้ดและ environment ทดสอบของโปรเจกต์นี้
+- ทดสอบเจาะระบบจริงหรือระบบของคนอื่น — ไฟล์นี้ตรวจเฉพาะโค้ดและ environment ทดสอบของโปรเจกต์นี้
 - มาตรฐานอื่น เช่น OWASP API Security Top 10 · Application Security Verification Standard (ASVS) · Payment Card Industry Data Security Standard (PCI-DSS) · พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล (PDPA) — ใช้ skill เฉพาะเรื่องนั้น (`fintech-payments` · `pdpa-compliance`) แต่รายงานนี้ใช้เป็นฐานร่วมได้
-- แอปมือถือ — ใช้ OWASP Mobile Top 10 ร่วมกับ `[`android.md`](android.md)` · ส่วน backend ของแอปมือถือยังใช้ ส่วน OWASP นี้
+- แอปมือถือ — ใช้ OWASP Mobile Top 10 ร่วมกับ [`android.md`](android.md) · ส่วน backend ของแอปมือถือยังใช้ไฟล์นี้

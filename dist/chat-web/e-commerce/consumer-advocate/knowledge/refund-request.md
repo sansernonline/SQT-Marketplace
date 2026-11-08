@@ -6,7 +6,7 @@ Use when the user wants money back or to complain (faulty, fake, undelivered ite
 
 Time-limited rights first — they expire while people are still arguing with the seller.
 
-General information, not legal advice — for large amounts ask a lawyer (ทนายความ); for bank disputes the Bank of Thailand (BOT)'s ศูนย์คุ้มครองผู้ใช้บริการทางการเงิน (hotline 1213) can help.
+General information, not legal advice — for large amounts, injury or a contract you signed, ask a lawyer (ทนายความ) or the legal aid centre of สภาทนายความ; for bank disputes the Bank of Thailand (BOT)'s ศูนย์คุ้มครองผู้ใช้บริการทางการเงิน (hotline 1213) can help.
 
 ## Step 1 — which route, and its clock
 
@@ -62,7 +62,7 @@ Unauthorised card transactions: under the BOT fraud measures (first Oct 2564, re
 |---|---|---|---|---|
 | 1 | Seller / shop / service provider | Chat on the platform (keeps a record), email, or letter | 3–7 days to answer (the template says ภายใน 7 วัน นับจากวันที่ได้รับหนังสือฉบับนี้) | No reply or refusal by the date |
 | 2 | Platform (Shopee, Lazada, TikTok Shop, delivery app) | In-app "return/refund" or dispute, then customer service ticket | Platform's own window — act **before** it closes | Platform rejects, or seller is off-platform |
-| 2b | Card issuer / bank (if paid by card) | Dispute or chargeback — see Card dispute below | Bank's dispute window (รอยืนยัน — read your card terms) | Bank declines |
+| 2b | Card issuer / bank (if paid by card) | Dispute or chargeback — see "Card dispute (chargeback) — steps" | Bank's dispute window (รอยืนยัน — read your card terms) | Bank declines |
 | 2c | Online-transaction complaints | ศูนย์รับเรื่องร้องเรียนปัญหาออนไลน์ (Online Complaint Center, OCC, under สำนักงานพัฒนาธุรกรรมทางอิเล็กทรอนิกส์ — Electronic Transactions Development Agency, ETDA) hotline 1212 | — | Not resolved |
 | 3 | สำนักงานคณะกรรมการคุ้มครองผู้บริโภค (สคบ., Office of the Consumer Protection Board) | Hotline **1166**, OCPB Connect app, online at **complaint.ocpb.go.th** (register with บัตรประชาชน), or in person; provinces → สคบ.จังหวัด at the provincial hall | สคบ. may call both sides to a mediation; can sue on the consumer's behalf in some cases | Mediation fails |
 | 4 | ศาล — consumer case (คดีผู้บริโภค) | File at the court where the cause arose (มูลคดีเกิด) or where the business is domiciled — not simply where you live (รอยืนยัน — one official court page so far); can be filed **orally** with a court case officer (เจ้าพนักงานคดี) who writes it down | Court hearing | — |
@@ -87,7 +87,7 @@ Bought a skincare set through a Facebook advertiser's own website (direct market
 1. Day 3 of 7 — the มาตรา 33 right applies. Send the cancellation notice by email and registered mail on 2026-10-04.
 2. Keep the set unopened for 21 days or return per the company's instructions.
 3. Refund due by 15 days from the company receiving the notice (≈ 2026-10-21 if received 2026-10-06).
-4. No refund by then → Step 3 below, rung 3 (สคบ. 1166), attaching the notice and postal receipt.
+4. No refund by then → "Step 3 — refund refused?", rung 3 (สคบ. 1166), attaching the notice and postal receipt.
 
 Related: `warranty-tracker` · `scam-check` in `trading-finance` (if installed) · `polite-message-th-en` (plugin `superuser`) · `important-docs` in `personal-life` (if installed).
 
@@ -120,6 +120,17 @@ Send so the date is provable: email + registered mail (ไปรษณีย์�
 # Complaint Letter (Thailand)
 
 Use after the refund route in SKILL.md fails or the seller will not fix, deliver or keep a promise. Firm, dated, specific — and one rung at a time.
+
+## Contents
+- [Evidence list](#evidence-list)
+- [Workflow](#workflow)
+- [Tone rules](#tone-rules)
+- [Complaint Templates](#complaint-templates)
+  - [0. Step 1 — letter to the seller](#0-step-1--letter-to-the-seller)
+  - [1. Platform escalation message](#1-platform-escalation-message)
+  - [2. Complaint to สคบ.](#2-complaint-to-สคบ)
+  - [3. English version](#3-english-version)
+  - [4. Follow-up after deadline](#4-follow-up-after-deadline)
 
 ## Evidence list
 
