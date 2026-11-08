@@ -83,7 +83,9 @@ function collectDay(dayDir, day, project, rules) {
   const leadModel = mostCommon(main.map((e) => e.model));
   for (const r of runs) Object.assign(r, { project, day, rough: !lines.length, lead_model: r.lead_model ?? leadModel, reviews: [], feedback: r.feedback ?? [] });
   fillTokens(runs, readJson(join(dayDir, "tokens.json"), {}));
-  return { runs, rough: !lines.length };
+  const expects = lines.filter((l) => l.event === "expect").map((l) => ({ ...l, project, day }));
+  const results = lines.filter((l) => l.event === "result");
+  return { runs, expects, results, rough: !lines.length };
 }
 
 // ผู้ตรวจ → งานล่าสุดก่อนหน้าใน session เดียวกัน · ตรวจรอบที่ 2 ขึ้นไป → งานเดียวกับรอบแรกที่ผูกไว้ · เป็นการประมาณ ไม่ใช่ข้อมูลที่ log จดตรง ๆ
@@ -102,9 +104,11 @@ function linkReviews(runs) {
 export function collectProject(logDir, project) {
   const rules = stepRules();
   let days = [];
-  try { days = readdirSync(logDir).filter((n) => DAY.test(n)).sort(); } catch { return { runs: [], days: [] }; }
+  try { days = readdirSync(logDir).filter((n) => DAY.test(n)).sort(); } catch { return { runs: [], expects: [], reviewResults: [], days: [] }; }
   const parts = days.map((d) => ({ day: d, ...collectDay(join(logDir, d), d, project, rules) }));
   const runs = parts.flatMap((p) => p.runs);
   linkReviews(runs);
-  return { runs, days: parts.map((p) => ({ day: p.day, rough: p.rough, runs: p.runs.length })) };
+  const reviewIds = new Set(runs.filter((r) => r.step === "review" && r.spawned_id).map((r) => r.spawned_id));
+  const reviewResults = parts.flatMap((p) => p.results).filter((l) => reviewIds.has(l.spawned_id));
+  return { runs, expects: parts.flatMap((p) => p.expects), reviewResults, days: parts.map((p) => ({ day: p.day, rough: p.rough, runs: p.runs.length })) };
 }

@@ -19,6 +19,7 @@ export function priority({ method, items }) {
     num(it[f.need.at(-1)], `${it.name}: ${f.need.at(-1)}`, { above: 0 });
     if (method === "rice" && it.confidence > 1) throw new Error(`${it.name}: confidence ใส่เป็นสัดส่วน 0–1 (80% = 0.8)`);
     if (method === "rice" && (it.impact < 0.25 || it.impact > 3)) throw new Error(`${it.name}: impact ต้องอยู่ในช่วง 0.25–3 (ได้ ${it.impact}) · ใช้ 3 มาก · 2 สูง · 1 กลาง · 0.5 ต่ำ · 0.25 น้อยมาก`);
+    if (method === "eisenhower") for (const k of ["urgent", "important"]) if (it[k] < 1 || it[k] > 5) throw new Error(`${it.name}: ${k} ต้องอยู่ในช่วง 1–5 (ได้ ${it[k]}) · เกินช่วงแล้วกลุ่มและคะแนนเพี้ยน`);
     if (it.must_first !== undefined && typeof it.must_first !== "boolean") throw new Error(`${it.name}: must_first ใส่ true หรือ false (ได้ ${JSON.stringify(it.must_first)})`);
   }
   // ชื่อซ้ำยังคิดได้ แต่ตารางจะมี 2 แถวชื่อเดียวกันจนชี้ผิดตัว จึงเตือนให้แก้ชื่อ

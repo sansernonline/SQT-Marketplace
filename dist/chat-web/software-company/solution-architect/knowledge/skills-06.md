@@ -1857,7 +1857,7 @@ Use before writing or editing anything people read (answer, email, report, READM
 
 # human-writing — เขียนภาษาคน อ่านลื่น เข้าใจง่าย
 
-ใช้กับทุกอย่างที่คนจะอ่าน ตั้งแต่แชตถึงป้ายใน diagram · ตัวอย่างของทุกข้อและที่มา → [`headings-and-examples`](references/headings-and-examples.md) · ภาษาไทยตั้งแต่ 1 ย่อหน้าขึ้นไป → [`thai-grammar`](references/thai-grammar.md) (โครงประโยค · ระดับภาษา · ตัวอย่างย่อหน้าใน [`thai-examples`](references/thai-examples.md)) · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
+ใช้กับทุกอย่างที่คนจะอ่าน ตั้งแต่แชตถึงป้ายใน diagram · ตัวอย่างของทุกข้อและที่มา → [`headings-and-examples`](references/headings-and-examples.md) · ภาษาไทยตั้งแต่ 1 ย่อหน้าขึ้นไป → [`thai-grammar`](references/thai-grammar.md) (โครงประโยค · ระดับภาษา · ตัวอย่างย่อหน้าใน [`thai-examples`](references/thai-examples.md)) · งานวิจัยหรืองานส่งคนนอก → [`strict-review`](references/strict-review.md) · เอกสารไทยที่จัดชิดสองข้าง → [`thai-line-breaking`](references/thai-line-breaking.md) · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
 
 เส้นแบ่ง: skill นี้ดูแลถ้อยคำ · หน้าตาของเอกสารที่คนเก็บไว้ (หัวข้อ ตาราง กล่องข้อความ ธีม) → `polished-document-style` · ตัวย่อและอภิธานศัพท์ → `spell-out-abbreviations`
 

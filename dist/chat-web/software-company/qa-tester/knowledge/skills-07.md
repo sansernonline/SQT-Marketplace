@@ -4,7 +4,7 @@ Use before writing or editing anything people read (answer, email, report, READM
 
 # human-writing — เขียนภาษาคน อ่านลื่น เข้าใจง่าย
 
-ใช้กับทุกอย่างที่คนจะอ่าน ตั้งแต่แชตถึงป้ายใน diagram · ตัวอย่างของทุกข้อและที่มา → [`headings-and-examples`](references/headings-and-examples.md) · ภาษาไทยตั้งแต่ 1 ย่อหน้าขึ้นไป → [`thai-grammar`](references/thai-grammar.md) (โครงประโยค · ระดับภาษา · ตัวอย่างย่อหน้าใน [`thai-examples`](references/thai-examples.md)) · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
+ใช้กับทุกอย่างที่คนจะอ่าน ตั้งแต่แชตถึงป้ายใน diagram · ตัวอย่างของทุกข้อและที่มา → [`headings-and-examples`](references/headings-and-examples.md) · ภาษาไทยตั้งแต่ 1 ย่อหน้าขึ้นไป → [`thai-grammar`](references/thai-grammar.md) (โครงประโยค · ระดับภาษา · ตัวอย่างย่อหน้าใน [`thai-examples`](references/thai-examples.md)) · งานวิจัยหรืองานส่งคนนอก → [`strict-review`](references/strict-review.md) · เอกสารไทยที่จัดชิดสองข้าง → [`thai-line-breaking`](references/thai-line-breaking.md) · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
 
 เส้นแบ่ง: skill นี้ดูแลถ้อยคำ · หน้าตาของเอกสารที่คนเก็บไว้ (หัวข้อ ตาราง กล่องข้อความ ธีม) → `polished-document-style` · ตัวย่อและอภิธานศัพท์ → `spell-out-abbreviations`
 
@@ -857,7 +857,7 @@ subagent มี context ของตัวเอง จึงอ่านไป 
 
 ปิด MCP server และ plugin ที่ไม่ใช้ · เลือกโมเดลและ effort ตั้งแต่ต้น · `/clear` เมื่อเปลี่ยนเรื่อง · `CLAUDE.md` ของโปรเจกต์ไม่เกิน 40 บรรทัด — ตารางเต็มพร้อมเหตุผลอยู่ใน [`settings`](references/settings.md) · ทำงานบน Windows (Git Bash · PowerShell) → กับดักที่เกิดจริงใน [`windows-shell`](references/windows-shell.md)
 
-**compact เองที่ราว 70% ไม่รอให้ระบบทำ** — context ใช้ไปราว 70% และเพิ่งจบขั้นหนึ่ง (test ผ่าน · ไฟล์บันทึกแล้ว · ตรวจผ่าน) → อัปเดต "รับงานต่อ" ใน `CONTEXT.md` ก่อน (`handoff` หัวข้อ 5) แล้ว `/compact` พร้อมบอกว่าให้เก็บอะไร (ไฟล์ที่แก้ · การตัดสินใจ · ขั้นถัดไป) · รอให้ระบบ compact เองมักโดนกลางขั้น ตอนที่ยังไม่มีอะไรจดไว้ (แนวคิดจาก strategic-compact ใน everything-claude-code · MIT)
+**compact เองที่ราว 70% ไม่รอให้ระบบทำ** — context ใช้ไปราว 70% และเพิ่งจบขั้นหนึ่ง (test ผ่าน · ไฟล์บันทึกแล้ว · ตรวจผ่าน) → อัปเดต "รับงานต่อ" ใน `CONTEXT.md` ก่อน (`handoff` หัวข้อ 5) แล้ว `/compact` พร้อมบอกว่าให้เก็บอะไร (ไฟล์ที่แก้ · การตัดสินใจ · ขั้นถัดไป) · รอให้ระบบ compact เองมักโดนกลางขั้น ตอนที่ยังไม่มีอะไรจดไว้ (แนวคิดจาก strategic-compact ใน everything-claude-code · MIT · 70% เป็นค่าตั้งต้น ยังไม่ได้วัด)
 
 ---
 

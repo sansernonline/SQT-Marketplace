@@ -1,5 +1,6 @@
 import { collectProject } from "./collect.mjs";
 import { chooseSections } from "./choose.mjs";
+import { distributionSection } from "./distribution.mjs";
 
 // รายการงานลูกทีม (จาก collect.mjs) → ตาราง model × ขั้น + ข้อสังเกต 3 ข้อ (markdown)
 const STEP_ORDER = ["plan", "research", "design", "write", "code", "test", "review", "other"];
@@ -173,6 +174,7 @@ export function render(runs, prices, meta) {
     ...observations(cells).map((o, i) => `${i + 1}. ${o}`),
     ...sizeSection(runs),
     ...chooseSections(runs, cells, prices),
+    ...distributionSection(runs, meta),
   ];
   return [...head, ...table, ...notes].join("\n");
 }
@@ -180,5 +182,5 @@ export function render(runs, prices, meta) {
 export function buildReport(logDirs, prices) {
   const parts = logDirs.map(([name, dir]) => ({ name, ...collectProject(dir, name) }));
   const sources = parts.map((p) => ({ name: p.name, days: p.days.length, rough: p.days.filter((d) => d.rough).length }));
-  return render(parts.flatMap((p) => p.runs), prices, { sources });
+  return render(parts.flatMap((p) => p.runs), prices, { sources, expects: parts.flatMap((p) => p.expects), reviewResults: parts.flatMap((p) => p.reviewResults) });
 }
