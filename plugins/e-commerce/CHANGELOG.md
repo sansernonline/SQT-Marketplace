@@ -1,5 +1,9 @@
 # CHANGELOG — e-commerce
 
+## 1.8.1 — 2026-11-08
+
+- `refund-request`: เลขขั้นเรียงเป็น Step 1 → 2 · `references/complaint-letter.md` ลบสารบัญซ้ำและลดระดับหัวข้อแม่แบบ (แก้ใน PR #75 ขึ้นเลขรุ่นที่นี่เพื่อให้เครื่องที่ติดตั้งแล้วอัปเดตได้)
+
 ## 1.8.0 — 2026-11-08
 
 - ยุบ `complaint-letter-th` เข้า `refund-request` · ขั้นบันไดร้องเรียนและแม่แบบจดหมายอยู่ใน `references/complaint-letter.md` · **เรียกชื่อเก่าไม่ได้แล้ว**
