@@ -83,7 +83,7 @@ Use when a big task of any kind ends, the user says reflect or รวมบท�
 ใช้เป็นขั้นรีวิวของ playbook [`learn-from-session`](../superuser/references/playbook-learn-from-session.md) ส่วนการรวบรวม การเสนอให้ผู้ใช้ดู และการปิดรายการให้ทำตาม playbook นั้น ไม่เขียนซ้ำไว้ที่นี่
 
 1. **ทำสรุป (digest)** — จากของที่ playbook รวบรวมมา เขียน `_to_delete/session-digest.md`: ลำดับเหตุการณ์ · จุดที่ผู้ใช้แก้ · จุดที่ติดนาน · skill ที่ถูกเรียกและผล จากนั้นส่งไฟล์นี้ให้ subagent ไม่ส่งบทสนทนาดิบ
-2. **ปล่อยรีวิวเวอร์ 3 มุมพร้อมกัน** (แต่ละคนอ่าน digest และไฟล์ skill ที่เกี่ยวข้อง)
+2. **ปล่อยผู้ตรวจ 3 มุมพร้อมกัน** (แต่ละคนอ่าน digest และไฟล์ skill ที่เกี่ยวข้อง)
 
    | มุม | ถามว่า | ระดับโมเดล + effort · agent |
    |---|---|---|
