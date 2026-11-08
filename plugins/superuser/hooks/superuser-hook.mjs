@@ -746,14 +746,29 @@ export function guardGate(name, inp = {}, teamDir = null, rules = readJson(join(
   const allow = [...((teamDir && readJson(join(teamDir, "guard-allow.json"), {}).allow) || []), ...(teamDir ? POLICY_ALLOWS[gitPolicyOf(teamDir)] : [])];
   if (allow.includes("git-push") && pushTargetsCurrent(cmd) && /^(main|master|HEAD|)$/.test(branchOf(cmd, teamDir)))
     return "ด่านป้องกัน (SuperUser): push โดยไม่ระบุ branch ขณะอยู่บน main หรือ master (หรืออ่าน branch ไม่ได้) — กฎ: ไม่ commit หรือ push ลง main ตรง · ระบุ branch งานให้ชัด เช่น git push -u origin claude/<งาน>";
-  const ids = new Set(rules.map((r) => r.id));
-  for (const a of allow) if (!ids.has(a)) { try { if (new RegExp(a, "i").test(cmd)) return ""; } catch { /* regex พัง = ไม่ยกเว้น */ } }
+  if (allowedByRegex(cmd, allow, rules)) return "";
   for (const r of rules) {
-    if (allow.includes(r.id)) continue;
+    if (allow.includes(r.id) || r.decision === "ask") continue;
     let re; try { re = new RegExp(r.pattern, r.flags ?? "i"); } catch { continue; }
     if (re.test(cmd)) return `ด่านป้องกัน (SuperUser): ${r.reason} — กฎ: ${r.rule} · ถ้าผู้ใช้สั่งไว้จริง เพิ่ม "${r.id}" ใน .claude/superuser/guard-allow.json ("allow") แล้วลองใหม่`;
   }
   return "";
+}
+
+// ค่าใน guard-allow.json ที่ไม่ใช่ id ของข้อไหน = regex ถ้าตรงคำสั่งให้ผ่านทุกข้อ (ใช้ร่วมกันทั้งด่านปฏิเสธและด่านถาม)
+function allowedByRegex(cmd, allow, rules) {
+  const ids = new Set(rules.map((r) => r.id));
+  return allow.some((a) => { if (ids.has(a)) return false; try { return new RegExp(a, "i").test(cmd); } catch { return false; } }); // regex พัง = ไม่ยกเว้น
+}
+
+// ข้อ "decision": "ask" ใน guard-rules.json → ให้ผู้ใช้กดยืนยัน ไม่ปฏิเสธ · ยกเว้นด้วย guard-allow.json แบบเดียวกับข้อปฏิเสธ
+export function guardAsk(name, inp = {}, teamDir = null, rules = readJson(join(HERE, "guard-rules.json"), { rules: [] }).rules ?? []) {
+  if (name !== "Bash") return "";
+  const cmd = String(inp.command ?? "");
+  const allow = (teamDir && readJson(join(teamDir, "guard-allow.json"), {}).allow) || [];
+  if (allowedByRegex(cmd, allow, rules)) return "";
+  const hit = rules.find((r) => r.decision === "ask" && !allow.includes(r.id) && (() => { try { return new RegExp(r.pattern, r.flags ?? "i").test(cmd); } catch { return false; } })());
+  return hit ? `ด่านป้องกัน (SuperUser): ${hit.reason} — กฎ: ${hit.rule} · ผู้ใช้สั่งเองแล้วกดอนุมัติได้ · ไม่อยากให้ถามอีก เพิ่ม "${hit.id}" ใน .claude/superuser/guard-allow.json` : "";
 }
 
 // ── ด่านข้อมูลส่วนตัวในไฟล์งาน (PreToolUse Write/Edit · โมดูล pii_gate ค่าเริ่มเปิด · ทำงานแม้ไม่มีโฟลเดอร์ทีม) ──
@@ -815,7 +830,8 @@ function preWriteGate(input) {
   if (deny) { answer("deny", deny); return; }
   const pii = teamDir && !moduleOn(teamDir, "pii_gate") ? "" : personalDataGate(input.tool_name, input.tool_input ?? {});
   const name = teamDir && moduleOn(teamDir, "name_gate", false) ? fileNameGate(input.tool_name, input.tool_input ?? {}) : "";
-  if (pii || name) answer("ask", [pii, name].filter(Boolean).join("\n"));
+  const risky = teamDir && moduleOn(teamDir, "guard", false) ? guardAsk(input.tool_name, input.tool_input ?? {}, teamDir) : "";
+  if (pii || name || risky) answer("ask", [pii, name, risky].filter(Boolean).join("\n"));
 }
 
 // ── ด่านชื่อไฟล์ใหม่ (PreToolUse Write · โมดูล name_gate ค่าเริ่มปิด · ถาม ไม่ปฏิเสธ) ──
@@ -1616,6 +1632,22 @@ ${rows}
       set("commit"); const commit = !g("git commit -m x") && g("git push origin feat");
       set("manual"); const manual = g("git push origin feat") && g("git commit -m x");
       unlinkSync(ctx); return auto && commit && manual && gitPolicyOf(gTeam) === "manual" && g("git push");
+    }],
+    ["ด่านป้องกัน: ข้อ ask ถามก่อน ไม่ปฏิเสธ · คำสั่งทั่วไปไม่ถาม", [], true, () => {
+      const asks = ["npm publish", "gh release create v1", "gh repo delete a/b --yes", "git tag -d v1", "git -C x rebase main", "find . -name '*.tmp' -delete", "python -c 'import shutil; shutil.rmtree(p)'"];
+      const quiet = ["npm test", "git status", "find . -name x", "gh pr list", "npm run publish-docs", "git log --grep rebase", 'echo "git rebase"',
+        "echo find -delete is risky", "grep -r rmtree src", "cat docs/rmtree.md", "git branch -d rebase-x"];
+      return asks.every((c) => guardAsk("Bash", { command: c }) && !guardGate("Bash", { command: c }))
+        && quiet.every((c) => !guardAsk("Bash", { command: c })) && Boolean(guardAsk("Bash", { command: "npm test && npm publish" }));
+    }],
+    ["ด่านป้องกัน: ข้อ ask ผ่าน preWriteGate เฉพาะเมื่อเปิด guard · guard-allow ยกเว้นได้ทั้ง id และ regex", [], true, () => {
+      const off = bashPre("npm publish");
+      writeFileSync(join(gTeam, "config.json"), JSON.stringify({ modules: { guard: true } }));
+      let on; try { on = JSON.parse(bashPre("npm publish")).hookSpecificOutput?.permissionDecision; } catch { on = null; }
+      writeFileSync(join(gTeam, "guard-allow.json"), JSON.stringify({ allow: ["npm-publish", "^git rebase main$"] }));
+      const allowed = !bashPre("npm publish") && !bashPre("git rebase main") && /"ask"/.test(bashPre("git rebase dev"));
+      unlinkSync(join(gTeam, "guard-allow.json")); unlinkSync(join(gTeam, "config.json"));
+      return off === "" && on === "ask" && allowed;
     }],
     ["ด่านป้องกัน: Edit/Write/Read ไม่โดน", [], false, () => guardGate("Edit", { file_path: "/p/a.md", new_string: "git push origin main" }) || guardGate("Write", { file_path: "/p/a.sh", content: "rm -rf /" }) || guardGate("Read", { file_path: "~/.claude/settings.json" })],
     ["ด่านป้องกัน: เปิดใน config → ตอบ deny ตามเอกสาร PreToolUse", [], true, () => {

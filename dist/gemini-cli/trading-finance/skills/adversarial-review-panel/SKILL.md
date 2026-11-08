@@ -37,5 +37,5 @@ description: Use when asked for adversarial review, stress test or blind spots, 
 
 ## ข้อควรระวัง
 
-- คณะรีวิวใช้ token เยอะ งานเล็กใช้ `reviewer` ตัวเดียวพอ · งานโค้ดดู `code-review-checklist` · `pr-description-template` (plugin `software-company`)
+- คณะรีวิวใช้ token ราว 3 เท่าของ `reviewer` ตัวเดียว · เลือกคณะเมื่อ ราคาของการพลาด × โอกาสพลาด มากกว่าค่าผู้ตรวจที่เพิ่มอีก 2 ตัว (คิดด้วย `decision-scoring` คำสั่ง `review`) · ถ้าประเมินไม่ได้ ใช้ค่าตั้งต้น (ยังไม่ได้วัด): งานที่ส่งคนนอก เงิน กฎหมาย สุขภาพ หรือเลือกทางที่ย้อนไม่ได้ → คณะ 3 มุม · ที่เหลือ → `reviewer` ตัวเดียว · งานโค้ดดู `code-review-checklist` · `pr-description-template` (plugin `software-company`)
 - รีวิวเวอร์ Artificial Intelligence (AI) ก็แจ้งปัญหาที่ไม่มีจริงได้ ทุกข้อจึงต้องผ่านข้อ 5 ก่อนเข้ารายงาน

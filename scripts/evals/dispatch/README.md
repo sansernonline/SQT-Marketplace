@@ -1,6 +1,6 @@
 # scripts/evals/dispatch — หัวหน้าทีมแจกงานถูกไหม
 
-อยากรู้ว่าหัวหน้าทีม superuser ใช้ลูกทีมกี่ตัว และเลือก model ระดับไหนตามกติกาของ `plugins/superuser/skills/superuser/SKILL.md` หรือไม่ → ให้ model วางแผนแจกงาน 8 เคสเป็น JSON แล้วให้คะแนนเทียบเฉลยเป็นตัวเลข 2 แขน: มี plugin superuser กับไม่มี plugin
+อยากรู้ว่าหัวหน้าทีม superuser ใช้ลูกทีมกี่ตัว และเลือก model ระดับไหนตามกติกาของ `plugins/superuser/skills/superuser/SKILL.md` หรือไม่ → ให้ model วางแผนแจกงาน 10 เคสเป็น JSON แล้วให้คะแนนเทียบเฉลยเป็นตัวเลข 2 แขน: มี plugin superuser กับไม่มี plugin
 
 ## วัดอะไร
 
@@ -14,6 +14,8 @@
 | `d6-risky-tax` | 2 | งานเสี่ยงเงิน ทุกชิ้นระดับใหญ่ ห้ามมี haiku |
 | `d7-mechanical` | 3 | งานกลไกที่สคริปต์ทำไม่ได้แต่ใบสั่งงานชัด (alt text 45 รูปตามแบบ 3 ตัวอย่าง) ทุกชิ้นระดับเล็ก · มาแทนเคสเดิม (เปลี่ยนชื่อตัวแปร) เพราะเคสเดิมตอบ 0 ก็ถูก ตาม `principle-build-a-tool-not-handwork` ที่ให้เขียนสคริปต์ครั้งเดียว |
 | `d8-twelve` | 8 | 12 ชิ้นอิสระ ต้องแบ่งคลื่นละไม่เกิน 8 |
+| `d9-labeling` | 3 | ติดหมวดตั๋วตามเกณฑ์ 6 หมวดที่ให้ อ่านทีละแถวแต่ไม่ต้องตัดสินเอง ทุกชิ้นระดับเล็ก |
+| `d10-judgment` | 3 | อ่านรีวิวทีละรุ่นแล้วจัดลำดับปัญหาเอง ไม่มีเกณฑ์ให้ ทุกชิ้นระดับกลาง · กันไม่ให้ข้อ haiku ดึงงานที่ต้องตัดสินเองลงมา |
 
 | ตัววัด (ต่อรอบ) | ความหมาย | น้ำหนักในคะแนนรวม |
 |---|---|---|
@@ -31,7 +33,7 @@ JSON พังหรือไม่มีคำตอบ = 0 ทุกช่อ�
 
 ```powershell
 node scripts/evals/dispatch/score.test.mjs                 # test ของตัวให้คะแนน
-node scripts/evals/dispatch/run-dispatch.mjs --verify      # ฟรี: 8 เคสครบ เฉลยตรงกับ plan.mjs ที่รันจริง
+node scripts/evals/dispatch/run-dispatch.mjs --verify      # ฟรี: 10 เคสครบ เฉลยตรงกับ plan.mjs ที่รันจริง
 node scripts/evals/dispatch/run-dispatch.mjs --plan        # ฟรี: ประมาณค่าใช้จ่าย
 node scripts/evals/dispatch/run-dispatch.mjs --run         # เสียเงิน
 node scripts/evals/dispatch/run-dispatch.mjs --score _to_delete/dispatch/<เวลา>/runs.json   # ให้คะแนนใหม่ ไม่เรียก claude
@@ -41,6 +43,7 @@ node scripts/evals/dispatch/run-dispatch.mjs --score _to_delete/dispatch/<เว
 |---|---|---|
 | `--runs` | 1 | รอบต่อเคสต่อแขน · ตัดสินจริงใช้ 3 รอบขึ้นไป (`--budget-total 5`) |
 | `--budget-total` | 2 | เพดานรวม (ดอลลาร์) · เช็กก่อนเรียกทุกครั้ง |
+| `--only` | — | regex ชื่อไฟล์เคส เช่น `"^d7"` · รันบางเคสเพื่อลองแก้ถ้อยคำ · ผลเทียบกับรอบเต็มไม่ได้ |
 | `--model` | `claude-sonnet-5-5` | model ของหัวหน้าทีม · `none` = ใช้ค่าของบัญชี |
 
 ทุกครั้งรัน `claude -p` ในโฟลเดอร์ว่างนอก repo · `--setting-sources project` · `--max-turns 8` · `--output-format stream-json --verbose` · เครื่องมือมีแค่ `Skill` กับ `Read` · แขนมี plugin เพิ่ม `--plugin-dir plugins/superuser`
@@ -49,7 +52,7 @@ node scripts/evals/dispatch/run-dispatch.mjs --score _to_delete/dispatch/<เว
 
 - วัดจริงรอบแรก 2026-11-08 บน sonnet (1 รอบคุย ไม่เปิด skill): มี plugin $0.065 · ไม่มี plugin $0.05 ต่อครั้ง
 - วัดจริงรอบ 2 (เปิด skill ครบ 8/8): มี plugin $0.12–0.16 · ไม่มี plugin $0.05 ต่อครั้ง · รวม 1 รอบ × 2 แขน $1.48 · model อื่นคูณอัตราราคา output ÷ sonnet จาก `prices.json`
-- 8 เคส × 3 รอบ × 2 แขน บน sonnet ≈ $4.80 → ใช้ `--budget-total 5`
+- 10 เคส × 3 รอบ × 2 แขน บน sonnet ≈ $6 → ใช้ `--budget-total 7`
 - เพดานต่อครั้ง = max(ประมาณ × 2, $0.10) · ผลไม่ครบนับ $ เท่าเพดาน · วนรอบนอกสุด งบหมดกลางทาง 2 แขนจึงได้จำนวนรอบใกล้กัน · โควตาบัญชีหมดหยุดทันที
 
 ## ผล
@@ -61,5 +64,5 @@ node scripts/evals/dispatch/run-dispatch.mjs --score _to_delete/dispatch/<เว
 - **วัดแผน ไม่ได้วัดการลงมือจริง** · หัวหน้าที่ตอบแผนถูกอาจแจกงานจริงต่างไป · การแจกงานจริงดู `speed/` (นับลูกทีมจาก transcript)
 - เฉลยเป็นการอ่านกติกาของ SKILL.md ซึ่งยังไม่ได้วัดว่าดีที่สุด · เช่น ทุกชิ้นของ `d6` เป็นระดับใหญ่ตามบรรทัด "งานเสี่ยงให้ทุกชิ้นเป็นระดับนี้" · `d1` ทุกชิ้นระดับกลาง (SKILL.md ข้อ 3 นับออกแบบตารางเดียวเป็นระดับกลาง)
 - prompt บอกโครงงานชัดเกือบเป็นกราฟ วัดว่าทำตามกติกาไหม ไม่ได้วัดว่าแตกงานเองเก่งไหม
-- 8 เคส × 3 รอบ = 24 รอบต่อแขน ช่วง Wilson ยังกว้าง · Δ น้อยกว่าราว 25 จุดเปอร์เซ็นต์อาจเป็นแค่ความแกว่ง
+- 10 เคส × 3 รอบ = 30 รอบต่อแขน ช่วง Wilson ยังกว้าง · Δ น้อยกว่าราว 25 จุดเปอร์เซ็นต์อาจเป็นแค่ความแกว่ง
 - `--setting-sources project` อาจยังโหลด `~/.claude/CLAUDE.md` ของเครื่อง (ยังไม่ได้ตรวจ) ซึ่งเอ่ยถึง superuser แขนไม่มี plugin จึงอาจไม่สะอาด

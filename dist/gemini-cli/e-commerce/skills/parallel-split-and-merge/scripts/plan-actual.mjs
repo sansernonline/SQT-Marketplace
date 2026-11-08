@@ -1,6 +1,9 @@
 // เทียบแผนกับงานที่เกิดจริง: อ่านงานลูกทีมจาก log ของ superuser (runs.jsonl ผ่าน model-scorecard) แล้วผูกกับชิ้นในแผน
 // ผูกด้วยคำอธิบายงาน (description ของเครื่องมือ Agent) ที่ขึ้นต้นด้วย id ของชิ้น เช่น "a: ออกแบบตาราง" หรือ "a ออกแบบตาราง"
-import { score, DEFAULT_WEIGHTS } from "./plan-assign.mjs";
+import { score, DEFAULT_WEIGHTS, DEFAULT_SAFETY } from "./plan-assign.mjs";
+
+// ชิ้นที่ใช้ token จริงเกินที่ประเมินกี่เท่าจึงติดธงในสรุป · ค่าตั้งต้น ยังไม่ได้วัด (ต่ำกว่านี้ถือเป็นความคลาดเคลื่อนปกติของการประเมิน)
+const OVER_RATIO = 1.5;
 
 // ปัดทศนิยม 1 ตำแหน่งก่อน เพราะ 400 × 0.2 ได้ 80.00000000000001 แล้วจะแสดงเป็น 80.0
 const n1 = (x) => { const r = Math.round(x * 10) / 10; return Number.isInteger(r) ? String(r) : r.toFixed(1); };
@@ -38,7 +41,7 @@ export function learnSpeed(rows, accounts) {
 
 // ⑤ คาดการณ์ว่าโควตาของบัญชีพอกับงานที่ค้างไหม · ไม่พอ ให้ย้ายชิ้นใหญ่ก่อนจนที่เหลือพอ · ✦ ส่งไม้ไปบัญชีที่ผ่านกฎเหล็กเดียวกับ ② และคะแนน ③ สูงสุด แล้วหักโควตาปลายทางทุกครั้งที่เสนอ
 export function predictMoves(a, rows, team, est) {
-  const safety = team.safety ?? 1.2, moves = [];
+  const safety = team.safety ?? DEFAULT_SAFETY, moves = [];
   const pool = team.accounts.map((b) => ({ ...b, left: b.remaining_k ?? b.cap_k, resetIn: b.reset_in_hours ?? b.window_hours ?? 5, max_parallel: b.max_parallel ?? 1,
     running: rows.filter((x) => !x.done && x.r.account === b.name) }));
   const maxSpeed = Math.max(...pool.map((b) => b.speed_k_per_hour));
@@ -92,8 +95,8 @@ export function actualReport(a, runs, team = null) {
   const span = Math.max(...rows.map((x) => x.end));
   const cpDone = a.cp.every((id) => rows.find((x) => x.id === id)?.done);
   const est = (id) => a.tasks.find((t) => t.id === id).size * 1000;
-  const over = rows.filter((x) => realTokens(x.r) > est(x.id) * 1.5).map((x) => x.id);
-  const summary = `เกิดจริง ${rows.length} จาก ${a.tasks.length} ชิ้น · ใช้เวลารวม ${n1(span)} นาที${cpDone ? "" : " (สายวิกฤตยังไม่ครบ)"}${over.length ? ` · token เกินที่ประเมินเกิน 1.5 เท่า: ${over.join(" ")}` : ""}${missing.length ? ` · ยังไม่ได้ปล่อย: ${missing.join(" ")}` : ""}`;
+  const over = rows.filter((x) => realTokens(x.r) > est(x.id) * OVER_RATIO).map((x) => x.id);
+  const summary = `เกิดจริง ${rows.length} จาก ${a.tasks.length} ชิ้น · ใช้เวลารวม ${n1(span)} นาที${cpDone ? "" : " (สายวิกฤตยังไม่ครบ)"}${over.length ? ` · token เกินที่ประเมินเกิน ${OVER_RATIO} เท่า: ${over.join(" ")}` : ""}${missing.length ? ` · ยังไม่ได้ปล่อย: ${missing.join(" ")}` : ""}`;
   const bar = (x) => { const s = 40 / (span || 1); return "·".repeat(Math.round(x.start * s)) + "█".repeat(Math.max(1, Math.round((x.end - x.start) * s))); };
   const markdown = [
     "## เกิดจริงเทียบแผน", "", summary, "",

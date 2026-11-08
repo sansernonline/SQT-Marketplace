@@ -98,6 +98,11 @@ export const POLICIES = {
   manual: "ไม่ commit · push · merge เอง ผู้ใช้ review เอง · ใส่ข้อความ commit ที่แนะนำไว้ในคำตอบ",
 };
 
+// โมดูล guard ของ hook ปิดเป็นค่าเริ่ม · เปิดเมื่อ config.json มี modules.guard = true
+export function guardOff(project) {
+  try { return JSON.parse(readFileSync(join(project, ".claude", "superuser", "config.json"), "utf8")).modules?.guard !== true; } catch { return true; }
+}
+
 export function gitPolicy(project, value, write, today = new Date().toISOString().slice(0, 10)) {
   const file = join(project, ".claude", "superuser", "CONTEXT.md");
   const raw = existsSync(file) ? readFileSync(file, "utf8") : "";
@@ -257,7 +262,11 @@ if (process.argv[1]?.replace(/\\/g, "/").endsWith("/setup.mjs")) {
     if (r.error) { console.log(`นโยบาย git: ${r.error}`); gaps++; }
     // ยังไม่เลือกเป็นคำแนะนำ ไม่นับว่าขาด · ไม่งั้น --check ล้มทุกโปรเจกต์ที่ยังไม่เคยถาม
     else if (!r.current) console.log(`นโยบาย git: ยังไม่ได้เลือก · ถามผู้ใช้ 1 ครั้ง แล้วรัน --git-policy ${Object.keys(POLICIES).join("|")}`);
-    else console.log(`นโยบาย git (${r.file}): ${r.current.slice(POLICY_MARK.length).trim()}`);
+    else {
+      console.log(`นโยบาย git (${r.file}): ${r.current.slice(POLICY_MARK.length).trim()}`);
+      // นโยบาย auto หรือ commit ให้ agent รัน git เอง · ด่าน guard (ปิดเป็นค่าเริ่ม) กัน force push · reset --hard · rebase จึงแนะนำให้เปิดคู่กัน ไม่เปิดเอง
+      if (guardOff(project)) console.log(`ด่าน guard: ยังปิดอยู่ · เปิดได้ที่ .claude/superuser/config.json {"modules": {"guard": true}} (ปฏิเสธ force push · reset --hard และถามก่อน rebase · npm publish)`);
+    }
   }
   if (!check && run("--permissions")) console.log("\nกฎสิทธิ์และกฎประจำตัวมีผลกับ session ใหม่ · เปิด Claude Code ใหม่หรือเริ่ม session ใหม่");
   process.exit((check && gaps) || blocked ? 1 : 0);
