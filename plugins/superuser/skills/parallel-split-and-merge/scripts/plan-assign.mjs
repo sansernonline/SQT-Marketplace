@@ -41,7 +41,8 @@ export function score(acc, task, { critical, maxSpeed, weights = DEFAULT_WEIGHTS
 // จำลองการแจกงานตามเวลา: ทุกครั้งที่มีชิ้นพร้อม ① เรียง rank ② กรองบัญชีที่ผิดกฎเหล็ก ③ ให้คะแนน ④ เลือกตัวคะแนนสูงสุดแล้วจองโควตาทันที
 export function assign(a, accountsIn, { weights = DEFAULT_WEIGHTS, safety = DEFAULT_SAFETY } = {}) {
   const accounts = accountsIn.map((x) => ({ ...x, max_parallel: x.max_parallel ?? 1, window: x.window_hours ?? DEFAULT_WINDOW,
-    left: x.remaining_k ?? x.cap_k, resetIn: x.reset_in_hours ?? x.window_hours ?? DEFAULT_WINDOW, running: [] }));
+    left: x.remaining_k ?? x.cap_k, resetIn: x.reset_in_hours ?? x.window_hours ?? DEFAULT_WINDOW, running: [],
+    weekLeft: x.week_left_k ?? x.week_cap_k ?? Infinity, weekResetIn: x.week_reset_in_hours ?? Infinity }));
   const maxSpeed = Math.max(...accounts.map((x) => x.speed_k_per_hour));
   const done = new Set(), started = new Set(), out = [];
   let now = 0;
@@ -58,21 +59,24 @@ export function assign(a, accountsIn, { weights = DEFAULT_WEIGHTS, safety = DEFA
       const critical = a.cpm.get(t.id).float === 0;
       const ranked = ok.map((x) => ({ x, s: score(x, t, { critical, maxSpeed, weights }) })).sort((p, q) => q.s.total - p.s.total || p.x.name.localeCompare(q.x.name));
       const { x, s } = ranked[0];
-      x.left -= t.size;
+      x.left -= t.size; x.weekLeft -= t.size;
       const run = { id: t.id, account: x.name, solo: Boolean(t.solo), start: now, end: now + t.size / x.speed_k_per_hour, score: near(s.total), parts: s.parts, critical };
       x.running.push(run); out.push(run); started.add(t.id);
       if (t.solo) break;
     }
     const finishes = accounts.flatMap((x) => x.running.map((r) => r.end));
-    const resets = accounts.map((x) => now + x.resetIn);
+    const resets = accounts.flatMap((x) => [now + x.resetIn, ...(x.weekLeft < x.cap_k && Number.isFinite(x.weekResetIn) ? [now + x.weekResetIn] : [])]);
     const next = Math.min(...finishes, ...(finishes.length && ready().length === 0 ? [] : resets));
     if (!(next > now - 1e-9)) throw new Error("จำลองย้อนเวลา: ตรวจ window_hours และ reset_in_hours ใน accounts");
     const step = next - now;
     now = next;
     for (const x of accounts) {
-      x.resetIn -= step;
+      x.resetIn -= step; x.weekResetIn -= step;
+      // ถึงรอบรีเซ็ตรายสัปดาห์ → ถังสัปดาห์เต็ม และถัง 5 ชม. กลับมาใช้ได้ (ไม่เกินถังของตัวเอง)
+      if (x.weekResetIn <= 1e-9) { x.weekLeft = x.week_cap_k ?? Infinity; x.weekResetIn = Infinity; x.left = Math.max(x.left, Math.min(x.cap_k, x.weekLeft)); }
       // ก้าวเวลา 1 ครั้งอาจข้ามหลายรอบโควตา จึงบวกรอบจนเวลารีเซ็ตถัดไปอยู่ข้างหน้า ไม่งั้นรอบถัดไปได้ next น้อยกว่า now
-      if (x.resetIn <= 1e-9) { x.left = x.cap_k; while (x.resetIn <= 1e-9) x.resetIn += x.window; }
+      // รีเซ็ตรอบ 5 ชม. เติมถังได้ไม่เกินที่โควตาสัปดาห์เหลือ (ไม่รู้ขนาดถังสัปดาห์ = ไม่จำกัด)
+      if (x.resetIn <= 1e-9) { x.left = Math.min(x.cap_k, Math.max(0, x.weekLeft)); while (x.resetIn <= 1e-9) x.resetIn += x.window; }
       for (const r of x.running.filter((q) => q.end <= now + 1e-9)) { done.add(r.id); x.running.splice(x.running.indexOf(r), 1); }
     }
   }
