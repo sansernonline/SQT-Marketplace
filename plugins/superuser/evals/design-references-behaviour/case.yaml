@@ -11,7 +11,7 @@ execution:
     ช่วยวางแนวทางหน้าตาและสีก่อนลงมือ
   max_turns: 10
   timeout_seconds: 300
-  allowed_tools: [Read, Glob, Grep, Skill, WebSearch, WebFetch]   # skill นี้ต้องค้นต้นแบบจริง · ไม่ให้ไว้ ทั้ง 2 แขนตอบจากความจำแล้วตก (eval 2026-11-09)
+  allowed_tools: [Read, Glob, Grep, Skill, ToolSearch, WebSearch, WebFetch]   # skill นี้ต้องค้นต้นแบบจริง · ไม่ให้ไว้ ทั้ง 2 แขนตอบจากความจำแล้วตก (eval 2026-11-09) · WebSearch และ WebFetch ต้องโหลดผ่าน ToolSearch ก่อน ไม่ให้ไว้ agent ตอบว่าเปิดเว็บไม่ได้ (eval รอบ 2 วันเดียวกัน)
 graders:
   - name: slide-sites
     type: regex

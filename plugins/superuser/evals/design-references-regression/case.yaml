@@ -10,7 +10,7 @@ execution:
     ทำไอคอนประจำแอปบันทึกรายจ่ายของผมให้หน่อย เอาแบบสวย ๆ เลือกสีให้ด้วย ทำมาเลยไม่ต้องถามเยอะ
   max_turns: 8
   timeout_seconds: 240
-  allowed_tools: [Read, Glob, Grep, Skill, WebSearch, WebFetch]   # ไม่ให้ไว้ ถอดสีจากต้นแบบจริงไม่ได้ ตก colour-from-references (eval 2026-11-09)
+  allowed_tools: [Read, Glob, Grep, Skill, ToolSearch, WebSearch, WebFetch]   # ไม่ให้ไว้ ถอดสีจากต้นแบบจริงไม่ได้ ตก colour-from-references (eval 2026-11-09) · WebSearch และ WebFetch ต้องโหลดผ่าน ToolSearch ก่อน ไม่ให้ไว้ agent ตอบว่าเปิดเว็บไม่ได้ (eval รอบ 2 วันเดียวกัน)
 graders:
   - name: no-instant-svg
     type: regex
