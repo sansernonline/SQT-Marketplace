@@ -1,7 +1,7 @@
 # รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
 # อาการที่กัน: เห็นจริง 2026-11-06 · หลักฐาน _to_delete/design-trial/findings.md และ _to_delete/design-trial/shots/desktop-1440-full.png
 #   หน้า landing ผ่านสคริปต์ slop_scan 0 ข้อ ตาผ่านแค่ 5/9 แต่ agent รายงานว่าผ่าน · ปิดโลโก้แล้วเป็นของใครก็ได้ · ส่วนเปิดว่างราว 40% ไม่มีภาพของจริง · ลำดับส่วนเป็นสูตร · แถว 6 ช่องเท่ากัน · mono เป็นเครื่องแต่งตัว
-# resources/landing.html คือสำเนา _to_delete/design-trial/work/index.src.html · ไม่ให้ Bash จึงวัดจากโค้ดต้นทาง
+# resources/landing.html คือสำเนา _to_delete/design-trial/work/index.src.html · ไม่ให้ Bash จึงวัดจากโค้ดต้นทาง · ค่าแม่แบบ {{ICON:…}} และโน้ต (รอยืนยัน) ในคำบรรยายตารางเอาออกแล้ว เพราะ agent ไปจับ 2 จุดนี้แทนด่านตา (eval รอบ 2 2026-11-09)
 schema_version: "1.1"
 name: no-ai-look-regression
 description: เห็นจริง 2026-11-06 หน้า landing ผ่านสคริปต์ 0 ข้อ agent บอกว่าผ่าน ทั้งที่ยังดูเหมือน AI ทำ (หลักฐาน _to_delete/design-trial/findings.md) · ต้องไม่ยืนยันว่าส่งได้จากสคริปต์อย่างเดียว และต้องบันทึกด่านตาไม่ครบ

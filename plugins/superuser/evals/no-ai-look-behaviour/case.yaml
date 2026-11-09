@@ -1,5 +1,5 @@
 # รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
-# resources/landing.html คือสำเนาของ _to_delete/design-trial/work/index.src.html (หน้า landing ที่ลองจริง 2026-11-06) · เคสนี้ไม่ให้ Bash (Windows ไม่มี sandbox) จึงวัดด่านตาจากโค้ดต้นทาง ไม่ได้วัดภาพเรนเดอร์
+# resources/landing.html คือสำเนาของ _to_delete/design-trial/work/index.src.html (หน้า landing ที่ลองจริง 2026-11-06) · เคสนี้ไม่ให้ Bash (Windows ไม่มี sandbox) จึงวัดด่านตาจากโค้ดต้นทาง ไม่ได้วัดภาพเรนเดอร์ · ค่าแม่แบบ {{ICON:…}} และโน้ต (รอยืนยัน) ในคำบรรยายตารางเอาออกแล้ว เพราะ agent ไปจับ 2 จุดนี้แทนด่านตา (eval รอบ 2 2026-11-09)
 schema_version: "1.1"
 name: no-ai-look-behaviour
 description: ให้ตรวจหน้า landing ที่เสร็จแล้ว ต้องตอบด่านตาข้อหน้าเว็บ (ของจริงในส่วนเปิด · ปิดโลโก้ · ลำดับสูตร · ช่องเท่ากัน · mono) และปิดท้ายด้วยบรรทัดบันทึกผลรูปแบบตายตัว
