@@ -15,8 +15,8 @@ execution:
 graders:
   - name: typo-fixed
     type: regex
-    pattern: 'อนุญาติ'
-    match: not_contains
+    pattern: 'ไม่อนุญาตให้ใช้รูปภาพ'   # เดิม not_contains 'อนุญาติ' ตกทั้ง 2 แขน 3 จาก 3 รอบ เพราะคำตอบยกคำผิดมาบอกว่าแก้อะไร (eval 2026-11-09)
+    match: contains
     target: last_message
   - name: rest-unchanged
     type: regex

@@ -3,7 +3,7 @@
 // อยู่ใน plugin superuser ที่เดียว · plugin อื่นได้ hook นี้ทาง dependencies · plugin รุ่นเก่าที่ยังมีสำเนา → ตัวแรกที่รับเหตุการณ์ทำงาน ตัวอื่นออกเลย (ไม่จดซ้ำ)
 // กฎประจำตัวและตัวบอก skill ทำงานทุก session · log · inbox · ด่านต่าง ๆ ทำงานเฉพาะโปรเจกต์ที่มี .claude/superuser/ (หรือ .superuser/ แบบเก่า)
 // โมดูล log · inbox · review_gate · split_gate ปิดได้ใน .claude/superuser/config.json (moduleOn) · ไม่สร้างโฟลเดอร์ทีมเอง · ไม่มีวันทำให้งานหลักล้ม (จับทุก error แล้วออกด้วย 0)
-import { readFileSync, readSync, writeSync, appendFileSync, existsSync, mkdirSync, readdirSync, writeFileSync, renameSync, openSync, closeSync, statSync, unlinkSync, utimesSync } from "node:fs";
+import { readFileSync, readSync, writeSync, appendFileSync, existsSync, mkdirSync, readdirSync, writeFileSync, renameSync, openSync, closeSync, statSync, unlinkSync, utimesSync, rmSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { join, dirname, resolve, relative, basename } from "node:path";
@@ -451,10 +451,15 @@ export function coreRules({ configDir = process.env.CLAUDE_CONFIG_DIR ?? join(ho
 // ติดตั้ง plugin ครบ รายการ skill ยาว 46,056 ตัวอักษร เกินงบตั้งต้น 30,000 (1%) → คำอธิบายถูกตัด
 // eval triggers 2026-11-09 ที่งบ 1%: debug log ขึ้น "Skill listing over budget" ทุกรอบ · docx · Python · สไลด์ ไม่เปิด skill 0/3
 // ติดตั้งผ่าน `claude plugin install` ไม่ได้รัน set-skill-budget.mjs จึงบอกตอนเริ่ม session จนกว่าจะตั้ง
+// บอกแล้วเงียบ 7 วัน · eval รอบ 3 (2026-11-09) ข้อความนี้ขึ้นท้ายคำตอบแรกทุก session
 export const SKILL_BUDGET_MIN = 0.02;
-export function skillBudgetNote({ configDir = process.env.CLAUDE_CONFIG_DIR ?? join(homedir(), ".claude") } = {}) {
+export const SKILL_BUDGET_QUIET_MS = 7 * 86400000;
+export function skillBudgetNote({ configDir = process.env.CLAUDE_CONFIG_DIR ?? join(homedir(), ".claude"), now = Date.now() } = {}) {
   const set = readJson(join(configDir, "settings.json"), {})?.skillListingBudgetFraction ?? 0;   // ไฟล์ที่มีแค่ null ต้องไม่ทำให้กฎประจำตัวหาย
   if (set >= SKILL_BUDGET_MIN) return "";
+  const stamp = join(configDir, "superuser", "skill-budget-noted");
+  try { if (now - statSync(stamp).mtimeMs < SKILL_BUDGET_QUIET_MS) return ""; } catch { /* ยังไม่เคยบอก */ }
+  try { mkdirSync(dirname(stamp), { recursive: true }); writeFileSync(stamp, ""); utimesSync(stamp, now / 1000, now / 1000); } catch { /* เขียนไม่ได้ก็บอกทุกครั้ง */ }
   return `งบรายการ skill ต่ำกว่า ${SKILL_BUDGET_MIN} (ค่าตั้งต้น 0.01) คำอธิบาย skill จึงถูกตัดและเปิด skill พลาดบ่อย · บอกผู้ใช้ 1 ครั้งในคำตอบแรกให้ใส่ "skillListingBudgetFraction": ${SKILL_BUDGET_MIN} ใน ~/.claude/settings.json แล้วเริ่ม session ใหม่ · อย่าแก้ไฟล์นั้นเอง`;
 }
 
@@ -1400,9 +1405,11 @@ function selfTest() {
     ["ตัวบอก skill: โค้ด python → simplify + lazy-coding + stack-python (ตรงกับตาราง skill ใน CLAUDE.global.md)", [], true, () => { const r = routes("เขียนสคริปต์ Python อ่าน csv"); return ["superuser:simplify", "lazy-coding", "stack-python"].every((s) => r.includes(s)); }],
     ["ตัวบอก skill: แถวใหม่ของ skill ที่เคยไม่มี router", [], true, () => routes("ขอ stress test แผนนี้หน่อย").includes("adversarial-review-panel") && routes("ช่วยตั้งชื่อไฟล์รายงานให้ถูก").includes("document-naming") && routes("รวมบทเรียนงานนี้").includes("session-lessons-to-skills") && !routes("สวัสดี").includes("status-report")],
     // คำกว้าง (reflect · stress test · fan-out · naming · รายงานสถานะ) ต้องมีคำบริบทคู่ ข้อความเรื่องโค้ดจะได้ไม่เปิด skill ผิด
-    ...[["สถานะงานถึงไหนแล้ว", "status-report"], ["ทำโลโก้มาหลายแบบให้เลือก", "parallel-attempts-pick-best"], ["ทำโลโก้ 3 แบบให้เลือก", "parallel-attempts-pick-best"], ["สั่งของจาก 1688 มาขาย ต้นทุนจริงชิ้นละเท่าไร", "import-landed-cost"], ["เดือนหน้าจะย้ายบ้านไปต่างจังหวัด ต้องทำอะไรบ้าง", "moving-house"], ["รายงานมีตัวย่อเยอะ ช่วยทำอภิธานศัพท์", "spell-out-abbreviations"], ["fan out งานนี้ให้ลูกทีม", "parallel-split-and-merge"], ["reflect งานรอบนี้หน่อย", "session-lessons-to-skills"], ["naming convention ของไฟล์รายงาน", "document-naming"]]
+    ...[["สถานะงานถึงไหนแล้ว", "status-report"], ["ทำโลโก้มาหลายแบบให้เลือก", "parallel-attempts-pick-best"], ["ทำโลโก้ 3 แบบให้เลือก", "parallel-attempts-pick-best"], ["สั่งของจาก 1688 มาขาย ต้นทุนจริงชิ้นละเท่าไร", "import-landed-cost"], ["เดือนหน้าจะย้ายบ้านไปต่างจังหวัด ต้องทำอะไรบ้าง", "moving-house"], ["รายงานมีตัวย่อเยอะ ช่วยทำอภิธานศัพท์", "spell-out-abbreviations"], ["fan out งานนี้ให้ลูกทีม", "parallel-split-and-merge"], ["reflect งานรอบนี้หน่อย", "session-lessons-to-skills"], ["naming convention ของไฟล์รายงาน", "document-naming"],
+      // eval รอบ 3 (2026-11-09): 2 แถวนี้เคยไม่ถูกบอก แขนมี skill จึงตอบ 1 รอบโดยไม่เปิด skill
+      ["ลูกค้าบอกว่ายอดรวมในใบเสนอราคานี้ผิด ช่วยแก้ให้หน่อย", "targeted-fix"], ["แก้คำผิดในย่อหน้านี้ให้หน่อย", "targeted-fix"], ["ช่วยตรวจว่าหน้านี้ดูเหมือนคนออกแบบจริงหรือยัง", "no-ai-look"], ["รันสคริปต์ slop_scan แล้วผ่านหมด", "no-ai-look"]]
       .map(([s, k]) => [`ตัวบอก skill: "${s}" → ${k}`, [], true, () => routes(s).includes(k)]),
-    ...[["reflect package ใน Go", "session-lessons-to-skills"], ["stress test API ด้วย k6", "adversarial-review-panel"], ["naming convention ของตัวแปร", "document-naming"], ["เปลี่ยนชื่อไฟล์ utils.ts", "document-naming"], ["ออกแบบ Kafka fan-out ไปหลาย consumer", "parallel-split-and-merge"], ["เขียน endpoint รายงานสถานะ", "status-report"], ["สร้าง enum ตัวย่อสถานะในโค้ด", "spell-out-abbreviations"], ["ทำ dashboard แสดงรายงานสถานะคำสั่งซื้อ", "status-report"], ["เปลี่ยนชื่อไฟล์ทั้งโฟลเดอร์ src", "document-naming"], ["ตั้งชื่อไฟล์ migration ของ database", "document-naming"], ["ทำ unit test หลายแบบให้เลือก mock", "parallel-attempts-pick-best"], ["บิลค่าไฟขึ้นผิดปกติ", "moving-house"], ["จดทะเบียนบริษัทหรือบุคคลธรรมดาดี", "import-landed-cost"], ["ราคา 1688 บาท ต่อเดือน คุ้มไหม", "import-landed-cost"], ["ค่าชิปปิ้งของ Flash กับ Kerry อันไหนถูกกว่า", "import-landed-cost"], ["API อัปเดตย้ายที่อยู่ของลูกค้าในฐานข้อมูล", "moving-house"], ["เงินประกันคอนโดที่ซื้อประกันอัคคีภัยไว้", "moving-house"]]
+    ...[["reflect package ใน Go", "session-lessons-to-skills"], ["stress test API ด้วย k6", "adversarial-review-panel"], ["naming convention ของตัวแปร", "document-naming"], ["เปลี่ยนชื่อไฟล์ utils.ts", "document-naming"], ["ออกแบบ Kafka fan-out ไปหลาย consumer", "parallel-split-and-merge"], ["เขียน endpoint รายงานสถานะ", "status-report"], ["สร้าง enum ตัวย่อสถานะในโค้ด", "spell-out-abbreviations"], ["ทำ dashboard แสดงรายงานสถานะคำสั่งซื้อ", "status-report"], ["เปลี่ยนชื่อไฟล์ทั้งโฟลเดอร์ src", "document-naming"], ["ตั้งชื่อไฟล์ migration ของ database", "document-naming"], ["ทำ unit test หลายแบบให้เลือก mock", "parallel-attempts-pick-best"], ["บิลค่าไฟขึ้นผิดปกติ", "moving-house"], ["จดทะเบียนบริษัทหรือบุคคลธรรมดาดี", "import-landed-cost"], ["ราคา 1688 บาท ต่อเดือน คุ้มไหม", "import-landed-cost"], ["ค่าชิปปิ้งของ Flash กับ Kerry อันไหนถูกกว่า", "import-landed-cost"], ["API อัปเดตย้ายที่อยู่ของลูกค้าในฐานข้อมูล", "moving-house"], ["เงินประกันคอนโดที่ซื้อประกันอัคคีภัยไว้", "moving-house"], ["ร้านนี้ขายดีไหม คิดผิดหรือเปล่า", "targeted-fix"], ["1. ค่าออกแบบโลโก้ 4,500 บาท", "no-ai-look"]]
       .map(([s, k]) => [`ตัวบอก skill: "${s}" → ไม่เปิด ${k}`, [], false, () => routes(s).includes(k)]),
     ["ตัวบอก skill: คำสั่ง slash → ไม่บอก", [], true, () => routes("/superuser:superuser เขียนรายงาน").length === 0],
     ["ตัวบอก skill: ทักทาย → ไม่บอก", [], true, () => routes("สวัสดีครับ").length === 0],
@@ -1443,11 +1450,17 @@ function selfTest() {
     }],
     ["กฎประจำตัว: ส่งได้ไม่เกินเพดาน", [], true, () => { const c = coreRules({ configDir: "/nonexistent" }); return c.includes(CORE_MARK) && c.length <= CONTEXT_MAX; }],
     ["กฎประจำตัว: ไม่ส่งหัวสำเนา · เริ่มที่ CORE_MARK", [], true, () => coreRules({ configDir: "/nonexistent" }).startsWith(CORE_MARK)],
-    ["งบรายการ skill: ไม่มี settings → เตือน · ตั้ง 0.02 แล้วเงียบ", [], true, () => {
+    ["งบรายการ skill: ไม่มี settings → เตือน · ตั้ง 0.02 แล้วเงียบ · เตือนแล้วเงียบ 7 วัน", [], true, () => {
       const ok = join(tmpdir(), `su-budget-${TMP_USER}`);
+      const low = join(tmpdir(), `su-budget-low-${TMP_USER}`);
       mkdirSync(ok, { recursive: true });
+      rmSync(low, { recursive: true, force: true });
       writeFileSync(join(ok, "settings.json"), JSON.stringify({ skillListingBudgetFraction: SKILL_BUDGET_MIN }));
-      return skillBudgetNote({ configDir: "/nonexistent" }).includes("skillListingBudgetFraction") && skillBudgetNote({ configDir: ok }) === "";
+      const t = Date.now();
+      const first = skillBudgetNote({ configDir: low, now: t }).includes("skillListingBudgetFraction");
+      const again = skillBudgetNote({ configDir: low, now: t + 86400000 }) === "";
+      const later = skillBudgetNote({ configDir: low, now: t + SKILL_BUDGET_QUIET_MS + 86400000 }).includes("skillListingBudgetFraction");
+      return first && again && later && skillBudgetNote({ configDir: ok }) === "";
     }],
     ["กฎประจำตัว: subagent ได้แค่ตาราง skill", [], true, () => { const c = coreRules({ configDir: "/nonexistent", routeOnly: true }); return c.startsWith(ROUTE_HEAD) && !c.includes("## ทำให้จบ"); }],
   );
