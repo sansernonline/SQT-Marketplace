@@ -72,7 +72,7 @@ export function assign(a, accountsIn, { weights = DEFAULT_WEIGHTS, safety = DEFA
     now = next;
     for (const x of accounts) {
       x.resetIn -= step; x.weekResetIn -= step;
-      // ถึงรอบรีเซ็ตรายสัปดาห์ → ถังสัปดาห์เต็ม และถัง 5 ชม. กลับมาใช้ได้ (ไม่เกินถังของตัวเอง)
+      // ถึงรอบรีเซ็ตรายสัปดาห์ → ถังสัปดาห์เต็ม และถัง 5 ชม. กลับมาใช้ได้ (ไม่เกินถังของตัวเอง) · สมมุติว่ารอบ 5 ชม. ไม่ได้กันไว้ต่อ (ยังไม่ได้ตรวจกับแหล่ง)
       if (x.weekResetIn <= 1e-9) { x.weekLeft = x.week_cap_k ?? Infinity; x.weekResetIn = Infinity; x.left = Math.max(x.left, Math.min(x.cap_k, x.weekLeft)); }
       // ก้าวเวลา 1 ครั้งอาจข้ามหลายรอบโควตา จึงบวกรอบจนเวลารีเซ็ตถัดไปอยู่ข้างหน้า ไม่งั้นรอบถัดไปได้ next น้อยกว่า now
       // รีเซ็ตรอบ 5 ชม. เติมถังได้ไม่เกินที่โควตาสัปดาห์เหลือ (ไม่รู้ขนาดถังสัปดาห์ = ไม่จำกัด)

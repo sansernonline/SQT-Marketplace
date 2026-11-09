@@ -883,7 +883,7 @@ export function dispatchGate(ti = {}) {
 export function accountLeft({ home = homedir(), env = process.env, now = new Date() } = {}) {
   const name = accountName(env, "claude");
   const conf = readJson(join(home, ".claude", "superuser", "accounts.json"), null);
-  const acc = conf?.accounts?.find((a) => a.name === name);
+  const acc = Array.isArray(conf?.accounts) ? conf.accounts.find((a) => a?.name === name) : null;
   const q = readJson(join(home, ".claude", "superuser", "quota", `${name.replace(/[^\w.-]/g, "_")}.json`), null);
   if (!acc?.cap_k || !q?.at || now - Date.parse(q.at) > 3600000) return null;
   const [a] = applyQuota([acc], { accounts: [q] }, now);
