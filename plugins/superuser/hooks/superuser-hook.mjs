@@ -492,7 +492,8 @@ export function routeSkills(prompt, router) {
 
 export function routerNotice(skills, note = "") {
   if (!skills.length) return "";
-  const head = `เปิด skill ก่อนลงมือ (เครื่องมือ Skill ทีละตัว · ไม่มีในเครื่องข้ามไป): ${skills.map((s) => `\`${s}\``).join(" · ")}`;
+  // ถ้อยคำแบบแนะนำ model ข้ามเมื่องานดูง่าย (eval 2026-11-09 รอบ 4: เห็นข้อความแล้วตอบรอบเดียว 0/6 ครั้งเปิด skill) จึงสั่งให้เรียกก่อนตอบ
+  const head = `ก่อนตอบข้อความนี้ เรียกเครื่องมือ Skill ให้ครบทุกตัวในรายการ (ทีละตัว · ตัวที่ไม่มีในเครื่องข้ามไป) แม้งานดูง่ายหรือรู้คำตอบแล้ว เพราะกฎใน skill เปลี่ยนรูปคำตอบ: ${skills.map((s) => `\`${s}\``).join(" · ")}`;
   return note && skills.some((s) => s.endsWith("superuser")) ? `${head}\n${note}` : head;
 }
 
@@ -859,11 +860,36 @@ function denyReason(input, teamDir) {
   const s = gateState(teamDir, input.transcript_path);
   return targets.map((t) => splitGate(s, t, input.tool_use_id ?? null, current, input.cwd ?? process.cwd())).find(Boolean) ?? "";
 }
+
+// ── ด่านส่งงาน (PreToolUse Agent ของหัวหน้าทีม · โมดูล dispatch_gate ค่าเริ่มเปิด) ──
+// เปิด superuser แล้วส่งลูกทีมโดยไม่ใส่ model หรือ effort หรือใบสั่งงานไม่ครบ 5 ข้อ → ไม่ให้ส่ง บอกว่าขาดอะไร
+// log ใช้งานจริง 2026-11-09 ถึง 11-10: ส่ง 15 ครั้ง ไม่ใส่ effort 5 · ใบครบ 5 ข้อแค่ 1 · คำเตือนหลังส่ง (PostToolUse) ไม่พอ
+// fork รับ model ไม่ได้ · Explore/Plan เป็นตัวค้นของ Claude Code ไม่ใช่ลูกทีม · ผู้ตรวจและตัวเสนอทางรับคำสั่งรูปอื่น (หัวข้อ 5) จึงตรวจแค่ model กับ effort
+const DISPATCH_SKIP = /^(fork|Explore|Plan|claude-code-guide|statusline-setup)$/;
+const NO_BRIEF = /(^|:)(reviewer|learning-reviewer|brainstormer)$/;
+const BRIEF_NAMES = ["เป้า", "ขอบเขต", "เสร็จเมื่อ", "กติกา", "ส่งกลับ"];
+export function dispatchGate(ti = {}) {
+  const type = String(ti.subagent_type ?? "");
+  if (DISPATCH_SKIP.test(type)) return "";
+  const fields = ["model", "effort"].filter((k) => !ti[k]).map((k) => `\`${k}\``);
+  const prompt = String(ti.prompt ?? "");
+  const lacking = NO_BRIEF.test(type) ? [] : BRIEF_NAMES.filter((_, i) => !BRIEF_SECTIONS[i].test(prompt));
+  if (!fields.length && !lacking.length) return "";
+  const why = [fields.length && `ไม่ได้ใส่ ${fields.join(" และ ")}`, lacking.length && `ใบสั่งงานขาดหัวข้อ ${lacking.join(" · ")}`].filter(Boolean).join(" · ");
+  return `ด่านส่งงาน (SuperUser): ${why} — ส่งใหม่ให้ครบ: (1) \`model\` + \`effort\` ตามระดับของชิ้นนี้ (opus + high งานเงิน กฎหมาย ส่งคนนอก ย้อนไม่ได้ · haiku + low งานกลไกที่มีแบบให้ทำตาม · ที่เหลือ sonnet + medium · superuser หัวข้อ 5) (2) ใบสั่งงานขึ้นหัวข้อละบรรทัด **1 · เป้า** · **2 · ขอบเขต** · **3 · เสร็จเมื่อ** · **4 · กติกา** · **5 · ส่งกลับ** (บรรทัดแรกของรายงานเป็น เสร็จ · เสร็จ มีข้อกังวล · ขาดบริบท · ติด) · ปิดด่านนี้ได้ที่ .claude/superuser/config.json {"modules": {"dispatch_gate": false}}`;
+}
+function agentGate(input, teamDir) {
+  if (!teamDir || input.agent_id || !moduleOn(teamDir, "dispatch_gate")) return "";
+  if (!input.transcript_path || !existsSync(input.transcript_path)) return "";
+  return gateState(teamDir, input.transcript_path).usedSuperuser ? dispatchGate(input.tool_input ?? {}) : "";
+}
+
 function preWriteGate(input) {
-  if (input.hook_event_name !== "PreToolUse" || !["Write", "Edit", "Bash"].includes(input.tool_name)) return;
+  if (input.hook_event_name !== "PreToolUse" || !["Write", "Edit", "Bash", "Agent", "Task"].includes(input.tool_name)) return;
   const root = findProjectRoot(input.cwd ?? process.cwd());
   const teamDir = root && teamDirOf(root);
   const answer = (decision, reason) => process.stdout.write(JSON.stringify({ hookSpecificOutput: { hookEventName: "PreToolUse", permissionDecision: decision, permissionDecisionReason: reason } }));
+  if (["Agent", "Task"].includes(input.tool_name)) { const r = agentGate(input, teamDir); if (r) answer("deny", r); return; }
   const deny = denyReason(input, teamDir);
   if (deny) { answer("deny", deny); return; }
   const pii = teamDir && !moduleOn(teamDir, "pii_gate") ? "" : personalDataGate(input.tool_name, input.tool_input ?? {});
@@ -1588,6 +1614,17 @@ ${rows}
       ctxWith(""); const c = decisionsLackExpect(cDir, "2026-10-24");
       const e = missingEffort({ model: "sonnet" }) && !missingEffort({ model: "sonnet", effort: "medium" }) && !missingEffort({});
       return a === true && b === false && old === true && c === true && e;
+    }],
+    ["ด่านส่งงาน: ขาด model/effort หรือใบไม่ครบ 5 ข้อ → ไม่ให้ส่ง · ครบ · fork · Explore · ผู้ตรวจไม่ต้องมีใบ 5 ข้อ", [], true, () => {
+      const brief = "**1 · เป้า** — a\n**2 · ขอบเขต** — b\n**3 · เสร็จเมื่อ** — c\n**4 · กติกา** — d\n**5 · ส่งกลับ** — e";
+      const ok = { model: "sonnet", effort: "medium", prompt: brief };
+      const noEffort = dispatchGate({ ...ok, effort: undefined });
+      const short = dispatchGate({ ...ok, prompt: "**1 · เป้า** — a\nทำให้เสร็จ" });
+      return dispatchGate(ok) === "" && noEffort.includes("`effort`") && !noEffort.includes("ใบสั่งงานขาด")
+        && short.includes("ขอบเขต · เสร็จเมื่อ · กติกา · ส่งกลับ") && !short.includes("ไม่ได้ใส่")
+        && dispatchGate({ subagent_type: "fork", prompt: "x" }) === "" && dispatchGate({ subagent_type: "Explore", prompt: "x" }) === ""
+        && dispatchGate({ subagent_type: "superuser:reviewer", model: "opus", effort: "high", prompt: "ตรวจ diff" }) === ""
+        && dispatchGate({ subagent_type: "superuser:reviewer", prompt: "ตรวจ" }).includes("`model` และ `effort`");
     }],
     ["heredoc: ไฟล์ปลายทางมีอักขระควบคุม → รายชื่อ · ไฟล์ปกติ · คำสั่งที่ไม่ใช่ heredoc · 2>&1 ไม่นับ", [], true, () => {
       const dir = join(tmpdir(), `sqt-heredoc-${process.pid}`); mkdirSync(dir, { recursive: true });
