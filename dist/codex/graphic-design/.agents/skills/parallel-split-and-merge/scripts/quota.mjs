@@ -71,7 +71,14 @@ export function applyQuota(accounts, snap, now = new Date()) {
     if (!q) return a;
     const five = q.five_hour && hours(q.five_hour.reset) > 0 ? q.five_hour : null;
     const week = q.week && hours(q.week.reset) > 0 ? q.week : null;
-    if (week && week.used >= 100) return { ...a, remaining_k: 0, reset_in_hours: hours(week.reset), quota_at: q.at };
+    if (week && week.used >= 100) return { ...a, remaining_k: 0, week_left_k: 0, reset_in_hours: hours(week.reset), quota_at: q.at };
+    // รู้ขนาดถังรายสัปดาห์ (week_cap_k) → คิดเป็น token ทั้ง 2 ถังแล้วเอาตัวที่น้อยกว่า · plan-assign หักถังสัปดาห์ด้วยและเติมถัง 5 ชม. ได้ไม่เกินที่สัปดาห์เหลือ
+    if (a.week_cap_k) {
+      const weekLeft = a.week_cap_k * (week ? 1 - week.used / 100 : 1);
+      const fiveLeft = five ? a.cap_k * (1 - five.used / 100) : a.cap_k;
+      return { ...a, remaining_k: Math.max(0, Math.min(fiveLeft, weekLeft)), week_left_k: weekLeft,
+        reset_in_hours: five ? hours(five.reset) : a.reset_in_hours, week_reset_in_hours: week ? hours(week.reset) : null, quota_at: q.at };
+    }
     if (!five) return { ...a, quota_at: q.at };
     // ใช้ส่วนที่เหลือน้อยกว่าระหว่างรอบ 5 ชม. กับรอบยาว · รอบยาวใกล้เต็มแล้ว รอบ 5 ชม. ที่ยังว่างก็ใช้ได้ไม่เต็ม
     const share = Math.max(0, Math.min(1 - five.used / 100, week ? 1 - week.used / 100 : 1));
