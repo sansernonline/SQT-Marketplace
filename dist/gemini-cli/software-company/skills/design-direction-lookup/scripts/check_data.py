@@ -21,7 +21,7 @@ from pathlib import Path
 COLUMNS = {
     'thai-fonts.csv': ['family', 'style', 'weights', 'has_latin', 'licence', 'source_url', 'checked', 'notes_th'],
     'font-pairs.csv': ['id', 'heading', 'body', 'numeric', 'thai_style', 'keywords', 'min_body_px', 'line_height',
-                       'size_note_th', 'notes_th', 'checked'],
+                       'size_note_th', 'notes_th', 'checked', 'voice'],
     'looks.csv': ['id', 'name_th', 'name_en', 'keywords', 'depth', 'motion', 'density', 'avoid_th'],
     'palettes.csv': ['id', 'name_th', 'keywords', 'mode', 'bg', 'surface', 'text', 'text_muted', 'primary',
                      'on_primary', 'accent', 'border', 'success', 'warning', 'danger', 'notes_th'],
@@ -186,9 +186,14 @@ def check_thai_fonts(rows, report, today):
     return {r['family'].strip().lower(): r for r in rows}
 
 
+VOICES = {'rounded', 'angular', 'modern', 'formal', 'classic', 'hand'}  # บุคลิกตัวอักษร · ui-craft references/font-voice.md
+
+
 def check_font_pairs(rows, fonts, report, today):
     for r in rows:
         w = r['_where']
+        if r['voice'] not in VOICES:
+            report.error(w, f'voice "{r["voice"]}" ต้องเป็น {"|".join(sorted(VOICES))}')
         for role in ('heading', 'body', 'numeric'):
             parts = font_parts(r[role])
             if not parts:
@@ -342,9 +347,9 @@ GOOD = {
         'Noto Sans Thai,loopless,100;900,varies,OFL-1.1,https://github.com/google/fonts/tree/main/ofl/notosansthai,{d},ok',
     ],
     'font-pairs.csv': [
-        'p1,IBM Plex Sans Thai,IBM Plex Sans Thai,IBM Plex Mono,loopless,tech,16,1.6,ok,ok,{d}',
-        'p2,Noto Sans Thai + Noto Sans,Noto Sans Thai + Noto Sans,Noto Sans,loopless,neutral,16,1.7,ok,ok,{d}',
-        'p3,IBM Plex Sans Thai,Noto Sans Thai + Noto Sans,IBM Plex Mono,loopless,mix,16,1.7,ok,ok,{d}',
+        'p1,IBM Plex Sans Thai,IBM Plex Sans Thai,IBM Plex Mono,loopless,tech,16,1.6,ok,ok,{d},modern',
+        'p2,Noto Sans Thai + Noto Sans,Noto Sans Thai + Noto Sans,Noto Sans,loopless,neutral,16,1.7,ok,ok,{d},modern',
+        'p3,IBM Plex Sans Thai,Noto Sans Thai + Noto Sans,IBM Plex Mono,loopless,mix,16,1.7,ok,ok,{d},modern',
     ],
     'looks.csv': [f'l{i},ก,l,k,flat,100ms,dense,x' for i in (1, 2, 3)],
     'palettes.csv': [f'c{i},ก,k,light,#F7F7F4,#FFFFFE,#1A1C1A,#5E605C,#1B4D3E,#FAFAF8,#A0522D,#8A8A86,#2E6B3A,#8A5300,#A3241B,ok'
@@ -364,9 +369,10 @@ HEADERS = dict(COLUMNS, **RULE_COLUMNS, **{'stacks/react.csv': STACK_COLUMNS, 's
 
 # (ชื่อกรณี · ไฟล์ · แถวที่แทนแถวแรก · ข้อความที่ต้องเจอใน error)
 BAD = [
-    ('Noto ไม่มีละตินคู่', 'font-pairs.csv', 'p1,Noto Sans Thai,IBM Plex Sans Thai,IBM Plex Mono,loopless,x,16,1.6,x,x,{d}', 'ต้องระบุฟอนต์ละตินคู่'),
-    ('Inter', 'font-pairs.csv', 'p1,IBM Plex Sans Thai,Noto Sans Thai + Inter,IBM Plex Mono,loopless,x,16,1.6,x,x,{d}', 'Inter'),
-    ('ฟอนต์ไทยไม่มีในรายการ', 'font-pairs.csv', 'p1,Kanit,IBM Plex Sans Thai,IBM Plex Mono,loopless,x,16,1.6,x,x,{d}', 'thai-fonts.csv'),
+    ('Noto ไม่มีละตินคู่', 'font-pairs.csv', 'p1,Noto Sans Thai,IBM Plex Sans Thai,IBM Plex Mono,loopless,x,16,1.6,x,x,{d},modern', 'ต้องระบุฟอนต์ละตินคู่'),
+    ('Inter', 'font-pairs.csv', 'p1,IBM Plex Sans Thai,Noto Sans Thai + Inter,IBM Plex Mono,loopless,x,16,1.6,x,x,{d},modern', 'Inter'),
+    ('ฟอนต์ไทยไม่มีในรายการ', 'font-pairs.csv', 'p1,Kanit,IBM Plex Sans Thai,IBM Plex Mono,loopless,x,16,1.6,x,x,{d},modern', 'thai-fonts.csv'),
+    ('voice ไม่รู้จัก', 'font-pairs.csv', 'p1,IBM Plex Sans Thai,IBM Plex Sans Thai,IBM Plex Mono,loopless,x,16,1.6,x,x,{d},cute', 'voice'),
     ('สี Tailwind', 'palettes.csv', 'c1,ก,k,light,#F7F7F4,#FFFFFE,#1A1C1A,#5E605C,#4F46E5,#FAFAF8,#A0522D,#8A8A86,#2E6B3A,#8A5300,#A3241B,x', 'Tailwind'),
     ('contrast ตก', 'palettes.csv', 'c1,ก,k,light,#F7F7F4,#FFFFFE,#1A1C1A,#B0B0AC,#1B4D3E,#FAFAF8,#A0522D,#8A8A86,#2E6B3A,#8A5300,#A3241B,x', 'text_muted/bg'),
     ('อ้าง id ไม่มี', 'industries.csv', 'i1,ร้าน,shop,ร้าน;ค้า,shop,3 ไลฟ์สไตล์ ช้อปปิ้ง อาหาร,l1;l2;zz,c1;c2;c3,p1;p2;p3,x,x', 'อ้าง "zz"'),
