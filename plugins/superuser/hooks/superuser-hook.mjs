@@ -9,6 +9,7 @@ import { execFileSync } from "node:child_process";
 import { join, dirname, resolve, relative, basename } from "node:path";
 import { homedir, tmpdir, userInfo } from "node:os";
 import { fileURLToPath } from "node:url";
+import { applyQuota, accountName } from "../skills/parallel-split-and-merge/scripts/quota.mjs";
 
 // โฟลเดอร์สถานะใน tmpdir แยกต่อผู้ใช้ · เครื่อง Linux ที่ใช้ร่วมกัน /tmp เป็นของทุกคน ชื่อตายตัวจะให้คนอื่นสร้างหรือแก้ไฟล์ล่วงหน้าได้
 const TMP_USER = (() => { try { return userInfo().username.replace(/[^\w.-]/g, "_"); } catch { return "user"; } })();
@@ -878,10 +879,35 @@ export function dispatchGate(ti = {}) {
   const why = [fields.length && `ไม่ได้ใส่ ${fields.join(" และ ")}`, lacking.length && `ใบสั่งงานขาดหัวข้อ ${lacking.join(" · ")}`].filter(Boolean).join(" · ");
   return `ด่านส่งงาน (SuperUser): ${why} — ส่งใหม่ให้ครบ: (1) \`model\` + \`effort\` ตามระดับของชิ้นนี้ (opus + high งานเงิน กฎหมาย ส่งคนนอก ย้อนไม่ได้ · haiku + low งานกลไกที่มีแบบให้ทำตาม · ที่เหลือ sonnet + medium · superuser หัวข้อ 5) (2) ใบสั่งงานขึ้นหัวข้อละบรรทัด **1 · เป้า** · **2 · ขอบเขต** · **3 · เสร็จเมื่อ** · **4 · กติกา** · **5 · ส่งกลับ** (บรรทัดแรกของรายงานเป็น เสร็จ · เสร็จ มีข้อกังวล · ขาดบริบท · ติด) · ปิดด่านนี้ได้ที่ .claude/superuser/config.json {"modules": {"dispatch_gate": false}}`;
 }
+// โควตาที่เหลือของบัญชีนี้ (k token) · ต้องมีทั้งไฟล์โควตาที่ status line จด และขนาดถังใน accounts.json · ขาดอย่างใดอย่างหนึ่ง หรือข้อมูลเก่ากว่า 1 ชม. → null ไม่ตรวจ
+export function accountLeft({ home = homedir(), env = process.env, now = new Date() } = {}) {
+  const name = accountName(env, "claude");
+  const conf = readJson(join(home, ".claude", "superuser", "accounts.json"), null);
+  const acc = Array.isArray(conf?.accounts) ? conf.accounts.find((a) => a?.name === name) : null;
+  const q = readJson(join(home, ".claude", "superuser", "quota", `${name.replace(/[^\w.-]/g, "_")}.json`), null);
+  if (!acc?.cap_k || !q?.at || now - Date.parse(q.at) > 3600000) return null;
+  const [a] = applyQuota([acc], { accounts: [q] }, now);
+  return a.remaining_k == null ? null : { name, left_k: a.remaining_k, reset_in_hours: a.reset_in_hours ?? null, week_left_k: a.week_left_k ?? null, safety: conf.safety ?? 1.2 };
+}
+// ด่านโควตา: ลูกทีมต้องทำชิ้นนี้จบในโควตาที่เหลือ ไม่งั้นหยุดกลางทางแล้วต้องส่งต่อ (ผู้ใช้สั่ง 2026-11-10)
+// ไม่มีบรรทัด "ขนาด: Nk" → ขอให้ประเมิน · ขนาด × safety เกินที่เหลือ → ไม่ให้ส่ง
+export function quotaGate(ti = {}, left) {
+  if (!left || DISPATCH_SKIP.test(String(ti.subagent_type ?? ""))) return "";
+  const k = (x) => Math.round(x * 10) / 10;
+  const reset = left.reset_in_hours != null ? ` (รอบ 5 ชม. รีเซ็ตอีก ${k(left.reset_in_hours)} ชม.)` : "";
+  const week = left.week_left_k != null ? ` · สัปดาห์เหลือ ${k(left.week_left_k)}k` : "";
+  const where = `บัญชี ${left.name} เหลือราว ${k(left.left_k)}k${reset}${week}`;
+  const need = estimateTokens(ti.prompt);
+  if (need == null) return `ด่านโควตา (SuperUser): ใบสั่งงานยังไม่มีบรรทัด "ขนาด: Nk" — ${where} · ประเมินขนาดชิ้น (token รวมโดยประมาณ) แล้วใส่ในใบ เพื่อให้แน่ใจว่าลูกทีมทำจบได้ในโควตาที่เหลือ`;
+  const needK = (need / 1000) * left.safety;
+  if (needK <= left.left_k) return "";
+  return `ด่านโควตา (SuperUser): ชิ้นนี้ราว ${k(need / 1000)}k × ${left.safety} = ${k(needK)}k แต่${where} — ลูกทีมจะหมดโควตากลางทางแล้วต้องส่งต่อ · เลือก 1 ทาง: หั่นชิ้นให้ไม่เกิน ${k(left.left_k / left.safety)}k · รอรีเซ็ต · หรือส่งให้บัญชีอื่น (plan.mjs --accounts --quota ของ parallel-split-and-merge)`;
+}
 function agentGate(input, teamDir) {
   if (!teamDir || input.agent_id || !moduleOn(teamDir, "dispatch_gate")) return "";
   if (!input.transcript_path || !existsSync(input.transcript_path)) return "";
-  return gateState(teamDir, input.transcript_path).usedSuperuser ? dispatchGate(input.tool_input ?? {}) : "";
+  if (!gateState(teamDir, input.transcript_path).usedSuperuser) return "";
+  return dispatchGate(input.tool_input ?? {}) || quotaGate(input.tool_input ?? {}, accountLeft());
 }
 
 function preWriteGate(input) {
@@ -1614,6 +1640,19 @@ ${rows}
       ctxWith(""); const c = decisionsLackExpect(cDir, "2026-10-24");
       const e = missingEffort({ model: "sonnet" }) && !missingEffort({ model: "sonnet", effort: "medium" }) && !missingEffort({});
       return a === true && b === false && old === true && c === true && e;
+    }],
+    ["ด่านโควตา: ไม่รู้โควตา → ผ่าน · ไม่มีบรรทัดขนาด → ขอ · ขนาด × 1.2 เกินที่เหลือ → ไม่ให้ส่ง · พอ → ผ่าน · ไฟล์โควตาเก่า → ไม่ตรวจ", [], true, () => {
+      const left = { name: ".claude", left_k: 50, reset_in_hours: 1.5, week_left_k: 400, safety: 1.2 };
+      const h = join(tmpdir(), `su-quota-${process.pid}`); mkdirSync(join(h, ".claude", "superuser", "quota"), { recursive: true });
+      writeFileSync(join(h, ".claude", "superuser", "accounts.json"), JSON.stringify({ accounts: [{ name: ".claude", cap_k: 100, week_cap_k: 1000 }] }));
+      const now = new Date("2026-11-10T00:00:00Z"), iso = (hr) => new Date(now.getTime() + hr * 3600000).toISOString();
+      const rec = (at) => writeFileSync(join(h, ".claude", "superuser", "quota", ".claude.json"), JSON.stringify({ account: ".claude", at, five_hour: { used: 60, reset: iso(2) }, week: { used: 30, reset: iso(90) } }));
+      rec(iso(-0.1)); const fresh = accountLeft({ home: h, env: {}, now }); rec(iso(-2)); const stale = accountLeft({ home: h, env: {}, now });
+      rmSync(h, { recursive: true, force: true });
+      return quotaGate({ prompt: "x" }, null) === "" && quotaGate({ prompt: "ทำ" }, left).includes("ขนาด: Nk")
+        && quotaGate({ prompt: "ขนาด: 45k" }, left).includes("54k") && quotaGate({ prompt: "ขนาด: 40k" }, left) === ""
+        && quotaGate({ subagent_type: "Explore", prompt: "x" }, left) === ""
+        && Math.abs(fresh.left_k - 40) < 1e-9 && Math.abs(fresh.week_left_k - 700) < 1e-9 && stale === null;
     }],
     ["ด่านส่งงาน: ขาด model/effort หรือใบไม่ครบ 5 ข้อ → ไม่ให้ส่ง · ครบ · fork · Explore · ผู้ตรวจไม่ต้องมีใบ 5 ข้อ", [], true, () => {
       const brief = "**1 · เป้า** — a\n**2 · ขอบเขต** — b\n**3 · เสร็จเมื่อ** — c\n**4 · กติกา** — d\n**5 · ส่งกลับ** — e";
