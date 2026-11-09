@@ -1,0 +1,74 @@
+{
+  "id": "d11-shared-stock",
+  "plugin": "e-commerce",
+  "title": "ไฟล์กลาง: ปรับสต็อก 3 ช่องทางจากตารางเดียว (ดูแยกได้แต่ชนไฟล์)",
+  "risky": false,
+  "prompt": "ร้านขายเสื้อลงขาย 3 ช่องทาง Shopee · Lazada · TikTok Shop · วันนี้นับของจริงแล้ว ต้องปรับสต็อกทุกช่องทางให้ตรง · ทุกช่องทางอ่านและเขียนกลับตาราง `stock/stock-master.xlsx` ไฟล์เดียวกัน (คอลัมน์ยอดคงเหลือต่อช่องทางและยอดจองรวม) ตามขั้นตอนเดิมที่ทำทุกสัปดาห์ · เสร็จแล้วตรวจยอดรวมทั้ง 3 ช่องทางให้ตรงกับยอดนับจริง",
+  "expected": {
+    "size": "กลาง",
+    "workers": 1
+  },
+  "accept_workers": [
+    0,
+    1
+  ],
+  "graph": {
+    "name": "ปรับสต็อก 3 ช่องทาง",
+    "tasks": [
+      {
+        "id": "shopee",
+        "size": 12,
+        "needs": [],
+        "owns": [
+          "stock/stock-master.xlsx"
+        ],
+        "tags": [
+          "mechanical",
+          "template"
+        ]
+      },
+      {
+        "id": "lazada",
+        "size": 12,
+        "needs": [
+          "shopee"
+        ],
+        "owns": [
+          "stock/stock-master.xlsx"
+        ],
+        "tags": [
+          "mechanical",
+          "template"
+        ]
+      },
+      {
+        "id": "tiktok",
+        "size": 12,
+        "needs": [
+          "lazada"
+        ],
+        "owns": [
+          "stock/stock-master.xlsx"
+        ],
+        "tags": [
+          "mechanical",
+          "template"
+        ]
+      },
+      {
+        "id": "verify",
+        "size": 8,
+        "needs": [
+          "tiktok"
+        ],
+        "owns": [
+          "stock/stock-master.xlsx"
+        ],
+        "tags": [
+          "mechanical",
+          "template"
+        ]
+      }
+    ]
+  }
+}

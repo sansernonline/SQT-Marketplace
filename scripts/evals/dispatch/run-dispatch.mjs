@@ -29,7 +29,7 @@ const PLUGIN = join(ROOT, "plugins", "superuser");
 const PLAN_MJS = join(PLUGIN, "skills", "parallel-split-and-merge", "scripts", "plan.mjs");
 // เคสสาขาอื่นใส่ "plugin": "<ชื่อ>" → โหลด plugin สาขานั้นคู่กับ superuser ให้หัวหน้าเห็นลูกทีมและ playbook ของสาขา (เหมือนใช้งานจริง)
 export const pluginDirs = (c) => [PLUGIN, ...(c.plugin ? [join(ROOT, "plugins", c.plugin)] : [])];
-const CASE_COUNT = 10;
+const CASE_COUNT = 18;
 const TIERS = ["ใหญ่", "กลาง", "เล็ก"];
 const ARMS = { plugin: "มี plugin", none: "ไม่มี plugin" };
 

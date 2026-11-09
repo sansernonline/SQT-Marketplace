@@ -1,0 +1,28 @@
+{
+  "id": "d17-script-not-team",
+  "plugin": "software-company",
+  "title": "โค้ด: งานซ้ำ 80 ไฟล์ที่ควรเขียนสคริปต์ ไม่ใช่แจกลูกทีม",
+  "risky": false,
+  "prompt": "ไฟล์ fixture 80 ไฟล์ใน `tests/fixtures/*.json` เก็บวันที่ในฟิลด์ `date` เป็น `DD/MM/YYYY` ต้องเปลี่ยนเป็น `YYYY-MM-DD` ทุกไฟล์ · ทุกไฟล์ใช้ชื่อฟิลด์เดียวกันและรูปแบบเดียวกัน ไม่มี test ที่อ้างรูปแบบเก่า · เสร็จเมื่อรัน test ทั้งชุดผ่าน",
+  "expected": {
+    "size": "เล็ก",
+    "workers": 0
+  },
+  "graph": {
+    "name": "แปลงวันที่ fixture",
+    "tasks": [
+      {
+        "id": "script",
+        "size": 4,
+        "needs": [],
+        "owns": [
+          "scripts/convert-dates.mjs"
+        ],
+        "tags": [
+          "mechanical",
+          "template"
+        ]
+      }
+    ]
+  }
+}

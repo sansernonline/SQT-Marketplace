@@ -1,0 +1,89 @@
+{
+  "id": "d13-campaign-chains",
+  "plugin": "graphic-design",
+  "title": "แคมเปญ 6 ชิ้น 2 สายยาว: ดูกว้าง 6 แต่กว้างจริง 2",
+  "risky": false,
+  "prompt": "ร้านกาแฟของตัวเองเปิดสาขาใหม่ ต้องมี 2 อย่างลงเพจของร้านเอง: ชุดโปสเตอร์ (คิดแนว → ออกแบบ → ส่งออก 4 ขนาดตามแม่แบบขนาดที่มีแล้ว) และคลิปสั้น 30 วินาที (เขียนสคริปต์ → ทำซับไทย → ตัดต่อ) · โปสเตอร์กับคลิปไม่ต้องใช้แนวเดียวกันและไม่ใช้ไฟล์ร่วมกัน · ในแต่ละสาย ขั้นหลังต้องใช้ผลของขั้นก่อน",
+  "expected": {
+    "size": "กลาง",
+    "workers": 2
+  },
+  "graph": {
+    "name": "แคมเปญเปิดสาขา",
+    "tasks": [
+      {
+        "id": "concept",
+        "size": 20,
+        "needs": [],
+        "owns": [
+          "poster/concept.md"
+        ],
+        "tags": [
+          "judgment"
+        ]
+      },
+      {
+        "id": "design",
+        "size": 25,
+        "needs": [
+          "concept"
+        ],
+        "owns": [
+          "poster/poster.svg"
+        ],
+        "tags": [
+          "judgment"
+        ]
+      },
+      {
+        "id": "export",
+        "size": 6,
+        "needs": [
+          "design"
+        ],
+        "owns": [
+          "poster/export/"
+        ],
+        "tags": [
+          "mechanical",
+          "template"
+        ]
+      },
+      {
+        "id": "script",
+        "size": 15,
+        "needs": [],
+        "owns": [
+          "clip/script.md"
+        ],
+        "tags": [
+          "judgment"
+        ]
+      },
+      {
+        "id": "subs",
+        "size": 10,
+        "needs": [
+          "script"
+        ],
+        "owns": [
+          "clip/subs.srt"
+        ],
+        "tags": []
+      },
+      {
+        "id": "edit",
+        "size": 25,
+        "needs": [
+          "subs"
+        ],
+        "owns": [
+          "clip/final.mp4"
+        ],
+        "tags": [
+          "judgment"
+        ]
+      }
+    ]
+  }
+}

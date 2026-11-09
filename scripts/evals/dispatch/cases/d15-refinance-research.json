@@ -1,0 +1,76 @@
+{
+  "id": "d15-refinance-research",
+  "plugin": "trading-finance",
+  "title": "วิจัยเทียบตัวเลือกด้านเงิน: ดูเป็นการดึงตัวเลขแต่เป็นงานเงิน + ต้องรวมผล",
+  "risky": true,
+  "prompt": "บ้านที่ผ่อนอยู่ดอกเบี้ยคงที่จะหมดเดือนหน้า อยากรู้ว่ารีไฟแนนซ์กับธนาคาร ก. ข. หรือ ค. หรืออยู่ที่เดิม (ขอลดดอกเบี้ยกับธนาคารเดิม) แบบไหนคุ้มที่สุดใน 3 ปี · ต้องหาเงื่อนไขจากเว็บของแต่ละธนาคาร รวมค่าประเมิน ค่าจดจำนอง ค่าปรับไถ่ถอนก่อนกำหนด แล้วคำนวณเทียบจุดคุ้มทุน · ยอดหนี้คงเหลือ 2.4 ล้านบาท",
+  "expected": {
+    "size": "กลาง",
+    "workers": 4
+  },
+  "graph": {
+    "name": "เทียบรีไฟแนนซ์",
+    "tasks": [
+      {
+        "id": "bank-a",
+        "size": 15,
+        "needs": [],
+        "owns": [
+          "work/bank-a.md"
+        ],
+        "tags": [
+          "money"
+        ]
+      },
+      {
+        "id": "bank-b",
+        "size": 15,
+        "needs": [],
+        "owns": [
+          "work/bank-b.md"
+        ],
+        "tags": [
+          "money"
+        ]
+      },
+      {
+        "id": "bank-c",
+        "size": 15,
+        "needs": [],
+        "owns": [
+          "work/bank-c.md"
+        ],
+        "tags": [
+          "money"
+        ]
+      },
+      {
+        "id": "stay",
+        "size": 10,
+        "needs": [],
+        "owns": [
+          "work/stay.md"
+        ],
+        "tags": [
+          "money"
+        ]
+      },
+      {
+        "id": "compare",
+        "size": 20,
+        "needs": [
+          "bank-a",
+          "bank-b",
+          "bank-c",
+          "stay"
+        ],
+        "owns": [
+          "work/compare.md"
+        ],
+        "tags": [
+          "money"
+        ]
+      }
+    ]
+  }
+}
