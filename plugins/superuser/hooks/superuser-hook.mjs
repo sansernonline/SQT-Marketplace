@@ -448,6 +448,16 @@ export function coreRules({ configDir = process.env.CLAUDE_CONFIG_DIR ?? join(ho
   return text.slice(0, CONTEXT_MAX);
 }
 
+// ติดตั้ง plugin ครบ รายการ skill ยาว 46,056 ตัวอักษร เกินงบตั้งต้น 30,000 (1%) → คำอธิบายถูกตัด
+// eval triggers 2026-11-09 ที่งบ 1%: debug log ขึ้น "Skill listing over budget" ทุกรอบ · docx · Python · สไลด์ ไม่เปิด skill 0/3
+// ติดตั้งผ่าน `claude plugin install` ไม่ได้รัน set-skill-budget.mjs จึงบอกตอนเริ่ม session จนกว่าจะตั้ง
+export const SKILL_BUDGET_MIN = 0.02;
+export function skillBudgetNote({ configDir = process.env.CLAUDE_CONFIG_DIR ?? join(homedir(), ".claude") } = {}) {
+  const set = readJson(join(configDir, "settings.json"), {})?.skillListingBudgetFraction ?? 0;   // ไฟล์ที่มีแค่ null ต้องไม่ทำให้กฎประจำตัวหาย
+  if (set >= SKILL_BUDGET_MIN) return "";
+  return `งบรายการ skill ต่ำกว่า ${SKILL_BUDGET_MIN} (ค่าตั้งต้น 0.01) คำอธิบาย skill จึงถูกตัดและเปิด skill พลาดบ่อย · บอกผู้ใช้ 1 ครั้งในคำตอบแรกให้ใส่ "skillListingBudgetFraction": ${SKILL_BUDGET_MIN} ใน ~/.claude/settings.json แล้วเริ่ม session ใหม่ · อย่าแก้ไฟล์นั้นเอง`;
+}
+
 // งานหลายขั้นที่ไม่เอ่ยชื่อ superuser มักไม่มีคำเฉพาะให้ regex แถวเดียวจับ (เปิดเองแทบ 0% เมื่อพูดอ้อม · Scott Spence 2026-02-08)
 // จึงนับสัญญาณหลายอย่างใน router.multistep: แต่ละ signal นับ 1 แต้มเมื่อเจอ pattern อย่างน้อย min ครั้ง หรือข้อความยาวถึง minLength
 export function multistepScore(text, cfg) {
@@ -539,7 +549,7 @@ export function promptNotice(input, router, dir = OPEN_DIR) {
 
 function leadContext(input) {
   if (input.agent_id) return "";
-  if (input.hook_event_name === "SessionStart") return [coreRules(), MULTISTEP_NOTE].filter(Boolean).join("\n\n");
+  if (input.hook_event_name === "SessionStart") return [coreRules(), MULTISTEP_NOTE, skillBudgetNote()].filter(Boolean).join("\n\n");
   if (input.hook_event_name === "UserPromptSubmit") return promptNotice(input, readJson(join(HERE, "skill-router.json"), { rules: [] }));
   return "";
 }
@@ -1433,6 +1443,12 @@ function selfTest() {
     }],
     ["กฎประจำตัว: ส่งได้ไม่เกินเพดาน", [], true, () => { const c = coreRules({ configDir: "/nonexistent" }); return c.includes(CORE_MARK) && c.length <= CONTEXT_MAX; }],
     ["กฎประจำตัว: ไม่ส่งหัวสำเนา · เริ่มที่ CORE_MARK", [], true, () => coreRules({ configDir: "/nonexistent" }).startsWith(CORE_MARK)],
+    ["งบรายการ skill: ไม่มี settings → เตือน · ตั้ง 0.02 แล้วเงียบ", [], true, () => {
+      const ok = join(tmpdir(), `su-budget-${TMP_USER}`);
+      mkdirSync(ok, { recursive: true });
+      writeFileSync(join(ok, "settings.json"), JSON.stringify({ skillListingBudgetFraction: SKILL_BUDGET_MIN }));
+      return skillBudgetNote({ configDir: "/nonexistent" }).includes("skillListingBudgetFraction") && skillBudgetNote({ configDir: ok }) === "";
+    }],
     ["กฎประจำตัว: subagent ได้แค่ตาราง skill", [], true, () => { const c = coreRules({ configDir: "/nonexistent", routeOnly: true }); return c.startsWith(ROUTE_HEAD) && !c.includes("## ทำให้จบ"); }],
   );
   const tmp = join(tmpdir(), `sqt-claim-test-${process.pid}`);

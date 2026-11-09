@@ -2,7 +2,7 @@
 // รัน `claude plugin eval` กับ plugin ของ repo นี้ให้วัดได้จริง
 // eval โหลด plugin ที่มี dependencies ไม่ขึ้นทั้งตัว (dependency-unsatisfied) รอบมี plugin จึงเป็น Claude เปล่า
 // เสีย 35.39 ดอลลาร์ก่อนรู้ (2026-10-26) · สคริปต์นี้ทำสำเนาที่ลบ dependencies แล้วลอง 1 เคส trigger ก่อนรันทั้งชุด
-//   node scripts/evals/plugin-eval.mjs <plugin> [--only <regex ชื่อเคส>] [--no-probe] [อาร์กิวเมนต์อื่นส่งต่อให้ claude plugin eval]
+//   node scripts/evals/plugin-eval.mjs <plugin> [--only <regex ชื่อเคส>] [--no-probe] [--no-scaffold] [อาร์กิวเมนต์อื่นส่งต่อให้ claude plugin eval]
 //   ตัวอย่าง: node scripts/evals/plugin-eval.mjs personal-life --only "^(flood-prep|estate-and-will)-" --max-cost-usd 5 -j 4
 //   --only ใช้แทน --case ที่ไม่รับปีกกา · skill กลางของ superuser จะไม่อยู่ในรอบนั้น
 import { cpSync, rmSync, readFileSync, writeFileSync, readdirSync, existsSync, mkdtempSync } from "node:fs";
@@ -19,10 +19,11 @@ const only = take("--only");
 // --only ที่ไม่มีค่าจะกลายเป็นรันทั้งชุดเงียบ ๆ และเสียเงิน จึงหยุดก่อน
 if (only === "" || only?.startsWith("--")) { console.error("--only ต้องตามด้วย regex ชื่อเคส"); process.exit(2); }
 const probe = !args.includes("--no-probe");
-const rest = args.filter((a) => a !== "--no-probe");
+const noScaffold = args.includes("--no-scaffold");   // ของตัวรันนี้ ไม่ส่งต่อ: claude plugin eval ไม่ได้ระบุ flag นี้ในเอกสาร
+const rest = args.filter((a) => a !== "--no-probe" && a !== "--no-scaffold");
 const source = join(ROOT, "plugins", plugin ?? "");
 if (!plugin || !existsSync(join(source, ".claude-plugin", "plugin.json"))) {
-  console.error(`ไม่เจอ plugins/${plugin ?? "<plugin>"} · ใช้: node scripts/evals/plugin-eval.mjs <plugin> [--only <regex>] [--no-probe] [...]`);
+  console.error(`ไม่เจอ plugins/${plugin ?? "<plugin>"} · ใช้: node scripts/evals/plugin-eval.mjs <plugin> [--only <regex>] [--no-probe] [--no-scaffold] [...]`);
   process.exit(2);
 }
 
@@ -41,11 +42,20 @@ const kept = cases.filter((c) => !only || new RegExp(only).test(c));
 if (!kept.length) { console.error(`--only "${only}" ไม่ตรงเคสไหนเลย`); process.exit(2); }
 console.log(`สำเนา: ${copy} · เคส ${kept.length}: ${kept.join(" ")}`);
 
+// เคสที่มี scaffold_script ต้องรันด้วย --scaffold ไม่งั้นโฟลเดอร์ที่รันว่างและเคสตก 0 ทั้ง 2 แขน (no-ai-look 2026-11-09)
+// สคริปต์อยู่ใน plugins/ ของ repo นี้และผ่าน PR แล้ว จึงเปิดให้เอง · ไม่อยากรัน → ส่ง --no-scaffold
+const scaffolded = kept.filter((c) => /^\s*scaffold_script:/m.test(readFileSync(join(evalsDir, c, "case.yaml"), "utf8")));
+if (scaffolded.length && !rest.includes("--scaffold") && !noScaffold) {
+  rest.push("--scaffold");
+  console.log(`เปิด --scaffold ให้ ${scaffolded.length} เคส: ${scaffolded.join(" ")}`);
+}
+
 // เรียก claude ตรง ไม่ผ่าน shell · path ชั่วคราวที่มีช่องว่างและ regex ใน --only จึงไม่ถูกตัด
 const evalRun = (extra) => spawnSync("claude", ["plugin", "eval", copy, "--trust-plugin", "--no-publish", ...extra], { stdio: "inherit" }).status;
 
 // ลอง 1 เคส trigger ก่อน: skill ต้องถูกเปิด ไม่งั้นทั้งชุดจะวัดอะไรไม่ได้
-const trigger = kept.find((c) => c.endsWith("-trigger"));
+// ข้าม -no-trigger ที่ลงท้ายเหมือนกัน: เคสนั้นผ่านเมื่อ skill ไม่ถูกเปิด การลองจึงไม่ได้วัดอะไร (เจอ 2026-11-09)
+const trigger = kept.find((c) => c.endsWith("-trigger") && !c.endsWith("-no-trigger"));
 if (probe && trigger) {
   const out = join(dirname(copy), "probe.json");
   evalRun(["--case", trigger, "--runs", "1", "--ablation", "none", "--max-cost-usd", "1", "--json", out]);

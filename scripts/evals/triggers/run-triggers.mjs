@@ -63,7 +63,7 @@ function run(c, n) {
       let overBudget = null;
       try { overBudget = readFileSync(debug, "utf8").match(/Skill listing over budget: [^\n]*/)?.[0] ?? null; } catch { /* ไม่มี log */ }
       const got = new Set(skills.map(base));
-      const pass = c.expect_all.every((s) => got.has(s)) && (!c.expect_any.length || c.expect_any.some((s) => got.has(s)))
+      const pass = c.expect_all.every((s) => got.has(s)) && (!(c.expect_any ?? []).length || c.expect_any.some((s) => got.has(s)))
         && !(c.expect_none ?? []).some((s) => got.has(s));   // งานเล็กต้องไม่เปิดหัวหน้าทีม (superuser)
       const r = { id: c.id, run: n, pass, skills, cost, overBudget };
       writeFileSync(join(OUT, `${c.id}-${n}.json`), JSON.stringify(r, null, 2));

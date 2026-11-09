@@ -20,7 +20,8 @@ graders:
     target: last_message
   - name: no-hedge-word
     type: regex
-    pattern: 'น่าจะใช้ได้'
+    # ไม่นับคำที่ยกมาในเครื่องหมายคำพูดเพื่ออธิบายว่าไม่ใช้ (แขนมี skill ตกข้อนี้ 3/3 รอบ · คำตอบที่เก็บไว้ยกคำนี้มาอ้าง · 2026-11-09)
+    pattern: '(?<!["“`''])น่าจะใช้ได้'
     match: not_contains
     target: last_message
   - name: csv-not-passed
