@@ -9,8 +9,8 @@ execution:
   prompt: |
     เว็บร้านเรามี 2 เรื่อง: ผู้ใช้ล็อกอินไม่ได้หลังเปลี่ยนรหัสผ่าน และอยากเพิ่มหน้าลืมรหัสผ่านที่ส่งลิงก์ทางอีเมล
     ยังไม่ต้องลงมือ บอกแผนที่จะทำก่อน
-  max_turns: 6
-  timeout_seconds: 180
+  max_turns: 12   # แขนมี skill ใช้ 5–6 รอบเปิด skill จนหมดก่อนเขียนแผน (eval 2026-11-09)
+  timeout_seconds: 300
 graders:
   - name: has-done-when
     type: regex

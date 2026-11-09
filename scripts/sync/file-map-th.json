@@ -288,7 +288,9 @@
     "evals/srs-writing-existing/resources/clinic-queue/ref/TOR.md": "ไฟล์ทดสอบของ eval srs-writing: แบบเดิมที่ skill ต้องอ่านและทำตาม",
     "evals/test-case-template-existing/case.yaml": "เคสวัดว่า test-case-template ใช้แบบที่มีอยู่ก่อน ไม่ยกแม่แบบของ skill มาใช้",
     "evals/test-case-template-existing/resources/hr-portal/README.md": "ไฟล์ทดสอบของ eval test-case-template: แบบเดิมที่ skill ต้องอ่านและทำตาม",
-    "evals/test-case-template-existing/resources/hr-portal/ref/client-testcase.csv": "ไฟล์ทดสอบของ eval test-case-template: แบบเดิมที่ skill ต้องอ่านและทำตาม"
+    "evals/test-case-template-existing/resources/hr-portal/ref/client-testcase.csv": "ไฟล์ทดสอบของ eval test-case-template: แบบเดิมที่ skill ต้องอ่านและทำตาม",
+    "evals/no-ai-look-behaviour/fixture.sh": "สคริปต์เตรียมเคส eval: วางหน้า landing ตัวอย่างลงโฟลเดอร์ที่รัน (รันเมื่อส่ง --scaffold)",
+    "evals/no-ai-look-regression/fixture.sh": "สคริปต์เตรียมเคส eval: วางหน้า landing ตัวอย่างลงโฟลเดอร์ที่รัน (รันเมื่อส่ง --scaffold)"
   },
   "superuser_files": {
     "references/code-extensions.md": "ส่วนที่ใช้เฉพาะงานโค้ดของ skill กลางใน plugin superuser",

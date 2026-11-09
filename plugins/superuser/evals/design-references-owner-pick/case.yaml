@@ -10,6 +10,7 @@ execution:
     ทำโปสเตอร์งานสัมมนาบริษัท เรื่องใช้ AI ช่วยทีมขาย ขนาด A3 ผมอยู่หน้าจอนะ ช่วยวางขั้นตอนก่อนลงมือว่าจะทำยังไง
   max_turns: 8
   timeout_seconds: 240
+  allowed_tools: [Read, Glob, Grep, Skill, WebSearch, WebFetch]   # skill นี้ต้องค้นต้นแบบจริง · ไม่ให้ไว้ ทั้ง 2 แขนตอบจากความจำแล้วตก (eval 2026-11-09)
 graders:
   - name: board-for-owner
     type: llm
