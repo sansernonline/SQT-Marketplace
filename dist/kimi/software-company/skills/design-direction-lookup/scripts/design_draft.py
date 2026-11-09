@@ -180,13 +180,19 @@ class Library:
         return out
 
 
-def pick_directions(lib, industry):
+def pick_directions(lib, industry, voice=None):
     """3 แนวที่ look ไม่ซ้ำกัน · ตัดแนวที่พาเลตหรือฟอนต์ไม่ผ่าน แล้วหยิบตัวถัดไป"""
     query = ' '.join([industry.get('name_en', ''), industry.get('keywords_en', '').replace(';', ' '),
                       industry.get('keywords_th', '').replace(';', ' ')])
     looks_pref = split_values(industry.get('looks'))
     pal_pref = split_values(industry.get('palette_ids')) if lib.is_fallback else list(lib.palettes)
     font_pref = split_values(industry.get('font_pair_ids'))
+    if voice:  # บุคลิกตัวอักษรตามพื้นฐานโปรเจกต์ขึ้นก่อน · แนว ก ได้คู่แรกของบุคลิกนั้น
+        own = [f for f in font_pref if lib.fonts[f].get('voice') == voice]
+        own += [f for f in lib.ranked('font', query, [], lib.fonts) if lib.fonts[f].get('voice') == voice and f not in own]
+        if not own:
+            raise SystemExit(f'ไม่มีคู่ฟอนต์บุคลิก {voice}')
+        font_pref = own + [f for f in font_pref if f not in own]
     look_pool = lib.ranked('look', query, looks_pref, lib.looks)
     pal_pool = lib.ranked('palette', query, pal_pref, lib.palettes)
     font_pool = lib.ranked('font', query, font_pref, lib.fonts)
@@ -368,7 +374,7 @@ def render_markdown(brief, industry, match, directions, rules, rejected, today, 
         lines += [f'### แนว {label} · {look.get("name_th", "")} ({look.get("name_en", look.get("id", ""))})', '',
                   f'- look `{look.get("id")}` · ความลึก {look.get("depth", "-")} · การเคลื่อนไหว {look.get("motion", "-")} · '
                   f'ความแน่น {look.get("density", "-")}',
-                  f'- ฟอนต์ `{d["font_id"]}`: {font_line(font)} · แบบไทย {font.get("thai_style", "-")} · '
+                  f'- ฟอนต์ `{d["font_id"]}`: {font_line(font)} · บุคลิก {font.get("voice", "-")} · แบบไทย {font.get("thai_style", "-")} · '
                   f'เนื้อเล็กสุด {font.get("min_body_px", "-")}px · line-height {font.get("line_height", "-")}',
                   '- CSS font-family: หัว `{}` · เนื้อ `{}` · ตัวเลข `{}`'.format(*css_lines(font, thai_fonts)),
                   f'- ใบอนุญาตฟอนต์: {licence_line(font, thai_fonts)}',
@@ -712,7 +718,7 @@ def palette_from_spec(spec, today, reference_shift=None):
 
 
 def draft(brief, data_dir, out, html_path, industry_id=None, force=False, today=None,
-          palette_ids=None, extra_palettes=None, palette_specs=None, reference_shift=None):
+          palette_ids=None, extra_palettes=None, palette_specs=None, reference_shift=None, voice=None):
     """คืน (directions, rejected, เส้นทางที่เขียน) · ไม่เขียนทับไฟล์ที่มีอยู่ถ้าไม่ force
     ลำดับแหล่งสี: สีจากการค้นสด (palette_specs · extra_palettes) ก่อนเสมอ · ไม่มีเลยจึงใช้คลังสำรองใน data/ พร้อมคำเตือน
     palette_ids เลือกและเรียงบางชุดจากแหล่งที่ใช้ (ค่าตั้งต้นคือทุกชุด)"""
@@ -742,7 +748,7 @@ def draft(brief, data_dir, out, html_path, industry_id=None, force=False, today=
     existing = [str(p) for p in (out, html_path) if p.exists()]
     if existing and not force:
         raise SystemExit(f'มีไฟล์อยู่แล้ว ไม่เขียนทับ: {", ".join(existing)} · ใส่ --force ถ้าตั้งใจ')
-    directions, rejected = pick_directions(lib, industry)
+    directions, rejected = pick_directions(lib, industry, voice)
     rejected = dropped + rejected
     if len(directions) < 3:
         raise SystemExit(f'ได้แนวที่ผ่านแค่ {len(directions)} แนว · ที่ตัดออก: {rejected}')
@@ -868,6 +874,9 @@ def self_test():
     check(f'ไม่มีอุตสาหกรรมที่ 2 แนวสีหลักโทนเดียวกัน (พบ: {same_tone})', not same_tone)
     check('is_same_tone แยกน้ำเงิน 2 เฉดออก และไม่นับเทา', is_same_tone('#1D4C8C', '#1B2E58')
           and not is_same_tone('#1D4C8C', '#9E1F1A') and not is_same_tone('#1E1B1A', '#6B5A4E'))
+    wrong_voice = [f'{i}:{v}' for i, ind in lib.industries.items() for v in ('rounded', 'angular', 'classic')
+                   if pick_directions(lib, ind, v)[0][0]['font'].get('voice') != v]
+    check(f'--voice ให้แนว ก ได้คู่ฟอนต์บุคลิกนั้นทุกอุตสาหกรรม (พลาด: {wrong_voice[:5]})', not wrong_voice)
     heading = lambda d: families(d['font'].get('heading'))[0].lower()  # noqa: E731
     same_heading = [i for i, ds in picks.items() if len({heading(d) for d in ds}) < 3]
     check(f'ทุกอุตสาหกรรมได้ฟอนต์หัว 3 แนวไม่ซ้ำ (ซ้ำ: {same_heading})', not same_heading)
@@ -929,6 +938,8 @@ def main():
                     'และบอกที่มาตามจริงใน DESIGN.md · ใส่ 0 = ไม่เลื่อน')
     ap.add_argument('--palettes', help='id พาเลตคั่นด้วย ; เลือกและเรียงเป็นแนว ก ข ค (ค่าตั้งต้น ทุกชุดของแหล่งที่ใช้) · '
                     'ไม่ได้ส่งสดมาเลยจะใช้คลังสำรองใน data/ พร้อมคำเตือน')
+    ap.add_argument('--voice', choices=['rounded', 'angular', 'modern', 'formal', 'classic', 'hand'],
+                    help='บุคลิกตัวอักษรตามพื้นฐานโปรเจกต์ (ui-craft references/font-voice.md) · แนว ก ได้คู่ฟอนต์บุคลิกนี้')
     ap.add_argument('--self-test', action='store_true')
     args = ap.parse_args()
     if hasattr(sys.stdout, 'reconfigure'):
@@ -939,7 +950,8 @@ def main():
         ap.error('ใส่โจทย์ หรือ --self-test')
     directions, rejected, paths = draft(args.brief, args.data, args.out, args.html, args.industry, args.force,
                                         palette_ids=split_values(args.palettes), extra_palettes=args.extra_palettes,
-                                        palette_specs=args.palette, reference_shift=args.reference_colors)
+                                        palette_specs=args.palette, reference_shift=args.reference_colors,
+                                        voice=args.voice)
     for label, d in zip(LABELS, directions):
         print(f'แนว {label}: {d["look"].get("id")} · พาเลต {d["palette_id"]} · ฟอนต์ {d["font_id"]}')
     if rejected:

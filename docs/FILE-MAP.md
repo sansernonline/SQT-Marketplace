@@ -11,7 +11,7 @@
 | [`e-commerce`](#e-commerce) | ขายออนไลน์ ซื้ออย่างมั่นใจ และงานหลังบ้านบริษัทไทย | 8 | 33 | 1 | 18 | 182 |
 | [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 22 | 0 | 9 | 164 |
 | [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 42 | 1 | 30 | 181 |
-| [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 105 | 11 | 17 | 1007 |
+| [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 105 | 11 | 17 | 1008 |
 | [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 39 | 0 | 7 | 215 |
 | [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 5 | 23 | 1 | 10 | 125 |
 
@@ -535,7 +535,7 @@ plugins/<plugin>/
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
-| `ui-craft` | ฝีมือหน้าจอ: ใช้คู่กับ skill ตามแพลตฟอร์มทุกครั้งที่ทำหน้าจอหรือ mockup | `assets/app-character-sheet.html` · `assets/app-character-sheet.webp` · `assets/mockup-start-page-preview.webp` · `assets/mockup-start-page.example.json` · `references/app-character.md` · `references/depth-and-flourish.md` · `references/figma-to-code.md` · `references/live-and-variants.md` · `references/mockup-start-page.md` · `references/scales.md` · `references/states-and-checks.md` · `references/ux-spec-outputs.md` · `references/web-looks.md` · `scripts/design_tokens.py` · `scripts/mockup-start-page.py` |
+| `ui-craft` | ฝีมือหน้าจอ: ใช้คู่กับ skill ตามแพลตฟอร์มทุกครั้งที่ทำหน้าจอหรือ mockup | `assets/app-character-sheet.html` · `assets/app-character-sheet.webp` · `assets/mockup-start-page-preview.webp` · `assets/mockup-start-page.example.json` · `references/app-character.md` · `references/depth-and-flourish.md` · `references/figma-to-code.md` · `references/font-voice.md` · `references/live-and-variants.md` · `references/mockup-start-page.md` · `references/scales.md` · `references/states-and-checks.md` · `references/ux-spec-outputs.md` · `references/web-looks.md` · `scripts/design_tokens.py` · `scripts/mockup-start-page.py` |
 | `web-app-design` | ออกแบบหน้าจอเว็บแอปหรือ mockup (dashboard · หน้าแอดมิน · SaaS) | `assets/appstrack.css` · `assets/mockup-template-preview.webp` · `assets/mockup-template.html` · `assets/theme-template.css` · `references/tokens.md` · `scripts/check-design-tokens.mjs` · `scripts/screenshot.py` |
 | `dynamic-website` | เว็บการตลาดหรือหน้างานที่เล่าเรื่องทีละบทด้วย GSAP (deck-mode · scroll · พื้นหลัง 3D) | `assets/example-deck.html` · `references/recipes.md` |
 | `mobile-app-design` | ออกแบบหน้าจอแอปมือถือหรือ mockup (PWA · React Native · Flutter) | `assets/mockup-template-preview.webp` · `assets/mockup-template.html` · `assets/speakgo.css` · `assets/theme-template.css` · `references/review.md` · `references/screen-and-components.md` · `references/tokens.md` · `scripts/screenshot.py` |
