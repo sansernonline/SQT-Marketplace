@@ -131,17 +131,13 @@ def public_url(url):
 
 
 def capture(url, out_png):
-    """จับภาพหน้าเว็บ · ทุก request รวม redirect และไฟล์ย่อยต้องไปเครื่องสาธารณะ ไม่งั้นตัดทิ้ง (กัน SSRF และ DNS rebinding)"""
+    """จับภาพหน้าเว็บ · ทุก request รวม redirect และไฟล์ย่อยต้องไปเครื่องสาธารณะ ไม่งั้นตัดทิ้ง (ลดช่อง Server-Side Request Forgery (SSRF) และ DNS rebinding)"""
     from playwright.sync_api import sync_playwright
-    checked = {}
-
     def guard(route):
-        host = urllib.parse.urlparse(route.request.url).hostname or ""
+        # ตรวจทุก request ไม่จำผลต่อชื่อโฮสต์ · ถ้าจำ โฮสต์ที่เปลี่ยน DNS ไปชี้เครื่องภายในทีหลัง (DNS rebinding) จะหลุด · ยังไม่ปิดสนิท เพราะ Chromium resolve อีกรอบเอง
         if route.request.url.startswith("data:"):
             return route.continue_()
-        if host not in checked:
-            checked[host] = public_url(route.request.url)
-        return route.continue_() if checked[host] else route.abort()
+        return route.continue_() if public_url(route.request.url) else route.abort()
 
     with sync_playwright() as pw:
         b = pw.chromium.launch()

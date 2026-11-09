@@ -14,7 +14,7 @@ A finding is a reason to look, not an order to change. Keep an intentional choic
 anywhere in the same file. The reason is shown in the report so reviewers can see it.
 No dependencies beyond the Python standard library.
 """
-import argparse, json, pathlib, re, sys, tempfile, urllib.parse, urllib.request
+import argparse, ipaddress, json, pathlib, re, socket, sys, tempfile, urllib.parse, urllib.request
 from html.parser import HTMLParser
 
 EXTS = {'.html', '.htm', '.css', '.scss', '.less', '.jsx', '.tsx', '.vue', '.svelte', '.astro'}
@@ -322,12 +322,26 @@ def as_url(arg):
     p = pathlib.Path(arg)
     return p.resolve().as_uri() if p.is_file() else arg
 
+def public_host(url):
+    """http(s) ที่ทุก IP ของโฮสต์เป็นเครื่องสาธารณะ · กันการยิงเข้าเครื่องในวงแลนหรือ metadata ของ cloud (Server-Side Request Forgery · SSRF)"""
+    u = urllib.parse.urlparse(url)
+    if u.scheme not in ('http', 'https') or not u.hostname: return False
+    try: return all(ipaddress.ip_address(a[4][0]).is_global for a in socket.getaddrinfo(u.hostname, None))
+    except (socket.gaierror, ValueError): return False
+
+class PublicRedirect(urllib.request.HTTPRedirectHandler):
+    """ตาม redirect ได้เฉพาะไปเครื่องสาธารณะ · หน้าเว็บที่ส่งต่อไป 127.0.0.1 หรือ 169.254.x ถูกตัด"""
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        if not public_host(newurl): raise ValueError(f'ไม่ตาม redirect ไปเครื่องที่ไม่ใช่สาธารณะ: {newurl}')
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
 def fetch(url):
     if not url.startswith(WEB_SCHEMES): raise ValueError('ใช้ได้เฉพาะ http:// https:// file:// หรือ path ไฟล์ในเครื่อง')
     if url.startswith('file://'):
         return pathlib.Path(urllib.request.url2pathname(urllib.parse.urlparse(url).path)).read_bytes()[:MAX_FETCH].decode('utf-8', 'replace')
+    if not public_host(url): raise ValueError(f'ไม่ตรวจเครื่องในวงแลนหรือที่ resolve ไม่ได้: {url} · หน้าในเครื่องให้บันทึกเป็นไฟล์แล้วตรวจไฟล์แทน')
     req = urllib.request.Request(url, headers={'User-Agent': 'slop-scan/1 (+no-ai-look)'})
-    with urllib.request.urlopen(req, timeout=10) as r:
+    with urllib.request.build_opener(PublicRedirect).open(req, timeout=10) as r:
         return r.read(MAX_FETCH).decode(r.headers.get_content_charset() or 'utf-8', 'replace')
 
 def scan_url(url):
@@ -442,6 +456,11 @@ def self_test():
         (root / 'c.html').write_text('<p>x</p>', encoding='utf-8')
         if len(list(files([root / '_to_delete' / 'trial']))) != 1: print('ชี้ _to_delete ตรง ๆ แต่ตรวจไม่ได้'); ok = False
         if len(list(files([root]))) != 1: print('สแกนจากราก ต้องข้าม _to_delete และ node_modules'); ok = False
+    for bad in ('http://127.0.0.1/', 'http://169.254.169.254/latest/', 'http://localhost:8080/', 'http://10.0.0.5/'):
+        try: fetch(bad); print('ยิงเครื่องภายในได้:', bad); ok = False
+        except ValueError: pass
+    try: PublicRedirect().redirect_request(None, None, 302, 'Found', {}, 'http://169.254.169.254/'); print('ตาม redirect ไปเครื่องภายในได้'); ok = False
+    except ValueError: pass
     print('self-test ผ่าน' if ok else 'self-test ล้ม')
     return 0 if ok else 1
 

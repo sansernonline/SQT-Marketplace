@@ -1,5 +1,14 @@
 # Changelog — superuser
 
+## 3.29.0 — 2026-11-08
+
+- `no-ai-look` `slop_scan.py --url`: ปฏิเสธโฮสต์ที่ไม่ใช่เครื่องสาธารณะ (127.0.0.1 · 10.x · 169.254.x) และไม่ตาม redirect ไปที่นั่น · กันการยิงเข้าเครื่องภายในผ่านสคริปต์ Server-Side Request Forgery (SSRF) (audit หัวข้อ 5)
+- `design-references` `find_refs.py`: ตรวจทุก request ไม่จำผลต่อชื่อโฮสต์ ลดช่อง DNS rebinding (ยังไม่ปิดสนิท เพราะ Chromium resolve เองอีกรอบ)
+- hook: โฟลเดอร์สถานะใน tmpdir แยกต่อผู้ใช้ · heredoc ไม่เตือนผิดเมื่อต่อท่อไปเขียนไฟล์ binary · อ่าน path แบบ `/c/...` ของ Git Bash ได้ · จับ heredoc ที่ไม่ได้อยู่บรรทัดแรก
+- eval `dispatch/` d9: ขยายเป็นตั๋ว 600 ใบ ให้เป็นงานกลางจริง (เดิม 45k token นับเป็นงานเล็ก หัวหน้าทำเองได้ถูก) · หลังขยาย ส่งลูกทีม 3/3 รอบ · ได้ haiku 2/3 รอบ (ค้างอยู่ · แขนไม่มี plugin 3/3)
+- `parallel-split-and-merge`: ย้ายหัวข้อหลายบัญชี ตัวคุม event และ `claude -p` ไป `references/multi-account-and-orchestrator.md` · SKILL.md 13,744 → 9,009 ตัวอักษร (audit หัวข้อ 8)
+- `skill-authoring`: description ขึ้นต้น `Use before` หรือ `Use at` ได้ · ไฟล์ใน references ลิงก์ต่ออีกชั้นได้เฉพาะรายละเอียดเสริม (audit หัวข้อ 4)
+
 ## 3.28.0 — 2026-11-08
 
 - hook: เตือนทันทีเมื่อคำสั่ง Bash เขียนไฟล์ผ่าน heredoc แล้วไฟล์ได้อักขระควบคุม (อาการ `\b` กลายเป็น backspace ที่เกิด 5 ครั้งถึง 2026-10-26)

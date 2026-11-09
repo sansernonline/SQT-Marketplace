@@ -51,39 +51,9 @@ description: Use when work splits into independent slices (chapters, listings, r
 - ตัวอย่างครบทั้ง 3 ขั้นพร้อมไฟล์และรูป: [`docs/examples/planner`](https://github.com/sansernonline/SQT-Marketplace/tree/main/docs/examples/planner) · `--now <เวลา ISO>` กำหนดเวลาตอนคิดโควตาให้ตัวอย่างได้ผลเดิมทุกครั้ง
 - ทดสอบ: `node scripts/plan.mjs --self-test` · แนวคิดจาก lab `02_DAG_Planner` และ `04_Multi_Agent_Orchestra` ของคอร์ส CWN2026 เขียนใหม่ ไม่ได้นำโค้ดมา
 
-## หลายบัญชี LLM — แจกงานข้ามบัญชีตามโควตา
+## หลายบัญชี LLM · ตัวคุมที่วนรับ event · รัน worker แบบ `claude -p`
 
-ใช้เมื่อเปิด Claude Code หรือ Codex หลายตัวคนละบัญชี (คนละ worktree ตาม `team-files`) · subagent ใช้บัญชีเดียวกับตัวที่เรียกเสมอ การแบ่งงานข้ามบัญชีจึงเป็นการแบ่งงานระหว่าง session หลายตัว · แนวคิดจาก KC-QUEST ใน lab `03_KC_QUEST` ของคอร์ส CWN2026 เขียนใหม่ ไม่ได้นำโค้ดมา
-
-1. **ตั้งชื่อบัญชี:** รันแต่ละบัญชีด้วย `CLAUDE_CONFIG_DIR` (หรือ `CODEX_HOME`) ของตัวเอง ชื่อบัญชีคือชื่อโฟลเดอร์นั้น (ไม่ตั้งเลย = `.claude` หรือ `.codex`) หรือตั้ง `SQT_ACCOUNT` เอง · ชื่อใน `accounts.json` ต้องตรงกับชื่อนี้ ไม่งั้นบัญชีนั้นใช้โควตาเต็มถังเสมอ · hook จดชื่อบัญชีในทุกงานลูกทีม
-2. **บอกขนาดถัง:** คัดลอก `superuser/templates/accounts.json` ไปไว้ที่ `~/.claude/superuser/accounts.json` แล้วแก้ `cap_k` (โควตาเต็มถังเป็น k token โดยประมาณ) · `speed_k_per_hour` · `max_parallel` · `window_hours` · ค่าในแม่แบบเป็นตัวอย่าง ยังไม่ได้วัด
-3. **อ่านโควตาที่เหลือ (อ่านในเครื่องเท่านั้น ไม่แตะ credential):**
-   - Claude: ตั้ง status line ของแต่ละบัญชีให้เรียก `node <plugin>/skills/parallel-split-and-merge/scripts/quota.mjs record` · Claude Code ส่งช่อง `rate_limits.five_hour` และ `seven_day` (`used_percentage` · `resets_at`) ให้ status line เฉพาะแผน Pro/Max และหลัง response แรกของ session ([status line](https://code.claude.com/docs/en/statusline) · ตรวจ 2026-10-27) · สคริปต์จดลง `~/.claude/superuser/quota/<บัญชี>.json`
-   - Codex: อ่าน `rate_limits` จาก event `token_count` ในไฟล์ session ใต้ `$CODEX_HOME/sessions` (ตรวจกับไฟล์จริงในเครื่อง 2026-10-27 · ไม่มีหน้าเอกสาร รูปแบบอาจเปลี่ยน)
-   - รวมเป็นไฟล์เดียว: `node quota.mjs snapshot --out quota.json` · ห้ามใช้ endpoint ที่ต้องดึง OAuth token ของบัญชีมาเรียก API เอง เพราะเสี่ยงผิดเงื่อนไขการใช้งาน
-4. **แจกงานครั้งแรก (① จัดลำดับ ② กรอง ③ ให้คะแนน ④ เลือกแล้วจอง):** `node scripts/plan.mjs plan.json --accounts ~/.claude/superuser/accounts.json --quota quota.json --html plan.html` · ชิ้นที่พร้อมเรียงตาม rank · ② ตัดบัญชีที่ผิดกฎเหล็กทิ้งก่อน (ช่องว่างเต็ม · โควตาเหลือน้อยกว่าขนาด × `safety` · `tool` ไม่ตรงกับช่อง `tool` ของชิ้น) · ③ คะแนน = 0.4U + 0.2F + 0.15R + 0.15V − 0.1L (U = 24/(24+ชั่วโมงก่อนรีเซ็ต · F พอดีถัง · R ถังว่าง · V บัญชีเร็วรับชิ้นวิกฤต · L งานค้าง · น้ำหนักแก้ได้ในช่อง `weights`) · ④ จองโควตาทันทีให้ชิ้นถัดไปในรอบเดียวกันเห็นของที่เหลือจริง · ไม่มีบัญชีไหนรับได้ ชิ้นนั้นรอรีเซ็ต
-5. **ระหว่างทำ (⑤ คาดการณ์และย้าย ⑥ เรียนรู้ ✦ ส่งไม้):** `node scripts/plan.mjs plan.json --accounts … --quota quota.json --actual` · ⑤ บัญชีที่โควตาเหลือไม่พอกับงานค้าง × `safety` ขึ้นรายการ "ควรย้าย" พร้อมบัญชีปลายทาง · ✦ ส่งไม้ด้วยใบ `handoff` (ทำถึงไหน · commit อะไร · ต่อจากตรงไหน) แล้วเปิดงานต่อบนบัญชีใหม่ ไม่เริ่มใหม่ · ⑥ ความเร็วจริงต่อบัญชีแบบ EMA ไว้แก้ `speed_k_per_hour`
-- น้ำหนักและสูตรเป็นค่าของคอร์ส ยังไม่ได้วัดกับงานเรา · ด้วยน้ำหนักตั้งต้น F ให้คะแนนถังเล็กที่พอดีสูง ชิ้นวิกฤตจึงอาจได้บัญชีที่ช้ากว่าเมื่อบัญชีเร็วมีถังใหญ่ ถ้าอยากให้ความเร็วชนะ ให้เพิ่มน้ำหนัก V · ข้อมูลโควตาเก่ากว่า 1 รอบ ตาราง `--actual` จะเตือนให้อ่านใหม่ · ไม่มีไฟล์บัญชี planner ทำงานแบบบัญชีเดียวเหมือนเดิม
-
-## ตัวคุมที่วนรับ event (ตัวอย่างจาก `04_Multi_Agent_Orchestra` ของคอร์ส CWN2026)
-
-ใช้เมื่อตัวหลักต้องคุม worker หลายตัวยาว ๆ หลายบัญชี · ตรวจกับ `ORCHESTRA_RECIPE.md` และ `tools/orch.py` แล้ว (orch.py มีทุก event ในตารางและเพดาน 4 รอบ ส่วนกติกาท้ายตารางมีแค่ใน recipe)
-
-| event | ตัวคุมทำอะไร |
-|---|---|
-| `DONE` · `HANDOFF` · `LIMIT_HANDOFF` (โควตาหมดกลางงาน ส่งต่อบัญชีอื่น) · `MERGE_CONFLICT` · `INCOMPLETE` (ทำไม่จบ ปล่อยทำต่อ) | รายงานผู้ใช้สั้น ๆ แล้ววนต่อ |
-| `FAILED` (ลองครบ 4 รอบ) | วิเคราะห์ แก้ prompt หรือแบ่งงานใหม่ แล้วปล่อยอีกรอบ |
-| `ORCH_LOW` (บัญชีตัวคุมเหลือน้อย) | เขียนสถานะและสิ่งที่ต้องทำต่อลง `NOTES.md` แล้วหยุด |
-
-- ตัวคุมไม่เขียนโค้ดเอง (นอกจากแก้เล็กมาก) มอบงานผ่านไฟล์ใบสั่งเท่านั้น · ความจำคือ `NOTES.md` + `BOARD.md` ให้ตัวคุมคนถัดไปอ่านต่อได้ · ให้บัญชีที่เหลือโควตามากสุดเป็นตัวคุม
-- recipe สั่ง worker (ไม่ใช่โค้ดใน orch.py): ชื่อคิวหรือฐานข้อมูลที่ใช้ร่วมกันต้องไม่ชนกันระหว่างงานที่ทดสอบพร้อมกัน (ให้แต่ละงานมี prefix เช่น `MQ_PREFIX=<id>_`) · โฟลเดอร์ทำงานอยู่นอก bind mount ของ Windows (`node_modules` หลายชุดช้ามาก) · ล็อกเวอร์ชัน `@playwright/test` ให้ตรงกับ Chromium ที่ image มีที่ `/ms-playwright`
-
-## รัน worker แบบ `claude -p` และอ่านผล
-
-- ส่ง `< /dev/null` และ `--no-session-persistence` ทุก call · วาง prompt ก่อน flag ที่รับหลายค่า (`--allowedTools` `--add-dir` `--mcp-config`) ไม่งั้น flag กลืน prompt · exit 0 ไม่ได้แปลว่าสำเร็จ ให้อ่าน `is_error` ในผล JSON · ที่มา: skill `yolo` ในโฟลเดอร์ `00_resource/Remote` ของคอร์ส (ผู้สอนทดสอบเอง)
-- ส่ง path ของข้อมูลแล้วสั่งให้ worker คำนวณเอง (ข้อ 5 ข้างบน) · ตัวอย่างเดียวจากคอร์ส: ยัดข้อมูลใน prompt ช้ากว่า 4 เท่าและเคยตอบผิด
-- worker หลายตัวที่ใช้ Playwright MCP ห้ามใช้ server ตัวเดียวกัน (ได้ browser กับแท็บชุดเดียวกัน และ config inline ที่เหมือนกันถูกรวมเป็น process เดียว) · ให้ explorer 1 ตัวต่อ 1 browser · อ้างจากเอกสาร issue ที่ผู้สอนเก็บไว้ ยังไม่ได้ทดลองเอง
-- วัดจำนวนที่ทำพร้อมกันสูงสุดจาก log แล้วรายงานตามที่ log เห็น ไม่ใช่ตามที่สั่ง · ตัวอย่างเดียว (lab1 ของคอร์ส): สั่ง 8 ได้สูงสุด 6 เพราะเปิดทีละตัวห่างกันราว 15 วินาที และโมดูลเล็กเสร็จก่อนตัวท้ายเริ่ม
+ถ้าเปิด Claude Code หรือ Codex หลายตัวคนละบัญชี · ตัวหลักต้องคุม worker หลายตัวยาว ๆ · หรือสั่งรัน worker ด้วย `claude -p` ให้อ่าน [references/multi-account-and-orchestrator.md](references/multi-account-and-orchestrator.md) (แจกงานข้ามบัญชีตามโควตา · ตารางตัวคุม event · ข้อควรระวังของ `claude -p`)
 
 ## dynamic workflow — พร้อมกันเกิน 8 ชิ้น หรืองานซ้ำทีละไฟล์
 
