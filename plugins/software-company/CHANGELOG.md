@@ -1,5 +1,11 @@
 # Changelog — software-company
 
+## 2.48.0 — 2026-11-09
+
+- `ui-craft`: look ใหม่ soft SaaS (มุมการ์ด 12–16px · เงาซ้อนนุ่มย้อมสีพื้น · สีหลักสว่างกลาง · เทาอมสีแบรนด์ · กราฟิกพระเอก 1 ชิ้น) · แนว (ก) เริ่มจากสไตล์ที่เจ้าของชอบใน `~/.claude/superuser-style.md` แทน look ตามอุตสาหกรรม · การ์ดบนหน้า landing ของ soft SaaS มีเงาอ่อนได้ หน้าแอปยังแบน · ด่านสวยเพิ่มแกนที่ 7 "มิติและภาพ" (ทุกไฟล์ที่อ้าง 6 แกนเปลี่ยนเป็น 7) · เหตุ: หน้า landing ทดลองรอบ 2 ได้ quiet utility ผู้ใช้ขอมุมโค้ง เงา สีนุ่ม กราฟิก และไอคอน (2026-11-09)
+- `design-direction-lookup`: `looks.csv` เพิ่ม `soft-saas` · `industries.csv` ให้ `dev-tool` และ `saas-b2b` เสนอ soft-saas เป็นแนวแรก และกฎตัดสินบอกว่า "หน้าขาย → soft-saas"
+- prompt `prompt-mockup.md` · `prompt-new-project.md`: ด่านสวย 5 แกนที่ค้างอยู่เปลี่ยนเป็น 7 แกน
+
 ## 2.47.3 — 2026-11-08
 
 - `superuser/references/code-extensions.md`: ใช้คำว่า "ผู้ตรวจ" ให้ตรงกับแกน
