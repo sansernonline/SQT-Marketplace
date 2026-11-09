@@ -27,6 +27,8 @@ const OUT = join(ROOT, "_to_delete", "dispatch");
 const WORK = join(tmpdir(), "sqt-dispatch");
 const PLUGIN = join(ROOT, "plugins", "superuser");
 const PLAN_MJS = join(PLUGIN, "skills", "parallel-split-and-merge", "scripts", "plan.mjs");
+// เคสสาขาอื่นใส่ "plugin": "<ชื่อ>" → โหลด plugin สาขานั้นคู่กับ superuser ให้หัวหน้าเห็นลูกทีมและ playbook ของสาขา (เหมือนใช้งานจริง)
+export const pluginDirs = (c) => [PLUGIN, ...(c.plugin ? [join(ROOT, "plugins", c.plugin)] : [])];
 const CASE_COUNT = 10;
 const TIERS = ["ใหญ่", "กลาง", "เล็ก"];
 const ARMS = { plugin: "มี plugin", none: "ไม่มี plugin" };
@@ -103,7 +105,7 @@ function readStream(out) {
 
 /** เรียก claude -p 1 ครั้งในโฟลเดอร์ว่างนอก repo · ผลไม่ครบ → นับ $ เท่าเพดาน เพราะอาจเสียจริงถึงเพดาน */
 async function ask(c, arm, cap) {
-  const argv = ["-p", ...(MODEL === "none" ? [] : ["--model", MODEL]), ...(arm === "plugin" ? ["--plugin-dir", PLUGIN] : []),
+  const argv = ["-p", ...(MODEL === "none" ? [] : ["--model", MODEL]), ...(arm === "plugin" ? pluginDirs(c).flatMap((d) => ["--plugin-dir", d]) : []),
     "--setting-sources", "project", "--strict-mcp-config", "--tools", "Skill,Read", "--max-turns", "8",
     "--output-format", "stream-json", "--verbose", "--max-budget-usd", String(cap)];
   const r = await run("claude", argv, { cwd: freshDir(`${c.id}-${arm}`), input: c.prompt + SUFFIX });
@@ -188,6 +190,7 @@ function checkCase(c) {
   for (const k of ["id", "title", "prompt", "risky", "expected", "graph"]) if (c[k] === undefined) bad.push(`ไม่มีช่อง ${k}`);
   if (bad.length) return { bad };
   if (`${c.id}.json` !== c.file) bad.push(`id ${c.id} ไม่ตรงชื่อไฟล์`);
+  if (c.plugin && !existsSync(join(ROOT, "plugins", c.plugin, ".claude-plugin", "plugin.json"))) bad.push(`ไม่มี plugin ${c.plugin}`);
   if (/superuser|ลูกทีม/i.test(c.prompt)) bad.push("prompt เอ่ยคำว่า superuser หรือลูกทีม");
   const tiers = c.graph.tasks.map((t) => t.tier);
   if (!tiers.every((t) => TIERS.includes(t))) bad.push(`tier ต้องเป็น ${TIERS.join("/")}`);
