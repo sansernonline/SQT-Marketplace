@@ -69,7 +69,7 @@
     ],
     "PreToolUse": [
       {
-        "matcher": "Write|Edit|Bash",
+        "matcher": "Write|Edit|Bash|Agent|Task",
         "hooks": [
           {
             "type": "command",
