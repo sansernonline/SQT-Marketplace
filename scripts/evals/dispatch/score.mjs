@@ -9,6 +9,17 @@ export const RATIO_HI = 1.2;
 /** น้ำหนักคะแนนรวมเต็ม 10 · จำนวนลูกทีมเป็นเรื่องหลักของชุดนี้จึงหนักสุด */
 export const WEIGHTS = { ratio_ok: 3, tier_acc: 2.5, iron_clean: 1.5, effort_set: 1, has_expect: 1, wave_ok: 1 };
 
+// ป้ายของชิ้น → ระดับเฉลย ตาม superuser หัวข้อ 5 (ข้อแรกที่ตรงชนะ) · เฉลยจึงคำนวณได้ ไม่ใช่ใส่มือ
+// ใหญ่: เงิน ภาษี กฎหมาย สุขภาพ ส่งถึงคนนอก ย้อนไม่ได้ สิทธิ์และรหัสผ่าน สถาปัตยกรรมทั้งระบบ · หรืออยู่ในงานเสี่ยง (ทุกชิ้นใหญ่)
+// เล็ก: กลไก (mechanical) และมีแบบให้ทำตาม (template) และไม่ต้องตัดสินใจเอง (ไม่มี judgment)
+export const RISK_TAGS = ["money", "legal", "health", "external", "irreversible", "auth", "architecture"];
+export const TAGS = [...RISK_TAGS, "mechanical", "template", "judgment"];
+export function tierFromTags(tags = [], risky = false) {
+  if (risky || tags.some((t) => RISK_TAGS.includes(t))) return "ใหญ่";
+  if (tags.includes("mechanical") && tags.includes("template") && !tags.includes("judgment")) return "เล็ก";
+  return "กลาง";
+}
+
 // fable ไม่ใช่ค่าเริ่มของระดับไหน (superuser หัวข้อ 5) นับเป็นระดับใหญ่ เพื่อไม่ให้หลุดกฎเหล็กงานเสี่ยง
 const TIER_BY_MODEL = [[/opus|fable/i, "ใหญ่"], [/sonnet/i, "กลาง"], [/haiku/i, "เล็ก"]];
 /** ชื่อ model → ระดับ · ไม่ระบุหรือไม่รู้จัก → null (นับว่าผิด) */

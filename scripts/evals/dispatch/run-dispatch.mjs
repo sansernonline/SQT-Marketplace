@@ -19,7 +19,7 @@ import { join, dirname, resolve } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { run } from "../coding/lib.mjs";
-import { WAVE_MAX, parsePlan, scoreRun, summarizeArm, armTable } from "./score.mjs";
+import { WAVE_MAX, parsePlan, scoreRun, summarizeArm, armTable, tierFromTags, TAGS } from "./score.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, "..", "..", "..");
@@ -62,7 +62,9 @@ function loadCases() {
   const dir = join(HERE, "cases");
   const only = args.only ? new RegExp(args.only) : null; // --only "^d7" รันเฉพาะเคสที่ชื่อไฟล์ตรง
   return readdirSync(dir).filter((f) => f.endsWith(".json") && (!only || only.test(f))).sort()
-    .map((f) => ({ file: f, ...JSON.parse(readFileSync(join(dir, f), "utf8")) }));
+    .map((f) => ({ file: f, ...JSON.parse(readFileSync(join(dir, f), "utf8")) }))
+    // ชิ้นที่มี tags แต่ไม่มี tier → คำนวณระดับเฉลยจากป้าย (มีทั้งคู่ --verify ตรวจว่าตรงกัน)
+    .map((c) => ({ ...c, graph: { ...c.graph, tasks: c.graph.tasks.map((t) => ({ ...t, tier: t.tier ?? (t.tags ? tierFromTags(t.tags, c.risky) : undefined), tierGiven: t.tier })) } }));
 }
 
 // ---- ประมาณค่าใช้จ่าย ----
@@ -195,6 +197,11 @@ function checkCase(c) {
   const tiers = c.graph.tasks.map((t) => t.tier);
   if (!tiers.every((t) => TIERS.includes(t))) bad.push(`tier ต้องเป็น ${TIERS.join("/")}`);
   if (c.risky && tiers.includes("เล็ก")) bad.push("งานเสี่ยงใช้ระดับเล็กไม่ได้");
+  for (const t of c.graph.tasks.filter((x) => x.tags)) {
+    const odd = t.tags.filter((g) => !TAGS.includes(g));
+    if (odd.length) bad.push(`${t.id}: ป้ายไม่รู้จัก ${odd.join(",")}`);
+    if (t.tierGiven && t.tierGiven !== tierFromTags(t.tags, c.risky)) bad.push(`${t.id}: tier ${t.tierGiven} ไม่ตรงกับป้าย (${tierFromTags(t.tags, c.risky)})`);
+  }
   let a;
   try { a = analyse(c); } catch (e) { return { bad: [...bad, `plan.mjs ไม่รับกราฟ: ${String(e.stderr ?? e.message).trim()}`] }; }
   const size = sizeOf(a);

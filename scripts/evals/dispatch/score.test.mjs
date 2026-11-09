@@ -1,7 +1,7 @@
 // node scripts/evals/dispatch/score.test.mjs
 import test from "node:test";
 import assert from "node:assert/strict";
-import { parsePlan, scoreRun, summarizeArm, tierAccuracy, tierOf, armTable } from "./score.mjs";
+import { parsePlan, scoreRun, summarizeArm, tierAccuracy, tierOf, armTable, tierFromTags } from "./score.mjs";
 
 const piece = (name, model, effort = "medium") => ({ name, model, effort, depends_on: [] });
 const answer = (plan) => "```json\n" + JSON.stringify(plan) + "\n```";
@@ -133,4 +133,13 @@ test("should_show_skill_opened_share_when_runs_record_it", () => {
   const m = summarizeArm([{ risky: false, skill_opened: true, score: scoreRun(FOUR, "") }, { risky: false, skill_opened: false, score: scoreRun(FOUR, "") }]);
 
   assert.equal(m.skill_opened, 0.5);
+});
+
+test("should_derive_tier_from_tags_first_rule_wins", () => {
+  assert.equal(tierFromTags(["money", "mechanical", "template"]), "ใหญ่");
+  assert.equal(tierFromTags(["mechanical", "template"]), "เล็ก");
+  assert.equal(tierFromTags(["mechanical", "template", "judgment"]), "กลาง");
+  assert.equal(tierFromTags(["mechanical"]), "กลาง");
+  assert.equal(tierFromTags(["mechanical", "template"], true), "ใหญ่");
+  assert.equal(tierFromTags([]), "กลาง");
 });
