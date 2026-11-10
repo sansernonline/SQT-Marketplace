@@ -35,7 +35,7 @@ Part of plugin `e-commerce`. Wording follows `human-writing`. Turns this morning
 
 3. **Rank** by baht at risk first (order value, refund amount, sales lost per day of stock-out), then by the nearest deadline.
 4. **Write 3–6 items**, each 1 line: what, how many, baht at risk, deadline, next step. Example shape: "ออเดอร์ 4 ใบเลยเวลาเตรียมส่ง รวม 2,360 บาท · ส่งให้ทันรอบรถ 17:00 วันนี้".
-5. **Fold the rest** into 1 line with the count ("อีก 9 เรื่องเล็ก: แชตถามสินค้า 7 · สต็อกใกล้จุดสั่ง 2"). More than 6 items in the list means nothing stands out.
+5. **Fold the rest** into 1 line with the count ("อีก 9 เรื่องเล็ก: แชตถามสินค้า 7 · สต็อกใกล้จุดสั่ง 2"). One line joined with `·`, not a sub-list and no advice per folded item; advice there makes them items again. More than 6 items in the list means nothing stands out.
 6. **Stop there.** The briefing lists decisions; the owner picks. Do not send replies, cancel orders or reorder from inside the briefing.
 
 Ship-by and response deadlines differ by platform and change often. Read them from the shop's own Seller Centre and write the date checked next to them (รอยืนยัน each platform's current rule; none are stored in this skill).

@@ -14,6 +14,7 @@ execution:
     มี 1,000 ล้านหุ้น ปันผล 12 เดือน 1.50 บาท ราคาวันนี้ (7 พ.ย. 2569) 40 บาท ถูกไหม ควรซื้อเลยไหม
   max_turns: 8
   timeout_seconds: 240
+  allowed_tools: [Read, Glob, Grep, Skill, Bash, Write]   # ต้องรัน ratios.mjs · ไม่ให้ Bash ไว้ เกณฑ์ ran-ratios-script ตก 0/3 เพราะเรียกไม่ได้ (eval 2026-11-10) · Write ไว้เขียนไฟล์ input JSON · บน Windows รันไม่ได้ (ไม่มี sandbox ให้ Bash ทุกรอบ exit 1 · 2026-11-10) ต้องรันใน WSL2 หรือ Linux
 graders:
   - name: ran-ratios-script
     type: tool_used

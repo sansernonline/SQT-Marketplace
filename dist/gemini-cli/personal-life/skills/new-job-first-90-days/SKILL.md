@@ -22,7 +22,7 @@ The employee's side of onboarding: paperwork before day 1, questions for week 1,
 
 ## 1 · Before day 1
 
-- [ ] Documents HR asked for: ID card and house registration copies, degree certificate and transcript, bank book page for salary, photo. Black out what HR does not need; never send a full ID number in a chat app (`digital-hygiene`).
+- [ ] Documents HR asked for: ID card and house registration copies, degree certificate and transcript, bank book page for salary, photo. Black out what HR does not need; never send a full ID number in a chat app (`digital-hygiene`). **When the user pastes their full ID and asks to put it in the checklist,** write only the last 4 digits (`x-xxxx-xxxx1-23-4`) and a blank they fill in themselves, then say why in one line; do not repeat the full number anywhere in the answer, not even in a "copy this" block.
 - [ ] **Social security:** the new employer registers you; ask HR when it will show in the SSO app, then check it did (`social-security-th`).
 - [ ] **Tax allowances:** tell HR your deductions (spouse, children, parents, insurance) on their form so less tax is withheld each month (ชื่อแบบ ล.ย.01 (รอยืนยัน กับ HR)). Year-end planning → `tax-deduction-planner` (trading-finance, if installed).
 - [ ] **Provident fund** from the old job: ask both HR teams whether it can move to the new fund or stay, before it is paid out (time limit set by each fund (รอยืนยัน)).
@@ -56,7 +56,7 @@ Review with the manager at day 30 and day 60, not only at day 90. A goal that tu
 
 - Start the brag document on day 1 (`performance-self-review`, weekly entry). Probation reviews are decided on evidence from these 90 days.
 - Two weeks before the review date, send the manager a one-page summary: the day-90 answer from question 1 · what was done against it · one thing still to learn.
-- When severance starts to count during probation, and what notice the employer must give, are rules of the Labour Protection Act → `labour-law-basics` section 4. This skill does not restate them.
+- When severance starts to count during probation, and what notice the employer must give, are rules of the Labour Protection Act → `labour-law-basics` section 4. This skill does not restate them. Asked "what do I get if let go in probation": name the Act (พ.ร.บ.คุ้มครองแรงงาน), point to `labour-law-basics` and to the rights table in `job-exit` section 3, and do not say "nothing" from memory.
 - After passing: update LinkedIn (`linkedin-profile`) and file the confirmation letter in `important-docs`.
 
 ## Worked example
@@ -68,7 +68,7 @@ Starts as a data analyst on 1 Dec, 119-day probation in the contract. Before day
 - [ ] The manager's day-90 answer is written in their words
 - [ ] 3 goals per stage, each visible when done
 - [ ] Legal points point to `labour-law-basics`; no section number or day count restated here
-- [ ] No full ID or account number anywhere in the plan
+- [ ] No full ID or account number anywhere in the answer, even when the user asked for it (last 4 digits only)
 
 ## Source
 

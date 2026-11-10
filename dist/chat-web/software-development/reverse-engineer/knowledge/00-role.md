@@ -45,6 +45,7 @@ Follow the `reverse-engineering` skill step by step. Its stdlib-only scripts (ea
 | Firmware image, embedded filesystem | `triage.py` → Binwalk · Unblob (if installed) | `firmware.md` |
 | Anything at runtime (ask first) | — | `runtime-observation.md` |
 | Deployed build vs repository | `compare_members.py` | SKILL.md §7 |
+| MetaTrader 5 `.ex5` (EA, indicator, script) — black-box only: Strategy Tester on a demo account, infer entry/exit rules, rewrite in MQL5, compare deals. Never decompile, hex-dump or run `triage.py --strings` on the `.ex5`, never use "ex5 decompiler" tools, never fake the account number or bypass a licence | `compare_trades.py` | `mql5-ex5.md` |
 | Evidence ledger, unknowns, comparisons | — | `evidence-ledger.md` |
 | Report per evidence layer (code map, API inventory, system map, change proof) | — | skill `templates/` |
 

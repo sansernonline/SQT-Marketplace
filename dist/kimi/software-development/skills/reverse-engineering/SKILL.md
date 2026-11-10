@@ -1,6 +1,6 @@
 ---
 name: reverse-engineering
-description: Use when a compiled app (exe, .NET, Electron, APK, JS bundle), firmware, network capture or unknown format has no source, or a build may differ.
+description: Use when a compiled app (exe, .NET, Electron, APK, JS bundle, MT5 .ex5), firmware, HAR/pcap or unknown format has no source, or a build may differ.
 allowed-tools: Read, Grep, Glob, Bash(python -I *), Bash(node *check-tools.mjs*)
 ---
 
@@ -45,6 +45,8 @@ allowed-tools: Read, Grep, Glob, Bash(python -I *), Bash(node *check-tools.mjs*)
 
 ## 3 · คัดแยก (triage)
 
+ถ้าเป้าหมายเป็นไฟล์ MetaTrader 5 `.ex5` ให้ข้ามไปอ่าน [mql5-ex5](references/mql5-ex5.md) ก่อน triage เพราะเส้นทางนี้ไม่เปิดเนื้อไฟล์เลย
+
 ```bash
 python -I scripts/triage.py <file>                          # ชนิดไฟล์ สถาปัตยกรรม ขั้นต่อไป
 python -I scripts/triage.py <file> --pattern 'oauth|WHT'    # หาคำในไฟล์ (ค่าลับถูกปิด)
@@ -69,6 +71,7 @@ python -I scripts/triage.py <file> --pattern 'oauth|WHT'    # หาคำใน
 | ฐานข้อมูล SQLite ในแอป | ตาราง · CREATE SQL · จำนวนแถว · ตัวอย่างแถวที่ปิดค่าลับ · ไม่กี่นาที | `sqlite_inspect.py` (อ่านอย่างเดียว ไม่เห็นข้อมูลที่ค้างใน `-wal`) | — | — |
 | smart contract (bytecode ของ EVM) | function selector · event topic · คำสั่งเสี่ยง (DELEGATECALL · SELFDESTRUCT) · ไม่กี่นาที | `evm_selectors.py` (จับเฉพาะ dispatcher แบบ solc) | — | — |
 | Python `.pyc` · PyInstaller | กู้ได้ถ้า Python ≤ 3.8 หลังจากนั้นได้บางส่วน · หลายชั่วโมง | `triage.py` | pyinstxtractor · decompyle3 / pycdc | — |
+| MetaTrader 5 `.ex5` (EA · indicator · script) | ไม่ได้โค้ด ได้กฎเข้าออกที่อนุมานจากไม้ใน Strategy Tester แล้วเขียน MQL5 ใหม่ · ไม่เปิดเนื้อไฟล์ ไม่ decompile · หลายวัน | `compare_trades.py` (เทียบไม้ของตัวเดิมกับตัวใหม่) | MetaTrader 5 กับบัญชี demo (ผู้ใช้ติดตั้งและกดเอง) | [mql5-ex5](references/mql5-ex5.md) |
 | ถูกทำให้อ่านยาก หรือถูก pack | ขึ้นกับตัวป้องกัน อาจหยุดงานได้ | `triage.py` | หาให้ได้ก่อนว่าเป็นตัวไหน แล้วถามผู้ใช้ | — |
 
 ต้องดูตอนรันจริง (ทุกเป้าหมาย) → [runtime-observation](references/runtime-observation.md) และต้องได้อนุญาตตามหัวข้อ 2

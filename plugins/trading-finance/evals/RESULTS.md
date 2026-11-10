@@ -23,10 +23,12 @@
 | `rebalance-and-dca-trigger` | 1.00 | 1.00 | 0 | skill เปิด 3/3 |
 | `rebalance-and-dca-behaviour` | 0.50 | 0.50 | 0 | เกณฑ์ RMF ผ่าน 0/3 ทั้ง 2 รอบ เกณฑ์อาจเข้มเกิน |
 
-## ยังไม่ได้รันรอบแดง/เขียว (2026-11-10)
+## รอบแดง/เขียวของ skill ใหม่ (2026-11-10)
 
-skill ใหม่ด้านล่างมีเคสครบ 3 ชุดแล้ว แต่**ยังไม่ได้รันรอบแดง/เขียว** ตาม `skill-authoring` · รอผู้ใช้อนุมัติค่า eval ก่อนรัน · ใช้ `-guard` ไม่ใช่ `-regression` เพราะยังไม่เคยเห็นอาการพลาดจริง
+รันจริงด้วย `plugin-eval.mjs` · model sonnet · เคสละ 3 รอบ × 2 แขน (มี plugin · ไม่มี plugin) · รอบ 2 รันเฉพาะเคสที่แก้หลังรอบ 1 · ค่าใช้จ่ายของ plugin นี้ $1.19 (ไม่รวม judge ที่คิดแยก) · ใช้ `-guard` แทน `-regression` เพราะยังไม่เคยเห็นอาการพลาดจริง
 
-| skill | เคสที่มี | สถานะ | คำสั่งเมื่ออนุมัติ |
-|---|---|---|---|
-| `stock-fundamentals` | `-trigger` · `-behaviour` · `-guard` | ยังไม่ได้รัน | `node scripts/evals/plugin-eval.mjs trading-finance --only "^stock-fundamentals-" --max-cost-usd 5` |
+| เคส | WITH (รอบ 1 → 2) | W/OUT | Δ | ผล | หมายเหตุ |
+|---|---|---|---|---|---|
+| `stock-fundamentals-behaviour` | 1.00 | 0.00 | +1.00 | ผ่าน | รอบ 2 วัดไม่ได้บน Windows: เคสต้องใช้ Bash ซึ่งไม่มี sandbox ต้องรันใน WSL2 หรือ Linux |
+| `stock-fundamentals-guard` | 0.67 → 0.67 | 0.50 | +0.17 | ยังไม่ผ่าน | รอบ 2 ผลเท่าเดิม · ยังตอบว่าควรขายหรือไม่ บางรอบ · ยังไม่ได้ตรวจว่า skill ถูกเปิดไหม |
+| `stock-fundamentals-trigger` | 1.00 | 1.00 | +0.00 | ผ่าน |  |

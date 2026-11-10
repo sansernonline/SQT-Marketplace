@@ -1,5 +1,19 @@
 # Changelog — trading-finance
 
+## 0.21.0 — 2026-11-10
+
+- `trading-technique-course` (ใหม่): หลักสูตรเทคนิคเทรด 5 ด่าน เริ่มที่จัดขนาดไม้และ stop-loss แล้วไปเทรนด์ · breakout · mean reversion · แนวรับแนวต้าน · แต่ละด่านมีกฎเข้าออกเป็นข้อ ทดสอบย้อนหลังด้วยมือ ฝึกใน `paper-trading` และวัดด้วย `trade-stats.mjs` ก่อนผ่านด่าน · eval 3 เคส (trigger · behaviour · guard)
+- `copy-trade-check` ครบวงจร: ตั้งค่าการคัดลอก (deposit load จากขาดทุนที่รับได้ · equity stop · ผลต่างจากผู้ให้สัญญาณ) · นับค่าสมาชิก ส่วนแบ่ง 20% ของ MQL5 และค่า VPS ก่อนสมัคร · เกณฑ์เลิกตามที่เขียนก่อนใช้เงินจริง · เฝ้าดูรายสัปดาห์ด้วยสคริปต์ใหม่ `copy-monitor.mjs` (self-test 22 ข้อ) · description ครอบการตั้งค่าและเฝ้าดู
+- `copy-trade-check` กล่องกฎหมาย: อ่าน FAQ ธปท. ใหม่ 2026-11-10 ข้อ 4 ตอบกรณีคนไทยเทรดผ่านเว็บโบรกเกอร์ต่างประเทศตรง ๆ (ทำได้ในขอบเขต ธปท. โอนผ่านธนาคารพาณิชย์ ไม่เกิน 5 ล้านดอลลาร์ต่อปี) จึงแก้ประโยคเดิมที่บอกว่าไม่พบข้อความ · โทษตามข้อ 5 ยืนยันจากแหล่งแล้ว · เพิ่ม ก.ล.ต. ไม่ได้กำกับ forex (รอยืนยัน) และรายชื่อ Investor Alert
+- agent `trade-journal-coach` และ `risk-manager` รับ skill ใหม่และงานเฝ้าดู copy trade · triggers เพิ่ม 1 แถว แก้ 1 แถว
+- `copy-trade-check` ตัวอย่างเฝ้าดูรายสัปดาห์ใช้ deposit load 47% ตามสูตร X ≤ 10 ÷ (14 × 1.5) = 47.6 ปัดลง (เดิม 50% เกินสูตร) · คิดตารางใหม่ด้วย `copy-monitor.mjs` (ห่างรวม 4 สัปดาห์ 3.69 จุด) · self-test 23 ข้อ เพิ่มข้อที่ตรวจว่า `monitor-example.json` ตรงกับชุดคิดมือ
+- eval `trading-technique-course-behaviour`: โจทย์ใช้ตัวเลขต่างจากตัวอย่างใน skill (ขาดทุนเฉลี่ย 1.4R เกิน 1.2R จึงไม่ผ่านด่าน · expectancy +0.31R คิดด้วย `trade-stats.mjs`) และแก้เกณฑ์ regex กับ llm ให้ตรงคำตอบใหม่
+
+## 0.20.2 — 2026-11-10
+
+- `stock-fundamentals`: ถูกถามว่าควรขายหรือซื้อไหม ไม่ตอบว่าไม่ควรขาย ไม่บอกให้ถือ และไม่ทำรายการขายเมื่อ… ให้ตัวเลขที่ต้องดูแล้วส่งเงื่อนไขขายให้ `watchlist-setup` (eval 2026-11-10 ตก 2/3 รอบเพราะข้อนี้)
+- eval `stock-fundamentals-behaviour`: ให้ Bash และ Write ใน allowed_tools เพื่อรัน `ratios.mjs`
+
 ## 0.20.1 — 2026-11-10
 
 - `mutual-fund-picker`: description ตัดเรื่อง DCA ออกและชี้ `rebalance-and-dca` · ขั้นตั้งแผน DCA ชี้ไปตัวเดียวกัน

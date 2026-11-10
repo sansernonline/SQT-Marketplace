@@ -1,5 +1,9 @@
 # Changelog — superuser
 
+## 3.34.1 — 2026-11-10
+
+- `skill-router.json` เพิ่ม 2 แถว (`copy-trade-check` · `trading-technique-course`) ใช้ด่านตัดโค้ดร่วม · `triggers.md` เพิ่มแถว copy trade · หลักสูตรเทรด · ไฟล์ .ex5
+
 ## 3.34.0 — 2026-11-10
 
 - `hooks/skill-router.json` เพิ่ม 10 แถวของ skill ชีวิตประจำวันและร้านค้า (`copy-claims-check` · `line-sticker` · `task-board` · `study-drill` · `new-job-first-90-days` · `job-exit` · `legal-help-prep` · `stock-fundamentals` · `shop-daily-briefing` · `win-back-customers`) · ทุกแถวใช้คำหลักของเรื่องกับด่านตัดประโยคเรื่องโค้ดหรือหน้าจอร่วมกัน · ผลกับ 5 ชุดทดสอบที่ใช้ตอนปรับ (ของทีม 2 ชุด และของผู้ตรวจ 3 ชุด): ประโยคจริงหลุด 0 · ประโยคโค้ดจับผิด 2 · ชุดเหล่านี้เคยเห็นตอนปรับ ผลกับประโยคที่ไม่เคยเห็นต่ำกว่านี้ (รอบที่วัดก่อนแก้: หลุด 17/30) · hook self-test 264/264

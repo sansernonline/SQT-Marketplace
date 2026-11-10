@@ -608,7 +608,7 @@
 
 ### 53. reverse-engineering
 **ใช้กับ:** developer, reverse-engineer, solution-architect
-**Description:** Use when a compiled app (exe, .NET, Electron, APK, JS bundle), firmware, network capture or unknown format has no source, or a build may differ.
+**Description:** Use when a compiled app (exe, .NET, Electron, APK, JS bundle, MT5 .ex5), firmware, HAR/pcap or unknown format has no source, or a build may differ.
 
 ---
 
