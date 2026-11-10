@@ -494,8 +494,16 @@ export function routeSkills(prompt, router) {
 export function routerNotice(skills, note = "") {
   if (!skills.length) return "";
   // ถ้อยคำแบบแนะนำ model ข้ามเมื่องานดูง่าย (eval 2026-11-09 รอบ 4: เห็นข้อความแล้วตอบรอบเดียว 0/6 ครั้งเปิด skill) จึงสั่งให้เรียกก่อนตอบ
-  const head = `ก่อนตอบข้อความนี้ เรียกเครื่องมือ Skill ให้ครบทุกตัวในรายการ (ทีละตัว · ตัวที่ไม่มีในเครื่องข้ามไป) แม้งานดูง่ายหรือรู้คำตอบแล้ว เพราะกฎใน skill เปลี่ยนรูปคำตอบ: ${skills.map((s) => `\`${s}\``).join(" · ")}`;
-  return note && skills.some((s) => s.endsWith("superuser")) ? `${head}\n${note}` : head;
+  const list = (xs) => xs.map((s) => `\`${s}\``).join(" · ");
+  // skill ที่เปลี่ยนตัวแผน (ค้นต้นแบบหรือแหล่งก่อนลงมือ) ต้องเปิดพร้อม superuser · ไม่งั้นแผนออกมาโดยไม่ค้น (owner-pick 2026-11-10)
+  const lead = skills.filter((s) => /(^|:)(superuser|design-references|research-with-sources)$/.test(s));
+  if (!lead.some((s) => /(^|:)superuser$/.test(s))) lead.length = 0;
+  if (!lead.length) return `ก่อนตอบข้อความนี้ เรียกเครื่องมือ Skill ให้ครบทุกตัวในรายการ (ทีละตัว · ตัวที่ไม่มีในเครื่องข้ามไป) แม้งานดูง่ายหรือรู้คำตอบแล้ว เพราะกฎใน skill เปลี่ยนรูปคำตอบ: ${list(skills)}`;
+  // งานหลายขั้น: หัวหน้าเปิดครบทุกตัวก่อนแจกงาน กิน context และชนเพดานเงิน (dispatch d13 2026-11-10: เปิด 7 ตัวก่อนตอบ) · skill ของชิ้นที่แจกไปอยู่ในใบสั่งงานแทน
+  const rest = skills.filter((s) => !lead.includes(s));
+  const head = `ก่อนตอบข้อความนี้ เรียกเครื่องมือ Skill เปิด ${list(lead)} ก่อน แม้งานดูง่าย`
+    + (rest.length ? ` · ตัวที่เหลือ (${list(rest)}) เปิดเมื่อหัวหน้าลงมือชิ้นนั้นเอง ชิ้นที่แจกลูกทีม ใส่ชื่อ skill ในใบสั่งงานข้อกติกาแทน` : "");
+  return note ? `${head}\n${note}` : head;
 }
 
 // ข้อความสั้นตอนเริ่ม session (แนวเดียวกับ using-superpowers ของ obra/superpowers · วัดได้ 66% เทียบ skill ธรรมดา 6% · Codeminer42 2026-04-09)
@@ -1482,6 +1490,12 @@ function selfTest() {
       "แก้ typo บรรทัด 3 ใน README", "สวัสดีครับ", "ราคา Opus 5.5 เท่าไร", "แปลประโยคนี้เป็นอังกฤษ", "ตอบเป็นไทย",
     ].map((s) => [`ตัวบอก skill: งานเล็ก → ไม่ใช่ superuser · ${s}`, [], true, () => !routes(s).includes("superuser:superuser")]),
     ["ตัวบอก skill: บอก superuser แล้วต่อท้ายคำอธิบายสาขา", [], true, () => routerNotice(["superuser:superuser"], "N").endsWith("\nN") && !routerNotice(["docx"], "N").includes("N")],
+    ["ตัวบอก skill: มี superuser → สั่งเปิดแค่ superuser ก่อน ตัวอื่นให้ใส่ในใบสั่งงาน · ไม่มี → เปิดครบทุกตัว", [], true, () => {
+      const lead = routerNotice(["superuser:superuser", "lazy-coding", "no-ai-look"]), solo = routerNotice(["lazy-coding", "no-ai-look"]);
+      const plan = routerNotice(["superuser:superuser", "design-references", "lazy-coding"]);
+      return /เปิด `superuser:superuser` ก่อน/.test(lead) && lead.includes("ใบสั่งงาน") && !lead.includes("ครบทุกตัว") && solo.includes("ครบทุกตัว")
+        && /เปิด `superuser:superuser` · `design-references` ก่อน/.test(plan);
+    }],
     // ให้ model ตัดสินเอง: เตือนทุกข้อความจนกว่าจะเปิด superuser · ข้อความสั้น คำสั่ง slash และรายงานลูกทีมไม่เตือน
     ["เตือนงานหลายขั้น: เตือนก่อนเปิด · เลิกเตือนหลังเปิด · ไม่เตือนข้อความสั้น", [], true, () => {
       const d = join(tmpdir(), `sqt-open-test-${process.pid}`);
