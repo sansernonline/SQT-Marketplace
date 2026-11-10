@@ -2,11 +2,11 @@
 # NOTICE
 # Source: anthropics/claude-plugins-official, plugins/code-modernization/scripts/compare.py
 # License: Apache-2.0 (https://www.apache.org/licenses/LICENSE-2.0) · copied 2026-11-10
-# Changes by SQT: file renamed to compare_outputs.py · this notice added · logic unchanged
+# Changes by SQT: file renamed to compare_outputs.py (docstring and messages use the new name) · this notice added · logic unchanged
 # Uses the Python standard library only · run with: python -I compare_outputs.py <cases.json>
 """Deterministic judge of "does the new system give the same output as the legacy one".
 
-    python3 compare.py <cases.json> [--out EQUIVALENCE.json] [--quiet] [--allow-outside]
+    python3 compare_outputs.py <cases.json> [--out EQUIVALENCE.json] [--quiet] [--allow-outside]
 
 The verdict comes from comparing bytes, never from a model's opinion. Input:
 
@@ -464,12 +464,12 @@ def main(argv=None):
     try:
         result = run(args.cases, out, args.allow_outside)
     except InputError as err:
-        print("compare.py: %s" % err, file=sys.stderr)
+        print("compare_outputs.py: %s" % err, file=sys.stderr)
         return 2
     try:
         write_atomic(out, json.dumps(result, indent=2, ensure_ascii=True) + "\n")
     except InputError as err:
-        print("compare.py: %s" % err, file=sys.stderr)
+        print("compare_outputs.py: %s" % err, file=sys.stderr)
         return 2
     problem = verdict_of(result)
     if not args.quiet:

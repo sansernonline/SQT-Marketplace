@@ -67,7 +67,7 @@ Consent is the weakest basis — it can be withdrawn. Pick the basis first (ม.
 6. **Reply in writing by day 30**: what was found, what was done, what was refused and why, and how to complain to สคส.
 7. **We only process the data for someone else** (for example, we pack orders for another brand): forward the request to that controller the same day and tell the person who will answer.
 
-The 2-letter flow (acknowledge, then answer) and the system checklist follow Anthropic's dsar-response skill, rewritten for Thai sellers.
+The 2-letter flow (acknowledge, then answer) and the system checklist follow Anthropic's dsar-response skill (`anthropics/claude-for-legal` privacy-legal, Apache-2.0, read 2026-11-10), rewritten for Thai sellers; no text copied.
 
 ### D. Breach response (clock starts when you become aware)
 | Hour | Action |

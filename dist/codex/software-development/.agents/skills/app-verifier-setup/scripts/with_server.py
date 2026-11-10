@@ -4,7 +4,8 @@
 # License: Apache-2.0 (https://www.apache.org/licenses/LICENSE-2.0) · copied 2026-11-10
 # Changes by SQT: (1) server output goes to --log-dir files instead of unread pipes, which can
 # fill up and freeze the server · (2) on Windows the whole process tree is stopped (taskkill /T),
-# because shell=True starts cmd.exe and terminate() would leave `npm run dev` running
+# because shell=True starts cmd.exe and terminate() would leave `npm run dev` running · (3) --log-dir defaults to
+# _to_delete/with-server-logs (not the project root) and is created when missing
 # Uses the Python standard library only · run with: python -I with_server.py --server ... --port ... -- <command>
 """
 Start one or more servers, wait for them to be ready, run a command, then clean up.
@@ -45,7 +46,7 @@ def main():
     parser.add_argument('--server', action='append', dest='servers', required=True, help='Server command (can be repeated)')
     parser.add_argument('--port', action='append', dest='ports', type=int, required=True, help='Port for each server (must match --server count)')
     parser.add_argument('--timeout', type=int, default=30, help='Timeout in seconds per server (default: 30)')
-    parser.add_argument('--log-dir', default='.', help='Folder for server-N.log files (default: current folder)')
+    parser.add_argument('--log-dir', default='_to_delete/with-server-logs', help='Folder for server-N.log files, created if missing (default: _to_delete/with-server-logs)')
     parser.add_argument('command', nargs=argparse.REMAINDER, help='Command to run after server(s) ready')
 
     args = parser.parse_args()
@@ -74,6 +75,7 @@ def main():
         for i, server in enumerate(servers):
             print(f"Starting server {i+1}/{len(servers)}: {server['cmd']}")
 
+            os.makedirs(args.log_dir, exist_ok=True)
             log = open(os.path.join(args.log_dir, f'server-{i+1}.log'), 'wb')
             # Use shell=True to support commands with cd and &&
             process = subprocess.Popen(

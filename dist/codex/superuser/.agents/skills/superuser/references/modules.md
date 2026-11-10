@@ -29,7 +29,7 @@
 
 ## config
 
-`.claude/superuser/config.json` ของโฟลเดอร์งาน (ไม่มีไฟล์ = ค่าเริ่ม: เปิดทุกตัว ยกเว้น `guard` · `recompact` · `name_gate` ที่ต้องเปิดเอง) · แม่แบบใน [`templates/config.json`](../templates/config.json) · หัวหน้าอ่านตอนเริ่ม session แล้วทำตาม · hook อ่านเองสำหรับ `log` · `inbox` · `review_gate` · `split_gate` · `dispatch_gate` · `guard` · `recompact` · `ui_scan` · `pii_gate` · `name_gate` และออกทันทีเมื่อโฟลเดอร์งานไม่มี `.claude/superuser/` หรือโมดูลนั้นปิด (ยกเว้น `ui_scan` ที่ทำงานโดยไม่ต้องมีโฟลเดอร์ทีม)
+`.claude/superuser/config.json` ของโฟลเดอร์งาน (ไม่มีไฟล์ = ค่าเริ่ม: เปิดทุกตัว ยกเว้น `guard` · `recompact` · `name_gate` ที่ต้องเปิดเอง) · แม่แบบใน [`templates/config.json`](../templates/config.json) · หัวหน้าอ่านตอนเริ่ม session แล้วทำตาม · hook อ่านเองสำหรับ `log` · `inbox` · `review_gate` · `split_gate` · `dispatch_gate` · `guard` · `recompact` · `ui_scan` · `code_patterns` · `pii_gate` · `name_gate` และออกทันทีเมื่อโฟลเดอร์งานไม่มี `.claude/superuser/` หรือโมดูลนั้นปิด (ยกเว้น `ui_scan` และ `code_patterns` ที่ทำงานโดยไม่ต้องมีโฟลเดอร์ทีม)
 
 ```json
 {

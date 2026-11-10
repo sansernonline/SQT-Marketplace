@@ -89,7 +89,7 @@ Reorder rules only look at what runs out. The money a small shop loses quietly s
 | Dead stock (สต็อกตาย) | no sale for 90 days | same, flagged louder |
 | Overstock (ล้นสต็อก) | more than 120 days of sales on hand | counts only the units beyond 120 days |
 
-The 28, 90 and 120-day lines are starting values taken from Anthropic's inventory-planner, not measured on Thai shops; tune them to your lead time.
+The 28, 90 and 120-day lines are starting values taken from Anthropic's inventory-planner (`anthropics/knowledge-work-plugins` small-business, Apache-2.0, read 2026-11-10), not measured on Thai shops; tune them to your lead time.
 
 1. Put **one line in baht at the top of the report**: money tied in stuck stock = units × cost per unit. The script prints it first (`เงินจมในสต็อกค้าง`). This is the number owners act on.
 2. For each stuck SKU give the owner 3 choices with the numbers that decide them: units left, sales per day, gross profit per unit (`marketplace-fees-pricing`).

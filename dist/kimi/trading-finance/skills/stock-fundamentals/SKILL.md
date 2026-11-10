@@ -88,7 +88,7 @@ Put several companies in `companies` and a `screen` (`maxPE` · `minROE` · `max
 | Yield · payout | 1.50 ÷ 40 · 1.50 ÷ 2.50 | 3.75% · 60% |
 | Core P/E | land sale 500,000 thousand removed → EPS 2.00 | 20.0 |
 
-Reading: on reported profit P/E is 16; without the land sale it is 20 — the "cheap" look came from a one-off. BBB in the same file is a loss maker with D/E 3 and interest coverage 0.75, paying a dividend anyway: five flags, and it fails the screen.
+Reading: on reported profit P/E is 16; without the land sale it is 20, so the lower figure came from a one-off. BBB in the same file is a loss maker with D/E 3 and interest coverage 0.75, paying a dividend anyway: five flags, and it fails the screen.
 
 ## Check before sending
 

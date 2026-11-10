@@ -120,7 +120,7 @@ Court and police papers always go to a lawyer or the legal-aid line the same wee
 
 ## 4 · Deadline block for `important-docs`
 
-Every date that matters becomes one row the user can paste into the `important-docs` registry and run through `due-dates.mjs`:
+Every date that matters becomes one row in the `important-docs` registry (CSV, same columns as there):
 
 ```csv
 section,item,holder,ref_no,issuer,start_date,end_date,extended_until,renew_lead_days,location,file,contact,amount,notes
@@ -128,7 +128,13 @@ contract,"ยื่นคำให้การ คดีเงินประก
 ```
 
 - **Never compute a legal deadline for the user.** A date that has to be counted from an event (served a summons, received a letter) is written `[ตรวจ]` with the event and its date, and the lawyer or agency fills it in. A wrong count here can lose the case.
-- Warnings at 14, 7, 3 and 1 days before; who is responsible in `holder`.
+- **Run the reminder script only after the real date is in.** `due-dates.mjs` reads JSON, not the CSV, and stops on a date like `[ตรวจ]`. Once the lawyer or agency gives the date, write it the way `important-docs` step 5 does and run `node skills/important-docs/scripts/due-dates.mjs <file.json>`:
+
+  ```json
+  { "today": "2026-11-10", "items": [ { "name": "ยื่นคำให้การ คดีเงินประกันห้อง", "end_date": "2026-11-25", "lead_days": 14 } ] }
+  ```
+  (`end_date` above is an example; use the date the lawyer gives.)
+- Warnings at 14, 7, 3 and 1 days before; who is responsible in `holder`. This differs on purpose from the 60 / 30 / 7-day warnings in `important-docs` step 5: those suit renewals known months ahead, while a legal deadline is usually set only weeks away, so a 60- or 30-day warning would already be past and the last few days matter most.
 
 ## 5 · Contact log
 

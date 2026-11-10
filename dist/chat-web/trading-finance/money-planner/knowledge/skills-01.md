@@ -149,7 +149,7 @@ Months × **essential** monthly spending (rent or mortgage, food, transport, uti
 | Business owner (keep separate from business cash) | 12 |
 | Paying off high-interest debt | 1-month mini buffer first, full fund after (`debt-payoff`) |
 
-Adjust up for: health conditions, older parents depending on you, older car, single-industry town. Adjust down slightly if the employer offers strong severance and the user is ม.33 (social security unemployment benefit: laid off 60% of wage up to 180 days since 28 Jun 2568, resign 30% up to 90 days, wage ceiling 15,000 → 17,500 from 2569 — check sso.go.th or 1506).
+Adjust up for: health conditions, older parents depending on you, older car, single-industry town. Adjust down slightly if the employer offers strong severance and the user is ม.33 (social security unemployment benefit when laid off: 60% of the capped wage for up to 180 days per government news from 28 Jun 2568, but SSO's own page dated 3 Oct 2567 still says 50% (รอยืนยัน which rate SSO pays now); wage cap 15,000 on SSO's page, and whether the 17,500 cap from 1 Jan 2569 applies to this benefit is (รอยืนยัน); resigned or contract ended: 30% for up to 90 days. Sources and dates → `e-commerce:social-security-th` (section 2, Unemployment row, checked 2026-11-10), or ask sso.go.th or 1506. Plan the fund without counting on the higher figure).
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.thaipbs.or.th/news/content/353742 (กฎกระทรวงฉบับที่ 2 พ.ศ. 2568 · 60% · 180 วัน · มีผล 28 มิ.ย. 2568 · ตรวจซ้ำ 2026-10-22; ลาออก 30% · 90 วัน ไม่ได้แก้) · เพดานค่าจ้าง 17,500 ตั้งแต่ 1 ม.ค. 2569 ตรวจซ้ำ 2026-10-22 (infoquest.co.th/2025/550753)
 

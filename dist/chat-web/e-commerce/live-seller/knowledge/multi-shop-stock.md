@@ -88,7 +88,7 @@ Reorder rules only look at what runs out. The money a small shop loses quietly s
 | Dead stock (สต็อกตาย) | no sale for 90 days | same, flagged louder |
 | Overstock (ล้นสต็อก) | more than 120 days of sales on hand | counts only the units beyond 120 days |
 
-The 28, 90 and 120-day lines are starting values taken from Anthropic's inventory-planner, not measured on Thai shops; tune them to your lead time.
+The 28, 90 and 120-day lines are starting values taken from Anthropic's inventory-planner (`anthropics/knowledge-work-plugins` small-business, Apache-2.0, read 2026-11-10), not measured on Thai shops; tune them to your lead time.
 
 1. Put **one line in baht at the top of the report**: money tied in stuck stock = units × cost per unit. The script prints it first (`เงินจมในสต็อกค้าง`). This is the number owners act on.
 2. For each stuck SKU give the owner 3 choices with the numbers that decide them: units left, sales per day, gross profit per unit (`marketplace-fees-pricing`).
@@ -119,8 +119,11 @@ Moved from `SKILL.md`. `scripts/stock-calc.mjs` computes all of this; open this 
 ```
 Reorder point = average daily sales × supplier lead time (days) + safety stock
 Safety stock  = (max daily sales × max lead time) − (average daily sales × average lead time)
-Reorder qty   = average daily sales × days of cover wanted − (available − reorder point)
+Position      = available + on order (ordered, not yet arrived)
+Reorder qty   = average daily sales × days of cover wanted − (position − reorder point)
 ```
+
+Reorder only when position ≤ reorder point. Goods already on the way count, or the same gap gets ordered twice.
 
 Worked example — `BAG-TOTE-BLK-L`, all channels together:
 
@@ -132,4 +135,5 @@ Worked example — `BAG-TOTE-BLK-L`, all channels together:
 | Safety stock | 9 × 14 − 4 × 10 = 126 − 40 = **86** |
 | Reorder point | 4 × 10 + 86 = **126** |
 | Days of cover wanted | 45 |
-| Reorder qty when available = 126 | 4 × 45 = **180** |
+| Reorder qty when available = 126, nothing on order | 4 × 45 − (126 − 126) = **180** |
+| Reorder qty when available = 126, 30 on order | position 156 > 126, so no order yet |

@@ -92,7 +92,7 @@ Do not move to the next step while the "to fix" list from steps 3 and 4 still ha
 
 **List missing receipts.** Every expense row above the owner's threshold with no document goes on a "ใบเสร็จขาด" list: date, payee, amount, what to ask for. The threshold is the owner's call (รอยืนยัน the amount with the owner or accountant). A missing receipt can cost the deduction: an individual seller who deducts actual expenses needs the document (`seller-tax-basics`); a payment that needed withholding tax also needs the 50 ทวิ (`tax-vat-th`).
 
-The 2-day, 1-baht and 5-day windows are starting values from Anthropic's month-end-prep skill, not measured on Thai payouts; widen the date window for a platform whose payouts you have seen land later.
+The 2-day, 1-baht and 5-day windows are starting values from Anthropic's month-end-prep skill (`anthropics/knowledge-work-plugins` small-business, Apache-2.0, read 2026-11-10; ideas only, no text copied), not measured on Thai payouts; widen the date window for a platform whose payouts you have seen land later.
 
 ## 6. When to hire an accountant
 

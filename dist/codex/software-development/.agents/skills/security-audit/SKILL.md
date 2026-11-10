@@ -23,6 +23,7 @@ description: Use when auditing a whole codebase for vulnerabilities before hando
 | สถานการณ์ | ใช้ | เกี่ยวกับ skill นี้อย่างไร |
 |---|---|---|
 | ก่อน merge · ship · เพิ่ม dependency | [`security-gate`](../security-gate/SKILL.md) | ผลสแกน gitleaks · semgrep · trivy ของ gate เข้ามาเป็น candidate ในขั้น 3 |
+| มี Terraform · compose · Kubernetes · Helm หรือสั่งตรวจ infra | [`infra-checklist`](references/infra-checklist.md) | รายการล่าของสาย infrastructure (พอร์ต · IAM · bucket · เข้ารหัส · image) ใช้เป็นหน่วยงานในขั้น 2 |
 | สัญญาระบุ OWASP Top 10 | [`security-gate` ส่วน OWASP](../security-gate/references/owasp-top10.md) | finding ทุกข้อมีช่อง `owasp` รายงานจึงสรุปแถว A01–A10 ให้ได้ทันที |
 | ออกแบบ feature ใหม่ ยังไม่มีโค้ด | [`threat-model`](../threat-model/SKILL.md) | ถ้ามี threat model อยู่แล้ว ขั้นสำรวจใช้ DFD และ non-capabilities เป็นจุดตั้งต้น |
 | คำสั่งสั้น `/security-scan` | [`security-scan`](../security-scan/SKILL.md) | เป็นทางลัดที่ชี้มาที่นี่ (ทั้ง codebase) หรือไป `security-gate` (diff ก่อน ship) |

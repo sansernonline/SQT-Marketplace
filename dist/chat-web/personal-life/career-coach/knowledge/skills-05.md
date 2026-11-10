@@ -138,7 +138,7 @@ Use when daily-life work spans several steps (weekly reset, documents, home, hea
 - **เขียนตาม `human-writing`** — ผลต่อผู้ใช้ก่อน · ภาษาคน · ตัวเลขเป็นเลข · ไม่สรุปซ้ำ · ไม่ทวนคำถาม
 - **ทุกข้ออ้างมีป้าย** `ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ` · เรื่องเงิน กฎหมาย สุขภาพ หรืองานส่งมอบใช้บันทึกเต็มตาม [`evidence`](references/evidence.md) · ไม่แต่งลิงก์ ไม่แต่งตัวเลข · ห้ามโยนงานตรวจที่ทำเองได้ให้ผู้ใช้ · `reviewer` ผ่าน = ผ่านเกณฑ์ที่ตรวจได้ · งานภาษา รสนิยม หน้าตา คำตัดสินสุดท้ายเป็นของผู้ใช้
 - **ไม่ซ่อนปัญหา** — สิ่งที่ยังไม่ได้ตรวจ และสิ่งที่ผู้ใช้ต้องทำต่อ 1 ข้อ อยู่ใน **ต่อไป** เสมอ (ข้อนั้นคือแถวบนสุดของตาราง "รอผู้ใช้" ใน `CONTEXT.md` ถ้ามี)
-- **คำถามตรวจต่อ (ครั้งเดียวต่อบทสนทนา)** — ถ้าผู้ใช้จะเอาคำตอบไปลงมือ (เงิน · แผนสุขภาพ · ข้อเสนองาน) ให้ต่อท้าย 2–3 คำถามสั้นที่ชี้ตัวเลขหรือข้อสมมติในคำตอบนั้น (ตัวไหนต้องยืนยัน · ขั้นไหนควรทบทวน · ข้อมูลอะไรยังขาด) ซึ่งเป็นคำถามใหม่ ไม่ใช่สรุปซ้ำ · ข้ามเมื่อผู้ใช้ขอตรวจหรือขอแหล่งอยู่แล้ว ขอฉบับสั้น ให้สรุปหรือจัดรูปเอกสาร หรือถามความหมายคำ · เรื่องสุขภาพถามว่าแพทย์ต้องรู้อะไรเพิ่ม ห้ามชี้โรค (แนวคิดจาก anthropics/skills `discernment-nudge` เขียนใหม่)
+- **คำถามตรวจต่อ (ครั้งเดียวต่อบทสนทนา)** — ถ้าผู้ใช้จะเอาคำตอบไปลงมือ (เงิน · แผนสุขภาพ · ข้อเสนองาน) ให้ต่อท้าย 2–3 คำถามสั้นถามเฉพาะสิ่งที่ผู้ใช้รู้คนเดียว (ตัวเลขของเขา · ข้อสมมติเรื่องชีวิตเขา) ที่ทำให้คำตอบเปลี่ยนถ้าผิด · อะไรตรวจเองได้ ตรวจเองตามข้อก่อนหน้า ไม่ถาม · คำถามเป็นบรรทัดแยกท้ายคำตอบ ไม่ปนใน **ต่อไป** (ซึ่งยังมีแค่ 1 ข้อที่ผู้ใช้ต้องทำ) · ข้ามเมื่อผู้ใช้ขอตรวจหรือขอแหล่งอยู่แล้ว ขอฉบับสั้น ให้สรุปหรือจัดรูปเอกสาร หรือถามความหมายคำ · เรื่องสุขภาพถามว่าแพทย์ต้องรู้อะไรเพิ่ม ห้ามชี้โรค (แนวคิดจาก anthropics/skills `discernment-nudge` เขียนใหม่)
 - **เทียบคาดกับจริง 1 บรรทัดใต้ ผล** (งานกลางขึ้นไป): `คาด ลูกทีม 3 · รอบ 2 → จริง ลูกทีม 5 · รอบ 3 · token <จาก SUMMARY>` · ต่างเกิน 2 เท่า หรือต่างแบบเดิมเป็นครั้งที่ 2 → จด `LEAD-PLAYBOOK.md`
 - **ข้อเสนอปรับปรุง ≤ 3** และ **ควรปรับทีม ≤ 3** (โมดูล learning) · ไม่มีเรื่องจริงไม่ต้องใส่ · ไม่ลงมือเองจนกว่าผู้ใช้สั่ง
 - **หัวข้อ** ตัวหนาเท่าที่มีเนื้อหา ปกติ 3: **ผล** (เสร็จไหม ได้อะไร หลักฐาน · `ข้ามรีวิว:` ถ้าข้าม) · **ที่ทำ** (หลายชิ้นสถานะต่างกันใช้ตารางสถานะ: งาน · สถานะ · ใคร · หลักฐาน · สถานะใช้ 5 คำ `เสร็จ` `ทำอยู่` `ติด` `รออนุมัติ` `ค้างอยู่`) · **ต่อไป** · เพิ่มเมื่อมีของจริง: **ตัดสินใจเอง** · **รออนุมัติ** · **ค้างอยู่**
@@ -1728,7 +1728,7 @@ Court and police papers always go to a lawyer or the legal-aid line the same wee
 
 ## 4 · Deadline block for `important-docs`
 
-Every date that matters becomes one row the user can paste into the `important-docs` registry and run through `due-dates.mjs`:
+Every date that matters becomes one row in the `important-docs` registry (CSV, same columns as there):
 
 ```csv
 section,item,holder,ref_no,issuer,start_date,end_date,extended_until,renew_lead_days,location,file,contact,amount,notes
@@ -1736,7 +1736,13 @@ contract,"ยื่นคำให้การ คดีเงินประก
 ```
 
 - **Never compute a legal deadline for the user.** A date that has to be counted from an event (served a summons, received a letter) is written `[ตรวจ]` with the event and its date, and the lawyer or agency fills it in. A wrong count here can lose the case.
-- Warnings at 14, 7, 3 and 1 days before; who is responsible in `holder`.
+- **Run the reminder script only after the real date is in.** `due-dates.mjs` reads JSON, not the CSV, and stops on a date like `[ตรวจ]`. Once the lawyer or agency gives the date, write it the way `important-docs` step 5 does and run `node skills/important-docs/scripts/due-dates.mjs <file.json>`:
+
+  ```json
+  { "today": "2026-11-10", "items": [ { "name": "ยื่นคำให้การ คดีเงินประกันห้อง", "end_date": "2026-11-25", "lead_days": 14 } ] }
+  ```
+  (`end_date` above is an example; use the date the lawyer gives.)
+- Warnings at 14, 7, 3 and 1 days before; who is responsible in `holder`. This differs on purpose from the 60 / 30 / 7-day warnings in `important-docs` step 5: those suit renewals known months ahead, while a legal deadline is usually set only weeks away, so a 60- or 30-day warning would already be past and the last few days matter most.
 
 ## 5 · Contact log
 

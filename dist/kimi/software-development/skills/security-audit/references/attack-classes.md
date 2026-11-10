@@ -10,6 +10,7 @@
 | ข้อมูลหลายลูกค้าหรือหลายร้านในฐานเดียว · export · backup · ลบข้อมูล · cache · search | [`classes-data-tenant`](classes-data-tenant.md) |
 | เรียก LLM · RAG · AI agent ที่เรียกเครื่องมือ · MCP server หรือ client | [`classes-ai-mcp`](classes-ai-mcp.md) |
 | dependency · CI/CD · Dockerfile · สคริปต์ build · plugin ที่โหลดได้ · ระบบอัปเดต | [`classes-supply-chain`](classes-supply-chain.md) |
+| Terraform · docker-compose · Kubernetes · Helm · ไฟล์ตั้งค่า cloud (IAM · พอร์ต · bucket · การเข้ารหัส · image) | [`infra-checklist`](infra-checklist.md) |
 | webhook (รับหรือส่ง) · คิว · job เบื้องหลัง · gRPC · GraphQL · WebSocket | [`classes-messaging-webhook`](classes-messaging-webhook.md) |
 | LINE OA · LIFF · PromptPay · สลิป · payment gateway ไทย · e-Tax Invoice · เลขบัตรประชาชน | [`classes-thai`](classes-thai.md) |
 

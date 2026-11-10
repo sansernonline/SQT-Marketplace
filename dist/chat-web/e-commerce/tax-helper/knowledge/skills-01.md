@@ -200,7 +200,7 @@ Most payroll errors are in the timesheet and the employee list, not in the tax m
 
 - Never guess a missing time or fix a row quietly. Ask the owner one person and one issue at a time, and write the answer next to the row.
 - Social security uses the wage floor and cap in `social-security-th`; a wage above the cap still pays the capped amount.
-- The 10% line is a starting value from Anthropic's payroll-prep skill, not measured on Thai payrolls.
+- The 10% line is a starting value from Anthropic's payroll-prep skill (`anthropics/knowledge-work-plugins` small-business, Apache-2.0, read 2026-11-10; ideas only, no text copied), not measured on Thai payrolls.
 - The check summary lists names and issues only, never ID card numbers or bank account numbers (`pdpa-workflow`).
 
 ## 2. PIT withholding on salary (ม.40(1)) — annualisation

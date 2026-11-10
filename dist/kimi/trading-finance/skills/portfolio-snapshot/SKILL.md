@@ -55,7 +55,7 @@ node money-calc.mjs snapshot <file.json> [--json]     # also: attribution · dri
 
 One return figure hides which holding did the work. `node money-calc.mjs attribution <file.json>` splits each holding into price change (end − start − new money), dividends received, and its part of the portfolio return, using the same mid-period shortcut as the return above. New money is never counted as gain. When one holding accounts for more than half of all the movement (gains and losses added as sizes), the script names it: the month's result is that holding's result. The 50% line is a starting value, not measured.
 
-Example `scripts/examples/attribution.json` (illustrative): ABC +8,000 price and 1,440 dividend = +9,440, DEF −5,000, the index fund +10,000 of new money and 0 gain; total +4,640 = +1.6% on 291,800. ABC is 64.5% of the movement, so it is named. Idea: `variance-analysis`, anthropics/knowledge-work-plugins (Apache-2.0, viewed 2026-11-10), cut to price, new money and dividends; script written from scratch.
+Example `scripts/examples/attribution.json` (illustrative): ABC +8,000 price and 1,440 dividend = +9,440, DEF −5,000, the index fund +10,000 of new money and 0 gain, the money market fund +200, cash 0; total +4,640 = +1.6% on 291,800. ABC is 64.5% of the movement, so it is named. A dividend paid into the cash account goes in `dividends` only: if the cash row's end value already includes it, take it out of that row, or it is counted twice. Idea: `variance-analysis`, anthropics/knowledge-work-plugins (Apache-2.0, viewed 2026-11-10), cut to price, new money and dividends; script written from scratch.
 
 ## Risk checks
 

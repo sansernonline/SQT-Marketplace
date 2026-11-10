@@ -47,7 +47,7 @@ Keep only your own employment papers. Copying company data you have no right to 
 | Bonus and benefits in the contract | Pro-rata rules in the contract or work rules | the contract |
 | Provident fund (กองทุนสำรองเลี้ยงชีพ) | Vesting of the employer's share, keep or move | the fund's rules · `retirement-plan` (trading-finance, if installed) |
 | Unemployment benefit | Laid off and resigned are paid differently; register in time (section 5) | `social-security-th` · sso.go.th |
-| Tax on the final pay | Severance under the labour law has its own tax treatment | section 5 · `tax-basics-th` (trading-finance, if installed) |
+| Tax on the final pay | Severance under the labour law has its own tax treatment | section 5 · `labour-law-basics` `references/leave-and-severance.md` item 9 (e-commerce, if installed) or an accountant |
 | Work certificate (หนังสือรับรองการทำงาน) | Ask for it; the employer must issue one on request | `labour-law-basics` termination checklist |
 
 Write the expected amount next to each row. A row you cannot work out stays `[ตรวจ]` and goes to the labour office or a lawyer; do not guess it.
@@ -63,7 +63,7 @@ Write the expected amount next to each row. A row you cannot work out stays `[�
 - **Register as unemployed within 30 days** of the last working day, on the Department of Employment's site (the SSO page names e-service.doe.go.th). Registering later still works, but the benefit counts only from the day you register. The benefit needs at least 6 months of contributions within the 15 months before leaving. sso.go.th, unemployment benefit page, viewed 2026-11-10.
 - **How much is paid** differs for laid off and for resigned or contract ended. The figures and the wage cap are kept in `social-security-th`. The SSO page viewed 2026-11-10 still shows 50% for up to 180 days (laid off), 30% for up to 90 days (resigned) and a 15,000 บาท cap, while `social-security-th` records a newer rate and cap from 2568–2569. Ask 1506 which one applies to you (รอยืนยัน).
 - **Keep social security under section 39:** possible if you paid under section 33 for at least 12 months; apply within 6 months of leaving (form สปส. 1-20). sso.go.th, section 39 page, viewed 2026-11-10.
-- **Tax on severance:** severance under the labour law for leaving not by choice is exempt up to the last 400 days' wages and no more than 600,000 บาท; with 5 years of service or more you may choose to tax it separately from other income on the ภ.ง.ด.91 attachment. Revenue Department, PND 91 instructions for tax year 2568, viewed 2026-11-10. Details with your own figures → `tax-basics-th` (trading-finance, if installed) or an accountant.
+- **Tax on severance:** severance under the labour law for leaving not by choice is exempt up to the last 400 days' wages and no more than 600,000 บาท; with 5 years of service or more you may choose to tax it separately from other income on the ภ.ง.ด.91 attachment. Revenue Department, PND 91 instructions for tax year 2568, viewed 2026-11-10. Details → `labour-law-basics` `references/leave-and-severance.md` item 9 (e-commerce, if installed); working it out with your own figures and the withholding → an accountant.
 
 Sources: https://www.sso.go.th/wpr/ (hotline 1506; unemployment and section 39 detail pages under "สิทธิประโยชน์") · https://www.rd.go.th/fileadmin/tax_pdf/pit/2568/Ins91_241268.pdf · https://rd.go.th/65809.html · viewed 2026-11-10.
 
