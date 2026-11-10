@@ -5,6 +5,8 @@
   - บรรทัด [สไลด์ 3] = เปลี่ยนเป็นสไลด์ 3 ก่อนซับถัดไป
   - บรรทัดว่างและบรรทัดที่ขึ้นต้นด้วย # ข้าม
 คำอ่าน (--lexicon ไม่บังคับ): .tsv บรรทัดละ คำ<TAB>คำอ่าน เช่น Git<TAB>กิต · เครื่องอ่านตามคำอ่าน ซับยังแสดงคำเดิม
+สะกดใหม่ (--respell ไม่บังคับ): .tsv บรรทัดละ คำอ่าน<TAB>คำที่เสียงอ่านถูก เช่น คอนโทรลเลอร์<TAB>คอนโทรเล่อ · ใช้หลังคำอ่าน
+  หาคำที่ต้องสะกดใหม่ด้วย term_sample.py ก่อนสร้างทั้งตอน
 
 ใช้:
   python tts_cues.py ep01.txt -o out --engine windows                     # ร่าง: เสียงที่มากับ Windows
@@ -70,6 +72,54 @@ def spoken_of(text, lexicon):
         else:
             s = s.replace(word, reading)
     return s
+
+
+DIGITS = "ศูนย์ หนึ่ง สอง สาม สี่ ห้า หก เจ็ด แปด เก้า".split()
+PLACES = ["", "สิบ", "ร้อย", "พัน", "หมื่น", "แสน"]
+NUMBER = re.compile(r"(?<![A-Za-z0-9.,])\d{1,3}(?:,\d{3})+(?:\.\d+)?(?![A-Za-z0-9])|(?<![A-Za-z0-9.,])\d+(?:\.\d+)?(?![A-Za-z0-9])")
+
+
+def _below_million(n):
+    out = ""
+    for i, ch in enumerate(str(n)[::-1]):
+        d = int(ch)
+        if d == 0:
+            continue
+        if i == 0:
+            out = ("เอ็ด" if d == 1 and n > 10 else DIGITS[d]) + out
+        elif i == 1:
+            out = ("" if d == 1 else "ยี่" if d == 2 else DIGITS[d]) + "สิบ" + out
+        else:
+            out = DIGITS[d] + PLACES[i] + out
+    return out
+
+
+def thai_int(n):
+    """จำนวนเต็มเป็นคำไทยทั้งก้อน เช่น 2569 → สองพันห้าร้อยหกสิบเก้า (ล้านขึ้นไปแบ่งซ้ำ)"""
+    if n == 0:
+        return DIGITS[0]
+    hi, lo = divmod(n, 1_000_000)
+    return (thai_int(hi) + "ล้าน" if hi else "") + (_below_million(lo) if lo else "")
+
+
+def numbers_to_thai(s):
+    """เลขอารบิกเป็นคำไทยก่อนส่งเครื่องอ่าน · 0 นำหน้า (เบอร์ รหัส) อ่านทีละตัว · ติดตัวอักษรละติน (ESP32) ไม่แตะ"""
+    def one(m):
+        raw = m.group(0).replace(",", "")
+        whole, _, frac = raw.partition(".")
+        head = "".join(DIGITS[int(c)] for c in whole) if len(whole) > 1 and whole[0] == "0" else thai_int(int(whole))
+        return head + ("จุด" + "".join(DIGITS[int(c)] for c in frac) if frac else "")
+    return NUMBER.sub(one, s)
+
+
+def smooth(s):
+    """ตัดช่องว่างระหว่างอักษรไทยกับอักษรไทย ให้เครื่องอ่านต่อเป็นประโยคเดียว · ช่องว่างทำให้เครื่องหยุดหายใจ"""
+    return re.sub(r"(?<=[฀-๿])\s+(?=[฀-๿])", "", s)
+
+
+def read_aloud(text, lexicon, respell):
+    """ข้อความที่ส่งเครื่องอ่าน: คำอ่าน → เลขเป็นคำ → ตัดช่องว่างกลางประโยค → สะกดใหม่ (สะกดใหม่เว้นวรรคเองได้จึงอยู่ท้าย)"""
+    return spoken_of(smooth(numbers_to_thai(spoken_of(text, lexicon))), respell)
 
 
 EXT = {"windows": ".wav", "edge": ".mp3", "f5": ".wav"}
@@ -150,6 +200,10 @@ def self_test():
                     == [("สวัสดีครับ\nวันนี้มาลอง Git", 2), ("ใช้ GitHub กับ git", 3)]),
                    ("ข้ามแถวหัวตารางคำอ่าน · คำยาวก่อน", [w for w, _ in lexicon] == ["GitHub", "Git"]),
                    ("แทนคำอ่านทั้งคำ ไม่สนตัวพิมพ์", spoken_of(cues[1]["text"], lexicon) == "ใช้ กิตฮับ กับ กิต"),
+                   ("สะกดใหม่หลังแทนคำอ่าน", spoken_of(spoken_of("ใช้ GitHub", lexicon), [("กิตฮับ", "กิ๊ตฮับ")]) == "ใช้ กิ๊ตฮับ"),
+                   ("ปีและเลขเป็นคำทั้งก้อน", numbers_to_thai("ปี 2569 มี 1,250,000 บาท 21 ตัว 3.5 โวลต์ เบอร์ 081 ESP32")
+                    == "ปี สองพันห้าร้อยหกสิบเก้า มี หนึ่งล้านสองแสนห้าหมื่น บาท ยี่สิบเอ็ด ตัว สามจุดห้า โวลต์ เบอร์ ศูนย์แปดหนึ่ง ESP32"),
+                   ("ตัดช่องว่างกลางประโยคไทย คงช่องว่างข้างอักษรละติน", smooth("ปี สองพัน\nห้าร้อย ใช้ Git ได้") == "ปีสองพันห้าร้อยใช้ Git ได้"),
                    ("เวลา .srt", ts(3661.5) == "01:01:01,500" and ts(0.0004) == "00:00:00,000"),
                    ("เวลา data-at ปัดไม่ล้นนาที", mss(59.97) == "1:00.0" and mss(75.25) == "1:15.2")]
         if not shutil.which("ffmpeg"):
@@ -184,6 +238,7 @@ def main():
     ap.add_argument("--voice", default="", help="windows: ส่วนหนึ่งของชื่อเสียง (Pattara) · edge: th-TH-NiwatNeural หรือ th-TH-PremwadeeNeural")
     ap.add_argument("--rate", default="+0%", help="edge: ความเร็ว เช่น -10%%")
     ap.add_argument("--lexicon")
+    ap.add_argument("--respell", help="คำอ่าน<TAB>คำที่สะกดให้เสียงอ่านถูก · ใช้หลัง --lexicon")
     # ค่าตั้งต้น 4 ตัวนี้ยังไม่ได้วัด · ปรับตามจังหวะของงานได้
     ap.add_argument("--gap", type=float, default=0.25, help="ช่วงเงียบระหว่างซับ (วินาที) ค่าตั้งต้น ยังไม่ได้วัด")
     ap.add_argument("--slide-gap", type=float, default=0.6, help="ช่วงเงียบก่อนซับที่เปลี่ยนสไลด์ ค่าตั้งต้น ยังไม่ได้วัด")
@@ -202,10 +257,10 @@ def main():
     cache = out / "cues"
     cache.mkdir(parents=True, exist_ok=True)
     cues = parse_script(a.script)
-    lexicon = load_lexicon(a.lexicon)
+    lexicon, respell = load_lexicon(a.lexicon), load_lexicon(a.respell)
     setting = {"windows": a.voice, "edge": f"{a.voice}|{a.rate}", "f5": f"{a.ref}|{a.ref_text}|{a.nfe}|{a.speed}|{a.f5_ckpt}"}[a.engine]
     for c in cues:
-        c["spoken"] = spoken_of(c["text"], lexicon)
+        c["spoken"] = read_aloud(c["text"], lexicon, respell)
         c["id"] = hashlib.sha1(f"{a.engine}|{setting}|{c['spoken']}".encode()).hexdigest()[:12]
 
     # ใช้ซ้ำทั้งไฟล์ที่แปลงแล้วและไฟล์ดิบที่สร้างเสร็จก่อนงานล้ม (F5 บน CPU สร้างช้า ไม่ควรเริ่มใหม่ทั้งตอน)
