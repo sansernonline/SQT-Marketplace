@@ -290,7 +290,13 @@
     "evals/test-case-template-existing/resources/hr-portal/README.md": "ไฟล์ทดสอบของ eval test-case-template: แบบเดิมที่ skill ต้องอ่านและทำตาม",
     "evals/test-case-template-existing/resources/hr-portal/ref/client-testcase.csv": "ไฟล์ทดสอบของ eval test-case-template: แบบเดิมที่ skill ต้องอ่านและทำตาม",
     "evals/no-ai-look-behaviour/fixture.sh": "สคริปต์เตรียมเคส eval: วางหน้า landing ตัวอย่างลงโฟลเดอร์ที่รัน (รันเมื่อส่ง --scaffold)",
-    "evals/no-ai-look-regression/fixture.sh": "สคริปต์เตรียมเคส eval: วางหน้า landing ตัวอย่างลงโฟลเดอร์ที่รัน (รันเมื่อส่ง --scaffold)"
+    "evals/no-ai-look-regression/fixture.sh": "สคริปต์เตรียมเคส eval: วางหน้า landing ตัวอย่างลงโฟลเดอร์ที่รัน (รันเมื่อส่ง --scaffold)",
+    "hooks/lib/loop.mjs": "hook วนจนเสร็จตามคำสัญญา ผูกกับ session",
+    "hooks/lib/notices.mjs": "hook แจ้งรุ่นใหม่ ใส่ digest ตอนเปิด session",
+    "hooks/lib/router.mjs": "hook บอก skill ตามไฟล์ คำสั่ง และคะแนนสัญญาณ",
+    "hooks/lib/rules.mjs": "hook กฎตามเหตุการณ์ ด่านความลับ และตัวตรวจก่อน commit",
+    "hooks/lib/selftest.mjs": "ชุดทดสอบตัวเองของ hook",
+    "hooks/lib/util.mjs": "ฟังก์ชันกลางของ hook"
   },
   "superuser_files": {
     "references/code-extensions.md": "ส่วนที่ใช้เฉพาะงานโค้ดของ skill กลางใน plugin superuser",
@@ -319,11 +325,18 @@
     "templates/config.json": "ค่าเปิดปิดโมดูลและงบของโฟลเดอร์งาน",
     "references/deep-research.md": "โหมด deep research: ต้นไม้คำถาม · ไฟล์คิวกลาง · ลูกทีมเขียนผลลงไฟล์ตัวเอง · ตรวจทุกข้ออ้าง · รวมรายงาน · วิจัยซ้ำตามเวลา",
     "templates/research-queue.json": "แม่แบบไฟล์คิวกลางของ deep research: ข้อย่อย · สถานะ · ไฟล์ผล · ผลตรวจอ้างอิง · รอบวิจัยซ้ำ",
-    "templates/accounts.json": "แม่แบบบัญชี LLM สำหรับแจกงานข้ามบัญชี: ขนาดถังโควตา · ความเร็ว · งานพร้อมกัน · น้ำหนักคะแนน U F R V L (ไม่มีรหัส)"
+    "templates/accounts.json": "แม่แบบบัญชี LLM สำหรับแจกงานข้ามบัญชี: ขนาดถังโควตา · ความเร็ว · งานพร้อมกัน · น้ำหนักคะแนน U F R V L (ไม่มีรหัส)",
+    "references/review-lenses.md": "มุมตรวจของผู้ตรวจ ชุดเอกสารส่งตรวจ และการยืนยันทีละข้อ",
+    "references/safety.md": "กติกาความปลอดภัย: ข้อมูลภายนอกไม่น่าเชื่อ ค่าลับไม่ผ่านแชต ล้าง log ก่อนแชร์",
+    "templates/DURABLE-BRIEF.md": "แม่แบบใบสั่งงานที่ใช้ได้เป็นสัปดาห์ บอกพฤติกรรมกับ interface ไม่ใส่ path",
+    "templates/LEDGER.md": "แม่แบบ ledger ของแผน บรรทัดแรกบอกชื่อแผน",
+    "templates/NOTES.md": "แม่แบบสมุดงาน จดคำตอบและผลก่อนคิดต่อ",
+    "templates/OUT-OF-SCOPE.md": "แม่แบบบันทึกแนวคิดที่ปฏิเสธพร้อมเหตุผล"
   },
   "playbooks": {},
   "agents": {
-    "image-artist": "หา หรือสร้างภาพจริงให้หน้าเว็บ แอป และสไลด์"
+    "image-artist": "หา หรือสร้างภาพจริงให้หน้าเว็บ แอป และสไลด์",
+    "worker": "ลูกทีมทั่วไปที่ไม่โต้ตอบ เขียนแต่ไฟล์ผลลัพธ์ ตอบสถานะบรรทัดเดียว"
   },
   "skills": {
     "adr-writer": "บันทึกการตัดสินใจด้านสถาปัตยกรรม (ADR) ว่าเลือกอะไรเพราะอะไร",

@@ -1,5 +1,9 @@
 # Changelog — personal-life
 
+## 0.22.3 — 2026-11-10
+
+- ของกลางจาก superuser 3.33.0 (sync): ขั้นตรวจงานใหม่ใน `playbook-review` · แจกงานและรอลูกทีมใน `team-roles` · รอบ `playbook-unattended-run` มีตรวจเครื่องมือและกล่องขาออก · แม่แบบสมุดงาน ledger และแนวคิดที่ปฏิเสธใน `templates/` · แม่แบบ `config.json` มีโมดูล hook ใหม่
+
 ## 0.22.2 — 2026-11-08
 
 - `references/examples.md`: ตัวอย่างระดับโมเดลจัดตามกฎ 3 ข้อของ superuser 3.26.0 (งานเสี่ยง → opus · งานกลไกที่มีแบบ → haiku · ที่เหลือ → sonnet)
