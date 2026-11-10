@@ -1,0 +1,12 @@
+{
+  "_note": "ตัวอย่าง ตัวเลขสมมุติ · load = Use no more than X% · rules ตั้งก่อน subscribe · fees = ค่าสมาชิกและ VPS ในช่วงนั้น แปลงเป็นสกุลเงินบัญชี",
+  "load": 50,
+  "rules": { "maxDrawdownPct": 10, "providerMaxDrawdownPct": 21, "maxGapPts": 3, "gapPeriods": 4, "reviewPeriods": 12 },
+  "periods": [
+    { "period": "W1", "providerPct": 4, "start": 1000, "end": 1018 },
+    { "period": "W2", "providerPct": -2, "start": 1018, "end": 1003 },
+    { "period": "W3", "providerPct": 2, "start": 1003, "end": 1010, "fees": 30 },
+    { "period": "W4", "providerPct": -6, "start": 1010, "end": 960, "providerDrawdownPct": 15 },
+    { "period": "W5", "providerPct": -1, "start": 960, "end": 948 }
+  ]
+}

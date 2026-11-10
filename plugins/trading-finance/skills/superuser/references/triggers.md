@@ -10,9 +10,10 @@
 | อ่านงบ · P/E ROE D/E · คัดหุ้นจากตัวเลขพื้นฐาน | `stock-fundamentals` + agent `market-analyst` |
 | จดเทรด · ทบทวนผล | `trade-journal` (จดเทรด · โหมดทบทวน) + agent `trade-journal-coach` |
 | ตั้งเตือนราคาหรือข่าว | agent `alert-dispatcher` |
-| เลือกสัญญาณ copy trade บน MQL5 (MT4/MT5) · จะตามสัญญาณด้วยเงินจริง | `copy-trade-check` + agent `risk-manager` |
+| เลือกสัญญาณ copy trade บน MQL5 (MT4/MT5) · ตั้งค่าการคัดลอก · เฝ้าดูรายสัปดาห์ · จะเลิกตามไหม | `copy-trade-check` + agent `risk-manager` |
 | เริ่มติดตามหุ้นใหม่ · จัด watchlist ที่รก | `watchlist-setup` |
 | ทดลองเทรดไม่ใช้เงินจริง | `paper-trading` |
+| อยากเรียนเทรดเป็นขั้น · เริ่มเทคนิคไหนก่อน · พร้อมไปด่านถัดไปหรือใช้เงินจริงหรือยัง | `trading-technique-course` + agent `trade-journal-coach` |
 | พอร์ต · ปันผล | `portfolio-snapshot` · `dividend-tracker` |
 | งบ หนี้ เงินสำรอง เกษียณ ประกัน กองทุน | `personal-budget` · `debt-payoff` · `emergency-fund` · `retirement-plan` · `insurance-review` · `mutual-fund-picker` + agent `money-planner` |
 | ภาษีและลดหย่อน | `tax-basics-th` · `tax-deduction-planner` + agent `money-planner` |

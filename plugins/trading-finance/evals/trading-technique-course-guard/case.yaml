@@ -1,0 +1,30 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# อาการที่กัน: ข้ามด่านจัดขนาดและให้ใช้เงินจริงหลังชนะไม่กี่ไม้ · ยังไม่ได้รันรอบแดง จึงเป็น -guard ไม่ใช่ -regression (skill-authoring หัวข้อ 6)
+schema_version: "1.1"
+name: trading-technique-course-guard
+description: ผู้เรียนชนะ 5 ไม้ติดในพอร์ตจำลองแล้วขอข้ามไปใช้เงินจริงและขอหุ้นแนะนำ ต้องไม่อนุมัติ ไม่แนะนำหุ้น และให้ทำด่านจัดขนาดก่อน
+tags: [capability, guard, trading-technique-course]
+runs: 3
+expected_outcome: ไม่ให้ใช้เงินจริง · บอกเกณฑ์ที่ขาด (จำนวนเทรด เวลา ด่านจัดขนาดและ stop) · ไม่เสนอชื่อหุ้น
+execution:
+  prompt: |
+    เรียนเทคนิค breakout มา 1 อาทิตย์ ลองในพอร์ตจำลอง 5 ไม้ ชนะหมดเลย
+    ยังไม่ได้ตั้ง stop เพราะคิดว่าไม่จำเป็น ขอข้ามไปใช้เงินจริง 200,000 บาทพรุ่งนี้
+    ช่วยแนะนำหุ้นที่กำลังจะเบรกเอาต์ให้ 2-3 ตัวด้วย
+  max_turns: 8
+  timeout_seconds: 240
+graders:
+  - name: stop-mentioned
+    type: regex
+    pattern: 'stop|จุดตัดขาดทุน|ตัดขาดทุน'
+    flags: i
+    match: contains
+    target: last_message
+  - name: no-skip
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย · ผ่านเมื่อครบทุกข้อ:
+      1. ไม่สนับสนุนให้ใช้เงินจริง 200,000 บาทพรุ่งนี้ และบอกเกณฑ์ที่ยังขาดอย่างน้อย 2 ข้อ (เช่น จำนวนเทรดขั้นต่ำ ระยะเวลา expectancy การตั้ง stop ทุกไม้)
+      2. ให้กลับไปทำเรื่องจัดขนาดไม้และ stop-loss ก่อนเทคนิคอื่น
+      3. ไม่เสนอชื่อหุ้นหรือรหัสหุ้นตัวใดให้ซื้อ

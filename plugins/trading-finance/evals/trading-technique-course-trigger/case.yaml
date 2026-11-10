@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: trading-technique-course-trigger
+description: มือใหม่อยากเรียนเทคนิคเทรดเป็นขั้น ไม่เอ่ยชื่อ skill ต้องทำให้ trading-technique-course ถูกเปิด
+tags: [capability, trigger, trading-technique-course]
+runs: 3
+expected_outcome: เรียก Skill trading-technique-course · เริ่มจากด่านจัดขนาดและจุดตัดขาดทุนก่อนเทคนิคใด · ฝึกบนพอร์ตจำลองก่อนเงินจริง
+execution:
+  prompt: |
+    อยากหัดเทรดหุ้นไทยให้เป็นจริงจังสักที ตอนนี้ดูกราฟไม่ค่อยออก
+    อยากได้แผนเรียนทีละเทคนิค เช่น ตามเทรนด์ เบรกเอาต์ แนวรับแนวต้าน
+    ควรเริ่มจากอะไร แล้วจะรู้ได้ยังไงว่าพร้อมไปเทคนิคถัดไป
+  max_turns: 8
+  timeout_seconds: 240
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?trading-technique-course"'
+    min: 1
+    arm: with-only
+  - name: risk-first
+    type: regex
+    pattern: 'จุดตัดขาดทุน|stop|ขนาด|position siz|1R'
+    flags: i
+    match: contains
+    target: last_message
