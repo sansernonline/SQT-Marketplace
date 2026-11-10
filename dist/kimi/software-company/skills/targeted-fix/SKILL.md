@@ -53,6 +53,7 @@ Cause known, line not found yet → search the literal wrong text, number or err
 
 - Don't patch the symptom and leave the cause (a `try/except` that swallows the real error, a typed-over total).
 - Don't refactor or restyle unrelated parts inside a fix.
+- Asked to send the whole document back (quotation, letter, list) → return it in its original shape: same numbering, line breaks and wording, with only the wrong line changed. A numbered list stays a list, not a table; no added headings, columns or VAT. Say `old → new` for the line you changed (eval 2026-11-09: skill opened, still rebuilt the quotation as a table 3/3).
 - Don't widen scope: "fix the date bug" ≠ "replace the date library".
 - Don't say it's fixed without re-running the exact failing case.
 
