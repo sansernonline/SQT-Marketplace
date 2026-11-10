@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Compare the deals of two MetaTrader 5 Strategy Tester runs — the original
 .ex5 and the MQL5 rewrite — on the same symbol, period, dates and tick mode.
-A deal matches when symbol and side (buy/sell) agree and the times are within
-a tolerance. Pure stdlib; reads only the two files it is given.
+A deal matches when symbol, side (buy/sell) and direction (in/out) agree and
+the times are within a tolerance. Pure stdlib; reads only the two files it is given.
 
 Input per file (auto-detected):
   - Strategy Tester HTML report (the Deals table; UTF-16 or UTF-8)
@@ -136,7 +136,7 @@ def match(a, b, tolerance):
     for da in a:
         best = None
         for i, db in enumerate(b):
-            if i in used or db["symbol"] != da["symbol"] or db["type"] != da["type"]:
+            if i in used or any(db[k] != da[k] for k in ("symbol", "type", "direction")):
                 continue
             gap = abs((db["time"] - da["time"]).total_seconds())
             if gap <= tolerance and (best is None or gap < best[1]):
@@ -203,6 +203,14 @@ def self_test():
         s = summarize(a, b, pairs, only_a, only_b)
         assert (s["matched"], s["match_pct"], s["same_volume_pct"]) == (2, 66.7, 100.0), s
         assert len(load_deals(pa, "all")) == 4
+        # --leg all: a sell entry 10 s after the original's sell exit is a different deal, not a match
+        pall = Path(tmp, "all.csv")
+        pall.write_text(head + "2024.01.02 12:00:10,10,EURUSD,sell,in,0.10,1.10200\n", encoding="utf-8")
+        pairs, only_a, only_b = match(load_deals(pa, "all"), load_deals(pall, "all"), 60)
+        assert (len(pairs), len(only_b)) == (0, 1), (len(pairs), len(only_b))
+        pall.write_text(head + "2024.01.02 12:00:10,10,EURUSD,sell,out,0.10,1.10200\n", encoding="utf-8")
+        pairs, _, _ = match(load_deals(pa, "all"), load_deals(pall, "all"), 60)
+        assert len(pairs) == 1 and pairs[0][0]["direction"] == "out", pairs
     print("self-test ok")
 
 
@@ -236,7 +244,7 @@ def main():
         print(json.dumps(s, indent=2, ensure_ascii=False))
     else:
         print(f"deals ({args.leg}): original={s['deals_a']} rewrite={s['deals_b']} matched={s['matched']} "
-              f"-> match {s['match_pct']}% (time within {args.tolerance:g}s, same symbol and side)")
+              f"-> match {s['match_pct']}% (time within {args.tolerance:g}s, same symbol, side and direction)")
         print(f"same volume among matched: {s['same_volume_pct']}% · median time gap: {s['median_gap_s']}s "
               f"· mean price gap: {s['mean_price_gap']}")
         for title, rows in (("only in original", only_a), ("only in rewrite", only_b)):

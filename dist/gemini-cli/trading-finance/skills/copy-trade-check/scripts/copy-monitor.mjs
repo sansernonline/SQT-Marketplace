@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // copy-monitor.mjs - weekly check of a followed copy-trade signal against exit rules set before subscribing (Node stdlib only)
 // Usage: node copy-monitor.mjs <monitor.json> [--json]   |   node copy-monitor.mjs --self-test
-// JSON: { "load": 50, "rules": { "maxDrawdownPct": 10, ... }, "periods": [ { "period", "providerPct", "start", "end", "fees", "providerDrawdownPct" } ] }
+// JSON: { "load": 47, "rules": { "maxDrawdownPct": 10, ... }, "periods": [ { "period", "providerPct", "start", "end", "fees", "providerDrawdownPct" } ] }
 // One period = one week (or month). Deposit or withdraw only between periods; "start" is the equity after it.
 // fees = subscription and VPS paid in that period, converted to the account currency (optional).
 import { readFileSync } from 'node:fs';
@@ -95,12 +95,13 @@ function selfTest() {
   const t = (name, cond) => { if (cond) ok++; else { bad++; console.error(`ล้ม: ${name}`); } };
   const near = (a, b, e = 1e-3) => a !== null && Math.abs(a - b) < e;
 
-  // Hand-worked set (also written out in references/example-and-sources.md), load 50%:
-  // W1 provider +4 · 1000 → 1018 → follower +1.8 · expected +2 · gap −0.2 · net idx 1.018 (peak)
-  // W2 provider −2 · 1018 → 1003 → −1.4735 · expected −1 · gap −0.4735 · idx 1.003
-  // W3 provider +2 · 1003 → 1010 · fees 30 → gross +0.6979 · net (1010 − 30 − 1003) / 1003 = −2.2931 · expected +1 · gap −0.3021 · idx 0.980
-  // W4 provider −6 · 1010 → 960 → −4.9505 · expected −3 · gap −1.9505 · idx 0.980 × 960/1010 = 0.931485 · DD (1.018 − 0.931485)/1.018 = 8.4985%
-  // gaps W1–W4 sum −2.9261 → not past −3
+  // Hand-worked set (also written out in references/example-and-sources.md and scripts/monitor-example.json),
+  // load 47% = X ≤ L ÷ (D × k) = 10 ÷ (14 × 1.5) = 47.6, rounded down:
+  // W1 provider +4 · 1000 → 1018 → follower +1.8 · expected +1.88 · gap −0.08 · net idx 1.018 (peak)
+  // W2 provider −2 · 1018 → 1003 → −1.4735 · expected −0.94 · gap −0.5335 · idx 1.003
+  // W3 provider +2 · 1003 → 1010 · fees 30 → gross +0.6979 · net (1010 − 30 − 1003) / 1003 = −2.2931 · expected +0.94 · gap −0.2421 · idx 0.980
+  // W4 provider −6 · 1010 → 960 → −4.9505 · expected −2.82 · gap −2.1305 · idx 0.980 × 960/1010 = 0.931485 · DD (1.018 − 0.931485)/1.018 = 8.4985%
+  // gaps W1–W4 sum −2.9861 → not past −3
   const base = [
     { period: 'W1', providerPct: 4, start: 1000, end: 1018 },
     { period: 'W2', providerPct: -2, start: 1018, end: 1003 },
@@ -108,36 +109,39 @@ function selfTest() {
     { period: 'W4', providerPct: -6, start: 1010, end: 960, providerDrawdownPct: 15 },
   ];
   const rules = { maxDrawdownPct: 10, providerMaxDrawdownPct: 21, maxGapPts: 3, gapPeriods: 4, reviewPeriods: 12 };
-  let r = monitor({ load: 50, rules, periods: base });
+  let r = monitor({ load: 47, rules, periods: base });
   t('W2 follower', near(r.rows[1].followerPct, -1.4735));
   t('W3 net หลังค่าสมาชิก', near(r.rows[2].netPct, -2.2931) && near(r.rows[2].followerPct, 0.6979));
-  t('W4 gap', near(r.rows[3].gapPts, -1.9505) && near(r.rows[3].expectedPct, -3));
+  t('W4 gap', near(r.rows[3].gapPts, -2.1305) && near(r.rows[3].expectedPct, -2.82));
   t('W4 DD', near(r.maxDrawdownPct, 8.4985) && near(r.currentDrawdownPct, 8.4985));
-  t('ห่างรวม 4 ช่วง', near(r.gapSum, -2.9261));
+  t('ห่างรวม 4 ช่วง', near(r.gapSum, -2.9861));
   t('สะสม', near(r.netReturnPct, -6.8515));
   t('4 ช่วงยังไม่ชนกฎ', !r.stop);
 
-  // W5 provider −1 · 960 → 948 → −1.25 · expected −0.5 · gap −0.75 · idx 0.919842 · DD 9.6422%
-  // gaps W2–W5 = −0.4735 −0.3021 −1.9505 −0.75 = −3.4761 → past −3 → stop on the gap rule only
+  // W5 provider −1 · 960 → 948 → −1.25 · expected −0.47 · gap −0.78 · idx 0.919842 · DD 9.6422%
+  // gaps W2–W5 = −0.5335 −0.2421 −2.1305 −0.78 = −3.6861 → past −3 → stop on the gap rule only
   const w5 = [...base, { period: 'W5', providerPct: -1, start: 960, end: 948 }];
-  r = monitor({ load: 50, rules, periods: w5 });
+  r = monitor({ load: 47, rules, periods: w5 });
   t('W5 DD', near(r.maxDrawdownPct, 9.6422));
-  t('W5 ชนกฎห่าง', r.stop && r.stops.length === 1 && r.stops[0].includes('ตามหลัง') && near(r.gapSum, -3.4761));
-  t('เพดาน DD 9 ชน', monitor({ load: 50, rules: { maxDrawdownPct: 9 }, periods: w5 }).stops[0]?.includes('จุดสูงสุด'));
+  t('W5 ชนกฎห่าง', r.stop && r.stops.length === 1 && r.stops[0].includes('ตามหลัง') && near(r.gapSum, -3.6861));
+  // the example file must carry the same load, rules and periods as the hand-worked set above
+  const ex = JSON.parse(readFileSync(new URL('./monitor-example.json', import.meta.url), 'utf8'));
+  t('monitor-example.json ตรงชุดคิดมือ', ex.load === 47 && JSON.stringify(ex.rules) === JSON.stringify(rules) && JSON.stringify(ex.periods) === JSON.stringify(w5));
+  t('เพดาน DD 9 ชน', monitor({ load: 47, rules: { maxDrawdownPct: 9 }, periods: w5 }).stops[0]?.includes('จุดสูงสุด'));
   t('DD เท่าเพดานพอดีชน', monitor({ load: 100, rules: { maxDrawdownPct: 10 }, periods: [{ providerPct: 0, start: 100, end: 90 }] }).stop);
-  t('ผู้ให้สัญญาณ DD เกิน', monitor({ load: 50, rules: { maxDrawdownPct: 50, providerMaxDrawdownPct: 15 }, periods: base }).stops[0]?.includes('ผู้ให้สัญญาณ'));
-  t('ครบรอบทบทวนแล้วยังขาดทุน', monitor({ load: 50, rules: { maxDrawdownPct: 50, reviewPeriods: 5 }, periods: w5 }).stops[0]?.includes('ครบ 5'));
-  t('ยังไม่ครบรอบทบทวน', !monitor({ load: 50, rules: { maxDrawdownPct: 50, reviewPeriods: 6 }, periods: w5 }).stop);
+  t('ผู้ให้สัญญาณ DD เกิน', monitor({ load: 47, rules: { maxDrawdownPct: 50, providerMaxDrawdownPct: 15 }, periods: base }).stops[0]?.includes('ผู้ให้สัญญาณ'));
+  t('ครบรอบทบทวนแล้วยังขาดทุน', monitor({ load: 47, rules: { maxDrawdownPct: 50, reviewPeriods: 5 }, periods: w5 }).stops[0]?.includes('ครบ 5'));
+  t('ยังไม่ครบรอบทบทวน', !monitor({ load: 47, rules: { maxDrawdownPct: 50, reviewPeriods: 6 }, periods: w5 }).stop);
   // DD starts from the first period's start (index 1), so a first-week loss counts
-  t('ขาดทุนสัปดาห์แรก', near(monitor({ load: 50, rules: { maxDrawdownPct: 50 }, periods: [{ providerPct: -2, start: 1000, end: 990 }] }).maxDrawdownPct, 1));
+  t('ขาดทุนสัปดาห์แรก', near(monitor({ load: 47, rules: { maxDrawdownPct: 50 }, periods: [{ providerPct: -2, start: 1000, end: 990 }] }).maxDrawdownPct, 1));
 
   const throwsWith = (fn, ...words) => { try { fn(); return false; } catch (e) { return words.every((x) => e.message.includes(x)); } };
-  t('ไม่มีเพดาน DD', throwsWith(() => monitor({ load: 50, rules: {}, periods: base }), 'maxDrawdownPct'));
+  t('ไม่มีเพดาน DD', throwsWith(() => monitor({ load: 47, rules: {}, periods: base }), 'maxDrawdownPct'));
   t('load เกิน 100', throwsWith(() => monitor({ load: 150, rules, periods: base }), 'load'));
-  t('start ศูนย์', throwsWith(() => monitor({ load: 50, rules, periods: [{ providerPct: 1, start: 0, end: 1 }] }), 'start', 'ช่วงที่ 1'));
-  t('end ข้อความ', throwsWith(() => monitor({ load: 50, rules, periods: [{ period: 'W9', providerPct: 1, start: 1, end: 'abc' }] }), 'end', 'W9'));
-  t('gap ไม่ครบคู่', throwsWith(() => monitor({ load: 50, rules: { maxDrawdownPct: 10, maxGapPts: 3 }, periods: base }), 'คู่'));
-  t('periods ว่าง', throwsWith(() => monitor({ load: 50, rules, periods: [] }), 'periods'));
+  t('start ศูนย์', throwsWith(() => monitor({ load: 47, rules, periods: [{ providerPct: 1, start: 0, end: 1 }] }), 'start', 'ช่วงที่ 1'));
+  t('end ข้อความ', throwsWith(() => monitor({ load: 47, rules, periods: [{ period: 'W9', providerPct: 1, start: 1, end: 'abc' }] }), 'end', 'W9'));
+  t('gap ไม่ครบคู่', throwsWith(() => monitor({ load: 47, rules: { maxDrawdownPct: 10, maxGapPts: 3 }, periods: base }), 'คู่'));
+  t('periods ว่าง', throwsWith(() => monitor({ load: 47, rules, periods: [] }), 'periods'));
 
   const self = fileURLToPath(import.meta.url);
   const c = spawnSync(process.execPath, [self, join(tmpdir(), 'copy-monitor-no-such-file.json')], { encoding: 'utf8' });

@@ -153,7 +153,7 @@ A made-up 3-provider example (ask · did · result) and every source with its re
 - [ ] No mql5.com signal page was fetched by the agent
 - [ ] Hard rules applied before any score; Growth was not the ranking
 - [ ] Every threshold without a source says "starting value, not yet measured"
-- [ ] `signal-check.mjs --self-test` passes (2026-10-27: 42/42; a fresh reviewer broke 18 formulas on purpose and the test caught 15) · `copy-monitor.mjs --self-test` passes (2026-11-10: 22/22, and the 5-week example matches the hand calculation in the reference)
+- [ ] `signal-check.mjs --self-test` passes (2026-10-27: 42/42; a fresh reviewer broke 18 formulas on purpose and the test caught 15) · `copy-monitor.mjs --self-test` passes (2026-11-11: 23/23, the 5-week example at X = 47% matches the hand calculation in the reference, and `monitor-example.json` matches the self-test set)
 - [ ] Costs counted (fee + VPS ÷ equity) and the equity stop is not 0
 - [ ] Exit rules written before real money; the weekly ผล line quotes them
 - [ ] Paper tracking comes before real money; the user decides

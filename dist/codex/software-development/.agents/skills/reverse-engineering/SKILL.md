@@ -45,6 +45,8 @@ allowed-tools: Read, Grep, Glob, Bash(python -I *), Bash(node *check-tools.mjs*)
 
 ## 3 · คัดแยก (triage)
 
+ถ้าเป้าหมายเป็นไฟล์ MetaTrader 5 `.ex5` ให้ข้ามไปอ่าน [mql5-ex5](references/mql5-ex5.md) ก่อน triage เพราะเส้นทางนี้ไม่เปิดเนื้อไฟล์เลย
+
 ```bash
 python -I scripts/triage.py <file>                          # ชนิดไฟล์ สถาปัตยกรรม ขั้นต่อไป
 python -I scripts/triage.py <file> --pattern 'oauth|WHT'    # หาคำในไฟล์ (ค่าลับถูกปิด)

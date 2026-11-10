@@ -152,7 +152,7 @@ A made-up 3-provider example (ask · did · result) and every source with its re
 - [ ] No mql5.com signal page was fetched by the agent
 - [ ] Hard rules applied before any score; Growth was not the ranking
 - [ ] Every threshold without a source says "starting value, not yet measured"
-- [ ] `signal-check.mjs --self-test` passes (2026-10-27: 42/42; a fresh reviewer broke 18 formulas on purpose and the test caught 15) · `copy-monitor.mjs --self-test` passes (2026-11-10: 22/22, and the 5-week example matches the hand calculation in the reference)
+- [ ] `signal-check.mjs --self-test` passes (2026-10-27: 42/42; a fresh reviewer broke 18 formulas on purpose and the test caught 15) · `copy-monitor.mjs --self-test` passes (2026-11-11: 23/23, the 5-week example at X = 47% matches the hand calculation in the reference, and `monitor-example.json` matches the self-test set)
 - [ ] Costs counted (fee + VPS ÷ equity) and the equity stop is not 0
 - [ ] Exit rules written before real money; the weekly ผล line quotes them
 - [ ] Paper tracking comes before real money; the user decides
@@ -168,27 +168,27 @@ Moved from `SKILL.md` (copy-trade-check)
 
 **Ask (numbers made up — ตัวอย่าง):** "Pick the signal with the highest Growth from these 3, I'll follow with 50,000 baht." GoldRush Pro: Growth 1,240% · 14 weeks · real · drawdown 78% · max deposit load 92% · 410 trades · profit trades 97%. Steady EU: 85% · 104 weeks · real · 14% · 12% · 620 trades · Sharpe 0.21 · recovery factor 4.1. Swing FX: 210% · 40 weeks · **demo** · 33% · 25% · 95 trades. Plus Calm Yen for the scoring step: 60 weeks · real · 22% · 18% · 240 trades · Sharpe 0.28 · recovery 3.0.
 
-**Did:** legal box first · GoldRush Pro out (14 weeks, load 92%, 97% wins with 78% drawdown points to martingale — history needed to confirm) · Swing FX out (demo) · `decide.mjs score` on the rest (run 2026-10-27): Steady EU 70, Calm Yen 30, stable under ±20% weight shifts · asked for Steady EU's history to run `signal-check.mjs` before going further · sizing: the user can lose 10% → 10 ÷ (14 × 1.5) ≈ 48% of capital, equity stop at 45,000 baht equivalent · 8 weeks of paper tracking first.
+**Did:** legal box first · GoldRush Pro out (14 weeks, load 92%, 97% wins with 78% drawdown points to martingale — history needed to confirm) · Swing FX out (demo) · `decide.mjs score` on the rest (run 2026-10-27): Steady EU 70, Calm Yen 30, stable under ±20% weight shifts · asked for Steady EU's history to run `signal-check.mjs` before going further · sizing: the user can lose 10% → X ≤ 10 ÷ (14 × 1.5) = 47.6, rounded down to 47% deposit load, equity stop at 45,000 baht equivalent · 8 weeks of paper tracking first.
 
 **Result:** "The highest Growth, GoldRush Pro, fails 2 hard rules (14 weeks · deposit load 92%) and looks like martingale; its history would confirm. Steady EU leads on the numbers, but send its trade history first, and ask BOT 1213 before moving any money. You decide."
 
 ## Worked example — weekly check (ตัวอย่าง, numbers made up)
 
-**Set before subscribing:** deposit load X = 50% · L = 10% · provider record drawdown 14% × 1.5 = 21% · gap limit 3 points over 4 weeks · time stop 12 weeks. File: `scripts/monitor-example.json`.
+**Set before subscribing:** deposit load X = 47% (X ≤ L ÷ (D × k) = 10 ÷ (14 × 1.5) = 47.6, rounded down) · L = 10% · provider record drawdown 14% × 1.5 = 21% · gap limit 3 points over 4 weeks · time stop 12 weeks. File: `scripts/monitor-example.json`.
 
 **Hand calculation** (the same numbers are asserted in `copy-monitor.mjs --self-test`):
 
-| Week | Provider % | Should get = × 0.5 | Ours % | Gap | Net index after fees | Down from peak |
+| Week | Provider % | Should get = × 0.47 | Ours % | Gap | Net index after fees | Down from peak |
 |---|---|---|---|---|---|---|
-| W1 | +4 | +2.00 | 1000 → 1018 = +1.80 | −0.20 | 1.018 (peak) | 0 |
-| W2 | −2 | −1.00 | 1018 → 1003 = −1.47 | −0.47 | 1.003 | 1.47% |
-| W3 | +2 | +1.00 | 1003 → 1010 = +0.70 · fee 30 → net −2.29 | −0.30 | 0.980 | 3.73% |
-| W4 | −6 | −3.00 | 1010 → 960 = −4.95 | −1.95 | 0.9315 | (1.018 − 0.9315) ÷ 1.018 = 8.50% |
-| W5 | −1 | −0.50 | 960 → 948 = −1.25 | −0.75 | 0.9198 | 9.64% |
+| W1 | +4 | +1.88 | 1000 → 1018 = +1.80 | −0.08 | 1.018 (peak) | 0 |
+| W2 | −2 | −0.94 | 1018 → 1003 = −1.47 | −0.53 | 1.003 | 1.47% |
+| W3 | +2 | +0.94 | 1003 → 1010 = +0.70 · fee 30 → net −2.29 | −0.24 | 0.980 | 3.73% |
+| W4 | −6 | −2.82 | 1010 → 960 = −4.95 | −2.13 | 0.9315 | (1.018 − 0.9315) ÷ 1.018 = 8.50% |
+| W5 | −1 | −0.47 | 960 → 948 = −1.25 | −0.78 | 0.9198 | 9.64% |
 
-Gap over W2–W5 = −0.47 − 0.30 − 1.95 − 0.75 = −3.48 points, past the −3 limit. Drawdown 9.64% is still under 10%.
+Gap over W1–W4 = −0.08 − 0.53 − 0.24 − 2.13 = −2.99 points, not yet past −3. Gap over W2–W5 = −0.53 − 0.24 − 2.13 − 0.78 = −3.69 points, past the −3 limit (both sums use the unrounded gaps, as the script prints them, so they can differ by 0.01 from adding the rounded column). Drawdown 9.64% is still under 10%.
 
-**Result:** "ผล: เลิกตาม — our account trails what the provider's numbers say we should get by 3.48 points over 4 weeks, past the 3 we set before subscribing, so the written rule says stop. Before following any other signal, compare our broker's spread and slippage with the provider's. Unsubscribing will not close the 2 open positions — decide on them separately."
+**Result:** "ผล: เลิกตาม — our account trails what the provider's numbers say we should get by 3.69 points over 4 weeks, past the 3 we set before subscribing, so the written rule says stop. Before following any other signal, compare our broker's spread and slippage with the provider's. Unsubscribing will not close the 2 open positions — decide on them separately."
 
 ## Sources
 
