@@ -27,6 +27,7 @@
 ## 0.19.2 — 2026-11-10
 
 - อ้างถึง plugin ซอฟต์แวร์ด้วยชื่อใหม่ `software-development` (เดิม `software-company`)
+- ของกลางจาก superuser 3.33.0 (sync): ขั้นตรวจงานใหม่ใน `playbook-review` · แจกงานและรอลูกทีมใน `team-roles` · รอบ `playbook-unattended-run` มีตรวจเครื่องมือและกล่องขาออก · แม่แบบสมุดงาน ledger และแนวคิดที่ปฏิเสธใน `templates/` · แม่แบบ `config.json` มีโมดูล hook ใหม่
 
 ## 0.19.1 — 2026-11-08
 

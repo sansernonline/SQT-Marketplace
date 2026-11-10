@@ -15,6 +15,8 @@ claude plugin eval plugins/superuser --trust-plugin --json _to_delete/eval.json 
 - แต่ละรอบเป็น home ว่าง ไม่มี CLAUDE.md ไม่มี auto memory ไม่มี plugin อื่น เห็นแต่ `plugins/superuser` · hook ของ plugin ยังทำงาน · เครื่องมือเขียนไฟล์และ Bash ต้องเปิดด้วย `--allow-tools` และ Bash บน Windows ต้องรันใน WSL2 (ไม่มี sandbox) — เคสที่นี่ใช้แค่เครื่องมืออ่านจึงรันบน Windows ได้
 - ผลลง `evals/results/<timestamp>/` (`aggregate-result.json` + `report.html`) · โฟลเดอร์นี้ต้องอยู่ใน `.gitignore` (ยังไม่ได้เพิ่ม · รอผู้ดูแล) · ผลที่อยากเก็บสรุปลง `RESULTS.md` ที่นี่ บรรทัดละรอบ
 - exit code: 0 ผ่าน · 1 มีเคสไม่ถึง threshold หรือโหลดไม่ได้ · 2 รันไม่ครบ (เงินหรือ auth)
+- **ก่อนรันทั้งชุด**: นำร่อง 3 รายการดูทุกแถว · หยุดถ้า auth พลาดหรือผลว่าง · ปิดสำเนา plugin ที่ติดตั้งในเครื่อง (`claude plugin disable superuser@sqt-marketplace` แล้วเปิดคืนหลังรัน) ไม่งั้น description ของสำเนานั้นอาจถูกให้คะแนนแทน · `node scripts/evals/plugin-eval.mjs --help` เตือนข้อนี้ให้ · รายละเอียด `skills/skill-authoring/references/eval-loop-rules.md`
+- **เทียบกับฉบับก่อน**: `node scripts/evals/ab/ab-run.mjs --help` (baseline แคช) · **ปรับ judge กับป้ายคน**: `node scripts/evals/judge/calibrate.mjs --help` · **วัดข้าม CLI** (codex · gemini) ยังไม่มีตัวรัน อธิบายวิธีใน `references/eval-audit.md`
 
 ## ต่างจาก `scripts/evals/` ของ repo อย่างไร
 

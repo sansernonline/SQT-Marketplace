@@ -57,6 +57,19 @@ hook ของ `superuser` จดให้เองใน `log/<วันที�
 
 ทดสอบสคริปต์: `node scripts/scorecard.mjs --self-test`
 
+## เครื่องมืออ่าน transcript และ log
+
+นอกจาก log ของ hook ยังอ่าน transcript ของ session (`~/.claude/projects/`) ได้ด้วยสคริปต์ Node 4 ตัวใน `scripts/` · อ่านแบบสตรีม ไม่ส่งบรรทัดดิบเข้า context · ข้อความที่พิมพ์ออกผ่านตัวตัดความลับของ hook · รายละเอียดทุกตัวอยู่ใน `references/log-tools.md`
+
+| ต้องการ | รัน |
+|---|---|
+| หาว่าเคยทำเรื่อง X ไว้ตอนไหน (โปรเจกต์นี้) | `node scripts/session-search.mjs <คำ>...` |
+| หาช่องว่างของ router จาก prompt จริง | `node scripts/router-replay.mjs --installed` |
+| ย่อ log เป็น `.claude/superuser/digest.md` (ติดหรือรออยู่ไม่ถูกตัด) | `node scripts/digest.mjs` |
+| ดู token ต่อ skill ต่อชนิดลูกทีม cache หลุด ข้อความแพงสุด | `node scripts/usage-report.mjs --json` อ่านตัวเลข เขียนข้อสังเกต 3–5 ข้อ แล้ว `--findings <ไฟล์>` ให้ได้ HTML |
+
+ข้ามโปรเจกต์ (`--all`) เมื่อคนสั่งเท่านั้น · ทดสอบ: `node scripts/log-tools.test.mjs`
+
 ## ตัวอย่างจริง
 
 โจทย์ (ตัวเลขสมมติ): "ผู้ตรวจใช้ Opus แพงไปไหม" · ทำ: รันข้อ 1 · ผล: ตารางขั้น `review` มี `opus` กับ `sonnet` ข้อสังเกตข้อแรกบอก "opus ค่าใช้จ่ายต่องานสูงกว่า sonnet 4.0 เท่า · ผ่านรอบแรก 80% เทียบ 80% (12 งาน เทียบ 9 งาน)" → เสนอให้ลองผู้ตรวจ Sonnet กับงานเสี่ยงต่ำ เก็บ Opus ไว้ตรวจงานความปลอดภัย แล้วดูรายงานซ้ำเมื่อสะสมครบ 5 งานต่อช่อง
@@ -69,4 +82,4 @@ hook ของ `superuser` จดให้เองใน `log/<วันที�
 
 ## ที่มา
 
-รูปแบบ log และกฎจัดขั้นเป็นของ hook `superuser` (`hooks/superuser-hook.mjs` · `hooks/step-rules.json`) · คำสั่ง `--rollup` และขอบเขตข้อมูลตามที่ผู้ใช้สั่ง 2026-10-27
+รูปแบบ log และกฎจัดขั้นเป็นของ hook `superuser` (`hooks/superuser-hook.mjs` · `hooks/step-rules.json`) · คำสั่ง `--rollup` และขอบเขตข้อมูลตามที่ผู้ใช้สั่ง 2026-10-27 · เครื่องมืออ่าน transcript ได้ไอเดียจาก duckdb-skills · vercel · claude-remember · session-report (ชื่อ ใบอนุญาต และไฟล์ ดูท้าย `references/log-tools.md`)

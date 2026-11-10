@@ -31,6 +31,8 @@ things is a new bug waiting to happen and a change nobody can review.
 4. **Confirm intent.** Restate in one line what "correct" means here. If the feedback is ambiguous ("it's wrong"), pick the reading that matches the spec or existing behaviour, log it in `decision-log`, and say so in the report. Ask only when readings lead to wholly different, hard-to-undo changes.
 5. **Smallest fix.** Change only what's needed. Match the surrounding style.
 6. **Prove it.** Re-run the failing case → it passes. Re-run nearby cases → still pass. Show the before/after of the one thing that changed.
+   - Fix adds a condition or special case → also add one case that **must not trigger** it (a neighbour input that was right before) and show it still passes. A test that only proves the new branch fires cannot catch a branch that fires too widely.
+   - The request was "explain why…" → answer with the explanation. An explanation request is not permission to change behaviour; change only after the user says to.
 
 ## รับผลรีวิว (receiving review feedback)
 
@@ -68,3 +70,7 @@ big — split it.
 
 - `lazy-coding` (plugin `software-development`) — the fix is the smallest correct diff.
 - `code-review-checklist` (plugin `software-development`) — confirm the fix introduced nothing new.
+
+## ที่มา
+
+mlflow (Apache-2.0) · `mlflow-agent-improvement/SKILL.md` · ดู 2026-11-10 (กรณีที่ต้องไม่เกิดคู่กับเทสต์ล้ม · คำขออธิบายไม่ใช่ใบอนุญาตแก้)

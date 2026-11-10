@@ -39,7 +39,7 @@ agent 6 · skill 62 (ของ plugin 23 · ของกลางจาก super
 | [`campaign`](#pb-campaign) | ทำแคมเปญหลายขนาด | 7 |
 | [`image-series`](#pb-image-series) | ทำภาพ AI เป็นชุด | 6 |
 | `learn-from-session` | เรียนรู้จากงานที่ทำ (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md)) | 7 |
-| [`review`](#pb-review) | ตรวจงานที่เสร็จแล้ว | 6 |
+| [`review`](#pb-review) | ตรวจงานที่เสร็จแล้ว | 8 |
 | `team-project` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md)) | 9 |
 | [`unattended-run`](#pb-unattended-run) | งานยาวไม่ต้องเฝ้า | 7 |
 | [`video`](#pb-video) | ทำคลิปสั้นจากสคริปต์ | 6 |

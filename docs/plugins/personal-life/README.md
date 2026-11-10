@@ -55,7 +55,7 @@ agent 9 · skill 85 (ของ plugin 46 · ของกลางจาก super
 | [`paper-to-practice`](#pb-paper-to-practice) | จากบทความสู่โค้ดจริง | 5 |
 | [`profile-refresh`](#pb-profile-refresh) | ปรับ CV และโปรไฟล์ | 5 |
 | [`promotion-case`](#pb-promotion-case) | เตรียมขอขึ้นตำแหน่ง | 5 |
-| [`review`](#pb-review) | ตรวจงานก่อนส่ง | 6 |
+| [`review`](#pb-review) | ตรวจงานก่อนส่ง | 8 |
 | [`side-project`](#pb-side-project) | เลือกโปรเจกต์ฝึกมือ | 4 |
 | [`subscriptions`](#pb-subscriptions) | ตรวจค่าสมาชิกรายเดือน | 5 |
 | `team-project` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md)) | 9 |

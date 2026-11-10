@@ -46,7 +46,7 @@ agent 8 · skill 73 (ของ plugin 34 · ของกลางจาก super
 | [`pdpa-setup`](#pb-pdpa-setup) | ตั้งระบบ PDPA | 5 |
 | [`pricing-check`](#pb-pricing-check) | ตรวจราคาและกำไร | 5 |
 | [`refund`](#pb-refund) | ขอคืนเงิน | 5 |
-| [`review`](#pb-review) | ตรวจงานที่เสร็จแล้ว | 6 |
+| [`review`](#pb-review) | ตรวจงานที่เสร็จแล้ว | 8 |
 | [`stock-sync`](#pb-stock-sync) | ซิงก์สต็อกหลายร้าน | 5 |
 | `team-project` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md)) | 9 |
 | [`unattended-run`](#pb-unattended-run) | งานยาวไม่ต้องเฝ้า | 7 |

@@ -38,7 +38,7 @@ agent 5 · skill 62 (ของ plugin 23 · ของกลางจาก super
 | [`money-plan`](#pb-money-plan) | วางแผนการเงินส่วนตัว | 5 |
 | [`portfolio-check`](#pb-portfolio-check) | เช็กพอร์ตลงทุน | 5 |
 | [`pre-trade`](#pb-pre-trade) | เตรียมก่อนเทรด | 6 |
-| [`review`](#pb-review) | ตรวจงานก่อนส่ง | 6 |
+| [`review`](#pb-review) | ตรวจงานก่อนส่ง | 8 |
 | [`scam-check`](#pb-scam-check) | เช็กว่าโดนหลอกไหม | 4 |
 | [`tax-season`](#pb-tax-season) | ภาษีประจำปี | 5 |
 | `team-project` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md)) | 9 |

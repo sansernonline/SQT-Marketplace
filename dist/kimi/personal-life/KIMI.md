@@ -4,7 +4,7 @@
 
 Daily-life admin, five categories — life admin (weekly reviews, inbox triage, documents, travel, decisions, subscriptions, digital safety, goals), home and family (bills, maintenance, vehicle, meals, school, elder care, pets, floods, wills), health (exercise, sleep, checkups, medication, doctor visits, pregnancy — never diagnoses), career (CVs, interviews, salary, LinkedIn), and learning (learning paths, papers, tech radar, certs, side projects, thesis). General information only.
 
-ชุดนี้มี skill 84 ตัว · บทบาท 12 บทบาท · คำสั่งสำเร็จรูป 1 คำสั่ง
+ชุดนี้มี skill 84 ตัว · บทบาท 13 บทบาท · คำสั่งสำเร็จรูป 1 คำสั่ง
 
 - **skill** → โหลดเองเมื่องานตรงกับคำอธิบาย ไม่ต้องสั่ง
 - **บทบาท (agent)** → เรียกใช้เป็น subagent ด้วยชื่อ · คำสั่งสำเร็จรูปเรียกด้วย `/skill:ชื่อคำสั่ง`
@@ -24,3 +24,4 @@ Daily-life admin, five categories — life admin (weekly reviews, inbox triage, 
 - **brainstormer** — Use when the user wants ideas or options, or a task is big or unclear and a wrong pick is costly. Lead picks.
 - **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked. Proposes up to 3 fixes with evidence.
 - **reviewer** — Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.
+- **worker** — Use when the lead hands out a self-contained slice needing no special role. Writes files, replies one line.

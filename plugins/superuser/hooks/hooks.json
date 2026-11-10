@@ -74,7 +74,28 @@
     ],
     "PreToolUse": [
       {
-        "matcher": "Write|Edit|Bash|Agent|Task",
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit|Bash|Agent|Task|Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/superuser-hook.mjs\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/superuser-hook.mjs\"",
+            "timeout": 10,
+            "if": "Read(**/.env*)"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__.*(secret|credential|password|token)",
         "hooks": [
           {
             "type": "command",

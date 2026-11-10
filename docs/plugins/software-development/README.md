@@ -45,7 +45,7 @@ agent 38 · skill 143 (ของ plugin 104 · ของกลางจาก su
 | [`project-docs`](#pb-project-docs) | เขียนเอกสารโปรเจกต์ | 8 |
 | [`prototype`](#pb-prototype) | ลองของก่อนตัดสินใจ | 7 |
 | [`refactor`](#pb-refactor) | จัดโค้ดใหม่ | 9 |
-| [`review`](#pb-review) | รีวิวโค้ด | 6 |
+| [`review`](#pb-review) | รีวิวโค้ด | 8 |
 | [`ship`](#pb-ship) | ส่งมอบงาน | 9 |
 | [`skill-authoring`](#pb-skill-authoring) | เขียน skill ใหม่ | 8 |
 | `team-project` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md)) | 9 |

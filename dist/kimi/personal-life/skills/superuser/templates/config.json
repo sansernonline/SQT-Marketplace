@@ -16,6 +16,21 @@
     "ui_scan": true,
     "code_patterns": true,
     "pii_gate": true,
-    "name_gate": false
+    "name_gate": false,
+    "hook": true,
+    "secret_scan": true,
+    "rules": true,
+    "post_hints": true,
+    "prompt_rules": true,
+    "stop_rules": true,
+    "route_by_tool": true,
+    "suggest": true,
+    "completion_loop": true,
+    "version_notice": true,
+    "digest": true,
+    "listeners": false,
+    "commit_check": true,
+    "push_check": true,
+    "lint_post": true
   }
 }

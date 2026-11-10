@@ -94,5 +94,48 @@
     {"pattern": "(อ่าน|ดู|วิเคราะห์)\\s*งบ(การเงิน)?(ของ)?\\s*(หุ้น|บริษัท)|งบการเงิน.{0,10}หุ้น|หุ้น.{0,25}(P/E|PE|P/BV|ROE|D/E)|คัดหุ้น|(P/E|P/BV|ROE|D/E|อัตราการจ่ายปันผล).{0,25}(สูงไหม|ต่ำไหม|ดีไหม|แพงไหม|ถูกไหม|เท่าไร)|(อ่าน|ดู|วิเคราะห์)\\s*งบ(การเงิน)?(ของ)?\\s*[A-Z]{2,8}\\b|\\b(stock|shares?)\\b.{0,20}\\b(P/E|ROE|fundamentals)\\b", "skills": ["stock-fundamentals"]},
     {"pattern": "ร้าน.{0,15}วันนี้.{0,10}(ต้อง|ควร)(ทำ|จัดการ)อะไร|วันนี้.{0,10}ร้าน.{0,10}(ต้อง|ควร)(ทำ|จัดการ)|ออเดอร์ค้างส่ง.{0,20}(ทำไง|อะไรก่อน|วันนี้|ทุกร้าน|ให้หน่อย)|วันนี้.{0,15}(ต้อง|ควร)(ทำ|จัดการ).{0,15}ในร้าน|\\bmy shop\\b.{0,25}\\btoday\\b|\\b(today|first)\\b.{0,25}\\bmy shop\\b", "skills": ["shop-daily-briefing"]},
     {"pattern": "^(?![\\s\\S]*\\b(dashboard|report|pipeline|segment|query|sql|crm|service|microservice)\\b)[\\s\\S]*?(ลูกค้า(เก่า|ประจำ).{0,40}(หายไป(?!ไหน)|ไม่กลับมา|เงียบ(หาย|ไป)|หายเงียบ)|ดึงลูกค้า(เก่า|ประจำ)?.{0,6}กลับ|\\bwin.?back (my|our|old|lapsed)|\\blapsed (customers|regulars)\\b|\\bwin-?back (message|campaign)s?\\b)", "skills": ["win-back-customers"]}
+  ],
+  "_scored": "ให้คะแนนถ่วงน้ำหนักต่อ skill (ข้อ 47) · anyOf รวมน้ำหนักที่ตรง · allOf ต้องตรงครบ · noneOf ตรง = ไม่นับ · minScore ค่าเริ่ม 1 · on: prompt (ข้อความผู้ใช้) · file (path ไฟล์) · command (คำสั่ง Bash) · ปรับการ route ได้โดยไม่ต้องเขียน regex ก้อนใหญ่ · hook/lib/router.mjs",
+  "scored": [
+    { "skill": "security-gate", "on": ["command"], "anyOf": [{ "p": "\\bgit\\s+push\\b", "w": 1 }, { "p": "\\bgh\\s+pr\\s+create\\b", "w": 1 }, { "p": "\\bnpm\\s+publish\\b", "w": 2 }] },
+    { "skill": "database-design", "on": ["prompt"], "anyOf": [{ "p": "\\b(schema|table|index|migration)\\b|ตาราง|ดัชนี", "w": 1 }, { "p": "\\b(database|postgres(ql)?|mysql|sql server)\\b|ฐานข้อมูล", "w": 2 }], "noneOf": ["^\\s*/"], "minScore": 3 }
+  ],
+  "_byTool": "บอก skill ตอนจะลงมือ (ข้อ 35) · hook PreToolUse ดูชื่อไฟล์ (Write/Edit) · คำสั่ง Bash · บรรทัด import ของเนื้อที่เขียน · เรียงตามน้ำหนัก · ไม่เกิน maxSkills ตัวและ maxBytes ไบต์ · skill ละครั้งต่อ session ต่อ agent · ชื่อ skill ต้องมีจริง (self-test ตรวจ) · skill ที่ยังไม่ได้ติดตั้ง บอกผู้ใช้ ไม่ติดตั้งเอง (ข้อ 78)",
+  "byTool": {
+    "maxSkills": 3,
+    "maxBytes": 700,
+    "rules": [
+      { "on": "file", "pattern": "\\.py$", "skills": ["stack-python"], "weight": 2 },
+      { "on": "file", "pattern": "\\.(cs|csproj|cshtml|razor)$", "skills": ["stack-dotnet"], "weight": 2 },
+      { "on": "file", "pattern": "\\.(ts|tsx|mts|cts|jsx)$", "skills": ["stack-typescript"], "weight": 2 },
+      { "on": "file", "pattern": "\\.sql$", "skills": ["stack-sql"], "weight": 2 },
+      { "on": "file", "pattern": "\\.(mq4|mq5|mqh)$", "skills": ["stack-mql"], "weight": 2 },
+      { "on": "file", "pattern": "\\.(html?|css|scss|vue|svelte|tsx|jsx)$", "skills": ["ui-craft", "no-ai-look"] },
+      { "on": "file", "pattern": "(^|[\\\\/])SKILL\\.md$|[\\\\/]agents[\\\\/][^\\\\/]+\\.md$", "skills": ["skill-authoring"], "weight": 2 },
+      { "on": "file", "pattern": "(^|[\\\\/])(README|CHANGELOG)\\.md$|[\\\\/]docs[\\\\/].*\\.md$", "skills": ["human-writing"] },
+      { "on": "file", "pattern": "(^|[\\\\/])(Dockerfile|docker-compose[^\\\\/]*\\.ya?ml|Chart\\.ya?ml|values\\.ya?ml)$|[\\\\/](k8s|kubernetes|helm|charts)[\\\\/]", "skills": ["kubernetes-helm"] },
+      { "on": "file", "pattern": "(^|[\\\\/])Jenkinsfile$", "skills": ["jenkins-pipeline"] },
+      { "on": "file", "pattern": "\\.github[\\\\/]workflows[\\\\/]", "skills": ["cicd-and-release"] },
+      { "on": "file", "pattern": "(^|[\\\\/])\\.env[^\\\\/]*$|appsettings[^\\\\/]*\\.json$", "skills": ["config-and-secrets"] },
+      { "on": "file", "pattern": "\\.(tf|tfvars)$", "skills": ["infra-as-code"] },
+      { "on": "command", "pattern": "\\bgit\\s+(?:-\\S+\\s+)*commit\\b", "skills": ["commit-log"] },
+      { "on": "command", "pattern": "\\b(kubectl|helm)\\s", "skills": ["kubernetes-helm"] },
+      { "on": "command", "pattern": "\\b(pytest|dotnet\\s+test|vitest|jest)\\b|\\bnpm\\s+(run\\s+)?test\\b", "skills": ["testing-standards"] },
+      { "on": "command", "pattern": "\\b(terraform|tofu|pulumi)\\s", "skills": ["infra-as-code"] },
+      { "on": "command", "pattern": "\\bk6\\s+run\\b", "skills": ["load-testing"] },
+      { "on": "command", "pattern": "\\bffmpeg\\b", "skills": ["video-editing"] },
+      { "on": "command", "pattern": "\\bplaywright\\s+test\\b|\\bcypress\\s+run\\b", "skills": ["e2e-testing-patterns"] },
+      { "on": "import", "pattern": "\\b(fastapi|django|pandas|sqlalchemy)\\b", "skills": ["stack-python"], "weight": 2 },
+      { "on": "import", "pattern": "@nestjs/|@angular/|from ['\"](express|react|vite)['\"]|require\\(['\"]express", "skills": ["stack-typescript"], "weight": 2 },
+      { "on": "import", "pattern": "Microsoft\\.(EntityFrameworkCore|AspNetCore)", "skills": ["stack-dotnet"], "weight": 2 },
+      { "on": "import", "pattern": "\\b(stripe|omise|promptpay)\\b", "skills": ["fintech-payments"] },
+      { "on": "import", "pattern": "\\bgsap\\b", "skills": ["dynamic-website"] },
+      { "on": "import", "pattern": "kafkajs|confluent_kafka|aiokafka", "skills": ["kafka-streaming"] },
+      { "on": "import", "pattern": "amqplib|\\bpika\\b", "skills": ["rabbitmq-messaging"] }
+    ]
+  },
+  "_homonyms": "ชื่อ skill ที่ซ้ำกับของในตัว Claude Code (ข้อ 78) · ตัวบอก skill แก้เป็นชื่อเต็มเสมอ และเตือนครั้งเดียวต่อ session เมื่อ agent เรียกชื่อเปล่า",
+  "homonyms": [
+    { "name": "simplify", "use": "superuser:simplify", "note": "ไม่ใช่ /simplify ของ Claude Code ที่รีวิวโค้ดที่เปลี่ยน" }
   ]
 }

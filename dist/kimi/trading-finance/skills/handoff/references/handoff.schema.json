@@ -13,6 +13,7 @@
     "status": { "type": "string", "enum": ["เสร็จ", "ทำอยู่", "ติด", "รออนุมัติ", "ค้างอยู่"], "description": "done · in progress · blocked · awaiting approval · pending" },
     "depends_on": { "type": "array", "items": { "type": "string" }, "default": [], "description": "ids that must be done first" },
     "files_allowed": { "type": "array", "items": { "type": "string" }, "default": [], "description": "Glob paths this worker may change; empty = read-only" },
+    "plan": { "type": "string", "description": "Plan name this card belongs to; same as the first line of ledger/<plan>.md (optional, added in 1.0 without rename)" },
     "dead_ends": { "type": "array", "items": { "type": "string" }, "default": [], "description": "Approaches already tried that failed, one line each with why; the next worker must not retry them (optional, added in 1.0 without rename)" }
   },
   "additionalProperties": true

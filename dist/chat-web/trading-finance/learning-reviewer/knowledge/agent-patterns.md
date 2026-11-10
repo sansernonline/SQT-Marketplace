@@ -42,6 +42,8 @@ Use when SuperUser plans how agents run a task (Planning, ReAct, Reflection, Mul
 
 **ไม่เปิด agent teams เป็นค่าเริ่ม** — ใช้ subagent แทน เพราะ agent teams ยังเป็นของทดลองและปิดอยู่ · ใช้ token มากกว่ามาก (ราว 7 เท่าเมื่อ teammate อยู่ใน plan mode) · เปิดแล้ว subagent ที่ตั้งชื่อจะกลายเป็น teammate เอง · teammate แบบ in-process (ค่าเริ่ม) ส่ง subagent เบื้องหลังไม่ได้ · teammate คุยกันเอง ขัดกับหลักทุกอย่างผ่านหัวหน้าทีม · ยกเว้นผู้ใช้เปิดไว้แล้วและงานเป็น debug หลายสมมติฐานที่ต้องให้ถกล้มทฤษฎีกัน · ([Claude Code: agent teams](https://code.claude.com/docs/en/agent-teams) · ตรวจ 21 ต.ค. 2569)
 
+**ข้อสรุปที่ต้องพิสูจน์ทีละข้อ** → บัญชี `PROVED · REFUTED · OPEN` + `scripts/ledger.mjs` (พิมพ์ขั้นถัดไปให้ · ต้องตรวจอย่างน้อย 2 รอบก่อนปิดข้อ) · รอลูกทีมนาน ๆ → `scripts/keep-waiting.mjs` · วิธีใช้ใน [`pattern-details`](references/pattern-details.md) หัวข้อ 7 · รอบแก้ที่ขยับคนตามรอบ → หัวข้อ 3 ข้อ 7
+
 **บอกในรายงาน** เฉพาะเมื่อมันเปลี่ยนการตัดสินใจ เช่น `Reranker (คัด 24 → 4 แหล่ง)`
 
 
@@ -50,6 +52,8 @@ Use when SuperUser plans how agents run a task (Planning, ReAct, Reflection, Mul
 # agent-patterns — วิธีทำทีละรูปแบบ
 
 เปิดไฟล์นี้เมื่อจะใช้รูปแบบไหนเป็นครั้งแรกในงาน หรือไม่แน่ใจขั้นตอน
+
+- สารบัญ: [1 Planning](#1--planning--วางแผนก่อน-แล้วทำทีละข้อ) · [2 ReAct](#2--react--คิด--ทำ--ดูผล-วนจนเสร็จ) · [3 Reflection](#3--reflection--ทำเสร็จ--อีกตัวตรวจ--แก้) · [4 Multi-Agent](#4--multi-agent--หลาย-agent-คนละงาน-ส่งต่อเป็นสาย) · [5 MoA](#5--mixture-of-agents-moa--งานเดียวกัน-คนละมุม-แล้วรวม) · [6 Reranker](#6--reranker--ให้คะแนน-แล้วเลือกชิ้นที่ตรงที่สุด) · [7 ledger](#7--บัญชีข้อกล่าวอ้าง-claim-ledger--เมื่อข้อสรุปต้องพิสูจน์ทีละข้อ) · [รอลูกทีม](#รอลูกทีมแบบไม่ต้องถามในแชต)
 
 ## 1 · Planning — วางแผนก่อน แล้วทำทีละข้อ
 
@@ -105,6 +109,8 @@ Use when SuperUser plans how agents run a task (Planning, ReAct, Reflection, Mul
 5. **ตัวตรวจต้องเทียบกับของจริง** — ผล test · ไฟล์ที่เปิดอ่าน · แหล่งที่ค้น · ภาพหน้าจอ ไม่ใช่ความเห็นลอย ๆ เพราะงานวิจัยพบว่าโมเดลที่แก้คำตอบตัวเองโดยไม่มีของจริงให้เทียบ มักแย่ลง (GPT-3.5 บน CommonSenseQA ได้ 75.8 ก่อนแก้ เหลือ 38.1 หลังแก้รอบแรก · Huang et al. ICLR 2024) · เกณฑ์ข้อไหนหาหลักฐานไม่ได้ให้นับว่าไม่ผ่าน และบอกว่าขาดอะไร
 6. แก้แล้วส่ง reviewer **ตัวใหม่**ตรวจซ้ำ ตามกฎวนตรวจใน `team-roles` ของ `superuser` (ไม่เหลือข้อระดับสูงและกลาง · ครบเพดานรอบ (งานกลาง 3 · งานใหญ่หรืองานเสี่ยง 5) ยังไม่ผ่าน → หยุดวน ทำส่วนอื่นให้จบ แล้วรายงานข้อที่เหลือ)
 
+7. **คนแก้ขยับตามรอบ** — รอบแก้ 1–3 ใช้ตัวเดิมของชิ้นนั้น · รอบ 4–5 (งานใหญ่หรืองานเสี่ยงเท่านั้น) เปลี่ยนเป็นตัวใหม่ที่ระดับสูงขึ้น 1 ขั้นตามบันไดใน `superuser` หัวข้อ 5 พร้อมรายงานทุกรอบ · ข้อกลางและต่ำที่เลือกไม่แก้ลงบัญชีข้อที่เลื่อนใน "ค้างอยู่" แล้วไล่ปิดตอนจบ (รายละเอียดใน `team-roles` "รอบตรวจ")
+
 ระดับโมเดลของคนตรวจ: เท่าหรือสูงกว่าคนทำ (รอบ 2 ขึ้นไปของงานกลางใช้ระดับกลางตาม `team-roles` "รอบตรวจ") ไม่ใช้ตัวเล็กตรวจงานของตัวใหญ่ (โมเดลชอบงานแบบที่ตัวเองเขียน) · คำสั่งถึงคนตรวจไม่ใส่ความเห็นของหัวหน้าทีม
 
 ## 4 · Multi-Agent — หลาย agent คนละงาน ส่งต่อเป็นสาย
@@ -142,4 +148,21 @@ Use when SuperUser plans how agents run a task (Planning, ReAct, Reflection, Mul
 ใช้คู่กับกฎ "≥ 3 แหล่งยืนยันตรงกัน" ของ `superuser` โดย Reranker เลือกแหล่ง ส่วนกฎ 3 แหล่งตัดสินว่าเชื่อได้ไหม
 ถ้าเป็นระบบที่ผู้ใช้สร้าง (Retrieval-Augmented Generation (RAG) ในแอปจริง) ให้ใช้ reranker แบบโมเดลจริงตาม `llm-engineering` ของ software-development เพราะไฟล์นี้พูดถึงวิธีทำงานของทีม agent เท่านั้น
 
+## 7 · บัญชีข้อกล่าวอ้าง (claim ledger) — เมื่อข้อสรุปต้องพิสูจน์ทีละข้อ
+
+ใช้เมื่อผลของงานเป็นข้อกล่าวอ้างหลายข้อที่ต้องจริงทั้งหมด (ข้อสรุปของการค้น · การวิเคราะห์ · การอ้างว่าโค้ดทำสิ่งนั้น ๆ) แทนรายการข้อพบแบบ Reflection ธรรมดา
+
+1. จดทุกข้อกล่าวอ้างที่ข้อสรุปพึ่งพา: `node scripts/ledger.mjs add <ไฟล์.json> <id> "<ข้อความ>"` · สถานะตั้งต้นคือ `OPEN`
+2. ผู้ตรวจ**ตัวใหม่**ตรวจทีละข้อแล้วลงผล: `mark <ไฟล์.json> <id> PROVED|REFUTED|OPEN --evidence "<ไฟล์:บรรทัด หรือผลรัน>"` · `PROVED` และ `REFUTED` ต้องมีหลักฐาน ไม่มีหลักฐาน = ยังเป็น `OPEN`
+3. ถามสคริปต์ว่าทำอะไรต่อ: `next <ไฟล์.json>` พิมพ์ 1 บรรทัดว่าข้อไหนต้องตรวจต่อ · ข้อไหนต้องตรวจซ้ำ · ข้อไหนต้องถอนออกจากข้อสรุป · หรือจบได้ · ทำตามบรรทัดนั้น
+4. **ขั้นต่ำ 2 รอบ** — ข้อที่ `PROVED` ด้วยการตรวจครั้งเดียวยังไม่จบ ต้องมีผู้ตรวจตัวใหม่อีกคนพยายามหักล้างและไม่เจอ (`--min-rounds` ปรับได้ · ค่าตั้งเอง ยังไม่ได้วัด) เพราะคนที่พิสูจน์เองมักมั่นใจเกินจริง
+5. `REFUTED` → ถอนข้อนั้นออกจากข้อสรุป แล้ว `close <ไฟล์.json> <id>` · `OPEN` ครบ 4 ตรวจ (`--max-rounds`) → หยุด รายงานว่าไม่ได้พิสูจน์และขาดอะไร
+6. ทดสอบ: `node --test scripts/ledger.test.mjs`
+
+## รอลูกทีมแบบไม่ต้องถามในแชต
+
+`node scripts/keep-waiting.mjs --until-file <ไฟล์รายงาน> --seconds 100` หลับสั้นกว่า timeout ของ Bash (120 วินาที) แล้วพิมพ์ `KEEP WAITING` ให้รันซ้ำ หรือ `DONE` เมื่อไฟล์ปรากฏ · ใช้กับ Node บน Windows ได้โดยไม่ต้องมี shell อื่น
+
 ที่มา: ReAct (Yao et al., 2022) · Reflexion (Shinn et al., 2023) · Plan-and-Solve (Wang et al., 2023) · Mixture-of-Agents (Wang et al., 2024) · multi-agent frameworks (AutoGen · MetaGPT) · cross-encoder reranking · [Huang et al. 2023 · LLMs cannot self-correct reasoning yet](https://arxiv.org/abs/2310.01798) · [LLMCompiler](https://arxiv.org/abs/2312.04511) · [ADaPT](https://arxiv.org/abs/2311.05772) · [Anthropic: multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) · แม่แบบ Loop · Graph · Dynamic ของคอร์ส AI Workflow (CWN2026) ของเจ้าของ repo · เปิดอ่าน 2026-10-26
+
+ที่มาเพิ่ม (ดู 2026-11-10): รอบแก้ที่ขยับคน และบัญชีข้อที่เลื่อน: superpowers (MIT) · `skills/subagent-driven-development/` · บัญชีข้อกล่าวอ้างและขั้นต่ำกี่รอบ: math-proof (LICENSE มี ยังไม่ได้ระบุชนิด · เอากลไกอย่างเดียว) · `agents/math-proof-judge.md` · `keep-waiting`: claude-security (All rights reserved · เอากลไกอย่างเดียว) · `scripts/keep-waiting.sh`

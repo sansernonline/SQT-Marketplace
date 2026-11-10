@@ -6,7 +6,7 @@
 
 รากโปรเจกต์เก็บแค่โฟลเดอร์มาตรฐาน (`ref/` · `docs/` · `mockup/` · `assets/` · `qa/` · `_to_delete/` · `.claude/` · โฟลเดอร์โค้ด) ไฟล์ทำงานของ SuperUser จึงอยู่ใน `.claude/superuser/` · หัวหน้าทีมเขียนคนเดียว (ยกเว้น `handoff/<id>.md` ที่ลูกทีมต่อท้ายใบส่งงานของตัวเองได้)
 
-**กติกา commit (ที่เดียว ไฟล์อื่นลิงก์มาที่นี่)** — `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md` อยู่ใน git ได้ · agent commit ได้เมื่อได้รับอนุญาตเท่านั้น ตามกฎข้อ 9 ของ `SKILL.md` (ผู้ใช้สั่ง · `~/.claude/superuser-style.md` · `docs/AGENT-LOOP.md` · หัวข้อ "กติกา" ใน `CONTEXT.md`) → 1 ขั้นที่ตรวจผ่าน = 1 commit ตาม `commit-log` · ไม่ได้อนุญาต → ใส่ข้อความ commit ที่แนะนำในคำตอบ · ไม่ push เว้นแต่ผู้ใช้สั่ง หรือบรรทัด **git อัตโนมัติ** ใน "กติกา" เป็น `auto` · `log/` · `inbox/` · `learn/` · `handoff/` · `state.json` และ `_to_delete/` ไม่ commit ใส่ `.gitignore` เพราะ log มีชื่อไฟล์และคำสั่งภายใน
+**กติกา commit (ที่เดียว ไฟล์อื่นลิงก์มาที่นี่)** — `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md` อยู่ใน git ได้ · agent commit ได้เมื่อได้รับอนุญาตเท่านั้น ตามกฎข้อ 9 ของ `SKILL.md` (ผู้ใช้สั่ง · `~/.claude/superuser-style.md` · `docs/AGENT-LOOP.md` · หัวข้อ "กติกา" ใน `CONTEXT.md`) → 1 ขั้นที่ตรวจผ่าน = 1 commit ตาม `commit-log` · ไม่ได้อนุญาต → ใส่ข้อความ commit ที่แนะนำในคำตอบ · ไม่ push เว้นแต่ผู้ใช้สั่ง หรือบรรทัด **git อัตโนมัติ** ใน "กติกา" เป็น `auto` · `log/` · `inbox/` · `learn/` · `handoff/` · `notes/` · `ledger/` · `out-of-scope/` · `state.json` และ `_to_delete/` ไม่ commit ใส่ `.gitignore` เพราะ log มีชื่อไฟล์และคำสั่งภายใน
 
 | ที่ | เก็บอะไร | กติกา |
 |---|---|---|
@@ -16,6 +16,8 @@
 | `.claude/superuser/log/` · `inbox/` · `learn/` | log ที่ hook จด · ข้อความที่ส่งเข้ามา · บันทึกรอบเรียนรู้ | รายละเอียดใน [`learning-loop`](learning-loop.md) |
 | `.claude/superuser/handoff/` | ใบสั่งงาน + ใบส่งงาน 1 ชิ้น 1 ไฟล์ (`<id>.md`) · ผลยาวของชิ้นใน `<id>/` | รูปแบบตาม skill `handoff` · หัวหน้าทีมเขียนใบสั่ง ลูกทีมต่อท้ายใบส่งของตัวเอง |
 | `.claude/superuser/log/SUMMARY.md` | สรุป log ให้คนอ่าน — ราย agent สะสม (ได้รับงาน · จบปกติ · ล้ม · เวลาทำงาน) · งานที่ส่งลูกทีมวันนี้ · รายวัน 30 วัน | hook เขียนเองทุกครั้งที่หัวหน้าทีมจบรอบ ห้ามแก้มือ · "จบปกติ" ไม่ใช่ผลตรวจ ผลตรวจอยู่ที่ `docs/BUILD-PLAN.md` หรือ `CONTEXT.md` |
+| `.claude/superuser/outbound/` | ร่างข้อความถึงคนนอกที่รอผู้ใช้ส่ง | หัวหน้าทีมเขียน · ส่งจริงต้องขออนุมัติ · รายละเอียดใน [`playbook-unattended-run`](playbook-unattended-run.md) ข้อ 5 |
+| `.claude/superuser/notes/` · `ledger/` · `out-of-scope/` · `learn/drop/` | สมุดงานของแผน · ledger · แนวคิดที่ปฏิเสธ · บทเรียนที่ทิ้งไว้ | หัวหน้าทีมเขียน · ก่อนเขียน `git check-ignore` ต้องเจอและ path ไม่เป็น symlink · รายละเอียดใน `handoff` → `team-memory` หัวข้อ 8 |
 | `docs/BRIEF.md` | สรุปงานใหญ่หลัง brainstorm ตาม [`brief-template`](brief-template.md) | งานเปลี่ยนทิศให้เขียนทับ |
 | `_to_delete/` | ของชั่วคราว · ไฟล์ที่ "ลบ" | ไม่ลบจริง ย้ายมาที่นี่ |
 

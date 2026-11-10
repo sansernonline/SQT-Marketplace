@@ -4,7 +4,7 @@
 
 Simulates a complete software development company — 38 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 95 skills and 29 slash commands for the whole SDLC.
 
-ชุดนี้มี skill 142 ตัว · บทบาท 41 บทบาท · คำสั่งสำเร็จรูป 11 คำสั่ง
+ชุดนี้มี skill 142 ตัว · บทบาท 42 บทบาท · คำสั่งสำเร็จรูป 11 คำสั่ง
 
 - **skill** → โหลดเองเมื่องานตรงกับคำอธิบาย ไม่ต้องสั่ง
 - **บทบาท (agent)** → เรียกใช้เป็น subagent ด้วยชื่อ · คำสั่งสำเร็จรูปเรียกด้วย `$ชื่อคำสั่ง`
@@ -53,3 +53,4 @@ Simulates a complete software development company — 38 agents from product, an
 - **brainstormer** — Use when the user wants ideas or options, or a task is big or unclear and a wrong pick is costly. Lead picks.
 - **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked. Proposes up to 3 fixes with evidence.
 - **reviewer** — Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.
+- **worker** — Use when the lead hands out a self-contained slice needing no special role. Writes files, replies one line.
