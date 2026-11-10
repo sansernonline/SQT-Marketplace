@@ -29,7 +29,7 @@
 
 ## 1. รายงานตรวจความปลอดภัย (Security Review)
 
-agent `security-engineer` · skill `software-development:security-scan` · `software-development:threat-model` · `auth-implementation-patterns` · `pdpa-compliance`
+agent `security-engineer` · skill `software-development:security-audit` · `software-development:threat-model` · `auth-implementation-patterns` · `pdpa-compliance`
 **ผลลัพธ์:** `docs/security-review.md` — **ห้ามแก้โค้ด** · ห้ามรันอะไรที่ส่งข้อมูลออกนอกเครื่องหรือแตะระบบจริง · ยกเว้นคำสั่งตรวจ dependency ในข้อ 3 (ส่งแค่รายชื่อแพ็กเกจและเวอร์ชัน ไม่ส่งโค้ดหรือข้อมูล)
 
 ### ขอบเขต (ผู้ใช้กรอก)
