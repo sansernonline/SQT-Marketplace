@@ -40,6 +40,11 @@
             "type": "command",
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/ui-scan-hook.mjs\"",
             "timeout": 20
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/code-pattern-warn.mjs\"",
+            "timeout": 5
           }
         ]
       }

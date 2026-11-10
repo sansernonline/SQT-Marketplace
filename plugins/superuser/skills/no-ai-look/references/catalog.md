@@ -150,7 +150,7 @@
 | รหัส | แหล่ง |
 |---|---|
 | IM | Impeccable — impeccable.style/slop (กฎตรวจ 61 ข้อบนเว็บ · 62 ข้อใน README ณ 2026-10-23 · ตอนเก็บแคตตาล็อกนี้มี 59 + 6 ข้อรีวิว) |
-| AN | Anthropic frontend-design skill — skills.sh/anthropics/claude-code/frontend-design |
+| AN | Anthropic frontend-design skill — skills.sh/anthropics/claude-code/frontend-design · หัวข้อ Process (ร่างเลย์เอาต์ ASCII หลายแบบแล้วเทียบกับ brief) จาก github.com/anthropics/skills/tree/main/skills/frontend-design · Apache-2.0 · ดู 2026-11-10 |
 | CM | codemyspec.com/blog/vibe-coded-websites-look-the-same |
 | UN | claudecodehq.com/playbooks/unslop-ui |
 | SK | skills.cat/skills/funboy322/avoid-ai-design |

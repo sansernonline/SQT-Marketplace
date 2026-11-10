@@ -1,5 +1,13 @@
 # Changelog — superuser
 
+## 3.33.0 — 2026-11-10
+
+- hook ใหม่ `code-pattern-warn` (PostToolUse · Write/Edit/MultiEdit · โมดูล `code_patterns` ค่าเริ่มเปิด): ข้อความที่เพิ่งเขียนมีรูปแบบโค้ดเสี่ยง 16 กฎ (eval · exec ต่อสตริง · SQL ต่อสตริง · ปิดตรวจ TLS · pickle · BinaryFormatter · script CDN ไม่มี integrity ฯลฯ) → เตือนเป็นบริบท ไม่บล็อก กฎละครั้งต่อ session · self-test 21/21 · กรณีข้อความยาวที่ช้าที่สุด 17 มิลลิวินาที (ก่อนจำกัดช่วง regex 1.9 วินาที) · แนวคิดรายการจาก security-guidance ของ claude-plugins-official (Apache-2.0)
+- `no-ai-look` ข้อ 1: ร่างเลย์เอาต์เป็น ASCII 2–3 แบบแล้วเลือกตามเนื้อหา ไม่ใช้แบบแรกที่นึกออก (แนวคิดจาก anthropics/skills `frontend-design` · Apache-2.0)
+- `superuser` หัวข้อ 7: คำถามตรวจต่อ 2–3 ข้อครั้งเดียวต่อบทสนทนา เมื่อผู้ใช้จะเอาคำตอบเรื่องเงิน สุขภาพ หรือข้อเสนองานไปลงมือ (แนวคิดจาก `discernment-nudge`)
+- `polite-message-th-en`: โปรไฟล์น้ำเสียงของผู้ใช้ใน `~/.claude/voice-profile.md` สร้างจากข้อความที่ส่งจริง 15–30 ฉบับ เน้นคำที่ผู้ใช้ไม่เคยใช้ และจดทุกการแก้ของผู้ใช้ · ตามหนี้หลายรายพร้อมกันชี้ `doc-quotation` หัวข้อ 6
+- `design-references`: ย้ายขั้นตอนเต็มไป `references/search-steps.md` (SKILL.md จาก 37 KB เหลือ 27 KB) · SKILL.md เหลือขั้นตอนย่อพร้อมกฎที่ห้ามข้าม
+
 ## 3.32.3 — 2026-11-10
 
 - อ้างถึง plugin ซอฟต์แวร์ด้วยชื่อใหม่ `software-development` (เดิม `software-company`)
