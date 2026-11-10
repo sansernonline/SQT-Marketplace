@@ -10,6 +10,13 @@ import { join, dirname, resolve, relative, basename } from "node:path";
 import { homedir, tmpdir, userInfo } from "node:os";
 import { fileURLToPath } from "node:url";
 import { applyQuota, accountName } from "../skills/parallel-split-and-merge/scripts/quota.mjs";
+import { readJson, moduleOn, modOn, sessionOnce, setFlags, takeFlags } from "./lib/util.mjs";
+import { isBashGuard, preRules, promptRules, postRules, stopRules, foldTestState } from "./lib/rules.mjs";
+import { scoredRoutes, fixHomonyms, homonymWarn, installedSkills, suggestSkill, toolRoute, markSkillOpened, replayRoutes, cacheDiff } from "./lib/router.mjs";
+import { parseLoopRequest, loopCancelRequested, loopStart, loopCancel, loopStartNotice, loopStopGate } from "./lib/loop.mjs";
+import { extraGates } from "./lib/selftest.mjs";
+import { ESCAPE_CLAUSE, scopeOk, versionNotice, digestNotice, lintHint, bashChecks, sessionStartListener } from "./lib/notices.mjs";
+export { moduleOn };
 
 // โฟลเดอร์สถานะใน tmpdir แยกต่อผู้ใช้ · เครื่อง Linux ที่ใช้ร่วมกัน /tmp เป็นของทุกคน ชื่อตายตัวจะให้คนอื่นสร้างหรือแก้ไฟล์ล่วงหน้าได้
 const TMP_USER = (() => { try { return userInfo().username.replace(/[^\w.-]/g, "_"); } catch { return "user"; } })();
@@ -128,17 +135,7 @@ function localStamp(now) {
   return `${local}${sign}${hh}:${mm}`;
 }
 
-function readJson(path, fallback) {
-  try { return JSON.parse(readFileSync(path, "utf8")); } catch { return fallback; }
-}
-
-// config ของโฟลเดอร์งาน (.claude/superuser/config.json) · ไม่มีไฟล์หรือพัง = ค่าเริ่ม (เปิด · โมดูล guard และ recompact ค่าเริ่มปิด) · ดู references/modules.md
-export function moduleOn(teamDir, key, def = true) {
-  if (!teamDir) return def;
-  const cfg = readJson(join(teamDir, "config.json"), null);
-  const v = cfg?.modules?.[key];
-  return v === undefined ? def : v !== false;
-}
+// readJson · moduleOn (สวิตช์โมดูลใน .claude/superuser/config.json · ดู references/modules.md) อยู่ใน lib/util.mjs
 
 // agent id ย่อ 8 ตัว · แยก subagent ชนิดเดียวกันที่ถูกเรียกหลายรอบ (เช่น reviewer รอบ 1–5) ซึ่งเขียนลงไฟล์เดียวกัน
 export function shortId(id) {
@@ -488,7 +485,9 @@ export function routeSkills(prompt, router) {
     let re; try { re = new RegExp(rule.pattern, "i"); } catch { continue; }
     if (re.test(text)) for (const s of rule.skills ?? []) if (!out.includes(s)) out.push(s);
   }
-  return out;
+  // คะแนนถ่วงน้ำหนักต่อ skill (router.scored · ข้อ 47) แล้วแก้ชื่อที่ซ้ำกับของในตัว Claude Code เป็นชื่อเต็ม (router.homonyms · ข้อ 78)
+  for (const { skill } of scoredRoutes(text, router, "prompt")) if (!out.includes(skill)) out.push(skill);
+  return [...new Set(fixHomonyms(out, router))];
 }
 
 export function routerNotice(skills, note = "") {
@@ -512,6 +511,7 @@ export const MULTISTEP_NOTE = [
   "งานหลายขั้นในเครื่องนี้มีหัวหน้าทีมคือ skill `superuser` (งานของสาขาไหนใช้ `<plugin>:superuser` ของสาขานั้น) ผู้ใช้ไม่ต้องเอ่ยชื่อ",
   "ถ้าคำขอมีงานมากกว่า 1 ชิ้น ต้องแก้ตั้งแต่ 3 ไฟล์ ต้องค้นข้อมูลก่อนลงมือ หรือต้องมีคนตรวจก่อนส่ง ให้เปิด superuser ก่อนเริ่ม",
   "งานเล็ก (คำถามเดียว · แก้จุดเดียว · คุยทั่วไป) ไม่ต้องเปิด",
+  ESCAPE_CLAUSE,
 ].join("\n");
 
 // zip ของ claude.ai มีสำเนา hook ในทุก plugin (ไม่มี dependencies) → ทุกสำเนาได้เหตุการณ์เดียวกัน · ให้ตัวแรกที่จองได้ส่งข้อความ ตัวอื่นเงียบ
@@ -584,10 +584,13 @@ export function reviewGate(s) {
   return `ด่านรีวิว (SuperUser): แก้ไฟล์งานไป ${s.edited.length} ไฟล์ แต่หลังการแก้ครั้งสุดท้ายยังไม่มีผู้ตรวจตัวใหม่ — ส่ง \`reviewer\` ตัวใหม่ตามกฎข้อ 3 (ชิ้นงาน · คำขอของผู้ใช้ · เสร็จเมื่อ) แล้วแก้ข้อสูงและกลางก่อนจบ · ถ้าเป็นงานเล็กที่หัวหน้าทีมตรวจเองได้จริง ให้ใส่บรรทัด \`ข้ามรีวิว: <เหตุผล>\` ในคำตอบสุดท้าย`;
 }
 
-function stopGate(input, teamDir) {
-  if (input.stop_hook_active || !input.transcript_path || !existsSync(input.transcript_path) || !moduleOn(teamDir, "review_gate")) return;
-  const reason = reviewGate(gateState(teamDir, input.transcript_path));
-  if (reason) process.stdout.write(JSON.stringify({ decision: "block", reason }));
+// คืนเหตุผลที่ไม่ให้จบ (หรือ "") · ด่านรีวิวก่อน แล้วกฎ stop ใน guard-rules.json (R7) · บล็อกได้ครั้งเดียวต่อการหยุด (stop_hook_active)
+function stopGate(input, teamDir, root) {
+  if (input.stop_hook_active || !input.transcript_path || !existsSync(input.transcript_path)) return "";
+  const review = moduleOn(teamDir, "review_gate"), rules = modOn(teamDir, "stop_rules");
+  if (!review && !rules) return "";
+  const s = gateState(teamDir, input.transcript_path);
+  return (review && reviewGate(s)) || (rules && stopRules(s, teamDir, root, HERE, input)) || "";
 }
 
 // ── ด่านแตกงาน (PreToolUse ของหัวหน้าทีม) ───────────────────────────────
@@ -635,7 +638,7 @@ export function splitGate(s, target, currentId = null, current = { name: "Write"
 // session ยาวหลาย MB → ไม่ parse ทั้งไฟล์ทุกครั้ง · จำ byte ที่อ่านถึงและตัวนับของด่านไว้ ต่อ transcript_path แล้วอ่านเฉพาะส่วนที่เพิ่ม
 // ไฟล์เล็กลง = ถูกเขียนใหม่ → นับใหม่ · ไม่อ่านบรรทัดท้ายที่ยังเขียนไม่จบ
 const GATE_KEEP = 20;
-const freshGate = () => ({ offset: 0, line: 0, usedSuperuser: false, workers: 0, pieces: [], edited: [], lastEdit: -1, lastCheck: -1, lastText: "", pending: [], agentCalls: [] });
+const freshGate = () => ({ offset: 0, line: 0, usedSuperuser: false, workers: 0, pieces: [], edited: [], lastEdit: -1, lastCheck: -1, lastText: "", pending: [], agentCalls: [], lastTest: -1, lastCodeEdit: -1 });
 
 // ลูกทีมเบื้องหลัง: ผลของคำสั่ง Agent ขึ้นว่า "Async agent launched" (มี agentId) = เริ่ม
 // ข้อความ <task-notification> ที่มี <tool-use-id> หรือ <task-id> ตรงกัน = จบ (บางฉบับมีแค่ task-id)
@@ -683,6 +686,7 @@ export function foldTranscript(s, lines) {
       if (b.type !== "tool_use") continue;
       const inp = b.input ?? {};
       if (b.name === "Skill" && /(^|:)superuser$/.test(inp.skill ?? "")) s.usedSuperuser = true;
+      foldTestState(s, b.name, inp, i);   // ข้อ stop-no-test: รัน test ครั้งสุดท้ายกับแก้โค้ดครั้งสุดท้าย (lib/rules.mjs)
       const p = String(inp.file_path ?? inp.notebook_path ?? "");
       if (EDIT_TOOLS.has(b.name) && p && !SKIP_PATH.test(p)) { if (!s.edited.includes(p)) s.edited.push(p); s.lastEdit = i; }
       if (["Agent", "Task"].includes(b.name)) {
@@ -796,7 +800,7 @@ export function guardGate(name, inp = {}, teamDir = null, rules = readJson(join(
     return "ด่านป้องกัน (SuperUser): push โดยไม่ระบุ branch ขณะอยู่บน main หรือ master (หรืออ่าน branch ไม่ได้) — กฎ: ไม่ commit หรือ push ลง main ตรง · ระบุ branch งานให้ชัด เช่น git push -u origin claude/<งาน>";
   if (allowedByRegex(cmd, allow, rules)) return "";
   for (const r of rules) {
-    if (allow.includes(r.id) || r.decision === "ask") continue;
+    if (!isBashGuard(r) || allow.includes(r.id) || r.decision === "ask") continue;
     let re; try { re = new RegExp(r.pattern, r.flags ?? "i"); } catch { continue; }
     if (re.test(cmd)) return `ด่านป้องกัน (SuperUser): ${r.reason} — กฎ: ${r.rule} · ถ้าผู้ใช้สั่งไว้จริง เพิ่ม "${r.id}" ใน .claude/superuser/guard-allow.json ("allow") แล้วลองใหม่`;
   }
@@ -815,7 +819,7 @@ export function guardAsk(name, inp = {}, teamDir = null, rules = readJson(join(H
   const cmd = String(inp.command ?? "");
   const allow = (teamDir && readJson(join(teamDir, "guard-allow.json"), {}).allow) || [];
   if (allowedByRegex(cmd, allow, rules)) return "";
-  const hit = rules.find((r) => r.decision === "ask" && !allow.includes(r.id) && (() => { try { return new RegExp(r.pattern, r.flags ?? "i").test(cmd); } catch { return false; } })());
+  const hit = rules.find((r) => isBashGuard(r) && r.decision === "ask" && !allow.includes(r.id) && (() => { try { return new RegExp(r.pattern, r.flags ?? "i").test(cmd); } catch { return false; } })());
   return hit ? `ด่านป้องกัน (SuperUser): ${hit.reason} — กฎ: ${hit.rule} · ผู้ใช้สั่งเองแล้วกดอนุมัติได้ · ไม่อยากให้ถามอีก เพิ่ม "${hit.id}" ใน .claude/superuser/guard-allow.json` : "";
 }
 
@@ -918,18 +922,43 @@ function agentGate(input, teamDir) {
   return dispatchGate(input.tool_input ?? {}) || quotaGate(input.tool_input ?? {}, accountLeft());
 }
 
+const PRE_TOOLS = ["Write", "Edit", "MultiEdit", "NotebookEdit", "Bash", "Agent", "Task", "Skill", "Read"];
+const configDirOf = () => process.env.CLAUDE_CONFIG_DIR ?? join(homedir(), ".claude");
+
+// กฎรวม (R7) + ตัวฟังของโปรเจกต์ + ตัวบอก skill ตอนลงมือ + ธงจากข้อความผู้ใช้ · คืน { deny, ask: [], warn: [] } · แต่ละส่วนพังแล้วข้ามส่วนนั้น (fail-open)
+function extraPre(input, teamDir, root) {
+  const out = { deny: "", ask: [], warn: [] }, tool = input.tool_name, configDir = configDirOf();
+  try { const r = preRules(input, teamDir, root, HERE); out.deny ||= r.deny; out.ask.push(...r.ask); out.warn.push(...r.warn); } catch { /* กฎพังต้องไม่ทำให้งานหยุด */ }
+  if (tool === "Bash") { try { const b = bashChecks(input, teamDir, configDir); out.deny ||= b.deny; out.warn.push(...b.warn); } catch { /* ตัวฟังพัง = ข้าม */ } }
+  try {
+    const router = readJson(join(HERE, "skill-router.json"), {});
+    if (tool === "Skill") {
+      if (modOn(teamDir, "suggest")) { const w = homonymWarn(input, router) || suggestSkill(input.tool_input?.skill, installedSkills({ hereDir: HERE, configDir })); if (w) out.warn.push(w); }
+    } else if (["Write", "Edit", "MultiEdit", "Bash"].includes(tool) && modOn(teamDir, "route_by_tool")) {
+      const r = toolRoute(input, router, { inst: installedSkills({ hereDir: HERE, configDir }) });
+      if (r) out.warn.push(r);
+    }
+  } catch { /* router พัง = ข้าม */ }
+  if (!input.agent_id) { try { out.warn.push(...takeFlags(input.session_id)); } catch { /* ไม่มีธง */ } }
+  return out;
+}
+
 function preWriteGate(input) {
-  if (input.hook_event_name !== "PreToolUse" || !["Write", "Edit", "Bash", "Agent", "Task"].includes(input.tool_name)) return;
+  if (input.hook_event_name !== "PreToolUse" || !(PRE_TOOLS.includes(input.tool_name) || /^mcp__/.test(input.tool_name ?? ""))) return;
   const root = findProjectRoot(input.cwd ?? process.cwd());
   const teamDir = root && teamDirOf(root);
   const answer = (decision, reason) => process.stdout.write(JSON.stringify({ hookSpecificOutput: { hookEventName: "PreToolUse", permissionDecision: decision, permissionDecisionReason: reason } }));
   if (["Agent", "Task"].includes(input.tool_name)) { const r = agentGate(input, teamDir); if (r) answer("deny", r); return; }
-  const deny = denyReason(input, teamDir);
+  const x = extraPre(input, teamDir, root);
+  const deny = denyReason(input, teamDir) || x.deny;
   if (deny) { answer("deny", deny); return; }
   const pii = teamDir && !moduleOn(teamDir, "pii_gate") ? "" : personalDataGate(input.tool_name, input.tool_input ?? {});
   const name = teamDir && moduleOn(teamDir, "name_gate", false) ? fileNameGate(input.tool_name, input.tool_input ?? {}) : "";
   const risky = teamDir && moduleOn(teamDir, "guard", false) ? guardAsk(input.tool_name, input.tool_input ?? {}, teamDir) : "";
-  if (pii || name || risky) answer("ask", [pii, name, risky].filter(Boolean).join("\n"));
+  const asks = [pii, name, risky, ...x.ask].filter(Boolean);
+  // warn = ไม่ถามและไม่ปฏิเสธ แค่ส่งข้อความเข้า context ของ agent ก่อนเครื่องมือทำงาน
+  if (asks.length) answer("ask", [...asks, ...x.warn].join("\n"));
+  else if (x.warn.length) process.stdout.write(JSON.stringify({ hookSpecificOutput: { hookEventName: "PreToolUse", additionalContext: x.warn.join("\n").slice(0, CONTEXT_MAX) } }));
 }
 
 // ── ด่านชื่อไฟล์ใหม่ (PreToolUse Write · โมดูล name_gate ค่าเริ่มปิด · ถาม ไม่ปฏิเสธ) ──
@@ -1259,17 +1288,53 @@ function stopSummary(input, teamDir) {
   writeSummary(teamDir);
 }
 
+// ส่วนเสริมต่อเหตุการณ์ (R4 · R7 · 34-48) · คืนข้อความรวม · ทุกส่วนมีสวิตช์โมดูลของตัวเอง (lib/util.mjs MODULE_DEFAULT)
+function eventExtras(input, event, teamDir, root) {
+  const parts = [], configDir = configDirOf(), lead = !input.agent_id, cwd = input.cwd ?? process.cwd();
+  if (event === "SessionStart" && lead) {
+    if (modOn(teamDir, "digest")) parts.push(digestNotice(teamDir));
+    if (modOn(teamDir, "version_notice")) parts.push(versionNotice({ hereDir: HERE, configDir }));
+    parts.push(sessionStartListener(teamDir, configDir, cwd));
+  }
+  if (event === "UserPromptSubmit" && lead && !NOT_USER.test(String(input.prompt ?? ""))) {
+    const text = String(input.prompt ?? "");
+    if (modOn(teamDir, "completion_loop")) {
+      if (loopCancelRequested(text)) { if (loopCancel(input.session_id)) parts.push("วนจนเสร็จ: หยุดแล้วตามที่ผู้ใช้สั่ง"); }
+      else { const req = parseLoopRequest(text); if (req && loopStart(input.session_id, req)) parts.push(loopStartNotice(req)); }
+    }
+    const r = promptRules(input, teamDir, root, HERE);
+    parts.push(...r.warn);
+    if (r.flags.length) setFlags(input.session_id, r.flags);   // แจ้งตอนเครื่องมือแรกหลังข้อความนี้ (ข้อ 43)
+  }
+  if ((event === "PostToolUse" || event === "PostToolUseFailure") && ["Skill", "Bash", "Edit", "Write", "MultiEdit"].includes(input.tool_name)) {
+    markSkillOpened(input);
+    parts.push(...postRules(input, teamDir, root, HERE));
+    if (modOn(teamDir, "lint_post")) parts.push(lintHint(input));
+  }
+  return parts.filter(Boolean).join("\n");
+}
+
 function main() {
   let raw = "";
   try { raw = readFileSync(0, "utf8"); } catch { return; }
   const input = JSON.parse(raw || "{}");
   const event = input.hook_event_name;
+  // ลายนิ้วมือโปรเจกต์ (ข้อ 34) · สวิตช์ใหญ่ modules.hook=false ของโปรเจกต์ → เงียบทั้งหมด
+  if (!scopeOk(input.cwd, configDirOf())) return;
+  { const r0 = findProjectRoot(input.cwd ?? process.cwd()); if (r0 && !modOn(teamDirOf(r0), "hook")) return; }
   if (event === "PreToolUse") { preWriteGate(input); return; }
   if (event === "Stop") {
     const root = findProjectRoot(input.cwd ?? process.cwd());
-    if (!root) return;
-    const teamDir = teamDirOf(root);
-    try { stopGate(input, teamDir); } catch { /* ด่านพังต้องไม่ทำให้สรุปหาย */ }
+    const teamDir = root && teamDirOf(root);
+    const out = (o) => process.stdout.write(JSON.stringify(o));
+    let note = "";
+    // วนจนเสร็จ (R4): ทำงานก่อนด่านอื่นและไม่ดู stop_hook_active · ยังไม่ถึงคำสัญญา = ไม่ให้จบ
+    if (!input.agent_id && modOn(teamDir, "completion_loop")) {
+      try { const l = loopStopGate(input); if (l?.block) { out({ decision: "block", reason: l.block }); return; } note = l?.say ?? ""; } catch { /* วนพังต้องไม่ทำให้จบไม่ได้ */ }
+    }
+    if (!root) { if (note) out({ systemMessage: note }); return; }
+    let reason = ""; try { reason = stopGate(input, teamDir, root); } catch { /* ด่านพังต้องไม่ทำให้สรุปหาย */ }
+    if (reason) out({ decision: "block", reason, ...(note ? { systemMessage: note } : {}) }); else if (note) out({ systemMessage: note });
     try { stopSummary(input, teamDir); } catch { /* สรุปพังต้องไม่บล็อกการจบ */ }
     return;
   }
@@ -1284,7 +1349,8 @@ function main() {
   let lead = "";
   try { lead = leadContext(input); } catch { /* กฎส่งไม่ได้ต้องไม่ทำให้ log ล้ม */ }
   const root = findProjectRoot(input.cwd ?? process.cwd());
-  if (!root) { say(lead); return; }
+  let more = ""; try { more = eventExtras(input, event, root && teamDirOf(root), root); } catch { /* ส่วนเสริมพังต้องไม่ทำให้กฎหาย */ }
+  if (!root) { say([more, lead].filter(Boolean).join("\n\n")); return; }
 
   const teamDir = teamDirOf(root);
   let notice = "", back = "";
@@ -1292,7 +1358,7 @@ function main() {
   if (event === "SessionStart" && input.source === "compact" && moduleOn(teamDir, "recompact", false)) {
     try { back = recompactNotice(teamDir, root); } catch { /* CONTEXT.md พังต้องไม่ทำให้กฎหาย */ }
   }
-  say([notice, back, lead].filter(Boolean).join("\n\n"));   // ข้อความ inbox และตำแหน่งงานสั้นและสำคัญ วางก่อนกฎ จะได้ไม่ถูกตัดท้าย
+  say([notice, back, more, lead].filter(Boolean).join("\n\n"));   // ข้อความ inbox และตำแหน่งงานสั้นและสำคัญ วางก่อนกฎ จะได้ไม่ถูกตัดท้าย
 }
 
 // เขียน log 1 บรรทัด · คืนข้อความแจ้ง inbox ของหัวหน้าทีม · สำเนา hook อีกตัวจด log ไปแล้ว → ไม่จดซ้ำ คืนค่าว่าง
@@ -1875,6 +1941,7 @@ ${rows}
   }]);
   const mdTok = summaryMarkdown({ "2026-10-21": { ...day, tokens: { main: { input: 1200, output: 30, cacheRead: 5000, cacheCreate: 40 }, "software-company:developer": { input: 10, output: 20, cacheRead: 0, cacheCreate: 0 } } } }, new Date("2026-10-21T04:00:00Z"));
   gates.push(["สรุป log: คอลัมน์ token ราย agent และยอดรวมวัน", [], true, () => mdTok.includes("| 2 นาที | 2026-10-21 10:04 | 10 | 20 | 0 | 0 |") && mdTok.includes("| 5 | 1 | 1,210 | 50 | 5,000 | 40 |")]);
+  try { gates.push(...extraGates({ HERE, isBashGuard, foldTranscript, freshGate, routeSkills, MULTISTEP_NOTE })); } catch (e) { gates.push([`P3 self-test เริ่มไม่ได้: ${e.message}`, [], true, () => false]); }
   for (const [label, lines, expect, fn = (l) => reviewGate(fold(l))] of gates) {
     const hit = Boolean(fn(lines)) === expect;
     console.log(`  ${hit ? "✅" : "❌"} ${label}`);
@@ -1893,6 +1960,19 @@ ${rows}
 
 if (process.argv[1]?.replace(/\\/g, "/").endsWith("/superuser-hook.mjs")) {
   if (process.argv.includes("--self-test")) selfTest();
+  if (process.argv.includes("--route-replay") || process.argv.includes("--cache-diff")) {
+    // เครื่องมือของคนแก้ plugin (ข้อ 36) · --route-replay [โฟลเดอร์ .claude/superuser] · --cache-diff
+    const router = readJson(join(HERE, "skill-router.json"), {});
+    if (process.argv.includes("--cache-diff")) console.log(JSON.stringify(cacheDiff(HERE, configDirOf()), null, 2));
+    else {
+      const given = process.argv[process.argv.indexOf("--route-replay") + 1];
+      const root = findProjectRoot(process.cwd());
+      const dir = given && !given.startsWith("--") ? given : root && teamDirOf(root);
+      const r = dir ? replayRoutes(dir, router, routeSkills) : { total: 0, hit: 0, miss: [] };
+      console.log(`prompt ${r.total} · ตรงแถว router ${r.hit} · ไม่ตรง ${r.total - r.hit}\n${r.miss.slice(0, 30).map((m) => "  - " + m).join("\n")}`);
+    }
+    process.exit(0);
+  }
   try { main(); } catch { /* log ล้มต้องไม่ทำให้งานหลักล้ม */ }
   process.exit(0);
 }
