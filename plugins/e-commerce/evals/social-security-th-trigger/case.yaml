@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: social-security-th-trigger
+description: ลูกจ้างลาออกแล้วอยากส่งประกันสังคมต่อเอง ต้องเปิด social-security-th และพูดถึงมาตรา 39 · ไม่เอ่ยชื่อ skill
+tags: [trigger, regression-suite, social-security-th]
+runs: 3
+expected_outcome: เปิด Skill social-security-th แล้วตอบเรื่องมาตรา 39
+execution:
+  prompt: |
+    ฉันเพิ่งลาออกจากงานประจำเมื่อ 2 เดือนก่อน ส่งประกันสังคมมา 5 ปี อยากส่งต่อเองจะได้ไม่เสียสิทธิ ทำได้ไหม ต้องจ่ายเดือนละเท่าไหร่
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?social-security-th"'
+    min: 1
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: 'มาตรา\s*39|ม\.\s*39|\b432\b'
+    flags: i
+    match: contains
+    target: last_message

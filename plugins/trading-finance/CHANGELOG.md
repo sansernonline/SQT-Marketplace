@@ -1,5 +1,10 @@
 # Changelog — trading-finance
 
+## 0.20.1 — 2026-11-10
+
+- `mutual-fund-picker`: description ตัดเรื่อง DCA ออกและชี้ `rebalance-and-dca` · ขั้นตั้งแผน DCA ชี้ไปตัวเดียวกัน
+- `emergency-fund`: แหล่งเงินคุ้มครองเงินฝากเปลี่ยนเป็นหน้า dpa.or.th ตรวจ 2026-11-10 (1 ล้านบาท · มีผล 11 ส.ค. 2564 · รายการที่ไม่คุ้มครอง) และชี้ `bonds-and-deposits` สำหรับเงินส่วนเกิน
+
 ## 0.20.0 — 2026-11-10
 
 - `stock-fundamentals` (ใหม่): อ่านงบหุ้น SET เป็น P/E · P/BV · ROE · D/E · ปันผล พร้อมจุดที่ต้องเปิดงบดู และคัดผู้สมัครเข้า watchlist · สคริปต์ `ratios.mjs` + eval 3 เคส

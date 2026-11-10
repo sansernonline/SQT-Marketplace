@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: e-tax-invoice-trigger
+description: ร้านจด VAT ลูกค้าบริษัทขอใบกำกับภาษี ต้องเปิด e-tax-invoice และพูดถึงรายการที่ต้องมีบนใบ · ไม่เอ่ยชื่อ skill
+tags: [trigger, regression-suite, e-tax-invoice]
+runs: 3
+expected_outcome: เปิด Skill e-tax-invoice แล้วตอบรายการที่ต้องมีบนใบกำกับภาษี
+execution:
+  prompt: |
+    ลูกค้าเป็นบริษัท เขาขอใบกำกับภาษีเต็มรูปจากร้านเรา ร้านจด VAT ไว้แล้ว บนใบต้องมีอะไรบ้างคะ เขาบอกถ้าขาดข้อมูลเขาเคลมภาษีซื้อไม่ได้
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?e-tax-invoice"'
+    min: 1
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: '13 หลัก|เลขประจำตัวผู้เสียภาษี|ม\.?\s*86/4|สาขา'
+    flags: i
+    match: contains
+    target: last_message

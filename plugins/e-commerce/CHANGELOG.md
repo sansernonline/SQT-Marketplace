@@ -1,5 +1,11 @@
 # CHANGELOG — e-commerce
 
+## 1.9.1 — 2026-11-10
+
+- `product-listing`: เรื่องรูปสินค้าชี้ `marketplace-product-images` (ขนาด พื้นขาว รูปที่ถูกปฏิเสธ) ส่วนแบนเนอร์และโพสต์ชี้ `social-formats`
+- `thai-business-setup`: ย้ายตารางหัวข้อ 1-3 ไป `references/` 3 ไฟล์ (รูปแบบธุรกิจ · ภาษีเงินได้เทียบ · จดทะเบียน) SKILL.md เหลือสรุปและลิงก์ตรง
+- เคส eval ใหม่ 8 ไฟล์ `e-tax-invoice` `seller-tax-basics` `social-security-th` `multi-shop-stock` (trigger และ behaviour อย่างละ 1) ยังไม่ได้รัน
+
 ## 1.9.0 — 2026-11-10
 
 - skill ใหม่ `shop-daily-briefing`: สรุปเรื่องที่ต้องตัดสินใจวันนี้ 3–6 ข้อจากข้อมูลที่ดึงวันนี้ เรียงตามเงินที่เสี่ยง

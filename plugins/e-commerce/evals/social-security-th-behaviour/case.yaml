@@ -1,0 +1,48 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# ตัวเลขจาก SKILL.md หัวข้อ 1 และตัวอย่างงานจริง ณ 2026-11-10: เพดานค่าจ้าง 17,500 (1 ม.ค. 2569 ถึง 2571) · 5% ต่อฝ่าย · สูงสุด 875 · ฐานต่ำสุด 1,650
+# เพดาน 17,500 ใน SKILL.md ยังมีป้าย (รอยืนยัน) กับราชกิจจาฯ · เพดานเปลี่ยนให้แก้เคสนี้
+schema_version: "1.1"
+name: social-security-th-behaviour
+description: คิดเงินสมทบประกันสังคม ม.33 ต้องใช้เพดานค่าจ้างและบอกกำหนดส่ง สปส.1-10 ไม่คิด 5% ของเงินเดือนเต็ม
+tags: [behaviour, capability-suite, social-security-th]
+runs: 3
+expected_outcome: เงินเดือน 30,000 หักคนละ 875 · เงินเดือน 12,000 หักคนละ 600 · นายจ้าง 10 คน เงินเดือนคนละ 20,000 ส่งรวม 17,500 ภายในวันที่ 15 ของเดือนถัดไปผ่านแบบ สปส.1-10
+execution:
+  prompt: |
+    ปี 2569 นี้ ลูกจ้างประกันสังคมมาตรา 33 ต้องหักเท่าไหร่ ช่วยคิดให้
+    1) เงินเดือน 30,000 หักกี่บาท นายจ้างสมทบอีกกี่บาท
+    2) เงินเดือน 12,000 หักกี่บาท
+    3) ร้านมีลูกน้อง 10 คน เงินเดือนคนละ 20,000 เดือนหนึ่งต้องส่งประกันสังคมรวมกี่บาท ส่งภายในวันไหน ใช้แบบอะไร
+  max_turns: 8
+  timeout_seconds: 240
+graders:
+  - name: capped-875
+    type: regex
+    pattern: '875'
+    flags: i
+    match: contains
+    target: last_message
+  - name: low-wage-600
+    type: regex
+    pattern: '\b600\b'
+    flags: i
+    match: contains
+    target: last_message
+  - name: ten-staff-total
+    type: regex
+    pattern: '17,?500'
+    flags: i
+    match: contains
+    target: last_message
+  - name: deadline-form
+    type: regex
+    pattern: 'สปส\.?\s*1-10'
+    flags: i
+    match: contains
+    target: last_message
+  - name: deadline-15th
+    type: regex
+    pattern: 'วันที่\s*15|ภายใน\s*15|15th|วัน 15'
+    flags: i
+    match: contains
+    target: last_message

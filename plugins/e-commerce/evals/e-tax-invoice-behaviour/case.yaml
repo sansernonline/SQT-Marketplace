@@ -1,0 +1,47 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# ตัวเลขที่คาดได้จากการรัน thai-id.mjs เมื่อ 2026-11-10: 1234567890139 ถูกต้อง · 1234567890123 ไม่ผ่าน หลักสุดท้ายควรเป็น 1
+# input: เลขผู้เสียภาษี 2 ตัว + ใบแจ้งหนี้ที่ไม่มีสาขาผู้ซื้อและรวม VAT ในยอดเดียว
+schema_version: "1.1"
+name: e-tax-invoice-behaviour
+description: ตรวจเลขผู้เสียภาษี 2 ตัวและใบกำกับภาษีที่ขาดสาขาผู้ซื้อ ต้องรัน thai-id.mjs และชี้ว่าเลขตัวที่ 2 ผิดตรงหลักตรวจสอบ
+tags: [behaviour, capability-suite, e-tax-invoice]
+runs: 3
+expected_outcome: เรียก thai-id.mjs · 1234567890139 ผ่าน · 1234567890123 ไม่ผ่าน · บอกว่าขาดสาขาผู้ซื้อและต้องแยก VAT · ไม่แก้ใบเดิมแต่ออกใบลดหนี้หรือยกเลิกออกใหม่
+execution:
+  prompt: |
+    ร้านเราจด VAT แล้ว กำลังจะออกใบกำกับภาษีให้ลูกค้าที่เป็นบริษัท ช่วยเช็กให้หน่อยค่ะ
+    - เลขผู้เสียภาษีของลูกค้า 1234567890139 และของเราที่พิมพ์ไว้ในแม่แบบ 1234567890123 ผ่านทั้งคู่ไหม
+    - ใบที่ออกไปแล้วใบหนึ่ง เขียนว่า "ใบเสร็จรับเงิน" ยอดรวม 21,400 บาท ไม่แยก VAT ไม่มีสาขาของลูกค้า ลูกค้าเป็นบริษัทจด VAT ใช้เคลมภาษีซื้อได้ไหม แก้ยังไง
+  max_turns: 10
+  timeout_seconds: 300
+graders:
+  - name: script-called
+    type: tool_used
+    tool: Bash
+    input_match: 'thai-id\.mjs'
+    min: 1
+    arm: with-only
+  - name: second-id-flagged
+    type: regex
+    pattern: '1234567890123[\s\S]{0,120}(ไม่ผ่าน|ไม่ถูก|ผิด|ไม่ตรง)'
+    flags: i
+    match: contains
+    target: last_message
+  - name: branch-missing
+    type: regex
+    pattern: 'สาขา|สำนักงานใหญ่'
+    flags: i
+    match: contains
+    target: last_message
+  - name: vat-separate
+    type: regex
+    pattern: 'แยก.{0,20}(VAT|ภาษีมูลค่าเพิ่ม)|(VAT|ภาษีมูลค่าเพิ่ม).{0,20}แยก'
+    flags: i
+    match: contains
+    target: last_message
+  - name: no-edit-original
+    type: regex
+    pattern: 'ใบลดหนี้|ใบเพิ่มหนี้|ยกเลิก.{0,20}ออกใหม่'
+    flags: i
+    match: contains
+    target: last_message
