@@ -1,0 +1,28 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# ทางที่กัน: งานของทีมในตัวติดตามงานของบริษัท ไม่ใช่งานของ task-board (ตาราง "Use when / not when")
+# รอบแดงยังไม่ได้รัน (ยังไม่ได้ตรวจ) · เขียนเป็น -guard เพราะยังไม่เคยเห็น agent พลาดจริง
+schema_version: "1.1"
+name: task-board-guard
+description: ผู้ใช้ถามวิธีจัดลำดับ ticket ของทีมใน Jira ต้องไม่เปิด task-board และไม่เสนอให้ย้ายงานทีมไปไฟล์ tasks.md ส่วนตัว
+tags: [guard, task-board]
+runs: 3
+expected_outcome: ตอบเรื่องจัดลำดับงานทีมใน Jira โดยตรง ไม่เปิด skill task-board และไม่แนะนำให้คัดลอกงานทีมลงไฟล์ tasks.md
+execution:
+  prompt: |
+    ทีมผมมี ticket ค้างใน Jira 40 ใบ sprint หน้าจะเลือกทำอันไหนก่อนดี
+    มีเกณฑ์จัดลำดับที่ใช้กันในทีม scrum ไหม
+  max_turns: 4
+  timeout_seconds: 120
+graders:
+  - name: skill-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?task-board"'
+    min: 0
+    max: 0
+    arm: with-only
+  - name: no-tasks-md
+    type: regex
+    pattern: "tasks\\.md"
+    match: not_contains
+    target: last_message

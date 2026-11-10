@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เขียน 2026-11-10 ยังไม่ได้รัน
+schema_version: "1.1"
+name: job-exit-trigger
+description: HR ยื่นเอกสารให้เซ็นลาออกโดยสมัครใจและบอกให้เซ็นวันนี้ ไม่เอ่ยชื่อ skill ต้องทำให้ job-exit ถูกเปิด
+tags: [trigger, job-exit]
+runs: 3
+expected_outcome: เรียก Skill job-exit แล้วบอกให้ยังไม่เซ็นวันนี้ ขอเวลาอ่าน เก็บหลักฐาน และเทียบสิทธิ์ก่อน
+execution:
+  prompt: |
+    เมื่อเช้า HR เรียกไปคุย บอกว่าบริษัทปรับโครงสร้าง ยื่นใบลาออกโดยสมัครใจมาให้เซ็น
+    ให้เงินชดเชย 1 เดือน บอกว่าต้องเซ็นภายในวันนี้ไม่งั้นจะไม่ได้อะไรเลย
+    ผมทำงานมา 4 ปีกว่า ควรทำยังไงดี
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?job-exit"'
+    min: 1
+    arm: with-only
+  - name: do-not-sign-today
+    type: regex
+    pattern: "(ยังไม่|อย่า|ไม่ควร).{0,15}เซ็น"
+    match: contains
+    target: last_message

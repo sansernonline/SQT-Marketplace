@@ -1,0 +1,28 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# ทางที่กัน: ของชำรุดและร้านไม่คืนเงินเป็นงานของ refund-request (e-commerce) ไม่ใช่ legal-help-prep
+# รอบแดงยังไม่ได้รัน (ยังไม่ได้ตรวจ) · เขียนเป็น -guard เพราะยังไม่เคยเห็น agent พลาดจริง
+schema_version: "1.1"
+name: legal-help-prep-guard
+description: ผู้ใช้ซื้อหูฟังออนไลน์แล้วได้ของปลอม ร้านไม่ยอมคืนเงิน ต้องไม่เปิด legal-help-prep แต่ใช้ขั้นขอคืนเงินและร้อง สคบ.
+tags: [guard, legal-help-prep]
+runs: 3
+expected_outcome: ไม่เปิด legal-help-prep · ให้ขั้นขอคืนเงินกับร้านและแพลตฟอร์มก่อน แล้วจึงร้อง สคบ.
+execution:
+  prompt: |
+    สั่งหูฟังจาก Shopee ราคา 3,990 ได้ของปลอมมา ร้านไม่ยอมคืนเงิน บอกว่าเปิดกล่องแล้ว
+    จะทำยังไงให้ได้เงินคืน
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?legal-help-prep"'
+    min: 0
+    max: 0
+    arm: with-only
+  - name: refund-steps
+    type: regex
+    pattern: "คืนเงิน|1166|สคบ"
+    match: contains
+    target: last_message

@@ -1,0 +1,30 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เขียน 2026-11-10 ยังไม่ได้รัน
+schema_version: "1.1"
+name: study-drill-trigger
+description: ผู้ใช้วางโน้ตเรื่อง VPC แล้วขอให้ทำบัตรคำและถามทดสอบโดยยังไม่เฉลย ไม่เอ่ยชื่อ skill ต้องทำให้ study-drill ถูกเปิด
+tags: [trigger, study-drill]
+runs: 3
+expected_outcome: เรียก Skill study-drill แล้วทำบัตรคำที่หน้าบัตรเป็นคำถาม หลังบัตรสั้น และมีแหล่งของแต่ละใบ
+execution:
+  prompt: |
+    อาทิตย์หน้าสอบ AWS SAA ข้างล่างคือโน้ตเรื่อง VPC ที่จดไว้
+    ช่วยทำเป็นการ์ดท่องจำให้หน่อย แล้วถามฉันทีละข้อ ยังไม่ต้องบอกคำตอบนะ
+    ---
+    - public subnet = มี route ไป internet gateway
+    - private subnet ออกเน็ตผ่าน NAT gateway ซึ่งต้องอยู่ใน public subnet
+    - security group เป็น stateful, NACL เป็น stateless
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?study-drill"'
+    min: 1
+    arm: with-only
+  - name: card-has-question
+    type: regex
+    pattern: "Q:|\\?|ไหม|อะไร|อย่างไร"
+    match: contains
+    target: last_message
