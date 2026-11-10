@@ -1,0 +1,81 @@
+{
+  "id": "d16-hidden-contract",
+  "plugin": "software-company",
+  "title": "โค้ด: dependency ซ่อน ต้องล็อก type กลางก่อนแตก 3 โมดูล",
+  "risky": false,
+  "prompt": "แอปเดลิเวอรี่ (TypeScript) ต้องเพิ่ม 3 โมดูล: โปรโมชัน `src/promo/` · ค่าส่ง `src/fee/` · แต้มสะสม `src/loyalty/` · ทั้ง 3 รับและคืนออเดอร์รูปแบบเดียวกัน และแก้ยอดในออเดอร์ต่อกัน แต่ตอนนี้ยังไม่มีไฟล์ type ของออเดอร์ที่ใช้ร่วม · เสร็จแล้วต้องมี integration test ที่ส่งออเดอร์ผ่านทั้ง 3 โมดูลใน `tests/order-flow.test.ts`",
+  "expected": {
+    "size": "กลาง",
+    "workers": 3
+  },
+  "graph": {
+    "name": "3 โมดูลออเดอร์",
+    "tasks": [
+      {
+        "id": "types",
+        "size": 10,
+        "needs": [],
+        "owns": [
+          "src/types/order.ts"
+        ],
+        "tags": [
+          "judgment"
+        ]
+      },
+      {
+        "id": "promo",
+        "size": 25,
+        "needs": [
+          "types"
+        ],
+        "owns": [
+          "src/promo/index.ts"
+        ],
+        "tags": [
+          "judgment"
+        ]
+      },
+      {
+        "id": "fee",
+        "size": 25,
+        "needs": [
+          "types"
+        ],
+        "owns": [
+          "src/fee/index.ts"
+        ],
+        "tags": [
+          "judgment"
+        ]
+      },
+      {
+        "id": "loyalty",
+        "size": 25,
+        "needs": [
+          "types"
+        ],
+        "owns": [
+          "src/loyalty/index.ts"
+        ],
+        "tags": [
+          "judgment"
+        ]
+      },
+      {
+        "id": "itest",
+        "size": 20,
+        "needs": [
+          "promo",
+          "fee",
+          "loyalty"
+        ],
+        "owns": [
+          "tests/order-flow.test.ts"
+        ],
+        "tags": [
+          "judgment"
+        ]
+      }
+    ]
+  }
+}

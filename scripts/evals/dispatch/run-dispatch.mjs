@@ -19,7 +19,7 @@ import { join, dirname, resolve } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { run } from "../coding/lib.mjs";
-import { WAVE_MAX, parsePlan, scoreRun, summarizeArm, armTable } from "./score.mjs";
+import { WAVE_MAX, parsePlan, scoreRun, summarizeArm, armTable, tierFromTags, TAGS } from "./score.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, "..", "..", "..");
@@ -27,7 +27,9 @@ const OUT = join(ROOT, "_to_delete", "dispatch");
 const WORK = join(tmpdir(), "sqt-dispatch");
 const PLUGIN = join(ROOT, "plugins", "superuser");
 const PLAN_MJS = join(PLUGIN, "skills", "parallel-split-and-merge", "scripts", "plan.mjs");
-const CASE_COUNT = 10;
+// เคสสาขาอื่นใส่ "plugin": "<ชื่อ>" → โหลด plugin สาขานั้นคู่กับ superuser ให้หัวหน้าเห็นลูกทีมและ playbook ของสาขา (เหมือนใช้งานจริง)
+export const pluginDirs = (c) => [PLUGIN, ...(c.plugin ? [join(ROOT, "plugins", c.plugin)] : [])];
+const CASE_COUNT = 18;
 const TIERS = ["ใหญ่", "กลาง", "เล็ก"];
 const ARMS = { plugin: "มี plugin", none: "ไม่มี plugin" };
 
@@ -60,13 +62,16 @@ function loadCases() {
   const dir = join(HERE, "cases");
   const only = args.only ? new RegExp(args.only) : null; // --only "^d7" รันเฉพาะเคสที่ชื่อไฟล์ตรง
   return readdirSync(dir).filter((f) => f.endsWith(".json") && (!only || only.test(f))).sort()
-    .map((f) => ({ file: f, ...JSON.parse(readFileSync(join(dir, f), "utf8")) }));
+    .map((f) => ({ file: f, ...JSON.parse(readFileSync(join(dir, f), "utf8")) }))
+    // ชิ้นที่มี tags แต่ไม่มี tier → คำนวณระดับเฉลยจากป้าย (มีทั้งคู่ --verify ตรวจว่าตรงกัน)
+    .map((c) => ({ ...c, graph: { ...c.graph, tasks: c.graph.tasks.map((t) => ({ ...t, tier: t.tier ?? (t.tags ? tierFromTags(t.tags, c.risky) : undefined), tierGiven: t.tier })) } }));
 }
 
 // ---- ประมาณค่าใช้จ่าย ----
 const priceRatio = MODEL === "none" ? 1 : (PRICES[MODEL]?.output ?? PRICES["claude-sonnet-5-5"].output) / PRICES["claude-sonnet-5-5"].output;
 const estimate = (arm) => SONNET_COST[arm] * priceRatio;
-const capPerCall = (arm) => Math.max(estimate(arm) * CAP_MARGIN, CAP_MIN);
+// เคสที่โหลด plugin สาขาด้วย หัวหน้าเปิด skill ของ 2 plugin ก่อนตอบ เพดานต่อครั้งจึงคูณ 2 (d13 ชนเพดาน $0.33 ก่อนตอบ 2 ใน 3 รอบ 2026-11-10)
+const capPerCall = (arm, c = {}) => Math.max(estimate(arm) * CAP_MARGIN * (arm === "plugin" && c.plugin ? 2 : 1), CAP_MIN);
 
 function printPlan() {
   const n = loadCases().length;
@@ -103,7 +108,7 @@ function readStream(out) {
 
 /** เรียก claude -p 1 ครั้งในโฟลเดอร์ว่างนอก repo · ผลไม่ครบ → นับ $ เท่าเพดาน เพราะอาจเสียจริงถึงเพดาน */
 async function ask(c, arm, cap) {
-  const argv = ["-p", ...(MODEL === "none" ? [] : ["--model", MODEL]), ...(arm === "plugin" ? ["--plugin-dir", PLUGIN] : []),
+  const argv = ["-p", ...(MODEL === "none" ? [] : ["--model", MODEL]), ...(arm === "plugin" ? pluginDirs(c).flatMap((d) => ["--plugin-dir", d]) : []),
     "--setting-sources", "project", "--strict-mcp-config", "--tools", "Skill,Read", "--max-turns", "8",
     "--output-format", "stream-json", "--verbose", "--max-budget-usd", String(cap)];
   const r = await run("claude", argv, { cwd: freshDir(`${c.id}-${arm}`), input: c.prompt + SUFFIX });
@@ -128,7 +133,7 @@ async function paidRun() {
   console.log(`เริ่ม ${cases.length} เคส × ${RUNS} รอบ × 2 แขน · model ${MODEL} · งบรวม ${usd(BUDGET_TOTAL)}`);
   // วนรอบนอกสุด แขนในสุด: งบหมดกลางทาง 2 แขนยังได้จำนวนรอบใกล้กัน
   run: for (let n = 1; n <= RUNS; n++) for (const c of cases) for (const arm of Object.keys(ARMS)) {
-    const cap = capPerCall(arm);
+    const cap = capPerCall(arm, c);
     if (spent + cap > BUDGET_TOTAL) { console.log(`เหลืองบ ${usd(BUDGET_TOTAL - spent)} ไม่พอเพดาน ${usd(cap)} · หยุดที่ ${c.id} ${arm} รอบ ${n}`); break run; }
     const r = { case: c.id, arm, n, risky: c.risky, ...(await ask(c, arm, cap)) };
     if (r.isQuota) { console.log("โควตาบัญชีหมด หยุดรัน · รันซ้ำทีหลัง"); break run; }
@@ -188,10 +193,16 @@ function checkCase(c) {
   for (const k of ["id", "title", "prompt", "risky", "expected", "graph"]) if (c[k] === undefined) bad.push(`ไม่มีช่อง ${k}`);
   if (bad.length) return { bad };
   if (`${c.id}.json` !== c.file) bad.push(`id ${c.id} ไม่ตรงชื่อไฟล์`);
+  if (c.plugin && !existsSync(join(ROOT, "plugins", c.plugin, ".claude-plugin", "plugin.json"))) bad.push(`ไม่มี plugin ${c.plugin}`);
   if (/superuser|ลูกทีม/i.test(c.prompt)) bad.push("prompt เอ่ยคำว่า superuser หรือลูกทีม");
   const tiers = c.graph.tasks.map((t) => t.tier);
   if (!tiers.every((t) => TIERS.includes(t))) bad.push(`tier ต้องเป็น ${TIERS.join("/")}`);
   if (c.risky && tiers.includes("เล็ก")) bad.push("งานเสี่ยงใช้ระดับเล็กไม่ได้");
+  for (const t of c.graph.tasks.filter((x) => x.tags)) {
+    const odd = t.tags.filter((g) => !TAGS.includes(g));
+    if (odd.length) bad.push(`${t.id}: ป้ายไม่รู้จัก ${odd.join(",")}`);
+    if (t.tierGiven && t.tierGiven !== tierFromTags(t.tags, c.risky)) bad.push(`${t.id}: tier ${t.tierGiven} ไม่ตรงกับป้าย (${tierFromTags(t.tags, c.risky)})`);
+  }
   let a;
   try { a = analyse(c); } catch (e) { return { bad: [...bad, `plan.mjs ไม่รับกราฟ: ${String(e.stderr ?? e.message).trim()}`] }; }
   const size = sizeOf(a);

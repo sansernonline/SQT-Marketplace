@@ -1,0 +1,107 @@
+{
+  "id": "d12-tax-mixed",
+  "plugin": "e-commerce",
+  "title": "งานภาษีที่มีชิ้นดูเป็นกลไก + ชิ้นที่ควรเป็นสคริปต์ + รวมผลท้าย",
+  "risky": true,
+  "prompt": "เตรียมยื่น ภ.ง.ด.94 ครึ่งปีแรกของร้านออนไลน์ (เงินได้ 40(8)) · ต้องสรุปรายได้จากรายการเดินบัญชีธนาคาร ม.ค. ถึง มิ.ย. ที่อยู่คนละไฟล์ `bank/2026-01.csv` ถึง `bank/2026-06.csv` ไฟล์ละหลายร้อยแถว ต้องแยกเงินโอนที่เป็นรายได้ออกจากเงินโอนส่วนตัว · แล้วคำนวณภาษีและกรอกแบบ · นอกจากนี้ใบเสร็จ 150 ไฟล์ในโฟลเดอร์ `receipts/` ชื่อยังมั่ว ต้องเปลี่ยนเป็น `วันที่-เลขที่.pdf` จากข้อมูลในชื่อไฟล์เดิมที่มีรูปแบบตายตัว",
+  "expected": {
+    "size": "กลาง",
+    "workers": 6
+  },
+  "graph": {
+    "name": "ภ.ง.ด.94 ครึ่งปี",
+    "tasks": [
+      {
+        "id": "m1",
+        "size": 15,
+        "needs": [],
+        "owns": [
+          "work/income-m1.md"
+        ],
+        "tags": [
+          "money",
+          "judgment"
+        ]
+      },
+      {
+        "id": "m2",
+        "size": 15,
+        "needs": [],
+        "owns": [
+          "work/income-m2.md"
+        ],
+        "tags": [
+          "money",
+          "judgment"
+        ]
+      },
+      {
+        "id": "m3",
+        "size": 15,
+        "needs": [],
+        "owns": [
+          "work/income-m3.md"
+        ],
+        "tags": [
+          "money",
+          "judgment"
+        ]
+      },
+      {
+        "id": "m4",
+        "size": 15,
+        "needs": [],
+        "owns": [
+          "work/income-m4.md"
+        ],
+        "tags": [
+          "money",
+          "judgment"
+        ]
+      },
+      {
+        "id": "m5",
+        "size": 15,
+        "needs": [],
+        "owns": [
+          "work/income-m5.md"
+        ],
+        "tags": [
+          "money",
+          "judgment"
+        ]
+      },
+      {
+        "id": "m6",
+        "size": 15,
+        "needs": [],
+        "owns": [
+          "work/income-m6.md"
+        ],
+        "tags": [
+          "money",
+          "judgment"
+        ]
+      },
+      {
+        "id": "pnd94",
+        "size": 25,
+        "needs": [
+          "m1",
+          "m2",
+          "m3",
+          "m4",
+          "m5",
+          "m6"
+        ],
+        "owns": [
+          "work/pnd94.md"
+        ],
+        "tags": [
+          "money",
+          "external"
+        ]
+      }
+    ]
+  }
+}
