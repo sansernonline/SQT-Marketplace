@@ -9,13 +9,13 @@ disable-model-invocation: true
 
 Use the `devops-engineer` agent to coordinate incident response for: **$ARGUMENTS**
 
-> 🚨 **Critical:** Speed matters. During the incident keep only a plain timestamped log (one line per event). Polish it after the incident. Focus on stopping the bleed.
+> **Critical:** Speed matters. During the incident keep only a plain timestamped log (one line per event). Polish it after the incident. Focus on stopping the bleed.
 >
-> 🔐 **Security breach or leaked personal data?** Hand the lead to the `security-analyst` agent and start `pdpa-compliance` section 8 now: the 72-hour clock to notify the PDPC (Personal Data Protection Committee) office starts when the breach is known.
+> **Security breach or leaked personal data?** Hand the lead to the `security-analyst` agent and start `pdpa-compliance` section 8 now: the 72-hour clock to notify the PDPC (Personal Data Protection Committee) office starts when the breach is known.
 
 The DevOps engineer should follow this structured response:
 
-## 🔥 Phase 1: Detection & Triage (first 5 min)
+## Phase 1: Detection & Triage (first 5 min)
 
 1. **Confirm the incident:**
    - Is it real? (multiple signals or just one)
@@ -35,7 +35,7 @@ The DevOps engineer should follow this structured response:
 
 5. **Update status page** (for user-facing SEV1/2)
 
-## 🔍 Phase 2: Investigation (next 15-30 min)
+## Phase 2: Investigation (next 15-30 min)
 
 1. **Gather evidence:**
    - Logs (application, infra)
@@ -69,9 +69,9 @@ The DevOps engineer should follow this structured response:
    | Customers (status page · in-app) | at declare · on change · at all-clear | symptom in their words · workaround if any · next update time — no root cause, no blame, no promises of a fix time |
    | Regulator / PDPC (personal-data breach only) | within 72 h of knowing, via `pdpa-compliance` section 8 | what data · how many people · what was done · contact person — drafted by `legal-compliance-officer`, not improvised in the channel |
 
-## 🩹 Phase 3: Mitigation (stop the bleeding)
+## Phase 3: Mitigation (stop the bleeding)
 
-> 💡 Mitigation ≠ fix. The goal is to cut user impact NOW.
+> **Tip:** Mitigation ≠ fix. The goal is to cut user impact NOW.
 
 Common mitigations, lowest risk first (same order as `incident-runbook-template`):
 - **Disable** broken feature (feature flag) · **Rate limit** abusive traffic
@@ -80,7 +80,7 @@ Common mitigations, lowest risk first (same order as `incident-runbook-template`
 - **Block** at WAF (web application firewall) or firewall
 - **Failover** to backup region/instance (last resort)
 
-> ✋ **Production changes need a human.** The agent proposes the action, the command and the expected effect. A human on-call runs it or approves it before rollback, failover, WAF or firewall blocks, scaling or flag changes touch production (`principle-proceed-on-reversible-work`).
+> **Production changes need a human.** The agent proposes the action, the command and the expected effect. A human on-call runs it or approves it before rollback, failover, WAF or firewall blocks, scaling or flag changes touch production (`principle-proceed-on-reversible-work`).
 
 Document what worked AND what didn't.
 
@@ -101,7 +101,7 @@ Document what worked AND what didn't.
    - Notify customer support
    - Post in incident channel
 
-## 📝 Phase 5: Post-Incident (within 48h)
+## Phase 5: Post-Incident (within 48h)
 
 1. **Schedule postmortem** within 48 hours
 2. **Use `postmortem-template` skill** for blameless analysis

@@ -1,0 +1,24 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: important-docs-trigger
+description: อยากรวมวันหมดอายุของพาสปอร์ต บัตร พ.ร.บ.รถ กรมธรรม์ไว้ที่เดียว ไม่เอ่ยชื่อ skill ต้องทำให้ important-docs ถูกเปิด
+tags: [trigger, important-docs]
+runs: 3
+expected_outcome: เรียก Skill important-docs แล้วเสนอทะเบียนเดียว (CSV) พร้อมคอลัมน์วันหมดอายุ ที่เก็บ และเวลาเตือนล่วงหน้า
+execution:
+  prompt: |
+    บ้านผมมีพาสปอร์ต 3 เล่ม บัตรประชาชน พ.ร.บ.รถ 2 คัน กรมธรรม์ประกัน อยากรวมวันหมดอายุไว้ที่เดียวจะได้ไม่ลืมต่ออายุ ต้องทำอย่างไร
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?important-docs"'
+    min: 1
+    arm: with-only
+  - name: registry
+    type: regex
+    pattern: "(?i)csv|ทะเบียน|renew"
+    match: contains
+    target: last_message

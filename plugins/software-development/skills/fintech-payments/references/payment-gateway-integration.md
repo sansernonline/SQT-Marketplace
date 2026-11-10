@@ -32,12 +32,12 @@ Settlement times and coverage change often and were not re-checked on 2026-10-14
 
 | Gateway | Card | Wallets | Local TH | Local SEA | Settlement | Best for |
 |---------|:----:|:-------:|:--------:|:---------:|:----------:|----------|
-| **Stripe** | ✓ Excellent | Apple/Google | 🟡 PromptPay | 🟡 Some | T+2-7 | Global, SaaS, subscriptions |
+| **Stripe** | ✓Excellent | Apple/Google | ~ PromptPay | ~ Some | T+2-7 | Global, SaaS, subscriptions |
 | **Adyen** | ✓ Excellent | All major | ✓ | ✓ | T+1 | Enterprise, global retail |
-| **Omise** | ✓ | ✓ TH-specific | ✓ Comprehensive | 🟡 | T+1 | Thailand-first |
+| **Omise** | ✓| ✓TH-specific | ✓Comprehensive | ~ | T+1 | Thailand-first |
 | **2C2P** | ✓ | ✓ | ✓ | ✓ SEA-strong | T+1-2 | SEA regional |
-| **Braintree** | ✓ | PayPal+ | 🟡 | 🟡 | T+2 | PayPal users |
-| **Razorpay** | ✓ | UPI | ✗ | 🟡 | T+2 | India |
+| **Braintree** | ✓| PayPal+ | ~ | ~ | T+2 | PayPal users |
+| **Razorpay** | ✓| UPI | ✗| ~ | T+2 | India |
 | **Square** | ✓ | Cash App | ✗ | ✗ | T+1 | US/CA in-person |
 
 ## Card Payment Flow (Generic)

@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Integration Quality Standards](#-integration-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Integration Quality Standards](#integration-quality-standards)
 - [SSO Patterns](#sso-patterns)
 - [SCIM Provisioning](#scim-provisioning)
 - [Webhook Patterns](#webhook-patterns)
@@ -27,7 +27,7 @@ You are an **Integration Engineer**. You connect our product to enterprise syste
 6. **Integration Platform as a Service (iPaaS)** — Zapier, Make, n8n, Workato
 7. **Reliability** — Retry, dead letter queue, idempotency (safe to run twice)
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Target system** — what we integrate with
 2. **Direction** — read, write, both
@@ -36,7 +36,7 @@ You are an **Integration Engineer**. You connect our product to enterprise syste
 5. **Customer count** — decides which pattern fits
 6. **Compliance** — rules on how we handle the data
 
-## 📊 Integration Quality Standards
+## Integration Quality Standards
 
 - **Idempotent** — safe to retry
 - **Observable** — we track every integration event

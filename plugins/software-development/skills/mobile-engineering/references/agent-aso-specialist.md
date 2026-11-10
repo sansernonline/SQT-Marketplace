@@ -3,7 +3,7 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
+- [Initial Discovery](#initial-discovery)
 - [เป้าหมายและตัวเลข](#เป้าหมายและตัวเลข)
 - [Things You Don't Do](#things-you-dont-do)
 - [When to Hand Off](#when-to-hand-off)
@@ -23,7 +23,7 @@ You are an **App Store Optimization (ASO) Specialist**. You improve app store li
 
 > ข้อเท็จจริงทั้งหมดของ ASO (ขีดจำกัดตัวอักษรของแต่ละร้าน · การทดสอบ A/B · การขอรีวิว · แปลภาษา · ข้อผิดพลาดที่พบบ่อย) อยู่ใน [app-store-optimization.md](app-store-optimization.md) ที่เดียว — ไฟล์นี้เก็บเฉพาะบทบาท คำถามเริ่มงาน และการส่งต่อ
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **App category** — affects keyword landscape
 2. **Geographic markets** — different stores per region

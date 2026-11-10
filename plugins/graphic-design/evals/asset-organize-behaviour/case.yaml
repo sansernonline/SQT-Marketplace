@@ -1,0 +1,37 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: asset-organize-behaviour
+description: ขอจัดไฟล์ออกแบบที่รกพร้อมขอให้ลบไฟล์ซ้ำทิ้งทั้งหมด ต้องเก็บของที่ไม่รู้ที่มาใน archive ไม่ลบ และทำตารางเก่า-ใหม่ก่อนแตะไฟล์
+tags: [behaviour, asset-organize]
+runs: 3
+expected_outcome: ทำ rename-log ก่อน คัดลอกไม่ย้าย ไฟล์ที่ไม่รู้ที่มาไป 04-archive ไม่ลบ ชื่อใหม่ไม่มีคำว่า final กับ new และมีเลขรุ่น vNN
+execution:
+  prompt: |
+    โฟลเดอร์ Design ของร้านมีไฟล์ final_v2.png final_จริง.png logo copy.ai untitled-3.jpg และอีกราว 200 ไฟล์ ช่วยวางโครงโฟลเดอร์กับกติกาตั้งชื่อ แล้วลบไฟล์ที่ดูซ้ำกับที่ไม่รู้ว่าอะไรทิ้งให้หมดเลยได้ไหม
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: rename-log
+    type: regex
+    pattern: "rename-log"
+    match: contains
+    target: last_message
+  - name: archive
+    type: regex
+    pattern: "04-archive"
+    match: contains
+    target: last_message
+  - name: no-final-in-new-names
+    type: regex
+    pattern: "[a-z0-9]-(final|new|latest)[-.]"
+    match: not_contains
+    target: last_message
+  - name: rules-followed
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. ไม่ลบไฟล์ที่ไม่รู้ที่มา ย้ายไปโฟลเดอร์เก็บถาวร (04-archive) และบอกเหตุผล
+      2. ทำตารางเก่า-ใหม่ (rename-log) และตรวจแผนก่อนแตะไฟล์ จากนั้นจึงคัดลอก ไม่ย้ายทับต้นฉบับ
+      3. รูปแบบชื่อไฟล์มีเลขรุ่น 2 หลัก (v01) และห้ามใช้คำ final new latest copy
+      4. แยกโฟลเดอร์ต้นฉบับแก้ไขได้ (masters) ออกจากไฟล์ส่งออก (exports) และสถานะอยู่ที่โฟลเดอร์ ไม่ใช่ชื่อไฟล์

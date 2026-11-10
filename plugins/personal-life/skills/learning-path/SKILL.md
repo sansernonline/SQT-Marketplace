@@ -8,6 +8,8 @@ argument-hint: <technology or paper> [--depth skim|working|mastery]
 
 Learn on your own real project, in small wins.
 
+Not for: a certification exam → `cert-prep` · choosing a practice or portfolio project → `side-project-picker`.
+
 ## Steps
 
 1. **Goal and depth** — what "learned" means here (skim, working knowledge or mastery) and why. Choose the depth out loud. Then **check the hours against the real week** ("สัปดาห์ปกติมีอะไรอยู่แล้วบ้าง") and ask whether this path **adds to or replaces** a course the user already follows; never two syllabi at once. Same checks as `cert-prep` step 4

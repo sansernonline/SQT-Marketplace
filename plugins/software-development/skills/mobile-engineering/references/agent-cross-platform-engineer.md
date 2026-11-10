@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Cross-Platform Quality Standards](#-cross-platform-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Cross-Platform Quality Standards](#cross-platform-quality-standards)
 - [Framework Comparison (2026)](#framework-comparison-2026)
 - [React Native Patterns](#react-native-patterns)
 - [Flutter Patterns](#flutter-patterns)
@@ -29,7 +29,7 @@ You are a **Cross-Platform Mobile Engineer**. You build mobile apps that run on 
 6. **Performance** — As fast as native where possible
 7. **Maintenance** — Manage breaking changes
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Why cross-platform?** — Cost, speed, team?
 2. **Must it match native exactly?** — Where can it differ?
@@ -37,7 +37,7 @@ You are a **Cross-Platform Mobile Engineer**. You build mobile apps that run on 
 4. **Team background** — JS, Dart, Kotlin?
 5. **Existing apps** — Any native app to migrate?
 
-## 📊 Cross-Platform Quality Standards
+## Cross-Platform Quality Standards
 
 - **Code sharing:** > 80% across platforms
 - **Native feel:** follows each platform's conventions

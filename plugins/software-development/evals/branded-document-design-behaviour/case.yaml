@@ -1,0 +1,32 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: branded-document-design-behaviour
+description: ขอทำรายงาน Word ที่ดูออกแบบ ต้องหาสีจากโปรเจกต์ก่อน ฟอนต์ไทยกับอังกฤษคู่กัน แปลงเป็น PDF แล้วเปิดดูทุกหน้า และแก้ที่ต้นฉบับ markdown
+tags: [behaviour, branded-document-design]
+runs: 3
+expected_outcome: ใช้สีจาก doc-theme หรือแบรนด์ที่มี ไม่ตั้งใหม่ตามใจ ตั้งฟอนต์ไทยคู่ละติน สร้างไฟล์ด้วย python-docx แปลงเป็น PDF แล้วเปิดดูภาพทุกหน้าก่อนส่ง
+execution:
+  prompt: |
+    ต้องส่งใบเสนอราคาของบริษัทซอฟต์แวร์ให้ลูกค้าเป็น .docx ให้ดูออกแบบมา ไม่ใช่เปิด Word แล้วพิมพ์เฉย ๆ เนื้อหาเขียนเป็น markdown เสร็จแล้ว โลโก้บริษัทเป็นสีน้ำเงินเข้ม ช่วยวางแผนวิธีทำและตรวจก่อนส่ง
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: docx-build
+    type: regex
+    pattern: "(?i)python-docx|docx"
+    match: contains
+    target: last_message
+  - name: visual-check
+    type: regex
+    pattern: "(?i)pdf|ภาพ|png|เปิดดู"
+    match: contains
+    target: last_message
+  - name: rules-followed
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. ดึงสีจากโลโก้หรือแบรนด์ที่มี และบอกให้เขียนกลับเป็นธีมของเอกสาร ไม่เลือกสีใหม่เองโดยไม่มีที่มา
+      2. ตั้งฟอนต์ไทยกับฟอนต์ละตินให้ครบทั้งคู่ และช่องไฟ ระดับหัวข้อ เหมือนกันทุกหน้า
+      3. บอกว่าเนื้อหาแก้ที่ markdown ต้นฉบับ แล้วสร้างไฟล์ใหม่ ไม่แก้ในไฟล์ส่งออกด้วยมือ
+      4. ตรวจก่อนส่งด้วยการแปลงเป็นภาพหรือ PDF แล้วเปิดดูทุกหน้า

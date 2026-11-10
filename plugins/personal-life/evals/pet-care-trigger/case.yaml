@@ -1,0 +1,24 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: pet-care-trigger
+description: เพิ่งรับลูกหมา 2 เดือนมาเลี้ยงที่กรุงเทพ ถามวัคซีนและทะเบียน ไม่เอ่ยชื่อ skill ต้องทำให้ pet-care ถูกเปิด
+tags: [trigger, pet-care]
+runs: 3
+expected_outcome: เรียก Skill pet-care แล้วบอกวัคซีนพิษสุนัขบ้าตามกฎหมาย ตารางวัคซีนรวมตามอายุ และให้ถามสัตวแพทย์กับเขตเรื่องทะเบียน
+execution:
+  prompt: |
+    เพิ่งรับลูกหมาอายุ 2 เดือนมาเลี้ยงที่กรุงเทพ ต้องฉีดวัคซีนอะไรบ้าง แล้วต้องขึ้นทะเบียนไหม
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?pet-care"'
+    min: 1
+    arm: with-only
+  - name: rabies
+    type: regex
+    pattern: "พิษสุนัขบ้า|(?i)rabies"
+    match: contains
+    target: last_message

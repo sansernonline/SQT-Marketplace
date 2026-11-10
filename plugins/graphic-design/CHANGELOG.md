@@ -1,5 +1,11 @@
 # Changelog — graphic-design
 
+## 0.27.1 — 2026-11-10
+
+- `social-formats` · `video-script-to-clip` · `brand-kit`: ส่วน Related ชี้ skill พี่น้องที่มีอยู่จริง (`banner-design` · `youtube-thumbnail` · `marketplace-product-images` · `line-richmenu` · `print-ready-files` · `speaking-script` · `subtitles-th` · `narration-th`) · โค้ด token ชี้ `design-system`
+- เอาอีโมจิที่เป็นหัวข้อและป้ายออกจากเอกสารใน plugin
+- eval ใหม่: `asset-organize` · `motion-basics` (trigger + behaviour อย่างละ 1 เคส)
+
 ## 0.27.0 — 2026-11-10
 
 - `copy-claims-check` (ใหม่): ตรวจข้อความโฆษณาเกินจริงด้วยประกาศ อย. โฆษณาอาหาร พ.ศ. 2564 และหน้า สคบ. ที่เปิดอ่านจริง · หมวดอื่นเป็น (รอยืนยัน) · ไม่ใช่คำปรึกษากฎหมาย

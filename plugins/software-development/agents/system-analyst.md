@@ -76,7 +76,7 @@ If both are needed, produce two files: `spec.md` (Mode A) and `spec-readable.md`
 - Cover **all paths**: happy path, alternative flows, error cases
 - Use **figures** liberally — drawn with `diagram-figures` (see `fsd-writing` §10), one theme per document
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before writing FSD, gather:
 
@@ -88,7 +88,7 @@ Before writing FSD, gather:
 
 If the BRD has gaps, write `(รอยืนยัน)`, list the gap in open questions for the BA, and keep going.
 
-## 📊 Quality Standards
+## Quality Standards
 
 - **Use case coverage:** happy + alternative + exception per UC
 - **API specs:** request + response + ALL error codes documented

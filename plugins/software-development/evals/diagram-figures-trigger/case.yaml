@@ -1,0 +1,24 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: diagram-figures-trigger
+description: แผนธุรกิจที่ส่งลูกค้ามีผังขั้นตอนของร้านกับผังเงินเข้าออก อยากให้รูปดูออกแบบ ไม่เอ่ยชื่อ skill ต้องทำให้ diagram-figures ถูกเปิด
+tags: [trigger, diagram-figures]
+runs: 3
+expected_outcome: เรียก Skill diagram-figures แล้วถามที่อยู่รูป ผู้อ่าน และคำถามที่รูปตอบ จากนั้นเลือกโครงสำเร็จรูปมาแก้
+execution:
+  prompt: |
+    แผนธุรกิจร้านนวดที่ผมจะส่งนักลงทุนต้องมีรูปผังขั้นตอนบริการกับผังเงินเข้าออก อยากให้รูปดูออกแบบมาอย่างดี ไม่ใช่รูปที่ AI สร้างแบบทั่วไป ทำอย่างไรดี
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?diagram-figures"'
+    min: 1
+    arm: with-only
+  - name: structure
+    type: regex
+    pattern: "(?i)svg|html|โครง|assets|สีหลัก"
+    match: contains
+    target: last_message

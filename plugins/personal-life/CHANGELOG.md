@@ -1,5 +1,11 @@
 # Changelog — personal-life
 
+## 0.23.1 — 2026-11-10
+
+- `learning-path`: เพิ่มบรรทัด Not for ชี้ `cert-prep` และ `side-project-picker`
+- เอาอีโมจิที่เป็นหัวข้อและป้ายออกจากเอกสารใน plugin
+- eval ใหม่: `important-docs` (trigger + behaviour) · `pet-care` (trigger + behaviour)
+
 ## 0.23.0 — 2026-11-10
 
 - `task-board` (ใหม่): ไฟล์ `tasks.md` 4 หมวด งานที่เจอในเมลหรือแชตต้องถามก่อนเพิ่ม · eval 3 เคส

@@ -1,5 +1,13 @@
 # Changelog — software-development
 
+## 3.1.1 — 2026-11-10
+
+- `security-scan`: เหลือคำสั่งสั้นที่ชี้ `security-audit` (ทั้ง codebase) หรือ `security-gate` (diff ก่อน ship) · ตารางระดับความรุนแรงเดิมเลิกใช้ ใช้ `security-audit` หัวข้อ 5 · `security-audit` หัวข้อ 8 รับข้อมาตรฐานกับแผน 30/60/90 วันมาแทน
+- `spec-to-code-loop`: ย้ายหัวข้อ 10 (ลูปที่ปรับตามตัวเลข) ไป `references/metric-loop.md`
+- `worktree-and-branch`: ย้ายตารางปิด branch ไป `references/close-branch.md`
+- เอาอีโมจิที่เป็นหัวข้อ ป้าย และกล่องเตือนออกจาก SKILL.md · references · agents (เก็บตัวอย่างที่เป็นเนื้อหา เช่น ช่องติ๊ก ไอคอนใน mockup)
+- eval ใหม่ (trigger + behaviour): `app-verifier-setup` · `branded-document-design` · `diagram-figures` · `html-slide-deck` · `legacy-spec-recovery` · `markdown-report-docx` · `project-doc-set` · `reverse-engineering`
+
 ## 3.1.0 — 2026-11-10
 
 - `data-analysis`: ตารางกับดัก 8 ข้อของตัวเลข (join เบิ้ล · เฉลี่ยของค่าเฉลี่ย · ตัวหารเปลี่ยน · เขตเวลา ฯลฯ) กับกล่องตรวจความสมเหตุสมผล 3 อย่าง

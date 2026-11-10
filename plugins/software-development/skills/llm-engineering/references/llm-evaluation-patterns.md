@@ -47,9 +47,9 @@ Without an eval set, you're guessing. Period.
 **Categories to include:**
 - Happy path (50%)
 - Note: Edge cases (20%)
-- 🚨 Safety / refusal (15%)
-- 🌐 Multilingual (if applicable) (10%)
-- 🐛 Known failure modes (5%)
+- Safety / refusal (15%)
+- Multilingual (if applicable) (10%)
+- Known failure modes (5%)
 
 ### Step 2: Grow with production data
 
@@ -206,7 +206,7 @@ async def llm_judge(question, ai_answer, reference):
 
 ### Critical: Use a BIGGER model as judge
 
-> 💡 If your app uses Sonnet, judge with Opus. A smaller judge gives noisy scores.
+> **Tip:** If your app uses Sonnet, judge with Opus. A smaller judge gives noisy scores.
 
 ### Validate judge with humans
 

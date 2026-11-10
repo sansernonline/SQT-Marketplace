@@ -31,4 +31,4 @@ async function login(page, user) {
 // await ctx.storageState({ path: 'playwright/.auth/user.json' });
 ```
 
-> 🔐 The saved state file holds a live session (cookies, tokens). Keep it out of git: add `playwright/.auth/` (or your `auth.json`) to `.gitignore`, and use a test account only.
+> **Security:** The saved state file holds a live session (cookies, tokens). Keep it out of git: add `playwright/.auth/` (or your `auth.json`) to `.gitignore`, and use a test account only.

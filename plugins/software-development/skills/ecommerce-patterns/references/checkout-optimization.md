@@ -92,11 +92,11 @@ Users can see how many steps are left.
 
 ### 7. Visible Trust Signals
 
-- 🔒 SSL padlock + security badges
-- 💳 Accepted payment logos
-- 🛡️ Money-back guarantee
-- ⭐ Recent reviews
-- 📞 Customer service availability
+- SSL padlock + security badges
+- Accepted payment logos
+- Money-back guarantee
+- Recent reviews
+- Customer service availability
 
 ## Form Field Best Practices
 
@@ -156,7 +156,7 @@ That's it.
 
 ## Express Checkout (Critical for Mobile)
 
-> 🇹🇭 For Thai buyers the express path is usually PromptPay QR or a mobile-banking deep link. The Apple Pay example below applies only where your gateway supports Apple Pay for your merchant country — for Thailand that is `(รอยืนยัน)`.
+> **ไทย:** For Thai buyers the express path is usually PromptPay QR or a mobile-banking deep link. The Apple Pay example below applies only where your gateway supports Apple Pay for your merchant country — for Thailand that is `(รอยืนยัน)`.
 
 ### Apple Pay flow
 

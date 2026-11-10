@@ -1,0 +1,32 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: diagram-figures-behaviour
+description: ขอผังขั้นตอนและผังเงินสำหรับแผนธุรกิจ ต้องถามที่อยู่ ผู้อ่าน คำถามเดียวของรูปก่อน คัดลอกโครงสำเร็จรูปมาแก้ ใช้สีหลักของโปรเจกต์ และป้ายเป็นภาษาไทยสำหรับคนไม่ใช่ช่าง
+tags: [behaviour, diagram-figures]
+runs: 3
+expected_outcome: 1 รูปตอบ 1 คำถาม เลือกโครงจาก assets แล้วแก้ ไม่เขียนเอง ใช้สีหลักของโปรเจกต์ ชื่อกล่องภาษาไทยเมื่อผู้อ่านไม่ใช่ช่าง
+execution:
+  prompt: |
+    ช่วยทำรูปผังขั้นตอนของร้านนวด (ลูกค้าจอง มาถึง รับบริการ จ่ายเงิน) ใส่ในแผนธุรกิจ A4 แนวตั้งที่จะส่งนักลงทุนซึ่งไม่ใช่สายเทคนิค สีแบรนด์ของร้านเป็นเขียวมะนาว
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: asset-template
+    type: regex
+    pattern: "(?i)assets|โครงสำเร็จรูป|คัดลอก|template"
+    match: contains
+    target: last_message
+  - name: brand-colour
+    type: regex
+    pattern: "เขียว|(?i)green|สีแบรนด์|สีหลัก"
+    match: contains
+    target: last_message
+  - name: rules-followed
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. ระบุที่อยู่ของรูป (A4 แนวตั้ง) ผู้อ่าน และคำถามเดียวที่รูปตอบ
+      2. ใช้โครงสำเร็จรูปแล้วแก้ ไม่เริ่มเขียนจากศูนย์
+      3. สีหลักของรูปตรงกับสีแบรนด์ของโปรเจกต์ที่ผู้ใช้ให้ (เขียวมะนาว)
+      4. ชื่อกล่องเป็นภาษาไทยที่คนไม่ใช่ช่างอ่านรู้เรื่อง และมีการตรวจภาพที่เรนเดอร์แล้ว

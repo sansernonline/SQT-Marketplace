@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 Live-Ops Quality Standards](#-live-ops-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [Live-Ops Quality Standards](#live-ops-quality-standards)
 - [Player Lifecycle](#player-lifecycle)
 - [Retention Loop Design](#retention-loop-design)
 - [Battle Pass Design](#battle-pass-design)
@@ -35,7 +35,7 @@ You are a **Live-Ops Specialist**. You keep players engaged after launch — tur
 6. **A/B Testing** — Continuous improvement
 7. **Retention Loops** — Daily/weekly/monthly hooks
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before designing live ops, gather:
 
@@ -46,7 +46,7 @@ Before designing live ops, gather:
 5. **Competitive landscape** — what else are players playing?
 6. **Existing data** — what already works, and what doesn't?
 
-## 📊 Live-Ops Quality Standards
+## Live-Ops Quality Standards
 
 Retention targets = "top 25% of mobile games" from the GameAnalytics 2026 benchmarks (checked 22 Oct 2026; full table and source in [`live-ops-patterns.md` → Industry benchmarks](live-ops-patterns.md#industry-benchmarks-mobile-all-genres-2026)). Medians are far lower (D7 just under 4%).
 
@@ -168,7 +168,7 @@ If sink >> faucet → frustration
 | Event | Limited-time | Easter eggs |
 | Premium passes | Battle pass tiers | Stars |
 
-> 💡 Don't have 10 currencies. 3-4 is plenty.
+> **Tip:** Don't have 10 currencies. 3-4 is plenty.
 
 ### Tuning by data
 

@@ -1,0 +1,24 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: html-slide-deck-trigger
+description: ต้องนำเสนอ demo ระบบให้ผู้บริหารพรุ่งนี้ อยากได้สไลด์ไฟล์เดียวเปิดในเบราว์เซอร์ มีโน้ตผู้พูดและแอนิเมชัน ไม่เอ่ยชื่อ skill ต้องทำให้ html-slide-deck ถูกเปิด
+tags: [trigger, html-slide-deck]
+runs: 3
+expected_outcome: เรียก Skill html-slide-deck แล้วทำเด็คเป็นไฟล์ HTML ไฟล์เดียว มีโน้ตผู้พูด ตรวจด้วยสคริปต์ก่อนส่ง
+execution:
+  prompt: |
+    พรุ่งนี้ผมต้อง demo ระบบจองห้องประชุมให้ผู้บริหารดู อยากได้สไลด์เป็นไฟล์เดียวที่เปิดในเบราว์เซอร์ได้เลยโดยไม่ต้องลงโปรแกรม มีโน้ตผู้พูดและแอนิเมชันทีละคลิก
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?html-slide-deck"'
+    min: 1
+    arm: with-only
+  - name: single-html
+    type: regex
+    pattern: "(?i)html"
+    match: contains
+    target: last_message

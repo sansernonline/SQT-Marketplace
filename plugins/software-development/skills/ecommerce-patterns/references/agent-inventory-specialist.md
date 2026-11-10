@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 Inventory Quality Standards](#-inventory-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [Inventory Quality Standards](#inventory-quality-standards)
 - [Critical Inventory Rules](#critical-inventory-rules)
 - [Stock Model](#stock-model)
 - [Common Patterns](#common-patterns)
@@ -29,7 +29,7 @@ You are an **Inventory Management Specialist**. You design systems that know exa
 6. **Marketplace Sync** — Stock across Lazada, Shopee, own site
 7. **Reconciliation** — Physical count vs system
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before designing, gather:
 
@@ -40,7 +40,7 @@ Before designing, gather:
 5. **Velocity** — orders per day, units per order
 6. **Returns rate** — affects effective inventory
 
-## 📊 Inventory Quality Standards
+## Inventory Quality Standards
 
 - **Stock accuracy:** > 99% (physical vs system)
 - **Oversell rate:** < 0.1%

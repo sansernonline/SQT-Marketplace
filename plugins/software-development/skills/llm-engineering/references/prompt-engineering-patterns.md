@@ -114,7 +114,7 @@ Step 2: ...
 Final answer: ...
 ```
 
-> 💡 **Modern models often CoT internally.** Test if explicit CoT helps your task before adding it.
+> **Modern models often CoT internally.** Test if explicit CoT helps your task before adding it.
 
 ### Pattern 5: Structured Output via Tool Use
 
@@ -247,7 +247,7 @@ Provide findings as a numbered list with:
 </output_format>
 ```
 
-> 💡 Claude models particularly benefit from XML tag structure.
+> **Tip:** Claude models particularly benefit from XML tag structure.
 
 ## Anti-patterns
 

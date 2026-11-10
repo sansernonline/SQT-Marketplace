@@ -1,0 +1,32 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: html-slide-deck-behaviour
+description: ขอสไลด์ HTML ไฟล์เดียวสำหรับ demo ต้องเขียนหัวสไลด์เป็นข้อสรุป สร้างด้วยสคริปต์ รันตัวตรวจจนไม่มีปัญหา และเปิดภาพทุกแผ่นก่อนส่ง
+tags: [behaviour, html-slide-deck]
+runs: 3
+expected_outcome: หัวสไลด์เป็นข้อสรุป สร้างไฟล์ด้วย build_deck.py ตรวจด้วย check_deck.py จนปัญหา 0 จุด เปิดภาพทุกแผ่น ซ้อมจับเวลา 1 รอบ
+execution:
+  prompt: |
+    ช่วยทำสไลด์ demo ระบบจองห้องประชุม 10 หน้า 8 นาที เป็นไฟล์ HTML ไฟล์เดียวที่เปิดออฟไลน์ได้ มีโน้ตผู้พูด และรูปต้องฝังในไฟล์ บอกขั้นตอนที่จะทำและวิธีตรวจก่อนส่งด้วย
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: build-script
+    type: regex
+    pattern: "build_deck"
+    match: contains
+    target: last_message
+  - name: check-script
+    type: regex
+    pattern: "check_deck"
+    match: contains
+    target: last_message
+  - name: rules-followed
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. ผลลัพธ์คือไฟล์ .html ไฟล์เดียว รูปฝังในไฟล์ ไม่อ้างไฟล์ภายนอกหรือ CDN
+      2. หัวสไลด์ทุกหน้าเป็นข้อสรุปของหน้า ไม่ใช่ชื่อหัวข้อ และวางโครงเรื่องก่อนสร้าง
+      3. ตรวจด้วย check_deck จนปัญหาเป็น 0 แล้วเปิดภาพทุกแผ่นดูก่อนส่ง
+      4. ซ้อมจับเวลาจริงหนึ่งรอบและมีโน้ตผู้พูด

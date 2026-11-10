@@ -6,10 +6,10 @@
 
 | Level | Speedup | Complexity |
 |-------|--------:|:----------:|
-| File-level parallel | 4-8x | 🟢 Low (just enable) |
-| Test-level within file | 10x+ | 🟡 Med (isolation needed) |
-| Sharded across CI workers | Nx | 🟡 Med (requires sharding config) |
-| Cloud grid (BrowserStack, etc.) | Massive | 🔴 High (cost) |
+| File-level parallel | 4-8x | Low (just enable) |
+| Test-level within file | 10x+ | Med (isolation needed) |
+| Sharded across CI workers | Nx | Med (requires sharding config) |
+| Cloud grid (BrowserStack, etc.) | Massive | High (cost) |
 
 **Requirements for safe parallel:**
 - Tests don't share state

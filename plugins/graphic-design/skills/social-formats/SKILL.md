@@ -83,7 +83,11 @@ Before handing over, run the check in `no-ai-look` (section 3): its script on HT
 - `campaign-set` — which placements, in what order
 - `asset-organize` — format codes in file names
 - `video-script-to-clip` — captions and safe zones in video
-- `software-development` `graphic-design` (if installed) — print sizes and LINE rich menu layout for product work
+- `banner-design` — banners and cover headers (event, web hero, display ad)
+- `youtube-thumbnail` — thumbnails for YouTube
+- `marketplace-product-images` — product photos for Shopee, Lazada, TikTok Shop
+- `line-richmenu` — LINE rich menu image sizes, tap areas and JSON
+- `print-ready-files` — files that go to a print shop (CMYK, bleed)
 
 ## เรียกเป็นคำสั่ง
 

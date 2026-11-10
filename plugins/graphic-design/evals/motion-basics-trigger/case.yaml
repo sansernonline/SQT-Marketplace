@@ -1,0 +1,24 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: motion-basics-trigger
+description: คนไม่ใช่นักออกแบบทำโลโก้เคลื่อนไหวกับข้อความเข้าจอ แอนิเมชันแข็งและโผล่พร้อมกัน ไม่เอ่ยชื่อ skill ต้องทำให้ motion-basics ถูกเปิด
+tags: [trigger, motion-basics]
+runs: 3
+expected_outcome: เรียก Skill motion-basics แล้วให้ค่า easing ระยะเวลา และการเหลื่อมจังหวะของแต่ละชิ้น
+execution:
+  prompt: |
+    ผมทำคลิปโลโก้เคลื่อนไหวกับข้อความเข้าจอให้ร้านกาแฟ ไม่ได้เป็นนักออกแบบ ตอนนี้แอนิเมชันดูแข็งและทุกอย่างโผล่พร้อมกันหมด ควรตั้งค่าอย่างไร
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?motion-basics"'
+    min: 1
+    arm: with-only
+  - name: easing
+    type: regex
+    pattern: "(?i)ease"
+    match: contains
+    target: last_message

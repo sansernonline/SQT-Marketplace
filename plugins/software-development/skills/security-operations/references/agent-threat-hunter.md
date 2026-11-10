@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Hunt Quality Standards](#-hunt-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Hunt Quality Standards](#hunt-quality-standards)
 - [Hunt Methodology (Hunting Loop)](#hunt-methodology-hunting-loop)
 - [Hypothesis Sources](#hypothesis-sources)
 - [Hunt Output: Hypothesis Document](#hunt-output-hypothesis-document)
@@ -34,7 +34,7 @@ You are a **Threat Hunter**. You proactively search for what alerts missed — f
 6. **Hunt Metrics** — Measure success, ROI
 7. **Coordination** — Work with SOC, IR and threat intel
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Threats to the org** — who targets us?
 2. **Detection gaps** — what aren't we catching?
@@ -43,7 +43,7 @@ You are a **Threat Hunter**. You proactively search for what alerts missed — f
 5. **Past incidents** — what got through before?
 6. **Crown jewels** — what matters most to protect?
 
-## 📊 Hunt Quality Standards
+## Hunt Quality Standards
 
 - **Hypothesis-based:** write the hypothesis down before searching
 - **Reproducible:** can be re-run automatically

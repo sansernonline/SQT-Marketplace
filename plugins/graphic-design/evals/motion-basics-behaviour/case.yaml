@@ -1,0 +1,37 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: motion-basics-behaviour
+description: ขอแก้แอนิเมชันข้อความและโลโก้ที่แข็งและโผล่พร้อมกัน ต้องได้ easing ไม่ใช่ linear ระยะเวลาตามตาราง เหลื่อมจังหวะ 40-80 ms และค้างข้อความให้อ่านทัน
+tags: [behaviour, motion-basics]
+runs: 3
+expected_outcome: ใช้ ease-out ตอนเข้า ease-in ตอนออก ไม่ใช้ linear กับวัตถุ ระยะเข้า 200-300 ms เหลื่อม 40-80 ms ค้างข้อความให้อ่านจบ และตรวจตอนปิดเสียงกับบนมือถือ
+execution:
+  prompt: |
+    ทำแอนิเมชันข้อความ 3 บรรทัดกับโลโก้เข้าจอสำหรับคลิปโปรโมตร้านกาแฟ ตอนนี้ทุกอย่างเด้งเข้ามาพร้อมกันแบบ linear แล้วข้อความหายเร็วจนอ่านไม่ทัน ช่วยกำหนดค่าให้หน่อย
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: ease-out
+    type: regex
+    pattern: "(?i)ease-out"
+    match: contains
+    target: last_message
+  - name: stagger
+    type: regex
+    pattern: "40\\s*[-–]\\s*80"
+    match: contains
+    target: last_message
+  - name: ms-values
+    type: regex
+    pattern: "(?i)\\bms\\b|มิลลิวินาที"
+    match: contains
+    target: last_message
+  - name: rules-followed
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. ไม่ให้ใช้ linear กับวัตถุที่เคลื่อนที่ ใช้ ease-out ตอนเข้าและ ease-in ตอนออก
+      2. ระยะเวลาแต่ละการเคลื่อนไหวเป็นช่วงที่สมเหตุสมผล (เช่นข้อความเข้า 200-300 ms) และตอนออกสั้นกว่าตอนเข้า
+      3. ให้เหลื่อมจังหวะรายการในกลุ่ม 40-80 ms แทนการโผล่พร้อมกัน
+      4. บอกให้ค้างข้อความนานพอให้อ่านจบ และให้ตรวจที่ความเร็วปกติ ตอนปิดเสียง และบนมือถือ

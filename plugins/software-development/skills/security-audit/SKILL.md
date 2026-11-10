@@ -25,7 +25,7 @@ description: Use when auditing a whole codebase for vulnerabilities before hando
 | ก่อน merge · ship · เพิ่ม dependency | [`security-gate`](../security-gate/SKILL.md) | ผลสแกน gitleaks · semgrep · trivy ของ gate เข้ามาเป็น candidate ในขั้น 3 |
 | สัญญาระบุ OWASP Top 10 | [`security-gate` ส่วน OWASP](../security-gate/references/owasp-top10.md) | finding ทุกข้อมีช่อง `owasp` รายงานจึงสรุปแถว A01–A10 ให้ได้ทันที |
 | ออกแบบ feature ใหม่ ยังไม่มีโค้ด | [`threat-model`](../threat-model/SKILL.md) | ถ้ามี threat model อยู่แล้ว ขั้นสำรวจใช้ DFD และ non-capabilities เป็นจุดตั้งต้น |
-| คำสั่งสแกนแบบเดิม | [`security-scan`](../security-scan/SKILL.md) | ถ้าขอบเขตคือทั้ง codebase ให้มาที่นี่ |
+| คำสั่งสั้น `/security-scan` | [`security-scan`](../security-scan/SKILL.md) | เป็นทางลัดที่ชี้มาที่นี่ (ทั้ง codebase) หรือไป `security-gate` (diff ก่อน ship) |
 | ถูกเจาะแล้ว · ตามรอยเหตุ · กฎ SIEM | `security-operations` | audit หาช่องก่อนเกิดเหตุ ส่วน security-operations รับมือหลังเกิดเหตุ |
 | ไม่มี source มีแต่ไฟล์ exe · APK · firmware | `reverse-engineering` | ทำต่อเมื่อได้ source ที่ถอดมาแล้ว |
 | finding แตะข้อมูลส่วนบุคคล | [`pdpa-compliance`](../pdpa-compliance/SKILL.md) | ข้อ confirmed ที่อาจรั่วแล้ว เปิดหัวข้อ 8 (72 ชั่วโมงแรก) |
@@ -159,6 +159,7 @@ node <skill>/scripts/render_report.mjs qa/security/audit-2026-10-26            #
 - **ก่อน merge แพตช์ของ confirmed ระดับ critical และ high** ให้ `reviewer` ตัวใหม่ที่ได้แค่ diff กับ finding (ไม่ได้คำอธิบายว่าช่องโหว่ทำงานอย่างไร) ตอบ 4 ข้อ: (1) แพตช์แตะเฉพาะเส้นทางของ finding นี้ไหม (2) แก้ที่ต้นเหตุ หรือกลบอาการ เช่น `try/except` ว่าง ลบการเช็ค ลดระดับ log (3) เพิ่มผิวโจมตีใหม่ไหม (4) นึกออกไหมว่ามี input ที่ยังไปถึงสภาพเดิมได้โดยไม่ชนแพตช์ · ข้อไหนตอบไม่ผ่านให้กลับไปแก้ก่อน (แนวคิดจากขั้นรีวิวแพตช์ของ defending-code-reference-harness · license ของ repo นั้นเป็น NOASSERTION จึงใช้แนวคิดเท่านั้น เขียนข้อความเอง · ดู 2026-11-10)
 - **needs_validation** → ส่ง `NEEDS-VALIDATION.md` ให้คนที่เข้าถึง deployment ได้ ตรวจตาม `check_plan` แล้วกลับมาปิดในรอบถัดไป
 - **รอบถัดไป** → อ่าน `findings.json` และ `ledger.json` รอบก่อนทั้งหมดก่อนวางแผน · ข้อ confirmed ที่โค้ดไม่เปลี่ยนยกมาพร้อม fingerprint เดิมแต่ต้องยืนยันใหม่ · โค้ดเปลี่ยนแล้ว ตรวจหน่วยนั้นใหม่ · แก้แล้ว ให้ตัวยืนยันรัน test ที่ล้มก่อนแก้ซ้ำ ผ่านจึงเขียนว่า `ปิดแล้ว` · หน่วย `blocked` และข้อ `needs_validation` เป็นงานของรอบนี้ · รอบเดียวไม่มีทางครอบคลุมทั้งหมด รายงานต้องไม่เขียนว่าครบ
+- **ส่งมอบตามมาตรฐาน** (PDPA · GDPR · PCI-DSS · SOC 2 · HIPAA) → ใส่ในรายงานว่า finding ข้อไหนชนข้อบังคับข้อไหน และหลักฐานที่เก็บแล้ว · แนบแผนแก้ 30/60/90 วัน เรียงตามระดับของ confirmed
 - สรุปสถานะด้วย `status-report` ประเภท `ตรวจ` · ถ้าส่งมอบตามสัญญา OWASP ให้แนบแถว A01–A10 จากรายงานนี้ไปกับรายงาน OWASP ของ `security-gate`
 
 ## ตัวอย่าง 1 ชุด

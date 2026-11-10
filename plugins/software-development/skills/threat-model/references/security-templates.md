@@ -197,7 +197,7 @@ return <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(user.bio) }} /
 
 ## Compliance Notes
 
-- 🇪🇺 General Data Protection Regulation (GDPR): personally identifiable information (PII) handling looks compliant
+- General Data Protection Regulation (GDPR): personally identifiable information (PII) handling looks compliant
 - Payment Card Industry Data Security Standard (PCI DSS): No card data touched
 ```
 
