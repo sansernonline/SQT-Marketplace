@@ -1,6 +1,6 @@
 {
  "plugin": "personal-life",
- "version": "0.22.1",
+ "version": "0.23.1",
  "description": "Daily-life admin, five categories — life admin (weekly reviews, inbox triage, documents, travel, decisions, subscriptions, digital safety, goals), home and family (bills, maintenance, vehicle, meals, school, elder care, pets, floods, wills), health (exercise, sleep, checkups, medication, doctor visits, pregnancy — never diagnoses), career (CVs, interviews, salary, LinkedIn), and learning (learning paths, papers, tech radar, certs, side projects, thesis). General information only.",
  "cross": [
   "superuser",
@@ -29,13 +29,16 @@
   "important-docs",
   "inbox-triage",
   "interview-prep",
+  "job-exit",
   "kids-school",
   "learning-path",
+  "legal-help-prep",
   "linkedin-profile",
   "meal-plan-grocery",
   "medication-schedule",
   "meeting",
   "moving-house",
+  "new-job-first-90-days",
   "paper-to-practice",
   "performance-self-review",
   "personal-kb",
@@ -45,7 +48,9 @@
   "salary-negotiation",
   "side-project-picker",
   "sleep-log",
+  "study-drill",
   "subscription-audit",
+  "task-board",
   "tech-radar",
   "thesis-writing",
   "travel-prep",
@@ -108,7 +113,10 @@
     "performance-self-review",
     "linkedin-profile",
     "interview-prep",
-    "superuser"
+    "new-job-first-90-days",
+    "job-exit",
+    "superuser",
+    "legal-help-prep"
    ]
   },
   {
@@ -185,6 +193,8 @@
     "important-docs",
     "inbox-triage",
     "calendar-audit",
+    "task-board",
+    "legal-help-prep",
     "personal-kb",
     "travel-prep",
     "gift-idea-tracker",
@@ -211,6 +221,7 @@
     "paper-to-practice",
     "english-tech-reading",
     "cert-prep",
+    "study-drill",
     "side-project-picker",
     "thesis-writing",
     "course-builder"

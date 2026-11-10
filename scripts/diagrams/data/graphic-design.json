@@ -1,6 +1,6 @@
 {
  "plugin": "graphic-design",
- "version": "0.26.1",
+ "version": "0.27.1",
  "description": "Creative design beyond product UI — brand kits, AI image generation and briefs with style consistency, social media formats, marketplace product images, YouTube thumbnails, print-ready files, campaign sets, LINE rich menus, app and UI icons, video editing with Thai subtitles and narration, speaking scripts, motion basics, and a design-review checklist.",
  "cross": [
   "software-development",
@@ -12,11 +12,13 @@
   "brand-kit",
   "brief-to-image",
   "campaign-set",
+  "copy-claims-check",
   "design-review",
   "icon-design",
   "image-editing-brief",
   "image-generation",
   "line-richmenu",
+  "line-sticker",
   "marketplace-product-images",
   "motion-basics",
   "narration-th",

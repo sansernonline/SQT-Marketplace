@@ -44,3 +44,12 @@ node scripts/evals/plugin-eval.mjs e-commerce --tag capability-suite --allow-too
 ## ตารางผล
 
 ยังไม่มี
+
+## ยังไม่ได้รันรอบแดง/เขียว (2026-11-10)
+
+skill ใหม่ด้านล่างมีเคสครบ 3 ชุดแล้ว แต่**ยังไม่ได้รันรอบแดง/เขียว** ตาม `skill-authoring` · รอผู้ใช้อนุมัติค่า eval ก่อนรัน · ใช้ `-guard` ไม่ใช่ `-regression` เพราะยังไม่เคยเห็นอาการพลาดจริง
+
+| skill | เคสที่มี | สถานะ | คำสั่งเมื่ออนุมัติ |
+|---|---|---|---|
+| `shop-daily-briefing` | `-trigger` · `-behaviour` · `-guard` | ยังไม่ได้รัน | `node scripts/evals/plugin-eval.mjs e-commerce --only "^shop-daily-briefing-" --max-cost-usd 5` |
+| `win-back-customers` | `-trigger` · `-behaviour` · `-guard` | ยังไม่ได้รัน | `node scripts/evals/plugin-eval.mjs e-commerce --only "^win-back-customers-" --max-cost-usd 5` |

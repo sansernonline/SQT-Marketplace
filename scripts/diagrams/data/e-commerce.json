@@ -1,6 +1,6 @@
 {
  "plugin": "e-commerce",
- "version": "1.8.1",
+ "version": "1.9.1",
  "description": "Thai online selling, buying and small-business back office — sell on Shopee, Lazada, TikTok Shop, LINE and Facebook (listings, pricing, stock, chat, live, returns), buy with confidence (total cost, warranty, OCPB 1166 complaints, refunds), and run the company (quotations, contracts, VAT and withholding tax, payroll, social security, year-end filing, labour law, PDPA, LINE OA, PromptPay). General information only, not tax or legal advice.",
  "cross": [
   "graphic-design",
@@ -36,12 +36,14 @@
   "returns-and-bad-reviews",
   "seller-tax-basics",
   "shipping-compare",
+  "shop-daily-briefing",
   "sme-bookkeeping",
   "social-security-th",
   "tax-vat-th",
   "thai-business-setup",
   "thai-holidays",
-  "warranty-tracker"
+  "warranty-tracker",
+  "win-back-customers"
  ],
  "core_skills": [
   "superuser",
@@ -117,6 +119,7 @@
    "skills": [
     "chat-reply-templates",
     "returns-and-bad-reviews",
+    "win-back-customers",
     "promptpay-qr",
     "line-oa-setup"
    ]
@@ -155,6 +158,7 @@
     "shipping-compare",
     "import-landed-cost",
     "seller-tax-basics",
+    "shop-daily-briefing",
     "doc-quotation",
     "promptpay-qr"
    ]

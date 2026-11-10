@@ -5,6 +5,7 @@
 - `social-formats` · `video-script-to-clip` · `brand-kit`: ส่วน Related ชี้ skill พี่น้องที่มีอยู่จริง (`banner-design` · `youtube-thumbnail` · `marketplace-product-images` · `line-richmenu` · `print-ready-files` · `speaking-script` · `subtitles-th` · `narration-th`) · โค้ด token ชี้ `design-system`
 - เอาอีโมจิที่เป็นหัวข้อและป้ายออกจากเอกสารใน plugin
 - eval ใหม่: `asset-organize` · `motion-basics` (trigger + behaviour อย่างละ 1 เคส)
+- `copy-claims-check`: เขียนชื่อ อย. และ สคบ. เต็มครั้งแรก · "ข้อเท็จจริง" แทน "ข้อความเท็จจริง" · `evals/RESULTS.md` จดว่า `copy-claims-check` และ `line-sticker` ยังไม่ได้รันรอบแดง/เขียว (รอผู้ใช้อนุมัติค่า eval)
 
 ## 0.27.0 — 2026-11-10
 

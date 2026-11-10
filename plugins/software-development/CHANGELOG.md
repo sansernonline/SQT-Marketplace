@@ -7,6 +7,10 @@
 - `worktree-and-branch`: ย้ายตารางปิด branch ไป `references/close-branch.md`
 - เอาอีโมจิที่เป็นหัวข้อ ป้าย และกล่องเตือนออกจาก SKILL.md · references · agents (เก็บตัวอย่างที่เป็นเนื้อหา เช่น ช่องติ๊ก ไอคอนใน mockup)
 - eval ใหม่ (trigger + behaviour): `app-verifier-setup` · `branded-document-design` · `diagram-figures` · `html-slide-deck` · `legacy-spec-recovery` · `markdown-report-docx` · `project-doc-set` · `reverse-engineering`
+- `security-audit`: เพิ่ม `references/infra-checklist.md` รายการล่าของสาย infrastructure (พอร์ตเปิด · IAM อ่อน · bucket สาธารณะ · storage ไม่เข้ารหัส · header · ค่าตั้งต้นไม่ปลอดภัย · image ของ container) ที่ย้ายมาจาก `security-scan` เดิม · `security-scan` ข้อ 3 ชี้ไฟล์นี้
+- `app-verifier-setup`: `scripts/with_server.py` `--log-dir` ค่าเริ่ม `_to_delete/with-server-logs` และสร้างโฟลเดอร์ให้เอง (เดิมเขียน log ลงรากและล้มถ้าโฟลเดอร์ไม่มี) · ทดสอบ `python -I` กับโฟลเดอร์ว่าง
+- `legacy-spec-recovery`: docstring และข้อความ error ของ `compare_outputs.py` ใช้ชื่อไฟล์ใหม่
+- `docs/plugins/software-development/` สร้างรูป 22 ไฟล์ใหม่ด้วย `scripts/diagrams/make.py` ให้ใช้ชื่อ software-development
 
 ## 3.1.0 — 2026-11-10
 

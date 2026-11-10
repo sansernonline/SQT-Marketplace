@@ -11,7 +11,7 @@
 | [`e-commerce`](#e-commerce) | ขายออนไลน์ ซื้ออย่างมั่นใจ และงานหลังบ้านบริษัทไทย | 8 | 35 | 1 | 18 | 201 |
 | [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 24 | 0 | 9 | 179 |
 | [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 47 | 1 | 30 | 205 |
-| [`software-development`](#software-development) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 105 | 11 | 17 | 1034 |
+| [`software-development`](#software-development) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 105 | 11 | 17 | 1035 |
 | [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 39 | 0 | 7 | 220 |
 | [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 5 | 24 | 1 | 10 | 134 |
 
@@ -498,7 +498,7 @@ plugins/<plugin>/
 | `config-and-secrets` | ค่าที่ต่างกันตาม environment และค่าลับที่ห้ามเข้า git | `references/per-stack.md` |
 | `pdpa-compliance` | ซอฟต์แวร์ที่เก็บข้อมูลคนไทยตาม PDPA: ความยินยอม · สิทธิ์ · ระยะเก็บ · ข้อมูลรั่ว | — |
 | `audit-trail` | เก็บประวัติว่าใครทำอะไรเมื่อไร (อนุมัติ · เงิน · สิทธิ์ · ข้อมูลส่วนบุคคล) | — |
-| `security-audit` | ตรวจช่องโหว่ทั้งระบบก่อนส่งมอบ: 6 ขั้น · ผู้ยืนยันแยกจากผู้ล่า · ผล findings.json ที่เครื่องตรวจได้ | `assets/findings.schema.json` · `assets/report-th.md` · `references/attack-classes.md` · `references/classes-ai-mcp.md` · `references/classes-data-tenant.md` · `references/classes-messaging-webhook.md` · `references/classes-supply-chain.md` · `references/classes-thai.md` · `references/classes-web-auth.md` · `references/hunting.md` · `references/ledger.md` · `references/recon.md` · `references/verify.md` · `scripts/audit_lib.mjs` · `scripts/fingerprint.mjs` · `scripts/fixtures/bad-cases.json` · `scripts/fixtures/good-confirmed-only/findings.json` · `scripts/fixtures/good-confirmed-only/ledger.json` · `scripts/fixtures/good-empty/findings.json` · `scripts/fixtures/good-empty/ledger.json` · `scripts/fixtures/good-full/findings.json` · `scripts/fixtures/good-full/ledger.json` · `scripts/render_report.mjs` · `scripts/self_test.mjs` · `scripts/validate_findings.mjs` · `scripts/validate_ledger.mjs` |
+| `security-audit` | ตรวจช่องโหว่ทั้งระบบก่อนส่งมอบ: 6 ขั้น · ผู้ยืนยันแยกจากผู้ล่า · ผล findings.json ที่เครื่องตรวจได้ | `assets/findings.schema.json` · `assets/report-th.md` · `references/attack-classes.md` · `references/classes-ai-mcp.md` · `references/classes-data-tenant.md` · `references/classes-messaging-webhook.md` · `references/classes-supply-chain.md` · `references/classes-thai.md` · `references/classes-web-auth.md` · `references/hunting.md` · `references/infra-checklist.md` · `references/ledger.md` · `references/recon.md` · `references/verify.md` · `scripts/audit_lib.mjs` · `scripts/fingerprint.mjs` · `scripts/fixtures/bad-cases.json` · `scripts/fixtures/good-confirmed-only/findings.json` · `scripts/fixtures/good-confirmed-only/ledger.json` · `scripts/fixtures/good-empty/findings.json` · `scripts/fixtures/good-empty/ledger.json` · `scripts/fixtures/good-full/findings.json` · `scripts/fixtures/good-full/ledger.json` · `scripts/render_report.mjs` · `scripts/self_test.mjs` · `scripts/validate_findings.mjs` · `scripts/validate_ledger.mjs` |
 
 **เขียนโค้ดและภาษา**
 

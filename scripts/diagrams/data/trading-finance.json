@@ -1,6 +1,6 @@
 {
  "plugin": "trading-finance",
- "version": "0.19.0",
+ "version": "0.20.1",
  "description": "Trading and personal finance toolkit for Thai investors — watchlists, signals, paper trading, trade journal, position sizing, dividends, budgets and scam checks, plus Thai money skills: investment tax, year-end deduction planning (/tax-plan), mutual funds, retirement, debt payoff and คลินิกแก้หนี้, insurance review and emergency funds, credit bureau reports, bonds and deposits, rebalancing and DCA, and home refinance. Uses whatever market-data plugins you already have.",
  "cross": [
   "software-development",
@@ -25,6 +25,7 @@
   "rebalance-and-dca",
   "retirement-plan",
   "scam-check",
+  "stock-fundamentals",
   "tax-basics-th",
   "tax-deduction-planner",
   "technical-signals",
@@ -82,8 +83,8 @@
    "core": false,
    "description": "Use when the user wants price or news alerts on watched symbols. Sets scheduled checks and keeps alerts few.",
    "skills": [
-    "watchlist-setup",
-    "news-impact"
+    "news-impact",
+    "watchlist-setup"
    ]
   },
   {
@@ -92,6 +93,7 @@
    "core": false,
    "description": "Use when asking about a stock, market trend or watchlist before trading. Explains price and news plainly; not advice.",
    "skills": [
+    "stock-fundamentals",
     "technical-signals",
     "news-impact"
    ]

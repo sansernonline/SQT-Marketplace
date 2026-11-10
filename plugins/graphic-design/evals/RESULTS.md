@@ -29,3 +29,12 @@
 | เคสไม่ควรเปิด 4 เคส (รอบละ 5) | `print-ready-files-trigger-negative` · `marketplace-product-images-trigger-negative` · `youtube-thumbnail-trigger-negative` · `social-formats-trigger-negative` | เพิ่ม 2026-10-28 ยังไม่ได้รัน (eval เรียกโมเดล เสียเงิน) |
 | skill ที่เพิ่งมี eval 5 เคส | `brief-to-image-trigger` · `brief-to-image-behaviour` · `image-generation-trigger-route` · `design-review-trigger` · `video-script-to-clip-trigger` | เพิ่ม 2026-10-28 ยังไม่ได้รัน |
 | เกณฑ์ใหม่ในเคสเดิม | `approval-before-default` ใน `line-richmenu-behaviour` | เพิ่ม 2026-10-28 ยังไม่ได้รัน |
+
+## ยังไม่ได้รันรอบแดง/เขียว (2026-11-10)
+
+`copy-claims-check` และ `line-sticker` มีเคสครบ 3 ชุดแล้ว (`-trigger` · `-behaviour` · `-guard`) แต่**ยังไม่ได้รันรอบแดง/เขียว** ตาม `skill-authoring` ไม่มีคะแนนทั้งแขนมี skill และแขนไม่มี skill · รอผู้ใช้อนุมัติค่า eval ก่อนรัน · ใช้ `-guard` ไม่ใช่ `-regression` เพราะยังไม่เคยเห็นอาการพลาดจริงมาก่อน
+
+| skill | เคสที่มี | สถานะ | คำสั่งเมื่ออนุมัติ |
+|---|---|---|---|
+| `copy-claims-check` | `-trigger` · `-behaviour` · `-guard` | ยังไม่ได้รัน | `node scripts/evals/plugin-eval.mjs graphic-design --only "^copy-claims-check-" --max-cost-usd 5` |
+| `line-sticker` | `-trigger` · `-behaviour` · `-guard` | ยังไม่ได้รัน | `node scripts/evals/plugin-eval.mjs graphic-design --only "^line-sticker-" --max-cost-usd 5` |

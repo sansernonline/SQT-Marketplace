@@ -7,6 +7,9 @@
 - `superuser` หัวข้อ 7: คำถามตรวจต่อ 2–3 ข้อครั้งเดียวต่อบทสนทนา เมื่อผู้ใช้จะเอาคำตอบเรื่องเงิน สุขภาพ หรือข้อเสนองานไปลงมือ (แนวคิดจาก `discernment-nudge`)
 - `polite-message-th-en`: โปรไฟล์น้ำเสียงของผู้ใช้ใน `~/.claude/voice-profile.md` สร้างจากข้อความที่ส่งจริง 15–30 ฉบับ เน้นคำที่ผู้ใช้ไม่เคยใช้ และจดทุกการแก้ของผู้ใช้ · ตามหนี้หลายรายพร้อมกันชี้ `doc-quotation` หัวข้อ 6
 - `design-references`: ย้ายขั้นตอนเต็มไป `references/search-steps.md` (SKILL.md จาก 37 KB เหลือ 27 KB) · SKILL.md เหลือขั้นตอนย่อพร้อมกฎที่ห้ามข้าม
+- `hooks/skill-router.json`: เพิ่ม 10 แถวท้ายของ skill ชีวิตประจำวันและร้านค้า (`copy-claims-check` · `line-sticker` · `task-board` · `study-drill` · `new-job-first-90-days` · `job-exit` · `legal-help-prep` · `stock-fundamentals` · `shop-daily-briefing` · `win-back-customers`) พร้อม lookahead ตัดประโยคเรื่องโค้ดแบบเดียวกับแถว `document-naming` · ประโยคโค้ด 24 ประโยคของผู้ตรวจไม่จับแล้ว (เดิมจับ 22) · ประโยคจริง 36 ประโยคยังจับ · เติมเคสใน `--self-test` (212/212)
+- `code-pattern-warn` กฎ `js-exec` ไม่จับ `re.exec(a + b)` ของ RegExp อีก (ต้องเป็น `exec(` เดี่ยวหรือ `child_process.exec`) · self-test 24/24
+- `superuser` หัวข้อ 7 คำถามตรวจต่อ: ถามเฉพาะสิ่งที่ผู้ใช้รู้คนเดียว ตรวจเองได้ให้ตรวจเอง · แยกบรรทัดจาก **ต่อไป** · `references/modules.md` เติม `code_patterns` ในรายการ hook ที่อ่าน config
 
 ## 3.32.3 — 2026-11-10
 
