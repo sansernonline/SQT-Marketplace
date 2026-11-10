@@ -1,5 +1,10 @@
 # Changelog — software-development
 
+## 3.2.0 — 2026-11-10
+
+- `reverse-engineering`: รองรับ MetaTrader 5 `.ex5` แบบกล่องดำ · `references/mql5-ex5.md` ใหม่ (ข้อเท็จจริงเรื่องการป้องกันและข้อตกลง MQL5 Market พร้อมแหล่ง · ด่านสิทธิ์ตามที่มาของไฟล์ · ตรวจ DLL WebRequest และไฟล์ก่อนรัน · ถอดพฤติกรรมใน Strategy Tester · เขียนใหม่แล้วเทียบ · สิ่งที่ห้ามทำ) · สคริปต์ `scripts/compare_trades.py` เทียบไม้จากรายงาน Strategy Tester หรือ CSV ของ 2 ตัว มี `--self-test` · description และตารางชนิดเป้าหมายเพิ่ม `.ex5`
+- agent `reverse-engineer` รู้จักเป้าหมาย `.ex5` และข้อห้าม · `stack-mql` หัวข้อ 9 ชี้ไปเมื่อมีแค่ `.ex5`
+
 ## 3.1.1 — 2026-11-10
 
 - `security-audit` หัวข้อ 9 ชี้ infra-checklist.md
