@@ -1,10 +1,10 @@
 # SQT graphic-design — Gemini CLI
 
-> สร้างอัตโนมัติจาก plugins/graphic-design/ โดย scripts/build/build-targets.mjs (v0.26.2) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/graphic-design/ โดย scripts/build/build-targets.mjs (v0.26.3) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Creative design beyond product UI — brand kits, AI image generation and briefs with style consistency, social media formats, marketplace product images, YouTube thumbnails, print-ready files, campaign sets, LINE rich menus, app and UI icons, video editing with Thai subtitles and narration, speaking scripts, motion basics, and a design-review checklist.
 
-ชุดนี้มี skill 59 ตัว · บทบาท 9 บทบาท · คำสั่งสำเร็จรูป 0 คำสั่ง
+ชุดนี้มี skill 59 ตัว · บทบาท 10 บทบาท · คำสั่งสำเร็จรูป 0 คำสั่ง
 
 - **skill** → โหลดเองเมื่องานตรงกับคำอธิบาย ไม่ต้องสั่ง
 - **บทบาท (agent)** → เรียกใช้เป็น subagent ด้วยชื่อ · คำสั่งสำเร็จรูปเรียกด้วย `/ชื่อคำสั่ง`
@@ -21,3 +21,4 @@ Creative design beyond product UI — brand kits, AI image generation and briefs
 - **brainstormer** — Use when the user wants ideas or options, or a task is big or unclear and a wrong pick is costly. Lead picks.
 - **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked. Proposes up to 3 fixes with evidence.
 - **reviewer** — Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.
+- **worker** — Use when the lead hands out a self-contained slice needing no special role. Writes files, replies one line.

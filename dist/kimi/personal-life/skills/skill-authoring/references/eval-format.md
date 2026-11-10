@@ -83,6 +83,13 @@ graders:
 - **เกณฑ์ที่จับความผิดจริงให้แยกเป็น grader ของตัวเอง** เช่น `rmf-skip-limit` ที่ agent ตอบผิดว่าหยุดซื้อ RMF 2 ปีได้ ทั้งที่ skill บอกว่าไม่ได้
 - ตกทั้ง 2 แขนเกินครึ่ง → ตรวจเกณฑ์ก่อนโทษ skill: ส่งคำตอบใน `evidence` ของผลกับเกณฑ์ให้ `claude -p --model haiku` ตัดสินทีละข้อพร้อมยกข้อความ แล้วดูว่าข้อไหนทำให้ตก
 
+### เคสแบบอ่านอย่างเดียว ให้ regex ให้คะแนนก่อน
+
+- ให้เคสแค่เครื่องมืออ่าน (`Read` `Glob` `Grep` `Skill`) ใน `allowed_tools` · เคสที่ไม่ต้องเขียนไฟล์ไม่ขอ `Write` `Edit` `Bash` เลย (รันบน Windows ได้ด้วยเพราะไม่ต้องมี sandbox)
+- **ให้คะแนนด้วย `regex` ก่อน** เพราะถูกและไม่แกว่ง · grader `llm` เป็นที่ปรึกษา: ตั้ง `arm: with-only` เพื่อให้เป็นตัวชี้วัดไม่นับคะแนน เมื่อยังไม่ได้ปรับกับป้ายของคน ([`eval-loop-rules`](eval-loop-rules.md) หัวข้อ 5) · `tool_used: Skill` เป็นตัวชี้วัดว่า skill ถูกเปิดไหม ไม่ใช่ผลลัพธ์
+- **ใส่เพดานเงินทุกครั้ง** `--max-cost-usd` (ตัวอย่างในหัวข้อคำสั่ง) · รอบเดียวของ 2026-10-26 เสีย 35.39 ดอลลาร์โดยไม่รู้ตัว
+- ก่อนรันทั้งชุดให้นำร่อง 3 รายการและตรวจสำเนา plugin ที่ติดตั้ง: [`eval-loop-rules`](eval-loop-rules.md) หัวข้อ 1 (แนวจาก coderabbit evals/README.md · MIT · ดู 2026-11-10)
+
 ## คะแนนและรอบไม่มี plugin
 
 - แต่ละเคสรัน 3 รอบต่อแขน · คะแนนรอบ = สัดส่วน grader ที่ผ่านถ่วงน้ำหนัก · คะแนนเคส = ค่าเฉลี่ย · ผ่านเมื่อถึง `--threshold` (ค่าเริ่ม 1.0)
@@ -115,12 +122,15 @@ graders:
 3. รันข้อละ 3 รอบ · ผ่านเมื่ออัตราเปิด > 0.5 (ข้อที่ไม่ควรเปิดให้อัตราต่ำกว่า 0.5 · ส่วนนี้เราตีความเอง แหล่งระบุแค่ข้อที่ควรเปิด) · นับว่าเปิดเมื่อเห็นการเรียกเครื่องมือ `Skill` จริงเท่านั้น
 4. แบ่ง train 60% กับ validation 40% · แก้ description ด้วย train · เลือกฉบับด้วย validation · ไม่เกิน 5 รอบ
 
+เทียบ 2 ฉบับของ description หรือ skill ด้วยสคริปต์ได้: `node scripts/evals/ab/ab-run.mjs --cases cases.json --plugin <plugin> --baseline-ref origin/main` · รัน baseline (ฉบับใน git ref) กับ working tree ผ่าน `claude -p --plugin-dir` · เก็บ baseline ไว้ตามรหัส commit รันใหม่เมื่อ ref ขยับหรือชุดเคส รอบ model เปลี่ยน (แนวจาก crowdstrike-falcon-fusion run-ab-test.sh · MIT · ดู 2026-11-10) · ใช้ regex ให้คะแนนเท่านั้น ต่างจาก `claude plugin eval` ที่ใช้ grader หลายชนิด
+
 หมายเหตุรูปแบบ: `evals/evals.json` ของ skill-creator เป็นคนละรูปแบบกับ `claude plugin eval` (ไม่อ่านไฟล์ของกันและกัน) · `claude plugin eval` ต้องใช้ git 2.31 ขึ้นไป
 
 ## สภาพแวดล้อมตอนรัน
 
 - แต่ละรอบ = home ใหม่ · workspace ใหม่ · `claude -p` ที่โหลดเฉพาะ plugin นี้ · ไม่มี CLAUDE.md ของเครื่อง · ไม่มี auto memory · ไม่มี plugin อื่น · eval ของ skill กลางจึงรันที่ `plugins/superuser` โดยตรง
 - **plugin ที่มี `dependencies` โหลดไม่ขึ้นทั้งตัวใน eval** (`plugin_errors: dependency-unsatisfied` ใน trace ที่ `--keep-temp` เก็บไว้) · ไม่มีตัวเลือกให้โหลด dependency · ผลคือรอบมี plugin ไม่มี skill ของเราเลย เคส trigger เปิด skill ได้ 0/3 ทุกเคส และ Δ ใกล้ 0 · ตรวจจริง 2026-10-26 Claude Code 2.1.310 (รันครบ 5 ชุด 59 เคส เสีย 35.39 ดอลลาร์ก่อนรู้) · **วิธีรัน:** `node scripts/evals/plugin-eval.mjs <plugin> [--only <regex ชื่อเคส>] [อาร์กิวเมนต์ของ eval]` ทำสำเนาที่ลบ `dependencies` ให้ ลองเคส trigger 1 เคสก่อน ถ้า skill ไม่ถูกเปิดจะหยุดก่อนรันทั้งชุด (ทดสอบจริง 2026-10-26 กับ `flood-prep-trigger`) · `--case` รับ glob แต่ไม่รับปีกกา `{a,b}-*` (ได้ 0 เคสโดยไม่ error) จึงใช้ `--only` แทน · skill กลางของ superuser จะไม่อยู่ในรอบนั้น
+- **ปิดสำเนา plugin ที่ติดตั้งก่อนวัดด้วย `--plugin-dir`** ไม่งั้น description ของสำเนานั้นถูกให้คะแนนแทนโดยไม่รู้ตัว · `plugin-eval.mjs` เตือน และ `ab-run.mjs` หยุดให้เมื่อพบ plugin ที่ติดตั้งและเปิดอยู่ ([`eval-loop-rules`](eval-loop-rules.md) หัวข้อ 1)
 - เครื่องมือที่ให้โดยไม่ต้องขอ: อ่านอย่างเดียว (`Read` `Glob` `Grep` `Skill` `Agent` `TodoWrite` …) · เพิ่มด้วย `--allow-tools Write Edit "Bash(npm test *)"` · Bash รันใต้ sandbox ของระบบ — **Windows ไม่มี sandbox ให้ใช้ WSL2** · โฟลเดอร์ `evals/` ถูกซ่อนจาก agent
 
 ## คำสั่งและ exit code
