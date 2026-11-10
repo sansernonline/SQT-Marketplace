@@ -1,0 +1,24 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: asset-organize-trigger
+description: โฟลเดอร์ออกแบบมีไฟล์ final_v2 กับ untitled กระจาย 200 กว่าไฟล์ หาโลโก้ไม่เจอ ไม่เอ่ยชื่อ skill ต้องทำให้ asset-organize ถูกเปิด
+tags: [trigger, asset-organize]
+runs: 3
+expected_outcome: เรียก Skill asset-organize แล้วเสนอโครงโฟลเดอร์ รูปแบบชื่อไฟล์ และตาราง old กับ new ก่อนแตะไฟล์
+execution:
+  prompt: |
+    โฟลเดอร์ออกแบบของร้านมีไฟล์ชื่อ final_v2.png final_จริง.png logo copy.ai untitled-3.jpg กระจายอยู่ 200 กว่าไฟล์ จนหาโลโก้ไม่เจอ ช่วยจัดระเบียบให้หน่อย
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?asset-organize"'
+    min: 1
+    arm: with-only
+  - name: naming-pattern
+    type: regex
+    pattern: "rename-log|v0[0-9]|02-exports"
+    match: contains
+    target: last_message

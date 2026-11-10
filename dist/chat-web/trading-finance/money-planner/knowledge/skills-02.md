@@ -119,7 +119,7 @@ General information, not financial advice — a Certified Financial Planner (CFP
 - Future value of monthly saving = PMT × ((1 + r)^n − 1) ÷ r, with r = annual return ÷ 12 and n = months.
 - Required monthly saving = gap ÷ that same factor.
 
-Run the numbers with the script instead of by hand: `node scripts/retire.mjs <file.json>` (example: `scripts/example.json` = the worked example below; `--self-test` checks it). Input: `age` `retireAge` `planToAge` `spendMonthly` `returnPct`, optional `inflationPct` (3), `year` (Buddhist year now), `sso: { monthsNow, monthsPerYear, avgWage }`, `assets: [{ name, balance, monthly, returnPct }]` for PVD / RMF, `levers: { retireLaterYears, spendLessMonthly }` (default 3 years and 5,000, from the worked example). Output: spending at retirement, needed sum, pension, gap, monthly saving, the three levers and the saving at 3% / 5% / 6%. Without `avgWage` the pension uses the wage ceiling of the retirement year (upper bound). Pension rule and ceilings: `scripts/sso-pension.json` (`checked` date). **Script path:** installed: `ls -d ~/.claude/plugins/cache/*/trading-finance/*/skills/retirement-plan/scripts/retire.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/trading-finance/skills/retirement-plan/scripts/retire.mjs` · Node only.
+Run the numbers with the script instead of by hand: `node scripts/retire.mjs <file.json>` (example: `scripts/example.json` = the worked example below; `--self-test` checks it). Input: `age` `retireAge` `planToAge` `spendMonthly` `returnPct`, optional `inflationPct` (3), `year` (Buddhist year now), `sso: { monthsNow, monthsPerYear, avgWage }`, `assets: [{ name, balance, monthly, returnPct }]` for PVD / RMF, `levers: { retireLaterYears, spendLessMonthly }` (default 3 years and 5,000, from the worked example). Output: spending at retirement, needed sum, pension, gap, monthly saving, the three levers, the saving at 3% / 5% / 6% and the two-way table of retire age × spending (`--mc` adds the chance check, section "Chance the money lasts"). Without `avgWage` the pension uses the wage ceiling of the retirement year (upper bound). Pension rule and ceilings: `scripts/sso-pension.json` (`checked` date). **Script path:** installed: `ls -d ~/.claude/plugins/cache/*/trading-finance/*/skills/retirement-plan/scripts/retire.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/trading-finance/skills/retirement-plan/scripts/retire.mjs` · Node only.
 
 ## Social security old age (กรณีชราภาพ, ม.33 / ม.39)
 
@@ -153,8 +153,9 @@ Caps and tax rules: `tax-deduction-planner`. Fund choice inside RMF/PVD: `mutual
 2. Compute spending at retirement and the needed sum.
 3. Subtract the pension value (monthly × 12 × years) and projected PVD/RMF.
 4. Turn the gap into the required monthly saving at a stated return (5–6% for a balanced mix; 3% conservative).
-5. Show three levers: retire later, spend less, save more — with numbers for each.
-6. Check emergency fund and debts first (`emergency-fund`, `debt-payoff`); a plan with 25% card debt starts there.
+5. Show three levers: retire later, spend less, save more — with numbers for each. The script also prints a two-way table (retire age × spending today, each moved 2 lever steps) so the user sees two levers pulled together.
+6. If the user asks "how sure is this" or has most of the plan in equity funds, run the chance check below.
+7. Check emergency fund and debts first (`emergency-fund`, `debt-payoff`); a plan with 25% card debt starts there.
 
 ## Worked example
 
@@ -170,6 +171,22 @@ Age 35, retire 60, plan to 85. Spends 30,000/month today. Salary 40,000, PVD 5% 
 | Monthly saving needed | at 6%, 300 months (factor 693.0) | **≈ 20,270 / month** |
 
 Reading: on these assumptions the PVD alone covers about 13%. Levers: raising PVD to the employer's max match, retiring at 63, or cutting retirement spending to 25,000 today each move the number a lot — show the user the one they choose. Salary growth is ignored here, which understates PVD.
+
+## Chance the money lasts — `--mc`
+
+The plan above uses one fixed return. Real returns jump around, and a bad run of years just before or after retiring hurts most. `node scripts/retire.mjs <file.json> --mc` replays the plan 5,000 times with random yearly returns (fixed seed 42, so the same file always gives the same answer) and reports:
+
+- the chance the money lasts to `planToAge`
+- the pot at retirement and what is left at `planToAge`, at the 10th, 50th and 90th percentile of the runs
+- the middle age at which the money ran out, in the runs where it did
+
+Input: the plan file plus `"mc": { "sdPct": … }`. **`sdPct` (yearly volatility of the user's mix, %) has no default** — no Thai source was checked, so the user supplies it, for example from the standard deviation on the factsheets of the funds they hold, and the script stops without it. Before retirement the simulation uses the plan's own basis: each asset at its own `returnPct` and the extra saving at the plan's `returnPct`, compounded monthly with deposits at each month end, then one random yearly shock moves all of them together. With `sdPct` 0 and `inflationSdPct` 0 the pot at retirement equals the plan's, and a plan that says "enough" lasts in 100% of runs (both in `--self-test`). Optional: `returnPct` (default = the plan's; a different figure shifts every asset's return by the same amount), `retiredReturnPct` (after retirement; lower it for a safer mix), `inflationSdPct` (default 0 = steady inflation, the script says so), `monthlySaving` (default = the plan's required saving, so the answer reads "if you save what the plan says, how likely is it enough"), `runs`, `seed`. Example: `scripts/example-mc.json` (its 10% volatility is made up for the example).
+
+Say every time: the volatility and returns are the user's assumptions; the result is a range under those assumptions, not a forecast; the ม.33 pension is fixed in baht and loses to inflation; the simulation lets money keep earning after retirement while the simple plan assumes a real return of 0. A chance well below the user's comfort (many planners aim near 80–90%, a rule of thumb, ยังไม่ได้ตรวจ) goes back to the levers, not to a riskier mix.
+
+In `example-mc.json` (the worked example, volatility 10% and inflation volatility 1% made up, 4% after retirement) saving the plan's 20,270 a month lasts to 85 in 46% of runs and the middle pot at 60 is 15.3 million, below the plan's 16.43 million, because volatile returns compound to less than their average. With volatility 0 the pot is the plan's 16,429,001. If `retiredReturnPct` is set equal to inflation (the plan's own real return of 0), the money runs out at 84 instead of lasting to 85: the plan counts the fixed-baht pension against spending that keeps rising, the simulation does not (run 2026-11-10).
+
+ที่มา: idea of Monte Carlo ranges and two-way sensitivity tables from `creating-financial-models` in anthropics/claude-cookbooks (MIT, viewed 2026-11-10); its script needs numpy, so `retire.mjs` was written from scratch in Node.
 
 ## Spending after retirement — guardrails, not a fixed %
 
@@ -188,3 +205,4 @@ A fixed "4% of the starting pot, raised with inflation every year" ignores what 
 - The three levers and the 3% / 5% / 6% line from the script are shown, with the one the user picked.
 - Pension: say whether it used the user's average wage or the ceiling (upper bound), give the `sso-pension.json` `checked` date, and that it is not inflation-linked.
 - Each `คำเตือน` line from the script is fixed in the input or repeated to the user.
+- A `--mc` result names the volatility as the user's own figure and is called a range under assumptions, never a forecast; no volatility or return was filled in by the agent without saying so.

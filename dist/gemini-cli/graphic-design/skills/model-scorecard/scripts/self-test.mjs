@@ -26,14 +26,14 @@ function makeProject(root, name, days) {
   return [name, log];
 }
 
-const spawnLine = { ts: at(5), session: "s9", event: "PostToolUse", agent: "main", model: null, tool: "Agent", target: "Fix bug in login", role: "software-company:developer", role_model: null, spawned_id: "x1" };
-const oldDay = { "main.jsonl": [spawnLine, { ts: at(6), session: "s9", event: "UserPromptSubmit", model: "claude-opus-5-5", prompt: "ok" }], "tokens.json": JSON.stringify({ "software-company:developer": { input: 10, output: 20, cacheRead: 30, cacheCreate: 0 } }) };
+const spawnLine = { ts: at(5), session: "s9", event: "PostToolUse", agent: "main", model: null, tool: "Agent", target: "Fix bug in login", role: "software-development:developer", role_model: null, spawned_id: "x1" };
+const oldDay = { "main.jsonl": [spawnLine, { ts: at(6), session: "s9", event: "UserPromptSubmit", model: "claude-opus-5-5", prompt: "ok" }], "tokens.json": JSON.stringify({ "software-development:developer": { input: 10, output: 20, cacheRead: 30, cacheCreate: 0 } }) };
 const newDay = [
-  run(0, "s1", "software-company:developer", "code"),
+  run(0, "s1", "software-development:developer", "code"),
   { ...review(1, "s1", null, null), async: true, spawned_id: "r1", duration_ms: null },
   { ts: at(3), session: "s1", event: "result", spawned_id: "r1", verdict: "pass", round: 1, high: 0, mid: 1, low: 2 },
   { ts: at(4), session: "s1", event: "feedback", user_feedback: "accept" },
-  run(10, "s2", "software-company:developer", "code"),
+  run(10, "s2", "software-development:developer", "code"),
   review(11, "s2", "fail", 1),
   review(13, "s2", "pass", 2),
   { ts: at(14), session: "s2", event: "feedback", user_feedback: "reject" },
@@ -48,7 +48,7 @@ const dist = (runs, expects) => distributionSection(runs, expects).join("\n");
 export async function selfTest() {
   const root = mkdtempSync(join(tmpdir(), "scorecard-"));
   const a = makeProject(root, "proj-a", { "2026-10-20": { "runs.jsonl": newDay }, "2026-10-19": oldDay });
-  const b = makeProject(root, "proj-b", { "2026-10-20": { "runs.jsonl": [run(0, "s1", "software-company:developer", "code")] } });
+  const b = makeProject(root, "proj-b", { "2026-10-20": { "runs.jsonl": [run(0, "s1", "software-development:developer", "code")] } });
   const report = buildReport([a], PRICES);
   const lines = (dir) => readdirSync(dir, { recursive: true }).sort().join();
   const before = lines(join(root, "proj-a"));
@@ -61,7 +61,7 @@ export async function selfTest() {
   const odds = bestOdds([{ model: "good", a: 21, b: 3, cost: 1 }, { model: "bad", a: 3, b: 21, cost: 1 }]);
   const cheap = bestOdds([{ model: "pricey", a: 9, b: 3, cost: 10 }, { model: "cheap", a: 8, b: 4, cost: 1 }]);
   const draws = Array.from({ length: 4000 }, ((r) => () => betaDraw(3, 7, r))(seeded(7)));
-  const c = makeProject(root, "proj-c", { "2026-10-20": { "runs.jsonl": [...newDay, { ...run(30, "s4", "software-company:developer", "code"), model: "opus" }, review(31, "s4", "fail", 1)] } });
+  const c = makeProject(root, "proj-c", { "2026-10-20": { "runs.jsonl": [...newDay, { ...run(30, "s4", "software-development:developer", "code"), model: "opus" }, review(31, "s4", "fail", 1)] } });
   const mixed = aggregate(collectProject(c[1], "proj-c").runs, PRICES);
   const withUntried = contenders(mixed, "code", PRICES, ["haiku"]);
   const r1 = collectProject(a[1], "proj-a").runs.find((r) => r.spawned_id === "r1");

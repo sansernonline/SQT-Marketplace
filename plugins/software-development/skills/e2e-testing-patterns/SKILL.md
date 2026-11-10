@@ -1,0 +1,179 @@
+---
+name: e2e-testing-patterns
+description: Use when designing end-to-end tests with Playwright or Cypress, fixing flaky tests or running in continuous integration (CI).
+---
+
+> **ใน SuperUser:** ถ้าอยากให้ agent รันแอปและพิสูจน์ผลเอง ให้ใช้ [`app-verifier-setup`](../app-verifier-setup/SKILL.md) ส่วน skill นี้คือหลักออกแบบชุดทดสอบ E2E (end-to-end) ที่ verifier นั้นเรียกใช้
+
+# End-to-End Testing Patterns
+
+## When to use this skill
+
+- Setting up E2E testing in a new project
+- Choosing between Playwright, Cypress, Selenium
+- Structuring a growing E2E test suite
+- Fighting flaky tests
+- Designing test data strategy
+- Adding E2E to a continuous integration and continuous delivery (CI/CD) pipeline
+- Migrating from one framework to another
+
+## When NOT to use
+
+| Task | Use instead |
+|---|---|
+| Writing manual test cases (steps, expected result) | `test-case-template` |
+| Unit or integration tests, test ratio and scope | `testing-standards` |
+
+## อ่านเพิ่มเมื่อ
+
+| ไฟล์ | เปิดเมื่อ |
+|---|---|
+| [references/page-object-model.md](references/page-object-model.md) | ถ้าจะตั้งโครงชุดทดสอบใหม่ หรือเจอเทสต์ที่ลอกขั้นตอนล็อกอินซ้ำกัน ให้เปิดดูโค้ดเทียบแบบไม่ดีกับแบบ Page Object |
+| [references/test-data-strategies.md](references/test-data-strategies.md) | ตอนเลือกวิธีเตรียมข้อมูลทดสอบ และอยากเห็นข้อดีข้อเสียของทั้ง 4 แบบพร้อมโค้ดตัวอย่าง |
+| [references/flaky-tests.md](references/flaky-tests.md) | ถ้าเทสต์ผ่านบ้างไม่ผ่านบ้าง ให้เปิดดูโค้ดเทียบการรอแบบ sleep กับการรอตามเหตุการณ์ |
+| [references/auth-in-e2e.md](references/auth-in-e2e.md) | ตอนวางวิธีล็อกอินในชุดทดสอบ และต้องการโค้ด `storageState` หรือการฉีด cookie ผ่าน API |
+| [references/ci-and-parallel.md](references/ci-and-parallel.md) | ตอนตั้งการรันขนานหรือแบ่งรอบการรัน E2E ใน CI และต้องรู้ว่าต้องเก็บไฟล์อะไรเมื่อเทสต์ล้ม |
+| [references/coverage-and-libraries.md](references/coverage-and-libraries.md) | ตอนทำตารางความครอบคลุมของเส้นทางผู้ใช้ หรือย้ายคำสั่งระหว่าง Playwright กับ Cypress |
+| [references/oracle-and-mutation.md](references/oracle-and-mutation.md) | ถ้ามีระบบเดิมให้เทียบ (differential) · จะเทียบโครงสร้างหน้าด้วย accessibility tree · อยากรู้ว่าชุดทดสอบจับบั๊กได้จริงไหม (mutation) · หรือต้องบันทึกแล้วเล่นซ้ำคำขอเครือข่ายให้นิ่ง |
+
+## The Testing Pyramid (Get This Right First)
+
+```
+        ▲
+       ╱E╲       E2E: ~5% of tests (same pyramid as testing-standards)
+      ╱ 2 ╲
+     ╱  E  ╲     - Slow, expensive, flaky
+    ╱───────╲    - Test critical user journeys ONLY
+   ╱  Integ  ╲   Integration: ~20%
+  ╱           ╲  - API contracts, DB interactions
+ ╱─────────────╲ Unit: ~75%
+╱      Unit     ╲ - Fast, deterministic, many
+─────────────────
+```
+
+> **Anti-pattern: Ice cream cone** (many E2E tests, few unit tests)
+> Result: slow CI, flaky tests, slow debugging
+
+## Framework Selection
+
+| Framework | Best for | Avoid for |
+|-----------|----------|-----------|
+| **Playwright** (recommended) | Modern apps, cross-browser, parallel | Legacy apps with weird patterns |
+| **Cypress** | Developer experience, easy to learn, single-app | Multi-tab, cross-origin tests |
+| **Selenium** | Legacy, language flexibility | Greenfield projects |
+| **Puppeteer** | Chrome-only, scraping | Cross-browser needs |
+| **WebDriverIO** | Mobile + web, BDD style | Simple use cases |
+
+> **Default recommendation: Playwright** — best developer experience, fast, cross-browser, made by Microsoft
+
+## Test Structure: Page Object Model (POM)
+
+ถ้าทุกเทสต์เขียน `page.fill` และ `page.click` ของหน้าเดียวกันซ้ำ ๆ ให้ย้ายขั้นตอนเหล่านั้นไปไว้ในคลาสของหน้านั้น แล้วให้เทสต์เรียกเมธอดแทน โค้ดเทียบอยู่ใน [references/page-object-model.md](references/page-object-model.md)
+
+> **One Page Object per page or major component.**
+
+## Selectors: Hierarchy of Goodness
+
+```
+Most resilient ─────────────────────────► Most brittle
+
+ถูก: Role + accessible name      page.getByRole('button', { name: 'Submit' })
+ถูก: Test IDs                     page.getByTestId('submit-btn')
+กลาง: Visible text              page.getByText('Submit')
+กลาง: Label                     page.getByLabel('Email')
+ผิด: CSS classes               page.locator('.btn-primary')
+ผิด: Tag + index               page.locator('button:nth-child(3)')
+ผิด: XPath                        page.locator('//div[2]/button')
+```
+
+**Rule:** Prefer queries that survive refactoring.
+
+## Test Data Strategy
+
+มี 4 แบบ คือ shared test DB · per-test setup · API setup กับ UI verification · database snapshot กับ rollback
+แบบที่แนะนำคือ **Option 3: API setup, UI verification (best)** — เตรียมข้อมูลผ่าน API ให้เร็วและแน่นอน แล้วค่อยทดสอบ UI จริง ส่วน shared test DB ทำให้เทสต์พึ่งลำดับกัน รันขนานยาก และข้อมูลปนกัน ส่วนข้อดีข้อเสียครบทุกแบบอยู่ใน [references/test-data-strategies.md](references/test-data-strategies.md)
+
+## What to Test E2E (Not Everything!)
+
+### ถูก: DO test E2E
+- Critical user journeys (login → checkout → confirmation)
+- Multi-step workflows that span multiple pages
+- Integration with external services (payment, email)
+- "Smoke tests" that verify deployment works
+- Cross-browser specific behavior
+
+### DON'T test E2E
+- Every form validation (use unit tests)
+- Edge cases of business logic (use unit/integration)
+- Every error message (use unit tests)
+- Performance (use dedicated tools)
+- Visual design (use visual regression tools)
+
+> **Rule of thumb:** If a unit/integration test can verify it, don't add E2E.
+
+ให้ทำตารางความครอบคลุมของเส้นทางผู้ใช้ (Critical Path Coverage Matrix) ที่บอกว่าแต่ละเส้นทางครอบคลุมแล้วหรือยัง และสำคัญระดับ P1 P2 หรือ P3 (scale เดียวกับ `test-case-template` และ tag ด้านล่าง · P1 สำคัญสุด) ตัวอย่างอยู่ใน [references/coverage-and-libraries.md](references/coverage-and-libraries.md)
+
+## Expected Values and Failing Tests
+
+ชุด E2E ที่แปลงมาจากแผนทดสอบ (`test-case-template`):
+
+- ชื่อ test ขึ้นต้นด้วยรหัส TC · tag `@<module>` `@P1|@P2|@P3` · ใส่ผลที่คาดหวังและ oracle เป็น annotation
+  `test.info().annotations.push({ type: 'expected', description: '฿760 · [D] BR-03' })`
+- ค่าที่คาดหวังเป็นค่าคงที่จากแผน · ห้ามอ่านค่าจากหน้าจอแล้ว assert กลับ เช่น อ่านราคาจากการ์ดแล้วเทียบยอดรวม → ผิดทั้งคู่ก็ผ่าน
+- reset ข้อมูลก่อนทุก TC (API reset หรือ seed) · ล็อก "วันนี้" ด้วย `page.clock.setFixedTime()` · `timezoneId` · `locale` ใน config
+- TC ที่มี **Check when** `หลังรีโหลด` → `page.reload()` แล้ว assert อีกครั้ง
+- รันทุกเบราว์เซอร์ที่แผนระบุ · เกณฑ์ผ่านคิดแยกทีละเบราว์เซอร์
+- test ล้ม → ห้ามแก้ค่าที่คาดหวัง · จำแนก `app` / `plan` / `test` ตาม agent `qa-tester` ลง `triage.json` · ใน CI ห้าม retry จนผ่านแล้วถือว่าจบ
+
+## Fighting Flaky Tests
+
+| Cause | Fix |
+|-------|-----|
+| Hard-coded sleeps | Use auto-waiting (Playwright/Cypress have this) |
+| Animation timing | Wait for animation to complete OR disable in tests |
+| Network race conditions | `page.waitForResponse(url)` before assertion |
+| Test data leak | Use unique data per test (timestamp/UUID) |
+| Order dependency | Each test fully isolated, parallelizable |
+| Auth race condition | Pre-authenticate via API, inject session |
+| Element not stable | `expect(el).toBeVisible()` before interacting |
+| Click times out "not visible/stable" but the site works | The tab may be in the background (`document.visibilityState === "hidden"`, common with Playwright MCP sharing one browser). Check with `browser_evaluate`, switch to the tab, then click. Do not retry blindly |
+
+ห้ามใช้ `page.waitForTimeout` รอแบบกำหนดเวลา ให้รอเหตุการณ์จริง เช่น response ของ API แทน โค้ดเทียบอยู่ใน [references/flaky-tests.md](references/flaky-tests.md)
+
+### Retry strategy
+- **In CI:** retry at most 1 time, **only to collect a trace** (`retries: 1` + `trace: 'on-first-retry'`)
+- **Pass on retry = flaky, not a pass** — report it as flaky and fail the run (`failOnFlakyTests: true` in `playwright.config.ts`, Playwright 1.52+) — the same rule as "Expected Values and Failing Tests" above and `testing-standards` (flaky test: fix or delete, never retry until green)
+- **Track flakiness:** a test that fails > 5% of runs is a candidate for quarantine (pulled out of the blocking run)
+- **Quarantine has an expiry date** (idea from ECC e2e-testing): tag the test `@flaky` with an issue link and a date (`test('checkout total @flaky', { annotation: { type: 'quarantine', description: 'until 2026-11-15 · issue #123' } }, ...)`), run the `@flaky` set as a separate non-blocking job so the signal is not lost, and have CI fail when today is past the date — the test is then fixed or deleted, never extended twice
+- **Don't accept flaky tests:** investigate or delete them. Don't ignore them
+
+## Authentication in E2E
+
+อย่าล็อกอินผ่าน UI ในทุกเทสต์ เพราะช้า เปราะ และโค้ดซ้ำ ให้ล็อกอินครั้งเดียวแล้วแชร์สถานะ (`storageState`) หรือดีกว่านั้นคือล็อกอินผ่าน API แล้วฉีด cookie เข้า browser context โค้ดทั้งสามแบบอยู่ใน [references/auth-in-e2e.md](references/auth-in-e2e.md)
+
+## Parallelization and CI
+
+เงื่อนไขก่อนรันขนาน (Requirements for safe parallel) อยู่ใน [references/ci-and-parallel.md](references/ci-and-parallel.md)
+
+แบ่ง E2E ใน CI เป็น 3 รอบ คือ smoke ทุก pull request (PR) บน Chromium ตัวเดียว ที่ล้มแล้วบล็อกการ merge → full ตอน merge เข้า main และทุกคืน บน Chromium + WebKit (จอ iPhone) → pre-prod ก่อน deploy ที่ต้องผ่าน P1 และ P2 บนครบ 3 browser (เพิ่ม Firefox) เมื่อเทสต์ล้มต้องเก็บ screenshot · video · trace · console log · network log ไว้เสมอ ส่วนระดับการรันขนานตาราง browser แต่ละรอบ และรายละเอียดของแต่ละรอบอยู่ใน [references/ci-and-parallel.md](references/ci-and-parallel.md)
+
+## Anti-patterns
+
+- **Testing implementation details** — selectors based on internal structure
+- **Long monolithic tests** — one test with 50 steps is hard to debug
+- **Coupled tests** — Test B depends on Test A having run
+- **Hidden state** — tests behave differently depending on order or data
+- **Manual cleanup** — relying on people to reset the environment
+- **No quarantine** — failing tests get merged anyway because "it's flaky"
+- **Mocking everything** — at this layer, use the real integrations, or it's not E2E
+- **Expected value read from the page** — the bug becomes the expectation
+
+## Quality Targets (from qa-tester agent)
+
+- Critical path coverage: 100%
+- Test runtime: ≤ 10 min for smoke, ≤ 30 min for full
+- Flakiness rate: < 2%
+- Pass rate in main: > 95%
+- Mean time to fix flake: < 2 days
+
+ตารางเทียบคำสั่งที่ใช้บ่อยของ Playwright กับ Cypress (Library Quick Reference) อยู่ใน [references/coverage-and-libraries.md](references/coverage-and-libraries.md)

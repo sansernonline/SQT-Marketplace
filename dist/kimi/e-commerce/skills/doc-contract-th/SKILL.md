@@ -59,9 +59,32 @@ Full checklists for employment, lease and hire-of-work contracts: [references/cl
 - Foreign party, foreign-currency payment, or arbitration abroad.
 - Dismissing an employee, settlement agreements, or anything already in dispute.
 
+## 6. Reviewing a contract the other side sent
+
+Sellers sign more contracts than they draft: distributor or reseller deals, ad agencies, creator and influencer networks, warehouse or space leases, bulk courier accounts. Review mode reads their paper and says where it hurts.
+
+1. **Ask which side we are** (buyer or seller, lessee or lessor, brand or creator). The same clause is fine for one side and red for the other.
+2. **Read every annex and schedule first** (ภาคผนวก · เอกสารแนบท้าย · price lists, SLAs, platform terms "incorporated by reference"). Fees, penalties and exclusivity often sit there, not in the main text.
+3. **Walk 8 risk areas**, each marked แดง (red: do not sign as is), เหลือง (yellow: negotiate) or เขียว (green: fine):
+
+| Area | Mark red or yellow when |
+|---|---|
+| Payment terms | we are paid more than 30 days after delivery or invoice (yellow); payment depends on the other side's "approval" with no deadline (red) |
+| Liability | our liability has no cap, or we indemnify them for things we do not control (red) |
+| Termination | they can end at once without cause and we cannot; no cure period; we pay for stock or work already done anyway |
+| Intellectual property (IP) | our brand, photos or content pass to them, or a creator's content cannot be reused in our ads after the term |
+| Scope and changes | scope is vague; they may change deliverables or prices by notice without our consent |
+| Non-compete and exclusivity | we may not sell on other platforms or to other customers; area, time and field not limited (same unfair-terms risk as the non-compete row in section 4) |
+| Confidentiality and data | customer personal data passes without a data processing agreement (`pdpa-workflow` E) |
+| Auto-renewal | renews on its own with a short window to give notice; price rises on renewal |
+
+4. **Quote the clause word for word** (clause number and the Thai text) next to a plain explanation of what it does to us. A finding without the quoted words cannot be checked.
+5. **Offer replacement wording** for each red or yellow item, and say which ones to give up first if the other side pushes back (least harm to us first).
+6. Every red item stays [ให้ทนายตรวจ]. Close with the same line as the workflow below.
+
 ## Workflow
 
-1. Identify the type (section 1) and the parties' authority (company: หนังสือรับรอง and authorised director).
+1. Identify the type (section 1) and the parties' authority (company: หนังสือรับรอง and authorised director). The other side already sent a draft → review mode, section 6, instead of steps 2–4.
 2. Fill the checklist for that type; leave unknowns as `{…}` not guesses.
 3. Mark [ให้ทนายตรวจ] on red-flag clauses, with 1 line on why.
 4. Compute stamp duty and say who pays.

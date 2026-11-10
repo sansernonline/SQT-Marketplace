@@ -9,7 +9,7 @@ description: Use when any task that produces or checks work ends (document, rese
 
 > **กฎข้อเดียว:** จบงานทุกครั้ง ต้องมีตารางสถานะในไฟล์กลางของงาน และตารางเดียวกันในคำตอบ
 > งานที่ไม่มีตารางสถานะ ถือว่ายังไม่จบ
-> **ยกเว้น** playbook ที่อ่านอย่างเดียว (`research` · `review` · software-company: `investigation`) — ใส่ตารางในคำตอบอย่างเดียว ไม่เขียนไฟล์
+> **ยกเว้น** playbook ที่อ่านอย่างเดียว (`research` · `review` · software-development: `investigation`) — ใส่ตารางในคำตอบอย่างเดียว ไม่เขียนไฟล์
 
 ---
 
@@ -96,8 +96,8 @@ description: Use when any task that produces or checks work ends (document, rese
 
 | ต้องการ | ใช้คู่กับ |
 |---|---|
-| ตารางงานและวงรอบเขียนโค้ด ในไฟล์เดียวกัน | `spec-to-code-loop` (plugin `software-company`) |
-| ชุดเอกสารของโปรเจกต์และสถานะเอกสาร | `project-doc-set` (plugin `software-company`) |
+| ตารางงานและวงรอบเขียนโค้ด ในไฟล์เดียวกัน | `spec-to-code-loop` (plugin `software-development`) |
+| ชุดเอกสารของโปรเจกต์และสถานะเอกสาร | `project-doc-set` (plugin `software-development`) |
 | บันทึกบริบทเพื่อทำต่อในรอบสนทนาหน้า | `handoff` |
 | ตารางการตัดสินใจเองในไฟล์เดียวกัน | `decision-log` |
 | เลือก playbook และจบงานทุกชนิด | `superuser` |

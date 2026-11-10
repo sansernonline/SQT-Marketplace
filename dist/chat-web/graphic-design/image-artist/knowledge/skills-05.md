@@ -596,7 +596,7 @@ Return on Investment (ROI) · Stock Keeping Unit (SKU) · Value Added Tax (VAT) 
 Cash on Delivery (COD) · Objectives and Key Results (OKR) ·
 Personally Identifiable Information (PII) · Proof of Concept (POC)
 
-ตัวย่อฝั่งโค้ด (RBAC · SSO · CI/CD · SRS · ADR ฯลฯ) → ส่วนเพิ่มใน plugin `software-company` → `superuser` → `references/code-extensions.md`
+ตัวย่อฝั่งโค้ด (RBAC · SSO · CI/CD · SRS · ADR ฯลฯ) → ส่วนเพิ่มใน plugin `software-development` → `superuser` → `references/code-extensions.md`
 
 ## Anti-patterns
 

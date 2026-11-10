@@ -22,7 +22,7 @@ description: Use when someone wants a multi-step prompt to paste in a chat (Clau
 | สถานการณ์ | ใช้ |
 |---|---|
 | หัวหน้าทีมใน Claude Code วางแผนให้ subagent ทำงาน (Loop · Graph · Dynamic ฉบับทีม agent มีไฟล์ มี reviewer ตัวใหม่) | `agent-patterns` |
-| เขียนโค้ดที่เรียก Large Language Model (LLM) · structured output · RAG · eval | `llm-engineering` ของ `software-company` |
+| เขียนโค้ดที่เรียก Large Language Model (LLM) · structured output · RAG · eval | `llm-engineering` ของ `software-development` |
 | แตกงานให้หลาย agent ทำพร้อมกันจริงใน Claude Code | `parallel-split-and-merge` |
 | ถ้อยคำในคำตอบและในเกณฑ์ตรวจ | `human-writing` (คู่กัน) |
 

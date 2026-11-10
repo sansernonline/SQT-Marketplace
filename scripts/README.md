@@ -23,7 +23,7 @@ scripts/
 | **sync** | `sync/sync-docs.mjs` | เขียนตัวเลขนับและรายการ skill ในเอกสารจากของจริงใน `plugins/` | **หลังเพิ่มหรือลบ skill / agent / command** |
 | sync | `sync/sync-superuser.mjs` | คัดลอกไฟล์กลางของ skill `superuser` (reference · บล็อก `superuser:begin`) ไปทุก plugin · คัดลอก `install/CLAUDE.global.md` เป็น `plugins/superuser/hooks/core-rules.md` (มีหัวเก็บ hash · สำเนาที่ถูกแก้มือ sync ไม่เขียนทับ ให้แก้ที่ต้นฉบับ) · ตรวจว่า skill · agent · hook กลางอยู่ใน `superuser` ที่เดียว และทุก plugin ประกาศ `dependencies` · ตรวจชื่อ skill ใน `skill-router.json` · `--check` ตรวจอย่างเดียว | **หลังแก้อะไรใน `plugins/superuser` หรือ `CLAUDE.global.md`** |
 | sync | `sync/sync-file-map.mjs` + `sync/file-map-th.json` | เขียน `docs/FILE-MAP.md` แผนผังไฟล์ของทุก plugin พร้อมคำอธิบายไทย · skill หรือ agent ใหม่ที่ยังไม่มีคำอธิบายใน `file-map-th.json` → แจ้งชื่อแล้ว exit 1 · `--check` ตรวจอย่างเดียว | **หลังเพิ่มหรือลบ skill / agent / playbook** (`build-dist.cmd` รันให้แล้ว) |
-| sync | `sync/sync-prompt-rules.mjs` | เขียนบล็อกกฎร่วม `<!-- rules:begin/end -->` ในทุกไฟล์ `prompt/software-company/prompt-*.md` ให้ตรงกับ `RULES` ในสคริปต์ (ต้นฉบับที่เดียว · กฎเฉพาะไฟล์วางใต้ `rules:end`) · `--check` ตรวจอย่างเดียว · `validate-marketplace` ตรวจให้ด้วย | **หลังแก้กฎร่วมของ prompt** — แก้ `RULES` แล้วรัน |
+| sync | `sync/sync-prompt-rules.mjs` | เขียนบล็อกกฎร่วม `<!-- rules:begin/end -->` ในทุกไฟล์ `prompt/software-development/prompt-*.md` ให้ตรงกับ `RULES` ในสคริปต์ (ต้นฉบับที่เดียว · กฎเฉพาะไฟล์วางใต้ `rules:end`) · `--check` ตรวจอย่างเดียว · `validate-marketplace` ตรวจให้ด้วย | **หลังแก้กฎร่วมของ prompt** — แก้ `RULES` แล้วรัน |
 | sync | `sync/sync-includes.mjs` | ไฟล์แม่แบบ (README · prompt · เอกสาร) ดึงหัวข้อจาก skill ด้วย marker ต้นบรรทัด `<!-- include: <path>#<หัวข้อ> -->` … `<!-- /include -->` · สคริปต์เขียนเนื้อหัวข้อทับระหว่าง marker · `--check` ล้มเมื่อไม่ตรงหรือหาหัวข้อไม่เจอ · ให้ skill เป็นต้นฉบับเดียว | **หลังแก้หัวข้อ skill ที่มีไฟล์อื่นดึงไป** |
 | sync | `sync/update-skills.mjs` + `sync/prior-names.json` | อัปเดตสำเนา skill ที่ผู้ใช้คัดลอกไปในโปรเจกต์ (`--from dist/codex/<plugin>/.agents/skills --to <ปลายทาง>`) ด้วย manifest แฮชรายไฟล์ · เขียนทับเฉพาะไฟล์ที่ผู้ใช้ไม่ได้แก้ · แปลงชื่อเก่า (`prior-names.json`) · ลบของเลิกใช้ · `--dry-run` · `--self-test` | เมื่อผู้ใช้ขออัปเดตสำเนา · เพิ่มแถวใน `prior-names.json` เมื่อเปลี่ยนชื่อ skill |
 | **build** | `build/build-targets.mjs` | สร้าง `dist/` สำหรับ claude.ai (zip), Codex CLI, Gemini CLI และหน้าเว็บ ChatGPT / Gemini จาก `plugins/` | **หลังแก้อะไรก็ได้ใน `plugins/`** แล้ว commit `dist/` ไปด้วย |
@@ -153,7 +153,7 @@ node scripts/build/build-targets.mjs --self-test  # พิสูจน์ว่�
 
 | ปลายทาง | skill | agent | command |
 |---|---|---|---|
-| `dist/claude-web/` | `software-company.zip` — plugin หลักทั้งโฟลเดอร์ตามเดิม ([วิธีอัปโหลด](../docs/INSTALL.md#claudeai--อัปโหลด-software-companyzip)) | ← | ← |
+| `dist/claude-web/` | `software-development.zip` — plugin หลักทั้งโฟลเดอร์ตามเดิม ([วิธีอัปโหลด](../docs/INSTALL.md#claudeai--อัปโหลด-software-developmentzip)) | ← | ← |
 | `dist/codex/` | คัดลอกไป `.agents/skills/` | `.codex/agents/<name>.toml` | แปลงเป็น skill (Codex เลิกใช้ custom prompt) · `$ARGUMENTS` → ข้อความบอกให้ใช้สิ่งที่ผู้ใช้ระบุ |
 | `dist/gemini-cli/` | คัดลอกไป `skills/` | `agents/<name>.md` ตัด `tools:` `model:` ทิ้ง | `commands/<name>.toml` · `$ARGUMENTS` → `{{args}}` |
 | `dist/kimi/` | คัดลอกไป `skills/` | `agents/<name>.md` ตัด `tools:` `model:` ทิ้ง · ขึ้นต้นด้วย `${base_prompt}` | แปลงเป็น skill ที่ตั้ง `disableModelInvocation: true` · `$ARGUMENTS` คงไว้ |
@@ -208,7 +208,7 @@ python scripts/diagrams/make.py trading-finance   # เฉพาะ plugin เ�
 |---|---|
 | `make.py` | รันทุกขั้นข้างล่างต่อกัน แล้ววางรูปลง `docs/plugins/<plugin>/` (`map.png` · `flow/<k>-<ชื่อ>.png` · `playbooks/<playbook>.png`) |
 | `extract.py` | อ่าน agent · skill · คำสั่ง · ขั้นของ playbook (ใครทำ · skill ที่อ้าง · ขั้นที่รอผู้ใช้) จากไฟล์จริง ไม่เดา → `data/` |
-| `labels/<plugin>.json` | คำสั้นในกล่อง: หน้าที่ของ agent · ชื่อสั้นและกลุ่มของ playbook · ป้ายของแต่ละขั้น · `software-company` มีกลุ่ม agent และกลุ่ม skill เพิ่ม — **คนหรือ agent เขียน** |
+| `labels/<plugin>.json` | คำสั้นในกล่อง: หน้าที่ของ agent · ชื่อสั้นและกลุ่มของ playbook · ป้ายของแต่ละขั้น · `software-development` มีกลุ่ม agent และกลุ่ม skill เพิ่ม — **คนหรือ agent เขียน** |
 | `kit/` | ชิ้นส่วนกลางของทุกรูป แนววงกลมไล่สีกับการ์ดขาวบนลายจุด อ่านจากบนลงล่าง (ผู้ใช้เลือก 2026-10-28: เส้นตั้งหรือนอนเท่านั้น · มีชื่อและคำอธิบายทุกขั้น): `kit.css` สีบทบาท ขนาด การ์ด · `kit.js` วาดเส้นหักมุมฉากด้วย D3 · `kit.py` ชิ้น HTML · `icons/` ไอคอน Lucide 0.460.0 (ISC) · `vendor/` D3 7.9.0 (ISC) ฝังในหน้า ไม่โหลดจากเน็ต — เปลี่ยนหน้าตาแก้ที่นี่ที่เดียว ไม่วาดไอคอนเอง |
 | `palette.py` | สีและตราประจำ plugin — ที่เดียว ทุกตัวสร้างใช้ร่วมกัน |
 | `build.py` | HTML ของ `map` · ภาพรวม · hook |

@@ -4,7 +4,7 @@
 
 ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ
 
-agent 3 · skill 39 (ของ plugin 0 · ของกลางจาก superuser 39) · คำสั่ง 0 · playbook 7 · ส่งงานต่อให้ —
+agent 4 · skill 39 (ของ plugin 0 · ของกลางจาก superuser 39) · คำสั่ง 0 · playbook 7 · ส่งงานต่อให้ —
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/superuser/`](../../../plugins/superuser/)
 
@@ -38,7 +38,7 @@ agent 3 · skill 39 (ของ plugin 0 · ของกลางจาก superu
 | [`learn-from-session`](#pb-learn-from-session) | เรียนรู้จากงานที่ทำ | 7 |
 | [`pickup-and-pause`](#pb-pickup-and-pause) | รับงานต่อ · หยุดงาน | 8 |
 | [`research`](#pb-research) | ค้นคว้าหาคำตอบ | 7 |
-| [`review`](#pb-review) | ตรวจงานก่อนส่ง | 6 |
+| [`review`](#pb-review) | ตรวจงานก่อนส่ง | 8 |
 | [`team-project`](#pb-team-project) | งานใหญ่หลายวัน คนกับ agent ร่วมทีม | 9 |
 | [`unattended-run`](#pb-unattended-run) | ปล่อยงานยาวให้ทำเอง | 7 |
 

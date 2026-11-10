@@ -15,7 +15,7 @@ description: Use when creating or changing a skill, agent or playbook in this ma
 - เขียนหรือแก้ eval ของ skill · `/skill-doctor` หรือ `scripts/evals/triggers` บอกว่า skill ไม่ถูกเรียก
 - ตรวจ skill ที่คนอื่นเขียนก่อนรวม
 
-ไม่ใช้เมื่อ: บทเรียนจากงานยังไม่ได้กรอง → `session-lessons-to-skills` ก่อน (ที่นั่นตัดสินว่าแก้ skill ไหน แล้วมาที่นี่เพื่อแก้ให้ถูกแบบ) · ความผิดซ้ำที่ทำเป็นตัวตรวจอัตโนมัติได้ → `repeated-mistakes-to-checks` · หัวหน้าทีมแจกงานเขียน skill เป็นหลายขั้นให้ลูกทีม → playbook `skill-authoring` ใน plugin `software-company` (`skills/superuser/references/playbook-skill-authoring.md` ขั้น 5 ทดสอบปิดตา) ซึ่งใช้กฎในไฟล์นี้
+ไม่ใช้เมื่อ: บทเรียนจากงานยังไม่ได้กรอง → `session-lessons-to-skills` ก่อน (ที่นั่นตัดสินว่าแก้ skill ไหน แล้วมาที่นี่เพื่อแก้ให้ถูกแบบ) · ความผิดซ้ำที่ทำเป็นตัวตรวจอัตโนมัติได้ → `repeated-mistakes-to-checks` · หัวหน้าทีมแจกงานเขียน skill เป็นหลายขั้นให้ลูกทีม → playbook `skill-authoring` ใน plugin `software-development` (`skills/superuser/references/playbook-skill-authoring.md` ขั้น 5 ทดสอบปิดตา) ซึ่งใช้กฎในไฟล์นี้
 
 ## 1 · ชื่อและ description — ส่วนเดียวที่ตัดสินว่า skill จะถูกเรียกไหม
 

@@ -6,7 +6,7 @@ argument-hint: <consent|breach|request|vendor> [details]
 
 # Personal Data Protection Act (PDPA) Workflow for Thai SMEs
 
-พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 turned into paperwork a small company can actually run. This is general information, not legal advice. Disputes, regulator letters and cross-border transfers go to a lawyer (ทนายความ) or a data protection officer (DPO, เจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล). Works on its own; if installed, `pdpa-compliance` (software-company) covers designing systems that hold personal data.
+พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 turned into paperwork a small company can actually run. This is general information, not legal advice. Disputes, regulator letters and cross-border transfers go to a lawyer (ทนายความ) or a data protection officer (DPO, เจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล). Works on its own; if installed, `pdpa-compliance` (software-development) covers designing systems that hold personal data.
 
 ## 1. Deadlines that matter
 
@@ -48,10 +48,26 @@ Consent is the weakest basis — it can be withdrawn. Pick the basis first (ม.
 3. Withdrawal channel (LINE keyword, email) that works the same day.
 
 ### C. Data-subject request (DSR)
-1. Log the request (day 0), verify identity (ID card copy redacted, or match account details).
-2. Find the data across systems (ROPA tells you where).
-3. Decide: fulfil, partly, or refuse with the legal ground (e.g. law requires keeping tax records).
-4. Reply in writing **by day 30**; record what was done.
+1. **Log the request (day 0) and name each right asked for.** One message can hold several ("send me my data, then delete it"): handle them in that order, copy first, then delete.
+2. **Verify identity in proportion to the risk.** Matching the LINE account, phone or order the person already uses is enough for most requests; ask for a redacted ID card copy only when sending sensitive data or deleting an account. Checks so heavy they stop a real person are a refusal in disguise.
+3. **Send a short acknowledgement within a few days**: request received, what we will search, the date the answer will come (inside 30 days).
+4. **Search every system and tick it off**, using the ROPA as the list:
+
+| System | Found | Notes |
+|---|---|---|
+| LINE OA chats | yes / no | |
+| Marketplace order data (Shopee, Lazada, TikTok Shop) | yes / no | the platform holds the buyer account; we hold only what we exported |
+| Google Sheets, order and customer lists | yes / no | |
+| Customer relationship management (CRM) tool or POS | yes / no | |
+| Email | yes / no | |
+| Courier accounts (labels, COD records) | yes / no | |
+| Backups and old exports | yes / no | |
+
+5. **Decide per item**: fulfil, partly, or refuse. Write every refusal with its reason and the law relied on (for example, tax records must be kept 5–7 years, `sme-bookkeeping` section 2), and keep that note with the ROPA (the Act requires refusals to be recorded, ม.30 and ม.39, รอยืนยัน the exact paragraph).
+6. **Reply in writing by day 30**: what was found, what was done, what was refused and why, and how to complain to สคส.
+7. **We only process the data for someone else** (for example, we pack orders for another brand): forward the request to that controller the same day and tell the person who will answer.
+
+The 2-letter flow (acknowledge, then answer) and the system checklist follow Anthropic's dsar-response skill (`anthropics/claude-for-legal` privacy-legal, Apache-2.0, read 2026-11-10), rewritten for Thai sellers; no text copied.
 
 ### D. Breach response (clock starts when you become aware)
 | Hour | Action |
@@ -67,6 +83,18 @@ Even breaches you decide not to report go in the incident log with the reason.
 ### E. Vendor check (before sharing data)
 What data, why, where stored (country), sub-processors, security measures, breach history, a data processing agreement (ข้อตกลงการประมวลผลข้อมูล) with breach-notice duty to you within 24–48 hours.
 
+When the vendor sends its own agreement (chatbot, CRM, fulfilment warehouse, ad agency), check that it says:
+
+- the vendor processes the data only on our written instructions and for our purpose
+- staff and sub-processors are bound to confidentiality; new sub-processors need our notice or consent
+- security measures are named, not just "appropriate"
+- the vendor tells us of a breach fast enough for our 72-hour clock (section 1)
+- the vendor helps us answer data-subject requests (section C)
+- data is returned or deleted when the contract ends, with written confirmation
+- the country where data is stored; storage abroad needs the cross-border check (lawyer)
+
+These duties of a processor (ผู้ประมวลผลข้อมูลส่วนบุคคล) come from ม.40 (รอยืนยัน the full list in the Act's text on pdpc.or.th). Clauses that cap the vendor's liability at a token amount or let it use our customers' data for its own purposes go to a lawyer (`doc-contract-th` section 6).
+
 ## Worked example
 
 A clinic's LINE OA admin sends a patient list (120 names + phone + diagnosis) to the wrong group at 10:00 Monday.
@@ -80,7 +108,7 @@ Health data is sensitive, so the risk is high. Contain: delete the message, ask 
 
 ## Related
 
-`line-chatbot` (chat logs) · `doc-leave` (health certificates) · `payroll-th` · `doc-contract-th` (data clauses) · if installed: `pdpa-compliance`, `audit-trail` (software-company).
+`line-chatbot` (chat logs) · `doc-leave` (health certificates) · `payroll-th` · `doc-contract-th` (data clauses) · if installed: `pdpa-compliance`, `audit-trail` (software-development).
 
 ## เรียกเป็นคำสั่ง
 

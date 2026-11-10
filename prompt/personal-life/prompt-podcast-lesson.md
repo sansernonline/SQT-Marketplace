@@ -2,7 +2,7 @@
 
 ทดสอบจริง: 2026-10-24 · ฉบับ 1–3 (แก้ 11 จุด) · ฉบับ 4–5 ยังไม่ได้ทดสอบจริง
 
-ใช้คู่กับ plugin `personal-life` (หมวดเรียนรู้ ฝั่งคนสอน) · สไลด์ใช้ skill ของ plugin `software-company` · บทพูด เสียงสังเคราะห์ ตัดต่อ และซับใช้ skill ของ plugin `graphic-design` · ไฟล์นี้รวม prompt 5 ฉบับ · 1 ฉบับ = 1 งาน
+ใช้คู่กับ plugin `personal-life` (หมวดเรียนรู้ ฝั่งคนสอน) · สไลด์ใช้ skill ของ plugin `software-development` · บทพูด เสียงสังเคราะห์ ตัดต่อ และซับใช้ skill ของ plugin `graphic-design` · ไฟล์นี้รวม prompt 5 ฉบับ · 1 ฉบับ = 1 งาน
 
 ## วิธีใช้
 
@@ -98,7 +98,7 @@
 
 ## 3. ทำสไลด์ประกอบตอนให้ตรงกับสคริปต์
 
-ประกอบเองตาม `playbook-template` · skill `presentation-design` และ `html-slide-deck` ของ plugin `software-company` (ทำ PowerPoint ใช้ `presentation-design` อย่างเดียว) · `course-builder` ข้อ 6
+ประกอบเองตาม `playbook-template` · skill `presentation-design` และ `html-slide-deck` ของ plugin `software-development` (ทำ PowerPoint ใช้ `presentation-design` อย่างเดียว) · `course-builder` ข้อ 6
 **ผลลัพธ์:** `podcast/<ชุด>/ep<NN>/slides-src.html` (เนื้อสไลด์) → build เป็น `slides.html` (ไฟล์เดียว มีบันทึกผู้พูด เปิดได้โดยไม่ต่อเน็ต ยกเว้นฟอนต์ที่โหลดจากเน็ต) หรือ `slides.pptx` · ภาพย่อทั้งเด็คสำหรับตรวจ
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -120,7 +120,7 @@
 ### กฎเฉพาะฉบับนี้
 
 - แก้สคริปต์ระหว่างทำสไลด์ → แก้ `script.md` ด้วย และบอกว่าแก้ตรงไหน สองไฟล์ต้องเล่าตรงกัน
-- ไม่ได้ติดตั้ง plugin `software-company` → ทำ `slides-outline.md` แผ่นละ 3 บรรทัด (หัวที่เป็นข้อสรุป · สิ่งที่แสดง · ช่วงในสคริปต์) แล้วรายงานว่าข้ามไฟล์สไลด์
+- ไม่ได้ติดตั้ง plugin `software-development` → ทำ `slides-outline.md` แผ่นละ 3 บรรทัด (หัวที่เป็นข้อสรุป · สิ่งที่แสดง · ช่วงในสคริปต์) แล้วรายงานว่าข้ามไฟล์สไลด์
 
 ---
 

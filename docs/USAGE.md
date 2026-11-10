@@ -1,4 +1,4 @@
-# คู่มือใช้งาน Software Company Plugin
+# คู่มือใช้งาน Software Development Plugin
 
 ## ภาพรวม: 3 วิธีเรียกใช้
 
@@ -12,10 +12,10 @@
 
 ## SuperUser — ประตูหน้าเดียวของงานหลายขั้น
 
-![การทำงานของ superuser](plugins/software-company/flow.png)
+![การทำงานของ superuser](plugins/software-development/flow.png)
 
 ```
-/software-company:superuser แก้บั๊กหน้ารายงาน วันที่ขึ้นเป็นค่าว่าง
+/software-development:superuser แก้บั๊กหน้ารายงาน วันที่ขึ้นเป็นค่าว่าง
 ใช้ superuser ทำฟีเจอร์ export Excel ตาม FR-012
 ใช้ superuser ทำไมโค้ดนี้ทำแบบนี้ สอนผมหน่อย
 ใช้ superuser ทำ API นี้ให้เร็วขึ้นจน p95 ต่ำกว่า 200 ms
@@ -35,7 +35,7 @@
 | ความจำกลาง | อยู่ใน `.claude/superuser/` ทั้งหมด: `CONTEXT.md` (หัวข้อ "รับงานต่อ") · `inbox/` (คิวข้อความถึงทีม) · `log/` (log ที่ hook เขียน · hook คือสคริปต์ที่รันอัตโนมัติ) · `IMPROVEMENTS.md` (สิ่งที่ทีมเจอ รอรวมเข้า skill) — วิธีส่งข้อความดู [Tips ข้อ 3](#3-ใช้-contextmd--inbox--log-รับงานต่อ) |
 | คำตอบตอนจบ | 3 ระดับ: คำเดียว · 3 บรรทัด · รายงานปิดงานไม่เกินครึ่งหน้า · ผลต่อคนใช้ก่อน · ทุกข้ออ้างมีป้าย `ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ` · บรรทัด "คาด → จริง" พร้อม token จาก `.claude/superuser/log/SUMMARY.md` · ข้อเสนอปรับปรุงไม่เกิน 3 ข้อ · ตารางสถานะ |
 
-เรียกครั้งเดียว SuperUser ทำงานไปทั้งแชต · ไม่ต้องการแล้ว → พิมพ์ `ปิด superuser` · โปรเจกต์ใหม่ → สั่ง `ใช้ app-verifier-setup กับโปรเจกต์นี้` ก่อน · อยากให้ทำงานใน Docker → สั่ง `ใช้ docker-sandbox กับโปรเจกต์นี้` · รายละเอียด → [`plugins/software-company/skills/superuser/SKILL.md`](../plugins/software-company/skills/superuser/SKILL.md)
+เรียกครั้งเดียว SuperUser ทำงานไปทั้งแชต · ไม่ต้องการแล้ว → พิมพ์ `ปิด superuser` · โปรเจกต์ใหม่ → สั่ง `ใช้ app-verifier-setup กับโปรเจกต์นี้` ก่อน · อยากให้ทำงานใน Docker → สั่ง `ใช้ docker-sandbox กับโปรเจกต์นี้` · รายละเอียด → [`plugins/software-development/skills/superuser/SKILL.md`](../plugins/software-development/skills/superuser/SKILL.md)
 
 ![pstack vs SuperUser](superuser-vs-pstack.png)
 
@@ -516,84 +516,84 @@ Step 4: Project Manager
 
 ### 🏭 Industry-Specific Commands
 
-รวมอยู่ใน `software-company` แล้ว ไม่ต้องติดตั้งเพิ่ม — เลือกโหมดด้วยคำแรก
+รวมอยู่ใน `software-development` แล้ว ไม่ต้องติดตั้งเพิ่ม — เลือกโหมดด้วยคำแรก
 
 #### 🏦 FinTech
 ```
-/software-company:fintech-payments pci-audit <scope>                   # PCI-DSS readiness
-/software-company:fintech-payments transaction-flow-design <use case>  # ออกแบบ money flow
+/software-development:fintech-payments pci-audit <scope>                   # PCI-DSS readiness
+/software-development:fintech-payments transaction-flow-design <use case>  # ออกแบบ money flow
 ```
 
 #### 🤖 AI/ML
 ```
-/software-company:llm-engineering rag-design <use case>               # ออกแบบ RAG system
-/software-company:llm-engineering llm-eval <application>              # สร้าง eval suite
+/software-development:llm-engineering rag-design <use case>               # ออกแบบ RAG system
+/software-development:llm-engineering llm-eval <application>              # สร้าง eval suite
 ```
 
 #### 🏥 Healthcare
 ```
-/software-company:healthcare-systems hipaa-audit <scope>                 # HIPAA readiness
-/software-company:healthcare-systems fhir-design <feature>               # FHIR API design
+/software-development:healthcare-systems hipaa-audit <scope>                 # HIPAA readiness
+/software-development:healthcare-systems fhir-design <feature>               # FHIR API design
 ```
 
 #### 🛒 E-commerce
 ```
-/software-company:ecommerce-patterns checkout-audit                      # วิเคราะห์ checkout
-/software-company:ecommerce-patterns recommendation-design               # ออกแบบ recsys
+/software-development:ecommerce-patterns checkout-audit                      # วิเคราะห์ checkout
+/software-development:ecommerce-patterns recommendation-design               # ออกแบบ recsys
 ```
 
 #### 🎮 Gaming
 ```
-/software-company:game-development game-design <game type>             # core loop + progression
-/software-company:game-development multiplayer-architecture            # netcode + matchmaking
+/software-development:game-development game-design <game type>             # core loop + progression
+/software-development:game-development multiplayer-architecture            # netcode + matchmaking
 ```
 
 #### 🌐 IoT
 ```
-/software-company:iot-systems iot-architecture <use case>         # device/edge/cloud
-/software-company:iot-systems device-fleet-design <fleet>         # provisioning + OTA
+/software-development:iot-systems iot-architecture <use case>         # device/edge/cloud
+/software-development:iot-systems device-fleet-design <fleet>         # provisioning + OTA
 ```
 
 #### 🔒 Cybersecurity
 ```
-/software-company:security-operations threat-hunt <hypothesis>            # proactive threat hunting
-/software-company:security-operations soc-design <org>                    # SOC architecture
+/software-development:security-operations threat-hunt <hypothesis>            # proactive threat hunting
+/software-development:security-operations soc-design <org>                    # SOC architecture
 ```
 
 #### 🏢 SaaS B2B
 ```
-/software-company:saas-platform saas-architecture-review <area>     # multi-tenancy review
-/software-company:saas-platform integration-design <integration>    # SSO/SCIM/webhook
+/software-development:saas-platform saas-architecture-review <area>     # multi-tenancy review
+/software-development:saas-platform integration-design <integration>    # SSO/SCIM/webhook
 ```
 
 #### 🔧 DevTools
 ```
-/software-company:developer-experience sdk-design <api>                    # multi-language SDK
-/software-company:developer-experience dx-audit <product>                  # developer experience
+/software-development:developer-experience sdk-design <api>                    # multi-language SDK
+/software-development:developer-experience dx-audit <product>                  # developer experience
 ```
 
 #### 📱 Mobile
 ```
-/software-company:mobile-engineering mobile-architecture <app>           # framework + architecture
-/software-company:mobile-engineering aso-audit <app>                     # App Store optimization
+/software-development:mobile-engineering mobile-architecture <app>           # framework + architecture
+/software-development:mobile-engineering aso-audit <app>                     # App Store optimization
 ```
 
 #### 🌐 Web3
 ```
-/software-company:smart-contracts smart-contract-audit <repo>         # security audit
-/software-company:smart-contracts tokenomics-design <protocol>        # token economics
+/software-development:smart-contracts smart-contract-audit <repo>         # security audit
+/software-development:smart-contracts tokenomics-design <protocol>        # token economics
 ```
 
 #### ⚖️ LegalTech
 ```
-/software-company:legal-document-systems contract-analysis-design <use>      # clause extraction system
-/software-company:legal-document-systems esignature-audit <system>           # eIDAS/ESIGN compliance
+/software-development:legal-document-systems contract-analysis-design <use>      # clause extraction system
+/software-development:legal-document-systems esignature-audit <system>           # eIDAS/ESIGN compliance
 ```
 
 #### 🛡️ InsurTech
 ```
-/software-company:insurance-systems claims-flow-design <LOB>            # FNOL + triage + settlement
-/software-company:insurance-systems underwriting-model-design <LOB>     # risk scoring + pricing
+/software-development:insurance-systems claims-flow-design <LOB>            # FNOL + triage + settlement
+/software-development:insurance-systems underwriting-model-design <LOB>     # risk scoring + pricing
 ```
 
 ---
@@ -724,10 +724,10 @@ Step 4: Project Manager
 - `.claude/superuser/log/<วันที่>/<agent>.jsonl` — hook จดทุกการกระทำ 1 ไฟล์ต่อ agent (ตัดค่าลับออก) · พิมพ์ "ดู log วันนี้" → ได้ตาราง Markdown
 - ต้องมีโฟลเดอร์ `.claude/superuser/` (โปรเจกต์เก่าที่มี `.superuser/` ยังใช้ได้) และ Node.js 16+ — ดู [INSTALL.md](INSTALL.md) · รายละเอียดใน skill [`handoff`](../plugins/superuser/skills/handoff/SKILL.md)
 
-#### 4. งานสาขาอยู่ใน software-company แล้ว
-ตั้งแต่ v2.0.0 สาขา (fintech · healthcare · e-commerce · insurance · legal tech · SaaS ฯลฯ) รวมอยู่ใน `software-company` — ติดตั้งตัวเดียวพอ
+#### 4. งานสาขาอยู่ใน software-development แล้ว
+ตั้งแต่ v2.0.0 สาขา (fintech · healthcare · e-commerce · insurance · legal tech · SaaS ฯลฯ) รวมอยู่ใน `software-development` — ติดตั้งตัวเดียวพอ
 ```
-/plugin install software-company@sqt-marketplace
+/plugin install software-development@sqt-marketplace
 ```
 
 #### 5. ดูว่า command ใช้ agent + skill อะไรบ้าง

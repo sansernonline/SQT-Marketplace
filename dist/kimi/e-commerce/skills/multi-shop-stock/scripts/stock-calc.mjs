@@ -4,7 +4,8 @@
 // File: { "skus": [ { "sku": "BAG-TOTE-BLK-L", "on_hand": 140, "reserved": 14, "avg_daily": 4, "max_daily": 9,
 //   "lead_avg": 10, "lead_max": 14, "cover_days": 45, "orders_per_day": 8, "syncs_per_day": 2 } ] }
 // avg_daily และ max_daily = ชิ้นต่อวันรวมทุกช่องทาง · orders_per_day ไม่บังคับ (ไม่ใส่ = avg_daily) · syncs_per_day ไม่บังคับ (ค่าตั้งต้น 2)
-// สูตรตาม multi-shop-stock/SKILL.md หัวข้อ Sync rules และ Reorder point
+// ไม่บังคับ: on_order = ชิ้นที่สั่งแล้วยังไม่ถึง (หักออกจากจำนวนสั่ง) · unit_cost = ต้นทุนต่อชิ้น บาท (คิดเงินจม) · days_since_sale = กี่วันแล้วที่ไม่มีการขาย
+// สูตรตาม multi-shop-stock/SKILL.md หัวข้อ Sync rules · Reorder point · Stuck stock
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -15,6 +16,11 @@ const VERY_LOW_DAYS = 3;
 // ค่าตั้งต้น ยังไม่ได้วัด: กันออเดอร์ที่เข้ามาพร้อมกันเกินค่าเฉลี่ยระหว่าง 2 รอบ sync
 const BUFFER_EXTRA = 2;
 const DEFAULT_SYNCS_PER_DAY = 2;
+// เส้นแบ่งสต็อกค้าง (แนวจาก Anthropic inventory-planner · ยังไม่ได้วัดกับร้านไทย): ไม่ขาย 28 วัน = ช้า · 90 วัน = ตาย · ของพอขายเกิน 120 วัน = ล้น
+const SLOW_DAYS = 28;
+const DEAD_DAYS = 90;
+const OVERSTOCK_DAYS = 120;
+const STUCK_TEXT = { slow: 'เคลื่อนไหวช้า', dead: 'สต็อกตาย', overstock: 'ล้นสต็อก' };
 
 const TIER_TEXT = {
   plenty: 'มาก: ทุกช่องทางแสดง available − buffer',
@@ -36,8 +42,7 @@ export function validate(input) {
       if (typeof s[f] !== 'number' || !Number.isFinite(s[f]) || s[f] < 0) throw new Error(`ช่อง ${at(f)} ต้องเป็นตัวเลขตั้งแต่ 0 (ได้ ${JSON.stringify(s[f])})`);
     };
     for (const f of ['on_hand', 'reserved', 'avg_daily', 'max_daily', 'lead_avg', 'lead_max', 'cover_days']) num(f);
-    num('orders_per_day', false);
-    num('syncs_per_day', false);
+    for (const f of ['orders_per_day', 'syncs_per_day', 'on_order', 'unit_cost', 'days_since_sale']) num(f, false);
     if (s.syncs_per_day === 0) throw new Error(`ช่อง ${at('syncs_per_day')} ต้องมากกว่า 0 (sync อย่างน้อยวันละครั้ง)`);
     if (s.max_daily < s.avg_daily) throw new Error(`ช่อง ${at('max_daily')} (${s.max_daily}) น้อยกว่า avg_daily (${s.avg_daily}) · ใส่ยอดขายสูงสุดต่อวันของวันปกติ`);
     if (s.lead_max < s.lead_avg) throw new Error(`ช่อง ${at('lead_max')} (${s.lead_max}) น้อยกว่า lead_avg (${s.lead_avg}) · ใส่วันรอของนานสุดที่เคยเจอ`);
@@ -54,32 +59,51 @@ export function calcSku(s) {
   const tier = available <= buffer || days < VERY_LOW_DAYS ? 'very_low' : days <= PLENTY_DAYS ? 'low' : 'plenty';
   const safety = s.max_daily * s.lead_max - s.avg_daily * s.lead_avg;
   const reorderPoint = s.avg_daily * s.lead_avg + safety;
-  const belowReorder = available <= reorderPoint;
-  const reorderQty = belowReorder ? Math.ceil(s.avg_daily * s.cover_days - (available - reorderPoint)) : 0;
+  // ของที่สั่งแล้วยังไม่ถึงนับรวมก่อนตัดสินว่าต้องสั่งอีกไหม
+  const position = available + (s.on_order ?? 0);
+  const sinceSale = s.days_since_sale ?? 0;
+  const stuck = sinceSale >= DEAD_DAYS ? 'dead' : sinceSale >= SLOW_DAYS ? 'slow' : Number.isFinite(days) && days > OVERSTOCK_DAYS && available > 0 ? 'overstock' : null;
+  // ช้าหรือตาย ห้ามสั่งซ้ำ · ล้นสต็อกอยู่เหนือจุดสั่งเสมอ
+  const belowReorder = !stuck && position <= reorderPoint;
+  const reorderQty = belowReorder ? Math.max(0, Math.ceil(s.avg_daily * s.cover_days - (position - reorderPoint))) : 0;
+  // เงินจม: ช้าและตายนับทั้งก้อน · ล้นนับเฉพาะส่วนที่เกิน 120 วัน
+  const stuckUnits = stuck === 'overstock' ? Math.floor(available - s.avg_daily * OVERSTOCK_DAYS) : stuck ? Math.max(0, s.on_hand) : 0;
+  const stuckValue = s.unit_cost === undefined ? null : Math.round(stuckUnits * s.unit_cost * 100) / 100;
   if (available < 0) warnings.push(`${s.sku}: available ติดลบ ${available} (reserved มากกว่า on_hand) · ขายเกินแล้ว นับของจริงและแจ้งลูกค้าก่อน`);
-  if (s.avg_daily === 0) warnings.push(`${s.sku}: ไม่มียอดขาย จุดสั่งซื้อเหลือแค่ safety stock · ทบทวนว่าควรสั่งเพิ่มไหม`);
+  if (s.avg_daily === 0 && !stuck) warnings.push(`${s.sku}: ไม่มียอดขาย จุดสั่งซื้อเหลือแค่ safety stock · ทบทวนว่าควรสั่งเพิ่มไหม`);
+  if (stuck && stuck !== 'overstock') warnings.push(`${s.sku}: ไม่มีการขาย ${sinceSale} วัน (${STUCK_TEXT[stuck]}) · ไม่สั่งซ้ำ เลือก คงไว้ · ลดราคา · ถอดลิสต์`);
+  if (stuck && s.unit_cost === undefined) warnings.push(`${s.sku}: ใส่ unit_cost เพื่อคิดเงินจม`);
   return {
-    sku: s.sku, available, buffer, days_of_cover: Number.isFinite(days) ? Math.round(days * 10) / 10 : null,
+    sku: s.sku, available, buffer,
+    days_of_cover: stuck === 'slow' || stuck === 'dead' || !Number.isFinite(days) ? null : Math.round(days * 10) / 10,
     tier, shown_per_channel: Math.max(0, available - buffer), safety_stock: safety, reorder_point: reorderPoint,
-    below_reorder: belowReorder, reorder_qty: reorderQty, warnings,
+    on_order: s.on_order ?? 0, below_reorder: belowReorder, reorder_qty: reorderQty,
+    stuck, stuck_units: stuckUnits, stuck_value: stuckValue, warnings,
   };
 }
 
 export function calc(input) {
   validate(input);
   const skus = input.skus.map(calcSku);
-  return { skus, warnings: skus.flatMap((x) => x.warnings) };
+  const stuck = skus.filter((x) => x.stuck);
+  const stuck_value = stuck.reduce((sum, x) => sum + (x.stuck_value ?? 0), 0);
+  return { skus, stuck_count: stuck.length, stuck_value: Math.round(stuck_value * 100) / 100, warnings: skus.flatMap((x) => x.warnings) };
 }
 
+const baht = (n) => n.toLocaleString('en-US', { maximumFractionDigits: 2 });
+
 export function report(r) {
-  const rows = r.skus.map((x) => `| ${x.sku} | ${x.available} | ${x.buffer} | ${x.days_of_cover ?? 'ไม่มียอดขาย'} | ${TIER_TEXT[x.tier]} | ${x.shown_per_channel} | ${x.safety_stock} | ${x.reorder_point} | ${x.below_reorder ? `**สั่ง ${x.reorder_qty}**` : '-'} |`);
+  const days = (x) => x.days_of_cover ?? (x.stuck ? '-' : 'ไม่มียอดขาย');
+  const stuckCell = (x) => (x.stuck ? `${STUCK_TEXT[x.stuck]} ${x.stuck_units} ชิ้น${x.stuck_value === null ? '' : ` ฿${baht(x.stuck_value)}`}` : '-');
+  const rows = r.skus.map((x) => `| ${x.sku} | ${x.available} | ${x.buffer} | ${days(x)} | ${TIER_TEXT[x.tier]} | ${x.shown_per_channel} | ${x.safety_stock} | ${x.reorder_point} | ${x.on_order} | ${x.below_reorder ? `**สั่ง ${x.reorder_qty}**` : '-'} | ${stuckCell(x)} |`);
   return [
+    `เงินจมในสต็อกค้าง: ฿${baht(r.stuck_value)} (${r.stuck_count} SKU)`,
     ...r.warnings.map((w) => `คำเตือน: ${w}`),
-    '| SKU | available | buffer | ขายได้อีก (วัน) | ระดับ | แสดงได้สูงสุดต่อช่อง | safety stock | จุดสั่งซื้อ | สั่งเพิ่ม |',
-    '|---|---|---|---|---|---|---|---|---|',
+    '| SKU | available | buffer | ขายได้อีก (วัน) | ระดับ | แสดงได้สูงสุดต่อช่อง | safety stock | จุดสั่งซื้อ | สั่งแล้วยังไม่ถึง | สั่งเพิ่ม | สต็อกค้าง |',
+    '|---|---|---|---|---|---|---|---|---|---|---|',
     ...rows,
     '',
-    `เส้นแบ่ง ${PLENTY_DAYS} และ ${VERY_LOW_DAYS} วัน และ buffer +${BUFFER_EXTRA} เป็นค่าตั้งต้น ยังไม่ได้วัด · ก่อนแคมเปญใหญ่ใส่ avg_daily ของช่วงแคมเปญปีก่อน`,
+    `เส้นแบ่ง ${PLENTY_DAYS} และ ${VERY_LOW_DAYS} วัน · buffer +${BUFFER_EXTRA} · สต็อกค้าง ${SLOW_DAYS}/${DEAD_DAYS}/${OVERSTOCK_DAYS} วัน เป็นค่าตั้งต้น ยังไม่ได้วัด · ก่อนแคมเปญใหญ่ใส่ avg_daily ของช่วงแคมเปญปีก่อน`,
   ].join('\n');
 }
 
@@ -118,6 +142,19 @@ function selfTest() {
   t('lead_max น้อยกว่า lead_avg', throwsWith({ skus: [{ ...base, lead_max: 5 }] }, 'lead_max'));
   t('sync 0 ครั้ง', throwsWith({ skus: [{ ...base, syncs_per_day: 0 }] }, 'syncs_per_day'));
   t('รายงานบอกค่าตั้งต้น', report(calc({ skus: [base] })).includes('ยังไม่ได้วัด'));
+  // สต็อกค้าง
+  t('สั่งแล้ว 10 ชิ้นยังไม่ถึง สั่งเพิ่ม 190 แทน 200', calcSku({ ...base, on_hand: 120 }).reorder_qty === 200 && calcSku({ ...base, on_hand: 120, on_order: 10 }).reorder_qty === 190);
+  t('สั่งแล้วพอ ไม่สั่งซ้ำ', calcSku({ ...base, on_order: 200 }).below_reorder === false);
+  x = calcSku({ ...base, days_since_sale: 30, unit_cost: 80 });
+  t('ไม่ขาย 30 วัน = ช้า ไม่สั่ง ไม่คิดวันขายได้', x.stuck === 'slow' && x.reorder_qty === 0 && x.days_of_cover === null);
+  t('ช้า เงินจม = on_hand × ต้นทุน', x.stuck_value === 140 * 80);
+  t('ไม่ขาย 90 วัน = ตาย', calcSku({ ...base, days_since_sale: 90 }).stuck === 'dead');
+  x = calcSku({ ...base, on_hand: 600, reserved: 0, unit_cost: 10 });
+  t('150 วัน = ล้น นับส่วนเกิน 120 วัน', x.stuck === 'overstock' && x.stuck_units === 120 && x.stuck_value === 1200);
+  const all = calc({ skus: [{ ...base, days_since_sale: 30, unit_cost: 80 }, { ...base, sku: 'B', on_hand: 600, reserved: 0, unit_cost: 10 }] });
+  t('รวมเงินจมบรรทัดแรก', all.stuck_value === 12400 && report(all).startsWith('เงินจมในสต็อกค้าง: ฿12,400 (2 SKU)'));
+  t('ค้างแต่ไม่มีต้นทุน เตือน', calcSku({ ...base, days_since_sale: 95 }).warnings.some((w) => w.includes('unit_cost')));
+  t('on_order ติดลบ หยุด', throwsWith({ skus: [{ ...base, on_order: -1 }] }, 'on_order'));
   console.log(`self-test ${ok}/${ok + bad} ผ่าน`);
   process.exit(bad ? 1 : 0);
 }

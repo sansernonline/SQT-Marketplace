@@ -1,6 +1,6 @@
 # ความจำกลางของทีม — ไฟล์ · เปิดใช้ครั้งแรก · สลับค่าย · inbox · log · auto memory
 
-ส่วนหนึ่งของ skill `handoff` · อยู่ใน plugin `superuser` ที่เดียว (รวมมาจาก `work-session-context` ของ software-company)
+ส่วนหนึ่งของ skill `handoff` · อยู่ใน plugin `superuser` ที่เดียว (รวมมาจาก `work-session-context` ของ software-development)
 
 > ทุกอย่างที่คนหรือ bot ตัวถัดไปต้องรู้ อยู่ในไฟล์ ไม่ใช่ในแชต · หัวหน้าทีมคนเดียวเขียน `CONTEXT.md` · `IMPROVEMENTS.md` และย้ายไฟล์ใน `inbox/`
 

@@ -18,11 +18,11 @@ description: Use when choosing between easier to make and better for the person 
 
 ## ทดสอบ
 
-ก่อนส่ง ให้เปิดของจริง (แอป · เอกสาร · ฟอร์ม · ข้อความที่จะส่ง) แล้วเดินเส้นทางหลักแบบผู้ใช้ใหม่ จุดที่ต้องหยุดคิด ต้องอ่านคู่มือ หรือรอโดยไม่รู้ว่ารออะไร คือจุดที่ต้องแก้ แอปให้ agent เดินเองได้ด้วย verify skill จาก `app-verifier-setup` (plugin `software-company`)
+ก่อนส่ง ให้เปิดของจริง (แอป · เอกสาร · ฟอร์ม · ข้อความที่จะส่ง) แล้วเดินเส้นทางหลักแบบผู้ใช้ใหม่ จุดที่ต้องหยุดคิด ต้องอ่านคู่มือ หรือรอโดยไม่รู้ว่ารออะไร คือจุดที่ต้องแก้ แอปให้ agent เดินเองได้ด้วย verify skill จาก `app-verifier-setup` (plugin `software-development`)
 
 ## ดูต่อ
 
-งานโค้ด → ส่วนเพิ่มใน plugin `software-company` → `superuser` → `references/code-extensions.md` (สถานะหน้าจอ 5 แบบและลำดับความสำคัญในหน้า `ui-craft` · ข้อความหลายภาษา `i18n-and-locale`)
+งานโค้ด → ส่วนเพิ่มใน plugin `software-development` → `superuser` → `references/code-extensions.md` (สถานะหน้าจอ 5 แบบและลำดับความสำคัญในหน้า `ui-craft` · ข้อความหลายภาษา `i18n-and-locale`)
 
 ## ไม่ใช้กับ
 

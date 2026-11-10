@@ -1,0 +1,46 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# ตัวเลขที่คาดได้จากการรัน tax-compare.mjs scripts/example.json เมื่อ 2026-11-10: หักเหมา 19,500 · หักตามจริง 6,000 (วิธีที่ 2 ร้อยละ 0.5 ของยอดขายสูงกว่า 4,500)
+# rates.json ตรวจ 2026-10-06 · อัตราเปลี่ยนให้รันใหม่แล้วแก้ pattern
+schema_version: "1.1"
+name: seller-tax-basics-behaviour
+description: คนขายออนไลน์รายบุคคลถามภาษีปีนี้ ต้องเรียก tax-compare.mjs เทียบหักเหมากับหักตามจริง และใช้เกณฑ์ 0.5% ไม่บวกเลขเอง
+tags: [behaviour, capability-suite, seller-tax-basics]
+runs: 3
+expected_outcome: เรียก tax-compare.mjs · หักเหมา 19,500 · หักตามจริง 6,000 · แนะนำหักตามจริงโดยมีเงื่อนไขต้องมีใบเสร็จ · ยอดขายต่ำกว่า 1.8 ล้านจึงยังไม่ต้องจด VAT
+execution:
+  prompt: |
+    ฉันขายของออนไลน์คนเดียวไม่มีบริษัท ปีนี้ยอดขายรวมทุกช่องทาง 1,200,000 บาท ต้นทุนสินค้ากับค่าแพ็ก ค่าส่ง ค่าโฆษณา มีใบเสร็จครบรวม 900,000 บาท
+    ไม่มีรายได้อื่น มีแต่ลดหย่อนส่วนตัว ปีนี้ต้องจ่ายภาษีเท่าไหร่ ควรหักค่าใช้จ่ายแบบเหมาหรือตามจริง และต้องจด VAT ไหม
+  max_turns: 10
+  timeout_seconds: 300
+graders:
+  - name: script-called
+    type: tool_used
+    tool: Bash
+    input_match: 'tax-compare\.mjs'
+    min: 1
+    arm: with-only
+  - name: deemed-tax
+    type: regex
+    pattern: '19,?500'
+    flags: i
+    match: contains
+    target: last_message
+  - name: actual-tax
+    type: regex
+    pattern: '6,?000'
+    flags: i
+    match: contains
+    target: last_message
+  - name: half-percent-check
+    type: regex
+    pattern: '0\.5\s*%|ร้อยละ\s*0\.5|วิธีที่\s*2'
+    flags: i
+    match: contains
+    target: last_message
+  - name: vat-not-yet
+    type: regex
+    pattern: '1\.8\s*ล้าน|1,800,000'
+    flags: i
+    match: contains
+    target: last_message

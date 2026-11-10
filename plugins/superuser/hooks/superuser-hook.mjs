@@ -1423,9 +1423,9 @@ function selfTest() {
     ["วันที่ไม่ถูกตัด", "นัด 2026-10-14 เวลา 10:30 ห้อง 1203", null],
   ];
   const T = (...blocks) => JSON.stringify({ message: { role: "assistant", content: blocks } });
-  const skill = T({ type: "tool_use", name: "Skill", input: { skill: "software-company:superuser" } });
+  const skill = T({ type: "tool_use", name: "Skill", input: { skill: "software-development:superuser" } });
   const edit = (f, n = 50) => T({ type: "tool_use", name: "Write", input: { file_path: `/p/${f}`, content: "x\n".repeat(n) } });
-  const rev = T({ type: "tool_use", name: "Agent", input: { subagent_type: "software-company:reviewer" } });
+  const rev = T({ type: "tool_use", name: "Agent", input: { subagent_type: "software-development:reviewer" } });
   const say = (s) => T({ type: "text", text: s });
   // เหตุการณ์จริง 2026-10-26: ด่านเตือนตอนลูกทีม 3 ตัวยังทำงานเบื้องหลัง
   const UM = (content) => JSON.stringify({ message: { role: "user", content } });
@@ -1450,7 +1450,7 @@ function selfTest() {
     ["ด่านรีวิว: ไม่ได้ใช้ superuser → ผ่าน", [edit("a"), edit("b"), edit("c")], false],
     ["ด่านรีวิว: ไฟล์ใน _to_delete ไม่นับ", [skill, edit("a"), edit("b"), edit("_to_delete/x")], false],
   ];
-  const dev = T({ type: "tool_use", name: "Agent", input: { subagent_type: "software-company:developer" } });
+  const dev = T({ type: "tool_use", name: "Agent", input: { subagent_type: "software-development:developer" } });
   gates.push(
     ["ด่านแตกงาน: เขียนไฟล์ที่ 2 ยังไม่ส่งลูกทีม → บล็อก", [skill, edit("a.js")], true, (l) => splitGate(fold(l), "/p/b.js")],
     ["ด่านแตกงาน: ไฟล์แรก → ผ่าน", [skill], false, (l) => splitGate(fold(l), "/p/a.js")],
@@ -1470,11 +1470,11 @@ function selfTest() {
   );
   // สรุป log: 1 วัน · หัวหน้าทีมส่ง developer 2 งาน (ล้ม 1) · developer ทำ 3 อย่าง (ล้ม 1) · ผู้ใช้แก้ 1 ครั้ง
   const day = { prompts: 2, corrections: 1, actions: 5, failed: 1,
-    spawns: [{ ts: "2026-10-21T10:00:00+07:00", role: "software-company:developer", task: "แก้ฟอร์ม", ok: true },
-      { ts: "2026-10-21T10:05:00+07:00", role: "software-company:developer", task: "เขียน test", ok: false }],
-    agents: { main: { actions: 2, failed: 0, ms: 0, last: "2026-10-21T10:06:00+07:00" }, "software-company:developer": { actions: 3, failed: 1, ms: 120000, last: "2026-10-21T10:04:00+07:00" } } };
+    spawns: [{ ts: "2026-10-21T10:00:00+07:00", role: "software-development:developer", task: "แก้ฟอร์ม", ok: true },
+      { ts: "2026-10-21T10:05:00+07:00", role: "software-development:developer", task: "เขียน test", ok: false }],
+    agents: { main: { actions: 2, failed: 0, ms: 0, last: "2026-10-21T10:06:00+07:00" }, "software-development:developer": { actions: 3, failed: 1, ms: 120000, last: "2026-10-21T10:04:00+07:00" } } };
   const md = summaryMarkdown({ "2026-10-21": day }, new Date("2026-10-21T04:00:00Z"));
-  gates.push(["สรุป log: นับงานราย agent", [], true, () => md.includes("| `software-company:developer` | 2 | 1 | 1 | 3 | 1 | 2 นาที |") && md.includes("| 2026-10-21 | 2 | 1 | — | 2 | — | 5 | 1 |")]);
+  gates.push(["สรุป log: นับงานราย agent", [], true, () => md.includes("| `software-development:developer` | 2 | 1 | 1 | 3 | 1 | 2 นาที |") && md.includes("| 2026-10-21 | 2 | 1 | — | 2 | — | 5 | 1 |")]);
   // คุ้มแค่ไหน: เวลาทำงาน · การขนาน · คาดกับจริง · ค่าประมาณจาก bench
   const T0 = Date.parse("2026-10-21T10:00:00+07:00"), at = (min) => new Date(T0 + min * 60000).toISOString();
   const estRuns = [
@@ -1537,6 +1537,11 @@ function selfTest() {
       .map(([s, k]) => [`ตัวบอก skill: "${s}" → ${k}`, [], true, () => routes(s).includes(k)]),
     ...[["reflect package ใน Go", "session-lessons-to-skills"], ["stress test API ด้วย k6", "adversarial-review-panel"], ["naming convention ของตัวแปร", "document-naming"], ["เปลี่ยนชื่อไฟล์ utils.ts", "document-naming"], ["ออกแบบ Kafka fan-out ไปหลาย consumer", "parallel-split-and-merge"], ["เขียน endpoint รายงานสถานะ", "status-report"], ["สร้าง enum ตัวย่อสถานะในโค้ด", "spell-out-abbreviations"], ["ทำ dashboard แสดงรายงานสถานะคำสั่งซื้อ", "status-report"], ["เปลี่ยนชื่อไฟล์ทั้งโฟลเดอร์ src", "document-naming"], ["ตั้งชื่อไฟล์ migration ของ database", "document-naming"], ["ทำ unit test หลายแบบให้เลือก mock", "parallel-attempts-pick-best"], ["บิลค่าไฟขึ้นผิดปกติ", "moving-house"], ["จดทะเบียนบริษัทหรือบุคคลธรรมดาดี", "import-landed-cost"], ["ราคา 1688 บาท ต่อเดือน คุ้มไหม", "import-landed-cost"], ["ค่าชิปปิ้งของ Flash กับ Kerry อันไหนถูกกว่า", "import-landed-cost"], ["API อัปเดตย้ายที่อยู่ของลูกค้าในฐานข้อมูล", "moving-house"], ["เงินประกันคอนโดที่ซื้อประกันอัคคีภัยไว้", "moving-house"], ["ร้านนี้ขายดีไหม คิดผิดหรือเปล่า", "targeted-fix"], ["1. ค่าออกแบบโลโก้ 4,500 บาท", "no-ai-look"], ["check the slope of this line", "no-ai-look"], ["ดูเหมือนคนไข้เป็นหวัด", "no-ai-look"], ["ดูเหมือนคนทำงานหนักมาก", "no-ai-look"], ["ยอดผิดปกติในบัญชีเดือนนี้", "targeted-fix"]]
       .map(([s, k]) => [`ตัวบอก skill: "${s}" → ไม่เปิด ${k}`, [], false, () => routes(s).includes(k)]),
+    // 10 แถวท้ายของ router (skill ชีวิตประจำวัน) ต้องไม่จับประโยคเรื่องโค้ด แต่ยังจับประโยคจริง (ผู้ตรวจรอบ 2 · 2026-11-10)
+    ...[["งานค้างในระบบ CI แก้ให้หน่อย", "task-board"], ["ทดลองงาน API ใหม่ของ payment", "new-job-first-90-days"], ["ROE ของฟังก์ชันนี้คำนวณผิด", "stock-fundamentals"], ["เพิ่มหน้า to-do list ในแอป", "task-board"], ["วันนี้ต้องทำอะไรบ้างใน sprint", "shop-daily-briefing"], ["ทำ endpoint layoff ในระบบ HR", "job-exit"], ["เพิ่ม line sticker picker ในแอป", "line-sticker"], ["เพิ่ม feature ad claims moderation", "copy-claims-check"]]
+      .map(([s, k]) => [`ตัวบอก skill: ประโยคโค้ด "${s}" → ไม่เปิด ${k}`, [], false, () => routes(s).includes(k)]),
+    ...[["ช่วยรวมรายการงานที่ค้างอยู่ให้หน่อย", "task-board"], ["ช่วยอ่านงบการเงินหุ้น PTT ให้หน่อย", "stock-fundamentals"], ["บริษัทเรียกไปเซ็นใบลาออก ทำไงดี", "job-exit"], ["ลูกค้าประจำหายไปหลายคน ดึงกลับยังไง", "win-back-customers"]]
+      .map(([s, k]) => [`ตัวบอก skill: ประโยคจริง "${s}" → ${k}`, [], true, () => routes(s).includes(k)]),
     ["ตัวบอก skill: คำสั่ง slash → ไม่บอก", [], true, () => routes("/superuser:superuser เขียนรายงาน").length === 0],
     ["ตัวบอก skill: ทักทาย → ไม่บอก", [], true, () => routes("สวัสดีครับ").length === 0],
     // ตัดสินด้วยตัวเลข: ถามเลือกหรือจัดลำดับที่มีตัวเลขหรือเกณฑ์ → decision-scoring · ถามลอย ๆ ไม่มีตัวเลข → ไม่บอก
@@ -1568,7 +1573,7 @@ function selfTest() {
       const ask = (prompt, session = "t1") => promptNotice({ prompt, session_id: session }, router, d);
       const long = "Audit our AWS bill and cut anything we don't use";
       const before = ask(long).includes(MULTISTEP_REMINDER) && !ask("ต่อ").includes(MULTISTEP_REMINDER) && !ask("/superuser:superuser ทำงานนี้").includes(MULTISTEP_REMINDER);
-      const marked = markSuperuserOpen({ tool_name: "Skill", tool_input: { skill: "software-company:superuser" }, session_id: "t1" }, d)
+      const marked = markSuperuserOpen({ tool_name: "Skill", tool_input: { skill: "software-development:superuser" }, session_id: "t1" }, d)
         && !markSuperuserOpen({ tool_name: "Skill", tool_input: { skill: "human-writing" }, session_id: "t2" }, d);
       return before && marked && !ask(long).includes(MULTISTEP_REMINDER) && ask(long, "t2").includes(MULTISTEP_REMINDER);
     }],
@@ -1577,7 +1582,7 @@ function selfTest() {
       const reports = ["<task-notification>งานพื้นหลังเสร็จแล้ว รันคำสั่งทดสอบผ่านทั้งหมดเรียบร้อย แล้วแก้ไฟล์ทุกไฟล์</task-notification>",
         "<agent-message from=\"x\">แก้ครบทุกไฟล์แล้ว แล้วเขียน test และอัปเดตเอกสารทั้งหมด</agent-message>"];
       const clean = reports.every((p) => { const n = promptNotice({ prompt: p, session_id: "r1" }, router, d); return !n.includes(MULTISTEP_REMINDER) && !n.includes("superuser"); });
-      promptNotice({ prompt: "/software-company:superuser ทำฟีเจอร์ใหม่", session_id: "s9" }, router, d);
+      promptNotice({ prompt: "/software-development:superuser ทำฟีเจอร์ใหม่", session_id: "s9" }, router, d);
       return clean && !promptNotice({ prompt: "Audit our AWS bill and cut anything we don't use", session_id: "s9" }, router, d).includes(MULTISTEP_REMINDER);
     }],
     ["กฎประจำตัว: ส่งได้ไม่เกินเพดาน", [], true, () => { const c = coreRules({ configDir: "/nonexistent" }); return c.includes(CORE_MARK) && c.length <= CONTEXT_MAX; }],
@@ -1629,7 +1634,7 @@ ${rows}
   gates.push(
     ["runs: จัดขั้นจากชื่อ agent และ description (review · code · plan · other)", [], true, () => {
       const r = readJson(join(HERE, "step-rules.json"), null);
-      return ["superuser:reviewer|x", "software-company:developer|x", "Plan|x", "general-purpose|x"].map((k) => classifyStep(...k.split("|"), r)).join() === "review,code,plan,other"
+      return ["superuser:reviewer|x", "software-development:developer|x", "Plan|x", "general-purpose|x"].map((k) => classifyStep(...k.split("|"), r)).join() === "review,code,plan,other"
         && classifyStep("general-purpose", "ตรวจรอบสุดท้าย", r) === "review"
         && classifyStep("general-purpose", "Merge html deck skills", r) === "write" && classifyStep("web-fetch", "Fetch Anthropic post", r) === "research"
         && classifyStep("general-purpose", "Red run without skill", r) === "test"
@@ -1933,13 +1938,13 @@ ${rows}
   const sub = join(team, "s2", "subagents"); mkdirSync(sub, { recursive: true });
   writeFileSync(join(team, "s2.jsonl"), [U("m1", 10, 5), U("m1", 10, 5), U("m2", 1, 2)].join("\n") + "\n");
   writeFileSync(join(sub, "agent-x.jsonl"), U("m3", 3, 4) + "\n");
-  writeFileSync(join(sub, "agent-x.meta.json"), JSON.stringify({ agentType: "software-company:developer" }));
+  writeFileSync(join(sub, "agent-x.meta.json"), JSON.stringify({ agentType: "software-development:developer" }));
   gates.push(["token: แยกราย agent · นับครั้งเดียวต่อข้อความ · เรียกซ้ำไม่นับซ้ำ", [], true, () => {
     collectTokens(team, join(team, "s2.jsonl")); collectTokens(team, join(team, "s2.jsonl"));
     const t = readJson(join(team, "log", tday, "tokens.json"), {});
-    return t.main?.input === 11 && t.main?.output === 7 && t.main?.cacheRead === 200 && t["software-company:developer"]?.output === 4;
+    return t.main?.input === 11 && t.main?.output === 7 && t.main?.cacheRead === 200 && t["software-development:developer"]?.output === 4;
   }]);
-  const mdTok = summaryMarkdown({ "2026-10-21": { ...day, tokens: { main: { input: 1200, output: 30, cacheRead: 5000, cacheCreate: 40 }, "software-company:developer": { input: 10, output: 20, cacheRead: 0, cacheCreate: 0 } } } }, new Date("2026-10-21T04:00:00Z"));
+  const mdTok = summaryMarkdown({ "2026-10-21": { ...day, tokens: { main: { input: 1200, output: 30, cacheRead: 5000, cacheCreate: 40 }, "software-development:developer": { input: 10, output: 20, cacheRead: 0, cacheCreate: 0 } } } }, new Date("2026-10-21T04:00:00Z"));
   gates.push(["สรุป log: คอลัมน์ token ราย agent และยอดรวมวัน", [], true, () => mdTok.includes("| 2 นาที | 2026-10-21 10:04 | 10 | 20 | 0 | 0 |") && mdTok.includes("| 5 | 1 | 1,210 | 50 | 5,000 | 40 |")]);
   try { gates.push(...extraGates({ HERE, isBashGuard, foldTranscript, freshGate, routeSkills, MULTISTEP_NOTE })); } catch (e) { gates.push([`P3 self-test เริ่มไม่ได้: ${e.message}`, [], true, () => false]); }
   for (const [label, lines, expect, fn = (l) => reviewGate(fold(l))] of gates) {

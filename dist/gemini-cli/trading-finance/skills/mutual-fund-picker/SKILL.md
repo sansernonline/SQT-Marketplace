@@ -1,6 +1,6 @@
 ---
 name: mutual-fund-picker
-description: Use when choosing Thai mutual funds, reading a factsheet, picking RMF or ThaiESG, or setting up DCA.
+description: Use when choosing Thai mutual funds, reading a factsheet, or picking RMF or ThaiESG. DCA plan → rebalance-and-dca.
 ---
 
 # Mutual Fund Picker (เลือกกองทุนรวม)
@@ -61,7 +61,7 @@ Where to compare: SEC fund search (https://market.sec.or.th/public/mfeds/), Morn
 2. Pick the type from the table.
 3. Shortlist 3 funds in that AIMC category; build the comparison table: TER, front/back fee, 5-yr return vs benchmark, max drawdown, size, hedging, dividend policy.
 4. Score the shortlist (section "Scoring the shortlist" below), then lay out the shapes side by side ("low-cost SET50 index" vs "global index feeder" vs active) with fees and risk; the user picks.
-5. Set the DCA plan and a yearly review date.
+5. Set the DCA plan and a yearly review date. Monthly schedule, rebalancing and the pre-order checks → `rebalance-and-dca`.
 
 ## Scoring the shortlist
 

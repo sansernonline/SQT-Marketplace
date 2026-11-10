@@ -1,6 +1,6 @@
 # skill: insurance-review
 
-Use when checking if life, health, critical illness or accident cover is enough, or an OIC complaint.
+Use when checking if life, health, critical illness or accident cover is enough, who is named beneficiary (ผู้รับผลประโยชน์), or an OIC complaint.
 
 # Insurance Review (ทบทวนประกันภัย)
 
@@ -15,6 +15,22 @@ General information, not insurance advice — a licensed agent or broker sells; 
 5. **Premium check**: total protection premium at most 10% of yearly income. This is the `must` filter in "Comparing quotes" below. The 10% is a starting value (starting value, not yet measured); the user may raise or lower it for dependants.
 6. **Prepare questions** for the agent (end of file).
 7. **Tax**: premiums deductible — life + health max 100,000, own health 25,000, parents' health 15,000 (`tax-deduction-planner`). Never buy cover for the deduction alone.
+8. **Beneficiaries**: check who is named now against who the user wants (section below), especially after marriage, divorce, a birth or a death in the family.
+
+## Beneficiaries — does the paper match the intent
+
+Money with a named beneficiary is paid to that person, whatever the user meant later (whether it then counts as part of the estate: รอยืนยัน with the insurer or fund; `estate-and-will` in personal-life marks the same point). Check while the user is alive, not after:
+
+| Account | Where the name is set | Ask |
+|---|---|---|
+| Life insurance policy | Policy schedule; change by the insurer's form | Who is named now · is it still who the user wants · share for each |
+| Provident fund (PVD, กองทุนสำรองเลี้ยงชีพ) | Beneficiary form held by the fund or employer (รอยืนยัน with the fund) | Same; a form signed years ago at the first job is common |
+| RMF, other funds, savings bond | Ask the fund house or bank whether a beneficiary can be named at all (รอยืนยัน per provider) | If not, it follows the will or the statutory heirs |
+| Bank deposits | Usually no beneficiary, part of the estate (รอยืนยัน with the bank) | Covered by a will (`estate-and-will`) |
+
+Put the result in one table: account · named now · intended · matches? Flag in this order: **high** — an ex-spouse or someone who has died is still named, or nobody is named; **medium** — a minor child is named directly with no plan for who manages the money until adulthood (the rules for minors receiving money: รอยืนยัน, ask the insurer and see `estate-and-will`); **low** — shares do not match the intent. Changing a beneficiary is the user's own step with the insurer or fund; wills and inheritance go to `estate-and-will` (personal-life, if installed).
+
+Idea: `estate-and-tax-brief` steps 5–6, anthropics/claude-for-financial-advisors (Apache-2.0, viewed 2026-11-10); US account types and legal terms left out.
 
 ## Sizing rules of thumb
 
@@ -88,7 +104,7 @@ Table of policies → have / need / gap per type → overlap and overspend → q
 
 # skill: mutual-fund-picker
 
-Use when choosing Thai mutual funds, reading a factsheet, picking RMF or ThaiESG, or setting up DCA.
+Use when choosing Thai mutual funds, reading a factsheet, or picking RMF or ThaiESG. DCA plan → rebalance-and-dca.
 
 # Mutual Fund Picker (เลือกกองทุนรวม)
 
@@ -148,7 +164,7 @@ Where to compare: SEC fund search (https://market.sec.or.th/public/mfeds/), Morn
 2. Pick the type from the table.
 3. Shortlist 3 funds in that AIMC category; build the comparison table: TER, front/back fee, 5-yr return vs benchmark, max drawdown, size, hedging, dividend policy.
 4. Score the shortlist (section "Scoring the shortlist" below), then lay out the shapes side by side ("low-cost SET50 index" vs "global index feeder" vs active) with fees and risk; the user picks.
-5. Set the DCA plan and a yearly review date.
+5. Set the DCA plan and a yearly review date. Monthly schedule, rebalancing and the pre-order checks → `rebalance-and-dca`.
 
 ## Scoring the shortlist
 

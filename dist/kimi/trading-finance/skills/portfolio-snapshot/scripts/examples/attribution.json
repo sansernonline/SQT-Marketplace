@@ -1,0 +1,10 @@
+{
+  "_note": "portfolio-snapshot \"Where the return came from\" (ตัวอย่างสมมติ) · startValue/endValue = มูลค่าต้นงวด/ปลายงวด · deposits = เงินที่ซื้อเพิ่ม (ขายออกใส่ติดลบ) · dividends = ปันผลเงินสดที่ได้ในงวด",
+  "holdings": [
+    { "name": "ABC", "startValue": 90000, "endValue": 98000, "dividends": 1440 },
+    { "name": "DEF", "startValue": 50000, "endValue": 45000 },
+    { "name": "SET50 index fund", "startValue": 39000, "deposits": 10000, "endValue": 49000 },
+    { "name": "Money market fund", "startValue": 77800, "endValue": 78000 },
+    { "name": "Cash at broker", "startValue": 30000, "endValue": 30000 }
+  ]
+}

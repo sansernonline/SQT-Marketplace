@@ -22,8 +22,8 @@ description: Use when a task will read large material (many files, long PDFs, ma
 | ทำให้**คำตอบ**สั้นลง | `answer-shape` | แทน |
 | เก็บสรุปงานข้ามเซสชัน | `handoff` | แทน |
 | ที่วางไฟล์ชั่วคราว | `temp-file-discipline` | แทน |
-| loop เขียนโค้ดที่ต้องรอดจากการสูญเสียบริบท | `spec-to-code-loop` (plugin `software-company`) | แทน |
-| แผนที่โปรเจกต์และโครงโฟลเดอร์ | `project-bootstrap` (plugin `software-company`) | คู่ |
+| loop เขียนโค้ดที่ต้องรอดจากการสูญเสียบริบท | `spec-to-code-loop` (plugin `software-development`) | แทน |
+| แผนที่โปรเจกต์และโครงโฟลเดอร์ | `project-bootstrap` (plugin `software-development`) | คู่ |
 | แก้บั๊กเฉพาะจุดโดยไม่อ่านทั้งโปรเจกต์ | `targeted-fix` | คู่ |
 | ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
 
@@ -119,7 +119,7 @@ subagent มี context ของตัวเอง จึงอ่านไป 
 **ใช้กับ**: ข้อความจากเว็บหรือ PDF ที่ดึงมา · ตารางข้อมูลใหญ่ (กรองหรือนับด้วยสคริปต์ ไม่ต้องอ่านทุกแถว) · ผลรัน test · log · ผลจากการแปลงไฟล์
 ไฟล์พวกนี้วางที่ไหน → `temp-file-discipline` · เจออะไรให้จดลงไฟล์ตั้งแต่รอบแรก จะได้ไม่ต้องอ่านซ้ำ
 
-**ทำซ้ำทุกงาน → ให้ hook กรองแทนวินัย** — hook ตัดของยาวก่อนเข้า context ได้ (log หมื่น token เหลือหลักร้อย) · ตัวอย่างงานโค้ด → ส่วนเพิ่มใน plugin `software-company` → `superuser` → `references/code-extensions.md`
+**ทำซ้ำทุกงาน → ให้ hook กรองแทนวินัย** — hook ตัดของยาวก่อนเข้า context ได้ (log หมื่น token เหลือหลักร้อย) · ตัวอย่างงานโค้ด → ส่วนเพิ่มใน plugin `software-development` → `superuser` → `references/code-extensions.md`
 
 ---
 
@@ -130,7 +130,7 @@ subagent มี context ของตัวเอง จึงอ่านไป 
 - ไฟล์ชื่ออื่น (`notes.md`) ไม่โหลดเอง ต้องสั่งให้อ่านทุกครั้ง จึงเสียเปล่า
 - แผนที่ล้าสมัยแย่กว่าไม่มีแผนที่ เพราะพาไปผิดที่อย่างมั่นใจ ห้ามใส่รายการไฟล์ทั้งหมดหรือประวัติการเปลี่ยนแปลง
 
-งานโค้ด (`CLAUDE.md` ของโปรเจกต์และโฟลเดอร์ ตัวอย่างแผนที่) → ส่วนเพิ่มใน plugin `software-company` → `superuser` → `references/code-extensions.md`
+งานโค้ด (`CLAUDE.md` ของโปรเจกต์และโฟลเดอร์ ตัวอย่างแผนที่) → ส่วนเพิ่มใน plugin `software-development` → `superuser` → `references/code-extensions.md`
 
 ---
 

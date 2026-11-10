@@ -85,7 +85,7 @@ What changed: ทำการตรวจสอบ → ตรวจสอบ · 
 2. Choose the type (section 1) and salutation/closing pair (section 2).
 3. Fill the template from references; write the body ด้วย → facts → request with a date. ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ ราชการ (and the word table in section 4).
 4. Check: salutation and closing match; ที่ and date present; enclosures numbered and actually attached; signer's full name in brackets and position under it.
-5. Output .docx on letterhead (styling → `branded-document-design`, plugin `software-company`).
+5. Output .docx on letterhead (styling → `branded-document-design`, plugin `software-development`).
 
 ## Worked example (company to Revenue Department)
 

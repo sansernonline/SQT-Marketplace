@@ -14,6 +14,8 @@ Get to "nothing hiding in here" in ten minutes a day. This is a method; reading 
 
 **Triage window = mail since the last session.** Daily habit → the last 24 hours; twice a week → since the last run. Anything older already has an owner and a date in a folder, so it is not re-read; a backlog that has grown past the window gets one scheduled catch-up session, not a bigger daily window.
 
+**One exception to the window: promises the user made.** Also search the user's own sent replies of the last 14 days for promises with a day in them ("เดี๋ยวส่งให้วันพุธนะครับ" · "will send by Friday"). A promise whose day is today or past goes into **Today**, even though the thread is old and already read. This is the most expensive thing an inbox hides, because nobody will remind the user. Paste mode (no connector, so old mail cannot be read): ask one question before sorting — "2 สัปดาห์นี้เคยรับปากใครไว้บ้างไหม" — and add the answers to the list.
+
 ## Daily workflow (10 minutes)
 
 1. **Scan oldest unanswered first** — newest mail is often a reply to something older.
@@ -42,6 +44,14 @@ When more than 3 items are in **Today** or **This week**, score each: **urgent 1
 - **Iron rules (กฎเหล็ก) outside the score:** **Verify** mail is handled first; an item due today (`urgent` 5) is done before the others, because short tasks win the score inside a group and would push a long deadline task down (the boss's figures rank 3rd of 3 in the first group above).
 - Scores are the user's and untested (starting value, not yet measured). Two items with scores within about 20% of each other → the user picks the order.
 
+## Drafting rules
+
+- **No new facts in a draft.** A price, date, amount or promise the user has not already written in the thread goes in as a blank, e.g. `[วันที่ส่งได้ — รอคุณกรอก]`. A wrong date in a polite draft is worse than a gap, because it gets sent.
+- **Angry mail or a complaint** (landlord, school, insurer, a seller) → draft only an acknowledgement ("ได้รับเรื่องแล้วครับ จะตอบรายละเอียดภายในวัน…"). Do not offer money, admit fault or promise a fix; put the item under **Today** with the note "ต้องตัดสินใจเอง".
+- **Someone else already answered** in the thread (spouse, colleague, the shop) → no draft; tell the user who answered and what they said.
+- **Cannot place a message** in one bucket → put it in **Today** and say in one line what is unclear ("ไม่แน่ใจว่าเป็นบิลจริงหรือโฆษณา"). Do not guess quietly.
+- Wording for awkward replies → `polite-message-th-en`.
+
 ## Folder / label set (keep it to seven)
 
 `1-Today` · `2-This week` · `3-Waiting for` · `Receipts-Tax` (e-Tax invoices, ใบเสร็จ, insurance premium certificates — needed for ลดหย่อน) · `Travel` · `Reference` · Archive. More labels = more deciding.
@@ -54,6 +64,8 @@ When more than 3 items are in **Today** or **This week**, score each: **urgent 1
 - **Government** — messages from the RD, the Social Security Office (SSO) or the Department of Land Transport (DLT) usually point you to log in on the official site; type the address yourself
 
 ## Waiting-for log
+
+Keep it in the **Waiting On** section of the user's `tasks.md` (`task-board`) when the user has one, so the weekly review reads a single file. No task file → the table below.
 
 ```
 | Sent | To | What I need back | Chase on |
@@ -79,12 +91,16 @@ Monday, 63 unread. Ten minutes:
 - Never mark-read-and-forget — every kept item leaves with an owner and a date
 - Do not set up auto-delete rules on anything that could be a bill, a tax document or a government notice
 - Reply "received, will answer by …" beats silence for anything over 2 days
+- **Report File and Archive as counts by kind**, not message by message ("45 ฉบับ: ใบเสร็จ 22 · จดหมายข่าว 9 · ขนส่ง 6 · อื่น ๆ 8"). Only Verify, Today, This week and Delegate are listed one by one
+- More than 20 items in Today + This week after one session means the tests are too loose; tighten them with the user before the next run
 
 ## Connecting your mail
 
 This plugin ships no email connector. The user connects Gmail (or another mail app) themselves, from the connectors or MCP settings of the Claude app they use, and grants read and draft access only, not send. Not checked against an official Google page, so no link is given here. No connector → the user pastes the mail text, or the subject lines and senders, into the chat; the method is the same.
 
-Related: `weekly-review` (clears `Waiting for`) · `digital-hygiene` (phishing, account takeover) · `subscription-audit` (newsletter and trial mail).
+Related: `weekly-review` (clears `Waiting for`) · `task-board` (one task file) · `digital-hygiene` (phishing, account takeover) · `subscription-audit` (newsletter and trial mail).
+
+Source for the promise scan, drafting rules and count report: ideas from anthropics/knowledge-work-plugins `small-business/skills/inbox-manager` and its `reference/gotchas.md` (Apache-2.0, rewritten, viewed 2026-11-10).
 
 ## เรียกเป็นคำสั่ง
 

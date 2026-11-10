@@ -1,5 +1,17 @@
 # Changelog — superuser
 
+## 3.34.0 — 2026-11-10
+
+- `hooks/skill-router.json` เพิ่ม 10 แถวของ skill ชีวิตประจำวันและร้านค้า (`copy-claims-check` · `line-sticker` · `task-board` · `study-drill` · `new-job-first-90-days` · `job-exit` · `legal-help-prep` · `stock-fundamentals` · `shop-daily-briefing` · `win-back-customers`) · ทุกแถวใช้คำหลักของเรื่องกับด่านตัดประโยคเรื่องโค้ดหรือหน้าจอร่วมกัน · ผลกับ 5 ชุดทดสอบที่ใช้ตอนปรับ (ของทีม 2 ชุด และของผู้ตรวจ 3 ชุด): ประโยคจริงหลุด 0 · ประโยคโค้ดจับผิด 2 · ชุดเหล่านี้เคยเห็นตอนปรับ ผลกับประโยคที่ไม่เคยเห็นต่ำกว่านี้ (รอบที่วัดก่อนแก้: หลุด 17/30) · hook self-test 264/264
+- hook ใหม่ `code-pattern-warn` (PostToolUse · Write/Edit/MultiEdit · โมดูล `code_patterns` ค่าเริ่มเปิด): ข้อความที่เพิ่งเขียนมีรูปแบบโค้ดเสี่ยง 16 กฎ (eval · exec ต่อสตริง · SQL ต่อสตริง · ปิดตรวจ TLS · pickle · BinaryFormatter · script CDN ไม่มี integrity ฯลฯ) → เตือนเป็นบริบท ไม่บล็อก กฎละครั้งต่อ session · self-test 36/36 · ข้อความยาวที่ช้าที่สุดใช้ 17 มิลลิวินาทีต่อกฎ (ก่อนจำกัดช่วง regex 1.9 วินาที) · แนวคิดรายการจาก security-guidance ของ claude-plugins-official (Apache-2.0)
+- `no-ai-look` ข้อ 1: ร่างเลย์เอาต์เป็น ASCII 2–3 แบบแล้วเลือกตามเนื้อหา ไม่ใช้แบบแรกที่นึกออก (แนวคิดจาก anthropics/skills `frontend-design` · Apache-2.0)
+- `superuser` หัวข้อ 7: คำถามตรวจต่อ 2–3 ข้อครั้งเดียวต่อบทสนทนา เมื่อผู้ใช้จะเอาคำตอบเรื่องเงิน สุขภาพ หรือข้อเสนองานไปลงมือ (แนวคิดจาก `discernment-nudge`)
+- `polite-message-th-en`: โปรไฟล์น้ำเสียงของผู้ใช้ใน `~/.claude/voice-profile.md` สร้างจากข้อความที่ส่งจริง 15–30 ฉบับ เน้นคำที่ผู้ใช้ไม่เคยใช้ และจดทุกการแก้ของผู้ใช้ · ตามหนี้หลายรายพร้อมกันชี้ `doc-quotation` หัวข้อ 6
+- `design-references`: ย้ายขั้นตอนเต็มไป `references/search-steps.md` (SKILL.md จาก 37 KB เหลือ 27 KB) · SKILL.md เหลือขั้นตอนย่อพร้อมกฎที่ห้ามข้าม
+- `code-pattern-warn` กฎ `js-exec`: ไม่เตือน `.exec` ของ RegExp (regex literal ที่มี flag · `new RegExp(...)` · ตัวแปรชื่อ re · regex · pattern หรือลงท้ายด้วย Re · Regex · Pattern · Matcher) แต่ยังเตือน `cp.exec` · `require("child_process").exec` · `remote.exec` · ไม่จับ `util.promisify(exec)(...)`
+- `superuser` หัวข้อ 7 คำถามตรวจต่อ: ถามเฉพาะสิ่งที่ผู้ใช้รู้คนเดียว ตรวจเองได้ให้ตรวจเอง · แยกบรรทัดจาก **ต่อไป** · `references/modules.md` เติม `code_patterns` ในรายการ hook ที่อ่าน config
+- อ้างถึง plugin ซอฟต์แวร์ด้วยชื่อใหม่ `software-development` (เดิม `software-company`)
+
 ## 3.33.0 — 2026-11-10
 
 รับกลไก 108 ข้อจาก plugin ใน marketplace ทางการของ Anthropic (anthropics/claude-plugins-official 317 ตัว) และ 8 ข้อรอบแรก · เขียนข้อความเองทั้งหมด · plugin ที่สิทธิ์จำกัด (claude-security · agentforce-adlc · claude-remember · databricks) เอาแค่กลไก · ที่มาอยู่ท้ายแต่ละไฟล์

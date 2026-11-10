@@ -12,9 +12,29 @@ Say the hard thing clearly. Politeness belongs in the wording, not in hiding the
 1. **Situation**: what the message is for (ask / decline / chase payment / apologise / complain / follow up), who it goes to, through which channel (LINE, email, letter), and what the user wants to happen
 2. **Register**: choose it from the relationship using the register table. When unsure, go one step more formal; it is easier to relax later
 3. **Tone level**: choose it on the tone ladder. The first contact is level 1 or 2. Move up one level per reminder, never two
-4. **Draft**: start from [references/templates.md](references/templates.md). Every message needs: greeting → context in one line → **the request or point, with a date** → a softener → sign-off
+4. **Draft**: if the user has a voice profile (next section), write in that voice. Start from [references/templates.md](references/templates.md). Every message needs: greeting → context in one line → **the request or point, with a date** → a softener → sign-off
 5. **Check**: the request is in the first 3 lines; there is one ask per message; numbers, dates and amounts are exact; there is nothing the user would regret if it were forwarded
 6. Give both Thai and English when the reader may use either. They are written for the same tone, not translated word for word
+
+## Voice profile — sound like the user, not like a template
+
+A message sent in the user's name must read as theirs. The profile lives in the user's own file `~/.claude/voice-profile.md`, never in this plugin, because it holds their real writing. Read it before drafting. If it is missing, use the register table and offer once to build one.
+
+**Build it from real sent messages, 15–30 of them** (LINE chats, emails, letters the user is happy with). Fewer than 3 samples → say so and ask for 3. Do not guess a voice; a guessed voice is the generic tone the user wants to avoid.
+
+| Trait | Capture exactly |
+|---|---|
+| Greeting · sign-off | The real form: "สวัสดีครับคุณเอ" vs "คุณเอครับ" · "ขอบคุณครับ" vs name only |
+| Particles · pronouns | ครับ/ค่ะ/นะครับ — where and how often · ผม / เรา / ชื่อเล่น |
+| Sentence length · ask timing | Short or long · which line the request lands on |
+| Softeners | How often รบกวน / ขออนุญาต / just checking appear |
+| Their own words | What they call their product or service, phrases they repeat verbatim |
+| **Never uses** | Words and structures absent from every sample. This matters most: one phrase the user never says tells the reader someone else wrote it |
+| Sample | One short real message, verbatim, as the reference |
+
+**Every edit the user makes to a draft is a signal.** Ask in one line what the change was about, then append it to the profile with the date (`Updated: 2026-11-10 — cut "อาจจะตกหล่นไป", user: sounds fake`). Append, do not overwrite, so a correction never needs making twice.
+
+Keep out of the profile: account numbers, ID numbers, phone numbers, addresses and anything about the people the messages went to. Store the user's words only, and replace names in the sample with roles.
 
 ## Thai register table
 
@@ -77,4 +97,10 @@ Rules for the ladder:
 - Day +10, level 3: "...ขอความกรุณาโอนชำระภายในวันศุกร์ที่ 16 ต.ค. นี้ครับ หากมีปัญหาเรื่องเอกสารแจ้งได้เลยครับ"
 - Day +20, level 4: "...หากไม่ได้รับชำระภายในวันที่ 31 ต.ค. ผมจำเป็นต้องหยุดงานส่วนที่เหลือไว้ก่อนจนกว่าจะเคลียร์ยอดนี้ครับ"
 
+Chasing several credit customers at once (check which payments already arrived, grade each payer, a summary table before any draft) → `doc-quotation` section 6 (plugin `e-commerce`, if installed). This skill then words each message.
+
 Related: `meeting` (plugin `personal-life`, Leg 2 — written follow-up after a meeting). Optional, if installed: `inbox-triage` (plugin `personal-life` — which messages to answer first) · `doc-thai-official` and `doc-quotation` (plugin `e-commerce` — formal letters and quotes).
+
+## Sources
+
+- Voice profile idea: anthropics/knowledge-work-plugins `small-business/shared/voice-profile.md` (Apache-2.0 · read 2026-11-10 · reworded, not copied) https://github.com/anthropics/knowledge-work-plugins/blob/main/small-business/shared/voice-profile.md

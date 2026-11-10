@@ -8,7 +8,7 @@
   "codeExts": [".mjs", ".js", ".py", ".ts", ".cmd", ".ps1", ".sh"],
   "readmes": ["README.md"],
   "allow": [
-    "^plugins/software-company/skills/project-doc-set/scripts/open_items\\.py$",
+    "^plugins/software-development/skills/project-doc-set/scripts/open_items\\.py$",
     "^scripts/check/validate-marketplace\\.mjs$",
     "^scripts/check/content-checks\\.mjs$",
     "^scripts/evals/review-recall/"

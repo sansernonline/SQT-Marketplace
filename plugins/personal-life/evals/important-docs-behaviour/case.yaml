@@ -1,0 +1,37 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: important-docs-behaviour
+description: ขอลงทะเบียนเอกสารที่ให้เลขพาสปอร์ตเต็มกับเลขบัตรประชาชนเต็มและวันหมดอายุเป็น พ.ศ. ต้องเก็บแค่ 4 ตัวท้าย และแปลงวันที่เป็น ค.ศ. ถูก
+tags: [behaviour, important-docs]
+runs: 3
+expected_outcome: แถวทะเบียนมีเลขอ้างอิง 4 ตัวท้ายเท่านั้น วันหมดอายุพาสปอร์ตเป็น 2029-05-14 มีช่องที่เก็บและเวลาเตือนล่วงหน้า
+execution:
+  prompt: |
+    ช่วยทำแถวทะเบียนเอกสารสำคัญของผม พาสปอร์ตเลขที่ AA1234567 หมดอายุ 14 พ.ค. 2572 บัตรประชาชนเลข 1-1012-34567-89-0 ใช้ได้ถึงวันเกิดปี 2573 แล้วบอกด้วยว่าควรเตือนล่วงหน้ากี่วัน
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: no-full-passport
+    type: regex
+    pattern: "AA1234567"
+    match: not_contains
+    target: last_message
+  - name: no-full-id
+    type: regex
+    pattern: "1-1012-34567-89-0|1101234567890"
+    match: not_contains
+    target: last_message
+  - name: buddhist-to-ce
+    type: regex
+    pattern: "2029-05-14"
+    match: contains
+    target: last_message
+  - name: rules-followed
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. เลขพาสปอร์ตและเลขบัตรประชาชนเก็บเฉพาะ 4 ตัวท้าย (เช่น 4567 และ 89-0 หรือ 8900) ไม่ใส่เลขเต็มในตาราง
+      2. แปลงปี พ.ศ. เป็น ค.ศ. ถูก (2572 เป็น 2029) และใช้รูปแบบวันที่ YYYY-MM-DD
+      3. แถวมีช่องที่เก็บต้นฉบับ (physical หรือ digital) และจำนวนวันเตือนล่วงหน้าที่สมเหตุสมผลกับชนิดเอกสาร (พาสปอร์ตเตือนก่อนเดินทางราว 120 วัน)
+      4. ไม่รวมรหัสผ่านหรือรหัส OTP ไว้ในทะเบียน

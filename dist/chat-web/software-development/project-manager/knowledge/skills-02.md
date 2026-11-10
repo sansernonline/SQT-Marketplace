@@ -1,0 +1,1179 @@
+# skill: polished-document-style
+
+Use when a kept doc (report, proposal, Word, PDF) needs headings, tables, theme. Wording → human-writing · designed look → branded-document-design.
+
+# Polished Document Style
+
+> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+
+> **เส้นแบ่ง:** skill นี้ดูแลหน้าตา (หัวข้อ ตาราง กล่องข้อความ ธีม) · ถ้อยคำทุกบรรทัดเป็นของ `human-writing` — เอกสารที่คนเก็บไว้อ่านเปิดทั้งคู่
+
+## When to use this skill
+
+- Output is meant for **general readers** (managers, executives, clients, customers)
+- Document needs **sign-off** or formal review
+- Output will be **shared widely** or converted to PDF/Word later · any doc with 3+ sections or 500+ words
+- จัดหน้าเอกสารที่คนเก็บไว้อ่านทุกชนิด (Markdown · Word · PDF) รวมถึงข้อความไทยในไฟล์ Office
+
+## When NOT to use
+
+- Internal notes for the author's own team (keep them concise)
+- Quick scratch notes · code comments
+- A whole Markdown report that must come out as one .docx → `markdown-report-docx` (plugin `software-development`)
+
+> **Note:** This skill governs the *markdown source*. When the deliverable is a
+> rendered **.docx / .pptx / .pdf** that a stakeholder will open, use
+> `branded-document-design` (plugin `software-development`) on top of it — that skill carries the design tokens,
+> the typography scale, Thai typography rules, and the `brandkit.py` builder.
+
+## อ่านเพิ่มเมื่อ
+
+| ไฟล์ | เปิดเมื่อ |
+|---|---|
+| [references/markdown-patterns.md](references/markdown-patterns.md) | ถ้าจะเขียนส่วนหัว สารบัญ กล่องข้อความ ตาราง ป้ายสถานะ cover block ตารางเทียบตัวเลือก ส่วนเซ็นรับ หรืออภิธานศัพท์ ให้เปิดดูตัวอย่าง markdown แล้วลอกไปใช้ |
+| [scripts/check_outline.py](scripts/check_outline.py) | ถ้า skill ที่เขียนเอกสารมีไฟล์แบบใน `assets/` ให้รัน `python scripts/check_outline.py <แบบ.md> <เอกสาร.md>` ก่อนส่ง — ตรวจหัวข้อครบและเรียงตามแบบ ช่องตัวหนาครบ หัวตารางตรง และไม่มีช่องที่ยังไม่เติม · ในแบบ ใส่ `<!-- optional -->` ท้ายหัวข้อหรือช่องที่ไม่บังคับ · แก้ตัวตรวจแล้วรัน `--self-test` ก่อน |
+| [references/theme-colors.md](references/theme-colors.md) | ถ้าต้องเลือกสีหลักของเอกสาร หรือใส่สีจริงลงรูป ไฟล์ .docx หรือสไลด์ ให้เปิดดูวิธีประกาศธีม ใครคุมสีส่วนไหน และค่าสีตั้งต้นประจำบ้าน |
+| [references/thai-office.md](references/thai-office.md) | ถ้าสร้างไฟล์ Word · Excel · PDF ที่มีภาษาไทย ให้เปิดดูก่อนเรื่องฟอนต์ การจัดย่อหน้า และการส่งออก |
+
+## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+
+ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+
+- **ที่ดู:** มาตรฐานเอกสารของลูกค้าหรือองค์กร: แม่แบบ Word/Google Docs ที่ลูกค้าให้ · เอกสารฉบับก่อนในโปรเจกต์ (`docs/` · `ref/`) · ข้อกำหนดเรื่องรูปแบบใน TOR หรือสัญญา
+- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
+- **ยังต้องมีทุกแบบ:** หัวเอกสาร ลำดับหัวข้อ และธีมในไฟล์นี้เป็นค่าสำรอง · ความอ่านง่าย (หัวข้อชัด ตารางอ่านได้) ใช้ทุกแบบ
+
+## Document Header (Always)
+
+Every polished doc MUST start with ส่วนหัวชุดเดียวกัน คือ H1 ข้อความล้วน ตามด้วยกล่อง quote ที่บอกเวอร์ชัน วันที่ สถานะ ผู้เขียน ผู้รีวิว และแท็ก แล้วปิดด้วย `---` ตัวอย่างเต็มอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+
+Status values:
+- **Draft** (ร่าง) — work in progress
+- **Review** (กำลังรีวิว) — under stakeholder review
+- **Approved** (อนุมัติแล้ว) — signed off
+- **Archived** (เก็บถาวร) — historical reference
+
+ชุดนี้ 4 ค่าเท่านั้น เขียนเหมือนกันทุก skill (`status-report` ใช้ชุดเดียวกัน และเพิ่ม `ยังไม่เริ่ม` สำหรับเอกสารที่ยังไม่ลงมือ) · ช่อง Status ในตาราง Sign-off เป็นสถานะของคนเซ็น ใช้ **Approved** · **Review** · **Pending** (ยังไม่ส่งให้ดู) · **Rejected**
+
+## Section Hierarchy
+
+- **H1** — Document title (exactly one)
+- **H2** — Numbered sections (`## 1. Section`)
+- **H3** — Sub-sections (`### 1.1 Sub-topic`)
+- **H4** — Rare, use only if needed
+
+**Always add Table of Contents** for docs with 5+ sections และต้องกดลิงก์ในสารบัญแล้วไปถึงหัวข้อจริง ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+
+## ธีมของเอกสาร — ตัดสินใจครั้งเดียว ใช้ทุกที่ในเอกสารนั้น
+
+เอกสาร 1 ฉบับผ่านหลาย skill (markdown · `diagram-figures` · `branded-document-design` · `presentation-design`) จึงเลือกสีหลักครั้งเดียว ประกาศเป็น `<!-- doc-theme: accent=… · ที่มา=… · ยืนยันเมื่อ=YYYY-MM-DD -->` ท้ายส่วนหัวของเอกสาร แล้วทุกเครื่องมืออ่านค่าจากที่นั่น · ต้องเลือกสีหรือใส่สีจริงลงรูป .docx สไลด์ → เปิด [references/theme-colors.md](references/theme-colors.md) (ที่มาของสี ค่าตั้งต้นประจำบ้าน สีของสถานะ)
+
+## คำกำกับ — ใช้คำ ไม่ใช้อีโมจิ
+
+**ไม่มีอีโมจิในเอกสาร** ทั้งหัวข้อ กล่องข้อความ ป้ายสถานะ และตาราง เพราะอีโมจิในหัวข้อและป้ายเป็นสัญญาณว่า AI ทำ (`no-ai-look`) · ใช้คำตัวหนาที่คงที่ทั้งเอกสารแทน
+
+| ใช้ทำอะไร | คำที่ใช้ |
+|---|---|
+| ระดับความสำคัญ | วิกฤต · สูง · กลาง · ต่ำ |
+| สถานะงาน | เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่ |
+| ผลตรวจ | ผ่าน · ไม่ผ่าน |
+| ชนิดกล่องข้อความ | ข้อแนะนำ (Tip) · ข้อควรจำ (Note) · ข้อควรระวัง (Warning) · อันตราย (Critical) · คำถามที่ยังเปิด (Open Question) |
+
+ช่องใช่/ไม่ในตาราง ใช้เครื่องหมายตัวอักษร `✓` `✗` ได้ (ไม่ใช่อีโมจิสี) หรือเขียน "ใช่" "ไม่" 
+
+## Callout Boxes
+
+Use blockquotes with a bold label (no emoji) มี 5 ชนิด คือ **Tip** (ข้อแนะนำ) · **Note** (ข้อควรจำ) · **Warning** (ข้อควรระวัง) · **Critical** (อันตราย) · **Open Question** (คำถามที่ยังเปิด) ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+
+**Rules:**
+- Keep callouts to 1-3 sentences
+- One callout per topic — don't stack
+- Don't overuse — max 3-5 per page
+
+## Tables — When and How
+
+Use tables when items have **2+ attributes** ถ้าเขียนเป็น bullet แล้วแต่ละบรรทัดมีหลายค่าคั่นด้วยจุลภาค ให้เปลี่ยนเป็นตาราง ตัวอย่างเทียบกันอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+
+- Left-align text, center checkmarks/numbers, right-align money
+- Use `—` (em dash) for "not applicable", not `-` or blank
+- Keep cells short — long content goes in body paragraphs
+- Bold key columns: `**email**`
+
+ถ้าเอกสารต้องเทียบตัวเลือกหรือชั่งข้อดีข้อเสีย (strategy, vendor choice, plan options) ให้ใช้ตารางเทียบที่มีคอลัมน์ Recommendation ส่วนเอกสารที่ต้องอนุมัติให้ปิดท้ายด้วยตาราง Sign-off และเอกสารที่มีตัวย่อตั้งแต่ 5 ตัวขึ้นไป (เกณฑ์เดียวกับ `spell-out-abbreviations`) ให้มีอภิธานศัพท์ ตัวอย่างทั้งสามแบบอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+
+## Diagrams
+
+**รูปในเอกสารโปรเจกต์ (รายงาน · ข้อเสนอ · ผังขั้นตอน · ผังข้อมูล) วาดด้วย `diagram-figures` ซึ่งเป็น house style เดียว แล้วฝังเป็นไฟล์ภาพ** · Mermaid (`software-diagrams` ใน plugin `software-development`) ใช้แค่รูปด่วนใน README · PR · โน้ตในโค้ด
+skill นี้คุมเฉพาะเรื่องการวางรูปลงในเอกสาร
+
+- วางไว้**หลังย่อหน้าที่อธิบายว่ารูปนี้ตอบคำถามอะไร** ไม่ใช่ลอยขึ้นมาเฉย ๆ
+- ทุกรูปมีคำบรรยายใต้รูป 1 บรรทัด ขึ้นต้นด้วย **รูปที่ N —**
+- รูปเดียวกันอย่าใส่ซ้ำหลายที่ในเอกสาร ให้อ้างถึงเลขรูปแทน
+
+## Status Badges and Cover Block
+
+ช่องสำคัญในส่วนหัวหรือในตารางให้ใช้ป้ายสถานะเป็นคำตัวหนา เช่น `**Status:** Approved` ส่วนเอกสารทางการ (ข้อเสนอ · รายงานทางการ · สัญญา · postmortem) ให้เปิดด้วย cover block ที่บอกชนิดเอกสาร เวอร์ชัน สถานะ วันที่ ผู้เขียน ผู้รีวิว และเอกสารที่เกี่ยวข้อง ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+
+## Lists and Code Blocks
+
+**Rule:** ไม่ซ้อน bullet เลย ถ้ารายการต้องมีชั้นย่อย ให้แยกเป็นหัวข้อย่อยหรือใช้ตาราง
+ตัวอย่างรายการที่ดีและรายการที่ซ้อนเกินอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+
+Code blocks ต้องระบุภาษาทุกครั้ง (Always specify language) และถ้าโค้ดยาว ให้ใส่ชื่อไฟล์เป็นคอมเมนต์ในบรรทัดแรก ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+
+## เอกสาร Office ภาษาไทย
+
+ไฟล์ Word · Excel · PDF ที่มีภาษาไทย (ฟอนต์ complex script · ไม่ justify · ฝังฟอนต์ · CSV แบบ BOM) → เปิด [references/thai-office.md](references/thai-office.md) ก่อนสร้างไฟล์
+
+## Quality Checklist
+
+Before delivering any polished doc:
+
+- [ ] H1 title in plain text — no emoji in any heading, callout, badge or table
+- [ ] Header block with version, date, status, authors (cover block เฉพาะเอกสารทางการ)
+- [ ] TOC if 5+ sections
+- [ ] All sections numbered consistently
+- [ ] Anchor links in TOC actually work
+- [ ] Status badges where applicable
+- [ ] Tables used (not bullets) where data has 2+ attributes
+- [ ] Every flow or relationship has a diagram drawn with `diagram-figures` (plugin `software-development` · house style), not default Mermaid
+- [ ] Callout boxes for tips/warnings (not just paragraphs)
+- [ ] Code blocks have language hints
+- [ ] Glossary for docs with 5+ abbreviations (ตัวย่อตั้งแต่ 5 ตัว)
+- [ ] No placeholder text (TBD, TODO, Lorem ipsum) — `(รอยืนยัน)` markers listed in the pending-confirmation list are not placeholders; keep them
+- [ ] Tested rendering in the real viewer (Word · PDF · GitHub preview)
+
+> ไดอะแกรมในเอกสารโปรเจกต์อยู่ใน `diagram-figures` · เอกสารโค้ด (Mermaid ด่วน · ข้อกำหนดซอฟต์แวร์) → ส่วนเพิ่มใน plugin `software-development`
+
+## Anti-patterns
+
+- **Inconsistent terminology** — "user" in one section, "customer" in next
+- **Tables of paragraphs** — if cells are >2 sentences, use headings instead
+
+หน้าตาแบบ AI ทุกสื่อ → ก่อนส่งไล่ข้อ 3 ของ `no-ai-look` · กฎเขียนตัวย่อ → `spell-out-abbreviations`
+
+
+## reference: markdown-patterns.md
+
+# รูปแบบ markdown พร้อมตัวอย่าง
+
+ตัวอย่างโค้ด markdown ของทุกรูปแบบที่ `SKILL.md` อ้างถึง ให้ลอกไปใช้ได้ทันที ส่วนกฎว่าใช้เมื่อไหร่อยู่ใน `SKILL.md`
+
+**สารบัญ:** Document Header · Table of Contents · Callout Boxes · Tables · Figures · Status Badges · Cover Block · Comparison / Decision Tables · Lists · Code Blocks · Approval/Sign-off · Glossary
+
+## Document Header (Always)
+
+Every polished doc MUST start with:
+
+```markdown
+# <Document Title>
+
+> **Version:** 1.0 · **Date:** YYYY-MM-DD · **Status:** Draft
+> **Authors:** <names> · **Reviewers:** <names>
+> **Tags:** `<area>` `<topic>`
+
+---
+```
+
+Status values:
+- **Draft** — work in progress
+- **Review** — under stakeholder review
+- **Approved** — signed off
+- **Archived** — historical reference
+
+## Table of Contents
+
+**Always add Table of Contents** for docs with 5+ sections:
+
+```markdown
+## Table of Contents
+
+1. [Executive Summary](#1-executive-summary)
+2. [Scope](#2-scope)
+3. [Details](#3-details)
+```
+
+## Callout Boxes
+
+Use blockquotes with a bold label — no emoji. 5 ชนิด ชื่อไทยคู่กัน: Tip (ข้อแนะนำ) · Note (ข้อควรจำ) · Warning (ข้อควรระวัง) · Critical (อันตราย) · Open Question (คำถามที่ยังเปิด):
+
+```markdown
+> **Tip:** Brief actionable insight.
+
+> **Warning:** Important caveat or limitation.
+
+> **Critical:** Must-read before proceeding.
+
+> **Note:** Additional context or background.
+
+> **Open Question:** Needs decision/clarification.
+```
+
+## Tables — When and How
+
+### When to use tables instead of bullets
+
+Use tables when items have **2+ attributes**:
+
+Don't use bullets:
+```markdown
+- email: string, required, unique
+- age: number, optional
+- role: enum, required, default "user"
+```
+
+Use a table:
+```markdown
+| Field | Type   | Required | Default | Description       |
+|-------|--------|:--------:|:-------:|-------------------|
+| email | string | ✓        | —       | Unique login email|
+| age   | number | ✗        | —       | Optional          |
+| role  | enum   | ✓        | `user`  | Access level      |
+```
+
+## Figures (รูปในเอกสาร)
+
+รูปในเอกสารโปรเจกต์วาดด้วย `diagram-figures` (plugin `software-development` · house style) แล้วฝังเป็นไฟล์ภาพ · Mermaid ใช้แค่รูปด่วนใน README · PR ไม่ใช้ในเอกสารที่ส่งต่อ
+
+```markdown
+ลำดับการเรียกเมื่อผู้ใช้กดบันทึกแสดงในรูปที่ 3
+
+![ลำดับการเรียกเมื่อผู้ใช้กดบันทึก](figures/fig-03.png)
+
+**รูปที่ 3 —** ลำดับการเรียกเมื่อผู้ใช้กดบันทึก
+```
+
+## Status Badges (Inline)
+
+For key fields in headers/tables:
+
+```markdown
+**Status:** Approved
+**Priority:** High
+**Risk Level:** Medium
+**Service Level Agreement (SLA):** < 200ms
+```
+
+Multiple badges in a header:
+
+```markdown
+> **Approved** · **High Priority** · Owner @alice · Due 2025-03-15
+```
+
+## Cover Block Pattern
+
+For formal documents (Business Requirements Document (BRD), Functional Specification Document (FSD), Architecture Decision Record (ADR), postmortem):
+
+```markdown
+# <Title>
+
+| | |
+|--|--|
+| **Document Type** | BRD \| FSD \| ADR \| Postmortem |
+| **Version** | 1.2 |
+| **Status** | Approved |
+| **Date** | 2025-01-15 |
+| **Author(s)** | @alice, @bob |
+| **Reviewer(s)** | @charlie |
+| **Related** | [BRD-001](link), [FSD-005](link) |
+
+---
+```
+
+## Comparison / Decision Tables
+
+For trade-off analysis (architect, Project Manager (PM), Search Engine Optimization (SEO) recommendations):
+
+```markdown
+| Option | Cost | Effort | Risk | Time-to-Value | Recommendation |
+|--------|:----:|:------:|:----:|:-------------:|:--------------:|
+| **A**  | ฿80k | Med  | Low  | Fast | **Recommended** |
+| B      | ฿40k | Low  | High | Med  | Not recommended |
+| C      | ฿150k| High | Low  | Slow | Future consideration |
+```
+
+## Lists — When to nest, when to flatten
+
+### Good list
+```markdown
+- Email is unique across all users
+- Passwords must be 8+ characters with mixed case
+- Sessions expire after 30 days of inactivity
+```
+
+### Bad list (over-nested)
+```markdown
+- Users
+  - Email
+    - Must be unique
+    - Required
+  - Password
+    - 8+ chars
+    - Mixed case
+```
+
+→ Should be a table instead.
+
+## Code Blocks
+
+Always specify language:
+
+````markdown
+```typescript
+const user: User = { id: 1, email: 'a@b.com' };
+```
+
+```bash
+npm install
+```
+
+```sql
+SELECT * FROM users WHERE id = $1;
+```
+````
+
+For long blocks, put the file name in a comment on the first line:
+
+```typescript
+// src/services/auth.ts
+export async function login(email: string, password: string) {
+  // ...
+}
+```
+
+## Approval/Sign-off Section (End of Doc)
+
+For documents needing formal approval:
+
+```markdown
+## Sign-off
+
+| Role | Name | Status | Date |
+|------|------|:------:|------|
+| Product Owner | @alice | Approved | 2025-01-15 |
+| Tech Lead | @bob | Review | — |
+| QA Lead | @charlie | Pending | — |
+| Security | @dave | Rejected | 2025-01-14 |
+```
+
+## Glossary Section
+
+For docs with 5+ technical terms:
+
+```markdown
+## Glossary
+
+| Term | Definition |
+|------|------------|
+| **API** | Application Programming Interface |
+| **JWT** | JSON Web Token, used for stateless auth |
+| **SLA** | Service Level Agreement |
+```
+
+Define acronyms on first use, then add to glossary.
+
+
+## reference: thai-office.md
+
+# เอกสาร Office ภาษาไทย
+
+ใช้กับไฟล์ Word · Excel · PDF ทุกไฟล์ที่มีภาษาไทย จะสร้างด้วยสคริปต์หรือทำมือก็ตาม รายละเอียดและตัวช่วยอยู่ใน `branded-document-design`
+
+- Word นับภาษาไทยเป็น complex script จึงมีช่องฟอนต์ ขนาด และตัวหนาแยกจากละติน ถ้าตั้งแค่ช่องละติน ข้อความไทยจะไม่เปลี่ยน ต้องตั้งให้ครบทั้งสองชุด
+- ย่อหน้าไทยไม่จัดชิดสองขอบ (justify) เพราะไทยไม่มีช่องว่างระหว่างคำ Word จะยืดช่องไฟจนเป็นรู (ยกเว้นคู่มือวิทยานิพนธ์สั่ง Thai Distributed)
+- ข้อความไทยห้ามใช้ฟอนต์ mono เพราะ Consolas กับ Cascadia ไม่มีอักษรไทย ใช้ mono กับรหัส คีย์ และตัวเลขเท่านั้น
+- ส่งออก PDF ให้ฝังฟอนต์ทุกครั้ง ไม่งั้นเครื่องที่ไม่มีฟอนต์จะเอาตัวอื่นมาแทนและวรรณยุกต์ลอย
+- CSV ที่ให้คนไทยเปิดใน Excel บันทึกเป็น UTF-8 แบบมี BOM ไม่งั้นภาษาไทยเพี้ยน
+- ก่อนบอกว่าเสร็จ แปลงทุกหน้าเป็นภาพแล้วเปิดดูจริง ตารางล้น หัวข้อค้างท้ายหน้า วรรณยุกต์ลอย ดูจากโค้ดไม่เห็น
+
+
+## reference: theme-colors.md
+
+# ตารางสีของธีมเอกสาร
+
+ไฟล์นี้บอกว่าส่วนไหนของเอกสารใครเป็นคนคุมสี และค่าสีตั้งต้นประจำบ้านคืออะไร ใช้ตอนต้องใส่สีจริงลงรูป ไฟล์ .docx หรือสไลด์
+
+## ประกาศธีม — ตัดสินใจครั้งเดียว ใช้ทุกที่ในเอกสารนั้น
+
+เอกสาร 1 ฉบับผ่านหลาย skill: markdown (`polished-document-style`) · รูปจาก `diagram-figures` ·
+ไฟล์ .docx จาก `branded-document-design` · สไลด์จาก `presentation-design` (ทั้งสามอยู่ใน plugin `software-development`)
+ถ้าแต่ละตัวเลือกสีเอง ผู้อ่านจะได้เอกสารที่รูปสีหนึ่ง หัวข้อสีหนึ่ง และสไลด์อีกสีหนึ่ง
+
+**markdown เป็นต้นฉบับหลัก (source of truth) จึงประกาศธีมไว้ที่นี่** — ใส่ไว้ท้ายส่วนหัวของเอกสารหรือในไฟล์ข้างกัน:
+
+```markdown
+<!-- doc-theme: accent=<สีหลัก> · ที่มา=<แบรนด์ลูกค้า / เสนอจากเนื้องาน> · ยืนยันเมื่อ=YYYY-MM-DD -->
+```
+
+**สีหลักมาจากเนื้องาน ไม่ใช่จากค่าเริ่มต้นของเครื่องมือ**
+ถ้ามีสีแบรนด์อยู่แล้วให้ใช้สีนั้น ถ้ายังไม่มีให้ค้นต้นแบบตาม `design-references` (plugin `superuser`) ประเภท `document` แล้วถอดสีจากงานที่เลือก · ค้นสดไม่ได้จึงใช้ค่าตั้งต้นประจำบ้าน เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม และเสนอโทนที่เข้ากับเนื้องานไว้ในรายงาน
+(คลังสำรอง: ตารางจับคู่เนื้องานกับโทนสีอยู่ใน `colour-by-domain` ของ skill `diagram-figures` (plugin `software-development`))
+
+markdown เองไม่มีสี จึงใช้คำกำกับและน้ำหนักตัวอักษรแทน ส่วนไดอะแกรม รูป ไฟล์ .docx และสไลด์อ่านค่าจาก `doc-theme` ถ้า `doc-theme` ยังไม่ประกาศ accent เฉพาะงาน ให้ใช้ค่าตั้งต้นประจำบ้าน ตารางทั้งสองอยู่ข้างล่าง
+
+**คำสถานะไม่ขึ้นกับธีม** — วิกฤต · ผ่าน ใช้คำเดิมทุกเอกสาร ส่วนสีของสถานะในรูป .docx และสไลด์อยู่ข้างล่าง
+
+## ใครคุมสีส่วนไหน
+
+| ส่วนของเอกสาร | ใครคุมสี | อ่านค่าจาก |
+|---|---|---|
+| หัวข้อ ตาราง กล่องข้อความใน markdown | markdown ไม่มีสี ใช้คำกำกับตัวหนาและน้ำหนักตัวอักษรแทน | — |
+| ไดอะแกรม Mermaid | `diagram-figures` → `references/engine-mermaid.md` (README · PR: `software-diagrams` ข้อ 2 ใน plugin `software-development`) | `doc-theme` |
+| รูปที่เป็นไฟล์ภาพ | `diagram-figures` (plugin `software-development`) | `doc-theme` |
+| ไฟล์ .docx / .pdf ที่ส่งออก | `branded-document-design` (plugin `software-development`) ข้อ 0–1 | `doc-theme` |
+| สไลด์ | `presentation-design` (plugin `software-development`) | `doc-theme` |
+
+## ค่าตั้งต้นประจำบ้าน (house default)
+
+ถ้า `doc-theme` ยังไม่ประกาศ accent เฉพาะงาน ทุก skill ใช้ชุดนี้เป็นค่าตั้งต้น เพื่อให้รูป เอกสาร และสไลด์เป็นชุดสีเดียวกันตั้งแต่แรก ชุดนี้คือชุดเดียวกับ `presentation-design` และ `branded-document-design`:
+
+| token | ค่า | ใช้กับ |
+|---|---|---|
+| brand | `#2A78D6` | สีหลัก · หัวข้อ · เส้น accent |
+| brand-deep | `#2A4C86` | หัวตาราง · H2 · ชื่อระบบ |
+| brand-2 | `#6A5CD6` | accent รอง (ม่วง) |
+| tint | `#EDF1FB` | พื้นหัวตาราง · พื้นกล่องเน้น |
+| ink / body | `#333B4A` / `#414957` | หัวข้อ / เนื้อความ |
+| muted / faint | `#7D8492` / `#A9AEB9` | คำบรรยาย / หมายเหตุ |
+| line | `#E4E7EE` | เส้นขอบ · เส้นเชื่อม |
+| exception | `#C77A11` | ทาง/โซนที่ไม่ใช่เส้นทางหลัก (ต่างจาก brand เสมอ) |
+| ฟอนต์ | Tahoma (เอกสาร/สไลด์) · Noto Sans Thai → Tahoma (ภาพ) | ทั้งไทยและอังกฤษ |
+
+เมื่อประกาศ accent เฉพาะงานแล้ว ให้ใช้ค่านั้นแทน brand ส่วนสีอื่นคำนวณจาก accent ตัวนั้น
+
+
+---
+
+# skill: markdown-visuals
+
+Use when a markdown doc needs a picture. Pick inline SVG, image file, ASCII or Mermaid by where it is read (GitHub drops inline SVG).
+
+# Markdown Visuals
+
+> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+
+> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-development`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
+
+> **Rule:** Every plan, process, design, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
+
+## When to use this skill
+
+- A picture *inside a markdown file* — sketch, flow or state in a business plan, report, process guide, spec or README
+- Writing a plan, Functional Specification Document (FSD), Business Requirements Document (BRD), Architecture Decision Record (ADR) or architecture doc that describes layout, flow, or relationships (the diagrams themselves follow the routing rule below)
+- Explaining state transitions, user journeys, or system interactions
+- Comparing 2+ visual options for the user
+- The user asked "show me how it looks" inside a markdown doc or chat reply
+
+**If the doc has zero visuals and is about anything visual or structural — stop and add one.**
+
+## When NOT to use
+
+| Task | Use instead |
+|---|---|
+| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`web-app-design` · `windows-app-design` · `mobile-app-design`) (plugin `software-development`) |
+| Chart colours and chart design in an app or dashboard | `web-app-design` (plugin `software-development`) → `references/tokens.md` "สีข้อมูล (กราฟ)" |
+| Designed figure for a proposal, slide or print | `diagram-figures` |
+
+## Decision tree: which format?
+
+```
+What are you showing?
+│
+├─ UI sketch in a doc / component state / icon → Inline SVG (doc read on GitHub → same SVG as a `.svg` file, §2)
+├─ Layout sketch / box diagram / state map  →  ASCII art (boxes & arrows)
+├─ Flow / process / money flow / decision   →  repo note (README · Pull Request (PR) · code note) → Mermaid (`software-diagrams`, plugin `software-development`)
+│                                              project document (BRD · Software Requirements Specification (SRS) · FSD · ADR) or read outside the team → `diagram-figures`
+├─ Architecture / Entity-Relationship (ER) / class → same rule as the line above
+├─ Designed figure (proposal, slide, print) →  diagram-figures → embed the PNG as an image file (§2)
+├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from web-app-design (plugin `software-development`) tokens.md "สีข้อมูล (กราฟ)"
+├─ Photo, screenshot, complex illustration  →  External file → ![alt](figures/x.png) (file in `docs/figures/`)
+└─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
+```
+
+**Routing rule (same in `software-diagrams` and `diagram-figures`):** markdown in a repo read by the team (README · PR · code note) → Mermaid via `software-diagrams` · a project document (BRD · SRS · FSD · ADR · ER · flows) or anything people outside the team read → `diagram-figures`.
+
+**Follow the tree above.** Where the doc will be read decides inline SVG vs image file:
+
+- **Inline `<svg>` renders** in VS Code preview, Obsidian, many static-site generators and chat replies.
+- **Inline `<svg>` does not render on GitHub** — GitHub's sanitizer drops the `<svg>` element, so the reader sees nothing. Other hosts (GitLab, Bitbucket): preview before relying on it.
+- **Doc will be read on GitHub** → save the SVG as `docs/figures/x.svg` and reference it with `![alt](figures/x.svg)` or `<img>` (§2). It still versions cleanly in git and stays editable.
+
+## 1 · Inline SVG (for viewers that render it — not GitHub)
+
+### Boilerplate
+
+```markdown
+<p align="center">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" role="img" aria-label="<what this shows>">
+  <!-- background = bg-canvas of the project palette (see สี below) -->
+  <rect width="640" height="280" rx="14" fill="<bg-canvas>"/>
+
+  <!-- content goes here -->
+</svg>
+</p>
+```
+
+**Required attributes:**
+- `xmlns="http://www.w3.org/2000/svg"` — required when the same markup is saved as a `.svg` file (GitHub shows `.svg` files only through `![]()` / `<img>`, and only with `xmlns`)
+- `viewBox` — sets the coordinate space; lets the SVG scale responsively
+- `role="img"` + `aria-label` — accessibility, screen readers
+- `<p align="center">` wrapper — centers in the rendered page
+
+**Sizing:** Use `viewBox` (not width/height) so it scales. Common sizes:
+- Sketch of a UI bar: `viewBox="0 0 640 200"` (wide, short)
+- Component state: `viewBox="0 0 400 300"` (squarer)
+- Icon / chip: `viewBox="0 0 64 64"`
+- Full screen layout: `viewBox="0 0 800 500"`
+
+### สี
+
+ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น ส่วนถ้ายังไม่มี ให้ค้นต้นแบบตาม `design-references` (plugin `superuser`) ประเภท `document` แล้วถอดสีจากงานที่เลือก · ค้นสดไม่ได้จึงใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม (ลำดับใน `diagram-figures` ข้อ 5 · ตารางโทนตามเนื้องาน [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) ส่วน token ตามหน้าที่ (`bg-canvas` · `accent-primary` · `state-*` …) ดูได้ใน [references/svg-snippets.md](references/svg-snippets.md) และ **1 เอกสารใช้ชุดสีเดียว**
+
+### Reusable snippets
+
+Window chrome, phone frame, button, card, status badge, running dot and tooltip snippets, plus the UI-state worked example, are in [references/svg-snippets.md](references/svg-snippets.md). Copy the structure and swap in the agreed colour tokens.
+
+## 2 · External image files
+
+Use when:
+- The doc will be read on GitHub (inline `<svg>` is dropped there) — save the SVG as a file
+- Photo or screenshot
+- Illustration too complex to author as SVG by hand (50+ shapes)
+- Reusing the same image across many docs
+- Generated by a design tool (Figma export, etc.)
+
+### Folder convention
+
+```
+docs/
+  figures/
+    01-hover-state.svg
+    02-empty-state.png
+    architecture-overview.svg
+    src/                      editable sources (.mmd · .drawio · .html)
+```
+
+- Put figures in `docs/figures/` (editable sources in `docs/figures/src/`) — relative to the doc · brand files (logo, icons) live in the project-root `assets/`, not here
+- Name files `<doc-section-number>-<short-slug>.<ext>` so they sort with the doc
+- Prefer `.svg` over `.png` when possible (scales, smaller, diff-friendly)
+
+### Reference syntax
+
+```markdown
+![Hover state showing magnified Projects tile](figures/01-hover-state.svg)
+```
+
+- **Alt text** describes what the image shows, for accessibility — not "screenshot.png"
+- Path is **relative to the markdown file**, not absolute
+- For centered + sized images, wrap in HTML:
+
+```markdown
+<p align="center">
+  <img src="figures/01-hover-state.svg" alt="Hover state" width="640"/>
+</p>
+```
+
+### Creating SVG files
+
+When the visual is too big to inline (>50 lines of SVG markup), save it as a file instead. Use the `Write` tool to create the SVG file in `docs/figures/`.
+
+## 3 · ASCII art
+
+For quick layouts, state diagrams, and structural sketches that don't need pixel-perfect visuals. Renders identically in every viewer and in terminal/diff output.
+
+Box-drawing characters plus worked layout sketch, state machine and curve examples are in [references/ascii-patterns.md](references/ascii-patterns.md).
+
+Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
+
+## 4 · Mermaid
+
+**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams` (plugin `software-development`) ข้อ 1–5 และ `assets/mermaid-theme.md`** · Mermaid ในเอกสารโปรเจกต์ที่ต้องแปลงเป็นรูปลง Word ใช้ตัวแปลงใน `diagram-figures` → `references/engine-mermaid.md`
+ที่นี่บอกแค่ว่า *เมื่อไหร่ควรเลือก Mermaid แทนรูปแบบอื่น*
+
+| เลือก Mermaid เมื่อ | เลือกอย่างอื่นเมื่อ |
+|---|---|
+| เป็นกล่องกับลูกศรที่เครื่องจัดวางให้ได้ | ถ้าต้องคุมตำแหน่งเองให้ใช้ inline SVG ส่วนรูปที่ต้องดูออกแบบมาให้ใช้ `diagram-figures` (HTML layout หรือ engine-svg-python) แล้วฝังเป็นไฟล์ภาพ |
+| อยู่ในไฟล์ที่ต้อง diff ใน git | เป็นภาพหน้าจอจริง ให้ใช้ไฟล์ภาพ |
+| ผู้อ่านเปิดใน GitHub หรือ Notion | ผู้อ่านเปิดในเอกสาร Word หรือสไลด์ ให้ใช้ไฟล์ภาพ |
+
+## Combining formats in one doc
+
+A full design spec usually mixes formats (SVG mockup, reference table, ASCII sketch, Mermaid state diagram, acceptance table). The 6-part pattern is in [references/combining-formats.md](references/combining-formats.md). Don't force everything into one format.
+
+## Accessibility checklist
+
+For every visual:
+
+- [ ] **Inline SVG** has `role="img"` and `aria-label="<description>"`
+- [ ] **Image file** has descriptive alt text (not "image.png")
+- [ ] **Mermaid** diagrams have a 1-sentence caption above or below
+- [ ] **ASCII art** has a prose summary nearby — screen readers will read the characters literally
+- [ ] **Colour** is not the only signal — pair red badges with `!`, green dots with a label
+- [ ] **Contrast** for text in SVG ≥ 4.5:1 against its background
+
+## Anti-patterns
+
+- **Text-only design docs** — "the icon is in the top-right" with no picture
+- **Linking to Figma / external design tools as the only source** — visuals must render in the repo
+- **PNG screenshots of text** — use the text, in a code block
+- **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
+- **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
+- **ASCII art outside a code fence** — proportional fonts will mangle alignment
+- **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
+- **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
+- **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
+
+## Quick-start recipe
+
+When a markdown doc needs a design picture (clickable app screens go to the platform design skill, `mockup/<CODE>-mockup.html`):
+
+1. **Identify what kinds of visuals are needed** (UI state? flow? architecture?)
+2. **Pick the format(s)** using the decision tree above
+3. **For each visual:**
+   - State a one-line caption
+   - Emit the SVG/Mermaid/ASCII
+   - Add `role="img"` + `aria-label` (SVG) or alt text (file)
+4. **Add a feature reference table** below the visuals — what each element means
+5. **Cross-check accessibility checklist** before delivery
+
+Not sure a visual will render? Preview it in the viewer the reader will use (GitHub, Notion, VS Code) before delivery.
+
+## Related skills
+
+- `polished-document-style` — overall doc formatting, figure captions, callout boxes
+- `simplicity-first` (plugin `software-development`) — don't over-design the diagram; show what's needed
+- `software-diagrams` (plugin `software-development`) — which diagram type answers which question, plus the shared Mermaid theme
+- `diagram-figures` — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
+- `ui-craft` (plugin `software-development`) — spacing, hierarchy and states when the picture is a screen
+
+## ไม่ให้ดูเหมือน AI ทำ
+
+ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ทุกงานต้องผ่านด่านตา 3.2 ด้วย (หน้าเว็บตอบเพิ่มข้อ 10–14) เพราะสคริปต์ 0 ข้อยังไม่ใช่ผ่าน · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
+
+## ตัวย่อ
+
+เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
+หลังจากนั้นใช้ตัวย่อได้เลย ดูรายละเอียดใน skill `spell-out-abbreviations`
+
+
+## reference: ascii-patterns.md
+
+# ASCII patterns
+
+Worked ASCII examples for markdown docs · used by [SKILL.md](../SKILL.md) §3 · always wrap ASCII in a fenced code block so spacing is preserved
+
+## Box-drawing characters
+
+```
+┌─────┐  ┏━━━━━┓  ╭─────╮  ┌╌╌╌╌╌┐
+│     │  ┃     ┃  │     │  ╎     ╎
+└─────┘  ┗━━━━━┛  ╰─────╯  └╌╌╌╌╌┘
+ light    heavy   rounded   dashed
+```
+
+Corners: `┌ ┐ └ ┘` ‧ `┏ ┓ ┗ ┛` ‧ `╭ ╮ ╰ ╯`
+Lines:   `─ │` ‧ `━ ┃` ‧ `═ ║`
+Joins:   `├ ┤ ┬ ┴ ┼`
+Arrows:  `→ ← ↑ ↓ ▲ ▼ ▶ ◀ ↔ ↕ ⇒ ⇐`
+Dots:    `• · ◦ ● ○ ▪ ▫`
+
+## Common patterns
+
+**Layout sketch:**
+```
+┌─────────────────────────────────────┐
+│ Header        [Search]      [👤]    │
+├──────────┬──────────────────────────┤
+│ Sidebar  │ Main content             │
+│  • Item  │                          │
+│  • Item  │  ┌────────────────────┐  │
+│          │  │  Primary CTA       │  │
+│          │  └────────────────────┘  │
+└──────────┴──────────────────────────┘
+```
+
+**State machine:**
+```
+┌─────────┐  hover  ┌──────────┐  click  ┌─────────┐
+│  REST   │────────►│ MAGNIFIED│────────►│ LAUNCH  │
+└─────────┘◄────────└──────────┘◄────────└─────────┘
+            exit               done
+```
+
+**Curve / chart:**
+```
+scale
+ ↑
+1.7│         ╱╲
+1.4│       ╱    ╲
+1.2│     ╱        ╲
+1.0│___╱            ╲___
+   └──────────┬──────────→ cursor X
+         tile.Center
+```
+
+
+## reference: combining-formats.md
+
+# Combining formats in one doc
+
+Used by [SKILL.md](../SKILL.md) · a full design spec usually mixes formats.
+
+The 6-part pattern for a design spec:
+
+```
+1. Inline SVG mockup of each UI state              ← "what it looks like"
+2. Feature reference table                          ← "what it does"
+3. ASCII layout sketch with measurements           ← "how it's positioned"
+4. Mermaid state diagram                            ← "how it transitions"
+5. ASCII / inline-SVG zoom curve                    ← "the math"
+6. Acceptance criteria table                        ← "how we verify"
+```
+
+Don't force everything into one format. Each format is best at something different.
+
+
+## reference: svg-snippets.md
+
+# Inline SVG snippets
+
+Reusable building blocks for inline SVG pictures of a screen inside .md docs (the real mockup is HTML) · used by [SKILL.md](../SKILL.md) §1
+
+## สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
+
+ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น
+ถ้ายังไม่มี ให้ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม และเสนอโทนจากเนื้องานไว้ในรายงาน — การแพทย์เขียว · การเงินน้ำเงินเข้ม ·
+อุตสาหกรรมเหลืองอำพัน · ราชการกรมท่า · ซอฟต์แวร์ทั่วไปน้ำเงิน (ตารางเต็มอยู่ใน [`diagram-figures/references/colour-by-domain.md`](../../diagram-figures/references/colour-by-domain.md))
+
+กำหนดเป็น **token ตามหน้าที่** ไว้บนสุดของเอกสาร แล้วใช้ค่าเดียวกันทุกรูปในเอกสารนั้น:
+
+| Token | หน้าที่ | ได้มาจาก |
+|---|---|---|
+| `bg-canvas` | พื้นหลังของรูป | เฉดเข้มสุด (โหมดมืด) หรืออ่อนสุด (โหมดสว่าง) |
+| `bg-surface` | แผ่น พาเนล การ์ด | ต่างจาก canvas พอให้เห็นขอบโดยไม่ต้องตีเส้น |
+| `bg-elevated` | ไทล์ที่ลอยขึ้นมาอีกชั้น | |
+| `accent-primary` | จุดเน้น สถานะที่กำลังทำงาน | **สีแบรนด์** (ไม่มี → `#2A78D6` + `(รอยืนยัน)`) |
+| `text-primary` | ข้อความหลัก | contrast ≥ 4.5:1 กับพื้นที่มันวางอยู่ |
+| `text-muted` | ข้อความรอง placeholder | `rgba(...,0.55)` ของ `text-primary` |
+| `state-success` · `state-warning` · `state-danger` | สถานะ | **ไม่เปลี่ยนตามแบรนด์** — เขียวคือผ่าน แดงคือไม่ผ่านเสมอ |
+
+**1 เอกสารใช้ชุดสีเดียว** — รูป 10 รูปในเอกสารเดียวที่สีไม่ตรงกัน อ่านยากกว่ารูปไม่สวยแต่สีตรงกัน
+
+## Snippets
+
+> ตัวอย่างข้างล่างใช้ชุดสีโหมดมืดชุดหนึ่งเป็นตัวแทนเท่านั้น
+> **เปลี่ยนค่าสีให้ตรงกับชุดที่ตกลงไว้ก่อนใช้** โครงสร้างคือสิ่งที่ต้องคัดลอก ไม่ใช่ค่าสี
+
+**Window chrome (desktop app mockup):**
+```xml
+<rect x="20" y="20" width="600" height="360" rx="10" fill="#2a3245"/>
+<circle cx="42" cy="42" r="6" fill="#ff5f57"/>
+<circle cx="62" cy="42" r="6" fill="#febc2e"/>
+<circle cx="82" cy="42" r="6" fill="#28c940"/>
+<text x="320" y="46" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Window title</text>
+<line x1="20" y1="64" x2="620" y2="64" stroke="rgba(255,255,255,0.08)"/>
+```
+
+**Phone frame (mobile mockup):**
+```xml
+<rect x="100" y="20" width="200" height="400" rx="28" fill="#0a0d14" stroke="#2a3245" stroke-width="2"/>
+<rect x="120" y="50" width="160" height="340" rx="6" fill="#1c2230"/>
+<rect x="170" y="28" width="60" height="14" rx="7" fill="#0a0d14"/>
+```
+
+**Button:**
+```xml
+<rect x="40" y="100" width="120" height="40" rx="8" fill="#0078d4"/>
+<text x="100" y="125" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="14" font-weight="500">Click me</text>
+```
+
+**Card with title and body:**
+```xml
+<rect x="40" y="40" width="240" height="120" rx="12" fill="#2a3245"/>
+<text x="60" y="72" fill="#fff" font-family="system-ui" font-size="14" font-weight="600">Card title</text>
+<text x="60" y="96" fill="rgba(255,255,255,0.7)" font-family="system-ui" font-size="12">Supporting body text goes here.</text>
+<rect x="60" y="116" width="80" height="28" rx="6" fill="#0078d4"/>
+<text x="100" y="134" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Action</text>
+```
+
+**Status badge (top-right of tile):**
+```xml
+<circle cx="<tile-right-x>" cy="<tile-top-y>" r="9" fill="#e24b4a"/>
+<text x="<tile-right-x>" y="<tile-top-y + 4>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="13" font-weight="500">!</text>
+```
+
+**Running dot (indicator below tile):**
+```xml
+<circle cx="<tile-center-x>" cy="<tile-bottom-y + 12>" r="4" fill="#4cc2ff"/>
+```
+
+**Tooltip text (no balloon — plain floating text):**
+```xml
+<text x="<tile-center-x>" y="<tile-top-y - 12>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12" font-weight="500">Tooltip label</text>
+```
+
+## Worked example — UI state mockup
+
+Use this pattern by default for showing UI feature states. On GitHub, save the SVG as a file in `docs/figures/` and reference it (inline `<svg>` is dropped there).
+
+
+---
+
+# skill: presentation-design
+
+Use when building a slide deck for any work (pitch, plan, report, training) that someone will present or read. Story, headlines, layouts.
+
+# Presentation Design
+
+> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+
+> **กฎข้อเดียวของ skill นี้:** หัวสไลด์ต้องเป็น**ข้อสรุป** ไม่ใช่**ชื่อหัวข้อ**
+> ถ้าผู้ฟังอ่านแค่หัวสไลด์ทุกแผ่นแล้วเข้าใจเรื่องทั้งหมด แปลว่าเด็คใช้ได้
+
+---
+
+> **เด็คต้องสดใส และหน้าตาเหมือนมาจากงานที่นำมาทำ** — สีถอดจากงานต้นทาง (ไฟล์ โลโก้ หรือเว็บที่ผู้ใช้ให้มา) ด้วย `scripts/source_palette.py` ก่อน · ต้นทางไม่มีสี ให้ใช้สีของโปรเจกต์ตาม `diagram-figures` ข้อ 5 · อารมณ์ของเด็คเลือกจากเนื้องาน · พื้นสว่างเป็นค่าเริ่มต้น และหน้าเปลี่ยนส่วนเป็นสีหลักเต็มแผ่น · กฎทั้งหมดอยู่ใน [`deck-theme`](references/deck-theme.md) ซึ่งเป็นไฟล์กลางของ skill สไลด์ทุกตัว · ค้นสดไม่ได้จริง ๆ จึงใช้สีประจำบ้าน `#2A78D6` แล้วเขียน `(รอยืนยัน)` · งานมีสีอยู่แล้ว อย่าเลือกสีใหม่ให้เด็ค
+>
+> **ไฟล์ที่ส่งมอบ — ต้นแบบคือเด็ค X Fitness Chatbot และเด็ค IS "Few-shot KIE" (.pptx ที่แปลงเป็น .html)**
+>
+> | ผู้ใช้สั่ง | ได้ไฟล์ | ใช้ |
+> |---|---|---|
+> | "ทำ slide deck" · "ทำสไลด์" · "ทำ presentation" (ไม่ระบุชนิด) | **.pptx** | `branded-document-design` · `StageDeck` |
+> | "slide deck html" · "เด็ค html" · "มี animation" · "นำเสนอจากเบราว์เซอร์" | **.html ไฟล์เดียว พร้อม animation** | `html-slide-deck` |
+> | มี .pptx อยู่แล้ว · "แปลง pptx เป็น html" · "animation แบบเด็ค IS" · มี .pptx แล้วอยากได้หน้าโต้ตอบหรือเปิดทีละคลิก | **.html ไฟล์เดียว หน้าตาเหมือน .pptx ทุกหน้า** | `html-slide-deck` (`references/from-pptx.md`) |
+> | ขอทั้ง 2 | .pptx + .html จากต้นฉบับเดียว | สร้าง .pptx ด้วย `StageDeck` แล้วแปลงด้วยทางเข้าจาก .pptx ของ `html-slide-deck` — หน้าตาตรงกันทุกหน้า แก้ที่ .pptx ที่เดียว |
+>
+> ไม่ถามซ้ำว่าจะเอาชนิดไหน — ไม่ระบุ = .pptx · ท้ายคำตอบบอก 1 บรรทัดว่าทำแบบ .html มี animation ได้ด้วย
+>
+> **สไตล์ของเด็คเลือกตามลำดับนี้ เจอที่ไหนหยุดที่นั่น:** งานต้นทางที่นำมาทำเด็ค → ดีไซน์ที่โปรเจกต์มีอยู่ → ต้นแบบที่ผู้ใช้แนบมา → ทิศทางจาก research (ข้อ 1 ขั้น 0) → ค่าประจำบ้าน "Stage" (`branded-document-design` · `brandkit_stage.py`) — **Stage คือตัวสำรองเมื่อไม่มีข้อมูลอะไรเลย ไม่ใช่คำตอบของทุกเด็ค** · เด็ค 2 ใบของงานต่างกันควรหน้าตาต่างกัน · โครงหน้าและงบตัวอักษรยังตาม skill นี้ ส่วนสีพื้น · ฟอนต์ · ความหนาแน่น · แบบภาพ เปลี่ยนตามทิศทางที่เลือก · รูปผังจาก `diagram-figures` เรนเดอร์ด้วยสีพื้นเดียวกับเด็ค (`#bg=`)
+
+## เมื่อไหร่ใช้ skill นี้
+
+- ทำเด็คนำเสนอ — ข้อเสนอลูกค้า · แผนธุรกิจ · สรุปงานวิจัย · รายงานความคืบหน้า · อบรม · รีวิวออกแบบ
+- รีวิวเด็คที่คนอื่นทำ
+- แปลงเอกสารยาวเป็นเด็ค
+
+## เมื่อไหร่ **ไม่** ใช้
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| สร้างไฟล์ `.pptx` จริง (python-pptx, ฟอนต์, หน้าปก) | `branded-document-design` |
+| ชุดสีของกราฟ | `diagram-figures` → `references/colour-by-domain.md` (หน้าจอแอป: `web-app-design` ใน plugin `software-development` → `references/tokens.md` "สีข้อมูล (กราฟ)") |
+| เอกสารที่อ่านเอง ไม่มีคนพูด | `polished-document-style` + `branded-document-design` |
+| ผัง ขั้นตอน หรือสถาปัตยกรรมในสไลด์ | `diagram-figures` (ซอฟต์แวร์ใช้ `software-diagrams` (plugin `software-development`) ได้) |
+
+> **เด็คที่ส่งให้อ่านเอง ไม่ใช่เด็ค** — เป็นเอกสาร ให้ทำเป็นเอกสาร
+> ถ้าต้องทำทั้ง 2 อย่าง ให้ทำเด็คสำหรับพูด แล้วแนบเอกสารแยก อย่ายัดทุกอย่างลงสไลด์
+
+---
+
+## 1 · ลำดับการทำงาน — research ก่อน แล้วเขียนเรื่องก่อนเปิดโปรแกรม
+
+0. **research 2 อย่าง ทำเฉพาะที่ขาด ไม่ใช่ทำทุกเด็ค**
+   - **เนื้อหา** — เด็คต้องอ้างข้อเท็จจริง ตัวเลข ตลาด คู่แข่ง หรือเรื่องที่เราไม่ถนัด → เก็บข้อเท็จจริงพร้อมแหล่งตาม `research-with-sources` (plugin `superuser`) ก่อนเขียนหัวสไลด์ · หัวสไลด์ที่เป็นข้อสรุปต้องยืนบนของจริง ไม่ใช่ความจำของโมเดล
+   - **ธีมจากงานต้นทาง** — ทำทุกเด็ค: รัน `python scripts/source_palette.py <ไฟล์ต้นทาง>` เอาสี แล้วเลือกอารมณ์จากตารางใน [`deck-theme`](references/deck-theme.md) ข้อ 2 · เขียนบรรทัดหัวงาน: สีมาจากไฟล์ไหน · อารมณ์แถวไหน · พื้นสว่างหรือเข้ม
+   - **ทิศทางภาพ** — ค้นทุกเด็คตามด่านก่อนลงมือ · งานต้นทางมีสี โปรเจกต์มีดีไซน์ หรือผู้ใช้แนบต้นแบบมา → สีและฟอนต์ใช้ของนั้น ค้นเฉพาะโครงหน้าและวิธีเล่า · ไม่มีเลย → **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `slide` แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้ · คัดเด็คของงานประเภทเดียวกัน 2–3 ชุด (pitch สายเดียวกัน · งานบนเวทีเดียวกัน · ของคู่แข่ง) แล้วเลือกทิศทาง 1 อย่าง: พื้นสว่างหรือเข้ม · ฟอนต์ · ความหนาแน่น · ภาพแบบไหน · เขียนเหตุผล 1 บรรทัดพร้อมแหล่งที่ดูไว้หัวงาน — **ทิศทางนี้เป็นของเด็คนี้เด็คเดียว ไม่ใช่ค่าถาวร** เด็คหน้าห้ามเริ่มจากทิศทางของเด็คก่อนโดยไม่ดูว่างานต่างกัน
+1. **เขียนหัวสไลด์ทุกแผ่นเป็นข้อความธรรมดาก่อน** บรรทัดละแผ่น
+2. **อ่านเรียงกันทั้งหมด** — ถ้ายังไม่เป็นเรื่องเดียวกัน ให้สลับลำดับตรงนี้ เพราะถูกกว่าไปสลับทีหลังมาก
+3. **ตัดแผ่นที่ไม่ได้ขยับเรื่องให้ไปข้างหน้า**
+4. **เลือกเลย์เอาต์ให้แต่ละแผ่น** จากข้อ 4
+5. **ใส่เนื้อหา** แล้วตัดบูลเล็ตให้พอดีงบบรรทัดในข้อ 3
+6. **เรนเดอร์ดูเป็นภาพย่อทั้งเด็ค** ตามข้อ 7
+
+ขั้นที่ 1–3 ใช้เวลาไม่ถึง 20 นาที และเป็นขั้นที่ตัดสินว่าเด็คดีหรือไม่ดี
+คนส่วนใหญ่ข้ามไปเปิดโปรแกรมเลย แล้วเสียเวลาจัดหน้าให้เรื่องที่ยังเรียงผิด
+
+---
+
+## 2 · ลำดับเรื่องตามจุดประสงค์
+
+**ถามก่อนว่าเด็คนี้ต้องการอะไรจากผู้ฟัง** แล้วเลือกลำดับ
+
+| จุดประสงค์ | ลำดับ |
+|---|---|
+| **ขออนุมัติ / ตัดสินใจ** | ข้อสรุปและสิ่งที่ขอ → เหตุผล 3 ข้อ → ทางเลือกที่พิจารณาแล้ว → ความเสี่ยง → สิ่งที่ขออีกครั้ง |
+| **รายงานความคืบหน้า** | สถานะรวม (เขียว/เหลือง/แดง) → ทำอะไรเสร็จ → ติดอะไร ต้องการอะไรจากใคร → แผนรอบหน้า |
+| **รีวิวแผนหรืองานออกแบบ** | ปัญหาที่แก้ → ข้อจำกัด → แบบที่เลือก → ที่ไม่เลือกเพราะอะไร → ประเด็นที่อยากได้ความเห็น |
+| **อบรม** | ทำอะไรได้หลังเรียน → แนวคิด → สาธิต → ให้ลองทำ → สรุปและที่ค้นต่อ |
+| **ขายงาน** | ปัญหาของลูกค้า (ด้วยคำของเขา) → ผลที่จะได้ → วิธีของเรา → หลักฐาน → ราคาและขั้นต่อไป |
+
+**สำหรับผู้บริหาร: ข้อสรุปอยู่แผ่นแรก** ไม่ใช่แผ่นสุดท้าย
+เขาอาจมีเวลาแค่ 5 นาทีแรก และอาจตัดสินใจได้เลยถ้าข้อมูลพอ
+
+---
+
+## 3 · หนึ่งแผ่น หนึ่งความคิด
+
+### หัวสไลด์คือข้อสรุป
+
+```
+ผิด: ผลการวิเคราะห์เวลาดำเนินการ
+ถูก: ขั้นอนุมัติกินเวลาสองในสามของทั้งหมด
+
+ผิด: สถานะโครงการ
+ถูก: ส่งทันกำหนด ยกเว้นงานเชื่อมระบบบัญชีที่ช้า 1 สัปดาห์
+```
+
+หัวสไลด์ยาวได้ถึง 2 บรรทัด **อย่าย่อจนกลายเป็นชื่อหัวข้อ** และอย่าย่อจนอ่านไม่ลื่น: หัวที่มี 2 ท่อนต้องมีคำเชื่อม ใช้วลีที่คนพูดจริง และเลือกคำตามคนฟัง (กฎเต็มอยู่ใน `human-writing` หัวข้อ 6)
+
+```
+ผิด: ทุกข้อความผ่าน 8 ขั้น: Artificial Intelligence (AI) ทำงานภาษา โค้ดตัดสินเรื่องสำคัญ
+ถูก: ทุกข้อความผ่าน 8 ขั้น: AI ช่วยเขียนคำตอบ ส่วนเรื่องสำคัญให้ระบบตัดสิน
+```
+
+### งบต่อแผ่น นับเป็นบรรทัด
+
+| ของ | ไม่เกิน |
+|---|---|
+| หัวสไลด์ | 2 บรรทัด |
+| บูลเล็ต | 6 ข้อ |
+| บรรทัดต่อบูลเล็ต | 2 บรรทัด |
+
+ภาษาไทยนับคำไม่ได้ จึงนับบรรทัดบนสไลด์จริงแทน
+
+**ถ้าเกินงบให้ตัดบูลเล็ตทั้งข้อ หรือย้ายไปแผ่นถัดไป** เพราะสไลด์ไม่มีค่าใช้จ่ายต่อแผ่น เวลาพูดต่างหากที่มีจำกัด · **ห้ามตัดคำทำหน้าที่** (จะ ให้ ก็ แล้ว คำสุภาพ) เพื่อให้พอดีบรรทัด ตัดได้แค่รายการ (กฎ "ตัดรายการ ไม่ตัดคำทำหน้าที่" อยู่ใน `human-writing` หัวข้อ 3)
+
+**บูลเล็ตต้องเป็นใจความ ไม่ใช่ประโยคเต็ม** — ถ้าเขียนเต็มประโยค ผู้ฟังจะอ่านแทนที่จะฟัง
+(คนอ่านเร็วกว่าคนพูด ผู้ฟังจะอ่านจบก่อนแล้วเลิกสนใจ)
+
+---
+
+## 4 · หกเลย์เอาต์ที่พอสำหรับเกือบทุกเด็ค
+
+ภาพรวมทั้ง 6 แบบอยู่ที่ `assets/slide-mockup-preview.webp` · ไฟล์ `assets/slide-mockup.html` มีครบ 6 แบบ **เรนเดอร์ที่ 1280×720 และเปิดตรวจด้วยตาแล้ว**
+เปิดในเบราว์เซอร์เพื่อดูของจริง หรือใช้เป็นต้นแบบตอนสร้าง `.pptx`
+
+| # | เลย์เอาต์ | ใช้เมื่อ |
+|---|---|---|
+| 1 | **ปก** — หัวใหญ่ + เส้นคั่น + คำอธิบาย | แผ่นแรก |
+| 2 | **หัวข้อ + บูลเล็ต + แถบข้าง** | เนื้อหาทั่วไป โดยแถบข้างใส่ที่มาของตัวเลข |
+| 3 | **ตัวเลข 3 ช่อง** | ผลลัพธ์ · ตัวชี้วัด · ก่อน-หลัง |
+| 4 | **กราฟ + คำอธิบายข้างกราฟ** | สไลด์ข้อมูล |
+| 5 | **คั่นบท** — พื้นสีหลักทึบเต็มแผ่น (เด็คพื้นเข้มใช้พื้นเข้มได้) | ขึ้นส่วนใหม่ · ให้ผู้ฟังพัก |
+| 6 | **ข้อความเดียวกลางแผ่น** | สิ่งที่ขอ · ข้อสรุป · คำพูดลูกค้า |
+
+**กฎของแถบข้าง (แบบ 2 และ 4):** ใส่สิ่งที่ผู้ฟัง**อาจถาม** — ที่มาของตัวเลข วิธีอ่านกราฟ
+ข้อจำกัดของข้อมูล ไม่ใช่เนื้อหาเพิ่ม
+
+**ทุกแผ่นมีท้ายกระดาษเหมือนกัน** — ชื่อส่วนซ้าย เลขหน้าขวา
+เลขหน้าสำคัญกว่าที่คิด เพราะผู้ฟังอ้างถึงได้ว่า "ขอย้อนกลับแผ่น 9"
+
+---
+
+## 5 · ขนาดตัวอักษร
+
+สไลด์ 16:9 กว้าง 13.333 นิ้ว = **960 pt** ในโปรแกรมทำสไลด์ และเท่ากับ 1280 px ในเบราว์เซอร์
+แปลงกัน **1 px = 0.75 pt**
+
+| ของ | ใน mockup | ในไฟล์ .pptx |
+|---|---|---|
+| หัวปก | 54 px | **40 pt** |
+| ตัวเลขใหญ่ | 46 px | **34 pt** |
+| หัวสไลด์ | 34 px | **26 pt** |
+| บูลเล็ต | 24 px | **18 pt** |
+| คำอธิบาย | 22 px | **17 pt** |
+| แถบข้าง | 19 px | **14 pt** |
+| คำนำหัว · ป้าย | 16 px | **12 pt** |
+| ท้ายกระดาษ | 14 px | **11 pt** |
+| ขอบกระดาษ | 64 px | **48 pt** (0.67 นิ้ว) |
+
+**ข้อยกเว้นของเด็ค Stage:** บรรทัด "ตัวอย่าง" · คำขยายในตารางขั้นตอน · ถาม/ตอบใต้ตัวเลข ใช้ 12–14 pt ได้ เพราะเป็นของที่ผู้ฟังอ่านทีหลัง หัวสไลด์ ชื่อขั้น และใจความหลักยังต้อง ≥ 18 pt
+
+**18 pt คือขนาดเล็กสุดของเนื้อหาในห้องประชุม** ต่ำกว่านี้คนแถวหลังอ่านไม่ออก
+ถ้าเนื้อหาไม่พอดีที่ 18 pt ปัญหาคือเนื้อหาเยอะไป ไม่ใช่ตัวอักษรใหญ่ไป
+**ห้ามลดขนาดเพื่อให้เนื้อหาพอดี** ให้ตัดเนื้อหาแทน
+
+**ใช้ 2 น้ำหนักพอ** (ปกติ + หนา) และหัวสไลด์ควรหนา ตัวเนื้อหาไม่ควรหนา
+
+---
+
+## 6 · สไลด์ข้อมูล
+
+**1 กราฟ 1 ข้อสรุป** — ถ้ากราฟบอก 2 เรื่อง ให้แยกเป็น 2 แผ่น
+
+- **หัวสไลด์คือข้อสรุปจากกราฟ** ไม่ใช่ชื่อกราฟ
+- **เน้นแท่ง/เส้นที่เป็นประเด็นด้วยสีแบรนด์ ที่เหลือเป็นสีเทา**
+  แค่สีก็บอกประเด็นได้เองโดยไม่ต้องมีคำอธิบาย
+- **ติดตัวเลขไว้บนแท่งเลย** อย่าให้ผู้ฟังกวาดตาไปอ่านแกน
+- **ตัดเส้นตาราง แกนที่ไม่จำเป็น และคำอธิบายสัญลักษณ์** ถ้าติดป้ายตรงข้อมูลได้แล้ว
+- **บอกที่มาของข้อมูลเสมอ** — ช่วงเวลา จำนวนตัวอย่าง แหล่ง (ใส่ในแถบข้างหรือท้ายกระดาษ)
+- **ตารางที่เกิน 5 แถว 4 คอลัมน์ไม่ควรอยู่ในสไลด์** ให้ทำเป็นกราฟ หรือย้ายไปเอกสารแนบ
+
+ชุดสีของกราฟในสไลด์มาจาก `diagram-figures` → `references/colour-by-domain.md` · กราฟที่ต้องใช้ร่วมกับหน้าจอแอปดู `web-app-design` (plugin `software-development`) → `references/tokens.md` "สีข้อมูล (กราฟ)"
+
+---
+
+## 7 · ตรวจงาน
+
+### ดูเป็นภาพย่อทั้งเด็ค
+
+เปิดมุมมองเรียงสไลด์ (slide sorter) หรือเรนเดอร์ทุกแผ่นเป็นภาพแล้ววางเรียงกัน
+
+- [ ] อ่านแค่หัวสไลด์ทุกแผ่น เข้าใจเรื่องทั้งหมดไหม
+- [ ] มีแผ่นไหนดูแน่นผิดจากเพื่อนไหม (= เกินงบตัวอักษร)
+- [ ] ขอบกระดาษตรงกันทุกแผ่นไหม
+- [ ] หัวสไลด์อยู่ตำแหน่งเดียวกันทุกแผ่นไหม
+
+### การทดสอบสามเมตร
+
+ย่อสไลด์เหลือ 25% แล้วมองห่าง ๆ ถ้าอ่านหัวสไลด์ไม่ออก คนแถวหลังก็อ่านไม่ออก
+
+### ไล่รายแผ่น
+
+- [ ] หัวสไลด์เป็นข้อสรุป ไม่ใช่ชื่อหัวข้อ
+- [ ] ไม่เกิน 6 บูลเล็ต บูลเล็ตละไม่เกิน 2 บรรทัดบนสไลด์จริง (ตามตาราง "งบต่อแผ่น" · ไทยนับคำไม่ได้)
+- [ ] ตัวอักษรเล็กสุดในเนื้อหา ≥ 18 pt
+- [ ] กราฟทุกอันมีข้อสรุปและที่มาของข้อมูล
+- [ ] ทุกแผ่นมีเลขหน้า
+- [ ] เปิดบนโปรเจกเตอร์จริงหรือจอที่จะใช้จริงแล้วอย่างน้อย 1 ครั้ง
+
+---
+
+## 8 · ภาษาไทยบนสไลด์
+
+- **ความสูงบรรทัดอย่างน้อย 1.4** สำหรับหัวสไลด์ และ **1.5** สำหรับเนื้อหา
+  เพราะถ้าต่ำกว่านี้ สระบนกับสระล่างของ 2 บรรทัดจะชนกัน (ค่ากลางอยู่ใน `human-writing` `references/thai-line-breaking.md`)
+- **หัวสไลด์ภาษาไทยที่ยาว ให้ตัดบรรทัดเอง** ตรงจุดที่จบใจความ
+  อย่าปล่อยให้โปรแกรมตัด เพราะภาษาไทยไม่มีช่องว่างระหว่างคำ โปรแกรมจึงตัดกลางคำ
+- **ฟอนต์ที่มีทั้งน้ำหนักปกติและหนาจริง** — ตัวหนาปลอมที่โปรแกรมสร้างเองทำให้สระเบลอ
+- **ไทยปนอังกฤษในบรรทัดเดียวกัน ให้ใช้ฟอนต์ตระกูลเดียวที่มีทั้งสองภาษา**
+  ไม่งั้นความสูงตัวอักษรไม่เท่ากันแล้วบรรทัดดูเอียง
+- การตั้งค่าฟอนต์ในไฟล์ `.pptx` จริง (รวมปัญหา complex script) อยู่ใน `branded-document-design`
+
+---
+
+## 9 · Anti-patterns
+
+รายการ 13 ข้อที่เจอบ่อย (หัวสไลด์เป็นชื่อหัวข้อ · สไลด์เป็นเอกสาร · ลดตัวอักษรให้พอดี · ไม่มีเลขหน้า ฯลฯ) อยู่ใน [`anti-patterns`](references/anti-patterns.md) — เปิดตอนตรวจข้อ 7
+
+**ของที่ทำให้ดูเหมือนเด็คสำเร็จรูป — เลี่ยง** (แนวคิดจาก anthropics/skills pptx): เส้นสีคาดใต้หัวสไลด์ทุกแผ่น · พื้นหลังครีม/เบจเป็นค่าตั้งต้น · ไอคอน 3 คอลัมน์ซ้ำทุกแผ่น · ตัวอักษรไล่สี · ย่อหน้ายาวจัดกึ่งกลาง
+
+**เด็คจืด — เลี่ยง:** พื้นเข้มหรือขาวล้วนทั้งเด็คทั้งที่งานต้นทางสีสด · สีหลักโผล่แค่เส้นบาง ๆ · หน้าข้อความล้วนติดกันเกิน 3 แผ่น · สีที่ไม่มีในงานต้นทาง (ทางแก้อยู่ใน [`deck-theme`](references/deck-theme.md) ข้อ 3)
+
+---
+
+## 10 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| สร้างไฟล์ `.pptx` จริง | `branded-document-design` |
+| เด็ค .html ไฟล์เดียว นำเสนอจากเบราว์เซอร์ (เมนู · โน้ต · นาฬิกา · คลิกดูรายละเอียด) | `html-slide-deck` |
+| แปลง .pptx เป็น .html มี animation · เปิดทีละคลิก · แทรกหน้าโต้ตอบ | `html-slide-deck` (`references/from-pptx.md`) |
+| ชุดสีของกราฟ | สีหลักของงาน + สีรองตาม `diagram-figures` → `references/colour-by-domain.md` (หน้าจอแอป: `web-app-design` ใน plugin `software-development`) |
+| ผังในสไลด์ | `diagram-figures` (ซอฟต์แวร์ใช้ `software-diagrams` (plugin `software-development`) ได้) |
+| กฎระยะห่างและลำดับสายตา (หน้าจอแอป) | `ui-craft` (plugin `software-development`) |
+| เนื้อหามาจากเอกสาร Software Requirements Specification (SRS) | `srs-writing` (plugin `software-development`) |
+| ตัดเนื้อหาให้เหลือเท่าที่จำเป็น | `simplicity-first` (plugin `software-development`) |
+| ระบบสีและตัวอักษรของแบรนด์ · ภาพประกอบ | `graphic-design` (plugin `software-development`) |
+
+---
+
+## ไม่ให้ดูเหมือน AI ทำ
+
+ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ทุกงานต้องผ่านด่านตา 3.2 ด้วย (หน้าเว็บตอบเพิ่มข้อ 10–14) เพราะสคริปต์ 0 ข้อยังไม่ใช่ผ่าน · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
+
+## ตัวย่อ
+
+เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
+หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
+
+
+## reference: anti-patterns.md
+
+# Anti-patterns ของสไลด์
+
+ใช้ตอนตรวจเด็คก่อนส่ง
+
+- **หัวสไลด์เป็นชื่อหัวข้อ** — "ภาพรวมระบบ" ไม่ได้บอกอะไรเลย
+- **หัวสไลด์ย่อจนต้องเดา** — 2 วลีวางเรียงกันโดยไม่มีคำเชื่อม หรือใช้ศัพท์ที่คนฟังไม่รู้ ("Guard" · "โค้ด") กับผู้ฟังทั่วไป
+- **สไลด์เป็นเอกสาร** — ย่อหน้าเต็มแผ่น ตัวอักษร 12 pt
+- **อ่านสไลด์ให้ผู้ฟังฟัง** — ถ้าทุกคำอยู่บนจอแล้ว ไม่ต้องมีคนพูด
+- **ลดขนาดตัวอักษรเพื่อให้เนื้อหาพอดี** — ให้ตัดเนื้อหาแทน
+- **บูลเล็ตซ้อน 3 ชั้น** — มากสุดคือ 2 ชั้น ถ้าถึง 3 ชั้นแปลว่าควรแยกแผ่น
+- **แอนิเมชันเข้าทีละบูลเล็ตทุกแผ่น** — ช้า และผู้ฟังรำคาญตั้งแต่แผ่นที่ 3
+- **ภาพสต๊อกที่ไม่เกี่ยวกับเนื้อหา** — คนจับมือกัน ลูกศรพุ่งขึ้น
+- **ตารางข้อมูล 15 แถวบนสไลด์** — ย้ายไปเอกสารแนบ
+- **กราฟที่คัดลอกจาก Excel มาทั้งดุ้น** พร้อมเส้นตารางและคำอธิบายครบ
+- **สีแบรนด์บนทุกอย่าง** — สีแบรนด์ใช้กับสิ่งที่ต้องการให้มองเท่านั้น
+- **ไม่มีเลขหน้า** — ผู้ฟังอ้างถึงแผ่นไม่ได้
+- **ส่งเด็คโดยไม่เคยดูเป็นภาพย่อทั้งชุด**
+
+
+## reference: deck-theme.md
+
+# ธีมของเด็ค — สดใส และเข้ากับงานที่นำมาทำ
+
+ไฟล์กลางของ skill สไลด์ทุกตัว (`presentation-design` · `html-slide-deck` (รวมทางเข้าจาก .pptx) · `StageDeck` ใน `branded-document-design`) · เปิดตอนข้อ 1 ขั้น 0 ก่อนเปิดโปรแกรม
+
+> **กฎข้อเดียว:** เด็คต้องหน้าตาเหมือนมาจากงานที่นำมาทำ ทั้งสีและอารมณ์ · คนเห็นเด็คข้างเอกสารต้นทางแล้วต้องรู้ว่าเป็นงานเดียวกัน
+
+## 1 · สีมาจากงานต้นทางก่อน
+
+"งานต้นทาง" คือของที่ผู้ใช้ให้มาทำเป็นเด็ค เช่น รายงาน .docx · .pdf · .pptx เดิม · เว็บหรือแอป · โปสเตอร์ · โลโก้ · ภาพสินค้า หาสีตามลำดับนี้ เจอที่ไหนให้หยุดที่นั่น:
+
+1. **ถ้างานต้นทางมีสีของตัวเอง ให้ถอดด้วยสคริปต์** ไม่กะด้วยตา:
+   ```bash
+   python scripts/source_palette.py <ไฟล์ต้นทาง> [โลโก้] [ภาพหน้าจอ]
+   ```
+   สคริปต์บอกสีหลัก สีรองไม่เกิน 2 สี และพื้นต้นทางว่าเข้มหรือสว่าง แล้วพิมพ์ค่าที่ใส่ใน `build_deck.py` · `StageDeck` · `pptx_to_html.py` ให้เลย · อ่านได้ทั้ง .pptx .docx .xlsx .html .css .svg รูป และ .pdf (ต้องมี `pdftoppm`) · สีที่ไม่นับ: เทา ขาว ดำ · ธีมตั้งต้นของ Office (สีที่ผู้ทำไม่ได้เลือกเอง) · สไตล์ Word ที่เนื้อหาไม่ได้ใช้ · สีที่โผล่ไม่ถึง 3 ครั้งหรือไม่ถึง 10% ของสีหลัก
+2. ถ้าต้นทางไม่มีสี (ข้อความล้วน · เอกสารขาวดำ) ให้ใช้สีของโปรเจกต์ตามลำดับใน `diagram-figures` ข้อ 5 (`doc-theme` แล้วจึงสีแบรนด์ในโค้ดหรือโลโก้)
+3. ถ้ายังไม่มีเลย ให้ค้นต้นแบบตาม `design-references` ประเภท `slide` ด้วยคำของงาน แล้วถอดสีจากงานที่เลือก (รันสคริปต์เดียวกันกับภาพหน้าจอต้นแบบได้)
+4. ถ้าค้นสดไม่ได้ ให้ใช้สีประจำบ้าน `#2A78D6` แล้วเขียน `(รอยืนยัน)` ในรายงาน
+
+ผลของสคริปต์ยังต้องเปิดดูด้วยตา 1 ครั้ง: สีหลักที่ได้ต้องเป็นสีที่คนจำงานนั้นได้ (สีโลโก้ · สีปก) ถ้าได้สีของภาพประกอบหรือรูปหน้าจอที่บังเอิญกินพื้นที่มาก ให้ส่งไฟล์โลโก้หรือปกเข้าไปแทน
+
+**ห้ามแต่งสีรองเอง** — สีรองต้องมาจากงานต้นทาง ถ้าต้นทางมีสีเดียวก็ใช้สีเดียว แล้วทำให้สดด้วยข้อ 3 แทน
+
+## 2 · อารมณ์มาจากเนื้องาน
+
+ดูว่างานต้นทางพูดถึงอะไรและใครฟัง แล้วเลือกจากตาราง · ของที่ใช้ทำภาพต้องมาจากโลกของงานนั้นเอง (ภาพสินค้าจริง · หน้าจอจริง · วัสดุ · ป้ายในวงการ) ไม่ใช่ไอคอนสำเร็จรูป
+
+| เนื้องาน | อารมณ์ | พื้น | รูปทรงและภาพ | ความหนาแน่น |
+|---|---|---|---|---|
+| กีฬา · ฟิตเนส · กิจกรรม · เปิดตัวสินค้า | พลังสูง | สว่าง แต่ปกและหน้าเปิดส่วนเป็นสีหลักทึบ | ภาพคนหรือสินค้าตัดชิดขอบ · ตัวเลขใหญ่ | ต่ำ 1 ประเด็นต่อแผ่น |
+| เด็ก · การศึกษา · อบรม · ชุมชน | เป็นกันเอง | สว่าง | มุมมนมาก · ใช้สีรองแยกส่วนบทเรียน · ภาพจริงจากห้องเรียนหรืองาน | กลาง |
+| อาหาร · ท่องเที่ยว · ร้านค้า · ไลฟ์สไตล์ | อยากลอง | สว่างอุ่นหรือภาพเต็มแผ่น | ภาพถ่ายจริงเต็มครึ่งแผ่นขึ้นไป · ข้อความวางบนแถบสีทึบ | ต่ำ |
+| การแพทย์ · สุขภาพ | ไว้ใจได้ | สว่างสะอาด | มุมมนน้อย · เน้นด้วยสีหลักทีละจุด · ไม่มีภาพที่ทำให้กลัว | กลาง |
+| การเงิน · กฎหมาย · ราชการ · ผู้บริหาร | มั่นคง | สว่าง | เส้นตรง · ตารางและกราฟเป็นพระเอก · สีหลักเต็มแผ่นเฉพาะปกและหน้าข้อสรุป | กลางถึงสูง |
+| ซอฟต์แวร์ · เทคนิค · demo ระบบ | ชัดและเป็นระบบ | ตามดีไซน์ของแอป (แอปพื้นมืดใช้พื้นมืดได้) | ภาพหน้าจอจริง · ผังระบบ · โค้ดสั้น | กลาง |
+| งานวิจัย · วิทยานิพนธ์ · สอบโครงงาน | น่าเชื่อถือ | สว่าง | กราฟผลจริง · สีหลักใช้เน้นผลที่เป็นประเด็น | กลางถึงสูง |
+| ไว้อาลัย · ภัยพิบัติ · ข่าวร้าย | สงบ | สว่างหรือเทาอ่อน | ไม่ใช้สีจัดเต็มแผ่น · ภาพน้อย | ต่ำ |
+
+งานที่ตรงหลายแถว ให้ยึดคนฟังเป็นหลัก (ฟิตเนสแต่ขอเงินผู้บริหาร → แถวการเงิน แล้วใส่ภาพของงานฟิตเนส) · ไม่ตรงแถวไหน → เลือกแถวที่ใกล้สุดแล้วเขียนเหตุผล 1 บรรทัดไว้หัวงาน
+
+## 3 · "สดใส" แปลว่าอะไรบนสไลด์
+
+ผู้ใช้พูดว่า "สดใส" "น่าดู" "ไม่จืด" หรือไม่ได้พูดอะไรเลย ให้ทำตามนี้เป็นค่าเริ่มต้น (`no-ai-look` ห้ามสั่งด้วยคำคุณศัพท์ลอย ๆ จึงแปลงเป็นกฎที่ตรวจได้):
+
+1. **พื้นสว่างเป็นค่าเริ่มต้น** — ใช้พื้นเข้มเฉพาะเมื่องานต้นทางหรือแอปเป็นพื้นเข้ม (สคริปต์บอก `พื้นต้นทาง … (เข้ม)`)
+2. **สีหลักเต็มแผ่น** ที่ปก หน้าเปิดส่วน และหน้าปิด · `build_deck.py --theme bright` ทำให้ทั้ง 3 แบบ (`.hero` `.divider` `.close`) · `StageDeck(block=True)` ทำให้ปกกับหน้าคั่นบท (ไม่มีหน้าปิดแยก) · หน้าเนื้อหาใช้พื้นสว่าง การ์ดอมสีหลักจาง ๆ
+   - **โลโก้บนหน้าสีทึบใช้แบบขาวล้วนหรือดำล้วน** ตามสีตัวอักษรของหน้านั้น เพราะโลโก้สีเดียวกับพื้นหรือสีใกล้กันจะหายไป · ถ้ามีแต่โลโก้สี ให้วางบนกล่องขาวมุมมน หรือย้ายโลโก้ไปหน้าเนื้อหาแผ่นแรก
+3. **สีรองจากต้นทาง** (ถ้ามี) ใช้แยกส่วน เช่น หน้าเปิดส่วนที่ 2 เป็นสีรองทั้งแผ่น หรือเน้นตัวเลขที่ต่างความหมายจากสีหลัก · ทั้งเด็คมีสีไม่เกิน 3 สีบวกสีสถานะ
+4. **มีภาพจริงในเด็คอย่างน้อย 1 ใน 3 ของแผ่น** — ภาพจากงานต้นทาง ภาพหน้าจอ ภาพสินค้า หรือภาพที่ทำตาม `image-generation` · หน้าข้อความล้วนติดกันไม่เกิน 3 แผ่น
+5. **เลย์เอาต์ไม่ซ้ำกันเกิน 2 แผ่นติด** (`no-ai-look` ข้อ 3.2 ข้อ 5)
+6. **ห้ามใช้ความสดแทนความอ่านง่าย** — ตัวอักษรทุกขนาดบนพื้นสีทึบต้องได้ ≥ 4.5:1 · `build_deck.py --theme bright` และ `StageDeck(block=True)` เลือกให้เอง: ใช้ขาวเมื่อขาวได้ 4.5:1 ถ้าไม่ได้ ใช้ตัวเกือบดำ (เช่นบนเหลือง) และถ้าเกือบดำยังไม่ถึงก็ใช้ดำล้วน (เช่นบนส้ม เขียวอมฟ้า และน้ำเงินประจำบ้าน) · แล้วยังต้องเปิดภาพทุกแผ่นตรวจตามข้อ 7 ของ `presentation-design`
+
+ไม่นับเป็นความสด และยังห้ามตาม `no-ai-look`: ไล่สีม่วง-ฟ้า · ตัวอักษรไล่สี · นีออนหรือแสงเรือง · สีพาสเทลหลายสีที่ไม่มีในงานต้นทาง · ไอคอนประดับทุกการ์ด · animation ทุกชิ้น
+
+งานในแถว "มั่นคง" "สงบ" ของข้อ 2 ใช้แค่ข้อ 1 2 4 5 6 · ข้อ 3 ใช้เมื่อต้นทางมีสีรองจริง และสีหลักเต็มแผ่นเหลือเฉพาะปกกับหน้าปิด
+
+## 4 · ใส่ลงเครื่องมือ
+
+| เครื่องมือ | ใส่อะไร |
+|---|---|
+| `html-slide-deck` | `build_deck.py … --theme bright --brand <สีหลัก>,<สีสว่าง>,<สีรอง>` · หน้าที่ใช้สีรองทั้งแผ่นใส่ `data-tone="2"` ที่ `<section>` · พื้นต้นทางเข้มใช้ `--theme dark` |
+| `StageDeck` (.pptx) | `StageDeck(accent="<สีหลัก>", bg="FFFFFF", block=True)` เมื่อพื้นสว่าง (`block=True` ทำปกและหน้าคั่นบทเป็นสีหลักทึบเต็มแผ่น) · สีรองใช้กับรูปและกราฟที่ส่งเข้า (`diagram-figures` `#accent=`) |
+| `html-slide-deck` ทางเข้าจาก .pptx | หน้าตามาจาก .pptx · ทำ .pptx ตามไฟล์นี้ก่อน แล้ว `--accent <สีหลัก>` |
+| รูปผังในเด็ค | `diagram-figures` ด้วย `#accent=<สีหลัก>&bg=<สีพื้นเด็ค>` |
+
+## 5 · ตรวจก่อนส่ง
+
+- [ ] วางภาพย่อเด็คข้างงานต้นทาง: สีหลักตรงกัน และเห็นว่าเป็นงานเดียวกัน
+- [ ] สีทุกสีในเด็คมาจากงานต้นทางหรือลำดับในข้อ 1 · รายงานบอกว่ามาจากไฟล์ไหน
+- [ ] อารมณ์ตรงแถวในข้อ 2 และเขียนเหตุผลไว้หัวงานแล้ว
+- [ ] ข้อ 3 ครบ: พื้นตามต้นทาง · สีหลักเต็มแผ่นในหน้าเปลี่ยนส่วน · ภาพจริง ≥ 1 ใน 3 · ไม่มีหน้าข้อความล้วนเกิน 3 แผ่นติด
+- [ ] `check_deck.py` หรือ `check_html_deck.py` ปัญหา 0 จุด แล้วเปิด `sheet-*.png` ดูทุกแผ่น

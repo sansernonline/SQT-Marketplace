@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: seller-tax-basics-trigger
+description: คนขายของออนไลน์ในนามตัวเองถามเรื่องภาษีจากยอดขาย ต้องเปิด seller-tax-basics และพูดถึง ภ.ง.ด.90 หรือหักเหมา · ไม่เอ่ยชื่อ skill
+tags: [trigger, regression-suite, seller-tax-basics]
+runs: 3
+expected_outcome: เปิด Skill seller-tax-basics แล้วตอบเรื่องภาษีของคนขายออนไลน์รายบุคคล
+execution:
+  prompt: |
+    ฉันขายของใน Shopee กับ TikTok ในนามตัวเอง ได้ยินว่าสรรพากรเห็นยอดโอนหมดแล้ว ต้องยื่นภาษีไหม ยื่นอะไรเมื่อไหร่ แล้วค่าใช้จ่ายหักยังไง
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?seller-tax-basics"'
+    min: 1
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: 'ภ\.?ง\.?ด\.?\s*9[04]|หักเหมา|40\(8\)'
+    flags: i
+    match: contains
+    target: last_message

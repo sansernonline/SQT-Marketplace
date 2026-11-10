@@ -12,3 +12,15 @@
 | `flood-prep-behaviour` | 0.75 | 0.75 | 0 | เกณฑ์แผนรวมผ่าน 0/3 ทั้ง 2 รอบ เกณฑ์อาจเข้มเกิน |
 | `pregnancy-and-baby-trigger` | 1.00 | 0.00 | +1.00 | ไม่มี skill ไม่บอกเบอร์ฉุกเฉินทั้ง 3 รอบ |
 | `pregnancy-and-baby-behaviour` | 0.75 | 0.42 | +0.33 | ไม่มี skill ไม่บอกเบอร์ฉุกเฉิน 0/3 และปลอบหรือแนะนำยา 1/3 |
+
+## ยังไม่ได้รันรอบแดง/เขียว (2026-11-10)
+
+skill ใหม่ด้านล่างมีเคสครบ 3 ชุดแล้ว แต่**ยังไม่ได้รันรอบแดง/เขียว** ตาม `skill-authoring` · รอผู้ใช้อนุมัติค่า eval ก่อนรัน · ใช้ `-guard` ไม่ใช่ `-regression` เพราะยังไม่เคยเห็นอาการพลาดจริง
+
+| skill | เคสที่มี | สถานะ | คำสั่งเมื่ออนุมัติ |
+|---|---|---|---|
+| `task-board` | `-trigger` · `-behaviour` · `-guard` | ยังไม่ได้รัน | `node scripts/evals/plugin-eval.mjs personal-life --only "^task-board-" --max-cost-usd 5` |
+| `study-drill` | `-trigger` · `-behaviour` · `-guard` | ยังไม่ได้รัน | `node scripts/evals/plugin-eval.mjs personal-life --only "^study-drill-" --max-cost-usd 5` |
+| `new-job-first-90-days` | `-trigger` · `-behaviour` · `-guard` | ยังไม่ได้รัน | `node scripts/evals/plugin-eval.mjs personal-life --only "^new-job-first-90-days-" --max-cost-usd 5` |
+| `job-exit` | `-trigger` · `-behaviour` · `-guard` | ยังไม่ได้รัน | `node scripts/evals/plugin-eval.mjs personal-life --only "^job-exit-" --max-cost-usd 5` |
+| `legal-help-prep` | `-trigger` · `-behaviour` · `-guard` | ยังไม่ได้รัน | `node scripts/evals/plugin-eval.mjs personal-life --only "^legal-help-prep-" --max-cost-usd 5` |

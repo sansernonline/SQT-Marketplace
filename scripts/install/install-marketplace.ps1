@@ -15,7 +15,7 @@
     ลงครั้งเดียวจึงเห็นทั้งสองที่ แต่ต้องปิดแล้วเปิดใหม่ทั้งคู่
 
 .PARAMETER Plugins
-    ชื่อ plugin ที่จะติดตั้ง คั่นด้วยจุลภาค ค่าเริ่มต้นคือ software-company ตัวเดียว
+    ชื่อ plugin ที่จะติดตั้ง คั่นด้วยจุลภาค ค่าเริ่มต้นคือ software-development ตัวเดียว
     ใส่ * หรือใช้ -All เพื่อเอาทั้งหมด
 
 .PARAMETER All
@@ -36,12 +36,12 @@
     .\scripts\install\install-marketplace.ps1 -WhatIf
     .\scripts\install\install-marketplace.ps1
     .\scripts\install\install-marketplace.ps1 -All
-    .\scripts\install\install-marketplace.ps1 -Plugins software-company
+    .\scripts\install\install-marketplace.ps1 -Plugins software-development
     .\scripts\install\install-marketplace.ps1 -Scope project
 #>
 [CmdletBinding(SupportsShouldProcess)]
 param(
-    [string[]]$Plugins = @('software-company'),
+    [string[]]$Plugins = @('software-development'),
     [switch]$All,
     [ValidateSet('user','project','local')]
     [string]$Scope = 'user',

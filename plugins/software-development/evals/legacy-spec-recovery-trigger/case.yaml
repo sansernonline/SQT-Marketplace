@@ -1,0 +1,24 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: legacy-spec-recovery-trigger
+description: ระบบ .NET อายุ 10 ปีไม่มีเอกสาร ลูกค้าขอเพิ่มเงื่อนไขอนุมัติ ต้องรู้ว่าระบบทำอะไรอยู่ ไม่เอ่ยชื่อ skill ต้องทำให้ legacy-spec-recovery ถูกเปิด
+tags: [trigger, legacy-spec-recovery]
+runs: 3
+expected_outcome: เรียก Skill legacy-spec-recovery แล้วทำสเปกสภาพปัจจุบันที่มีหลักฐานและป้ายความมั่นใจ และชี้ผลกระทบของคำขอเปลี่ยน
+execution:
+  prompt: |
+    ระบบสั่งซื้อ .NET อายุ 10 ปีของลูกค้าไม่มีเอกสารเลย ตอนนี้เขาขอเพิ่มเงื่อนไขอนุมัติใบสั่งซื้อเกิน 50,000 บาท ผมต้องรู้ก่อนว่าระบบตอนนี้ทำอะไรอยู่ จะเริ่มจากตรงไหน
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?legacy-spec-recovery"'
+    min: 1
+    arm: with-only
+  - name: as-is
+    type: regex
+    pattern: "(?i)as-is|สภาพปัจจุบัน|หลักฐาน"
+    match: contains
+    target: last_message

@@ -1,7 +1,24 @@
 # Changelog — graphic-design
 
+## 0.27.1 — 2026-11-10
+
+- `social-formats` · `video-script-to-clip` · `brand-kit`: ส่วน Related ชี้ skill พี่น้องที่มีอยู่จริง (`banner-design` · `youtube-thumbnail` · `marketplace-product-images` · `line-richmenu` · `print-ready-files` · `speaking-script` · `subtitles-th` · `narration-th`) · โค้ด token ชี้ `design-system`
+- เอาอีโมจิที่เป็นหัวข้อและป้ายออกจากเอกสารใน plugin
+- eval ใหม่: `asset-organize` · `motion-basics` (trigger + behaviour อย่างละ 1 เคส)
+- `copy-claims-check`: เขียนชื่อ อย. และ สคบ. เต็มครั้งแรก · "ข้อเท็จจริง" แทน "ข้อความเท็จจริง" · `evals/RESULTS.md` จดว่า `copy-claims-check` และ `line-sticker` ยังไม่ได้รันรอบแดง/เขียว (รอผู้ใช้อนุมัติค่า eval)
+
+## 0.27.0 — 2026-11-10
+
+- `copy-claims-check` (ใหม่): ตรวจข้อความโฆษณาเกินจริงด้วยประกาศ อย. โฆษณาอาหาร พ.ศ. 2564 และหน้า สคบ. ที่เปิดอ่านจริง · หมวดอื่นเป็น (รอยืนยัน) · ไม่ใช่คำปรึกษากฎหมาย
+- `line-sticker` (ใหม่): เพดานสติกเกอร์นิ่ง เคลื่อนไหว และอีโมจิ LINE (ตรวจ 2026-11-10) พร้อม `scripts/sticker_check.py` และ `--self-test`
+- `design-review`: รายการข้อบกพร่องจากภาพที่เรนเดอร์ · grep หาข้อความตกค้าง · คอนทราสต์ 3:1 ของไอคอน · alt text ก่อนส่ง · ตรวจตามระยะงาน (ร่างแรกดูแค่จุด 1-2)
+- `campaign-set`: ด่านส่งงานเพิ่ม alt text และ `copy-claims-check` · แม่แบบเมทริกซ์เพิ่มคอลัมน์ข้อความสูงสุด · ถ้ายาวกว่านี้ · alt text
+- `motion-basics`: `scripts/gif_check.py` อ่านขนาด MB เฟรม fps วินาทีของ GIF (WebM/MP4 ผ่าน ffprobe) แล้วเทียบเพดานที่ผู้ใช้ส่ง ไม่ฝังเพดานปลายทาง
+- `social-formats`: แถวโพสต์ตัวเลข 1 ภาพ 1 ข้อสรุป ชี้ไป `data-analysis`
+
 ## 0.26.3 — 2026-11-10
 
+- อ้างถึง plugin ซอฟต์แวร์ด้วยชื่อใหม่ `software-development` (เดิม `software-company`)
 - ของกลางจาก superuser 3.33.0 (sync): ขั้นตรวจงานใหม่ใน `playbook-review` · แจกงานและรอลูกทีมใน `team-roles` · รอบ `playbook-unattended-run` มีตรวจเครื่องมือและกล่องขาออก · แม่แบบสมุดงาน ledger และแนวคิดที่ปฏิเสธใน `templates/` · แม่แบบ `config.json` มีโมดูล hook ใหม่
 
 ## 0.26.2 — 2026-11-08

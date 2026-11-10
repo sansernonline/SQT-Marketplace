@@ -202,7 +202,7 @@ eval 3 ข้อของทั้ง 2 server อยู่ใน README ขอ�
 
 **Type:** Integration · **Priority:** P1 · **สถานะ:** ยังรันไม่ได้ (เครื่องนี้ไม่มี claude CLI)
 
-- `inventory-mcp`: 3 ข้อตามตารางใน `plugins/software-company/skills/mcp-server/assets/inventory-mcp/README.md`
+- `inventory-mcp`: 3 ข้อตามตารางใน `plugins/software-development/skills/mcp-server/assets/inventory-mcp/README.md`
 - `set-data-mcp`: 3 ข้อตามตารางใน `tools/set-data-mcp/README.md`
 - ผ่านเมื่อครบทั้ง 2 ตาราง แล้วลงวันที่แถว "Claude Code" เพิ่ม
 

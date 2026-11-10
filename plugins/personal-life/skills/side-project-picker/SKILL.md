@@ -12,11 +12,12 @@ Pick the project you will finish. A shipped small project teaches more than an a
 1. **Learning goal**: which 1–2 skills should this project exercise? Take them from the active `learning-path` or the `cert-prep` plan if one exists
 2. **Constraints**: the hours available (default: 2 weekends ≈ 16 hours), the stack the user already knows, and any budget for hosting (default ฿0)
 3. **Candidates**: collect 3–5 ideas. Use the user's own annoyances first (a real problem has a real user), then the idea bank in [references/idea-bank.md](references/idea-bank.md)
-4. **Score** each one with the matrix below. Pick the highest. On a tie, pick the one the user would actually use
-5. **Cut scope** with the rules below until the plan fits the hours
-6. **Write the done definition** before writing any code, in the project's `README.md`
-7. **Two-weekend plan**: weekend 1 is a walking skeleton (the thinnest version that works end to end), deployed and still ugly. Weekend 2 is the core feature, the done list, and a write-up
-8. **Ship and log**: a public repo or demo link, a 5-line write-up of what was learned, and a line in `learning-log.md`
+4. **Name the assumptions** of the top 2–3 ideas in two kinds: facts about the world (the API is free, the data is public, someone will use it) and the user's ability (can deploy, can learn the new library in a weekend). An idea resting on two or more unchecked ones scores F no higher than 2. Lock one thing (the stack or the data) and let the rest move. Same test as `thesis-writing`, "Topic test"
+5. **Score** each one with the matrix below. Pick the highest. On a tie, pick the one the user would actually use
+6. **Cut scope** with the rules below until the plan fits the hours
+7. **Write the done definition** before writing any code, in the project's `README.md`
+8. **Two-weekend plan**: weekend 1 is a walking skeleton (the thinnest version that works end to end), deployed and still ugly. Weekend 2 is the core feature, the done list, and a write-up
+9. **Ship and log**: a public repo or demo link, a 5-line write-up of what was learned, and a line in `learning-log.md`
 
 ## Scoring matrix (1–5 each)
 
@@ -72,4 +73,4 @@ Goal: learn Go and REST API design. 16 hours. Knows Python.
 - A project that misses its 2 weekends gets 1 more weekend with stricter cuts. Then ship it as it is, or drop it with a note
 - Prefer projects that run on free tiers. Add a budget alert to any cloud account
 
-Related: `learning-path` (where the goal comes from), `cert-prep` (a project after the exam), `tech-radar` (new tools worth trying), and `project-bootstrap` and `lazy-coding` in `software-company`.
+Related: `learning-path` (where the goal comes from), `cert-prep` (a project after the exam), `tech-radar` (new tools worth trying), and `project-bootstrap` and `lazy-coding` in `software-development`.

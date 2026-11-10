@@ -21,7 +21,7 @@ skill นี้คุมแค่ "ดูเหมือน AI หรือไ�
 
 ทำก่อนวาดชิ้นแรก จดไว้ที่ที่โปรเจกต์เก็บหน้าตาอยู่แล้ว (`docs/README.md` ช่อง `doc-theme` · token ของแอป · brand kit) ไม่สร้างไฟล์ใหม่ถ้ามีที่อยู่แล้ว
 
-1. **งานนี้มีไว้ทำอะไร** — เลือก 1: โน้มน้าว (หน้าขาย · โพสต์) · ใช้งาน (แอป · แดชบอร์ด) · อ่าน (เอกสาร · บทความ) · ประสบการณ์ (เกม · งานโชว์) · เลย์เอาต์มาจากข้อนี้ ไม่ใช่จากโครงสำเร็จรูป
+1. **งานนี้มีไว้ทำอะไร** — เลือก 1: โน้มน้าว (หน้าขาย · โพสต์) · ใช้งาน (แอป · แดชบอร์ด) · อ่าน (เอกสาร · บทความ) · ประสบการณ์ (เกม · งานโชว์) · เลย์เอาต์มาจากข้อนี้ ไม่ใช่จากโครงสำเร็จรูป · ร่างเลย์เอาต์เป็น ASCII 2–3 แบบที่ต่างกันจริง แล้วเลือกแบบที่เข้ากับเนื้อหาและคนใช้งานนี้ พร้อมเหตุผล 1 บรรทัด ไม่ใช้แบบแรกที่นึกออก เพราะแบบแรกมักเป็นค่าตั้งต้น (แนวคิดจาก anthropics/skills `frontend-design` หัวข้อ Process · Apache-2.0 · ที่มารหัส AN ใน `catalog`)
 2. **สีหลัก 1 สี** ที่ผูกกับธุรกิจนี้ แล้วไล่สีกลางจากสีนั้น · ห้ามใช้สีที่ framework และ tutorial ใช้บ่อยเป็นสีแบรนด์ (indigo-500 `#6366f1` ของ Tailwind · ปุ่มเทาเข้มตั้งต้นของ shadcn/ui)
 3. **ฟอนต์ 2 ตัว** — หัวข้อ 1 ตัวที่มีบุคลิก + เนื้อหา 1 ตัวที่อ่านง่าย · เขียนเหตุผลที่เลือกคนละ 1 บรรทัด · งานไทยต้องเป็นตระกูลที่มีไทยครบ
 4. **แหล่งแรงบันดาลใจจริง** — โลกของสินค้านั้นเอง (วัสดุ · ป้ายหน้าร้าน · เอกสารในวงการ) หรือแนวที่มีชื่อ (Swiss · risograph · โปสเตอร์ท่องเที่ยวยุค 60) · ห้ามสั่งด้วยคำคุณศัพท์ลอย ๆ ("พรีเมียม" "ทันสมัย" "สดใส") เพราะได้ค่าเฉลี่ยของหมวดนั้น · **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท ที่ตรงงาน แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้
@@ -197,7 +197,7 @@ python <path ของ skill นี้>/scripts/slop_scan.py --self-test        
 
 | สัญญาณ | ใช้แทน | กฎ | ที่มา |
 |---|---|---|---|
-| fade-up และ hover-scale ทุกชิ้น | ขยับเฉพาะที่มีความหมาย 150–300 ms ease-out · เว็บที่ต้องมีชีวิตใช้ทางเข้า 4 แบบสลับกัน ไม่ซ้ำแบบเดียวทุกจุด (`dynamic-website` ใน software-company) | | UN · SK · BL |
+| fade-up และ hover-scale ทุกชิ้น | ขยับเฉพาะที่มีความหมาย 150–300 ms ease-out · เว็บที่ต้องมีชีวิตใช้ทางเข้า 4 แบบสลับกัน ไม่ซ้ำแบบเดียวทุกจุด (`dynamic-website` ใน software-development) | | UN · SK · BL |
 | จุดสถานะกระพริบไม่หยุด | นิ่ง · ขยับเมื่อสถานะเปลี่ยน | `pulsing-dot` | IM (1 แหล่ง) |
 | เคอร์เซอร์กระพริบในข้อความนิ่ง | เก็บไว้ในช่องที่พิมพ์ได้ | `blinking-cursor` | IM (1 แหล่ง) |
 | ตัวอักษร/โลโก้เลื่อนเอง | นิ่ง หรือมีปุ่มหยุด | `marquee` | IM (1 แหล่ง) |
@@ -278,7 +278,7 @@ python <path ของ skill นี้>/scripts/slop_scan.py --self-test        
 | รหัส | แหล่ง |
 |---|---|
 | IM | Impeccable — impeccable.style/slop (กฎตรวจ 61 ข้อบนเว็บ · 62 ข้อใน README ณ 2026-10-23 · ตอนเก็บแคตตาล็อกนี้มี 59 + 6 ข้อรีวิว) |
-| AN | Anthropic frontend-design skill — skills.sh/anthropics/claude-code/frontend-design |
+| AN | Anthropic frontend-design skill — skills.sh/anthropics/claude-code/frontend-design · หัวข้อ Process (ร่างเลย์เอาต์ ASCII หลายแบบแล้วเทียบกับ brief) จาก github.com/anthropics/skills/tree/main/skills/frontend-design · Apache-2.0 · ดู 2026-11-10 |
 | CM | codemyspec.com/blog/vibe-coded-websites-look-the-same |
 | UN | claudecodehq.com/playbooks/unslop-ui |
 | SK | skills.cat/skills/funboy322/avoid-ai-design |
@@ -307,4 +307,4 @@ python <path ของ skill นี้>/scripts/slop_scan.py --self-test        
 | BU | bushe.co/answers/how-to-detect-ai-generated-logos |
 | PN | postnitro.ai blog |
 | 1S | 1stopasia.com/blog/english-to-thai-ai-translation |
-| GD | skill `graphic-design` ของ `software-company` ข้อ 7 (กฎเดิมของชุดนี้) |
+| GD | skill `graphic-design` ของ `software-development` ข้อ 7 (กฎเดิมของชุดนี้) |

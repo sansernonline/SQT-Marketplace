@@ -1,0 +1,26 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เตรียมไว้ ยังไม่ได้รัน (2026-11-10)
+schema_version: "1.1"
+name: copy-claims-check-trigger
+description: ขอให้ดูข้อความโฆษณาอาหารเสริมก่อนโพสต์ ไม่เอ่ยชื่อ skill ต้องเปิด copy-claims-check
+tags: [trigger, copy-claims-check]
+runs: 3
+expected_outcome: เรียก Skill copy-claims-check แล้วชี้คำที่เกินจริงอย่างน้อย 1 คำ
+execution:
+  prompt: |
+    ร้านเราจะโพสต์ขายคอลลาเจนชงดื่มบน Facebook ข้อความบนภาพคือ "ผิวขาวใสใน 7 วัน ดีที่สุดในไทย อย. รับรอง"
+    ช่วยดูหน่อยว่าโพสต์นี้ไปต่อได้ไหม มีอะไรต้องแก้
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?copy-claims-check"'
+    min: 1
+    arm: with-only
+  - name: flags-claims
+    type: regex
+    pattern: "ผิวขาว|ดีที่สุด|อย\\. รับรอง"
+    match: contains
+    target: last_message

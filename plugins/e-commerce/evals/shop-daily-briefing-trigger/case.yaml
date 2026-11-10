@@ -1,0 +1,26 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: shop-daily-briefing-trigger
+description: เจ้าของร้านถามตอนเช้าว่าวันนี้ต้องจัดการอะไรก่อน ต้องเปิด shop-daily-briefing · ไม่เอ่ยชื่อ skill
+tags: [trigger, shop-daily-briefing]
+runs: 3
+expected_outcome: เปิด Skill shop-daily-briefing แล้วจัดลำดับเรื่องที่ต้องทำวันนี้
+execution:
+  prompt: |
+    เช้านี้เปิดร้านมา Shopee มีออเดอร์ค้างส่ง 15 ใบ มีคนขอคืนเงิน 2 ราย แชตค้าง 20 กว่าข้อความ แล้วกระเป๋าสีดำเหลือ 8 ใบ
+    วันนี้ควรทำอะไรก่อนดีคะ งงไปหมด
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?shop-daily-briefing"'
+    min: 1
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: 'ออเดอร์|คืนเงิน|ส่ง'
+    flags: i
+    match: contains
+    target: last_message

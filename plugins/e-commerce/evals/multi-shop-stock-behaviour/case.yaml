@@ -1,0 +1,48 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# ตัวเลขที่คาดได้จากการรัน stock-calc.mjs scripts/example.json แถว BAG-TOTE-BLK-L เมื่อ 2026-11-10: available 126 · buffer 6 · safety 86 · จุดสั่งซื้อ 126 · สั่งเพิ่ม 180
+schema_version: "1.1"
+name: multi-shop-stock-behaviour
+description: คิดสต็อกกลาง 3 ช่องทางของ SKU เดียว ต้องเรียก stock-calc.mjs และได้ buffer จุดสั่งซื้อ จำนวนสั่งตรงผลสคริปต์
+tags: [behaviour, capability-suite, multi-shop-stock]
+runs: 3
+expected_outcome: เรียก stock-calc.mjs · available 126 · buffer 6 · safety stock 86 · จุดสั่งซื้อ 126 · สั่งเพิ่ม 180
+execution:
+  prompt: |
+    ขายกระเป๋ารุ่นเดียวกันใน Shopee Lazada และ TikTok ใช้สต็อกชุดเดียว เคยโดนยกเลิกออเดอร์เพราะขายเกินหลายครั้ง ช่วยคิดให้หน่อย
+    SKU BAG-TOTE-BLK-L ของในมือ 140 ชิ้น จองไว้แล้ว 14 ชิ้น ขายเฉลี่ยวันละ 4 สูงสุดวันละ 9
+    ผู้ผลิตส่งเฉลี่ย 10 วัน นานสุด 14 วัน อยากมีของพอขาย 45 วัน ไม่มีของที่สั่งแล้วยังไม่มาถึง
+    ออเดอร์รวมทุกช่องวันละ 8 ออเดอร์ ซิงก์สต็อกวันละ 2 รอบ
+    ต้องกันของไว้ไม่แสดงกี่ชิ้น ควรสั่งเมื่อเหลือเท่าไหร่ และรอบนี้ควรสั่งเพิ่มกี่ชิ้น
+  max_turns: 10
+  timeout_seconds: 300
+graders:
+  - name: script-called
+    type: tool_used
+    tool: Bash
+    input_match: 'stock-calc\.mjs'
+    min: 1
+    arm: with-only
+  - name: buffer-6
+    type: regex
+    pattern: 'buffer[^\n]{0,40}\b6\b|บัฟเฟอร์[^\n]{0,40}\b6\b|\b6\b[^\n]{0,20}(ชิ้น|buffer)'
+    flags: i
+    match: contains
+    target: last_message
+  - name: safety-86
+    type: regex
+    pattern: '\b86\b'
+    flags: i
+    match: contains
+    target: last_message
+  - name: reorder-point-126
+    type: regex
+    pattern: '\b126\b'
+    flags: i
+    match: contains
+    target: last_message
+  - name: order-180
+    type: regex
+    pattern: '\b180\b'
+    flags: i
+    match: contains
+    target: last_message

@@ -4,7 +4,7 @@
 
 ขายออนไลน์ ซื้ออย่างมั่นใจ และงานหลังบ้านบริษัทไทย
 
-agent 8 · skill 71 (ของ plugin 32 · ของกลางจาก superuser 39) · คำสั่ง 1 · playbook 18 · ส่งงานต่อให้ [`graphic-design`](../graphic-design/README.md) · [`software-company`](../software-company/README.md) · [`trading-finance`](../trading-finance/README.md) · [`superuser`](../superuser/README.md) · [`personal-life`](../personal-life/README.md)
+agent 8 · skill 73 (ของ plugin 34 · ของกลางจาก superuser 39) · คำสั่ง 1 · playbook 18 · ส่งงานต่อให้ [`graphic-design`](../graphic-design/README.md) · [`software-development`](../software-development/README.md) · [`trading-finance`](../trading-finance/README.md) · [`superuser`](../superuser/README.md) · [`personal-life`](../personal-life/README.md)
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/e-commerce/`](../../../plugins/e-commerce/)
 
@@ -46,7 +46,7 @@ agent 8 · skill 71 (ของ plugin 32 · ของกลางจาก super
 | [`pdpa-setup`](#pb-pdpa-setup) | ตั้งระบบ PDPA | 5 |
 | [`pricing-check`](#pb-pricing-check) | ตรวจราคาและกำไร | 5 |
 | [`refund`](#pb-refund) | ขอคืนเงิน | 5 |
-| [`review`](#pb-review) | ตรวจงานที่เสร็จแล้ว | 6 |
+| [`review`](#pb-review) | ตรวจงานที่เสร็จแล้ว | 8 |
 | [`stock-sync`](#pb-stock-sync) | ซิงก์สต็อกหลายร้าน | 5 |
 | `team-project` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md)) | 9 |
 | [`unattended-run`](#pb-unattended-run) | งานยาวไม่ต้องเฝ้า | 7 |

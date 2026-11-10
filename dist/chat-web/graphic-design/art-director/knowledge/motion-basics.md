@@ -111,6 +111,7 @@ ffmpeg -i in.mp4 -c:v libvpx-vp9 -b:v 0 -crf 33 -an out.webm      # WebM (VP9), 
 - GIF has no sound and only 256 colours per frame; a gradient or photo looks worse than the same clip as WebM or MP4. Offer MP4 or WebM first where the destination plays video
 - Never overwrite the source; name the output with the version (`name-v02.gif`)
 - Size ceilings per destination (email, chat apps, Shopee and others): (รอยืนยัน) not checked against an official page yet. Open the destination's own help page before promising a size, and record the date
+- Check the result: `python scripts/gif_check.py out.gif --max-mb <n> --max-width <px> --max-seconds <s> --max-fps <n>` prints width × height, MB, frames, fps, seconds and loops, and lists what is over the ceilings you pass · it hard-codes no ceiling, so open the destination's help page and pass the numbers · `.webm` and `.mp4` need `ffprobe` on the PATH · `--self-test` runs it on files it builds itself (tested 2026-11-10, 14 of 14)
 
 ## Rules
 

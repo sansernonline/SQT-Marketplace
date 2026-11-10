@@ -1,0 +1,24 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: app-verifier-setup-trigger
+description: โปรเจกต์เว็บ Express ไม่มีวิธีให้ agent เปิดแอปดูผลเอง ผู้ใช้ต้องเปิดแล้วเล่าให้ฟังทุกครั้ง ไม่เอ่ยชื่อ skill ต้องทำให้ app-verifier-setup ถูกเปิด
+tags: [trigger, app-verifier-setup]
+runs: 3
+expected_outcome: เรียก Skill app-verifier-setup แล้วหาวิธีรันที่มีอยู่ก่อน เลือกวิธีขับตามชนิดแอป และวางสคริปต์ verify กับ skill คู่มือสั้น
+execution:
+  prompt: |
+    โปรเจกต์เว็บ Express ของผมไม่มีวิธีให้ agent เปิดแอปแล้วดูผลได้เอง ทุกครั้งต้องให้ผมเปิดดูแล้วมาเล่าให้ฟัง อยากให้ agent ตรวจงานตัวเองได้ ควรตั้งอย่างไร
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?app-verifier-setup"'
+    min: 1
+    arm: with-only
+  - name: verify-script
+    type: regex
+    pattern: "(?i)verify|playwright"
+    match: contains
+    target: last_message

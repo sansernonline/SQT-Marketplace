@@ -11,12 +11,27 @@ One page that answers "how am I doing?" honestly. Holdings template and the page
 ## Workflow
 
 1. **Load holdings** from the user's file (ask where it lives). Include every account: stock broker, fund accounts (AMC / fund supermarket), Retirement Mutual Fund (RMF) / ThaiESG, provident fund (PVD) (latest statement), digital-asset exchange, cash and fixed deposits. Missing an account makes every percentage wrong.
-2. **Refresh prices** via an installed market-data plugin; funds use the latest NAV (one business day behind); record the as-of timestamp per source. If there is no data plugin, say so and ask for the broker statement values.
+2. **Refresh prices** via an installed market-data plugin; funds use the latest NAV (one business day behind); record the as-of timestamp per source. If there is no data plugin, say so and ask for the broker statement values. Then run the **data checks** below before any total; if the holdings live in the user's own spreadsheet with formulas, run the 9 checks in `trade-journal`'s [spreadsheet-check](../trade-journal/references/spreadsheet-check.md) too.
 3. **Compute per holding**: market value, cost, unrealised P/L (baht and %), weight %.
 4. **Compute portfolio**: total value, cash %, allocation by asset class / sector / market / currency, realised P/L year to date (from `trade-journal`), dividends received YTD (from `dividend-tracker`).
-5. **Return since last snapshot** — use the money-weighted shortcut below so deposits are not counted as gains.
+5. **Return since last snapshot** — use the money-weighted shortcut below so deposits are not counted as gains. Then say where it came from (section "Where the return came from").
 6. **Run the risk checks** (table below) and list only the ones that fire.
 7. **Save** the snapshot as `snapshot-YYYY-MM.md` so the next one can compare.
+
+## Data checks — before any total
+
+Users hold money in several places (broker, fund app, PVD statement, crypto exchange), and the totals are only as good as the weakest file. Check these and list only what fires:
+
+| Check | Fires when | Do |
+|---|---|---|
+| Size | A holding's gain is far beyond what its asset class could do (a money market fund +40%, a bond fund doubling) | Ask whether units, a split or a typo; do not compute until answered |
+| Adds up | Sum of holdings ≠ the account total on the statement | Show the difference in baht; find the missing or extra line |
+| Missing pieces | A holding has no cost or no units | Keep it in value and weight, mark P/L as unknown; never drop the row quietly |
+| Stale | Fund NAV and stock prices are from different dates, or a statement is older than a month | Show each as-of date; say which totals mix dates |
+| Counted twice | The same fund appears in the fund app and again inside a PVD or RMF statement, or one account was exported twice | Keep one, say which |
+| Unreadable | A figure in a screenshot or PDF cannot be read clearly | Ask; never guess a number |
+
+When a check fires, say which conclusion depends on that number (for example "the cash % and the concentration warning both use the DEF row, which has no cost"). Checklist idea: `portfolio-rebalance-review` step 1 and `prospect-intake` step 2, anthropics/claude-for-financial-advisors (Apache-2.0, viewed 2026-11-10), reworded for Thai accounts.
 
 ## Formulas
 
@@ -31,10 +46,16 @@ The ×0.5 assumes deposits arrived mid-period (Modified Dietz shortcut) — good
 Run the numbers with the script instead of by hand (the worked example below is `scripts/examples/snapshot.json` and gives the same figures):
 
 ```
-node money-calc.mjs snapshot <file.json> [--json]     # also: drift · dividend · afterTax · fee · --self-test
+node money-calc.mjs snapshot <file.json> [--json]     # also: attribution · drift · dividend · afterTax · fee · --self-test
 ```
 
 **Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/trading-finance/*/skills/portfolio-snapshot/scripts/money-calc.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/trading-finance/skills/portfolio-snapshot/scripts/money-calc.mjs` · Node only, no dependencies. One script serves `rebalance-and-dca`, `dividend-tracker`, `bonds-and-deposits` and `mutual-fund-picker` too; example files for every command are in `scripts/examples/`.
+
+## Where the return came from
+
+One return figure hides which holding did the work. `node money-calc.mjs attribution <file.json>` splits each holding into price change (end − start − new money), dividends received, and its part of the portfolio return, using the same mid-period shortcut as the return above. New money is never counted as gain. When one holding accounts for more than half of all the movement (gains and losses added as sizes), the script names it: the month's result is that holding's result. The 50% line is a starting value, not measured.
+
+Example `scripts/examples/attribution.json` (illustrative): ABC +8,000 price and 1,440 dividend = +9,440, DEF −5,000, the index fund +10,000 of new money and 0 gain, the money market fund +200, cash 0; total +4,640 = +1.6% on 291,800. ABC is 64.5% of the movement, so it is named. A dividend paid into the cash account goes in `dividends` only: if the cash row's end value already includes it, take it out of that row, or it is counted twice. Idea: `variance-analysis`, anthropics/knowledge-work-plugins (Apache-2.0, viewed 2026-11-10), cut to price, new money and dividends; script written from scratch.
 
 ## Risk checks
 
@@ -66,7 +87,7 @@ Checks firing: ABC 32.7% > 10% (a 30% fall = −29,400 baht ≈ −9.8% of portf
 
 ## Output
 
-Headline (total value, month return, as-of) · holdings table · allocation (asset class, sector) · YTD realised P/L and dividends · risk checks that fired · one question for the user. Command: `/portfolio`.
+Headline (total value, month return, as-of) · data checks that fired · holdings table · allocation (asset class, sector) · YTD realised P/L and dividends · where the return came from · risk checks that fired · one question for the user. Command: `/portfolio`.
 
 ## เรียกเป็นคำสั่ง
 

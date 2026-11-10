@@ -21,7 +21,7 @@ Use when one attempt could lock in the wrong shape (design, draft, layout, plan)
 4. ความต่างต้องมาจากที่ไหนสักแห่ง เพราะใน Claude Code โมเดลมาจากค่ายเดียวกัน
    - **ค่าเริ่ม:** ให้แต่ละตัวมีข้อจำกัดต่างกัน เช่น "ไม่เกิน 1 หน้า" · "เริ่มจากคำถามของผู้อ่าน" · ทุกตัวใช้ชนิด agent + โมเดล + effort เดียวกัน
    - ข้อจำกัดยังไม่ทำให้ต่างพอ → ผสมระดับโมเดล (ใหญ่ · กลาง — ชื่อจริงดูหัวข้อ 5 ใน `superuser`) (ต่างโมเดล = ต่าง cache)
-5. กำหนดที่ส่งงานแยกกัน — โฟลเดอร์แยกต่อตัว `_to_delete/attempts-<เรื่อง>/<n>/` ห้ามเขียนที่เดียวกัน (เหมือน [`parallel-split-and-merge`](../parallel-split-and-merge/SKILL.md)) · งานโค้ด → ส่วนเพิ่มใน plugin `software-company` → `superuser` → `references/code-extensions.md`
+5. กำหนดที่ส่งงานแยกกัน — โฟลเดอร์แยกต่อตัว `_to_delete/attempts-<เรื่อง>/<n>/` ห้ามเขียนที่เดียวกัน (เหมือน [`parallel-split-and-merge`](../parallel-split-and-merge/SKILL.md)) · งานโค้ด → ส่วนเพิ่มใน plugin `software-development` → `superuser` → `references/code-extensions.md`
 
 ## 2 · ปล่อยพร้อมกัน
 
@@ -39,7 +39,7 @@ Use when one attempt could lock in the wrong shape (design, draft, layout, plan)
 - กฎเหล็กของงาน (ข้อกำหนดที่ต้องมี) กรองตัวที่ไม่ผ่านออกก่อนเทียบ
 - ถ้าตรงกัน ถือว่ายืนยันแล้ว
 - ถ้าไม่ตรงกัน แปลว่าเกณฑ์กำกวมหรือมีฝ่ายลำเอียง ให้อ่านเหตุผลของทั้ง 2 ฝ่ายก่อนตัดสิน
-- ถ้าคะแนนใกล้กัน ให้เลือกตัวที่แก้ต่อได้ง่ายที่สุด คือขอบเขตชัดกว่าและส่วนประกอบน้อยกว่า (`lazy-coding` (plugin `software-company`))
+- ถ้าคะแนนใกล้กัน ให้เลือกตัวที่แก้ต่อได้ง่ายที่สุด คือขอบเขตชัดกว่าและส่วนประกอบน้อยกว่า (`lazy-coding` (plugin `software-development`))
 - **ผ่านเกณฑ์ไม่ถึง 2 ตัว → ถอยเป็นงานตัวเดียว** — ไม่มีอะไรให้เทียบ ข้ามข้อ 5 เอาตัวที่ใกล้ผ่านสุดเป็นร่าง แล้วแก้ต่อตามรอบตรวจปกติของ `superuser` · ไม่ปล่อยรอบใหม่ เพราะทุกตัวตกพร้อมกันมักแปลว่าโจทย์หรือเกณฑ์ไม่ชัด ไม่ใช่ผู้แข่งไม่เก่ง · จดใน `decision-log` ว่า bake-off ไม่ได้ผลเพราะอะไร (แนวคิดจาก best-of-n ของ paulingham)
 
 ## 5 · ยกส่วนเด่นมาใส่
@@ -55,4 +55,4 @@ Use when one attempt could lock in the wrong shape (design, draft, layout, plan)
 ## ไม่ควรใช้เมื่อ
 
 - งานกลไกที่มีคำตอบเดียว เพราะเปลืองแรงเปล่า
-- งานที่ตัดสินได้ด้วยการวัดตัวเลขตัวเดียว ให้วัดตัวเลขนั้นตรง ๆ แทน (งานโค้ด: playbook `prototype` ของ `superuser` ใน plugin `software-company`)
+- งานที่ตัดสินได้ด้วยการวัดตัวเลขตัวเดียว ให้วัดตัวเลขนั้นตรง ๆ แทน (งานโค้ด: playbook `prototype` ของ `superuser` ใน plugin `software-development`)

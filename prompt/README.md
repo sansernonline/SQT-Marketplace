@@ -7,7 +7,7 @@
 ```
 prompt/
 ├─ README.md            ไฟล์นี้ (สารบัญ)
-├─ software-company/    25 ไฟล์
+├─ software-development/    25 ไฟล์
 ├─ e-commerce/ · graphic-design/ · personal-life/
 ├─ trading-finance/
 │                       4–6 ไฟล์ตามสถานการณ์ + README.md (รายการไฟล์ · เลือกจากสถานการณ์)
@@ -16,11 +16,11 @@ prompt/
 
 | plugin | ไฟล์ |
 |---|---|
-| `software-company` | `software-company/` — 25 ไฟล์ตามช่วงงาน · ดู [รายการไฟล์](#รายการไฟล์) |
+| `software-development` | `software-development/` — 25 ไฟล์ตามช่วงงาน · ดู [รายการไฟล์](#รายการไฟล์) |
 | plugin อื่น 4 ตัว | `<ชื่อ plugin>/prompt-<สถานการณ์>.md` · เลือกไฟล์จาก `<ชื่อ plugin>/README.md` · ดู [plugin อื่น](#plugin-อื่น) |
 | `superuser` | `superuser/prompt-superuser.md` ไฟล์เดียว |
 
-## วิธีใช้ (software-company)
+## วิธีใช้ (software-development)
 
 1. เปิด Claude Code, Codex CLI หรือ Gemini CLI ที่**รากโฟลเดอร์โปรเจกต์**
 2. วางทั้งไฟล์ แล้วพิมพ์ต่อท้ายว่าจะทำฉบับไหน เช่น `ทำทั้งหมด` หรือ `ทำข้อ 3 และ 4`
@@ -34,35 +34,35 @@ prompt/
 
 | กลุ่ม | ไฟล์ | ใช้เมื่อ | ฉบับในไฟล์ |
 |---|---|---|---|
-| ก่อนได้งาน | `software-company/prompt-proposal.md` | ลูกค้าส่ง TOR หรือขอใบเสนอ | 1 อ่าน TOR · 2 ประเมินงานและราคา · 3 proposal |
-| ก่อนได้งาน | `software-company/prompt-poc.md` | ต้องพิสูจน์ให้ลูกค้าหรือผู้บริหารเห็นว่าทำได้จริง ก่อนลงเงิน | 1 แผนและเกณฑ์ผ่าน · 2 สร้าง POC · 3 วัดผลและเตรียม demo · 4 สรุปผลและข้อเสนอไปต่อหรือไม่ |
-| ก่อนได้งาน | `software-company/prompt-tor.md` | เราเป็นผู้ว่าจ้าง หรือช่วยลูกค้าร่าง TOR | 1 ร่าง TOR · 2 ราคากลางและเกณฑ์ให้คะแนน · 3 ตรวจ TOR ก่อนประกาศ |
-| Dev | `software-company/prompt-new-project.md` | เปิดโปรเจกต์ใหม่ | **0 research แอปต้นแบบ** (เช่น "อยากได้แบบ MobaXterm") · 1 project plan · 2 BRD · 3 SRS · **4 user story (ชี้ไป prompt-user-story)** · 5 mockup · 6 ตรวจ mockup (ชี้ไป prompt-mockup) · 7 architecture + ADR · 8 FSD · 9 test plan + test case · 10 tech doc · **11 prompt agent-loop ของโปรเจกต์** · 12 คู่มือ (ชี้ไป prompt-manual) · 13 ตรวจเอกสาร · 14 render .docx/.pdf · 15 Document Checklist (ขนาด L) |
-| Dev | `software-company/prompt-user-story.md` | ต้องมี backlog ก่อนวางแผน sprint | 1 story จาก SRS/BRD · 2 story ฟีเจอร์ใหม่จากคำเล่า · 3 ปรับ story ให้พร้อมเข้า sprint |
-| Dev | `software-company/prompt-mockup.md` | ต้องมีหน้าจอให้ลูกค้าเห็นก่อนเขียนโค้ด | 1 สร้าง mockup กดได้จริง · 2 ตรวจ mockup · 3 แก้ตามความเห็นลูกค้า / CR |
-| Dev | `software-company/prompt-existing-dev.md` | รับแอปที่มีอยู่มาพัฒนาต่อ | 1 รับช่วงโค้ด · 2 เพิ่มฟีเจอร์ · 3 ปรับโครง/อัปเกรดไลบรารี · 4 ทำให้เร็วขึ้น · 5 อัปเกรด framework ข้ามรุ่นใหญ่ · 6 ทำหลายงานขนานด้วย worktree และปิด branch |
-| Dev | `software-company/prompt-rebuild.md` | รื้อแอปเดิม สร้างรุ่นใหม่ ออกแบบใหม่ทั้งหมด โดยเก็บบางส่วนไว้ใช้ | 1 สำรวจของเดิม อะไรเก็บ อะไรทิ้ง · 2 เป้าหมายรุ่นใหม่ + แนวทางรื้อ + stack · 3 ออกแบบหน้าตาใหม่ 3 ทิศทาง · 4 สเปกรุ่นใหม่ · 5 สร้างรุ่นใหม่ · 6 ย้ายข้อมูล ตรวจเทียบ แผนสลับระบบ |
-| Dev | `software-company/prompt-change.md` | มีคำขอเปลี่ยน / พบบั๊ก หลังส่งงาน | 1 change request · 2 bugfix |
-| Test | `software-company/prompt-test-automation.md` | มีแอปแล้ว ต้องทำ automated test อย่างเดียว | 1 แผนทดสอบอัตโนมัติ · 2 test case จากแอปจริง · 3 เขียน test · 4 ต่อเข้า CI · 5 ทดสอบสัญญา API ด้วย OpenAPI |
-| Test | `software-company/prompt-quality.md` | ตรวจคุณภาพก่อนปล่อยหรือตามรอบ | 1 security review · 2 code review · 3 doc sync (เอกสารกับโค้ดไม่ตรงกัน) · 4 ตรวจ accessibility และความเร็วเว็บ |
-| เอกสาร | `software-company/prompt-existing-code.md` | มีแอปอยู่แล้ว ได้รับมอบหมายให้ทำเอกสาร | 1 reverse spec (`docs/as-is/`) · 2 SRS · 3 FSD · 4 tech doc · 5 คู่มือ (ชี้ไป prompt-manual) · **6 มีแค่ตัวโปรแกรม ไม่มี source** |
-| เอกสาร | `software-company/prompt-manual.md` | ทำคู่มือและอบรมผู้ใช้ | 1 user manual แยกบทบาท · 2 training guide |
-| เอกสาร | `software-company/prompt-doc-cover.md` | ปกเอกสาร .docx ดูเหมือนของโปรเจกต์อื่น · อยากได้ปกที่ว้าวและไม่ซ้ำ | 1 สำรวจโปรเจกต์ + research ปก · 2 ออกแบบ 3 แนวแล้วโหวต 2 ใน 3 · 3 รวมผลและสร้างปกใน Word ทั้งชุด |
-| ส่งมอบและดูแล | `software-company/prompt-release.md` | เตรียม deploy / ออกรุ่น | 1 deploy guide · 2 release notes · 3 runbook · **4 ออกรุ่นแอป Windows (installer · code signing · auto-update)** |
-| ส่งมอบและดูแล | `software-company/prompt-handover.md` | ส่งงานต่อ / ปิดโครงการ | 1 handover · 2 retrospective |
-| ส่งมอบและดูแล | `software-company/prompt-operations.md` | ระบบขึ้นใช้งานจริงแล้ว | 1 รับมือระบบล่ม · 2 postmortem · 3 แผนเฝ้าระวัง · 4 threat model · 5 เก็บกวาดเครื่อง · **6 ดูแลประจำ: คัดบั๊ก · ตรวจโค้ด · รายงาน MA / SLA** · 7 อัปเดต dependency และแก้ช่องโหว่ |
-| Dev | `software-company/prompt-explore.md` | ต้องรู้หรือพิสูจน์ก่อนลงมือ | 1 ตอบคำถามเชิงเทคนิค · 2 ทำเองหรือใช้ของที่มี · 3 ทดลองหลายแบบ · 4 หน้าจอตรงต้นแบบ |
-| ผลิตภัณฑ์ | `software-company/prompt-product.md` | ตัดสินใจเชิงผลิตภัณฑ์ / นำเสนอ | 1 ตั้งชื่อ · 2 roadmap · 3 แผน sprint · 4 deck นำเสนอ |
-| ผลิตภัณฑ์ | `software-company/prompt-growth.md` | ให้คนค้นเจอและเริ่มใช้ | 1 ตรวจ SEO · 2 เพิ่ม conversion · 3 ภาพประกอบ · 4 ประสบการณ์นักพัฒนา |
-| ผลิตภัณฑ์ | `software-company/prompt-sell-product.md` | จะขายผลิตภัณฑ์ของเราเอง (แอป · plugin · API · EA) | 1 ราคาและแพ็กเกจ · 2 license · สมาชิก · รับเงิน · 3 เงื่อนไขการใช้ · ความเป็นส่วนตัว · คืนเงิน · 4 หน้าร้าน · 5 เปิดขายและดูตัวเลข |
-| งานเฉพาะสาขา | `software-company/prompt-ai-feature.md` | แอปจะเรียก Large Language Model (LLM) หรือ model AI (แชตบอต · สรุป · ถอดเสียง · อ่านภาพ) | 1 ออกแบบและเลือก model · 2 ชุดทดสอบ (eval) · 3 RAG · 4 สร้างและวัดผล · 5 ขึ้นจริงและเฝ้าดู |
-| งานเฉพาะสาขา | `software-company/prompt-mcp-server.md` | agent ต้องใช้ระบบจริงของลูกค้า (ฐานข้อมูล · ERP · API ภายใน) ผ่าน Model Context Protocol (MCP) server | 1 ออกแบบ tool และเลือกสร้างเองหรือใช้ของผู้ผลิต · 2 สร้างแบบ stdio อ่านอย่างเดียว + eval 3 กรณี · 3 เพิ่ม tool ที่เขียนข้อมูล · 4 ส่งมอบให้ลูกค้า · 5 ยกเป็น remote HTTP + OAuth |
-| งานเฉพาะสาขา | `software-company/prompt-dynamic-website.md` | เว็บการตลาด หน้างานสัมมนา หรือหน้าเปิดตัว ที่เล่าเรื่องทีละบทด้วยการเคลื่อนไหว | 1 ทิศทางภาพ 3 แนวให้ผู้ใช้เลือก · 2 บทเต็มจอ (deck-mode) · 3 หน้าเลื่อนและหน้าลงทะเบียน (page-mode) · 4 ตรวจคุณภาพ · 5 ขึ้นใช้งานจริง |
-| งานเฉพาะสาขา | `software-company/prompt-trading-system.md` | เขียน Expert Advisor (EA) หรือ indicator บน MetaTrader 4/5 | 1 EA Spec · 2 EA Design · 3 เขียนโค้ด + ตัวตรวจออร์เดอร์ · 4 backtest + ความทนทาน · 5 forward test + VPS · 6 เตรียมขาย MQL5 Market |
+| ก่อนได้งาน | `software-development/prompt-proposal.md` | ลูกค้าส่ง TOR หรือขอใบเสนอ | 1 อ่าน TOR · 2 ประเมินงานและราคา · 3 proposal |
+| ก่อนได้งาน | `software-development/prompt-poc.md` | ต้องพิสูจน์ให้ลูกค้าหรือผู้บริหารเห็นว่าทำได้จริง ก่อนลงเงิน | 1 แผนและเกณฑ์ผ่าน · 2 สร้าง POC · 3 วัดผลและเตรียม demo · 4 สรุปผลและข้อเสนอไปต่อหรือไม่ |
+| ก่อนได้งาน | `software-development/prompt-tor.md` | เราเป็นผู้ว่าจ้าง หรือช่วยลูกค้าร่าง TOR | 1 ร่าง TOR · 2 ราคากลางและเกณฑ์ให้คะแนน · 3 ตรวจ TOR ก่อนประกาศ |
+| Dev | `software-development/prompt-new-project.md` | เปิดโปรเจกต์ใหม่ | **0 research แอปต้นแบบ** (เช่น "อยากได้แบบ MobaXterm") · 1 project plan · 2 BRD · 3 SRS · **4 user story (ชี้ไป prompt-user-story)** · 5 mockup · 6 ตรวจ mockup (ชี้ไป prompt-mockup) · 7 architecture + ADR · 8 FSD · 9 test plan + test case · 10 tech doc · **11 prompt agent-loop ของโปรเจกต์** · 12 คู่มือ (ชี้ไป prompt-manual) · 13 ตรวจเอกสาร · 14 render .docx/.pdf · 15 Document Checklist (ขนาด L) |
+| Dev | `software-development/prompt-user-story.md` | ต้องมี backlog ก่อนวางแผน sprint | 1 story จาก SRS/BRD · 2 story ฟีเจอร์ใหม่จากคำเล่า · 3 ปรับ story ให้พร้อมเข้า sprint |
+| Dev | `software-development/prompt-mockup.md` | ต้องมีหน้าจอให้ลูกค้าเห็นก่อนเขียนโค้ด | 1 สร้าง mockup กดได้จริง · 2 ตรวจ mockup · 3 แก้ตามความเห็นลูกค้า / CR |
+| Dev | `software-development/prompt-existing-dev.md` | รับแอปที่มีอยู่มาพัฒนาต่อ | 1 รับช่วงโค้ด · 2 เพิ่มฟีเจอร์ · 3 ปรับโครง/อัปเกรดไลบรารี · 4 ทำให้เร็วขึ้น · 5 อัปเกรด framework ข้ามรุ่นใหญ่ · 6 ทำหลายงานขนานด้วย worktree และปิด branch |
+| Dev | `software-development/prompt-rebuild.md` | รื้อแอปเดิม สร้างรุ่นใหม่ ออกแบบใหม่ทั้งหมด โดยเก็บบางส่วนไว้ใช้ | 1 สำรวจของเดิม อะไรเก็บ อะไรทิ้ง · 2 เป้าหมายรุ่นใหม่ + แนวทางรื้อ + stack · 3 ออกแบบหน้าตาใหม่ 3 ทิศทาง · 4 สเปกรุ่นใหม่ · 5 สร้างรุ่นใหม่ · 6 ย้ายข้อมูล ตรวจเทียบ แผนสลับระบบ |
+| Dev | `software-development/prompt-change.md` | มีคำขอเปลี่ยน / พบบั๊ก หลังส่งงาน | 1 change request · 2 bugfix |
+| Test | `software-development/prompt-test-automation.md` | มีแอปแล้ว ต้องทำ automated test อย่างเดียว | 1 แผนทดสอบอัตโนมัติ · 2 test case จากแอปจริง · 3 เขียน test · 4 ต่อเข้า CI · 5 ทดสอบสัญญา API ด้วย OpenAPI |
+| Test | `software-development/prompt-quality.md` | ตรวจคุณภาพก่อนปล่อยหรือตามรอบ | 1 security review · 2 code review · 3 doc sync (เอกสารกับโค้ดไม่ตรงกัน) · 4 ตรวจ accessibility และความเร็วเว็บ |
+| เอกสาร | `software-development/prompt-existing-code.md` | มีแอปอยู่แล้ว ได้รับมอบหมายให้ทำเอกสาร | 1 reverse spec (`docs/as-is/`) · 2 SRS · 3 FSD · 4 tech doc · 5 คู่มือ (ชี้ไป prompt-manual) · **6 มีแค่ตัวโปรแกรม ไม่มี source** |
+| เอกสาร | `software-development/prompt-manual.md` | ทำคู่มือและอบรมผู้ใช้ | 1 user manual แยกบทบาท · 2 training guide |
+| เอกสาร | `software-development/prompt-doc-cover.md` | ปกเอกสาร .docx ดูเหมือนของโปรเจกต์อื่น · อยากได้ปกที่ว้าวและไม่ซ้ำ | 1 สำรวจโปรเจกต์ + research ปก · 2 ออกแบบ 3 แนวแล้วโหวต 2 ใน 3 · 3 รวมผลและสร้างปกใน Word ทั้งชุด |
+| ส่งมอบและดูแล | `software-development/prompt-release.md` | เตรียม deploy / ออกรุ่น | 1 deploy guide · 2 release notes · 3 runbook · **4 ออกรุ่นแอป Windows (installer · code signing · auto-update)** |
+| ส่งมอบและดูแล | `software-development/prompt-handover.md` | ส่งงานต่อ / ปิดโครงการ | 1 handover · 2 retrospective |
+| ส่งมอบและดูแล | `software-development/prompt-operations.md` | ระบบขึ้นใช้งานจริงแล้ว | 1 รับมือระบบล่ม · 2 postmortem · 3 แผนเฝ้าระวัง · 4 threat model · 5 เก็บกวาดเครื่อง · **6 ดูแลประจำ: คัดบั๊ก · ตรวจโค้ด · รายงาน MA / SLA** · 7 อัปเดต dependency และแก้ช่องโหว่ |
+| Dev | `software-development/prompt-explore.md` | ต้องรู้หรือพิสูจน์ก่อนลงมือ | 1 ตอบคำถามเชิงเทคนิค · 2 ทำเองหรือใช้ของที่มี · 3 ทดลองหลายแบบ · 4 หน้าจอตรงต้นแบบ |
+| ผลิตภัณฑ์ | `software-development/prompt-product.md` | ตัดสินใจเชิงผลิตภัณฑ์ / นำเสนอ | 1 ตั้งชื่อ · 2 roadmap · 3 แผน sprint · 4 deck นำเสนอ |
+| ผลิตภัณฑ์ | `software-development/prompt-growth.md` | ให้คนค้นเจอและเริ่มใช้ | 1 ตรวจ SEO · 2 เพิ่ม conversion · 3 ภาพประกอบ · 4 ประสบการณ์นักพัฒนา |
+| ผลิตภัณฑ์ | `software-development/prompt-sell-product.md` | จะขายผลิตภัณฑ์ของเราเอง (แอป · plugin · API · EA) | 1 ราคาและแพ็กเกจ · 2 license · สมาชิก · รับเงิน · 3 เงื่อนไขการใช้ · ความเป็นส่วนตัว · คืนเงิน · 4 หน้าร้าน · 5 เปิดขายและดูตัวเลข |
+| งานเฉพาะสาขา | `software-development/prompt-ai-feature.md` | แอปจะเรียก Large Language Model (LLM) หรือ model AI (แชตบอต · สรุป · ถอดเสียง · อ่านภาพ) | 1 ออกแบบและเลือก model · 2 ชุดทดสอบ (eval) · 3 RAG · 4 สร้างและวัดผล · 5 ขึ้นจริงและเฝ้าดู |
+| งานเฉพาะสาขา | `software-development/prompt-mcp-server.md` | agent ต้องใช้ระบบจริงของลูกค้า (ฐานข้อมูล · ERP · API ภายใน) ผ่าน Model Context Protocol (MCP) server | 1 ออกแบบ tool และเลือกสร้างเองหรือใช้ของผู้ผลิต · 2 สร้างแบบ stdio อ่านอย่างเดียว + eval 3 กรณี · 3 เพิ่ม tool ที่เขียนข้อมูล · 4 ส่งมอบให้ลูกค้า · 5 ยกเป็น remote HTTP + OAuth |
+| งานเฉพาะสาขา | `software-development/prompt-dynamic-website.md` | เว็บการตลาด หน้างานสัมมนา หรือหน้าเปิดตัว ที่เล่าเรื่องทีละบทด้วยการเคลื่อนไหว | 1 ทิศทางภาพ 3 แนวให้ผู้ใช้เลือก · 2 บทเต็มจอ (deck-mode) · 3 หน้าเลื่อนและหน้าลงทะเบียน (page-mode) · 4 ตรวจคุณภาพ · 5 ขึ้นใช้งานจริง |
+| งานเฉพาะสาขา | `software-development/prompt-trading-system.md` | เขียน Expert Advisor (EA) หรือ indicator บน MetaTrader 4/5 | 1 EA Spec · 2 EA Design · 3 เขียนโค้ด + ตัวตรวจออร์เดอร์ · 4 backtest + ความทนทาน · 5 forward test + VPS · 6 เตรียมขาย MQL5 Market |
 
 ## เลือกจากสถานการณ์
 
-ไฟล์ในตารางนี้อยู่ใน `software-company/` ทั้งหมด
+ไฟล์ในตารางนี้อยู่ใน `software-development/` ทั้งหมด
 
 | สถานการณ์ | ใช้ |
 |---|---|
@@ -112,9 +112,9 @@ prompt/
 
 ## plugin อื่น
 
-แยกไฟล์ตามสถานการณ์แบบเดียวกับ `software-company` · แต่ละโฟลเดอร์มี `README.md` ของตัวเอง มีตาราง "รายการไฟล์" และ "เลือกจากสถานการณ์" (16–20 แถว) · เปิด agent ที่**โฟลเดอร์งานของเรื่องนั้น** (ไม่ใช่โฟลเดอร์โปรเจกต์โค้ด) · เลือกไฟล์จากตาราง กรอกช่อง "ผู้ใช้กรอก" แล้ววางทั้งไฟล์ + `ทำข้อ N`
+แยกไฟล์ตามสถานการณ์แบบเดียวกับ `software-development` · แต่ละโฟลเดอร์มี `README.md` ของตัวเอง มีตาราง "รายการไฟล์" และ "เลือกจากสถานการณ์" (16–20 แถว) · เปิด agent ที่**โฟลเดอร์งานของเรื่องนั้น** (ไม่ใช่โฟลเดอร์โปรเจกต์โค้ด) · เลือกไฟล์จากตาราง กรอกช่อง "ผู้ใช้กรอก" แล้ววางทั้งไฟล์ + `ทำข้อ N`
 
-ต่างจาก `software-company` ตรงนี้: ใช้ playbook ของ plugin นั้น (ไม่ใช่ `project-docs`) · ไฟล์ทำงานของ `superuser` (`.claude/superuser/CONTEXT.md`) อยู่ในโฟลเดอร์งาน · ของที่ย้อนไม่ได้ (ส่ง · จ่าย · ยื่น · โพสต์ · ลบ) อยู่ใน "รออนุมัติ" เสมอ · ฉบับ "ตรวจก่อนส่ง" มีฉบับเดียวต่อ plugin ไฟล์อื่นชี้ไปที่ฉบับนั้น
+ต่างจาก `software-development` ตรงนี้: ใช้ playbook ของ plugin นั้น (ไม่ใช่ `project-docs`) · ไฟล์ทำงานของ `superuser` (`.claude/superuser/CONTEXT.md`) อยู่ในโฟลเดอร์งาน · ของที่ย้อนไม่ได้ (ส่ง · จ่าย · ยื่น · โพสต์ · ลบ) อยู่ใน "รออนุมัติ" เสมอ · ฉบับ "ตรวจก่อนส่ง" มีฉบับเดียวต่อ plugin ไฟล์อื่นชี้ไปที่ฉบับนั้น
 
 | plugin | ไฟล์ (สถานการณ์) | ฉบับ |
 |---|---|---|
@@ -126,7 +126,7 @@ prompt/
 
 เพิ่ม plugin ใหม่ → `superuser/prompt-superuser.md` ฉบับ 6 สร้างโฟลเดอร์ prompt ของ plugin นั้นแบบเดียวกันให้ด้วย แล้วเพิ่มแถวในตารางนี้ · สถานการณ์ใหม่ของ plugin เดิม → เพิ่มแถวใน `README.md` ของ plugin นั้นก่อน สร้างฉบับใหม่เมื่อประกอบจากฉบับที่มีไม่ได้
 
-## โครงโฟลเดอร์ของโปรเจกต์ที่ prompt สร้างไฟล์ลงไป (software-company)
+## โครงโฟลเดอร์ของโปรเจกต์ที่ prompt สร้างไฟล์ลงไป (software-development)
 
 ```
 <project>/
@@ -151,7 +151,7 @@ prompt/
 ## หมายเหตุ
 
 - ฉบับส่วนใหญ่สร้างเอกสารอย่างเดียว ไม่แก้โค้ด · ฉบับที่แก้โค้ดมีช่องให้ติ๊กอนุญาตก่อนเสมอ: bugfix ใน `prompt-change.md` · ฉบับ 2–6 ใน `prompt-existing-dev.md` · ฉบับ 5–6 ใน `prompt-rebuild.md` · ฉบับ 3–5 ใน `prompt-test-automation.md` · ฉบับ 4 ใน `prompt-explore.md` · ฉบับ 3 และ 7 ใน `prompt-operations.md` · ฉบับ 2 ใน `prompt-poc.md` · ฉบับ 3 ใน `prompt-trading-system.md` · ฉบับ 4 ใน `prompt-ai-feature.md` · ฉบับ 2 ใน `prompt-sell-product.md` · ฉบับ 2–5 ใน `prompt-mcp-server.md` · ฉบับ 2 · 3 · 5 ใน `prompt-dynamic-website.md`
-- ทุกไฟล์ prompt มีบรรทัด **วนจนเสร็จ (agent loop)** — ทุกฉบับวน ทำ → ตรวจ → แก้ → ตรวจซ้ำ (`reviewer` ตัวใหม่ทุกรอบ · งานกลางไม่เกิน 3 รอบ · งานใหญ่หรืองานเสี่ยงไม่เกิน 5 รอบ) จนผ่าน · ต้นฉบับกฎคือ skill `superuser` กฎข้อ 3 · ของ `software-company` อยู่ในบล็อกที่ `sync-prompt-rules.mjs` เขียนให้
+- ทุกไฟล์ prompt มีบรรทัด **วนจนเสร็จ (agent loop)** — ทุกฉบับวน ทำ → ตรวจ → แก้ → ตรวจซ้ำ (`reviewer` ตัวใหม่ทุกรอบ · งานกลางไม่เกิน 3 รอบ · งานใหญ่หรืองานเสี่ยงไม่เกิน 5 รอบ) จนผ่าน · ต้นฉบับกฎคือ skill `superuser` กฎข้อ 3 · ของ `software-development` อยู่ในบล็อกที่ `sync-prompt-rules.mjs` เขียนให้
 - กฎการทำงานร่วม (ตัดสินใจเอง · พิสูจน์ผล · รายงานสถานะ) อยู่ใน skill `superuser` · `decision-log` · `principle-prove-it-works` · `status-report` · ไม่เขียนซ้ำในไฟล์ prompt · จะแก้กฎ → แก้ที่ skill ที่เดียว
 - คู่มือผู้ใช้มีที่เดียวคือ `prompt-manual.md` ฉบับ 1 · `prompt-new-project.md` ฉบับ 12 ชี้ไปที่นั่น
 - user story มีที่เดียวคือ `prompt-user-story.md` · mockup มีที่เดียวคือ `prompt-mockup.md` · `prompt-new-project.md` ฉบับ 4–6 ชี้ไปที่นั่น

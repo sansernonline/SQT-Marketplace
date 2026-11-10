@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เขียน 2026-11-10 ยังไม่ได้รัน
+schema_version: "1.1"
+name: task-board-trigger
+description: ผู้ใช้จดงานไว้หลายที่แล้วอยากได้รายการเดียว ถามว่ารออะไรจากใครอยู่ ไม่เอ่ยชื่อ skill ต้องทำให้ task-board ถูกเปิด
+tags: [trigger, task-board]
+runs: 3
+expected_outcome: เรียก Skill task-board แล้วเสนอไฟล์ tasks.md 4 หมวด (Active · Waiting On · Someday · Done) โดยรายการ Waiting On มีวันที่เริ่มรอ
+execution:
+  prompt: |
+    งานผมกระจายอยู่ทั้งในโน้ตมือถือ LINE Keep แล้วก็ในอีเมล ตอนนี้จำไม่ได้แล้วว่าต้องทำอะไร
+    แล้วก็รออะไรจากใครอยู่บ้าง เช่นรอใบเสนอราคาช่างแอร์ตั้งแต่ต้นเดือน
+    อยากได้ที่เดียวไว้ดูทั้งหมด ช่วยจัดให้หน่อย
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?task-board"'
+    min: 1
+    arm: with-only
+  - name: waiting-section
+    type: regex
+    pattern: "Waiting On|รอ.{0,20}ตั้งแต่"
+    match: contains
+    target: last_message

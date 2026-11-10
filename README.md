@@ -1,4 +1,4 @@
-# SQT Marketplace — Software Company Plugin Suite
+# SQT Marketplace — Software Development Plugin Suite
 
 Marketplace สำหรับ Claude Code · **6 plugins** — ทีมพัฒนาซอฟต์แวร์ (รวม reverse engineering) + ชุดใช้ในชีวิตประจำวันและธุรกิจ เลือกติดตั้งตามงาน
 
@@ -28,14 +28,14 @@ scripts\build-dist.cmd                                                       # �
 | Plugin | Agents | Skills | Commands | สำหรับ |
 |--------|:-----:|:------:|:--------:|--------|
 | **`superuser`** | 4 | 39 | 0 | หัวหน้างานกลาง — จัดขนาด ใบสั่งงาน 5 ข้อ แจกลูกทีม ตรวจซ้ำจนผ่าน วัด token · ใช้เดี่ยวได้ หรือเป็นแกนให้ plugin อื่น ([ADAPT.md](plugins/superuser/ADAPT.md)) |
-| **`software-company`** | 38 | 105 | 11 | บริษัทซอฟต์แวร์ครบทุกสาขา |
-| **`trading-finance`** | 5 | 23 | 1 | เทรดหุ้น การเงินส่วนตัว ภาษีและลดหย่อน เกษียณ หนี้ ประกัน |
-| **`personal-life`** | 9 | 42 | 1 | ชีวิตประจำวันตัวเดียวครบ 5 หมวด — จัดการชีวิต (ประชุม เอกสาร ค่าสมาชิก ความปลอดภัยบัญชี) · บ้านและครอบครัว (บิล รถ ลูก ผู้สูงอายุ สัตว์เลี้ยง) · สุขภาพ (จัดระเบียบ ไม่วินิจฉัย) · อาชีพ (เรซูเม่ สัมภาษณ์ เงินเดือน) · เรียนรู้ (เรียนเทคโนโลยี paper ใบรับรอง side project วิทยานิพนธ์ — รวม `dev-learning` เดิม) |
-| **`e-commerce`** | 8 | 33 | 1 | ซื้อขายออนไลน์ทั้งสองฝั่งและงานหลังบ้านบริษัทไทย — ขาย: Shopee · Lazada · TikTok Shop · LINE · ไลฟ์ · สต็อก · ซื้อ: เทียบก่อนซื้อ ประกัน ร้องเรียน สคบ. ขอคืนเงิน · หลังบ้าน: LINE OA · เอกสาร · ภาษี · เงินเดือน · กฎหมายแรงงาน · PDPA · พร้อมเพย์ (รวม `online-seller` · `consumer-rights` · `thai-workplace` เดิม) |
-| **`graphic-design`** | 6 | 22 | 0 | งานครีเอทีฟ: แบรนด์, ภาพ/วิดีโอ AI, โซเชียล |
+| **`software-development`** | 38 | 105 | 11 | บริษัทซอฟต์แวร์ครบทุกสาขา |
+| **`trading-finance`** | 5 | 24 | 1 | เทรดหุ้น การเงินส่วนตัว ภาษีและลดหย่อน เกษียณ หนี้ ประกัน |
+| **`personal-life`** | 9 | 47 | 1 | ชีวิตประจำวันตัวเดียวครบ 5 หมวด — จัดการชีวิต (ประชุม เอกสาร ค่าสมาชิก ความปลอดภัยบัญชี) · บ้านและครอบครัว (บิล รถ ลูก ผู้สูงอายุ สัตว์เลี้ยง) · สุขภาพ (จัดระเบียบ ไม่วินิจฉัย) · อาชีพ (เรซูเม่ สัมภาษณ์ เงินเดือน) · เรียนรู้ (เรียนเทคโนโลยี paper ใบรับรอง side project วิทยานิพนธ์ — รวม `dev-learning` เดิม) |
+| **`e-commerce`** | 8 | 35 | 1 | ซื้อขายออนไลน์ทั้งสองฝั่งและงานหลังบ้านบริษัทไทย — ขาย: Shopee · Lazada · TikTok Shop · LINE · ไลฟ์ · สต็อก · ซื้อ: เทียบก่อนซื้อ ประกัน ร้องเรียน สคบ. ขอคืนเงิน · หลังบ้าน: LINE OA · เอกสาร · ภาษี · เงินเดือน · กฎหมายแรงงาน · PDPA · พร้อมเพย์ (รวม `online-seller` · `consumer-rights` · `thai-workplace` เดิม) |
+| **`graphic-design`** | 6 | 24 | 0 | งานครีเอทีฟ: แบรนด์, ภาพ/วิดีโอ AI, โซเชียล |
 
 > plugin ชีวิตประจำวันยังเป็นรุ่น v0.x · ตัวเลขภาษี กฎหมาย และอัตราต่าง ๆ ตรวจกับแหล่งทางการแล้วเมื่อ 6 ต.ค. 2569 · ตัวเลขที่ยังไม่ยืนยันมีป้าย (รอยืนยัน) · spec ดูที่ [docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน](docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน)
-> ตั้งแต่ v2.0.0 สาขาเฉพาะทาง (fintech · AI · healthcare · e-commerce · game · IoT · security operations · SaaS · devtools · mobile · web3 · legal · insurance) รวมอยู่ใน software-company ตัวเดียว · ตารางว่าอะไรย้ายไปไหนอยู่ที่ [docs/PLUGINS.md](docs/PLUGINS.md)
+> ตั้งแต่ v2.0.0 สาขาเฉพาะทาง (fintech · AI · healthcare · e-commerce · game · IoT · security operations · SaaS · devtools · mobile · web3 · legal · insurance) รวมอยู่ใน software-development ตัวเดียว · ตารางว่าอะไรย้ายไปไหนอยู่ที่ [docs/PLUGINS.md](docs/PLUGINS.md)
 
 ---
 
@@ -56,14 +56,14 @@ scripts\build-dist.cmd                                                       # �
 
 ```
 /plugin marketplace add sansernonline/SQT-Marketplace
-/plugin install software-company@sqt-marketplace
+/plugin install software-development@sqt-marketplace
 ```
 
-ทุก plugin ใช้ของกลางจาก `superuser` (แกนหัวหน้าทีม · skill `human-writing` · `simplify` · เอกสารหลัก `polished-document-style` · `document-naming` · agent `reviewer` · hook) · ติดตั้ง plugin ไหน Claude Code ติดตั้ง `superuser` ให้เองจาก `dependencies` · skill เอกสารออกแบบ สไลด์ รูปอยู่ใน `software-company` · ภาพ AI ใน `graphic-design` · ประชุม ใน `personal-life` · zip สำหรับ claude.ai มีของกลางอยู่ในตัวแล้ว
+ทุก plugin ใช้ของกลางจาก `superuser` (แกนหัวหน้าทีม · skill `human-writing` · `simplify` · เอกสารหลัก `polished-document-style` · `document-naming` · agent `reviewer` · hook) · ติดตั้ง plugin ไหน Claude Code ติดตั้ง `superuser` ให้เองจาก `dependencies` · skill เอกสารออกแบบ สไลด์ รูปอยู่ใน `software-development` · ภาพ AI ใน `graphic-design` · ประชุม ใน `personal-life` · zip สำหรับ claude.ai มีของกลางอยู่ในตัวแล้ว
 
 ติดตั้งหลาย plugin → รัน `node scripts/install/set-skill-budget.mjs` ครั้งเดียว (ขยายงบรายการ skill เป็น 2%) ไม่งั้นคำอธิบาย skill บางตัวถูกตัดทิ้ง · รายละเอียด [scripts/README.md](scripts/README.md)
 
-เคยติดตั้ง plugin สาขาของรุ่นก่อน v2.0.0 → ถอดออก (`/plugin uninstall software-company-<สาขา>`) เพราะรวมอยู่ในตัวหลักแล้ว
+เคยติดตั้ง plugin สาขาของรุ่นก่อน v2.0.0 → ถอดออก (`/plugin uninstall software-development-<สาขา>`) เพราะรวมอยู่ในตัวหลักแล้ว
 
 ### ทาง ข · พัฒนาต่อ
 
@@ -85,7 +85,7 @@ scripts\build-dist.cmd                                                       # �
 | ติดตั้งแบบ | ทำอะไร |
 |---|---|
 | ทาง ข | `/reload-plugins` เท่านั้น ไม่ต้อง commit |
-| ทาง ก | `git push` ก่อน แล้ว `/plugin marketplace update sqt-marketplace` + `/plugin update software-company@sqt-marketplace` |
+| ทาง ก | `git push` ก่อน แล้ว `/plugin marketplace update sqt-marketplace` + `/plugin update software-development@sqt-marketplace` |
 
 ### ไม่เห็น skill ที่เพิ่งเพิ่ม
 
@@ -114,10 +114,10 @@ scripts\build-dist.cmd                                                       # �
 ```
 
 ```
-/software-company:superuser เพิ่มหน้าจอค้นหาลูกค้า
+/software-development:superuser เพิ่มหน้าจอค้นหาลูกค้า
 ```
 
-SuperUser ทำงานอย่างไร → [docs/plugins/software-company/flow.png](docs/plugins/software-company/flow.png) · รูปของทุก plugin (วิธีทำงาน · แผนผัง · ขั้นตอน playbook) → [docs/plugins/](docs/plugins/README.md) · วิธีใช้ → [docs/USAGE.md](docs/USAGE.md)
+SuperUser ทำงานอย่างไร → [docs/plugins/software-development/flow.png](docs/plugins/software-development/flow.png) · รูปของทุก plugin (วิธีทำงาน · แผนผัง · ขั้นตอน playbook) → [docs/plugins/](docs/plugins/README.md) · วิธีใช้ → [docs/USAGE.md](docs/USAGE.md)
 
 ---
 
@@ -128,7 +128,7 @@ SuperUser ทำงานอย่างไร → [docs/plugins/software-compan
 | [docs/INSTALL.md](docs/INSTALL.md) | ติดตั้งบน Claude Code · อัปโหลดเข้า claude.ai · ใช้กับ Codex CLI / Gemini CLI / Kimi Code CLI / ChatGPT / Gemini Gem |
 | [docs/USAGE.md](docs/USAGE.md) | วิธีใช้ · SuperUser · workflow จริง · cheatsheet คำสั่งที่ใช้บ่อย |
 | [docs/PLUGINS.md](docs/PLUGINS.md) | สรุป plugin ทั้งหมด · ย้ายจากรุ่นเก่า · roadmap |
-| [docs/REFERENCE.md](docs/REFERENCE.md) | รายละเอียดทุก agent / skill / command ของ software-company |
+| [docs/REFERENCE.md](docs/REFERENCE.md) | รายละเอียดทุก agent / skill / command ของ software-development |
 | [docs/SKILL-LEVELS.md](docs/SKILL-LEVELS.md) | 4 ระดับที่เก็บ skill ได้ และเรียกใช้ยังไง |
 | [docs/IDEAS.md](docs/IDEAS.md) | ไอเดียปรับปรุงที่สำรวจไว้ (ของเก่า เก็บไว้อ้างอิง) |
 | [scripts/README.md](scripts/README.md) | สคริปต์ทั้งหมด · build-dist · ติดตั้งกฎประจำตัว |
@@ -142,7 +142,7 @@ SuperUser ทำงานอย่างไร → [docs/plugins/software-compan
 SQT-Marketplace/
 ├── .claude-plugin/marketplace.json
 ├── plugins/
-│   └── software-company/
+│   └── software-development/
 │       ├── .claude-plugin/plugin.json
 │       ├── agents/     (42)
 │       ├── skills/     (114 skill + 29 คำสั่ง)

@@ -11,7 +11,7 @@
 | กันถอยหลัง (regression) | `regression-suite` | `<skill>-trigger` `-trigger-2` `-trigger-3` (ควรเปิด) · `<skill>-trigger-negative` `-negative-2` `-negative-3` (ไม่ควรเปิด) | skill ถูกเปิดเมื่อควรเปิด และไม่ถูกเปิดเมื่อคำถามเป็นงานของ skill ข้างเคียง | เกือบ 100% ถ้าตกแปลว่า description หรือ skill ข้างเคียงเพิ่งพัง |
 | ความสามารถ (capability) | `capability-suite` | `<skill>-behaviour` | agent เรียกสคริปต์ของ skill และตัวเลขในคำตอบตรงกับผลสคริปต์ · `tax-vat-th` ไม่มีสคริปต์ จึงวัดว่ากำหนดยื่นถูกและมีแหล่ง และไม่แต่งยอดหัก ณ ที่จ่าย | เริ่มที่ผ่านน้อยได้ ใช้ดูว่า skill ช่วยมากแค่ไหน |
 
-ชื่อโฟลเดอร์ไม่ใช้ `-regression` เพราะ `validate-marketplace.mjs` สงวนชื่อนี้ไว้ให้อาการที่ agent พลาดจริงแล้วเท่านั้น ชุดนี้ยังไม่เคยรัน จึงแยกด้วย tag แทน · เคส "ไม่ควรเปิด" ตั้งชื่อแบบ `-trigger-negative` ตาม `plugins/software-company/evals`
+ชื่อโฟลเดอร์ไม่ใช้ `-regression` เพราะ `validate-marketplace.mjs` สงวนชื่อนี้ไว้ให้อาการที่ agent พลาดจริงแล้วเท่านั้น ชุดนี้ยังไม่เคยรัน จึงแยกด้วย tag แทน · เคส "ไม่ควรเปิด" ตั้งชื่อแบบ `-trigger-negative` ตาม `plugins/software-development/evals`
 
 ตัวเลขที่ใช้ตรวจในเคส behaviour ได้มาจากการรันสคริปต์ของ skill ด้วยโจทย์เดียวกันเมื่อ 2026-10-28 (บรรทัดคอมเมนต์บนสุดของแต่ละ `case.yaml` บอก input ไว้) · ถ้าแก้สคริปต์หรือ `rates.json` ให้รันสคริปต์ใหม่แล้วแก้ pattern ตาม · โจทย์ไม่มีอัตราภาษีที่ไม่มีใน SKILL.md
 
@@ -44,3 +44,12 @@ node scripts/evals/plugin-eval.mjs e-commerce --tag capability-suite --allow-too
 ## ตารางผล
 
 ยังไม่มี
+
+## ยังไม่ได้รันรอบแดง/เขียว (2026-11-10)
+
+skill ใหม่ด้านล่างมีเคสครบ 3 ชุดแล้ว แต่**ยังไม่ได้รันรอบแดง/เขียว** ตาม `skill-authoring` · รอผู้ใช้อนุมัติค่า eval ก่อนรัน · ใช้ `-guard` ไม่ใช่ `-regression` เพราะยังไม่เคยเห็นอาการพลาดจริง
+
+| skill | เคสที่มี | สถานะ | คำสั่งเมื่ออนุมัติ |
+|---|---|---|---|
+| `shop-daily-briefing` | `-trigger` · `-behaviour` · `-guard` | ยังไม่ได้รัน | `node scripts/evals/plugin-eval.mjs e-commerce --only "^shop-daily-briefing-" --max-cost-usd 5` |
+| `win-back-customers` | `-trigger` · `-behaviour` · `-guard` | ยังไม่ได้รัน | `node scripts/evals/plugin-eval.mjs e-commerce --only "^win-back-customers-" --max-cost-usd 5` |

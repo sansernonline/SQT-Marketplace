@@ -190,7 +190,7 @@ SQT-Marketplace\
 ├── .claude-plugin\
 │   └── marketplace.json          ← ประกาศว่ามี plugin อะไรบ้าง
 └── plugins\
-    └── software-company\
+    └── software-development\
         ├── .claude-plugin\
         │   └── plugin.json       ← name · version · description
         ├── skills\               ← skill
@@ -232,7 +232,7 @@ SQT-Marketplace\
 
 ```
 /plugin marketplace add "C:\_DATA\...\SQT-Marketplace"
-/plugin install software-company@sqt-marketplace
+/plugin install software-development@sqt-marketplace
 ```
 
 ติดตั้งแล้วใช้เหมือนระดับอื่น — **พิมพ์งานตามปกติ** แล้ว Claude เลือกเอง
@@ -240,7 +240,7 @@ SQT-Marketplace\
 เรียกตรงต้องใส่ชื่อ plugin นำหน้า:
 
 ```
-/software-company:srs-writing
+/software-development:srs-writing
 ```
 
 เรียก agent ด้วยชื่อ agent ในคำสั่งภาษาคน:
@@ -344,7 +344,7 @@ skill จะถูกเลือกเองเมื่องานตรง�
 
 ```
 /srs-writing                      ← ระดับเครื่อง และระดับโปรเจกต์
-/software-company:srs-writing     ← ระดับ plugin ต้องมีชื่อ plugin นำหน้า
+/software-development:srs-writing     ← ระดับ plugin ต้องมีชื่อ plugin นำหน้า
 ```
 
 ### เกิดอะไรขึ้นหลังมันถูกเรียก

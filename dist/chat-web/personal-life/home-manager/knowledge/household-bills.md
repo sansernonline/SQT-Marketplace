@@ -47,7 +47,10 @@ Ft is reset every 4 months (ม.ค.–เม.ย., พ.ค.–ส.ค., ก.ย
 1. **Collect** the last 3–6 bills for each service (apps keep 12+ months of history)
 2. **Log** each month in the tracker — [references/bill-tracker-template.md](references/bill-tracker-template.md)
 3. **Set due dates** in the family calendar 3 days before each due date; note the disconnection date printed on the electricity bill (it is later than the due date — do not plan on it)
-4. **Auto-debit** (หักบัญชีอัตโนมัติ) for fixed-ish bills: set it up in the bank app or the utility app; keep one account just for bills and check the debit on the statement each month
+4. **Auto-debit** (หักบัญชีอัตโนมัติ) for fixed-ish bills: set it up in the bank app or the utility app; keep one account just for bills and check the debit on the statement each month. Before paying a batch or switching on a new debit:
+   - **Check the money first.** Add up every bill due before the next salary and compare with what will be left in the account ("จ่าย 6 บิลวันศุกร์รวม 7,840 บาท เหลือ 3,100 ก่อนเงินเดือนเข้าวันที่ 25 · พอ"). The user gives the balance or checks it in the bank app; if nobody checked, say so plainly ("ยังไม่ได้ดูยอดเงินในบัญชี") instead of calling the plan safe
+   - **An old auto-debit is not a standing approval.** A bill debited for 3 years is still looked at when its amount jumps (step 5); the debit just pays, it does not check
+   - **A bill or message asking to pay into a new account number** is verified by calling the number printed on an old bill or the utility's own app, never one in the message, and nothing is paid until then (same rule as **Verify** in `inbox-triage`)
 5. **Spike check** — if a bill is >20% above the 3-month average in units (20% is a default threshold, not measured), run the checklist below · do not compute the percentage by hand: `node power-bill.mjs --history scripts/example-history.json` (4 months of units, oldest first)
 6. **Monthly review** — 5 minutes on the 5th of each month; totals feed `trading-finance` `personal-budget` (if installed)
 
@@ -96,6 +99,8 @@ A Bangkok house used 412 units in May against 318 / 305 / 330 in Feb–Apr (aver
 ## Related
 
 `home-maintenance` · `trading-finance` `personal-budget` (if installed) · `important-docs` (keep the meter number, electricity customer number CA/รหัสผู้ใช้ไฟ, and water account number there)
+
+The money check before paying and the "old debit is not approval" rule in step 4 are ideas from anthropics/knowledge-work-plugins `small-business/skills/pay-the-bills` (Apache-2.0, rewritten, viewed 2026-11-10).
 
 ## เรียกเป็นคำสั่ง
 

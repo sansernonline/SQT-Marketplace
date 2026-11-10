@@ -4,7 +4,7 @@
 ผลลัพธ์: สรุปสถานะที่ตรวจกับของจริงแล้ว (ตอนรับต่อ) · หัวข้อ "รับงานต่อ" ใน `CONTEXT.md` ที่คนอื่นอ่านแล้วเริ่มได้ทันที (ตอนหยุด)
 รูปแบบหลัก: ReAct · Reflection (`agent-patterns`)
 
-งานโค้ด (branch · sandbox/docker · server · test) → playbook เดียวกันใน plugin `software-company`
+งานโค้ด (branch · sandbox/docker · server · test) → playbook เดียวกันใน plugin `software-development`
 
 ## ขั้นตอน — รับงานต่อ (คัดลง todo ตรงตัว)
 

@@ -1,0 +1,32 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: markdown-report-docx-behaviour
+description: ขอแปลงรายงาน Markdown เป็น Word แล้วถามว่าเปิด Word แก้ตัวเลขเองทีหลังได้ไหม ต้องตอบว่าแก้ที่ Markdown แล้วรันใหม่ และเปิดดูทุกหน้าก่อนส่ง
+tags: [behaviour, markdown-report-docx]
+runs: 3
+expected_outcome: Markdown เป็นต้นฉบับ แก้ที่ .md แล้วรัน md_to_docx ใหม่ ไม่แก้ Word ด้วยมือ แปลงเป็น PDF เป็นภาพแล้วเปิดดูทุกหน้า ตั้งชื่อไฟล์ตามกติกา
+execution:
+  prompt: |
+    รายงานผลทดสอบของผมเป็น Markdown ไฟล์เดียว ช่วยแปลงเป็น Word ส่งลูกค้า แล้วถ้าตัวเลขเปลี่ยนทีหลัง ผมเปิด Word แก้ตัวเลขเองได้เลยใช่ไหม
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: converter
+    type: regex
+    pattern: "md_to_docx"
+    match: contains
+    target: last_message
+  - name: rerun
+    type: regex
+    pattern: "(?i)รันใหม่|สร้างใหม่|run again|rerun|regenerate"
+    match: contains
+    target: last_message
+  - name: rules-followed
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. ตอบว่าไม่ควรแก้ใน Word ด้วยมือ ให้แก้ที่ไฟล์ Markdown แล้วรันสคริปต์สร้างใหม่ เพราะแก้มือจะหายตอนรันรอบหน้า
+      2. ใช้สคริปต์ md_to_docx (ไม่เขียนไฟล์ Word ทีละส่วนด้วยมือ)
+      3. แปลงผลเป็น PDF หรือภาพแล้วเปิดดูทุกหน้าก่อนส่ง
+      4. ตั้งชื่อไฟล์ส่งมอบตามกติกาที่มีเลขรุ่นและสถานะ (เช่น v1.0-DRAFT)

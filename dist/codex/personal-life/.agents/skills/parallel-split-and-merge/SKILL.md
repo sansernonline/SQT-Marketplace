@@ -75,7 +75,7 @@ description: Use when work splits into independent slices (chapters, listings, r
 
 ## แยกที่ทำงานต่อตัว (งานโค้ด)
 
-งานโค้ด → ส่วนเพิ่มใน plugin `software-company` → `superuser` → `references/code-extensions.md`
+งานโค้ด → ส่วนเพิ่มใน plugin `software-development` → `superuser` → `references/code-extensions.md`
 
 ## สิ่งที่ห้ามทำ
 

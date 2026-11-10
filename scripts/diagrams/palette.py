@@ -8,7 +8,7 @@ import os
 import re
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-PLUGINS = ["superuser", "software-company", "e-commerce", "trading-finance", "personal-life", "graphic-design"]
+PLUGINS = ["superuser", "software-development", "e-commerce", "trading-finance", "personal-life", "graphic-design"]
 MERGED = {"career": "personal-life", "health-wellness": "personal-life", "home-family": "personal-life",
           "consumer-rights": "e-commerce", "online-seller": "e-commerce"}
 

@@ -3,7 +3,7 @@
  * run-bench.mjs — เทียบ plugin 2 รุ่นบนงานชุดเดียวกัน: เวลา · จำนวนรอบ · ค่าใช้จ่าย · ลูกทีม · test ที่ซ่อนไว้
  *
  *   node scripts/evals/speed/run-bench.mjs --old <git ref>|none [--new <git ref>|worktree] [--tasks t1,t4] [--runs 2]
- *        [--plugin software-company] [--budget 8] [--parallel 4] [--save-ratios]
+ *        [--plugin software-development] [--budget 8] [--parallel 4] [--save-ratios]
  *
  *   --old    รุ่นก่อน เป็น git ref เช่น HEAD หรือ f105afc · none = ไม่โหลด plugin เลย (แขนเทียบ "ไม่ใช้ superuser")
  *   --new    รุ่นหลัง ค่าเริ่ม = ไฟล์ในโฟลเดอร์ตอนนี้ (worktree) · ใส่ git ref ก็ได้
@@ -32,7 +32,7 @@ const args = Object.fromEntries(process.argv.slice(2).join(" ").split(/\s*--/).f
   const [k, ...v] = p.trim().split(/\s+/); return [k, v.join(" ") || true];
 }));
 if (!args.old) { console.error("ต้องใส่ --old <git ref> เช่น --old HEAD"); process.exit(1); }
-const PLUGIN = args.plugin ?? "software-company";
+const PLUGIN = args.plugin ?? "software-development";
 const TASKS = (args.tasks ?? "t1,t4").split(",");
 const RUNS = Number(args.runs ?? 2);
 const BUDGET = String(args.budget ?? 8);

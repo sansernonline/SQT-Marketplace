@@ -75,4 +75,4 @@ Before handing over, run the check in `no-ai-look` (section 3): its script on HT
 
 ## Related
 
-`line-oa-setup` · `line-chatbot` · `line-broadcast` (plugin `e-commerce`, if installed).
+`line-oa-setup` · `line-chatbot` · `line-broadcast` (plugin `e-commerce`, if installed). · `line-sticker` (stickers and emoji, same Creators-side limits style).

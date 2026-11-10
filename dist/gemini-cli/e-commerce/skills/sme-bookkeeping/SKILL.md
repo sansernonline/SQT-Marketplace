@@ -76,12 +76,24 @@ Do it in the first 5 days of the next month, before the WHT and VAT dates in `ta
 1. Download every platform's monthly payout or income report and the courier COD statements.
 2. Download the business bank statement; check the closing balance matches the journal balance.
 3. Every bank line has a journal row; every row has a document (or a note why not).
-4. Gross sales per channel = platform report total. Fees per channel match the platform's fee invoice.
+4. Gross sales per channel = platform report total. Fees per channel match the platform's fee invoice. Then match payouts to the bank, hunt duplicates and list missing receipts (the 3 checks below).
 5. Stock count or stock-sheet total (`multi-shop-stock`) recorded; note large write-offs (damage, loss).
 6. Unpaid supplier bills and unpaid customer invoices listed with due dates (feeds `cash-flow`).
 7. VAT-registered: sales and purchase tax reports done; ภ.พ.30 figures ready. Paid suppliers or freelancers 1,000 baht or more: WHT and 50 ทวิ done (`tax-vat-th`).
 8. Running total of the year's sales updated. Not VAT-registered and approaching **1.8 million baht**: register within 30 days of passing it (`tax-vat-th` section 1).
 9. One-line summary: sales · costs · profit · cash in bank · owner draws. Scan and file the month's documents in one folder named `YYYY-MM`.
+
+Do not move to the next step while the "to fix" list from steps 3 and 4 still has open rows, unless the owner says "ข้ามก่อน". Write that down next to the row.
+
+### The 3 checks in step 4
+
+**Match payouts to the bank, net to net.** Compare the **net payout** in each Shopee, Lazada or TikTok Shop payout report with the deposit that actually reached the shop account. Comparing gross sales with the bank makes every row differ by exactly the fees, and real gaps hide among them. A payout and a deposit match when the dates are at most 2 days apart and the amounts at most 1 baht apart. A bigger gap gets its own row with the difference written out. "In the report but no money arrived" and "money arrived but no report" are 2 separate lists; never net them against each other.
+
+**Hunt duplicates.** Flag pairs with the same amount, the same counterparty and dates at most 5 days apart. The owner decides whether each pair is a real duplicate or a regular payment (rent, a supplier who bills twice a month). Report it as "checked for duplicates within 5 days", not "no duplicates".
+
+**List missing receipts.** Every expense row above the owner's threshold with no document goes on a "ใบเสร็จขาด" list: date, payee, amount, what to ask for. The threshold is the owner's call (รอยืนยัน the amount with the owner or accountant). A missing receipt can cost the deduction: an individual seller who deducts actual expenses needs the document (`seller-tax-basics`); a payment that needed withholding tax also needs the 50 ทวิ (`tax-vat-th`).
+
+The 2-day, 1-baht and 5-day windows are starting values from Anthropic's month-end-prep skill (`anthropics/knowledge-work-plugins` small-business, Apache-2.0, read 2026-11-10; ideas only, no text copied), not measured on Thai payouts; widen the date window for a platform whose payouts you have seen land later.
 
 ## 6. When to hire an accountant
 

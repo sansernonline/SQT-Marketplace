@@ -13,8 +13,8 @@
       "description": "SuperUser — a team lead agent. Sizes the task and picks a budget, briefs every piece, dispatches low-effort subagents in parallel, scores them, and re-checks with a fresh reviewer until done. Optional modules (shared context, logs, learning loop, inbox, hook gates) switch per project. Install alone, or extend it with a domain plugin via dependencies."
     },
     {
-      "name": "software-company",
-      "source": "./plugins/software-company",
+      "name": "software-development",
+      "source": "./plugins/software-development",
       "description": "Complete software development company in one plugin — 38 agents (core SDLC team plus AI, security operations, mobile, data, compliance, growth, games, IoT, blockchain, reverse engineering and an engineer, a compliance officer and an analyst per industry: fintech, healthcare, e-commerce, insurance, legal tech, SaaS), 95 skills and 29 slash commands. Industry add-ons are merged in since v2.0.0."
     },
     {

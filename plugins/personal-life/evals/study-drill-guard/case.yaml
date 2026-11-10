@@ -1,0 +1,26 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# ทางที่กัน: วางแผนสอบทั้งรอบเป็นงานของ cert-prep ไม่ใช่ study-drill (ตาราง "Use when / not when")
+# รอบแดงยังไม่ได้รัน (ยังไม่ได้ตรวจ) · เขียนเป็น -guard เพราะยังไม่เคยเห็น agent พลาดจริง
+schema_version: "1.1"
+name: study-drill-guard
+description: ผู้ใช้ขอแผนเตรียมสอบ AZ-104 รายสัปดาห์และถามว่าควรจองสอบเมื่อไร ต้องไม่ตอบด้วยการทำบัตรคำแทนแผน
+tags: [guard, study-drill]
+runs: 3
+expected_outcome: ตอบเป็นแผนรายสัปดาห์และเกณฑ์จองสอบจากคะแนนสอบฝึก (ผ่าน cert-prep) ไม่เริ่มทำบัตรคำหรือถามตอบทดสอบ
+execution:
+  prompt: |
+    จะสอบ Azure AZ-104 มีเวลาประมาณ 8 สัปดาห์ สัปดาห์ละ 6 ชั่วโมง
+    ช่วยวางแผนรายสัปดาห์ให้หน่อย แล้วควรจองวันสอบตอนไหน
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: no-cards
+    type: regex
+    pattern: "Q:.{0,80}A:"
+    match: not_contains
+    target: last_message
+  - name: plan-shape
+    type: llm
+    focus: last_message
+    criteria: |
+      ผ่านเมื่อคำตอบเป็นแผนรายสัปดาห์สำหรับสอบ และมีเกณฑ์จองสอบที่อิงคะแนนสอบฝึก ไม่ใช่ชุดบัตรคำหรือการถามตอบทีละข้อ

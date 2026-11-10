@@ -231,7 +231,7 @@ description ที่สรุปว่าต้องทำอะไรบ้�
 | skill ทั้งหมด | 73 |
 | description รวม | 22,582 ตัวอักษร |
 | **≈ token ที่จ่ายทุก session ถ้าลงครบทุก plugin** | **~5,700** |
-| เฉพาะ `software-company` (34 ตัว) | ~3,800 |
+| เฉพาะ `software-development` (34 ตัว) | ~3,800 |
 | add-on ตัวละ | ~130-180 |
 
 หนักสุด 5 ตัว: `web-app-design` 204 · `mobile-app-design` 202 · `ui-craft` 191 ·
@@ -331,7 +331,7 @@ _Reviewed: all 14 plugins, 67 agents, 73 skills. Goal: each agent gets more capa
 ### 1. What I found
 
 **The "universal" skill wasn't universal.** `simplicity-first` is described as
-applying to every agent, but only the 12 core `software-company` agents
+applying to every agent, but only the 12 core `software-development` agents
 referenced it. The 55 specialist agents — including every engineer who writes
 code — referenced it nowhere.
 
@@ -352,7 +352,7 @@ less code, 47–77% less cost, 3–6× faster. That's the pattern worth copying.
 
 ### 2. What I changed (done)
 
-1. **Created `lazy-coding`** (`software-company/skills/lazy-coding/`) — a
+1. **Created `lazy-coding`** (`software-development/skills/lazy-coding/`) — a
    ponytail-adapted skill, 90 lines, **code only**. Keeps ponytail's ladder,
    `lite/full/ultra` intensity, and output discipline; adapted to the team's
    own rule ("a tired teammate understands it in 6 months") and uses a
@@ -366,7 +366,7 @@ less code, 47–77% less cost, 3–6× faster. That's the pattern worth copying.
    including the ones that previously had no skills section at all.
 
 4. **Created `spell-out-abbreviations` and `short-answers`**
-   (`software-company/skills/`) — the two rules that apply to *everything*
+   (`software-development/skills/`) — the two rules that apply to *everything*
    written for a person, not just code or docs.
 
 5. **Appended the abbreviation rule to all 134 agent and skill files** across
@@ -402,7 +402,7 @@ invisible outside the core plugin. Suggested additions per agent type:
 | Compliance / officer agents | `polished-document-style`, `office-document-handling` | They produce reports and audit docs |
 
 Each is a one-line addition to the agent's **Skills You Use** section, in the
-same `` `skill-name` (from software-company) — when to use `` format already in
+same `` `skill-name` (from software-development) — when to use `` format already in
 use. Say the word and I'll wire these in too.
 
 ---

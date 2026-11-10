@@ -29,4 +29,4 @@ General information under พ.ร.บ.คุ้มครองแรงงาน
 6. SSO: สปส.6-09 by the 15th of next month (see `social-security-th`).
 7. 50 ทวิ for the year to date (see `payroll-th`).
 8. Work certificate (หนังสือรับรองการทำงาน) on request — required by ป.พ.พ. ม.585.
-9. Severance is taxable income, but there is a special exemption/calculation for termination pay — check with the accountant.
+9. Severance under labour law is tax-exempt only when the employee was let go involuntarily (not retirement, not a contract that simply ended), and only up to the wages of the last 400 days, capped at **600,000 baht**; the rest is taxable. With 5 years of service or more, the employee may instead tax the one-off termination pay separately from other income. Checked 2026-11-10: Revenue Department guide to ภ.ง.ด.91, tax year 2568, [rd.go.th/fileadmin/tax_pdf/pit/2568/Ins91_241268.pdf](https://www.rd.go.th/fileadmin/tax_pdf/pit/2568/Ins91_241268.pdf). Withholding on the severance → the accountant.

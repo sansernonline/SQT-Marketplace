@@ -14,7 +14,7 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const CHECK_ONLY = process.argv.includes("--check");
-const CORE = "software-company";
+const CORE = "software-development";
 
 // ── อ่านของจริงจาก plugins/ ────────────────────────────────────────────
 
@@ -121,7 +121,7 @@ function updateGlobalReadme(core) {
   ).version;
   edit("docs/INSTALL.md", (text) =>
     text.replace(
-      /(\*\*ในไฟล์:\*\*|\*\*`software-company\.zip`:\*\*) \d+ skills · \d+ agents · \d+ commands · `plugin\.json` v[\d.]+/,
+      /(\*\*ในไฟล์:\*\*|\*\*`software-development\.zip`:\*\*) \d+ skills · \d+ agents · \d+ commands · `plugin\.json` v[\d.]+/,
       (_, head) => `${head} ${core.skills.length} skills · ${core.agents.length} agents · ${core.commands.length} commands · \`plugin.json\` v${version}`
     )
   );

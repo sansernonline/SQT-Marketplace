@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 // money-calc.mjs - money arithmetic for 5 trading-finance skills, so figures are not worked out in the model's head (Node stdlib only)
-// Usage: node money-calc.mjs <snapshot|drift|dividend|afterTax|fee> <file.json> [--json]   |   node money-calc.mjs --self-test
+// Usage: node money-calc.mjs <snapshot|attribution|drift|dividend|afterTax|fee> <file.json> [--json]   |   node money-calc.mjs --self-test
 // Example files: examples/<command>.json next to this script. Each command follows the formula in its skill:
 //   snapshot  portfolio-snapshot/SKILL.md "Formulas"      drift     rebalance-and-dca/SKILL.md section 3
 //   dividend  dividend-tracker/SKILL.md "Formulas"        afterTax  bonds-and-deposits/SKILL.md Workflow step 5
-//   fee       mutual-fund-picker/SKILL.md "fee drag"
+//   fee       mutual-fund-picker/SKILL.md "fee drag"       attribution  portfolio-snapshot/SKILL.md "Where the return came from"
 import { readFileSync } from 'node:fs';
 
 // Tax rates change with the law: each one is taken from the skill text that carries its source and check date.
@@ -60,6 +60,30 @@ export function snapshot(input) {
     out.ret = pct(total - input.startValue - dep, base);
   }
   return out;
+}
+
+// --- attribution: which holding moved the result (price, new money, dividends) -----------
+// Starting value, not measured: one holding behind more than half of all the movement gets named.
+const ONE_NAME_SHARE_PCT = 50;
+export function attribution(input) {
+  const rows = list(input?.holdings, 'holdings').map((h, i) => {
+    const n = h?.name ?? `แถวที่ ${i + 1}`;
+    const L = (f) => `holdings[${i}].${f} (${n})`;
+    num(h.startValue, L('startValue')); num(h.endValue, L('endValue'));
+    const dep = opt(h.deposits, 0), div = opt(h.dividends, 0);
+    if (typeof dep !== 'number' || !Number.isFinite(dep)) throw new Error(`ช่อง ${L('deposits')} ต้องเป็นตัวเลข (ขายออกใส่ติดลบ) (ได้ ${JSON.stringify(dep)})`);
+    num(div, L('dividends'));
+    const price = h.endValue - h.startValue - dep; // market move only: new money is not a gain
+    return { name: n, startValue: h.startValue, deposits: dep, endValue: h.endValue, price, dividends: div, gain: price + div };
+  });
+  const start = rows.reduce((s, r) => s + r.startValue, 0), dep = rows.reduce((s, r) => s + r.deposits, 0);
+  const base = start + dep * 0.5; // same mid-period shortcut as snapshot
+  if (base <= 0) throw new Error('มูลค่าต้นงวดรวม + เงินเข้าครึ่งหนึ่งต้องมากกว่า 0 · ตรวจ startValue และ deposits');
+  const gain = rows.reduce((s, r) => s + r.gain, 0);
+  const moved = rows.reduce((s, r) => s + Math.abs(r.gain), 0);
+  rows.forEach((r) => { r.contributionPct = pct(r.gain, base); r.sharePct = moved > 0 ? pct(Math.abs(r.gain), moved) : null; });
+  const top = rows.filter((r) => r.sharePct !== null && r.sharePct > ONE_NAME_SHARE_PCT).map((r) => r.name);
+  return { rows, start, deposits: dep, gain, returnPct: pct(gain, base), moved, oneName: top[0] ?? null, thresholdPct: ONE_NAME_SHARE_PCT };
 }
 
 // --- drift: deviation from target and months for DCA to close the gap --------------------
@@ -146,7 +170,7 @@ export function fee(input) {
   return { amount: input.amount, years: input.years, grossReturnPct: input.grossReturnPct, rows };
 }
 
-const COMMANDS = { snapshot, drift, dividend, afterTax, fee };
+const COMMANDS = { snapshot, attribution, drift, dividend, afterTax, fee };
 
 // --- text output ----------------------------------------------------------------------------
 const b = (n) => Math.round(n).toLocaleString('en-US');
@@ -160,6 +184,15 @@ export function report(cmd, r) {
       `| **รวม** | **${b(r.total)}** | **${r.pl >= 0 ? '+' : ''}${b(r.pl)}** | 100% |`];
     if (r.ret !== null) lines.push('', `ผลตอบแทนงวดนี้ ${p1(r.ret)} (Modified Dietz ถือว่าเงินเข้ากลางงวด เป็นค่าประมาณ)`);
     if (r.warnings.length) lines.unshift(...r.warnings.map((w) => `คำเตือน: ${w}`), '');
+    return lines.join('\n');
+  }
+  if (cmd === 'attribution') {
+    const sg = (n) => `${n >= 0 ? '+' : ''}${b(n)}`;
+    const lines = ['| ถือ | ต้นงวด | เงินเข้า(+)/ออก(−) | ราคาเปลี่ยน | ปันผล | รวมได้/เสีย | ต่อผลตอบแทนพอร์ต | ส่วนของการขยับทั้งหมด |', '|---|---|---|---|---|---|---|---|',
+      ...r.rows.map((x) => `| ${x.name} | ${b(x.startValue)} | ${sg(x.deposits)} | ${sg(x.price)} | ${b(x.dividends)} | ${sg(x.gain)} | ${p1(x.contributionPct)} | ${x.sharePct === null ? '-' : w1(x.sharePct)} |`),
+      `| **รวม** | **${b(r.start)}** | **${sg(r.deposits)}** | | | **${sg(r.gain)}** | **${p1(r.returnPct)}** | 100% |`, ''];
+    lines.push(r.oneName ? `${r.oneName} ตัวเดียวอธิบายเกิน ${r.thresholdPct}% ของการขยับทั้งหมด · ผลของพอร์ตงวดนี้คือผลของตัวนี้เป็นหลัก` : `ไม่มีตัวไหนอธิบายเกิน ${r.thresholdPct}% ของการขยับทั้งหมด`);
+    lines.push('เงินเข้าไม่นับเป็นกำไร · ผลตอบแทนแบบ Modified Dietz ถือว่าเงินเข้ากลางงวด เป็นค่าประมาณ');
     return lines.join('\n');
   }
   if (cmd === 'drift') {
@@ -212,6 +245,24 @@ function selfTest() {
   t('snapshot shares ติดลบ error', throwsWith(snapshot, { holdings: [{ name: 'A', shares: -1, price: 10 }] }, 'shares'));
   t('snapshot ไม่มี value error', throwsWith(snapshot, { holdings: [{ name: 'A' }] }, 'value'));
   t('snapshot startValue 0 error', throwsWith(snapshot, { startValue: 0, holdings: [{ name: 'A', value: 1 }] }, 'startValue'));
+
+  // attribution set 1 (hand-worked, examples/attribution.json): ABC +8,000 price +1,440 dividend = +9,440 · DEF −5,000
+  // fund 39,000 + 10,000 in → 49,000 = 0 · money market +200 · total +4,640 on base 291,800 = +1.59% · ABC 9,440 ÷ 14,640 = 64.5% of movement
+  const att = { holdings: [
+    { name: 'ABC', startValue: 90000, endValue: 98000, dividends: 1440 }, { name: 'DEF', startValue: 50000, endValue: 45000 },
+    { name: 'SET50 index fund', startValue: 39000, deposits: 10000, endValue: 49000 }, { name: 'Money market fund', startValue: 77800, endValue: 78000 },
+    { name: 'Cash at broker', startValue: 30000, endValue: 30000 }] };
+  r = attribution(att);
+  t('attribution ABC +9,440 DEF −5,000 กอง 0', near(r.rows[0].gain, 9440) && near(r.rows[1].gain, -5000) && near(r.rows[2].gain, 0) && near(r.rows[2].price, 0));
+  t('attribution รวม +4,640 ผลตอบแทน 1.59%', near(r.gain, 4640) && near(r.returnPct, 4640 / 291800 * 100, 1e-9) && r.returnPct.toFixed(2) === '1.59');
+  t('attribution ABC 64.5% ของการขยับ ถูกเรียกชื่อ', r.rows[0].sharePct.toFixed(1) === '64.5' && r.oneName === 'ABC');
+  t('attribution ส่วนต่อผลตอบแทนรวมกันเท่าผลตอบแทนพอร์ต', near(r.rows.reduce((s, x) => s + x.contributionPct, 0), r.returnPct, 1e-9));
+  // set 2 (hand-worked): A 100 → 110 · B 100 → 95 with 5 dividend = 0 · total +10 on 200 = 5% · A is all of the movement
+  r = attribution({ holdings: [{ name: 'A', startValue: 100, endValue: 110 }, { name: 'B', startValue: 100, endValue: 95, dividends: 5 }] });
+  t('attribution ชุด 2: 5% · A 100%', near(r.returnPct, 5) && near(r.rows[0].sharePct, 100) && near(r.rows[1].gain, 0) && r.oneName === 'A');
+  t('attribution ไม่มีอะไรขยับ ไม่เรียกชื่อ', attribution({ holdings: [{ name: 'A', startValue: 1, endValue: 1 }] }).oneName === null);
+  t('attribution ไม่มี endValue error', throwsWith(attribution, { holdings: [{ name: 'A', startValue: 1 }] }, 'endValue'));
+  t('attribution ปันผลติดลบ error', throwsWith(attribution, { holdings: [{ name: 'A', startValue: 1, endValue: 1, dividends: -1 }] }, 'dividends'));
 
   // rebalance-and-dca worked example: deviation 10.9 · 20 months > 12 · DCA 20,000 → 10 months
   const dr = { holdings: { Equity: 780000, Bonds: 320000 }, target: { Equity: 60, Bonds: 40 }, monthlyDca: 10000 };

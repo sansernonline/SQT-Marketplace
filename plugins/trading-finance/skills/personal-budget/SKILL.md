@@ -19,7 +19,7 @@ A budget that survives contact with real life. Worksheet: [references/budget-wor
 4. **Flag leaks**: forgotten subscriptions, BNPL / ผ่อน 0% instalments stacking up, cash-advance fees, delivery frequency. List each with its monthly baht.
 5. **Propose the split** — 50/30/20 (needs/wants/savings+investment) as a starting point; adjust to reality (high Bangkok rent may push needs to 60%). Never treat the split as sacred.
 6. **The one number that matters** — the investment/saving transfer, set as a standing order on payday (บัญชีแยก, auto-transfer), before spending starts.
-7. **Monthly 10-minute review** — actual vs plan per envelope, one category to fix next month.
+7. **Monthly 10-minute review** — actual vs plan per envelope, one category to fix next month. Explain only the lines that are off by **more than 10% and more than 500 baht** (both at once); the rest is noise and gets no comment. For a large line such as rent or a loan, a lower % is fine because 10% of it is already a lot of money. The 10% and 500 baht are starting values, not measured; the user may change them. (Idea: materiality thresholds in `variance-analysis`, anthropics/knowledge-work-plugins, Apache-2.0, viewed 2026-11-10.)
 
 ## Decision table
 

@@ -1,0 +1,29 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# ทางที่กัน: ยังเทียบข้อเสนองานอยู่ เป็นงานของ salary-negotiation ไม่ใช่ new-job-first-90-days
+# รอบแดงยังไม่ได้รัน (ยังไม่ได้ตรวจ) · เขียนเป็น -guard เพราะยังไม่เคยเห็น agent พลาดจริง
+schema_version: "1.1"
+name: new-job-first-90-days-guard
+description: ผู้ใช้ได้ข้อเสนองาน 2 ที่และยังไม่ได้ตอบรับ ถามว่าควรเลือกที่ไหนและต่อรองอย่างไร ต้องไม่เปิด new-job-first-90-days
+tags: [guard, new-job-first-90-days]
+runs: 3
+expected_outcome: ไม่เปิด new-job-first-90-days · เทียบรายได้ทั้งปีของ 2 ข้อเสนอและเสนอวิธีต่อรอง
+execution:
+  prompt: |
+    ได้ข้อเสนองาน 2 ที่ ยังไม่ได้ตอบรับ ที่แรกเงินเดือน 55,000 โบนัส 2 เดือน
+    ที่สองเงินเดือน 60,000 ไม่มีโบนัสแต่มีกองทุนสำรองเลี้ยงชีพสมทบ 5%
+    ควรเลือกที่ไหน แล้วต่อรองที่แรกยังไงดี
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?new-job-first-90-days"'
+    min: 0
+    max: 0
+    arm: with-only
+  - name: yearly-compare
+    type: regex
+    pattern: "×\\s*12|x\\s*12|ต่อปี|ทั้งปี"
+    match: contains
+    target: last_message

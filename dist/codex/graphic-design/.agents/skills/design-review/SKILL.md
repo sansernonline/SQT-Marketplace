@@ -29,14 +29,18 @@ Visuals only; a second look at text, code or a plan → a new `reviewer` agent.
 |---|---|---|---|
 | 1 | First read | In 2 seconds a stranger names the product or offer intended | They name the background, a model's face, or "a promotion" |
 | 2 | Hierarchy | Exactly 1 primary element, clearly largest or highest contrast; 3 levels or fewer | 2 elements the same size and weight; price and headline fight |
-| 3 | Contrast | Body text ≥ 4.5:1, large text ≥ 3:1 (Web Content Accessibility Guidelines (WCAG) AA); text over photo passes a squint test | Text on busy photo areas without overlay; amber on white |
+| 3 | Contrast | Body text ≥ 4.5:1, large text ≥ 3:1 (Web Content Accessibility Guidelines (WCAG) AA); text over photo passes a squint test · icons, chart lines and button outlines ≥ 3:1 against their background · no meaning carried by colour alone (price up/down also has an arrow or a word) | Text on busy photo areas without overlay; amber on white; a pale-grey icon on white |
 | 4 | Spacing | 1 spacing scale (e.g. multiples of 8 px); outer margin ≥ inner gaps; text clear of safe zones | Random gaps; text touching edges; text in the story's bottom 35% |
 | 5 | Alignment | Every element sits on a shared edge or centre line | Items "almost" aligned (off by a few px); centred and left-aligned mixed |
 | 6 | Type | ≤ 2 families; ≤ 3 sizes; Thai line-height ≥ 1.5 for body; no single word alone on a headline line | Third font; faux bold; clipped tone marks or vowels; one-word last line |
 | 7 | Consistency | Colours, fonts and logo from the brand kit; matches sibling assets' style lock | Off-kit colour; stretched or recoloured logo; different lighting style |
 | 8 | Craft | No artefacts, no stretching, no default effects, correct spelling in both languages | AI artefacts (fingers, warped text, melted objects); jagged cut-outs; typos in price or date |
 
-Point 3 source: WCAG 2.2 criterion 1.4.3 — ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html
+Point 3 source: WCAG 2.2 criterion 1.4.3 — ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html · the 3:1 for graphics is criterion 1.4.11 (anthropics/knowledge-work-plugins `design/skills/accessibility-review`, Apache-2.0 · ideas only, rewritten · ตรวจ 2026-11-10; (ยังไม่ได้เปิดหน้า W3C ของ 1.4.11 ในรอบนี้))
+
+### Alt text before delivery
+
+Every post, banner or video cover that goes out has 1 line of alt text in the delivery sheet: what is seen plus any text on the image, in Thai, short, not starting with "ภาพของ". Example: `ถ้วยมัทฉะเย็น 2 แก้วบนเคาน์เตอร์ ข้อความ "ซื้อ 1 แถม 1 ถึง 15 เม.ย."`. Where each platform stores alt text: (รอยืนยัน) open the platform's help page first and do not promise a step before that.
 
 Point 6, 4 quick checks (house rules):
 
@@ -44,6 +48,28 @@ Point 6, 4 quick checks (house rules):
 - Line length: body text 45–75 Latin characters, about 35–55 Thai characters per line; longer lines are skipped on a phone
 - No letter-spacing on Thai body text — it breaks the vowel and tone-mark stacking; tracking only on short Latin caps
 - One alignment per text block; a centred headline over left-aligned body needs a visible reason (a centred photo axis)
+
+## Rendered-image defects (look at the exported file, not the layout)
+
+Check in this order and write each hit with its place:
+
+1. Text overflowing or clipped at the edge of a box or the image (look here first)
+2. Overlaps: text on text, text on a face or the product, footnote or source line touching content
+3. Uneven gaps between items that should repeat; outer margin smaller than the margin you set
+4. Dark icon or text on a dark area (or light on light) that looked fine in the editor
+5. Decoration of a template that stayed in place after the text changed length
+6. Thai tone marks or upper vowels missing or colliding after rendering (known with some fonts: `software-development` `data-analysis` 3.10.6) · mark the font and swap it
+
+Left-over placeholders: before shipping run `grep -rniE "lorem|xxx|todo|\[insert|ชื่อ-นามสกุล|ใส่ข้อความ|ตัวอย่างข้อความ" <source files>`; on an image, read the text layer or the OCR. A hit is a fail on point 8.
+
+If you made the asset yourself you see what you expected to see: hand the exported file to a fresh `design-critic` agent (see `no-ai-look` 3.2).
+
+## Match the review to the stage
+
+| Stage | Check | Do not |
+|---|---|---|
+| First sketch | Points 1 and 2 only | List spacing or craft faults on a draft |
+| Before it ships | All 8 points plus the defects list above | Skip a point because "it is nearly done" |
 
 Severity: a fail on 1, 3 or 8 (wrong price, unreadable text, broken hands) blocks shipping. Fails on 4–7 can ship if the deadline is hard and they go on the next-round list.
 

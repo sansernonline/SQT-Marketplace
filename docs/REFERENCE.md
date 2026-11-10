@@ -6,7 +6,7 @@
 
 ## 🧑‍💼 Agents (38)
 
-> หัวข้อด้านล่างอธิบาย 12 ตัวแรกเท่านั้น · หน้าที่ล่าสุดของทุกตัวอยู่ในไฟล์ `plugins/software-company/agents/*.md` · บทบาทกลาง `brainstormer` · `reviewer` · `learning-reviewer` อยู่ที่ [superuser](#62-superuser)
+> หัวข้อด้านล่างอธิบาย 12 ตัวแรกเท่านั้น · หน้าที่ล่าสุดของทุกตัวอยู่ในไฟล์ `plugins/software-development/agents/*.md` · บทบาทกลาง `brainstormer` · `reviewer` · `learning-reviewer` อยู่ที่ [superuser](#62-superuser)
 
 > `model:` ใน frontmatter ของแต่ละ agent เป็นแค่ค่าเริ่มต้น · ถ้างานสั่งผ่าน SuperUser หัวหน้าทีมจะเลือกขนาดโมเดลตามงานเอง (งานใหญ่ = opus · กลาง = sonnet · เล็ก = haiku) · ดู [superuser](#62-superuser)
 
@@ -1085,7 +1085,7 @@ SQT-Marketplace/
 ├── .claude-plugin/
 │   └── marketplace.json
 ├── plugins/
-│   └── software-company/
+│   └── software-development/
 │       ├── .claude-plugin/
 │       │   └── plugin.json
 │       ├── agents/         (41 files)

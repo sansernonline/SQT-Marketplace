@@ -4,7 +4,7 @@
 
 วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ
 
-agent 5 · skill 61 (ของ plugin 22 · ของกลางจาก superuser 39) · คำสั่ง 1 · playbook 10 · ส่งงานต่อให้ [`software-company`](../software-company/README.md) · [`e-commerce`](../e-commerce/README.md) · [`personal-life`](../personal-life/README.md)
+agent 5 · skill 62 (ของ plugin 23 · ของกลางจาก superuser 39) · คำสั่ง 1 · playbook 10 · ส่งงานต่อให้ [`software-development`](../software-development/README.md) · [`e-commerce`](../e-commerce/README.md) · [`personal-life`](../personal-life/README.md)
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/trading-finance/`](../../../plugins/trading-finance/)
 
@@ -38,7 +38,7 @@ agent 5 · skill 61 (ของ plugin 22 · ของกลางจาก super
 | [`money-plan`](#pb-money-plan) | วางแผนการเงินส่วนตัว | 5 |
 | [`portfolio-check`](#pb-portfolio-check) | เช็กพอร์ตลงทุน | 5 |
 | [`pre-trade`](#pb-pre-trade) | เตรียมก่อนเทรด | 6 |
-| [`review`](#pb-review) | ตรวจงานก่อนส่ง | 6 |
+| [`review`](#pb-review) | ตรวจงานก่อนส่ง | 8 |
 | [`scam-check`](#pb-scam-check) | เช็กว่าโดนหลอกไหม | 4 |
 | [`tax-season`](#pb-tax-season) | ภาษีประจำปี | 5 |
 | `team-project` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md)) | 9 |

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // retire.mjs - Thai retirement sum, social security pension, monthly saving and three levers (Node stdlib only)
-// Usage: node retire.mjs <file.json> [--json]   |   node retire.mjs --self-test
+// Usage: node retire.mjs <file.json> [--json] [--mc]   |   node retire.mjs --self-test
+// --mc: random-return simulation (seeded, same answer every run); needs "mc": { "sdPct": <user's own figure> } in the file.
 // File: { "age": 35, "retireAge": 60, "planToAge": 85, "spendMonthly": 30000, "returnPct": 6,
 //         "sso": { "monthsNow": 0 }, "assets": [ { "name": "PVD", "balance": 0, "monthly": 4000, "returnPct": 5 } ] }
 // Formulas follow SKILL.md "Formulas": spending grows with inflation, needed sum = yearly spending x years (real return 0),
@@ -13,6 +14,10 @@ const RETURN_RANGE = [3, 5, 6]; // SKILL.md Workflow step 4: 3% conservative, 5-
 const PENSION_AGE = 55; // SKILL.md social security table: benefit at age 55 and leaving insured work
 // Lever sizes from the SKILL.md worked example (retire at 63 instead of 60; spend 25,000 instead of 30,000) - starting values, not measured
 const DEFAULT_LEVERS = { retireLaterYears: 3, spendLessMonthly: 5000 };
+// --mc: 5,000 runs and a fixed seed so the same file gives the same answer (SKILL.md "Chance the money lasts").
+// There is no default volatility: no Thai source was checked, so mc.sdPct must come from the user.
+const MC_RUNS = 5000;
+const MC_SEED = 42;
 
 const num = (v, label, { min = 0, strict = false } = {}) => {
   if (typeof v !== 'number' || !Number.isFinite(v) || (strict ? v <= min : v < min))
@@ -103,7 +108,109 @@ export function plan(input) {
   const later = x.retireAge + L.retireLaterYears < x.planToAge ? compute(x, { retireAge: x.retireAge + L.retireLaterYears }) : null;
   const less = x.spendMonthly > L.spendLessMonthly ? compute(x, { spendMonthly: x.spendMonthly - L.spendLessMonthly }) : null;
   const range = RETURN_RANGE.map((p) => ({ returnPct: p, monthly: compute(x, { returnPct: p }).monthly }));
-  return { input: x, base, levers: { later, less }, range };
+  // two-way table: retire age (now, +1 lever, +2 levers) × spending today (now, −1 lever, −2 levers)
+  const ages = [0, 1, 2].map((k) => x.retireAge + k * L.retireLaterYears).filter((a) => a < x.planToAge);
+  const spends = [0, 1, 2].map((k) => x.spendMonthly - k * L.spendLessMonthly).filter((s) => s > 0);
+  const grid = { ages, spends, monthly: ages.map((a) => spends.map((s) => compute(x, { retireAge: a, spendMonthly: s }).monthly)) };
+  return { input: x, base, levers: { later, less }, range, grid };
+}
+
+// --- Monte Carlo (--mc) -------------------------------------------------------------------
+// mulberry32: small seeded generator, so a run can be repeated exactly
+const rng = (seed) => () => {
+  seed = (seed + 0x6d2b79f5) | 0;
+  let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+};
+// Box-Muller: standard normal from two uniforms
+const normal = (rand) => { let u = 0; while (u === 0) u = rand(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * rand()); };
+
+export function validateMc(x) {
+  if (!x.mc || typeof x.mc !== 'object') throw new Error('โหมด --mc ต้องมีช่อง mc เช่น "mc": { "sdPct": 10 } · sdPct คือความผันผวนต่อปีของพอร์ตเป็น % ที่ผู้ใช้หาเอง');
+  const m = { returnPct: x.returnPct, inflationSdPct: 0, runs: MC_RUNS, seed: MC_SEED, ...x.mc };
+  if (m.sdPct === undefined) throw new Error('ช่อง mc.sdPct หายไป · ใส่ความผันผวนต่อปีของพอร์ต (%) เอง เช่นจากส่วนเบี่ยงเบนมาตรฐานใน factsheet ของกองที่ถือ · plugin ไม่มีค่าตั้งต้นเพราะยังไม่มีแหล่งไทยที่ตรวจแล้ว');
+  num(m.sdPct, 'mc.sdPct (ความผันผวนต่อปีของพอร์ต %)');
+  num(m.returnPct, 'mc.returnPct (ผลตอบแทนเฉลี่ยต่อปีก่อนเกษียณ %)', { min: -100 });
+  m.retiredReturnPct ??= m.returnPct;
+  num(m.retiredReturnPct, 'mc.retiredReturnPct (ผลตอบแทนเฉลี่ยต่อปีหลังเกษียณ %)', { min: -100 });
+  num(m.inflationSdPct, 'mc.inflationSdPct (ความผันผวนของเงินเฟ้อ %)');
+  num(m.runs, 'mc.runs (จำนวนรอบ)', { min: 100 });
+  num(m.seed, 'mc.seed');
+  if (m.monthlySaving !== undefined) num(m.monthlySaving, 'mc.monthlySaving (เงินออมเพิ่มต่อเดือน)');
+  m.runs = Math.floor(m.runs);
+  return m;
+}
+
+const pctile = (sorted, p) => sorted[Math.floor(p * (sorted.length - 1))];
+
+// Year by year from today to planToAge.
+// Before retirement: the same basis as compute() - each pot (every asset, plus the extra saving at returnPct) grows
+// month by month at its yearly return / 12 and takes its deposit at each month end. Then one random draw per year
+// scales that year's growth by k = 1 + sdPct x z (floor 0, so a pot can lose all but not go below 0): the balance
+// carried in takes all of k, the year's deposits half of it (on average they are in for half the year).
+// Every pot uses the same z (one portfolio, one return series); mc.returnPct - returnPct shifts every pot's average.
+// k averages 1, so the average path is the plan's; with sdPct 0 the pot at retirement equals the plan's (self-test).
+// From retirement: take the year's spending (minus the pension once it is paid), then grow what is left.
+// Spending grows with inflation every year, also after retirement; the pension stays fixed in baht.
+export function simulate(x, base, m) {
+  const rand = rng(m.seed);
+  const saving = m.monthlySaving ?? base.monthly ?? 0;
+  const shift = m.returnPct - x.returnPct;
+  const pots = [...x.assets.map((a) => ({ balance: a.balance, monthly: a.monthly, pct: a.returnPct })), { balance: 0, monthly: saving, pct: x.returnPct }];
+  const pensionYear = base.pension.monthly * 12;
+  const pensionFrom = Math.max(x.retireAge, PENSION_AGE);
+  const atRetire = [], atEnd = [], brokeAges = [];
+  for (let i = 0; i < m.runs; i++) {
+    let bal = pots.map((p) => p.balance), pot = 0, spend = x.spendMonthly * 12, broke = null;
+    for (let age = x.age; age < x.planToAge; age++) {
+      const inflation = x.inflationPct + m.inflationSdPct * normal(rand);
+      if (age === x.retireAge) { pot = bal.reduce((s, v) => s + v, 0); atRetire.push(pot); }
+      if (age < x.retireAge) {
+        const z = normal(rand);
+        const k = Math.max(0, 1 + (m.sdPct * z) / 100);
+        bal = bal.map((v, j) => {
+          const y = pots[j].pct + shift;
+          return v * (1 + y / 1200) ** 12 * k + pots[j].monthly * factor(y, 12) * ((1 + k) / 2);
+        });
+      } else {
+        const need = Math.max(0, spend - (age >= pensionFrom ? pensionYear : 0));
+        if (pot < need) { broke = age; pot = 0; break; }
+        pot = (pot - need) * (1 + Math.max(-100, m.retiredReturnPct + m.sdPct * normal(rand)) / 100);
+      }
+      spend *= 1 + inflation / 100;
+    }
+    atEnd.push(pot);
+    if (broke !== null) brokeAges.push(broke);
+  }
+  const sort = (a) => [...a].sort((p, q) => p - q);
+  const r = sort(atRetire), e = sort(atEnd), b = sort(brokeAges);
+  return {
+    runs: m.runs, seed: m.seed, saving, successPct: ((m.runs - b.length) / m.runs) * 100,
+    atRetire: { p10: pctile(r, 0.1), p50: pctile(r, 0.5), p90: pctile(r, 0.9) },
+    atEnd: { p10: pctile(e, 0.1), p50: pctile(e, 0.5), p90: pctile(e, 0.9) },
+    brokeAgeMedian: b.length ? pctile(b, 0.5) : null, mc: m,
+  };
+}
+
+export function reportMc(r, s) {
+  const x = r.input, m = s.mc;
+  return [
+    `สุ่มผลตอบแทน ${s.runs.toLocaleString('en-US')} รอบ (seed ${s.seed} รันซ้ำได้ผลเดิม) · อายุ ${x.age} เกษียณ ${x.retireAge} ถึง ${x.planToAge}`,
+    `คำเตือน: ความผันผวน ${m.sdPct}% ผลตอบแทนเฉลี่ย ${m.returnPct}% (หลังเกษียณ ${m.retiredReturnPct}%) และความผันผวนเงินเฟ้อ ${m.inflationSdPct}% เป็นค่าที่ผู้ใช้ใส่เอง ไม่ใช่ค่าที่ plugin ตรวจจากแหล่ง`,
+    ...(m.inflationSdPct === 0 ? ['คำเตือน: เงินเฟ้อคงที่ทุกปี เพราะไม่ได้ใส่ mc.inflationSdPct'] : []),
+    'คำเตือน: ผลสุ่มบอกช่วงที่เป็นไปได้ภายใต้ข้อสมมตินี้ ไม่ใช่คำพยากรณ์ · บำนาญประกันสังคมไม่ปรับตามเงินเฟ้อ · ผลตอบแทนต่อปีสุ่มแบบปกติ ปีที่ตลาดตกหนักจริงอาจแรงกว่านี้',
+    '',
+    '| ผล | ค่า |',
+    '|---|---|',
+    `| โอกาสที่เงินอยู่ถึงอายุ ${x.planToAge} | **${s.successPct.toFixed(1)}%** |`,
+    `| เงินก้อนตอนเกษียณ (10% · 50% · 90% ของรอบ) | ${fmt(s.atRetire.p10)} · ${fmt(s.atRetire.p50)} · ${fmt(s.atRetire.p90)} |`,
+    `| เงินเหลือตอนอายุ ${x.planToAge} (10% · 50% · 90%) | ${fmt(s.atEnd.p10)} · ${fmt(s.atEnd.p50)} · ${fmt(s.atEnd.p90)} |`,
+    `| รอบที่เงินหมด: อายุกลาง | ${s.brokeAgeMedian === null ? 'ไม่มีรอบที่เงินหมด' : s.brokeAgeMedian} |`,
+    '',
+    `ออมเพิ่ม ${fmt(s.saving)} ต่อเดือน (${m.monthlySaving === undefined ? 'ตามที่แผนปกติคำนวณ' : 'ตามที่ผู้ใช้ใส่'}) + ${x.assets.map((a) => a.name).join(' · ') || 'ไม่มีเงินก้อนอื่น'} รวมเป็นพอร์ตเดียวใช้ผลตอบแทนชุดเดียว`,
+    'แผนปกติถือว่าหลังเกษียณผลตอบแทนจริงเป็น 0 ส่วนการสุ่มให้เงินทำงานต่อหลังเกษียณ ถ้าอยากให้ระวังกว่านี้ ลด mc.retiredReturnPct',
+  ].join('\n');
 }
 
 const fmt = (n) => Math.round(n).toLocaleString('en-US');
@@ -135,6 +242,13 @@ export function report(r) {
     row(`ใช้จ่ายน้อยลง ${fmt(x.levers.spendLessMonthly)}/เดือน`, r.levers.less),
     '',
     `ออมมากขึ้น = ช่องออมต่อเดือนข้างบน · ตามผลตอบแทน: ${r.range.map((g) => `${g.returnPct}% → ${showMonthly(g.monthly)}`).join(' · ')}`,
+    '',
+    `ออมต่อเดือนเมื่อขยับ 2 คันโยกพร้อมกัน (ผลตอบแทน ${x.returnPct}%):`,
+    '',
+    `| อายุเกษียณ \\ ใช้จ่ายวันนี้ต่อเดือน | ${r.grid.spends.map(fmt).join(' | ')} |`,
+    `|---|${r.grid.spends.map(() => '---').join('|')}|`,
+    ...r.grid.ages.map((a, i) => `| ${a} | ${r.grid.monthly[i].map(showMonthly).join(' | ')} |`),
+    '',
     `เพดานค่าจ้างประกันสังคมจาก sso-pension.json (ตรวจ ${SSO.checked}) · ทุกตัวเลขเป็นค่าประมาณ คิดใหม่ทุกปี · ผู้ใช้ตัดสิน`,
   ];
   return out.join('\n');
@@ -188,6 +302,42 @@ function selfTest() {
   t('spendMonthly 0', throwsWith({ ...ex, spendMonthly: 0 }, 'spendMonthly'));
   t('assets ค่าผิด', throwsWith({ ...ex, assets: [{ name: 'PVD', monthly: 'x', returnPct: 5 }] }, 'assets[0].monthly'));
   t('sso.monthsPerYear เกิน 12', throwsWith({ ...ex, sso: { monthsNow: 0, monthsPerYear: 13 } }, 'monthsPerYear'));
+  // two-way table: corner cells equal the plan and the single levers
+  t('ตาราง 2 ทาง มุมตรงแผนและคันโยก', p.grid.ages.join() === '60,63,66' && p.grid.spends.join() === '30000,25000,20000'
+    && p.grid.monthly[0][0] === p.base.monthly && p.grid.monthly[1][0] === p.levers.later.monthly && p.grid.monthly[0][1] === p.levers.less.monthly
+    && p.grid.monthly[2][2] < p.grid.monthly[1][1]);
+  t('ตาราง 2 ทาง ตัดอายุที่เกิน planToAge', plan({ ...ex, planToAge: 64 }).grid.ages.join() === '60,63');
+  // Monte Carlo. Set 1 (hand-worked): retired at 60, 0% return, 0 volatility, 60,000 a year for 20 years
+  const sim = (inp) => { const q = plan(inp); return simulate(q.input, q.base, validateMc(q.input)); };
+  const retired = { age: 60, retireAge: 60, planToAge: 80, spendMonthly: 5000, inflationPct: 0, returnPct: 0, year: 2569, mc: { sdPct: 0, runs: 100 } };
+  let s = sim({ ...retired, assets: [{ name: 'เงินก้อน', balance: 1200000, returnPct: 0 }] });
+  t('MC 1,200,000 พอดี 20 ปี: อยู่รอด 100% เหลือ 0', s.successPct === 100 && s.atEnd.p50 === 0 && s.atRetire.p50 === 1200000);
+  s = sim({ ...retired, assets: [{ name: 'เงินก้อน', balance: 1000000, returnPct: 0 }] });
+  t('MC 1,000,000 หมดตอนอายุ 76 (ถอน 16 ปี เหลือ 40,000)', s.successPct === 0 && s.brokeAgeMedian === 76);
+  // Set 2 (hand-worked, monthly like the plan): 100,000 × (1 + 0.10/12)^24 + 1,000 × ((1 + 0.10/12)^24 − 1) ÷ (0.10/12)
+  //   = 122,039.1 + 26,446.9 = 148,486.0
+  s = sim({ age: 58, retireAge: 60, planToAge: 61, spendMonthly: 1, inflationPct: 0, returnPct: 10, year: 2569,
+    assets: [{ name: 'PVD', balance: 100000, monthly: 1000, returnPct: 10 }], mc: { sdPct: 0, runs: 100, monthlySaving: 0 } });
+  t('MC สะสม 2 ปี รายเดือน = 148,486', near(s.atRetire.p50, 148486, 1));
+  // Set 2b: volatility 0 gives the plan's own answer (pot at retirement within 0.1%, and 100% when the plan says enough)
+  const flat = (inp) => { const q = plan(inp); return { q, s: simulate(q.input, q.base, validateMc(q.input)) }; };
+  let f = flat({ ...ex, mc: { sdPct: 0, runs: 100 } });
+  const planPot = f.q.base.assetsFV + f.q.base.monthly * f.q.base.factor;
+  t('MC ผันผวน 0 เงินก้อนตรงแผน (16.43 ล้าน)', Math.abs(f.s.atRetire.p50 - planPot) / planPot <= 0.001 && near(planPot, 16429000, 1000));
+  t('MC ผันผวน 0 แผนบอกพอ โอกาส 100%', f.s.successPct === 100);
+  f = flat({ ...ex, assets: [{ name: 'PVD', balance: 300000, monthly: 4000, returnPct: 4 }, { name: 'RMF', balance: 50000, monthly: 2000, returnPct: 7 }], mc: { sdPct: 0, runs: 100 } });
+  const planPot2 = f.q.base.assetsFV + f.q.base.monthly * f.q.base.factor;
+  t('MC ผันผวน 0 หลายกอง ผลตอบแทนต่างกัน ตรงแผน', Math.abs(f.s.atRetire.p50 - planPot2) / planPot2 <= 0.001 && f.s.successPct === 100);
+  f = flat({ ...ex, assets: [{ name: 'PVD', balance: 30000000, monthly: 0, returnPct: 5 }], mc: { sdPct: 0, runs: 100 } });
+  t('MC ผันผวน 0 มีเงินพอโดยไม่ต้องออมเพิ่ม โอกาส 100%', f.q.base.monthly === 0 && f.s.successPct === 100 && Math.abs(f.s.atRetire.p50 - f.q.base.assetsFV) / f.q.base.assetsFV <= 0.001);
+  // Set 3: same seed = same answer, more volatility = wider spread, percentiles in order
+  const vol = { ...ex, mc: { sdPct: 12, runs: 2000 } };
+  const s1 = sim(vol), s2 = sim(vol), s3 = sim({ ...ex, mc: { sdPct: 20, runs: 2000 } });
+  t('MC seed เดิมได้ผลเดิม', s1.successPct === s2.successPct && s1.atEnd.p50 === s2.atEnd.p50);
+  t('MC เปอร์เซ็นไทล์เรียงกัน', s1.atRetire.p10 <= s1.atRetire.p50 && s1.atRetire.p50 <= s1.atRetire.p90);
+  t('MC ผันผวนมากขึ้น p10 ต่ำลง p90 สูงขึ้น', s3.atRetire.p10 < s1.atRetire.p10 && s3.atRetire.p90 > s1.atRetire.p90);
+  t('MC ไม่ใส่ sdPct ต้องหยุด', (() => { try { sim({ ...ex, mc: {} }); return false; } catch (e) { return e.message.includes('mc.sdPct'); } })());
+  t('MC ไม่มีช่อง mc ต้องหยุด', (() => { try { sim(ex); return false; } catch (e) { return e.message.includes('mc'); } })());
   console.log(`self-test: ${ok} ผ่าน ${bad} ล้ม`);
   process.exit(bad ? 1 : 0);
 }
@@ -196,10 +346,13 @@ const args = process.argv.slice(2);
 if (args.includes('--self-test')) selfTest();
 else {
   const file = args.find((a) => !a.startsWith('--'));
-  if (!file) { console.error('ใช้: node retire.mjs <ไฟล์.json> [--json] | --self-test'); process.exit(2); }
+  if (!file) { console.error('ใช้: node retire.mjs <ไฟล์.json> [--json] [--mc] | --self-test'); process.exit(2); }
   try {
     const r = plan(JSON.parse(readFileSync(file, 'utf8')));
-    console.log(args.includes('--json') ? JSON.stringify(r, null, 2) : report(r));
+    if (args.includes('--mc')) {
+      const s = simulate(r.input, r.base, validateMc(r.input));
+      console.log(args.includes('--json') ? JSON.stringify(s, null, 2) : reportMc(r, s));
+    } else console.log(args.includes('--json') ? JSON.stringify(r, null, 2) : report(r));
   } catch (e) {
     console.error(`ผิดพลาด: ${e instanceof SyntaxError ? `ไฟล์ ${file} ไม่ใช่ JSON ที่ถูกต้อง (${e.message})` : e.code === 'ENOENT' ? `ไม่พบไฟล์ ${file}` : e.message}`);
     process.exit(1);

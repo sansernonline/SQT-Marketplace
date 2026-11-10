@@ -74,7 +74,7 @@
 | เจอ error ภาษาอังกฤษยาว ๆ อ่านไม่รู้เรื่อง | `prompt-read-and-apply.md` ฉบับ 2 |
 | ต้องเล่าเรื่องที่ไปเรียนมาให้ทีมฟังสัปดาห์หน้า | `prompt-read-and-apply.md` ฉบับ 1 → 3 |
 | ไลบรารีอัปเดตบ่อยจนตามไม่ทัน | `prompt-keep-up.md` ฉบับ 1 (ทุกสัปดาห์) |
-| framework ที่ใช้ประกาศเลิกสนับสนุนเวอร์ชันที่เราใช้ | `prompt-keep-up.md` ฉบับ 2 → งานอัปเกรดจริงใช้ plugin `software-company` (`prompt-existing-dev.md` ฉบับ 3) |
+| framework ที่ใช้ประกาศเลิกสนับสนุนเวอร์ชันที่เราใช้ | `prompt-keep-up.md` ฉบับ 2 → งานอัปเกรดจริงใช้ plugin `software-development` (`prompt-existing-dev.md` ฉบับ 3) |
 | ทุกคนพูดถึงเครื่องมือ AI ตัวใหม่ ไม่รู้ว่าต้องเรียนไหม | `prompt-keep-up.md` ฉบับ 3 → (เรียนตอนนี้) `prompt-start-learning.md` ฉบับ 1 |
 | เรดาร์สัปดาห์นี้เจอเรื่องที่ต้องลงมือ | `prompt-keep-up.md` ฉบับ 1 → 2 หรือ `prompt-start-learning.md` ฉบับ 1 |
 | side project ค้างมาหลายเดือน | `prompt-portfolio.md` ฉบับ 2 |

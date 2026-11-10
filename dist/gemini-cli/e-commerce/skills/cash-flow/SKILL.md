@@ -33,6 +33,8 @@ Do not guess payout timing. Take last month's orders and the payout reports and 
 
 Write the result as a lag table, e.g. Shopee 9 days, TikTok 12 days, COD 6 days with 8% refused. Use these numbers in the forecast. Returns and refunds also come out of later payouts; take last month's return rate per channel.
 
+Keep the slow end too, not just the median: a channel that pays in 9 days on average but sometimes in 15 is the one that leaves you short. With fewer than 3 measured payouts for a channel, use median + 30% as its slow lag and label it `(ค่าเริ่มต้น ยังไม่ได้วัดกับร้านจริง)` until real payouts replace it. The 30% is a starting value from Anthropic's cash-flow-snapshot skill, not a measured Thai figure.
+
 ## 2. Build the 13-week forecast
 
 Template: [references/13-week-forecast.md](references/13-week-forecast.md). One column per week (Monday to Sunday), rows:
@@ -44,6 +46,10 @@ Template: [references/13-week-forecast.md](references/13-week-forecast.md). One 
 5. **Minimum buffer** — a floor you do not go below, e.g. 2 weeks of fixed costs (rent, wages, loans, owner draw).
 
 Highlight every week where closing cash is below the buffer. That week is the problem to solve now, not then.
+
+6. **Slow-case closing** — the same week with every payout shifted by its slow lag instead of the median. A week that is fine on the median but below the buffer in the slow case still gets a flag.
+
+Every flag names the source, the week and the amount, so the owner knows whom to call: "TikTok payout in week 3 lands 6 days late in the slow case; week 3 closes at 18,400, below the 40,000 buffer". A flag that only says "cash may be tight" is not finished.
 
 ## 3. Tax and contribution dates that take cash
 
@@ -79,7 +85,7 @@ Never pay supplier deposits or "release fees" to unlock platform money at the re
 1. Week 1 opening = today's real bank balance.
 2. Payouts are shifted by measured lags, net of fees and returns.
 3. Tax, social security and owner draw appear as cash out on their dates.
-4. Every week below the buffer has a named action and an owner.
+4. Every week below the buffer, on the median or the slow case, has a named source, amount, action and owner.
 
 ## Related
 

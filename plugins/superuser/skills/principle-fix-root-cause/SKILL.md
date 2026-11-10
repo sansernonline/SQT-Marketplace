@@ -41,7 +41,7 @@ description: Use when something is broken or wrong (error, wrong figure, failed 
 
 ## ใช้คู่กับ
 
-`targeted-fix` (ขั้นตอนแก้แบบเล็กที่สุด) · playbook `bug-fix` ของ `superuser` ใน plugin `software-company`
+`targeted-fix` (ขั้นตอนแก้แบบเล็กที่สุด) · playbook `bug-fix` ของ `superuser` ใน plugin `software-development`
 
 ## ที่มา
 

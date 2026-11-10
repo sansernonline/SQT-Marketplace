@@ -1,0 +1,24 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: project-doc-set-trigger
+description: เปิดโปรเจกต์ระบบจองคิวคลินิกใหม่ ไม่รู้ว่าต้องมีเอกสารอะไร เรียงอย่างไร เก็บที่ไหน ไม่เอ่ยชื่อ skill ต้องทำให้ project-doc-set ถูกเปิด
+tags: [trigger, project-doc-set]
+runs: 3
+expected_outcome: เรียก Skill project-doc-set แล้วเสนอชุดเอกสารตามขนาดโปรเจกต์ ลำดับ และที่เก็บ
+execution:
+  prompt: |
+    ผมเพิ่งรับทำระบบจองคิวคลินิก ลูกค้าส่งไฟล์มาปนกันหมด ยังไม่รู้ว่าต้องมีเอกสารอะไรบ้าง ต้องเขียนอันไหนก่อน และควรเก็บไว้ตรงไหน
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?project-doc-set"'
+    min: 1
+    arm: with-only
+  - name: doc-set
+    type: regex
+    pattern: "(?i)ref/|BRD|SRS|ชุดเอกสาร"
+    match: contains
+    target: last_message

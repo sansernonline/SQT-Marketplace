@@ -4,7 +4,7 @@
 
 จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้
 
-agent 9 · skill 80 (ของ plugin 41 · ของกลางจาก superuser 39) · คำสั่ง 1 · playbook 30 · ส่งงานต่อให้ [`superuser`](../superuser/README.md) · [`software-company`](../software-company/README.md) · [`trading-finance`](../trading-finance/README.md) · [`e-commerce`](../e-commerce/README.md) · [`graphic-design`](../graphic-design/README.md)
+agent 9 · skill 85 (ของ plugin 46 · ของกลางจาก superuser 39) · คำสั่ง 1 · playbook 30 · ส่งงานต่อให้ [`superuser`](../superuser/README.md) · [`software-development`](../software-development/README.md) · [`trading-finance`](../trading-finance/README.md) · [`e-commerce`](../e-commerce/README.md) · [`graphic-design`](../graphic-design/README.md)
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/personal-life/`](../../../plugins/personal-life/)
 
@@ -55,7 +55,7 @@ agent 9 · skill 80 (ของ plugin 41 · ของกลางจาก super
 | [`paper-to-practice`](#pb-paper-to-practice) | จากบทความสู่โค้ดจริง | 5 |
 | [`profile-refresh`](#pb-profile-refresh) | ปรับ CV และโปรไฟล์ | 5 |
 | [`promotion-case`](#pb-promotion-case) | เตรียมขอขึ้นตำแหน่ง | 5 |
-| [`review`](#pb-review) | ตรวจงานก่อนส่ง | 6 |
+| [`review`](#pb-review) | ตรวจงานก่อนส่ง | 8 |
 | [`side-project`](#pb-side-project) | เลือกโปรเจกต์ฝึกมือ | 4 |
 | [`subscriptions`](#pb-subscriptions) | ตรวจค่าสมาชิกรายเดือน | 5 |
 | `team-project` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md)) | 9 |

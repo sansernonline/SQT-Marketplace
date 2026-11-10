@@ -1,7 +1,7 @@
 # MCP ที่เกี่ยวกับ marketplace นี้
 
 > สำรวจ 2026-10-23 · คำถาม 3 ข้อ: plugin เราขาด MCP server อะไรบ้าง · ตัวไหนช่วยให้ skill ทำงานดีขึ้น · ตัวไหนควรเขียนเอง
-> วิธีสร้าง server ของเราเองอยู่ที่ skill `mcp-server` (plugin `software-company`) — เอกสารนี้บอกแค่ว่า **ควรมีตัวไหน**
+> วิธีสร้าง server ของเราเองอยู่ที่ skill `mcp-server` (plugin `software-development`) — เอกสารนี้บอกแค่ว่า **ควรมีตัวไหน**
 
 หลัก 3 ข้อ (ตาม skill `mcp-server` ข้อ 1):
 
@@ -15,8 +15,8 @@
 
 | MCP server | ผู้ดูแล | ช่วย skill ของเรา | หมายเหตุ |
 |---|---|---|---|
-| GitHub MCP | GitHub (first-party) | `code-review-checklist` · `cicd-and-release` · `pr-description-template` · `bug-inbox-triage` · agent ใน software-company ที่อ่าน issue/PR | remote (`api.githubcopilot.com/mcp/`) หรือ local · tool เยอะมาก เปิดเท่าที่ใช้ กิน context |
-| Playwright MCP | Microsoft | `e2e-testing-patterns` · `web-quality-audit` · `reverse-engineering` (software-company) · `seo-audit-checklist` | local · เปิดเป็น project-local อย่าเปิด global |
+| GitHub MCP | GitHub (first-party) | `code-review-checklist` · `cicd-and-release` · `pr-description-template` · `bug-inbox-triage` · agent ใน software-development ที่อ่าน issue/PR | remote (`api.githubcopilot.com/mcp/`) หรือ local · tool เยอะมาก เปิดเท่าที่ใช้ กิน context |
+| Playwright MCP | Microsoft | `e2e-testing-patterns` · `web-quality-audit` · `reverse-engineering` (software-development) · `seo-audit-checklist` | local · เปิดเป็น project-local อย่าเปิด global |
 | Chrome DevTools MCP | Google | `web-quality-audit` · `observability-basics` — console · network · performance trace จริง | ต่างจาก Playwright: ตัวนี้เน้น debug ไม่ใช่ขับหน้าเว็บ |
 | Context7 | Upstash | `stack-*` ทุกตัว · `lazy-coding` — ดึง docs ของ library ตามเวอร์ชันจริง แทนการอนุมานจากข้อมูลฝึก | remote หรือ local |
 | LINE Bot MCP | LINE (first-party, **preview**) | `line-oa-setup` · `line-chatbot` · `line-broadcast` ของ e-commerce · `line-richmenu` ของ graphic-design | 12 tool: push/reply/broadcast · Flex · rich menu · quota · followers · `@line/line-bot-mcp-server` · Apache-2.0 · README ระบุว่าเป็น preview |
@@ -38,7 +38,7 @@
 | 3 | `line-oa-mcp` (เสริม) | LINE Messaging API | e-commerce: `line-*` + `chat-reply-templates` · graphic-design: `line-richmenu` | เฉพาะ tool ที่ official LINE Bot MCP ขาด เช่น อ่าน insight/สถิติ broadcast ต่อเนื่อง | official มีอยู่แล้วแต่เป็น preview — **อย่า fork มาแก้** ให้ใช้ของเขา + เขียน server เล็กเฉพาะส่วนที่ขาด (หลักข้อ 1 ของ `mcp-server`) |
 | 4 | `thai-gov-mcp` | data.go.th (เปิด ไม่ต้องมี key) · DBD datawarehouse · กรมสรรพากร | e-commerce: `dbd-annual-filing` · `tax-vat-th` · `e-tax-invoice` · `seller-tax-basics` | `thaigov_search_dataset` · `thaigov_get_company` · `thaigov_get_company_financials` | DBD และ data.go.th มี community MCP แล้ว (ดูข้อ 3) แต่ยังไม่ไว้ใจ — เขียนเองสั้นกว่า audit ของคนอื่น · e-Tax กรมสรรพากรไม่มี API ตรงสำหรับ SME — การออกเอกสารจริงต้องผ่าน service provider ที่ ETDA อนุญาต (เช่น Leceipt มี community MCP แล้ว) server ของเราทำได้แค่เตรียมข้อมูล/ตรวจความถูก ไม่ใช่ส่งให้กรมฯ |
 
-ต้นแบบสำหรับทั้ง 4 ตัว: คัดลอก `plugins/software-company/skills/mcp-server/assets/inventory-mcp/` → เปลี่ยน `query()` ให้ต่อ API จริง → รัน eval 3 กรณี → บันทึกวันที่ใน README ของ server นั้น
+ต้นแบบสำหรับทั้ง 4 ตัว: คัดลอก `plugins/software-development/skills/mcp-server/assets/inventory-mcp/` → เปลี่ยน `query()` ให้ต่อ API จริง → รัน eval 3 กรณี → บันทึกวันที่ใน README ของ server นั้น
 
 ## 3 · ของชุมชนที่มีอยู่ — ยังไม่ไว้ใจจนกว่าจะอ่านโค้ด
 

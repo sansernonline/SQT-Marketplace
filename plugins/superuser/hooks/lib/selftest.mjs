@@ -25,7 +25,7 @@ export function extraGates(env) {
   mkdirSync(join(proj, "clean"), { recursive: true });
   writeFileSync(envOk, `STRIPE_TOKEN=${GH}\n`); writeFileSync(envClean, "PORT=3000\n");
   const router = readJson(join(HERE, "skill-router.json"), {});
-  const inst = { full: new Set(["software-company:stack-python", "superuser:simplify"]), bare: new Set(["stack-python", "simplify", "commit-log", "human-writing"]) };
+  const inst = { full: new Set(["software-development:stack-python", "superuser:simplify"]), bare: new Set(["stack-python", "simplify", "commit-log", "human-writing"]) };
   const state = (o) => ({ lastCodeEdit: -1, lastTest: -1, edited: [], lastText: "", usedSuperuser: false, ...o });
   const T = (...blocks) => JSON.stringify({ message: { role: "assistant", content: blocks } });
   const editJs = T({ type: "tool_use", name: "Edit", input: { file_path: "/p/src/a.mjs", new_string: "x" } });

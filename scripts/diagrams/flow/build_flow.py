@@ -19,7 +19,7 @@ from palette import PLUGINS, badge  # noqa: E402
 
 ROOT, OUT = sys.argv[1:3]
 
-# ---------- ข้อมูลที่ไม่อยู่ใน figdata (software-company อยู่ในแม่แบบเดิม) ----------
+# ---------- ข้อมูลที่ไม่อยู่ใน figdata (software-development อยู่ในแม่แบบเดิม) ----------
 SC = dict(
     title="งานซอฟต์แวร์", src_note="โค้ด · test · เอกสารโปรเจกต์",
     inputs=[("ไฟล์ใน prompt/", "ชุดเอกสารโปรเจกต์")],
@@ -130,8 +130,8 @@ def tags(xs, role="", mute=False):
 
 def fin(title, body, plug, ctx, n, k):
     """หัวรูป + ตัวรูป · k = เลขรูปในชุด"""
-    pl = P[plug if plug != "software-company" else "superuser"]
-    t = SC["title"] if plug == "software-company" else P[plug]["title"]
+    pl = P[plug if plug != "software-development" else "superuser"]
+    t = SC["title"] if plug == "software-development" else P[plug]["title"]
     hd = head(title, f"ภาพที่ {k} จาก {n} · SuperUser · {t}", plug, f"plugins/{plug}/skills/superuser/SKILL.md")
     out = page(f"SuperUser {plug} · {title}", hd + body, plug)
     out = out.replace("</style></head>", EXTRA + "</style></head>")
@@ -185,7 +185,7 @@ def f1(plug, d, r, core):
                    vstep("ลูกทีม (subagent)", "ทำเฉพาะชิ้นตามใบสั่งงาน แล้วรายงานกลับหัวหน้า ไม่คุยกับผู้ใช้", "c3", "agent", "bot")],
                   [("c1", "c2", "main"), ("c2", "c3", "main")])
     xs = r["cross"] or [p for p in PLUGINS if p not in ("superuser", plug)]
-    if plug == "software-company":
+    if plug == "software-development":
         xs = [p for p in PLUGINS if p not in ("superuser", plug) and plug in read_plugin(p)["cross"]]
         sub = "plugin เหล่านี้ส่งงานโค้ดมาที่นี่"
     else:
@@ -222,7 +222,7 @@ def f2(plug, d, r, core):
 
 # ---------- รูปที่ 3: ทำ → ตรวจ → แก้ ----------
 def f3(plug, d, r, core):
-    gate = SC["gate"] if plug == "software-company" else CORE_GATE
+    gate = SC["gate"] if plug == "software-development" else CORE_GATE
     steps = [vstep("ใบสั่งงาน 5 ข้อ", "หัวหน้าเขียนให้ทุกชิ้น ไม่มีใบ ไม่ส่งงาน", "w1", num=1,
                    dets=["<b>เป้า</b> · <b>ขอบเขต</b> · <b>เสร็จเมื่อ</b> · <b>กติกาเดียวกัน</b> · <b>ส่งกลับแบบไหน</b>"]),
              vstep("ลูกทีมทำชิ้นงาน", "ลูกทีมตัวใหม่ทุกงาน ตรวจเองก่อนส่ง", "w2", "agent", num=2,
@@ -240,7 +240,7 @@ def f3(plug, d, r, core):
 
 # ---------- รูปที่ 4: ตัดสินใจ รออนุมัติ ส่งผล ----------
 def f4(plug, d, r, core):
-    approvals = list(dict.fromkeys(d["appr"] + ["จ่ายเงิน", "ใส่รหัสผ่าน"] if plug != "software-company" else SC["appr"]))
+    approvals = list(dict.fromkeys(d["appr"] + ["จ่ายเงิน", "ใส่รหัสผ่าน"] if plug != "software-development" else SC["appr"]))
     stop = f'<p style="color:var(--r-gate);font-weight:600">หยุดทันที: {e(d["stop"])}</p>' if d.get("stop") else ""
     hub = icard("ต้องตัดสินใจกลางงาน", "ถามผู้ใช้ครั้งเดียวตอนเริ่ม แล้วเลือกเองตามทางข้างล่าง · จดทุกข้อใต้ ตัดสินใจเอง", "pc", "git-branch", id="q", cls="hub")
     opts = kit.group("เลือก 1 ใน 3 ทาง", cls="capb", inner=fan([
@@ -249,7 +249,7 @@ def f4(plug, d, r, core):
         icard("ย้อนไม่ได้ → รออนุมัติ", "เตรียมให้พร้อมกด แล้วทำส่วนอื่นต่อ", "gate", "hand", id="b2", cls="col",
               extra=f'<div style="margin-top:10px">{tags(approvals, "gate")}</div>{stop}')]))
     top = f'<div class="layers">{wires([("q", "b0", "dash"), ("q", "b1", "dash"), ("q", "b2", "main")])}{hub}{opts}</div>'
-    o4a, o4b = SC["o4"] if plug == "software-company" else d["o4"]
+    o4a, o4b = SC["o4"] if plug == "software-development" else d["o4"]
     outs = fan([icard("คำตอบตอนจบ", "3 ระดับ · คาด → จริง", "pc", "message-square", cls="col"),
                 icard("ตารางสถานะ", "เสร็จ · ทำอยู่ · ติด", "pc", "list-checks", cls="col"),
                 icard("CONTEXT.md", "ความคืบหน้า · รับงานต่อ", "pc", "file-text", cls="col"),
@@ -295,9 +295,9 @@ SERIES = [("intake", "งานเข้ามาทางไหน แล้ว
           ("learn", "จบงานแล้ว ทีมจำอะไรไว้", f5), ("modules", "อะไรเปิดปิดได้ อะไรปิดไม่ได้", f6)]
 
 os.makedirs(OUT, exist_ok=True)
-for plug in ["superuser", "software-company", "e-commerce", "graphic-design", "personal-life", "trading-finance"]:
+for plug in ["superuser", "software-development", "e-commerce", "graphic-design", "personal-life", "trading-finance"]:
     core = plug == "superuser"
-    d = SC if plug == "software-company" else P[plug]
+    d = SC if plug == "software-development" else P[plug]
     r = read_plugin(plug)
     for k, (slug, title, fn) in enumerate(SERIES, 1):
         body = fn(plug, d, r, core)

@@ -1,7 +1,7 @@
 # scripts/evals/coding — วัดว่าทีมเขียนโค้ดเก่งขึ้นจริงไหม
 
 แก้ skill หรือ agent ที่เกี่ยวกับโค้ดแล้ว → ให้ plugin รุ่นก่อนกับรุ่นหลังทำงานชุดเดียวกัน แล้วเทียบคะแนน
-ต่างจาก `scripts/evals/speed` ตรงที่วัด **คุณภาพ** (เต็ม 10 ต่องาน) ไม่ใช่ความเร็ว · วิธีให้คะแนนอยู่ใน skill `coding-evals` ของ software-company
+ต่างจาก `scripts/evals/speed` ตรงที่วัด **คุณภาพ** (เต็ม 10 ต่องาน) ไม่ใช่ความเร็ว · วิธีให้คะแนนอยู่ใน skill `coding-evals` ของ software-development
 
 ## วิธีรัน
 
@@ -23,12 +23,12 @@ node scripts/evals/coding/run-coding.mjs --old f105afc --new HEAD --runs 2 --bud
 | `--new` | ไฟล์ในโฟลเดอร์ตอนนี้ | รุ่นหลัง ใส่ git ref ก็ได้ |
 | `--tasks` | ทั้ง 8 งาน | ใส่แค่เลขก็ได้ เช่น `c1,c5` |
 | `--runs` | `1` | รันกี่รอบต่อรุ่น · ผลแกว่ง ตัดสินจริงใช้ 2 รอบขึ้นไป |
-| `--plugin` | `software-company` | plugin ที่เทียบ |
+| `--plugin` | `software-development` | plugin ที่เทียบ |
 | `--budget` | `8` | เพดานค่าใช้จ่ายต่อรอบ (ดอลลาร์) |
 | `--parallel` | `2` | รันพร้อมกันกี่รอบ |
 | `--no-judge` | — | ไม่เรียกผู้ตัดสิน · ข้อ "ตามแบบแผน" กับ "รายงานจริง" ได้ 0 |
 
-ทุกรุ่นโหลด plugin ที่เทียบพร้อม `superuser` จาก repo รุ่นเดียวกัน (`--plugin-dir` ไม่ติดตั้ง dependencies ให้ ตั้งแต่ superuser 2.0.0 ของกลางไม่อยู่ใน software-company แล้ว) · รุ่นเก่าที่ยังไม่มี 2 plugin นี้ก็โหลดแค่ที่มี
+ทุกรุ่นโหลด plugin ที่เทียบพร้อม `superuser` จาก repo รุ่นเดียวกัน (`--plugin-dir` ไม่ติดตั้ง dependencies ให้ ตั้งแต่ superuser 2.0.0 ของกลางไม่อยู่ใน software-development แล้ว) · รุ่นเก่าที่ยังไม่มี 2 plugin นี้ก็โหลดแค่ที่มี
 
 ## ต้องมีในเครื่อง
 

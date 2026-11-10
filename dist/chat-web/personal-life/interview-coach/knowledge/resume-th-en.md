@@ -78,6 +78,7 @@ English verbs: Led · Built · Cut · Grew · Launched · Automated · Negotiate
 - [ ] Spell-checked in both languages; company names in their official spelling
 - [ ] PDF opens with correct Thai on another machine
 - [ ] Thai CV uses พ.ศ. or ค.ศ. consistently (ค.ศ. = พ.ศ. − 543), never both
+- [ ] **Reader test** passed: a fresh reader (a subagent that has not seen this chat, or the user in a new chat) gets only the CV and the job post, reads for 6 seconds as the HR screener would, then answers "what role is this person for · their 2 strongest results · which must-have is missing". A wrong answer marks what to fix. Method: `thesis-writing`, "Reader test"
 
 ## Worked example — summary line
 

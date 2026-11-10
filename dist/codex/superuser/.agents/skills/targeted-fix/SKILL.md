@@ -3,7 +3,7 @@ name: targeted-fix
 description: Use when feedback says something is wrong (error, wrong figure, typo, not what I asked). Smallest fix. Cause unknown → principle-fix-root-cause.
 ---
 
-> **ใน SuperUser:** งานแก้บั๊กเริ่มจาก playbook `bug-fix` (`superuser` → `references/playbook-bug-fix.md` (plugin `software-company`)) และ skill นี้คือขั้น "แก้ให้เล็กที่สุด" ส่วนการหาสาเหตุจริงใช้ [`principle-fix-root-cause`](../principle-fix-root-cause/SKILL.md)
+> **ใน SuperUser:** งานแก้บั๊กเริ่มจาก playbook `bug-fix` (`superuser` → `references/playbook-bug-fix.md` (plugin `software-development`)) และ skill นี้คือขั้น "แก้ให้เล็กที่สุด" ส่วนการหาสาเหตุจริงใช้ [`principle-fix-root-cause`](../principle-fix-root-cause/SKILL.md)
 
 # แก้ตรงจุด (Targeted Fix)
 
@@ -15,8 +15,8 @@ Resist the urge to rewrite, "improve while you're here", or guess.
 | งาน | ใช้ตัวนี้แทน |
 |---|---|
 | ยังไม่รู้ว่าพังเพราะอะไร ต้องไล่หาสาเหตุ (error · ยอดไม่ตรง · flaky test) | `principle-fix-root-cause` แล้วค่อยกลับมาแก้ตรงจุดด้วย skill นี้ |
-| แก้ของที่ใช้ร่วมกันหลายที่ (แม่แบบ · ชีตต้นทาง · helper · type · schema) | ไล่ดูว่าใครใช้ก่อนแก้ (โค้ด: `blast-radius` (plugin `software-company`)) |
-| ยังไม่เคยอ่านงานส่วนนี้ | อ่านก่อน (โค้ด: `code-orientation` (plugin `software-company`)) |
+| แก้ของที่ใช้ร่วมกันหลายที่ (แม่แบบ · ชีตต้นทาง · helper · type · schema) | ไล่ดูว่าใครใช้ก่อนแก้ (โค้ด: `blast-radius` (plugin `software-development`)) |
+| ยังไม่เคยอ่านงานส่วนนี้ | อ่านก่อน (โค้ด: `code-orientation` (plugin `software-development`)) |
 
 ## กฎ
 
@@ -68,8 +68,8 @@ big — split it.
 
 ## ใช้คู่กับ
 
-- `lazy-coding` (plugin `software-company`) — the fix is the smallest correct diff.
-- `code-review-checklist` (plugin `software-company`) — confirm the fix introduced nothing new.
+- `lazy-coding` (plugin `software-development`) — the fix is the smallest correct diff.
+- `code-review-checklist` (plugin `software-development`) — confirm the fix introduced nothing new.
 
 ## ที่มา
 

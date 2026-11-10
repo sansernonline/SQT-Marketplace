@@ -26,7 +26,7 @@ description: Use when an app, website, plugin or brand needs icons (UI icon set,
 |---|---|---|
 | เริ่มร่างไอคอนทุกครั้ง | `design-references` (plugin `superuser`) | **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `icon` แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้ |
 | ไอคอนอยู่ในระบบแบรนด์ | `brand-kit` | สีและกฎการใช้โลโก้มาจากที่นั่น skill นี้ทำแค่ตัวไอคอน |
-| ไอคอนในหน้าจอแอป | `ui-craft` ของ software-company (ถ้าติดตั้ง) | ขนาดปุ่ม ระยะ และ token ของหน้าจออยู่ที่นั่น |
+| ไอคอนในหน้าจอแอป | `ui-craft` ของ software-development (ถ้าติดตั้ง) | ขนาดปุ่ม ระยะ และ token ของหน้าจออยู่ที่นั่น |
 | ต้องให้คนเลือกระหว่างหลายแนว | `parallel-attempts-pick-best` ข้อ 0 | ต้องมีตัวอย่างที่ผู้ใช้ชอบก่อนแข่งทุกครั้ง |
 | ตรวจไอคอนก่อนส่ง | `design-critic` agent · `design-review` | ได้สายตาใหม่ที่ไม่ได้ทำงานนี้ |
 

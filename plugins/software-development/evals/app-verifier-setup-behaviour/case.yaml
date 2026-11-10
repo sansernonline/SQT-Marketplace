@@ -1,0 +1,37 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: app-verifier-setup-behaviour
+description: ขอตั้งให้ agent รันและตรวจแอปเว็บเองได้ ต้องหาวิธีรันที่มีอยู่ก่อน ไม่ดาวน์โหลดเบราว์เซอร์ซ้ำ และให้สคริปต์เปิดปิดแอปเองพร้อมเก็บหลักฐานใน _to_delete
+tags: [behaviour, app-verifier-setup]
+runs: 3
+expected_outcome: ไล่ README กับ package.json ก่อน ใช้ Playwright ที่มีอยู่ สคริปต์ verify เปิดและปิดแอปเอง หลักฐานลง _to_delete/verify-runs และทำ skill คู่มือสั้นที่ .claude/skills
+execution:
+  prompt: |
+    แอป Express ของผมรันด้วย npm start ที่พอร์ต 3000 เครื่องนี้ลง Playwright กับ Chromium ไว้แล้ว ช่วยตั้งให้ agent เปิดแอป กดดูหน้าจอ แล้วรู้เองว่าผ่านหรือไม่ผ่าน โดยไม่ต้องให้ผมเปิดดูทุกรอบ
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: verify-script
+    type: regex
+    pattern: "(?i)verify"
+    match: contains
+    target: last_message
+  - name: evidence-folder
+    type: regex
+    pattern: "_to_delete"
+    match: contains
+    target: last_message
+  - name: no-redownload
+    type: regex
+    pattern: "(?i)npx playwright install|playwright install"
+    match: not_contains
+    target: last_message
+  - name: rules-followed
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. เริ่มจากหาวิธีรันที่โปรเจกต์มีอยู่ (README, package.json) ไม่เริ่มเขียนใหม่ทั้งหมด
+      2. ใช้ Playwright และ Chromium ที่ติดตั้งแล้ว ไม่สั่งดาวน์โหลดเบราว์เซอร์ใหม่
+      3. สคริปต์เปิดแอปบนพอร์ตที่ไม่ชน และปิดแอปเองเมื่อจบ รวมถึงอ่านผลจากภาพหน้าจอ DOM หรือ console
+      4. แยก 2 ชิ้น คือสคริปต์ตรวจในโฟลเดอร์ test และ skill คู่มือสั้นที่บอกวิธีรัน อ่านผล และข้อห้าม พร้อมหลักฐานแต่ละรอบเก็บใน _to_delete

@@ -108,7 +108,7 @@
 3. **ข้อขัดแย้งระหว่างแหล่ง** แยกหัวข้อของมันเอง บอกว่าแหล่งไหนว่าอะไร และใช้ค่าไหนเพราะอะไร
 4. **ยังไม่รู้** แยกหัวข้อ พร้อมว่าจะหาได้จากที่ไหน
 5. ป้ายหลักฐานตาม [`evidence`](evidence.md) · เขียนตาม `human-writing` · ตัวย่อเขียนเต็มครั้งแรก
-6. ภาพประกอบ: กราฟด้วย `data-analysis` หรือ `diagram-figures` (software-company) · ภาพปกด้วย `graphic-design:image-generation` (ถ้าติดตั้ง) · ผู้ใช้ต้องการไฟล์ Word → `markdown-report-docx` (ถ้าติดตั้ง `software-company`) ไม่ติดตั้ง → ส่ง Markdown
+6. ภาพประกอบ: กราฟด้วย `data-analysis` หรือ `diagram-figures` (software-development) · ภาพปกด้วย `graphic-design:image-generation` (ถ้าติดตั้ง) · ผู้ใช้ต้องการไฟล์ Word → `markdown-report-docx` (ถ้าติดตั้ง `software-development`) ไม่ติดตั้ง → ส่ง Markdown
 
 ## 8 · งบ
 

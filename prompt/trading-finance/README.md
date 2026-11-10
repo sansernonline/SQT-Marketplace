@@ -31,7 +31,7 @@
 | อยากตามหุ้นไม่กี่ตัวแล้วให้เตือนเมื่อถึงราคา | `prompt-trading.md` ฉบับ 3 → 1 |
 | จะเทรด forex ทองคำ หรือ crypto ไม่รู้จะเปิดกี่ lot | `prompt-trading.md` ฉบับ 6 |
 | สมัคร prop firm challenge กลัวชนเพดานขาดทุน | `prompt-trading.md` ฉบับ 7 → 6 ทุกไม้ → 2 ทุกสัปดาห์ |
-| อยากให้ EA เทรดแทน (เขียน · backtest · ขาย) | plugin `software-company` → `prompt/software-company/prompt-trading-system.md` |
+| อยากให้ EA เทรดแทน (เขียน · backtest · ขาย) | plugin `software-development` → `prompt/software-development/prompt-trading-system.md` |
 | สิ้นเดือน อยากรู้ว่าพอร์ตเป็นอย่างไร | `prompt-investing.md` ฉบับ 1 |
 | ตลาดร่วง ข่าวใหญ่ นอนไม่หลับ | `prompt-investing.md` ฉบับ 4 → `prompt-trading.md` ฉบับ 5 (ตัวที่ลงหนัก) |
 | มีเงินเก็บแล้ว อยากเริ่มลงทุนแต่ไม่รู้เริ่มตรงไหน | `prompt-investing.md` ฉบับ 3 → 2 |

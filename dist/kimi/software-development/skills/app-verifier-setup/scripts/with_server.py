@@ -1,0 +1,121 @@
+#!/usr/bin/env python3
+# NOTICE
+# Source: anthropics/skills, skills/webapp-testing/scripts/with_server.py
+# License: Apache-2.0 (https://www.apache.org/licenses/LICENSE-2.0) · copied 2026-11-10
+# Changes by SQT: (1) server output goes to --log-dir files instead of unread pipes, which can
+# fill up and freeze the server · (2) on Windows the whole process tree is stopped (taskkill /T),
+# because shell=True starts cmd.exe and terminate() would leave `npm run dev` running · (3) --log-dir defaults to
+# _to_delete/with-server-logs (not the project root) and is created when missing
+# Uses the Python standard library only · run with: python -I with_server.py --server ... --port ... -- <command>
+"""
+Start one or more servers, wait for them to be ready, run a command, then clean up.
+
+Usage:
+    # Single server
+    python scripts/with_server.py --server "npm run dev" --port 5173 -- python automation.py
+    python scripts/with_server.py --server "npm start" --port 3000 -- python test.py
+
+    # Multiple servers
+    python scripts/with_server.py \
+      --server "cd backend && python server.py" --port 3000 \
+      --server "cd frontend && npm run dev" --port 5173 \
+      -- python test.py
+"""
+
+import subprocess
+import socket
+import time
+import sys
+import argparse
+import os
+
+def is_server_ready(port, timeout=30):
+    """Wait for server to be ready by polling the port."""
+    start_time = time.time()
+    while time.time() - start_time < timeout:
+        try:
+            with socket.create_connection(('localhost', port), timeout=1):
+                return True
+        except (socket.error, ConnectionRefusedError):
+            time.sleep(0.5)
+    return False
+
+
+def main():
+    parser = argparse.ArgumentParser(description='Run command with one or more servers')
+    parser.add_argument('--server', action='append', dest='servers', required=True, help='Server command (can be repeated)')
+    parser.add_argument('--port', action='append', dest='ports', type=int, required=True, help='Port for each server (must match --server count)')
+    parser.add_argument('--timeout', type=int, default=30, help='Timeout in seconds per server (default: 30)')
+    parser.add_argument('--log-dir', default='_to_delete/with-server-logs', help='Folder for server-N.log files, created if missing (default: _to_delete/with-server-logs)')
+    parser.add_argument('command', nargs=argparse.REMAINDER, help='Command to run after server(s) ready')
+
+    args = parser.parse_args()
+
+    # Remove the '--' separator if present
+    if args.command and args.command[0] == '--':
+        args.command = args.command[1:]
+
+    if not args.command:
+        print("Error: No command specified to run")
+        sys.exit(1)
+
+    # Parse server configurations
+    if len(args.servers) != len(args.ports):
+        print("Error: Number of --server and --port arguments must match")
+        sys.exit(1)
+
+    servers = []
+    for cmd, port in zip(args.servers, args.ports):
+        servers.append({'cmd': cmd, 'port': port})
+
+    server_processes = []
+
+    try:
+        # Start all servers
+        for i, server in enumerate(servers):
+            print(f"Starting server {i+1}/{len(servers)}: {server['cmd']}")
+
+            os.makedirs(args.log_dir, exist_ok=True)
+            log = open(os.path.join(args.log_dir, f'server-{i+1}.log'), 'wb')
+            # Use shell=True to support commands with cd and &&
+            process = subprocess.Popen(
+                server['cmd'],
+                shell=True,
+                stdout=log,
+                stderr=subprocess.STDOUT
+            )
+            server_processes.append(process)
+
+            # Wait for this server to be ready
+            print(f"Waiting for server on port {server['port']}...")
+            if not is_server_ready(server['port'], timeout=args.timeout):
+                raise RuntimeError(f"Server failed to start on port {server['port']} within {args.timeout}s")
+
+            print(f"Server ready on port {server['port']}")
+
+        print(f"\nAll {len(servers)} server(s) ready")
+
+        # Run the command
+        print(f"Running: {' '.join(args.command)}\n")
+        result = subprocess.run(args.command)
+        sys.exit(result.returncode)
+
+    finally:
+        # Clean up all servers
+        print(f"\nStopping {len(server_processes)} server(s)...")
+        for i, process in enumerate(server_processes):
+            try:
+                if os.name == 'nt':
+                    subprocess.run(['taskkill', '/F', '/T', '/PID', str(process.pid)], capture_output=True)
+                else:
+                    process.terminate()
+                process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                process.kill()
+                process.wait()
+            print(f"Server {i+1} stopped")
+        print("All servers stopped")
+
+
+if __name__ == '__main__':
+    main()

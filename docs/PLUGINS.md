@@ -1,10 +1,10 @@
 # 📦 Plugin ใน SQT Marketplace
 
-ทั้งหมด **6 plugins** · สายพัฒนาซอฟต์แวร์มี `software-company` ตัวเดียว เพราะรวมทุกสาขาไว้แล้วตั้งแต่ v2.0.0
+ทั้งหมด **6 plugins** · สายพัฒนาซอฟต์แวร์มี `software-development` ตัวเดียว เพราะรวมทุกสาขาไว้แล้วตั้งแต่ v2.0.0
 
-> **รวม plugin รอบ 2 (2026-10-25)** — `thai-workplace` รวมเข้า **`e-commerce`** (skill 19 ตัว คำสั่ง 8 ตัว agent 4 ตัว playbook 5 ตัว) ยกเว้น `line-richmenu` ที่ย้ายไป **`graphic-design`** · `reverse-engineer` รวมเข้า skill `reverse-engineering` และ agent `reverse-engineer` ของ **`software-company`** (module .NET · firmware · network และตัวตรวจเครื่องมือ `check-tools.mjs`) · ถอด plugin เก่าด้วย `/plugin uninstall thai-workplace` และ `/plugin uninstall reverse-engineer` · หัวข้อด้านล่างที่ยังเรียก `thai-workplace` เป็นบันทึกของรอบก่อน
+> **รวม plugin รอบ 2 (2026-10-25)** — `thai-workplace` รวมเข้า **`e-commerce`** (skill 19 ตัว คำสั่ง 8 ตัว agent 4 ตัว playbook 5 ตัว) ยกเว้น `line-richmenu` ที่ย้ายไป **`graphic-design`** · `reverse-engineer` รวมเข้า skill `reverse-engineering` และ agent `reverse-engineer` ของ **`software-development`** (module .NET · firmware · network และตัวตรวจเครื่องมือ `check-tools.mjs`) · ถอด plugin เก่าด้วย `/plugin uninstall thai-workplace` และ `/plugin uninstall reverse-engineer` · หัวข้อด้านล่างที่ยังเรียก `thai-workplace` เป็นบันทึกของรอบก่อน
 >
-> **รวม plugin ชีวิตประจำวัน (2026-10-22)** — `online-seller` + `consumer-rights` → **`e-commerce`** (ซื้อ-ขายออนไลน์ทั้งสองฝั่ง) · `home-family` + `health-wellness` + `career` → **`personal-life`** (ชีวิตประจำวัน 4 หมวด) · `dev-learning` → **`personal-life`** (หมวดเรียนรู้: เรียนเทคโนโลยี paper ใบรับรอง side project วิทยานิพนธ์) · `seller-tax-basics` ย้ายไป `thai-workplace` · `sqt-toolkit` (เคยชื่อ `doc-toolkit`) ยุบแล้ว — skill เอกสารหลัก 4 ตัวกลับเข้า `superuser` ที่เหลือไป `software-company` `graphic-design` `personal-life` · เพิ่ม **`reverse-engineer`** (ลอกสถาปัตยกรรม REA: จุดเข้าเดียว evidence-first) · ชื่อ skill/command เดิมใช้ได้เหมือนเดิม ถอด plugin เก่าด้วย `/plugin uninstall <ชื่อเดิม>` · ไฟล์นี้ลงรายละเอียดเฉพาะ `software-company` — จำนวนของทุก plugin ดูตารางใน [README](../README.md#-plugins) และหน้าแต่ละตัวใน [docs/plugins/](plugins/)
+> **รวม plugin ชีวิตประจำวัน (2026-10-22)** — `online-seller` + `consumer-rights` → **`e-commerce`** (ซื้อ-ขายออนไลน์ทั้งสองฝั่ง) · `home-family` + `health-wellness` + `career` → **`personal-life`** (ชีวิตประจำวัน 4 หมวด) · `dev-learning` → **`personal-life`** (หมวดเรียนรู้: เรียนเทคโนโลยี paper ใบรับรอง side project วิทยานิพนธ์) · `seller-tax-basics` ย้ายไป `thai-workplace` · `sqt-toolkit` (เคยชื่อ `doc-toolkit`) ยุบแล้ว — skill เอกสารหลัก 4 ตัวกลับเข้า `superuser` ที่เหลือไป `software-development` `graphic-design` `personal-life` · เพิ่ม **`reverse-engineer`** (ลอกสถาปัตยกรรม REA: จุดเข้าเดียว evidence-first) · ชื่อ skill/command เดิมใช้ได้เหมือนเดิม ถอด plugin เก่าด้วย `/plugin uninstall <ชื่อเดิม>` · ไฟล์นี้ลงรายละเอียดเฉพาะ `software-development` — จำนวนของทุก plugin ดูตารางใน [README](../README.md#-plugins) และหน้าแต่ละตัวใน [docs/plugins/](plugins/)
 
 ---
 
@@ -13,7 +13,7 @@
 ทีมผู้ช่วยทำงานหลายขั้น: หัวหน้าทีมรับงาน → จัดขนาด → brainstorm (งานใหญ่) → เลือก playbook → แจกงานให้ agent ตัวใหม่ → ตรวจกับของจริง → ส่งงาน → เรียนรู้ · ใช้กับงานได้ทุกสาขา (เอกสาร · หาข้อมูล · ร้านค้า · เงิน · โค้ด) · plugin สาขาอื่นต่อยอดจากตัวนี้ทาง `dependencies`
 
 ### มีอะไรบ้าง
-**4 agents · 39 skills · 0 commands** · 6 playbooks · hook 1 ชุด (skill เอกสารออกแบบ สไลด์ รูป อยู่ใน `software-company` · ภาพ AI ใน `graphic-design` · ประชุมใน `personal-life`)
+**4 agents · 39 skills · 0 commands** · 6 playbooks · hook 1 ชุด (skill เอกสารออกแบบ สไลด์ รูป อยู่ใน `software-development` · ภาพ AI ใน `graphic-design` · ประชุมใน `personal-life`)
 
 - **agent กลาง:** brainstormer (คิดทางเลือก) · reviewer (ตรวจด้วยสายตาใหม่) · learning-reviewer (ทบทวนวิธีทำงาน)
 - **playbook:** research · document · review · unattended-run · learn-from-session · pickup-and-pause (รับงานต่อ · หยุดงาน)
@@ -38,15 +38,15 @@
 ```
 ก่อน                                        หลัง
 superuser = แม่แบบ + skill 6 ตัว           superuser = แกนที่ใช้ตัวเดียวได้ · skill 43 ตัว
-   │                                           │  (ย้ายมาจาก software-company 31 · personal-life 3 · ใหม่ 2)
-   ├─ software-company มีทั้งของกลาง          ├─ software-company เหลือเฉพาะงานโค้ด
+   │                                           │  (ย้ายมาจาก software-development 31 · personal-life 3 · ใหม่ 2)
+   ├─ software-development มีทั้งของกลาง          ├─ software-development เหลือเฉพาะงานโค้ด
    │  และของโค้ดปนกัน                         │  + ส่วนเพิ่มงานโค้ด → superuser/references/code-extensions.md
    └─ ติดตั้ง superuser ตัวเดียว              └─ ติดตั้ง superuser ตัวเดียว → ทำงานทุกสาขาได้เต็ม
       ทำได้แค่งานทั่วไปพื้นฐาน                    ติดตั้งสาขา → ได้แกนกลางมาเอง (dependencies)
 ```
 
 - **ใหม่:** `handoff` (ใบสั่งงาน · ใบส่งงาน · รับงานต่อ · inbox · log · รวม `work-session-context` เดิม) · `research-with-sources`
-- **ย้ายเข้าแกน:** skill ทั่วไป 31 ตัวจาก software-company (รวม `html-slide-deck` · `pptx-to-html-deck`) · `meeting-prep-card` · `meeting-summary` · `polite-message-th-en` จาก personal-life · playbook `pickup-and-pause` แบบใช้ได้ทุกงาน
+- **ย้ายเข้าแกน:** skill ทั่วไป 31 ตัวจาก software-development (รวม `html-slide-deck` · `pptx-to-html-deck`) · `meeting-prep-card` · `meeting-summary` · `polite-message-th-en` จาก personal-life · playbook `pickup-and-pause` แบบใช้ได้ทุกงาน
 - **รวมบางส่วนเข้าแกน:** วิธีทำปก 3 แนว โหวต 2 ใน 3 → `branded-document-design` · วิธีเขียน prompt และทำภาพเป็นชุด → `image-generation`
 - **ไม่เปลี่ยนชื่อ skill** — งานเดิมเรียกชื่อเดิมได้ · plugin สาขาได้ skill ชุดนี้ผ่าน `dependencies` เหมือนเดิม
 
@@ -58,7 +58,7 @@ superuser = แม่แบบ + skill 6 ตัว           superuser = แก�
 
 ---
 
-## 🏢 `software-company`
+## 🏢 `software-development`
 
 จำลองบริษัทซอฟต์แวร์ครบทุกขั้นของ Software Development Life Cycle (SDLC) ตั้งแต่ทีมหลัก (product · analysis · architecture · design · development · QA · DevOps · security) ไปจนถึงผู้เชี่ยวชาญเฉพาะสาขา
 
@@ -68,35 +68,35 @@ superuser = แม่แบบ + skill 6 ตัว           superuser = แก�
 ### ติดตั้ง
 ```
 /plugin marketplace add sansernonline/SQT-Marketplace
-/plugin install software-company@sqt-marketplace
+/plugin install software-development@sqt-marketplace
 ```
 
 ---
 
-## 🏭 สาขาเฉพาะทาง — รวมอยู่ใน `software-company` แล้ว
+## 🏭 สาขาเฉพาะทาง — รวมอยู่ใน `software-development` แล้ว
 
 ก่อน v2.0.0 แต่ละสาขาเป็น plugin แยก ตอนนี้อยู่ในตัวเดียว ไม่ต้องติดตั้งเพิ่ม
 
 | เดิม (plugin) | เรื่อง | agent | skill | command |
 |---|---|---|---|---|
-| `software-company-ai` | AI / ML · LLM · RAG | `ai-engineer` · `data-engineer` | `llm-engineering` | `/software-company:llm-engineering` |
-| `software-company-cybersecurity` | SOC · threat hunting · incident response | `security-analyst` | `security-operations` | `/software-company:security-operations` |
-| `software-company-devtools` | SDK · DevRel · docs | `devrel-engineer` | `developer-experience` | `/software-company:developer-experience` |
-| `software-company-ecommerce` | checkout · inventory · recommendation | `growth-specialist` · `ecommerce-engineer` · `recommendation-engineer` | `ecommerce-patterns` | `/software-company:ecommerce-patterns` |
-| `software-company-fintech` | payment · KYC/AML · PCI-DSS | `fintech-engineer` · `fintech-compliance-officer` · `quant-analyst` | `fintech-payments` | `/software-company:fintech-payments` |
-| `software-company-gaming` | game engine · multiplayer · live-ops | `game-developer` · `game-designer` | `game-development` | `/software-company:game-development` |
-| `software-company-healthcare` | FHIR · HIPAA · clinical | `healthcare-engineer` · `hipaa-officer` · `clinical-data-analyst` | `healthcare-systems` | `/software-company:healthcare-systems` |
-| `software-company-insurtech` | claims · underwriting · insurance law | `insurance-engineer` · `insurance-analyst` · `insurance-compliance-officer` | `insurance-systems` | `/software-company:insurance-systems` |
-| `software-company-iot` | firmware · MQTT · edge · fleet | `iot-engineer` | `iot-systems` | `/software-company:iot-systems` |
-| `software-company-legaltech` | contract · document automation · e-signature | `legaltech-engineer` · `legal-compliance-officer` | `legal-document-systems` | `/software-company:legal-document-systems` |
-| `software-company-mobile` | iOS / Android / Flutter · ASO | `growth-specialist` · `mobile-engineer` | `mobile-engineering` | `/software-company:mobile-engineering` |
-| `software-company-saas-b2b` | multi-tenancy · SSO/SCIM · billing | `growth-specialist` · `solution-architect` · `revops-analyst` | `saas-platform` | `/software-company:saas-platform` |
-| `software-company-web3` | smart contract · DeFi · tokenomics | `blockchain-engineer` | `smart-contracts` | `/software-company:smart-contracts` |
+| `software-development-ai` | AI / ML · LLM · RAG | `ai-engineer` · `data-engineer` | `llm-engineering` | `/software-development:llm-engineering` |
+| `software-development-cybersecurity` | SOC · threat hunting · incident response | `security-analyst` | `security-operations` | `/software-development:security-operations` |
+| `software-development-devtools` | SDK · DevRel · docs | `devrel-engineer` | `developer-experience` | `/software-development:developer-experience` |
+| `software-development-ecommerce` | checkout · inventory · recommendation | `growth-specialist` · `ecommerce-engineer` · `recommendation-engineer` | `ecommerce-patterns` | `/software-development:ecommerce-patterns` |
+| `software-development-fintech` | payment · KYC/AML · PCI-DSS | `fintech-engineer` · `fintech-compliance-officer` · `quant-analyst` | `fintech-payments` | `/software-development:fintech-payments` |
+| `software-development-gaming` | game engine · multiplayer · live-ops | `game-developer` · `game-designer` | `game-development` | `/software-development:game-development` |
+| `software-development-healthcare` | FHIR · HIPAA · clinical | `healthcare-engineer` · `hipaa-officer` · `clinical-data-analyst` | `healthcare-systems` | `/software-development:healthcare-systems` |
+| `software-development-insurtech` | claims · underwriting · insurance law | `insurance-engineer` · `insurance-analyst` · `insurance-compliance-officer` | `insurance-systems` | `/software-development:insurance-systems` |
+| `software-development-iot` | firmware · MQTT · edge · fleet | `iot-engineer` | `iot-systems` | `/software-development:iot-systems` |
+| `software-development-legaltech` | contract · document automation · e-signature | `legaltech-engineer` · `legal-compliance-officer` | `legal-document-systems` | `/software-development:legal-document-systems` |
+| `software-development-mobile` | iOS / Android / Flutter · ASO | `growth-specialist` · `mobile-engineer` | `mobile-engineering` | `/software-development:mobile-engineering` |
+| `software-development-saas-b2b` | multi-tenancy · SSO/SCIM · billing | `growth-specialist` · `solution-architect` · `revops-analyst` | `saas-platform` | `/software-development:saas-platform` |
+| `software-development-web3` | smart contract · DeFi · tokenomics | `blockchain-engineer` | `smart-contracts` | `/software-development:smart-contracts` |
 
 **รวมแบบนี้:**
 - agent ที่ทำงานคล้ายกันรวมเป็นตัวเดียว (เช่น android · ios · cross-platform → `mobile-engineer`) — คู่มือบทบาทเดิมทุกตัวอยู่ครบใน `references/agent-<ชื่อเดิม>.md` ของ skill สาขานั้น
 - skill 3 ตัวของแต่ละสาขารวมเป็น skill เดียว — เนื้อหาเดิมอยู่ครบใน `references/<ชื่อเดิม>.md`
-- command 2 ตัวของแต่ละสาขารวมเป็นตัวเดียวที่เลือกโหมดได้ เช่น `/software-company:fintech-payments pci-audit <ขอบเขต>`
+- command 2 ตัวของแต่ละสาขารวมเป็นตัวเดียวที่เลือกโหมดได้ เช่น `/software-development:fintech-payments pci-audit <ขอบเขต>`
 
 ---
 
@@ -105,13 +105,13 @@ superuser = แม่แบบ + skill 6 ตัว           superuser = แก�
 ถ้าเคยติดตั้ง plugin สาขาไว้ ให้ถอดออกแล้วอัปเดตตัวหลัก
 
 ```
-/plugin uninstall software-company-fintech     # ทำกับทุกตัวที่เคยติดตั้ง
+/plugin uninstall software-development-fintech     # ทำกับทุกตัวที่เคยติดตั้ง
 /plugin marketplace update sqt-marketplace
-/plugin update software-company@sqt-marketplace
+/plugin update software-development@sqt-marketplace
 ```
 
 ชื่อที่เปลี่ยน:
-- command `/software-company-<สาขา>:<ชื่อ>` เปลี่ยนเป็น `/software-company:<สาขา>-design <ชื่อเดิม>`
+- command `/software-development-<สาขา>:<ชื่อ>` เปลี่ยนเป็น `/software-development:<สาขา>-design <ชื่อเดิม>`
 - ชื่อ agent และ skill ใหม่ ดูตารางข้างบน
 - รายการจับคู่ชื่อเก่า → ชื่อใหม่ทั้งหมด อยู่ในหัวข้อ "ที่มา" ของ skill สาขานั้น
 
@@ -122,7 +122,7 @@ superuser = แม่แบบ + skill 6 ตัว           superuser = แก�
 ```
 SQT-Marketplace/
 ├── .claude-plugin/marketplace.json
-├── plugins/software-company/
+├── plugins/software-development/
 │   ├── agents/      38 บทบาท
 │   ├── skills/      95 skill + 29 คำสั่ง (คำสั่งตั้ง disable-model-invocation: true)
 │   └── (hook อยู่ใน plugins/superuser/hooks/ · ใช้ร่วมทาง dependencies)
@@ -150,7 +150,7 @@ SQT-Marketplace/
 
 ## 🗺️ Roadmap — plugin ชีวิตประจำวัน
 
-_ร่างเมื่อ 6 ต.ค. 2569 · software-company ครอบงาน "สร้างซอฟต์แวร์" แล้ว ชุดนี้จึงเสนอ plugin สำหรับใช้ในชีวิตประจำวัน_
+_ร่างเมื่อ 6 ต.ค. 2569 · software-development ครอบงาน "สร้างซอฟต์แวร์" แล้ว ชุดนี้จึงเสนอ plugin สำหรับใช้ในชีวิตประจำวัน_
 
 > **แผนเก่า เก็บไว้ดูที่มา** — ตัวเลขและสถานะในหัวข้อนี้เป็นของวันที่ร่าง (เช่น dev-learning ที่เขียนว่า "สำรอง" ส่งแล้วเป็น v0.6.0 และรวมเข้า `personal-life` หมวดเรียนรู้เมื่อ 22 ต.ค. 2569) · จำนวนจริงปัจจุบันดูตารางใน [README](../README.md#-plugins)
 
@@ -250,7 +250,7 @@ _ร่างเมื่อ 6 ต.ค. 2569 · software-company ครอบง
 
 ### 4 · graphic-design
 
-**จุดต่างจากตลาดและของเดิม:** software-company มี skill graphic-design แต่เน้นหน้าจอ product และเอกสาร · kimi-design ที่ผู้ใช้ติดตั้งไว้ทำ infographic และโปสเตอร์ด้วย Domain-Specific Language (DSL) · plugin นี้เน้น **วิดีโอ · ระบบแบรนด์ · วิจารณ์งาน** ที่ยังไม่มีตัวไหนทำ
+**จุดต่างจากตลาดและของเดิม:** software-development มี skill graphic-design แต่เน้นหน้าจอ product และเอกสาร · kimi-design ที่ผู้ใช้ติดตั้งไว้ทำ infographic และโปสเตอร์ด้วย Domain-Specific Language (DSL) · plugin นี้เน้น **วิดีโอ · ระบบแบรนด์ · วิจารณ์งาน** ที่ยังไม่มีตัวไหนทำ
 
 **Agents (4):** art-director (บรีฟภาพ/วิดีโอ AI ให้ได้รสเดียวกัน), brand-keeper (brand kit ชุดเดียวใช้ทุกงาน), social-creator (งานโพสต์/โฆษณา), design-critic (วิจารณ์ตาดี)
 

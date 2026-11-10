@@ -169,7 +169,7 @@ Gross pay minus social security (SSO), provident fund (PVD) and personal income 
 
 | # | Step | Output | Deadline |
 |---|---|---|---|
-| 1 | Close attendance: OT, unpaid leave, new joiners, leavers (see `labour-law-basics` for OT rates) | timesheet | before cut-off |
+| 1 | Close attendance: OT, unpaid leave, new joiners, leavers (see `labour-law-basics` for OT rates), then run the 9 checks in section 1a | timesheet | before cut-off |
 | 2 | Compute gross: salary + OT + allowances + commission + taxable benefits | payroll register | |
 | 3 | SSO 5% on wage capped at 17,500 → max 875 (see `social-security-th`) | employee + employer share | |
 | 4 | PVD employee % and employer % (if the company has a fund) | | |
@@ -181,6 +181,27 @@ Gross pay minus social security (SSO), provident fund (PVD) and personal income 
 | 10 | Archive register, payslips, receipts — keep 5 years minimum, 7 recommended (`sme-bookkeeping` section 2 — per a Revenue Department ruling, not yet checked against the current statute) | | |
 
 Year end: **ภ.ง.ด.1ก** (annual summary per employee) by end of February; give every employee **50 ทวิ** for the year (by February, รอยืนยัน exact day) and within 1 month after anyone leaves (รอยืนยัน).
+
+## 1a. Check the inputs before computing tax
+
+Most payroll errors are in the timesheet and the employee list, not in the tax maths. Before step 5, run these 9 checks against the attendance file and last month's register:
+
+| # | Flag | Usual cause |
+|---|---|---|
+| 1 | Clock-in with no clock-out | forgot to scan; hours unknown |
+| 2 | OT far above this person's normal month | real peak, or a typing error; OT also needs the employee's consent (`labour-law-basics` section 1) and pays 1.5× or 3× (section 2) |
+| 3 | Zero hours for someone who normally works | unrecorded leave, left the job, or missing file |
+| 4 | Wage rate differs from last month | a raise not yet approved in writing, or a wrong row |
+| 5 | Duplicate or overlapping rows | same day entered twice |
+| 6 | Leave beyond entitlement | paid sick or personal leave over the yearly days in `labour-law-basics` section 3 |
+| 7 | Someone paid last month is missing | resigned (final pay, `labour-law-basics` section 4) or dropped by mistake |
+| 8 | New joiner with no starting documents | no ล.ย.01, no social security registration (`social-security-th`) |
+| 9 | Total payroll differs from last month by more than 10% | explain it in 1 line (new staff, OT, bonus) before paying |
+
+- Never guess a missing time or fix a row quietly. Ask the owner one person and one issue at a time, and write the answer next to the row.
+- Social security uses the wage floor and cap in `social-security-th`; a wage above the cap still pays the capped amount.
+- The 10% line is a starting value from Anthropic's payroll-prep skill (`anthropics/knowledge-work-plugins` small-business, Apache-2.0, read 2026-11-10; ideas only, no text copied), not measured on Thai payrolls.
+- The check summary lists names and issues only, never ID card numbers or bank account numbers (`pdpa-workflow`).
 
 ## 2. PIT withholding on salary (ม.40(1)) — annualisation
 

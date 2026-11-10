@@ -12,7 +12,7 @@ Check a signal provider with numbers **before** following, then follow with fake
 
 Use when the user wants to pick one of several MQL5 Signals providers, asks if a signal is safe to follow, pastes a signal's statistics page, or has a provider's trade history to check.
 
-Not when: building or testing their own Expert Advisor (EA) → `stack-mql` (software-company) · an automated bot that sends real orders (out of scope) · sizing one manual trade → `position-sizing`.
+Not when: building or testing their own Expert Advisor (EA) → `stack-mql` (software-development) · an automated bot that sends real orders (out of scope) · sizing one manual trade → `position-sizing`.
 
 ## Use another skill instead, or with this one
 
