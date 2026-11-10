@@ -2,6 +2,7 @@
 
 ## 0.23.1 — 2026-11-10
 
+- `legal-help-prep`: ตัวอย่าง JSON ไม่กำหนด today ตายตัว ให้สคริปต์ใช้วันที่ของเครื่อง
 - `learning-path`: เพิ่มบรรทัด Not for ชี้ `cert-prep` และ `side-project-picker`
 - เอาอีโมจิที่เป็นหัวข้อและป้ายออกจากเอกสารใน plugin
 - eval ใหม่: `important-docs` (trigger + behaviour) · `pet-care` (trigger + behaviour)

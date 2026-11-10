@@ -2,6 +2,7 @@
 
 ## 3.1.1 — 2026-11-10
 
+- `security-audit` หัวข้อ 9 ชี้ infra-checklist.md
 - `security-scan`: เหลือคำสั่งสั้นที่ชี้ `security-audit` (ทั้ง codebase) หรือ `security-gate` (diff ก่อน ship) · ตารางระดับความรุนแรงเดิมเลิกใช้ ใช้ `security-audit` หัวข้อ 5 · `security-audit` หัวข้อ 8 รับข้อมาตรฐานกับแผน 30/60/90 วันมาแทน
 - `spec-to-code-loop`: ย้ายหัวข้อ 10 (ลูปที่ปรับตามตัวเลข) ไป `references/metric-loop.md`
 - `worktree-and-branch`: ย้ายตารางปิด branch ไป `references/close-branch.md`
