@@ -69,7 +69,9 @@
         "owns": [
           "clip/subs.srt"
         ],
-        "tags": []
+        "tags": [
+          "judgment"
+        ]
       },
       {
         "id": "edit",

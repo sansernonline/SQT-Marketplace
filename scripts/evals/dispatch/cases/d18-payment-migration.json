@@ -59,7 +59,9 @@
         "owns": [
           "docs/runbook.md"
         ],
-        "tags": []
+        "tags": [
+          "judgment"
+        ]
       },
       {
         "id": "webhook",

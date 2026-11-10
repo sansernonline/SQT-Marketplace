@@ -31,7 +31,9 @@
         "owns": [
           "src/promo/index.ts"
         ],
-        "tags": []
+        "tags": [
+          "judgment"
+        ]
       },
       {
         "id": "fee",
@@ -42,7 +44,9 @@
         "owns": [
           "src/fee/index.ts"
         ],
-        "tags": []
+        "tags": [
+          "judgment"
+        ]
       },
       {
         "id": "loyalty",
@@ -53,7 +57,9 @@
         "owns": [
           "src/loyalty/index.ts"
         ],
-        "tags": []
+        "tags": [
+          "judgment"
+        ]
       },
       {
         "id": "itest",
@@ -66,7 +72,9 @@
         "owns": [
           "tests/order-flow.test.ts"
         ],
-        "tags": []
+        "tags": [
+          "judgment"
+        ]
       }
     ]
   }

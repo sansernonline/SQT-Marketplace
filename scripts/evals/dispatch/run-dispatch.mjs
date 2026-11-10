@@ -70,7 +70,8 @@ function loadCases() {
 // ---- ประมาณค่าใช้จ่าย ----
 const priceRatio = MODEL === "none" ? 1 : (PRICES[MODEL]?.output ?? PRICES["claude-sonnet-5-5"].output) / PRICES["claude-sonnet-5-5"].output;
 const estimate = (arm) => SONNET_COST[arm] * priceRatio;
-const capPerCall = (arm) => Math.max(estimate(arm) * CAP_MARGIN, CAP_MIN);
+// เคสที่โหลด plugin สาขาด้วย หัวหน้าเปิด skill ของ 2 plugin ก่อนตอบ เพดานต่อครั้งจึงคูณ 2 (d13 ชนเพดาน $0.33 ก่อนตอบ 2 ใน 3 รอบ 2026-11-10)
+const capPerCall = (arm, c = {}) => Math.max(estimate(arm) * CAP_MARGIN * (arm === "plugin" && c.plugin ? 2 : 1), CAP_MIN);
 
 function printPlan() {
   const n = loadCases().length;
@@ -132,7 +133,7 @@ async function paidRun() {
   console.log(`เริ่ม ${cases.length} เคส × ${RUNS} รอบ × 2 แขน · model ${MODEL} · งบรวม ${usd(BUDGET_TOTAL)}`);
   // วนรอบนอกสุด แขนในสุด: งบหมดกลางทาง 2 แขนยังได้จำนวนรอบใกล้กัน
   run: for (let n = 1; n <= RUNS; n++) for (const c of cases) for (const arm of Object.keys(ARMS)) {
-    const cap = capPerCall(arm);
+    const cap = capPerCall(arm, c);
     if (spent + cap > BUDGET_TOTAL) { console.log(`เหลืองบ ${usd(BUDGET_TOTAL - spent)} ไม่พอเพดาน ${usd(cap)} · หยุดที่ ${c.id} ${arm} รอบ ${n}`); break run; }
     const r = { case: c.id, arm, n, risky: c.risky, ...(await ask(c, arm, cap)) };
     if (r.isQuota) { console.log("โควตาบัญชีหมด หยุดรัน · รันซ้ำทีหลัง"); break run; }
