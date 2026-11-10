@@ -26,13 +26,31 @@ jobs:
         run: node scripts/check/validate-marketplace.mjs --self-test
       - name: ตรวจทั้ง repo
         run: node scripts/check/validate-marketplace.mjs
-      - name: ของกลาง superuser ตรงทุก plugin
-        run: node scripts/sync/sync-superuser.mjs --check
-      - name: แผนผังไฟล์และกฎร่วมของ prompt ตรงกับของจริง
+      - name: ตัวตรวจ manifest · เนื้อหา · include · สำเนา skill self-test
         shell: bash
         run: |
-          node scripts/sync/sync-file-map.mjs --check
-          node scripts/sync/sync-prompt-rules.mjs --check
+          node scripts/check/validate-manifests.mjs --self-test
+          node scripts/check/content-checks.mjs --self-test
+          node scripts/sync/sync-includes.mjs --self-test
+          node scripts/sync/update-skills.mjs --self-test
+      - name: manifest ของทุกเครื่องมือถูกต้อง (ต้นฉบับ + dist)
+        shell: bash
+        run: |
+
+          node scripts/check/validate-manifests.mjs || { echo "::error title=manifest ผิด::แก้ manifest ตามรายการข้างบน ถ้าเป็น dist เก่า รัน node scripts/build/build-targets.mjs แล้ว commit dist/"; exit 1; }
+      # ไฟล์ที่สร้างจากต้นฉบับต้องตรงกัน · ไม่ตรง = ล้มพร้อมคำสั่งแก้ที่ต้องรัน (ไม่ให้ bot commit แทน: GITHUB_TOKEN ที่ push ไม่ทำให้ check รอบใหม่รัน และ AGENTS.md ห้าม commit โดยไม่ได้สั่ง)
+      - name: ของกลาง superuser ตรงทุก plugin
+        shell: bash
+        run: |
+
+          node scripts/sync/sync-superuser.mjs --check || { echo "::error title=ของกลาง superuser ไม่ตรง::แก้: รัน node scripts/sync/sync-superuser.mjs แล้ว commit"; exit 1; }
+      - name: เอกสารนับ แผนผังไฟล์ กฎร่วมของ prompt และ include ตรงกับของจริง
+        shell: bash
+        run: |
+          node scripts/sync/sync-docs.mjs --check || { echo "::error title=ตัวเลขในเอกสารไม่ตรง::แก้: รัน node scripts/sync/sync-docs.mjs แล้ว commit"; exit 1; }
+          node scripts/sync/sync-file-map.mjs --check || { echo "::error title=FILE-MAP ไม่ตรง::แก้: รัน node scripts/sync/sync-file-map.mjs แล้ว commit"; exit 1; }
+          node scripts/sync/sync-prompt-rules.mjs --check || { echo "::error title=กฎร่วมของ prompt ไม่ตรง::แก้: รัน node scripts/sync/sync-prompt-rules.mjs แล้ว commit"; exit 1; }
+          node scripts/sync/sync-includes.mjs --check || { echo "::error title=marker include ไม่ตรง::แก้: รัน node scripts/sync/sync-includes.mjs แล้ว commit"; exit 1; }
       - name: hook self-test
         run: node plugins/superuser/hooks/superuser-hook.mjs --self-test
       - name: scorecard planner decide และสคริปต์การเงิน self-test
@@ -68,6 +86,9 @@ jobs:
           node plugins/trading-finance/skills/portfolio-snapshot/scripts/money-calc.mjs --self-test
           node plugins/trading-finance/skills/technical-signals/scripts/indicators.mjs --self-test
           node plugins/personal-life/skills/important-docs/scripts/due-dates.mjs --self-test
+      - name: เทสต์ node:test (ระบุไฟล์ผ่าน glob เพราะ node --test รับโฟลเดอร์ไม่ได้บนเครื่องบางแบบ)
+        shell: bash
+        run: node --test scripts/evals/ab/*.test.mjs scripts/evals/judge/*.test.mjs plugins/superuser/skills/*/scripts/*.test.mjs
       - name: dist ที่ commit ไว้ตรงกับที่สร้างใหม่
         shell: bash
         run: |

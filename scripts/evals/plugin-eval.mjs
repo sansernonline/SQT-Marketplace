@@ -10,9 +10,19 @@ import { join, dirname, resolve } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
+import { activeCopies, collisionMessage } from "./ab/installed-collision.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const args = process.argv.slice(2);
+if (args.includes("-h") || args.includes("--help") || !args.length) {
+  console.log(`ใช้: node scripts/evals/plugin-eval.mjs <plugin> [--only <regex ชื่อเคส>] [--no-probe] [--no-scaffold] [--allow-installed] [อาร์กิวเมนต์อื่นส่งต่อให้ claude plugin eval]
+  --only            เลือกเคสด้วย regex ชื่อเคส (แทน --case ที่ไม่รับปีกกา)
+  --no-probe        ข้ามการลองเคส trigger 1 เคสก่อนรันทั้งชุด
+  --no-scaffold     ไม่เปิด --scaffold ให้เคสที่มี scaffold_script
+  --allow-installed ไม่หยุดเมื่อ plugin นี้ติดตั้งและเปิดอยู่ในเครื่อง (ตัวรันโหลดเฉพาะสำเนาใน repo จึงเป็นแค่คำเตือน)
+เรียก model จริง มีค่าใช้จ่าย · ใส่ --max-cost-usd ทุกครั้ง · รายละเอียด: scripts/evals/README.md`);
+  process.exit(0);
+}
 const plugin = args.shift();
 const take = (flag) => { const i = args.indexOf(flag); return i < 0 ? null : args.splice(i, 2)[1] ?? ""; };
 const only = take("--only");
@@ -20,12 +30,18 @@ const only = take("--only");
 if (only === "" || only?.startsWith("--")) { console.error("--only ต้องตามด้วย regex ชื่อเคส"); process.exit(2); }
 const probe = !args.includes("--no-probe");
 const noScaffold = args.includes("--no-scaffold");   // ของตัวรันนี้ ไม่ส่งต่อ: claude plugin eval ไม่ได้ระบุ flag นี้ในเอกสาร
-const rest = args.filter((a) => a !== "--no-probe" && a !== "--no-scaffold");
+const allowInstalled = args.includes("--allow-installed");   // ของตัวรันนี้ ไม่ส่งต่อ
+const rest = args.filter((a) => a !== "--no-probe" && a !== "--no-scaffold" && a !== "--allow-installed");
 const source = join(ROOT, "plugins", plugin ?? "");
 if (!plugin || !existsSync(join(source, ".claude-plugin", "plugin.json"))) {
   console.error(`ไม่เจอ plugins/${plugin ?? "<plugin>"} · ใช้: node scripts/evals/plugin-eval.mjs <plugin> [--only <regex>] [--no-probe] [--no-scaffold] [...]`);
   process.exit(2);
 }
+
+// สำเนาที่ติดตั้งและเปิดอยู่ในเครื่อง: eval ใช้ home ใหม่ต่อรอบจึงไม่น่าโหลดสำเนานั้น แต่ถ้าหลุดเข้ามา description ของมันจะถูกให้คะแนนแทนโดยไม่รู้ตัว
+// เตือนไว้ก่อนเสียเงิน · ตรวจว่าตัวไหนถูกโหลดจริงด้วย --keep-temp แล้วดู trace (expo-skill-eval ดู 2026-11-10)
+const installed = activeCopies(plugin);
+if (installed.length && !allowInstalled) console.warn(`คำเตือน: ${collisionMessage(plugin, installed)}`);
 
 // สำเนาไร้ dependencies · ผลเก่าใน evals/results ไม่ติดไป · --only เหลือเฉพาะเคสที่ตรง
 const copy = join(mkdtempSync(join(tmpdir(), "plugin-eval-")), plugin);

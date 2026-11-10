@@ -43,4 +43,6 @@ description: Use when SuperUser plans how agents run a task (Planning, ReAct, Re
 
 **ไม่เปิด agent teams เป็นค่าเริ่ม** — ใช้ subagent แทน เพราะ agent teams ยังเป็นของทดลองและปิดอยู่ · ใช้ token มากกว่ามาก (ราว 7 เท่าเมื่อ teammate อยู่ใน plan mode) · เปิดแล้ว subagent ที่ตั้งชื่อจะกลายเป็น teammate เอง · teammate แบบ in-process (ค่าเริ่ม) ส่ง subagent เบื้องหลังไม่ได้ · teammate คุยกันเอง ขัดกับหลักทุกอย่างผ่านหัวหน้าทีม · ยกเว้นผู้ใช้เปิดไว้แล้วและงานเป็น debug หลายสมมติฐานที่ต้องให้ถกล้มทฤษฎีกัน · ([Claude Code: agent teams](https://code.claude.com/docs/en/agent-teams) · ตรวจ 21 ต.ค. 2569)
 
+**ข้อสรุปที่ต้องพิสูจน์ทีละข้อ** → บัญชี `PROVED · REFUTED · OPEN` + `scripts/ledger.mjs` (พิมพ์ขั้นถัดไปให้ · ต้องตรวจอย่างน้อย 2 รอบก่อนปิดข้อ) · รอลูกทีมนาน ๆ → `scripts/keep-waiting.mjs` · วิธีใช้ใน [`pattern-details`](references/pattern-details.md) หัวข้อ 7 · รอบแก้ที่ขยับคนตามรอบ → หัวข้อ 3 ข้อ 7
+
 **บอกในรายงาน** เฉพาะเมื่อมันเปลี่ยนการตัดสินใจ เช่น `Reranker (คัด 24 → 4 แหล่ง)`

@@ -14,6 +14,11 @@ Log fields and the queue are described in `superuser` → `references/learning-l
 3. The decision record — this task's rows in `docs/BUILD-PLAN.md`, or "การตัดสินใจ" in `.claude/superuser/CONTEXT.md` (root `CONTEXT.md` in older projects). Reasons starting "ผู้ใช้แก้" are corrections. Plan versions (`แผน v2` …): each needs one of the 3 re-plan reasons in `agent-patterns` (work the plan missed · a piece could not be done · new requirements); a version with none, a 4th revision, or reused work that was redone anyway is a lesson about planning, not about the piece. A review loop that kept going after the same issue stayed open 2 rounds with no drop is a lesson too. A reason holding `คาด … · ตรวจ <date>` whose date has passed: compare the outcome with what happened — a call that keeps missing is a lesson about how the lead picks.
 4. `.claude/superuser/IMPROVEMENTS.md` rows `ใหม่` · earlier notes in `.claude/superuser/learn/` · `~/.claude/superuser/IMPROVEMENTS.md` (read only). The same lesson elsewhere means it repeats. Rows in `~/.claude/superuser/IMPROVEMENTS.md` already merged whose ตรวจวันที่ has passed: did the mistake stop? If a merged lesson's mistake came back 2 more times, the fix did not work — propose a mechanical check or rolling the change back, never more prose.
 5. The file each lesson points to — quote the current line before proposing a new one. Before proposing a new skill or agent, list the plugin's `skills/` and `agents/` and say why none fits.
+6. Only when steps 1–4 leave a correction unexplained: the session transcript itself. Measure first (`wc -lc` and line lengths — one JSONL record can be megabytes; never read a whole line), then search by keyword with `model-scorecard/scripts/session-search.mjs` if present, and read only the matching slice.
+
+## Walk these angles every time
+
+Go through each angle and keep only findings you can pin to `path:line` (or log time) plus a quote of at most 200 characters — a finding without both is dropped before the table: timeline (where time went) · plan vs what was done · repeated work · stumbles (fail→pass pairs) · quality evidence (what was actually checked) · request conflicts (user said X, rule said Y) · cost (tokens per piece vs the `คาด:` line). Also check the 4 categories listed under "หมวดที่ผู้ตรวจต้องไล่ทุกรอบ" in `session-lessons-to-skills`: (ก) navigation — a name or description that made a skill open wrongly or not at all · (ข) a warning that should be a test, lint or hook · (ค) `CLAUDE.md` or `CONTEXT.md` too long to be read · (ง) an instruction the log shows was ignored or impossible.
 
 ## What counts as a lesson
 
@@ -84,6 +89,8 @@ Return to the lead only the note's path and the "ควรปรับทีม"
 - Edit what exists before adding text; a new line must not contradict an old one — rewrite the old line. A lesson seen 2+ times becomes a check, marked in ชนิด as `ตัวตรวจ (ซ้ำ)`.
 - Never write `CONTEXT.md`, `IMPROVEMENTS.md` or the machine queue · never edit skills, agents or playbooks.
 - No secrets, customer data, ID or account numbers, health details, money amounts or other people's data — describe the pattern, not the person.
+
+Sources of the angles: obra/superpowers `diagnosing-superpowers` (MIT) · mattpocock/skills `retro` (MIT) · seen 2026-11-10.
 
 ## Writing
 

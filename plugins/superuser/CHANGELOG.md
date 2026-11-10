@@ -1,5 +1,21 @@
 # Changelog — superuser
 
+## 3.33.0 — 2026-11-10
+
+รับกลไก 108 ข้อจาก plugin ใน marketplace ทางการของ Anthropic (anthropics/claude-plugins-official 317 ตัว) และ 8 ข้อรอบแรก · เขียนข้อความเองทั้งหมด · plugin ที่สิทธิ์จำกัด (claude-security · agentforce-adlc · claude-remember · databricks) เอาแค่กลไก · ที่มาอยู่ท้ายแต่ละไฟล์
+
+- **ตรวจงาน** (`playbook-review` 8 ขั้น · `references/review-lenses.md` ใหม่ · `reviewer`): ชุดเอกสารส่งตรวจ (diff เป็นไฟล์ · ข้อกำหนดคัดคำต่อคำ · head) → ผู้ตรวจถือมุมตรวจ ตอบ PASS/FAIL/OUT-OF-SCOPE และตัดสิน 2 เรื่อง (ตรง spec · คุณภาพ) → ผู้ยืนยันทีละข้อ ค่าเริ่มคือ "ผิดพลาด" รายงานเมื่อมั่นใจ ≥ 80 → ปัดทิ้งต้องมีเหตุผลและอ่านกลับ → ตรวจว่าผลตรวจยังตรง head · มุมตรวจ silent-failure · ผู้สร้างที่ถามผู้เขียนไม่ได้ · ภาพหน้าจอตัดสินจากพิกเซล · ป้าย `observed`/`reasoned`
+- `principle-prove-it-works`: `scripts/test-verdict.mjs` อ่านไฟล์ผล TAP หรือ JUnit แล้วฟันธง PROVEN · PARTLY · NOT PROVEN · ทำโค้ดพัง 1 บรรทัดในสำเนาเพื่อดูว่า test จับได้
+- **แจกงาน** (`team-roles` · `brief-template` · `voting` · `parallel-split-and-merge` · `SKILL.md` หัวข้อ 5): ดูภาพรวมด้วยสคริปต์ก่อนแบ่ง · ตารางคู่งานที่แตะไฟล์เดียวกัน · Consumes/Produces และข้อจำกัดทั้งงานในใบสั่งงาน · ลูกทีมเขียนรายงานเต็มลงไฟล์ · รอลูกทีมเป็นรอบ · จุดตัดสินใจที่ต้องอยู่โมเดลบนสุด · รอบแก้ 1–3 ตัวเดิม 4–5 ตัวใหม่ที่แรงกว่า · จำนวนผู้โหวตคงที่ 3 และหยุดนับเมื่อผลไม่เปลี่ยน · agent `worker` ใหม่ · `agent-patterns/scripts/ledger.mjs` (ข้อสรุป พิสูจน์แล้ว/ผิด/ยังเปิด + รอบขั้นต่ำ) · `keep-waiting.mjs`
+- `playbook-unattended-run`: ตรวจเครื่องมือภายนอกก่อนเริ่ม ไม่มีให้หยุด · ข้อความถึงคนนอกเขียนเป็นร่างใน `.claude/superuser/outbound/`
+- **hook** (`superuser-hook.mjs` แยกโค้ดเป็น `hooks/lib/` · self-test 200 → 250): ด่านความลับใน Write · Edit · Bash · Read · MCP · ลายนิ้วมือโปรเจกต์ (`~/.claude/superuser/fingerprint.json`) · บอก skill ตามไฟล์และคำสั่ง + คะแนนสัญญาณ + แยกคำพ้อง · กฎตามเหตุการณ์ (prompt · post · stop) ใน `guard-rules.json` และ `.claude/superuser/rules.json` เช่น `stop-no-test` · วนจนเสร็จตามคำสัญญา · แจ้งรุ่นใหม่ · ใส่ digest ตอนเปิด session · ตัวตรวจก่อน commit และก่อน push · lint เบาหลังแก้ไฟล์ · ข้อยกเว้นของ subagent · `--route-replay` · `--cache-diff` · โมดูลใหม่ทั้งหมดปิดได้ใน `config.json` (`modules.md`)
+- **ความจำและรับงานต่อ** (`handoff` · `team-memory` หัวข้อ 8 · `playbook-pickup-and-pause` · `context-budget` · แม่แบบ NOTES · LEDGER · OUT-OF-SCOPE · DURABLE-BRIEF): จดคำตอบและผลก่อนคิดต่อ · ไม่ถามซ้ำ · ledger ต่อแผน · รับงานต่อแล้วตรวจสถานะจริง · ต้นไม้รอยต่อ phase · แนวคิดที่ปฏิเสธ · โน้ตส่งต่อนับจำนวนครั้ง
+- **eval และเขียน skill** (`skill-authoring` + `eval-loop-rules` · `eval-audit` · `skill-structure`): เทสต์ "ต้องไม่เกิด" คู่กับ "ต้องเกิด" · กฎกันโกงในวงปรับ · รันนำร่อง 3 รายการ · grader ตรวจเกณฑ์ด้วย · `scripts/evals/ab/ab-run.mjs` (baseline แคช) · `scripts/evals/judge/calibrate.mjs` (TPR/TNR) · `plugin-eval.mjs` เตือนเมื่อ plugin ที่ติดตั้งชนกับตัวที่ทดสอบ
+- **ความปลอดภัย ถาม และแก้บั๊ก** (`references/safety.md` ใหม่ · `autonomy` · `principle-fix-root-cause` · `targeted-fix` · `repeated-mistakes-to-checks` · `workspace-setup --doctor`)
+- **เครื่องมืออ่าน log** (`model-scorecard`): `session-search.mjs` · `router-replay.mjs` · `digest.mjs` · `usage-report.mjs` (HTML)
+- `learning-reviewer`: ไล่ 7 มุมและ 4 หมวด ข้อพบต้องมี `path:line` และคำอ้าง
+- ไม่ทำ (เหตุผลอยู่ในรายงานงาน): lead เป็น agent ไม่มีเครื่องมือเขียน · skill fork เข้า agent · router agent บาง · หน้า HTML สำรวจตัวเลือก · bash wizard · bot commit กลับ · monitors (ยังไม่ได้ตรวจว่า Claude Code รองรับ) · validator ของ frontmatter phase (เลื่อน)
+
 ## 3.32.2 — 2026-11-10
 
 - `superuser` หัวข้อ 5: ข้อ 0 ใหม่ งานทั้งชุดเสี่ยง (เงิน ภาษี กฎหมาย สุขภาพ ย้อนไม่ได้) → ทุกชิ้น opus + high รวมชิ้นค้นข้อมูลและ mock · dispatch d15 d18 ตกเกณฑ์ระดับทั้ง 2 แขนเพราะข้อนี้
