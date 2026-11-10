@@ -1,0 +1,26 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: win-back-customers-trigger
+description: ร้านขายผ่าน LINE อยากดึงลูกค้าประจำที่หายไปกลับมา ต้องเปิด win-back-customers · ไม่เอ่ยชื่อ skill
+tags: [trigger, win-back-customers]
+runs: 3
+expected_outcome: เปิด Skill win-back-customers แล้วตอบเรื่องหาลูกค้าที่หายไปและข้อความรายคน
+execution:
+  prompt: |
+    ร้านขายกาแฟดริปทาง LINE มีลูกค้าประจำหลายคนที่เคยสั่งทุกเดือน ช่วงนี้หายไปเลย
+    มีไฟล์ประวัติสั่งซื้อปีที่แล้วทั้งปี อยากทักไปชวนกลับมาซื้อ ควรเริ่มยังไงดีครับ
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?win-back-customers"'
+    min: 1
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: 'ลูกค้า'
+    flags: i
+    match: contains
+    target: last_message
