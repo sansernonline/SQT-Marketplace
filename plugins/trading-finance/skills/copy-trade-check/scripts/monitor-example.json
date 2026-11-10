@@ -1,6 +1,6 @@
 {
   "_note": "ตัวอย่าง ตัวเลขสมมุติ · load = Use no more than X% · rules ตั้งก่อน subscribe · fees = ค่าสมาชิกและ VPS ในช่วงนั้น แปลงเป็นสกุลเงินบัญชี",
-  "load": 50,
+  "load": 47,
   "rules": { "maxDrawdownPct": 10, "providerMaxDrawdownPct": 21, "maxGapPts": 3, "gapPeriods": 4, "reviewPeriods": 12 },
   "periods": [
     { "period": "W1", "providerPct": 4, "start": 1000, "end": 1018 },
