@@ -45,11 +45,15 @@ node scripts/evals/plugin-eval.mjs e-commerce --tag capability-suite --allow-too
 
 ยังไม่มี
 
-## ยังไม่ได้รันรอบแดง/เขียว (2026-11-10)
+## รอบแดง/เขียวของ skill ใหม่ (2026-11-10)
 
-skill ใหม่ด้านล่างมีเคสครบ 3 ชุดแล้ว แต่**ยังไม่ได้รันรอบแดง/เขียว** ตาม `skill-authoring` · รอผู้ใช้อนุมัติค่า eval ก่อนรัน · ใช้ `-guard` ไม่ใช่ `-regression` เพราะยังไม่เคยเห็นอาการพลาดจริง
+รันจริงด้วย `plugin-eval.mjs` · model sonnet · เคสละ 3 รอบ × 2 แขน (มี plugin · ไม่มี plugin) · รอบ 2 รันเฉพาะเคสที่แก้หลังรอบ 1 · ค่าใช้จ่ายของ plugin นี้ $2.14 (ไม่รวม judge ที่คิดแยก) · ใช้ `-guard` แทน `-regression` เพราะยังไม่เคยเห็นอาการพลาดจริง
 
-| skill | เคสที่มี | สถานะ | คำสั่งเมื่ออนุมัติ |
-|---|---|---|---|
-| `shop-daily-briefing` | `-trigger` · `-behaviour` · `-guard` | ยังไม่ได้รัน | `node scripts/evals/plugin-eval.mjs e-commerce --only "^shop-daily-briefing-" --max-cost-usd 5` |
-| `win-back-customers` | `-trigger` · `-behaviour` · `-guard` | ยังไม่ได้รัน | `node scripts/evals/plugin-eval.mjs e-commerce --only "^win-back-customers-" --max-cost-usd 5` |
+| เคส | WITH (รอบ 1 → 2) | W/OUT | Δ | ผล | หมายเหตุ |
+|---|---|---|---|---|---|
+| `shop-daily-briefing-behaviour` | 0.50 → 1.00 | 0.50 | +0.50 | ผ่าน | รอบ 2: skill พับเรื่องเล็กเป็นบรรทัดเดียว · เกณฑ์ข้อ 3 รับจำนวนออเดอร์แทนยอดบาท (หลวมลง) |
+| `shop-daily-briefing-guard` | 1.00 | 1.00 | +0.00 | ผ่าน |  |
+| `shop-daily-briefing-trigger` | 1.00 | 1.00 | +0.00 | ผ่าน |  |
+| `win-back-customers-behaviour` | 1.00 | 0.00 | +1.00 | ผ่าน |  |
+| `win-back-customers-guard` | 1.00 | 0.00 | +1.00 | ผ่าน |  |
+| `win-back-customers-trigger` | 1.00 | 1.00 | +0.00 | ผ่าน |  |
