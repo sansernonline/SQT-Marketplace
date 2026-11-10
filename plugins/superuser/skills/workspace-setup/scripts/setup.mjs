@@ -5,6 +5,7 @@
 //   --user  เขียนกฎสิทธิ์ลง ~/.claude/settings.json ให้ใช้ได้ทุกโปรเจกต์ แทน .claude/settings.local.json ของโปรเจกต์
 //   --git-policy auto|commit|manual  จดว่าโปรเจกต์นี้ให้ agent commit · push · PR · merge เองแค่ไหน ลงหัวข้อ "กติกา" ใน .claude/superuser/CONTEXT.md
 //   node setup.mjs --check [--project <dir>]   ตรวจอย่างเดียว · ขาดอะไร → exit 1
+//   node setup.mjs --doctor [--project <dir>]   หมอเครื่อง อ่านอย่างเดียว ตรวจครบทุกข้อไม่หยุดที่ข้อแรกที่พัง จบด้วยตารางและขั้นถัดไป 1 ข้อ (doctor.mjs)
 //   node setup.mjs --self-test · --help
 // flag ที่ไม่รู้จัก (เช่นพิมพ์ผิด --chek) → exit 1 ไม่รันอะไรเลย · ไม่งั้นจะกลายเป็นโหมดเขียนทุกส่วน
 // เขียนซ้ำได้ไม่พัง · สำรองไฟล์เดิมไว้ใน <project>/_to_delete/ ก่อนเขียนทับทุกครั้ง (CLAUDE.md สำรองไว้ข้างไฟล์ใน ~/.claude/) · JSON ที่อ่านไม่ได้ไม่แตะ
@@ -13,6 +14,7 @@ import { join, dirname, resolve } from "node:path";
 import { homedir, tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
+import { runDoctor, formatDoctor } from "./doctor.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const ALLOW = ["Bash(git add:*)", "Bash(git commit:*)", "Bash(git push:*)", "Bash(gh pr:*)", "Bash(git branch -d:*)", "Bash(git worktree remove:*)"];
@@ -212,7 +214,7 @@ function selfTest() {
 }
 
 // flag ที่รู้จัก · ตัวที่ตามด้วยค่าให้ข้ามค่านั้นไป
-const FLAGS = ["--project", "--gitignore", "--permissions", "--global-rules", "--git-policy", "--user", "--check", "--replace-foreign", "--self-test", "--help"];
+const FLAGS = ["--project", "--gitignore", "--permissions", "--global-rules", "--git-policy", "--user", "--check", "--doctor", "--replace-foreign", "--self-test", "--help"];
 const TAKES_VALUE = ["--project", "--git-policy"];
 export function badArgs(args) {
   const bad = [];
@@ -234,6 +236,14 @@ if (process.argv[1]?.replace(/\\/g, "/").endsWith("/setup.mjs")) {
   }
   const at = args.indexOf("--project");
   const project = resolve(at >= 0 ? args[at + 1] : process.cwd());
+  if (args.includes("--doctor")) {
+    // แถวจาก --check เดิม (อ่านอย่างเดียว) ต่อท้ายตารางของหมอเครื่อง
+    const gap = (name, missing, error) => ({ name, status: error || missing.length ? "warn" : "ok", detail: error || (missing.length ? `ขาด ${missing.join(" · ")}` : "ครบ"), fix: `node setup.mjs --${name === ".gitignore" ? "gitignore" : "permissions"} --project "${project}"` });
+    const gi = gitignore(project, false), pm = permissions(project, false);
+    const r = runDoctor({ project, extra: [gap(".gitignore", gi.missing), gap("สิทธิ์ merge", pm.missing, pm.error)] });
+    console.log(formatDoctor(r));
+    process.exit(r.failed ? 1 : 0);
+  }
   const check = args.includes("--check");
   const picked = ["--gitignore", "--permissions", "--global-rules", "--git-policy"].filter((f) => args.includes(f));
   const run = (f) => picked.length === 0 || picked.includes(f);
