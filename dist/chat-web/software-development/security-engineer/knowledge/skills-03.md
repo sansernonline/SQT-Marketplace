@@ -275,7 +275,7 @@ F-001 ไป playbook `bug-fix` · test `A01_other_user_order_returns_404` ล�
 9. error ใน production ที่ส่ง stack trace path ภายใน หรือ SQL กลับไป
 10. endpoint ที่ยังเป็น HTTP ล้วน
 
-## 9 · cloud และ deployment (ยังไม่มีไฟล์ตามสาย)
+## 9 · cloud และ deployment (รายการตรวจอยู่ใน [`infra-checklist.md`](infra-checklist.md))
 
 - ล่า: สิทธิ์ของ service account กว้างเกินงาน · แอปเชื่อ header จาก proxy (`X-Forwarded-For` · `X-User-Id`) โดยไม่ตรวจว่ามาจาก proxy จริง · เข้าถึง metadata ของ cloud (`169.254.169.254`) ผ่าน SSRF · bucket หรือ storage ที่เปิดสาธารณะ · ค่าลับที่ workload อื่นอ่านได้ · ระบบตั้งค่าที่ล้มแล้วเปิดทาง
 - ส่วนใหญ่อยู่นอก repo จึงมักเป็น `needs_validation` · IaC ที่อยู่ใน repo (Terraform · compose · Kubernetes YAML) ตรวจได้จริง ใช้ผล `trivy config` เป็น candidate

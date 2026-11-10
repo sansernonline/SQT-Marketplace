@@ -1739,7 +1739,7 @@ contract,"ยื่นคำให้การ คดีเงินประก
 - **Run the reminder script only after the real date is in.** `due-dates.mjs` reads JSON, not the CSV, and stops on a date like `[ตรวจ]`. Once the lawyer or agency gives the date, write it the way `important-docs` step 5 does and run `node skills/important-docs/scripts/due-dates.mjs <file.json>`:
 
   ```json
-  { "today": "2026-11-10", "items": [ { "name": "ยื่นคำให้การ คดีเงินประกันห้อง", "end_date": "2026-11-25", "lead_days": 14 } ] }
+  { "items": [ { "name": "ยื่นคำให้การ คดีเงินประกันห้อง", "end_date": "2026-11-25", "lead_days": 14 } ] }
   ```
   (`end_date` above is an example; use the date the lawyer gives.)
 - Warnings at 14, 7, 3 and 1 days before; who is responsible in `holder`. This differs on purpose from the 60 / 30 / 7-day warnings in `important-docs` step 5: those suit renewals known months ahead, while a legal deadline is usually set only weeks away, so a 60- or 30-day warning would already be past and the last few days matter most.
