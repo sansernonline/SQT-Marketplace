@@ -19,7 +19,7 @@ argument-hint: <campaign idea in one sentence>
 5. **Master first** — design the hero at the main placement's ratio (the one that carries most of the campaign), at its largest canvas. Get it approved before deriving anything. Then derive tallest to widest
 6. **Derive in order** — stills by ratio (9:16 → 4:5 → 1:1 → wide) → covers and banners → motion and video last, built from the still's look
 7. **Name** every file with the `asset-organize` pattern, putting the matrix ID in its optional `<id>` token
-8. **Ship gate** (final check before posting) — each asset passes `design-review` and its matrix row is ticked. No tick, no post
+8. **Ship gate** (final check before posting) — each asset passes `design-review`, has its alt text (1 Thai line: what is seen plus the text on the image), its promo claims pass `copy-claims-check`, and its matrix row is ticked. No tick, no post
 
 ## Campaign card
 
@@ -74,6 +74,8 @@ Before handing over, run the check in `no-ai-look` (section 3): its script on HT
 - `style-consistency` — the look shared by all rows
 - `video-script-to-clip` — V rows
 - `design-review` — the ship gate
+- `copy-claims-check` — wording of offers and claims before posting
+- `line-sticker` — when the campaign includes a LINE sticker set
 - `asset-organize` — names and folders
 
 ## เรียกเป็นคำสั่ง

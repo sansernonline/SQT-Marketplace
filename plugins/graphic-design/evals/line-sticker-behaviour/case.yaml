@@ -1,0 +1,37 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เตรียมไว้ ยังไม่ได้รัน (2026-11-10)
+schema_version: "1.1"
+name: line-sticker-behaviour
+description: ชุดสติกเกอร์นิ่งต้องบอกจำนวนที่ใช้ได้ ภาพหลัก 240 x 240 ภาพแท็บ 96 x 74 พื้นโปร่ง 1 MB และให้รันสคริปต์ตรวจ
+tags: [behaviour, line-sticker]
+runs: 3
+expected_outcome: จำนวนต่อชุดเป็นหนึ่งใน 8/16/24/32/40 · ภาพหลัก 240 × 240 · ภาพแท็บ 96 × 74 · PNG พื้นโปร่ง · ไม่เกิน 1 MB · แนะนำรัน sticker_check.py
+execution:
+  prompt: |
+    ทำสติกเกอร์ LINE ชุดแรก มีไอเดีย 12 ท่า อยากส่งเป็นชุดนิ่ง ต้องเตรียมไฟล์ยังไงให้ผ่านตอนอัปโหลด
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: main-and-tab
+    type: regex
+    pattern: "240\\s*[×xX]\\s*240"
+    match: contains
+    target: last_message
+  - name: tab-size
+    type: regex
+    pattern: "96\\s*[×xX]\\s*74"
+    match: contains
+    target: last_message
+  - name: runs-checker
+    type: regex
+    pattern: "sticker_check"
+    match: contains
+    target: last_message
+  - name: count-rule
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. บอกว่า 12 ท่าไม่ใช่จำนวนที่ใช้ได้ ต้องเพิ่มเป็น 16 หรือตัดเหลือ 8 (จำนวนที่ใช้ได้คือ 8 16 24 32 40)
+      2. บอกว่าไฟล์เป็น PNG พื้นหลังโปร่ง ไม่เกิน 1 MB ต่อภาพ กว้างสูงเป็นเลขคู่
+      3. ไม่อ้างว่าอัปโหลดหรือสมัครบัญชีให้ได้เอง

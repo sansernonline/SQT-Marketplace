@@ -1,0 +1,36 @@
+{
+  "_note": "เพดานสติกเกอร์และอีโมจิ LINE ที่ sticker_check.py ใช้ · ต้นทางเดียวกับตารางใน SKILL.md ถ้าแก้ที่หนึ่งต้องแก้อีกที่",
+  "checked": "2026-11-10",
+  "recheck_by": "2027-05-10",
+  "sources": [
+    "https://creator.line.me/en/guideline/sticker/",
+    "https://creator.line.me/en/guideline/animationsticker/",
+    "https://creator.line.me/en/guideline/emoji/"
+  ],
+  "max_file_bytes": 1000000,
+  "max_file_bytes_note": "หน้า LINE เขียน 1 MB · ตีความเป็น 1,000,000 ไบต์ (เข้มกว่า) ยังไม่ยืนยันว่านับ 1,048,576",
+  "margin_px": 10,
+  "static": {
+    "main": [240, 240],
+    "tab": [96, 74],
+    "sticker_max": [370, 320],
+    "counts": [8, 16, 24, 32, 40],
+    "zip_max_mb": 60
+  },
+  "animated": {
+    "main": [240, 240],
+    "tab": [96, 74],
+    "sticker_max": [320, 270],
+    "counts": [8, 16, 24],
+    "frames": [5, 20],
+    "loops": [1, 4],
+    "max_seconds": 4,
+    "zip_max_mb": 60
+  },
+  "emoji": {
+    "size": [180, 180],
+    "counts_regular": [8, 40],
+    "zip_max_mb_note": "หน้า LINE เขียน less than 20 MB",
+    "zip_max_mb": 20
+  }
+}
