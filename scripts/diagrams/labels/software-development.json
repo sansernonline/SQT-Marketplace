@@ -422,6 +422,9 @@
    "observability-basics",
    "cicd-and-release",
    "infra-as-code",
+   "backblaze-b2",
+   "cloudflare-r2",
+   "render-deploy",
    "incident-runbook-template",
    "postmortem-template",
    "saas-platform",
@@ -432,6 +435,7 @@
   ],
   "ออกแบบหน้าจอและภาพ": [
    "ui-craft",
+   "design-system",
    "web-app-design",
    "dynamic-website",
    "mobile-app-design",

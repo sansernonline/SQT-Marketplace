@@ -23,7 +23,7 @@ const STATE_DIR = join(tmpdir(), `sqt-code-pattern-${USER}`);
 // exts = ส่วนต่อท้ายไฟล์ที่ใช้กฎนี้ · path = ใช้กับเส้นทางไฟล์แทน (เช่น workflow)
 export const RULES = [
   { id: "js-eval", exts: JS, re: /\beval\s*\(|new\s+Function\s*\(/, msg: "eval หรือ new Function รันข้อความเป็นโค้ด ถ้าข้อความมาจากผู้ใช้คือช่องให้รันคำสั่งได้ · ใช้ JSON.parse หรือตารางฟังก์ชันแทน" },
-  { id: "js-exec", exts: JS, re: /(?:\bchild_process\.|(?<![\w.]))exec(?:Sync)?\s*\(\s*(?:`[^`]{0,500}\$\{|[^)]{0,300}\+)/, msg: "exec ต่อสตริงจากตัวแปรเป็น command injection · ใช้ execFile หรือ spawn ที่ส่ง argument เป็น array" },
+  { id: "js-exec", exts: JS, re: /(?<!\/\.)(?<!\b(?:re|rx|regex|regexp|pattern|matcher)\w*\.)\bexec(?:Sync)?\s*\(\s*(?:`[^`]{0,500}\$\{|[^)]{0,300}\+)/, msg: "exec ต่อสตริงจากตัวแปรเป็น command injection · ใช้ execFile หรือ spawn ที่ส่ง argument เป็น array" },
   { id: "js-innerhtml", exts: [...JS, ...HTML], re: /\.(?:inner|outer)HTML\s*=(?!=)|dangerouslySetInnerHTML|\bv-html\b|document\.write\s*\(/, msg: "ใส่ HTML จากตัวแปรโดยตรงเสี่ยง XSS · ใช้ textContent หรือ sanitize ด้วย DOMPurify ก่อน" },
   { id: "js-sql-concat", exts: JS, re: /\.(?:query|execute|raw)\s*\(\s*(?:`[^`]{0,500}\$\{|["'][^"']{0,500}["']\s*\+)/, msg: "ต่อสตริงเป็น SQL เสี่ยง SQL injection · ใช้ parameter (? หรือ $1)" },
   { id: "tls-off", exts: [...JS, ...PY], re: /rejectUnauthorized\s*:\s*false|NODE_TLS_REJECT_UNAUTHORIZED\s*=\s*['"]?0|verify\s*=\s*False/, msg: "ปิดการตรวจใบรับรอง TLS ทำให้ถูกดักกลางทางได้ · ใส่ CA ที่ถูกต้องแทนการปิด" },
@@ -93,6 +93,10 @@ function selfTest() {
   t("exec ต่อสตริงใน .js → เตือน", msgOf(decide(ev("Write", "g.js", { content: 'exec("ls " + dir)' }, "s20"), dir)).includes("js-exec"));
   t("child_process.execSync ต่อสตริง → เตือน", msgOf(decide(ev("Write", "g.js", { content: "child_process.execSync(`ls ${dir}`)" }, "s21"), dir)).includes("js-exec"));
   t("re.exec(a + b) ของ RegExp → เงียบ", decide(ev("Write", "g.js", { content: "const m = re.exec(a + b)" }, "s22"), dir) === null);
+  t("/x/.exec(a + b) → เงียบ", decide(ev("Write", "g.js", { content: "const m = /x/.exec(a + b)" }, "s25"), dir) === null);
+  t("cp.exec ต่อสตริง → เตือน", msgOf(decide(ev("Write", "g.js", { content: 'cp.exec("ls " + d)' }, "s26"), dir)).includes("js-exec"));
+  t("require(child_process).exec ต่อสตริง → เตือน", msgOf(decide(ev("Write", "g.js", { content: 'require("child_process").exec("x" + y)' }, "s27"), dir)).includes("js-exec"));
+  t("childProcess.execSync template → เตือน", msgOf(decide(ev("Write", "g.js", { content: "childProcess.execSync(`rm ${f}`)" }, "s28"), dir)).includes("js-exec"));
   t("ข้อเดิมใน session เดิม → เงียบ", decide(ev("Edit", "a.ts", { new_string: "eval(y)" }), dir) === null);
   t("session ใหม่ → เตือนอีก", decide(ev("Edit", "a.ts", { new_string: "eval(y)" }, "s2"), dir) !== null);
   t("โค้ดปกติ → เงียบ", decide(ev("Write", "b.ts", { content: "const a = JSON.parse(s)" }, "s3"), dir) === null);
