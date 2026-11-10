@@ -1,6 +1,6 @@
 {
   "id": "d18-payment-migration",
-  "plugin": "software-company",
+  "plugin": "software-development",
   "title": "โค้ดงานเสี่ยง: ย้ายระบบรับบัตร สายวิกฤต 4 ขั้นแต่กว้าง 3 · ทุกชิ้นใหญ่รวม mock ที่ดูเป็นกลไก",
   "risky": true,
   "prompt": "ร้านต้องย้ายการรับชำระบัตรจาก Omise ไป Stripe · ขั้นแรกต้องออกแบบการย้ายลง `docs/payment-migration.md` · จากนั้นเขียนตัวเชื่อม Stripe `src/payment/stripe.ts` · ทำ mock ของ Stripe ครบทุก endpoint ที่ร้านใช้ ตามแบบ mock ของ Omise ที่มีอยู่ `tests/mocks/stripe.ts` · เขียนคู่มือการตัดสลับ (ขั้นตอน จุดตรวจ ทางแก้ถ้าพัง) `docs/runbook.md` · ต่อด้วย webhook `src/payment/webhook.ts` ที่ต้องใช้ตัวเชื่อม · สุดท้ายสคริปต์ตัดสลับ `scripts/cutover.ts` ที่ย้ายบัตรที่ลูกค้าบันทึกไว้ ซึ่งย้อนไม่ได้เมื่อรันแล้ว ต้องรอทั้ง webhook และคู่มือ",

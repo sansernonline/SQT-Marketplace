@@ -40,7 +40,7 @@
 | rag1 | general-purpose @ .claude-work | sonnet | 0 | 6 นาที | 26k / 20k | – | `███████████████` |
 | ml1 | general-purpose @ .claude | sonnet | 0.5 | 15 นาที | 61k / 50k | – | `·██████████████████████████████████████` |
 | rag2 | general-purpose @ .claude-work | sonnet | 7 | ยังไม่จบ | – | – | `··················█` |
-| ml2 | software-company:developer @ .claude | opus | 16 | ยังไม่จบ | – | – | `········································█` |
+| ml2 | software-development:developer @ .claude | opus | 16 | ยังไม่จบ | – | – | `········································█` |
 
 ## บัญชีระหว่างทำงาน
 

@@ -29,7 +29,7 @@ _ร่าง 2026-11-01 · ตัวเลขฐานรันจริง `no
 | e-commerce | 48 | 15% | 15% | 15% | 7 | 41 |
 | graphic-design | 27 | 63% | 19% | 56% | 5 | 10 |
 | personal-life | 59 | 7% | 5% | 15% | 1 | 50 |
-| software-company | 132 | 8% | 3% | 8% | 4 | 121 |
+| software-development | 132 | 8% | 3% | 8% | 4 | 121 |
 | superuser | 39 | 13% | 13% | 31% | 5 | 27 |
 | trading-finance | 31 | 29% | 6% | 35% | 2 | 20 |
 

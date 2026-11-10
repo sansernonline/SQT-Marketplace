@@ -19,7 +19,7 @@ node scripts/evals/speed/run-bench.mjs --old f105afc --new HEAD --tasks t1,t2,t3
 | `--new` | ไฟล์ในโฟลเดอร์ตอนนี้ | รุ่นหลัง ใส่ git ref ก็ได้ |
 | `--tasks` | `t1,t4` (งานใหญ่ใช้ `t5`) | งานที่รัน คั่นด้วย `,` |
 | `--runs` | `2` | รันกี่รอบต่อรุ่น · ผลแกว่งมาก ตัดสินจริงใช้ 5 รอบขึ้นไป |
-| `--plugin` | `software-company` | plugin ที่เทียบ |
+| `--plugin` | `software-development` | plugin ที่เทียบ |
 | `--budget` | `8` | เพดานค่าใช้จ่ายต่อรอบ (ดอลลาร์) |
 | `--parallel` | `4` | รันพร้อมกันกี่รอบ |
 | `--save-ratios` | ไม่ใส่ | ใช้คู่กับ `--old none` · เขียนอัตราส่วนลง `plugins/superuser/hooks/bench-ratios.json` ให้ hook ประมาณค่า "ถ้าไม่ใช้ superuser" ใน `log/SUMMARY.md` |

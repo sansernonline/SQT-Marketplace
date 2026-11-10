@@ -1,5 +1,9 @@
 # Changelog — personal-life
 
+## 0.22.3 — 2026-11-10
+
+- อ้างถึง plugin ซอฟต์แวร์ด้วยชื่อใหม่ `software-development` (เดิม `software-company`)
+
 ## 0.22.2 — 2026-11-08
 
 - `references/examples.md`: ตัวอย่างระดับโมเดลจัดตามกฎ 3 ข้อของ superuser 3.26.0 (งานเสี่ยง → opus · งานกลไกที่มีแบบ → haiku · ที่เหลือ → sonnet)

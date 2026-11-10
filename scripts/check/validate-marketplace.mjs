@@ -775,7 +775,7 @@ if (existsSync(join(pluginsDir, 'superuser'))) {
   const { problems } = planSuperuser(join(pluginsDir, '..'));
   for (const line of problems) err(line, 'ของกลาง SuperUser ไม่ตรงกับต้นฉบับ — แก้ที่ต้นฉบับ (plugins/superuser หรือไฟล์ที่ข้อความบอก) แล้วรัน node scripts/sync/sync-superuser.mjs');
 }
-// บล็อกกฎร่วมของ prompt/software-company: ต้นฉบับคือ RULES ใน sync-prompt-rules.mjs
+// บล็อกกฎร่วมของ prompt/software-development: ต้นฉบับคือ RULES ใน sync-prompt-rules.mjs
 if (existsSync(join(pluginsDir, '..', PROMPT_DIR))) {
   const { problems } = planPromptRules(join(pluginsDir, '..'));
   for (const line of problems) err(line, 'บล็อกกฎร่วมของ prompt ไม่ตรงกับต้นฉบับ — แก้ RULES แล้วรัน node scripts/sync/sync-prompt-rules.mjs');

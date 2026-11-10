@@ -168,7 +168,7 @@ def build_map(plugin):
 
 def build_overview(plugins):
     """บนลงล่าง: การ์ดแกนกลางอยู่บน การ์ดสาขา 5 ใบอยู่ล่าง · การส่งงานหากันเขียนเป็นข้อความในการ์ด ไม่ลากเส้นไขว้"""
-    ring = [p for p in ["e-commerce", "personal-life", "graphic-design", "software-company", "trading-finance"] if p in plugins]
+    ring = [p for p in ["e-commerce", "personal-life", "graphic-design", "software-development", "trading-finance"] if p in plugins]
     D = {p: load(p)[0] for p in plugins}
     cross = {p: [t for t in D[p]["cross"] if t in ring] for p in ring}
     su = D["superuser"]

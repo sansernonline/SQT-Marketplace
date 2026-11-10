@@ -13,7 +13,7 @@ _ตรวจ 2026-11-08 ที่ main `2d922f5` · ไม่ได้รัน
 | plugin | skill | วัดได้เลย | เติมเคส | สร้างใหม่ | ไม่คุ้ม | ตารางเต็ม |
 |---|---|---|---|---|---|---|
 | superuser (+ agent `reviewer`) | 39 + 1 | 17 | 11 | 7 | 5 | [superuser](skill-benchmark/superuser.md) |
-| software-company | 119 | 28 | 50 | 19 | 22 | [ชิ้น A](skill-benchmark/software-company-a.md) · [ชิ้น B](skill-benchmark/software-company-b.md) |
+| software-development | 119 | 28 | 50 | 19 | 22 | [ชิ้น A](skill-benchmark/software-development-a.md) · [ชิ้น B](skill-benchmark/software-development-b.md) |
 | personal-life | 45 | 11 | 26 | 3 | 5 | [personal-life](skill-benchmark/personal-life.md) |
 | e-commerce | 35 | 8 | 22 | 4 | 1 | [e-commerce](skill-benchmark/e-commerce.md) |
 | trading-finance | 25 | 14 | 8 | 2 | 1 | [รวมกับ graphic-design](skill-benchmark/trading-finance-graphic-design.md) |
@@ -74,7 +74,7 @@ _ตรวจ 2026-11-08 ที่ main `2d922f5` · ไม่ได้รัน
 
 ## 5 · ข้อจำกัดของแผนที่นี้
 
-- ลูกทีมอ่าน SKILL.md เฉพาะช่วงที่มีตัวเลขและเกณฑ์ ไม่ได้อ่านทุกไฟล์เต็ม · skill แบบดัชนี 9 ตัวใน software-company (เช่น `fintech-payments` `healthcare-systems`) ได้ระดับ `ไม่คุ้ม` เพราะไม่ได้เปิด `references/` ที่เก็บเกณฑ์จริง ระดับจริงอาจสูงกว่านี้
+- ลูกทีมอ่าน SKILL.md เฉพาะช่วงที่มีตัวเลขและเกณฑ์ ไม่ได้อ่านทุกไฟล์เต็ม · skill แบบดัชนี 9 ตัวใน software-development (เช่น `fintech-payments` `healthcare-systems`) ได้ระดับ `ไม่คุ้ม` เพราะไม่ได้เปิด `references/` ที่เก็บเกณฑ์จริง ระดับจริงอาจสูงกว่านี้
 - ตัวเลขเกณฑ์ที่คัดมาจาก SKILL.md (เบี้ย ภาษี เงินช่วยเหลือ ค่าธรรมเนียมแพลตฟอร์ม) ยังไม่ได้เทียบกับแหล่งทางการรอบนี้ ใช้วันหมดอายุใน `scripts/check/expiry.json` ตามเดิม
 - self-test ส่วนใหญ่เทียบกับค่าที่ผู้เขียนสคริปต์คิดเอง ยกเว้น CRC ของ PromptPay และหลักตรวจเลขบัตรประชาชน · "test ผ่าน" จึงบอกว่าโค้ดตรงกับความเข้าใจของผู้เขียน ยังไม่ได้บอกว่าตรงกับกฎจริง
 - path ที่ขึ้นต้น `L/` ในตาราง superuser ชี้ไป `.claude/superuser/` ในโฟลเดอร์หลัก ซึ่งไม่อยู่ใน git

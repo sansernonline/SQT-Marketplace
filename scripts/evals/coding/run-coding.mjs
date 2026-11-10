@@ -4,7 +4,7 @@
  *
  *   node scripts/evals/coding/run-coding.mjs --verify [--tasks c5,c6]          ตรวจชุดงานเอง (ไม่เรียก claude)
  *   node scripts/evals/coding/run-coding.mjs --old <git ref> [--new <git ref>] [--tasks c1,c5] [--runs 1]
- *        [--plugin software-company] [--budget 8] [--parallel 2] [--no-judge]
+ *        [--plugin software-development] [--budget 8] [--parallel 2] [--no-judge]
  *   node scripts/evals/coding/run-coding.mjs --score <โฟลเดอร์งาน> --tasks c5 [--no-judge]   ให้คะแนนโฟลเดอร์ที่ทำเสร็จแล้วซ้ำ
  *
  * คะแนน (ตาม skill coding-evals): ถูกต้อง 4 · test ของทีมเอง 2 · สะอาด 2 · ตามแบบแผน repo 1 · รายงานจริง 1
@@ -35,7 +35,7 @@ const args = Object.fromEntries(process.argv.slice(2).join(" ").split(/\s*--/).f
 const ALL = readdirSync(TASK_DIR).filter((d) => existsSync(join(TASK_DIR, d, "check.mjs"))).sort();
 const pick = (list) => (args.tasks ? String(args.tasks).split(",").map((t) => ALL.find((d) => d === t || d.startsWith(`${t}-`)) ?? t) : list);
 const TASKS = pick(ALL);
-const PLUGIN = args.plugin ?? "software-company";
+const PLUGIN = args.plugin ?? "software-development";
 const RUNS = Number(args.runs ?? 1);
 const BUDGET = String(args.budget ?? 8);
 const PARALLEL = Number(args.parallel ?? 2);

@@ -26,7 +26,7 @@
 | 4 | ตรวจอ้างอิงและตัวเลขก่อนส่งอาจารย์ | `review` | `thesis/check-<ปี-เดือน-วัน>.md` |
 | 5 | เตรียมสอบป้องกัน หรือตอบผู้ทบทวนบทความ | — (ใช้ skill `thesis-writing` ตรง) | `thesis/defense/` · `thesis/response-to-reviewers.md` |
 
-ใช้ต่อกัน: เริ่มใหม่ → 1 → 2 → 3 → 4 → 5 · อาจารย์สั่งแก้บทไหน → 3 (บทนั้น) → 4 · paper ที่ต้องอ่านให้เข้าใจก่อนอ้าง → `prompt-read-and-apply.md` ฉบับ 1 · สไลด์สอบ → plugin `software-company` (`presentation-design`)
+ใช้ต่อกัน: เริ่มใหม่ → 1 → 2 → 3 → 4 → 5 · อาจารย์สั่งแก้บทไหน → 3 (บทนั้น) → 4 · paper ที่ต้องอ่านให้เข้าใจก่อนอ้าง → `prompt-read-and-apply.md` ฉบับ 1 · สไลด์สอบ → plugin `software-development` (`presentation-design`)
 
 ---
 

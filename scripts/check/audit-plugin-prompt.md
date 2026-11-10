@@ -5,7 +5,7 @@
 **วิธีใช้**
 1. เปิด Claude Code ที่รากของ repo · คัดลอกก้อนข้างล่างไปวาง · ถ้าจะตรวจหัวข้อ 8 ซึ่งแก้ไฟล์ด้วย ให้แตก worktree ของตัวเองก่อน (`git fetch origin && git worktree add ../SQT-Marketplace-claude-audit-<plugin> -b claude/audit-<plugin> origin/main`) ตามกฎ 1 ตัว 1 worktree ใน `AGENTS.md`
 2. แก้ 3 บรรทัดบนสุด: ชื่อ plugin · หัวข้อที่จะตรวจ · คำสั่งเพิ่ม (ไม่มีก็ลบบรรทัดทิ้ง)
-3. ตรวจทีละ plugin · เริ่มที่ `superuser` ก่อน เพราะ plugin สาขาทุกตัวพึ่งมันผ่าน `dependencies` · `software-company` ตรวจแยกตัวเดียว
+3. ตรวจทีละ plugin · เริ่มที่ `superuser` ก่อน เพราะ plugin สาขาทุกตัวพึ่งมันผ่าน `dependencies` · `software-development` ตรวจแยกตัวเดียว
 4. หัวข้อ 8 แก้ให้เลยในรอบเดียว · หัวข้ออื่นแค่รายงาน ถ้าจะแก้ต่อ พิมพ์รหัสแถว เช่น "แก้ข้อ A1, A4" · แก้เสร็จรัน `node scripts/check/validate-marketplace.mjs` แล้วค่อย build dist
 
 **เลือกหัวข้อ**

@@ -15,7 +15,7 @@ description: Use when translating Thai to English or English to Thai (document, 
 - แปลข้อความหน้าจอ (ปุ่ม · ป้าย · error · แจ้งเตือน) ลงไฟล์ภาษา
 - โปรเจกต์มีไฟล์คู่ไทย/อังกฤษ และต้องแก้ให้ตรงกัน
 
-ไม่ใช้เมื่อ: เขียนใหม่ในภาษาเดียว → `human-writing` · เก็บและแสดงวันที่ ตัวเลข เงินในโค้ด → `i18n-and-locale` (plugin `software-company`)
+ไม่ใช้เมื่อ: เขียนใหม่ในภาษาเดียว → `human-writing` · เก็บและแสดงวันที่ ตัวเลข เงินในโค้ด → `i18n-and-locale` (plugin `software-development`)
 
 ## ใช้ตัวอื่นแทนหรือคู่กัน
 

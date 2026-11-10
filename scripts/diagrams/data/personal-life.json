@@ -4,7 +4,7 @@
  "description": "Daily-life admin, five categories — life admin (weekly reviews, inbox triage, documents, travel, decisions, subscriptions, digital safety, goals), home and family (bills, maintenance, vehicle, meals, school, elder care, pets, floods, wills), health (exercise, sleep, checkups, medication, doctor visits, pregnancy — never diagnoses), career (CVs, interviews, salary, LinkedIn), and learning (learning paths, papers, tech radar, certs, side projects, thesis). General information only.",
  "cross": [
   "superuser",
-  "software-company",
+  "software-development",
   "trading-finance",
   "e-commerce",
   "graphic-design"
@@ -2493,7 +2493,7 @@
     },
     {
      "n": 4,
-     "text": "ตั้งโครงโปรเจกต์ขั้นต่ำที่รันได้ ส่วนงานโค้ดที่ใหญ่กว่านั้นให้ส่งต่อ `/software-company:superuser` · ใคร: `tech-mentor` ตัวใหม่ · `reviewer` ตัวใหม่รันโครงจริงและตรวจว่านิยาม \"เสร็จ\" วัดได้ทุกข้อ",
+     "text": "ตั้งโครงโปรเจกต์ขั้นต่ำที่รันได้ ส่วนงานโค้ดที่ใหญ่กว่านั้นให้ส่งต่อ `/software-development:superuser` · ใคร: `tech-mentor` ตัวใหม่ · `reviewer` ตัวใหม่รันโครงจริงและตรวจว่านิยาม \"เสร็จ\" วัดได้ทุกข้อ",
      "sub": [],
      "phase": "",
      "who": {

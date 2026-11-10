@@ -30,7 +30,7 @@
 
 ทำประจำ: ฉบับ 1 ทุกครั้งก่อนเทรด · ฉบับ 2 ทุกสัปดาห์หรือเดือน
 
-ใช้ต่อกัน: ฉบับ 3 → 1 เมื่อราคาเข้าโซน · ฉบับ 4 ผ่านเกณฑ์ → 1 ด้วยเงินจริงขนาดเล็ก · ฉบับ 5 → 2 (ไม้นี้เป็นหลักฐานในการทบทวน) · ฉบับ 7 → 6 ทุกไม้ → 2 ทุกสัปดาห์ · อยากให้ Expert Advisor (EA) เทรดแทน → plugin `software-company` (`prompt/software-company/prompt-trading-system.md`) · ภาพรวมพอร์ต → `prompt-investing.md` ฉบับ 1 · ตรวจก่อนใช้ → `prompt-tax.md` ฉบับ 3
+ใช้ต่อกัน: ฉบับ 3 → 1 เมื่อราคาเข้าโซน · ฉบับ 4 ผ่านเกณฑ์ → 1 ด้วยเงินจริงขนาดเล็ก · ฉบับ 5 → 2 (ไม้นี้เป็นหลักฐานในการทบทวน) · ฉบับ 7 → 6 ทุกไม้ → 2 ทุกสัปดาห์ · อยากให้ Expert Advisor (EA) เทรดแทน → plugin `software-development` (`prompt/software-development/prompt-trading-system.md`) · ภาพรวมพอร์ต → `prompt-investing.md` ฉบับ 1 · ตรวจก่อนใช้ → `prompt-tax.md` ฉบับ 3
 
 ---
 

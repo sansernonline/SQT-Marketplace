@@ -1357,9 +1357,9 @@ function selfTest() {
     ["วันที่ไม่ถูกตัด", "นัด 2026-10-14 เวลา 10:30 ห้อง 1203", null],
   ];
   const T = (...blocks) => JSON.stringify({ message: { role: "assistant", content: blocks } });
-  const skill = T({ type: "tool_use", name: "Skill", input: { skill: "software-company:superuser" } });
+  const skill = T({ type: "tool_use", name: "Skill", input: { skill: "software-development:superuser" } });
   const edit = (f, n = 50) => T({ type: "tool_use", name: "Write", input: { file_path: `/p/${f}`, content: "x\n".repeat(n) } });
-  const rev = T({ type: "tool_use", name: "Agent", input: { subagent_type: "software-company:reviewer" } });
+  const rev = T({ type: "tool_use", name: "Agent", input: { subagent_type: "software-development:reviewer" } });
   const say = (s) => T({ type: "text", text: s });
   // เหตุการณ์จริง 2026-10-26: ด่านเตือนตอนลูกทีม 3 ตัวยังทำงานเบื้องหลัง
   const UM = (content) => JSON.stringify({ message: { role: "user", content } });
@@ -1384,7 +1384,7 @@ function selfTest() {
     ["ด่านรีวิว: ไม่ได้ใช้ superuser → ผ่าน", [edit("a"), edit("b"), edit("c")], false],
     ["ด่านรีวิว: ไฟล์ใน _to_delete ไม่นับ", [skill, edit("a"), edit("b"), edit("_to_delete/x")], false],
   ];
-  const dev = T({ type: "tool_use", name: "Agent", input: { subagent_type: "software-company:developer" } });
+  const dev = T({ type: "tool_use", name: "Agent", input: { subagent_type: "software-development:developer" } });
   gates.push(
     ["ด่านแตกงาน: เขียนไฟล์ที่ 2 ยังไม่ส่งลูกทีม → บล็อก", [skill, edit("a.js")], true, (l) => splitGate(fold(l), "/p/b.js")],
     ["ด่านแตกงาน: ไฟล์แรก → ผ่าน", [skill], false, (l) => splitGate(fold(l), "/p/a.js")],
@@ -1404,11 +1404,11 @@ function selfTest() {
   );
   // สรุป log: 1 วัน · หัวหน้าทีมส่ง developer 2 งาน (ล้ม 1) · developer ทำ 3 อย่าง (ล้ม 1) · ผู้ใช้แก้ 1 ครั้ง
   const day = { prompts: 2, corrections: 1, actions: 5, failed: 1,
-    spawns: [{ ts: "2026-10-21T10:00:00+07:00", role: "software-company:developer", task: "แก้ฟอร์ม", ok: true },
-      { ts: "2026-10-21T10:05:00+07:00", role: "software-company:developer", task: "เขียน test", ok: false }],
-    agents: { main: { actions: 2, failed: 0, ms: 0, last: "2026-10-21T10:06:00+07:00" }, "software-company:developer": { actions: 3, failed: 1, ms: 120000, last: "2026-10-21T10:04:00+07:00" } } };
+    spawns: [{ ts: "2026-10-21T10:00:00+07:00", role: "software-development:developer", task: "แก้ฟอร์ม", ok: true },
+      { ts: "2026-10-21T10:05:00+07:00", role: "software-development:developer", task: "เขียน test", ok: false }],
+    agents: { main: { actions: 2, failed: 0, ms: 0, last: "2026-10-21T10:06:00+07:00" }, "software-development:developer": { actions: 3, failed: 1, ms: 120000, last: "2026-10-21T10:04:00+07:00" } } };
   const md = summaryMarkdown({ "2026-10-21": day }, new Date("2026-10-21T04:00:00Z"));
-  gates.push(["สรุป log: นับงานราย agent", [], true, () => md.includes("| `software-company:developer` | 2 | 1 | 1 | 3 | 1 | 2 นาที |") && md.includes("| 2026-10-21 | 2 | 1 | — | 2 | — | 5 | 1 |")]);
+  gates.push(["สรุป log: นับงานราย agent", [], true, () => md.includes("| `software-development:developer` | 2 | 1 | 1 | 3 | 1 | 2 นาที |") && md.includes("| 2026-10-21 | 2 | 1 | — | 2 | — | 5 | 1 |")]);
   // คุ้มแค่ไหน: เวลาทำงาน · การขนาน · คาดกับจริง · ค่าประมาณจาก bench
   const T0 = Date.parse("2026-10-21T10:00:00+07:00"), at = (min) => new Date(T0 + min * 60000).toISOString();
   const estRuns = [
@@ -1502,7 +1502,7 @@ function selfTest() {
       const ask = (prompt, session = "t1") => promptNotice({ prompt, session_id: session }, router, d);
       const long = "Audit our AWS bill and cut anything we don't use";
       const before = ask(long).includes(MULTISTEP_REMINDER) && !ask("ต่อ").includes(MULTISTEP_REMINDER) && !ask("/superuser:superuser ทำงานนี้").includes(MULTISTEP_REMINDER);
-      const marked = markSuperuserOpen({ tool_name: "Skill", tool_input: { skill: "software-company:superuser" }, session_id: "t1" }, d)
+      const marked = markSuperuserOpen({ tool_name: "Skill", tool_input: { skill: "software-development:superuser" }, session_id: "t1" }, d)
         && !markSuperuserOpen({ tool_name: "Skill", tool_input: { skill: "human-writing" }, session_id: "t2" }, d);
       return before && marked && !ask(long).includes(MULTISTEP_REMINDER) && ask(long, "t2").includes(MULTISTEP_REMINDER);
     }],
@@ -1511,7 +1511,7 @@ function selfTest() {
       const reports = ["<task-notification>งานพื้นหลังเสร็จแล้ว รันคำสั่งทดสอบผ่านทั้งหมดเรียบร้อย แล้วแก้ไฟล์ทุกไฟล์</task-notification>",
         "<agent-message from=\"x\">แก้ครบทุกไฟล์แล้ว แล้วเขียน test และอัปเดตเอกสารทั้งหมด</agent-message>"];
       const clean = reports.every((p) => { const n = promptNotice({ prompt: p, session_id: "r1" }, router, d); return !n.includes(MULTISTEP_REMINDER) && !n.includes("superuser"); });
-      promptNotice({ prompt: "/software-company:superuser ทำฟีเจอร์ใหม่", session_id: "s9" }, router, d);
+      promptNotice({ prompt: "/software-development:superuser ทำฟีเจอร์ใหม่", session_id: "s9" }, router, d);
       return clean && !promptNotice({ prompt: "Audit our AWS bill and cut anything we don't use", session_id: "s9" }, router, d).includes(MULTISTEP_REMINDER);
     }],
     ["กฎประจำตัว: ส่งได้ไม่เกินเพดาน", [], true, () => { const c = coreRules({ configDir: "/nonexistent" }); return c.includes(CORE_MARK) && c.length <= CONTEXT_MAX; }],
@@ -1563,7 +1563,7 @@ ${rows}
   gates.push(
     ["runs: จัดขั้นจากชื่อ agent และ description (review · code · plan · other)", [], true, () => {
       const r = readJson(join(HERE, "step-rules.json"), null);
-      return ["superuser:reviewer|x", "software-company:developer|x", "Plan|x", "general-purpose|x"].map((k) => classifyStep(...k.split("|"), r)).join() === "review,code,plan,other"
+      return ["superuser:reviewer|x", "software-development:developer|x", "Plan|x", "general-purpose|x"].map((k) => classifyStep(...k.split("|"), r)).join() === "review,code,plan,other"
         && classifyStep("general-purpose", "ตรวจรอบสุดท้าย", r) === "review"
         && classifyStep("general-purpose", "Merge html deck skills", r) === "write" && classifyStep("web-fetch", "Fetch Anthropic post", r) === "research"
         && classifyStep("general-purpose", "Red run without skill", r) === "test"
@@ -1867,13 +1867,13 @@ ${rows}
   const sub = join(team, "s2", "subagents"); mkdirSync(sub, { recursive: true });
   writeFileSync(join(team, "s2.jsonl"), [U("m1", 10, 5), U("m1", 10, 5), U("m2", 1, 2)].join("\n") + "\n");
   writeFileSync(join(sub, "agent-x.jsonl"), U("m3", 3, 4) + "\n");
-  writeFileSync(join(sub, "agent-x.meta.json"), JSON.stringify({ agentType: "software-company:developer" }));
+  writeFileSync(join(sub, "agent-x.meta.json"), JSON.stringify({ agentType: "software-development:developer" }));
   gates.push(["token: แยกราย agent · นับครั้งเดียวต่อข้อความ · เรียกซ้ำไม่นับซ้ำ", [], true, () => {
     collectTokens(team, join(team, "s2.jsonl")); collectTokens(team, join(team, "s2.jsonl"));
     const t = readJson(join(team, "log", tday, "tokens.json"), {});
-    return t.main?.input === 11 && t.main?.output === 7 && t.main?.cacheRead === 200 && t["software-company:developer"]?.output === 4;
+    return t.main?.input === 11 && t.main?.output === 7 && t.main?.cacheRead === 200 && t["software-development:developer"]?.output === 4;
   }]);
-  const mdTok = summaryMarkdown({ "2026-10-21": { ...day, tokens: { main: { input: 1200, output: 30, cacheRead: 5000, cacheCreate: 40 }, "software-company:developer": { input: 10, output: 20, cacheRead: 0, cacheCreate: 0 } } } }, new Date("2026-10-21T04:00:00Z"));
+  const mdTok = summaryMarkdown({ "2026-10-21": { ...day, tokens: { main: { input: 1200, output: 30, cacheRead: 5000, cacheCreate: 40 }, "software-development:developer": { input: 10, output: 20, cacheRead: 0, cacheCreate: 0 } } } }, new Date("2026-10-21T04:00:00Z"));
   gates.push(["สรุป log: คอลัมน์ token ราย agent และยอดรวมวัน", [], true, () => mdTok.includes("| 2 นาที | 2026-10-21 10:04 | 10 | 20 | 0 | 0 |") && mdTok.includes("| 5 | 1 | 1,210 | 50 | 5,000 | 40 |")]);
   for (const [label, lines, expect, fn = (l) => reviewGate(fold(l))] of gates) {
     const hit = Boolean(fn(lines)) === expect;

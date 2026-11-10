@@ -1,12 +1,12 @@
 {
   "title": "pstack กับ SuperUser",
-  "sub": "pstack ของ poteto (Cursor) กับ superuser ของ software-company มีอะไรเหมือน อะไรมีแค่ฝั่งเดียว",
-  "src": "github.com/cursor/plugins/tree/main/pstack (README) · plugins/superuser/skills/superuser/SKILL.md · plugins/software-company/skills/superuser/SKILL.md · ตรวจล่าสุด 2026-10-08",
+  "sub": "pstack ของ poteto (Cursor) กับ superuser ของ software-development มีอะไรเหมือน อะไรมีแค่ฝั่งเดียว",
+  "src": "github.com/cursor/plugins/tree/main/pstack (README) · plugins/superuser/skills/superuser/SKILL.md · plugins/software-development/skills/superuser/SKILL.md · ตรวจล่าสุด 2026-10-08",
   "core": "SuperUser ดัดแปลงจาก pstack: ประตูเดียวเลือก playbook → คัดขั้นตอนลง todo → ทุกขั้นพิสูจน์ก่อนไปต่อ · principle หลักของ pstack มีครบแล้ว · SuperUser เพิ่มความปลอดภัย ห้องทดลอง และการไม่หยุดงาน · รับเครื่องมือเฉพาะทางของ pstack มาครบแล้ว เหลือตัวเดียวที่ผูกกับ Cursor",
   "sections": [
     {
       "title": "เหมือนกัน ชิ้นต่อชิ้น",
-      "cols": ["แนวคิด", "pstack", "SuperUser (software-company)"],
+      "cols": ["แนวคิด", "pstack", "SuperUser (software-development)"],
       "rows": [
         ["ประตูเดียว เลือกแผนตามงาน", "`/poteto-mode` → 22 playbook", "`superuser` → 16 playbook (รวมตัวที่หน้าที่ซ้ำ)"],
         ["ไม่มีแผนตรง ออกแบบแผนเอง", "`/figure-it-out`", "จัดขนาดงานก่อน · ไม่ตรงก็ประกอบเองตาม `playbook-template` · งานใหญ่ brainstorm แล้วเขียน `BRIEF.md`"],

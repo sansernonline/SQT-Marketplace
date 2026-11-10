@@ -51,7 +51,7 @@ playbook `tech-radar` · agent `tech-mentor` · skill `tech-radar`
 ## 2. ไลบรารีหลักออกเวอร์ชันใหญ่หรือเลิกสนับสนุน ต้องอัปเกรดไหม
 
 playbook `tech-radar` (ขั้น 2–5 ทำกับไลบรารีเดียวแบบเจาะลึก) · agent `tech-mentor` · skill `tech-radar` · `english-tech-reading`
-**ผลลัพธ์:** `radar/deep-dives/<library>-<version>.md` · **ไม่แก้โค้ดในโปรเจกต์จริง** · งานอัปเกรดจริงส่งต่อ plugin `software-company` (`prompt-existing-dev.md` ฉบับ 3)
+**ผลลัพธ์:** `radar/deep-dives/<library>-<version>.md` · **ไม่แก้โค้ดในโปรเจกต์จริง** · งานอัปเกรดจริงส่งต่อ plugin `software-development` (`prompt-existing-dev.md` ฉบับ 3)
 
 - [ ] อนุญาตให้ลองอัปเกรดในสำเนาแยก (git worktree หรือสำเนาใน `_to_delete/`) แล้วรัน test · ไม่แตะโค้ดจริง ไม่ commit
 

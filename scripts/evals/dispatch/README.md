@@ -21,9 +21,9 @@
 | `d13-campaign-chains` (graphic-design) | 2 | 6 ชิ้นแต่เป็น 2 สายยาวสายละ 3 ขั้น · ความกว้างไม่ใช่จำนวนชิ้น (Kim et al. 2025 arXiv 2512.08296) |
 | `d14-looks-big` (personal-life) | 0 | เมนู 7 วันดูเหมือน 7 ชิ้น แต่รายการซื้อต้องรวมข้ามวัน และทั้งก้อนเล็ก (Anthropic multi-agent research system: คำถามง่ายใช้ 1 ตัว) |
 | `d15-refinance-research` (trading-finance) | 4 | ค้น 3 ธนาคาร + อยู่ที่เดิมพร้อมกันแล้วรวม · ดูเป็นการดึงตัวเลขแต่เป็นงานเงิน ห้าม haiku |
-| `d16-hidden-contract` (software-company) | 3 | 3 โมดูลแก้ออเดอร์รูปเดียวกัน ต้องล็อก type กลางก่อนแตก · dependency ซ่อน (TaskBench: ทายเส้นเชื่อมอ่อนกว่าทายตัวงาน) |
-| `d17-script-not-team` (software-company) | 0 | แก้รูปแบบวันที่ 80 ไฟล์ซ้ำแบบเดียว ควรเขียนสคริปต์ ไม่แจก haiku หลายตัว |
-| `d18-payment-migration` (software-company) | 3 | ย้าย Omise ไป Stripe สายวิกฤต 4 ขั้นแต่กว้าง 3 · ทั้งงานเสี่ยงจึงทุกชิ้นใหญ่ รวม mock ที่ดูเป็นกลไก |
+| `d16-hidden-contract` (software-development) | 3 | 3 โมดูลแก้ออเดอร์รูปเดียวกัน ต้องล็อก type กลางก่อนแตก · dependency ซ่อน (TaskBench: ทายเส้นเชื่อมอ่อนกว่าทายตัวงาน) |
+| `d17-script-not-team` (software-development) | 0 | แก้รูปแบบวันที่ 80 ไฟล์ซ้ำแบบเดียว ควรเขียนสคริปต์ ไม่แจก haiku หลายตัว |
+| `d18-payment-migration` (software-development) | 3 | ย้าย Omise ไป Stripe สายวิกฤต 4 ขั้นแต่กว้าง 3 · ทั้งงานเสี่ยงจึงทุกชิ้นใหญ่ รวม mock ที่ดูเป็นกลไก |
 
 | ตัววัด (ต่อรอบ) | ความหมาย | น้ำหนักในคะแนนรวม |
 |---|---|---|

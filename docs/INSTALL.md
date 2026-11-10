@@ -50,7 +50,7 @@ claude
 
 **3. ติดตั้ง plugin**
 ```
-/plugin install software-company@sqt-marketplace
+/plugin install software-development@sqt-marketplace
 ```
 
 **4. ยืนยันการติดตั้ง**
@@ -58,7 +58,7 @@ claude
 /plugin
 ```
 
-จะเห็น `software-company` ในรายการ พร้อม status `enabled`
+จะเห็น `software-development` ในรายการ พร้อม status `enabled`
 
 **5. รีสตาร์ท Claude Code** (สำคัญ)
 
@@ -74,7 +74,7 @@ claude
 
 ```bash
 # ใน project ที่ต้องการใช้
-cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Agent Skill - Sub Agents & Agent Skills/SQT-Marketplace/plugins/software-company/." ".claude/"
+cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Agent Skill - Sub Agents & Agent Skills/SQT-Marketplace/plugins/software-development/." ".claude/"
 ```
 
 โครงสร้างที่ได้:
@@ -91,8 +91,8 @@ your-project/
 mkdir -p ~/.claude/agents ~/.claude/skills
 
 # Windows (Git Bash)
-cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Agent Skill - Sub Agents & Agent Skills/SQT-Marketplace/plugins/software-company/agents/." ~/.claude/agents/
-cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Agent Skill - Sub Agents & Agent Skills/SQT-Marketplace/plugins/software-company/skills/." ~/.claude/skills/
+cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Agent Skill - Sub Agents & Agent Skills/SQT-Marketplace/plugins/software-development/agents/." ~/.claude/agents/
+cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Agent Skill - Sub Agents & Agent Skills/SQT-Marketplace/plugins/software-development/skills/." ~/.claude/skills/
 ```
 
 **ข้อเสีย:** อัปเดตทีหลังต้อง copy ทับเอง · **ไม่มี hooks** → SuperUser ใช้ได้ แต่ไม่มี log และไม่แจ้งข้อความใน inbox (ดู [SKILL-LEVELS.md](SKILL-LEVELS.md))
@@ -120,7 +120,7 @@ git push -u origin main
 
 ```
 /plugin marketplace add sansernonline/SQT-Marketplace
-/plugin install software-company@sqt-marketplace
+/plugin install software-development@sqt-marketplace
 ```
 
 **3. อัปเดต**
@@ -128,7 +128,7 @@ git push -u origin main
 เมื่อมี version ใหม่:
 ```
 /plugin marketplace update sqt-marketplace
-/plugin update software-company@sqt-marketplace
+/plugin update software-development@sqt-marketplace
 ```
 
 ---
@@ -140,14 +140,14 @@ git push -u origin main
 /agents
 ```
 
-ควรเห็น 41 agents ของ software-company เช่น project-manager · business-analyst · solution-architect · system-analyst · developer · qa-tester · devops-engineer
+ควรเห็น 41 agents ของ software-development เช่น project-manager · business-analyst · solution-architect · system-analyst · developer · qa-tester · devops-engineer
 
 ### 2. ดู slash commands
 ```
 /help
 ```
 
-ควรเห็น 28 commands ของ software-company เช่น:
+ควรเห็น 28 commands ของ software-development เช่น:
 - /feature-kickoff
 - /sprint-plan
 - /code-review-checklist
@@ -168,7 +168,7 @@ Claude ควรเรียก skill `user-story-writer` มาใช้อั�
 /hooks
 ```
 
-ควรเห็น hook `superuser-hook.mjs` (อยู่ใน plugin `superuser` ซึ่งติดตั้งตามมาเองจาก `dependencies` · skill เอกสารออกแบบ สไลด์ รูปอยู่ใน `software-company` · ภาพ AI ใน `graphic-design` · ประชุมใน `personal-life` — ติดตั้ง plugin นั้นเพิ่มถ้าต้องการ) — รายการ event ดู [REFERENCE.md หัวข้อ Hooks](REFERENCE.md#hooks)
+ควรเห็น hook `superuser-hook.mjs` (อยู่ใน plugin `superuser` ซึ่งติดตั้งตามมาเองจาก `dependencies` · skill เอกสารออกแบบ สไลด์ รูปอยู่ใน `software-development` · ภาพ AI ใน `graphic-design` · ประชุมใน `personal-life` — ติดตั้ง plugin นั้นเพิ่มถ้าต้องการ) — รายการ event ดู [REFERENCE.md หัวข้อ Hooks](REFERENCE.md#hooks)
 
 ### 5. เปิด SuperUser ในโปรเจกต์
 
@@ -190,7 +190,7 @@ hook เขียน log เฉพาะโปรเจกต์ที่มี 
 
 ### Plugin (วิธีที่ 1 และ 3)
 ```
-/plugin uninstall software-company
+/plugin uninstall software-development
 ```
 
 ### Marketplace
@@ -235,7 +235,7 @@ hook เขียน log เฉพาะโปรเจกต์ที่มี 
 
 `dist/claude-web/<plugin>.zip` คือ plugin ที่บีบอัดไว้ 1 ไฟล์ต่อ 1 plugin · **อัปโหลดเข้า claude.ai** แล้วใช้ skill ได้ใน Cowork และแชทบนเว็บหรือเดสก์ท็อปด้วย ไม่ใช่แค่ใน Claude Code
 
-**`software-company.zip`:** 105 skills · 38 agents · 11 commands · `plugin.json` v2.48.0 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-company/`
+**`software-development.zip`:** 105 skills · 38 agents · 11 commands · `plugin.json` v3.0.0 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-development/`
 
 ---
 
@@ -264,14 +264,14 @@ skill ทำงานทุกที่ · agent กับ hook จะเป็�
 
 ### 🔄 สร้าง zip ใหม่หลังแก้ skill
 
-แก้ไฟล์ใน `plugins/software-company/` แล้วสำเนาที่อัปโหลดไว้จะ **ไม่อัปเดตตาม** ต้อง build ใหม่แล้วอัปโหลดทับ
+แก้ไฟล์ใน `plugins/software-development/` แล้วสำเนาที่อัปโหลดไว้จะ **ไม่อัปเดตตาม** ต้อง build ใหม่แล้วอัปโหลดทับ
 
 ```bash
 node scripts/check/validate-marketplace.mjs   # ตรวจก่อนเสมอ
 node scripts/build/build-targets.mjs          # สร้าง dist/ ทั้งหมด รวม zip นี้
 ```
 
-สคริปต์สร้าง zip เอง ไม่ต้องมีคำสั่ง `zip` หรือ Python · ตั้ง path ในไฟล์เป็น `/` และโฟลเดอร์หลักเป็น `software-company/` ให้อัตโนมัติ
+สคริปต์สร้าง zip เอง ไม่ต้องมีคำสั่ง `zip` หรือ Python · ตั้ง path ในไฟล์เป็น `/` และโฟลเดอร์หลักเป็น `software-development/` ให้อัตโนมัติ
 วันที่ของไฟล์ใน zip คงที่ · เนื้อหาไม่เปลี่ยน → zip ไม่เปลี่ยน → git ไม่เห็นเป็นไฟล์ที่ถูกแก้
 
 ---
@@ -343,7 +343,7 @@ node scripts/build/build-targets.mjs          # สร้าง dist/ ทั้�
 `dist/gemini-cli/<plugin>/` เป็น extension 1 ตัวต่อ 1 plugin ติดตั้งได้ทั้งโฟลเดอร์:
 
 ```bash
-gemini extensions install ./dist/gemini-cli/software-company
+gemini extensions install ./dist/gemini-cli/software-development
 ```
 
 - คำสั่งเรียกด้วย `/ชื่อ` เช่น `/code-review-checklist src/app.ts`
@@ -358,7 +358,7 @@ gemini extensions install ./dist/gemini-cli/software-company
 `dist/kimi/<plugin>/` เป็น plugin 1 ตัวต่อ 1 plugin (`kimi.plugin.json`) · ในหน้าจอ Kimi พิมพ์:
 
 ```text
-/plugins install ./dist/kimi/software-company
+/plugins install ./dist/kimi/software-development
 ```
 
 - คำสั่งสำเร็จรูปเรียกด้วย `/skill:ชื่อ` เช่น `/skill:code-review src/app.ts`

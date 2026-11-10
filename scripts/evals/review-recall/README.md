@@ -35,7 +35,7 @@ node scripts/evals/review-recall/run-review-recall.mjs --run --runs 2 --label re
 | `--budget` | `1` | เพดานดอลลาร์ต่อการเรียก 1 ครั้ง (`--max-budget-usd`) |
 | `--parallel` | `4` | รันพร้อมกันกี่ครั้ง |
 | `--label` | `current` | ชื่อชุดผล · ผลรายรอบอยู่ใน `_to_delete/review-recall/<label>/` |
-| `--plugins` | `superuser` | plugin ที่โหลด คั่นด้วย `,` · ใส่ `superuser,software-company` ถ้าอยากให้ reviewer ใช้ `code-review-checklist` กับเคสโค้ดด้วย |
+| `--plugins` | `superuser` | plugin ที่โหลด คั่นด้วย `,` · ใส่ `superuser,software-development` ถ้าอยากให้ reviewer ใช้ `code-review-checklist` กับเคสโค้ดด้วย |
 
 `--verify` ตรวจ: `case.json` ครบทุกช่อง · ไฟล์งานรวมไม่เกิน 60 บรรทัด · ข้อความที่ฝังอยู่บรรทัดที่บอกจริงและมีบรรทัดเดียว · prompt ไม่มีข้อความที่ฝังหรือคำอธิบายข้อผิด · ตัวให้คะแนนนับแถวที่อ้างถูก ไม่นับหัวข้อ "ตรวจแล้วไม่เจอปัญหา" ไม่นับแถวกลาง ๆ และแถวของข้อหนึ่งไม่ทำให้อีกข้อในเคสเดียวกันนับว่าเจอ · ครบทั้ง 8 ชนิด · แล้วพิมพ์ prompt ของเคสแรกกับคำสั่งที่จะรัน `--run` ตรวจชุดเดียวกันก่อนเรียก claude ไม่ผ่านก็ไม่รัน
 
