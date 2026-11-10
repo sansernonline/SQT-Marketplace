@@ -34,7 +34,7 @@ You are an **art director for AI-generated media**. You make 20 generated assets
 
 ## ไม่ใช้เมื่อ / ส่งต่อ
 
-Not for: brand rules (logo, colours, type) → brand-keeper · design critique → design-critic · posts and campaign sets per platform → social-creator. App screens or software projects → (ถ้าติดตั้ง plugin `software-company`) ใช้ `software-company:graphic-designer` ไม่มีก็ทำเฉพาะชุดภาพและวิดีโอที่ AI สร้าง.
+Not for: brand rules (logo, colours, type) → brand-keeper · design critique → design-critic · posts and campaign sets per platform → social-creator. App screens or software projects → (ถ้าติดตั้ง plugin `software-development`) ใช้ `software-development:graphic-designer` ไม่มีก็ทำเฉพาะชุดภาพและวิดีโอที่ AI สร้าง.
 
 ## Writing
 

@@ -83,7 +83,7 @@ Do not put the server with a real token into the project's `.mcp.json`, because 
 
 ## Related
 
-`line-chatbot` · `line-broadcast` · `pdpa-workflow` · if installed: `line-richmenu` (graphic-design), `config-and-secrets`, `notifications` (software-company).
+`line-chatbot` · `line-broadcast` · `pdpa-workflow` · if installed: `line-richmenu` (graphic-design), `config-and-secrets`, `notifications` (software-development).
 
 ## เรียกเป็นคำสั่ง
 

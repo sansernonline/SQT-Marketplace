@@ -40,7 +40,7 @@ Use before any design work (web, app, slide, doc, logo, poster, product, banner,
 
 | สถานการณ์ | ใช้ | เหตุผล |
 |---|---|---|
-| ได้สีและต้นแบบแล้ว ต้องทำ 3 แนวหน้าจอ | `design-direction-lookup` (software-company) รับสีผ่าน `--palette` | ตรวจ contrast ฟอนต์ไทย และกฎ UX ต่อ |
+| ได้สีและต้นแบบแล้ว ต้องทำ 3 แนวหน้าจอ | `design-direction-lookup` (software-development) รับสีผ่าน `--palette` | ตรวจ contrast ฟอนต์ไทย และกฎ UX ต่อ |
 | ไอคอน | `icon-design` (graphic-design) | กฎขนาดและใบอนุญาตของไอคอน |
 | ตรวจงานที่ทำเสร็จ | `no-ai-look` | skill นี้หาต้นแบบ ไม่ได้ตรวจผล |
 

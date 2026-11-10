@@ -374,7 +374,7 @@ brief คือสรุปให้ผู้ใช้อ่าน ไม่ใ�
 3. **ข้อขัดแย้งระหว่างแหล่ง** แยกหัวข้อของมันเอง บอกว่าแหล่งไหนว่าอะไร และใช้ค่าไหนเพราะอะไร
 4. **ยังไม่รู้** แยกหัวข้อ พร้อมว่าจะหาได้จากที่ไหน
 5. ป้ายหลักฐานตาม [`evidence`](evidence.md) · เขียนตาม `human-writing` · ตัวย่อเขียนเต็มครั้งแรก
-6. ภาพประกอบ: กราฟด้วย `data-analysis` หรือ `diagram-figures` (software-company) · ภาพปกด้วย `graphic-design:image-generation` (ถ้าติดตั้ง) · ผู้ใช้ต้องการไฟล์ Word → `markdown-report-docx` (ถ้าติดตั้ง `software-company`) ไม่ติดตั้ง → ส่ง Markdown
+6. ภาพประกอบ: กราฟด้วย `data-analysis` หรือ `diagram-figures` (software-development) · ภาพปกด้วย `graphic-design:image-generation` (ถ้าติดตั้ง) · ผู้ใช้ต้องการไฟล์ Word → `markdown-report-docx` (ถ้าติดตั้ง `software-development`) ไม่ติดตั้ง → ส่ง Markdown
 
 ## 8 · งบ
 
@@ -745,7 +745,7 @@ brief คือสรุปให้ผู้ใช้อ่าน ไม่ใ�
 ผลลัพธ์: สรุปสถานะที่ตรวจกับของจริงแล้ว (ตอนรับต่อ) · หัวข้อ "รับงานต่อ" ใน `CONTEXT.md` ที่คนอื่นอ่านแล้วเริ่มได้ทันที (ตอนหยุด)
 รูปแบบหลัก: ReAct · Reflection (`agent-patterns`)
 
-งานโค้ด (branch · sandbox/docker · server · test) → playbook เดียวกันใน plugin `software-company`
+งานโค้ด (branch · sandbox/docker · server · test) → playbook เดียวกันใน plugin `software-development`
 
 ## ขั้นตอน — รับงานต่อ (คัดลง todo ตรงตัว)
 
@@ -992,7 +992,7 @@ brief คือสรุปให้ผู้ใช้อ่าน ไม่ใ�
 | agent | ระดับโมเดล | ใช้เมื่อ | ไม่ใช่ |
 |---|---|---|---|
 | `brainstormer` | ใหญ่ | ก่อนเริ่มงานใหญ่หรือโจทย์ไม่ชัด — คิด 2–3 ทางบนกระดาษ ให้คะแนน 1–5 (5 = ดีสุด) | สร้างของจริงหลายชุดแล้วเลือก → `parallel-attempts-pick-best` |
-| `reviewer` | ตามตารางงบใน `SKILL.md` หัวข้อ 2 (สมดุล: รอบแรกกลาง · งานใหญ่หรือรอบสุดท้ายก่อนส่งมอบใหญ่) | ตรวจชิ้นงานที่เสร็จแล้วก่อนถึงผู้ใช้หรือคนนอก อ่านอย่างเดียว ไม่แก้ | งานเสี่ยงสูง → `adversarial-review-panel` (ใช้ `reviewer` หลายตัว) · (ถ้าติดตั้ง plugin `software-company`) โค้ด → คู่กับ `code-review-checklist` · (ถ้าติดตั้ง plugin `graphic-design`) งานภาพ → `design-critic` หรือ `design-review` · ไม่มีก็ตรวจตามเกณฑ์ในใบสั่งงาน |
+| `reviewer` | ตามตารางงบใน `SKILL.md` หัวข้อ 2 (สมดุล: รอบแรกกลาง · งานใหญ่หรือรอบสุดท้ายก่อนส่งมอบใหญ่) | ตรวจชิ้นงานที่เสร็จแล้วก่อนถึงผู้ใช้หรือคนนอก อ่านอย่างเดียว ไม่แก้ | งานเสี่ยงสูง → `adversarial-review-panel` (ใช้ `reviewer` หลายตัว) · (ถ้าติดตั้ง plugin `software-development`) โค้ด → คู่กับ `code-review-checklist` · (ถ้าติดตั้ง plugin `graphic-design`) งานภาพ → `design-critic` หรือ `design-review` · ไม่มีก็ตรวจตามเกณฑ์ในใบสั่งงาน |
 | `learning-reviewer` | กลาง | ตอนจบงานหลายขั้น — ตรวจวิธีทำงานของทีม ไม่ใช่ตัวงาน | — |
 
 เรียกตัวใหม่ทุกครั้ง เพราะตัวที่ทำงานไม่ตรวจงานของตัวเอง · ผู้ตรวจเฉพาะทาง (`design-critic` · `brand-keeper` · `qa-tester` · `security-engineer` · `risk-manager`) ใช้แทน `reviewer` ได้เฉพาะขั้นที่เขียนว่า "อ่านอย่างเดียว · ไม่แก้ไฟล์" (เรียกด้วย `model: opus`) · ขั้นที่ตัวนั้นเขียน test หรือแก้ของนับเป็นการลงมือ
@@ -1033,7 +1033,7 @@ brief คือสรุปให้ผู้ใช้อ่าน ไม่ใ�
 
 ตัวอย่าง (ขนาดเป็นหน่วยสมมติ): ก ออกแบบตาราง 2 → ข เขียน API 3 → ง ทดสอบรวม 2 · ค แก้ README 1 ไม่รอใคร → rank ก 7 · ข 5 · ง 2 · ค 1 · สายวิกฤต 7 · งานรวม 8 · กว้างสุด 2 · ขนาน 2 ตัวได้เวลาต่ำสุด 7 เร็วขึ้น 1.1 เท่า ไม่ถึง 1.3 → กราฟเกือบเป็นสายเดียว จึงใช้ลูกทีม 1 ตัว (`คาด: ลูกทีม 1 · สายวิกฤต 7k · กว้างสุด 2 · เร็วขึ้น 1.0 เท่า`) · ค เผื่อได้ 6 ส่วน ก ข ง เผื่อได้ 0 · ทำ ก → ข → ง ตาม rank และ ค ชิ้นเล็กให้หัวหน้าทีมทำเองระหว่างรอ
 
-**ง่ายไว้ก่อน** — 1 ชิ้น = 1 เรื่อง = ไฟล์ของตัวเอง · ไม่มีชั้นประสานงานเพิ่ม ลูกทีมไม่คุยกันเอง ทุกอย่างผ่านหัวหน้าทีม · ระดับโมเดลเล็กสุดที่พอ · หัวหน้าทีมไม่อ่านชิ้นงานซ้ำทั้งไฟล์ ใช้ผลตรวจและ `reviewer` แทน · จดใน log ว่า `ลูกทีมที่ใช้: <ตัว × จำนวน> · ส่งพร้อมกัน <n> ครั้ง` (ไม่ใส่ในสรุปงาน) · งานโค้ด → ส่วนเพิ่มใน plugin `software-company` → `superuser` → `references/code-extensions.md`
+**ง่ายไว้ก่อน** — 1 ชิ้น = 1 เรื่อง = ไฟล์ของตัวเอง · ไม่มีชั้นประสานงานเพิ่ม ลูกทีมไม่คุยกันเอง ทุกอย่างผ่านหัวหน้าทีม · ระดับโมเดลเล็กสุดที่พอ · หัวหน้าทีมไม่อ่านชิ้นงานซ้ำทั้งไฟล์ ใช้ผลตรวจและ `reviewer` แทน · จดใน log ว่า `ลูกทีมที่ใช้: <ตัว × จำนวน> · ส่งพร้อมกัน <n> ครั้ง` (ไม่ใส่ในสรุปงาน) · งานโค้ด → ส่วนเพิ่มใน plugin `software-development` → `superuser` → `references/code-extensions.md`
 
 ## ผลที่ลูกทีมรายงาน — 4 ค่า และวิธีรับ
 
@@ -1065,7 +1065,7 @@ brief คือสรุปให้ผู้ใช้อ่าน ไม่ใ�
 
 ย้ายมาจาก `SKILL.md` หัวข้อ 3 · เปิดเมื่อไม่แน่ใจว่าจะเรียก skill ไหน หรืองานข้ามไป plugin อื่น
 
-skill เอกสารหลัก (`polished-document-style` · `document-naming` · `spell-out-abbreviations` · `polite-message-th-en`) อยู่ในแกนนี้ · เอกสารออกแบบ สไลด์ รูปประกอบ ชื่อสินค้า (`branded-document-design` · `markdown-report-docx` · `presentation-design` · `html-slide-deck` · `diagram-figures` · `markdown-visuals` · `product-naming`) อยู่ใน plugin `software-company` · ภาพ AI (`image-generation`) ใน `graphic-design` · ประชุม (`meeting`) ใน `personal-life` — ไม่ได้ติดตั้ง plugin นั้น ให้บอกผู้ใช้ว่ามี แล้วทำต่อด้วยความรู้ทั่วไป
+skill เอกสารหลัก (`polished-document-style` · `document-naming` · `spell-out-abbreviations` · `polite-message-th-en`) อยู่ในแกนนี้ · เอกสารออกแบบ สไลด์ รูปประกอบ ชื่อสินค้า (`branded-document-design` · `markdown-report-docx` · `presentation-design` · `html-slide-deck` · `diagram-figures` · `markdown-visuals` · `product-naming`) อยู่ใน plugin `software-development` · ภาพ AI (`image-generation`) ใน `graphic-design` · ประชุม (`meeting`) ใน `personal-life` — ไม่ได้ติดตั้ง plugin นั้น ให้บอกผู้ใช้ว่ามี แล้วทำต่อด้วยความรู้ทั่วไป
 
 | สถานการณ์ | เรียก |
 |---|---|
@@ -1094,12 +1094,12 @@ skill เอกสารหลัก (`polished-document-style` · `document-nam
 | ต้องอ่านของเยอะ (ไฟล์หลายสิบ · PDF ยาว · เว็บหลายหน้า) | `context-budget` |
 | จบงานที่มีชิ้นงาน / รายงานสถานะ | `status-report` |
 | ผู้ใช้แก้เรื่องเดิมซ้ำ / อยากให้ทำแบบที่เขาชอบ / สั่งรวมบทเรียน | `repeated-mistakes-to-checks` / `owner-style-capture` / `session-lessons-to-skills` |
-| เอกสารที่คนเก็บไว้ใช้ (Markdown · Word · PDF) | `polished-document-style` · ตั้งชื่อไฟล์ → `document-naming` · คำย่อเยอะ → `spell-out-abbreviations` · ต้องดูออกแบบมา → `branded-document-design` · Markdown เป็น Word → `markdown-report-docx` (2 ตัวหลังอยู่ใน plugin `software-company`) |
+| เอกสารที่คนเก็บไว้ใช้ (Markdown · Word · PDF) | `polished-document-style` · ตั้งชื่อไฟล์ → `document-naming` · คำย่อเยอะ → `spell-out-abbreviations` · ต้องดูออกแบบมา → `branded-document-design` · Markdown เป็น Word → `markdown-report-docx` (2 ตัวหลังอยู่ใน plugin `software-development`) |
 | เขียนไฟล์ชั่วคราว (ไฟล์ดึงข้อมูล · ตัวอย่าง · สคริปต์ใช้ครั้งเดียว) | `temp-file-discipline` |
 | เริ่มงานในโฟลเดอร์ใหม่ · ผู้ใช้ต้องพิมพ์อนุญาต push · PR · merge ทุกครั้ง หรืออยากให้ agent merge และลบ branch เอง · `~/.claude/CLAUDE.md` ไม่มีหรือเป็นรุ่นเก่า | `workspace-setup` (agent ตรวจและแก้ `.gitignore` เอง · สิทธิ์ agent เพิ่มเองได้เมื่อผู้ใช้สั่งชัดในแชต ไม่งั้นให้ผู้ใช้กดรันบรรทัดเดียว · โปรเจกต์ที่ยังไม่มีนโยบาย git ถามครั้งเดียวว่าให้ทำเองแค่ไหน · กฎประจำตัวให้ผู้ใช้รันเอง) |
-| รูปในเอกสาร (ขั้นตอน · ระบบ · ผัง) / รูปในไฟล์ Markdown | `diagram-figures` / `markdown-visuals` (plugin `software-company`) |
-| สไลด์ / ภาพจริงในหน้าเว็บ สไลด์ หรือเอกสาร / ตั้งชื่อสินค้าหรือแบรนด์ | `presentation-design` (plugin `software-company`) / `image-generation` (plugin `graphic-design`) / `product-naming` (plugin `software-company`) |
-| เด็คเป็นไฟล์ .html เดียว นำเสนอจากเบราว์เซอร์ / มี .pptx แล้วอยากได้ .html มี animation | `html-slide-deck` — มี .pptx แล้วใช้ทางเข้าจาก .pptx ในตัว (plugin `software-company`) |
+| รูปในเอกสาร (ขั้นตอน · ระบบ · ผัง) / รูปในไฟล์ Markdown | `diagram-figures` / `markdown-visuals` (plugin `software-development`) |
+| สไลด์ / ภาพจริงในหน้าเว็บ สไลด์ หรือเอกสาร / ตั้งชื่อสินค้าหรือแบรนด์ | `presentation-design` (plugin `software-development`) / `image-generation` (plugin `graphic-design`) / `product-naming` (plugin `software-development`) |
+| เด็คเป็นไฟล์ .html เดียว นำเสนอจากเบราว์เซอร์ / มี .pptx แล้วอยากได้ .html มี animation | `html-slide-deck` — มี .pptx แล้วใช้ทางเข้าจาก .pptx ในตัว (plugin `software-development`) |
 | เขียนสคริปต์ให้คนพูดหน้ากล้อง (คลิป influencer · รีวิว · พิธีกร · voiceover) | `speaking-script` (plugin `graphic-design`) — ภาพนำหรือคลิปตัดต่อที่ไม่มีคนพูด → `video-script-to-clip` |
 | เสียงบรรยายจากสคริปต์โดยไม่อัดเอง · ตัดต่อด้วยคำสั่ง · ซับไทยเป็นไฟล์ | `narration-th` (เสียงบรรยายจากสคริปต์) · `video-editing` (ตัดต่อ) · `subtitles-th` (plugin `graphic-design`) |
 | รูปสินค้าลง marketplace · ส่งไฟล์โรงพิมพ์หรือร้านป้าย · ปกคลิป YouTube | `marketplace-product-images` · `print-ready-files` · `youtube-thumbnail` (plugin `graphic-design`) |

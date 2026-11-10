@@ -8,7 +8,7 @@ Use when starting a brand, posts look inconsistent, a full guideline is needed o
 
 One folder, one README, everything the brand needs to look like itself. A small shop needs a kit it can read in 5 minutes, not a 60-page brand book.
 
-For app or product screens, the `software-company` plugin's `ui-craft` skill (if installed) covers tokens for code; without it, keep to this skill. This skill is for marketing, social and print. A software project's one-off visuals (logo, poster, LINE art) are lighter work in `software-company:graphic-design`; once the brand needs a full kit or campaign, work here.
+For app or product screens, the `software-development` plugin's `ui-craft` skill (if installed) covers tokens for code; without it, keep to this skill. This skill is for marketing, social and print. A software project's one-off visuals (logo, poster, LINE art) are lighter work in `software-development:graphic-design`; once the brand needs a full kit or campaign, work here.
 
 ## Workflow
 
@@ -122,8 +122,8 @@ Ends with a README you can read in 5 minutes and a v1 version tag.
 |---|---|
 | ร้านเล็ก ต้องการชุดแบรนด์อ่านจบใน 5 นาที (โลโก้ 4 แบบ สีตามบทบาท ฟอนต์ไทย) | `SKILL.md` ส่วน Workflow |
 | องค์กรหรือทีมที่ต้องมีคู่มือเต็ม: น้ำเสียง ข้อความหลัก กติกาอนุมัติงาน การเก็บไฟล์ | ไฟล์นี้ |
-| อ่านโค้ดที่มีอยู่แล้วสรุปเป็น token | `ui-craft` → `design_tokens.py` (plugin `software-company`) |
-| เขียน token สามชั้นและสร้าง CSS | `design-system` (plugin `software-company`) |
+| อ่านโค้ดที่มีอยู่แล้วสรุปเป็น token | `ui-craft` → `design_tokens.py` (plugin `software-development`) |
+| เขียน token สามชั้นและสร้าง CSS | `design-system` (plugin `software-development`) |
 | ตรวจคอนทราสต์ของคู่สี | ตารางตัวอย่างใน `SKILL.md` |
 
 ## ขั้นตอน

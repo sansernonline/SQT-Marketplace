@@ -39,7 +39,7 @@ description: Use when SuperUser plans how agents run a task (Planning, ReAct, Re
 
 งานเล็ก (แก้จุดเดียว · เขียนไฟล์เดียว เช่น README) ไม่ต้องระบุแบบ · เปลี่ยนแบบกลางทางได้ แต่ต้องมีเหตุจากผลจริง และจด 1 แถวตาม `decision-log`
 
-ตารางนี้คือวิธีทำงานของทีม agent ของเราเอง · ถ้าลูกค้าจะสร้างระบบ agent ในผลิตภัณฑ์ (เลือก framework · checkpoint · คนอนุมัติ · eval) → `llm-engineering` ของ software-company (`references/agent-systems.md`) คู่กับ `mcp-server` และ `background-jobs` · ใช้ 3 แบบนี้ผ่านแชตโดยไม่เขียนโค้ด → [`chat-prompt-workflows`](../chat-prompt-workflows/SKILL.md)
+ตารางนี้คือวิธีทำงานของทีม agent ของเราเอง · ถ้าลูกค้าจะสร้างระบบ agent ในผลิตภัณฑ์ (เลือก framework · checkpoint · คนอนุมัติ · eval) → `llm-engineering` ของ software-development (`references/agent-systems.md`) คู่กับ `mcp-server` และ `background-jobs` · ใช้ 3 แบบนี้ผ่านแชตโดยไม่เขียนโค้ด → [`chat-prompt-workflows`](../chat-prompt-workflows/SKILL.md)
 
 **ไม่เปิด agent teams เป็นค่าเริ่ม** — ใช้ subagent แทน เพราะ agent teams ยังเป็นของทดลองและปิดอยู่ · ใช้ token มากกว่ามาก (ราว 7 เท่าเมื่อ teammate อยู่ใน plan mode) · เปิดแล้ว subagent ที่ตั้งชื่อจะกลายเป็น teammate เอง · teammate แบบ in-process (ค่าเริ่ม) ส่ง subagent เบื้องหลังไม่ได้ · teammate คุยกันเอง ขัดกับหลักทุกอย่างผ่านหัวหน้าทีม · ยกเว้นผู้ใช้เปิดไว้แล้วและงานเป็น debug หลายสมมติฐานที่ต้องให้ถกล้มทฤษฎีกัน · ([Claude Code: agent teams](https://code.claude.com/docs/en/agent-teams) · ตรวจ 21 ต.ค. 2569)
 

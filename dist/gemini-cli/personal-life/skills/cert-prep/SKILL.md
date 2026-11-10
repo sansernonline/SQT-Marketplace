@@ -46,4 +46,4 @@ Worked gap map (AWS SAA-C03) and the week-by-week plan file to copy to `cert/<ex
 - Dumps (leaked real questions) breach the candidate agreement and can lead to the certification being revoked. Refuse to use them
 - Certifications prove a baseline. Pair each one with a small project (see `side-project-picker`) so the skill shows in a portfolio
 
-Related: `learning-path` (for skills beyond the exam), `side-project-picker`, `english-tech-reading` (for long, conditional English questions), and `sprint-plan` in `software-company` for Scrum context.
+Related: `learning-path` (for skills beyond the exam), `side-project-picker`, `english-tech-reading` (for long, conditional English questions), and `sprint-plan` in `software-development` for Scrum context.

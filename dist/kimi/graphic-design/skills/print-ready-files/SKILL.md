@@ -25,7 +25,7 @@ description: Use when a flyer, name card, vinyl banner or sticker goes to a prin
 | รูปสินค้าลงร้านออนไลน์ | `marketplace-product-images` |
 | ตรวจความสวย ลำดับสายตา คอนทราสต์ | `design-review` (ทำก่อน แล้วค่อยเตรียมไฟล์ด้วย skill นี้) |
 | สีแบรนด์ ฟอนต์แบรนด์ โลโก้ | `brand-kit` |
-| รายงานหรือเอกสาร Word/PDF ที่อ่านบนจอ | `software-company:branded-document-design` (ถ้าติดตั้ง) |
+| รายงานหรือเอกสาร Word/PDF ที่อ่านบนจอ | `software-development:branded-document-design` (ถ้าติดตั้ง) |
 
 ## ขั้นตอน
 

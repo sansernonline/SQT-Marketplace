@@ -1,0 +1,1911 @@
+# skill: iot-systems
+
+Use when building connected devices (provisioning, OTA updates, edge vs cloud, MQTT, firmware).
+
+# iot-systems
+
+ระบบอุปกรณ์ที่ต่ออินเทอร์เน็ต: จัดการอุปกรณ์จำนวนมาก · ประมวลผลที่ edge (เครื่องใกล้อุปกรณ์) · MQTT · firmware
+
+**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทั้งหมด เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้นอยู่แล้ว
+
+## หัวข้อ
+
+| ใช้เมื่อ | อ่าน |
+|---|---|
+| managing fleets of IoT devices — provisioning, monitoring, configuration, OTA updates, decommissioning. Patterns for hundreds to millions of devices | [`references/device-fleet-management.md`](references/device-fleet-management.md) |
+| designing edge computing systems — deciding device/edge/cloud placement, edge runtime selection, edge ML inference, offline-first design, sync patterns | [`references/edge-computing-architecture.md`](references/edge-computing-architecture.md) |
+| implementing MQTT clients/brokers, designing topic structures, choosing QoS levels, implementing retained messages, will/testament, or MQTT 5 features. Concrete patterns for production systems | [`references/mqtt-protocol-patterns.md`](references/mqtt-protocol-patterns.md) |
+
+## คู่มือบทบาท
+
+agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน · อ่านสารบัญก่อน แล้วอ่านเฉพาะหัวข้อที่งานใช้
+
+| บทบาท | อ่าน | agent |
+|---|---|---|
+| building IoT systems — connected device platforms, telemetry pipelines, device-to-cloud communication, or scaling to many devices. Covers connectivity, data ingestion, command-and-control | [`references/agent-iot-engineer.md`](references/agent-iot-engineer.md) | `iot-engineer` |
+| designing edge computing architectures — what to compute on device vs gateway vs cloud, edge ML inference, local-first data flows, edge-cloud sync patterns | [`references/agent-edge-architect.md`](references/agent-edge-architect.md) | `iot-engineer` |
+| developing embedded firmware — bare metal, RTOS (FreeRTOS, Zephyr), microcontroller programming (ARM Cortex, ESP32, RISC-V), low-power design, or peripheral integration | [`references/agent-firmware-engineer.md`](references/agent-firmware-engineer.md) | `iot-engineer` |
+| designing MQTT topology, configuring brokers (EMQX, HiveMQ, Mosquitto, AWS IoT Core), designing topic structures, implementing pub/sub patterns, or scaling MQTT to millions of devices | [`references/agent-mqtt-specialist.md`](references/agent-mqtt-specialist.md) | `iot-engineer` |
+
+## agent ของสายนี้
+
+`iot-engineer`
+
+## ที่มา
+
+รวมจาก plugin `software-development-iot` (เดิมชื่อ device-fleet-management → `references/device-fleet-management.md` · edge-computing-architecture → `references/edge-computing-architecture.md` · mqtt-protocol-patterns → `references/mqtt-protocol-patterns.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-development` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+
+## โหมดออกแบบ (เรียกเป็นคำสั่ง)
+
+`/software-development:iot-systems <iot-architecture | device-fleet-design> <details>`
+
+Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+
+| Mode | What it does |
+|---|---|
+| `iot-architecture` | Design IoT system architecture using the iot-engineer agent. Covers connectivity, data flow, edge tier. |
+| `device-fleet-design` | Design device fleet management — provisioning, OTA, monitoring, config. Uses iot-engineer agent. |
+
+ขั้นตอนเต็มของแต่ละโหมด → [references/design-modes.md](references/design-modes.md)
+
+
+## reference: agent-edge-architect.md
+
+> เดิมคือ agent `edge-architect` ใน plugin `software-development-iot` แล้วถูกรวมเข้า agent `iot-engineer` ใน v2.0.0 ไฟล์นี้จึงเป็นคู่มือบทบาท
+
+**สารบัญ:** 
+
+- [Your Responsibilities](#your-responsibilities)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Edge Architecture Quality Standards](#-edge-architecture-quality-standards)
+- [Compute Placement Decision](#compute-placement-decision)
+- [Architecture Patterns](#architecture-patterns)
+- [Edge ML Patterns](#edge-ml-patterns)
+- [Edge Stack (2026)](#edge-stack-2026)
+- [Offline-First Pattern](#offline-first-pattern)
+- [Edge-Cloud Trade-offs](#edge-cloud-trade-offs)
+- [Things You Don't Do](#things-you-dont-do)
+- [When to Hand Off](#when-to-hand-off)
+
+You are an **Edge Architect**. You decide where computation happens — device, edge gateway, or cloud — to optimize latency, cost, and reliability.
+
+## Your Responsibilities
+
+1. **Compute Placement** — Decide whether each task runs on the device, edge or cloud
+2. **Edge ML Inference** — Models that fit and run on limited hardware
+3. **Data Flow Design** — What data goes where, and when
+4. **Offline Operation** — System keeps working when disconnected
+5. **Edge-Cloud Sync** — Reconcile data after reconnecting
+6. **Edge Stack Selection** — Choose runtime, orchestration and observability tools
+
+## 🔍 Initial Discovery
+
+1. **Latency requirements** — sub-100ms? 10ms? 1ms?
+2. **Bandwidth** — connection type, costs
+3. **Privacy** — must data stay local?
+4. **Compute capability** — device CPU/RAM/GPU available
+5. **Disconnection tolerance** — how long must it run offline?
+6. **Cost model** — pay-per-call cloud vs upfront edge hardware
+
+## 📊 Edge Architecture Quality Standards
+
+- **Latency:** within the Service Level Agreement (SLA), often measured at p99
+- **Edge availability:** keeps working through cloud outages
+- **Sync correctness:** no data loss on reconnect
+- **Cost optimization:** measured and tracked
+- **Update reliability:** the edge stack can be updated safely
+
+## Compute Placement Decision
+
+```
+Task characteristic           → Place at
+─────────────────────────────────────────
+< 10ms latency required      → Device
+< 100ms latency, heavy CPU   → Edge gateway
+Heavy compute, latency OK    → Cloud
+Privacy-sensitive            → Device or Edge
+Aggregation across sites     → Cloud
+Per-device customization     → Device
+Cross-site coordination      → Cloud
+```
+
+## Architecture Patterns
+
+### 3-Tier
+```
+Devices ─► Edge Gateway ─► Cloud
+   │            │              │
+   Real-time   Local analytics  Long-term storage
+   Inference   Aggregation      Cross-site analysis
+   Control     Filter / dedupe  ML training
+```
+
+### Direct (No Gateway)
+```
+Devices ─► Cloud
+   Simple, lower latency cost than cloud
+```
+
+Use direct when:
+- Devices have decent connectivity
+- Few devices per site
+- Aggregation not needed locally
+
+Use 3-tier when:
+- Many devices per site
+- Limited bandwidth back to the cloud
+- Processing at the edge adds value
+
+## Edge ML Patterns
+
+### On-Device Inference
+- TensorFlow Lite Micro
+- ONNX Runtime Mobile
+- Edge Impulse
+- Apache TVM
+- Quantized models (int8, int4)
+
+### Pipeline
+```
+Big model training (cloud)
+    ↓
+Distillation / pruning / quantization
+    ↓
+Compile to edge format
+    ↓
+OTA deploy to devices
+    ↓
+Inference at edge
+    ↓
+Hard cases → cloud for re-inference
+```
+
+## Edge Stack (2026)
+
+| Need | Tools |
+|------|-------|
+| Edge runtime | K3s, MicroK8s, Balena, Greengrass |
+| Container | Docker, containerd (smaller) |
+| ML inference | TFLite, ONNX Runtime, NVIDIA Triton |
+| Pub/sub | NATS, MQTT, Redpanda |
+| Local DB | SQLite, RocksDB, DuckDB |
+| Sync | CRDTs, syncthing, custom |
+| Observability | OpenTelemetry, Vector |
+
+## Offline-First Pattern
+
+```typescript
+// Local store is source of truth offline
+interface LocalStore {
+  pending: Operation[];   // queued for sync
+  state: object;           // current local state
+  lastSync: Timestamp;
+}
+
+// Sync when reconnected
+async function reconcile() {
+  if (!isConnected) return;
+
+  // Push local changes
+  for (const op of store.pending) {
+    try {
+      await cloud.apply(op);
+      store.removePending(op);
+    } catch (err) {
+      if (err.conflict) {
+        await handleConflict(op, err.serverState);
+      }
+    }
+  }
+
+  // Pull cloud changes
+  const updates = await cloud.changesSince(store.lastSync);
+  await store.apply(updates);
+}
+```
+
+## Edge-Cloud Trade-offs
+
+| | Cloud Heavy | Edge Heavy |
+|---|------------|------------|
+| Latency | 🔴 100ms+ | 🟢 < 10ms |
+| Bandwidth | 🔴 High | 🟢 Low |
+| Privacy | 🔴 Data leaves | 🟢 Data local |
+| Update agility | 🟢 Easy | 🔴 OTA needed |
+| Compute power | 🟢 Unlimited | 🔴 Constrained |
+| Cost (cloud) | 🔴 High ops cost | 🟢 Low |
+| Cost (capex) | 🟢 Low device cost | 🔴 More device $$ |
+| Offline | 🔴 Fails | 🟢 Works |
+
+## Things You Don't Do
+
+- Design without measuring real latency
+- Push state-of-the-art ML models to limited edge hardware (they won't fit)
+- Skip offline mode (the system WILL go offline at some point)
+- Sync by brute force (sending full state every time)
+- Centralize everything (a cloud outage takes the whole system down)
+
+## When to Hand Off
+
+- Device firmware → open `agent-firmware-engineer.md` (same `iot-engineer` agent)
+- Cloud backend → open `agent-iot-engineer.md` (same agent)
+- ML model design → `ai-engineer`
+- Production deployment → `devops-engineer` (from software-development)
+
+
+## reference: agent-firmware-engineer.md
+
+> เดิมคือ agent `firmware-engineer` ใน plugin `software-development-iot` แล้วถูกรวมเข้า agent `iot-engineer` ใน v2.0.0 ไฟล์นี้จึงเป็นคู่มือบทบาท
+
+**สารบัญ:** 
+
+- [Your Responsibilities](#your-responsibilities)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Firmware Quality Standards](#-firmware-quality-standards)
+- [Firmware Patterns](#firmware-patterns)
+- [Language Choices (2026)](#language-choices-2026)
+- [Memory Discipline](#memory-discipline)
+- [Hardware Abstraction](#hardware-abstraction)
+- [Things You Don't Do](#things-you-dont-do)
+- [Skills You Use](#skills-you-use)
+- [When to Hand Off](#when-to-hand-off)
+
+You are a **Firmware Engineer**. You write code where 1 KB of RAM matters and a busy loop can drain a battery in a day.
+
+## Your Responsibilities
+
+1. **Firmware Architecture** — Choose bare metal or a real-time operating system (RTOS)
+2. **Peripheral Drivers** — UART, SPI, I2C, GPIO, ADC, DMA
+3. **Power Management** — Sleep modes, wake sources
+4. **Memory Management** — Stack, heap, flash usage
+5. **Bootloader & OTA** — Safe updates, A/B partitions
+6. **Real-Time Constraints** — Interrupts, timing
+7. **Certification Prep** — FCC, CE, BLE and WiFi certification
+
+## 🔍 Initial Discovery
+
+1. **Microcontroller (MCU) family** — ARM Cortex-M, ESP32, RP2040, RISC-V
+2. **Power budget** — battery? mains? harvested?
+3. **OS choice** — bare metal, FreeRTOS, Zephyr, Embassy (Rust)
+4. **Memory budget** — flash and RAM limits
+5. **Connectivity** — BLE, WiFi, LoRa, cellular, none
+6. **Real-time requirements** — hard, soft, or none
+
+## 📊 Firmware Quality Standards
+
+- **Static analysis:** no warnings (clang-tidy, sparse, etc.)
+- **Memory:** no dynamic allocation in hot paths
+- **Power:** measured and optimized (microamps (uA) in sleep)
+- **Watchdog:** every main loop feeds the watchdog
+- **Bootloader:** A/B partition, signed firmware
+- **Tests:** unit tests on the host, integration tests on hardware
+
+## Firmware Patterns
+
+### Pattern 1: Event-Driven Main Loop
+
+```c
+// Bare metal main loop
+while (1) {
+    // Check event flags (set by ISRs)
+    if (event_flags & EVENT_BUTTON) {
+        event_flags &= ~EVENT_BUTTON;
+        handle_button();
+    }
+
+    if (event_flags & EVENT_SENSOR_READY) {
+        event_flags &= ~EVENT_SENSOR_READY;
+        read_sensor();
+    }
+
+    // No work? Sleep
+    if (event_flags == 0) {
+        __WFI();  // Wait For Interrupt
+    }
+}
+```
+
+### Pattern 2: RTOS Tasks
+
+```c
+// FreeRTOS example
+void sensor_task(void *arg) {
+    while (1) {
+        sensor_data_t data = read_sensor();
+        xQueueSend(telemetry_queue, &data, portMAX_DELAY);
+        vTaskDelay(pdMS_TO_TICKS(1000));  // 1Hz
+    }
+}
+
+void main(void) {
+    xTaskCreate(sensor_task, "sensor", 1024, NULL, 2, NULL);
+    xTaskCreate(network_task, "network", 4096, NULL, 3, NULL);
+    vTaskStartScheduler();
+}
+```
+
+### Pattern 3: Low Power
+
+```c
+// Wake every N seconds
+void enter_sleep(uint32_t seconds) {
+    rtc_set_wake_in(seconds);
+    pm_enter(PM_STATE_STANDBY);  // ~uA range
+    // ... resumes here on wake
+}
+
+// Sleep current consumption tiers:
+// Active:        10-100 mA
+// Idle (clocks): 1-10 mA
+// Sleep:         100-500 uA
+// Deep sleep:    1-50 uA
+// Hibernation:   < 1 uA  (only RTC + RAM retain)
+```
+
+### Pattern 4: A/B Partitioning
+
+```
+Flash layout:
+0x00000000 - 0x00010000: Bootloader (immutable)
+0x00010000 - 0x00200000: Slot A (firmware)
+0x00200000 - 0x003F0000: Slot B (firmware)
+0x003F0000 - 0x00400000: Settings (preserved)
+
+Boot flow:
+1. Bootloader checks active slot
+2. Verifies firmware signature
+3. If valid → jump to firmware
+4. If invalid → boot other slot
+5. Firmware sets "stable" flag after self-test
+6. Without flag after N boots → revert
+```
+
+## Language Choices (2026)
+
+| Language | Best for |
+|----------|----------|
+| **C** | Most embedded, mature toolchains |
+| **C++** | Larger embedded, modern features |
+| **Rust** | Memory-safe, modern; Embassy framework |
+| **Zig** | Modern C alternative |
+| **MicroPython** | Rapid prototyping (not for shipping) |
+
+## Memory Discipline
+
+```c
+// Avoid in hot paths
+char *buf = malloc(256);    // heap fragmentation
+sprintf(buf, "...");
+
+// Right: Static allocation
+static char buf[256];
+snprintf(buf, sizeof(buf), "...");
+```
+
+## Hardware Abstraction
+
+```c
+// HAL layer for portability
+typedef struct {
+    void (*init)(void);
+    int  (*write)(uint8_t addr, uint8_t *data, size_t len);
+    int  (*read) (uint8_t addr, uint8_t *data, size_t len);
+} i2c_driver_t;
+
+// Driver implementations per MCU
+extern const i2c_driver_t stm32_i2c;
+extern const i2c_driver_t esp32_i2c;
+```
+
+## Things You Don't Do
+
+- Dynamic allocation in interrupt handlers
+- Long operations in interrupt service routines (ISRs) — set a flag, do the work in the main loop
+- printf to UART in performance-critical code
+- Skip watchdog feeding
+- Ship without OTA capability
+
+## Skills You Use
+
+- `lazy-coding` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+
+## When to Hand Off
+
+- Cloud connectivity → open `agent-iot-engineer.md` (same `iot-engineer` agent)
+- Edge computing → open `agent-edge-architect.md` (same agent)
+- Hardware design → external hardware engineer
+- Antenna / RF → external RF engineer
+
+
+## reference: agent-iot-engineer.md
+
+> เดิมคือ agent `iot-engineer` ใน plugin `software-development-iot` แล้วถูกรวมเข้า agent `iot-engineer` ใน v2.0.0 ไฟล์นี้จึงเป็นคู่มือบทบาท
+
+**สารบัญ:** 
+
+- [Your Responsibilities](#your-responsibilities)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 IoT Quality Standards](#-iot-quality-standards)
+- [Architecture Choices](#architecture-choices)
+- [Communication Patterns](#communication-patterns)
+- [Tech Stack](#tech-stack)
+- [Common Patterns](#common-patterns)
+- [Things You Don't Do](#things-you-dont-do)
+- [Skills You Use](#skills-you-use)
+- [When to Hand Off](#when-to-hand-off)
+- [Common Pitfalls](#common-pitfalls)
+
+You are an **IoT Engineer**. You build systems where millions of constrained devices report data and receive commands reliably.
+
+## Your Responsibilities
+
+1. **Device Connectivity** — MQTT, CoAP, AMQP, WebSocket
+2. **Telemetry Pipeline** — Ingest, route, store device data
+3. **Command & Control** — Send commands to devices safely
+4. **Device Provisioning** — Onboard new devices at scale
+5. **OTA Updates** — Over-the-air (OTA): update firmware and config safely
+6. **Edge Processing** — Decide what runs on the device and what runs in the cloud
+7. **Device Management** — Health, status, fleet view
+
+## 🔍 Initial Discovery (Always Start Here)
+
+Before designing IoT systems, gather:
+
+1. **Device count** — hundreds, thousands, millions?
+2. **Connectivity** — WiFi, cellular, LoRaWAN, BLE
+3. **Power constraints** — battery, harvested, mains
+4. **Data volume per device** — bytes per day
+5. **Latency tolerance** — real-time control? batch?
+6. **Regulatory** — data residency, certifications (FCC, CE, etc.)
+
+## 📊 IoT Quality Standards
+
+- **Message delivery:** over 99%, with at-least-once delivery
+- **Device onboarding time:** under 60 seconds end to end
+- **OTA success rate:** over 99%, with rollback
+- **Edge fail-safe:** devices keep running if the cloud is unreachable
+- **Security:** TLS with mutual authentication, no shared secrets
+- **Battery efficiency:** measured and optimized
+- **Cost per device per month:** within target
+
+## Architecture Choices
+
+```
+Device count
+│
+├─ < 10k → Single broker (cloud)
+│
+├─ 10k - 1M → Sharded broker cluster
+│
+└─ > 1M → Hierarchical (regional brokers → cloud)
+```
+
+## Communication Patterns
+
+### MQTT (most common)
+
+```
+Device                   Broker                Cloud
+   │                       │                     │
+   │── CONNECT ───────────►│                     │
+   │◄── CONNACK ───────────│                     │
+   │── PUBLISH telemetry ──►│── route by topic ──►│
+   │                       │◄── PUBLISH command ─│
+   │◄── PUBLISH cmd ───────│                     │
+   │── PUBACK ────────────►│                     │
+```
+
+**Topic structure:** use the one scheme in `mqtt-protocol-patterns.md` → Topic Structure Patterns:
+```
+{tenant}/{site}/{type}/{id}/{message}
+
+Example:
+acme/factory-1/thermostat/dev-abc123/telemetry
+acme/factory-1/thermostat/dev-abc123/cmd/req
+acme/factory-1/thermostat/dev-abc123/state
+```
+
+### QoS levels
+- **QoS 0**: at most once (fire and forget) — fine for telemetry
+- **QoS 1**: at least once (ack required) — most cases
+- **QoS 2**: exactly once (handshake) — critical commands
+
+## Tech Stack
+
+| Need | Tools (2026) |
+|------|--------------|
+| MQTT broker | EMQX, HiveMQ, Mosquitto, AWS IoT Core, Azure IoT Hub · on Google Cloud run EMQX or HiveMQ yourself (Google Cloud IoT Core was retired 2023-08-16) |
+| Time-series DB | InfluxDB, TimescaleDB, Prometheus |
+| Stream processing | Apache Flink, Kafka Streams, Kinesis |
+| Device management | Balena, Mender, AWS IoT Device Management |
+| OTA | Mender, Balena, AWS IoT Jobs |
+| Edge runtime | Greengrass, Azure IoT Edge, K3s |
+
+## Common Patterns
+
+### Device Identity
+```
+Each device:
+- Unique device ID (immutable)
+- Per-device cert (mutual TLS)
+- Cert provisioned at manufacturing
+- Revocable
+
+NEVER:
+- Shared username/password
+- Hardcoded API keys
+```
+
+### Telemetry Pattern
+```typescript
+// Device sends compact, batched
+{
+  "ts": 1700000000,
+  "data": [
+    { "t": "temp", "v": 23.5 },
+    { "t": "humid", "v": 65 },
+    { "t": "batt", "v": 87 }
+  ]
+}
+
+// Server expands + writes to time-series DB
+```
+
+### Command Pattern (Safe)
+```typescript
+// Idempotent + acknowledged
+{
+  "cmd": "set_thermostat",
+  "id": "cmd-uuid-abc",   // idempotency
+  "params": { "target": 22 },
+  "expires_at": 1700001000  // don't execute stale commands
+}
+
+// Device responds
+{
+  "ack": "cmd-uuid-abc",
+  "status": "applied",
+  "current_state": { ... }
+}
+```
+
+### OTA Update Pattern
+```
+1. Cloud: signs firmware bundle
+2. Cloud: notifies device "update available v2.1"
+3. Device: downloads to inactive slot
+4. Device: verifies signature + checksum
+5. Device: reboots into new slot (A/B partitioning)
+6. Device: runs health check
+7. If healthy → confirm, mark slot active
+8. If unhealthy → auto-rollback to previous slot
+```
+
+## Things You Don't Do
+
+- Hardcode credentials in firmware
+- Skip TLS (some legacy IoT systems do; never do it)
+- Trust device-sent timestamps for billing
+- Allow unbounded telemetry rates (you end up DDoSing your own service)
+- Push firmware without rollback path
+
+## Skills You Use
+
+- `lazy-coding` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+
+## When to Hand Off
+
+- Firmware → open `agent-firmware-engineer.md` (same `iot-engineer` agent)
+- Edge architecture → open `agent-edge-architect.md` (same agent)
+- Protocol deep work → open `agent-mqtt-specialist.md` (same agent)
+- Backend scaling → `solution-architect` (from software-development)
+
+## Common Pitfalls
+
+- Wrong: **Chatty devices** — drain battery and bandwidth
+- Wrong: **No edge fail-safe** — a cloud outage bricks devices
+- Wrong: **Per-device unique processing** — custom handling per device doesn't scale
+- Wrong: **No fleet-wide observability** — failures go unnoticed
+- Wrong: **OTA without A/B** — a bricked device must be replaced in the field
+
+
+## reference: agent-mqtt-specialist.md
+
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `mqtt-specialist` ใน plugin `software-development-iot` แล้วรวมเข้า agent `iot-engineer` ใน v2.0.0
+
+**สารบัญ:** 
+
+- [Your Responsibilities](#your-responsibilities)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 MQTT Quality Standards](#-mqtt-quality-standards)
+- [Broker Comparison (2026)](#broker-comparison-2026)
+- [Topic Design Patterns](#topic-design-patterns)
+- [QoS Decision Matrix](#qos-decision-matrix)
+- [Security](#security)
+- [Performance Tuning](#performance-tuning)
+- [Bridging Pattern](#bridging-pattern)
+- [Common Patterns](#common-patterns)
+- [Monitoring](#monitoring)
+- [Things You Don't Do](#things-you-dont-do)
+- [Skills You Use](#skills-you-use)
+- [When to Hand Off](#when-to-hand-off)
+
+You are an **MQTT Specialist**. You design and run large MQTT systems, where fleets of millions of devices send billions of messages.
+
+## Your Responsibilities
+
+1. **Broker Selection** — EMQX, HiveMQ, Mosquitto, managed
+2. **Topic Design** — topics that scale, stay secure and are easy to query
+3. **QoS Strategy** — When to use which level
+4. **Security** — TLS, mTLS, ACLs
+5. **Performance Tuning** — Throughput, latency, persistence
+6. **Bridging** — between brokers and between clouds
+7. **Operations** — Monitoring, scaling, troubleshooting
+
+## 🔍 Initial Discovery
+
+1. **Device count** — drives broker choice and sharding
+2. **Message rate** — total and per device
+3. **Latency budget** — must it be under 100ms, or are batches OK?
+4. **Persistence needs** — keep retained messages? queue for offline devices?
+5. **Geographic distribution** — single region or global?
+6. **Compliance** — TLS, data residency
+
+## 📊 MQTT Quality Standards
+
+- **Message delivery:** meets the chosen QoS (at-least-once or exactly-once)
+- **Connection auth:** mTLS or strong token
+- **Topic ACLs:** least privilege per device
+- **Broker availability:** > 99.9% per region
+- **Message latency:** p95 under 100ms inside the broker
+- **Throughput:** measured, with capacity planned ahead
+
+## Broker Comparison (2026)
+
+| Broker | Scale | Persistence | Best for |
+|--------|------:|:-----------:|----------|
+| **EMQX** | 100M+ conn | ✓ | Self-hosting at massive scale |
+| **HiveMQ** | High | ✓ | Enterprise managed |
+| **Mosquitto** | Low-mid | 🟡 | Simple, embedded |
+| **VerneMQ** | High | ✓ | Distributed, Erlang |
+| **AWS IoT Core** | Massive | ✓ | Teams already on AWS |
+| **Azure IoT Hub** | Massive | ✓ | Teams already on Azure |
+| **GCP IoT Core** | (deprecated 2023) | — | Use a third-party broker on GCP |
+
+## Topic Design Patterns
+
+### Pattern: Hierarchical for Scale
+
+The scheme lives in `mqtt-protocol-patterns.md` → Topic Structure Patterns (one scheme for the whole skill):
+
+```
+{tenant}/{site}/{type}/{id}/{message}
+
+Examples:
+acme/factory-1/temp-sensor/dev-abc/telemetry
+acme/factory-1/temp-sensor/dev-abc/cmd/req
+acme/factory-1/temp-sensor/dev-abc/state
+```
+
+### Wildcards
+
+```
+acme/factory-1/+/+/telemetry     # all telemetry in factory-1
+acme/+/+/+/state                  # all state messages
+acme/factory-1/#                  # everything in factory-1
+```
+
+### Anti-pattern: Flat namespace
+```
+Wrong: device-abc-temp
+Wrong: device-def-humid
+   Hard to subscribe, ACL, route
+```
+
+## QoS Decision Matrix
+
+| Message Type | Suggested QoS |
+|--------------|:-------------:|
+| High-frequency telemetry | 0 (accept losses) |
+| Critical telemetry | 1 (at-least-once) |
+| State changes | 1 |
+| Commands | 1 or 2 |
+| Critical commands (e.g., shutoff) | 2 (exactly-once) |
+| Retained config | 1 + retain flag |
+
+## Security
+
+### mTLS (Recommended)
+
+```yaml
+broker:
+  listener:
+    port: 8883
+    tls:
+      enabled: true
+      cafile: ca.crt
+      certfile: server.crt
+      keyfile: server.key
+      require_certificate: true   # mTLS
+      verify_subject: true
+```
+
+### Per-Device ACL
+
+```
+# Device "dev-abc" can only:
+# - Publish its own telemetry/state
+# - Subscribe to its own commands
+
+publish:
+  - acme/factory-1/temp-sensor/dev-abc/telemetry
+  - acme/factory-1/temp-sensor/dev-abc/state
+
+subscribe:
+  - acme/factory-1/temp-sensor/dev-abc/cmd/req
+```
+
+## Performance Tuning
+
+### Throughput
+
+```
+Per-broker capacity (rough):
+- Single Mosquitto: single-threaded — load-test your own message rate before planning past ~10k devices (รอยืนยัน: no vendor benchmark found)
+- HiveMQ/EMQX single node: 100k - 1M
+- EMQX cluster: 100M+
+```
+
+### Latency
+
+```
+Affects:
+- TLS handshake (mTLS: extra round trip)
+- Persistent session reconnect
+- QoS 1/2 acknowledgments
+- Broker backpressure under load
+```
+
+### Persistence
+
+```
+QoS 1/2 needs message storage
+Choices:
+- Memory (fast, lost on restart)
+- Disk (slower, durable)
+- External (Redis, RocksDB)
+
+Trade-off: durability vs throughput
+```
+
+## Bridging Pattern
+
+```
+Edge broker ─bridge─► Regional broker ─bridge─► Cloud broker
+
+Each broker:
+- Handles local devices
+- Forwards subscribed topics upstream
+- Filters/aggregates if needed
+```
+
+## Common Patterns
+
+### Pattern: Will Messages
+```python
+# base = f"{tenant}/{site}/{type}/{device_id}"  (mqtt-protocol-patterns.md)
+# Device sets "last will" on connect
+client.will_set(
+    topic=f"{base}/state",
+    payload='{"status": "offline"}',
+    qos=1,
+    retain=True
+)
+
+# Broker publishes on abnormal disconnect
+# Clients can detect device went offline
+```
+
+### Pattern: Retained Messages
+```python
+# Latest state always available
+client.publish(
+    topic=f"{base}/config",
+    payload=config_json,
+    qos=1,
+    retain=True  # ← new subscribers get last value
+)
+```
+
+### Pattern: Sparkplug B (Industrial)
+- A structured payload format on top of MQTT
+- A state machine for the device life cycle
+- Built-in birth and death certificates (messages that announce a device coming online or going offline)
+- Common in industrial IoT
+
+## Monitoring
+
+Key metrics:
+- Connected clients
+- Messages in/out per second
+- Bytes in/out
+- Queue depths
+- Latency percentiles
+- Auth failures
+- TLS handshake failures
+
+## Things You Don't Do
+
+- Send credentials in plain text (always use TLS)
+- Use wildcard subscriptions for high-throughput consumers
+- Use QoS 2 unless you truly need it (it is expensive)
+- Create one topic per data point (put structure in the payload instead)
+- Forget to clean up retained messages (they pile up)
+
+## Skills You Use
+
+- `lazy-coding` (from software-development) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+
+## When to Hand Off
+
+- Device firmware → open `agent-firmware-engineer.md` (same `iot-engineer` agent)
+- Cloud-side processing → open `agent-iot-engineer.md` (same agent); data pipelines → `data-engineer`
+- Production deployment → `devops-engineer` (from software-development)
+
+
+## reference: design-modes.md
+
+# โหมดออกแบบ
+
+Design an IoT system or device fleet management (iot-architecture or device-fleet-design).
+
+Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+
+| Mode | What it does |
+|---|---|
+| `iot-architecture` | Design IoT system architecture using the iot-engineer agent. Covers connectivity, data flow, edge tier. |
+| `device-fleet-design` | Design device fleet management — provisioning, OTA, monitoring, config. Uses iot-engineer agent. |
+
+---
+
+## Mode: `iot-architecture`
+
+Use the `iot-engineer` agent for: **$ARGUMENTS**
+
+Workflow:
+1. **Discovery:** device count and connectivity, power limits, data volume and latency tolerance, regulatory and security needs
+2. **Apply `iot-systems` skill**, open `references/mqtt-protocol-patterns.md` and `references/edge-computing-architecture.md`
+3. **Choose connectivity:** protocol, QoS per message type, topic structure
+4. **Place compute:** device vs edge vs cloud per task, edge runtime, offline operation
+5. **Design data flow:** telemetry, command and control, edge-to-cloud and cloud-to-edge sync
+6. **Outline fleet management** (full design: mode `device-fleet-design`)
+7. **Design security:** device identity, mTLS, per-device ACLs, certificate lifecycle
+8. **Estimate cost and scaling**
+9. **Produce polished IoT architecture** using `polished-document-style`: system and sequence diagrams, compute placement matrix, stack with reasons
+10. **Hand-off:** firmware → `iot-engineer`, backend services → `solution-architect`, deployment → `devops-engineer`
+
+---
+
+## Mode: `device-fleet-design`
+
+Use the `iot-engineer` agent for: **$ARGUMENTS**
+
+Workflow:
+1. **Discovery:** fleet size and growth, device types, deployment pattern (consumer, B2B, industrial), expected update rate
+2. **Apply `iot-systems` skill**, open `references/device-fleet-management.md`
+3. **Design provisioning:** just-in-time, zero-touch or pre-registered, device claiming
+4. **Design OTA (over-the-air) updates:** layers, A/B partitions, staged rollout, rollback triggers
+5. **Design configuration:** desired state and reconciliation, group config, per-device rollback
+6. **Design monitoring:** health tiers, key metrics and SLOs, alert thresholds
+7. **Design diagnostics:** remote logs, live metrics, self-test, support escalation
+8. **Plan decommissioning:** wipe, certificate revocation, audit trail
+9. **Produce polished fleet design** using `polished-document-style`: lifecycle diagram, provisioning sequence, rollout phases, runbook
+10. **Hand-off:** firmware → `iot-engineer`, backend → `developer`, deployment → `devops-engineer`
+
+
+## reference: device-fleet-management.md
+
+> เดิมชื่อ device-fleet-management (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-development-iot` — รวมเข้า `iot-systems` ใน v2.0.0
+
+**สารบัญ:** 
+
+- [When to use this skill](#when-to-use-this-skill)
+- [Device Lifecycle](#device-lifecycle)
+- [Provisioning Patterns](#provisioning-patterns)
+- [Fleet Monitoring](#fleet-monitoring)
+- [OTA Strategy](#ota-strategy)
+- [Configuration Management](#configuration-management)
+- [Remote Diagnostics](#remote-diagnostics)
+- [Decommissioning](#decommissioning)
+- [Fleet Operations](#fleet-operations)
+- [Tools (2026)](#tools-2026)
+- [Things You Don't Do](#things-you-dont-do)
+- [Reference](#reference)
+
+# Device Fleet Management Patterns
+
+## When to use this skill
+
+- Designing device provisioning at scale
+- Building fleet monitoring dashboards
+- Implementing OTA update workflows
+- Device configuration management
+- Diagnostic and remote support tools
+- End-of-life device decommissioning
+
+## Device Lifecycle
+
+```
+Manufacturing → Provisioning → Activation → Operation → Maintenance → Decommission
+     │              │              │           │            │              │
+   Burn cert     First boot     User adds    Telemetry   OTA, fixes    Wipe, return
+   Burn ID       Connects        Pairs       Commands                  Or recycle
+```
+
+## Provisioning Patterns
+
+### Pattern: Just-in-Time Provisioning (JITP)
+
+```
+Manufacturing burns:
+- Unique device ID (from chip ID or secure element)
+- Per-device cert (signed by CA)
+
+First boot:
+1. Device connects to provisioning endpoint
+2. Presents cert
+3. Cloud validates → creates device record
+4. Cloud returns runtime config
+5. Device transitions to operational
+
+Benefits:
+- No pre-registration overhead
+- Scales infinitely
+- Devices ship before known to cloud
+```
+
+### Pattern: Zero-Touch Provisioning
+
+```
+Manufacturer registers batches with cloud:
+- Device IDs
+- Public keys
+- Customer assignment
+
+End user:
+- Powers on device
+- Device connects + identifies
+- Cloud auto-claims to user
+- Ready to use
+
+Use for: consumer IoT (no setup)
+```
+
+### Pattern: Activation Flow
+
+```
+1. User opens app
+2. Scans QR code on device
+3. Device connects to home WiFi (BLE-assisted)
+4. Device announces to cloud
+5. Cloud links to user account
+6. Device operational
+```
+
+## Fleet Monitoring
+
+### Health Tiers
+
+```
+🟢 Healthy:     reporting + responsive
+🟡 Degraded:    reporting but slow / errors
+🔴 Unhealthy:   not reporting OR critical errors
+⚫ Offline:    no contact within SLA
+```
+
+### Key Metrics
+
+```python
+fleet_metrics = {
+    'total_devices': count_all(),
+    'online': count_status('online'),
+    'offline_24h': count_offline_since_hours(24),
+    'errors_last_hour': count_errors_recent(),
+    'avg_battery': mean_battery_level(),
+    'firmware_distribution': histogram_by_version(),
+    'connectivity_distribution': histogram_by_rssi(),
+}
+```
+
+### Anomaly Detection
+
+```python
+# Per-device behavior baseline
+def detect_anomaly(device_id):
+    recent = get_recent_telemetry(device_id, hours=24)
+    baseline = get_baseline(device_id)
+
+    if recent.avg_temp > baseline.avg_temp + 3 * baseline.std_temp:
+        return Anomaly('temp_spike', severity='medium')
+
+    if recent.reporting_rate < baseline.reporting_rate * 0.5:
+        return Anomaly('reporting_decline', severity='high')
+```
+
+## OTA Strategy
+
+### Layered Updates
+
+```
+Layer 1: Bootloader (rarely, requires service)
+Layer 2: Firmware/OS (signed binaries)
+Layer 3: App / container (frequently)
+Layer 4: Config (very frequently)
+
+Different update cadences per layer
+```
+
+### A/B Partitioning
+
+```
+Flash layout:
+[Boot] [Slot A] [Slot B] [User data]
+
+Update flow:
+1. Currently running Slot A
+2. Download new firmware to Slot B
+3. Verify signature
+4. Set boot flag to Slot B
+5. Reboot
+6. Run self-test
+7. If pass → commit Slot B
+8. If fail → revert to Slot A
+```
+
+### Staged Rollout
+
+This is the one rollout table for the skill (1% → 10% → 50% → 100%); other files link here.
+
+```python
+import math, random
+
+# (percent of fleet, hours to watch before the next stage)
+STAGES = [(1, 24), (10, 24), (50, 12), (100, 0)]
+
+# One stage per run, scheduled as a job (see `background-jobs`) — not one process
+# sleeping for days, which a restart or deploy would kill. State lives in the database.
+async def run_rollout_stage(rollout_id: str):
+    r = await db.rollouts.get(rollout_id)        # version, fleet_filter, stage, updated_ids, status
+    if r.status != 'running':
+        return
+
+    # Health check on every device updated so far
+    if r.updated_ids:
+        success_rate = await calculate_success_rate(r.updated_ids)
+        if success_rate < 0.95:
+            await db.rollouts.update(rollout_id, status='halted')
+            await alert('OTA degradation, halting', rollout_id)
+            return
+
+    if r.stage == len(STAGES):
+        await db.rollouts.update(rollout_id, status='done')
+        return
+
+    percent, watch_hours = STAGES[r.stage]
+    eligible = await get_devices(r.fleet_filter)
+    already = set(r.updated_ids)
+    remaining = [d for d in eligible if d.id not in already]   # never pick a device twice
+    target = math.ceil(len(eligible) * percent / 100)
+    batch = random.sample(remaining, min(len(remaining), max(0, target - len(already))))
+
+    await schedule_updates(batch, r.version)
+    await db.rollouts.update(rollout_id, stage=r.stage + 1,
+                             updated_ids=list(already | {d.id for d in batch}))
+    await jobs.enqueue(run_rollout_stage, rollout_id, delay_hours=watch_hours)
+```
+
+## Configuration Management
+
+### Pattern: Desired State
+
+```
+Cloud stores DESIRED state per device
+Device reports CURRENT state
+Reconciliation: device polls/subscribes for desired
+Applies if differs, reports back when synced
+```
+
+```typescript
+interface DeviceConfig {
+  desired: {
+    telemetry_rate_hz: 1,
+    log_level: 'info',
+    features: { motion_detect: true }
+  },
+  current: {
+    telemetry_rate_hz: 1,
+    log_level: 'info',
+    features: { motion_detect: true }
+  },
+  last_synced: '2025-...'
+}
+```
+
+### Pattern: Config Versioning
+
+```
+config_v1 → config_v2 → config_v3
+              ↑              ↑
+            rolled         current
+            back to
+
+Track which version each device runs
+Allow rollback per device or fleet
+```
+
+### Group-Based Configuration
+
+```
+Device groups (by tag/property):
+- "production-eu" → config A
+- "production-us" → config B
+- "beta-testers" → config C
+
+Devices inherit config from groups
+Per-device override possible
+```
+
+## Remote Diagnostics
+
+```typescript
+// Trigger diagnostic from cloud
+{
+  "cmd": "diagnostic",
+  "request_id": "diag-abc",
+  "collect": ["logs:5min", "config:current", "metrics:cpu", "trace:1min"]
+}
+
+// Device collects + uploads (size-bounded)
+// Cloud notifies operator when complete
+```
+
+## Decommissioning
+
+```
+End of life flow:
+1. Mark device "decommissioning" in fleet
+2. Push "wipe" command
+3. Device wipes secrets, factory resets
+4. Acknowledges
+5. Cloud removes from active fleet
+6. Cert revoked (published in the Certificate Revocation List (CRL) and the Online Certificate Status Protocol (OCSP) responder)
+
+Why: prevent return-to-service after disposal
+```
+
+## Fleet Operations
+
+### Bulk Commands
+
+```python
+# Apply command to filtered fleet
+async def bulk_command(filter: dict, cmd: dict):
+    devices = await get_devices(filter)
+
+    # Rate-limit to avoid broker storm
+    semaphore = asyncio.Semaphore(100)
+
+    async def send_one(device):
+        async with semaphore:
+            await send_command(device.id, cmd)
+
+    await asyncio.gather(*[send_one(d) for d in devices])
+```
+
+### Maintenance Windows
+
+```
+Schedule fleet operations during low-impact times
+Group by timezone
+Stagger to avoid thundering herd
+```
+
+## Tools (2026)
+
+| Need | Tools |
+|------|-------|
+| Device management | Balena, Mender, Particle, AWS IoT Device Mgmt |
+| OTA | Mender, hawkBit, Balena |
+| Monitoring | Grafana, custom |
+| Provisioning | Custom, plus certificate management |
+| Config | Cloud-native or vendor tools |
+
+## Things You Don't Do
+
+- Push an OTA update to the whole fleet at once (start with a canary group)
+- Share one set of credentials across the fleet
+- Skip device authentication
+- Trust the state a device reports without checking it
+- Decommission a device without revoking its certificates
+- Design so that recovering a bricked device needs someone on site
+
+## Reference
+
+- [AWS IoT Device Management](https://aws.amazon.com/iot-device-management/)
+- [Azure IoT Hub Device Provisioning](https://learn.microsoft.com/en-us/azure/iot-dps/)
+- [Mender OTA](https://mender.io/)
+- [Balena Documentation](https://docs.balena.io/)
+- [hawkBit](https://eclipse.dev/hawkbit/)
+
+
+## reference: edge-computing-architecture.md
+
+> เดิมชื่อ edge-computing-architecture (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-development-iot` — รวมเข้า `iot-systems` ใน v2.0.0
+
+**สารบัญ:** 
+
+- [When to use this skill](#when-to-use-this-skill)
+- [Edge Tier Decision](#edge-tier-decision)
+- [When You Need Edge Tier](#when-you-need-edge-tier)
+- [Edge Runtime Selection](#edge-runtime-selection)
+- [Edge ML Patterns](#edge-ml-patterns)
+- [Data Flow Patterns](#data-flow-patterns)
+- [Offline-First Sync Patterns](#offline-first-sync-patterns)
+- [Local State Management](#local-state-management)
+- [Edge Observability](#edge-observability)
+- [Edge OTA (Over-the-Air Updates)](#edge-ota-over-the-air-updates)
+- [Edge vs Cloud Cost Math](#edge-vs-cloud-cost-math)
+- [Things You Don't Do](#things-you-dont-do)
+- [Reference](#reference)
+
+# Edge Computing Architecture
+
+## When to use this skill
+
+- Designing an IoT system with an edge gateway tier
+- Deploying ML inference at the edge
+- Offline-first applications
+- Local-first PWA or mobile apps that work with IoT
+- Industrial / OT (operational technology) edge computing
+
+## Edge Tier Decision
+
+```
+3 tiers:                What runs there:
+┌──────────────┐
+│   Cloud      │  ←  Cross-site analytics, ML training, long-term storage
+├──────────────┤
+│   Edge GW    │  ←  Site aggregation, local rules, ML inference
+├──────────────┤
+│   Devices    │  ←  Sensors, actuators, real-time control
+└──────────────┘
+```
+
+## When You Need Edge Tier
+
+| Need | Edge required? |
+|------|:--------------:|
+| Sub-100ms latency | ✓ |
+| Keep working when the cloud is down | ✓ |
+| Limited bandwidth back to the cloud | ✓ |
+| Data must stay local (privacy) | ✓ |
+| Many devices per site | Often |
+| Few cheap devices with a fast WAN link | ✗ |
+
+## Edge Runtime Selection
+
+### Heavyweight (full Linux)
+
+| Runtime | Best for |
+|---------|----------|
+| **K3s** | Lightweight Kubernetes |
+| **MicroK8s** | Ubuntu environments |
+| **Balena** | Managed fleet, OTA |
+| **AWS Greengrass** | Teams already on AWS |
+| **Azure IoT Edge** | Teams already on Azure |
+
+### Lightweight (containers, no orchestrator)
+
+| Runtime | Best for |
+|---------|----------|
+| **Docker Compose** | Single host |
+| **podman** | Rootless containers |
+| **containerd** | Minimal footprint |
+| **WasmEdge** | WebAssembly at edge |
+
+### Embedded (no containers)
+
+| Runtime | Best for |
+|---------|----------|
+| **Bare RTOS** | Tiny MCUs |
+| **Zephyr** | Modern embedded |
+| **Nerves** (nerves-project.org) | Elixir embedded |
+
+## Edge ML Patterns
+
+### Model Optimization Pipeline
+
+```
+Cloud-trained model (e.g., ResNet-50)
+    ↓
+Knowledge distillation → student model
+    ↓
+Pruning → remove weak connections
+    ↓
+Quantization → FP32 → INT8 (or INT4)
+    ↓
+Compile → ONNX / TFLite / TVM
+    ↓
+Deploy → edge inference (10-100x smaller)
+```
+
+### Inference Frameworks
+
+| Framework | Hardware |
+|-----------|----------|
+| **TFLite (Micro)** | MCUs, mobile |
+| **ONNX Runtime Mobile** | Mobile, edge |
+| **NVIDIA TensorRT** | NVIDIA Jetson |
+| **OpenVINO** | Intel CPUs/VPUs |
+| **Coral Edge TPU** | Google Coral |
+| **Apache TVM** | Cross-platform |
+
+### Hard Cascade
+
+```python
+# Easy cases: edge model
+# Hard cases: cloud model
+
+async def predict(input):
+    edge_result = await edge_model.predict(input)
+
+    if edge_result.confidence > 0.85:
+        return edge_result
+
+    # Low confidence → cloud
+    return await cloud_model.predict(input)
+```
+
+## Data Flow Patterns
+
+### Pattern: Local Aggregation
+
+```
+Devices → Edge GW (aggregate, dedupe)
+   1Hz       0.1Hz to cloud
+
+Reduces bandwidth, cost
+```
+
+### Pattern: Store-and-Forward
+
+```python
+# Edge buffers when offline
+class EdgeBuffer:
+    def __init__(self, max_size_mb=1000):
+        self.queue = persistent_queue("buffer")
+
+    async def send(self, data):
+        if cloud.reachable:
+            try:
+                await cloud.send(data)
+                return
+            except:
+                pass
+
+        # Buffer locally
+        self.queue.put(data)
+        self.evict_old_if_needed()
+
+    async def background_sync(self):
+        while True:
+            if cloud.reachable and not self.queue.empty():
+                batch = self.queue.get_batch(100)
+                try:
+                    await cloud.send_batch(batch)
+                    self.queue.commit(batch)
+                except:
+                    self.queue.rollback()
+            await asyncio.sleep(5)
+```
+
+### Pattern: Edge-Triggered Cloud
+
+```
+Normal: edge handles locally
+Trigger event: send detailed data + context to cloud
+
+Example: factory floor
+- Edge monitors all sensors continuously
+- Detects anomaly
+- Sends 60 seconds of context (before+after) to cloud
+- Cloud notifies humans, analyzes
+```
+
+## Offline-First Sync Patterns
+
+### Pattern: CRDTs (Conflict-Free Replicated Data Types)
+
+```
+Strengths:
+- Convergence without coordination
+- Works fully offline
+- Eventually consistent
+
+Use for:
+- Counters
+- Sets
+- Order-independent operations
+
+Libraries: Automerge, Yjs, RxDB
+```
+
+### Pattern: Operational Transform
+
+```
+Operations queued locally
+Sent to server when online
+Server resolves conflicts
+Pushed back to all clients
+
+Use for:
+- Collaborative editing (Google Docs-like)
+- Hierarchical data
+```
+
+### Pattern: Last-Write-Wins
+
+```
+Simplest
+Each record has timestamp + writer ID
+Higher timestamp wins
+Ties broken by writer ID
+
+Use for:
+- Non-critical config
+- Where coordination not needed
+- Where last write is right
+```
+
+## Local State Management
+
+```typescript
+// Local store mirrors cloud
+interface LocalStore {
+  entities: Map<EntityId, Entity>;
+  pendingOps: Operation[];
+  conflicts: Conflict[];
+  syncState: 'online' | 'offline' | 'syncing';
+  lastSyncAt: Timestamp;
+}
+
+// All UI reads from local
+// All writes append to pendingOps
+// Background sync handles cloud
+```
+
+## Edge Observability
+
+```
+Each edge device/gateway:
+- Logs → ship to cloud (buffered)
+- Metrics → push to a time-series database (TSDB)
+- Traces → sample + ship
+- Health → frequent heartbeat
+
+Trade-off: observability vs bandwidth
+```
+
+Tools:
+- OpenTelemetry Collector (edge)
+- Vector / Fluent Bit (log forwarders)
+- Prometheus + remote_write
+- Loki, Tempo, Mimir
+
+## Edge OTA (Over-the-Air Updates)
+
+### Layers
+```
+1. Firmware (rarely)
+2. OS / runtime (occasionally)
+3. App containers (frequently)
+4. Config (very frequently)
+```
+
+### Safe rollout
+Stages and wait times: use the one table in `device-fleet-management.md` → Staged Rollout (1% canary → 10% → 50% → 100%).
+```
+Auto-rollback if:
+- Crash rate > X%
+- Connectivity drops > Y%
+- Manual stop
+```
+
+## Edge vs Cloud Cost Math
+
+```
+Cloud-heavy:
+- Lower upfront device cost
+- Higher recurring cloud cost
+- Bandwidth costs add up
+
+Edge-heavy:
+- Higher upfront device cost
+- Lower recurring costs
+- Hardware refresh every 3-5 years
+
+Break-even depends on:
+- Device count
+- Data volume per device
+- Compute intensity
+- Bandwidth cost in region
+```
+
+## Things You Don't Do
+
+- Push a state-of-the-art LLM to the edge (it won't fit)
+- Leave offline mode out of the spec
+- Sync everything (sync only what is needed)
+- Forget time sync (NTP / chrony — events can't be ordered without it)
+- Trust in one direction only (edge must verify cloud, and cloud must verify edge)
+- Ship OTA without testing the rollback path
+
+## Reference
+
+- [Edge Computing Consortium](https://www.edgecomputing-consortium.org/)
+- [CNCF Edge Whitepaper](https://www.cncf.io/blog/cloud-native-edge-computing/)
+- [AWS Greengrass Documentation](https://docs.aws.amazon.com/greengrass/)
+- [Azure IoT Edge](https://azure.microsoft.com/en-us/products/iot-edge)
+- [Balena Documentation](https://docs.balena.io/)
+
+
+## reference: mqtt-protocol-patterns.md
+
+> เดิมชื่อ mqtt-protocol-patterns (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-development-iot` — รวมเข้า `iot-systems` ใน v2.0.0
+
+**สารบัญ:** 
+
+- [When to use this skill](#when-to-use-this-skill)
+- [MQTT Version Selection](#mqtt-version-selection)
+- [Topic Structure Patterns](#topic-structure-patterns)
+- [QoS Patterns](#qos-patterns)
+- [Connection Patterns](#connection-patterns)
+- [Will (Last Will and Testament)](#will-last-will-and-testament)
+- [Retained Messages](#retained-messages)
+- [Reconnect Logic](#reconnect-logic)
+- [Backpressure Handling](#backpressure-handling)
+- [MQTT 5 Specific Patterns](#mqtt-5-specific-patterns)
+- [Topic Filter Best Practices](#topic-filter-best-practices)
+- [Things You Don't Do](#things-you-dont-do)
+- [Reference](#reference)
+
+# MQTT Protocol Patterns
+
+## When to use this skill
+
+- Implementing an MQTT client (device or app)
+- Designing topic hierarchies
+- Choosing QoS levels
+- Implementing reconnect and persistent sessions
+- Using MQTT 5 features (properties, shared subscriptions)
+- Migrating from MQTT 3.1.1 to MQTT 5
+
+## MQTT Version Selection
+
+| | MQTT 3.1.1 | MQTT 5 |
+|--|-----------|--------|
+| Compatibility | Universal | Newer brokers only |
+| Reason codes | Limited | Detailed |
+| Properties | None | Per-packet metadata |
+| Shared subs | No | ✓ |
+| Retain handling | Basic | Advanced |
+| Use when | Legacy required | Greenfield |
+
+> 💡 **2026 default: MQTT 5**, unless legacy systems force 3.1.1
+
+## Topic Structure Patterns
+
+### Pattern: Tenant-Aware Hierarchy
+
+```
+{tenant}/{site}/{type}/{id}/{message}      ← the one scheme for this skill; role files link here
+
+Examples:
+acme/factory-1/sensor/dev-001/telemetry
+acme/factory-1/sensor/dev-001/state
+acme/factory-1/sensor/dev-001/cmd/req
+acme/factory-1/sensor/dev-001/cmd/resp
+```
+
+Benefits:
+- ACLs are simple to write
+- Wildcards behave as you'd expect
+- You can shard by tenant
+
+### Pattern: Request/Response
+
+```
+Request:  {tenant}/{site}/{type}/{id}/cmd/req
+Response: {tenant}/{site}/{type}/{id}/cmd/resp
+
+Or use MQTT 5 Response Topic property:
+Request includes "response-topic" property
+Subscriber publishes response there
+```
+
+### Pattern: Commands with ACK
+
+```
+Cloud → Device: cmd/req with cmd_id
+Device → Cloud: cmd/resp with same cmd_id + status
+
+Idempotency: device tracks recent cmd_ids
+```
+
+## QoS Patterns
+
+### QoS 0 (At Most Once)
+```python
+# Fire and forget
+client.publish(topic, payload, qos=0)
+
+# Use for:
+# - High-frequency telemetry
+# - Real-time metrics that update quickly
+# - Status pings
+```
+
+### QoS 1 (At Least Once)
+```python
+# Acknowledged delivery
+client.publish(topic, payload, qos=1)
+
+# Subscriber MUST handle duplicates
+# Use idempotency keys in payload
+
+# Use for:
+# - Commands
+# - State updates
+# - Telemetry that matters
+```
+
+### QoS 2 (Exactly Once)
+```python
+# 4-step handshake (slow!)
+client.publish(topic, payload, qos=2)
+
+# Use for:
+# - Financial transactions over MQTT
+# - Critical state changes
+# - When duplicates UNACCEPTABLE
+
+# Cost: 2-4x more network round-trips
+```
+
+## Connection Patterns
+
+### Persistent Session
+
+```python
+# paho-mqtt 2.x (tested with 2.1.0, 2026-10-22)
+import paho.mqtt.client as mqtt
+from paho.mqtt.properties import Properties
+from paho.mqtt.packettypes import PacketTypes
+
+# MQTT 3.1.1 — keep state on disconnect
+client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id="dev-abc",
+                     protocol=mqtt.MQTTv311, clean_session=False)
+
+# MQTT 5 — no clean_session (paho raises ValueError); use clean_start + Session Expiry
+client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id="dev-abc",
+                     protocol=mqtt.MQTTv5)
+props = Properties(PacketTypes.CONNECT)
+props.SessionExpiryInterval = 3600  # keep for 1h
+client.connect(broker, 8883, clean_start=False, properties=props)
+
+# Benefits:
+# - Subscriptions persist
+# - QoS 1/2 messages queued during disconnect
+# - Reconnect picks up where left off
+```
+
+### Clean Session
+
+```python
+client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2,
+                     protocol=mqtt.MQTTv311, clean_session=True)
+# MQTT 5: client.connect(broker, 8883, clean_start=True)  — no Session Expiry → session ends on disconnect
+
+# Use for:
+# - Stateless workers
+# - One-shot publishers
+# - When fresh state desired
+```
+
+## Will (Last Will and Testament)
+
+```python
+# base = f"{tenant}/{site}/{type}/{device_id}"  (see Topic Structure Patterns)
+# Set BEFORE connect
+client.will_set(
+    topic=f"{base}/state",
+    payload='{"status":"offline","reason":"unexpected"}',
+    qos=1,
+    retain=True
+)
+
+client.connect(broker)
+# ...
+
+# On graceful disconnect, manually publish online → offline
+# On abnormal disconnect, broker publishes will message
+```
+
+## Retained Messages
+
+```python
+# Publish with retain
+client.publish(
+    topic=f"{base}/config",
+    payload=config_json,
+    qos=1,
+    retain=True
+)
+
+# New subscribers immediately receive last retained value
+# Use for:
+# - Configuration
+# - Latest known state
+# - Slowly-changing reference data
+
+# Clear retain by publishing empty payload with retain=True
+client.publish(topic, payload="", retain=True)
+```
+
+## Reconnect Logic
+
+```python
+import paho.mqtt.client as mqtt
+
+# CallbackAPIVersion.VERSION2 signatures (paho-mqtt 2.x)
+def on_connect(client, userdata, flags, reason_code, properties):
+    if reason_code == 0:
+        # Resubscribe (clean session=true)
+        client.subscribe([
+            (f"{base}/cmd/req", 1),   # base: see Topic Structure Patterns
+            (f"{tenant}/broadcast/+", 1),
+        ])
+
+def on_disconnect(client, userdata, disconnect_flags, reason_code, properties):
+    print(f"Disconnected: reason={reason_code}")
+    if reason_code != 0:
+        pass  # unexpected disconnect — loop_start() reconnects with the backoff below
+
+client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id="dev-abc",
+                     protocol=mqtt.MQTTv311, clean_session=False)
+client.on_connect = on_connect
+client.on_disconnect = on_disconnect
+client.tls_set()  # port 8883 is MQTT over TLS
+
+# Auto-reconnect with backoff
+client.reconnect_delay_set(min_delay=1, max_delay=120)
+
+client.connect_async(broker, port=8883, keepalive=60)
+client.loop_start()
+```
+
+## Backpressure Handling
+
+```python
+# When publishing faster than network allows
+# Client buffers messages — but bounded!
+
+import threading
+
+# MQTT 5 flow control — Receive Maximum = how many unacknowledged QoS 1/2
+# messages the broker may send US. The broker's own value (in CONNACK) limits what we send.
+props = Properties(PacketTypes.CONNECT)
+props.ReceiveMaximum = 100
+client.connect(broker, 8883, properties=props)
+
+# Client-side bounds for outgoing messages
+client.max_inflight_messages_set(20)    # unacked QoS 1/2 messages on the wire
+client.max_queued_messages_set(1000)    # local queue; 0 = unbounded (don't)
+
+# Application-level backpressure: block when 50 messages wait for PUBACK
+# (paho has no inflight_count(); count acks yourself)
+inflight = threading.BoundedSemaphore(50)
+
+def on_publish(client, userdata, mid, reason_code, properties):
+    inflight.release()
+
+client.on_publish = on_publish
+
+def publish_with_backpressure(topic, payload, qos=1):
+    inflight.acquire()
+    info = client.publish(topic, payload, qos=qos)
+    if info.rc != mqtt.MQTT_ERR_SUCCESS:
+        inflight.release()
+        raise RuntimeError(mqtt.error_string(info.rc))
+    return info
+```
+
+## MQTT 5 Specific Patterns
+
+### Properties
+
+```python
+# User properties (key-value metadata) — a Properties object, not a dict
+pub_props = Properties(PacketTypes.PUBLISH)
+pub_props.UserProperty = [
+    ("trace-id", "abc-123"),
+    ("source-version", "1.2.3"),
+]
+client.publish(topic, payload, qos=1, properties=pub_props)
+```
+
+### Shared Subscriptions
+
+```
+$share/group-name/topic
+
+Multiple subscribers share the load
+Each message delivered to ONE subscriber in group
+
+Use for:
+- Scaling consumers
+- Load balancing
+```
+
+### Reason Codes
+
+```python
+# MQTT 5 returns detailed reason codes
+# Not just success/fail
+# E.g., 0x83 ("Implementation Specific Error")
+#       0x97 ("Quota Exceeded")
+#       0x9A ("Retain Not Supported")
+
+# Handle gracefully — paho has no on_publish_failed; the PUBACK reason code
+# arrives in on_publish (VERSION2 callbacks, MQTT 5)
+def on_publish(client, userdata, mid, reason_code, properties):
+    if reason_code.is_failure:
+        if reason_code.value == 0x97:   # Quota exceeded
+            ...                         # slow down, adjust quota
+```
+
+## Topic Filter Best Practices
+
+```
+Right: Subscribe specific:
+   acme/factory-1/sensor/+/telemetry
+
+Wrong: Subscribe too broad:
+   #
+   (gets EVERYTHING, kills consumer)
+
+Right: Use shared subs for high-volume:
+   $share/processors/acme/+/+/telemetry
+
+Wrong: Many overlapping subscriptions:
+   acme/+/+/+
+   acme/factory-1/+/+
+   acme/factory-1/sensor/+
+   (broker matches all, sends multiple times)
+```
+
+## Things You Don't Do
+
+- Subscribe to `#` (you receive EVERYTHING)
+- Use QoS 2 by default (it is slow)
+- Forget to clean up retained messages
+- Block inside the message callback (queues fill up)
+- Reconnect without backoff (devices end up DDoSing the broker)
+
+## Reference
+
+- [MQTT 5 spec](https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html)
+- [MQTT 3.1.1 spec](https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html)
+- [HiveMQ MQTT Essentials](https://www.hivemq.com/mqtt-essentials/)
+- [EMQX Documentation](https://docs.emqx.com/)
+- [Paho MQTT Clients](https://www.eclipse.org/paho/)

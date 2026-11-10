@@ -197,7 +197,7 @@ python <path ของ skill นี้>/scripts/slop_scan.py --self-test        
 
 | สัญญาณ | ใช้แทน | กฎ | ที่มา |
 |---|---|---|---|
-| fade-up และ hover-scale ทุกชิ้น | ขยับเฉพาะที่มีความหมาย 150–300 ms ease-out · เว็บที่ต้องมีชีวิตใช้ทางเข้า 4 แบบสลับกัน ไม่ซ้ำแบบเดียวทุกจุด (`dynamic-website` ใน software-company) | | UN · SK · BL |
+| fade-up และ hover-scale ทุกชิ้น | ขยับเฉพาะที่มีความหมาย 150–300 ms ease-out · เว็บที่ต้องมีชีวิตใช้ทางเข้า 4 แบบสลับกัน ไม่ซ้ำแบบเดียวทุกจุด (`dynamic-website` ใน software-development) | | UN · SK · BL |
 | จุดสถานะกระพริบไม่หยุด | นิ่ง · ขยับเมื่อสถานะเปลี่ยน | `pulsing-dot` | IM (1 แหล่ง) |
 | เคอร์เซอร์กระพริบในข้อความนิ่ง | เก็บไว้ในช่องที่พิมพ์ได้ | `blinking-cursor` | IM (1 แหล่ง) |
 | ตัวอักษร/โลโก้เลื่อนเอง | นิ่ง หรือมีปุ่มหยุด | `marquee` | IM (1 แหล่ง) |
@@ -307,4 +307,4 @@ python <path ของ skill นี้>/scripts/slop_scan.py --self-test        
 | BU | bushe.co/answers/how-to-detect-ai-generated-logos |
 | PN | postnitro.ai blog |
 | 1S | 1stopasia.com/blog/english-to-thai-ai-translation |
-| GD | skill `graphic-design` ของ `software-company` ข้อ 7 (กฎเดิมของชุดนี้) |
+| GD | skill `graphic-design` ของ `software-development` ข้อ 7 (กฎเดิมของชุดนี้) |

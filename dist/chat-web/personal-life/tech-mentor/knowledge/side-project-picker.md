@@ -71,7 +71,7 @@ Goal: learn Go and REST API design. 16 hours. Knows Python.
 - A project that misses its 2 weekends gets 1 more weekend with stricter cuts. Then ship it as it is, or drop it with a note
 - Prefer projects that run on free tiers. Add a budget alert to any cloud account
 
-Related: `learning-path` (where the goal comes from), `cert-prep` (a project after the exam), `tech-radar` (new tools worth trying), and `project-bootstrap` and `lazy-coding` in `software-company`.
+Related: `learning-path` (where the goal comes from), `cert-prep` (a project after the exam), `tech-radar` (new tools worth trying), and `project-bootstrap` and `lazy-coding` in `software-development`.
 
 
 ## reference: idea-bank.md

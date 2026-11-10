@@ -548,7 +548,7 @@ node decide.mjs payoff payoff.json                    # decision-scoring: ค่
 | ใบเสนอราคา ใบแจ้งหนี้ ใบเสร็จ | `doc-quotation` |
 | ตั้งราคาขายบน Shopee Lazada TikTok Shop หลังรู้ต้นทุน | `marketplace-fees-pricing` |
 | เทียบขนส่งในประเทศ | `shipping-compare` |
-| ตั้งชื่อธุรกิจก่อนจองชื่อ | `product-naming` (plugin `software-company`) |
+| ตั้งชื่อธุรกิจก่อนจองชื่อ | `product-naming` (plugin `software-development`) |
 | ถ้อยคำทุกบรรทัด | `human-writing` |
 
 ที่มาของแนวคิด: ลำดับคำถามเลือกรูปแบบธุรกิจได้แนวคิดจาก https://github.com/Boom-Vitt/claude-thai-business-skills (MIT License · Copyright (c) 2026 Vittawat (boombignose) · ตรวจไฟล์ LICENSE 2026-10-23) · เขียนใหม่ทั้งหมด ไม่คัดลอกข้อความ และตรวจตัวเลขทุกตัวกับแหล่งทางการใหม่

@@ -17,7 +17,7 @@ skill นี้ใช้ตอนคุณเป็นคนสอน ส่ว�
 |---|---|
 | จะสอน workshop · อบรมในบริษัท · คอร์สออนไลน์ · ติวเพื่อนร่วมทีม | skill นี้ |
 | อยากเรียนเองให้ใช้เป็น | `learning-path` |
-| เนื้อหาพร้อมแล้ว ต้องการแค่สไลด์ | `presentation-design` (software-company) |
+| เนื้อหาพร้อมแล้ว ต้องการแค่สไลด์ | `presentation-design` (software-development) |
 | เตรียมสอบใบรับรอง | `cert-prep` |
 | สอนให้คนทั่วไปใช้ AI แบบหลายขั้นในแชต (Loop · Graph · Dynamic) | skill นี้วางหลักสูตร แล้วใช้แม่แบบ prompt จาก `superuser:chat-prompt-workflows` เป็นแบบฝึก |
 | สอนวิชาในสถาบันการศึกษาที่มีแบบฟอร์มรายวิชาของตัวเอง | กรอกแบบฟอร์มของสถาบันเป็นหลัก แล้วใช้หัวข้อ 2 ถึง 5 ของ skill นี้เติมเนื้อ |
@@ -151,9 +151,9 @@ rubric คือชุดเกณฑ์ของงาน ที่บรรย
 | ต้องการ | ใช้ |
 |---|---|
 | ฝั่งผู้เรียน: วางเส้นทางเรียนเอง | `learning-path` |
-| สไลด์ที่คนจะนำเสนอ (เรื่องเล่า หัวสไลด์ ฟอนต์ไทย) | `presentation-design` (software-company) |
-| สไลด์ HTML ไฟล์เดียว เปิดได้ไม่ต้องต่อเน็ต มีโน้ตผู้พูด | `html-slide-deck` (software-company) |
-| เอกสารแจกเป็น Word จาก Markdown | `markdown-report-docx` (software-company) |
+| สไลด์ที่คนจะนำเสนอ (เรื่องเล่า หัวสไลด์ ฟอนต์ไทย) | `presentation-design` (software-development) |
+| สไลด์ HTML ไฟล์เดียว เปิดได้ไม่ต้องต่อเน็ต มีโน้ตผู้พูด | `html-slide-deck` (software-development) |
+| เอกสารแจกเป็น Word จาก Markdown | `markdown-report-docx` (software-development) |
 | ภาษาไทยในเอกสารแจก สไลด์ และแบบประเมิน | `human-writing` · ตัดคำไทยในไฟล์ส่งออก `references/thai-line-breaking.md` |
 | ผู้เรียนอยากสอบใบรับรองต่อ | `cert-prep` |
 | เก็บชื่อหรืออีเมลผู้เรียน · อัดวิดีโอการสอน | `pdpa-workflow` (e-commerce) |

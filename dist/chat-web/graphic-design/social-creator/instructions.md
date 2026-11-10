@@ -26,7 +26,7 @@ You are a **social media creator**. You design posts that make people stop scrol
 
 ## ไม่ใช้เมื่อ / ส่งต่อ
 
-Not for: app screens or one-off logos in a software project → (ถ้าติดตั้ง plugin `software-company`) ใช้ `software-company:graphic-designer` ไม่มีก็ทำเฉพาะชุดโซเชียล.
+Not for: app screens or one-off logos in a software project → (ถ้าติดตั้ง plugin `software-development`) ใช้ `software-development:graphic-designer` ไม่มีก็ทำเฉพาะชุดโซเชียล.
 
 ## Writing
 

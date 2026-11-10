@@ -91,6 +91,6 @@
 5. แสดงตารางคะแนนในรายงานหรือภาคผนวก: ชิ้น · คะแนนแต่ละเกณฑ์ · รวม · เลือกหรือไม่ เพื่อให้คนอ่านเห็นว่าทำไมเลือกชิ้นนี้
 
 ใช้คู่กับกฎ "≥ 3 แหล่งยืนยันตรงกัน" ของ `superuser` โดย Reranker เลือกแหล่ง ส่วนกฎ 3 แหล่งตัดสินว่าเชื่อได้ไหม
-ถ้าเป็นระบบที่ผู้ใช้สร้าง (Retrieval-Augmented Generation (RAG) ในแอปจริง) ให้ใช้ reranker แบบโมเดลจริงตาม `llm-engineering` ของ software-company เพราะไฟล์นี้พูดถึงวิธีทำงานของทีม agent เท่านั้น
+ถ้าเป็นระบบที่ผู้ใช้สร้าง (Retrieval-Augmented Generation (RAG) ในแอปจริง) ให้ใช้ reranker แบบโมเดลจริงตาม `llm-engineering` ของ software-development เพราะไฟล์นี้พูดถึงวิธีทำงานของทีม agent เท่านั้น
 
 ที่มา: ReAct (Yao et al., 2022) · Reflexion (Shinn et al., 2023) · Plan-and-Solve (Wang et al., 2023) · Mixture-of-Agents (Wang et al., 2024) · multi-agent frameworks (AutoGen · MetaGPT) · cross-encoder reranking · [Huang et al. 2023 · LLMs cannot self-correct reasoning yet](https://arxiv.org/abs/2310.01798) · [LLMCompiler](https://arxiv.org/abs/2312.04511) · [ADaPT](https://arxiv.org/abs/2311.05772) · [Anthropic: multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) · แม่แบบ Loop · Graph · Dynamic ของคอร์ส AI Workflow (CWN2026) ของเจ้าของ repo · เปิดอ่าน 2026-10-26

@@ -12,8 +12,8 @@
 |---|---|
 | ร้านเล็ก ต้องการชุดแบรนด์อ่านจบใน 5 นาที (โลโก้ 4 แบบ สีตามบทบาท ฟอนต์ไทย) | `SKILL.md` ส่วน Workflow |
 | องค์กรหรือทีมที่ต้องมีคู่มือเต็ม: น้ำเสียง ข้อความหลัก กติกาอนุมัติงาน การเก็บไฟล์ | ไฟล์นี้ |
-| อ่านโค้ดที่มีอยู่แล้วสรุปเป็น token | `ui-craft` → `design_tokens.py` (plugin `software-company`) |
-| เขียน token สามชั้นและสร้าง CSS | `design-system` (plugin `software-company`) |
+| อ่านโค้ดที่มีอยู่แล้วสรุปเป็น token | `ui-craft` → `design_tokens.py` (plugin `software-development`) |
+| เขียน token สามชั้นและสร้าง CSS | `design-system` (plugin `software-development`) |
 | ตรวจคอนทราสต์ของคู่สี | ตารางตัวอย่างใน `SKILL.md` |
 
 ## ขั้นตอน

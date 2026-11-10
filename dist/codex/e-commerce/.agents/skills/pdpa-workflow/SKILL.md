@@ -6,7 +6,7 @@ argument-hint: <consent|breach|request|vendor> [details]
 
 # Personal Data Protection Act (PDPA) Workflow for Thai SMEs
 
-พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 turned into paperwork a small company can actually run. This is general information, not legal advice. Disputes, regulator letters and cross-border transfers go to a lawyer (ทนายความ) or a data protection officer (DPO, เจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล). Works on its own; if installed, `pdpa-compliance` (software-company) covers designing systems that hold personal data.
+พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 turned into paperwork a small company can actually run. This is general information, not legal advice. Disputes, regulator letters and cross-border transfers go to a lawyer (ทนายความ) or a data protection officer (DPO, เจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล). Works on its own; if installed, `pdpa-compliance` (software-development) covers designing systems that hold personal data.
 
 ## 1. Deadlines that matter
 
@@ -80,7 +80,7 @@ Health data is sensitive, so the risk is high. Contain: delete the message, ask 
 
 ## Related
 
-`line-chatbot` (chat logs) · `doc-leave` (health certificates) · `payroll-th` · `doc-contract-th` (data clauses) · if installed: `pdpa-compliance`, `audit-trail` (software-company).
+`line-chatbot` (chat logs) · `doc-leave` (health certificates) · `payroll-th` · `doc-contract-th` (data clauses) · if installed: `pdpa-compliance`, `audit-trail` (software-development).
 
 ## เรียกเป็นคำสั่ง
 

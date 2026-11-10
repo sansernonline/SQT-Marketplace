@@ -14,8 +14,8 @@ description: Use when about to build or buy something that may already exist (to
 
 | งาน | ใช้ตัวนี้แทน |
 |---|---|
-| แกะแอปต้นแบบเพื่อทำแบบเดียวกัน | `reference-app-research` (plugin `software-company`) |
-| เลือกรูปแบบสถาปัตยกรรม ไม่ใช่เลือกเครื่องมือ | `architecture-patterns` (plugin `software-company`) |
+| แกะแอปต้นแบบเพื่อทำแบบเดียวกัน | `reference-app-research` (plugin `software-development`) |
+| เลือกรูปแบบสถาปัตยกรรม ไม่ใช่เลือกเครื่องมือ | `architecture-patterns` (plugin `software-development`) |
 | ตัดสินใจแล้ว เหลือแค่บันทึกเหตุผล | [`decision-log`](../decision-log/SKILL.md) |
 | ค้นคว้าเรื่องทั่วไป (เทคโนโลยี · ตลาด) ที่ไม่ได้จบที่การเลือกของมาใช้ | [`research-with-sources`](../research-with-sources/SKILL.md) |
 
@@ -102,7 +102,7 @@ description: Use when about to build or buy something that may already exist (to
 ## 7 · บันทึกสิ่งที่ยอมแลก
 
 ทุกทางเลือกต้องแลกบางอย่างไป **ถ้าไม่บันทึกวันนี้ อีก 6 เดือนจะไม่มีใครจำได้**
-ให้บันทึกด้วย [`decision-log`](../decision-log/SKILL.md) อย่างน้อย 3 บรรทัด (งานโค้ดที่เป็นสถาปัตยกรรม: `adr-writer` (plugin `software-company`))
+ให้บันทึกด้วย [`decision-log`](../decision-log/SKILL.md) อย่างน้อย 3 บรรทัด (งานโค้ดที่เป็นสถาปัตยกรรม: `adr-writer` (plugin `software-development`))
 
 ```
 เลือก: <ตัวเลือก>  เพราะ <เหตุผลหลักข้อเดียว>
@@ -135,13 +135,13 @@ description: Use when about to build or buy something that may already exist (to
 | ต้องการ | ใช้คู่กับ |
 |---|---|
 | บันทึกการตัดสินใจ | [`decision-log`](../decision-log/SKILL.md) |
-| งานโค้ด: แกะแอปต้นแบบ · เทียบสถาปัตยกรรม | `reference-app-research` · `architecture-patterns` (plugin `software-company`) |
+| งานโค้ด: แกะแอปต้นแบบ · เทียบสถาปัตยกรรม | `reference-app-research` · `architecture-patterns` (plugin `software-development`) |
 | รูปทรงของตารางเทียบในคำตอบ | [`answer-shape`](../answer-shape/SKILL.md) |
 | ไฟล์ที่ดาวน์โหลดหรือแปลงระหว่างสำรวจ | [`temp-file-discipline`](../temp-file-discipline/SKILL.md) |
 
 ---
 
-## งานโค้ด · ต่างจาก `reference-app-research` (plugin `software-company`) อย่างไร
+## งานโค้ด · ต่างจาก `reference-app-research` (plugin `software-development`) อย่างไร
 
 | | `reference-app-research` | skill นี้ |
 |---|---|---|

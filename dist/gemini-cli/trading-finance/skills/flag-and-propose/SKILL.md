@@ -29,7 +29,7 @@ description: Use when something found mid-task in any work changes what happens 
 | เขียนเป็นเอกสารให้คนอื่นอ่าน | `polished-document-style` | แทน |
 | งานพังจริงและต้องแก้ทันที | `targeted-fix` — แก้ก่อน แล้วค่อยรายงาน | แทน |
 | กางตัวย่อและศัพท์เฉพาะในคำตอบ | `spell-out-abbreviations` | คู่ |
-| สิ่งที่เจอคือเหตุขัดข้องของระบบจริง | `incident-runbook-template` · `postmortem-template` (plugin `software-company`) | คู่ |
+| สิ่งที่เจอคือเหตุขัดข้องของระบบจริง | `incident-runbook-template` · `postmortem-template` (plugin `software-development`) | คู่ |
 
 ---
 

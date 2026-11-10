@@ -2,7 +2,7 @@
 
 ย้ายมาจาก `SKILL.md` หัวข้อ 3 · เปิดเมื่อไม่แน่ใจว่าจะเรียก skill ไหน หรืองานข้ามไป plugin อื่น
 
-skill เอกสารหลัก (`polished-document-style` · `document-naming` · `spell-out-abbreviations` · `polite-message-th-en`) อยู่ในแกนนี้ · เอกสารออกแบบ สไลด์ รูปประกอบ ชื่อสินค้า (`branded-document-design` · `markdown-report-docx` · `presentation-design` · `html-slide-deck` · `diagram-figures` · `markdown-visuals` · `product-naming`) อยู่ใน plugin `software-company` · ภาพ AI (`image-generation`) ใน `graphic-design` · ประชุม (`meeting`) ใน `personal-life` — ไม่ได้ติดตั้ง plugin นั้น ให้บอกผู้ใช้ว่ามี แล้วทำต่อด้วยความรู้ทั่วไป
+skill เอกสารหลัก (`polished-document-style` · `document-naming` · `spell-out-abbreviations` · `polite-message-th-en`) อยู่ในแกนนี้ · เอกสารออกแบบ สไลด์ รูปประกอบ ชื่อสินค้า (`branded-document-design` · `markdown-report-docx` · `presentation-design` · `html-slide-deck` · `diagram-figures` · `markdown-visuals` · `product-naming`) อยู่ใน plugin `software-development` · ภาพ AI (`image-generation`) ใน `graphic-design` · ประชุม (`meeting`) ใน `personal-life` — ไม่ได้ติดตั้ง plugin นั้น ให้บอกผู้ใช้ว่ามี แล้วทำต่อด้วยความรู้ทั่วไป
 
 | สถานการณ์ | เรียก |
 |---|---|
@@ -31,12 +31,12 @@ skill เอกสารหลัก (`polished-document-style` · `document-nam
 | ต้องอ่านของเยอะ (ไฟล์หลายสิบ · PDF ยาว · เว็บหลายหน้า) | `context-budget` |
 | จบงานที่มีชิ้นงาน / รายงานสถานะ | `status-report` |
 | ผู้ใช้แก้เรื่องเดิมซ้ำ / อยากให้ทำแบบที่เขาชอบ / สั่งรวมบทเรียน | `repeated-mistakes-to-checks` / `owner-style-capture` / `session-lessons-to-skills` |
-| เอกสารที่คนเก็บไว้ใช้ (Markdown · Word · PDF) | `polished-document-style` · ตั้งชื่อไฟล์ → `document-naming` · คำย่อเยอะ → `spell-out-abbreviations` · ต้องดูออกแบบมา → `branded-document-design` · Markdown เป็น Word → `markdown-report-docx` (2 ตัวหลังอยู่ใน plugin `software-company`) |
+| เอกสารที่คนเก็บไว้ใช้ (Markdown · Word · PDF) | `polished-document-style` · ตั้งชื่อไฟล์ → `document-naming` · คำย่อเยอะ → `spell-out-abbreviations` · ต้องดูออกแบบมา → `branded-document-design` · Markdown เป็น Word → `markdown-report-docx` (2 ตัวหลังอยู่ใน plugin `software-development`) |
 | เขียนไฟล์ชั่วคราว (ไฟล์ดึงข้อมูล · ตัวอย่าง · สคริปต์ใช้ครั้งเดียว) | `temp-file-discipline` |
 | เริ่มงานในโฟลเดอร์ใหม่ · ผู้ใช้ต้องพิมพ์อนุญาต push · PR · merge ทุกครั้ง หรืออยากให้ agent merge และลบ branch เอง · `~/.claude/CLAUDE.md` ไม่มีหรือเป็นรุ่นเก่า | `workspace-setup` (agent ตรวจและแก้ `.gitignore` เอง · สิทธิ์ agent เพิ่มเองได้เมื่อผู้ใช้สั่งชัดในแชต ไม่งั้นให้ผู้ใช้กดรันบรรทัดเดียว · โปรเจกต์ที่ยังไม่มีนโยบาย git ถามครั้งเดียวว่าให้ทำเองแค่ไหน · กฎประจำตัวให้ผู้ใช้รันเอง) |
-| รูปในเอกสาร (ขั้นตอน · ระบบ · ผัง) / รูปในไฟล์ Markdown | `diagram-figures` / `markdown-visuals` (plugin `software-company`) |
-| สไลด์ / ภาพจริงในหน้าเว็บ สไลด์ หรือเอกสาร / ตั้งชื่อสินค้าหรือแบรนด์ | `presentation-design` (plugin `software-company`) / `image-generation` (plugin `graphic-design`) / `product-naming` (plugin `software-company`) |
-| เด็คเป็นไฟล์ .html เดียว นำเสนอจากเบราว์เซอร์ / มี .pptx แล้วอยากได้ .html มี animation | `html-slide-deck` — มี .pptx แล้วใช้ทางเข้าจาก .pptx ในตัว (plugin `software-company`) |
+| รูปในเอกสาร (ขั้นตอน · ระบบ · ผัง) / รูปในไฟล์ Markdown | `diagram-figures` / `markdown-visuals` (plugin `software-development`) |
+| สไลด์ / ภาพจริงในหน้าเว็บ สไลด์ หรือเอกสาร / ตั้งชื่อสินค้าหรือแบรนด์ | `presentation-design` (plugin `software-development`) / `image-generation` (plugin `graphic-design`) / `product-naming` (plugin `software-development`) |
+| เด็คเป็นไฟล์ .html เดียว นำเสนอจากเบราว์เซอร์ / มี .pptx แล้วอยากได้ .html มี animation | `html-slide-deck` — มี .pptx แล้วใช้ทางเข้าจาก .pptx ในตัว (plugin `software-development`) |
 | เขียนสคริปต์ให้คนพูดหน้ากล้อง (คลิป influencer · รีวิว · พิธีกร · voiceover) | `speaking-script` (plugin `graphic-design`) — ภาพนำหรือคลิปตัดต่อที่ไม่มีคนพูด → `video-script-to-clip` |
 | เสียงบรรยายจากสคริปต์โดยไม่อัดเอง · ตัดต่อด้วยคำสั่ง · ซับไทยเป็นไฟล์ | `narration-th` (เสียงบรรยายจากสคริปต์) · `video-editing` (ตัดต่อ) · `subtitles-th` (plugin `graphic-design`) |
 | รูปสินค้าลง marketplace · ส่งไฟล์โรงพิมพ์หรือร้านป้าย · ปกคลิป YouTube | `marketplace-product-images` · `print-ready-files` · `youtube-thumbnail` (plugin `graphic-design`) |

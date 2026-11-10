@@ -1,0 +1,51 @@
+---
+name: iot-systems
+description: Use when building connected devices (provisioning, OTA updates, edge vs cloud, MQTT, firmware).
+argument-hint: <iot-architecture | device-fleet-design> <details>
+---
+
+# iot-systems
+
+ระบบอุปกรณ์ที่ต่ออินเทอร์เน็ต: จัดการอุปกรณ์จำนวนมาก · ประมวลผลที่ edge (เครื่องใกล้อุปกรณ์) · MQTT · firmware
+
+**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทั้งหมด เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้นอยู่แล้ว
+
+## หัวข้อ
+
+| ใช้เมื่อ | อ่าน |
+|---|---|
+| managing fleets of IoT devices — provisioning, monitoring, configuration, OTA updates, decommissioning. Patterns for hundreds to millions of devices | [`references/device-fleet-management.md`](references/device-fleet-management.md) |
+| designing edge computing systems — deciding device/edge/cloud placement, edge runtime selection, edge ML inference, offline-first design, sync patterns | [`references/edge-computing-architecture.md`](references/edge-computing-architecture.md) |
+| implementing MQTT clients/brokers, designing topic structures, choosing QoS levels, implementing retained messages, will/testament, or MQTT 5 features. Concrete patterns for production systems | [`references/mqtt-protocol-patterns.md`](references/mqtt-protocol-patterns.md) |
+
+## คู่มือบทบาท
+
+agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน · อ่านสารบัญก่อน แล้วอ่านเฉพาะหัวข้อที่งานใช้
+
+| บทบาท | อ่าน | agent |
+|---|---|---|
+| building IoT systems — connected device platforms, telemetry pipelines, device-to-cloud communication, or scaling to many devices. Covers connectivity, data ingestion, command-and-control | [`references/agent-iot-engineer.md`](references/agent-iot-engineer.md) | `iot-engineer` |
+| designing edge computing architectures — what to compute on device vs gateway vs cloud, edge ML inference, local-first data flows, edge-cloud sync patterns | [`references/agent-edge-architect.md`](references/agent-edge-architect.md) | `iot-engineer` |
+| developing embedded firmware — bare metal, RTOS (FreeRTOS, Zephyr), microcontroller programming (ARM Cortex, ESP32, RISC-V), low-power design, or peripheral integration | [`references/agent-firmware-engineer.md`](references/agent-firmware-engineer.md) | `iot-engineer` |
+| designing MQTT topology, configuring brokers (EMQX, HiveMQ, Mosquitto, AWS IoT Core), designing topic structures, implementing pub/sub patterns, or scaling MQTT to millions of devices | [`references/agent-mqtt-specialist.md`](references/agent-mqtt-specialist.md) | `iot-engineer` |
+
+## agent ของสายนี้
+
+`iot-engineer`
+
+## ที่มา
+
+รวมจาก plugin `software-development-iot` (เดิมชื่อ device-fleet-management → `references/device-fleet-management.md` · edge-computing-architecture → `references/edge-computing-architecture.md` · mqtt-protocol-patterns → `references/mqtt-protocol-patterns.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-development` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+
+## โหมดออกแบบ (เรียกเป็นคำสั่ง)
+
+`/software-development:iot-systems <iot-architecture | device-fleet-design> <details>`
+
+Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
+
+| Mode | What it does |
+|---|---|
+| `iot-architecture` | Design IoT system architecture using the iot-engineer agent. Covers connectivity, data flow, edge tier. |
+| `device-fleet-design` | Design device fleet management — provisioning, OTA, monitoring, config. Uses iot-engineer agent. |
+
+ขั้นตอนเต็มของแต่ละโหมด → [references/design-modes.md](references/design-modes.md)
