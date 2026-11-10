@@ -13,6 +13,9 @@
 import { plan as planSuperuser, rulesCopyAction, rulesHeader } from '../sync/sync-superuser.mjs';
 import { plan as planPromptRules, PROMPT_DIR } from '../sync/sync-prompt-rules.mjs';
 import { installedOlder, regressionNeverSeen, undatedClaims, promptTestLine, bigSkills, decisionRows, loneCR, expiredFacts, localToday, badPluginRefs, changelogOrder, iconLines, yamlEscapeTraps } from './lesson-checks.mjs';
+import { skillTestDocs, internalTerms, internalTermScope, loadTerms, invisibleChars } from './content-checks.mjs';
+import { checkManifests } from './validate-manifests.mjs';
+import { plan as planIncludes, expand as expandIncludes } from '../sync/sync-includes.mjs';
 import { execFileSync } from 'node:child_process';
 import { readFileSync, readdirSync, existsSync, statSync, mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir, homedir } from 'node:os';
@@ -685,8 +688,41 @@ function selfTest() {
     && controlChars('a.json', '{"pattern":"\\\\bflood\\\\b","t":"a\\tb\\nc"}').length === 0 && controlChars('a.mjs', 'a\tb\r\n').length === 0;
   console.log(`  ${cc ? '✅' : '❌'} อักขระควบคุมใน .json (หลัง parse) และ .mjs โดนจับ 5 จาก 5 · \\\\b tab ขึ้นบรรทัด และ CRLF ไม่โดน`);
   if (cc) ok++;
+  // ตัวตรวจใหม่ — ที่มา: superpowers (agent อ่านไฟล์ทดสอบเป็นคำสั่ง) · vsql (คำภายในหลุดเข้า deliverable) · ui5 (ตัวอักษรที่ลินเตอร์มองไม่เห็น) · vercel (ต้นฉบับเดียว) · postman (manifest ทุกเครื่องมือ)
+  const tc = { terms: [{ pattern: '\\bPhase \\d+\\b', why: 'x' }], codeExts: ['.mjs'], readmes: [], allow: [] };
+  const nt = skillTestDocs(['plugins/a/skills/x/CREATION-LOG.md', 'plugins/a/skills/x/SKILL.md', 'plugins/a/evals/x/test-1.md']).length === 1;
+  console.log(`  ${nt ? '✅' : '❌'} CREATION-LOG.md / test-*.md ใต้ skills/ โดนจับ · SKILL.md และไฟล์ใน evals/ ไม่โดน`);
+  if (nt) ok++;
+  const it = internalTerms('// Phase 3: ตรวจ\nconst phase = 1;', tc).length === 1 && internalTerms('ปกติ', tc).length === 0 && internalTermScope('a.mjs', tc) && !internalTermScope('a.md', tc);
+  console.log(`  ${it ? '✅' : '❌'} คำภายใน (Phase N) ในโค้ดโดนจับ · ชื่อตัวแปรคล้ายกันและไฟล์นอกขอบเขตไม่โดน`);
+  if (it) ok++;
+  const RLO = String.fromCharCode(0x202E), ZWSP = String.fromCharCode(0x200B);
+  const ic2 = invisibleChars(`a${RLO}b\nz${ZWSP}w`).map((x) => x.level).join() === 'error,warn' && invisibleChars(`\`\`\`\na${RLO}b\n\`\`\`\n\`x${ZWSP}y\` ปกติ`).length === 0;
+  console.log(`  ${ic2 ? '✅' : '❌'} อักขระล่องหนนอกโค้ดโดนจับ (bidi = error · zero-width = warning) · ในบล็อกโค้ดและ inline code ไม่โดน`);
+  if (ic2) ok++;
+  const mf = (() => {
+    const tmp = mkdtempSync(join(tmpdir(), 'val-manifest-'));
+    try {
+      const put = (p, o) => { mkdirSync(dirname(join(tmp, p)), { recursive: true }); writeFileSync(join(tmp, p), JSON.stringify(o)); };
+      put('.claude-plugin/marketplace.json', { name: 'm', owner: { name: 'o' }, plugins: [{ name: 'a', source: './plugins/a', description: 'd' }] });
+      put('plugins/a/.claude-plugin/plugin.json', { name: 'a', version: '1.0.0', description: 'd' });
+      const okRun = checkManifests(tmp, { dist: false });
+      put('plugins/a/.claude-plugin/plugin.json', { name: 'a', version: 'x', description: 'd' });
+      return okRun.problems.length === 0 && okRun.inspected === 2 && checkManifests(tmp, { dist: false }).problems.length === 1;
+    } finally { rmSync(tmp, { recursive: true, force: true }); }
+  })();
+  console.log(`  ${mf ? '✅' : '❌'} manifest ถูกต้องผ่านและนับว่าเปิดอ่านจริง · version ผิดรูปโดนจับ`);
+  if (mf) ok++;
+  const inc = (() => {
+    const src = '# T\n## A\nใหม่\n';
+    const r = expandIncludes('<!-- include: s.md#A -->\nเก่า\n<!-- /include -->\n', () => src);
+    const bad = expandIncludes('<!-- include: s.md#Z -->\nเก่า\n<!-- /include -->\n', () => src);
+    return r.text.includes('ใหม่') && !r.text.includes('เก่า') && r.problems.length === 0 && bad.problems.length === 1;
+  })();
+  console.log(`  ${inc ? '✅' : '❌'} marker include ดึงเนื้อหัวข้อจากต้นฉบับมาแทนที่ · หัวข้อที่ไม่มีโดนจับ`);
+  if (inc) ok++;
   errors.length = 0; warns.length = 0;
-  const total = cases.length + 25;
+  const total = cases.length + 30;
   console.log(`\nself-test ${ok}/${total} ผ่าน`);
   process.exit(ok === total ? 0 : 1);
 }
@@ -837,6 +873,18 @@ if (existsSync(expiryFile)) {
   for (const m of ew) warn('scripts/check/expiry.json', m);
   for (const m of ee) err('scripts/check/expiry.json', m);
 }
+// manifest ของทุกเครื่องมือ (ต้นฉบับ · dist ตรวจแยกด้วย validate-manifests.mjs เพราะ dist เก่าเป็นเรื่องของ build-targets --check)
+for (const m of checkManifests(ROOT, { dist: false }).problems) err('manifest', m);
+// ไฟล์ทดสอบ/สถานการณ์ทดสอบใต้ skills/ · อักขระล่องหนใน markdown · marker include ที่เนื้อไม่ตรง skill ต้นฉบับ
+for (const m of skillTestDocs(docFiles.map(([rel]) => rel))) err('skills/', m);
+for (const [rel, text] of docFiles) for (const { at, level, msg } of invisibleChars(text)) (level === 'error' ? err : warn)(`${rel}:${at}`, msg);
+for (const m of planIncludes(ROOT).problems) err('marker include', `${m} — รัน node scripts/sync/sync-includes.mjs`);
+// คำภายในของ skill ในโค้ด เทสต์ และ README ราก (รายการอยู่ใน internal-terms.json)
+const termCfg = loadTerms();
+for (const d of ['plugins', 'scripts', 'tools'].filter((x) => existsSync(join(ROOT, x))))
+  for (const f of walkFiles(join(ROOT, d), termCfg.codeExts)) if (internalTermScope(relOf(f), termCfg))
+    for (const { at, msg } of internalTerms(readFileSync(f, 'utf8'), termCfg)) err(`${relOf(f)}:${at}`, msg);
+if (existsSync(readme)) for (const { at, msg } of internalTerms(readFileSync(readme, 'utf8'), termCfg)) err(`README.md:${at}`, msg);
 for (const [rel, text] of docFiles) if (rel.startsWith('prompt/') && /^prompt-.+\.md$/.test(basename(rel))) for (const m of promptTestLine(text)) err(rel, m);
 
 // ---------------------------------------------------------------- report

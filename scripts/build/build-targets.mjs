@@ -115,7 +115,7 @@ const loaded = listDir(join(ROOT, "plugins")).map((plugin) => {
 // ของกลางที่ plugin อื่นใช้ร่วม · ชุดสำหรับปลายทางอื่นต้องใช้เดี่ยวได้ จึงใส่ให้ทุก plugin ที่ประกาศ dependencies
 // รายการต้องตรงกับ SHARED_ONLY_IN_SUPERUSER ใน scripts/sync/sync-superuser.mjs
 const SHARED_SKILLS = ["adversarial-review-panel", "agent-patterns", "answer-shape", "chat-prompt-workflows", "commit-log", "context-budget", "decision-log", "decision-scoring", "design-references", "document-naming", "flag-and-propose", "handoff", "human-writing", "model-scorecard", "no-ai-look", "owner-style-capture", "parallel-attempts-pick-best", "parallel-split-and-merge", "polished-document-style", "polite-message-th-en", "principle-build-a-tool-not-handwork", "principle-fix-root-cause", "principle-proceed-on-reversible-work", "principle-prove-it-works", "principle-small-verifiable-steps", "principle-user-experience-first", "prior-art-review", "repeated-mistakes-to-checks", "research-with-sources", "session-lessons-to-skills", "simplify", "skill-authoring", "spell-out-abbreviations", "status-report", "targeted-fix", "temp-file-discipline", "translate-th-en"];
-const SHARED_AGENTS = ["brainstormer", "reviewer", "learning-reviewer"];
+const SHARED_AGENTS = ["brainstormer", "reviewer", "learning-reviewer", "worker"];
 const core = loaded.find((p) => p.plugin === "superuser");
 // SKILL.md ของ superuser สาขามีเฉพาะส่วนสาขา (Claude Code เปิดแกนจาก plugin superuser เอง) · ปลายทางอื่นไม่มี dependencies จึงรวมแกน + สาขาเป็นไฟล์เดียว
 const POINTER_LINE = /^> \*\*เปิด `superuser:superuser` ก่อน\*\*[^\n]*\n\n?/m;
@@ -469,6 +469,8 @@ if (CHECK) {
   const diff = distDiff(DIST, join(ROOT, "dist"));
   rmSync(DIST, { recursive: true, force: true });
   for (const line of diff.slice(0, 20)) console.log(`  ${line}`);
-  console.log(diff.length ? `\ndist/ เก่ากว่าต้นฉบับ ${diff.length} ไฟล์ — รัน scripts\\build-dist.cmd ใหม่` : "\ndist/ ตรงกับต้นฉบับ");
+  const fix = "node scripts/build/build-targets.mjs แล้ว commit dist/ (บน Windows ใช้ scripts\\build-dist.cmd ซึ่งตรวจก่อนสร้าง)";
+  console.log(diff.length ? `\ndist/ เก่ากว่าต้นฉบับ ${diff.length} ไฟล์ — แก้: รัน ${fix}` : "\ndist/ ตรงกับต้นฉบับ");
+  if (diff.length && process.env.GITHUB_ACTIONS) console.log(`::error title=dist เก่ากว่าต้นฉบับ::แก้: รัน ${fix}`);
   process.exit(diff.length ? 1 : 0);
 }

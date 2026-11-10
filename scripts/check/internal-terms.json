@@ -1,0 +1,16 @@
+{
+  "_about": "คำภายในของ skill ที่ห้ามโผล่ในไฟล์ที่ส่งมอบ (โค้ด เทสต์ README ราก ข้อความ commit) · ตัวตรวจ: content-checks.mjs · เพิ่มคำ = เพิ่มแถวใน terms · ไฟล์ที่ใช้คำนั้นเป็นศัพท์จริงของงาน (เช่น UAT ในเอกสารโครงการ) ใส่ใน allow",
+  "terms": [
+    { "pattern": "\\bPhase \\d+\\b", "why": "เลขขั้นของ skill ไม่มีความหมายกับคนอ่านโค้ด · ตั้งชื่อตามสิ่งที่โค้ดทำ" },
+    { "pattern": "\\bCriterion \\d+\\b", "why": "เลขเกณฑ์ภายในของ skill · เขียนเกณฑ์ออกมาเป็นประโยค" },
+    { "pattern": "\\bUAT\\b", "why": "ศัพท์ทดสอบภายใน · เขียนเต็มว่าผู้ใช้ทดสอบรับมอบ (user acceptance test) หรือบอกสิ่งที่ตรวจจริง" }
+  ],
+  "codeExts": [".mjs", ".js", ".py", ".ts", ".cmd", ".ps1", ".sh"],
+  "readmes": ["README.md"],
+  "allow": [
+    "^plugins/software-company/skills/project-doc-set/scripts/open_items\\.py$",
+    "^scripts/check/validate-marketplace\\.mjs$",
+    "^scripts/check/content-checks\\.mjs$",
+    "^scripts/evals/review-recall/"
+  ]
+}

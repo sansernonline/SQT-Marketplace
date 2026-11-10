@@ -14,7 +14,7 @@ import { fileURLToPath } from "node:url";
 // ห้ามมีสำเนาใน plugin อื่น: สำเนาทำให้ชื่อ skill ซ้ำในรายการ skill ของทุก session จนเกินงบรายการ และ hook ทำงานซ้ำทุกเหตุการณ์
 export const SHARED_ONLY_IN_SUPERUSER = [
   "skills/adversarial-review-panel", "skills/agent-patterns", "skills/answer-shape", "skills/chat-prompt-workflows", "skills/workspace-setup", "skills/commit-log", "skills/context-budget", "skills/decision-log", "skills/decision-scoring", "skills/design-references", "skills/document-naming", "skills/flag-and-propose", "skills/handoff", "skills/human-writing", "skills/model-scorecard", "skills/no-ai-look", "skills/owner-style-capture", "skills/parallel-attempts-pick-best", "skills/parallel-split-and-merge", "skills/polished-document-style", "skills/polite-message-th-en", "skills/principle-build-a-tool-not-handwork", "skills/principle-fix-root-cause", "skills/principle-proceed-on-reversible-work", "skills/principle-prove-it-works", "skills/principle-small-verifiable-steps", "skills/principle-user-experience-first", "skills/prior-art-review", "skills/repeated-mistakes-to-checks", "skills/research-with-sources", "skills/session-lessons-to-skills", "skills/simplify", "skills/skill-authoring", "skills/spell-out-abbreviations", "skills/status-report", "skills/targeted-fix", "skills/temp-file-discipline", "skills/translate-th-en",
-  "agents/learning-reviewer.md", "agents/brainstormer.md", "agents/reviewer.md",
+  "agents/learning-reviewer.md", "agents/brainstormer.md", "agents/reviewer.md", "agents/worker.md",
   "hooks",
 ];
 // SKILL.md ของ superuser สาขาต้องมีบรรทัดนี้ (เปิดแกนก่อน) และต้องไม่มีบล็อกกลางอีก — ส่วนกลางอยู่ที่แกนที่เดียว
@@ -30,6 +30,12 @@ export const SHARED_FILES = [
   "skills/superuser/references/evidence.md",
   "skills/superuser/references/team-roles.md",
   "skills/superuser/references/voting.md",
+  "skills/superuser/references/review-lenses.md",
+  "skills/superuser/references/safety.md",
+  "skills/superuser/templates/NOTES.md",
+  "skills/superuser/templates/LEDGER.md",
+  "skills/superuser/templates/OUT-OF-SCOPE.md",
+  "skills/superuser/templates/DURABLE-BRIEF.md",
   "skills/superuser/templates/improvements-queue.md",
   "skills/superuser/references/lead-playbook.md",
   "skills/superuser/templates/TEAM.md",
