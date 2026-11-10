@@ -50,6 +50,19 @@ if (scaffolded.length && !rest.includes("--scaffold") && !noScaffold) {
   console.log(`เปิด --scaffold ให้ ${scaffolded.length} เคส: ${scaffolded.join(" ")}`);
 }
 
+// เครื่องมือที่ claude plugin eval กันไว้ต้องให้ด้วย --allow-tools แม้เคสใส่ไว้ใน allowed_tools แล้ว
+// ไม่ส่ง → agent ตอบว่าเปิดเว็บหรือเขียนไฟล์ไม่ได้ (design-references ตกทุกรอบ eval 2026-11-09 · ส่งแล้วค้นเว็บได้จริง)
+const GATED = /^(Bash|Write|Edit|MultiEdit|NotebookEdit|WebFetch|WebSearch|mcp__\S+)$/;
+export const gatedTools = (yamlTexts) => [...new Set(yamlTexts.flatMap((y) => {
+  const m = y.match(/^\s*allowed_tools:\s*\[([^\]]*)\]/m);
+  return m ? m[1].split(",").map((s) => s.trim().replace(/^["']|["']$/g, "")) : [];
+}).filter((t) => GATED.test(t)))];
+const gated = gatedTools(kept.map((c) => readFileSync(join(evalsDir, c, "case.yaml"), "utf8")));
+if (gated.length && !rest.includes("--allow-tools")) {
+  rest.push("--allow-tools", ...gated);
+  console.log(`ให้เครื่องมือที่ถูกกันไว้ตาม allowed_tools ของเคส: ${gated.join(" ")}`);
+}
+
 // เรียก claude ตรง ไม่ผ่าน shell · path ชั่วคราวที่มีช่องว่างและ regex ใน --only จึงไม่ถูกตัด
 const evalRun = (extra) => spawnSync("claude", ["plugin", "eval", copy, "--trust-plugin", "--no-publish", ...extra], { stdio: "inherit" }).status;
 
@@ -58,7 +71,7 @@ const evalRun = (extra) => spawnSync("claude", ["plugin", "eval", copy, "--trust
 const trigger = kept.find((c) => c.endsWith("-trigger") && !c.endsWith("-no-trigger"));
 if (probe && trigger) {
   const out = join(dirname(copy), "probe.json");
-  evalRun(["--case", trigger, "--runs", "1", "--ablation", "none", "--max-cost-usd", "1", "--json", out]);
+  evalRun(["--case", trigger, "--runs", "1", "--ablation", "none", "--max-cost-usd", "1", "--json", out, ...(gated.length ? ["--allow-tools", ...gated] : [])]);
   const result = existsSync(out) ? JSON.parse(readFileSync(out, "utf8")).cases?.[0] : null;
   // ดูจากชนิด grader ไม่ใช่ withOnly เพราะ --ablation none ทำให้ withOnly เป็น false (เจอตอนทดสอบ 2026-10-26)
   const toolGraders = new Set((result?.graders ?? []).filter((g) => g.type === "tool_used").map((g) => g.name));
