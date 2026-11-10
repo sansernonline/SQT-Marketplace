@@ -32,6 +32,8 @@ argument-hint: <file path or PR description>
 1. **Understand the intent** — read PR description and linked ticket
 2. **Skim the diff** — get overall sense of changes
 3. **Deep review** — go through each section of checklist below
+   - **Verify before posting:** hand every `blocking:` finding to a fresh agent (or a second reader) with only the diff and the finding, and ask whether it is real. Drop it if they cannot reproduce or point to the line. For a contested diff use `adversarial-review-panel`.
+   - **Do not flag** (adapted from the `code-review` command of claude-plugins-official · Apache-2.0 · opened 2026-11-10): a problem that existed before this PR · something the linter or compiler already catches · a nitpick a senior reviewer would skip · behaviour that looks wrong but is right (check the context first) · a rule the team silenced on purpose with a lint-ignore comment · a problem that only appears for an input that cannot occur here
 4. **Run the code** if non-trivial — don't just read
 5. **Leave actionable comments** — suggest fixes, not just point out problems
 

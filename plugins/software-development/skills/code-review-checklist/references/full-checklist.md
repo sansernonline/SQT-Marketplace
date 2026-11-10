@@ -28,6 +28,8 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 - [ ] Tests are readable and maintainable?
 - [ ] No flaky tests introduced?
 
+**Rate each missing test 1–10 before suggesting it** (adapted from `pr-test-analyzer` · claude-plugins-official · Apache-2.0 · opened 2026-11-10). 9–10: data loss, money or security would break unnoticed · 7–8: the user sees an error · 5–6: edge case with limited impact · below 5: do not suggest it. Review behaviour, not line coverage. Do not ask for tests of plain getters and setters.
+
 ### 🔒 Security
 
 - [ ] Input validation at boundaries?

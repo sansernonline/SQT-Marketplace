@@ -48,6 +48,18 @@ The DevOps engineer should follow this structured response:
    - What pattern do logs show?
    - Could it be capacity? Network? Bug? Config?
 
+   **Label every hypothesis with a confidence tag** that follows the evidence, not how tidy the report looks (adapted from `incident-investigate` in claude-tag-plugins · opened 2026-11-10). No percentages. Keep at most 3 suspects in the report.
+
+   | Tag | Means |
+   |---|---|
+   | `[ยืนยันแล้ว]` | Seen happening: a query result, log line or graph anyone can open |
+   | `[น่าจะ]` | Evidence points to it but the failure itself was not seen (found in the code but never seen firing is at most this) |
+   | `[เป็นไปได้]` | Fits the symptoms, no direct evidence yet |
+   | `[ไม่น่า]` | Evidence against, not conclusive |
+   | `[ตัดออกแล้ว]` | Killed by one stated fact (write the fact) |
+
+   Every claim carries the query or link so a person can re-check it. These tags pair with `จากแหล่ง` and `อนุมาน` in `superuser` evidence labels.
+
 3. **Communicate updates** every 15-30 min even if "still investigating" — one message per audience, the Communications lead sends them (แนวคิดจาก borghei incident-commander (MIT+Commons Clause → เขียนใหม่)):
 
    | Audience | When | Says (and nothing more) |
@@ -101,7 +113,7 @@ Document what worked AND what didn't.
 Throughout the incident, keep a running **incident log** as plain timestamped lines. After the all-clear, format it with `polished-document-style`. It covers:
 - Severity + timeline table
 - Affected services + user count
-- Investigation steps + findings
+- Investigation steps + findings (the first paragraph answers "what broke and why" before any evidence; hypotheses carry the tags from Phase 2)
 - Mitigations attempted (worked + didn't)
 - Resolution actions
 - Action items for postmortem

@@ -98,6 +98,13 @@ What set it off? (deploy · config change · traffic spike · dependency outage 
 How was the incident detected? Was it automated alerting or customer report?
 - Time to detect (TTD): XX minutes
 - Could we have detected faster? How?
+- If a person noticed before any alert, name the gap type (adapted from `incident-postmortem` in claude-tag-plugins · opened 2026-11-10): **coverage** = no rule watched it · **late** = a rule exists but fired too slowly · **noise** = it fired and was ignored. The action item fixes that type (new rule · tighter threshold or window · remove or merge noisy alerts) → alert rules in `observability-basics`.
+
+| Measure from first user impact | Minutes |
+|---|---|
+| Time to detect (TTD) | XX |
+| Time to mitigate (impact stops growing) | XX |
+| Time to recover (fully back to normal) | XX |
 
 ### Investigation
 What did we look at? What did we rule out?
@@ -214,7 +221,7 @@ One block in the incident channel or ticket, same day — no meeting. Trigger ·
 **Quick postmortem:** <title> · SEV3 · YYYY-MM-DD · <XX min>
 - Trigger → impact: <what set it off> → <who felt what>
 - Detection: <alert | customer | chance> after <XX min>
-- Mitigation: <what stopped it>
+- Mitigation: <what stopped it> after <XX min> from first impact · recovered after <XX min>
 - Root cause: <one sentence>
 - Action: <one item> · @owner · Type <Prevent | Detect | Mitigate | Process> · due YYYY-MM-DD
 ```

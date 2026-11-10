@@ -1,5 +1,19 @@
 # Changelog — software-development
 
+## 3.1.0 — 2026-11-10
+
+- `data-analysis`: ตารางกับดัก 8 ข้อของตัวเลข (join เบิ้ล · เฉลี่ยของค่าเฉลี่ย · ตัวหารเปลี่ยน · เขตเวลา ฯลฯ) กับกล่องตรวจความสมเหตุสมผล 3 อย่าง
+- `llm-engineering`: กฎกัน agent ที่มี tool เขียน 5 ข้อ (provenance · identity ฝั่งเซิร์ฟเวอร์ · ล้างข้อความภายนอก · memory มีตัวกรองและวันลบ · ด่านคืนผลไม่ throw) กับ poisoned fixture ใน eval
+- `legacy-spec-recovery`: delta catalog ในอัปเกรด framework · หลักฐาน canary กับอินพุตสด · สคริปต์ `compare_outputs.py` (Apache-2.0 จาก claude-plugins-official) · ทะเบียนกฎเพิ่มช่องตัวอย่างค่าจริงกับพารามิเตอร์ hardcode
+- `srs-writing` · `fsd-writing`: ทดสอบด้วยผู้อ่านใหม่ก่อนส่ง (`references/reader-test.md`)
+- `error-handling-patterns`: ตรวจการกลืนความล้มเหลวเงียบ 4 แบบ
+- `code-review-checklist`: รายการห้ามแจ้ง 6 ข้อ · ให้ตัวใหม่ยืนยัน finding ระดับ blocking · ให้คะแนนเทสต์ที่ขาด 1–10
+- `incident-response`: ป้ายความมั่นใจ 5 ระดับของสมมุติฐาน
+- `postmortem-template`: ชนิดช่องว่างของการตรวจจับ (coverage · late · noise) กับเวลา mitigate และ recover
+- `app-verifier-setup`: สคริปต์ `with_server.py` (Apache-2.0 จาก anthropics/skills) กับกฎรอ `networkidle`
+- `security-audit`: รีวิวแพตช์ critical และ high ด้วย 4 คำถามก่อน merge
+- `stack-typescript` · `stack-dotnet`: เช็ก type ใหม่ 4 ข้อ พร้อมตัวอย่างเลขบัตรประชาชน
+
 ## 3.0.0 — 2026-11-10
 
 - **เปลี่ยนชื่อ plugin จาก `software-company` เป็น `software-development`** · skill และ agent เรียกด้วยชื่อใหม่ เช่น `software-development:superuser` · `software-development:developer` · โฟลเดอร์ `prompt/software-development/` และ `docs/plugins/software-development/` ย้ายตาม
