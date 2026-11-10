@@ -24,7 +24,7 @@ const STATE_DIR = join(tmpdir(), `sqt-code-pattern-${USER}`);
 export const RULES = [
   { id: "js-eval", exts: JS, re: /\beval\s*\(|new\s+Function\s*\(/, msg: "eval หรือ new Function รันข้อความเป็นโค้ด ถ้าข้อความมาจากผู้ใช้คือช่องให้รันคำสั่งได้ · ใช้ JSON.parse หรือตารางฟังก์ชันแทน" },
   // js-exec ไม่จับ util.promisify(exec)(...) และไม่เตือน .exec ของตัวแปรที่ชื่อมี re · regex · pattern (ถือว่าเป็น RegExp)
-  { id: "js-exec", exts: JS, re: /(?<!\/[a-z]{0,6}\.)(?<!\b\w{0,40}(?:[rR]e|RE|[rR]egex|REGEX|[pP]attern|PATTERN|[rR]x|RX|[mM]atcher)\w{0,40}\.)(?<!RegExp\([^)]{0,200}\)\.)\bexec(?:Sync)?\s*\(\s*(?:`[^`]{0,500}\$\{|[^)]{0,300}\+)/, msg: "exec ต่อสตริงจากตัวแปรเป็น command injection · ใช้ execFile หรือ spawn ที่ส่ง argument เป็น array" },
+  { id: "js-exec", exts: JS, re: /(?<!\/[a-z]{0,6}\.)(?<!(?<![\w$])(?:re|rx|regex|regexp|pattern|matcher|[\w$]{0,40}(?:Re|RE|Rx|Regex|REGEX|RegExp|Pattern|PATTERN|Matcher)|[\w$]{0,40}_(?:re|rx|regex|pattern))\.)(?<!RegExp\([^)]{0,200}\)\.)\bexec(?:Sync)?\s*\(\s*(?:`[^`]{0,500}\$\{|[^)]{0,300}\+)/, msg: "exec ต่อสตริงจากตัวแปรเป็น command injection · ใช้ execFile หรือ spawn ที่ส่ง argument เป็น array" },
   { id: "js-innerhtml", exts: [...JS, ...HTML], re: /\.(?:inner|outer)HTML\s*=(?!=)|dangerouslySetInnerHTML|\bv-html\b|document\.write\s*\(/, msg: "ใส่ HTML จากตัวแปรโดยตรงเสี่ยง XSS · ใช้ textContent หรือ sanitize ด้วย DOMPurify ก่อน" },
   { id: "js-sql-concat", exts: JS, re: /\.(?:query|execute|raw)\s*\(\s*(?:`[^`]{0,500}\$\{|["'][^"']{0,500}["']\s*\+)/, msg: "ต่อสตริงเป็น SQL เสี่ยง SQL injection · ใช้ parameter (? หรือ $1)" },
   { id: "tls-off", exts: [...JS, ...PY], re: /rejectUnauthorized\s*:\s*false|NODE_TLS_REJECT_UNAUTHORIZED\s*=\s*['"]?0|verify\s*=\s*False/, msg: "ปิดการตรวจใบรับรอง TLS ทำให้ถูกดักกลางทางได้ · ใส่ CA ที่ถูกต้องแทนการปิด" },
@@ -96,6 +96,8 @@ function selfTest() {
   t("re.exec(a + b) ของ RegExp → เงียบ", decide(ev("Write", "g.js", { content: "const m = re.exec(a + b)" }, "s22"), dir) === null);
   for (const [i, c] of ["/\\d+/g.exec(a + b)", "DATE_RE.exec(s + t)", "tokenRegex.exec(a + b)", "myPattern.exec(`${a}`)", "new RegExp(p).exec(a + b)"].entries())
     t(`RegExp แบบ ${c} → เงียบ`, decide(ev("Write", "g.js", { content: `const m = ${c}` }, "s3" + i), dir) === null);
+  for (const [i, c] of ['remote.exec("rm -rf " + dir)', 'preview.exec("ls " + d)', 'childProcessRef.exec("ls " + d)'].entries())
+    t(`ชื่อที่แค่มี re อยู่กลาง ${c} → เตือน`, msgOf(decide(ev("Write", "g.js", { content: c }, "s4" + i), dir)).includes("js-exec"));
   t("/x/.exec(a + b) → เงียบ", decide(ev("Write", "g.js", { content: "const m = /x/.exec(a + b)" }, "s25"), dir) === null);
   t("cp.exec ต่อสตริง → เตือน", msgOf(decide(ev("Write", "g.js", { content: 'cp.exec("ls " + d)' }, "s26"), dir)).includes("js-exec"));
   t("require(child_process).exec ต่อสตริง → เตือน", msgOf(decide(ev("Write", "g.js", { content: 'require("child_process").exec("x" + y)' }, "s27"), dir)).includes("js-exec"));
