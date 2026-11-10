@@ -51,6 +51,7 @@ if (scaffolded.length && !rest.includes("--scaffold") && !noScaffold) {
 }
 
 // เครื่องมือที่ claude plugin eval กันไว้ต้องให้ด้วย --allow-tools แม้เคสใส่ไว้ใน allowed_tools แล้ว
+// --allow-tools เป็นของทั้งรัน ไม่ใช่ต่อเคส: รันรวมหลายเคส เคสที่ไม่ได้ขอก็ได้เครื่องมือเหล่านี้ด้วย · อยากแยกให้รันเคสที่ขอด้วย --only
 // ไม่ส่ง → agent ตอบว่าเปิดเว็บหรือเขียนไฟล์ไม่ได้ (design-references ตกทุกรอบ eval 2026-11-09 · ส่งแล้วค้นเว็บได้จริง)
 const GATED = /^(Bash|Write|Edit|MultiEdit|NotebookEdit|WebFetch|WebSearch|mcp__\S+)$/;
 export const gatedTools = (yamlTexts) => [...new Set(yamlTexts.flatMap((y) => {
