@@ -105,8 +105,8 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 CS Engineering Quality Standards](#-cs-engineering-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [CS Engineering Quality Standards](#cs-engineering-quality-standards)
 - [Activation Milestones](#activation-milestones)
 - [Health Score Components](#health-score-components)
 - [In-Product Engagement Tools](#in-product-engagement-tools)
@@ -132,7 +132,7 @@ You are a **Customer Success (CS) Engineer**. You build the technical base that 
 6. **Churn Signals** — Detect at-risk accounts
 7. **Expansion Signals** — Detect upgrade opportunities
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Product maturity** — early, growth or scale stage
 2. **Customer segments** — small and medium business (SMB) to enterprise
@@ -141,7 +141,7 @@ You are a **Customer Success (CS) Engineer**. You build the technical base that 
 5. **CS team size** — decides which tools you need
 6. **Churn pattern** — voluntary vs involuntary
 
-## 📊 CS Engineering Quality Standards
+## CS Engineering Quality Standards
 
 - **Time to first value:** measured and getting shorter
 - **Activation rate:** measured and rising against your own baseline — target set per product (รอยืนยัน · no public standard; quote a benchmark only with source + date)
@@ -323,8 +323,8 @@ flowchart LR
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Integration Quality Standards](#-integration-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Integration Quality Standards](#integration-quality-standards)
 - [SSO Patterns](#sso-patterns)
 - [SCIM Provisioning](#scim-provisioning)
 - [Webhook Patterns](#webhook-patterns)
@@ -347,7 +347,7 @@ You are an **Integration Engineer**. You connect our product to enterprise syste
 6. **Integration Platform as a Service (iPaaS)** — Zapier, Make, n8n, Workato
 7. **Reliability** — Retry, dead letter queue, idempotency (safe to run twice)
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Target system** — what we integrate with
 2. **Direction** — read, write, both
@@ -356,7 +356,7 @@ You are an **Integration Engineer**. You connect our product to enterprise syste
 5. **Customer count** — decides which pattern fits
 6. **Compliance** — rules on how we handle the data
 
-## 📊 Integration Quality Standards
+## Integration Quality Standards
 
 - **Idempotent** — safe to retry
 - **Observable** — we track every integration event
@@ -691,8 +691,8 @@ Recommendation:
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 SaaS Architecture Quality Standards](#-saas-architecture-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [SaaS Architecture Quality Standards](#saas-architecture-quality-standards)
 - [Multi-Tenancy Models](#multi-tenancy-models)
 - [Data Isolation Patterns](#data-isolation-patterns)
 - [Tenant Context Propagation](#tenant-context-propagation)
@@ -718,7 +718,7 @@ You are a **Software as a Service (SaaS) Architect**. You design multi-tenant sy
 6. **Tenant Lifecycle** — Onboarding, offboarding, upgrades
 7. **Tenant Operations** — Manage each tenant separately
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Tenant profile** — number of tenants, how their sizes spread, growth
 2. **Workload characteristics** — bursty? steady? batch?
@@ -727,7 +727,7 @@ You are a **Software as a Service (SaaS) Architect**. You design multi-tenant sy
 5. **Pricing tiers** — decide how much resource each tenant gets
 6. **Per-tenant service level agreements (SLAs)** — different per tenant or the same for all?
 
-## 📊 SaaS Architecture Quality Standards
+## SaaS Architecture Quality Standards
 
 - **Tenant isolation:** no data ever leaks from one tenant to another
 - **Noisy neighbor mitigation:** one tenant can't slow down the others
@@ -1831,7 +1831,7 @@ Paddle / Lemon Squeezy — Merchant of Record (global tax done)
 Custom               — only for special needs
 ```
 
-> 💡 **Never** build the billing basics yourself. Use a platform.
+> **Never** build the billing basics yourself. Use a platform.
 
 ## Pricing Model Implementation
 

@@ -103,7 +103,7 @@ logs/
 ตัวช่วยที่มีให้แล้ว: ฟังก์ชัน redaction (ปิดค่าลับ) ดู**ว่าชื่อคีย์มีคำต้องห้ามอยู่ข้างในไหม** (`userPassword`, `pwd`,
 `accessToken` โดนหมด) แล้วแทนค่าด้วย `***` โดยตรวจลึกลงไปได้ 4 ชั้นของ object
 
-> 🚨 **Log injection** — ค่าที่มาจากผู้ใช้อาจมี `\n` ถ้าปล่อยผ่าน ผู้ใช้จะ "แต่ง" บรรทัด log
+> **Log injection** — ค่าที่มาจากผู้ใช้อาจมี `\n` ถ้าปล่อยผ่าน ผู้ใช้จะ "แต่ง" บรรทัด log
 > ปลอมขึ้นมาเองได้ ทำให้คนอ่านเข้าใจผิดและ parser พัง โค้ดที่ให้มาจึงตัด `\r\n\t` ทิ้งจากทุกค่าและจากข้อความหลัก
 
 ---
@@ -841,7 +841,7 @@ updated_at   timestamptz     NOT NULL DEFAULT now()
 | `row_version` / `xmin` | มีคนแก้พร้อมกันได้ | ใช้คู่กับ ETag ใน `api-conventions` |
 | `tenant_id` | ระบบหลายผู้เช่า | ดูข้อ 10 |
 
-> 🚨 **soft delete (ลบโดยแค่ติดป้าย) มีต้นทุน** คือทุก unique constraint ต้องคิดใหม่
+> **soft delete (ลบโดยแค่ติดป้าย) มีต้นทุน** คือทุก unique constraint ต้องคิดใหม่
 > `ux_users_email` จะกันไม่ให้สมัครอีเมลเดิมซ้ำ แม้บัญชีเก่าถูกลบไปแล้ว
 > แก้ด้วย partial index: `CREATE UNIQUE INDEX ... WHERE deleted_at IS NULL`
 
@@ -855,7 +855,7 @@ updated_at   timestamptz     NOT NULL DEFAULT now()
 | **UUIDv7 / ULID** | เรียงตามเวลา · สร้างจากฝั่งแอปได้ · ไม่ชนกัน | 16 ไบต์ · อ่านด้วยตายาก | ระบบกระจาย · ต้องสร้าง id ก่อนบันทึก · id โผล่ใน URL |
 | `UUIDv4` สุ่มล้วน | ไม่ชนกัน เดาไม่ได้ | **index แตกกระจาย เขียนช้าลงชัดเจนเมื่อข้อมูลเยอะ** | เลี่ยงถ้าเลือกได้ |
 
-> 🚨 **UUIDv4 เป็น primary key คือกับดักที่เจอบ่อยที่สุด**
+> **UUIDv4 เป็น primary key คือกับดักที่เจอบ่อยที่สุด**
 > ค่าสุ่มล้วนทำให้ทุก insert ไปแทรกกลางโครงสร้าง index
 > ข้อมูลหลักหมื่นยังไม่รู้สึก แต่พอถึงหลักสิบล้านจะช้าจนต้องรื้อ
 > ถ้าต้องใช้ UUID ให้ใช้ **v7** ซึ่งขึ้นต้นด้วยเวลา จึงเรียงเพิ่มเหมือน bigint
@@ -954,7 +954,7 @@ index `(a, b)` ใช้กับ query ที่กรองด้วย `a` �
 | schema แยกต่อผู้เช่า | กลาง | migration ต้องวนทุก schema | ผู้เช่าหลักสิบถึงหลักร้อย |
 | ฐานข้อมูลแยกต่อผู้เช่า | สูงสุด | แพงสุด | ลูกค้าองค์กรที่บังคับให้แยก |
 
-> 🚨 ถ้าเลือกแบบ `tenant_id` ให้**บังคับที่ชั้นล่างสุด ไม่ใช่ใส่ใน query ทีละตัว**
+> **สำคัญ:** ถ้าเลือกแบบ `tenant_id` ให้**บังคับที่ชั้นล่างสุด ไม่ใช่ใส่ใน query ทีละตัว**
 > ใช้ row-level security ของฐานข้อมูล หรือ global filter ของ ORM
 > query ที่ลืมใส่ `WHERE tenant_id = ?` แค่ตัวเดียว ก็ทำให้ข้อมูลลูกค้ารายหนึ่งโผล่ให้อีกรายเห็น
 > และไม่มี error ให้เห็นเลย
@@ -1243,10 +1243,10 @@ total_amount   float / double                -- ผิด: 0.1 + 0.2 ไม่�
 | JSON | `jsonb` (มี index ได้) | `nvarchar(max)` + `JSON_VALUE` | `JSON` |
 | ไฟล์ไบนารี | `bytea` (หรือเก็บนอกฐานข้อมูล) | `varbinary(max)` | `BLOB` |
 
-> 🚨 **SQL Server + ภาษาไทย**: `varchar` ทำให้ตัวอักษรไทยกลายเป็น `?`
+> **SQL Server + ภาษาไทย**: `varchar` ทำให้ตัวอักษรไทยกลายเป็น `?`
 > ต้องใช้ `nvarchar` และเขียนค่าคงที่เป็น `N'ข้อความ'` เสมอ
 >
-> 🚨 **MySQL ต้องเป็น `utf8mb4`** เพราะชุดอักขระชื่อ `utf8` เฉย ๆ ของ MySQL
+> **MySQL ต้องเป็น `utf8mb4`** เพราะชุดอักขระชื่อ `utf8` เฉย ๆ ของ MySQL
 > เก็บได้แค่ 3 ไบต์ต่อตัว อีโมจิและอักขระบางตัวจึงหาย
 
 ---
@@ -1512,7 +1512,7 @@ Source → Load raw → Transform in warehouse
                     Snowflake/BigQuery scale
 ```
 
-> 💡 **2026 default: ELT with dbt** — load raw to warehouse, transform with SQL via dbt
+> **2026 default: ELT with dbt** — load raw to warehouse, transform with SQL via dbt
 
 ## Tech Stack (2026 Recommendations)
 
@@ -1521,12 +1521,12 @@ Source → Load raw → Transform in warehouse
 ### Warehouse / Lake
 | Tool | Best for | Cost |
 |------|----------|------|
-| **Snowflake** | Pure warehouse, separation of compute/storage | 💰💰 |
-| **BigQuery** | Serverless, ad-hoc, GCP shops | 💰💰 |
-| **Databricks** | Unified lake + warehouse, ML-heavy | 💰💰💰 |
-| **DuckDB** | Local dev, embedded analytics | 💰 free |
-| **Redshift** | AWS-native, legacy | 💰💰 |
-| **Postgres** | Small data (<1TB), simplicity | 💰 |
+| **Snowflake** | Pure warehouse, separation of compute/storage | $$|
+| **BigQuery** | Serverless, ad-hoc, GCP shops | $$|
+| **Databricks** | Unified lake + warehouse, ML-heavy | $$$|
+| **DuckDB** | Local dev, embedded analytics | $free |
+| **Redshift** | AWS-native, legacy | $$|
+| **Postgres** | Small data (<1TB), simplicity | $|
 
 ### Transformation
 - **dbt** — SQL-based, version controlled, tested (industry default)
@@ -1577,7 +1577,7 @@ CREATE TABLE dim_customer (
 );
 ```
 
-> 💡 **Star = denormalized, query-fast**
+> **Star = denormalized, query-fast**
 > **Snowflake = normalized dims, save storage**
 > **Wide tables / OBT (One Big Table) = even faster for analytics**
 
@@ -1672,7 +1672,7 @@ Use when settings differ by environment or something must never be committed (ke
 
 ## 3 · ตรวจตอนบูต — ขาดค่าไหนให้ตายทันที
 
-> 🚨 ข้อนี้คุ้มที่สุดในหน้านี้
+> **สำคัญ:** ข้อนี้คุ้มที่สุดในหน้านี้
 > ระบบที่บูตขึ้นมาได้ทั้งที่ config ผิด จะไปพังตอนตี 2 ในฟังก์ชันที่นาน ๆ ใช้ที
 > ระบบที่ **ไม่ยอมบูต** เมื่อ config ผิด ทำให้รู้ตั้งแต่ตอน deploy ซึ่งยัง rollback ได้
 
@@ -1735,15 +1735,15 @@ APP_FEATURE_NEW_CHECKOUT
 ```bash
 # .env.example
 APP_DB_HOST=localhost              # ที่อยู่ฐานข้อมูล
-APP_DB_PASSWORD=change-me          # ❗ ค่าจริงอยู่ใน 1Password ห้องทีม
-APP_JWT_SECRET=                    # ❗ สร้างด้วย: openssl rand -base64 48
+APP_DB_PASSWORD=change-me          # สำคัญ: ค่าจริงอยู่ใน 1Password ห้องทีม
+APP_JWT_SECRET=                    # สำคัญ: สร้างด้วย: openssl rand -base64 48
 APP_LOG_LEVEL=debug
 ```
 
 **`.env.example` ต้องอัปเดตในคอมมิตเดียวกับที่เพิ่มค่าใหม่**
 ไม่งั้นคนถัดไปที่ clone จะเจอ error ที่ไม่มีใครอธิบายได้
 
-> 🚨 **`.env` ที่ใส่ `.gitignore` ไม่ทัน**: ไฟล์ถูก track ไปแล้วแม้ครั้งเดียว
+> **`.env` ที่ใส่ `.gitignore` ไม่ทัน**: ไฟล์ถูก track ไปแล้วแม้ครั้งเดียว
 > การเพิ่มใน `.gitignore` ทีหลัง**ไม่ลบมันออกจากประวัติ** ต้อง `git rm --cached` และถือว่า secret หลุดแล้ว
 
 **ด่านก่อน commit** (แนวคิดจาก wshobson secrets-management): `.gitignore` กันแค่ไฟล์ที่รู้ชื่อ แต่กุญแจที่เผลอวางในโค้ดหรือ YAML ต้องมีตัวสแกน — ติดตั้ง gitleaks เป็น pre-commit hook ของทุก repo (`gitleaks git --pre-commit --staged` ใน gitleaks 8.19 ขึ้นไป · รุ่นก่อนหน้าใช้ `gitleaks protect --staged`) และรันซ้ำใน CI ทั้งประวัติด้วย `gitleaks git --redact` · hook ตกแล้วห้าม `--no-verify` ให้ย้ายค่าออกก่อน · เจอใน history แล้วไปข้อ 8 ทันที ไม่ใช่แค่ลบบรรทัด
@@ -1789,7 +1789,7 @@ APP_LOG_LEVEL=debug
 4. ลบออกจากประวัติ git (`git filter-repo`) และแจ้งทุกคนให้ clone ใหม่ (ถ้าต้อง force push ให้รอผู้ใช้อนุมัติก่อน · แจ้งทีมก่อน)
 5. บันทึกเหตุการณ์ด้วย `postmortem-template`
 
-> 🚨 **ข้อ 4 ไม่ใช่ข้อ 1** เพราะลบ commit แล้วกุญแจก็ไม่ปลอดภัยขึ้นเลย
+> **ข้อ 4 ไม่ใช่ข้อ 1** เพราะลบ commit แล้วกุญแจก็ไม่ปลอดภัยขึ้นเลย
 > ใครที่ fork หรือ clone ไปแล้ว รวมถึงข้อมูลสำรองของผู้ให้บริการ ยังมีค่าเดิมอยู่
 > **ถือว่าทุก secret ที่เคยเข้า git คือหลุดแล้ว** แม้ repo จะเป็น private
 
@@ -1811,7 +1811,7 @@ APP_LOG_LEVEL=debug
 
 ## 10 · config ของ frontend — ไม่มีอะไรลับ
 
-> 🚨 ทุกอย่างที่อยู่ในไฟล์ที่เบราว์เซอร์โหลด **คือข้อมูลสาธารณะ**
+> **สำคัญ:** ทุกอย่างที่อยู่ในไฟล์ที่เบราว์เซอร์โหลด **คือข้อมูลสาธารณะ**
 > ไม่ว่าจะชื่อว่า `VITE_SECRET_KEY` หรืออยู่ในไฟล์ที่ถูกย่อจนอ่านไม่ออกก็ตาม
 > การย่อโค้ดไม่ใช่การเข้ารหัส เปิด DevTools ก็เห็น
 
@@ -1961,7 +1961,7 @@ settings = Settings()      # ขาดค่า = ValidationError ตั้ง�
 
 ## 4 · Angular และ frontend ทั่วไป
 
-> 🚨 **ทุกอย่างที่อยู่ในไฟล์ที่เบราว์เซอร์โหลด คือสาธารณะ** ไม่มีข้อยกเว้น
+> **ทุกอย่างที่อยู่ในไฟล์ที่เบราว์เซอร์โหลด คือสาธารณะ** ไม่มีข้อยกเว้น
 
 **แบบฝังตอน build** (`environment.ts`, `import.meta.env`, `NEXT_PUBLIC_*`):
 ค่าติดไปกับไฟล์ที่ build ได้ เปลี่ยนค่าทีไรต้อง build ใหม่ จึงขัดกับกฎ build ครั้งเดียวแล้วใช้ทุก environment
@@ -2016,7 +2016,7 @@ env:
       secretKeyRef: { name: app-secrets, key: db-password }
 ```
 
-> 🚨 **Secret ของ Kubernetes เป็นแค่ base64 ไม่ใช่การเข้ารหัส**
+> **Secret ของ Kubernetes เป็นแค่ base64 ไม่ใช่การเข้ารหัส**
 > ใครมีสิทธิ์ `get secret` ก็อ่านค่าได้ตรง ๆ
 > ต้องเปิด encryption at rest ที่ etcd และคุมสิทธิ์ด้วย RBAC
 > ทางที่ดีกว่า: ให้ External Secrets Operator ดึงค่าจาก Key Vault / Secrets Manager มาสร้าง Secret ให้
@@ -2157,7 +2157,7 @@ Use when work runs outside the user request (mail, reports, imports, schedules).
 | **ส่งต่อ idempotency key** | เวลาเรียก API ภายนอก (ดู `api-conventions`) |
 | **ตั้งค่าให้เป็นค่าใหม่ ไม่บวกเพิ่มจากค่าเดิม** | `set status = 'paid'` ปลอดภัยกว่า `balance = balance + 100` |
 
-> 🚨 **งานที่บวกค่าหรือส่งของออกไปข้างนอก ถ้ารันซ้ำจะเสียเงินจริง**
+> **งานที่บวกค่าหรือส่งของออกไปข้างนอก ถ้ารันซ้ำจะเสียเงินจริง**
 > อีเมล 2 ฉบับแค่น่ารำคาญ แต่โอนเงิน 2 ครั้งเป็นเรื่องใหญ่
 
 ---
@@ -2188,7 +2188,7 @@ Use when work runs outside the user request (mail, reports, imports, schedules).
 
 ## 5 · งานตามเวลา
 
-> 🚨 **ถ้ามีหลาย instance งานตามเวลาจะรันหลายรอบพร้อมกัน**
+> **ถ้ามีหลาย instance งานตามเวลาจะรันหลายรอบพร้อมกัน**
 > รายงานสรุปยอดถูกส่ง 3 ฉบับ หรือหักเงิน 3 ครั้ง ก็เพราะข้อนี้
 
 | วิธี | ใช้เมื่อ |
@@ -2317,7 +2317,7 @@ Use when a system must show who did what and when (approvals, money, permissions
 | แก้ได้ไหม | ไม่สำคัญ | **ห้ามแก้ ห้ามลบ** |
 | หายได้ไหม | หายบ้างรับได้ | **หายไม่ได้** ถ้าเขียนไม่สำเร็จ ธุรกรรมต้องล้มตาม |
 
-> 🚨 **2 อย่างนี้แยกกันเสมอ** เพราะ audit log ที่ปนอยู่ในไฟล์ log ทั่วไป
+> **2 อย่างนี้แยกกันเสมอ** เพราะ audit log ที่ปนอยู่ในไฟล์ log ทั่วไป
 > จะถูกลบตามอายุการเก็บ (retention) ของ log ภายในเดือนเดียว และไม่มีใครค้นเจอตอนที่ต้องใช้
 
 ---

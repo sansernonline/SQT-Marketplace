@@ -78,6 +78,9 @@ node price-calc.mjs --self-test
 - Joining a free-shipping or cashback programme adds a percentage fee; price it as part of `r`
 - Affiliate commission (TikTok Shop, Shopee, Lazada affiliate) is another percentage — add it to `r` for SKUs sold through creators
 - A promotion is a new price — re-run the formula; a 20% discount on a 20% margin is a loss
+- Every promotion states 3 things before it is priced: which SKUs, how deep, and the end date. Missing any one → ask the owner; never fill it in yourself. A promotion with no end date becomes the new normal price
+- Show profit per unit before and after the promotion, and the expected total profit with the sales assumption written next to it ("ขายเพิ่มจาก 40 เป็น 70 ชิ้นต่อเดือน, owner's guess"). Campaign fees (9.9, 11.11 and the like) go into `r` first, as in step 5
+- Offer the options that are not a price cut first, in this order: keep the price · shorter promotion · only the overstocked variants (`multi-shop-stock`, stuck stock). Then the smallest discount that reaches the owner's goal. If the owner set a maximum discount, say it is the owner's limit, not the platform's
 - Prices on LINE and Facebook carry no platform fee but do carry payment fees (card/QR gateway) and the seller's own shipping — price them separately; payment by `promptpay-qr` has no gateway fee for a personal account (รอยืนยัน for business accounts)
 
 ## Related

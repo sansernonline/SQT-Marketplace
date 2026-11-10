@@ -14,7 +14,8 @@ Turn "I want to watch some stocks" into a short list where every name has a reas
 2. **Limit the list** — max **10 names** (swing) or **15** (long-term). More means none get real attention. When the list is over the limit, score the names (section "Scoring when over the limit" below) and cut from the bottom.
 3. **Per symbol record**
    - ticker, market, sector, as-of date of every number
-   - **thesis** — one falsifiable sentence ("EPS growing 20%+ two quarters in a row while P/E is below its 5-year average")
+   - **thesis** — one falsifiable sentence ("EPS growing 20%+ two quarters in a row while P/E is below its 5-year average"). Numbers for it (P/E, ROE, D/E, payout) come from `stock-fundamentals`
+   - **long-term names also get pillars** — the 2–3 facts the thesis stands on (each one checkable in a filing) and the 2–3 risks that would break it, kept in a thesis file next to the watchlist (section "Thesis pillars" below)
    - **trigger / entry zone** — price zone or event that makes it actionable
    - **invalidation** — price or event that kills the thesis (from `technical-signals` for levels)
    - **liquidity** — 20-day average daily value traded; flag if under ~5 million baht (wide spreads, hard to exit)
@@ -38,6 +39,20 @@ Use `decision-scoring`, command `score`, on the names that pass the hard rules. 
 | Criterion 4 | 20-day average traded value, million baht · `high` · 0.20 |
 
 Weights are starting values the user can change (starting value, not yet measured). Drop the lowest scores until the list is at the cap (10 or 15). If the cut line reads `ยังไม่นิ่ง` (not stable) or `สูสี` (too close), the user chooses which name goes.
+
+## Thesis pillars — long-term names
+
+A one-line thesis is enough for a swing trade. A name held for years needs a record that shows, quarter by quarter, whether the reasons still hold. Template: "Thesis file" in [references/watchlist-template.md](references/watchlist-template.md).
+
+1. **Pillars** — 2–3 facts the thesis needs, each tied to a number in a filing ("same-store sales growth positive", "net debt ÷ EBITDA below 2"). If a pillar cannot be checked in a filing, rewrite it.
+2. **Break risks** — 2–3 things that would end it ("a new competitor takes the anchor tenant", "dividend cut").
+3. **Update log** — every time new information arrives (results, a filing, a news item from `news-impact`): date · what is new · which pillar it touches · supports / weakens / neutral · conviction high / medium / low after it.
+4. **Record evidence against as carefully as evidence for.** A log that only ever says "supports" is a log of what the user wanted to read.
+5. **Review each long-term thesis at least once a quarter, even with no news** — usually right after the quarterly results (`news-impact` results day). Two pillars weakened, or one break risk happened, goes to the decision table below as "thesis invalidated".
+
+No target price, no "upside", no buy or sell rating: the file records whether the reasons hold, the decision stays with the user.
+
+Idea: `thesis-tracker` in anthropics/financial-services equity-research (Apache-2.0, viewed 2026-11-10), with the institutional parts (short ideas, price targets) left out.
 
 ## Decision table — add, keep or drop
 

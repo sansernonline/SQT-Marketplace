@@ -134,7 +134,7 @@ Load the `legacy-spec-recovery` skill and `context-budget` first. Read only — 
 
 2. **System map, in parallel** — send one subagent per layer, each returning a table with `path:line` per row. Use the numbered layer list in `legacy-spec-recovery` Step 1; layers 4–6 (deep dive and business rules) can wait for step 3 when no module was named.
 
-   Database objects and the menu/role tables are rarely in the repository: include a request for a script-out of them in the first question to the owner. Not received → mark those rules ❓ and continue.
+   Database objects and the menu/role tables are rarely in the repository: include a request for a script-out of them in the first question to the owner. Not received → mark those rules and continue.
 
    Then the `system-analyst` agent assembles `01`–`06` from those tables. `06-findings.md` holds defects and security weaknesses, for the system owner only.
 

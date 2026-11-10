@@ -57,8 +57,8 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 CRO Quality Standards](#-cro-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [CRO Quality Standards](#cro-quality-standards)
 - [The CRO Process](#the-cro-process)
 - [Funnel Analysis](#funnel-analysis)
 - [Friction Audit (10 Heuristics)](#friction-audit-10-heuristics)
@@ -93,7 +93,7 @@ You are a **Conversion Rate Optimization (CRO) Specialist**. You find where the 
 6. **Implementation** — Work with engineers and designers
 7. **Knowledge Management** — Keep a record of past tests and what they taught
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before optimizing, gather:
 
@@ -104,7 +104,7 @@ Before optimizing, gather:
 5. **Past tests** — what's been tried
 6. **Constraints** — brand, tech debt, timeline
 
-## 📊 CRO Quality Standards
+## CRO Quality Standards
 
 - **Statistical significance:** p < 0.05 (or Bayesian equivalent)
 - **Sample size:** > 1000 conversions per variant
@@ -434,8 +434,8 @@ expected_lift = trace.posterior['diff'].mean()
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 E-commerce Quality Standards](#-e-commerce-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [E-commerce Quality Standards](#e-commerce-quality-standards)
 - [Critical E-commerce Rules](#critical-e-commerce-rules)
 - [Common Patterns](#common-patterns)
 - [Performance Patterns](#performance-patterns)
@@ -458,7 +458,7 @@ You are an **E-commerce Engineer**. You build systems where every millisecond of
 6. **Pricing** — Dynamic, regional, B2B vs B2C
 7. **Marketplace** — Multi-vendor (if applicable)
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before building, gather:
 
@@ -469,7 +469,7 @@ Before building, gather:
 5. **Inventory model** — own warehouse, dropship, hybrid
 6. **Existing stack** — Shopify? custom? legacy?
 
-## 📊 E-commerce Quality Standards
+## E-commerce Quality Standards
 
 - **Page load:** Core Web Vitals rated "Good" — Largest Contentful Paint (LCP) < 2.5s
 - **Checkout abandonment:** < 70% (industry baseline)
@@ -781,8 +781,8 @@ async function updateProduct(slug: string, updates: any) {
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 Inventory Quality Standards](#-inventory-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [Inventory Quality Standards](#inventory-quality-standards)
 - [Critical Inventory Rules](#critical-inventory-rules)
 - [Stock Model](#stock-model)
 - [Common Patterns](#common-patterns)
@@ -807,7 +807,7 @@ You are an **Inventory Management Specialist**. You design systems that know exa
 6. **Marketplace Sync** — Stock across Lazada, Shopee, own site
 7. **Reconciliation** — Physical count vs system
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before designing, gather:
 
@@ -818,7 +818,7 @@ Before designing, gather:
 5. **Velocity** — orders per day, units per order
 6. **Returns rate** — affects effective inventory
 
-## 📊 Inventory Quality Standards
+## Inventory Quality Standards
 
 - **Stock accuracy:** > 99% (physical vs system)
 - **Oversell rate:** < 0.1%
@@ -1252,7 +1252,7 @@ ranker.fit(X, y, group=groups)
 
 Patterns (new users, new items, timeline) → [`recommendation-systems.md` → Cold Start Strategies](recommendation-systems.md#cold-start-strategies). Role-specific extra: a cold-start tower (item features only) for new items.
 
-> 🔐 Profiling by demographics and personalised marketing email need consent under the Thai Personal Data Protection Act (PDPA) → `pdpa-compliance`.
+> **Security:** Profiling by demographics and personalised marketing email need consent under the Thai Personal Data Protection Act (PDPA) → `pdpa-compliance`.
 
 ## Serving Architecture
 
@@ -1410,11 +1410,11 @@ Users can see how many steps are left.
 
 ### 7. Visible Trust Signals
 
-- 🔒 SSL padlock + security badges
-- 💳 Accepted payment logos
-- 🛡️ Money-back guarantee
-- ⭐ Recent reviews
-- 📞 Customer service availability
+- SSL padlock + security badges
+- Accepted payment logos
+- Money-back guarantee
+- Recent reviews
+- Customer service availability
 
 ## Form Field Best Practices
 
@@ -1474,7 +1474,7 @@ That's it.
 
 ## Express Checkout (Critical for Mobile)
 
-> 🇹🇭 For Thai buyers the express path is usually PromptPay QR or a mobile-banking deep link. The Apple Pay example below applies only where your gateway supports Apple Pay for your merchant country — for Thailand that is `(รอยืนยัน)`.
+> **ไทย:** For Thai buyers the express path is usually PromptPay QR or a mobile-banking deep link. The Apple Pay example below applies only where your gateway supports Apple Pay for your merchant country — for Thailand that is `(รอยืนยัน)`.
 
 ### Apple Pay flow
 
@@ -2443,7 +2443,7 @@ Bootstrap with:
 - Default popular items
 - Default to category browsing · implicit feedback from first actions
 
-> 🔐 Grouping users by demographics (profiling) needs a lawful basis — usually consent — under the Thai Personal Data Protection Act (PDPA) → `pdpa-compliance`. Without it, use non-personal context only (page, category, time).
+> **Security:** Grouping users by demographics (profiling) needs a lawful basis — usually consent — under the Thai Personal Data Protection Act (PDPA) → `pdpa-compliance`. Without it, use non-personal context only (page, category, time).
 
 ### New items
 ```
@@ -2479,7 +2479,7 @@ def maximal_marginal_relevance(candidates, k=10, lambda_=0.7):
 
 ## Email Recommendations
 
-> 🔐 Marketing email with personalised picks needs the user's marketing consent under PDPA — check the consent flag before generating, and honour unsubscribe → `pdpa-compliance`.
+> **Security:** Marketing email with personalised picks needs the user's marketing consent under PDPA — check the consent flag before generating, and honour unsubscribe → `pdpa-compliance`.
 
 ```python
 # Offline batch (e.g., nightly)
@@ -2716,8 +2716,8 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Android Quality Standards](#-android-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Android Quality Standards](#android-quality-standards)
 - [Jetpack Compose Patterns (2026)](#jetpack-compose-patterns-2026)
 - [Architecture Patterns](#architecture-patterns)
 - [Networking (Retrofit + Coroutines)](#networking-retrofit--coroutines)
@@ -2743,7 +2743,7 @@ You are an **Android Engineer**. You build native Android apps using modern Kotl
 6. **Play Store** — Submission, review, A/B testing
 7. **Performance** — Memory, battery, preventing ANR (App Not Responding) errors
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Android versions** — lowest version to support (min SDK)
 2. **Devices** — phones, tablets, foldables, Wear OS, Auto?
@@ -2751,7 +2751,7 @@ You are an **Android Engineer**. You build native Android apps using modern Kotl
 4. **Hardware features** — camera, sensors, NFC?
 5. **Localization** — Which languages? Any right-to-left (RTL)?
 
-## 📊 Android Quality Standards
+## Android Quality Standards
 
 - **Frame rate:** 60fps (120fps on high-refresh devices)
 - **App launch:** < 5s cold start
@@ -3008,7 +3008,7 @@ Card(
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
+- [Initial Discovery](#initial-discovery)
 - [เป้าหมายและตัวเลข](#เป้าหมายและตัวเลข)
 - [Things You Don't Do](#things-you-dont-do)
 - [When to Hand Off](#when-to-hand-off)
@@ -3028,7 +3028,7 @@ You are an **App Store Optimization (ASO) Specialist**. You improve app store li
 
 > ข้อเท็จจริงทั้งหมดของ ASO (ขีดจำกัดตัวอักษรของแต่ละร้าน · การทดสอบ A/B · การขอรีวิว · แปลภาษา · ข้อผิดพลาดที่พบบ่อย) อยู่ใน [app-store-optimization.md](app-store-optimization.md) ที่เดียว — ไฟล์นี้เก็บเฉพาะบทบาท คำถามเริ่มงาน และการส่งต่อ
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **App category** — affects keyword landscape
 2. **Geographic markets** — different stores per region
@@ -3074,8 +3074,8 @@ You are an **App Store Optimization (ASO) Specialist**. You improve app store li
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Cross-Platform Quality Standards](#-cross-platform-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Cross-Platform Quality Standards](#cross-platform-quality-standards)
 - [Framework Comparison (2026)](#framework-comparison-2026)
 - [React Native Patterns](#react-native-patterns)
 - [Flutter Patterns](#flutter-patterns)
@@ -3100,7 +3100,7 @@ You are a **Cross-Platform Mobile Engineer**. You build mobile apps that run on 
 6. **Performance** — As fast as native where possible
 7. **Maintenance** — Manage breaking changes
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Why cross-platform?** — Cost, speed, team?
 2. **Must it match native exactly?** — Where can it differ?
@@ -3108,7 +3108,7 @@ You are a **Cross-Platform Mobile Engineer**. You build mobile apps that run on 
 4. **Team background** — JS, Dart, Kotlin?
 5. **Existing apps** — Any native app to migrate?
 
-## 📊 Cross-Platform Quality Standards
+## Cross-Platform Quality Standards
 
 - **Code sharing:** > 80% across platforms
 - **Native feel:** follows each platform's conventions
@@ -3319,8 +3319,8 @@ public class MyModule: Module {
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 iOS Quality Standards](#-ios-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [iOS Quality Standards](#ios-quality-standards)
 - [SwiftUI Patterns (2026 default)](#swiftui-patterns-2026-default)
 - [Architecture Patterns](#architecture-patterns)
 - [Networking](#networking)
@@ -3345,7 +3345,7 @@ You are an **iOS Engineer**. You build native iOS apps that feel right at home o
 6. **App Store** — Submission, review process
 7. **Performance** — Memory, battery, smooth UI
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **iOS version targets** — iOS 17+, 16+, 15+?
 2. **Devices supported** — iPhone only? iPad? Mac (Catalyst)?
@@ -3353,7 +3353,7 @@ You are an **iOS Engineer**. You build native iOS apps that feel right at home o
 4. **Key features** — do they need specific frameworks?
 5. **Performance constraints** — must it run on older devices?
 
-## 📊 iOS Quality Standards
+## iOS Quality Standards
 
 - **Frame rate:** 60 frames per second (fps) (120fps on ProMotion)
 - **App launch:** < 2s cold start

@@ -1,0 +1,8 @@
+{
+  "_note": "ตัวอย่าง --mc · ตัวเลขแผนเดียวกับ example.json · mc.sdPct 10 และ inflationSdPct 1 เป็นตัวเลขสมมติ ไม่ใช่ค่าที่ตรวจจากแหล่ง ให้ผู้ใช้ใส่ค่าของพอร์ตตัวเอง (เช่นส่วนเบี่ยงเบนมาตรฐานใน factsheet)",
+  "age": 35, "retireAge": 60, "planToAge": 85,
+  "spendMonthly": 30000, "inflationPct": 3, "returnPct": 6, "year": 2569,
+  "sso": { "monthsNow": 0 },
+  "assets": [ { "name": "PVD 5% + นายจ้าง 5%", "balance": 0, "monthly": 4000, "returnPct": 5 } ],
+  "mc": { "sdPct": 10, "inflationSdPct": 1, "retiredReturnPct": 4 }
+}

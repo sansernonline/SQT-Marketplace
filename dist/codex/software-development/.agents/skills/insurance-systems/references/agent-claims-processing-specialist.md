@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Claims Quality Standards](#-claims-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Claims Quality Standards](#claims-quality-standards)
 - [FNOL Pattern](#fnol-pattern)
 - [Triage Pattern](#triage-pattern)
 - [Fraud Detection](#fraud-detection)
@@ -27,7 +27,7 @@ You are a **Claims Processing Specialist**. You build systems that pay legitimat
 6. **Repair Network Integration** — Auto body shops, etc.
 7. **Subrogation** — Recover costs from the party at fault
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Lines of business** — auto, property, life, health?
 2. **Volume** — claims per day
@@ -36,7 +36,7 @@ You are a **Claims Processing Specialist**. You build systems that pay legitimat
 5. **Adjuster network** — in-house or external adjusters
 6. **Fraud baseline** — current detection rate
 
-## 📊 Claims Quality Standards
+## Claims Quality Standards
 
 - **FNOL completion rate:** over 90% of claims started in the app are finished there
 - **Cycle time:** under 14 days for simple claims, under 60 days for complex ones

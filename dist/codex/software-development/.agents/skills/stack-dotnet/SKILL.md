@@ -91,6 +91,24 @@ return r.IsSuccess ? Results.Ok(r.Value) : Results.Problem(r.Error, statusCode: 
 
 repo ที่มี `FluentResults` หรือ `ErrorOr` อยู่แล้วให้ใช้ตัวนั้น ไม่เพิ่ม record ใหม่ซ้อน
 
+**เช็ก type ใหม่ 4 ข้อ** (แนวคิดจาก type-design-analyzer · claude-plugins-official · Apache-2.0 · ดู 2026-11-10): (1) ซ่อนภายใน ใช้ `record` ที่ constructor เป็น `private` และมี factory `Create` (2) กฎอยู่ใน type ค่าผิดสร้างไม่ได้ (3) ตรวจที่ constructor หรือ factory ครั้งเดียว (4) ไม่เปิด setter ใช้ `init` หรือ `readonly record struct`
+
+```csharp
+// เลขบัตรประชาชน 13 หลัก + ตรวจเลขท้าย · จำนวนเงินเป็นสตางค์ (long) ไม่ใช้ double
+public readonly record struct ThaiNationalId
+{
+    public string Value { get; }
+    private ThaiNationalId(string v) => Value = v;
+    public static ThaiNationalId? Create(string s)
+    {
+        if (s.Length != 13 || !s.All(char.IsAsciiDigit)) return null;
+        var sum = s.Take(12).Select((c, i) => (c - '0') * (13 - i)).Sum();
+        return (11 - sum % 11) % 10 == s[12] - '0' ? new ThaiNationalId(s) : null;
+    }
+}
+```
+(ยังไม่ได้คอมไพล์ตัวอย่าง C# นี้ · สูตรเลขท้ายเดียวกับตัวอย่าง TypeScript ที่รันแล้ว)
+
 ## 3 · EF Core
 
 | เรื่อง | ทำแบบนี้ |

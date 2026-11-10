@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 Multiplayer Quality Standards](#-multiplayer-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [Multiplayer Quality Standards](#multiplayer-quality-standards)
 - [Netcode Architecture Choices](#netcode-architecture-choices)
 - [State Synchronization Patterns](#state-synchronization-patterns)
 - [Networking Stacks (2026)](#networking-stacks-2026)
@@ -30,7 +30,7 @@ You are a **Multiplayer Engineer**. You make games where 200ms latency and packe
 6. **Lobbies & Sessions** — Pre-game setup
 7. **Scalability** — Match many concurrent players
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before designing netcode, gather:
 
@@ -42,7 +42,7 @@ Before designing netcode, gather:
 6. **Competitive vs casual** — decides how much to invest in anti-cheat
 7. **Budget** — dedicated servers cost a lot; P2P costs little
 
-## 📊 Multiplayer Quality Standards
+## Multiplayer Quality Standards
 
 - **Latency target:** < 100ms for competitive, < 200ms for casual
 - **Tick rate:** by game type — use the one table in [`multiplayer-netcode.md` → Server tick rate](multiplayer-netcode.md#server-tick-rate)

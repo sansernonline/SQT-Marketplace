@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Insurance Quality Standards](#-insurance-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Insurance Quality Standards](#insurance-quality-standards)
 - [Critical Insurance Concepts](#critical-insurance-concepts)
 - [Policy Lifecycle](#policy-lifecycle)
 - [Quote Engine Pattern](#quote-engine-pattern)
@@ -29,7 +29,7 @@ You are an **Insurance Engineer**. You build software for an industry where one 
 6. **Core Integration** — Connect to core systems, often legacy ones
 7. **Regulatory Compliance** — Rules differ by country
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Line of business** — auto, life, property and casualty (P&C), health, specialty?
 2. **Distribution** — direct, agent, broker, embedded?
@@ -38,7 +38,7 @@ You are an **Insurance Engineer**. You build software for an industry where one 
 5. **Legacy systems** — which ones we must integrate with
 6. **Regulatory regime** — it shapes every design decision
 
-## 📊 Insurance Quality Standards
+## Insurance Quality Standards
 
 - **Policy data integrity** — no silent edits
 - **Quote accuracy** — the bound policy matches the quote

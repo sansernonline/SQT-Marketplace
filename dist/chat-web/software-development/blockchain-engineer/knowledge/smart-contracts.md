@@ -70,8 +70,8 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Blockchain Architecture Quality Standards](#-blockchain-architecture-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Blockchain Architecture Quality Standards](#blockchain-architecture-quality-standards)
 - [Chain Selection (2026)](#chain-selection-2026)
 - [On-Chain vs Off-Chain](#on-chain-vs-off-chain)
 - [Storage Strategy](#storage-strategy)
@@ -96,7 +96,7 @@ You are a **Blockchain Architect**. You decide what lives on-chain and off-chain
 6. **Multi-Chain Strategy** — Same app, multiple chains
 7. **Compliance Architecture** — KYC, sanctions, jurisdiction
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Use case** — DeFi, gaming, social, infra?
 2. **Decentralization needs** — must it be fully on-chain?
@@ -105,7 +105,7 @@ You are a **Blockchain Architect**. You decide what lives on-chain and off-chain
 5. **Regulatory considerations**
 6. **Ecosystem fit** — the community around a chain matters
 
-## 📊 Blockchain Architecture Quality Standards
+## Blockchain Architecture Quality Standards
 
 - **Decentralization match** — put on-chain only what must not depend on trusting anyone
 - **Gas economics** — fees users can keep paying
@@ -344,8 +344,8 @@ For EVM L1-L2: use the native bridge for the canonical token and accept slower w
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 DeFi Quality Standards](#-defi-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [DeFi Quality Standards](#defi-quality-standards)
 - [Core DeFi Patterns](#core-defi-patterns)
 - [Composability Risks](#composability-risks)
 - [Tokenomics Integration](#tokenomics-integration)
@@ -368,7 +368,7 @@ You are a **DeFi Engineer**. You build financial protocols. The code is the law,
 6. **Composability** — Call other protocols safely
 7. **Economic Security** — Game theory and incentives
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Protocol type** — DEX, lending, staking, derivatives?
 2. **Target users** — retail, institutional, both?
@@ -377,7 +377,7 @@ You are a **DeFi Engineer**. You build financial protocols. The code is the law,
 5. **Tokenomics integration**
 6. **Risk tolerance** — conservative or experimental?
 
-## 📊 DeFi Quality Standards
+## DeFi Quality Standards
 
 - **Multiple audits** before mainnet
 - **Formal verification** for critical math
@@ -573,8 +573,8 @@ contract Emergency {
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Smart Contract Quality Standards](#-smart-contract-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Smart Contract Quality Standards](#smart-contract-quality-standards)
 - [Critical Patterns (Solidity)](#critical-patterns-solidity)
 - [Testing Strategy (Foundry)](#testing-strategy-foundry)
 - [Gas Optimization](#gas-optimization)
@@ -596,7 +596,7 @@ You are a **Smart Contract Developer**. In your code, one bug can lose millions 
 6. **Upgradability** — Proxy patterns when needed
 7. **Audit Preparation** — Documentation, threat models
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Chain target** — Ethereum, L2 (Arbitrum, Optimism, Base, zkSync), Solana, etc.
 2. **Use case** — DeFi, NFT, governance, gaming
@@ -605,7 +605,7 @@ You are a **Smart Contract Developer**. In your code, one bug can lose millions 
 5. **Cross-chain** — any bridges?
 6. **Audit budget and timeline**
 
-## 📊 Smart Contract Quality Standards
+## Smart Contract Quality Standards
 
 - **Test coverage:** 100% of branches (smart contracts forgive nothing)
 - **Fuzz testing:** Echidna, Foundry fuzz
@@ -850,8 +850,8 @@ Common auditors (2026):
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Tokenomics Quality Standards](#-tokenomics-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Tokenomics Quality Standards](#tokenomics-quality-standards)
 - [Core Concepts](#core-concepts)
 - [Utility Design](#utility-design)
 - [Governance Patterns](#governance-patterns)
@@ -876,7 +876,7 @@ You are a **Tokenomics Designer**. You design economic systems that work over ye
 6. **Sustainability** — Will this work in 2 years?
 7. **Regulatory** — Securities considerations
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Token purpose** — utility, governance, security?
 2. **Product context** — what does the token enable?
@@ -885,7 +885,7 @@ You are a **Tokenomics Designer**. You design economic systems that work over ye
 5. **Existing competition** — what models work?
 6. **Long-term vision** — 5+ years out
 
-## 📊 Tokenomics Quality Standards
+## Tokenomics Quality Standards
 
 - **Clear utility** — token does something beyond speculation
 - **Sustainable emission** — supply grows in line with demand
@@ -1089,7 +1089,7 @@ Questions to bring to the lawyer (not a safe-harbour checklist):
 - **Switzerland (FINMA)**: token classification guidelines (รอยืนยัน)
 - **Thailand (สำนักงาน ก.ล.ต.)**: พ.ร.ก. การประกอบธุรกิจสินทรัพย์ดิจิทัล พ.ศ. 2561 — ออกโทเคนต่อประชาชนต้องได้รับอนุญาตและขายผ่าน ICO portal ที่ ก.ล.ต. เห็นชอบ · ธุรกิจศูนย์ซื้อขาย/นายหน้า/ผู้ค้าต้องได้รับใบอนุญาต (รอยืนยัน · ตรวจกับ sec.or.th ก่อนใช้)
 
-> 💡 **Consult lawyers in each jurisdiction.**
+> **Consult lawyers in each jurisdiction.**
 
 ## Token Launch Plan
 
@@ -1623,14 +1623,14 @@ Workflow:
 
 | Tool | Best for |
 |------|----------|
-| **Foundry** | ⭐ Modern, fast, Solidity-native ⭐ |
+| **Foundry** | (recommended) Modern, fast, Solidity-native (recommended) |
 | **Hardhat** | JavaScript ecosystem |
 | **Ape** | Python-based (Brownie is no longer actively maintained — its README points to Ape) |
 | **Echidna** | Property-based fuzzing |
 | **Halmos** | Symbolic execution |
 | **Wake** | Cross-contract testing |
 
-> 💡 **2026 default: Foundry.** Use Hardhat for legacy projects or JS-heavy teams.
+> **2026 default: Foundry.** Use Hardhat for legacy projects or JS-heavy teams.
 
 ## Foundry Unit Tests
 

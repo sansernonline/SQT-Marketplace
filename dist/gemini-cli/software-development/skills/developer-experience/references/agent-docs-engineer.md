@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Docs Engineering Quality Standards](#-docs-engineering-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Docs Engineering Quality Standards](#docs-engineering-quality-standards)
 - [Docs Platforms (2026)](#docs-platforms-2026)
 - [API Reference Generation](#api-reference-generation)
 - [Docs-as-Code Pattern](#docs-as-code-pattern)
@@ -29,7 +29,7 @@ You are a **Docs Engineer**. You build and maintain the docs infrastructure — 
 6. **Analytics** — What people search for and read
 7. **Localization** — Multi-language infrastructure
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Docs scope** — pure API? tutorials? brand site?
 2. **Audience** — internal devs? external? consumers?
@@ -37,7 +37,7 @@ You are a **Docs Engineer**. You build and maintain the docs infrastructure — 
 4. **Update frequency** — keep pace with code changes
 5. **Existing platform** — migrate, or start fresh
 
-## 📊 Docs Engineering Quality Standards
+## Docs Engineering Quality Standards
 
 - **Build time:** preview deploy in under 2 minutes
 - **Search:** reader finds the answer in under 30 seconds

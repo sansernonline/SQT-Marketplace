@@ -24,7 +24,7 @@ Use when auditing a whole codebase for vulnerabilities before handover, a pen te
 | ก่อน merge · ship · เพิ่ม dependency | [`security-gate`](../security-gate/SKILL.md) | ผลสแกน gitleaks · semgrep · trivy ของ gate เข้ามาเป็น candidate ในขั้น 3 |
 | สัญญาระบุ OWASP Top 10 | [`security-gate` ส่วน OWASP](../security-gate/references/owasp-top10.md) | finding ทุกข้อมีช่อง `owasp` รายงานจึงสรุปแถว A01–A10 ให้ได้ทันที |
 | ออกแบบ feature ใหม่ ยังไม่มีโค้ด | [`threat-model`](../threat-model/SKILL.md) | ถ้ามี threat model อยู่แล้ว ขั้นสำรวจใช้ DFD และ non-capabilities เป็นจุดตั้งต้น |
-| คำสั่งสแกนแบบเดิม | [`security-scan`](../security-scan/SKILL.md) | ถ้าขอบเขตคือทั้ง codebase ให้มาที่นี่ |
+| คำสั่งสั้น `/security-scan` | [`security-scan`](../security-scan/SKILL.md) | เป็นทางลัดที่ชี้มาที่นี่ (ทั้ง codebase) หรือไป `security-gate` (diff ก่อน ship) |
 | ถูกเจาะแล้ว · ตามรอยเหตุ · กฎ SIEM | `security-operations` | audit หาช่องก่อนเกิดเหตุ ส่วน security-operations รับมือหลังเกิดเหตุ |
 | ไม่มี source มีแต่ไฟล์ exe · APK · firmware | `reverse-engineering` | ทำต่อเมื่อได้ source ที่ถอดมาแล้ว |
 | finding แตะข้อมูลส่วนบุคคล | [`pdpa-compliance`](../pdpa-compliance/SKILL.md) | ข้อ confirmed ที่อาจรั่วแล้ว เปิดหัวข้อ 8 (72 ชั่วโมงแรก) |
@@ -155,8 +155,10 @@ node <skill>/scripts/render_report.mjs qa/security/audit-2026-10-26            #
 
 - **confirmed ที่แตะข้อมูลส่วนบุคคล** (`pdpa.personal_data` เป็น true) และมีร่องรอยว่าอาจถูกใช้แล้ว → เปิด `pdpa-compliance` หัวข้อ 8 ทันที นับ 72 ชั่วโมงจากตอนรู้ ไม่ใช่ตอนรายงานเสร็จ · ไม่มีร่องรอย ให้ระบุในรายงานว่าควรตรวจ log ย้อนหลัง
 - **confirmed ทุกข้อ** → playbook `bug-fix` (หาต้นเหตุ · เขียน test ที่ล้มก่อนแก้ ชื่อขึ้นต้นด้วยรหัส OWASP เช่น `A01_other_user_order_returns_404` · ค้นจุดอื่นที่เขียนแบบเดียวกัน) · ระดับ critical และ high ห้ามส่งมอบจนกว่าจะแก้ หรือลูกค้ายอมรับความเสี่ยงเป็นลายลักษณ์อักษรใน `decision-log`
+- **ก่อน merge แพตช์ของ confirmed ระดับ critical และ high** ให้ `reviewer` ตัวใหม่ที่ได้แค่ diff กับ finding (ไม่ได้คำอธิบายว่าช่องโหว่ทำงานอย่างไร) ตอบ 4 ข้อ: (1) แพตช์แตะเฉพาะเส้นทางของ finding นี้ไหม (2) แก้ที่ต้นเหตุ หรือกลบอาการ เช่น `try/except` ว่าง ลบการเช็ค ลดระดับ log (3) เพิ่มผิวโจมตีใหม่ไหม (4) นึกออกไหมว่ามี input ที่ยังไปถึงสภาพเดิมได้โดยไม่ชนแพตช์ · ข้อไหนตอบไม่ผ่านให้กลับไปแก้ก่อน (แนวคิดจากขั้นรีวิวแพตช์ของ defending-code-reference-harness · license ของ repo นั้นเป็น NOASSERTION จึงใช้แนวคิดเท่านั้น เขียนข้อความเอง · ดู 2026-11-10)
 - **needs_validation** → ส่ง `NEEDS-VALIDATION.md` ให้คนที่เข้าถึง deployment ได้ ตรวจตาม `check_plan` แล้วกลับมาปิดในรอบถัดไป
 - **รอบถัดไป** → อ่าน `findings.json` และ `ledger.json` รอบก่อนทั้งหมดก่อนวางแผน · ข้อ confirmed ที่โค้ดไม่เปลี่ยนยกมาพร้อม fingerprint เดิมแต่ต้องยืนยันใหม่ · โค้ดเปลี่ยนแล้ว ตรวจหน่วยนั้นใหม่ · แก้แล้ว ให้ตัวยืนยันรัน test ที่ล้มก่อนแก้ซ้ำ ผ่านจึงเขียนว่า `ปิดแล้ว` · หน่วย `blocked` และข้อ `needs_validation` เป็นงานของรอบนี้ · รอบเดียวไม่มีทางครอบคลุมทั้งหมด รายงานต้องไม่เขียนว่าครบ
+- **ส่งมอบตามมาตรฐาน** (PDPA · GDPR · PCI-DSS · SOC 2 · HIPAA) → ใส่ในรายงานว่า finding ข้อไหนชนข้อบังคับข้อไหน และหลักฐานที่เก็บแล้ว · แนบแผนแก้ 30/60/90 วัน เรียงตามระดับของ confirmed
 - สรุปสถานะด้วย `status-report` ประเภท `ตรวจ` · ถ้าส่งมอบตามสัญญา OWASP ให้แนบแถว A01–A10 จากรายงานนี้ไปกับรายงาน OWASP ของ `security-gate`
 
 ## ตัวอย่าง 1 ชุด
@@ -1057,6 +1059,8 @@ Use when reviewing a pull request, self-reviewing before submitting, or auditing
 1. **Understand the intent** — read PR description and linked ticket
 2. **Skim the diff** — get overall sense of changes
 3. **Deep review** — go through each section of checklist below
+   - **Verify before posting:** hand every `blocking:` finding to a fresh agent (or a second reader) with only the diff and the finding, and ask whether it is real. Drop it if they cannot reproduce or point to the line. For a contested diff use `adversarial-review-panel`.
+   - **Do not flag** (adapted from the `code-review` command of claude-plugins-official · Apache-2.0 · opened 2026-11-10): a problem that existed before this PR · something the linter or compiler already catches · a nitpick a senior reviewer would skip · behaviour that looks wrong but is right (check the context first) · a rule the team silenced on purpose with a lint-ignore comment · a problem that only appears for an input that cannot occur here
 4. **Run the code** if non-trivial — don't just read
 5. **Leave actionable comments** — suggest fixes, not just point out problems
 
@@ -1142,7 +1146,7 @@ The author does not fix every finding on sight: a finding can be wrong (reviewer
 
 Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. The house-specific checks stay in SKILL.md.
 
-### 🎯 Correctness
+### Correctness
 
 - [ ] Does the code do what the PR description says?
 - [ ] Are edge cases handled? (null, empty, zero, negative, very large)
@@ -1151,7 +1155,7 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 - [ ] Off-by-one errors checked?
 - [ ] Are assumptions explicit (or asserted)?
 
-### 🏗️ Design
+### Design
 
 - [ ] Does this fit the existing architecture?
 - [ ] Is the abstraction at the right level? (not too generic, not too specific)
@@ -1160,7 +1164,7 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 - [ ] Are dependencies appropriate? (no circular, minimal coupling)
 - [ ] Could this be simpler?
 
-### 🧪 Tests
+### Tests
 
 - [ ] Are there tests for the new code?
 - [ ] Tests cover happy path + edge cases + errors?
@@ -1168,7 +1172,9 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 - [ ] Tests are readable and maintainable?
 - [ ] No flaky tests introduced?
 
-### 🔒 Security
+**Rate each missing test 1–10 before suggesting it** (adapted from `pr-test-analyzer` · claude-plugins-official · Apache-2.0 · opened 2026-11-10). 9–10: data loss, money or security would break unnoticed · 7–8: the user sees an error · 5–6: edge case with limited impact · below 5: do not suggest it. Review behaviour, not line coverage. Do not ask for tests of plain getters and setters.
+
+### Security
 
 - [ ] Input validation at boundaries?
 - [ ] No SQL injection (parameterized queries)?
@@ -1178,7 +1184,7 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 - [ ] PII / sensitive data logged appropriately?
 - [ ] Dependencies updated? No known CVEs?
 
-### 🚀 Performance
+### Performance
 
 - [ ] No N+1 queries?
 - [ ] Appropriate caching where beneficial?
@@ -1186,7 +1192,7 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 - [ ] Large data handled with pagination/streaming?
 - [ ] No unnecessary network calls?
 
-### 📖 Readability
+### Readability
 
 - [ ] Names reveal intent? (variables, functions, classes)
 - [ ] Functions reasonably short?
@@ -1195,14 +1201,14 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 - [ ] No debug prints / TODO without ticket?
 - [ ] Consistent with existing code style?
 
-### 📚 Documentation
+### Documentation
 
 - [ ] Public APIs documented?
 - [ ] README/CHANGELOG updated if needed?
 - [ ] Breaking changes called out?
 - [ ] New env vars / config documented?
 
-### 🔄 Maintainability
+### Maintainability
 
 - [ ] Could a new team member understand this in 6 months?
 - [ ] Easy to modify when requirements change?

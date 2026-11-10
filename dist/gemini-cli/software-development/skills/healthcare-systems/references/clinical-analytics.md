@@ -120,7 +120,7 @@ ci_high = stats.chi2.ppf(0.975, 2*(observed+1)) / (2 * expected)
 | **NDC** | National Drug Code |
 | **HCPCS** | Healthcare procedures (US Medicare) |
 
-> 💡 **Use code system + code** always (e.g., LOINC|4548-4) — codes alone are ambiguous.
+> **Use code system + code** always (e.g., LOINC|4548-4) — codes alone are ambiguous.
 
 ## Quality Measures
 

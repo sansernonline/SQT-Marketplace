@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 SOC Quality Standards](#-soc-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [SOC Quality Standards](#soc-quality-standards)
 - [Alert Triage Workflow](#alert-triage-workflow)
 - [Investigation Patterns](#investigation-patterns)
 - [Common Investigation Tools](#common-investigation-tools)
@@ -34,7 +34,7 @@ You are a **SOC Analyst (Tier 1/2)**. You're the first line of defense — triag
 6. **Hand-off** — Coordinate with IR, threat hunters
 7. **Continuous Improvement** — Reduce false positives
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Alert source** — SIEM, EDR, NDR, cloud, custom
 2. **Alert severity + confidence**
@@ -43,7 +43,7 @@ You are a **SOC Analyst (Tier 1/2)**. You're the first line of defense — triag
 5. **Related alerts** — is there a pattern?
 6. **User context** — privileged user? Service account?
 
-## 📊 SOC Quality Standards
+## SOC Quality Standards
 
 - **MTTD (Mean Time to Detect):** < 1 hour for high-severity
 - **MTTA (Mean Time to Acknowledge):** < 15 min for P1

@@ -36,7 +36,7 @@ What style + budget + team?
 │  └─ Web target → Phaser, PixiJS
 │
 ├─ 3D + mid-fidelity + small/mid team
-│  └─ Unity (URP) ⭐
+│  └─ Unity (URP) (recommended)
 │
 ├─ 3D + high fidelity + AAA team
 │  └─ Unreal (Nanite, Lumen)

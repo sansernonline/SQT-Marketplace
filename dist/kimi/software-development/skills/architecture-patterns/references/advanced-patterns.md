@@ -91,10 +91,10 @@ Service A ──Event──► Service B ──Event──► Service C
 
 | | Orchestration | Choreography |
 |---|--------------|--------------|
-| Visibility | 🟢 Central | 🔴 Distributed |
-| Coupling | 🟡 Coupled to orchestrator | 🟢 Loosely coupled |
-| Debugging | 🟢 Easier | 🔴 Hard |
-| Adding services | 🟡 Update orchestrator | 🟢 Add subscriber |
+| Visibility | ✓Central | ✗Distributed |
+| Coupling | ~ Coupled to orchestrator | ✓Loosely coupled |
+| Debugging | ✓Easier | ✗Hard |
+| Adding services | ~ Update orchestrator | ✓Add subscriber |
 
 **Choose orchestration** when: complex flow, need clear visibility
 **Choose choreography** when: simple flow, many independent teams
@@ -138,4 +138,4 @@ Phase 1:    Phase 2:           Phase 3:
 4. Gradually shift traffic to new service
 5. Delete old code when fully migrated
 
-> 💡 **Safer than rewriting everything at once.**
+> **Safer than rewriting everything at once.**

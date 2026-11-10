@@ -90,10 +90,10 @@ Use for: consumer IoT (no setup)
 ### Health Tiers
 
 ```
-🟢 Healthy:     reporting + responsive
-🟡 Degraded:    reporting but slow / errors
-🔴 Unhealthy:   not reporting OR critical errors
-⚫ Offline:    no contact within SLA
+Healthy:     reporting + responsive
+Degraded:    reporting but slow / errors
+Unhealthy:   not reporting OR critical errors
+Offline:    no contact within SLA
 ```
 
 ### Key Metrics

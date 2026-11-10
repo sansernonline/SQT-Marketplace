@@ -545,7 +545,7 @@ api.newMethod({ arg })
 
 [Migration guide](#)
 
-## 🆕 New Features
+## New Features
 
 ### Feature Name
 
@@ -810,10 +810,10 @@ Service A ──Event──► Service B ──Event──► Service C
 
 | | Orchestration | Choreography |
 |---|--------------|--------------|
-| Visibility | 🟢 Central | 🔴 Distributed |
-| Coupling | 🟡 Coupled to orchestrator | 🟢 Loosely coupled |
-| Debugging | 🟢 Easier | 🔴 Hard |
-| Adding services | 🟡 Update orchestrator | 🟢 Add subscriber |
+| Visibility | ✓Central | ✗Distributed |
+| Coupling | ~ Coupled to orchestrator | ✓Loosely coupled |
+| Debugging | ✓Easier | ✗Hard |
+| Adding services | ~ Update orchestrator | ✓Add subscriber |
 
 **Choose orchestration** when: complex flow, need clear visibility
 **Choose choreography** when: simple flow, many independent teams
@@ -857,7 +857,7 @@ Phase 1:    Phase 2:           Phase 3:
 4. Gradually shift traffic to new service
 5. Delete old code when fully migrated
 
-> 💡 **Safer than rewriting everything at once.**
+> **Safer than rewriting everything at once.**
 
 
 ## reference: architecture-overview-template.md
@@ -1056,13 +1056,13 @@ Details moved out of [SKILL.md](../SKILL.md). Load this file once the decision t
 - Business areas don't have clear boundaries yet
 
 **Hidden costs:**
-- 💸 Much harder to operate (more services to deploy, monitor and debug)
-- 💸 Network latency between services
-- 💸 Transactions across services are hard
-- 💸 Bugs are harder to trace
-- 💸 You need a service mesh and a monitoring stack
+- Much harder to operate (more services to deploy, monitor and debug)
+- Network latency between services
+- Transactions across services are hard
+- Bugs are harder to trace
+- You need a service mesh and a monitoring stack
 
-> 🚨 **Microservices are an organizational scaling pattern**, not a tech pattern. Adopt them only when teams blocking each other is the real bottleneck.
+> **Microservices are an organizational scaling pattern**, not a tech pattern. Adopt them only when teams blocking each other is the real bottleneck.
 
 ---
 
@@ -1148,10 +1148,10 @@ Multiple consumers? ─Yes─► Async (pub/sub)
 
 | | Shared DB | DB per service |
 |---|-----------|----------------|
-| Coupling | 🔴 High | 🟢 Low |
-| Consistency | 🟢 ACID (all-or-nothing transactions) | 🟡 Eventual |
-| Schema changes | 🔴 Coordinate | 🟢 Independent |
-| Performance | 🟢 Easy joins | 🔴 Network calls |
+| Coupling | ✗High | ✓Low |
+| Consistency | ✓ACID (all-or-nothing transactions) | ~ Eventual |
+| Schema changes | ✗Coordinate | ✓Independent |
+| Performance | ✓Easy joins | ✗Network calls |
 | Use when | Monolith | Microservices |
 
 ### Caching tiers

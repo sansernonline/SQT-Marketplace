@@ -246,6 +246,8 @@ SRS ที่ไม่มีรูปเลย คนอ่านต้องน
 ไล่ checklist ใน [`references/review-checklist.md`](references/review-checklist.md) ให้ครบก่อนส่งทุกครั้ง (ขอบเขต · ข้อกำหนดรายข้อ · ความครบของหมวด · เอกสาร)
 เพราะข้อที่ไม่ผ่านจะกลายเป็นข้อพิพาทตอนตรวจรับ
 
+**ทดสอบด้วยผู้อ่านใหม่** ต่อจาก checklist: ให้ agent ตัวใหม่ที่ได้เฉพาะไฟล์ SRS ตอบ 8–10 คำถามที่ developer และ QA จะถาม ข้อที่ตอบผิดหรือตอบว่า "ไม่รู้" คือจุดที่ต้องแก้ ยังไม่ผ่านก็ไม่ส่งลูกค้า → [`references/reader-test.md`](references/reader-test.md)
+
 ---
 
 ## 9 · Anti-patterns

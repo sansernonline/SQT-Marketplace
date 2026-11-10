@@ -68,6 +68,10 @@ Brief: a café promotes a new drink on IG feed, IG story, TikTok and LINE OA.
 
 Story middle band: 1920 × 14% = 269 px from top; 1920 × 35% = 672 px from bottom → usable to y = 1248.
 
+## Number posts (infographic in a post)
+
+1 image = 1 conclusion: the title states the finding ("ยอดขายเดือนนี้เพิ่ม 20%"), the line under it gives the period, the source goes small at the bottom. Sort bars by value, label the bars directly when there are about 12 or fewer, mark only what the reader must see. Full chart rules (Thai font, colours): `software-development` `data-analysis` (if installed). Idea from anthropics `claude-tag-data-viz` graphing (rewritten, no code copied · ตรวจ 2026-11-10).
+
 ## Not an AI look
 
 Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files.
@@ -77,7 +81,11 @@ Before handing over, run the check in `no-ai-look` (section 3): its script on HT
 - `campaign-set` — which placements, in what order
 - `asset-organize` — format codes in file names
 - `video-script-to-clip` — captions and safe zones in video
-- `software-development` `graphic-design` (if installed) — print sizes and LINE rich menu layout for product work
+- `banner-design` — banners and cover headers (event, web hero, display ad)
+- `youtube-thumbnail` — thumbnails for YouTube
+- `marketplace-product-images` — product photos for Shopee, Lazada, TikTok Shop
+- `line-richmenu` — LINE rich menu image sizes, tap areas and JSON
+- `print-ready-files` — files that go to a print shop (CMYK, bleed)
 
 ## เรียกเป็นคำสั่ง
 
@@ -202,7 +210,7 @@ Use when one campaign (launch, sale, event, festival) needs assets for several p
 5. **Master first** — design the hero at the main placement's ratio (the one that carries most of the campaign), at its largest canvas. Get it approved before deriving anything. Then derive tallest to widest
 6. **Derive in order** — stills by ratio (9:16 → 4:5 → 1:1 → wide) → covers and banners → motion and video last, built from the still's look
 7. **Name** every file with the `asset-organize` pattern, putting the matrix ID in its optional `<id>` token
-8. **Ship gate** (final check before posting) — each asset passes `design-review` and its matrix row is ticked. No tick, no post
+8. **Ship gate** (final check before posting) — each asset passes `design-review`, has its alt text (1 Thai line: what is seen plus the text on the image), its promo claims pass `copy-claims-check`, and its matrix row is ticked. No tick, no post
 
 ## Campaign card
 
@@ -257,6 +265,8 @@ Before handing over, run the check in `no-ai-look` (section 3): its script on HT
 - `style-consistency` — the look shared by all rows
 - `video-script-to-clip` — V rows
 - `design-review` — the ship gate
+- `copy-claims-check` — wording of offers and claims before posting
+- `line-sticker` — when the campaign includes a LINE sticker set
 - `asset-organize` — names and folders
 
 ## เรียกเป็นคำสั่ง
@@ -283,12 +293,14 @@ Style lock: <sheet name + version> · Brand kit: <version>
 Mandatory on every asset: <logo · price · ID · terms line>
 Approver: <name> · Turnaround: <hours>
 
-| ID | Placement | Platform | Canvas (px) | Ratio | Still / video | Length | Copy on image (TH / EN) | Derived from | Owner | Due | Review | Status | File name |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| M1 | Feed (master) | ig | 1080 × 1350 | 4:5 | Still | — | | — | | | ☐ | To do | |
-| D1 | Story | ig/fb | 1080 × 1920 | 9:16 | Still | — | | M1 | | | ☐ | To do | |
-| D2 | | | | | | | | M1 | | | ☐ | | |
-| V1 | Reel / TikTok | tt/ig | 1080 × 1920 | 9:16 | Video | 15 s | | M1 | | | ☐ | | |
+| ID | Placement | Platform | Canvas (px) | Ratio | Still / video | Length | Copy on image (TH / EN) | Max text | If longer | Alt text (TH, 1 line) | Derived from | Owner | Due | Review | Status | File name |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| M1 | Feed (master) | ig | 1080 × 1350 | 4:5 | Still | — | | headline 25 Thai chars · 2 lines | cut a line, or shrink ≤ 15%, or move to the caption | | — | | | ☐ | To do | |
+| D1 | Story | ig/fb | 1080 × 1920 | 9:16 | Still | — | | | | | M1 | | | ☐ | To do | |
+| D2 | | | | | | | | | | | M1 | | | ☐ | | |
+| V1 | Reel / TikTok | tt/ig | 1080 × 1920 | 9:16 | Video | 15 s | | | | | M1 | | | ☐ | | |
+
+**Max text** is counted without Thai tone marks and upper/lower vowels (the Netflix Thai count in `motion-basics`); 25 above is an example, set the real number from the master layout. Thai has no spaces, so break a longer line where `human-writing` `references/thai-line-breaking.md` allows. Sample row for a long product name: `M1 · "มัทฉะเย็นโอ๊ตมิลค์สูตรพิเศษ ขนาด 16 ออนซ์" · max 25 chars → 2 lines at 64 px · longer → drop the size to the caption`. Reference the brand kit's tokens by name (colour role, type style), not by hex or px, so a Canva template edit by the team follows a kit update. Idea from anthropics/knowledge-work-plugins `design/skills/design-handoff` (Apache-2.0 · rewritten · ตรวจ 2026-11-10).
 
 Status values: To do · In progress · In review · Fix · Approved · Posted
 

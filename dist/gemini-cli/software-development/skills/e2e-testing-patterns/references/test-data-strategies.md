@@ -12,8 +12,8 @@ Wrong: Pollution between tests
 
 ## Option 2: Per-test setup (slow)
 ```
-🟡 Clean slate every test
-🟡 Reliable but slow
+Right: Clean slate every test
+Mixed: Reliable but slow
 Good for critical flows
 ```
 
@@ -35,5 +35,5 @@ test('user sees orders', async ({ page, request }) => {
 ```
 Right: Real production-like data
 Right: Fast (uses snapshots)
-🟡 Requires DB tooling
+Mixed: Requires DB tooling
 ```

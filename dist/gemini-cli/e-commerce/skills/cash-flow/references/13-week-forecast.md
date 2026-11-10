@@ -40,6 +40,8 @@ Copy into Google Sheets or Excel. Columns B–N are weeks 1–13 (week starting 
 | 21 | buffer | e.g. 2 weeks of rows 14 + 15 + 18 |
 | 22 | below buffer? | `=IF(B20<B21,"ACT","")` · conditional format red |
 | 23 | action and owner | what will be done, by whom, by which date |
+| 24 | slow-case closing | copy rows 3–6 with the `slowest 10% days` lag (fewer than 3 payouts measured: median × 1.3, labelled default) and recompute closing |
+| 25 | slow case below buffer? | `=IF(B24<B21,"ACT","")` · the flag in row 23 names the channel, week and amount |
 
 ## Tab `actual-vs-forecast`
 

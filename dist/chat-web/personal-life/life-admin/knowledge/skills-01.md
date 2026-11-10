@@ -11,11 +11,22 @@ Twenty minutes, once a week, so Monday starts with a plan instead of panic. Frid
 | Min | Step | Look at | Write down |
 |---|---|---|---|
 | 0–4 | **1. Clear inputs** | Inbox `Waiting for`, chat saved messages, notes inbox, paper receipts | Anything actionable → task with a date |
-| 4–8 | **2. Look back** | Last 7 days of calendar, sent mail, task list | Done · slipped · delegated |
+| 4–8 | **2. Look back** | Last 7 days of calendar, sent mail, task list (`tasks.md` from `task-board`, if kept) | Done · slipped · delegated |
 | 8–11 | **3. Open loops** | Promises made in meetings and chats | What I owe whom, and by when |
 | 11–14 | **4. Money and admin** | Bills, card statement due dates, renewals, expiring documents | Due next 14 days, with amount |
 | 14–17 | **5. Look ahead** | Next 2 weeks of calendar, birthdays, deadlines | Prep needed; conflicts |
 | 17–20 | **6. Next week's three** | Goals (`goal-and-habit`) and the above | Exactly three priorities, ranked, each with a scheduled block |
+
+## Shape of the summary when several sources are scanned
+
+Steps 1–3 often read mail, chat, calendar and notes together. Write what comes out like this:
+
+1. **Things to do come first**, each with owner and date. Background and news after.
+2. **Group by topic, not by source.** The same matter seen in mail, LINE and the calendar is one line that names all three ("ซ่อมแอร์ห้องนอน — อีเมลช่าง · LINE แม่ · นัดพฤหัส 10:00").
+3. **A source that could not be opened** (connector down, export missing) is named at the end ("ไม่ได้อ่าน: LINE กลุ่มบ้าน"). The rest of the summary still goes out.
+4. **Last line counts:** to-dos · decisions made · sources scanned · the dates covered ("งาน 7 · ตัดสินใจ 2 · แหล่ง 4 · 3–9 พ.ย.").
+
+Works the same when the user pastes text instead of connecting sources. Idea from anthropics/knowledge-work-plugins `enterprise-search/skills/digest` (Apache-2.0, rewritten, viewed 2026-11-10).
 
 ## Money and admin checklist (step 4)
 
@@ -46,7 +57,7 @@ Template (append to `weekly-reviews.md`, newest on top) and a filled week: [refe
 - Three priorities, not five; everything else is the queue
 - End with the three visible where the user will see them Monday morning (calendar, phone widget, sticky note)
 
-Related: `inbox-triage` · `calendar-audit` (monthly) · `goal-and-habit` (quarterly) · `important-docs` · `subscription-audit` · `gift-idea-tracker` (occasions in the next 14 days).
+Related: `inbox-triage` · `task-board` (the task file steps 1–3 read and update) · `calendar-audit` (monthly) · `goal-and-habit` (quarterly) · `important-docs` · `subscription-audit` · `gift-idea-tracker` (occasions in the next 14 days).
 
 ## เรียกเป็นคำสั่ง
 

@@ -371,7 +371,7 @@ updated_at   timestamptz     NOT NULL DEFAULT now()
 | `row_version` / `xmin` | มีคนแก้พร้อมกันได้ | ใช้คู่กับ ETag ใน `api-conventions` |
 | `tenant_id` | ระบบหลายผู้เช่า | ดูข้อ 10 |
 
-> 🚨 **soft delete (ลบโดยแค่ติดป้าย) มีต้นทุน** คือทุก unique constraint ต้องคิดใหม่
+> **soft delete (ลบโดยแค่ติดป้าย) มีต้นทุน** คือทุก unique constraint ต้องคิดใหม่
 > `ux_users_email` จะกันไม่ให้สมัครอีเมลเดิมซ้ำ แม้บัญชีเก่าถูกลบไปแล้ว
 > แก้ด้วย partial index: `CREATE UNIQUE INDEX ... WHERE deleted_at IS NULL`
 
@@ -385,7 +385,7 @@ updated_at   timestamptz     NOT NULL DEFAULT now()
 | **UUIDv7 / ULID** | เรียงตามเวลา · สร้างจากฝั่งแอปได้ · ไม่ชนกัน | 16 ไบต์ · อ่านด้วยตายาก | ระบบกระจาย · ต้องสร้าง id ก่อนบันทึก · id โผล่ใน URL |
 | `UUIDv4` สุ่มล้วน | ไม่ชนกัน เดาไม่ได้ | **index แตกกระจาย เขียนช้าลงชัดเจนเมื่อข้อมูลเยอะ** | เลี่ยงถ้าเลือกได้ |
 
-> 🚨 **UUIDv4 เป็น primary key คือกับดักที่เจอบ่อยที่สุด**
+> **UUIDv4 เป็น primary key คือกับดักที่เจอบ่อยที่สุด**
 > ค่าสุ่มล้วนทำให้ทุก insert ไปแทรกกลางโครงสร้าง index
 > ข้อมูลหลักหมื่นยังไม่รู้สึก แต่พอถึงหลักสิบล้านจะช้าจนต้องรื้อ
 > ถ้าต้องใช้ UUID ให้ใช้ **v7** ซึ่งขึ้นต้นด้วยเวลา จึงเรียงเพิ่มเหมือน bigint
@@ -484,7 +484,7 @@ index `(a, b)` ใช้กับ query ที่กรองด้วย `a` �
 | schema แยกต่อผู้เช่า | กลาง | migration ต้องวนทุก schema | ผู้เช่าหลักสิบถึงหลักร้อย |
 | ฐานข้อมูลแยกต่อผู้เช่า | สูงสุด | แพงสุด | ลูกค้าองค์กรที่บังคับให้แยก |
 
-> 🚨 ถ้าเลือกแบบ `tenant_id` ให้**บังคับที่ชั้นล่างสุด ไม่ใช่ใส่ใน query ทีละตัว**
+> **สำคัญ:** ถ้าเลือกแบบ `tenant_id` ให้**บังคับที่ชั้นล่างสุด ไม่ใช่ใส่ใน query ทีละตัว**
 > ใช้ row-level security ของฐานข้อมูล หรือ global filter ของ ORM
 > query ที่ลืมใส่ `WHERE tenant_id = ?` แค่ตัวเดียว ก็ทำให้ข้อมูลลูกค้ารายหนึ่งโผล่ให้อีกรายเห็น
 > และไม่มี error ให้เห็นเลย
@@ -773,10 +773,10 @@ total_amount   float / double                -- ผิด: 0.1 + 0.2 ไม่�
 | JSON | `jsonb` (มี index ได้) | `nvarchar(max)` + `JSON_VALUE` | `JSON` |
 | ไฟล์ไบนารี | `bytea` (หรือเก็บนอกฐานข้อมูล) | `varbinary(max)` | `BLOB` |
 
-> 🚨 **SQL Server + ภาษาไทย**: `varchar` ทำให้ตัวอักษรไทยกลายเป็น `?`
+> **SQL Server + ภาษาไทย**: `varchar` ทำให้ตัวอักษรไทยกลายเป็น `?`
 > ต้องใช้ `nvarchar` และเขียนค่าคงที่เป็น `N'ข้อความ'` เสมอ
 >
-> 🚨 **MySQL ต้องเป็น `utf8mb4`** เพราะชุดอักขระชื่อ `utf8` เฉย ๆ ของ MySQL
+> **MySQL ต้องเป็น `utf8mb4`** เพราะชุดอักขระชื่อ `utf8` เฉย ๆ ของ MySQL
 > เก็บได้แค่ 3 ไบต์ต่อตัว อีโมจิและอักขระบางตัวจึงหาย
 
 ---
@@ -1042,7 +1042,7 @@ Source → Load raw → Transform in warehouse
                     Snowflake/BigQuery scale
 ```
 
-> 💡 **2026 default: ELT with dbt** — load raw to warehouse, transform with SQL via dbt
+> **2026 default: ELT with dbt** — load raw to warehouse, transform with SQL via dbt
 
 ## Tech Stack (2026 Recommendations)
 
@@ -1051,12 +1051,12 @@ Source → Load raw → Transform in warehouse
 ### Warehouse / Lake
 | Tool | Best for | Cost |
 |------|----------|------|
-| **Snowflake** | Pure warehouse, separation of compute/storage | 💰💰 |
-| **BigQuery** | Serverless, ad-hoc, GCP shops | 💰💰 |
-| **Databricks** | Unified lake + warehouse, ML-heavy | 💰💰💰 |
-| **DuckDB** | Local dev, embedded analytics | 💰 free |
-| **Redshift** | AWS-native, legacy | 💰💰 |
-| **Postgres** | Small data (<1TB), simplicity | 💰 |
+| **Snowflake** | Pure warehouse, separation of compute/storage | $$|
+| **BigQuery** | Serverless, ad-hoc, GCP shops | $$|
+| **Databricks** | Unified lake + warehouse, ML-heavy | $$$|
+| **DuckDB** | Local dev, embedded analytics | $free |
+| **Redshift** | AWS-native, legacy | $$|
+| **Postgres** | Small data (<1TB), simplicity | $|
 
 ### Transformation
 - **dbt** — SQL-based, version controlled, tested (industry default)
@@ -1107,7 +1107,7 @@ CREATE TABLE dim_customer (
 );
 ```
 
-> 💡 **Star = denormalized, query-fast**
+> **Star = denormalized, query-fast**
 > **Snowflake = normalized dims, save storage**
 > **Wide tables / OBT (One Big Table) = even faster for analytics**
 
@@ -1298,10 +1298,10 @@ GET /v1/orders?status=confirmed&createdAt[gte]=2026-01-01&sort=-createdAt&fields
 | ระยะเวลา | วินาทีเป็นตัวเลข ตั้งชื่อให้รู้หน่วย | `"timeoutSeconds": 30` |
 | ประเทศ / สกุลเงิน / ภาษา | ISO 3166 · ISO 4217 · BCP 47 | `"TH"` · `"THB"` · `"th-TH"` |
 
-> 🚨 **id เป็นตัวเลขใน JSON คือระเบิดเวลา** — JavaScript เก็บจำนวนเต็มได้ปลอดภัยถึง 9,007,199,254,740,991
+> **id เป็นตัวเลขใน JSON คือระเบิดเวลา** — JavaScript เก็บจำนวนเต็มได้ปลอดภัยถึง 9,007,199,254,740,991
 > `bigint` ที่เกินนั้นจะถูกปัดเศษเงียบ ๆ ตอน `JSON.parse` และถ้าจะเปลี่ยนเป็นสตริงทีหลังก็เป็น breaking change
 >
-> 🚨 **เงินเป็น float ใน JSON** — `1250.10` ที่ผ่าน 2 ภาษาโปรแกรมอาจกลายเป็น `1250.0999999999999`
+> **เงินเป็น float ใน JSON** — `1250.10` ที่ผ่าน 2 ภาษาโปรแกรมอาจกลายเป็น `1250.0999999999999`
 
 **`null` กับ "ไม่มีฟิลด์" ต้องหมายถึงคนละอย่าง:**
 

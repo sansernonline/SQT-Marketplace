@@ -51,26 +51,26 @@ description: Use when designing end-to-end tests with Playwright or Cypress, fix
 ─────────────────
 ```
 
-> 🚨 **Anti-pattern: Ice cream cone** (many E2E tests, few unit tests)
+> **Anti-pattern: Ice cream cone** (many E2E tests, few unit tests)
 > Result: slow CI, flaky tests, slow debugging
 
 ## Framework Selection
 
 | Framework | Best for | Avoid for |
 |-----------|----------|-----------|
-| **Playwright** ⭐ | Modern apps, cross-browser, parallel | Legacy apps with weird patterns |
+| **Playwright** (recommended) | Modern apps, cross-browser, parallel | Legacy apps with weird patterns |
 | **Cypress** | Developer experience, easy to learn, single-app | Multi-tab, cross-origin tests |
 | **Selenium** | Legacy, language flexibility | Greenfield projects |
 | **Puppeteer** | Chrome-only, scraping | Cross-browser needs |
 | **WebDriverIO** | Mobile + web, BDD style | Simple use cases |
 
-> 💡 **Default recommendation: Playwright** — best developer experience, fast, cross-browser, made by Microsoft
+> **Default recommendation: Playwright** — best developer experience, fast, cross-browser, made by Microsoft
 
 ## Test Structure: Page Object Model (POM)
 
 ถ้าทุกเทสต์เขียน `page.fill` และ `page.click` ของหน้าเดียวกันซ้ำ ๆ ให้ย้ายขั้นตอนเหล่านั้นไปไว้ในคลาสของหน้านั้น แล้วให้เทสต์เรียกเมธอดแทน โค้ดเทียบอยู่ใน [references/page-object-model.md](references/page-object-model.md)
 
-> 💡 **One Page Object per page or major component.**
+> **One Page Object per page or major component.**
 
 ## Selectors: Hierarchy of Goodness
 
@@ -79,10 +79,10 @@ Most resilient ─────────────────────�
 
 ถูก: Role + accessible name      page.getByRole('button', { name: 'Submit' })
 ถูก: Test IDs                     page.getByTestId('submit-btn')
-🟡 Visible text                 page.getByText('Submit')
-🟡 Label                        page.getByLabel('Email')
-🔴 CSS classes                  page.locator('.btn-primary')
-🔴 Tag + index                  page.locator('button:nth-child(3)')
+กลาง: Visible text              page.getByText('Submit')
+กลาง: Label                     page.getByLabel('Email')
+ผิด: CSS classes               page.locator('.btn-primary')
+ผิด: Tag + index               page.locator('button:nth-child(3)')
 ผิด: XPath                        page.locator('//div[2]/button')
 ```
 
@@ -109,7 +109,7 @@ Most resilient ─────────────────────�
 - Performance (use dedicated tools)
 - Visual design (use visual regression tools)
 
-> 💡 **Rule of thumb:** If a unit/integration test can verify it, don't add E2E.
+> **Rule of thumb:** If a unit/integration test can verify it, don't add E2E.
 
 ให้ทำตารางความครอบคลุมของเส้นทางผู้ใช้ (Critical Path Coverage Matrix) ที่บอกว่าแต่ละเส้นทางครอบคลุมแล้วหรือยัง และสำคัญระดับ P1 P2 หรือ P3 (scale เดียวกับ `test-case-template` และ tag ด้านล่าง · P1 สำคัญสุด) ตัวอย่างอยู่ใน [references/coverage-and-libraries.md](references/coverage-and-libraries.md)
 

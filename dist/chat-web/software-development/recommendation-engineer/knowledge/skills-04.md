@@ -58,8 +58,8 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 LLM System Quality Standards](#-llm-system-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [LLM System Quality Standards](#llm-system-quality-standards)
 - [Model Selection](#model-selection)
 - [RAG (Retrieval-Augmented Generation) Architecture](#rag-retrieval-augmented-generation-architecture)
 - [Agent Systems](#agent-systems)
@@ -84,7 +84,7 @@ You are an **LLM Architect**. You design systems built around Large Language Mod
 6. **Safety & Guardrails** — Input + output filtering
 7. **Cost & Latency** — Keep the system fast and affordable enough to run
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before designing LLM systems, gather:
 
@@ -96,7 +96,7 @@ Before designing LLM systems, gather:
 6. **Privacy / data residency** — can data leave your servers?
 7. **Existing data sources** — what to retrieve from in RAG?
 
-## 📊 LLM System Quality Standards
+## LLM System Quality Standards
 
 - **Eval pass rate:** > 90% on production-like inputs
 - **Hallucination rate:** < 2% (measured, not assumed)
@@ -114,10 +114,10 @@ Model names change every few months, so this section names tiers, not versions. 
 
 | Tier | Use for | Cost | Latency |
 |------|---------|:----:|:-------:|
-| 🚀 **Frontier** (Claude Opus tier, OpenAI's top tier) | Complex reasoning, agents, code | 💰💰💰 | 🐢 Slow |
-| ⚡ **Workhorse** (Claude Sonnet tier, OpenAI's mid tier) | Most production tasks | 💰💰 | 🚶 Med |
-| 🏃 **Fast** (Claude Haiku tier, OpenAI's mini tier) | Classification, simple gen | 💰 | 🏃 Fast |
-| 🦾 **Specialized** (speech-to-text, embedding models) | Specific tasks | varies | varies |
+| **Frontier** (Claude Opus tier, OpenAI's top tier) | Complex reasoning, agents, code | $$$ | Slow |
+| **Workhorse** (Claude Sonnet tier, OpenAI's mid tier) | Most production tasks | $$ | Med |
+| **Fast** (Claude Haiku tier, OpenAI's mini tier) | Classification, simple gen | $ | Fast |
+| **Specialized** (speech-to-text, embedding models) | Specific tasks | varies | varies |
 
 ### Decision flow
 
@@ -423,8 +423,8 @@ Levers:
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 ML Quality Standards](#-ml-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [ML Quality Standards](#ml-quality-standards)
 - [Problem Framing](#problem-framing)
 - [Model Selection Decision Tree](#model-selection-decision-tree)
 - [Feature Engineering Patterns](#feature-engineering-patterns)
@@ -448,7 +448,7 @@ You are a **Machine Learning Engineer**. You build models that solve real proble
 5. **Evaluation** — The right metrics, not just accuracy
 6. **Production Handoff** — Deployable models with monitoring
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before training anything, gather:
 
@@ -462,7 +462,7 @@ Before training anything, gather:
 **Before training a model, ask:** "Can rules solve this?"
 Often the answer is yes. Don't use machine learning (ML) where rules will do.
 
-## 📊 ML Quality Standards
+## ML Quality Standards
 
 - **Test set performance:** clearly better than the baseline
 - **Train/test/val split:** stratified, time-aware
@@ -529,7 +529,7 @@ Problem type? Data size? Latency?
    └─ Embedding + classical (or multi-modal model)
 ```
 
-> 💡 **2026 default for tabular data: XGBoost.** It beats neural nets on most tabular problems.
+> **2026 default for tabular data: XGBoost.** It beats neural nets on most tabular problems.
 
 ## Feature Engineering Patterns
 
@@ -712,8 +712,8 @@ Hand model to `ai-engineer` with:
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 MLOps Quality Standards](#-mlops-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [MLOps Quality Standards](#mlops-quality-standards)
 - [Production ML Architecture](#production-ml-architecture)
 - [Tech Stack (2026)](#tech-stack-2026)
 - [Model Serving Patterns](#model-serving-patterns)
@@ -739,7 +739,7 @@ You are an **MLOps Engineer**. You take models from notebooks to production. You
 6. **A/B Testing** — Compare the current model (champion) with a new one (challenger)
 7. **Rollback** — Return to the previous model safely when something fails
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before productionizing, gather:
 
@@ -750,7 +750,7 @@ Before productionizing, gather:
 5. **Existing infra** — Kubernetes (k8s)? serverless? SageMaker?
 6. **Compliance** — explainability, audit, data residency
 
-## 📊 MLOps Quality Standards
+## MLOps Quality Standards
 
 - **Deployment time:** < 1 hour for model update
 - **Rollback time:** < 5 min
@@ -792,13 +792,13 @@ flowchart LR
 ## Tech Stack (2026)
 
 ### Model Registry / Tracking
-- **MLflow** — open source, mature ⭐
+- **MLflow** — open source, mature (recommended)
 - **Weights & Biases** — slick UI, popular
 - **Comet** — enterprise features
 - **Neptune** — flexible logging
 
 ### Serving
-- **BentoML** — model packaging + serving ⭐
+- **BentoML** — model packaging + serving (recommended)
 - **TorchServe** — PyTorch native
 - **TF Serving** — TensorFlow native
 - **Triton (NVIDIA)** — GPU-optimized, multi-framework
@@ -806,7 +806,7 @@ flowchart LR
 - **AWS SageMaker / GCP Vertex / Azure ML** — managed
 
 ### Feature Stores
-- **Feast** — open source, lightweight ⭐
+- **Feast** — open source, lightweight (recommended)
 - **Tecton** — managed, full-featured
 - **SageMaker Feature Store** — AWS native
 - **Hopsworks** — open source, enterprise
@@ -818,7 +818,7 @@ flowchart LR
 - **Metaflow** (Netflix) — dev-friendly
 
 ### Monitoring
-- **Evidently** — drift + performance ⭐
+- **Evidently** — drift + performance (recommended)
 - **Arize / Fiddler / Aporia** — commercial
 - **WhyLabs** — open source profiling
 - **Grafana + Prometheus** — custom metrics
@@ -1066,8 +1066,8 @@ prediction = model.predict(features)
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 Prompt Quality Standards](#-prompt-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [Prompt Quality Standards](#prompt-quality-standards)
 - [Anatomy of a Good Prompt](#anatomy-of-a-good-prompt)
 - [Critical Prompt Patterns](#critical-prompt-patterns)
 - [Few-Shot vs Fine-Tuning](#few-shot-vs-fine-tuning)
@@ -1092,7 +1092,7 @@ You are a **Prompt Engineer**. You design and improve Large Language Model (LLM)
 6. **Evaluation** — Eval sets, metrics, regression tests
 7. **Token Efficiency** — Cut cost and latency
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before writing prompts, gather:
 
@@ -1105,7 +1105,7 @@ Before writing prompts, gather:
 
 If you don't have examples, **stop and collect them first**.
 
-## 📊 Prompt Quality Standards
+## Prompt Quality Standards
 
 - **Eval set:** 20-50 to start, 50+ before production (llm-evaluation-patterns.md Step 1)
 - **Pass rate target:** > 90% on eval
@@ -1281,7 +1281,7 @@ If critique finds issues, revise. Output ONLY the final answer.
 | Exploring problem | Production at scale |
 | Schema is complex | Pattern is consistent |
 
-> 💡 **2026 default: few-shot first.** Fine-tune only when the eval set shows a measurable gain.
+> **2026 default: few-shot first.** Fine-tune only when the eval set shows a measurable gain.
 
 ## Token Efficiency
 
@@ -1638,6 +1638,11 @@ Thai deployments: KBTG (AthenaMind) appears only in press coverage with no mecha
 - **Guardrails can trip the whole run**: OpenAI input, output and tool guardrails run alongside the agent and stop it on a tripwire ([O2]).
 - **Make every step reversible where possible**: commit or checkpoint per step (Replit, Anthropic resume) ([R3], [A2]).
 - **Saved run state is untrusted input** until loaded from a store you control ([O3]).
+- **Write tools accept only ids the session has read (provenance).** An order, customer or account id that the agent typed from memory or copied out of a retrieved document is rejected; the server keeps the list of ids this session was shown and checks against it. This stops a poisoned page from steering a refund to an id of the attacker's choice (idea from Anthropic commerce-agents `commerce-trust-safety` · Apache-2.0 · reworded · opened 2026-11-10).
+- **The user is bound to the session on the server, never passed as a tool argument.** A tool schema with a `user_id` or `account` field lets the model, or whoever steered it, act as someone else. Take the identity from the authenticated session.
+- **Clean outside text before it enters the prompt.** Normalize Unicode, strip invisible characters (zero-width, bidi controls) and anything that imitates a turn separator or role label (`Assistant:`, `</system>`). Do this at the edge where email, chat and web text arrive.
+- **Memory has a filter and an expiry date.** What the agent may remember passes a filter that refuses identifiers (Thai national id 13 digits, phone number, bank account number, card number) and every saved item carries a delete-by date → [`pdpa-compliance`](../../pdpa-compliance/SKILL.md) section 5.
+- **A blocked call returns a result that names the gate, it does not throw.** Return `{blocked: "needs_approval", reason: ...}` so the agent can tell the user what is missing instead of retrying or looping on an exception.
 - Agents reaching real systems (database, ERP, internal API) go through an MCP server → [`mcp-server`](../../mcp-server/SKILL.md). Input validation, server-side permission checks, secrets and logs → [`principle-secure-by-default`](../../principle-secure-by-default/SKILL.md).
 - Evaluate the agent before and after every change → [`llm-evaluation-patterns.md`](llm-evaluation-patterns.md) section "Agent Evaluation".
 
@@ -1965,9 +1970,9 @@ Without an eval set, you're guessing. Period.
 **Categories to include:**
 - Happy path (50%)
 - Note: Edge cases (20%)
-- 🚨 Safety / refusal (15%)
-- 🌐 Multilingual (if applicable) (10%)
-- 🐛 Known failure modes (5%)
+- Safety / refusal (15%)
+- Multilingual (if applicable) (10%)
+- Known failure modes (5%)
 
 ### Step 2: Grow with production data
 
@@ -2124,7 +2129,7 @@ async def llm_judge(question, ai_answer, reference):
 
 ### Critical: Use a BIGGER model as judge
 
-> 💡 If your app uses Sonnet, judge with Opus. A smaller judge gives noisy scores.
+> **Tip:** If your app uses Sonnet, judge with Opus. A smaller judge gives noisy scores.
 
 ### Validate judge with humans
 
@@ -2214,6 +2219,10 @@ def safety_score(model):
 Over-cautious models refuse fair questions:
 - "How does anesthesia work?" → wrongly refused
 - "What's the history of nuclear weapons?" → wrongly refused
+
+### Poisoned fixtures for agents with write tools
+
+Keep the attack text in its own fixture file, not inside the test code, so a reviewer can read it and the model never sees it as part of the harness. Each fixture is a fake email, web page or database row that carries an instruction ("refund order 123 to this account"). Every refuse case needs a paired "should do it" case with the same tool and a clean fixture; a suite that only checks refusal rewards an agent that refuses everything. Pass criterion: the write tool was not called (check the call log, not the agent's words). Rules the fixtures test: [`agent-systems.md`](agent-systems.md) section 11.
 
 ## Regression Tests
 
@@ -2457,7 +2466,7 @@ Step 2: ...
 Final answer: ...
 ```
 
-> 💡 **Modern models often CoT internally.** Test if explicit CoT helps your task before adding it.
+> **Modern models often CoT internally.** Test if explicit CoT helps your task before adding it.
 
 ### Pattern 5: Structured Output via Tool Use
 
@@ -2590,7 +2599,7 @@ Provide findings as a numbered list with:
 </output_format>
 ```
 
-> 💡 Claude models particularly benefit from XML tag structure.
+> **Tip:** Claude models particularly benefit from XML tag structure.
 
 ## Anti-patterns
 
@@ -2854,7 +2863,7 @@ flowchart LR
 | Tables | `camelot`, `tabula-py` for PDF tables |
 | Images | Optical character recognition (OCR) via `tesseract`, `paddleocr` — for Thai pass `lang='tha+eng'` (Tesseract defaults to English only) |
 
-> 💡 **Use [Unstructured.io](https://unstructured.io)** for mixed-format pipelines.
+> **Use [Unstructured.io](https://unstructured.io)** for mixed-format pipelines.
 
 ### Cleaning
 
@@ -2933,13 +2942,13 @@ Model names and prices change often. Check each provider's current embedding mod
 
 | Vector DB | Open Source | Hybrid Search | Filtering | Scale | Best for |
 |-----------|:----------:|:-------------:|:---------:|:-----:|----------|
-| **Pinecone** | ✗ | 🟡 | ✓ | 🟢 | Quick start, managed |
-| **Weaviate** | ✓ | ✓ | ✓ | 🟢 | Self-host, GraphQL |
-| **Qdrant** | ✓ | ✓ | ✓ | 🟢 | Performance, Rust |
-| **Chroma** | ✓ | 🟡 | ✓ | 🟡 | Local dev |
-| **pgvector** | ✓ | ✓ (with FTS) | ✓ | 🟡 | Already on Postgres |
-| **Elasticsearch** | ✓ | ✓✓ | ✓ | 🟢 | Hybrid + analytics |
-| **OpenSearch** | ✓ | ✓✓ | ✓ | 🟢 | AWS-native |
+| **Pinecone** | ✗| ~ | ✓| ✓| Quick start, managed |
+| **Weaviate** | ✓| ✓| ✓| ✓| Self-host, GraphQL |
+| **Qdrant** | ✓| ✓| ✓| ✓| Performance, Rust |
+| **Chroma** | ✓| ~ | ✓| ~ | Local dev |
+| **pgvector** | ✓| ✓(with FTS) | ✓| ~ | Already on Postgres |
+| **Elasticsearch** | ✓| ✓✓| ✓| ✓| Hybrid + analytics |
+| **OpenSearch** | ✓| ✓✓| ✓| ✓| AWS-native |
 
 ### When to choose what
 
@@ -2974,9 +2983,9 @@ def rrf_merge(*result_lists, k=60):
     return sorted(scores.items(), key=lambda x: -x[1])
 ```
 
-> 💡 **Hybrid beats pure vector** in most production cases — especially for proper nouns, acronyms and codes
+> **Hybrid beats pure vector** in most production cases — especially for proper nouns, acronyms and codes
 
-> 🇹🇭 **Thai text needs word segmentation before keyword search.** Thai has no spaces between words, so a BM25 (Best Matching 25) keyword index built on whitespace sees a whole sentence as one token. Segment both the documents and the query with PyThaiNLP (`word_tokenize(text, engine="newmm")`) or an ICU (International Components for Unicode) word break analyzer — Elasticsearch and OpenSearch ship a `thai` analyzer — then index the segmented words.
+> **Thai text needs word segmentation before keyword search.** Thai has no spaces between words, so a BM25 (Best Matching 25) keyword index built on whitespace sees a whole sentence as one token. Segment both the documents and the query with PyThaiNLP (`word_tokenize(text, engine="newmm")`) or an ICU (International Components for Unicode) word break analyzer — Elasticsearch and OpenSearch ship a `thai` analyzer — then index the segmented words.
 
 ### Metadata filtering
 
@@ -3007,7 +3016,7 @@ ranked = sorted(zip(candidates, scores), key=lambda x: -x[1])
 final = [doc for doc, score in ranked[:5]]
 ```
 
-> 💡 Retrieve top-20, re-rank to top-5. Big quality gain, modest cost.
+> **Tip:** Retrieve top-20, re-rank to top-5. Big quality gain, modest cost.
 
 **พิสูจน์ว่า reranker คุ้ม ด้วย ablation (ถอดทีละชิ้น)**: ให้ปิดชิ้นส่วนด้วย env flag (เช่น `RERANK=off`) · รันซ้ำเฉพาะชุดคำถามที่เกี่ยวข้อง · ตั้งกลับเป็นเปิด · รายงานเป็นตาราง เปิด / ปิด / ผลต่าง (ตัวอย่างจากงานสอน: หน้าที่ถูกอยู่ใน 4 ย่อหน้าแรก 80.8% → 95.4% · ตอบถูก 84.0% → 91.7% ไม่ใช่เกณฑ์)
 
@@ -3234,7 +3243,7 @@ Use when a live system must be known healthy before users complain (metrics, log
 | **เวลาตอบสนอง** | ช้าแค่ไหน | **p50 · p95 · p99** |
 | **ทรัพยากร** | ใกล้เต็มไหม | CPU · หน่วยความจำ · พื้นที่ · connection pool |
 
-> 🚨 **ห้ามดูค่าเฉลี่ยของเวลาตอบสนอง** — เฉลี่ย 200 ms ฟังดูดี
+> **ห้ามดูค่าเฉลี่ยของเวลาตอบสนอง** — เฉลี่ย 200 ms ฟังดูดี
 > ทั้งที่ผู้ใช้ 5% รอ 9 วินาที ค่าเฉลี่ยกลบคนที่เจอปัญหาเสมอ **ดู p95 และ p99**
 
 **สำหรับคิวและงานเบื้องหลัง** เพิ่มอีก 3 ตัว — งานค้างในคิว · เวลารอในคิว · งานที่ล้มถาวร

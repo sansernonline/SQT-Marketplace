@@ -566,26 +566,26 @@ Use when designing end-to-end tests with Playwright or Cypress, fixing flaky tes
 ─────────────────
 ```
 
-> 🚨 **Anti-pattern: Ice cream cone** (many E2E tests, few unit tests)
+> **Anti-pattern: Ice cream cone** (many E2E tests, few unit tests)
 > Result: slow CI, flaky tests, slow debugging
 
 ## Framework Selection
 
 | Framework | Best for | Avoid for |
 |-----------|----------|-----------|
-| **Playwright** ⭐ | Modern apps, cross-browser, parallel | Legacy apps with weird patterns |
+| **Playwright** (recommended) | Modern apps, cross-browser, parallel | Legacy apps with weird patterns |
 | **Cypress** | Developer experience, easy to learn, single-app | Multi-tab, cross-origin tests |
 | **Selenium** | Legacy, language flexibility | Greenfield projects |
 | **Puppeteer** | Chrome-only, scraping | Cross-browser needs |
 | **WebDriverIO** | Mobile + web, BDD style | Simple use cases |
 
-> 💡 **Default recommendation: Playwright** — best developer experience, fast, cross-browser, made by Microsoft
+> **Default recommendation: Playwright** — best developer experience, fast, cross-browser, made by Microsoft
 
 ## Test Structure: Page Object Model (POM)
 
 ถ้าทุกเทสต์เขียน `page.fill` และ `page.click` ของหน้าเดียวกันซ้ำ ๆ ให้ย้ายขั้นตอนเหล่านั้นไปไว้ในคลาสของหน้านั้น แล้วให้เทสต์เรียกเมธอดแทน โค้ดเทียบอยู่ใน [references/page-object-model.md](references/page-object-model.md)
 
-> 💡 **One Page Object per page or major component.**
+> **One Page Object per page or major component.**
 
 ## Selectors: Hierarchy of Goodness
 
@@ -594,10 +594,10 @@ Most resilient ─────────────────────�
 
 ถูก: Role + accessible name      page.getByRole('button', { name: 'Submit' })
 ถูก: Test IDs                     page.getByTestId('submit-btn')
-🟡 Visible text                 page.getByText('Submit')
-🟡 Label                        page.getByLabel('Email')
-🔴 CSS classes                  page.locator('.btn-primary')
-🔴 Tag + index                  page.locator('button:nth-child(3)')
+กลาง: Visible text              page.getByText('Submit')
+กลาง: Label                     page.getByLabel('Email')
+ผิด: CSS classes               page.locator('.btn-primary')
+ผิด: Tag + index               page.locator('button:nth-child(3)')
 ผิด: XPath                        page.locator('//div[2]/button')
 ```
 
@@ -624,7 +624,7 @@ Most resilient ─────────────────────�
 - Performance (use dedicated tools)
 - Visual design (use visual regression tools)
 
-> 💡 **Rule of thumb:** If a unit/integration test can verify it, don't add E2E.
+> **Rule of thumb:** If a unit/integration test can verify it, don't add E2E.
 
 ให้ทำตารางความครอบคลุมของเส้นทางผู้ใช้ (Critical Path Coverage Matrix) ที่บอกว่าแต่ละเส้นทางครอบคลุมแล้วหรือยัง และสำคัญระดับ P1 P2 หรือ P3 (scale เดียวกับ `test-case-template` และ tag ด้านล่าง · P1 สำคัญสุด) ตัวอย่างอยู่ใน [references/coverage-and-libraries.md](references/coverage-and-libraries.md)
 
@@ -729,7 +729,7 @@ async function login(page, user) {
 // await ctx.storageState({ path: 'playwright/.auth/user.json' });
 ```
 
-> 🔐 The saved state file holds a live session (cookies, tokens). Keep it out of git: add `playwright/.auth/` (or your `auth.json`) to `.gitignore`, and use a test account only.
+> **Security:** The saved state file holds a live session (cookies, tokens). Keep it out of git: add `playwright/.auth/` (or your `auth.json`) to `.gitignore`, and use a test account only.
 
 
 ## reference: ci-and-parallel.md
@@ -742,10 +742,10 @@ async function login(page, user) {
 
 | Level | Speedup | Complexity |
 |-------|--------:|:----------:|
-| File-level parallel | 4-8x | 🟢 Low (just enable) |
-| Test-level within file | 10x+ | 🟡 Med (isolation needed) |
-| Sharded across CI workers | Nx | 🟡 Med (requires sharding config) |
-| Cloud grid (BrowserStack, etc.) | Massive | 🔴 High (cost) |
+| File-level parallel | 4-8x | Low (just enable) |
+| Test-level within file | 10x+ | Med (isolation needed) |
+| Sharded across CI workers | Nx | Med (requires sharding config) |
+| Cloud grid (BrowserStack, etc.) | Massive | High (cost) |
 
 **Requirements for safe parallel:**
 - Tests don't share state
@@ -1018,7 +1018,7 @@ test('user can login', async ({ page }) => {
 });
 ```
 
-> 💡 **One Page Object per page or major component.**
+> **One Page Object per page or major component.**
 
 
 ## reference: test-data-strategies.md
@@ -1037,8 +1037,8 @@ Wrong: Pollution between tests
 
 ## Option 2: Per-test setup (slow)
 ```
-🟡 Clean slate every test
-🟡 Reliable but slow
+Right: Clean slate every test
+Mixed: Reliable but slow
 Good for critical flows
 ```
 
@@ -1060,7 +1060,7 @@ test('user sees orders', async ({ page, request }) => {
 ```
 Right: Real production-like data
 Right: Fast (uses snapshots)
-🟡 Requires DB tooling
+Mixed: Requires DB tooling
 ```
 
 
@@ -1297,6 +1297,43 @@ page.screenshot(path="_to_delete/check/login.png")
 
 ## 10 · ลูปที่ปรับตามตัวเลข
 
+ใช้เมื่อลูปไล่ตัวชี้วัด (ตรงกับระบบเดิม · ตรงกับ mockup · คะแนนที่วัดได้) ไม่ได้ปิดทีละข้อกำหนด · สัญญาของลูป ตัวกันการโกงตัวเลข กฎหยุด และตัวอย่างวัดจริง อยู่ใน [`references/metric-loop.md`](references/metric-loop.md) · ต้องเปิดอ่านก่อนเริ่มลูปแบบนี้
+
+---
+
+## 11 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| ทำข้อกำหนดให้ทดสอบได้ก่อน | `srs-writing` |
+| แปลงข้อกำหนดเป็น test case | `test-case-template` |
+| โครง test กรอบทดสอบ ชื่อ ความครอบคลุม | `testing-standards` |
+| test ระดับเปิดเบราว์เซอร์จริง | `e2e-testing-patterns` |
+| เขียนโค้ดให้เรียบง่ายที่สุดที่ใช้ได้ | `lazy-coding` |
+| แก้เมื่อ test แดงหรือผลไม่ตรง | `targeted-fix` |
+| รูปแบบข้อความ commit | `commit-message-format` |
+| ไฟล์ภาพที่ถ่ายไว้ตรวจ | `temp-file-discipline` |
+| ข้อสอบและตัววัดของลูปที่ไล่ตัวเลข | `test-evidence` ข้อ 5 · `e2e-testing-patterns` (oracle-and-mutation) |
+| บันทึกสถานะข้ามรอบสนทนา | `handoff` |
+| ตารางสรุปสถานะเมื่อจบรอบ | `status-report` |
+
+---
+
+## ตัวย่อ
+
+- **test** — ชุดทดสอบอัตโนมัติ
+- **mockup** — ภาพต้นแบบหน้าจอ
+- **commit** — การบันทึกการเปลี่ยนแปลงลงระบบควบคุมเวอร์ชัน
+- **UI** — User Interface (ส่วนติดต่อผู้ใช้)
+
+
+## reference: metric-loop.md
+
+# ลูปที่ปรับตามตัวเลข
+
+ย้ายมาจาก SKILL.md หัวข้อ 10 (2026-11-10) · เปิดอ่านเมื่อลูปไล่ตัวชี้วัด ไม่ได้ปิดทีละข้อกำหนด
+
+
 ใช้เมื่อลูปไม่ได้ปิดทีละข้อกำหนด แต่ไล่ตัวชี้วัด เช่น ตรงกับระบบเดิม ตรงกับ mockup หรือคะแนนที่วัดได้ · ที่มา: บทเรียนโคลนเว็บ 6 บท (Week 03 ของ Teaching_CWN2026) วัดจริงบนแอปที่ต่อเวอร์ชัน · ตัวเลขข้างล่างเป็นผลของงานนั้น ใช้เป็นตัวอย่าง ไม่ใช่เกณฑ์
 
 **สัญญาของลูป เขียนไว้ก่อนเริ่ม และให้เครื่องตรวจได้ ไม่ใช่แค่ขอร้อง**
@@ -1347,33 +1384,6 @@ page.screenshot(path="_to_delete/check/login.png")
 
 ข้อสอบและตัววัดของลูปแบบนี้ต้องน่าเชื่อก่อน → `test-evidence` ข้อ 5
 
----
-
-## 11 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| ทำข้อกำหนดให้ทดสอบได้ก่อน | `srs-writing` |
-| แปลงข้อกำหนดเป็น test case | `test-case-template` |
-| โครง test กรอบทดสอบ ชื่อ ความครอบคลุม | `testing-standards` |
-| test ระดับเปิดเบราว์เซอร์จริง | `e2e-testing-patterns` |
-| เขียนโค้ดให้เรียบง่ายที่สุดที่ใช้ได้ | `lazy-coding` |
-| แก้เมื่อ test แดงหรือผลไม่ตรง | `targeted-fix` |
-| รูปแบบข้อความ commit | `commit-message-format` |
-| ไฟล์ภาพที่ถ่ายไว้ตรวจ | `temp-file-discipline` |
-| ข้อสอบและตัววัดของลูปที่ไล่ตัวเลข | `test-evidence` ข้อ 5 · `e2e-testing-patterns` (oracle-and-mutation) |
-| บันทึกสถานะข้ามรอบสนทนา | `handoff` |
-| ตารางสรุปสถานะเมื่อจบรอบ | `status-report` |
-
----
-
-## ตัวย่อ
-
-- **test** — ชุดทดสอบอัตโนมัติ
-- **mockup** — ภาพต้นแบบหน้าจอ
-- **commit** — การบันทึกการเปลี่ยนแปลงลงระบบควบคุมเวอร์ชัน
-- **UI** — User Interface (ส่วนติดต่อผู้ใช้)
-
 
 ---
 
@@ -1421,6 +1431,8 @@ Use when a project has no scripted way for an agent to run the app and see resul
    - แอปที่อ่าน hardware (sensor · กล้อง · GPS) ให้ป้อนค่าที่รู้ล่วงหน้า ผ่าน emulator (`adb emu sensor set light 420`, กล้องเสมือน) หรือแหล่งข้อมูลปลอมที่เปิดได้เฉพาะ debug build แล้วติดป้ายทุก check ว่า `emulator` หรือ `เครื่องจริง` เพราะความแม่นของ sensor จริงพิสูจน์บน emulator ไม่ได้ ถ้ายังไม่ได้รันบนเครื่องจริง ให้เขียนว่า "ยังไม่ได้ตรวจบนเครื่องจริง"
 
 3. **เขียน `test/e2e/verify.*`** ให้เปิดแอปเองบนพอร์ตที่ไม่ชน (มือถือ: ติดตั้ง APK แล้วล้างข้อมูลแอป) ใส่ข้อมูลทดสอบ (seed) และรอจนพร้อม**โดยมีเวลาจำกัด** (เว็บ: ถ้าไม่ขึ้นใน 10 วินาทีถือว่าล้ม · มือถือ: ตั้งเวลาแยกสำหรับ build · boot emulator · เปิดแอป · แต่ละ check ดู reference) ปิดแอปเมื่อจบเสมอ และรันซ้ำต้องได้ผลเดิม (`principle-build-a-tool-not-handwork`)
+   - **เว็บหรือ API ที่ต้องเปิดเซิร์ฟเวอร์ก่อน** ใช้ [`scripts/with_server.py`](scripts/with_server.py) เปิด รอพอร์ตพร้อม รันสคริปต์ แล้วปิดให้ครบ เช่น `python -I scripts/with_server.py --server "npm run dev" --port 5173 -- node test/e2e/verify.mjs` (เปิดหลายตัวได้โดยใส่ `--server` กับ `--port` ซ้ำ · log อยู่ใน `--log-dir`) · ทดสอบบน Windows 2026-11-10 กับ `python -m http.server` แล้วพอร์ตปิดจริงหลังจบ · แอปไดนามิกให้รอ `networkidle` (Playwright `page.wait_for_load_state("networkidle")`) หรือ `data-ready="true"` ก่อนอ่าน DOM ไม่เดา `sleep`
+
 4. **รายการฟีเจอร์เป็นข้อมูลในสคริปต์** ไล่จากเมนู · route · command list · SRS แล้วเขียน 1 กลุ่มต่อฟีเจอร์ 1 บรรทัดต่อ check (`ทำอะไร → ต้องเห็นอะไร`) อย่างน้อย 3 ฟีเจอร์หลัก และกรณีผิดพลาด 1 กรณีต่อฟีเจอร์ **ทุก check เริ่มจากสถานะสะอาด** รันเดี่ยวหรือสลับลำดับได้ และพิมพ์ผล `PASS/FAIL` พร้อม expected กับ actual
 5. **สคริปต์ต้องไม่ผ่านลอย ๆ** (ผ่านทั้งที่ไม่ได้ตรวจอะไรจริง) ถ้าชื่อฟีเจอร์ไม่มีจริงให้ exit 1 ถ้าแอปไม่ขึ้นให้ exit 1 และถ้าไม่มี check ไหนได้รันก็ให้ exit 1 (ตรวจ 0 รายการถือว่าพัง ไม่ใช่ผ่าน)
    - **check ที่ตรวจว่า "หยุด/ปล่อยแล้ว" ต้องตรวจเงื่อนไขก่อนเสมอ** (เช่น กล้องถูกถืออยู่ก่อนกด Home) ไม่งั้นจะผ่านลอย ๆ และรอผลด้วยการวนตรวจจนหมดเวลา ไม่ใช่ `sleep` ค่าเดา
@@ -1445,6 +1457,7 @@ verify ต้องพึ่งของที่แอปเตรียมไ�
 ## SKILL.md ของ verify skill ต้องมี
 
 - description บอกว่าใช้เมื่อ "ต้องพิสูจน์ว่าฟีเจอร์ใช้ได้บนแอปจริง · ทำบั๊กให้เกิดซ้ำ · ตรวจก่อนส่ง"
+- คำสั่งเริ่มด้วย `with_server.py` (ถ้าแอปต้องเปิดเซิร์ฟเวอร์) และกฎรอ `networkidle` หรือ `data-ready` ก่อนอ่าน DOM
 - คำสั่งเริ่ม · หยุด · ข้อมูลทดสอบ (บัญชีทดสอบอยู่ไฟล์ไหน — **ห้ามใส่รหัสผ่านจริง**)
 - ลิงก์ไปแผนที่ฟีเจอร์
 - ข้อห้าม: ไม่แตะฐานข้อมูลจริง · ไม่เรียก API ภายนอกที่เสียเงินหรือส่งข้อความจริง

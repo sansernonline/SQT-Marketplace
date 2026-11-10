@@ -38,7 +38,7 @@ Paddle / Lemon Squeezy — Merchant of Record (global tax done)
 Custom               — only for special needs
 ```
 
-> 💡 **Never** build the billing basics yourself. Use a platform.
+> **Never** build the billing basics yourself. Use a platform.
 
 ## Pricing Model Implementation
 

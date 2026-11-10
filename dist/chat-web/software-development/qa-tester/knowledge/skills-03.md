@@ -319,7 +319,7 @@ Use when writing or reviewing a Functional Specification Document (FSD) that scr
 เอกสารสองฉบับนี้ปนกันบ่อยที่สุด ผลคือ SRS ยาวจนลูกค้าไม่อ่าน และ FSD ตื้นจน developer ต้องถาม
 SRS บอกว่าระบบ**ต้องทำอะไรได้** ส่วน FSD บอกว่าระบบ**ทำสิ่งนั้นอย่างไร** ตารางเทียบทีละมิติอยู่ใน [references/fsd-vs-srs.md](references/fsd-vs-srs.md)
 
-> 🚨 **ห้าม FSD สร้างข้อกำหนดใหม่เอง** — เจออะไรที่ SRS ไม่ได้ครอบคลุม ให้**ลงรายการคำถามค้าง** ใส่ `(รอยืนยัน)` แล้วทำส่วนอื่นต่อ
+> **ห้าม FSD สร้างข้อกำหนดใหม่เอง** — เจออะไรที่ SRS ไม่ได้ครอบคลุม ให้**ลงรายการคำถามค้าง** ใส่ `(รอยืนยัน)` แล้วทำส่วนอื่นต่อ
 > ข้อนั้นต้องเพิ่มใน SRS ก่อน ไม่ใช่เขียนลง FSD เงียบ ๆ
 > ข้อที่โผล่มาใน FSD โดยไม่มีที่มา คือข้อที่ลูกค้าจะปฏิเสธจ่ายตอนตรวจรับ
 
@@ -448,6 +448,8 @@ Mermaid ผ่าน `software-diagrams` ใช้แค่ร่างคุย
 
 > **ทดสอบขั้นสุดท้าย:** ให้ developer ที่ไม่ได้อยู่ในที่ประชุมอ่านหนึ่งคน
 > ทุกคำถามที่เขาถาม คือหนึ่งช่องว่างที่ต้องเติมก่อนส่ง
+
+ไม่มีคนว่างอ่าน ให้ใช้ agent ตัวใหม่ที่ได้เฉพาะไฟล์ FSD ตอบ 8–10 คำถามที่ developer และ QA จะถาม (เช่น "ถ้าจองซ้ำเกิดอะไร" "สถานะไหนย้อนกลับได้") ข้อที่ตอบผิดหรือตอบว่า "ไม่รู้" ต้องแก้ก่อนส่ง · วิธีและคำถามเฉพาะไทย (ปี พ.ศ. · รูปแบบเลขที่เอกสาร) → [`../srs-writing/references/reader-test.md`](../srs-writing/references/reader-test.md)
 
 **เมื่อมีโค้ดแล้ว — เทียบ FSD กับโค้ดจริง** (ทำตอนรีวิว FSD รอบหลัง build หรือก่อนรับงานแก้ · แนวคิดจาก trailofbits/skills และ ECC intent-driven-development)
 
@@ -1075,6 +1077,24 @@ return r.IsSuccess ? Results.Ok(r.Value) : Results.Problem(r.Error, statusCode: 
 
 repo ที่มี `FluentResults` หรือ `ErrorOr` อยู่แล้วให้ใช้ตัวนั้น ไม่เพิ่ม record ใหม่ซ้อน
 
+**เช็ก type ใหม่ 4 ข้อ** (แนวคิดจาก type-design-analyzer · claude-plugins-official · Apache-2.0 · ดู 2026-11-10): (1) ซ่อนภายใน ใช้ `record` ที่ constructor เป็น `private` และมี factory `Create` (2) กฎอยู่ใน type ค่าผิดสร้างไม่ได้ (3) ตรวจที่ constructor หรือ factory ครั้งเดียว (4) ไม่เปิด setter ใช้ `init` หรือ `readonly record struct`
+
+```csharp
+// เลขบัตรประชาชน 13 หลัก + ตรวจเลขท้าย · จำนวนเงินเป็นสตางค์ (long) ไม่ใช้ double
+public readonly record struct ThaiNationalId
+{
+    public string Value { get; }
+    private ThaiNationalId(string v) => Value = v;
+    public static ThaiNationalId? Create(string s)
+    {
+        if (s.Length != 13 || !s.All(char.IsAsciiDigit)) return null;
+        var sum = s.Take(12).Select((c, i) => (c - '0') * (13 - i)).Sum();
+        return (11 - sum % 11) % 10 == s[12] - '0' ? new ThaiNationalId(s) : null;
+    }
+}
+```
+(ยังไม่ได้คอมไพล์ตัวอย่าง C# นี้ · สูตรเลขท้ายเดียวกับตัวอย่าง TypeScript ที่รันแล้ว)
+
 ## 3 · EF Core
 
 | เรื่อง | ทำแบบนี้ |
@@ -1221,6 +1241,21 @@ type PayResult =
   | { status: 'paid'; receiptId: string }
   | { status: 'failed'; reason: 'declined' | 'timeout' };
 // switch (r.status) ครบทุกกรณี · default: const _never: never = r;
+```
+
+**เช็ก type ใหม่ 4 ข้อ** (แนวคิดจาก type-design-analyzer ของ pr-review-toolkit · claude-plugins-official · Apache-2.0 · ดู 2026-11-10) ใช้กับ type ที่แทนเลขบัตรประชาชน จำนวนเงิน เลขที่เอกสาร:
+
+1. **ซ่อนภายใน** — ผู้ใช้ type สร้างค่าได้ทางเดียว (ฟังก์ชัน `parse`) ไม่ได้แก้ field ตรง ๆ
+2. **กฎอยู่ใน type** — ค่าที่ผิดกฎสร้างไม่ได้ ไม่ใช่เขียนไว้แค่ในเอกสาร
+3. **ตรวจที่ทางเข้า** — ตรวจครั้งเดียวตอนสร้าง แล้วทั้งระบบเชื่อ type ได้
+4. **ไม่เปิด mutable** — `readonly` ทุก field และไม่คืน array ภายในให้คนแก้
+
+```ts
+type ThaiNationalId = string & { readonly __brand: 'ThaiNationalId' };  // 13 หลัก + ตรวจเลขท้าย
+const checkDigit = (d: string) => (11 - (d.slice(0, 12).split('').reduce((s, c, i) => s + Number(c) * (13 - i), 0) % 11)) % 10;
+const parseNationalId = (s: string): ThaiNationalId | null =>
+  /^\d{13}$/.test(s) && checkDigit(s) === Number(s[12]) ? (s as ThaiNationalId) : null;
+// จำนวนเงินเก็บเป็นสตางค์ (number เต็ม) ไม่ใช้ float · ตัวอย่างเลข 1234567890121 สร้างขึ้นเอง ไม่ใช่เลขของใคร
 ```
 
 ## 3 · Node backend (Express · Fastify · NestJS)

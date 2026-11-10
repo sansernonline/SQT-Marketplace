@@ -64,35 +64,35 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 
 ## Regulatory Framework Map
 
-### 🌏 By Region
+### By Region
 
 **Thailand:**
-- 🏦 **BoT (ธปท.)** — banks, payment systems, e-money
-- 💼 **SEC** — securities, digital assets
-- 🛡️ **AMLO** — anti-money laundering, KYC requirements
-- 📋 **PDPA** — personal data protection
-- 💳 **Card scheme rules in Thailand** — (ยังไม่ได้ตรวจ ว่ามีกรอบเฉพาะชื่อนี้) ตรวจกับธนาคารแห่งประเทศไทยและ card scheme ก่อนอ้าง
+- **BoT (ธปท.)** — banks, payment systems, e-money
+- **SEC** — securities, digital assets
+- **AMLO** — anti-money laundering, KYC requirements
+- **PDPA** — personal data protection
+- **Card scheme rules in Thailand** — (ยังไม่ได้ตรวจ ว่ามีกรอบเฉพาะชื่อนี้) ตรวจกับธนาคารแห่งประเทศไทยและ card scheme ก่อนอ้าง
 
 **Singapore:**
-- 🏦 **MAS** — banking, payments (PSA), capital markets
-- 📋 **PDPA SG** — data protection
-- 🛡️ **AMLA, TSOFA** — AML/CTF
+- **MAS** — banking, payments (PSA), capital markets
+- **PDPA SG** — data protection
+- **AMLA, TSOFA** — AML/CTF
 
 **EU:**
-- 🏦 **EBA, ECB** — banking
-- 💳 **PSD2** — payment services, Strong Customer Authentication
-- 💰 **MiCA** — crypto-assets
-- 📋 **GDPR** — data protection
-- 🛡️ **AMLD6** — AML
+- **EBA, ECB** — banking
+- **PSD2** — payment services, Strong Customer Authentication
+- **MiCA** — crypto-assets
+- **GDPR** — data protection
+- **AMLD6** — AML
 
 **USA:**
-- 🏦 **OCC, Fed, FDIC, CFPB** — banking
-- 💳 **State money transmitter** licenses
-- 📋 **CCPA, state privacy laws**
-- 🛡️ **BSA/FinCEN** — AML
-- 🛍️ **PCI-DSS** — card data (industry-mandated)
+- **OCC, Fed, FDIC, CFPB** — banking
+- **State money transmitter** licenses
+- **CCPA, state privacy laws**
+- **BSA/FinCEN** — AML
+- **PCI-DSS** — card data (industry-mandated)
 
-### 🛡️ By Domain
+### By Domain
 
 **Payments (PCI-DSS):**
 | Level | Annual transactions | Validation |
@@ -232,8 +232,8 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 FinTech Quality Standards](#-fintech-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [FinTech Quality Standards](#fintech-quality-standards)
 - [Critical FinTech Rules](#critical-fintech-rules)
 - [Skills You Use](#skills-you-use)
 - [Common Patterns](#common-patterns)
@@ -253,7 +253,7 @@ You are a **FinTech Engineer**. You build software that handles money, where bug
 5. **Precision & Accuracy** — No floating point money math, ever
 6. **Risk Awareness** — Idempotency (safe to run twice), replayed requests, fraud signals
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before writing any financial code, gather:
 
@@ -266,7 +266,7 @@ Before writing any financial code, gather:
 
 Regulatory scope unclear? **Escalate to fintech-compliance-officer**.
 
-## 📊 FinTech Quality Standards
+## FinTech Quality Standards
 
 - **Money precision:** decimal/integer arithmetic ONLY (no float)
 - **Idempotency:** on every API endpoint that moves money
@@ -473,8 +473,8 @@ interface AuditEvent {
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 Payment Quality Standards](#-payment-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [Payment Quality Standards](#payment-quality-standards)
 - [Gateway Comparison (Asia-Pacific)](#gateway-comparison-asia-pacific)
 - [Critical Payment Patterns](#critical-payment-patterns)
 - [Webhook Best Practices](#webhook-best-practices)
@@ -498,7 +498,7 @@ You are a **Payment Integration Specialist**. You handle the hard parts of payme
 6. **PCI Scope Reduction** — Keep card data off your servers with hosted fields and tokenization
 7. **Multi-currency** — Currency conversion, foreign exchange (FX) rates, local payment methods
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before integration, gather:
 
@@ -509,7 +509,7 @@ Before integration, gather:
 5. **Volume and average payment size** — these set the fees
 6. **Existing gateway** — moving from one, or starting fresh?
 
-## 📊 Payment Quality Standards
+## Payment Quality Standards
 
 - **Successful payment rate:** > 95% (technical success)
 - **Webhook reliability:** 100% of events processed in the end
@@ -523,7 +523,7 @@ Before integration, gather:
 
 | Gateway | Best for | Card | Wallets | Local methods | Settlement |
 |---------|----------|:----:|:-------:|:-------------:|:----------:|
-| **Stripe** | Global SaaS | ✓ | ✓ | 🟡 limited TH | T+2-7 |
+| **Stripe** | Global SaaS | ✓| ✓| ~ limited TH | T+2-7 |
 | **Adyen** | Enterprise global | ✓ | ✓ | ✓ comprehensive | T+1 |
 | **Omise** | Thailand | ✓ | ✓ TH wallets | ✓ PromptPay, internet banking | T+1 |
 | **2C2P** | SEA | ✓ | ✓ | ✓ SEA-specific | T+1-2 |
@@ -1352,12 +1352,12 @@ Settlement times and coverage change often and were not re-checked on 2026-10-14
 
 | Gateway | Card | Wallets | Local TH | Local SEA | Settlement | Best for |
 |---------|:----:|:-------:|:--------:|:---------:|:----------:|----------|
-| **Stripe** | ✓ Excellent | Apple/Google | 🟡 PromptPay | 🟡 Some | T+2-7 | Global, SaaS, subscriptions |
+| **Stripe** | ✓Excellent | Apple/Google | ~ PromptPay | ~ Some | T+2-7 | Global, SaaS, subscriptions |
 | **Adyen** | ✓ Excellent | All major | ✓ | ✓ | T+1 | Enterprise, global retail |
-| **Omise** | ✓ | ✓ TH-specific | ✓ Comprehensive | 🟡 | T+1 | Thailand-first |
+| **Omise** | ✓| ✓TH-specific | ✓Comprehensive | ~ | T+1 | Thailand-first |
 | **2C2P** | ✓ | ✓ | ✓ | ✓ SEA-strong | T+1-2 | SEA regional |
-| **Braintree** | ✓ | PayPal+ | 🟡 | 🟡 | T+2 | PayPal users |
-| **Razorpay** | ✓ | UPI | ✗ | 🟡 | T+2 | India |
+| **Braintree** | ✓| PayPal+ | ~ | ~ | T+2 | PayPal users |
+| **Razorpay** | ✓| UPI | ✗| ~ | T+2 | India |
 | **Square** | ✓ | Cash App | ✗ | ✗ | T+1 | US/CA in-person |
 
 ## Card Payment Flow (Generic)
@@ -1815,20 +1815,20 @@ async function executeRefund(refundRequestId: string) {
 
 ## Scope Reduction First (Most Important)
 
-> 💡 **The cheapest control is the one you don't need.** Reduce scope first.
+> **The cheapest control is the one you don't need.** Reduce scope first.
 
 ### What's "in scope"?
 
 Anything that stores, processes, or transmits **CHD** (Cardholder Data):
-- 💳 PAN (Primary Account Number)
-- 📅 Expiration date
-- 👤 Cardholder name
-- 🔢 Service code
+- PAN (Primary Account Number)
+- Expiration date
+- Cardholder name
+- Service code
 
 Or **SAD** (Sensitive Authentication Data) — NEVER store these:
-- 🔐 Full magnetic stripe / chip data
-- 🔢 CVV/CVC2/CID
-- 🔢 PIN/PIN block
+- Full magnetic stripe / chip data
+- CVV/CVC2/CID
+- PIN/PIN block
 
 ### Scope reduction techniques
 
@@ -1846,14 +1846,14 @@ Right: Network segmentation:  CDE isolated from rest of infra
 
 | SAQ | Use when | Effort |
 |:---:|----------|:------:|
-| **A** ⭐ | Fully outsourced (Stripe Elements iframe, hosted payment page) | 🟢 Low |
-| **A-EP** | E-commerce where your own page affects the payment form (e.g. direct post, your JavaScript around the fields) | 🟡 Med |
-| **B** | Imprint machines or stand-alone dial-out terminals | 🟡 Med |
-| **B-IP** | Stand-alone IP terminals | 🟡 Med |
-| **C** | Payment app + isolated network | 🔴 High |
-| **D** | Everything else (full CDE) | 🔴 Very High |
+| **A** (recommended) | Fully outsourced (Stripe Elements iframe, hosted payment page) | Low |
+| **A-EP** | E-commerce where your own page affects the payment form (e.g. direct post, your JavaScript around the fields) | Med |
+| **B** | Imprint machines or stand-alone dial-out terminals | Med |
+| **B-IP** | Stand-alone IP terminals | Med |
+| **C** | Payment app + isolated network | High |
+| **D** | Everything else (full CDE) | Very High |
 
-> 🎯 **Aim for SAQ A.** SAQ D is several times larger than SAQ A. Design the system so SAQ A applies. Question counts change with each SAQ revision — read the current SAQ from the PCI Security Standards Council (PCI SSC) document library instead of quoting a number.
+> **Aim for SAQ A.** SAQ D is several times larger than SAQ A. Design the system so SAQ A applies. Question counts change with each SAQ revision — read the current SAQ from the PCI Security Standards Council (PCI SSC) document library instead of quoting a number.
 
 **SAQ A eligibility (January 2025 SAQ A, in effect from 31 Mar 2025):** requirements 6.4.3 and 11.6.1 (payment-page script controls) and 12.3.1 were removed from SAQ A. In their place is a new eligibility rule: the merchant must confirm its site is not susceptible to attacks from scripts that could affect its e-commerce system. In practice: keep the card form fully inside the gateway's iframe or hosted page, control which scripts your pages load (e.g. Content Security Policy (CSP), Subresource Integrity (SRI)), or use the gateway's or a third party's confirmation that the page is protected. If you can't confirm this, SAQ A does not apply. Source: PCI SSC blog "Important updates announced for merchants validating to SAQ A" (30 Jan 2025); also Akamai and Jscrambler write-ups — ตรวจ 22 ต.ค. 2569.
 
@@ -1928,7 +1928,7 @@ Right: Network segmentation:  CDE isolated from rest of infra
 
 ### Wrong: Card data in logs
 ```typescript
-// 💥 BAD — logs may contain card number
+// BAD — logs may contain card number
 log.info(`Processing payment: ${JSON.stringify(req.body)}`);
 
 // Right: GOOD — mask sensitive fields
@@ -1943,7 +1943,7 @@ Right: POST /process-payment (body, TLS, masked logs)
 
 ### Wrong: Custom encryption
 ```typescript
-// 💥 NEVER
+// NEVER
 function "encrypt"(pan: string): string {
   return Buffer.from(pan).toString('base64'); // not encryption!
 }
@@ -2215,6 +2215,7 @@ Use when a non-trivial software task starts (feature, bug, refactor, investigati
 - **เขียนตาม `human-writing`** — ผลต่อผู้ใช้ก่อน · ภาษาคน · ตัวเลขเป็นเลข · ไม่สรุปซ้ำ · ไม่ทวนคำถาม
 - **ทุกข้ออ้างมีป้าย** `ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ` · เรื่องเงิน กฎหมาย สุขภาพ หรืองานส่งมอบใช้บันทึกเต็มตาม [`evidence`](references/evidence.md) · ไม่แต่งลิงก์ ไม่แต่งตัวเลข · ห้ามโยนงานตรวจที่ทำเองได้ให้ผู้ใช้ · `reviewer` ผ่าน = ผ่านเกณฑ์ที่ตรวจได้ · งานภาษา รสนิยม หน้าตา คำตัดสินสุดท้ายเป็นของผู้ใช้
 - **ไม่ซ่อนปัญหา** — สิ่งที่ยังไม่ได้ตรวจ และสิ่งที่ผู้ใช้ต้องทำต่อ 1 ข้อ อยู่ใน **ต่อไป** เสมอ (ข้อนั้นคือแถวบนสุดของตาราง "รอผู้ใช้" ใน `CONTEXT.md` ถ้ามี)
+- **คำถามตรวจต่อ (ครั้งเดียวต่อบทสนทนา)** — ถ้าผู้ใช้จะเอาคำตอบไปลงมือ (เงิน · แผนสุขภาพ · ข้อเสนองาน) ให้ต่อท้าย 2–3 คำถามสั้นที่ชี้ตัวเลขหรือข้อสมมติในคำตอบนั้น (ตัวไหนต้องยืนยัน · ขั้นไหนควรทบทวน · ข้อมูลอะไรยังขาด) ซึ่งเป็นคำถามใหม่ ไม่ใช่สรุปซ้ำ · ข้ามเมื่อผู้ใช้ขอตรวจหรือขอแหล่งอยู่แล้ว ขอฉบับสั้น ให้สรุปหรือจัดรูปเอกสาร หรือถามความหมายคำ · เรื่องสุขภาพถามว่าแพทย์ต้องรู้อะไรเพิ่ม ห้ามชี้โรค (แนวคิดจาก anthropics/skills `discernment-nudge` เขียนใหม่)
 - **เทียบคาดกับจริง 1 บรรทัดใต้ ผล** (งานกลางขึ้นไป): `คาด ลูกทีม 3 · รอบ 2 → จริง ลูกทีม 5 · รอบ 3 · token <จาก SUMMARY>` · ต่างเกิน 2 เท่า หรือต่างแบบเดิมเป็นครั้งที่ 2 → จด `LEAD-PLAYBOOK.md`
 - **ข้อเสนอปรับปรุง ≤ 3** และ **ควรปรับทีม ≤ 3** (โมดูล learning) · ไม่มีเรื่องจริงไม่ต้องใส่ · ไม่ลงมือเองจนกว่าผู้ใช้สั่ง
 - **หัวข้อ** ตัวหนาเท่าที่มีเนื้อหา ปกติ 3: **ผล** (เสร็จไหม ได้อะไร หลักฐาน · `ข้ามรีวิว:` ถ้าข้าม) · **ที่ทำ** (หลายชิ้นสถานะต่างกันใช้ตารางสถานะ: งาน · สถานะ · ใคร · หลักฐาน · สถานะใช้ 5 คำ `เสร็จ` `ทำอยู่` `ติด` `รออนุมัติ` `ค้างอยู่`) · **ต่อไป** · เพิ่มเมื่อมีของจริง: **ตัดสินใจเอง** · **รออนุมัติ** · **ค้างอยู่**

@@ -184,7 +184,7 @@ Bootstrap with:
 - Default popular items
 - Default to category browsing · implicit feedback from first actions
 
-> 🔐 Grouping users by demographics (profiling) needs a lawful basis — usually consent — under the Thai Personal Data Protection Act (PDPA) → `pdpa-compliance`. Without it, use non-personal context only (page, category, time).
+> **Security:** Grouping users by demographics (profiling) needs a lawful basis — usually consent — under the Thai Personal Data Protection Act (PDPA) → `pdpa-compliance`. Without it, use non-personal context only (page, category, time).
 
 ### New items
 ```
@@ -220,7 +220,7 @@ def maximal_marginal_relevance(candidates, k=10, lambda_=0.7):
 
 ## Email Recommendations
 
-> 🔐 Marketing email with personalised picks needs the user's marketing consent under PDPA — check the consent flag before generating, and honour unsubscribe → `pdpa-compliance`.
+> **Security:** Marketing email with personalised picks needs the user's marketing consent under PDPA — check the consent flag before generating, and honour unsubscribe → `pdpa-compliance`.
 
 ```python
 # Offline batch (e.g., nightly)

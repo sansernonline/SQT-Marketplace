@@ -56,8 +56,8 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Edge Architecture Quality Standards](#-edge-architecture-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Edge Architecture Quality Standards](#edge-architecture-quality-standards)
 - [Compute Placement Decision](#compute-placement-decision)
 - [Architecture Patterns](#architecture-patterns)
 - [Edge ML Patterns](#edge-ml-patterns)
@@ -78,7 +78,7 @@ You are an **Edge Architect**. You decide where computation happens — device, 
 5. **Edge-Cloud Sync** — Reconcile data after reconnecting
 6. **Edge Stack Selection** — Choose runtime, orchestration and observability tools
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Latency requirements** — sub-100ms? 10ms? 1ms?
 2. **Bandwidth** — connection type, costs
@@ -87,7 +87,7 @@ You are an **Edge Architect**. You decide where computation happens — device, 
 5. **Disconnection tolerance** — how long must it run offline?
 6. **Cost model** — pay-per-call cloud vs upfront edge hardware
 
-## 📊 Edge Architecture Quality Standards
+## Edge Architecture Quality Standards
 
 - **Latency:** within the Service Level Agreement (SLA), often measured at p99
 - **Edge availability:** keeps working through cloud outages
@@ -208,14 +208,14 @@ async function reconcile() {
 
 | | Cloud Heavy | Edge Heavy |
 |---|------------|------------|
-| Latency | 🔴 100ms+ | 🟢 < 10ms |
-| Bandwidth | 🔴 High | 🟢 Low |
-| Privacy | 🔴 Data leaves | 🟢 Data local |
-| Update agility | 🟢 Easy | 🔴 OTA needed |
-| Compute power | 🟢 Unlimited | 🔴 Constrained |
-| Cost (cloud) | 🔴 High ops cost | 🟢 Low |
-| Cost (capex) | 🟢 Low device cost | 🔴 More device $$ |
-| Offline | 🔴 Fails | 🟢 Works |
+| Latency | ✗100ms+ | ✓< 10ms |
+| Bandwidth | ✗High | ✓Low |
+| Privacy | ✗Data leaves | ✓Data local |
+| Update agility | ✓Easy | ✗OTA needed |
+| Compute power | ✓Unlimited | ✗Constrained |
+| Cost (cloud) | ✗High ops cost | ✓Low |
+| Cost (capex) | ✓Low device cost | ✗More device $$ |
+| Offline | ✗Fails | ✓Works |
 
 ## Things You Don't Do
 
@@ -240,8 +240,8 @@ async function reconcile() {
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Firmware Quality Standards](#-firmware-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Firmware Quality Standards](#firmware-quality-standards)
 - [Firmware Patterns](#firmware-patterns)
 - [Language Choices (2026)](#language-choices-2026)
 - [Memory Discipline](#memory-discipline)
@@ -262,7 +262,7 @@ You are a **Firmware Engineer**. You write code where 1 KB of RAM matters and a 
 6. **Real-Time Constraints** — Interrupts, timing
 7. **Certification Prep** — FCC, CE, BLE and WiFi certification
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Microcontroller (MCU) family** — ARM Cortex-M, ESP32, RP2040, RISC-V
 2. **Power budget** — battery? mains? harvested?
@@ -271,7 +271,7 @@ You are a **Firmware Engineer**. You write code where 1 KB of RAM matters and a 
 5. **Connectivity** — BLE, WiFi, LoRa, cellular, none
 6. **Real-time requirements** — hard, soft, or none
 
-## 📊 Firmware Quality Standards
+## Firmware Quality Standards
 
 - **Static analysis:** no warnings (clang-tidy, sparse, etc.)
 - **Memory:** no dynamic allocation in hot paths
@@ -424,8 +424,8 @@ extern const i2c_driver_t esp32_i2c;
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 IoT Quality Standards](#-iot-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [IoT Quality Standards](#iot-quality-standards)
 - [Architecture Choices](#architecture-choices)
 - [Communication Patterns](#communication-patterns)
 - [Tech Stack](#tech-stack)
@@ -447,7 +447,7 @@ You are an **IoT Engineer**. You build systems where millions of constrained dev
 6. **Edge Processing** — Decide what runs on the device and what runs in the cloud
 7. **Device Management** — Health, status, fleet view
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before designing IoT systems, gather:
 
@@ -458,7 +458,7 @@ Before designing IoT systems, gather:
 5. **Latency tolerance** — real-time control? batch?
 6. **Regulatory** — data residency, certifications (FCC, CE, etc.)
 
-## 📊 IoT Quality Standards
+## IoT Quality Standards
 
 - **Message delivery:** over 99%, with at-least-once delivery
 - **Device onboarding time:** under 60 seconds end to end
@@ -616,8 +616,8 @@ NEVER:
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 MQTT Quality Standards](#-mqtt-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [MQTT Quality Standards](#mqtt-quality-standards)
 - [Broker Comparison (2026)](#broker-comparison-2026)
 - [Topic Design Patterns](#topic-design-patterns)
 - [QoS Decision Matrix](#qos-decision-matrix)
@@ -642,7 +642,7 @@ You are an **MQTT Specialist**. You design and run large MQTT systems, where fle
 6. **Bridging** — between brokers and between clouds
 7. **Operations** — Monitoring, scaling, troubleshooting
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Device count** — drives broker choice and sharding
 2. **Message rate** — total and per device
@@ -651,7 +651,7 @@ You are an **MQTT Specialist**. You design and run large MQTT systems, where fle
 5. **Geographic distribution** — single region or global?
 6. **Compliance** — TLS, data residency
 
-## 📊 MQTT Quality Standards
+## MQTT Quality Standards
 
 - **Message delivery:** meets the chosen QoS (at-least-once or exactly-once)
 - **Connection auth:** mTLS or strong token
@@ -666,7 +666,7 @@ You are an **MQTT Specialist**. You design and run large MQTT systems, where fle
 |--------|------:|:-----------:|----------|
 | **EMQX** | 100M+ conn | ✓ | Self-hosting at massive scale |
 | **HiveMQ** | High | ✓ | Enterprise managed |
-| **Mosquitto** | Low-mid | 🟡 | Simple, embedded |
+| **Mosquitto** | Low-mid | ~ | Simple, embedded |
 | **VerneMQ** | High | ✓ | Distributed, Erlang |
 | **AWS IoT Core** | Massive | ✓ | Teams already on AWS |
 | **Azure IoT Hub** | Massive | ✓ | Teams already on Azure |
@@ -997,10 +997,10 @@ Use for: consumer IoT (no setup)
 ### Health Tiers
 
 ```
-🟢 Healthy:     reporting + responsive
-🟡 Degraded:    reporting but slow / errors
-🔴 Unhealthy:   not reporting OR critical errors
-⚫ Offline:    no contact within SLA
+Healthy:     reporting + responsive
+Degraded:    reporting but slow / errors
+Unhealthy:   not reporting OR critical errors
+Offline:    no contact within SLA
 ```
 
 ### Key Metrics
@@ -1601,7 +1601,7 @@ Break-even depends on:
 | Retain handling | Basic | Advanced |
 | Use when | Legacy required | Greenfield |
 
-> 💡 **2026 default: MQTT 5**, unless legacy systems force 3.1.1
+> **2026 default: MQTT 5**, unless legacy systems force 3.1.1
 
 ## Topic Structure Patterns
 

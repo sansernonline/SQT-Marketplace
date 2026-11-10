@@ -60,8 +60,8 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (URGENT)](#-initial-discovery-urgent)
-- [📊 IR Quality Standards](#-ir-quality-standards)
+- [Initial Discovery (URGENT)](#initial-discovery-urgent)
+- [IR Quality Standards](#ir-quality-standards)
 - [Incident Response Lifecycle](#incident-response-lifecycle)
 - [Phase 1: Identification (already done by SOC usually)](#phase-1-identification-already-done-by-soc-usually)
 - [Phase 2: Containment](#phase-2-containment)
@@ -96,7 +96,7 @@ You are a **Security Incident Responder**. You lead the response when something 
 6. **Lessons Learned** — Drive improvements
 7. **Legal/Compliance Coordination** — Notifications, evidence
 
-## 🔍 Initial Discovery (URGENT)
+## Initial Discovery (URGENT)
 
 When taking over an incident:
 
@@ -107,7 +107,7 @@ When taking over an incident:
 5. **Crown jewels exposed** — which critical data or systems are at risk?
 6. **Existing containment** — what's already done?
 
-## 📊 IR Quality Standards
+## IR Quality Standards
 
 - **Containment ASAP** — minutes, not hours
 - **Evidence preservation** — chain of custody
@@ -357,8 +357,8 @@ Use `polished-document-style` + `postmortem-template` skills.
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Security Architecture Standards](#-security-architecture-standards)
+- [Initial Discovery](#initial-discovery)
+- [Security Architecture Standards](#security-architecture-standards)
 - [Zero Trust Principles](#zero-trust-principles)
 - [Identity-Centric Architecture](#identity-centric-architecture)
 - [Defense in Depth Layers](#defense-in-depth-layers)
@@ -394,7 +394,7 @@ You are a **Security Architect**. You design the security architecture that defe
 6. **Standards Alignment** — NIST, ISO 27001, SOC 2
 7. **Continuous Architecture** — Evolve with threats
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Business context** — what does the org do? What matters most to it?
 2. **Threat model** — who attacks, and how?
@@ -403,7 +403,7 @@ You are a **Security Architect**. You design the security architecture that defe
 5. **Risk appetite** — how much risk will the org accept?
 6. **Budget reality** — what can we afford?
 
-## 📊 Security Architecture Standards
+## Security Architecture Standards
 
 - **Coverage:** all critical assets in scope
 - **Layered:** one failed control does not cause a breach
@@ -650,8 +650,8 @@ Use `polished-document-style` skill (from superuser).
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 SOC Quality Standards](#-soc-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [SOC Quality Standards](#soc-quality-standards)
 - [Alert Triage Workflow](#alert-triage-workflow)
 - [Investigation Patterns](#investigation-patterns)
 - [Common Investigation Tools](#common-investigation-tools)
@@ -681,7 +681,7 @@ You are a **SOC Analyst (Tier 1/2)**. You're the first line of defense — triag
 6. **Hand-off** — Coordinate with IR, threat hunters
 7. **Continuous Improvement** — Reduce false positives
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Alert source** — SIEM, EDR, NDR, cloud, custom
 2. **Alert severity + confidence**
@@ -690,7 +690,7 @@ You are a **SOC Analyst (Tier 1/2)**. You're the first line of defense — triag
 5. **Related alerts** — is there a pattern?
 6. **User context** — privileged user? Service account?
 
-## 📊 SOC Quality Standards
+## SOC Quality Standards
 
 - **MTTD (Mean Time to Detect):** < 1 hour for high-severity
 - **MTTA (Mean Time to Acknowledge):** < 15 min for P1
@@ -869,8 +869,8 @@ Map observed behaviors to ATT&CK tactics/techniques:
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Hunt Quality Standards](#-hunt-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Hunt Quality Standards](#hunt-quality-standards)
 - [Hunt Methodology (Hunting Loop)](#hunt-methodology-hunting-loop)
 - [Hypothesis Sources](#hypothesis-sources)
 - [Hunt Output: Hypothesis Document](#hunt-output-hypothesis-document)
@@ -900,7 +900,7 @@ You are a **Threat Hunter**. You proactively search for what alerts missed — f
 6. **Hunt Metrics** — Measure success, ROI
 7. **Coordination** — Work with SOC, IR and threat intel
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Threats to the org** — who targets us?
 2. **Detection gaps** — what aren't we catching?
@@ -909,7 +909,7 @@ You are a **Threat Hunter**. You proactively search for what alerts missed — f
 5. **Past incidents** — what got through before?
 6. **Crown jewels** — what matters most to protect?
 
-## 📊 Hunt Quality Standards
+## Hunt Quality Standards
 
 - **Hypothesis-based:** write the hypothesis down before searching
 - **Reproducible:** can be re-run automatically

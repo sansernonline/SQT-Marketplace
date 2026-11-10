@@ -35,8 +35,22 @@ Response time and chat rate count toward shop ratings on the big platforms, and 
 | ส่งของวันไหน | T7 shipping time | cut-off time, today's shipments |
 | ขอใบเสร็จ / ใบกำกับภาษี | T8 receipt | VAT-registered or not (`seller-tax-basics`) |
 
+## Which chat first
+
+When chats pile up, answer by money at risk and deadline, not by arrival order:
+
+| Order | Chat | Why first |
+|---|---|---|
+| 1 | Return or refund request, or open dispute, with little time left to respond | a missed deadline is usually an automatic refund (`returns-and-bad-reviews`, return windows table; the deadlines there are still รอยืนยัน, so read them in Seller Centre) |
+| 2 | Buyer mentions สคบ., police report, lawyer, or posting publicly | escalate to the owner the same hour; reply with facts only |
+| 3 | Same buyer writing for the 2nd or 3rd time about one order | each extra message means the last answer did not solve it |
+| 4 | Late parcel, wrong or damaged item | money and a review at stake |
+| 5 | Pre-sale questions (price, stock, size) | a sale to win, no loss yet |
+
 ## Rules
 
+- **Reply from the shop's written policy.** If the buyer asks for something the policy does not give (return after the window, extra compensation), draft a polite no with what the shop *can* do. If the policy says nothing or contradicts itself, ask the owner before drafting; do not invent a policy in the reply. Never offer a refund or exchange while a dispute is open on the platform; the platform's process decides
+- Return windows count from the date the parcel was actually delivered (tracking), not the order date; if only an estimate is known, say the count is from the estimated date
 - Answer within the platform's expected window during shop hours; set an auto-reply for after hours that says when a person will answer
 - Never send a buyer to pay outside Shopee, Lazada or TikTok Shop, or give a LINE ID or phone number there — it breaks platform rules and removes buyer protection
 - Never blame the courier or the buyer; state facts and the fix

@@ -10,35 +10,35 @@
 
 ## Regulatory Framework Map
 
-### 🌏 By Region
+### By Region
 
 **Thailand:**
-- 🏦 **BoT (ธปท.)** — banks, payment systems, e-money
-- 💼 **SEC** — securities, digital assets
-- 🛡️ **AMLO** — anti-money laundering, KYC requirements
-- 📋 **PDPA** — personal data protection
-- 💳 **Card scheme rules in Thailand** — (ยังไม่ได้ตรวจ ว่ามีกรอบเฉพาะชื่อนี้) ตรวจกับธนาคารแห่งประเทศไทยและ card scheme ก่อนอ้าง
+- **BoT (ธปท.)** — banks, payment systems, e-money
+- **SEC** — securities, digital assets
+- **AMLO** — anti-money laundering, KYC requirements
+- **PDPA** — personal data protection
+- **Card scheme rules in Thailand** — (ยังไม่ได้ตรวจ ว่ามีกรอบเฉพาะชื่อนี้) ตรวจกับธนาคารแห่งประเทศไทยและ card scheme ก่อนอ้าง
 
 **Singapore:**
-- 🏦 **MAS** — banking, payments (PSA), capital markets
-- 📋 **PDPA SG** — data protection
-- 🛡️ **AMLA, TSOFA** — AML/CTF
+- **MAS** — banking, payments (PSA), capital markets
+- **PDPA SG** — data protection
+- **AMLA, TSOFA** — AML/CTF
 
 **EU:**
-- 🏦 **EBA, ECB** — banking
-- 💳 **PSD2** — payment services, Strong Customer Authentication
-- 💰 **MiCA** — crypto-assets
-- 📋 **GDPR** — data protection
-- 🛡️ **AMLD6** — AML
+- **EBA, ECB** — banking
+- **PSD2** — payment services, Strong Customer Authentication
+- **MiCA** — crypto-assets
+- **GDPR** — data protection
+- **AMLD6** — AML
 
 **USA:**
-- 🏦 **OCC, Fed, FDIC, CFPB** — banking
-- 💳 **State money transmitter** licenses
-- 📋 **CCPA, state privacy laws**
-- 🛡️ **BSA/FinCEN** — AML
-- 🛍️ **PCI-DSS** — card data (industry-mandated)
+- **OCC, Fed, FDIC, CFPB** — banking
+- **State money transmitter** licenses
+- **CCPA, state privacy laws**
+- **BSA/FinCEN** — AML
+- **PCI-DSS** — card data (industry-mandated)
 
-### 🛡️ By Domain
+### By Domain
 
 **Payments (PCI-DSS):**
 | Level | Annual transactions | Validation |

@@ -61,20 +61,41 @@ Multi-channel tools (BigSeller, Zort, Duoke and similar) sync stock automaticall
 
 ## Reorder point
 
-Reorder point = average daily sales × lead time + safety stock (max-demand × max-lead minus the averages); reorder qty = daily sales × days of cover wanted − (available − reorder point). Formulas and the `BAG-TOTE-BLK-L` worked example → [references/reorder-point.md](references/reorder-point.md); the script below computes them.
+Reorder point = average daily sales × lead time + safety stock (max-demand × max-lead minus the averages); reorder qty = daily sales × days of cover wanted − (available + already ordered but not arrived − reorder point). Count goods already on the way before ordering more, or the same gap gets ordered twice. Formulas and the `BAG-TOTE-BLK-L` worked example → [references/reorder-point.md](references/reorder-point.md); the script below computes them.
 
-Before a big campaign (9.9, 10.10, 11.11, 12.12, payday sales) raise average daily sales for the campaign window from last year's numbers, not this month's.
+Before a big campaign (9.9, 10.10, 11.11, 12.12, payday sales) raise average daily sales for the campaign window from last year's numbers, not this month's. Adjust for season only when you hold a full year of sales history; with less, ask the owner what last year's peak looked like.
+
+Days the SKU was out of stock are not zero-demand days. Leave them out of average daily sales, or a SKU that sold out fast looks slow and gets under-ordered.
 
 ### Run the script at every stock count
 
-`scripts/stock-calc.mjs` does all of the above per SKU in one call: available, buffer, days left, stock level and what each channel may show, safety stock, reorder point and reorder quantity, with warnings for oversold (negative available) and no-sales SKUs. Do not work these out by hand.
+`scripts/stock-calc.mjs` does all of the above per SKU in one call: available, buffer, days left, stock level and what each channel may show, safety stock, reorder point and reorder quantity, with warnings for oversold (negative available) and no-sales SKUs. Optional fields `on_order`, `unit_cost` and `days_since_sale` add the stuck-stock check below. Do not work these out by hand.
 
 ```bash
-node scripts/stock-calc.mjs scripts/example.json     # BAG-TOTE-BLK-L → safety 86 · reorder point 126 · order 180
+node scripts/stock-calc.mjs scripts/example.json     # BAG-TOTE-BLK-L → safety 86 · reorder point 126 · order 180 · stuck stock ฿6,970 in 2 SKUs
 node scripts/stock-calc.mjs --self-test
 ```
 
 **Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/multi-shop-stock/scripts/stock-calc.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/e-commerce/skills/multi-shop-stock/scripts/stock-calc.mjs` · Node only, no dependencies.
+
+## Stuck stock (สินค้าค้างสต็อก)
+
+Reorder rules only look at what runs out. The money a small shop loses quietly sits in what never sells. Check it at every monthly count.
+
+| Status | Test | What the script does |
+|---|---|---|
+| Slow mover (เคลื่อนไหวช้า) | no sale for 28 days | no days-of-cover figure, never reorders |
+| Dead stock (สต็อกตาย) | no sale for 90 days | same, flagged louder |
+| Overstock (ล้นสต็อก) | more than 120 days of sales on hand | counts only the units beyond 120 days |
+
+The 28, 90 and 120-day lines are starting values taken from Anthropic's inventory-planner, not measured on Thai shops; tune them to your lead time.
+
+1. Put **one line in baht at the top of the report**: money tied in stuck stock = units × cost per unit. The script prints it first (`เงินจมในสต็อกค้าง`). This is the number owners act on.
+2. For each stuck SKU give the owner 3 choices with the numbers that decide them: units left, sales per day, gross profit per unit (`marketplace-fees-pricing`).
+   - **Keep**: stock is small or a campaign is coming that sold it last year
+   - **Discount or bundle**: price still above cost after campaign fees; bundle with a fast seller (bundle SKU rules above)
+   - **Delist or stop selling**: no sale in 90 days and a discount would sell below cost; clear through a sale lot or return to the supplier if the terms allow
+3. Never reorder a slow or dead SKU, even when its count drops below the reorder point. The owner decides, the sheet does not.
 
 ## Rules
 

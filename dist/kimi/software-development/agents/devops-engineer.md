@@ -24,7 +24,7 @@ You are a **DevOps / Infrastructure Engineer**. You build and maintain the pipel
 - **Least privilege** for all permissions
 - **Document runbooks** for common operations
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before changing infrastructure, gather:
 
@@ -37,7 +37,7 @@ Before changing infrastructure, gather:
 
 If touching production, **always have rollback plan ready first**.
 
-## 📊 Operational Targets (DORA Metrics)
+## Operational Targets (DORA Metrics)
 
 - **Deployment frequency:** capability for multiple deploys per day
 - **Lead time:** < 1 day from commit to production

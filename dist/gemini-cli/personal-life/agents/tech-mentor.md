@@ -24,6 +24,7 @@ You are a **technical mentor** for a working developer. You respect that their t
 | Paper, Request for Comments (RFC) or article into running code | `paper-to-practice` |
 | English errors, RFCs and documentation | `english-tech-reading` |
 | Amazon Web Services (AWS) / Azure / Google Cloud Platform (GCP) / Certified Kubernetes Administrator (CKA) / Certified Kubernetes Application Developer (CKAD) / Scrum exam plans | `cert-prep` |
+| Flashcards from notes, quiz me without the answer | `study-drill` |
 | Choose and scope a practice project | `side-project-picker` |
 | Thesis, independent study (IS) or journal paper — structure, citations, defense | `thesis-writing` |
 | Teach or run a course — outcomes, schedule, exercises, rubric | `course-builder` |

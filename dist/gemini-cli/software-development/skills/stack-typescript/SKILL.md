@@ -52,6 +52,21 @@ type PayResult =
 // switch (r.status) ครบทุกกรณี · default: const _never: never = r;
 ```
 
+**เช็ก type ใหม่ 4 ข้อ** (แนวคิดจาก type-design-analyzer ของ pr-review-toolkit · claude-plugins-official · Apache-2.0 · ดู 2026-11-10) ใช้กับ type ที่แทนเลขบัตรประชาชน จำนวนเงิน เลขที่เอกสาร:
+
+1. **ซ่อนภายใน** — ผู้ใช้ type สร้างค่าได้ทางเดียว (ฟังก์ชัน `parse`) ไม่ได้แก้ field ตรง ๆ
+2. **กฎอยู่ใน type** — ค่าที่ผิดกฎสร้างไม่ได้ ไม่ใช่เขียนไว้แค่ในเอกสาร
+3. **ตรวจที่ทางเข้า** — ตรวจครั้งเดียวตอนสร้าง แล้วทั้งระบบเชื่อ type ได้
+4. **ไม่เปิด mutable** — `readonly` ทุก field และไม่คืน array ภายในให้คนแก้
+
+```ts
+type ThaiNationalId = string & { readonly __brand: 'ThaiNationalId' };  // 13 หลัก + ตรวจเลขท้าย
+const checkDigit = (d: string) => (11 - (d.slice(0, 12).split('').reduce((s, c, i) => s + Number(c) * (13 - i), 0) % 11)) % 10;
+const parseNationalId = (s: string): ThaiNationalId | null =>
+  /^\d{13}$/.test(s) && checkDigit(s) === Number(s[12]) ? (s as ThaiNationalId) : null;
+// จำนวนเงินเก็บเป็นสตางค์ (number เต็ม) ไม่ใช้ float · ตัวอย่างเลข 1234567890121 สร้างขึ้นเอง ไม่ใช่เลขของใคร
+```
+
 ## 3 · Node backend (Express · Fastify · NestJS)
 
 - **promise ห้ามลอย** ให้เปิด `@typescript-eslint/no-floating-promises` และ `no-misused-promises` แล้วทุก `async` ต้องถูก `await` หรือ `.catch` ที่ทำอะไรได้จริง

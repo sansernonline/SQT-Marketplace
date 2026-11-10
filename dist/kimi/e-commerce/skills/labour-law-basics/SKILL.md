@@ -72,6 +72,38 @@ Changes in force from **7 Dec 2568** (พ.ร.บ.คุ้มครองแร
 
 Worked example: last wage 30,000/month (1,000/day), 7 years of service → 240 days × 1,000 = **240,000** + notice pay if no notice given.
 
+## 5a. Check before dismissing
+
+Run these 7 checks **before** the decision is made, not after the letter is written. Any check that hits → stop and send the case to a labour lawyer (ทนายความด้านแรงงาน) with the facts below. The numbers in sections 4 and 5 are what a dismissal costs when it is lawful; these checks are about whether it is.
+
+| # | Check | Why it matters |
+|---|---|---|
+| 1 | Did the employee complain recently (to the owner, the labour office, or about pay or OT)? | a dismissal soon after a complaint looks like retaliation; ask "why now?" |
+| 2 | Is the employee on leave, or just back from maternity or sick leave? | timing again; leave is a legal right (section 3) |
+| 3 | Is the employee pregnant? | **ม.43 forbids dismissing a female employee because she is pregnant** |
+| 4 | Is there a written warning for the conduct, still within 1 year? | ม.119 lets you skip severance for a rule breach only after a written warning, except serious cases (section 5) |
+| 5 | Did others do the same thing without being dismissed? | unequal treatment points to another reason |
+| 6 | Do the work rules or the contract promise a procedure (warning steps, hearing)? | skipping your own procedure weakens the case |
+| 7 | Does the reason in the letter fit a ม.119 ground exactly, and is it written in the letter? | ม.17 para 3: a reason not written in the letter cannot be relied on later (section 4) |
+
+Even a dismissal that pays full severance can be unfair. The Labour Court may order the employer to take the employee back at the same wage, or order compensation instead (พ.ร.บ.จัดตั้งศาลแรงงานและวิธีพิจารณาคดีแรงงาน ม.49). An employee who is part of a pending labour demand has extra protection under the Labour Relations Act (รอยืนยัน the section and its conditions).
+
+Sources, checked 2026-11-10: ม.43 — Labour Protection Act consolidated text by the Office of the Council of State (สำนักงานคณะกรรมการกฤษฎีกา), amendments up to No. 4 B.E. 2553, hosted at [senate.go.th](https://www.senate.go.th/assets/portals/28/fileups/146/files/%E0%B8%9E%E0%B8%A3%E0%B8%9A.%E0%B8%84%E0%B8%B8%E0%B9%89%E0%B8%A1%E0%B8%84%E0%B8%A3%E0%B8%AD%E0%B8%87%E0%B9%81%E0%B8%A3%E0%B8%87%E0%B8%87%E0%B8%B2%E0%B8%99%20%E0%B8%9E.%E0%B8%A8.2541_1.pdf); not yet checked that Nos. 5–9 left ม.43 unchanged (รอยืนยัน). ม.49 — Nakhon Phanom provincial labour protection office, [nakhonphanom.labour.go.th](https://nakhonphanom.labour.go.th/2067-new-npm20062565-1) (20 Jun 2565, summary of the section and Supreme Court ruling 7213/2546, not the section text itself).
+
+## 5b. Employee or freelancer
+
+Shops often pay admins, live hosts and video editors as "freelancers". What the contract calls them does not decide it; how the work is done does (`doc-contract-th` section 1: จ้างแรงงาน ม.575 vs จ้างทำของ ม.587).
+
+| Points to employee | Points to freelancer (hire of work) |
+|---|---|
+| shop sets hours and the place, checks attendance | person chooses when and where, paid for the result |
+| shop gives orders on how to do the work and can discipline | shop accepts or rejects the finished result only |
+| paid by the month, day or hour | paid per piece, per clip, per job |
+| shop provides the tools and accounts | person uses own tools |
+| cannot send someone else in their place | may hire helpers or work for other shops |
+
+These signs are general guidance, not a legal test (รอยืนยัน with a labour lawyer or the labour office, hotline 1546). Mostly the left column → treat as an employee: social security registration (`social-security-th`), wages through `payroll-th`, severance and leave rights in this skill. Mostly the right → a hire-of-work contract (`doc-contract-th`) and withholding tax on the fee (`tax-vat-th`). A mix → ask before the first payment, because back-paying social security and severance later costs more.
+
 ## 6. Minimum wage
 
 Set by the Wage Committee (คณะกรรมการค่าจ้าง) by province. From 1 Jul 2568 (ประกาศฉบับที่ 14) the top rate is **400 baht/day** (Bangkok, Chonburi, Rayong, Chachoengsao, Phuket, Ko Samui district, and hotels and service venues nationwide) and the lowest is **337 baht/day**. The committee met 17 มี.ค. 2569 and postponed any 2569 raise, so these rates are still in force. Always look up the current announcement (ประกาศคณะกรรมการค่าจ้าง เรื่อง อัตราค่าจ้างขั้นต่ำ) on mol.go.th / wage.mol.go.th before quoting — a round for 2570 may come (รอยืนยัน).

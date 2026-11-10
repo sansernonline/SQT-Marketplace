@@ -30,6 +30,8 @@ Use when reviewing a pull request, self-reviewing before submitting, or auditing
 1. **Understand the intent** — read PR description and linked ticket
 2. **Skim the diff** — get overall sense of changes
 3. **Deep review** — go through each section of checklist below
+   - **Verify before posting:** hand every `blocking:` finding to a fresh agent (or a second reader) with only the diff and the finding, and ask whether it is real. Drop it if they cannot reproduce or point to the line. For a contested diff use `adversarial-review-panel`.
+   - **Do not flag** (adapted from the `code-review` command of claude-plugins-official · Apache-2.0 · opened 2026-11-10): a problem that existed before this PR · something the linter or compiler already catches · a nitpick a senior reviewer would skip · behaviour that looks wrong but is right (check the context first) · a rule the team silenced on purpose with a lint-ignore comment · a problem that only appears for an input that cannot occur here
 4. **Run the code** if non-trivial — don't just read
 5. **Leave actionable comments** — suggest fixes, not just point out problems
 
@@ -115,7 +117,7 @@ The author does not fix every finding on sight: a finding can be wrong (reviewer
 
 Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. The house-specific checks stay in SKILL.md.
 
-### 🎯 Correctness
+### Correctness
 
 - [ ] Does the code do what the PR description says?
 - [ ] Are edge cases handled? (null, empty, zero, negative, very large)
@@ -124,7 +126,7 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 - [ ] Off-by-one errors checked?
 - [ ] Are assumptions explicit (or asserted)?
 
-### 🏗️ Design
+### Design
 
 - [ ] Does this fit the existing architecture?
 - [ ] Is the abstraction at the right level? (not too generic, not too specific)
@@ -133,7 +135,7 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 - [ ] Are dependencies appropriate? (no circular, minimal coupling)
 - [ ] Could this be simpler?
 
-### 🧪 Tests
+### Tests
 
 - [ ] Are there tests for the new code?
 - [ ] Tests cover happy path + edge cases + errors?
@@ -141,7 +143,9 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 - [ ] Tests are readable and maintainable?
 - [ ] No flaky tests introduced?
 
-### 🔒 Security
+**Rate each missing test 1–10 before suggesting it** (adapted from `pr-test-analyzer` · claude-plugins-official · Apache-2.0 · opened 2026-11-10). 9–10: data loss, money or security would break unnoticed · 7–8: the user sees an error · 5–6: edge case with limited impact · below 5: do not suggest it. Review behaviour, not line coverage. Do not ask for tests of plain getters and setters.
+
+### Security
 
 - [ ] Input validation at boundaries?
 - [ ] No SQL injection (parameterized queries)?
@@ -151,7 +155,7 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 - [ ] PII / sensitive data logged appropriately?
 - [ ] Dependencies updated? No known CVEs?
 
-### 🚀 Performance
+### Performance
 
 - [ ] No N+1 queries?
 - [ ] Appropriate caching where beneficial?
@@ -159,7 +163,7 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 - [ ] Large data handled with pagination/streaming?
 - [ ] No unnecessary network calls?
 
-### 📖 Readability
+### Readability
 
 - [ ] Names reveal intent? (variables, functions, classes)
 - [ ] Functions reasonably short?
@@ -168,14 +172,14 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 - [ ] No debug prints / TODO without ticket?
 - [ ] Consistent with existing code style?
 
-### 📚 Documentation
+### Documentation
 
 - [ ] Public APIs documented?
 - [ ] README/CHANGELOG updated if needed?
 - [ ] Breaking changes called out?
 - [ ] New env vars / config documented?
 
-### 🔄 Maintainability
+### Maintainability
 
 - [ ] Could a new team member understand this in 6 months?
 - [ ] Easy to modify when requirements change?

@@ -117,7 +117,7 @@ settings = Settings()      # ขาดค่า = ValidationError ตั้ง�
 
 ## 4 · Angular และ frontend ทั่วไป
 
-> 🚨 **ทุกอย่างที่อยู่ในไฟล์ที่เบราว์เซอร์โหลด คือสาธารณะ** ไม่มีข้อยกเว้น
+> **ทุกอย่างที่อยู่ในไฟล์ที่เบราว์เซอร์โหลด คือสาธารณะ** ไม่มีข้อยกเว้น
 
 **แบบฝังตอน build** (`environment.ts`, `import.meta.env`, `NEXT_PUBLIC_*`):
 ค่าติดไปกับไฟล์ที่ build ได้ เปลี่ยนค่าทีไรต้อง build ใหม่ จึงขัดกับกฎ build ครั้งเดียวแล้วใช้ทุก environment
@@ -172,7 +172,7 @@ env:
       secretKeyRef: { name: app-secrets, key: db-password }
 ```
 
-> 🚨 **Secret ของ Kubernetes เป็นแค่ base64 ไม่ใช่การเข้ารหัส**
+> **Secret ของ Kubernetes เป็นแค่ base64 ไม่ใช่การเข้ารหัส**
 > ใครมีสิทธิ์ `get secret` ก็อ่านค่าได้ตรง ๆ
 > ต้องเปิด encryption at rest ที่ etcd และคุมสิทธิ์ด้วย RBAC
 > ทางที่ดีกว่า: ให้ External Secrets Operator ดึงค่าจาก Key Vault / Secrets Manager มาสร้าง Secret ให้

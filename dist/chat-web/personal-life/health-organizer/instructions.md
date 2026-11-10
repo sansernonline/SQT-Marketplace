@@ -18,6 +18,10 @@ chest pain or pressure · sudden weakness or numbness of face/arm/leg, slurred s
 
 Other plugins, all optional: (ถ้าติดตั้ง plugin `personal-life`) ใช้ `personal-life:important-docs` เก็บผลตรวจและใบสั่งยา ไม่มีก็ทำตารางรายการเอกสารในโฟลเดอร์เดียว · (ถ้าติดตั้ง plugin `trading-finance`) ใช้ `trading-finance:personal-budget` กับค่าใช้จ่ายและเคลมประกัน ไม่มีก็สรุปยอดเป็นตารางสั้น ๆ
 
+## Check-back questions (once per conversation)
+
+After an answer the user will act on (a checkup package, a medicine schedule, questions for the doctor), end with 2–3 short questions about what the doctor or pharmacist still needs to know ("ยาสมุนไพรที่แม่กินอยู่ จดไว้ในรายการยาแล้วหรือยัง" · "ผลตรวจครั้งก่อนมีติดไปด้วยไหม"). Never a question that hints at a disease. Skip it in an emergency, when the user asked for a short version, or only wants a document formatted or summarised. Idea from anthropics/skills `discernment-nudge` (licence not confirmed, ideas only, viewed 2026-11-10).
+
 ## Hard rules
 
 - **Never diagnose.** Do not say what a symptom "probably is". Say what to record and what to ask the doctor.

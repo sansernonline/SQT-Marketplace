@@ -71,7 +71,7 @@ flowchart LR
 | Tables | `camelot`, `tabula-py` for PDF tables |
 | Images | Optical character recognition (OCR) via `tesseract`, `paddleocr` — for Thai pass `lang='tha+eng'` (Tesseract defaults to English only) |
 
-> 💡 **Use [Unstructured.io](https://unstructured.io)** for mixed-format pipelines.
+> **Use [Unstructured.io](https://unstructured.io)** for mixed-format pipelines.
 
 ### Cleaning
 
@@ -150,13 +150,13 @@ Model names and prices change often. Check each provider's current embedding mod
 
 | Vector DB | Open Source | Hybrid Search | Filtering | Scale | Best for |
 |-----------|:----------:|:-------------:|:---------:|:-----:|----------|
-| **Pinecone** | ✗ | 🟡 | ✓ | 🟢 | Quick start, managed |
-| **Weaviate** | ✓ | ✓ | ✓ | 🟢 | Self-host, GraphQL |
-| **Qdrant** | ✓ | ✓ | ✓ | 🟢 | Performance, Rust |
-| **Chroma** | ✓ | 🟡 | ✓ | 🟡 | Local dev |
-| **pgvector** | ✓ | ✓ (with FTS) | ✓ | 🟡 | Already on Postgres |
-| **Elasticsearch** | ✓ | ✓✓ | ✓ | 🟢 | Hybrid + analytics |
-| **OpenSearch** | ✓ | ✓✓ | ✓ | 🟢 | AWS-native |
+| **Pinecone** | ✗| ~ | ✓| ✓| Quick start, managed |
+| **Weaviate** | ✓| ✓| ✓| ✓| Self-host, GraphQL |
+| **Qdrant** | ✓| ✓| ✓| ✓| Performance, Rust |
+| **Chroma** | ✓| ~ | ✓| ~ | Local dev |
+| **pgvector** | ✓| ✓(with FTS) | ✓| ~ | Already on Postgres |
+| **Elasticsearch** | ✓| ✓✓| ✓| ✓| Hybrid + analytics |
+| **OpenSearch** | ✓| ✓✓| ✓| ✓| AWS-native |
 
 ### When to choose what
 
@@ -191,9 +191,9 @@ def rrf_merge(*result_lists, k=60):
     return sorted(scores.items(), key=lambda x: -x[1])
 ```
 
-> 💡 **Hybrid beats pure vector** in most production cases — especially for proper nouns, acronyms and codes
+> **Hybrid beats pure vector** in most production cases — especially for proper nouns, acronyms and codes
 
-> 🇹🇭 **Thai text needs word segmentation before keyword search.** Thai has no spaces between words, so a BM25 (Best Matching 25) keyword index built on whitespace sees a whole sentence as one token. Segment both the documents and the query with PyThaiNLP (`word_tokenize(text, engine="newmm")`) or an ICU (International Components for Unicode) word break analyzer — Elasticsearch and OpenSearch ship a `thai` analyzer — then index the segmented words.
+> **Thai text needs word segmentation before keyword search.** Thai has no spaces between words, so a BM25 (Best Matching 25) keyword index built on whitespace sees a whole sentence as one token. Segment both the documents and the query with PyThaiNLP (`word_tokenize(text, engine="newmm")`) or an ICU (International Components for Unicode) word break analyzer — Elasticsearch and OpenSearch ship a `thai` analyzer — then index the segmented words.
 
 ### Metadata filtering
 
@@ -224,7 +224,7 @@ ranked = sorted(zip(candidates, scores), key=lambda x: -x[1])
 final = [doc for doc, score in ranked[:5]]
 ```
 
-> 💡 Retrieve top-20, re-rank to top-5. Big quality gain, modest cost.
+> **Tip:** Retrieve top-20, re-rank to top-5. Big quality gain, modest cost.
 
 **พิสูจน์ว่า reranker คุ้ม ด้วย ablation (ถอดทีละชิ้น)**: ให้ปิดชิ้นส่วนด้วย env flag (เช่น `RERANK=off`) · รันซ้ำเฉพาะชุดคำถามที่เกี่ยวข้อง · ตั้งกลับเป็นเปิด · รายงานเป็นตาราง เปิด / ปิด / ผลต่าง (ตัวอย่างจากงานสอน: หน้าที่ถูกอยู่ใน 4 ย่อหน้าแรก 80.8% → 95.4% · ตอบถูก 84.0% → 91.7% ไม่ใช่เกณฑ์)
 

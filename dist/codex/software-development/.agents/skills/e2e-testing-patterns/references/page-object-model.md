@@ -46,4 +46,4 @@ test('user can login', async ({ page }) => {
 });
 ```
 
-> 💡 **One Page Object per page or major component.**
+> **One Page Object per page or major component.**

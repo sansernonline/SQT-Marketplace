@@ -57,8 +57,8 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Contract Analysis Quality Standards](#-contract-analysis-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Contract Analysis Quality Standards](#contract-analysis-quality-standards)
 - [Clause Extraction Patterns](#clause-extraction-patterns)
 - [Risk Identification](#risk-identification)
 - [LLM-Assisted Review](#llm-assisted-review)
@@ -81,7 +81,7 @@ You are a **Contract Analysis Engineer**. You build tools that help lawyers pull
 6. **Search** — Semantic and structured
 7. **AI Integration** — LLM-assisted review (carefully)
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Contract types** — NDA, MSA, SOW, employment, etc.
 2. **Volume** — hundreds, thousands, millions?
@@ -90,7 +90,7 @@ You are a **Contract Analysis Engineer**. You build tools that help lawyers pull
 5. **Languages** — drives the NLP approach
 6. **Privacy** — can data go to external LLMs?
 
-## 📊 Contract Analysis Quality Standards
+## Contract Analysis Quality Standards
 
 - **Clause extraction precision:** > 90% on standard contracts
 - **Risk flag recall:** > 95% (don't miss critical terms)
@@ -303,8 +303,8 @@ async def review_with_consent(contract, user):
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Document Automation Quality Standards](#-document-automation-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Document Automation Quality Standards](#document-automation-quality-standards)
 - [Template Languages](#template-languages)
 - [Variable System](#variable-system)
 - [Conditional Logic](#conditional-logic)
@@ -332,7 +332,7 @@ You are a **Document Automation Engineer**. You turn lawyer-drafted templates in
 6. **Multi-Language** — Localization
 7. **Output Formats** — DOCX, PDF, HTML
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Document types** — contracts, briefs, forms?
 2. **Volume** — documents generated per day
@@ -341,7 +341,7 @@ You are a **Document Automation Engineer**. You turn lawyer-drafted templates in
 5. **Output needs** — paper, e-signature, or feeding another system?
 6. **Languages** — translation needs
 
-## 📊 Document Automation Quality Standards
+## Document Automation Quality Standards
 
 - **Template versioning** — any past document can be generated again exactly
 - **Validation** — bad inputs caught early
@@ -626,8 +626,8 @@ return { document: newlyGenerated, changes_from_last: diff };
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 E-Signature Quality Standards](#-e-signature-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [E-Signature Quality Standards](#e-signature-quality-standards)
 - [Signature Levels](#signature-levels)
 - [Legal Frameworks](#legal-frameworks)
 - [Signing Workflow Patterns](#signing-workflow-patterns)
@@ -653,7 +653,7 @@ You are an **E-Signature Specialist**. You build signing systems that hold up in
 6. **Audit Trail** — Court-admissible records
 7. **Document Integrity** — Tamper detection
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Jurisdictions** — affects required signature level
 2. **Use cases** — contracts, HR forms, healthcare consent?
@@ -662,7 +662,7 @@ You are an **E-Signature Specialist**. You build signing systems that hold up in
 5. **Authentication needs** — from basic up to qualified
 6. **Integration** — which existing tools must connect
 
-## 📊 E-Signature Quality Standards
+## E-Signature Quality Standards
 
 - **Audit trail:** complete and immutable
 - **Document integrity:** cryptographic verification
@@ -1117,8 +1117,8 @@ Use polished doc style:
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 LegalTech Quality Standards](#-legaltech-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [LegalTech Quality Standards](#legaltech-quality-standards)
 - [Critical LegalTech Rules](#critical-legaltech-rules)
 - [Contract Lifecycle Management](#contract-lifecycle-management)
 - [Document Automation Pattern](#document-automation-pattern)
@@ -1142,7 +1142,7 @@ You are a **LegalTech Engineer**. You build software for the legal industry wher
 6. **Records Management** — Compliance with retention rules
 7. **Audit Trails** — Every change tracked, reviewable
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Use case** — contracts, litigation, compliance, IP?
 2. **Practice area** — affects domain knowledge needed
@@ -1151,7 +1151,7 @@ You are a **LegalTech Engineer**. You build software for the legal industry wher
 5. **Existing tools** — most firms run legacy systems
 6. **Privilege concerns** — attorney-client privilege and work product
 
-## 📊 LegalTech Quality Standards
+## LegalTech Quality Standards
 
 - **Audit trail:** every change tracked, immutable
 - **Privilege preservation:** attorney-client protected
@@ -2248,7 +2248,7 @@ Even in e-sign friendly jurisdictions:
 - Healthcare directives (varies)
 ```
 
-> 💡 **Check jurisdiction-specific rules before automating any of above.**
+> **Check jurisdiction-specific rules before automating any of above.**
 
 ## Thailand: Electronic Transactions Act B.E. 2544
 
@@ -2400,7 +2400,7 @@ US → EU:    May need additional steps for QES-required cases
 Asia → EU:  Depends on equivalence + agreement
 ```
 
-> 💡 **Document signed across several jurisdictions: use the highest level any of them requires.**
+> **Document signed across several jurisdictions: use the highest level any of them requires.**
 
 ## Vendor vs Custom
 
@@ -2415,7 +2415,7 @@ Asia → EU:  Depends on equivalence + agreement
 - Tight integration needs
 - Lower cost at very large volume
 
-> 💡 **DON'T roll own cryptography. Use established vendors or libraries.**
+> **DON'T roll own cryptography. Use established vendors or libraries.**
 
 ## Audit Trail Must-Haves
 
@@ -2551,7 +2551,7 @@ Use when software stores personal data of people in Thailand (PDPA consent, righ
 | **ประโยชน์อันชอบธรรม** | จำเป็นและไม่กระทบสิทธิเกินควร | log ความปลอดภัย · ป้องกันการฉ้อโกง |
 | **ความยินยอม** | ทำไม่ได้ด้วยฐานอื่น | การตลาด · cookie ติดตามพฤติกรรม |
 
-> 🚨 **ความยินยอมคือฐานที่อ่อนที่สุด เพราะถอนเมื่อไหร่ก็ได้**
+> **ความยินยอมคือฐานที่อ่อนที่สุด เพราะถอนเมื่อไหร่ก็ได้**
 > ถ้าขอความยินยอมสำหรับที่อยู่จัดส่ง แล้วเขาถอน ระบบจะส่งของไม่ได้
 > **ที่อยู่จัดส่งใช้ฐานสัญญา** ไม่ใช่ความยินยอม
 >
@@ -2589,7 +2589,7 @@ Use when software stores personal data of people in Thailand (PDPA consent, righ
 | ขอย้ายข้อมูล | ส่งออกในรูปแบบที่เครื่องอ่านได้ |
 | คัดค้าน | หยุดการตลาดหรือการประมวลผลที่คัดค้าน |
 
-> 🚨 **"ขอลบ" คือข้อที่ทำยากที่สุด** — ข้อมูลอยู่ในฐานข้อมูล ที่สำรอง log ระบบวิเคราะห์
+> **"ขอลบ" คือข้อที่ทำยากที่สุด** — ข้อมูลอยู่ในฐานข้อมูล ที่สำรอง log ระบบวิเคราะห์
 > และผู้ให้บริการภายนอก **ออกแบบให้ลบได้ตั้งแต่วันแรก** ไม่ใช่มาไล่หาทีหลัง
 >
 > soft delete อย่างเดียว**ไม่นับว่าลบ** ส่วนข้อมูลที่กฎหมายบังคับให้เก็บต่อ (เช่นเอกสารภาษี)

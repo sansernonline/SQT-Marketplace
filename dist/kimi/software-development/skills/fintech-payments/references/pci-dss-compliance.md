@@ -30,20 +30,20 @@
 
 ## Scope Reduction First (Most Important)
 
-> 💡 **The cheapest control is the one you don't need.** Reduce scope first.
+> **The cheapest control is the one you don't need.** Reduce scope first.
 
 ### What's "in scope"?
 
 Anything that stores, processes, or transmits **CHD** (Cardholder Data):
-- 💳 PAN (Primary Account Number)
-- 📅 Expiration date
-- 👤 Cardholder name
-- 🔢 Service code
+- PAN (Primary Account Number)
+- Expiration date
+- Cardholder name
+- Service code
 
 Or **SAD** (Sensitive Authentication Data) — NEVER store these:
-- 🔐 Full magnetic stripe / chip data
-- 🔢 CVV/CVC2/CID
-- 🔢 PIN/PIN block
+- Full magnetic stripe / chip data
+- CVV/CVC2/CID
+- PIN/PIN block
 
 ### Scope reduction techniques
 
@@ -61,14 +61,14 @@ Right: Network segmentation:  CDE isolated from rest of infra
 
 | SAQ | Use when | Effort |
 |:---:|----------|:------:|
-| **A** ⭐ | Fully outsourced (Stripe Elements iframe, hosted payment page) | 🟢 Low |
-| **A-EP** | E-commerce where your own page affects the payment form (e.g. direct post, your JavaScript around the fields) | 🟡 Med |
-| **B** | Imprint machines or stand-alone dial-out terminals | 🟡 Med |
-| **B-IP** | Stand-alone IP terminals | 🟡 Med |
-| **C** | Payment app + isolated network | 🔴 High |
-| **D** | Everything else (full CDE) | 🔴 Very High |
+| **A** (recommended) | Fully outsourced (Stripe Elements iframe, hosted payment page) | Low |
+| **A-EP** | E-commerce where your own page affects the payment form (e.g. direct post, your JavaScript around the fields) | Med |
+| **B** | Imprint machines or stand-alone dial-out terminals | Med |
+| **B-IP** | Stand-alone IP terminals | Med |
+| **C** | Payment app + isolated network | High |
+| **D** | Everything else (full CDE) | Very High |
 
-> 🎯 **Aim for SAQ A.** SAQ D is several times larger than SAQ A. Design the system so SAQ A applies. Question counts change with each SAQ revision — read the current SAQ from the PCI Security Standards Council (PCI SSC) document library instead of quoting a number.
+> **Aim for SAQ A.** SAQ D is several times larger than SAQ A. Design the system so SAQ A applies. Question counts change with each SAQ revision — read the current SAQ from the PCI Security Standards Council (PCI SSC) document library instead of quoting a number.
 
 **SAQ A eligibility (January 2025 SAQ A, in effect from 31 Mar 2025):** requirements 6.4.3 and 11.6.1 (payment-page script controls) and 12.3.1 were removed from SAQ A. In their place is a new eligibility rule: the merchant must confirm its site is not susceptible to attacks from scripts that could affect its e-commerce system. In practice: keep the card form fully inside the gateway's iframe or hosted page, control which scripts your pages load (e.g. Content Security Policy (CSP), Subresource Integrity (SRI)), or use the gateway's or a third party's confirmation that the page is protected. If you can't confirm this, SAQ A does not apply. Source: PCI SSC blog "Important updates announced for merchants validating to SAQ A" (30 Jan 2025); also Akamai and Jscrambler write-ups — ตรวจ 22 ต.ค. 2569.
 
@@ -143,7 +143,7 @@ Right: Network segmentation:  CDE isolated from rest of infra
 
 ### Wrong: Card data in logs
 ```typescript
-// 💥 BAD — logs may contain card number
+// BAD — logs may contain card number
 log.info(`Processing payment: ${JSON.stringify(req.body)}`);
 
 // Right: GOOD — mask sensitive fields
@@ -158,7 +158,7 @@ Right: POST /process-payment (body, TLS, masked logs)
 
 ### Wrong: Custom encryption
 ```typescript
-// 💥 NEVER
+// NEVER
 function "encrypt"(pan: string): string {
   return Buffer.from(pan).toString('base64'); // not encryption!
 }

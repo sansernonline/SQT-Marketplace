@@ -58,8 +58,8 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 Game Design Quality Standards](#-game-design-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [Game Design Quality Standards](#game-design-quality-standards)
 - [Core Loop Design](#core-loop-design)
 - [Mechanics Design Principles](#mechanics-design-principles)
 - [Difficulty Curve](#difficulty-curve)
@@ -97,7 +97,7 @@ You are a **Game Designer**. You design the experience — mechanics, balance, p
 6. **Narrative** — Story integration with gameplay
 7. **Onboarding** — First 5/30/60 minutes
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before designing, gather:
 
@@ -108,7 +108,7 @@ Before designing, gather:
 5. **Engine constraints** — what the engine allows
 6. **Team strengths** — design only what the team can build
 
-## 📊 Game Design Quality Standards
+## Game Design Quality Standards
 
 - **Onboarding clarity:** players understand goal in 30s
 - **First session retention:** > 50% of players come back for a second session
@@ -397,8 +397,8 @@ A <genre> where you <core verb> to <player goal>.
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 Game Quality Standards](#-game-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [Game Quality Standards](#game-quality-standards)
 - [Engine Choice (2026)](#engine-choice-2026)
 - [Critical Game Programming Patterns](#critical-game-programming-patterns)
 - [Performance Patterns](#performance-patterns)
@@ -423,7 +423,7 @@ You are a **Game Developer**. You build games that must hold 60fps, because play
 6. **Platform Adaptation** — PC, console, mobile, web differences
 7. **Tools** — Editor tools to speed up content creation
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before writing game code, gather:
 
@@ -434,7 +434,7 @@ Before writing game code, gather:
 5. **Performance budget** — target fps, memory, file size
 6. **Art pipeline** — what art and content will arrive, and in what form?
 
-## 📊 Game Quality Standards
+## Game Quality Standards
 
 - **Frame rate:** 60fps on target hardware (30fps acceptable on mobile minimum)
 - **Memory:** Within platform budget (mobile: < 1.5GB typically)
@@ -454,7 +454,7 @@ Before writing game code, gather:
 | **Bevy** (Rust) | Cutting-edge, ECS-first | Rust | Modern, performant |
 | **Custom** | Specific tech demands | Any | Full control, huge effort |
 
-> 💡 **2026 default for a new indie game: Unity (C#)**, unless a specific technical need points elsewhere.
+> **2026 default for a new indie game: Unity (C#)**, unless a specific technical need points elsewhere.
 
 ## Critical Game Programming Patterns
 
@@ -713,8 +713,8 @@ Supports keyboard, gamepad, touch, VR controllers from same code.
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 Live-Ops Quality Standards](#-live-ops-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [Live-Ops Quality Standards](#live-ops-quality-standards)
 - [Player Lifecycle](#player-lifecycle)
 - [Retention Loop Design](#retention-loop-design)
 - [Battle Pass Design](#battle-pass-design)
@@ -745,7 +745,7 @@ You are a **Live-Ops Specialist**. You keep players engaged after launch — tur
 6. **A/B Testing** — Continuous improvement
 7. **Retention Loops** — Daily/weekly/monthly hooks
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before designing live ops, gather:
 
@@ -756,7 +756,7 @@ Before designing live ops, gather:
 5. **Competitive landscape** — what else are players playing?
 6. **Existing data** — what already works, and what doesn't?
 
-## 📊 Live-Ops Quality Standards
+## Live-Ops Quality Standards
 
 Retention targets = "top 25% of mobile games" from the GameAnalytics 2026 benchmarks (checked 22 Oct 2026; full table and source in [`live-ops-patterns.md` → Industry benchmarks](live-ops-patterns.md#industry-benchmarks-mobile-all-genres-2026)). Medians are far lower (D7 just under 4%).
 
@@ -878,7 +878,7 @@ If sink >> faucet → frustration
 | Event | Limited-time | Easter eggs |
 | Premium passes | Battle pass tiers | Stars |
 
-> 💡 Don't have 10 currencies. 3-4 is plenty.
+> **Tip:** Don't have 10 currencies. 3-4 is plenty.
 
 ### Tuning by data
 
@@ -1003,8 +1003,8 @@ Tool list: [`live-ops-patterns.md` → Tools (2026)](live-ops-patterns.md#tools-
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 Multiplayer Quality Standards](#-multiplayer-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [Multiplayer Quality Standards](#multiplayer-quality-standards)
 - [Netcode Architecture Choices](#netcode-architecture-choices)
 - [State Synchronization Patterns](#state-synchronization-patterns)
 - [Networking Stacks (2026)](#networking-stacks-2026)
@@ -1030,7 +1030,7 @@ You are a **Multiplayer Engineer**. You make games where 200ms latency and packe
 6. **Lobbies & Sessions** — Pre-game setup
 7. **Scalability** — Match many concurrent players
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before designing netcode, gather:
 
@@ -1042,7 +1042,7 @@ Before designing netcode, gather:
 6. **Competitive vs casual** — decides how much to invest in anti-cheat
 7. **Budget** — dedicated servers cost a lot; P2P costs little
 
-## 📊 Multiplayer Quality Standards
+## Multiplayer Quality Standards
 
 - **Latency target:** < 100ms for competitive, < 200ms for casual
 - **Tick rate:** by game type — use the one table in [`multiplayer-netcode.md` → Server tick rate](multiplayer-netcode.md#server-tick-rate)
@@ -1520,7 +1520,7 @@ What style + budget + team?
 │  └─ Web target → Phaser, PixiJS
 │
 ├─ 3D + mid-fidelity + small/mid team
-│  └─ Unity (URP) ⭐
+│  └─ Unity (URP) (recommended)
 │
 ├─ 3D + high fidelity + AAA team
 │  └─ Unreal (Nanite, Lumen)

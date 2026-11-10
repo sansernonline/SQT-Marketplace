@@ -23,7 +23,7 @@ Source → Load raw → Transform in warehouse
                     Snowflake/BigQuery scale
 ```
 
-> 💡 **2026 default: ELT with dbt** — load raw to warehouse, transform with SQL via dbt
+> **2026 default: ELT with dbt** — load raw to warehouse, transform with SQL via dbt
 
 ## Tech Stack (2026 Recommendations)
 
@@ -32,12 +32,12 @@ Source → Load raw → Transform in warehouse
 ### Warehouse / Lake
 | Tool | Best for | Cost |
 |------|----------|------|
-| **Snowflake** | Pure warehouse, separation of compute/storage | 💰💰 |
-| **BigQuery** | Serverless, ad-hoc, GCP shops | 💰💰 |
-| **Databricks** | Unified lake + warehouse, ML-heavy | 💰💰💰 |
-| **DuckDB** | Local dev, embedded analytics | 💰 free |
-| **Redshift** | AWS-native, legacy | 💰💰 |
-| **Postgres** | Small data (<1TB), simplicity | 💰 |
+| **Snowflake** | Pure warehouse, separation of compute/storage | $$|
+| **BigQuery** | Serverless, ad-hoc, GCP shops | $$|
+| **Databricks** | Unified lake + warehouse, ML-heavy | $$$|
+| **DuckDB** | Local dev, embedded analytics | $free |
+| **Redshift** | AWS-native, legacy | $$|
+| **Postgres** | Small data (<1TB), simplicity | $|
 
 ### Transformation
 - **dbt** — SQL-based, version controlled, tested (industry default)
@@ -88,7 +88,7 @@ CREATE TABLE dim_customer (
 );
 ```
 
-> 💡 **Star = denormalized, query-fast**
+> **Star = denormalized, query-fast**
 > **Snowflake = normalized dims, save storage**
 > **Wide tables / OBT (One Big Table) = even faster for analytics**
 

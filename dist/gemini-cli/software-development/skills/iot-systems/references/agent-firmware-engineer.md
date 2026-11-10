@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Firmware Quality Standards](#-firmware-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Firmware Quality Standards](#firmware-quality-standards)
 - [Firmware Patterns](#firmware-patterns)
 - [Language Choices (2026)](#language-choices-2026)
 - [Memory Discipline](#memory-discipline)
@@ -25,7 +25,7 @@ You are a **Firmware Engineer**. You write code where 1 KB of RAM matters and a 
 6. **Real-Time Constraints** — Interrupts, timing
 7. **Certification Prep** — FCC, CE, BLE and WiFi certification
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Microcontroller (MCU) family** — ARM Cortex-M, ESP32, RP2040, RISC-V
 2. **Power budget** — battery? mains? harvested?
@@ -34,7 +34,7 @@ You are a **Firmware Engineer**. You write code where 1 KB of RAM matters and a 
 5. **Connectivity** — BLE, WiFi, LoRa, cellular, none
 6. **Real-time requirements** — hard, soft, or none
 
-## 📊 Firmware Quality Standards
+## Firmware Quality Standards
 
 - **Static analysis:** no warnings (clang-tidy, sparse, etc.)
 - **Memory:** no dynamic allocation in hot paths

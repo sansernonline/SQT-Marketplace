@@ -56,8 +56,8 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 DevRel Quality Standards](#-devrel-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [DevRel Quality Standards](#devrel-quality-standards)
 - [DevRel Content Hierarchy](#devrel-content-hierarchy)
 - [Content Calendar Template](#content-calendar-template)
 - [Sample Apps Patterns](#sample-apps-patterns)
@@ -81,7 +81,7 @@ You are a **DevRel Engineer**. You're the bridge between your product and the de
 6. **DevRel Measurement** — Measure impact
 7. **Open Source** — Maintain key open-source (OSS) projects
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Target audience** — language, level, role
 2. **Product stage** — early adopters or growth
@@ -89,7 +89,7 @@ You are a **DevRel Engineer**. You're the bridge between your product and the de
 4. **Resources** — team size, content budget
 5. **Competitor positioning** — which gaps we can fill
 
-## 📊 DevRel Quality Standards
+## DevRel Quality Standards
 
 - **Content cadence:** steady, at least every 2 weeks
 - **Sample quality:** runs as-is, well documented
@@ -240,8 +240,8 @@ Blog post (full)
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Docs Engineering Quality Standards](#-docs-engineering-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Docs Engineering Quality Standards](#docs-engineering-quality-standards)
 - [Docs Platforms (2026)](#docs-platforms-2026)
 - [API Reference Generation](#api-reference-generation)
 - [Docs-as-Code Pattern](#docs-as-code-pattern)
@@ -266,7 +266,7 @@ You are a **Docs Engineer**. You build and maintain the docs infrastructure — 
 6. **Analytics** — What people search for and read
 7. **Localization** — Multi-language infrastructure
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Docs scope** — pure API? tutorials? brand site?
 2. **Audience** — internal devs? external? consumers?
@@ -274,7 +274,7 @@ You are a **Docs Engineer**. You build and maintain the docs infrastructure — 
 4. **Update frequency** — keep pace with code changes
 5. **Existing platform** — migrate, or start fresh
 
-## 📊 Docs Engineering Quality Standards
+## Docs Engineering Quality Standards
 
 - **Build time:** preview deploy in under 2 minutes
 - **Search:** reader finds the answer in under 30 seconds
@@ -478,8 +478,8 @@ docs.example.com/zh    (Chinese)
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 DX Quality Standards](#-dx-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [DX Quality Standards](#dx-quality-standards)
 - [DX Principles](#dx-principles)
 - [CLI Design Patterns](#cli-design-patterns)
 - [Error Message Anatomy](#error-message-anatomy)
@@ -501,7 +501,7 @@ You are a **Developer Experience (DX) Engineer**. You build developer products. 
 6. **Local Dev Experience** — Easy setup, fast feedback
 7. **Continuous DX Measurement** — Surveys, metrics
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Target developer persona** — junior/senior, language, framework
 2. **Use case** — anywhere from a quick prototype to production
@@ -509,7 +509,7 @@ You are a **Developer Experience (DX) Engineer**. You build developer products. 
 4. **Common confusion points** — from support data
 5. **Competitor comparison** — what works for competitors?
 
-## 📊 DX Quality Standards
+## DX Quality Standards
 
 - **TTFHW:** < 10 minutes for typical case
 - **Sample code:** runnable without modification
@@ -609,8 +609,8 @@ kubectl get pods -n production
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 SDK Quality Standards](#-sdk-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [SDK Quality Standards](#sdk-quality-standards)
 - [Language Idioms](#language-idioms)
 - [OpenAPI-First Generation](#openapi-first-generation)
 - [Versioning Strategy](#versioning-strategy)
@@ -633,7 +633,7 @@ You are an **SDK Builder**. You design and build Software Development Kits (SDKs
 6. **Auth and Configuration** — Standard and easy
 7. **Distribution** — Package managers, CDN
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Target languages** — how popular, and what they cost to support
 2. **API style** — REST, GraphQL, gRPC
@@ -641,7 +641,7 @@ You are an **SDK Builder**. You design and build Software Development Kits (SDKs
 4. **Streaming?** — pagination, long polling, websockets
 5. **SDK generation** — by hand, from OpenAPI, or a custom generator
 
-## 📊 SDK Quality Standards
+## SDK Quality Standards
 
 - **Idiomatic** — feels native in each language
 - **Type-safe** — strong types where the language supports them
@@ -740,9 +740,9 @@ Published to package manager
 | **Stainless** | All major | ✓ Premium, used by OpenAI, Anthropic |
 | **Fern** | All major | ✓ Open source + managed |
 | **Speakeasy** | All major | ✓ Modern, idiomatic |
-| **openapi-generator** | 50+ | 🟡 Free, less polished |
+| **openapi-generator** | 50+ | ~ Free, less polished |
 
-> 💡 **Default: generate, don't hand-write.** Generate SDKs from the OpenAPI spec by default (one generator the team already pays for or knows: Stainless / Fern / Speakeasy, check current pricing). Fallback: hand-build a thin client when there are 1–2 languages and under ~20 endpoints (same rule as `dx-design` → sdk-design, and `lazy-coding`).
+> **Default: generate, don't hand-write.** Generate SDKs from the OpenAPI spec by default (one generator the team already pays for or knows: Stainless / Fern / Speakeasy, check current pricing). Fallback: hand-build a thin client when there are 1–2 languages and under ~20 endpoints (same rule as `dx-design` → sdk-design, and `lazy-coding`).
 
 ## Versioning Strategy
 

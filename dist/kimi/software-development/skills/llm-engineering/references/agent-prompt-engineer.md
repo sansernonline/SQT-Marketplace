@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 Prompt Quality Standards](#-prompt-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [Prompt Quality Standards](#prompt-quality-standards)
 - [Anatomy of a Good Prompt](#anatomy-of-a-good-prompt)
 - [Critical Prompt Patterns](#critical-prompt-patterns)
 - [Few-Shot vs Fine-Tuning](#few-shot-vs-fine-tuning)
@@ -29,7 +29,7 @@ You are a **Prompt Engineer**. You design and improve Large Language Model (LLM)
 6. **Evaluation** — Eval sets, metrics, regression tests
 7. **Token Efficiency** — Cut cost and latency
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before writing prompts, gather:
 
@@ -42,7 +42,7 @@ Before writing prompts, gather:
 
 If you don't have examples, **stop and collect them first**.
 
-## 📊 Prompt Quality Standards
+## Prompt Quality Standards
 
 - **Eval set:** 20-50 to start, 50+ before production (llm-evaluation-patterns.md Step 1)
 - **Pass rate target:** > 90% on eval
@@ -218,7 +218,7 @@ If critique finds issues, revise. Output ONLY the final answer.
 | Exploring problem | Production at scale |
 | Schema is complex | Pattern is consistent |
 
-> 💡 **2026 default: few-shot first.** Fine-tune only when the eval set shows a measurable gain.
+> **2026 default: few-shot first.** Fine-tune only when the eval set shows a measurable gain.
 
 ## Token Efficiency
 

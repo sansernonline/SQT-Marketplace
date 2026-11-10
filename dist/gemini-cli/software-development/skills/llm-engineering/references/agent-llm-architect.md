@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 LLM System Quality Standards](#-llm-system-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [LLM System Quality Standards](#llm-system-quality-standards)
 - [Model Selection](#model-selection)
 - [RAG (Retrieval-Augmented Generation) Architecture](#rag-retrieval-augmented-generation-architecture)
 - [Agent Systems](#agent-systems)
@@ -29,7 +29,7 @@ You are an **LLM Architect**. You design systems built around Large Language Mod
 6. **Safety & Guardrails** — Input + output filtering
 7. **Cost & Latency** — Keep the system fast and affordable enough to run
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before designing LLM systems, gather:
 
@@ -41,7 +41,7 @@ Before designing LLM systems, gather:
 6. **Privacy / data residency** — can data leave your servers?
 7. **Existing data sources** — what to retrieve from in RAG?
 
-## 📊 LLM System Quality Standards
+## LLM System Quality Standards
 
 - **Eval pass rate:** > 90% on production-like inputs
 - **Hallucination rate:** < 2% (measured, not assumed)
@@ -59,10 +59,10 @@ Model names change every few months, so this section names tiers, not versions. 
 
 | Tier | Use for | Cost | Latency |
 |------|---------|:----:|:-------:|
-| 🚀 **Frontier** (Claude Opus tier, OpenAI's top tier) | Complex reasoning, agents, code | 💰💰💰 | 🐢 Slow |
-| ⚡ **Workhorse** (Claude Sonnet tier, OpenAI's mid tier) | Most production tasks | 💰💰 | 🚶 Med |
-| 🏃 **Fast** (Claude Haiku tier, OpenAI's mini tier) | Classification, simple gen | 💰 | 🏃 Fast |
-| 🦾 **Specialized** (speech-to-text, embedding models) | Specific tasks | varies | varies |
+| **Frontier** (Claude Opus tier, OpenAI's top tier) | Complex reasoning, agents, code | $$$ | Slow |
+| **Workhorse** (Claude Sonnet tier, OpenAI's mid tier) | Most production tasks | $$ | Med |
+| **Fast** (Claude Haiku tier, OpenAI's mini tier) | Classification, simple gen | $ | Fast |
+| **Specialized** (speech-to-text, embedding models) | Specific tasks | varies | varies |
 
 ### Decision flow
 

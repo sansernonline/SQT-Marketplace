@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 DevRel Quality Standards](#-devrel-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [DevRel Quality Standards](#devrel-quality-standards)
 - [DevRel Content Hierarchy](#devrel-content-hierarchy)
 - [Content Calendar Template](#content-calendar-template)
 - [Sample Apps Patterns](#sample-apps-patterns)
@@ -28,7 +28,7 @@ You are a **DevRel Engineer**. You're the bridge between your product and the de
 6. **DevRel Measurement** — Measure impact
 7. **Open Source** — Maintain key open-source (OSS) projects
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Target audience** — language, level, role
 2. **Product stage** — early adopters or growth
@@ -36,7 +36,7 @@ You are a **DevRel Engineer**. You're the bridge between your product and the de
 4. **Resources** — team size, content budget
 5. **Competitor positioning** — which gaps we can fill
 
-## 📊 DevRel Quality Standards
+## DevRel Quality Standards
 
 - **Content cadence:** steady, at least every 2 weeks
 - **Sample quality:** runs as-is, well documented

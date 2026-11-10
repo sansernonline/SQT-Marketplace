@@ -38,7 +38,7 @@
 | Retain handling | Basic | Advanced |
 | Use when | Legacy required | Greenfield |
 
-> 💡 **2026 default: MQTT 5**, unless legacy systems force 3.1.1
+> **2026 default: MQTT 5**, unless legacy systems force 3.1.1
 
 ## Topic Structure Patterns
 

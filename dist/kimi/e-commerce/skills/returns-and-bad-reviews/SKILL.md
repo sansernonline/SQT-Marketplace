@@ -72,6 +72,18 @@ Don't:
 - Buy fake reviews or ask friends to post them — penalties and possible removal
 - Report a review only because it is negative; report it only if it breaks rules (abuse, personal data, spam, wrong product)
 
+## Monthly review of reviews
+
+Replying one review at a time fixes the reply, not the cause. Once a month, read the low reviews together:
+
+1. Pull all 1–3 star reviews from the last 90 days on every platform. If a source cannot be pulled, name it in the report ("TikTok Shop not included: export failed"), never skip it silently. Fewer than 6 low reviews a quarter: do not shrink to a 30-day window, it is too few to show a pattern.
+2. Group them into 3–5 themes (size runs small, parcel crushed, colour differs from photo, slow shipping). Count reviews per theme, and sort by count, not by how angry the words are.
+3. Under each theme quote 2–3 reviews word for word, without rewording. Remove the buyer's name, order number and anything else that identifies them, as in the "Don't" list above.
+4. Check the order data for the same theme before it becomes a review: returns with the same reason, chats asking the same question (`chat-reply-templates` step 6).
+5. End with 3 things to do this week tied to the top theme, each one concrete (add a size chart, change box size, retake the photo in daylight).
+
+Low-review replies still follow the rules above; the monthly review never offers anything for changing a review.
+
 ## Related
 
 - `chat-reply-templates` (T4, T5), `shipping-compare` (claims), `multi-shop-stock` (damaged stock), `product-listing` (fix the cause in the listing)

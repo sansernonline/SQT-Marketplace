@@ -38,9 +38,9 @@ Never in stocks, crypto, long-term funds, Retirement Mutual Fund (RMF) / ThaiESG
 
 - Covers **up to 1,000,000 baht per depositor per bank** — all accounts and branches at that bank combined, principal plus interest. In force since 11 Aug 2564.
 - Covers Thai-baht savings, current, fixed deposits and certificates of deposit at member banks. Does **not** cover mutual funds, bonds, bills of exchange (ตั๋วแลกเงิน), insurance, or co-operatives (สหกรณ์ออมทรัพย์).
-- Above 1 million: split across banks.
+- Above 1 million: split across banks. Money beyond the emergency tier (deposits vs bonds vs money market funds) → `bonds-and-deposits`.
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.bangkokbank.com/th-TH/Personal/Grow-Club/DPA
+ตรวจล่าสุด 2026-11-10 · แหล่ง (สถาบันคุ้มครองเงินฝาก): https://www.dpa.or.th/News/kar-prab-wngngein-khumkhrxng-thi-1-lan-bath (1 ล้านบาท ตั้งแต่ 11 ส.ค. 2564) · https://www.dpa.or.th/Protected-Financial-Products (ที่ไม่คุ้มครอง: เงินตราต่างประเทศ ตราสาร กองทุน SSF/RMF เงินฝากสหกรณ์ ตั๋วแลกเงิน ประกันออมทรัพย์ crypto)
 
 ## Workflow
 

@@ -985,7 +985,7 @@ api.newMethod({ arg })
 
 [Migration guide](#)
 
-## 🆕 New Features
+## New Features
 
 ### Feature Name
 

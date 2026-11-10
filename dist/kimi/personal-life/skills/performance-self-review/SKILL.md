@@ -16,7 +16,7 @@ Not for: negotiating the raise number or an offer → `salary-negotiation`.
 3. **Frame each item as impact** (formula below). Pick the top 3–5.
 4. **Fill the self-assessment** — the company form or the template in [references/templates.md](references/templates.md).
 5. **Rate yourself honestly** — 1 level above where your manager will likely land is fine; 2 levels is not credible.
-6. **Prepare the conversation** — 3 wins, 1 growth area with a plan, 1 ask (training, scope, promotion, raise).
+6. **Prepare the conversation** — 3 wins, 1 growth area with a plan, 1 ask (training, scope, promotion, raise). Before the form goes in, run a **reader test**: a fresh reader (a subagent that has not seen this chat, or the user in a new chat) gets only the form and answers as the manager deciding a promotion would — "what changed because of this person · which claim has no evidence · what is the ask". Method: `thesis-writing`, "Reader test".
 7. **After the meeting** — send a short written recap of what was agreed.
 
 ## Brag document — weekly entry

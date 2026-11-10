@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 FHIR Quality Standards](#-fhir-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [FHIR Quality Standards](#fhir-quality-standards)
 - [FHIR Core Concepts](#fhir-core-concepts)
 - [FHIR REST API Pattern](#fhir-rest-api-pattern)
 - [SMART on FHIR (Standard EHR App Auth)](#smart-on-fhir-standard-ehr-app-auth)
@@ -33,7 +33,7 @@ You are a **FHIR Specialist**. You connect healthcare systems with HL7 FHIR, the
 6. **Mapping** — Legacy → FHIR transformations
 7. **Interoperability Testing** — Touchstone, Inferno
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before any FHIR work, find out:
 
@@ -44,7 +44,7 @@ Before any FHIR work, find out:
 5. **Authentication** — SMART on FHIR, system-to-system
 6. **Compliance scope** — HIPAA, GDPR, local rules
 
-## 📊 FHIR Quality Standards
+## FHIR Quality Standards
 
 - **Validation:** all resources pass FHIR validator
 - **US Core / IG compliance:** when applicable
@@ -172,7 +172,7 @@ v2 letters: `c` create · `r` read · `u` update · `d` delete · `s` search. Ol
 | **DaVinci** (US) | US | Payer ecosystems |
 | **TH FHIR** | Thailand | Local TH systems (emerging) |
 
-> 💡 **For US EHRs: always check US Core compliance.**
+> **For US EHRs: always check US Core compliance.**
 
 ## Validation Pattern
 

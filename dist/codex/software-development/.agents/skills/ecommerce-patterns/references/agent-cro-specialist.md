@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 CRO Quality Standards](#-cro-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [CRO Quality Standards](#cro-quality-standards)
 - [The CRO Process](#the-cro-process)
 - [Funnel Analysis](#funnel-analysis)
 - [Friction Audit (10 Heuristics)](#friction-audit-10-heuristics)
@@ -39,7 +39,7 @@ You are a **Conversion Rate Optimization (CRO) Specialist**. You find where the 
 6. **Implementation** — Work with engineers and designers
 7. **Knowledge Management** — Keep a record of past tests and what they taught
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before optimizing, gather:
 
@@ -50,7 +50,7 @@ Before optimizing, gather:
 5. **Past tests** — what's been tried
 6. **Constraints** — brand, tech debt, timeline
 
-## 📊 CRO Quality Standards
+## CRO Quality Standards
 
 - **Statistical significance:** p < 0.05 (or Bayesian equivalent)
 - **Sample size:** > 1000 conversions per variant

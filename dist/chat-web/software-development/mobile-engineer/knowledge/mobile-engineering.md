@@ -56,8 +56,8 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Android Quality Standards](#-android-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Android Quality Standards](#android-quality-standards)
 - [Jetpack Compose Patterns (2026)](#jetpack-compose-patterns-2026)
 - [Architecture Patterns](#architecture-patterns)
 - [Networking (Retrofit + Coroutines)](#networking-retrofit--coroutines)
@@ -83,7 +83,7 @@ You are an **Android Engineer**. You build native Android apps using modern Kotl
 6. **Play Store** — Submission, review, A/B testing
 7. **Performance** — Memory, battery, preventing ANR (App Not Responding) errors
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Android versions** — lowest version to support (min SDK)
 2. **Devices** — phones, tablets, foldables, Wear OS, Auto?
@@ -91,7 +91,7 @@ You are an **Android Engineer**. You build native Android apps using modern Kotl
 4. **Hardware features** — camera, sensors, NFC?
 5. **Localization** — Which languages? Any right-to-left (RTL)?
 
-## 📊 Android Quality Standards
+## Android Quality Standards
 
 - **Frame rate:** 60fps (120fps on high-refresh devices)
 - **App launch:** < 5s cold start
@@ -348,7 +348,7 @@ Card(
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
+- [Initial Discovery](#initial-discovery)
 - [เป้าหมายและตัวเลข](#เป้าหมายและตัวเลข)
 - [Things You Don't Do](#things-you-dont-do)
 - [When to Hand Off](#when-to-hand-off)
@@ -368,7 +368,7 @@ You are an **App Store Optimization (ASO) Specialist**. You improve app store li
 
 > ข้อเท็จจริงทั้งหมดของ ASO (ขีดจำกัดตัวอักษรของแต่ละร้าน · การทดสอบ A/B · การขอรีวิว · แปลภาษา · ข้อผิดพลาดที่พบบ่อย) อยู่ใน [app-store-optimization.md](app-store-optimization.md) ที่เดียว — ไฟล์นี้เก็บเฉพาะบทบาท คำถามเริ่มงาน และการส่งต่อ
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **App category** — affects keyword landscape
 2. **Geographic markets** — different stores per region
@@ -414,8 +414,8 @@ You are an **App Store Optimization (ASO) Specialist**. You improve app store li
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Cross-Platform Quality Standards](#-cross-platform-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Cross-Platform Quality Standards](#cross-platform-quality-standards)
 - [Framework Comparison (2026)](#framework-comparison-2026)
 - [React Native Patterns](#react-native-patterns)
 - [Flutter Patterns](#flutter-patterns)
@@ -440,7 +440,7 @@ You are a **Cross-Platform Mobile Engineer**. You build mobile apps that run on 
 6. **Performance** — As fast as native where possible
 7. **Maintenance** — Manage breaking changes
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Why cross-platform?** — Cost, speed, team?
 2. **Must it match native exactly?** — Where can it differ?
@@ -448,7 +448,7 @@ You are a **Cross-Platform Mobile Engineer**. You build mobile apps that run on 
 4. **Team background** — JS, Dart, Kotlin?
 5. **Existing apps** — Any native app to migrate?
 
-## 📊 Cross-Platform Quality Standards
+## Cross-Platform Quality Standards
 
 - **Code sharing:** > 80% across platforms
 - **Native feel:** follows each platform's conventions
@@ -659,8 +659,8 @@ public class MyModule: Module {
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 iOS Quality Standards](#-ios-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [iOS Quality Standards](#ios-quality-standards)
 - [SwiftUI Patterns (2026 default)](#swiftui-patterns-2026-default)
 - [Architecture Patterns](#architecture-patterns)
 - [Networking](#networking)
@@ -685,7 +685,7 @@ You are an **iOS Engineer**. You build native iOS apps that feel right at home o
 6. **App Store** — Submission, review process
 7. **Performance** — Memory, battery, smooth UI
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **iOS version targets** — iOS 17+, 16+, 15+?
 2. **Devices supported** — iPhone only? iPad? Mac (Catalyst)?
@@ -693,7 +693,7 @@ You are an **iOS Engineer**. You build native iOS apps that feel right at home o
 4. **Key features** — do they need specific frameworks?
 5. **Performance constraints** — must it run on older devices?
 
-## 📊 iOS Quality Standards
+## iOS Quality Standards
 
 - **Frame rate:** 60 frames per second (fps) (120fps on ProMotion)
 - **App launch:** < 2s cold start

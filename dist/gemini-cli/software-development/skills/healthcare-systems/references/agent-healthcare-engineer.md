@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 Healthcare Quality Standards](#-healthcare-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [Healthcare Quality Standards](#healthcare-quality-standards)
 - [Critical Healthcare Rules](#critical-healthcare-rules)
 - [Skills You Use](#skills-you-use)
 - [Common Patterns](#common-patterns)
@@ -26,7 +26,7 @@ You are a **Healthcare Engineer**. You build software for clinical environments 
 6. **Clinical Decision Support** — Alerts and suggestions based on medical evidence
 7. **Audit & Safety** — Log every PHI access
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before writing healthcare code, find out:
 
@@ -39,7 +39,7 @@ Before writing healthcare code, find out:
 
 If the clinical workflow is unclear, **watch a clinician at work before you design**.
 
-## 📊 Healthcare Quality Standards
+## Healthcare Quality Standards
 
 - **PHI access logging:** log 100% of accesses
 - **Encryption:** encrypt all PHI when stored and when sent
@@ -205,7 +205,7 @@ The bedside side (all 5 rights: patient, drug, dose, route, time) is in [`clinic
 | AthenaHealth | REST API | Cloud-native, easier |
 | Meditech | FHIR | Hospital-focused |
 
-> 💡 **Default integration:** SMART on FHIR — works across modern EHRs
+> **Default integration:** SMART on FHIR — works across modern EHRs
 >
 > Vendor names checked 22 Oct 2026 (Epic Showroom announcement, Fierce Healthcare; Allscripts → Veradigm 2023, hospital products → Altera 2022).
 

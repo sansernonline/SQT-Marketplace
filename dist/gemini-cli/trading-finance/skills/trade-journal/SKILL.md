@@ -72,6 +72,7 @@ Fewer than 20 closed trades: report the numbers but say the sample is too small 
 
 ### Workflow
 
+0. If the journal is the user's own Excel or Google Sheets file with formulas (not the plain CSV from mode 1), run the 9 checks in [references/spreadsheet-check.md](references/spreadsheet-check.md) first; a broken range or a typed-in commission rate makes every stat below wrong.
 1. Load closed trades since the last review (filter rows by `date_out` into a temp file first, because the script has no date option, then pass that file to the script; do not read the whole journal into context); separate `live` and `paper`.
 2. Run `scripts/trade-stats.mjs` (win rate, average win and loss in R, payoff, expectancy, profit factor, max drawdown, streaks, violation rate) and show its output once so the user can check it; do not compute by hand. Self-test: `node scripts/trade-stats.mjs --self-test`.
 3. **Group losing trades** by setup, by emotion tag, by day of week / time of day, and by violation; find the cluster with the largest total -R, not the most memorable trade.

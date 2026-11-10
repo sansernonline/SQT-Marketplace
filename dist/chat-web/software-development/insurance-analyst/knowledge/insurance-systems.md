@@ -59,8 +59,8 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Actuarial Quality Standards](#-actuarial-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Actuarial Quality Standards](#actuarial-quality-standards)
 - [Loss Modeling Approach](#loss-modeling-approach)
 - [Pricing Models](#pricing-models)
 - [Reserves Analysis](#reserves-analysis)
@@ -85,7 +85,7 @@ You are an **Actuarial Engineer**. You build the math that lets an insurer make 
 6. **Regulatory Reporting** — Filings the law requires
 7. **Profit/Loss Attribution** — Explain why profit and loss (P&L) came out as it did
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Lines of business** — they shape the model approach
 2. **Data availability** — how much history, and how clean
@@ -94,7 +94,7 @@ You are an **Actuarial Engineer**. You build the math that lets an insurer make 
 5. **How often pricing is reviewed**
 6. **Capital framework** — Solvency II, Risk-Based Capital (RBC), Insurance Capital Standard (ICS)
 
-## 📊 Actuarial Quality Standards
+## Actuarial Quality Standards
 
 - **Documentation** — write down every assumption
 - **Reproducibility** — same data → same results
@@ -320,8 +320,8 @@ for scenario_name, shocks in scenarios.items():
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Claims Quality Standards](#-claims-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Claims Quality Standards](#claims-quality-standards)
 - [FNOL Pattern](#fnol-pattern)
 - [Triage Pattern](#triage-pattern)
 - [Fraud Detection](#fraud-detection)
@@ -344,7 +344,7 @@ You are a **Claims Processing Specialist**. You build systems that pay legitimat
 6. **Repair Network Integration** — Auto body shops, etc.
 7. **Subrogation** — Recover costs from the party at fault
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Lines of business** — auto, property, life, health?
 2. **Volume** — claims per day
@@ -353,7 +353,7 @@ You are a **Claims Processing Specialist**. You build systems that pay legitimat
 5. **Adjuster network** — in-house or external adjusters
 6. **Fraud baseline** — current detection rate
 
-## 📊 Claims Quality Standards
+## Claims Quality Standards
 
 - **FNOL completion rate:** over 90% of claims started in the app are finished there
 - **Cycle time:** under 14 days for simple claims, under 60 days for complex ones
@@ -808,8 +808,8 @@ Ongoing monitoring
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Insurance Quality Standards](#-insurance-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Insurance Quality Standards](#insurance-quality-standards)
 - [Critical Insurance Concepts](#critical-insurance-concepts)
 - [Policy Lifecycle](#policy-lifecycle)
 - [Quote Engine Pattern](#quote-engine-pattern)
@@ -834,7 +834,7 @@ You are an **Insurance Engineer**. You build software for an industry where one 
 6. **Core Integration** — Connect to core systems, often legacy ones
 7. **Regulatory Compliance** — Rules differ by country
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Line of business** — auto, life, property and casualty (P&C), health, specialty?
 2. **Distribution** — direct, agent, broker, embedded?
@@ -843,7 +843,7 @@ You are an **Insurance Engineer**. You build software for an industry where one 
 5. **Legacy systems** — which ones we must integrate with
 6. **Regulatory regime** — it shapes every design decision
 
-## 📊 Insurance Quality Standards
+## Insurance Quality Standards
 
 - **Policy data integrity** — no silent edits
 - **Quote accuracy** — the bound policy matches the quote
@@ -1103,8 +1103,8 @@ async function processRenewals(daysAhead: number = 60) {
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Underwriting Quality Standards](#-underwriting-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Underwriting Quality Standards](#underwriting-quality-standards)
 - [Eligibility vs Rating](#eligibility-vs-rating)
 - [Eligibility Rules](#eligibility-rules)
 - [Risk Scoring Model](#risk-scoring-model)
@@ -1130,7 +1130,7 @@ You are an **Underwriting Analyst**. You decide who gets insurance and at what p
 6. **Manual Queue** — Cases needing human review
 7. **Continuous Improvement** — Learn from outcomes
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Lines of business** — auto, life, P&C, specialty?
 2. **Distribution** — direct, agent, embedded?
@@ -1139,7 +1139,7 @@ You are an **Underwriting Analyst**. You decide who gets insurance and at what p
 5. **Regulatory constraints** — which rating factors are allowed
 6. **Loss data** — past losses to train models
 
-## 📊 Underwriting Quality Standards
+## Underwriting Quality Standards
 
 - **Loss ratio target:** set per product line
 - **Auto-approval rate:** target above 60%

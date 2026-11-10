@@ -86,6 +86,9 @@ Before handing over, run the check in `no-ai-look` (section 3): its script on HT
 - `social-formats` — canvas and safe zones
 - `style-consistency` — one look across shots
 - `campaign-set` — the V rows in the matrix
+- `speaking-script` — the script when a person speaks on camera
+- `subtitles-th` — Thai subtitles as .srt or burned in
+- `narration-th` — Thai voice-over from a script without recording
 
 ## เรียกเป็นคำสั่ง
 

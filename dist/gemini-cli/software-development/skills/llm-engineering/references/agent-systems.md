@@ -216,6 +216,11 @@ Thai deployments: KBTG (AthenaMind) appears only in press coverage with no mecha
 - **Guardrails can trip the whole run**: OpenAI input, output and tool guardrails run alongside the agent and stop it on a tripwire ([O2]).
 - **Make every step reversible where possible**: commit or checkpoint per step (Replit, Anthropic resume) ([R3], [A2]).
 - **Saved run state is untrusted input** until loaded from a store you control ([O3]).
+- **Write tools accept only ids the session has read (provenance).** An order, customer or account id that the agent typed from memory or copied out of a retrieved document is rejected; the server keeps the list of ids this session was shown and checks against it. This stops a poisoned page from steering a refund to an id of the attacker's choice (idea from Anthropic commerce-agents `commerce-trust-safety` · Apache-2.0 · reworded · opened 2026-11-10).
+- **The user is bound to the session on the server, never passed as a tool argument.** A tool schema with a `user_id` or `account` field lets the model, or whoever steered it, act as someone else. Take the identity from the authenticated session.
+- **Clean outside text before it enters the prompt.** Normalize Unicode, strip invisible characters (zero-width, bidi controls) and anything that imitates a turn separator or role label (`Assistant:`, `</system>`). Do this at the edge where email, chat and web text arrive.
+- **Memory has a filter and an expiry date.** What the agent may remember passes a filter that refuses identifiers (Thai national id 13 digits, phone number, bank account number, card number) and every saved item carries a delete-by date → [`pdpa-compliance`](../../pdpa-compliance/SKILL.md) section 5.
+- **A blocked call returns a result that names the gate, it does not throw.** Return `{blocked: "needs_approval", reason: ...}` so the agent can tell the user what is missing instead of retrying or looping on an exception.
 - Agents reaching real systems (database, ERP, internal API) go through an MCP server → [`mcp-server`](../../mcp-server/SKILL.md). Input validation, server-side permission checks, secrets and logs → [`principle-secure-by-default`](../../principle-secure-by-default/SKILL.md).
 - Evaluate the agent before and after every change → [`llm-evaluation-patterns.md`](llm-evaluation-patterns.md) section "Agent Evaluation".
 

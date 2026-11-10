@@ -8,7 +8,9 @@
 |---|---|
 | เขียนหรือแก้ listing | `product-listing` + agent `shop-manager` |
 | ตั้งราคา · ขายแล้วขาดทุน | `marketplace-fees-pricing` |
-| สต็อกหลายร้านไม่ตรง | `multi-shop-stock` |
+| สต็อกหลายร้านไม่ตรง · ของค้างสต็อก เงินจม | `multi-shop-stock` |
+| เช้านี้ต้องทำอะไรก่อน · ออเดอร์ค้างส่ง คำขอคืน แชตค้าง สต็อกใกล้หมดพร้อมกัน | `shop-daily-briefing` + agent `shop-manager` |
+| ลูกค้าประจำของร้านเองหายไป อยากดึงกลับ (LINE · Facebook · หน้าร้าน) | `win-back-customers` + agent `customer-chat` |
 | สั่งของจากจีน (1688 · Taobao · ชิปปิ้ง) ต้นทุนถึงร้านต่อชิ้นเท่าไร · อากร VAT · ทางรถหรือทางเรือ | `import-landed-cost` + agent `shop-manager` |
 | เลือกขนส่ง · COD | `shipping-compare` |
 | ตอบลูกค้า | `chat-reply-templates` + agent `customer-chat` |

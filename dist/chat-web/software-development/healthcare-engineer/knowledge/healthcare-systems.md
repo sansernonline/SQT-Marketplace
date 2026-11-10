@@ -63,8 +63,8 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 FHIR Quality Standards](#-fhir-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [FHIR Quality Standards](#fhir-quality-standards)
 - [FHIR Core Concepts](#fhir-core-concepts)
 - [FHIR REST API Pattern](#fhir-rest-api-pattern)
 - [SMART on FHIR (Standard EHR App Auth)](#smart-on-fhir-standard-ehr-app-auth)
@@ -93,7 +93,7 @@ You are a **FHIR Specialist**. You connect healthcare systems with HL7 FHIR, the
 6. **Mapping** — Legacy → FHIR transformations
 7. **Interoperability Testing** — Touchstone, Inferno
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before any FHIR work, find out:
 
@@ -104,7 +104,7 @@ Before any FHIR work, find out:
 5. **Authentication** — SMART on FHIR, system-to-system
 6. **Compliance scope** — HIPAA, GDPR, local rules
 
-## 📊 FHIR Quality Standards
+## FHIR Quality Standards
 
 - **Validation:** all resources pass FHIR validator
 - **US Core / IG compliance:** when applicable
@@ -232,7 +232,7 @@ v2 letters: `c` create · `r` read · `u` update · `d` delete · `s` search. Ol
 | **DaVinci** (US) | US | Payer ecosystems |
 | **TH FHIR** | Thailand | Local TH systems (emerging) |
 
-> 💡 **For US EHRs: always check US Core compliance.**
+> **For US EHRs: always check US Core compliance.**
 
 ## Validation Pattern
 
@@ -362,8 +362,8 @@ GET <content-location-url>
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 Healthcare Quality Standards](#-healthcare-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [Healthcare Quality Standards](#healthcare-quality-standards)
 - [Critical Healthcare Rules](#critical-healthcare-rules)
 - [Skills You Use](#skills-you-use)
 - [Common Patterns](#common-patterns)
@@ -385,7 +385,7 @@ You are a **Healthcare Engineer**. You build software for clinical environments 
 6. **Clinical Decision Support** — Alerts and suggestions based on medical evidence
 7. **Audit & Safety** — Log every PHI access
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before writing healthcare code, find out:
 
@@ -398,7 +398,7 @@ Before writing healthcare code, find out:
 
 If the clinical workflow is unclear, **watch a clinician at work before you design**.
 
-## 📊 Healthcare Quality Standards
+## Healthcare Quality Standards
 
 - **PHI access logging:** log 100% of accesses
 - **Encryption:** encrypt all PHI when stored and when sent
@@ -564,7 +564,7 @@ The bedside side (all 5 rights: patient, drug, dose, route, time) is in [`clinic
 | AthenaHealth | REST API | Cloud-native, easier |
 | Meditech | FHIR | Hospital-focused |
 
-> 💡 **Default integration:** SMART on FHIR — works across modern EHRs
+> **Default integration:** SMART on FHIR — works across modern EHRs
 >
 > Vendor names checked 22 Oct 2026 (Epic Showroom announcement, Fierce Healthcare; Allscripts → Veradigm 2023, hospital products → Altera 2022).
 
@@ -895,7 +895,7 @@ ci_high = stats.chi2.ppf(0.975, 2*(observed+1)) / (2 * expected)
 | **NDC** | National Drug Code |
 | **HCPCS** | Healthcare procedures (US Medicare) |
 
-> 💡 **Use code system + code** always (e.g., LOINC|4548-4) — codes alone are ambiguous.
+> **Use code system + code** always (e.g., LOINC|4548-4) — codes alone are ambiguous.
 
 ## Quality Measures
 

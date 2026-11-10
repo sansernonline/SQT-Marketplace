@@ -164,7 +164,7 @@ function selfTest() {
   t('ต้นทุนเกินยอดขาย เตือน เงินได้สุทธิ 0', r.warnings.some((w) => w.includes('ขาดทุน')) && r.actual.net_income === 0);
   t('ต้นทุนต่ำ หักเหมาถูกกว่า', seller({ sales: 1200000, actual_expenses: 300000 }).cheaper === 'deemed');
   t('ลดหย่อนน้อยกว่าส่วนตัว เตือน', seller({ sales: 500000, actual_expenses: 0, allowances: 0 }).warnings.length === 1);
-  // บุคคลเทียบบริษัท: ตรงกับ thai-business-setup หัวข้อ 2 (กำไร 1,000,000 → 103,000 ต่อ 105,000)
+  // บุคคลเทียบบริษัท: ตรงกับ thai-business-setup/references/income-tax-compare.md (กำไร 1,000,000 → 103,000 ต่อ 105,000)
   const company = (i) => compareCompany({ company_yearly_cost: 60000, ...i }, rates, FRESH);
   const c = company({ scenarios: [{ name: 'a', profit: 300000, p: 0.4 }, { name: 'b', profit: 1000000, p: 0.4 }, { name: 'c', profit: 3000000, p: 0.2 }] });
   t('กำไร 1 ล้าน บุคคล 103,000 บริษัท 105,000', c.rows[1].personal === 103000 && c.rows[1].company_tax === 105000);

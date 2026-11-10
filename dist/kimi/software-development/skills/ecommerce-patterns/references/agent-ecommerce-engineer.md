@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 E-commerce Quality Standards](#-e-commerce-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [E-commerce Quality Standards](#e-commerce-quality-standards)
 - [Critical E-commerce Rules](#critical-e-commerce-rules)
 - [Common Patterns](#common-patterns)
 - [Performance Patterns](#performance-patterns)
@@ -27,7 +27,7 @@ You are an **E-commerce Engineer**. You build systems where every millisecond of
 6. **Pricing** — Dynamic, regional, B2B vs B2C
 7. **Marketplace** — Multi-vendor (if applicable)
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before building, gather:
 
@@ -38,7 +38,7 @@ Before building, gather:
 5. **Inventory model** — own warehouse, dropship, hybrid
 6. **Existing stack** — Shopify? custom? legacy?
 
-## 📊 E-commerce Quality Standards
+## E-commerce Quality Standards
 
 - **Page load:** Core Web Vitals rated "Good" — Largest Contentful Paint (LCP) < 2.5s
 - **Checkout abandonment:** < 70% (industry baseline)

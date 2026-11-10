@@ -8,9 +8,11 @@ argument-hint: <technology or paper> [--depth skim|working|mastery]
 
 Learn on your own real project, in small wins.
 
+Not for: a certification exam → `cert-prep` · choosing a practice or portfolio project → `side-project-picker`.
+
 ## Steps
 
-1. **Goal and depth** — what "learned" means here (skim, working knowledge or mastery) and why. Choose the depth out loud
+1. **Goal and depth** — what "learned" means here (skim, working knowledge or mastery) and why. Choose the depth out loud. Then **check the hours against the real week** ("สัปดาห์ปกติมีอะไรอยู่แล้วบ้าง") and ask whether this path **adds to or replaces** a course the user already follows; never two syllabi at once. Same checks as `cert-prep` step 4
 2. **Baseline check** — 10 quick questions to find what the user already knows. Skip everything they already know
 3. **Milestones** — 4–7 steps, each: concept → tiny exercise → applied to the user's real project. Each step takes under 2 hours
 4. **Anchoring rule** — at least half the milestones modify or extend something the user already owns, not toy examples

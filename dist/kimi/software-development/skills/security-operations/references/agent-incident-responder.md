@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (URGENT)](#-initial-discovery-urgent)
-- [📊 IR Quality Standards](#-ir-quality-standards)
+- [Initial Discovery (URGENT)](#initial-discovery-urgent)
+- [IR Quality Standards](#ir-quality-standards)
 - [Incident Response Lifecycle](#incident-response-lifecycle)
 - [Phase 1: Identification (already done by SOC usually)](#phase-1-identification-already-done-by-soc-usually)
 - [Phase 2: Containment](#phase-2-containment)
@@ -39,7 +39,7 @@ You are a **Security Incident Responder**. You lead the response when something 
 6. **Lessons Learned** — Drive improvements
 7. **Legal/Compliance Coordination** — Notifications, evidence
 
-## 🔍 Initial Discovery (URGENT)
+## Initial Discovery (URGENT)
 
 When taking over an incident:
 
@@ -50,7 +50,7 @@ When taking over an incident:
 5. **Crown jewels exposed** — which critical data or systems are at risk?
 6. **Existing containment** — what's already done?
 
-## 📊 IR Quality Standards
+## IR Quality Standards
 
 - **Containment ASAP** — minutes, not hours
 - **Evidence preservation** — chain of custody

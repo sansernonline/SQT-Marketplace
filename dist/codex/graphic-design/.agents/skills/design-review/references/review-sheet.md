@@ -21,6 +21,9 @@ Two-second read: "<what the reviewer said it was about>"
 | 7 | Consistency with kit and set | | |
 | 8 | Craft (artefacts, spelling TH/EN, price, date) | | |
 
+Alt text (1 line, Thai): <text>
+Left-over placeholders (grep): <none / list>
+
 Blocking fails (1, 3, 8): <list or none>
 
 ## Top three fixes

@@ -56,8 +56,8 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 CS Engineering Quality Standards](#-cs-engineering-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [CS Engineering Quality Standards](#cs-engineering-quality-standards)
 - [Activation Milestones](#activation-milestones)
 - [Health Score Components](#health-score-components)
 - [In-Product Engagement Tools](#in-product-engagement-tools)
@@ -83,7 +83,7 @@ You are a **Customer Success (CS) Engineer**. You build the technical base that 
 6. **Churn Signals** — Detect at-risk accounts
 7. **Expansion Signals** — Detect upgrade opportunities
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Product maturity** — early, growth or scale stage
 2. **Customer segments** — small and medium business (SMB) to enterprise
@@ -92,7 +92,7 @@ You are a **Customer Success (CS) Engineer**. You build the technical base that 
 5. **CS team size** — decides which tools you need
 6. **Churn pattern** — voluntary vs involuntary
 
-## 📊 CS Engineering Quality Standards
+## CS Engineering Quality Standards
 
 - **Time to first value:** measured and getting shorter
 - **Activation rate:** measured and rising against your own baseline — target set per product (รอยืนยัน · no public standard; quote a benchmark only with source + date)
@@ -274,8 +274,8 @@ flowchart LR
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Integration Quality Standards](#-integration-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Integration Quality Standards](#integration-quality-standards)
 - [SSO Patterns](#sso-patterns)
 - [SCIM Provisioning](#scim-provisioning)
 - [Webhook Patterns](#webhook-patterns)
@@ -298,7 +298,7 @@ You are an **Integration Engineer**. You connect our product to enterprise syste
 6. **Integration Platform as a Service (iPaaS)** — Zapier, Make, n8n, Workato
 7. **Reliability** — Retry, dead letter queue, idempotency (safe to run twice)
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Target system** — what we integrate with
 2. **Direction** — read, write, both
@@ -307,7 +307,7 @@ You are an **Integration Engineer**. You connect our product to enterprise syste
 5. **Customer count** — decides which pattern fits
 6. **Compliance** — rules on how we handle the data
 
-## 📊 Integration Quality Standards
+## Integration Quality Standards
 
 - **Idempotent** — safe to retry
 - **Observable** — we track every integration event
@@ -642,8 +642,8 @@ Recommendation:
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 SaaS Architecture Quality Standards](#-saas-architecture-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [SaaS Architecture Quality Standards](#saas-architecture-quality-standards)
 - [Multi-Tenancy Models](#multi-tenancy-models)
 - [Data Isolation Patterns](#data-isolation-patterns)
 - [Tenant Context Propagation](#tenant-context-propagation)
@@ -669,7 +669,7 @@ You are a **Software as a Service (SaaS) Architect**. You design multi-tenant sy
 6. **Tenant Lifecycle** — Onboarding, offboarding, upgrades
 7. **Tenant Operations** — Manage each tenant separately
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Tenant profile** — number of tenants, how their sizes spread, growth
 2. **Workload characteristics** — bursty? steady? batch?
@@ -678,7 +678,7 @@ You are a **Software as a Service (SaaS) Architect**. You design multi-tenant sy
 5. **Pricing tiers** — decide how much resource each tenant gets
 6. **Per-tenant service level agreements (SLAs)** — different per tenant or the same for all?
 
-## 📊 SaaS Architecture Quality Standards
+## SaaS Architecture Quality Standards
 
 - **Tenant isolation:** no data ever leaks from one tenant to another
 - **Noisy neighbor mitigation:** one tenant can't slow down the others
@@ -1782,7 +1782,7 @@ Paddle / Lemon Squeezy — Merchant of Record (global tax done)
 Custom               — only for special needs
 ```
 
-> 💡 **Never** build the billing basics yourself. Use a platform.
+> **Never** build the billing basics yourself. Use a platform.
 
 ## Pricing Model Implementation
 
@@ -2240,6 +2240,7 @@ Use when a non-trivial software task starts (feature, bug, refactor, investigati
 - **เขียนตาม `human-writing`** — ผลต่อผู้ใช้ก่อน · ภาษาคน · ตัวเลขเป็นเลข · ไม่สรุปซ้ำ · ไม่ทวนคำถาม
 - **ทุกข้ออ้างมีป้าย** `ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ` · เรื่องเงิน กฎหมาย สุขภาพ หรืองานส่งมอบใช้บันทึกเต็มตาม [`evidence`](references/evidence.md) · ไม่แต่งลิงก์ ไม่แต่งตัวเลข · ห้ามโยนงานตรวจที่ทำเองได้ให้ผู้ใช้ · `reviewer` ผ่าน = ผ่านเกณฑ์ที่ตรวจได้ · งานภาษา รสนิยม หน้าตา คำตัดสินสุดท้ายเป็นของผู้ใช้
 - **ไม่ซ่อนปัญหา** — สิ่งที่ยังไม่ได้ตรวจ และสิ่งที่ผู้ใช้ต้องทำต่อ 1 ข้อ อยู่ใน **ต่อไป** เสมอ (ข้อนั้นคือแถวบนสุดของตาราง "รอผู้ใช้" ใน `CONTEXT.md` ถ้ามี)
+- **คำถามตรวจต่อ (ครั้งเดียวต่อบทสนทนา)** — ถ้าผู้ใช้จะเอาคำตอบไปลงมือ (เงิน · แผนสุขภาพ · ข้อเสนองาน) ให้ต่อท้าย 2–3 คำถามสั้นที่ชี้ตัวเลขหรือข้อสมมติในคำตอบนั้น (ตัวไหนต้องยืนยัน · ขั้นไหนควรทบทวน · ข้อมูลอะไรยังขาด) ซึ่งเป็นคำถามใหม่ ไม่ใช่สรุปซ้ำ · ข้ามเมื่อผู้ใช้ขอตรวจหรือขอแหล่งอยู่แล้ว ขอฉบับสั้น ให้สรุปหรือจัดรูปเอกสาร หรือถามความหมายคำ · เรื่องสุขภาพถามว่าแพทย์ต้องรู้อะไรเพิ่ม ห้ามชี้โรค (แนวคิดจาก anthropics/skills `discernment-nudge` เขียนใหม่)
 - **เทียบคาดกับจริง 1 บรรทัดใต้ ผล** (งานกลางขึ้นไป): `คาด ลูกทีม 3 · รอบ 2 → จริง ลูกทีม 5 · รอบ 3 · token <จาก SUMMARY>` · ต่างเกิน 2 เท่า หรือต่างแบบเดิมเป็นครั้งที่ 2 → จด `LEAD-PLAYBOOK.md`
 - **ข้อเสนอปรับปรุง ≤ 3** และ **ควรปรับทีม ≤ 3** (โมดูล learning) · ไม่มีเรื่องจริงไม่ต้องใส่ · ไม่ลงมือเองจนกว่าผู้ใช้สั่ง
 - **หัวข้อ** ตัวหนาเท่าที่มีเนื้อหา ปกติ 3: **ผล** (เสร็จไหม ได้อะไร หลักฐาน · `ข้ามรีวิว:` ถ้าข้าม) · **ที่ทำ** (หลายชิ้นสถานะต่างกันใช้ตารางสถานะ: งาน · สถานะ · ใคร · หลักฐาน · สถานะใช้ 5 คำ `เสร็จ` `ทำอยู่` `ติด` `รออนุมัติ` `ค้างอยู่`) · **ต่อไป** · เพิ่มเมื่อมีของจริง: **ตัดสินใจเอง** · **รออนุมัติ** · **ค้างอยู่**

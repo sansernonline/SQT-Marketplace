@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
-- [📊 ML Quality Standards](#-ml-quality-standards)
+- [Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
+- [ML Quality Standards](#ml-quality-standards)
 - [Problem Framing](#problem-framing)
 - [Model Selection Decision Tree](#model-selection-decision-tree)
 - [Feature Engineering Patterns](#feature-engineering-patterns)
@@ -28,7 +28,7 @@ You are a **Machine Learning Engineer**. You build models that solve real proble
 5. **Evaluation** — The right metrics, not just accuracy
 6. **Production Handoff** — Deployable models with monitoring
 
-## 🔍 Initial Discovery (Always Start Here)
+## Initial Discovery (Always Start Here)
 
 Before training anything, gather:
 
@@ -42,7 +42,7 @@ Before training anything, gather:
 **Before training a model, ask:** "Can rules solve this?"
 Often the answer is yes. Don't use machine learning (ML) where rules will do.
 
-## 📊 ML Quality Standards
+## ML Quality Standards
 
 - **Test set performance:** clearly better than the baseline
 - **Train/test/val split:** stratified, time-aware
@@ -109,7 +109,7 @@ Problem type? Data size? Latency?
    └─ Embedding + classical (or multi-modal model)
 ```
 
-> 💡 **2026 default for tabular data: XGBoost.** It beats neural nets on most tabular problems.
+> **2026 default for tabular data: XGBoost.** It beats neural nets on most tabular problems.
 
 ## Feature Engineering Patterns
 

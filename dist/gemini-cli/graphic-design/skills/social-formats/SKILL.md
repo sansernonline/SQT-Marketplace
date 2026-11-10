@@ -70,6 +70,10 @@ Brief: a café promotes a new drink on IG feed, IG story, TikTok and LINE OA.
 
 Story middle band: 1920 × 14% = 269 px from top; 1920 × 35% = 672 px from bottom → usable to y = 1248.
 
+## Number posts (infographic in a post)
+
+1 image = 1 conclusion: the title states the finding ("ยอดขายเดือนนี้เพิ่ม 20%"), the line under it gives the period, the source goes small at the bottom. Sort bars by value, label the bars directly when there are about 12 or fewer, mark only what the reader must see. Full chart rules (Thai font, colours): `software-development` `data-analysis` (if installed). Idea from anthropics `claude-tag-data-viz` graphing (rewritten, no code copied · ตรวจ 2026-11-10).
+
 ## Not an AI look
 
 Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the eye check (3.2) on images and other files.
@@ -79,7 +83,11 @@ Before handing over, run the check in `no-ai-look` (section 3): its script on HT
 - `campaign-set` — which placements, in what order
 - `asset-organize` — format codes in file names
 - `video-script-to-clip` — captions and safe zones in video
-- `software-development` `graphic-design` (if installed) — print sizes and LINE rich menu layout for product work
+- `banner-design` — banners and cover headers (event, web hero, display ad)
+- `youtube-thumbnail` — thumbnails for YouTube
+- `marketplace-product-images` — product photos for Shopee, Lazada, TikTok Shop
+- `line-richmenu` — LINE rich menu image sizes, tap areas and JSON
+- `print-ready-files` — files that go to a print shop (CMYK, bleed)
 
 ## เรียกเป็นคำสั่ง
 

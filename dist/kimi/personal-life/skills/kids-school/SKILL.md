@@ -47,6 +47,18 @@ Sign every copy "สำเนาถูกต้อง" and keep the originals in
 
 Ask before paying: what exact gap (subject, grade, test)? For how many weeks? How will we know it worked (school mark, practice test)? Prefer short blocks (8–10 weeks) with a review over open-ended monthly fees.
 
+## 5-minute check at home (ทบทวนความเข้าใจ)
+
+Before paying for tutoring, or when homework comes back wrong, find out what the child actually misunderstands.
+
+1. **Take the topic from the child's own textbook chapter or worksheet**, not from a curriculum list. The core-curriculum indicator codes of สพฐ. were not checked for this skill (ยังไม่ได้ตรวจ), so none are quoted here.
+2. **1–3 questions per idea.** For multiple choice, each wrong option comes from a real common mistake, so the answer shows which mistake it is. Example (ป.3 fractions): "พิซซ่าแบ่ง 4 ชิ้นไม่เท่ากัน กินไป 1 ชิ้น กินไป 1/4 ไหม" — a child who says yes thinks the bottom number counts pieces, not equal parts.
+3. **A short guide for the parent:** "ตอบแบบนี้ แปลว่า … ลองทำต่อแบบนี้ …", one line per wrong option.
+4. **Positive, specific words only.** Say what the child did ("นับชิ้นถูก แต่ยังไม่ได้ดูว่าชิ้นเท่ากันไหม"), never อ่อน · โง่ · ตามไม่ทัน.
+5. Same gap in 2 checks a week apart → that gap is what tutoring is for (decision questions above). The agent does not make up exam questions "from the real test".
+
+Idea from anthropics/k12-teacher-skills `plugin/skills/k12-check-for-understanding` (Apache-2.0, US math standards not used, rewritten, viewed 2026-11-10).
+
 ## Tax and grants pointer
 
 | Item | Amount | Notes |

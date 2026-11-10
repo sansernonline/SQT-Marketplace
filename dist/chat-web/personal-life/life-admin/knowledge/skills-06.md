@@ -1,269 +1,289 @@
-# skill: gift-idea-tracker
+# skill: personal-kb
 
-Use when a birthday, wedding or holiday is near or the user is stuck on a gift. Past gifts, budget list.
+Use when the user cannot find a note they wrote, or wants a personal knowledge base or second brain.
 
-# Gift Idea Tracker (ของขวัญและของฝาก)
+# Personal KB (คลังความรู้ส่วนตัว)
 
-Never the blank-page "what do I get them" again — and no repeats, no awkward over- or under-giving.
+A knowledge base works only if search finds the note in ten seconds. Plain Markdown files, so it survives any app change. When a notes plugin or app (Obsidian, Notion, Apple Notes) is installed, write there and keep this as the naming and tagging convention.
 
-Registry template and occasion calendar: [references/gift-registry-template.md](references/gift-registry-template.md).
+## Layout
+
+```
+kb/
+  index.md            ← evergreen notes by category, refreshed monthly
+  names.md            ← short decoder of nicknames, relatives and home words (≤ 100 lines)
+  inbox/              ← quick captures, emptied weekly
+  people/             ← one note per person (context, last talk, preferences)
+  projects/           ← one folder per active project; archive when done
+  reference/          ← how-tos, recipes, manuals, addresses, procedures
+  journal/            ← dated notes, meeting notes, weekly reviews
+  archive/
+```
+
+Two levels deep at most. A note's home is decided in two seconds: *is it about a person, a project, a reusable fact, or a day?*
+
+## Naming
+
+| Kind | Pattern | Example |
+|---|---|---|
+| Dated | `YYYY-MM-DD topic.md` | `2026-10-06 condo committee.md` |
+| Evergreen | `topic.md` — noun first | `aircon service – Daikin bedroom.md` |
+| Person | `firstname lastname.md` (plus Thai name in the note) | `ploy srisuk.md` |
+
+## The Thai search problem
+
+Thai has no spaces between words, so many tools match Thai words badly ("ภาษี" may not find "ภาษีเงินได้" in some apps, or finds too much). Fix:
+
+- **File names in English or transliteration** (`tax 2569 deductions.md`), Thai content inside
+- **Tags line at the top in both languages**: `tags: #tax #ภาษี #ลดหย่อน #deduction`
+- **One spelling** — pick `Ploy` not `Ploi/พลอย/Ploy S.` and keep an alias line: `aliases: พลอย, Ploi`
+- Dates always ค.ศ. `YYYY-MM-DD` in names — sorting and search break with mixed พ.ศ./ค.ศ.
+
+### `names.md` — the decoder read first
+
+Thai family talk is full of nicknames and kin words that match no file name ("ป้าน้อย" · "บ้านสวน" · "พี่หมู ที่ทำงาน"). Keep one short file, read before any search:
+
+```markdown
+ป้าน้อย = พี่สาวแม่ · ชื่อจริง สมศรี · → people/somsri.md
+บ้านสวน = ที่ดินราชบุรี · → reference/ratchaburi land.md
+พี่หมู = หัวหน้าทีมบัญชี (งาน) · → people/kittipong.md
+```
+
+Keep it under about 100 lines. A name used every week goes up here; one not used for months moves down into its people note's `aliases:` line. Never put ID numbers, phone numbers or health details in it.
+
+## Note template
+
+```markdown
+# [Title]
+tags: #area #คำไทย
+aliases: [other names people use]
+source: [link / book / person] · created YYYY-MM-DD
+
+[One idea, in your own words. Max ~1 screen.]
+
+Related: [[other note]]
+```
 
 ## Workflow
 
-1. **Build the people list once** — family, close friends, boss/team, kids' teachers, helpers (แม่บ้าน, คนขับรถ, รปภ.). One block per person.
-2. **Load the occasion calendar** — birthdays plus the Thai calendar below; set a reminder 14 days ahead (30 days if shipping from abroad or ordering custom).
-3. **Capture year-round** — when someone says "อยากได้…" / "I wish I had…", add it to their wish list the same day with the date.
-4. **Before an occasion** — read the person's block: last 2 years' gifts (avoid repeats), wishes, sizes, dislikes, budget.
-5. **Shortlist 3 ideas** within budget — one from their wish list if any, one experience, one practical/consumable. Each with *why it fits this person*.
-6. **Decide and buy** — note delivery time; for a group gift name who collects money and the per-person share.
-7. **Log after giving** — what, cost, reaction (loved / fine / unused). The reaction is next year's data.
-
-## Thai occasions and what is customary
-
-| Occasion | Usual form | Notes |
-|---|---|---|
-| ปีใหม่ (New Year) | Gift basket (กระเช้า), snacks, small gift for helpers and teams | Order baskets by mid-December — prices and lead times rise |
-| ตรุษจีน | อั่งเปา (red envelope) to children and elders, even amounts; fruit (ส้ม) when visiting | Avoid amounts with 4; new notes |
-| สงกรานต์ | Visit elders, รดน้ำดำหัว with ผ้าขาวม้า/ผ้า, fragrant water, food | Plan travel weeks ahead |
-| วันแม่ 12 ส.ค. · วันพ่อ 5 ธ.ค. | Meal together, flowers (มะลิ for mothers), health items | Booking restaurants fills early |
-| Birthday | Personal gift; for elders, a merit-making outing (ทำบุญ) works well | |
-| งานแต่ง | ซองช่วยงาน in the envelope from the invitation | Amount by closeness and venue — family norm, not a rule |
-| งานบวช / ขึ้นบ้านใหม่ | ซองทำบุญ, or useful household item for a new home | |
-| งานศพ | ซองทำบุญ at the funeral rites; flowers/wreath (พวงหรีด) | No "gift" — never give anything festive |
-| Visit / back from a trip | ของฝาก — local snack or product | Team: one shareable box beats individual items |
-| Teacher (วันครู 16 ม.ค., end of term) | Card made by the child, small useful item | Check school policy |
-
-Amounts are family and social custom — there is no correct number; follow what the family did before and the user's budget.
-
-## Rules
-
-- **Budget is a hard ceiling**, set before looking at ideas
-- Experiences beat objects for people who have everything — always include one experience option
-- Kids: agree with the parents before anything big, noisy or screen-based
-- **Gifts to government officials**: a state official may accept a customary gift only up to 3,000 บาท per giver per occasion (ระเบียบ ป.ป.ช.); many companies have stricter no-gift policies — for work contacts, check their policy first
-- Track sizes with the date measured — children's sizes go stale in six months
-- Never put the price tag or receipt in the box, but keep the receipt (exchange) in the registry note
-
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.sec.or.th/TH/Documents/AboutUs/SEC-NACC-Guidelines-On-Ethical-Gifts-2020.pdf · https://www.prachachat.net/?p=1112842
+1. **Capture (< 1 minute)** — drop into `kb/inbox/` with a dated name; formatting optional.
+2. **Weekly sort (10 minutes, in `weekly-review`)** — for each inbox note: delete · merge into an existing note · file it with a proper name and tags.
+3. **Split** notes over one screen into one-idea notes and link them.
+4. **Index and lint monthly** — add new evergreen notes to `kb/index.md` under their category, then run the lint: notes with no `tags:` line (`grep -rL '^tags:' kb --include=*.md`) · inbox notes older than 14 days · two notes with the same title · `[[links]]` to notes that do not exist · people notes with no "last talk" date. Fix or delete each hit in the same sitting; a lint list that is carried over is a to-do list, not a knowledge base.
+5. **Retrieval** — decode the words with `names.md` first, then search by file name, then tags, then full text. When a note was hard to find, rename it or add the alias you searched for — that is the maintenance loop.
+6. **Answering from notes** — every answer names the note and its date ("จาก `2025-05-11 notes.md`"). A note used for a status (who is doing what, a balance, a booking) that is older than 1 month, or for a fact older than 1 year, gets the line "โน้ตนี้อายุ … อาจเปลี่ยนแล้ว". **Two notes that disagree → show both with their dates**; never pick one silently.
 
 ## Worked example
 
-Mother-in-law, 64, birthday 3 November, budget 2,000 บาท. Record: 2024 scarf (fine), 2025 blender (loved — uses daily); wish noted 2026-07-20: "เข่าไม่ค่อยดี อยากเดินสวนแต่ไม่มีรองเท้าดีๆ"; dislikes perfume.
+User: "I wrote down how to reset the water pump last year." Search `pump` → nothing; full-text `ปั๊ม` → 14 hits in chat exports. Found it in `2025-05-11 notes.md`, mixed with a shopping list. Fix: move into `reference/water pump – reset and service.md`, tags `#home #ปั๊มน้ำ #pump`, alias "Mitsubishi pump", link from `index.md` under Home. Next search: 2 seconds.
 
-Shortlist:
-1. Walking shoes with good cushioning, size 38 (measured 2026-07) — 1,890 บาท — straight from her wish, practical.
-2. Morning ทำบุญ at her favourite temple + breakfast together — about 1,200 บาท — experience she values.
-3. Herbal compress set + Thai massage voucher — 1,500 บาท — supports the knee comment without being medical.
+## Rules
 
-Chosen: 1 + a handwritten card. Log reaction after the day.
+- Capture is fast; organisation happens weekly, not at capture time
+- **Never store passwords, OTPs, recovery codes, full ID or card numbers** — they go to a password manager (`digital-hygiene`)
+- Notes about other people: facts and preferences they shared with you, not gossip or health details they did not want written
+- Back up the `kb/` folder with the rest of the user's files (3-2-1 rule in `digital-hygiene`)
 
-## Output
+Source for `names.md` and the answering rules: ideas from anthropics/knowledge-work-plugins `productivity/skills/memory-management` and `enterprise-search/skills/knowledge-synthesis` (Apache-2.0, rewritten, viewed 2026-11-10).
 
-Shortlist table (idea · price · where to buy · why it fits · lead time) · updated person block · next reminders.
-
-Related: `polite-message-th-en` (thank-you and declining messages) · `weekly-review` (upcoming occasions in the next 14 days).
-
-
-## reference: gift-registry-template.md
-
-# Gift registry template
-
-One file `gift-tracker.md`. Keep people in alphabetical order; newest log line on top.
-
-## Person block
-
-```markdown
-## [Name] — [relationship]
-- Birthday: YYYY-MM-DD · Other dates: [wedding anniversary, วันเกิดลูก]
-- Budget per occasion: ___ บาท
-- Sizes (date measured): shirt ___ · shoes ___ · ring ___ · (YYYY-MM)
-- Likes: ___ · Dislikes / allergies: ___ · Already owns plenty of: ___
-- Coordinate with: [spouse, siblings — group gifts]
-
-### Wish list (date heard · item · where)
-- 2026-07-20 · walking shoes · said at the park
-
-### Given
-| Date | Occasion | Gift | Cost | Reaction (loved / fine / unused) |
-|---|---|---|---|---|
-| 2025-11-03 | Birthday | Blender | 1,650 | loved — uses daily |
-```
-
-## Occasion calendar (fill once a year)
-
-| Month | Fixed occasions | People |
-|---|---|---|
-| Jan | ปีใหม่ · วันครู 16 ม.ค. | |
-| Jan/Feb | ตรุษจีน (lunar date — check the year) | |
-| Apr | สงกรานต์ 13–15 เม.ย. | |
-| Aug | วันแม่ 12 ส.ค. | |
-| Dec | วันพ่อ 5 ธ.ค. · Christmas / year-end team gifts | |
-| Any | Birthdays, weddings, งานบวช, ขึ้นบ้านใหม่, new baby | |
-
-## Group gift note
-
-```
-Gift: ___  Total: ___ บาท  People: ___  Each: ___ บาท
-Collector: ___  PromptPay/account: ___  Paid by date: ___
-Bought by: ___  Card signed by: ___
-```
+Related: `meeting` (Leg 2 summaries file into `journal/`) · `important-docs` (documents, not notes) · `weekly-review`.
 
 
 ---
 
-# skill: decision-journal
+# skill: travel-prep
 
-Use when facing a big personal decision (job change, condo, car, moving, lump sum). Records it, revisits.
+Use when a trip is one to two weeks away or a passport is near expiry. Visa, insurance, money, itinerary.
 
-# Decision Journal
+# Travel Prep (เตรียมเดินทาง)
 
-Write down why you decided, so future-you cannot rewrite it — and so you can tell bad luck from bad judgement.
+One checklist, one itinerary file, no airport surprises. Written for Thai passport holders; works for anyone by swapping the entry-rule lookup.
 
-Entry and revisit templates: [references/entry-template.md](references/entry-template.md).
+Entry rules, passport facts, plug table and the fill-in checklist: [references/travel-facts.md](references/travel-facts.md) · [references/checklist-template.md](references/checklist-template.md).
 
-## When to write an entry
-
-| Write one | Skip |
-|---|---|
-| Costs more than ~1 month of income, or locks money in for a year+ | Reversible within a week at low cost |
-| Hard to undo (job, move, marriage-level, big purchase, loan) | Daily or repeated choices |
-| Made under strong emotion, pressure or a sales deadline | Choices someone else makes for you |
-| You notice yourself arguing with someone about it | |
+General information — entry rules are set by the destination and change often; confirm on the embassy or official e-visa site before booking.
 
 ## Workflow
 
-1. **State the decision** in one sentence, with the date it takes effect.
-2. **Classify the door** — two-way (reversible: decide fast) or one-way (irreversible: slow down, sleep on it).
-3. **List the real options** — at least three, always including "do nothing / wait".
-4. **Write the key facts** with numbers (price, monthly cost, time, salary) and what you do **not** know.
-5. **Reasoning** — the two or three reasons that actually tip it, each with confidence 1–10 (10 = would bet a year's income on it; under 5 = a guess dressed as a reason, so find the fact or drop it). At the revisit, a 9 that turned out wrong is the lesson.
-6. **Pre-mortem** — "It is one year later and this went badly. Why?" List the top 2 causes and what would warn you early.
-7. **Prediction** — what you expect to observe, measurable, with a check-in date (3, 6 or 12 months).
-8. **Emotional state** — calm / excited / anxious / pressured. One word.
-9. **Schedule the revisit** in the calendar now.
-10. **At the revisit** — fill the revisit block **without editing the original**, give the verdict, write one process lesson.
+1. **Trip card** — destination(s) incl. transit countries, dates, travellers (ages; children travelling with one parent?), purpose (tourism / business / study).
+2. **Passport check (T − 4 months or earlier)** — expiry date vs return date + 6 months; blank pages (2+). Short → renew now (below).
+3. **Entry rule lookup** — per destination, decide which row of the decision table applies; record the source URL and the date checked.
+4. **Book in the right order** — visa-required trip: refundable flights/hotel first, then visa appointment, then pay the rest after approval.
+5. **Insurance** — buy before departure; match the destination's minimum if any (Schengen €30,000 medical incl. repatriation).
+6. **Money** — card with low foreign-exchange (FX) fee or a travel card, some cash in local currency, tell the bank / enable overseas use in the app, note the card-freeze hotline.
+7. **Connectivity and power** — roaming pack or eSIM, offline maps, plug adapter from the plug table.
+8. **Health** — enough prescription medicine for the trip + 3 days, in original packaging with the label; English medicine list (`medication-schedule` ใน plugin เดียวกัน).
+9. **Itinerary file** — every booking with confirmation number, address in local script, check-in time, contact.
+10. **Day-before pass** — passport, money/cards, phone + charger + adapter, medicine: four things, physically checked.
 
-## Choose between options by numbers (`decision-scoring`)
+## Entry decision table
 
-Use this at step 3–5, once the options and the numbers exist. Pick the command by what is known:
-
-| Situation | Command | Read the result as |
+| Situation | What to do | Lead time |
 |---|---|---|
-| The outcome depends on the future and the user can state the chances | `payoff` | expected value (ค่าคาดหวัง) = sum of chance × outcome |
-| Chances unknown (a guess dressed as a number) or the door is one-way | `payoff`, read the **เสียดายมากสุด** column | minimax regret: pick the option whose worst regret is smallest |
-| Several different criteria (money, time, growth), each option sure | `score` | weighted score after iron rules drop options |
+| Visa-exempt (e.g. China 30 days, Korea 90 days, Japan 15 days) | Check stay limit and whether the exemption is temporary; check any pre-registration (Korea K-ETA) | 1–3 weeks |
+| Electronic authorisation / e-visa | Apply only on the official government site — look-alike sites charge many times the fee | 1–4 weeks |
+| Visa on arrival | Bring photo, cash in the required currency, return ticket, hotel proof | Day of travel |
+| Embassy / Visa Facilitation Services (VFS) visa (Schengen, UK, US, Australia, etc.) | Appointment, bank statements, employer letter, insurance (Schengen), bookings | 4–12 weeks; US interviews can be longer |
+| Transit through a third country | Check airside transit rules — some countries need a transit visa even airside | With booking |
 
-Iron rules first (กฎเหล็ก): an option that breaks a limit the user set before looking (monthly payment above a fixed share of income, no emergency fund left) is dropped, not scored. Run `node decide.mjs payoff decision.json` or `score`. Example, the job offer in the worked example below (pay in year 1, baht, higher is better; chances 0.3 / 0.4 / 0.3 are the user's guess):
+Current visa-free list for Thai passports: [references/travel-facts.md](references/travel-facts.md).
 
-Example input (JSON for `payoff`) and the result when run: [references/scoring-example.md](references/scoring-example.md)
+## Thai passport renewal (summary)
 
-## Revisit verdict grid
-
-| | Outcome good | Outcome bad |
-|---|---|---|
-| **Reasoning good** | Earned — repeat the process | Bad luck — do not overcorrect |
-| **Reasoning bad** | Lucky — fix the process anyway | Learn — what signal was ignored? |
-
-Judge the reasoning on what was knowable *then*, not on what happened.
-
-## Thai-context checks for common big decisions
-
-- **Buying a condo/house** — monthly instalment vs rent, transfer fees and taxes at the land office, common-area fee (ค่าส่วนกลาง), and whether the bank's approved loan is the user's comfortable payment; tax angle in `tax-deduction-planner` (trading-finance) if installed
-- **Changing jobs** — total package not base salary: bonus history, provident fund (PVD) employer match and vesting, social security continuity, notice period in the contract; `payroll-th` (e-commerce) if installed
-- **Lump-sum investing** — emergency fund first, then fit to the time horizon; product choice is outside this skill
-- **Big purchase with a "today only" price** — that pressure is a reason to log, wait 48 hours, and compare (`buy-compare` in e-commerce if installed)
-
-General information, not financial advice — for money decisions of this size talk to a licensed adviser or นักบัญชี.
-
-## Worked example
-
-A full dated entry with its revisit and verdict: [references/scoring-example.md](references/scoring-example.md)
+- There is no "renewal" — a new book is issued; the old one is cancelled. Book a queue at **qpassport.in.th**.
+- Age 20+: choose 10-year or 5-year book; fees and same-day express rates are in [travel-facts](references/travel-facts.md).
+- Adult brings ID card + old passport. Under 20 brings birth certificate, ID card, parents' ID cards; parents' consent required.
+- Standard delivery by post in about 2–5 working days — still allow 2+ weeks before a visa appointment that needs the new book.
 
 ## Rules
 
-- Short beats detailed — if it cannot be stated in five lines, it is not decided yet
-- Never edit the original entry; revisits are appended
-- Log emotional decisions especially; they teach the most
-- One file `decision-journal.md`, newest first, or one file per decision `YYYY-MM-DD-decision-topic.md`
-
-Related: `weekly-review` (surfaces revisit dates) · `goal-and-habit`.
-
-## เรียกเป็นคำสั่ง
-
-`/personal-life:decision-journal <the decision, in one sentence>`
-
-Run the `decision-journal` skill for: **$ARGUMENTS**
-
-Confirms options considered and expected outcome, writes the dated entry, and sets the check-in reminder.
-
-
-## reference: entry-template.md
-
-# Decision journal templates
-
-## Entry
-
-```markdown
-## YYYY-MM-DD — [decision in one sentence], effective YYYY-MM-DD
-
-- Door: one-way / two-way
-- Options: 1) ___ 2) ___ 3) do nothing / wait
-- Key facts (numbers): ___
-- Unknowns: ___
-- Reasoning (confidence 1–10 each):
-  - ___ (H)
-  - ___ (M)
-- Pre-mortem — it went badly because: ___ · early warning sign: ___
-- Prediction (measurable): ___ by YYYY-MM-DD
-- State of mind: calm / excited / anxious / pressured
-- Revisit: YYYY-MM-DD (calendar event created: yes / no)
-```
-
-## Revisit (append below the entry — never edit above)
-
-```markdown
-### Revisit YYYY-MM-DD
-- What happened: ___
-- Prediction met? yes / partly / no
-- Early warning appeared? ___
-- Verdict: reasoning good|bad / outcome good|bad
-- Process lesson (one line): ___
-```
-
-## Quarterly look-back (10 minutes)
-
-| Decisions revisited | Good/good | Good/bad (luck) | Bad/good (lucky) | Bad/bad | Repeated lesson |
-|---|---|---|---|---|---|
-| | | | | | |
-
-A lesson that appears twice becomes a personal rule, written at the top of the journal.
-
-
-## reference: scoring-example.md
-
-# decision-journal — examples and templates
-
-## Example input for `payoff` and the result
-
-```json
-{"better":"high","options":["stay at A","take B","negotiate at A"],
- "scenarios":[{"name":"B bonus 0 months","p":0.3},{"name":"B bonus 1 month","p":0.4},{"name":"B bonus 2 months","p":0.3}],
- "table":{"stay at A":[624000,624000,624000],"take B":[720000,780000,840000],"negotiate at A":[672000,672000,672000]}}
-```
-
-Result when run: take B has the best expected value (780,000), the best worst case (720,000) and regret 0. That is only year-1 pay; growth, commute and the PVD loss go into a `score` run. Expected value and score disagree, or two options are close (`สูสี`) → the user decides, and writes why in the entry. Money and life decisions: supporting data, not advice.
-
-## Worked example — full dated entry with revisit
+- Confirm **validity windows**, not just possession — "6 months beyond entry" or "beyond departure" is the classic failure
+- Never pay for an e-visa or K-ETA through an agent site you found by search ads; type the official address
+- Everything with a confirmation number lives in the itinerary file, nowhere else
+- Passport photo page and visa page scanned into the important-docs folder (`important-docs`) and available offline
+- Travelling with a foreign spouse or friend into Thailand: they fill the **TDAC** (Thailand Digital Arrival Card) online before arrival; Thai citizens do not
 
 ## Worked example
 
-**2026-10-06 — Accept the job offer at Company B, start 1 Dec 2026.** One-way-ish door (can return to market, cannot return to A).
+Nok (Thai, 34) and her German husband, Tokyo 10–17 January 2027. Check on 2026-10-06:
+- Nok's passport expires 2027-03-14 — Japan wants it valid for the stay, but the airline and future trips make 6 months the safe rule → book a 10-year passport now (1,500 บาท).
+- Japan visa exemption for Thai ordinary passports: 15 days, temporary measure to 30 June 2027 → covers 7 days; recheck in December.
+- Husband: German passport, Japan visa-free; returning to Bangkok he fills TDAC online before arrival.
+- Insurance: annual Asia plan; Japan 100 V, plug A/B — Thai two-flat-pin chargers fit, check the device says 100–240 V.
 
-Options: stay at A (52,000/month) · take B (60,000) · negotiate A counter-offer.
-Facts: B base +15%; B bonus 0–2 months (no history known); A PVD match 5% vested after 5 years — I am at year 4, leaving forfeits about 125,000 plus returns (5% × 52,000 × 12 × 4 years; รอยืนยัน with HR); commute B 25 min shorter.
-Reasoning: growth in role (8), salary (5), commute (9).
-Pre-mortem: B's team lead leaves; bonus is zero. Early warning: no clear role scope by week 6.
-Prediction: by 2027-06-01, leading one project, total pay ≥ A's last year, more evenings free.
-State: excited. Revisit: 2027-06-01.
+## Output
 
-Revisit (2027-06-01): leading a project ✓, bonus 0.5 month, evenings ✓. Verdict: reasoning good / outcome good. Lesson: ask for bonus history in writing at offer stage next time.
+Trip card · entry decision per traveller with source and date · checklist from the template · itinerary file `YYYY-MM-DD-destination-itinerary.md`.
+
+Related: `important-docs` (passport expiry) · `polite-message-th-en` (hotel or airline requests) · `digital-hygiene` (public Wi-Fi, SIM swap).
+
+## เรียกเป็นคำสั่ง
+
+`/personal-life:travel-prep <destination> <dates> [travelers]`
+
+Run the `travel-prep` skill for: **$ARGUMENTS**
+
+Produces the checklist plus an itinerary file with every confirmation number, and a day-before four-thing check list.
+
+
+## reference: checklist-template.md
+
+# Travel checklist and itinerary template
+
+## Trip card
+
+```
+Trip: ______  Dates: ______ to ______  Travellers: ______
+Purpose: tourism / business / study      Transit: ______
+Entry rule (per traveller): ______  Source + date checked: ______
+```
+
+## Checklist
+
+**T − 4 months**
+- [ ] Passport valid ≥ 6 months after return, 2+ blank pages — every traveller
+- [ ] Entry rule checked on the official site; visa appointment booked if needed
+
+**T − 2 weeks**
+- [ ] Visa / e-visa / K-ETA approved — printed and saved offline
+- [ ] Travel insurance bought; policy no. and 24-hour hotline in the itinerary file
+- [ ] Card overseas use on; card-freeze hotline saved; some cash in local currency
+- [ ] Roaming / eSIM chosen; offline maps downloaded
+- [ ] Plug adapter for the destination; chargers say 100–240 V
+- [ ] Medicine for trip + 3 days, in labelled packs; English medicine list
+- [ ] Home: bills paid or on auto-debit, mail held, plants/pets covered
+
+**T − 1 day**
+- [ ] Passport · money/cards · phone + charger + adapter · medicine — physically checked
+- [ ] Online check-in done; boarding passes offline
+- [ ] Arrival card / registration filled (destination's official app or site)
+
+## Itinerary file (`YYYY-MM-DD-destination-itinerary.md`)
+
+| Date | Time | What | Confirmation no. | Address (local script) | Contact | Notes |
+|---|---|---|---|---|---|---|
+| | | Flight TG___ BKK→___ | | | | check-in closes ___ |
+| | | Hotel | | | | check-in from ___ |
+
+Emergency block: insurer hotline · Thai embassy/consulate address and phone at the destination · card-freeze numbers · a contact at home.
+
+
+## reference: travel-facts.md
+
+# Travel facts for Thai passport holders
+
+## Contents
+
+- Visa-free destinations (Thai ordinary passport)
+- Pre-registration and arrival cards
+- Thai passport fees
+- Travel insurance minimums
+- Plugs and voltage
+
+## Visa-free destinations (Thai ordinary passport)
+
+Department of Consular Affairs list, July 2026 — 35 destinations. Recheck before every trip: the destination decides and temporary measures end.
+
+| Stay | Destinations |
+|---|---|
+| 365 days | Georgia |
+| 90 days | Republic of Korea (K-ETA see below), Argentina, Brazil, Chile, Ecuador, Haiti, Panama, Peru |
+| 60 days | Cambodia (รอยืนยัน: some reports say 14 days under the bilateral deal, checked 2026-10-22), Samoa |
+| 30 days | China (mutual agreement since 1 Mar 2024; max 90 days in 180), Hong Kong, Macau, Indonesia, Malaysia, Singapore, Vietnam, Laos, Philippines, Maldives, Mongolia, Kazakhstan, Kyrgyz Republic, Tajikistan, Russia, Türkiye, Seychelles, South Africa, Timor-Leste |
+| 15 days | Japan — temporary, extended to 30 June 2027 |
+| 14 days | Brunei, Oman, Myanmar (airport entry only); Taiwan — trial extended 1 Aug 2026 to 31 Jul 2027, no extension of stay (announced by the Taipei Economic and Cultural Office in Thailand 17 Jul 2026; ตรวจล่าสุด 2026-10-14 · แหล่ง: https://www.nationthailand.com/news/general/40068763 · https://www.dailynews.co.th/news/6035608/ — official page not found, รอยืนยัน) |
+
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.nationthailand.com/news/40068149 · https://www.nationthailand.com/news/40068390 · https://english.beijing.gov.cn/latest/lawsandpolicies/202403/t20240301_3578010.html
+
+If the country is not on the list, a visa is needed (Schengen countries, UK, US, Canada, Australia, New Zealand, India e-visa, etc.). Use the embassy or official e-visa site.
+
+## Pre-registration and arrival cards
+
+| Item | Who | Notes |
+|---|---|---|
+| K-ETA (Korea) | Thai passport holders — Thailand was not on the K-ETA exemption list (รอยืนยัน for travel after 31 Dec 2026) | Official site k-eta.go.kr or the K-ETA app only, fee 10,000 KRW; fake sites charge many times more |
+| TDAC — Thailand Digital Arrival Card | Non-Thai nationals entering Thailand (since 1 May 2025); Thai citizens exempt | tdac.immigration.go.th — free; fill before arrival |
+| Arrival cards abroad | Varies (Japan Visit Japan Web, Singapore SG Arrival Card, etc.) | Fill on the official site/app 1–3 days before |
+
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.universalweather.com/blog/thailand-introduces-mandatory-digital-arrival-card-for-all-foreign-nationals-effective-may-1-2025/ · https://loyaltylobby.com/2026/01/02/south-korea-extends-k-eta-waiver-through-december-2026-for-select-nationals-of-22-countries/
+
+## Thai passport fees
+
+| Book | Standard | Express (same day) |
+|---|---|---|
+| 5 years | 1,000 บาท | 3,000 บาท |
+| 10 years (age 20+) | 1,500 บาท | 3,500 บาท |
+
+Queue: qpassport.in.th. Adults: ID card + old passport. Standard delivery by post 2–5 working days; postage fee (รอยืนยัน).
+
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.thaipbs.or.th/news/content/302339 · https://www.thairath.co.th/lifestyle/life/2859846
+
+## Travel insurance minimums
+
+| Destination | Requirement |
+|---|---|
+| Schengen visa | Medical incl. emergency treatment, hospitalisation and repatriation, minimum €30,000, valid in all Schengen states for the whole stay |
+| Others | Usually not required for entry but strongly advised — check medical limit, repatriation, pre-existing conditions, flight delay, baggage, adventure-sport exclusions |
+
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.axa-schengen.com/en/schengen-travel-insurance/30000-euro-coverage (EU Regulation 810/2009)
+
+## Plugs and voltage
+
+Thailand: A, B, C, O · 230 V · 50 Hz. Most phone/laptop chargers are 100–240 V — check the label; hair dryers and kettles often are not.
+
+| Destination | Plug | Voltage |
+|---|---|---|
+| Japan | A, B | 100 V |
+| Taiwan | A, B | 110 V |
+| United States | A, B | 120 V |
+| South Korea | C, F | 220–230 V (รอยืนยัน) |
+| China | A, C, I | 220–230 V (รอยืนยัน) |
+| Hong Kong, Singapore, Malaysia, United Kingdom | G | 230 V |
+| Vietnam | A, B, C | 220–230 V (รอยืนยัน) |
+| Germany | C, F | 230 V |
+| France | C, E | 230 V |
+| Italy | C, F, L | 230 V |
+| Switzerland | C, J | 230 V |
+| Australia | I | 230 V |
+
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.worldstandards.eu/electricity/plug-voltage-by-country/

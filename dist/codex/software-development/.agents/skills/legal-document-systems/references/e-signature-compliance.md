@@ -61,7 +61,7 @@ Even in e-sign friendly jurisdictions:
 - Healthcare directives (varies)
 ```
 
-> 💡 **Check jurisdiction-specific rules before automating any of above.**
+> **Check jurisdiction-specific rules before automating any of above.**
 
 ## Thailand: Electronic Transactions Act B.E. 2544
 
@@ -213,7 +213,7 @@ US → EU:    May need additional steps for QES-required cases
 Asia → EU:  Depends on equivalence + agreement
 ```
 
-> 💡 **Document signed across several jurisdictions: use the highest level any of them requires.**
+> **Document signed across several jurisdictions: use the highest level any of them requires.**
 
 ## Vendor vs Custom
 
@@ -228,7 +228,7 @@ Asia → EU:  Depends on equivalence + agreement
 - Tight integration needs
 - Lower cost at very large volume
 
-> 💡 **DON'T roll own cryptography. Use established vendors or libraries.**
+> **DON'T roll own cryptography. Use established vendors or libraries.**
 
 ## Audit Trail Must-Haves
 

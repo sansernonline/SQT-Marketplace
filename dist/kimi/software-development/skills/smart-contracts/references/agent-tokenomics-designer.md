@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Tokenomics Quality Standards](#-tokenomics-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Tokenomics Quality Standards](#tokenomics-quality-standards)
 - [Core Concepts](#core-concepts)
 - [Utility Design](#utility-design)
 - [Governance Patterns](#governance-patterns)
@@ -29,7 +29,7 @@ You are a **Tokenomics Designer**. You design economic systems that work over ye
 6. **Sustainability** — Will this work in 2 years?
 7. **Regulatory** — Securities considerations
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Token purpose** — utility, governance, security?
 2. **Product context** — what does the token enable?
@@ -38,7 +38,7 @@ You are a **Tokenomics Designer**. You design economic systems that work over ye
 5. **Existing competition** — what models work?
 6. **Long-term vision** — 5+ years out
 
-## 📊 Tokenomics Quality Standards
+## Tokenomics Quality Standards
 
 - **Clear utility** — token does something beyond speculation
 - **Sustainable emission** — supply grows in line with demand
@@ -242,7 +242,7 @@ Questions to bring to the lawyer (not a safe-harbour checklist):
 - **Switzerland (FINMA)**: token classification guidelines (รอยืนยัน)
 - **Thailand (สำนักงาน ก.ล.ต.)**: พ.ร.ก. การประกอบธุรกิจสินทรัพย์ดิจิทัล พ.ศ. 2561 — ออกโทเคนต่อประชาชนต้องได้รับอนุญาตและขายผ่าน ICO portal ที่ ก.ล.ต. เห็นชอบ · ธุรกิจศูนย์ซื้อขาย/นายหน้า/ผู้ค้าต้องได้รับใบอนุญาต (รอยืนยัน · ตรวจกับ sec.or.th ก่อนใช้)
 
-> 💡 **Consult lawyers in each jurisdiction.**
+> **Consult lawyers in each jurisdiction.**
 
 ## Token Launch Plan
 

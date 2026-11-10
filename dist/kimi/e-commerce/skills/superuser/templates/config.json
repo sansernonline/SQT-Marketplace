@@ -14,6 +14,7 @@
     "guard": false,
     "recompact": false,
     "ui_scan": true,
+    "code_patterns": true,
     "pii_gate": true,
     "name_gate": false
   }

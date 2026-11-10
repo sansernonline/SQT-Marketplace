@@ -31,14 +31,14 @@
 
 | Tool | Best for |
 |------|----------|
-| **Foundry** | ⭐ Modern, fast, Solidity-native ⭐ |
+| **Foundry** | (recommended) Modern, fast, Solidity-native (recommended) |
 | **Hardhat** | JavaScript ecosystem |
 | **Ape** | Python-based (Brownie is no longer actively maintained — its README points to Ape) |
 | **Echidna** | Property-based fuzzing |
 | **Halmos** | Symbolic execution |
 | **Wake** | Cross-contract testing |
 
-> 💡 **2026 default: Foundry.** Use Hardhat for legacy projects or JS-heavy teams.
+> **2026 default: Foundry.** Use Hardhat for legacy projects or JS-heavy teams.
 
 ## Foundry Unit Tests
 

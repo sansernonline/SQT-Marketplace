@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Contract Analysis Quality Standards](#-contract-analysis-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Contract Analysis Quality Standards](#contract-analysis-quality-standards)
 - [Clause Extraction Patterns](#clause-extraction-patterns)
 - [Risk Identification](#risk-identification)
 - [LLM-Assisted Review](#llm-assisted-review)
@@ -27,7 +27,7 @@ You are a **Contract Analysis Engineer**. You build tools that help lawyers pull
 6. **Search** — Semantic and structured
 7. **AI Integration** — LLM-assisted review (carefully)
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Contract types** — NDA, MSA, SOW, employment, etc.
 2. **Volume** — hundreds, thousands, millions?
@@ -36,7 +36,7 @@ You are a **Contract Analysis Engineer**. You build tools that help lawyers pull
 5. **Languages** — drives the NLP approach
 6. **Privacy** — can data go to external LLMs?
 
-## 📊 Contract Analysis Quality Standards
+## Contract Analysis Quality Standards
 
 - **Clause extraction precision:** > 90% on standard contracts
 - **Risk flag recall:** > 95% (don't miss critical terms)

@@ -93,7 +93,7 @@ updated_at   timestamptz     NOT NULL DEFAULT now()
 | `row_version` / `xmin` | มีคนแก้พร้อมกันได้ | ใช้คู่กับ ETag ใน `api-conventions` |
 | `tenant_id` | ระบบหลายผู้เช่า | ดูข้อ 10 |
 
-> 🚨 **soft delete (ลบโดยแค่ติดป้าย) มีต้นทุน** คือทุก unique constraint ต้องคิดใหม่
+> **soft delete (ลบโดยแค่ติดป้าย) มีต้นทุน** คือทุก unique constraint ต้องคิดใหม่
 > `ux_users_email` จะกันไม่ให้สมัครอีเมลเดิมซ้ำ แม้บัญชีเก่าถูกลบไปแล้ว
 > แก้ด้วย partial index: `CREATE UNIQUE INDEX ... WHERE deleted_at IS NULL`
 
@@ -107,7 +107,7 @@ updated_at   timestamptz     NOT NULL DEFAULT now()
 | **UUIDv7 / ULID** | เรียงตามเวลา · สร้างจากฝั่งแอปได้ · ไม่ชนกัน | 16 ไบต์ · อ่านด้วยตายาก | ระบบกระจาย · ต้องสร้าง id ก่อนบันทึก · id โผล่ใน URL |
 | `UUIDv4` สุ่มล้วน | ไม่ชนกัน เดาไม่ได้ | **index แตกกระจาย เขียนช้าลงชัดเจนเมื่อข้อมูลเยอะ** | เลี่ยงถ้าเลือกได้ |
 
-> 🚨 **UUIDv4 เป็น primary key คือกับดักที่เจอบ่อยที่สุด**
+> **UUIDv4 เป็น primary key คือกับดักที่เจอบ่อยที่สุด**
 > ค่าสุ่มล้วนทำให้ทุก insert ไปแทรกกลางโครงสร้าง index
 > ข้อมูลหลักหมื่นยังไม่รู้สึก แต่พอถึงหลักสิบล้านจะช้าจนต้องรื้อ
 > ถ้าต้องใช้ UUID ให้ใช้ **v7** ซึ่งขึ้นต้นด้วยเวลา จึงเรียงเพิ่มเหมือน bigint
@@ -206,7 +206,7 @@ index `(a, b)` ใช้กับ query ที่กรองด้วย `a` �
 | schema แยกต่อผู้เช่า | กลาง | migration ต้องวนทุก schema | ผู้เช่าหลักสิบถึงหลักร้อย |
 | ฐานข้อมูลแยกต่อผู้เช่า | สูงสุด | แพงสุด | ลูกค้าองค์กรที่บังคับให้แยก |
 
-> 🚨 ถ้าเลือกแบบ `tenant_id` ให้**บังคับที่ชั้นล่างสุด ไม่ใช่ใส่ใน query ทีละตัว**
+> **สำคัญ:** ถ้าเลือกแบบ `tenant_id` ให้**บังคับที่ชั้นล่างสุด ไม่ใช่ใส่ใน query ทีละตัว**
 > ใช้ row-level security ของฐานข้อมูล หรือ global filter ของ ORM
 > query ที่ลืมใส่ `WHERE tenant_id = ?` แค่ตัวเดียว ก็ทำให้ข้อมูลลูกค้ารายหนึ่งโผล่ให้อีกรายเห็น
 > และไม่มี error ให้เห็นเลย
@@ -495,10 +495,10 @@ total_amount   float / double                -- ผิด: 0.1 + 0.2 ไม่�
 | JSON | `jsonb` (มี index ได้) | `nvarchar(max)` + `JSON_VALUE` | `JSON` |
 | ไฟล์ไบนารี | `bytea` (หรือเก็บนอกฐานข้อมูล) | `varbinary(max)` | `BLOB` |
 
-> 🚨 **SQL Server + ภาษาไทย**: `varchar` ทำให้ตัวอักษรไทยกลายเป็น `?`
+> **SQL Server + ภาษาไทย**: `varchar` ทำให้ตัวอักษรไทยกลายเป็น `?`
 > ต้องใช้ `nvarchar` และเขียนค่าคงที่เป็น `N'ข้อความ'` เสมอ
 >
-> 🚨 **MySQL ต้องเป็น `utf8mb4`** เพราะชุดอักขระชื่อ `utf8` เฉย ๆ ของ MySQL
+> **MySQL ต้องเป็น `utf8mb4`** เพราะชุดอักขระชื่อ `utf8` เฉย ๆ ของ MySQL
 > เก็บได้แค่ 3 ไบต์ต่อตัว อีโมจิและอักขระบางตัวจึงหาย
 
 ---
@@ -764,7 +764,7 @@ Source → Load raw → Transform in warehouse
                     Snowflake/BigQuery scale
 ```
 
-> 💡 **2026 default: ELT with dbt** — load raw to warehouse, transform with SQL via dbt
+> **2026 default: ELT with dbt** — load raw to warehouse, transform with SQL via dbt
 
 ## Tech Stack (2026 Recommendations)
 
@@ -773,12 +773,12 @@ Source → Load raw → Transform in warehouse
 ### Warehouse / Lake
 | Tool | Best for | Cost |
 |------|----------|------|
-| **Snowflake** | Pure warehouse, separation of compute/storage | 💰💰 |
-| **BigQuery** | Serverless, ad-hoc, GCP shops | 💰💰 |
-| **Databricks** | Unified lake + warehouse, ML-heavy | 💰💰💰 |
-| **DuckDB** | Local dev, embedded analytics | 💰 free |
-| **Redshift** | AWS-native, legacy | 💰💰 |
-| **Postgres** | Small data (<1TB), simplicity | 💰 |
+| **Snowflake** | Pure warehouse, separation of compute/storage | $$|
+| **BigQuery** | Serverless, ad-hoc, GCP shops | $$|
+| **Databricks** | Unified lake + warehouse, ML-heavy | $$$|
+| **DuckDB** | Local dev, embedded analytics | $free |
+| **Redshift** | AWS-native, legacy | $$|
+| **Postgres** | Small data (<1TB), simplicity | $|
 
 ### Transformation
 - **dbt** — SQL-based, version controlled, tested (industry default)
@@ -829,7 +829,7 @@ CREATE TABLE dim_customer (
 );
 ```
 
-> 💡 **Star = denormalized, query-fast**
+> **Star = denormalized, query-fast**
 > **Snowflake = normalized dims, save storage**
 > **Wide tables / OBT (One Big Table) = even faster for analytics**
 
@@ -997,6 +997,7 @@ Use when a non-trivial software task starts (feature, bug, refactor, investigati
 - **เขียนตาม `human-writing`** — ผลต่อผู้ใช้ก่อน · ภาษาคน · ตัวเลขเป็นเลข · ไม่สรุปซ้ำ · ไม่ทวนคำถาม
 - **ทุกข้ออ้างมีป้าย** `ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ` · เรื่องเงิน กฎหมาย สุขภาพ หรืองานส่งมอบใช้บันทึกเต็มตาม [`evidence`](references/evidence.md) · ไม่แต่งลิงก์ ไม่แต่งตัวเลข · ห้ามโยนงานตรวจที่ทำเองได้ให้ผู้ใช้ · `reviewer` ผ่าน = ผ่านเกณฑ์ที่ตรวจได้ · งานภาษา รสนิยม หน้าตา คำตัดสินสุดท้ายเป็นของผู้ใช้
 - **ไม่ซ่อนปัญหา** — สิ่งที่ยังไม่ได้ตรวจ และสิ่งที่ผู้ใช้ต้องทำต่อ 1 ข้อ อยู่ใน **ต่อไป** เสมอ (ข้อนั้นคือแถวบนสุดของตาราง "รอผู้ใช้" ใน `CONTEXT.md` ถ้ามี)
+- **คำถามตรวจต่อ (ครั้งเดียวต่อบทสนทนา)** — ถ้าผู้ใช้จะเอาคำตอบไปลงมือ (เงิน · แผนสุขภาพ · ข้อเสนองาน) ให้ต่อท้าย 2–3 คำถามสั้นที่ชี้ตัวเลขหรือข้อสมมติในคำตอบนั้น (ตัวไหนต้องยืนยัน · ขั้นไหนควรทบทวน · ข้อมูลอะไรยังขาด) ซึ่งเป็นคำถามใหม่ ไม่ใช่สรุปซ้ำ · ข้ามเมื่อผู้ใช้ขอตรวจหรือขอแหล่งอยู่แล้ว ขอฉบับสั้น ให้สรุปหรือจัดรูปเอกสาร หรือถามความหมายคำ · เรื่องสุขภาพถามว่าแพทย์ต้องรู้อะไรเพิ่ม ห้ามชี้โรค (แนวคิดจาก anthropics/skills `discernment-nudge` เขียนใหม่)
 - **เทียบคาดกับจริง 1 บรรทัดใต้ ผล** (งานกลางขึ้นไป): `คาด ลูกทีม 3 · รอบ 2 → จริง ลูกทีม 5 · รอบ 3 · token <จาก SUMMARY>` · ต่างเกิน 2 เท่า หรือต่างแบบเดิมเป็นครั้งที่ 2 → จด `LEAD-PLAYBOOK.md`
 - **ข้อเสนอปรับปรุง ≤ 3** และ **ควรปรับทีม ≤ 3** (โมดูล learning) · ไม่มีเรื่องจริงไม่ต้องใส่ · ไม่ลงมือเองจนกว่าผู้ใช้สั่ง
 - **หัวข้อ** ตัวหนาเท่าที่มีเนื้อหา ปกติ 3: **ผล** (เสร็จไหม ได้อะไร หลักฐาน · `ข้ามรีวิว:` ถ้าข้าม) · **ที่ทำ** (หลายชิ้นสถานะต่างกันใช้ตารางสถานะ: งาน · สถานะ · ใคร · หลักฐาน · สถานะใช้ 5 คำ `เสร็จ` `ทำอยู่` `ติด` `รออนุมัติ` `ค้างอยู่`) · **ต่อไป** · เพิ่มเมื่อมีของจริง: **ตัดสินใจเอง** · **รออนุมัติ** · **ค้างอยู่**

@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 SDK Quality Standards](#-sdk-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [SDK Quality Standards](#sdk-quality-standards)
 - [Language Idioms](#language-idioms)
 - [OpenAPI-First Generation](#openapi-first-generation)
 - [Versioning Strategy](#versioning-strategy)
@@ -27,7 +27,7 @@ You are an **SDK Builder**. You design and build Software Development Kits (SDKs
 6. **Auth and Configuration** — Standard and easy
 7. **Distribution** — Package managers, CDN
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Target languages** — how popular, and what they cost to support
 2. **API style** — REST, GraphQL, gRPC
@@ -35,7 +35,7 @@ You are an **SDK Builder**. You design and build Software Development Kits (SDKs
 4. **Streaming?** — pagination, long polling, websockets
 5. **SDK generation** — by hand, from OpenAPI, or a custom generator
 
-## 📊 SDK Quality Standards
+## SDK Quality Standards
 
 - **Idiomatic** — feels native in each language
 - **Type-safe** — strong types where the language supports them
@@ -134,9 +134,9 @@ Published to package manager
 | **Stainless** | All major | ✓ Premium, used by OpenAI, Anthropic |
 | **Fern** | All major | ✓ Open source + managed |
 | **Speakeasy** | All major | ✓ Modern, idiomatic |
-| **openapi-generator** | 50+ | 🟡 Free, less polished |
+| **openapi-generator** | 50+ | ~ Free, less polished |
 
-> 💡 **Default: generate, don't hand-write.** Generate SDKs from the OpenAPI spec by default (one generator the team already pays for or knows: Stainless / Fern / Speakeasy, check current pricing). Fallback: hand-build a thin client when there are 1–2 languages and under ~20 endpoints (same rule as `dx-design` → sdk-design, and `lazy-coding`).
+> **Default: generate, don't hand-write.** Generate SDKs from the OpenAPI spec by default (one generator the team already pays for or knows: Stainless / Fern / Speakeasy, check current pricing). Fallback: hand-build a thin client when there are 1–2 languages and under ~20 endpoints (same rule as `dx-design` → sdk-design, and `lazy-coding`).
 
 ## Versioning Strategy
 

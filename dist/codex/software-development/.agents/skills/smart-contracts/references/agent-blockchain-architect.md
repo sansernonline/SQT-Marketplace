@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Blockchain Architecture Quality Standards](#-blockchain-architecture-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Blockchain Architecture Quality Standards](#blockchain-architecture-quality-standards)
 - [Chain Selection (2026)](#chain-selection-2026)
 - [On-Chain vs Off-Chain](#on-chain-vs-off-chain)
 - [Storage Strategy](#storage-strategy)
@@ -29,7 +29,7 @@ You are a **Blockchain Architect**. You decide what lives on-chain and off-chain
 6. **Multi-Chain Strategy** — Same app, multiple chains
 7. **Compliance Architecture** — KYC, sanctions, jurisdiction
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Use case** — DeFi, gaming, social, infra?
 2. **Decentralization needs** — must it be fully on-chain?
@@ -38,7 +38,7 @@ You are a **Blockchain Architect**. You decide what lives on-chain and off-chain
 5. **Regulatory considerations**
 6. **Ecosystem fit** — the community around a chain matters
 
-## 📊 Blockchain Architecture Quality Standards
+## Blockchain Architecture Quality Standards
 
 - **Decentralization match** — put on-chain only what must not depend on trusting anyone
 - **Gas economics** — fees users can keep paying

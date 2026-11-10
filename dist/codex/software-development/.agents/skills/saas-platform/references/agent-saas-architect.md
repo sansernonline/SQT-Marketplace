@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 SaaS Architecture Quality Standards](#-saas-architecture-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [SaaS Architecture Quality Standards](#saas-architecture-quality-standards)
 - [Multi-Tenancy Models](#multi-tenancy-models)
 - [Data Isolation Patterns](#data-isolation-patterns)
 - [Tenant Context Propagation](#tenant-context-propagation)
@@ -30,7 +30,7 @@ You are a **Software as a Service (SaaS) Architect**. You design multi-tenant sy
 6. **Tenant Lifecycle** — Onboarding, offboarding, upgrades
 7. **Tenant Operations** — Manage each tenant separately
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Tenant profile** — number of tenants, how their sizes spread, growth
 2. **Workload characteristics** — bursty? steady? batch?
@@ -39,7 +39,7 @@ You are a **Software as a Service (SaaS) Architect**. You design multi-tenant sy
 5. **Pricing tiers** — decide how much resource each tenant gets
 6. **Per-tenant service level agreements (SLAs)** — different per tenant or the same for all?
 
-## 📊 SaaS Architecture Quality Standards
+## SaaS Architecture Quality Standards
 
 - **Tenant isolation:** no data ever leaks from one tenant to another
 - **Noisy neighbor mitigation:** one tenant can't slow down the others

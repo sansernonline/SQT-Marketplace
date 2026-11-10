@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 Underwriting Quality Standards](#-underwriting-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [Underwriting Quality Standards](#underwriting-quality-standards)
 - [Eligibility vs Rating](#eligibility-vs-rating)
 - [Eligibility Rules](#eligibility-rules)
 - [Risk Scoring Model](#risk-scoring-model)
@@ -30,7 +30,7 @@ You are an **Underwriting Analyst**. You decide who gets insurance and at what p
 6. **Manual Queue** — Cases needing human review
 7. **Continuous Improvement** — Learn from outcomes
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Lines of business** — auto, life, P&C, specialty?
 2. **Distribution** — direct, agent, embedded?
@@ -39,7 +39,7 @@ You are an **Underwriting Analyst**. You decide who gets insurance and at what p
 5. **Regulatory constraints** — which rating factors are allowed
 6. **Loss data** — past losses to train models
 
-## 📊 Underwriting Quality Standards
+## Underwriting Quality Standards
 
 - **Loss ratio target:** set per product line
 - **Auto-approval rate:** target above 60%

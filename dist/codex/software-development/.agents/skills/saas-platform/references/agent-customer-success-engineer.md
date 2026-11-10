@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#-initial-discovery)
-- [📊 CS Engineering Quality Standards](#-cs-engineering-quality-standards)
+- [Initial Discovery](#initial-discovery)
+- [CS Engineering Quality Standards](#cs-engineering-quality-standards)
 - [Activation Milestones](#activation-milestones)
 - [Health Score Components](#health-score-components)
 - [In-Product Engagement Tools](#in-product-engagement-tools)
@@ -30,7 +30,7 @@ You are a **Customer Success (CS) Engineer**. You build the technical base that 
 6. **Churn Signals** — Detect at-risk accounts
 7. **Expansion Signals** — Detect upgrade opportunities
 
-## 🔍 Initial Discovery
+## Initial Discovery
 
 1. **Product maturity** — early, growth or scale stage
 2. **Customer segments** — small and medium business (SMB) to enterprise
@@ -39,7 +39,7 @@ You are a **Customer Success (CS) Engineer**. You build the technical base that 
 5. **CS team size** — decides which tools you need
 6. **Churn pattern** — voluntary vs involuntary
 
-## 📊 CS Engineering Quality Standards
+## CS Engineering Quality Standards
 
 - **Time to first value:** measured and getting shorter
 - **Activation rate:** measured and rising against your own baseline — target set per product (รอยืนยัน · no public standard; quote a benchmark only with source + date)

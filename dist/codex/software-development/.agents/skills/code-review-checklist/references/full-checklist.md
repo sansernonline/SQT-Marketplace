@@ -2,7 +2,7 @@
 
 Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. The house-specific checks stay in SKILL.md.
 
-### 🎯 Correctness
+### Correctness
 
 - [ ] Does the code do what the PR description says?
 - [ ] Are edge cases handled? (null, empty, zero, negative, very large)
@@ -11,7 +11,7 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 - [ ] Off-by-one errors checked?
 - [ ] Are assumptions explicit (or asserted)?
 
-### 🏗️ Design
+### Design
 
 - [ ] Does this fit the existing architecture?
 - [ ] Is the abstraction at the right level? (not too generic, not too specific)
@@ -20,7 +20,7 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 - [ ] Are dependencies appropriate? (no circular, minimal coupling)
 - [ ] Could this be simpler?
 
-### 🧪 Tests
+### Tests
 
 - [ ] Are there tests for the new code?
 - [ ] Tests cover happy path + edge cases + errors?
@@ -28,7 +28,9 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 - [ ] Tests are readable and maintainable?
 - [ ] No flaky tests introduced?
 
-### 🔒 Security
+**Rate each missing test 1–10 before suggesting it** (adapted from `pr-test-analyzer` · claude-plugins-official · Apache-2.0 · opened 2026-11-10). 9–10: data loss, money or security would break unnoticed · 7–8: the user sees an error · 5–6: edge case with limited impact · below 5: do not suggest it. Review behaviour, not line coverage. Do not ask for tests of plain getters and setters.
+
+### Security
 
 - [ ] Input validation at boundaries?
 - [ ] No SQL injection (parameterized queries)?
@@ -38,7 +40,7 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 - [ ] PII / sensitive data logged appropriately?
 - [ ] Dependencies updated? No known CVEs?
 
-### 🚀 Performance
+### Performance
 
 - [ ] No N+1 queries?
 - [ ] Appropriate caching where beneficial?
@@ -46,7 +48,7 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 - [ ] Large data handled with pagination/streaming?
 - [ ] No unnecessary network calls?
 
-### 📖 Readability
+### Readability
 
 - [ ] Names reveal intent? (variables, functions, classes)
 - [ ] Functions reasonably short?
@@ -55,14 +57,14 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 - [ ] No debug prints / TODO without ticket?
 - [ ] Consistent with existing code style?
 
-### 📚 Documentation
+### Documentation
 
 - [ ] Public APIs documented?
 - [ ] README/CHANGELOG updated if needed?
 - [ ] Breaking changes called out?
 - [ ] New env vars / config documented?
 
-### 🔄 Maintainability
+### Maintainability
 
 - [ ] Could a new team member understand this in 6 months?
 - [ ] Easy to modify when requirements change?

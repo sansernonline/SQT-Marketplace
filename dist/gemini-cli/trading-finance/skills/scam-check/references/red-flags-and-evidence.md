@@ -5,6 +5,10 @@
 **The offer**
 - [ ] Return is guaranteed, fixed, or above bank rates by a wide margin
 - [ ] "Risk-free", "capital protected" for a stock, forex, gold or crypto scheme
+- [ ] Thai wording: การันตีกำไร · รับประกันผลตอบแทน · ไม่มีความเสี่ยง · ไม่ขาดทุนแน่นอน · ปลอดภัย 100% · กำไรทุกวัน · ทุนคืนแน่นอน
+- [ ] "ได้รับอนุญาตจาก ก.ล.ต." or a SEC / SET / BOT logo shown as proof the return is safe
+- [ ] Profit screenshots or reviews from people who are paid by, or part of, the seller (ask; no answer counts as a tick)
+- [ ] "No. 1" ranking or award with no named giver or no date
 - [ ] Profit comes from recruiting others, or rewards grow with team size
 - [ ] Trading signals from a "teacher", "analyst" or "assistant" in a chat group
 
