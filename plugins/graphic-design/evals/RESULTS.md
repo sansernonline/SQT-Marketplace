@@ -30,11 +30,15 @@
 | skill ที่เพิ่งมี eval 5 เคส | `brief-to-image-trigger` · `brief-to-image-behaviour` · `image-generation-trigger-route` · `design-review-trigger` · `video-script-to-clip-trigger` | เพิ่ม 2026-10-28 ยังไม่ได้รัน |
 | เกณฑ์ใหม่ในเคสเดิม | `approval-before-default` ใน `line-richmenu-behaviour` | เพิ่ม 2026-10-28 ยังไม่ได้รัน |
 
-## ยังไม่ได้รันรอบแดง/เขียว (2026-11-10)
+## รอบแดง/เขียวของ skill ใหม่ (2026-11-10)
 
-`copy-claims-check` และ `line-sticker` มีเคสครบ 3 ชุดแล้ว (`-trigger` · `-behaviour` · `-guard`) แต่**ยังไม่ได้รันรอบแดง/เขียว** ตาม `skill-authoring` ไม่มีคะแนนทั้งแขนมี skill และแขนไม่มี skill · รอผู้ใช้อนุมัติค่า eval ก่อนรัน · ใช้ `-guard` ไม่ใช่ `-regression` เพราะยังไม่เคยเห็นอาการพลาดจริงมาก่อน
+รันจริงด้วย `plugin-eval.mjs` · model sonnet · เคสละ 3 รอบ × 2 แขน (มี plugin · ไม่มี plugin) · รอบ 2 รันเฉพาะเคสที่แก้หลังรอบ 1 · ค่าใช้จ่ายของ plugin นี้ $2.29 (ไม่รวม judge ที่คิดแยก) · ใช้ `-guard` แทน `-regression` เพราะยังไม่เคยเห็นอาการพลาดจริง
 
-| skill | เคสที่มี | สถานะ | คำสั่งเมื่ออนุมัติ |
-|---|---|---|---|
-| `copy-claims-check` | `-trigger` · `-behaviour` · `-guard` | ยังไม่ได้รัน | `node scripts/evals/plugin-eval.mjs graphic-design --only "^copy-claims-check-" --max-cost-usd 5` |
-| `line-sticker` | `-trigger` · `-behaviour` · `-guard` | ยังไม่ได้รัน | `node scripts/evals/plugin-eval.mjs graphic-design --only "^line-sticker-" --max-cost-usd 5` |
+| เคส | WITH (รอบ 1 → 2) | W/OUT | Δ | ผล | หมายเหตุ |
+|---|---|---|---|---|---|
+| `copy-claims-check-behaviour` | 1.00 | 0.00 | +1.00 | ผ่าน |  |
+| `copy-claims-check-guard` | 1.00 | 0.00 | +1.00 | ผ่าน |  |
+| `copy-claims-check-trigger` | 1.00 | 1.00 | +0.00 | ผ่าน |  |
+| `line-sticker-behaviour` | 1.00 | 0.75 | +0.25 | ผ่าน |  |
+| `line-sticker-guard` | 0.17 → 1.00 | 0.00 | +1.00 | ผ่าน | รอบ 2: regex รับคำว่า ยังไม่ได้อ่าน · skill ห้ามบอกเปอร์เซ็นต์จากความจำ |
+| `line-sticker-trigger` | 1.00 | 1.00 | +0.00 | ผ่าน |  |

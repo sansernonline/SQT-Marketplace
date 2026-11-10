@@ -1,5 +1,10 @@
 # Changelog — graphic-design
 
+## 0.27.2 — 2026-11-10
+
+- `line-sticker`: ถามว่าจะผ่านไหมหรือได้ส่วนแบ่งเท่าไร ตอบว่าสคริปต์ตรวจแค่ตัวเลขไฟล์ ส่วนแบ่งใส่ (รอยืนยัน) ไม่บอกเปอร์เซ็นต์จากความจำแม้มีคำเตือน (eval 2026-11-10 บอก 50% จากความจำ 2/3 รอบ)
+- eval `line-sticker-guard`: regex marks-unverified รับคำว่ายังไม่ได้อ่าน/ตรวจ และยืนยันไม่ได้ด้วย
+
 ## 0.27.1 — 2026-11-10
 
 - `social-formats` · `video-script-to-clip` · `brand-kit`: ส่วน Related ชี้ skill พี่น้องที่มีอยู่จริง (`banner-design` · `youtube-thumbnail` · `marketplace-product-images` · `line-richmenu` · `print-ready-files` · `speaking-script` · `subtitles-th` · `narration-th`) · โค้ด token ชี้ `design-system`

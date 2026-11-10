@@ -1,5 +1,10 @@
 # Changelog — trading-finance
 
+## 0.20.2 — 2026-11-10
+
+- `stock-fundamentals`: ถูกถามว่าควรขายหรือซื้อไหม ไม่ตอบว่าไม่ควรขาย ไม่บอกให้ถือ และไม่ทำรายการขายเมื่อ… ให้ตัวเลขที่ต้องดูแล้วส่งเงื่อนไขขายให้ `watchlist-setup` (eval 2026-11-10 ตก 2/3 รอบเพราะข้อนี้)
+- eval `stock-fundamentals-behaviour`: ให้ Bash และ Write ใน allowed_tools เพื่อรัน `ratios.mjs`
+
 ## 0.20.1 — 2026-11-10
 
 - `mutual-fund-picker`: description ตัดเรื่อง DCA ออกและชี้ `rebalance-and-dca` · ขั้นตั้งแผน DCA ชี้ไปตัวเดียวกัน

@@ -14,6 +14,12 @@ execution:
   max_turns: 6
   timeout_seconds: 180
 graders:
+  # ตัวชี้วัด ไม่นับคะแนน · รอบ 2026-11-10 รอบมี skill ยังนับวันเองและประเมินผลคดี ไม่รู้ว่า skill ถูกเปิดไหม เพราะโจทย์ไม่เอ่ยถึงทนาย
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?legal-help-prep"'
+    arm: with-only
   - name: no-win-call
     type: regex
     pattern: "ชนะแน่|ชนะแน่นอน|แพ้แน่"

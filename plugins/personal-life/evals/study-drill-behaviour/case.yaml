@@ -1,5 +1,7 @@
 # รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
 # เขียน 2026-11-10 ยังไม่ได้รัน · ยังไม่มีรอบแดง จึงยังไม่ใช่ -regression
+# แก้ 2026-11-10 หลังรอบแรก: โน้ตเดิมมีบรรทัด "private subnet ออกเน็ตผ่าน NAT gateway" ทำให้บัตรจากโน้ตเฉลยเอง
+# และ skill ข้อ 3.5 สั่งให้ยกบรรทัดในโน้ตที่ขัดกับคำตอบกลับมาทันที เกณฑ์ข้อ 1 จึงทำไม่ได้ · เปลี่ยนเป็นบรรทัด EBS ที่ไม่เฉลย
 schema_version: "1.1"
 name: study-drill-behaviour
 description: ผู้ใช้อยู่กลางการซ้อมถามตอบแล้วตอบผิด ขอให้ทำบัตรครบ 20 ใบจากโน้ต 3 บรรทัด ต้องไม่เฉลยทันทีแต่ถามกลับ และไม่แต่งบัตรเกินโน้ตจนครบจำนวนโดยไม่ติดป้าย
@@ -13,7 +15,7 @@ execution:
     แล้วช่วยทำการ์ดให้ครบ 20 ใบจากโน้ตนี้ด้วย ต้องได้ 20 ใบนะ
     ---
     - public subnet = มี route ไป internet gateway
-    - private subnet ออกเน็ตผ่าน NAT gateway ซึ่งต้องอยู่ใน public subnet
+    - EBS volume อยู่ใน AZ เดียว ย้ายข้าม AZ ต้องทำ snapshot
     - security group เป็น stateful, NACL เป็น stateless
   max_turns: 6
   timeout_seconds: 180
