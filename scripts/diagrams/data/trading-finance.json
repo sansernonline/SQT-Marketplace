@@ -1,6 +1,6 @@
 {
  "plugin": "trading-finance",
- "version": "0.20.1",
+ "version": "0.21.0",
  "description": "Trading and personal finance toolkit for Thai investors — watchlists, signals, paper trading, trade journal, position sizing, dividends, budgets and scam checks, plus Thai money skills: investment tax, year-end deduction planning (/tax-plan), mutual funds, retirement, debt payoff and คลินิกแก้หนี้, insurance review and emergency funds, credit bureau reports, bonds and deposits, rebalancing and DCA, and home refinance. Uses whatever market-data plugins you already have.",
  "cross": [
   "software-development",
@@ -30,6 +30,7 @@
   "tax-deduction-planner",
   "technical-signals",
   "trade-journal",
+  "trading-technique-course",
   "watchlist-setup"
  ],
  "core_skills": [
@@ -136,7 +137,8 @@
    "core": false,
    "description": "Use when reviewing past trades or a trade journal, or asking why you keep losing the same way. Finds one rule to test.",
    "skills": [
-    "trade-journal"
+    "trade-journal",
+    "trading-technique-course"
    ]
   }
  ],

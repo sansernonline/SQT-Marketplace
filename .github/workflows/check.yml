@@ -70,6 +70,7 @@ jobs:
           node plugins/trading-finance/skills/debt-payoff/scripts/payoff.mjs --self-test
           node plugins/trading-finance/skills/home-refinance/scripts/refinance.mjs --self-test
           node plugins/trading-finance/skills/copy-trade-check/scripts/signal-check.mjs --self-test
+          node plugins/trading-finance/skills/copy-trade-check/scripts/copy-monitor.mjs --self-test
           node plugins/trading-finance/skills/position-sizing/scripts/size.mjs --self-test
           node plugins/trading-finance/skills/stock-fundamentals/scripts/ratios.mjs --self-test
           node plugins/trading-finance/skills/trade-journal/scripts/trade-stats.mjs --self-test
