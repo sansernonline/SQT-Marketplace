@@ -2,7 +2,7 @@
 
 ## 3.34.0 — 2026-11-10
 
-- skill-router 10 แถวใหม่จับเฉพาะเมื่อประโยคบอกว่าเป็นเรื่องของผู้ใช้เอง (ทดสอบประโยคจริง 107 · ประโยคโค้ด 59 จับผิด 0) · js-exec เตือน cp.exec และ require("child_process").exec แต่ไม่เตือน RegExp.exec
+- skill-router 10 แถวใหม่: ทุกแถวมีด่านตัดประโยคเรื่องโค้ดร่วมกัน และจับเฉพาะคำที่ผู้ใช้พิมพ์เรื่องของตัวเอง · ผ่านชุดทดสอบ 4 ชุด (ของทีม และของผู้ตรวจ 3 รอบ) ประโยคจริงหลุด 0 ประโยคโค้ดจับผิด 0 · ชุดเหล่านี้ใช้ตอนปรับ regex จึงยังต้องวัดกับประโยคที่ไม่เคยเห็น · js-exec ไม่เตือน .exec ของ RegExp (literal มี flag · new RegExp · ชื่อตัวแปรมี re/regex/pattern) แต่ยังเตือน cp.exec และ require("child_process").exec
 - hook ใหม่ `code-pattern-warn` (PostToolUse · Write/Edit/MultiEdit · โมดูล `code_patterns` ค่าเริ่มเปิด): ข้อความที่เพิ่งเขียนมีรูปแบบโค้ดเสี่ยง 16 กฎ (eval · exec ต่อสตริง · SQL ต่อสตริง · ปิดตรวจ TLS · pickle · BinaryFormatter · script CDN ไม่มี integrity ฯลฯ) → เตือนเป็นบริบท ไม่บล็อก กฎละครั้งต่อ session · self-test 21/21 · กรณีข้อความยาวที่ช้าที่สุด 17 มิลลิวินาที (ก่อนจำกัดช่วง regex 1.9 วินาที) · แนวคิดรายการจาก security-guidance ของ claude-plugins-official (Apache-2.0)
 - `no-ai-look` ข้อ 1: ร่างเลย์เอาต์เป็น ASCII 2–3 แบบแล้วเลือกตามเนื้อหา ไม่ใช้แบบแรกที่นึกออก (แนวคิดจาก anthropics/skills `frontend-design` · Apache-2.0)
 - `superuser` หัวข้อ 7: คำถามตรวจต่อ 2–3 ข้อครั้งเดียวต่อบทสนทนา เมื่อผู้ใช้จะเอาคำตอบเรื่องเงิน สุขภาพ หรือข้อเสนองานไปลงมือ (แนวคิดจาก `discernment-nudge`)
