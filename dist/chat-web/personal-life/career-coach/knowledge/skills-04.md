@@ -49,7 +49,7 @@ Keep only your own employment papers. Copying company data you have no right to 
 | Tax on the final pay | Severance under the labour law has its own tax treatment | section 5 · `labour-law-basics` `references/leave-and-severance.md` item 9 (e-commerce, if installed) or an accountant |
 | Work certificate (หนังสือรับรองการทำงาน) | Ask for it; the employer must issue one on request | `labour-law-basics` termination checklist |
 
-Write the expected amount next to each row. A row you cannot work out stays `[ตรวจ]` and goes to the labour office or a lawyer; do not guess it.
+Write the expected amount next to each row, and the section from the "Rule lives in" column (ม.118 · ม.17 · ม.67 …) so the user can check it, even when `labour-law-basics` is not installed. A row you cannot work out stays `[ตรวจ]` and goes to the labour office or a lawyer; do not guess it.
 
 ## 4 · Papers they ask you to sign
 
@@ -93,6 +93,7 @@ Preparing the visit (facts table, deadlines, contact log) → `legal-help-prep`.
 
 - [ ] The first line tells the user not to sign today
 - [ ] Every number points to `labour-law-basics` or an official page with date; none restated from memory
+- [ ] Every rights row names its section (ม.118 severance · ม.17 notice · ม.67 leave)
 - [ ] Every row the agent could not compute is `[ตรวจ]`
 - [ ] Says it is not legal advice, and no ruling on fairness
 

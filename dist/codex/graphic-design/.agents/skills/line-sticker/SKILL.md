@@ -36,6 +36,8 @@ Sources, read 2026-11-10: https://creator.line.me/en/guideline/sticker/ · https
 
 Not read yet: LINE's content rules (what is rejected), the review time, the sales split and the copyright terms. Open the Creators Market guideline pages for those before promising an approval. (รอยืนยัน)
 
+Asked "will it be approved" or "what share do I get": the script checks file numbers only, the review is LINE's. Mark the share `(รอยืนยัน)` and point to creator.line.me; give no percentage, not even "about 50% from memory" with a warning, because the user will plan income on it.
+
 ## 2 · Workflow
 
 1. Write the set list first: 8, 16, 24, 32 or 40 situations (ทักทาย · ขอบคุณ · โอเค · งง · ขอโทษ · เหนื่อย ...) and one Thai phrase each · the count must be one of the allowed numbers, so pad or cut the list before drawing

@@ -1,16 +1,16 @@
 # skill: copy-trade-check
 
-Use when picking an MQL5 (MT4/MT5) copy-trade signal, or checking a signal provider's stats or trade history before subscribing (ตามสัญญาณ).
+Use when picking, setting up or weekly-checking an MQL5 (MT4/MT5) copy-trade signal, or deciding when to stop following it (ตามสัญญาณ).
 
-# Copy Trade Check (ประเมินผู้ให้สัญญาณก่อนตามเทรด)
+# Copy Trade Check (ตามสัญญาณ copy trade ทั้งวงจร)
 
-Check a signal provider with numbers **before** following, then follow with fake money first. This skill evaluates; it never places orders or moves money. General information, not investment or legal advice. Wording follows `human-writing`.
+The whole cycle: check a signal provider with numbers **before** following (sections 1–4) → set up the copy and count its costs (5) → follow with fake money first (6) → write the exit rules before any real money (7) → check every week against those rules (8). This skill evaluates; it never places orders or moves money. General information, not investment or legal advice. Wording follows `human-writing`.
 
-> **Read first — the legal status in Thailand is unclear and may be illegal.** The Bank of Thailand (ธปท., BOT) FAQ says that providing forex trading services, including receiving or sending money to settle forex trades inside or outside Thailand, is an offence under the Exchange Control Act (พ.ร.บ.ควบคุมการแลกเปลี่ยนเงิน พ.ศ. 2485) ([FAQ 21](https://www.bot.or.th/th/faqs/faqs-21.html), item 2). Item 4 of the same FAQ and the BOT page on retail investment abroad let individuals invest through foreign brokers within limits, for 6 asset types (the list includes derivatives but does not mention forex or CFDs). No BOT text found says directly whether an individual sending their own money to a forex broker is legal or not ([retail portfolio investment abroad](https://www.bot.or.th/en/our-roles/financial-markets/foreign-exchange-regulations/foreign-exchange-laws/retail-portfolio-investment-abroad.html)). Both pages read 2026-10-27. **Before any real money leaves Thailand, the user asks BOT on 1213** (ศคง., office hours). This skill never says a transfer is allowed; the user decides. Say this in the first lines of every answer that ends in subscribing with real money.
+> **Read first — the legal route in Thailand is narrow and parts are unclear.** Bank of Thailand (ธปท., BOT) [FAQ 21](https://www.bot.or.th/th/faqs/faqs-21.html), read 2026-11-10: BOT has no policy to license forex businesses, and running a forex service or receiving or sending money to settle forex trades, inside or outside Thailand, is an offence under the Exchange Control Act (พ.ร.บ.ควบคุมการแลกเปลี่ยนเงิน พ.ศ. 2485) — fine up to 20,000 baht, prison up to 3 years, or both (items 2 and 5). So **no forex broker is licensed in Thailand**, and a Thai agent, a Thai personal account or an e-wallet that takes the deposit is outside the law. Item 4 answers the individual's own case: a Thai person may trade on a foreign broker's website "ภายใต้ขอบเขตที่ ธปท. กำหนด", sending money **through a Thai commercial bank**, up to USD 5 million a year, in stocks, bonds, fund units, deposits, derivatives or investment-linked insurance. Whether leveraged forex or CFDs count as "derivatives" in that list is not written (รอยืนยัน). The SEC (ก.ล.ต.) does not supervise forex, because forex is not a securities, derivatives or digital-asset business under its laws (SEC statement of 19 Sep 2022 as reported by [PPTV](https://www.pptvhd36.com/wealth/stock-investment/180854); the SEC's own file returned 403, so รอยืนยัน). Check the broker's name on the SEC [Investor Alert list](https://market.sec.or.th/public/idisc/th/InvestorAlert) (opened 2026-11-10; not being listed proves nothing) and run `scam-check`. **Before any real money leaves Thailand, the user asks BOT on 1213** (ศคง., office hours). This skill never says a transfer is allowed; the user decides. Say this in the first lines of every answer that ends in subscribing with real money.
 
 ## Use when / not
 
-Use when the user wants to pick one of several MQL5 Signals providers, asks if a signal is safe to follow, pastes a signal's statistics page, or has a provider's trade history to check.
+Use when the user wants to pick one of several MQL5 Signals providers, asks if a signal is safe to follow, pastes a signal's statistics page, has a provider's trade history to check, asks how to set up copying (deposit load, equity stop, VPS, fees), or brings this week's numbers and asks whether to keep following.
 
 Not when: building or testing their own Expert Advisor (EA) → `stack-mql` (software-development) · an automated bot that sends real orders (out of scope) · sizing one manual trade → `position-sizing`.
 
@@ -24,6 +24,7 @@ Not when: building or testing their own Expert Advisor (EA) → `stack-mql` (sof
 | Following with fake money first | `paper-trading` | Same honesty rules as a live account |
 | Tax on profits brought back to Thailand | `tax-basics-th` | Foreign income rules and filing |
 | Logging what was followed and why | `trade-journal` | One line per subscription change |
+| Learning to trade a technique yourself instead of copying | `trading-technique-course` | Staged levels with paper gates |
 
 ## Why not "highest Growth"
 
@@ -80,24 +81,64 @@ Only providers that passed section 2. Suggested criteria and weights (starting v
 
 Do not add Growth as a criterion. If the user insists, give it the smallest weight and quote the research above.
 
-## 5 · Follower settings (MetaTrader 5 help)
+## 5 · Set up the copy — settings and costs
+
+Settings from the MetaTrader 5 help ([signal subscriber](https://www.metatrader5.com/en/terminal/help/signals/signal_subscriber), read 2026-11-10):
 
 | Setting | What it does | Set it to |
 |---|---|---|
-| Use no more than X% of deposit | Lot = provider lot × (follower balance ÷ provider balance) × X%, adjusted for currency. Official example: follower 8,000 EUR at 50%, provider 10,000 USD, EURUSD 1.2 → provider 1 lot becomes 0.48 lot. Lower follower leverage shrinks lots further | From the sizing rule below |
-| Stop if equity is less than | Below this equity the copying stops and all positions close · 0 = no limit | Never 0 · the equity the user can walk away at |
+| Use no more than X% of deposit | Lot = provider lot × (follower balance ÷ provider balance) × X%, adjusted for currency. Official example: follower 8,000 EUR at 50%, provider 10,000 USD, EURUSD 1.2 → provider 1 lot becomes 0.48 lot. Higher follower leverage does not raise lots; lower leverage shrinks them (provider 1:100, follower 1:10 → 1 lot becomes 0.1) | From the sizing rule below |
+| Stop if equity is less than | Below this equity the copying stops and all positions close · 0 = no limit | Never 0 · starting equity × (1 − L) |
 | Deviation / slippage | Set in spreads · a requote widens it by 0.5 spread · a second requote drops sync until re-sync | Keep low; prefer the provider's broker server |
-| Copy Stop Loss and Take Profit | SL/TP sit at the follower's broker | On |
+| Copy Stop Loss and Take Profit | SL/TP sit at the follower's broker, so they work while the terminal is off | On |
 
-**How much behind one provider** — the user names the most they can lose, L (% of capital). The provider's equity drawdown D (%) is a floor, so inflate it by k (1.5, starting value, not yet measured): share of capital ≤ L ÷ (D × k). The account-level stop goes in `position-sizing`. Never Kelly — a small error in the edge estimate oversizes the bet.
+**How much behind one provider.** Because lots scale by X%, the follower should earn about the provider's return × X%, and lose about the provider's drawdown × X%. The user names the most they can lose, L (% of the account). The provider's equity drawdown D (%) is a floor, so inflate it by k (1.5, starting value, not yet measured): **X ≤ L ÷ (D × k)**, rounded down. Never Kelly — a small error in the edge estimate oversizes the bet. Do not change X while positions are open.
 
-Also from the help: keep the terminal online (a VPS is recommended) · one account follows one signal · do not trade by hand or run an EA on the following account · pending orders are not copied · unsubscribing does not close open positions · do not change the deposit load while positions are open · symbols the follower's broker lacks are not copied. Fees: monthly, paid up front, no refund on cancel except fraud or fake results; auto-renew is capped at 3 months.
+**Why our result will differ from the provider's.** The MQL5 Signals rules (VI.1) say subscriber results can differ. Causes named in the help: a different broker (other prices, spread and execution, so stops can trigger earlier), slippage and requotes, volume limits or missing symbols at the follower's broker, and any manual or EA trade on the following account. Pending orders are not copied. One account follows one signal. Prefer the same broker and server as the provider; section 8 measures the gap.
+
+**Costs, counted before subscribing:**
+
+| Cost | Fact | Source, read 2026-11-10 |
+|---|---|---|
+| Subscription | Monthly fee in USD set by the provider, paid up front for the period · no refund when the subscriber cancels (V.7) · MQL5 keeps 20% (V.6) · unsubscribing passes the locked payment to the provider · auto-renew covers at most 3 months and is cancelled if the price rises · a current minimum price was not found on an official page (รอยืนยัน) | [Signals rules](https://www.mql5.com/en/signals/rules) · [signal subscriber help](https://www.metatrader5.com/en/terminal/help/signals/signal_subscriber) · [provider help](https://www.metatrader5.com/en/terminal/help/signals/signal_provider) |
+| VPS | The terminal must stay online. MetaTrader VPS list price: 15 USD for 1 month · 39 for 3 · 65 for 6 · 120 for 12 (10 USD a month) · full refund within the first 24 hours | [VPS plans](https://www.mql5.com/en/vps/forex-plans) |
+| Spread and commission | The follower's broker, not the provider's; read the symbol spec | `position-sizing` forex reference |
+
+**Break-even.** Monthly fixed costs ÷ account equity = the return the copy must make just to stand still. A 20 USD signal plus a 15 USD VPS on a 1,500 USD account is 35 ÷ 1,500 = 2.3% a month (ตัวอย่าง). If that is more than the provider's typical month × X%, the account is too small for this signal; say so.
 
 ## 6 · Fake money first — `paper-trading`
 
-A real signal can be followed only from a real account (MQL5 article 523, checked 2026-10-27), so it cannot be copied on demo. Instead, track the chosen provider's **new** trades in the `paper-trading` ledger for 8 weeks (starting value, not yet measured), scaled to the user's planned deposit load, then rerun `signal-check.mjs` on that period alone. Go live only if the new period has no hard-rule flag and its drawdown stayed inside what the user named — and only after the BOT question in the box above is answered.
+A real signal can be followed only from a real account (MQL5 article 523, checked 2026-10-27), so it cannot be copied on demo. Instead, track the chosen provider's **new** trades in the `paper-trading` ledger for 8 weeks (starting value, not yet measured), scaled to the user's planned deposit load, then rerun `signal-check.mjs` on that period alone. Write the exit rules of section 7 before this period starts. Go live only if the new period has no hard-rule flag and its drawdown stayed inside what the user named — and only after the BOT question in the box above is answered.
 
-## 7 · Tax
+## 7 · Exit rules — written before any real money
+
+Write these in the `trade-journal` notes (or the monitor file below) **before** subscribing; a rule set after a loss is a rule bent by that loss. Any one reached means stop following: unsubscribe, then close or decide on the open positions, because unsubscribing does not close them.
+
+| Rule | Stop when | Starting value (not yet measured) |
+|---|---|---|
+| Our drawdown | Account falls L% from its peak, net of fees · the MT5 equity stop is the hard backstop | L = the user's own number |
+| Provider breaks its record | The provider's current drawdown passes D × k | k = 1.5 |
+| Copy gap | Our return trails provider return × X% by more than G points, summed over the last N weeks · afterwards, compare broker, spread, slippage and lot rounding before following any other signal | G = 3 · N = 4 |
+| Time stop | After M weeks the result net of fees is still 0 or below | M = 12 |
+| Hard rule appears | Rerun `signal-check.mjs` on the new trades monthly: a martingale or grid flag, or Max deposit load above 30% | Section 2 |
+| Provider changes | Account switched, signal stopped, price raised, or recruiting talk starts | → `scam-check` if recruiting |
+
+## 8 · Weekly check — `copy-monitor.mjs`
+
+Every week the user copies 4 numbers into the monitor file: the provider's return that week (%, from the growth chart or the history: profit ÷ starting balance), our starting and ending equity, and any fees paid. Deposits and withdrawals happen only between weeks. Optional: the provider's current drawdown.
+
+```
+node copy-monitor.mjs <monitor.json> [--json]      # example: scripts/monitor-example.json
+node copy-monitor.mjs --self-test
+```
+
+Same folder as `signal-check.mjs` (script path in section 3) · Node only, no dependencies.
+
+It prints a table (provider % · what we should get = provider % × X% · ours · the gap · net of fees · drawdown from peak) and a **ผล** line: "ยังไม่ชนกฎเลิกข้อใด" or "เลิกตาม" with each rule reached. The drawdown limit is required, so the script refuses a file without exit rules. It does not see open positions; set it beside the equity shown in the terminal. The hard-rule and provider-change rows of section 7 stay manual.
+
+Report weekly in 3 lines: the table · the ผล line · one thing to watch next week. Log the week in `trade-journal` with `account = copy-<signal>`. The decision stays with the user; if a rule is reached and the user wants to keep going, say which rule was set before and that changing it now is the bending section 7 warns about.
+
+## 9 · Tax
 
 Revenue Department order ป.161/2566 (15 Sep 2023), amended by ป.162/2566 (20 Nov 2023): a Thai tax resident with foreign-source income must include it in the tax year it is **brought into Thailand**, for income brought in from 1 Jan 2024; income earned before 1 Jan 2024 is outside it. Tax withheld abroad under a double-tax treaty can be credited (RD news 34/2566). Not confirmed: which section of section 40 forex/CFD profit falls under and whether losses offset (รอยืนยัน — ask RD on 1161) · the 180-day residence test comes from search results only (รอยืนยัน). Details → `tax-basics-th`.
 
@@ -108,10 +149,12 @@ A made-up 3-provider example (ask · did · result) and every source with its re
 ## Check before sending
 
 - [ ] The legal box is in the answer before any step that moves real money
-- [ ] No mql5.com page was fetched by the agent
+- [ ] No mql5.com signal page was fetched by the agent
 - [ ] Hard rules applied before any score; Growth was not the ranking
 - [ ] Every threshold without a source says "starting value, not yet measured"
-- [ ] `signal-check.mjs --self-test` passes (2026-10-27: 42/42; a fresh reviewer broke 18 formulas on purpose and the test caught 15)
+- [ ] `signal-check.mjs --self-test` passes (2026-10-27: 42/42; a fresh reviewer broke 18 formulas on purpose and the test caught 15) · `copy-monitor.mjs --self-test` passes (2026-11-10: 22/22, and the 5-week example matches the hand calculation in the reference)
+- [ ] Costs counted (fee + VPS ÷ equity) and the equity stop is not 0
+- [ ] Exit rules written before real money; the weekly ผล line quotes them
 - [ ] Paper tracking comes before real money; the user decides
 
 
@@ -129,11 +172,31 @@ Moved from `SKILL.md` (copy-trade-check)
 
 **Result:** "The highest Growth, GoldRush Pro, fails 2 hard rules (14 weeks · deposit load 92%) and looks like martingale; its history would confirm. Steady EU leads on the numbers, but send its trade history first, and ask BOT 1213 before moving any money. You decide."
 
+## Worked example — weekly check (ตัวอย่าง, numbers made up)
+
+**Set before subscribing:** deposit load X = 50% · L = 10% · provider record drawdown 14% × 1.5 = 21% · gap limit 3 points over 4 weeks · time stop 12 weeks. File: `scripts/monitor-example.json`.
+
+**Hand calculation** (the same numbers are asserted in `copy-monitor.mjs --self-test`):
+
+| Week | Provider % | Should get = × 0.5 | Ours % | Gap | Net index after fees | Down from peak |
+|---|---|---|---|---|---|---|
+| W1 | +4 | +2.00 | 1000 → 1018 = +1.80 | −0.20 | 1.018 (peak) | 0 |
+| W2 | −2 | −1.00 | 1018 → 1003 = −1.47 | −0.47 | 1.003 | 1.47% |
+| W3 | +2 | +1.00 | 1003 → 1010 = +0.70 · fee 30 → net −2.29 | −0.30 | 0.980 | 3.73% |
+| W4 | −6 | −3.00 | 1010 → 960 = −4.95 | −1.95 | 0.9315 | (1.018 − 0.9315) ÷ 1.018 = 8.50% |
+| W5 | −1 | −0.50 | 960 → 948 = −1.25 | −0.75 | 0.9198 | 9.64% |
+
+Gap over W2–W5 = −0.47 − 0.30 − 1.95 − 0.75 = −3.48 points, past the −3 limit. Drawdown 9.64% is still under 10%.
+
+**Result:** "ผล: เลิกตาม — our account trails what the provider's numbers say we should get by 3.48 points over 4 weeks, past the 3 we set before subscribing, so the written rule says stop. Before following any other signal, compare our broker's spread and slippage with the provider's. Unsubscribing will not close the 2 open positions — decide on them separately."
+
 ## Sources
 
 All read 2026-10-27 unless marked.
 
-- BOT — [FAQ 21 forex](https://www.bot.or.th/th/faqs/faqs-21.html) (items 2, 3, 4, 6) · [retail portfolio investment abroad](https://www.bot.or.th/en/our-roles/financial-markets/foreign-exchange-regulations/foreign-exchange-laws/retail-portfolio-investment-abroad.html) · [news 74/2564](https://www.bot.or.th/th/news-and-media/news/news-20211015.html) · 1213 hours from `scam-check` (checked 2026-10-26) · penalty under the Exchange Control Act from search results only (รอยืนยัน)
+- BOT — [FAQ 21 forex](https://www.bot.or.th/th/faqs/faqs-21.html) (items 2, 3, 4, 6) · [retail portfolio investment abroad](https://www.bot.or.th/en/our-roles/financial-markets/foreign-exchange-regulations/foreign-exchange-laws/retail-portfolio-investment-abroad.html) · [news 74/2564](https://www.bot.or.th/th/news-and-media/news/news-20211015.html) · 1213 hours from `scam-check` (checked 2026-10-26) · re-read 2026-11-10: item 4 (foreign broker website allowed within BOT limits, via a Thai commercial bank, up to USD 5 million a year, 6 asset types) and item 5 (fine up to 20,000 baht or prison up to 3 years for running forex services; 5–10 years and 500,000–1,000,000 baht under the public-fraud lending law for soliciting the public)
+- SEC — [Investor Alert list](https://market.sec.or.th/public/idisc/th/InvestorAlert) (opened 2026-11-10, updated 9 Nov 2569) · SEC statement 19 Sep 2022 that forex is outside SEC supervision, read via [PPTV](https://www.pptvhd36.com/wealth/stock-investment/180854) on 2026-11-10 · the SEC's own [PDF](https://www.sec.or.th/TH/Template3/Articles/2565/190965.pdf) returned 403 (รอยืนยัน)
+- Setup and costs, read 2026-11-10 — [signal subscriber help](https://www.metatrader5.com/en/terminal/help/signals/signal_subscriber) (deposit load, leverage, equity stop, deviation, SL/TP, unsubscribe, VPS, auto-renew) · [Signals rules](https://www.mql5.com/en/signals/rules) (V.6 20% commission · V.7 no refund · VI.1 results differ) · [provider help](https://www.metatrader5.com/en/terminal/help/signals/signal_provider) (monthly price in USD; no minimum stated) · [MetaTrader VPS plans](https://www.mql5.com/en/vps/forex-plans) (15 · 39 · 65 · 120 USD) · minimum signal price 30 USD appears only in 2017 forum posts (รอยืนยัน)
 - DSI — [copy-trade scheme warning, May 2023](https://dsi.go.th/en/Detail/2a62807b58c90766044ba12fe68b2b48)
 - MetaTrader 5 help — [signal subscriber settings](https://www.metatrader5.com/en/terminal/help/signals/signal_subscriber) · [signal statistics](https://www.metatrader5.com/en/terminal/help/signals/signal_monitoring) · MQL5 [Signals rules](https://www.mql5.com/en/signals/rules) · [terms of use](https://www.mql5.com/en/about/terms) (3.7, 3.9) · [article 523](https://www.mql5.com/en/articles/523) (real signals on real accounts only) · [FAQ forum 10773](https://www.mql5.com/en/forum/10773) (Growth formula) · [MQL5 statistics docs](https://www.mql5.com/en/docs/constants/environment_state/statistics) (profit factor, recovery factor, drawdown)
 - Research — [Dorfleitner et al. 2018](https://ideas.repec.org/a/eee/quaeco/v70y2018icp160-171.html) (abstract only) · [AAII summary](https://www.aaii.com/journal/article/returns-for-social-trading-platforms-are-negative) · [Nasr et al. 2026](https://ideas.repec.org/a/eee/finlet/v108y2026ics1544612326010093.html) (abstract only) · [ESMA 2018 CFD measures](https://www.esma.europa.eu/node/84933) · [Harvey, Liu, Zhu (NBER w20592)](https://www.nber.org/papers/w20592) · [Magdon-Ismail et al. 2004](https://www.cambridge.org/core/journals/journal-of-applied-probability/article/on-the-maximum-drawdown-of-a-brownian-motion/F9E3B8A454B020DDEBF0AC3390EF7807) (abstract only)

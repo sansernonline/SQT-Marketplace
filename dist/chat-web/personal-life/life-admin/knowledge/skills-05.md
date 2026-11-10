@@ -76,11 +76,13 @@ Related: `weekly-review` · `inbox-triage` · `meeting` (action items) · `perso
 
 # skill: legal-help-prep
 
-Use when the user has a dispute (rent, deposit, debt, neighbour, unpaid wages) and prepares to see a lawyer or agency (ปรึกษาทนาย, ร้องเรียน).
+Use when the user has a dispute or court summons (หมายศาล, ปรึกษาทนาย, rent, debt, wages), asks a deadline or who wins, or preps a lawyer visit.
 
 # Legal Help Prep (เตรียมเรื่องก่อนไปหาทนายหรือหน่วยงาน)
 
 > **One rule:** put the facts, papers and dates in order; never say who will win. The output is a brief the user carries to a lawyer or an agency, not advice on what the law says about their case.
+
+**When the user asks straight out** "นับวันให้หน่อย" or "จะชนะไหม": say in one line that you do not count legal deadlines or predict the result, and why (a wrong count can lose the case; the result depends on evidence a judge weighs). Then give what does help: the urgency from section 3 (court papers → a lawyer this week), the facts table from section 2, the deadline row with `[ตรวจ]`, and a free legal-aid line from section 6. No pros-and-cons list of the case either; that is a forecast by another name.
 
 General information, not legal advice (ข้อมูลทั่วไป ไม่ใช่คำปรึกษากฎหมาย). A free first meeting with a lawyer or an agency goes much further when the user arrives with one page of facts, the documents in order and every date written down.
 

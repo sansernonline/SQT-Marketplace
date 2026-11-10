@@ -134,7 +134,7 @@ auth middleware. Log to the existing system."
 
 # skill: reverse-engineering
 
-Use when a compiled app (exe, .NET, Electron, APK, JS bundle), firmware, network capture or unknown format has no source, or a build may differ.
+Use when a compiled app (exe, .NET, Electron, APK, JS bundle, MT5 .ex5), firmware, HAR/pcap or unknown format has no source, or a build may differ.
 
 # Reverse Engineering — แกะซอฟต์แวร์ที่ไม่มีซอร์ส แบบมีหลักฐานทุกข้อ
 
@@ -201,6 +201,7 @@ python -I scripts/triage.py <file> --pattern 'oauth|WHT'    # หาคำใน
 | ฐานข้อมูล SQLite ในแอป | ตาราง · CREATE SQL · จำนวนแถว · ตัวอย่างแถวที่ปิดค่าลับ · ไม่กี่นาที | `sqlite_inspect.py` (อ่านอย่างเดียว ไม่เห็นข้อมูลที่ค้างใน `-wal`) | — | — |
 | smart contract (bytecode ของ EVM) | function selector · event topic · คำสั่งเสี่ยง (DELEGATECALL · SELFDESTRUCT) · ไม่กี่นาที | `evm_selectors.py` (จับเฉพาะ dispatcher แบบ solc) | — | — |
 | Python `.pyc` · PyInstaller | กู้ได้ถ้า Python ≤ 3.8 หลังจากนั้นได้บางส่วน · หลายชั่วโมง | `triage.py` | pyinstxtractor · decompyle3 / pycdc | — |
+| MetaTrader 5 `.ex5` (EA · indicator · script) | ไม่ได้โค้ด ได้กฎเข้าออกที่อนุมานจากไม้ใน Strategy Tester แล้วเขียน MQL5 ใหม่ · ไม่เปิดเนื้อไฟล์ ไม่ decompile · หลายวัน | `compare_trades.py` (เทียบไม้ของตัวเดิมกับตัวใหม่) | MetaTrader 5 กับบัญชี demo (ผู้ใช้ติดตั้งและกดเอง) | [mql5-ex5](references/mql5-ex5.md) |
 | ถูกทำให้อ่านยาก หรือถูก pack | ขึ้นกับตัวป้องกัน อาจหยุดงานได้ | `triage.py` | หาให้ได้ก่อนว่าเป็นตัวไหน แล้วถามผู้ใช้ | — |
 
 ต้องดูตอนรันจริง (ทุกเป้าหมาย) → [runtime-observation](references/runtime-observation.md) และต้องได้อนุญาตตามหัวข้อ 2
@@ -559,6 +560,173 @@ python -I scripts/sourcemap_list.py _to_delete/re/<ชื่อ>/app --extract _
 - แตกแต่ละรุ่นครั้งเดียว แล้วเทียบรายการไฟล์และ SHA-256 (ดู [evidence-ledger](evidence-ledger.md#4--เทียบ-2-รุ่นหรือ-2-ไฟล์))
 - บอกว่า "เพิ่ม" หรือ "หาย" ได้เมื่อดูอีกฝั่งครบแล้วเท่านั้น
 - ค่าที่คำนวณตอนรัน ยังเป็นสิ่งที่ยังไม่รู้ จนกว่าจะเห็นตอนรัน (ต้องถามตาม [runtime-observation](runtime-observation.md))
+
+
+## reference: mql5-ex5.md
+
+# MetaTrader 5 `.ex5` — ถอดพฤติกรรมแบบกล่องดำ แล้วเขียน MQL5 ใหม่
+
+ใช้เมื่อมีแค่ไฟล์ `.ex5` (Expert Advisor (EA) · indicator · script) ไม่มี `.mq5` · วิธีเดียวที่ใช้คือ **ดูว่ามันเทรดอย่างไรใน Strategy Tester** แล้วเขียนตัวใหม่ให้เทรดเหมือนกัน · ไม่เปิดเนื้อไฟล์ ไม่ถอดรหัส และไม่แตะการป้องกันลิขสิทธิ์ทุกชนิด · ป้ายหลักฐานและสมุดหลักฐานใช้ตาม SKILL.md หัวข้อ 6 และ [evidence-ledger](evidence-ledger.md) · การรันทุกครั้งต้องถามตาม [runtime-observation](runtime-observation.md)
+
+| หัวข้อ | |
+|---|---|
+| [1 · ข้อเท็จจริงที่ต้องรู้ก่อน](#1--ข้อเท็จจริงที่ต้องรู้ก่อน) | [2 · ด่านสิทธิ์ก่อนเริ่ม](#2--ด่านสิทธิ์ก่อนเริ่ม) |
+| [3 · ตรวจความปลอดภัยก่อนรันครั้งแรก](#3--ตรวจความปลอดภัยก่อนรันครั้งแรก) | [4 · ถอดพฤติกรรมใน Strategy Tester](#4--ถอดพฤติกรรมใน-strategy-tester) |
+| [5 · เขียน MQL5 ใหม่ แล้วเทียบผล](#5--เขียน-mql5-ใหม่-แล้วเทียบผล) | [6 · สิ่งที่ห้ามทำ](#6--สิ่งที่ห้ามทำ) |
+
+## 1 · ข้อเท็จจริงที่ต้องรู้ก่อน
+
+ตรวจทุกข้อเมื่อ 2026-11-10 จากหน้าทางการของ MetaQuotes · ข้อที่เป็นคำอ้างของผู้ผลิตเองเขียนกำกับไว้
+
+| เรื่อง | ข้อเท็จจริง | ป้าย · แหล่ง |
+|---|---|---|
+| `.ex5` คืออะไร | ไฟล์ที่ MetaEditor compile จาก `.mq5` แล้วรันใน terminal ได้ แจกได้โดยไม่ต้องมีซอร์ส ผู้ผลิตบอกว่าเป็น "รูปแบบเฉพาะที่ซ่อน algorithm เดิม" และ debug ไม่ได้ถ้าไม่มีซอร์ส | จากแหล่ง · [MetaEditor: Compilation](https://www.metatrader5.com/en/metaeditor/help/development/compile) |
+| การป้องกันทั่วไป | MetaQuotes เขียนว่า EX4/EX5 "ป้องกันการ decompile ได้อย่างน่าเชื่อถือ" · เป็นคำอ้างของผู้ผลิต ยังไม่เจอการทดสอบอิสระ | จากแหล่ง (คำอ้างผู้ผลิต) · [MQL5 Cloud Protector](https://www.metatrader5.com/en/metaeditor/help/development/mql5_cloud_protector) |
+| MQL5 Cloud Protector | เปิดให้นักพัฒนาทุกคนตั้งแต่ build 1730 (ประกาศ 22 ธ.ค. 2017) ส่งเฉพาะส่วน executable ไปเข้ารหัสด้วย algorithm แบบอสมมาตรและเซ็นด้วยกุญแจส่วนตัว และ compile เป็น native code แบบเดียวกับสินค้าใน Market · ไฟล์ไม่ผูกกับเครื่อง | จากแหล่ง · [ประกาศ build 1730](https://metatrader5.com/en/news/1732) · [หน้า Cloud Protector](https://www.metatrader5.com/en/metaeditor/help/development/mql5_cloud_protector) |
+| สินค้าจาก MQL5 Market | ผู้ซื้อแต่ละคนได้ "secure version" ที่สร้างให้เครื่องนั้นและสำเนา OS นั้น เปลี่ยนฮาร์ดแวร์แล้วรันไม่ได้ (เรียกว่า Activation) · Market รับเฉพาะไฟล์ EX5/EX4 และห้ามเรียก DLL ทุกตัว | จากแหล่ง · [Market Rules](https://www.mql5.com/en/market/rules) ข้อ IV.1 · IV.2 · IV.15–IV.19 |
+| `.ex5` เริ่มถูกเข้ารหัสตั้งแต่ build ไหน | ไม่เจอเอกสารทางการที่ระบุ build · ที่เจอคือ MT4 build 600 (ก.พ. 2014) ประกาศว่า EX4 จาก Market ได้การป้องกันระดับเดียวกับ MQL5 | (รอยืนยัน) · ผลค้นหาชี้ [ข่าว MT4 build 600](https://www.metaquotes.net/en/metatrader4/news/4207) ยังไม่ได้เปิดอ่านหน้านี้เอง |
+
+**ข้อตกลง MQL5 Market ที่ผูกผู้ซื้อ** ([Market Rules](https://www.mql5.com/en/market/rules) · อ่าน 2026-11-10 · หน้าไม่บอกวันแก้ไขล่าสุด):
+
+| ข้อ | ใจความ |
+|---|---|
+| III.2 · III.3 | ขายต่อไม่ได้ · การซื้อไม่ได้ซื้อสิทธิ์ในตัวสินค้า ได้มาเพื่อใช้ส่วนตัวเท่านั้น |
+| III.9 | ห้าม decompile และห้ามจ้างคนอื่นทำ · **พยายาม decompile ก็ถือว่าผิดแล้ว ไม่ว่าจะได้ผลหรือไม่** |
+| IX.8 | ห้ามคัดลอก ขาย แจก แก้ ดัดแปลง แปล สร้างงานที่ต่อยอด (derivative products) หรือ reverse engineer · decompile · disassemble เพื่อให้ได้ซอร์ส เว้นแต่ได้รับอนุญาต |
+| IX.9 | ห้ามทำอะไรเพื่อหลบหรือเอาชนะการป้องกันหรือกฎการใช้ของสินค้า |
+
+ข้อเหล่านี้อยู่ในหมวด IX ซึ่งเป็นเหตุให้ MetaQuotes ระงับบริการได้ทันที
+
+**เครื่องมือหรือบริการที่อ้างว่าแปลง `.ex4`/`.ex5` กลับเป็นซอร์ส** — มีเว็บและผู้ขายอ้างแบบนี้ แต่ไม่เจอหลักฐานที่ตรวจสอบได้ว่าทำได้กับไฟล์รุ่นปัจจุบัน ผู้ผลิตบอกว่าป้องกันไว้ ส่วนผู้ใช้ในฟอรัม mql5.com เขียนว่ายังไม่มีใครพิสูจน์ได้ตั้งแต่ build 600 ซึ่งเป็นแค่ความเห็นในฟอรัม · ป้าย `ยังไม่ได้ตรวจ` · skill นี้ไม่เอ่ยชื่อ ไม่ลิงก์ ไม่แนะนำ ไม่ดาวน์โหลด และไม่ลองเครื่องมือพวกนี้ ไฟล์ที่แจกในนามเครื่องมือเหล่านี้ไม่รู้ที่มา จึงเสี่ยงเป็น malware ด้วย
+
+## 2 · ด่านสิทธิ์ก่อนเริ่ม
+
+ถามผู้ใช้ 2 ข้อ แล้วจดคำตอบลงบรรทัดแรกของ `_to_delete/re/<ชื่อ EA>/ledger.md` ตามแบบฟอร์มใน [evidence-ledger](evidence-ledger.md) หัวข้อ 1:
+
+1. ไฟล์นี้ได้มาจากไหน (เขียนเอง · จ้างเขียน · ซื้อใน MQL5 Market · ซื้อนอก Market · ได้ฟรีจากกลุ่มหรือเว็บ)
+2. จะเอาตัวที่เขียนใหม่ไปทำอะไร (ใช้เองบัญชีเดียว · ใช้ในบริษัท · แจก · ขาย)
+
+| ที่มา | ทำได้ | ต้องได้เพิ่มก่อน |
+|---|---|---|
+| ผู้ใช้เขียนเอง แต่ซอร์สหาย | ทุกขั้นในหัวข้อ 3–5 | ไม่มี · จดหลักฐานความเป็นเจ้าของที่มี (ซอร์สรุ่นเก่า · ประวัติขาย · บัญชีผู้ขาย) |
+| จ้างคนอื่นเขียน | ทุกขั้น ถ้าสัญญาจ้างให้สิทธิ์ซอร์สหรือสิทธิ์ดัดแปลงกับผู้ใช้ | ถ้าสัญญาไม่ชัด ให้ขอข้อความอนุญาตจากผู้เขียนเป็นลายลักษณ์อักษร |
+| ซื้อจาก MQL5 Market | ทดสอบพฤติกรรมของสำเนาที่ซื้อใน Strategy Tester เพื่อประเมินและตั้งค่าใช้เอง (หัวข้อ 3–4) | **ขั้นเขียนตัวเลียนแบบ (หัวข้อ 5)** ต้องมีข้อความอนุญาตจากผู้ขาย เพราะข้อ IX.8 ห้าม derivative products เว้นแต่ได้รับอนุญาต · ห้ามแจกหรือขายตัวเลียนแบบในทุกกรณี · การเขียนใหม่เพื่อใช้เองอย่างเดียวจะนับเป็น derivative ไหมเป็นคำถามทางกฎหมาย (รอยืนยัน กับผู้ขายหรือนักกฎหมาย) |
+| ซื้อนอก Market | ตามสัญญาอนุญาตที่ได้มา | ไม่มีสัญญาหรือสัญญาห้ามดัดแปลง ให้ทำเฉพาะหัวข้อ 3–4 แล้วถามเจ้าของ |
+| ได้ฟรี · ไม่รู้ที่มา · ไฟล์ที่ถูก crack หรือหลุดมา | **หยุด** | ไฟล์ที่ถูก crack หรือหลุดมาไม่ทำต่อเลย แม้แต่ทดสอบ · ไฟล์ฟรีที่ไม่รู้ที่มาให้ถามหาเจ้าของก่อน |
+
+ไฟล์ล็อกเลขบัญชี วันหมดอายุ หรือเซิร์ฟเวอร์ license จนทดสอบไม่ได้ ให้หยุดแล้วบอกผู้ใช้ให้ขอไฟล์สำหรับทดสอบจากเจ้าของ ไม่หาทางเลี่ยง
+
+## 3 · ตรวจความปลอดภัยก่อนรันครั้งแรก
+
+Strategy Tester รันโค้ดของ `.ex5` จริง จึงต้องถามผู้ใช้ก่อนทุกครั้งตาม SKILL.md หัวข้อ 2 · ผู้ใช้เป็นคนกดใน terminal เอง หรืออนุญาตให้ agent สั่ง `terminal64.exe /config:` เป็นรายครั้ง
+
+| ตรวจอะไร | ทำอย่างไร | ป้าย · แหล่ง |
+|---|---|---|
+| terminal แยกสำหรับงานนี้ | ติดตั้ง MetaTrader 5 อีกชุดหรือใช้ data folder แยก login **บัญชี demo เท่านั้น** ตลอดงาน · เปิด "Disable automated trading when switching accounts" ไว้ · ไฟล์ที่ยังไม่น่าไว้ใจให้รันใน Windows Sandbox หรือ VM ที่ผู้ใช้เตรียมเอง ([runtime-observation](runtime-observation.md) หัวข้อ 2) | จากแหล่ง · [Platform Settings](https://www.metatrader5.com/en/terminal/help/startworking/settings) |
+| เรียก DLL ไหม | ลากไฟล์ใส่กราฟแล้วดูแท็บ **Dependencies** ในหน้าต่างตั้งค่า · แท็บนี้ขึ้นเมื่อ EA import ฟังก์ชันจาก EX5 หรือ DLL ไอคอนแดงคือ DLL · ปิด **Allow DLL imports** ไว้ (ผู้ผลิตแนะนำให้ปิดกับ EA ที่ไม่รู้จัก) ถ้าปิดอยู่ ปุ่ม OK จะไม่ขึ้นและ EA จะไม่เริ่ม | จากแหล่ง · [Expert Advisors and Custom Indicators](https://www.metatrader5.com/en/terminal/help/algotrading/trade_robots_indicators) |
+| ถ้ามี DLL | จดชื่อ DLL เป็นหลักฐาน · DLL เป็นเป้าหมายใหม่ที่ต้องได้สิทธิ์แยก แล้วดูแบบ static ด้วย `pe_elf_info.py` ตาม [native-binaries](native-binaries.md) ก่อนคิดจะเปิด · DLL ทำได้ทุกอย่างนอก sandbox ของ MQL5 | อนุมาน |
+| ติดต่อเว็บไหม | `WebRequest` เรียกได้เฉพาะ URL ที่ผู้ใช้ใส่ใน Tools → Options → Expert Advisors ซึ่งปิดเป็นค่าเริ่ม · ปล่อยรายการว่างไว้ · เพิ่ม URL ได้ทีละตัวเมื่อผู้ใช้อนุญาตเท่านั้น · ใน Strategy Tester ฟังก์ชันนี้ใช้ไม่ได้ และ indicator เรียกไม่ได้ | จากแหล่ง · [WebRequest](https://www.mql5.com/en/docs/network/webrequest) |
+| เขียนไฟล์ไหน | MQL5 เขียนไฟล์ได้แค่ใน `MQL5\Files` ของ terminal และโฟลเดอร์ Common ที่ใช้ร่วมกัน · เก็บรายชื่อไฟล์ใน 2 ที่นี้ก่อนและหลังรันแล้ว `diff` · ตอนอยู่ใน tester ไฟล์อาจไปอยู่ในโฟลเดอร์ของ tester agent | จากแหล่ง · [File Functions](https://www.mql5.com/en/docs/files) · โฟลเดอร์ของ agent (ยังไม่ได้ตรวจ) |
+
+พฤติกรรมที่พึ่งเว็บ (ตัวกรองข่าว · สัญญาณจากเซิร์ฟเวอร์ · ตรวจ license) จะไม่เกิดใน tester · ให้จดเป็นสิ่งที่ยังไม่รู้ ไม่สรุปว่าไม่มี
+
+## 4 · ถอดพฤติกรรมใน Strategy Tester
+
+**4.1 ตั้งค่าเดียวกันทุกครั้ง** — โหมด **Every tick based on real ticks** (ใช้ tick จริงที่โบรกเกอร์เก็บไว้ ไม่จำลอง) · เซิร์ฟเวอร์ symbol timeframe ทุน leverage เดียวกันทุกรอบ · จดรุ่น build ของ terminal ลงสมุดหลักฐาน · รันจาก command line ด้วยไฟล์ ini ได้ ([หน้าเอกสาร](https://www.metatrader5.com/en/terminal/help/start_advanced/start) · ตรวจ 2026-11-10):
+
+```ini
+[Tester]
+Expert=Target\Original.ex5          ; path นับจาก MQL5\Experts (ยังไม่ได้ตรวจ)
+ExpertParameters=original-default.set   ; อยู่ใน MQL5\Profiles\Tester
+Symbol=EURUSD
+Period=H1
+Model=4                                 ; 4 = Every tick based on real ticks
+FromDate=2023.01.01
+ToDate=2023.12.31
+Deposit=10000
+Leverage=1:100
+Report=original-2023-default            ; ไม่ใส่นามสกุล ได้ .htm
+ReplaceReport=1
+ShutdownTerminal=1
+```
+
+ไม่ใส่ `Login=` เพื่อปลอมเลขบัญชีให้ EA ที่ล็อกบัญชี เพราะเป็นการเลี่ยง license (หัวข้อ 6)
+
+**4.2 หลายช่วงตลาด** — อย่างน้อย 4 ช่วงที่ต่างกัน: ขาขึ้น · ขาลง · ไซด์เวย์ผันผวนต่ำ · ช่วงข่าวแรง · และ symbol หรือ timeframe อื่นถ้า EA รองรับ · กันไว้ 1 ช่วงที่**ไม่ใช้ตอนอนุมานกฎ** เพื่อใช้ตัดสินในข้อ 5
+
+**4.3 กวาดค่า input** — กด Save ในแท็บ Inputs เก็บค่าเริ่มเป็น `.set` แล้วเปลี่ยนทีละตัว (หรือใช้ optimization แบบ Slow complete algorithm กับ input ตัวเดียว) เพื่อดูว่า input ไหนเปลี่ยนเวลาเข้า ระยะ SL/TP หรือขนาดล็อต
+
+**4.4 ส่งออกผล** — ไฟล์ `.htm` ที่ได้จาก `Report=` มีตาราง Orders และ Deals (คอลัมน์ Deals: Time · Deal · Symbol · Type · Direction · Volume · Price · Order · Commission · Swap · Profit · Balance · Comment ตาม [บทความ mql5.com](https://www.mql5.com/en/articles/5436) ซึ่งเป็นชื่อที่ผู้เขียนบทความตั้ง (รอยืนยัน กับรายงานจริง)) · บันทึกจากหน้าจอได้ด้วยคลิกขวาที่แท็บผล → Report → HTML หรือ Open XML (ชื่อเมนูจากคู่มือของบุคคลที่สาม (รอยืนยัน)) · จด SHA-256 ของทุกรายงานเป็นหลักฐาน · terminal ที่ตั้งภาษาไทยอาจได้หัวคอลัมน์เป็นภาษาไทย ให้ตั้ง terminal เป็นภาษาอังกฤษก่อนส่งออก (ยังไม่ได้ตรวจ)
+
+**4.5 ตารางสังเกต** — 1 แถวต่อ 1 ไม้ ลงไฟล์ `_to_delete/re/<ชื่อ EA>/trades.md` หรือ CSV:
+
+| ช่อง | ดูอะไร |
+|---|---|
+| เวลาเข้า | ตรงเวลาเปิดแท่งไหม (เช่น 10:00:00 ทุกไม้ = ตัดสินตอนแท่งใหม่) · มีช่วงเวลาหรือวันที่ไม่เคยเข้าไหม |
+| ทิศ · ราคาเข้า | เข้าตามเทรนด์หรือสวน · เข้าหลังราคาทะลุระดับไหน |
+| indicator ที่น่าจะใช้ | เขียน script ของเราเองดึงค่า indicator ที่สงสัย (MA · RSI · Bollinger · ATR) ณ เวลาเข้าแต่ละไม้ แล้วดูว่าค่าไหนอยู่ในช่วงเดียวกันทุกไม้ |
+| SL · TP | ระยะเป็นจุดคงที่ · เป็นเท่าของ ATR · เลื่อนตาม (trailing) · ไม่มี |
+| ล็อต | คงที่ · ตามสัดส่วนทุน · คูณขึ้นหลังไม้แพ้ (martingale) |
+| จำนวนไม้ที่เปิดพร้อมกัน | เปิดไม้ทิศเดียวกันซ้อนห่างเท่า ๆ กัน = grid |
+| เหตุออก | ชน SL · ชน TP · ปิดตามเวลา · ปิดตามสัญญาณกลับทิศ |
+
+เจอ martingale หรือ grid ให้บอกผู้ใช้ทันที เพราะแบบนี้ทำให้ขาดทุนหนักได้ในช่วงตลาดวิ่งทางเดียว
+
+**4.6 สมมติฐานลงสมุดหลักฐาน** — ผลรายงานแต่ละไฟล์เป็น E-id (`จากแหล่ง` หรือ `ตรวจจริง` ถ้าเห็นตอนรันใน tester ที่ได้อนุญาต) · กฎที่เดาจากหลายไม้เป็น `อนุมาน` ชี้ E-id ที่เป็นฐาน · กฎที่อธิบายไม่ได้ลงตาราง "สิ่งที่ยังไม่รู้":
+
+```markdown
+| # | ข้อสรุป | หลักฐาน | ป้าย |
+|---|---|---|---|
+| H1 | เข้า buy ตอนแท่ง H1 ใหม่เมื่อ EMA 20 ตัด EMA 50 ขึ้น | E3 (รายงาน 2023 · 41 จาก 44 ไม้) + E7 (ค่า EMA ณ เวลาเข้า) | อนุมาน |
+| H2 | SL 300 จุดคงที่ทุกไม้ | E3 · E4 | อนุมาน |
+```
+
+## 5 · เขียน MQL5 ใหม่ แล้วเทียบผล
+
+1. **ผู้ใช้ยืนยันสมมติฐานก่อน** แล้วเขียน spec ของพฤติกรรมทีละข้อ แต่ละข้อชี้ H-id
+2. **เขียนด้วยโค้ดของเราตาม `stack-mql`** จาก spec ไม่ใช่จากไฟล์ `.ex5` · ไม่ใช้ชื่อสินค้า คำบรรยาย หรือรูปของต้นฉบับ
+3. **ตั้งเกณฑ์ความตรงก่อนรัน** แล้วจดลงสมุดหลักฐาน ไม่ปรับเกณฑ์หลังเห็นผล · ตัวเลขด้านล่างเป็น `ตัวอย่าง` ที่เราเสนอ ไม่ใช่มาตรฐาน:
+
+| เกณฑ์ | ตัวอย่าง |
+|---|---|
+| ไม้เข้าที่ symbol ทิศ และเวลาตรงกัน (ห่างไม่เกิน 60 วินาที) | อย่างน้อย 90% ของจำนวนไม้ที่มากกว่า |
+| ขนาดล็อตตรงกันในไม้ที่จับคู่ได้ | อย่างน้อย 95% |
+| ช่วงที่กันไว้ในข้อ 4.2 | ผ่านเกณฑ์เดียวกัน ถ้าผ่านแค่ช่วงที่ใช้อนุมาน แปลว่ากฎยังจับไม่ครบ |
+
+4. **รันทั้ง 2 ตัวด้วยการตั้งค่าเดียวกัน** (เซิร์ฟเวอร์ · ช่วงวันที่ · Model 4 · `.set` ที่ตรงกัน) แล้วเทียบ:
+
+```bash
+python -I scripts/compare_trades.py original-2023.htm rewrite-2023.htm --tolerance 60 --threshold 90
+python -I scripts/compare_trades.py original.csv rewrite.csv --leg all --json > _to_delete/re/<ชื่อ EA>/compare.json
+```
+
+สคริปต์อ่านตาราง Deals จากรายงาน HTML (UTF-16 หรือ UTF-8) หรือ CSV ที่มีหัว Time · Symbol · Type · Direction แล้วจับคู่ไม้ที่ symbol กับทิศตรงกันและเวลาห่างไม่เกิน `--tolerance` · บอก % ที่ตรง · % ล็อตที่ตรง · ไม้ที่มีแต่ฝั่งเดียว · ต่ำกว่า `--threshold` ออก exit 1 · ทดสอบแล้ว 2026-11-10 ด้วย `--self-test` และข้อมูลตัวอย่างที่สร้างเอง 50 ไม้ ยังไม่ได้ลองกับรายงานจริงจาก terminal (รอยืนยัน)
+
+5. ไม้ที่มีแต่ฝั่งเดียวคือที่มาของกฎที่ยังขาด ให้ไล่ดูทีละไม้แล้วแก้สมมติฐาน ไม่ปรับโค้ดให้ตรงเป็นรายไม้ · ผ่านเกณฑ์ = ตรงเฉพาะช่วงและการตั้งค่าที่ทดสอบ ไม่ใช่เหมือนต้นฉบับทุกสภาพตลาด
+6. ก่อนผู้ใช้เอาตัวใหม่ไปใช้บัญชีจริง ให้ผ่านรายการตรวจของ `stack-mql` หัวข้อ 8 และรันกับบัญชี demo ช่วงหนึ่งก่อน · การตัดสินใจเปิดบัญชีจริงเป็นของผู้ใช้
+
+## 6 · สิ่งที่ห้ามทำ
+
+1. ห้าม decompile · disassemble · เปิด `.ex5` ด้วย hex editor · รัน `triage.py --strings` หรือ `--pattern` กับ `.ex5` · ทำกับ `.ex5` ได้แค่จด SHA-256 ขนาด และที่มา
+2. ห้ามค้น ดาวน์โหลด แนะนำ ลิงก์ หรือจ้างเครื่องมือหรือบริการที่อ้างว่าถอด `.ex4`/`.ex5`
+3. ห้ามถอดรหัสหรือแกะชั้นป้องกันของ MQL5 Cloud Protector หรือ secure version จาก Market
+4. ห้ามปลดหรือเลี่ยง license: ปลอมเลขบัญชี (รวม `Login=` ใน tester ini) · เปลี่ยนเวลาเครื่องหนีวันหมดอายุ · ทำเซิร์ฟเวอร์ license ปลอม · แก้ไฟล์ hosts · ทำ DLL ปลอมมาแทนตัวจริง
+5. ห้ามคัดลอกไฟล์จาก Market ไปเครื่องอื่นเพื่อเลี่ยงจำนวน activation
+6. ห้ามแจกหรือขายตัวที่เขียนเลียนแบบไฟล์ที่ไม่ใช่ของผู้ใช้ เว้นแต่เจ้าของอนุญาตเป็นลายลักษณ์อักษร
+7. ห้ามรันกับบัญชีจริงระหว่างงาน · ห้ามเปิด Allow DLL imports หรือเพิ่ม URL ใน WebRequest ให้ไฟล์ที่ยังไม่น่าไว้ใจ
+8. ห้ามทำต่อกับไฟล์ที่ถูก crack หรือหลุดมา แม้ผู้ใช้จะบอกว่าแค่ทดสอบ
+
+## ที่มา
+
+อ่านทุกหน้าเมื่อ 2026-11-10
+
+- [MetaEditor: Compilation](https://www.metatrader5.com/en/metaeditor/help/development/compile)
+- [MQL5 Cloud Protector](https://www.metatrader5.com/en/metaeditor/help/development/mql5_cloud_protector) · [ประกาศ build 1730](https://metatrader5.com/en/news/1732)
+- [MQL5 Market Rules](https://www.mql5.com/en/market/rules)
+- [Strategy Tester: Testing](https://www.metatrader5.com/en/terminal/help/algotrading/testing) · [Platform start (ไฟล์ ini)](https://www.metatrader5.com/en/terminal/help/start_advanced/start)
+- [Platform Settings](https://www.metatrader5.com/en/terminal/help/startworking/settings) · [Expert Advisors and Custom Indicators](https://www.metatrader5.com/en/terminal/help/algotrading/trade_robots_indicators)
+- [WebRequest](https://www.mql5.com/en/docs/network/webrequest) · [File Functions](https://www.mql5.com/en/docs/files)
+- [Analyzing trading results using HTML reports](https://www.mql5.com/en/articles/5436) (บทความใน mql5.com ไม่ใช่เอกสารทางการ)
 
 
 ## reference: native-binaries.md

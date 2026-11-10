@@ -4,7 +4,7 @@ Use when reading a Thai stock's financial statements or ratios (P/E, P/BV, ROE, 
 
 # Stock Fundamentals (อ่านงบและตัวเลขพื้นฐานหุ้น SET)
 
-General information, not investment advice. This skill turns a company's filed statements into a handful of ratios and the places worth a second look. It never says buy or sell.
+General information, not investment advice. This skill turns a company's filed statements into a handful of ratios and the places worth a second look. It never says buy, sell or hold, even when asked straight out (see "Check before sending").
 
 > **One rule:** every ratio comes from a `ratios.mjs` run on figures the user (or a data plugin) took from the filed statement, with the statement date and the price date beside it — a ratio without both dates is not shown.
 
@@ -96,6 +96,7 @@ Reading: on reported profit P/E is 16; without the land sale it is 20, so the lo
 - Every flag the script printed is passed on with what to read in the notes
 - Banks and insurers have no D/E; the note about NIM, NPL or CAR is passed on
 - No buy, sell or "cheap/expensive" verdict; a screen pass is called a candidate
+- Asked "ควรขายไหม" or "ควรซื้อไหม": no "ไม่ควรขาย", no hold call and no "sell when …" list. Say the decision is the user's, give the figures to check, and hand the sell conditions to `watchlist-setup` (its invalidation line, written by the user)
 
 ## Sources
 

@@ -45,6 +45,8 @@ skill เอกสารหลัก (`polished-document-style` · `document-nam
 | คนในบ้านเสียชีวิตหรือทำพินัยกรรม · น้ำท่วม · ตั้งครรภ์และลูกแรกเกิด | `estate-and-will` · `flood-prep` · `pregnancy-and-baby` (plugin `personal-life`) |
 | งานส่วนตัวกระจายหลายที่ · ทำบัตรคำหรือซ้อมถามตอบก่อนสอบ · เริ่มงานใหม่ · ถูกเลิกจ้างหรือลาออก · ข้อพิพาทที่ต้องไปหาทนายหรือหน่วยงาน | `task-board` · `study-drill` · `new-job-first-90-days` · `job-exit` · `legal-help-prep` (plugin `personal-life`) |
 | อ่านงบการเงินหรือ ratio ของหุ้น · คัดหุ้นเข้า watchlist | `stock-fundamentals` (plugin `trading-finance`) |
+| ตั้งค่า เฝ้าดู หรือเลิกตาม copy trade · เรียนเทคนิคเทรดทีละด่านก่อนใช้เงินจริง | `copy-trade-check` · `trading-technique-course` (plugin `trading-finance`) |
+| มีแค่ไฟล์ .ex5 ของ EA หรือ indicator อยากรู้ว่าทำงานอย่างไร | `reverse-engineering` หัวข้อ .ex5 (plugin `software-development`) · ถอดพฤติกรรมแบบกล่องดำ ไม่ decompile |
 | ร้านออนไลน์เริ่มวันว่าต้องทำอะไรก่อน · ดึงลูกค้าประจำที่หายไปกลับมา | `shop-daily-briefing` · `win-back-customers` (plugin `e-commerce`) |
 | ตรวจข้อความโฆษณาเกินจริงก่อนโพสต์ · ทำสติกเกอร์หรืออีโมจิ LINE | `copy-claims-check` · `line-sticker` (plugin `graphic-design`) |
 | หยุดงานไว้ หรือรับงานที่ค้างต่อ | playbook `pickup-and-pause` + `handoff` |

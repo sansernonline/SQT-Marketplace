@@ -509,6 +509,8 @@ Use when writing, reviewing or testing MQL4/MQL5 code for MetaTrader 4/5 (Expert
 
 ## 9 · เชื่อมกับ skill อื่น
 
+มีแค่ `.ex5` ไม่มี `.mq5` (ซอร์สหาย หรืออยากได้ตัวที่เทรดเหมือนเดิม) → `reverse-engineering` ไฟล์ `references/mql5-ex5.md` ถอดพฤติกรรมใน Strategy Tester แล้วเขียนใหม่ตามกฎในไฟล์นี้ · ไม่ decompile
+
 สูตรและสถิติ backtest → agent `quant-analyst` · test ทั่วไป → `testing-standards` · log → `logging-standards` · ค่าลับ → `config-and-secrets` · ขั้นตอนเล็กที่ตรวจได้ → `principle-small-verifiable-steps` · ขายและราคา → `prompt/software-development/prompt-sell-product.md` ของ repo (ถ้าใช้ชุด prompt)
 
 

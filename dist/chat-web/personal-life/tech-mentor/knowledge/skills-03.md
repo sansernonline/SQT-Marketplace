@@ -142,7 +142,7 @@ Two tools for the same goal: cards to remember, and a question drill to understa
 2. **The front is a question**, not a topic. "S3 Standard-IA เหมาะกับข้อมูลแบบไหน" — not "S3 storage classes".
 3. **The back is the rule in 1–2 sentences**, not a paragraph. Add one short example if it helps.
 4. **Every card names its source**: the user's note, the page of the exam guide, the official docs URL. Facts the agent adds from its own knowledge with no source are marked `(ยังไม่ได้ตรวจ)` until the user checks them.
-5. **Cards from mistakes first.** A wrong answer in a practice exam becomes a card before anything else (`cert-prep` step 7).
+5. **Cards from mistakes first.** A wrong answer in a practice exam becomes a card before anything else (`cert-prep` step 7). A miss inside a drill that is still running becomes a card only after the user reaches the answer (section 3 step 4); until then no card, padded or `(ยังไม่ได้ตรวจ)`, may carry that answer.
 6. Keep cards as markdown, one file per subject (`kb/cards/aws-saa.md` if `personal-kb` is used), one card per line: `Q: … | A: … | src: … | box: 1 | next: 2026-11-11`. Anki import works from the same lines.
 
 ## 2 · Box schedule without an app
