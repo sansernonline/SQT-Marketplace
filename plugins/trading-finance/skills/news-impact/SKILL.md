@@ -1,6 +1,7 @@
 ---
 name: news-impact
-description: Use when the user asks what news matters today for their stocks. Filters headlines by watchlist.
+description: Use when the user asks what news matters today for their stocks, what is due next week (งบออก, XD, กนง.), or how to prepare for results.
+argument-hint: '[today | week-ahead | results <symbol>]'
 ---
 
 # News Impact (ข่าวที่กระทบพอร์ตจริง)
@@ -27,7 +28,36 @@ Use whatever news or market-data plugin is installed; if none, say so and use pu
 4. **Classify** each survivor: `fact` (filed/announced) or `opinion` (someone's view); `scheduled` (earnings, XD, AGM) or `surprise`.
 5. **Rank** by impact × confidence (decision table below). Keep at most **5**.
 6. Write one line each: what happened · which symbol · what to watch next (the price or date that would confirm or deny the impact).
-7. If an item hits a thesis or invalidation on the watchlist, say so explicitly and point to `watchlist-setup` review.
+7. If an item hits a thesis or invalidation on the watchlist, say so explicitly and point to `watchlist-setup` review. For a long-term name with a thesis file, name the pillar or break risk it touches (P1, R2) and whether it supports or weakens it, so the user can add one line to the update log.
+
+## Week ahead (`week-ahead`)
+
+Run on Friday evening or Sunday. One short list of what is scheduled in the next 7 days for names on the watchlist and in the portfolio:
+
+| Kind | Where to read it |
+|---|---|
+| Results due (quarter 45 days after quarter end; year 2–3 months, deadlines and sources in `watchlist-setup` step 3) | SET company news, company investor-relations calendar |
+| XD / XR dates, payment dates | SET company news (`dividend-tracker` for the amounts) |
+| Shareholder meetings (AGM / EGM) and what is on the agenda (capital increase, dividend) | SET company news |
+| Monetary Policy Committee (MPC, กนง.) meeting, consumer price index release | bot.or.th calendar · Ministry of Commerce |
+
+Each line: date · symbol · event · why it matters to this user (which thesis pillar or holding). Mark dates the company has not announced as "expected (not announced)"; never fill in a guessed date. Nothing scheduled is a valid answer. Last week's events go at the bottom with what actually happened, so the list also shows how good the expectations were.
+
+## Results day (`results <symbol>`)
+
+**Before the results** (when the week-ahead list shows them):
+
+1. Pick the 3 numbers that decide the thesis (from the thesis pillars, for example same-store sales growth, gross margin, net debt).
+2. Write down now, before seeing them, what the user will do in each case: better than the thesis needs · as needed · worse. Actions are about the user's own plan (keep the position size, reduce, re-read the thesis, drop from the watchlist), never a recommendation from this skill.
+3. There is usually no reliable consensus figure for Thai mid and small caps. If none is found, say "no consensus found" rather than inventing one.
+
+**After the results**:
+
+1. Read the filed statement, not the headline. Separate one-off items (asset sales, revaluation, impairment) from normal profit; `stock-fundamentals` shows profit with and without them.
+2. Compare the 3 numbers with what the thesis needs; for each pillar say supports / weakens / neutral.
+3. Match the outcome to the action the user wrote before. If the user now wants to do something else, say that it differs from the plan; the user decides.
+
+Idea: `catalyst-calendar`, `earnings-preview` and `earnings-analysis` in anthropics/financial-services equity-research (Apache-2.0, viewed 2026-11-10); whisper numbers, implied moves and analyst ratings left out.
 
 ## Impact decision table
 
@@ -62,3 +92,13 @@ Watchlist: ABC, DEF and a bank stock held in the portfolio. 30 overnight headlin
 3. **Bank holding (fact, scheduled)** — policy rate cut 0.25% at the MPC meeting. Lower rates usually squeeze bank margins. Watch: next quarter net interest margin.
 
 Dropped: 27 items (global index moves, analyst targets for names not on the list, celebrity investor comments).
+
+## เรียกเป็นคำสั่ง
+
+`/trading-finance:news-impact [today | week-ahead | results <symbol>]`
+
+Run the `news-impact` skill: **$ARGUMENTS**
+
+- `today` (default) — the workflow above, at most 5 items
+- `week-ahead` — the next 7 days of results, XD, meetings and MPC for the watchlist and portfolio
+- `results <symbol>` — before or after that company's results, against its thesis pillars

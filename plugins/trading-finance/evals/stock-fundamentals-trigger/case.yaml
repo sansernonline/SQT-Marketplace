@@ -1,0 +1,26 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เพิ่ม 2026-11-10 พร้อม skill ใหม่ · โจทย์คิดขึ้นเอง ไม่ได้มาจากงานที่พลาดจริง · ยังไม่ได้รัน
+schema_version: "1.1"
+name: stock-fundamentals-trigger
+description: ถามว่าหุ้นตัวหนึ่ง P/E ROE เท่านี้ถูกหรือแพง ไม่เอ่ยชื่อ skill ต้องทำให้ stock-fundamentals ถูกเปิด
+tags: [capability, trigger, stock-fundamentals]
+runs: 3
+expected_outcome: เรียก Skill stock-fundamentals · ไม่ตัดสินว่าถูกหรือแพงจากตัวเลขเดียว
+execution:
+  prompt: |
+    งบไตรมาส 3 ของหุ้นที่ถืออยู่ออกแล้ว กำไรสุทธิ 4 ไตรมาสรวม 2,500 ล้าน ส่วนผู้ถือหุ้น 20,000 ล้าน
+    มี 1,000 ล้านหุ้น ราคาตอนนี้ 40 บาท อยากรู้ว่า P/E กับ ROE เท่าไร แล้วตัวเลขแบบนี้ควรดูอะไรต่อ
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?stock-fundamentals"'
+    min: 1
+    arm: with-only
+  - name: roe-12-5
+    type: regex
+    pattern: '12\.5'
+    match: contains
+    target: last_message

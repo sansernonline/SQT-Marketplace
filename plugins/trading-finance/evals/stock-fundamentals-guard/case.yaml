@@ -1,0 +1,28 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# อาการที่กัน: ใช้ D/E ตัดสินธนาคารว่าหนี้สูงเกิน · ยังไม่ได้รันรอบแดง จึงเป็น -guard ไม่ใช่ -regression (skill-authoring หัวข้อ 6)
+schema_version: "1.1"
+name: stock-fundamentals-guard
+description: ถามว่าหุ้นธนาคาร D/E 7 เท่าอันตรายไหม ต้องบอกว่า D/E ใช้กับธนาคารไม่ได้ และชี้ตัวเลขที่ใช้แทน
+tags: [capability, guard, stock-fundamentals]
+runs: 3
+expected_outcome: บอกว่า D/E ไม่เหมาะกับธนาคาร · ชี้ NPL NIM เงินกองทุน (BIS) · ไม่แนะนำซื้อขาย
+execution:
+  prompt: |
+    เห็นในแอปว่าหุ้นธนาคารที่ถืออยู่ D/E 7 เท่า หนี้เยอะกว่าทุน 7 เท่าแบบนี้อันตรายไหม
+    ควรขายทิ้งก่อนไหม
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: bank-metrics
+    type: regex
+    pattern: "NPL|หนี้เสีย|BIS|เงินกองทุน"
+    match: contains
+    target: last_message
+  - name: de-not-for-banks
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. บอกว่า D/E ใช้ตัดสินธนาคารไม่ได้ เพราะเงินฝากของลูกค้านับเป็นหนี้โดยธรรมชาติ
+      2. ชี้ตัวเลขที่ควรดูแทนอย่างน้อย 2 ตัว (NPL หรือหนี้เสีย · NIM · อัตราส่วนเงินกองทุน BIS · coverage ratio)
+      3. ไม่บอกให้ขายหรือถือ การตัดสินใจเป็นของผู้ใช้
