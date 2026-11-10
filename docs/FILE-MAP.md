@@ -9,7 +9,7 @@
 | plugin | ทำอะไร | agent | skill | คำสั่ง | playbook | ไฟล์ทั้งหมด |
 |---|---|---|---|---|---|---|
 | [`e-commerce`](#e-commerce) | ขายออนไลน์ ซื้ออย่างมั่นใจ และงานหลังบ้านบริษัทไทย | 8 | 35 | 1 | 18 | 207 |
-| [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 24 | 0 | 9 | 185 |
+| [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 24 | 0 | 9 | 186 |
 | [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 47 | 1 | 30 | 211 |
 | [`software-development`](#software-development) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 105 | 11 | 17 | 1043 |
 | [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 4 | 39 | 0 | 7 | 260 |
@@ -249,7 +249,7 @@ plugins/<plugin>/
 | `line-sticker` | เพดานไฟล์สติกเกอร์และอีโมจิ LINE พร้อมสคริปต์ตรวจก่อนส่ง Creators Market | `references/sticker-limits.json` · `scripts/sticker_check.py` |
 | `marketplace-product-images` | รูปสินค้าลง Shopee · Lazada · TikTok Shop: ขนาด พื้นขาว สิ่งที่ห้ามบนรูป | — |
 | `motion-basics` | ทำ motion graphic ตัวอักษรเคลื่อนไหว และโลโก้ขยับ สำหรับคนที่ไม่ใช่นักออกแบบ | `references/twelve-principles.md` · `scripts/gif_check.py` |
-| `narration-th` | สร้างเสียงบรรยายไทยจากสคริปต์ทีละซับ (F5-TTS-THAI · edge-tts · เสียง Windows) ได้เสียง ซับ และเวลาสไลด์ในรอบเดียว พร้อมตารางเทียบเครื่องและสิทธิ์เสียง | `references/tts-engine-score.example.json` · `scripts/f5_worker.py` · `scripts/tts_cues.py` · `scripts/windows_tts.ps1` |
+| `narration-th` | สร้างเสียงบรรยายไทยจากสคริปต์ทีละซับ (F5-TTS-THAI · edge-tts · เสียง Windows) ได้เสียง ซับ และเวลาสไลด์ในรอบเดียว · ฟังศัพท์ทีละคำก่อนด้วย term_sample.py · ตารางเทียบเครื่องและสิทธิ์เสียง | `references/tts-engine-score.example.json` · `scripts/f5_worker.py` · `scripts/term_sample.py` · `scripts/tts_cues.py` · `scripts/windows_tts.ps1` |
 | `print-ready-files` | เตรียมไฟล์ส่งโรงพิมพ์และร้านป้าย: CMYK ระยะตัดตก ความละเอียด ฟอนต์ไทย PDF/X | `references/print-specs.json` · `scripts/print_check.py` |
 | `social-formats` | ขนาด สัดส่วน และพื้นที่ปลอดภัยของ Facebook · IG · TikTok · YouTube · LINE OA · X | `references/platform-sizes.md` |
 | `speaking-script` | เขียนสคริปต์พูดหน้ากล้อง: hook ก่อนทักทาย · ภาษาพูด · จับเวลาด้วยนาฬิกา | — |
