@@ -99,7 +99,7 @@ Input file: `{ "items": [ { "name": "...", "qty": 1, "price": 50000, "discount":
 
 ## 6. Chasing overdue invoices (ตามหนี้ลูกค้าเครดิต)
 
-For a batch of B2B buyers, resellers and agents on credit terms, at month end or billing day. One awkward message to one customer → `polite-message-th-en` (plugin `superuser`), whose tone ladder the levels below follow. Process from Anthropic's invoice-chase skill, rewritten for Thai sellers.
+For a batch of B2B buyers, resellers and agents on credit terms, at month end or billing day. One awkward message to one customer → `polite-message-th-en` (plugin `superuser`), whose tone ladder the levels below follow. Process from Anthropic's invoice-chase skill (`anthropics/knowledge-work-plugins` small-business, Apache-2.0, read 2026-11-10), rewritten for Thai sellers; no text copied.
 
 1. **Check the bank first, every time.** Match each overdue invoice against deposits and PromptPay slips. A customer who paid anything in the last 14 days is not chased; mark "อาจจ่ายแล้ว ตรวจก่อน".
 2. **Grade each customer by history**: pays on time · sometimes late · late again and again. The grade sets the tone of the message, not the amount.

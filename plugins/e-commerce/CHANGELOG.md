@@ -5,6 +5,10 @@
 - `product-listing`: เรื่องรูปสินค้าชี้ `marketplace-product-images` (ขนาด พื้นขาว รูปที่ถูกปฏิเสธ) ส่วนแบนเนอร์และโพสต์ชี้ `social-formats`
 - `thai-business-setup`: ย้ายตารางหัวข้อ 1-3 ไป `references/` 3 ไฟล์ (รูปแบบธุรกิจ · ภาษีเงินได้เทียบ · จดทะเบียน) SKILL.md เหลือสรุปและลิงก์ตรง
 - เคส eval ใหม่ 8 ไฟล์ `e-tax-invoice` `seller-tax-basics` `social-security-th` `multi-shop-stock` (trigger และ behaviour อย่างละ 1) ยังไม่ได้รัน
+- `win-back-customers`: ส่งข้อความการตลาดได้เฉพาะคนที่มีบันทึกความยินยอม และทุกข้อความมีวิธีเลิกรับ · ฐานประโยชน์โดยชอบด้วยกฎหมายกับลูกค้าเก่ายังรอยืนยันกับทนาย
+- `multi-shop-stock`: สูตรใน `references/reorder-point.md` หักของที่สั่งแล้วยังไม่ถึง (on order) ตรงกับ SKILL.md และ `stock-calc.mjs`
+- `refund-request`: สายด่วน 1166 ตรวจกับหน้าทางการ complaint.ocpb.go.th แล้ว 2026-11-10
+- ที่มาของ Anthropic ใน `multi-shop-stock` `payroll-th` `doc-quotation` `sme-bookkeeping` `pdpa-workflow` `win-back-customers` `shop-daily-briefing` ระบุ repo · Apache-2.0 · วันที่ดู
 
 ## 1.9.0 — 2026-11-10
 

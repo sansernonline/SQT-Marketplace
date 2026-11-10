@@ -23,7 +23,7 @@ Part of plugin `e-commerce`. Wording follows `human-writing`. Finds regular cust
 
 1. **Marketplace buyers (Shopee, Lazada, TikTok Shop) are out of scope.** Their contact data belongs to the platform, and moving them to LINE or paying outside the platform breaks platform rules (`chat-reply-templates`, Rules). Use the platform's own follower vouchers instead.
 2. **The shop's own list only**: LINE OA friends who ordered through LINE, Facebook page buyers, walk-in members, website customers.
-3. **A marketing message needs a basis**: consent for marketing, or a clear opt-out in every message (`pdpa-workflow` section 2). No record of consent → do not send; ask the owner first.
+3. **A marketing message needs a consent record**: send only to people with a recorded marketing consent (`pdpa-workflow` section 2, Marketing row), and put a way to stop in every message as well. An opt-out line alone is not a basis. No record of consent → do not send; ask the owner first. Whether legitimate interest can cover past buyers of the shop is (รอยืนยัน with a lawyer); until then, treat it as no.
 4. **LINE push messages use quota** per recipient (`line-broadcast` section 1). 15 people is cheap; still count it.
 
 ## Steps
@@ -45,12 +45,12 @@ Draft for คุณเอ (owner approves first):
 
 ## Check before handing over
 
-1. Every person on the list came from the shop's own channels and has a consent or opt-out record.
+1. Every person on the list came from the shop's own channels and has a recorded marketing consent.
 2. Lapsed is based on each person's own gap, not a shop-wide number.
-3. No more than 15 people; each message names real history and has an opt-out line.
+3. No more than 15 people; each message names real history and ends with a way to stop receiving messages.
 4. No offer that the owner has not approved; nothing sent before approval.
 
 ## Sources
 
-- Anthropic `knowledge-work-plugins` small-business `reactivate` and `review-reputation` (lapse = gap beyond the customer's own rhythm, rank by value, approve each message), read 2026-11-10 through the lead's research notes. Ideas only, rewritten for Thai sellers; no text copied.
+- Anthropic `anthropics/knowledge-work-plugins` (Apache-2.0) small-business `reactivate` and `review-reputation` (lapse = gap beyond the customer's own rhythm, rank by value, approve each message), read 2026-11-10 through the lead's research notes. Ideas only, rewritten for Thai sellers; no text copied.
 - The 2 × median-gap line and the 15-person cap are starting values, not measured on Thai shops.

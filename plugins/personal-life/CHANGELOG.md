@@ -5,6 +5,8 @@
 - `learning-path`: เพิ่มบรรทัด Not for ชี้ `cert-prep` และ `side-project-picker`
 - เอาอีโมจิที่เป็นหัวข้อและป้ายออกจากเอกสารใน plugin
 - eval ใหม่: `important-docs` (trigger + behaviour) · `pet-care` (trigger + behaviour)
+- `job-exit`: ภาษีค่าชดเชยชี้ `labour-law-basics` (e-commerce) ข้อ 9 หรือนักบัญชี แทน `tax-basics-th` ที่ไม่มีเรื่องนี้
+- `legal-help-prep`: รัน `due-dates.mjs` หลังได้วันที่จริงเท่านั้น เขียนเป็น JSON ตาม `important-docs` · บอกเหตุผลที่เตือน 14/7/3/1 วัน ต่างจาก 60/30/7
 
 ## 0.23.0 — 2026-11-10
 
