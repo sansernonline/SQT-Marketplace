@@ -18,7 +18,8 @@ graders:
     target: last_message
   - name: rerun
     type: regex
-    pattern: "(?i)รันใหม่|สร้างใหม่|run again|rerun|regenerate"
+    pattern: "รันใหม่|สร้างใหม่|run again|rerun|regenerate"
+    flags: i
     match: contains
     target: last_message
   - name: rules-followed

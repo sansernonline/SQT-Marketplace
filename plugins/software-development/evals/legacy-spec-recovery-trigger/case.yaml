@@ -19,6 +19,7 @@ graders:
     arm: with-only
   - name: as-is
     type: regex
-    pattern: "(?i)as-is|สภาพปัจจุบัน|หลักฐาน"
+    pattern: "as-is|สภาพปัจจุบัน|หลักฐาน"
+    flags: i
     match: contains
     target: last_message

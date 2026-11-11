@@ -19,6 +19,7 @@ graders:
     arm: with-only
   - name: theme-fonts
     type: regex
-    pattern: "(?i)font|ฟอนต์|python-docx|doc-theme"
+    pattern: "font|ฟอนต์|python-docx|doc-theme"
+    flags: i
     match: contains
     target: last_message

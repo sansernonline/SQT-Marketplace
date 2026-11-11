@@ -19,6 +19,7 @@ graders:
     arm: with-only
   - name: registry
     type: regex
-    pattern: "(?i)csv|ทะเบียน|renew"
+    pattern: "csv|ทะเบียน|renew"
+    flags: i
     match: contains
     target: last_message

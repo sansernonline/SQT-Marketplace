@@ -13,12 +13,14 @@ execution:
 graders:
   - name: asset-template
     type: regex
-    pattern: "(?i)assets|โครงสำเร็จรูป|คัดลอก|template"
+    pattern: "assets|โครงสำเร็จรูป|คัดลอก|template"
+    flags: i
     match: contains
     target: last_message
   - name: brand-colour
     type: regex
-    pattern: "เขียว|(?i)green|สีแบรนด์|สีหลัก"
+    pattern: "เขียว|green|สีแบรนด์|สีหลัก"
+    flags: i
     match: contains
     target: last_message
   - name: rules-followed

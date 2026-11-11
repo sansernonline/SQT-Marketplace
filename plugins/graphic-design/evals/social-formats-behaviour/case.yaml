@@ -19,7 +19,8 @@ graders:
     target: last_message
   - name: story-bottom-35
     type: regex
-    pattern: "(?i)(story|สตอรี่)[^\\n]{0,80}35\\s*%|35\\s*%[^\\n]{0,80}(story|สตอรี่)"
+    pattern: "(story|สตอรี่)[^\\n]{0,80}35\\s*%|35\\s*%[^\\n]{0,80}(story|สตอรี่)"
+    flags: i
     match: contains
     target: last_message
   - name: flags-unconfirmed

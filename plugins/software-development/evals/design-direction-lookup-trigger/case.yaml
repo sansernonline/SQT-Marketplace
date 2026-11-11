@@ -20,6 +20,7 @@ graders:
     arm: with-only
   - name: hex-colours-given
     type: regex
-    pattern: "#[0-9A-Fa-f]{6}"
-    match: "count:6"
+    # ต้องมีสีอย่างน้อย 6 ค่า · count:6 นับแบบเท่ากันพอดี ตก 10/10 เพราะคำตอบดีมีสีถึง 36 ค่า (eval 2026-11-12)
+    pattern: "(?:#[0-9A-Fa-f]{6}[\\s\\S]*?){6}"
+    match: contains
     target: last_message

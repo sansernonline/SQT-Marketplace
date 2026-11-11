@@ -23,6 +23,7 @@ graders:
     target: last_message
   - name: header-not-a-rated-finding
     type: regex
-    pattern: "(?i)\\|[^|\\n]*header[^|\\n]*\\|[^|\\n]*(confirmed|ยืนยันแล้ว)[^|\\n]*\\|\\s*(low|ต่ำ|medium|กลาง|high|สูง)"
+    pattern: "\\|[^|\\n]*header[^|\\n]*\\|[^|\\n]*(confirmed|ยืนยันแล้ว)[^|\\n]*\\|\\s*(low|ต่ำ|medium|กลาง|high|สูง)"
+    flags: i
     match: not_contains
     target: last_message

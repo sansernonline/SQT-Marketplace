@@ -19,6 +19,7 @@ graders:
     arm: with-only
   - name: authorization
     type: regex
-    pattern: "สิทธิ์|(?i)authoriz|ledger|หลักฐาน"
+    pattern: "สิทธิ์|authoriz|ledger|หลักฐาน"
+    flags: i
     match: contains
     target: last_message

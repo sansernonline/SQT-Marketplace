@@ -13,7 +13,8 @@ execution:
 graders:
   - name: ease-out
     type: regex
-    pattern: "(?i)ease-out"
+    pattern: "ease-out"
+    flags: i
     match: contains
     target: last_message
   - name: stagger
@@ -23,7 +24,8 @@ graders:
     target: last_message
   - name: ms-values
     type: regex
-    pattern: "(?i)\\bms\\b|มิลลิวินาที"
+    pattern: "\\bms\\b|มิลลิวินาที"
+    flags: i
     match: contains
     target: last_message
   - name: rules-followed
