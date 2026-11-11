@@ -1,5 +1,9 @@
 # Changelog — personal-life
 
+## 0.23.6 — 2026-11-11
+
+- สำเนา `superuser/references/` (brief-template · review-lenses · team-roles) ตรงกับแกน 3.38.0: ใบสั่งงานสั้น · โหมด test ของผู้ตรวจ · รอลูกทีมแบบ background
+
 ## 0.23.5 — 2026-11-11
 
 - `superuser/references/team-roles.md` ตรงกับแกน: ผู้ตรวจในงบสมดุลใช้ระดับกลางทุกรอบ ระดับใหญ่เฉพาะรอบสุดท้ายของงานเสี่ยง
