@@ -490,10 +490,14 @@ export function routeSkills(prompt, router) {
   return [...new Set(fixHomonyms(out, router))];
 }
 
+// skill ของ plugin นี้บอกด้วยชื่อเต็ม superuser:<ชื่อ> · ชื่อสั้นที่ชนกับ plugin อื่นทำให้เครื่องมือ Skill ปฏิเสธ (human-writing ชนกับ software-company รุ่นเก่า 2026-11-11)
+const OWN_SKILLS = new Set(readdirSync(fileURLToPath(new URL("../skills", import.meta.url)), { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => d.name));
+export const fullName = (s) => (!s.includes(":") && OWN_SKILLS.has(s) ? `superuser:${s}` : s);
+const tick = (xs) => xs.map((s) => `\`${fullName(s)}\``).join(" · ");
 export function routerNotice(skills, note = "") {
   if (!skills.length) return "";
   // ถ้อยคำแบบแนะนำ model ข้ามเมื่องานดูง่าย (eval 2026-11-09 รอบ 4: เห็นข้อความแล้วตอบรอบเดียว 0/6 ครั้งเปิด skill) จึงสั่งให้เรียกก่อนตอบ
-  const list = (xs) => xs.map((s) => `\`${s}\``).join(" · ");
+  const list = tick;
   // skill ที่เปลี่ยนตัวแผน (ค้นต้นแบบหรือแหล่งก่อนลงมือ) ต้องเปิดพร้อม superuser · ไม่งั้นแผนออกมาโดยไม่ค้น (owner-pick 2026-11-10)
   const lead = skills.filter((s) => /(^|:)(superuser|design-references|research-with-sources)$/.test(s));
   if (!lead.some((s) => /(^|:)superuser$/.test(s))) lead.length = 0;
@@ -616,8 +620,8 @@ export function promptNotice(input, router, dir = OPEN_DIR) {
   // งานเขียนที่ไม่แตะโค้ด: สั่งเปิด human-writing ก่อนเขียน (คำว่า "เปิดเมื่อลงมือ" ถูกข้าม 3/3 ใน bench r7 · ปิดป้ายเทียบ t6 ฉบับที่เปิดชนะเรื่องภาษาคน 3/3 คู่ 2026-11-11)
   const writing = skills.some((s) => /(^|:)human-writing$/.test(s)) && !/\.(?:m?js|cjs|tsx?|jsx|py|cs|java|go|rb|php|sql|dart|kt|swift|rs|vue)\b/i.test(text);
   const others = skills.filter((s) => !writing || !/(^|:)human-writing$/.test(s));
-  if (medium) return [writing ? "ก่อนเขียน เรียก Skill เปิด `human-writing`" : "", others.length ? `เปิด ${others.map((s) => `\`${s}\``).join(" · ")} เมื่อลงมือ` : "", MEDIUM_NOTE].filter(Boolean).join("\n");
-  const notice = small ? (skills.length ? `งานเล็ก เปิดแค่ \`${skills[0]}\` แล้วลงมือ` : "") : routerNotice(skills, router.multistep?.note);
+  if (medium) return [writing ? "ก่อนเขียน เรียก Skill เปิด `superuser:human-writing`" : "", others.length ? `เปิด ${tick(others)} เมื่อลงมือ` : "", MEDIUM_NOTE].filter(Boolean).join("\n");
+  const notice = small ? (skills.length ? `งานเล็ก เปิดแค่ ${tick(skills)} แล้วลงมือ` : "") : routerNotice(skills, router.multistep?.note);
   // ไม่เตือน: คำสั่ง slash · ข้อความสั้นอย่าง "ต่อ" "ok" · รายงานลูกทีมที่มาในช่องผู้ใช้ · superuser เปิดแล้ว · regex เน้นให้แล้ว · คำขอดูเล็ก
   const quiet = small || text.length < 12 || text.startsWith("/") || NOT_USER.test(text) || skills.some((s) => s.endsWith("superuser"))
     || existsSync(sessionFile(dir, input.session_id));
@@ -1675,7 +1679,7 @@ function selfTest() {
       const lead = routerNotice(["superuser:superuser", "lazy-coding", "no-ai-look"]), solo = routerNotice(["lazy-coding", "no-ai-look"]);
       const plan = routerNotice(["superuser:superuser", "design-references", "lazy-coding"]);
       return /เปิด `superuser:superuser` ก่อน/.test(lead) && lead.includes("ใบสั่งงาน") && !lead.includes("ครบทุกตัว") && solo.includes("ครบทุกตัว")
-        && /เปิด `superuser:superuser` · `design-references` ก่อน/.test(plan);
+        && /เปิด `superuser:superuser` · `superuser:design-references` ก่อน/.test(plan);
     }],
     // ให้ model ตัดสินเอง: เตือนทุกข้อความจนกว่าจะเปิด superuser · ข้อความสั้น คำสั่ง slash และรายงานลูกทีมไม่เตือน
     ["เตือนงานหลายขั้น: เตือนก่อนเปิด · เลิกเตือนหลังเปิด · ไม่เตือนข้อความสั้น", [], true, () => {
@@ -1706,7 +1710,7 @@ function selfTest() {
       const small = [t1, "ฟังก์ชัน formatThaiDate คืนค่าอะไร", "แก้ typo บรรทัด 3 ใน README"].every((p) => looksSmall(p) && !pushed(p));
       const mid = (p) => promptNotice({ prompt: p, session_id: "md" }, router, d).includes(MEDIUM_NOTE) && !pushed(p);
       return small && [t3, t5, t6].every((p) => !looksSmall(p)) && pushed(t5) && mid(t3) && mid(t6)
-        && promptNotice({ prompt: t6, session_id: "md6" }, router, d).includes("ก่อนเขียน เรียก Skill เปิด `human-writing`")
+        && promptNotice({ prompt: t6, session_id: "md6" }, router, d).includes("ก่อนเขียน เรียก Skill เปิด `superuser:human-writing`")
         && !promptNotice({ prompt: t3, session_id: "md3" }, router, d).includes("ก่อนเขียน") && !looksSmall("ใช้ superuser แก้ `src/report.js`");
     }],
     // ผู้ตรวจ 2026-11-11: อ้างไฟล์เดียวแต่สั่งหลายงาน (กริยาสั่งงาน ≥ 2) ต้องไม่นับเป็นงานเล็ก · t1 ของ bench ทั้งไฟล์ยังเล็ก
@@ -1763,7 +1767,7 @@ function selfTest() {
     ["งานเล็ก: บอก skill ตัวเดียวที่ตรงสุด (วิธีทำงานก่อนภาษา · ตัวกว้างไม่เลือก) · ข้อความ ≤ 200 ตัวอักษร", [], true, () => {
       const d = join(tmpdir(), `sqt-open-one-${process.pid}`);
       const n = promptNotice({ prompt: "แก้บั๊ก src/report.ts วันที่ผิด", session_id: "one" }, { rules: [{ pattern: "แก้บั๊ก", skills: ["human-writing", "stack-typescript", "principle-fix-root-cause", "targeted-fix"] }] }, d);
-      return n === "งานเล็ก เปิดแค่ `principle-fix-root-cause` แล้วลงมือ" && smallLeft("one", d) === 0
+      return n === "งานเล็ก เปิดแค่ `superuser:principle-fix-root-cause` แล้วลงมือ" && smallLeft("one", d) === 0
         && pickOne(["superuser:superuser", "human-writing", "lazy-coding"]).length === 0 && pickOne(["stack-sql", "targeted-fix"])[0] === "targeted-fix";
     }],
     ["งานเล็ก: โควตาบอก skill ตอนลงมือ · บอกตอนรับคำขอแล้ว → 0 · ยังไม่บอก → 1 · คำขอไม่เล็ก → null", [], true, () => {
