@@ -552,7 +552,8 @@ export function markSuperuserOpen(input, dir = OPEN_DIR, now = Date.now()) {
 // → hook ไม่ผลักให้เปิด superuser (bench 2026-11-11: t1 แก้บั๊กไฟล์เดียว ใช้ superuser แล้วแพงขึ้น 46% ลูกทีม 0 test เท่าเดิม)
 const SMALL_FILE_REF = /[\w./\\-]+\.(?:js|mjs|cjs|ts|tsx|jsx|py|cs|java|go|rb|php|sql|dart|kt|swift|rs|vue|html|css|md|json|ya?ml|csv|txt|docx|xlsx|pptx|pdf)\b/gi;
 const NOT_SMALL = /ทุกไฟล์|ทุกตัว|ทุกหน้า|ทั้งหมด|ให้หมด|ทั้งชุด|ทั้งระบบ|ทั้ง\s*\d|จากนั้น|หลังจากนั้น|แล้ว(ก็|ค่อย)?\s*(ทำ|เขียน|แก้|เพิ่ม|ใส่|สร้าง|อัปเดต|ส่ง|ตรวจ)|\bthen\b|after that|and also|\ball (the )?files\b|\beverything\b|\bwhole\b|ส่ง(ให้)?(ลูกค้า|ผู้บริหาร|บอร์ด|หัวหน้า)|ส่งมอบ|ค้นข้อมูล|หาข้อมูล|research|superuser|[2-9]\d*\s*(ไฟล์|โมดูล|ชิ้น|หน้า|files|modules)/i;
-const QUESTION = /[?？]\s*$|(ไหม|มั้ย|หรือเปล่า|หรือยัง|อะไร|ยังไง|อย่างไร|เท่าไร|เท่าไหร่|ทำไม|ไหน)\s*(ครับ|คะ|ค่ะ|นะ)?\s*$|^(what|how|why|which|where|when|is|are|does|do|can)\b/i;
+// ชุดคำขอจริง 2026-11-11: คำถามไทยขึ้นต้นด้วย ทำไม · ยังไง หรือลงท้าย อะไรดี · ล่ะ · เหรอ ก็นับ
+const QUESTION = /[?？]\s*$|(ไหม|มั้ย|หรือเปล่า|หรือยัง|อะไร|ยังไง|อย่างไร|เท่าไร|เท่าไหร่|ทำไม|ไหน|ใคร)(ดี)?\s*(ครับ|คะ|ค่ะ|นะ|ล่ะ)?\s*$|(เหรอ|ล่ะ)\s*$|^(ทำไม|ยังไง|อย่างไร)|^(what|how|why|which|where|when|is|are|does|do|can)\b/i;
 // กริยาสั่งงานคนละชนิด ≥ 2 = งานหลายขั้นแม้อ้างไฟล์เดียว ("fix … add tests and open a PR" · "แก้ … เพิ่ม test แล้ว commit") · ผู้ตรวจ 2026-11-11
 // "รัน test" ไม่นับ เพราะเป็นการตรวจ ไม่ใช่งานอีกชิ้น (t1 ของ bench มี "แก้" กับ "รัน" ยังเป็นงานเล็ก)
 const ACTION_VERBS = [/\bfix(es|ed|ing)?\b|แก้/i, /\badd(s|ed|ing)?\b|เพิ่ม/i, /\bwrit(e|es|ing)\b|เขียน/i, /\bupdat(e|es|ed|ing)\b|อัปเดต/i,
@@ -565,11 +566,15 @@ export const actionCount = (t) => ACTION_VERBS.filter((r) => r.test(t)).length;
 const LIST_JOIN = /\b(and|plus|also)\b|\s(และ|พร้อม)|;|,[^,]*,/i;
 const spacedList = (t) => t.split("\n").some((l) => { const m = l.match(/[\w./\\-]+\.[a-z]{1,5}\b(.*)$/i); return m && /[฀-๿]/.test(m[1]) && m[1].trim().split(/\s+/).filter(Boolean).length >= 5; });   // ภาษาไทยเท่านั้น อังกฤษเว้นวรรคทุกคำ
 const listed = (t) => !QUESTION.test(t) && (spacedList(t) || LIST_JOIN.test(t.replace(/`[^`]*`|"[^"]*"/g, " ").replace(/(แล้ว)?\s*รัน\s*test\S*|\b(and )?run (the )?tests?\b/gi, " ")));
+// คำสั่งสั้นที่แตะของนอกเครื่องหรือคนอื่น ไม่นับเป็นงานเล็ก ให้ตกไปงานกลางซึ่งมีข้อความเตือนหมวดเสี่ยง (ผู้ตรวจ 2026-11-11: "git push origin main" · "reset database ของ staging" ได้งานเล็ก)
+const OUTWARD = /จ่าย|โอน|\bpush\b|\bmerge\b|release|ปล่อย|reset|ยกเลิก|ใบเสนอราคา|server|เซิร์ฟเวอร์|staging|database|ฐานข้อมูล|ลูกค้า|ผู้ใช้|\busers?\b|ส่ง/i;
 export function looksSmall(text) {
   const t = String(text ?? "").trim();
-  if (!t || NOT_SMALL.test(t) || looksRisky(t) || actionCount(t) >= 2 || listed(t) || (t.match(/^\s*\d+[.)]\s+\S/gm) ?? []).length >= 2 || (t.match(/^#{2,}\s/gm) ?? []).length >= 2) return false;
+  if (!t || NOT_SMALL.test(t) || looksBig(t) || actionCount(t) >= 2 || listed(t) || (t.match(/^\s*\d+[.)]\s+\S/gm) ?? []).length >= 2 || (t.match(/^#{2,}\s/gm) ?? []).length >= 2) return false;
   const files = new Set((t.match(SMALL_FILE_REF) ?? []).map((f) => f.toLowerCase()));
-  return files.size === 1 || (files.size === 0 && t.length < 300 && QUESTION.test(t)) || (files.size === 0 && /\btypo\b|คำผิด|บรรทัด(ที่)?\s*\d+|line \d+/i.test(t));
+  // คำสั่งสั้นบรรทัดเดียวที่มีกริยาไม่เกิน 1 ตัว ("สลับหน้า 4 มาเป็นหน้า 3" · "create repository on github") = งานเล็ก (ชุดคำขอจริง 2026-11-11)
+  return files.size === 1 || (files.size === 0 && t.length < 300 && QUESTION.test(t)) || (files.size === 0 && /\btypo\b|คำผิด|บรรทัด(ที่)?\s*\d+|line \d+/i.test(t))
+    || (files.size === 0 && t.length < 80 && !t.includes("\n") && !/แล้ว|\bthen\b/i.test(t) && !OUTWARD.test(t));
 }
 
 // งานเล็กเปิด skill ไม่เกิน 1 ตัว (bench 2026-11-11: t1 แก้บั๊กไฟล์เดียวเปิด 4 ตัวก่อนลงมือ) · เลือกตัวที่บอกวิธีทำงาน (แก้บั๊ก · ค้นแหล่ง) ก่อนภาษา · ตัวกว้างที่ใช้ทุกงานไม่เลือก
@@ -597,13 +602,17 @@ export function smallLeft(session, dir = OPEN_DIR) {
 // งานเสี่ยง (กฎแกนข้อ 3 และ 7): เงิน · ภาษี · กฎหมาย · สุขภาพ · ข้อมูลส่วนตัว · ลบหรือเขียนทับ · ระบบจริง · ส่งถึงคนนอก → ไม่เป็นงานเล็กหรือกลาง
 // regex เป็นแค่ด่านแรก ตามคำไม่ทันทุกแบบ (ผู้ตรวจ 2 รอบ 2026-11-11 หาประโยคหลุดได้ใหม่ทุกรอบ) จึงให้ MEDIUM_NOTE บอก model ตัดสินหมวดเดียวกันอีกชั้น
 // ไม่นับคำในชื่อไฟล์ (docs/tax-faq.md ไม่ใช่งานภาษี)
-const RISK = /refund|คืนเงิน|โอนเงิน|invoice|ใบแจ้งหนี้|ใบกำกับ|\bvat\b|ภาษี|หัก ณ ที่จ่าย|\btax(es)?\b|payroll|เงินเดือน|ค่าชดเชย|เลิกจ้าง|severance|ประกัน|insurance|สปส|social security|กฎหมาย|\blegal\b|สัญญา|\bcontracts?\b|pdpa|gdpr|hipaa|ข้อมูลส่วน(บุคคล|ตัว)|personal data|ผู้ป่วย|patient|medical|ขนาดยา|\bdos(e|age)\b|แพทย์|payment|ชำระเงิน|stripe|omise|promptpay|credit cards?|บัตรเครดิต|\bcharge\b|หุ้น|\bshares\b|buy order|sell order|รีไฟแนนซ์|refinanc|สินเชื่อ|\bloans?\b|\bdrop\b.{0,30}\b(tables?|columns?|database)\b|truncate|reset --hard|--force|force.?push|\bforce the remote\b|\bprod(uction)?\b|ใช้จริง|\bdns\b|app store|play store|\bpassword|secret|\bs3 bucket|ลบ.{0,20}(branch|ตาราง|คอลัมน์|ข้อมูล|bucket)|\b(delete|remove)\b.{0,40}\b(branch(es)?|bucket|data|users?)\b|\bmigrat|ส่งอีเมล|send (an |the )?emails?|email receipts|broadcast|ทุกคน|ส่งมอบ|ส่ง(ให้)?ลูกค้า|ลูกค้าใช้|for (a |the )?client|to (the )?customers?|vendors?\b|ให้.{0,10}เซ็น|\bsign\b|ทนาย|ฟ้อง|หนังสือเตือน|ผ่านโปร|ทดลองงาน|ลงโทษ|\bnda\b|terms of service|privacy policy|นโยบายความเป็นส่วนตัว|lawsuit|\bsue\b/i;
+const RISK = /refund|คืนเงิน|โอนเงิน|invoice|ใบแจ้งหนี้|ใบกำกับ|\bvat\b|ภาษี|หัก ณ ที่จ่าย|\btax(es)?\b|payroll|เงินเดือน|ค่าชดเชย|เลิกจ้าง|severance|ประกัน|insurance|สปส|social security|กฎหมาย|\blegal\b|สัญญา|\bcontracts?\b|pdpa|gdpr|hipaa|ข้อมูลส่วน(บุคคล|ตัว)|personal data|ผู้ป่วย|patient|medical|ขนาดยา|\bdos(e|age)\b|แพทย์|payment|ชำระเงิน|stripe|omise|promptpay|พร้อมเพย์|ใบเสนอราคา|quotation|จ่ายเงิน|โอน.{0,10}(เงิน|บัญชี|\d)|credit cards?|บัตรเครดิต|\bcharge\b|หุ้น|\bshares\b|buy order|sell order|รีไฟแนนซ์|refinanc|สินเชื่อ|\bloans?\b|\bdrop\b.{0,30}\b(tables?|columns?|database)\b|truncate|reset --hard|--force|force.?push|\bforce the remote\b|\bprod(uction)?\b|ใช้จริง|\bdns\b|app store|play store|\bpassword|secret|\bs3 bucket|ลบ.{0,20}(branch|ตาราง|คอลัมน์|ข้อมูล|bucket)|\b(delete|remove)\b.{0,40}\b(branch(es)?|bucket|data|users?)\b|\bmigrat|ส่งอีเมล|send (an |the )?emails?|email receipts|broadcast|ทุกคน|ส่งมอบ|ส่ง(ให้)?ลูกค้า|ลูกค้าใช้|for (a |the )?client|to (the )?customers?|vendors?\b|ให้.{0,10}เซ็น|\bsign\b|ทนาย|ฟ้อง|หนังสือเตือน|ผ่านโปร|ทดลองงาน|ลงโทษ|\bnda\b|terms of service|privacy policy|นโยบายความเป็นส่วนตัว|lawsuit|\bsue\b|ลบทิ้ง|ลบ.{0,20}(ไฟล์|โฟลเดอร์|json|sqlite|\.\w{2,5}\b)|\b(delete|remove)\b.{0,30}\b(files?|folders?|director(y|ies))\b|\bdeploy/i;
 const BIG = /superuser|ค้นข้อมูล|หาข้อมูล|research|ทั้งระบบ|ทั้ง repo|whole (repo|codebase|system)|entire (repo|codebase|system)|every .{0,30} in the (codebase|repo)|ทุก.{0,10}ใน(โปรเจกต์|repo)|ทุกไฟล์|all files/i;
 export const looksRisky = (text) => RISK.test(String(text ?? "").replace(/[\w./\\-]+\.[a-z]{1,5}\b/gi, " "));
 export function looksBig(text) {
   const t = String(text ?? "");
   const items = Math.max((t.match(/^\s*\d+[.)]\s+\S/gm) ?? []).length, (t.match(/^#{2,}\s/gm) ?? []).length);
-  return looksRisky(t) || BIG.test(t) || items >= 5 || t.length >= 2500;
+  // ชุดคำขอจริง 2026-11-11: "ทุก plugin" · "ไฟล์ไหนไม่ได้ใช้" · "ข้อสอบ 60 ข้อ" · คำสั่งที่มีรายการคั่น ≥ 5 ตัว ก็เป็นงานใหญ่
+  // "ข้อ" กับ "หน้า" ลอย ๆ ไม่นับ ("สรุป 5 ข้อสำคัญ" · "เตรียมสอน 5 หน้า" เป็นงานเดียว) · คำถามไม่นับรายการ (ผู้ตรวจ 2026-11-11)
+  const many = /ทุก ?(plugin|skill|agent|โปรเจกต์)|(every|all) (plugins?|skills?|agents?)|ไม่ได้ใช้(งาน)?(แล้ว)?|unused (files?|code)|ข้อสอบ|(^|\s)([5-9]|\d{2,})\s*(ไฟล์|โมดูล|ชิ้น|files?|modules?)(?![a-z])/i;
+  const commaItems = QUESTION.test(t) ? 0 : Math.max(...t.split("\n").map((l) => l.split(/,|\|/).length));
+  return looksRisky(t) || BIG.test(t) || many.test(t) || items >= 5 || commaItems >= 5 || t.length >= 2500;
 }
 export const MEDIUM_NOTE = "งานกลาง ทำเองได้ ไม่ต้องเปิด superuser — ยกเว้นงานแตะเงิน · กฎหมาย สัญญา หรือเรื่องจ้างงาน · ข้อมูลส่วนตัว · สุขภาพหรือยา · ลบ เขียนทับ หรือ force · ระบบจริง · ส่งถึงคนนอกหรือคนจำนวนมาก ให้เปิด skill superuser แทนและมีผู้ตรวจ · ชิ้นโค้ดที่ไม่ขึ้นต่อกันรวม ≥ 200 บรรทัดและมี test ส่ง agent `worker` พร้อมกันในข้อความเดียว · จบด้วยหลักฐาน (test ผ่าน หรือไล่ข้อกำหนดทีละข้อ) แล้วใส่บรรทัด `ข้ามรีวิว: <ผลตรวจ>`";
 export function promptNotice(input, router, dir = OPEN_DIR) {
@@ -1762,7 +1771,11 @@ function selfTest() {
       ["ใหญ่", "Write the terms of service and privacy policy page for our app and link it in the footer"],
       ["ใหญ่", "ร่างข้อตกลงรักษาความลับ (NDA) กับผู้รับจ้าง แล้วทำแบบฟอร์มให้กรอก"], ["ใหญ่", "ร่างหนังสือเตือนพนักงานที่มาสายเป็นครั้งที่ 3 และบันทึกลงแฟ้มบุคคล"],
       ["ใหญ่", "ประเมินผลงานพนักงาน 3 คนแล้วตัดสินว่าใครไม่ผ่านโปร"], ["ใหญ่", "ตอบลูกค้าที่ขู่จะฟ้องเรื่องสินค้าเสีย"],
-      ["ใหญ่", "Port every API endpoint in the codebase from Express to Fastify"], ["กลาง", "Build a todo list component with add, edit and delete, plus unit tests"]]
+      ["ใหญ่", "Port every API endpoint in the codebase from Express to Fastify"],
+      // รอบ 4 (ชุดคำขอจริง + ผู้ตรวจ): คำสั่งสั้นที่แตะของนอกเครื่องไม่เป็นงานเล็ก · "5 ข้อ" ลอย ๆ ไม่เป็นงานใหญ่
+      ["ใหญ่", "โอน 50000 ไปบัญชีแม่"], ["ใหญ่", "ส่งใบเสนอราคาให้บริษัท ABC"], ["ใหญ่", "อยากให้ทุก plugin ทำงานขนานกันมากขึ้น"], ["ใหญ่", "ไฟล์ไหนไม่ได้ใช้งานลบทิ้งได้เลย"],
+      ["กลาง", "git push origin main"], ["กลาง", "reset database ของ staging"], ["กลาง", "release v2 to users"],
+      ["เล็ก", "สรุป 5 ข้อสำคัญของบทความนี้"], ["เล็ก", "สลับหน้า 4 มาเป็นหน้า 3 แทน"], ["เล็ก", "ชื่อ ก, ข, ค, ง, จ คือใคร"], ["เล็ก", "ทำไมก่อนหน้านี้ edge-tts ถึงสร้างไฟล์เสียงไวนักล่ะ"], ["กลาง", "Build a todo list component with add, edit and delete, plus unit tests"]]
       .map(([want, s]) => [`ขนาดงาน ${want}: ${s.slice(0, 30)}`, [], true, () => (looksSmall(s) ? "เล็ก" : looksBig(s) ? "ใหญ่" : "กลาง") === want]),
     ["งานเล็ก: บอก skill ตัวเดียวที่ตรงสุด (วิธีทำงานก่อนภาษา · ตัวกว้างไม่เลือก) · ข้อความ ≤ 200 ตัวอักษร", [], true, () => {
       const d = join(tmpdir(), `sqt-open-one-${process.pid}`);
