@@ -1,6 +1,6 @@
 ---
 name: chat-prompt-workflows
-description: Use when someone wants a multi-step prompt to paste in a chat (Claude, ChatGPT, Gemini), loop graph dynamic, prompt หลายขั้น, ให้ AI ตรวจงานตัวเอง
+description: Use when someone wants a multi-step prompt to paste into ChatGPT, Gemini or a Claude chat.
 ---
 
 # chat-prompt-workflows — prompt หลายขั้นแบบ Loop · Graph · Dynamic ที่คัดลอกไปวางในแชตได้ทันที

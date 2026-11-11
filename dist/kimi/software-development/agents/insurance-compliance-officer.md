@@ -1,6 +1,6 @@
 ---
 name: "insurance-compliance-officer"
-description: "Use for insurance regulation — US state filings, Solvency II, Thailand OIC, licensing, market conduct, privacy."
+description: "Use for insurance regulation (US state filings, Solvency II, Thailand OIC, licensing)."
 ---
 
 ${base_prompt}

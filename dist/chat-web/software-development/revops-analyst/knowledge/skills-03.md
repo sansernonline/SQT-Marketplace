@@ -1,6 +1,6 @@
 # skill: markdown-visuals
 
-Use when a markdown doc needs a picture. Pick inline SVG, image file, ASCII or Mermaid by where it is read (GitHub drops inline SVG).
+Use when a Markdown doc needs a picture (inline SVG, image, ASCII or Mermaid).
 
 # Markdown Visuals
 
@@ -377,7 +377,7 @@ Use this pattern by default for showing UI feature states. On GitHub, save the S
 
 # skill: flag-and-propose
 
-Use when something found mid-task in any work changes what happens next (stale file, wrong number, blocked step) and needs a decision.
+Use when something found mid-task changes what happens next and needs a decision.
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 

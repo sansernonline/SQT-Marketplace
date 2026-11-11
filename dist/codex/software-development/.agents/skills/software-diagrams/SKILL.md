@@ -1,6 +1,6 @@
 ---
 name: software-diagrams
-description: Use when a README, PR or code note needs a quick Mermaid diagram. Diagrams in project docs (BRD, SRS, FSD, ER, flows) → diagram-figures.
+description: Use when a README, PR or code note needs a quick Mermaid diagram. Doc figures → diagram-figures.
 ---
 
 # Software Diagrams

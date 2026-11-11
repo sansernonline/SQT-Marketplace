@@ -1,6 +1,6 @@
 # skill: owner-style-capture
 
-Use when the user wants agents to work their way (learn my style) or keeps correcting the same preferences.
+Use when the user wants agents to learn their style or keeps correcting the same thing.
 
 # owner-style-capture — ให้ superuser ทำงานแบบเจ้าของเครื่อง
 
@@ -47,7 +47,7 @@ Use when the user wants agents to work their way (learn my style) or keeps corre
 
 # skill: decision-log
 
-Use when an agent makes its own judgment call in any long or unattended work (choice, filled gap, skipped step).
+Use when an agent makes its own judgment call in long or unattended work.
 
 # decision-log — ทุกการตัดสินใจเองต้องตรวจย้อนได้
 
@@ -109,7 +109,7 @@ subagent ไม่เขียนตารางเอง แต่**ราย�
 
 # skill: parallel-split-and-merge
 
-Use when work splits into independent slices (chapters, listings, research questions, modules) or the user says swarm or fan out.
+Use when work splits into independent slices or the user says swarm or fan out.
 
 # parallel-split-and-merge — แบ่งงาน ทำพร้อมกัน รวมเป็นรายงานเดียว
 > ใช้คู่กัน: `principle-build-a-tool-not-handwork` (เขียนสคริปต์ทำงานซ้ำ) · `principle-small-verifiable-steps` (ตัดเป็นชิ้นเล็กที่ตรวจได้)

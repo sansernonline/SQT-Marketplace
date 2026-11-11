@@ -1,6 +1,6 @@
 # skill: principle-proceed-on-reversible-work
 
-Use when about to ask shall I continue on any work that can be undone. Proceed; hold irreversible steps.
+Use when about to ask shall I continue on work that can be undone. Proceed.
 
 # principle · proceed on reversible work — ย้อนได้ ทำเลย
 
@@ -39,7 +39,7 @@ Use when about to ask shall I continue on any work that can be undone. Proceed; 
 
 # skill: document-naming
 
-Use when creating, renaming or filing any document a team or client keeps or sends (report, quote, contract) — file name, version, status.
+Use when creating, renaming or filing a document others keep (name, version, status).
 
 # ตั้งชื่อและจัดเวอร์ชันเอกสาร
 
@@ -183,7 +183,7 @@ Use when creating, renaming or filing any document a team or client keeps or sen
 
 # skill: i18n-and-locale
 
-Use when a system shows text, dates, numbers or money in Thai and English (Buddhist years, sorting).
+Use when a system shows text, dates or money in Thai and English.
 
 # ภาษาและรูปแบบท้องถิ่น
 

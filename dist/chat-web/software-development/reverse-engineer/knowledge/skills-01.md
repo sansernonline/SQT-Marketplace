@@ -1,6 +1,6 @@
 # skill: docker-sandbox
 
-Use when a project needs its own Docker container (untrusted code, system installs, overnight runs) or the user says sandbox.
+Use when a project needs its own Docker container for untrusted code, or says sandbox.
 
 # docker-sandbox — ห้องทดลองต่อโปรเจกต์
 
@@ -160,7 +160,7 @@ Use when a project needs its own Docker container (untrusted code, system instal
 
 # skill: principle-prove-it-works
 
-Use when about to say any work is done, fixed, sent or working. Check it against the real thing first.
+Use when about to say any work is done, fixed or working. Check against the real thing first.
 
 # principle · prove it works — พิสูจน์กับของจริง
 
@@ -213,7 +213,7 @@ Use when about to say any work is done, fixed, sent or working. Check it against
 
 # skill: reverse-engineering
 
-Use when a compiled app (exe, .NET, Electron, APK, JS bundle, MT5 .ex5), firmware, HAR/pcap or unknown format has no source, or a build may differ.
+Use when a compiled app, firmware, network capture or unknown format has no source.
 
 # Reverse Engineering — แกะซอฟต์แวร์ที่ไม่มีซอร์ส แบบมีหลักฐานทุกข้อ
 

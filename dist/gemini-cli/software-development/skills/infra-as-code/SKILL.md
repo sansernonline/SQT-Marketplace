@@ -1,6 +1,6 @@
 ---
 name: infra-as-code
-description: Use when cloud servers, databases or networks should be built from code (OpenTofu, Terraform, Pulumi), drift appears, or data must stay in Thailand.
+description: Use when servers or networks should be built from code (Terraform, OpenTofu).
 ---
 
 # Infrastructure as Code (IaC) · สร้างเครื่องและฐานข้อมูลบนคลาวด์จากโค้ด

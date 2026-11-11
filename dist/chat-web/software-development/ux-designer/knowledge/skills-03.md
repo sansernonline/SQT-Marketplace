@@ -1,6 +1,6 @@
 # skill: web-app-design
 
-Use when designing or building a web app UI or mockup (dashboard, admin panel, internal tool, SaaS).
+Use when designing a web app UI or mockup (dashboard, admin panel, SaaS).
 
 # Web App Design
 
@@ -357,7 +357,7 @@ contrast (Web Content Accessibility Guidelines (WCAG) 2.2 ระดับ AA ต
 
 # skill: mobile-app-design
 
-Use when designing or building a phone app UI or mockup (PWA, React Native, Flutter). Not desktop.
+Use when designing a phone app UI or mockup (PWA, React Native, Flutter).
 
 # Mobile App Design
 
@@ -827,7 +827,7 @@ CSS คือต้นฉบับ ค่าเดียวกันใช้ไ
 
 # skill: windows-app-design
 
-Use when building a desktop app or mockup that must look native on Windows 11 (WinUI 3, Avalonia, web-wrapped). Browser-based → web-app-design.
+Use when building a desktop app or mockup that must look native on Windows 11.
 
 # Windows App Design
 

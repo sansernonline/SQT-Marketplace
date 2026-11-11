@@ -1,6 +1,6 @@
 # skill: principle-proceed-on-reversible-work
 
-Use when about to ask shall I continue on any work that can be undone. Proceed; hold irreversible steps.
+Use when about to ask shall I continue on work that can be undone. Proceed.
 
 # principle · proceed on reversible work — ย้อนได้ ทำเลย
 
@@ -39,7 +39,7 @@ Use when about to ask shall I continue on any work that can be undone. Proceed; 
 
 # skill: context-budget
 
-Use when a task will read large material (many files, long PDFs, many web pages, a codebase) or run long-output commands.
+Use when a task will read large material (many files, long PDFs, a codebase) or long output.
 
 # งบ context
 

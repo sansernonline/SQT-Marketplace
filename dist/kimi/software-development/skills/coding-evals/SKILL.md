@@ -1,6 +1,7 @@
 ---
-name: coding-evals
-description: Use when changing coding skills, playbooks or the developer agent, or asked if the team codes better.
+name: "coding-evals"
+description: "Use when changing coding skills, playbooks or the developer agent, or asked if the team codes better."
+disableModelInvocation: true
 ---
 
 # coding-evals — วัดว่าทีมเขียนโค้ดเก่งขึ้นจริง

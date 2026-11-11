@@ -1,6 +1,6 @@
 ---
 name: design-direction-lookup
-description: Use when a new screen, app or site needs a starting look (palette, Thai-Latin fonts, industry, UX and stack rules) before ui-craft design directions.
+description: Use when a new screen, app or site needs a starting palette and Thai-Latin fonts before ui-craft.
 ---
 
 # design-direction-lookup — หาจุดเริ่มหน้าตา 3 แนวจากโจทย์ไทยหรืออังกฤษ

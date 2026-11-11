@@ -1,6 +1,6 @@
 ---
 name: test-case-template
-description: Use when writing test cases or a feature test plan, or turning acceptance criteria into tests.
+description: Use when writing test cases or a test plan from acceptance criteria.
 argument-hint: <feature or user story>
 ---
 

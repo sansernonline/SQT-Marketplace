@@ -1,6 +1,6 @@
 # skill: status-report
 
-Use when any task that produces or checks work ends (document, research, review, shop job, code) to report status in a table.
+Use when a task that produces or checks work ends, to report status in a table.
 
 # รายงานสถานะเมื่อจบงาน
 
@@ -278,7 +278,7 @@ Use when any task that produces or checks work ends (document, research, review,
 
 # skill: flag-and-propose
 
-Use when something found mid-task in any work changes what happens next (stale file, wrong number, blocked step) and needs a decision.
+Use when something found mid-task changes what happens next and needs a decision.
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 

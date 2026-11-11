@@ -1,6 +1,6 @@
 # skill: software-diagrams
 
-Use when a README, PR or code note needs a quick Mermaid diagram. Diagrams in project docs (BRD, SRS, FSD, ER, flows) → diagram-figures.
+Use when a README, PR or code note needs a quick Mermaid diagram. Doc figures → diagram-figures.
 
 # Software Diagrams
 
@@ -262,7 +262,7 @@ plugin `software-development` มีรายละเอียดของโ�
 
 # skill: no-ai-look
 
-Use when making or reviewing anything people look at (screen, slide, poster, logo, AI image, document) so it looks made by a person, not AI.
+Use when making or reviewing anything people look at so it looks made by a person, not AI.
 
 # no-ai-look — งานที่ดูเหมือนคนออกแบบ ไม่ใช่ AI
 

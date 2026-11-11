@@ -1,6 +1,6 @@
 ---
 name: principle-replace-then-delete
-description: Use when replacing an API, function, table or component, or in a migration. Move callers, delete old.
+description: Use when replacing an API, function, table or component. Move callers, delete old.
 ---
 
 # principle · replace then delete — ย้ายให้ครบ แล้วลบของเก่าในรอบเดียวกัน

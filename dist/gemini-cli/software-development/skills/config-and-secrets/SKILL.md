@@ -1,6 +1,6 @@
 ---
 name: config-and-secrets
-description: Use when settings differ by environment or something must never be committed (keys, connection strings).
+description: Use when settings differ by environment or secrets must stay out of git.
 ---
 
 # Config และ Secret

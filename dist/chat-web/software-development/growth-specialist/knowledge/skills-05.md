@@ -1,6 +1,6 @@
 # skill: spell-out-abbreviations
 
-Use when text people read (report, slide, label, message) is heavy with abbreviations or jargon, or needs a glossary. Writing → human-writing.
+Use when text people read is heavy with abbreviations or jargon, or needs a glossary.
 
 # Spell Out Abbreviations
 

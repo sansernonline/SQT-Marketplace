@@ -1,6 +1,6 @@
 # skill: user-story-writer
 
-Use when writing user stories or turning requirements into stories (Given-When-Then criteria).
+Use when writing user stories with Given-When-Then acceptance criteria.
 
 # User Story Writer
 
@@ -137,7 +137,7 @@ skill นี้ตัดสินว่า**เนื้อหาต้องม
 
 # skill: markdown-visuals
 
-Use when a markdown doc needs a picture. Pick inline SVG, image file, ASCII or Mermaid by where it is read (GitHub drops inline SVG).
+Use when a Markdown doc needs a picture (inline SVG, image, ASCII or Mermaid).
 
 # Markdown Visuals
 
@@ -514,7 +514,7 @@ Use this pattern by default for showing UI feature states. On GitHub, save the S
 
 # skill: prior-art-review
 
-Use when about to build or buy something that may already exist (tool, service, template, library). Decide adopt, buy or build.
+Use when about to build something that may already exist. Decide adopt, buy or build.
 
 # สำรวจของที่มีอยู่แล้วก่อนลงมือทำ
 

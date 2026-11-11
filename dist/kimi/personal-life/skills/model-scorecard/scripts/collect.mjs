@@ -66,7 +66,7 @@ function fromRunsFile(lines) {
 
 // token ที่ log ไม่ได้จดต่องาน: เอายอดของ agent ชนิดนั้นในวัน หักของที่จดไว้ แล้วหารเท่ากันให้งานที่ไม่มี
 function fillTokens(runs, dayTokens) {
-  const keys = ["input", "output", "cacheRead", "cacheCreate"];
+  const keys = ["input", "output", "cacheRead", "cacheCreate", "cacheCreate1h"];
   for (const role of new Set(runs.map((r) => r.role))) {
     const mine = runs.filter((r) => r.role === role), total = dayTokens[role];
     const lacking = mine.filter((r) => !r.tokens);

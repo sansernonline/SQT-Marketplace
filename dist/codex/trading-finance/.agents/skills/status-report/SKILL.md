@@ -1,6 +1,6 @@
 ---
 name: status-report
-description: Use when any task that produces or checks work ends (document, research, review, shop job, code) to report status in a table.
+description: Use when a task that produces or checks work ends, to report status in a table.
 ---
 
 # รายงานสถานะเมื่อจบงาน

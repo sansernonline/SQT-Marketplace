@@ -1,6 +1,6 @@
 # skill: principle-prove-it-works
 
-Use when about to say any work is done, fixed, sent or working. Check it against the real thing first.
+Use when about to say any work is done, fixed or working. Check against the real thing first.
 
 # principle · prove it works — พิสูจน์กับของจริง
 
@@ -1206,7 +1206,7 @@ Text parts of a UX spec that sit beside the clickable HTML mockup (`mockup/<CODE
 
 # skill: presentation-design
 
-Use when building a slide deck for any work (pitch, plan, report, training) that someone will present or read. Story, headlines, layouts.
+Use when building a slide deck (pitch, plan, report, training) to present or read. Story, layouts.
 
 # Presentation Design
 

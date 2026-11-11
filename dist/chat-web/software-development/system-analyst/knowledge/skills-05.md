@@ -1,6 +1,6 @@
 # skill: status-report
 
-Use when any task that produces or checks work ends (document, research, review, shop job, code) to report status in a table.
+Use when a task that produces or checks work ends, to report status in a table.
 
 # รายงานสถานะเมื่อจบงาน
 
@@ -278,7 +278,7 @@ Use when any task that produces or checks work ends (document, research, review,
 
 # skill: database-design
 
-Use when designing or changing a database schema (tables, columns, indexes, relations, migrations).
+Use when designing or changing a database schema (tables, indexes, migrations).
 
 # ออกแบบฐานข้อมูล
 
@@ -1137,7 +1137,7 @@ Customer table: current_city, previous_city
 
 # skill: api-conventions
 
-Use when starting an API, adding endpoints or checking API consistency (URLs, paging, dates, ids).
+Use when adding API endpoints or checking API consistency (URLs, ids).
 
 # ข้อตกลงของ Application Programming Interface (API)
 

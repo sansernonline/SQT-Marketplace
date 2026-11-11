@@ -1,6 +1,6 @@
 ---
 name: smart-contracts
-description: Use when building on a blockchain (Solidity or Solana contracts, audits, Foundry, DeFi, tokenomics).
+description: Use when building on a blockchain (Solidity, Solana, DeFi, contract audits).
 argument-hint: <smart-contract-audit | tokenomics-design> <details>
 ---
 

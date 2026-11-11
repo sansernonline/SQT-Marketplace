@@ -1,6 +1,6 @@
 # skill: handoff
 
-Use when project work starts or passes on — to a subagent, next session, another model or vendor, a person or bot — or an inbox message lands.
+Use when work passes to a subagent, next session, another model or person, or an inbox message lands.
 
 # handoff — ส่งงานต่อ ให้คนรับไม่ต้องเดา
 
@@ -335,7 +335,7 @@ Claude Code มี 2 ระบบ: CLAUDE.md ที่คนเขียน แ�
 
 # skill: document-naming
 
-Use when creating, renaming or filing any document a team or client keeps or sends (report, quote, contract) — file name, version, status.
+Use when creating, renaming or filing a document others keep (name, version, status).
 
 # ตั้งชื่อและจัดเวอร์ชันเอกสาร
 
@@ -479,7 +479,7 @@ Use when creating, renaming or filing any document a team or client keeps or sen
 
 # skill: project-doc-set
 
-Use when a project needs its doc set decided (which docs, order, where they live) or DRAFT open items listed in one Excel.
+Use when deciding a project's doc set or listing open items in one Excel.
 
 # ชุดเอกสารโปรเจกต์
 

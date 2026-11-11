@@ -1,6 +1,6 @@
 # skill: reverse-engineering
 
-Use when a compiled app (exe, .NET, Electron, APK, JS bundle, MT5 .ex5), firmware, HAR/pcap or unknown format has no source, or a build may differ.
+Use when a compiled app, firmware, network capture or unknown format has no source.
 
 # Reverse Engineering — แกะซอฟต์แวร์ที่ไม่มีซอร์ส แบบมีหลักฐานทุกข้อ
 
@@ -872,7 +872,7 @@ tshark -r <file.pcap> -Y 'tls.handshake.type == 1' -T fields -e tls.handshake.ex
 
 # skill: polished-document-style
 
-Use when a kept doc (report, proposal, Word, PDF) needs headings, tables, theme. Wording → human-writing · designed look → branded-document-design.
+Use when a kept doc (report, proposal, Word, PDF) needs headings, tables, theme. Wording → human-writing.
 
 # Polished Document Style
 
@@ -1318,7 +1318,7 @@ markdown เองไม่มีสี จึงใช้คำกำกับ�
 
 # skill: branded-document-design
 
-Use when a Word, PowerPoint or PDF deliverable (proposal, report, contract) must look designed. Whole report from one Markdown → markdown-report-docx.
+Use when a Word, PowerPoint or PDF deliverable must look designed. Markdown report → markdown-report-docx.
 
 # Branded Document Design
 

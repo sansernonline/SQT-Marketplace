@@ -1,6 +1,6 @@
 ---
 name: test-evidence
-description: Use when running test cases and keeping proof. Captioned GIF per case, Markdown pass/fail report, result and evidence columns in Excel.
+description: Use when running test cases and keeping proof (GIF per case, pass/fail report).
 ---
 
 # Test Evidence

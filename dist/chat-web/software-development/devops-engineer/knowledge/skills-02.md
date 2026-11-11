@@ -1,6 +1,6 @@
 # skill: simplicity-first
 
-Use when shaping a software BRD, SRS, FSD, ADR, architecture or roadmap to fewest parts. Code → lazy-coding; other → simplify.
+Use when cutting a software spec or architecture to fewest parts. Code → lazy-coding.
 
 # Simplicity First
 
@@ -95,7 +95,7 @@ auth middleware. Log to the existing system."
 
 # skill: postmortem-template
 
-Use when writing a post-incident review or blameless postmortem of a production outage.
+Use when writing a post-incident review or blameless postmortem.
 
 # Blameless Postmortem Template
 
@@ -340,7 +340,7 @@ Default formatting is not neutral — it reads as unfinished work.
 
 # skill: polished-document-style
 
-Use when a kept doc (report, proposal, Word, PDF) needs headings, tables, theme. Wording → human-writing · designed look → branded-document-design.
+Use when a kept doc (report, proposal, Word, PDF) needs headings, tables, theme. Wording → human-writing.
 
 # Polished Document Style
 
@@ -786,7 +786,7 @@ markdown เองไม่มีสี จึงใช้คำกำกับ�
 
 # skill: branded-document-design
 
-Use when a Word, PowerPoint or PDF deliverable (proposal, report, contract) must look designed. Whole report from one Markdown → markdown-report-docx.
+Use when a Word, PowerPoint or PDF deliverable must look designed. Markdown report → markdown-report-docx.
 
 # Branded Document Design
 
@@ -1491,7 +1491,7 @@ footer        "หน้า N" กลางหน้า สีเทา 9pt
 
 # skill: diagram-figures
 
-Use when a document, plan, proposal, slide or print (business plan, shop process, budget flow, research, software spec) needs a designed diagram.
+Use when a document, plan, slide or spec needs a designed diagram (process, budget flow, BRD).
 
 > **สีหลักของรูป = สีหลักของโปรเจกต์** · หาตามลำดับในข้อ 5 ถ้าหาไม่เจอเลยจึงใช้ชุดสีประจำบ้าน `#2A78D6` ใน `polished-document-style/references/theme-colors.md` ("ค่าตั้งต้นประจำบ้าน")
 

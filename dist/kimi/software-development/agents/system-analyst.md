@@ -1,6 +1,6 @@
 ---
 name: "system-analyst"
-description: "Use for an FSD, use cases, data flows, endpoint API specs or sequence diagrams. Architecture → solution-architect."
+description: "Use for an FSD, use cases, data flows or endpoint API specs. Architecture → solution-architect."
 ---
 
 ${base_prompt}

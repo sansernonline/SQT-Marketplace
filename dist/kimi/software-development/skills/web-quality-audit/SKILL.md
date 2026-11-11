@@ -1,6 +1,6 @@
 ---
 name: web-quality-audit
-description: Use when auditing a web page for accessibility (WCAG 2.2 AA) or performance (Lighthouse, Core Web Vitals), or before a site launches.
+description: Use when auditing a web page for accessibility (WCAG) or speed (Lighthouse).
 ---
 
 # Web Quality Audit — การเข้าถึงและความเร็วในรอบเดียว

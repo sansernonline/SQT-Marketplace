@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
-import { buildReport, aggregate } from "./report.mjs";
+import { buildReport, aggregate, costOf } from "./report.mjs";
 import { collectProject } from "./collect.mjs";
 import { distributionSection, simultaneousGroups, wilson } from "./distribution.mjs";
 import { pertByStep, bestOdds, pickOnce, contenders, seeded, betaDraw } from "./choose.mjs";
@@ -109,6 +109,12 @@ export async function selfTest() {
     ["การแจกงาน ts 0,4,8,12,16 ไม่ต่อเป็นสายชุดเดียว (ชุดใหญ่สุด ≤ 2)", Math.max(...simultaneousGroups([0, 4, 8, 12, 16].map((t) => sec(t, "s1")))) <= 2],
     ["การแจกงาน ลูกทีม ÷ ความกว้าง: 4 ตัวพร้อมกัน ÷ กว้าง 4 = 1.00 · อยู่ในช่วง 1/1", dist(team, { expects: [{ ts: "2026-10-20T09:59:00+07:00", session: "s1", workers: 4, width: 4 }] }).includes("1.00 · 100% (1/1)")],
     ["การแจกงาน ไม่มี expect → ยังไม่มีบรรทัด คาด: · ไม่มีกว้างสุด → บอกว่ายังไม่มี", dist(team).includes("| คาดแม่นแค่ไหน | ยังไม่มีบรรทัด คาด: |") && normal.includes("ยังไม่มีบรรทัด คาด: ที่มีกว้างสุด")],
+    ["ค่าใช้จ่าย: เขียน cache 1 ชม. คิดราคา cache_write_1h · ไม่มีราคานี้ → ราคา 5 นาที · ไม่มีส่วน 1 ชม. → เท่าเดิม", (() => {
+      const pr = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "references", "prices.json"), "utf8")).per_mtok["claude-sonnet-5-5"];
+      const t = { input: 0, output: 0, cacheRead: 0, cacheCreate: 1e6, cacheCreate1h: 4e5 };
+      return pr.cache_write_1h === pr.input * 2 && Math.abs(costOf(t, pr) - (6e5 * pr.cache_write + 4e5 * pr.cache_write_1h) / 1e6) < 1e-9
+        && costOf(t, { cache_write: 2.5 }) === 2.5 && costOf({ cacheCreate: 1e6 }, pr) === pr.cache_write;
+    })()],
     ["Wilson 95% ของ 9/27 = 19%–52%", Math.round(lo * 100) === 19 && Math.round(hi * 100) === 52],
   );
   rmSync(root, { recursive: true, force: true });

@@ -19,7 +19,11 @@ export function priceFor(label, prices) {
   return p && Object.values(p).some((v) => v > 0) ? p : null;
 }
 
-export const costOf = (tokens, price) => TOKEN_KEYS.reduce((s, k) => s + (tokens[k] ?? 0) * (price[PER_MTOK[k]] ?? 0), 0) / 1e6;
+// cacheCreate1h = ส่วนของ cacheCreate ที่เขียนลง cache 1 ชั่วโมง (usage.cache_creation.ephemeral_1h_input_tokens) · ราคา cache_write_1h ไม่มี → คิดราคา 5 นาที
+export const costOf = (tokens, price) => {
+  const extra1h = (tokens.cacheCreate1h ?? 0) * ((price.cache_write_1h ?? price.cache_write ?? 0) - (price.cache_write ?? 0));
+  return (TOKEN_KEYS.reduce((s, k) => s + (tokens[k] ?? 0) * (price[PER_MTOK[k]] ?? 0), 0) + extra1h) / 1e6;
+};
 
 function newCell(model, step) {
   return { model, step, n: 0, tok: { n: 0, input: 0, output: 0, cacheRead: 0, cacheCreate: 0, estimated: false }, cost: { n: 0, sum: 0 },

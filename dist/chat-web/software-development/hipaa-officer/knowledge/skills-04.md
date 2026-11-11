@@ -1,6 +1,6 @@
 # skill: flag-and-propose
 
-Use when something found mid-task in any work changes what happens next (stale file, wrong number, blocked step) and needs a decision.
+Use when something found mid-task changes what happens next and needs a decision.
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 
@@ -203,7 +203,7 @@ Use when something found mid-task in any work changes what happens next (stale f
 
 # skill: principle-proceed-on-reversible-work
 
-Use when about to ask shall I continue on any work that can be undone. Proceed; hold irreversible steps.
+Use when about to ask shall I continue on work that can be undone. Proceed.
 
 # principle · proceed on reversible work — ย้อนได้ ทำเลย
 

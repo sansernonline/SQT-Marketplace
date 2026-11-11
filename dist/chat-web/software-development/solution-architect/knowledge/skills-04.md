@@ -1,6 +1,6 @@
 # skill: database-design
 
-Use when designing or changing a database schema (tables, columns, indexes, relations, migrations).
+Use when designing or changing a database schema (tables, indexes, migrations).
 
 # ออกแบบฐานข้อมูล
 
@@ -859,7 +859,7 @@ Customer table: current_city, previous_city
 
 # skill: api-conventions
 
-Use when starting an API, adding endpoints or checking API consistency (URLs, paging, dates, ids).
+Use when adding API endpoints or checking API consistency (URLs, ids).
 
 # ข้อตกลงของ Application Programming Interface (API)
 
@@ -1175,7 +1175,7 @@ Retry-After: 42                ← ต้องมีคู่กับ 429 เ�
 
 # skill: web-service-essentials
 
-Use when building or reviewing any HTTP service or backend (health endpoints, RFC 9457 errors).
+Use when building or reviewing any HTTP backend (health endpoints, RFC 9457 errors).
 
 # Web Service Essentials
 
@@ -1872,7 +1872,7 @@ catch (SmtpException ex)
 
 # skill: observability-basics
 
-Use when a live system must be known healthy before users complain (metrics, logs, traces, alerts).
+Use when a live system needs metrics, logs, traces or alerts before users complain.
 
 # วัดผลและเฝ้าระบบ
 

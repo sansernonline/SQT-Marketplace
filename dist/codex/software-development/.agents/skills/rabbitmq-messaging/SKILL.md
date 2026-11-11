@@ -1,6 +1,6 @@
 ---
 name: rabbitmq-messaging
-description: Use when work goes through RabbitMQ (queue, exchange, ack, DLX, ข้อความหาย/ซ้ำ). Many readers of one log → kafka-streaming
+description: Use when work goes through RabbitMQ (queue, exchange, ack). Event log → kafka-streaming.
 ---
 
 # rabbitmq-messaging — ออกแบบคิว RabbitMQ ไม่ให้ข้อความหายหรือซ้ำแบบเงียบ ๆ

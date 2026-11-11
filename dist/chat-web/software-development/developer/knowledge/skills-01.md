@@ -1,6 +1,6 @@
 # skill: code-orientation
 
-Use when about to change code not yet read this session. Maps how it runs, why, and repo conventions.
+Use when about to change code not yet read this session. Maps how it runs.
 
 # code-orientation — อ่านโค้ดเดิมให้เข้าใจก่อนแตะ
 
@@ -460,7 +460,7 @@ unless asked. Trivial one-liners need no test.
 
 # skill: testing-standards
 
-Use when adding or setting up automated tests (.NET, Node, Python, Angular, Flutter) or a suite is flaky.
+Use when adding or setting up automated tests, or a test suite is flaky.
 
 # Testing Standards
 
@@ -986,7 +986,7 @@ flutter test integration_test/            # ต้องมี emulator หร�
 
 # skill: code-review-checklist
 
-Use when reviewing a pull request, self-reviewing before submitting, or auditing code quality.
+Use when reviewing a pull request or self-reviewing code before submitting.
 
 > **ใน SuperUser:** รีวิวเริ่มจาก playbook [`review`](../superuser/references/playbook-review.md) แล้วใช้ checklist นี้กับรีวิวทั่วไป ส่วนงานเสี่ยงสูงหรือ diff ใหญ่ใช้ `adversarial-review-panel`
 
@@ -1177,7 +1177,7 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 
 # skill: commit-message-format
 
-Use when setting up commitlint or semantic-release, or a commit needs release rules (scope, BREAKING CHANGE). Everyday commits → commit-log.
+Use when setting up commitlint or semantic-release. Everyday commits → commit-log.
 
 # Conventional Commit Message Format
 

@@ -1,6 +1,6 @@
 ---
 name: principle-build-a-tool-not-handwork
-description: Use when work has a mechanical part (same edit in many files, rows or documents, a repeated check). Script it once.
+description: Use when work has a mechanical part (same edit in many files or rows). Script it once.
 ---
 
 # principle · build a tool, not handwork — งานกลไกทำเป็นเครื่องมือ

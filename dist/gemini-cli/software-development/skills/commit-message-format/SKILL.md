@@ -1,6 +1,6 @@
 ---
 name: commit-message-format
-description: Use when setting up commitlint or semantic-release, or a commit needs release rules (scope, BREAKING CHANGE). Everyday commits → commit-log.
+description: Use when setting up commitlint or semantic-release. Everyday commits → commit-log.
 ---
 
 # Conventional Commit Message Format

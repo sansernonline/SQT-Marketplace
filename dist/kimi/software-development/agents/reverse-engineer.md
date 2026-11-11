@@ -1,6 +1,6 @@
 ---
 name: "reverse-engineer"
-description: "Use to understand or recreate software without source (binary, .NET, Electron, APK, JS bundle). Authorized targets only."
+description: "Use to understand or recreate software without source (binary, APK). Authorized only."
 ---
 
 ${base_prompt}

@@ -1,6 +1,6 @@
 ---
 name: seo-audit-checklist
-description: Use when auditing a website or page for search engine optimization (SEO) or doing pre-launch SEO checks.
+description: Use when auditing a website or page for SEO or doing pre-launch SEO checks.
 argument-hint: <URL or page/site description>
 ---
 

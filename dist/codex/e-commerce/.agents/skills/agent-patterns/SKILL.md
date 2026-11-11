@@ -1,6 +1,6 @@
 ---
 name: agent-patterns
-description: Use when SuperUser plans how agents run a task (Planning, ReAct, Reflection, Multi-Agent, Mixture-of-Agents, Reranker).
+description: Use when SuperUser plans how agents run a task (ReAct, Reflection, Multi-Agent, Reranker).
 ---
 
 # agent-patterns — 6 รูปแบบการทำงานของทีม agent

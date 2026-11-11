@@ -1,6 +1,6 @@
 ---
 name: insurance-systems
-description: Use when building insurance software (policy, quotes, claims, fraud, underwriting, OIC filings).
+description: Use when building insurance software (policy, quotes, claims, underwriting).
 argument-hint: <claims-flow-design | underwriting-model-design> <details>
 ---
 

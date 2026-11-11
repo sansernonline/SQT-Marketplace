@@ -1,6 +1,6 @@
 # skill: principle-prove-it-works
 
-Use when about to say any work is done, fixed, sent or working. Check it against the real thing first.
+Use when about to say any work is done, fixed or working. Check against the real thing first.
 
 # principle · prove it works — พิสูจน์กับของจริง
 
@@ -53,7 +53,7 @@ Use when about to say any work is done, fixed, sent or working. Check it against
 
 # skill: saas-platform
 
-Use when building B2B SaaS (multi-tenancy, tenant isolation, SSO, SCIM, billing, usage metering).
+Use when building B2B SaaS (multi-tenancy, SSO, billing, usage metering).
 
 # saas-platform
 
@@ -2155,7 +2155,7 @@ await stripe.subscriptions.create({
 
 # skill: simplicity-first
 
-Use when shaping a software BRD, SRS, FSD, ADR, architecture or roadmap to fewest parts. Code → lazy-coding; other → simplify.
+Use when cutting a software spec or architecture to fewest parts. Code → lazy-coding.
 
 # Simplicity First
 
@@ -2250,7 +2250,7 @@ auth middleware. Log to the existing system."
 
 # skill: markdown-visuals
 
-Use when a markdown doc needs a picture. Pick inline SVG, image file, ASCII or Mermaid by where it is read (GitHub drops inline SVG).
+Use when a Markdown doc needs a picture (inline SVG, image, ASCII or Mermaid).
 
 # Markdown Visuals
 
@@ -2627,7 +2627,7 @@ Use this pattern by default for showing UI feature states. On GitHub, save the S
 
 # skill: diagram-figures
 
-Use when a document, plan, proposal, slide or print (business plan, shop process, budget flow, research, software spec) needs a designed diagram.
+Use when a document, plan, slide or spec needs a designed diagram (process, budget flow, BRD).
 
 > **สีหลักของรูป = สีหลักของโปรเจกต์** · หาตามลำดับในข้อ 5 ถ้าหาไม่เจอเลยจึงใช้ชุดสีประจำบ้าน `#2A78D6` ใน `polished-document-style/references/theme-colors.md` ("ค่าตั้งต้นประจำบ้าน")
 

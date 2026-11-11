@@ -1,6 +1,6 @@
 # skill: code-review-checklist
 
-Use when reviewing a pull request, self-reviewing before submitting, or auditing code quality.
+Use when reviewing a pull request or self-reviewing code before submitting.
 
 > **ใน SuperUser:** รีวิวเริ่มจาก playbook [`review`](../superuser/references/playbook-review.md) แล้วใช้ checklist นี้กับรีวิวทั่วไป ส่วนงานเสี่ยงสูงหรือ diff ใหญ่ใช้ `adversarial-review-panel`
 

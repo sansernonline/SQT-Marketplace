@@ -637,7 +637,7 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
 
 # skill: spell-out-abbreviations
 
-Use when text people read (report, slide, label, message) is heavy with abbreviations or jargon, or needs a glossary. Writing → human-writing.
+Use when text people read is heavy with abbreviations or jargon, or needs a glossary.
 
 # Spell Out Abbreviations
 
@@ -721,7 +721,7 @@ Personally Identifiable Information (PII) · Proof of Concept (POC)
 
 # skill: context-budget
 
-Use when a task will read large material (many files, long PDFs, many web pages, a codebase) or run long-output commands.
+Use when a task will read large material (many files, long PDFs, a codebase) or long output.
 
 # งบ context
 
@@ -932,7 +932,7 @@ subagent มี context ของตัวเอง จึงอ่านไป 
 
 # skill: temp-file-discipline
 
-Use when a task writes temporary files (extracts, previews, backups, drafts, one-off scripts) into a project or work folder.
+Use when a task writes temporary files (extracts, backups, scripts) into a project.
 
 # ระเบียบไฟล์ชั่วคราว
 

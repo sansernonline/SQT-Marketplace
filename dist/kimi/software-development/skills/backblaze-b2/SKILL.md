@@ -1,6 +1,6 @@
 ---
 name: backblaze-b2
-description: Use when using Backblaze B2 — app file storage (S3 API, keys, presigned upload, lifecycle, cost) or deploying a static site (b2 sync, Cloudflare).
+description: Use when storing app files or hosting a static site on Backblaze B2 (S3 API, keys).
 ---
 
 # backblaze-b2 — ต่อแอปเข้า Backblaze B2 แบบ bucket ส่วนตัว สิทธิ์น้อยสุด และไม่ปล่อยเวอร์ชันเก่าค้างคิดเงิน

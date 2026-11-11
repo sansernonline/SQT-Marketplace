@@ -1,6 +1,6 @@
 ---
 name: voice-agent
-description: Use when building a realtime voice agent or phone bot (รับสาย, โทรศัพท์, STT, TTS, พูดแทรก, barge-in, SIP, latency), especially in Thai.
+description: Use when building a realtime voice agent or phone bot (STT, TTS, barge-in), especially Thai.
 ---
 
 # voice-agent — ออกแบบและสร้าง voice agent ภาษาไทยที่คุยได้ทันใจและไม่โกหกลูกค้า

@@ -1,6 +1,6 @@
 ---
 name: jenkins-pipeline
-description: Use when writing or fixing a Jenkinsfile or Jenkins pipeline (CI/CD) that builds a Docker image, tests, and deploys with Helm.
+description: Use when writing or fixing a Jenkinsfile or Jenkins pipeline.
 ---
 
 # jenkins-pipeline — Jenkinsfile ที่ build image, ทดสอบ และ deploy ด้วย Helm โดยค่าลับไม่รั่ว

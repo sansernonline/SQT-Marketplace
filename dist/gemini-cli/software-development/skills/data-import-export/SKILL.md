@@ -1,6 +1,6 @@
 ---
 name: data-import-export
-description: Use when a system imports or exports Excel or CSV. Validate before write, row errors, Buddhist years.
+description: Use when a system imports or exports Excel or CSV (row errors, Buddhist years).
 ---
 
 # นำเข้าและส่งออกข้อมูล

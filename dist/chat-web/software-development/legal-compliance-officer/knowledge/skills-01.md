@@ -1,6 +1,6 @@
 # skill: legal-document-systems
 
-Use when software handles legal documents (clause extraction, automation, e-signature, Thai ETA).
+Use when software handles legal documents (clause extraction, e-signature, Thai ETA).
 
 # legal-document-systems
 
@@ -2485,7 +2485,7 @@ But: some need longer (court records, real estate)
 
 # skill: pdpa-compliance
 
-Use when software stores personal data of people in Thailand (PDPA consent, rights, retention, breach).
+Use when software stores personal data of people in Thailand (PDPA).
 
 # PDPA — ข้อมูลส่วนบุคคล
 

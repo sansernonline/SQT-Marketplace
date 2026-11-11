@@ -110,7 +110,7 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
 
 # skill: temp-file-discipline
 
-Use when a task writes temporary files (extracts, previews, backups, drafts, one-off scripts) into a project or work folder.
+Use when a task writes temporary files (extracts, backups, scripts) into a project.
 
 # ระเบียบไฟล์ชั่วคราว
 
@@ -228,7 +228,7 @@ Use when a task writes temporary files (extracts, previews, backups, drafts, one
 
 # skill: status-report
 
-Use when any task that produces or checks work ends (document, research, review, shop job, code) to report status in a table.
+Use when a task that produces or checks work ends, to report status in a table.
 
 # รายงานสถานะเมื่อจบงาน
 

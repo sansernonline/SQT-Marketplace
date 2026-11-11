@@ -1,6 +1,6 @@
 ---
 name: "technical-writer"
-description: "Use when writing user guides, API docs, tutorials, READMEs or release notes. Docs platform, SDK → devrel-engineer."
+description: "Use when writing user guides, API docs, tutorials, READMEs or release notes."
 ---
 
 ${base_prompt}

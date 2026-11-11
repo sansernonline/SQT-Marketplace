@@ -1,6 +1,6 @@
 # skill: security-audit
 
-Use when auditing a whole codebase for vulnerabilities before handover, a pen test of source, or ตรวจช่องโหว่ทั้งระบบ. Pre-ship scan → security-gate.
+Use when auditing a whole codebase for vulnerabilities before handover. Pre-ship → security-gate.
 
 # security-audit — ไล่หาช่องโหว่ทั้งระบบจากโค้ด แล้วยืนยันทุกข้อก่อนรายงาน
 
@@ -1063,7 +1063,7 @@ path และบรรทัดใน location และ trace ชี้ถู�
 
 # skill: code-review-checklist
 
-Use when reviewing a pull request, self-reviewing before submitting, or auditing code quality.
+Use when reviewing a pull request or self-reviewing code before submitting.
 
 > **ใน SuperUser:** รีวิวเริ่มจาก playbook [`review`](../superuser/references/playbook-review.md) แล้วใช้ checklist นี้กับรีวิวทั่วไป ส่วนงานเสี่ยงสูงหรือ diff ใหญ่ใช้ `adversarial-review-panel`
 
@@ -1305,7 +1305,7 @@ plugin `software-development` มีรายละเอียดของโ�
 
 # skill: auth-implementation-patterns
 
-Use when implementing login or identity (session vs JWT, OAuth, SSO, MFA, password reset).
+Use when implementing login or identity (sessions, JWT, OAuth, SSO, MFA).
 
 # Authentication Implementation Patterns
 

@@ -1,6 +1,6 @@
 ---
 name: principle-user-experience-first
-description: Use when choosing between easier to make and better for the person using it (flows, wording, error messages, scope cuts).
+description: Use when choosing between easier to make and better for the person using it.
 ---
 
 # principle · user experience first — เลือกสิ่งที่ผู้ใช้รู้สึก ไม่ใช่สิ่งที่เราทำง่าย

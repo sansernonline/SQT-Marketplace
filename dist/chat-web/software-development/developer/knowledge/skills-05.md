@@ -1,6 +1,6 @@
 # skill: principle-build-a-tool-not-handwork
 
-Use when work has a mechanical part (same edit in many files, rows or documents, a repeated check). Script it once.
+Use when work has a mechanical part (same edit in many files or rows). Script it once.
 
 # principle · build a tool, not handwork — งานกลไกทำเป็นเครื่องมือ
 > ใช้คู่กัน: `principle-small-verifiable-steps` (ตัดเป็นชิ้นเล็กที่ตรวจได้) · `parallel-split-and-merge` (รันหลายชิ้นพร้อมกัน)
@@ -37,7 +37,7 @@ Use when work has a mechanical part (same edit in many files, rows or documents,
 
 # skill: security-gate
 
-Use when about to ship, merge or hand over code, after adding a dependency, user says security check, or OWASP Top 10:2025 sign-off (web app, API).
+Use when about to ship, merge or hand over code, or asked for a security check.
 
 # security-gate — ประตูความปลอดภัยก่อนส่งงาน
 
@@ -378,7 +378,7 @@ Open Worldwide Application Security Project (OWASP) Top 10:2025 คือรา�
 
 # skill: markdown-visuals
 
-Use when a markdown doc needs a picture. Pick inline SVG, image file, ASCII or Mermaid by where it is read (GitHub drops inline SVG).
+Use when a Markdown doc needs a picture (inline SVG, image, ASCII or Mermaid).
 
 # Markdown Visuals
 
@@ -755,7 +755,7 @@ Use this pattern by default for showing UI feature states. On GitHub, save the S
 
 # skill: web-service-essentials
 
-Use when building or reviewing any HTTP service or backend (health endpoints, RFC 9457 errors).
+Use when building or reviewing any HTTP backend (health endpoints, RFC 9457 errors).
 
 # Web Service Essentials
 
@@ -1265,7 +1265,7 @@ this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r))
 
 # skill: api-conventions
 
-Use when starting an API, adding endpoints or checking API consistency (URLs, paging, dates, ids).
+Use when adding API endpoints or checking API consistency (URLs, ids).
 
 # ข้อตกลงของ Application Programming Interface (API)
 

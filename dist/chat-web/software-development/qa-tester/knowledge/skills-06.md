@@ -1,6 +1,6 @@
 # skill: parallel-split-and-merge
 
-Use when work splits into independent slices (chapters, listings, research questions, modules) or the user says swarm or fan out.
+Use when work splits into independent slices or the user says swarm or fan out.
 
 # parallel-split-and-merge — แบ่งงาน ทำพร้อมกัน รวมเป็นรายงานเดียว
 > ใช้คู่กัน: `principle-build-a-tool-not-handwork` (เขียนสคริปต์ทำงานซ้ำ) · `principle-small-verifiable-steps` (ตัดเป็นชิ้นเล็กที่ตรวจได้)
@@ -132,7 +132,7 @@ Use when work splits into independent slices (chapters, listings, research quest
 
 # skill: bug-inbox-triage
 
-Use when software bug reports pile up in email, chat, a tracker or inbox, or the user says triage bugs.
+Use when software bug reports pile up (email, chat, tracker) or the user says triage bugs.
 
 # bug-inbox-triage — วงนอก คัดบั๊กก่อนคนเปิดดู
 
@@ -193,7 +193,7 @@ Use when software bug reports pile up in email, chat, a tracker or inbox, or the
 
 # skill: markdown-visuals
 
-Use when a markdown doc needs a picture. Pick inline SVG, image file, ASCII or Mermaid by where it is read (GitHub drops inline SVG).
+Use when a Markdown doc needs a picture (inline SVG, image, ASCII or Mermaid).
 
 # Markdown Visuals
 
@@ -570,7 +570,7 @@ Use this pattern by default for showing UI feature states. On GitHub, save the S
 
 # skill: polished-document-style
 
-Use when a kept doc (report, proposal, Word, PDF) needs headings, tables, theme. Wording → human-writing · designed look → branded-document-design.
+Use when a kept doc (report, proposal, Word, PDF) needs headings, tables, theme. Wording → human-writing.
 
 # Polished Document Style
 
@@ -1016,7 +1016,7 @@ markdown เองไม่มีสี จึงใช้คำกำกับ�
 
 # skill: branded-document-design
 
-Use when a Word, PowerPoint or PDF deliverable (proposal, report, contract) must look designed. Whole report from one Markdown → markdown-report-docx.
+Use when a Word, PowerPoint or PDF deliverable must look designed. Markdown report → markdown-report-docx.
 
 # Branded Document Design
 

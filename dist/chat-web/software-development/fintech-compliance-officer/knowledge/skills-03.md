@@ -1,6 +1,6 @@
 # skill: audit-trail
 
-Use when a system must show who did what and when (approvals, money, permissions, personal data).
+Use when a system must record who did what and when (approvals, money, permissions).
 
 # ร่องรอยการใช้งาน (audit trail)
 
@@ -167,7 +167,7 @@ audit log ที่เก็บทุกอย่าง มีค่าเท่
 
 # skill: branded-document-design
 
-Use when a Word, PowerPoint or PDF deliverable (proposal, report, contract) must look designed. Whole report from one Markdown → markdown-report-docx.
+Use when a Word, PowerPoint or PDF deliverable must look designed. Markdown report → markdown-report-docx.
 
 # Branded Document Design
 

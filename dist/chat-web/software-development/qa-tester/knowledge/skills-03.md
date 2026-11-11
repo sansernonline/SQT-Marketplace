@@ -1,6 +1,6 @@
 # skill: load-testing
 
-Use when checking how a system holds many users at once (load, stress, spike, soak test, k6, ยิงโหลด, รับได้กี่คน). Page speed → web-quality-audit.
+Use when checking how many users a system holds (load, stress, spike, k6). Page speed → web-quality-audit.
 
 # load-testing — ยิงโหลดแบบมีเป้า มีเกณฑ์ผ่าน และได้รับอนุญาต
 
@@ -264,7 +264,7 @@ claude mcp add --scope=user --transport=stdio k6 -- docker run --rm -i grafana/m
 
 # skill: fsd-writing
 
-Use when writing or reviewing a Functional Specification Document (FSD) that screens are built from.
+Use when writing or reviewing a Functional Specification Document (FSD).
 
 # เขียน Functional Specification Document (FSD)
 
@@ -1192,7 +1192,7 @@ options.LogTo(Console.WriteLine, LogLevel.Information).EnableSensitiveDataLoggin
 
 # skill: stack-typescript
 
-Use when writing or reviewing TypeScript in Node (Express, Fastify, NestJS), Angular, React or Vite.
+Use when writing or reviewing TypeScript (Node, NestJS, Angular, React, Vite).
 
 # stack-typescript — TypeScript ที่ทีมอ่านง่าย และพังยาก
 

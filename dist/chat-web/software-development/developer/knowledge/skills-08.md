@@ -1,6 +1,6 @@
 # skill: docker-sandbox
 
-Use when a project needs its own Docker container (untrusted code, system installs, overnight runs) or the user says sandbox.
+Use when a project needs its own Docker container for untrusted code, or says sandbox.
 
 # docker-sandbox — ห้องทดลองต่อโปรเจกต์
 
@@ -160,7 +160,7 @@ Use when a project needs its own Docker container (untrusted code, system instal
 
 # skill: project-doc-set
 
-Use when a project needs its doc set decided (which docs, order, where they live) or DRAFT open items listed in one Excel.
+Use when deciding a project's doc set or listing open items in one Excel.
 
 # ชุดเอกสารโปรเจกต์
 
@@ -779,7 +779,7 @@ Thanks to: @alice, @bob, @charlie
 
 # skill: temp-file-discipline
 
-Use when a task writes temporary files (extracts, previews, backups, drafts, one-off scripts) into a project or work folder.
+Use when a task writes temporary files (extracts, backups, scripts) into a project.
 
 # ระเบียบไฟล์ชั่วคราว
 
@@ -897,7 +897,7 @@ Use when a task writes temporary files (extracts, previews, backups, drafts, one
 
 # skill: code-gardener
 
-Use when patrolling a codebase for misleading patterns (duplication, dead code, naming drift) or says garden.
+Use when patrolling code for duplication, dead code or naming drift, or says garden.
 
 # code-gardener — คนสวนที่จดก่อน ยังไม่ตัด
 
@@ -946,7 +946,7 @@ Use when patrolling a codebase for misleading patterns (duplication, dead code, 
 
 # skill: fsd-writing
 
-Use when writing or reviewing a Functional Specification Document (FSD) that screens are built from.
+Use when writing or reviewing a Functional Specification Document (FSD).
 
 # เขียน Functional Specification Document (FSD)
 
@@ -1618,7 +1618,7 @@ Every error body is `application/problem+json` (RFC 9457): `type` · `title` · 
 
 # skill: flag-and-propose
 
-Use when something found mid-task in any work changes what happens next (stale file, wrong number, blocked step) and needs a decision.
+Use when something found mid-task changes what happens next and needs a decision.
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 

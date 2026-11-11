@@ -1,6 +1,6 @@
 ---
 name: adr-writer
-description: Use when recording an architecture decision or why a tech choice was made, or revisiting an ADR.
+description: Use when recording why a tech or architecture choice was made (ADR).
 ---
 
 # Architecture Decision Record (ADR) Writer

@@ -1,6 +1,6 @@
 # skill: principle-proceed-on-reversible-work
 
-Use when about to ask shall I continue on any work that can be undone. Proceed; hold irreversible steps.
+Use when about to ask shall I continue on work that can be undone. Proceed.
 
 # principle · proceed on reversible work — ย้อนได้ ทำเลย
 
@@ -39,7 +39,7 @@ Use when about to ask shall I continue on any work that can be undone. Proceed; 
 
 # skill: simplicity-first
 
-Use when shaping a software BRD, SRS, FSD, ADR, architecture or roadmap to fewest parts. Code → lazy-coding; other → simplify.
+Use when cutting a software spec or architecture to fewest parts. Code → lazy-coding.
 
 # Simplicity First
 
@@ -134,7 +134,7 @@ auth middleware. Log to the existing system."
 
 # skill: reverse-engineering
 
-Use when a compiled app (exe, .NET, Electron, APK, JS bundle, MT5 .ex5), firmware, HAR/pcap or unknown format has no source, or a build may differ.
+Use when a compiled app, firmware, network capture or unknown format has no source.
 
 # Reverse Engineering — แกะซอฟต์แวร์ที่ไม่มีซอร์ส แบบมีหลักฐานทุกข้อ
 
@@ -1643,7 +1643,7 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
 
 # skill: spell-out-abbreviations
 
-Use when text people read (report, slide, label, message) is heavy with abbreviations or jargon, or needs a glossary. Writing → human-writing.
+Use when text people read is heavy with abbreviations or jargon, or needs a glossary.
 
 # Spell Out Abbreviations
 

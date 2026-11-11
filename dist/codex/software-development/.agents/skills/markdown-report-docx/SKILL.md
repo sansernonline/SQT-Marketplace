@@ -1,6 +1,6 @@
 ---
 name: markdown-report-docx
-description: Use when one Markdown file must become a polished Word report (business, research, test, handover). Thesis or Independent Study (IS) → thesis-writing.
+description: Use when one Markdown file must become a polished Word report. Thesis → thesis-writing.
 ---
 
 # Markdown Report → .docx

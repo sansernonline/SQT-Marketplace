@@ -1,6 +1,6 @@
 ---
 name: skill-authoring
-description: Use when creating or changing a skill, agent or playbook in this marketplace, writing evals for one, or /skill-doctor shows a skill never used.
+description: Use when creating or changing a skill, agent or playbook in this marketplace, or its evals.
 ---
 
 # skill-authoring — เขียน skill ให้ถูกเรียก ทำตามได้ และวัดได้
@@ -92,6 +92,7 @@ description: Use when creating or changing a skill, agent or playbook in this ma
 
 - โจทย์ต้องเป็นงานที่ agent ทำไม่ได้ดีโดยไม่มี skill — โจทย์ง่ายเกินไปทั้ง 2 รอบผ่านหมด วัดอะไรไม่ได้ (`จากแหล่ง` skill-creator) · ค่าเริ่มต้นรัน 3 รอบต่อเคส ทั้งรอบมี plugin และไม่มี แล้วรายงาน `WITH` `W/OUT` `Δ`
 - เทียบฉบับแก้กับ git ref ด้วย `node scripts/evals/ab/ab-run.mjs --help` (baseline แคชตาม commit · คะแนนจาก regex) · ปรับ judge ด้วย `node scripts/evals/judge/calibrate.mjs --help`
+- **ตัดสินว่ารุ่นใหม่ดีขึ้นด้วยตัวเลขที่ตั้งไว้ก่อน ไม่ใช่ด้วยตา** · ตรวจ grader regex ด้วย `scripts/evals/gate/grader-check.mjs` ก่อนใช้ token (คำตอบอ้างอิงผ่าน 100% · คำตอบที่ผิด 1 จุดตกข้อนั้นข้อเดียว) · แบ่งเคสเป็น train/val/test แล้วแก้จาก train เท่านั้น · ให้ `scripts/evals/gate/gate.mjs` ตัดสินจากความแกว่งของรอบซ้ำ (exit 0 รับ · 1 ไม่รับ · 2 เทียบไม่ได้) · จดสาเหตุลงสมุดปัญหาและแก้ไม่เกิน 3 จุดต่อรุ่น — ขั้นตอนเต็มใน [`optimize-loop`](references/optimize-loop.md) · แม่แบบ [`templates/ISSUES.md`](templates/ISSUES.md)
 - รัน: `node scripts/evals/plugin-eval.mjs <plugin> --only "^<skill>-" --max-cost-usd 5` (plugin ที่มี `dependencies` โหลดไม่ขึ้นถ้ารัน `claude plugin eval` ตรง ๆ · รายละเอียดใน `eval-format`) · ใน CI เพิ่ม `--json results.json --threshold 0.8` และอ่าน exit code (0 ผ่าน · 1 ไม่ผ่าน · 2 ชนเพดานเงินหรือ auth)
 - ใส่ `evals/results/` ใน `.gitignore` · ผลสรุปที่อยากเก็บลง `RESULTS.md` ของ plugin นั้น
 - eval ของ repo (`scripts/evals/triggers` `speed` `coding`) เป็นคนละชั้น: วัดข้ามทุก plugin และเทียบ 2 รุ่นจาก git ref · ไม่แทนกัน (ความต่างใน README ของ `plugins/superuser/evals/`)
@@ -128,3 +129,4 @@ description: Use when creating or changing a skill, agent or playbook in this ma
 - กฎของ repo นี้ — `scripts/check/validate-marketplace.mjs` (อ่าน 2026-10-23)
 - กติกาวงปรับ ผู้ตัดสิน และเครื่องมือ — [`eval-loop-rules`](references/eval-loop-rules.md) · [`eval-audit`](references/eval-audit.md) · โครง skill และ plugin — [`skill-structure`](references/skill-structure.md) (ที่มาของแต่ละข้อลงไว้ท้ายไฟล์เหล่านั้น · ดู 2026-11-10) · superpowers (MIT) · docs/superpowers/specs/2026-06-10-positive-instruction-redesign-design.md · ดู 2026-11-10 → สูตรบอกสิ่งที่ให้ทำ
 - หลักฐานจากคอร์ส CWN2026 และ paper (SkillsBench ฯลฯ) พร้อมข้อจำกัดและรุ่นของตัวเลข — [`skill-evaluation-evidence`](references/skill-evaluation-evidence.md) (ดู 2026-11-04)
+- วงปรับด้วยประตูรับ — ดัดแปลงจากคอร์ส CWN2026 สัปดาห์ 2 บท Skill Optimization (`skill-optimizer`) ของเจ้าของ repo · เรียบเรียงใหม่ 2026-11-11 → [`optimize-loop`](references/optimize-loop.md)

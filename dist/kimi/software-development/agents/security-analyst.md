@@ -1,6 +1,6 @@
 ---
 name: "security-analyst"
-description: "Use for security operations — incidents, alert triage, threat hunting, SOC, detections. App code → security-engineer."
+description: "Use for security operations (incidents, alert triage, SOC). App code → security-engineer."
 ---
 
 ${base_prompt}

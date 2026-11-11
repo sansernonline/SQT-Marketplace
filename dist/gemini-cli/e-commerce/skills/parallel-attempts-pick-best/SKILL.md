@@ -1,6 +1,6 @@
 ---
 name: parallel-attempts-pick-best
-description: Use when one attempt could lock in the wrong shape (design, draft, layout, plan) or the user says bake-off.
+description: Use when one attempt could lock in the wrong shape (design, plan) or the user says bake-off.
 ---
 
 # parallel-attempts-pick-best — ลองหลายทาง เลือกทางที่ดีที่สุด

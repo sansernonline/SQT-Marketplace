@@ -1,6 +1,6 @@
 ---
 name: "data-engineer"
-description: "Use when building data pipelines (ETL/ELT), warehouses, integrations, data quality checks or data infrastructure."
+description: "Use when building data pipelines (ETL/ELT), warehouses or data quality checks."
 ---
 
 ${base_prompt}

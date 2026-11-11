@@ -1,6 +1,6 @@
 # skill: decision-log
 
-Use when an agent makes its own judgment call in any long or unattended work (choice, filled gap, skipped step).
+Use when an agent makes its own judgment call in long or unattended work.
 
 # decision-log — ทุกการตัดสินใจเองต้องตรวจย้อนได้
 
@@ -62,7 +62,7 @@ subagent ไม่เขียนตารางเอง แต่**ราย�
 
 # skill: status-report
 
-Use when any task that produces or checks work ends (document, research, review, shop job, code) to report status in a table.
+Use when a task that produces or checks work ends, to report status in a table.
 
 # รายงานสถานะเมื่อจบงาน
 
@@ -340,7 +340,7 @@ Use when any task that produces or checks work ends (document, research, review,
 
 # skill: handoff
 
-Use when project work starts or passes on — to a subagent, next session, another model or vendor, a person or bot — or an inbox message lands.
+Use when work passes to a subagent, next session, another model or person, or an inbox message lands.
 
 # handoff — ส่งงานต่อ ให้คนรับไม่ต้องเดา
 
@@ -675,7 +675,7 @@ Claude Code มี 2 ระบบ: CLAUDE.md ที่คนเขียน แ�
 
 # skill: context-budget
 
-Use when a task will read large material (many files, long PDFs, many web pages, a codebase) or run long-output commands.
+Use when a task will read large material (many files, long PDFs, a codebase) or long output.
 
 # งบ context
 
@@ -1091,7 +1091,7 @@ options.LogTo(Console.WriteLine, LogLevel.Information).EnableSensitiveDataLoggin
 
 # skill: stack-typescript
 
-Use when writing or reviewing TypeScript in Node (Express, Fastify, NestJS), Angular, React or Vite.
+Use when writing or reviewing TypeScript (Node, NestJS, Angular, React, Vite).
 
 # stack-typescript — TypeScript ที่ทีมอ่านง่าย และพังยาก
 

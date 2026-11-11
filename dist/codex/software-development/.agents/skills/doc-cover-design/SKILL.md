@@ -1,6 +1,6 @@
 ---
 name: doc-cover-design
-description: Use when a project's .docx set needs covers unique to it. Concept from logo geometry or a mockup; bake-off of 3 if it fails checks or user asks.
+description: Use when a project's .docx set needs its own cover (from logo geometry or a mockup).
 ---
 
 # doc-cover-design — หน้าปกเอกสารที่จำได้ และไม่ซ้ำโปรเจกต์อื่น

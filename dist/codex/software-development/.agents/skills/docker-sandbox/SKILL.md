@@ -1,6 +1,6 @@
 ---
 name: docker-sandbox
-description: Use when a project needs its own Docker container (untrusted code, system installs, overnight runs) or the user says sandbox.
+description: Use when a project needs its own Docker container for untrusted code, or says sandbox.
 ---
 
 # docker-sandbox — ห้องทดลองต่อโปรเจกต์

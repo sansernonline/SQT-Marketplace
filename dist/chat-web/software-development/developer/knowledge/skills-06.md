@@ -1,6 +1,6 @@
 # skill: logging-standards
 
-Use when writing or reviewing code that logs (format, levels, correlation ids, redaction).
+Use when writing or reviewing code that logs (levels, ids, redaction).
 
 # Logging Standards
 
@@ -398,7 +398,7 @@ export const correlationInterceptor: HttpInterceptorFn = (req, next) =>
 
 # skill: auth-implementation-patterns
 
-Use when implementing login or identity (session vs JWT, OAuth, SSO, MFA, password reset).
+Use when implementing login or identity (sessions, JWT, OAuth, SSO, MFA).
 
 # Authentication Implementation Patterns
 
@@ -748,7 +748,7 @@ Verify:
 
 # skill: database-design
 
-Use when designing or changing a database schema (tables, columns, indexes, relations, migrations).
+Use when designing or changing a database schema (tables, indexes, migrations).
 
 # ออกแบบฐานข้อมูล
 
@@ -1607,7 +1607,7 @@ Customer table: current_city, previous_city
 
 # skill: config-and-secrets
 
-Use when settings differ by environment or something must never be committed (keys, connection strings).
+Use when settings differ by environment or secrets must stay out of git.
 
 # Config และ Secret
 
@@ -2081,7 +2081,7 @@ $b = New-Object byte[] 48
 
 # skill: background-jobs
 
-Use when work runs outside the user request (mail, reports, imports, schedules). Queues, retries.
+Use when work runs outside the user request (queues, scheduled jobs, retries).
 
 # งานเบื้องหลัง
 
@@ -2278,7 +2278,7 @@ Use when work runs outside the user request (mail, reports, imports, schedules).
 
 # skill: audit-trail
 
-Use when a system must show who did what and when (approvals, money, permissions, personal data).
+Use when a system must record who did what and when (approvals, money, permissions).
 
 # ร่องรอยการใช้งาน (audit trail)
 

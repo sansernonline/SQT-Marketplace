@@ -6,7 +6,7 @@
 |---|---|
 | ต้องเข้าใจโค้ดก่อนแก้ | [`code-orientation`](../../code-orientation/SKILL.md) → แผนที่ 10 บรรทัด ถ้าระบบใหญ่หรือมีหลายบริการ ให้ใช้ agent `system-analyst` (มี Bash ไล่ `git log` · `git blame` ได้) หรือ `Explore` และสั่งในคำขอว่า "อ่านอย่างเดียว ห้ามเขียนหรือแก้ไฟล์" · `solution-architect` รับแค่สรุปที่ได้ไปออกแบบต่อ |
 | เขียนหรือตรวจโค้ด C# · TypeScript · Python · SQL | skill ตาม stack: [`stack-dotnet`](../../stack-dotnet/SKILL.md) · [`stack-typescript`](../../stack-typescript/SKILL.md) · [`stack-python`](../../stack-python/SKILL.md) · [`stack-sql`](../../stack-sql/SKILL.md) — คำสั่ง build · test · กับดัก · รายการตรวจก่อนส่ง |
-| แก้ skill หรือ playbook ด้านเขียนโค้ด · อยากรู้ว่าทีมเขียนโค้ดเก่งขึ้นจริงไหม | [`coding-evals`](../../coding-evals/SKILL.md) — รันงานชุดเดิมก่อนและหลังแล้วเทียบคะแนน |
+| แก้ skill หรือ playbook ด้านเขียนโค้ด · อยากรู้ว่าทีมเขียนโค้ดเก่งขึ้นจริงไหม | [`coding-evals`](../../coding-evals/SKILL.md) — ปิดการเรียกเองแล้ว (`disable-model-invocation`) บอกผู้ใช้ให้สั่ง `/coding-evals` เอง · รันงานชุดเดิมก่อนและหลังแล้วเทียบคะแนน |
 | ต้องเข้าใจแอปหรือไฟล์ที่ไม่มีซอร์สโค้ด (binary · APK · bundle · รูปแบบไฟล์ไม่มีเอกสาร) | agent `reverse-engineer` + skill `reverse-engineering` ใน playbook `investigation` — เฉพาะของที่ผู้ใช้มีสิทธิ์ |
 | ผู้ใช้ขอไอเดีย · ขอทางเลือก · โจทย์ใหญ่หรือไม่ชัด | agent `brainstormer` ตัวใหม่ — 2–3 ทางบนกระดาษ หัวหน้าทีมเลือก · อยากลองของจริงหลายชุด → `parallel-attempts-pick-best` |
 | ค้นคว้าเรื่องนอกโค้ด (ตลาด · คู่แข่ง · งานที่มีคนทำแล้ว · แอปตัวอย่าง) | `prior-art-review` · [`reference-app-research`](../../reference-app-research/SKILL.md) · (ถ้าติดตั้ง plugin `superuser`) playbook `research` |
