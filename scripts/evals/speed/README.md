@@ -22,6 +22,8 @@ node scripts/evals/speed/run-bench.mjs --old f105afc --new HEAD --tasks t1,t2,t3
 | `--plugin` | `software-development` | plugin ที่เทียบ |
 | `--budget` | `8` | เพดานค่าใช้จ่ายต่อรอบ (ดอลลาร์) |
 | `--parallel` | `4` | รันพร้อมกันกี่รอบ |
+| `--prompt` | `lead` | `lead` = แขน new ได้ประโยค "ใช้ skill `superuser`" นำหน้า · `natural` = ทุกแขนได้แค่เนื้อ `TASK.md` ไม่สั่งให้ใช้ superuser (แขน new ยังโหลด plugin) ใช้วัดว่างานเล็กหลบ superuser เองจริงไหม |
+| `--dry-run` | ไม่ใส่ | พิมพ์คำสั่งที่แต่ละแขนจะได้แล้วจบ ไม่เรียก `claude` ไม่เสียเงิน |
 | `--save-ratios` | ไม่ใส่ | ใช้คู่กับ `--old none` · เขียนอัตราส่วนลง `plugins/superuser/hooks/bench-ratios.json` ให้ hook ประมาณค่า "ถ้าไม่ใช้ superuser" ใน `log/SUMMARY.md` |
 
 - ใช้ `claude` ที่ล็อกอินอยู่ในเครื่อง · ค่าใช้จ่ายตัดจากบัญชีนั้น (รอบหนึ่งของ t4 ราว $0.5–1.2)
@@ -65,7 +67,7 @@ node scripts/evals/speed/run-bench.mjs --old f105afc --new HEAD --tasks t1,t2,t3
 node scripts/evals/speed/run-bench.mjs --old none --tasks t1,t2,t3,t4,t6,t7 --runs 5 --budget 5 --save-ratios
 ```
 
-แขน `none` ได้คำสั่งเดียวกันทุกคำ ยกเว้นประโยคที่ให้ใช้ superuser และไม่โหลด plugin ใด ๆ · `--save-ratios` เขียน `bench-ratios.json` ให้ hook ใช้ในหัวข้อ "คุ้มแค่ไหน" ของ `log/SUMMARY.md` · แก้ไฟล์นั้นแล้วต้องขึ้นรุ่น superuser และรัน `sync-superuser`
+แขน `none` ได้คำสั่งเดียวกันทุกคำ ยกเว้นประโยคที่ให้ใช้ superuser และไม่โหลด plugin ใด ๆ · อยากรู้ว่าผู้ใช้ที่ไม่เอ่ยชื่อ superuser ได้อะไร (งานเล็กต้องไม่แพงขึ้น งานใหญ่ยังแตกงาน) ใส่ `--prompt natural` · ดูคำสั่งก่อนรันจริงด้วย `--dry-run` · `--save-ratios` เขียน `bench-ratios.json` ให้ hook ใช้ในหัวข้อ "คุ้มแค่ไหน" ของ `log/SUMMARY.md` · แก้ไฟล์นั้นแล้วต้องขึ้นรุ่น superuser และรัน `sync-superuser`
 
 ## แยกว่า token ที่เพิ่มมาจากไหน
 

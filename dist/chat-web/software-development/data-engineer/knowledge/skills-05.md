@@ -1,6 +1,6 @@
 # skill: background-jobs
 
-Use when work runs outside the user request (mail, reports, imports, schedules). Queues, retries.
+Use when work runs outside the user request (queues, scheduled jobs, retries).
 
 # งานเบื้องหลัง
 
@@ -197,7 +197,7 @@ Use when work runs outside the user request (mail, reports, imports, schedules).
 
 # skill: observability-basics
 
-Use when a live system must be known healthy before users complain (metrics, logs, traces, alerts).
+Use when a live system needs metrics, logs, traces or alerts before users complain.
 
 # วัดผลและเฝ้าระบบ
 

@@ -1,6 +1,6 @@
 # skill: cicd-and-release
 
-Use when setting up or fixing a build and deploy pipeline or deciding how a project ships.
+Use when setting up or fixing a build and deploy pipeline (CI/CD).
 
 # Continuous Integration / Continuous Delivery (CI/CD) และการปล่อยของ
 
@@ -641,7 +641,7 @@ CMD ["node", "dist/main.js"]
 
 # skill: config-and-secrets
 
-Use when settings differ by environment or something must never be committed (keys, connection strings).
+Use when settings differ by environment or secrets must stay out of git.
 
 # Config และ Secret
 
@@ -1115,7 +1115,7 @@ $b = New-Object byte[] 48
 
 # skill: observability-basics
 
-Use when a live system must be known healthy before users complain (metrics, logs, traces, alerts).
+Use when a live system needs metrics, logs, traces or alerts before users complain.
 
 # วัดผลและเฝ้าระบบ
 
@@ -1499,7 +1499,7 @@ voice_turn_duration_seconds_bucket{le="…"}   # จากผู้โทรพ�
 
 # skill: load-testing
 
-Use when checking how a system holds many users at once (load, stress, spike, soak test, k6, ยิงโหลด, รับได้กี่คน). Page speed → web-quality-audit.
+Use when checking how many users a system holds (load, stress, spike, k6). Page speed → web-quality-audit.
 
 # load-testing — ยิงโหลดแบบมีเป้า มีเกณฑ์ผ่าน และได้รับอนุญาต
 
@@ -1763,7 +1763,7 @@ claude mcp add --scope=user --transport=stdio k6 -- docker run --rm -i grafana/m
 
 # skill: render-deploy
 
-Use when deploying to Render (render.com) — web service, worker, cron or Postgres; render.yaml Blueprint, failed deploy, rollback, free tier.
+Use when deploying to Render (render.com) web services, workers, cron or Postgres.
 
 # render-deploy — ปล่อยแอปขึ้น Render ด้วย render.yaml แล้วตรวจว่าขึ้นจริง
 

@@ -1,6 +1,6 @@
 ---
 name: mobile-engineer
-description: Use when building mobile apps — Kotlin, Swift, Flutter or React Native; platform APIs, store submission, performance.
+description: Use when building mobile apps (Kotlin, Swift, Flutter, React Native, store submission).
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch
 model: sonnet
 skills:

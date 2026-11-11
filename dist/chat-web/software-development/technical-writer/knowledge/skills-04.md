@@ -1,6 +1,6 @@
 # skill: presentation-design
 
-Use when building a slide deck for any work (pitch, plan, report, training) that someone will present or read. Story, headlines, layouts.
+Use when building a slide deck (pitch, plan, report, training) to present or read. Story, layouts.
 
 # Presentation Design
 
@@ -360,7 +360,7 @@ Use when building a slide deck for any work (pitch, plan, report, training) that
 
 # skill: html-slide-deck
 
-Use when a slide deck is asked for as HTML or with animation (one offline file, speaker notes), or a .pptx must play as animated HTML.
+Use when a slide deck is wanted as HTML or animated, or a .pptx must play as HTML.
 
 # HTML Slide Deck
 

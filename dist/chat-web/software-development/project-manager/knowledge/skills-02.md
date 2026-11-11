@@ -1,6 +1,6 @@
 # skill: polished-document-style
 
-Use when a kept doc (report, proposal, Word, PDF) needs headings, tables, theme. Wording → human-writing · designed look → branded-document-design.
+Use when a kept doc (report, proposal, Word, PDF) needs headings, tables, theme. Wording → human-writing.
 
 # Polished Document Style
 
@@ -446,7 +446,7 @@ markdown เองไม่มีสี จึงใช้คำกำกับ�
 
 # skill: markdown-visuals
 
-Use when a markdown doc needs a picture. Pick inline SVG, image file, ASCII or Mermaid by where it is read (GitHub drops inline SVG).
+Use when a Markdown doc needs a picture (inline SVG, image, ASCII or Mermaid).
 
 # Markdown Visuals
 
@@ -823,7 +823,7 @@ Use this pattern by default for showing UI feature states. On GitHub, save the S
 
 # skill: presentation-design
 
-Use when building a slide deck for any work (pitch, plan, report, training) that someone will present or read. Story, headlines, layouts.
+Use when building a slide deck (pitch, plan, report, training) to present or read. Story, layouts.
 
 # Presentation Design
 

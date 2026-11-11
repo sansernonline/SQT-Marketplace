@@ -1,6 +1,6 @@
 ---
 name: notifications
-description: Use when a system sends email, SMS, LINE, push or in-app messages (channels, templates, unsubscribe).
+description: Use when a system sends email, SMS, LINE, push or in-app messages.
 ---
 
 # การแจ้งเตือนผู้ใช้

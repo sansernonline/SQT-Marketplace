@@ -1,6 +1,6 @@
 # skill: principle-proceed-on-reversible-work
 
-Use when about to ask shall I continue on any work that can be undone. Proceed; hold irreversible steps.
+Use when about to ask shall I continue on work that can be undone. Proceed.
 
 # principle · proceed on reversible work — ย้อนได้ ทำเลย
 
@@ -39,7 +39,7 @@ Use when about to ask shall I continue on any work that can be undone. Proceed; 
 
 # skill: status-report
 
-Use when any task that produces or checks work ends (document, research, review, shop job, code) to report status in a table.
+Use when a task that produces or checks work ends, to report status in a table.
 
 # รายงานสถานะเมื่อจบงาน
 
@@ -317,7 +317,7 @@ Use when any task that produces or checks work ends (document, research, review,
 
 # skill: handoff
 
-Use when project work starts or passes on — to a subagent, next session, another model or vendor, a person or bot — or an inbox message lands.
+Use when work passes to a subagent, next session, another model or person, or an inbox message lands.
 
 # handoff — ส่งงานต่อ ให้คนรับไม่ต้องเดา
 

@@ -1,6 +1,6 @@
 # skill: graphic-design
 
-Use when a software project needs a one-off visual (logo, poster, social post). Full brand or campaign → graphic-design plugin.
+Use when a software project needs a one-off logo or poster. Full brand → graphic-design plugin.
 
 # Graphic Design
 

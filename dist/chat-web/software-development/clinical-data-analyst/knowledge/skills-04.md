@@ -1,6 +1,6 @@
 # skill: pdpa-compliance
 
-Use when software stores personal data of people in Thailand (PDPA consent, rights, retention, breach).
+Use when software stores personal data of people in Thailand (PDPA).
 
 # PDPA — ข้อมูลส่วนบุคคล
 
@@ -235,7 +235,7 @@ Use when software stores personal data of people in Thailand (PDPA consent, righ
 
 # skill: markdown-visuals
 
-Use when a markdown doc needs a picture. Pick inline SVG, image file, ASCII or Mermaid by where it is read (GitHub drops inline SVG).
+Use when a Markdown doc needs a picture (inline SVG, image, ASCII or Mermaid).
 
 # Markdown Visuals
 

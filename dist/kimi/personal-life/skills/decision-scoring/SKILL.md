@@ -1,6 +1,6 @@
 ---
 name: decision-scoring
-description: Use when picking, ranking or budgeting options by numbers instead of gut feel (which is best, what first, เลือกอันไหนดี, คุ้มไหม, ตรวจอีกรอบไหม).
+description: Use when picking or ranking options by numbers, not gut feel (which is best, worth it).
 ---
 
 # decision-scoring — ตัดสินด้วยตัวเลข ไม่ใช่ความรู้สึก

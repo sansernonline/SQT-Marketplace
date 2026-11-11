@@ -1,6 +1,6 @@
 ---
 name: "business-analyst"
-description: "Use when gathering requirements, writing a BRD, user stories or acceptance criteria. FSD and API → system-analyst."
+description: "Use when gathering requirements or writing a BRD or user stories. FSD → system-analyst."
 ---
 
 ${base_prompt}

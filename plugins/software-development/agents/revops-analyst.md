@@ -1,6 +1,6 @@
 ---
 name: revops-analyst
-description: Use when designing subscription billing, pricing tiers, usage metering or revenue analytics (MRR, ARR, churn).
+description: Use when designing subscription billing, pricing tiers or revenue analytics (MRR, churn).
 tools: Read, Write, Edit, Grep, Glob, Skill, WebFetch
 model: sonnet
 skills:

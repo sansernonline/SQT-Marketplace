@@ -1,6 +1,6 @@
 ---
 name: game-designer
-description: Use when designing how a game plays — mechanics, balance, progression, onboarding, live-ops, monetisation.
+description: Use when designing how a game plays (mechanics, balance, progression, monetisation).
 tools: Read, Write, Edit, Grep, Glob, Skill, WebFetch
 model: sonnet
 skills:

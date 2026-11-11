@@ -1,6 +1,6 @@
 # SQT graphic-design — OpenAI Codex CLI
 
-> สร้างอัตโนมัติจาก plugins/graphic-design/ โดย scripts/build/build-targets.mjs (v0.28.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/graphic-design/ โดย scripts/build/build-targets.mjs (v0.28.1) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Creative design beyond product UI — brand kits, AI image generation and briefs with style consistency, social media formats, marketplace product images, YouTube thumbnails, print-ready files, campaign sets, LINE rich menus, app and UI icons, video editing with Thai subtitles and narration, speaking scripts, motion basics, and a design-review checklist.
 
@@ -19,6 +19,6 @@ Creative design beyond product UI — brand kits, AI image generation and briefs
 - **social-creator** — Use when creating social media posts, ads or campaign assets. Knows platform formats and safe zones; ships whole sets.
 - **video-editor** — Use when footage or narration must become a finished file — cut, Thai subtitles, loudness, export. Works with ffmpeg.
 - **brainstormer** — Use when the user wants ideas or options, or a task is big or unclear and a wrong pick is costly. Lead picks.
-- **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked. Proposes up to 3 fixes with evidence.
+- **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked.
 - **reviewer** — Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.
-- **worker** — Use when the lead hands out a self-contained slice needing no special role. Writes files, replies one line.
+- **worker** — Use when the lead hands out a self-contained slice needing no special role (code slice with its test, file to fill).

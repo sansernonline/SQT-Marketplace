@@ -1,6 +1,6 @@
 # skill: reference-app-research
 
-Use when someone says I want an app like X. Researches it and its competitors into one doc.
+Use when someone says I want an app like X. Researches it and its competitors.
 
 # Research แอปต้นแบบ — แกะ feature · UI · UX แล้วหาว่าเราจะทำให้ดีกว่าอย่างไร
 
@@ -224,7 +224,7 @@ Use when someone says I want an app like X. Researches it and its competitors in
 
 # skill: context-budget
 
-Use when a task will read large material (many files, long PDFs, many web pages, a codebase) or run long-output commands.
+Use when a task will read large material (many files, long PDFs, a codebase) or long output.
 
 # งบ context
 
@@ -435,7 +435,7 @@ subagent มี context ของตัวเอง จึงอ่านไป 
 
 # skill: principle-build-a-tool-not-handwork
 
-Use when work has a mechanical part (same edit in many files, rows or documents, a repeated check). Script it once.
+Use when work has a mechanical part (same edit in many files or rows). Script it once.
 
 # principle · build a tool, not handwork — งานกลไกทำเป็นเครื่องมือ
 > ใช้คู่กัน: `principle-small-verifiable-steps` (ตัดเป็นชิ้นเล็กที่ตรวจได้) · `parallel-split-and-merge` (รันหลายชิ้นพร้อมกัน)

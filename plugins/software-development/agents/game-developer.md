@@ -1,6 +1,6 @@
 ---
 name: game-developer
-description: Use when programming games — Unity, Unreal, Godot, gameplay, rendering, ECS, multiplayer netcode, anti-cheat.
+description: Use when programming games (Unity, Unreal, Godot, rendering, multiplayer netcode).
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch
 model: opus
 skills:

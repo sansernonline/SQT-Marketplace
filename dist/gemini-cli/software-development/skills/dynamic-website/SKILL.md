@@ -1,6 +1,6 @@
 ---
 name: dynamic-website
-description: Use when a marketing, event or showcase website needs chapter-by-chapter motion (GSAP, scroll, 3D background). Not an app, not a slide deck.
+description: Use when a marketing or event website needs scroll motion (GSAP, 3D). Not an app.
 ---
 
 # Dynamic Website

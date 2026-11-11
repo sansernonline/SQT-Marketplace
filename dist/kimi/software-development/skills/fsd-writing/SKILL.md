@@ -1,6 +1,6 @@
 ---
 name: fsd-writing
-description: Use when writing or reviewing a Functional Specification Document (FSD) that screens are built from.
+description: Use when writing or reviewing a Functional Specification Document (FSD).
 ---
 
 # เขียน Functional Specification Document (FSD)

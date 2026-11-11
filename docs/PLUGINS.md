@@ -63,7 +63,7 @@ superuser = แม่แบบ + skill 6 ตัว           superuser = แก�
 จำลองบริษัทซอฟต์แวร์ครบทุกขั้นของ Software Development Life Cycle (SDLC) ตั้งแต่ทีมหลัก (product · analysis · architecture · design · development · QA · DevOps · security) ไปจนถึงผู้เชี่ยวชาญเฉพาะสาขา
 
 ### มีอะไรบ้าง
-**38 agents · 105 skills · 11 commands** (ไม่นับ skill กลาง 32 ตัวจาก `superuser`)
+**38 agents · 104 skills · 12 commands** (ไม่นับ skill กลาง 32 ตัวจาก `superuser`)
 
 ### ติดตั้ง
 ```

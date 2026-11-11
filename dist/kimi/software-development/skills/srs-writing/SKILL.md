@@ -1,6 +1,6 @@
 ---
 name: srs-writing
-description: Use when writing or reviewing a Software Requirements Specification (SRS) — ISO 29148, testable ids, tracing.
+description: Use when writing or reviewing a Software Requirements Specification (SRS).
 ---
 
 # SRS Writing

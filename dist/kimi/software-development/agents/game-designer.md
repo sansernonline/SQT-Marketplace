@@ -1,6 +1,6 @@
 ---
 name: "game-designer"
-description: "Use when designing how a game plays — mechanics, balance, progression, onboarding, live-ops, monetisation."
+description: "Use when designing how a game plays (mechanics, balance, progression, monetisation)."
 ---
 
 ${base_prompt}

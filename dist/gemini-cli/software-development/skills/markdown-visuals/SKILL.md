@@ -1,6 +1,6 @@
 ---
 name: markdown-visuals
-description: Use when a markdown doc needs a picture. Pick inline SVG, image file, ASCII or Mermaid by where it is read (GitHub drops inline SVG).
+description: Use when a Markdown doc needs a picture (inline SVG, image, ASCII or Mermaid).
 ---
 
 # Markdown Visuals

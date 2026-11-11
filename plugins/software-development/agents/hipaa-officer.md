@@ -1,6 +1,6 @@
 ---
 name: hipaa-officer
-description: Use for HIPAA compliance — Privacy, Security and Breach Rules, business associate agreements, risk assessments, audits.
+description: Use for HIPAA compliance (Privacy, Security and Breach Rules, BAAs, risk assessments).
 tools: Read, Write, Edit, Grep, Glob, Skill, WebFetch
 model: opus
 skills:

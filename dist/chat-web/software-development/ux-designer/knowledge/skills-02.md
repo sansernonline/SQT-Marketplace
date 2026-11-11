@@ -1,6 +1,6 @@
 # skill: principle-prove-it-works
 
-Use when about to say any work is done, fixed, sent or working. Check it against the real thing first.
+Use when about to say any work is done, fixed or working. Check against the real thing first.
 
 # principle · prove it works — พิสูจน์กับของจริง
 
@@ -104,7 +104,7 @@ plugin `software-development` มีรายละเอียดของโ�
 
 # skill: design-direction-lookup
 
-Use when a new screen, app or site needs a starting look (palette, Thai-Latin fonts, industry, UX and stack rules) before ui-craft design directions.
+Use when a new screen, app or site needs a starting palette and Thai-Latin fonts before ui-craft.
 
 # design-direction-lookup — หาจุดเริ่มหน้าตา 3 แนวจากโจทย์ไทยหรืออังกฤษ
 

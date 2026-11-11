@@ -1,6 +1,6 @@
 # skill: architecture-patterns
 
-Use when choosing system architecture (monolith, microservices, serverless, event-driven, CQRS, Saga).
+Use when choosing system architecture (monolith, microservices, serverless, events).
 
 # Architecture Patterns
 

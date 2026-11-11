@@ -1,6 +1,6 @@
 ---
 name: stack-mql
-description: Use when writing, reviewing or testing MQL4/MQL5 code for MetaTrader 4/5 (Expert Advisors, indicators, scripts) or preparing one for the MQL5 Market.
+description: Use when writing, reviewing or testing MQL4/MQL5 code for MetaTrader (EAs, indicators).
 ---
 
 # stack · MQL — Expert Advisor (EA) ที่ส่งออร์เดอร์ถูก ทุกโบรกเกอร์ ทุกครั้ง

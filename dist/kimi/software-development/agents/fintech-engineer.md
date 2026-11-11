@@ -1,6 +1,6 @@
 ---
 name: "fintech-engineer"
-description: "Use when building payments — gateways (Stripe, Omise), webhooks, refunds, ledgers, reconciliation. MRR → revops-analyst."
+description: "Use when building payments (Stripe, Omise, webhooks, refunds, ledgers, reconciliation)."
 ---
 
 ${base_prompt}

@@ -110,7 +110,7 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
 
 # skill: temp-file-discipline
 
-Use when a task writes temporary files (extracts, previews, backups, drafts, one-off scripts) into a project or work folder.
+Use when a task writes temporary files (extracts, backups, scripts) into a project.
 
 # ระเบียบไฟล์ชั่วคราว
 

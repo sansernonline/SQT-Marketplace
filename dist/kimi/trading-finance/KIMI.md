@@ -1,6 +1,6 @@
 # SQT trading-finance — Kimi Code CLI
 
-> สร้างอัตโนมัติจาก plugins/trading-finance/ โดย scripts/build/build-targets.mjs (v0.21.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/trading-finance/ โดย scripts/build/build-targets.mjs (v0.21.1) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Trading and personal finance toolkit for Thai investors — watchlists, signals, paper trading, trade journal, position sizing, dividends, budgets and scam checks, plus Thai money skills: investment tax, year-end deduction planning (/tax-plan), mutual funds, retirement, debt payoff and คลินิกแก้หนี้, insurance review and emergency funds, credit bureau reports, bonds and deposits, rebalancing and DCA, and home refinance. Uses whatever market-data plugins you already have.
 
@@ -18,6 +18,6 @@ Trading and personal finance toolkit for Thai investors — watchlists, signals,
 - **risk-manager** — Use before opening a position, asking how much to buy, or when a portfolio drifts. Never sizes without a stop-loss.
 - **trade-journal-coach** — Use when reviewing past trades or a trade journal, or asking why you keep losing the same way. Finds one rule to test.
 - **brainstormer** — Use when the user wants ideas or options, or a task is big or unclear and a wrong pick is costly. Lead picks.
-- **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked. Proposes up to 3 fixes with evidence.
+- **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked.
 - **reviewer** — Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.
-- **worker** — Use when the lead hands out a self-contained slice needing no special role. Writes files, replies one line.
+- **worker** — Use when the lead hands out a self-contained slice needing no special role (code slice with its test, file to fill).

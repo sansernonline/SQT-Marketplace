@@ -1,6 +1,6 @@
 ---
 name: graphic-design
-description: Use when a software project needs a one-off visual (logo, poster, social post). Full brand or campaign → graphic-design plugin.
+description: Use when a software project needs a one-off logo or poster. Full brand → graphic-design plugin.
 ---
 
 # Graphic Design

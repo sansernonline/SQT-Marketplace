@@ -1,6 +1,6 @@
 # skill: kafka-streaming
 
-Use when services pass events via Kafka (topic, producer, consumer, DLQ, ส่ง event ระหว่าง service) or events get lost or doubled.
+Use when services pass events via Kafka or events get lost or doubled.
 
 # kafka-streaming — ออกแบบ topic · producer · consumer ของ Apache Kafka ไม่ให้ event หายหรือซ้ำแบบเงียบ ๆ
 
@@ -323,7 +323,7 @@ max.poll.interval.ms=300000
 
 # skill: rabbitmq-messaging
 
-Use when work goes through RabbitMQ (queue, exchange, ack, DLX, ข้อความหาย/ซ้ำ). Many readers of one log → kafka-streaming
+Use when work goes through RabbitMQ (queue, exchange, ack). Event log → kafka-streaming.
 
 # rabbitmq-messaging — ออกแบบคิว RabbitMQ ไม่ให้ข้อความหายหรือซ้ำแบบเงียบ ๆ
 
@@ -613,7 +613,7 @@ ch.basic_consume("order.email.send", on_message, auto_ack=False)
 
 # skill: jenkins-pipeline
 
-Use when writing or fixing a Jenkinsfile or Jenkins pipeline (CI/CD) that builds a Docker image, tests, and deploys with Helm.
+Use when writing or fixing a Jenkinsfile or Jenkins pipeline.
 
 # jenkins-pipeline — Jenkinsfile ที่ build image, ทดสอบ และ deploy ด้วย Helm โดยค่าลับไม่รั่ว
 
@@ -932,7 +932,7 @@ pipeline {
 
 # skill: mcp-server
 
-Use when an agent must reach a real system (database, ERP, internal API) through an MCP server, or when choosing a vendor MCP over building one.
+Use when an agent must reach a real system (database, ERP, API) through an MCP server.
 
 # mcp-server — สร้าง MCP server ให้ agent ใช้ระบบจริงได้
 

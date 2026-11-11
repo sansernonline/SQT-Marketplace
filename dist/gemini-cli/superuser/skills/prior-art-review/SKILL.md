@@ -1,6 +1,6 @@
 ---
 name: prior-art-review
-description: Use when about to build or buy something that may already exist (tool, service, template, library). Decide adopt, buy or build.
+description: Use when about to build something that may already exist. Decide adopt, buy or build.
 ---
 
 # สำรวจของที่มีอยู่แล้วก่อนลงมือทำ

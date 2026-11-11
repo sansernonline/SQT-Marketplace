@@ -1,6 +1,6 @@
 ---
 name: ux-designer
-description: Use when designing user flows, wireframes, clickable HTML mockups or UI heuristic reviews. Logos → graphic-designer.
+description: Use when designing user flows, wireframes or clickable HTML mockups. Logos → graphic-designer.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill
 model: sonnet
 skills:

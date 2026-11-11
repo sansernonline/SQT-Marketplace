@@ -1,6 +1,6 @@
 # skill: branded-document-design
 
-Use when a Word, PowerPoint or PDF deliverable (proposal, report, contract) must look designed. Whole report from one Markdown → markdown-report-docx.
+Use when a Word, PowerPoint or PDF deliverable must look designed. Markdown report → markdown-report-docx.
 
 # Branded Document Design
 

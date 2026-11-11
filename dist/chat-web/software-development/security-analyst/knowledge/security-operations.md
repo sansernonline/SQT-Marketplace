@@ -1,6 +1,6 @@
 # skill: security-operations
 
-Use when running security operations (incident containment, SOC, SIEM rules, threat hunting).
+Use when running security operations (SOC, SIEM rules, threat hunting).
 
 # security-operations
 

@@ -1,6 +1,6 @@
 ---
 name: context-budget
-description: Use when a task will read large material (many files, long PDFs, many web pages, a codebase) or run long-output commands.
+description: Use when a task will read large material (many files, long PDFs, a codebase) or long output.
 ---
 
 # งบ context

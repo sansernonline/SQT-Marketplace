@@ -328,7 +328,7 @@ Use when writing or reviewing code, config or scripts, especially input, databas
 
 # skill: principle-prove-it-works
 
-Use when about to say any work is done, fixed, sent or working. Check it against the real thing first.
+Use when about to say any work is done, fixed or working. Check against the real thing first.
 
 # principle · prove it works — พิสูจน์กับของจริง
 
@@ -381,7 +381,7 @@ Use when about to say any work is done, fixed, sent or working. Check it against
 
 # skill: testing-standards
 
-Use when adding or setting up automated tests (.NET, Node, Python, Angular, Flutter) or a suite is flaky.
+Use when adding or setting up automated tests, or a test suite is flaky.
 
 # Testing Standards
 
@@ -907,7 +907,7 @@ flutter test integration_test/            # ต้องมี emulator หร�
 
 # skill: e2e-testing-patterns
 
-Use when designing end-to-end tests with Playwright or Cypress, fixing flaky tests or running in continuous integration (CI).
+Use when writing end-to-end tests (Playwright, Cypress) or fixing flaky ones.
 
 > **ใน SuperUser:** ถ้าอยากให้ agent รันแอปและพิสูจน์ผลเอง ให้ใช้ [`app-verifier-setup`](../app-verifier-setup/SKILL.md) ส่วน skill นี้คือหลักออกแบบชุดทดสอบ E2E (end-to-end) ที่ verifier นั้นเรียกใช้
 

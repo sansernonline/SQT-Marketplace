@@ -1,6 +1,6 @@
 ---
 name: web-app-design
-description: Use when designing or building a web app UI or mockup (dashboard, admin panel, internal tool, SaaS).
+description: Use when designing a web app UI or mockup (dashboard, admin panel, SaaS).
 ---
 
 # Web App Design

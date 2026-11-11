@@ -1,6 +1,6 @@
 ---
 name: "developer"
-description: "Use when implementing features, writing code, fixing bugs, refactoring, writing unit tests or self-reviewing code."
+description: "Use when implementing features, fixing bugs, refactoring or writing unit tests."
 ---
 
 ${base_prompt}

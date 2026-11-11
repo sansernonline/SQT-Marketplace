@@ -1,6 +1,6 @@
 ---
 name: product-manager
-description: Use for product vision, roadmap, feature priorities, user research or market analysis. HOW and WHEN → project-manager.
+description: Use for product vision, roadmap, priorities or user research. Schedules → project-manager.
 tools: Read, Write, Edit, Grep, Glob, Skill, WebFetch, WebSearch
 model: sonnet
 skills:

@@ -1,6 +1,6 @@
 # skill: cloudflare-r2
 
-Use when connecting an app to Cloudflare R2 object storage — S3 API, presigned upload, public bucket, CORS, wrangler, cost.
+Use when an app stores files in Cloudflare R2 (S3 API, presigned upload, CORS).
 
 # cloudflare-r2 — ต่อแอปเข้า Cloudflare R2 แบบ bucket ส่วนตัว สิทธิ์น้อยสุด และคุมเงินได้
 
@@ -169,7 +169,7 @@ Cloudflare R2 docs ดู 2026-11-05: [S3 API](https://developers.cloudflare.com
 
 # skill: backblaze-b2
 
-Use when using Backblaze B2 — app file storage (S3 API, keys, presigned upload, lifecycle, cost) or deploying a static site (b2 sync, Cloudflare).
+Use when storing app files or hosting a static site on Backblaze B2 (S3 API, keys).
 
 # backblaze-b2 — ต่อแอปเข้า Backblaze B2 แบบ bucket ส่วนตัว สิทธิ์น้อยสุด และไม่ปล่อยเวอร์ชันเก่าค้างคิดเงิน
 
@@ -522,7 +522,7 @@ Backblaze และ Cloudflare ดู 2026-11-05: [Deliver public B2 content thr
 
 # skill: project-bootstrap
 
-Use when starting a repository or one is slow to run on a new machine (layout, README, one run command).
+Use when starting a repository or making one easy to run on a new machine.
 
 # ตั้งต้นโปรเจกต์
 
@@ -934,7 +934,7 @@ README ของแต่ละงานไม่เหมือนกัน · 
 
 # skill: background-jobs
 
-Use when work runs outside the user request (mail, reports, imports, schedules). Queues, retries.
+Use when work runs outside the user request (queues, scheduled jobs, retries).
 
 # งานเบื้องหลัง
 
@@ -1131,7 +1131,7 @@ Use when work runs outside the user request (mail, reports, imports, schedules).
 
 # skill: kubernetes-helm
 
-Use when writing a Dockerfile, Kubernetes (k8s) manifest or Helm chart, deploying staging to production, or running STT/TTS on GPU nodes.
+Use when writing a Dockerfile, Kubernetes manifest or Helm chart, or deploying to k8s.
 
 # kubernetes-helm — Dockerfile, manifest, Helm chart และ deploy staging → production
 

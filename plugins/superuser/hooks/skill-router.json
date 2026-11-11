@@ -6,7 +6,7 @@
     "_": "งานหลายขั้นที่ไม่เอ่ยชื่อ · แต่ละ signal ได้ 1 แต้มเมื่อเจอ pattern ถึง min ครั้ง (หรือข้อความยาวถึง minLength) · ถึง threshold → บอก superuser · ปรับเกณฑ์แล้วรัน hook --self-test",
     "threshold": 2,
     "skills": ["superuser:superuser"],
-    "note": "งานนี้เป็นของสาขาไหน (โค้ด · ขายของ · เงิน · ชีวิต · ออกแบบ) เปิด `<plugin>:superuser` ของสาขานั้นแทนได้",
+    "note": "สาขาอื่นใช้ `<สาขา>:superuser` · subagent ข้าม",
     "signals": [
       { "pattern": "จากนั้น|ต่อด้วย|หลังจากนั้น|พร้อมทั้ง|พร้อม(?=\\s*(โอน|ทำ|เขียน|ส่งออก|ย้าย|ตั้ง))|แล้ว(ก็|ค่อย)?\\s*(ทำ|เขียน|ร่าง|สร้าง|คำนวณ|สรุป|ออกแบบ|เพิ่ม|แก้|ตรวจ|รัน|เทียบ|วางแผน|อัปเดต|ปรับ|จัด|โอน|ย้าย|เช็ก|ตั้ง)|\\bthen\\s+(add|fix|write|create|build|update|deploy|migrate|refactor|review|merge|commit|push|publish|set ?up|draft|design|plan|compare)\\b|after that|and also" },
       { "pattern": "(\\s|^)และ|, and |\\band\\b", "min": 2 },

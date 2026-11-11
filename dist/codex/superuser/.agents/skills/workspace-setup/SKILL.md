@@ -1,6 +1,6 @@
 ---
 name: workspace-setup
-description: Use when work starts in a new project folder, the user wants agents to merge PRs and delete branches without asking, or ~/.claude/CLAUDE.md is old.
+description: Use when work starts in a new project folder or agents should merge branches without asking.
 ---
 
 # ตั้งโปรเจกต์ให้ agent ทำงานจนจบได้

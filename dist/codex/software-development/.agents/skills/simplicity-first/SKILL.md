@@ -1,6 +1,6 @@
 ---
 name: simplicity-first
-description: Use when shaping a software BRD, SRS, FSD, ADR, architecture or roadmap to fewest parts. Code → lazy-coding; other → simplify.
+description: Use when cutting a software spec or architecture to fewest parts. Code → lazy-coding.
 ---
 
 # Simplicity First

@@ -1,6 +1,6 @@
 ---
 name: mobile-engineering
-description: Use when engineering a mobile app (Kotlin, Swift, Flutter, React Native, offline-first). Not screens.
+description: Use when engineering a mobile app (Kotlin, Swift, Flutter, React Native).
 argument-hint: <mobile-architecture | aso-audit> <details>
 ---
 

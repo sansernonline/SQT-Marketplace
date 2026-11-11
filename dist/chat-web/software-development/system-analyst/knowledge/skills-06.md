@@ -1,6 +1,6 @@
 # skill: fsd-writing
 
-Use when writing or reviewing a Functional Specification Document (FSD) that screens are built from.
+Use when writing or reviewing a Functional Specification Document (FSD).
 
 # เขียน Functional Specification Document (FSD)
 
@@ -672,7 +672,7 @@ Every error body is `application/problem+json` (RFC 9457): `type` · `title` · 
 
 # skill: legacy-spec-recovery
 
-Use when a legacy system has code but no spec and must change. As-is spec with evidence, impact.
+Use when a legacy system has code but no spec and must change.
 
 # Legacy Spec Recovery
 
@@ -895,7 +895,7 @@ Ignore build output everywhere: `bin/`, `obj/`, `publish*/`, `dist/`, `build/`, 
 
 # skill: flag-and-propose
 
-Use when something found mid-task in any work changes what happens next (stale file, wrong number, blocked step) and needs a decision.
+Use when something found mid-task changes what happens next and needs a decision.
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 

@@ -1,6 +1,6 @@
 # SQT personal-life — OpenAI Codex CLI
 
-> สร้างอัตโนมัติจาก plugins/personal-life/ โดย scripts/build/build-targets.mjs (v0.23.2) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/personal-life/ โดย scripts/build/build-targets.mjs (v0.23.3) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Daily-life admin, five categories — life admin (weekly reviews, inbox triage, documents, travel, decisions, subscriptions, digital safety, goals), home and family (bills, maintenance, vehicle, meals, school, elder care, pets, floods, wills), health (exercise, sleep, checkups, medication, doctor visits, pregnancy — never diagnoses), career (CVs, interviews, salary, LinkedIn), and learning (learning paths, papers, tech radar, certs, side projects, thesis). General information only.
 
@@ -22,6 +22,6 @@ Daily-life admin, five categories — life admin (weekly reviews, inbox triage, 
 - **meeting-prep** — Use before and after a meeting that matters. One-page prep card (goal, questions, context) and action-item summary.
 - **tech-mentor** — Use to keep up with tech, learn a new technology, prepare for a certification, or pick a 2-weekend side project.
 - **brainstormer** — Use when the user wants ideas or options, or a task is big or unclear and a wrong pick is costly. Lead picks.
-- **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked. Proposes up to 3 fixes with evidence.
+- **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked.
 - **reviewer** — Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.
-- **worker** — Use when the lead hands out a self-contained slice needing no special role. Writes files, replies one line.
+- **worker** — Use when the lead hands out a self-contained slice needing no special role (code slice with its test, file to fill).

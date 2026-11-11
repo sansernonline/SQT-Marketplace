@@ -1,6 +1,6 @@
 # skill: reference-app-research
 
-Use when someone says I want an app like X. Researches it and its competitors into one doc.
+Use when someone says I want an app like X. Researches it and its competitors.
 
 # Research แอปต้นแบบ — แกะ feature · UI · UX แล้วหาว่าเราจะทำให้ดีกว่าอย่างไร
 
@@ -224,7 +224,7 @@ Use when someone says I want an app like X. Researches it and its competitors in
 
 # skill: document-naming
 
-Use when creating, renaming or filing any document a team or client keeps or sends (report, quote, contract) — file name, version, status.
+Use when creating, renaming or filing a document others keep (name, version, status).
 
 # ตั้งชื่อและจัดเวอร์ชันเอกสาร
 
@@ -368,7 +368,7 @@ Use when creating, renaming or filing any document a team or client keeps or sen
 
 # skill: product-naming
 
-Use when naming a product, shop, service, app or brand, or checking how a name sounds in Thai.
+Use when naming a product, shop, app or brand, or checking how it sounds in Thai.
 
 # ตั้งชื่อผลิตภัณฑ์
 

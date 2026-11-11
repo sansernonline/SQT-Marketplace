@@ -1,6 +1,6 @@
 # skill: principle-prove-it-works
 
-Use when about to say any work is done, fixed, sent or working. Check it against the real thing first.
+Use when about to say any work is done, fixed or working. Check against the real thing first.
 
 # principle · prove it works — พิสูจน์กับของจริง
 
@@ -53,7 +53,7 @@ Use when about to say any work is done, fixed, sent or working. Check it against
 
 # skill: spell-out-abbreviations
 
-Use when text people read (report, slide, label, message) is heavy with abbreviations or jargon, or needs a glossary. Writing → human-writing.
+Use when text people read is heavy with abbreviations or jargon, or needs a glossary.
 
 # Spell Out Abbreviations
 

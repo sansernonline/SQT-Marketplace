@@ -1,6 +1,6 @@
 ---
 name: healthcare-systems
-description: Use when software handles patient or clinical data (orders, medication, FHIR, EHR, HIPAA).
+description: Use when software handles patient or clinical data (FHIR, EHR, HIPAA).
 argument-hint: <fhir-design | hipaa-audit> <details>
 ---
 

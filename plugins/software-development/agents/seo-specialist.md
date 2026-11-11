@@ -1,6 +1,6 @@
 ---
 name: seo-specialist
-description: Use when improving search ranking — SEO audits, keywords, meta tags, URL structure, structured data, competitor SEO.
+description: Use when improving search ranking (SEO audits, keywords, meta tags, structured data).
 tools: Read, Write, Edit, Grep, Glob, WebFetch, WebSearch, Skill
 model: sonnet
 skills:

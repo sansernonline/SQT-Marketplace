@@ -1,6 +1,6 @@
 ---
 name: worktree-and-branch
-description: Use when 2 or more agents edit one repo at once, a spike could break the main checkout, or a finished branch must be merged, PR-ed or discarded.
+description: Use when 2+ agents edit one repo at once, or a finished branch must be merged.
 ---
 
 # worktree-and-branch — แยกที่ทำงานให้ agent แล้วปิด branch ให้จบ

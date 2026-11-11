@@ -1,6 +1,6 @@
 ---
 name: project-manager
-description: Use for project plans, timelines, sprints, risks, progress tracking or status reports. WHAT and WHY → product-manager.
+description: Use for project plans, timelines, sprints, risks or status reports. Scope → product-manager.
 tools: Read, Write, Edit, Grep, Glob, Skill
 model: sonnet
 skills:

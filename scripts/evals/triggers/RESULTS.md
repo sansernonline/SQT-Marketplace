@@ -148,3 +148,33 @@
 - ตัวรันล้มที่เคส `tf-*` ซึ่งไม่มี `expect_any` (แก้แล้ว) · ไม่ได้รัน `tf-*` 5 เคส และ `gd-clip` รอบ 3
 - ตกทุกรอบ: `docx-edit` 0/3 · `python-code` 0/3 · `slides` 0/3 · `ecom-slip` 0/3 · `meeting-minutes` 0/3 (เปิด meeting แต่ไม่เปิด human-writing) · ตกบางรอบ: `bugfix` 1/3 · `readme` 1/3 · `compare` 2/3 · `domain-tax` 2/3
 - ทุกรอบขึ้น "Skill listing over budget" คำอธิบาย skill จึงถูกตัด → superuser 3.30.0 บอกให้ผู้ใช้ตั้งงบ 0.02 ตอนเริ่ม session · ยังไม่ได้รันเทียบที่งบ 2% ในรอบนี้
+
+## 2026-11-11 01:48 · lean-after · ผ่าน 5/8 · $2.32
+
+- plugin: 6 ตัวจาก `C:\Users\sanse\AppData\Local\Temp\claude\75378f8d937b4189\d2c049aa-3719-427f-9afc-762f9c62eb03\scratchpad\lean\after\plugins` · listing: Skill listing over budget: 288 skills, 43685 chars > 30000 budget — descriptions will be truncated. Run /skills to disable some, or raise skillListingBudgetFraction in settings.
+
+| เคส | ผ่าน | skill ที่เปิด |
+|---|---|---|
+| docx-edit | 1/1 | human-writing, polished-document-style |
+| readme | 1/1 | human-writing |
+| compare | 1/1 | answer-shape, stack-sql |
+| python-code | 0/1 | superuser |
+| bugfix | 1/1 | superuser |
+| slides | 0/1 | superuser |
+| multistep-noname | 1/1 | superuser |
+| no-git-concept | 0/1 | commit-log |
+
+## 2026-11-11 01:48 · lean-before · ผ่าน 5/8 · $2.14
+
+- plugin: 6 ตัวจาก `C:\Users\sanse\AppData\Local\Temp\claude\75378f8d937b4189\d2c049aa-3719-427f-9afc-762f9c62eb03\scratchpad\lean\before\plugins` · listing: Skill listing over budget: 289 skills, 48554 chars > 30000 budget — descriptions will be truncated. Run /skills to disable some, or raise skillListingBudgetFraction in settings.
+
+| เคส | ผ่าน | skill ที่เปิด |
+|---|---|---|
+| docx-edit | 1/1 | human-writing, polished-document-style |
+| readme | 1/1 | human-writing, simplify, lazy-coding, readable-code |
+| compare | 1/1 | answer-shape, stack-sql |
+| python-code | 0/1 | superuser |
+| bugfix | 1/1 | superuser |
+| slides | 0/1 | superuser |
+| multistep-noname | 1/1 | superuser |
+| no-git-concept | 0/1 | commit-log |

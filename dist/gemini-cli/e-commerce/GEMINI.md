@@ -1,6 +1,6 @@
 # SQT e-commerce — Gemini CLI
 
-> สร้างอัตโนมัติจาก plugins/e-commerce/ โดย scripts/build/build-targets.mjs (v1.9.2) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/e-commerce/ โดย scripts/build/build-targets.mjs (v1.9.3) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Thai online selling, buying and small-business back office — sell on Shopee, Lazada, TikTok Shop, LINE and Facebook (listings, pricing, stock, chat, live, returns), buy with confidence (total cost, warranty, OCPB 1166 complaints, refunds), and run the company (quotations, contracts, VAT and withholding tax, payroll, social security, year-end filing, labour law, PDPA, LINE OA, PromptPay). General information only, not tax or legal advice.
 
@@ -21,6 +21,6 @@ Thai online selling, buying and small-business back office — sell on Shopee, L
 - **tax-helper** — Use when a Thai SME or person asks what to file and when (VAT, WHT, social security), hiring or business setup.
 - **thai-doc-writer** — Use when drafting Thai business documents — ใบเสนอราคา, invoice, receipt, official letter, contract, leave form.
 - **brainstormer** — Use when the user wants ideas or options, or a task is big or unclear and a wrong pick is costly. Lead picks.
-- **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked. Proposes up to 3 fixes with evidence.
+- **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked.
 - **reviewer** — Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.
-- **worker** — Use when the lead hands out a self-contained slice needing no special role. Writes files, replies one line.
+- **worker** — Use when the lead hands out a self-contained slice needing no special role (code slice with its test, file to fill).

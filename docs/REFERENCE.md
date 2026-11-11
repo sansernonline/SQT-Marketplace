@@ -197,7 +197,7 @@
 
 ---
 
-## 🛠️ Skills (105)
+## 🛠️ Skills (104)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst, product-manager
@@ -550,7 +550,7 @@
 
 ### 44. reference-app-research
 **ใช้กับ:** product-manager, reverse-engineer
-**Description:** Use when someone says I want an app like X. Researches it and its competitors into one doc.
+**Description:** Use when someone says I want an app like X. Researches it and its competitors.
 
 ---
 
@@ -566,31 +566,31 @@
 
 ### 46. app-verifier-setup
 **ใช้กับ:** developer, qa-tester
-**Description:** Use when a project has no scripted way for an agent to run the app and see results, or before feature one.
+**Description:** Use when a project has no scripted way for an agent to run the app and see results.
 
 ---
 
 ### 47. app-verifier-upkeep
 **ใช้กับ:** qa-tester
-**Description:** Use when a project verify skill has drifted from the real app (steps fail, screens missing).
+**Description:** Use when a project verify skill has drifted from the real app (steps fail).
 
 ---
 
 ### 48. docker-sandbox
 **ใช้กับ:** developer, devops-engineer, qa-tester, reverse-engineer, security-engineer
-**Description:** Use when a project needs its own Docker container (untrusted code, system installs, overnight runs) or the user says sandbox.
+**Description:** Use when a project needs its own Docker container for untrusted code, or says sandbox.
 
 ---
 
 ### 49. bug-inbox-triage
 **ใช้กับ:** qa-tester
-**Description:** Use when software bug reports pile up in email, chat, a tracker or inbox, or the user says triage bugs.
+**Description:** Use when software bug reports pile up (email, chat, tracker) or the user says triage bugs.
 
 ---
 
 ### 50. code-gardener
 **ใช้กับ:** developer
-**Description:** Use when patrolling a codebase for misleading patterns (duplication, dead code, naming drift) or says garden.
+**Description:** Use when patrolling code for duplication, dead code or naming drift, or says garden.
 
 ---
 
@@ -602,91 +602,91 @@
 
 ### 52. security-gate
 **ใช้กับ:** developer, qa-tester, security-engineer
-**Description:** Use when about to ship, merge or hand over code, after adding a dependency, user says security check, or OWASP Top 10:2025 sign-off (web app, API).
+**Description:** Use when about to ship, merge or hand over code, or asked for a security check.
 
 ---
 
 ### 53. reverse-engineering
 **ใช้กับ:** developer, reverse-engineer, solution-architect
-**Description:** Use when a compiled app (exe, .NET, Electron, APK, JS bundle, MT5 .ex5), firmware, HAR/pcap or unknown format has no source, or a build may differ.
+**Description:** Use when a compiled app, firmware, network capture or unknown format has no source.
 
 ---
 
 ### 54. developer-experience
 **ใช้กับ:** devrel-engineer
-**Description:** Use when the users are developers (time to hello world, error messages, CLI, SDK design, docs).
+**Description:** Use when the users are developers (hello-world time, error messages, CLI, SDK).
 
 ---
 
 ### 55. ecommerce-patterns
 **ใช้กับ:** ecommerce-engineer, growth-specialist, recommendation-engineer
-**Description:** Use when building commerce software (checkout, cart, orders, promotions, inventory). Not running a shop.
+**Description:** Use when building shop software (cart, checkout, orders, promotions). Not running a shop.
 
 ---
 
 ### 56. fintech-payments
 **ใช้กับ:** fintech-compliance-officer, fintech-engineer, quant-analyst, revops-analyst, security-engineer
-**Description:** Use when money moves through software (Stripe, Omise, PromptPay, webhooks, refunds, KYC, PCI-DSS).
+**Description:** Use when money moves through software (Stripe, Omise, PromptPay, webhooks, refunds).
 
 ---
 
 ### 57. game-development
 **ใช้กับ:** game-designer, game-developer
-**Description:** Use when building a game (engine choice, ECS, netcode, matchmaking, anti-cheat, live-ops).
+**Description:** Use when building a game (engine choice, ECS, netcode, live-ops).
 
 ---
 
 ### 58. healthcare-systems
 **ใช้กับ:** clinical-data-analyst, healthcare-engineer, hipaa-officer, security-engineer
-**Description:** Use when software handles patient or clinical data (orders, medication, FHIR, EHR, HIPAA).
+**Description:** Use when software handles patient or clinical data (FHIR, EHR, HIPAA).
 
 ---
 
 ### 59. insurance-systems
 **ใช้กับ:** insurance-analyst, insurance-compliance-officer, insurance-engineer
-**Description:** Use when building insurance software (policy, quotes, claims, fraud, underwriting, OIC filings).
+**Description:** Use when building insurance software (policy, quotes, claims, underwriting).
 
 ---
 
 ### 60. iot-systems
 **ใช้กับ:** iot-engineer
-**Description:** Use when building connected devices (provisioning, OTA updates, edge vs cloud, MQTT, firmware).
+**Description:** Use when building connected devices (provisioning, OTA updates, MQTT, firmware).
 
 ---
 
 ### 61. legal-document-systems
 **ใช้กับ:** legal-compliance-officer, legaltech-engineer
-**Description:** Use when software handles legal documents (clause extraction, automation, e-signature, Thai ETA).
+**Description:** Use when software handles legal documents (clause extraction, e-signature, Thai ETA).
 
 ---
 
 ### 62. llm-engineering
 **ใช้กับ:** ai-engineer, data-engineer, recommendation-engineer
-**Description:** Use when a system calls a large language model (prompts, structured output, RAG, embeddings, evals).
+**Description:** Use when a system calls a large language model (prompts, RAG, embeddings, evals).
 
 ---
 
 ### 63. mobile-engineering
 **ใช้กับ:** growth-specialist, mobile-engineer
-**Description:** Use when engineering a mobile app (Kotlin, Swift, Flutter, React Native, offline-first). Not screens.
+**Description:** Use when engineering a mobile app (Kotlin, Swift, Flutter, React Native).
 
 ---
 
 ### 64. saas-platform
 **ใช้กับ:** growth-specialist, revops-analyst, solution-architect
-**Description:** Use when building B2B SaaS (multi-tenancy, tenant isolation, SSO, SCIM, billing, usage metering).
+**Description:** Use when building B2B SaaS (multi-tenancy, SSO, billing, usage metering).
 
 ---
 
 ### 65. security-operations
 **ใช้กับ:** security-analyst, security-engineer
-**Description:** Use when running security operations (incident containment, SOC, SIEM rules, threat hunting).
+**Description:** Use when running security operations (SOC, SIEM rules, threat hunting).
 
 ---
 
 ### 66. smart-contracts
 **ใช้กับ:** blockchain-engineer
-**Description:** Use when building on a blockchain (Solidity or Solana contracts, audits, Foundry, DeFi, tokenomics).
+**Description:** Use when building on a blockchain (Solidity, Solana, DeFi, contract audits).
 
 ---
 
@@ -716,207 +716,202 @@
 
 ### 71. code-orientation
 **ใช้กับ:** developer
-**Description:** Use when about to change code not yet read this session. Maps how it runs, why, and repo conventions.
+**Description:** Use when about to change code not yet read this session. Maps how it runs.
 
 ---
 
-### 72. coding-evals
-**Description:** Use when changing coding skills, playbooks or the developer agent, or asked if the team codes better.
-
----
-
-### 73. stack-dotnet
+### 72. stack-dotnet
 **ใช้กับ:** developer, qa-tester
 **Description:** Use when writing, reviewing or fixing C# and .NET (ASP.NET Core, MVC 5, EF Core).
 
 ---
 
-### 74. stack-python
+### 73. stack-python
 **ใช้กับ:** developer, qa-tester
 **Description:** Use when writing, reviewing or testing Python (scripts, CLIs, FastAPI, Django, pandas, AI code).
 
 ---
 
-### 75. stack-sql
+### 74. stack-sql
 **ใช้กับ:** developer, qa-tester
-**Description:** Use when writing or reviewing SQL queries, procedures or data-change scripts (SQL Server, PostgreSQL, MySQL).
+**Description:** Use when writing or reviewing SQL (SQL Server, PostgreSQL, MySQL queries, procedures).
 
 ---
 
-### 76. stack-typescript
+### 75. stack-typescript
 **ใช้กับ:** developer, qa-tester
-**Description:** Use when writing or reviewing TypeScript in Node (Express, Fastify, NestJS), Angular, React or Vite.
+**Description:** Use when writing or reviewing TypeScript (Node, NestJS, Angular, React, Vite).
 
 ---
 
-### 77. legacy-spec-recovery
+### 76. legacy-spec-recovery
 **ใช้กับ:** business-analyst, reverse-engineer, system-analyst
-**Description:** Use when a legacy system has code but no spec and must change. As-is spec with evidence, impact.
+**Description:** Use when a legacy system has code but no spec and must change.
 
 ---
 
-### 78. doc-cover-design
-**Description:** Use when a project's .docx set needs covers unique to it. Concept from logo geometry or a mockup; bake-off of 3 if it fails checks or user asks.
+### 77. doc-cover-design
+**Description:** Use when a project's .docx set needs its own cover (from logo geometry or a mockup).
 
 ---
 
-### 79. test-evidence
+### 78. test-evidence
 **ใช้กับ:** qa-tester
-**Description:** Use when running test cases and keeping proof. Captioned GIF per case, Markdown pass/fail report, result and evidence columns in Excel.
+**Description:** Use when running test cases and keeping proof (GIF per case, pass/fail report).
 
 ---
 
-### 80. stack-mql
+### 79. stack-mql
 **ใช้กับ:** developer, quant-analyst
-**Description:** Use when writing, reviewing or testing MQL4/MQL5 code for MetaTrader 4/5 (Expert Advisors, indicators, scripts) or preparing one for the MQL5 Market.
+**Description:** Use when writing, reviewing or testing MQL4/MQL5 code for MetaTrader (EAs, indicators).
 
 ---
 
-### 81. dynamic-website
-**Description:** Use when a marketing, event or showcase website needs chapter-by-chapter motion (GSAP, scroll, 3D background). Not an app, not a slide deck.
+### 80. dynamic-website
+**Description:** Use when a marketing or event website needs scroll motion (GSAP, 3D). Not an app.
 
 ---
 
-### 82. branded-document-design
+### 81. branded-document-design
 **ใช้กับ:** business-analyst, devops-engineer, fintech-compliance-officer, graphic-designer, hipaa-officer, insurance-compliance-officer, legal-compliance-officer, product-manager, project-manager, qa-tester, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer
-**Description:** Use when a Word, PowerPoint or PDF deliverable (proposal, report, contract) must look designed. Whole report from one Markdown → markdown-report-docx.
+**Description:** Use when a Word, PowerPoint or PDF deliverable must look designed. Markdown report → markdown-report-docx.
 
 ---
 
-### 83. diagram-figures
+### 82. diagram-figures
 **ใช้กับ:** business-analyst, devops-engineer, solution-architect, system-analyst, ux-designer
-**Description:** Use when a document, plan, proposal, slide or print (business plan, shop process, budget flow, research, software spec) needs a designed diagram.
+**Description:** Use when a document, plan, slide or spec needs a designed diagram (process, budget flow, BRD).
 
 ---
 
-### 84. html-slide-deck
+### 83. html-slide-deck
 **ใช้กับ:** technical-writer
-**Description:** Use when a slide deck is asked for as HTML or with animation (one offline file, speaker notes), or a .pptx must play as animated HTML.
+**Description:** Use when a slide deck is wanted as HTML or animated, or a .pptx must play as HTML.
 
 ---
 
-### 85. markdown-report-docx
+### 84. markdown-report-docx
 **ใช้กับ:** technical-writer
-**Description:** Use when one Markdown file must become a polished Word report (business, research, test, handover). Thesis or Independent Study (IS) → thesis-writing.
+**Description:** Use when one Markdown file must become a polished Word report. Thesis → thesis-writing.
 
 ---
 
-### 86. markdown-visuals
+### 85. markdown-visuals
 **ใช้กับ:** business-analyst, clinical-data-analyst, developer, devops-engineer, product-manager, project-manager, qa-tester, quant-analyst, reverse-engineer, revops-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
-**Description:** Use when a markdown doc needs a picture. Pick inline SVG, image file, ASCII or Mermaid by where it is read (GitHub drops inline SVG).
+**Description:** Use when a Markdown doc needs a picture (inline SVG, image, ASCII or Mermaid).
 
 ---
 
-### 87. presentation-design
+### 86. presentation-design
 **ใช้กับ:** business-analyst, graphic-designer, product-manager, project-manager, technical-writer
-**Description:** Use when building a slide deck for any work (pitch, plan, report, training) that someone will present or read. Story, headlines, layouts.
+**Description:** Use when building a slide deck (pitch, plan, report, training) to present or read. Story, layouts.
 
 ---
 
-### 88. product-naming
+### 87. product-naming
 **ใช้กับ:** graphic-designer, product-manager, technical-writer
-**Description:** Use when naming a product, shop, service, app or brand, or checking how a name sounds in Thai.
+**Description:** Use when naming a product, shop, app or brand, or checking how it sounds in Thai.
 
 ---
 
-### 89. mcp-server
+### 88. mcp-server
 **ใช้กับ:** devops-engineer
-**Description:** Use when an agent must reach a real system (database, ERP, internal API) through an MCP server, or when choosing a vendor MCP over building one.
+**Description:** Use when an agent must reach a real system (database, ERP, API) through an MCP server.
 
 ---
 
-### 90. web-quality-audit
-**Description:** Use when auditing a web page for accessibility (WCAG 2.2 AA) or performance (Lighthouse, Core Web Vitals), or before a site launches.
+### 89. web-quality-audit
+**Description:** Use when auditing a web page for accessibility (WCAG) or speed (Lighthouse).
 
 ---
 
-### 91. worktree-and-branch
-**Description:** Use when 2 or more agents edit one repo at once, a spike could break the main checkout, or a finished branch must be merged, PR-ed or discarded.
+### 90. worktree-and-branch
+**Description:** Use when 2+ agents edit one repo at once, or a finished branch must be merged.
 
 ---
 
-### 92. data-analysis
-**Description:** Use when a CSV, Excel or SQL export must answer a business question (sales, usage, survey) with traceable numbers, Thai charts and caveats.
+### 91. data-analysis
+**Description:** Use when a CSV, Excel or SQL export must answer a business question with numbers.
 
 ---
 
-### 93. infra-as-code
-**Description:** Use when cloud servers, databases or networks should be built from code (OpenTofu, Terraform, Pulumi), drift appears, or data must stay in Thailand.
+### 92. infra-as-code
+**Description:** Use when servers or networks should be built from code (Terraform, OpenTofu).
 
 ---
 
-### 94. design-direction-lookup
+### 93. design-direction-lookup
 **ใช้กับ:** ux-designer
-**Description:** Use when a new screen, app or site needs a starting look (palette, Thai-Latin fonts, industry, UX and stack rules) before ui-craft design directions.
+**Description:** Use when a new screen, app or site needs a starting palette and Thai-Latin fonts before ui-craft.
 
 ---
 
-### 95. security-audit
+### 94. security-audit
 **ใช้กับ:** security-engineer
-**Description:** Use when auditing a whole codebase for vulnerabilities before handover, a pen test of source, or ตรวจช่องโหว่ทั้งระบบ. Pre-ship scan → security-gate.
+**Description:** Use when auditing a whole codebase for vulnerabilities before handover. Pre-ship → security-gate.
 
 ---
 
-### 96. jenkins-pipeline
+### 95. jenkins-pipeline
 **ใช้กับ:** devops-engineer
-**Description:** Use when writing or fixing a Jenkinsfile or Jenkins pipeline (CI/CD) that builds a Docker image, tests, and deploys with Helm.
+**Description:** Use when writing or fixing a Jenkinsfile or Jenkins pipeline.
 
 ---
 
-### 97. kafka-streaming
+### 96. kafka-streaming
 **ใช้กับ:** devops-engineer
-**Description:** Use when services pass events via Kafka (topic, producer, consumer, DLQ, ส่ง event ระหว่าง service) or events get lost or doubled.
+**Description:** Use when services pass events via Kafka or events get lost or doubled.
 
 ---
 
-### 98. kubernetes-helm
+### 97. kubernetes-helm
 **ใช้กับ:** devops-engineer
-**Description:** Use when writing a Dockerfile, Kubernetes (k8s) manifest or Helm chart, deploying staging to production, or running STT/TTS on GPU nodes.
+**Description:** Use when writing a Dockerfile, Kubernetes manifest or Helm chart, or deploying to k8s.
 
 ---
 
-### 99. voice-agent
+### 98. voice-agent
 **ใช้กับ:** ai-engineer
-**Description:** Use when building a realtime voice agent or phone bot (รับสาย, โทรศัพท์, STT, TTS, พูดแทรก, barge-in, SIP, latency), especially in Thai.
+**Description:** Use when building a realtime voice agent or phone bot (STT, TTS, barge-in), especially Thai.
 
 ---
 
-### 100. rabbitmq-messaging
+### 99. rabbitmq-messaging
 **ใช้กับ:** devops-engineer
-**Description:** Use when work goes through RabbitMQ (queue, exchange, ack, DLX, ข้อความหาย/ซ้ำ). Many readers of one log → kafka-streaming
+**Description:** Use when work goes through RabbitMQ (queue, exchange, ack). Event log → kafka-streaming.
 
 ---
 
-### 101. load-testing
+### 100. load-testing
 **ใช้กับ:** devops-engineer, qa-tester
-**Description:** Use when checking how a system holds many users at once (load, stress, spike, soak test, k6, ยิงโหลด, รับได้กี่คน). Page speed → web-quality-audit.
+**Description:** Use when checking how many users a system holds (load, stress, spike, k6). Page speed → web-quality-audit.
 
 ---
 
-### 102. design-system
-**Description:** Use when authoring design tokens (primitive, semantic, component), CSS variables, state tables or a Tailwind theme. Reading existing code → ui-craft
+### 101. design-system
+**Description:** Use when authoring design tokens, CSS variables or a Tailwind theme. Existing code → ui-craft.
 
 ---
 
-### 103. backblaze-b2
+### 102. backblaze-b2
 **ใช้กับ:** devops-engineer
-**Description:** Use when using Backblaze B2 — app file storage (S3 API, keys, presigned upload, lifecycle, cost) or deploying a static site (b2 sync, Cloudflare).
+**Description:** Use when storing app files or hosting a static site on Backblaze B2 (S3 API, keys).
 
 ---
 
-### 104. cloudflare-r2
+### 103. cloudflare-r2
 **ใช้กับ:** devops-engineer
-**Description:** Use when connecting an app to Cloudflare R2 object storage — S3 API, presigned upload, public bucket, CORS, wrangler, cost.
+**Description:** Use when an app stores files in Cloudflare R2 (S3 API, presigned upload, CORS).
 
 ---
 
-### 105. render-deploy
+### 104. render-deploy
 **ใช้กับ:** devops-engineer
-**Description:** Use when deploying to Render (render.com) — web service, worker, cron or Postgres; render.yaml Blueprint, failed deploy, rollback, free tier.
+**Description:** Use when deploying to Render (render.com) web services, workers, cron or Postgres.
 
 ---
 
-## ⚡ Commands (11)
+## ⚡ Commands (12)
 
 ### 1. /feature-kickoff `<feature description>`
 **Workflow:** BA → Solution Architect → System Analyst → PM

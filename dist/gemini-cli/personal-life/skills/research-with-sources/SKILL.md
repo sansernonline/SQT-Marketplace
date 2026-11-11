@@ -1,6 +1,6 @@
 ---
 name: research-with-sources
-description: Use when a question needs a checked answer with sources (prices, rules, rates, which option is best) or the user says research or หาข้อมูล.
+description: Use when a question needs a checked answer with sources (prices, rules, rates) or says research or หาข้อมูล.
 ---
 
 # research-with-sources — หาข้อมูลที่ยืนยันได้ พร้อมแหล่ง

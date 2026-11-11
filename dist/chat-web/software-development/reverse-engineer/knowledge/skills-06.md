@@ -1,6 +1,6 @@
 # skill: polished-document-style
 
-Use when a kept doc (report, proposal, Word, PDF) needs headings, tables, theme. Wording → human-writing · designed look → branded-document-design.
+Use when a kept doc (report, proposal, Word, PDF) needs headings, tables, theme. Wording → human-writing.
 
 # Polished Document Style
 
@@ -446,7 +446,7 @@ markdown เองไม่มีสี จึงใช้คำกำกับ�
 
 # skill: spell-out-abbreviations
 
-Use when text people read (report, slide, label, message) is heavy with abbreviations or jargon, or needs a glossary. Writing → human-writing.
+Use when text people read is heavy with abbreviations or jargon, or needs a glossary.
 
 # Spell Out Abbreviations
 

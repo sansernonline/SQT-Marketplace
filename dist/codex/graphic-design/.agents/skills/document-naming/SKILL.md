@@ -1,6 +1,6 @@
 ---
 name: document-naming
-description: Use when creating, renaming or filing any document a team or client keeps or sends (report, quote, contract) — file name, version, status.
+description: Use when creating, renaming or filing a document others keep (name, version, status).
 ---
 
 # ตั้งชื่อและจัดเวอร์ชันเอกสาร

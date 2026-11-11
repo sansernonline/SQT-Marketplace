@@ -1,6 +1,6 @@
 ---
 name: render-deploy
-description: Use when deploying to Render (render.com) — web service, worker, cron or Postgres; render.yaml Blueprint, failed deploy, rollback, free tier.
+description: Use when deploying to Render (render.com) web services, workers, cron or Postgres.
 ---
 
 # render-deploy — ปล่อยแอปขึ้น Render ด้วย render.yaml แล้วตรวจว่าขึ้นจริง

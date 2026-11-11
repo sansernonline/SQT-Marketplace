@@ -110,7 +110,7 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
 
 # skill: polished-document-style
 
-Use when a kept doc (report, proposal, Word, PDF) needs headings, tables, theme. Wording → human-writing · designed look → branded-document-design.
+Use when a kept doc (report, proposal, Word, PDF) needs headings, tables, theme. Wording → human-writing.
 
 # Polished Document Style
 

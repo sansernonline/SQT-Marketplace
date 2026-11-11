@@ -1,6 +1,6 @@
 ---
 name: learning-reviewer
-description: Use at the end of a multi-step SuperUser task to review how the team worked. Proposes up to 3 fixes with evidence.
+description: Use at the end of a multi-step SuperUser task to review how the team worked.
 tools: Read, Grep, Glob, Write
 model: sonnet
 effort: medium

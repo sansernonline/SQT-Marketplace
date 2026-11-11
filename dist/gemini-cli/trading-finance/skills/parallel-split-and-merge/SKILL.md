@@ -1,6 +1,6 @@
 ---
 name: parallel-split-and-merge
-description: Use when work splits into independent slices (chapters, listings, research questions, modules) or the user says swarm or fan out.
+description: Use when work splits into independent slices or the user says swarm or fan out.
 ---
 
 # parallel-split-and-merge — แบ่งงาน ทำพร้อมกัน รวมเป็นรายงานเดียว

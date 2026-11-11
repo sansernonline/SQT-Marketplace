@@ -1,6 +1,6 @@
 # skill: smart-contracts
 
-Use when building on a blockchain (Solidity or Solana contracts, audits, Foundry, DeFi, tokenomics).
+Use when building on a blockchain (Solidity, Solana, DeFi, contract audits).
 
 # smart-contracts
 

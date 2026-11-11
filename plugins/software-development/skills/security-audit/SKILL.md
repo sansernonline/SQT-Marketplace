@@ -1,6 +1,6 @@
 ---
 name: security-audit
-description: Use when auditing a whole codebase for vulnerabilities before handover, a pen test of source, or ตรวจช่องโหว่ทั้งระบบ. Pre-ship scan → security-gate.
+description: Use when auditing a whole codebase for vulnerabilities before handover. Pre-ship → security-gate.
 ---
 
 # security-audit — ไล่หาช่องโหว่ทั้งระบบจากโค้ด แล้วยืนยันทุกข้อก่อนรายงาน

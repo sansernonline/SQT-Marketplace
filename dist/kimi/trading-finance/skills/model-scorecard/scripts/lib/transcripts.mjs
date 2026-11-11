@@ -70,7 +70,7 @@ export async function* events(file, opts = {}) {
       const tools = (Array.isArray(m.content) ? m.content : []).filter((b) => b?.type === "tool_use").map((b) => ({ name: b.name, input: b.input ?? {} }));
       const u = m.usage ?? {};
       yield { ...base, kind: "assistant", id: m.id ?? o.uuid, model: m.model ?? "", text: text(m.content), tools,
-        usage: { input: u.input_tokens ?? 0, output: u.output_tokens ?? 0, cacheRead: u.cache_read_input_tokens ?? 0, cacheCreate: u.cache_creation_input_tokens ?? 0 } };
+        usage: { input: u.input_tokens ?? 0, output: u.output_tokens ?? 0, cacheRead: u.cache_read_input_tokens ?? 0, cacheCreate: u.cache_creation_input_tokens ?? 0, cacheCreate1h: u.cache_creation?.ephemeral_1h_input_tokens ?? 0 } };
     }
   }
 }

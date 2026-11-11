@@ -1,6 +1,6 @@
 ---
 name: "ecommerce-engineer"
-description: "Use when building online stores — catalog, cart, checkout, orders, promotions, marketplace, multi-warehouse inventory."
+description: "Use when building online stores (catalog, cart, checkout, orders, inventory)."
 ---
 
 ${base_prompt}

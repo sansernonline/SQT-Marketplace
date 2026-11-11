@@ -1,6 +1,6 @@
 ---
 name: "devops-engineer"
-description: "Use when setting up CI/CD, Docker, Kubernetes, monitoring, deployments, infrastructure-as-code or SDK/toolchain setup."
+description: "Use when setting up CI/CD, Docker, Kubernetes, monitoring, deploys or infra as code."
 ---
 
 ${base_prompt}

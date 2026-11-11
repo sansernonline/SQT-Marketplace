@@ -1,6 +1,6 @@
 ---
 name: healthcare-engineer
-description: Use when building healthcare software — EHR integration, FHIR and SMART on FHIR, clinical workflows, telemedicine.
+description: Use when building healthcare software (EHR integration, FHIR, telemedicine).
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch
 model: sonnet
 skills:

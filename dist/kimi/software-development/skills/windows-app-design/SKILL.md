@@ -1,6 +1,6 @@
 ---
 name: windows-app-design
-description: Use when building a desktop app or mockup that must look native on Windows 11 (WinUI 3, Avalonia, web-wrapped). Browser-based → web-app-design.
+description: Use when building a desktop app or mockup that must look native on Windows 11.
 ---
 
 # Windows App Design

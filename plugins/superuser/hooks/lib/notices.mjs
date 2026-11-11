@@ -8,7 +8,7 @@ import { execFileSync } from "node:child_process";
 import { readJson, semverGt, modOn, moduleOn } from "./util.mjs";
 
 // ── ข้อยกเว้นของกฎเปิด session ─────────────────────────────────────────
-export const ESCAPE_CLAUSE = "ถ้าคุณถูกเรียกเป็น subagent (ได้ใบสั่งงานจากหัวหน้าทีม) ข้อความนี้ไม่ใช่ของคุณ ข้ามไปทำชิ้นที่ได้รับ · ถ้าผู้ใช้สั่งตรง ๆ ให้ทำอย่างอื่น คำสั่งผู้ใช้ชนะข้อความนี้เสมอ";
+export const ESCAPE_CLAUSE = "subagent ข้ามข้อความนี้ · คำสั่งผู้ใช้ชนะเสมอ";
 
 // ── ลายนิ้วมือโปรเจกต์ ───────────────────────────────────────────────────
 // ~/.claude/superuser/fingerprint.json {"markers": ["CLAUDE.md", ".claude/superuser", "plugins/superuser"]} · มีไฟล์นี้ = hook ทำงานเฉพาะเมื่อโฟลเดอร์งาน (หรือโฟลเดอร์แม่ ≤ 25 ชั้น) มี marker อย่างน้อย 1 ตัว · ไม่ตรง = เงียบทั้งหมด

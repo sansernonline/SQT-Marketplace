@@ -1,6 +1,6 @@
 ---
 name: postmortem-template
-description: Use when writing a post-incident review or blameless postmortem of a production outage.
+description: Use when writing a post-incident review or blameless postmortem.
 ---
 
 # Blameless Postmortem Template

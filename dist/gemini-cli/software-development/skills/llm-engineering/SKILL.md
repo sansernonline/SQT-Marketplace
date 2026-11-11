@@ -1,6 +1,6 @@
 ---
 name: llm-engineering
-description: Use when a system calls a large language model (prompts, structured output, RAG, embeddings, evals).
+description: Use when a system calls a large language model (prompts, RAG, embeddings, evals).
 argument-hint: <rag-design | llm-eval> <details>
 ---
 

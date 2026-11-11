@@ -1,6 +1,6 @@
 ---
 name: load-testing
-description: Use when checking how a system holds many users at once (load, stress, spike, soak test, k6, ยิงโหลด, รับได้กี่คน). Page speed → web-quality-audit.
+description: Use when checking how many users a system holds (load, stress, spike, k6). Page speed → web-quality-audit.
 ---
 
 # load-testing — ยิงโหลดแบบมีเป้า มีเกณฑ์ผ่าน และได้รับอนุญาต

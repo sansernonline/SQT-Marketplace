@@ -1,6 +1,6 @@
 # skill: ecommerce-patterns
 
-Use when building commerce software (checkout, cart, orders, promotions, inventory). Not running a shop.
+Use when building shop software (cart, checkout, orders, promotions). Not running a shop.
 
 # ecommerce-patterns
 

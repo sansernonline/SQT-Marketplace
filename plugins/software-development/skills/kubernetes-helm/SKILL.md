@@ -1,6 +1,6 @@
 ---
 name: kubernetes-helm
-description: Use when writing a Dockerfile, Kubernetes (k8s) manifest or Helm chart, deploying staging to production, or running STT/TTS on GPU nodes.
+description: Use when writing a Dockerfile, Kubernetes manifest or Helm chart, or deploying to k8s.
 ---
 
 # kubernetes-helm — Dockerfile, manifest, Helm chart และ deploy staging → production

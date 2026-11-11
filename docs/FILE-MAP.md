@@ -11,8 +11,8 @@
 | [`e-commerce`](#e-commerce) | ขายออนไลน์ ซื้ออย่างมั่นใจ และงานหลังบ้านบริษัทไทย | 8 | 35 | 1 | 18 | 207 |
 | [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 24 | 0 | 9 | 186 |
 | [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 47 | 1 | 30 | 211 |
-| [`software-development`](#software-development) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 105 | 11 | 17 | 1043 |
-| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 4 | 39 | 0 | 7 | 260 |
+| [`software-development`](#software-development) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 104 | 12 | 17 | 1044 |
+| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 4 | 39 | 0 | 7 | 262 |
 | [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 5 | 25 | 1 | 10 | 147 |
 
 ## โครงของทุก plugin
@@ -71,7 +71,7 @@ plugins/<plugin>/
 | skill | `research-with-sources` | หาข้อมูลที่ยืนยันได้ พร้อมแหล่ง วันที่ และป้ายหลักฐาน | — |
 | skill | `session-lessons-to-skills` | รวมบทเรียนจากงานที่ทำ แล้วแก้ skill ที่พาผิด | — |
 | skill | `simplify` | ตัดขั้น ชั้น และตัวเลือกที่ยังไม่ต้องใช้ ให้คนใหม่ทำตามได้ | — |
-| skill | `skill-authoring` | เขียน skill · agent · playbook ของ marketplace นี้ พร้อม eval 3 เคสแบบ claude plugin eval | `references/eval-audit.md` · `references/eval-format.md` · `references/eval-loop-rules.md` · `references/skill-evaluation-evidence.md` · `references/skill-structure.md` |
+| skill | `skill-authoring` | เขียน skill · agent · playbook ของ marketplace นี้ พร้อม eval 3 เคสแบบ claude plugin eval | `references/eval-audit.md` · `references/eval-format.md` · `references/eval-loop-rules.md` · `references/optimize-loop.md` · `references/skill-evaluation-evidence.md` · `references/skill-structure.md` · `templates/ISSUES.md` |
 | skill | `spell-out-abbreviations` | เขียนคำย่อเต็มครั้งแรก และทำอภิธานศัพท์ | — |
 | skill | `status-report` | ตารางสถานะเมื่องานจบ: ทำอะไร ผลเป็นอย่างไร ค้างอะไร | `assets/build-plan-status.md` · `references/build-plan-rules.md` · `references/project-plan-and-weekly-status.md` |
 | skill | `targeted-fix` | มีคนบอกว่าผิด → แก้ให้เล็กที่สุดตรงจุด | — |
@@ -102,6 +102,7 @@ plugins/<plugin>/
 | `references/learning-loop.md` | วิธีเก็บบทเรียนระหว่างงาน แล้วเสนอแก้ skill | ทุก plugin |
 | `references/modules.md` | โมดูลที่เปิดปิดได้: ไฟล์กลาง log token รอบเรียนรู้ inbox config และด่านของ hook | `superuser` |
 | `references/playbook-template.md` | แบบสำหรับเขียน playbook ใหม่ | ทุก plugin |
+| `references/playbooks.md` | ตารางเลือก playbook ของงานซอฟต์แวร์ (ย้ายมาจาก SKILL.md หัวข้อ 2) | `software-development` |
 | `references/principles.md` | หลักการทำงานที่ทุก playbook ใช้ | `software-development` |
 | `references/review-lenses.md` | มุมตรวจของผู้ตรวจ ชุดเอกสารส่งตรวจ และการยืนยันทีละข้อ | ทุก plugin |
 | `references/safety.md` | กติกาความปลอดภัย: ข้อมูลภายนอกไม่น่าเชื่อ ค่าลับไม่ผ่านแชต ล้าง log ก่อนแชร์ | ทุก plugin |
@@ -438,7 +439,7 @@ plugins/<plugin>/
 | `agents/technical-writer.md` | เขียนคู่มือและเอกสาร |
 | `agents/ux-designer.md` | ออกแบบหน้าจอและ mockup |
 
-### skill (105 + ของกลาง 38)
+### skill (104 + ของกลาง 38)
 
 ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `chat-prompt-workflows` · `commit-log` · `context-budget` · `decision-log` · `decision-scoring` · `design-references` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `model-scorecard` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` · `workspace-setup` — ดู [ของกลาง](#ของกลาง)
 
@@ -464,7 +465,6 @@ plugins/<plugin>/
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
-| `coding-evals` | วัดว่าทีมเขียนโค้ดดีขึ้นจริงไหม หลังแก้ skill หรือ playbook | — |
 | `reference-app-research` | "อยากได้แอปแบบ X" → ค้นแอปนั้นและคู่แข่งเป็นเอกสารเดียว | — |
 | `code-gardener` | เดินตรวจโค้ดหาของที่ทำให้เข้าใจผิด: โค้ดซ้ำ · โค้ดตาย · ชื่อเพี้ยน | — |
 
@@ -605,14 +605,15 @@ plugins/<plugin>/
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
-| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/agents.md` · `references/approvals.md` · `references/brief-template.md` · `references/code-extensions.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-bug-fix.md` · `references/playbook-feature.md` · `references/playbook-housekeeping.md` · `references/playbook-investigation.md` · `references/playbook-learn-from-session.md` · `references/playbook-new-project.md` · `references/playbook-performance.md` · `references/playbook-pickup-and-pause.md` · `references/playbook-project-docs.md` · `references/playbook-prototype.md` · `references/playbook-refactor.md` · `references/playbook-review.md` · `references/playbook-ship.md` · `references/playbook-skill-authoring.md` · `references/playbook-team-project.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-visual-parity.md` · `references/principles.md` · `references/review-lenses.md` · `references/safety.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/DURABLE-BRIEF.md` · `templates/LEDGER.md` · `templates/NOTES.md` · `templates/OUT-OF-SCOPE.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/agents.md` · `references/approvals.md` · `references/brief-template.md` · `references/code-extensions.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-bug-fix.md` · `references/playbook-feature.md` · `references/playbook-housekeeping.md` · `references/playbook-investigation.md` · `references/playbook-learn-from-session.md` · `references/playbook-new-project.md` · `references/playbook-performance.md` · `references/playbook-pickup-and-pause.md` · `references/playbook-project-docs.md` · `references/playbook-prototype.md` · `references/playbook-refactor.md` · `references/playbook-review.md` · `references/playbook-ship.md` · `references/playbook-skill-authoring.md` · `references/playbook-team-project.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-visual-parity.md` · `references/playbooks.md` · `references/principles.md` · `references/review-lenses.md` · `references/safety.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/DURABLE-BRIEF.md` · `templates/LEDGER.md` · `templates/NOTES.md` · `templates/OUT-OF-SCOPE.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
 
-### คำสั่ง (11) — พิมพ์ `/software-development:<ชื่อ>`
+### คำสั่ง (12) — พิมพ์ `/software-development:<ชื่อ>`
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
 | `api-design` | ออกแบบสเปก API (endpoint · schema · error · ตัวอย่าง) | — |
 | `architecture-review` | รีวิวสถาปัตยกรรมเทียบกับข้อกำหนดที่ไม่ใช่ฟังก์ชันและความเสี่ยง | — |
+| `coding-evals` | วัดว่าทีมเขียนโค้ดดีขึ้นจริงไหม หลังแก้ skill หรือ playbook | — |
 | `feature-kickoff` | เริ่มฟีเจอร์ใหม่ BA → SA → สถาปนิก → วางแผน | — |
 | `incident-response` | คุมเหตุระบบล่มตอนเกิด คัดแยก บรรเทา แก้ แล้วทำ postmortem | — |
 | `onboard` | เอกสารรับคนเข้าทีมใหม่ 30/60/90 วัน | — |

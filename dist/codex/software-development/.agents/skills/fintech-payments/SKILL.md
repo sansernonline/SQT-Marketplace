@@ -1,6 +1,6 @@
 ---
 name: fintech-payments
-description: Use when money moves through software (Stripe, Omise, PromptPay, webhooks, refunds, KYC, PCI-DSS).
+description: Use when money moves through software (Stripe, Omise, PromptPay, webhooks, refunds).
 argument-hint: <transaction-flow-design | pci-audit> <details>
 ---
 

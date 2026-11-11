@@ -1,6 +1,6 @@
 ---
 name: project-doc-set
-description: Use when a project needs its doc set decided (which docs, order, where they live) or DRAFT open items listed in one Excel.
+description: Use when deciding a project's doc set or listing open items in one Excel.
 ---
 
 # ชุดเอกสารโปรเจกต์

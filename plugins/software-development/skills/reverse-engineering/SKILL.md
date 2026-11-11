@@ -1,6 +1,6 @@
 ---
 name: reverse-engineering
-description: Use when a compiled app (exe, .NET, Electron, APK, JS bundle, MT5 .ex5), firmware, HAR/pcap or unknown format has no source, or a build may differ.
+description: Use when a compiled app, firmware, network capture or unknown format has no source.
 allowed-tools: Read, Grep, Glob, Bash(python -I *), Bash(node *check-tools.mjs*)
 ---
 

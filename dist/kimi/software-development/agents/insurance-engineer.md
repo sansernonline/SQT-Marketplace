@@ -1,6 +1,6 @@
 ---
 name: "insurance-engineer"
-description: "Use when building insurance products — policy admin, quote and rating engines, agent portals, claims intake."
+description: "Use when building insurance products (policy admin, quote and rating engines, claims)."
 ---
 
 ${base_prompt}

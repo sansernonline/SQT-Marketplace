@@ -1,6 +1,6 @@
 ---
 name: polished-document-style
-description: Use when a kept doc (report, proposal, Word, PDF) needs headings, tables, theme. Wording → human-writing · designed look → branded-document-design.
+description: Use when a kept doc (report, proposal, Word, PDF) needs headings, tables, theme. Wording → human-writing.
 ---
 
 # Polished Document Style
