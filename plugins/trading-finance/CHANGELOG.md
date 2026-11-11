@@ -1,5 +1,9 @@
 # Changelog — trading-finance
 
+## 0.21.1 — 2026-11-11
+
+- ใบสั่งงานแบบสั้นสำหรับ `worker` (`references/brief-template.md`) และ `team-roles.md` ตามต้นฉบับใน `superuser` 3.35.0: ลูกทีมค่าเริ่ม `haiku` รัน test เองได้
+
 ## 0.21.0 — 2026-11-10
 
 - `trading-technique-course` (ใหม่): หลักสูตรเทคนิคเทรด 5 ด่าน เริ่มที่จัดขนาดไม้และ stop-loss แล้วไปเทรนด์ · breakout · mean reversion · แนวรับแนวต้าน · แต่ละด่านมีกฎเข้าออกเป็นข้อ ทดสอบย้อนหลังด้วยมือ ฝึกใน `paper-trading` และวัดด้วย `trade-stats.mjs` ก่อนผ่านด่าน · eval 3 เคส (trigger · behaviour · guard)

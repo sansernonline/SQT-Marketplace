@@ -1,5 +1,9 @@
 # Changelog — personal-life
 
+## 0.23.3 — 2026-11-11
+
+- ใบสั่งงานแบบสั้นสำหรับ `worker` (`references/brief-template.md`) และ `team-roles.md` ตามต้นฉบับใน `superuser` 3.35.0: ลูกทีมค่าเริ่ม `haiku` รัน test เองได้
+
 ## 0.23.2 — 2026-11-10
 
 แก้จากผล eval รอบแดง/เขียว 2026-11-10 (sonnet · 3 รอบ)

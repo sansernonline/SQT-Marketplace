@@ -1,5 +1,9 @@
 # Changelog — graphic-design
 
+## 0.28.1 — 2026-11-11
+
+- ใบสั่งงานแบบสั้นสำหรับ `worker` (`references/brief-template.md`) และ `team-roles.md` ตามต้นฉบับใน `superuser` 3.35.0: ลูกทีมค่าเริ่ม `haiku` รัน test เองได้
+
 ## 0.28.0 — 2026-11-11
 
 - `narration-th`: เพิ่ม `scripts/term_sample.py` อ่านศัพท์ทีละคำแบบ "1, คำ" ได้ไฟล์เสียงชายกับหญิงและรายการเลข ให้ผู้ใช้ฟังหาคำที่ต้องแก้ก่อนสร้างทั้งตอน · `tts_cues.py --respell` สะกดใหม่หลังแทนคำอ่าน · ความเร็ว edge ที่ผู้ใช้เลือก Niwat +0% และ Premwadee −2% · ต้นแบบจาก podcast IoT 338 คำ (2026-11-09)

@@ -552,12 +552,18 @@ const QUESTION = /[?？]\s*$|(ไหม|มั้ย|หรือเปล่า
 // กริยาสั่งงานคนละชนิด ≥ 2 = งานหลายขั้นแม้อ้างไฟล์เดียว ("fix … add tests and open a PR" · "แก้ … เพิ่ม test แล้ว commit") · ผู้ตรวจ 2026-11-11
 // "รัน test" ไม่นับ เพราะเป็นการตรวจ ไม่ใช่งานอีกชิ้น (t1 ของ bench มี "แก้" กับ "รัน" ยังเป็นงานเล็ก)
 const ACTION_VERBS = [/\bfix(es|ed|ing)?\b|แก้/i, /\badd(s|ed|ing)?\b|เพิ่ม/i, /\bwrit(e|es|ing)\b|เขียน/i, /\bupdat(e|es|ed|ing)\b|อัปเดต/i,
-  /\bmigrat(e|es|ed|ing)\b|ย้าย/i, /\brefactor|รีแฟกเตอร์|ปรับโครง/i, /\bcreat(e|es|ed|ing)\b|สร้าง/i, /\b(delete|remove)\b|ลบ/i,
+  /\bmigrat(e|es|ed|ing)\b|ย้าย/i, /\brefactor|รีแฟกเตอร์|ปรับโครง/i, /\bcreat(e|es|ed|ing)\b|สร้าง/i, /\b(delete|remove)\b|(?<!ติด)ลบ/i,
   /\bcommit\b/i, /\bpush\b/i, /\bopen (a )?pr\b|เปิด ?pr\b/i, /\bdeploy\b/i, /\bmerge\b/i];
 export const actionCount = (t) => ACTION_VERBS.filter((r) => r.test(t)).length;
+// คำเชื่อมรายการ = สั่งหลายชิ้นในประโยคเดียว ("login page with validation and tests" · "ส่งอีเมลยืนยัน และหน้า reset") · ผู้ตรวจรอบ 2 2026-11-11
+// ตัดโค้ด ข้อความในเครื่องหมายคำพูด และ "รัน test" ออกก่อนนับ เพราะไม่ใช่งานอีกชิ้น
+// รอบ 3: "with" กับ "," ตัวเดียว และ "และ" ที่ติดคำหน้า ("ส่วนลดและภาษี") ไม่นับ · ";" "also" และรายการไทยคั่นเว้นวรรค ≥ 5 ช่วงหลังชื่อไฟล์นับ · ไม่ใช้กับคำถาม
+const LIST_JOIN = /\b(and|plus|also)\b|\s(และ|พร้อม)|;|,[^,]*,/i;
+const spacedList = (t) => t.split("\n").some((l) => { const m = l.match(/[\w./\\-]+\.[a-z]{1,5}\b(.*)$/i); return m && /[฀-๿]/.test(m[1]) && m[1].trim().split(/\s+/).filter(Boolean).length >= 5; });   // ภาษาไทยเท่านั้น อังกฤษเว้นวรรคทุกคำ
+const listed = (t) => !QUESTION.test(t) && (spacedList(t) || LIST_JOIN.test(t.replace(/`[^`]*`|"[^"]*"/g, " ").replace(/(แล้ว)?\s*รัน\s*test\S*|\b(and )?run (the )?tests?\b/gi, " ")));
 export function looksSmall(text) {
   const t = String(text ?? "").trim();
-  if (!t || NOT_SMALL.test(t) || actionCount(t) >= 2 || (t.match(/^\s*\d+[.)]\s+\S/gm) ?? []).length >= 2 || (t.match(/^#{2,}\s/gm) ?? []).length >= 2) return false;
+  if (!t || NOT_SMALL.test(t) || actionCount(t) >= 2 || listed(t) || (t.match(/^\s*\d+[.)]\s+\S/gm) ?? []).length >= 2 || (t.match(/^#{2,}\s/gm) ?? []).length >= 2) return false;
   const files = new Set((t.match(SMALL_FILE_REF) ?? []).map((f) => f.toLowerCase()));
   return files.size === 1 || (files.size === 0 && t.length < 300 && QUESTION.test(t)) || (files.size === 0 && /\btypo\b|คำผิด|บรรทัด(ที่)?\s*\d+|line \d+/i.test(t));
 }
@@ -1680,11 +1686,20 @@ function selfTest() {
     // ผู้ตรวจ 2026-11-11: อ้างไฟล์เดียวแต่สั่งหลายงาน (กริยาสั่งงาน ≥ 2) ต้องไม่นับเป็นงานเล็ก · t1 ของ bench ทั้งไฟล์ยังเล็ก
     ...["fix the bug in src/cart.js, add tests and open a PR", "แก้ src/cart.js ให้รองรับส่วนลด เพิ่ม test แล้ว commit กับ push",
       "migrate the users table in db/schema.sql and update all callers", "update src/index.ts to add auth middleware and write integration tests",
-      "refactor src/api.js ให้ใช้ async ทุกฟังก์ชัน พร้อมแก้ทุกที่ที่เรียกใช้", "แก้ src/cart.js และเขียน test ให้ด้วย"]
+      "refactor src/api.js ให้ใช้ async ทุกฟังก์ชัน พร้อมแก้ทุกที่ที่เรียกใช้", "แก้ src/cart.js และเขียน test ให้ด้วย",
+      // รอบ 2: กริยาที่ไม่อยู่ในรายการ แต่มีคำเชื่อมรายการ
+      "build a login page in src/login.vue with form validation and unit tests", "implement caching in src/api/client.ts and benchmark it",
+      "ทำระบบสมัครสมาชิกใน src/auth.py ส่งอีเมลยืนยัน และหน้า reset password", "convert src/legacy.js to TypeScript, make sure CI passes, and release v2.0",
+      "แปลง docs/manual.docx เป็นภาษาอังกฤษ ทำสไลด์สรุป และส่งอีเมลให้ทีม", "rewrite src/parser.js from scratch and add e2e tests",
+      // รอบ 3: รายการไทยคั่นเว้นวรรค · "; also"
+      "ทำหน้า dashboard ใน src/dash.vue แสดงยอดขายรายวัน กราฟ ตัวกรองวันที่ ส่งออก Excel", "implement OAuth login in src/auth.ts; also set up CI"]
       .map((s) => [`งานเล็ก: สั่งหลายงานในไฟล์เดียว → ไม่เล็ก · ${s.slice(0, 30)}`, [], false, () => looksSmall(s)]),
     ["งานเล็ก: TASK.md ของ bench t1 ทั้งไฟล์ · แก้ null check ไฟล์เดียว → เล็ก", [], true, () => {
       let t1 = ""; try { t1 = readFileSync(join(HERE, "..", "..", "..", "scripts", "evals", "speed", "tasks", "t1", "TASK.md"), "utf8"); } catch { return true; }   // สำเนาที่ติดตั้งไม่มี scripts/
-      return looksSmall(t1) && looksSmall("fix the null check in src/cart.js");
+      return looksSmall(t1) && looksSmall("fix the null check in src/cart.js") && looksSmall("ยอดติดลบใน src/total.js ผิด ช่วยแก้ให้หน่อย")
+        && looksSmall("fix off-by-one in src/slots.js and run the tests")
+        && ["fix the typo in README.md, line 12", "src/date.ts returns the wrong week number for Jan 1, why?",
+          "ฟังก์ชัน total ใน src/cart.js คืนค่าผิดเมื่อมีส่วนลดและภาษี ช่วยแก้หน่อย", "fix the null pointer in src/user.ts that happens with an empty name"].every(looksSmall);
     }],
     ["งานเล็ก: บอก skill ตัวเดียวที่ตรงสุด (วิธีทำงานก่อนภาษา · ตัวกว้างไม่เลือก) · ข้อความ ≤ 200 ตัวอักษร", [], true, () => {
       const d = join(tmpdir(), `sqt-open-one-${process.pid}`);

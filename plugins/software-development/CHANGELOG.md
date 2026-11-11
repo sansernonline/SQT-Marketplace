@@ -1,5 +1,11 @@
 # Changelog — software-development
 
+## 3.3.0 — 2026-11-11
+
+- `superuser` ของสาขาย่อจาก 13,348 เหลือ 6,781 ไบต์: playbook ย้ายไป `references/playbooks.md` · รายการรออนุมัติอยู่ต้น `approvals.md` · description บอกให้แก้บั๊กไฟล์เดียวเองโดยไม่เปิด superuser
+- เกณฑ์แตกงานโค้ด 200 บรรทัด (`code-extensions.md`) · `coding-evals` ให้ผู้ใช้สั่ง `/coding-evals` เอง
+- รับใบสั่งงานแบบสั้นสำหรับ `worker` (`references/brief-template.md`) และ `team-roles.md` ตามต้นฉบับใน `superuser` 3.35.0: ลูกทีมค่าเริ่ม `haiku` รัน test เองได้
+
 ## 3.2.1 — 2026-11-11
 
 - `superuser`: description เปิดเฉพาะงานหลายส่วนหรือหลายไฟล์ · บั๊กไฟล์เดียวแก้ตรง (ยังไม่ได้วัดในงานจริง เพราะ bench สั่งเปิด superuser เองทุกรอบ)

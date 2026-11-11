@@ -1,6 +1,6 @@
 ---
 name: superuser
-description: Use when software work has several steps (multi-module change, feature plus tests). One-file bug → just fix.
+description: Use when software work has several steps (multi-module change, feature plus tests) or says superuser. One-file bug → just fix.
 ---
 
 # SuperUser — ประตูหน้าเดียวของทีม agent
