@@ -1,6 +1,6 @@
 ---
 name: superuser
-description: Use when a non-trivial software task starts (feature, bug, refactor, investigation, review) or says superuser.
+description: Use when a software task spans several parts or files (feature plus tests, multi-module change, review then fix) or says superuser. One-file bug → fix directly.
 ---
 
 # SuperUser — หัวหน้าทีม

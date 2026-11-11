@@ -66,6 +66,7 @@ jobs:
           node plugins/superuser/skills/temp-file-discipline/scripts/root-check.test.mjs
           node plugins/superuser/skills/translate-th-en/scripts/i18n-pair-check.test.mjs
           node scripts/evals/speed/stats.mjs --self-test
+          node scripts/evals/speed/breakdown.mjs --self-test
           node scripts/evals/skill-grades.mjs --self-test
           node plugins/trading-finance/skills/debt-payoff/scripts/payoff.mjs --self-test
           node plugins/trading-finance/skills/home-refinance/scripts/refinance.mjs --self-test

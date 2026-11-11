@@ -67,6 +67,14 @@ node scripts/evals/speed/run-bench.mjs --old none --tasks t1,t2,t3,t4,t6,t7 --ru
 
 แขน `none` ได้คำสั่งเดียวกันทุกคำ ยกเว้นประโยคที่ให้ใช้ superuser และไม่โหลด plugin ใด ๆ · `--save-ratios` เขียน `bench-ratios.json` ให้ hook ใช้ในหัวข้อ "คุ้มแค่ไหน" ของ `log/SUMMARY.md` · แก้ไฟล์นั้นแล้วต้องขึ้นรุ่น superuser และรัน `sync-superuser`
 
+## แยกว่า token ที่เพิ่มมาจากไหน
+
+```powershell
+node scripts/evals/speed/breakdown.mjs              # ทุกรอบใน _to_delete/bench/runs (ฟรี · อ่าน transcript)
+```
+
+ได้ตารางต่องานต่อแขน: context รอบคุยแรก (ต้นทุนก่อนลงมือ = รายการ skill · agent · ข้อความ hook ตอนเริ่ม) · context รอบคุยสุดท้าย (รวมไฟล์ที่โหลดเมื่อเปิด skill) · จำนวนรอบคุย · context รวม · skill ที่เปิด · ใช้แยก 3 ต้นเหตุ: ต้นทุนคงที่ตั้งแต่รอบแรก · ไฟล์ที่โหลดระหว่างทาง · รอบคุยที่เพิ่ม · ตัวอย่างผลและวิธีอ่านอยู่ใน `RESULTS.md` หัวข้อ 2026-11-11
+
 ## เพิ่มงาน
 
 สร้าง `tasks/<ชื่อ>/` มี `TASK.md` (คำสั่งที่ส่งให้ทีม) · `repo/` (โค้ดตั้งต้น) · `hidden/` (`*.test.js` รันด้วย `node --test` หรือ `test_*.py` รันด้วย `pytest`) · ก่อนใช้ ตรวจว่า test ที่ซ่อนไว้ผ่านกับคำตอบอ้างอิง และตกกับโค้ดตั้งต้น

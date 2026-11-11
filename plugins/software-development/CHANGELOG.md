@@ -1,5 +1,9 @@
 # Changelog — software-development
 
+## 3.2.1 — 2026-11-11
+
+- `superuser`: description เปิดเฉพาะงานหลายส่วนหรือหลายไฟล์ · บั๊กไฟล์เดียวแก้ตรง (ยังไม่ได้วัดในงานจริง เพราะ bench สั่งเปิด superuser เองทุกรอบ)
+
 ## 3.2.0 — 2026-11-10
 
 - `reverse-engineering`: รองรับ MetaTrader 5 `.ex5` แบบกล่องดำ · `references/mql5-ex5.md` ใหม่ (ข้อเท็จจริงเรื่องการป้องกันและข้อตกลง MQL5 Market พร้อมแหล่ง · ด่านสิทธิ์ตามที่มาของไฟล์ · ตรวจ DLL WebRequest และไฟล์ก่อนรัน · ถอดพฤติกรรมใน Strategy Tester · เขียนใหม่แล้วเทียบ · สิ่งที่ห้ามทำ) · สคริปต์ `scripts/compare_trades.py` เทียบไม้จากรายงาน Strategy Tester หรือ CSV ของ 2 ตัว มี `--self-test` · description และตารางชนิดเป้าหมายเพิ่ม `.ex5`
