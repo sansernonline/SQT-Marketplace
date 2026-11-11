@@ -527,7 +527,7 @@ Use before writing or editing anything people read (answer, email, report, READM
 
 # skill: superuser
 
-Use when a non-trivial software task starts (feature, bug, refactor, investigation, review) or says superuser.
+Use when a software task spans several parts or files (feature plus tests, multi-module change, review then fix) or says superuser. One-file bug → fix directly.
 
 # SuperUser — หัวหน้าทีม
 
