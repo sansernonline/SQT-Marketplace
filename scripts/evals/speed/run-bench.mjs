@@ -83,15 +83,19 @@ function countAgents(sessionId) {
   for (const d of readdirSync(base)) {
     const f = join(base, d, `${sessionId}.jsonl`);
     if (!existsSync(f)) continue;
-    const agents = [], batches = [];
+    // transcript มีบรรทัดชนิด api-request-blob ที่บันทึก tool_use เดียวกันซ้ำ → นับตาม id ของ tool_use และรวมรอบตาม id ของข้อความ
+    // (เดิมนับซ้ำ: t5 2026-11-11 ส่งลูกทีม 6 ตัว แต่รายงาน 12)
+    const seen = new Set(), perMsg = new Map(), agents = [];
     for (const line of readFileSync(f, "utf8").split("\n")) {
       let m; try { m = JSON.parse(line); } catch { continue; }
       const c = m?.message?.role === "assistant" && Array.isArray(m.message.content) ? m.message.content : [];
-      const calls = c.filter((b) => b.type === "tool_use" && (b.name === "Agent" || b.name === "Task"));
-      calls.forEach((b) => agents.push(b.input?.subagent_type ?? "?"));
-      if (calls.length > 1) batches.push(calls.length);
+      for (const b of c) {
+        if (b.type !== "tool_use" || !(b.name === "Agent" || b.name === "Task") || seen.has(b.id)) continue;
+        seen.add(b.id); agents.push(b.input?.subagent_type ?? "?");
+        const k = m.message.id ?? b.id; perMsg.set(k, (perMsg.get(k) ?? 0) + 1);
+      }
     }
-    return { agents, batches };
+    return { agents, batches: [...perMsg.values()].filter((n) => n > 1) };
   }
   return { agents: [], batches: [] };
 }
