@@ -529,7 +529,7 @@ export function claimContext(input, dir = join(tmpdir(), `sqt-superuser-context-
 // แนวเดียวกับ forced eval ของ Scott Spence ที่วัดได้ 22/22 แต่สั้นกว่ามาก ไม่ไล่ทุก skill · regex ยังใช้เป็นตัวเน้นเมื่อเจอสัญญาณชัด
 // ข้อความเดียวของ hook เรื่องนี้ · เดิมมีอีกก้อนตอน SessionStart ที่พูดซ้ำ (ต้นทุนคงที่ 2026-11-11) จึงรวมเหลือก้อนนี้ ≤ 200 ตัวอักษร
 // แนวเดียวกับ using-superpowers ของ obra/superpowers (66% เทียบ skill ธรรมดา 6% · Codeminer42 2026-04-09) · มีทางข้ามของงานเล็กและของ subagent
-export const MULTISTEP_REMINDER = `งานหลายชิ้น · แก้ ≥ 3 ไฟล์ · ต้องค้นก่อน · ต้องมีคนตรวจ → เปิด \`superuser\` (หรือของสาขา) ก่อน · งานเล็กทำเลย · ${ESCAPE_CLAUSE}`;
+export const MULTISTEP_REMINDER = `งาน ≥ 5 ชิ้น · ทั้ง repo · ต้องค้นก่อน · เงิน กฎหมาย หรือส่งคนนอก → เปิด \`superuser\` (หรือของสาขา) ก่อน · งานเล็กทำเลย · ${ESCAPE_CLAUSE}`;
 const OPEN_DIR = join(tmpdir(), `sqt-superuser-open-${TMP_USER}`);
 const sessionFile = (dir, session) => join(dir, String(session ?? "none").replace(/[^\w-]/g, "_"));
 
@@ -563,7 +563,7 @@ const spacedList = (t) => t.split("\n").some((l) => { const m = l.match(/[\w./\\
 const listed = (t) => !QUESTION.test(t) && (spacedList(t) || LIST_JOIN.test(t.replace(/`[^`]*`|"[^"]*"/g, " ").replace(/(แล้ว)?\s*รัน\s*test\S*|\b(and )?run (the )?tests?\b/gi, " ")));
 export function looksSmall(text) {
   const t = String(text ?? "").trim();
-  if (!t || NOT_SMALL.test(t) || actionCount(t) >= 2 || listed(t) || (t.match(/^\s*\d+[.)]\s+\S/gm) ?? []).length >= 2 || (t.match(/^#{2,}\s/gm) ?? []).length >= 2) return false;
+  if (!t || NOT_SMALL.test(t) || looksRisky(t) || actionCount(t) >= 2 || listed(t) || (t.match(/^\s*\d+[.)]\s+\S/gm) ?? []).length >= 2 || (t.match(/^#{2,}\s/gm) ?? []).length >= 2) return false;
   const files = new Set((t.match(SMALL_FILE_REF) ?? []).map((f) => f.toLowerCase()));
   return files.size === 1 || (files.size === 0 && t.length < 300 && QUESTION.test(t)) || (files.size === 0 && /\btypo\b|คำผิด|บรรทัด(ที่)?\s*\d+|line \d+/i.test(t));
 }
@@ -587,13 +587,36 @@ export function smallLeft(session, dir = OPEN_DIR) {
   try { return Math.max(0, 1 - Number(readFileSync(smallFile(dir, session), "utf8"))); } catch { return null; }
 }
 
+// งานใหญ่ = ต้องมีหัวหน้าทีมเต็มตัว: เอ่ยชื่อ superuser · ส่งมอบคนนอกหรือใช้จริง · ค้นข้อมูล · ทั้งระบบ · เงิน กฎหมาย · ≥ 5 ข้อหรือหัวข้อ · ข้อความยาว
+// ที่เหลือที่ไม่เล็กคืองานกลาง → ไม่เปิด superuser (48 KB) · hook บอกวิธีแจกงาน 1 บรรทัดแทน
+// (bench 2026-11-11: t3 4 โมดูล และ t6 สรุปประชุม เปิด superuser แล้วลูกทีมราว 0–1 ตัว ผลเท่าเดิม แพงขึ้น 1.6 และ 2.7 เท่า · t5 6 โมดูลส่งมอบลูกค้าได้ประโยชน์จริง)
+// งานเสี่ยง (กฎแกนข้อ 3 และ 7): เงิน · ภาษี · กฎหมาย · สุขภาพ · ข้อมูลส่วนตัว · ลบหรือเขียนทับ · ระบบจริง · ส่งถึงคนนอก → ไม่เป็นงานเล็กหรือกลาง
+// regex เป็นแค่ด่านแรก ตามคำไม่ทันทุกแบบ (ผู้ตรวจ 2 รอบ 2026-11-11 หาประโยคหลุดได้ใหม่ทุกรอบ) จึงให้ MEDIUM_NOTE บอก model ตัดสินหมวดเดียวกันอีกชั้น
+// ไม่นับคำในชื่อไฟล์ (docs/tax-faq.md ไม่ใช่งานภาษี)
+const RISK = /refund|คืนเงิน|โอนเงิน|invoice|ใบแจ้งหนี้|ใบกำกับ|\bvat\b|ภาษี|หัก ณ ที่จ่าย|\btax(es)?\b|payroll|เงินเดือน|ค่าชดเชย|เลิกจ้าง|severance|ประกัน|insurance|สปส|social security|กฎหมาย|\blegal\b|สัญญา|\bcontracts?\b|pdpa|gdpr|hipaa|ข้อมูลส่วน(บุคคล|ตัว)|personal data|ผู้ป่วย|patient|medical|ขนาดยา|\bdos(e|age)\b|แพทย์|payment|ชำระเงิน|stripe|omise|promptpay|credit cards?|บัตรเครดิต|\bcharge\b|หุ้น|\bshares\b|buy order|sell order|รีไฟแนนซ์|refinanc|สินเชื่อ|\bloans?\b|\bdrop\b.{0,30}\b(tables?|columns?|database)\b|truncate|reset --hard|--force|force.?push|\bforce the remote\b|\bprod(uction)?\b|ใช้จริง|\bdns\b|app store|play store|\bpassword|secret|\bs3 bucket|ลบ.{0,20}(branch|ตาราง|คอลัมน์|ข้อมูล|bucket)|\b(delete|remove)\b.{0,40}\b(branch(es)?|bucket|data|users?)\b|\bmigrat|ส่งอีเมล|send (an |the )?emails?|email receipts|broadcast|ทุกคน|ส่งมอบ|ส่ง(ให้)?ลูกค้า|ลูกค้าใช้|for (a |the )?client|to (the )?customers?|vendors?\b|ให้.{0,10}เซ็น|\bsign\b|ทนาย|ฟ้อง|หนังสือเตือน|ผ่านโปร|ทดลองงาน|ลงโทษ|\bnda\b|terms of service|privacy policy|นโยบายความเป็นส่วนตัว|lawsuit|\bsue\b/i;
+const BIG = /superuser|ค้นข้อมูล|หาข้อมูล|research|ทั้งระบบ|ทั้ง repo|whole (repo|codebase|system)|entire (repo|codebase|system)|every .{0,30} in the (codebase|repo)|ทุก.{0,10}ใน(โปรเจกต์|repo)|ทุกไฟล์|all files/i;
+export const looksRisky = (text) => RISK.test(String(text ?? "").replace(/[\w./\\-]+\.[a-z]{1,5}\b/gi, " "));
+export function looksBig(text) {
+  const t = String(text ?? "");
+  const items = Math.max((t.match(/^\s*\d+[.)]\s+\S/gm) ?? []).length, (t.match(/^#{2,}\s/gm) ?? []).length);
+  return looksRisky(t) || BIG.test(t) || items >= 5 || t.length >= 2500;
+}
+export const MEDIUM_NOTE = "งานกลาง ทำเองได้ ไม่ต้องเปิด superuser — ยกเว้นงานแตะเงิน · กฎหมาย สัญญา หรือเรื่องจ้างงาน · ข้อมูลส่วนตัว · สุขภาพหรือยา · ลบ เขียนทับ หรือ force · ระบบจริง · ส่งถึงคนนอกหรือคนจำนวนมาก ให้เปิด skill superuser แทนและมีผู้ตรวจ · ชิ้นโค้ดที่ไม่ขึ้นต่อกันรวม ≥ 200 บรรทัดและมี test ส่ง agent `worker` พร้อมกันในข้อความเดียว · จบด้วยหลักฐาน (test ผ่าน หรือไล่ข้อกำหนดทีละข้อ) แล้วใส่บรรทัด `ข้ามรีวิว: <ผลตรวจ>`";
 export function promptNotice(input, router, dir = OPEN_DIR) {
   const text = String(input.prompt ?? "").trim();
   // เปิดด้วยคำสั่ง slash ไม่มี PostToolUse ของเครื่องมือ Skill → จดว่าเปิดแล้วจากข้อความเอง
   if (/^\/([\w-]+:)?superuser\b/.test(text)) markSuperuserOpen({ tool_name: "Skill", tool_input: { skill: "superuser" }, session_id: input.session_id }, dir);
   const small = looksSmall(text);
-  const skills = small ? pickOne(routeSkills(text, router)) : routeSkills(text, router);
+  const medium = !small && text.length >= 12 && !text.startsWith("/") && !NOT_USER.test(text) && !looksBig(text)
+    && !existsSync(sessionFile(dir, input.session_id));   // superuser เปิดค้างแล้วทั้ง session → ให้มันคุมต่อ
+  const routed = routeSkills(text, router);
+  const skills = small ? pickOne(routed) : medium
+    ? routed.filter((s) => !/(^|:)superuser$/.test(s)).sort((a, b) => BROAD_SKILL.test(a) - BROAD_SKILL.test(b)).slice(0, 2) : routed;
   noteSmall(dir, input.session_id, small ? skills.length : null);
+  // งานเขียนที่ไม่แตะโค้ด: สั่งเปิด human-writing ก่อนเขียน (คำว่า "เปิดเมื่อลงมือ" ถูกข้าม 3/3 ใน bench r7 · ปิดป้ายเทียบ t6 ฉบับที่เปิดชนะเรื่องภาษาคน 3/3 คู่ 2026-11-11)
+  const writing = skills.some((s) => /(^|:)human-writing$/.test(s)) && !/\.(?:m?js|cjs|tsx?|jsx|py|cs|java|go|rb|php|sql|dart|kt|swift|rs|vue)\b/i.test(text);
+  const others = skills.filter((s) => !writing || !/(^|:)human-writing$/.test(s));
+  if (medium) return [writing ? "ก่อนเขียน เรียก Skill เปิด `human-writing`" : "", others.length ? `เปิด ${others.map((s) => `\`${s}\``).join(" · ")} เมื่อลงมือ` : "", MEDIUM_NOTE].filter(Boolean).join("\n");
   const notice = small ? (skills.length ? `งานเล็ก เปิดแค่ \`${skills[0]}\` แล้วลงมือ` : "") : routerNotice(skills, router.multistep?.note);
   // ไม่เตือน: คำสั่ง slash · ข้อความสั้นอย่าง "ต่อ" "ok" · รายงานลูกทีมที่มาในช่องผู้ใช้ · superuser เปิดแล้ว · regex เน้นให้แล้ว · คำขอดูเล็ก
   const quiet = small || text.length < 12 || text.startsWith("/") || NOT_USER.test(text) || skills.some((s) => s.endsWith("superuser"))
@@ -1658,7 +1681,7 @@ function selfTest() {
     ["เตือนงานหลายขั้น: เตือนก่อนเปิด · เลิกเตือนหลังเปิด · ไม่เตือนข้อความสั้น", [], true, () => {
       const d = join(tmpdir(), `sqt-open-test-${process.pid}`);
       const ask = (prompt, session = "t1") => promptNotice({ prompt, session_id: session }, router, d);
-      const long = "Audit our AWS bill and cut anything we don't use";
+      const long = "Audit our whole codebase and cut anything we don't use before the client release";   // งานใหญ่ · งานกลางไม่ได้บรรทัดนี้ (ข้ออื่น)
       const before = ask(long).includes(MULTISTEP_REMINDER) && !ask("ต่อ").includes(MULTISTEP_REMINDER) && !ask("/superuser:superuser ทำงานนี้").includes(MULTISTEP_REMINDER);
       const marked = markSuperuserOpen({ tool_name: "Skill", tool_input: { skill: "software-development:superuser" }, session_id: "t1" }, d)
         && !markSuperuserOpen({ tool_name: "Skill", tool_input: { skill: "human-writing" }, session_id: "t2" }, d);
@@ -1681,7 +1704,10 @@ function selfTest() {
       const t5 = "# ชุดโมดูลหลักของระบบร้าน (ส่งมอบลูกค้าใช้จริง)\n\n## 1 · `src/csv.js`\n- parseCsv\n## 2 · `src/slots.js`\n- freeSlots";
       const t6 = "# สรุปประชุมส่งผู้บริหาร\n\nเขียนลง `report.md` จาก `notes/meeting-2026-10-20.md` และ `data/sales.csv`";
       const small = [t1, "ฟังก์ชัน formatThaiDate คืนค่าอะไร", "แก้ typo บรรทัด 3 ใน README"].every((p) => looksSmall(p) && !pushed(p));
-      return small && [t3, t5, t6].every((p) => !looksSmall(p) && pushed(p)) && !looksSmall("ใช้ superuser แก้ `src/report.js`");
+      const mid = (p) => promptNotice({ prompt: p, session_id: "md" }, router, d).includes(MEDIUM_NOTE) && !pushed(p);
+      return small && [t3, t5, t6].every((p) => !looksSmall(p)) && pushed(t5) && mid(t3) && mid(t6)
+        && promptNotice({ prompt: t6, session_id: "md6" }, router, d).includes("ก่อนเขียน เรียก Skill เปิด `human-writing`")
+        && !promptNotice({ prompt: t3, session_id: "md3" }, router, d).includes("ก่อนเขียน") && !looksSmall("ใช้ superuser แก้ `src/report.js`");
     }],
     // ผู้ตรวจ 2026-11-11: อ้างไฟล์เดียวแต่สั่งหลายงาน (กริยาสั่งงาน ≥ 2) ต้องไม่นับเป็นงานเล็ก · t1 ของ bench ทั้งไฟล์ยังเล็ก
     ...["fix the bug in src/cart.js, add tests and open a PR", "แก้ src/cart.js ให้รองรับส่วนลด เพิ่ม test แล้ว commit กับ push",
@@ -1699,8 +1725,41 @@ function selfTest() {
       return looksSmall(t1) && looksSmall("fix the null check in src/cart.js") && looksSmall("ยอดติดลบใน src/total.js ผิด ช่วยแก้ให้หน่อย")
         && looksSmall("fix off-by-one in src/slots.js and run the tests")
         && ["fix the typo in README.md, line 12", "src/date.ts returns the wrong week number for Jan 1, why?",
-          "ฟังก์ชัน total ใน src/cart.js คืนค่าผิดเมื่อมีส่วนลดและภาษี ช่วยแก้หน่อย", "fix the null pointer in src/user.ts that happens with an empty name"].every(looksSmall);
+          "ฟังก์ชัน total ใน src/cart.js คืนค่าผิดเมื่อมีส่วนลด ช่วยแก้หน่อย", "fix the null pointer in src/user.ts that happens with an empty name"].every(looksSmall)
+        && !looksSmall("ฟังก์ชัน total ใน src/cart.js คืนค่าผิดเมื่อมีส่วนลดและภาษี ช่วยแก้หน่อย");   // แตะภาษี = งานเสี่ยง ไม่เล็ก
     }],
+    // ผู้ตรวจ 2026-11-11 (รอบงานกลาง): 3 ขนาด · งานเสี่ยงต้องเป็นใหญ่ ไม่ตกไปเป็นกลางหรือเล็ก
+    ...[["เล็ก", "เปลี่ยนสีปุ่มใน src/button.css เป็นสีน้ำเงิน"], ["เล็ก", "what does parseDate in utils.ts return?"],
+      ["กลาง", "เพิ่มหน้าตั้งค่าโปรไฟล์ มีฟอร์มแก้ชื่อ อัปโหลดรูป และ test ของทั้งสองส่วน"],
+      ["กลาง", "Add a CSV export button to the reports page and a backend endpoint that streams the file, with tests"],
+      ["กลาง", "ร่างบทความบล็อกเรื่องการจัดตู้เสื้อผ้า 800 คำ แล้วทำหัวข้อย่อย 3 ข้อ"],
+      ["กลาง", "เพิ่มฟิลด์เบอร์โทรลูกค้าในฟอร์มสมัคร และ validate รูปแบบ พร้อม test"],
+      ["ใหญ่", "Refactor the entire codebase to TypeScript strict mode"], ["ใหญ่", "Write a refund flow that calls Stripe refunds API and add tests"],
+      ["ใหญ่", "ทำระบบคืนเงินให้ผู้ซื้อ: เพิ่มปุ่มคืนเงินในหน้า order แล้วเรียก API ของ Omise"],
+      ["ใหญ่", "ร่างอีเมลแจ้งพนักงานทั้งบริษัทเรื่องปรับเงินเดือน แล้วส่งให้ HR ตรวจ"],
+      ["ใหญ่", "เขียน migration ลบคอลัมน์ email_old ออกจากตาราง users บน prod และอัปเดตโค้ดที่ใช้"],
+      ["ใหญ่", "Drop the old orders table and migrate the data into the new schema, then update the repository layer"],
+      ["ใหญ่", "ร่างหนังสือเลิกจ้างพนักงาน 2 คน พร้อมคำนวณค่าชดเชยตามอายุงาน"],
+      ["ใหญ่", "Send a follow-up email to all our vendors about the overdue invoices and update the tracker"],
+      ["ใหญ่", "เทียบรีไฟแนนซ์บ้านกับรีเทนชั่น แล้วสรุปว่าควรเลือกแบบไหน"],
+      ["ใหญ่", "ตรวจสิทธิ์ผู้ป่วยในระบบนัดหมาย และแก้ให้หมอเห็นประวัติเฉพาะคนไข้ของตัวเอง เพิ่ม test ด้วย"],
+      ["ใหญ่", "คำนวณ VAT 7% และหัก ณ ที่จ่ายในใบแจ้งหนี้ แล้วแก้รายงานยอดขายให้ตรง"],
+      ["ใหญ่", "Delete all branches older than 90 days on the remote and clean up the CI config"],
+      // รอบ 2: หมวดเสี่ยงที่ไม่ใช่คำเดิม
+      ["ใหญ่", "Charge the saved credit cards for all overdue subscriptions and email receipts"],
+      ["ใหญ่", "คำนวณประกันสังคมและเงินสมทบของพนักงานเดือนนี้ แล้วทำไฟล์ยื่น สปส."], ["ใหญ่", "Run git reset --hard on main and force the remote to match"],
+      ["ใหญ่", "Place a buy order for 500 shares of PTT at market price and log it in the trade journal"],
+      ["ใหญ่", "Remove the S3 bucket with old customer uploads and update the cleanup script"], ["ใหญ่", "ยื่นเคลมประกันสุขภาพให้แม่ พร้อมแนบใบรับรองแพทย์"],
+      ["ใหญ่", "Publish version 2.0 of the app to the App Store and update the release notes"],
+      ["ใหญ่", "Change the DNS records for our main domain to point at the new server and update the docs"],
+      ["ใหญ่", "ปรับขนาดยาให้คุณพ่อตามผลเลือดล่าสุด แล้วจดในตารางยา"], ["ใหญ่", "ส่ง LINE broadcast แจ้งโปรโมชันให้ลูกค้าทุกคน แล้วสรุปยอดคนอ่าน"],
+      ["เล็ก", "fix the typo in docs/tax-faq.md"],
+      // รอบ 3: กฎหมายและเรื่องจ้างงานภายใน · ทุกจุดใน codebase
+      ["ใหญ่", "Write the terms of service and privacy policy page for our app and link it in the footer"],
+      ["ใหญ่", "ร่างข้อตกลงรักษาความลับ (NDA) กับผู้รับจ้าง แล้วทำแบบฟอร์มให้กรอก"], ["ใหญ่", "ร่างหนังสือเตือนพนักงานที่มาสายเป็นครั้งที่ 3 และบันทึกลงแฟ้มบุคคล"],
+      ["ใหญ่", "ประเมินผลงานพนักงาน 3 คนแล้วตัดสินว่าใครไม่ผ่านโปร"], ["ใหญ่", "ตอบลูกค้าที่ขู่จะฟ้องเรื่องสินค้าเสีย"],
+      ["ใหญ่", "Port every API endpoint in the codebase from Express to Fastify"], ["กลาง", "Build a todo list component with add, edit and delete, plus unit tests"]]
+      .map(([want, s]) => [`ขนาดงาน ${want}: ${s.slice(0, 30)}`, [], true, () => (looksSmall(s) ? "เล็ก" : looksBig(s) ? "ใหญ่" : "กลาง") === want]),
     ["งานเล็ก: บอก skill ตัวเดียวที่ตรงสุด (วิธีทำงานก่อนภาษา · ตัวกว้างไม่เลือก) · ข้อความ ≤ 200 ตัวอักษร", [], true, () => {
       const d = join(tmpdir(), `sqt-open-one-${process.pid}`);
       const n = promptNotice({ prompt: "แก้บั๊ก src/report.ts วันที่ผิด", session_id: "one" }, { rules: [{ pattern: "แก้บั๊ก", skills: ["human-writing", "stack-typescript", "principle-fix-root-cause", "targeted-fix"] }] }, d);
