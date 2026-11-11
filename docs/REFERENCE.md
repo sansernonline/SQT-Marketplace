@@ -1066,7 +1066,7 @@ User Request
 | SessionStart | ส่งกฎประจำตัว (`core-rules.md`) เว้นแต่ติดตั้งเป็น `~/.claude/CLAUDE.md` แล้ว · เขียน log · เตือนให้อ่าน `.claude/superuser/CONTEXT.md` หัวข้อ "รับงานต่อ" (แบบเก่าคือ `CONTEXT.md` ที่ราก) · แจ้งข้อความค้างใน inbox ทุกครั้ง |
 | UserPromptSubmit | บอกชื่อ skill ที่ต้องเปิดตาม `skill-router.json` · เขียน log (รวมข้อความผู้ใช้ ติดธง `correction: true` เมื่อผู้ใช้กำลังแก้งาน) · แจ้งเมื่อมีข้อความใหม่ใน inbox |
 | PostToolUse | เขียน log การเรียกเครื่องมือ · แจ้งเมื่อมีข้อความใหม่ใน inbox |
-| SubagentStart | ส่งตาราง "เปิด skill ก่อนลงมือ" ให้ subagent |
+| SubagentStart | ส่งตาราง "Open skills before you start" ให้ subagent |
 | PostToolUseFailure | เขียน log การเรียกเครื่องมือที่ล้ม · แจ้งเมื่อมีข้อความใหม่ใน inbox |
 
 การแจ้ง inbox ส่งให้หัวหน้าทีมเท่านั้น ไม่ส่งให้ subagent · log อยู่ที่ `.claude/superuser/log/<วันที่>/<agent>.jsonl` 1 ไฟล์ต่อ agent 1 บรรทัดต่อ 1 เหตุการณ์ — ไม่เก็บเนื้อไฟล์และผลของเครื่องมือ · ค่าที่ดูเป็นค่าลับถูกแทนด้วย `[ตัด]` · รายละเอียดใน skill `handoff`

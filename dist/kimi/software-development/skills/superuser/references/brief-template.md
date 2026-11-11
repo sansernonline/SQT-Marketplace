@@ -1,21 +1,21 @@
-# Brief — สรุปงานเป็นภาษาคนหลัง brainstorm
+# Brief — a plain-language summary after brainstorm
 
-ไฟล์นี้เหมือนกันทุก plugin · ต้นฉบับอยู่ที่ plugin `superuser`
+This file is identical in every plugin. The original lives in plugin `superuser`.
 
-ใช้เมื่องานขนาดใหญ่หรือโจทย์ไม่ชัด หลัง brainstorm และเลือกทางแล้ว ให้หัวหน้าทีมเขียน brief ก่อนลงมือ ส่งให้ผู้ใช้อ่านในคำตอบ แล้วเก็บไว้ที่ `docs/BRIEF.md` · ถ้างานเปลี่ยนทิศ ให้เขียน brief ใหม่ทับ ไม่ต่อท้าย
+Use it when the task is large or the request is unclear. After brainstorm and choosing a path, the lead writes a brief before starting, shows it to the user in the reply, and saves it at `docs/BRIEF.md`. If the task changes direction, rewrite the brief over the old one. Do not append.
 
-brief คือสรุปให้ผู้ใช้อ่าน ไม่ใช่ใบสั่งงาน · คำว่า "ใบสั่งงาน" ใช้กับใบที่หัวหน้าทีมส่งให้ลูกทีม (`handoff/<id>.md` ตาม skill `handoff` หัวข้อ 3) อย่างเดียว
+A brief is a summary for the user to read, not a work order. The term "brief" for a worker (the file `handoff/<id>.md` per skill `handoff` section 3) means only the one the lead sends to a team member.
 
-## กติกา
+## Rules
 
-- เขียนให้คนที่ไม่เคยเห็นแชตอ่านจบใน 1 นาทีแล้วเข้าใจว่างานนี้คืออะไร ทำอะไรได้ และจะได้อะไร
-- เขียนตาม `human-writing` · ประโยคเต็ม · ไม่มีศัพท์ภายในทีม (playbook · subagent · Mixture-of-Agents (MoA)) ถ้าไม่จำเป็น
-- ทุกข้อตรวจได้ · ของที่ยังไม่รู้ใส่ `(รอยืนยัน)` ไม่เดาให้ดูครบ
-- ไม่เกิน 40 บรรทัด · ถ้ายาวกว่านี้แปลว่างานใหญ่เกิน ให้แบ่งเป็นหลาย brief
+- Write so that someone who never saw the chat can read it in 1 minute and understand what the task is, what it can do, and what they will get.
+- Follow `human-writing`. Full sentences. No team jargon (playbook · subagent · Mixture-of-Agents (MoA)) unless needed.
+- Every item is checkable. Mark unknowns `(รอยืนยัน)` (awaiting confirmation). Never guess to look complete.
+- At most 40 lines. Longer means the task is too big, so split it into several briefs.
 
-## แม่แบบ
+## Template
 
-ทุกหัวข้อเป็น bullet หรือตาราง ไม่มีย่อหน้ายาว · 1 ข้อ 1 เรื่อง
+Every section is a bullet or a table, with no long paragraphs. One item, one point. The user reads it in Thai, so keep the template in Thai.
 
 ```markdown
 # <ชื่องาน> — Brief
@@ -55,27 +55,27 @@ brief คือสรุปให้ผู้ใช้อ่าน ไม่ใ�
 - **ต้องให้ผู้ใช้ตอบ:** <คำถามที่ตอบได้ด้วยคำสั้น ๆ>
 ```
 
-หัวข้อ "ข้อจำกัดทั้งงาน" ผู้ใช้ไม่ต้องตัดสิน แต่หัวหน้าทีมคัดลงทุกใบสั่งงาน ([`team-roles`](team-roles.md) หัวข้อ "แบ่งงาน" ข้อ 7) เพราะลูกทีมแต่ละตัวไม่เห็นกฎที่ตัวอื่นต้องตาม · ใส่เฉพาะกฎที่กระทบหลายชิ้น กฎของชิ้นเดียวอยู่ในใบของชิ้นนั้น · แถวช่องว่างใน spec หัวหน้าไล่ก่อนแตกงาน ถ้าไม่ใส่ ลูกทีมแต่ละตัวจะเดาเองต่างกัน และมักเดาทางแคบที่ทำให้ test ตก
+The section "ข้อจำกัดทั้งงาน" (task-wide constraints) needs no decision from the user, but the lead copies it into every worker brief ([`team-roles`](team-roles.md) section "แบ่งงาน" (splitting work) item 7), because each worker cannot see the rules the others must follow. Put in only rules that affect several pieces. A rule for one piece goes in that piece's brief. The lead goes through the spec-gap row before splitting the task. Without it, each worker guesses differently, and tends to guess the narrow path that fails the tests.
 
-## ใบสั่งงานแบบสั้นสำหรับ `worker`
+## Short brief for `worker`
 
-ใช้กับทุกชิ้นที่ส่งลูกทีมตาม `superuser` หัวข้อ 5 (ใบสั่งงาน 5 ข้อ) · งานที่ไม่ใช่โค้ดเปลี่ยนบรรทัด `เสร็จเมื่อ:` เป็นวิธีตรวจของงานนั้น · ส่งในข้อความเรียก agent ไม่ใช่ brief ให้ผู้ใช้ · **ทั้งใบไม่เกินราว 15 บรรทัด** · **spec บอกเป็นไฟล์และหัวข้อ ห้ามคัดเนื้อ spec มาใส่** ลูกทีมเปิดอ่านเอง · หัวข้อขึ้นต้นบรรทัดตามนี้ เพราะ hook นับช่องใบสั่งงานและอ่าน `ขนาด:` จากต้นบรรทัด
+Use it for every piece sent to a worker per `superuser` section 5 (the 5-field brief). For non-code tasks, change the `เสร็จเมื่อ:` line to that task's way of checking. Send it in the agent-call message, not as a brief for the user. **The whole brief stays within about 15 lines.** **Point to the spec by file and heading. Never copy spec text in.** The worker opens it. Start each field at the beginning of a line exactly as below, because the hook counts the brief fields and reads `ขนาด:` from the line start. Keep the Thai labels; the placeholders are English.
 
 ```
-เป้า: <ชิ้นนี้ทำอะไร> — 1 ใน <N> ชิ้นของ <งาน>
-ขอบเขต: เขียนได้ <path> · อ่าน <path:ช่วงบรรทัด เฉพาะของกลางที่ต้องใช้> · ห้ามแตะ <ชิ้นอื่น · ไฟล์กลาง> · ไม่อ่านไฟล์อื่น
-spec: <ไฟล์> หัวข้อ <N> · ชี้เท่านั้น ห้ามคัดเนื้อมาใส่ · spec ยังไม่อยู่ในไฟล์ (มีแค่ในแชต) → หัวหน้าเขียนลงไฟล์ครั้งเดียวก่อน แล้วชี้ไฟล์นั้น
-ใช้จาก · ให้ชิ้นอื่น: <ชื่อ · signature ตรงตัวอักษร>
-กติกา: <ช่องว่างใน spec → ทางที่ตัดสินแล้ว> · ไม่เพิ่มการตรวจหรือ error ที่ spec ไม่ได้สั่ง ยกเว้นตรวจ input ที่ขอบระบบ
-เสร็จเมื่อ: `<คำสั่ง test ของชิ้นนี้>` ผ่านครบ
+เป้า: <what this piece does> — 1 of <N> pieces of <task>
+ขอบเขต: write <path> · read <path:line range, only shared pieces it needs> · do not touch <other pieces · shared team files> · read no other file
+spec: <file> section <N> · point only, never copy text in · spec not yet in a file (only in chat) → the lead writes it to a file once first, then points to that file
+ใช้จาก · ให้ชิ้นอื่น: <name · signature exactly as written>
+กติกา: <spec gap → the decided path> · no checks or errors the spec did not ask for, except input checks at the system edge
+เสร็จเมื่อ: `<test command for this piece>` passes in full
 ขนาด: <N>k
-ส่งกลับ: ไม่เกิน 15 บรรทัด · บรรทัดแรก เสร็จ | เสร็จ มีข้อกังวล | ขาดบริบท | ติด · ไฟล์ที่แก้ · ผล test (ผ่าน/ทั้งหมด) · สิ่งที่ไม่แน่ใจ
+ส่งกลับ: at most 15 lines · first line เสร็จ | เสร็จ มีข้อกังวล | ขาดบริบท | ติด · files changed · test result (ผ่าน/total) · what is unsure
 ```
 
-1 หน่วยของโจทย์ (โมดูล · ไฟล์) = 1 ใบ เขียนทั้งโค้ดและ test ของตัวเอง ไม่แยกใบโค้ดกับใบ test · ใบสั่งงานที่หัวหน้าคัด spec มาเองทุกใบคือ output ของ opus ที่แพงที่สุดในงาน (bench t5 รอบ r7 2026-11-11: 6 ใบ · output ของหัวหน้า 20,647 · 22,151 · 48,980 token ใน 3 รอบ · bench t5 2026-11-11: ใบสั่งงาน 6–7 ใบใช้ output 10.5k token = 50–64% ของ output หัวหน้า · บันทึกใน `scripts/evals/speed/RESULTS.md`)
+1 unit of the task (module · file) = 1 brief, and the worker writes both its code and its tests. Do not split into a code brief and a test brief. A brief where the lead copies the spec in every time is the most expensive opus output in the task (bench t5 round r7 2026-11-11: 6 briefs · lead output 20,647 · 22,151 · 48,980 tokens across 3 rounds · bench t5 2026-11-11: 6–7 briefs used 10.5k output tokens = 50–64% of the lead's output · recorded in `scripts/evals/speed/RESULTS.md`).
 
-ชิ้นที่ spec ยังเปิดหรือยาก → ใบเดิม แต่ส่ง `model` และ `effort` สูงขึ้นตอนเรียก (`sonnet` + `medium` ขึ้นไป) ไม่เปลี่ยน agent
+A piece whose spec is still open or hard → the same brief, but send a higher `model` and `effort` in the call (`sonnet` + `medium` or above). Do not change the agent.
 
-## ที่มา
+## Sources
 
-ข้อจำกัดทั้งงาน (Global Constraints): superpowers (MIT) · `skills/writing-plans` · ดู 2026-11-10
+Global Constraints: superpowers (MIT) · `skills/writing-plans` · viewed 2026-11-10

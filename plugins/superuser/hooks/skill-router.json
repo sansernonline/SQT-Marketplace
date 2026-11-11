@@ -1,5 +1,5 @@
 {
-  "_": "hook superuser อ่านไฟล์นี้ทุกข้อความของผู้ใช้ · ข้อความตรง pattern ไหน (regex ไม่สนตัวพิมพ์) → บอกให้เปิด skill ในแถวนั้นก่อนเริ่ม · ชื่อ skill ต้องมีจริงใน plugins/ หรืออยู่ใน external (sync-superuser ตรวจ) · ชื่อที่ชนกับ skill ในตัวของ Claude Code (simplify) ใส่ชื่อ plugin นำหน้า · ตารางเดียวกันในรูปที่คนอ่านอยู่ใน scripts/install/CLAUDE.global.md หัวข้อ เปิด skill ก่อนลงมือ",
+  "_": "hook superuser อ่านไฟล์นี้ทุกข้อความของผู้ใช้ · ข้อความตรง pattern ไหน (regex ไม่สนตัวพิมพ์) → บอกให้เปิด skill ในแถวนั้นก่อนเริ่ม · ชื่อ skill ต้องมีจริงใน plugins/ หรืออยู่ใน external (sync-superuser ตรวจ) · ชื่อที่ชนกับ skill ในตัวของ Claude Code (simplify) ใส่ชื่อ plugin นำหน้า · ตารางเดียวกันในรูปที่คนอ่านอยู่ใน scripts/install/CLAUDE.global.md หัวข้อ Open skills before you start",
   "_unrouted": "skill ที่ตั้งใจไม่มีแถว router เพราะเปิดจากสถานะงาน ไม่ใช่คำในข้อความผู้ใช้ (ตารางใน triggers.md เป็นตัวบอกแทน): principle-build-a-tool-not-handwork · principle-proceed-on-reversible-work · principle-prove-it-works · principle-small-verifiable-steps · principle-user-experience-first · context-budget · temp-file-discipline · decision-log · flag-and-propose · agent-patterns (2026-10-28)",
   "external": ["docx", "pdf", "pptx", "xlsx"],
   "multistep": {

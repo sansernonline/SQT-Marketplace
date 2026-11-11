@@ -17,6 +17,7 @@ skill เอกสารหลัก (`polished-document-style` · `document-nam
 | งานที่คนต้องมอง (หน้าจอ · สไลด์ · โปสเตอร์ · รูป) | `no-ai-look` |
 | จบ 1 ขั้นในโฟลเดอร์ที่มี git | `commit-log` |
 | ของพังหรือผิด → ยังไม่รู้สาเหตุ / รู้สาเหตุแล้วแก้จุดเดียว | `principle-fix-root-cause` / `targeted-fix` |
+| hook บอกว่างานเล็ก (ไฟล์เดียว · แก้จุดเดียว · คำถามเดียว) | `quick` รันใน subagent `haiku` · ส่งคำขอเต็ม path และข้อมูลจากแชตใน args เพราะมันไม่เห็นแชต · ได้ `เกินงานเล็ก` หรือ `ขาดบริบท` → ทำเอง |
 | งานหลายขั้นที่ย้อนได้ กำลังจะถามว่า "ทำต่อไหม" | `principle-proceed-on-reversible-work` · งานยาวแบ่งเป็นขั้นที่ตรวจได้ → `principle-small-verifiable-steps` |
 | เลือกระหว่างทำง่ายกับใช้ง่าย | `principle-user-experience-first` |
 | ตัดสินใจเองกลางงาน / เจอเรื่องที่เปลี่ยนแผนและต้องให้ผู้ใช้ตัดสิน | `decision-log` / `flag-and-propose` |

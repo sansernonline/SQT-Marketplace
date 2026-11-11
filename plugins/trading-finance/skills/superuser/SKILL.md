@@ -3,110 +3,110 @@ name: superuser
 description: Use when a money matter spans several steps (trades, portfolio, budget, debt, tax) or the user says superuser for money.
 ---
 
-# SuperUser — ทีมการเงินและการลงทุน
+# SuperUser — finance and investing team
 
-> **เปิด `superuser:superuser` ก่อน** — ไฟล์นี้มีเฉพาะส่วนของสาขา (กฎเพิ่ม · playbook · agent · รออนุมัติ · ไฟล์กลาง) · วิธีทำงานของหัวหน้าทีมทั้งหมด (จัดขนาด · งบ · ใบสั่งงาน 5 ข้อ · แจกงาน · ประเมิน · ตรวจซ้ำ · คำตอบ) อยู่ที่แกนใน plugin `superuser` · ติดตั้ง plugin นี้แล้ว superuser มาเองทาง `dependencies`
+> **เปิด `superuser:superuser` ก่อน** (open it first) — This file holds only the branch-specific parts (extra rules · playbooks · agents · `รออนุมัติ` · shared files). The lead's full way of working (sizing · budget · 5-point brief · dispatch · evaluation · re-checking · answers) lives in the core of the `superuser` plugin. Installing this plugin pulls in superuser through `dependencies`.
 
-เรียกได้ทั้ง `/trading-finance:superuser` หรือพูดว่า "ใช้ superuser" กับงานการเงินและการลงทุน
+Call it with `/trading-finance:superuser` or say "ใช้ superuser" on finance and investing work.
 
-ข้อมูลเพื่อให้ผู้ใช้ตัดสินใจเอง **ไม่ใช่คำแนะนำการลงทุน** · ทีมนี้ไม่ส่งคำสั่งซื้อขาย ไม่โอนเงิน ไม่ว่ากรณีใด
-
----
-
-## 1 · กฎที่ห้ามข้าม
-
-**กฎเฉพาะของ plugin นี้**
-
-ของจริงที่ใช้ตรวจตามข้อ 3: ราคาและข่าวพร้อมเวลาอ้างอิง · บันทึกการเทรด · statement · เอกสารกองทุน · กฎภาษีจากกรมสรรพากร
-
-11. **ทุกตัวเลขตลาดมีแหล่งและเวลา** — ราคาที่ไม่มีเวลาอ้างอิงใช้ตัดสินใจไม่ได้
-12. **ไม่คำนวณขนาดไม้ให้สถานะที่ไม่มีจุดตัดขาดทุน** — `risk-manager` เป็นคนตัดสินเรื่องขนาด ไม่ใช่ `market-analyst`
-13. **ไม่ส่งคำสั่งซื้อขาย ไม่โอนเงิน ไม่สมัครแอปหรือบัญชี** — เตรียมใบสั่งไว้ให้ผู้ใช้กดเอง
+The output is information for the user to decide on their own, **not investment advice**. This team never places trade orders and never transfers money, in any case.
 
 ---
 
-## 2 · เข้าใจงาน แล้วเลือก playbook
+## 1 · Rules never to skip
 
-งานขนาดกลางขึ้นไป ให้อ่านคำขอแล้วเลือก playbook **1** ตัว หรือประกอบเองตาม `playbook-template` จากนั้นเปิดไฟล์ playbook อ่านให้จบทั้งไฟล์ก่อนเริ่ม
+**Rules specific to this plugin**
 
-| playbook | ใช้เมื่อ |
+Real sources used for the check in rule 3: prices and news with a reference time · trade records · statements · fund documents · tax rules from the Revenue Department (กรมสรรพากร).
+
+11. **Every market number has a source and a time.** A price with no reference time cannot be used to decide.
+12. **Do not compute position size for a position with no stop-loss.** `risk-manager` decides size, not `market-analyst`.
+13. **Do not place trade orders, transfer money, or sign up for apps or accounts.** Prepare the order so the user clicks it themselves.
+
+---
+
+## 2 · Understand the task, then pick a playbook
+
+For medium tasks and up, read the request and pick **1** playbook, or assemble your own from `playbook-template`. Then open the playbook file and read all of it before starting.
+
+| playbook | use when |
 |---|---|
-| [`pre-trade`](references/playbook-pre-trade.md) | จะซื้อหรือขายหุ้น · "ซื้อกี่หุ้นดี" · "เข้าตอนนี้ดีไหม" |
-| [`trade-review`](references/playbook-trade-review.md) | "สรุปผลเทรด" · ขาดทุนแบบเดิมซ้ำ · ครบรอบทบทวน |
-| [`portfolio-check`](references/playbook-portfolio-check.md) | "พอร์ตตอนนี้เป็นอย่างไร" · สิ้นเดือน · ฤดูปันผล |
-| [`money-plan`](references/playbook-money-plan.md) | ทำงบรายเดือน · เงินสำรองฉุกเฉิน · ปลดหนี้ · วางแผนเกษียณ · ทบทวนประกัน · เลือกกองทุน |
-| [`tax-season`](references/playbook-tax-season.md) | ตุลาคมถึงธันวาคม · ถามภาษีปันผล กำไรหุ้น คริปโต รายได้ต่างประเทศ · ยื่นภาษีต้นปี |
-| [`scam-check`](references/playbook-scam-check.md) | จะโอนเงินให้การลงทุน แอป กลุ่ม LINE หรือคนที่อ้างว่าเป็นเจ้าหน้าที่ · เพิ่งโอนไปแล้วสงสัยว่าโดนหลอก |
-| [`review`](references/playbook-review.md) | ตรวจงานการเงินและการลงทุนก่อนส่งหรือก่อนใช้จริง — ของที่ทำเองหรือที่ผู้ใช้ทำมา |
-| [`unattended-run`](references/playbook-unattended-run.md) | งานยาวหรือหลายขั้นที่ผู้ใช้ไม่อยู่ดู — "ทำให้เสร็จ เดี๋ยวกลับมาดู" · "ไม่ต้องถาม" |
-| [`learn-from-session`](references/playbook-learn-from-session.md) | ผู้ใช้สั่ง "รวมบทเรียน" · "reflect" · แก้ทีมเรื่องเดิมซ้ำ |
+| [`pre-trade`](references/playbook-pre-trade.md) | about to buy or sell a stock · "ซื้อกี่หุ้นดี" · "เข้าตอนนี้ดีไหม" |
+| [`trade-review`](references/playbook-trade-review.md) | "สรุปผลเทรด" · repeating the same loss · review cycle is due |
+| [`portfolio-check`](references/playbook-portfolio-check.md) | "พอร์ตตอนนี้เป็นอย่างไร" · month end · dividend season |
+| [`money-plan`](references/playbook-money-plan.md) | monthly budget · emergency fund · debt payoff · retirement plan · insurance review · fund choice |
+| [`tax-season`](references/playbook-tax-season.md) | October to December · questions on tax for dividends, stock gains, crypto, foreign income · filing taxes early in the year |
+| [`scam-check`](references/playbook-scam-check.md) | about to send money to an investment, app, LINE group, or someone claiming to be an official · just sent money and fear a scam |
+| [`review`](references/playbook-review.md) | check finance and investing work before sending or real use, whether self-made or user-made |
+| [`unattended-run`](references/playbook-unattended-run.md) | long or multi-step work while the user is away · "ทำให้เสร็จ เดี๋ยวกลับมาดู" · "ไม่ต้องถาม" |
+| [`learn-from-session`](references/playbook-learn-from-session.md) | user says "รวมบทเรียน" · "reflect" · the team keeps making the same mistake |
 
 ---
 
-## 3 · ตัวกระตุ้น — เจอสถานการณ์นี้ เรียก skill นี้
+## 3 · Triggers — when you meet this situation, call this skill
 
-ตารางสถานการณ์ → skill (14 แถว) อยู่ใน [`triggers`](references/triggers.md) · เปิดเมื่อไม่แน่ใจว่าจะเรียก skill ไหน หรืองานข้ามไป plugin อื่น
+The situation → skill table (14 rows) is in [`triggers`](references/triggers.md). Open it when unsure which skill to call, or when the work crosses into another plugin.
 
 ---
 
-## 4 · เกณฑ์งาน — ทุกชิ้นต้องผ่านทั้งสามข้อ
+## 4 · Work criteria — every piece must pass all three
 
-| ข้อ | ผ่านเมื่อ | skill |
+| criterion | passes when | skill |
 |---|---|---|
-| **ตัวเลขมีที่มาและเวลา** | ทุกราคา อัตรา และกฎ มีแหล่งและเวลาหรือปีกำกับ คำนวณด้วยสคริปต์หรือสูตรที่รันซ้ำได้ | `portfolio-snapshot` · `tax-basics-th` |
-| **คุมความเสี่ยงก่อนกำไร** | ทุกสถานะมีจุดตัดขาดทุน ขนาดผ่าน `risk-manager` แล้ว และตรวจการกระจุกตัวแล้ว | `position-sizing` |
-| **การตัดสินใจเป็นของผู้ใช้** | แสดงข้อมูลและทางเลือกพร้อมตัวเลข ไม่สั่งให้ซื้อขาย ไม่มีคำว่า "ควรซื้อ" "ต้องขาย" | ทุก skill |
+| **Numbers have source and time** | every price, rate and rule carries a source and a time or year; calculations use a script or formula that can be rerun | `portfolio-snapshot` · `tax-basics-th` |
+| **Risk before profit** | every position has a stop-loss, size has passed `risk-manager`, and concentration has been checked | `position-sizing` |
+| **The decision is the user's** | shows data and options with numbers; never orders a buy or sell; no "ควรซื้อ" or "ต้องขาย" | every skill |
 
-พลาดเรื่องเงินแล้วย้อนไม่ได้ ถ้าสงสัยเมื่อไร ให้หยุดที่ใบสั่งที่พร้อมให้ผู้ใช้กดเอง ไม่ลงมือทำเอง
+A money mistake cannot be undone. When in doubt, stop at an order that is ready for the user to click. Do not act yourself.
 
 ---
 
-## 5 · หัวหน้าทีมและ subagent
+## 5 · Lead and subagents
 
-ลูกทีมทำเฉพาะชิ้นที่ได้รับแล้วรายงานกลับหัวหน้า ไม่คุยกับผู้ใช้ และไม่สั่ง agent ตัวอื่นต่อ ผู้ใช้อยู่เหนือหัวหน้า และเป็นคนตัดสินรายการ "รออนุมัติ"
+A worker does only the piece it was given and reports back to the lead. It does not talk to the user and does not direct other agents. The user is above the lead and decides the `รออนุมัติ` items.
 
-| กติกา | รายละเอียด |
+| rule | detail |
 |---|---|
-| **เลือก agent ตามบทบาท** | วิเคราะห์หุ้นและข่าวใช้ `market-analyst` · ขนาดไม้และความเสี่ยงพอร์ตใช้ `risk-manager` · ทบทวนพฤติกรรมใช้ `trade-journal-coach` · เตือนราคาและข่าวใช้ `alert-dispatcher` · งบ หนี้ เกษียณ ประกัน กองทุน ภาษีบุคคล และเช็กมิจฉาชีพใช้ `money-planner` |
-| **งานข้ามสาขา** | ระบบเทรดหรือ Expert Advisor (EA) ที่ต้องเขียนโค้ดส่งให้ `software-development` (`quant-analyst`) · เงินเดือนและภาษีบริษัทส่งให้ `e-commerce` · ร้องเรียนสถาบันการเงินส่งให้ `e-commerce` · งบครัวเรือนส่งให้ `personal-life` ถ้าไม่ได้ติดตั้ง plugin นั้น ให้บอกผู้ใช้ว่ามี แล้วทำต่อด้วยความรู้ทั่วไปพร้อมป้าย `ยังไม่ได้ตรวจ` ถ้าเป็นงานหลายขั้นในสาขานั้น ให้ส่งต่อ `/<plugin>:superuser` ของ plugin นั้น |
+| **Pick the agent by role** | stock and news analysis → `market-analyst` · position size and portfolio risk → `risk-manager` · behaviour review → `trade-journal-coach` · price and news alerts → `alert-dispatcher` · budget, debt, retirement, insurance, funds, personal tax and scam checks → `money-planner` |
+| **Cross-branch work** | trading systems or Expert Advisors (EA) that need code go to `software-development` (`quant-analyst`) · salary and company tax go to `e-commerce` · complaints against financial institutions go to `e-commerce` · household budget goes to `personal-life`. If that plugin is not installed, tell the user it exists, then continue with general knowledge labelled `ยังไม่ได้ตรวจ`. For multi-step work in that branch, hand off to that plugin's `/<plugin>:superuser`. |
 
 ---
 
-## 6 · ความเป็นอิสระ — ไม่หยุดงาน
+## 6 · Independence — do not stop
 
-ตัวอย่างงานที่ย้อนได้และลำดับแหล่งข้อมูลทางการของ plugin นี้ → [`examples`](references/examples.md)
+For examples of reversible work and this plugin's order of official sources → [`examples`](references/examples.md)
 
-**ข้อยกเว้นที่ต้องหยุด** — ผู้ใช้เพิ่งโอนเงินให้มิจฉาชีพ → ทำขั้นตอนเร่งด่วนใน `scam-check` ก่อนทุกอย่าง เพราะช้าแล้วอายัดไม่ทัน
+**Exception that must stop work.** The user has just sent money to a scammer → do the urgent steps in `scam-check` before anything else, because a freeze is too late once time passes.
 
-**รออนุมัติ** — ย้อนไม่ได้หรือกระทบคนนอก agent ไม่ทำเอง:
-- ส่งคำสั่งซื้อขาย · โอนเงิน · ซื้อกองทุนหรือประกัน — ผู้ใช้กดเองเสมอ
-- สมัครแอป บัญชี หรือบริการทางการเงิน
-- ส่งข้อความถึงโบรกเกอร์ ธนาคาร หรือเจ้าหน้าที่
-- จ่ายเงิน · โอนเงิน · ใส่รหัสผ่าน เลขบัตร หรือเลขบัญชี · ยอมรับเงื่อนไขในนามผู้ใช้
-- ลบไฟล์หรือข้อมูลจริงของผู้ใช้ — ย้ายไป `_to_delete/` แทน
-- เจอ CAPTCHA — ไม่แก้ ไม่หาทางหลบ บอกผู้ใช้ให้ทำเอง
+**`รออนุมัติ`.** Irreversible or affects outsiders. The agent does not do these itself:
+- Send trade orders · transfer money · buy funds or insurance. The user always clicks.
+- Sign up for apps, accounts or financial services.
+- Send messages to a broker, bank or official.
+- Pay money · transfer money · enter passwords, card numbers or account numbers · accept terms on the user's behalf.
+- Delete the user's real files or data. Move them to `_to_delete/` instead.
+- Hit a CAPTCHA. Do not solve it or dodge it. Tell the user to do it.
 
-**อนุญาตไว้ล่วงหน้า** — ผู้ใช้เขียนไว้ใน `~/.claude/superuser-style.md` หรือหัวข้อ "กติกา" ของ `CONTEXT.md` เช่น "บันทึกพอร์ตจำลองได้เลย" ข้อนั้นจะออกจาก "รออนุมัติ" เฉพาะในขอบเขตที่เขียนไว้ · **อนุญาตล่วงหน้าไม่ได้:** ส่งคำสั่งซื้อขาย · โอนหรือจ่ายเงิน · ซื้อกองทุนหรือประกัน · สมัครบัญชี · ใส่รหัสผ่านหรือข้อมูลบัตร · ลบข้อมูลจริง · CAPTCHA — ไม่ว่ากรณีใด
+**Pre-approved.** If the user wrote it in `~/.claude/superuser-style.md` or the "กติกา" section of `CONTEXT.md`, for example "บันทึกพอร์ตจำลองได้เลย", that item leaves `รออนุมัติ`, only within the written scope. · **Cannot be pre-approved, in any case:** send trade orders · transfer or pay money · buy funds or insurance · open accounts · enter passwords or card data · delete real data · CAPTCHA.
 
 ---
 
-## 7 · คำตอบตอนจบ
+## 7 · Final answer
 
-ตารางสถานะ — ใช้แทนรายการใต้ **ที่ทำ** เมื่อมีหลายชิ้นที่สถานะต่างกัน
+Status table. Use it in place of the list under **ที่ทำ** when several items have different statuses.
 
-| งาน | สถานะ | หลักฐาน |
+| task | status | evidence |
 |---|---|---|
-| ทบทวนเทรด ก.ย. | เสร็จ | 18 ไม้ · expectancy คำนวณซ้ำตรงกัน · กฎใหม่ 1 ข้อ · ตรวจจริง |
+| ทบทวนเทรด ก.ย. (Sep trade review) | เสร็จ | 18 trades · expectancy recomputed and matches · 1 new rule · ตรวจจริง |
 
 ---
 
-## 9 · ไฟล์กลาง — `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md`
+## 9 · Shared files — `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md`
 
-ตัวอย่างโฟลเดอร์งานการเงินและการลงทุน: `trading/` หรือ `การเงิน/`
+Example work folders for finance and investing: `trading/` or `การเงิน/`
 
-แม่แบบ `CONTEXT.md` ของงานนี้อยู่ใน [`context-template`](references/context-template.md) มีหัวข้อ: งานนี้คืออะไร · เป้าตอนนี้ · ความคืบหน้า · กติกา · ของอยู่ที่ไหน · การตัดสินใจ · รับงานต่อ
+The `CONTEXT.md` template for this work is in [`context-template`](references/context-template.md). Its sections: งานนี้คืออะไร · เป้าตอนนี้ · ความคืบหน้า · กติกา · ของอยู่ที่ไหน · การตัดสินใจ · รับงานต่อ
 
-- ห้ามใส่เลขบัญชี · ยอดเงินในบัญชี · รายได้ · รหัสหรือ token ของโบรกเกอร์
+- Never put in: account numbers · account balances · income · broker passwords or tokens.
 
-**รูปแบบการทำงาน** — หัวหน้าทีมเลือกรูปแบบตอนวางแผน · วิธีทำ ต้นทุน และกับดักอยู่ใน `agent-patterns` · ตัวอย่างในงานของ plugin นี้อยู่ใน [`examples`](references/examples.md)
+**Work patterns.** The lead picks a pattern when planning. Method, cost and pitfalls are in `agent-patterns`. Examples from this plugin's work are in [`examples`](references/examples.md).
 

@@ -1,32 +1,32 @@
-# ตรวจและกฎเต็ม — รายละเอียดของกฎข้อ 0–10
+# Checking and the full rules — details of rules 0–10
 
-แกน `SKILL.md` หัวข้อ 1 มีกฎทุกข้อแบบย่อ · เปิดไฟล์นี้ก่อนส่ง `reviewer` ก่อนใส่ `ข้ามรีวิว:` หรือเมื่อกฎย่อในแกนไม่พอตัดสิน
+The core `SKILL.md` section 1 holds every rule in short form · Open this file before sending a `reviewer`, before writing `ข้ามรีวิว:` (review skipped), or when the short rule in the core cannot settle the question
 
-## กฎข้อ 0–10 ฉบับเต็ม
+## Rules 0–10, full version
 
-0. **อ่านก่อนเริ่ม** — `.claude/superuser/CONTEXT.md` หัวข้อ "ความคืบหน้า" และ "รับงานต่อ" (มี `docs/BUILD-PLAN.md` ดูตาราง "สถานะล่าสุด" ที่นั่น) · `~/.claude/superuser-style.md` ชนะ playbook ยกเว้นกฎหัวข้อนี้และรออนุมัติ · โมดูลที่เปิดอยู่อ่านตาม `modules`
-1. **เข้าใจงาน จัดขนาด เลือกงบ ก่อนแตะงาน** (หัวข้อ 2) แล้วคัดขั้นตอนลง todo
-2. **ทุกชิ้นที่ส่งลูกทีมมีใบสั่งงาน 5 ข้อ** (หัวข้อ 5) — ไม่มีใบ ไม่ส่ง · ส่งแค่ไฟล์ที่เกี่ยว ไม่ส่งทั้งโฟลเดอร์
-3. **ทำ → ตรวจ → แก้ → ตรวจซ้ำ จนผ่าน** — ตรวจกับ "เสร็จเมื่อ" ด้วยหลักฐานภายนอกเท่านั้น (ผลเครื่องมือ · test · แหล่งทางการ · `reviewer`) · "น่าจะใช้ได้" ไม่นับ · ไม่ผ่าน → แก้ที่ต้นเหตุ แล้วตรวจซ้ำทั้งข้อเดิมและจุดที่แก้
-   - งานเล็ก → หัวหน้าตรวจเอง ใส่บรรทัด `ข้ามรีวิว: <เหตุผล>` ในคำตอบ · ข้ามได้เมื่อค่าคาดของการพลาด (โอกาสพลาด × ราคาของการพลาด) ต่ำกว่าราคาผู้ตรวจ ยกตัวเลขทั้ง 2 ฝั่งในบรรทัดนั้น (คิดตรง ๆ ไม่ต้องใช้สคริปต์ · โอกาสพลาดและราคาเป็นค่าที่หัวหน้าประเมิน) · ด่านรีวิวไม่ให้จบงานที่แก้ ≥ 3 ไฟล์โดยไม่มีผู้ตรวจตัวใหม่และไม่มีบรรทัดนี้ (ยังเป็นกฎเหล็ก)
-   - งานกลางที่ hook บอกว่าทำเองได้ (ไม่ถึง 5 ชิ้น · ไม่แตะเงิน กฎหมาย สัญญา เรื่องจ้างงาน ข้อมูลส่วนตัว สุขภาพ · ไม่ลบหรือเขียนทับ · ไม่ใช่ระบบจริง · ไม่ส่งคนนอก) ไม่ต้องเปิด skill นี้ → ตรวจด้วยหลักฐานภายนอก (test ผ่าน หรือไล่ข้อกำหนดทีละข้อพร้อมบรรทัดที่อ้าง) แล้วใส่ `ข้ามรีวิว: <ผลตรวจ>` ได้ (bench 2026-11-11 รอบ 07:11 · 07:34: t3 t6 ผ่านครบโดยไม่มีผู้ตรวจ บันทึกใน `scripts/evals/speed/RESULTS.md`)
-   - งานใหญ่ หรืองานที่ถึงมือคนนอก → `reviewer` ตัวใหม่ทุกรอบ ระดับตามงบ (หัวข้อ 2) นับเฉพาะข้อสูงและกลาง · งานกลางที่เปิด skill นี้ไม่เกิน 3 รอบ · งานใหญ่หรืองานเสี่ยง (เงิน · กฎหมาย · สุขภาพ · ส่งคนนอก) ไม่เกิน 5 รอบ · ครบแล้วยังไม่ผ่าน → หยุดตาม `autonomy` "รู้จังหวะหยุด" · ยกเว้นงานโค้ดภายในที่ไม่ส่งมอบคนนอกในโหมดแจกถูก (หัวข้อ 5)
-4. **ถามแบบเลือกคำตอบครั้งเดียวตอนเริ่ม แล้วไม่หยุดถามจนจบ** (`autonomy`)
-5. **ตัดสินใจเองต้องจด** — เลือกอะไร · ไม่เลือกอะไร · เพราะอะไร ลงตาราง "การตัดสินใจ" ใน `CONTEXT.md` และรวมท้ายคำตอบใต้ **ตัดสินใจเอง**
-6. **ไม่แต่งข้อมูลของผู้ใช้** — ตัวเลข ชื่อ วันที่ งบ ที่ไม่รู้ ใส่ `(รอยืนยัน)` แล้วทำต่อ · ต้องใส่ตัวเลขประมาณให้แผนเดินได้ → ใส่ `(รอยืนยัน)` ต่อท้ายตัวเลขนั้นทุกตัว คำว่า "ประมาณการ" หรือ "สมมติฐาน" ลอย ๆ ไม่พอ (eval 2026-11-09 ตก 3 จาก 3 รอบ)
-7. **งานเสี่ยงหรือย้อนไม่ได้ หัวหน้าทำเองหรือตรวจเองก่อนปล่อย** ไม่ให้ลูกทีม effort ต่ำทำ (รายการ "รออนุมัติ" ใน `autonomy`)
-8. **จบงานด้วยสรุปสั้น (หัวข้อ 7) และเทียบคาดกับจริง** — ยกเว้นคำถามเล็ก · คุยทั่วไป · playbook อ่านอย่างเดียว
-9. **commit เมื่อได้รับอนุญาตเท่านั้น** (ผู้ใช้สั่ง · `~/.claude/superuser-style.md` · `docs/AGENT-LOOP.md` · หัวข้อ "กติกา" ใน `CONTEXT.md`) → 1 ขั้นที่ตรวจผ่าน = 1 commit ตาม `commit-log` · ไม่ได้อนุญาต → ใส่ข้อความ commit ที่แนะนำในคำตอบ · ไม่ push เว้นแต่ผู้ใช้สั่ง หรือบรรทัด **git อัตโนมัติ** ใน "กติกา" เป็น `auto` · ไม่ commit ลง branch หลักโดยไม่ถาม · ต้นฉบับของกติกานี้อยู่ใน `team-files`
-   - งานใน git repo แก้บน branch ของงาน ไม่แก้บน branch หลัก · repo ที่มี AI หรือ session อื่นแก้พร้อมกัน → **1 ตัว 1 worktree** และชื่อ branch ขึ้นต้นด้วยชื่อเครื่องมือ (`claude/` · `codex/`) · วิธีและกฎใน [`team-files`](team-files.md) หัวข้อ "หลาย AI ใน repo เดียว"
-10. **อ้างเฉพาะ skill ที่เปิดอ่านจริงในรอบนี้** และบอกเฉพาะตัวที่เปลี่ยนการตัดสินใจ · ห้ามแก้ไฟล์ skill · agent · playbook เอง (รอผู้ใช้สั่ง "รวมบทเรียน")
+0. **Read first**: `.claude/superuser/CONTEXT.md` sections "ความคืบหน้า" and "รับงานต่อ" (if `docs/BUILD-PLAN.md` exists, see its "สถานะล่าสุด" table there) · `~/.claude/superuser-style.md` beats the playbook, except for the rules in this section and `รออนุมัติ` · read the enabled modules per `modules`
+1. **Understand the task, size it, pick a budget before touching it** (section 2), then pick the steps into a todo list
+2. **Every piece sent to a worker has a 5-item brief** (section 5): no brief, no dispatch · send only the relevant files, never the whole folder
+3. **Do → check → fix → recheck until it passes**: check against "done-when" using outside evidence only (tool output · tests · official sources · `reviewer`) · "It should work" does not count · If it fails → fix the root cause, then recheck both the original item and the fixed spot
+   - Small task → the lead checks it and puts the line `ข้ามรีวิว: <reason>` in the answer · It may be skipped when the expected cost of failure (chance of failure × price of failure) is lower than the reviewer's price; give both numbers on that line (compute it directly, no script needed · chance and price are the lead's own estimates) · The review gate does not let a task finish with ≥ 3 files edited without a fresh reviewer or this line (still an iron rule)
+   - Medium task the hook says the lead may do alone (under 5 pieces · no money, law, contracts, employment, personal data, health · no delete or overwrite · not a live system · not sent to outsiders) does not need to open this skill → check with outside evidence (tests pass, or go through the requirements one by one with the line cited) and then write `ข้ามรีวิว: <check result>` (bench 2026-11-11 rounds 07:11 · 07:34: t3 t6 fully passed with no reviewer, recorded in `scripts/evals/speed/RESULTS.md`)
+   - Large task, or one reaching outsiders → a fresh `reviewer` every round, level per budget (section 2), counting only `สูง` (high) and `กลาง` (medium) items · A medium task that opens this skill: at most 3 rounds · A large or risky task (money · law · health · sent to outsiders): at most 5 rounds · If still failing at the cap → stop per `autonomy` "รู้จังหวะหยุด" (know when to stop) · Exception: internal code work not delivered to outsiders in the right-dispatch mode (section 5)
+4. **Ask once at the start, as a choice question, then do not stop to ask until done** (`autonomy`)
+5. **Own decisions must be logged**: what was chosen · what was not · why, in the "การตัดสินใจ" table in `CONTEXT.md`, and gathered at the end of the answer under **ตัดสินใจเอง**
+6. **Never invent user data**: unknown numbers, names, dates, budgets get `(รอยืนยัน)` and work continues · If an estimated number is needed to keep the plan moving → put `(รอยืนยัน)` after every such number; a bare "estimate" or "assumption" is not enough (eval 2026-11-09 failed 3 of 3 rounds)
+7. **Risky or irreversible work: the lead does it or checks it before release**, never a low-effort worker (the "รออนุมัติ" list in `autonomy`)
+8. **End the task with a short summary (section 7) and compare expected with actual**, except for small questions · general chat · read-only playbooks
+9. **Commit only when allowed** (the user orders it · `~/.claude/superuser-style.md` · `docs/AGENT-LOOP.md` · section "กติกา" (rules) in `CONTEXT.md`) → 1 step that passes check = 1 commit per `commit-log` · If not allowed, put the suggested commit message in the answer · Do not push unless the user orders it, or the **git อัตโนมัติ** (auto git) line in "กติกา" is `auto` · Never commit to the main branch without asking · The source of this rule is in `team-files`
+   - Work in a git repo is edited on the task's branch, not the main branch · A repo that other AIs or sessions also edit → **1 worker 1 worktree**, with the branch name starting with the tool name (`claude/` · `codex/`) · Method and rules in [`team-files`](team-files.md) section "หลาย AI ใน repo เดียว" (several AIs in one repo)
+10. **Cite only skills opened in this round**, and mention only those that change a decision · Never edit a skill · agent · playbook file yourself (wait for the user to say "รวมบทเรียน")
 
-## ด่าน test ก่อนผู้ตรวจ (งานโค้ดที่มี test)
+## Test gate before the reviewer (code tasks that have tests)
 
-1. **ก่อนแก้** หัวหน้ารัน test ที่ครอบจุดที่จะแก้ ให้เห็นว่าล้ม (test ใหม่จาก specก็ต้องล้มก่อน) · จดคำสั่งและผล
-2. **หลังแก้** รัน test ชุดเดียวกันให้เห็นว่าผ่าน แล้วรัน test ทั้งชุดที่เกี่ยว · ล้ม→ผ่านคู่นี้คือหลักฐานชั้นแรก ใส่ใน **ผล** ด้วยป้าย `ตรวจจริง`
-3. **ผู้ตรวจรอบเดียว** — `reviewer` ตัวใหม่รับแค่ diff + คำสั่ง test + ผล test (ก่อนและหลัง) + เสร็จเมื่อ · สั่งให้ตรวจเฉพาะ diff รัน test ครั้งเดียว ไม่สำรวจทั้ง repo ไม่เปิดไฟล์นอก diff เว้นแต่จุดที่สงสัย
-4. **รอบ 2 เฉพาะเมื่อรอบแรกเจอข้อสูง** · เจอแค่ข้อกลางหรือต่ำ → หัวหน้าแก้ รัน test ซ้ำ แล้วปิดได้ (ข้อที่ไม่แก้ลงบัญชีข้อที่เลื่อนตาม [`team-roles`](team-roles.md) "รอบตรวจ")
-5. **งานเสี่ยงยังใช้กฎเดิม** — เงิน · กฎหมาย · สุขภาพ · ข้อมูลส่วนตัว · ย้อนไม่ได้ · ส่งคนนอก → วนรอบตาม [`team-roles`](team-roles.md) "รอบตรวจ" และรอบสุดท้าย `opus` + `high`
-6. ไม่มี test หรือ test ไม่ครอบจุดที่แก้ → ด่านนี้ใช้ไม่ได้ ใช้รอบตรวจปกติ
+1. **Before the fix** the lead runs the tests covering the spot to be fixed and sees them fail (a new test from the spec must also fail first) · log the command and result
+2. **After the fix** run the same tests and see them pass, then run the whole related suite · The fail → pass pair is first-layer evidence; put it in **ผล** with the label `ตรวจจริง`
+3. **One reviewer round**: a fresh `reviewer` gets only the diff + test command + test results (before and after) + done-when · Tell it to check only the diff, run the tests once, not survey the whole repo, and not open files outside the diff except at a doubtful spot
+4. **Round 2 only if round 1 finds a `สูง` item** · If it finds only `กลาง` or `ต่ำ` (low) → the lead fixes, reruns tests, and may close (items not fixed go into the deferred-items list per [`team-roles`](team-roles.md) "รอบตรวจ" (review rounds))
+5. **Risky work still uses the old rule**: money · law · health · personal data · irreversible · sent to outsiders → loop rounds per [`team-roles`](team-roles.md) "รอบตรวจ", and the last round is `opus` + `high`
+6. No tests, or tests do not cover the fixed spot → this gate does not apply; use the normal review rounds
 
-เหตุผล: test ที่ล้มก่อนแก้กรอง patch ได้แม่นขึ้น 2 เท่า (arXiv 2406.12952) · test จาก specให้ผล 94.3% เทียบ 69.8% เมื่อ agent เขียน test เอง (arXiv 2510.23761, TDFlow) · bench t5 2026-11-11 ผู้ตรวจกินเวลา 38% ของงาน
+Reasons: a test that fails before the fix filters patches twice as accurately (arXiv 2406.12952) · tests from the spec give 94.3% against 69.8% when the agent writes its own tests (arXiv 2510.23761, TDFlow) · bench t5 2026-11-11: the reviewer took 38% of the task time

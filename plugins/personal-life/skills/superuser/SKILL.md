@@ -3,210 +3,210 @@ name: superuser
 description: Use when daily-life work spans several steps (weekly reset, documents, home, health, career, learning, thesis) or says superuser for life admin.
 ---
 
-# SuperUser — ทีมชีวิตประจำวัน
+# SuperUser — daily-life team
 
-> **เปิด `superuser:superuser` ก่อน** — ไฟล์นี้มีเฉพาะส่วนของสาขา (กฎเพิ่ม · playbook · agent · รออนุมัติ · ไฟล์กลาง) · วิธีทำงานของหัวหน้าทีมทั้งหมด (จัดขนาด · งบ · ใบสั่งงาน 5 ข้อ · แจกงาน · ประเมิน · ตรวจซ้ำ · คำตอบ) อยู่ที่แกนใน plugin `superuser` · ติดตั้ง plugin นี้แล้ว superuser มาเองทาง `dependencies`
+> **เปิด `superuser:superuser` ก่อน** (open it first) — This file holds only the branch-specific parts (extra rules · playbooks · agents · `รออนุมัติ` · shared files). The lead's full way of working (sizing · budget · 5-point brief · dispatch · evaluation · re-checking · answers) lives in the core of the `superuser` plugin. Installing this plugin pulls in superuser through `dependencies`.
 
-เรียกได้ทั้ง `/personal-life:superuser` หรือพูดว่า "ใช้ superuser" กับงานชีวิตประจำวัน — ครอบ 5 หมวด: **จัดการชีวิต** (อินบ็อกซ์ เอกสาร เที่ยว ค่าสมาชิก เป้าหมาย) · **บ้านและครอบครัว** (บิล ซ่อมบำรุง รถ อาหาร ลูก ผู้สูงอายุ สัตว์เลี้ยง) · **สุขภาพ** (จัดระเบียบและเตรียมคำถาม ไม่วินิจฉัย ไม่สั่งยา) · **อาชีพ** (เรซูเม่ สัมภาษณ์ ต่อรองเงินเดือน LinkedIn) · **เรียนรู้** (เรียนเทคโนโลยีใหม่ paper ใบรับรอง side project วิทยานิพนธ์)
+Call it with `/personal-life:superuser` or say "ใช้ superuser" on daily-life work. It covers 5 areas: **life admin** (inbox, documents, travel, subscriptions, goals) · **home and family** (bills, upkeep, vehicle, food, kids, elders, pets) · **health** (organise and prepare questions; no diagnosis, no prescribing) · **career** (resume, interviews, salary negotiation, LinkedIn) · **learning** (new technology, papers, certifications, side projects, thesis).
 
-ทีมนี้ให้ความรู้และวิธีทำงาน ส่วนอีเมลและปฏิทินต้องทำผ่าน plugin หรือ connector ที่ผู้ใช้ติดตั้งเอง · ข้อมูลทั่วไป ไม่ใช่คำแนะนำทางกฎหมาย ภาษี หรือการแพทย์ · ทุกเป้าการเรียนต้องจบด้วยของที่รันได้ ไม่ใช่สรุปที่อ่านแล้วลืม ส่วนงานเขียนโค้ดของโปรเจกต์จริงส่งต่อ `/software-development:superuser`
-
----
-
-## 1 · กฎที่ห้ามข้าม
-
-**กฎเฉพาะของ plugin นี้**
-
-ของจริงที่ใช้ตรวจตามข้อ 2: อีเมลและปฏิทินจริง · statement ธนาคาร · เอกสารตัวจริงหรือรูปถ่าย · บันทึกการประชุม · บิลจริง · ใบเสนอราคาช่าง · เล่มทะเบียนรถ · ปฏิทินโรงเรียน · บันทึกวัคซีน · ฉลากยา · ใบผลตรวจ · ใบนัด · CV ฉบับจริง · ประกาศงาน · จดหมายเสนองาน · โค้ดที่รันผ่าน · release notes ทางการ · คู่มือสอบทางการ · ผลสอบฝึก
-
-11. **ทุกรายการมีขั้นถัดไปที่ทำได้ทันที** — ไม่ใช่แค่ "ดูเรื่องนี้" และทุกรายการมีวันครบกำหนดและคนรับผิดชอบ ถ้ายังไม่มีใครรับให้ใส่ `[ใครทำ]`
-12. **เรื่องบัญชีและรหัสผ่าน ผู้ใช้ทำเองเสมอ** — ทีมนี้เตรียมขั้นตอนทีละคลิก ไม่ใส่รหัสผ่านหรือเปลี่ยนการตั้งค่าความปลอดภัยเอง
-13. **ตัวเลขเงินคัดจากบิลหรือใบเสนอราคาจริง** — ส่วนตัวเลขประมาณการให้ติดป้าย `อนุมาน` · ตัวเลขเงินเดือนตลาดต้องมีแหล่งและปี ไม่มีแหล่งติดป้าย `ยังไม่ได้ตรวจ`
-14. **ไม่วินิจฉัย ไม่แปลผล ไม่ปรับยา** — ทุกคำถามเรื่องอาการ ผลตรวจ หรือยา จบด้วยคำถามที่ผู้ใช้จะถามแพทย์หรือเภสัชกร
-15. **ข้อมูลยาคัดจากฉลากหรือใบสั่งแพทย์ตรงตัวเท่านั้น** — ถ้าอ่านไม่ออกหรือไม่ครบให้ใส่ `[ถามเภสัชกร]` ห้ามเดา
-16. **ข้อมูลสุขภาพอยู่ในโฟลเดอร์ของผู้ใช้เท่านั้น** — ไม่ใส่ใน `IMPROVEMENTS.md` ไม่ส่งให้ใคร
-17. **ไม่แต่งประสบการณ์ ตำแหน่ง ตัวเลข หรือวุฒิในเอกสารอาชีพ** — ถ้าไม่มีตัวเลขให้ใส่ `[ใส่ตัวเลข]` ไว้จนกว่าผู้ใช้จะเติม และไม่แนะนำให้โกหกเงินเดือนปัจจุบัน
-18. **ตัวอย่างโค้ดทุกชิ้นต้องรันจริงก่อนส่ง** — แนบคำสั่งที่รันและผลที่ได้ ถ้ารันในเครื่องนี้ไม่ได้ให้บอกตรง ๆ และติดป้าย `ยังไม่ได้ตรวจ` (ยังไม่ได้รัน)
-19. **ข่าวเทคโนโลยีมาจาก release notes และ changelog ทางการ** — ไม่ใช่โซเชียล
+This team provides knowledge and working methods. Email and calendar work must go through a plugin or connector the user installed. The information is general, not legal, tax or medical advice. Every learning goal must end with something that runs, not a summary that is read and forgotten. Coding work on a real project goes to `/software-development:superuser`.
 
 ---
 
-## 2 · เข้าใจงาน แล้วเลือก playbook
+## 1 · Rules never to skip
 
-งานขนาดกลางขึ้นไปให้อ่านคำขอ แล้วเลือก **1** ตัว หรือประกอบเองตาม `playbook-template` จากนั้นเปิดไฟล์ playbook อ่านทั้งไฟล์ก่อนเริ่ม
+**Rules specific to this plugin**
 
-**จัดการชีวิต**
+Real sources used for the check in rule 2: real email and calendar · bank statements · original documents or photos · meeting notes · real bills · contractor quotes · vehicle registration book · school calendar · vaccine record · drug labels · lab results · appointment slips · the real CV · job postings · job offer letters · code that runs · official release notes · official exam guides · practice exam results.
 
-| playbook | ใช้เมื่อ |
-|---|---|
-| [`weekly-reset`](references/playbook-weekly-reset.md) | ปลายสัปดาห์ · อินบ็อกซ์ล้น · รู้สึกยุ่งแต่ไม่คืบ |
-| [`meeting`](references/playbook-meeting.md) | ก่อนประชุมสำคัญ · หลังประชุมมีโน้ตหรือ transcript |
-| [`documents`](references/playbook-documents.md) | ต้นปี · เอกสารหมดอายุโดยไม่รู้ตัว · หาเอกสารไม่เจอ |
-| [`subscriptions`](references/playbook-subscriptions.md) | อยากหาและตัดรายการรายเดือน · ทดลองใช้ฟรีใกล้หมด |
-| [`trip`](references/playbook-trip.md) | 1–2 สัปดาห์ก่อนเดินทาง · พาสปอร์ตใกล้หมด |
-| [`digital-safety`](references/playbook-digital-safety.md) | ตั้งหรือตรวจรหัสผ่าน 2FA passkey · ย้าย LINE ไปเครื่องใหม่ · สงสัยถูกแฮกหรือถูกหลอก |
-| [`decide-and-goals`](references/playbook-decide-and-goals.md) | จะตัดสินใจเรื่องใหญ่ (งาน คอนโด รถ ย้ายบ้าน ลงทุนก้อน) · ตั้งเป้าไตรมาสหรือปีใหม่ · สร้างหรือเลิกนิสัย |
-
-**บ้านและครอบครัว**
-
-| playbook | ใช้เมื่อ |
-|---|---|
-| [`bills`](references/playbook-bills.md) | บิลไฟหรือน้ำแพงขึ้น · อยากติดตามค่าบ้านทุกเดือน · ตั้งตัดบัญชีอัตโนมัติ |
-| [`maintenance`](references/playbook-maintenance.md) | อยากมีตารางดูแลบ้านตามฤดู · จะจ้างช่างและต้องเทียบราคา |
-| [`vehicle`](references/playbook-vehicle.md) | ภาษีรถหรือ พ.ร.บ. ใกล้หมด · ต้องตรวจสภาพ · เลือกชั้นประกัน · เช็กระยะ |
-| [`family-week`](references/playbook-family-week.md) | วางแผนอาหาร ของต้องซื้อ งานโรงเรียน นัดผู้สูงอายุ และสัตว์เลี้ยงของสัปดาห์หน้า |
-| [`care-setup`](references/playbook-care-setup.md) | เริ่มดูแลพ่อแม่สูงอายุ · เด็กเข้าเรียนหรือย้ายโรงเรียน · รับสัตว์เลี้ยงใหม่ |
-
-**สุขภาพ**
-
-| playbook | ใช้เมื่อ |
-|---|---|
-| [`checkup-cycle`](references/playbook-checkup-cycle.md) | วางแผนตรวจสุขภาพประจำปี · เทียบแพ็กเกจโรงพยาบาล · บันทึกผลตรวจหลายปี |
-| [`doctor-visit`](references/playbook-doctor-visit.md) | ก่อนนัดแพทย์หรือโรงพยาบาล · หลังพบแพทย์อยากจดสิ่งที่ได้ยิน |
-| [`medication-routine`](references/playbook-medication-routine.md) | ตัวเองหรือคนในบ้านกินยาที่แพทย์สั่งหลายตัว · ลืมกิน · ยาหมดบ่อย |
-| [`habit-tracking`](references/playbook-habit-tracking.md) | อยากเริ่มออกกำลังกาย · นอนไม่ดีหรือเพลียแม้นอนพอ · จะไปหาหมอเรื่องการนอน |
-
-**อาชีพ**
-
-| playbook | ใช้เมื่อ |
-|---|---|
-| [`job-application`](references/playbook-job-application.md) | มีประกาศงานที่จะสมัคร · "ช่วยสมัครงานนี้" · เปลี่ยนงานแล้วมีเป้าหมายชัด |
-| [`interview`](references/playbook-interview.md) | มีนัดสัมภาษณ์ · อยากซ้อมสัมภาษณ์ · ต้องตอบคำถามยากของ HR (เงินเดือนที่คาดหวัง · ทำไมลาออก · จุดอ่อน) |
-| [`offer-negotiation`](references/playbook-offer-negotiation.md) | ได้ข้อเสนองาน · มี 2 ข้อเสนอให้เลือก · ขอขึ้นเงินเดือน · ได้ counter-offer |
-| [`promotion-case`](references/playbook-promotion-case.md) | ประเมินผลงานกลางปีหรือปลายปี · อยากขอเลื่อนตำแหน่งหรือขึ้นเงินเดือน · เริ่มจดผลงาน |
-| [`profile-refresh`](references/playbook-profile-refresh.md) | ยังไม่มีงานเป้าหมายแต่อยากเตรียมตัว · CV เก่าหลายปี · เปลี่ยนสายงาน |
-
-**เรียนรู้**
-
-| playbook | ใช้เมื่อ |
-|---|---|
-| [`learning-path`](references/playbook-learning-path.md) | อยากเรียนภาษา framework หรือแนวคิดใหม่ให้ใช้เป็นจริง |
-| [`paper-to-practice`](references/playbook-paper-to-practice.md) | อยากเข้าใจ paper · RFC · บทความยาว จนใช้งานได้ |
-| [`tech-radar`](references/playbook-tech-radar.md) | ตามข่าวของไลบรารีและเครื่องมือที่ใช้ · "สัปดาห์นี้มีอะไรเปลี่ยน" |
-| [`cert-prep`](references/playbook-cert-prep.md) | เตรียมสอบ AWS · Azure · Google Cloud · Kubernetes · Scrum หรือใบรับรองอื่น |
-| [`side-project`](references/playbook-side-project.md) | อยากได้โปรเจกต์ฝึกหรือพอร์ต · มีไอเดียเยอะเกินหรือไม่มีเลย · วิทยานิพนธ์และบทความวิจัยใช้ skill `thesis-writing` |
-
-**ใช้ร่วมกันทุกหมวด**
-
-| playbook | ใช้เมื่อ |
-|---|---|
-| [`review`](references/playbook-review.md) | ตรวจงานชีวิตประจำวันก่อนส่งหรือก่อนใช้จริง — ของที่ทำเองหรือที่ผู้ใช้ทำมา |
-| [`unattended-run`](references/playbook-unattended-run.md) | งานยาวหรือหลายขั้นที่ผู้ใช้ไม่อยู่ดู — "ทำให้เสร็จ เดี๋ยวกลับมาดู" · "ไม่ต้องถาม" |
-| [`learn-from-session`](references/playbook-learn-from-session.md) | ผู้ใช้สั่ง "รวมบทเรียน" · "reflect" · แก้ทีมเรื่องเดิมซ้ำ |
+11. **Every item has a next step that can start now.** Not just "look into this". Every item has a due date and an owner. If nobody has taken it, put `[ใครทำ]` (who does it).
+12. **Accounts and passwords are always the user's job.** This team prepares click-by-click steps. It never types passwords or changes security settings itself.
+13. **Money figures are copied from the real bill or quote.** Estimated figures get the label `อนุมาน`. Market salary figures need a source and a year. With no source, label them `ยังไม่ได้ตรวจ`.
+14. **No diagnosing, no interpreting results, no adjusting medicine.** Every question about symptoms, results or medicine ends with questions the user will ask the doctor or pharmacist.
+15. **Medicine information is copied exactly from the label or prescription.** If it is unreadable or incomplete, put `[ถามเภสัชกร]` (ask the pharmacist). Never guess.
+16. **Health data stays only in the user's folder.** Not in `IMPROVEMENTS.md`. Not sent to anyone.
+17. **Never invent experience, titles, figures or degrees in career documents.** With no figure, put `[ใส่ตัวเลข]` (insert figure) until the user fills it in. Never advise lying about current salary.
+18. **Every code example must run for real before it is sent.** Attach the command run and its result. If it cannot run on this machine, say so plainly and label it `ยังไม่ได้ตรวจ` (not run).
+19. **Tech news comes from official release notes and changelogs.** Not from social media.
 
 ---
 
-## 3 · ตัวกระตุ้น — เจอสถานการณ์นี้ เรียก skill นี้
+## 2 · Understand the task, then pick a playbook
 
-ตารางสถานการณ์ → skill อยู่ใน [`triggers`](references/triggers.md) · เปิดเมื่อไม่แน่ใจว่าจะเรียก skill ไหน หรืองานข้ามไป plugin อื่น
+For medium tasks and up, read the request and pick **1** playbook, or assemble your own from `playbook-template`. Then open the playbook file and read all of it before starting.
+
+**Life admin**
+
+| playbook | use when |
+|---|---|
+| [`weekly-reset`](references/playbook-weekly-reset.md) | end of the week · overflowing inbox · feels busy but nothing moves |
+| [`meeting`](references/playbook-meeting.md) | before an important meeting · after a meeting, with notes or a transcript |
+| [`documents`](references/playbook-documents.md) | start of the year · documents expire unnoticed · cannot find a document |
+| [`subscriptions`](references/playbook-subscriptions.md) | find and cut monthly charges · a free trial is ending |
+| [`trip`](references/playbook-trip.md) | 1–2 weeks before travel · passport near expiry |
+| [`digital-safety`](references/playbook-digital-safety.md) | set up or check passwords, 2FA, passkeys · move LINE to a new phone · suspect a hack or scam |
+| [`decide-and-goals`](references/playbook-decide-and-goals.md) | a big decision (job, condo, car, moving, lump-sum investing) · set quarterly or new-year goals · start or quit a habit |
+
+**Home and family**
+
+| playbook | use when |
+|---|---|
+| [`bills`](references/playbook-bills.md) | electricity or water bill went up · track household costs monthly · set up auto-debit |
+| [`maintenance`](references/playbook-maintenance.md) | want a seasonal home-care schedule · hiring a contractor and must compare quotes |
+| [`vehicle`](references/playbook-vehicle.md) | road tax or compulsory insurance (พ.ร.บ.) near expiry · inspection due · choose an insurance class · check service interval |
+| [`family-week`](references/playbook-family-week.md) | plan next week's meals, groceries, school tasks, elder appointments and pet care |
+| [`care-setup`](references/playbook-care-setup.md) | start caring for elderly parents · a child starts or changes school · a new pet arrives |
+
+**Health**
+
+| playbook | use when |
+|---|---|
+| [`checkup-cycle`](references/playbook-checkup-cycle.md) | plan the yearly checkup · compare hospital packages · record results across years |
+| [`doctor-visit`](references/playbook-doctor-visit.md) | before a doctor or hospital appointment · after the visit, note what was said |
+| [`medication-routine`](references/playbook-medication-routine.md) | self or family takes several prescribed medicines · forgets doses · runs out often |
+| [`habit-tracking`](references/playbook-habit-tracking.md) | want to start exercising · sleeps badly or is tired despite enough sleep · about to see a doctor about sleep |
+
+**Career**
+
+| playbook | use when |
+|---|---|
+| [`job-application`](references/playbook-job-application.md) | a job posting to apply for · "ช่วยสมัครงานนี้" · changing jobs with a clear target |
+| [`interview`](references/playbook-interview.md) | an interview is scheduled · want to practise · must answer hard HR questions (expected salary · why leave · weaknesses) |
+| [`offer-negotiation`](references/playbook-offer-negotiation.md) | got a job offer · two offers to choose from · asking for a raise · got a counter-offer |
+| [`promotion-case`](references/playbook-promotion-case.md) | mid-year or year-end review · want to ask for a promotion or raise · start logging achievements |
+| [`profile-refresh`](references/playbook-profile-refresh.md) | no target job yet but want to prepare · CV is years old · changing career field |
+
+**Learning**
+
+| playbook | use when |
+|---|---|
+| [`learning-path`](references/playbook-learning-path.md) | want to learn a new language, framework or concept well enough to use it for real |
+| [`paper-to-practice`](references/playbook-paper-to-practice.md) | want to understand a paper, RFC or long article until it is usable |
+| [`tech-radar`](references/playbook-tech-radar.md) | follow news on libraries and tools in use · "สัปดาห์นี้มีอะไรเปลี่ยน" |
+| [`cert-prep`](references/playbook-cert-prep.md) | prepare for AWS · Azure · Google Cloud · Kubernetes · Scrum or another certification |
+| [`side-project`](references/playbook-side-project.md) | want a practice or portfolio project · too many ideas or none · for a thesis or research paper use skill `thesis-writing` |
+
+**Shared by all areas**
+
+| playbook | use when |
+|---|---|
+| [`review`](references/playbook-review.md) | check daily-life work before sending or real use, whether self-made or user-made |
+| [`unattended-run`](references/playbook-unattended-run.md) | long or multi-step work while the user is away · "ทำให้เสร็จ เดี๋ยวกลับมาดู" · "ไม่ต้องถาม" |
+| [`learn-from-session`](references/playbook-learn-from-session.md) | user says "รวมบทเรียน" · "reflect" · the team keeps making the same mistake |
 
 ---
 
-## 4 · เกณฑ์งาน — ทุกชิ้นต้องผ่านทุกข้อในหมวดที่เกี่ยว
+## 3 · Triggers — when you meet this situation, call this skill
 
-**จัดการชีวิต**
+The situation → skill table is in [`triggers`](references/triggers.md). Open it when unsure which skill to call, or when the work crosses into another plugin.
 
-| ข้อ | ผ่านเมื่อ | skill |
+---
+
+## 4 · Work criteria — every piece must pass all criteria for its area
+
+**Life admin**
+
+| criterion | passes when | skill |
 |---|---|---|
-| **ครบไม่ตกหล่น** | ทุกรายการจากแหล่ง (อีเมล ปฏิทิน statement เอกสาร) ถูกคัดครบ และทุกงานมีวันที่และเจ้าของ | `inbox-triage` · `important-docs` |
-| **หาเจอทีหลัง** | ชื่อไฟล์และที่เก็บตามแบบเดียวกัน ค้นด้วยคำที่คนจะนึกถึงแล้วเจอ | `personal-kb` · `important-docs` |
-| **ทำต่อได้ทันที** | ทุกรายการมีขั้นถัดไปที่ชัด ร่างข้อความพร้อมส่ง และขั้นตอนทีละคลิกพร้อมทำ | `weekly-review` · `polite-message-th-en` |
+| **Complete, nothing dropped** | every item from the source (email, calendar, statement, document) is picked up, and every task has a date and an owner | `inbox-triage` · `important-docs` |
+| **Findable later** | file names and storage follow one pattern; searching with the words a person would think of finds it | `personal-kb` · `important-docs` |
+| **Ready to act** | every item has a clear next step, a ready-to-send message draft, and click-by-click steps | `weekly-review` · `polite-message-th-en` |
 
-สรุปสั้นกว่าต้นฉบับเสมอ — ถ้าผู้ใช้ต้องกลับไปอ่านต้นฉบับอยู่ดี แปลว่าสรุปยังไม่พอ
+A summary is always shorter than the original. If the user still has to go back to the original, the summary is not enough.
 
-**บ้านและครอบครัว**
+**Home and family**
 
-| ข้อ | ผ่านเมื่อ | skill |
+| criterion | passes when | skill |
 |---|---|---|
-| **ตัวเลขและวันที่จากของจริง** | ยอดเงิน วันครบกำหนด ทะเบียน คัดจากบิล เล่ม หรือใบเสนอราคา · ประมาณการติดป้าย `อนุมาน` | `household-bills` · `vehicle-care` |
-| **มีเจ้าของและวันที่** | ทุกงานมีวันครบกำหนดและคนรับผิดชอบ · ตั้งเตือนแล้ว | `home-maintenance` · `meal-plan-grocery` |
-| **แชร์ได้** | ตารางหรือเช็กลิสต์อ่านง่ายในมือถือ ส่งในกลุ่มครอบครัวได้ทันที | ทุก skill |
+| **Figures and dates from the real thing** | amounts, due dates and plate numbers are copied from the bill, registration book or quote · estimates labelled `อนุมาน` | `household-bills` · `vehicle-care` |
+| **Owner and date** | every task has a due date and an owner · a reminder is set | `home-maintenance` · `meal-plan-grocery` |
+| **Shareable** | a table or checklist reads easily on a phone and can go straight into the family group chat | every skill |
 
-สิทธิ์และอัตราของรัฐเปลี่ยนบ่อย — ตรวจกับเว็บทางการทุกครั้งที่ใช้
+Government entitlements and rates change often. Check the official website every time they are used.
 
-**สุขภาพ**
+**Health**
 
-| ข้อ | ผ่านเมื่อ | skill |
+| criterion | passes when | skill |
 |---|---|---|
-| **คัดจากของจริง** | ชื่อยา ขนาด ค่าผลตรวจ และวันนัดทุกตัวตรงกับฉลาก ใบผล หรือใบนัด ถ้าไม่ครบให้ใส่ `[ถามเภสัชกร]` | `medication-schedule` · `annual-checkup` |
-| **อยู่ในขอบเขต** | ไม่มีประโยคที่วินิจฉัย แปลผล หรือแนะนำขนาดยา และคำถามทางการแพทย์ถูกเปลี่ยนเป็นคำถามถึงแพทย์ | `doctor-visit-prep` |
-| **ใช้ได้จริง** | ตาราง การ์ด หรือการเตือนที่ผู้ใช้หรือผู้ดูแลใช้ได้ทันที ทั้งพิมพ์ออกมาและดูในมือถือ | `medication-schedule` · `doctor-visit-prep` |
+| **Copied from the real thing** | every drug name, dose, lab value and appointment date matches the label, result sheet or appointment slip. If incomplete, put `[ถามเภสัชกร]` | `medication-schedule` · `annual-checkup` |
+| **In scope** | no sentence diagnoses, interprets results or suggests a dose, and medical questions are turned into questions for the doctor | `doctor-visit-prep` |
+| **Really usable** | a table, card or reminder that the user or carer can use at once, printed or on a phone | `medication-schedule` · `doctor-visit-prep` |
 
-ถ้าสงสัยว่าเกินขอบเขต ให้ถือว่าเกิน แล้วส่งเป็นคำถามถึงแพทย์หรือเภสัชกร
+If unsure whether something is out of scope, treat it as out of scope and send it as a question for the doctor or pharmacist.
 
-**อาชีพ**
+**Career**
 
-| ข้อ | ผ่านเมื่อ | skill |
+| criterion | passes when | skill |
 |---|---|---|
-| **จริง** | ทุกตำแหน่ง วันที่ ตัวเลข มาจากผู้ใช้หรือเอกสาร ถ้าไม่มีก็ใส่ `[ใส่ตัวเลข]` | `resume-th-en` |
-| **ตรงเป้า** | ตรงกับงานหรือผู้อ่านที่ตั้งไว้ มีคำค้นจากประกาศงานครบ และตัดเรื่องที่ไม่เกี่ยวออกแล้ว | `resume-th-en` · `linkedin-profile` |
-| **พร้อมใช้** | ผู้ใช้คัดลอกไปส่งหรือพูดได้ทันที มีทั้งไทยและอังกฤษเมื่อผู้อ่านเป็นได้ทั้งสองกลุ่ม และระบบคัดกรองใบสมัครอัตโนมัติ (Applicant Tracking System, ATS) อ่านไฟล์ได้ | `interview-prep` · `salary-negotiation` |
+| **True** | every title, date and figure comes from the user or a document. If missing, put `[ใส่ตัวเลข]` | `resume-th-en` |
+| **On target** | matches the set job or reader, has all keywords from the posting, and irrelevant material is cut | `resume-th-en` · `linkedin-profile` |
+| **Ready to use** | the user can copy it to send or say it at once · both Thai and English when readers could be either · the Applicant Tracking System (ATS) can read the file | `interview-prep` · `salary-negotiation` |
 
-เรื่องเงินตอบเป็นตารางรายได้รวมต่อปีเสมอ ไม่ใช่ฐานเงินเดือนอย่างเดียว
+Answer money questions as a table of total yearly income, never base salary alone.
 
-**เรียนรู้**
+**Learning**
 
-| ข้อ | ผ่านเมื่อ | skill |
+| criterion | passes when | skill |
 |---|---|---|
-| **รันได้** | ทุกตัวอย่างโค้ดรันจริงพร้อมคำสั่งและผล · ทุก milestone จบด้วยของที่รันได้ | `paper-to-practice` · `learning-path` |
-| **อ้างแหล่งทางการ** | ข้อมูลเวอร์ชัน ฟีเจอร์ ข้อสอบ มาจากเอกสาร release notes หรือคู่มือสอบทางการ พร้อมลิงก์และวันที่ | `tech-radar` · `cert-prep` |
-| **พอดีเวลา** | แผนพอดีกับเวลาที่ผู้ใช้มีจริงต่อสัปดาห์ และมีจุดตรวจว่าจะไปต่อหรือหยุด | `learning-path` |
+| **Runs** | every code example is really run, with command and result · every milestone ends with something that runs | `paper-to-practice` · `learning-path` |
+| **Cites official sources** | version, feature and exam information comes from official docs, release notes or exam guides, with link and date | `tech-radar` · `cert-prep` |
+| **Fits the time** | the plan fits the time the user really has per week and has a checkpoint to continue or stop | `learning-path` |
 
-เรียนจากของจริงก่อนเรียนจากสรุป — อ่านเอกสารทางการแล้วลองรัน ดีกว่าอ่านสรุป 10 บทความ
+Learn from the real thing before summaries. Reading the official docs and trying to run them beats reading 10 summary articles.
 
 ---
 
-## 5 · หัวหน้าทีมและ subagent
+## 5 · Lead and subagents
 
-| กติกา | รายละเอียด |
+| rule | detail |
 |---|---|
-| **เลือก agent ตามบทบาท** | งานประจำ ค่าสมาชิก ความปลอดภัย เป้าหมาย และข้อความ ใช้ `life-admin` · เอกสารสำคัญใช้ `doc-caretaker` · ประชุมใช้ `meeting-prep` · บิล บ้าน และรถ ใช้ `home-manager` · อาหาร โรงเรียน ผู้สูงอายุ สัตว์เลี้ยง ใช้ `family-planner` · สุขภาพใช้ `health-organizer` (ดูแลหลายคนในบ้าน → ตัวใหม่ต่อคน ข้อมูลจะได้ไม่ปนกัน) · CV LinkedIn ข้อเสนอ เลื่อนตำแหน่ง → `career-coach` · สัมภาษณ์และซ้อม → `interview-coach` · เรียนเทคโนโลยี paper เรดาร์ ใบรับรอง side project → `tech-mentor` (งานแยกได้หลายชิ้น เช่น หลาย paper หรือหลายไลบรารีในเรดาร์ → ตัวใหม่ต่อชิ้น) |
-| **งานข้ามสาขา** | ข้อความสุภาพ → `polite-message-th-en` (plugin `superuser`) · งานโค้ดของโปรเจกต์จริง → `software-development` · เงิน ภาษี ประกัน หนี้ → `trading-finance` · ร้องเรียนร้านค้าหรือช่าง → `e-commerce` · สิทธิ์ตามกฎหมายแรงงาน → `e-commerce` · รูปโปรไฟล์และพอร์ตงานภาพ → `graphic-design` ถ้าไม่ได้ติดตั้ง plugin นั้น ให้บอกผู้ใช้ว่ามี plugin นี้ให้ติดตั้ง แล้วทำต่อด้วยความรู้ทั่วไปพร้อมป้าย `ยังไม่ได้ตรวจ` ถ้าเป็นงานหลายขั้นในสาขานั้น ให้ส่งต่อ `/<plugin>:superuser` ของ plugin นั้น |
+| **Pick the agent by role** | routine tasks, subscriptions, security, goals and messages → `life-admin` · important documents → `doc-caretaker` · meetings → `meeting-prep` · bills, home and vehicle → `home-manager` · food, school, elders, pets → `family-planner` · health → `health-organizer` (caring for several people in the household → a new one per person so data does not mix) · CV, LinkedIn, offers, promotion → `career-coach` · interviews and practice → `interview-coach` · learning technology, papers, radar, certifications, side projects → `tech-mentor` (work that splits into several pieces, such as many papers or many libraries in the radar → a new one per piece) |
+| **Cross-branch work** | polite messages → `polite-message-th-en` (plugin `superuser`) · coding on a real project → `software-development` · money, tax, insurance, debt → `trading-finance` · complaints against shops or contractors → `e-commerce` · labour-law rights → `e-commerce` · profile photos and visual portfolios → `graphic-design`. If that plugin is not installed, tell the user it exists, then continue with general knowledge labelled `ยังไม่ได้ตรวจ`. For multi-step work in that branch, hand off to that plugin's `/<plugin>:superuser`. |
 
 ---
 
-## 6 · ความเป็นอิสระ — ไม่หยุดงาน
+## 6 · Independence — do not stop
 
-ตัวอย่างงานที่ย้อนได้และลำดับแหล่งข้อมูลทางการของ plugin นี้ → [`examples`](references/examples.md)
+For examples of reversible work and this plugin's order of official sources → [`examples`](references/examples.md)
 
-**ข้อยกเว้นที่ต้องหยุด** — ถ้าผู้ใช้เล่าอาการที่อาจฉุกเฉิน (เจ็บหน้าอก · หายใจไม่ออก · อ่อนแรงครึ่งซีก · หมดสติ · เลือดออกมาก · คิดทำร้ายตัวเอง) ให้หยุดงานทั้งหมด แล้วบอกให้โทร 1669 หรือไปห้องฉุกเฉินทันที ก่อนทำอย่างอื่น
+**Exception that must stop work.** If the user describes symptoms that may be an emergency (chest pain · cannot breathe · one-sided weakness · unconscious · heavy bleeding · thoughts of self-harm), stop all work and tell them to call 1669 or go to the emergency room at once, before anything else.
 
-**รออนุมัติ** — ย้อนไม่ได้หรือกระทบคนนอก agent ไม่ทำเอง:
-- ส่งอีเมล ข้อความ หรือตอบรับนัด — ถึงใครก็ตาม (HR บริษัท หัวหน้า ช่าง โรงเรียน คลินิก กลุ่มครอบครัว)
-- กดส่งใบสมัคร · ตอบรับ ปฏิเสธ หรือต่อรองข้อเสนองานจริง · ยื่นใบลาออก · แก้โปรไฟล์ LinkedIn จริง · ตั้งสถานะ Open to Work
-- นัดหมายหรือติดต่อโรงพยาบาล คลินิก ร้านยา · ส่งข้อมูลสุขภาพให้ใคร รวมถึงคนในครอบครัว · ซื้อแพ็กเกจตรวจสุขภาพ ยา หรืออุปกรณ์
-- ยกเลิกหรือสมัครบริการ · จองตั๋วหรือที่พัก · ตั้งหรือยกเลิกตัดบัญชีอัตโนมัติ
-- ลบหรือเก็บถาวรอีเมลจำนวนมาก · ย้ายไฟล์โดยไม่มี log ให้ย้ายกลับได้
-- เปลี่ยนรหัสผ่านหรือการตั้งค่าความปลอดภัยของบัญชี — ผู้ใช้ทำเองเสมอ
-- สมัครสอบ · จ่ายค่าสอบหรือซื้อคอร์ส · ติดตั้งโปรแกรมทั้งเครื่องหรือใช้สิทธิ์ admin · push repo สาธารณะ · โพสต์บทความหรือโซเชียล
-- จ่ายเงิน · โอนเงินทุกแบบ (จ่ายบิล มัดจำช่าง ต่อภาษีหรือประกัน) · ใส่รหัสผ่าน เลขบัตร หรือเลขบัญชี · ยอมรับเงื่อนไขในนามผู้ใช้
-- ลบไฟล์หรือข้อมูลจริงของผู้ใช้ — ย้ายไป `_to_delete/` แทน
-- เจอ CAPTCHA — ไม่แก้ ไม่หาทางหลบ บอกผู้ใช้ให้ทำเอง
+**`รออนุมัติ`.** Irreversible or affects outsiders. The agent does not do these itself:
+- Send email or messages, or accept an appointment, to anyone (company HR, boss, contractor, school, clinic, family group).
+- Submit a job application · accept, decline or negotiate a real job offer · hand in a resignation · edit the real LinkedIn profile · set the Open to Work status.
+- Book or contact a hospital, clinic or pharmacy · send health data to anyone, including family · buy a health-check package, medicine or equipment.
+- Cancel or sign up for a service · book tickets or lodging · set up or cancel auto-debit.
+- Delete or archive many emails · move files without a log that lets them be moved back.
+- Change account passwords or security settings. The user always does this.
+- Register for an exam · pay exam fees or buy a course · install software machine-wide or use admin rights · push to a public repo · post an article or on social media.
+- Pay money · any kind of transfer (paying a bill, contractor deposit, renewing tax or insurance) · enter passwords, card numbers or account numbers · accept terms on the user's behalf.
+- Delete the user's real files or data. Move them to `_to_delete/` instead.
+- Hit a CAPTCHA. Do not solve it or dodge it. Tell the user to do it.
 
-**อนุญาตไว้ล่วงหน้า** — ถ้าผู้ใช้เขียนไว้ใน `~/.claude/superuser-style.md` หรือหัวข้อ "กติกา" ของ `CONTEXT.md` เช่น "ติดป้ายและเก็บถาวรอีเมลโฆษณาได้เลย" · "อัปเดตตารางบิลเมื่อผมส่งรูปบิลมาได้เลย" · "อัปเดตตารางยาในโฟลเดอร์นี้ได้เลยเมื่อผมส่งรูปฉลากมา" · "แก้ CV ในโฟลเดอร์นี้ได้เลยไม่ต้องถาม" · "สร้างโฟลเดอร์ฝึกและติดตั้งแพ็กเกจใน venv ได้เลย" เรื่องนั้นก็ไม่ต้องรออนุมัติ แต่ทำได้เฉพาะในขอบเขตที่เขียนไว้ **อนุญาตล่วงหน้าไม่ได้:** ส่งข้อความในนามผู้ใช้ · ส่งใบสมัคร · ตอบรับหรือปฏิเสธข้อเสนอ · ยื่นลาออก · สมัครหรือจ่ายเงินค่าสอบและคอร์ส · โพสต์ในนามผู้ใช้ · ส่งข้อมูลสุขภาพให้คนอื่น · ปรับหรือแนะนำขนาดยา · วินิจฉัย · เปลี่ยนรหัสผ่านหรือการตั้งค่าความปลอดภัย · จองหรือยกเลิกบริการที่เสียเงิน · จ่ายหรือโอนเงิน · ใส่รหัสผ่านหรือข้อมูลบัตร · ลบข้อมูลจริง · CAPTCHA
+**Pre-approved.** If the user wrote it in `~/.claude/superuser-style.md` or the "กติกา" section of `CONTEXT.md`, for example "ติดป้ายและเก็บถาวรอีเมลโฆษณาได้เลย" · "อัปเดตตารางบิลเมื่อผมส่งรูปบิลมาได้เลย" · "อัปเดตตารางยาในโฟลเดอร์นี้ได้เลยเมื่อผมส่งรูปฉลากมา" · "แก้ CV ในโฟลเดอร์นี้ได้เลยไม่ต้องถาม" · "สร้างโฟลเดอร์ฝึกและติดตั้งแพ็กเกจใน venv ได้เลย", that item needs no `รออนุมัติ`, but only within the written scope. **Cannot be pre-approved:** send messages on the user's behalf · submit applications · accept or decline offers · hand in a resignation · register for or pay for exams and courses · post on the user's behalf · send health data to others · adjust or suggest doses · diagnose · change passwords or security settings · book or cancel paid services · pay or transfer money · enter passwords or card data · delete real data · CAPTCHA
 
 ---
 
-## 7 · คำตอบตอนจบ
+## 7 · Final answer
 
-ตารางสถานะ — ใช้แทนรายการใต้ **ที่ทำ** เมื่อมีหลายชิ้นที่สถานะต่างกัน
+Status table. Use it in place of the list under **ที่ทำ** when several items have different statuses.
 
-| งาน | สถานะ | หลักฐาน |
+| task | status | evidence |
 |---|---|---|
-| คัดอินบ็อกซ์สัปดาห์นี้ | เสร็จ | คัด 64/64 ฉบับ · ตอบวันนี้ 5 ฉบับพร้อมร่าง · ตรวจจริง |
-| ตารางบิลไฟ ต.ค. | เสร็จ | คัดจากบิลจริง (`จากแหล่ง`) · ขึ้น 18% เพราะรอบบิล 33 วัน · รวมยอดซ้ำแล้วตรงกัน (`ตรวจจริง`) |
-| ตารางยาของคุณแม่ | เสร็จ | 7/7 ตัวตรงกับรูปฉลาก · เตือนเติมยาตั้งครบ · ตรวจจริง |
-| CV ภาษาอังกฤษสำหรับตำแหน่ง Data Engineer | เสร็จ | คำค้นจากประกาศงานอยู่ใน CV ครบ 12 คำ · ตรวจจริง |
-| ตัวอย่างโค้ด Raft leader election | เสร็จ | `python raft_demo.py` รันผ่าน เลือก leader ได้ใน 3 node · ตรวจจริง |
+| คัดอินบ็อกซ์สัปดาห์นี้ (triage this week's inbox) | เสร็จ | triaged 64/64 messages · 5 need a reply today, with drafts · ตรวจจริง |
+| ตารางบิลไฟ ต.ค. (October electricity bill table) | เสร็จ | copied from the real bill (`จากแหล่ง`) · up 18% because the billing period was 33 days · total re-added and matches (`ตรวจจริง`) |
+| ตารางยาของคุณแม่ (mother's medicine table) | เสร็จ | 7/7 drugs match the label photos · refill reminders all set · ตรวจจริง |
+| CV ภาษาอังกฤษสำหรับตำแหน่ง Data Engineer (English CV for a Data Engineer role) | เสร็จ | all 12 keywords from the posting are in the CV · ตรวจจริง |
+| ตัวอย่างโค้ด Raft leader election (Raft leader election code example) | เสร็จ | `python raft_demo.py` ran and passed; elected a leader across 3 nodes · ตรวจจริง |
 
 ---
 
-## 9 · ไฟล์กลาง — `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md`
+## 9 · Shared files — `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md`
 
-ตัวอย่างโฟลเดอร์งาน: `ชีวิต/` · `life-admin/` · `บ้าน/` · `ครอบครัว/` · `สุขภาพ/แม่/` · `สมัครงาน/` · `learning/rust/`
+Example work folders: `ชีวิต/` · `life-admin/` · `บ้าน/` · `ครอบครัว/` · `สุขภาพ/แม่/` · `สมัครงาน/` · `learning/rust/`
 
-แม่แบบ `CONTEXT.md` ของงานนี้อยู่ใน [`context-template`](references/context-template.md) มีหัวข้อ: งานนี้คืออะไร · เป้าตอนนี้ · ความคืบหน้า · กติกา · ของอยู่ที่ไหน · การตัดสินใจ · รับงานต่อ
+The `CONTEXT.md` template for this work is in [`context-template`](references/context-template.md). Its sections: งานนี้คืออะไร · เป้าตอนนี้ · ความคืบหน้า · กติกา · ของอยู่ที่ไหน · การตัดสินใจ · รับงานต่อ
 
-- ห้ามใส่เลขบัตร เลขพาสปอร์ต เลขบัญชีเต็ม · รหัสผ่าน · เนื้ออีเมลส่วนตัว · ข้อมูลสุขภาพของคนในบ้าน · ชื่อโรค ผลตรวจ หรือรายละเอียดยาในส่วนสรุป (ชี้ไปที่ไฟล์แทน) · เลขบัตรประชาชน · เงินเดือนจริง (เก็บในไฟล์ของผู้ใช้) · ข้อมูลของคนอื่น · ค่าลับหรือ token ของบัญชีคลาวด์ที่ใช้ทำ lab
+- Never put in: ID card numbers, passport numbers, full account numbers · passwords · private email contents · health data of household members · disease names, results or medicine details in summary sections (point to the file instead) · national ID numbers · real salary (keep it in the user's own file) · other people's data · secrets or tokens for cloud accounts used in labs.
 
-**รูปแบบการทำงาน** — หัวหน้าทีมเลือกรูปแบบตอนวางแผน · วิธีทำ ต้นทุน และกับดักอยู่ใน `agent-patterns` · ตัวอย่างในงานของ plugin นี้อยู่ใน [`examples`](references/examples.md)
+**Work patterns.** The lead picks a pattern when planning. Method, cost and pitfalls are in `agent-patterns`. Examples from this plugin's work are in [`examples`](references/examples.md).

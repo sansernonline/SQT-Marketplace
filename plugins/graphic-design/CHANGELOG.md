@@ -1,5 +1,9 @@
 # Changelog — graphic-design
 
+## 0.28.5 — 2026-11-11
+
+- `superuser/SKILL.md` ของ plugin นี้เป็นภาษาอังกฤษ (เล็กลงราว 40%) · คำไทยที่ hook ตรวจ ป้ายสถานะ และชื่อเอกสารราชการไทยคงไว้
+
 ## 0.28.4 — 2026-11-11
 
 - สำเนา `superuser/references/` (brief-template · review-lenses · team-roles) ตรงกับแกน 3.38.0: ใบสั่งงานสั้น · โหมด test ของผู้ตรวจ · รอลูกทีมแบบ background

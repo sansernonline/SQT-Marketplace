@@ -3,107 +3,106 @@ name: superuser
 description: Use when design work spans several assets (brand kit, campaign, AI image or video series) or the user says superuser for design.
 ---
 
-# SuperUser — ทีมงานออกแบบ
+# SuperUser — the design team
 
-> **เปิด `superuser:superuser` ก่อน** — ไฟล์นี้มีเฉพาะส่วนของสาขา (กฎเพิ่ม · playbook · agent · รออนุมัติ · ไฟล์กลาง) · วิธีทำงานของหัวหน้าทีมทั้งหมด (จัดขนาด · งบ · ใบสั่งงาน 5 ข้อ · แจกงาน · ประเมิน · ตรวจซ้ำ · คำตอบ) อยู่ที่แกนใน plugin `superuser` · ติดตั้ง plugin นี้แล้ว superuser มาเองทาง `dependencies`
+> **เปิด `superuser:superuser` ก่อน** (open it first). This file holds only the branch parts (extra rules · playbooks · agents · approvals `รออนุมัติ` · shared files). The lead's full way of working (sizing · budget · 5-point brief · dispatch · evaluation · re-check · answer) lives in the core of plugin `superuser`. Installing this plugin brings superuser in through `dependencies`.
 
-เรียกได้ทั้ง `/graphic-design:superuser` หรือพูดว่า "ใช้ superuser" กับงานออกแบบ
+Call it with `/graphic-design:superuser` or say "use superuser" on design work.
 
-ทีมนี้ให้ความรู้และการตัดสินด้านการออกแบบ ส่วนการสร้างภาพและวิดีโอใช้เครื่องมือหรือ plugin ที่ผู้ใช้ติดตั้งไว้ และไม่ลอกโลโก้ ตัวละคร หรืองานของคนอื่น
-
----
-
-## 1 · กฎที่ห้ามข้าม
-
-**กฎเฉพาะของ plugin นี้**
-
-ของจริงที่ใช้ตรวจตามข้อ 2: brand kit · ขนาดและ safe zone ของแพลตฟอร์ม · ภาพที่ export จริง
-
-11. **ดูภาพจริงก่อนบอกว่าเสร็จ** — เปิดไฟล์ที่ export ออกมาดูที่ขนาดจริง ไม่ตัดสินจาก prompt หรือไฟล์ต้นฉบับ
-12. **ไม่เขียนทับไฟล์ต้นฉบับ** — งานแก้ภาพหรือเปลี่ยนชื่อไฟล์ทำบนสำเนา หรือมี log ให้ย้อนกลับได้
+This team provides design knowledge and judgement. Image and video generation uses the tools or plugins the user has installed. Never copy another party's logo, character or work.
 
 ---
 
-## 2 · เข้าใจงาน แล้วเลือก playbook
+## 1 · Rules you must not skip
 
-งานขนาดกลางขึ้นไปเลือก **1** playbook แล้วอ่านทั้งไฟล์ก่อนเริ่ม · ไม่มีตัวตรง → ประกอบตาม `playbook-template` ของแกน
+**Rules specific to this plugin**
 
-| playbook | ใช้เมื่อ |
+The real things to check against in rule 2: brand kit · platform sizes and safe zones · the actual exported image.
+
+11. **Look at the real image before saying done** — open the exported file at real size. Do not judge from the prompt or the source file.
+12. **Never overwrite original files** — image edits and file renames happen on a copy, or with a log that allows undo.
+
+---
+
+## 2 · Understand the task, then pick a playbook
+
+For medium tasks and up, pick **1** playbook and read the whole file before starting. No exact match → assemble one from the core `playbook-template`.
+
+| playbook | use when |
 |---|---|
-| [`brand-setup`](references/playbook-brand-setup.md) | เริ่มแบรนด์ใหม่ · รีแบรนด์ · ทุกโพสต์ดูเหมือนคนละบริษัท |
-| [`campaign`](references/playbook-campaign.md) | เปิดตัวสินค้า · โปรลดราคา · งานอีเวนต์ · โปรโมชันตามเทศกาล ที่ต้องใช้หลายขนาด |
-| [`image-series`](references/playbook-image-series.md) | ภาพสินค้าหลายชิ้น · โพสต์หนึ่งสัปดาห์ · storyboard · ตัวละครที่ใช้ซ้ำ · ต้องแก้ภาพที่มีอยู่ |
-| [`video`](references/playbook-video.md) | Reels · TikTok · Shorts · วิดีโอโฆษณา · ข้อความเคลื่อนไหว · โลโก้เคลื่อนไหว |
-| [`asset-cleanup`](references/playbook-asset-cleanup.md) | ไฟล์รก หาโลโก้ไม่เจอ · ชื่อแบบ final_v2_REAL.png |
-| [`review`](references/playbook-review.md) | ตรวจงานออกแบบก่อนส่งหรือก่อนใช้จริง — ของที่ทำเองหรือที่ผู้ใช้ทำมา |
-| [`unattended-run`](references/playbook-unattended-run.md) | งานยาวหรือหลายขั้นที่ผู้ใช้ไม่อยู่ดู — "ทำให้เสร็จ เดี๋ยวกลับมาดู" · "ไม่ต้องถาม" |
-| [`learn-from-session`](references/playbook-learn-from-session.md) | ผู้ใช้สั่ง "รวมบทเรียน" · "reflect" · แก้ทีมเรื่องเดิมซ้ำ |
+| [`brand-setup`](references/playbook-brand-setup.md) | Starting a new brand · rebrand · every post looks like a different company |
+| [`campaign`](references/playbook-campaign.md) | Product launch · price promotion · event · seasonal promotion that needs several sizes |
+| [`image-series`](references/playbook-image-series.md) | Images for many products · a week of posts · storyboard · a recurring character · existing images need edits |
+| [`video`](references/playbook-video.md) | Reels · TikTok · Shorts · video ads · animated text · animated logo |
+| [`asset-cleanup`](references/playbook-asset-cleanup.md) | Messy files, lost logo · names like final_v2_REAL.png |
+| [`review`](references/playbook-review.md) | Check a design before sending or going live — your own work or the user's |
+| [`unattended-run`](references/playbook-unattended-run.md) | Long or multi-step work while the user is away — "finish it, I'll check later" · "don't ask" |
+| [`learn-from-session`](references/playbook-learn-from-session.md) | User says "รวมบทเรียน" · "reflect" · the same team error keeps recurring |
 
 ---
 
-## 3 · ตัวกระตุ้น — เจอสถานการณ์นี้ เรียก skill นี้
+## 3 · Triggers — meet this situation, call this skill
 
-ตารางสถานการณ์ → skill อยู่ใน [`triggers`](references/triggers.md) · เปิดเมื่อไม่แน่ใจว่าจะเรียก skill ไหน หรืองานข้ามไป plugin อื่น
+The situation → skill table is in [`triggers`](references/triggers.md). Open it when unsure which skill to call, or when the work crosses into another plugin.
 
 ---
 
-## 4 · เกณฑ์งาน — ทุกชิ้นต้องผ่านทั้งสามข้อ
+## 4 · Work criteria — every piece must pass all three
 
-| ข้อ | ผ่านเมื่อ | skill |
+| Criterion | Passes when | Skill |
 |---|---|---|
-| **ตรงแบรนด์** | สี ฟอนต์ โลโก้ และน้ำเสียงตรงกับ brand kit ถ้าไม่มี kit ให้ยึดชิ้นที่ผู้ใช้อนุมัติล่าสุดเป็นหลัก | `brand-kit` · `style-consistency` |
-| **ใช้ได้ในที่ที่จะไปอยู่** | ขนาดและสัดส่วนถูกตามแพลตฟอร์ม · ข้อความอยู่ใน safe zone · contrast ผ่าน · ซับอ่านทัน | `social-formats` · `motion-basics` |
-| **ผ่านการตรวจ 8 ข้อ** | `design-review` ผ่านทุกข้อ หรือข้อที่ไม่ผ่านมีเหตุผลที่ผู้ใช้ยอมรับ | `design-review` |
+| **On brand** | Colours, fonts, logo and voice match the brand kit. With no kit, follow the last piece the user approved. | `brand-kit` · `style-consistency` |
+| **Works where it will live** | Size and ratio are right for the platform · text sits inside the safe zone · contrast passes · subtitles are readable in time | `social-formats` · `motion-basics` |
+| **Passes the 8-point check** | `design-review` passes every point, or each failed point has a reason the user accepts | `design-review` |
 
-เขียนทิศทางเป็นคำก่อนวาดเสมอ — ภาพที่ไม่มีทิศทางจะออกมาเหมือนแม่แบบทั่วไป
+Always write the direction in words before drawing. An image with no direction comes out like a generic template.
 
 ---
 
-## 5 · หัวหน้าทีมและ subagent
+## 5 · The lead and subagents
 
-| กติกา | รายละเอียด |
+| Rule | Detail |
 |---|---|
-| **เลือก agent ตามบทบาท** | ล็อกสไตล์และเขียน brief ภาพใช้ `art-director` · ทำ brand kit และตรวจความตรงแบรนด์ใช้ `brand-keeper` · ตรวจก่อนส่งใช้ `design-critic` (ตัวใหม่ที่ไม่เห็นงานมาก่อน) · โพสต์และแคมเปญใช้ `social-creator` · ตัดต่อ ใส่ซับ และส่งออกวิดีโอใช้ `video-editor` · รูปจริงในหน้าเว็บ แอป และสไลด์ใช้ `image-artist` |
-| **งานข้ามสาขา** | หน้าจอแอปหรือเว็บส่งให้ `software-development` (`ux-designer` · `graphic-designer`) · ภาพสินค้าในร้านออนไลน์ส่งให้ `e-commerce` · rich menu ของ LINE OA ส่งให้ `e-commerce` ถ้ายังไม่ได้ติดตั้ง plugin นั้น ให้บอกผู้ใช้ว่ามี แล้วทำต่อด้วยความรู้ทั่วไปพร้อมป้าย `ยังไม่ได้ตรวจ` ส่วนงานหลายขั้นในสาขานั้นให้ส่งต่อ `/<plugin>:superuser` ของ plugin นั้น |
+| **Pick the agent by role** | Lock style and write image briefs: `art-director` · build the brand kit and check brand fit: `brand-keeper` · pre-send review: `design-critic` (a fresh agent that has not seen the work) · posts and campaigns: `social-creator` · cut, subtitle and export video: `video-editor` · real images in web pages, apps and slides: `image-artist` |
+| **Cross-branch work** | App or web screens go to `software-development` (`ux-designer` · `graphic-designer`) · product images for online shops go to `e-commerce` · LINE OA rich menus go to `e-commerce`. If that plugin is not installed, tell the user it exists, then continue with general knowledge and the label `ยังไม่ได้ตรวจ`. Multi-step work in that branch goes to that plugin's `/<plugin>:superuser`. |
 
 ---
 
-## 6 · ความเป็นอิสระ — ไม่หยุดงาน
+## 6 · Independence — do not stop the work
 
-ตัวอย่างงานที่ย้อนได้และลำดับแหล่งข้อมูลทางการของ plugin นี้ → [`examples`](references/examples.md)
+Examples of reversible work and this plugin's order of official sources → [`examples`](references/examples.md)
 
-**รออนุมัติ** — งานที่ย้อนไม่ได้หรือกระทบคนนอก agent จะไม่ทำเอง:
-- โพสต์ ยิงแอด หรือส่งงานถึงลูกค้า
-- ใช้เครดิตเสียเงินของเครื่องมือสร้างภาพหรือวิดีโอเกินงบที่ผู้ใช้ตั้ง
-- ใช้ภาพ ฟอนต์ หรือเพลงที่ใบอนุญาตไม่ชัด
-- เขียนทับหรือลบไฟล์ต้นฉบับ
-- จ่ายเงิน · โอนเงิน · ใส่รหัสผ่าน เลขบัตร หรือเลขบัญชี · ยอมรับเงื่อนไขในนามผู้ใช้
-- ลบไฟล์หรือข้อมูลจริงของผู้ใช้ — ย้ายไป `_to_delete/` แทน
-- เจอ CAPTCHA — ไม่แก้ ไม่หาทางหลบ บอกผู้ใช้ให้ทำเอง
+**`รออนุมัติ`** — the agent does not do irreversible work or work that affects outsiders on its own:
+- Post, run ads, or send work to the client
+- Spend paid credits of image or video tools beyond the budget the user set
+- Use images, fonts or music with unclear licences
+- Overwrite or delete original files
+- Pay · transfer money · enter a password, card number or account number · accept terms on the user's behalf
+- Delete the user's real files or data — move them to `_to_delete/` instead
+- Hit a CAPTCHA — do not solve it or work around it, tell the user to do it
 
-**เลือกว่าจะสร้างภาพไหนใต้งบเครดิต** — ให้ผู้ใช้ให้คะแนนความสำคัญ 1–10 ต่อภาพ ภาพที่ขาดไม่ได้ใส่ `must` แล้วรัน `node <decision-scoring>/scripts/decide.mjs knapsack ไฟล์.json` (`<decision-scoring>` คือโฟลเดอร์ skill `superuser:decision-scoring`) · ได้ชุดที่ไม่เกินงบเสมอ · ตัวอย่าง [`credit-knapsack.example.json`](../campaign-set/references/credit-knapsack.example.json) (ตัวเลขสมมติ รันผ่าน 2026-10-28: ใช้ 35 จากงบ 40) · งบเป็นเพดานที่ผู้ใช้ตั้ง เกินเมื่อไรกลับไปรออนุมัติ
+**Choosing which images to make under a credit budget** — ask the user to score each image's importance 1–10. Mark must-have images `must`, then run `node <decision-scoring>/scripts/decide.mjs knapsack file.json` (`<decision-scoring>` is the folder of skill `superuser:decision-scoring`). The result always stays within budget. Example: [`credit-knapsack.example.json`](../campaign-set/references/credit-knapsack.example.json) (made-up numbers, run OK 2026-10-28: 35 used of budget 40). The budget is a ceiling the user set. Past it, go back to `รออนุมัติ`.
 
-**อนุญาตไว้ล่วงหน้า** — ผู้ใช้เขียนไว้ใน `~/.claude/superuser-style.md` หรือหัวข้อ "กติกา" ของ `CONTEXT.md` เช่น "สร้างภาพทดลองได้ไม่เกิน 20 ภาพต่องาน" ข้อนั้นจะไม่ต้องรออนุมัติ แต่เฉพาะในขอบเขตที่เขียนไว้ · **อนุญาตล่วงหน้าไม่ได้:** โพสต์หรือยิงแอดในนามผู้ใช้ · ใช้งานที่ละเมิดลิขสิทธิ์ · จ่ายหรือโอนเงิน · ใส่รหัสผ่านหรือข้อมูลบัตร · ลบข้อมูลจริง · CAPTCHA
+**Pre-approved** — the user writes it in `~/.claude/superuser-style.md` or the "กติกา" section of `CONTEXT.md`, for example "up to 20 trial images per job". That item then needs no approval, but only within the stated scope. **Cannot be pre-approved:** posting or running ads on the user's behalf · using infringing work · paying or transferring money · entering passwords or card data · deleting real data · CAPTCHA
 
 ---
 
-## 7 · คำตอบตอนจบ
+## 7 · The closing answer
 
-ตารางสถานะ — ใช้แทนรายการใต้ **ที่ทำ** เมื่อมีหลายชิ้นที่สถานะต่างกัน
+Status table — use it in place of the list under **ที่ทำ** when several items have different statuses.
 
-| งาน | สถานะ | หลักฐาน |
+| Task | Status | Evidence |
 |---|---|---|
-| ชุดโพสต์โปร 11.11 (6 ขนาด) | เสร็จ | export ครบ 6/6 ขนาดถูก · `design-review` ผ่าน 8/8 · ตรวจจริง |
+| 11.11 promo post set (6 sizes) | เสร็จ | all 6/6 sizes exported correctly · `design-review` passed 8/8 · ตรวจจริง |
 
 ---
 
-## 9 · ไฟล์กลาง — `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md`
+## 9 · Shared files — `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md`
 
-ตัวอย่างโฟลเดอร์งานออกแบบ: `brand/` หรือ `campaign-1111/`
+Example design work folders: `brand/` or `campaign-1111/`
 
-แม่แบบ `CONTEXT.md` ของงานนี้อยู่ใน [`context-template`](references/context-template.md) มีหัวข้อ: งานนี้คืออะไร · เป้าตอนนี้ · ความคืบหน้า · กติกา · ของอยู่ที่ไหน · การตัดสินใจ · รับงานต่อ
+The `CONTEXT.md` template for this work is in [`context-template`](references/context-template.md). Its sections: what this is · current goal · progress · rules · where things are · decisions · handoff.
 
-- ห้ามใส่ค่าลับหรือ API key ของเครื่องมือสร้างภาพ และข้อมูลลูกค้า
+- Never put secrets, image-tool API keys or customer data in them.
 
-**รูปแบบการทำงาน** — หัวหน้าทีมเลือกรูปแบบตอนวางแผน · วิธีทำ ต้นทุน และกับดักอยู่ใน `agent-patterns` · ตัวอย่างในงานของ plugin นี้อยู่ใน [`examples`](references/examples.md)
-
+**Working patterns** — the lead picks a pattern at planning time. How to run them, costs and pitfalls are in `agent-patterns`. Examples from this plugin's work are in [`examples`](references/examples.md)

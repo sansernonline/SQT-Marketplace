@@ -1,22 +1,22 @@
-# คำตอบตอนจบ — รายละเอียดของหัวข้อ 7
+# Closing answer — details of section 7
 
-แกน `SKILL.md` หัวข้อ 7 มีแค่ย่อ · เปิดไฟล์นี้ก่อนเขียนคำตอบตอนจบงานกลางขึ้นไป หรือเมื่อผู้ใช้จะเอาคำตอบไปลงมือ (เงิน · สุขภาพ · ข้อเสนองาน)
+The core `SKILL.md` section 7 holds only the short form · Open this file before writing the closing answer of a medium or larger task, or when the user will act on the answer (money · health · a work proposal)
 
-| ระดับ | ใช้เมื่อ | รูป |
+| Level | Use when | Shape |
 |---|---|---|
-| **คำเดียว** | ใช่ไหม · เท่าไร · อันไหน | คำตอบ + หลักฐาน 1 บรรทัด |
-| **3 บรรทัด** | ทำอะไรไป · เป็นไง · ต่อไปทำอะไร | ผล · ที่ทำ · ต่อไป อย่างละ 1 บรรทัด |
-| **รายงานปิดงาน** | งานเกิน 1 ขั้น | แบบด้านล่าง ไม่เกินครึ่งหน้า |
+| **One word** | yes or no · how much · which one | the answer + 1 line of evidence |
+| **3 lines** | what was done · how it went · what next | result · done · next, 1 line each |
+| **Closing report** | a task over 1 step | the form below, at most half a page |
 
-- **เขียนตาม `human-writing`** — ผลต่อผู้ใช้ก่อน · ภาษาคน · ตัวเลขเป็นเลข · ไม่สรุปซ้ำ · ไม่ทวนคำถาม
-- **ทุกข้ออ้างมีป้าย** `ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ` · เรื่องเงิน กฎหมาย สุขภาพ หรืองานส่งมอบใช้บันทึกเต็มตาม [`evidence`](evidence.md) · ไม่แต่งลิงก์ ไม่แต่งตัวเลข · ห้ามโยนงานตรวจที่ทำเองได้ให้ผู้ใช้ · `reviewer` ผ่าน = ผ่านเกณฑ์ที่ตรวจได้ · งานภาษา รสนิยม หน้าตา คำตัดสินสุดท้ายเป็นของผู้ใช้
-- **ไม่ซ่อนปัญหา** — สิ่งที่ยังไม่ได้ตรวจ และสิ่งที่ผู้ใช้ต้องทำต่อ 1 ข้อ อยู่ใน **ต่อไป** เสมอ (ข้อนั้นคือแถวบนสุดของตาราง "รอผู้ใช้" ใน `CONTEXT.md` ถ้ามี)
-- **คำถามตรวจต่อ (ครั้งเดียวต่อบทสนทนา)** — ถ้าผู้ใช้จะเอาคำตอบไปลงมือ (เงิน · แผนสุขภาพ · ข้อเสนองาน) ให้ต่อท้าย 2–3 คำถามสั้นถามเฉพาะสิ่งที่ผู้ใช้รู้คนเดียว (ตัวเลขของเขา · ข้อสมมติเรื่องชีวิตเขา) ที่ทำให้คำตอบเปลี่ยนถ้าผิด · อะไรตรวจเองได้ ตรวจเองตามข้อก่อนหน้า ไม่ถาม · คำถามเป็นบรรทัดแยกท้ายคำตอบ ไม่ปนใน **ต่อไป** (ซึ่งยังมีแค่ 1 ข้อที่ผู้ใช้ต้องทำ) · ข้ามเมื่อผู้ใช้ขอตรวจหรือขอแหล่งอยู่แล้ว ขอฉบับสั้น ให้สรุปหรือจัดรูปเอกสาร หรือถามความหมายคำ · เรื่องสุขภาพถามว่าแพทย์ต้องรู้อะไรเพิ่ม ห้ามชี้โรค (แนวคิดจาก anthropics/skills `discernment-nudge` เขียนใหม่)
-- **เทียบคาดกับจริง 1 บรรทัดใต้ ผล** (งานกลางขึ้นไป): `คาด ลูกทีม 3 · รอบ 2 → จริง ลูกทีม 5 · รอบ 3 · token <จาก SUMMARY>` · ต่างเกิน 2 เท่า หรือต่างแบบเดิมเป็นครั้งที่ 2 → จด `LEAD-PLAYBOOK.md`
-- **ข้อเสนอปรับปรุง ≤ 3** และ **ควรปรับทีม ≤ 3** (โมดูล learning) · ไม่มีเรื่องจริงไม่ต้องใส่ · ไม่ลงมือเองจนกว่าผู้ใช้สั่ง
-- **หัวข้อ** ตัวหนาเท่าที่มีเนื้อหา ปกติ 3: **ผล** (เสร็จไหม ได้อะไร หลักฐาน · `ข้ามรีวิว:` ถ้าข้าม) · **ที่ทำ** (หลายชิ้นสถานะต่างกันใช้ตารางสถานะ: งาน · สถานะ · ใคร · หลักฐาน · สถานะใช้ 5 คำ `เสร็จ` `ทำอยู่` `ติด` `รออนุมัติ` `ค้างอยู่`) · **ต่อไป** · เพิ่มเมื่อมีของจริง: **ตัดสินใจเอง** · **รออนุมัติ** · **ค้างอยู่**
-- **bullet ข้อละใจความเดียว** · ห้ามซ้อน · ตัดทิ้ง: วิธีทำเบื้องหลัง · ปัญหาที่แก้แล้วและไม่กระทบผู้ใช้ · ตัวเลขที่ไม่ได้ใช้ตัดสินใจ
+- **Write per `human-writing`**: the result for the user first · plain language · numbers as digits · no repeated summary · do not restate the question
+- **Every claim carries a label** `ตรวจจริง` (verified) · `จากแหล่ง` (from source) · `อนุมาน` (inferred) · `ยังไม่ได้ตรวจ` (not yet checked) · For money, law, health or delivered work, use the full record per [`evidence`](evidence.md) · Do not invent links or numbers · Never hand the user a check you can do yourself · `reviewer` pass = passed the checkable criteria · For language, taste and looks, the final verdict is the user's
+- **Hide no problem**: what is not yet checked, and the 1 thing the user must do next, always go under **ต่อไป** (that item is the top row of the "รอผู้ใช้" (awaiting user) table in `CONTEXT.md`, if it exists)
+- **Follow-up check questions (once per conversation)**: if the user will act on the answer (money · health plan · work proposal), end with 2–3 short questions asking only what the user alone knows (their numbers · assumptions about their life) that would change the answer if wrong · Whatever you can check yourself, check per the previous item and do not ask · Put the questions on a separate line at the end, not inside **ต่อไป** (which still holds just 1 thing the user must do) · Skip when the user already asked for a review or sources, asked for a short version, asked to summarise or format a document, or asked what a word means · For health, ask what the doctor needs to know; never name a disease (idea from anthropics/skills `discernment-nudge`, rewritten)
+- **Compare expected with actual in 1 line under ผล** (medium tasks and up): `คาด ลูกทีม 3 · รอบ 2 → จริง ลูกทีม 5 · รอบ 3 · token <จาก SUMMARY>` (expected 3 workers · 2 rounds → actual 5 workers · 3 rounds · tokens from SUMMARY) · A gap over 2 times, or the same gap a 2nd time → log it in `LEAD-PLAYBOOK.md`
+- **Improvement proposals ≤ 3** and **team adjustments ≤ 3** (learning module) · Leave out if nothing real · Do not act on them until the user orders it
+- **Headings**: bold, only those with content, normally 3: **ผล** (done or not, what was gained, evidence · `ข้ามรีวิว:` if review was skipped) · **ที่ทำ** (for several pieces with different statuses use a status table: task · status · who · evidence · status uses 5 words `เสร็จ` `ทำอยู่` `ติด` `รออนุมัติ` `ค้างอยู่`) · **ต่อไป** · add when real content exists: **ตัดสินใจเอง** · **รออนุมัติ** · **ค้างอยู่**
+- **One point per bullet** · no nesting · cut: how it was done behind the scenes · problems fixed that do not affect the user · numbers not used for a decision
 
-## เกณฑ์งานแบบเต็ม (หัวข้อ 4)
+## Full quality bar (section 4)
 
-**จริง** ทุกข้อเท็จจริงและตัวเลขมาจากผู้ใช้ เอกสาร หรือแหล่งที่ตรวจแล้ว ไม่มีให้ใส่ `(รอยืนยัน)` · **ตรงเป้า** ตรงกับ "เป้า" และ "เสร็จเมื่อ" ตัดส่วนที่ไม่เกี่ยวออกแล้ว · **พร้อมใช้** ผู้ใช้เอาไปใช้ต่อได้ทันที ไม่ต้องแก้หรือเดาต่อ · ง่ายตาม `simplify`
+**True**: every fact and number comes from the user, a document, or a checked source; if none, put `(รอยืนยัน)` · **On target**: matches the "goal" and "done-when", with unrelated parts cut · **Ready to use**: the user can use it at once with no fixing or guessing · simple per `simplify`

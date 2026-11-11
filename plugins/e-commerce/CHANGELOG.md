@@ -1,5 +1,9 @@
 # CHANGELOG — e-commerce
 
+## 1.9.7 — 2026-11-11
+
+- `superuser/SKILL.md` ของ plugin นี้เป็นภาษาอังกฤษ (เล็กลงราว 40%) · คำไทยที่ hook ตรวจ ป้ายสถานะ และชื่อเอกสารราชการไทยคงไว้
+
 ## 1.9.6 — 2026-11-11
 
 - สำเนา `superuser/references/` (brief-template · review-lenses · team-roles) ตรงกับแกน 3.38.0: ใบสั่งงานสั้น · โหมด test ของผู้ตรวจ · รอลูกทีมแบบ background
