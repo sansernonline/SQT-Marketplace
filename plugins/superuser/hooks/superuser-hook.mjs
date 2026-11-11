@@ -571,16 +571,16 @@ function leadContext(input) {
 
 // ── ด่านรีวิวก่อนจบ (Stop) ───────────────────────────────────────────────
 // หัวหน้าทีมใช้ skill superuser แล้วแก้ไฟล์งาน ≥ 3 ไฟล์ แต่หลังการแก้ครั้งสุดท้ายไม่มีผู้ตรวจตัวใหม่ → ไม่ให้จบ ส่งกลับไปตรวจก่อน 1 ครั้ง
-// ข้ามได้เมื่อคำตอบสุดท้ายมีบรรทัด `ข้ามรีวิว: <เหตุผล>` (เช่น งานเล็กตามกฎข้อ 3) · กันวน: บล็อกได้ครั้งเดียวต่อการหยุด (stop_hook_active)
+// ข้ามได้ด้วยบรรทัด `ข้ามรีวิว: <เหตุผล>` (เช่น งานเล็กตามกฎข้อ 3) ซึ่งนับเป็นจุดตรวจ จะบล็อกอีกเมื่อแก้ไฟล์งานหลังจุดนั้นเท่านั้น · ไฟล์ชั่วคราว (scratchpad · Temp) ไม่นับ · กันวน: บล็อกได้ครั้งเดียวต่อการหยุด (stop_hook_active)
 export const REVIEW_MIN_FILES = 3;
 const CHECKER = /(^|:)(reviewer|design-critic|design-review|qa-tester|security-engineer|adversarial-review-panel)$/;
 const EDIT_TOOLS = new Set(["Edit", "Write", "MultiEdit", "NotebookEdit"]);
-const SKIP_PATH = /(^|[\\/])(_to_delete|\.claude|node_modules)([\\/]|$)/;
+// ไฟล์ชั่วคราวไม่นับเป็นไฟล์งาน: โฟลเดอร์ทิ้ง · scratchpad ของ session · Temp ของระบบ (Windows AppData\Local\Temp · /tmp)
+const SKIP_PATH = /(^|[\\/])(_to_delete|\.claude|node_modules|scratchpad)([\\/]|$)|[\\/]AppData[\\/]Local[\\/]Temp[\\/]|^\/tmp\//i;
 
 export function reviewGate(s) {
   if (!s.usedSuperuser || s.edited.length < REVIEW_MIN_FILES || s.lastCheck > s.lastEdit) return null;
   if (s.pending?.length) return null;   // ลูกทีมยังทำงานเบื้องหลังอยู่ = งานยังไม่จบ ยังไม่ถึงเวลาตรวจ (บทเรียน 2026-10-26)
-  if (/ข้ามรีวิว\s*:\s*\S/.test(s.lastText)) return null;
   return `ด่านรีวิว (SuperUser): แก้ไฟล์งานไป ${s.edited.length} ไฟล์ แต่หลังการแก้ครั้งสุดท้ายยังไม่มีผู้ตรวจตัวใหม่ — ส่ง \`reviewer\` ตัวใหม่ตามกฎข้อ 3 (ชิ้นงาน · คำขอของผู้ใช้ · เสร็จเมื่อ) แล้วแก้ข้อสูงและกลางก่อนจบ · ถ้าเป็นงานเล็กที่หัวหน้าทีมตรวจเองได้จริง ให้ใส่บรรทัด \`ข้ามรีวิว: <เหตุผล>\` ในคำตอบสุดท้าย`;
 }
 
@@ -682,7 +682,11 @@ export function foldTranscript(s, lines) {
     const msg = m.message;
     if (m.isSidechain || msg?.role !== "assistant" || !Array.isArray(msg.content)) continue;
     for (const b of msg.content) {
-      if (b.type === "text" && b.text) s.lastText = b.text;
+      if (b.type === "text" && b.text) {
+        s.lastText = b.text;
+        // บรรทัด ข้ามรีวิว: นับเป็นจุดตรวจ · รอบถัดไปจะบล็อกอีกก็ต่อเมื่อแก้ไฟล์งานหลังจุดนี้ (เดิมดูแค่ข้อความล่าสุด จึงบล็อกซ้ำทุกรอบ · บทเรียน 2026-11-11)
+        if (/(^|\n)\s*ข้ามรีวิว\s*:\s*\S/.test(b.text)) s.lastCheck = i;   // ต้องขึ้นต้นบรรทัด · ข้อความที่แค่อ้างถึงกลางประโยคไม่นับ
+      }
       if (b.type !== "tool_use") continue;
       const inp = b.input ?? {};
       if (b.name === "Skill" && /(^|:)superuser$/.test(inp.skill ?? "")) s.usedSuperuser = true;
@@ -1449,6 +1453,11 @@ function selfTest() {
     ["ด่านรีวิว: ใส่ ข้ามรีวิว: → ผ่าน", [skill, edit("a"), edit("b"), edit("c"), say("ข้ามรีวิว: งานเล็ก แก้ข้อความ 3 ไฟล์")], false],
     ["ด่านรีวิว: ไม่ได้ใช้ superuser → ผ่าน", [edit("a"), edit("b"), edit("c")], false],
     ["ด่านรีวิว: ไฟล์ใน _to_delete ไม่นับ", [skill, edit("a"), edit("b"), edit("_to_delete/x")], false],
+    ["ด่านรีวิว: ข้ามรีวิว แล้วรอบถัดไปไม่ได้แก้ไฟล์เพิ่ม → ผ่าน", [skill, edit("a"), edit("b"), edit("c"), say("ข้ามรีวิว: งานเล็ก"), say("รอผลเบื้องหลังอยู่")], false],
+    ["ด่านรีวิว: ข้ามรีวิว แล้วแก้ไฟล์งานเพิ่ม → บล็อก", [skill, edit("a"), edit("b"), edit("c"), say("ข้ามรีวิว: งานเล็ก"), edit("d")], true],
+    ["ด่านรีวิว: ข้ามรีวิว กับการแก้ไฟล์อยู่ในข้อความเดียวกัน (ข้ามก่อนลงมือ) → บล็อก", [skill, T({ type: "text", text: "ข้ามรีวิว: งานเล็ก" }, { type: "tool_use", name: "Write", input: { file_path: "/p/a", content: "x" } }, { type: "tool_use", name: "Write", input: { file_path: "/p/b", content: "x" } }, { type: "tool_use", name: "Write", input: { file_path: "/p/c", content: "x" } })], true],
+    ["ด่านรีวิว: อ้างคำว่า ข้ามรีวิว: กลางประโยคไม่นับ → บล็อก", [skill, edit("a"), edit("b"), edit("c"), say("ถ้าเป็นงานเล็กให้ใส่ ข้ามรีวิว: เหตุผล")], true],
+    ["ด่านรีวิว: ไฟล์ใน scratchpad และ Temp ไม่นับ", [skill, edit("a"), edit("b"), edit("x/scratchpad/m.mjs"), edit("C:/Users/u/AppData/Local/Temp/y.txt")], false],
   ];
   const dev = T({ type: "tool_use", name: "Agent", input: { subagent_type: "software-development:developer" } });
   gates.push(
