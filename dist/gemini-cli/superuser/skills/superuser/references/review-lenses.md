@@ -1,95 +1,95 @@
-# review-lenses — แพ็กเกจรีวิว · เลนส์ · ด่านยืนยันทีละข้อ
+# review-lenses — review package · lenses · item-by-item validator gate
 
-ใช้กับ [`playbook-review`](playbook-review.md) · `reviewer` · skill `adversarial-review-panel` ของ plugin superuser · ทุกที่ที่มีผู้ตรวจตัวใหม่
+Used with [`playbook-review`](playbook-review.md) · `reviewer` · skill `adversarial-review-panel` of plugin superuser · everywhere a fresh reviewer is used.
 
-ภาพรวมของ flow เดียว: **แพ็กเกจรีวิว → ผู้ตรวจถือเลนส์ (เช็กลิสต์) → ผู้ยืนยันทีละข้อ → บันทึกข้อที่ปัดทิ้งพร้อมเหตุผล → ตรวจความสดก่อนรายงาน** · ผู้ตรวจเจอปัญหาได้ง่าย ผู้ยืนยันทำให้เหลือแต่ข้อจริง แพ็กเกจกับความสดทำให้ทุกคนดูงานชุดเดียวกัน
+The one flow in brief: **review package → reviewer holds lenses (checklists) → validator confirms item by item → log dismissed items with reasons → freshness check before reporting.** Reviewers find problems easily. Validators leave only the real ones. The package and the freshness check make everyone look at the same version of the work.
 
-## 1 · แพ็กเกจรีวิว
+## 1 · Review package
 
-หัวหน้าทีมสร้างโฟลเดอร์ `_to_delete/<โฟลเดอร์งาน>/review-<รอบ>/` แล้วใส่ 4 ไฟล์ ผู้ตรวจอ่านจากไฟล์ ไม่อ่านจากคำเล่าในแชต
+The lead creates the folder `_to_delete/<task folder>/review-<round>/` and puts 4 files in it. The reviewer reads from the files, not from a chat retelling.
 
-| ไฟล์ | ใส่อะไร | ใครอ่าน |
+| File | Contents | Who reads |
 |---|---|---|
-| `package.md` | ชื่องาน · ผู้ใช้เขียนว่าอะไร (คัดคำของผู้ใช้ตรงตัว) · เงื่อนไขจาก spec หรือ brief **คัดตรงตัว ห้ามย่อ** · "จบเมื่อ" · path ของชิ้นงาน · skill ที่งานต้องทำตาม · `head:` รหัส commit (หรือ hash ของไฟล์) ที่ตรวจ · เจตนา 1 ย่อหน้า · งานโค้ดที่มี test และไม่เสี่ยง ใส่บรรทัด `โหมด test` พร้อมคำสั่ง test และผลก่อนแก้ (ล้ม) กับหลังแก้ (ผ่าน) ผู้ตรวจจะตรวจแค่ diff และรัน test ครั้งเดียว (`reviewer` หัวข้อ Test mode) | ผู้ตรวจทุกตัว |
-| `diff.patch` | diff ของงานเป็นไฟล์ (`git diff <ฐาน>` คำสั่งที่ใช้เขียนไว้ในหัวไฟล์) · งานที่ไม่ใช่โค้ดใส่รายการไฟล์ที่เปลี่ยน | ผู้ตรวจทุกตัว |
-| `author-notes.md` | โจทย์ ข้อจำกัด และเหตุผลที่ผู้ทำเลือกทางนี้ (สรุปจาก `decision-log` · `handoff`) | เฉพาะรอบ "ท้าทายเจตนา" ในข้อ 6 |
-| `ledger.md` | ข้อที่พบ · ผลยืนยัน · ข้อที่ปัดทิ้งพร้อมเหตุผล (ข้อ 4) | หัวหน้าทีม · รอบถัดไป |
+| `package.md` | Task name · what the user wrote (the user's words **verbatim**) · conditions from the spec or brief **copied verbatim, never shortened** · "done-when" · paths of the work · skills the work must follow · `head:` commit ID (or file hash) under review · intent in 1 paragraph · for code with tests that is not risky, add a `โหมด test` (test mode) line with the test command and the result before the fix (fails) and after the fix (passes). The reviewer then checks only the diff and runs the tests once (`reviewer` section Test mode) | Every reviewer |
+| `diff.patch` | The diff of the work as a file (`git diff <base>`, with the command written at the top of the file) · for non-code work, the list of changed files | Every reviewer |
+| `author-notes.md` | The task, constraints, and why the doer chose this path (summarised from `decision-log` · `handoff`) | Only the "challenge intent" round in section 6 |
+| `ledger.md` | Findings · confirmation results · dismissed items with reasons (section 4) | Lead · next round |
 
-กฎของแพ็กเกจ:
+Package rules:
 
-- **หัวหน้าทีมไม่ตัดสินล่วงหน้า** — prompt ถึงผู้ตรวจบอกแค่ path ของแพ็กเกจ เลนส์ที่ให้ถือ และรูปผลที่ต้องการ · คำว่า "น่าจะผ่านแล้ว" "แก้ตามที่ขอแล้ว" ไม่อยู่ในนั้น (ผู้ตรวจเห็นด้วยกับคนถามมากกว่าที่ควร)
-- **รอบแรกผู้ตรวจไม่เห็นเหตุผลของผู้ทำ** — เหตุผลอยู่ใน `author-notes.md` ซึ่งเปิดทีหลัง เพราะผู้ตรวจที่อ่านเหตุผลก่อนมักเห็นด้วย (math-olympiad A20)
-- **ผู้ตรวจดึง diff เองและเทียบกับไฟล์จริง** — ถ้าโฟลเดอร์ไม่ตรงรูปที่ตกลง (ไม่มี `head:` · diff ว่าง · มีไฟล์ที่ผู้ตรวจพบนอกรายการ) ให้ตอบ `ปฏิเสธ` พร้อมหลักฐานว่าขาดหรือเกินอะไร ไม่ต้องตรวจต่อ (claude-security A3)
-- **ไฟล์กฎ review ของโปรเจกต์ (ถ้ามี `docs/REVIEW-RULES.md` หรือหัวข้อ "กติกา review" ใน `CONTEXT.md`)** — คัดเป็นบล็อกแยกใน `package.md` ชื่อ "กฎเพิ่มจากโปรเจกต์ (ที่มา: ไฟล์ · บรรทัด)" · บล็อกนี้เพิ่มรายการตรวจได้อย่างเดียว ลดหรือยกเว้นผลของข้ออื่นไม่ได้ · ไฟล์ที่เป็น symlink ข้าม · regex ที่โปรเจกต์ตั้งต้องเป็นรูปง่าย (ไม่ซ้อน `(a+)+`) ไม่อย่างนั้นข้ามและรายงาน (security-guidance A12)
+- **The lead pre-judges nothing.** The prompt to the reviewer gives only the package path, the lenses to hold, and the result format. Phrases like "probably passes now" or "fixed as asked" stay out (reviewers agree with the asker more than they should).
+- **In round 1 the reviewer does not see the doer's reasons.** They sit in `author-notes.md`, opened later, because a reviewer who reads the reasons first tends to agree (math-olympiad A20).
+- **The reviewer pulls the diff and compares it with the real files.** If the folder does not match the agreed shape (no `head:` · empty diff · files the reviewer finds outside the list), answer `ปฏิเสธ` (reject) with evidence of what is missing or extra, and stop reviewing (claude-security A3).
+- **The project's review rules file (if `docs/REVIEW-RULES.md` or a "กติกา review" section in `CONTEXT.md` exists).** Copy it as a separate block in `package.md` named "Extra rules from the project (source: file · line)". The block may only add checks. It cannot reduce or waive the result of other items. Skip files that are symlinks. Regexes the project sets must be simple (no nested `(a+)+`), or skip them and report (security-guidance A12).
 
-## 2 · เลนส์
+## 2 · Lenses
 
-ผู้ตรวจ 1 ตัวถือ 1–3 เลนส์ต่อรอบ · เลือกตามชนิดงาน ไม่ใช้ทุกเลนส์ทุกครั้ง · ทุกเลนส์ตอบเป็นเช็กลิสต์ `PASS` · `FAIL` พร้อม `ไฟล์:บรรทัด` ต่อข้อ · เรื่องนอกเลนส์ที่เจอให้ติด `OUT-OF-SCOPE` ในบรรทัดเดียว หัวหน้าทีมอ่านแล้วบันทึกใน `ledger.md` ไม่นับเป็นข้อพบ ซ้ำเกิน 3 รอบให้ยกเรื่องนั้นขึ้นเป็นเลนส์ใหม่ (vsql E14)
+One reviewer holds 1–3 lenses per round. Choose by kind of work. Do not use every lens every time. Each lens answers as a checklist of `PASS` · `FAIL` with `file:line` per item. Anything found outside the lens gets one `OUT-OF-SCOPE` line. The lead reads it and logs it in `ledger.md`, and it does not count as a finding. If it repeats for more than 3 rounds, raise it to a new lens (vsql E14).
 
-| เลนส์ | ถามอะไร | ใช้เมื่อ |
+| Lens | What it asks | Use when |
 |---|---|---|
-| `spec` | ทุกเงื่อนไขในแพ็กเกจที่คัดตรงตัวมีที่ทำและที่พิสูจน์ · ขาดส่วนที่ขอ · มีส่วนที่ไม่มีใครขอ | ทุกงานที่มี spec หรือ brief |
-| `quality` | อ่านออก · เรียบง่าย · ชื่อตรง · ซ้ำกับของเดิมไหม · สอดคล้องกับชิ้นข้างเคียง · test กันของที่แก้จริงไหม | ทุกงาน |
-| `silent-failure` | ไล่ **ทุกจุด** ที่รับ error (catch · fallback · ค่าเริ่มต้นเมื่อพลาด · ผลที่ถูกกลืน) แล้วตอบทีละจุดว่า error โผล่ให้ผู้ใช้หรือ log พร้อมบริบทไหม · catch เจาะจงชนิดไหม · fallback บอกผู้ใช้ไหม · mock อยู่แค่ใน test ไหม (pr-review-toolkit A24) | โค้ด · สคริปต์ · งานที่เรียกระบบอื่น |
-| `builder-blind` | อ่านเฉพาะเอกสารออกแบบ แล้วเล่นเป็นผู้สร้างที่ถามผู้เขียนไม่ได้ · ตอบเป็นคำถามเรียงตามความเสียหายถ้าเดาผิด หรือ "ไม่เหลือข้อสำคัญ" (superpowers B7) | spec · แผน · เอกสารออกแบบก่อนเริ่มสร้าง |
-| `security-reach` · `security-impact` · `security-defense` | 3 มุมของผู้โหวต: ถึงจุดอ่อนได้จริงไหม · ถ้าถึงแล้วเสียหายแค่ไหน · มีตัวกันอยู่ก่อนแล้วไหม · ยืนยันได้ต้องอ้าง `ไฟล์:บรรทัด` ของทางเข้า จุดที่พัง และตัวกันที่ขาด ไม่ครบ = ไม่ยืนยัน (claude-security A1) | งานเสี่ยงสูง ใช้ผ่านขั้นยืนยันข้อ 3 |
-| `visual` | ตัดสินจากพิกเซลของภาพที่แนบ ไม่เชื่อคำบรรยาย · ดูอาการล้มก่อน (จอแดง จอว่าง กล่องหรือ dialog บังเนื้อหา) แล้วเทียบ log · กำกวม = ไม่ผ่าน · มีกล่องบัง = ถ่ายใหม่ ไม่ใช่ตก · หลักฐานระบุชื่อไฟล์ภาพ (expo D16) | หน้าจอ · สไลด์ · ภาพ |
-| `claims` | ทุกข้ออ้างว่า "ทำงานบนระบบ X" ติดป้าย `observed` (รันแล้วเห็นผลบนระบบนั้น) หรือ `reasoned` (คิดเอา) · ป้ายผิดหรือไม่มีป้ายคือข้อพบ (claude-remember B13) | PR · รายงานที่อ้างข้ามระบบปฏิบัติการหรือข้ามเครื่อง |
+| `spec` | Every condition in the verbatim-copied package has an implementation and a proof · missing requested parts · parts nobody asked for | Every task with a spec or brief |
+| `quality` | Readable · simple · names are accurate · duplicates existing code · consistent with neighbouring pieces · do tests guard what was actually fixed | Every task |
+| `silent-failure` | Walk **every spot** that handles an error (catch · fallback · default on failure · swallowed result) and answer spot by spot: does the error reach the user or the log with context · is the catch specific to a type · does the fallback tell the user · are mocks only in tests (pr-review-toolkit A24) | Code · scripts · work that calls other systems |
+| `builder-blind` | Read only the design document and play a builder who cannot ask the author. Answer as questions ordered by damage if guessed wrong, or "no important item left" (superpowers B7) | Specs · plans · design documents before building starts |
+| `security-reach` · `security-impact` · `security-defense` | The 3 angles of the voters: can the weak point really be reached · if reached, how much damage · is a guard already in place. To confirm, cite `file:line` of the entry point, the failing spot, and the missing guard. Incomplete = not confirmed (claude-security A1) | High-risk work, used through the confirm step in section 3 |
+| `visual` | Judge from the pixels of the attached image, never from descriptions. Look for failure signs first (red screen, blank screen, a box or dialog covering content), then compare with the log. Ambiguous = fail. A covering box = retake the shot, not a fail. Evidence names the image file (expo D16) | Screens · slides · images |
+| `claims` | Every claim of "works on system X" is labelled `observed` (ran it and saw the result on that system) or `reasoned` (worked out by thought). A wrong or missing label is a finding (claude-remember B13) | PRs · reports that claim across operating systems or machines |
 
-ข้อห้ามความรู้เก่าของผู้ตรวจ: ผู้ตรวจไม่ชี้ว่า model ID · ชื่อ parameter · เวอร์ชัน API ผิด จากความจำของตัวเอง เพราะรายการจริงใหม่กว่าความรู้ของมัน · ให้เทียบกับเอกสารหรือ config ในโปรเจกต์ ไม่มีให้ติด `ยังไม่ได้ตรวจ` · เรื่องสไตล์ทั่วไปที่ไม่มีกฎของโปรเจกต์รองรับข้ามไป (atomic-agents C22)
+Rule against stale knowledge: a reviewer does not flag a model ID · parameter name · API version as wrong from its own memory, because the real list is newer than its knowledge. Compare against the project's documents or config. If none exist, mark `ยังไม่ได้ตรวจ` (not checked). Skip general style matters that no project rule supports (atomic-agents C22).
 
-## 3 · ผู้ยืนยันทีละข้อ (validator)
+## 3 · Item-by-item validator
 
-ข้อพบที่ผู้ตรวจส่งมาเป็นแค่ข้อกล่าวหา ผู้ตรวจ AI แต่งปัญหาที่ไม่มีจริงได้ ทุกข้อจึงผ่านผู้ยืนยัน **1 ตัวต่อ 1 ข้อ** (`reviewer` ตัวใหม่ อ่านอย่างเดียว) ก่อนเข้ารายงาน · หลาย ๆ ข้อที่เกิดจากสาเหตุเดียวกันรวมเป็นข้อเดียวก่อนยืนยัน
+A finding from a reviewer is only an accusation. An AI reviewer can invent problems that are not real. So every item goes through **1 validator per item** (a fresh `reviewer`, read-only) before entering the report. Several items with the same cause are merged into one before confirming.
 
-ผู้ยืนยันได้รับ: ข้อพบ 1 ข้อ (ที่ไหน · ทำให้พังอย่างไร) · path แพ็กเกจ · รายการ false positive ด้านล่าง · **ไม่ได้รับ** ชื่อผู้ตรวจ ระดับที่ผู้ตรวจให้ หรือเหตุผลของผู้ตรวจ · ค่าตั้งต้นคือ `FALSE_POSITIVE` ต้องมีหลักฐานจึงเปลี่ยน
+The validator receives: 1 finding (where · how it breaks) · the package path · the false-positive list below · **does not receive** the reviewer's name, the severity the reviewer gave, or the reviewer's reasons. The default is `FALSE_POSITIVE`, and only evidence changes it.
 
-ผู้ยืนยันตอบ 1 บรรทัด: `ยืนยัน` · `FALSE_POSITIVE` · `มีมาก่อนงานนี้` (ผิดจริงแต่ไม่ใช่ผลของ diff นี้ ไปรายการแยก) · `ไม่รู้` พร้อมคะแนนมั่นใจ 0–100 และหลักฐาน (`ไฟล์:บรรทัด` · คำสั่ง → ผล)
+The validator answers in 1 line: `ยืนยัน` (confirmed) · `FALSE_POSITIVE` · `มีมาก่อนงานนี้` (pre-existing: truly wrong but not a result of this diff, goes to a separate list) · `ไม่รู้` (don't know), with a confidence score 0–100 and evidence (`file:line` · command → result).
 
-- **มั่นใจต่ำกว่า 80 ไม่เข้ารายงานเป็นสูงหรือกลาง** — ลงเป็นคำถามระดับต่ำ หรือติด `ยังไม่ได้ตรวจ` · เป็นเส้นเดียวกับกฎ "ต้องมีหลักฐานที่เปิดดูได้" ของ `reviewer`
-- งานเสี่ยงสูงใช้ผู้ยืนยัน **3 ตัวคงที่** คนละเลนส์ `security-*` (หรือเลนส์ที่เหมาะกับข้อนั้น) จำนวนไม่ขึ้นลงตามงบ เพื่อให้ความมั่นใจข้ามรอบเทียบกันได้ · เสียงข้างมากชนะ ผลนับด้วยตาราง ไม่ใช่ความรู้สึก
+- **Confidence below 80 does not enter the report as `สูง` or `กลาง` (high or medium).** Log it as a `ต่ำ` (low) question or mark `ยังไม่ได้ตรวจ`. This follows the same line as the `reviewer` rule "evidence that can be opened is required".
+- High-risk work uses **3 fixed validators**, each with a different `security-*` lens (or the lens that fits the item). The number does not rise or fall with budget, so confidence stays comparable across rounds. The majority wins. Count the result with a table, not by feel.
 
-**รายการ false positive** (ผู้ยืนยันปัดทิ้งได้เลยถ้าข้อพบเข้าข่ายและไม่มีหลักฐานเพิ่ม):
+**False-positive list** (the validator may dismiss an item at once if it falls in this list and has no added evidence):
 
-- ปัญหาที่มีอยู่ก่อนงานนี้และ diff ไม่ได้แตะ
-- สิ่งที่ linter · type checker · compiler · test ที่รันอยู่แล้วจับได้ (ผู้ตรวจไม่ต้องซ้ำ)
-- รสนิยมหรือสไตล์ทั่วไปที่โปรเจกต์ไม่มีกฎ
-- ข้อที่อ้างจากความรู้เก่า (model ID · ชื่อ parameter · เวอร์ชัน) โดยไม่มีเอกสารในโปรเจกต์
-- พฤติกรรมที่เปลี่ยนโดยตั้งใจและอยู่ใน "จบเมื่อ" หรือ **ตัดสินใจเอง**
-- บรรทัดที่ผู้ทำติดป้ายว่าตั้งใจพร้อมเหตุผล
-- กรณีที่ทำให้พังได้ต้องมี input ที่ระบบไม่มีทางรับจริง
+- A problem that existed before this work and that the diff did not touch
+- Anything the linter · type checker · compiler · tests already running would catch (the reviewer need not repeat it)
+- General taste or style where the project has no rule
+- An item argued from stale knowledge (model ID · parameter name · version) with no project document
+- Behaviour changed on purpose and listed in "done-when" or **ตัดสินใจเอง** (own decision)
+- A line the doer labelled as intentional with a reason
+- A case where breaking it needs an input the system can never actually receive
 
-## 4 · ปัดทิ้งต้องมีเหตุผลและอ่านกลับ
+## 4 · Dismissing needs a reason and a read-back
 
-สิทธิ์ให้แก้ไม่ครอบคลุมการตัดสินว่าข้อพบไหนไม่ต้องแก้ · หัวหน้าทีมบันทึกทุกข้อที่ปัดทิ้งใน `ledger.md` ด้วยแถวนี้:
+The right to fix does not cover deciding which finding needs no fix. The lead logs every dismissed item in `ledger.md` with this row:
 
-| ข้อ | เหตุผล (เลือก 1) | คำอธิบาย 1 บรรทัดพร้อมหลักฐาน |
+| Item | Reason (pick 1) | 1-line explanation with evidence |
 |---|---|---|
-| `#3` | `false_positive` · `intentional` · `deferred` · `rejected` · `มีมาก่อน` | ... |
+| `#3` | `false_positive` · `intentional` · `deferred` · `rejected` · `มีมาก่อน` (pre-existing) | ... |
 
-`deferred` ต้องบอกว่ารอใครหรือรออะไร และลงรายการ `ค้างอยู่` ของรายงานด้วย · เขียนแล้วอ่านไฟล์กลับ นับแถวให้ตรงกับจำนวนข้อที่ปัด (qodo E19)
+`deferred` must say who or what it waits for, and also goes in the `ค้างอยู่` (pending) list of the report. After writing, read the file back and count the rows to match the number of dismissed items (qodo E19).
 
-## 5 · ความสดก่อนรายงาน
+## 5 · Freshness before reporting
 
-ก่อนทำตามผลรีวิว ให้เทียบ `head:` ในแพ็กเกจกับของจริงตอนนี้ (`git rev-parse HEAD` หรือ hash ของไฟล์) · ไม่ตรง = ผลเก่า ตรวจรอบใหม่กับของปัจจุบันหรือรายงานว่าเก่า · ผู้ตรวจที่ยังรัน ล้ม หรือถูกตัดผล ให้รายงานตามนั้น ห้ามนับเป็น "สะอาด" (qodo E18)
+Before acting on review results, compare `head:` in the package with the real state now (`git rev-parse HEAD` or the file hash). Mismatch = stale result. Review again against the current work, or report that it is stale. A reviewer that is still running, failed, or had its result cut off reports as such and never counts as "clean" (qodo E18).
 
-## 6 · รอบถัดไป
+## 6 · Next round
 
-- **ข้อที่เคยพบ** — ดึงข้อทั้งหมดจากรอบก่อน จัดเป็น แก้โค้ด · แก้เอกสาร · คำถาม · อภิปราย แล้วเปิด diff หลังรอบก่อนดูว่าแต่ละข้อมีการแก้จริงที่ตรงปัญหา ไม่ใช่แค่หัวหน้าทีมเขียนว่า "แก้แล้ว" · ข้อที่ยังไม่แก้รายงานก่อนเริ่มรอบใหม่ (datahub C1)
-- **ท้าทายเจตนา** — หลังผู้ตรวจรอบแรกส่งผลแล้ว จึงให้ผู้ตรวจตัวใหม่อ่านรายงานรอบแรกกับ `author-notes.md` แล้วตอบว่า ข้อจำกัดหรือเหตุผลข้อไหนไม่ตรงกับ spec หรือไม่มีหลักฐานรองรับ (qodo E20) · ใช้ได้กับ session ถัดไปที่รับงานต่อ โดยไม่ต้องย้อนแชต
+- **Previously found items.** Pull all items from the previous round and sort them into code fix · document fix · question · discussion. Then open the diff after the previous round and see that each item has a real fix that matches the problem, not just the lead writing "fixed". Report unfixed items before starting the new round (datahub C1).
+- **Challenge intent.** Only after the first-round reviewer returns, have a fresh reviewer read the first-round report and `author-notes.md` and answer which constraint or reason does not match the spec or has no supporting evidence (qodo E20). It works for a later session that takes over the work, with no need to go back through the chat.
 
-## ที่มา
+## Sources
 
-- superpowers (MIT) · skills/brainstorming/builder-check-prompt.md · ดู 2026-11-10
-- expo · .claude/skills/expo-skill-eval/agents/visual-grader.md · ดู 2026-11-10
-- vsql · skills/vsql-extension-builder/SKILL.md · ดู 2026-11-10
-- claude-security (All rights reserved · เอาแค่กลไก) · agents/scan-verifier.md · agents/patch-verifier.md · ดู 2026-11-10
-- security-guidance · hooks/extensibility.py · ดู 2026-11-10
-- datahub · agents/comment-resolution-checker.md · ดู 2026-11-10
-- math-olympiad · skills/math-olympiad/SKILL.md · ดู 2026-11-10
-- pr-review-toolkit · agents/silent-failure-hunter.md · ดู 2026-11-10
-- claude-remember (ห้ามแจกจ่ายซ้ำ · เอาแค่กลไก) · CONTRIBUTING.md · ดู 2026-11-10
-- atomic-agents · claude-plugin/atomic-agents/agents/atomic-reviewer.md · ดู 2026-11-10
-- qodo · skills/qodo-review-resolver/SKILL.md · skills/qodo-review/references/local-triage.md · skills/qodo-review-notes/SKILL.md · ดู 2026-11-10
-- code-review (Anthropic) · ผู้ยืนยันทีละข้อ · เกณฑ์ 80 · รายการ false positive · ดู 2026-11-10
-- superpowers (MIT) · แพ็กเกจรีวิวและคำตัดสิน 2 ด้าน spec กับ quality · ดู 2026-11-10
+- superpowers (MIT) · skills/brainstorming/builder-check-prompt.md · viewed 2026-11-10
+- expo · .claude/skills/expo-skill-eval/agents/visual-grader.md · viewed 2026-11-10
+- vsql · skills/vsql-extension-builder/SKILL.md · viewed 2026-11-10
+- claude-security (All rights reserved · mechanism only) · agents/scan-verifier.md · agents/patch-verifier.md · viewed 2026-11-10
+- security-guidance · hooks/extensibility.py · viewed 2026-11-10
+- datahub · agents/comment-resolution-checker.md · viewed 2026-11-10
+- math-olympiad · skills/math-olympiad/SKILL.md · viewed 2026-11-10
+- pr-review-toolkit · agents/silent-failure-hunter.md · viewed 2026-11-10
+- claude-remember (no redistribution · mechanism only) · CONTRIBUTING.md · viewed 2026-11-10
+- atomic-agents · claude-plugin/atomic-agents/agents/atomic-reviewer.md · viewed 2026-11-10
+- qodo · skills/qodo-review-resolver/SKILL.md · skills/qodo-review/references/local-triage.md · skills/qodo-review-notes/SKILL.md · viewed 2026-11-10
+- code-review (Anthropic) · item-by-item validator · threshold 80 · false-positive list · viewed 2026-11-10
+- superpowers (MIT) · review package and the 2-sided verdict, spec and quality · viewed 2026-11-10

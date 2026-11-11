@@ -1,0 +1,37 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# hook จัดคำขอนี้เป็นงานเล็ก (looksSmall = true ตรวจ 2026-11-11) · ต้นเหตุ: ส่งเปอร์เซ็นต์เป็น 10 แต่สูตรคูณตรง ๆ
+schema_version: "1.1"
+name: quick-behaviour
+description: บั๊กส่วนลดไฟล์เดียวที่มี test ต้องแก้ที่สูตร (หาร 100) รัน npm test จริง แล้วตอบผลก่อนพร้อมป้าย ตรวจจริง (quick หัวข้อ The loop และ Answer format)
+tags: [behaviour, quick]
+runs: 10
+expected_outcome: เปลี่ยนสูตรใน src/discount.js ให้หาร percent ด้วย 100 · ไม่แก้ test · รัน npm test ผ่าน · บรรทัดแรกบอกผล · มีป้าย ตรวจจริง กับคำสั่งที่รัน
+execution:
+  prompt: |
+    ยอดหลังหักส่วนลดใน src/discount.js ติดลบ ช่วยแก้ให้หน่อย
+    เช่น ราคา 200 ลด 10 เปอร์เซ็นต์ ได้ -1800 ควรได้ 180
+    รัน test ด้วย `npm test`
+  max_turns: 10
+  timeout_seconds: 360
+context:
+  scaffold_script: fixture.sh   # ต้องรันด้วย --scaffold (plugin-eval.mjs ใส่ให้)
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?quick"'
+    min: 1
+    arm: with-only
+  - name: evidence-label
+    type: regex
+    pattern: 'ตรวจจริง'   # ป้ายหลักฐานของ quick · เขียน 2026-11-11
+    match: contains
+    target: last_message
+  - name: root-cause-and-proof
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน · ผ่านเมื่อครบ 3 ข้อ:
+      1. บรรทัดแรกบอกผล (แก้แล้ว หรือเสร็จ) ไม่เกริ่นและไม่ทวนคำถาม
+      2. บอกต้นเหตุว่าสูตรใช้ percent เป็นจำนวนเต็มโดยไม่หาร 100 และแก้ที่สูตรใน src/discount.js ไม่ได้แก้ test หรือเพิ่มการแปลงที่ผู้เรียก
+      3. บอกว่ารัน npm test แล้วผ่าน (มีผลจากคำสั่งจริง ไม่ใช่ "น่าจะผ่าน")

@@ -178,7 +178,7 @@ bash scripts/install/install-global-rules.sh                                    
 
 สคริปต์สำรองไฟล์เดิมไว้เป็น `CLAUDE.md.bak-<วันเวลา>` ก่อนเขียนทับ
 
-ไม่ได้ติดตั้งไฟล์นี้ (เช่น Cowork หรือเครื่องใหม่) ก็ยังได้กฎชุดเดียวกัน เพราะ hook ของ plugin `superuser` ส่ง `core-rules.md` (สำเนาที่ `sync-superuser` สร้าง) เข้า context ตอนเริ่มทุก session · ติดตั้งแล้ว hook เห็นบรรทัด `<!-- sqt-core-rules -->` ใน `~/.claude/CLAUDE.md` จึงไม่ส่งซ้ำ · subagent ได้เฉพาะหัวข้อ "เปิด skill ก่อนลงมือ"
+ไม่ได้ติดตั้งไฟล์นี้ (เช่น Cowork หรือเครื่องใหม่) ก็ยังได้กฎชุดเดียวกัน เพราะ hook ของ plugin `superuser` ส่ง `core-rules.md` (สำเนาที่ `sync-superuser` สร้าง) เข้า context ตอนเริ่มทุก session · ติดตั้งแล้ว hook เห็นบรรทัด `<!-- sqt-core-rules -->` ใน `~/.claude/CLAUDE.md` จึงไม่ส่งซ้ำ · subagent ได้เฉพาะหัวข้อ "Open skills before you start"
 
 ### อะไรควรอยู่ไฟล์ไหน
 
@@ -191,7 +191,7 @@ bash scripts/install/install-global-rules.sh                                    
 
 ไฟล์นี้ยาวได้ไม่เกิน **9,500 ตัวอักษร** (hook ส่งได้ไม่เกิน 10,000 ต่อครั้ง · `sync-superuser` ตรวจ) — ทุกบรรทัดจ่ายต้นทุนทุกเซสชันของทุกโปรเจกต์
 
-**หัวข้อ "เปิด skill ก่อนลงมือ"** คือตาราง งาน → skill ที่ต้องเปิด · ทำงานคู่กับ `plugins/superuser/hooks/skill-router.json` ที่ hook ใช้จับคำในข้อความผู้ใช้แล้วบอกชื่อ skill · เพิ่มแถวในตารางแล้วเพิ่ม pattern ใน router ด้วย · วัดผลด้วย [`scripts/evals/triggers`](evals/triggers/README.md)
+**หัวข้อ "Open skills before you start"** คือตาราง งาน → skill ที่ต้องเปิด · ทำงานคู่กับ `plugins/superuser/hooks/skill-router.json` ที่ hook ใช้จับคำในข้อความผู้ใช้แล้วบอกชื่อ skill · เพิ่มแถวในตารางแล้วเพิ่ม pattern ใน router ด้วย · วัดผลด้วย [`scripts/evals/triggers`](evals/triggers/README.md)
 
 ---
 

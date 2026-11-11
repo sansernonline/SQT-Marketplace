@@ -1,50 +1,50 @@
-# จัดขนาด เลือกงบ คาดไว้ก่อน — รายละเอียดของหัวข้อ 2
+# Sizing, budget, expectation — details of section 2
 
-แกน `SKILL.md` หัวข้อ 2 มีแค่ย่อ · เปิดไฟล์นี้ตอนจัดขนาดงาน เลือกงบ และเลือก playbook (ก่อนแตะงานกลางขึ้นไป)
+The core `SKILL.md` section 2 holds only the short form · Open this file when sizing a task, picking a budget and picking a playbook (before touching a medium or larger task)
 
-หัวหน้าทีม 1 คน เก่ง 4 เรื่อง: **แจกงาน** · **ประเมินลูกน้อง** · **จัดการงาน** · **ตรวจซ้ำจนสำเร็จ** — ใช้ลูกน้อง effort ต่ำได้ เพราะใบสั่งงานชัดและมีคนตรวจ · เรียก `/superuser:superuser` หรือพูดว่า "ใช้ superuser"
+One lead is good at 4 things: **dispatching** · **rating team members** · **managing the work** · **rechecking until it succeeds** — low-effort team members are fine because the brief is clear and someone checks · Call `/superuser:superuser` or say "ใช้ superuser" (use superuser)
 
-## 3 บรรทัดก่อนแตะงาน
+## 3 lines before touching the task
 
-**3 บรรทัดก่อนแตะงาน** (ไม่เกิน 1 นาที): **เป้า** ผู้ใช้จะได้อะไร · **เสร็จเมื่อ** ตรวจด้วยอะไร · **เสี่ยง** พลาดแล้วเสียอะไร ย้อนได้ไหม (ย้อนไม่ได้ → กฎข้อ 7) · งานกลางขึ้นไปเติมท้ายบรรทัดเสร็จเมื่อว่าใช้ workflow แบบไหน: Loop (ชิ้นเดียว ทำ-ตรวจ-แก้) · Graph (แตกชิ้นแล้วรวม) · Dynamic (ข้อเท็จจริงอาจเปลี่ยนกลางทาง) · หัวหน้าเลือกเองจากตารางคำขอใน [`agent-patterns`](../../agent-patterns/SKILL.md) ไม่ถามผู้ใช้ · ผู้ใช้ขอดูแผนก่อนลงมือ → ใส่ 3 บรรทัดนี้ไว้บนสุดของแผนที่ส่ง (eval 2026-11-09: แผนไม่มีบรรทัดเสร็จเมื่อ 3 จาก 3 รอบ)
+**3 lines before touching the task** (1 minute at most): **Goal**: what the user gets · **Done-when**: how it is checked · **Risk**: what is lost if it goes wrong, and can it be undone (irreversible → rule 7) · Medium tasks and up add to the end of the done-when line which workflow: Loop (one piece, do-check-fix) · Graph (split into pieces, then merge) · Dynamic (facts may change midway) · The lead picks from the request table in [`agent-patterns`](../../agent-patterns/SKILL.md) and does not ask the user · If the user asks to see the plan before work starts → put these 3 lines at the very top of the plan sent (eval 2026-11-09: the plan had no done-when line in 3 of 3 rounds)
 
-## ขนาด
+## Size
 
-| ขนาด | ดูจาก | ทำอย่างไร |
+| Size | Judged by | What to do |
 |---|---|---|
-| **เล็ก** | 1 ชิ้น (ชิ้น = ส่วนที่ทำได้โดยไม่รอกัน เช่น 1 โมดูลกับ test ของมัน) · งานโค้ด: รวมคาด < 200 บรรทัดแม้หลายไฟล์ · ≤ 50k token · คำถามเดียว · แก้จุดเดียว · ย้อนได้ทันที | หัวหน้าทำเอง ไม่แบ่ง ไม่เปิด playbook หรือ reference ไม่เขียน log หรือไฟล์ทีม · ตรวจผลก่อนตอบ · ตอบแบบคำเดียวหรือ 3 บรรทัด (หัวข้อ 7) |
-| **กลาง** | 2–8 ชิ้นที่ไม่พึ่งกัน · งานโค้ด: รวมคาด ≥ 200 บรรทัด (ต่ำกว่านี้แตกแล้วแพงขึ้นแต่ไม่เร็วขึ้น bench 2026-11-11) · หลายขั้น แต่รู้ทางแล้ว (รู้ทางแล้วยังต้องแบ่ง) | playbook ที่ตรงที่สุด (ตารางด้านล่าง) · ไม่มีตัวตรง → ประกอบตาม [`playbook-template`](playbook-template.md) · จำนวนลูกทีมเท่าความกว้างของกราฟงาน |
-| **ใหญ่ หรือโจทย์ไม่ชัด** | (hook นับงาน ≥ 5 ชิ้นหรืองานเสี่ยงว่า "ต้องเปิด skill นี้" ซึ่งอาจเป็นกลางในตารางนี้) เกิน 8 ชิ้น หรือสายวิกฤตยาวเกิน 4 ชิ้น · ไปได้หลายทาง · เลือกผิดแล้วแพง | `brainstormer` ตัวใหม่เสนอ 2–3 ทาง → หัวหน้าเลือก 1 → brief ตาม [`brief-template`](brief-template.md) ที่ `docs/BRIEF.md` → playbook · วางกราฟทั้งงานก่อน จำนวนลูกทีมคิดจากความกว้างของกราฟ หน้าที่ไม่ทับกัน |
-| **XL (หลายวัน · มี milestone · มีคนร่วมทีม)** | จบไม่ได้ใน session เดียว · คนจริงรับชิ้นไปทำคู่กับ agent | [`team-project`](playbook-team-project.md) — brief → BUILD-PLAN แตก milestone → ใบ `handoff` ทุกชิ้น · ตรวจต่อ milestone · ปิดวันด้วย "รับงานต่อ" |
+| **Small** | 1 piece (piece = a part that can be done without waiting on others, e.g. 1 module with its tests) · code task: total expected < 200 lines even across several files · ≤ 50k tokens · a single question · a one-spot fix · instantly reversible | The lead does it alone: no split, no playbook or reference, no log or team files · check the result before answering · answer as one word or 3 lines (section 7) |
+| **Medium** | 2–8 independent pieces · code task: total expected ≥ 200 lines (below this, splitting costs more and is no faster, bench 2026-11-11) · several steps, but the way is known (a known way still needs splitting) | The best-fit playbook (table below) · no match → compose one per [`playbook-template`](playbook-template.md) · number of workers = width of the task graph |
+| **Large or unclear** | (the hook counts ≥ 5 pieces or risky work as "must open this skill", which may be medium in this table) over 8 pieces, or a critical path longer than 4 pieces · several possible routes · a wrong pick is costly | A fresh `brainstormer` proposes 2–3 routes → the lead picks 1 → brief per [`brief-template`](brief-template.md) at `docs/BRIEF.md` → playbook · lay out the whole graph first; worker count comes from graph width, with non-overlapping duties |
+| **XL (several days · milestones · people on the team)** | cannot finish in one session · a real person takes a piece alongside an agent | [`team-project`](playbook-team-project.md) — brief → BUILD-PLAN splits milestones → a `handoff` note for every piece · check per milestone · close the day with "รับงานต่อ" (pickup) |
 
-เกณฑ์ตัวเลขเป็นค่าตั้งต้น ยังไม่ได้วัด (ผูกกับ S/M/L 20/50/100k และ WORKFLOW_AT 8 ของ `plan.mjs`) · ขนาดชิ้นที่ไม่รู้ ใช้ค่าคาด PERT ของขั้นนั้นจาก `model-scorecard` (หัวข้อ "ขนาดชิ้นงานจากงานเก่า") · ไม่แน่ใจขนาด → ถือว่าใหญ่ขึ้น 1 ขั้น · ใช้ลูกทีมเกิน 2 เท่าของที่วางไว้แล้วยังไม่จบ → ทบทวนแผน จด 1 แถวใน "การตัดสินใจ"
+The numeric thresholds are defaults and not yet measured (tied to S/M/L 20/50/100k and WORKFLOW_AT 8 in `plan.mjs`) · For an unknown piece size, use that step's PERT expected value from `model-scorecard` (section "ขนาดชิ้นงานจากงานเก่า", piece size from past work) · Unsure of size → treat as one size up · Used more than 2 times the planned workers and still not done → review the plan and log 1 row in "การตัดสินใจ"
 
-## งบ
+## Budget
 
-**งบ** — ผู้ใช้บอกได้ ไม่บอกใช้ `สมดุล` · ค่าในแชตชนะ `config.json`
+**Budget**: the user may state it; if not, use `สมดุล` (balanced) · A value in chat beats `config.json`
 
-| งบ | ลูกทีม | ผู้ตรวจ | รอบตรวจ | ขนาน |
+| Budget | Workers | Reviewer | Review rounds | Parallel |
 |---|---|---|---|---|
-| **เร็ว** | เล็กเป็นหลัก กลางเฉพาะชิ้นยาก | `sonnet` + `medium` รับ diff กับ "เสร็จเมื่อ" | 1 รอบ (งานเสี่ยง 2) | มากสุด |
-| **สมดุล** | ตามหัวข้อ 5 | `sonnet` + `medium` ทุกรอบ · `opus` + `high` เฉพาะรอบสุดท้ายของงานเสี่ยง (เงิน · กฎหมาย · สุขภาพ · ข้อมูลส่วนตัว · ย้อนไม่ได้) · รอบก่อนหน้าตรวจ diff กับ test ซึ่ง sonnet พอ แม้คนทำเป็น opus | ตามกฎข้อ 3 | ตามงาน |
-| **คุณภาพ** | ขยับขึ้น 1 ระดับทุกชิ้น | `opus` + `high` ทุกรอบ · ตรวจ 2 มุม | เต็มเพดาน | ตามงาน |
+| **เร็ว** (fast) | mostly small; medium only for hard pieces | `sonnet` + `medium`, gets the diff and the "done-when" | 1 round (risky work 2) | most |
+| **สมดุล** (balanced) | per section 5 | `sonnet` + `medium` every round · `opus` + `high` only in the last round of risky work (money · law · health · personal data · irreversible) · earlier rounds check the diff against tests, which sonnet can do even when the author is opus | per rule 3 | per task |
+| **คุณภาพ** (quality) | one level up on every piece | `opus` + `high` every round · check from 2 angles | full cap | per task |
 
-## คาดไว้ก่อน
+## Expectation
 
-**คาดไว้ก่อน** — 1 บรรทัดลง "การตัดสินใจ" ก่อนแจกงาน: `คาด: ขนาด <เล็ก/กลาง/ใหญ่> · ลูกทีม <N> · รอบตรวจ <N> · ระดับ <เล็ก/กลาง/ใหญ่>` (แบบ Graph ต่อท้าย `· สายวิกฤต <N>k · กว้างสุด <N> · เร็วขึ้น <N> เท่า`) · ตอนจบเทียบกับที่เกิดจริงและ token จาก `log/SUMMARY.md` (หัวข้อ 7) · ส่วนต่างที่ซ้ำคือบทเรียนของหัวหน้า จดตาม [`lead-playbook`](lead-playbook.md) · ก่อนจัดขนาด เปิด `~/.claude/superuser/LEAD-PLAYBOOK.md` ถ้ามี
+**Expectation**: 1 line in "การตัดสินใจ" before dispatch: `คาด: size <small/medium/large> · workers <N> · review rounds <N> · level <small/medium/large>` (Graph form appends `· critical path <N>k · max width <N> · speedup <N> times`) · At the end compare with what actually happened and with the tokens from `log/SUMMARY.md` (section 7) · A repeated gap is a lesson for the lead, logged per [`lead-playbook`](lead-playbook.md) · Before sizing, open `~/.claude/superuser/LEAD-PLAYBOOK.md` if it exists
 
-## เลือก playbook
+## Choosing a playbook
 
-งานกลางขึ้นไปเลือก **1** playbook หรือประกอบเอง แล้วอ่านทั้งไฟล์ก่อนเริ่ม
+For medium tasks and up, pick **1** playbook or compose your own, and read the whole file before starting
 
-| playbook | ใช้เมื่อ |
+| playbook | use when |
 |---|---|
-| [`research`](playbook-research.md) | หาข้อมูลหรือคำตอบที่ต้องยืนยัน · เทียบตัวเลือก |
-| [`document`](playbook-document.md) | เอกสาร รายงาน แผน หรือข้อความที่คนอื่นจะอ่าน |
-| [`review`](playbook-review.md) | ตรวจงานก่อนส่งหรือก่อนใช้จริง |
-| [`unattended-run`](playbook-unattended-run.md) | งานยาวที่ผู้ใช้ไม่อยู่ดู — "ทำให้เสร็จ" · "ไม่ต้องถาม" |
-| [`learn-from-session`](playbook-learn-from-session.md) | "รวมบทเรียน" · "reflect" · แก้ทีมเรื่องเดิมซ้ำ |
-| [`pickup-and-pause`](playbook-pickup-and-pause.md) | "ทำต่อจากเมื่อวาน" · รับงานต่อจากตัวอื่น · "พอก่อน" |
-| [`team-project`](playbook-team-project.md) | งาน XL หลายวัน มี milestone · คนจริงรับชิ้นคู่กับ agent |
+| [`research`](playbook-research.md) | finding information or an answer that must be confirmed · comparing options |
+| [`document`](playbook-document.md) | a document, report, plan, or text others will read |
+| [`review`](playbook-review.md) | checking work before sending or before real use |
+| [`unattended-run`](playbook-unattended-run.md) | a long task the user will not watch — "ทำให้เสร็จ" (get it done) · "ไม่ต้องถาม" (no questions) |
+| [`learn-from-session`](playbook-learn-from-session.md) | "รวมบทเรียน" (roll up lessons) · "reflect" · fixing a team that repeats the same issue |
+| [`pickup-and-pause`](playbook-pickup-and-pause.md) | "ทำต่อจากเมื่อวาน" (continue from yesterday) · taking over from another agent · "พอก่อน" (stop for now) |
+| [`team-project`](playbook-team-project.md) | an XL task over several days with milestones · a real person takes pieces alongside an agent |
 
-ตัวอย่างระดับโมเดลและรูปแบบทีมของ plugin นี้ → [`examples`](examples.md)
+Examples of model levels and team shapes for this plugin → [`examples`](examples.md)

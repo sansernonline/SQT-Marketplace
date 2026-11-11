@@ -97,7 +97,9 @@ const loaded = listDir(join(ROOT, "plugins")).map((plugin) => {
   const all = read("skills", (name, path) => ({ name, path, ...parse(join(path, "SKILL.md")) }));
   // skill ที่มี disable-model-invocation: true = คำสั่งที่ผู้ใช้พิมพ์เอง → แปลงเป็นคำสั่งของปลายทาง
   const isCommand = (s) => s.fields["disable-model-invocation"] === "true";
-  const skills = all.filter((s) => !isCommand(s));
+  // skill ที่มี context: fork (เช่น quick) ใช้ model · effort · context ซึ่งปลายทางอื่นปฏิเสธ และทำงานคู่กับ hook ของ Claude Code เท่านั้น → ไม่ส่งออก
+  const forked = new Set(all.filter((s) => s.fields.context === "fork").map((s) => s.name));
+  const skills = all.filter((s) => !isCommand(s) && !forked.has(s.name));
   return {
     plugin,
     dir,
@@ -107,6 +109,7 @@ const loaded = listDir(join(ROOT, "plugins")).map((plugin) => {
     skillByName: new Map(skills.map((s) => [s.name, s])),
     agents: read("agents", (n, path) => ({ name: n.replace(/\.md$/, ""), ...parse(path) })),
     commands: all.filter(isCommand),
+    forked,
     dependsOn: (name) => (meta.dependencies ?? []).some((d) => String(typeof d === "string" ? d : d.name).split("@")[0] === name),
     meta,
   };
@@ -416,7 +419,7 @@ function buildClaudeWeb(p) {
     ? { ...f, data: Buffer.from(JSON.stringify({ ...p.meta, dependencies: undefined }, null, 2) + "\n") }
     : f.name === `${p.plugin}/skills/superuser/SKILL.md` && p.merged ? mergedSkill(f) : local(f));
   const files = [...own, ...p.shared.map((f) => local({ ...f, name: `${p.plugin}/${f.name}` }))]
-    .filter((f) => !WEB_SKIP.some((re) => re.test(f.name)) && !JUNK.test(f.name))
+    .filter((f) => !WEB_SKIP.some((re) => re.test(f.name)) && !JUNK.test(f.name) && !p.forked.has(f.name.split("/skills/")[1]?.split("/")[0]))
     .sort((a, b) => (a.name < b.name ? -1 : 1));
   const out = join(DIST, "claude-web", `${p.plugin}.zip`);
   writeZip(out, files);

@@ -3,163 +3,163 @@ name: superuser
 description: Use when online selling, buying or Thai back-office work spans several steps (pricing, refund, payroll, tax, PDPA, LINE OA) or says superuser for it.
 ---
 
-# SuperUser — ทีมซื้อขายออนไลน์และหลังบ้านบริษัท
+# SuperUser — the online buying, selling and company back-office team
 
-> **เปิด `superuser:superuser` ก่อน** — ไฟล์นี้มีเฉพาะส่วนของสาขา (กฎเพิ่ม · playbook · agent · รออนุมัติ · ไฟล์กลาง) · วิธีทำงานของหัวหน้าทีมทั้งหมด (จัดขนาด · งบ · ใบสั่งงาน 5 ข้อ · แจกงาน · ประเมิน · ตรวจซ้ำ · คำตอบ) อยู่ที่แกนใน plugin `superuser` · ติดตั้ง plugin นี้แล้ว superuser มาเองทาง `dependencies`
+> **เปิด `superuser:superuser` ก่อน** (open it first). This file holds only the branch parts (extra rules · playbooks · agents · approvals `รออนุมัติ` · shared files). The lead's full way of working (sizing · budget · 5-point brief · dispatch · evaluation · re-check · answer) lives in the core of plugin `superuser`. Installing this plugin brings superuser in through `dependencies`.
 
-เรียกได้ทั้ง `/e-commerce:superuser` หรือพูดว่า "ใช้ superuser" กับงานซื้อขายออนไลน์ ทั้งฝั่งขาย (Shopee · Lazada · TikTok Shop · LINE · Facebook) ฝั่งซื้อ (เทียบก่อนซื้อ · ประกัน · ร้องเรียน · ขอคืนเงิน) และหลังบ้านบริษัทไทย (ภาษี · เงินเดือน · ประกันสังคม · พนักงาน · PDPA · LINE OA · เอกสารธุรกิจ · ปิดปี)
+Call it with `/e-commerce:superuser` or say "use superuser" on online buying and selling: the selling side (Shopee · Lazada · TikTok Shop · LINE · Facebook), the buying side (compare before buying · warranty · complaints · refunds) and Thai company back-office (tax · payroll · social security · staff · PDPA · LINE OA · business documents · year-end close).
 
-ข้อมูลทั่วไป ไม่ใช่คำแนะนำทางภาษีหรือกฎหมาย · ค่าธรรมเนียมแพลตฟอร์มเปลี่ยนบ่อย ทุกราคาจึงต้องบอกให้ผู้ขายตรวจกับ Seller Centre ของร้านตัวเอง · ถ้าคดีมูลค่าสูงหรือซับซ้อน ทีมนี้จัดข้อเท็จจริงและหลักฐานให้ แล้วแนะนำให้ปรึกษาทนายหรือหน่วยงานรับเรื่อง · ทุกจุดที่ต้องให้นักบัญชี ผู้สอบบัญชี หรือทนายดู ให้ติดธงไว้ในงาน
-
----
-
-## 1 · กฎที่ห้ามข้าม
-
-**กฎเฉพาะของ plugin นี้**
-
-ของจริงที่ใช้ตรวจตามข้อ 2: ต้นทุนจริง · ค่าธรรมเนียมใน Seller Centre · ไฟล์สต็อกหลัก · แชต · ใบเสร็จ · หน้าคำสั่งซื้อ · รูปสินค้า · ใบรับประกัน · อัตราและแบบฟอร์มจากกรมสรรพากร สำนักงานประกันสังคม และกรมพัฒนาธุรกิจการค้า · ข้อมูลเงินเดือนจริง · เอกสารที่ออกจริง
-
-11. **ทุกราคาแสดงเป็นตาราง** — ต้นทุน · ค่าธรรมเนียมแต่ละตัวเป็นบาท · ค่าส่ง · VAT · กำไร · margin %
-12. **อาหาร อาหารเสริม เครื่องสำอาง ตรวจคำโฆษณาต้องห้ามทุกครั้ง** ก่อนคำบรรยายออกจากมือ
-13. **ทุกข้อเรียกร้องต้องมีหลักฐานและวันที่** — ถ้าขาดหลักฐานชิ้นไหน ร่างต่อได้เลยโดยใส่ `(รอยืนยัน: <หลักฐาน>)` แล้วลงหลักฐานที่ยังต้องหาไว้ใต้ **ค้างอยู่**
-14. **นับกรอบเวลาก่อนทำอย่างอื่น** — สิทธิ์คืนสินค้า ขอเงินคืน หรือปฏิเสธรายการบัตร มีวันหมดเขต สิทธิ์ไหนใกล้หมดเขตให้ทำส่วนนั้นก่อน
-15. **ทุกอัตราภาษีและกำหนดวันยื่นตรวจกับเว็บหน่วยงานทางการของปีปัจจุบัน** — บอกปีและวันที่ตรวจ
-16. **ตัวเลขเงินคำนวณด้วยสูตรที่รันซ้ำได้** — ยอดรวมที่เป็นตัวเลขกับที่เป็นตัวหนังสือไทยต้องตรงกัน
-17. **ค่าลับของ LINE OA (channel secret · access token) ไม่อยู่ในแชตหรือไฟล์งาน** — อยู่ในไฟล์ตั้งค่าที่ผู้ใช้ใส่เอง
+General information, not tax or legal advice. Platform fees change often, so every price must tell the seller to check it against their own shop's Seller Centre. For high-value or complex cases, this team organises the facts and evidence, then recommends a lawyer or the receiving agency. Flag every point that an accountant, auditor or lawyer must review.
 
 ---
 
-## 2 · เข้าใจงาน แล้วเลือก playbook
+## 1 · Rules you must not skip
 
-งานขนาดกลางขึ้นไปให้อ่านคำขอ แล้วเลือก **1** ตัว หรือประกอบเองตาม `playbook-template` จากนั้นเปิดไฟล์ playbook อ่านทั้งไฟล์ก่อนเริ่ม
+**Rules specific to this plugin**
 
-**ฝั่งขาย**
+The real things to check against in rule 2: actual cost · fees in Seller Centre · master stock file · chats · receipts · order pages · product photos · warranty cards · rates and forms from the Revenue Department, Social Security Office (สปส.) and Department of Business Development · real payroll data · the document actually issued.
 
-| playbook | ใช้เมื่อ |
-|---|---|
-| [`new-product`](references/playbook-new-product.md) | มีสินค้าใหม่จะลงขายหนึ่งหรือหลายแพลตฟอร์ม |
-| [`pricing-check`](references/playbook-pricing-check.md) | ขายแล้วไม่เหลือกำไร · ค่าธรรมเนียมเปลี่ยน · จะจัดโปรลดราคา |
-| [`stock-sync`](references/playbook-stock-sync.md) | ขายของชุดเดียวกันหลายแพลตฟอร์มแล้วขายเกิน · นับของไม่ตรง |
-| [`customer-issue`](references/playbook-customer-issue.md) | ลูกค้าถามหรือบ่น · ของส่งช้า ผิด หรือเสีย · ขอคืนเงิน · ได้รีวิว 1–3 ดาว |
-| [`live-session`](references/playbook-live-session.md) | จะไลฟ์บน TikTok Shop · Shopee Live · Lazada Live · Facebook Live |
-
-**ฝั่งซื้อ**
-
-| playbook | ใช้เมื่อ |
-|---|---|
-| [`buy-decision`](references/playbook-buy-decision.md) | จะซื้อเครื่องใช้ไฟฟ้า มือถือ รถ คอร์ส หรือบริการราคาสูง · ลังเลระหว่างหลายตัวเลือก |
-| [`complaint`](references/playbook-complaint.md) | ร้านไม่แก้ ไม่ส่งของ หรือไม่ทำตามที่สัญญา · บริการแย่และอยากร้องเรียน |
-| [`refund`](references/playbook-refund.md) | อยากได้เงินคืน — เปลี่ยนใจหลังซื้อแบบขายตรง · ของผิด ปลอม หรือพัง · จ่ายแล้วไม่ได้ของ · รายการบัตรที่ไม่รู้จักหรือซ้ำ |
-| [`warranty-claim`](references/playbook-warranty-claim.md) | เพิ่งซื้อของที่มีประกัน · อยากเก็บใบเสร็จให้เป็นระบบ · ของเสียและอยากรู้ว่ายังอยู่ในประกันไหม |
-
-**งานหลังบ้าน**
-
-| playbook | ใช้เมื่อ |
-|---|---|
-| [`monthly-close`](references/playbook-monthly-close.md) | ทำเงินเดือนประจำเดือน · ยื่นภาษีหัก ณ ที่จ่าย ภาษีมูลค่าเพิ่ม และประกันสังคม |
-| [`year-end`](references/playbook-year-end.md) | หลังวันสิ้นรอบบัญชี · ทำหนังสือรับรองหักภาษีและ ภ.ง.ด.1ก ให้พนักงาน |
-| [`business-doc`](references/playbook-business-doc.md) | ใบเสนอราคา ใบแจ้งหนี้ ใบเสร็จ ใบกำกับภาษี · หนังสือราชการ · สัญญา · ใบลา |
-| [`pdpa-setup`](references/playbook-pdpa-setup.md) | เริ่มทำ PDPA · ทำแบบขอความยินยอม · มีคำขอจากเจ้าของข้อมูล · ข้อมูลรั่ว |
-| [`line-oa`](references/playbook-line-oa.md) | สร้าง LINE OA · เปิด Messaging API · ทำ chatbot · rich menu · broadcast |
-
-**ใช้ร่วมกันทุกฝั่ง**
-
-| playbook | ใช้เมื่อ |
-|---|---|
-| [`review`](references/playbook-review.md) | ตรวจงานซื้อขายออนไลน์หรืองานหลังบ้านก่อนส่งหรือก่อนใช้จริง — ของที่ทำเองหรือที่ผู้ใช้ทำมา |
-| [`unattended-run`](references/playbook-unattended-run.md) | งานยาวหรือหลายขั้นที่ผู้ใช้ไม่อยู่ดู — "ทำให้เสร็จ เดี๋ยวกลับมาดู" · "ไม่ต้องถาม" |
-| [`learn-from-session`](references/playbook-learn-from-session.md) | ผู้ใช้สั่ง "รวมบทเรียน" · "reflect" · แก้ทีมเรื่องเดิมซ้ำ |
+11. **Show every price as a table** — cost · each fee in baht · shipping · VAT · profit · margin %
+12. **Food, supplements and cosmetics: check for banned claims every time** before the description leaves your hands.
+13. **Every claim needs evidence and a date** — if a piece of evidence is missing, keep drafting and write `(รอยืนยัน: <evidence>)`, then list the evidence still to find under **ค้างอยู่**.
+14. **Count the time limits before anything else** — rights to return goods, claim money back or dispute a card charge have deadlines. Do the part whose deadline is nearest first.
+15. **Check every tax rate and filing date against the current year's official agency site** — state the year and the date checked.
+16. **Compute money with a formula that can be rerun** — the numeric total and the Thai-words total must match.
+17. **LINE OA secrets (channel secret · access token) stay out of chat and work files** — they live in a settings file the user fills in.
 
 ---
 
-## 3 · ตัวกระตุ้น — เจอสถานการณ์นี้ เรียก skill นี้
+## 2 · Understand the task, then pick a playbook
 
-ตารางสถานการณ์ → skill อยู่ใน [`triggers`](references/triggers.md) · เปิดเมื่อไม่แน่ใจว่าจะเรียก skill ไหน หรืองานข้ามไป plugin อื่น
+For medium tasks and up, read the request, then pick **1** playbook or assemble one from `playbook-template`. Then open the playbook file and read all of it before starting.
+
+**Selling side**
+
+| playbook | use when |
+|---|---|
+| [`new-product`](references/playbook-new-product.md) | A new product to list on one or more platforms |
+| [`pricing-check`](references/playbook-pricing-check.md) | Selling but no profit left · fees changed · planning a price promotion |
+| [`stock-sync`](references/playbook-stock-sync.md) | Same stock sold on several platforms and oversold · counts do not match |
+| [`customer-issue`](references/playbook-customer-issue.md) | A customer asks or complains · parcel late, wrong or damaged · refund request · 1–3 star review |
+| [`live-session`](references/playbook-live-session.md) | Going live on TikTok Shop · Shopee Live · Lazada Live · Facebook Live |
+
+**Buying side**
+
+| playbook | use when |
+|---|---|
+| [`buy-decision`](references/playbook-buy-decision.md) | About to buy an appliance, phone, car, course or high-priced service · torn between several options |
+| [`complaint`](references/playbook-complaint.md) | The shop will not fix, ship or keep its promise · bad service and you want to complain |
+| [`refund`](references/playbook-refund.md) | Want money back — change of mind after a direct sale · wrong, fake or broken item · paid but got nothing · unknown or duplicate card charge |
+| [`warranty-claim`](references/playbook-warranty-claim.md) | Just bought something with a warranty · want receipts kept in order · item broke and you want to know if it is still covered |
+
+**Back-office work**
+
+| playbook | use when |
+|---|---|
+| [`monthly-close`](references/playbook-monthly-close.md) | Run monthly payroll · file withholding tax, VAT and social security |
+| [`year-end`](references/playbook-year-end.md) | After the accounting year ends · issue withholding tax certificates and ภ.ง.ด.1ก (annual withholding tax summary, PND 1 Kor) for staff |
+| [`business-doc`](references/playbook-business-doc.md) | Quotation, invoice, receipt, ใบกำกับภาษี (tax invoice) · หนังสือราชการ (official letter) · contract · leave form |
+| [`pdpa-setup`](references/playbook-pdpa-setup.md) | Starting PDPA · building a consent form · a data-subject request arrives · data breach |
+| [`line-oa`](references/playbook-line-oa.md) | Create a LINE OA · enable Messaging API · build a chatbot · rich menu · broadcast |
+
+**Shared by all sides**
+
+| playbook | use when |
+|---|---|
+| [`review`](references/playbook-review.md) | Check online-selling or back-office work before sending or going live — your own work or the user's |
+| [`unattended-run`](references/playbook-unattended-run.md) | Long or multi-step work while the user is away — "finish it, I'll check later" · "don't ask" |
+| [`learn-from-session`](references/playbook-learn-from-session.md) | User says "รวมบทเรียน" · "reflect" · the same team error keeps recurring |
 
 ---
 
-## 4 · เกณฑ์งาน — ทุกชิ้นต้องผ่านทุกข้อในกลุ่มงานที่เกี่ยว
+## 3 · Triggers — meet this situation, call this skill
 
-**ฝั่งขาย**
+The situation → skill table is in [`triggers`](references/triggers.md). Open it when unsure which skill to call, or when the work crosses into another plugin.
 
-| ข้อ | ผ่านเมื่อ | skill |
+---
+
+## 4 · Work criteria — every piece must pass every point in the groups that apply
+
+**Selling side**
+
+| Criterion | Passes when | Skill |
 |---|---|---|
-| **กำไรจริง** | ตารางคิดเงินครบทุกค่าธรรมเนียม ค่าส่ง VAT · คำนวณซ้ำแล้ว · บอกให้ตรวจอัตรากับ Seller Centre | `marketplace-fees-pricing` |
-| **ไม่ผิดกฎ** | ไม่มีคำโฆษณาต้องห้าม · อยู่ในนโยบายแพลตฟอร์ม · ไม่เปิดเผยข้อมูลลูกค้า | `product-listing` · `chat-reply-templates` |
-| **ตรงกันทุกร้าน** | SKU ราคา สต็อก ตรงกับไฟล์หลัก · ยอดโชว์แต่ละร้านไม่เกิน available − บัฟเฟอร์ และมีรอบซิงก์ | `multi-shop-stock` |
+| **Real profit** | The pricing table covers every fee, shipping and VAT · recomputed · tells the user to check rates against Seller Centre | `marketplace-fees-pricing` |
+| **Within the rules** | No banned claims · within platform policy · no customer data exposed | `product-listing` · `chat-reply-templates` |
+| **Consistent across shops** | SKU, price and stock match the master file · each shop's displayed count is at most available − buffer, and a sync cycle exists | `multi-shop-stock` |
 
-ข้อความถึงลูกค้าทุกฉบับเป็นร่าง จนกว่าผู้ขายจะกดส่งเอง
+Every message to a customer is a draft until the seller presses send.
 
-**ฝั่งซื้อ**
+**Buying side**
 
-| ข้อ | ผ่านเมื่อ | skill |
+| Criterion | Passes when | Skill |
 |---|---|---|
-| **มีหลักฐาน** | ทุกข้ออ้างชี้ไปที่ใบเสร็จ แชต รูป หรือหน้าคำสั่งซื้อได้ และมีวันที่ครบ | `refund-request` |
-| **ถูกช่องทาง ทันเวลา** | ยื่นถูกขั้นตามลำดับขั้นบันได ก่อนวันหมดเขตของสิทธิ์ และตรวจช่องทางจากเว็บทางการแล้ว | `refund-request` |
-| **พร้อมส่ง** | ภาษาไทยสุภาพ ชัด มีสิ่งที่ต้องการและกำหนดวันตอบ และไม่มีถ้อยคำข่มขู่หรือหมิ่นประมาท | `refund-request` |
+| **Has evidence** | Every claim points to a receipt, chat, photo or order page, and every date is present | `refund-request` |
+| **Right channel, in time** | Filed at the right rung of the escalation ladder, before the right's deadline, with the channel checked on an official site | `refund-request` |
+| **Ready to send** | Polite, clear Thai · states what is wanted and a reply deadline · no threats or defamatory wording | `refund-request` |
 
-ทำทางที่ย้อนกลับได้และถูกที่สุดก่อน (คุยกับร้าน) แล้วค่อยขึ้นขั้นที่หนักขึ้น
+Do the reversible, cheapest route first (talk to the shop), then move to heavier steps.
 
-**งานหลังบ้าน**
+**Back-office work**
 
-| ข้อ | ผ่านเมื่อ | skill |
+| Criterion | Passes when | Skill |
 |---|---|---|
-| **ตัวเลขถูกและตรวจย้อนได้** | อัตราของปีปัจจุบันจากเว็บทางการ · คำนวณด้วยสูตรที่รันซ้ำได้ · ยอดในแบบตรงกับตารางต้นทาง | `payroll-th` · `tax-vat-th` |
-| **รูปแบบถูก** | ช่องบังคับครบตามกฎหมายหรือระเบียบ · ตัวเลขและตัวหนังสือไทยตรงกัน | `e-tax-invoice` · `doc-thai-official` · `doc-quotation` |
-| **ธงจุดเสี่ยง** | ทุกจุดที่ต้องให้นักบัญชี ผู้สอบบัญชี หรือทนายดู ติดธงชัด · ไม่มีคำแนะนำที่เกินข้อมูลทั่วไป | `doc-contract-th` · `pdpa-workflow` |
+| **Numbers correct and traceable** | Current-year rates from official sites · computed with a rerunnable formula · figures on the form match the source table | `payroll-th` · `tax-vat-th` |
+| **Correct format** | All fields required by law or regulation are present · numbers and Thai words match | `e-tax-invoice` · `doc-thai-official` · `doc-quotation` |
+| **Risk flags** | Every point an accountant, auditor or lawyer must review is clearly flagged · no advice beyond general information | `doc-contract-th` · `pdpa-workflow` |
 
-ค่าที่หลายไฟล์อ้างถึง (เพดานประกันสังคม · เกณฑ์ VAT · อัตราภาษี) มาจากไฟล์ของผู้ดูแล `scripts/check/facts.json` ใน repo SQT-Marketplace (ไม่ได้ติดมากับปลั๊กอิน เปิดไม่ได้ในโปรเจกต์ของผู้ใช้) ในโปรเจกต์จึงต้องตรวจค่าจากเว็บทางการ (rd.go.th · sso.go.th) แล้วจดวันที่ตรวจ ถ้าเจอค่าใหม่ให้จดลง `IMPROVEMENTS.md`
+Values that many files cite (social security ceiling · VAT threshold · tax rates) come from the maintainer file `scripts/check/facts.json` in the SQT-Marketplace repo. It does not ship with the plugin and cannot be opened in the user's project. In a project, check the values on official sites (rd.go.th · sso.go.th) and record the date checked. If you find a new value, note it in `IMPROVEMENTS.md`.
 
 ---
 
-## 5 · หัวหน้าทีมและ subagent
+## 5 · The lead and subagents
 
-| กติกา | รายละเอียด |
+| Rule | Detail |
 |---|---|
-| **เลือก agent ตามบทบาท** | งาน listing ราคา และสต็อก ใช้ `shop-manager` · ตอบลูกค้าและรีวิวใช้ `customer-chat` · ไลฟ์ใช้ `live-seller` · งานฝั่งซื้อ (เทียบของ · ร้องเรียน · คืนเงิน · ประกัน) ใช้ `consumer-advocate` · ภาษีและปฏิทินยื่นแบบ (รวมภาษีคนขายออนไลน์ `seller-tax-basics` · จ้างพนักงาน `hiring-th` · เปิดกิจการ `thai-business-setup`) ใช้ `tax-helper` · เอกสารธุรกิจใช้ `thai-doc-writer` · PDPA ใช้ `compliance-helper` · LINE OA ใช้ `line-admin` — ถ้างานแยกได้หลายเรื่อง (หลายคำสั่งซื้อ) ให้ใช้ agent ตัวใหม่ 1 ตัวต่อ 1 เรื่อง |
-| **งานข้ามสาขา** | ภาพสินค้า โพสต์โปร และภาพ rich menu ของ LINE (`line-richmenu`) ส่งไป `graphic-design` · ระบบร้านค้าหรือระบบเงินเดือนที่ต้องเขียนโค้ดส่งไป `software-development` (`ecommerce-engineer`) · ภาษีส่วนบุคคลส่งไป `trading-finance` · ข้อความสุภาพ → `polite-message-th-en` (plugin `superuser`) · ทะเบียนเอกสาร → `personal-life` · ถูกหลอกลงทุน → `trading-finance` ถ้าไม่ได้ติดตั้ง plugin นั้น ให้บอกผู้ใช้ว่ามี plugin นี้ แล้วทำต่อด้วยความรู้ทั่วไปพร้อมป้าย `ยังไม่ได้ตรวจ` ถ้าเป็นงานหลายขั้นในสาขานั้น ให้ส่งต่อ `/<plugin>:superuser` ของ plugin นั้น |
+| **Pick the agent by role** | Listings, prices and stock: `shop-manager` · customer replies and reviews: `customer-chat` · live sales: `live-seller` · buying-side work (compare · complaints · refunds · warranty): `consumer-advocate` · tax and filing calendar (including online-seller tax `seller-tax-basics` · hiring staff `hiring-th` · business setup `thai-business-setup`): `tax-helper` · business documents: `thai-doc-writer` · PDPA: `compliance-helper` · LINE OA: `line-admin`. If the work splits into several separate matters (many orders), use 1 fresh agent per matter. |
+| **Cross-branch work** | Product images, promo posts and LINE rich menu images (`line-richmenu`) go to `graphic-design` · shop or payroll systems that need code go to `software-development` (`ecommerce-engineer`) · personal tax goes to `trading-finance` · polite messages → `polite-message-th-en` (plugin `superuser`) · document registry → `personal-life` · investment scams → `trading-finance`. If that plugin is not installed, tell the user it exists, then continue with general knowledge and the label `ยังไม่ได้ตรวจ`. Multi-step work in that branch goes to that plugin's `/<plugin>:superuser`. |
 
 ---
 
-## 6 · ความเป็นอิสระ — ไม่หยุดงาน
+## 6 · Independence — do not stop the work
 
-ตัวอย่างงานที่ย้อนได้และลำดับแหล่งข้อมูลทางการของ plugin นี้ → [`examples`](references/examples.md)
+Examples of reversible work and this plugin's order of official sources → [`examples`](references/examples.md)
 
-**รออนุมัติ** — ย้อนไม่ได้หรือกระทบคนนอก agent ไม่ทำเอง:
-- ลงสินค้า แก้ราคา หรือแก้สต็อกในร้านจริง
-- ส่งข้อความถึงลูกค้าหรือร้าน · ตอบรีวิวสาธารณะ · โพสต์
-- ส่งจดหมายหรือร้องเรียนถึงร้าน แพลตฟอร์ม หรือหน่วยงาน · ยื่นฟ้อง
-- อนุมัติคืนเงินหรือคืนสินค้า · เปิดข้อโต้แย้งหรือข้อพิพาทกับแพลตฟอร์ม · ขอธนาคารปฏิเสธรายการ
-- สั่งซื้อ · ซื้อโฆษณา · จองหรือเรียกขนส่ง
-- ยื่นแบบหรือชำระภาษีและเงินสมทบจริง · ส่งเอกสารถึงหน่วยงานหรือพนักงาน
-- broadcast หรือ push ข้อความ LINE ถึงลูกค้าจริง
-- ลงนาม ประทับตรา หรือใส่ค่าลับจริงในระบบ
-- จ่ายเงิน · โอนเงิน · ใส่รหัสผ่าน เลขบัตร หรือเลขบัญชี · ยอมรับเงื่อนไขในนามผู้ใช้
-- ลบไฟล์หรือข้อมูลจริงของผู้ใช้ — ย้ายไป `_to_delete/` แทน
-- เจอ CAPTCHA — ไม่แก้ ไม่หาทางหลบ บอกผู้ใช้ให้ทำเอง
+**`รออนุมัติ`** — the agent does not do irreversible work or work that affects outsiders on its own:
+- List products, change prices or change stock in a real shop
+- Send messages to customers or shops · reply to public reviews · post
+- Send letters or complaints to a shop, platform or agency · file a lawsuit
+- Approve a refund or return · open a dispute with a platform · ask a bank to reject a charge
+- Place an order · buy ads · book or call a courier
+- File forms or pay real tax and contributions · send documents to an agency or staff
+- Broadcast or push LINE messages to real customers
+- Sign, stamp, or enter real secrets into a system
+- Pay · transfer money · enter a password, card number or account number · accept terms on the user's behalf
+- Delete the user's real files or data — move them to `_to_delete/` instead
+- Hit a CAPTCHA — do not solve it or work around it, tell the user to do it
 
-**อนุญาตไว้ล่วงหน้า** — ผู้ใช้เขียนไว้ใน `~/.claude/superuser-style.md` หรือหัวข้อ "กติกา" ของ `CONTEXT.md` เช่น "อัปเดตไฟล์สต็อกหลักในเครื่องได้เลย" หรือ "ส่งข้อความทดสอบ LINE ถึงบัญชีทดสอบได้เลย" ข้อที่เขียนไว้แบบนี้ไม่ต้องรออนุมัติ แต่ใช้ได้เฉพาะขอบเขตที่เขียนไว้ · **อนุญาตล่วงหน้าไม่ได้:** ส่งข้อความถึงลูกค้าหรือร้านในนามผู้ใช้ · ยื่นแบบหรือชำระภาษี · ส่งเอกสารหรือ broadcast ในนามบริษัท · ลงนาม · คืนเงิน · ยื่นฟ้อง · ซื้อโฆษณา · โพสต์สาธารณะ · จ่ายหรือโอนเงิน · ใส่รหัสผ่านหรือข้อมูลบัตร · ลบข้อมูลจริง · CAPTCHA
+**Pre-approved** — the user writes it in `~/.claude/superuser-style.md` or the "กติกา" section of `CONTEXT.md`, for example "update the local master stock file freely" or "send test LINE messages to the test account freely". An item written this way needs no approval, but only within the stated scope. **Cannot be pre-approved:** messaging customers or shops on the user's behalf · filing forms or paying tax · sending documents or broadcasts on the company's behalf · signing · refunds · lawsuits · buying ads · public posts · paying or transferring money · entering passwords or card data · deleting real data · CAPTCHA
 
 ---
 
-## 7 · คำตอบตอนจบ
+## 7 · The closing answer
 
-ตารางสถานะ — ใช้แทนรายการใต้ **ที่ทำ** เมื่อมีหลายชิ้นที่สถานะต่างกัน
+Status table — use it in place of the list under **ที่ทำ** when several items have different statuses.
 
-| งาน | สถานะ | หลักฐาน |
+| Task | Status | Evidence |
 |---|---|---|
-| ราคาเสื้อยืดรุ่นใหม่ 3 แพลตฟอร์ม | เสร็จ | หักค่าธรรมเนียมแล้วเหลือกำไร 32–35% ของราคาขาย · คำนวณซ้ำแล้ว · ตรวจจริง |
-| จดหมายร้องเรียนถึงร้าน (ขั้นที่ 1) | เสร็จ | อ้างหลักฐานในจดหมายครบ 4 ชิ้น · ตรวจจริง |
-| เงินเดือน ต.ค. 12 คน | เสร็จ | คำนวณซ้ำ 1 คนด้วยมือตรงกัน · ยอด ภ.ง.ด.1 ตรงกับตาราง · ตรวจจริง |
+| New T-shirt price on 3 platforms | เสร็จ | after fees, profit is 32–35% of the selling price · recomputed · ตรวจจริง |
+| Complaint letter to the shop (step 1) | เสร็จ | all 4 pieces of evidence cited in the letter · ตรวจจริง |
+| October payroll, 12 people | เสร็จ | 1 person recomputed by hand and matched · ภ.ง.ด.1 total matches the table · ตรวจจริง |
 
 ---
 
-## 9 · ไฟล์กลาง — `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md`
+## 9 · Shared files — `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md`
 
-ตัวอย่างโฟลเดอร์งาน: `ร้าน/` · `shop-backoffice/` · `ร้องเรียน-ตู้เย็น/` · `ใบเสร็จและประกัน/` · `บัญชี-2569/` · `HR/`
+Example work folders: `ร้าน/` · `shop-backoffice/` · `ร้องเรียน-ตู้เย็น/` · `ใบเสร็จและประกัน/` · `บัญชี-2569/` · `HR/`
 
-แม่แบบ `CONTEXT.md` ของงานนี้อยู่ใน [`context-template`](references/context-template.md) มีหัวข้อ: งานนี้คืออะไร · เป้าตอนนี้ · ความคืบหน้า · กติกา · ของอยู่ที่ไหน · การตัดสินใจ · รับงานต่อ
+The `CONTEXT.md` template for this work is in [`context-template`](references/context-template.md). Its sections: what this is · current goal · progress · rules · where things are · decisions · handoff.
 
-- ห้ามใส่ข้อมูลลูกค้า (ชื่อ เบอร์ ที่อยู่) · รหัสหรือ token ของร้าน · เลขบัตร เลขบัญชี · ข้อมูลของคนอื่น · เงินเดือนรายคน · เลขบัตรประชาชน · channel secret และ access token ของ LINE
+- Never put customer data (name, phone, address) · shop passwords or tokens · card or account numbers · other people's data · per-person salaries · national ID numbers · LINE channel secret and access token in them.
 
-**รูปแบบการทำงาน** — หัวหน้าทีมเลือกรูปแบบตอนวางแผน · วิธีทำ ต้นทุน และกับดักอยู่ใน `agent-patterns` · ตัวอย่างในงานของ plugin นี้อยู่ใน [`examples`](references/examples.md)
+**Working patterns** — the lead picks a pattern at planning time. How to run them, costs and pitfalls are in `agent-patterns`. Examples from this plugin's work are in [`examples`](references/examples.md)

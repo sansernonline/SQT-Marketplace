@@ -190,90 +190,90 @@ Biller ID and allowed reference formats come from the company's bank — ask for
 
 Use before writing or editing anything people read (answer, email, report, README, slide, label) in Thai or English. Look → polished-document-style.
 
-# human-writing — เขียนภาษาคน อ่านลื่น เข้าใจง่าย
+# human-writing — write like a person: smooth to read, easy to understand
 
-ใช้กับทุกอย่างที่คนจะอ่าน ตั้งแต่แชตถึงป้ายใน diagram · ตัวอย่างของทุกข้อและที่มา → [`headings-and-examples`](references/headings-and-examples.md) · ภาษาไทยตั้งแต่ 1 ย่อหน้าขึ้นไป → [`thai-grammar`](references/thai-grammar.md) (โครงประโยค · ระดับภาษา · ตัวอย่างย่อหน้าใน [`thai-examples`](references/thai-examples.md)) · งานวิจัยหรืองานส่งคนนอก → [`strict-review`](references/strict-review.md) · เอกสารไทยที่จัดชิดสองข้าง → [`thai-line-breaking`](references/thai-line-breaking.md) · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
+Applies to everything a person will read, from chat to labels in a diagram. This skill teaches good Thai and good English. Rules about Thai output stay as written. Examples of every rule and their sources → [`headings-and-examples`](references/headings-and-examples.md). Thai of 1 paragraph or more → [`thai-grammar`](references/thai-grammar.md) (sentence structure · register · example paragraphs in [`thai-examples`](references/thai-examples.md)). Research or work sent to outsiders → [`strict-review`](references/strict-review.md). Thai documents with justified alignment → [`thai-line-breaking`](references/thai-line-breaking.md). It lives only in plugin `superuser`; other plugins share it through `dependencies`.
 
-เส้นแบ่ง: skill นี้ดูแลถ้อยคำ · หน้าตาของเอกสารที่คนเก็บไว้ (หัวข้อ ตาราง กล่องข้อความ ธีม) → `polished-document-style` · ตัวย่อและอภิธานศัพท์ → `spell-out-abbreviations`
+Boundary: this skill owns the wording. The look of kept documents (headings, tables, text boxes, theme) → `polished-document-style`. Abbreviations and glossaries → `spell-out-abbreviations`.
 
-## 1 · หลักใหญ่
+## 1 · Core principles
 
-- เขียนเหมือนอธิบายให้เพื่อนร่วมงานที่เก่งแต่ไม่ได้อยู่ในโปรเจกต์ฟัง ถ้าอ่านออกเสียงแล้วสะดุดให้เขียนใหม่
-- คำตอบหรือข้อสรุปขึ้นก่อน แล้วค่อยเหตุผล ไม่เกริ่น ไม่ทวนคำถาม
-- 1 ประโยค 1 ความคิด ถ้าต่อด้วย "ซึ่ง" "โดย" "จึง" หลายชั้น ให้แยกเป็นหลายประโยค
-- ภาษาอังกฤษใช้หลักเดียวกัน: ประโยคไม่เกิน 25 คำ · ใครทำอะไร (active voice) · คำธรรมดา
+- Write as if explaining to a skilled coworker who is not on the project. If it trips you up when read aloud, rewrite it.
+- Answer or conclusion first, then the reason. No preamble, no repeating the question.
+- 1 sentence, 1 idea. If you chain "ซึ่ง" "โดย" "จึง" several layers deep, split into several sentences.
+- English follows the same rules: sentences under 25 words · who does what (active voice) · plain words.
 
-## 2 · สัญลักษณ์และตัวเลข
+## 2 · Symbols and numbers
 
-- `→` ลำดับขั้นหรือผลที่ตามมา · `·` คั่นคำนามสั้นในบรรทัดเดียว · `:` ตามด้วยรายละเอียด · จำนวนทุกชนิดเขียนเป็นเลข · คำรอบสัญลักษณ์ต้องเป็นภาษาคน
-- **เงื่อนไขและคำสั่งเขียนเป็นประโยคเต็ม มีคำเชื่อม** (ถ้า … ให้ … · แล้ว · ส่วน · เพราะ) ไม่ใช้ `→` หรือ `·` ต่อประโยคเป็นท่อน ๆ
-- ในตารางใช้ข้อความสั้นได้ แต่ยังต้องอ่านเป็นภาษาคน ไม่ใช่รหัส
-- สัญลักษณ์ห้ามแทนคำจนต้องถอดรหัส ถ้าคนนอกต้องเดาว่าลูกศรหมายถึงอะไร ให้เติมคำ
-- **ไม่ใส่อีโมจิหรือไอคอน** (📌 ✅ 💡 🚀 👀) ในหัวข้อ เนื้อหา ตาราง ป้าย และกล่องข้อความ เพราะคนอ่านเห็นแล้วรู้ทันทีว่า AI เขียน ให้ใช้คำตัวหนาแทน เช่น **หมายเหตุ** · ช่องใช่/ไม่ในตารางใช้ `✓` `✗` ได้ · ระดับความรุนแรงใช้คำ `วิกฤต · สูง · กลาง · ต่ำ` ไม่ใช้จุดสี · อีโมจิที่เจ้าของงานเขียนไว้เองไม่ต้องลบ และไม่ต้องลอกตาม · ข้อยกเว้นเดียวคือข้อความแชตถึงลูกค้าที่ skill ของงานนั้นกำหนดไว้
-- ทุกตัวเลขบอกว่าหมายถึงอะไร · เทียบให้เห็นภาพ (เท่า อ่านง่ายกว่า %) · ผลยังไม่แน่นอนให้บอกตรง ๆ ว่าเพราะอะไร
-- **ตัวเลขที่เปลี่ยนตามเวลา** (ราคา · อัตราภาษี · กฎหมาย · กำหนดยื่น) บอกแหล่งและวันที่ตรวจ · อ้างได้เฉพาะแหล่งที่เปิดอ่านจริง ใส่ลิงก์หรือ DOI · ตัวเลขสมมุติหรือข้อมูลจำลอง ติดป้าย `ตัวอย่าง` ตั้งแต่จุดแรกที่เห็น
-- **วันที่** ในเนื้อหาภาษาไทยใช้ พ.ศ. หรือ ค.ศ. แบบเดียวทั้งชุด · ชื่อไฟล์ รหัส และข้อมูลที่เครื่องอ่านใช้ `YYYY-MM-DD` แบบ ค.ศ.
-- **สถานะงาน** ใช้ 5 คำนี้ทุกเอกสาร: `เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่` · ผลตรวจใช้ `ผ่าน · ไม่ผ่าน`
+- `→` means order of steps or a consequence · `·` separates short nouns on one line · `:` introduces detail · write every kind of count as a numeral · the words around a symbol must be human language.
+- **Write conditions and instructions as full sentences with connectors** (ถ้า … ให้ … · แล้ว · ส่วน · เพราะ — that is, if … then … · and then · as for · because). Do not chain sentences into fragments with `→` or `·`.
+- In tables, short text is fine, but it must still read as human language, not code.
+- A symbol must never replace a word so far that the reader has to decode it. If an outsider must guess what the arrow means, add words.
+- **No emoji or icons** (📌 ✅ 💡 🚀 👀) in headings, body, tables, labels, or text boxes, because readers spot them at once as AI-written. Use bold words instead, such as **หมายเหตุ** (note). Yes/no cells in a table may use `✓` `✗`. Show severity with the words `วิกฤต · สูง · กลาง · ต่ำ`, never coloured dots. Do not delete emoji the owner wrote, and do not copy them. The one exception is customer chat text that the task's own skill prescribes.
+- Say what every number means. Compare so it is easy to picture (times, easier to read than %). If a result is uncertain, say plainly why.
+- **Figures that change over time** (prices · tax rates · law · filing deadlines): give the source and the date checked. Cite only sources you actually opened, with a link or DOI. Mark hypothetical numbers or mock data with the label `ตัวอย่าง` (example) from the first place they appear.
+- **Dates** in Thai text use Buddhist Era (พ.ศ.) or Common Era (ค.ศ.), one style across the whole set. File names, codes, and machine-read data use Common Era `YYYY-MM-DD`.
+- **Task status** uses these 5 words in every document: `เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่` (done · in progress · blocked · awaiting approval · pending). Check results use `ผ่าน · ไม่ผ่าน` (pass · fail).
 
-## 3 · คำ
+## 3 · Words
 
-- ใช้คำที่คนพูดจริง ไม่ใช้คำราชการหรือศัพท์แปลตรงตัว
-- ศัพท์ที่คนในวงการใช้อยู่แล้ว (token · prompt · API · OCR) คงภาษาอังกฤษไว้
-- ตัวย่อ → ทำตาม `spell-out-abbreviations` · คำที่ตั้งเองหรือชวนงง อธิบายครั้งแรกที่ใช้
-- สิ่งเดียวกันเรียกคำเดียวทั้งชุด ทั้งแชต สไลด์ เอกสาร และ diagram
-- เอกสาร 2 ภาษา: เลือกภาษาหลัก 1 ภาษา อีกภาษาอยู่ในวงเล็บหรือคอลัมน์ที่ 2 ไม่สลับไปมาในประโยค
-- ตัดคำฟุ่มเฟือย ("ทำการ" · "มีการ" · "ในส่วนของ" · "ได้มีการ" · "เป็นการ")
-- **ตัดรายการ ไม่ตัดคำทำหน้าที่** — งบความยาวทุกชนิด (คำต่อบูลเล็ต · ตัวอักษรต่อหัว commit · ตัวอักษรต่อซับไตเติล) ตัดด้วยการลดข้อ ย่อเนื้อหา หรือย้ายไปชิ้นถัดไป ไม่ตัด `จะ` `ให้` `ก็` `ด้วย` `แล้ว` `ต่างหาก` และคำสุภาพ (`ขอ` `รบกวน` `นะ` และ ครับ/ค่ะ ตามระดับภาษา) เพราะคำพวกนี้ทำหน้าที่ในประโยค ตัดแล้วภาษาไทยห้วนและอ่านเป็นภาษาแปล
-- เลี่ยงท่าที่ดูเหมือน AI เขียน: คำคมเปิดเรื่อง · "ไม่ใช่แค่… แต่ยัง…" แบบสโลแกนเน้นความ (ประโยคที่เทียบของจริงหรือตั้งโจทย์ใหม่ใช้ได้ แต่ต้องปิดด้วย "ด้วย") · จัดทุกอย่างเป็นชุดละ 3 · ชมว่าสำคัญเกินจริง · ตัวหนาทุกบรรทัด · สรุปซ้ำตอนจบ · เปิดด้วย "แน่นอน" · ปิดด้วย "หวังว่าจะช่วยได้" · ใช้ "หลาย" ทั้งที่รู้ตัวเลข · ออกตัวซ้อนหลายชั้น (ออกตัวครั้งเดียวตรงจุดที่ไม่แน่ใจจริง)
-- งานที่คนดู (หน้าจอ · สไลด์ · โฆษณา) เลี่ยงเพิ่ม: คำโฆษณากว้าง ๆ (ยกระดับ · ไร้รอยต่อ · ล้ำสมัย · supercharge) · ขีดยาวทุกประโยค · ประโยคเปิดสำเร็จรูป ("ในยุคดิจิทัลที่…") · ท่อนสั้นมีจุดคั่น ("เร็ว. ง่าย. ครบ.") · คำอ้างที่ใช้กับคู่แข่งได้ ให้ใส่ชื่อหรือตัวเลขจริงแทน · หน้าตาของงานใช้ `no-ai-look`
+- Use words people actually say. No bureaucratic words or literal-translation jargon.
+- Keep terms the field already uses in English (token · prompt · API · OCR).
+- Abbreviations → follow `spell-out-abbreviations`. Explain a coined or confusing term the first time you use it.
+- Call one thing by one word across the whole set: chat, slides, documents, and diagrams.
+- Two-language documents: pick 1 main language and put the other in brackets or a second column. Do not switch back and forth inside a sentence.
+- Cut padding words ("ทำการ" · "มีการ" · "ในส่วนของ" · "ได้มีการ" · "เป็นการ" — empty Thai fillers such as "ทำการ" before a verb).
+- **Cut items, not function words.** Every kind of length budget (words per bullet · characters per commit title · characters per subtitle) is met by dropping items, condensing content, or moving it to the next piece. Never cut `จะ` `ให้` `ก็` `ด้วย` `แล้ว` `ต่างหาก` (Thai function words: future marker, "to/let", "also", "too", "then", emphatic particle) or polite words (`ขอ` `รบกวน` `นะ` and ครับ/ค่ะ, per register). These do work in the sentence. Cut them and Thai turns curt and reads like a translation.
+- Avoid moves that look AI-written: a quotable opener · the slogan "ไม่ใช่แค่… แต่ยัง…" (not just… but also…) used for emphasis (a sentence that contrasts with something real or reframes the problem is fine, but it must close with "ด้วย") · grouping everything in threes · praising something as more important than it is · bold on every line · a closing recap · opening with "แน่นอน" (certainly) · closing with "หวังว่าจะช่วยได้" (hope this helps) · using "หลาย" (several) when you know the number · stacked hedges (hedge once, at the point you are truly unsure).
+- For work people look at (screens · slides · ads) also avoid: broad ad words (ยกระดับ · ไร้รอยต่อ · ล้ำสมัย · supercharge — elevate · seamless · cutting-edge) · em dashes in every sentence · canned openers ("ในยุคดิจิทัลที่…" — "In the digital age where…") · short fragments split by full stops ("เร็ว. ง่าย. ครบ." — "Fast. Easy. Complete.") · claims a competitor could also make: put in a real name or number instead · for the look of the work, use `no-ai-look`.
 
-## 4 · ตอบในแชต
+## 4 · Answering in chat
 
-- ประโยคแรกตอบตรง ๆ แล้วค่อยเหตุผล
-- คำถามสั้นให้ตอบสั้น 2–3 ประโยค ไม่ต้องมีหัวข้อหรือตาราง
-- ใช้ตารางเมื่อเทียบตั้งแต่ 2 ตัวเลือกหรือหลายตัวเลข ส่วนรายการใช้เมื่อมีหลายข้อที่ต้องไล่อ่าน · bullet ไม่ซ้อน (เรื่องย่อยแยกเป็นหัวข้อตัวหนาใหม่) · 2–3 ข้อสั้นเขียนบรรทัดเดียวคั่นด้วย ` · ` · ใส่เท่าที่ผู้อ่านต้องรู้
-- งานที่ทำแล้วบอกด้วยผล ไม่เล่าขั้นตอน
-- เคยบอกผิดให้บอกว่าผิดตรงไหน ที่ถูกคืออะไร ไม่ขอโทษยืดยาว · ไม่แน่ใจให้บอกว่าตรงไหนและตรวจได้อย่างไร ไม่เดาให้ฟังดูมั่นใจ
-- ให้ผู้ใช้ตัดสินใจ: เสนอตัวเลือก บอกข้อที่แนะนำและเหตุผล ปิดด้วยคำถามเดียวที่ตอบง่าย
-- ยาวเกิน 1 หน้าจอ: ตอบส่วนสำคัญก่อน เสนอฉบับละเอียดไว้ 1 บรรทัด (ไม่หยุดถาม)
-- ผู้ใช้บอก "งง" หรือ "พูดง่าย ๆ": เขียนคำตอบล่าสุดใหม่ สั้นลงครึ่งหนึ่ง ไม่มีศัพท์ที่ไม่ได้อธิบาย ไม่เพิ่มเนื้อหา
-- ลงท้ายด้วยสิ่งที่ทำต่อได้จริง 1 อย่าง ไม่สรุปซ้ำ
-- **ตอบจากเอกสารหรือเว็บ** — เล่าใหม่ด้วยคำของตัวเอง ไม่แปลทีละประโยค · เหตุต่อผลในย่อหน้าเดียว · ข้อยกเว้นเล็กใส่วงเล็บ · ป้ายตัวหนา 2–3 อันพอ · ที่มารวมไว้ท้ายคำตอบ
+- First sentence answers directly, then the reason.
+- Short question → short answer, 2–3 sentences, no headings or tables.
+- Use a table to compare 2 or more options or many numbers. Use a list when there are several items to scan. No nested bullets (split sub-topics into a new bold heading). 2–3 short items go on one line separated by ` · `. Include only what the reader needs.
+- Report finished work by its result, not by narrating the steps.
+- If you told them something wrong, say what was wrong and what is right. No long apology. If unsure, say where and how to check. Do not guess in a confident voice.
+- When the user must decide: offer options, name the recommended one and why, and close with 1 question that is easy to answer.
+- Longer than 1 screen: answer the important part first and offer the detailed version in 1 line (do not stop to ask).
+- If the user says "งง" (confused) or "พูดง่าย ๆ" (say it simply): rewrite the last answer at half the length, with no unexplained jargon and no new content.
+- End with 1 thing they can actually do next. No recap.
+- **Answering from a document or the web**: retell in your own words, never translate sentence by sentence · cause and effect in one paragraph · small exceptions in brackets · 2–3 bold labels are enough · put sources together at the end of the answer.
 
-## 5 · เอกสารและรายงาน
+## 5 · Documents and reports
 
-- ย่อหน้าแรกคือข้อสรุป อ่านแค่ย่อหน้านี้ต้องได้เรื่อง
-- หัวข้อบอกเนื้อหา ไม่ใช่ชื่อหมวด · ย่อหน้าละไม่เกิน 5 ประโยค
-- หัวคอลัมน์บอกว่าวัดอะไร · 1 คอลัมน์ 1 ความหมาย
-- เชิงอรรถมีไว้สำหรับนิยามและที่มาของตัวเลข · ข้อสรุปสำคัญห้ามซ่อนในเชิงอรรถ
-- สรุปงานและรายงานสถานะ: หัวข้อตัวหนาเท่าที่จำเป็น **ผล** → **ที่ทำ** → **ต่อไป** (เพิ่มหัวข้อเมื่อมีของจริง เช่น รออนุมัติ) · ตัดวิธีทำเบื้องหลัง ปัญหาที่แก้แล้วไม่กระทบคนอ่าน และตัวเลขที่ไม่ได้ใช้ตัดสินใจ · ทุกข้ออ้างติดป้าย `ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ` (ความหมายใน `superuser` `references/evidence.md`)
-- เอกสารตามแบบ (หนังสือราชการ · สัญญา · ใบกำกับภาษี) ใช้ถ้อยคำตามแบบ ไฟล์นี้ใช้กับส่วนที่เขียนเองได้ · ระดับภาษาของแต่ละงาน (ราชการ · ธุรกิจ · แชตร้าน · สมัครงาน · ร้องเรียน · หน้าจอ) เลือกจากตาราง `thai-grammar` หัวข้อ 4 ก่อนเขียน แล้วคงไว้ทั้งชิ้น
+- The first paragraph is the conclusion. Reading only it must give the point.
+- Headings say what the content is, not the category name · at most 5 sentences per paragraph.
+- Column headings say what is measured · 1 column, 1 meaning.
+- Footnotes are for definitions and number sources · never hide an important conclusion in a footnote.
+- Work summaries and status reports: bold headings only as needed, **ผล** (result) → **ที่ทำ** (what was done) → **ต่อไป** (next) (add headings when there is real content, such as awaiting approval) · cut behind-the-scenes method, solved problems that do not affect the reader, and numbers not used for a decision · tag every claim `ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ` (verified · from a source · inferred · not yet checked; meanings in `superuser` `references/evidence.md`).
+- Formal documents (official letters · contracts · tax invoices) use the wording the form requires. This file covers only the parts you write yourself. Choose the register for each job (official · business · shop chat · job application · complaint · screen) from the table in `thai-grammar` section 4 before writing, and keep it through the whole piece.
 
-## 6 · สไลด์ และหัวข้อทุกชนิด
+## 6 · Slides and headings of every kind
 
-ใช้กับหัวสไลด์ ชื่อรูป หัวข้อเอกสาร และหัวกล่องใน diagram · กฎเต็มและตารางก่อน → หลังอยู่ใน reference เดียวกัน
+Applies to slide titles, figure titles, document headings, and box titles in a diagram. The full rules and the before → after table are in the same reference.
 
-- หัวสไลด์ = ข้อสรุปของหน้า ไม่ใช่ชื่อหัวข้อ · ไม่เกิน 2 บรรทัด (ราว 15 คำ) รายละเอียดลงเนื้อหน้า
-- **หัวที่มี 2 ท่อนต้องมีคำเชื่อมที่ตรงกับความสัมพันธ์จริง** ("เพราะ" หรือ "จึง" เมื่อเป็นเหตุผล · "ส่วน" เมื่อแบ่งหน้าที่ · "แต่" เมื่อขัดกัน) · 1 หัว 1 คำเชื่อม ถ้าต้องใช้ 2 แปลว่ายัดเกิน
-- ใช้วลีที่คนพูดจริง ไม่ใช่คำนามเรียงกัน · เลือกคำตามคนอ่าน
-- กริยาตรงกับสิ่งที่หน้านั้นแสดง · ไม่ใช้ "คน" กับสิ่งที่ไม่ใช่คน
-- บรรทัดใต้รูปต้องบอกสิ่งที่รูปไม่ได้บอก ถ้าซ้ำกับรูปให้ตัด · โครงหน้า ปัญหา → วิธีแก้ → ผล · สคริปต์พูดเขียนแบบที่พูดจริง
-- **ทดสอบ:** อ่านหัวให้คนนอกฟังครั้งเดียว ถ้าเขาเล่าต่อไม่ได้ ให้เขียนใหม่
+- A slide title = the conclusion of the page, not the topic name · at most 2 lines (about 15 words) · detail goes in the page body.
+- **A title with 2 parts needs a connector that matches the real relationship** ("เพราะ" or "จึง" for reason · "ส่วน" for a split of roles · "แต่" for contrast — because or so · as for · but) · 1 title, 1 connector. If it needs 2, you crammed too much in.
+- Use phrases people actually say, not strings of nouns · choose words by reader.
+- The verb matches what the page shows · do not use "คน" (person) for things that are not people.
+- The caption under a picture must say what the picture does not. If it repeats the picture, cut it · page structure: problem → fix → result · write a speaking script the way it is actually spoken.
+- **Test:** read the title once to an outsider. If they cannot retell it, rewrite it.
 
-## 7 · Diagram
+## 7 · Diagrams
 
-- ป้ายในกล่องเป็นคำนามสั้น 1–4 คำที่คนเข้าใจ · ป้ายบนลูกศรเป็นกริยา · ลูกศรไม่มีป้ายต้องเดาไม่ผิด
-- คำในรูปตรงกับเอกสาร · ชื่อรูปเป็นข้อสรุป ใต้รูป 1 ประโยคบอกว่าควรดูอะไร · มี house style ให้ใช้ตามนั้น
+- Box labels are short nouns of 1–4 words people understand · arrow labels are verbs · an unlabelled arrow must be impossible to misread.
+- Words in the figure match the document · the figure title is a conclusion, with 1 sentence under it saying what to look at · follow the house style if there is one.
 
-## 8 · ตรวจก่อนส่ง 7 ข้อ
+## 8 · 7-point check before sending
 
-1. อ่านออกเสียงแล้วลื่นไหม · ไม่เหมือนภาษาแปล
-2. คนนอกอ่านแล้วเข้าใจโดยไม่ต้องถามไหม · สัญลักษณ์ทุกตัวอ่านออกไหม
-3. ประโยคแรกตอบคำถามหรือบอกข้อสรุปแล้วหรือยัง
-4. ศัพท์และตัวเลขตรงกันทุกไฟล์ในชุดเดียวกันไหม
-5. มีคำฟุ่มเฟือยที่ตัดออกได้โดยความหมายไม่เปลี่ยนไหม ถ้ามีให้ตัด · แต่ `จะ` `ให้` `ก็` `ด้วย` `แล้ว` และคำสุภาพไม่ใช่คำฟุ่มเฟือย (หัวข้อ 3) ตัดแล้วประโยคห้วนให้ใส่กลับ
-6. หัวข้อทุกอันผ่านหัวข้อ 6: 2 ท่อนมีคำเชื่อม · เป็นวลีที่คนพูด · คำเหมาะกับคนอ่าน · กริยาตรงกับที่รูปแสดง
-7. ภาษาไทยตั้งแต่ 1 ย่อหน้า: รัน `python scripts/thai_tells.py <ไฟล์>` (เตือนอย่างเดียว ไม่ตัดสิน) แล้วไล่โครงประโยค 7 ข้อใน `thai-grammar` · ผ่านทุกกฎยังไม่เท่ากับอ่านลื่น งานภาษา รสนิยม และหน้าตา คำตัดสินสุดท้ายเป็นของผู้ใช้ ไม่ใช่ของโมเดลที่ตรวจ
+1. Does it read smoothly aloud, and not like a translation?
+2. Can an outsider understand it without asking? Can every symbol be read?
+3. Does the first sentence already answer the question or give the conclusion?
+4. Do terms and numbers match across every file in the set?
+5. Is there any padding you can cut without changing the meaning? If so, cut it. But `จะ` `ให้` `ก็` `ด้วย` `แล้ว` and polite words are not padding (section 3). If cutting made a sentence curt, put them back.
+6. Does every heading pass section 6: 2 parts have a connector · a phrase people say · words fit the reader · the verb matches what the figure shows?
+7. Thai of 1 paragraph or more: run `python scripts/thai_tells.py <file>` (warns only, does not judge), then walk the 7 sentence-structure rules in `thai-grammar`. Passing every rule is not the same as reading smoothly. For language, taste, and looks, the final verdict belongs to the user, not to the model doing the check.
 
 
 ## reference: headings-and-examples.md

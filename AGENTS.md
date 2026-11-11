@@ -41,4 +41,7 @@ scripts\build-dist.cmd                           # validate → claude plugin va
 
 ## ภาษา
 
-เอกสารและข้อความ commit เขียนภาษาไทยตาม `plugins/superuser/skills/human-writing/SKILL.md` · ไม่ใส่อีโมจิ
+- **ไฟล์ที่ model อ่าน** (`SKILL.md` · `references/` · `agents/` · `scripts/install/CLAUDE.global.md` · ข้อความจาก hook) เขียนภาษาอังกฤษ เพราะเนื้อเดียวกันใช้ token น้อยกว่าไทย 36–43% (วัด 2026-11-11 · `scripts/evals/speed/RESULTS.md`) · คำไทยที่ hook ตรวจ ป้ายสถานะ ป้ายหลักฐาน และตัวอย่างภาษาไทยคงเป็นไทย · คำตอบถึงผู้ใช้ยังเป็นภาษาไทย
+- **ไฟล์ที่คนอ่าน** (README · CHANGELOG · `docs/` · ข้อความ commit · `.claude/superuser/`) เขียนภาษาไทยตาม `plugins/superuser/skills/human-writing/SKILL.md`
+- ไม่ใส่อีโมจิทั้ง 2 แบบ
+- ไฟล์ที่ model อ่านซึ่งยังเป็นไทย (skill ที่ไม่ค่อยถูกเปิด) แปลเมื่อแก้ไฟล์นั้นครั้งถัดไป ไม่ต้องรีบแปลทั้งหมด

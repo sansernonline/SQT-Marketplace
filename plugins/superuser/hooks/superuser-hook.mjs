@@ -430,7 +430,7 @@ export function claimEvent(root, raw, now = Date.now()) {
 // ติดตั้ง CLAUDE.global.md เป็น ~/.claude/CLAUDE.md แล้ว (มี CORE_MARK) → ไม่ส่งซ้ำ · ส่งได้ไม่เกิน 10,000 ตัวอักษรต่อครั้ง
 export const CORE_MARK = "<!-- sqt-core-rules -->";
 export const CONTEXT_MAX = 9500;
-const ROUTE_HEAD = "## เปิด skill ก่อนลงมือ";
+const ROUTE_HEAD = "## Open skills before you start";
 
 export function coreRules({ configDir = process.env.CLAUDE_CONFIG_DIR ?? join(homedir(), ".claude"), dir = HERE, routeOnly = false } = {}) {
   try { if (readFileSync(join(configDir, "CLAUDE.md"), "utf8").includes(CORE_MARK)) return ""; } catch { /* ยังไม่ได้ติดตั้ง */ }
@@ -615,6 +615,9 @@ export function looksBig(text) {
   return looksRisky(t) || BIG.test(t) || many.test(t) || items >= 5 || commaItems >= 5 || t.length >= 2500;
 }
 export const MEDIUM_NOTE = "งานกลาง ทำเองได้ ไม่ต้องเปิด superuser — ยกเว้นงานแตะเงิน · กฎหมาย สัญญา หรือเรื่องจ้างงาน · ข้อมูลส่วนตัว · สุขภาพหรือยา · ลบ เขียนทับ หรือ force · ระบบจริง · ส่งถึงคนนอกหรือคนจำนวนมาก ให้เปิด skill superuser แทนและมีผู้ตรวจ · ชิ้นโค้ดที่ไม่ขึ้นต่อกันรวม ≥ 200 บรรทัดและมี test ส่ง agent `worker` พร้อมกันในข้อความเดียว · จบด้วยหลักฐาน (test ผ่าน หรือไล่ข้อกำหนดทีละข้อ) แล้วใส่บรรทัด `ข้ามรีวิว: <ผลตรวจ>`";
+// งานเล็กส่งให้ skill `quick` (context: fork · model: haiku) ทำแทน model หลัก · subagent ไม่เห็นแชต จึงต้องส่งทุกอย่างใน args
+// (bench t1 2026-11-11: opus ทำเอง ~$0.27–0.32 ต่อบั๊กไฟล์เดียว) · skill ที่ตัวบอกเลือกได้ส่งชื่อให้ quick เปิดเอง
+export const smallNotice = (skills) => `งานเล็ก → เรียก Skill \`superuser:quick\` args = คำขอเต็ม · path ไฟล์ · ข้อมูลจากแชตที่ต้องใช้${skills.length ? ` · ให้เปิด ${tick(skills)}` : ""} แล้วส่งผลต่อ · ได้ \`เกินงานเล็ก\` หรือ \`ขาดบริบท\` → ทำเอง`;
 export function promptNotice(input, router, dir = OPEN_DIR) {
   const text = String(input.prompt ?? "").trim();
   // เปิดด้วยคำสั่ง slash ไม่มี PostToolUse ของเครื่องมือ Skill → จดว่าเปิดแล้วจากข้อความเอง
@@ -630,7 +633,7 @@ export function promptNotice(input, router, dir = OPEN_DIR) {
   const writing = skills.some((s) => /(^|:)human-writing$/.test(s)) && !/\.(?:m?js|cjs|tsx?|jsx|py|cs|java|go|rb|php|sql|dart|kt|swift|rs|vue)\b/i.test(text);
   const others = skills.filter((s) => !writing || !/(^|:)human-writing$/.test(s));
   if (medium) return [writing ? "ก่อนเขียน เรียก Skill เปิด `superuser:human-writing`" : "", others.length ? `เปิด ${tick(others)} เมื่อลงมือ` : "", MEDIUM_NOTE].filter(Boolean).join("\n");
-  const notice = small ? (skills.length ? `งานเล็ก เปิดแค่ ${tick(skills)} แล้วลงมือ` : "") : routerNotice(skills, router.multistep?.note);
+  const notice = small ? smallNotice(skills) : routerNotice(skills, router.multistep?.note);
   // ไม่เตือน: คำสั่ง slash · ข้อความสั้นอย่าง "ต่อ" "ok" · รายงานลูกทีมที่มาในช่องผู้ใช้ · superuser เปิดแล้ว · regex เน้นให้แล้ว · คำขอดูเล็ก
   const quiet = small || text.length < 12 || text.startsWith("/") || NOT_USER.test(text) || skills.some((s) => s.endsWith("superuser"))
     || existsSync(sessionFile(dir, input.session_id));
@@ -1780,8 +1783,16 @@ function selfTest() {
     ["งานเล็ก: บอก skill ตัวเดียวที่ตรงสุด (วิธีทำงานก่อนภาษา · ตัวกว้างไม่เลือก) · ข้อความ ≤ 200 ตัวอักษร", [], true, () => {
       const d = join(tmpdir(), `sqt-open-one-${process.pid}`);
       const n = promptNotice({ prompt: "แก้บั๊ก src/report.ts วันที่ผิด", session_id: "one" }, { rules: [{ pattern: "แก้บั๊ก", skills: ["human-writing", "stack-typescript", "principle-fix-root-cause", "targeted-fix"] }] }, d);
-      return n === "งานเล็ก เปิดแค่ `superuser:principle-fix-root-cause` แล้วลงมือ" && smallLeft("one", d) === 0
+      return n === smallNotice(["superuser:principle-fix-root-cause"]) && n.includes("ให้เปิด `superuser:principle-fix-root-cause`") && n.length <= 200 && smallLeft("one", d) === 0
         && pickOne(["superuser:superuser", "human-writing", "lazy-coding"]).length === 0 && pickOne(["stack-sql", "targeted-fix"])[0] === "targeted-fix";
+    }],
+    ["งานเล็ก: ส่งให้ superuser:quick (fork · haiku) ทุกครั้ง แม้ไม่มี skill ให้เปิด · งานกลางไม่ส่ง · skill quick มีอยู่จริงและตั้ง context: fork", [], true, () => {
+      const d = join(tmpdir(), `sqt-open-quick-${process.pid}`), R = { rules: [] };
+      const n = promptNotice({ prompt: "แก้ typo บรรทัด 3 ใน README", session_id: "Q" }, R, d);
+      const mid = promptNotice({ prompt: "Build a todo list component with add, edit and delete, plus unit tests", session_id: "Q2" }, R, d);
+      const skill = readFileSync(join(HERE, "..", "skills", "quick", "SKILL.md"), "utf8");
+      return n === smallNotice([]) && n.startsWith("งานเล็ก → เรียก Skill `superuser:quick`") && !n.includes("ให้เปิด") && n.includes("เกินงานเล็ก")
+        && !mid.includes("superuser:quick") && /^context: fork$/m.test(skill) && /^model: haiku$/m.test(skill) && /^name: quick$/m.test(skill);
     }],
     ["งานเล็ก: โควตาบอก skill ตอนลงมือ · บอกตอนรับคำขอแล้ว → 0 · ยังไม่บอก → 1 · คำขอไม่เล็ก → null", [], true, () => {
       const d = join(tmpdir(), `sqt-open-left-${process.pid}`), R = { rules: [] };

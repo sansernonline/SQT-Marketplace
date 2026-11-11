@@ -1,0 +1,33 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# hook จัดคำขอนี้เป็นงานเล็ก (looksSmall = true ตรวจ 2026-11-11) แล้วบอกให้เรียก superuser:quick
+schema_version: "1.1"
+name: quick-trigger
+description: แก้คำผิดจุดเดียวใน README.md ไม่เอ่ยชื่อ skill ต้องทำให้ model หลักส่งงานให้ quick พร้อมคำขอเต็มและ path ไฟล์ใน args
+tags: [trigger, quick]
+runs: 10
+expected_outcome: เรียก Skill superuser:quick โดย args มี README.md และคำว่า instal · คำตอบสุดท้ายบอกว่าแก้เป็น npm install แล้ว
+execution:
+  prompt: |
+    README.md มีคำผิดตรงคำสั่ง npm instal ช่วยแก้ให้หน่อย
+  max_turns: 6
+  timeout_seconds: 240
+context:
+  scaffold_script: fixture.sh   # ต้องรันด้วย --scaffold (plugin-eval.mjs ใส่ให้)
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?quick"'
+    min: 1
+    arm: with-only
+  - name: args-carry-task
+    type: tool_used
+    tool: Skill
+    input_match: '"args"\s*:\s*"[^"]*README\.md[^"]*instal'
+    min: 1
+    arm: with-only
+  - name: fixed-word
+    type: regex
+    pattern: 'npm install'
+    match: contains
+    target: last_message
