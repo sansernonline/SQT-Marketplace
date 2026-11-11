@@ -687,8 +687,8 @@ function selfTest() {
   const ic = iconLines('- ❌ **ลบไฟล์ผู้ใช้**\nบรรทัด `⚠ แปลงไม่ครบ` จากสคริปต์\n```\n# ✅ ในโค้ด\n```\n| a | ✓ |').length === 1;
   console.log(`  ${ic ? '✅' : '❌'} ไอคอนในเนื้อหาโดนจับ · ใน backtick บล็อกโค้ด และ ✓ ✗ ในตารางไม่โดน`);
   if (ic) ok++;
-  const ye = yamlEscapeTraps('pattern: "1280\\s*x"\n# "\\s ในคอมเมนต์"\npattern: \'1280\\s*x\'\npattern: "a\\\\sb \\n ok"\nx: "\u0008"\nprompt: |\n  ใน block a\\sb "x\\s"\nnext: "ok"').length === 2;
-  console.log(`  ${ye ? '✅' : '❌'} case.yaml ที่มี \\s ใน "..." และอักขระควบคุมโดนจับ · '...' คอมเมนต์ block scalar และ escape ที่ YAML รับไม่โดน`);
+  const ye = yamlEscapeTraps('pattern: "1280\\s*x"\n# "\\s ในคอมเมนต์"\npattern: \'1280\\s*x\'\npattern: "a\\\\sb \\n ok"\nx: "\u0008"\nprompt: |\n  ใน block a\\sb "x\\s"\nnext: "ok"\n    pattern: "(?i)contrast"\n    input_match: \'(?i)metformin\'\n    pattern: "(?:a|b)"').length === 4;
+  console.log(`  ${ye ? '✅' : '❌'} case.yaml ที่มี \\s ใน "..." อักขระควบคุม และ (?i) ใน pattern โดนจับ · '...' คอมเมนต์ block scalar escape ที่ YAML รับ และ (?:…) ไม่โดน`);
   if (ye) ok++;
   // ตัวอย่าง 5 แบบ: แถว router 3 แถวของเหตุการณ์จริง (ไฟล์มี \b ตัวเดียว JSON อ่านเป็น backspace) · อักขระดิบใน .mjs · \u001b ใน JSON · แถวที่เขียน \\b ถูกต้องไม่โดน
   const cc = ['{"rows":[{"pattern":"\\bestate\\b"}]}', '{"rows":[{"pattern":"\\bflood\\b"}]}', '{"r":{"pattern":"\\bpregnancy\\b"}}']

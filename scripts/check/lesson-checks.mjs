@@ -170,6 +170,8 @@ export function yamlEscapeTraps(text) {
     block = /:\s*[|>][-+0-9]*\s*(#.*)?$/.test(line) ? indent : -1;
     if (/[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(line)) out.push({ at: i + 1, msg: 'มีอักขระควบคุม (มักเป็น backspace แทน \\b จาก heredoc) — เขียนใหม่ด้วย Edit หรือสคริปต์ที่เป็นไฟล์' });
     else if (badDoubleQuoteEscape(line)) out.push({ at: i + 1, msg: 'ใน YAML แบบ "..." ใช้ \\s \\d ตรง ๆ ไม่ได้ ไฟล์จะโหลดไม่ขึ้น — ครอบด้วย \'...\' แทน หรือเขียน \\\\s' });
+    // ตัวให้คะแนนเป็น JavaScript ซึ่งไม่รับ (?i) ในตัว pattern · grader error เงียบ 27 ตัว (eval 2026-11-12)
+    else if (/^\s*(?:-\s*)?(?:pattern|input_match):.*\(\?[imsx]+\)/.test(line)) out.push({ at: i + 1, msg: '(?i) ในตัว regex ใช้ไม่ได้กับตัวให้คะแนน (JavaScript) grader จะ error — ลบออกแล้วใส่ flags: i' });
   });
   return out;
 }
