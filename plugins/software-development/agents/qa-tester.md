@@ -1,6 +1,6 @@
 ---
 name: qa-tester
-description: Use when creating test plans, test cases, bug reports, exploratory testing or test coverage before release.
+description: Use when creating test plans, test cases, bug reports or exploratory tests before release.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill
 model: sonnet
 skills:

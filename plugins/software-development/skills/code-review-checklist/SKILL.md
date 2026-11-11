@@ -1,6 +1,6 @@
 ---
 name: code-review-checklist
-description: Use when reviewing a pull request, self-reviewing before submitting, or auditing code quality.
+description: Use when reviewing a pull request or self-reviewing code before submitting.
 argument-hint: <file path or PR description>
 ---
 

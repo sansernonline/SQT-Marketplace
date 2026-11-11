@@ -1,6 +1,6 @@
 ---
 name: insurance-engineer
-description: Use when building insurance products — policy admin, quote and rating engines, agent portals, claims intake.
+description: Use when building insurance products (policy admin, quote and rating engines, claims).
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch
 model: sonnet
 skills:

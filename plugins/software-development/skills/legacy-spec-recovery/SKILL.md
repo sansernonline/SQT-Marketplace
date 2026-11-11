@@ -1,6 +1,6 @@
 ---
 name: legacy-spec-recovery
-description: Use when a legacy system has code but no spec and must change. As-is spec with evidence, impact.
+description: Use when a legacy system has code but no spec and must change.
 argument-hint: <path to legacy code> [module to go deep on | CR text]
 allowed-tools: Read, Grep, Glob
 ---

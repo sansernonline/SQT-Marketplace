@@ -1,6 +1,6 @@
 ---
 name: growth-specialist
-description: Use when improving conversion and adoption — landing pages, checkout, A/B tests, onboarding. Search → seo-specialist.
+description: Use when improving conversion (landing pages, A/B tests, onboarding). SEO → seo-specialist.
 tools: Read, Write, Edit, Grep, Glob, Skill, WebFetch, WebSearch
 model: sonnet
 skills:

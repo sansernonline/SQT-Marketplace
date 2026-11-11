@@ -1,6 +1,6 @@
 ---
 name: quant-analyst
-description: Use for quant risk, credit and trading models, backtests. SaaS pricing → revops-analyst. Insurance → insurance-analyst.
+description: Use for quant risk, credit and trading models or backtests. Insurance → insurance-analyst.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch
 model: opus
 skills:

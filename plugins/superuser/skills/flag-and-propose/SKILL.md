@@ -1,6 +1,6 @@
 ---
 name: flag-and-propose
-description: Use when something found mid-task in any work changes what happens next (stale file, wrong number, blocked step) and needs a decision.
+description: Use when something found mid-task changes what happens next and needs a decision.
 ---
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป

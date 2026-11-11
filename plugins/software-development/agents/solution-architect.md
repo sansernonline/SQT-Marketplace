@@ -1,6 +1,6 @@
 ---
 name: solution-architect
-description: Use for system architecture, stack choice, trade-offs, ADRs or architecture review. Endpoint specs → system-analyst.
+description: Use for system architecture, stack choice, trade-offs or ADRs. Endpoints → system-analyst.
 tools: Read, Write, Edit, Grep, Glob, Skill, WebFetch
 model: opus
 skills:

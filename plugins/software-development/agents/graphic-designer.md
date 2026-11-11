@@ -1,6 +1,6 @@
 ---
 name: graphic-designer
-description: Use for visuals that are not screens — logo, brand colours, poster, social post. Screens → ux-designer.
+description: Use for visuals that are not screens (logo, poster, social post). Screens → ux-designer.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill
 model: sonnet
 skills:

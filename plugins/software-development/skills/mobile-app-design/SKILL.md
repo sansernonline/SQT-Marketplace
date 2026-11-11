@@ -1,6 +1,6 @@
 ---
 name: mobile-app-design
-description: Use when designing or building a phone app UI or mockup (PWA, React Native, Flutter). Not desktop.
+description: Use when designing a phone app UI or mockup (PWA, React Native, Flutter).
 ---
 
 # Mobile App Design

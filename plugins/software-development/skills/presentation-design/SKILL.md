@@ -1,6 +1,6 @@
 ---
 name: presentation-design
-description: Use when building a slide deck for any work (pitch, plan, report, training) that someone will present or read. Story, headlines, layouts.
+description: Use when building a slide deck (pitch, plan, report, training) to present or read. Story, layouts.
 ---
 
 # Presentation Design

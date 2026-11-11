@@ -1,6 +1,6 @@
 ---
 name: worker
-description: Use when the lead hands out a self-contained slice needing no special role. Writes files, replies one line.
+description: Use when the lead hands out a self-contained slice needing no special role.
 tools: Read, Write, Edit, Grep, Glob
 model: sonnet
 effort: medium

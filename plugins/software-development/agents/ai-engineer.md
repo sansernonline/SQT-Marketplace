@@ -1,6 +1,6 @@
 ---
 name: ai-engineer
-description: Use when building with LLMs or machine learning — model choice, RAG, prompts, evaluation, training, serving, monitoring.
+description: Use when building with LLMs or machine learning (RAG, prompts, evals, training, serving).
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch
 model: opus
 skills:

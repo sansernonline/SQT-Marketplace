@@ -1,6 +1,6 @@
 ---
 name: data-analysis
-description: Use when a CSV, Excel or SQL export must answer a business question (sales, usage, survey) with traceable numbers, Thai charts and caveats.
+description: Use when a CSV, Excel or SQL export must answer a business question with numbers.
 ---
 
 # data-analysis · ตอบคำถามธุรกิจจากข้อมูล ด้วยตัวเลขที่ตรวจย้อนได้

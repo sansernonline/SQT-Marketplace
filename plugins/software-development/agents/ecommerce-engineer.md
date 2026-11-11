@@ -1,6 +1,6 @@
 ---
 name: ecommerce-engineer
-description: Use when building online stores — catalog, cart, checkout, orders, promotions, marketplace, multi-warehouse inventory.
+description: Use when building online stores (catalog, cart, checkout, orders, inventory).
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch
 model: sonnet
 skills:

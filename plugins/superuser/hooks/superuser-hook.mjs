@@ -594,8 +594,8 @@ function stopGate(input, teamDir, root) {
 }
 
 // ── ด่านแตกงาน (PreToolUse ของหัวหน้าทีม) ───────────────────────────────
-// หัวหน้าทีมใช้ superuser · ยังไม่ได้ส่งลูกทีมลงมือสักตัว · ชิ้นที่เขียนเองไปแล้วมีชิ้นใหญ่ (≥ 40 บรรทัด) แล้วจะเขียนไฟล์โค้ดไฟล์ใหม่อีก → ไม่ให้เขียน ให้แตกชิ้นที่เหลือให้ลูกทีมพร้อมกัน
-// ใช้ชิ้นที่เขียนไปแล้วเป็นตัววัดขนาด: ชิ้นสั้นหมด = งานชิ้นเล็ก หัวหน้าทีมทำเองต่อได้ · ไฟล์ใน scripts/ (สคริปต์ช่วยงาน) ไม่นับ
+// หัวหน้าทีมใช้ superuser · ยังไม่ได้ส่งลูกทีมลงมือสักตัว · จะเขียนไฟล์โค้ดไฟล์ที่ 2 ขึ้นไป และบรรทัดรวมของไฟล์โค้ดทั้งหมด (รวมไฟล์นี้) ≥ 40 → ไม่ให้เขียน ให้แตกชิ้นที่เหลือให้ลูกทีมพร้อมกัน
+// งานไฟล์โค้ดเดียว (แก้บั๊ก) ไม่โดน · 2 ไฟล์สั้นรวมไม่ถึง 40 หัวหน้าทีมทำเองต่อได้ · ไฟล์ใน scripts/ (สคริปต์ช่วยงาน) และไฟล์ที่ไม่ใช่โค้ดไม่นับ
 // นับเป็น "เขียนโค้ด" = Write หรือ Edit ที่ใส่เกิน 10 บรรทัด · ไฟล์ test ไม่นับ · แก้เล็กไม่โดน · งานชิ้นเดียวไม่โดน · ส่งลูกทีมลงมือแล้ว 1 ตัวขึ้นไป → ปล่อย
 // คำสั่งอื่นในข้อความเดียวกันนับด้วย (เขียน 5 ไฟล์รวดเดียว = 5 ชิ้น) แต่ไม่นับคำสั่งที่กำลังตรวจ
 const WORKER_SKIP = /(^|:)(reviewer|learning-reviewer|brainstormer|design-critic|design-review|Explore|Plan)$/;
@@ -620,18 +620,24 @@ const linesOf = (name, inp) => {
   const n = String(text ?? "").split("\n").length;
   return name === "Bash" ? Math.floor(n / Math.max(1, bashWrites(inp.command).length)) : n;
 };
-const countable = (p) => !SKIP_PATH.test(p) && !TEST_FILE.test(p) && !TOOL_PATH.test(p);
+// ตรวจ path นับจากโฟลเดอร์งาน (cwd) · โปรเจกต์ที่ตั้งอยู่ใต้ _to_delete/ หรือ test/ (เช่นโฟลเดอร์ bench) ยังนับ src/ ได้ · ไฟล์นอก cwd ตรวจทั้ง path
+// (bench 2026-11-11: path เต็มของงานมี _to_delete ด่านจึงไม่นับไฟล์ไหนเลย t3 t5 ไม่ส่งลูกทีม)
+const inCwd = (p, cwd) => { const r = relative(cwd, p); return r && !r.startsWith("..") && !/^([a-z]:|[\\/])/i.test(r) ? r : p; };
+// นับเฉพาะไฟล์โค้ด · เอกสาร (.md · BUILD-PLAN) ที่หัวหน้าเขียนหลังโค้ดเสร็จไม่โดนบล็อก และงานเอกสารล้วนไม่โดนด่านนี้
+const CODE_FILE = new RegExp(`\\.(?:${CODE_EXT})$`, "i");
+const countable = (p, cwd = "/") => { const q = inCwd(p, cwd); return CODE_FILE.test(q) && !SKIP_PATH.test(q) && !TEST_FILE.test(q) && !TOOL_PATH.test(q); };
 export function splitGate(s, target, currentId = null, current = { name: "Write", input: {} }, cwd = "/") {
   const t = resolve(cwd, String(target ?? ""));
-  if (!target || !countable(t) || !targetsOf(current.name, current.input ?? {}).length) return "";
+  if (!target || !countable(t, cwd) || !targetsOf(current.name, current.input ?? {}).length) return "";
   const files = new Map(); // path → บรรทัดมากสุดที่หัวหน้าทีมเขียน
-  const add = (p0, n) => { const p = resolve(cwd, p0); if (p0 && countable(p)) files.set(p, Math.max(files.get(p) ?? 0, n)); };
+  const add = (p0, n) => { const p = resolve(cwd, p0); if (p0 && countable(p, cwd)) files.set(p, Math.max(files.get(p) ?? 0, n)); };
   // คำสั่งเดียวเขียนหลายไฟล์ (เช่น Bash ที่มี cat > หลายไฟล์) → ไฟล์อื่นในคำสั่งเดียวกันนับเป็นชิ้นอื่นด้วย
   for (const p0 of targetsOf(current.name, current.input ?? {})) if (resolve(cwd, p0) !== t) add(p0, linesOf(current.name, current.input ?? {}));
   for (const [id, p0, n] of s.pieces) if (id !== currentId) add(p0, n);
-  const biggest = Math.max(0, ...files.values());
-  if (!s.usedSuperuser || s.workers > 0 || biggest < BIG_PIECE_LINES || files.has(t)) return "";
-  return `ด่านแตกงาน (SuperUser): หัวหน้าทีมเขียนโค้ดเองไปแล้ว ${files.size} ไฟล์ (ชิ้นใหญ่สุด ${biggest} บรรทัด) และยังไม่ได้ส่งลูกทีมลงมือ — ชิ้นขนาดนี้ต้องแตกให้ทำพร้อมกัน: เขียนตาราง \`ชิ้น | ไฟล์ที่แตะ | ขนาด | ต้องรอชิ้นไหน | ลูกทีม · ระดับ\` แล้วส่งชิ้นที่เหลือที่ไม่แตะไฟล์ร่วมกันให้ลูกทีมตัวใหม่ (เช่น \`developer\`) **พร้อมกันในข้อความเดียว** · ใบสั่งงาน 5 ข้อใส่ในข้อความส่งงาน · ไฟล์ที่เกี่ยวส่ง path ไม่ส่งเนื้อหา · หัวหน้าทีมรวมผลและตรวจ · แก้เล็กในไฟล์เดิมใช้ Edit ได้ตามปกติ`;
+  // วัดจากบรรทัดรวมของไฟล์โค้ดทุกไฟล์ (รวมไฟล์ที่กำลังจะเขียน) ไม่ใช่ชิ้นใหญ่สุด · โมดูลแยกกันหลายไฟล์ไฟล์ละ 12–38 บรรทัดก็ต้องแตก (bench t3 2026-11-11: 4 โมดูล ชิ้นใหญ่สุดไม่ถึง 40 ใน 2 จาก 9 รอบ)
+  const total = [...files.values()].reduce((a, n) => a + n, 0) + linesOf(current.name, current.input ?? {});
+  if (!s.usedSuperuser || s.workers > 0 || !files.size || total < BIG_PIECE_LINES || files.has(t)) return "";
+  return `ด่านแตกงาน (SuperUser): หัวหน้าทีมเขียนโค้ดเองไปแล้ว ${files.size} ไฟล์ (รวมไฟล์นี้ ${total} บรรทัด) และยังไม่ได้ส่งลูกทีมลงมือ — ชิ้นขนาดนี้ต้องแตกให้ทำพร้อมกัน: เขียนตาราง \`ชิ้น | ไฟล์ที่แตะ | ขนาด | ต้องรอชิ้นไหน | ลูกทีม · ระดับ\` แล้วส่งชิ้นที่เหลือที่ไม่แตะไฟล์ร่วมกันให้ลูกทีมตัวใหม่ (เช่น \`developer\`) **พร้อมกันในข้อความเดียว** · ใบสั่งงาน 5 ข้อใส่ในข้อความส่งงาน · ไฟล์ที่เกี่ยวส่ง path ไม่ส่งเนื้อหา · หัวหน้าทีมรวมผลและตรวจ · แก้เล็กในไฟล์เดิมใช้ Edit ได้ตามปกติ`;
 }
 
 // ── สถานะ transcript ของด่าน (log/gate-state.json) ─────────────────────
@@ -863,18 +869,19 @@ export function personalDataGate(name, inp = {}) {
   return found.length ? `ด่านข้อมูลส่วนตัว (SuperUser): สิ่งที่จะเขียนลง ${basename(path)} มี${found.join(" · ")} · กฎ: ไม่เก็บเลขบัตรหรือเลขบัญชีลงไฟล์งาน เก็บได้แค่ 4 ตัวท้าย · ถ้าเป็นข้อมูลตัวอย่าง หรือผู้ใช้สั่งให้เก็บ อนุมัติได้ · ปิดทั้งโปรเจกต์ได้ที่ .claude/superuser/config.json {"modules": {"pii_gate": false}}` : "";
 }
 
-// ทางด่วน: ไม่มีโฟลเดอร์ทีม หรือปิด split_gate → ออกก่อนแตะ transcript · ด่านข้อความเจ้าของไม่อ่านไฟล์ จึงตรวจทุกโปรเจกต์
+// ทางด่วน: ปิด split_gate หรือคำสั่งไม่ได้เขียนโค้ด → ออกก่อนแตะ transcript · ด่านข้อความเจ้าของไม่อ่านไฟล์ จึงตรวจทุกโปรเจกต์
 // ด่านที่ปฏิเสธ (deny) ทำงานก่อน แล้วค่อยถาม (ask) เรื่องข้อมูลส่วนตัว · ถ้าถามก่อน ผู้ใช้กดอนุมัติแล้วไฟล์ที่ควรถูกปฏิเสธจะถูกเขียน
 function denyReason(input, teamDir) {
   if (teamDir && moduleOn(teamDir, "guard", false)) { const g = guardGate(input.tool_name, input.tool_input ?? {}, teamDir); if (g) return g; }
   if (teamDir && !moduleOn(teamDir, "split_gate")) return "";
   const owner = ownerInboxGate(input.tool_name, input.tool_input ?? {});
   if (owner) return owner;
-  if (!teamDir || input.agent_id || !input.transcript_path || !existsSync(input.transcript_path)) return "";
+  if (input.agent_id || !input.transcript_path || !existsSync(input.transcript_path)) return "";
   const current = { name: input.tool_name, input: input.tool_input ?? {} };
   const targets = targetsOf(current.name, current.input);
   if (!targets.length) return "";
-  const s = gateState(teamDir, input.transcript_path);
+  // โปรเจกต์ที่ยังไม่มี .claude/superuser/ ด่านก็ทำงาน (เปิด superuser แล้วเท่านั้น) · สถานะเก็บที่ ~/.claude/superuser/log แทน (bench 2026-11-11: ด่านไม่เคยทำงาน)
+  const s = gateState(teamDir ?? join(configDirOf(), "superuser"), input.transcript_path);
   return targets.map((t) => splitGate(s, t, input.tool_use_id ?? null, current, input.cwd ?? process.cwd())).find(Boolean) ?? "";
 }
 
@@ -1476,7 +1483,25 @@ function selfTest() {
     ["ด่านแตกงาน: Bash เขียน 2 ไฟล์เล็ก → ผ่าน", [skill], false, (l) => splitGate(fold(l), "a.js", null, { name: "Bash", input: { command: "cat > a.js <<'EOF'\n" + "x\n".repeat(8) + "EOF\ncat > b.js <<'EOF'\n" + "y\n".repeat(8) + "EOF" } }, "/p")],
     ["ด่านแตกงาน: Bash สั้น → ผ่าน", [skill, edit("a.js")], false, (l) => splitGate(fold(l), "b.js", null, { name: "Bash", input: { command: "echo x > b.js" } }, "/p")],
     ["ด่านแตกงาน: Edit เล็ก → ผ่าน", [skill, edit("a.js")], false, (l) => splitGate(fold(l), "/p/b.js", null, { name: "Edit", input: { new_string: "x\ny" } })],
+    // bench 2026-11-11: โฟลเดอร์งานอยู่ใต้ _to_delete/ ด่านไม่นับไฟล์ไหนเลย · เอกสารหลังเขียนโค้ดไม่ใช่ชิ้นงานโค้ด
+    ["ด่านแตกงาน: โฟลเดอร์งานอยู่ใต้ _to_delete (bench) → ยังบล็อก", [skill, T({ type: "tool_use", name: "Write", input: { file_path: "/w/_to_delete/bench/t3/src/a.js", content: "x\n".repeat(50) } })], true, (l) => splitGate(fold(l), "src/b.js", null, undefined, "/w/_to_delete/bench/t3")],
+    ["ด่านแตกงาน: _to_delete ภายในโปรเจกต์ → ไม่นับ", [skill, edit("_to_delete/x.js")], false, (l) => splitGate(fold(l), "/p/b.js", null, undefined, "/p")],
+    ["ด่านแตกงาน: 4 โมดูลสั้นในข้อความเดียว (12+11+38+14 บรรทัด) → บล็อก", [skill, T(...[["a", 12], ["b", 11], ["c", 38], ["d", 14]].map(([f, n]) => ({ type: "tool_use", id: f, name: "Write", input: { file_path: `/p/src/${f}.js`, content: "x\n".repeat(n - 1) } })))], true, (l) => splitGate(fold(l), "/p/src/a.js", "a", { name: "Write", input: { content: "x\n".repeat(11) } })],
+    ["ด่านแตกงาน: 2 ไฟล์สั้นรวมไม่ถึง 40 → ผ่าน", [skill, edit("a.js", 20)], false, (l) => splitGate(fold(l), "/p/b.js", null, { name: "Write", input: { content: "x\n".repeat(14) } })],
+    ["ด่านแตกงาน: เอกสาร .md หลังเขียนโค้ด → ผ่าน", [skill, edit("a.js")], false, (l) => splitGate(fold(l), "/p/docs/BUILD-PLAN.md")],
+    ["ด่านแตกงาน: เอกสาร .md 2 ไฟล์ใหญ่ (สรุปประชุม) → ผ่าน", [skill, edit("notes.md")], false, (l) => splitGate(fold(l), "/p/summary.md")],
   );
+  gates.push(["ด่านแตกงาน: โปรเจกต์ไม่มี .claude/superuser/ → preWriteGate ยังบล็อก (สถานะเก็บใน CLAUDE_CONFIG_DIR)", [], true, () => {
+    const base = join(tmpdir(), `sqt-split-${process.pid}`), proj = join(base, "_to_delete", "bench", "t3"), cfg = join(base, "cfg"), tx = join(base, "tx.jsonl");
+    mkdirSync(proj, { recursive: true }); writeFileSync(tx, [skill, edit("a.js")].map((l) => l.replace('"/p/a.js"', JSON.stringify(join(proj, "src", "a.js")))).join("\n") + "\n");
+    const old = process.env.CLAUDE_CONFIG_DIR; process.env.CLAUDE_CONFIG_DIR = cfg;
+    const w = process.stdout.write; let out = ""; process.stdout.write = (s) => { out += s; return true; };
+    try { preWriteGate({ hook_event_name: "PreToolUse", tool_name: "Write", cwd: proj, transcript_path: tx, tool_input: { file_path: join(proj, "src", "b.js"), content: "y\n".repeat(30) } }); }
+    finally { process.stdout.write = w; if (old === undefined) delete process.env.CLAUDE_CONFIG_DIR; else process.env.CLAUDE_CONFIG_DIR = old; }
+    const ok = /ด่านแตกงาน/.test(out) && existsSync(join(cfg, "superuser", "log", "gate-state.json"));
+    rmSync(base, { recursive: true, force: true });
+    return ok;
+  }]);
   // สรุป log: 1 วัน · หัวหน้าทีมส่ง developer 2 งาน (ล้ม 1) · developer ทำ 3 อย่าง (ล้ม 1) · ผู้ใช้แก้ 1 ครั้ง
   const day = { prompts: 2, corrections: 1, actions: 5, failed: 1,
     spawns: [{ ts: "2026-10-21T10:00:00+07:00", role: "software-development:developer", task: "แก้ฟอร์ม", ok: true },

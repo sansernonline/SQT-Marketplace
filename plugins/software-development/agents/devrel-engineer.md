@@ -1,6 +1,6 @@
 ---
 name: devrel-engineer
-description: Use when the product is for developers — developer experience audits, SDK design, docs platforms, developer content.
+description: Use when the product is for developers (DX audits, SDK design, docs platforms).
 tools: Read, Write, Edit, Grep, Glob, Skill, WebFetch, Bash
 model: sonnet
 skills:
