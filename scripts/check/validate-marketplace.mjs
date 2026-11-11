@@ -91,6 +91,10 @@ function parseFrontmatter(file, text) {
 }
 
 // ---------------------------------------------------------------- skill
+// skill ที่ตั้ง model ต่างจาก session แล้วรันใน context หลัก = สลับ model กลาง session แล้ว prompt cache แตกทั้งก้อน
+// ("that turn is also a model switch" · code.claude.com/docs/en/prompt-caching ดู 2026-11-11) · ใส่ context: fork คู่กันให้รันใน subagent
+const MODEL_NO_FORK = 'ตั้ง model: โดยไม่มี context: fork — skill จะสลับ model ใน context หลักแล้ว prompt cache แตก · ใส่ context: fork หรือเอา model ออก';
+const modelWithoutFork = (fm) => Boolean(fm?.model) && String(fm.context ?? '') !== 'fork';
 function checkSkill(dir) {
   const file = join(dir, 'SKILL.md');
   const slug = basename(dir);
@@ -124,6 +128,8 @@ function checkSkill(dir) {
     // หมายเหตุ: \b ใช้กับอักษรไทยไม่ได้ใน JavaScript regex — ตรวจแบบไม่มี word boundary
     if (!userOnly && !/(^|[^a-z])use\s|ใช้/i.test(description)) warn(file, 'description ไม่ได้บอกว่าใช้เมื่อไหร่ — ขึ้นต้นด้วย "Use when …" หรือ "ใช้เมื่อ …"');
   }
+
+  if (modelWithoutFork(fm)) err(file, MODEL_NO_FORK);
 
   const bodyLines = text.slice(text.indexOf('\n---', 3) + 4).split('\n').length;
   if (bodyLines > 500) err(file, `เนื้อหา ${bodyLines} บรรทัด เกิน 500 — แยกไป references/`);
@@ -419,6 +425,8 @@ function selfTest() {
     ['ค่าขึ้นต้นด้วย [', "---\nname: x\ndescription: Use when something happens in a project\nargument-hint: [month|year-end] [--x]\n---\n", /ขึ้นต้นด้วย \[/],
     ['ค่า [ ที่ครอบคำพูดผ่าน', "---\nname: x\ndescription: Use when something happens in a project\nargument-hint: '[--deep]'\n---\n", null],
     ['CRLF ไม่ใช่ error', '---\r\nname: x\r\ndescription: Use when something happens in a project\r\n---\r\n', null],
+    ['model ไม่มี fork', '---\nname: x\ndescription: Use when something happens in a project\nmodel: haiku\n---\n', /context: fork/],
+    ['model คู่ fork ผ่าน', '---\nname: x\ndescription: Use when something happens in a project\nmodel: haiku\ncontext: fork\n---\n', null],
   ];
   let ok = 0;
   for (const [label, text, expect] of cases) {
@@ -427,6 +435,7 @@ function selfTest() {
     if (fm) {
       if (fm.name && fm.name !== 'x') err('x/SKILL.md', `name "${fm.name}" ไม่ตรงกับชื่อโฟลเดอร์ "x"`);
       if (fm.description?.length > 1024) err('x/SKILL.md', `description ยาว ${fm.description.length} ตัว เกิน 1024`);
+      if (modelWithoutFork(fm)) err('x/SKILL.md', MODEL_NO_FORK);
     }
     const hit = expect ? errors.some(e => expect.test(e)) : errors.length === 0;
     console.log(`  ${hit ? '✅' : '❌'} ${label}`);
