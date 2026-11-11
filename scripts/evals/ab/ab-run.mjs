@@ -90,7 +90,9 @@ try {
   const next = runArm({ cases, runs, run: runner(join(ROOT, pluginRel)), maxCostUsd: maxCost });
   const table = compare(baseline, next);
   console.log("\n" + fmtTable(table));
-  console.log(`\nค่าใช้จ่าย: baseline $${baseline.costUsd.toFixed(2)}${cache.status === "hit" ? " (แคช)" : ""} · ใหม่ $${next.costUsd.toFixed(2)}`);
+  // ต่ำกว่า 1 เซนต์แสดง 4 ตำแหน่ง ไม่ให้รอบ haiku ที่รันจริงดูเหมือน $0.00 (รันจริง 2026-11-12)
+  const usd = (x) => x.toFixed(x > 0 && x < 0.01 ? 4 : 2);
+  console.log(`\nค่าใช้จ่าย: baseline $${usd(baseline.costUsd)}${cache.status === "hit" ? " (แคช)" : ""} · ใหม่ $${usd(next.costUsd)}`);
   if (opt("--out")) writeFileSync(opt("--out"), JSON.stringify({ baseline, next, table }, null, 2));
   process.exitCode = baseline.partial || next.partial ? 2 : 0;
 } finally {
