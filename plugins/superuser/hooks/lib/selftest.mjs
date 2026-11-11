@@ -154,7 +154,7 @@ export function extraGates(env) {
       const none = digestNotice(team) === ""; writeFileSync(join(team, "digest.md"), "สรุป\n".repeat(2000));
       const t = digestNotice(team); return none && t.includes("digest.md") && t.length < 3200;
     }],
-    ["ข้อยกเว้น subagent: ข้อความเปิด session มีบรรทัดข้ามเมื่อเป็น subagent และให้คำสั่งผู้ใช้ชนะ", [], true, () => env.MULTISTEP_NOTE.includes(ESCAPE_CLAUSE) && /subagent/.test(ESCAPE_CLAUSE) && /คำสั่งผู้ใช้ชนะ/.test(ESCAPE_CLAUSE)],
+    ["ข้อยกเว้น subagent: ข้อความเตือนงานหลายขั้นมีทางข้ามของ subagent และให้คำสั่งผู้ใช้ชนะ", [], true, () => env.MULTISTEP_REMINDER.includes(ESCAPE_CLAUSE) && /subagent/.test(ESCAPE_CLAUSE) && /คำสั่งผู้ใช้ชนะ/.test(ESCAPE_CLAUSE)],
     // ── lint · 37 · 48 · 38
     ["lint เบา: JSON พัง → แจ้งพร้อมบอกว่าไม่ได้ตรวจอะไร · JSON ดี · ไฟล์ที่ไม่ใช่โค้ด → เงียบ", [], true, () => /ไม่ได้ตรวจความปลอดภัย/.test(lintHint({ tool_name: "Write", tool_input: { file_path: join(proj, "bad.json") } })) && !lintHint({ tool_name: "Write", tool_input: { file_path: join(proj, "ok.json") } }) && !lintHint({ tool_name: "Write", tool_input: { file_path: join(proj, ".env") } })],
     ["lint เบา: .mjs ไวยากรณ์ผิด → แจ้ง · .mjs ถูก → เงียบ · เครื่องหมาย merge → แจ้ง", [], true, () => {

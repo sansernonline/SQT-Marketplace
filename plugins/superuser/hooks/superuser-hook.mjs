@@ -290,7 +290,7 @@ function responseText(res) {
 function runTokens(res) {
   const u = res?.usage;
   if (!u) return null;
-  return { input: u.input_tokens ?? 0, output: u.output_tokens ?? 0, cacheRead: u.cache_read_input_tokens ?? 0, cacheCreate: u.cache_creation_input_tokens ?? 0 };
+  return { input: u.input_tokens ?? 0, output: u.output_tokens ?? 0, cacheRead: u.cache_read_input_tokens ?? 0, cacheCreate: u.cache_creation_input_tokens ?? 0, cacheCreate1h: u.cache_creation?.ephemeral_1h_input_tokens ?? 0 };
 }
 
 // ชื่อบัญชี LLM ของ session นี้: SQT_ACCOUNT หรือชื่อโฟลเดอร์ของ CLAUDE_CONFIG_DIR (วิธีรันหลายบัญชีตามเอกสาร Claude Code) · ไม่ตั้ง = ".claude" ตามโฟลเดอร์ตั้งต้น ให้ตรงกับ quota.mjs และแม่แบบ accounts.json
@@ -497,22 +497,14 @@ export function routerNotice(skills, note = "") {
   // skill ที่เปลี่ยนตัวแผน (ค้นต้นแบบหรือแหล่งก่อนลงมือ) ต้องเปิดพร้อม superuser · ไม่งั้นแผนออกมาโดยไม่ค้น (owner-pick 2026-11-10)
   const lead = skills.filter((s) => /(^|:)(superuser|design-references|research-with-sources)$/.test(s));
   if (!lead.some((s) => /(^|:)superuser$/.test(s))) lead.length = 0;
-  if (!lead.length) return `ก่อนตอบข้อความนี้ เรียกเครื่องมือ Skill ให้ครบทุกตัวในรายการ (ทีละตัว · ตัวที่ไม่มีในเครื่องข้ามไป) แม้งานดูง่ายหรือรู้คำตอบแล้ว เพราะกฎใน skill เปลี่ยนรูปคำตอบ: ${list(skills)}`;
+  if (!lead.length) return `ก่อนตอบ เรียก Skill ครบทุกตัว แม้งานดูง่าย (ไม่มีข้าม): ${list(skills)}`;
   // งานหลายขั้น: หัวหน้าเปิดครบทุกตัวก่อนแจกงาน กิน context และชนเพดานเงิน (dispatch d13 2026-11-10: เปิด 7 ตัวก่อนตอบ) · skill ของชิ้นที่แจกไปอยู่ในใบสั่งงานแทน
-  const rest = skills.filter((s) => !lead.includes(s));
-  const head = `ก่อนตอบข้อความนี้ เรียกเครื่องมือ Skill เปิด ${list(lead)} ก่อน แม้งานดูง่าย`
-    + (rest.length ? ` · ตัวที่เหลือ (${list(rest)}) เปิดเมื่อหัวหน้าลงมือชิ้นนั้นเอง ชิ้นที่แจกลูกทีม ใส่ชื่อ skill ในใบสั่งงานข้อกติกาแทน` : "");
+  // ตัวที่เหลือบอกไม่เกิน 3 ตัว ตัวเฉพาะงานก่อนตัวกว้าง · ตัวบอกตอนลงมือ (PreToolUse) บอกเพิ่มเมื่อแตะไฟล์จริง
+  const rest = skills.filter((s) => !lead.includes(s)).sort((a, b) => BROAD_SKILL.test(a) - BROAD_SKILL.test(b)).slice(0, 3);
+  const head = `ก่อนตอบ เรียก Skill เปิด ${list(lead)} ก่อน แม้งานดูง่าย`
+    + (rest.length ? ` · ${list(rest)} เปิดเมื่อลงมือเอง หรือใส่ในใบสั่งงาน` : "");
   return note ? `${head}\n${note}` : head;
 }
-
-// ข้อความสั้นตอนเริ่ม session (แนวเดียวกับ using-superpowers ของ obra/superpowers · วัดได้ 66% เทียบ skill ธรรมดา 6% · Codeminer42 2026-04-09)
-// เขียนเป็นข้อเท็จจริงและบอกทางข้ามของงานเล็ก เพื่อไม่ให้งานเล็กช้าลง · ส่งแม้ติดตั้งกฎประจำตัวแล้ว เพราะสั้นและเป็นจุดที่หลุดบ่อยสุด
-export const MULTISTEP_NOTE = [
-  "งานหลายขั้นในเครื่องนี้มีหัวหน้าทีมคือ skill `superuser` (งานของสาขาไหนใช้ `<plugin>:superuser` ของสาขานั้น) ผู้ใช้ไม่ต้องเอ่ยชื่อ",
-  "ถ้าคำขอมีงานมากกว่า 1 ชิ้น ต้องแก้ตั้งแต่ 3 ไฟล์ ต้องค้นข้อมูลก่อนลงมือ หรือต้องมีคนตรวจก่อนส่ง ให้เปิด superuser ก่อนเริ่ม",
-  "งานเล็ก (คำถามเดียว · แก้จุดเดียว · คุยทั่วไป) ไม่ต้องเปิด",
-  ESCAPE_CLAUSE,
-].join("\n");
 
 // zip ของ claude.ai มีสำเนา hook ในทุก plugin (ไม่มี dependencies) → ทุกสำเนาได้เหตุการณ์เดียวกัน · ให้ตัวแรกที่จองได้ส่งข้อความ ตัวอื่นเงียบ
 // จองด้วยไฟล์ใน tmp ต่อ session · เหตุการณ์ · ข้อความ · agent · ช่วงเวลา · ไฟล์เก่ากว่า 10 นาทีลบทิ้ง
@@ -535,7 +527,9 @@ export function claimContext(input, dir = join(tmpdir(), `sqt-superuser-context-
 // regex จับความหมายของงานไม่ได้ (ผู้ตรวจ 3 ตัววัดได้ 36–93% ตามชุดประโยค · 2026-10-27) ผู้ใช้จึงเลือกให้ model ตัดสินเอง:
 // ทุกข้อความแทรกบรรทัดเตือนสั้น ๆ จนกว่า superuser จะถูกเปิดใน session นั้น (skill นี้เปิดค้างได้ทั้ง session จึงเลิกเตือน)
 // แนวเดียวกับ forced eval ของ Scott Spence ที่วัดได้ 22/22 แต่สั้นกว่ามาก ไม่ไล่ทุก skill · regex ยังใช้เป็นตัวเน้นเมื่อเจอสัญญาณชัด
-export const MULTISTEP_REMINDER = "ดูคำขอนี้เองก่อนลงมือ: ถ้ามีงานมากกว่า 1 ชิ้น ต้องแก้ตั้งแต่ 3 ไฟล์ ต้องค้นข้อมูลก่อน หรือต้องมีคนตรวจก่อนส่ง ให้เปิด skill `superuser` (หรือ `<plugin>:superuser` ของสาขานั้น) ก่อนเริ่ม · ถ้าเป็นงานเล็กหรือคำถามเดียว ทำต่อได้เลย";
+// ข้อความเดียวของ hook เรื่องนี้ · เดิมมีอีกก้อนตอน SessionStart ที่พูดซ้ำ (ต้นทุนคงที่ 2026-11-11) จึงรวมเหลือก้อนนี้ ≤ 200 ตัวอักษร
+// แนวเดียวกับ using-superpowers ของ obra/superpowers (66% เทียบ skill ธรรมดา 6% · Codeminer42 2026-04-09) · มีทางข้ามของงานเล็กและของ subagent
+export const MULTISTEP_REMINDER = `งานหลายชิ้น · แก้ ≥ 3 ไฟล์ · ต้องค้นก่อน · ต้องมีคนตรวจ → เปิด \`superuser\` (หรือของสาขา) ก่อน · งานเล็กทำเลย · ${ESCAPE_CLAUSE}`;
 const OPEN_DIR = join(tmpdir(), `sqt-superuser-open-${TMP_USER}`);
 const sessionFile = (dir, session) => join(dir, String(session ?? "none").replace(/[^\w-]/g, "_"));
 
@@ -550,21 +544,60 @@ export function markSuperuserOpen(input, dir = OPEN_DIR, now = Date.now()) {
   } catch { return false; }
 }
 
+// คำขอที่ดูเล็ก: คำถามสั้น · อ้างไฟล์เดียว · แก้จุดเดียว และไม่มีสัญญาณงานหลายชิ้น (ข้อเลข ≥ 2 · หัวข้อ ≥ 2 · ทุกไฟล์ · ทำต่อกันหลายขั้น · ส่งคนนอก · ค้นข้อมูล)
+// → hook ไม่ผลักให้เปิด superuser (bench 2026-11-11: t1 แก้บั๊กไฟล์เดียว ใช้ superuser แล้วแพงขึ้น 46% ลูกทีม 0 test เท่าเดิม)
+const SMALL_FILE_REF = /[\w./\\-]+\.(?:js|mjs|cjs|ts|tsx|jsx|py|cs|java|go|rb|php|sql|dart|kt|swift|rs|vue|html|css|md|json|ya?ml|csv|txt|docx|xlsx|pptx|pdf)\b/gi;
+const NOT_SMALL = /ทุกไฟล์|ทุกตัว|ทุกหน้า|ทั้งหมด|ให้หมด|ทั้งชุด|ทั้งระบบ|ทั้ง\s*\d|จากนั้น|หลังจากนั้น|แล้ว(ก็|ค่อย)?\s*(ทำ|เขียน|แก้|เพิ่ม|ใส่|สร้าง|อัปเดต|ส่ง|ตรวจ)|\bthen\b|after that|and also|\ball (the )?files\b|\beverything\b|\bwhole\b|ส่ง(ให้)?(ลูกค้า|ผู้บริหาร|บอร์ด|หัวหน้า)|ส่งมอบ|ค้นข้อมูล|หาข้อมูล|research|superuser|[2-9]\d*\s*(ไฟล์|โมดูล|ชิ้น|หน้า|files|modules)/i;
+const QUESTION = /[?？]\s*$|(ไหม|มั้ย|หรือเปล่า|หรือยัง|อะไร|ยังไง|อย่างไร|เท่าไร|เท่าไหร่|ทำไม|ไหน)\s*(ครับ|คะ|ค่ะ|นะ)?\s*$|^(what|how|why|which|where|when|is|are|does|do|can)\b/i;
+// กริยาสั่งงานคนละชนิด ≥ 2 = งานหลายขั้นแม้อ้างไฟล์เดียว ("fix … add tests and open a PR" · "แก้ … เพิ่ม test แล้ว commit") · ผู้ตรวจ 2026-11-11
+// "รัน test" ไม่นับ เพราะเป็นการตรวจ ไม่ใช่งานอีกชิ้น (t1 ของ bench มี "แก้" กับ "รัน" ยังเป็นงานเล็ก)
+const ACTION_VERBS = [/\bfix(es|ed|ing)?\b|แก้/i, /\badd(s|ed|ing)?\b|เพิ่ม/i, /\bwrit(e|es|ing)\b|เขียน/i, /\bupdat(e|es|ed|ing)\b|อัปเดต/i,
+  /\bmigrat(e|es|ed|ing)\b|ย้าย/i, /\brefactor|รีแฟกเตอร์|ปรับโครง/i, /\bcreat(e|es|ed|ing)\b|สร้าง/i, /\b(delete|remove)\b|ลบ/i,
+  /\bcommit\b/i, /\bpush\b/i, /\bopen (a )?pr\b|เปิด ?pr\b/i, /\bdeploy\b/i, /\bmerge\b/i];
+export const actionCount = (t) => ACTION_VERBS.filter((r) => r.test(t)).length;
+export function looksSmall(text) {
+  const t = String(text ?? "").trim();
+  if (!t || NOT_SMALL.test(t) || actionCount(t) >= 2 || (t.match(/^\s*\d+[.)]\s+\S/gm) ?? []).length >= 2 || (t.match(/^#{2,}\s/gm) ?? []).length >= 2) return false;
+  const files = new Set((t.match(SMALL_FILE_REF) ?? []).map((f) => f.toLowerCase()));
+  return files.size === 1 || (files.size === 0 && t.length < 300 && QUESTION.test(t)) || (files.size === 0 && /\btypo\b|คำผิด|บรรทัด(ที่)?\s*\d+|line \d+/i.test(t));
+}
+
+// งานเล็กเปิด skill ไม่เกิน 1 ตัว (bench 2026-11-11: t1 แก้บั๊กไฟล์เดียวเปิด 4 ตัวก่อนลงมือ) · เลือกตัวที่บอกวิธีทำงาน (แก้บั๊ก · ค้นแหล่ง) ก่อนภาษา · ตัวกว้างที่ใช้ทุกงานไม่เลือก
+const BROAD_SKILL = /(^|:)(superuser|human-writing|simplify|lazy-coding|readable-code|answer-shape)$/;
+export function pickOne(skills) {
+  const tier = (s) => (/(^|:)stack-/.test(s) ? 1 : 0);
+  return skills.filter((s) => !BROAD_SKILL.test(s)).sort((a, b) => tier(a) - tier(b)).slice(0, 1);
+}
+// จำต่อ session ว่าคำขอล่าสุดเป็นงานเล็ก และบอก skill ไปแล้วกี่ตัว · ตัวบอกตอนลงมือ (PreToolUse) ใช้โควตาที่เหลือ · คำขอที่ไม่เล็กล้างทิ้ง
+const smallFile = (dir, session) => `${sessionFile(dir, session)}.small`;
+function noteSmall(dir, session, used) {
+  try {
+    if (used == null) { if (existsSync(smallFile(dir, session))) unlinkSync(smallFile(dir, session)); return; }
+    mkdirSync(dir, { recursive: true }); writeFileSync(smallFile(dir, session), String(used));
+  } catch { /* จำไม่ได้ = ตัวบอกตอนลงมือทำงานแบบปกติ */ }
+}
+/** งานเล็ก: เหลือโควตาบอก skill กี่ตัว (0 หรือ 1) · ไม่ใช่งานเล็ก → null */
+export function smallLeft(session, dir = OPEN_DIR) {
+  try { return Math.max(0, 1 - Number(readFileSync(smallFile(dir, session), "utf8"))); } catch { return null; }
+}
+
 export function promptNotice(input, router, dir = OPEN_DIR) {
   const text = String(input.prompt ?? "").trim();
   // เปิดด้วยคำสั่ง slash ไม่มี PostToolUse ของเครื่องมือ Skill → จดว่าเปิดแล้วจากข้อความเอง
   if (/^\/([\w-]+:)?superuser\b/.test(text)) markSuperuserOpen({ tool_name: "Skill", tool_input: { skill: "superuser" }, session_id: input.session_id }, dir);
-  const skills = routeSkills(text, router);
-  const notice = routerNotice(skills, router.multistep?.note);
-  // ไม่เตือน: คำสั่ง slash · ข้อความสั้นอย่าง "ต่อ" "ok" · รายงานลูกทีมที่มาในช่องผู้ใช้ · superuser เปิดแล้ว · regex เน้นให้แล้ว
-  const quiet = text.length < 12 || text.startsWith("/") || NOT_USER.test(text) || skills.some((s) => s.endsWith("superuser"))
+  const small = looksSmall(text);
+  const skills = small ? pickOne(routeSkills(text, router)) : routeSkills(text, router);
+  noteSmall(dir, input.session_id, small ? skills.length : null);
+  const notice = small ? (skills.length ? `งานเล็ก เปิดแค่ \`${skills[0]}\` แล้วลงมือ` : "") : routerNotice(skills, router.multistep?.note);
+  // ไม่เตือน: คำสั่ง slash · ข้อความสั้นอย่าง "ต่อ" "ok" · รายงานลูกทีมที่มาในช่องผู้ใช้ · superuser เปิดแล้ว · regex เน้นให้แล้ว · คำขอดูเล็ก
+  const quiet = small || text.length < 12 || text.startsWith("/") || NOT_USER.test(text) || skills.some((s) => s.endsWith("superuser"))
     || existsSync(sessionFile(dir, input.session_id));
   return quiet ? notice : [notice, MULTISTEP_REMINDER].filter(Boolean).join("\n");
 }
 
 function leadContext(input) {
   if (input.agent_id) return "";
-  if (input.hook_event_name === "SessionStart") return [coreRules(), MULTISTEP_NOTE, skillBudgetNote()].filter(Boolean).join("\n\n");
+  if (input.hook_event_name === "SessionStart") return [coreRules(), skillBudgetNote()].filter(Boolean).join("\n\n");
   if (input.hook_event_name === "UserPromptSubmit") return promptNotice(input, readJson(join(HERE, "skill-router.json"), { rules: [] }));
   return "";
 }
@@ -594,14 +627,15 @@ function stopGate(input, teamDir, root) {
 }
 
 // ── ด่านแตกงาน (PreToolUse ของหัวหน้าทีม) ───────────────────────────────
-// หัวหน้าทีมใช้ superuser · ยังไม่ได้ส่งลูกทีมลงมือสักตัว · จะเขียนไฟล์โค้ดไฟล์ที่ 2 ขึ้นไป และบรรทัดรวมของไฟล์โค้ดทั้งหมด (รวมไฟล์นี้) ≥ 40 → ไม่ให้เขียน ให้แตกชิ้นที่เหลือให้ลูกทีมพร้อมกัน
-// งานไฟล์โค้ดเดียว (แก้บั๊ก) ไม่โดน · 2 ไฟล์สั้นรวมไม่ถึง 40 หัวหน้าทีมทำเองต่อได้ · ไฟล์ใน scripts/ (สคริปต์ช่วยงาน) และไฟล์ที่ไม่ใช่โค้ดไม่นับ
+// หัวหน้าทีมใช้ superuser · ยังไม่ได้ส่งลูกทีมลงมือสักตัว · จะเขียนไฟล์โค้ดไฟล์ที่ 2 ขึ้นไป และบรรทัดรวมของไฟล์โค้ดทั้งหมด (รวมไฟล์นี้) ≥ 200 → ไม่ให้เขียน ให้แตกชิ้นที่เหลือให้ลูกทีมพร้อมกัน
+// งานไฟล์โค้ดเดียว (แก้บั๊ก) ไม่โดน · หลายไฟล์รวมไม่ถึง 200 หัวหน้าทีมทำเองต่อได้ (แตกแล้วเสียค่าเปิดลูกทีมมากกว่าที่ได้) · ไฟล์ใน scripts/ (สคริปต์ช่วยงาน) และไฟล์ที่ไม่ใช่โค้ดไม่นับ
 // นับเป็น "เขียนโค้ด" = Write หรือ Edit ที่ใส่เกิน 10 บรรทัด · ไฟล์ test ไม่นับ · แก้เล็กไม่โดน · งานชิ้นเดียวไม่โดน · ส่งลูกทีมลงมือแล้ว 1 ตัวขึ้นไป → ปล่อย
 // คำสั่งอื่นในข้อความเดียวกันนับด้วย (เขียน 5 ไฟล์รวดเดียว = 5 ชิ้น) แต่ไม่นับคำสั่งที่กำลังตรวจ
 const WORKER_SKIP = /(^|:)(reviewer|learning-reviewer|brainstormer|design-critic|design-review|Explore|Plan)$/;
 const TEST_FILE = /(^|[\\/])(tests?|__tests__|spec)[\\/]|[._-](test|spec)\.[^\\/]+$|(^|[\\/])test_[^\\/]*$/i;
 export const SMALL_EDIT_LINES = 10;
-export const BIG_PIECE_LINES = 40;
+// bench 2026-11-11 (บรรทัดโค้ดไม่รวม test): t3 4 โมดูล รวม 84–108 แตกแล้วแพงขึ้น 63% ไม่เร็วขึ้น · t5 6 โมดูล รวม 400–666 (≥ 60 บรรทัด 4–5 ไฟล์) · เกณฑ์อยู่ระหว่าง 2 กลุ่ม
+export const SPLIT_MIN_LINES = 200;
 const TOOL_PATH = /(^|[\\/])scripts[\\/]/;
 const CODE_EXT = "js|mjs|cjs|ts|tsx|jsx|py|cs|java|go|rb|php|sql|dart|kt|swift|rs|c|cc|cpp|h|vue|svelte|html|css|scss";
 const BASH_TARGETS = [new RegExp(`>>?\\s*['"]?([^\\s'";&|<>]+\\.(?:${CODE_EXT}))['"]?`, "g"),
@@ -634,10 +668,10 @@ export function splitGate(s, target, currentId = null, current = { name: "Write"
   // คำสั่งเดียวเขียนหลายไฟล์ (เช่น Bash ที่มี cat > หลายไฟล์) → ไฟล์อื่นในคำสั่งเดียวกันนับเป็นชิ้นอื่นด้วย
   for (const p0 of targetsOf(current.name, current.input ?? {})) if (resolve(cwd, p0) !== t) add(p0, linesOf(current.name, current.input ?? {}));
   for (const [id, p0, n] of s.pieces) if (id !== currentId) add(p0, n);
-  // วัดจากบรรทัดรวมของไฟล์โค้ดทุกไฟล์ (รวมไฟล์ที่กำลังจะเขียน) ไม่ใช่ชิ้นใหญ่สุด · โมดูลแยกกันหลายไฟล์ไฟล์ละ 12–38 บรรทัดก็ต้องแตก (bench t3 2026-11-11: 4 โมดูล ชิ้นใหญ่สุดไม่ถึง 40 ใน 2 จาก 9 รอบ)
+  // วัดจากบรรทัดรวมของไฟล์โค้ดทุกไฟล์ (รวมไฟล์ที่กำลังจะเขียน) ไม่ใช่ชิ้นใหญ่สุด (โมดูลใหญ่หลายตัวเขียนทีละไฟล์ก็โดน) · เกณฑ์ที่ SPLIT_MIN_LINES
   const total = [...files.values()].reduce((a, n) => a + n, 0) + linesOf(current.name, current.input ?? {});
-  if (!s.usedSuperuser || s.workers > 0 || !files.size || total < BIG_PIECE_LINES || files.has(t)) return "";
-  return `ด่านแตกงาน (SuperUser): หัวหน้าทีมเขียนโค้ดเองไปแล้ว ${files.size} ไฟล์ (รวมไฟล์นี้ ${total} บรรทัด) และยังไม่ได้ส่งลูกทีมลงมือ — ชิ้นขนาดนี้ต้องแตกให้ทำพร้อมกัน: เขียนตาราง \`ชิ้น | ไฟล์ที่แตะ | ขนาด | ต้องรอชิ้นไหน | ลูกทีม · ระดับ\` แล้วส่งชิ้นที่เหลือที่ไม่แตะไฟล์ร่วมกันให้ลูกทีมตัวใหม่ (เช่น \`developer\`) **พร้อมกันในข้อความเดียว** · ใบสั่งงาน 5 ข้อใส่ในข้อความส่งงาน · ไฟล์ที่เกี่ยวส่ง path ไม่ส่งเนื้อหา · หัวหน้าทีมรวมผลและตรวจ · แก้เล็กในไฟล์เดิมใช้ Edit ได้ตามปกติ`;
+  if (!s.usedSuperuser || s.workers > 0 || !files.size || total < SPLIT_MIN_LINES || files.has(t)) return "";
+  return `ด่านแตกงาน (SuperUser): หัวหน้าทีมเขียนโค้ดเองไปแล้ว ${files.size} ไฟล์ (รวมไฟล์นี้ ${total} บรรทัด) และยังไม่ได้ส่งลูกทีมลงมือ — ชิ้นขนาดนี้ต้องแตกให้ทำพร้อมกัน: เขียนตาราง \`ชิ้น | ไฟล์ที่แตะ | ขนาด | ต้องรอชิ้นไหน | ลูกทีม · ระดับ\` แล้วส่งชิ้นที่เหลือที่ไม่แตะไฟล์ร่วมกันให้ลูกทีมตัวใหม่ **พร้อมกันในข้อความเดียว** (ชิ้นที่มี test ให้รัน → \`worker\` ใบสั่งงานแบบสั้นของ brief-template · ชิ้นที่ spec ยังเปิดส่ง model สูงขึ้น · ที่เหลือ \`developer\` ใบสั่งงาน 5 ข้อ) · ไฟล์ที่เกี่ยวส่ง path ไม่ส่งเนื้อหา · หัวหน้าทีมรวมผลและตรวจ · แก้เล็กในไฟล์เดิมใช้ Edit ได้ตามปกติ`;
 }
 
 // ── สถานะ transcript ของด่าน (log/gate-state.json) ─────────────────────
@@ -721,7 +755,8 @@ export function gateState(teamDir, transcript) {
   delete all[transcript];
   all[transcript] = s;   // ตัวล่าสุดอยู่ท้าย · เก็บแค่ GATE_KEEP ตัวล่าสุด
   for (const key of Object.keys(all).slice(0, -GATE_KEEP)) delete all[key];
-  writeAtomic(file, JSON.stringify(all));
+  // จดสถานะไม่ได้ (โฟลเดอร์เขียนไม่ได้ · ไฟล์ถูกล็อก) ต้องไม่ทำให้ด่านทั้งหมดในเหตุการณ์นี้หาย รวมด่านข้อมูลส่วนตัว (ผู้ตรวจ 2026-11-11) · รอบหน้านับจาก transcript ใหม่
+  try { writeAtomic(file, JSON.stringify(all)); } catch { /* ข้ามการจด */ }
   return s;
 }
 
@@ -946,8 +981,12 @@ function extraPre(input, teamDir, root) {
     if (tool === "Skill") {
       if (modOn(teamDir, "suggest")) { const w = homonymWarn(input, router) || suggestSkill(input.tool_input?.skill, installedSkills({ hereDir: HERE, configDir })); if (w) out.warn.push(w); }
     } else if (["Write", "Edit", "MultiEdit", "Bash"].includes(tool) && modOn(teamDir, "route_by_tool")) {
-      const r = toolRoute(input, router, { inst: installedSkills({ hereDir: HERE, configDir }) });
-      if (r) out.warn.push(r);
+      // งานเล็ก: บอกรวมทั้งงานไม่เกิน 1 ตัว (นับตัวที่บอกตอนรับคำขอด้วย)
+      const left = input.agent_id ? null : smallLeft(input.session_id);
+      if (left !== 0) {
+        const r = toolRoute(input, left === 1 ? { ...router, byTool: { ...router.byTool, maxSkills: 1 } } : router, { inst: installedSkills({ hereDir: HERE, configDir }) });
+        if (r) { out.warn.push(left === 1 ? `${r} · งานเล็ก เปิดแค่ตัวนี้` : r); if (left === 1) noteSmall(OPEN_DIR, input.session_id, 1); }
+      }
     }
   } catch { /* router พัง = ข้าม */ }
   if (!input.agent_id) { try { out.warn.push(...takeFlags(input.session_id)); } catch { /* ไม่มีธง */ } }
@@ -961,7 +1000,9 @@ function preWriteGate(input) {
   const answer = (decision, reason) => process.stdout.write(JSON.stringify({ hookSpecificOutput: { hookEventName: "PreToolUse", permissionDecision: decision, permissionDecisionReason: reason } }));
   if (["Agent", "Task"].includes(input.tool_name)) { const r = agentGate(input, teamDir); if (r) answer("deny", r); return; }
   const x = extraPre(input, teamDir, root);
-  const deny = denyReason(input, teamDir) || x.deny;
+  let deny = "";
+  try { deny = denyReason(input, teamDir); } catch { /* ด่านแตกงานพัง = ข้าม · ด่านข้อมูลส่วนตัวข้างล่างยังต้องทำงาน */ }
+  deny ||= x.deny;
   if (deny) { answer("deny", deny); return; }
   const pii = teamDir && !moduleOn(teamDir, "pii_gate") ? "" : personalDataGate(input.tool_name, input.tool_input ?? {});
   const name = teamDir && moduleOn(teamDir, "name_gate", false) ? fileNameGate(input.tool_name, input.tool_input ?? {}) : "";
@@ -1237,7 +1278,7 @@ export function writeSummary(teamDir, now = new Date()) {
 // อ่านเฉพาะส่วนที่เพิ่ม (log/token-state.json จำ byte ต่อไฟล์) แล้วบวกเข้า log/<วันที่>/tokens.json ตามวันของข้อความ
 const TOKEN_KEEP = 400;
 const SEEN_KEEP = 50;
-const ZERO_TOKENS = () => ({ input: 0, output: 0, cacheRead: 0, cacheCreate: 0 });
+const ZERO_TOKENS = () => ({ input: 0, output: 0, cacheRead: 0, cacheCreate: 0, cacheCreate1h: 0 });
 
 export function transcriptFiles(transcript) {
   const sub = join(transcript.replace(/\.jsonl$/, ""), "subagents");
@@ -1260,7 +1301,7 @@ export function addTokens(byDay, agent, lines, seen) {
     const day = localStamp(new Date(m.timestamp ?? Date.now())).slice(0, 10);
     const t = ((byDay[day] ??= {})[agent] ??= ZERO_TOKENS());
     t.input += u.input_tokens ?? 0; t.output += u.output_tokens ?? 0;
-    t.cacheRead += u.cache_read_input_tokens ?? 0; t.cacheCreate += u.cache_creation_input_tokens ?? 0;
+    t.cacheRead += u.cache_read_input_tokens ?? 0; t.cacheCreate += u.cache_creation_input_tokens ?? 0; t.cacheCreate1h = (t.cacheCreate1h ?? 0) + (u.cache_creation?.ephemeral_1h_input_tokens ?? 0);
   }
   return byDay;
 }
@@ -1435,7 +1476,7 @@ function selfTest() {
   ];
   const T = (...blocks) => JSON.stringify({ message: { role: "assistant", content: blocks } });
   const skill = T({ type: "tool_use", name: "Skill", input: { skill: "software-development:superuser" } });
-  const edit = (f, n = 50) => T({ type: "tool_use", name: "Write", input: { file_path: `/p/${f}`, content: "x\n".repeat(n) } });
+  const edit = (f, n = 200) => T({ type: "tool_use", name: "Write", input: { file_path: `/p/${f}`, content: "x\n".repeat(n) } });
   const rev = T({ type: "tool_use", name: "Agent", input: { subagent_type: "software-development:reviewer" } });
   const say = (s) => T({ type: "text", text: s });
   // เหตุการณ์จริง 2026-10-26: ด่านเตือนตอนลูกทีม 3 ตัวยังทำงานเบื้องหลัง
@@ -1474,20 +1515,26 @@ function selfTest() {
     ["ด่านแตกงาน: ไฟล์ test → ผ่าน", [skill, edit("a.js")], false, (l) => splitGate(fold(l), "/p/a.test.js")],
     ["ด่านแตกงาน: ส่ง developer แล้ว → ผ่าน", [skill, dev, edit("a.js")], false, (l) => splitGate(fold(l), "/p/b.js")],
     ["ด่านแตกงาน: มีแค่ reviewer → บล็อก", [skill, rev, edit("a.js")], true, (l) => splitGate(fold(l), "/p/b.js")],
-    ["ด่านแตกงาน: เขียน 2 ไฟล์ในข้อความเดียว → บล็อก", [skill, T({ type: "tool_use", id: "w1", name: "Write", input: { file_path: "/p/a.js", content: "x\n".repeat(50) } }, { type: "tool_use", id: "w2", name: "Write", input: { file_path: "/p/b.js", content: "x\n".repeat(50) } })], true, (l) => splitGate(fold(l), "/p/a.js", "w1")],
+    ["ด่านแตกงาน: เขียน 2 ไฟล์ในข้อความเดียว → บล็อก", [skill, T({ type: "tool_use", id: "w1", name: "Write", input: { file_path: "/p/a.js", content: "x\n".repeat(150) } }, { type: "tool_use", id: "w2", name: "Write", input: { file_path: "/p/b.js", content: "x\n".repeat(150) } })], true, (l) => splitGate(fold(l), "/p/a.js", "w1", { name: "Write", input: { content: "x\n".repeat(150) } })],
     ["ด่านแตกงาน: Edit ใหญ่ไฟล์ที่ 2 → บล็อก", [skill, edit("a.js")], true, (l) => splitGate(fold(l), "/p/b.js", null, { name: "Edit", input: { new_string: "x\n".repeat(20) } })],
     ["ด่านแตกงาน: Bash cat > ไฟล์โค้ดที่ 2 → บล็อก", [skill, edit("a.js")], true, (l) => splitGate(fold(l), "b.js", null, { name: "Bash", input: { command: "cat > b.js <<'EOF'\n" + "x\n".repeat(20) + "EOF" } }, "/p")],
     ["ด่านแตกงาน: ชิ้นแรกสั้น (15 บรรทัด) → ผ่าน", [skill, edit("a.js", 15)], false, (l) => splitGate(fold(l), "/p/b.js")],
     ["ด่านแตกงาน: ไฟล์ใน scripts/ → ไม่นับ", [skill, edit("scripts/gen.mjs")], false, (l) => splitGate(fold(l), "/p/b.js")],
-    ["ด่านแตกงาน: Bash เขียน 2 ไฟล์ใหญ่ → บล็อก", [skill], true, (l) => splitGate(fold(l), "a.js", null, { name: "Bash", input: { command: "cat > a.js <<'EOF'\n" + "x\n".repeat(50) + "EOF\ncat > b.js <<'EOF'\n" + "y\n".repeat(50) + "EOF" } }, "/p")],
+    ["ด่านแตกงาน: Bash เขียน 2 ไฟล์ใหญ่ → บล็อก", [skill], true, (l) => splitGate(fold(l), "a.js", null, { name: "Bash", input: { command: "cat > a.js <<'EOF'\n" + "x\n".repeat(120) + "EOF\ncat > b.js <<'EOF'\n" + "y\n".repeat(120) + "EOF" } }, "/p")],
     ["ด่านแตกงาน: Bash เขียน 2 ไฟล์เล็ก → ผ่าน", [skill], false, (l) => splitGate(fold(l), "a.js", null, { name: "Bash", input: { command: "cat > a.js <<'EOF'\n" + "x\n".repeat(8) + "EOF\ncat > b.js <<'EOF'\n" + "y\n".repeat(8) + "EOF" } }, "/p")],
     ["ด่านแตกงาน: Bash สั้น → ผ่าน", [skill, edit("a.js")], false, (l) => splitGate(fold(l), "b.js", null, { name: "Bash", input: { command: "echo x > b.js" } }, "/p")],
     ["ด่านแตกงาน: Edit เล็ก → ผ่าน", [skill, edit("a.js")], false, (l) => splitGate(fold(l), "/p/b.js", null, { name: "Edit", input: { new_string: "x\ny" } })],
     // bench 2026-11-11: โฟลเดอร์งานอยู่ใต้ _to_delete/ ด่านไม่นับไฟล์ไหนเลย · เอกสารหลังเขียนโค้ดไม่ใช่ชิ้นงานโค้ด
-    ["ด่านแตกงาน: โฟลเดอร์งานอยู่ใต้ _to_delete (bench) → ยังบล็อก", [skill, T({ type: "tool_use", name: "Write", input: { file_path: "/w/_to_delete/bench/t3/src/a.js", content: "x\n".repeat(50) } })], true, (l) => splitGate(fold(l), "src/b.js", null, undefined, "/w/_to_delete/bench/t3")],
+    ["ด่านแตกงาน: โฟลเดอร์งานอยู่ใต้ _to_delete (bench) → ยังบล็อก", [skill, T({ type: "tool_use", name: "Write", input: { file_path: "/w/_to_delete/bench/t3/src/a.js", content: "x\n".repeat(200) } })], true, (l) => splitGate(fold(l), "src/b.js", null, undefined, "/w/_to_delete/bench/t3")],
     ["ด่านแตกงาน: _to_delete ภายในโปรเจกต์ → ไม่นับ", [skill, edit("_to_delete/x.js")], false, (l) => splitGate(fold(l), "/p/b.js", null, undefined, "/p")],
-    ["ด่านแตกงาน: 4 โมดูลสั้นในข้อความเดียว (12+11+38+14 บรรทัด) → บล็อก", [skill, T(...[["a", 12], ["b", 11], ["c", 38], ["d", 14]].map(([f, n]) => ({ type: "tool_use", id: f, name: "Write", input: { file_path: `/p/src/${f}.js`, content: "x\n".repeat(n - 1) } })))], true, (l) => splitGate(fold(l), "/p/src/a.js", "a", { name: "Write", input: { content: "x\n".repeat(11) } })],
-    ["ด่านแตกงาน: 2 ไฟล์สั้นรวมไม่ถึง 40 → ผ่าน", [skill, edit("a.js", 20)], false, (l) => splitGate(fold(l), "/p/b.js", null, { name: "Write", input: { content: "x\n".repeat(14) } })],
+    // เกณฑ์ SPLIT_MIN_LINES จากขนาดจริงของ bench 2026-11-11 (บรรทัดโค้ดไม่รวม test): t1 ไฟล์เดียว · t3 53+24+17+14 · t5 cron 121 แล้ว csv 111 · t6 เอกสารล้วน
+    ["ด่านแตกงาน: bench t1 แก้บั๊กไฟล์เดียว → ผ่าน", [skill, edit("src/thaiDate.js", 30)], false, (l) => splitGate(fold(l), "/p/src/thaiDate.js", null, { name: "Edit", input: { new_string: "x\n".repeat(20) } })],
+    ["ด่านแตกงาน: bench t3 4 โมดูลทีละไฟล์ (53+24+17+14) → ผ่าน", [skill, edit("src/bahtText.js", 53), edit("src/buddhist.js", 24), edit("src/phone.js", 17)], false, (l) => splitGate(fold(l), "/p/src/thaiId.js", null, { name: "Write", input: { content: "x\n".repeat(13) } })],
+    ["ด่านแตกงาน: bench t3 4 โมดูลในข้อความเดียว → ผ่าน", [skill, T(...[["a", 53], ["b", 24], ["c", 17], ["d", 14]].map(([f, n]) => ({ type: "tool_use", id: f, name: "Write", input: { file_path: `/p/src/${f}.js`, content: "x\n".repeat(n - 1) } })))], false, (l) => splitGate(fold(l), "/p/src/a.js", "a", { name: "Write", input: { content: "x\n".repeat(52) } })],
+    ["ด่านแตกงาน: bench t5 โมดูลใหญ่ไฟล์ที่ 2 (121 แล้ว 111) → บล็อก", [skill, edit("src/cron.js", 121)], true, (l) => splitGate(fold(l), "/p/src/csv.js", null, { name: "Write", input: { content: "x\n".repeat(110) } })],
+    ["ด่านแตกงาน: bench t5 เริ่มจากโมดูลเล็ก (28+50+72) แล้ว router 133 → บล็อก", [skill, edit("src/slots.js", 28), edit("src/csv.js", 50), edit("src/lru.js", 72)], true, (l) => splitGate(fold(l), "/p/src/router.js", null, { name: "Write", input: { content: "x\n".repeat(132) } })],
+    ["ด่านแตกงาน: bench t6 เอกสารล้วน → ผ่าน", [skill, edit("report.md", 60)], false, (l) => splitGate(fold(l), "/p/notes/summary.md")],
+    ["ด่านแตกงาน: 2 ไฟล์สั้นรวมไม่ถึง 200 → ผ่าน", [skill, edit("a.js", 20)], false, (l) => splitGate(fold(l), "/p/b.js", null, { name: "Write", input: { content: "x\n".repeat(14) } })],
     ["ด่านแตกงาน: เอกสาร .md หลังเขียนโค้ด → ผ่าน", [skill, edit("a.js")], false, (l) => splitGate(fold(l), "/p/docs/BUILD-PLAN.md")],
     ["ด่านแตกงาน: เอกสาร .md 2 ไฟล์ใหญ่ (สรุปประชุม) → ผ่าน", [skill, edit("notes.md")], false, (l) => splitGate(fold(l), "/p/summary.md")],
   );
@@ -1619,6 +1666,39 @@ function selfTest() {
       promptNotice({ prompt: "/software-development:superuser ทำฟีเจอร์ใหม่", session_id: "s9" }, router, d);
       return clean && !promptNotice({ prompt: "Audit our AWS bill and cut anything we don't use", session_id: "s9" }, router, d).includes(MULTISTEP_REMINDER);
     }],
+    // งานเล็กหลบเอง (bench 2026-11-11 --prompt natural): คำขอแบบ t1 (บั๊กไฟล์เดียว มีรายการอาการ) และคำถามไม่ถูกผลักให้เปิด superuser · t3 t5 t6 ยังถูกผลัก
+    ["งานเล็กหลบเอง: t1 · คำถาม · แก้จุดเดียว → ไม่มีบรรทัดเตือนและไม่มี superuser · t3 t5 t6 → ยังมี", [], true, () => {
+      const d = join(tmpdir(), `sqt-open-small-${process.pid}`);
+      const pushed = (p) => { const n = promptNotice({ prompt: p, session_id: "sm" }, router, d); return n.includes(MULTISTEP_REMINDER) || /`([\w-]+:)?superuser`/.test(n); };
+      const t1 = "# แก้บั๊ก: วันที่ในหัวรายงานผิด\n\nลูกค้าแจ้ง: หัวรายงาน (`src/report.js`) แสดงวันที่ผิด\n- รายงานวันที่ 19 ต.ค. 2569 แสดงเป็น \"19 พ.ย. 2569\"\n- รายงานตอน 01:30 น. แสดงวันที่ของปีก่อน\n- เดือนธันวาคมแสดงเป็น \"undefined\"\n\nต้องการ: `formatThaiDate(date)` คืนวันที่ตามเวลาไทยทุกกรณี\nรัน test ด้วย `npm test`";
+      const t3 = "# ทำ 4 โมดูลอรรถประโยชน์ภาษาไทย\n\n1. `src/thaiId.js` ตรวจเลขบัตร\n2. `src/phone.js` แปลงเบอร์\n3. `src/bahtText.js` คำอ่านเงิน\n4. `src/buddhist.js` แปลงปี\n\nรัน test ด้วย `npm test`";
+      const t5 = "# ชุดโมดูลหลักของระบบร้าน (ส่งมอบลูกค้าใช้จริง)\n\n## 1 · `src/csv.js`\n- parseCsv\n## 2 · `src/slots.js`\n- freeSlots";
+      const t6 = "# สรุปประชุมส่งผู้บริหาร\n\nเขียนลง `report.md` จาก `notes/meeting-2026-10-20.md` และ `data/sales.csv`";
+      const small = [t1, "ฟังก์ชัน formatThaiDate คืนค่าอะไร", "แก้ typo บรรทัด 3 ใน README"].every((p) => looksSmall(p) && !pushed(p));
+      return small && [t3, t5, t6].every((p) => !looksSmall(p) && pushed(p)) && !looksSmall("ใช้ superuser แก้ `src/report.js`");
+    }],
+    // ผู้ตรวจ 2026-11-11: อ้างไฟล์เดียวแต่สั่งหลายงาน (กริยาสั่งงาน ≥ 2) ต้องไม่นับเป็นงานเล็ก · t1 ของ bench ทั้งไฟล์ยังเล็ก
+    ...["fix the bug in src/cart.js, add tests and open a PR", "แก้ src/cart.js ให้รองรับส่วนลด เพิ่ม test แล้ว commit กับ push",
+      "migrate the users table in db/schema.sql and update all callers", "update src/index.ts to add auth middleware and write integration tests",
+      "refactor src/api.js ให้ใช้ async ทุกฟังก์ชัน พร้อมแก้ทุกที่ที่เรียกใช้", "แก้ src/cart.js และเขียน test ให้ด้วย"]
+      .map((s) => [`งานเล็ก: สั่งหลายงานในไฟล์เดียว → ไม่เล็ก · ${s.slice(0, 30)}`, [], false, () => looksSmall(s)]),
+    ["งานเล็ก: TASK.md ของ bench t1 ทั้งไฟล์ · แก้ null check ไฟล์เดียว → เล็ก", [], true, () => {
+      let t1 = ""; try { t1 = readFileSync(join(HERE, "..", "..", "..", "scripts", "evals", "speed", "tasks", "t1", "TASK.md"), "utf8"); } catch { return true; }   // สำเนาที่ติดตั้งไม่มี scripts/
+      return looksSmall(t1) && looksSmall("fix the null check in src/cart.js");
+    }],
+    ["งานเล็ก: บอก skill ตัวเดียวที่ตรงสุด (วิธีทำงานก่อนภาษา · ตัวกว้างไม่เลือก) · ข้อความ ≤ 200 ตัวอักษร", [], true, () => {
+      const d = join(tmpdir(), `sqt-open-one-${process.pid}`);
+      const n = promptNotice({ prompt: "แก้บั๊ก src/report.ts วันที่ผิด", session_id: "one" }, { rules: [{ pattern: "แก้บั๊ก", skills: ["human-writing", "stack-typescript", "principle-fix-root-cause", "targeted-fix"] }] }, d);
+      return n === "งานเล็ก เปิดแค่ `principle-fix-root-cause` แล้วลงมือ" && smallLeft("one", d) === 0
+        && pickOne(["superuser:superuser", "human-writing", "lazy-coding"]).length === 0 && pickOne(["stack-sql", "targeted-fix"])[0] === "targeted-fix";
+    }],
+    ["งานเล็ก: โควตาบอก skill ตอนลงมือ · บอกตอนรับคำขอแล้ว → 0 · ยังไม่บอก → 1 · คำขอไม่เล็ก → null", [], true, () => {
+      const d = join(tmpdir(), `sqt-open-left-${process.pid}`), R = { rules: [] };
+      promptNotice({ prompt: "แก้ typo บรรทัด 3 ใน README", session_id: "L" }, R, d); const one = smallLeft("L", d);
+      promptNotice({ prompt: "1. เพิ่มหน้า login\n2. แก้บั๊กตะกร้า\n3. เขียน test", session_id: "L" }, R, d);
+      return one === 1 && smallLeft("L", d) === null;
+    }],
+    ["ข้อความ hook: เตือนงานหลายขั้น ≤ 200 ตัวอักษร · SessionStart ไม่มีข้อความเรื่องนี้ซ้ำ", [], true, () => MULTISTEP_REMINDER.length <= 200 && !leadContext({ hook_event_name: "SessionStart" }).includes(MULTISTEP_REMINDER.slice(0, 20))],
     ["กฎประจำตัว: ส่งได้ไม่เกินเพดาน", [], true, () => { const c = coreRules({ configDir: "/nonexistent" }); return c.includes(CORE_MARK) && c.length <= CONTEXT_MAX; }],
     ["กฎประจำตัว: ไม่ส่งหัวสำเนา · เริ่มที่ CORE_MARK", [], true, () => coreRules({ configDir: "/nonexistent" }).startsWith(CORE_MARK)],
     ["งบรายการ skill: ไม่มี settings → เตือน · ตั้ง 0.02 แล้วเงียบ · เตือนแล้วเงียบ 7 วัน", [], true, () => {
@@ -1847,6 +1927,15 @@ ${rows}
       finally { process.stdout.write = w; }
       return /"ask"/.test(out) && !/"deny"/.test(out);
     }],
+    ["ด่านข้อมูลส่วนตัว: จดสถานะด่านแตกงานไม่ได้ (config dir เป็นไฟล์) → ยังถาม ไม่เงียบ", [], true, () => {
+      const bad = join(tmpdir(), `sqt-bad-config-${process.pid}`), tx = join(tmpdir(), `sqt-bad-tx-${process.pid}.jsonl`);
+      writeFileSync(bad, "x"); writeFileSync(tx, "");
+      const w = process.stdout.write, keep = process.env.CLAUDE_CONFIG_DIR; let out = "";
+      process.stdout.write = (s) => { out += s; return true; }; process.env.CLAUDE_CONFIG_DIR = bad;
+      try { preWriteGate({ hook_event_name: "PreToolUse", tool_name: "Write", cwd: tmpdir(), transcript_path: tx, tool_input: { file_path: join(tmpdir(), "src", "x.js"), content: "// บัตรประชาชน 1101700123456\n" } }); }
+      finally { process.stdout.write = w; if (keep == null) delete process.env.CLAUDE_CONFIG_DIR; else process.env.CLAUDE_CONFIG_DIR = keep; }
+      return /"ask"/.test(out) && /ด่านข้อมูลส่วนตัว/.test(out);
+    }],
     ["ด่านชื่อไฟล์: ชื่อถูก 8 แบบผ่าน · ชื่อผิด 8 แบบถูกทัก · ไฟล์ที่มีอยู่และ _to_delete ไม่ตรวจ", [], true, () => {
       const W = (f) => fileNameGate("Write", { file_path: join(tmpdir(), "sqt-name-test", f) });
       const good = ["report-2026-10-28.md", "README.md", "ACME-QUOTE-v1.2-APPROVED.docx", "user_card.tsx", "newsletter.md", "renew-plan.md", "SKILL.md", "data.json"];
@@ -1980,7 +2069,7 @@ ${rows}
   }]);
   const mdTok = summaryMarkdown({ "2026-10-21": { ...day, tokens: { main: { input: 1200, output: 30, cacheRead: 5000, cacheCreate: 40 }, "software-development:developer": { input: 10, output: 20, cacheRead: 0, cacheCreate: 0 } } } }, new Date("2026-10-21T04:00:00Z"));
   gates.push(["สรุป log: คอลัมน์ token ราย agent และยอดรวมวัน", [], true, () => mdTok.includes("| 2 นาที | 2026-10-21 10:04 | 10 | 20 | 0 | 0 |") && mdTok.includes("| 5 | 1 | 1,210 | 50 | 5,000 | 40 |")]);
-  try { gates.push(...extraGates({ HERE, isBashGuard, foldTranscript, freshGate, routeSkills, MULTISTEP_NOTE })); } catch (e) { gates.push([`P3 self-test เริ่มไม่ได้: ${e.message}`, [], true, () => false]); }
+  try { gates.push(...extraGates({ HERE, isBashGuard, foldTranscript, freshGate, routeSkills, MULTISTEP_REMINDER })); } catch (e) { gates.push([`P3 self-test เริ่มไม่ได้: ${e.message}`, [], true, () => false]); }
   for (const [label, lines, expect, fn = (l) => reviewGate(fold(l))] of gates) {
     const hit = Boolean(fn(lines)) === expect;
     console.log(`  ${hit ? "✅" : "❌"} ${label}`);

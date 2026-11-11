@@ -3,7 +3,7 @@
  * run-bench.mjs — เทียบ plugin 2 รุ่นบนงานชุดเดียวกัน: เวลา · จำนวนรอบ · ค่าใช้จ่าย · ลูกทีม · test ที่ซ่อนไว้
  *
  *   node scripts/evals/speed/run-bench.mjs --old <git ref>|none [--new <git ref>|worktree] [--tasks t1,t4] [--runs 2]
- *        [--plugin software-development] [--budget 8] [--parallel 4] [--save-ratios]
+ *        [--plugin software-development] [--budget 8] [--parallel 4] [--save-ratios] [--prompt lead|natural] [--dry-run]
  *
  *   --old    รุ่นก่อน เป็น git ref เช่น HEAD หรือ f105afc · none = ไม่โหลด plugin เลย (แขนเทียบ "ไม่ใช้ superuser")
  *   --new    รุ่นหลัง ค่าเริ่ม = ไฟล์ในโฟลเดอร์ตอนนี้ (worktree) · ใส่ git ref ก็ได้
@@ -39,7 +39,11 @@ const BUDGET = String(args.budget ?? 8);
 const PARALLEL = Number(args.parallel ?? 4);
 // แขน none ได้คำสั่งเดียวกันทุกคำ ยกเว้นประโยคที่ให้ใช้ superuser · ต่างกันแค่นี้ผลต่างจึงมาจาก plugin
 const TASK_PROMPT = "ทำงานตาม TASK.md ในโฟลเดอร์นี้ให้เสร็จจนส่งมอบได้ · ผมไม่อยู่ ห้ามถามกลางทาง ตัดสินใจเองแล้วจดไว้ · จบแล้วสรุปสั้น ๆ ว่าทำอะไรไปและผ่าน test อะไร";
-const promptFor = (label) => (label === "none" ? TASK_PROMPT : "ใช้ skill `superuser` ของ plugin " + PLUGIN + " " + TASK_PROMPT);
+// --prompt natural: ทั้ง 2 แขนได้แค่เนื้อ TASK.md ไม่สั่งให้ใช้ superuser (แขน new ยังโหลด plugin) · วัดว่า hook และ skill หลบงานเล็กเองจริงไหม
+const PROMPT_MODE = args.prompt ?? "lead";
+if (!["lead", "natural"].includes(PROMPT_MODE)) { console.error("--prompt ใช้ได้ 2 ค่า: lead (ค่าเริ่ม) · natural"); process.exit(1); }
+const promptFor = (label, task) => PROMPT_MODE === "natural" ? readFileSync(join(HERE, "tasks", task, "TASK.md"), "utf8")
+  : label === "none" ? TASK_PROMPT : "ใช้ skill `superuser` ของ plugin " + PLUGIN + " " + TASK_PROMPT;
 const BASELINE = args.old === "none";
 const ALLOWED = ["Read", "Edit", "Write", "Glob", "Grep", "Agent", "Task", "Skill", "TodoWrite",
   ...["npm", "node", "python", "python3", "pytest", "git", "ls", "cat", "cd", "mkdir", "cp", "grep", "head", "tail", "echo"].map((c) => `Bash(${c} *)`)];
@@ -132,7 +136,7 @@ async function one({ task, label, plugin, n }) {
     execFileSync("git", a, { cwd: work });
   const sid = randomUUID(); // ตั้ง session เอง จะได้หา transcript ของรอบนี้เจอแน่นอน
   const t0 = Date.now();
-  const r = await run("claude", ["-p", promptFor(label), "--session-id", sid, ...plugin.flatMap((d) => ["--plugin-dir", d]), "--setting-sources", "project", "--strict-mcp-config",
+  const r = await run("claude", ["-p", promptFor(label, task), "--session-id", sid, ...plugin.flatMap((d) => ["--plugin-dir", d]), "--setting-sources", "project", "--strict-mcp-config",
     "--permission-mode", "acceptEdits", "--allowedTools", ...ALLOWED, "--output-format", "json", "--max-budget-usd", BUDGET], { cwd: work });
   const wall = Math.round((Date.now() - t0) / 1000);
   let j = {}; try { j = JSON.parse(r.out); } catch { /* claude ล้ม → ดู stderr ในไฟล์ */ }
@@ -145,8 +149,13 @@ async function one({ task, label, plugin, n }) {
   return row;
 }
 
-mkdirSync(join(OUT, "runs"), { recursive: true });
 const OLD = BASELINE ? "none" : "old";
+// --dry-run: พิมพ์คำสั่งที่แต่ละแขนจะได้ แล้วจบ · ไม่เรียก claude ไม่แตก worktree ไม่เสียเงิน
+if (args["dry-run"]) {
+  for (const task of TASKS) for (const label of [OLD, "new"]) console.log(`── ${task} · ${label} · prompt=${PROMPT_MODE} · plugin=${label === "none" ? "ไม่โหลด" : PLUGIN + " + superuser"}\n${promptFor(label, task)}\n`);
+  process.exit(0);
+}
+mkdirSync(join(OUT, "runs"), { recursive: true });
 const versions = [[OLD, pluginDirs("old", args.old)], ["new", pluginDirs("new", args.new)]];
 for (const [label, dirs] of versions) console.log(`${label}: โหลด ${dirs.map((d) => d.replace(ROOT, ".")).join(" · ") || "ไม่มี plugin"}`);
 const jobs = TASKS.flatMap((task) => Array.from({ length: RUNS }, (_, i) => versions.map(([label, plugin]) => ({ task, label, plugin, n: i + 1 }))).flat());
@@ -156,7 +165,7 @@ for (let i = 0; i < jobs.length; i += PARALLEL) rows.push(...(await Promise.all(
 // สรุป: ค่ากลางต่องาน ต่อรุ่น · ผลแกว่งแรงจึงไม่ใช้ค่าเฉลี่ย · pass^1 = สัดส่วนรอบที่ผ่าน test ที่ซ่อนไว้ครบ · pass^k = ผ่านครบทุกรอบ (k = จำนวนรอบ)
 const pick = (rs, k) => rs.map((r) => r[k]).filter((x) => x != null);
 const f0 = (x) => (x == null ? "–" : x.toFixed(0)), f2 = (x) => (x == null ? "–" : x.toFixed(2));
-const lines = [`\n## ${new Date().toISOString().slice(0, 16).replace("T", " ")} · old=${args.old} · new=${args.new ?? "worktree"} · ${RUNS} รอบ/รุ่น\n`,
+const lines = [`\n## ${new Date().toISOString().slice(0, 16).replace("T", " ")} · old=${args.old} · new=${args.new ?? "worktree"} · prompt=${PROMPT_MODE} · ${RUNS} รอบ/รุ่น\n`,
   "| งาน | รุ่น | เวลา ค่ากลาง (วินาที) | รอบคุย ค่ากลาง | ค่าใช้จ่าย ค่ากลาง ($) | token ค่ากลาง | ลูกทีมเฉลี่ย | ส่งพร้อมกัน | test ที่ซ่อนไว้ | pass^1 · pass^k |", "|---|---|---|---|---|---|---|---|---|---|"];
 for (const task of TASKS) for (const [label] of versions) {
   const rs = rows.filter((r) => r.task === task && r.label === label);

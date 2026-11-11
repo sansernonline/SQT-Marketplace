@@ -369,6 +369,7 @@
     "SKILL.md": "หัวหน้าทีม: รับงาน วัดขนาด เลือก playbook แจกงาน ตรวจ รายงาน",
     "references/agents.md": "รายชื่อ agent ของ plugin และงานที่แต่ละตัวรับ",
     "references/approvals.md": "งานแบบไหนต้องรอคนอนุมัติก่อนทำ",
+    "references/playbooks.md": "ตารางเลือก playbook ของงานซอฟต์แวร์ (ย้ายมาจาก SKILL.md หัวข้อ 2)",
     "references/brief-template.md": "แบบฟอร์มใบสั่งงานที่ส่งให้ลูกทีม",
     "references/context-template.md": "แบบไฟล์ CONTEXT.md สำหรับส่งงานต่อ",
     "references/evidence.md": "หลักฐานแบบไหนนับว่า \"เสร็จจริง\"",

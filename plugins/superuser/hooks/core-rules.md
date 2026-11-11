@@ -1,4 +1,4 @@
-<!-- สำเนาที่ scripts/sync/sync-superuser.mjs สร้างจาก scripts/install/CLAUDE.global.md · ห้ามแก้ไฟล์นี้ แก้ที่ต้นฉบับ · sha256:f4a04ccdab9a -->
+<!-- สำเนาที่ scripts/sync/sync-superuser.mjs สร้างจาก scripts/install/CLAUDE.global.md · ห้ามแก้ไฟล์นี้ แก้ที่ต้นฉบับ · sha256:595f3e8e8164 -->
 <!-- sqt-core-rules -->
 # กฎประจำตัว — ใช้กับทุกโปรเจกต์
 
@@ -25,6 +25,8 @@
 | commit · ไฟล์ชั่วคราว · ตั้งชื่อเอกสาร | `commit-log` · `temp-file-discipline` · `document-naming` |
 
 ข้อความแจ้ง `skill ที่ต้องเปิด` จาก hook ก่อนข้อความของผู้ใช้ คือรายการจากตารางนี้ที่ตรงกับคำขอ ให้เปิดตามนั้น
+
+**งานเล็ก (ไฟล์เดียว · แก้จุดเดียว · คำถามเดียว) เปิด skill ไม่เกิน 1 ตัวที่ตรงที่สุด แล้วลงมือ** — ข้อนี้ชนะ "หลายแถวตรง เปิดครบทุกแถว"
 
 ## งบ context
 

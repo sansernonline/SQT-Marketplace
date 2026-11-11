@@ -1,6 +1,6 @@
 ---
 name: reviewer
-description: Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes.
+description: Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.
 tools: Read, Grep, Glob, Bash, Skill
 model: sonnet
 effort: medium
