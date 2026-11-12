@@ -1,5 +1,9 @@
 # Changelog — personal-life
 
+## 0.23.8 — 2026-11-12
+
+- สำเนา `superuser/references/team-roles.md` ของ plugin นี้เป็นภาษาอังกฤษตาม superuser 3.39.1
+
 ## 0.23.7 — 2026-11-11
 
 - `superuser/SKILL.md` ของ plugin นี้เป็นภาษาอังกฤษ (เล็กลงราว 40%) · คำไทยที่ hook ตรวจ ป้ายสถานะ และชื่อเอกสารราชการไทยคงไว้
