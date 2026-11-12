@@ -1161,6 +1161,8 @@ Use before any design work (web, app, slide, logo, poster) to search live refere
 
 > **กฎข้อเดียว:** ทุกงานออกแบบเริ่มจากเอาคำของโปรเจกต์ไปค้นสดในเว็บที่เก่งงานประเภทนั้น แล้วหยิบสไตล์และสีจากงานที่ใกล้ที่สุดมาเป็นต้นแบบ · ไม่ออกแบบจากความจำหรือคลังที่เก็บไว้ เพราะเทรนด์เปลี่ยนเร็ว (ผู้ใช้ตัดสิน 2026-10-27) · skill นี้เก็บแค่รายชื่อเว็บ ไม่เก็บตัวอย่างงาน
 
+**Order of the first answer to any design request:** (1) search queries from the project's own words (2) links to real works you opened this round on sites strong in that type, such as Awwwards · Land-book · Dribbble · Behance (3) if the owner is present and did not say "don't ask", the board and the pick question from gate item 3 below; otherwise colours or shapes, each colour naming where it came from (a reference opened this round, or the locked brand guide) · Hex codes and `<svg>` come after step 2, never before · "Just make it, don't ask" skips the questions, not the search · No web tool in this session → give the queries and site links, and say the colours will be taken from the work the owner picks (eval 2026-11-10: drew SVG or picked colours before searching 3/3 in every case)
+
 ## ด่านก่อนลงมือ — ทุกงานสร้างสรรค์ ทุกครั้ง
 
 เจ้าของสั่ง 2026-11-06: สั่งงานสร้างสรรค์เมื่อไร ต้องอ่านธีมและค้นต้นแบบก่อนลงมือเสมอ · skill ออกแบบทุกตัวชี้มาที่หัวข้อนี้ · ข้ามข้อไหนต้องเขียนเหตุผลในบรรทัดหลักฐาน
@@ -1342,7 +1344,7 @@ Use when software work is big or risky (5+ modules, whole repo, money, personal 
 
 ## 2 · Size, pick a budget, then set the expectation
 
-**3 lines before touching the task:** **Goal** · **Done-when** (medium tasks and up add Loop · Graph · Dynamic per [`agent-patterns`](../agent-patterns/SKILL.md)) · **Risk**: can it be undone?
+**3 lines before touching the task, also on top of every plan you show the user, written with these Thai labels word for word:** `เป้า:` (goal) · `เสร็จเมื่อ:` (done-when: a check anyone can run, such as a test that passes or the failing case now working · medium tasks and up add Loop · Graph · Dynamic per [`agent-patterns`](../agent-patterns/SKILL.md)) · `เสี่ยง:` (risk: can it be undone?) · Every step in the plan also says how it is checked
 
 - **Small**: 1 piece · code total < 200 lines → the lead does it alone, no playbook
 - **Medium**: 2–8 independent pieces · code total ≥ 200 lines → the best-fit playbook

@@ -40,7 +40,7 @@ Use when design work spans several assets (brand kit, campaign, AI image or vide
 
 ## 2 · Size, pick a budget, then set the expectation
 
-**3 lines before touching the task:** **Goal** · **Done-when** (medium tasks and up add Loop · Graph · Dynamic per [`agent-patterns`](../agent-patterns/SKILL.md)) · **Risk**: can it be undone?
+**3 lines before touching the task, also on top of every plan you show the user, written with these Thai labels word for word:** `เป้า:` (goal) · `เสร็จเมื่อ:` (done-when: a check anyone can run, such as a test that passes or the failing case now working · medium tasks and up add Loop · Graph · Dynamic per [`agent-patterns`](../agent-patterns/SKILL.md)) · `เสี่ยง:` (risk: can it be undone?) · Every step in the plan also says how it is checked
 
 - **Small**: 1 piece · code total < 200 lines → the lead does it alone, no playbook
 - **Medium**: 2–8 independent pieces · code total ≥ 200 lines → the best-fit playbook

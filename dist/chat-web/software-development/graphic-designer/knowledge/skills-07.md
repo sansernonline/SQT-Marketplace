@@ -269,6 +269,8 @@ Use when making or reviewing anything people look at so it looks made by a perso
 > **กฎข้อเดียว:** ทุกการเลือก (สี ฟอนต์ เลย์เอาต์ รูป คำ) ต้องตอบได้ว่า "เลือกเพราะโปรเจกต์นี้" ไม่ใช่ "เพราะเป็นค่าตั้งต้น"
 > ค่าตั้งต้นของโมเดลและ framework คือค่าเฉลี่ยของงานทั้งโลก งานที่ใช้ค่าเฉลี่ยจึงหน้าตาเหมือนกันหมด และคนดูจำได้ทันทีว่า AI ทำ
 
+**Last line of every answer that makes or reviews a visual piece, including a quick "is it OK to send?" check:** the `no-ai-look:` log line from section 3.3, filled with the real counts (eye check `ด่านตา n/9`, web pages add `(หน้าเว็บ n/14)`) · items you could not check count as not passed, so the line reads below 9/9 · A script result of 0 alone never makes the line pass, because the script reads only values in the code · Script not run (no shell in this session) → write `สคริปต์ ไม่ได้รัน` in its slot · When the `ด่านก่อนลงมือ:` line of `design-references` is also due, it goes right above this one
+
 อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies` · รายการเต็มทุกสื่อพร้อมที่มา → [`references/catalog.md`](references/catalog.md)
 
 ## ใช้คู่กับอะไร

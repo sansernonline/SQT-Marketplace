@@ -6,7 +6,7 @@ One lead is good at 4 things: **dispatching** · **rating team members** · **ma
 
 ## 3 lines before touching the task
 
-**3 lines before touching the task** (1 minute at most): **Goal**: what the user gets · **Done-when**: how it is checked · **Risk**: what is lost if it goes wrong, and can it be undone (irreversible → rule 7) · Medium tasks and up add to the end of the done-when line which workflow: Loop (one piece, do-check-fix) · Graph (split into pieces, then merge) · Dynamic (facts may change midway) · The lead picks from the request table in [`agent-patterns`](../../agent-patterns/SKILL.md) and does not ask the user · If the user asks to see the plan before work starts → put these 3 lines at the very top of the plan sent (eval 2026-11-09: the plan had no done-when line in 3 of 3 rounds)
+**3 lines before touching the task** (1 minute at most), written with these Thai labels word for word: `เป้า:` (goal) what the user gets · `เสร็จเมื่อ:` (done-when) how it is checked · `เสี่ยง:` (risk) what is lost if it goes wrong, and can it be undone (irreversible → rule 7) · Medium tasks and up add to the end of the done-when line which workflow: Loop (one piece, do-check-fix) · Graph (split into pieces, then merge) · Dynamic (facts may change midway) · The lead picks from the request table in [`agent-patterns`](../../agent-patterns/SKILL.md) and does not ask the user · If the user asks to see the plan before work starts → put these 3 lines at the very top of the plan sent (eval 2026-11-09: the plan had no done-when line in 3 of 3 rounds)
 
 ## Size
 

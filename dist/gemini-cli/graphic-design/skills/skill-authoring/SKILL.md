@@ -3,130 +3,87 @@ name: skill-authoring
 description: Use when creating or changing a skill, agent or playbook in this marketplace, or its evals.
 ---
 
-# skill-authoring — เขียน skill ให้ถูกเรียก ทำตามได้ และวัดได้
+# skill-authoring — write skills that get called, can be followed, and can be measured
 
-อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies` · ถ้อยคำใน skill เขียนตาม `human-writing` · กฎที่ validator บังคับอยู่ในหัวข้อ 5 รูปแบบ eval ทางการอยู่ใน [`eval-format`](references/eval-format.md)
+Lives only in plugin `superuser`; other plugins share it through `dependencies`. Wording follows `human-writing`. The official eval format is in [`eval-format`](references/eval-format.md).
 
-> **กฎข้อเดียว:** skill ที่ไม่เคยเห็น agent พลาดโดยไม่มีมัน และไม่เคยเห็นมันถูกเรียกเอง ยังไม่ใช่ skill ที่เสร็จ — ทุกตัวใหม่มี eval 3 เคสและผ่านรอบทดสอบก่อนและหลัง
+> **The one rule:** a skill is not finished until you have seen an agent fail without it and seen it called on its own. Every new skill has 3 eval cases and passes a before-and-after test round.
 
-## ใช้เมื่อ
+## Must-not-skip rules (read these first)
 
-- สร้าง skill agent หรือ playbook ใหม่ใน `plugins/<plugin>/` · แก้ description หรือย้าย skill ข้าม plugin
-- เขียนหรือแก้ eval ของ skill · `/skill-doctor` หรือ `scripts/evals/triggers` บอกว่า skill ไม่ถูกเรียก
-- ตรวจ skill ที่คนอื่นเขียนก่อนรวม
+1. Run `node scripts/check/validate-marketplace.mjs` (error must be 0) and `node scripts/sync/sync-superuser.mjs --check` before every handoff.
+2. `description` starts with `Use when …` or `ใช้เมื่อ …`, is at most 160 characters, has no `: ` in an unquoted value and no `<` `>`. It says when to use the skill, never summarises the steps.
+3. Add a row to `plugins/superuser/hooks/skill-router.json` and test it with 3–5 real sentences (match) and one unrelated sentence (no match).
+4. Edit JSON or YAML that contains a regex with Edit or a script file. Never through a Bash heredoc: `\\b` becomes `\b`, a backspace (happened 5 times up to 2026-10-26).
+5. Every new skill gets 3 eval cases (`-trigger` · `-behaviour` · `-regression`) and a red/green test with fresh subagents. Details: [`eval-cases`](references/eval-cases.md) · [`before-after-testing`](references/before-after-testing.md).
+6. Bump `version` in `plugins/<plugin>/.claude-plugin/plugin.json` whenever plugin content changes. The validator does not check this; without it `claude plugin update` says "latest" although content changed (found in the course, 2026-11-04).
+7. Write rules as instructions saying what to do, not prohibitions (section 2). Every number or fact carries a source and date, or `(ยังไม่ได้ตรวจ)`.
+8. A skill that spends money or creates things outside the machine needs all 4 safeguards in section 2.
 
-ไม่ใช้เมื่อ: บทเรียนจากงานยังไม่ได้กรอง → `session-lessons-to-skills` ก่อน (ที่นั่นตัดสินว่าแก้ skill ไหน แล้วมาที่นี่เพื่อแก้ให้ถูกแบบ) · ความผิดซ้ำที่ทำเป็นตัวตรวจอัตโนมัติได้ → `repeated-mistakes-to-checks` · หัวหน้าทีมแจกงานเขียน skill เป็นหลายขั้นให้ลูกทีม → playbook `skill-authoring` ใน plugin `software-development` (`skills/superuser/references/playbook-skill-authoring.md` ขั้น 5 ทดสอบปิดตา) ซึ่งใช้กฎในไฟล์นี้
+## When to use
 
-## 1 · ชื่อและ description — ส่วนเดียวที่ตัดสินว่า skill จะถูกเรียกไหม
+- Create a new skill, agent or playbook in `plugins/<plugin>/`; change a description or move a skill across plugins.
+- Write or change a skill's evals; `/skill-doctor` or `scripts/evals/triggers` says a skill is not being called.
+- Review a skill someone else wrote before merging.
 
-ตอนเริ่ม session Claude เห็นแค่ `name` + `description` ของทุก skill เนื้อ SKILL.md โหลดเมื่อถูกเรียกเท่านั้น และรายการนี้มีงบราว 1% ของ context ตัวที่ไม่ค่อยถูกเรียกจะถูกตัดคำอธิบายเหลือแค่ชื่อก่อน (`จากแหล่ง` เอกสาร Claude Code หน้า skills · 2026-10-23) · ชื่อจึงต้องบอกงานได้ด้วยตัวเอง และ description ต้องบอกว่า "ใช้เมื่อไหร่" ไม่ใช่ "ทำอะไร"
+Not for: lessons from work not yet filtered → `session-lessons-to-skills` first (it decides which skill to change, then come here to change it the right way) · a repeated mistake that can become an automatic check → `repeated-mistakes-to-checks` · a team lead splitting skill writing into several steps for team members → playbook `skill-authoring` in plugin `software-development` (`skills/superuser/references/playbook-skill-authoring.md`, step 5 blind test), which uses the rules in this file.
 
-| กฎ | ทำอย่างไร | ใครบังคับ |
+## 1 · Name and description — the only part that decides whether a skill gets called
+
+At session start Claude sees only `name` + `description` of every skill. The SKILL.md body loads only when the skill is called, and the list has a budget of about 1% of context; rarely-called skills get their description cut to the name first (`จากแหล่ง` Claude Code docs, skills page · 2026-10-23). So the name must say the job by itself, and the description must say "when to use", not "what it does".
+
+| Rule | How | Enforced by |
 |---|---|---|
-| `name` = ชื่อโฟลเดอร์ · a-z 0-9 และ `-` · ไม่เกิน 64 ตัว · ไม่มีคำว่า anthropic หรือ claude | ตั้งเป็นกริยา+กรรม หรือชื่อของที่ได้ (`translate-th-en` ไม่ใช่ `thai-helper`) | validator |
-| ชื่อชนกับ skill ในตัวของ Claude Code (เช่น `simplify`) | ใน `skill-router.json` ใส่ชื่อ plugin นำหน้า `superuser:simplify` | sync-superuser |
-| `description` ขึ้นต้น `Use when …` หรือ `ใช้เมื่อ …` (skill ที่ต้องเปิดก่อนเริ่มงานใช้ `Use before …` และ agent ที่เรียกตามจังหวะใช้ `Use at …` ได้ validator รับทั้ง 2 แบบ) | ใส่สถานการณ์และคำที่ผู้ใช้พิมพ์จริง ทั้งไทยและอังกฤษ ("says reflect or รวมบทเรียน") · ไม่สรุปขั้นตอนทำงาน เพราะ agent อาจทำตามสรุปแทนเปิด skill | validator · แนวคิดจาก obra/superpowers |
-| ยาวไม่เกิน 160 ตัว (เตือนที่ 150 · agent เตือนที่ 120) · ไม่มี `: ` ในค่าที่ไม่ได้ครอบเครื่องหมายคำพูด · ไม่มี `<` `>` | `: ` ทำให้ YAML พังทั้งบล็อกแล้ว skill หายเงียบ ๆ · เขียน `(reflect or รวมบทเรียน)` แทน `: reflect` | validator (Claude Code ตัดที่ 1,536 ตัว แต่ข้อกำหนด Agent Skills เขียนไว้ 1,024 ตัว ซึ่งใช้กับ `dist/` ที่เอาไปใช้นอก Claude Code · 160 ของเราอยู่ในทั้งสองเพดาน · งบรายการทั้งชุดทำให้ยาวแล้วถูกตัดก่อน) |
-| ไม่ทับกับ skill พี่น้อง | `grep -rn "^description:" plugins/*/skills/*/SKILL.md \| grep -i <คำ>` · ทับกัน → บอกใน description ว่าตัวไหนรับอะไร ("Cause known → targeted-fix") และใส่ตาราง "ใช้ตัวอื่นแทน" ในเนื้อ | คนเขียน |
-| hook router เห็นด้วย | เพิ่ม pattern 1 แถวใน `plugins/superuser/hooks/skill-router.json` แล้วทดสอบด้วย `node -e` ว่าประโยคจริง 3–5 แบบจับได้ และประโยคที่ไม่เกี่ยวไม่จับ (ตัวอย่างในหัวข้อ 4) · แถวที่คนอ่านอยู่ใน `references/triggers.md` ของ `superuser` | sync-superuser ตรวจชื่อ |
+| `name` = folder name · a-z 0-9 and `-` · at most 64 characters · no "anthropic" or "claude" | Use verb + object or the name of the output (`translate-th-en`, not `thai-helper`) | validator |
+| Name collides with a built-in Claude Code skill (e.g. `simplify`) | In `skill-router.json` prefix the plugin name: `superuser:simplify` | sync-superuser |
+| `description` starts with `Use when …` or `ใช้เมื่อ …` (a skill that must be opened before work starts uses `Use before …`; an agent called at a point in the flow may use `Use at …`; the validator accepts all of these) | Put in situations and words users really type, in both Thai and English ("says reflect or รวมบทเรียน"). Do not summarise the working steps, because an agent may follow the summary instead of opening the skill | validator · idea from obra/superpowers |
+| At most 160 characters (warn at 150; agent warns at 120) · no `: ` in an unquoted value · no `<` `>` | `: ` breaks the whole YAML block and the skill silently disappears. Write `(reflect or รวมบทเรียน)` instead of `: reflect` | validator (Claude Code truncates at 1,536 characters but the Agent Skills spec says 1,024, which applies to `dist/` used outside Claude Code. Our 160 is under both ceilings; the budget for the whole list truncates long ones first) |
+| No overlap with sibling skills | `grep -rn "^description:" plugins/*/skills/*/SKILL.md \| grep -i <word>`. If they overlap, say in the description which one takes what ("Cause known → targeted-fix") and add a "use the other one instead" table in the body | the author |
+| The hook router sees it | Add 1 pattern row to `plugins/superuser/hooks/skill-router.json`, then test with `node -e` that 3–5 real sentences match and unrelated sentences do not (example in [`wiring-and-validator`](references/wiring-and-validator.md)). The human-read rows are in `references/triggers.md` of `superuser` | sync-superuser checks the name |
 
-ช่อง frontmatter ที่ใช้ได้ (`จากแหล่ง` หน้า skills · 2026-10-23): `name` · `description` · `when_to_use` (ต่อท้าย description ใช้ใส่วลีกระตุ้น — validator ของเรานับเฉพาะ description จึงใส่วลีไว้ใน description ก่อน) · `allowed-tools` · `disallowed-tools` · `disable-model-invocation: true` (skill ที่มีผลข้างเคียง เช่น deploy ให้คนเรียกเองเท่านั้น) · `user-invocable: false` (ซ่อนจากเมนู `/`) · `model` · `effort` · `context: fork` + `agent` (รันใน subagent) · `paths` (โหลดเฉพาะเมื่อแตะไฟล์ตาม glob) · `argument-hint` · `hooks` · `license` · `metadata` · **นอก Claude Code** (claude.ai · `dist/`) รับแค่ `name` `description` `license` `compatibility` `metadata` `allowed-tools` ช่องอื่นทำให้ไฟล์ถูกปฏิเสธ จึงใช้ช่องพิเศษเฉพาะ skill ที่ไม่ไป `dist/` · agent ใช้คีย์ `tools:` ไม่ใช่ `allowed-tools:` (ใส่ผิดถูกเมินเงียบ ๆ)
+Usable frontmatter fields (`จากแหล่ง` skills page · 2026-10-23): `name` · `description` · `when_to_use` (appended to description for trigger phrases; our validator counts only description, so put the phrases in description first) · `allowed-tools` · `disallowed-tools` · `disable-model-invocation: true` (skills with side effects such as deploy: the user calls them) · `user-invocable: false` (hide from the `/` menu) · `model` · `effort` · `context: fork` + `agent` (run in a subagent) · `paths` (load only when files matching the glob are touched) · `argument-hint` · `hooks` · `license` · `metadata`. **Outside Claude Code** (claude.ai · `dist/`) accepts only `name` `description` `license` `compatibility` `metadata` `allowed-tools`; other fields get the file rejected, so use special fields only in skills that do not go to `dist/`. An agent uses the key `tools:`, not `allowed-tools:` (the wrong one is silently ignored).
 
-## 2 · รูปร่างของเนื้อ SKILL.md
+## 2 · Shape of the SKILL.md body
 
-- **ไม่เกิน 500 บรรทัด** (validator ไม่ผ่าน) · รายละเอียดที่ใช้บางครั้งย้ายไป `references/<เรื่อง>.md` (ไฟล์เกิน 300 บรรทัดต้องมีสารบัญ) · ไฟล์ที่ต้องอ่านเพื่อทำงานให้ถูก ลิงก์จาก SKILL.md ตรง ๆ · ไฟล์ใน references ลิงก์ต่ออีกชั้นได้เฉพาะรายละเอียดเสริมหรือตัวอย่างที่ข้ามได้ (เช่น `thai-grammar` → `thai-examples`) เพราะ Claude มักอ่านไฟล์ชั้นที่ 2 ไม่ครบ · งานที่เครื่องทำได้ไป `scripts/` (รันโดยไม่ต้องอ่านเข้า context) · แม่แบบไป `templates/` หรือ `assets/`
-- ลำดับหัวข้อแบบเดียวกันทุก skill ในแกน: บรรทัดบอกว่าอยู่ plugin ไหนและเขียนตาม `human-writing` → **กฎข้อเดียว** ในกล่อง `>` → **ใช้เมื่อ / ไม่ใช้เมื่อ** → ตาราง **ใช้ตัวอื่นแทนหรือคู่กัน** → ขั้นตอนหรือกฎเป็นเลขข้อ → **ตัวอย่างจริง 1 ชุด** (โจทย์ · สิ่งที่ทำ · ผล) → **ตรวจก่อนส่ง** → **ที่มา** ทุกข้อมีลิงก์และวันที่ดู หรือป้าย `(ยังไม่ได้ตรวจ)`
-- **ประกาศก่อนเขียน** ชื่อ · ขนาดเป้าหมาย · 3 หัวข้อที่จะไม่ครอบคลุม · ตารางว่าอะไรอยู่ไฟล์ไหน และแยกความรู้ (ตารางค่าคงที่) · สัญญา (รูปแบบไฟล์) · ขั้นตอนออกจากกัน — ทำตาม [`skill-structure`](references/skill-structure.md)
-- **ลองทำงานจริง 1 รอบก่อนร่าง skill** แล้วเก็บวิธีที่ได้ผลจริง ไม่ให้ AI เดาเขียนเอง (เหตุผลอ้างจากคลิปของคอร์ส ไม่ได้วัดเทียบ) · ร่างที่ AI เขียนต้องผ่านคนอ่านและ eval ก่อนรวม · skill เล็กและแคบ ไม่กี่ตัวต่องาน · เนื้อ SKILL.md อยู่ใน context ทุกเทิร์น จึงเขียนเป็นคำสั่งถาวร และหลัง compaction Claude Code เก็บให้ราว 5,000 โทเคนต่อ skill (เอกสาร Claude Code ผ่านบทสรุป 2026-11-04) · หลักฐานและข้อจำกัดอยู่ใน [`skill-evaluation-evidence`](references/skill-evaluation-evidence.md)
-- **เขียนเป็นสูตรบอกสิ่งที่ให้ทำ ไม่ใช่ข้อห้าม** · วัดซ้ำ 5 รอบต่อถ้อยคำ "อย่าพิมพ์ค่าในใบสั่งซ้ำ" ได้ค่าที่พิมพ์ซ้ำเฉลี่ย 4.4 แย่กว่าไม่เขียนกฎเลย ส่วนสูตร "คัดลอกจากไฟล์ต้นทาง" ได้ 3.0 และนิ่ง (superpowers 2026-06 · n=5 ต่อถ้อยคำ · อ่านผ่านบทสรุป ยังไม่ได้ทำซ้ำเอง) · กฎประเภท "ต้องเปิดก่อนทำ" (tripwire) ได้ผลดี · ถ้า 2 ถ้อยคำผลเสมอ เลือกที่สั้นกว่า · ทดสอบถ้อยคำที่สำคัญด้วย [`eval-loop-rules`](references/eval-loop-rules.md) · เขียนเป็นคำสั่งตรง ๆ พร้อมเหตุผล 1 บรรทัด ไม่ตะโกนตัวพิมพ์ใหญ่ · กฎเรื่องคำหรือน้ำเสียงใส่เป็นคู่ `ก่อน → หลัง` ก่อน แล้วค่อยเป็นกฎเมื่อซ้ำ 2 ครั้ง (`session-lessons-to-skills` ข้อ 2)
-- ข้อใหม่ขัดกับข้อเดิม → แก้ข้อเดิม ไม่ต่อท้าย · skill ที่รับงานต่อจากตัวอื่นชี้ชื่อตัวนั้นและหัวข้อ ไม่คัดลอกเนื้อ (ตัวอย่าง `translate-th-en` ชี้ `thai-grammar` หัวข้อ 7)
-- ตัวเลขที่เปลี่ยนตามเวลา (ราคา · กฎ · รุ่น) ใส่วันที่ตรวจ และลงใน `scripts/check/facts.json` ถ้าอยากให้ validator เตือนเมื่อล้าสมัย
-- **skill ที่ทำให้เสียเงินหรือสร้างของนอกเครื่อง** (เช่าเครื่อง cloud · GPU · สั่งซื้อ · API ที่คิดเงินต่อครั้ง) ต้องมีครบ 4 ข้อ: (1) เพดานเงินที่ผู้ใช้ตั้ง skill ขึ้นเพดานเองไม่ได้ ต้องถามก่อน (2) ไม่ลบหรือยกเลิกของผู้ใช้เองโดยไม่ถาม (3) ลบแล้วตรวจซ้ำว่าหายจริงด้วยคำสั่งดูรายการ แล้วสรุปค่าใช้จ่ายที่เกิดจริง (4) บอกให้ชัดว่าหยุด (stop) ไม่เท่ากับลบ (destroy) เพราะของที่แค่หยุดยังคิดค่าพื้นที่ต่อ · ใช้คู่กับ `disable-model-invocation: true` เมื่อไม่อยากให้ model เรียกเอง · key ใช้สิทธิ์น้อยที่สุดที่พอ (เช่นไม่ให้สิทธิ์แก้ billing) และตรวจ environment แบบบอกแค่ OK หรือ MISSING ไม่พิมพ์ค่า (แนวจาก lab VastAi_Skill ของคอร์ส CWN2026)
-  - ตัวอย่างเช่า GPU จากคอร์ส (ตัวเลขจากการรันครั้งเดียว ไม่ใช่เกณฑ์): ค่าดาวน์โหลดต่อ GB อาจแพงกว่าค่า GPU (11.8 GB × $0.029 = $0.34 เทียบ GPU $0.16) จึงใส่เพดาน `inet_down_cost` ตอนเลือกเครื่อง · ความเร็วเน็ตที่ประกาศเชื่อไม่ได้ (ประกาศ 1391 Mbps ได้จริง 1.8 MB/s) ให้วัดแล้วย้ายเครื่อง · ยอดใน invoice โตต่อหลัง destroy ให้รอยอดนิ่งก่อนสรุปค่าใช้จ่าย
+- **At most 500 lines** (validator fails above). Detail used only sometimes moves to `references/<topic>.md` (a file over 300 lines needs a table of contents). A file the agent must read to work correctly is linked directly from SKILL.md. A reference file may link one level further only for optional detail or skippable examples (e.g. `thai-grammar` → `thai-examples`), because Claude often does not read second-level files completely. Work a machine can do goes in `scripts/` (run without reading into context); templates go in `templates/` or `assets/`.
+- Same heading order in every core skill: a line saying which plugin it is in and that it follows `human-writing` → **the one rule** in a `>` box → **When to use / Not for** → a **use another / pairs with** table → steps or rules as numbered items → **one real example** (task · what was done · result) → **ตรวจก่อนส่ง** (pre-send checklist) → **sources**: every item has a link and date viewed, or the label `(ยังไม่ได้ตรวจ)`.
+- **Declare before writing**: name · target size · 3 topics that will not be covered · a table of what lives in which file, separating knowledge (constant tables) · contract (file formats) · steps. Follow [`skill-structure`](references/skill-structure.md).
+- **Do 1 real run of the task before drafting the skill** and keep the methods that actually worked, rather than letting the AI guess (reason cited from a course clip, not measured against a baseline). An AI-written draft must pass a human reader and evals before merging. Skills are small and narrow, a few per task. SKILL.md body sits in context every turn, so write it as standing instructions; after compaction Claude Code keeps about 5,000 tokens per skill (Claude Code docs via summary, 2026-11-04). Evidence and limits: [`skill-evaluation-evidence`](references/skill-evaluation-evidence.md).
+- **Write as a recipe saying what to do, not a prohibition.** Measured 5 runs per wording: "don't retype the value in the order form" gave an average of 4.4 retyped values, worse than no rule at all, while the recipe "copy from the source file" gave 3.0 and was stable (superpowers 2026-06 · n=5 per wording · read via summary, not reproduced yourself). "Must open before doing" rules (tripwire) work well. If 2 wordings tie, pick the shorter. Test important wording with [`eval-loop-rules`](references/eval-loop-rules.md). Write direct commands with a 1-line reason, no shouting in capitals. A rule about words or tone goes in first as a `before → after` pair, and becomes a rule once it repeats twice (`session-lessons-to-skills` item 2).
+- A new item that contradicts an old one → fix the old one, do not append. A skill that continues work from another names that skill and section instead of copying its content (example: `translate-th-en` points to `thai-grammar` section 7).
+- Numbers that change over time (prices · rules · versions) carry the date checked, and go into `scripts/check/facts.json` if you want the validator to warn when stale.
+- **A skill that costs money or creates things outside the machine** (renting cloud machines · GPU · purchases · APIs billed per call) needs all 4: (1) a money ceiling set by the user; the skill cannot raise it itself and must ask first (2) never delete or cancel the user's own things without asking (3) after deleting, re-check with a list command that they are really gone, then summarise the actual cost (4) say clearly that stop is not destroy, because a merely stopped item still bills for storage. Pair with `disable-model-invocation: true` when the model should not call it itself. Use the least-privilege key that is enough (e.g. no billing-edit rights) and check the environment by reporting only OK or MISSING, never printing the value (pattern from the course's VastAi_Skill lab, CWN2026).
+  - GPU rental example from the course (numbers from a single run, not a standard): download cost per GB can exceed the GPU cost (11.8 GB × $0.029 = $0.34 vs GPU $0.16), so set a `inet_down_cost` ceiling when choosing a machine. Advertised network speed cannot be trusted (advertised 1391 Mbps, actual 1.8 MB/s): measure, then switch machines. The invoice total keeps growing after destroy: wait until it settles before summarising costs.
 
-## 3 · agent และ playbook
+## 3 · Agents and playbooks
 
-- **ไฟล์คำสั่งและกฎกลางของ plugin**: ไฟล์คำสั่งมี 4 หัวข้อ Preflight · Plan · Commands · Verification · plugin ที่มี 3 skill ขึ้นไปเก็บกฎร่วมไว้ใน `INTENT.md` ไฟล์เดียว · skill ที่เรียกคำสั่งภายนอกมีสูตรรับมือเมื่อ CLI เก่ากว่า skill — แม่แบบทั้งหมดใน [`skill-structure`](references/skill-structure.md)
-- **agent** (`agents/<name>.md`): `name` ตรงชื่อไฟล์ · `description` "Use when …" ไม่เกิน 120 ตัว · `tools:` · `model` · `effort` · ต้องมีหัวข้อ `## Writing` ชี้ `human-writing` · บอกว่ารับอะไรจากหัวหน้าทีม ส่งอะไรกลับ (รูปแบบผลเป็นบล็อก markdown) และสิ่งที่ห้ามทำ — ดู `agents/brainstormer.md` เป็นแบบ
-- **playbook** (`skills/superuser/references/playbook-<ชื่อ>.md` จาก `playbook-template.md`): มี `## ขั้นตอน` เป็นเลขข้อ · ทุกขั้นปิดท้าย `ใคร:` (หัวหน้าทีม · ผู้ใช้ · หรือ agent ตัวใหม่) · ต้องมีขั้นตรวจที่คนตรวจไม่ใช่คนทำ และขั้นตรวจสุดท้ายอยู่หลังขั้นลงมือสุดท้าย · ขั้นตรวจเป็นงานตรวจล้วน (ตรวจ · พิสูจน์ · รีวิว · รัน · วัด) ไม่ใช่ "ตรวจแล้วแก้" · ไม่มีขั้นที่รอผู้ใช้ตอบกลางงาน (ถามรวมตอนเริ่ม หรือใส่ `(รอยืนยัน)` แล้วลง "รออนุมัติ") · agent จาก plugin อื่นเขียน "(ถ้าติดตั้ง plugin …)" พร้อมทางสำรอง · ไม่ใช้ "ตัวเดิม" ยกเว้นถือของที่ย้ายยาก
+- **Command files and shared rules of a plugin**: a command file has 4 headings: Preflight · Plan · Commands · Verification. A plugin with 3 or more skills keeps shared rules in a single `INTENT.md`. A skill that calls an external command has a fallback for when the CLI is older than the skill. All templates are in [`skill-structure`](references/skill-structure.md).
+- **agent** (`agents/<name>.md`): `name` matches the file name · `description` "Use when …" at most 120 characters · `tools:` · `model` · `effort` · must have a `## Writing` heading pointing to `human-writing` · says what it receives from the team lead, what it returns (result format as a markdown block) and what it must not do. See `agents/brainstormer.md` as the model.
+- **playbook** (`skills/superuser/references/playbook-<name>.md` from `playbook-template.md`): has `## ขั้นตอน` as numbered items · every step ends with `ใคร:` (team lead · user · or a new agent) · must have a check step done by someone other than the doer, and the last check step comes after the last doing step · a check step is pure checking (check · prove · review · run · measure), not "check and fix" · no step that waits for a user reply mid-work (ask everything at the start, or write `(รอยืนยัน)` and log "รออนุมัติ") · an agent from another plugin is written "(ถ้าติดตั้ง plugin …)" with a fallback · do not use "ตัวเดิม" (the same one) unless carrying something hard to move.
 
-## 4 · ต่อสายให้ครบ — skill ใหม่ 1 ตัวแตะไฟล์เหล่านี้
+## 4–8 · Detail moved to references
 
-| ไฟล์ | ทำอะไร |
-|---|---|
-| `plugins/<plugin>/skills/<name>/SKILL.md` | ตัว skill |
-| ของกลางใน `superuser` เท่านั้น: `scripts/sync/sync-superuser.mjs` รายการ `SHARED_ONLY_IN_SUPERUSER` และ `scripts/build/build-targets.mjs` รายการ `SHARED_SKILLS` | เพิ่มชื่อ เรียงตามตัวอักษร ทั้ง 2 รายการต้องตรงกัน |
-| `scripts/sync/file-map-th.json` → `node scripts/sync/sync-file-map.mjs` | คำอธิบายไทย 1 บรรทัด แล้วสร้าง `docs/FILE-MAP.md` ใหม่ |
-| `plugins/superuser/hooks/skill-router.json` | pattern 1 แถว · ทดสอบ: `node -e "const j=require('./plugins/superuser/hooks/skill-router.json');for(const s of ['ประโยคจริง 1','ประโยคที่ไม่เกี่ยว'])console.log(s,j.rules.filter(r=>new RegExp(r.pattern,'i').test(s)).flatMap(r=>r.skills))"` · **แก้ JSON หรือ YAML ที่มี regex ด้วย Edit หรือสคริปต์ที่เป็นไฟล์ ห้ามผ่าน heredoc ใน Bash** เพราะ `\\b` หายเหลือ `\b` ซึ่งเป็น backspace (เกิด 5 ครั้งถึง 2026-10-26) · `sync-superuser --check` และ validator จับอักขระควบคุมกับ `\s` ใน YAML แบบ `"..."` ให้แล้ว |
-| `plugins/superuser/skills/superuser/references/triggers.md` | แถวสถานการณ์ → skill ให้หัวหน้าทีมอ่าน |
-| `plugins/<plugin>/evals/<name>-*/case.yaml` × 3 | หัวข้อ 6 |
-| `plugins/<plugin>/CHANGELOG.md` หัวข้อ Unreleased | 1 bullet |
-| `plugins/<plugin>/.claude-plugin/plugin.json` ช่อง `version` | เพิ่มเลขทุกครั้งที่แก้เนื้อ plugin · ไม่เพิ่ม `claude plugin update` จะตอบว่าล่าสุดแล้วทั้งที่เนื้อเปลี่ยน (เจอในคอร์ส 2026-11-04) · validator ไม่ตรวจข้อนี้ ต้องทำมือ |
-| `node scripts/build/build-targets.mjs` | สร้าง `dist/` ใหม่ (ทำตอนปล่อยรุ่น ไม่ต้องทุกครั้ง) |
+Must-not-skip points are in the list at the top. Full text, with all original rules, numbers and dates:
 
-## 5 · สิ่งที่ validator บังคับ — `node scripts/check/validate-marketplace.mjs`
-
-รันก่อนส่งทุกครั้ง (`--warn` ให้เตือนนับเป็นไม่ผ่าน · `--self-test` พิสูจน์ว่าตัวตรวจยังจับได้) · ออก exit 1 เมื่อมี error ใช้เป็นด่านใน CI ได้ · ตรวจ:
-
-1. frontmatter: ขึ้นต้น `---` บรรทัดแรก · มีบรรทัดปิด · ทุกบรรทัดเป็น `key: value` · ค่าที่มี `: ` หรือขึ้นต้นด้วยอักขระพิเศษต้องครอบเครื่องหมายคำพูด · ไม่ใช้ block scalar (`|` `>`)
-2. `name`: มี · ตรงชื่อโฟลเดอร์หรือไฟล์ · a-z 0-9 `-` · ไม่เกิน 64 · ไม่มี anthropic/claude
-3. `description`: มี · ขึ้นต้น "Use when" หรือ "ใช้เมื่อ" · ไม่เกิน 160 (เตือน 150 · agent 120) · ไม่สั้นจนไม่บอกว่าใช้เมื่อไหร่ · ไม่มี `< >`
-4. เนื้อ SKILL.md ไม่เกิน 500 บรรทัด (เตือนเมื่อใกล้) · ไฟล์ยาวต้องมีสารบัญ · ตาราง markdown: มีหัวและแถว `|---|` ทุกแถวมีจำนวนช่องเท่าหัว (แถวหลุดเพราะบรรทัดว่างคั่นคือบั๊กที่เจอบ่อยสุด)
-5. agent: `tools:` ไม่ใช่ `allowed-tools:` · มี `## Writing` ชี้ `human-writing`
-6. playbook: กฎในหัวข้อ 3 ทุกข้อ
-7. plugin: มี `.claude-plugin/plugin.json` · `version` เป็น x.y.z · description ไม่เกิน 500 ตัว (claude.ai ปฏิเสธถ้าเกิน) · ประกาศใน `marketplace.json` และ README ครบ · `mcpServers` ล็อกรุ่น `<แพ็กเกจ>@x.y.z`
-8. ของกลาง: `sync-superuser --check` และ `sync-prompt-rules --check` ตรงต้นฉบับ · ชื่อใน `skill-router.json` มีจริง · คำที่เลิกใช้ (`scripts/check/deprecated-terms` ในตัว validator) ไม่ค้าง · ค่าใน `facts.json` ยังตรงไฟล์
-
-## 6 · eval — 3 เคสต่อ skill ใหม่ ในรูปแบบ `claude plugin eval`
-
-เคสอยู่ที่ `plugins/<plugin>/evals/<skill>-<เคส>/case.yaml` · รูปแบบทางการและคำสั่งทั้งหมดใน [`eval-format`](references/eval-format.md) · ตัวอย่างจริง 3 ไฟล์ของ `human-writing` ใน `plugins/superuser/evals/` และ README ที่นั่นอธิบายการรัน
-
-| เคส | พิสูจน์อะไร | grader หลัก |
-|---|---|---|
-| `<skill>-trigger` | โจทย์ที่ผู้ใช้พิมพ์จริง (ไม่เอ่ยชื่อ skill) ทำให้ skill ถูกเปิด | `tool_used` เครื่องมือ `Skill` จับชื่อ skill (`arm: with-only` เพราะรอบไม่มี plugin เปิดไม่ได้อยู่แล้ว) + grader ผลลัพธ์ 1 ตัวที่ให้คะแนนได้ · โจทย์ต้องเขียนโดยคนหรือ agent ที่ไม่เคยเห็น description (ชุดคำที่เคยเห็น hit@1 98.3% ชุดใหม่ 80% ในการจำลอง BM25 n=60 ไม่ใช่ Claude เลือกจริง · อ่านจากคอร์ส 2026-11-04) · วิธีวัดที่แน่นกว่านี้อยู่ใน `eval-format` |
-| `<skill>-behaviour` | เปิดแล้วทำตามกฎหลัก 2–3 ข้อ | `regex` กับผล (`not_contains` คำต้องห้าม · `match` สิ่งที่ต้องมี) + `llm` เกณฑ์ที่ regex จับไม่ได้ |
-| `<skill>-regression` | เรื่องที่ agent พลาดจริงในรอบแดง (หัวข้อ 7) หรือใน digest ของ `session-lessons-to-skills` ไม่กลับมา | `regex` ที่จับอาการเดิมตรง ๆ · เขียนอาการและวันที่ที่เห็นไว้ใน `description` ของเคส |
-
-- **ชุดเคสต้องไม่ตาย** ทุกเคส "ต้องไม่เกิด" มีเคส "ต้องเกิด" คู่ · ไม่ปรับเคสให้เขียว · วงปรับตามคะแนนคงเกณฑ์ ไม่ลบเคสยาก ไม่เปลี่ยนผู้ตัดสินเพื่อให้ผ่าน · นำร่อง 3 รายการดูทุกแถวก่อนรันทั้งชุด · ปิดสำเนา plugin ที่ติดตั้งก่อนวัด · ปรับ judge กับป้ายคนก่อนเชื่อคะแนน — กติกาเต็มใน [`eval-loop-rules`](references/eval-loop-rules.md) · รับชุดที่ไม่ได้เขียนเองมาตรวจด้วย [`eval-audit`](references/eval-audit.md)
-- **รอบแดงทำถูกอยู่แล้ว** → ตั้งชื่อเคส `<skill>-guard` ไม่นับเป็น 1 ใน 3 เคส · แดงทำถูกทุกโจทย์ → ย่อ skill เหลือสคริปต์กับข้อเท็จจริงที่โมเดลไม่รู้เอง แล้วถามผู้ใช้ว่าคงหรือเลิก · validator ล้มเมื่อ `case.yaml` ของ `-regression` เขียนว่ายังไม่เคยเห็นจริง
-
-- โจทย์ต้องเป็นงานที่ agent ทำไม่ได้ดีโดยไม่มี skill — โจทย์ง่ายเกินไปทั้ง 2 รอบผ่านหมด วัดอะไรไม่ได้ (`จากแหล่ง` skill-creator) · ค่าเริ่มต้นรัน 3 รอบต่อเคส ทั้งรอบมี plugin และไม่มี แล้วรายงาน `WITH` `W/OUT` `Δ`
-- เทียบฉบับแก้กับ git ref ด้วย `node scripts/evals/ab/ab-run.mjs --help` (baseline แคชตาม commit · คะแนนจาก regex) · ปรับ judge ด้วย `node scripts/evals/judge/calibrate.mjs --help`
-- **ตัดสินว่ารุ่นใหม่ดีขึ้นด้วยตัวเลขที่ตั้งไว้ก่อน ไม่ใช่ด้วยตา** · ตรวจ grader regex ด้วย `scripts/evals/gate/grader-check.mjs` ก่อนใช้ token (คำตอบอ้างอิงผ่าน 100% · คำตอบที่ผิด 1 จุดตกข้อนั้นข้อเดียว) · แบ่งเคสเป็น train/val/test แล้วแก้จาก train เท่านั้น · ให้ `scripts/evals/gate/gate.mjs` ตัดสินจากความแกว่งของรอบซ้ำ (exit 0 รับ · 1 ไม่รับ · 2 เทียบไม่ได้) · จดสาเหตุลงสมุดปัญหาและแก้ไม่เกิน 3 จุดต่อรุ่น — ขั้นตอนเต็มใน [`optimize-loop`](references/optimize-loop.md) · แม่แบบ [`templates/ISSUES.md`](templates/ISSUES.md)
-- รัน: `node scripts/evals/plugin-eval.mjs <plugin> --only "^<skill>-" --max-cost-usd 5` (plugin ที่มี `dependencies` โหลดไม่ขึ้นถ้ารัน `claude plugin eval` ตรง ๆ · รายละเอียดใน `eval-format`) · ใน CI เพิ่ม `--json results.json --threshold 0.8` และอ่าน exit code (0 ผ่าน · 1 ไม่ผ่าน · 2 ชนเพดานเงินหรือ auth)
-- ใส่ `evals/results/` ใน `.gitignore` · ผลสรุปที่อยากเก็บลง `RESULTS.md` ของ plugin นั้น
-- eval ของ repo (`scripts/evals/triggers` `speed` `coding`) เป็นคนละชั้น: วัดข้ามทุก plugin และเทียบ 2 รุ่นจาก git ref · ไม่แทนกัน (ความต่างใน README ของ `plugins/superuser/evals/`)
-
-## 7 · ทดสอบก่อนและหลังด้วย subagent ตัวใหม่ ก่อนรวมทุกการแก้
-
-1. **แดง** — เขียนโจทย์ 3–5 บรรทัดจากสถานการณ์ที่พลาดจริง (ไม่เฉลย ไม่เอ่ยชื่อ skill) · ส่ง `general-purpose` ระดับเล็ก **โดยไม่มี skill** (หรือ skill ฉบับเดิม) · ต้องพลาดแบบเดียวกับที่เจอ และจดคำแก้ตัวของมันตรง ๆ · ไม่พลาด = skill ไม่ใช่สาเหตุ ก็ต่อเมื่อให้คะแนนมากกว่าผลลัพธ์ด้วย: ทำผิดขั้นตอนไหม (แอบเปิดไฟล์ที่ห้าม) และตีความจุดกำกวมเองโดยไม่บอกไหม · ตัวอย่างจากคอร์ส (n=1 2026-11-04) รอบไม่มี skill ผ่าน 39/40 แต่แอบ `ls` และตีความ "อาหารแมว" ไว้เงียบ ๆ ซึ่งตีความอีกแบบแล้วคำตัดสินพลิก · รันรอบแดง/เขียวในโฟลเดอร์ว่างและซ่อน plugin อื่น เพราะ agent เดินไปเปิดชุดกติกา โฟลเดอร์ดีล และ skill แผนกอื่นเอง (เกิด 2 ครั้ง)
-2. **เขียว** — แก้ skill ให้เล็กที่สุดที่ปิดจุดพลาดที่เห็น · ส่งตัวใหม่อีกตัวทำโจทย์เดิมกับฉบับใหม่ · ต้องไม่พลาดและอ้างข้อใน skill ได้ · ยังพลาด = คำไม่ชัดหรือวางผิดที่ แก้ใหม่ ไม่ต่อท้ายข้อความ
-3. **ปิดช่อง** — ทุกคำแก้ตัวใหม่ที่เจอในรอบเขียว ใส่ตัวปิดลง skill (ข้อห้ามที่เอ่ยชื่อข้ออ้างนั้น · แถวในตาราง "ไม่ใช้เมื่อ" · อาการใน description) แล้วรันซ้ำจนไม่มีข้ออ้างใหม่ · กฎที่ถูกฝ่าภายใต้แรงกดดัน (เวลา · ผู้มีอำนาจสั่ง · ทำมาเยอะแล้ว) ต้องทดสอบด้วยโจทย์ที่มีแรงกดดันนั้นจริง ไม่ใช่ถามว่า "ควรทำอย่างไร"
-4. จดผล 2 รอบลงตารางที่เสนอผู้ใช้ · โจทย์แดงที่พลาดจริงแปลงเป็นเคส `-regression` · ไม่พลาด → `-guard` (หัวข้อ 6) · ถ้าให้ผู้ตัดสิน (คนหรือ Claude อีกตัว) เทียบ 2 ฉบับ ห้ามบอกว่าฉบับไหนมี skill: สลับป้าย A/B เก็บเฉลยไว้แยกไฟล์ และเขียนเกณฑ์ก่อนอ่านผล (คอร์สได้ 1/12 กับ 12/12 จากคู่เดียว 2026-11-04)
-
-(แนวคิดจาก writing-skills ใน obra/superpowers · MIT · เรียบเรียงใหม่)
-
-## 8 · อ่านผล `/skill-doctor`
-
-- `/skill-doctor` (Claude Code 2.1.252 ขึ้นไป · ในโหมดโต้ตอบเปิดแท็บ Stats ของ `/plugin` · โหมด `-p` พิมพ์เป็นข้อความ) บอกต้นทุน context ของแต่ละ skill และจำนวนครั้งที่ถูกเรียก พร้อมธง **ไม่เคยถูกเรียก** = อยู่ในรายการแต่ไม่เคยเปิดเลย · เริ่มดูจากตัวที่ธงขึ้นและกิน context มากที่สุด (`จากแหล่ง` หน้า skills · ช่วงเวลาที่นับยังไม่ได้ตรวจ)
-- skill ของเราไม่เคยถูกเรียก ไล่ตามลำดับ: (1) YAML พังไหม → รัน validator (2) description บอก "ใช้เมื่อ" ด้วยคำที่ผู้ใช้พิมพ์จริงไหม → แก้แล้วรันเคส `-trigger` (3) hook router มีแถวไหม → หัวข้อ 4 (4) งานนั้นเกิดจริงไหม → ไม่เกิดใน 1 เดือน ย้าย skill ไป plugin ที่งานนั้นอยู่ หรือยุบรวมกับตัวที่ใกล้กัน แล้วบันทึกใน CHANGELOG
-- **เขียนไว้ใน settings ไม่เท่ากับติดตั้งแล้ว** — หลังติดตั้งให้เปิดแชตใหม่แล้วนับ skill ที่ agent เห็นจริง (คอร์ส 2026-11-04: 13 จาก 21 โต๊ะไม่มี `core` ทั้งที่แม่แบบเขียนชื่อไว้) · กฎ "ห้ามเด็ดขาด" อย่าให้อยู่แค่ใน skill เพราะ skill อาจไม่ถูกเรียก ใส่ใน hook หรือ CLAUDE.md ด้วย (ชั้นของตัวตรวจดู `repeated-mistakes-to-checks`)
-- skill ของ plugin ปิดได้จาก `/plugin` เท่านั้น (`skillOverrides` ใน settings ใช้กับ skill ส่วนตัวและโปรเจกต์) · `/doctor` บอกต้นทุน context ของรายการทั้งชุด
+- **4 · Wiring a new skill** (files a new skill touches: SKILL.md · `SHARED_ONLY_IN_SUPERUSER` and `SHARED_SKILLS` lists in the same order · `file-map-th.json` + `sync-file-map.mjs` · `skill-router.json` · `triggers.md` · 3 `case.yaml` · CHANGELOG Unreleased bullet · `plugin.json` version · `build-targets.mjs` at release) and **5 · what the validator enforces** (frontmatter · name · description · 500-line body · tables · agent · playbook · plugin · shared files): [`wiring-and-validator`](references/wiring-and-validator.md).
+- **6 · Evals**, 3 cases per new skill in `claude plugin eval` format (the suite must not die · `-guard` · default 3 runs per case reporting `WITH` `W/OUT` `Δ` · gate by pre-set numbers, not by eye): [`eval-cases`](references/eval-cases.md), with [`eval-format`](references/eval-format.md) · [`eval-loop-rules`](references/eval-loop-rules.md) · [`eval-audit`](references/eval-audit.md) · [`optimize-loop`](references/optimize-loop.md).
+- **7 · Before/after test with fresh subagents** (red → green → close loopholes → record 2 rounds; run in an empty folder with other plugins hidden; judges must not know which version has the skill): [`before-after-testing`](references/before-after-testing.md).
+- **8 · Reading `/skill-doctor`** (never-called flag · checklist when our skill is never called · "written in settings" is not "installed" · a "never ever" rule also goes into a hook or CLAUDE.md): [`skill-doctor`](references/skill-doctor.md).
 
 ## ตรวจก่อนส่ง
 
-1. validator ผ่าน และ `node scripts/sync/sync-superuser.mjs --check` ผ่าน
-2. description ขึ้นต้น "Use when" ไม่เกิน 160 ไม่ทับพี่น้อง · router จับประโยคจริงได้
-3. ไฟล์ในหัวข้อ 4 แตะครบ · เคส 3 ไฟล์ · รอบแดง/เขียวมีผลจด
-4. ตัวเลขและข้อเท็จจริงทุกข้อมีแหล่ง + วันที่ หรือวัดเอง + วันที่ + รุ่นเครื่องมือ · เขียนจากความจำ = `(ยังไม่ได้ตรวจ)` จนกว่าจะวัด · บรรทัดที่บอกว่าทดสอบหรือตรวจจริงมีวันที่ในบรรทัดเดียวกัน (validator ตรวจ)
-5. ร่างที่ AI เขียนมีคนอ่านหาจุดที่ AI ตัดสินใจเองเงียบ ๆ เพื่อให้ test ผ่านแล้ว · แก้เนื้อ plugin แล้วเพิ่ม `version` ใน `plugin.json` แล้ว (ตรวจมือ) · ติดตั้งแล้วนับ skill ในแชตใหม่
+1. The validator passes and `node scripts/sync/sync-superuser.mjs --check` passes.
+2. description starts with "Use when", at most 160, no overlap with siblings · the router matches real sentences.
+3. Every file in the wiring list (section 4, [`wiring-and-validator`](references/wiring-and-validator.md)) touched · 3 case files · red/green round results recorded.
+4. Every number and fact has a source + date, or was measured yourself + date + tool version · written from memory = `(ยังไม่ได้ตรวจ)` until measured · a line saying something was tested or checked has the date on the same line (the validator checks).
+5. For an AI-written draft, a human has read it looking for places where the AI silently decided something just to make the test pass · after editing plugin content, `version` in `plugin.json` is bumped (manual check) · after installing, count the skills in a fresh chat.
 
-## ที่มา
+## Sources
 
-- Claude Code docs — [Skills](https://code.claude.com/docs/en/skills) · [Plugin evals](https://code.claude.com/docs/en/plugin-evals) · [Plugins reference](https://code.claude.com/docs/en/plugins-reference) · ดู 2026-10-23
-- [anthropics/skills — skill-creator](https://github.com/anthropics/skills/tree/main/skills/skill-creator) (Apache-2.0 · เรียบเรียงแนวคิด progressive disclosure · description เป็นตัวกระตุ้น · โจทย์ eval ต้องยาก · ดู 2026-10-23)
-- [obra/superpowers — writing-skills](https://github.com/obra/superpowers/tree/main/skills/writing-skills) (MIT · แดง/เขียวกับ subagent · ปิดช่องข้ออ้าง · description ไม่สรุปขั้นตอน · ดู 2026-10-23)
-- กฎของ repo นี้ — `scripts/check/validate-marketplace.mjs` (อ่าน 2026-10-23)
-- กติกาวงปรับ ผู้ตัดสิน และเครื่องมือ — [`eval-loop-rules`](references/eval-loop-rules.md) · [`eval-audit`](references/eval-audit.md) · โครง skill และ plugin — [`skill-structure`](references/skill-structure.md) (ที่มาของแต่ละข้อลงไว้ท้ายไฟล์เหล่านั้น · ดู 2026-11-10) · superpowers (MIT) · docs/superpowers/specs/2026-06-10-positive-instruction-redesign-design.md · ดู 2026-11-10 → สูตรบอกสิ่งที่ให้ทำ
-- หลักฐานจากคอร์ส CWN2026 และ paper (SkillsBench ฯลฯ) พร้อมข้อจำกัดและรุ่นของตัวเลข — [`skill-evaluation-evidence`](references/skill-evaluation-evidence.md) (ดู 2026-11-04)
-- วงปรับด้วยประตูรับ — ดัดแปลงจากคอร์ส CWN2026 สัปดาห์ 2 บท Skill Optimization (`skill-optimizer`) ของเจ้าของ repo · เรียบเรียงใหม่ 2026-11-11 → [`optimize-loop`](references/optimize-loop.md)
+- Claude Code docs — [Skills](https://code.claude.com/docs/en/skills) · [Plugin evals](https://code.claude.com/docs/en/plugin-evals) · [Plugins reference](https://code.claude.com/docs/en/plugins-reference) · viewed 2026-10-23
+- [anthropics/skills — skill-creator](https://github.com/anthropics/skills/tree/main/skills/skill-creator) (Apache-2.0 · reworded ideas: progressive disclosure · description as trigger · eval tasks must be hard · viewed 2026-10-23)
+- [obra/superpowers — writing-skills](https://github.com/obra/superpowers/tree/main/skills/writing-skills) (MIT · red/green with subagents · close loopholes in excuses · description does not summarise steps · viewed 2026-10-23; before/after test text in [`before-after-testing`](references/before-after-testing.md) is reworded from it)
+- This repo's rules — `scripts/check/validate-marketplace.mjs` (read 2026-10-23)
+- Loop rules, judges and tools — [`eval-loop-rules`](references/eval-loop-rules.md) · [`eval-audit`](references/eval-audit.md) · skill and plugin structure — [`skill-structure`](references/skill-structure.md) (sources of each item are at the end of those files · viewed 2026-11-10) · superpowers (MIT) · docs/superpowers/specs/2026-06-10-positive-instruction-redesign-design.md · viewed 2026-11-10 → the "recipe saying what to do" rule
+- Course CWN2026 evidence and papers (SkillsBench etc.) with limits and version of the numbers — [`skill-evaluation-evidence`](references/skill-evaluation-evidence.md) (viewed 2026-11-04)
+- Optimise loop with an acceptance gate — adapted from course CWN2026 week 2, lesson Skill Optimization (`skill-optimizer`), by the repo owner · reworded 2026-11-11 → [`optimize-loop`](references/optimize-loop.md)
