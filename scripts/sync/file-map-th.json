@@ -132,7 +132,7 @@
     "evals/security-audit-regression/resources/shop-api/package.json": "repo ทดสอบของ eval security-audit: แพ็กเกจของ repo ทดสอบ",
     "evals/security-audit-regression/resources/shop-api/server.js": "repo ทดสอบของ eval security-audit: API ที่ฝัง IDOR และ webhook LINE ไม่ตรวจลายเซ็น",
     "evals/security-audit-trigger/case.yaml": "เคส eval: โจทย์ตรวจทั้งโปรเจกต์ที่ต้องทำให้ security-audit ถูกเปิด",
-    "evals/social-formats-behaviour/case.yaml": "เคส eval: ขนาดและพื้นที่ปลอดภัยต้องตรงตาราง platform-sizes.md (feed 4:5 1080 × 1350 · story ล่าง 35%) …",
+    "evals/social-formats-behaviour/case.yaml": "เคส eval: ขนาดและพื้นที่ปลอดภัยต้องอ้างหรือค้นสดจากหน้าทางการ (ลิงก์ใน platform-sizes.md) ไม่พูดตัวเลขเหมือนจำเอง …",
     "evals/social-formats-trigger/case.yaml": "เคส eval: โจทย์ร้านค้าขอขนาดภาพหลายแพลตฟอร์ม ไม่เอ่ยชื่อ skill ต้องทำให้ social-formats ถูกเปิด และให้ขนาด 9:16 เป็น …",
     "evals/speaking-script-behaviour/case.yaml": "เคส eval: บทพูดต้องเปิดด้วย hook เป็นภาษาพูด และปิดด้วย CTA",
     "evals/speaking-script-regression/case.yaml": "เคส eval: กันอาการเดิมกลับมา เช่น สคริปต์พูดออกมาเป็นบทความ",

@@ -4,7 +4,7 @@ name: social-formats-trigger
 description: โจทย์ร้านค้าขอขนาดภาพหลายแพลตฟอร์ม ไม่เอ่ยชื่อ skill ต้องทำให้ social-formats ถูกเปิด และให้ขนาด 9:16 เป็น 1080 × 1920
 tags: [trigger, social-formats]
 runs: 3
-expected_outcome: เรียก Skill social-formats แล้วตอบขนาดที่ตรงตาราง platform-sizes.md พร้อมพื้นที่ปลอดภัยของสตอรี่
+expected_outcome: เรียก Skill social-formats แล้วตอบขนาดที่มาจากหน้าทางการของแพลตฟอร์ม (ลิงก์ใน platform-sizes.md) หรือติดป้าย (รอยืนยัน) พร้อมพื้นที่ปลอดภัยของสตอรี่
 execution:
   prompt: |
     ร้านเบเกอรี่ของฉันจะโปรโมตเค้กวันเกิดลง IG feed, IG story และ TikTok

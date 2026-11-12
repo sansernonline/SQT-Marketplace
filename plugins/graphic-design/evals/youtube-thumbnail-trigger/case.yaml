@@ -4,7 +4,7 @@ name: youtube-thumbnail-trigger
 description: ยูทูบเบอร์ถามเรื่องภาพปกคลิปและการทดสอบหลายปก ไม่เอ่ยชื่อ skill ต้องทำให้ youtube-thumbnail ถูกเปิด และบอกว่าการทดสอบตัดสินด้วยเวลาดู
 tags: [trigger, youtube-thumbnail]
 runs: 3
-expected_outcome: เรียก Skill youtube-thumbnail แล้วให้ 1280 × 720 · ข้อความสั้นอ่านออกบนมือถือ · Test & compare สูงสุด 3 แบบตัดสินด้วย watch time share ไม่ใช่ยอดกด
+expected_outcome: เรียก Skill youtube-thumbnail แล้วให้ 16:9 · ข้อความสั้นอ่านออกบนมือถือ · ขนาดและจำนวนปกที่ทดสอบได้อ้างหน้า YouTube Help หรือดูสด · Test & compare ตัดสินด้วย watch time share ไม่ใช่ยอดกด
 execution:
   prompt: |
     ช่อง YouTube รีวิวมือถือของผมคนกดน้อย อยากทำปกคลิปใหม่ที่ตัวหนังสือไทยอ่านออกบนมือถือ
@@ -18,12 +18,16 @@ graders:
     input_match: '"skill"\s*:\s*"(?:[\w-]+:)?youtube-thumbnail"'
     min: 1
     arm: with-only
-  - name: size
+  - name: size-16-9
     type: regex
-    pattern: "1280\\s*[×xX]\\s*720"
+    pattern: '16\s*:\s*9'
     match: contains
     target: last_message
+  - name: cites-or-looks-up-limits
+    type: llm
+    focus: last_message
+    criteria: ให้ผ่านเมื่อคำตอบอ้างหน้า YouTube Help หรือบอกว่าค้นดูสดสำหรับขนาดและขีดจำกัดของปก หรือติดป้าย (รอยืนยัน) ไม่ได้พูดตัวเลขเหมือนจำได้เอง
   - name: watch-time-not-ctr
     type: llm
     focus: last_message
-    criteria: ให้ผ่านเมื่อคำตอบบอกว่าทดสอบได้สูงสุด 3 แบบ และ YouTube ตัดสินผู้ชนะจากส่วนแบ่งเวลาดู (watch time share) ไม่ใช่อัตราการคลิก
+    criteria: ให้ผ่านเมื่อคำตอบบอกว่า YouTube ตัดสินผู้ชนะจากส่วนแบ่งเวลาดู (watch time share) ไม่ใช่อัตราการคลิก
