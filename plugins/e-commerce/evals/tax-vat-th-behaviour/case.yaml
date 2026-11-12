@@ -1,12 +1,12 @@
 # รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
 # skill นี้ไม่มีสคริปต์ จึงวัดกำหนดยื่น แหล่ง และตัวเลขที่ต้องตรงกับ SKILL.md หัวข้อ 2 และ 3
-# ธ.ค. 2569: กำหนดยื่นกระดาษ 7 ธ.ค. ตรงวันหยุดชดเชยวันพ่อ (thai-holidays/references/holidays-2569-2570.md:26) จึงเลื่อนไปวันทำการถัดไป · กำหนดยื่นออนไลน์ 15 และ 23 ธ.ค. ไม่ตรงวันหยุด · grader ไม่ใช้วันที่ 7 · ช่วงขยาย e-Filing 8 วันยังครอบถึง 31 ม.ค. 2570
+# ธ.ค. 2569: กำหนดยื่นกระดาษ 7 ธ.ค. ตรงวันหยุดชดเชยวันพ่อ (thai-holidays/references/holidays-2569-2570.md:26) จึงเลื่อนไปวันทำการถัดไป · grader ไม่ใช้วันที่ 7 · SKILL.md ไม่เก็บจำนวนวันขยาย e-Filing แล้ว จึงวัดว่าค้นประกาศขยายเวลาสด หรือติดป้าย (รอยืนยัน) แทนการตรวจวันที่ 15 และ 23 ธ.ค.
 schema_version: "1.1"
 name: tax-vat-th-behaviour
 description: บริษัทจด VAT จ่ายฟรีแลนซ์ ค่าเช่าให้บริษัท และเงินเดือน ต้องได้แบบที่ถูก กำหนดยื่นออนไลน์ที่มีแหล่ง และยอดหัก ณ ที่จ่ายที่ไม่แต่งขึ้น
 tags: [behaviour, capability-suite, tax-vat-th]
 runs: 3
-expected_outcome: ภ.ง.ด.1 · ภ.ง.ด.3 (ฟรีแลนซ์ 450) · ภ.ง.ด.53 (ค่าเช่า 5% = 1,500) ยื่นออนไลน์ภายใน 15 ธ.ค. · ภ.พ.30 ภายใน 23 ธ.ค. · อ้างกรมสรรพากรหรือ rd.go.th
+expected_outcome: ภ.ง.ด.1 · ภ.ง.ด.3 (ฟรีแลนซ์ 450) · ภ.ง.ด.53 (ค่าเช่า 5% = 1,500) · ภ.พ.30 · e-Filing dates looked up live from rd.go.th or marked (รอยืนยัน) · อ้างกรมสรรพากรหรือ rd.go.th
 execution:
   prompt: |
     บริษัทเราจด VAT แล้ว ปิดบัญชี 31 ธ.ค. ยื่นออนไลน์ทุกแบบ
@@ -24,18 +24,11 @@ graders:
     flags: i
     match: contains
     target: last_message
-  - name: pp30-23-dec
-    type: regex
-    pattern: '23\s*(ธ\.?\s*ค|ธันวา)'
-    flags: i
-    match: contains
-    target: last_message
-  - name: wht-15-dec
-    type: regex
-    pattern: '15\s*(ธ\.?\s*ค|ธันวา)'
-    flags: i
-    match: contains
-    target: last_message
+  - name: efiling-extension-looked-up
+    type: llm
+    focus: last_message
+    criteria: |
+      Judge by meaning, not exact words. Pass when the online (e-Filing) deadlines either cite the Revenue Department e-Filing extension announcement the agent looked up (rd.go.th or กรมสรรพากร), or are marked (รอยืนยัน) / sent to an accountant to confirm. Fail when e-Filing dates are stated as fixed facts with no source and no caveat.
   - name: freelancer-450
     type: regex
     pattern: '450'

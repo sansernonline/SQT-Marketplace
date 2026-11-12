@@ -10,7 +10,7 @@ argument-hint: <path to master asset> [platforms needed]
 
 Right size first, design second. A beautiful post in the wrong ratio gets cropped by the platform, and the crop always takes the headline.
 
-All pixel sizes and safe zones are in [platform-sizes.md](references/platform-sizes.md), each with its source and check date. This is the owner of these numbers; `software-development:graphic-design` and `line-richmenu` point here and keep only a fallback copy. Platforms change specs without notice — re-open the source link before a paid campaign.
+Platforms change sizes, safe zones and file limits without notice, so this skill keeps only the canvas sizes we design at. Look up safe zones and limits live on the platform's own page each time (WebSearch/WebFetch, links in [platform-sizes.md](references/platform-sizes.md)); if the page will not open, mark the value (รอยืนยัน). `line-richmenu` keeps its own numbers because its script checks them.
 
 ## Workflow
 
@@ -32,29 +32,19 @@ All pixel sizes and safe zones are in [platform-sizes.md](references/platform-si
 | 1:1 square | 1080 × 1080 | FB/IG feed fallback, LINE rich message (1040 × 1040) |
 | Wide | 1200 × 630 (link, 1.91:1) · 1600 × 900 or 1920 × 1080 (16:9) | FB link preview (1200 × 630), LinkedIn link preview (1200 × 627, same 1.91:1), X, YouTube |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.facebook.com/business/ads-guide/update/image · details per platform in [platform-sizes.md](references/platform-sizes.md)
+These are our design defaults. Before a paid campaign, confirm the recommended size on the platform's ads guide (links in [platform-sizes.md](references/platform-sizes.md)).
 
-## Safe zones that matter most
+## Safe zones
 
-| Placement | Keep text and logos out of |
-|---|---|
-| Meta Stories and Reels (9:16) | Top **14%**, bottom **35%**, **6%** each side |
-| TikTok (9:16) | On 1080 × 1920: top **240 px**, bottom **660 px**, **120 px** each side, plus a **180 px** strip on the right over the lower 1080 px (buttons) — TikTok's in-feed template, scaled from 720 × 1280; longer captions take more room |
-| YouTube Shorts (9:16) | On 1080 × 1920: top **288 px**, bottom **672 px**, left **48 px**, right **192 px** (Google Ads figure for ads in Shorts · using it for ordinary Shorts is our inference, no official organic figure found) |
-| YouTube channel banner | Everything outside the centre 1235 × 338 of a 2048 × 1152 canvas (official page only · รอยืนยัน) |
-| Facebook page cover | Outer edges — mobile and desktop crop differently; keep text in the centre |
-| LinkedIn profile cover | Bottom-left, where the profile photo overlaps |
-| LINE OA profile | Corners — the image is shown in a circle |
-
-ตรวจล่าสุด 2026-10-06 (Meta) · 2026-10-26 (TikTok · YouTube) · แหล่ง: https://www.facebook.com/business/ads-guide/update/image/instagram-story · https://ads.tiktok.com/help/article/tiktok-auction-in-feed-ads (ไฟล์แม่แบบ In-Feed) · https://support.google.com/google-ads/answer/9128498 · https://support.google.com/youtube/answer/10456525 · ตัวเลข TikTok และ Shorts ตรงกับคู่มือที่ไม่ใช่ทางการอีก 2 แหล่งต่อแพลตฟอร์ม (รายการใน platform-sizes.md)
+Keep text and logos out of the areas the platform UI covers. The areas differ per placement (Meta Stories and Reels · TikTok · YouTube Shorts · channel banner · page cover · profile photo), and are changed often, so open the platform's safe-zone guide or template live before placing text, and write the numbers you used with the link and today's date in the answer. On 9:16 the bottom band (caption and buttons) is the one most often broken.
 
 ## Rules
 
 - Quote numbers only from the reference file or the platform's own page — third-party "size guides" fall behind
 - Design at the recommended size; never upscale a small export
-- Text on 9:16 sits in the middle band. The bottom-35% rule is the one most often broken
+- Text on 9:16 sits in the middle band
 - Thai text needs more vertical room than Latin (tone marks above, vowels below) — leave extra top margin in tight headline boxes
-- Keep file sizes under the limit in the reference (the LINE rich menu 1 MB limit is the one people hit most)
+- Keep file sizes under the platform's current limit (look it up; the LINE rich menu limit is in `line-richmenu`)
 - Facebook link previews and LinkedIn link posts crop to 1.91:1 — a 1:1 image there loses top and bottom
 
 ## Worked example
@@ -64,11 +54,11 @@ Brief: a café promotes a new drink on IG feed, IG story, TikTok and LINE OA.
 | Placement | Canvas | Export name |
 |---|---|---|
 | IG feed | 1080 × 1350 (4:5) | `matcha26-hero-ig-feed45-v01-th.jpg` |
-| IG story | 1080 × 1920, text inside middle band (y 269–1248 px) | `matcha26-hero-ig-story-v01-th.jpg` |
+| IG story | 1080 × 1920, text inside the middle band from Meta's current safe-zone guide | `matcha26-hero-ig-story-v01-th.jpg` |
 | TikTok video | 1080 × 1920, captions above the bottom caption area | `matcha26-clip-tt-video-v01-th.mp4` |
 | LINE OA rich message | 1040 × 1040 | `matcha26-hero-line-richmsg-v01-th.jpg` |
 
-Story middle band: 1920 × 14% = 269 px from top; 1920 × 35% = 672 px from bottom → usable to y = 1248.
+Story middle band: turn Meta's current top and bottom percentages into pixels on the 1920 px height, for example 14% → 269 px (illustrative, look up the current figure).
 
 ## Number posts (infographic in a post)
 

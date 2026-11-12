@@ -27,9 +27,9 @@ General information, not financial advice; every fee and rate is confirmed with 
 | MOR (Minimum Overdraft Rate) | Overdrafts to prime large companies |
 | BOT policy rate | Bank of Thailand rate; banks move MRR with it but set their own levels |
 
-Each bank sets its own MRR. Examples: Bangkok Bank 6.50% (from 26 Feb 2569), KBank 6.58% and ttb 7.105% (from 2 Mar 2569, rechecked on ttbbank.com 2026-10-26). BOT policy rate 1.00% since 25 Feb 2569 (held at 1.00% again on 28 Oct 2569, unanimous 6–0, per ThaiPublica, PPTV and Thansettakij news checked 2026-11-01; next meeting 23 Dec 2569), so read the bank's current rate table on the day.
+Each bank sets its own MRR, and MRR levels differ between banks. Banks usually move MRR after a BOT policy-rate decision, but not always by the same amount or on the same day.
 
-ตรวจล่าสุด 2026-11-01 (ดอกเบี้ยนโยบาย · MRR ธนาคารยังเป็นค่าที่ตรวจ 2026-10-26) · แหล่ง: https://thaipublica.org/2026/10/mpc-28-10-2026/ , https://www.pptvhd36.com/wealth/monetary/286033 , https://www.thansettakij.com/economy/672432 , https://www.bangkokbank.com (ตารางอัตราดอกเบี้ยเงินให้สินเชื่อ 26 ก.พ. 2569) , https://www.kasikornbank.com/th/rate/LendingPDF/lending-02032026-th.pdf , https://www.ttbbank.com/th/rates/loan-interest-rates , https://www.infoquest.co.th/2026/572846 · ดอกเบี้ยนโยบาย https://www.bot.or.th/th/our-roles/monetary-policy/mpc-meeting.html , https://www.thaipbs.or.th/news/content/509928 · MRR ของแต่ละธนาคารมาจากตารางของธนาคารเองแหล่งเดียวต่อธนาคาร (เป็นแหล่งทางการ)
+Look up the current BOT policy rate and the user's bank's current MRR live (WebSearch/WebFetch) before quoting: BOT policy rate https://www.bot.or.th/th/our-roles/monetary-policy/mpc-meeting.html · MRR from each bank's own lending-rate table, e.g. https://www.bangkokbank.com , https://www.kasikornbank.com , https://www.ttbbank.com/th/rates/loan-interest-rates ; if the page will not open, mark the value (รอยืนยัน).
 
 ## 2 · The two paths
 
@@ -40,9 +40,11 @@ Each bank sets its own MRR. Examples: Bangkok Bank 6.50% (from 26 Feb 2569), KBa
 | Paperwork | New credit check, income documents, Land Office visit | A form at the current bank |
 | Lock after | New 3-year prepayment penalty | Often a new lock period — ask |
 
-The government cut of the mortgage fee to 0.01% (homes ≤ 7 million baht, until 30 Jun 2570) applies when the purchase and mortgage are registered together; reports say a refinance pays the normal 1% (รอยืนยัน with the Land Office).
+The government sometimes runs a temporary cut of the mortgage registration fee for homes under a price cap. Such a cut has applied only when the purchase and the mortgage are registered together; reports say a refinance pays the normal 1% (รอยืนยัน with the Land Office).
 
-ตรวจล่าสุด 2026-10-26 · ค่าปรับและค่าจดจำนอง แหล่ง: https://www.gsb.or.th/media/2024/01/sale-sheet-สินเชื่อเคหะ.pdf , https://www.scb.co.th/th/personal-banking/stories/home-car/home-retention , https://www.krungsri.com/th/krungsri-the-coach/loan/mortgages/home-refinance-fees-guide , https://www.ktc.co.th/article/lifestyle/home-decoration/house-refinance-costs · อากร 0.05% สูงสุด 10,000 มีแต่แหล่งไม่ทางการ 3 แหล่ง (ktc · krungsri the coach · https://www.bangkokbiznews.com/finance/investment/1073962) รอยืนยันกับกรมสรรพากร · ค่ารีเทนชั่น https://www.krungsri.com/th/krungsri-the-coach/loan/mortgages/refinance-vs-retention-percent-interest , https://www.ktc.co.th/article/lifestyle/home-decoration/what-is-retention (ตัวเลขขัดกัน) · ค่าจดจำนอง 0.01% https://www.thaipbs.or.th/news/content/507690 , https://www.prachachat.net/politics/news-2030776
+Look up whether a fee cut is in force, its rate, price cap, end date and whether it covers refinance live (WebSearch/WebFetch) before quoting: the sources in this file are news only (https://www.thaipbs.or.th/news/content/507690 , https://www.prachachat.net/politics/news-2030776), so confirm with the Land Office; if the page will not open, mark the value (รอยืนยัน).
+
+ตรวจล่าสุด 2026-10-26 · ค่าปรับและค่าจดจำนอง แหล่ง: https://www.gsb.or.th/media/2024/01/sale-sheet-สินเชื่อเคหะ.pdf , https://www.scb.co.th/th/personal-banking/stories/home-car/home-retention , https://www.krungsri.com/th/krungsri-the-coach/loan/mortgages/home-refinance-fees-guide , https://www.ktc.co.th/article/lifestyle/home-decoration/house-refinance-costs · อากร 0.05% สูงสุด 10,000 มีแต่แหล่งไม่ทางการ 3 แหล่ง (ktc · krungsri the coach · https://www.bangkokbiznews.com/finance/investment/1073962) รอยืนยันกับกรมสรรพากร · ค่ารีเทนชั่น https://www.krungsri.com/th/krungsri-the-coach/loan/mortgages/refinance-vs-retention-percent-interest , https://www.ktc.co.th/article/lifestyle/home-decoration/what-is-retention (ตัวเลขขัดกัน)
 
 ## Workflow
 
@@ -77,7 +79,7 @@ Input fields `balance`, `payment`, `months`, `stay.rate` and each option's `rate
 
 ## Worked example
 
-Balance 2,400,000 after exactly 3 years (no penalty). Payment kept at 18,000 a month. Current floating rate about 6.5%. Offer A: other bank, 3-year average 3.2%. Offer B: current bank 4.0% for a 1% fee. Fees are ตัวอย่าง until confirmed.
+Balance 2,400,000 after exactly 3 years (no penalty). Payment kept at 18,000 a month. Floating rate 6.5% (ตัวอย่าง, not a current MRR). Offer A: other bank, 3-year average 3.2%. Offer B: current bank 4.0% for a 1% fee. Fees are ตัวอย่าง until confirmed.
 
 | Over 36 months | Stay (6.5%) | B · Retention (4.0%) | A · Refinance (3.2%) |
 |---|---|---|---|
