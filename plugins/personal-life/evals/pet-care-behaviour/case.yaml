@@ -18,12 +18,14 @@ graders:
     target: last_message
   - name: rabies-required
     type: regex
-    pattern: "พิษสุนัขบ้า|(?i)rabies"
+    pattern: "พิษสุนัขบ้า|rabies"
+    flags: i
     match: contains
     target: last_message
   - name: vet
     type: regex
-    pattern: "สัตวแพทย์|หมอ|คลินิก|(?i)vet"
+    pattern: "สัตวแพทย์|หมอ|คลินิก|vet"
+    flags: i
     match: contains
     target: last_message
   - name: rules-followed

@@ -1,5 +1,9 @@
 # Changelog — graphic-design
 
+## 0.28.7 — 2026-11-12
+
+- eval: ตัวให้คะแนน regex ที่เขียน `(?i)` ในตัว pattern (JavaScript ไม่รับ จึง error เงียบ) ย้ายเป็น `flags: i`
+
 ## 0.28.6 — 2026-11-12
 
 - สำเนา `superuser/references/team-roles.md` ของ plugin นี้เป็นภาษาอังกฤษตาม superuser 3.39.1

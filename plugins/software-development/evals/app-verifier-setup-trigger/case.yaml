@@ -19,6 +19,7 @@ graders:
     arm: with-only
   - name: verify-script
     type: regex
-    pattern: "(?i)verify|playwright"
+    pattern: "verify|playwright"
+    flags: i
     match: contains
     target: last_message

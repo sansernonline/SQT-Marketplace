@@ -10,9 +10,11 @@ execution:
     เขียนรายงานบั๊กลง tracker ของโปรเจกต์ใน resources/pos-app:
     พนักงานสาขาบางแสนกดพิมพ์ใบเสร็จแล้วยอดรวมไม่ตรงกับหน้าจอ ต่างกัน 1 บาท เกิดกับบิลที่มีส่วนลดเป็นเปอร์เซ็นต์
     ห้ามแก้ไฟล์ ตอบกลับเป็นรายงานที่พร้อมวาง ไม่ต้องถามกลับ
-  add_dirs: [resources]
   max_turns: 15
   timeout_seconds: 400
+context:
+  add_dirs: [resources]
+  scaffold_script: fixture.sh   # ต้องรันด้วย --scaffold (plugin-eval.mjs ใส่ให้)
 graders:
   - name: read-existing-template
     type: tool_used

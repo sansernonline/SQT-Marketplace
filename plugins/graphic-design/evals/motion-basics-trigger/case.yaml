@@ -19,6 +19,7 @@ graders:
     arm: with-only
   - name: easing
     type: regex
-    pattern: "(?i)ease"
+    pattern: "ease"
+    flags: i
     match: contains
     target: last_message

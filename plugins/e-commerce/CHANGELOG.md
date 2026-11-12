@@ -1,5 +1,9 @@
 # CHANGELOG — e-commerce
 
+## 1.9.9 — 2026-11-12
+
+- eval: ตัวให้คะแนน regex ที่เขียน `(?i)` ในตัว pattern (JavaScript ไม่รับ จึง error เงียบ) ย้ายเป็น `flags: i` · เคสที่มีไฟล์ประกอบใน `resources/` ได้ `fixture.sh` + `scaffold_script` ใต้ `context:` (เดิมวาง `add_dirs` ใต้ `execution:` ซึ่งถูกเมิน) · ยังไม่ได้รันยืนยันเพราะหน่วยความจำเครื่องไม่พอ
+
 ## 1.9.8 — 2026-11-12
 
 - สำเนา `superuser/references/team-roles.md` ของ plugin นี้เป็นภาษาอังกฤษตาม superuser 3.39.1

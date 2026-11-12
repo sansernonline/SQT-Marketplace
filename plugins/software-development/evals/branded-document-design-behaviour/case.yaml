@@ -13,12 +13,14 @@ execution:
 graders:
   - name: docx-build
     type: regex
-    pattern: "(?i)python-docx|docx"
+    pattern: "python-docx|docx"
+    flags: i
     match: contains
     target: last_message
   - name: visual-check
     type: regex
-    pattern: "(?i)pdf|ภาพ|png|เปิดดู"
+    pattern: "pdf|ภาพ|png|เปิดดู"
+    flags: i
     match: contains
     target: last_message
   - name: rules-followed

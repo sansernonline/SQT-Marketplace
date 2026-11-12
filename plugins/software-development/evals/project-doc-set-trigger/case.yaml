@@ -19,6 +19,7 @@ graders:
     arm: with-only
   - name: doc-set
     type: regex
-    pattern: "(?i)ref/|BRD|SRS|ชุดเอกสาร"
+    pattern: "ref/|BRD|SRS|ชุดเอกสาร"
+    flags: i
     match: contains
     target: last_message

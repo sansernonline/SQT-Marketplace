@@ -9,9 +9,11 @@ execution:
   prompt: |
     บันทึกการตัดสินใจลงโปรเจกต์ resources/billing-api: เลือกใช้ PostgreSQL แทน MongoDB เพราะต้องทำธุรกรรมหลายตารางและรายงานบัญชี
     ห้ามแก้ไฟล์ ตอบกลับเป็นชื่อไฟล์และเนื้อ ADR ไม่ต้องถามกลับ
-  add_dirs: [resources]
   max_turns: 15
   timeout_seconds: 400
+context:
+  add_dirs: [resources]
+  scaffold_script: fixture.sh   # ต้องรันด้วย --scaffold (plugin-eval.mjs ใส่ให้)
 graders:
   - name: read-existing-template
     type: tool_used

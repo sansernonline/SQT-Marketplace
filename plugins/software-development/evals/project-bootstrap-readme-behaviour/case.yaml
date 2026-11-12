@@ -10,9 +10,11 @@ execution:
   prompt: |
     เขียน README.md ให้โปรเจกต์ในโฟลเดอร์ resources/tidy-notes ห้ามแก้ไฟล์ในโฟลเดอร์นั้น
     ตอบกลับเป็นเนื้อ README ทั้งไฟล์ ทำต่อได้เลยไม่ต้องถามกลับ
-  add_dirs: [resources]
   max_turns: 20
   timeout_seconds: 600
+context:
+  add_dirs: [resources]
+  scaffold_script: fixture.sh   # ต้องรันด้วย --scaffold (plugin-eval.mjs ใส่ให้)
 graders:
   - name: read-manifest
     type: tool_used

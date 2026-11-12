@@ -13,7 +13,8 @@ execution:
 graders:
   - name: verify-script
     type: regex
-    pattern: "(?i)verify"
+    pattern: "verify"
+    flags: i
     match: contains
     target: last_message
   - name: evidence-folder
@@ -23,7 +24,8 @@ graders:
     target: last_message
   - name: no-redownload
     type: regex
-    pattern: "(?i)npx playwright install|playwright install"
+    pattern: "npx playwright install|playwright install"
+    flags: i
     match: not_contains
     target: last_message
   - name: rules-followed

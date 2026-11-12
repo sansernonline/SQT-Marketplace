@@ -20,7 +20,8 @@ graders:
     target: last_message
   - name: contrast-checked
     type: regex
-    pattern: "(?i)contrast|คอนทราสต์|ความต่างสี|4\\.5"
+    pattern: "contrast|คอนทราสต์|ความต่างสี|4\\.5"
+    flags: i
     match: contains
     target: last_message
   - name: distinct-and-paired

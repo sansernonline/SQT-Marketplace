@@ -19,6 +19,7 @@ graders:
     arm: with-only
   - name: rabies
     type: regex
-    pattern: "พิษสุนัขบ้า|(?i)rabies"
+    pattern: "พิษสุนัขบ้า|rabies"
+    flags: i
     match: contains
     target: last_message

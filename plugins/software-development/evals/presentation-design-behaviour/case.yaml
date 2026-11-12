@@ -14,6 +14,7 @@ execution:
   allowed_tools: [Read, Write, Edit, Glob, Grep, Skill, Bash]
 context:
   add_dirs: [resources]
+  scaffold_script: fixture.sh   # ต้องรันด้วย --scaffold (plugin-eval.mjs ใส่ให้)
 graders:
   - name: palette-script-run
     type: regex

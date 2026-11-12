@@ -15,6 +15,7 @@ execution:
   timeout_seconds: 900
 context:
   add_dirs: [resources]
+  scaffold_script: fixture.sh   # ต้องรันด้วย --scaffold (plugin-eval.mjs ใส่ให้)
 graders:
   - name: webhook-not-rated-high
     type: regex
@@ -23,6 +24,7 @@ graders:
     target: last_message
   - name: header-not-a-rated-finding
     type: regex
-    pattern: "(?i)\\|[^|\\n]*header[^|\\n]*\\|[^|\\n]*(confirmed|ยืนยันแล้ว)[^|\\n]*\\|\\s*(low|ต่ำ|medium|กลาง|high|สูง)"
+    pattern: "\\|[^|\\n]*header[^|\\n]*\\|[^|\\n]*(confirmed|ยืนยันแล้ว)[^|\\n]*\\|\\s*(low|ต่ำ|medium|กลาง|high|สูง)"
+    flags: i
     match: not_contains
     target: last_message

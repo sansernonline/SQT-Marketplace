@@ -1,5 +1,10 @@
 # Changelog — trading-finance
 
+## 0.21.7 — 2026-11-12
+
+- `trading-technique-course`: ผู้ใช้ขอใช้เงินจริงก่อนผ่านด่าน ให้บอกตัวเลขด่านที่ยังขาดและฝึกในพอร์ตจำลองต่อทั้งก้อน ไม่เสนอเริ่มเงินจริงก้อนเล็ก (guard no-skip ตก 1 ใน 3 รอบ 2026-11-12)
+- eval `tax-basics-th-behaviour`: description ครอบเครื่องหมายคำพูด (เดิม YAML พังเพราะมี `: `)
+
 ## 0.21.6 — 2026-11-12
 
 - สำเนา `superuser/references/team-roles.md` ของ plugin นี้เป็นภาษาอังกฤษตาม superuser 3.39.1

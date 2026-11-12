@@ -19,6 +19,7 @@ graders:
     arm: with-only
   - name: structure
     type: regex
-    pattern: "(?i)svg|html|โครง|assets|สีหลัก"
+    pattern: "svg|html|โครง|assets|สีหลัก"
+    flags: i
     match: contains
     target: last_message

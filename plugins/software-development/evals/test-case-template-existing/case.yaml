@@ -9,9 +9,11 @@ execution:
   prompt: |
     เขียน test case ให้ฟีเจอร์ "ลืมรหัสผ่าน" ของโปรเจกต์ใน resources/hr-portal สำหรับรอบ UAT ของลูกค้า 4–6 ข้อ
     ห้ามแก้ไฟล์ ตอบกลับเป็นแถวที่พร้อมวางต่อในไฟล์ของลูกค้า ไม่ต้องถามกลับ
-  add_dirs: [resources]
   max_turns: 15
   timeout_seconds: 400
+context:
+  add_dirs: [resources]
+  scaffold_script: fixture.sh   # ต้องรันด้วย --scaffold (plugin-eval.mjs ใส่ให้)
 graders:
   - name: read-existing-template
     type: tool_used

@@ -19,6 +19,7 @@ graders:
     arm: with-only
   - name: converter
     type: regex
-    pattern: "md_to_docx|(?i)docx"
+    pattern: "md_to_docx|docx"
+    flags: i
     match: contains
     target: last_message
