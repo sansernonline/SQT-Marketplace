@@ -29,25 +29,15 @@ Forex, CFDs (gold, indices), crypto or a prop-firm account → lots, pip value, 
 | Settlement | T+2 |
 | ETFs / unit trusts tick | 0.01 baht at every price |
 
-Tick size (ช่วงราคา) for SET/mai shares — SET changes the 5–<50 baht bands on **16 Nov 2569 (2026)**:
+Tick size (ช่วงราคา) for SET/mai shares, in force from 16 Nov 2569 (2026):
 
-| Price (baht) | Tick now (until 13 Nov 2569) | Tick from 16 Nov 2569 |
-|---|---|---|
-| < 2 | 0.01 | 0.01 |
-| 2 – < 5 | 0.02 | 0.02 |
-| 5 – < 10 | 0.05 | **0.02** |
-| 10 – < 25 | 0.10 | **0.05** |
-| 25 – < 50 | 0.25 | **0.10** |
-| 50 – < 100 | 0.25 | 0.25 |
-| 100 – < 200 | 0.50 | 0.50 |
-| 200 – < 400 | 1.00 | 1.00 |
-| ≥ 400 | 2.00 | 2.00 |
+| Price (baht) | < 2 | 2–<5 | 5–<10 | 10–<25 | 25–<50 | 50–<100 | 100–<200 | 200–<400 | ≥ 400 |
+|---|---|---|---|---|---|---|---|---|---|
+| Tick | 0.01 | 0.02 | 0.02 | 0.05 | 0.10 | 0.25 | 0.50 | 1.00 | 2.00 |
 
-ตรวจ 12 พ.ย. 2569 (2026-11-12): SET circular ปก.(ว) 4/2569 "Trading Measures" (15 Oct 2026) confirms the new table and the effective date 16 พ.ย. 2569 https://media.set.or.th/rulebook/circular-letter/attachment-file/379.pdf (unofficial English translation; the Thai original not read) · SET also cancels every order carried over from earlier days (SET and mai) before Pre-open on 16 พ.ย. 2569 · keep both tables until then (delete the old one after 16 พ.ย. 2569, once the SET tick page shows the new table) · other sources: SET, "8 มาตรการซื้อขาย" https://www.set.or.th/th/about/mediacenter/insights/article/795-eight-trading-measures (confirms the tick cut for 5–50 baht and the date 16 พ.ย. 2569; same date in Thansettakij, Infoquest, Mondo Visione; InnovestX https://www.innovestx.co.th/cafeinvest/th/articles/special-thai-20261012-1 gives 25–<50 baht 0.25 → 0.10, matching the hearing result) · SET hearing result No21 (Jun 2026) https://media.set.or.th/set/Documents/2026/Jun/No21-HearingResult-Proposed-Revision-Measures-Enhance-Confidence.pdf (new values 5–<10 0.02, 10–<25 0.05, 25–<50 0.10; 82% agreed) · old table https://www.set.or.th/en/trading-units-tick-sizes-price-limits.
+Source: SET circular ปก.(ว) 4/2569 (15 Oct 2026, checked 2026-11-12) https://media.set.or.th/rulebook/circular-letter/attachment-file/379.pdf · SET tick page https://www.set.or.th/en/trading-units-tick-sizes-price-limits · SET changes ticks rarely (the table before this one ran from 2009), so check the SET page only when a user says the tick changed or a broker rejects a price, then update this table and `scripts/ticks.json` together.
 
-Examples in this plugin use prices valid under **both** tables (multiples of 0.50 between 25 and 50 baht), so they stay correct before and after 16 Nov 2569.
-
-Why ticks matter: stop and entry must sit on a valid tick, and on a 9.90-baht stock one tick (0.05 now, 0.02 from 16 Nov 2569) is 0.5% now — a "1-tick" stop is not a real stop.
+Why ticks matter: stop and entry must sit on a valid tick, and on a 9.90-baht stock one tick (0.02) is 0.2% — a "1-tick" stop is not a real stop.
 
 ## Workflow
 
@@ -63,16 +53,16 @@ Why ticks matter: stop and entry must sit on a valid tick, and on a 9.90-baht st
 
 ## Script
 
-`size.mjs` does the arithmetic so the number is not worked out in the model's head: risk budget, risk per share (with cost), raw size, round down to the board lot, then the concentration cap (10% of capital, 20% for an ETF) and the liquidity cap (5% of average daily value, only when `avgDailyValue` is given). It reports which rule bound the size. Entry and stop must sit on a valid tick from `scripts/ticks.json` (the table above, with `checked` and `source`); the table in force follows `asOf` (default today), and a price valid under only one of the two tables gets a warning. `ticks.json` marks each table `confirmed`; both are confirmed (SET circular ปก.(ว) 4/2569), so an off-tick price stops the script under either table. A table marked unconfirmed would give a warning instead of a stop.
+`size.mjs` does the arithmetic so the number is not worked out in the model's head: risk budget, risk per share (with cost), raw size, round down to the board lot, then the concentration cap (10% of capital, 20% for an ETF) and the liquidity cap (5% of average daily value, only when `avgDailyValue` is given). It reports which rule bound the size. Entry and stop must sit on a valid tick from `scripts/ticks.json` (the table above, with `checked` and `source`); an off-tick price stops the script.
 
 ```
 node size.mjs <file.json> [--json]     # example file: scripts/example.json
 node size.mjs --self-test
 ```
 
-Input file: `{ "type": "share", "capital": 100000, "riskPct": 1, "entry": 48.5, "stop": 47.5, "costPerShare": 0.19 }` · `type` is `share` (default), `etf` (tick 0.01), `crypto` (needs `lot` = coin step, no tick check) or `forex` (`stopPips`, `pipValuePerLot`, `costPerLot`, `volumeStep`; formula in [references/forex-cfd-crypto.md](references/forex-cfd-crypto.md)). Optional: `lot` (default 100), `maxPositionPct`, `avgDailyValue`, `asOf` (`YYYY-MM-DD`). Every number must be finite; a bad field stops the script with a message naming it. **No stop = the script stops** — it never sizes without one. A `riskPct` above 2 stops the script unless `riskPctApprovedBy` says where the user set it (for example `"CONTEXT.md 2026-10-28"`). Optional what-ifs that never change the size: `gapMultiplier` (1.5–2 when the price can gap past the stop) prints the gap loss · `openRiskPct` (risk already open, % of capital) prints total open risk and warns above 6% · forex `price` + `leverage` (+ `contractSize`, default 100,000) prints margin. Size 0 means the stop is too wide for the account: skip the trade.
+Input file: `{ "type": "share", "capital": 100000, "riskPct": 1, "entry": 48.5, "stop": 47.5, "costPerShare": 0.19 }` · `type` is `share` (default), `etf` (tick 0.01), `crypto` (needs `lot` = coin step, no tick check) or `forex` (`stopPips`, `pipValuePerLot`, `costPerLot`, `volumeStep`; formula in [references/forex-cfd-crypto.md](references/forex-cfd-crypto.md)). Optional: `lot` (default 100), `maxPositionPct`, `avgDailyValue`. Every number must be finite; a bad field stops the script with a message naming it. **No stop = the script stops** — it never sizes without one. A `riskPct` above 2 stops the script unless `riskPctApprovedBy` says where the user set it (for example `"CONTEXT.md 2026-10-28"`). Optional what-ifs that never change the size: `gapMultiplier` (1.5–2 when the price can gap past the stop) prints the gap loss · `openRiskPct` (risk already open, % of capital) prints total open risk and warns above 6% · forex `price` + `leverage` (+ `contractSize`, default 100,000) prints margin. Size 0 means the stop is too wide for the account: skip the trade.
 
-**Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/trading-finance/*/skills/position-sizing/scripts/size.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/trading-finance/skills/position-sizing/scripts/size.mjs` · Node only, no dependencies. When SET's tick change takes effect (16 Nov 2569), delete the old table from `ticks.json` too.
+**Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/trading-finance/*/skills/position-sizing/scripts/size.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/trading-finance/skills/position-sizing/scripts/size.mjs` · Node only, no dependencies.
 
 ## Why the risk % stays small — drawdown and the way back
 
@@ -80,7 +70,7 @@ Gain needed = drawdown ÷ (1 − drawdown): a 10% loss needs 11.1% back, 50% nee
 
 ## Worked example
 
-Capital 100,000 baht, risk 1% = **1,000 baht**. Entry 48.50, invalidation 48.00 → stop 0.50 below at **47.50** (valid under both tick tables: 0.25 now, 0.10 from 16 Nov 2569). Risk per share = 1.00. Round-trip cost ≈ 0.2% × 2 × 48.50 ≈ 0.19 → use **1.19**.
+Capital 100,000 baht, risk 1% = **1,000 baht**. Entry 48.50, invalidation 48.00 → stop 0.50 below at **47.50** (on the 0.10 tick). Risk per share = 1.00. Round-trip cost ≈ 0.2% × 2 × 48.50 ≈ 0.19 → use **1.19**.
 
 - Raw size = 1,000 ÷ 1.19 = 840 → round down to board lot = **800 shares**
 - Position value = 800 × 48.50 = **38,800 baht = 38.8% of capital** → fails the 10% concentration check
