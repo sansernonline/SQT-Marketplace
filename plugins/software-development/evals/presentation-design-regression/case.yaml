@@ -18,6 +18,7 @@ execution:
   allowed_tools: [Read, Write, Edit, Glob, Grep, Skill, Bash]
 context:
   add_dirs: [resources]
+  scaffold_script: fixture.sh   # ต้องรันด้วย --scaffold (plugin-eval.mjs ใส่ให้)
 # trace รวมเนื้อ skill ที่ agent อ่านด้วย และในนั้นมีทั้ง --theme dark และ --theme bright · จึงจับเฉพาะคำสั่ง build จริงที่มีไฟล์ .html ตามหลัง
 # รับคำสั่งที่ต่อบรรทัดด้วย \ · ตัวอย่างใน skill มี <ที่ว่าง> อยู่ในคำสั่ง จึงห้าม < ระหว่างทาง
 graders:

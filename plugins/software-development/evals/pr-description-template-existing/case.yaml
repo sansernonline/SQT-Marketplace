@@ -11,6 +11,7 @@ execution:
     ไฟล์ที่แก้: src/orders/History.tsx · src/orders/reorder.ts · test ใน src/orders/reorder.test.ts
     ห้ามแก้ไฟล์ในโฟลเดอร์ ตอบกลับเป็นเนื้อ PR ทั้งหมด ไม่ต้องถามกลับ
   add_dirs: [resources]
+  scaffold_script: fixture.sh   # ต้องรันด้วย --scaffold (plugin-eval.mjs ใส่ให้)
   max_turns: 15
   timeout_seconds: 400
 graders:

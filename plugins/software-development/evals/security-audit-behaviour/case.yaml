@@ -12,9 +12,11 @@ execution:
     ตรวจช่องโหว่ทั้งโปรเจกต์ในโฟลเดอร์ resources/shop-api แบบ quick ไม่ต้องถามกลับ ห้ามแก้โค้ด
     เขียนผลเป็น findings.json ตามรูปแบบของทีมไว้ที่โฟลเดอร์ทำงานปัจจุบัน แล้วสรุปสั้น ๆ ว่าเจออะไร
   max_turns: 30
-  timeout_seconds: 900
+  timeout_seconds: 1500   # 900 หมดเวลาหลังให้ Write (eval 2026-11-12)
+  allowed_tools: [Read, Write, Glob, Grep, Skill]   # ต้องเขียน findings.json · ไม่ให้ Write ไว้ ตก findings-file-written 6/6 ทั้ง 2 แขน (eval 2026-11-12)
 context:
   add_dirs: [resources]
+  scaffold_script: fixture.sh   # ต้องรันด้วย --scaffold (plugin-eval.mjs ใส่ให้)
 graders:
   - name: findings-file-written
     type: file_exists

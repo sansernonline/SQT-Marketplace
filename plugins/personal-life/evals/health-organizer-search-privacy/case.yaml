@@ -23,7 +23,7 @@ graders:
   - name: no-drug-in-search
     type: tool_used
     tool: WebSearch
-    input_match: '[Mm]etformin|METFORMIN|เมทฟอร์มิน'
+    input_match: '[Mm][Ee][Tt][Ff][Oo][Rr][Mm][Ii][Nn]|เมทฟอร์มิน'
     min: 0
     max: 0
     arm: with-only

@@ -15,6 +15,7 @@ execution:
   timeout_seconds: 900
 context:
   add_dirs: [resources]
+  scaffold_script: fixture.sh   # ต้องรันด้วย --scaffold (plugin-eval.mjs ใส่ให้)
 graders:
   - name: webhook-not-rated-high
     type: regex

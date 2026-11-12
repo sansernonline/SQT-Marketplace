@@ -11,7 +11,7 @@ execution:
   prompt: |
     ร้านทองในเยาวราชจะทำเว็บขายทองออนไลน์ ขอชุดสีและคู่ฟอนต์ไทย-อังกฤษ 3 แนว ไม่ต้องถามกลับ
   max_turns: 12
-  timeout_seconds: 400
+  timeout_seconds: 700   # 400 หมดเวลา (eval 2026-11-12)
 graders:
   - name: no-inter
     type: regex
@@ -21,6 +21,7 @@ graders:
     target: last_message
   - name: font-licence-stated
     type: regex
-    pattern: "(?i)\\bOFL\\b|Open Font License|ใบอนุญาต|licen[cs]e"
+    pattern: "\\bOFL\\b|Open Font License|ใบอนุญาต|licen[cs]e"
+    flags: i
     match: contains
     target: last_message
