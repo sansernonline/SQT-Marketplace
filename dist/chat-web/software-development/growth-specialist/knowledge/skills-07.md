@@ -7,6 +7,8 @@ Use when making or reviewing anything people look at so it looks made by a perso
 > **กฎข้อเดียว:** ทุกการเลือก (สี ฟอนต์ เลย์เอาต์ รูป คำ) ต้องตอบได้ว่า "เลือกเพราะโปรเจกต์นี้" ไม่ใช่ "เพราะเป็นค่าตั้งต้น"
 > ค่าตั้งต้นของโมเดลและ framework คือค่าเฉลี่ยของงานทั้งโลก งานที่ใช้ค่าเฉลี่ยจึงหน้าตาเหมือนกันหมด และคนดูจำได้ทันทีว่า AI ทำ
 
+**Last line of every answer that makes or reviews a visual piece, including a quick "is it OK to send?" check:** the `no-ai-look:` log line from section 3.3, filled with the real counts (eye check `ด่านตา n/9`, web pages add `(หน้าเว็บ n/14)`) · items you could not check count as not passed, so the line reads below 9/9 · A script result of 0 alone never makes the line pass, because the script reads only values in the code · Script not run (no shell in this session) → write `สคริปต์ ไม่ได้รัน` in its slot · When the `ด่านก่อนลงมือ:` line of `design-references` is also due, it goes right above this one
+
 อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies` · รายการเต็มทุกสื่อพร้อมที่มา → [`references/catalog.md`](references/catalog.md)
 
 ## ใช้คู่กับอะไร
@@ -321,6 +323,8 @@ Use before any design work (web, app, slide, logo, poster) to search live refere
 อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies` · ถ้อยคำเขียนตาม `human-writing` · ใช้ก่อน skill ออกแบบทุกตัว (`ui-craft` · `presentation-design` · `branded-document-design` · `icon-design` · `brand-kit` · `social-formats` ฯลฯ)
 
 > **กฎข้อเดียว:** ทุกงานออกแบบเริ่มจากเอาคำของโปรเจกต์ไปค้นสดในเว็บที่เก่งงานประเภทนั้น แล้วหยิบสไตล์และสีจากงานที่ใกล้ที่สุดมาเป็นต้นแบบ · ไม่ออกแบบจากความจำหรือคลังที่เก็บไว้ เพราะเทรนด์เปลี่ยนเร็ว (ผู้ใช้ตัดสิน 2026-10-27) · skill นี้เก็บแค่รายชื่อเว็บ ไม่เก็บตัวอย่างงาน
+
+**Order of the first answer to any design request:** (1) search queries from the project's own words (2) links to real works you opened this round on sites strong in that type, such as Awwwards · Land-book · Dribbble · Behance (3) if the owner is present and did not say "don't ask", the board and the pick question from gate item 3 below; otherwise colours or shapes, each colour naming where it came from (a reference opened this round, or the locked brand guide) · Hex codes and `<svg>` come after step 2, never before · "Just make it, don't ask" skips the questions, not the search · No web tool in this session → give the queries and site links, and say the colours will be taken from the work the owner picks (eval 2026-11-10: drew SVG or picked colours before searching 3/3 in every case)
 
 ## ด่านก่อนลงมือ — ทุกงานสร้างสรรค์ ทุกครั้ง
 

@@ -12,7 +12,7 @@
 | [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 24 | 0 | 9 | 186 |
 | [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 47 | 1 | 30 | 212 |
 | [`software-development`](#software-development) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 104 | 12 | 17 | 1056 |
-| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 4 | 40 | 0 | 7 | 273 |
+| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 4 | 40 | 0 | 7 | 277 |
 | [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 5 | 25 | 1 | 10 | 147 |
 
 ## โครงของทุก plugin
@@ -72,7 +72,7 @@ plugins/<plugin>/
 | skill | `research-with-sources` | หาข้อมูลที่ยืนยันได้ พร้อมแหล่ง วันที่ และป้ายหลักฐาน | — |
 | skill | `session-lessons-to-skills` | รวมบทเรียนจากงานที่ทำ แล้วแก้ skill ที่พาผิด | — |
 | skill | `simplify` | ตัดขั้น ชั้น และตัวเลือกที่ยังไม่ต้องใช้ ให้คนใหม่ทำตามได้ | — |
-| skill | `skill-authoring` | เขียน skill · agent · playbook ของ marketplace นี้ พร้อม eval 3 เคสแบบ claude plugin eval | `references/eval-audit.md` · `references/eval-format.md` · `references/eval-loop-rules.md` · `references/optimize-loop.md` · `references/skill-evaluation-evidence.md` · `references/skill-structure.md` · `templates/ISSUES.md` |
+| skill | `skill-authoring` | เขียน skill · agent · playbook ของ marketplace นี้ พร้อม eval 3 เคสแบบ claude plugin eval | `references/before-after-testing.md` · `references/eval-audit.md` · `references/eval-cases.md` · `references/eval-format.md` · `references/eval-loop-rules.md` · `references/optimize-loop.md` · `references/skill-doctor.md` · `references/skill-evaluation-evidence.md` · `references/skill-structure.md` · `references/wiring-and-validator.md` · `templates/ISSUES.md` |
 | skill | `spell-out-abbreviations` | เขียนคำย่อเต็มครั้งแรก และทำอภิธานศัพท์ | — |
 | skill | `status-report` | ตารางสถานะเมื่องานจบ: ทำอะไร ผลเป็นอย่างไร ค้างอะไร | `assets/build-plan-status.md` · `references/build-plan-rules.md` · `references/project-plan-and-weekly-status.md` |
 | skill | `targeted-fix` | มีคนบอกว่าผิด → แก้ให้เล็กที่สุดตรงจุด | — |
