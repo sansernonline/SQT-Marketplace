@@ -9,10 +9,11 @@ execution:
   prompt: |
     ร้านในโฟลเดอร์ resources/kanom-shop ได้แชตจากลูกค้าใน Shopee: "สั่งไปตั้งแต่วันจันทร์ ทำไมยังไม่ส่งของคะ" (วันนี้วันพฤหัส สถานะยังเตรียมสินค้า)
     ร่างคำตอบให้ร้าน ห้ามแก้ไฟล์ ไม่ต้องถามกลับ
-  add_dirs: [resources]
-  scaffold_script: fixture.sh   # ต้องรันด้วย --scaffold (plugin-eval.mjs ใส่ให้)
   max_turns: 15
   timeout_seconds: 400
+context:
+  add_dirs: [resources]
+  scaffold_script: fixture.sh   # ต้องรันด้วย --scaffold (plugin-eval.mjs ใส่ให้)
 graders:
   - name: read-existing-template
     type: tool_used

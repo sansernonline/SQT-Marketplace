@@ -9,10 +9,11 @@ execution:
   prompt: |
     ร่างโครงเอกสารข้อกำหนดซอฟต์แวร์ (SRS) ให้โปรเจกต์ใน resources/clinic-queue พร้อมข้อกำหนดตัวอย่าง 3 ข้อของระบบเรียกคิว
     ห้ามแก้ไฟล์ ตอบกลับเป็นโครงหัวข้อและข้อกำหนดตัวอย่าง ไม่ต้องถามกลับ
-  add_dirs: [resources]
-  scaffold_script: fixture.sh   # ต้องรันด้วย --scaffold (plugin-eval.mjs ใส่ให้)
   max_turns: 15
   timeout_seconds: 400
+context:
+  add_dirs: [resources]
+  scaffold_script: fixture.sh   # ต้องรันด้วย --scaffold (plugin-eval.mjs ใส่ให้)
 graders:
   - name: read-existing-template
     type: tool_used

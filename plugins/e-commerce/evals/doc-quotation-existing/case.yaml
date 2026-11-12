@@ -9,10 +9,11 @@ execution:
   prompt: |
     ทำใบเสนอราคาใหม่ในโปรเจกต์ resources/sqt-docs ให้ลูกค้า บริษัท ทะเลทอง จำกัด: ออกแบบเว็บไซต์ 45,000 บาท · ดูแลรายปี 12,000 บาท (ราคายังไม่รวมภาษีมูลค่าเพิ่ม)
     ห้ามแก้ไฟล์ ตอบกลับเป็นเนื้อใบเสนอราคา ไม่ต้องถามกลับ
-  add_dirs: [resources]
-  scaffold_script: fixture.sh   # ต้องรันด้วย --scaffold (plugin-eval.mjs ใส่ให้)
   max_turns: 15
   timeout_seconds: 400
+context:
+  add_dirs: [resources]
+  scaffold_script: fixture.sh   # ต้องรันด้วย --scaffold (plugin-eval.mjs ใส่ให้)
 graders:
   - name: read-existing-template
     type: tool_used

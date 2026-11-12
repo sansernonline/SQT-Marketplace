@@ -10,10 +10,11 @@ execution:
     สรุปการประชุมลงแบบขององค์กรในโฟลเดอร์ resources/coop-office จากโน้ตนี้:
     ประชุมกรรมการสหกรณ์ 5 พ.ย. 2569 · ประธานแจ้งยอดสมาชิกใหม่ 12 คน · พิจารณาซื้อเครื่องพิมพ์ใหม่ 18,000 บาท ที่ประชุมอนุมัติ ให้คุณสมศรีหาใบเสนอราคา 3 ร้านภายใน 15 พ.ย.
     ห้ามแก้ไฟล์ ตอบกลับเป็นรายงานทั้งฉบับ ไม่ต้องถามกลับ
-  add_dirs: [resources]
-  scaffold_script: fixture.sh   # ต้องรันด้วย --scaffold (plugin-eval.mjs ใส่ให้)
   max_turns: 15
   timeout_seconds: 400
+context:
+  add_dirs: [resources]
+  scaffold_script: fixture.sh   # ต้องรันด้วย --scaffold (plugin-eval.mjs ใส่ให้)
 graders:
   - name: read-existing-template
     type: tool_used

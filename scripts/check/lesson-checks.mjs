@@ -176,6 +176,16 @@ export function yamlEscapeTraps(text) {
   return out;
 }
 
+// add_dirs และ scaffold_script ต้องอยู่ใต้ context: · ใต้ execution: ถูกเมินเงียบ โฟลเดอร์ที่รันว่าง (10 เคส · eval 2026-11-12)
+export function misplacedContextKeys(text) {
+  let section = '';
+  return text.split('\n').flatMap((line, i) => {
+    if (/^\S/.test(line)) section = line.split(':')[0];
+    return section === 'execution' && /^\s+(add_dirs|scaffold_script):/.test(line)
+      ? [{ at: i + 1, msg: 'add_dirs และ scaffold_script ต้องอยู่ใต้ context: ไม่ใช่ execution: (ไม่งั้นถูกเมินและโฟลเดอร์ที่รันว่าง)' }] : [];
+  });
+}
+
 // 10. ลำดับหัวรุ่นใน CHANGELOG · หัวที่ไม่ใช่รุ่น (เช่น "ประวัติจาก …") ข้าม
 export function changelogOrder(text, version) {
   const heads = [...text.matchAll(/^## (Unreleased|\d+\.\d+\.\d+)\b/gm)].map((m) => m[1]);

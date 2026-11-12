@@ -9,10 +9,11 @@ execution:
   prompt: |
     เขียนรายงานหลังเหตุให้โปรเจกต์ resources/booking-svc: วันที่ 3 พ.ย. 2569 ระบบจองห้องล่ม 47 นาที 10:05–10:52 เพราะใบรับรอง TLS ของฐานข้อมูลหมดอายุ ลูกค้าจองไม่ได้ทุกสาขา
     ห้ามแก้ไฟล์ ตอบกลับเป็นรายงานทั้งฉบับ ไม่ต้องถามกลับ
-  add_dirs: [resources]
-  scaffold_script: fixture.sh   # ต้องรันด้วย --scaffold (plugin-eval.mjs ใส่ให้)
   max_turns: 15
   timeout_seconds: 400
+context:
+  add_dirs: [resources]
+  scaffold_script: fixture.sh   # ต้องรันด้วย --scaffold (plugin-eval.mjs ใส่ให้)
 graders:
   - name: read-existing-template
     type: tool_used

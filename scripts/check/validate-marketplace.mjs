@@ -12,7 +12,7 @@
  */
 import { plan as planSuperuser, rulesCopyAction, rulesHeader } from '../sync/sync-superuser.mjs';
 import { plan as planPromptRules, PROMPT_DIR } from '../sync/sync-prompt-rules.mjs';
-import { installedOlder, regressionNeverSeen, undatedClaims, promptTestLine, bigSkills, decisionRows, loneCR, expiredFacts, localToday, badPluginRefs, changelogOrder, iconLines, yamlEscapeTraps } from './lesson-checks.mjs';
+import { installedOlder, regressionNeverSeen, undatedClaims, promptTestLine, bigSkills, decisionRows, loneCR, expiredFacts, localToday, badPluginRefs, changelogOrder, iconLines, yamlEscapeTraps, misplacedContextKeys } from './lesson-checks.mjs';
 import { skillTestDocs, internalTerms, internalTermScope, loadTerms, invisibleChars } from './content-checks.mjs';
 import { checkManifests } from './validate-manifests.mjs';
 import { plan as planIncludes, expand as expandIncludes } from '../sync/sync-includes.mjs';
@@ -690,6 +690,9 @@ function selfTest() {
   const ye = yamlEscapeTraps('pattern: "1280\\s*x"\n# "\\s ในคอมเมนต์"\npattern: \'1280\\s*x\'\npattern: "a\\\\sb \\n ok"\nx: "\u0008"\nprompt: |\n  ใน block a\\sb "x\\s"\nnext: "ok"\n    pattern: "(?i)contrast"\n    input_match: \'(?i)metformin\'\n    pattern: "(?:a|b)"').length === 4;
   console.log(`  ${ye ? '✅' : '❌'} case.yaml ที่มี \\s ใน "..." อักขระควบคุม และ (?i) ใน pattern โดนจับ · '...' คอมเมนต์ block scalar escape ที่ YAML รับ และ (?:…) ไม่โดน`);
   if (ye) ok++;
+  const mc = misplacedContextKeys('execution:\n  prompt: x\n  add_dirs: [resources]\n  scaffold_script: f.sh\ncontext:\n  add_dirs: [resources]\n  scaffold_script: f.sh').length === 2;
+  console.log(`  ${mc ? '✅' : '❌'} case.yaml ที่วาง add_dirs หรือ scaffold_script ใต้ execution: โดนจับ · ใต้ context: ไม่โดน`);
+  if (mc) ok++;
   // ตัวอย่าง 5 แบบ: แถว router 3 แถวของเหตุการณ์จริง (ไฟล์มี \b ตัวเดียว JSON อ่านเป็น backspace) · อักขระดิบใน .mjs · \u001b ใน JSON · แถวที่เขียน \\b ถูกต้องไม่โดน
   const cc = ['{"rows":[{"pattern":"\\bestate\\b"}]}', '{"rows":[{"pattern":"\\bflood\\b"}]}', '{"r":{"pattern":"\\bpregnancy\\b"}}']
     .every((t) => controlChars('a.json', t).length === 1)
@@ -731,7 +734,7 @@ function selfTest() {
   console.log(`  ${inc ? '✅' : '❌'} marker include ดึงเนื้อหัวข้อจากต้นฉบับมาแทนที่ · หัวข้อที่ไม่มีโดนจับ`);
   if (inc) ok++;
   errors.length = 0; warns.length = 0;
-  const total = cases.length + 30;
+  const total = cases.length + 31;
   console.log(`\nself-test ${ok}/${total} ผ่าน`);
   process.exit(ok === total ? 0 : 1);
 }
@@ -860,6 +863,7 @@ for (const p of plugins) {
     const text = readFileSync(f, 'utf8');
     if (basename(f) === 'case.yaml') for (const m of regressionNeverSeen(basename(dirname(f)), text)) err(relOf(f), m);
     if (basename(f) === 'case.yaml') for (const { at, msg } of yamlEscapeTraps(text)) err(`${relOf(f)}:${at}`, msg);
+    if (basename(f) === 'case.yaml') for (const { at, msg } of misplacedContextKeys(text)) err(`${relOf(f)}:${at}`, msg);
     for (const { at, msg } of undatedClaims(text)) warn(`${relOf(f)}:${at}`, msg);
   }
   const skills = join(pluginsDir, p, 'skills');
