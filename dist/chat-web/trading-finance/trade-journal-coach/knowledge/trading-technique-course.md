@@ -64,7 +64,7 @@ Every number here is a starting value, not yet measured, except where a skill is
 | Level n → level n+1 | 20 or more closed paper trades with this setup (the `paper-trading` minimum for a first look) · expectancy above 0R · violation rate 5% or less (`paper-trading`) · average loss 1.2R or less · max drawdown within the user's limit · paper expectancy at least half the backtest expectancy; lower means the rules are not being followed as written, so find which |
 | A technique → real money | The `paper-trading` graduation gate for that setup alone: 30 or more trades, expectancy above +0.2R, violations 5% or less, drawdown within the limit, 2 months or more including a down week. Then live at one quarter of the planned risk for 20 trades. One technique live at a time. Forex or CFD → the `copy-trade-check` legal box first. The user decides |
 
-Fail a gate → stay on the level and run another 20 paper trades; do not skip ahead. The win rate is reported with its 95% interval but is never a gate on its own, because a 35% win rate with 2R winners beats a 70% win rate with 0.3R winners.
+Fail a gate → stay on the level and run another 20 paper trades; do not skip ahead. A user who asks to go live before the gate: name the missing gate numbers, keep the whole amount on paper, and give the next paper step (stop-loss on every trade, position sizing). A smaller live amount before the gate still skips the gate. The win rate is reported with its 95% interval but is never a gate on its own, because a 35% win rate with 2R winners beats a 70% win rate with 0.3R winners.
 
 ## 5 · Weekly rhythm
 
