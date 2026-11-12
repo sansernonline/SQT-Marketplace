@@ -368,7 +368,21 @@
     "hooks/lib/router.mjs": "hook บอก skill ตามไฟล์ คำสั่ง และคะแนนสัญญาณ",
     "hooks/lib/rules.mjs": "hook กฎตามเหตุการณ์ ด่านความลับ และตัวตรวจก่อน commit",
     "hooks/lib/selftest.mjs": "ชุดทดสอบตัวเองของ hook",
-    "hooks/lib/util.mjs": "ฟังก์ชันกลางของ hook"
+    "hooks/lib/util.mjs": "ฟังก์ชันกลางของ hook",
+    "evals/chat-reply-templates-existing/fixture.sh": "สคริปต์เตรียมเคส eval: คัดลอกโฟลเดอร์ resources ลงโฟลเดอร์ที่รัน (รันเมื่อส่ง --scaffold)",
+    "evals/doc-quotation-existing/fixture.sh": "สคริปต์เตรียมเคส eval: คัดลอกโฟลเดอร์ resources ลงโฟลเดอร์ที่รัน (รันเมื่อส่ง --scaffold)",
+    "evals/meeting-summary-existing/fixture.sh": "สคริปต์เตรียมเคส eval: คัดลอกโฟลเดอร์ resources ลงโฟลเดอร์ที่รัน (รันเมื่อส่ง --scaffold)",
+    "evals/adr-writer-existing/fixture.sh": "สคริปต์เตรียมเคส eval: คัดลอกโฟลเดอร์ resources ลงโฟลเดอร์ที่รัน (รันเมื่อส่ง --scaffold)",
+    "evals/bug-report-template-existing/fixture.sh": "สคริปต์เตรียมเคส eval: คัดลอกโฟลเดอร์ resources ลงโฟลเดอร์ที่รัน (รันเมื่อส่ง --scaffold)",
+    "evals/postmortem-template-existing/fixture.sh": "สคริปต์เตรียมเคส eval: คัดลอกโฟลเดอร์ resources ลงโฟลเดอร์ที่รัน (รันเมื่อส่ง --scaffold)",
+    "evals/pr-description-template-existing/fixture.sh": "สคริปต์เตรียมเคส eval: คัดลอกโฟลเดอร์ resources ลงโฟลเดอร์ที่รัน (รันเมื่อส่ง --scaffold)",
+    "evals/presentation-design-behaviour/fixture.sh": "สคริปต์เตรียมเคส eval: คัดลอกโฟลเดอร์ resources ลงโฟลเดอร์ที่รัน (รันเมื่อส่ง --scaffold)",
+    "evals/presentation-design-regression/fixture.sh": "สคริปต์เตรียมเคส eval: คัดลอกโฟลเดอร์ resources ลงโฟลเดอร์ที่รัน (รันเมื่อส่ง --scaffold)",
+    "evals/project-bootstrap-readme-behaviour/fixture.sh": "สคริปต์เตรียมเคส eval: คัดลอกโฟลเดอร์ resources ลงโฟลเดอร์ที่รัน (รันเมื่อส่ง --scaffold)",
+    "evals/security-audit-behaviour/fixture.sh": "สคริปต์เตรียมเคส eval: คัดลอกโฟลเดอร์ resources ลงโฟลเดอร์ที่รัน (รันเมื่อส่ง --scaffold)",
+    "evals/security-audit-regression/fixture.sh": "สคริปต์เตรียมเคส eval: คัดลอกโฟลเดอร์ resources ลงโฟลเดอร์ที่รัน (รันเมื่อส่ง --scaffold)",
+    "evals/srs-writing-existing/fixture.sh": "สคริปต์เตรียมเคส eval: คัดลอกโฟลเดอร์ resources ลงโฟลเดอร์ที่รัน (รันเมื่อส่ง --scaffold)",
+    "evals/test-case-template-existing/fixture.sh": "สคริปต์เตรียมเคส eval: คัดลอกโฟลเดอร์ resources ลงโฟลเดอร์ที่รัน (รันเมื่อส่ง --scaffold)"
   },
   "superuser_files": {
     "references/code-extensions.md": "ส่วนที่ใช้เฉพาะงานโค้ดของ skill กลางใน plugin superuser",

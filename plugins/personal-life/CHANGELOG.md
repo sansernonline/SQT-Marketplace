@@ -1,5 +1,10 @@
 # Changelog — personal-life
 
+## 0.23.9 — 2026-11-12
+
+- eval: ตัวให้คะแนน regex ที่เขียน `(?i)` ในตัว pattern (JavaScript ไม่รับ จึง error เงียบ) ย้ายเป็น `flags: i` · เคสที่มีไฟล์ประกอบใน `resources/` ได้ `fixture.sh` + `scaffold_script` คัดลอกเข้าโฟลเดอร์ที่รัน (`add_dirs` แค่เปิดสิทธิ์อ่าน · ยังไม่ได้รันยืนยันเพราะหน่วยความจำเครื่องไม่พอ)
+- eval `job-exit-behaviour`: ยกเว้นประโยค "ไม่สามารถบอกได้ว่า…" จากเกณฑ์ห้ามฟันธง · รันจริง with 1.00 · without 0.50 (2026-11-12)
+
 ## 0.23.8 — 2026-11-12
 
 - สำเนา `superuser/references/team-roles.md` ของ plugin นี้เป็นภาษาอังกฤษตาม superuser 3.39.1
