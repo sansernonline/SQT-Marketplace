@@ -40,7 +40,7 @@ Keep text and logos out of the areas the platform UI covers. The areas differ pe
 
 ## Rules
 
-- Quote numbers only from the reference file or the platform's own page — third-party "size guides" fall behind
+- Quote numbers only from the platform's own page — third-party "size guides" fall behind
 - Design at the recommended size; never upscale a small export
 - Text on 9:16 sits in the middle band
 - Thai text needs more vertical room than Latin (tone marks above, vowels below) — leave extra top margin in tight headline boxes

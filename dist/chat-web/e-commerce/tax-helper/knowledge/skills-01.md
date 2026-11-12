@@ -174,7 +174,7 @@ Gross pay minus social security (SSO), provident fund (PVD) and personal income 
 | 4 | PVD employee % and employer % (if the company has a fund) | | |
 | 5 | PIT withholding by annualisation (section 2) | withholding tax (WHT) per head | |
 | 6 | Net pay = gross − SSO − PVD − PIT − other agreed deductions | payslip | pay day per contract (at least once a month, ม.70) |
-| 7 | File **ภ.ง.ด.1** and remit WHT | RD receipt | 7th next month (paper) / 15th (e-Filing) |
+| 7 | File **ภ.ง.ด.1** and remit WHT | RD receipt | 7th next month (paper); e-Filing = paper deadline + the current e-Filing extension (look it up live, see `tax-vat-th` section 2) |
 | 8 | File **สปส.1-10** and remit SSO (both shares) | SSO receipt | 15th next month |
 | 9 | Remit PVD to the fund manager | | per fund rules |
 | 10 | Archive register, payslips, receipts — keep 5 years minimum, 7 recommended (`sme-bookkeeping` section 2 — per a Revenue Department ruling, not yet checked against the current statute) | | |
@@ -288,7 +288,7 @@ Field list and fill-in template: [references/50-tawi.md](references/50-tawi.md).
 
 Run `payroll-th` with the `tax-helper` agent for: **$ARGUMENTS**
 
-Uses `social-security-th` for the SSO cap and `labour-law-basics` for OT rates. Produces the payroll register, payslip figures, and the filing dates for ภ.ง.ด.1 (7th paper / 15th e-Filing) and สปส.1-10 (15th), ending with the accountant handoff checklist.
+Uses `social-security-th` for the SSO cap and `labour-law-basics` for OT rates. Produces the payroll register, payslip figures, and the filing dates for ภ.ง.ด.1 (7th on paper; e-Filing = paper deadline + the current extension, looked up live per `tax-vat-th` section 2) and สปส.1-10 (15th), ending with the accountant handoff checklist.
 
 
 ## reference: 50-tawi.md

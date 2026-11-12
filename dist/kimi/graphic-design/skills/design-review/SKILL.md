@@ -30,7 +30,7 @@ Visuals only; a second look at text, code or a plan → a new `reviewer` agent.
 | 1 | First read | In 2 seconds a stranger names the product or offer intended | They name the background, a model's face, or "a promotion" |
 | 2 | Hierarchy | Exactly 1 primary element, clearly largest or highest contrast; 3 levels or fewer | 2 elements the same size and weight; price and headline fight |
 | 3 | Contrast | Body text ≥ 4.5:1, large text ≥ 3:1 (Web Content Accessibility Guidelines (WCAG) AA); text over photo passes a squint test · icons, chart lines and button outlines ≥ 3:1 against their background · no meaning carried by colour alone (price up/down also has an arrow or a word) | Text on busy photo areas without overlay; amber on white; a pale-grey icon on white |
-| 4 | Spacing | 1 spacing scale (e.g. multiples of 8 px); outer margin ≥ inner gaps; text clear of safe zones | Random gaps; text touching edges; text in the story's bottom 35% |
+| 4 | Spacing | 1 spacing scale (e.g. multiples of 8 px); outer margin ≥ inner gaps; text clear of safe zones (look up the platform's safe-zone guide live; links in social-formats/references/platform-sizes.md) | Random gaps; text touching edges; text inside the story's bottom UI zone |
 | 5 | Alignment | Every element sits on a shared edge or centre line | Items "almost" aligned (off by a few px); centred and left-aligned mixed |
 | 6 | Type | ≤ 2 families; ≤ 3 sizes; Thai line-height ≥ 1.5 for body; no single word alone on a headline line | Third font; faux bold; clipped tone marks or vowels; one-word last line |
 | 7 | Consistency | Colours, fonts and logo from the brand kit; matches sibling assets' style lock | Off-kit colour; stretched or recoloured logo; different lighting style |
@@ -91,7 +91,7 @@ Severity: a fail on 1, 3 or 8 (wrong price, unreadable text, broken hands) block
 | 1 First read | Fail | Read as "two drinks"; the offer was not noticed in 2 s |
 | 2 Hierarchy | Fail | Headline and price badge same size, both orange |
 | 3 Contrast | Fail | White headline on bright window ≈ 1.6:1 |
-| 4 Spacing | Fail | Badge and LINE ID sit in the bottom 35%, under reply bar |
+| 4 Spacing | Fail | Badge and LINE ID sit in the story's bottom UI zone, under the reply bar |
 | 5 Alignment | Pass | Central axis kept |
 | 6 Type | Pass | Kanit + Sarabun, line-height 1.6 |
 | 7 Consistency | Pass | Kit colours and logo used correctly |

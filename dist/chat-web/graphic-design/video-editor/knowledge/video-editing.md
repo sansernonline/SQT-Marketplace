@@ -78,7 +78,7 @@ Loudness targets change and differ per destination, so this skill stores none. D
 
 Look up live (WebSearch/WebFetch) before using it; if the page will not open, mark the value (รอยืนยัน). Official sources: the platform's own help or specification pages (Apple Podcasts Connect · Spotify for Artists loudness page · ACX audio submission requirements · EBU R 128).
 
-ปลายทางที่ไม่ประกาศค่า ใช้ -16 LUFS · -1.5 dBTP (ค่าตั้งต้นของ `loudnorm2.py`) เพราะอยู่ในช่วงของ Apple และไม่ดังจนถูกลดระดับ (อนุมาน) แล้วบอกผู้ใช้ว่าเป็นค่าที่เลือกเอง · ลงหลายที่ด้วยไฟล์เดียว ตั้งความดังตามช่องทางหลัก และใช้เพดาน true peak ที่ต่ำสุดของทุกช่องทาง
+ปลายทางที่ไม่ประกาศค่า ใช้ -16 LUFS · -1.5 dBTP (ค่าตั้งต้นของ `loudnorm2.py`) เพราะอยู่ในช่วงของ Apple (อนุมาน · เทียบกับค่าของ Apple ที่ค้นสด) และไม่ดังจนถูกลดระดับ (อนุมาน) แล้วบอกผู้ใช้ว่าเป็นค่าที่เลือกเอง · ลงหลายที่ด้วยไฟล์เดียว ตั้งความดังตามช่องทางหลัก และใช้เพดาน true peak ที่ต่ำสุดของทุกช่องทาง
 
 ## ตัวอย่างจริง
 

@@ -47,7 +47,7 @@ Rows marked `(รอยืนยัน)` were not confirmed on an official page 
 Move-in date (T0): YYYY-MM-DD
 ทะเบียนบ้าน due (T0 + 15 days): YYYY-MM-DD    way: ย้ายปลายทาง / ย้ายออก+ย้ายเข้า
 Old place:  rent/own · landlord units 3+? yes/no · lease end YYYY-MM-DD · notice given YYYY-MM-DD
-            deposit amount ____ · refund due YYYY-MM-DD (7 days no damage / 30 days with damage, if the สคบ. rules apply)
+            deposit amount ____ · refund due YYYY-MM-DD (days from the current สคบ. announcement, looked up live, if the rules apply)
             electricity MEA/PEA · water MWA/PWA · meter photos taken YYYY-MM-DD
 New place:  electricity MEA/PEA · water MWA/PWA · meter photos taken YYYY-MM-DD · internet booked YYYY-MM-DD
 

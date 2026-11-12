@@ -38,7 +38,7 @@ Rules: no logo intro, no slow fade-in, no black frame at the start; movement or 
 
 | Rule | Value |
 |---|---|
-| Position | Inside the middle band — clear of top 14%, bottom 35%, sides 6% (Meta); TikTok right column and caption area |
+| Position | Inside the middle band — clear of the platform's UI zones; look up the platform's safe-zone guide live (links in social-formats/references/platform-sizes.md) |
 | Lines | 1 line preferred, max 2; bottom-heavy pyramid when 2 lines |
 | Thai line length | ≤ 35 characters per line, not counting tone marks and above/below vowels |
 | Reading speed (Thai adult) | Captions and subtitles (they follow the voice-over): ≤ 17 characters per second. On-screen marketing text (headline, offer): characters ÷ 12, min 1.5 s, offers ≥ 2.5 s (see `motion-basics`) |

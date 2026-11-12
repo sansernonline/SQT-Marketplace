@@ -15,7 +15,7 @@ Each year end brings 4 deadlines from 2 authorities (DBD and the Revenue Departm
 | 3 | **AGM** approves audited statements | ป.พ.พ. ม.1197 | within **4 months** after year end |
 | 4 | **บอจ.5** shareholder list | ป.พ.พ. ม.1139 | within **14 days** after the AGM |
 | 5 | **Financial statements** to DBD (DBD e-Filing) with AGM minutes and ส.บช.3 | พ.ร.บ.การบัญชี ม.11 | within **1 month** after the AGM approves (so at latest ~5 months after year end) |
-| 6 | **ภ.ง.ด.50** corporate income tax + audited statements to RD | ประมวลรัษฎากร ม.68 | within **150 days** after year end (+8 days on e-Filing, see `tax-vat-th`) |
+| 6 | **ภ.ง.ด.50** corporate income tax + audited statements to RD | ประมวลรัษฎากร ม.68 | within **150 days** after year end; e-Filing = paper deadline + the current e-Filing extension (look it up live, see `tax-vat-th` section 2) |
 
 ### For a 31 December 2569 year end
 
@@ -24,7 +24,7 @@ Each year end brings 4 deadlines from 2 authorities (DBD and the Revenue Departm
 | AGM | by 30 Apr 2570 |
 | บอจ.5 | 14 days after the AGM (AGM 28 Apr → by 12 May 2570) |
 | Statements to DBD | 1 month after the AGM (AGM 28 Apr → by 28 May 2570) |
-| ภ.ง.ด.50 | by 30 May 2570 (Sun) → next working day, Mon 31 May 2570 (RD Order ป.117/2545, https://www.rd.go.th/10514.html, checked 22 ต.ค. 2569) — +8 days on e-Filing if the extension is renewed after 31 Jan 2570 (รอยืนยัน) |
+| ภ.ง.ด.50 | by 30 May 2570 (Sun) → next working day, Mon 31 May 2570 (RD Order ป.117/2545, https://www.rd.go.th/10514.html, checked 22 ต.ค. 2569) — on e-Filing, add the current e-Filing extension (look it up live, see `tax-vat-th` section 2) |
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://efiling.dbd.go.th · https://www.dbd.go.th · https://www.infoproff.com/en/open-data/thailand/114/financial-reporting-obligations-for-companies-in-thailand
 
