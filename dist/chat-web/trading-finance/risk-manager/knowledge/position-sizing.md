@@ -29,13 +29,13 @@ Forex, CFDs (gold, indices), crypto or a prop-firm account → lots, pip value, 
 | Settlement | T+2 |
 | ETFs / unit trusts tick | 0.01 baht at every price |
 
-Tick size (ช่วงราคา) for SET/mai shares, in force from 16 Nov 2569 (2026):
+Tick size (ช่วงราคา) for SET/mai shares, in force from 16 Nov 2569 (2026) · SET cancels every order carried over from earlier days before Pre-open that day:
 
 | Price (baht) | < 2 | 2–<5 | 5–<10 | 10–<25 | 25–<50 | 50–<100 | 100–<200 | 200–<400 | ≥ 400 |
 |---|---|---|---|---|---|---|---|---|---|
 | Tick | 0.01 | 0.02 | 0.02 | 0.05 | 0.10 | 0.25 | 0.50 | 1.00 | 2.00 |
 
-Source: SET circular ปก.(ว) 4/2569 (15 Oct 2026, checked 2026-11-12) https://media.set.or.th/rulebook/circular-letter/attachment-file/379.pdf · SET tick page https://www.set.or.th/en/trading-units-tick-sizes-price-limits · SET changes ticks rarely (the table before this one ran from 2009), so check the SET page only when a user says the tick changed or a broker rejects a price, then update this table and `scripts/ticks.json` together.
+Source: SET circular ปก.(ว) 4/2569 (15 Oct 2026, checked 2026-11-12) https://media.set.or.th/rulebook/circular-letter/attachment-file/379.pdf (unofficial English translation; Thai original not read) · SET tick page https://www.set.or.th/en/trading-units-tick-sizes-price-limits · SET changes ticks rarely (the SET tick page dated the previous table 30 Mar 2009), so check the SET page only when a user says the tick changed or a broker rejects a price, then update this table and `scripts/ticks.json` together.
 
 Why ticks matter: stop and entry must sit on a valid tick, and on a 9.90-baht stock one tick (0.02) is 0.2% — a "1-tick" stop is not a real stop.
 

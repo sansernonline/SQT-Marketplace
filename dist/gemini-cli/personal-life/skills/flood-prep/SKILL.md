@@ -57,7 +57,7 @@ Do not act on forwarded LINE messages alone — check one official source.
 | Scheme | Amount | Status |
 |---|---|---|
 | ระเบียบกระทรวงการคลัง emergency relief (new criteria for disasters from 6 Mar 2569) | House repair up to 88,600 บาท (actual cost, owner-occupied, not rented); rent 2,500/month up to 2 months; tools of trade up to 13,500 per family; basic living 4,900 if the house is lost; funeral up to 35,700 | confirmed (thaigov.go.th 8 Oct 2569); exact regulation title รอยืนยัน |
-| Cabinet flat payment 2569 | 9,000 บาท per household flooded with damage or over 7 days; 5,000 if cut off by water over 7 days | **only floods 15 May – 30 Sep 2569**; register via the ทางรัฐ app or the อปท.; paid to PromptPay linked to the ID card. A new year needs a new cabinet decision |
+| Cabinet flat payment | A flat amount per flooded household, with a lower tier for households cut off by water. Each round needs its own cabinet decision with set flood dates. Look up the current amount, tiers and covered flood period at https://www.thaigov.go.th/th/news/169925 or the latest cabinet news live (WebSearch/WebFetch) before quoting; if the page will not open, mark the value (รอยืนยัน) | register via the ทางรัฐ app or the อปท.; paid to PromptPay linked to the ID card. Never promise it for a flood outside the dates in the current decision |
 
 **Insurance:**
 

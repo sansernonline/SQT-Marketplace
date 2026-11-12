@@ -39,6 +39,6 @@ Legal basis: ประมวลรัษฎากร ม.3 เตรส, ม.50,
 - **Base excludes VAT** — withhold on the price before VAT when VAT is shown separately.
 - **Gross-up** — if you agree to bear the payee's tax, the tax itself is income: tax = payment × rate ÷ (1 − rate). Example: net 10,000 at 3% → tax 309.28, gross 10,309.28.
 - **Wrong form** — individual on ภ.ง.ด.3, juristic person on ภ.ง.ด.53, employee on ภ.ง.ด.1. Mixing them up means amending both.
-- **Deadline** — remit by the 7th (paper) / 15th (e-Filing) of the following month; surcharge 1.5% per month after that.
+- **Deadline** — remit by the 7th of the following month on paper, or by the e-Filing deadline online (paper date + the current extension, see SKILL.md section 2); surcharge 1.5% per month after that.
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.rd.go.th (คำสั่ง ท.ป.4/2528) · https://www.infoquest.co.th/?p=601636 (e-WHT)

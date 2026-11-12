@@ -37,10 +37,11 @@ DPA covers up to **1,000,000 baht per depositor per bank**, all Thai-baht saving
 
 - Sold in rounds. Each round sets its own rates, tenors, minimums, caps and channels — **read the round's "รู้ก่อนซื้อ" sheet from PDMO before quoting any number.**
 - Channels: the เป๋าตัง app (สบม. wallet) and agent banks / Bond Connect, depending on the round.
-- Example round, for shape only: ออมพลัส fiscal year 2570 round 1 — 3 years 1.80%, 10 years 2.80% fixed; wallet sale 26 Oct–13 Nov 2569, bank channel 27–29 Oct 2569 (bot.or.th sale page; rates and 26 Oct start rechecked in news 2026-10-26: https://www.naewna.com/n/?p=109617 , https://infoquest.co.th/2026/662598 — the wallet quota was reported as 2,000 million of a 4,000 million total, so read the PDMO sheet). The wallet round of July 2569 sold from 100 baht in steps of 100, capped at 3 million baht a time and 50 million per person, and could be transferred only from 31 Jan 2570. Caps change every round (an earlier wallet round capped 20 million).
+- A round usually offers 2 or more tenors at fixed rates, the longer tenor at the higher rate. The wallet channel and the bank channel can have different sale dates and separate quotas.
+- The wallet issue sells in small baht steps, with a cap per purchase and a cap per person. It can be transferred only from a date the round sets, and only inside the wallet. Caps and dates change every round.
 - Interest is 15% withheld each payment.
 
-ตรวจล่าสุด 2026-10-26 · แหล่ง: https://www.bot.or.th/th/our-services/bond-and-debt-securities-services/Saving-Bond-Sale.html , https://backend.pdmo.go.th/uploads/documents/2026/Jul/20260723165731_8729.pdf (รู้ก่อนซื้อ รุ่นวอลเล็ต ก.ค. 2569) · รุ่นนี้มีแหล่งทางการเป็นหลัก สื่อยืนยัน 1 แหล่ง (infoquest.co.th/2026/662598) จึงถือเป็นตัวอย่าง ไม่ใช่ตัวเลขที่ใช้ซื้อ (รอยืนยัน ทุกรุ่น)
+Look up the open round's rates, tenors, sale dates, caps, quota and transfer date live (WebSearch/WebFetch) before quoting: BOT sale page https://www.bot.or.th/th/our-services/bond-and-debt-securities-services/Saving-Bond-Sale.html and the round's PDMO "รู้ก่อนซื้อ" sheet (format example: https://backend.pdmo.go.th/uploads/documents/2026/Jul/20260723165731_8729.pdf); if the page will not open, mark the value (รอยืนยัน).
 
 ## 3 · Corporate bonds — read before buying
 
@@ -78,7 +79,7 @@ Idea: `fixed-income-portfolio` from LSEG, a third-party skill in anthropics/fina
 2. Emergency part: savings and money market fund only.
 3. 1–3 year money: fixed deposits across banks (each ≤ 1 million), savings bonds of matching tenor, short government bond fund.
 4. Longer money: longer savings bonds; corporate bonds only investment grade, spread, and only what the user can hold to maturity.
-5. Show the table with after-tax interest in baht for the user's real amount (formula: amount × rate × (1 − 0.15) × years, for products with 15% withheld; run `node money-calc.mjs afterTax <file.json>`, script in `portfolio-snapshot`, see its Script path; example `../portfolio-snapshot/scripts/examples/afterTax.json`: 500,000 at 1.80% for 3 years → 22,950 after tax, 1.53% a year). Score the options that survive the hard rules below. The user picks.
+5. Show the table with after-tax interest in baht for the user's real amount (formula: amount × rate × (1 − 0.15) × years, for products with 15% withheld; run `node money-calc.mjs afterTax <file.json>`, script in `portfolio-snapshot`, see its Script path; example `../portfolio-snapshot/scripts/examples/afterTax.json`, rate is ตัวอย่าง and not a current offer: 500,000 at 1.80% for 3 years → 22,950 after tax, 1.53% a year). Score the options that survive the hard rules below. The user picks.
 
 ## Scoring the options
 

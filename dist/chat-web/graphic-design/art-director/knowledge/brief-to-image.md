@@ -81,7 +81,7 @@ Write the 1–5 scores and who gave them next to the brief (`briefs/<asset-name>
 | Set does not match across images | Style lock sheet (`style-consistency`) and the same seed or reference image |
 | Wrong aspect ratio | Set the parameter, delete the ratio words from the prompt |
 
-Gemini API users: Imagen is no longer the way — the `imagen-4.0-*` models were shut down on 17 Aug 2026 per the deprecations page, and the image-generation page now lists `gemini-3.1-flash-image` (Nano Banana 2), `gemini-nano-banana-2.1` and `gemini-3-pro-image`, with `gemini-2.5-flash-image` kept as legacy. Record the exact model ID you used (workflow step 7). ตรวจ 2026-10-23 · ตรวจซ้ำทุก 3 เดือน ครั้งหน้า 2027-01-23 · แหล่ง: https://ai.google.dev/gemini-api/docs/image-generation · https://ai.google.dev/gemini-api/docs/deprecations
+Gemini API users: Imagen models are being retired and the Gemini image model names change often, so no model list is stored here. Look up the current image model IDs and any shutdown dates at https://ai.google.dev/gemini-api/docs/image-generation and https://ai.google.dev/gemini-api/docs/deprecations; look it up live (WebSearch/WebFetch) before using it; if the page will not open, mark the value (รอยืนยัน). Record the exact model ID you used (workflow step 7).
 
 ## Worked example — brief to prompt
 

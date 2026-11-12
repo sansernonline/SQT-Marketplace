@@ -27,13 +27,13 @@ Old place rented or owned · new place rented or owned · same province or not �
 
 | Way | Who goes, where | Deadline | Bring | Fee |
 |---|---|---|---|---|
-| **ย้ายปลายทาง** (one trip; usually the easiest) | the mover or someone authorised, at the registry office (สำนักทะเบียนอำเภอ/ท้องถิ่น, เขต in Bangkok) of the **new** area; no visit to the old office | 15 days from moving in | mover's ID card · copy of the new house's ทะเบียนบ้าน ฉบับเจ้าบ้าน (ท.ร.14) · new เจ้าบ้าน's ID card, or a copy with written consent if the เจ้าบ้าน does not come | 20 บาท |
+| **ย้ายปลายทาง** (one trip; usually the easiest) | the mover or someone authorised, at the registry office (สำนักทะเบียนอำเภอ/ท้องถิ่น, เขต in Bangkok) of the **new** area; no visit to the old office | 15 days from moving in | mover's ID card · copy of the new house's ทะเบียนบ้าน ฉบับเจ้าบ้าน (ท.ร.14) · new เจ้าบ้าน's ID card, or a copy with written consent if the เจ้าบ้าน does not come | fee: look up live |
 | **ย้ายออก** then **ย้ายเข้า** (two trips) | ย้ายออก: เจ้าบ้าน of the old house (or authorised) at the old registry → you get ใบแจ้งการย้ายที่อยู่ (ท.ร.6). ย้ายเข้า: เจ้าบ้าน of the new house at the new registry | each within 15 days (from moving out / moving in) | ย้ายออก: เจ้าบ้าน's ID, old house ท.ร.14 · ย้ายเข้า: เจ้าบ้าน's ID, new house ท.ร.14, ท.ร.6 signed by the new เจ้าบ้าน | none listed on the DOPA pages |
 | Moving within the same registry area | เจ้าบ้าน, at that registry | 15 days | as ย้ายเข้า | (รอยืนยัน) |
 
-- **Late:** the DOPA move-in page (view434, checked 2026-10-28) gives the 15-day deadline but lists no fee or fine for late notice, and the BORA fee page (kathumnian_1) lists no late tiers. Guides quote late fees and a fine of up to 1,000 บาท (รอยืนยัน) — do not quote any figure as certain; tell the user to ask the registry office and to notify within 15 days.
+- **Late:** the deadline is 15 days. Look up the registry fees and any late fee or fine live (WebSearch/WebFetch) at the DOPA and BORA pages in Sources before quoting; if the page will not open, mark the value (รอยืนยัน). Guides quote late fines that are not on official pages: do not quote them as certain; tell the user to ask the registry office and to notify within 15 days.
 - **Renting:** moving your name in needs the new เจ้าบ้าน's consent (landlord or condo owner). If the landlord refuses, say so plainly to the user and still update the contact address everywhere in section 3 — agencies post to the contact address, not only to ทะเบียนบ้าน.
-- **ID card:** changing the card for the new address is optional; 100 บาท if the card has not expired.
+- **ID card:** changing the card for the new address is optional; a fee applies if the card has not expired (look up live).
 - **Authorised person:** one person can act for up to 3 movers on ย้ายปลายทาง, with a letter of authority from each (รอยืนยัน; seen only in a search summary).
 - **Online (ThaID):** not confirmed on an official page this round (รอยืนยัน) — check bora.dopa.go.th before telling the user to skip the office.
 
@@ -63,16 +63,16 @@ Full checklist with what to bring for each: [references/notify-list.md](referenc
 
 ## 4 · Getting a rental deposit back
 
-For landlords with **3 or more units** for rent, the สคบ. rules (ประกาศคณะกรรมการว่าด้วยสัญญา 2568, in force 90 days after its Royal Gazette date of 6 Jun 2568) set the floor. Check which applies before quoting it: a single condo owner renting one unit is outside these rules, and the contract decides.
+For landlords with **3 or more units** for rent, the สคบ. rules (the สคบ. residential lease notice, ประกาศคณะกรรมการว่าด้วยสัญญา 2568) set the floor. Look up the current notice, its in-force date and the limits below live (WebSearch/WebFetch, sources in Sources) before quoting any number; check whether a newer notice replaced it; if the page will not open, mark the value (รอยืนยัน). Check which applies before quoting it: a single condo owner renting one unit is outside these rules, and the contract decides.
 
 | Rule | Short lease (up to 3 years, form ก) | Long lease (over 3 years, form ข) |
 |---|---|---|
-| Advance rent + deposit together | not more than 3 months' rent | not more than 1 year's rent |
+| Advance rent + deposit together | capped (look up the limit) | capped (look up the limit) |
 | Condition evidence | the landlord must attach a record of the unit's condition (with any furniture and appliances) to the lease and give the tenant a copy | same |
-| Deposit back, no damage | within 7 days of the lease ending and the landlord taking the unit back; landlord pays the transfer cost | same rule (รอยืนยัน the form ข wording) |
-| Deposit back, with damage | landlord deducts the actual repair cost, except normal wear and tear; the rest within 30 days | (รอยืนยัน) |
+| Deposit back, no damage | within a short fixed period after the lease ends and the landlord takes the unit back (look up the days); landlord pays the transfer cost | same rule (รอยืนยัน the form ข wording) |
+| Deposit back, with damage | landlord deducts the actual repair cost, except normal wear and tear; the rest within a longer fixed period (look up the days) | (รอยืนยัน) |
 | Electricity and water rates | not above what MEA/PEA and MWA/PWA charge the landlord | same |
-| Leaving early (tenant) | allowed after living at least half the lease term, with written notice at least 30 days ahead, and no rent owed | (รอยืนยัน) |
+| Leaving early (tenant) | allowed after a minimum part of the lease term, with advance written notice, and no rent owed (look up the exact terms) | (รอยืนยัน) |
 
 Steps: give notice in writing (keep a photo of the signed copy) → on the last day walk through with the landlord against the move-in record, photo or video every room → hand back keys and cards against a signed note → write down the deposit due date. Late or short refund → a polite written reminder (`polite-message-th-en`), then สคบ. 1166 (or `e-commerce:refund-request` if installed).
 
@@ -104,8 +104,8 @@ Renter in Bangkok moving on 2026-11-15 to a townhouse in Nonthaburi rented from 
 ## Sources (checked 2026-10-28)
 
 - DOPA service guides — ย้ายออก https://www.dopa.go.th/public_service/service_guide24/view433 · ย้ายเข้า https://www.dopa.go.th/public_service/service_guide24/view434 · ย้ายปลายทาง https://www.dopa.go.th/public_service/service_guide24/view436
-- BORA fee table (ย้ายปลายทาง ม.30 วรรคสอง 20 บาท) https://stat.bora.dopa.go.th/callcenter1548/kathumnian_1.htm · late fees and ID card change 100 บาท, คู่มือบริการประชาชน https://callcenter1548.bora.dopa.go.th/คู่มือปฏิบัติงานสำหรับ/ · พ.ร.บ.การทะเบียนราษฎร 2534 รวมฉบับแก้ไข (ม.30, 30/1, 51) https://www.bora.dopa.go.th/wp-content/uploads/2026/02/พ.ร.บ.การทะเบียนราษฎร-พ.ศ.2534-รวมฉบับแก้ไขเพิ่มเติม.pdf
+- BORA fee table (ย้ายปลายทาง ม.30 วรรคสอง) https://stat.bora.dopa.go.th/callcenter1548/kathumnian_1.htm · late fees and ID card change, คู่มือบริการประชาชน https://callcenter1548.bora.dopa.go.th/คู่มือปฏิบัติงานสำหรับ/ · พ.ร.บ.การทะเบียนราษฎร 2534 รวมฉบับแก้ไข (ม.30, 30/1, 51) https://www.bora.dopa.go.th/wp-content/uploads/2026/02/พ.ร.บ.การทะเบียนราษฎร-พ.ศ.2534-รวมฉบับแก้ไขเพิ่มเติม.pdf
 - MEA deposit refund https://www.mea.or.th/our-services/mea-service/e-service/security-deposit-refund · PEA คู่มือการจ่ายคืนหลักประกันการใช้ไฟฟ้า (กรณียกเลิกการใช้ไฟ) PDF at https://www.pea.co.th/our-services/download/customer-guideline
 - MWA cancel and refund https://www.mwa.co.th/en/services/users-services/procedures-and-details/request-water-cancel/ · transfer https://www-orisma.mwa.co.th/services/request-for-water/request-transfer/ · PWA FAQ https://www.pwa.co.th/contents/faq
 - SSO forms list (สปส.1-34, 1-40/1, 9-02) https://www.sso.go.th/wpr/main/downloads/ (แบบฟอร์มของกองทุนประกันสังคม, page 2)
-- สคบ. ประกาศ 2568 (ราชกิจจานุเบกษา เล่ม 142 ตอนพิเศษ 211 ง, 6 มิ.ย. 2568) and form ก ข้อ 9, 10, 13 https://www.ocpb.go.th/article_attach/articlefile_2025070314222862724.pdf · news page https://www.ocpb.go.th/news_view_en.php?nid=17943
+- สคบ. ประกาศ 2568 (ราชกิจจานุเบกษา เล่ม 142 ตอนพิเศษ 211 ง) and form ก ข้อ 9, 10, 13 https://www.ocpb.go.th/article_attach/articlefile_2025070314222862724.pdf · news page https://www.ocpb.go.th/news_view_en.php?nid=17943
