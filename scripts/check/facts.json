@@ -89,30 +89,6 @@
         "plugins/e-commerce/skills/refund-request/SKILL.md"
       ]
     },
-    "apple-podcasts-loudness": {
-      "value": "-16 LKFS ±1 dB",
-      "checked": "2026-10-24",
-      "note": "Apple Podcasts audio requirements (podcasters.apple.com/support/893) · true peak ไม่เกิน -1 dB",
-      "files": [
-        "plugins/graphic-design/skills/video-editing/SKILL.md"
-      ]
-    },
-    "spotify-loudness": {
-      "value": "-14 LUFS",
-      "checked": "2026-10-24",
-      "note": "Spotify for Artists loudness normalization · ตอน podcast ไม่มีค่าทางการ · โฆษณาใน podcast -16 LUFS ±1.5",
-      "files": [
-        "plugins/graphic-design/skills/video-editing/SKILL.md"
-      ]
-    },
-    "google-tts-chirp3hd-free": {
-      "value": "1 ล้านตัวอักษรต่อเดือน",
-      "checked": "2026-10-24",
-      "note": "Google Cloud Text-to-Speech pricing · Chirp 3: HD ฟรี 0 ถึง 1 ล้านตัวอักษรต่อเดือน เกินแล้ว 30 USD ต่อ 1 ล้าน · ต้องเปิด billing",
-      "files": [
-        "plugins/graphic-design/skills/narration-th/SKILL.md"
-      ]
-    },
     "vat-rate": {
       "value": "7%",
       "checked": "2026-10-25",

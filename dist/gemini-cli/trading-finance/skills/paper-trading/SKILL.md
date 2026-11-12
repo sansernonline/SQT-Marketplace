@@ -20,7 +20,7 @@ A practice account that only works if it is treated as real. General information
 |---|---|
 | Trading hours | Morning: pre-open 09:30 → random open (T1) → close 12:30 · Afternoon: pre-open **13:30** (since 25 Mar 2567; it used to be 14:00) → open 14:00 → pre-close 16:30 → random close 16:35–16:40 · off-hour until 17:00. Orders outside these windows queue for the next session; a paper fill cannot happen at 13:45 (set.or.th trading-hours, checked 2026-10-22) |
 | Board lot | Round to 100 shares (50 for stocks ≥ 500 baht for 6 months) |
-| Tick size | Entry and stop on valid ticks — current and from-16-Nov-2569 tables are in `position-sizing` (the tick changes on that date for 5–<50 baht) |
+| Tick size | Entry and stop on valid ticks — the table is in `position-sizing` |
 | Fill price | Market order = next tick against you (buy at ask + 0, assume 1 tick slippage); limit order fills only if price **trades through** the limit, not just touches it |
 | Costs | Commission per the user's broker (often around 0.15–0.25% for internet orders, plus 7% VAT on commission (รอยืนยัน — use the real broker rate)); charge both buy and sell |
 | Settlement | T+2 — cash from a sale is not available for a cash-account purchase the same day (credit-balance and cash-balance accounts differ; ask the broker) |
@@ -59,7 +59,7 @@ Then start live at **one quarter** of the planned risk (0.25% instead of 1%) for
 
 ## Worked example
 
-Capital 100,000 · rule `pullback-50ma` only · risk 1%. Trade #12: XYZ limit buy 31.50, stop 30.00 (both prices are valid ticks before and after 16 Nov 2569).
+Capital 100,000 · rule `pullback-50ma` only · risk 1%. Trade #12: XYZ limit buy 31.50, stop 30.00.
 - Size: risk/share 1.50 + costs ≈ 0.13 = 1.63 → 1,000 ÷ 1.63 = 613 → **600 shares** (18,900 baht = 18.9% of capital)
 - Cap: 10% concentration limit (from `position-sizing`) → 300 shares, 9,450 baht
 - Fill: low of the day was 31.50 exactly — touched, not traded through → **no fill**, logged `no-fill`

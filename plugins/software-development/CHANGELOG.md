@@ -1,5 +1,9 @@
 # Changelog — software-development
 
+## 3.4.6 — 2026-11-12
+
+- `graphic-design/references/sizes-and-print.md`: ระยะปลอดภัยของแพลตฟอร์มให้ค้นสดจากคู่มือทางการ ไม่ชี้ไปตัวเลขใน `social-formats` แล้ว (graphic-design 0.28.8)
+
 ## 3.4.5 — 2026-11-12
 
 - eval: ตัวให้คะแนน regex ที่เขียน `(?i)` ในตัว pattern (JavaScript ไม่รับ จึง error เงียบ) ย้ายเป็น `flags: i` · เคสที่มีไฟล์ประกอบใน `resources/` ได้ `fixture.sh` + `scaffold_script` ใต้ `context:` (10 เคสเดิมวาง `add_dirs` ใต้ `execution:` ซึ่งถูกเมิน) · ยังไม่ได้รันยืนยันเพราะหน่วยความจำเครื่องไม่พอ

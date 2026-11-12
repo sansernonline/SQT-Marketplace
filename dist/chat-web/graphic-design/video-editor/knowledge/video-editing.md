@@ -74,19 +74,11 @@ Use when editing video or audio with ffmpeg (ตัดต่อ, silences, loudn
 
 ## ค่าความดังต่อแพลตฟอร์ม
 
-ตามที่แต่ละแพลตฟอร์มเขียนไว้เอง (ตรวจ 2026-10-24 · ตรวจซ้ำทุก 6 เดือน ครั้งหน้า 2027-04-24):
+Loudness targets change and differ per destination, so this skill stores none. Destinations to look up: Apple Podcasts · Spotify (music, podcast, podcast ads) · YouTube · TikTok · Audible (ACX) · broadcast (EBU R 128). For each one find the integrated loudness target, the true peak ceiling, and whether the platform publishes a figure at all. Some platforms publish nothing, and secondary sources quote numbers the platform never wrote, so say which kind each value is. Note also that ACX uses dB RMS, a different unit from LUFS.
 
-| ปลายทาง | ความดังรวม | เพดาน true peak | หมายเหตุ |
-|---|---|---|---|
-| Apple Podcasts | -16 LKFS ±1 dB | ไม่เกิน -1 dB | ทางการ · ผู้ฟังจะได้ระดับเท่ากันผ่าน Sound Check |
-| Spotify เพลง | เล่นที่ -14 LUFS · แนะนำทำไฟล์ที่ -14 | ไม่เกิน -1 dB (ไฟล์ที่ดังกว่า -14 ให้ต่ำกว่า -2) | ทางการ · เว็บและอุปกรณ์ของผู้ผลิตอื่นไม่ปรับระดับให้ |
-| Spotify ตอน podcast | ไม่ประกาศ | ไม่ประกาศ | มีแค่ค่าของโฆษณาใน podcast: -16 LUFS ±1.5 · -2.0 dBTP |
-| YouTube | ไม่ประกาศ | ไม่ประกาศ | มีแค่ปุ่ม "เสียงคงที่" ฝั่งคนดู · ตัวเลข -14 พบในแหล่งรองเท่านั้น |
-| TikTok | ไม่ประกาศ | ไม่ประกาศ | นโยบายโฆษณาบอกแค่ว่าเสียงต้องไม่ด้อยคุณภาพ |
-| Audible (ACX) | -23 ถึง -18 dB RMS (คนละหน่วยกับ LUFS) | peak ไม่เกิน -3 dB | ทางการ · เสียงพื้นไม่เกิน -60 dB RMS · MP3 192 kbps ขึ้นไป |
-| ออกอากาศ (EBU R 128) | -23 LUFS ±1 LU | ไม่เกิน -1 dBTP | มาตรฐานวิทยุโทรทัศน์ ไม่ใช่แพลตฟอร์มออนไลน์ |
+Look up live (WebSearch/WebFetch) before using it; if the page will not open, mark the value (รอยืนยัน). Official sources: the platform's own help or specification pages (Apple Podcasts Connect · Spotify for Artists loudness page · ACX audio submission requirements · EBU R 128).
 
-ปลายทางที่ไม่ประกาศค่า ใช้ -16 LUFS · -1.5 dBTP (ค่าตั้งต้นของ `loudnorm2.py`) เพราะอยู่ในช่วงของ Apple และไม่ดังจนถูกลดระดับ (อนุมาน) แล้วบอกผู้ใช้ว่าเป็นค่าที่เลือกเอง · ลงหลายที่ด้วยไฟล์เดียว ตั้งความดังตามช่องทางหลัก และใช้เพดาน true peak ที่ต่ำสุดของทุกช่องทาง
+ปลายทางที่ไม่ประกาศค่า ใช้ -16 LUFS · -1.5 dBTP (ค่าตั้งต้นของ `loudnorm2.py`) เพราะอยู่ในช่วงของ Apple (อนุมาน · เทียบกับค่าของ Apple ที่ค้นสด) และไม่ดังจนถูกลดระดับ (อนุมาน) แล้วบอกผู้ใช้ว่าเป็นค่าที่เลือกเอง · ลงหลายที่ด้วยไฟล์เดียว ตั้งความดังตามช่องทางหลัก และใช้เพดาน true peak ที่ต่ำสุดของทุกช่องทาง
 
 ## ตัวอย่างจริง
 

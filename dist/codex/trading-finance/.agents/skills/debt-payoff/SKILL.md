@@ -17,11 +17,13 @@ General information, not legal or financial advice — for lawsuits or garnishme
 | Car title loan (จำนำทะเบียนรถ) | 24% per year |
 | Nano finance (สินเชื่อรายย่อยเพื่อการประกอบอาชีพ) | 33% per year |
 | Car or motorbike hire purchase (เช่าซื้อ) for personal use | new car 10% · used car 15% · motorbike 23% per year, effective rate (ประกาศ ธปท. 55/2568 ลงวันที่ 2 ธ.ค. 2568 · รอยืนยัน) |
-| Credit card minimum payment | 8% of balance, kept at 8% until 31 Dec 2569 |
+| Credit card minimum payment | A % of the balance set by BOT for a stated period; look it up live (below) |
+
+Credit card minimum payment: look up the current BOT minimum % and the date it applies until live (WebSearch/WebFetch) before quoting, at https://www.bot.or.th/th/news-and-media/news/news-20251204-2.html or a newer BOT notice; if the page will not open, mark the value (รอยืนยัน).
 
 A lender charging above these, or an unlicensed lender (เงินกู้นอกระบบ), is outside the rules — informal loans above 15% per year are illegal under the Civil and Commercial Code (ป.พ.พ. ม.654) and the 2560 loan-interest act; report to police or **1359**, the ศูนย์รับแจ้งการเงินนอกระบบ สำนักงานเศรษฐกิจการคลัง (office hours; 1359.go.th, ตรวจ 2026-10-26 · https://www.1359.go.th/contact/ , https://www.thansettakij.com/finance/489385).
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.bot.or.th/th/news-and-media/news/news-20251204-2.html , https://www.prachachat.net/finance/news-1368667 · ตรวจซ้ำ 2026-10-22: หน้า BOT news-20251204-2 ยืนยันขั้นต่ำ 8% ถึงสิ้นปี 2569 · เพดาน 16/25/24/33% ตรวจล่าสุด 2026-10-25 · แหล่ง: https://www.bot.or.th/content/dam/bot/documents/th/our-services/bot-license-check/interest.pdf (ประกาศ ธปท. สนส. 11-13/2563 · เช่าซื้อ 10/15/23% อยู่ในเอกสารเดียวกัน ตรวจ 2026-10-25 แหล่งเดียว) , https://www.thairath.co.th/money/personal_finance/finance_banking/2843164 , https://www.sawad.co.th/article/legal-interest-rates-and-calculation (25/24/33%) , https://www.tcc.or.th/credit-card-interest/ (16%)
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.bot.or.th/th/news-and-media/news/news-20251204-2.html , https://www.prachachat.net/finance/news-1368667 · เพดาน 16/25/24/33% ตรวจล่าสุด 2026-10-25 · แหล่ง: https://www.bot.or.th/content/dam/bot/documents/th/our-services/bot-license-check/interest.pdf (ประกาศ ธปท. สนส. 11-13/2563 · เช่าซื้อ 10/15/23% อยู่ในเอกสารเดียวกัน ตรวจ 2026-10-25 แหล่งเดียว) , https://www.thairath.co.th/money/personal_finance/finance_banking/2843164 , https://www.sawad.co.th/article/legal-interest-rates-and-calculation (25/24/33%) , https://www.tcc.or.th/credit-card-interest/ (16%)
 
 ## Workflow
 
@@ -45,7 +47,7 @@ node payoff.mjs <file.json> [--json]     # example file: scripts/example.json
 node payoff.mjs --self-test
 ```
 
-Input file: `{ "budget": 8000, "debts": [ { "name": "...", "balance": 15000, "rate": 16, "min": 1000 } ] }` · rate is % a year (24, not 0.24; the script warns below 1). For a credit card whose minimum is a share of the balance (8% above), put `"minPct": 8` (optional `"minFloor"` in baht) instead of `"min"`, so the minimum falls as the balance falls. Debt names must differ (two cards: `"บัตร KTC"`, `"บัตร KTC (2)"`); a repeated name stops the script. Every field must be a finite number; a bad field stops the script with a message naming it. If the budget is below the sum of minimums the script stops and says so. If the monthly interest is more than the payment, the debt never clears: the script reports that the budget cannot clear these debts and does not compare the two methods. If snowball finishes sooner than avalanche, it says so as it is.
+Input file: `{ "budget": 8000, "debts": [ { "name": "...", "balance": 15000, "rate": 16, "min": 1000 } ] }` · rate is % a year (24, not 0.24; the script warns below 1). For a credit card whose minimum is a share of the balance, put the current BOT minimum looked up live as `"minPct"` (e.g. `"minPct": 8`, ตัวอย่าง only; optional `"minFloor"` in baht) instead of `"min"`, so the minimum falls as the balance falls. Debt names must differ (two cards: `"บัตร KTC"`, `"บัตร KTC (2)"`); a repeated name stops the script. Every field must be a finite number; a bad field stops the script with a message naming it. If the budget is below the sum of minimums the script stops and says so. If the monthly interest is more than the payment, the debt never clears: the script reports that the budget cannot clear these debts and does not compare the two methods. If snowball finishes sooner than avalanche, it says so as it is.
 
 **Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/trading-finance/*/skills/debt-payoff/scripts/payoff.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/trading-finance/skills/debt-payoff/scripts/payoff.mjs` · Node only, no dependencies.
 
@@ -90,6 +92,6 @@ Avalanche saves about 1,240 baht (1,241 by `payoff.mjs scripts/example.json`, ru
 ## Rules
 
 - Never suggest a new loan to pay minimums.
-- Minimum payment only on a 16% card at 8% minimum still takes years; always show the time to payoff.
+- Paying only the minimum on a 16% card still takes years; always show the time to payoff.
 - Emergency fund goes to a mini buffer (1 month) during payoff, then grows to full size (`emergency-fund`).
 - A "debt clearing" agent asking for an upfront fee is a red flag — run `scam-check`.

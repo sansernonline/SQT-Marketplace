@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // size.mjs - position size from risk budget, snapped to board lot and checked against SET ticks (Node stdlib only)
 // Usage: node size.mjs <file.json> [--json]   |   node size.mjs --self-test
-// type "share" | "etf" | "crypto": { capital, riskPct, entry, stop, costPerShare, lot, maxPositionPct, avgDailyValue, asOf }
+// type "share" | "etf" | "crypto": { capital, riskPct, entry, stop, costPerShare, lot, maxPositionPct, avgDailyValue }
 // type "forex": { capital, riskPct, stopPips, pipValuePerLot, costPerLot, volumeStep } + optional margin: { price, leverage, contractSize }
 // Any type, optional: riskPctApprovedBy (required when riskPct > 2), gapMultiplier (1.5-2 for earnings/XD/weekend), openRiskPct (risk already open, % of capital)
 // No stop = error. Tick table lives in ticks.json (checked + source); entry and stop must sit on a valid tick.
@@ -16,7 +16,6 @@ const LIQUIDITY_PCT = 5;
 const MAX_OPEN_RISK_PCT = 6;
 // forex-cfd-crypto.md section 2: one standard lot = 100,000 units of the base currency
 const STANDARD_CONTRACT = 100000;
-const todayLocal = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
 
 export const tickFor = (price, bands) => bands.filter(([from]) => price >= from).at(-1)[1];
 const onTick = (price, tick) => Math.abs(price / tick - Math.round(price / tick)) < 1e-6;
@@ -71,29 +70,14 @@ export function validate(input) {
   return warnings;
 }
 
-// Error if entry/stop are off the tick in force on asOf; warning if they would be off the other table.
-// A table marked unconfirmed in ticks.json never rejects: off-tick becomes a warning and the result says so.
+// Error if entry or stop is off the tick in ticks.json (SET rejects such orders anyway).
 function checkTicks(input, type) {
-  const asOf = input.asOf ?? todayLocal();
-  const inForce = asOf >= TICKS.effective ? 'after' : 'before';
-  const other = inForce === 'after' ? 'before' : 'after';
-  const warnings = [];
-  const confirmed = TICKS.confirmed?.[inForce] !== false;
-  if (!confirmed) warnings.push(`ใช้ตาราง tick ${inForce === 'after' ? 'หลัง' : 'ก่อน'} ${TICKS.effective} ที่ยังไม่ยืนยันประกาศฉบับสุดท้ายของ SET · ตรวจราคากับประกาศก่อนส่งคำสั่ง`);
   for (const field of ['entry', 'stop']) {
     const price = input[field];
-    const tick = type === 'etf' ? TICKS.etf : tickFor(price, TICKS[inForce]);
-    if (!onTick(price, tick)) {
-      const msg = `ช่อง ${field} ${price} ไม่อยู่บน tick ที่ใช้ ณ ${asOf} (tick ${tick} บาท) · ปรับเป็นราคาที่หาร ${tick} ลงตัว`;
-      if (confirmed) throw new Error(msg);
-      warnings.push(`${msg} (ตารางยังไม่ยืนยัน จึงเตือนแทนหยุด)`);
-      continue;
-    }
-    if (type !== 'etf' && !onTick(price, tickFor(price, TICKS[other]))) {
-      warnings.push(`${field} ${price} ใช้ได้ตาม tick ${inForce === 'after' ? 'หลัง' : 'ก่อน'} ${TICKS.effective} แต่ไม่ตรง tick ${inForce === 'after' ? 'ก่อน' : 'หลัง'}วันนั้น`);
-    }
+    const tick = type === 'etf' ? TICKS.etf : tickFor(price, TICKS.bands);
+    if (!onTick(price, tick)) throw new Error(`ช่อง ${field} ${price} ไม่อยู่บน tick (tick ${tick} บาท) · ปรับเป็นราคาที่หาร ${tick} ลงตัว`);
   }
-  return warnings;
+  return [];
 }
 
 function sizeForex(input, warnings) {
@@ -166,7 +150,7 @@ function selfTest() {
   const t = (name, cond) => { cond ? ok++ : (bad++, console.error('ล้ม:', name)); };
   const near = (a, b) => Math.abs(a - b) < 0.01;
   const throwsWith = (inp, word) => { try { compute(inp); return false; } catch (e) { return e.message.includes(word); } };
-  const S = { capital: 100000, riskPct: 1, entry: 48.5, stop: 47.5, costPerShare: 0.19, asOf: '2026-10-28' };
+  const S = { capital: 100000, riskPct: 1, entry: 48.5, stop: 47.5, costPerShare: 0.19 };
   // SKILL.md worked example: raw 840 -> 800 by risk; concentration caps at 200; real risk 238
   let r = compute({ ...S, maxPositionPct: 100 });
   t('ตัวอย่าง SKILL ไม่ติดเพดาน = 800', r.size === 800 && r.bound === 'risk' && near(r.rawSize, 840.34));
@@ -192,22 +176,13 @@ function selfTest() {
   t('forex พิมพ์ 0.32 lots', report(fx, compute(fx)).includes('0.32 lot'));
   t('ไม่มี stop error', throwsWith({ ...S, stop: undefined }, 'stop-loss'));
   t('forex ไม่มี stop error', throwsWith({ type: 'forex', capital: 1000, riskPct: 1, pipValuePerLot: 10 }, 'stopPips'));
-  // 48.30 is valid only under the new table (0.10), not before 16 Nov (0.25)
-  t('tick เดิม 48.30 ผิด', throwsWith({ ...S, entry: 48.3 }, 'entry'));
-  t('tick ใหม่ 48.30 ผ่าน', compute({ ...S, entry: 48.3, asOf: '2026-11-16' }).size > 0);
-  t('tick stop ผิด', throwsWith({ ...S, stop: 47.4 }, 'stop'));
-  t('48.50 ใช้ได้ทั้งสองตาราง ไม่เตือน', compute(S).warnings.length === 0);
-  const after = compute({ ...S, entry: 48.3, asOf: '2026-11-16' }).warnings;
-  t('tick ใหม่ 48.30 เตือนแค่ว่าไม่ตรงตารางเดิม (ตารางหลังยืนยันแล้ว)', after.length === 1 && !after.some((w) => w.includes('ยังไม่ยืนยัน')));
-  t('ตารางยืนยันแล้ว off-tick 48.35 หลัง 16 พ.ย. หยุด', throwsWith({ ...S, entry: 48.35, asOf: '2026-11-16' }, 'entry'));
-  // ทางของตารางที่ยังไม่ยืนยัน: ปิดชั่วคราวแล้วคืนค่า · 48.35 ไม่อยู่บน tick 0.10 -> เตือนแทนหยุด แต่ยังคำนวณ
-  const saved = TICKS.confirmed.after;
-  TICKS.confirmed.after = false;
-  let off;
-  try { off = compute({ ...S, entry: 48.35, asOf: '2026-11-16' }); } finally { TICKS.confirmed.after = saved; }
-  t('ตารางยังไม่ยืนยัน off-tick เตือนไม่หยุด', off.size > 0 && off.warnings.some((w) => w.includes('เตือนแทนหยุด')));
+  // tick 0.10 for 25-50 baht · 0.02 for 5-10 baht (SET from 16 Nov 2569)
+  t('48.30 ลง tick 0.10 ผ่าน', compute({ ...S, entry: 48.3 }).size > 0);
+  t('48.35 ไม่ลง tick หยุด', throwsWith({ ...S, entry: 48.35 }, 'entry'));
+  t('tick stop ผิด', throwsWith({ ...S, stop: 47.45 }, 'stop'));
+  t('48.50 ไม่เตือน', compute(S).warnings.length === 0);
   t('ETF tick 0.01', compute({ ...S, type: 'etf', entry: 10.07, stop: 9.97 }).size > 0);
-  t('tickFor 9.90 ก่อน/หลัง', tickFor(9.9, TICKS.before) === 0.05 && tickFor(9.9, TICKS.after) === 0.02 && tickFor(400, TICKS.after) === 2);
+  t('tickFor 9.90 · 400', tickFor(9.9, TICKS.bands) === 0.02 && tickFor(400, TICKS.bands) === 2);
   t('capital NaN', throwsWith({ ...S, capital: NaN }, 'capital'));
   t('riskPct เป็นข้อความ', throwsWith({ ...S, riskPct: '1' }, 'riskPct'));
   t('stop = entry', throwsWith({ ...S, stop: 48.5 }, 'stop'));

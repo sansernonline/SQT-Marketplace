@@ -23,24 +23,23 @@ Which form, which date, how much to withhold, and what filing late costs. This i
 
 ## 2. Monthly and yearly calendar
 
-| Form | What | Paper deadline | e-Filing deadline |
-|---|---|---|---|
-| ภ.พ.30 | VAT return — **every month, even with zero sales** | 15th of next month | 23rd (15 + 8 days) |
-| ภ.ง.ด.1 | Withholding tax (WHT) on salary and wages | 7th of next month | 15th |
-| ภ.ง.ด.2 | WHT on interest/dividends paid to individuals | 7th | 15th |
-| ภ.ง.ด.3 | WHT on payments to **individuals** (services, rent, fees) | 7th | 15th |
-| ภ.ง.ด.53 | WHT on payments to **companies / juristic persons** | 7th | 15th |
-| ภ.ง.ด.54 | WHT on payments to **foreign** juristic persons not doing business in Thailand | 7th | 15th |
-| ภ.พ.36 | Self-assessed VAT on imported services | 7th | 15th |
-| ภ.ง.ด.1ก | Annual summary of employee income and WHT | end of February | per RD announcement |
-| ภ.ง.ด.51 | Half-year corporate income tax (estimate) | within 2 months after month 6 of the accounting year | + 8 days |
-| ภ.ง.ด.50 | Annual corporate income tax | within **150 days** after year end | + 8 days |
+| Form | What | Paper deadline |
+|---|---|---|
+| ภ.พ.30 | VAT return — **every month, even with zero sales** | 15th of next month |
+| ภ.ง.ด.1 | Withholding tax (WHT) on salary and wages | 7th of next month |
+| ภ.ง.ด.2 | WHT on interest/dividends paid to individuals | 7th |
+| ภ.ง.ด.3 | WHT on payments to **individuals** (services, rent, fees) | 7th |
+| ภ.ง.ด.53 | WHT on payments to **companies / juristic persons** | 7th |
+| ภ.ง.ด.54 | WHT on payments to **foreign** juristic persons not doing business in Thailand | 7th |
+| ภ.พ.36 | Self-assessed VAT on imported services | 7th |
+| ภ.ง.ด.1ก | Annual summary of employee income and WHT | end of February |
+| ภ.ง.ด.51 | Half-year corporate income tax (estimate) | within 2 months after month 6 of the accounting year |
+| ภ.ง.ด.50 | Annual corporate income tax | within **150 days** after year end |
 
-- The **+8 days for e-Filing** is an RD extension currently covering returns due **1 Feb 2567 – 31 Jan 2570** (ประกาศกระทรวงการคลัง ฉบับที่ 8 ลงวันที่ 1 มี.ค. 2567). No renewal found as of 2026-10-25 — check before planning dates after Jan 2570 (รอยืนยัน). ตรวจล่าสุด 2026-10-25 · แหล่ง: https://www.rd.go.th/fileadmin/user_upload/lorkhor/newspr/2025/vat_refund.pdf · https://www.peakaccount.com/blog/tax/gen-tax/tax-filing-deadline · https://www.humansoft.co.th/en/blog/submit-tax-returns-online
+- **e-Filing extension:** filing online gets extra days on top of the paper deadline. A Ministry of Finance announcement sets the number of days and the window of due dates it covers, and each announcement ends on a fixed date. e-Filing deadline = paper deadline + extension days, then shift for holidays.
+- Look up the current e-Filing extension (number of extra days, and whether the window covers the due date in question) at https://rd.go.th/49808.html · https://www.rd.go.th/fileadmin/user_upload/kormor/newlaw/FilingExtension_4.pdf. Look it up live (WebSearch/WebFetch) before quoting; if the page will not open, mark the value (รอยืนยัน).
 - A due date on a weekend or public holiday moves to the next working day (see `thai-holidays`).
-- For a 31 December year end: ภ.ง.ด.51 by 31 Aug (e-Filing 8 Sep); ภ.ง.ด.50 by 30 May (150 days; 29 May when February has 29 days) + 8 for e-Filing. When 30 May falls on a Sunday (as in 2570), the next working day applies (RD Order ป.117/2545, https://www.rd.go.th/10514.html, checked 22 ต.ค. 2569).
-
-ตรวจล่าสุด 2026-10-22 (ช่วงขยาย 1 ก.พ. 2567 – 31 ม.ค. 2570 ตรงกับ Deloitte ก.พ. 2567 · หน้า rd.go.th ที่ค้นได้ไม่แสดงวันสิ้นสุด) · แหล่ง: https://rd.go.th/49808.html · https://www.rd.go.th/fileadmin/user_upload/kormor/newlaw/FilingExtension_4.pdf
+- For a 31 December year end: ภ.ง.ด.51 by 31 Aug; ภ.ง.ด.50 by 30 May (150 days; 29 May when February has 29 days). Add the e-Filing extension for online filing. When 30 May falls on a Sunday (as in 2570), the next working day applies (RD Order ป.117/2545, https://www.rd.go.th/10514.html, checked 22 ต.ค. 2569).
 
 ## 3. Withholding tax — how much
 
@@ -90,7 +89,7 @@ Pay through a bank that supports e-WHT and the bank deducts, files and remits �
 Company pays a design agency (บริษัท) 20,000 baht + VAT 7% = 21,400.
 
 - WHT 3% × 20,000 = **600** → pay the agency 21,400 − 600 = **20,800**
-- Issue 50 ทวิ for 600; file ภ.ง.ด.53 and remit 600 by the 7th (paper) / 15th (e-Filing) of next month.
+- Issue 50 ทวิ for 600; file ภ.ง.ด.53 and remit 600 by the 7th of next month on paper, or by the e-Filing deadline online (section 2).
 - Through e-WHT at 1%: withhold 200, pay 21,200, the bank files.
 - Paid 2 months late: surcharge 600 × 1.5% × 2 = 18 baht plus the settlement fine.
 
@@ -150,7 +149,7 @@ Legal basis: ประมวลรัษฎากร ม.3 เตรส, ม.50,
 - **Base excludes VAT** — withhold on the price before VAT when VAT is shown separately.
 - **Gross-up** — if you agree to bear the payee's tax, the tax itself is income: tax = payment × rate ÷ (1 − rate). Example: net 10,000 at 3% → tax 309.28, gross 10,309.28.
 - **Wrong form** — individual on ภ.ง.ด.3, juristic person on ภ.ง.ด.53, employee on ภ.ง.ด.1. Mixing them up means amending both.
-- **Deadline** — remit by the 7th (paper) / 15th (e-Filing) of the following month; surcharge 1.5% per month after that.
+- **Deadline** — remit by the 7th of the following month on paper, or by the e-Filing deadline online (paper date + the current extension, see SKILL.md section 2); surcharge 1.5% per month after that.
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.rd.go.th (คำสั่ง ท.ป.4/2528) · https://www.infoquest.co.th/?p=601636 (e-WHT)
 
@@ -175,7 +174,7 @@ Gross pay minus social security (SSO), provident fund (PVD) and personal income 
 | 4 | PVD employee % and employer % (if the company has a fund) | | |
 | 5 | PIT withholding by annualisation (section 2) | withholding tax (WHT) per head | |
 | 6 | Net pay = gross − SSO − PVD − PIT − other agreed deductions | payslip | pay day per contract (at least once a month, ม.70) |
-| 7 | File **ภ.ง.ด.1** and remit WHT | RD receipt | 7th next month (paper) / 15th (e-Filing) |
+| 7 | File **ภ.ง.ด.1** and remit WHT | RD receipt | 7th next month (paper); e-Filing = paper deadline + the current e-Filing extension (look it up live, see `tax-vat-th` section 2) |
 | 8 | File **สปส.1-10** and remit SSO (both shares) | SSO receipt | 15th next month |
 | 9 | Remit PVD to the fund manager | | per fund rules |
 | 10 | Archive register, payslips, receipts — keep 5 years minimum, 7 recommended (`sme-bookkeeping` section 2 — per a Revenue Department ruling, not yet checked against the current statute) | | |
@@ -289,7 +288,7 @@ Field list and fill-in template: [references/50-tawi.md](references/50-tawi.md).
 
 Run `payroll-th` with the `tax-helper` agent for: **$ARGUMENTS**
 
-Uses `social-security-th` for the SSO cap and `labour-law-basics` for OT rates. Produces the payroll register, payslip figures, and the filing dates for ภ.ง.ด.1 (7th paper / 15th e-Filing) and สปส.1-10 (15th), ending with the accountant handoff checklist.
+Uses `social-security-th` for the SSO cap and `labour-law-basics` for OT rates. Produces the payroll register, payslip figures, and the filing dates for ภ.ง.ด.1 (7th on paper; e-Filing = paper deadline + the current extension, looked up live per `tax-vat-th` section 2) and สปส.1-10 (15th), ending with the accountant handoff checklist.
 
 
 ## reference: 50-tawi.md

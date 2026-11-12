@@ -1,5 +1,9 @@
 # Changelog — graphic-design
 
+## 0.28.8 — 2026-11-12
+
+- ตัวเลขที่เปลี่ยนบ่อยไม่เก็บใน skill แล้ว ให้ค้นสดจากหน้าทางการทุกครั้ง เปิดไม่ได้ใส่ `(รอยืนยัน)` · คงเฉพาะเลขที่สคริปต์ใช้คำนวณ · แถวใน `scripts/check/expiry.json` ลดจาก 26 เหลือ 8 · `social-formats` (ระยะปลอดภัย · ขนาดโฆษณา · `platform-sizes.md`) · `marketplace-product-images` · `youtube-thumbnail` · `brief-to-image` (รุ่น Gemini) · `video-editing` (ความดังต่อแพลตฟอร์ม คงค่าตั้งต้น -16 LUFS ที่ `loudnorm2.py` ใช้) · `narration-th` (ราคา TTS) · คง `line-richmenu` เพราะ `richmenu_check.py` ใช้ · eval `social-formats-behaviour` และ `youtube-thumbnail-behaviour` ตรวจว่าอ้างหรือค้นหน้าทางการแทนตัวเลข · `facts.json` ตัด 3 ค่า (ความดัง Apple Podcasts · Spotify · โควตาฟรี Google TTS)
+
 ## 0.28.7 — 2026-11-12
 
 - eval: ตัวให้คะแนน regex ที่เขียน `(?i)` ในตัว pattern (JavaScript ไม่รับ จึง error เงียบ) ย้ายเป็น `flags: i`

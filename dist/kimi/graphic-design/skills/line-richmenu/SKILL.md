@@ -11,7 +11,7 @@ The rich menu is the shop front. 6 clear buttons work better than 12 tiny ones.
 
 ## 1. Hard limits
 
-Image sizes are also kept in `social-formats` with source and check date — if the two differ, trust that one and re-check the LINE page.
+`social-formats` points here for rich menu sizes, so this table is the one copy. A script (`scripts/richmenu_check.py`) reads these numbers, so they stay stored; re-check them against the LINE page below.
 
 | Item | Limit |
 |---|---|

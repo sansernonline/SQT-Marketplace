@@ -1,9 +1,6 @@
 {
   "checked": "2026-11-12",
-  "source": "SET circular ปก.(ว) 4/2569 Trading Measures (15 Oct 2026) https://media.set.or.th/rulebook/circular-letter/attachment-file/379.pdf (unofficial English translation, page 1-2) · old table https://www.set.or.th/en/trading-units-tick-sizes-price-limits",
-  "confirmed": { "before": true, "after": true },
-  "effective": "2026-11-16",
+  "source": "SET circular ปก.(ว) 4/2569 Trading Measures (unofficial English translation), in force 16 Nov 2026 https://media.set.or.th/rulebook/circular-letter/attachment-file/379.pdf · SET tick page https://www.set.or.th/en/trading-units-tick-sizes-price-limits",
   "etf": 0.01,
-  "before": [[0, 0.01], [2, 0.02], [5, 0.05], [10, 0.1], [25, 0.25], [50, 0.25], [100, 0.5], [200, 1], [400, 2]],
-  "after": [[0, 0.01], [2, 0.02], [5, 0.02], [10, 0.05], [25, 0.1], [50, 0.25], [100, 0.5], [200, 1], [400, 2]]
+  "bands": [[0, 0.01], [2, 0.02], [5, 0.02], [10, 0.05], [25, 0.1], [50, 0.25], [100, 0.5], [200, 1], [400, 2]]
 }

@@ -16,7 +16,7 @@ The Revenue Department already sees most online sales: banks and e-wallets repor
 3. **Choose the expense method** — 60% deemed or actual (table below); compute both
 4. **Run the 0.5% minimum-tax check** (below) — it often decides the bill for low-margin shops
 5. **File half-year** ภ.ง.ด.94 for January–June sales (by 30 September; e-filing extension for this form is not confirmed — `tax-vat-th` section 2 lists only VAT and withholding forms)
-6. **File full-year** ภ.ง.ด.90 by 31 March of the following year (by 31 March 2570 — the +8-day e-Filing extension in `tax-vat-th` section 2 covers forms due up to 31 Jan 2570; no renewal announced yet, so plan for no extension (expected) and check rd.go.th before filing), crediting tax paid with ภ.ง.ด.94
+6. **File full-year** ภ.ง.ด.90 by 31 March of the following year (by 31 March 2570 on paper; e-Filing = paper deadline + the current e-Filing extension, if its window covers this due date (look it up live, see `tax-vat-th` section 2)), crediting tax paid with ภ.ง.ด.94
 7. **Watch the value added tax (VAT) line** monthly — when sales for the year pass ฿1.8 million, register for VAT within 30 days (below)
 8. **Keep records** (list below) (retention period: `sme-bookkeeping` section 2 — 5 years minimum, 7 recommended — per a Revenue Department ruling, not yet checked against the current statute)
 
@@ -29,7 +29,7 @@ The Revenue Department already sees most online sales: banks and e-wallets repor
 | Personal allowance | ฿60,000 |
 | Minimum-tax check | Applies when non-salary income (40(2)–40(8)) is ฿120,000 or more: tax = 0.5% of that income; if over ฿5,000, pay the higher of normal tax and 0.5% tax |
 | Personal income tax brackets (net income) | 0–150,000: exempt · 150,001–300,000: 5% · 300,001–500,000: 10% · 500,001–750,000: 15% · 750,001–1,000,000: 20% · 1,000,001–2,000,000: 25% · 2,000,001–5,000,000: 30% · above 5,000,000: 35% |
-| VAT registration | Compulsory once annual sales exceed ฿1.8 million; register (ภ.พ.01) within 30 days of exceeding; then file ภ.พ.30 every month, even with zero sales: paper by the 15th, e-filing by the 23rd while the +8-day extension runs (to 31 Jan 2570, see `tax-vat-th`) |
+| VAT registration | Compulsory once annual sales exceed ฿1.8 million; register (ภ.พ.01) within 30 days of exceeding; then file ภ.พ.30 every month, even with zero sales: paper by the 15th; e-Filing = paper deadline + the current e-Filing extension (look it up live, see `tax-vat-th` section 2) |
 | VAT rate | 7% (reduced from the statutory 10%), extended by พ.ร.ฎ. (ฉบับที่ 807) พ.ศ. 2569 to 30 Sep 2570 |
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.rd.go.th · https://flowaccount.com/blog/shopee-income-tax-threshold/ · https://www.thairath.co.th/money/personal_finance/finance_banking/2778210 · https://www.prd.go.th/th/content/category/detail/id/33/iid/526275 (VAT 7% to 30 Sep 2570, same source as `tax-vat-th`) · ตรวจซ้ำ 2026-10-22: พ.ร.ฎ. ฉบับที่ 807 พ.ศ. 2569 ลงราชกิจจานุเบกษา 23 ส.ค. 2569 มีผล 1 ต.ค. 2569 (ไฟล์กรมสรรพากร https://rd.go.th/fileadmin/user_upload/kormor/newlaw/dc807.pdf มีจริง แต่อ่านข้อความไม่ออก · วัน/เลขฉบับจาก lookuptax.com และข่าว — ตรวจกับราชกิจจาฯ อีกครั้ง) · 40(8) หักเหมา 60% อัตราเดียว: ข่าวกรมสรรพากร ต.ค. 2560 https://media.thaigov.go.th (ยังไม่ได้เทียบประกาศฉบับปัจจุบัน)

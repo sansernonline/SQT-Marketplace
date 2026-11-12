@@ -36,10 +36,11 @@ DPA covers up to **1,000,000 baht per depositor per bank**, all Thai-baht saving
 
 - Sold in rounds. Each round sets its own rates, tenors, minimums, caps and channels — **read the round's "รู้ก่อนซื้อ" sheet from PDMO before quoting any number.**
 - Channels: the เป๋าตัง app (สบม. wallet) and agent banks / Bond Connect, depending on the round.
-- Example round, for shape only: ออมพลัส fiscal year 2570 round 1 — 3 years 1.80%, 10 years 2.80% fixed; wallet sale 26 Oct–13 Nov 2569, bank channel 27–29 Oct 2569 (bot.or.th sale page; rates and 26 Oct start rechecked in news 2026-10-26: https://www.naewna.com/n/?p=109617 , https://infoquest.co.th/2026/662598 — the wallet quota was reported as 2,000 million of a 4,000 million total, so read the PDMO sheet). The wallet round of July 2569 sold from 100 baht in steps of 100, capped at 3 million baht a time and 50 million per person, and could be transferred only from 31 Jan 2570. Caps change every round (an earlier wallet round capped 20 million).
+- A round usually offers 2 or more tenors at fixed rates, the longer tenor at the higher rate. The wallet channel and the bank channel can have different sale dates and separate quotas.
+- The wallet issue sells in small baht steps, with a cap per purchase and a cap per person. It can be transferred only from a date the round sets, and only inside the wallet. Caps and dates change every round.
 - Interest is 15% withheld each payment.
 
-ตรวจล่าสุด 2026-10-26 · แหล่ง: https://www.bot.or.th/th/our-services/bond-and-debt-securities-services/Saving-Bond-Sale.html , https://backend.pdmo.go.th/uploads/documents/2026/Jul/20260723165731_8729.pdf (รู้ก่อนซื้อ รุ่นวอลเล็ต ก.ค. 2569) · รุ่นนี้มีแหล่งทางการเป็นหลัก สื่อยืนยัน 1 แหล่ง (infoquest.co.th/2026/662598) จึงถือเป็นตัวอย่าง ไม่ใช่ตัวเลขที่ใช้ซื้อ (รอยืนยัน ทุกรุ่น)
+Look up the open round's rates, tenors, sale dates, caps, quota and transfer date live (WebSearch/WebFetch) before quoting: BOT sale page https://www.bot.or.th/th/our-services/bond-and-debt-securities-services/Saving-Bond-Sale.html and the round's PDMO "รู้ก่อนซื้อ" sheet (format example: https://backend.pdmo.go.th/uploads/documents/2026/Jul/20260723165731_8729.pdf); if the page will not open, mark the value (รอยืนยัน).
 
 ## 3 · Corporate bonds — read before buying
 
@@ -77,7 +78,7 @@ Idea: `fixed-income-portfolio` from LSEG, a third-party skill in anthropics/fina
 2. Emergency part: savings and money market fund only.
 3. 1–3 year money: fixed deposits across banks (each ≤ 1 million), savings bonds of matching tenor, short government bond fund.
 4. Longer money: longer savings bonds; corporate bonds only investment grade, spread, and only what the user can hold to maturity.
-5. Show the table with after-tax interest in baht for the user's real amount (formula: amount × rate × (1 − 0.15) × years, for products with 15% withheld; run `node money-calc.mjs afterTax <file.json>`, script in `portfolio-snapshot`, see its Script path; example `../portfolio-snapshot/scripts/examples/afterTax.json`: 500,000 at 1.80% for 3 years → 22,950 after tax, 1.53% a year). Score the options that survive the hard rules below. The user picks.
+5. Show the table with after-tax interest in baht for the user's real amount (formula: amount × rate × (1 − 0.15) × years, for products with 15% withheld; run `node money-calc.mjs afterTax <file.json>`, script in `portfolio-snapshot`, see its Script path; example `../portfolio-snapshot/scripts/examples/afterTax.json`, rate is ตัวอย่าง and not a current offer: 500,000 at 1.80% for 3 years → 22,950 after tax, 1.53% a year). Score the options that survive the hard rules below. The user picks.
 
 ## Scoring the options
 
@@ -143,9 +144,9 @@ General information, not financial advice; every fee and rate is confirmed with 
 | MOR (Minimum Overdraft Rate) | Overdrafts to prime large companies |
 | BOT policy rate | Bank of Thailand rate; banks move MRR with it but set their own levels |
 
-Each bank sets its own MRR. Examples: Bangkok Bank 6.50% (from 26 Feb 2569), KBank 6.58% and ttb 7.105% (from 2 Mar 2569, rechecked on ttbbank.com 2026-10-26). BOT policy rate 1.00% since 25 Feb 2569 (held at 1.00% again on 28 Oct 2569, unanimous 6–0, per ThaiPublica, PPTV and Thansettakij news checked 2026-11-01; next meeting 23 Dec 2569), so read the bank's current rate table on the day.
+Each bank sets its own MRR, and MRR levels differ between banks. Banks usually move MRR after a BOT policy-rate decision, but not always by the same amount or on the same day.
 
-ตรวจล่าสุด 2026-11-01 (ดอกเบี้ยนโยบาย · MRR ธนาคารยังเป็นค่าที่ตรวจ 2026-10-26) · แหล่ง: https://thaipublica.org/2026/10/mpc-28-10-2026/ , https://www.pptvhd36.com/wealth/monetary/286033 , https://www.thansettakij.com/economy/672432 , https://www.bangkokbank.com (ตารางอัตราดอกเบี้ยเงินให้สินเชื่อ 26 ก.พ. 2569) , https://www.kasikornbank.com/th/rate/LendingPDF/lending-02032026-th.pdf , https://www.ttbbank.com/th/rates/loan-interest-rates , https://www.infoquest.co.th/2026/572846 · ดอกเบี้ยนโยบาย https://www.bot.or.th/th/our-roles/monetary-policy/mpc-meeting.html , https://www.thaipbs.or.th/news/content/509928 · MRR ของแต่ละธนาคารมาจากตารางของธนาคารเองแหล่งเดียวต่อธนาคาร (เป็นแหล่งทางการ)
+Look up the current BOT policy rate and the user's bank's current MRR live (WebSearch/WebFetch) before quoting: BOT policy rate https://www.bot.or.th/th/our-roles/monetary-policy/mpc-meeting.html · MRR from each bank's own lending-rate table, e.g. https://www.bangkokbank.com , https://www.kasikornbank.com , https://www.ttbbank.com/th/rates/loan-interest-rates ; if the page will not open, mark the value (รอยืนยัน).
 
 ## 2 · The two paths
 
@@ -156,9 +157,11 @@ Each bank sets its own MRR. Examples: Bangkok Bank 6.50% (from 26 Feb 2569), KBa
 | Paperwork | New credit check, income documents, Land Office visit | A form at the current bank |
 | Lock after | New 3-year prepayment penalty | Often a new lock period — ask |
 
-The government cut of the mortgage fee to 0.01% (homes ≤ 7 million baht, until 30 Jun 2570) applies when the purchase and mortgage are registered together; reports say a refinance pays the normal 1% (รอยืนยัน with the Land Office).
+The government sometimes runs a temporary cut of the mortgage registration fee for homes under a price cap. Such a cut has applied only when the purchase and the mortgage are registered together; reports say a refinance pays the normal 1% (รอยืนยัน with the Land Office).
 
-ตรวจล่าสุด 2026-10-26 · ค่าปรับและค่าจดจำนอง แหล่ง: https://www.gsb.or.th/media/2024/01/sale-sheet-สินเชื่อเคหะ.pdf , https://www.scb.co.th/th/personal-banking/stories/home-car/home-retention , https://www.krungsri.com/th/krungsri-the-coach/loan/mortgages/home-refinance-fees-guide , https://www.ktc.co.th/article/lifestyle/home-decoration/house-refinance-costs · อากร 0.05% สูงสุด 10,000 มีแต่แหล่งไม่ทางการ 3 แหล่ง (ktc · krungsri the coach · https://www.bangkokbiznews.com/finance/investment/1073962) รอยืนยันกับกรมสรรพากร · ค่ารีเทนชั่น https://www.krungsri.com/th/krungsri-the-coach/loan/mortgages/refinance-vs-retention-percent-interest , https://www.ktc.co.th/article/lifestyle/home-decoration/what-is-retention (ตัวเลขขัดกัน) · ค่าจดจำนอง 0.01% https://www.thaipbs.or.th/news/content/507690 , https://www.prachachat.net/politics/news-2030776
+Look up whether a fee cut is in force, its rate, price cap, end date and whether it covers refinance live (WebSearch/WebFetch) before quoting: the sources in this file are news only (https://www.thaipbs.or.th/news/content/507690 , https://www.prachachat.net/politics/news-2030776), so confirm with the Land Office; if the page will not open, mark the value (รอยืนยัน).
+
+ตรวจล่าสุด 2026-10-26 · ค่าปรับและค่าจดจำนอง แหล่ง: https://www.gsb.or.th/media/2024/01/sale-sheet-สินเชื่อเคหะ.pdf , https://www.scb.co.th/th/personal-banking/stories/home-car/home-retention , https://www.krungsri.com/th/krungsri-the-coach/loan/mortgages/home-refinance-fees-guide , https://www.ktc.co.th/article/lifestyle/home-decoration/house-refinance-costs · อากร 0.05% สูงสุด 10,000 มีแต่แหล่งไม่ทางการ 3 แหล่ง (ktc · krungsri the coach · https://www.bangkokbiznews.com/finance/investment/1073962) รอยืนยันกับกรมสรรพากร · ค่ารีเทนชั่น https://www.krungsri.com/th/krungsri-the-coach/loan/mortgages/refinance-vs-retention-percent-interest , https://www.ktc.co.th/article/lifestyle/home-decoration/what-is-retention (ตัวเลขขัดกัน)
 
 ## Workflow
 
@@ -193,7 +196,7 @@ Input fields `balance`, `payment`, `months`, `stay.rate` and each option's `rate
 
 ## Worked example
 
-Balance 2,400,000 after exactly 3 years (no penalty). Payment kept at 18,000 a month. Current floating rate about 6.5%. Offer A: other bank, 3-year average 3.2%. Offer B: current bank 4.0% for a 1% fee. Fees are ตัวอย่าง until confirmed.
+Balance 2,400,000 after exactly 3 years (no penalty). Payment kept at 18,000 a month. Floating rate 6.5% (ตัวอย่าง, not a current MRR). Offer A: other bank, 3-year average 3.2%. Offer B: current bank 4.0% for a 1% fee. Fees are ตัวอย่าง until confirmed.
 
 | Over 36 months | Stay (6.5%) | B · Retention (4.0%) | A · Refinance (3.2%) |
 |---|---|---|---|
