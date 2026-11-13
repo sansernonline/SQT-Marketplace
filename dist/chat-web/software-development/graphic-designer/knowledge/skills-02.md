@@ -1206,7 +1206,7 @@ Text parts of a UX spec that sit beside the clickable HTML mockup (`mockup/<CODE
 
 # skill: presentation-design
 
-Use when building a slide deck (pitch, plan, report, training) to present or read. Story, layouts.
+Use when making slides or a deck (pitch, plan, progress report, training) in any format · ทำสไลด์. Story, layouts.
 
 # Presentation Design
 

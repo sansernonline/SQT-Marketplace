@@ -15,7 +15,7 @@ const HELP = `ใช้:
 
 <ผล> = ไฟล์ JSON จาก \`claude plugin eval --json\` (หรือ plugin-eval.mjs --json) · หรือโฟลเดอร์ runs/ ของ bench (ต้องมี label)
 split.json = { "costMetric": "cost_usd", "splits": { "<ชื่อเคส>": "train" | "val" | "test" } } · เคสที่ไม่อยู่ในรายการนับเป็น train
-  costMetric ประกาศก่อนวัดรุ่นใหม่: ${COST_METRICS.join(" · ")} (plugin eval มี cost_usd กับ turns · bench มีครบ)
+  costMetric ประกาศก่อนวัดรุ่นใหม่: ${COST_METRICS.join(" · ")} (plugin eval มี cost_usd กับ turns · bench มีครบรวม tool_calls = คำสั่งต่อรอบ)
 
 ตัวเลือก
   --only <regex>          กรองชื่อเคส
@@ -149,6 +149,10 @@ function selfTest() {
   const changedGrader = (() => { const c = v([["train", "t", [1, 1]], ["val", "v", [1, 1]]]); c.rows[0].signature = c.rows[1].signature = "x"; return decide(v([["train", "t", [0, 0]], ["val", "v", [0, 0]]]), c, { costMetric: "cost_usd" }); })();
   const noMetric = g([["train", "t", [0, 0]], ["val", "v", [0, 0]]], [["train", "t", [1, 1]], ["val", "v", [1, 1]]], { costMetric: undefined });
   const tokensMissing = g([["train", "t", [0, 0]], ["val", "v", [0, 0]]], [["train", "t", [1, 1]], ["val", "v", [1, 1]]], { costMetric: "tokens" });
+  const withCalls = (spec, calls) => ({ ...v(spec), rows: v(spec).rows.map((r) => ({ ...r, tool_calls: calls })) });
+  const fewerCalls = decide(withCalls([["train", "t", [1, 1]], ["val", "v", [1, 1]]], 11), withCalls([["train", "t", [1, 1]], ["val", "v", [1, 1]]], 6.5), { costMetric: "tool_calls" });
+  const callsMissing = g([["train", "t", [0, 0]], ["val", "v", [0, 0]]], [["train", "t", [1, 1]], ["val", "v", [1, 1]]], { costMetric: "tool_calls" });
+  const valThree = g([["train", "t", [0, 0]], ["val", "v1", [0, 0]], ["val", "v2", [0, 0]], ["val", "v3", [0, 0]]], [["train", "t", [1, 1]], ["val", "v1", [1, 1]], ["val", "v2", [1, 1]], ["val", "v3", [1, 1]]]);
   const testIgnored = g([["train", "t", [0, 0]], ["val", "v", [0, 0]], ["test", "x", [1, 1]]], [["train", "t", [1, 1]], ["val", "v", [1, 1]], ["test", "x", [0, 0]]]);
 
   const pe = loadPluginEval({ suite: { modelOverride: "sonnet" }, cases: [
@@ -159,7 +163,7 @@ function selfTest() {
   let benchRows, ledgerOk;
   try {
     mkdirSync(join(dir, "runs"));
-    writeFileSync(join(dir, "runs", "t1-new-1.json"), JSON.stringify({ hidden: "5/7", cost: 0.3, turns: 9, tokens: 1000 }));
+    writeFileSync(join(dir, "runs", "t1-new-1.json"), JSON.stringify({ hidden: "5/7", cost: 0.3, turns: 9, tokens: 1000, toolCalls: 7 }));
     writeFileSync(join(dir, "runs", "t1-old-1.json"), JSON.stringify({ passAll: true, cost: 0.4, turns: 9, tokens: 1200 }));
     writeFileSync(join(dir, "runs", "t1-new-2.json"), "{ ยังเขียนไม่เสร็จ");
     benchRows = loadBench(join(dir, "runs"), "new").rows;
@@ -184,7 +188,10 @@ function selfTest() {
     ["ไม่มีค่า tokens ในผล → เทียบไม่ได้", tokensMissing.verdict === "incomparable"],
     ["ชุด test ไม่ใช้ตัดสิน", testIgnored.verdict === "accept" && testIgnored.table.some((s) => s.note)],
     ["plugin eval: ข้ามรอบ null · รอบ error นับว่าจบไม่ปกติ", pe.rows.length === 2 && pe.rows[1].rep === 3 && pe.rows[1].abnormal && pe.model === "sonnet"],
-    ["bench: hidden 5/7 · ไฟล์เขียนไม่เสร็จถูกข้าม · ไม่ปน label อื่น", benchRows.length === 1 && near(benchRows[0].score, 5 / 7) && benchRows[0].tokens === 1000],
+    ["bench: hidden 5/7 · ไฟล์เขียนไม่เสร็จถูกข้าม · ไม่ปน label อื่น", benchRows.length === 1 && near(benchRows[0].score, 5 / 7) && benchRows[0].tokens === 1000 && benchRows[0].tool_calls === 7],
+    ["คะแนนเท่าเดิม คำสั่ง 11 → 6.5 (tool_calls) → รับ", fewerCalls.verdict === "accept" && fewerCalls.reasons[0].includes("tool_calls")],
+    ["ไม่มีค่า tool_calls ในผล (plugin eval) → เทียบไม่ได้", callsMissing.verdict === "incomparable" && callsMissing.reasons[0].includes("tool_calls")],
+    ["ชุด val 1 เคส → เตือน · 3 เคส → ไม่เตือน", big.warnings.some((w) => w.includes("ชุด val มีแค่ 1")) && !valThree.warnings.some((w) => w.includes("ชุด val มีแค่"))],
     ["ชุด val ใช้ครบ 3 รุ่น รุ่นที่ 4 ถูกกัน · รุ่นเดิมตัดสินซ้ำได้ · เพิ่มโจทย์ val แล้วนับใหม่", ledgerOk],
   ];
   let ok = 0;

@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { readJson, moduleOn, semverGt, setFlags, takeFlags } from "./util.mjs";
 import { preRules, promptRules, postRules, stopRules } from "./rules.mjs";
-import { scoreRule, scoredRoutes, fixHomonyms, homonymWarn, toolRoute, suggestSkill, replayRoutes } from "./router.mjs";
+import { scoreRule, scoredRoutes, fixHomonyms, homonymWarn, toolRoute, suggestSkill, replayRoutes, qualify } from "./router.mjs";
 import { parseLoopRequest, loopCancelRequested, loopStep, loopStart, loopStopGate, loopActive } from "./loop.mjs";
 import { scopeOk, versionNotice, digestNotice, lintHint, runListener, bashChecks, ESCAPE_CLAUSE } from "./notices.mjs";
 
@@ -109,6 +109,11 @@ export function extraGates(env) {
       return fixHomonyms(["simplify", "lazy-coding"], router).join() === "superuser:simplify,lazy-coding" && /superuser:simplify/.test(w()) && w() === "" && !homonymWarn({ tool_name: "Skill", tool_input: { skill: "superuser:simplify" }, session_id: "h2" }, router, sess);
     }],
     ["เดาชื่อ skill: stack-pyton → stack-python · ชื่อที่มี · ชื่อไกลมาก → เงียบ", [], true, () => /stack-python/.test(suggestSkill("stack-pyton", inst)) && suggestSkill("stack-python", inst) === "" && suggestSkill("zzzzzzzz", inst) === ""],
+    ["ชื่อ skill: prefix ผิด plugin → เตือนพร้อมชื่อถูก · plugin ที่สแกนไม่เจอ (anthropic-skills) → เงียบ · ชื่อสั้นแปลงเป็นชื่อเต็ม", [], true, () =>
+      /software-development:stack-python/.test(suggestSkill("superuser:stack-python", inst)) && suggestSkill("anthropic-skills:pdf", inst) === ""
+      && qualify("stack-python", inst) === "software-development:stack-python" && qualify("commit-log", inst) === "commit-log" && qualify("superuser:simplify", inst) === "superuser:simplify"
+      && qualify("x", null) === "x" && qualify("dup", { full: new Set(["a:dup", "superuser:dup"]), bare: new Set(["dup"]) }) === "superuser:dup"
+      && qualify("deck", { full: new Set(["old-co:deck", "software-development:deck"]), bare: new Set(["deck"]), enabled: new Set(["software-development"]) }) === "software-development:deck"],
     ["router.routeSkills: ชื่อ simplify ที่หลุดมาถูกแก้เป็นชื่อเต็ม", [], true, () => env.routeSkills("เขียนสคริปต์ python อ่านไฟล์ csv", router).every((s) => s !== "simplify")],
     ["เล่น log จริง: นับ prompt ที่ router ไม่ตรง", [], true, () => {
       const d = join(base, "replay", "log", "2026-11-10"); mkdirSync(d, { recursive: true });

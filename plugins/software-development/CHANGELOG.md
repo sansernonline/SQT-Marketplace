@@ -1,5 +1,9 @@
 # Changelog — software-development
 
+## 3.4.7 — 2026-11-13
+
+- description ของ `stack-python` และ `presentation-design` มีคำที่ผู้ใช้พิมพ์จริง (CSV · เขียนสคริปต์ Python · ทำสไลด์ · progress report) · trigger eval 2026-11-11 เคส `python-code` และ `slides` ไม่เปิด skill 0/1 · ยังไม่ได้รันเทียบ
+
 ## 3.4.6 — 2026-11-12
 
 - `graphic-design/references/sizes-and-print.md`: ระยะปลอดภัยของแพลตฟอร์มให้ค้นสดจากคู่มือทางการ ไม่ชี้ไปตัวเลขใน `social-formats` แล้ว (graphic-design 0.28.8)

@@ -13,7 +13,8 @@
 ## ผลที่ gate อ่านได้
 
 - ไฟล์ JSON จาก `claude plugin eval --json` หรือ `node scripts/evals/plugin-eval.mjs <plugin> --json <ไฟล์>` · ใช้แขน `with` (เปลี่ยนด้วย `--arm`) · ต้นทุนมี `cost_usd` และ `turns`
-- โฟลเดอร์ `runs/` ของ `speed/run-bench.mjs` (ไฟล์ `<งาน>-<label>-<รอบ>.json`) · บอก label ด้วย `--base-label` และ `--cand-label` · คะแนน = test ที่ซ่อนไว้ที่ผ่าน · ต้นทุนมี `cost_usd` `turns` `tokens`
+- โฟลเดอร์ `runs/` ของ `speed/run-bench.mjs` (ไฟล์ `<งาน>-<label>-<รอบ>.json`) · บอก label ด้วย `--base-label` และ `--cand-label` · คะแนน = test ที่ซ่อนไว้ที่ผ่าน · ต้นทุนมี `cost_usd` `turns` `tokens` `tool_calls` (จำนวนคำสั่งที่ agent เรียกต่อรอบ นับจาก transcript · ไฟล์ผลยังจดคำสั่งที่ล้มใน `toolErrors`) · ผลที่รันก่อน 2026-11-13 ไม่มี `tool_calls` ต้องรันใหม่
+- เลือก `tool_calls` เมื่อ skill ตั้งใจลดคำสั่งที่เปลือง หรือราคาแทบไม่ขยับ (คอร์ส Skill Optimization: haiku ราคา $0.031–0.033 ต่อรอบ แม้คำสั่งต่างกัน 3 เท่า)
 
 ## ไฟล์ split
 
@@ -22,7 +23,7 @@
   "splits": { "job-exit-behaviour": "train", "study-drill-behaviour": "val", "task-board-behaviour": "test" } }
 ```
 
-- เคสที่ไม่อยู่ในรายการนับเป็น train · ไม่มีเคส val เลย gate จะไม่รับ เพราะตัดสินไม่ได้ว่า skill จำโจทย์
+- เคสที่ไม่อยู่ในรายการนับเป็น train · ไม่มีเคส val เลย gate จะไม่รับ เพราะตัดสินไม่ได้ว่า skill จำโจทย์ · เคส val น้อยกว่า 3 gate เตือนว่าเชื่อได้เฉพาะส่วนต่างที่ใหญ่
 - `costMetric` ต้องเขียนก่อนวัดรุ่นใหม่ · gate ไม่ยอมให้ `--cost-metric` เปลี่ยนค่าที่ประกาศไว้
 - gate จดรุ่นที่ตัดสินด้วยชุด val ไว้ใน `<split>.gate-log.jsonl` ข้างไฟล์ split · ครบ 3 รุ่นแล้วรุ่นที่ 4 ได้ exit 2 จนกว่าจะเพิ่มโจทย์ val ใหม่
 

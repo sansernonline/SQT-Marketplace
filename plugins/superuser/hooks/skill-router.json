@@ -46,7 +46,7 @@
     { "pattern": "ภาษาไทย(ให้)?(ลื่น|เป็นธรรมชาติ|อ่านง่าย)|ขัดภาษา|ตรวจเข้ม|เกลาภาษา|แปล(เป็น)?ไทย|อ่านแล้ว(แข็ง|เหมือนแปล|ห้วน)", "skills": ["human-writing"] },
     { "pattern": "diagram|ไดอะแกรม|แผนภาพ|flowchart|โฟลว์|\\ber\\b|sequence|architecture figure", "skills": ["diagram-figures", "no-ai-look"] },
     { "pattern": "(สรุป|บันทึก|รายงาน)[^\\n]{0,15}ประชุม|meeting (notes|minutes|summary)", "skills": ["meeting"] },
-    { "pattern": "\\bcommit\\b|คอมมิต", "skills": ["commit-log"] },
+    { "pattern": "(^|\\n)\\s*(ช่วย\\s*)?(?![^\\n]*(คืออะไร|ต่างกัน))(\\bcommit\\b|คอมมิต)|(^|\\n)(?![^\\n]*(ต่างกัน|ยังไง|อย่างไร|คืออะไร|difference|what is|\\?))[^\\n]*(\\bcommit\\b|คอมมิต)", "skills": ["commit-log"] },
     { "pattern": "ส่งงานต่อ|รับงานต่อ|ส่งต่องาน|ใบสั่งงาน|\\bhand-?off\\b|สลับโมเดล", "skills": ["handoff"] },
     { "pattern": "หาข้อมูล|ค้นข้อมูล|\\bresearch\\b|เช็กให้หน่อย|ยังจริงไหม", "skills": ["research-with-sources"] },
     { "pattern": "(สร้าง|เขียน|แก้|ปรับ|ทำ)[^\\n]{0,12}(skill|agent|playbook)\\b|\\b(new|write|create|fix|improve)[^\\n]{0,12}(skill|subagent|playbook)\\b|\\bevals?\\b|case\\.yaml|skill-doctor|plugin eval", "skills": ["skill-authoring"] },

@@ -1,73 +1,84 @@
-# วงปรับ skill ด้วยประตูรับ — ตัดสินว่ารุ่นใหม่ดีขึ้นด้วยตัวเลขที่ตั้งไว้ก่อน
+# Skill optimise loop with an acceptance gate: decide whether a new version is better by numbers set in advance
 
-ใช้เมื่อแก้ skill ที่มีเคส eval แล้วอยากรู้ว่ารุ่นใหม่ดีขึ้นจริงหรือแค่บังเอิญ · กติกากันโกงในวงปรับ (คงเกณฑ์ · ไม่ลบเคสยาก · จบที่ 5 รอบ) อยู่ใน [`eval-loop-rules`](eval-loop-rules.md) ไฟล์นี้เพิ่ม 4 เรื่องที่ทำให้คำตัดสินเป็นตัวเลข: ตรวจตัวตรวจก่อน · แบ่ง train/val/test · วัดความแกว่งแล้วให้ประตูรับตัดสิน · สมุดปัญหาและแก้ไม่เกิน 3 จุดต่อรุ่น
+Use when you change a skill that already has eval cases and want to know whether the new version is really better or just lucky. The anti-cheating rules of the loop (keep the bar · never drop hard cases · stop at 5 rounds) are in [`eval-loop-rules`](eval-loop-rules.md). This file adds 4 things that turn the verdict into a number: check the grader first · split train/val/test · measure noise and let the gate decide · an issue log with at most 3 fixes per version.
 
-เครื่องมืออยู่ใน `scripts/evals/gate/` (ไม่เรียก model ไม่เสียเงิน) · แม่แบบสมุดปัญหา [`templates/ISSUES.md`](../templates/ISSUES.md)
+Tools live in `scripts/evals/gate/` (no model calls, no cost) · issue log template: [`templates/ISSUES.md`](../templates/ISSUES.md)
 
-## ขั้นตอน ทำตามลำดับ
+## Steps, in order
 
-0. **ตรวจตัวตรวจก่อนใช้ token** · grader ที่ตัดสินผิดทำให้ทุกตัวเลขผิด · เขียนคำตอบอ้างอิงที่ถูกทุกข้อ 1 ชิ้น และคำตอบที่จงใจผิด 1 จุดต่อ grader 1 ตัว แล้วรัน `node scripts/evals/gate/grader-check.mjs <case.yaml> --good ref.md --bad <grader>=wrong.md` · คำตอบอ้างอิงต้องผ่าน 100% · คำตอบที่ผิดต้องตกเฉพาะข้อนั้น · grader ชนิด `llm` ปรับกับป้ายคนด้วย `judge/calibrate.mjs` ([`eval-loop-rules`](eval-loop-rules.md) หัวข้อ 5)
-1. **เขียนไฟล์ split ก่อนรัน** · ใส่ split ให้ทุกเคสและประกาศตัวชี้วัดต้นทุน (หัวข้อถัดไป) · ห้ามเปลี่ยนหลังเห็นผล
-2. **วัดรุ่นฐาน** · `node scripts/evals/plugin-eval.mjs <plugin> --only "<regex>" --json _to_delete/<งาน>/v0.json --max-cost-usd <เพดาน>` · ทุกเคสทั้ง train และ val · อย่างน้อย 2 รอบต่อเคส (ค่าเริ่มของ eval คือ 3)
-3. **ดูความแกว่ง** · `node scripts/evals/gate/gate.mjs --null v0.json --split split.json` แล้วจดค่า "ความแกว่งของส่วนต่าง 2 รุ่น" ลงสมุด · ส่วนต่างที่น้อยกว่า 1.5 เท่าของค่านี้ถือว่าไม่ต่าง · ถ้าค่านี้ใหญ่กว่าส่วนต่างที่หวังไว้ ให้เพิ่มรอบหรือเพิ่มเคสก่อนเริ่มแก้
-4. **หาสาเหตุจากชุด train เท่านั้น** · เปิด trace (`--keep-temp`) และคำตอบของรอบที่ตกในเคส train · ผลของชุด val ดูได้แค่ตัวเลขรวมในตารางของ gate ห้ามเปิดรายรอบ เพราะเมื่อแก้ตามคำตอบของ val ชุด val ก็ไม่ได้วัดของที่ skill ไม่เคยเห็นอีกต่อไป
-5. **จดสมุดปัญหา** ตามแม่แบบ · 1 แถว = 1 สาเหตุ · พบกี่รอบจากกี่รอบ · พบรอบเดียวยังไม่แก้
-6. **แก้ไม่เกิน 3 จุดต่อรุ่น** · ทุกรุ่นเป็น commit แยก และผลแยกไฟล์ (`v1.json` `v2.json`) จะได้ย้อนกลับและเทียบได้ · เลือกทางแก้ตามลำดับความคุ้ม:
-   - สคริปต์ตรวจแล้วเตือนเอง (ข้อความเตือนบอกวิธีแก้) ดีกว่ากติกาให้ AI จำ
-   - กติกาที่บอกคำสั่ง ไฟล์ หรือค่าที่ตรวจได้ ดีกว่าคำแนะนำกว้าง ๆ
-   - ลบหรือรวมกติกาที่ซ้ำหรือไม่เคยมีผล · skill ต้องไม่ยาวขึ้นโดยไม่มีเหตุผล
-   - ห้ามใส่คำตอบหรือชื่อเฉพาะของเคส train ลงใน skill
-7. **วัดซ้ำ** ด้วย model · effort · จำนวนรอบ · เคส และ grader ชุดเดิมทุกค่า · ต่างจากรุ่นฐานแค่เนื้อ skill
-8. **ให้ประตูรับตัดสิน** · `node scripts/evals/gate/gate.mjs --base v0.json --cand v1.json --split split.json` · exit 0 รับ · 1 ไม่รับ · 2 เทียบไม่ได้ · ไม่รับให้กลับไปใช้รุ่นเดิม จดผล `ไม่ได้ผล` ลงสมุด แล้วลองทางอื่น · ห้ามแก้ grader หรือเคสเพื่อให้ผ่าน
-9. **ยืนยันรุ่นสุดท้ายด้วยชุด test ครั้งเดียว** · ห้ามแก้ skill จากผลของชุด test
+0. **Check the grader before spending tokens.** A grader that judges wrong makes every number wrong. Write 1 reference answer that is right on every point and, per grader, 1 answer that is deliberately wrong on that point, then run `node scripts/evals/gate/grader-check.mjs <case.yaml> --good ref.md --bad <grader>=wrong.md`. The reference must pass 100% and each wrong answer must fail only its own point. Calibrate `llm` graders against human labels with `judge/calibrate.mjs` ([`eval-loop-rules`](eval-loop-rules.md) section 5).
+1. **Write the split file before running.** Give every case a split and declare the cost metric (next section). Never change it after seeing results.
+2. **Pick the model you will really use, and measure the baseline with it.** The same skill can help one model and hurt another (course: skill v0 made sonnet 21% more expensive but helped haiku), so a result from a different model does not carry over. Run `node scripts/evals/plugin-eval.mjs <plugin> --only "<regex>" --json _to_delete/<task>/v0.json --max-cost-usd <cap>` on every train and val case, at least 2 runs per case (eval default is 3). Also run the no-skill arm once: if the task already scores near 100% without the skill, the gain can only come from cost.
+3. **Look at the noise.** `node scripts/evals/gate/gate.mjs --null v0.json --split split.json`, then write "noise of the difference between 2 versions" in the log. A difference below 1.5 times this value counts as no difference. If this value is bigger than the gain you hope for, add runs or cases before fixing anything.
+4. **Find causes in the train set only.** Open the traces (`--keep-temp`) and answers of failed train runs. For val, look only at the totals in the gate table, never the single runs: once you fix things from val answers, val no longer measures what the skill has never seen.
+5. **Write the issue log** from the template. 1 row = 1 cause · seen in how many of how many runs · a cause seen once is not fixed yet.
+6. **At most 3 fixes per version.** Every version is its own commit with its own result file (`v1.json` `v2.json`) so you can roll back and compare. Choose fixes in this order of value:
+   - A script that checks and warns by itself (the warning says how to fix) beats a rule the AI must remember
+   - A rule naming a command, a file or a checkable value beats broad advice
+   - Delete or merge rules that repeat or never had an effect · the skill must not grow without a reason
+   - Never put answers or names specific to train cases into the skill
+7. **Measure again** with the same model · effort · number of runs · cases and graders. Only the skill text differs from the baseline.
+8. **Let the gate decide.** `node scripts/evals/gate/gate.mjs --base v0.json --cand v1.json --split split.json` · exit 0 accept · 1 reject · 2 not comparable. On reject, go back to the old version, log the result `ไม่ได้ผล`, and try another way. Never change graders or cases to make it pass.
+9. **Confirm the final version on the test set, once.** Never fix the skill from test results.
 
-## แบ่ง train / val / test
+## Splitting train / val / test
 
-| ชุด | ใช้ทำอะไร | กติกา |
+| Set | Used for | Rule |
 |---|---|---|
-| train | หาข้อบกพร่อง เปิด trace ได้ | แก้ skill จากชุดนี้เท่านั้น |
-| val | ตัดสินที่ประตูรับ | ดูแค่ตัวเลขรวม · ตัดสินได้ไม่เกิน 3 รุ่น แล้วต้องเพิ่มเคส val ใหม่ (gate นับให้ รุ่นที่ 4 ได้ exit 2) |
-| test (ไม่บังคับ) | ยืนยันรุ่นสุดท้าย | รันครั้งเดียว ไม่ใช้แก้ |
+| train | finding defects, traces allowed | fix the skill from this set only |
+| val | the gate's verdict | totals only · at most 3 versions judged, then add new val cases (gate counts; the 4th version gets exit 2) |
+| test (optional) | confirming the final version | run once, never used for fixes |
 
-- เคส val ต้องต่างจาก train ในสิ่งที่ skill อาจจำได้ (คนละเรื่อง คนละกับดัก) ไม่ใช่เคสเดิมที่เปลี่ยนคำ · คอร์สใช้ 6 โจทย์ แบ่ง train 4 กับ val 2
-- **train ขึ้นแต่ val ลง = skill จำโจทย์ (overfit) ไม่รับ** · gate ตรวจให้
-- ไฟล์ split: `{ "costMetric": "cost_usd", "splits": { "<เคส>": "train" | "val" | "test" } }` · เคสที่ไม่อยู่ในรายการนับเป็น train · ไม่มีเคส val เลย gate ไม่รับ
+- Val cases must differ from train in what the skill could memorise (different topic, different trap), not the same case reworded.
+- **At least 3 val cases.** With fewer, only large differences mean anything (course part 2 had 2 val cases). The gate warns when val has fewer than 3.
+- **Train up but val down = the skill memorised the cases (overfit): reject.** The gate checks this.
+- Split file: `{ "costMetric": "cost_usd", "splits": { "<case>": "train" | "val" | "test" } }` · cases not listed count as train · with no val case at all the gate rejects.
 
-## ประตูรับตัดสินอย่างไร
+## How the gate decides
 
-- **ความแกว่ง:** skill รุ่นเดียว เคสเดิม รันซ้ำได้คะแนนไม่เท่ากัน · gate คิด sd ระหว่างรอบของเคสเดียวกันรวมทุกเคส แล้วหารด้วย √จำนวนรอบ ได้ความแกว่งของค่าเฉลี่ย · ความแกว่งของส่วนต่าง 2 รุ่น = √(ฐาน² + ใหม่²)
-- **เกณฑ์** = ค่าที่มากกว่าระหว่าง `--eps` (2 จุด) กับ `--z` (1.5) × ความแกว่งของส่วนต่าง · คิดแยกต่อชุด เพราะชุดที่เคสน้อยแกว่งมากกว่า
-- ไม่รับเมื่อ train หรือ val ลดลงเกินเกณฑ์ของชุดนั้น
-- รับเมื่อคะแนนรวม train+val ดีขึ้นเกินเกณฑ์ **หรือ** ไม่ลดเกินเกณฑ์และต้นทุนลดอย่างน้อย 10%
-- **ตัวชี้วัดต้นทุนประกาศก่อนวัด** · `cost_usd` (ราคาตามรายการ) · `turns` (จำนวนรอบคุย) · `tokens` (มีเฉพาะผลของ bench) · gate ไม่ยอมให้เปลี่ยนค่าที่ประกาศไว้ใน split
-- **เทียบไม่ได้ (exit 2)** เมื่อเคส × รอบไม่ตรงกัน · โจทย์หรือ grader ของเคสเดียวกันเปลี่ยน · model ต่างกัน · ไม่ได้ประกาศต้นทุน
-- **ผ่านประตูไม่ใช่ข้อพิสูจน์** · ที่ z 1.5 รุ่นที่ไม่ต่างจริงยังหลุดผ่านได้ราว 7% · งานที่พลาดแล้วเสียหายมากใช้ `--z 2` (ราว 2%) และเพิ่มรอบ
+- **Noise:** one skill version on the same case scores differently run to run. The gate takes the sd between runs of the same case, pooled across cases, and divides by √runs to get the noise of the mean. Noise of the difference of 2 versions = √(base² + new²).
+- **Threshold** = the larger of `--eps` (2 points) and `--z` (1.5) × noise of the difference, per set, because a set with few cases is noisier.
+- Reject when train or val drops by more than that set's threshold.
+- Accept when the train+val total improves by more than the threshold, **or** does not drop beyond it and cost falls by at least 10%.
+- **Declare the cost metric before measuring.** The gate refuses to change the value declared in the split.
 
-## เมื่อ grader ดูผิดปกติ ให้เปิดผลงานก่อนเชื่อคะแนน
+| Metric | What it counts | Available in | Pick it when |
+|---|---|---|---|
+| `cost_usd` | list price | plugin eval · bench | the default |
+| `turns` | conversation turns | plugin eval · bench | a cheap model whose price barely moves |
+| `tokens` | all tokens incl. subagents | bench | comparing context size |
+| `tool_calls` | tool calls the agent made per run (bench also records failed calls) | bench | the skill aims to cut wasted commands, or price barely moves |
 
-ข้อที่คะแนนแปลก (รุ่นที่เพิ่งแก้ข้อนั้นกลับตกมากขึ้น) ให้เปิดคำตอบจริงดูว่าผิดที่ skill หรือที่ grader
+  Course example: haiku cost $0.031–0.033 per run even when commands differed 3 times, so a version that cut commands 39% passed on `tool_calls` and failed on `cost_usd`. Choose the metric from what the skill is meant to improve, before the first run.
+- **Not comparable (exit 2)** when case × run sets differ · a case's prompt or grader changed · the models differ · no cost metric declared · the result file lacks the declared metric.
+- **Passing the gate is not proof.** At z 1.5 a version that is not really different still slips through about 7% of the time. For work where a mistake is costly, use `--z 2` (about 2%) and add runs.
 
-| ทำได้ | ห้ามทำ |
+## When a grader looks wrong, open the work before trusting the score
+
+For a point with an odd score (a version that just fixed that point fails it more), open the real answers and see whether the skill or the grader is wrong.
+
+| Allowed | Not allowed |
 |---|---|
-| แก้ grader เมื่อเปิดผลงานแล้วพบว่าตัดสินผิด จดลงสมุด แล้วรันทุกรุ่นใหม่ด้วย grader ชุดเดียวกัน | แก้ grader เพื่อให้รุ่นใหม่ผ่านโดยไม่ได้ดูผลงาน |
-| ใช้ `grader-check.mjs` ยืนยันว่า grader ที่แก้ยังตกคำตอบผิดและผ่านคำตอบถูก | ตรวจรุ่นเก่าด้วย grader เก่า รุ่นใหม่ด้วย grader ใหม่ (gate ตอบ exit 2) |
+| Fix the grader after opening the work and finding it judged wrong, log it, then rerun every version with the same grader set | Change a grader so the new version passes without looking at the work |
+| Use `grader-check.mjs` to confirm the fixed grader still fails wrong answers and passes right ones | Grade the old version with the old grader and the new one with the new grader (gate answers exit 2) |
 
-ตัวอย่างจริง
+Real examples
 
-- คอร์ส: ข้อ `image_data` ของรุ่น v1 ได้ 0/4 แย่กว่า v0 ทั้งที่เพิ่งเพิ่มกติกาข้อนี้ · เปิดผลงานแล้วพบว่า grader นับโลโก้ซึ่งไม่ต้องรอข้อมูลเป็นข้อผิด · แก้ grader แล้วตรวจซ้ำทุกรุ่น v0 ได้ 1/4 เท่าเดิม v1 ได้ 4/4 · อีกชุดหนึ่ง grader ผิด 5 จุดทำให้ดูเหมือน skill ทำให้แย่ลง 4.7 จุด แก้แล้วทั้ง 2 แขนได้ 100%
-- repo นี้ 2026-11-11: `gate.mjs` เทียบผล eval รอบ 1 กับรอบ 2 ของ `personal-life` ได้ exit 2 เพราะ 3 ใน 4 เคส behaviour เปลี่ยน grader หรือโจทย์ระหว่างรอบ · `grader-check.mjs` พบว่า `no-promise-9000` ของ `flood-prep-behaviour` ตกคำตอบที่ถูก "ยังไม่แน่ว่าจะได้เงิน 9,000 บาท" เพราะ regex จับคำปฏิเสธ
+- Course: point `image_data` of v1 scored 0/4, worse than v0, right after a rule for it was added. Opening the work showed the grader counted the logo, which needs no data wait, as a failure. After fixing the grader and regrading every version, v0 stayed at 1/4 and v1 got 4/4. In another set, 5 grader mistakes made the skill look 4.7 points worse; once fixed, both arms scored 100%.
+- This repo 2026-11-11: `gate.mjs` compared round 1 and round 2 of `personal-life` evals and gave exit 2 because 3 of 4 behaviour cases changed grader or prompt between rounds. `grader-check.mjs` found that `no-promise-9000` in `flood-prep-behaviour` failed the right answer "ยังไม่แน่ว่าจะได้เงิน 9,000 บาท" because its regex caught the negation.
 
-## สิ่งที่ไม่ได้ลอกจากคอร์ส
+## What was not copied from the course
 
-| ของคอร์ส | ที่ repo นี้ใช้แทน |
+| Course | This repo uses instead |
 |---|---|
-| ตัวรันโจทย์ผ่านหลายบัญชี (`skillopt.py run`) | `plugin-eval.mjs` และ `speed/run-bench.mjs` |
-| คำสั่ง `lint` ขนาด skill | `validate-marketplace.mjs` |
-| คำสั่ง `report` `failures` | `report.html` ของ `claude plugin eval` และ trace จาก `--keep-temp` |
-| คอลัมน์ "อ่านสกิล" | เคส `-trigger` ที่ใช้ grader `tool_used` |
-| ทุกรุ่นเป็นโฟลเดอร์สำเนาใหม่ | ทุกรุ่นเป็น commit แยกใน git |
-| ตรวจซ้ำทุกรุ่นโดยไม่เรียก model (`grade`) | ทำไม่ได้กับ grader `llm` จึงรันรุ่นฐานใหม่แทน |
+| Multi-account case runner (`skillopt.py run`) | `plugin-eval.mjs` and `speed/run-bench.mjs` |
+| `lint` command for skill size | `validate-marketplace.mjs` |
+| `report` and `failures` commands | `report.html` from `claude plugin eval` and traces from `--keep-temp` |
+| "Read the skill" column | `-trigger` cases with a `tool_used` grader |
+| Every version as a fresh copied folder | Every version as its own git commit |
+| Regrade every version without calling the model (`grade`) | Not possible with `llm` graders, so rerun the baseline instead |
+| Bandit to choose which version to measure (COBRA-Skills) | Not used: the case sets here are small enough to measure every version |
 
-## ที่มา
+## Source
 
-ดัดแปลงจากคอร์ส CWN2026 สัปดาห์ 2 บท Skill Optimization (`skill-optimizer`) ของเจ้าของ repo · เรียบเรียงใหม่ 2026-11-11 · อ่านจาก `skills/skill-optimizer/SKILL.md` · `references/issues.md` · `references/suite.md` · `scripts/skillopt.py` (`noise_of` `se_diff` `cmd_gate`) · `01_theory/README.md` หัวข้อ ข3 ข4 ข5 ค1–ค6 · `README.md` ขั้นที่ 4.3 และ 8.1 · ตัวเลข 7% และ 2% คือหางเดียวของการแจกแจงปกติที่ z 1.5 และ 2 (6.7% และ 2.3%)
+Adapted from course CWN2026 week 2, lesson Skill Optimization (`skill-optimizer`), by the repo owner · reworded 2026-11-11, translated and extended 2026-11-13 (`tool_calls`, real model, val size) from `Skill_Optimization_Slides.pdf` pages 58–67 · read from `skills/skill-optimizer/SKILL.md` · `references/issues.md` · `references/suite.md` · `scripts/skillopt.py` (`noise_of` `se_diff` `cmd_gate`) · `01_theory/README.md` sections ข3 ข4 ข5 ค1–ค6 · `README.md` steps 4.3 and 8.1 · 7% and 2% are the one-sided normal tails at z 1.5 and 2 (6.7% and 2.3%)
