@@ -1,8 +1,9 @@
 // ประตูรับรุ่นใหม่: ความแกว่ง A/A · เกณฑ์ต่อชุด · คำตัดสิน · ไม่อ่านไฟล์ ไม่พิมพ์
 // สูตรดัดแปลงจาก skillopt.py (noise_of · se_diff · cmd_gate) ของคอร์ส CWN2026 สัปดาห์ 2 บท Skill Optimization · เรียบเรียงใหม่ 2026-11-11
-export const COST_METRICS = ["cost_usd", "turns", "tokens"];
+export const COST_METRICS = ["cost_usd", "turns", "tokens", "tool_calls"]; // tool_calls = คำสั่งที่ agent เรียกต่อรอบ ใช้เมื่อราคาแทบไม่ขยับ (haiku) · มีเฉพาะผลของ bench
 export const JUDGED_SPLITS = ["train", "val"]; // test ไม่ใช้ตัดสิน รันครั้งเดียวกับรุ่นสุดท้ายเพื่อยืนยัน
 const MIN_COST_CUT = 0.1; // คะแนนเท่าเดิมแต่ต้นทุนลดอย่างน้อย 10% จึงรับ
+const MIN_VAL_CASES = 3; // ชุด val น้อยกว่านี้ ตัวเลขเชื่อได้เฉพาะส่วนต่างที่ใหญ่ (คอร์ส: val 2 ข้อ)
 
 const mean = (xs) => xs.reduce((s, x) => s + x, 0) / xs.length;
 
@@ -55,7 +56,7 @@ export function comparability(base, cand, costMetric) {
   if (!COST_METRICS.includes(costMetric))
     problems.push(`ยังไม่ได้ประกาศตัวชี้วัดต้นทุน (${COST_METRICS.join(" · ")}) → ใส่ใน split ก่อนวัดรุ่นใหม่ ห้ามเลือกหลังเห็นผล`);
   else if ([...base.rows, ...cand.rows].some((r) => typeof r[costMetric] !== "number"))
-    problems.push(`ไฟล์ผลไม่มีค่า ${costMetric} ทุกรอบ (plugin eval มีแค่ cost_usd กับ turns)`);
+    problems.push(`ไฟล์ผลไม่มีค่า ${costMetric} ทุกรอบ (plugin eval มีแค่ cost_usd กับ turns · tokens กับ tool_calls มีเฉพาะ bench)`);
   return problems;
 }
 
@@ -82,6 +83,8 @@ export function decide(base, cand, { eps = 0.02, z = 1.5, costMetric } = {}) {
     const bad = v.rows.filter((r) => r.abnormal);
     return bad.length ? [`${i ? "รุ่นใหม่" : "ฐาน"} มี ${bad.length} รอบจบไม่ปกติ (error หรือไม่มีคะแนน): ${bad.slice(0, 6).map((r) => `${r.case}#${r.rep}`).join(" ")} → ถ้าเป็นเหตุของระบบ (โควตา เครือข่าย) ให้รันรอบนั้นซ้ำก่อนตัดสิน`] : [];
   });
+  const valCases = new Set(base.rows.filter((r) => r.split === "val").map((r) => r.case)).size;
+  if (valCases && valCases < MIN_VAL_CASES) warnings.push(`ชุด val มีแค่ ${valCases} เคส (ควรมีอย่างน้อย ${MIN_VAL_CASES}) → เชื่อได้เฉพาะส่วนต่างที่ใหญ่ · เพิ่มเคส val ที่ต่างเรื่องและต่างกับดักจาก train`);
   const problems = comparability(base, cand, costMetric);
   if (problems.length) return { verdict: "incomparable", reasons: problems, table: [], warnings };
 

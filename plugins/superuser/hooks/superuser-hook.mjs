@@ -12,7 +12,7 @@ import { fileURLToPath } from "node:url";
 import { applyQuota, accountName } from "../skills/parallel-split-and-merge/scripts/quota.mjs";
 import { readJson, moduleOn, modOn, sessionOnce, setFlags, takeFlags } from "./lib/util.mjs";
 import { isBashGuard, preRules, promptRules, postRules, stopRules, foldTestState } from "./lib/rules.mjs";
-import { scoredRoutes, fixHomonyms, homonymWarn, installedSkills, suggestSkill, toolRoute, markSkillOpened, replayRoutes, cacheDiff } from "./lib/router.mjs";
+import { scoredRoutes, fixHomonyms, homonymWarn, installedSkills, suggestSkill, toolRoute, markSkillOpened, replayRoutes, cacheDiff, qualify } from "./lib/router.mjs";
 import { parseLoopRequest, loopCancelRequested, loopStart, loopCancel, loopStartNotice, loopStopGate } from "./lib/loop.mjs";
 import { extraGates } from "./lib/selftest.mjs";
 import { ESCAPE_CLAUSE, scopeOk, versionNotice, digestNotice, lintHint, bashChecks, sessionStartListener } from "./lib/notices.mjs";
@@ -625,7 +625,9 @@ export function promptNotice(input, router, dir = OPEN_DIR) {
   const small = looksSmall(text);
   const medium = !small && text.length >= 12 && !text.startsWith("/") && !NOT_USER.test(text) && !looksBig(text)
     && !existsSync(sessionFile(dir, input.session_id));   // superuser เปิดค้างแล้วทั้ง session → ให้มันคุมต่อ
-  const routed = routeSkills(text, router);
+  let inst = null;
+  try { inst = installedSkills({ hereDir: HERE, configDir: configDirOf() }); } catch { /* สแกนไม่ได้ → บอกชื่อสั้นตามเดิม */ }
+  const routed = routeSkills(text, router).map((s) => qualify(s, inst));
   const skills = small ? pickOne(routed) : medium
     ? routed.filter((s) => !/(^|:)superuser$/.test(s)).sort((a, b) => BROAD_SKILL.test(a) - BROAD_SKILL.test(b)).slice(0, 2) : routed;
   noteSmall(dir, input.session_id, small ? skills.length : null);
@@ -972,14 +974,20 @@ function denyReason(input, teamDir) {
 const DISPATCH_SKIP = /^(fork|Explore|Plan|claude-code-guide|statusline-setup)$/;
 const NO_BRIEF = /(^|:)(reviewer|learning-reviewer|brainstormer)$/;
 const BRIEF_NAMES = ["เป้า", "ขอบเขต", "เสร็จเมื่อ", "กติกา", "ส่งกลับ"];
+// ประโยคบังคับในใบสั่งงาน (superuser หัวข้อ 5 ข้อ 4) · เดิมเป็นกติกาให้หัวหน้าจำ ใบที่ขาดประโยคนี้ตก 2 ใน 3 รอบ (t5 2026-11-11)
+// ย้ายมาให้สคริปต์ตรวจตามบทเรียนคอร์ส Skill Optimization: สคริปต์เตือนเองได้ผลกว่าเพิ่มกติกา
+const NO_EXTRA_CHECKS = /ห้ามเพิ่มการตรวจ\s*error|do not add error checks/i;
+export const NO_EXTRA_CHECKS_TEXT = "ห้ามเพิ่มการตรวจ error หรือเปลี่ยนรูปค่าที่คืน (เช่น object ไม่มี prototype · class) ที่ spec ไม่ได้สั่ง ยกเว้นตรวจ input ที่ขอบระบบ";
 export function dispatchGate(ti = {}) {
   const type = String(ti.subagent_type ?? "");
   if (DISPATCH_SKIP.test(type)) return "";
   const fields = ["model", "effort"].filter((k) => !ti[k]).map((k) => `\`${k}\``);
   const prompt = String(ti.prompt ?? "");
   const lacking = NO_BRIEF.test(type) ? [] : BRIEF_NAMES.filter((_, i) => !BRIEF_SECTIONS[i].test(prompt));
-  if (!fields.length && !lacking.length) return "";
-  const why = [fields.length && `missing ${fields.join(" and ")}`, lacking.length && `brief lacks headings ${lacking.join(" · ")}`].filter(Boolean).join(" · ");
+  const noSentence = !NO_BRIEF.test(type) && !NO_EXTRA_CHECKS.test(prompt);
+  if (!fields.length && !lacking.length && !noSentence) return "";
+  const why = [fields.length && `missing ${fields.join(" and ")}`, lacking.length && `brief lacks headings ${lacking.join(" · ")}`,
+    noSentence && `brief lacks the required sentence under กติกา: "${NO_EXTRA_CHECKS_TEXT}"`].filter(Boolean).join(" · ");
   return `Dispatch gate (SuperUser): ${why} — resend it complete: (1) \`model\` + \`effort\` by the level of this piece (opus + high for money, law, sent to outsiders, irreversible · haiku + low for mechanical work that has a pattern to follow · the rest sonnet + medium · superuser section 5) (2) a brief with one line per heading **1 · เป้า** · **2 · ขอบเขต** · **3 · เสร็จเมื่อ** · **4 · กติกา** · **5 · ส่งกลับ** (the first line of the report is one of เสร็จ · เสร็จ มีข้อกังวล · ขาดบริบท · ติด) · turn this gate off in .claude/superuser/config.json {"modules": {"dispatch_gate": false}}`;
 }
 // โควตาที่เหลือของบัญชีนี้ (k token) · ต้องมีทั้งไฟล์โควตาที่ status line จด และขนาดถังใน accounts.json · ขาดอย่างใดอย่างหนึ่ง หรือข้อมูลเก่ากว่า 1 ชม. → null ไม่ตรวจ
@@ -1686,6 +1694,9 @@ function selfTest() {
     ...[
       "แก้ typo บรรทัด 3 ใน README", "สวัสดีครับ", "ราคา Opus 5.5 เท่าไร", "แปลประโยคนี้เป็นอังกฤษ", "ตอบเป็นไทย",
     ].map((s) => [`ตัวบอก skill: งานเล็ก → ไม่ใช่ superuser · ${s}`, [], true, () => !routes(s).includes("superuser:superuser")]),
+    ["ตัวบอก skill: ถามคอนเซปต์ git ไม่เปิด commit-log · สั่ง commit เปิด (trigger eval no-git-concept 0/1 2026-11-11)", [], true, () =>
+      ["git stash กับ git commit ต่างกันยังไง", "แก้เสร็จแล้ว\ngit commit ต่างกันกับ stash ยังไง", "commit คืออะไร"].every((p) => !routes(p).some((s) => s.endsWith("commit-log")))
+      && ["แก้เสร็จแล้ว\nช่วย commit ด้วย", "commit แล้วบอกด้วยว่าเปลี่ยนอะไรยังไง", "เสร็จแล้ว commit เลย"].every((p) => routes(p).some((s) => s.endsWith("commit-log")))],
     ["ตัวบอก skill: บอก superuser แล้วต่อท้ายคำอธิบายสาขา", [], true, () => routerNotice(["superuser:superuser"], "N").endsWith("\nN") && !routerNotice(["docx"], "N").includes("N")],
     ["ตัวบอก skill: มี superuser → สั่งเปิดแค่ superuser ก่อน ตัวอื่นให้ใส่ในใบสั่งงาน · ไม่มี → เปิดครบทุกตัว", [], true, () => {
       const lead = routerNotice(["superuser:superuser", "lazy-coding", "no-ai-look"]), solo = routerNotice(["lazy-coding", "no-ai-look"]);
@@ -1955,12 +1966,15 @@ ${rows}
         && quotaGate({ subagent_type: "Explore", prompt: "x" }, left) === ""
         && Math.abs(fresh.left_k - 40) < 1e-9 && Math.abs(fresh.week_left_k - 700) < 1e-9 && stale === null;
     }],
-    ["ด่านส่งงาน: ขาด model/effort หรือใบไม่ครบ 5 ข้อ → ไม่ให้ส่ง · ครบ · fork · Explore · ผู้ตรวจไม่ต้องมีใบ 5 ข้อ", [], true, () => {
-      const brief = "**1 · เป้า** — a\n**2 · ขอบเขต** — b\n**3 · เสร็จเมื่อ** — c\n**4 · กติกา** — d\n**5 · ส่งกลับ** — e";
+    ["ด่านส่งงาน: ขาด model/effort · ใบไม่ครบ 5 ข้อ · ขาดประโยคห้ามเพิ่มการตรวจ → ไม่ให้ส่ง · ครบ · fork · Explore · ผู้ตรวจไม่ต้องมีใบ 5 ข้อ", [], true, () => {
+      const brief = `**1 · เป้า** — a\n**2 · ขอบเขต** — b\n**3 · เสร็จเมื่อ** — c\n**4 · กติกา** — ${NO_EXTRA_CHECKS_TEXT}\n**5 · ส่งกลับ** — e`;
       const ok = { model: "sonnet", effort: "medium", prompt: brief };
       const noEffort = dispatchGate({ ...ok, effort: undefined });
       const short = dispatchGate({ ...ok, prompt: "**1 · เป้า** — a\nทำให้เสร็จ" });
+      const noSentence = dispatchGate({ ...ok, prompt: brief.replace(NO_EXTRA_CHECKS_TEXT, "d") });
       return dispatchGate(ok) === "" && noEffort.includes("`effort`") && !noEffort.includes("brief lacks")
+        && noSentence.includes("required sentence") && !noSentence.includes("headings")
+        && dispatchGate({ ...ok, prompt: brief.replace(NO_EXTRA_CHECKS_TEXT, "Do not add error checks the spec did not ask for") }) === ""
         && short.includes("ขอบเขต · เสร็จเมื่อ · กติกา · ส่งกลับ") && !short.includes("missing")
         && dispatchGate({ subagent_type: "fork", prompt: "x" }) === "" && dispatchGate({ subagent_type: "Explore", prompt: "x" }) === ""
         && dispatchGate({ subagent_type: "superuser:reviewer", model: "opus", effort: "high", prompt: "ตรวจ diff" }) === ""

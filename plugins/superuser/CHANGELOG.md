@@ -1,5 +1,16 @@
 # Changelog — superuser
 
+## 3.41.0 — 2026-11-13
+
+- hook บอกชื่อ skill เป็นชื่อเต็ม `plugin:skill` จาก plugin ที่เปิดอยู่ในเครื่อง (`enabledPlugins`) เช่น `software-development:presentation-design` · เดิมบอกแค่ `lazy-coding` แล้ว model เดา `superuser:lazy-coding` จนเครื่องมือ Skill ปฏิเสธ (เกิดจริง 2026-11-13)
+- เรียก skill ด้วย prefix ผิด plugin → hook เตือนพร้อมชื่อที่ถูก · plugin ที่สแกนไม่เจอ (`anthropic-skills:pdf`) ไม่เตือนผิดแล้ว
+- ด่านส่งงานตรวจประโยค "ห้ามเพิ่มการตรวจ error …" ในใบสั่งงาน ขาดแล้วไม่ให้ส่ง · เดิมเป็นกติกาให้หัวหน้าจำ ใบที่ขาดตก 2 ใน 3 รอบ (t5)
+- router: ถามคอนเซปต์ git ("git stash กับ git commit ต่างกันยังไง") ไม่เปิด `commit-log` แล้ว · คำสั่ง commit ยังเปิด · `commit-log` description บอกว่าไม่ใช้กับคำถาม git
+- `gate.mjs` ตัวชี้วัดต้นทุนใหม่ `tool_calls` (คำสั่งต่อรอบ) · `run-bench.mjs` จดคำสั่งทั้งหมดและคำสั่งที่ล้มจาก transcript · gate เตือนเมื่อชุด val น้อยกว่า 3 เคส
+- `skill-authoring/references/optimize-loop.md` เป็นภาษาอังกฤษ · เพิ่มตารางเลือกตัวชี้วัดต้นทุน · วัดกับ model ที่จะใช้จริงและแขนไม่มี skill · val อย่างน้อย 3 เคส (จากสไลด์คอร์ส Skill Optimization หน้า 58–67)
+- `CLAUDE.global.md` ตาราง "Open skills before you start" ใช้ชื่อเต็มทุกแถว
+- self-test hook 351/351 · gate 19/19 ผ่าน · ยังไม่ได้รัน trigger eval เทียบ (เสียเงิน รออนุมัติ)
+
 ## 3.40.0 — 2026-11-12
 
 - แผนและงานหลายขั้นขึ้นด้วย 3 บรรทัดที่เขียนป้ายไทยตรงตัว `เป้า:` · `เสร็จเมื่อ:` · `เสี่ยง:` และทุกขั้นบอกวิธีตรวจ ทั้งในแกน `superuser` หัวข้อ 2 · `references/sizing.md` · ข้อความงานกลางของ hook (งานกลางไม่เปิด superuser จึงไม่เคยเห็นกฎนี้ · eval `superuser-behaviour` แผนไม่มี "เสร็จเมื่อ" 2026-11-09)

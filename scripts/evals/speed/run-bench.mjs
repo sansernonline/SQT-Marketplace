@@ -76,28 +76,33 @@ function run(cmd, argv, opts) {
   });
 }
 
-/** นับลูกทีมที่เปิด และรอบที่เปิดพร้อมกันหลายตัว จาก transcript ของ session */
+/** จาก transcript ของ session: ลูกทีมที่เปิด · รอบที่เปิดพร้อมกันหลายตัว · คำสั่งทั้งหมดที่เรียก (tool_use) · คำสั่งที่ล้ม (tool_result is_error) */
 function countAgents(sessionId) {
   const base = join(process.env.CLAUDE_CONFIG_DIR ?? join(homedir(), ".claude"), "projects");
-  if (!sessionId || !existsSync(base)) return { agents: [], batches: [] };
+  const none = { agents: [], batches: [], toolCalls: null, toolErrors: null };
+  if (!sessionId || !existsSync(base)) return none;
   for (const d of readdirSync(base)) {
     const f = join(base, d, `${sessionId}.jsonl`);
     if (!existsSync(f)) continue;
     // transcript มีบรรทัดชนิด api-request-blob ที่บันทึก tool_use เดียวกันซ้ำ → นับตาม id ของ tool_use และรวมรอบตาม id ของข้อความ
     // (เดิมนับซ้ำ: t5 2026-11-11 ส่งลูกทีม 6 ตัว แต่รายงาน 12)
-    const seen = new Set(), perMsg = new Map(), agents = [];
+    const seen = new Set(), failed = new Set(), perMsg = new Map(), agents = [];
     for (const line of readFileSync(f, "utf8").split("\n")) {
       let m; try { m = JSON.parse(line); } catch { continue; }
-      const c = m?.message?.role === "assistant" && Array.isArray(m.message.content) ? m.message.content : [];
-      for (const b of c) {
-        if (b.type !== "tool_use" || !(b.name === "Agent" || b.name === "Task") || seen.has(b.id)) continue;
-        seen.add(b.id); agents.push(b.input?.subagent_type ?? "?");
+      const content = Array.isArray(m?.message?.content) ? m.message.content : [];
+      if (m?.message?.role === "user") for (const b of content) if (b.type === "tool_result" && b.is_error) failed.add(b.tool_use_id);
+      if (m?.message?.role !== "assistant") continue;
+      for (const b of content) {
+        if (b.type !== "tool_use" || seen.has(b.id)) continue;
+        seen.add(b.id);
+        if (!(b.name === "Agent" || b.name === "Task")) continue;
+        agents.push(b.input?.subagent_type ?? "?");
         const k = m.message.id ?? b.id; perMsg.set(k, (perMsg.get(k) ?? 0) + 1);
       }
     }
-    return { agents, batches: [...perMsg.values()].filter((n) => n > 1) };
+    return { agents, batches: [...perMsg.values()].filter((n) => n > 1), toolCalls: seen.size, toolErrors: failed.size };
   }
-  return { agents: [], batches: [] };
+  return none;
 }
 
 /** token รวมทุก model รวมลูกทีม (modelUsage ของ claude -p) · ไม่มี → usage ของ session หลักอย่างเดียว · นับ cache ด้วยเพื่อให้เทียบกับ log ของ hook ได้ */
@@ -146,10 +151,10 @@ async function one({ task, label, plugin, n }) {
   let j = {}; try { j = JSON.parse(r.out); } catch { /* claude ล้ม → ดู stderr ในไฟล์ */ }
   const h = await hidden(task, work);
   const a = countAgents(sid);
-  const row = { id, task, label, n, wall, turns: j.num_turns ?? null, cost: j.total_cost_usd ?? null, tokens: totalTokens(j), agents: a.agents, batches: a.batches,
+  const row = { id, task, label, n, wall, turns: j.num_turns ?? null, cost: j.total_cost_usd ?? null, tokens: totalTokens(j), toolCalls: a.toolCalls, toolErrors: a.toolErrors, agents: a.agents, batches: a.batches,
     hidden: `${h.pass}/${h.total}`, passAll: h.total > 0 && h.pass === h.total, denied: (j.permission_denials ?? []).length, error: j.is_error ?? (r.code !== 0) };
   writeFileSync(join(OUT, "runs", `${id}.json`), JSON.stringify({ ...row, stderr: r.err.slice(-2000), result: j.result }, null, 2));
-  console.log(`${id.padEnd(14)} ${wall}s · turns ${row.turns} · $${(row.cost ?? 0).toFixed(2)} · token ${row.tokens ?? "?"} · ลูกทีม ${a.agents.length} · test ${row.hidden}`);
+  console.log(`${id.padEnd(14)} ${wall}s · turns ${row.turns} · $${(row.cost ?? 0).toFixed(2)} · token ${row.tokens ?? "?"} · คำสั่ง ${row.toolCalls ?? "?"} (ล้ม ${row.toolErrors ?? "?"}) · ลูกทีม ${a.agents.length} · test ${row.hidden}`);
   return row;
 }
 

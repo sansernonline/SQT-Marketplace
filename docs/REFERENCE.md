@@ -728,7 +728,7 @@
 
 ### 73. stack-python
 **ใช้กับ:** developer, qa-tester
-**Description:** Use when writing, reviewing or testing Python (scripts, CLIs, FastAPI, Django, pandas, AI code).
+**Description:** Use when writing, reviewing or testing Python (scripts, CSV or Excel with pandas, CLIs, FastAPI, Django, AI code) · เขียนสคริปต์ Python.
 
 ---
 
@@ -804,7 +804,7 @@
 
 ### 86. presentation-design
 **ใช้กับ:** business-analyst, graphic-designer, product-manager, project-manager, technical-writer
-**Description:** Use when building a slide deck (pitch, plan, report, training) to present or read. Story, layouts.
+**Description:** Use when making slides or a deck (pitch, plan, progress report, training) in any format · ทำสไลด์. Story, layouts.
 
 ---
 

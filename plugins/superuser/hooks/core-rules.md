@@ -1,4 +1,4 @@
-<!-- สำเนาที่ scripts/sync/sync-superuser.mjs สร้างจาก scripts/install/CLAUDE.global.md · ห้ามแก้ไฟล์นี้ แก้ที่ต้นฉบับ · sha256:966b6b881625 -->
+<!-- สำเนาที่ scripts/sync/sync-superuser.mjs สร้างจาก scripts/install/CLAUDE.global.md · ห้ามแก้ไฟล์นี้ แก้ที่ต้นฉบับ · sha256:66fe3ef54718 -->
 <!-- sqt-core-rules -->
 # Personal rules (all projects)
 
@@ -10,18 +10,18 @@ Skill descriptions are often cut down to just the name. **When the task matches 
 
 | Task | Open |
 |---|---|
-| Write or edit anything people read (long answer · email · report · README · document · slide · label) | `human-writing` |
-| Answer has options, comparisons, trade-offs, or several connected parts | `answer-shape` |
-| Word · Portable Document Format (PDF) · kept documents | `docx` or `pdf` + `human-writing` + `polished-document-style` |
-| Slides · Excel | `pptx` or `presentation-design` · `xlsx` (+ `human-writing`) |
-| Any creative work (screen · mockup · poster · image · slide · cover · icon) | `design-references` (read the theme in `~/.claude/superuser-style.md`, then search live references **before every start**) + `no-ai-look` + the task's skill (`ui-craft` · `graphic-design` · `diagram-figures`) |
-| Write or edit code | `superuser:simplify` (not Claude Code's `/simplify`) + `lazy-coding` + `readable-code` + `stack-<language>` |
-| Fix a bug · something broken | `principle-fix-root-cause` + `targeted-fix` |
-| Find information that needs sources (prices · rules · rates · compare options) | `research-with-sources` |
-| About to say done · passed · fixed | `principle-prove-it-works` |
-| Large or risky work (≥ 5 items · whole repo · search then edit · money · law · health · personal data · delete or overwrite · live system · sent to outsiders) | `superuser` of the matching branch plugin |
-| Brief a worker · hand off or take over work · switch model | `handoff` |
-| commit · temp files · naming documents | `commit-log` · `temp-file-discipline` · `document-naming` |
+| Write or edit anything people read (long answer · email · report · README · document · slide · label) | `superuser:human-writing` |
+| Answer has options, comparisons, trade-offs, or several connected parts | `superuser:answer-shape` |
+| Word · Portable Document Format (PDF) · kept documents | `anthropic-skills:docx` or `anthropic-skills:pdf` + `superuser:human-writing` + `superuser:polished-document-style` |
+| Slides · Excel | `anthropic-skills:pptx` or `software-development:presentation-design` · `anthropic-skills:xlsx` (+ `superuser:human-writing`) |
+| Any creative work (screen · mockup · poster · image · slide · cover · icon) | `superuser:design-references` (read the theme in `~/.claude/superuser-style.md`, then search live references **before every start**) + `superuser:no-ai-look` + the task's skill (`software-development:ui-craft` · `graphic-design:superuser` · `software-development:diagram-figures`) |
+| Write or edit code | `superuser:simplify` (not Claude Code's `/simplify`) + `software-development:lazy-coding` + `software-development:readable-code` + `software-development:stack-python` (or stack-typescript · stack-dotnet · stack-sql · stack-mql by language) |
+| Fix a bug · something broken | `superuser:principle-fix-root-cause` + `superuser:targeted-fix` |
+| Find information that needs sources (prices · rules · rates · compare options) | `superuser:research-with-sources` |
+| About to say done · passed · fixed | `superuser:principle-prove-it-works` |
+| Large or risky work (≥ 5 items · whole repo · search then edit · money · law · health · personal data · delete or overwrite · live system · sent to outsiders) | `<plugin>:superuser` of the matching branch (`superuser:superuser` · `software-development:superuser` · `e-commerce:superuser` · `trading-finance:superuser` · `personal-life:superuser` · `graphic-design:superuser`) |
+| Brief a worker · hand off or take over work · switch model | `superuser:handoff` |
+| commit · temp files · naming documents | `superuser:commit-log` · `superuser:temp-file-discipline` · `superuser:document-naming` |
 
 The hook announces `skill ที่ต้องเปิด` (skills to open) → open those · **small task (1 item in one file · a single question): when the hook says `งานเล็ก`, call Skill `superuser:quick` (runs on haiku and does not see this chat) with the full request, file paths and any facts from the chat in the args, then relay its result. If it returns `เกินงานเล็ก` or `ขาดบริบท`, do the task yourself.**
 

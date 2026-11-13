@@ -46,14 +46,30 @@ export function scanInstalled({ pluginsDir, cacheDir }) {
   return { full: [...full], bare: [...bare] };
 }
 export function installedSkills({ hereDir, configDir, now = Date.now(), cacheFile = join(tmpdir(), `sqt-superuser-installed-${TMP_USER}.json`) } = {}) {
+  // plugin ที่เปิดอยู่ (enabledPlugins ใน settings) · cache เก็บรุ่นเก่าของ plugin ที่เปลี่ยนชื่อไว้ด้วย (software-company) จึงใช้แยกชื่อซ้ำ
+  const enabled = new Set(Object.entries(readJson(join(configDir, "settings.json"), {})?.enabledPlugins ?? {}).filter(([, on]) => on).map(([k]) => k.split("@")[0]));
   const saved = cacheFile ? readJson(cacheFile, null) : null;
-  if (saved && now - saved.at < 6 * 3600000) return { full: new Set(saved.full), bare: new Set(saved.bare) };
+  if (saved && now - saved.at < 6 * 3600000) return { full: new Set(saved.full), bare: new Set(saved.bare), enabled };
   const up = join(hereDir, "..", "..");
   const found = scanInstalled({ pluginsDir: basename(up) === "plugins" ? up : null, cacheDir: join(configDir, "plugins", "cache") });
   if (cacheFile && found.bare.length) { try { writeFileSync(cacheFile, JSON.stringify({ at: now, ...found })); } catch { /* ไม่จำก็สแกนใหม่รอบหน้า */ } }
-  return { full: new Set(found.full), bare: new Set(found.bare) };
+  return { full: new Set(found.full), bare: new Set(found.bare), enabled };
 }
-const isInstalled = (s, inst) => inst.full.has(s) || inst.bare.has(s.split(":").pop());
+// ชื่อเต็มที่ plugin อยู่ในเครื่อง ต้องตรงทั้งชื่อ (superuser:lazy-coding ไม่นับ เพราะ lazy-coding อยู่ใน software-development) · plugin ที่สแกนไม่เจอ (anthropic-skills · skill ในตัว) ไม่รู้ จึงไม่เตือน
+const knownPlugin = (p, inst) => [...inst.full].some((f) => f.startsWith(`${p}:`));
+const isInstalled = (s, inst) => {
+  if (!s.includes(":")) return inst.bare.has(s);
+  const plugin = s.slice(0, s.lastIndexOf(":"));
+  return inst.full.has(s) || !knownPlugin(plugin, inst);
+};
+/** ชื่อสั้น → ชื่อเต็ม plugin:skill เมื่อ plugin ที่เปิดอยู่มีตัวเดียวที่ชื่อนี้ (หลายตัวเลือกของ superuser) · ได้ชื่อสั้นแล้ว model เดา prefix ผิด (superuser:lazy-coding 2026-11-13) */
+export function qualify(s, inst) {
+  if (!inst || s.includes(":")) return s;
+  const all = [...inst.full].filter((f) => f.endsWith(`:${s}`));
+  const on = inst.enabled?.size ? all.filter((f) => inst.enabled.has(f.slice(0, f.lastIndexOf(":")))) : all;
+  const hits = on.length ? on : all;
+  return hits.length === 1 ? hits[0] : hits.find((f) => f.startsWith("superuser:")) ?? s;
+}
 
 // ── ชื่อ skill ที่ไม่มีในเครื่อง → "หมายถึงอันนี้ไหม" (ไม่ปฏิเสธ) ─────────────────
 export function suggestSkill(name, inst) {
@@ -81,7 +97,7 @@ export function toolRoute(input, router, { inst, sessDir } = {}) {
   for (const r of cfg.rules ?? []) { const t = subjects[r.on]; if (t && rx(r.pattern)?.test(t)) for (const s of r.skills ?? []) bump(s, r.weight ?? 1); }
   for (const on of ["file", "command"]) if (subjects[on]) for (const { skill, score } of scoredRoutes(subjects[on], router, on)) bump(skill, score);
   const key = (s) => `route:${agent}:${s.split(":").pop()}`;
-  let chosen = [...cand].filter(([s]) => !sessionSeen(input.session_id, key(s), sessDir)).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, cfg.maxSkills ?? 3).map(([s]) => s);
+  let chosen = [...cand].map(([s, w]) => [qualify(s, inst), w]).filter(([s]) => !sessionSeen(input.session_id, key(s), sessDir)).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, cfg.maxSkills ?? 3).map(([s]) => s);
   const build = (xs) => {
     const have = xs.filter((s) => isInstalled(s, inst)), miss = xs.filter((s) => !isInstalled(s, inst));
     return [have.length && `ตรงกับ skill ${listSkills(have)} — เปิดด้วยเครื่องมือ Skill ก่อนลงมือชิ้นนี้ (ตัวที่เปิดแล้วใน session ข้ามได้)`, miss.length && `skill ${listSkills(miss)} ยังไม่ได้ติดตั้งในเครื่อง — บอกผู้ใช้ ไม่ติดตั้งเอง`].filter(Boolean).join(" · ");

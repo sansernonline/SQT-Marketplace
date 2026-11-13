@@ -1,5 +1,5 @@
 // อ่านผลรัน 2 แบบให้เป็นแถวรูปเดียวกัน: ผลของ `claude plugin eval --json` และโฟลเดอร์ไฟล์รายรอบของ bench (speed/run-bench.mjs)
-// แถว 1 รอบ = { case, rep, score 0–1, cost_usd, turns, tokens, abnormal, signature }
+// แถว 1 รอบ = { case, rep, score 0–1, cost_usd, turns, tokens, tool_calls, abnormal, signature }
 // signature = แฮชของโจทย์ + ตัวตรวจ ใช้จับว่ารุ่นฐานกับรุ่นใหม่ถูกตรวจด้วยตัวตรวจคนละชุด (bench ไม่มี จึงเป็น null)
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
@@ -23,7 +23,7 @@ export function loadPluginEval(result, arm) {
       const hasScore = typeof run.score === "number";
       rows.push({
         case: c.name, rep: i + 1, score: hasScore ? run.score : 0,
-        cost_usd: run.costUsd, turns: run.turns, tokens: undefined,
+        cost_usd: run.costUsd, turns: run.turns, tokens: undefined, tool_calls: undefined,
         abnormal: Boolean(run.error) || !hasScore, signature,
       });
     });
@@ -44,7 +44,7 @@ export function loadBench(dir, label) {
     const [passed, total] = String(run.hidden ?? "").split("/").map(Number);
     rows.push({
       case: m[1], rep: Number(m[3]), score: total ? passed / total : run.passAll ? 1 : 0,
-      cost_usd: run.cost, turns: run.turns, tokens: run.tokens,
+      cost_usd: run.cost, turns: run.turns, tokens: run.tokens, tool_calls: run.toolCalls,
       abnormal: Boolean(run.error), signature: null,
     });
   }
