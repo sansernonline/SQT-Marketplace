@@ -1,6 +1,6 @@
 # skill: stack-python
 
-Use when writing, reviewing or testing Python (scripts, CLIs, FastAPI, Django, pandas, AI code).
+Use when writing, reviewing or testing Python (scripts, CSV or Excel with pandas, CLIs, FastAPI, Django, AI code) · เขียนสคริปต์ Python.
 
 # stack-python — Python ที่อ่านง่าย ถูกชนิด รันซ้ำได้
 

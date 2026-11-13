@@ -1,6 +1,6 @@
 # skill: presentation-design
 
-Use when building a slide deck (pitch, plan, report, training) to present or read. Story, layouts.
+Use when making slides or a deck (pitch, plan, progress report, training) in any format · ทำสไลด์. Story, layouts.
 
 # Presentation Design
 
