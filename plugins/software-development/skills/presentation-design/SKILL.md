@@ -1,6 +1,6 @@
 ---
 name: presentation-design
-description: Use when making slides or a deck in any format
+description: Use when planning a slide deck story and layouts
 ---
 
 # Presentation Design

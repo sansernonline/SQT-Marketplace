@@ -786,7 +786,7 @@
 
 ### 83. html-slide-deck
 **ใช้กับ:** technical-writer
-**Description:** Use when a slide deck is wanted as HTML
+**Description:** Use when the deck must be HTML or animated, or pptx as HTML
 
 ---
 
@@ -804,7 +804,7 @@
 
 ### 86. presentation-design
 **ใช้กับ:** business-analyst, graphic-designer, product-manager, project-manager, technical-writer
-**Description:** Use when making slides or a deck in any format
+**Description:** Use when planning a slide deck story and layouts
 
 ---
 
