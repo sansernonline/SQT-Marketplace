@@ -1,21 +1,21 @@
-# playbook · investigation — ตอบคำถามแบบอ่านอย่างเดียว
+# playbook · investigation — answer a question, read-only
 
-ใช้เมื่อ: "X ทำงานอย่างไร" · "ทำไมถึงทำแบบนี้" · "ควรวางไว้ที่ไหน" · "แน่ใจไหมว่า..."
-ผลลัพธ์: คำตอบที่อ้างไฟล์และบรรทัดจริง · **ไม่แก้โค้ด**
+Use when: "How does X work" · "Why is it done this way" · "Where should this go" · "Are you sure that..."
+Output: an answer that cites real files and lines · **no code edits**
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. เขียนคำถามใหม่เป็นประโยคเดียวที่ตอบได้ว่าใช่หรือไม่ใช่ หรือชี้ได้ว่าอยู่ตรงไหน · ใคร: หัวหน้าทีม
-2. ประเมินขนาด — ถ้าต้องเปิดเกิน 3 ไฟล์ ให้ส่ง agent `system-analyst` ไปค้น โดยสั่งให้อ่านอย่างเดียว ("ห้ามเขียนหรือแก้ไฟล์") แล้วรับกลับมาแค่สรุปกับตำแหน่งไฟล์ (`context-budget`) · ใคร: `system-analyst` ตัวใหม่ (ไม่เกิน 3 ไฟล์: หัวหน้าทีม)
-3. ไล่จากจุดเข้า (route · command · หน้าจอ) ไปจนถึงข้อมูลที่ถูกอ่านหรือเขียน แล้วจดเส้นทางเป็นลำดับไฟล์:บรรทัด · ใคร: `system-analyst` ตัวใหม่ (งานเล็ก: หัวหน้าทีม)
-4. ถาม "ทำไม" แล้วไล่หลักฐานจากทุกแหล่งที่เข้าถึงได้ ถ้าทำพร้อมกันได้ให้ส่ง subagent แหล่งละตัว: `git log -p -n 20 -- <ไฟล์> | head -200` · `git blame -w -L <เริ่ม>,<จบ> <ไฟล์>` · ข้อความ commit · การคุยใน PR (`gh pr view <n> --comments | head -100`) · issue ที่ commit อ้างถึง · ADR ใน `docs/decisions/` · เอกสารใน `docs/` · connector ที่ต่อไว้ (issue tracker · แชตทีม · wiki) แต่ละตัวส่งกลับไม่เกิน 10 บรรทัดพร้อมแหล่งที่มา แล้วเรียงคำตอบตามน้ำหนักหลักฐาน ถ้าไม่มีหลักฐาน ให้เขียนว่า `ไม่พบหลักฐาน` ห้ามเดาเหตุผล · ใคร: `Explore` ตัวใหม่แหล่งละตัว
-5. ข้ออ้างไหนพิสูจน์ได้ด้วยการรัน (ค่าที่ได้ · เวลาที่ใช้ · ลำดับที่เกิด) ให้รันดู อย่าอนุมานจากการอ่าน ไม่แก้ไฟล์ในโปรเจกต์ (สิ่งที่ต้องเขียนไฟล์ให้รันในสำเนาใต้ `_to_delete/`) · ใคร: `developer` ตัวใหม่
-6. **ถ้าผู้ใช้ขอให้สอน หรือบอกว่ายังไม่เข้าใจ** ให้อธิบายแบบต่อชั้น เริ่มจากสิ่งที่เขารู้แล้ว ใช้ 1 ชั้น 1 ภาพ (`software-diagrams`) และแต่ละภาพเพิ่มของใหม่ไม่เกิน 2 อย่าง ผูก "ทำงานอย่างไร" กับ "ทำไมถึงทำแบบนี้" จากข้อ 4 ไว้ด้วยกัน แล้วปิดด้วยตัวอย่างจริง 1 เส้นทางที่ผ่านทุกชั้น · ใคร: หัวหน้าทีม
-7. ร่างคำตอบ — ขึ้นด้วยคำตอบ 1 ประโยค แล้วตามด้วยเส้นทาง ไฟล์:บรรทัด และป้าย `ตรวจจริง` / `จากแหล่ง` / `อนุมาน` / `ยังไม่ได้ตรวจ` ทุกข้อ ถ้าภาพช่วยได้ ให้ใช้ `software-diagrams` · ใคร: หัวหน้าทีม
-8. ตรวจคำตอบ — ทุกข้ออ้างชี้ไฟล์:บรรทัดหรือผลการรันได้จริง ป้ายตรงกับหลักฐาน และคำตอบ 1 ประโยคตอบคำถามข้อ 1 · ใคร: `reviewer` ตัวใหม่
-9. ส่งคำตอบหลังยืนยันข้อที่ `reviewer` พบเอง (ไม่ผ่าน → แก้แล้ววนตามรอบตรวจใน [`team-roles`](team-roles.md)) · ใคร: หัวหน้าทีม
+1. Rewrite the question as one sentence that can be answered yes or no, or that points to a place · ใคร: หัวหน้าทีม
+2. Judge the size — if more than 3 files must be opened, send a `system-analyst` agent to search, told to read only ("do not write or edit files"), and take back only a summary and file locations (`context-budget`) · ใคร: `system-analyst` ตัวใหม่ (up to 3 files: หัวหน้าทีม)
+3. Trace from the entry point (route · command · screen) to the data that is read or written, and note the path as an ordered list of file:line · ใคร: `system-analyst` ตัวใหม่ (`งานเล็ก` (small job): หัวหน้าทีม)
+4. Ask "why" and trace evidence from every reachable source. If they can run in parallel, send one subagent per source: `git log -p -n 20 -- <ไฟล์> | head -200` · `git blame -w -L <เริ่ม>,<จบ> <ไฟล์>` · commit messages · discussion in the PR (`gh pr view <n> --comments | head -100`) · issues the commit refers to · ADRs in `docs/decisions/` · documents in `docs/` · connected connectors (issue tracker · team chat · wiki). Each returns at most 10 lines with its source. Then order the answers by weight of evidence. If there is no evidence, write `ไม่พบหลักฐาน` (no evidence found) and do not guess a reason · ใคร: `Explore` ตัวใหม่ one per source
+5. For any claim that can be proven by running it (a value · time taken · order of events), run it; do not infer from reading. Do not edit files in the project (anything that needs a file written runs in a copy under `_to_delete/`) · ใคร: `developer` ตัวใหม่
+6. **If the user asks to be taught, or says they do not understand yet**, explain in layers, starting from what they already know. Use 1 picture per layer (`software-diagrams`), each picture adding at most 2 new things. Tie "how it works" and "why it is done this way" from step 4 together, then close with 1 real example path through every layer · ใคร: หัวหน้าทีม
+7. Draft the answer — start with a 1-sentence answer, then the path, file:line, and a label `ตรวจจริง` (verified) / `จากแหล่ง` (from a source) / `อนุมาน` (inferred) / `ยังไม่ได้ตรวจ` (not yet checked) on every claim. If a picture helps, use `software-diagrams` · ใคร: หัวหน้าทีม
+8. Check (ตรวจ) the answer — every claim points to a real file:line or run result, the labels match the evidence, and the 1-sentence answer answers the question in step 1 · ใคร: `reviewer` ตัวใหม่
+9. Deliver the answer after confirming the findings `reviewer` found on its own (fail (`ไม่ผ่าน`) → fix, then repeat per the review rounds in [`team-roles`](team-roles.md)) · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-- ทุกข้ออ้างมีไฟล์:บรรทัด หรือผลการรันกำกับ
-- ไม่มีไฟล์ในโปรเจกต์ถูกแก้
+- Every claim has a file:line or a run result attached
+- No file in the project was edited

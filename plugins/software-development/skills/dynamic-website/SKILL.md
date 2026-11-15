@@ -5,32 +5,32 @@ description: Use when a marketing website needs scroll motion or 3D
 
 # Dynamic Website
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" (Pre-work gate) of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the job with the line `ด่านก่อนลงมือ:` (Pre-work gate:)
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดตาม `human-writing` · หน้าตาและระยะตาม `ui-craft` — skill นี้บอกวิธีทำให้เว็บ "เล่าเรื่องทีละบท" เคลื่อนไหวได้โดยไม่ทำให้คนอ่านเวียนหัว
+> **Language:** wording on every line by `human-writing` · look and spacing by `ui-craft` — this skill says how to make a "chapter by chapter storytelling" website move without making readers dizzy.
 
-> **กฎข้อเดียวของ skill นี้:** การเคลื่อนไหวทุกชิ้นผ่านประตูเดียว (`T()` ใน JS + kill-switch ใน CSS) และ**แต่ละบทมีทางเข้าของตัวเอง** — fade-up ซ้ำทุกจุดคือสัญญาณ AI อันดับ 1 ของเว็บแบบนี้
+> **The one rule of this skill:** every motion passes through one gate (`T()` in JS + a kill-switch in CSS) and **each chapter has its own entrance** — fade-up repeated everywhere is the number 1 AI signal of this kind of website.
 
-ต้นแบบคือเว็บ ai4ba.ai-cie.com (อ่านโค้ดสาธารณะ 2026-10-22 · ไม่มี licence ระบุ → recipe ทุกตัวเขียนใหม่ในรูปของเรา เก็บเฉพาะแนวคิดและประโยคไทยของผู้เขียนในเครื่องหมาย «…») · ตัวอย่างที่เปิดได้จริง: `assets/example-deck.html` · โค้ดพร้อมคัดลอก: `references/recipes.md`
+The reference is the website ai4ba.ai-cie.com (public code read 2026-10-22 · no licence stated → every recipe is rewritten in our own form, keeping only the ideas and the author's Thai sentences inside «…» marks) · a working example you can open: `assets/example-deck.html` · copy-ready code: `references/recipes.md`
 
-## เมื่อไหร่ใช้
+## When to use
 
-- เว็บการตลาด · หน้างานสัมมนา · หน้าเปิดตัวสินค้า · หน้า "เกี่ยวกับเรา" ที่อยากให้คนอ่านไล่เป็นบท ๆ
-- หน้าเดียวที่มี 3–7 บทเต็มจอ เปลี่ยนด้วยล้อเมาส์ คีย์บอร์ด หรือปัดจอ (deck-mode) หรือหน้าเลื่อนปกติที่เนื้อหาโผล่เมื่อเลื่อนมาถึง (page-mode)
-- มีพื้นหลังที่ "มีความหมาย" (เครือข่ายคน · เส้นทางกำหนดการ · แผนที่) ที่กล้องเคลื่อนตามบท
+- Marketing sites · seminar pages · product launch pages · "About us" pages where you want people to read chapter by chapter
+- A single page with 3–7 full-screen chapters, changed by mouse wheel, keyboard, or swipe (deck-mode), or a normal scrolling page where content appears when scrolled to (page-mode)
+- Has a "meaningful" background (a network of people · a schedule route · a map) with a camera that moves per chapter
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use
 
-| งาน | ใช้ |
+| Task | Use |
 |---|---|
-| แดชบอร์ด · หน้าแอดมิน · เครื่องมือภายใน · SaaS — ผู้ใช้ต้องทำงาน ไม่ใช่ดูเรื่อง | `web-app-design` + `ui-craft` (งบการเคลื่อนไหว ≤ 350 ms) |
-| สไลด์นำเสนอที่คนพูดกดเปลี่ยนหน้า มีโน้ตผู้พูด | `html-slide-deck` |
-| โครงเรื่องยังไม่มี — ยังไม่รู้ว่าบทไหนพูดอะไร | `presentation-design` ข้อ 1–3 ก่อน แล้วค่อยกลับมา |
-| คลิปเคลื่อนไหวหรือโลโก้ขยับ ไม่ใช่หน้าเว็บ | `motion-basics` (plugin `graphic-design`) |
+| Dashboard · admin page · internal tool · SaaS — users must work, not watch a story | `web-app-design` + `ui-craft` (motion budget ≤ 350 ms) |
+| Presentation slides where a speaker presses to change pages, with speaker notes | `html-slide-deck` |
+| No storyline yet — you do not know what each chapter says | `presentation-design` steps 1–3 first, then come back |
+| Animated clip or moving logo, not a web page | `motion-basics` (plugin `graphic-design`) |
 
 ---
 
-## 1 · โครง
+## 1 · Structure
 
 ```
 hashchange → route()
@@ -41,160 +41,160 @@ hashchange → route()
 getWorld(): รอ renderer หนักไม่เกิน 4 วินาที → WebGL ได้? → three.js (กล้องเป็น object ที่ GSAP tween) · ไม่ได้ → body.no-webgl + เครือข่าย 2D canvas
 ```
 
-| ส่วน | ทำอย่างไร |
+| Part | How |
 |---|---|
-| 2 โหมด | **deck-mode** บทซ้อนกัน `position:absolute; visibility:hidden` เห็นเฉพาะ `.on` · **page-mode** หน้าเลื่อนปกติ ใช้ reveal ข้อ 8 ของ recipes · เว็บหนึ่งมีได้ทั้ง 2 โหมด (บทเล่าเรื่อง = deck · ลงทะเบียน ชำระเงิน แอดมิน = page) |
-| hash router | ฟังก์ชันเดียว `route()` บน `hashchange` · เปลี่ยนบทใช้ `replaceState` (ปุ่ม Back ไม่เต็มไปด้วยบท) · เปลี่ยนหน้าใช้ hash ปกติ |
-| cleanup list | ทุก view ดันฟังก์ชันถอดของตัวเองลง `cleanups[]` · `route()` ล้างทั้งหมดก่อน render view ใหม่ — ไม่มี listener ค้าง ไม่มี timer รั่ว |
-| มาร์กอัปประกาศทางเข้า | `<section class="ch" data-enter="blurWords">` · หัวเรื่อง `data-t` · ตัวตาม `data-f` · รูป `data-w` · เนื้อหาอยู่ใน HTML ไม่อยู่ใน JS |
-| renderer หนัก | โหลด three.js เป็น module ขนาน · รอ `neural:ready` หรือ 4 วินาที · probe WebGL · ไม่ผ่าน → `body.no-webgl` + fallback 2D canvas ที่สื่อความหมายเดียวกัน · `setAnimationLoop` เฉพาะตอนที่จอต้องการ |
+| 2 modes | **deck-mode** chapters stacked with `position:absolute; visibility:hidden`, only `.on` is visible · **page-mode** a normal scrolling page, using reveal item 8 of recipes · one site can have both modes (story chapters = deck · registration, payment, admin = page) |
+| hash router | One function `route()` on `hashchange` · changing chapters uses `replaceState` (so the Back button is not full of chapters) · changing pages uses a normal hash |
+| cleanup list | Every view pushes its own teardown function into `cleanups[]` · `route()` clears them all before rendering a new view — no leftover listeners, no leaking timers |
+| markup that declares the entrance | `<section class="ch" data-enter="blurWords">` · heading `data-t` · followers `data-f` · image `data-w` · content lives in HTML, not in JS |
+| heavy renderer | Load three.js as a module in parallel · wait for `neural:ready` or 4 seconds · probe WebGL · if it fails → `body.no-webgl` + a 2D canvas fallback that conveys the same meaning · `setAnimationLoop` only while the screen needs it |
 
-## 2 · 15 กฎ
+## 2 · 15 rules
 
-1. **ประตูเดียว** — ทุก duration · delay · stagger ผ่าน `T(s) = reduced ? 0 : s` ใน JS และ kill-switch 1 บล็อกใน CSS · ไม่เช็ก reduced-motion ในแต่ละ animation
-2. **ทางเข้า 4 แบบต่อเว็บ** เลือกต่อบทในมาร์กอัป ไม่ซ้ำกันติดกัน 2 บท — «ห้ามใช้ fade+slide-up ซ้ำทุกจุด»
-3. **ออกสั้นกว่าเข้าและเร่งออก** (`power3.in` 0.22 วินาที) · บทใหม่เข้าเมื่อกล้องบินไปได้ราว 40%
-4. **ล้าง filter หลังเข้าเสร็จ** (`clearProps:'filter'`) ตัวหนังสือต้องคม · blur ≤ 10px สั้น ๆ · ไม่ animate `backdrop-filter`
-5. **animate เฉพาะ transform · opacity · clip-path** (+ filter ช่วงสั้น) · ไม่แตะ width height top
-6. บทที่ปิด `visibility:hidden` + `pointer-events:none` · สลับ `aria-hidden` ใน timeline · hash ด้วย `replaceState`
-7. **พื้นหลังต้องมีความหมาย** — 1 จุด = 1 คน · เส้น = กำหนดการ · «ชี้เมาส์ = กล้องบินไปดูตรงนั้นทันที» · ไม่ใช่อนุภาคลอยเล่น ๆ
-8. **renderer หนักโหลดทีหลัง** ตั้งเวลารอ 4 วินาที probe WebGL มี fallback 2D และ CSS สำหรับ `body.no-webgl`
-9. **รายการในบทเลื่อนก่อน** ถึงขอบแล้วบอกใบ้ หยุดเลื่อนแล้วค่อยเปลี่ยนบท — «ไม่ให้หลุดบทตอนกำลังอ่าน»
-10. **`passive:false` เฉพาะ wheel/touch ใน deck-mode** และถอดเมื่อเปลี่ยน route · `scroll` `pointermove` เป็น `{passive:true}` เสมอ
-11. **แผนที่คีย์บอร์ดบังคับ** ↓ PgDn Space · ↑ PgUp · Home End · ข้ามเมื่ออยู่ใน input หรือ modal · ปุ่ม rail มี `aria-current="step"`
-12. **ย้ายโฟกัสหลังเปลี่ยนบท** (`section tabindex="-1"` แล้ว `.focus()`) ไม่งั้นคีย์บอร์ดยังอยู่บทเก่า
-13. **reduced motion ต้องเห็นเนื้อหาครบ** (WCAG 2.3.3) — พิมพ์ข้อความจริงทันที ทุกคำ `.on` อนุภาคอยู่ที่ปลายทาง
-14. **จำกัดภาระ GPU** — `devicePixelRatio` ไม่เกิน 2 (1.75 บนจอ < 900px) · clamp `dt` 50 ms · loop วิ่งเฉพาะตอนต้องใช้
-15. **ฟอนต์ self-host** แยกไทย/ละตินด้วย `unicode-range` · preload แค่ 2 น้ำหนักเหนือ fold · `font-display:swap`
+1. **One gate** — every duration · delay · stagger goes through `T(s) = reduced ? 0 : s` in JS and 1 kill-switch block in CSS · do not check reduced-motion in each animation
+2. **4 entrances per site**, chosen per chapter in the markup, never the same one in 2 chapters in a row — «ห้ามใช้ fade+slide-up ซ้ำทุกจุด»
+3. **Exit shorter than entrance, and accelerating** (`power3.in` 0.22 seconds) · the new chapter enters when the camera has flown about 40% of the way
+4. **Clear the filter after the entrance ends** (`clearProps:'filter'`) text must be sharp · blur ≤ 10px and brief · never animate `backdrop-filter`
+5. **Animate only transform · opacity · clip-path** (+ filter for a short time) · never touch width height top
+6. Hidden chapters get `visibility:hidden` + `pointer-events:none` · toggle `aria-hidden` in the timeline · hash with `replaceState`
+7. **The background must mean something** — 1 dot = 1 person · line = schedule · «ชี้เมาส์ = กล้องบินไปดูตรงนั้นทันที» · not particles floating for fun
+8. **Heavy renderer loads later**: set a 4-second wait, probe WebGL, have a 2D fallback and CSS for `body.no-webgl`
+9. **A list inside a chapter scrolls first**: at the edge, give a hint, stop scrolling, and only then change chapter — «ไม่ให้หลุดบทตอนกำลังอ่าน»
+10. **`passive:false` only for wheel/touch in deck-mode**, removed when the route changes · `scroll` and `pointermove` are always `{passive:true}`
+11. **Keyboard map is mandatory**: ↓ PgDn Space · ↑ PgUp · Home End · skip when inside an input or modal · rail buttons have `aria-current="step"`
+12. **Move focus after changing chapter** (`section tabindex="-1"` then `.focus()`), otherwise the keyboard stays in the old chapter
+13. **Reduced motion must show all content** (WCAG 2.3.3) — type the real text at once, every word `.on`, particles at their destination
+14. **Limit GPU load** — `devicePixelRatio` at most 2 (1.75 on screens < 900px) · clamp `dt` to 50 ms · the loop runs only while needed
+15. **Self-host fonts**, split Thai/Latin with `unicode-range` · preload only 2 weights above the fold · `font-display:swap`
 
-## 3 · Recipe
+## 3 · Recipes
 
-โค้ดทุกตัวใน `references/recipes.md` (บล็อกละ ≤ 15 บรรทัด พร้อมที่มา)
+All code is in `references/recipes.md` (each block ≤ 15 lines, with its source)
 
-| Recipe | ใช้ทำอะไร | ใช้ / ไม่ใช้ | reduced-motion |
+| Recipe | What it does | Use / do not use | reduced-motion |
 |---|---|---|---|
-| T gate + kill-switch | ประตูเดียวของทุกการเคลื่อนไหว | ทุกไฟล์ · ไม่เช็กซ้ำรายชิ้น | ตัวมันเอง |
-| splitWords | แตกข้อความเป็น `.wd` ตามช่องว่าง | ก่อนทางเข้ารายคำ · ไทย = เว้นวรรคตามจังหวะที่อยากให้เข้า | ไม่กระทบ |
-| blurWords | ทางเข้าค่าเริ่มต้น คำเบลอ → คม | หัวเรื่องไทย/ละติน ≤ 12 คำ | duration 0 · ล้าง blur |
-| inkWords | คำเข้มขึ้นจาก .14 | ประโยคปิดยาว · อ่านออกตั้งแต่เฟรมแรก | เหมือนกัน |
-| blurLine | ทั้งบล็อกเบลอเข้า stagger 0.08 | ตัวตาม `data-f` · ย่อหน้า · ฟอร์ม | เหมือนกัน |
-| wipe | `clip-path` ล่าง → บน | รูปหรือ figure 1 ชิ้นต่อบท | เหมือนกัน |
-| decodeWords | อักษรสุ่มวิ่งจนติด | หัวเรื่องละตินเท่านั้น · **ไม่ใช้กับไทย** (สระลอยแตก) | พิมพ์ข้อความจริงทันที |
-| exit | ออกสั้น เร่งออก | คู่กับทุกทางเข้า | 0 |
-| goChapter | timeline เดียว ออก → ซ่อน → กล้อง → โชว์ → เข้า | deck-mode | ทันที |
-| iris | วงสีแบรนด์โตจากจุดคลิก สลับหน้าหลังวง | เปลี่ยน route จากการคลิก "ของ" บนจอ · ไม่ใช่ทุกการนำทาง | ข้าม ตั้ง hash ตรง ๆ |
-| count-up | ตัวเลขไหลถึงค่า | สถิติ 1 ตัวที่อยากให้จำ · ไม่ทุกการ์ด | พิมพ์ค่าสุดท้าย |
-| scroll reveal + .lines | CSS ทำท่า IO ติด `.in` | page-mode | kill-switch |
-| scrubWords | คำสว่างตามตำแหน่งเลื่อน | ประโยคยาว 1 ประโยคต่อหน้า · ไม่ใช่เนื้อความ | ทุกคำ `.on` |
-| wheel + ล็อกรายการใน | ล้อเมาส์เปลี่ยนบท รายการเลื่อนก่อน | deck-mode เท่านั้น · `passive:false` | T=0 ทำให้ทันที |
-| Observer swipe | ปัดจอเปลี่ยนบท `tolerance:24` | มือถือ deck-mode · ข้าม `.scrollable` | เหมือนกัน |
-| keyboard map | ↓ PgDn Space · ↑ PgUp · Home End | ทุกเว็บแบบบท (บังคับ) | เหมือนกัน |
-| rail | รายการเลข 01–05 ขวาจอ · แถบล่างบนมือถือ | 3–7 บท | CSS อย่างเดียว |
+| T gate + kill-switch | The one gate of all motion | Every file · do not re-check per item | itself |
+| splitWords | Split text into `.wd` by spaces | Before a per-word entrance · Thai = put spaces at the rhythm you want the entrance to follow | not affected |
+| blurWords | Default entrance, words blurred → sharp | Thai/Latin headings ≤ 12 words | duration 0 · clear blur |
+| inkWords | Words darken from .14 | Long closing sentence · readable from the first frame | same |
+| blurLine | Whole block blurs in with stagger 0.08 | Followers `data-f` · paragraphs · forms | same |
+| wipe | `clip-path` bottom → top | 1 image or figure per chapter | same |
+| decodeWords | Random characters run until they settle | Latin headings only · **not for Thai** (floating vowels break) | type the real text at once |
+| exit | Short exit, accelerating | Pair with every entrance | 0 |
+| goChapter | One timeline: exit → hide → camera → show → enter | deck-mode | immediate |
+| iris | A brand-colour circle grows from the click point, swap page behind the circle | Route change from clicking a "thing" on screen · not every navigation | skip, set the hash directly |
+| count-up | A number flows to its value | 1 statistic you want remembered · not every card | type the final value |
+| scroll reveal + .lines | CSS does the motion, IO adds `.in` | page-mode | kill-switch |
+| scrubWords | Words light up by scroll position | 1 long sentence per page · not body text | every word `.on` |
+| wheel + inner-list lock | Wheel changes chapter, list scrolls first | deck-mode only · `passive:false` | T=0 makes it immediate |
+| Observer swipe | Swipe changes chapter `tolerance:24` | Mobile deck-mode · skip `.scrollable` | same |
+| keyboard map | ↓ PgDn Space · ↑ PgUp · Home End | Every chapter-style site (mandatory) | same |
+| rail | Number list 01–05 on the right · bottom bar on mobile | 3–7 chapters | CSS only |
 
-## 4 · Token และสเกลตัวอักษร
+## 4 · Tokens and type scale
 
-**สีมาจากเนื้องาน** — มีสีแบรนด์ใช้สีนั้น · ไม่มี → **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `web` หรือ `motion` แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้ · ค้นสดไม่ได้ → ค่าประจำบ้าน `#2A78D6` (เฉดเข้ม `#226CC6` สำหรับตัวหนังสือบนพื้นสว่าง) เขียน `(รอยืนยัน)` แล้วทำต่อ · ค่าในตารางคือของเว็บต้นแบบ ให้ยึด**รายชื่อ token และหน้าที่** ไม่ใช่ค่าสี · ชื่อ token ตรงกับ `web-app-design` → `references/tokens.md` เพื่อให้หน้า page-mode (ฟอร์ม · แอดมิน) ใช้ชุดเดียวกันได้
+**Colour comes from the work** — if there is a brand colour, use it · if not → **search references first:** take the project's words and search live per `design-references` (plugin `superuser`) type `web` or `motion`, then extract colours from the chosen work · the stored palette library is for when live search is impossible · if live search is impossible → house value `#2A78D6` (dark shade `#226CC6` for text on a light background), write `(รอยืนยัน)` (awaiting confirmation) and carry on · the values in the table are the reference site's, so stick to the **token list and its roles**, not the colour values · token names match `web-app-design` → `references/tokens.md` so page-mode pages (forms · admin) can use the same set
 
-| Token | ค่าต้นแบบ | บทบาทตัวอักษร | ค่า |
+| Token | Reference value | Type role | Value |
 |---|---|---|---|
-| `--bg` · `--surface` | `#F7F6F2` · `#FFF` | เนื้อความ | 400 16px/1.6 "IBM Plex Sans Thai", system-ui |
+| `--bg` · `--surface` | `#F7F6F2` · `#FFF` | body text | 400 16px/1.6 "IBM Plex Sans Thai", system-ui |
 | `--ink` · `--ink-2` · `--muted` | `#0F0F0E` · `#3A3934` · `#6B6A63` | hero display | `clamp(52px, 8.4vw, 132px)` · lh 1.04 · ls -.035em · 700 |
-| `--line` · `--line-2` | `#E4E1D8` · `#CFCBBF` | หัวบท (deck) | `clamp(42px, 5.7vw, 94px)` · lh 1.02 · ls -.04em |
-| `--accent` · `--accent-ink` · `--accent-soft` | สีแบรนด์ · เฉดเข้ม · เฉดอ่อน 95% | kicker h2 | `clamp(40px, 5.2vw, 76px)` · lh 1.05 · ls -.035em |
-| `--ok` `--warn` `--bad` (+ `-soft`) | เขียว · อำพัน · แดง — ไม่เปลี่ยนตามแบรนด์ | ประโยคปิด | `clamp(34px, 4.2vw, 66px)` · lh 1.16 · 600 · max-width 12.5em |
-| `--ease` | `cubic-bezier(.16,1,.3,1)` (expo-out) | lead / hero-sub | 18px หรือ `clamp(17px,1.6vw,20px)` · max-width 34–36em |
-| `--ease-io` | `cubic-bezier(.65,0,.35,1)` | เลขใหญ่โปร่ง | `clamp(100px,9vw,170px)` · `-webkit-text-stroke` 1.5px ink 13% |
-| `--r` · `--pad` · `--max` · `--top` | 8px · 24px→16px · 1200px · 64px→56px | eyebrow / เล็ก | 12–13px · ls .04–.28em (ละตินเท่านั้น) · `tabular-nums` |
+| `--line` · `--line-2` | `#E4E1D8` · `#CFCBBF` | chapter heading (deck) | `clamp(42px, 5.7vw, 94px)` · lh 1.02 · ls -.04em |
+| `--accent` · `--accent-ink` · `--accent-soft` | brand colour · dark shade · light shade 95% | kicker h2 | `clamp(40px, 5.2vw, 76px)` · lh 1.05 · ls -.035em |
+| `--ok` `--warn` `--bad` (+ `-soft`) | green · amber · red — do not change with the brand | closing sentence | `clamp(34px, 4.2vw, 66px)` · lh 1.16 · 600 · max-width 12.5em |
+| `--ease` | `cubic-bezier(.16,1,.3,1)` (expo-out) | lead / hero-sub | 18px or `clamp(17px,1.6vw,20px)` · max-width 34–36em |
+| `--ease-io` | `cubic-bezier(.65,0,.35,1)` | large outlined number | `clamp(100px,9vw,170px)` · `-webkit-text-stroke` 1.5px ink 13% |
+| `--r` · `--pad` · `--max` · `--top` | 8px · 24px→16px · 1200px · 64px→56px | eyebrow / small | 12–13px · ls .04–.28em (Latin only) · `tabular-nums` |
 
-- หัวใหญ่ไทยที่ `letter-spacing` ติดลบต้องดูจริงทุกน้ำหนัก — วรรณยุกต์ชนสระเมื่อไหร่ถอยเป็น -.01em · `uppercase` + ls กว้างใช้กับ eyebrow ละตินเท่านั้น (`web-app-design` ข้อ 5)
-- พื้นหลัง 3D อยู่ที่ z-index 0 ใต้ `main` (z 1) · deck opacity 1 · page-mode .22 · มี scrim ไล่สี `.deck::before` «ให้ตัวหนังสืออ่านง่ายเหนือเครือข่าย»
+- Large Thai headings with negative `letter-spacing` must be checked at every weight — when tone marks collide with vowels, back off to -.01em · `uppercase` + wide ls is for Latin eyebrows only (`web-app-design` item 5)
+- The 3D background sits at z-index 0 under `main` (z 1) · deck opacity 1 · page-mode .22 · with a gradient scrim `.deck::before` «ให้ตัวหนังสืออ่านง่ายเหนือเครือข่าย»
 
-## 5 · เลือกเครื่องมือ
+## 5 · Choosing tools
 
-| ความต้องการ | GSAP 3 (+ Observer · ScrollTrigger · SplitText) | CSS scroll-driven (`animation-timeline`) | View Transitions (same-document) | CSS scroll-snap |
+| Need | GSAP 3 (+ Observer · ScrollTrigger · SplitText) | CSS scroll-driven (`animation-timeline`) | View Transitions (same-document) | CSS scroll-snap |
 |---|---|---|---|---|
-| สถานะ 2026-10 | 3.15.0 บน cdnjs · ฟรีทุก plugin ตั้งแต่ 3.13 (2025-04) | MDN "Limited availability" · Chrome/Edge 115+ · Safari 26+ · Firefox หลัง flag (Interop 2026) | Baseline Newly available · Firefox 144 · Chrome 111 · Safari 18 | รองรับ 97% · Chrome 69 · Safari 11 · Firefox 68 |
-| เลือกเมื่อ | บทที่ซ้อนเวลากัน · กล้อง/3D rig · จับ wheel และปัดจอ · แตกคำ | แถบความคืบหน้า · parallax · reveal ในหน้าเลื่อนปกติ — ต้องดูดีแม้ไม่ทำงาน | สลับ route หรือ state ที่ DOM เก่าและใหม่มีพร้อมกัน (รายการ → รายละเอียด · ธีม · สลับบทไม่มี 3D) | เว็บแบบบทที่ไม่มี JS · ต้องการให้เบราว์เซอร์จัดการเลื่อนเอง |
-| ไม่ใช้กับ | reveal ง่าย ๆ ที่ CSS + IO ทำได้แล้ว | ของที่ต้องทำงานบน Firefox วันนี้โดยไม่มี fallback · scroll-jacking (ทำไม่ได้) | เอฟเฟกต์ต่อเนื่องตามการเลื่อน · กล้อง 3D | บทที่มีรายการเลื่อนข้างใน (snap จะแย่งกัน) · timeline ออก/เข้าซ้อนกัน |
-| reduced motion | `T()` + `gsap.matchMedia()` | kill-switch `@media (prefers-reduced-motion)` | `::view-transition-group(*){animation:none}` | ปิด `scroll-behavior:smooth` |
+| Status 2026-10 | 3.15.0 on cdnjs · every plugin free since 3.13 (2025-04) | MDN "Limited availability" · Chrome/Edge 115+ · Safari 26+ · Firefox behind a flag (Interop 2026) | Baseline Newly available · Firefox 144 · Chrome 111 · Safari 18 | 97% supported · Chrome 69 · Safari 11 · Firefox 68 |
+| Choose when | Chapters that overlap in time · camera/3D rig · capturing wheel and swipe · splitting words | Progress bar · parallax · reveal in a normal scrolling page — must look fine even when it does not run | Switching a route or state where old and new DOM exist together (list → detail · theme · chapter switch with no 3D) | Chapter-style site with no JS · want the browser to handle scrolling itself |
+| Do not use for | Simple reveals that CSS + IO already do | Things that must work on Firefox today with no fallback · scroll-jacking (cannot be done) | Continuous scroll-linked effects · 3D camera | Chapters with a scrolling list inside (snap will fight) · overlapping exit/enter timelines |
+| reduced motion | `T()` + `gsap.matchMedia()` | kill-switch `@media (prefers-reduced-motion)` | `::view-transition-group(*){animation:none}` | turn off `scroll-behavior:smooth` |
 
-- `@starting-style` (Baseline 2024-08) สำหรับ transition ตอนโผล่จาก `display:none` · Lenis 1.3.x (MIT) ถ้าต้องการเลื่อนนุ่ม — ขับด้วย `gsap.ticker` ให้มี rAF loop เดียว และ `respectReducedMotion:true` (ค่าเริ่มต้น)
-- GSAP โหลดจาก cdnjs ตอน mockup · ส่งมอบจริงให้ self-host ไฟล์ไว้ใน `vendor/` (เว็บต้องเปิดได้โดยไม่พึ่ง CDN ที่ล่ม)
-- ต้องการ API ของ GSAP ลึกกว่าที่หน้านี้บอก (pin และ scrub ของ ScrollTrigger · timeline ซ้อน · Flip · MorphSVG) → เปิด skill ทางการของผู้ผลิตที่ github.com/greensock/gsap-skills (MIT) แล้วอ่านเฉพาะไฟล์ของ plugin ที่ใช้ ไม่โหลดทั้งชุดเข้า context · กฎในหน้านี้ (reduced motion · passive · budget) ยังอยู่เหนือคำแนะนำของเขา
+- `@starting-style` (Baseline 2024-08) for transitions when appearing from `display:none` · Lenis 1.3.x (MIT) if you want smooth scrolling — drive it with `gsap.ticker` so there is only one rAF loop, and `respectReducedMotion:true` (the default)
+- Load GSAP from cdnjs for the mockup · for real delivery, self-host the files in `vendor/` (the site must open without depending on a CDN that is down)
+- If you need deeper GSAP API than this page gives (pin and scrub of ScrollTrigger · nested timelines · Flip · MorphSVG) → open the maker's official skill at github.com/greensock/gsap-skills (MIT) and read only the file of the plugin you use, do not load the whole set into context · the rules on this page (reduced motion · passive · budget) still outrank their advice
 
-## 6 · ฟอนต์ไทยสำหรับหัวใหญ่
+## 6 · Thai fonts for large headings
 
-| ฟอนต์ | licence | เหมาะกับ | หมายเหตุ |
+| Font | Licence | Suited to | Note |
 |---|---|---|---|
-| IBM Plex Sans Thai | OFL 1.1 | เนื้อความ + หัวบท (เว็บต้นแบบใช้) | ละตินคือ Plex Sans · ไม่มีหัว (ตัวมีหัวแยกชื่อ IBM Plex Sans Thai Looped · ตรวจ 2026-10-23) อ่านง่ายขนาดเล็ก |
-| Anuphan | OFL 1.1 | หัวใหญ่ไม่มีหัว ทันสมัย | ดัดแปลงจาก Plex Thai แบบไม่มีหัว · ls ติดลบได้ |
-| Bai Jamjuree | OFL 1.1 | หัวใหญ่ทรงเหลี่ยม | ผู้ทำระบุ "เหมาะกับหัวเรื่อง" |
-| Kanit | OFL 1.1 | หัวใหญ่หนา | ปลายตัด ls แคบได้ · น้ำหนักเยอะ |
-| Noto Sans Thai | OFL 1.1 | fallback ปลอดภัยทุกงาน | คู่กับ Noto Sans ละติน |
-| LINE Seed Sans TH | OFL 1.1 (github.com/line/seed) | หัวใหญ่กลมเป็นมิตร | บน Google Fonts (ยังไม่ได้ตรวจ) |
-| Sarabun | OFL | เนื้อความราชการ | ไม่ใช่ฟอนต์หัวใหญ่ |
-| Chakra Petch | (ยังไม่ได้ตรวจ) | หัวเทคโนโลยี — `html-slide-deck` ใช้ | ตรวจ licence ก่อน self-host |
+| IBM Plex Sans Thai | OFL 1.1 | Body text + chapter headings (the reference site uses it) | Latin is Plex Sans · loopless (the looped one is named IBM Plex Sans Thai Looped · checked 2026-10-23) easy to read at small size |
+| Anuphan | OFL 1.1 | Large loopless headings, modern | Adapted from Plex Thai in a loopless style · negative ls allowed |
+| Bai Jamjuree | OFL 1.1 | Large angular headings | The maker states "suited to headings" |
+| Kanit | OFL 1.1 | Large bold headings | Cut terminals, narrow ls allowed · many weights |
+| Noto Sans Thai | OFL 1.1 | Safe fallback for every job | Pairs with Noto Sans Latin |
+| LINE Seed Sans TH | OFL 1.1 (github.com/line/seed) | Large round friendly headings | On Google Fonts (`ยังไม่ได้ตรวจ` not yet checked) |
+| Sarabun | OFL | Official-document body text | Not a large-heading font |
+| Chakra Petch | (`ยังไม่ได้ตรวจ` not yet checked) | Technology headings — `html-slide-deck` uses it | Check the licence before self-hosting |
 
-**คู่กับละติน:** ไทยมีหัวคู่ละติน serif · ไทยไม่มีหัวคู่ละติน sans เป็นธรรมเนียมตั้งต้น ไม่ใช่กฎตายตัว ไทยมีหัวหลายตัวเข้ากับ sans ได้ แต่ serif คู่ไทยไม่มีหัวมักดูแปลก · ชุดที่ออกแบบคู่กันมาแล้ว: Trirong · Taviraj (ไทยมีหัว + serif · OFL) · IBM Plex Sans Thai (ไม่มีหัว + sans) · ที่มา: Anuthin Wongsunkakon หน้า Linotype Neue Frutiger Thai บน myfonts.com · Smich Smanloh "Thai Type Pairing" ATypI 2020 · คำอธิบาย Trirong และ Taviraj ใน google/fonts · Wikipedia IBM Plex (ตรวจทั้งหมด 2026-10-23)
+**Pairing with Latin:** looped Thai pairs with Latin serif · loopless Thai pairs with Latin sans is a starting convention, not a hard rule. Several looped Thai fonts go with sans, but a serif paired with loopless Thai often looks odd · sets already designed as pairs: Trirong · Taviraj (looped Thai + serif · OFL) · IBM Plex Sans Thai (loopless + sans) · sources: Anuthin Wongsunkakon on the Linotype Neue Frutiger Thai page at myfonts.com · Smich Smanloh "Thai Type Pairing" ATypI 2020 · the Trirong and Taviraj descriptions in google/fonts · Wikipedia IBM Plex (all checked 2026-10-23)
 
-ทั้งหมดดาวน์โหลดเป็น woff2 มา self-host (กฎ 15) · ไม่ `<link>` Google Fonts ในไฟล์ส่งมอบ
+Download everything as woff2 and self-host (rule 15) · do not `<link>` Google Fonts in the delivered files
 
-## 7 · ตรวจก่อนส่ง
+## 7 · Check before sending
 
-- [ ] คีย์บอร์ดครบ: ↓ PgDn Space · ↑ PgUp · Home End เปลี่ยนบทได้ · Tab ไล่ rail แล้วเห็นวงแหวนโฟกัส · โฟกัสย้ายตามบท
-- [ ] เปิด reduced-motion (DevTools → Rendering → Emulate prefers-reduced-motion) แล้วเห็น**เนื้อหาครบทุกบท** ตัวเลขเป็นค่าสุดท้าย ไม่มีคำจาง
-- [ ] ไม่มี fade-up ซ้ำทุกจุด — ไล่ `data-enter` ทุกบท ไม่ซ้ำกันติดกัน
-- [ ] Lighthouse Best Practices ไม่ฟ้อง passive listeners · `wheel`/`touch` แบบ `passive:false` มีเฉพาะ deck-mode และถอดเมื่อออกจากโหมด
-- [ ] ฟอนต์ self-host · preload 2 น้ำหนัก · ถอดเน็ตแล้วตัวอักษรยังเป็นฟอนต์ที่ตั้งใจ
-- [ ] ตัด WebGL (DevTools → Rendering → Disable WebGL หรือ `body.no-webgl`) แล้ว fallback 2D ขึ้นและอ่านได้
-- [ ] trackpad ปัดแรง 1 ครั้ง = เปลี่ยน 1 บท · รายการในบทเลื่อนจนสุดก่อนแล้วค่อยเปลี่ยนบท
-- [ ] ไม่มีสี hardcode นอกบล็อก token (`web-app-design` → `scripts/check-design-tokens.mjs`)
-- [ ] ถ่ายภาพ 1440 · 900 · 420 ทุกบท (`web-app-design` → `scripts/screenshot.py`) แล้วเปิดดูจริง · rail ที่ < 900px เป็นแถบล่างและไม่ทับเนื้อหา
-- [ ] ไล่รายการ a11y และ motion ของ vercel-labs/web-interface-guidelines (สำเนาในเครื่อง ไม่ fetch ตอนรัน) เฉพาะหมวด focus · motion · touch target · contrast กับทุกบท — ใช้เป็นรายการตรวจ ไม่คัดลอกข้อความ (MIT · ตรวจ 2026-10-23)
+- [ ] Keyboard complete: ↓ PgDn Space · ↑ PgUp · Home End change chapters · Tab walks the rail and shows the focus ring · focus moves with the chapter
+- [ ] Turn on reduced-motion (DevTools → Rendering → Emulate prefers-reduced-motion) and see **all content in every chapter**, numbers at final values, no faded words
+- [ ] No fade-up repeated everywhere — go through `data-enter` of every chapter, none the same twice in a row
+- [ ] Lighthouse Best Practices does not warn about passive listeners · `wheel`/`touch` with `passive:false` exist only in deck-mode and are removed on leaving the mode
+- [ ] Fonts self-hosted · preload 2 weights · unplug the network and text is still the intended font
+- [ ] Cut WebGL (DevTools → Rendering → Disable WebGL or `body.no-webgl`) and the 2D fallback appears and is readable
+- [ ] 1 hard trackpad swipe = change 1 chapter · a list inside a chapter scrolls to the end first, then the chapter changes
+- [ ] No hardcoded colours outside the token block (`web-app-design` → `scripts/check-design-tokens.mjs`)
+- [ ] Take screenshots at 1440 · 900 · 420 of every chapter (`web-app-design` → `scripts/screenshot.py`) and actually look at them · rail below 900px is a bottom bar and does not cover content
+- [ ] Go through the a11y and motion list of vercel-labs/web-interface-guidelines (local copy, do not fetch at run time) for focus · motion · touch target · contrast on every chapter — use it as a check list, do not copy the text (MIT · checked 2026-10-23)
 
 ## 8 · Anti-patterns
 
-- **fade + slide-up ทุกชิ้น** — สัญญาณ AI (`no-ai-look` catalog ข้อ fade-up) · แก้ด้วยทางเข้า 4 แบบ (กฎ 2)
-- **blur ค้างบนตัวหนังสือ** หลังเข้าเสร็จ — ต้อง `clearProps`
-- **ล็อก `busy` ยาว** จนเครื่องช้าค้าง — ปลดเองใน 2.4 วินาที
-- **แรงเฉื่อย trackpad ข้าม 2 บท** — ทิ้ง delta < 6 และภายใน 1 วินาทีหลังเปลี่ยนบท
-- **หลุดบทตอนกำลังอ่านรายการ** เพราะล้อเมาส์เปลี่ยนบทด้วย — รายการเลื่อนก่อน (กฎ 9)
-- **toast ผิดพลาดที่หายไปเอง** — ข้อความแนบจุดที่ผิดพร้อมปุ่มลองใหม่
-- **ป้าย 3D ทับตัวหนังสือ** · แผนที่โผล่หลังหัวข้อของบทอื่น — ใช้ occluder และซ่อนตามบท
-- **`pushState` ทุกบท** — ปุ่ม Back ต้องกด 5 ครั้งถึงออก · ใช้ `replaceState`
-- **อนุภาคลอยไร้ความหมาย · glow วนไม่หยุด · gradient ไล่สีบนปุ่ม** — `no-ai-look` ทั้งชุด
-- **ส่งงานโดยไม่เคยเปิดแบบ reduced-motion และไม่เคยถอด WebGL**
+- **fade + slide-up on every piece** — an AI signal (`no-ai-look` catalog item fade-up) · fix with 4 entrances (rule 2)
+- **Blur left on text** after the entrance ends — needs `clearProps`
+- **A long `busy` lock** that freezes a slow device — release it on its own at 2.4 seconds
+- **Trackpad inertia skipping 2 chapters** — drop delta < 6 and anything within 1 second after a chapter change
+- **Losing the chapter while reading a list** because the wheel also changes chapters — the list scrolls first (rule 9)
+- **An error toast that disappears by itself** — attach the message to the faulty spot with a retry button
+- **A 3D label over text** · a map showing up behind another chapter's heading — use an occluder and hide per chapter
+- **`pushState` on every chapter** — the Back button needs 5 presses to leave · use `replaceState`
+- **Meaningless floating particles · endlessly looping glow · gradient fills on buttons** — all of `no-ai-look`
+- **Delivering without ever opening reduced-motion and without ever cutting WebGL**
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Connecting to other skills
 
-| ต้องการ | ใช้ |
+| Need | Use |
 |---|---|
-| token สี · ฟอร์ม · ตาราง สำหรับหน้า page-mode (ลงทะเบียน · แอดมิน) | `web-app-design` → `references/tokens.md` |
-| งบการเคลื่อนไหวของคอมโพเนนต์ทั่วไป (hover · modal ≤ 350 ms) | `ui-craft` ข้อ 7 |
-| หลัก motion 12 ข้อ · easing · จังหวะข้อความบนจอ | `motion-basics` (plugin `graphic-design`) |
-| ไล่สัญญาณ AI ก่อนส่ง (fade-up ทุกชิ้น · glow · เลขยักษ์) | `no-ai-look` (plugin `superuser`) |
-| สไลด์นำเสนอแทนเว็บ · shell กดเปลี่ยนหน้า · โน้ตผู้พูด | `html-slide-deck` |
-| โครงเรื่อง หัวบทเป็นข้อสรุป งบข้อความต่อบท | `presentation-design` |
-| ถ้อยคำบนหน้า | `human-writing` |
-| ตรวจ SEO ของหน้าที่ render ด้วย JS | `seo-audit-checklist` |
+| Colour tokens · forms · tables for page-mode pages (registration · admin) | `web-app-design` → `references/tokens.md` |
+| Motion budget of ordinary components (hover · modal ≤ 350 ms) | `ui-craft` item 7 |
+| The 12 motion principles · easing · timing of on-screen text | `motion-basics` (plugin `graphic-design`) |
+| Go through AI signals before sending (fade-up on every piece · glow · giant numbers) | `no-ai-look` (plugin `superuser`) |
+| Presentation slides instead of a website · click-to-change shell · speaker notes | `html-slide-deck` |
+| Storyline · headings as conclusions · text budget per chapter | `presentation-design` |
+| Wording on the page | `human-writing` |
+| SEO check of a page rendered with JS | `seo-audit-checklist` |
 
-## ไม่ให้ดูเหมือน AI ทำ
+## Not looking AI-made
 
-ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ทุกงานต้องผ่านด่านตา 3.2 ด้วย (หน้าเว็บตอบเพิ่มข้อ 10–14) เพราะสคริปต์ 0 ข้อยังไม่ใช่ผ่าน · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
+Before sending, go through item 3 of `no-ai-look` — for HTML work run its script · every job must also pass the eye gate 3.2 (web pages also answer items 10–14) because a script result of 0 items is not yet a pass · the prohibitions in this file are the parts specific to this job, and the full list for every medium is there
 
-## แหล่งที่มา (ตรวจ 2026-10-22)
+## Sources (checked 2026-10-22)
 
-| เรื่อง | ที่มา |
+| Topic | Source |
 |---|---|
-| โครง · recipe · กฎ · anti-pattern | เว็บ ai4ba.ai-cie.com (index.html · css/styles.css · js/app.js · js/fx.js · js/neural.js · js/net3d.js) อ่านโค้ดสาธารณะ · ไม่มี licence ระบุ · vendor/ ที่เว็บใช้ไม่ได้ดาวน์โหลด (ยังไม่ได้ตรวจ) |
-| GSAP ฟรี | README gsap@3.15.0 บน cdn.jsdelivr.net และ gsap.com/pricing "Now Free!" — ฟรีรวมทุก plugin ใช้เชิงพาณิชย์ได้ · ฟรีตั้งแต่ 3.13.0 (npm 2025-04-30) · licence ฉบับเต็ม (Standard "No Charge" GSAP License · มีผล 2025-04-30 · แก้ล่าสุด 2025-05-30) อ่านจากสำเนา web.archive.org/web/20261017164627/https://gsap.com/standard-license เพราะ gsap.com ตอบหน้าปิดปรับปรุงบางหน้า · ตัวบทห้ามเฉพาะ "Prohibited Uses" คือใช้ในเครื่องมือสร้างแอนิเมชันภาพแบบไม่เขียนโค้ดที่แข่งกับ Webflow · คำอธิบายสั้นบนหน้าเดียวกันยังเขียนว่าห้ามเก็บเงินผู้ใช้ปลายทาง ซึ่งขัดกับตัวบทและหน้า pricing จึงยึดตัวบท · ตรวจ 2026-10-26 · npm gsap@3.15.0 ระบุ license ชี้ gsap.com/standard-license และไม่มีไฟล์ LICENSE ในแพ็กเกจ |
-| GSAP CDN | cdnjs.com/libraries/gsap 3.15.0 (2026-04-13) · `gsap.min.js` · plugin โฟลเดอร์เดียวกัน (`Observer.min.js` `ScrollTrigger.min.js` `SplitText.min.js` — ตรวจ 2026-10-26: ทั้ง 4 ไฟล์ตอบ HTTP 200 ที่ `cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/<ชื่อ>.min.js` · api.cdnjs.com/libraries/gsap ระบุ version 3.15.0 และ licence "Standard 'No Charge' GreenSock License") |
+| Structure · recipes · rules · anti-patterns | The website ai4ba.ai-cie.com (index.html · css/styles.css · js/app.js · js/fx.js · js/neural.js · js/net3d.js) public code read · no licence stated · the vendor/ that the site uses was not downloaded (`ยังไม่ได้ตรวจ` not yet checked) |
+| GSAP free | README gsap@3.15.0 on cdn.jsdelivr.net and gsap.com/pricing "Now Free!" — free including every plugin, commercial use allowed · free since 3.13.0 (npm 2025-04-30) · the full licence (Standard "No Charge" GSAP License · effective 2025-04-30 · last revised 2025-05-30) was read from the copy web.archive.org/web/20261017164627/https://gsap.com/standard-license because gsap.com returned a maintenance page for some pages · the text prohibits only "Prohibited Uses", meaning use in a no-code visual animation builder that competes with Webflow · the short explanation on the same page also says you may not charge end users, which contradicts the text and the pricing page, so the text governs · checked 2026-10-26 · npm gsap@3.15.0 states a license pointing to gsap.com/standard-license and has no LICENSE file in the package |
+| GSAP CDN | cdnjs.com/libraries/gsap 3.15.0 (2026-04-13) · `gsap.min.js` · plugins in the same folder (`Observer.min.js` `ScrollTrigger.min.js` `SplitText.min.js` — checked 2026-10-26: all 4 files returned HTTP 200 at `cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/<name>.min.js` · api.cdnjs.com/libraries/gsap states version 3.15.0 and licence "Standard 'No Charge' GreenSock License") |
 | CSS scroll-driven | developer.mozilla.org animation-timeline · drweb.de |
 | View Transitions | web.dev/blog/same-document-view-transitions-are-now-baseline-newly-available (2025-10-16) |
 | `@starting-style` · scroll-snap | developer.mozilla.org/@starting-style · caniuse.com/css-snappoints |
 | Lenis | github.com/darkroomengineering/lenis (MIT · 1.3.x) |
 | Observer · SplitText | gsap.com/docs/v3/Plugins/Observer · Codrops "7 Must-Know GSAP Animation Tips" (2025-09-03) · Osmo masked text reveal |
-| การเข้าถึง | WCAG 2.3.3 w3.org/WAI/WCAG21/Understanding/animation-from-interactions · Heilmann 2019 (โฟกัสหลังเลื่อน) · developer.chrome.com/docs/lighthouse/best-practices/uses-passive-event-listeners |
-| ประสิทธิภาพ | web.dev/articles/animations-guide (transform/opacity · will-change ประหยัด) · ต้นทุน blur และ backdrop-filter: blog.openreplay.com · f22labs.com (บทความชุมชน ไม่ใช่ benchmark) · ผลของ scroll-jacking ต่อ INP (ยังไม่ได้ตรวจ) |
-| ฟอนต์ไทย | fontsource.org · fonts.google.com · github.com/line/seed |
-| skill ภายนอกที่อ้างถึง | github.com/greensock/gsap-skills (MIT · ตามรายงานเทียบ 2026-10-22 · เนื้อหาไฟล์ยังไม่ได้ตรวจ) · github.com/vercel-labs/web-interface-guidelines (MIT · ตรวจ 2026-10-23) |
+| Accessibility | WCAG 2.3.3 w3.org/WAI/WCAG21/Understanding/animation-from-interactions · Heilmann 2019 (focus after scrolling) · developer.chrome.com/docs/lighthouse/best-practices/uses-passive-event-listeners |
+| Performance | web.dev/articles/animations-guide (transform/opacity · use will-change sparingly) · cost of blur and backdrop-filter: blog.openreplay.com · f22labs.com (community articles, not benchmarks) · effect of scroll-jacking on INP (`ยังไม่ได้ตรวจ` not yet checked) |
+| Thai fonts | fontsource.org · fonts.google.com · github.com/line/seed |
+| External skills referenced | github.com/greensock/gsap-skills (MIT · per a report compared 2026-10-22 · file content `ยังไม่ได้ตรวจ` not yet checked) · github.com/vercel-labs/web-interface-guidelines (MIT · checked 2026-10-23) |

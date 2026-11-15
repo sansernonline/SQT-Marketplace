@@ -1,26 +1,26 @@
-# ตัวอย่างเต็ม — event สายโทรและนัดหมายของคลินิกทันตกรรม
+# Full example — call and appointment events of a dental clinic
 
-ป้าย `ตัวอย่าง` — เขียนจากกฎใน [`SKILL.md`](../SKILL.md) ยังไม่ได้รันกับ Kafka จริง ชื่อฟังก์ชันของ client เป็นโค้ดสมมติ ตรวจกับไลบรารีที่ใช้จริงก่อน
+Label `ตัวอย่าง` (example) — written from the rules in [`SKILL.md`](../SKILL.md), not yet run against a real Kafka. Client function names are made-up code; check them against the library actually used.
 
-## สารบัญ
+## Contents
 
 1. [topic](#1--topic)
-2. [โครง event](#2--โครง-event)
-3. [outbox ฝั่ง voice agent](#3--outbox-ฝั่ง-voice-agent)
-4. [consumer ที่ทำซ้ำได้](#4--consumer-ที่ทำซ้ำได้)
-5. [ค่า properties](#5--ค่า-properties)
+2. [Event structure](#2--event-structure)
+3. [Outbox on the voice agent side](#3--outbox-on-the-voice-agent-side)
+4. [A consumer that can run repeatedly](#4--a-consumer-that-can-run-repeatedly)
+5. [Properties values](#5--properties-values)
 
 ## 1 · topic
 
-| topic | key | event ชนิด | consumer group |
+| topic | key | event types | consumer group |
 |---|---|---|---|
 | `clinic.call.events.v1` | `call_id` | `call.started` · `call.ended` · `call.summarised` | `crm-summary` |
 | `clinic.appointment.events.v1` | `appointment_id` | `appointment.booked` · `appointment.rescheduled` · `appointment.cancelled` | `line-notifier` · `crm-summary` |
-| `<topic>.dlq` | เดิม | event ที่ประมวลผลไม่ได้ | คนดูแลเล่นซ้ำ |
+| `<topic>.dlq` | same as the original | events that could not be processed | the owner replays them |
 
-สร้างทุก topic ด้วยสคริปต์ที่รีวิวได้: partition 3 · RF 3 · `min.insync.replicas=2` · `retention.ms=604800000` · `cleanup.policy=delete`
+Create every topic with a script that can be reviewed: partition 3 · RF 3 · `min.insync.replicas=2` · `retention.ms=604800000` · `cleanup.policy=delete`
 
-## 2 · โครง event
+## 2 · Event structure
 
 ```json
 {
@@ -35,11 +35,11 @@
 }
 ```
 
-- ไม่มีเบอร์โทร ชื่อ เสียง ถอดเสียง · `reason_code` เป็นรหัส ไม่ใช่ข้อความอิสระ
-- `version` นับเพิ่มต่อนัด ผู้รับใช้ตัดสินลำดับ ถ้ามาช้ากว่าที่เก็บอยู่ให้ข้าม
-- `call.summarised` ใส่ `summary_ref` ชี้ที่เก็บสรุป ไม่ใส่ตัวสรุป
+- No phone number, name, voice, or transcript · `reason_code` is a code, not free text
+- `version` increases per appointment; the receiver uses it to decide order, and skips an event that arrives later than what is stored
+- `call.summarised` carries a `summary_ref` pointing to where the summary is stored, not the summary itself
 
-## 3 · outbox ฝั่ง voice agent
+## 3 · Outbox on the voice agent side
 
 ```sql
 create table outbox (
@@ -66,9 +66,9 @@ relay วนทุกไม่กี่วินาที:
     update outbox set sent_at = now() where id = row.id
 ```
 
-relay ตายหลังส่งก่อน `update` = ส่งซ้ำ · ผู้รับกันด้วย `event_id` (หัวข้อ 4) · ลบแถวที่ส่งแล้วเกินกำหนดด้วยงานเบื้องหลัง (`background-jobs`)
+If the relay dies after sending but before the `update`, the event is sent twice · receivers guard with `event_id` (section 4) · delete sent rows older than the retention period with a background job (`background-jobs`)
 
-## 4 · consumer ที่ทำซ้ำได้
+## 4 · A consumer that can run repeatedly
 
 ```
 loop:
@@ -87,9 +87,9 @@ loop:
   consumer.commit()   -- หลังทุก record ในรอบเสร็จหรือเข้า DLQ แล้วเท่านั้น
 ```
 
-consumer แจ้งเตือน LINE: ส่งจริงนอกธุรกรรม DB จึงอาจส่งซ้ำถ้าตายหลังส่งก่อน commit · ลดด้วยการบันทึก `event_id` ที่ส่งแล้ว และใช้กลไกกันส่งซ้ำของ LINE ถ้ามี `(ยังไม่ได้ตรวจ ดู e-commerce:line-oa-setup และเอกสาร LINE Messaging API)` · ข้อความซ้ำ 1 ครั้งในกรณีหายากยอมรับได้ ข้อความหายไม่ได้ · กฎโควตากับช่องทางตาม `notifications`
+LINE notification consumer: the real send happens outside the DB transaction, so it may send twice if it dies after sending but before commit · reduce this by recording the `event_id` already sent, and use LINE's own duplicate-send protection if it has one `(ยังไม่ได้ตรวจ` — not yet checked — see e-commerce:line-oa-setup and the LINE Messaging API docs`)` · one duplicate message in a rare case is acceptable, a lost message is not · quota rules and channels follow `notifications`
 
-## 5 · ค่า properties
+## 5 · Properties values
 
 producer (relay):
 
@@ -109,4 +109,4 @@ max.poll.interval.ms=300000
 # group.instance.id=<ชื่อ pod คงที่>   # ใช้เมื่อรีสตาร์ทบ่อย
 ```
 
-`max.poll.records=50` เป็นค่าสมมติสำหรับ consumer ที่เรียก LINE ต่อ record `(ประมาณ ยังไม่ได้วัด)` · ค่าอื่นดู [`config-table`](config-table.md)
+`max.poll.records=50` is an assumed value for a consumer that calls LINE once per record `(ประมาณ ยังไม่ได้วัด` — estimate, not yet measured`)` · for the other values see [`config-table`](config-table.md)

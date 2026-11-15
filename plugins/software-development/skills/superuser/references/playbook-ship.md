@@ -1,34 +1,34 @@
-# playbook · ship — เตรียมส่งงานขึ้น branch หลัก
+# playbook · ship — prepare work to go onto the main branch
 
-ใช้เมื่อ: "เปิด PR" · "ดูแล PR ให้เขียว" · "แก้ตามคอมเมนต์รีวิว" · "พร้อม merge หรือยัง" (รวม `opening a PR` · `babysit` · `shipping` · `autopilot-stack` ของ pstack)
-skill หลัก: `pr-description-template` · `commit-message-format` · `cicd-and-release` · `adversarial-review-panel`
+Use when: "Open a PR" · "Keep the PR green" · "Fix per the review comments" · "Ready to merge yet" (covers pstack's `opening a PR` · `babysit` · `shipping` · `autopilot-stack`)
+Main skills: `pr-description-template` · `commit-message-format` · `cicd-and-release` · `adversarial-review-panel`
 
-> agent **ไม่ commit · push · merge เอง** เว้นแต่ได้รับอนุญาตตามกฎ commit ใน `superuser` หัวข้อ 6 ขั้นไหนต้องใช้สิทธิ์นี้แต่ยังไม่ได้รับอนุญาต ให้เตรียมคำสั่งไว้ใน "รออนุมัติ" แล้วทำส่วนอื่นต่อ
+> The agent **does not commit · push · merge by itself** unless permitted under the commit rule in `superuser` section 6. For a step that needs that permission when it has not been granted, prepare the command under "รออนุมัติ" (awaiting approval) and carry on with the other parts
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ตรวจว่าทุกชิ้นงานผ่านการพิสูจน์แล้ว (test · skill ตรวจแอป) ถ้ายังไม่ผ่าน ให้กลับไป playbook เดิม · ใคร: `qa-tester` ตัวใหม่
-   - รัน [`security-gate`](../../security-gate/SKILL.md) — ถ้า critical หรือ high ที่ยืนยันแล้วยังค้างอยู่ ห้ามส่ง ถ้าค่าลับหลุด ให้หยุดและบอกผู้ใช้
-   - เว็บแอปหรือ API ที่ส่งลูกค้า → รายงาน [`security-gate` ส่วน OWASP](../../security-gate/references/owasp-top10.md) ครบ A01–A10 ต้องไม่มีข้อ `ไม่ผ่าน` หรือ `ยังไม่ได้ตรวจ` · ใคร: `security-engineer` ตัวใหม่ กรอก · `reviewer` ตัวใหม่ เปิดหลักฐานทุกแถวที่เขียน `ผ่าน`
-2. **หาผลกระทบนอก diff** ตาม [`blast-radius`](../../blast-radius/SKILL.md) — ทุกฟังก์ชัน ตาราง หรือ API ที่เปลี่ยน · ใคร: `Explore` ตัวใหม่
-3. เรียง commit เป็นชิ้นเล็ก แต่ละชิ้นผ่าน test และอ่านตามลำดับแล้วเข้าใจเป็นเรื่องเดียว ส่วนข้อความเขียนตาม `commit-message-format` · ใคร: หัวหน้าทีม
-4. เขียนคำอธิบาย PR ตาม `pr-description-template` — ผลต่อผู้ใช้ก่อน · วิธีพิสูจน์ · ความเสี่ยง · ภาพหน้าจอถ้ามี · ใคร: หัวหน้าทีม
-5. ถ้าผู้ใช้อนุญาต ให้ push และเปิด PR ถ้าไม่อนุญาต ให้ส่งคำสั่งและข้อความ PR ไว้ในคำตอบ · ใคร: หัวหน้าทีม (ผู้ใช้อนุญาต)
-6. **ดูแลจนเขียว** — ถ้า CI แดง ให้หาต้นเหตุแล้วแก้ (`principle-fix-root-cause`) ห้าม retry หรือปิด test ส่วนคอมเมนต์รีวิวจากคนหรือบอต ให้ประเมินทีละข้อ แก้ข้อที่เป็นปัญหาจริง และตอบข้อที่ไม่ใช่ปัญหาพร้อมเหตุผล · ใคร: `developer` ตัวใหม่
-7. ก่อน merge ตรวจทั้ง PR อีกรอบตาม playbook [`review`](playbook-review.md) เพราะ CI เขียวไม่ได้แปลว่าปลอดภัย · ใคร: `reviewer` ตัวใหม่
-8. การ merge เข้า branch หลักต้อง **รออนุมัติ** แม้ทุกอย่างผ่าน (เตรียมคำสั่ง merge ไว้ให้) แล้วจบด้วย `status-report` · ใคร: หัวหน้าทีม (merge: ผู้ใช้ ใน "รออนุมัติ")
-9. ผู้ใช้อนุมัติ merge แล้ว **ลบ branch ในขั้นเดียวกันเลย ไม่ต้องถามซ้ำ:** `gh pr merge <เลข> --merge --delete-branch` (ลบทั้งบน GitHub และในเครื่อง แล้วสลับไป branch หลัก) · ก่อนลบดูว่าไม่มีไฟล์ค้างใน working tree และ branch นี้ไม่มี worktree อื่นใช้อยู่ · ไม่ใช้ `gh` → `git branch -d <ชื่อ>` (ลบได้เฉพาะที่ merge แล้ว · ห้าม `-D`) และ `git push origin --delete <ชื่อ>` · branch ที่ลบแล้วกู้คืนได้จากหน้า PR บน GitHub · ใคร: หัวหน้าทีม
+1. Check (ตรวจ) that every piece of work has been proven (tests · app-check skill). If not, go back to the original playbook · ใคร: `qa-tester` ตัวใหม่
+   - Run [`security-gate`](../../security-gate/SKILL.md) — if a confirmed critical or high finding is still open, do not ship. If a secret has leaked, stop and tell the user
+   - Web app or API going to customers → the [`security-gate` OWASP section](../../security-gate/references/owasp-top10.md) report must cover A01–A10, with no item `ไม่ผ่าน` (fail) or `ยังไม่ได้ตรวจ` (not yet checked) · Who: a fresh `security-engineer` fills it in · a fresh `reviewer` opens the evidence of every row marked `ผ่าน` (pass)
+2. **Find the impact outside the diff** per [`blast-radius`](../../blast-radius/SKILL.md) — every function, table, or API that changed · ใคร: `Explore` ตัวใหม่
+3. Arrange the commits as small pieces, each passing tests and, read in order, making sense as one story; write the messages per `commit-message-format` · ใคร: หัวหน้าทีม
+4. Write the PR description per `pr-description-template` — effect on users first · how it was proven · risks · screenshots if any · ใคร: หัวหน้าทีม
+5. If the user allows it, push and open the PR. If not, put the commands and the PR text in the reply · ใคร: หัวหน้าทีม (ผู้ใช้อนุญาต)
+6. **Watch until green** — if CI is red, find the root cause and fix it (`principle-fix-root-cause`); do not retry or switch off a test. For review comments from people or bots, judge each one, fix the ones that are real problems, and reply to the ones that are not, with a reason · ใคร: `developer` ตัวใหม่
+7. Before merge, check (ตรวจ) the whole PR again per the playbook [`review`](playbook-review.md), because a green CI does not mean it is safe · ใคร: `reviewer` ตัวใหม่
+8. Merging into the main branch must wait for **`รออนุมัติ`** (awaiting approval) even when everything passes (have the merge command ready), then finish with `status-report` · ใคร: หัวหน้าทีม (merge: ผู้ใช้ ใน "รออนุมัติ")
+9. After the user approves the merge, **delete the branch in the same step, no need to ask again:** `gh pr merge <เลข> --merge --delete-branch` (deletes both on GitHub and locally, then switches to the main branch) · before deleting, check there are no leftover files in the working tree and no other worktree uses this branch · if not using `gh` → `git branch -d <ชื่อ>` (only works for merged branches · never `-D`) and `git push origin --delete <ชื่อ>` · a deleted branch can be restored from the PR page on GitHub · ใคร: หัวหน้าทีม
 
-## ข้ออ้างที่เจอบ่อย — อ่านก่อนข้ามขั้น
+## Common excuses — read before skipping a step
 
-| ข้ออ้าง | ความจริง |
+| Excuse | Reality |
 |---|---|
-| "test น่าจะผ่าน เปลี่ยนนิดเดียว" | "น่าจะ" ไม่ใช่หลักฐาน · ต้องมีคำสั่งที่รันและผลที่ออก |
-| "อ่าน diff ตัวเองละเอียดแล้ว ไม่ต้องให้คนอื่นดู" | คนเขียนคนเดิม จุดบอดเดิม · reviewer ตัวใหม่คือสายตาสดชุดเดียวที่มี |
-| "reviewer บอกว่า minor ก็ minor" | ป้ายนั้นให้ตามที่ spec เงียบ · ให้ใหม่ตามผลที่ผู้ใช้ได้รับ แล้วค่อยตัดสิน |
-| "แก้ชัด ๆ ไม่ต้องมี test ที่แดงก่อน" | test ที่แดงก่อนเป็นหลักฐานเดียวว่าปัญหามีจริงและหายแล้ว · ไม่มีก็มีแค่ diff กับความหวัง |
-| "CI แดงเพราะ flaky กด retry ก็พอ" | retry ซ่อนต้นเหตุ · หาให้เจอตาม `principle-fix-root-cause` |
+| "The tests should pass, it's a tiny change" | "Should" is not evidence · you need the command that ran and the output it gave |
+| "I read my own diff carefully, no need for anyone else" | Same writer, same blind spot · a fresh reviewer is the only fresh pair of eyes you have |
+| "The reviewer said minor, so it's minor" | That label was given where the spec was silent · re-label by the effect on the user, then decide |
+| "The fix is obvious, no need for a test that fails first" | A test that fails first is the only evidence the problem was real and is gone · without it you have only a diff and hope |
+| "CI is red because it's flaky, just hit retry" | Retry hides the cause · find it per `principle-fix-root-cause` |
 
-## จบเมื่อ
+## Done when
 
-PR เขียว · ทุกคอมเมนต์มีคำตอบ · ผ่านการตรวจอิสระ และผู้ใช้ตัดสินใจเรื่อง merge แล้ว
+The PR is green · every comment has an answer · it passed an independent check, and the user has decided about the merge

@@ -5,172 +5,172 @@ description: Use when a Word, PowerPoint or PDF must look designed
 
 # Branded Document Design
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the owner's theme → search live for reference designs → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" (pre-work gate) of `design-references` (plugin `superuser`) even when a brand exists (the brand controls color and fonts; the search is for finding this piece's structure) · close the job with the line `ด่านก่อนลงมือ:`
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write all wording per `human-writing`. This skill gives format and structure; human-writing gives how to write so people can understand.
 
-> **กฎข้อเดียวของ skill นี้:** เอกสารที่ส่งออกไปต้องดูออกว่าตั้งใจออกแบบ คือมีชุดสี ชุดขนาดตัวอักษร
-> และช่องไฟที่เหมือนกันทุกหน้า ไม่ใช่เปิด Word แล้วพิมพ์เลย
+> **The one rule of this skill:** an exported document must look intentionally designed: one color set, one set of type sizes
+> and spacing that is the same on every page. It must not look like someone opened Word and just typed.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ผลลัพธ์คือ **.docx / .pptx / .pdf** (ใบเสนอราคา · แผนธุรกิจ · รายงาน · สัญญา · เอกสารซอฟต์แวร์ เช่น SRS) ที่ลูกค้า ผู้บริหาร หรือทีมอื่นจะเปิดดู
-- เอกสารต้อง **เซ็นอนุมัติ** หรือแนบไปกับสัญญา/ข้อเสนอ
-- เอกสารไทย–อังกฤษปนกัน (ถ้าตั้งฟอนต์ไม่ครบจะพังง่ายมาก)
-- ต้องออกเอกสารแบบเดียวกันซ้ำ ๆ และอยากให้ทุกฉบับหน้าตาเหมือนกัน
+- The output is a **.docx / .pptx / .pdf** (quotation · business plan · report · contract · software document such as an SRS) that a customer, executive or another team will open
+- The document must be **signed off** or attached to a contract/proposal
+- Mixed Thai–English documents (they break very easily if fonts are not fully set)
+- The same kind of document is issued repeatedly and every copy should look the same
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use
 
-- ผลลัพธ์เป็น markdown (ในรีโปหรือโฟลเดอร์งาน) ให้ใช้ `polished-document-style`
-- ต้องแค่ **อ่าน/แกะ** ไฟล์ Office ที่ได้รับมา ให้ใช้ `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf`
-- ไดอะแกรมในเอกสาร markdown ให้ใช้ `markdown-visuals`
-- รายงานทั้งเล่มจาก Markdown ไฟล์เดียว (ปกโลโก้กลาง · สารบัญ · ตาราง · รูป) ให้ใช้ `markdown-report-docx` ซึ่งมีสคริปต์ md → docx พร้อมแล้ว
+- The output is markdown (in the repo or work folder): use `polished-document-style`
+- You only need to **read/extract** a received Office file: use `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf`
+- Diagrams in a markdown document: use `markdown-visuals`
+- A whole-book report from a single Markdown file (shared logo cover · table of contents · tables · figures): use `markdown-report-docx`, which has a ready md → docx script
 
-**ลำดับที่ถูกต้อง:** เขียนเนื้อหาเป็น markdown ก่อน (polished-document-style)
-→ ค่อยใช้ skill นี้ render เป็นไฟล์ส่งมอบ และแก้เนื้อหาที่ markdown เสมอ (markdown คือต้นฉบับ)
-
----
-
-**ติดตั้งก่อนใช้:** `pip install python-docx python-pptx` · LibreOffice (`soffice`) สำหรับแปลงเป็น PDF · `pdftoppm` (poppler) สำหรับแปลงเป็นภาพ
-
-## 0 · สีมาจากโปรเจกต์ — หาตามลำดับ ไม่หยุดรอ
-
-**ถ้า markdown ต้นทางมี `doc-theme` อยู่แล้ว ให้ใช้ค่านั้น อย่าถามซ้ำ อย่าตั้งใหม่**
-(ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร")
-
-ถ้ายังไม่มี ให้หาตามลำดับใน `diagram-figures` ข้อ 5 ที่เดียว (`doc-theme` → สีแบรนด์ในโค้ด โลโก้ ชุดแบรนด์ → ยังไม่มีเลย)
-ยังไม่มีเลย → **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `document` แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้ · ค้นสดไม่ได้ → ใช้สีประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` ไว้ในรายงาน แล้วทำต่อ ไม่หยุดถาม · เสนอโทนตามเนื้องาน (ดูบรรทัดถัดไป) ไว้ในรายงานให้ผู้ใช้เลือกทีหลัง
-ได้สีแล้ว**เขียนกลับลง `doc-theme`** ในไฟล์ markdown เพื่อให้เอกสาร รูป และสไลด์ใช้สีเดียวกัน
-
-โทนที่เสนอตามเนื้องาน (การแพทย์ · การเงิน · ราชการ ฯลฯ · คลังสำรอง ใช้เมื่อค้นสดไม่ได้) → [`references/palette-examples.md`](references/palette-examples.md) · ลูกค้ามีแบรนด์แล้วใช้สีแบรนด์เสมอ
-
-**สีหลักมีสีเดียว** เฉดอ่อนและเข้มทั้งหมดคำนวณจากสีนั้น ไม่เลือกเพิ่มทีละสี
-สีที่ไม่ผูกกับสีหลักมีแค่สีสถานะ (สำเร็จ · เตือน · ผิดพลาด) และต้องคงความหมายเดิมเสมอ
-
-
-## 0.1 · หน้าตาเอกสารต่อจากหน้าตาของแบรนด์หรือแอป — ทำก่อน render ครั้งแรก
-
-> ค่าตั้งต้นของ skill นี้ (Tahoma · ปกแถบสีทึบ · ตารางมีเส้นทุกช่อง) คือ**พื้น** ไม่ใช่หน้าตาส่งมอบ
-> ใช้ค่าตั้งต้นตรง ๆ = เอกสารที่ดูเหมือนพิมพ์จาก Word ทุกบริษัท ทั้งที่แบรนด์หรือแอปของงานนั้นผ่านด่านสวยแล้ว
-
-1. **มีตัวตนอยู่แล้วไหม** — ดู brand kit เดิม (`graphic-design:brand-kit` ถ้าติดตั้ง ใช้สีและฟอนต์จากชุดนั้น) · `assets/logo/` · `docs/design/` · งานซอฟต์แวร์: mockup ที่ผ่านด่านสวย (คะแนนใน `docs/BUILD-PLAN.md`) · `docs/README.md` ช่อง `doc-theme` → มี: เอกสารต้องใช้โลโก้ (ปก + หัวหน้า) สีแบรนด์ และลวดลายเดียวกับแอป · ไม่มี: ทำตามข้อ 0
-2. **ทำ 1 แนวก่อน** · ถ้าผู้ใช้ไม่ว้าวหรือขอหลายแนว จึงทำ **3 แนวขนานกัน** (ค่าแรง 3–5 เท่า · `parallel-attempts-pick-best` · agent ที่มี Bash ตัวใหม่แนวละตัว · ปกใช้วิธีโหวต 3 แนวในหัวข้อ 0.2) — แต่ละแนวทำ HTML จำลองหน้า A4: ปก · หน้าเนื้อหาที่มีตารางข้อกำหนดจริง 4 แถว + callout · หน้าสารบัญหรือหน้ารูป · **รูป 1 รูปทำใหม่ตามแนว** (ใช้ `diagram-figures`) · หัวไฟล์บอกวิธีทำแต่ละชิ้นใน Word จริง · เมื่อทำหลายแนว แนวต้องต่างกันจริง เช่น ปกมืดต่อจากแอป / รายงานสว่างแบบบรรณาธิการ / สเปกวิศวกรรม
-3. **ผู้ตรวจ 2 ตัวที่ไม่ได้ทำ** (ถ้ามีแนวเดียว ให้คะแนนแนวนั้นอย่างเดียว ไม่ต้องผสม) ให้คะแนน 1–5 (ผ่าน = 4): ความประทับใจแรก · ต่อเนื่องกับแอป · ความประณีต (ตารางไทยยาว 60 แถว ไม่ตัดกลางคำ · สเกลตัวอักษร · คอนทราสต์) · รูปอ่านออกเมื่อวางจริง · สร้างใน Word ได้จริง → **ผสมได้** (ปกจากแนวหนึ่ง เนื้อจากอีกแนว) ถ้าผู้ตรวจระบุชิ้นชัด
-4. ลงมือที่ตัว render (ไม่แก้ทีละไฟล์ .docx) → render ทุกฉบับ → **ด่านสวยของเอกสาร**: ผู้ตรวจ 2 ตัวใหม่ดูภาพหน้าจริง (ปก · สารบัญ · หน้าเปิดบท · หน้าตารางยาว · หน้ารูป) ใช้ 5 แกนข้างบน ใช้คะแนนที่ต่ำกว่า · เพดาน **3 รอบ** (รายละเอียดเพิ่มที่ `ui-craft/references/states-and-checks.md` ใน plugin `software-development` ถ้าติดตั้ง) · คะแนนทุกรอบลง `docs/BUILD-PLAN.md`
-5. **ฟอนต์:** ใช้ฟอนต์ไทยของแบรนด์ที่ติดตั้งในเครื่องและฝังในไฟล์ (`embed_fonts`) · Tahoma เป็นทางสำรองเมื่อฝังไม่ได้ · **ห้ามตั้งข้อความไทยด้วยฟอนต์ mono** (Cascadia/Consolas ไม่มีอักษรไทย) — mono ใช้กับรหัส คีย์ ตัวเลขเท่านั้น
-6. **รูปในเอกสาร · กฎที่ด่านสวยจับได้บ่อย · ปก** (ขนาดพิกเซลขั้นต่ำ กฎใน `check` ของตัว render สูตรปก) → [`references/word-layout.md`](references/word-layout.md) หัวข้อท้ายไฟล์
-
-## 0.2 · ปกที่ต้องเป็นของเอกสารชุดนี้ — ทำ 3 แนวแล้วโหวต 2 ใน 3
-
-ใช้เมื่อชุดเอกสาร (ข้อเสนอ · รายงาน · แผนธุรกิจ) ต้องมีปกของตัวเอง และปกตั้งต้นดูเหมือนของงานอื่น · ทำแนวเดียวก่อน ถ้าผู้ใช้ไม่ว้าวหรือขอหลายแนวจึงใช้ (ค่าแรง 3–5 เท่า) · ขั้นเต็ม (หาของจริงมาจับ · ผู้ออกแบบ 3 ตัว · ผู้ตรวจ 3 ตัว · เกณฑ์โหวต · ข้อความบนปก) อยู่ใน [`cover-vote`](references/cover-vote.md)
+**The correct order:** write the content as markdown first (polished-document-style)
+→ then use this skill to render it into the deliverable file, and always fix content in the markdown (markdown is the source).
 
 ---
 
-## 1 · Design tokens — ห้าม hardcode สีนอกตารางนี้
+**Install before use:** `pip install python-docx python-pptx` · LibreOffice (`soffice`) to convert to PDF · `pdftoppm` (poppler) to convert to images
 
-ตารางนี้กำหนด**หน้าที่**ของแต่ละ token ไม่ได้กำหนดค่าสี · ค่าจริงมาจากข้อ 0 แล้วตั้งครั้งเดียวด้วย `use_brand(...)`
+## 0 · Colors come from the project — look in order, do not stop and wait
 
-- token: `brand` · `brand_2` · `brand_deep` · `brand_tint` · `brand_tint_2` · `text` · `text_body` · `text_muted` · `line` + สีสถานะ 6 ตัว (สำเร็จ · ข้อมูล · เตือน · ผิดพลาด · เน้น · เป็นกลาง) ที่**ไม่เปลี่ยนตามแบรนด์**
-- เลือกสีตามความหมาย ไม่ใช่ตามความสวย (แดง = อันตราย/ผิดจริงเท่านั้น) · ใช้ชุดความหมายเดียวกับไดอะแกรม
-- เกณฑ์ที่ต้องผ่านทุกชุดสี: เนื้อความและ `text_muted` บนพื้น ≥ 4.5:1 · H2 และหัวตาราง (`brand_deep`) ≥ 7:1 · H1 และตัวเลข KPI (`brand` ตัวใหญ่) ≥ 3:1 · `use_brand()` ตรวจให้และหยุดถ้าไม่ผ่าน · พิมพ์ขาวดำแล้วยังแยกลำดับชั้นออก · ไม่ผ่านให้ปรับความเข้ม ไม่เปลี่ยนสี
-- ตัวอักษรไม่ใช้ดำสนิท (ใช้ `text_body`) · **อย่าเพิ่มขนาดตัวอักษรนอกสเกล** (เนื้อความ Word 11pt · สไลด์ 17pt)
+**If the source markdown already has a `doc-theme`, use that value. Do not ask again, do not set a new one.**
+(See `polished-document-style`, section "ธีมของเอกสาร" (document theme).)
 
-ตาราง token เต็ม · ตารางความหมายของสี · สเกลตัวอักษร (pt) · องค์ประกอบที่ใช้ซ้ำ + เมธอด → [`references/tokens-and-type.md`](references/tokens-and-type.md) — เปิดเมื่อตั้งธีมหรือเลือกขนาด/สี · ตัวอย่างชุดสีที่เคยใช้ → [`references/palette-examples.md`](references/palette-examples.md)
+If there is none yet, look in the order given in `diagram-figures` item 5, in that one place (`doc-theme` → brand colors in code, logo, brand kit → nothing at all).
+Nothing at all → **search for reference designs first:** take the project's keywords to a live search per `design-references` (plugin `superuser`), type `document`, then extract colors from the chosen work. The stored palette library is used when a live search is impossible. Live search impossible → use the house color `#2A78D6`, write `(รอยืนยัน)` (awaiting confirmation) in the report, and carry on without stopping to ask. Put a tone suggested by the content of the work (see the next line) in the report for the user to choose later.
+Once you have the colors, **write them back into `doc-theme`** in the markdown file so the document, figures and slides use the same colors.
 
----
+Tones suggested by the content of the work (medical · finance · government etc. · fallback library, used when live search is impossible) → [`references/palette-examples.md`](references/palette-examples.md) · if the customer already has a brand, always use the brand colors.
 
-## 2 · ฟอนต์และภาษาไทย — จุดที่พังบ่อยที่สุด
+**There is only one main color.** All light and dark shades are computed from it; do not pick more one by one.
+The only colors not tied to the main color are the status colors (success · warning · error), and they must always keep their meaning.
 
-ใช้ฟอนต์ไทยของแบรนด์ตามข้อ 0.1 ข้อ 5 ก่อน · ไม่มีหรือฝังไม่ได้ ใช้ **Tahoma** เป็นทางสำรอง · กฎที่ห้ามพลาด:
 
-- Word ถือว่าไทยเป็น *complex script* — **ห้ามตั้งฟอนต์/ขนาด/ตัวหนาเองด้วยมือ** ใช้ `style_run()` ใน `brandkit.py` (ตั้ง `w:szCs` `w:bCs` `w:iCs` และ `w:rFonts` ครบ 4 ช่อง)
-- ฟอนต์ละตินกับไทยคนละตัว → ตั้ง `bk.FONT` กับ `bk.LATIN_FONT` แล้วเรียก `bk.thai_runs(doc.element.body)` กับทุก header/footer ก่อน `save()`
-- ระยะบรรทัด 1.3–1.35 (Tahoma) (ค่ากลางอยู่ใน `human-writing` `references/thai-line-breaking.md`) · **ห้าม justify** ย่อหน้าไทย · ส่ง PDF ให้ export จาก Word จริง หรือเปิดตรวจด้วยตาก่อน (LibreOffice ตัดคำไทยต่างจาก Word)
-- Linux ไม่มี Tahoma → Loma/Sarabun · ReportLab จัดวรรณยุกต์ผิด
+## 0.1 · The document's look continues from the brand's or app's look — do this before the first render
 
-รายละเอียดกับดักฟอนต์คู่ · ฝังฟอนต์ · ฟอนต์ variable · ตัวไทยดูเล็กบน Linux → [`references/thai-fonts.md`](references/thai-fonts.md) — เปิดเมื่อตั้งฟอนต์หรือ PDF เพี้ยน
+> This skill's defaults (Tahoma · solid color band cover · table with lines in every cell) are the **floor**, not the deliverable look.
+> Using the defaults as is = a document that looks printed from Word at every company, even though the brand or app of that job already passed a beauty gate.
 
----
+1. **Is there an identity already?** Look at the existing brand kit (`graphic-design:brand-kit` if installed; use the colors and fonts from that kit) · `assets/logo/` · `docs/design/` · software work: a mockup that passed the beauty gate (score in `docs/BUILD-PLAN.md`) · field `doc-theme` in `docs/README.md` → if there is: the document must use the same logo (cover + page header), brand colors and patterns as the app · if not: follow item 0
+2. **Do 1 direction first.** Only if the user is not wowed, or asks for several directions, do **3 directions in parallel** (3–5 times the labor · `parallel-attempts-pick-best` · a new agent with Bash per direction · for the cover use the 3-direction vote method in section 0.2). Each direction makes an HTML mock of A4 pages: cover · a content page with a real 4-row requirements table + callout · a table-of-contents page or a figure page · **1 figure redone for the direction** (use `diagram-figures`) · the file header says how to build each piece in real Word. When doing several directions they must really differ, for example a dark cover continuing from the app / a light editorial report / an engineering spec.
+3. **2 reviewers who did not do the work** (if there is only one direction, score that one only; no mixing) score 1–5 (pass = 4): first impression · continuity with the app · craftsmanship (a long Thai table of 60 rows without breaking mid-word · type scale · contrast) · figures readable when placed for real · really buildable in Word → **mixing is allowed** (cover from one direction, body from another) if the reviewers name the pieces clearly.
+4. Work on the render script (do not edit .docx files one by one) → render every copy → **document beauty gate (`ด่านสวย`)**: 2 new reviewers look at images of the real pages (cover · table of contents · chapter opener · long table page · figure page) using the 5 axes above, and take the lower score · ceiling **3 rounds** (more detail in `ui-craft/references/states-and-checks.md` in plugin `software-development` if installed) · record every round's score in `docs/BUILD-PLAN.md`
+5. **Fonts:** use the brand's Thai font installed on the machine and embedded in the file (`embed_fonts`) · Tahoma is the fallback when embedding is impossible · **never set Thai text in a mono font** (Cascadia/Consolas have no Thai letters). Mono is for code, keys and numbers only.
+6. **Figures in documents · rules the beauty gate often catches · cover** (minimum pixel sizes, rules in the render script's `check`, cover recipe) → [`references/word-layout.md`](references/word-layout.md), section at the end of the file
 
-## 3 · โครงหน้าเอกสาร Word
+## 0.2 · A cover that belongs to this document set — make 3 directions, then vote 2 of 3
 
-โครงเอกสาร: หน้าปก (โปรเจกต์มีโลโก้และ mockup แล้ว → ปกเฉพาะโปรเจกต์ตามหัวข้อ 0.2 · ไม่มีตัวตนใช้แบบตั้งต้น) → สารบัญ (field TOC) → เนื้อหา (H1 มีเลขข้อ · keep-with-next ทุกหัวข้อ) → ตารางลงนามอนุมัติ · footer "หน้า N" กลางหน้า สีเทา 9pt · โครงเต็มทีละบรรทัด → [`references/word-layout.md`](references/word-layout.md) หัวข้อ "โครงหน้าเอกสาร"
-
-**ปกเข้ม** (แอปหรือแบรนด์ใช้หน้าจอสีเข้ม) → `doc.cover(..., style="night")` · ตัวอย่าง `scripts/example_srs.py` · ภาพ `examples/example_srs-preview.png` · รายละเอียดและบทเรียนจากเจ้าของงาน → [`references/word-layout.md`](references/word-layout.md) กฎที่ต้องจำทุกครั้ง:
-- ภาพพื้นปกและโลโก้ห้ามอยู่ใน header หน้าแรก (Word แสดงจางตอนแก้ไฟล์) — ยึดกับย่อหน้าแรกของปก
-
-**หัวตารางหน้าใน ห้ามใช้พื้นสีเข้มเต็มแถบ** · พื้นปกเข้ม ขนาดโลโก้ ตัวหนังสือเล็ก เส้นแสงใต้ชื่อ → [`references/word-layout.md`](references/word-layout.md)
-
-หน้ากระดาษ A4 · ขอบ บน/ล่าง 2.2 ซม. · ซ้าย/ขวา 2.0 ซม. ได้ความกว้างเนื้อหา **17 ซม. = 9638 twips** (`BODY_TWIPS`)
-(ใช้ตัวเลขนี้ตั้งความกว้างคอลัมน์ตารางให้รวมกันพอดี)
+Use when a document set (proposal · report · business plan) needs its own cover and the default cover looks like another job's. Do one direction first; only if the user is not wowed, or asks for several directions, use this (3–5 times the labor). The full steps (find real examples to hold up · 3 designers · 3 reviewers · voting criteria · cover text) are in [`cover-vote`](references/cover-vote.md).
 
 ---
 
-## 4 · องค์ประกอบที่ใช้ซ้ำ
+## 1 · Design tokens — never hardcode colors outside this table
 
-องค์ประกอบ (`cover()` · `table()` · `pill_table()` · `kpi_row()` · `callout()` · `figure()` · `code()` · `signoff()`) หน้าตาและเมธอดครบ → [`references/tokens-and-type.md`](references/tokens-and-type.md)
+This table defines each token's **role**, not the color value. The real values come from item 0, then are set once with `use_brand(...)`.
 
-**สัดส่วนที่พอดี:** callout ไม่เกิน 3–5 กล่องต่อ 10 หน้า · KPI strip 3–5 ช่อง · ตารางเกิน 6 คอลัมน์ให้เปลี่ยนเป็นหน้าแนวนอน (`landscape_section()`)
+- tokens: `brand` · `brand_2` · `brand_deep` · `brand_tint` · `brand_tint_2` · `text` · `text_body` · `text_muted` · `line` + 6 status colors (success · info · warning · error · accent · neutral) that **do not change with the brand**
+- Choose colors by meaning, not by looks (red = danger/real error only) · use the same meaning set as diagrams
+- Thresholds every color set must pass: body text and `text_muted` on the background ≥ 4.5:1 · H2 and table headers (`brand_deep`) ≥ 7:1 · H1 and KPI numbers (`brand`, large) ≥ 3:1 · `use_brand()` checks and stops if it fails · printed in black and white, the hierarchy must still be distinguishable · if it fails, adjust the darkness, do not change the color
+- Text is never pure black (use `text_body`) · **do not add type sizes outside the scale** (Word body 11pt · slides 17pt)
 
----
-
-## 5 · วิธีใช้ brandkit
-
-นำเข้า: `from brandkit import BrandDoc, use_brand, to_pdf` (วาง `scripts/` ไว้ใน path หรือ copy `brandkit.py` มาข้างงาน) · สไลด์ → `brandkit_pptx.BrandDeck` · เด็คพูด → `brandkit_stage.StageDeck`
-
-โค้ดตัวอย่างครบ (Word · สไลด์ · เด็ค Stage) → [`references/brandkit-usage.md`](references/brandkit-usage.md) · เมธอดทั้งหมด → `references/api.md` · สคริปต์ที่รันได้ `scripts/example_srs.py` · `scripts/example_deck.py`
-
-**เด็ค Stage** (ค่าเริ่มต้นของเด็คที่ใช้พูด): สี `accent`/`bg` ถอดจากงานต้นทางตาม `presentation-design` `references/deck-theme.md` (`source_palette.py` พิมพ์บรรทัด `StageDeck(...)` ให้) · ต้นทางไม่มีสี ให้หาตาม `diagram-figures` ข้อ 5 · พื้นสว่าง `FFFFFF` คู่ `block=True` (ปกและหน้าคั่นบทเป็นสีหลักทึบ) เป็นค่าเริ่มต้น ใช้พื้นเข้มเมื่องานต้นทางเข้ม · ไม่มีสีเลยใช้ `#2A78D6` พื้น `FFFFFF` + `(รอยืนยัน)` · รายละเอียด → `references/brandkit-usage.md`
+Full token table · color meaning table · type scale (pt) · reusable elements + methods → [`references/tokens-and-type.md`](references/tokens-and-type.md). Open it when setting the theme or choosing sizes/colors · examples of color sets used before → [`references/palette-examples.md`](references/palette-examples.md)
 
 ---
 
-## 6 · ตรวจงานด้วยตา — ขั้นตอนที่ห้ามข้าม
+## 2 · Fonts and Thai — where it breaks most often
 
-เอกสารที่ยังไม่มีใครเปิดดูหน้าจริง ถือว่ายังไม่เสร็จ เพราะอาจมีตารางล้นขอบ หัวข้อค้างท้ายหน้า
-วรรณยุกต์ลอย ปัญหาเหล่านี้ดูจากโค้ดไม่เห็น
-render เป็น PDF แล้วแปลงเป็นภาพ แล้ว **เปิดภาพดูจริงทุกหน้า** (Read tool) ก่อนส่งมอบ · คำสั่ง `soffice` · `pdftoppm` และรายการตรวจ 7 ข้อ → [`references/visual-check.md`](references/visual-check.md)
+Use the brand's Thai font per item 0.1 step 5 first · if absent or not embeddable, use **Tahoma** as the fallback · rules that must not be missed:
+
+- Word treats Thai as a *complex script*: **never set font/size/bold by hand.** Use `style_run()` in `brandkit.py` (it sets `w:szCs` `w:bCs` `w:iCs` and all 4 slots of `w:rFonts`)
+- When the Latin and Thai fonts differ → set `bk.FONT` and `bk.LATIN_FONT`, then call `bk.thai_runs(doc.element.body)` and on every header/footer before `save()`
+- Line spacing 1.3–1.35 (Tahoma) (the middle value is in `human-writing` `references/thai-line-breaking.md`) · **never justify** Thai paragraphs · to send a PDF, export it from real Word or check by eye first (LibreOffice breaks Thai words differently from Word)
+- Linux has no Tahoma → Loma/Sarabun · ReportLab places tone marks wrongly
+
+Details on dual-font traps · embedding fonts · variable fonts · Thai looking small on Linux → [`references/thai-fonts.md`](references/thai-fonts.md). Open it when setting fonts or when a PDF looks off.
+
+---
+
+## 3 · Word page structure
+
+Document structure: cover page (project has a logo and mockup already → a project-specific cover per section 0.2 · no identity → use the default) → table of contents (TOC field) → body (H1 with section numbers · keep-with-next on every heading) → sign-off table · footer "หน้า N" (page N) centered, gray 9pt · full structure line by line → [`references/word-layout.md`](references/word-layout.md), section "Page structure"
+
+**Dark cover** (the app or brand uses a dark screen) → `doc.cover(..., style="night")` · example `scripts/example_srs.py` · image `examples/example_srs-preview.png` · details and lessons from the work's owner → [`references/word-layout.md`](references/word-layout.md). Rule to remember every time:
+- The cover background image and logo must not be in the first-page header (Word shows them faded while editing the file). Anchor them to the cover's first paragraph.
+
+**Inner-page table headers must not use a full-width solid dark fill.** Dark cover background · logo size · small text · glow line under the title → [`references/word-layout.md`](references/word-layout.md)
+
+Paper A4 · margins top/bottom 2.2 cm · left/right 2.0 cm give a content width of **17 cm = 9638 twips** (`BODY_TWIPS`)
+(use this number to set table column widths so they add up exactly)
+
+---
+
+## 4 · Reusable elements
+
+Elements (`cover()` · `table()` · `pill_table()` · `kpi_row()` · `callout()` · `figure()` · `code()` · `signoff()`): full look and methods → [`references/tokens-and-type.md`](references/tokens-and-type.md)
+
+**Right proportions:** at most 3–5 callout boxes per 10 pages · KPI strip of 3–5 cells · a table over 6 columns should become a landscape page (`landscape_section()`)
+
+---
+
+## 5 · How to use brandkit
+
+Import: `from brandkit import BrandDoc, use_brand, to_pdf` (put `scripts/` on the path or copy `brandkit.py` next to the work) · slides → `brandkit_pptx.BrandDeck` · speaking deck → `brandkit_stage.StageDeck`
+
+Full sample code (Word · slides · Stage deck) → [`references/brandkit-usage.md`](references/brandkit-usage.md) · all methods → `references/api.md` · runnable scripts `scripts/example_srs.py` · `scripts/example_deck.py`
+
+**Stage deck** (the default for a deck used for speaking): the colors `accent`/`bg` are extracted from the source work per `presentation-design` `references/deck-theme.md` (`source_palette.py` prints the `StageDeck(...)` line for you) · if the source has no color, look per `diagram-figures` item 5 · a light background `FFFFFF` with `block=True` (cover and chapter dividers in solid main color) is the default; use a dark background when the source work is dark · no color at all → use `#2A78D6` with background `FFFFFF` + `(รอยืนยัน)` (awaiting confirmation) · details → `references/brandkit-usage.md`
+
+---
+
+## 6 · Check the work by eye — a step that must not be skipped
+
+A document that nobody has opened to look at the real pages is not finished, because there may be tables overflowing the margin, headings stranded at the page bottom,
+floating tone marks. These problems cannot be seen from the code.
+Render to PDF, convert to images, then **open and look at every page** (Read tool) before delivery · `soffice` and `pdftoppm` commands and the 7-point checklist → [`references/visual-check.md`](references/visual-check.md)
 
 ---
 
 ## 7 · Anti-patterns
 
-- **ใช้ Heading style ที่มากับ Word** → ใช้ `h1()/h2()/h3()`
-- **เส้นตารางดำหนาแบบค่าเริ่มต้น** → เส้น `line` 0.5pt
-- **ตัวอักษรสีดำสนิท** → ใช้ `text_body`
-- **หัวตารางตัวหนาแต่ไม่มีพื้นสี**
-- **ปล่อยความกว้างคอลัมน์ให้ Word คิดเอง** → `fixed_widths()` เสมอ
-- **อีโมจิเยอะเกิน**
-- **ส่งไฟล์โดยไม่เคย render ดู**
-- **ใช้หน้าตาตั้งต้นของ skill เป็นเอกสารส่งมอบ ทั้งที่แอปมีตัวตนแล้ว** → ทำข้อ 0.1
-- **รูปกว้าง 2000px วางในหน้าแนวตั้ง 17 ซม. โดยไม่คิดขนาดตัวอักษร** → ตัวอักษรเหลือราว 5pt (ข้อ 0.1 ข้อ 6)
-- **ภาพตกแต่งบนปกที่ไม่มีใครบอกว่าว้าว** → ตัดออก ให้ตัวอักษรเป็นจุดเด่น (references/word-layout.md ข้อ 8)
-- **สร้าง .docx โดยไม่เก็บ markdown ต้นฉบับ**
+- **Using Word's built-in Heading styles** → use `h1()/h2()/h3()`
+- **Thick black default table lines** → `line` 0.5pt lines
+- **Pure black text** → use `text_body`
+- **Bold table headers with no fill color**
+- **Letting Word decide column widths** → always `fixed_widths()`
+- **Too many emoji**
+- **Sending a file never rendered for a look**
+- **Using the skill's default look as the deliverable when the app already has an identity** → do item 0.1
+- **A 2000px-wide figure placed on a 17 cm portrait page without thinking about type size** → the text ends up around 5pt (item 0.1 step 6)
+- **A decorative image on the cover that nobody said wows** → cut it, let the type be the highlight (references/word-layout.md item 8)
+- **Creating a .docx without keeping the source markdown**
 
-เหตุผลและสิ่งที่ใช้แทนของแต่ละข้อ → [`references/anti-patterns.md`](references/anti-patterns.md)
+Reasons and replacements for each item → [`references/anti-patterns.md`](references/anti-patterns.md)
 
 ---
 
-## 8 · เชื่อมกับ skill อื่น
+## 8 · Linking with other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---------|-----------|
-| โครงเนื้อหา/สำนวนเอกสารทางการ · **ธีมสีของเอกสาร** | `polished-document-style` |
-| ไดอะแกรมที่จะเอามาแปะเป็นรูป | `diagram-figures` (รูปออกแบบ) · `software-diagrams` (plugin `software-development`) (Mermaid) → export PNG → `figure()` |
-| อ่านไฟล์ Office ที่ลูกค้าส่งมา | `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` |
-| สเปรดชีตส่งมอบ | `anthropic-skills:xlsx` (โทเคนสีชุดเดียวกันใช้ได้) |
-| เนื้อหาและความครบถ้วนของเอกสาร SRS | `srs-writing` (plugin `software-development`) |
-| โครงเรื่องและเลย์เอาต์ของสไลด์ | `presentation-design` |
-| เด็คนำเสนอเป็น .html ไฟล์เดียว | `html-slide-deck` (มี .pptx แล้วใช้ทางเข้าจาก .pptx ใน skill เดียวกัน) |
-| ไดอะแกรมที่วาดด้วย Mermaid ธีมเดียวกัน | `software-diagrams` (plugin `software-development`) |
-| ที่มาของระบบสีและตัวอักษร · โลโก้ | `graphic-design` (plugin `software-development`) |
+| Content structure/wording of formal documents · **the document's color theme** | `polished-document-style` |
+| Diagrams to paste in as figures | `diagram-figures` (designed figures) · `software-diagrams` (plugin `software-development`) (Mermaid) → export PNG → `figure()` |
+| Read Office files a customer sent | `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` |
+| Spreadsheet deliverable | `anthropic-skills:xlsx` (the same color tokens can be used) |
+| Content and completeness of an SRS document | `srs-writing` (plugin `software-development`) |
+| Slide storyline and layout | `presentation-design` |
+| A presentation deck as a single .html file | `html-slide-deck` (when a .pptx exists, use the entry from .pptx in the same skill) |
+| Diagrams drawn in Mermaid with the same theme | `software-diagrams` (plugin `software-development`) |
+| Origin of the color and type system · logo | `graphic-design` (plugin `software-development`) |
 
 ---
 
-## ไม่ให้ดูเหมือน AI ทำ
+## Do not look AI-made
 
-ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ทุกงานต้องผ่านด่านตา 3.2 ด้วย (หน้าเว็บตอบเพิ่มข้อ 10–14) เพราะสคริปต์ 0 ข้อยังไม่ใช่ผ่าน · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
+Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass the eye gate 3.2 (web pages answer items 10–14 in addition), because 0 script findings is not yet a pass. The prohibitions in this file are the parts specific to this work; the full list for all media is there.
 
-## ตัวย่อ
+## Abbreviations
 
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
+Always spell out an abbreviation in full the first time, then put the abbreviation in brackets, for example Model Context Protocol (MCP).
+After that the abbreviation may be used. See the skill `spell-out-abbreviations` for details.

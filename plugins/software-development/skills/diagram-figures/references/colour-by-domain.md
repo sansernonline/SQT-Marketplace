@@ -1,13 +1,13 @@
-# ตารางเนื้องาน → โทนสี
+# Work domain → colour tone
 
-ใช้เมื่อเอกสารยังไม่มี `doc-theme` และยังไม่มีสีแบรนด์ ให้ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม และเสนอโทนจากตารางนี้ไว้ในรายงานให้ผู้ใช้เลือกทีหลัง (ลำดับเต็มอยู่ใน `diagram-figures` ข้อ 5) ตารางนี้ใช้ร่วมกันทั้ง 2 engine ของ `diagram-figures` และทุก skill ที่วาดรูป
+Use this when the document has no `doc-theme` and no brand colour. Use the house default `#2A78D6`, mark it `(รอยืนยัน)` (to be confirmed), and carry on without stopping to ask. Put a tone from this table in the report so the user can choose later (the full order is in `diagram-figures` item 5). This table is shared by both engines of `diagram-figures` and by every skill that draws figures.
 
-| เนื้องาน | โทนที่เสนอ | เหตุผล |
+| Domain | Suggested tone | Reason |
 |---|---|---|
-| การแพทย์ · สุขภาพ | เขียวอมฟ้า · เขียว | ความสะอาด ความปลอดภัย |
-| การเงิน · ธนาคาร | น้ำเงินเข้ม · เทาเงิน | ความมั่นคง |
-| อุตสาหกรรม · โรงงาน | เหลืองอำพัน · เทาเหล็ก | เครื่องจักร การเตือน |
-| การศึกษา | ม่วง · ส้มอ่อน | ความกระตือรือร้น |
-| ค้าปลีก · อาหาร | ส้ม · แดงอมชมพู | ความอบอุ่น ความอยาก |
-| ราชการ · กฎหมาย | กรมท่า · เลือดหมู | ความเป็นทางการ |
-| ซอฟต์แวร์ทั่วไป | น้ำเงิน | ค่ากลางเมื่อไม่มีบริบทอื่น |
+| Medical · health | Teal · green | Cleanliness, safety |
+| Finance · banking | Dark blue · silver grey | Stability |
+| Industry · factory | Amber yellow · steel grey | Machinery, warning |
+| Education | Purple · light orange | Enthusiasm |
+| Retail · food | Orange · pinkish red | Warmth, appetite |
+| Government · law | Navy · oxblood | Formality |
+| General software | Blue | Neutral default when there is no other context |

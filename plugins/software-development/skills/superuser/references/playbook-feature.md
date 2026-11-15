@@ -1,39 +1,39 @@
-# playbook · feature — เพิ่มหรือเปลี่ยนพฤติกรรม
+# playbook · feature — add or change behavior
 
-ใช้เมื่อ: ฟีเจอร์ใหม่ · เปลี่ยนการทำงานเดิม · ทำตามข้อกำหนดใน SRS หรือ FSD
-skill หลัก: [`code-orientation`](../../code-orientation/SKILL.md) · skill ตาม stack (`stack-dotnet` · `stack-typescript` · `stack-python` · `stack-sql`) · `lazy-coding` · `readable-code` · `testing-standards` · `spec-to-code-loop` (ถ้ามีหลายข้อกำหนด)
+Use when: a new feature · changing existing behavior · following requirements in an SRS or FSD
+Main skills: [`code-orientation`](../../code-orientation/SKILL.md) · the skill for the stack (`stack-dotnet` · `stack-typescript` · `stack-python` · `stack-sql`) · `lazy-coding` · `readable-code` · `testing-standards` · `spec-to-code-loop` (if there are several requirements)
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. อ่านข้อกำหนดที่เกี่ยว (`docs/srs.md` · `docs/fsd-*.md` · mockup) แล้วทำ [`code-orientation`](../../code-orientation/SKILL.md) กับส่วนที่จะแตะ จะได้แผนที่ 10 บรรทัด แล้วเปิด skill ตาม stack ของโปรเจกต์ · ใคร: หัวหน้าทีม (โจทย์ไม่ชัด: `brainstormer` ตัวใหม่)
-2. **บอกรูปข้อมูลก่อน** — type · ตาราง · state ที่ฟีเจอร์นี้สร้างหรือเปลี่ยน โดยเขียนเป็นโค้ดหรือตารางสั้น ๆ ในคำตอบ · ใคร: หัวหน้าทีม
-   - แยก 3 ชั้น (รับข้อมูลเข้า → กฎธุรกิจ → เก็บข้อมูล)
-   - ถ้าแตะ input จากภายนอก · login · ไฟล์ · เงิน · ข้อมูลส่วนบุคคล ให้เปิด [`principle-secure-by-default`](../../principle-secure-by-default/SKILL.md) ส่วนฟีเจอร์ที่เปิดสู่ภายนอก ให้ส่ง `security-engineer` ตัวใหม่ทำ STRIDE ตาม `threat-model/references/security-templates.md` ก่อนเขียน (หรือขอให้ผู้ใช้รัน `/software-development:threat-model` เอง เพราะ skill นั้นเรียกได้เฉพาะผู้ใช้)
-   - เว็บแอปหรือ API → ทำตามคอลัมน์ "ต้องมี" ของ [`security-gate` ส่วน OWASP](../../security-gate/references/owasp-top10.md) ในส่วนที่ฟีเจอร์แตะ และเขียน test ตามคอลัมน์ "พิสูจน์ด้วย" (ชื่อ test ขึ้นต้นด้วยรหัสข้อ เช่น `A01_`)
-3. ถ้าฟีเจอร์ข้ามหลายโมดูล ให้ร่างลายเซ็นฟังก์ชันและตำแหน่งไฟล์ก่อนเขียนเนื้อ ถ้ายังมีหลายทางที่ดีพอกัน ให้ใช้ `parallel-attempts-pick-best` หรือ playbook `prototype` · ใคร: หัวหน้าทีม (หลายทางดีพอกัน: `developer` ตัวใหม่ทางละตัว)
-4. ในจุดที่จะแตะ ลบของที่ไม่ใช้ออกก่อน แล้วค่อยเพิ่ม ([`principle-replace-then-delete`](../../principle-replace-then-delete/SKILL.md)) · ใคร: `developer` ตัวใหม่
-5. แบ่งเป็นชิ้นเล็กที่ตรวจได้ทีละชิ้น ชิ้นละ 1 ข้อกำหนดหรือ 1 หน้าจอ แล้วส่งแต่ละชิ้นให้ agent `developer` ตัวใหม่ พร้อมแผนที่จากข้อ 1 ตำแหน่งไฟล์ และเกณฑ์ผ่าน · ชิ้นที่ไม่รอกัน (คนละไฟล์ · คนละโมดูล) ส่งพร้อมกันในข้อความเดียว แม้แต่ละชิ้นสั้น · ใคร: `developer` ตัวใหม่ต่อชิ้น
-   - **test ก่อนโค้ด** สำหรับชิ้นที่มี logic (คำนวณ · เงื่อนไข · state): เขียน test ที่ล้มก่อน → รันให้เห็นว่าแดง → เขียนโค้ดให้เขียว → จัดให้สะอาด ส่วนชิ้นที่เป็นหน้าจอล้วนให้ตรวจด้วย skill ตรวจแอปแทน
-6. ตรวจทุกชิ้นก่อนไปชิ้นที่รอมัน — test ของชิ้นนั้นต้องผ่าน และกดดูบนแอปจริงด้วย skill ตรวจแอปของโปรเจกต์ · ใคร: `qa-tester` ตัวใหม่
-   - **ทุกพฤติกรรมใหม่และทุกข้อที่ตัดสินใจเอง ต้องมี test ล็อกไว้อย่างน้อย 1 ตัว** และ test ต้องล้มเมื่อโค้ดผิด (`principle-prove-it-works`)
-7. **รีวิวก่อนบอกว่าเสร็จ — ห้ามข้าม** diff เล็ก: ความถูกต้องและ edge case · logic หรือ state มาก: `adversarial-review-panel` อย่างน้อย 2 มุม คือความถูกต้องและความเรียบง่าย ถ้าเพิ่ม dependency หรือแตะเรื่องเสี่ยง ให้ผ่าน [`security-gate`](../../security-gate/SKILL.md) · ใคร: `reviewer` ตัวใหม่ (logic มาก: `reviewer` ตัวใหม่มุมละตัว · เรื่องเสี่ยง: `security-engineer` ตัวใหม่ อ่านอย่างเดียว · ไม่แก้ไฟล์)
-   - test ผ่านครบไม่ได้แปลว่าไม่มีบั๊ก — ทุกข้อที่รีวิวยืนยันแล้ว ให้เขียน test ที่ล้มก่อน แล้วค่อยแก้
-   - หน้าจอที่มี mockup หรือต้องเหมือนระบบเดิม ให้จบขั้นตรวจด้วย playbook `visual-parity`
-8. แก้ข้อที่หัวหน้าทีมยืนยันแล้ว — test ที่ล้มก่อน แล้วค่อยแก้ · ใคร: `developer` ตัวใหม่
-9. รอบตรวจ — ดูข้อเดิมทุกข้อและจุดที่เปลี่ยน วนจนไม่เหลือข้อสูงและกลาง ตาม [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
-10. เมื่อผ่านทั้งหมด ส่งมอบตามกฎ commit ใน `superuser` หัวข้อ 6 เปิด PR (`pr-description-template`) เมื่อผู้ใช้สั่ง แล้วจบด้วย `status-report` · ใคร: หัวหน้าทีม
+1. Read the relevant requirements (`docs/srs.md` · `docs/fsd-*.md` · mockup), then run [`code-orientation`](../../code-orientation/SKILL.md) on the part you will touch to get a 10-line map, then open the skill for the project's stack · ใคร: หัวหน้าทีม (unclear brief: `brainstormer` ตัวใหม่)
+2. **State the data shape first** — the types · tables · state this feature creates or changes, written as code or a short table in the reply · ใคร: หัวหน้าทีม
+   - Split into 3 layers (input → business rules → storage)
+   - If it touches outside input · login · files · money · personal data, open [`principle-secure-by-default`](../../principle-secure-by-default/SKILL.md). For a feature exposed to the outside, send a fresh `security-engineer` to do STRIDE per `threat-model/references/security-templates.md` before writing (or ask the user to run `/software-development:threat-model` themselves, because only the user can call that skill)
+   - Web app or API → follow the "must have" column of [`security-gate` OWASP section](../../security-gate/references/owasp-top10.md) for the parts the feature touches, and write tests per the "prove with" column (test names start with the item ID, such as `A01_`)
+3. If the feature crosses several modules, draft the function signatures and file locations before writing the body. If several approaches are still equally good, use `parallel-attempts-pick-best` or the `prototype` playbook · ใคร: หัวหน้าทีม (several equally good approaches: `developer` ตัวใหม่ one per approach)
+4. At the spot you will touch, delete what is unused first, then add ([`principle-replace-then-delete`](../../principle-replace-then-delete/SKILL.md)) · ใคร: `developer` ตัวใหม่
+5. Split the work into small pieces that can be checked one by one, each piece 1 requirement or 1 screen, then send each piece to a `developer` agent ตัวใหม่ with the map from step 1, the file locations, and the pass criteria · Pieces that do not wait on each other (different files · different modules) go out together in one message, even if each is short · ใคร: `developer` ตัวใหม่ per piece
+   - **Test before code** for a piece with logic (calculation · conditions · state): write a test that fails → run it and see it red → write the code until green → clean up. For a pure screen piece, check with the app-checking skill instead.
+6. Check (ตรวจ) every piece before moving to the piece that waits on it — that piece's tests must pass, and click through the real app with the project's app-check skill · ใคร: `qa-tester` ตัวใหม่
+   - **Every new behavior and every decision you made yourself needs at least 1 test that locks it in**, and the test must fail when the code is wrong (`principle-prove-it-works`)
+7. **Check (ตรวจ) by review before saying done — do not skip.** Small diff: correctness and edge cases · much logic or state: `adversarial-review-panel` with at least 2 angles, correctness and simplicity. If a dependency is added or a risky area is touched, also pass it through [`security-gate`](../../security-gate/SKILL.md) · ใคร: `reviewer` ตัวใหม่ (much logic: `reviewer` ตัวใหม่ per angle · risky area: `security-engineer` ตัวใหม่ อ่านอย่างเดียว · ไม่แก้ไฟล์)
+   - All tests passing does not mean there are no bugs — for every finding the review confirmed, write a failing test first, then fix
+   - A screen that has a mockup or must match the old system ends its check with playbook `visual-parity`
+8. Fix the findings the lead has confirmed — write the failing test first, then fix · ใคร: `developer` ตัวใหม่
+9. Check (ตรวจ) again — look at every earlier finding and every changed spot, and repeat until no `สูง` (high) or `กลาง` (medium) finding is left, per [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
+10. When everything passes, deliver per the commit rules in `superuser` section 6, open a PR (`pr-description-template`) when the user asks, then finish with `status-report` · ใคร: หัวหน้าทีม
 
-## ข้ออ้างที่เจอบ่อย — อ่านก่อนข้ามขั้น
+## Common excuses — read before skipping a step
 
-| ข้ออ้าง | ความจริง |
+| Excuse | Reality |
 |---|---|
-| "ง่ายเกินกว่าจะต้องมี test" | โค้ดง่ายก็พัง · test ใช้เวลาครึ่งนาที |
-| "เขียน test ทีหลังก็ได้" | test ที่เขียนหลังโค้ดผ่านทันที ไม่เคยเห็นมันแดง จึงพิสูจน์ไม่ได้ว่าจับบั๊กได้ |
-| "กดดูเองแล้ว ใช้ได้" | ไม่มีบันทึกว่ากดอะไร รันซ้ำไม่ได้ · พอโค้ดเปลี่ยนต้องกดใหม่หมด |
-| "เขียนไปแล้ว ลบทิ้งเสียดาย" | เวลานั้นหมดไปแล้วทั้ง 2 ทาง · เก็บโค้ดที่เชื่อไม่ได้ต่างหากที่เปลือง |
-| "test เขียนยาก งั้นข้ามไปก่อน" | test ยาก = ใช้ยาก · ฟังสัญญาณแล้วแก้ที่ design |
-| "รันทั้งชุดตอนท้ายทีเดียว" | รันต่อชิ้นถึงจะรู้ว่าชิ้นไหนทำพัง · รอบท้ายเป็นสัญญา ไม่ใช่ของแทน |
+| "Too simple to need a test" | Simple code breaks too · a test takes half a minute |
+| "I can write the tests later" | A test written after the code passes at once. You never saw it red, so it does not prove it can catch the bug |
+| "I clicked through it myself and it works" | There is no record of what was clicked, so it cannot be re-run · when the code changes you must click everything again |
+| "It's written already, a pity to delete it" | That time is gone either way · what costs more is keeping code you cannot trust |
+| "The test is hard to write, so skip it for now" | A hard test = hard to use · take it as a signal and fix the design |
+| "Run the whole suite once at the end" | Running per piece is how you learn which piece broke it · the final run is the contract, not a substitute |
 
-## จบเมื่อ
+## Done when
 
-ทุกเกณฑ์ผ่านของข้อกำหนดมีหลักฐาน — test ที่รันจริง หรือการกดบนแอปจริงพร้อมผลที่เห็น
+Every pass criterion of the requirements has evidence — a test that actually ran, or a click-through on the real app with the result seen

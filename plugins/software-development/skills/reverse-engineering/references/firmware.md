@@ -1,44 +1,44 @@
-# firmware และ filesystem ของอุปกรณ์
+# Firmware and device filesystems
 
-ใช้กับไฟล์ image ของ firmware · archive ที่ฝังอยู่ในอุปกรณ์ · filesystem ที่แตกออกมาแล้ว · อ่านไฟล์อย่างเดียว ไม่เขียนหรือ flash ลงอุปกรณ์
+For firmware image files · archives embedded in a device · filesystems already extracted. Read files only; never write or flash to the device.
 
-## 1 · ก่อนแตก
+## 1 · Before extracting
 
-- ทำกับสำเนาในโฟลเดอร์งาน จด SHA-256 และที่มาของไฟล์ (ดาวน์โหลดจากผู้ผลิต · ดึงจากอุปกรณ์ของผู้ใช้) ลงสมุดหลักฐาน
-- เขียนหรือ flash ลงอุปกรณ์ต้องขออนุญาตแยกทุกครั้ง เพราะอุปกรณ์อาจใช้งานไม่ได้อีก
-- ไฟล์ executable ที่แตกออกมา ห้ามรันบนเครื่องผู้ใช้ ถ้าต้องดูตอนรันให้ทำใน `docker-sandbox` ตาม [runtime-observation](runtime-observation.md)
-- ตรวจเครื่องมือด้วย `node scripts/check-tools.mjs --target firmware` · Binwalk และ Unblob มักติดตั้งใน Linux หรือ WSL ตัวตรวจบน Windows มองไม่เห็นของใน WSL ดังนั้นผล `missing` ไม่ได้แปลว่าไม่มี ให้ถามผู้ใช้
+- Work on a copy in the work folder. Record the file's SHA-256 and origin (downloaded from the maker · pulled from the user's device) in the evidence ledger.
+- Writing or flashing to a device needs separate permission every time, because the device may become unusable.
+- Never run extracted executables on the user's machine. If you need to watch it run, do it in `docker-sandbox` per [runtime-observation](runtime-observation.md).
+- Check tools with `node scripts/check-tools.mjs --target firmware`. Binwalk and Unblob are usually installed in Linux or WSL. The checker on Windows cannot see inside WSL, so a `missing` result does not mean absent; ask the user.
 
-## 2 · คัดแยกก่อนแตก
+## 2 · Triage before extracting
 
-| ดูอะไร | ทำอย่างไร | บอกอะไร |
+| What to look at | How | What it tells you |
 |---|---|---|
-| ขนาดและ magic bytes | `python -I scripts/triage.py <image>` | ชนิดไฟล์ที่รู้จัก หรือเป็น raw binary |
-| signature ที่ฝังอยู่ | `binwalk <image>` | ตำแหน่ง (offset) และชนิดข้อมูล เช่น header ของ bootloader · kernel · squashfs · zip |
-| entropy | `binwalk -E <image>` | ช่วงที่ entropy สูงเกือบตลอดมักถูกบีบอัดหรือเข้ารหัส |
-| partition | ดูจาก signature และเอกสารของอุปกรณ์ | ขอบเขตของแต่ละส่วน |
+| Size and magic bytes | `python -I scripts/triage.py <image>` | A known file type, or a raw binary |
+| Embedded signatures | `binwalk <image>` | Offsets and data types, such as bootloader · kernel · squashfs · zip headers |
+| Entropy | `binwalk -E <image>` | A stretch with high entropy almost throughout is usually compressed or encrypted |
+| Partitions | From signatures and the device's documentation | The boundaries of each part |
 
-signature ที่เจอบอกแค่ว่ามีอะไรอยู่ตรงนั้น ไม่ได้ยืนยันโครงสร้างทั้ง image และเจอผิดได้ ให้ติด `อนุมาน` จนกว่าจะแตกได้จริง
+A signature only says something is there. It does not confirm the structure of the whole image, and it can be a false hit. Label it `อนุมาน` (inferred) until it actually extracts.
 
-## 3 · แตก
+## 3 · Extract
 
 ```bash
 unblob -e _to_delete/re/<ชื่อ>/unblob <image>       # แตกทุกชั้นลงโฟลเดอร์แยก
 binwalk -e -C _to_delete/re/<ชื่อ>/binwalk <image>  # ทางเลือก ถ้ามีแค่ Binwalk
 ```
 
-- แตกลงโฟลเดอร์ใหม่ใต้ `_to_delete/re/` ทุกครั้ง ไม่เขียนทับไฟล์เดิม และดูพื้นที่ดิสก์ก่อน เพราะ image ที่ซ้อนกันหลายชั้นแตกแล้วอาจใหญ่ขึ้นหลายเท่า
-- ยังไม่ได้ทดลองคำสั่งในหัวข้อนี้บนเครื่องที่เขียนเอกสาร เพราะไม่มี Binwalk และ Unblob (`ยังไม่ได้ตรวจ`) ให้ดู `--help` ของรุ่นที่ผู้ใช้ติดตั้งก่อนรัน
+- Always extract into a new folder under `_to_delete/re/`. Never overwrite existing files. Check disk space first, because an image nested in many layers can grow several times when extracted.
+- The commands in this section were not tried on the machine where this document was written, because it has no Binwalk or Unblob (`ยังไม่ได้ตรวจ`, not yet checked). Read `--help` for the version the user installed before running.
 
-## 4 · อ่านผลที่แตก
+## 4 · Read the extracted result
 
-1. ทำรายการไฟล์ทั้งหมดพร้อม SHA-256 ลงไฟล์ แล้วอ่านเฉพาะส่วน
-2. ดู config (`/etc` · ไฟล์ `.conf` · `.ini` · ไฟล์ที่ระบบเริ่มทำงานเรียก) เพื่อรู้ว่าบริการไหนเปิด และพอร์ตไหนฟังอยู่
-3. binary ที่สนใจส่งต่อ [native-binaries](native-binaries.md) · image ที่ไม่มี header ต้องรู้สถาปัตยกรรมและจุดเริ่มก่อน ให้ถามผู้ใช้หรือดูเอกสารของอุปกรณ์
-4. ส่วนที่เข้ารหัสหรือแตกไม่ได้ ให้จดเป็น `ยังไม่ได้ตรวจ` พร้อมบอกว่าต้องมีอะไรถึงจะอ่านได้
+1. Write the full file list with SHA-256 to a file, then read only parts of it.
+2. Read the config (`/etc` · `.conf` · `.ini` files · files called by system startup) to learn which services are on and which ports are listening.
+3. Pass binaries of interest to [native-binaries](native-binaries.md). An image with no header needs its architecture and entry point first; ask the user or read the device documentation.
+4. For parts that are encrypted or cannot be extracted, record them as `ยังไม่ได้ตรวจ` (not yet checked) and say what is needed to read them.
 
-## 5 · รายงาน
+## 5 · Report
 
-- ทุกข้อสรุปชี้ไฟล์ · offset ใน image หรือ path ในโฟลเดอร์ที่แตก
-- ห้ามบอกพฤติกรรมตอนอุปกรณ์รันจากหลักฐาน static อย่างเดียว
-- คีย์ · ใบรับรอง · รหัสผ่านที่ฝังมา รายงานแค่ชื่อและตำแหน่ง ไม่แปะค่า แล้วบอกผู้ใช้ว่าควรเปลี่ยนไหม
+- Every conclusion points to a file · an offset in the image or a path in the extracted folder.
+- Never state the device's runtime behavior from static evidence alone.
+- For embedded keys · certificates · passwords, report only the name and location. Do not paste the value, and tell the user whether to change it.
