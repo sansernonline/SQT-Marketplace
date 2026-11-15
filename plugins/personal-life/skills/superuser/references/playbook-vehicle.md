@@ -1,15 +1,15 @@
-# playbook · vehicle — ต่อภาษี พ.ร.บ. ตรวจสภาพ และเช็กระยะรถ
+# playbook · vehicle — renew tax and พ.ร.บ. (compulsory motor insurance), inspection, and service mileage
 
-ใช้เมื่อ: ภาษีรถหรือ พ.ร.บ. ใกล้หมด · ต้องตรวจสภาพ · เลือกชั้นประกัน · เช็กระยะ
-skill หลัก: `vehicle-care`
+Use when: the car tax or พ.ร.บ. is about to expire · an inspection is needed · choosing an insurance class · checking service mileage
+Main skill: `vehicle-care`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. อ่านข้อมูลจากเล่มทะเบียนหรือกรมธรรม์ — วันหมดอายุภาษี พ.ร.บ. ประกัน ใบขับขี่ · ใคร: `home-manager` ตัวใหม่
-2. ตรวจเงื่อนไขปัจจุบันจากเว็บกรมการขนส่งทางบก — ต้องตรวจสภาพไหม ต่อออนไลน์ได้ไหม · ใคร: `home-manager` ตัวใหม่
-3. ทำลำดับขั้นตาม `vehicle-care` — ตรอ. ตรวจสภาพ (ถ้าต้อง) → พ.ร.บ. → ภาษี พร้อมเอกสารที่ต้องใช้ · ใคร: `home-manager` ตัวใหม่
-4. ตั้งเตือนตาม `vehicle-care` — ภาษี 90 วันก่อนหมดอายุ · พ.ร.บ. ประกัน และใบขับขี่ 30 วันก่อนหมดอายุ — และเช็กระยะตามกิโลเมตร · ใคร: `home-manager` ตัวใหม่ · `reviewer` ตัวใหม่ตรวจทั้งชุดกับเล่มจริงและเว็บทางการ
+1. Read the data from the registration book or the policy: expiry dates of the tax, พ.ร.บ., insurance, and driving licence · ใคร: `home-manager` ตัวใหม่
+2. Check (ตรวจ) the current conditions on the Department of Land Transport website: is an inspection needed, can it be renewed online · ใคร: `home-manager` ตัวใหม่
+3. Make the sequence of steps per `vehicle-care`: private inspection centre (ตรอ.) inspection (if needed) → พ.ร.บ. → tax, with the documents needed · ใคร: `home-manager` ตัวใหม่
+4. Set reminders per `vehicle-care`: tax 90 days before expiry · พ.ร.บ., insurance, and driving licence 30 days before expiry. Also set service reminders by kilometres · ใคร: `home-manager` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the whole set against the real registration book and official websites
 
-## จบเมื่อ
+## Done when
 
-ลำดับขั้นพร้อมเอกสาร ตรวจกับแหล่งทางการแล้ว และเตือนตั้งครบ
+The sequence of steps with documents is checked against official sources, and all reminders are set

@@ -1,19 +1,19 @@
-# playbook · job-application — สมัครงานตำแหน่งหนึ่งให้ครบชุด
+# playbook · job-application — apply for one position with a complete set
 
-ใช้เมื่อ: มีประกาศงานที่จะสมัคร · "ช่วยสมัครงานนี้" · เปลี่ยนงานแล้วมีเป้าหมายชัด
-skill หลัก: `resume-th-en` · `linkedin-profile` · `interview-prep`
+Use when: there is a job ad to apply to · "ช่วยสมัครงานนี้" · changing jobs with a clear target
+Main skills: `resume-th-en` · `linkedin-profile` · `interview-prep`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. เก็บวัตถุดิบ — CV ปัจจุบัน · ประกาศงาน · ลิงก์ LinkedIn · ภาษาที่บริษัทใช้ ชิ้นไหนไม่มีให้ใส่ `(รอยืนยัน)` แล้วทำต่อ · ใคร: หัวหน้าทีม
-2. อ่านประกาศงาน แล้วแยกเป็น 3 กลุ่ม: ต้องมี · ควรมี · คำค้นที่ระบบ Applicant Tracking System (ATS) จะหา เขียนเป็นตารางสั้นในคำตอบ · ใคร: `career-coach` ตัวใหม่
-3. จับคู่ประสบการณ์กับข้อต้องมีทีละข้อ ข้อที่ไม่มีหลักฐานให้ลงช่อง "ช่องว่าง" ไม่แต่งเติม · ใคร: `career-coach` ตัวใหม่
-4. เขียน CV ฉบับสำหรับงานนี้ด้วย `resume-th-en` ทุก bullet ต้องมีการกระทำ + ผล + ตัวเลข และใช้ภาษาตามผู้อ่าน (ไทย · อังกฤษ · ทั้งสอง) · ใคร: `career-coach` ตัวใหม่
-5. ปรับ headline และ About ของ LinkedIn ให้ตรงกับ CV ด้วย `linkedin-profile` ตำแหน่งและวันที่ต้องไม่ขัดกัน · ใคร: `career-coach` ตัวใหม่
-6. ร่างข้อความสมัครหรือ cover letter สั้น ๆ ที่พูดถึงข้อต้องมี 2–3 ข้อด้วยหลักฐาน · ใคร: `career-coach` ตัวใหม่
-7. ตรวจว่าคำค้นจากข้อ 2 อยู่ใน CV ครบ วันที่และตำแหน่งตรงกันทุกเอกสาร และระบบ ATS อ่านไฟล์ได้ (ไม่มีตาราง กล่องข้อความ หรือรูปแทนข้อความ) · ใคร: `reviewer` ตัวใหม่
-8. ถ้าผู้ใช้ต้องการ ให้เตรียมสัมภาษณ์รอบแรกด้วย playbook `interview` ส่วนการกดส่งใบสมัครอยู่ใน "รออนุมัติ" · ใคร: หัวหน้าทีม (กดส่ง: ผู้ใช้)
+1. Collect the raw material: current CV · job ad · LinkedIn link · the language the company uses. For any item that is missing, write `(รอยืนยัน)` (awaiting confirmation) and carry on · ใคร: หัวหน้าทีม
+2. Read the job ad and split it into 3 groups: must-haves · nice-to-haves · keywords the Applicant Tracking System (ATS) will search for. Write them as a short table in the reply · ใคร: `career-coach` ตัวใหม่
+3. Match the experience to each must-have, one by one. For a must-have with no evidence, put it in the "ช่องว่าง" (gap) column and do not invent anything · ใคร: `career-coach` ตัวใหม่
+4. Write the CV for this job with `resume-th-en`. Every bullet needs an action + a result + a number, and uses the language of the reader (Thai · English · both) · ใคร: `career-coach` ตัวใหม่
+5. Adjust the LinkedIn headline and About section to match the CV with `linkedin-profile`. Positions and dates must not conflict · ใคร: `career-coach` ตัวใหม่
+6. Draft a short application message or cover letter that speaks to 2–3 must-haves with evidence · ใคร: `career-coach` ตัวใหม่
+7. Check (ตรวจ) that every keyword from step 2 appears in the CV, that dates and positions match in every document, and that the ATS can read the file (no tables, text boxes, or images in place of text) · ใคร: `reviewer` ตัวใหม่
+8. If the user wants, prepare for the first-round interview with the playbook `interview`. Submitting the application sits under "รออนุมัติ" (awaiting approval) · ใคร: หัวหน้าทีม (submit: the user)
 
-## จบเมื่อ
+## Done when
 
-CV · ข้อความสมัคร · LinkedIn ตรงกัน ผ่านเกณฑ์ 3 ข้อ (หัวข้อ 4 ของ superuser) และร่างไว้พร้อมให้ผู้ใช้กดส่งเอง
+The CV · application message · LinkedIn match, pass the 3 criteria (section 4 of superuser), and are drafted ready for the user to submit themselves
