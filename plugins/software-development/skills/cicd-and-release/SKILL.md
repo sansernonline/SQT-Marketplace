@@ -1,6 +1,6 @@
 ---
 name: cicd-and-release
-description: Use when setting up or fixing a build and deploy pipeline (CI/CD).
+description: Use when setting up or fixing a CI/CD pipeline
 ---
 
 # Continuous Integration / Continuous Delivery (CI/CD) และการปล่อยของ

@@ -61,8 +61,6 @@ scripts\build-dist.cmd                                                       # �
 
 ทุก plugin ใช้ของกลางจาก `superuser` (แกนหัวหน้าทีม · skill `human-writing` · `simplify` · เอกสารหลัก `polished-document-style` · `document-naming` · agent `reviewer` · hook) · ติดตั้ง plugin ไหน Claude Code ติดตั้ง `superuser` ให้เองจาก `dependencies` · skill เอกสารออกแบบ สไลด์ รูปอยู่ใน `software-development` · ภาพ AI ใน `graphic-design` · ประชุม ใน `personal-life` · zip สำหรับ claude.ai มีของกลางอยู่ในตัวแล้ว
 
-ติดตั้งหลาย plugin → รัน `node scripts/install/set-skill-budget.mjs` ครั้งเดียว (ขยายงบรายการ skill เป็น 2%) ไม่งั้นคำอธิบาย skill บางตัวถูกตัดทิ้ง · รายละเอียด [scripts/README.md](scripts/README.md)
-
 เคยติดตั้ง plugin สาขาของรุ่นก่อน v2.0.0 → ถอดออก (`/plugin uninstall software-development-<สาขา>`) เพราะรวมอยู่ในตัวหลักแล้ว
 
 ### ทาง ข · พัฒนาต่อ

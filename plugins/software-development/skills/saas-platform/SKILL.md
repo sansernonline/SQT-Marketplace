@@ -1,6 +1,6 @@
 ---
 name: saas-platform
-description: Use when building B2B SaaS (multi-tenancy, SSO, billing, usage metering).
+description: Use when building B2B SaaS with tenants and billing
 argument-hint: <saas-architecture-review | integration-design> <details>
 ---
 

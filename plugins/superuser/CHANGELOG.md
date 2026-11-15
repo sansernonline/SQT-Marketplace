@@ -1,5 +1,12 @@
 # Changelog — superuser
 
+## 3.42.0 — 2026-11-15
+
+- description ของ skill ทั้ง 40 ตัวเป็นภาษาอังกฤษประโยคเดียว ยาวไม่เกิน 65 ตัวอักษร · รายการ skill ของ plugin นี้ลดจาก 5,146 เหลือ 3,458 ตัวอักษร · รวมทุก plugin เหลือ 23,892 ตัว ต่ำกว่างบตั้งต้น 30,000 ของ Claude Code จึงไม่ต้องตั้ง `skillListingBudgetFraction` แล้ว (ผู้ใช้สั่ง 2026-11-15)
+- ยังไม่ได้รัน trigger eval เทียบก่อนและหลัง (เสียเงิน รออนุมัติ)
+- hook เลิกบอกให้ตั้ง `skillListingBudgetFraction` 0.02 และลบ `scripts/install/set-skill-budget.mjs` · ค่านี้ทำให้ model ที่ context 200k ได้งบ 16,000 ตัว น้อยกว่าค่าตั้งต้น 30,000 (ดูจากโค้ดใน `claude.exe` 2026-11-15)
+- validator: เตือนเมื่อ description ของ skill ยาวเกิน 70 ตัว (เดิม 150) · คำสั่งและ skill ที่คนสั่งเองคง 150 · เตือนสั้นเกินเมื่อน้อยกว่า 20 ตัว (เดิม 60)
+
 ## 3.41.0 — 2026-11-13
 
 - hook บอกชื่อ skill เป็นชื่อเต็ม `plugin:skill` จาก plugin ที่เปิดอยู่ในเครื่อง (`enabledPlugins`) เช่น `software-development:presentation-design` · เดิมบอกแค่ `lazy-coding` แล้ว model เดา `superuser:lazy-coding` จนเครื่องมือ Skill ปฏิเสธ (เกิดจริง 2026-11-13)

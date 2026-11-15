@@ -1,6 +1,6 @@
 ---
 name: superuser
-description: Use when online selling, buying or Thai back-office work spans several steps (pricing, refund, payroll, tax, PDPA, LINE OA) or says superuser for it.
+description: Use when online selling or Thai back-office work spans steps
 ---
 
 # SuperUser — the online buying, selling and company back-office team

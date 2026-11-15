@@ -1,6 +1,6 @@
 ---
 name: principle-secure-by-default
-description: Use when writing or reviewing code, config or scripts, especially input, database, files, logins, money.
+description: Use when writing or reviewing code for security basics
 ---
 
 # principle · secure by default — ปลอดภัยตั้งแต่บรรทัดแรก

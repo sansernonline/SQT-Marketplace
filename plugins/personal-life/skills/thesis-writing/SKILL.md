@@ -1,6 +1,6 @@
 ---
 name: thesis-writing
-description: Use when writing a thesis, independent study (IS) or research paper (proposal, literature review, citations, Thai .docx typesetting, defense).
+description: Use when writing a thesis or research paper
 ---
 
 # Thesis and Paper Writing

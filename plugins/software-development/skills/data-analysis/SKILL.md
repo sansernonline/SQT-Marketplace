@@ -1,6 +1,6 @@
 ---
 name: data-analysis
-description: Use when a CSV, Excel or SQL export must answer a business question with numbers.
+description: Use when a CSV, Excel or SQL export must answer a question
 ---
 
 # data-analysis · ตอบคำถามธุรกิจจากข้อมูล ด้วยตัวเลขที่ตรวจย้อนได้

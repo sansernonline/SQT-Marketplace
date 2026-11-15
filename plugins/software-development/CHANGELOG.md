@@ -1,5 +1,10 @@
 # Changelog — software-development
 
+## 3.5.0 — 2026-11-15
+
+- description ของ skill ทั้ง 104 ตัวเป็นภาษาอังกฤษประโยคเดียว ยาวไม่เกิน 65 ตัวอักษร · รายการ skill ของ plugin นี้ลดจาก 12,867 เหลือ 9,608 ตัวอักษร · รวมทุก plugin เหลือ 23,892 ตัว ต่ำกว่างบตั้งต้น 30,000 ของ Claude Code จึงไม่ต้องตั้ง `skillListingBudgetFraction` แล้ว (ผู้ใช้สั่ง 2026-11-15)
+- ยังไม่ได้รัน trigger eval เทียบก่อนและหลัง (เสียเงิน รออนุมัติ)
+
 ## 3.4.7 — 2026-11-13
 
 - description ของ `stack-python` และ `presentation-design` มีคำที่ผู้ใช้พิมพ์จริง (CSV · เขียนสคริปต์ Python · ทำสไลด์ · progress report) · trigger eval 2026-11-11 เคส `python-code` และ `slides` ไม่เปิด skill 0/1 · ยังไม่ได้รันเทียบ

@@ -1,6 +1,6 @@
 ---
 name: test-evidence
-description: Use when running test cases and keeping proof (GIF per case, pass/fail report).
+description: Use when running test cases and keeping proof
 ---
 
 # Test Evidence

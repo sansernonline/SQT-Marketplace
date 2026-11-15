@@ -17,5 +17,4 @@ fi
 
 cp "$src" "$file"
 echo "ติดตั้งแล้ว -> $file"
-node "$(cd "$(dirname "$0")" && pwd)/set-skill-budget.mjs" || echo "ตั้งงบรายการ skill ไม่สำเร็จ (ต้องมี node) — รัน node scripts/install/set-skill-budget.mjs เอง"
 echo "เปิด Claude Code ใหม่ หรือพิมพ์ /memory เพื่อตรวจ"

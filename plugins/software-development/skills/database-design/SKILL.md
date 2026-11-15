@@ -1,6 +1,6 @@
 ---
 name: database-design
-description: Use when designing or changing a database schema (tables, indexes, migrations).
+description: Use when designing or changing a database schema
 ---
 
 # ออกแบบฐานข้อมูล

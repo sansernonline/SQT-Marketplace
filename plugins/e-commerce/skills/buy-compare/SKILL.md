@@ -1,6 +1,6 @@
 ---
 name: buy-compare
-description: Use when about to buy something big in Thailand (appliance, phone, car, course). Total cost, trusted reviews.
+description: Use before a big purchase in Thailand to compare total cost
 argument-hint: <product category> [option A] [option B] [budget]
 ---
 

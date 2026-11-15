@@ -16,6 +16,4 @@ if (Test-Path $file) {
 
 Copy-Item $src $file -Force
 Write-Host "ติดตั้งแล้ว -> $file"
-node (Join-Path $PSScriptRoot "set-skill-budget.mjs")
-if ($LASTEXITCODE -ne 0) { Write-Host "ตั้งงบรายการ skill ไม่สำเร็จ (ต้องมี node) — รัน node scripts\install\set-skill-budget.mjs เอง" }
 Write-Host "เปิด Claude Code ใหม่ หรือพิมพ์ /memory เพื่อตรวจ"

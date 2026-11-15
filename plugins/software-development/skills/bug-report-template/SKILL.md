@@ -1,6 +1,6 @@
 ---
 name: bug-report-template
-description: Use when writing up one software defect (repro steps, severity).
+description: Use when writing up one software defect
 argument-hint: <brief description of the bug>
 ---
 

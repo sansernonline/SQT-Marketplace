@@ -1,6 +1,6 @@
 ---
 name: cloudflare-r2
-description: Use when an app stores files in Cloudflare R2 (S3 API, presigned upload, CORS).
+description: Use when an app stores files in Cloudflare R2
 ---
 
 # cloudflare-r2 — ต่อแอปเข้า Cloudflare R2 แบบ bucket ส่วนตัว สิทธิ์น้อยสุด และคุมเงินได้

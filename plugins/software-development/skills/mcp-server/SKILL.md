@@ -1,6 +1,6 @@
 ---
 name: mcp-server
-description: Use when an agent must reach a real system (database, ERP, API) through an MCP server.
+description: Use when an agent must reach a real system via MCP
 ---
 
 # mcp-server — สร้าง MCP server ให้ agent ใช้ระบบจริงได้

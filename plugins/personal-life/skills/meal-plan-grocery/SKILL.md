@@ -1,6 +1,6 @@
 ---
 name: meal-plan-grocery
-description: Use when a Thai family wants a weekly meal plan on a budget, a grocery list or less food waste.
+description: Use when a Thai family wants a budget meal plan
 ---
 
 # Meal Plan and Grocery List

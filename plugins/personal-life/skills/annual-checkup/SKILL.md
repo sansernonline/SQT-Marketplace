@@ -1,6 +1,6 @@
 ---
 name: annual-checkup
-description: Use when planning a yearly checkup in Thailand, social security or gold card cover, or comparing packages.
+description: Use when planning a yearly checkup in Thailand
 argument-hint: <plan|log|trend> [age] [sex] [scheme — sso|gold|civil|private]
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: tax-basics-th
-description: Use when asking about Thai tax on stock gains, dividends, interest, crypto or foreign income (PND 90, 91).
+description: Use when asking how Thai tax applies to gains or dividends
 ---
 
 # Thai Tax Basics for Investors

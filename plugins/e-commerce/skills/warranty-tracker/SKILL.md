@@ -1,6 +1,6 @@
 ---
 name: warranty-tracker
-description: Use when filing receipts and warranty cards, checking if an item is covered, or preparing a claim.
+description: Use when filing warranty cards or preparing a claim
 ---
 
 # Warranty Tracker

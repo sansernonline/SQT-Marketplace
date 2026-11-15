@@ -1,6 +1,6 @@
 ---
 name: legal-help-prep
-description: Use when the user has a dispute or court summons (หมายศาล, ปรึกษาทนาย, rent, debt, wages), asks a deadline or who wins, or preps a lawyer visit.
+description: Use when facing a dispute or court summons
 ---
 
 # Legal Help Prep (เตรียมเรื่องก่อนไปหาทนายหรือหน่วยงาน)

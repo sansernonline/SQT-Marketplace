@@ -1,6 +1,6 @@
 ---
 name: hiring-th
-description: Use when a Thai employer hires staff (job ad, screening scorecard, interview plan, reference check, offer letter, first week).
+description: Use when a Thai employer hires staff
 ---
 
 # จ้างพนักงาน 1 ตำแหน่ง (ฝั่งนายจ้างไทย)
