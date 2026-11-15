@@ -18,7 +18,8 @@
  *   dist/codex/<plugin>/                 OpenAI Codex CLI → .agents/skills · .codex/agents/*.toml · AGENTS.md
  *   dist/gemini-cli/<plugin>/            Gemini CLI extension → gemini-extension.json · skills · agents · commands/*.toml
  *   dist/kimi/<plugin>/                  Kimi Code CLI plugin → kimi.plugin.json · skills (คำสั่ง = skill เรียกเอง) · agents · KIMI.md
- *   dist/chat-web/<plugin>/<บทบาท>/      ChatGPT Custom GPT / Gemini Gem → instructions.md + knowledge/
+ *   dist/hermes/<plugin>/                Hermes Agent → skills (คำสั่ง และบทบาทเป็น skill role-<ชื่อ>) · HERMES.md
+ *   dist/chat-web/<plugin>/<บทบาท>/     ChatGPT Custom GPT / Gemini Gem → instructions.md + knowledge/
  */
 import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync, rmSync, cpSync, statSync, mkdtempSync } from "node:fs";
 import { join, dirname, resolve } from "node:path";
@@ -273,6 +274,28 @@ function buildKimi(p) {
     "เรียกใช้เป็น subagent ด้วยชื่อ · คำสั่งสำเร็จรูปเรียกด้วย `/skill:ชื่อคำสั่ง`"));
 }
 
+// ── Hermes Agent (Nous Research) ──────────────────────────────────────
+// เอกสาร hermes-agent.nousresearch.com/docs (ตรวจ 2026-11-15): skill ทุกตัวเป็น /ชื่อ ให้เอง · ไม่มีรูปแบบไฟล์ subagent
+// → คำสั่งเป็น skill · บทบาทเป็น skill `role-<ชื่อ>` ที่ผู้ใช้เรียก /role-<ชื่อ> · บริบทอยู่ใน HERMES.md
+
+function buildHermes(p) {
+  const out = join(DIST, "hermes", p.plugin);
+  placeSkills(p, join(out, "skills"));
+
+  for (const c of p.commands) {
+    write(join(out, "skills", c.name, "SKILL.md"),
+      frontmatter({ name: c.name, description: c.fields.description }) + c.body.replaceAll("$ARGUMENTS", "สิ่งที่ผู้ใช้ระบุมากับคำสั่ง"));
+  }
+
+  for (const a of p.agents) {
+    write(join(out, "skills", `role-${a.name}`, "SKILL.md"),
+      frontmatter({ name: `role-${a.name}`, description: a.fields.description }) + a.body);
+  }
+
+  write(join(out, "HERMES.md"), contextFile(p, "Hermes Agent",
+    "ไม่มี subagent แบบไฟล์ · เรียกบทบาทด้วย `/role-ชื่อบทบาท` · คำสั่งสำเร็จรูปเรียกด้วย `/ชื่อคำสั่ง`"));
+}
+
 // ── ChatGPT Custom GPT / Gemini Gem ───────────────────────────────────
 
 function skillAsText(s) {
@@ -441,13 +464,16 @@ function distReadme(rows) {
 | OpenAI Codex CLI | \`codex/<plugin>/\` | คัดลอกเนื้อในโฟลเดอร์ไปไว้รากโปรเจกต์ |
 | Gemini CLI | \`gemini-cli/<plugin>/\` | \`gemini extensions install <โฟลเดอร์>\` |
 | Kimi Code CLI | \`kimi/<plugin>/\` | \`/plugins install <โฟลเดอร์>\` ในหน้าจอ Kimi |
+| Hermes Agent | \`hermes/<plugin>/\` | ใส่ \`<โฟลเดอร์>/skills\` ใน \`skills.external_dirs\` ของ \`~/.hermes/config.yaml\` แล้ว \`/reload-skills\` · คัด \`HERMES.md\` ไปรากโปรเจกต์ถ้าต้องการบริบท |
 | ChatGPT Custom GPT / Gemini Gem | \`chat-web/<plugin>/<บทบาท>/\` | ดู \`chat-web/README.md\` |
 
 | plugin | รุ่น | skill | บทบาท | คำสั่ง | ขนาด zip |
 |---|---|---:|---:|---:|---:|
 ${table}
 
-ไฟล์ .zip ภายใน skill (เช่นคลังไอคอน) ไม่อยู่ใน \`claude-web/\` เพราะหน้าเว็บแตกไฟล์ไม่ได้ · ชุด codex · gemini-cli · kimi มีครบ
+ไฟล์ .zip ภายใน skill (เช่นคลังไอคอน) ไม่อยู่ใน \`claude-web/\` เพราะหน้าเว็บแตกไฟล์ไม่ได้ · ชุด codex · gemini-cli · kimi · hermes มีครบ
+
+Hermes: อย่าวางใน \`.hermes/skills\` ของโปรเจกต์ ตัวสแกนของ Hermes กัก skill \`superuser\` ไว้ (อ่านรายการคำสั่งที่ด่าน guard ห้าม เช่น \`rm -rf\` ว่าเป็นคำสั่งอันตราย และไฟล์เกิน 50 ไฟล์) · \`skills.external_dirs\` ไม่ผ่านตัวสแกนนี้ (ตรวจกับ Hermes v0.23.1 วันที่ 2026-11-15) · skill กลางอยู่ในทุก plugin ใส่หลาย plugin แล้วชื่อซ้ำ Hermes จะเลือกตัวเดียว
 `);
 }
 
@@ -461,6 +487,7 @@ for (const p of plugins) {
   buildCodex(p);
   buildGemini(p);
   buildKimi(p);
+  buildHermes(p);
   tooLong.push(...buildChatWeb(p));
   rows.push({ plugin: p.plugin, version: p.version, skills: p.skills.length, agents: p.agents.length, commands: p.commands.length, zip });
   console.log(`  ${p.plugin.padEnd(18)} v${p.version}  ${p.skills.length} skills · ${p.agents.length} agents · ${p.commands.length} commands · zip ${(zip / 1024 / 1024).toFixed(1)} MB`);

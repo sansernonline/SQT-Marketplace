@@ -12,6 +12,7 @@
 | OpenAI Codex CLI | สร้างแล้ว · ยังไม่ได้ทดสอบกับ Codex จริงในรอบนี้ | `dist/codex/<plugin>/` (`.agents/skills` · `.codex/agents/*.toml` · `AGENTS.md`) | โครงสร้าง manifest ตรวจ 2026-11-10 |
 | Gemini CLI | สร้างแล้ว · ยังไม่ได้ทดสอบกับ Gemini CLI จริงในรอบนี้ | `dist/gemini-cli/<plugin>/gemini-extension.json` | โครงสร้าง manifest ตรวจ 2026-11-10 |
 | Kimi Code CLI | สร้างแล้ว · ยังไม่ได้ทดสอบกับ Kimi จริงในรอบนี้ | `dist/kimi/<plugin>/kimi.plugin.json` | โครงสร้าง manifest ตรวจ 2026-11-10 |
+| Hermes Agent | สร้างแล้ว · ลองโหลดในโปรเจกต์กับ Hermes v0.23.1 ได้ 84/85 (`superuser` ถูกตัวสแกนกัก) · แบบ `external_dirs` ยังไม่ได้ลอง | `dist/hermes/<plugin>/skills` · `HERMES.md` | 2026-11-15 |
 | ChatGPT Custom GPT · Gemini Gem | สร้างแล้ว · ต้องทำมือทีละบทบาท | `dist/chat-web/<plugin>/<บทบาท>/` | ยังไม่ได้ตรวจซ้ำ |
 | ติดตั้งสำเนา skill ในโปรเจกต์ผู้ใช้ (Codex · Gemini · Kimi) พร้อมอัปเดตที่ไม่ทับของที่แก้เอง | ใช้ได้ · มี self-test | `scripts/sync/update-skills.mjs` + `scripts/sync/prior-names.json` | 2026-11-10 self-test ผ่าน |
 
