@@ -1,29 +1,29 @@
-# ตัวอย่างของ plugin นี้ — ระดับโมเดล · ความเป็นอิสระ · รูปแบบทีม
+# Examples for this plugin — model tiers · autonomy · team patterns
 
-ย้ายมาจาก `SKILL.md` หัวข้อ 5 · 6 · 9 · กฎอยู่ใน `SKILL.md` ไฟล์นี้มีแต่ตัวอย่าง
+Moved from `SKILL.md` sections 5 · 6 · 9. The rules are in `SKILL.md`, and this file holds examples only.
 
-## ระดับโมเดล — ตัวอย่างงาน (หัวข้อ 5)
+## Model tiers — example jobs (section 5)
 
-กฎ ชื่อโมเดล และการสลับกลางทาง อยู่ใน `superuser:superuser` หัวข้อ 5 (แกนกลาง) · ไฟล์นี้มีแต่ตัวอย่างงานของแต่ละระดับ
+The rules, model names and mid-task switching are in `superuser:superuser` section 5 (the core). This file holds only example jobs for each tier.
 
-ระดับไล่จากบนลงล่างตามกฎ 3 ข้อของแกน ข้อแรกที่ตรงชนะ (ใหญ่ → เล็ก → กลาง) · **ใหญ่** `opus` — แทบทุกชิ้นของ plugin นี้แตะเงิน: หารูปแบบความผิดพลาดจากบันทึกเทรด · วางแผนภาษีที่มีรายได้หลายประเภท · ตรวจกรณีสงสัยมิจฉาชีพ · คำนวณขนาด position · **เล็ก** `haiku` — งานกลไกที่มีแบบให้ทำตาม: จัดหมวดข่าวตามรายการหัวข้อที่ให้ · ค้นไฟล์แล้วรายงาน · **กลาง** `sonnet` (ที่เหลือ) — สรุปข่าวที่ยังไม่ใช้ตัดสินใจซื้อขาย · จัดตาราง watchlist · ร่างบันทึก
+Tiers run from top to bottom under the core's 3 rules, and the first match wins (large → small → medium). **Large** `opus` — almost every piece of this plugin touches money: find error patterns in the trade journal · plan tax with several kinds of income · check a suspected scam · calculate position size · **Small** `haiku` — mechanical work that has a pattern to follow: sort news into the given list of topics · search a file and report · **Medium** `sonnet` (everything else) — summarise news not yet used for a trading decision · arrange a watchlist table · draft notes
 
-## ความเป็นอิสระ — งานที่ย้อนได้และแหล่งข้อมูล (หัวข้อ 6)
+## Autonomy — reversible work and sources (section 6)
 
-| เจอ | ทำ |
+| Found | Do |
 |---|---|
-| งานที่ย้อนกลับได้ — ร่างแผน · คำนวณในสเปรดชีตหรือสคริปต์ · บันทึกพอร์ตจำลอง · จัดไฟล์บันทึกการเทรด | ทำเลย |
-| ไม่รู้ข้อเท็จจริงสาธารณะ (อัตราภาษีและเพดานลดหย่อน · กฎตลาด · วัน XD · ใบอนุญาตของผู้ให้บริการ) | ค้นเอง โดยเรียงแหล่งดังนี้: กรมสรรพากร ตลาดหลักทรัพย์ สำนักงาน ก.ล.ต. ธนาคารแห่งประเทศไทย → เอกสารของบริษัทจดทะเบียนและกองทุน → สำนักข่าวการเงิน ใช้ได้ตามกฎ 3 แหล่งใน `SKILL.md` หัวข้อ 6 |
+| Reversible work — draft a plan · calculate in a spreadsheet or script · record a paper portfolio · organise the trade journal files | Do it now |
+| Public fact not known (tax rates and deduction ceilings · market rules · XD dates · a provider's licence) | Search it yourself, going through sources in this order: Revenue Department, Stock Exchange, SEC Office, Bank of Thailand → documents of listed companies and funds → financial news outlets. Usable under the 3-source rule in `SKILL.md` section 6 |
 
-## รูปแบบทีม — ใช้อย่างไรในงานนี้ (หัวข้อ 9)
+## Team patterns — how each is used in this work (section 9)
 
-วิธีทำ ต้นทุน และกับดักของแต่ละแบบอยู่ใน `agent-patterns`
+How to run each pattern, its cost and its traps are in `agent-patterns`.
 
-| รูปแบบ | ในงานนี้ใช้อย่างไร |
+| Pattern | How it is used here |
 |---|---|
-| **Planning** | thesis → จุดตัดขาดทุน → ขนาดไม้ → ใบสั่ง |
-| **ReAct** | ดึงราคา → อ่านค่า → เทียบเวลา → คำนวณ |
-| **Reflection** | `reviewer` ตัวใหม่ (อ่านอย่างเดียว ไม่ใช่ `risk-manager` ที่ทำงานชิ้นนั้น) ตรวจทุกใบสั่งก่อนให้ผู้ใช้ |
+| **Planning** | thesis → stop-loss point → position size → order |
+| **ReAct** | fetch price → read the value → compare the time → calculate |
+| **Reflection** | A new `reviewer` (read-only, not the `risk-manager` that did the piece) checks every order before it goes to the user |
 | **Multi-Agent** | `market-analyst` → `risk-manager` → `trade-journal-coach` |
-| **Mixture-of-Agents (MoA)** | แผนเกษียณหรือภาษี → 3 สมมติฐาน (ระวัง · กลาง · ดี) แล้วแสดงคู่กัน |
-| **Reranker** | ข่าวหลายสิบชิ้น → ให้คะแนนผลกระทบต่อหุ้นที่ถือ → เหลือ 5 |
+| **Mixture-of-Agents (MoA)** | Retirement or tax plan → 3 assumptions (cautious · middle · good), then show them side by side |
+| **Reranker** | Dozens of news items → score the impact on the stocks held → keep 5 |
