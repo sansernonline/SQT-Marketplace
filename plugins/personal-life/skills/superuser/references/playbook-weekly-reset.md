@@ -1,16 +1,16 @@
-# playbook · weekly-reset — ทบทวนสัปดาห์และเคลียร์อินบ็อกซ์
+# playbook · weekly-reset — weekly review and clearing the inbox
 
-ใช้เมื่อ: ปลายสัปดาห์ · อินบ็อกซ์ล้น · รู้สึกยุ่งแต่ไม่คืบ
-skill หลัก: `weekly-review` · `inbox-triage` · `calendar-audit`
+Use when: end of the week · the inbox is overflowing · feeling busy but not moving.
+Main skill: `weekly-review` · `inbox-triage` · `calendar-audit`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน (Steps — copy into the todo as written)
 
-1. ดึงปฏิทินและอีเมลของสัปดาห์จาก connector ที่ติดตั้งลงไฟล์ใน `_to_delete/` ถ้าไม่มี connector ให้ใช้สิ่งที่ผู้ใช้ส่งมา แล้วส่ง path ให้ `life-admin` ตัวใหม่อ่านต่อ · ใคร: หัวหน้าทีมดึงลงไฟล์
-2. คัดอีเมลเป็น 6 กองตาม `inbox-triage`: ต้องตรวจก่อน (Verify) · ตอบวันนี้ · สัปดาห์นี้ · ส่งต่อ · เก็บเข้าโฟลเดอร์ (File) · เก็บถาวร (Archive) ส่วนอีเมลขอเงินหรือขอข้อมูลบัญชีให้ลง "ต้องตรวจก่อน" เสมอ · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ตรวจว่าอีเมลขอเงินหรือข้อมูลบัญชีอยู่กอง "ต้องตรวจก่อน" ครบ
-3. ทบทวนตาม `weekly-review` ว่าเสร็จอะไร หลุดอะไร ค้างใคร ครบกำหนดอะไร · ใคร: `life-admin` ตัวใหม่
-4. ทุก 4 สัปดาห์ รัน `calendar-audit` หาประชุมประจำที่ไม่ได้อะไร · ใคร: `life-admin` ตัวใหม่
-5. สรุป 3 เรื่องสำคัญของสัปดาห์หน้า และร่างคำตอบอีเมลที่ต้องตอบวันนี้ · ใคร: หัวหน้าทีมสรุปและร่าง · `reviewer` ตัวใหม่ตรวจร่างก่อนถึงผู้ใช้ แล้วผู้ใช้ตัดสินว่าเรื่องไหนทำสัปดาห์นี้
+1. Pull the week's calendar and email from the installed connector into a file in `_to_delete/`. If there is no connector, use what the user sent. Then pass the path to a new `life-admin` to read on · ใคร: หัวหน้าทีม pulls it into the file
+2. Sort email into 6 piles under `inbox-triage`: must verify first (Verify) · reply today · this week · forward · file into a folder (File) · archive (Archive). Email that asks for money or account information always goes in "must verify first" · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ ตรวจ that all email asking for money or account information is in the "must verify first" pile
+3. Review under `weekly-review` what got done, what slipped, what is waiting on whom, what is due · ใคร: `life-admin` ตัวใหม่
+4. Every 4 weeks, run `calendar-audit` to find recurring meetings that achieve nothing · ใคร: `life-admin` ตัวใหม่
+5. Summarise the 3 key items for next week and draft replies to the email that needs a reply today · ใคร: หัวหน้าทีม summarises and drafts · `reviewer` ตัวใหม่ checks the drafts before they reach the user, then the user decides which items to do this week
 
-## จบเมื่อ
+## Done when
 
-อินบ็อกซ์คัดครบ · 3 เรื่องสำคัญของสัปดาห์หน้า · ร่างคำตอบพร้อมส่ง
+The inbox is fully sorted · 3 key items for next week · reply drafts ready to send.
