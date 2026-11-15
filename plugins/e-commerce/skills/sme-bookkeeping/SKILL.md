@@ -43,7 +43,7 @@ The Department of Business Development (DBD) sets the time limits for posting en
 
 Keep **7 years** for anything about money: it covers both rules and the extension. Paper or clean scans both work for your own file; the original tax invoice is what backs an input VAT claim, so keep originals until your accountant says otherwise.
 
-ตรวจล่าสุด 2026-10-25 · แหล่ง: https://rd.go.th/25306.html (ข้อหารือกรมสรรพากร อ้าง พ.ร.บ.การบัญชี ม.14 · 5 ปีนับแต่วันปิดบัญชี · ขยายไม่เกิน 7 ปี) · https://rd.go.th/28312.html (กค 0706/4151 · 20 เม.ย. 2550 · ม.87/3 · 5 ปีนับแต่วันยื่นแบบ · ขยายไม่เกิน 7 ปี) · https://www.ofm.co.th/blog/organize-accounting-documents-2026/ · ข้อหารือทั้ง 2 ฉบับเก่า ยังไม่ได้เทียบตัวบทปัจจุบันในราชกิจจานุเบกษา
+Last checked 2026-10-25 · sources: https://rd.go.th/25306.html (Revenue Department ruling, citing the Accounting Act (พ.ร.บ.การบัญชี) section 14 · 5 years from the account closing date · extendable to at most 7 years) · https://rd.go.th/28312.html (กค 0706/4151 · 20 Apr 2007 (B.E. 2550) · section 87/3 · 5 years from the filing date · extendable to at most 7 years) · https://www.ofm.co.th/blog/organize-accounting-documents-2026/ · both rulings are old and have not been compared with the current text in the Royal Gazette
 
 ## 3. Separate personal and business money first
 

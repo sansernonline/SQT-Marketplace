@@ -1,16 +1,16 @@
-# playbook · business-doc — เอกสารธุรกิจภาษาไทย
+# playbook · business-doc — Thai business documents
 
-ใช้เมื่อ: ใบเสนอราคา ใบแจ้งหนี้ ใบเสร็จ ใบกำกับภาษี · หนังสือราชการ · สัญญา · ใบลา
-skill หลัก: `doc-quotation` · `e-tax-invoice` · `doc-thai-official` · `doc-contract-th` · `doc-leave` · agent `thai-doc-writer`
+Use when: a quotation · invoice · receipt · tax invoice · official letter · contract · leave request
+Main skills: `doc-quotation` · `e-tax-invoice` · `doc-thai-official` · `doc-contract-th` · `doc-leave` · agent `thai-doc-writer`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. เลือกชนิดเอกสารให้ถูกกับเหตุการณ์ตาม `doc-quotation` (เสนอราคา · วางบิล · รับเงิน · ใบกำกับภาษี) · ใคร: หัวหน้าทีม
-2. เก็บข้อมูลคู่สัญญาและรายการจากของจริง · เลขผู้เสียภาษีและที่อยู่ใส่ตามที่ผู้ใช้ให้ · ใคร: หัวหน้าทีม
-3. ร่างตามรูปแบบของ skill — ใบกำกับภาษีมีช่องครบตามกฎหมาย · หนังสือราชการตามระเบียบงานสารบรรณ · สัญญาตามเช็กลิสต์ข้อสัญญา · ใคร: `thai-doc-writer` ตัวใหม่
-4. คำนวณ VAT ภาษีหัก ณ ที่จ่าย และยอดรวมเป็นตัวหนังสือไทยด้วยสูตร · ใคร: `thai-doc-writer` ตัวใหม่
-5. ตรวจ — ช่องบังคับครบ · ตัวเลขและตัวหนังสือตรงกัน · ข้อสัญญาที่ต้องให้ทนายดูติดธงแล้ว · ใคร: `reviewer` ตัวใหม่
+1. Pick the document type that fits the event, per `doc-quotation` (quote · billing · payment received · tax invoice) · ใคร: หัวหน้าทีม
+2. Collect the parties' details and line items from real sources · put the tax ID and address exactly as the user gave them · ใคร: หัวหน้าทีม
+3. Draft in the skill's format — a tax invoice has every field the law requires · an official letter follows the correspondence regulations · a contract follows the contract-clause checklist · ใคร: `thai-doc-writer` ตัวใหม่
+4. Calculate VAT, withholding tax, and the total in Thai words using the formulas · ใคร: `thai-doc-writer` ตัวใหม่
+5. Check (ตรวจ) — mandatory fields are complete · figures and words match · contract clauses that need a lawyer are flagged · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-เอกสารพร้อมส่ง ช่องบังคับครบ ยอดตรง และจุดที่ต้องให้ผู้เชี่ยวชาญดูติดธงแล้ว
+The document is ready to send, the mandatory fields are complete, the totals match, and every point that needs an expert is flagged.
