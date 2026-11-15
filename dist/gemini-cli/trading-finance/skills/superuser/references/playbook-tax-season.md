@@ -1,16 +1,16 @@
-# playbook · tax-season — ภาษีเงินได้บุคคลธรรมดาและการลดหย่อน
+# playbook · tax-season — personal income tax and deductions
 
-ใช้เมื่อ: ตุลาคมถึงธันวาคม · ถามภาษีปันผล กำไรหุ้น คริปโต รายได้ต่างประเทศ · ยื่นภาษีต้นปี
-skill หลัก: `tax-deduction-planner` · `tax-basics-th`
+Use when: October to December · questions about tax on dividends, stock gains, crypto, foreign income · filing the return early in the year.
+Main skill: `tax-deduction-planner` · `tax-basics-th`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน (Steps — copy into the todo as written)
 
-1. เก็บรายได้ทั้งปีและลดหย่อนที่ใช้แล้ว จากเอกสารจริง (50 ทวิ · หนังสือรับรอง) · ใคร: หัวหน้าทีม
-2. ตรวจกฎและเพดานปีภาษีนี้จากเว็บกรมสรรพากร · ใคร: `money-planner` ตัวใหม่
-3. คำนวณภาษีก่อนและหลังลดหย่อนแต่ละทาง ตาม `tax-deduction-planner` แล้วบอกว่ายังเหลือสิทธิ์ซื้อกองทุนลดหย่อนได้อีกเท่าไร · ใคร: `money-planner` ตัวใหม่
-4. ภาษีจากการลงทุน ให้บอกแบบที่ต้องยื่น และจะขอเครดิตภาษีปันผลหรือไม่ ตาม `tax-basics-th` · ใคร: `money-planner` ตัวใหม่
-5. ตรวจ — คำนวณซ้ำด้วย `tax.mjs` ของ `tax-deduction-planner` และทุกเพดานมีแหล่งและปี · ใคร: `reviewer` ตัวใหม่
+1. Collect the whole year's income and the deductions already used, from real documents (50 ทวิ · certificates) · ใคร: หัวหน้าทีม
+2. ตรวจ this tax year's rules and ceilings on the Revenue Department website · ใคร: `money-planner` ตัวใหม่
+3. Calculate tax before and after each deduction route under `tax-deduction-planner`, and say how much room is left to buy tax-saving funds · ใคร: `money-planner` ตัวใหม่
+4. For tax on investments, say which form must be filed and whether to claim the dividend tax credit, under `tax-basics-th` · ใคร: `money-planner` ตัวใหม่
+5. ตรวจ by recalculating with `tax.mjs` of `tax-deduction-planner`, and that every ceiling has a source and a year · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-ตารางภาษีก่อนและหลังที่คำนวณซ้ำแล้ว พร้อมรายการที่ต้องทำก่อน 31 ธันวาคม
+A before-and-after tax table that has been recalculated, with the list of things to do before 31 December.

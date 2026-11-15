@@ -113,53 +113,53 @@ Use when about to ship or merge code, as a security check
 
 ## reference: dependency-updates.md
 
-# อัปเดต dependency ที่มีช่องโหว่ — ส่วนขยายของ `security-gate` ขั้น 5
+# Updating vulnerable dependencies — an extension of `security-gate` step 5
 
-ใช้เมื่อผลสแกน dependency มีรายการ หรือเพิ่งเพิ่ม dependency ใหม่ · แนวคิดจาก wshobson `dependency-management` (MIT) และ Trail of Bits `supply-chain-risk-auditor` (CC-BY-SA 4.0 — เอาแค่แนวคิด เขียนใหม่ด้วยคำเรา)
+Use when the dependency scan result has entries, or a new dependency was just added · ideas from wshobson `dependency-management` (MIT) and Trail of Bits `supply-chain-risk-auditor` (CC-BY-SA 4.0 — ideas only, rewritten in our own words)
 
-## 1 · สแกน — ใช้ตัวที่มากับภาษา แล้วเสริมด้วยตัวที่อ่าน lockfile ได้ทุกภาษา
+## 1 · Scan — use the tool that comes with the language, then add one that reads lockfiles of every language
 
-| stack | คำสั่ง | หมายเหตุ |
+| stack | Command | Note |
 |---|---|---|
-| Node | `npm audit --omit=dev --json > _to_delete/security/npm-audit.json` | `--omit=dev` ตัดของที่ไม่ไปถึง production · ห้าม `npm audit fix --force` เพราะมันยอมอัปเดตข้าม major |
-| Python | `pip-audit -r requirements.txt` หรือ `pip-audit` ใน venv | โปรเจกต์ที่ใช้ `uv` / `poetry` ให้ export lockfile เป็น requirements ก่อน |
-| .NET | `dotnet list package --vulnerable --include-transitive` | ไม่ใส่ `--include-transitive` จะเห็นแค่ที่อ้างตรง |
-| ทุก stack | `trivy fs --scanners vuln .` หรือ `osv-scanner scan source -r .` | อ่าน lockfile ของทุกภาษาในครั้งเดียว ใช้ยืนยันผลข้างบนและจับ Dart · Go · Rust |
+| Node | `npm audit --omit=dev --json > _to_delete/security/npm-audit.json` | `--omit=dev` drops things that never reach production · never `npm audit fix --force` because it allows updates across a major version |
+| Python | `pip-audit -r requirements.txt` or `pip-audit` inside the venv | For projects using `uv` / `poetry`, export the lockfile to requirements first |
+| .NET | `dotnet list package --vulnerable --include-transitive` | Without `--include-transitive` you see only directly referenced ones |
+| Every stack | `trivy fs --scanners vuln .` or `osv-scanner scan source -r .` | Reads the lockfiles of every language at once, use it to confirm the results above and to catch Dart · Go · Rust |
 
-**lockfile ต้อง commit เสมอ** (`package-lock.json` · `uv.lock` / `poetry.lock` · `packages.lock.json` · `pubspec.lock`) — ไม่มี lockfile เครื่องแต่ละเครื่องได้เวอร์ชันต่างกัน และตัวสแกนไม่รู้ว่าจริง ๆ ใช้เวอร์ชันไหน
+**Always commit the lockfile** (`package-lock.json` · `uv.lock` / `poetry.lock` · `packages.lock.json` · `pubspec.lock`) — with no lockfile each machine gets different versions, and the scanner does not know which version is really used
 
-## 2 · จัดกลุ่มตามความเสี่ยงจริง ไม่ใช่ตามป้าย severity ของตัวสแกน
+## 2 · Group by real risk, not by the scanner's severity label
 
-ตอบ 3 คำถามต่อรายการ แล้วลงตาราง `| แพ็กเกจ | เวอร์ชัน | ช่องโหว่ | ใช้ถึงโค้ดที่เสี่ยงไหม | ตรง/ผ่านตัวอื่น | มีเวอร์ชันแก้ไหม | ทำอะไร |`
+Answer 3 questions per entry, then fill the table `| แพ็กเกจ | เวอร์ชัน | ช่องโหว่ | ใช้ถึงโค้ดที่เสี่ยงไหม | ตรง/ผ่านตัวอื่น | มีเวอร์ชันแก้ไหม | ทำอะไร |` (package · version · vulnerability · reaches the risky code · direct/via another · fixed version available · action)
 
-| คำถาม | ดูจาก | ผลต่อการตัดสิน |
+| Question | Look at | Effect on the decision |
 |---|---|---|
-| โค้ดเราเรียกถึงฟังก์ชันที่มีช่องโหว่ไหม และ input ไปถึงมันได้จากภายนอกไหม | `grep` ชื่อฟังก์ชันใน advisory · ทางเดินของ input | ไม่ถึง → ลดระดับได้ แต่ต้องจดเหตุผล ไม่ใช่ปิดเงียบ |
-| อ้างตรงหรือมาผ่านตัวอื่น (transitive) | `npm ls <pkg>` · `pipdeptree -r -p <pkg>` · `dotnet nuget why <pkg>` | transitive → แก้ที่ตัวแม่ก่อน ถ้าแม่ยังไม่ออกเวอร์ชันใหม่ค่อย override ใน lockfile แล้วจดไว้ว่าต้องถอดเมื่อแม่แก้ |
-| มีเวอร์ชันที่แก้แล้วไหม | ช่อง `fixed in` ของ advisory | ไม่มี → หาแพ็กเกจแทน หรือปิดทางเข้าของ input แล้วจดเป็นความเสี่ยงที่ยอมรับใน `decision-log` |
+| Does our code call the vulnerable function, and can outside input reach it | `grep` the function name in the advisory · the path of input | Does not reach → may be downgraded, but the reason must be recorded, not closed silently |
+| Referenced directly or through another package (transitive) | `npm ls <pkg>` · `pipdeptree -r -p <pkg>` · `dotnet nuget why <pkg>` | transitive → fix at the parent first, and if the parent has no new version yet, override in the lockfile and note that it must be removed when the parent is fixed |
+| Is there a fixed version | The `fixed in` field of the advisory | None → find a replacement package, or close the input's entry path and record it as an accepted risk in `decision-log` |
 
-ผลสรุป: **แก้ตอนนี้** (ถึงจริง + มีตัวแก้) · **แก้รอบหน้า** (ถึงไม่ได้ แต่มีตัวแก้) · **ยอมรับความเสี่ยงชั่วคราว** (ไม่มีตัวแก้ — ผู้ใช้ต้องเห็นและตกลง)
+Resulting summary: **fix now** (really reached + a fix exists) · **fix next round** (cannot be reached, but a fix exists) · **accept the risk temporarily** (no fix — the user must see it and agree)
 
-## 3 · ลำดับอัปเดต — เล็กก่อน แยกใหญ่ออกมาให้เห็นชัด
+## 3 · Update order — small first, split the large ones out so they are visible
 
-1. **patch** ทั้งหมดในรอบเดียว (1.2.3 → 1.2.9) — ตามสัญญา semver ไม่เปลี่ยนพฤติกรรม แต่ยังต้องรัน test
-2. **minor** รวมได้ถ้าอยู่ในกลุ่มเดียวกัน (เช่น ชุด `@angular/*` ไปพร้อมกัน) · อ่าน release notes หาคำว่า deprecated
-3. **major — 1 PR ต่อ 1 แพ็กเกจ** อ่าน migration guide ก่อน แก้โค้ดตามนั้น แล้วรัน test ทั้งชุด · ห้ามพ่วง major 2 ตัวใน PR เดียว เพราะพังแล้วไม่รู้ว่าตัวไหน
-4. แพ็กเกจที่ไม่มีคนดูแลแล้ว (ไม่มี release เกิน 2 ปี · issue ค้างเรื่องความปลอดภัย) → เปิดงานแยกเพื่อหาตัวแทน ไม่ซ่อนไว้ใน PR อัปเดต
+1. All **patch** updates in one round (1.2.3 → 1.2.9) — by the semver contract they do not change behaviour, but you still must run tests
+2. **minor** may be combined if in the same group (for example the `@angular/*` set together) · read the release notes for the word deprecated
+3. **major — 1 PR per 1 package**: read the migration guide first, change the code accordingly, then run the whole test set · never bundle 2 majors in one PR, because when it breaks you will not know which one
+4. A package nobody maintains any more (no release over 2 years · open security issues) → open a separate task to find a replacement, do not hide it inside an update PR
 
-ทางอัตโนมัติ: เปิด **Renovate** หรือ **Dependabot** ให้ยื่น PR ตามลำดับข้างบนเอง (ตั้งกลุ่ม patch+minor อัตโนมัติ · major แยก PR · กำหนดวันในสัปดาห์) — คนยังต้องอ่าน release notes และ merge เอง ไม่ auto-merge major
+Automatic route: turn on **Renovate** or **Dependabot** to file PRs in the order above by themselves (group patch+minor automatically · major in its own PR · set the day of the week) — a person still must read the release notes and merge, and never auto-merge a major
 
-## 4 · พิสูจน์ก่อนปิดรายการ
+## 4 · Prove it before closing the entry
 
-- test ทั้งชุดเขียว และ build ผ่านจากเครื่องเปล่าด้วย lockfile ที่ commit แล้ว
-- **เดินทางเดิมของช่องโหว่อีกครั้ง** — ถ้า advisory บอกว่า input รูปแบบ X ทำให้พัง ให้ส่ง X เข้าไปจริง (ใน sandbox) แล้วดูว่าไม่พัง · เขียนเป็น test ถ้าทำได้ เพื่อไม่ให้ถอยกลับตอนมีคน downgrade
-- รันตัวสแกนข้อ 1 ซ้ำ รายการนั้นต้องหายไป ไม่ใช่แค่เปลี่ยนเวอร์ชันในไฟล์
+- The whole test set is green and the build passes from a clean machine with the committed lockfile
+- **Walk the vulnerability's original path again** — if the advisory says input of form X makes it break, really send X in (in a sandbox) and see that it does not break · write it as a test if you can, so it does not regress when someone downgrades
+- Re-run the scanner of item 1, and that entry must be gone, not merely have its version changed in the file
 
-## 5 · บันทึก
+## 5 · Record
 
-- `CHANGELOG.md` ใต้หัวข้อ Security: แพ็กเกจ · จาก → ไป · รหัสช่องโหว่ (CVE หรือ GHSA) · 1 บรรทัดว่าเราถึงช่องโหว่นั้นไหม
-- รายการที่ยอมรับความเสี่ยงหรือ override ใน lockfile → `decision-log` พร้อมวันที่ต้องกลับมาดู
-- รายงาน gate ของรอบนั้น (`qa/security/<วัน>-gate.md`) ชี้มาที่ CHANGELOG แทนการเขียนซ้ำ
+- `CHANGELOG.md` under the heading Security: package · from → to · vulnerability ID (CVE or GHSA) · 1 line on whether we reach that vulnerability
+- Entries with an accepted risk or an override in the lockfile → `decision-log` with the date to come back and look
+- That round's gate report (`qa/security/<วัน>-gate.md`) points to the CHANGELOG instead of writing it again
 
 
 ## reference: owasp-contract-clause.md
@@ -284,94 +284,94 @@ Use when about to ship or merge code, as a security check
 
 ## reference: owasp-top10.md
 
-# OWASP Top 10:2025 — ระบบที่ส่งมอบต้องผ่านรายการตรวจรายข้อ
+# OWASP Top 10:2025 — a delivered system must pass an item-by-item checklist
 
-ส่วนขยายของ [`SKILL.md`](../SKILL.md) · ใช้เมื่อสร้างหรือส่งมอบเว็บแอปหรือ API ที่สัญญาหรือข้อกำหนดความปลอดภัย (NFR) ระบุ OWASP Top 10:2025
+An extension of [`SKILL.md`](../SKILL.md) · use when building or delivering a web app or API whose contract or security requirement (NFR) names OWASP Top 10:2025
 
-> สัญญาจ้างทำเว็บแอปเขียนได้ว่า "ต้องผ่าน OWASP Top 10:2025" แต่ไม่มีใครให้ใบรับรองแบบนี้ได้
-> สิ่งที่ส่งมอบได้จริงคือ **รายงานที่บอกทีละข้อ A01–A10 ว่าคุมด้วยอะไร ตรวจด้วยอะไร และมีหลักฐานอะไร**
-> ไฟล์นี้ทำให้ทุกระบบที่ทีมสร้างมีรายงานนั้น ตั้งแต่ออกแบบจนส่งมอบ
+> A web-app contract may say "must pass OWASP Top 10:2025", but nobody can issue a certificate like that
+> What can really be delivered is **a report that says, item by item A01–A10, what controls it, what checks it, and what evidence there is**
+> This file makes every system the team builds have that report, from design to delivery
 
-Open Worldwide Application Security Project (OWASP) Top 10:2025 คือรายการความเสี่ยงของเว็บแอปที่พบบ่อยและร้ายแรงที่สุด 10 ข้อ ฉบับล่าสุด (ต้นฉบับ: owasp.org/Top10/2025)
+Open Worldwide Application Security Project (OWASP) Top 10:2025 is the list of the 10 most common and most serious web-app risks, in its latest edition (original: owasp.org/Top10/2025)
 
-ใช้คู่กับ: [`principle-secure-by-default`](../../principle-secure-by-default/SKILL.md) (เขียนโค้ด) · [`security-gate`](../SKILL.md) (สแกนก่อนส่ง) · คำสั่ง `/software-development:threat-model` (ออกแบบ) · agent `security-engineer` (รายงานเชิงลึก)
+Use together with: [`principle-secure-by-default`](../../principle-secure-by-default/SKILL.md) (writing code) · [`security-gate`](../SKILL.md) (scan before sending) · the command `/software-development:threat-model` (design) · agent `security-engineer` (in-depth report)
 
 ---
 
-## 1 · 10 ข้อ และสิ่งที่ระบบต้องมี
+## 1 · The 10 items, and what the system must have
 
-แต่ละข้อมี 3 ส่วน → **ต้องมี** (สิ่งที่โค้ดและการตั้งค่าต้องทำ) · **พิสูจน์ด้วย** (test หรือเครื่องมือที่รันได้จริง) · **ภาษาเจ้าของกิจการ** (ใช้อธิบายลูกค้าและในรายงาน)
+Each item has 3 parts → **must have** (what code and configuration must do) · **prove with** (a test or tool that can really run) · **business-owner wording** (for explaining to the customer and in the report)
 
-| ข้อ | ความเสี่ยง | ภาษาเจ้าของกิจการ | ต้องมี | พิสูจน์ด้วย |
+| Item | Risk | Business-owner wording (ภาษาเจ้าของกิจการ) | Must have | Prove with |
 |---|---|---|---|---|
-| A01 | Broken Access Control | ลูกค้าคนหนึ่งเห็นข้อมูลของอีกคนได้ | ตรวจสิทธิ์ฝั่ง server ทุก endpoint · ปฏิเสธเป็นค่าเริ่ม · ตรวจว่าเป็นเจ้าของ record ทุกครั้งที่อ่านหรือแก้ด้วย id · กันเซิร์ฟเวอร์ไปดึง URL ภายใน (Server-Side Request Forgery (SSRF)) ด้วย allowlist · Cross-Origin Resource Sharing (CORS) ไม่เปิด `*` คู่กับ cookie · ระบบที่ใช้ cookie session ต้องมี token กันการส่งคำขอแทนผู้ใช้ (Cross-Site Request Forgery (CSRF)) · รับ input ผ่าน Data Transfer Object (DTO) หรือรายชื่อฟิลด์ที่อนุญาต ไม่ผูกทั้ง object (กัน client ส่ง `role` · `isAdmin` มาเอง) | integration test ต่อ endpoint: ไม่ login → 401 · ผิดบทบาท → 403 · id ของคนอื่น → 403 หรือ 404 · POST ไม่มี CSRF token → 403 (ระบบที่ใช้ cookie) · ส่งฟิลด์ `role` เกินมา → ค่าในฐานข้อมูลไม่เปลี่ยน |
-| A02 | Security Misconfiguration | ตั้งค่าเซิร์ฟเวอร์หละหลวม เปิดหน้า admin ทิ้งไว้ | ตั้งค่าเป็นสคริปต์เดียวกันทุก environment ต่างกันแค่ค่าลับ · ปิด debug · stack trace · directory listing · หน้า admin ตัวอย่าง · ใส่ security header (Content Security Policy (CSP) รวม `frame-ancestors` · HTTP Strict Transport Security (HSTS) · X-Content-Type-Options) · ไม่มีรหัสผ่านค่าเริ่ม · storage บน cloud ไม่เปิดสาธารณะ | สแกน header (OWASP ZAP (Zed Attack Proxy) baseline) · `trivy config .` · test ว่า production ตอบ error แบบไม่มี stack trace |
-| A03 | Software Supply Chain Failures | ใช้ไลบรารีเก่า หรือมีช่องโหว่ | lockfile ทุกภาษา · รายการส่วนประกอบซอฟต์แวร์ (Software Bill of Materials (SBOM)) · ไม่มี dependency ที่มีช่องโหว่ระดับ critical หรือ high · ตัดของที่ไม่ใช้ · ดึงจาก registry ทางการเท่านั้น | `security-gate` ด้าน dependency (npm audit · pip-audit · `dotnet list package --vulnerable` · osv-scanner) · SBOM แบบ CycloneDX |
-| A04 | Cryptographic Failures | ไม่เข้ารหัสรหัสผ่านและข้อมูลสำคัญ | Transport Layer Security (TLS) 1.2 ขึ้นไปทุกทาง + HSTS · รหัสผ่านใช้ Argon2id · bcrypt · PBKDF2 (ห้าม MD5 · SHA-1 · SHA-256 เปล่า) · ข้อมูลอ่อนไหวเข้ารหัสตอนเก็บ · ค่าลับอยู่นอกโค้ด · เก็บข้อมูลเท่าที่ใช้ | semgrep (กฎ crypto) · test ว่ารหัสผ่านใน DB ไม่ใช่ข้อความเดิม · ตรวจ TLS ของ server ที่ deploy |
-| A05 | Injection | กรอกคำสั่งในช่องค้นหา แล้วดึงฐานข้อมูลได้ | SQL ผ่าน parameter หรือ ORM เท่านั้น · ไม่ต่อสตริงเป็นคำสั่ง shell · HTML escape ตอนแสดงผล (กัน Cross-Site Scripting (XSS)) · ตรวจ input ที่ขอบระบบ | semgrep · test ส่ง `' OR 1=1--` · `<script>` · `; rm` แล้วต้องไม่ทำงาน |
-| A06 | Insecure Design | ออกแบบผิดตั้งแต่ต้น เช่น ใช้คูปองซ้ำได้ | threat model ส่วน login · สิทธิ์ · เงิน · ข้อมูลส่วนบุคคล ก่อนเขียน · กฎธุรกิจบังคับที่ server (ใช้ซ้ำไม่ได้ · ยอดติดลบไม่ได้ · ทำซ้ำแล้วไม่ตัดเงินซ้ำ) · จำกัดความถี่ (rate limit) · อัปโหลดไฟล์: ตรวจชนิดจากเนื้อไฟล์ จำกัดขนาด เก็บนอก web root ตั้งชื่อใหม่ ([`file-upload-and-storage`](../../file-upload-and-storage/SKILL.md)) | เอกสาร threat model · test อัปโหลดไฟล์ `.php` · `.exe` ที่เปลี่ยนนามสกุลเป็น `.jpg` → ปฏิเสธ · test กรณีใช้ผิดวิธี (abuse case) อย่างน้อย 1 ข้อต่อกฎธุรกิจที่เกี่ยวกับเงินหรือสิทธิ์ |
-| A07 | Authentication Failures | เดารหัสได้ไม่จำกัด ไม่มี MFA | จำกัดการ login ผิด · ยืนยันตัวตนหลายชั้น (Multi-Factor Authentication (MFA)) สำหรับ admin และงานเงิน · รหัสผ่านอย่างน้อย 15 ตัว (8 ตัวถ้ามี MFA ตาม National Institute of Standards and Technology (NIST) Special Publication (SP) 800-63B-4) และเทียบรายการรหัสที่หลุด · ข้อความ login ผิดไม่บอกว่า user มีจริงไหม · session id สุ่มจาก server หมุนใหม่หลัง login · JSON Web Token (JWT) ตรวจ `iss` `aud` `exp` และ algorithm | test: login ผิด N ครั้ง → ถูกหน่วงหรือล็อก · token หมดอายุ → 401 · ข้อความผิดเหมือนกันทั้ง user มีและไม่มี |
-| A08 | Software or Data Integrity Failures | อัปเดตหรือข้อมูลถูกแก้ระหว่างทาง โดยไม่ตรวจ | ไม่ deserialize ข้อมูลจากภายนอกเป็น object ที่รันโค้ดได้ · webhook ตรวจลายเซ็น · ไฟล์อัปเดตตรวจ checksum หรือลายเซ็น · pipeline ส่งงานอัตโนมัติ (CI/CD) ใช้สิทธิ์น้อยสุด ไม่มีค่าลับใน log · ราคาและยอดเงินคำนวณที่ server ไม่เชื่อค่าจาก client | test webhook ลายเซ็นผิด → ปฏิเสธ · test ส่งราคาปลอมจาก client → ใช้ราคาจาก server |
-| A09 | Security Logging and Alerting Failures | ถูกเจาะแล้วไม่มีใครรู้ ไม่มี log | log login สำเร็จและล้ม · ถูกปฏิเสธสิทธิ์ · input ไม่ผ่าน · งานของ admin · เปลี่ยนเงิน — มีเวลา · ใคร · ทำอะไร · ผล · ไม่มีรหัสผ่าน token เลขบัตรใน log · มีการแจ้งเตือนเมื่อ login ล้มเป็นชุด | test ว่า login ล้มแล้วมีบรรทัด log · ค้น log หาค่าลับต้องไม่เจอ · ดู `audit-trail` · `logging-standards` |
-| A10 | Mishandling of Exceptional Conditions | ระบบล่มแล้วแสดงข้อมูลภายใน หรือเปิดช่องให้ผ่าน | error ทุกจุดถูกจับ มีตัวจับกลาง (global handler) เป็นด่านสุดท้าย · ล้มแล้ว **ปิด** ไม่ใช่เปิด (ตรวจสิทธิ์ error → ปฏิเสธ) · ธุรกรรมที่ทำไม่จบต้องย้อนกลับ · ข้อความ error ให้ผู้ใช้ไม่มี stack trace หรือ SQL · จำกัด quota · timeout | test: ทำให้ DB หรือบริการภายนอกล้มระหว่างทำงาน → ได้ error ปกติ ข้อมูลไม่ค้างครึ่งทาง · ตรวจสิทธิ์ throw → ได้ 403 ไม่ใช่ผ่าน |
+| A01 | Broken Access Control | ลูกค้าคนหนึ่งเห็นข้อมูลของอีกคนได้ | Check permissions server-side on every endpoint · deny by default · check ownership of the record every time one is read or changed by id · stop the server from fetching internal URLs (Server-Side Request Forgery (SSRF)) with an allowlist · Cross-Origin Resource Sharing (CORS) never `*` together with cookies · a system using cookie sessions must have a token against forged requests on the user's behalf (Cross-Site Request Forgery (CSRF)) · accept input through a Data Transfer Object (DTO) or an allowed-field list, never bind a whole object (stops a client sending `role` · `isAdmin` itself) | integration test per endpoint: not logged in → 401 · wrong role → 403 · another person's id → 403 or 404 · POST with no CSRF token → 403 (cookie-based systems) · sending an extra `role` field → the value in the database does not change |
+| A02 | Security Misconfiguration | ตั้งค่าเซิร์ฟเวอร์หละหลวม เปิดหน้า admin ทิ้งไว้ | Configure by the same script in every environment, differing only in secrets · turn off debug · stack traces · directory listing · sample admin pages · add security headers (Content Security Policy (CSP) including `frame-ancestors` · HTTP Strict Transport Security (HSTS) · X-Content-Type-Options) · no default passwords · cloud storage not public | Scan headers (OWASP ZAP (Zed Attack Proxy) baseline) · `trivy config .` · a test that production returns errors with no stack trace |
+| A03 | Software Supply Chain Failures | ใช้ไลบรารีเก่า หรือมีช่องโหว่ | Lockfiles for every language · a list of software components (Software Bill of Materials (SBOM)) · no dependency with a critical or high vulnerability · cut what is not used · pull only from official registries | `security-gate` dependency side (npm audit · pip-audit · `dotnet list package --vulnerable` · osv-scanner) · SBOM in CycloneDX form |
+| A04 | Cryptographic Failures | ไม่เข้ารหัสรหัสผ่านและข้อมูลสำคัญ | Transport Layer Security (TLS) 1.2 or higher everywhere + HSTS · passwords use Argon2id · bcrypt · PBKDF2 (never MD5 · SHA-1 · plain SHA-256) · sensitive data encrypted at rest · secrets outside code · store only the data you use | semgrep (crypto rules) · a test that passwords in the DB are not the original text · check the TLS of the deployed server |
+| A05 | Injection | กรอกคำสั่งในช่องค้นหา แล้วดึงฐานข้อมูลได้ | SQL only through parameters or an ORM · never concatenate strings into shell commands · HTML-escape on output (stops Cross-Site Scripting (XSS)) · validate input at the system boundary | semgrep · a test sending `' OR 1=1--` · `<script>` · `; rm` which must not take effect |
+| A06 | Insecure Design | ออกแบบผิดตั้งแต่ต้น เช่น ใช้คูปองซ้ำได้ | threat model of login · permissions · money · personal data before writing · business rules enforced at the server (cannot reuse · balance cannot go negative · repeating does not charge twice) · rate limit · file upload: check the type from the file contents, limit size, store outside the web root, rename ([`file-upload-and-storage`](../../file-upload-and-storage/SKILL.md)) | The threat model document · a test uploading a `.php` · `.exe` renamed to `.jpg` → rejected · an abuse-case test, at least 1 per business rule about money or permissions |
+| A07 | Authentication Failures | เดารหัสได้ไม่จำกัด ไม่มี MFA | Limit failed logins · multiple-factor authentication (Multi-Factor Authentication (MFA)) for admin and money work · passwords at least 15 characters (8 if MFA is present per National Institute of Standards and Technology (NIST) Special Publication (SP) 800-63B-4) and check against lists of leaked passwords · a failed-login message does not reveal whether the user exists · session id random from the server and rotated after login · JSON Web Token (JWT) checks `iss` `aud` `exp` and the algorithm | test: N failed logins → delayed or locked · expired token → 401 · the failure message is the same for existing and non-existing users |
+| A08 | Software or Data Integrity Failures | อัปเดตหรือข้อมูลถูกแก้ระหว่างทาง โดยไม่ตรวจ | Never deserialize outside data into an object that can run code · webhooks verify signatures · update files verify a checksum or signature · the automatic delivery pipeline (CI/CD) uses least privilege and has no secrets in logs · prices and amounts are computed at the server and values from the client are not trusted | test a webhook with a wrong signature → rejected · test sending a fake price from the client → the server's price is used |
+| A09 | Security Logging and Alerting Failures | ถูกเจาะแล้วไม่มีใครรู้ ไม่มี log | Log successful and failed logins · permission denials · failed input validation · admin actions · money changes — with time · who · what · result · no passwords, tokens, or ID-card numbers in logs · an alert when logins fail in bursts | a test that a failed login leaves a log line · searching the logs for secrets must find none · see `audit-trail` · `logging-standards` |
+| A10 | Mishandling of Exceptional Conditions | ระบบล่มแล้วแสดงข้อมูลภายใน หรือเปิดช่องให้ผ่าน | Every error is caught, with a global handler as the last gate · on failure **close**, not open (permission check errors → deny) · a transaction that does not complete must roll back · error messages shown to users carry no stack trace or SQL · limit quota · timeout | test: make the DB or an external service fail mid-operation → a normal error, and data is not left half done · permission check throws → 403, not let through |
 
-**ข้อที่ไม่เกี่ยว** เขียน `ไม่เกี่ยว` พร้อมเหตุผล 1 บรรทัด เช่น A07 ในระบบที่ไม่มี login เลย · ห้ามเว้นว่าง
+**Items that do not apply**: write `ไม่เกี่ยว` (not applicable) with a 1-line reason, for example A07 in a system with no login at all · never leave blank
 
-วิธีเขียนตาม stack ที่ทีมใช้ (.NET · TypeScript/Node/Angular · Python · SQL) → [`owasp-stack-checks.md`](owasp-stack-checks.md)
+How to write it for the team's stacks (.NET · TypeScript/Node/Angular · Python · SQL) → [`owasp-stack-checks.md`](owasp-stack-checks.md)
 
 ---
 
-## 2 · ใช้ตอนไหนของงาน
+## 2 · When to use it in the job
 
-| ช่วง | ทำอะไร | ได้อะไร |
+| Phase | Do | Get |
 |---|---|---|
-| รับงาน · เขียนสัญญา | ใส่ข้อกำหนดและเกณฑ์รับงานตาม [`owasp-contract-clause.md`](owasp-contract-clause.md) · ใส่ในเอกสารความต้องการ (Software Requirements Specification (SRS)) หมวดความปลอดภัย (`srs-writing`) | ลูกค้ากับทีมเข้าใจตรงกันว่า "ผ่าน" แปลว่าอะไร |
-| ออกแบบ | threat model ส่วน login · สิทธิ์ · เงิน · ข้อมูลส่วนบุคคล (A01 · A06 · A07) · ระบุบทบาทและสิทธิ์เป็นตาราง | `docs/security/threat-model.md` |
-| เขียนโค้ด | ทำตามคอลัมน์ "ต้องมี" และ [`owasp-stack-checks.md`](owasp-stack-checks.md) · ทุกข้อที่ทำได้ให้เป็นของกลางที่ใช้ซ้ำ (ตัวตรวจสิทธิ์ตัวเดียว · ตัวจับ error ตัวเดียว · logger ตัวเดียว) | โค้ดที่ทางปลอดภัยเป็นทางที่ง่ายที่สุด |
-| test | เขียน test ตามคอลัมน์ "พิสูจน์ด้วย" ใส่ไว้ในโฟลเดอร์ test ปกติ ชื่อขึ้นต้นด้วยรหัสข้อ เช่น `A01_other_user_order_returns_404` | หลักฐานที่รันซ้ำได้ทุกครั้ง |
-| ก่อนส่งมอบ | รัน `security-gate` แล้วกรอก [`assets/owasp-report.md` (ในโฟลเดอร์ security-gate)](../assets/owasp-report.md) ทีละข้อ | `qa/security/<ปี-เดือน-วัน>-owasp.md` |
+| Taking the job · writing the contract | Put in the requirements and acceptance criteria per [`owasp-contract-clause.md`](owasp-contract-clause.md) · put in the requirements document (Software Requirements Specification (SRS)) security category (`srs-writing`) | Customer and team agree on what "pass" means |
+| Design | threat model of login · permissions · money · personal data (A01 · A06 · A07) · state roles and permissions as a table | `docs/security/threat-model.md` |
+| Writing code | Follow the "must have" column and [`owasp-stack-checks.md`](owasp-stack-checks.md) · make every item that can be so a reusable shared piece (one permission checker · one error handler · one logger) | Code where the safe way is the easiest way |
+| test | Write tests per the "prove with" column, put them in the normal test folder, named starting with the item code, such as `A01_other_user_order_returns_404` | Evidence that can be re-run every time |
+| Before delivery | Run `security-gate`, then fill [`assets/owasp-report.md` (in the security-gate folder)](../assets/owasp-report.md) item by item | `qa/security/<ปี-เดือน-วัน>-owasp.md` |
 
 ---
 
-## 3 · รายงานก่อนส่งมอบ — กติกา
+## 3 · The report before delivery — rules
 
-- 1 แถวต่อ 1 ข้อ ครบ A01–A10 · สถานะใช้ 6 ค่านี้เท่านั้น
+- 1 row per item, all of A01–A10 · status uses only these 6 values
 
-  | สถานะ | ส่งมอบได้ไหม | เขียนเมื่อ |
+  | Status | Deliverable | Write when |
   |---|---|---|
-  | `ผ่าน` | ได้ | มีหลักฐานที่รันได้ — ชื่อ test + ผลรัน · ชื่อเครื่องมือ + ไฟล์ผล |
-  | `ผ่าน (ตรวจด้วยตา)` | ได้ ถ้าบอกว่าตรวจไฟล์ไหน และข้อนั้นเขียน test ไม่ได้จริง | เช่น การตั้งค่า server ที่ทีมไม่ได้ deploy test ไว้ |
-  | `ไม่เกี่ยว — <เหตุผล>` | ได้ | ระบบไม่มีส่วนนั้นเลย |
-  | `ยอมรับความเสี่ยง — <วันที่ · ใคร>` | ได้ | ลูกค้าอนุมัติเป็นลายลักษณ์อักษร จดใน `decision-log` |
-  | `ไม่ผ่าน` | ไม่ได้ | เจอช่องโหว่ที่ยืนยันแล้ว |
-  | `ยังไม่ได้ตรวจ — <เหตุผล>` | ไม่ได้ | เครื่องมือรันไม่ได้ หรือยังไม่ได้ทำ |
+  | `ผ่าน` (pass) | Yes | There is evidence that can be run — test name + run result · tool name + result file |
+  | `ผ่าน (ตรวจด้วยตา)` (pass, checked by eye) | Yes, if it says which file was checked and that item truly cannot have a test written | For example a server configuration the team did not deploy a test for |
+  | `ไม่เกี่ยว — <เหตุผล>` (not applicable — <reason>) | Yes | The system has no such part at all |
+  | `ยอมรับความเสี่ยง — <วันที่ · ใคร>` (risk accepted — <date · who>) | Yes | The customer approved in writing, recorded in `decision-log` |
+  | `ไม่ผ่าน` (fail) | No | A confirmed vulnerability was found |
+  | `ยังไม่ได้ตรวจ — <เหตุผล>` (not yet checked — <reason>) | No | The tool cannot run or it has not been done |
 
-- **ส่งมอบได้เมื่อ** ไม่มีข้อ `ไม่ผ่าน` และไม่มีข้อ `ยังไม่ได้ตรวจ`
-- **ข้อที่ `ไม่ผ่าน` เขียนเป็น finding block ทีละรายการ** (แม่แบบใน `assets/owasp-report.md` (ในโฟลเดอร์ security-gate)) — รหัส `F-01` · ไฟล์:บรรทัด · ข้อ A0x + ระดับ Application Security Verification Standard (ASVS) ที่ต้องถึง (L1 ทุกระบบ · L2 มีข้อมูลส่วนบุคคลหรือธุรกรรม · L3 เงิน สุขภาพ โครงสร้างสำคัญ) · ผลกระทบในภาษาเจ้าของกิจการ · วิธีแก้ · หลักฐานที่ใช้ยืนยัน (คำสั่ง · test · ภาพ) · 1 block ต่อ 1 ช่องโหว่ ไม่รวมหลายจุดในแถวเดียว (แนวคิดจาก agamm/claude-code-owasp (MIT))
-- ใส่ส่วน **ขอบเขตที่ไม่ได้ตรวจ** เสมอ เช่น ทดสอบเจาะระบบโดยคนนอก (penetration test) · server ของลูกค้าที่ทีมไม่ได้ deploy · ไลบรารีที่ไม่มีข้อมูลช่องโหว่
-- ห้ามเขียน "ปลอดภัย 100%" หรือ "ได้รับการรับรอง OWASP" — OWASP ไม่ได้ออกใบรับรอง · ถ้าส่งมอบได้ ให้เขียน "ผ่านเกณฑ์ OWASP Top 10:2025 ตามรายการตรวจในรายงานนี้"
-- ผลรวมนับแยกครบ 6 สถานะ เช่น `ผ่าน 7 · ผ่าน (ตรวจด้วยตา) 1 · ไม่เกี่ยว 2 · ยอมรับความเสี่ยง 0 · ไม่ผ่าน 0 · ยังไม่ได้ตรวจ 0`
-- สรุปสถานะลง `docs/BUILD-PLAN.md` ด้วย `status-report` ประเภท `ตรวจ` (ใครทำ · ใครตรวจ · ผลตรวจ `ผ่าน — ผ่าน 8 · ไม่เกี่ยว 2` หรือ `ไม่ผ่าน — A01 · A07`)
+- **Deliverable when** there is no `ไม่ผ่าน` item and no `ยังไม่ได้ตรวจ` item
+- **An item that is `ไม่ผ่าน` is written as a finding block, one per entry** (template in `assets/owasp-report.md` (in the security-gate folder)) — ID `F-01` · file:line · item A0x + the Application Security Verification Standard (ASVS) level it must reach (L1 every system · L2 has personal data or transactions · L3 money, health, critical infrastructure) · impact in business-owner wording · fix · evidence used to confirm (command · test · image) · 1 block per vulnerability, never several spots in one row (idea from agamm/claude-code-owasp (MIT))
+- Always include a section **scope not checked**, for example penetration testing by outsiders · the customer's servers the team did not deploy · libraries with no vulnerability data
+- Never write "100% secure" or "OWASP certified" — OWASP issues no certificates · if it can be delivered, write "passes the OWASP Top 10:2025 criteria per the checklist in this report"
+- The totals count all 6 statuses separately, for example `ผ่าน 7 · ผ่าน (ตรวจด้วยตา) 1 · ไม่เกี่ยว 2 · ยอมรับความเสี่ยง 0 · ไม่ผ่าน 0 · ยังไม่ได้ตรวจ 0`
+- Summarise the status into `docs/BUILD-PLAN.md` with `status-report` of type `ตรวจ` (check) (who did it · who checked · check result `ผ่าน — ผ่าน 8 · ไม่เกี่ยว 2` or `ไม่ผ่าน — A01 · A07`)
 
 ---
 
-## 4 · ใครทำอะไร
+## 4 · Who does what
 
-| ส่วน | agent |
+| Part | agent |
 |---|---|
-| ข้อกำหนดในสัญญาและ SRS | `business-analyst` · ข้อกฎหมาย → `legal-compliance-officer` |
-| threat model · ตารางสิทธิ์ · รีวิวการออกแบบ | `security-engineer` |
-| โค้ดและ test ตามคอลัมน์ "ต้องมี" · "พิสูจน์ด้วย" | `developer` (และ agent ตาม stack) |
-| สแกนและกรอกรายงาน | `security-engineer` ผ่าน `security-gate` |
-| ตรวจรายงานก่อนส่งลูกค้า | `reviewer` ตัวใหม่ — ทุกแถวที่เขียน `ผ่าน` ต้องเปิดหลักฐานดูได้จริง |
+| Contract and SRS requirements | `business-analyst` · legal clauses → `legal-compliance-officer` |
+| threat model · permissions table · design review | `security-engineer` |
+| Code and tests per the "must have" · "prove with" columns | `developer` (and the agent for the stack) |
+| Scan and fill the report | `security-engineer` through `security-gate` |
+| Check the report before sending to the customer | a new `reviewer` — every row marked `ผ่าน` (pass) must have evidence that can really be opened |
 
 ---
 
-## 5 · ไม่ใช่หน้าที่ของไฟล์นี้
+## 5 · Not this file's job
 
-- ทดสอบเจาะระบบจริงหรือระบบของคนอื่น — ไฟล์นี้ตรวจเฉพาะโค้ดและ environment ทดสอบของโปรเจกต์นี้
-- มาตรฐานอื่น เช่น OWASP API Security Top 10 · Application Security Verification Standard (ASVS) · Payment Card Industry Data Security Standard (PCI-DSS) · พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล (PDPA) — ใช้ skill เฉพาะเรื่องนั้น (`fintech-payments` · `pdpa-compliance`) แต่รายงานนี้ใช้เป็นฐานร่วมได้
-- แอปมือถือ — ใช้ OWASP Mobile Top 10 ร่วมกับ [`android.md`](android.md) · ส่วน backend ของแอปมือถือยังใช้ไฟล์นี้
+- Real penetration testing, or testing someone else's system — this file checks only this project's code and test environment
+- Other standards, such as OWASP API Security Top 10 · Application Security Verification Standard (ASVS) · Payment Card Industry Data Security Standard (PCI-DSS) · the Personal Data Protection Act (PDPA) — use the skill for that topic (`fintech-payments` · `pdpa-compliance`), but this report can be used as a common base
+- Mobile apps — use OWASP Mobile Top 10 together with [`android.md`](android.md) · the backend of a mobile app still uses this file
 
 
 ---
@@ -1539,42 +1539,42 @@ Retry-After: 42                ← ต้องมีคู่กับ 429 เ�
 
 ## reference: contract-testing.md
 
-# Contract testing — OpenAPI คือสัญญา แล้วให้ CI ตรวจว่าของจริงตรง
+# Contract testing — OpenAPI is the contract, and CI checks that the real thing matches
 
-เอกสาร `docs/API-CONVENTIONS.md` บอกกติกา · ไฟล์ OpenAPI บอกรูปร่างของแต่ละ endpoint · contract test คือสิ่งที่ทำให้ 2 อย่างนี้ไม่เป็นแค่เอกสาร
+The document `docs/API-CONVENTIONS.md` states the rules · the OpenAPI file states the shape of each endpoint · contract tests are what keep these 2 from being just documents
 
-## 1 · OpenAPI เป็นสัญญา
+## 1 · OpenAPI as the contract
 
-- สร้างจากโค้ดจริง (annotation · decorator · generator ของ framework) แล้ว commit ไฟล์ที่ได้ — ไม่เขียนมือแยก · เมื่อ 2 ฝั่งต่างกัน ฝั่งโค้ดคือความจริง และ diff ในไฟล์คือสิ่งที่ reviewer เห็น
-- ทุก response มี schema รวมถึง error (`web-service-essentials` §2) · ทุกฟิลด์มี `format` ของวันที่ · id · เงิน ตาม §6 ของ SKILL.md หลัก
+- Generate it from the real code (annotations · decorators · the framework's generator) and commit the resulting file — do not hand-write it separately · when the 2 sides differ, the code side is the truth, and the diff in the file is what the reviewer sees
+- Every response has a schema, including errors (`web-service-essentials` §2) · every field has a `format` for dates · ids · money, per §6 of the main SKILL.md
 
-## 2 · ตรวจ response กับ spec ใน CI (provider side)
+## 2 · Check responses against the spec in CI (provider side)
 
-| เครื่องมือ | ทำอะไร | licence | หมายเหตุ (ตรวจ 2026-10-23) |
+| Tool | What it does | licence | Note (checked 2026-10-23) |
 |---|---|---|---|
-| Schemathesis | อ่าน OpenAPI แล้วสร้าง request จาก schema ยิงใส่ service จริง ตรวจว่า response ตรง spec และไม่ 500 · `schemathesis run <url ของ openapi.json>` | MIT | ยิงจริง สร้างและลบข้อมูล → ชี้ไป dev หรือ staging เท่านั้น · Python |
-| Prism (Stoplight) | `prism mock <spec>` ให้ frontend ใช้ก่อน backend เสร็จ · `prism proxy <spec> <upstream>` ตรวจ traffic จริงกับ spec | Apache-2.0 | Node ≥ 18.20 · โหมด proxy ใส่หน้า service ใน test environment ได้ |
-| Dredd | ตรวจ API กับ API Blueprint / OpenAPI 2 (OpenAPI 3 ทดลอง) | MIT | **เลิกดูแลแล้ว** (archived 2024-11-08) — ไม่เริ่มใช้ใหม่ |
+| Schemathesis | reads OpenAPI, builds requests from the schema, fires them at the real service, and checks that responses match the spec and are not 500 · `schemathesis run <url of openapi.json>` | MIT | really fires, creates and deletes data → point it only at dev or staging · Python |
+| Prism (Stoplight) | `prism mock <spec>` lets the frontend work before the backend is done · `prism proxy <spec> <upstream>` checks real traffic against the spec | Apache-2.0 | Node ≥ 18.20 · proxy mode can sit in front of the service in a test environment |
+| Dredd | checks an API against API Blueprint / OpenAPI 2 (OpenAPI 3 experimental) | MIT | **no longer maintained** (archived 2024-11-08) — do not start using it |
 
-ค่าเริ่มของเรา: Schemathesis ใน job ของ CI หลัง service ขึ้นด้วยข้อมูลทดสอบ (reset endpoint จาก `app-verifier-setup`) · ล้ม = ไม่ merge
+Our default: Schemathesis in a CI job after the service is up with test data (the reset endpoint from `app-verifier-setup`) · failure = no merge
 
-## 3 · Consumer-driven contract — เมื่อทีม frontend หรือผู้เรียกแยกจาก backend
+## 3 · Consumer-driven contract — when the frontend team or callers are separate from the backend
 
-- Pact (pact-foundation · MIT): ฝั่งผู้เรียกเขียน test ว่าใช้ request/response คู่ไหนบ้าง → ได้ไฟล์ pact → ฝั่ง provider รันตรวจกับไฟล์นั้นใน CI ของตัวเอง · provider เปลี่ยนส่วนที่ไม่มีใครใช้ได้โดย test ไม่พัง
-- ใช้เมื่อ: ทีมคนละชุด ปล่อยคนละรอบ หรือมีผู้เรียกมากกว่า 1 ราย (mobile + web + partner) · ทีมเดียวทำทั้ง 2 ฝั่ง → ข้อ 2 พอ
-- ไฟล์ pact แลกกันผ่าน Pact Broker หรือ commit ลง repo ของ provider — ตกลงที่เดียวใน `API-CONVENTIONS.md`
+- Pact (pact-foundation · MIT): the caller side writes tests of which request/response pairs it uses → produces a pact file → the provider side runs a check against that file in its own CI · the provider can change parts nobody uses without breaking tests
+- Use when: the teams are different, release separately, or there is more than 1 caller (mobile + web + partner) · one team does both sides → item 2 is enough
+- Pact files are exchanged through a Pact Broker or committed to the provider's repo — agree on one way in `API-CONVENTIONS.md`
 
-## 4 · เช็ค breaking change ทุก PR
+## 4 · Check for breaking changes on every PR
 
-- `oasdiff breaking <spec เดิม> <spec ใหม่>` (Apache-2.0 · Go · มี Docker image) รายงานเฉพาะการเปลี่ยนที่ทำให้ผู้เรียกเดิมพัง: ลบ endpoint หรือฟิลด์ · ฟิลด์กลายเป็น required · type เปลี่ยน · enum หาย
-- ใน CI: spec เดิม = ของ branch หลัก · spec ใหม่ = ของ PR · เจอ breaking → ต้องขึ้นเวอร์ชันใหม่ตาม §3 หรือ deprecate ตาม §10 ของ SKILL.md หลัก — ไม่ใช่ปิด check
-- เพิ่มฟิลด์ optional · เพิ่ม endpoint · เพิ่มค่า enum ที่ผู้เรียกไม่ switch ตาย = ไม่ breaking
+- `oasdiff breaking <old spec> <new spec>` (Apache-2.0 · Go · has a Docker image) reports only changes that break existing callers: removing an endpoint or field · a field becoming required · a type change · an enum value removed
+- In CI: old spec = the main branch's · new spec = the PR's · on a breaking change → bump to a new version per §3, or deprecate per §10 of the main SKILL.md — do not turn off the check
+- Adding an optional field · adding an endpoint · adding an enum value that callers do not crash on in a switch = not breaking
 
-## ตรวจก่อนส่ง
+## Check before handing over
 
-- [ ] OpenAPI อยู่ใน repo และสร้างจากโค้ด · CI ล้มถ้าไฟล์ไม่ตรงโค้ด
-- [ ] Schemathesis (หรือเทียบเท่า) รันกับ service ที่ขึ้นด้วยข้อมูลทดสอบ · `oasdiff breaking` รันทุก PR
-- [ ] ผู้เรียกแยกทีม → มี pact อย่างน้อย 1 ไฟล์ต่อผู้เรียก และ provider ตรวจใน CI
+- [ ] OpenAPI is in the repo and generated from code · CI fails if the file does not match the code
+- [ ] Schemathesis (or equivalent) runs against a service brought up with test data · `oasdiff breaking` runs on every PR
+- [ ] Callers in a separate team → at least 1 pact file per caller, and the provider checks it in CI
 
 
 ---

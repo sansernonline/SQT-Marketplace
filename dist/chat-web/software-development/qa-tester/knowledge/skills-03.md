@@ -165,75 +165,75 @@ thresholds: {
 
 ## reference: mcp-k6.md
 
-# MCP ของ k6 (grafana/mcp-k6)
+# k6 MCP (grafana/mcp-k6)
 
-ส่วนขยายของ `load-testing` · ตรวจ 2026-10-28 จาก https://github.com/grafana/mcp-k6 และ https://api.github.com/repos/grafana/mcp-k6/releases · ไม่ฝังใน plugin ผู้ใช้ติดตั้งเองถ้าต้องการ
+Extension of `load-testing` · checked 2026-10-28 from https://github.com/grafana/mcp-k6 and https://api.github.com/repos/grafana/mcp-k6/releases · not embedded in the plugin; the user installs it if wanted
 
-## สถานะ
+## Status
 
-| เรื่อง | ที่เห็น |
+| Topic | What was seen |
 |---|---|
-| ผู้ดูแล | Grafana (repo `grafana/mcp-k6`) |
-| สถานะ | README เขียนว่ายังเป็นของทดลอง (experimental) |
-| รุ่นล่าสุด | v0.7.0 วันที่ 2026-10-05 |
-| ใบอนุญาต | หน้า repo ไม่ตรงกัน: แถบข้างเขียน AGPL-3.0 แต่ README เขียน MIT · เปิดไฟล์ LICENSE ก่อนใช้ในงานลูกค้า |
-| เครื่องมือ | `validate_script` (รัน 1 VU 1 รอบ) · `run_script` (รันจริง ไม่เกิน 5 นาที) · `list_sections` · `get_documentation` |
+| Maintainer | Grafana (repo `grafana/mcp-k6`) |
+| Status | The README says it is still experimental |
+| Latest version | v0.7.0 on 2026-10-05 |
+| License | The repo page is inconsistent: the sidebar says AGPL-3.0 but the README says MIT · open the LICENSE file before using it in customer work |
+| Tools | `validate_script` (runs 1 VU for 1 round) · `run_script` (real run, up to 5 minutes) · `list_sections` · `get_documentation` |
 
-## ข้อควรระวัง
+## Cautions
 
-- `run_script` ยิงคำขอจริงไปยังปลายทางในสคริปต์ · `validate_script` ก็ยิง 1 รอบ · ด่านอนุญาตใน `load-testing` หัวข้อ 2 ใช้กับการเรียกผ่าน MCP ด้วย ไม่มีข้อยกเว้น
-- เริ่มใช้แค่ `get_documentation` กับ `validate_script` ที่ชี้ staging · ให้ agent เรียก `run_script` เฉพาะเมื่อผู้ใช้อนุญาตในรอบนั้น
-- โหมด HTTP ไม่มีระบบยืนยันตัวตนในตัว ใช้ในเครือข่ายที่เชื่อถือได้เท่านั้น · ใช้แบบ stdio บนเครื่องตัวเองดีกว่า
+- `run_script` sends real requests to the targets in the script · `validate_script` also sends 1 round · the permission gate in `load-testing` section 2 applies to calls through MCP too, with no exceptions
+- Start with only `get_documentation` and `validate_script` pointed at staging · have the agent call `run_script` only when the user allows it in that round
+- HTTP mode has no built-in authentication; use it only in a trusted network · stdio on your own machine is better
 
-## ติดตั้ง (ผู้ใช้ทำเอง ล็อกรุ่น)
+## Install (the user does it, pin the version)
 
-Claude Code ผ่าน Docker (รูปแบบคำสั่งตาม README):
+Claude Code via Docker (command form per the README):
 
 ```bash
 claude mcp add --scope=user --transport=stdio k6 -- docker run --rm -i grafana/mcp-k6:<tag ของ v0.7.0>
 ```
 
-ชื่อ tag ของ image บน Docker Hub ที่ตรงกับ v0.7.0 `(ยังไม่ได้ตรวจ)` · README ใช้ `latest` แต่ให้เปิดหน้า tag แล้วใส่รุ่นที่ล็อกได้แทน · ทางอื่น: Homebrew (`brew tap grafana/grafana` แล้ว `brew install mcp-k6`) หรือแพ็กเกจ `.deb` `.rpm` จากหน้า release ของ v0.7.0 · รันแบบ native ต้องมี k6 อยู่ใน PATH ด้วย
+The Docker Hub image tag that matches v0.7.0 `(ยังไม่ได้ตรวจ)` (not yet checked) · the README uses `latest`, but open the tag page and put in a pinnable version instead · other ways: Homebrew (`brew tap grafana/grafana` then `brew install mcp-k6`) or the `.deb` `.rpm` packages from the v0.7.0 release page · running natively also needs k6 on PATH
 
-เอกสาร k6 ยังพูดถึงคำสั่ง `k6 x mcp` ที่ดึงรุ่นล่าสุดอัตโนมัติ · ต้องการล็อกรุ่นให้ใช้ตัวแยก `mcp-k6` แบบข้างบน (จากผลค้นหาที่อ้างหน้า https://grafana.com/docs/k6/v2.3.x/set-up/configure-ai-assistant/ ยังไม่ได้เปิดหน้านั้นเอง)
+The k6 docs still mention the command `k6 x mcp`, which pulls the latest version automatically · to pin a version, use the standalone `mcp-k6` as above (from search results citing https://grafana.com/docs/k6/v2.3.x/set-up/configure-ai-assistant/; that page was not opened directly)
 
 
 ## reference: reading-results.md
 
-# อ่านผล k6 แล้วเขียนรายงาน
+# Reading k6 results and writing the report
 
-ส่วนขยายของ `load-testing` หัวข้อ 5 · ข้อเท็จจริงของ k6 ตรวจ 2026-10-28 จากหน้าที่ลิงก์ไว้ท้ายไฟล์ · วิธีตีความเป็นแนวปฏิบัติทั่วไป ยังไม่ได้ทดสอบกับระบบจริงในรอบนี้
+Extension of `load-testing` section 5 · k6 facts checked 2026-10-28 from the pages linked at the end of the file · the interpretation is general practice, not yet tested against a real system this round
 
-## 1 · อ่านตามลำดับนี้
+## 1 · Read in this order
 
-| ลำดับ | ดูอะไร | ตีความ |
+| Order | What to look at | Interpretation |
 |---|---|---|
-| 1 | exit code | 0 = ผ่านทุกเกณฑ์ · ไม่ใช่ 0 = ไม่ผ่าน · เกณฑ์ไม่ผ่านมักได้ 99 |
-| 2 | บรรทัด thresholds ท้ายรายงาน | เกณฑ์ข้อไหนผ่าน ข้อไหนไม่ผ่าน และค่าจริงเท่าไร |
-| 3 | `http_req_failed` | error พุ่ง → เวลาตอบที่เร็วอาจเป็นเพราะตอบ error เร็ว อย่าเพิ่งดีใจกับ p95 |
-| 4 | `http_req_duration` p95 และ p99 | ช่วงที่ผู้ใช้ส่วนใหญ่เจอ และหางที่คนส่วนน้อยรอ · ค่าเฉลี่ยใช้ตัดสินไม่ได้ |
-| 5 | `checks` | คำตอบถูกไหม ไม่ใช่แค่ได้ status 200 |
-| 6 | คำเตือนเรื่อง VU ไม่พอ หรือรอบที่ไม่ได้เริ่ม | เครื่องยิงตามปริมาณที่ตั้งไม่ทัน ผลรอบนี้บอกขีดของเครื่องยิง ไม่ใช่ระบบ (ชื่อ metric ของรอบที่หลุด `(ยังไม่ได้ตรวจ)`) |
+| 1 | exit code | 0 = every threshold passed · not 0 = failed · a failed threshold usually gives 99 |
+| 2 | the thresholds line at the end of the report | which thresholds passed, which failed, and the actual values |
+| 3 | `http_req_failed` | if errors spike → a fast response time may only be because errors return fast, so do not celebrate the p95 yet |
+| 4 | `http_req_duration` p95 and p99 | the range most users experience, and the tail a few users wait through · the average cannot be used to decide |
+| 5 | `checks` | whether the answers are correct, not just a status 200 |
+| 6 | warnings about not enough VUs, or rounds that did not start | the load generator could not keep up with the set rate; this run shows the limit of the generator, not the system (metric name of the dropped rounds `(ยังไม่ได้ตรวจ)` — not yet checked) |
 
-## 2 · หาว่าตันตรงไหน
+## 2 · Find where it jams
 
-ดูกราฟของระบบช่วงเวลาเดียวกับการยิง (`observability-basics` หัวข้อ 2):
+Look at the system graphs for the same period as the run (`observability-basics` section 2):
 
-| อาการในกราฟ | สงสัยอะไรก่อน |
+| Symptom in the graph | Suspect first |
 |---|---|
-| CPU ของแอปเต็ม เวลาตอบโตตาม | โค้ดหนักหรือเครื่องน้อยไป · ลองเพิ่มเครื่องแล้วยิงซ้ำ |
-| CPU แอปว่าง แต่เวลาตอบโต | รอของข้างนอก: connection pool ฐานข้อมูล · ล็อกในตาราง · API ภายนอก |
-| error เริ่มที่ปริมาณหนึ่งแล้วพุ่ง | ชนเพดาน (pool · ไฟล์ที่เปิดได้ · rate limit) · หาค่าตั้งที่ปริมาณนั้น |
-| soak: หน่วยความจำขึ้นเรื่อย ๆ ไม่ลง | หน่วยความจำรั่ว · connection ไม่ถูกคืน |
-| เวลาตอบดีตอนแรก แล้วแย่ลงพร้อมข้อมูลที่โต | query ไม่มี index · ตารางโตจากข้อมูลที่ยิงสร้าง |
+| App CPU full, response time grows with it | Heavy code or too few machines · try adding machines and run again |
+| App CPU idle, but response time grows | Waiting on something outside: database connection pool · table locks · an external API |
+| Errors start at a certain load and then spike | Hit a ceiling (pool · open files · rate limit) · find the setting at that load |
+| soak: memory keeps rising and never drops | Memory leak · connections not returned |
+| Response time good at first, then worse as the data grows | Query without an index · table grown from data the run created |
 
-## 3 · ยิงซ้ำให้เทียบได้
+## 3 · Re-run so results are comparable
 
-- สคริปต์เดิม ข้อมูลตั้งต้นเดิม environment เดิม · ล้างข้อมูลที่การยิงรอบก่อนสร้างไว้
-- เปลี่ยนทีละอย่าง (โค้ด หรือ ค่าตั้ง หรือ ขนาดเครื่อง) แล้วยิงเทียบกับ baseline
-- เอกสาร k6 แนะนำรันแบบเดียวกันอย่างน้อย 2 รอบก่อนปล่อยรุ่น เพราะผลแต่ละรอบแกว่ง
+- Same script, same starting data, same environment · clean up the data the previous run created
+- Change one thing at a time (code, or a setting, or machine size) and run against the baseline
+- The k6 docs advise running the same way at least 2 rounds before releasing a version, because each round's result varies
 
-## 4 · แบบรายงาน 1 หน้า
+## 4 · One-page report format
 
 ```markdown
 ## ผล load test · <ระบบ> · <YYYY-MM-DD>
@@ -251,13 +251,13 @@ claude mcp add --scope=user --transport=stdio k6 -- docker run --rm -i grafana/m
 ทำต่อ: <ข้อแก้ 1–3 ข้อ> · ยิงซ้ำหลังแก้: <วันที่>
 ```
 
-เขียนผลตามที่ยิงจริงเท่านั้น · ยิงแค่ 50 รอบต่อวินาที → ห้ามเขียนว่า "รับได้ 1,000 คนพร้อมกัน"
+Write results only as actually run · if you only ran 50 rounds per second → never write "can handle 1,000 users at once"
 
-## ที่มา
+## Sources
 
-- exit code https://grafana.com/docs/learning-paths/automate-k6-cicd/handle-exit-code/ (ตรวจ 2026-10-28)
-- thresholds https://grafana.com/docs/k6/latest/using-k6/thresholds/ (ตรวจ 2026-10-28)
-- รันซ้ำอย่างน้อย 2 รอบ https://grafana.com/docs/k6/latest/testing-guides/automated-performance-testing/ (ตรวจ 2026-10-28)
+- exit code https://grafana.com/docs/learning-paths/automate-k6-cicd/handle-exit-code/ (checked 2026-10-28)
+- thresholds https://grafana.com/docs/k6/latest/using-k6/thresholds/ (checked 2026-10-28)
+- run at least 2 rounds again https://grafana.com/docs/k6/latest/testing-guides/automated-performance-testing/ (checked 2026-10-28)
 
 
 ---
@@ -938,49 +938,49 @@ Every error body is `application/problem+json` (RFC 9457): `type` · `title` · 
 
 Use to cut extras nobody needs yet. Not Claude Code simplify
 
-# simplify — ทำให้ง่าย คนอ่านครั้งแรกก็ตามได้
+# simplify — make it simple so a first-time reader can follow
 
-ใช้กับทุกงานที่ส่งให้คน ทั้งโค้ด เอกสาร แผน ดีไซน์ สไลด์ ตาราง และคำตอบ · `human-writing` คุมว่า**เขียนอย่างไร** ส่วน skill นี้คุมว่า**ตัวงานมีอะไรบ้าง** · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
+Use on any work handed to people: code, documents, plans, designs, slides, tables and answers · `human-writing` controls **how it is written**, while this skill controls **what the work contains** · lives only in plugin `superuser`; other plugins share it through `dependencies`
 
-## 1 · หลักใหญ่
+## 1 · Main principles
 
-- **บททดสอบ:** คนที่ไม่ได้อยู่ในงานนี้ เปิดดูอีก 6 เดือนข้างหน้า ต้องเข้าใจและแก้ต่อได้โดยไม่ต้องถามใคร
-- ทำเท่าที่โจทย์ต้องการ ไม่เผื่ออนาคตที่ยังไม่มีใครขอ
-- ตัดก่อนเพิ่ม · ถ้าตัดส่วนไหนออกแล้วความหมายหรือการทำงานไม่เสีย ให้ตัด
-- ของธรรมดาที่คนรู้จักดีกว่าของฉลาดที่ต้องถอดรหัส
-- **ง่ายไม่ใช่มักง่าย** — ห้ามตัดความถูกต้อง ความปลอดภัย การตรวจข้อมูลที่รับจากภายนอก การจัดการ error ที่กันข้อมูลหาย และสิ่งที่ผู้ใช้ขอไว้ชัด ๆ
-- **ง่ายไม่ใช่กองรวม** — ลดจำนวนของ แต่ยังแยกหน้าที่ชัด 1 ส่วนทำ 1 เรื่อง เหมือนงานของมืออาชีพ
+- **The test:** someone not on this work, opening it 6 months from now, must understand it and continue it without asking anyone
+- Do only what the task needs; do not provide for a future nobody has asked for
+- Cut before adding · if removing a part loses neither meaning nor function, cut it
+- Plain things people know beat clever things that need decoding
+- **Simple is not sloppy** — never cut correctness, safety, validation of data from outside, error handling that prevents data loss, or what the user asked for explicitly
+- **Simple is not one big pile** — reduce the number of things, but keep clear separation of duties, 1 part doing 1 thing, as professional work does
 
-## 2 · บันไดก่อนลงมือ — หยุดที่ขั้นแรกที่ใช้ได้
+## 2 · Ladder before starting — stop at the first step that works
 
-1. ต้องมีสิ่งนี้จริงไหม · ไม่จำเป็น → ไม่ทำ แล้วบอก 1 บรรทัดว่าข้ามอะไร
-2. มีของเดิมที่ใช้ได้แล้วไหม (ไฟล์ แม่แบบ ฟังก์ชัน เครื่องมือ ฟีเจอร์ที่ติดมากับระบบ) · มี → ใช้ของเดิม
-3. ทำแบบสั้นที่สุดที่ยังครบและถูก
+1. Do we really need this · not needed → do not do it, and say in 1 line what you skipped
+2. Is there an existing thing that works (file, template, function, tool, a feature that comes with the system) · yes → use the existing thing
+3. Do the shortest version that is still complete and correct
 
-## 3 · ตามชนิดงาน
+## 3 · By kind of work
 
-| งาน | ทำ | เลี่ยง |
+| Work | Do | Avoid |
 |---|---|---|
-| **โค้ด** | ชื่อบอกว่าคืออะไรและมีหน่วย · 1 ฟังก์ชันทำ 1 เรื่อง · คืนค่าออกเร็วแทนการซ้อน `if` · เยื้องไม่เกิน 3 ชั้น · คอมเมนต์บอก "ทำไม" · ตามสไตล์ของโปรเจกต์ | abstraction ที่มีตัวใช้ตัวเดียว · ทางลัดที่ฉลาดแต่อ่านยาก · ไฟล์ก้อนเดียวทำทุกอย่าง · โฟลเดอร์ `utils/` กองรวม · dependency ใหม่เพื่องานไม่กี่บรรทัด |
-| **เอกสาร · รายงาน** | ข้อสรุปขึ้นก่อน · 1 ย่อหน้า 1 เรื่อง · ตัวอย่างประกอบข้อที่เป็นนามธรรม · ตารางสำหรับข้อมูลที่เทียบกัน | ทวนสิ่งที่พูดไปแล้ว · หัวข้อที่ไม่มีเนื้อ · ศัพท์ที่คนอ่านไม่รู้ |
-| **แผน · ขั้นตอน** | 3–5 ข้อสำคัญ · ทุกข้อมีเจ้าของและวัดได้ว่าเสร็จ · ขั้นน้อยที่สุดที่ได้ผล | รายการ 20 ข้อที่ไม่มีลำดับความสำคัญ · ขั้นที่มีไว้ "เผื่อ" |
-| **ดีไซน์ · สไลด์ · รูป** | 1 หน้า 1 ใจความ · ทางสั้นสุดไปถึงเป้าของผู้ใช้ · ใช้แบบที่คนคุ้นเคย | อัดข้อมูลจนต้องเพ่ง · ของตกแต่งที่ไม่ช่วยให้เข้าใจ |
-| **ตาราง · ข้อมูล** | คอลัมน์เท่าที่ใช้ตัดสินใจ · สูตรสั้นที่ตามได้ | คอลัมน์ซ้ำความหมาย · สูตรซ้อนยาวบรรทัดเดียว |
-| **คำตอบ** | ตอบก่อน · ยาวเท่าที่คำถามต้องการ | อธิบายยาวกว่าตัวงาน |
+| **Code** | Names say what it is and carry units · 1 function does 1 thing · return early instead of nesting `if` · at most 3 levels of indentation · comments say "why" · follow the project's style | An abstraction with a single user · a clever shortcut that is hard to read · one big file doing everything · a pile-up `utils/` folder · a new dependency for a few lines of work |
+| **Documents · reports** | Conclusion first · 1 paragraph 1 topic · an example for abstract points · a table for data that is compared | Repeating what was already said · headings with no content · terms the reader does not know |
+| **Plans · procedures** | 3–5 key items · every item has an owner and a way to measure done · the fewest steps that work | A list of 20 items with no priority · steps kept "just in case" |
+| **Designs · slides · figures** | 1 page 1 point · the shortest path to the user's goal · use patterns people are familiar with | Cramming data until people must squint · decoration that does not help understanding |
+| **Tables · data** | Only the columns used to decide · short formulas you can follow | Columns that repeat a meaning · long nested formulas in one line |
+| **Answers** | Answer first · as long as the question needs | An explanation longer than the work itself |
 
-plugin `software-development` มีรายละเอียดของโค้ดและสถาปัตยกรรมเพิ่ม: `lazy-coding` (เขียนให้น้อย) · `readable-code` (ชื่อ รูปร่างฟังก์ชัน โครงไฟล์) · `simplicity-first` (เอกสาร แผน สถาปัตยกรรม) · ถ้าติดตั้งอยู่ให้เปิดคู่กัน
+Plugin `software-development` has more detail on code and architecture: `lazy-coding` (write less) · `readable-code` (names, function shape, file structure) · `simplicity-first` (documents, plans, architecture) · if installed, open them together
 
-## 4 · บอกว่าตั้งใจทำให้ง่าย
+## 4 · Say that you made it simple on purpose
 
-ทางลัดที่ตั้งใจ ให้เขียนไว้ว่าใช้ได้ถึงแค่ไหนและเปลี่ยนเมื่อไร จะได้ไม่ดูเหมือนลืม เช่น `// simple: เก็บใน memory — ย้ายไป Redis เมื่อรันเกิน 1 process` · ในรายงานใส่ 1 บรรทัด `ข้าม: X — เพิ่มเมื่อ Y`
+A deliberate shortcut should be written down with how far it works and when it changes, so it does not look forgotten, for example `// simple: เก็บใน memory — ย้ายไป Redis เมื่อรันเกิน 1 process` (gloss: simple: kept in memory — move to Redis when running more than 1 process) · in the report put 1 line `ข้าม: X — เพิ่มเมื่อ Y` (skipped: X — add when Y)
 
-## 5 · ตรวจก่อนส่ง 5 ข้อ
+## 5 · 5-point check before sending
 
-1. คนนอกเปิดดูครั้งแรกแล้วเข้าใจภายใน 30 วินาทีไหม
-2. มีส่วนไหน ขั้นไหน หรือชั้นไหนตัดออกได้โดยไม่เสียอะไรไหม ถ้ามีให้ตัด
-3. ทุกส่วนที่เพิ่มมา มีเหตุผลว่าต้องใช้ตอนนี้ ไม่ใช่ "เผื่อ" ใช่ไหม
-4. ยังครบเรื่องความถูกต้อง ความปลอดภัย และสิ่งที่ผู้ใช้ขอไหม
-5. ยังแยกหน้าที่ชัด ไม่ได้ยุบหลายเรื่องไว้ที่เดียวเพื่อให้ดูสั้นใช่ไหม
+1. Can an outsider open it for the first time and understand within 30 seconds
+2. Is there any part, step or layer that can be cut with no loss? If so, cut it
+3. Does every part added have a reason it is needed now, not "just in case"
+4. Is it still complete on correctness, safety, and what the user asked for
+5. Are duties still clearly separated, and not several things squashed into one place to look short
 
 
 ---
@@ -1194,20 +1194,20 @@ options.LogTo(Console.WriteLine, LogLevel.Information).EnableSensitiveDataLoggin
 
 Use when writing or reviewing TypeScript code
 
-# stack-typescript — TypeScript ที่ทีมอ่านง่าย และพังยาก
+# stack-typescript — TypeScript the team can read easily and that is hard to break
 
-> **กฎข้อเดียว:** ให้ compiler จับ bug แทนคน `tsc` ผ่าน 0 error ไม่ได้แปลว่าเสร็จ แต่ไม่ผ่านแปลว่ายังไม่เริ่ม
+> **One rule:** let the compiler catch bugs instead of people. `tsc` passing with 0 errors does not mean done, but failing means not started.
 
-ไฟล์นี้มีแค่เรื่องเฉพาะ TypeScript · Node · Angular ส่วนหลักทั่วไปอยู่ใน `lazy-coding` · `readable-code` · `principle-data-shape-first` · `principle-secure-by-default`
+This file covers only what is specific to TypeScript · Node · Angular. The general principles are in `lazy-coding` · `readable-code` · `principle-data-shape-first` · `principle-secure-by-default`.
 
-## 1 · เริ่มงาน — ดู repo ก่อนพิมพ์คำสั่งแรก
+## 1 · Starting work — look at the repo before the first command
 
-| ดูไฟล์ | บอกอะไร | ทำ |
+| Look at | It tells you | Do |
 |---|---|---|
-| `package-lock.json` · `pnpm-lock.yaml` · `yarn.lock` | package manager | ใช้ตัวนั้นตัวเดียว ห้ามมี lockfile 2 ตัว |
-| `.nvmrc` · `engines` ใน `package.json` | Node version | ใช้ตามนั้น ถ้าไม่มีให้ใช้ Long Term Support (LTS) ล่าสุด — ตรวจล่าสุด 2026-10-14 · แหล่ง: https://nodejs.org/en/about/previous-releases : LTS คือ 24 และ 22 · 26 ยังเป็น Current ไม่ใช้ใน production จนกว่าหน้านี้จะขึ้นว่า LTS · ตัวถัดไปที่หมดอายุคือ 22 (2027-04-30 (รอยืนยัน)) · ก่อนใช้ให้ตรวจหน้านี้ซ้ำ · Node 26 น่าจะขึ้น LTS ช่วงปลาย ต.ค. 2569 (รอยืนยัน) ให้ตรวจบรรทัดนี้ใหม่ทันทีหลังวันนั้น |
-| `"type"` ใน `package.json` · `tsconfig` `module` | ECMAScript Modules (ESM) หรือ CommonJS (CJS) | ตามของเดิม ห้ามผสม |
-| `scripts` ใน `package.json` | คำสั่งจริงของ repo | ใช้ script ที่มีอยู่ก่อนจะเดาคำสั่งเอง |
+| `package-lock.json` · `pnpm-lock.yaml` · `yarn.lock` | package manager | Use that one only; never have 2 lockfiles |
+| `.nvmrc` · `engines` in `package.json` | Node version | Follow it. If absent, use the latest Long Term Support (LTS) — last checked 2026-10-14 · source: https://nodejs.org/en/about/previous-releases : LTS is 24 and 22 · 26 is still Current, so do not use it in production until this page lists it as LTS · the next one to expire is 22 (2027-04-30 (รอยืนยัน)) · re-check this page before use · Node 26 will probably become LTS in late Oct 2026 (รอยืนยัน); re-check this line right after that date |
+| `"type"` in `package.json` · `tsconfig` `module` | ECMAScript Modules (ESM) or CommonJS (CJS) | Follow what exists; never mix |
+| `scripts` in `package.json` | the repo's real commands | Use an existing script before guessing a command |
 
 ```bash
 npm ci                      # pnpm install --frozen-lockfile · yarn install --immutable
@@ -1216,22 +1216,22 @@ npm run lint && npm test && npm run build 2>&1 | tail -40   # ดูแค่ท
 npx vitest run src/order/order.service.test.ts -t "คืนเงินเกินยอด"   # รัน test เดียว
 ```
 
-- Angular ใช้ `ng test --include=src/app/order/**` และดูขนาด bundle ท้าย output ของ `ng build`
-- `npm install <pkg>` จะเปลี่ยน lockfile จึงต้อง commit lockfile ในรอบเดียวกัน
+- For Angular use `ng test --include=src/app/order/**` and check the bundle size at the end of the `ng build` output.
+- `npm install <pkg>` changes the lockfile, so commit the lockfile in the same round.
 
-## 2 · TypeScript แบบเข้ม
+## 2 · Strict TypeScript
 
-| ห้าม | ใช้แทน | เหตุผล |
+| Never | Use instead | Reason |
 |---|---|---|
-| `any` | `unknown` แล้ว narrow ด้วย `typeof` · `in` · type guard | `any` ปิด compiler ทั้งสาย |
-| `value!` เพื่อให้ error เงียบ | เช็ก `if (!value) throw …` หรือแก้ type ต้นทาง | `!` คือการโกหก compiler |
-| `as Order` กับข้อมูลจากข้างนอก | parse ด้วย zod (หรือ library ที่ repo ใช้) | cast ไม่ได้ตรวจอะไรเลย |
-| boolean หลายตัวบอกสถานะ | discriminated union | สถานะที่เป็นไปไม่ได้จะเขียนไม่ได้ |
-| `const x: Config = {...}` จนเสีย literal | `satisfies Config` | ได้ทั้งตรวจ shape และ type แคบ |
+| `any` | `unknown`, then narrow with `typeof` · `in` · a type guard | `any` switches off the compiler along the whole chain |
+| `value!` just to silence an error | check `if (!value) throw …` or fix the source type | `!` is a lie to the compiler |
+| `as Order` on outside data | parse with zod (or the library the repo uses) | a cast checks nothing |
+| several booleans to hold a state | discriminated union | impossible states cannot be written |
+| `const x: Config = {...}` that loses the literal | `satisfies Config` | you get both the shape check and the narrow type |
 
-- `tsconfig`: `"strict": true` · `noUncheckedIndexedAccess` · `noImplicitOverride` ถ้า repo เก่าปิด strict อยู่ ให้เปิดทีละ folder ไม่เปิดทั้ง repo ในงานเดียว
-- จะใช้ `enum` หรือ union ของ string ให้ตามที่ repo ใช้ ส่วน repo ใหม่ใช้ `as const` + union (ไม่สร้าง code ตอน runtime)
-- type ของ API ที่ frontend กับ backend ใช้ร่วมกันให้เก็บไว้ที่เดียว (shared package หรือ generate จาก OpenAPI)
+- `tsconfig`: `"strict": true` · `noUncheckedIndexedAccess` · `noImplicitOverride`. If an old repo has strict off, turn it on one folder at a time, not for the whole repo in one task.
+- For `enum` versus a union of strings, follow what the repo uses. A new repo uses `as const` + union (no runtime code is generated).
+- Keep API types shared by frontend and backend in one place (a shared package, or generated from OpenAPI).
 
 ```ts
 const Order = z.object({ id: z.uuid(), totalSatang: z.number().int().nonnegative() });
@@ -1243,12 +1243,12 @@ type PayResult =
 // switch (r.status) ครบทุกกรณี · default: const _never: never = r;
 ```
 
-**เช็ก type ใหม่ 4 ข้อ** (แนวคิดจาก type-design-analyzer ของ pr-review-toolkit · claude-plugins-official · Apache-2.0 · ดู 2026-11-10) ใช้กับ type ที่แทนเลขบัตรประชาชน จำนวนเงิน เลขที่เอกสาร:
+**4 new-type checks** (idea from the type-design-analyzer of pr-review-toolkit · claude-plugins-official · Apache-2.0 · viewed 2026-11-10). Apply them to types that stand for a national ID number, an amount of money, a document number:
 
-1. **ซ่อนภายใน** — ผู้ใช้ type สร้างค่าได้ทางเดียว (ฟังก์ชัน `parse`) ไม่ได้แก้ field ตรง ๆ
-2. **กฎอยู่ใน type** — ค่าที่ผิดกฎสร้างไม่ได้ ไม่ใช่เขียนไว้แค่ในเอกสาร
-3. **ตรวจที่ทางเข้า** — ตรวจครั้งเดียวตอนสร้าง แล้วทั้งระบบเชื่อ type ได้
-4. **ไม่เปิด mutable** — `readonly` ทุก field และไม่คืน array ภายในให้คนแก้
+1. **Hide the internals** — users of the type create a value in only one way (a `parse` function) and never edit fields directly.
+2. **The rules live in the type** — a value that breaks the rules cannot be created; the rules are not written only in a document.
+3. **Check at the entrance** — validate once at creation, and then the whole system can trust the type.
+4. **Expose nothing mutable** — `readonly` on every field, and never return an internal array for others to change.
 
 ```ts
 type ThaiNationalId = string & { readonly __brand: 'ThaiNationalId' };  // 13 หลัก + ตรวจเลขท้าย
@@ -1260,14 +1260,14 @@ const parseNationalId = (s: string): ThaiNationalId | null =>
 
 ## 3 · Node backend (Express · Fastify · NestJS)
 
-- **promise ห้ามลอย** ให้เปิด `@typescript-eslint/no-floating-promises` และ `no-misused-promises` แล้วทุก `async` ต้องถูก `await` หรือ `.catch` ที่ทำอะไรได้จริง
-- Express 4 ไม่ส่ง error จาก `async` handler ต่อเอง จึงต้องใช้ Express 5 หรือห่อ handler ส่วน Fastify และ NestJS จัดการให้แล้ว
-- **config ตรวจตอนเริ่ม** ให้ parse `process.env` ด้วย schema ครั้งเดียว ถ้าขาดหรือผิดก็ไม่ยอม start (รายละเอียดใน `config-and-secrets`)
-- **ปิด server ให้เรียบร้อย**: รับ `SIGTERM` → หยุดรับ request ใหม่ → รอ request ที่ค้าง → ปิด DB pool และตั้งเวลาบังคับปิดไว้
-- ไฟล์ใหญ่ให้ใช้ `stream.pipeline` จาก `node:stream/promises` ห้าม `readFile` ทั้งไฟล์เข้า memory
-- ห้าม `fs.*Sync` · `crypto.*Sync` ที่หนัก · loop ใหญ่ ใน path ของ request เพราะ event loop จะค้างทั้ง server
-- DB ต้อง query แบบ parameter (`$1` · `?`) หรือผ่าน ORM เสมอ ห้ามต่อ string เข้า SQL
-- log แบบมีโครง (pino ใน Fastify · logger ที่ repo มี) ตาม `logging-standards` ไม่ใช้ `console.log` ใน server
+- **No floating promises.** Turn on `@typescript-eslint/no-floating-promises` and `no-misused-promises`, and every `async` must be `await`ed or given a `.catch` that does something real.
+- Express 4 does not forward errors from an `async` handler by itself, so use Express 5 or wrap the handler. Fastify and NestJS already handle it.
+- **Validate config at startup.** Parse `process.env` with a schema once; if a value is missing or wrong, refuse to start (details in `config-and-secrets`).
+- **Shut the server down cleanly**: receive `SIGTERM` → stop accepting new requests → wait for pending requests → close the DB pool, and set a timer to force exit.
+- For large files use `stream.pipeline` from `node:stream/promises`; never `readFile` the whole file into memory.
+- No `fs.*Sync` · heavy `crypto.*Sync` · big loops in a request path, because the event loop would block the whole server.
+- DB access must always use parameterized queries (`$1` · `?`) or an ORM; never concatenate strings into SQL.
+- Use structured logs (pino in Fastify · the repo's logger) per `logging-standards`; no `console.log` in a server.
 
 ```ts
 const server = app.listen(port);
@@ -1279,24 +1279,24 @@ process.on('SIGTERM', () => {
 
 ## 4 · Angular
 
-ตัวล่าสุดคือ v22 (ออก 3 มิ.ย. 2026 · แหล่ง: https://angular.dev/reference/releases · ตรวจ 22 ต.ค. 2569): app ใหม่เป็น zoneless และ `OnPush` เป็นค่าเริ่มต้น ส่วน Signal Forms ใช้ใน production ได้แล้ว (3 ข้อหลังนี้ (รอยืนยัน) — หน้าแหล่งไม่ได้ระบุ ให้ตรวจ release notes ของ v22 ก่อนอ้าง)
+The latest is v22 (released 3 Jun 2026 · source: https://angular.dev/reference/releases · checked 22 Oct 2026): new apps are zoneless and `OnPush` is the default, and Signal Forms are production-ready (these last 3 points (รอยืนยัน) — the source page does not state them; check the v22 release notes before citing).
 
-| เรื่อง | ทำแบบนี้ | ไม่ทำ |
+| Topic | Do this | Do not |
 |---|---|---|
-| component | standalone · `inject()` | สร้าง NgModule ใหม่ |
-| state | `signal` · `computed` · `input()` · `output()` | `BehaviorSubject` สำหรับ state ใน component |
-| change detection | `OnPush` (v22 เป็นค่าเริ่มต้น) | `Default`/`Eager` โดยไม่มีเหตุผล |
-| template | `@if` · `@for (x of xs; track x.id)` · `@switch` | `*ngIf` · `*ngFor` (deprecated ตั้งแต่ v20) |
-| form | Signal Forms (v22) ส่วน repo เดิมใช้ typed reactive forms | `UntypedFormGroup` |
-| HTTP | `HttpClient` + functional interceptor (`withInterceptors`) | ใส่ header token ทีละที่ |
-| subscription | `async` pipe · `toSignal` · `takeUntilDestroyed()` | `subscribe` แล้วไม่ยกเลิก |
-| route | `loadComponent` · `loadChildren` แบบ lazy | import ทุกหน้าใน route หลัก |
+| component | standalone · `inject()` | create a new NgModule |
+| state | `signal` · `computed` · `input()` · `output()` | `BehaviorSubject` for state inside a component |
+| change detection | `OnPush` (default in v22) | `Default`/`Eager` without a reason |
+| template | `@if` · `@for (x of xs; track x.id)` · `@switch` | `*ngIf` · `*ngFor` (deprecated since v20) |
+| form | Signal Forms (v22); an existing repo uses typed reactive forms | `UntypedFormGroup` |
+| HTTP | `HttpClient` + functional interceptor (`withInterceptors`) | add the token header one place at a time |
+| subscription | `async` pipe · `toSignal` · `takeUntilDestroyed()` | `subscribe` and never unsubscribe |
+| route | lazy `loadComponent` · `loadChildren` | import every page in the root route |
 
-- logic ใน template ให้ย้ายไป `computed` ให้ template มีแค่การแสดงผล และห้ามเรียก function หนักใน binding
-- `DomSanitizer.bypassSecurityTrust*` ห้ามใช้กับข้อมูลที่ผู้ใช้ส่งมา ถ้าต้องใช้จริงให้คอมเมนต์ว่าทำไมปลอดภัย
-- **repo เก่า (v14–19)** ให้เขียนตามแบบที่ repo ใช้อยู่ ใช้ของใหม่ได้เฉพาะที่ version นั้นรองรับ และไม่ migrate ทั้ง repo ในงาน feature ถ้าอยาก migrate ให้เสนอแยกงาน แล้วใช้ `ng generate @angular/core:control-flow` และ schematic อื่นของ Angular
-- React หรือ Vite: เก็บ state ใน component ก่อน `useEffect` ต้องมี cleanup key ใน list เป็น id ไม่ใช่ index และ env ฝั่ง client ใช้ได้เฉพาะ `VITE_*` และถือว่าทุกคนเห็น
-- repo React หรือ Next.js ที่ต้องไล่เรื่องความเร็ว (render ซ้ำ · bundle · data fetching แบบ waterfall) ให้ดึงกฎจาก Vercel `react-best-practices` มาอ่านสด ๆ ตอนทำ: https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices — เป็นลิงก์อย่างเดียว ไม่คัดกฎมาใส่ที่นี่ เพราะยังไม่ได้ตรวจ licence ของ repo นั้น (ตรวจ 23 ต.ค. 2569) · กฎที่ขัดกับข้อ 2 ของ skill นี้ (strict TS) ให้ยึดของเรา
+- Move logic out of templates into `computed` so a template only displays, and never call a heavy function in a binding.
+- Never use `DomSanitizer.bypassSecurityTrust*` on data sent by users. If it is truly needed, comment why it is safe.
+- **Old repo (v14–19)**: write in the style the repo already uses, use new features only where that version supports them, and do not migrate the whole repo inside a feature task. If you want to migrate, propose it as a separate task, then use `ng generate @angular/core:control-flow` and Angular's other schematics.
+- React or Vite: keep state in the component first · `useEffect` needs a cleanup · list keys are ids, not indexes · client-side env may use only `VITE_*`, and treat it as visible to everyone.
+- For a React or Next.js repo where speed must be chased (repeated renders · bundle · waterfall data fetching), pull the rules from Vercel `react-best-practices` and read them live while working: https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices — a link only, no rules copied here, because that repo's licence has not been checked (checked 23 Oct 2026) · a rule that conflicts with item 2 of this skill (strict TS): follow ours.
 
 ```ts
 export class OrderList {
@@ -1306,62 +1306,62 @@ export class OrderList {
 // <ul>@for (o of unpaid(); track o.id) { <li>{{ o.id }}</li> } @empty { <li>ไม่มีรายการค้างจ่าย</li> }</ul>
 ```
 
-## 5 · กับดักที่เจอบ่อย
+## 5 · Common traps
 
-| กับดัก | อาการ | ทำแบบนี้ |
+| Trap | Symptom | Do this |
 |---|---|---|
-| เวลาและ time zone | วันที่ถอยไป 1 วัน ช่วง 00:00–06:59 เวลาไทย | เก็บและส่ง ISO 8601 แบบ UTC แล้วแสดงด้วย `Intl.DateTimeFormat('th-TH', { timeZone: 'Asia/Bangkok' })` ส่วนปี พ.ศ. ดู `i18n-and-locale` |
-| เงิน | `0.1 + 0.2 !== 0.3` | เก็บเป็นสตางค์ (integer) ถ้าคิดภาษีหรือแปลงสกุลให้ใช้ decimal library ที่ repo ใช้ |
-| `==` | `'0' == false` เป็นจริง | ใช้ `===` เสมอ และเปิด eslint `eqeqeq` |
-| แก้ object ที่แชร์กัน | ค่าเปลี่ยนเองข้ามหน้า | สร้างใหม่ด้วย spread · `structuredClone` · `readonly` ใน type |
-| memory leak | RAM โตเรื่อย ๆ | ยกเลิก subscription · `removeEventListener` · `clearInterval` และ cache ต้องมีเพดาน |
-| import ก้อนใหญ่ | bundle บวมหลายร้อย KB | `import { debounce } from 'lodash-es'` ไม่ใช่ทั้ง lodash แล้วดู bundle หลัง build |
-| เรียงชื่อไทย | สระหน้าเรียงผิด | ใช้ `new Intl.Collator('th').compare` ไม่ใช้ `localeCompare` เปล่า ๆ |
-| `JSON.parse` ไม่มีตรวจ | crash ลึกในโค้ด | parse ด้วย schema ที่ขอบระบบ (ข้อ 2) |
+| time and time zone | the date goes back 1 day between 00:00–06:59 Thai time | store and send ISO 8601 in UTC, then display with `Intl.DateTimeFormat('th-TH', { timeZone: 'Asia/Bangkok' })`; for the Buddhist Era year see `i18n-and-locale` |
+| money | `0.1 + 0.2 !== 0.3` | store as satang (integer); for tax or currency conversion use the decimal library the repo uses |
+| `==` | `'0' == false` is true | always use `===` and turn on eslint `eqeqeq` |
+| mutating a shared object | values change by themselves across pages | create a new one with spread · `structuredClone` · `readonly` in the type |
+| memory leak | RAM keeps growing | cancel subscriptions · `removeEventListener` · `clearInterval`, and caches need a cap |
+| big imports | bundle bloats by hundreds of KB | `import { debounce } from 'lodash-es'`, not all of lodash, and check the bundle after the build |
+| sorting Thai names | leading vowels sort wrong | use `new Intl.Collator('th').compare`, not bare `localeCompare` |
+| `JSON.parse` without checks | crash deep in the code | parse with a schema at the system edge (item 2) |
 
 ## 6 · test
 
-ใช้ framework ที่ repo มี · ตั้งค่า Vitest และ Angular พร้อมตัวอย่าง ดู [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#node--typescript--vitest) ส่วนเบราว์เซอร์ดู `e2e-testing-patterns`
+Use the framework the repo has · for Vitest and Angular setup with examples, see [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#node--typescript--vitest) · for browsers see `e2e-testing-patterns`.
 
-- HTTP API: `supertest` (Express · NestJS) · `fastify.inject()` (Fastify) ไม่ต้องเปิดพอร์ตจริง
-- Angular ตั้งแต่ v21 CLI ใช้ Vitest เป็นค่าเริ่มต้น ไม่ใช่ Karma
+- HTTP API: `supertest` (Express · NestJS) · `fastify.inject()` (Fastify) — no need to open a real port.
+- From Angular v21 the CLI uses Vitest by default, not Karma.
 
-- logic ใหม่หรือแก้ bug ให้เขียน test ที่แดงก่อน แล้วค่อยแก้ให้เขียว
-- snapshot อย่างเดียวไม่นับเป็น test ต้องมี assert ค่าที่สำคัญ
-- signal ใน test ให้อ่านค่าตรง ๆ `component.unpaid()` ไม่ต้องรอ `fakeAsync` ถ้าไม่มี async จริง
+- For new logic or a bug fix, write a test that is red first, then fix it until green.
+- A snapshot alone does not count as a test; it must assert the values that matter.
+- For a signal in a test, read the value directly, `component.unpaid()`; no need to wait with `fakeAsync` if nothing is really async.
 
-## 7 · ความปลอดภัยเฉพาะ stack
+## 7 · Stack-specific security
 
-- **แพ็กเกจใหม่** ต้องตรวจก่อนลง: ชื่อสะกดถูก (typosquat) · ยอดดาวน์โหลด · ผู้ดูแล · วันที่ออกล่าสุด ส่วนชื่อ scope ภายในองค์กรต้องตั้ง registry ใน `.npmrc` กัน dependency confusion
-- รัน `npm audit --omit=dev` ก่อนส่ง lockfile ต้อง commit และ CI ใช้ `npm ci`
-- Cross-Site Scripting (XSS): ห้ามใช้ `innerHTML` · `[innerHTML]` · `dangerouslySetInnerHTML` กับข้อมูลผู้ใช้ ส่วน Angular escape ให้เองถ้าไม่ bypass
-- login ด้วย cookie ต้องตั้ง cookie `HttpOnly` · `Secure` · `SameSite` + กัน Cross-Site Request Forgery (CSRF) (token หรือ `withXsrfConfiguration` ของ Angular)
-- Cross-Origin Resource Sharing (CORS): ระบุ origin ทีละตัว ห้ามใช้ `*` คู่กับ `credentials`
-- secret ห้ามอยู่ใน frontend เพราะทุกอย่างใน `environment.ts` และ `VITE_*` ถูก build เข้า bundle ให้ทุกคนอ่าน
-- header ความปลอดภัยใช้ `helmet` (Express) · `@fastify/helmet` · NestJS ใช้ `helmet` ใน `main.ts`
+- **A new package** must be checked before installing: spelled correctly (typosquat) · download count · maintainer · latest release date. For an organisation-internal scope name, set the registry in `.npmrc` to prevent dependency confusion.
+- Run `npm audit --omit=dev` before sending · the lockfile must be committed and CI uses `npm ci`.
+- Cross-Site Scripting (XSS): never use `innerHTML` · `[innerHTML]` · `dangerouslySetInnerHTML` with user data. Angular escapes for you if you do not bypass.
+- Cookie login must set the cookie `HttpOnly` · `Secure` · `SameSite` + guard against Cross-Site Request Forgery (CSRF) (token or Angular's `withXsrfConfiguration`).
+- Cross-Origin Resource Sharing (CORS): list origins one by one; never use `*` together with `credentials`.
+- Secrets must never be in the frontend, because everything in `environment.ts` and `VITE_*` is built into the bundle for everyone to read.
+- For security headers use `helmet` (Express) · `@fastify/helmet` · in NestJS use `helmet` in `main.ts`.
 
-## 8 · รายการตรวจก่อนส่ง
+## 8 · Pre-submit checklist
 
-- [ ] `tsc --noEmit` 0 error
-- [ ] lint 0 warning ในไฟล์ที่แก้
-- [ ] test ทั้งชุดผ่าน และพฤติกรรมใหม่มี test ที่เคยแดงก่อนแก้
-- [ ] ไม่มี `any` · `as` กับข้อมูลภายนอก · `!` ใหม่ใน diff
-- [ ] ไม่มี promise ลอย และไม่มี subscription ที่ไม่ยกเลิก
-- [ ] งาน frontend เทียบขนาด bundle ก่อนและหลังแล้ว ถ้าโตเกิน 20 KB (gzip) ให้บอกเหตุผลในรายงาน
-- [ ] ถ้า lockfile เปลี่ยน ได้ตรวจแพ็กเกจใหม่ตามข้อ 7 แล้ว
+- [ ] `tsc --noEmit` 0 errors
+- [ ] lint 0 warnings in the files changed
+- [ ] the whole test suite passes, and the new behaviour has a test that was red before the fix
+- [ ] no `any` · `as` on external data · new `!` in the diff
+- [ ] no floating promise and no subscription left uncancelled
+- [ ] frontend work: bundle size compared before and after; if it grew more than 20 KB (gzip), give the reason in the report
+- [ ] if the lockfile changed, the new packages were checked per item 7
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Link to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---|---|
-| โค้ดน้อยที่สุดที่ใช้ได้ | `lazy-coding` |
-| ชื่อ · โครงไฟล์ · คอมเมนต์ | `readable-code` |
-| ออกแบบ type และรูปข้อมูลก่อนเขียน | `principle-data-shape-first` |
-| จับ error ที่ไหน · retry · timeout | `error-handling-patterns` |
-| รูปแบบ log และ correlation id | `logging-standards` |
-| สัดส่วนและการตั้งชื่อ test | `testing-standards` |
-| test ผ่านเบราว์เซอร์ | `e2e-testing-patterns` |
-| หน้าจอ · token สี · layout | `web-app-design` |
-| ข้อบังคับความปลอดภัยทุก diff | `principle-secure-by-default` |
-| env และ secret | `config-and-secrets` |
-| วันที่ไทย · พ.ศ. · เรียงคำไทย | `i18n-and-locale` |
+| the least code that works | `lazy-coding` |
+| names · file layout · comments | `readable-code` |
+| design types and data shape before writing | `principle-data-shape-first` |
+| where to catch errors · retry · timeout | `error-handling-patterns` |
+| log format and correlation id | `logging-standards` |
+| test proportions and naming | `testing-standards` |
+| tests through the browser | `e2e-testing-patterns` |
+| screens · color tokens · layout | `web-app-design` |
+| security rules for every diff | `principle-secure-by-default` |
+| env and secrets | `config-and-secrets` |
+| Thai dates · Buddhist Era · Thai word sorting | `i18n-and-locale` |

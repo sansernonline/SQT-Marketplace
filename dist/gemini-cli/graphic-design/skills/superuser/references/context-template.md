@@ -1,13 +1,13 @@
-# แม่แบบไฟล์กลาง — graphic-design
+# Central-file template — graphic-design
 
-หัวหน้าทีมใช้แม่แบบนี้ตอนสร้างไฟล์ครั้งแรก ส่วนกติกาการเขียนอยู่ในหัวข้อ 9 ของ `superuser`
+The team lead uses this template when first creating the files. The writing rules are in section 9 of `superuser`.
 
-## ค่าของ plugin นี้
+## Values for this plugin
 
-ใส่แทนช่องว่างในแม่แบบด้านล่าง
-- ชื่องาน: แคมเปญ 11.11
-- งานนี้คืออะไร: แบรนด์หรือแคมเปญอะไร ใช้ที่ไหน สถานะโดยรวม
-- กติกา: brand kit อยู่ที่ไหน · เครื่องมือสร้างภาพที่ใช้ · งบเครดิตต่องาน
+Fill in the blanks of the template below.
+- ชื่องาน (job name): แคมเปญ 11.11
+- งานนี้คืออะไร (what this job is): which brand or campaign, where it is used, overall status
+- กติกา (rules): where the brand kit is · which image-generation tool is used · credit budget per job
 - ตัวอย่างแถว IMPROVEMENTS: แพลตฟอร์มหนึ่งเปลี่ยน safe zone ของวิดีโอแนวตั้ง · หลักฐาน: หน้าช่วยเหลือของแพลตฟอร์ม + ภาพทดสอบ · ไปรวมที่ `social-formats` references/platform-sizes.md
 
 <!-- superuser:begin context -->

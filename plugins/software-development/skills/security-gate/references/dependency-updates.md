@@ -1,47 +1,47 @@
-# อัปเดต dependency ที่มีช่องโหว่ — ส่วนขยายของ `security-gate` ขั้น 5
+# Updating vulnerable dependencies — an extension of `security-gate` step 5
 
-ใช้เมื่อผลสแกน dependency มีรายการ หรือเพิ่งเพิ่ม dependency ใหม่ · แนวคิดจาก wshobson `dependency-management` (MIT) และ Trail of Bits `supply-chain-risk-auditor` (CC-BY-SA 4.0 — เอาแค่แนวคิด เขียนใหม่ด้วยคำเรา)
+Use when the dependency scan result has entries, or a new dependency was just added · ideas from wshobson `dependency-management` (MIT) and Trail of Bits `supply-chain-risk-auditor` (CC-BY-SA 4.0 — ideas only, rewritten in our own words)
 
-## 1 · สแกน — ใช้ตัวที่มากับภาษา แล้วเสริมด้วยตัวที่อ่าน lockfile ได้ทุกภาษา
+## 1 · Scan — use the tool that comes with the language, then add one that reads lockfiles of every language
 
-| stack | คำสั่ง | หมายเหตุ |
+| stack | Command | Note |
 |---|---|---|
-| Node | `npm audit --omit=dev --json > _to_delete/security/npm-audit.json` | `--omit=dev` ตัดของที่ไม่ไปถึง production · ห้าม `npm audit fix --force` เพราะมันยอมอัปเดตข้าม major |
-| Python | `pip-audit -r requirements.txt` หรือ `pip-audit` ใน venv | โปรเจกต์ที่ใช้ `uv` / `poetry` ให้ export lockfile เป็น requirements ก่อน |
-| .NET | `dotnet list package --vulnerable --include-transitive` | ไม่ใส่ `--include-transitive` จะเห็นแค่ที่อ้างตรง |
-| ทุก stack | `trivy fs --scanners vuln .` หรือ `osv-scanner scan source -r .` | อ่าน lockfile ของทุกภาษาในครั้งเดียว ใช้ยืนยันผลข้างบนและจับ Dart · Go · Rust |
+| Node | `npm audit --omit=dev --json > _to_delete/security/npm-audit.json` | `--omit=dev` drops things that never reach production · never `npm audit fix --force` because it allows updates across a major version |
+| Python | `pip-audit -r requirements.txt` or `pip-audit` inside the venv | For projects using `uv` / `poetry`, export the lockfile to requirements first |
+| .NET | `dotnet list package --vulnerable --include-transitive` | Without `--include-transitive` you see only directly referenced ones |
+| Every stack | `trivy fs --scanners vuln .` or `osv-scanner scan source -r .` | Reads the lockfiles of every language at once, use it to confirm the results above and to catch Dart · Go · Rust |
 
-**lockfile ต้อง commit เสมอ** (`package-lock.json` · `uv.lock` / `poetry.lock` · `packages.lock.json` · `pubspec.lock`) — ไม่มี lockfile เครื่องแต่ละเครื่องได้เวอร์ชันต่างกัน และตัวสแกนไม่รู้ว่าจริง ๆ ใช้เวอร์ชันไหน
+**Always commit the lockfile** (`package-lock.json` · `uv.lock` / `poetry.lock` · `packages.lock.json` · `pubspec.lock`) — with no lockfile each machine gets different versions, and the scanner does not know which version is really used
 
-## 2 · จัดกลุ่มตามความเสี่ยงจริง ไม่ใช่ตามป้าย severity ของตัวสแกน
+## 2 · Group by real risk, not by the scanner's severity label
 
-ตอบ 3 คำถามต่อรายการ แล้วลงตาราง `| แพ็กเกจ | เวอร์ชัน | ช่องโหว่ | ใช้ถึงโค้ดที่เสี่ยงไหม | ตรง/ผ่านตัวอื่น | มีเวอร์ชันแก้ไหม | ทำอะไร |`
+Answer 3 questions per entry, then fill the table `| แพ็กเกจ | เวอร์ชัน | ช่องโหว่ | ใช้ถึงโค้ดที่เสี่ยงไหม | ตรง/ผ่านตัวอื่น | มีเวอร์ชันแก้ไหม | ทำอะไร |` (package · version · vulnerability · reaches the risky code · direct/via another · fixed version available · action)
 
-| คำถาม | ดูจาก | ผลต่อการตัดสิน |
+| Question | Look at | Effect on the decision |
 |---|---|---|
-| โค้ดเราเรียกถึงฟังก์ชันที่มีช่องโหว่ไหม และ input ไปถึงมันได้จากภายนอกไหม | `grep` ชื่อฟังก์ชันใน advisory · ทางเดินของ input | ไม่ถึง → ลดระดับได้ แต่ต้องจดเหตุผล ไม่ใช่ปิดเงียบ |
-| อ้างตรงหรือมาผ่านตัวอื่น (transitive) | `npm ls <pkg>` · `pipdeptree -r -p <pkg>` · `dotnet nuget why <pkg>` | transitive → แก้ที่ตัวแม่ก่อน ถ้าแม่ยังไม่ออกเวอร์ชันใหม่ค่อย override ใน lockfile แล้วจดไว้ว่าต้องถอดเมื่อแม่แก้ |
-| มีเวอร์ชันที่แก้แล้วไหม | ช่อง `fixed in` ของ advisory | ไม่มี → หาแพ็กเกจแทน หรือปิดทางเข้าของ input แล้วจดเป็นความเสี่ยงที่ยอมรับใน `decision-log` |
+| Does our code call the vulnerable function, and can outside input reach it | `grep` the function name in the advisory · the path of input | Does not reach → may be downgraded, but the reason must be recorded, not closed silently |
+| Referenced directly or through another package (transitive) | `npm ls <pkg>` · `pipdeptree -r -p <pkg>` · `dotnet nuget why <pkg>` | transitive → fix at the parent first, and if the parent has no new version yet, override in the lockfile and note that it must be removed when the parent is fixed |
+| Is there a fixed version | The `fixed in` field of the advisory | None → find a replacement package, or close the input's entry path and record it as an accepted risk in `decision-log` |
 
-ผลสรุป: **แก้ตอนนี้** (ถึงจริง + มีตัวแก้) · **แก้รอบหน้า** (ถึงไม่ได้ แต่มีตัวแก้) · **ยอมรับความเสี่ยงชั่วคราว** (ไม่มีตัวแก้ — ผู้ใช้ต้องเห็นและตกลง)
+Resulting summary: **fix now** (really reached + a fix exists) · **fix next round** (cannot be reached, but a fix exists) · **accept the risk temporarily** (no fix — the user must see it and agree)
 
-## 3 · ลำดับอัปเดต — เล็กก่อน แยกใหญ่ออกมาให้เห็นชัด
+## 3 · Update order — small first, split the large ones out so they are visible
 
-1. **patch** ทั้งหมดในรอบเดียว (1.2.3 → 1.2.9) — ตามสัญญา semver ไม่เปลี่ยนพฤติกรรม แต่ยังต้องรัน test
-2. **minor** รวมได้ถ้าอยู่ในกลุ่มเดียวกัน (เช่น ชุด `@angular/*` ไปพร้อมกัน) · อ่าน release notes หาคำว่า deprecated
-3. **major — 1 PR ต่อ 1 แพ็กเกจ** อ่าน migration guide ก่อน แก้โค้ดตามนั้น แล้วรัน test ทั้งชุด · ห้ามพ่วง major 2 ตัวใน PR เดียว เพราะพังแล้วไม่รู้ว่าตัวไหน
-4. แพ็กเกจที่ไม่มีคนดูแลแล้ว (ไม่มี release เกิน 2 ปี · issue ค้างเรื่องความปลอดภัย) → เปิดงานแยกเพื่อหาตัวแทน ไม่ซ่อนไว้ใน PR อัปเดต
+1. All **patch** updates in one round (1.2.3 → 1.2.9) — by the semver contract they do not change behaviour, but you still must run tests
+2. **minor** may be combined if in the same group (for example the `@angular/*` set together) · read the release notes for the word deprecated
+3. **major — 1 PR per 1 package**: read the migration guide first, change the code accordingly, then run the whole test set · never bundle 2 majors in one PR, because when it breaks you will not know which one
+4. A package nobody maintains any more (no release over 2 years · open security issues) → open a separate task to find a replacement, do not hide it inside an update PR
 
-ทางอัตโนมัติ: เปิด **Renovate** หรือ **Dependabot** ให้ยื่น PR ตามลำดับข้างบนเอง (ตั้งกลุ่ม patch+minor อัตโนมัติ · major แยก PR · กำหนดวันในสัปดาห์) — คนยังต้องอ่าน release notes และ merge เอง ไม่ auto-merge major
+Automatic route: turn on **Renovate** or **Dependabot** to file PRs in the order above by themselves (group patch+minor automatically · major in its own PR · set the day of the week) — a person still must read the release notes and merge, and never auto-merge a major
 
-## 4 · พิสูจน์ก่อนปิดรายการ
+## 4 · Prove it before closing the entry
 
-- test ทั้งชุดเขียว และ build ผ่านจากเครื่องเปล่าด้วย lockfile ที่ commit แล้ว
-- **เดินทางเดิมของช่องโหว่อีกครั้ง** — ถ้า advisory บอกว่า input รูปแบบ X ทำให้พัง ให้ส่ง X เข้าไปจริง (ใน sandbox) แล้วดูว่าไม่พัง · เขียนเป็น test ถ้าทำได้ เพื่อไม่ให้ถอยกลับตอนมีคน downgrade
-- รันตัวสแกนข้อ 1 ซ้ำ รายการนั้นต้องหายไป ไม่ใช่แค่เปลี่ยนเวอร์ชันในไฟล์
+- The whole test set is green and the build passes from a clean machine with the committed lockfile
+- **Walk the vulnerability's original path again** — if the advisory says input of form X makes it break, really send X in (in a sandbox) and see that it does not break · write it as a test if you can, so it does not regress when someone downgrades
+- Re-run the scanner of item 1, and that entry must be gone, not merely have its version changed in the file
 
-## 5 · บันทึก
+## 5 · Record
 
-- `CHANGELOG.md` ใต้หัวข้อ Security: แพ็กเกจ · จาก → ไป · รหัสช่องโหว่ (CVE หรือ GHSA) · 1 บรรทัดว่าเราถึงช่องโหว่นั้นไหม
-- รายการที่ยอมรับความเสี่ยงหรือ override ใน lockfile → `decision-log` พร้อมวันที่ต้องกลับมาดู
-- รายงาน gate ของรอบนั้น (`qa/security/<วัน>-gate.md`) ชี้มาที่ CHANGELOG แทนการเขียนซ้ำ
+- `CHANGELOG.md` under the heading Security: package · from → to · vulnerability ID (CVE or GHSA) · 1 line on whether we reach that vulnerability
+- Entries with an accepted risk or an override in the lockfile → `decision-log` with the date to come back and look
+- That round's gate report (`qa/security/<วัน>-gate.md`) points to the CHANGELOG instead of writing it again

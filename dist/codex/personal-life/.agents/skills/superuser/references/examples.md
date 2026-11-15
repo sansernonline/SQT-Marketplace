@@ -1,30 +1,30 @@
-# ตัวอย่างของ plugin นี้ — ระดับโมเดล · ความเป็นอิสระ · รูปแบบทีม
+# Examples for this plugin — model tiers · autonomy · team patterns
 
-กฎอยู่ใน `superuser:superuser` (แกน) · ไฟล์นี้มีแต่ตัวอย่าง
+The rules are in `superuser:superuser` (the core). This file holds examples only.
 
-## ระดับโมเดล — ตัวอย่างงาน
+## Model tiers — example jobs
 
-กฎ ชื่อโมเดล และการสลับกลางทาง อยู่ใน `superuser:superuser` · ไฟล์นี้มีแต่ตัวอย่างงานของแต่ละระดับ
+The rules, model names and mid-task switching are in `superuser:superuser`. This file holds only example jobs for each tier.
 
-ระดับไล่จากบนลงล่างตามกฎ 3 ข้อของแกน ข้อแรกที่ตรงชนะ (ใหญ่ → เล็ก → กลาง) · **ใหญ่** `opus` — ทุกชิ้นที่แตะเงิน สุขภาพ กฎหมาย หรือความปลอดภัยของบัญชี: ตรวจอีเมลที่สงสัยว่ามาจากมิจฉาชีพ · หาเหตุบิลขึ้น · เทียบใบเสนอราคาที่ขอบเขตไม่เท่ากัน · ต่อรองที่มีหลายข้อเสนอ · วางระบบดูแลผู้สูงอายุ · จัดไทม์ไลน์อาการ · ตรวจว่างานสุขภาพไม่หลุดขอบเขต · **เล็ก** `haiku` — งานกลไกที่มีแบบให้ทำตาม: ลงนัดในปฏิทินตามรายการ · ค้นเอกสารแล้วรายงาน · **กลาง** `sonnet` (ที่เหลือ) — วางแผนเปลี่ยนสายงาน · คัดอินบ็อกซ์ · สรุปประชุมยาว · ตรวจหาจุดอ่อนของ CV · อธิบาย paper ที่ยาก · ออกแบบเส้นทางเรียน · ตรวจตัวอย่างโค้ด
+Tiers run from top to bottom under the core's 3 rules, and the first match wins (large → small → medium). **Large** `opus` — every piece that touches money, health, law or account security: check an email suspected to come from a scammer · find why a bill went up · compare quotes whose scope differs · negotiate with several offers · set up elder care · build a symptom timeline · check that health work stays in scope. **Small** `haiku` — mechanical work that has a pattern to follow: put appointments in the calendar from a list · search documents and report. **Medium** `sonnet` (everything else) — plan a career change · triage the inbox · summarise a long meeting · find weak points in a CV · explain a hard paper · design a learning path · check sample code.
 
-## ความเป็นอิสระ — งานที่ย้อนได้และแหล่งข้อมูล
+## Autonomy — reversible work and sources
 
-| เจอ | ทำ |
+| Found | Do |
 |---|---|
-| งานที่ย้อนกลับได้ — ร่างข้อความ · ร่าง CV · ร่างตารางและการ์ด · ทำตาราง · จัดโฟลเดอร์ที่ย้อนกลับได้ · ตั้งไฟล์เตือน · ซ้อมสัมภาษณ์ · เขียนตัวอย่างโค้ดในโฟลเดอร์ฝึก · ติดตั้งแพ็กเกจในโฟลเดอร์โปรเจกต์หรือ virtual environment | ทำเลย |
-| ไม่รู้ข้อเท็จจริงสาธารณะ (เงื่อนไขวีซ่า · ขั้นตอนยกเลิกบริการ · อัตราค่าไฟและน้ำ · สิทธิ์สวัสดิการ · ขั้นตอนต่อภาษีรถ · สิทธิ์ตรวจสุขภาพฟรี · แนวทางกิจกรรมทางกาย · เงินเดือนตลาด · สิทธิ์ตามกฎหมายแรงงาน) | ค้นเอง ไล่แหล่งตามลำดับ: เว็บหน่วยงานรัฐ รัฐวิสาหกิจ และสถานทูตที่เกี่ยว → ราชกิจจานุเบกษาและองค์การอนามัยโลก → รายงานที่ระบุชื่อผู้จัดและปี → สำนักข่าว · ใช้ได้ตามกฎ 3 แหล่งใน `superuser:superuser` หัวข้อ 6 |
-| ไม่รู้ข้อเท็จจริงด้านเทคโนโลยี (เวอร์ชันล่าสุด · การเปลี่ยนแปลง · รูปแบบข้อสอบ) | ค้นเอง ไล่แหล่งตามลำดับ: เอกสารและ release notes ทางการ → มาตรฐาน (RFC) → repo หรือบล็อกของผู้ดูแลเครื่องมือ · ไม่ใช่โซเชียล |
+| Reversible work: draft messages · draft a CV · draft tables and cards · build a table · organise a folder in a reversible way · set up a reminder file · rehearse an interview · write sample code in a practice folder · install packages in the project folder or a virtual environment | Do it now |
+| Public fact not known (visa conditions · service cancellation steps · electricity and water rates · welfare entitlements · car tax renewal steps · free health-check entitlements · physical activity guidelines · market salary · labour law entitlements) | Search it yourself. Go through sources in this order: websites of the relevant government agencies, state enterprises and embassies → the Royal Gazette and the World Health Organization → reports that name the publisher and year → news outlets. Usable under the 3-source rule in `superuser:superuser` section 6 |
+| Technology fact not known (latest version · changes · exam format) | Search it yourself. Go through sources in this order: official docs and release notes → standards (RFC) → the repo or blog of the tool's maintainers. Not social media |
 
-## รูปแบบทีม — ใช้อย่างไรในงานนี้
+## Team patterns — how each is used in this work
 
-วิธีทำ ต้นทุน และกับดักของแต่ละแบบอยู่ใน `agent-patterns`
+How to run each pattern, its cost and its traps are in `agent-patterns`.
 
-| รูปแบบ | ในงานนี้ใช้อย่างไร |
+| Pattern | How it is used here |
 |---|---|
-| **Planning** | ทบทวนสัปดาห์ → 3 เรื่องสำคัญ → ทีละเรื่อง · ปฏิทินบ้าน 12 เดือน → ทีละงาน · รายการยาและนัด → ตาราง → เตือน · playbook สมัครงาน → todo ทีละขั้น · milestone การเรียน → ทีละขั้น |
-| **ReAct** | คัดอีเมล → เปิดอ่าน → จัดกลุ่ม · อ่านบิล → เทียบ 3 เดือน → หาเหตุ · คัดจากฉลากยา → เทียบกับรูปอีกครั้ง → แก้ · ร่าง CV → ตรวจคำค้นกับประกาศงาน → แก้ · เขียนตัวอย่างโค้ด → รัน → อ่านผล → แก้ |
-| **Reflection** | `reviewer` ตัวใหม่ (อ่านอย่างเดียว ไม่ใช่ agent ที่ทำงานชิ้นนั้น) ตรวจว่าไม่มีอีเมลตกหล่น · เทียบตัวเลขในตารางกับบิลจริง · ตรวจทุกแถวกับฉลากยาและหาประโยคที่เกินขอบเขต · อ่าน CV แบบ HR ก่อนส่ง · รันตัวอย่างโค้ดซ้ำจากศูนย์ |
-| **Multi-Agent** | `meeting-prep` → `life-admin` → `doc-caretaker` ส่งต่องานจากประชุม · `home-manager` ทำบิลและบ้าน · `family-planner` ทำอาหารและโรงเรียน · สุขภาพ 1 agent ต่อ 1 คนในบ้าน ข้อมูลไม่ปนกัน · `career-coach` ทำ CV → `interview-coach` ใช้ CV เตรียมสัมภาษณ์ · `tech-mentor` ชิ้นอ่าน paper → ชิ้นเขียนโค้ด → ชิ้นสรุป |
-| **Mixture-of-Agents (MoA)** | ตัดสินใจเรื่องใหญ่ → 3 มุม: เงิน · เวลา · ความเสี่ยง แล้วรวมลง decision journal · ใบเสนอราคาช่าง → 3 มุม: ราคา · ขอบเขต · ความเสี่ยง · แผนออกกำลังกายเริ่มต้น → 2–3 แบบ แล้วเลือกที่ทำได้จริงสุด (ไม่ใช้กับเรื่องยาหรืออาการ) · ข้อเสนองาน 2 ที่ → 3 มุม: เงินรวมทั้งปี · การเติบโต · ความเสี่ยง · อธิบายแนวคิดยาก → 3 แบบ (เปรียบเทียบ · โค้ด · รูป) แล้วเลือกที่ชัดสุด |
-| **Reranker** | อีเมล 30 ฉบับ → ให้คะแนนความด่วน · ผลกระทบ → ตอบวันนี้เฉพาะ top 5 · เมนูหรือร้านค้าหลายสิบ → ให้คะแนนงบ · เวลา · โภชนาการ → เลือกสัปดาห์ละ 7 · แพ็กเกจตรวจสุขภาพหลายที่ → ให้คะแนนตามสิทธิ์ที่มี · ราคา · ระยะทาง → เลือก 3 · ประกาศงานหลายสิบชิ้น → ให้คะแนนตรงประสบการณ์ · เงินเดือน · ที่ตั้ง → เลือก 5 · release notes หลายสิบรายการ → ให้คะแนนผลกระทบต่อโปรเจกต์ → เหลือ 5 |
+| **Planning** | Weekly review → 3 key items → one at a time · 12-month home calendar → one job at a time · medication and appointment list → table → reminders · job-application playbook → todo, one step at a time · learning milestones → one step at a time |
+| **ReAct** | Triage email → open and read → group · read bills → compare 3 months → find the cause · pick from the medicine label → compare with the photo again → fix · draft a CV → check keywords against the job ad → fix · write sample code → run → read the result → fix |
+| **Reflection** | A new `reviewer` (read-only, not the agent that did the piece) checks that no email was missed · compares figures in the table with the real bills · checks every row against the medicine label and looks for sentences that go beyond scope · reads the CV like an HR person before sending · reruns sample code from scratch |
+| **Multi-Agent** | `meeting-prep` → `life-admin` → `doc-caretaker` pass on work from a meeting · `home-manager` does bills and the house · `family-planner` does meals and school · health gets 1 agent per person in the household so data does not mix · `career-coach` makes the CV → `interview-coach` uses the CV to prepare for interviews · `tech-mentor` paper-reading piece → code-writing piece → summary piece |
+| **Mixture-of-Agents (MoA)** | Big decision → 3 angles: money · time · risk, then merge into the decision journal · contractor quote → 3 angles: price · scope · risk · starter exercise plan → 2–3 versions, then pick the most doable (not used for medicine or symptoms) · 2 job offers → 3 angles: total pay for the year · growth · risk · explain a hard idea → 3 versions (comparison · code · picture), then pick the clearest |
+| **Reranker** | 30 emails → score urgency and impact → answer only the top 5 today · dozens of menus or shops → score budget · time · nutrition → pick 7 a week · several health-check packages → score by entitlement held · price · distance → pick 3 · dozens of job ads → score by matching experience · salary · location → pick 5 · dozens of release notes → score impact on the project → keep 5 |

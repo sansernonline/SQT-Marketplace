@@ -1,35 +1,35 @@
-# ตัวอย่าง: เจ้าหน้าที่บัญชี 1 ตำแหน่ง
+# Example: hiring 1 accounting officer
 
-ย้ายมาจาก `SKILL.md` หัวข้อ 9 · ทุกชื่อ ตัวเลข และวันที่ในไฟล์นี้เป็น**ตัวอย่าง** · บริษัทมีพนักงาน 25 คน รับเจ้าหน้าที่บัญชี 1 คน งบเงินเดือน 22,000–26,000 บาท ผู้สมัครเข้ารอบสุดท้าย 3 คน (A · B · C)
+Moved from `SKILL.md` section 9 · every name, number and date in this file is an **example** · the company has 25 employees and is hiring 1 accounting officer, salary budget 22,000–26,000 baht, 3 candidates in the final round (A · B · C)
 
-**ใบคัดกรอง**
+**Screening sheet**
 
-| เกณฑ์ | น้ำหนัก | 1 = | 3 = | 5 = |
+| Criterion | Weight | 1 = | 3 = | 5 = |
 |---|---|---|---|---|
-| ปิดงบรายเดือน | 30 | บันทึกบัญชีรายวันได้ แต่ไม่เคยปิดงบ | ปิดงบได้โดยมีคนตรวจ อธิบายการกระทบยอดธนาคารได้ | ปิดงบเองตรงเวลา 12 เดือนติด อธิบายรายการปรับปรุงสิ้นเดือนได้ครบ |
-| ภาษีหัก ณ ที่จ่ายและ VAT รายเดือน | 25 | เลือกอัตราหัก ณ ที่จ่ายไม่ถูก | แบบทดสอบถูก 4 จาก 5 ข้อ | ถูก 5 จาก 5 ข้อ และอธิบายภาษีซื้อที่ขอคืนไม่ได้ |
-| Excel | 15 | ใช้แค่สูตรบวกลบ | ใช้ XLOOKUP และ pivot ได้ | ทำไฟล์กระทบยอดจากข้อมูลธนาคารเสร็จในแบบทดสอบ 30 นาที |
-| ความละเอียด (ตรวจเอกสาร 20 ใบที่ซ่อนจุดผิด 6 จุด) | 20 | เจอไม่เกิน 2 จุด | เจอ 4 จุด | เจอครบ 6 จุด |
-| ทวงเอกสารจากผู้ขายและทีม | 10 | ตอบไม่ได้ว่าจะทวงอย่างไร | เล่าได้ 1 ครั้งพร้อมผล | เล่าได้ 2 ครั้งขึ้นไปพร้อมตัวเลข เช่น เอกสารค้างลดจาก 30 เหลือ 5 ใบ |
+| Monthly close | 30 | can post daily entries but has never closed the books | can close with someone checking, can explain a bank reconciliation | closes on time alone 12 months in a row, can explain every month-end adjusting entry |
+| Monthly withholding tax and VAT | 25 | cannot pick the right withholding rate | gets 4 of 5 test questions right | gets 5 of 5 right and can explain input tax that cannot be reclaimed |
+| Excel | 15 | uses only add and subtract formulas | can use XLOOKUP and pivot tables | finishes a reconciliation file from bank data within the 30-minute test |
+| Attention to detail (check 20 documents hiding 6 errors) | 20 | finds at most 2 | finds 4 | finds all 6 |
+| Chasing documents from vendors and the team | 10 | cannot say how they would chase | tells of 1 time, with the result | tells of 2 or more times, with numbers, such as pending documents cut from 30 to 5 |
 
-**คะแนนหลังสัมภาษณ์**
+**Scores after the interview**
 
-| เกณฑ์ | น้ำหนัก | A | B | C |
+| Criterion | Weight | A | B | C |
 |---|---|---|---|---|
-| ปิดงบรายเดือน | 30 | 4 | 5 | 3 |
-| ภาษีหัก ณ ที่จ่ายและ VAT | 25 | 3 | 4 | 5 |
+| Monthly close | 30 | 4 | 5 | 3 |
+| Withholding tax and VAT | 25 | 3 | 4 | 5 |
 | Excel | 15 | 5 | 3 | 4 |
-| ความละเอียด | 20 | 4 | 3 | 5 |
-| ทวงเอกสาร | 10 | 3 | 4 | 2 |
-| ผลรวม น้ำหนัก × คะแนน | | 380 | 395 | 395 |
-| **คะแนนรวม (÷ 5)** | | **76.0** | **79.0** | **79.0** |
+| Attention to detail | 20 | 4 | 3 | 5 |
+| Chasing documents | 10 | 3 | 4 | 2 |
+| Sum of weight × score | | 380 | 395 | 395 |
+| **Total score (÷ 5)** | | **76.0** | **79.0** | **79.0** |
 
-วิธีคิดของ B: 30×5 + 25×4 + 15×3 + 20×3 + 10×4 = 150 + 100 + 45 + 60 + 40 = 395 แล้ว ÷ 5 = 79.0
+How B's score is worked out: 30×5 + 25×4 + 15×3 + 20×3 + 10×4 = 150 + 100 + 45 + 60 + 40 = 395, then ÷ 5 = 79.0
 
-B กับ C เสมอกัน จึงรัน `node decide.mjs score templates/score-example.json` (รันจริง 2026-10-28 · สคริปต์ปรับแต่ละเกณฑ์เป็น 0–100 ตามผู้สมัครที่ดีสุดและแย่สุด ตัวเลขจึงไม่เท่ากับคะแนนรวม ÷ 5): B 52 · C 52 · A 45 และขึ้นว่า
+B and C tie, so run `node decide.mjs score templates/score-example.json` (actually run 2026-10-28 · the script rescales each criterion to 0–100 by the best and worst candidate, so the numbers differ from total score ÷ 5): B 52 · C 52 · A 45, and it prints
 
 `ผล: ยังไม่นิ่ง อันดับ 1 เปลี่ยนเมื่อ ปิดงบรายเดือน ×0.8 → C · ภาษีหัก ณ ที่จ่ายและ VAT ×1.2 → C · …`
 
-อันดับ 1 พลิกได้ คะแนนจึงตัดสินแทนคนไม่ได้ คณะสัมภาษณ์คุยกันว่างานปีแรกต้องการปิดงบรายเดือน (B ได้ 5 ส่วน C ได้ 3) มากกว่าภาษีและความละเอียด (C ดีกว่า) จึงเลือก B แล้วจดเหตุผลนี้ไว้ · C เป็นลำดับสำรองไว้ 6 เดือนตามหัวข้อ 6 · ไม่มีใครได้ 1 ในเกณฑ์ใด จึงไม่มีใครตกข้อขั้นต่ำ
+Rank 1 can flip, so the score cannot decide in place of people. The interview panel discussed that the first-year job needs monthly close (B scored 5, C scored 3) more than tax and attention to detail (where C is better), so they chose B and wrote this reason down · C is kept as the reserve for 6 months per section 6 · nobody scored 1 on any criterion, so nobody fails a minimum.
 
-**ข้อเสนอถึง B** เงินเดือน 25,000 บาท เริ่มงาน 1 ธ.ค. 2569 ทดลองงาน 119 วัน (1 ธ.ค. 2569 ถึง 29 มี.ค. 2570) · ถ้าบริษัทเลิกจ้างหลังทำงานติดต่อกันครบ 120 วัน โดยไม่เข้าข้อยกเว้นในหัวข้อ 7 ค่าชดเชยเท่ากับค่าจ้างอัตราสุดท้าย 30 วัน = 25,000 ÷ 30 × 30 = 25,000 บาท และยังต้องบอกกล่าวล่วงหน้าหรือจ่ายค่าจ้างแทนการบอกกล่าวด้วย
+**Offer to B** Salary 25,000 baht, start 1 Dec 2569, probation 119 days (1 Dec 2569 to 29 Mar 2570) · if the company dismisses after 120 consecutive days of work and no exception in section 7 applies, severance equals 30 days of the last wage rate = 25,000 ÷ 30 × 30 = 25,000 baht, and the company must still give advance notice or pay wages in lieu of notice.

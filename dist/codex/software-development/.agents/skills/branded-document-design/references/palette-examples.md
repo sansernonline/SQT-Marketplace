@@ -1,12 +1,12 @@
-# ตัวอย่างชุดสีที่เคยใช้จริง
+# Color sets that were actually used (examples)
 
-> ระวัง: **นี่คือตัวอย่าง ไม่ใช่ค่ามาตรฐาน**
-> เลือกสีจากเนื้องานตามข้อ 0 ของ `SKILL.md` ก่อนเสมอ
-> ใช้ไฟล์นี้เพื่อดูว่าชุดที่ครบและผ่านเกณฑ์ contrast (ตรวจด้วยสคริปต์แล้ว 22 ต.ค. 2569) หน้าตาเป็นอย่างไร ไม่ใช่เพื่อคัดลอก
+> Warning: **these are examples, not standard values.**
+> Always choose colors from the content of the work first, per item 0 of `SKILL.md`.
+> Use this file to see what a complete set that passes the contrast thresholds looks like (checked with the script on 22 Oct 2026 (2569 BE)), not to copy.
 
-## ชุด A — น้ำเงิน–ม่วง (ซอฟต์แวร์ทั่วไป · สกัดจาก Apps Track)
+## Set A — blue–violet (general software · extracted from Apps Track)
 
-โทนสว่าง โปร่ง นุ่มนวล ตัวอักษรเทาเย็น
+Light tone, airy, soft, cool gray text
 
 ```python
 use_brand(
@@ -16,7 +16,7 @@ use_brand(
 )
 ```
 
-## ชุด B — เขียวอมฟ้า (การแพทย์ · สุขภาพ)
+## Set B — teal green (medical · health)
 
 ```python
 use_brand(
@@ -26,7 +26,7 @@ use_brand(
 )
 ```
 
-## ชุด C — กรมท่า (ราชการ · กฎหมาย)
+## Set C — navy (government · legal)
 
 ```python
 use_brand(
@@ -36,9 +36,9 @@ use_brand(
 )
 ```
 
-## ชุด D — เหลืองอำพัน + เทาเหล็ก (อุตสาหกรรม · โรงงาน)
+## Set D — amber yellow + steel gray (industrial · factory)
 
-accent อุ่นบนโครงเทาเย็น — ใช้ accent เฉพาะจุดที่ต้องการให้สังเกต ไม่ใช่ทั้งหน้า
+A warm accent on a cool gray frame. Use the accent only at the spots that need attention, not across the whole page.
 
 ```python
 use_brand(
@@ -48,38 +48,38 @@ use_brand(
 )
 ```
 
-## สีสถานะ — ชุดเดียวกันทุกแบรนด์
+## Status colors — the same set for every brand
 
-สีสถานะ**ไม่เปลี่ยนตามแบรนด์** เพราะความหมายของมันคงที่
+Status colors **do not change with the brand**, because their meaning is fixed.
 
-| สถานะ | พื้น | ตัวอักษร |
+| Status | Background | Text |
 |---|---|---|
-| สำเร็จ | `E9F7EF` | `17794A` |
-| ข้อมูล | `EAF2FD` | `2160AB` |
-| เตือน | `FDF5E4` | `96660D` |
-| ผิดพลาด | `FDEDEC` | `A63A34` |
-| เน้น | `F1EEFC` | `52439F` |
-| เป็นกลาง | `F2F4F8` | `626A7A` |
+| Success | `E9F7EF` | `17794A` |
+| Info | `EAF2FD` | `2160AB` |
+| Warning | `FDF5E4` | `96660D` |
+| Error | `FDEDEC` | `A63A34` |
+| Accent | `F1EEFC` | `52439F` |
+| Neutral | `F2F4F8` | `626A7A` |
 
-> ถ้าสีแบรนด์ชนกับสีสถานะตัวใดตัวหนึ่ง (เช่น แบรนด์เป็นเขียว) ให้เปลี่ยน**สีแบรนด์ในบริบทนั้น**
-> อย่าเปลี่ยนสีสถานะ — ผู้อ่านตีความเขียวว่าผ่านไปแล้วก่อนอ่านข้อความ
+> If the brand color clashes with one of the status colors (for example the brand is green), change the **brand color in that context**.
+> Do not change the status color. Readers interpret green as "passed" before reading the text.
 
-## วิธีตรวจก่อนใช้
+## How to check before use
 
-1. เนื้อความและ `text_muted` บนพื้นขาวและพื้น `brand_tint` ≥ 4.5:1 · `brand_deep` (H2 และหัวตาราง) บนพื้นขาวและ `brand_tint` ≥ 7:1 · `brand` (H1 16pt ตัวหนา และตัวเลข KPI นับเป็นตัวใหญ่) ≥ 3:1
-2. พิมพ์ขาวดำแล้วยังแยกหัวข้อกับเนื้อความออก
-3. เปิดไฟล์ที่เรนเดอร์แล้วดูด้วยตา ไม่ใช่เชื่อค่าในตาราง
+1. Body text and `text_muted` on a white background and on a `brand_tint` background ≥ 4.5:1 · `brand_deep` (H2 and table headers) on white and `brand_tint` ≥ 7:1 · `brand` (H1 16pt bold, and KPI numbers count as large text) ≥ 3:1
+2. Printed in black and white, headings must still be distinguishable from body text
+3. Open the rendered file and look by eye; do not trust the values in the table
 
-## โทนที่เสนอตามเนื้องาน (ใช้เมื่อไม่มีสีแบรนด์ให้ยึด)
+## Tones suggested by the content of the work (use when there is no brand color to hold on to)
 
-| เนื้องาน | โทนที่เสนอ | เหตุผล |
+| Content of the work | Suggested tone | Reason |
 |---|---|---|
-| การแพทย์ · สุขภาพ | เขียวอมฟ้า · เขียว | ความสะอาด ความปลอดภัย |
-| การเงิน · ธนาคาร | น้ำเงินเข้ม · เทาเงิน | ความมั่นคง |
-| อุตสาหกรรม · โรงงาน | เหลืองอำพัน · เทาเหล็ก | เครื่องจักร การเตือน |
-| การศึกษา | ม่วง · ส้มอ่อน | ความกระตือรือร้น |
-| ค้าปลีก · อาหาร | ส้ม · แดงอมชมพู | ความอบอุ่น ความอยาก |
-| ราชการ · กฎหมาย | กรมท่า · เลือดหมู | ความเป็นทางการ |
-| ซอฟต์แวร์ทั่วไป | น้ำเงิน | ค่ากลางเมื่อไม่มีบริบทอื่น |
+| Medical · health | Teal green · green | Cleanliness, safety |
+| Finance · banking | Dark blue · silver gray | Stability |
+| Industrial · factory | Amber yellow · steel gray | Machinery, warning |
+| Education | Purple · light orange | Enthusiasm |
+| Retail · food | Orange · pinkish red | Warmth, appetite |
+| Government · legal | Navy · oxblood | Formality |
+| General software | Blue | A neutral default when there is no other context |
 
-ถ้าลูกค้ามีแบรนด์อยู่แล้ว ให้ใช้สีแบรนด์ ตารางนี้ใช้เฉพาะตอนไม่มีอะไรให้ยึด
+If the customer already has a brand, use the brand colors. This table is used only when there is nothing to hold on to.

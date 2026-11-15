@@ -1,16 +1,16 @@
-# สมุดหลักฐาน · การเทียบ · งานใหญ่หลายคำถาม
+# Evidence ledger · comparison · large multi-question jobs
 
-แนวคิดดัดแปลงจาก `evidence-workflows.md` ของ REA (MIT · © 2026 morluto) เขียนใหม่ให้ใช้ไฟล์ markdown และสคริปต์ในเครื่องแทน tool ของ REA
+Ideas adapted from REA's `evidence-workflows.md` (MIT · © 2026 morluto), rewritten to use markdown files and local scripts instead of REA's tools.
 
-| หัวข้อ | |
+| Section | |
 |---|---|
-| [1 · บันทึกสิทธิ์](#1--บันทึกสิทธิ์) | [2 · สมุดหลักฐาน](#2--สมุดหลักฐาน) |
-| [3 · สิ่งที่ยังไม่รู้](#3--สิ่งที่ยังไม่รู้) | [4 · เทียบ 2 รุ่นหรือ 2 ไฟล์](#4--เทียบ-2-รุ่นหรือ-2-ไฟล์) |
-| [5 · งานใหญ่หลายคำถาม](#5--งานใหญ่หลายคำถาม) | [6 · ตรวจของที่สร้างใหม่](#6--ตรวจของที่สร้างใหม่) |
+| [1 · Authorization record](#1--authorization-record) | [2 · Evidence ledger](#2--evidence-ledger) |
+| [3 · Unknowns](#3--unknowns) | [4 · เทียบ 2 รุ่นหรือ 2 ไฟล์](#4--เทียบ-2-รุ่นหรือ-2-ไฟล์) |
+| [5 · Large multi-question jobs](#5--large-multi-question-jobs) | [6 · Check what was rebuilt](#6--check-what-was-rebuilt) |
 
-## 1 · บันทึกสิทธิ์
+## 1 · Authorization record
 
-ไฟล์เดียวต่อเป้าหมาย: `_to_delete/re/<ชื่อเป้าหมาย>/ledger.md` · ส่วนบนเขียนก่อนเปิดไฟล์เป้าหมาย
+One file per target: `_to_delete/re/<ชื่อเป้าหมาย>/ledger.md` · write the top part before opening the target file.
 
 ```markdown
 # <ชื่อเป้าหมาย>
@@ -26,11 +26,11 @@
 | การรันที่ถูกปฏิเสธ | <คำสั่ง · input> — ห้ามขอซ้ำด้วย input เดิม |
 ```
 
-ขอบเขตเปลี่ยน (ไฟล์ใหม่ · ขอรันเป้าหมาย · อุปกรณ์จริง) ให้ถามผู้ใช้แล้วเพิ่มแถวใหม่ ไม่แก้แถวเดิม
+When the scope changes (new file · asking to run the target · real device), ask the user and add a new row. Do not edit the old row.
 
-## 2 · สมุดหลักฐาน
+## 2 · Evidence ledger
 
-ตารางหลักฐาน 1 แถวต่อ 1 สิ่งที่เห็น · ผลยาวเก็บเป็นไฟล์ข้าง ๆ แล้วชี้ไป
+The evidence table has 1 row per thing seen · keep long output in a side file and point to it.
 
 ```markdown
 ## หลักฐาน
@@ -46,12 +46,12 @@
 | 2 | ข้อมูลที่ส่งคือรายการสินค้า | E2 + ข้อ 1 + E5 | อนุมาน (จากข้อ 1 และ E5) |
 ```
 
-- ป้าย 4 แบบดูหัวข้อ 6 ของ SKILL.md · `อนุมาน` ชี้ข้อที่เป็นฐานเสมอ
-- pseudocode และโค้ดที่แกะได้เป็นหลักฐาน ไม่ใช่ซอร์สต้นฉบับ
-- สคริปต์ที่จำกัดจำนวนบรรทัด (`--limit`) แปลว่าดูไม่ครบ ให้จดว่าดูกี่รายการจากทั้งหมดเท่าไร
-- เครื่องมือขาด หรืออ่านไฟล์ไม่ได้ (`decode failed` · `unreadable`) = `ยังไม่ได้ตรวจ` ไม่ใช่ "ไม่มี"
+- The 4 labels are in section 6 of SKILL.md · `อนุมาน` (inferred) always points to the items it rests on.
+- Pseudocode and recovered code are evidence, not the original source.
+- A script that limits line count (`--limit`) means the view is incomplete. Note how many items were seen out of the total.
+- A missing tool or an unreadable file (`decode failed` · `unreadable`) = `ยังไม่ได้ตรวจ` (not yet checked), not "none".
 
-## 3 · สิ่งที่ยังไม่รู้
+## 3 · Unknowns
 
 ```markdown
 ## สิ่งที่ยังไม่รู้
@@ -60,33 +60,33 @@
 | U1 | ค่า % 7 ใน checksum มาจากไหน | E7 | ตัวอย่างไฟล์อีก 3 ชุด หรือรันใน sandbox | เปิด |
 ```
 
-- จดทุกค่าคงที่หรือการออกแบบที่เห็นแต่อธิบายไม่ได้ (เลขแปลก · version field ที่เห็นค่าเดียว)
-- ปิดข้อได้ด้วยหลักฐานที่เห็นจริงเท่านั้น ไม่ปิดเพราะเดาได้
+- Record every constant or design choice that is seen but cannot be explained (odd numbers · a version field with only one value seen).
+- Close an item only with evidence actually seen, never because it can be guessed.
 
 ## 4 · เทียบ 2 รุ่นหรือ 2 ไฟล์
 
-ต้องดูครบทั้ง 2 ฝั่งก่อนจะบอกว่า "เหมือน" "เพิ่ม" หรือ "หาย" ไม่งั้นเป็นสิ่งที่ยังไม่รู้
+Look at both sides completely before saying "same", "added" or "missing". Otherwise it is an unknown.
 
-| เทียบอะไร | ทำอย่างไร | ระวัง |
+| What to compare | How | Watch out |
 |---|---|---|
-| รายการไฟล์ใน archive (ASAR · APK · ZIP) | รัน `asar_extract.py list` หรือ `apk_inventory.py` ทั้ง 2 รุ่นลงไฟล์ แล้ว `diff` | ชื่อเหมือน เนื้อต่างได้ ให้เทียบ SHA-256 |
-| import · export ของ binary | `pe_elf_info.py --json` ทั้ง 2 ไฟล์แล้วเทียบ | ต่างแบบ static เป็นผู้ต้องสงสัย ยังไม่ใช่ต้นเหตุ |
-| method ของ .NET หรือ Java | `compare_members.py` | เทียบชื่อ ไม่ได้เทียบเนื้อ ต้อง diff ต่อ |
-| JavaScript ที่ถูกย่อ | จับคู่ด้วย digest หรือ source map | เลขลำดับ module และชื่อที่ถูกย่อไม่ใช่ตัวตน |
-| static กับ runtime | วางคู่กันในสมุดหลักฐาน | ตรงกันเป็นสมมติฐาน ยังไม่ใช่เหตุและผล |
+| File list in an archive (ASAR · APK · ZIP) | Run `asar_extract.py list` or `apk_inventory.py` on both versions into files, then `diff` | Same name can have different content; compare SHA-256 |
+| Imports · exports of a binary | `pe_elf_info.py --json` on both files, then compare | A static difference is a suspect, not yet the cause |
+| .NET or Java methods | `compare_members.py` | Compares names, not bodies; diff further |
+| Minified JavaScript | Match by digest or source map | Module index numbers and minified names are not identity |
+| static vs runtime | Put side by side in the ledger | A match is a hypothesis, not yet cause and effect |
 
-## 5 · งานใหญ่หลายคำถาม
+## 5 · Large multi-question jobs
 
-1. แตกคำขอเป็นรายการคำถาม พร้อมหลักฐานที่แต่ละข้อต้องใช้
-2. ดูสมุดหลักฐานที่มีอยู่ก่อน ใช้ซ้ำได้ก็ใช้ ไม่แกะซ้ำ
-3. เริ่มจากภาพรวมเล็กที่สุด แล้วไล่ทีละคำถาม: จุดเข้า → ข้อมูลและสถานะที่เปลี่ยน → ผล
-4. อ่าน resource และ config ด้วย parser ของรูปแบบนั้น ไม่เดาจากชื่อไฟล์
-5. ยืนยันด้วยหลักฐานชนิดที่ข้อสรุปต้องใช้ · runtime เฉพาะเมื่อ static ตอบไม่ได้จริงและได้อนุญาตแล้ว
-6. คำถามที่ไม่ขึ้นต่อกันแบ่งให้ subagent ได้ (`superuser` จัดทีม) · บอกขอบเขต เลขหลักฐานที่มี และให้ส่งกลับ ข้อสรุป · หลักฐาน · ช่องว่าง
-7. ก่อนจบ ติดป้ายทุกคำถามว่า ตอบแล้ว · ตอบบางส่วน · ยังไม่ได้คำตอบ
+1. Break the request into a list of questions, with the evidence each one needs.
+2. Check existing ledgers first. Reuse them if possible; do not extract again.
+3. Start from the smallest overview, then go question by question: entry point → data and state changes → result.
+4. Read resources and config with the parser for that format. Do not guess from file names.
+5. Confirm with the kind of evidence the conclusion needs · runtime only when static truly cannot answer and permission was given.
+6. Independent questions can be split among subagents (`superuser` team setup). Give the scope and the evidence numbers already held, and ask them to return: conclusion · evidence · gaps.
+7. Before finishing, label every question: answered · partly answered · not answered.
 
-## 6 · ตรวจของที่สร้างใหม่
+## 6 · Check what was rebuilt
 
-- เขียนพฤติกรรมที่เห็นเป็น spec ทีละข้อ แต่ละข้อชี้เลขหลักฐาน
-- test ของโค้ดใหม่ใช้ตัวอย่างจริงจากเป้าหมาย (ไฟล์ · request · ค่า) ที่ผู้ใช้อนุญาตให้ใช้
-- ผ่าน test = ผ่านเฉพาะข้อที่เขียนไว้ ไม่ใช่เหมือนต้นฉบับทั้งระบบ · ข้อที่ไม่ได้เขียนให้ลงสิ่งที่ยังไม่รู้
+- Write the observed behavior as a spec, item by item, each pointing to evidence numbers.
+- Tests for the new code use real samples from the target (files · requests · values) that the user allowed.
+- Passing the tests = passing only the items written down, not identical to the original system. Items not written go into unknowns.

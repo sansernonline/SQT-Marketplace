@@ -5,53 +5,53 @@ description: Use when setting up automated tests or fixing flaky ones
 
 # Testing Standards
 
-> **กฎข้อเดียว:** test ที่ไม่มีใครเชื่อถือ แย่กว่าไม่มี test
-> test ที่แดงสลับเขียวเองจะถูก `skip` ภายใน 2 สัปดาห์ แล้วทั้งชุดจะตายตามกันไป
+> **One rule:** a test nobody trusts is worse than no test.
+> A test that flips between red and green on its own gets `skip`ped within 2 weeks, and then the whole suite dies with it.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เริ่มวาง test ในโปรเจกต์ใหม่ หรือเพิ่ม test ให้โค้ดที่มีอยู่
-- มีคนขอ "ให้มี unit test / automate test"
-- ชุด test เดิมช้า แดง ๆ เขียว ๆ หรือไม่มีใครดูแล้ว
+- Starting tests in a new project, or adding tests to existing code
+- Someone asks "have unit tests / automate the tests"
+- The existing suite is slow, flips red and green, or nobody maintains it
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-- E2E ผ่านเบราว์เซอร์ (Playwright/Cypress) ให้ใช้ `e2e-testing-patterns`
-- ขับแอปมือถือจริงบน emulator ให้ใช้ `app-verifier-setup` (`references/android-native.md`)
-- ออกแบบ test case เชิงธุรกิจก่อนลงมือเขียน ให้ใช้ `test-case-template`
+- E2E through a browser (Playwright/Cypress): use `e2e-testing-patterns`
+- Driving a real mobile app on an emulator: use `app-verifier-setup` (`references/android-native.md`)
+- Designing business-level test cases before writing: use `test-case-template`
 
 ---
 
-## 1 · ขั้นแรก: ใช้ของที่มี ถามเฉพาะตอนต้องเพิ่มตัวใหม่
+## 1 · First: use what exists; ask only when a new one must be added
 
-- **ถ้าโปรเจกต์มี framework อยู่แล้ว หรือสแต็กมี test library มากับ SDK** (Flutter `flutter_test` · Angular CLI) ให้ใช้เลย ไม่ต้องถาม
-- **ถ้าต้องลงแพ็กเกจ test ตัวใหม่** ให้ใส่คำถามนี้ไว้ในการถามครั้งเดียวก่อนเริ่มงาน (ถ้าเครื่องมือมีหน้าต่างให้เลือกคำตอบ เช่น `AskUserQuestion` ก็ใช้ตัวนั้น) เพราะถ้าเลือกผิดแล้วย้ายทีหลังจะแพงมาก
-- ถ้าเริ่มงานไปแล้วเพิ่งรู้ว่าต้องเลือก ให้เลือกตัว**แนะนำ**ในตารางแล้วทำต่อ จากนั้นบันทึกไว้ในหัวข้อ "ตัดสินใจเอง" ของรายงาน ไม่ต้องหยุดถามกลางทาง
+- **If the project already has a framework, or the stack ships a test library with its SDK** (Flutter `flutter_test` · Angular CLI), use it. Do not ask.
+- **If a new test package must be installed**, put this question into the single round of questions before starting (if the tool has a picker for answers, such as `AskUserQuestion`, use it), because switching later after a wrong choice is very expensive.
+- If you only discover mid-work that a choice is needed, pick the **recommended** one in the table and continue, then record it under the "ตัดสินใจเอง" (decided on my own) heading of the report. Do not stop to ask midway.
 
-2 เรื่องที่ต้องตกลง:
+2 things to settle:
 
-**ข้อ 1 — framework**
+**Item 1 — framework**
 
-| สแต็ก | ตัวเลือกที่ควรเสนอ |
+| Stack | Options to offer |
 |---|---|
-| .NET | **xUnit** (แนะนำ · เป็นมาตรฐานของ .NET ยุคใหม่) · NUnit (ทีมมาจาก NUnit เดิม) · MSTest (องค์กรที่ผูกกับ VS) |
-| Node/TS | **Vitest** (แนะนำ · เร็ว ตั้งค่าน้อย ใช้ ESM/TS ได้เลย) · Jest (ระบบนิเวศใหญ่ที่สุด) · `node:test` (ไม่อยากลงอะไรเลย) |
-| Python | **pytest** (แนะนำ) · `unittest` (stdlib ล้วน ห้ามลงแพ็กเกจเพิ่ม) |
-| Angular | **Vitest ที่มากับ Angular CLI** (`ng test` · แนะนำ · ค่าเริ่มต้นของโปรเจกต์ใหม่) + Testing Library ถ้าต้องการ · Jasmine + Karma (ค่าเริ่มต้นเดิม ยังใช้ได้) · รุ่นเก่ามากใช้ Analog |
-| Flutter · Dart | **`flutter_test`** (มากับ SDK ไม่ต้องถาม) · fake ด้วยคลาสที่ `implements` ของจริง ก่อนจะลง `mocktail` |
+| .NET | **xUnit** (recommended · the standard of modern .NET) · NUnit (a team coming from NUnit) · MSTest (organizations tied to VS) |
+| Node/TS | **Vitest** (recommended · fast, little setup, ESM/TS work out of the box) · Jest (largest ecosystem) · `node:test` (when you want to install nothing) |
+| Python | **pytest** (recommended) · `unittest` (pure stdlib; no extra packages allowed) |
+| Angular | **Vitest that ships with Angular CLI** (`ng test` · recommended · default for new projects) + Testing Library if wanted · Jasmine + Karma (the old default, still usable) · very old versions use Analog |
+| Flutter · Dart | **`flutter_test`** (ships with the SDK, no need to ask) · fake with a class that `implements` the real one, before installing `mocktail` |
 
-**ข้อ 2 — ขอบเขตที่ต้องการตอนนี้**
+**Item 2 — the scope wanted now**
 
-- unit อย่างเดียว (เร็ว ไม่แตะ DB/network)
-- unit + integration (แตะ DB จริงผ่าน Testcontainers ใช้ DB ชนิดเดียวกับ production · SQLite in-memory ใช้ได้เฉพาะเมื่อ production ก็เป็น SQLite)
-- ครบชุดรวม E2E (ต่อยอดไป `e2e-testing-patterns`)
+- unit only (fast, touches no DB/network)
+- unit + integration (touches a real DB through Testcontainers, using the same DB type as production · in-memory SQLite is allowed only when production is also SQLite)
+- the full set including E2E (continue to `e2e-testing-patterns`)
 
-> ถ้าโปรเจกต์**มี framework อยู่แล้ว** ก็ไม่ต้องถาม ใช้ของเดิมไป เพราะการมี 2 ระบบในโปรเจกต์เดียว
-> แย่กว่าใช้ของที่ไม่ถูกใจนัก
+> If the project **already has a framework**, do not ask; use the existing one, because having 2 systems in one project
+> is worse than using one you do not quite like.
 
 ---
 
-## 2 · พีระมิด — สัดส่วนที่ยั่งยืน
+## 2 · The pyramid — a ratio that lasts
 
 ```
         ▲  E2E  5%      ช้า เปราะ แพง — เอาไว้ทดสอบ "เส้นทางที่ทำเงิน" เท่านั้น
@@ -62,36 +62,36 @@ description: Use when setting up automated tests or fixing flaky ones
    ╱_________╲
 ```
 
-**แอปมือถือมีชั้น widget test (Flutter) หรือ component test (React Native)** อยู่ระหว่าง unit กับ E2E ชั้นนี้สร้างหน้าจอจริงในหน่วยความจำ แล้วกดและอ่านได้โดยไม่ต้องมี emulator แอปมือถือส่วนใหญ่ไม่มี integration ที่ต่อ DB จึงใช้ชั้นนี้เป็นชั้นกลางหลักแทน
+**A mobile app has a widget test layer (Flutter) or component test layer (React Native)** between unit and E2E. This layer builds the real screen in memory, then taps and reads it without an emulator. Most mobile apps have no integration tests that connect to a DB, so this layer is used as the main middle layer instead.
 
-**ชุด unit ทั้งหมดต้องรันจบใน 10 วินาที** (Flutter: นับหลังคอมไพล์เสร็จ เพราะแค่เริ่ม `flutter test` ก็กินหลายวินาที · ตัวเลขนี้รอยืนยันบนเครื่องจริง)
-ถ้าเกินนี้ คนจะเลิกรันก่อน commit แล้ว test ที่พังจะไปเจอที่ CI เท่านั้น ซึ่งช้าเกินไป
-
----
-
-## 3 · อะไรควรมี test / อะไรไม่ต้อง
-
-**ต้องมี**
-- ตรรกะทางธุรกิจ: การคำนวณ, เงื่อนไขสิทธิ์, การเปลี่ยนสถานะ
-- ทุกกรณีขอบ: ค่าว่าง, ศูนย์, ติดลบ, ขอบเขตล่าง/บน, ค่าซ้ำ
-- **ทุกบั๊กที่เคยเกิด** — เขียน test ที่แดงก่อน แล้วค่อยแก้ (regression test)
-- สัญญาที่คนอื่นพึ่งพา: รูปแบบ response ของ API, schema ของ event
-
-**ไม่ต้องมี**
-- getter/setter, DTO, mapping ตรง ๆ
-- โค้ดของเฟรมเวิร์ก (ไม่ต้อง test ว่า EF Core บันทึกได้ไหม)
-- ไลบรารีของคนอื่น
-- UI ที่แค่แสดงผลโดยไม่มีตรรกะ
-
-> **Coverage ที่ซื่อสัตย์: 70–80% ของ business logic** ไม่ใช่ 100% ของทั้งโปรเจกต์
-> ไล่ตาม 100% จะได้ test ปลอม ๆ ที่เขียนเพื่อให้ตัวเลขสวยเต็มไปหมด
-> ตั้ง gate ที่ "ห้ามลดลงจากเดิม" มีประโยชน์กว่าตั้งเลขเป้า
+**The whole unit suite must finish in 10 seconds** (Flutter: count after compilation finishes, because merely starting `flutter test` takes several seconds · this number is รอยืนยัน (to be confirmed) on a real machine).
+If it takes longer, people stop running it before commit, and a broken test is only found in CI, which is too late.
 
 ---
 
-## 4 · เขียนยังไง
+## 3 · What needs a test / what does not
 
-**ตั้งชื่อ** — อ่านชื่อแล้วต้องรู้ว่าพังอะไรโดยไม่ต้องเปิดโค้ด
+**Must have**
+- Business logic: calculations, permission conditions, state transitions
+- Every edge case: empty value, zero, negative, lower/upper bound, duplicates
+- **Every bug that has happened** — write a test that is red first, then fix (regression test)
+- Contracts others depend on: the API response shape, the event schema
+
+**Not needed**
+- getters/setters, DTOs, direct mappings
+- framework code (no need to test whether EF Core can save)
+- other people's libraries
+- UI that only displays with no logic
+
+> **Honest coverage: 70–80% of business logic**, not 100% of the whole project.
+> Chasing 100% gives you fake tests written just to make the number look good.
+> A gate of "must not drop below the current level" is more useful than a target number.
+
+---
+
+## 4 · How to write
+
+**Naming** — reading the name must tell you what broke, without opening the code
 
 ```
 MethodName_Scenario_ExpectedResult
@@ -101,9 +101,9 @@ CreateOrder_WhenStockIsZero_ThrowsOutOfStock
 ParseDate_WhenInputIsEmpty_ReturnsNull
 ```
 
-ภาษาที่ชื่อ test เป็นข้อความ (Dart · Vitest · Jest) ใช้ `group('<สิ่งที่ทดสอบ>')` + `test('<สถานการณ์> → <ผลที่ต้องได้>')` เป็นประโยค เช่น `group('verdict')` · `test('below 50 lux is too dark for reading')`
+In languages where the test name is a string (Dart · Vitest · Jest), use `group('<what is tested>')` + `test('<scenario> → <expected result>')` as a sentence, e.g. `group('verdict')` · `test('below 50 lux is too dark for reading')`
 
-**โครง AAA** — เว้นบรรทัดคั่น 3 ส่วนให้เห็นชัด
+**AAA structure** — separate the 3 parts with blank lines so they are clearly visible
 
 ```
 // Arrange   เตรียมข้อมูลและ dependency
@@ -111,35 +111,35 @@ ParseDate_WhenInputIsEmpty_ReturnsNull
 // Assert    ตรวจผล
 ```
 
-**1 test = 1 เหตุผลที่จะพัง** ถ้ามี assert 5 อันที่ไม่เกี่ยวกัน ให้แยกเป็น 5 test
+**1 test = 1 reason to break.** If there are 5 unrelated asserts, split into 5 tests.
 
-**บอกให้ได้ก่อนเขียนว่าโค้ดเปลี่ยนตรงไหนแล้ว test นี้จะแดง** (ปรับจาก superpowers `test-driven-development` · MIT)
-- บอกไม่ได้ → test นี้ไม่ได้จับพฤติกรรม เขียนใหม่ให้จับผลที่สังเกตได้
-- คำตอบคือ "ข้อความในไฟล์ต้นฉบับเปลี่ยน" → กำลังทดสอบตัวอักษร ให้รันของจริงแล้วตรวจผลแทน
-- แดงเฉพาะตอนคนตั้งใจเปลี่ยนค่า (เช่น เปลี่ยนสี label) → เป็นตัวจับการเปลี่ยน ไม่ใช่ test พฤติกรรม ย้ายไปทดสอบสิ่งที่ค่านั้นกระทบแทน
+**Be able to say, before writing, which code change makes this test go red** (adapted from superpowers `test-driven-development` · MIT)
+- Cannot say → this test does not catch behavior. Rewrite it to catch an observable result.
+- The answer is "the text in the source file changes" → you are testing characters. Run the real thing and check the result instead.
+- It goes red only when someone deliberately changes a value (e.g. changes a label color) → it is a change detector, not a behavior test. Move to testing what that value affects.
 
-**ห้ามมี logic ใน test** — ไม่มี `if`, ไม่มีลูปที่คำนวณค่าคาดหวัง
-ถ้าอยากรันหลายเคส ใช้ parameterized test (`[Theory]` / `test.each` / `@pytest.mark.parametrize`)
+**No logic in tests** — no `if`, no loop that computes the expected value.
+To run several cases, use a parameterized test (`[Theory]` / `test.each` / `@pytest.mark.parametrize`).
 
-**ทำให้ผลเหมือนเดิมทุกครั้ง**
-- เวลา: inject `TimeProvider` (.NET 8+) หรือ `now()` ไม่เรียก `DateTime.Now` ตรง ๆ ในโค้ดที่ทดสอบ
-- สุ่ม: fix seed
-- ลำดับ: test ต้องรันสลับลำดับได้ ห้ามพึ่งสถานะที่ test ก่อนหน้าทิ้งไว้
-- **ห้าม `sleep`** เพื่อรอ async — ใช้ fake timer หรือรอ signal จริง
+**Make results the same every time**
+- Time: inject `TimeProvider` (.NET 8+) or `now()`; do not call `DateTime.Now` directly in the code under test.
+- Randomness: fix the seed.
+- Order: tests must run in any order; never depend on state a previous test left behind.
+- **No `sleep`** to wait for async — use a fake timer or wait for a real signal.
 
-**Mock เท่าที่จำเป็น** — mock ขอบเขตนอกระบบ (HTTP, คิว, เวลา, ไฟล์)
-ไม่ mock คลาสของตัวเองที่คำนวณล้วน ๆ ถ้า mock เยอะเกินไป แปลว่า test ผูกกับวิธีเขียนโค้ด
-พอ refactor ทีเดียว test แดงทั้งชุด ทั้งที่พฤติกรรมไม่เปลี่ยน
+**Mock only what is necessary** — mock boundaries outside the system (HTTP, queues, time, files).
+Do not mock your own purely computational classes. If you mock too much, the test is tied to how the code is written;
+one refactor turns the whole suite red even though behavior did not change.
 
 ---
 
 ## 5 · Integration test
 
-- ใช้ **DB จริงชนิดเดียวกับ production** (Testcontainers) ไม่ใช่ SQLite แทน PostgreSQL
-  เพราะ SQL ที่ผ่านบน SQLite อาจพังบนของจริง
-- แต่ละ test เริ่มจากสถานะที่รู้แน่ — transaction rollback หรือ truncate ทุกครั้ง
-- แยก command ออกจาก unit เพื่อให้รันแยกกันได้ (`npm run test:unit` / `test:integration`)
-- ทดสอบ **สัญญา** ของ API: status code, รูปร่าง JSON, header สำคัญ — ไม่ใช่แค่ "ไม่ error"
+- Use a **real DB of the same type as production** (Testcontainers), not SQLite instead of PostgreSQL,
+  because SQL that passes on SQLite may break on the real one.
+- Each test starts from a known state — transaction rollback or truncate every time.
+- Separate the command from unit so they can run separately (`npm run test:unit` / `test:integration`).
+- Test the API **contract**: status code, JSON shape, important headers — not just "no error".
 
 ---
 
@@ -149,51 +149,51 @@ ParseDate_WhenInputIsEmpty_ReturnsNull
 push / PR → lint → unit (< 10 วินาที) → integration → build
 ```
 
-- **test แดง = merge ไม่ได้** ไม่มีข้อยกเว้น
-- ห้ามมี `skip`/`ignore` ค้างในสาขาหลัก — ถ้าจะ skip ต้องมีลิงก์ issue กำกับ
-- test ที่ flaky (แดงสลับเขียวเอง) ต้อง**แก้หรือลบ** ห้าม retry จนกว่าจะเขียว เพราะนั่นคือการซ่อนบั๊ก
-- รายงาน coverage ในหน้า PR ให้เห็นว่าเพิ่มหรือลด
+- **Red test = cannot merge**, no exceptions.
+- No `skip`/`ignore` left in the main branch — to skip, an issue link must be attached.
+- A flaky test (flips red and green on its own) must be **fixed or deleted**; never retry until green, because that hides a bug.
+- Show the coverage report on the PR page so it is visible whether it rose or fell.
 
-รายละเอียดคำสั่งและไฟล์ config ของแต่ละ framework อยู่ใน `references/per-stack.md`
+Command details and config files for each framework are in `references/per-stack.md`.
 
 ---
 
-## 7 · ตรวจงาน
+## 7 · Review
 
-- [ ] ใช้ framework ของเดิมหรือที่มากับสแต็ก ถ้าลงตัวใหม่ ต้องถามแล้วหรือบันทึกไว้ใน "ตัดสินใจเอง"
-- [ ] `npm test` / `dotnet test` / `pytest` / `flutter test` รันผ่านจากเครื่องเปล่าโดยไม่ต้องตั้งค่าอะไรเพิ่ม (ผลยาว → `> _to_delete/test.txt 2>&1` แล้ว `tail -20`)
-- [ ] ชุด unit รันจบใน 10 วินาที
-- [ ] ลองสลับลำดับ test แล้วยังเขียวหมด (pytest: ลง `pytest-randomly` แล้วรัน `pytest` ธรรมดา · Vitest: `--sequence.shuffle` · Jest: `--randomize` · Flutter: `--test-randomize-ordering-seed random`)
-- [ ] รันซ้ำ 3 รอบได้ผลเหมือนเดิม (ไม่ flaky)
-- [ ] แก้โค้ดให้พังโดยตั้งใจ 1 จุด แล้ว test **ต้องแดง** — ถ้ายังเขียว แปลว่า test ไม่ได้ทดสอบอะไร
-- [ ] **ลองพังในหัวก่อนปิดไฟล์ test** — ไล่ 5 แบบ: ค่าคงที่หรือ argument ผิด · เข้า branch ผิด · ลืมเปลี่ยน state หรือ side effect · คืนค่าว่างหรือค่าเริ่มต้น · ไม่ตรวจ 0 · ว่าง · null · ไม่มีสิทธิ์ · รูปแบบผิด — แบบไหนไม่มี test แดง แปลว่าพฤติกรรมนั้นยังไม่มีใครคุ้ม
-- [ ] ชื่อ test อ่านแล้วรู้ว่าพังอะไรโดยไม่ต้องเปิดโค้ด
-- [ ] ไม่มี `sleep` / `Thread.Sleep` ในชุด test
-- [ ] ไม่มี test ที่ถูก skip ค้างโดยไม่มีเหตุผลกำกับ
+- [ ] Used the existing framework or the one that ships with the stack; if a new one was installed, it was asked or recorded under "ตัดสินใจเอง"
+- [ ] `npm test` / `dotnet test` / `pytest` / `flutter test` passes from a clean machine with no extra setup (long output → `> _to_delete/test.txt 2>&1` then `tail -20`)
+- [ ] The unit suite finishes in 10 seconds
+- [ ] Shuffling the test order still gives all green (pytest: install `pytest-randomly` then run plain `pytest` · Vitest: `--sequence.shuffle` · Jest: `--randomize` · Flutter: `--test-randomize-ordering-seed random`)
+- [ ] 3 repeated runs give the same result (not flaky)
+- [ ] Break the code deliberately in 1 spot, and the test **must go red** — if still green, the test tests nothing
+- [ ] **Try breaking it in your head before closing the test file** — go through 5 ways: wrong constant or argument · entering the wrong branch · forgetting to change state or a side effect · returning empty or a default · not checking 0 · empty · null · no permission · wrong format — any way that makes no test red means that behavior is not yet protected by anyone
+- [ ] Reading the test name tells you what broke, without opening the code
+- [ ] No `sleep` / `Thread.Sleep` in the test suite
+- [ ] No test left skipped without a reason attached
 
 ---
 
 ## 8 · Anti-patterns
 
-- **เขียน test หลังจบงานเพื่อให้ผ่าน gate** — ได้ test ที่ยืนยันว่าโค้ดทำสิ่งที่มันทำ
-  ไม่ใช่สิ่งที่มันควรทำ
-- **assert ว่า "ไม่ throw"** เฉย ๆ — ไม่ได้ทดสอบอะไรเลย
-- **test ที่พึ่ง test ก่อนหน้า** — พอรันเดี่ยว ๆ แดงทันที
-- **mock ทุกอย่างจน test ทดสอบแค่ mock**
-- **`sleep(1000)` รอ async** — ช้าและยังเปราะอยู่ดี
-- **retry flaky test จนเขียว** — คุณเพิ่งซ่อนบั๊กที่เกิดจริงใน production
-- **ไล่ coverage 100%** — เขียน test ให้ getter เพื่อตัวเลข
-- **ข้อมูลทดสอบเป็นข้อมูลลูกค้าจริง** — ผิดกฎหมายและหลุดง่าย ใช้ตัวสร้างข้อมูลปลอม
+- **Writing tests after the work is done just to pass the gate** — you get tests that confirm the code does what it does,
+  not what it should do
+- **Asserting only "does not throw"** — tests nothing at all
+- **A test that depends on the previous test** — red at once when run alone
+- **Mocking everything until the test tests only the mock**
+- **`sleep(1000)` to wait for async** — slow and still brittle
+- **Retrying a flaky test until green** — you just hid a bug that really happens in production
+- **Chasing 100% coverage** — writing tests for getters for the number
+- **Test data that is real customer data** — illegal and easy to leak; use a fake-data generator
 
 ---
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Link to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---|---|
-| E2E ผ่านเบราว์เซอร์ | `e2e-testing-patterns` |
-| E2E แอปมือถือ (`integration_test` · `adb`) | `app-verifier-setup` |
-| ออกแบบ test case ก่อนเขียนโค้ด | `test-case-template` |
-| ทดสอบ endpoint health/ping | `web-service-essentials` |
-| log ที่ช่วยไล่ปัญหาตอน test แดง | `logging-standards` |
-| review โค้ด test | `code-review-checklist` |
+| E2E through a browser | `e2e-testing-patterns` |
+| E2E for a mobile app (`integration_test` · `adb`) | `app-verifier-setup` |
+| Design test cases before writing code | `test-case-template` |
+| Test health/ping endpoints | `web-service-essentials` |
+| Logs that help trace a problem when a test is red | `logging-standards` |
+| Review test code | `code-review-checklist` |

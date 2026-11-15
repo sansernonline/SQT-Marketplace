@@ -1,15 +1,15 @@
-# playbook · side-project — เลือกและเริ่ม side project
+# playbook · side-project — pick and start a side project
 
-ใช้เมื่อ: อยากได้โปรเจกต์ฝึกหรือพอร์ต · มีไอเดียเยอะเกินหรือไม่มีเลย
-skill หลัก: `side-project-picker` · `learning-path`
+Use when: the user wants a practice project or a portfolio piece · has too many ideas or none at all.
+Main skill: `side-project-picker` · `learning-path`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน (Steps — copy into the todo as written)
 
-1. รวบรวมไอเดียจากผู้ใช้หรือคลังไอเดีย แล้วให้คะแนนตาม `side-project-picker` — คุณค่าการเรียน · ทำจบได้ใน 2 สุดสัปดาห์ · ใช้ได้จริง · ใคร: `tech-mentor` ตัวใหม่
-2. เลือกตัวที่ผู้ใช้บอกไว้ตอนเริ่ม ไม่มีให้เลือกตัวคะแนนสูงสุดแล้วติด `(รอยืนยัน)` ตัด scope ให้เหลือส่วนที่ทำจบได้ · ใคร: หัวหน้าทีม
-3. เขียนนิยาม "เสร็จ" ที่ตรวจได้ 3–5 ข้อ · ใคร: `tech-mentor` ตัวใหม่
-4. ตั้งโครงโปรเจกต์ขั้นต่ำที่รันได้ ส่วนงานโค้ดที่ใหญ่กว่านั้นให้ส่งต่อ `/software-development:superuser` · ใคร: `tech-mentor` ตัวใหม่ · `reviewer` ตัวใหม่รันโครงจริงและตรวจว่านิยาม "เสร็จ" วัดได้ทุกข้อ
+1. Collect ideas from the user or the idea bank, then score them under `side-project-picker` — learning value · can be finished in 2 weekends · really usable · ใคร: `tech-mentor` ตัวใหม่
+2. Pick the one the user named at the start. If none, pick the highest score and mark it `(รอยืนยัน)` (pending confirmation). Cut the scope down to the part that can be finished · ใคร: หัวหน้าทีม
+3. Write a "done" definition with 3–5 checkable points · ใคร: `tech-mentor` ตัวใหม่
+4. Set up the minimum project skeleton that runs. Pass any larger code work on to `/software-development:superuser` · ใคร: `tech-mentor` ตัวใหม่ · `reviewer` ตัวใหม่ runs the real skeleton and ตรวจ that every point of the "done" definition can be measured
 
-## จบเมื่อ
+## Done when
 
-ได้โปรเจกต์ 1 ตัวที่มีนิยามเสร็จชัด และโครงขั้นต่ำรันได้
+There is 1 project with a clear "done" definition, and the minimum skeleton runs.

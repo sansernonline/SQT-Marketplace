@@ -1,19 +1,19 @@
-# playbook · skill-authoring — เขียนหรือแก้ skill แล้วพิสูจน์ว่ามันช่วยจริง
+# playbook · skill-authoring — write or edit a skill and prove it really helps
 
-ใช้เมื่อ: สร้าง skill ใหม่ · แก้ SKILL.md · แก้ไฟล์ agent · แก้ prompt ใน `prompt/` (รวม `authoring a skill` · `eval` ของ pstack)
-skill หลัก: `repeated-mistakes-to-checks` · `spell-out-abbreviations` · `simplicity-first`
+Use when: creating a new skill · editing SKILL.md · editing an agent file · editing a prompt in `prompt/` (covers pstack's `authoring a skill` · `eval`)
+Main skills: `repeated-mistakes-to-checks` · `spell-out-abbreviations` · `simplicity-first`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. หาก่อนว่ามี skill ที่ครอบเรื่องนี้แล้วหรือไม่ — แก้ skill ที่มีอยู่ดีกว่าสร้างใหม่ และชื่อใหม่ต้องบอกว่าทำอะไร ไม่ใช่ชื่อเล่น · ใคร: หัวหน้าทีม
-2. เขียน description ให้บอก "ใช้เมื่อ" ด้วยคำที่ผู้ใช้พูดจริง และห้ามมี `": "` ที่ไม่อยู่ในเครื่องหมายคำพูด · ใคร: หัวหน้าทีม
-3. เนื้อหา — กฎสั้น · ขั้นตอนที่ทำตามได้ · สิ่งที่ห้าม ส่วนที่เป็นกลไกให้ย้ายออกจาก SKILL.md: `scripts/` สำหรับโค้ดที่รัน · `assets/` สำหรับแม่แบบ (SKILL.md เหลือแค่บอกว่าเรียกใช้เมื่อไร) · ใคร: หัวหน้าทีม
-4. เตรียมงานทดสอบ 3–5 งานที่ skill ควรช่วย และ 1 งานที่ไม่ควรถูกเรียก · ใคร: หัวหน้าทีม
-5. **ทดสอบแบบปิดตา** — ส่ง subagent ตัวใหม่ 2 ชุดทำงานเดียวกัน ชุดหนึ่งมี skill อีกชุดไม่มี (หรือใช้ skill รุ่นเก่า) แล้วให้ subagent ตัวที่ 3 ที่ไม่รู้ว่าผลไหนมาจากชุดไหน ให้คะแนนตามเกณฑ์ที่เขียนไว้ก่อน · ใคร: `general-purpose` ตัวใหม่ 2 ตัวทำ · `reviewer` ตัวใหม่ให้คะแนนแบบปิดตา
-6. ถ้า skill ใหม่ไม่ชนะชัด ให้แก้แล้วทดสอบใหม่ หรือไม่เพิ่มเลย แล้วลงผลใน `decision-log` · ใคร: หัวหน้าทีม
-7. ใน repo SQT-Marketplace ให้รัน `node scripts/check/validate-marketplace.mjs --self-test` แล้วตามด้วย `node scripts/check/validate-marketplace.mjs` · `node scripts/sync/sync-docs.mjs` · `node scripts/build/build-targets.mjs` · ใคร: หัวหน้าทีม
+1. First look for whether a skill already covers this — editing an existing skill beats creating a new one, and a new name must say what it does, not be a nickname · ใคร: หัวหน้าทีม
+2. Write the description to say "use when" (ใช้เมื่อ) in words the user really says, and it must not contain `": "` outside quotation marks · ใคร: หัวหน้าทีม
+3. Content — short rules · steps that can be followed · what is forbidden. Move mechanical parts out of SKILL.md: `scripts/` for code that runs · `assets/` for templates (SKILL.md only says when to call them) · ใคร: หัวหน้าทีม
+4. Prepare 3–5 test tasks the skill should help with, and 1 that should not call it · ใคร: หัวหน้าทีม
+5. **Blind test** — send 2 fresh subagents on the same task, one with the skill and one without (or with the old version of the skill), then have a 3rd subagent that does not know which result came from which set score them against criteria written beforehand · ใคร: `general-purpose` ตัวใหม่ 2 do the task · `reviewer` ตัวใหม่ scores blind
+6. If the new skill does not clearly win, fix it and test again, or do not add it, then log the result in `decision-log` · ใคร: หัวหน้าทีม
+7. In the SQT-Marketplace repo, run (รัน) `node scripts/check/validate-marketplace.mjs --self-test`, then `node scripts/check/validate-marketplace.mjs` · `node scripts/sync/sync-docs.mjs` · `node scripts/build/build-targets.mjs` · ใคร: หัวหน้าทีม
 8. `status-report` · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-validator ไม่มี error ใหม่ และมีผลทดสอบปิดตาที่บอกว่า skill ช่วยจริง
+The validator has no new errors, and there is a blind test result showing the skill really helps

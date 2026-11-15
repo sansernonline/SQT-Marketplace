@@ -1,8 +1,8 @@
-# ตัวอย่าง: หลักสูตร "Git สำหรับมือใหม่" 1 วัน
+# Example: a 1-day course "Git สำหรับมือใหม่" (Git for beginners)
 
-ตัวอย่างเต็มของ `course-builder` หัวข้อ 10 · กฎทั้งหมดอยู่ใน [SKILL.md](../SKILL.md) ไฟล์นี้แสดงว่ากฎหน้าตาเป็นอย่างไรเมื่อใช้จริง
+A full example for `course-builder` section 10 · all the rules are in [SKILL.md](../SKILL.md), and this file shows what the rules look like in use.
 
-ทั้งหัวข้อนี้เป็น **ตัวอย่าง** ผู้เรียน จำนวนคน และเวลาเป็นค่าสมมุติ · คำสั่ง Git ทุกบรรทัดรันจริงแล้วด้วย Git 2.54 บน Windows (2026-10-23)
+This whole section is an **example** (ตัวอย่าง): the learners, head count and times are assumed values · every Git command line was really run with Git 2.54 on Windows (2026-10-23)
 
 โจทย์: นักวิเคราะห์ธุรกิจ (Business Analyst: BA) และผู้ทดสอบระบบ (Quality Assurance: QA) 12 คน อยากเก็บเอกสารข้อกำหนดและ test case ใน Git แทนการส่งไฟล์ `_final_v3` ทางอีเมล · สอนในห้อง · เครื่องของบริษัทติดตั้ง Git ไว้แล้ว
 

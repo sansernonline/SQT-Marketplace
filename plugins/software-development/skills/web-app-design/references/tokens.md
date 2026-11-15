@@ -1,146 +1,146 @@
-# Token reference — ระบบดีไซน์เว็บแอปสไตล์ Apps Track
+# Token reference — Apps Track-style web app design system
 
-> ระวัง: **ค่าสีในไฟล์นี้เป็นตัวอย่างที่ประกอบครบแล้ว ไม่ใช่ค่ามาตรฐาน**
-> เลือกสีจากเนื้องานก่อนเสมอ (ดูข้อ "สีมาจากเนื้องาน" ใน `SKILL.md`)
-> สิ่งที่ให้ยึดจากไฟล์นี้คือ **รายชื่อ token และหน้าที่ของมัน** ไม่ใช่ค่า
-> สี ฟอนต์ ขนาดตัวอักษร มุม เงา และความกว้างเลย์เอาต์เป็นค่าสำรอง ค่าของงานอยู่ใน `theme.css` (`SKILL.md` ข้อ 2) · ระยะห่างและ breakpoint ใช้ตามไฟล์นี้
+> Warning: **the color values in this file are a finished example, not a standard.**
+> Always pick colors from the work itself first (see the item "colors come from the work" in `SKILL.md`).
+> What to take from this file is **the list of tokens and their roles**, not the values.
+> Colors, fonts, type sizes, radii, shadows and layout widths are fallbacks. The project's values live in `theme.css` (`SKILL.md` item 2) · spacing and breakpoints follow this file.
 
-นิยามทั้งหมดอยู่ใน `assets/appstrack.css` บล็อก `:root`
-**ทุกอย่างใต้บรรทัด `=== base ===` ห้ามมีสีดิบ** เพราะตัวตรวจใช้บรรทัดนั้นเป็นเส้นแบ่ง
+All definitions are in `assets/appstrack.css`, in the `:root` block.
+**Nothing below the `=== base ===` line may contain a raw color**, because the checker uses that line as the boundary.
 
-## สารบัญ
+## Contents
 
-1. [แบรนด์ — สีทึบ](#แบรนด์--สีทึบ)
-2. [พื้นผิว · เส้น · เงา](#พื้นผิว--เส้น--เงา)
-3. [ตัวอักษร](#ตัวอักษร)
-4. [สีข้อมูล (กราฟ) — ทึบเสมอ](#สีข้อมูล-กราฟ--ทึบเสมอ)
-5. [Pill (สถานะ) — สามค่าเป็นชุด](#pill-สถานะ--สามค่าเป็นชุด)
-6. [เลย์เอาต์](#เลย์เอาต์)
-7. [เปลี่ยนธีม / เปลี่ยนแบรนด์](#เปลี่ยนธีม--เปลี่ยนแบรนด์)
-8. [คลาสคอมโพเนนต์ที่มีให้แล้ว](#คลาสคอมโพเนนต์ที่มีให้แล้ว)
+1. [Brand — solid color](#brand--solid-color)
+2. [Surfaces · lines · shadows](#surfaces--lines--shadows)
+3. [Typography](#typography)
+4. [Data colors (charts) — always solid](#data-colors-charts--always-solid)
+5. [Pill (status) — three values as a set](#pill-status--three-values-as-a-set)
+6. [Layout](#layout)
+7. [Switching theme / brand](#switching-theme--brand)
+8. [Ready-made component classes](#ready-made-component-classes)
 
 ---
 
-## แบรนด์ — สีทึบ
+## Brand — solid color
 
-| Token | ค่า | ใช้กับ |
+| Token | Value | Used for |
 |---|---|---|
-| `--brand` | `#226cc6` (เฉดเข้มของค่าประจำบ้าน `#2A78D6`) | ปุ่มหลัก · chip ที่เลือก · แถบ progress · ลิงก์ · แท็บที่เลือก · ขีดเลือกเมนู · เส้นขอบตอนโฟกัส · โลโก้ |
-| `--brand-2` | `#6a5cd6` | สีข้อมูลชุดที่ 2 คู่กับ `--brand` (กราฟ) |
-| `--brand-50` | `#eef4fd` | พื้น avatar · mention · วงแหวนโฟกัส |
-| `--brand-100` | `#dde9fb` | รางของ spinner |
+| `--brand` | `#226cc6` (a darker shade of the house default `#2A78D6`) | primary button · selected chip · progress bar · link · selected tab · menu selection bar · border on focus · logo |
+| `--brand-2` | `#6a5cd6` | 2nd data color paired with `--brand` (charts) |
+| `--brand-50` | `#eef4fd` | avatar · mention background · focus ring |
+| `--brand-100` | `#dde9fb` | spinner track |
 
-> **ไม่มี gradient** — ปุ่ม chip progress และกราฟใช้ `--brand` ทึบ (`no-ai-look`: ไล่สีม่วง-น้ำเงิน → สีแบรนด์ทึบ 1 สี)
-> **`--brand` ต้องผ่าน 4.5:1** ทั้งตัวขาวบนพื้น brand (`#226cc6` = 5.21) · brand บน `--bg` (4.87) · brand บน `--brand-50` (4.71) — ตรวจ 22 ต.ค. 2569
+> **No gradient** — buttons, chips, progress and charts use solid `--brand` (`no-ai-look`: purple-blue gradient → 1 solid brand color)
+> **`--brand` must pass 4.5:1** for white text on a brand background (`#226cc6` = 5.21) · brand on `--bg` (4.87) · brand on `--brand-50` (4.71) — checked 22 Oct 2026
 
-## พื้นผิว · เส้น · เงา
+## Surfaces · lines · shadows
 
-| Token | ค่า | ใช้กับ |
+| Token | Value | Used for |
 |---|---|---|
-| `--bg` | `#f6f7fb` | พื้นหน้า |
-| `--surface` | `#ffffff` | การ์ด · input · ปุ่มปกติ |
-| `--line` | `#eef0f5` | เส้นในการ์ด · เส้นตาราง |
-| `--line-strong` | `#e4e7ee` | ขอบ input · ขอบปุ่ม |
-| `--skeleton` | `#e4e7ee` | โครงร่างตอนโหลด (`.skeleton`) |
-| `--shadow` | เงา 2 ชั้นบาง | dropdown · tooltip (ของที่ลอยเล็ก ๆ) |
-| `--shadow-lg` | เงา 2 ชั้นลึก | modal · toast · เมนูลอย |
-| `--radius` / `--radius-sm` / `--radius-pill` | `14px` / `9px` / `99px` | การ์ด / ปุ่ม·input / pill·chip |
-| `--ease` | `cubic-bezier(.16, 1, .3, 1)` | ของที่โผล่เข้ามา (dropdown · toast · modal) — พุ่งเร็วแล้วค่อยหยุด (expo-out) |
-| `--ease-io` | `cubic-bezier(.65, 0, .35, 1)` | ของที่ย้ายที่ (เลื่อนแผง · สลับแท็บ) · ระยะเวลาใช้ตาม `ui-craft` ข้อ 7 |
+| `--bg` | `#f6f7fb` | page background |
+| `--surface` | `#ffffff` | cards · inputs · normal buttons |
+| `--line` | `#eef0f5` | lines inside cards · table lines |
+| `--line-strong` | `#e4e7ee` | input border · button border |
+| `--skeleton` | `#e4e7ee` | loading placeholder (`.skeleton`) |
+| `--shadow` | thin 2-layer shadow | dropdown · tooltip (small floating things) |
+| `--shadow-lg` | deep 2-layer shadow | modal · toast · floating menu |
+| `--radius` / `--radius-sm` / `--radius-pill` | `14px` / `9px` / `99px` | card / button·input / pill·chip |
+| `--ease` | `cubic-bezier(.16, 1, .3, 1)` | things that appear (dropdown · toast · modal) — shoots fast then settles (expo-out) |
+| `--ease-io` | `cubic-bezier(.65, 0, .35, 1)` | things that move (sliding a panel · switching tabs) · durations follow `ui-craft` item 7 |
 
-> **การ์ดไม่มีเงา** — การ์ดนิ่งไม่ได้ลอย แยกจากพื้นหน้าด้วยเส้น `--line` + พื้น `--surface` บน `--bg` (`ui-craft` ข้อ 4) · topbar พื้น `--surface` ทึบ ไม่ใช้กระจกฝ้า
+> **Cards have no shadow** — a still card does not float; it is separated from the page by the `--line` border + `--surface` fill on `--bg` (`ui-craft` item 4) · the topbar is a solid `--surface` fill, no frosted glass
 
-**เงา 2 ส่วนจากสีเดียว:** `--shadow` และ `--shadow-lg` ข้างบนเป็นเงา 2 ชั้นสี `rgba(20, 30, 55)` อยู่แล้ว · โปรเจกต์ที่พื้นไม่ใช่เทาฟ้า (ครีม เขียว ธีมมืด) หรือต้องการ 3 ระดับ ให้เพิ่มชุดนี้ใน `:root` ของโปรเจกต์ (ยังไม่อยู่ใน `appstrack.css`)
+**2-part shadow from one color:** `--shadow` and `--shadow-lg` above are already 2-layer shadows in the color `rgba(20, 30, 55)` · for a project whose background is not blue-gray (cream, green, dark theme) or that needs 3 levels, add this set to the project's `:root` (not yet in `appstrack.css`).
 
-| Token | ค่า | ใช้กับ |
+| Token | Value | Used for |
 |---|---|---|
-| `--shadow-color` | `223 47% 15%` (ช่อง HSL ของ `rgba(20, 30, 55)`) | สีของเงาทุกชั้น · เปลี่ยน hue ให้ตรงสีพื้น ไม่ใช้ดำโปร่ง |
-| `--elev-1` | `0 1px 2px hsl(var(--shadow-color) / .12), 0 2px 6px hsl(var(--shadow-color) / .06)` | ชิ้นเล็กที่ยกขึ้น: หัวตารางติดบนตอนเลื่อน · ปุ่มเลื่อนของ switch |
-| `--elev-2` | `0 1px 3px hsl(var(--shadow-color) / .14), 0 8px 20px hsl(var(--shadow-color) / .08)` | dropdown · tooltip (แทน `--shadow`) |
-| `--elev-3` | `0 2px 4px hsl(var(--shadow-color) / .12), 0 18px 40px hsl(var(--shadow-color) / .12)` | modal · toast (แทน `--shadow-lg`) |
+| `--shadow-color` | `223 47% 15%` (the HSL channels of `rgba(20, 30, 55)`) | the color of every shadow layer · change the hue to match the background; do not use translucent black |
+| `--elev-1` | `0 1px 2px hsl(var(--shadow-color) / .12), 0 2px 6px hsl(var(--shadow-color) / .06)` | small raised pieces: a table header that sticks to the top while scrolling · a switch knob |
+| `--elev-2` | `0 1px 3px hsl(var(--shadow-color) / .14), 0 8px 20px hsl(var(--shadow-color) / .08)` | dropdown · tooltip (replaces `--shadow`) |
+| `--elev-3` | `0 2px 4px hsl(var(--shadow-color) / .12), 0 18px 40px hsl(var(--shadow-color) / .12)` | modal · toast (replaces `--shadow-lg`) |
 
-ชั้นแรกแคบและเข้มกว่า (ใต้ชิ้นที่แสงเข้าไม่ถึง) ชั้นที่ 2 กว้างและจาง (แสงรอบตัว) · ระดับสูงขึ้น ชั้นกว้างเยื้องลงมากขึ้นทิศเดียวกัน · การ์ดนิ่งยังไม่มีเงา · เงาซ้อนหลายชั้น ขอบโปร่ง และภาษาความลึกอื่น → `ui-craft` → `references/depth-and-flourish.md`
+The first layer is narrow and darker (under the piece, where light cannot reach); the second is wide and faint (ambient light) · at higher levels the wide layer is offset further down in the same direction · a still card still has no shadow · for layered shadows, translucent edges and other depth language → `ui-craft` → `references/depth-and-flourish.md`
 
-**มุมซ้อน:** มุมใน = มุมนอก − ระยะจากขอบนอกถึงของข้างใน (padding) ให้เส้นโค้ง 2 ชั้นขนานกัน เช่น การ์ด `--radius` 14 มีรูปห่างขอบ 6 → รูปโค้ง 8 · ผลเป็น 0 หรือติดลบ (padding ≥ มุมนอก) → ใช้ `--radius-sm` เพราะ 2 มุมห่างกันจนตาไม่เทียบแล้ว · ที่มา vercel-labs/web-interface-guidelines หัวข้อ nested radii (MIT · ตรวจ 2026-10-23)
+**Nested corners:** inner radius = outer radius − the distance from the outer edge to the inner item (padding), so the 2 curves are parallel, e.g. a `--radius` 14 card with an image 6 from the edge → the image radius is 8 · if the result is 0 or negative (padding ≥ outer radius) → use `--radius-sm`, because the 2 corners are so far apart the eye no longer compares them · source: vercel-labs/web-interface-guidelines, section nested radii (MIT · checked 2026-10-23)
 
-## ตัวอักษร
+## Typography
 
-| Token | ค่า | ใช้กับ |
+| Token | Value | Used for |
 |---|---|---|
-| `--text` | `#333b4a` | หัวข้อ · ตัวเลขตัวชี้วัดหลัก (Key Performance Indicator · KPI) |
-| `--text-body` | `#414957` | เนื้อความ (ค่าเริ่มต้นของ body) |
-| `--text-muted` | `#5f6673` | label · คำอธิบาย · หัวตาราง · empty state · เมนูที่ไม่ active |
-| `--text-faint` | `#69707d` | timestamp · หัวกลุ่มเมนู · ข้อความประกอบ |
+| `--text` | `#333b4a` | headings · main metric numbers (Key Performance Indicator · KPI) |
+| `--text-body` | `#414957` | body text (the default for body) |
+| `--text-muted` | `#5f6673` | labels · descriptions · table headers · empty state · inactive menu |
+| `--text-faint` | `#69707d` | timestamps · menu group headings · supporting text |
 
-contrast (Web Content Accessibility Guidelines (WCAG) 2.2 ระดับ AA ต้อง ≥ 4.5:1 · ตรวจ 22 ต.ค. 2569): `--text-muted` บนขาว 5.78 · บน `--bg` 5.40 · `--text-faint` บนขาว 4.98 · บน `--bg` 4.65 ← ต่ำสุดของระบบ ห้ามทำให้จางกว่านี้
+Contrast (Web Content Accessibility Guidelines (WCAG) 2.2 level AA needs ≥ 4.5:1 · checked 22 Oct 2026): `--text-muted` on white 5.78 · on `--bg` 5.40 · `--text-faint` on white 4.98 · on `--bg` 4.65 ← the lowest in the system; never make it fainter
 
-สเกล 5 ขนาด ตรงกับ `ui-craft` ข้อ 2 (lg 22 · md 15 · base 13 · sm 12 · xs 11 · เล็กสุด 11):
+A 5-size scale, matching `ui-craft` item 2 (lg 22 · md 15 · base 13 · sm 12 · xs 11 · smallest 11):
 
-| ระดับ | ขนาด | |
+| Level | Size | |
 |---|---|---|
-| h1 · ตัวเลข KPI | 22px / 500 · KPI 600 | ชื่อหน้า · KPI ใช้ `letter-spacing:-.4px` + `tabular-nums` |
-| h2 | 15px / 500 | หัวการ์ด · ชื่อแอปใน sidebar |
-| body · h3 | 13px / 1.6 · h3 หนา 500 | เนื้อความ · input · tab · เมนู · หัวข้อย่อย |
-| ปุ่ม · คำอธิบายใต้ h1 | 12px | |
-| label · pill · หัวตาราง · faint | 11px | หัวตารางเป็นตัวพิมพ์ใหญ่ letter-spacing .4px (เฉพาะอังกฤษ) |
+| h1 · KPI number | 22px / 500 · KPI 600 | page title · KPI uses `letter-spacing:-.4px` + `tabular-nums` |
+| h2 | 15px / 500 | card heading · app name in the sidebar |
+| body · h3 | 13px / 1.6 · h3 bold 500 | body text · input · tab · menu · sub-heading |
+| button · description under h1 | 12px | |
+| label · pill · table header · faint | 11px | table headers are uppercase with letter-spacing .4px (English only) |
 
-ฟอนต์ตั้งต้นใช้ `Inter` + `Noto Sans Thai` — เลือก Inter เพราะอ่านง่ายที่ขนาด 11–13px ในหน้าจอข้อมูลแน่น (`graphic-design` ข้อ 6 ให้บอกเหตุผลเมื่อใช้ฟอนต์ที่คนใช้กันมาก) · โปรเจกต์ที่มีฟอนต์แบรนด์ ใช้ของโปรเจกต์ · **Inter ไม่มีอักษรไทย** ถ้าลืมใส่ Noto Sans Thai
-เบราว์เซอร์จะใช้ฟอนต์ระบบแทน (fallback) ซึ่งความสูงไม่เข้ากัน ตัวไทยจะดูเล็กและเตี้ยกว่าอังกฤษ
+The default font is `Inter` + `Noto Sans Thai` — Inter is chosen because it reads easily at 11–13px in dense data screens (`graphic-design` item 6 says to give a reason when using a widely used font) · a project with a brand font uses the project's · **Inter has no Thai letters**; if you forget to add Noto Sans Thai
+the browser uses a system font as fallback, whose height does not match, and Thai looks smaller and shorter than English.
 
-ตัวเลขทุกที่ที่เรียงเป็นคอลัมน์ต้องใส่ `.num` (`tabular-nums`) ไม่งั้นหลักจะไม่ตรงกัน
+Every number laid out in a column must use `.num` (`tabular-nums`), otherwise the digits will not line up.
 
-## สีข้อมูล (กราฟ) — ทึบเสมอ
+## Data colors (charts) — always solid
 
 `--c-blue #4a8ee0` · `--c-teal #2bbd8a` · `--c-amber #f0ad2e` · `--c-green #1f9d3f` ·
 `--c-violet #6a5cc9` · `--c-red #e87f7c` · `--c-grey #c8ced9`
-คู่แผน/จริง: `--c-plan #e0eaf8` vs `--c-actual #5a97e0` · เลยกำหนด `--c-late #e58079`
+Plan/actual pair: `--c-plan #e0eaf8` vs `--c-actual #5a97e0` · overdue is defined as `--c-late #e58079`
 
-## Pill (สถานะ) — สามค่าเป็นชุด
+## Pill (status) — three values as a set
 
-| โทน | พื้น | ตัวอักษร | เส้น | ใช้กับ |
+| Tone | Background | Text | Line | Used for |
 |---|---|---|---|---|
-| green | `#e9f7ef` | `#17794a` | `#d6efe1` | เสร็จ · ปกติ |
-| blue | `#eaf2fd` | `#2160ab` | `#d8e7fb` | รีวิว · กำลังดำเนินการ |
-| amber | `#fdf5e4` | `#96660d` | `#f7e9c9` | รอ · เตือน |
-| orange | `#fdefe6` | `#a2541b` | `#f8ddcb` | ใกล้เกินกำหนด |
-| red | `#fdedec` | `#a63a34` | `#f8d9d7` | ค้าง · ผิดพลาด |
-| violet | `#f1eefc` | `#52439f` | `#e3ddf8` | ประเภทพิเศษ |
-| grey | `#f2f4f8` | `#626a7a` | `#e7eaf1` | ปิด · ยังไม่เริ่ม |
+| green | `#e9f7ef` | `#17794a` | `#d6efe1` | done · normal |
+| blue | `#eaf2fd` | `#2160ab` | `#d8e7fb` | review · in progress |
+| amber | `#fdf5e4` | `#96660d` | `#f7e9c9` | waiting · warning |
+| orange | `#fdefe6` | `#a2541b` | `#f8ddcb` | nearly overdue |
+| red | `#fdedec` | `#a63a34` | `#f8d9d7` | stuck · error |
+| violet | `#f1eefc` | `#52439f` | `#e3ddf8` | special type |
+| grey | `#f2f4f8` | `#626a7a` | `#e7eaf1` | closed · not started |
 
-## เลย์เอาต์
+## Layout
 
-| Token | ค่า |
+| Token | Value |
 |---|---|
-| `--sidebar-w` | `232px` (≤1024px หด 64px · ≤720px เป็น drawer 240px) |
+| `--sidebar-w` | `232px` (≤1024px shrinks to 64px · ≤720px becomes a 240px drawer) |
 | `--topbar-h` | `56px` |
 | `--content-max` | `1160px` |
 
-จุดตัด: **1024px** sidebar หดเหลือไอคอน · **720px** sidebar เป็น drawer (`body.nav-open`)
-ถ้าตารางกว้างเกินจอ ให้เลื่อนแนวนอน**เฉพาะใน `.tb-wrap`** ห้ามให้ทั้งหน้าเลื่อน
+Breakpoints: **1024px** the sidebar shrinks to icons · **720px** the sidebar becomes a drawer (`body.nav-open`)
+If a table is wider than the screen, scroll horizontally **only inside `.tb-wrap`**; never let the whole page scroll.
 
-## เปลี่ยนธีม / เปลี่ยนแบรนด์
+## Switching theme / brand
 
-**สลับ accent ทั้งแอป** — `body[data-theme]`: ว่าง (ocean `#226cc6`) · `emerald #097a54` · `sunset #b8501a` · `plum #7a4ee8` · `graphite #0a7a90`
-แต่ละธีมแก้แค่ 4 token (`--brand --brand-2 --brand-50 --brand-100`) · ทุก `--brand` ผ่าน 4.5:1 กับตัวขาว · `--bg` · `--brand-50` ของธีมตัวเอง
+**Switch the accent across the whole app** — `body[data-theme]`: empty (ocean `#226cc6`) · `emerald #097a54` · `sunset #b8501a` · `plum #7a4ee8` · `graphite #0a7a90`
+Each theme changes only 4 tokens (`--brand --brand-2 --brand-50 --brand-100`) · every `--brand` passes 4.5:1 with white text · `--bg` · the theme's own `--brand-50`
 
-**sidebar สว่าง/เข้ม** — `body[data-side='dark']` เปลี่ยน 9 token ของ sidebar · พื้นเข้มคือ `--sidebar-dark-bg #1f2329` เทากลาง ไม่ย้อมสีแบรนด์
-เมนู active: โหมดสว่าง = พื้นเทา `--sidebar-active-bg` + ขีดสีแบรนด์ 3px (`--sidebar-active-bar`) · โหมดเข้ม = แผ่นทับโปร่ง `--on-brand-veil` + ขีดขาว
-กรอบแอปเป็นสีกลาง — สีแบรนด์ในกรอบมีได้แค่ขีดเลือกกับโลโก้
+**Light/dark sidebar** — `body[data-side='dark']` changes 9 sidebar tokens · the dark background is `--sidebar-dark-bg #1f2329`, a neutral gray, not tinted with the brand color
+Active menu: light mode = a gray fill `--sidebar-active-bg` + a 3px brand-colored bar (`--sidebar-active-bar`) · dark mode = a translucent overlay `--on-brand-veil` + a white bar
+The app frame is neutral — the brand color inside the frame appears only in the selection bar and the logo.
 
-**แบรนด์ลูกค้าใหม่** ให้คัดลอกบล็อก `body[data-theme='…']` แล้วใส่ 4 ค่าของลูกค้า (สีลูกค้าสว่างเกิน → ใช้เฉดเข้มที่ผ่าน 4.5:1 เป็น `--brand` เก็บสีเดิมไว้ที่โลโก้และกราฟ)
-ไม่ต้องแตะคอมโพเนนต์แม้แต่บรรทัดเดียว
+**For a new customer brand**, copy a `body[data-theme='…']` block and put in the customer's 4 values (if the customer's color is too bright → use a darker shade that passes 4.5:1 as `--brand`, and keep the original color for the logo and charts)
+You do not touch a single line of any component.
 
-## คลาสคอมโพเนนต์ที่มีให้แล้ว
+## Ready-made component classes
 
-| กลุ่ม | คลาส |
+| Group | Classes |
 |---|---|
-| โครง | `.app-shell` `.app-sidebar` `.nav-link(.on)` `.app-topbar` `.app-main > .inner` `.page-head` |
-| การ์ด | `.card` `.card-head` `.card-body` |
+| Structure | `.app-shell` `.app-sidebar` `.nav-link(.on)` `.app-topbar` `.app-main > .inner` `.page-head` |
+| Card | `.card` `.card-head` `.card-body` |
 | KPI | `.stat-grid` `.card.stat` (`.label` `.value` `.foot`) |
-| สถานะ | `.pill.pill-green/blue/amber/orange/red/violet/grey` |
-| ปุ่ม | `.btn` `.btn-primary` `.btn-ghost` `.btn-danger` `.btn-sm` |
-| ฟอร์ม | `.field > label` `.input` `.select` `.textarea` `.err` |
-| ตาราง | `.tb-wrap > .tb` (`.right`) |
-| ตัวกรอง | `.chips > .chip(.on)` · `.tabs > .tab(.on)` |
-| อื่น | `.prog > i` `.ava(.ava-lg)` `.md-html` `.empty` `.skeleton(.lg)` (โหลดเนื้อหา) `.spinner` (รอสั้น ๆ ในปุ่ม) `.toasts > .toast(.ok/.err)` `.backdrop + .modal` |
-| ยูทิลิตี | `.row` `.row-between` `.col` `.grow` `.ellipsis` `.wrap` `.mt-*` `.mb-*` `.gap-*` `.num` `.muted` `.faint` |
+| Status | `.pill.pill-green/blue/amber/orange/red/violet/grey` |
+| Button | `.btn` `.btn-primary` `.btn-ghost` `.btn-danger` `.btn-sm` |
+| Form | `.field > label` `.input` `.select` `.textarea` `.err` |
+| Table | `.tb-wrap > .tb` (`.right`) |
+| Filter | `.chips > .chip(.on)` · `.tabs > .tab(.on)` |
+| Other | `.prog > i` `.ava(.ava-lg)` `.md-html` `.empty` `.skeleton(.lg)` (loading content) `.spinner` (a short wait inside a button) `.toasts > .toast(.ok/.err)` `.backdrop + .modal` |
+| Utility | `.row` `.row-between` `.col` `.grow` `.ellipsis` `.wrap` `.mt-*` `.mb-*` `.gap-*` `.num` `.muted` `.faint` |

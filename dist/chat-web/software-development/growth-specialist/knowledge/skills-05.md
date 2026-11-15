@@ -86,61 +86,65 @@ Personally Identifiable Information (PII) · Proof of Concept (POC)
 
 Use when an answer needs prose, a table or a diagram
 
-# รูปทรงของคำตอบ
+# The shape of an answer
 
-skill นี้บอกรูปทรงและโครง ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
+This skill gives the shape and structure; every line of wording follows `human-writing` · lives only in plugin `superuser`; other plugins share it through `dependencies`
 
-> **กฎข้อเดียว:** เนื้อหามีโครงสร้างอะไร คำตอบใช้รูปทรงนั้น
-> เปรียบเทียบ → ตาราง · เชื่อมโยง → รูป · เรื่องเดียว → ประโยค
+> **One rule:** whatever structure the content has, the answer uses that shape.
+> Comparison → table · connections → figure · one thing → sentences
 
 ---
 
-## เลือกรูปทรงจากสัญญาณในคำถาม
+## Pick the shape from signals in the question
 
-| สัญญาณ | รูปทรง |
+The quoted signals are Thai user phrasings; English meanings are in brackets.
+
+| Signal | Shape |
 |---|---|
-| "แบบไหนดีกว่า" · "ต่างกันยังไง" · "มีทางเลือกอะไรบ้าง" | **ตารางเปรียบเทียบ** |
-| "อะไรต่อกับอะไร" · "ข้อมูลไหลยังไง" · "ลำดับเป็นยังไง" | **รูป** |
-| "มีอะไรบ้าง" ที่ไม่ได้เทียบกัน | **รายการหัวข้อย่อย** |
-| "ทำไม" · "แปลว่าอะไร" · เรื่องเดียวไม่มีแขนง | **ประโยคธรรมดา** |
-| ตัวเลขหลายตัวที่ต้องดูพร้อมกัน | **ตาราง** |
-| ขั้นตอนที่ต้องทำเรียงกัน | **รายการมีเลข** |
-| ทำต่อไม่ได้ · ต้องรอของจากผู้ใช้ | **รายการสั้น: ติดอะไร → ต้องการอะไร** |
+| "แบบไหนดีกว่า" · "ต่างกันยังไง" · "มีทางเลือกอะไรบ้าง" ("which is better" · "how do they differ" · "what options are there") | **Comparison table** |
+| "อะไรต่อกับอะไร" · "ข้อมูลไหลยังไง" · "ลำดับเป็นยังไง" ("what connects to what" · "how does data flow" · "what is the sequence") | **Figure** |
+| "มีอะไรบ้าง" ("what are there") when the items are not compared | **Bullet list** |
+| "ทำไม" · "แปลว่าอะไร" ("why" · "what does it mean") · one thing with no branches | **Plain sentences** |
+| Several numbers that must be seen together | **Table** |
+| Steps that must be done in order | **Numbered list** |
+| Cannot continue · must wait for something from the user | **Short list: what is blocking → what is needed** |
 
-**สัญญาณสำคัญที่สุดคือมี "สิ่งที่ถูกเทียบ" ตั้งแต่ 2 ตัวขึ้นไป** แบบนี้ให้ใช้ตาราง
-เพราะถ้าเขียนเป็นย่อหน้า ผู้อ่านต้องจำตัวแรกไว้ในหัวระหว่างอ่านตัวที่ 2
+**The most important signal is having 2 or more "things being compared"**; use a table then,
+because in a paragraph the reader must hold the first one in their head while reading the second.
 
 ---
 
-## ตารางที่อ่านง่าย
+## A table that reads easily
 
-- **คอลัมน์แรกคือสิ่งที่ถูกเทียบ** คอลัมน์ถัดไปคือแง่มุมที่เทียบ
-- **3–5 คอลัมน์** เกินนี้อ่านไม่ทัน ส่วนแถวไม่เกิน 8 แถวในคำตอบแชต
-- **ทุกช่องต้องมีเนื้อ** — ช่องว่างแปลว่าคอลัมน์นั้นไม่ควรมี หรือข้อมูลยังไม่ครบ ถ้าไม่มีข้อมูลให้เขียนว่า "ไม่มี" ตรง ๆ · ช่องที่เขียน "ขึ้นอยู่กับ" ทุกช่องก็ไม่มีเนื้อ
-- **ช่องละไม่เกิน 1 บรรทัด** ถ้ายาวกว่านั้นให้ยกไปเขียนใต้ตาราง
-- **เรียงแถวตามน้ำหนัก** ตัวที่แนะนำหรือตัวที่ใช้บ่อยที่สุดอยู่บนสุด ไม่ใช่เรียงตามตัวอักษร
-- **หัวคอลัมน์เป็นคำถามที่ผู้อ่านมีในหัว** ไม่ใช่ชื่อสาขาวิชา
+- **The first column is the thing being compared**, and the next columns are the aspects compared
+- **3–5 columns**; more than that cannot be read in time, and at most 8 rows in a chat answer
+- **Every cell must have content** — an empty cell means that column should not exist, or the data is incomplete; if there is no data, write "ไม่มี" (none) plainly · a table where every cell says "it depends" also has no content
+- **At most 1 line per cell**; if longer, move it below the table
+- **Order rows by weight**: the recommended one or the most used one on top, not alphabetical
+- **Column headings are the questions in the reader's head**, not names of academic fields
 
 ```
 ผิด: | ตัวเลือก | ประสิทธิภาพ | ความซับซ้อน |
 ถูก: | ตัวเลือก | เร็วแค่ไหน | ต้องดูแลมากไหม |
 ```
 
-**ปิดท้ายตารางด้วยข้อสรุป 1 บรรทัดเสมอ** — ตารางบอกข้อมูล ไม่ได้บอกว่าควรเลือกอะไร
+(Gloss: wrong = "Option | Performance | Complexity" · right = "Option | How fast | Does it need much upkeep".)
+
+**Always close a table with a 1-line conclusion** — a table gives data; it does not say what to choose
 
 ---
 
-## เมื่อไหร่รูปชนะตาราง
+## When a figure beats a table
 
-ใช้รูปเมื่อ**ความสัมพันธ์คือคำตอบ** — ตารางบอกคุณสมบัติได้ แต่บอกไม่ได้ว่าอะไรต่อกับอะไร
+Use a figure when **the relationship is the answer** — a table can give properties, but cannot say what connects to what.
 
-| ใช้รูป | ใช้ตาราง |
+| Use a figure | Use a table |
 |---|---|
-| อะไรต่อกับอะไร · อะไรอยู่ในอะไร | ตัวไหนดีกว่าตัวไหนในแง่ใด |
-| ลำดับที่มีทางแยกหรือวนกลับ | ขั้นตอนเรียงตรงไม่มีแขนง (ใช้รายการมีเลขพอ) |
-| สิ่งเดียวกันในหลายสถานะ | สิ่งต่างกันในแง่มุมเดียวกัน |
+| What connects to what · what sits inside what | Which is better than which, and in what respect |
+| A sequence with forks or loops back | A straight sequence of steps with no branches (a numbered list is enough) |
+| The same thing in several states | Different things on the same aspects |
 
-ในแชต **รูปเล็ก ๆ แบบ ASCII หรือ Mermaid สั้น ๆ ก็พอ** — ไม่ต้องเปิดเครื่องมือวาด
+In chat, **a small ASCII figure or a short Mermaid is enough** — no need to open a drawing tool
 
 ```
 กล้อง ──DICOM──▶ Orthanc ──▶ API ──▶ รายงาน
@@ -148,27 +152,29 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
                     └──▶ ที่เก็บถาวร
 ```
 
-รูปที่ต้องเป็นไฟล์จริงเพื่อใส่เอกสารหรือสไลด์ ให้ใช้ skill วาดรูปของ plugin นั้น (ถ้ามี)
+(Gloss: กล้อง = camera/scanner · รายงาน = report · ที่เก็บถาวร = permanent storage.)
+
+A figure that must be a real file to go into a document or slides uses the figure-drawing skill of that plugin (if there is one)
 
 ---
 
-## เมื่อไหร่ประโยคชนะทั้งคู่
+## When sentences beat both
 
-- คำตอบสั้นกว่า 3 บรรทัด — ตาราง 2 แถวเป็นแค่การตกแต่ง ไม่ได้อธิบายอะไร
-- คำถามที่ตอบว่า "ใช่" หรือ "ไม่ใช่" แล้วตามด้วยเหตุผล 1 ประโยค
-- เรื่องที่**เหตุผลสำคัญกว่าตัวเลือก** — ตารางจะตัดเหตุผลทิ้งเพื่อให้พอดีช่อง
+- The answer is shorter than 3 lines — a 2-row table is only decoration and explains nothing
+- A question answered "yes" or "no" followed by 1 sentence of reason
+- A matter where **the reason matters more than the options** — a table cuts the reason to fit the cell
 
-> ตารางที่มีแถวเดียวหรือ 2 แถวสั้น ๆ แปลว่าใช้ผิดรูปทรง · รูปที่วาดสิ่งที่ประโยคเดียวบอกได้ก็เช่นกัน
+> A table with one row or 2 short rows means the wrong shape was used · a figure that draws what one sentence can say is the same
 
 ---
 
-## เมื่อทำต่อไม่ได้
+## When you cannot continue
 
-ติดขัดเมื่อไหร่ → บอกเป็นข้อ ๆ แค่ 2 อย่าง: **ติดอะไร** และ **ต้องการอะไรจากผู้ใช้**
+Whenever you are blocked → list only 2 things: **what is blocking** and **what you need from the user**
 
-- ข้อละ 1 บรรทัด · ไม่เกิน 4 ข้อ
-- ไม่เล่าสาเหตุยาว ไม่ตอบเรื่องข้างเคียง ไม่วางแผนงานล่วงหน้า — รอได้ของก่อนค่อยทำ
-- ถ้ามีหลายทางให้ผู้ใช้เลือก → แต่ละทางเป็น 1 ข้อ ทางที่ง่ายสุดอยู่บนสุด
+- 1 line per item · at most 4 items
+- Do not tell the cause at length, do not answer side topics, do not plan the work ahead — wait until you have the thing, then do it
+- If there are several paths for the user to choose → each path is 1 item, the easiest on top
 
 ```
 ผิด: ย่อหน้ายาวเล่าว่า container ใหม่ · โฟลเดอร์ว่าง · OneDrive หาย · แล้ววางแผนแก้ 3 ข้อรอไว้
@@ -178,13 +184,15 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
    - แนบ Mockup.html มา หรือบอก path ใหม่
 ```
 
+(Gloss: wrong = a long paragraph telling that the container is new · the folder is empty · OneDrive is gone · and then planning 3 fixes while waiting · right = "Blocked on 1 thing: cannot see the file — the linked folder is empty. Need 1 thing: attach Mockup.html or give the new path.")
+
 ---
 
-## ตัวย่อ
+## Abbreviations
 
-ตัวย่อที่ใช้ในไฟล์นี้ · กฎเขียนตัวย่อ → `spell-out-abbreviations`
+Abbreviations used in this file · rules for writing abbreviations → `spell-out-abbreviations`
 
-- **ASCII** — American Standard Code for Information Interchange (การวาดรูปด้วยตัวอักษรธรรมดา)
-- **Mermaid** — ภาษาเขียนไดอะแกรมเป็นข้อความ แล้วให้โปรแกรมวาดให้
-- **DICOM** — Digital Imaging and Communications in Medicine (มาตรฐานไฟล์และการส่งภาพทางการแพทย์)
-- **API** — Application Programming Interface (ช่องทางที่โปรแกรมหนึ่งเรียกใช้อีกโปรแกรมหนึ่ง)
+- **ASCII** — American Standard Code for Information Interchange (drawing figures with plain characters)
+- **Mermaid** — a language that writes diagrams as text and lets a program draw them
+- **DICOM** — Digital Imaging and Communications in Medicine (a standard for medical image files and transfer)
+- **API** — Application Programming Interface (the channel through which one program calls another)

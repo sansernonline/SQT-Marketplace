@@ -1,20 +1,20 @@
-# playbook · performance — ช้า วัดก่อน แก้ทีละข้อ วัดซ้ำ
+# playbook · performance — it is slow: measure first, fix one thing at a time, measure again
 
-ใช้เมื่อ: หน้าช้า · API ช้า · build ช้า · กินหน่วยความจำ · อยากให้ตัวเลขตัวหนึ่งดีขึ้นจนถึงเป้า · ถ้าเป็นอาการที่ไม่ควรเกิดเลย (รั่ว · วิ่งตอนว่าง) → `bug-fix` (รวม `perf` · `hillclimb` · `trace forensics` ของ pstack)
-skill หลัก: `principle-prove-it-works` · `decision-log` · `observability-basics`
+Use when: a slow page · a slow API · a slow build · memory use · you want one number to improve until it reaches a target · if the symptom should never happen at all (a leak · running while idle) → `bug-fix` (covers pstack's `perf` · `hillclimb` · `trace forensics`)
+Main skills: `principle-prove-it-works` · `decision-log` · `observability-basics`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ตั้งตัวเลขเดียวที่จะดู (เช่น เวลาโหลดหน้ารายงานเป็นวินาที) วิธีวัด และเป้า ถ้าไม่มีเป้า ให้ตั้ง "ดีขึ้นอย่างน้อย 20%" แล้วลง `decision-log` · ใคร: หัวหน้าทีม
-2. **วัดค่าตั้งต้นอย่างน้อย 3 รอบ** บนข้อมูลชุดเดียวกัน เครื่องเดียวกัน ถ้ามี `.sandbox/` (ข้อยกเว้นของรากตาม `project-doc-set` ข้อ 1) ให้วัดใน sandbox แล้วบันทึกค่าดิบลง `_to_delete/perf/<เรื่อง>.tsv` · ใคร: `qa-tester` ตัวใหม่
-3. หาว่าอะไรจำกัดตัวเลขนั้น — profiler · trace · query plan · log เวลาแต่ละช่วง ถ้าได้ไฟล์ profile มา (cpuprofile · heap snapshot) ให้อ่านด้วยเครื่องมือ ไม่เดาจากโค้ด · ใคร: `developer` ตัวใหม่ (ต้นเหตุยาก: `model: opus`)
-4. ตั้งสมมติฐานทีละข้อ เช่น "ช้าเพราะ X ถ้าแก้ X ตัวเลขควรลดลงประมาณ Y" · ใคร: `developer` ตัวใหม่ (ส่งผลขั้น 3)
-5. แก้ทีละข้อ (`lazy-coding`) แล้ววัดซ้ำ 3 รอบ ถ้าดีขึ้นจริงเกินความแกว่งของการวัด ให้เก็บไว้ และ commit 1 ครั้งต่อการแก้ที่ได้ผล พร้อมตัวเลขก่อน/หลังในข้อความ (ตามกฎ commit ใน `superuser` หัวข้อ 6 ถ้าไม่ได้อนุญาตให้เก็บเป็น patch แยกใน `_to_delete/perf/`) ถ้าไม่ดีขึ้น ให้ถอยการแก้ทิ้งให้สะอาดก่อนลองข้อถัดไป และไม่ซ้อนการแก้ที่ยังไม่พิสูจน์ · ใคร: `developer` ตัวใหม่แก้ · `qa-tester` ตัวใหม่วัด
-6. ทุกสมมติฐานลงตาราง `| สมมติฐาน | ก่อน | หลัง | เก็บ/ทิ้ง |` ใน `decision-log` · ใคร: หัวหน้าทีม
-7. วนข้อ 4–6 จนถึงเป้า หรือจนสมมติฐานที่เหลือไม่คุ้ม ถ้าล้มเหลว 3 ข้อติดกันในทางเดียวกัน ให้ถอยกลับไปข้อ 3 เพราะสิ่งที่คิดว่าจำกัดอาจผิด · ใคร: หัวหน้าทีม
-8. ตรวจทั้งชุด — การแก้ที่เก็บ · ค่าดิบ · ตารางสมมติฐาน · ใคร: `reviewer` ตัวใหม่
-9. รายงาน — ตัวเลขก่อน/หลังพร้อมจำนวนรอบที่วัด และบอกว่าอะไรจำกัดตัวเลขอยู่ตอนนี้ แล้วจบด้วย `status-report` · ใคร: หัวหน้าทีม
+1. Set the one number to watch (for example, report page load time in seconds), how to measure it, and the target. If there is no target, set "at least 20% better" and log it in `decision-log` · ใคร: หัวหน้าทีม
+2. **Measure the baseline at least 3 rounds** on the same data set and the same machine. If `.sandbox/` exists (a root exception per `project-doc-set` item 1), measure inside the sandbox, then save the raw values to `_to_delete/perf/<เรื่อง>.tsv` · ใคร: `qa-tester` ตัวใหม่
+3. Find what limits that number — profiler · trace · query plan · timing log per stage. If you get a profile file (cpuprofile · heap snapshot), read it with a tool; do not guess from the code · ใคร: `developer` ตัวใหม่ (hard root cause: `model: opus`)
+4. Form hypotheses one at a time, for example "slow because of X; if X is fixed the number should drop by about Y" · ใคร: `developer` ตัวใหม่ (given the result of step 3)
+5. Fix one at a time (`lazy-coding`), then re-measure 3 rounds. If it is really better, beyond the noise of the measurement, keep it, and commit once per fix that works, with the before/after numbers in the message (per the commit rules in `superuser` section 6; if not allowed, keep it as a separate patch in `_to_delete/perf/`). If it is not better, revert the fix cleanly before trying the next one, and do not stack fixes that are not proven · ใคร: `developer` ตัวใหม่ fixes · `qa-tester` ตัวใหม่ measures
+6. Put every hypothesis in the table `| สมมติฐาน | ก่อน | หลัง | เก็บ/ทิ้ง |` (hypothesis | before | after | keep/drop) in `decision-log` · ใคร: หัวหน้าทีม
+7. Repeat steps 4–6 until the target is met, or until the remaining hypotheses are not worth it. If 3 fixes in a row fail in the same direction, go back to step 3, because what was thought to be the limit may be wrong · ใคร: หัวหน้าทีม
+8. Check (ตรวจ) the whole set — the fixes kept · the raw values · the hypothesis table · ใคร: `reviewer` ตัวใหม่
+9. Report — the before/after numbers with the number of rounds measured, and what limits the number now, then finish with `status-report` · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-ตัวเลขถึงเป้าหรือมีเหตุผลว่าทำไมหยุด และทุกการแก้ที่เก็บไว้มีผลวัดก่อน/หลังกำกับ
+The number reached the target or there is a reason why you stopped, and every fix that was kept has a before/after measurement attached

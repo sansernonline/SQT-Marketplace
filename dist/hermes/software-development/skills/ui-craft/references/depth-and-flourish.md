@@ -1,55 +1,55 @@
-# ความลึกและลูกเล่นพื้นผิว (depth and flourish)
+# Depth and surface flourish (depth and flourish)
 
-เงาที่ดูจริง ผิวกระดาษ ดินปั้น และขอบฉีก สำหรับหน้าจอและ mockup · ใช้คู่กับ `SKILL.md` ข้อ 4 (เงาเฉพาะของที่ลอยจริง · ความลึก 3 ระดับ · การ์ดนิ่งไม่มีเงา) ไม่ใช่แทน
-token เงาของเว็บแอป (`--shadow-color` · `--elev-1` ถึง `--elev-3` · สูตรมุมซ้อน) อยู่ใน `web-app-design` → `references/tokens.md` · look ที่ใช้แต่ละภาษาอยู่ใน [`web-looks.md`](web-looks.md)
+Realistic shadows, paper surface, clay and torn edges, for screens and mockups · use together with `SKILL.md` section 4 (shadow only for things that really float · 3 depth levels · still cards get no shadow), not instead of it
+The web app's shadow tokens (`--shadow-color` · `--elev-1` to `--elev-3` · the nested-corner formula) are in `web-app-design` → `references/tokens.md` · the looks that use each language are in [`web-looks.md`](web-looks.md)
 
-## สารบัญ
+## Contents
 
-1. [หลัก 6 ข้อ](#หลัก-6-ข้อ)
-2. [ภาษาความลึก เลือกภาษาเดียว](#ภาษาความลึก-เลือกภาษาเดียว)
-3. [สูตร 10 ข้อ](#สูตร-10-ข้อ)
-4. [รองรับเบราว์เซอร์](#รองรับเบราว์เซอร์)
-5. [ที่มา](#ที่มา)
+1. [The 6 principles](#the-6-principles)
+2. [Depth languages, choose one](#depth-languages-choose-one)
+3. [The 10 recipes](#the-10-recipes)
+4. [Browser support](#browser-support)
+5. [Sources](#sources)
 
-## หลัก 6 ข้อ
+## The 6 principles
 
-| # | หลัก | ทำอย่างไร | ที่มา |
+| # | Principle | How | Source |
 |---|---|---|---|
-| 1 | แสงมาจากทิศเดียว | ทุกเงาในหน้าเยื้องไปทางเดียวกัน ปกติแสงจากบน เงาตกลงล่าง · ทุกชั้นใช้อัตราส่วนระยะเยื้องแนวนอนต่อแนวตั้งเท่ากัน | CM |
-| 2 | เงามี 2 ส่วน | ชั้นกว้าง นุ่ม จาง แทนแสงรอบตัว + ชั้นแคบ เข้ม ชิดวัตถุ แทนมุมที่แสงเข้าไม่ถึง · ของยิ่งลอยสูง ชั้นกว้างยิ่งเยื้องไกล เบลอขึ้น และจางลง | RU · CM · VC |
-| 3 | ย้อมเงาเข้าหาสีพื้น | เงาบนพื้นสีใช้เฉดเข้มของ hue เดียวกับพื้น · ดำโปร่งทำให้พื้นสีดูหม่นเทา | CM · VC |
-| 4 | ออกแบบด้วยสีเทาก่อน | วางลำดับด้วยระยะ ขนาด น้ำหนัก และความเข้มของเทาให้ครบ แล้วค่อยเติมสี · เทาล้วนยังอ่านลำดับไม่ออก เติมสีก็ไม่ช่วย | RU |
-| 5 | ลำดับด้วยอย่างใดอย่างหนึ่ง | 1 ระดับใช้ขนาด หรือ น้ำหนัก หรือ สี อย่างเดียว · ใส่ทั้ง 3 ที่จุดเดียวคือตะโกน ระดับอื่นไม่เหลือทางให้เด่น | RU |
-| 6 | ผิวที่นูนมีขอบบนสว่าง | แสงจากบนกระทบขอบบนของปุ่มหรือแผ่นที่นูน จึงมีเส้นสว่าง 1px ด้านบน · ผิวที่ยุบลง (ช่องกรอก) กลับกัน เงาอยู่ด้านบนในช่อง | RU |
+| 1 | Light comes from one direction | Every shadow on the page is offset the same way, normally light from above and shadow falling down · every layer uses the same ratio of horizontal to vertical offset | CM |
+| 2 | A shadow has 2 parts | A wide, soft, faint layer for ambient light + a narrow, dark layer tight to the object for the corner light cannot reach · the higher the object floats, the further the wide layer is offset, the blurrier and fainter it gets | RU · CM · VC |
+| 3 | Tint the shadow toward the background color | A shadow on a colored background uses a dark shade of the same hue as the background · translucent black makes a colored background look dull gray | CM · VC |
+| 4 | Design in gray first | Set the order with spacing, size, weight and gray intensity completely, then add color · if all-gray still does not read as an order, adding color will not help | RU |
+| 5 | Order with only one of them | 1 level uses size, or weight, or color, only one · all 3 at one spot is shouting, and no other level has any way left to stand out | RU |
+| 6 | A raised surface has a light top edge | Light from above hits the top edge of a raised button or panel, so it has a 1px light line on top · a sunken surface (input field) is the reverse, with the shadow at the top inside the field | RU |
 
-## ภาษาความลึก เลือกภาษาเดียว
+## Depth languages, choose one
 
-ทั้งโปรเจกต์ใช้ 1 ใน 4 ภาษานี้ และจดไว้บรรทัดเดียวกับบุคลิกแอปในคอมเมนต์บรรทัดแรกของไฟล์ token (`/* app-character: 3 lifestyle · look: paper/print · depth: กระดาษ */`) · ผสมหลายภาษาในหน้าเดียว เช่น การ์ดดินปั้นข้างแผงกระจกข้างกระดาษฉีก คือร่องรอยว่า AI วาด (`no-ai-look` catalog ข้อ 6 ภาษาภาพเดียว)
+The whole project uses 1 of these 4 languages and records it on the same line as the app character in the first-line comment of the token file (`/* app-character: 3 lifestyle · look: paper/print · depth: กระดาษ */` — `กระดาษ` means "paper") · mixing several languages on one page, such as a clay card beside a glass panel beside torn paper, is a sign of AI drawing (`no-ai-look` catalog item 6, one visual language)
 
-| ภาษา | หน้าตา | สูตร | look |
+| Language | Look | Recipes | looks |
 |---|---|---|---|
-| เงาซ้อน | ของลอยมีเงาหลายชั้นทิศเดียว ขอบบนรับแสง | 1 · 2 · 3 · 5 · 8 · 10 | skeuomorphic · glass/tech · soft SaaS |
-| ดินปั้น | ก้อนพองนุ่มมีปริมาตร | 4 · 8 | claymorphism |
-| กระดาษ | แผ่นซ้อน เกรน ขอบฉีก รูปตัดวางบนพื้น | 6 · 7 · 8 · 9 | paper/print · Thai craft |
-| เรียบมีเส้น | ไม่มีเงาเบลอ แยกด้วยเส้น 1px และพื้นต่างเฉด · แบบหนาใช้ขอบ 2–3px กับเงาทึบไม่เบลอ | 3 (เฉพาะขอบโปร่ง) · 9 | quiet utility · editorial · bento · luxury · neobrutalism · playful |
+| Layered shadow (เงาซ้อน) | Floating things have a multi-layer single-direction shadow, top edge catching light | 1 · 2 · 3 · 5 · 8 · 10 | skeuomorphic · glass/tech · soft SaaS |
+| Clay (ดินปั้น) | A puffy soft lump with volume | 4 · 8 | claymorphism |
+| Paper (กระดาษ) | Stacked sheets, grain, torn edges, cutouts laid on the background | 6 · 7 · 8 · 9 | paper/print · Thai craft |
+| Flat with lines (เรียบมีเส้น) | No blurred shadow; separate with a 1px line and a background of a different shade · the thick version uses a 2–3px border with a solid, unblurred shadow | 3 (translucent border only) · 9 | quiet utility · editorial · bento · luxury · neobrutalism · playful |
 
-สูตร 10 ส่วนตัวอักษร (2 บรรทัดล่าง) ใช้ได้ทุกภาษา
+Recipe 10, the type part (the last 2 lines), works in every language
 
-**กฎ**
+**Rules**
 
-- เงาซ้อนห้าม animate (`transition` หรือ `@keyframes` บน `box-shadow` หลายชั้น) เพราะเบราว์เซอร์ต้องวาดเบลอใหม่ทุกเฟรม · อยากให้เงาเปลี่ยนตอน hover ให้วางเงาชุดที่ 2 ไว้ใน `::after` แล้วเปลี่ยน `opacity` ของมันแทน
-- สูตร 7 เป็นฟิลเตอร์ SVG ที่คำนวณทุกครั้งที่วาด ใช้กับชิ้นเล็กที่นิ่ง ห้ามใส่กับพื้นที่ใหญ่หรือของที่ขยับ · สูตร 6 เป็นภาพพื้นหลังเล็กที่ซ้ำเป็นลาย เบากว่ามาก ใช้กับพื้นใหญ่ได้
-- ทุกอย่างที่ขยับ (ยุบตอนกด · เงาเปลี่ยน · เส้นวาดเข้า) ปิดใน `@media (prefers-reduced-motion: reduce)` ตาม `SKILL.md` ข้อ 7
-- ธีมมืดแทบมองไม่เห็นเงา ยกระดับด้วยพื้นที่สว่างขึ้นทีละขั้นแทน · ภาษากระดาษและดินปั้นต้องลองทั้ง 2 ธีมก่อนเลือก
-- การ์ดในรายการยังแบนทุกภาษา ยกเว้น soft SaaS บนหน้าโน้มน้าว (landing · หน้าขาย) ที่การ์ดเนื้อหาใช้ 2 ชั้นล่างของสูตร 1 ได้และชิ้นเด่นใช้ครบ 4 ชั้น (แบบหน้า stripe.com ที่ผู้ใช้เลือก 2026-10-28) · ดินปั้นและกระดาษให้ความลึกกับชิ้นเด่นของหน้าเท่านั้น และไม่เกิน 3 ระดับตาม `SKILL.md` ข้อ 4 · หน้าแอปที่ใช้ทั้งวันยังแบน
+- Never animate a layered shadow (`transition` or `@keyframes` on a multi-layer `box-shadow`), because the browser must redraw the blur every frame · to change the shadow on hover, put the second shadow set in `::after` and change its `opacity` instead
+- Recipe 7 is an SVG filter that is recomputed on every paint; use it on small still pieces, never on large areas or moving things · recipe 6 is a small background image repeated as a pattern, much lighter, and can be used on large backgrounds
+- Everything that moves (squash on press · shadow change · line drawing in) is turned off in `@media (prefers-reduced-motion: reduce)` per `SKILL.md` section 7
+- A dark theme hardly shows shadows; raise levels with progressively lighter surfaces instead · the paper and clay languages must be tried in both themes before choosing
+- Cards in a list stay flat in every language, except soft SaaS on a persuasion page (landing · sales page), where content cards may use the lower 2 layers of recipe 1 and a standout piece uses all 4 layers (like the stripe.com page the user chose 2026-10-28) · clay and paper give depth only to the page's standout piece, and no more than 3 levels per `SKILL.md` section 4 · an app page used all day stays flat
 
-## สูตร 10 ข้อ
+## The 10 recipes
 
-โค้ดเขียนเองทั้งหมด สั้นพอวางในไฟล์ css ของโปรเจกต์ · ค่าสีเป็นตัวอย่าง ให้ใช้ token ของโปรเจกต์แทน · `--shadow-color` นิยามในสูตร 1 · ทุกสูตรใช้แสงจากบน
+All the code is written by us and is short enough to paste into the project's css file · color values are examples; use the project's tokens instead · `--shadow-color` is defined in recipe 1 · every recipe uses light from above
 
-### 1 · เงาซ้อนหลายชั้น
+### 1 · Layered multi-layer shadow
 
-ของลอยที่ต้องดูนุ่มและจริง (เมนูหลัก แผงลอย) · ทุกชั้นเยื้องลงล่างอย่างเดียว ระยะเยื้องคูณ 2 ทุกชั้น เบลอเป็น 2 เท่าของระยะเยื้อง ความเข้มลดลงทีละชั้น
+For floating things that must look soft and real (main menu, floating panel) · every layer is offset downward only, the offset doubles each layer, blur is 2 times the offset, and intensity falls layer by layer
 
 ```css
 :root { --shadow-color: 223 47% 15%; }  /* hue เดียวกับพื้น · พื้นเปลี่ยน hue เปลี่ยนตาม */
@@ -61,9 +61,9 @@ token เงาของเว็บแอป (`--shadow-color` · `--elev-1` �
 }
 ```
 
-### 2 · เงา 2 ส่วน
+### 2 · 2-part shadow
 
-แบบประหยัดของสูตร 1 สำหรับ dropdown · tooltip · toast · ค่าเดียวกับ `--elev-2` ใน `tokens.md`
+The economy version of recipe 1 for dropdown · tooltip · toast · same values as `--elev-2` in `tokens.md`
 
 ```css
 .menu {
@@ -72,9 +72,9 @@ token เงาของเว็บแอป (`--shadow-color` · `--elev-1` �
 }
 ```
 
-### 3 · ขอบคม + มุมร่วมศูนย์
+### 3 · Crisp border + concentric corners
 
-ขอบโปร่งเข้ากับทุกสีพื้น (ธีมมืดเปลี่ยนเป็น `hsl(0 0% 100% / .1)`) · ของข้างในโค้งเท่ากับมุมนอกลบระยะห่างจากขอบ เส้นโค้ง 2 ชั้นจึงขนานกัน
+A translucent border suits every background color (dark theme changes it to `hsl(0 0% 100% / .1)`) · the inside item's radius equals the outer corner minus the distance from the edge, so the 2 curves are parallel
 
 ```css
 .popover {
@@ -86,9 +86,9 @@ token เงาของเว็บแอป (`--shadow-color` · `--elev-1` �
 .popover > * { border-radius: calc(var(--r) - var(--pad)); }      /* 14 − 6 = 8 */
 ```
 
-### 4 · ปริมาตรดินปั้น
+### 4 · Clay volume
 
-ก้อนพอง ท้องมืด หลังรับแสง เงาตกบนพื้นทิศเดียวกับแสง · ใช้กับชิ้นเด่นไม่กี่ชิ้นต่อหน้า
+A puffy lump, dark belly, lit back, shadow falling on the ground in the same direction as the light · use on a few standout pieces per page
 
 ```css
 .clay {
@@ -100,9 +100,9 @@ token เงาของเว็บแอป (`--shadow-color` · `--elev-1` �
 }
 ```
 
-### 5 · ขอบบนรับแสง + ตัวอักษรกดลง
+### 5 · Top edge catching light + pressed-in type
 
-ปุ่มนูนแบบ skeuomorphic และป้ายที่ดูกดลงในเนื้อวัสดุ (letterpress)
+Skeuomorphic raised buttons and labels that look pressed into the material (letterpress)
 
 ```css
 .key {
@@ -114,9 +114,9 @@ token เงาของเว็บแอป (`--shadow-color` · `--elev-1` �
            text-shadow: 0 1px 0 hsl(0 0% 100% / .8); }      /* ขอบล่างของร่องรับแสง */
 ```
 
-### 6 · เกรนกระดาษ
+### 6 · Paper grain
 
-ไฟล์ SVG เล็ก ๆ ที่ซ้ำเป็นลายพื้น · กรอบฟิลเตอร์เท่ากับรูปพอดี (`x` `y` `width` `height`) รอยต่อของลายจึงไม่เห็น · งานส่งมอบไฟล์เดียวให้ฝังเป็น data URI
+A small SVG file repeated as a background pattern · the filter box equals the image exactly (`x` `y` `width` `height`) so the seams of the pattern do not show · for single-file deliverables, embed it as a data URI
 
 ```html
 <!-- grain.svg -->
@@ -131,9 +131,9 @@ token เงาของเว็บแอป (`--shadow-color` · `--elev-1` �
 .paper { background: var(--paper) url(grain.svg); }   /* --paper = สีกระดาษของแบรนด์ */
 ```
 
-### 7 · ขอบฉีก
+### 7 · Torn edge
 
-แผ่นกระดาษที่ขอบไม่เรียบ · บิดเฉพาะแผ่นพื้นใน `::before` ตัวหนังสือไม่บิดตาม
+A sheet of paper with an uneven edge · distort only the base sheet in `::before`; the text is not distorted with it
 
 ```html
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -147,9 +147,9 @@ token เงาของเว็บแอป (`--shadow-color` · `--elev-1` �
                 background: var(--paper); filter: url(#torn); }
 ```
 
-### 8 · เงาของรูปทรงอิสระ
+### 8 · Shadow of a free-form shape
 
-รูปตัดพื้นโปร่ง (PNG · SVG) เช่น เครื่องหมายคำถามกระดาษตัดจากแม่แบบใน `brief-to-image` ของ plugin `graphic-design` · `box-shadow` ได้แค่กรอบสี่เหลี่ยม `drop-shadow()` ตามรูปทรงจริง · ภาพที่มีเงาในตัวแล้วไม่ต้องใส่ซ้ำ
+Cutouts with a transparent background (PNG · SVG), for example the paper-cut question mark from the template in `brief-to-image` of plugin `graphic-design` · `box-shadow` gives only a rectangular frame; `drop-shadow()` follows the real shape · an image that already has its own shadow needs none added
 
 ```css
 .cutout {
@@ -160,7 +160,7 @@ token เงาของเว็บแอป (`--shadow-color` · `--elev-1` �
 
 ### 9 · duotone
 
-รวมภาพถ่ายหลายแหล่งให้เป็นชุดเดียวด้วย 2 สีของแบรนด์ (ส่วนมืดเป็น `--duo-dark` ส่วนสว่างเป็น `--duo-light`) · ห้ามใช้กับภาพที่ต้องเห็นสีจริง เช่น ภาพสินค้า
+Unify photos from several sources into one set with the brand's 2 colors (the dark part is `--duo-dark`, the light part is `--duo-light`) · never use on images that must show true color, such as product photos
 
 ```css
 .duotone { position: relative; isolation: isolate; background: var(--duo-light); }
@@ -169,9 +169,9 @@ token เงาของเว็บแอป (`--shadow-color` · `--elev-1` �
                   background: var(--duo-dark); mix-blend-mode: lighten; }
 ```
 
-### 10 · วัตถุนูนนุ่มด้วย gradient + ตัวอักษรเรียบร้อย
+### 10 · Soft raised object with gradient + tidy type
 
-ลูกบิดหรือปุ่มหมุนที่มีหน้าที่จริง (วงกลมลอยประดับคือสัญญาณ AI ใน `no-ai-look` ข้อ 6) · 2 บรรทัดล่างใช้ได้ทุกภาษาความลึก
+A knob or dial with a real function (a decorative floating circle is an AI sign in `no-ai-look` item 6) · the last 2 lines work in every depth language
 
 ```css
 .knob {
@@ -183,15 +183,15 @@ h1, h2, h3 { text-wrap: balance; }                       /* หัวข้อ�
 .num, td.amount { font-variant-numeric: tabular-nums; }  /* ตัวเลขกว้างเท่ากัน คอลัมน์ตรง */
 ```
 
-## รองรับเบราว์เซอร์
+## Browser support
 
-ตรวจบน MDN เมื่อ 2026-10-23 ทุกตัวในรายการนี้เป็น Baseline widely available: `text-wrap` ใช้ได้ทุกเบราว์เซอร์หลักตั้งแต่ มี.ค. 2024 (`balance` จัดเฉพาะข้อความไม่เกิน 6 บรรทัดใน Chromium และไม่เกิน 10 บรรทัดใน Firefox จึงใช้กับหัวข้อ ไม่ใช้กับย่อหน้า) · `font-variant-numeric` และ `mix-blend-mode` ตั้งแต่ ม.ค. 2020 · `drop-shadow()` ตั้งแต่ ก.ย. 2016 (ไม่รับ spread และ `inset`) · `<feTurbulence>` และ `<feDisplacementMap>` ตั้งแต่ ก.ค. 2015
+Checked on MDN on 2026-10-23; every item in this list is Baseline widely available: `text-wrap` works in all major browsers since Mar 2024 (`balance` balances only text of at most 6 lines in Chromium and at most 10 lines in Firefox, so use it on headings, not paragraphs) · `font-variant-numeric` and `mix-blend-mode` since Jan 2020 · `drop-shadow()` since Sep 2016 (does not accept spread and `inset`) · `<feTurbulence>` and `<feDisplacementMap>` since Jul 2015
 
-## ที่มา
+## Sources
 
-| รหัส | แหล่ง |
+| Code | Source |
 |---|---|
-| CM | Josh W. Comeau "Designing Beautiful Shadows in CSS" https://www.joshwcomeau.com/css/designing-shadows/ (เผยแพร่ 2021-09-13 · ปรับล่าสุด 2026-04-27 · เปิดตรวจ 2026-10-23) · ใช้หลักเท่านั้น ไม่คัดโค้ด |
-| RU | หนังสือ Refactoring UI ของ Adam Wathan และ Steve Schoger (หนังสือขาย · สรุปหลักด้วยคำของเรา ไม่ยกข้อความ · ไม่ได้เปิดเล่มตรวจรอบนี้) |
-| VC | vercel-labs/web-interface-guidelines `README.md` หัวข้อ layered shadows · crisp borders · nested radii · hue consistency (MIT · ตรวจ 2026-10-23) |
-| อื่น | ดินปั้น: Smashing Magazine "Claymorphism: Will It Stick Around?" ของ Adrian Bece 2022-03-16 · เกรน: CSS-Tricks "Grainy Gradients" ของ Jimmy Chion 2021-09-13 (เปิดตรวจทั้งคู่ 2026-10-23) · โค้ดทั้ง 10 สูตรเขียนเอง |
+| CM | Josh W. Comeau "Designing Beautiful Shadows in CSS" https://www.joshwcomeau.com/css/designing-shadows/ (published 2021-09-13 · last updated 2026-04-27 · opened and checked 2026-10-23) · principles only, no code copied |
+| RU | The book Refactoring UI by Adam Wathan and Steve Schoger (a commercial book · principles summarized in our own words, no text quoted · the book was not opened for checking this round) |
+| VC | vercel-labs/web-interface-guidelines `README.md` sections layered shadows · crisp borders · nested radii · hue consistency (MIT · checked 2026-10-23) |
+| Other | Clay: Smashing Magazine "Claymorphism: Will It Stick Around?" by Adrian Bece 2022-03-16 · grain: CSS-Tricks "Grainy Gradients" by Jimmy Chion 2021-09-13 (both opened and checked 2026-10-23) · all 10 recipes' code written by us |

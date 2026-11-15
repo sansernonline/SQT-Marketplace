@@ -1,5 +1,9 @@
 # Changelog — software-development
 
+## 3.5.2 — 2026-11-15
+
+- SKILL.md และ reference ของ skill ที่ถูกเปิดจริง (ui-craft · reverse-engineering · branded-document-design · diagram-figures · presentation-design · stack-* และอื่น) และ playbook ของ superuser สาขาเป็นภาษาอังกฤษ (ผู้ใช้สั่ง 2026-11-15 · เลือกไฟล์จากการใช้จริงใน log 2,900 session · ไทยในไฟล์ที่แปลลดลง 88%) · ป้ายสถานะ ป้ายหลักฐาน คำที่ hook และตัวตรวจจับ และตัวอย่างภาษาไทยคงเป็นไทย · ยังไม่ได้รัน eval เทียบก่อนและหลัง
+
 ## 3.5.1 — 2026-11-15
 
 - `design-direction-lookup` ฟอนต์ SIPA 14 แถวมีค่า Latin และน้ำหนักจากไฟล์ .ttf (ตรวจจาก mirror ไม่ใช่ต้นทาง SIPA) · TH Charmonman · TH Srisakdi · TH Charm of AU ยังไม่รู้ใบอนุญาต (ไม่ใช่ DIP-SIPA)

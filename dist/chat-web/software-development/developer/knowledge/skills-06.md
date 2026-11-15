@@ -1131,9 +1131,9 @@ For every table, document:
 
 ## reference: data-types.md
 
-# 6 · สี่ชนิดข้อมูลที่พลาดกันประจำ
+# 6 · Four data types that are routinely got wrong
 
-### เงิน
+### Money
 
 ```sql
 total_amount   numeric(19,4)   NOT NULL      -- ถูก:
@@ -1141,71 +1141,71 @@ currency       char(3)         NOT NULL      -- ถูก: ISO 4217 เช่น
 total_amount   float / double                -- ผิด: 0.1 + 0.2 ไม่เท่ากับ 0.3
 ```
 
-> ผิด: **float กับเงินคือบั๊กที่หาไม่เจอ** ยอดรวมเพี้ยนรายการละ 1 สตางค์
-> ปิดงบสิ้นเดือนถึงรู้ แล้วไล่ย้อนไม่ได้ว่าเพี้ยนตรงไหน
+> Wrong: **float for money is a bug you cannot find.** The total drifts by 1 satang per line
+> You only learn at month-end close, and cannot trace back where it drifted
 
-### เวลา
+### Time
 
-| เก็บ | ใช้ | เหตุผล |
+| Store | Use | Reason |
 |---|---|---|
-| เวลาที่เกิดเหตุการณ์ | `timestamptz` (SQL Server ใช้ `datetimeoffset`) เก็บเป็น UTC | ประเทศไทยไม่มี daylight saving แต่ระบบที่ขายต่างประเทศมี |
-| วันเกิด วันครบกำหนด | `date` | ไม่มีเวลา ไม่มีโซนเวลา |
-| ช่วงเวลาเปิดร้าน | `time` + คอลัมน์โซนเวลาแยก | |
+| Time an event happened | `timestamptz` (SQL Server uses `datetimeoffset`) stored as UTC | Thailand has no daylight saving, but systems sold abroad do |
+| Birth date, due date | `date` | no time, no time zone |
+| Shop opening hours | `time` + a separate time zone column | |
 
-**กฎ:** เก็บ UTC แล้วแปลงเป็น `+07:00` ตอนแสดงผลเท่านั้น ห้ามเก็บเวลาไทยดิบ ๆ ใน `timestamp` ที่ไม่มีโซน
+**Rule:** store UTC and convert to `+07:00` only at display time; never store raw Thai time in a `timestamp` that has no zone
 
-**พุทธศักราช**: เก็บเป็น ค.ศ. เสมอ แล้วแปลงเป็น พ.ศ. ตอนแสดงผล
-ถ้าเก็บปี 2569 ลงฐานข้อมูล ทุกฟังก์ชันจะคำนวณช่วงเวลาผิด
+**Buddhist Era (BE)**: always store Common Era (CE), then convert to BE at display time
+If you store the year 2569 in the database, every function will compute durations wrongly
 
-### enum / สถานะ
+### enum / status
 
-| วิธี | ดีเมื่อ | เสียเมื่อ |
+| Approach | Good when | Bad when |
 |---|---|---|
-| ตาราง lookup + foreign key | ค่าเพิ่มได้โดยไม่ deploy มีชื่อไทย/อังกฤษ และมีลำดับการแสดง | ต้อง join |
-| `check constraint` เป็นข้อความ | ค่าคงที่ ไม่ค่อยเปลี่ยน | เพิ่มค่าต้อง migration |
-| ชนิด `enum` ของ PostgreSQL | เร็ว เล็ก | **ลบค่าออกไม่ได้** เปลี่ยนลำดับไม่ได้ |
-| `int` ดิบ ๆ | — | ✗ อ่าน `status = 3` แล้วไม่มีใครรู้ว่าอะไร |
+| Lookup table + foreign key | values can be added without a deploy, has Thai/English names, and has a display order | needs a join |
+| `check constraint` as text | constant values that rarely change | adding a value needs a migration |
+| PostgreSQL `enum` type | fast, small | **a value cannot be removed** and the order cannot be changed |
+| raw `int` | — | ✗ reading `status = 3`, nobody knows what it means |
 
 ### boolean
 
-- ตั้งชื่อเป็นประโยคบอกเล่าเชิงบวก: `is_active` (ถูก) · `is_not_disabled` (ผิด)
-- **ถ้าอาจมีสถานะที่ 3 ในอนาคต อย่าใช้ boolean** เพราะ `is_approved` จะกลายเป็น `approval_status`
-  ภายใน 6 เดือน เมื่อมี "รออนุมัติ" เพิ่มมา
+- Name it as a positive statement: `is_active` (right) · `is_not_disabled` (wrong)
+- **If a third state might appear in the future, do not use boolean**, because `is_approved` will become `approval_status`
+  within 6 months, once "รออนุมัติ" (awaiting approval) is added
 
 ---
 
 
 ## reference: migrations.md
 
-# 9 · migration — เปลี่ยน schema โดยไม่ต้องปิดระบบ
+# 9 · migration — change the schema without taking the system down
 
-**กฎ 3 ข้อ:**
+**3 rules:**
 
-1. **เดินหน้าอย่างเดียว**: migration ที่ merge แล้วห้ามแก้ ถ้าผิดให้เขียนตัวใหม่ทับ
-2. **1 migration ทำเรื่องเดียว**: ไล่ปัญหาง่าย และ rollback ได้ตรงจุด
-3. **โค้ดเวอร์ชันเก่ากับ schema เวอร์ชันใหม่ต้องทำงานด้วยกันได้** เพราะระหว่าง deploy มีโค้ดทั้ง 2 เวอร์ชันรันพร้อมกันเสมอ
+1. **Forward only**: a migration that has been merged must not be edited; if it is wrong, write a new one over it
+2. **1 migration does one thing**: easy to trace problems, and rollback is exact
+3. **Old-version code and the new-version schema must work together**, because during a deploy both versions of the code always run at the same time
 
-### expand / contract — ขั้นตอนมาตรฐานสำหรับการเปลี่ยนที่ทำลายของเดิม
+### expand / contract — the standard steps for a change that destroys something existing
 
-ตัวอย่าง: เปลี่ยนชื่อคอลัมน์ `name` → `full_name`
+Example: rename the column `name` → `full_name`
 
-| รอบ deploy | ฐานข้อมูล | โค้ด |
+| Deploy round | Database | Code |
 |:--:|---|---|
-| **1 · ขยาย** | เพิ่ม `full_name` (nullable) | เขียนลงทั้ง 2 คอลัมน์ · อ่านจาก `name` |
-| **2 · ย้าย** | คัดลอกข้อมูลเก่าเป็นชุด ๆ | อ่านจาก `full_name` ถ้าไม่มีค่อยดู `name` |
-| **3 · บีบ** | ตั้ง `NOT NULL` · ลบ `name` | อ่านและเขียน `full_name` อย่างเดียว |
+| **1 · Expand** | add `full_name` (nullable) | write to both columns · read from `name` |
+| **2 · Migrate** | copy old data in batches | read from `full_name`, fall back to `name` if it has no value |
+| **3 · Contract** | set `NOT NULL` · drop `name` | read and write only `full_name` |
 
-ทำ 3 รอบดูเสียเวลา แต่ทุกรอบ rollback ได้โดยไม่เสียข้อมูล
-ถ้าทำรอบเดียว ก็ต้องยอมรับว่าต้องปิดระบบ
+3 rounds looks slow, but every round can roll back without losing data
+If you do it in one round, you must accept that the system has to go down
 
-**คำสั่งที่ล็อกตารางจนระบบค้าง** (ระวังเป็นพิเศษบนตารางใหญ่):
+**Commands that lock the table until the system hangs** (be extra careful on large tables):
 
-- เพิ่มคอลัมน์ที่มี `DEFAULT` และ `NOT NULL` พร้อมกัน ซึ่ง PostgreSQL รุ่นใหม่ทำได้เร็ว และ MySQL 8.0.12 ขึ้นไปเพิ่มคอลัมน์แบบ INSTANT ได้ (การเปลี่ยนชนิดข้อมูลยังเขียนตารางใหม่)
-- เปลี่ยนชนิดข้อมูล
-- สร้าง index ธรรมดา ให้ใช้ `CREATE INDEX CONCURRENTLY` แทน (PostgreSQL) หรือ `ONLINE = ON` (SQL Server)
+- Adding a column with both `DEFAULT` and `NOT NULL` at once — newer PostgreSQL does this fast, and MySQL 8.0.12 and up can add a column as INSTANT (changing a data type still rewrites the table)
+- Changing a data type
+- Creating a plain index; use `CREATE INDEX CONCURRENTLY` instead (PostgreSQL) or `ONLINE = ON` (SQL Server)
 
-**ทดสอบ migration กับสำเนาข้อมูลจริงเสมอ** เพราะ migration ที่รัน 0.2 วินาทีบนเครื่องตัวเอง
-อาจใช้ 40 นาทีบน production และล็อกตารางไว้ตลอด
+**Always test a migration against a copy of real data**, because a migration that runs in 0.2 seconds on your own machine
+may take 40 minutes on production and hold the table lock the whole time
 
 ---
 
@@ -1842,23 +1842,23 @@ APP_LOG_LEVEL=debug
 
 ## reference: per-stack.md
 
-# วิธีทำจริงแยกตามภาษาและเฟรมเวิร์ก
+# Practical how-to by language and framework
 
-**สารบัญ:** 1 .NET / ASP.NET Core · 2 Node.js · 3 Python · 4 Angular และ frontend ทั่วไป · 5 Docker และ Kubernetes · 6 เครื่องมือตรวจ secret ที่หลุดเข้า git · 7 คำสั่งสร้างค่าสุ่มที่ปลอดภัย
+**Contents:** 1 .NET / ASP.NET Core · 2 Node.js · 3 Python · 4 Angular and frontend in general · 5 Docker and Kubernetes · 6 Tools that detect secrets leaked into git · 7 Commands that generate safe random values
 
 1. [.NET / ASP.NET Core](#1--net--aspnet-core)
 2. [Node.js](#2--nodejs)
 3. [Python](#3--python)
-4. [Angular และ frontend ทั่วไป](#4--angular-และ-frontend-ทั่วไป)
-5. [Docker และ Kubernetes](#5--docker-และ-kubernetes)
-6. [เครื่องมือตรวจ secret ที่หลุดเข้า git](#6--เครื่องมือตรวจ-secret-ที่หลุดเข้า-git)
-7. [คำสั่งสร้างค่าสุ่มที่ปลอดภัย](#7--คำสั่งสร้างค่าสุ่มที่ปลอดภัย)
+4. [Angular and frontend in general](#4--angular-and-frontend-in-general)
+5. [Docker and Kubernetes](#5--docker-and-kubernetes)
+6. [Tools that detect secrets leaked into git](#6--tools-that-detect-secrets-leaked-into-git)
+7. [Commands that generate safe random values](#7--commands-that-generate-safe-random-values)
 
 ---
 
 ## 1 · .NET / ASP.NET Core
 
-**บนเครื่องนักพัฒนา เก็บนอกโฟลเดอร์โปรเจกต์ จึงไม่มีทางเข้า git:**
+**On the developer machine, stored outside the project folder so it can never reach git:**
 
 ```bash
 dotnet user-secrets init
@@ -1866,7 +1866,7 @@ dotnet user-secrets set "ConnectionStrings:Default" "Host=localhost;..."
 dotnet user-secrets list
 ```
 
-**ตรวจตอนบูต:**
+**Validate at boot:**
 
 ```csharp
 public sealed class AppOptions
@@ -1885,14 +1885,14 @@ builder.Services
     .ValidateOnStart();                   // ← ขาดค่า = แอปไม่ยอมบูต
 ```
 
-**ลำดับที่ ASP.NET Core อ่าน (ค่าหลังทับค่าก่อน):**
+**Order in which ASP.NET Core reads (later values override earlier ones):**
 
 ```
 appsettings.json → appsettings.{Environment}.json → user-secrets (dev)
 → environment variable → อาร์กิวเมนต์บรรทัดคำสั่ง
 ```
 
-ตัวแปรสภาพแวดล้อมใช้ `__` แทนลำดับชั้น เช่น `ConnectionStrings__Default`
+Environment variables use `__` in place of hierarchy levels, for example `ConnectionStrings__Default`
 
 **Azure Key Vault:**
 
@@ -1929,10 +1929,10 @@ if (!parsed.success) {
 export const env = parsed.data;
 ```
 
-> **ห้ามอ่าน `process.env` กระจายทั่วโค้ด** ให้รวมไว้ที่ไฟล์เดียว
-> จะได้ตอบได้ว่าระบบใช้ค่าอะไรบ้าง โดยไม่ต้องไล่ grep ทั้งโปรเจกต์
+> **Do not read `process.env` scattered through the code.** Gather it in one file
+> so you can answer which values the system uses, without grepping the whole project
 
-Node 20 ขึ้นไปโหลด `.env` ได้เองด้วย `node --env-file=.env` ไม่ต้องพึ่ง `dotenv`
+Node 20 and up can load `.env` itself with `node --env-file=.env`, with no need for `dotenv`
 
 ---
 
@@ -1954,19 +1954,19 @@ class Settings(BaseSettings):
 settings = Settings()      # ขาดค่า = ValidationError ตั้งแต่ import
 ```
 
-- อ่าน `APP_DATABASE_URL`, `APP_JWT_SECRET` ตาม `env_prefix`
-- import ที่ระดับบนสุดของแอป error จะได้เกิดตอนบูต ไม่ใช่ตอนเรียกใช้ครั้งแรก
+- Reads `APP_DATABASE_URL`, `APP_JWT_SECRET` according to `env_prefix`
+- Import at the top level of the app so the error happens at boot, not at the first use
 
 ---
 
-## 4 · Angular และ frontend ทั่วไป
+## 4 · Angular and frontend in general
 
-> **ทุกอย่างที่อยู่ในไฟล์ที่เบราว์เซอร์โหลด คือสาธารณะ** ไม่มีข้อยกเว้น
+> **Everything in a file the browser loads is public.** No exceptions
 
-**แบบฝังตอน build** (`environment.ts`, `import.meta.env`, `NEXT_PUBLIC_*`):
-ค่าติดไปกับไฟล์ที่ build ได้ เปลี่ยนค่าทีไรต้อง build ใหม่ จึงขัดกับกฎ build ครั้งเดียวแล้วใช้ทุก environment
+**Embedded at build time** (`environment.ts`, `import.meta.env`, `NEXT_PUBLIC_*`):
+The value is baked into the built files. Every change needs a rebuild, which breaks the rule of building once and using in every environment
 
-**แบบโหลดตอนรัน (แนะนำ):**
+**Loaded at run time (recommended):**
 
 ```ts
 // main.ts — โหลดก่อนแอปเริ่ม
@@ -1983,13 +1983,13 @@ fetch('/config.json', { cache: 'no-store' })
 { "apiBaseUrl": "https://api.example.co", "env": "production", "sentryDsn": "..." }
 ```
 
-ตั้ง header `Cache-Control: no-store` ให้ `/config.json` ไม่งั้นเบราว์เซอร์จะใช้ค่าเก่า
+Set the header `Cache-Control: no-store` on `/config.json`, otherwise the browser will use the old value
 
 ---
 
-## 5 · Docker และ Kubernetes
+## 5 · Docker and Kubernetes
 
-**Docker อย่าใส่ secret ตอน build:**
+**For Docker, do not put secrets in at build time:**
 
 ```dockerfile
 # ผิด: ค่าจะติดอยู่ในชั้นของ image ตลอดไป เห็นได้ด้วย docker history
@@ -2005,7 +2005,7 @@ docker build --secret id=npmrc,src=$HOME/.npmrc .
 docker run --env-file .env myapp        # ตอนรัน ส่งค่าเข้าไป
 ```
 
-ห้ามเขียน `# comment` ต่อท้ายบรรทัดค่าใน `.env` ที่ใช้กับ `--env-file`: docker เก็บ comment เป็นส่วนของค่า ทำให้ค่าผิดโดยไม่มี error (ทดลองเมื่อ 2026-11-04: `A=value # note` ได้ค่า `value # note`) · วาง comment ไว้บรรทัดของมันเอง
+Do not write a trailing `# comment` on a value line in a `.env` used with `--env-file`: docker keeps the comment as part of the value, making the value wrong with no error (tested 2026-11-04: `A=value # note` gives the value `value # note`) · put the comment on its own line
 
 **Kubernetes:**
 
@@ -2016,14 +2016,14 @@ env:
       secretKeyRef: { name: app-secrets, key: db-password }
 ```
 
-> **Secret ของ Kubernetes เป็นแค่ base64 ไม่ใช่การเข้ารหัส**
-> ใครมีสิทธิ์ `get secret` ก็อ่านค่าได้ตรง ๆ
-> ต้องเปิด encryption at rest ที่ etcd และคุมสิทธิ์ด้วย RBAC
-> ทางที่ดีกว่า: ให้ External Secrets Operator ดึงค่าจาก Key Vault / Secrets Manager มาสร้าง Secret ให้
+> **A Kubernetes Secret is only base64, not encryption**
+> Anyone with `get secret` permission can read the value directly
+> You must turn on encryption at rest in etcd and control access with RBAC
+> A better way: let External Secrets Operator pull the value from Key Vault / Secrets Manager and create the Secret
 
 ---
 
-## 6 · เครื่องมือตรวจ secret ที่หลุดเข้า git
+## 6 · Tools that detect secrets leaked into git
 
 ```bash
 # ตรวจทั้งประวัติ
@@ -2042,7 +2042,7 @@ repos:
     hooks: [{ id: gitleaks }]
 ```
 
-**ลบออกจากประวัติ** (ทำหลังเพิกถอนค่าเดิมแล้วเท่านั้น):
+**Remove from history** (only after the old value has been revoked):
 
 ```bash
 pip install git-filter-repo
@@ -2053,7 +2053,7 @@ git push --force --all
 
 ---
 
-## 7 · คำสั่งสร้างค่าสุ่มที่ปลอดภัย
+## 7 · Commands that generate safe random values
 
 ```bash
 openssl rand -base64 48                 # กุญแจทั่วไป
@@ -2073,8 +2073,8 @@ $b = New-Object byte[] 48
 # PowerShell 7.4 ขึ้นไป: Get-SecureRandom ก็ใช้ได้
 ```
 
-> ผิด: **อย่าใช้ตัวสุ่มทั่วไป** (`Math.random`, `random.random`, `Random` ของ .NET)
-> เพราะพวกนี้คาดเดาได้ ต้องใช้ตัวสุ่มสำหรับงานเข้ารหัสตามคำสั่งข้างบน
+> Wrong: **do not use a general-purpose random generator** (`Math.random`, `random.random`, .NET `Random`)
+> because they are predictable; use the cryptographic random generator as in the commands above
 
 
 ---

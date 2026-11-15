@@ -3,47 +3,47 @@ name: principle-fix-root-cause
 description: Use when something is broken and the cause is unknown
 ---
 
-# principle · fix root cause — แก้ที่ต้นเหตุ
+# principle · fix root cause — fix the cause, not the symptom
 
-> ดัก null ที่หน้าจอแล้ว error หายไปจากสายตาก็จริง แต่ข้อมูลผิดยังไหลอยู่ในระบบ
+> Catching null on the screen does make the error vanish from sight, but wrong data still flows through the system.
 
-## กฎ
+## Rule
 
-1. **สร้างวงสั่งซ้ำก่อนตั้งสมมติฐาน** — หาคำสั่งเดียวที่รันแล้วขึ้นอาการตามที่ผู้ใช้บอกทุกตัวอักษร (red) · รันให้เห็นอาการจริง 1 ครั้งก่อน แล้วจึงคิดว่าเพราะอะไร · ทำให้เกิดซ้ำไม่ได้ = ยังไม่รู้ว่ากำลังแก้อะไร
-   - วงที่ใช้ได้ (เรียงจากตรงที่สุด): test ที่ล้ม · สคริปต์หรือ `curl` ที่ยิงตัวเดียวกับที่ผู้ใช้เจอ · เล่น log หรือไฟล์ที่ทำให้พังซ้ำ · เทียบผลของฉบับเก่ากับใหม่ · ขั้นตอนบนหน้าจอจาก skill ตรวจแอปของโปรเจกต์
-   - บีบให้เร็ว (วินาทีไม่ใช่นาที) และแน่นอน (ผลเหมือนเดิมทุกรอบ) · เกิดบางครั้ง → รัน N รอบหรือตรึงตัวสุ่ม/เวลา จนอัตราเกิดสูงพอจะเห็นผลการแก้ · ต้องมีคนทำบางขั้น (กดบนอุปกรณ์จริง) → เขียนสคริปต์ที่บอกคนทีละขั้นและจดผลกลับ
-2. **EXPLORE ก่อนแก้ จากหลักฐานล้วน** — อ่าน รัน วงข้อ 1 ดู log และประวัติ โดยไม่แก้ไฟล์ใดจนระบุจุดที่ค่าผิดเกิดครั้งแรกได้ · คำขอแบบ "ช่วยอธิบายว่าทำไม" ตอบเป็นคำอธิบาย ไม่ใช่ใบอนุญาตให้เปลี่ยนพฤติกรรม
-3. **ถาม "ทำไม" จนถึงจุดที่ค่าผิดเกิดขึ้นครั้งแรก** — ไม่ใช่จุดที่มันระเบิด
-4. **แก้ที่จุดนั้น** แล้วรันวงข้อ 1 ให้ผ่าน (green) · ถ้าการแก้เพิ่มเงื่อนไข ให้เพิ่มกรณีที่ "ต้องไม่เกิด" ด้วย ดู `targeted-fix` ขั้น 6
-5. **แก้แล้วพัง 3 ครั้งในอาการเดียว → หยุดแก้** — ครั้งที่ 4 ไม่ใช่การลองอีกที แต่เป็นสัญญาณว่าแก้ผิดชั้น (เข้าใจโครงผิด · สมมติฐานตั้งต้นผิด · ปัญหาอยู่ที่ออกแบบไม่ใช่ที่จุดนั้น) · เขียน 3 บรรทัด: ลองอะไรไปแล้ว · แต่ละครั้งพังต่างกันอย่างไร · สมมติฐานไหนที่ทุกครั้งเชื่อเหมือนกัน → ส่ง `brainstormer` หรือถามผู้ใช้ด้วยข้อมูลชุดนี้ ไม่เดาครั้งที่ 4 (แนวคิดจาก systematic-debugging ใน obra/superpowers · MIT)
+1. **Build a repeat loop before forming a hypothesis** — find one command that, when run, shows the symptom exactly as the user described it, character for character (red) · run it and see the real symptom once, and only then think about why · if you cannot reproduce it, you do not yet know what you are fixing
+   - Usable loops (from most direct): a failing test · a script or `curl` that hits the same thing the user hit · replay the log or file that causes the break · compare the output of the old and new versions · on-screen steps from the project's app-checking skill
+   - Squeeze it to be fast (seconds, not minutes) and deterministic (same result every round) · happens only sometimes → run N rounds or pin the random seed/time until the rate is high enough to see the effect of a fix · some step needs a person (tapping on a real device) → write a script that tells the person step by step and records the result back
+2. **EXPLORE before fixing, from evidence only** — read, run the loop from item 1, look at logs and history, without editing any file until you can name where the wrong value first appears · a request like "please explain why" is answered with an explanation, and is not a license to change behavior
+3. **Ask "why" until you reach the point where the wrong value first appears** — not the point where it blows up
+4. **Fix at that point**, then run the loop from item 1 until it passes (green) · if the fix adds a condition, also add a case that "must not happen", see `targeted-fix` step 6
+5. **Fix breaks 3 times on one symptom → stop fixing** — the 4th time is not another try but a signal that you are fixing the wrong layer (misunderstood structure · wrong starting hypothesis · the problem is in the design, not at that point) · write 3 lines: what was tried · how each attempt broke differently · which assumption every attempt believed the same → send `brainstormer` or ask the user with this information, and do not guess a 4th time (idea from systematic-debugging in obra/superpowers · MIT)
 
-**หาจุดเร็ว**
-- ข้อความ error · stack trace → หาบรรทัดแรกที่เป็นโค้ดของเรา (ส่วนของเราก่อน ส่วนของ framework ทีหลัง) · Python พิมพ์จุดที่พังไว้ล่างสุด ส่วน Java · Node.js · .NET พิมพ์ไว้บนสุด
-- ค้นข้อความ ตัวเลข หรือ error ที่ผิดแบบตรงตัว · มักเจอที่เดียว
-- "เมื่อก่อนใช้ได้" → ดูการแก้ครั้งล่าสุดของจุดนั้น (ประวัติฉบับ · งานโค้ด `git log -p <ไฟล์>` · `git blame`)
-- เบาะแสขอบเขต ("เฉพาะออเดอร์ใหญ่" · "หลัง login เท่านั้น") ช่วยตัดที่ค้นได้มาก
+**Find the spot fast**
+- Error message · stack trace → find the first line that is our code (our part first, the framework's part later) · Python prints the failing point at the bottom, while Java · Node.js · .NET print it at the top
+- Search for the wrong text, number or error exactly · you usually find it in one place
+- "It used to work" → look at the latest change at that spot (version history · for code work `git log -p <file>` · `git blame`)
+- Clues about scope ("only big orders" · "only after login") cut the search space a lot
 
-## ไม่ใช้เมื่อ
+## Do not use when
 
-รู้สาเหตุแล้ว เหลือแค่แก้ให้เล็กที่สุดตรงจุดที่ผู้ใช้ชี้ (feedback · stack trace ที่ชัด · regression ที่รู้ที่มา) → `targeted-fix`
+The cause is known and only the smallest possible fix at the spot the user pointed to is left (feedback · a clear stack trace · a regression with a known source) → `targeted-fix`
 
-## ตัวอย่าง
+## Examples
 
-| อาการ | แก้ที่อาการ (ห้าม) | แก้ที่ต้นเหตุ |
+| Symptom | Fix at the symptom (forbidden) | Fix at the root cause |
 |---|---|---|
-| ยอดรวมในรายงานไม่ตรงบัญชี | พิมพ์ทับยอดให้ตรง | หาว่าแถวไหนนำเข้าซ้ำหรือสูตรอ้างช่วงผิด แล้วแก้ที่ต้นทาง |
-| ลูกค้าได้ของช้าหลายราย | ขอโทษทีละราย | หาว่าขั้นไหนค้าง (สต็อกไม่ซิงก์ · ส่งช้า) แล้วแก้ขั้นนั้น |
-| หน้ารายงานพังเพราะ `date` เป็น null | `if (date) ...` ที่หน้าจอ | หาว่าทำไม import ไม่ใส่วันที่ แล้วพบว่าต้องแก้ parser ที่อ่านปี พ.ศ. ไม่ได้ |
+| The report total does not match the books | Type over the total to make it match | Find which row was imported twice or which formula references the wrong range, and fix at the source |
+| Several customers received goods late | Apologize one by one | Find which step is stuck (stock not synced · slow shipping) and fix that step |
+| The report page breaks because `date` is null | `if (date) ...` on the screen | Find why the import did not set the date, and discover the parser must be fixed because it cannot read Buddhist Era years |
 
-## ข้อยกเว้น
+## Exception
 
-แก้ชั่วคราวที่อาการได้ เมื่อระบบจริงกำลังเสียหายและต้องหยุดความเสียหายก่อน แต่ต้องจดใน `decision-log` ว่าแก้ชั่วคราว และเปิดงานแก้ต้นเหตุต่อทันที
+You may patch the symptom temporarily when the real system is being damaged and the damage must stop first, but record in `decision-log` that it is a temporary fix, and open the root-cause fix right away
 
-## ใช้คู่กับ
+## Use together with
 
-`targeted-fix` (ขั้นตอนแก้แบบเล็กที่สุด) · playbook `bug-fix` ของ `superuser` ใน plugin `software-development`
+`targeted-fix` (the smallest-fix procedure) · playbook `bug-fix` of `superuser` in plugin `software-development`
 
-## ที่มา
+## Sources
 
-- mattpocock/skills (MIT) · `skills/engineering/diagnosing-bugs/SKILL.md` · ดู 2026-11-10 (วงสั่งซ้ำที่ต้องเห็น red ก่อนมีสมมติฐาน)
-- mlflow (Apache-2.0) · `mlflow-agent-improvement/SKILL.md` · ดู 2026-11-10 (EXPLORE ไม่แก้ · คำขออธิบายไม่ใช่ใบอนุญาตเปลี่ยนพฤติกรรม)
+- mattpocock/skills (MIT) · `skills/engineering/diagnosing-bugs/SKILL.md` · seen 2026-11-10 (a repeat loop that must show red before any hypothesis)
+- mlflow (Apache-2.0) · `mlflow-agent-improvement/SKILL.md` · seen 2026-11-10 (EXPLORE without fixing · a request to explain is not a license to change behavior)

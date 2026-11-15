@@ -340,16 +340,18 @@ const CHECKER_TAIL = new RegExp('`(?:[\\w-]+:)?(' +CHECKER_NAMES.join('|') + ')`
 // งานลงมือ (สรุปผลตรวจให้หัวหน้าทีมเป็นงานของคนตรวจเอง จึงไม่อยู่ในรายการ)
 // "จดผล" คือรายงานผลตรวจ · "ทำงาน/ทำตาม" คือสิ่งที่ถูกตรวจ จึงไม่นับ
 const MAKE_VERBS = 'เขียน|ร่าง|แก้|เตรียม|คัด|ทิ้ง|จด(?!ผล)|สร้าง|ปรับ|เพิ่ม|ลบ|ทำ(?!งาน|ตาม)|ส่ง|ย้าย|อัปเดต|กรอก|นัด';
-const REVIEWER_MAKES = new RegExp('(^|แล้ว|และ|ซึ่ง|ช่วย|\\(|\\s)(' + MAKE_VERBS + ')');   // คำหลังชื่อคนตรวจ
-const THEN_MAKES = new RegExp('(แล้ว|และ)\\s*(' + MAKE_VERBS + ')');   // ในเนื้อขั้น: "ตรวจ…แล้วเตรียม" (ไม่นับ "· นัด" ที่เป็นรายการคำนาม)
+// playbook แปลเป็นอังกฤษแล้ว (2026-11-15) → กริยาชุดเดียวกันภาษาอังกฤษ · "record results" คือจดผลตรวจ จึงไม่นับ · ไม่มี "do" เพราะกว้างเกิน
+const MAKE_EN = '(?:write|draft|fix|edit|prepare|select|discard|record(?! (?:the )?results?)|create|build|adjust|add|delete|remove|make(?! sure)|send|move|update|fill(?: in)?|schedule)(?:s|es|ed|ing)?\\b';
+const REVIEWER_MAKES = new RegExp('(^|แล้ว|และ|ซึ่ง|ช่วย|\\(|\\s)(' + MAKE_VERBS + ')|(^|\\(|\\s)' + MAKE_EN, 'i');   // คำหลังชื่อคนตรวจ
+const THEN_MAKES = new RegExp('(แล้ว|และ)\\s*(' + MAKE_VERBS + ')|\\b(then|and)\\s+' + MAKE_EN, 'i');   // ในเนื้อขั้น: "ตรวจ…แล้วเตรียม" (ไม่นับ "· นัด" ที่เป็นรายการคำนาม)
 // ขั้นที่มีแต่คนตรวจ: ต้องมีงานตรวจใน 80 ตัวอักษรแรก (ตัดปลายทางลิงก์ออกก่อน) และไม่ขึ้นต้นด้วยงานลงมือ (รายการที่อนุญาต เพราะรายการที่ห้ามเลี่ยงด้วยการเลือกคำได้)
 // ข้อจำกัดที่ยังเหลือ: คำกริยานอกรายการหลัง "แล้ว · และ" ยังหลุดได้ — reviewer ตัวใหม่เป็นด่านสุดท้าย
-const CHECK_NEAR = /^.{0,80}(ตรวจ|พิสูจน์|รีวิว|ทวน|ยืนยัน|รัน|วัด|เทียบ|ทดสอบ|ให้คะแนน|สแกน|อ่าน|ลอง|กด|เช็ก)/;
-const MAKE_START = /^\d+\. (\*\*)?(เขียน|ร่าง|แก้|เตรียม|คัด|ทิ้ง|จด|สร้าง|ปรับ|เพิ่ม|ลบ|ทำ|สรุป)/;   // ไม่มี "ส่ง" เพราะ "ส่ง `reviewer`" คือหัวหน้าทีมส่งงาน
-const NEGATED = /(ไม่ต้อง|ห้าม|ไม่ให้)[^·)]*/g;
-const USER_WAIT = /(?<!ไม่)รอ(คำตอบ|ผู้ใช้|ให้ผู้ใช้)|คำยืนยัน[^·]{0,15}(ไปต่อ|ค่อย)|(?<!คำ|ไม่)ถาม(?!รวม)[^·]{0,20}ผู้ใช้/;   // "ถามรวมครั้งเดียวตอนเริ่ม" ได้
-const LEAD_MAKES = /^\d+\. (\*\*)?(แก้|เขียน|ร่าง|สร้าง|ปรับ)|ใคร: หัวหน้าทีม[\s—-]*(แก้|เขียน|ร่าง|สร้าง|ปรับ)/;
-const LEAD_RECORDS = /รายงาน|สรุป|บันทึก|CONTEXT\.md|BUILD-PLAN|IMPROVEMENTS|log/;
+const CHECK_NEAR = /^.{0,80}(ตรวจ|พิสูจน์|รีวิว|ทวน|ยืนยัน|รัน|วัด|เทียบ|ทดสอบ|ให้คะแนน|สแกน|อ่าน|ลอง|กด|เช็ก|\b(?:check|prove|verify|review|re-?read|confirm|run|measure|compare|test|score|scan|read|try|press|click)\w*)/i;
+const MAKE_START = /^\d+\. (\*\*)?((เขียน|ร่าง|แก้|เตรียม|คัด|ทิ้ง|จด|สร้าง|ปรับ|เพิ่ม|ลบ|ทำ|สรุป)|(?:do|drop|rewrite|write|draft|fix|edit|prepare|select|discard|record|create|build|adjust|add|delete|remove|make(?! sure)|summari[sz]e)\b)/i;   // ไม่มี "ส่ง · send" เพราะ "ส่ง `reviewer`" คือหัวหน้าทีมส่งงาน
+const NEGATED = /(ไม่ต้อง|ห้าม|ไม่ให้|\bdon't\b|\bdo not\b|\bnever\b|\bno need to\b|\bmust not\b)[^·)]*/gi;
+const USER_WAIT = /(?<!ไม่)รอ(คำตอบ|ผู้ใช้|ให้ผู้ใช้)|คำยืนยัน[^·]{0,15}(ไปต่อ|ค่อย)|(?<!คำ|ไม่)ถาม(?!รวม)[^·]{0,20}ผู้ใช้|\bwait(?:s|ing)? for (?:the )?(?:user|answer|reply)|\bask(?:s|ing)? (?:the )?user(?![^·]{0,40}\bonce (?:at|up)\b)/i;   // "ถามรวมครั้งเดียวตอนเริ่ม" · "ask … once at the start" ได้
+const LEAD_MAKES = /^\d+\. (\*\*)?(แก้|เขียน|ร่าง|สร้าง|ปรับ|(?:fix|rewrite|write|draft|create|build|adjust|edit)\b)|ใคร: หัวหน้าทีม[\s—-]*(แก้|เขียน|ร่าง|สร้าง|ปรับ|(?:fix|rewrite|write|draft|create|build|adjust|edit)\b)/i;
+const LEAD_RECORDS = /รายงาน|สรุป|บันทึก|CONTEXT\.md|BUILD-PLAN|IMPROVEMENTS|\blog\b|\breport|\bsummar|\brecord/i;
 function checkPlaybook(file, text, hasAgent) {
   const lines = text.replace(/\r\n/g, '\n').split('\n');
   if (!lines.some(l => /^## ขั้นตอน/.test(l))) { err(file, 'playbook ไม่มีหัวข้อ "## ขั้นตอน"'); return; }
@@ -373,7 +375,9 @@ function checkPlaybook(file, text, hasAgent) {
     const onlyCheckers = actors.length > 0 && actors.every(isChecker) && !/หัวหน้าทีม/.test(said);
     const checkerSays = [...said.matchAll(CHECKER_TAIL)].filter(t => isChecker(t[1])).map(t => t[3]).join(' ');
     const body = line.slice(0, at).replace(NEGATED, '').replace(/\]\([^)]*\)/g, ']');
-    const afterCheck = checkerSays.replace(/ตรวจว่า[^·]*/g, '').replace(/ตรวจ(ร่าง|ผล|ซ้ำ)?/g, '');   // หลัง "ตรวจว่า" คือสิ่งที่ถูกตรวจ · "ตรวจร่าง" คือตรวจ ไม่ใช่ร่าง
+    const afterCheck = checkerSays.replace(/ตรวจว่า[^·]*/g, '').replace(/ตรวจ(ร่าง|ผล|ซ้ำ)?/g, '')
+      .replace(/\b(?:then |and )?the user (?!would\b)\w+[^,·]*/gi, '')   // "then the user sends it" = งานของผู้ใช้ ไม่ใช่ของคนตรวจ
+      .replace(/\b(?:check|verif)\w* (?:that|whether)[^·]*/gi, '').replace(/\b(?:check|review|verif)\w*(?: (?:the )?(?:draft|results?))?/gi, '');   // หลัง "ตรวจว่า" คือสิ่งที่ถูกตรวจ · "ตรวจร่าง" คือตรวจ ไม่ใช่ร่าง
     if ((onlyCheckers && (MAKE_START.test(body) || !CHECK_NEAR.test(body) || THEN_MAKES.test(body))) || REVIEWER_MAKES.test(afterCheck))
       err(file, `ขั้น ${m[1]}: คนตรวจ (\`reviewer\` หรือผู้ตรวจเฉพาะทาง) ได้งานลงมือ — ขั้นที่มีแต่คนตรวจต้องเป็นงานตรวจ (ตรวจ · พิสูจน์ · รีวิว · รัน · วัด … ในต้นขั้น ไม่ขึ้นต้นด้วยงานลงมือ) และไม่มี "แล้ว/และ + ${MAKE_VERBS.replace(/\|/g, ' · ')}" · งานลงมือให้ agent สาขาทำ แล้วคนตรวจตรวจ`);
     let checkAt = said.search(/ผู้ใช้(อนุมัติ|ตรวจ)/), workAt = -1;
@@ -493,6 +497,14 @@ function selfTest() {
     [pb('1. ทำ · ใคร: `developer` ตัวใหม่\n2. ตรวจ · ใคร: `reviewer` ตัวใหม่\n3. ปรับโค้ดตามผลตรวจ · ใคร: หัวหน้าทีม'), 1],
     [pb('1. ทำ · ใคร: `developer` ตัวใหม่\n2. ตรวจ · ใคร: `reviewer` ตัวใหม่\n3. ปิดงาน · ใคร: หัวหน้าทีม — แก้ข้อที่เหลือ'), 1],
     [pb('1. ทำ · ใคร: `developer` ตัวใหม่\n2. ส่งให้ผู้ใช้ดู ได้คำยืนยันแล้วจึงไปต่อ · ใคร: หัวหน้าทีม\n3. ตรวจ · ใคร: `reviewer` ตัวใหม่'), 1],
+    // playbook ภาษาอังกฤษ (2026-11-15): กติกาเดียวกันต้องจับได้
+    [pb('1. Build it · ใคร: `developer` ตัวใหม่\n2. Check (ตรวจ) · ใคร: `reviewer` ตัวใหม่\n3. Fix what the review found · ใคร: หัวหน้าทีม'), 1],
+    [pb('1. Build it · ใคร: `developer` ตัวใหม่\n2. Check (ตรวจ) · ใคร: `reviewer` ตัวใหม่\n3. Write the report · ใคร: หัวหน้าทีม'), 0],
+    [pb('1. Build it · ใคร: `developer` ตัวใหม่\n2. Pick a path · ใคร: หัวหน้าทีม asks the user, then waits for the answer\n3. Check (ตรวจ) · ใคร: `reviewer` ตัวใหม่'), 1],
+    [pb('1. Collect questions · ใคร: หัวหน้าทีม (ask the user once at the start)\n2. Check (ตรวจ) · ใคร: `reviewer` ตัวใหม่'), 0],
+    [pb('1. Build it · ใคร: `developer` ตัวใหม่\n2. Pick a path · ใคร: หัวหน้าทีม asks the user which one\n3. Check (ตรวจ) · ใคร: `reviewer` ตัวใหม่'), 1],
+    [pb('1. Build it · ใคร: `developer` ตัวใหม่\n2. Check (ตรวจ) · ใคร: `reviewer` ตัวใหม่\n3. Rewrite the intro after review · ใคร: หัวหน้าทีม'), 1],
+    [pb('1. Build it · ใคร: `developer` ตัวใหม่\n2. Check (ตรวจ) · ใคร: `reviewer` ตัวใหม่\n3. Fix the login bug · ใคร: หัวหน้าทีม'), 1],
   ];
   const pbHit = pbCases.every(([text, n]) => { errors.length = 0; checkPlaybook('p.md', text, has); return errors.length === n; });
   console.log(`  ${pbHit ? '✅' : '❌'} playbook ใคร: · agent มีจริง · มีคนตรวจ`);
@@ -531,7 +543,17 @@ function selfTest() {
     && !rv('2. ลองกดทุกปุ่มใน mockup · ใคร: `reviewer` ตัวใหม่')
     && !rv('2. รันเทสต์แล้วจดผลลงตาราง · ใคร: `reviewer` ตัวใหม่')
     && rv('2. ตรวจเอกสาร แล้วส่งอีเมลถึงลูกค้า · ใคร: `reviewer` ตัวใหม่')
-    && rv('2. รอบตรวจ · ใคร: `reviewer` ตัวใหม่ (เขียนไฟล์แก้เอง)');
+    && rv('2. รอบตรวจ · ใคร: `reviewer` ตัวใหม่ (เขียนไฟล์แก้เอง)')
+    // ภาษาอังกฤษ (2026-11-15)
+    && rv('2. Write the fix · ใคร: `reviewer` ตัวใหม่')
+    && rv('2. Check (ตรวจ) the files, then fix what is wrong · ใคร: `reviewer` ตัวใหม่')
+    && rv('2. Review round · ใคร: `reviewer` ตัวใหม่ checks and writes a summary for the user')
+    && !rv('2. Check (ตรวจ) that every item is fixed · ใคร: `reviewer` ตัวใหม่')
+    && !rv('2. Run the tests and record results in the table · ใคร: `reviewer` ตัวใหม่')
+    && !rv('2. Draft the message · ใคร: หัวหน้าทีม drafts · `reviewer` ตัวใหม่ checks the draft, then the user sends it')
+    && !rv('2. Review round · ใคร: `reviewer` ตัวใหม่ checks that every item is fixed')
+    && rv('2. Review round · ใคร: `reviewer` ตัวใหม่ checks the page as the user would, then fixes the layout')
+    && rv('2. Do the fixes, then check · ใคร: `reviewer` ตัวใหม่');
   console.log(`  ${rvHit ? '✅' : '❌'} คนตรวจได้งานลงมือ (warranty-claim · side-project)`);
   if (rvHit) ok++;
   // แถวหลุดตารางเพราะบรรทัดว่างคั่น: brainstormer แถว "ไม่ทำ" · จำนวนช่องไม่ตรงหัว

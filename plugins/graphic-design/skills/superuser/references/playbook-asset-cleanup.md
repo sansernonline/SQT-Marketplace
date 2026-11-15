@@ -1,16 +1,16 @@
-# playbook · asset-cleanup — จัดไฟล์งานออกแบบ
+# playbook · asset-cleanup — organize design files
 
-ใช้เมื่อ: ไฟล์รก หาโลโก้ไม่เจอ · ชื่อแบบ final_v2_REAL.png
-skill หลัก: `asset-organize`
+Use when: files are messy, the logo cannot be found · names like final_v2_REAL.png
+Main skill: `asset-organize`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน (Steps) (copy into the todo exactly)
 
-1. สำรวจโฟลเดอร์ ทำรายการไฟล์ทั้งหมดพร้อมขนาดและวันที่ · ใคร: หัวหน้าทีม
-2. ตั้งโครงโฟลเดอร์และรูปแบบชื่อไฟล์ตาม `asset-organize` · ใคร: `brand-keeper` ตัวใหม่
-3. เขียนสคริปต์เปลี่ยนชื่อที่จด log ชื่อเดิม → ชื่อใหม่ และรันย้อนกลับได้ แล้วลองกับสำเนาก่อน · ใคร: `general-purpose` ตัวใหม่
-4. รันจริง ไฟล์ซ้ำให้ย้ายไป `_to_delete/` ไม่ลบทิ้ง · ใคร: หัวหน้าทีม
-5. ตรวจว่าจำนวนไฟล์ก่อนและหลังเท่ากัน และค้นโลโก้ด้วยชื่อแล้วเจอ · ใคร: `reviewer` ตัวใหม่
+1. Survey the folder and list every file with its size and date · ใคร: หัวหน้าทีม
+2. Set up the folder structure and file-name pattern per `asset-organize` · ใคร: `brand-keeper` ตัวใหม่
+3. Write a rename script that logs old name → new name and can run in reverse, and try it on a copy first · ใคร: `general-purpose` ตัวใหม่
+4. Run for real, and move duplicate files to `_to_delete/` instead of deleting them · ใคร: หัวหน้าทีม
+5. Check (ตรวจ) that the file count is the same before and after, and that searching for the logo by name finds it · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-ทุกไฟล์อยู่ในโครงใหม่ มี log ย้อนกลับได้ และจำนวนไฟล์ครบ
+Every file is in the new structure, there is a log that can be reversed, and the file count is complete

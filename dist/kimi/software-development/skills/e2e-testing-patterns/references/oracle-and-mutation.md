@@ -1,77 +1,77 @@
-# Oracle, เทียบโครงสร้าง และ mutation — ใช้เมื่อมีระบบเดิมให้เทียบ
+# Oracle, structure comparison and mutation — use when an existing system is available to compare against
 
-ที่มา: บทเรียนโคลนเว็บ 6 บท (Week 03 ของ Teaching_CWN2026) วัดบนแอป 5 เวอร์ชัน · ตัวเลขเป็นผลของงานนั้น ใช้เป็นตัวอย่าง ไม่ใช่เกณฑ์ · เนื้อหาเฉพาะเว็บที่ใช้โคลน (ข้อมูลเที่ยวบิน พอร์ต container) ไม่เอามา
+Source: lessons from a 6-chapter web-clone course (Week 03 of Teaching_CWN2026), measured on 5 app versions · the numbers are results of that job, used as examples, not as criteria · content specific to the cloned website (flight data, container ports) is not carried over.
 
-## 1 · ใช้ระบบเดิมเป็นเฉลย (differential testing)
+## 1 · Use the existing system as the answer key (differential testing)
 
-ทำสถานการณ์เดียวกันกับระบบเดิมและแอปของเรา แล้วเทียบผลทีละช่อง แทนการเขียนค่าคาดหวังมือ
+Run the same scenario on the existing system and on our app, then compare the results field by field, instead of writing expected values by hand.
 
-- ผลต้องตรงทุกช่องที่เทียบจึงผ่าน (ตัวอย่าง: จำนวน + ราคา + ชื่อ + เวลา ทีละตำแหน่ง)
-- ค่าคาดหวังดึงจากระบบเดิมตอนรัน ไม่ฝังตัวเลขในโค้ดเทียบ เว้นแต่พารามิเตอร์ที่มาจากโจทย์
-- สถานการณ์ที่ระบบเดิมตอบเองไม่ได้ ใช้ **เฉลยอนุมาน** (คำนวณเอง) ได้ แต่ต้องพิสูจน์วิธีกับกรณีที่มีเฉลยจริงก่อน · ถ้าลำดับเชื่อไม่ได้ ตัดสินจากจำนวนและชุดข้อมูล · เขียนบอกตรง ๆ ว่าเกณฑ์อ่อนกว่า (รอบจริง: S2 ผ่านทั้งที่มี 10 ใบ)
-- รายงานผลต่างเป็นตำแหน่ง แถว ช่อง ไม่ใช่แค่ตก · รอบจริง 4 สถานการณ์มีสาเหตุเดียว แก้จุดเดียว (ข้อมูล 310 บรรทัด โค้ด 7 บรรทัด) ได้ 4/8 → 8/8
-- ตัดสิ่งที่ตั้งใจให้ต่างก่อนเทียบ (แบนเนอร์ ชื่อแบรนด์ ลิงก์โดเมนอื่น ป้ายข้อมูลจำลอง)
+- The result passes only if every compared field matches (example: count + price + name + time, position by position).
+- Fetch expected values from the existing system at run time; do not hard-code numbers in the comparison code, except parameters that come from the task.
+- For a scenario the existing system cannot answer itself, an **inferred answer key** (computed by yourself) may be used, but first prove the method on cases that have a real answer key · if the order cannot be trusted, judge by count and data set · say plainly that the criterion is weaker (real round: S2 passed even though it had 10 tickets).
+- Report a difference as position, row, field, not just "failed" · in the real round, 4 scenarios had one cause, fixed in one place (310 lines of data, 7 lines of code), going from 4/8 → 8/8.
+- Remove what is meant to differ before comparing (banners, brand names, links to other domains, mock-data labels).
 
-### ถ้าต้องบันทึกแล้วเล่นซ้ำ (record-replay) ให้ระบบเดิมนิ่ง
+### If you must record and replay (record-replay), keep the existing system stable
 
-| กับดัก | ทำ |
+| Trap | Do |
 |---|---|
-| URL ไม่ตรงตัวอักษรกับที่บันทึก (`+` กับ `%20`) | `routeFromHAR` จับคู่ URL + method + body ตรงตัว · ต้องมี route เองสำหรับกรณีที่ไม่ตรง |
-| ค่าสุ่มใน URL หรือ body | จับคู่ POST ด้วย body และเลือกคีย์ที่นิ่ง |
-| ผลต่างกันทุกรอบ | ตรึงนาฬิกา (`context.clock.setFixedTime`) · ปิด telemetry · ตัดเน็ตด้วย abort ชั้นสุดท้าย |
-| นับแถวตอนกล่องตัวกรองยังเปิดอยู่ | รอให้จำนวนนิ่งก่อนนับ |
-| ลำดับ route | Playwright ลองตัวที่ลงทะเบียนทีหลังก่อน |
-| ไม่มีไฟล์บันทึก | ห้ามเปิดของจริงสดแทน เสียความนิ่ง |
+| The URL does not match the recorded one character for character (`+` vs `%20`) | `routeFromHAR` matches URL + method + body exactly · you need your own route for the cases that do not match |
+| Random values in the URL or body | match POST by body and pick stable keys |
+| Results differ every round | freeze the clock (`context.clock.setFixedTime`) · turn off telemetry · cut the network with a last-layer abort |
+| Counting rows while the filter box is still open | wait for the count to settle before counting |
+| Route order | Playwright tries the one registered later first |
+| No recording file | never open the real live site instead; stability is lost |
 
-- ตรวจว่านิ่งจริงด้วยรัน 3 รอบแล้วผลเหมือนกัน
-- ข้อจำกัด: ตอบได้เฉพาะที่บันทึกไว้ ถ้าจะให้ครอบคลุมต้องบันทึกให้ครบสถานการณ์ก่อน
-- ไฟล์บันทึกมี cookie และ token ห้าม commit ห้ามนำออกนอกเครื่อง
+- Check that it is really stable by running 3 rounds and getting the same result.
+- Limit: it can answer only what was recorded; for full coverage, record every scenario first.
+- The recording file contains cookies and tokens: do not commit it and do not take it off the machine.
 
-## 2 · เทียบโครงสร้างหน้าด้วย accessibility tree (`ariaSnapshot`)
+## 2 · Compare page structure with the accessibility tree (`ariaSnapshot`)
 
-เทียบพิกเซลเปราะและให้ผลหลอกได้ (พื้นขาวตรงกัน) การเทียบโครงสร้างบอกว่า "ขาดอะไร" เป็นรายการ
+Pixel comparison is brittle and can mislead (matching white backgrounds). Structure comparison tells you "what is missing" as a list.
 
-1. เก็บหน้าในสถานะเดียวกัน
-2. ตัดสิ่งที่ตั้งใจให้ต่างออกก่อนเทียบ (แบนเนอร์ ลิงก์โดเมนอื่น ชื่อแบรนด์ ป้ายข้อมูลจำลอง)
-3. ทำชื่อให้เป็นมาตรฐาน: ตัดสัญลักษณ์ ตัวเลขเป็น `#`
-4. ทำโทเคน `role | ชื่อ` (button, combobox, textbox นับเป็น control เดียวกันได้)
-5. คิด Jaccard ของโทเคน (ส่วนร่วม ÷ ส่วนรวม)
-6. เช็กรายการองค์ประกอบสำคัญที่เลือกจากระบบเดิม (รอบจริง 38 ข้อ) · ระบบเดิมต้องผ่านครบก่อน ไม่งั้นรายการผิดเอง
-7. คะแนนรวม = เฉลี่ยของสองตัว · ผลให้เป็นรายการสิ่งที่ยังขาด
+1. Capture the page in the same state.
+2. Remove what is meant to differ before comparing (banners, links to other domains, brand names, mock-data labels).
+3. Normalize names: strip symbols, turn numbers into `#`.
+4. Make `role | name` tokens (button, combobox, textbox can count as one control kind).
+5. Compute the Jaccard score of the tokens (intersection ÷ union).
+6. Check a list of key elements chosen from the existing system (38 items in the real round) · the existing system must pass all of them first, otherwise the list itself is wrong.
+7. Total score = average of the two · give the result as a list of what is still missing.
 
-ข้อควรระวัง: ภาษาไทยไม่เว้นวรรค ตัดคำด้วยช่องว่างพลาด ใช้ `Intl.Segmenter('th')` · ครึ่งหนึ่งของคะแนนขึ้นกับรายการที่เลือกเอง
+Caution: Thai has no spaces, so splitting by whitespace fails; use `Intl.Segmenter('th')` · half of the score depends on the list you chose yourself.
 
-## 3 · Mutation testing — สอบ "ชุดทดสอบ" ด้วยบั๊กจงใจ
+## 3 · Mutation testing — examine the test suite with deliberate bugs
 
-ฝังบั๊กทีละจุดในแอปที่ผ่านแล้ว แล้วดูว่าชุดทดสอบจับได้ไหม
+Plant bugs one at a time in an app that already passes, then see whether the test suite catches them.
 
-**นับ "จับได้" เป็น pass → fail เทียบฐาน ไม่ใช่ "ล้มอย่างน้อย 1 ข้อ"** ถ้าฐานมีข้อแดงค้างอยู่แล้ว เกณฑ์หลังจะผ่านอัตโนมัติ (รอบจริง: คะแนนดิบ 10/10 ทั้งสองชุด แต่เกณฑ์เข้ม acceptance 8/10 และ differential 4/10 · ตัวที่รอดเพราะข้อที่เกี่ยวแดงอยู่แล้ว) · ต้องทำฐานให้เขียวก่อนจึงอ่านคะแนนได้
+**Count "caught" as pass → fail against the baseline, not "at least 1 failure".** If the baseline already has a red test, the latter criterion passes automatically (real round: raw score 10/10 for both suites, but the strict criterion gave acceptance 8/10 and differential 4/10 · the survivors survived because the related test was already red) · make the baseline green first, then the score can be read.
 
-ขั้นตอน:
+Steps:
 
-1. คัดลอกโค้ดฐานเป็น `mutants/base` · เขียน `manifest.json` เก็บข้อความก่อนและหลังของทุกบั๊ก (ไฟล์ + บรรทัด) · แก้ 1 จุดต่อ 1 บั๊ก ไม่รวมกัน
-2. รันฐานก่อน บันทึกชุดข้อที่ล้ม
-3. ต่อบั๊ก: สร้าง compose project ชื่อแยก → รอ health endpoint (วนจำกัดรอบ) → รันทุกชุดทดสอบ → `down -v --remove-orphans` ใน `finally` เสมอ
-4. ไม่แก้ test ให้ชี้เป้าใหม่ ให้ห่อ: โหลด `endpoint.cjs` ด้วย `node --require` เปลี่ยนแค่ baseURL · หรือเขียนตัวรันเพิ่มที่เรียกสถานการณ์เดิม
-5. คำนวณทั้งเกณฑ์ดิบและเกณฑ์ pass → fail · บันทึกข้อที่ล้มเพิ่มรายตัว
-6. ตรวจ SHA-256 ของไฟล์ test ก่อนและหลัง · สร้างรายงานจากสคริปต์ ไม่เขียนมือ
-7. บอกผู้ใช้เรื่องเวลาล่วงหน้า (รอบจริง 11 รอบ × 2 ชุด ใช้ 46 นาที เพราะ build Docker ทุกรอบ)
+1. Copy the base code to `mutants/base` · write `manifest.json` holding the before and after text of every bug (file + line) · change 1 spot per bug, never combined.
+2. Run the baseline first and record the set of failing tests.
+3. Per bug: create a compose project with a separate name → wait for the health endpoint (loop with a limited count) → run every test suite → always `down -v --remove-orphans` in `finally`.
+4. Do not edit tests to point at a new target; wrap them: load `endpoint.cjs` with `node --require` to change only the baseURL · or write an extra runner that calls the same scenarios.
+5. Compute both the raw criterion and the pass → fail criterion · record the additionally failing tests one by one.
+6. Check the SHA-256 of the test files before and after · generate the report from a script, not by hand.
+7. Tell the user the duration in advance (real round: 11 rounds × 2 suites took 46 minutes because Docker is built every round).
 
-บั๊กที่ควรมี: เรียงกลับด้าน · ปิดตัวกรองทีละตัว · จำนวนผลขาด 1 · โหลดเพิ่มเหลือ 299 · `<` แทน `≤` · เวลาเลื่อน 1 ชั่วโมง · รหัสผิด
+Bugs worth having: reversed sorting · turning off filters one at a time · result count short by 1 · load-more ending at 299 · `<` instead of `≤` · time shifted by 1 hour · wrong code.
 
-ข้อสังเกต:
-- บั๊กที่รอด `<` แทน `≤` เพราะค่าขอบไม่มีในข้อมูลทดสอบ ต้องมี test ค่าขอบเฉพาะ
-- ชุดที่ต่างชนิดจับบั๊กคนละกลุ่ม (acceptance จับข้อมูลหลายตัวที่ differential จับใหม่ไม่ได้ ส่วน differential บอกแถวและช่องที่ผิด) ใช้คู่กัน
-- 80% และ 40% เป็นขอบล่าง ไม่ได้แปลว่าบั๊กที่ไม่มีข้อใหม่ล้มหลุดแน่นอน
-- รอบจริงยังไม่ได้รัน mutation ซ้ำกับเวอร์ชันที่ differential เขียวแล้ว และมีแค่ 10 บั๊ก
+Observations:
+- The surviving bug was `<` instead of `≤`, because the boundary value was not in the test data; a dedicated boundary-value test is needed.
+- Different kinds of suites catch different groups of bugs (acceptance catches several data bugs that differential cannot newly catch, while differential tells the wrong row and field) · use them together.
+- 80% and 40% are lower bounds; they do not mean that a bug with no newly failing test certainly slipped through.
+- The real round has not yet re-run mutation against the version where differential is green, and had only 10 bugs.
 
-## 4 · ตัวรันที่ใช้ซ้ำได้
+## 4 · Reusable runner
 
-- 1 test ต่อ 1 รายการ context ใหม่ทุกข้อ ไม่ retry ไม่ลดเกณฑ์ ห้ามแก้ test
-- กันออกนอกขอบเขต: route ยกเลิกคำขอ navigate ข้าม origin
-- locator ต้องเจาะจง: รอบจริงข้อสอบที่ผ่านเพราะเห็นแค่ 10 แถวพังทันทีเมื่อข้อมูลครบและเจอ 2 แถว
-- ตั้งสวิตช์โหมดหลักฐาน (เช่น `EVIDENCE=1`): ปกติรันเร็วหลาย worker ไม่อัดวิดีโอ โหมดหลักฐานลด worker เพิ่ม timeout และอัดวิดีโอ
-- ตัวหาองค์ประกอบกลาง (control/choice) ที่รองรับทั้ง `select` และเมนูกด ทำให้ชุดเทสต์เดียวรันกับสองแอปที่เขียนต่างกัน · project ต่างกันแค่ `baseURL`
-- เทสต์ต้องไม่เพิ่มของที่ไม่ลบ (สร้าง booking ใหม่ทุกครั้งที่รัน = ไม่ idempotent)
-- ป๊อปอัปบังการกด ต้องมีขั้นปิดป๊อปอัปก่อน · ดูภาพและ snapshot ของข้อที่ตก ไม่ใช่แค่ข้อความ error (รอบจริง "กดปุ่มไม่ได้" ที่แท้คือป๊อปอัปบัง สาเหตุราก: re-render ถอด listener ของปุ่ม Escape)
-- วัดหน้าเปล่าแล้วรอ timeout ทุกขั้น ใช้ 24 นาที ควร fail-fast
+- 1 test per item · a fresh context for every test · no retry · no lowering of criteria · never edit a test.
+- Keep it inside the scope: a route cancels navigate requests across origins.
+- Locators must be specific: in the real round, a test that passed because it saw only 10 rows broke at once when the data was complete and it found 2 rows.
+- Set an evidence-mode switch (e.g. `EVIDENCE=1`): normally run fast with many workers and no video; evidence mode lowers workers, raises timeouts and records video.
+- A neutral element finder (control/choice) that supports both `select` and a tap menu lets one test suite run against two apps written differently · the projects differ only in `baseURL`.
+- A test must not add things it does not delete (creating a new booking on every run = not idempotent).
+- A popup that blocks a click needs a step that closes the popup first · look at the screenshot and snapshot of the failed test, not only the error text (real round: "cannot click the button" was really a popup blocking; root cause: a re-render removed the Escape key listener).
+- Measuring an empty page and waiting for the timeout at every step took 24 minutes; it should fail fast.

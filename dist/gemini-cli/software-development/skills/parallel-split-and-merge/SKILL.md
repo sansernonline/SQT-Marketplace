@@ -3,23 +3,23 @@ name: parallel-split-and-merge
 description: Use when work splits into independent slices to fan out
 ---
 
-# parallel-split-and-merge — แบ่งงาน ทำพร้อมกัน รวมเป็นรายงานเดียว
-> ใช้คู่กัน: `principle-build-a-tool-not-handwork` (เขียนสคริปต์ทำงานซ้ำ) · `principle-small-verifiable-steps` (ตัดเป็นชิ้นเล็กที่ตรวจได้)
+# parallel-split-and-merge — split the work, run it in parallel, merge into one report
+> Use together with: `principle-build-a-tool-not-handwork` (write a script for repeated work) · `principle-small-verifiable-steps` (cut into small, checkable pieces)
 
-> ต่างจาก `parallel-attempts-pick-best` ตรงที่แต่ละตัวทำ**คนละชิ้น** ไม่ใช่แข่งทำชิ้นเดียวกัน
+> Differs from `parallel-attempts-pick-best` in that each worker does a **different piece**, not a race on the same piece.
 
-มาจาก `swarm` ของ pstack
+From pstack's `swarm`.
 
-## ขั้นตอน
+## Steps
 
-0a. **ดูภาพรวมก่อนแบ่ง** — สแกนถูก ๆ ด้วยสคริปต์ครั้งเดียว (manifest · โครงสร้าง · ขนาดเป็นบรรทัด · ใครอ้างถึงใคร) แล้วลงตารางชิ้น · ชนิด · ความหนา ก่อนตัดสินว่าแบ่งอย่างไร · แจกชิ้นหนาให้ระดับโมเดลที่สูงพอ ชิ้นบางหรือกลไกรวมกันให้ `haiku` เพื่อได้งานต่อ token สูงสุด · วิธีเต็มและตารางใน `superuser` → `references/team-roles.md` "แบ่งงาน" ข้อ 0 · ระดับ `model` + `effort` ต่อชิ้นตามบันไดของ `superuser` หัวข้อ 5
-0b. **วางของกลางก่อนแบ่ง** — โครงเรื่อง · รูปข้อมูล · แม่แบบ · ไฟล์กลาง (เช่น โครงรายงาน · คอลัมน์ของตารางสินค้า · interface ของโค้ด) ตัวหลักทำคนเดียว · ชิ้นเล็ก (ไม่ถึงหน้าเดียว) ไม่ต้องแยกออกไป ตัวหลักทำเองเร็วกว่า · ใบสั่งงานทุกตัวใช้แบบเดียวกันตาม `superuser` → `references/team-roles.md` "แบ่งงาน"
-1. **แบ่งให้ไม่ทับกัน** — เขียนตารางแบ่งงาน `| ชิ้น | ขอบเขต (บท · หมวดสินค้า · คำถามวิจัย · ไฟล์) | worker |` ทุกส่วนของงานอยู่ในชิ้นเดียวพอดี ไม่ซ้ำ ไม่ตก · ใช้ planner ให้ใส่ `scope` (รายการขอบเขตทั้งหมด) และ `covers` ต่อชิ้น สคริปต์ฟ้องข้อที่ตกหรือซ้ำ
-2. **รูปแบบรายงานเดียวกันทุกตัว** — กำหนดหัวข้อที่ต้องส่งกลับ เช่น `| สิ่งที่พบ | ที่มา (หน้า · ลิงก์ · ไฟล์:บรรทัด) | ความรุนแรง | หลักฐาน |` เพื่อรวมได้โดยไม่ต้องตีความ
-3. **ห้ามเขียนที่เดียวกัน** — งานอ่านอย่างเดียวปล่อยได้เลย งานที่สร้างหรือแก้ไฟล์ให้แต่ละตัวมีไฟล์หรือโฟลเดอร์ของตัวเอง (งานโค้ดใช้ git worktree ต่อตัว → ดูหัวข้อท้าย) ส่วนไฟล์สรุปรวมให้ตัวหลักเขียนคนเดียว
-4. **ขนาดชิ้นและจำนวนตัว** — ชิ้นละไม่เกินสิ่งที่ subagent ทำจบในรอบเดียว (ราว 5 โมดูล · 10 หน้าจอ · 5 บทสั้น) · จำนวนตัวเท่ากับจำนวนชิ้นที่ทำพร้อมกันได้ ไม่เกินที่งบรับไหว ชิ้นที่ต้องรอกันปล่อยตาม rank (`superuser` → `references/team-roles.md` "แบ่งงาน" ข้อ 4–6) · พร้อมกันเกิน 8 ตัว → ดูหัวข้อ "dynamic workflow" ข้างล่าง
-5. **ปล่อยทุกตัวในข้อความเดียว** รันเบื้องหลัง โดยส่งตำแหน่งไฟล์แทนเนื้อหา และเลือก agent ตามงาน (`reviewer` ตรวจ · `general-purpose` ทำหรือแก้ · `brainstormer` คิดทางเลือก · ถ้าลง plugin ที่มี agent เฉพาะทาง เช่น `developer` ก็ใช้ได้) · ตัวที่ทำงานแบบเดียวกันใช้ชนิด agent + โมเดล + effort เดียวกัน (ส่วน system prompt อาจได้ cache ร่วมกัน แต่ไม่รับประกัน)
-   ข้อความถึงแต่ละตัวใช้แบบเดียวกันทุกใบ ต่างแค่ช่อง (ใบสั่งงาน 5 ข้อของ `superuser` ย่อให้พอดีงานแบ่ง):
+0a. **Get the overall picture before splitting** — scan cheaply with one script run (manifest · structure · size in lines · who refers to whom), then fill in a table of piece · type · thickness before deciding how to split. Give thick pieces a high enough model level; give thin pieces or mechanical merge work to `haiku` for the most work per token. Full method and table in `superuser` → `references/team-roles.md` "แบ่งงาน" (splitting work) item 0. The `model` + `effort` level per piece follows the ladder in `superuser` section 5.
+0b. **Lay the shared things down before splitting** — storyline · data shape · template · shared files (such as a report outline · columns of the product table · a code interface). The main session does this alone. A small piece (under 1 page) need not be split off; the main session does it faster itself. Every worker's brief uses the same form per `superuser` → `references/team-roles.md` "แบ่งงาน".
+1. **Split with no overlap** — write a split table `| ชิ้น | ขอบเขต (บท · หมวดสินค้า · คำถามวิจัย · ไฟล์) | worker |` (piece | scope (chapter · product category · research question · file) | worker). Every part of the work sits in exactly one piece, none repeated, none dropped. With the planner, give a `scope` (the full list of scopes) and `covers` per piece; the script flags items that are dropped or repeated.
+2. **The same report format from every worker** — fix the fields to send back, such as `| สิ่งที่พบ | ที่มา (หน้า · ลิงก์ · ไฟล์:บรรทัด) | ความรุนแรง | หลักฐาน |` (finding | source (page · link · file:line) | severity | evidence), so they merge without interpretation.
+3. **Never write to the same place** — read-only work can be released at once. For work that creates or edits files, give each worker its own file or folder (code work uses one git worktree per worker → see the last section). The combined summary file is written by the main session alone.
+4. **Piece size and number of workers** — each piece no bigger than what a subagent finishes in one round (about 5 modules · 10 screens · 5 short chapters). The number of workers equals the number of pieces that can run at once, not more than the budget can take. Pieces that must wait for each other are released by rank (`superuser` → `references/team-roles.md` "แบ่งงาน" items 4–6). More than 8 at once → see the section "dynamic workflow" below.
+5. **Release every worker in one message**, in the background, passing file locations instead of content, and pick the agent by the job (`reviewer` checks · `general-purpose` does or fixes · `brainstormer` thinks up options · if a plugin with a specialist agent such as `developer` is installed, use it). Workers doing the same kind of work use the same agent type + model + effort (the system prompt may share a cache, but this is not guaranteed).
+   The message to each worker uses the same form for every brief, differing only in the fields (the 5-item brief of `superuser`, cut down to fit split work):
 
    ```
    ชิ้น: <ชื่อชิ้นจากตารางแบ่งงาน> — ส่วนหนึ่งของ <งานใหญ่>
@@ -28,16 +28,16 @@ description: Use when work splits into independent slices to fan out
    เสร็จเมื่อ: <สิ่งที่ตรวจได้ 1–3 ข้อ>   กติกาเดียวกัน: <skill หรือแม่แบบที่ทุกชิ้นต้องตาม>   ข้อจำกัดทั้งงาน: <คัดจาก docs/BRIEF.md>
    ส่งกลับ: ตามรูปแบบข้อ 2 ไม่เกิน 40 บรรทัด · บรรทัดแรกบอกผล เสร็จ · เสร็จ มีข้อกังวล · ขาดบริบท · ติด
    ```
-6. **รอให้ครบ** — ห้ามสรุปจากตัวที่เสร็จก่อน ถ้าตัวไหนล้มให้ปล่อยตัวใหม่ทำซ้ำ 1 ครั้ง ถ้ายังล้มอีกให้บันทึกว่าชิ้นนั้นไม่ได้ตรวจ
-7. **รวม** — ตัดข้อซ้ำ แล้วจัดกลุ่มสิ่งที่เป็นเรื่องเดียวกัน (หลายรายงานที่ต่างกันเล็กน้อย มักชี้ไปที่ต้นเหตุเดียวที่อยู่สูงกว่า) และยืนยันข้อที่ร้ายแรงด้วยตัวเองก่อนรายงาน · ผ่านเมื่อข้อร้ายแรงทุกข้อมี `ไฟล์:บรรทัด` (หรือหน้า · ลิงก์) ที่ตัวหลักเปิดดู
-   - **ผู้ตรวจอ้างอิง (referee)** — งานที่แบ่งตามโมดูลแล้วแต่ละตัวรายงานเป็นรายการ (สกัดกฎ · หาข้อบกพร่อง · สำรวจ) ส่ง agent ตัวใหม่ตรวจว่าทุกรายการมี `ไฟล์:บรรทัด` ที่เปิดแล้วตรงจริง · รายการที่ไม่มีอ้างอิง หรืออ้างแล้วไม่ตรง ตัวหลักทิ้งก่อนรวม ไม่ซ่อม (ใช้กับทุกชิ้นที่รายงานเป็นข้อค้นพบ รวมการวิเคราะห์ transcript ที่แยกเป็นมุมมอง)
-   - **ข้อสำคัญสูงผ่านผู้ตัดสิน 2 คน** — ข้อที่ถ้าผิดแล้วเสียหายมาก ส่ง judge ตัวใหม่ 2 ตัวอิสระจากกัน เห็นตรงกันทั้งคู่จึงคงไว้ · เห็นต่างกัน → ตัวหลักเปิดจุดนั้นเองตัดสิน
-   - **ประเมินจำนวน agent และ token ก่อนปล่อย** — จำนวนชิ้น × ขนาดต่อชิ้น (ข้อ 4) บอกผู้ใช้ในคำถามตอนเริ่มเมื่อรวมกันเกินราว 12 ชิ้น ไม่ถึงเกณฑ์นั้นปล่อยเลยซ้ำเองแล้ว ข้อไหนยังไม่ได้เปิดดู ติดป้าย `(ยังไม่ยืนยัน)` ในรายงาน
-8. **รายงานเดียว** — สรุป 1 ย่อหน้า · ตารางรวม · ชิ้นที่ไม่ได้ตรวจ (ถ้ามี) · `status-report`
+6. **Wait for all** — never conclude from the ones that finished first. If a worker fails, release a new one to redo it once; if it fails again, record that the piece was not checked.
+7. **Merge** — drop repeats, then group things that are the same issue (several reports that differ slightly often point to one higher root cause) and confirm the serious items yourself before reporting. It passes when every serious item has a `file:line` (or page · link) that the main session opened.
+   - **Referee** — for work split by module where each worker reports a list (rule extraction · defect finding · survey), send a fresh agent to check that every item has a `file:line` that was opened and really matches. Items with no reference, or a reference that does not match, are dropped by the main session before merging, not repaired (applies to every piece reported as findings, including transcript analysis split into viewpoints).
+   - **High-stakes items go through 2 judges** — for an item that does a lot of damage if wrong, send 2 fresh judges independent of each other; keep it only if both agree. If they disagree → the main session opens that spot and decides.
+   - **Estimate the number of agents and tokens before releasing** — number of pieces × size per piece (item 4). Tell the user in the opening question when the total passes about 12 pieces; below that threshold just release and repeat it yourself. Any item not yet opened gets the label `(ยังไม่ยืนยัน)` (not yet confirmed) in the report.
+8. **One report** — a 1-paragraph summary · a combined table · pieces not checked (if any) · `status-report`
 
-## planner — คิด rank สายวิกฤต และจำนวนลูกทีมให้
+## planner — works out rank, critical path and number of workers for you
 
-กราฟตั้งแต่ราว 5 ชิ้น หรือมีชิ้นที่รอกันหลายทอด ให้เขียน `plan.json` แล้วรัน `node scripts/plan.mjs plan.json` (ไม่ใช้ token · ไม่ใช้ library ภายนอก) · กราฟเล็กกว่านั้นคิดในตารางเองได้
+For a graph of about 5 pieces or more, or with pieces that wait on each other through several steps, write a `plan.json` and run `node scripts/plan.mjs plan.json` (uses no tokens · no outside library). A smaller graph can be worked out in the table yourself.
 
 ```json
 { "name": "เพิ่มระบบสมาชิก", "max_agents": 6, "tasks": [
@@ -46,45 +46,45 @@ description: Use when work splits into independent slices to fan out
   { "id": "d", "title": "ทดสอบรวม", "size": 15, "needs": ["b"], "solo": true, "step": "test" } ] }
 ```
 
-- `size` = token รวมโดยประมาณ หน่วยพัน · `scope` (ระดับแผน ไม่บังคับ) = รายการขอบเขตทั้งหมด เช่น `["บท 1", "บท 2"]` · `covers` = ข้อจาก `scope` ที่ชิ้นนี้รับ · `needs` = ชิ้นที่ต้องเสร็จก่อน · `owns` = ไฟล์ที่ชิ้นนี้เป็นเจ้าของ · `solo` = ทำคนเดียว · `step` ใช้ชื่อขั้นแบบเดียวกับ `model-scorecard` (plan · research · design · write · code · test · review · other) ชื่ออื่นได้ k = 1 โดยไม่เตือน · ใช้ดึงค่า k จาก log (`--log` ค่าเริ่ม `.claude/superuser/log`) · `max_agents` หรือ `--agents N` = เพดานจากงบ
-- **ตรวจก่อนคิด:** tasks ว่างหรือไม่ใช่รายการ · needs หรือ owns ไม่ใช่รายการ · size ไม่มากกว่า 0 · กราฟวน · รอชิ้นที่ไม่มี · id ซ้ำ · 2 ชิ้นเป็นเจ้าของไฟล์เดียวกันแต่ไม่ได้รอกัน · มี `scope` แล้วข้อไหนไม่อยู่ใน `covers` ของชิ้นใดเลย อยู่หลายชิ้น หรือ `covers` อ้างข้อที่ไม่มีใน `scope` → ออกด้วยรหัส 1 พร้อมรายการที่ต้องแก้
-- **ได้:** บรรทัด `คาด:` · สายวิกฤต · งานรวม · เวลาต่ำสุด · ตารางลำดับปล่อย (rank · เผื่อได้ตามวิธี CPM คิดแบบลูกทีมไม่จำกัด · ลูกทีมตัวที่ · เริ่ม → จบ · ไทม์ไลน์) · `--json` สำหรับเครื่องอ่าน · ขนานแล้วเร็วขึ้นไม่ถึง 1.3 เท่า สคริปต์แนะนำลูกทีมตัวเดียว (ค่าตั้งเอง ยังไม่ได้วัด)
-- **รูปแบบของ lab และคิว deep research ใช้ได้เลย:** `research/<งาน>/queue.json` ส่งให้ planner ได้ตรง ๆ · ไฟล์เป็น array เปล่าก็ได้ · `depends_on` = `needs` · `exclusive` = `solo` · `size` เป็นป้าย `S` `M` `L` ได้ (ค่าตั้งต้น 20k · 50k · 100k เป็นค่าตั้งเอง ยังไม่ได้วัด เปลี่ยนด้วยช่อง `"sizes": { "S": 30 }` แล้วค่า k จาก log ปรับต่อ)
-- **รูป:** `--mermaid` พิมพ์ flowchart ของ DAG ให้วางใน markdown (GitHub แสดงเป็นรูป · เส้นหนาสีส้ม = สายวิกฤต) · `--html <ไฟล์.html>` เขียนหน้าเดียวที่มี SVG ของ DAG และ Gantt ตามแผน เปิดในเบราว์เซอร์ได้เลย ไม่ต้องติดตั้งอะไร ถ้าต้องการ PNG ให้จับภาพจากหน้านั้น
-- **เทียบกับงานจริง:** `--actual` อ่าน `runs.jsonl` ใน log ของ superuser แล้วผูกงานลูกทีมกับชิ้นในแผนด้วย**คำอธิบายงานที่ขึ้นต้นด้วย id ของชิ้น** (ช่อง description ของเครื่องมือ Agent เช่น `a: ออกแบบตาราง`) · ได้ตารางว่าใครทำ model อะไร เริ่มและใช้เวลากี่นาที token จริงเทียบที่ประเมิน ผลตรวจ ชิ้นที่ยังไม่ปล่อย และชิ้นที่ใช้ token เกินที่ประเมิน 1.5 เท่า · ใส่คู่กับ `--html` ได้ Gantt ของที่เกิดจริงเพิ่มอีกรูป
-- **สายวิกฤตยาวแค่ไหนคือตัวกำหนดเวลา ไม่ใช่จำนวนชิ้น** · ตัวอย่างจาก `02_DAG_Planner` ของคอร์ส (เครื่องมือคำนวณ ไม่ได้วัดกับงานจริง): 2 โจทย์ 22 ชิ้นเท่ากัน ได้ 131 นาที กับ 194 นาที เพราะสายวิกฤตต่างกัน · สายวิกฤตเป็นตัวจำกัดอยู่ เพิ่มตัวทำงานไม่ช่วย ให้ตัด dependency (เช่น ทดสอบด้วยข้อความแทนเสียง) และย้ายชั้น deploy ออกจากสายวิกฤต
-- ตัวอย่างครบทั้ง 3 ขั้นพร้อมไฟล์และรูป: [`docs/examples/planner`](https://github.com/sansernonline/SQT-Marketplace/tree/main/docs/examples/planner) · `--now <เวลา ISO>` กำหนดเวลาตอนคิดโควตาให้ตัวอย่างได้ผลเดิมทุกครั้ง
-- ทดสอบ: `node scripts/plan.mjs --self-test` · แนวคิดจาก lab `02_DAG_Planner` และ `04_Multi_Agent_Orchestra` ของคอร์ส CWN2026 เขียนใหม่ ไม่ได้นำโค้ดมา
+- `size` = total tokens, roughly, in thousands · `scope` (plan level, optional) = the full list of scopes, such as `["บท 1", "บท 2"]` · `covers` = items from `scope` that this piece takes · `needs` = pieces that must finish first · `owns` = files this piece owns · `solo` = done by one worker alone · `step` uses the same step names as `model-scorecard` (plan · research · design · write · code · test · review · other); any other name gets k = 1 with no warning · used to pull the k value from the log (`--log`, default `.claude/superuser/log`) · `max_agents` or `--agents N` = the cap from the budget
+- **Checked before computing:** tasks empty or not a list · needs or owns not a list · size not greater than 0 · cyclic graph · waiting on a piece that does not exist · duplicate id · 2 pieces own the same file but do not wait on each other · with a `scope`, any item that is in no piece's `covers`, in several, or a `covers` that names an item not in `scope` → exits with code 1 with the list to fix
+- **Output:** a `คาด:` (estimate) line · critical path · total work · minimum time · release-order table (rank · slack by the CPM method (critical path method) computed as if workers were unlimited · worker number · start → end · timeline) · `--json` for machines · if parallelism speeds things up by less than 1.3 times, the script recommends a single worker (self-set value, not measured)
+- **The lab format and the deep research queue work as they are:** `research/<งาน>/queue.json` can go to the planner directly · the file may be an empty array · `depends_on` = `needs` · `exclusive` = `solo` · `size` may be the labels `S` `M` `L` (default 20k · 50k · 100k are self-set values, not measured; change with the field `"sizes": { "S": 30 }`, and the k value from the log adjusts further)
+- **Pictures:** `--mermaid` prints a flowchart of the DAG (directed acyclic graph) to paste into markdown (GitHub shows it as a picture · thick orange line = critical path) · `--html <file.html>` writes one page with an SVG of the DAG and a Gantt of the plan; open it in a browser, nothing to install; for a PNG, capture the page.
+- **Compare with the real work:** `--actual` reads `runs.jsonl` in superuser's log and ties worker tasks to plan pieces by a **task description that starts with the piece's id** (the description field of the Agent tool, such as `a: ออกแบบตาราง`). You get a table of who ran which model, when it started and how many minutes it took, real tokens against the estimate, check results, pieces not yet released, and pieces that used more than 1.5 times the estimated tokens. Add it with `--html` for one more picture, a Gantt of what really happened.
+- **The length of the critical path sets the time, not the number of pieces.** Example from `02_DAG_Planner` of the course (a calculation tool, not measured on real work): 2 briefs with the same 22 pieces gave 131 minutes and 194 minutes because their critical paths differ. When the critical path is the limit, adding workers does not help; cut dependencies (such as testing with text instead of voice) and move the deploy layer off the critical path.
+- A full example of all 3 steps with files and pictures: [`docs/examples/planner`](https://github.com/sansernonline/SQT-Marketplace/tree/main/docs/examples/planner) · `--now <ISO time>` fixes the time used when computing quota so the example gives the same result every time.
+- Test: `node scripts/plan.mjs --self-test` · idea from labs `02_DAG_Planner` and `04_Multi_Agent_Orchestra` of the CWN2026 course, rewritten, no code copied.
 
-## หลายบัญชี LLM · ตัวคุมที่วนรับ event · รัน worker แบบ `claude -p`
+## Multiple LLM accounts · event-driven orchestrator · running workers with `claude -p`
 
-ถ้าเปิด Claude Code หรือ Codex หลายตัวคนละบัญชี · ตัวหลักต้องคุม worker หลายตัวยาว ๆ · หรือสั่งรัน worker ด้วย `claude -p` ให้อ่าน [references/multi-account-and-orchestrator.md](references/multi-account-and-orchestrator.md) (แจกงานข้ามบัญชีตามโควตา · ตารางตัวคุม event · ข้อควรระวังของ `claude -p`)
+If several Claude Code or Codex sessions run under different accounts, the main session must run many workers over a long time, or you run workers with `claude -p`, read [references/multi-account-and-orchestrator.md](references/multi-account-and-orchestrator.md) (hand out work across accounts by quota · orchestrator event table · cautions for `claude -p`).
 
-## dynamic workflow — พร้อมกันเกิน 8 ชิ้น หรืองานซ้ำทีละไฟล์
+## dynamic workflow — more than 8 pieces at once, or repeated file-by-file work
 
-หัวข้อนี้คือ workflow script ของ Claude Code (สคริปต์สั่ง subagent จำนวนมาก) ซึ่งคนละเรื่องกับแบบ Dynamic ที่ปรับแผนระหว่างทาง (`agent-patterns` หัวข้อ 1)
+This section is about Claude Code's workflow script (a script that commands many subagents), which is a different thing from the Dynamic pattern that adjusts the plan along the way (`agent-patterns` section 1).
 
-ใช้เมื่อ: ตรวจทุกไฟล์ในโฟลเดอร์ด้วยเกณฑ์เดียวกัน · แปลงหรือย้ายไฟล์หลายสิบถึงหลายร้อยไฟล์ · วนแก้จนตัวตรวจผ่าน หรือ 2 รอบติดไม่คืบ · ค้นซ้ำจนรอบใหม่ไม่เจออะไรเพิ่ม · วิจัยที่ต้องเทียบแหล่งกัน (`/deep-research`)
+Use when: checking every file in a folder against one criterion · converting or moving tens to hundreds of files · looping fixes until the checker passes, or 2 rounds in a row make no progress · searching again until a new round finds nothing more · research that must compare sources (`/deep-research`)
 
-- Claude เขียน script ที่สั่ง subagent จำนวนมาก แล้วรันเบื้องหลัง · ผลกลางอยู่ในตัวแปรของ script → context หัวหน้าทีมเก็บแค่คำตอบสุดท้าย · หยุดแล้วต่อได้ในเซสชันเดิม
-- **เริ่มเมื่อผู้ใช้ขอเท่านั้น** — คำขอมีคำว่า `ultracode` หรือ "use a workflow" หรือผู้ใช้เปิด `/effort ultracode` ไว้ · แผน Pro ต้องเปิด Dynamic workflows ใน `/config` ก่อน → หัวหน้าทีมเสนอในคำถามตอนเริ่ม ไม่เริ่มเอง · งานที่รันแบบไม่มีคนดู (`claude -p`) คำว่า `ultracode` ใน prompt ไม่เริ่ม workflow · ผู้ใช้ไม่เอา → แบ่งเป็นรอบละไม่เกิน 8 ตัวตามขั้นตอนข้างบน
-- พร้อมกันได้ 16 ตัว (เครื่องที่ Central Processing Unit (CPU) น้อยได้น้อยกว่า) · สูงสุด 1,000 ตัวต่อรอบ · ขึ้นเตือน `Large workflow` เมื่อเกิน 25 agent หรือคาดว่าเกิน 1.5 ล้าน token · ใช้ token มากกว่าทำในบทสนทนาและกินโควตาเดียวกัน → ลองกับชิ้นเล็กก่อน (โฟลเดอร์เดียว) แล้วค่อยขยาย
-- งานที่แก้ไฟล์ สั่งให้แต่ละชิ้นทำในสำเนาแยกของตัวเอง (งานโค้ดดูหัวข้อถัดไป)
-- กติกาในหน้านี้ยังใช้ครบ: ของกลางก่อนแบ่ง · ตารางแบ่งงาน · รูปแบบรายงานเดียว · ยืนยันข้อร้ายแรงเอง · `reviewer` ตัวใหม่ตรวจผลรวม
-- ที่มา: [Claude Code: dynamic workflows](https://code.claude.com/docs/en/workflows) (ตรวจ 21 ต.ค. 2569)
+- Claude writes a script that commands many subagents and runs it in the background. Intermediate results stay in the script's variables → the lead's context keeps only the final answer. You can stop and resume in the same session.
+- **Start only when the user asks** — the request contains the word `ultracode` or "use a workflow", or the user turned on `/effort ultracode`. On the Pro plan, Dynamic workflows must be turned on in `/config` first → the lead offers it in the opening question and does not start on its own. For unattended runs (`claude -p`), the word `ultracode` in the prompt does not start a workflow. If the user declines → split into rounds of no more than 8 workers per the steps above.
+- Up to 16 at once (a machine with fewer Central Processing Unit (CPU) cores gets fewer) · at most 1,000 workers per run · a `Large workflow` warning appears above 25 agents or when more than 1.5 million tokens are expected · it uses more tokens than doing it in the conversation and draws on the same quota → try a small piece first (one folder), then expand.
+- For work that edits files, tell each piece to work in its own separate copy (for code work see the next section).
+- The rules on this page still all apply: shared things before splitting · split table · one report format · confirm serious items yourself · a fresh `reviewer` checks the merged result.
+- Source: [Claude Code: dynamic workflows](https://code.claude.com/docs/en/workflows) (checked 21 Oct 2026)
 
-## แยกที่ทำงานต่อตัว (งานโค้ด)
+## A separate workspace per worker (code work)
 
-งานโค้ด → ส่วนเพิ่มใน plugin `software-development` → `superuser` → `references/code-extensions.md`
+Code work → addition in plugin `software-development` → `superuser` → `references/code-extensions.md`
 
-## สิ่งที่ห้ามทำ
+## Do not
 
-| อย่าทำ | เพราะ |
+| Do not | Because |
 |---|---|
-| ปล่อย worker โดยไม่มีตารางแบ่งงาน | ทำซ้ำกันบางส่วน ตกหล่นบางส่วน ไม่มีใครรู้ |
-| ส่งต่อรายงานของ worker ตรง ๆ | ตัวหลักต้องรับผิดชอบผลรวม ต้องอ่านและยืนยันเอง |
-| ให้ worker หลายตัวแก้ไฟล์เดียวกัน | ผลชนกันและหายเงียบ |
+| Release workers with no split table | Some work is done twice, some is dropped, and no one knows |
+| Pass a worker's report on as it is | The main session is responsible for the merged result and must read and confirm it itself |
+| Let several workers edit the same file | Results collide and vanish silently |
 
-## ที่มา
+## Sources
 
-ภาพรวมก่อนแบ่ง: บทเรียนของโปรเจกต์นี้ 2026-11-10 (ไม่ได้มาจากภายนอก) · ผลิต/ใช้ตรงตัวและข้อจำกัดทั้งงาน: superpowers (MIT) · `skills/writing-plans` · ผู้ตรวจอ้างอิง ผู้ตัดสิน 2 คน และประเมินจำนวน agent: code-modernization (LICENSE มี ยังไม่ได้ระบุชนิด) · `commands/modernize-extract-rules.md` · ดู 2026-11-10
+Overall picture before splitting: lesson from this project 2026-11-10 (not from outside) · produces/consumes exactly and whole-job limits: superpowers (MIT) · `skills/writing-plans` · referee, 2 judges and estimating the number of agents: code-modernization (LICENSE exists, type not yet identified) · `commands/modernize-extract-rules.md` · seen 2026-11-10

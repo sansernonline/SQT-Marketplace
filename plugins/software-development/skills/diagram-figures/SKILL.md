@@ -3,156 +3,156 @@ name: diagram-figures
 description: Use when a document or slide needs a designed diagram
 ---
 
-> **สีหลักของรูป = สีหลักของโปรเจกต์** · หาตามลำดับในข้อ 5 ถ้าหาไม่เจอเลยจึงใช้ชุดสีประจำบ้าน `#2A78D6` ใน `polished-document-style/references/theme-colors.md` ("ค่าตั้งต้นประจำบ้าน")
+> **The figure's main colour = the project's main colour.** Look for it in the order given in item 5. Only if nothing is found, use the house palette `#2A78D6` from `polished-document-style/references/theme-colors.md` ("ค่าตั้งต้นประจำบ้าน", the house default).
 
 # Diagram Figures
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Pre-work gate (every time):** read the owner's theme → search live for a reference → 3 genuinely different directions → check `no-ai-look` before sending. Follow the section "ด่านก่อนลงมือ" (pre-work gate) of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search is for finding this piece's structure). Close the work with a line `ด่านก่อนลงมือ:` (pre-work gate:).
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write every line of wording per `human-writing`. This skill gives the format and structure; human-writing gives the way to write so people understand.
 
-skill นี้คือ house style เดียวของรูปที่ต้องดู "ออกแบบมา" ไม่ใช่ "generate มา" มี 3 engine ซึ่งใช้สี ไอคอน และกติกาชุดเดียวกัน
+This skill is the single house style for figures that must look "designed", not "generated". It has 3 engines that share one set of colours, icons and rules.
 
-## เลือกทาง
+## Choose a route
 
-| ต้องการ | ไปที่ |
+| Need | Go to |
 |---|---|
-| รูปในเอกสารงานใดก็ได้ (แผนธุรกิจ · ผังขั้นตอนของร้าน · ผังเงินครอบครัว · สรุปงานวิจัย · เอกสารซอฟต์แวร์ เช่น เอกสารความต้องการทางธุรกิจ (Business Requirements Document — BRD) · ข้อกำหนดความต้องการซอฟต์แวร์ (Software Requirements Specification — SRS) · ผังความสัมพันธ์ข้อมูล (Entity-Relationship — ER)) และรูปที่ต้องดูออกแบบมา สำหรับข้อเสนอลูกค้า · สไลด์ · งานพิมพ์ · เอกสารเซ็นรับ รวมถึงผังคลาวด์ที่ต้องมีโลโก้จริง | **skill นี้ — HTML layout engine** (ค่าเริ่มต้น · ข้อ 2) |
-| รูปแบบเดียวกัน แต่ต้อง generate จากข้อมูลหรือโค้ด เช่น ออกซ้ำทุกครั้งที่ข้อมูลเปลี่ยน หรือต้องคุมพิกัดบนกริดเอง | **skill นี้ — SVG/Python engine** ([references/engine-svg-python.md](references/engine-svg-python.md)) |
-| บล็อก Mermaid หลายสิบบล็อก (sequence · state · ER · gantt) ที่ต้องส่งในไฟล์ Word หรือ Portable Document Format (PDF) ให้หน้าตาเหมือนรูปวาดมือ | **skill นี้ — Mermaid engine** ([references/engine-mermaid.md](references/engine-mermaid.md)) |
-| ไดอะแกรมด่วนใน README · Pull Request · โน้ตในโค้ด (ไม่ใช่เอกสารโปรเจกต์) | `software-diagrams` (plugin `software-development`) (Mermaid ธีมประจำบ้าน · ถ้าเป็นผังคลาวด์ใน repo ที่ต้องมีโลโก้ ใช้ไลบรารี `diagrams` ใน skill เดียวกัน) |
-| ตัดสินใจว่าจะฝังรูปในไฟล์ markdown แบบไหน (inline SVG · ไฟล์ภาพ · ASCII · Mermaid) | [`markdown-visuals`](../markdown-visuals/SKILL.md) |
+| A figure in any work document (business plan · shop process chart · family money chart · research summary · software documents such as Business Requirements Document (BRD) · Software Requirements Specification (SRS) · Entity-Relationship (ER) diagram) and figures that must look designed, for client proposals · slides · print · sign-off documents, including cloud diagrams that need real logos | **This skill: HTML layout engine** (default · item 2) |
+| The same style, but generated from data or code, for example re-issued every time the data changes, or needing coordinates controlled on a grid | **This skill: SVG/Python engine** ([references/engine-svg-python.md](references/engine-svg-python.md)) |
+| Dozens of Mermaid blocks (sequence · state · ER · gantt) that must go into a Word or Portable Document Format (PDF) file looking like hand-drawn figures | **This skill: Mermaid engine** ([references/engine-mermaid.md](references/engine-mermaid.md)) |
+| A quick diagram in a README · Pull Request · code note (not a project document) | `software-diagrams` (plugin `software-development`) (Mermaid with the house theme; for a cloud diagram in a repo that needs logos, use the `diagrams` library in the same skill) |
+| Deciding how to embed a figure in a markdown file (inline SVG · image file · ASCII · Mermaid) | [`markdown-visuals`](../markdown-visuals/SKILL.md) |
 
-**กติกาเลือกทาง (ตรงกับ `software-diagrams` และ `markdown-visuals`):** markdown ใน repo ที่ทีมอ่าน (README · Pull Request · โน้ตในโค้ด) → Mermaid ผ่าน `software-diagrams` · เอกสารโปรเจกต์ (BRD · SRS · Functional Specification Document (FSD) · Architecture Decision Record (ADR) · ER · ผังขั้นตอน) หรือของที่คนนอกทีมอ่าน → skill นี้
+**Routing rule (matches `software-diagrams` and `markdown-visuals`):** markdown in a repo the team reads (README · Pull Request · code note) → Mermaid via `software-diagrams` · project documents (BRD · SRS · Functional Specification Document (FSD) · Architecture Decision Record (ADR) · ER · process charts) or anything read by people outside the team → this skill.
 
-ต้นทุนของ skill นี้คือ **เวลา** เพราะ 1 รูปต้องแก้หลายรอบ
-ดังนั้นให้ใช้กับรูปที่คนนอกทีมจะเห็น และเห็นซ้ำหลายครั้งเท่านั้น
+The cost of this skill is **time**, because 1 figure needs several rounds of fixes.
+So use it only for figures that people outside the team will see, and see repeatedly.
 
-## 1 · ตอบสามข้อก่อนเปิดไฟล์
+## 1 · Answer three questions before opening a file
 
-1. **รูปนี้ไปอยู่ที่ไหน** — สไลด์ 16:9 · หน้า A4 · หน้าจอ
-   แล้วกำหนด `.sheet{width:...}` ตามนั้น: สไลด์ 1600px · A4 แนวตั้ง 1240px · A4 แนวนอน 1750px
-2. **ผู้อ่านคือใคร** — ถ้าเป็นลูกค้าที่ไม่ใช่ช่าง ให้เขียนชื่อกล่องเป็นภาษาไทย ส่วนทีมเทคนิคอ่านชื่อจริงของ service
-3. **คำถามเดียวที่รูปนี้ตอบคืออะไร** — 1 รูปตอบ 1 คำถาม (กฎเดียวกับ `software-diagrams` (plugin `software-development`))
+1. **Where does this figure go?** Slide 16:9 · A4 page · screen.
+   Then set `.sheet{width:...}` to match: slide 1600px · A4 portrait 1240px · A4 landscape 1750px
+2. **Who is the reader?** For a non-technical client, write box names in Thai. A technical team reads the real service names.
+3. **What is the one question this figure answers?** 1 figure answers 1 question (same rule as `software-diagrams` (plugin `software-development`))
 
-## 2 · เลือกโครง
+## 2 · Choose a template
 
-มี 4 โครงในโฟลเดอร์ `assets/` ให้**คัดลอกไปแก้ อย่าเริ่มเขียนเอง** ส่วนรายละเอียดของแต่ละโครงอยู่ในไฟล์ที่ลิงก์ไว้
+There are 4 templates in the `assets/` folder. **Copy one and edit it; do not start writing your own.** Details of each template are in the linked files.
 
-| คำถามที่รูปตอบ | โครง | รายละเอียด |
+| Question the figure answers | Template | Details |
 |---|---|---|
-| "ระบบ ร้าน หรือองค์กรนี้คุยกับใครข้างนอกบ้าง" — ภาพรวมระดับบนสุด (ซอฟต์แวร์เรียก C4 model (Context · Containers · Components · Code) ระดับ 1) | [`figure-context.html`](assets/figure-context.html) | [layout-context.md](references/layout-context.md) |
-| "ของจริงอยู่ตรงไหน มีอะไรอยู่ข้างใน" — ฝ่าย · สถานที่ · เครื่อง (ซอฟต์แวร์คือ deployment · container) | [`figure-template.html`](assets/figure-template.html) | [layout-deployment.md](references/layout-deployment.md) |
-| "ใช้บริการอะไรของคลาวด์บ้าง" — ต้องมีโลโก้ Amazon Web Services (AWS) · Azure · Google Cloud ของจริง | [`figure-cloud.html`](assets/figure-cloud.html) | [layout-cloud.md](references/layout-cloud.md) |
-| "ของ 1 ชิ้น (ข้อความ · คำสั่งซื้อ · เงิน) วิ่งผ่านอะไรบ้าง ตามลำดับไหน" — ผังมีเลขลำดับ ①–⑥ · ผู้ใช้ → ช่องทาง → ชั้นภายใน → บริการภายนอกและข้อมูล | [`figure-flow.html`](assets/figure-flow.html) · [ตัวอย่าง](assets/figure-flow-example.png) | [layout-flow.md](references/layout-flow.md) |
+| "Who outside does this system, shop or organisation talk to?" — the top-level overview (software calls it C4 model (Context · Containers · Components · Code) level 1) | [`figure-context.html`](assets/figure-context.html) | [layout-context.md](references/layout-context.md) |
+| "Where is the real thing, and what is inside?" — departments · places · machines (in software: deployment · container) | [`figure-template.html`](assets/figure-template.html) | [layout-deployment.md](references/layout-deployment.md) |
+| "Which cloud services are used?" — must have real Amazon Web Services (AWS) · Azure · Google Cloud logos | [`figure-cloud.html`](assets/figure-cloud.html) | [layout-cloud.md](references/layout-cloud.md) |
+| "What does 1 item (a message · an order · money) pass through, and in what order?" — a chart with sequence numbers ①–⑥ · user → channel → internal layer → external services and data | [`figure-flow.html`](assets/figure-flow.html) · [example](assets/figure-flow-example.png) | [layout-flow.md](references/layout-flow.md) |
 
-ทุกโครงใช้สี ขนาด ฟอนต์ และสคริปต์ลากเส้นชุดเดียวกัน ต่างกันแค่การจัดวาง
+Every template uses the same colours, sizes, fonts and line-drawing script. They differ only in layout.
 
-## 3 · หัวรูปต้องมีครบหกอย่าง
+## 3 · The figure header needs all six parts
 
-โลโก้โปรเจกต์ · ชื่อ · คำขยาย 1 บรรทัด · เลขรูป · เวอร์ชันกับวันที่ · เจ้าของ
+Project logo · title · 1-line sub-title · figure number · version and date · owner
 
-โลโก้อยู่หน้าชื่อรูป (`<img class="logo">` ชี้ไป `assets/logo/` ของโปรเจกต์ · ไม่มีโลโก้ให้จดไว้ในรายงานว่าขาด) · คำขยายบอกว่า "ของจริงเป็นอย่างไร" ไม่ใช่ขยายชื่อ · **รูปที่ไม่มีวันที่ ไม่มีใครกล้าแก้และไม่มีใครกล้าเชื่อ**
+The logo goes before the figure title (`<img class="logo">` points to the project's `assets/logo/`; if there is no logo, note in the report that it is missing). The sub-title says "what the real thing is", not an expansion of the title. **A figure with no date is one nobody dares edit and nobody dares trust.**
 
-เหตุผลเต็มกับตัวอย่าง ผิด/ถูก ของคำขยาย → [`references/design-system.md`](references/design-system.md) หัวข้อ "หัวรูป" 
+Full reasoning and the wrong/right example of the sub-title → [`references/design-system.md`](references/design-system.md), section "Figure header".
 
-## 4 · ระบบขนาด
+## 4 · Size system
 
-**ขนาด ระยะ และมุม อยู่ใน `:root` ของ `assets/figure-template.html` แล้ว อย่าตั้งค่าใหม่เอง**
-ตัวเลขพวกนี้ปรับจนรูปดูตั้งใจแล้ว ถ้าขยับเมื่อไหร่ รูปในเอกสารเดียวกันจะดูไม่เท่ากัน
+**Sizes, spacing and corners are already in `:root` of `assets/figure-template.html`. Do not set new values yourself.**
+These numbers were tuned until figures look deliberate. If you move them, figures in the same document will look uneven.
 
-กรอบไอคอน 66px ขึ้นไป (ต่ำกว่า 56px รูปจะโหวง) · เส้นเชื่อมตั้งหรือนอนเท่านั้น หักมุมโค้ง ห้ามเส้นเฉียง
+Icon frame 66px or more (below 56px the figure looks hollow) · connectors vertical or horizontal only, bent with rounded corners, no diagonal lines
 
-ตารางค่าเต็ม (ตัวอักษร · ไอคอน · กล่อง · `.focus` · เส้น · ระยะ) → [`references/design-system.md`](references/design-system.md) หัวข้อ "ระบบขนาด" — เปิดเมื่อต้องปรับโครงหรือเขียนโครงใหม่
+Full value table (text · icon · box · `.focus` · line · spacing) → [`references/design-system.md`](references/design-system.md), section "Size system". Open it when adjusting a template or writing a new one.
 
-> **ขนาดตัวอักษรขึ้นกับที่ที่รูปจะไปวาง ไม่ใช่ผ้าใบ** — ตารางข้างบนเหมาะกับสไลด์และจอ · รูปที่จะวางในเอกสาร A4 ต้องคิดย้อนจากขนาดที่วาง: ตัวอักษรเล็กสุดหลังวาง ≥ 7 พอยต์ (point — pt) → `px ขั้นต่ำ = 0.247 × ความกว้างผ้าใบ(px) ÷ ความกว้างที่วาง(ซม.)` · ผ้าใบ 2000px บนหน้าแนวตั้ง 17 ซม. = 29px · บนหน้าแนวนอน 25.7 ซม. = 20px · ขยายฟอนต์แล้วกล่องต้องกว้างพอให้ชื่อไทยไม่ตัดกลางคำ
-> **2 ฉบับจากไฟล์ต้นทางเดียว:** ฉบับเต็ม (มีหัวรูป 6 อย่าง · ใช้เปิดเดี่ยว/สไลด์) และฉบับวางในเอกสาร (`?embed=1` ซ่อนหัวรูป เพราะคำบรรยายของเอกสารบอกแล้ว — หัวซ้ำทำให้รูปเล็กลงและดูรก) · สัดส่วนรูปให้กว้างพอวางเต็มหน้าแนวนอน (กว้าง ÷ สูง ≥ 1.46)
-> **รูปทั้งชุดใช้ CSS ไฟล์เดียว** (`figure-theme.css` ข้างไฟล์ต้นทาง) ที่ดึงสี ฟอนต์ และโลโก้จากตัวตนของโปรเจกต์ (`assets/logo/` · token ของ mockup) — แก้ที่เดียว รูปทุกใบเปลี่ยนตาม
-> **ด่านสวยของรูป** ไปพร้อมด่านสวยของเอกสาร (`branded-document-design` ข้อ 0.1) — เส้นทางหลักเส้นทึบสีเด่น · เส้นรองเทา · มีคำอธิบายสัญลักษณ์ · ลำดับการไหลมีเลขเมื่อมีมากกว่า 3 ขั้น
+> **Text size depends on where the figure will be placed, not on the canvas.** The table above suits slides and screens. A figure placed in an A4 document must be worked back from the placed size: the smallest text after placing must be ≥ 7 points (pt) → `minimum px = 0.247 × canvas width(px) ÷ placed width(cm)`. A 2000px canvas on a 17 cm portrait page = 29px; on a 25.7 cm landscape page = 20px. After enlarging the font, boxes must be wide enough that Thai names are not cut mid-word.
+> **2 versions from one source file:** the full version (with all 6 header parts, for standalone or slide use) and the in-document version (`?embed=1` hides the header because the document's caption already says it; a repeated header makes the figure smaller and cluttered). Make the aspect ratio wide enough to fill a landscape page (width ÷ height ≥ 1.46).
+> **The whole set of figures uses one CSS file** (`figure-theme.css` next to the source files) that pulls colour, font and logo from the project's identity (`assets/logo/` · mockup tokens). Change it in one place and every figure follows.
+> **The beauty gate for figures** runs together with the beauty gate for documents (`branded-document-design` item 0.1): main path is a solid line in the strong colour · secondary lines grey · a legend · flow order numbered when there are more than 3 steps.
 
-## 5 · ระบบสี
+## 5 · Colour system
 
-**สีหลักของรูปคือสีหลักของโปรเจกต์ (หรือของร้าน ครอบครัว งานนั้น)** ห้ามใช้สีจากตัวอย่างหรือจากรูปอ้างอิง หาตามลำดับนี้ เจอที่ไหนหยุดที่นั่น:
+**The figure's main colour is the project's main colour (or the shop's, the family's, that job's).** Never use a colour from an example or a reference image. Look in this order and stop at the first hit:
 
-1. `doc-theme` ในเอกสารของโปรเจกต์ (ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร")
-2. สีแบรนด์ที่โปรเจกต์ใช้จริง — ตัวแปรสีหลักในโค้ด (`--primary` · `--brand` · `--accent` ใน CSS · `primary` ใน Tailwind / ธีม UI · `colorPrimary` ในแอปมือถือ) · ชุดแบรนด์ (brand kit) · สีหลักในโลโก้
-   ดูสีพื้นจากที่เดียวกันด้วย (`--background` · `--bg` · `background` ใน Tailwind · โหมดมืดหรือสว่างที่แอปใช้เป็นหลัก) เพราะรูปและเด็คใช้สีพื้นตามดีไซน์ของโปรเจกต์
-3. ยังไม่มีเลย → **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `document` แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้
-4. ค้นสดไม่ได้ → ใช้ชุดสีประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` ไว้ในรายงาน แล้วทำต่อ ไม่หยุดถาม · เสนอโทนจาก [references/colour-by-domain.md](references/colour-by-domain.md) ไว้ในรายงานให้เลือกทีหลัง
+1. `doc-theme` in the project's documents (see `polished-document-style`, section "ธีมของเอกสาร" (document theme))
+2. The brand colour the project actually uses: main colour variables in code (`--primary` · `--brand` · `--accent` in CSS · `primary` in Tailwind / UI theme · `colorPrimary` in a mobile app) · brand kit · main colour in the logo
+   Read the background colour from the same places (`--background` · `--bg` · `background` in Tailwind · the dark or light mode the app mainly uses), because figures and decks use the background that follows the project's design.
+3. Nothing at all yet → **search for a reference first:** take the project's words and search live per `design-references` (plugin `superuser`), type `document`, then extract colours from the chosen work. The stored colour library is used when live search is not possible.
+4. Live search not possible → use the house palette `#2A78D6`, write `(รอยืนยัน)` (to be confirmed) in the report, and carry on without stopping to ask. Put a tone from [references/colour-by-domain.md](references/colour-by-domain.md) in the report to choose later.
 
-เจอสีจากข้อ 2 แล้วแต่ยังไม่มี `doc-theme` ให้ประกาศ `doc-theme` ด้วยค่านั้น เพื่อให้รูป เอกสาร และสไลด์ของโปรเจกต์ใช้สีเดียวกัน
+If you found a colour in item 2 but there is no `doc-theme` yet, declare a `doc-theme` with that value, so the project's figures, documents and slides use the same colour.
 
-ในโครง HTML แก้ที่ `--accent` ใน `:root` ที่เดียว (SVG/Python engine แก้ `ACCENT` ใน `theme.py`) · สีพื้นตามดีไซน์ของโปรเจกต์ → ต่อท้ายชื่อไฟล์ `#accent=<สีหลัก>&bg=<สีพื้น>` · ข้อยกเว้นที่ไม่เปลี่ยนตามแบรนด์ (สีโลโก้ผู้ให้บริการ · เทาโครงสร้าง) และ**สีไอคอน 7 กลุ่ม** (`t-neutral` · `t-edge` · `t-app` · `t-view` · `t-data` · `t-alert` · `t-warn`) พร้อมความหมาย → [`references/design-system.md`](references/design-system.md) หัวข้อ "ระบบสี" — สีที่ 8 แปลว่าใช้สีเพื่อความสวย
+In the HTML templates, change `--accent` in `:root` in one place (SVG/Python engine: change `ACCENT` in `theme.py`) · background that follows the project's design → append `#accent=<main colour>&bg=<background colour>` to the file name · exceptions that do not change with the brand (provider logo colours · structural grey) and the **7 icon colour groups** (`t-neutral` · `t-edge` · `t-app` · `t-view` · `t-data` · `t-alert` · `t-warn`) with their meanings → [`references/design-system.md`](references/design-system.md), section "Colour system". An 8th colour means colour is used for looks.
 
-**จำกัดจำนวนสี ไม่ได้จำกัดน้ำหนักของสี** — ในรูปที่ต้องดูออกแบบมา สีหลักต้องเห็นได้ทั่วทั้งรูป ไม่ได้อยู่แค่แถบหัว: ป้ายที่ต้องหาให้เจอเร็ว (เลขขั้น · ผู้รับผิดชอบ · สถานะ) ใช้พื้นทึบ · หัวการ์ดเป็นแถบพื้นสีทึบเต็มความกว้าง (ไม่ใช้แถบสีหนาข้างการ์ดมุมมน เพราะเป็นสัญญาณ AI ใน `no-ai-look`) · กล่องสรุปใช้พื้นสีเข้ม · สีพาสเทลใช้ได้แค่เป็นพื้นที่มีตัวหนังสือหรือขอบสีเข้มคู่กัน · ตรวจด้วยแกน "พลังของสี" ในด่านสวยของ `ui-craft` (`ui-craft/references/states-and-checks.md` (plugin `software-development`))
+**Limit the number of colours, not the weight of colour.** In a figure that must look designed, the main colour must be visible across the whole figure, not only in the header bar. Labels that must be found fast (step number · owner · status) use a solid fill · card headers are a full-width solid colour band (do not use a thick colour stripe beside a rounded card, because that is an AI signal in `no-ai-look`) · summary boxes use a dark fill · pastel colours are allowed only as a fill that has text or a dark border with it · check with the "colour power" axis in the beauty gate of `ui-craft` (`ui-craft/references/states-and-checks.md` (plugin `software-development`)).
 
-### 5.1 · รูปต้องมีจุดเด่น ไม่จืด
+### 5.1 · A figure needs a focal point, not flatness
 
-รูปที่อ่านออกแต่จืด = การ์ดขาวหน้าตาเท่ากันทุกใบ · เส้นบางเท่ากันทุกเส้น · ไม่มีอะไรดึงสายตา ผู้ใช้จะบอกว่า "ดีขึ้นแต่ไม่ว้าว" ทางที่ผ่านด่านสวยแล้ว:
+A figure that is readable but flat = white cards that all look alike · all lines the same thickness · nothing draws the eye. The user will say "ดีขึ้นแต่ไม่ว้าว" (better but not wow). Ways that pass the beauty gate:
 
-| ชิ้น | ทำอย่างไร |
+| Part | What to do |
 |---|---|
-| ผ้าใบ | ใช้พื้นเดียวกับตัวตนของแอป — แอปพื้นมืดก็ใช้รูปพื้นมืดทั้งใบ (ไม่ใช่กรอบขาวล้อมภาพมืด) · ลายจุดตารางจาง ๆ ทึบไม่เกิน 8% ให้มีมิติ |
-| เส้นทางหลัก | หนา 6px สีแบรนด์ + เรืองแสง (`filter: drop-shadow(0 0 8px <สีแบรนด์ 75%>)`) · เส้นรองบาง สีเทา ไม่เรือง — ต่างกันชัดจนไม่ต้องอ่านคำอธิบายสัญลักษณ์ |
-| จุดเด่น | การ์ด `.focus` 1 ใบต่อรูป: ขอบสีแบรนด์ 3px + แสงรอบ + ไอคอนพื้นสีแบรนด์ · การ์ดอื่นพื้นกลืนกับผ้าใบ |
-| ป้ายลำดับ | พื้นสีแบรนด์ ตัวอักษรสีพื้นผ้าใบ + แสงรอบเบา ๆ |
-| คอนทราสต์ | ข้อความรองบนพื้นมืด ≥ 7:1 (เทาอ่อน ไม่ใช่เทากลาง) |
-| ธีม | ทุกสีเป็นตัวแปรใน css ไฟล์เดียว · หัวลูกศรอ่านสีจากตัวแปร (`getComputedStyle`) ไม่ฝังค่าใน JavaScript (JS) · สีความหมาย (`t-app` `t-alert` `t-warn`) มีคู่สีของพื้นมืด · ห้ามใส่สีใน `style=""` ของไฟล์รูป |
+| Canvas | Use the same background as the app's identity. A dark app gets a figure that is dark all over (not a white frame around a dark image) · faint dot-grid pattern, at most 8% opaque, for depth |
+| Main path | 6px thick in the brand colour + glow (`filter: drop-shadow(0 0 8px <brand colour 75%>)`) · secondary lines thin, grey, no glow. The difference is clear enough that the legend need not be read |
+| Focal point | 1 `.focus` card per figure: 3px brand-colour border + surrounding glow + icon with brand-colour fill · other cards' fill blends into the canvas |
+| Sequence badge | Brand-colour fill, text in the canvas colour + a light glow |
+| Contrast | Secondary text on a dark fill ≥ 7:1 (light grey, not mid grey) |
+| Theme | Every colour is a variable in a single css file · arrowheads read colour from the variable (`getComputedStyle`), no values hard-coded in JavaScript (JS) · meaning colours (`t-app` `t-alert` `t-warn`) have a dark-background pair · no colour in `style=""` of figure files |
 
-**ลายจุดตาราง + เส้นเรืองแสง = house style ที่อนุมัติแล้ว** (ข้อยกเว้น "หน้าตาที่อนุมัติแล้วชนะเสมอ" ใน `no-ai-look`) · ตอนสแกนด้วย `slop_scan.py` ให้ติด `slop-ok` ที่ `grid-bg` และ `neon-glow` ของรูปเหล่านี้ พร้อมเหตุผลสั้น ๆ
+**Dot grid + glowing lines = an approved house style** (the exception "an approved look always wins" in `no-ai-look`) · when scanning with `slop_scan.py`, add `slop-ok` at `grid-bg` and `neon-glow` of these figures, with a short reason.
 
-**วิธีเลือกแนว:** เขียน 3 แนวเป็น css ทับ (override) ฉีดเข้ารูปจริง 2 รูปตอนเรนเดอร์ (`add_init_script` ก่อนสคริปต์วาดเส้นทำงาน) → วางเทียบกับรูปเดิม → ให้ผู้ตรวจที่ไม่ได้ทำให้คะแนน → แก้ theme css ไฟล์เดียวแล้วเรนเดอร์ทั้งชุด · รูปมืดในเอกสารหน้าขาวต้องเป็นการตัดสินใจที่จดไว้ (เช่น หน้าเปิดบทและปกก็มืด) ไม่ใช่เผลอ
+**How to choose a direction:** write 3 directions as override css, inject them into 2 real figures at render time (`add_init_script` before the line-drawing script runs) → place them next to the original → have a reviewer who did not do the work score them → edit the one theme css file and render the whole set. A dark figure in a white-page document must be a recorded decision (for example, chapter-opening pages and the cover are dark too), not an accident.
 
-## 6 · ไอคอน — ใช้ของทางการจากคลัง และวาดเองเฉพาะเมื่อไม่มี
+## 6 · Icons: use official ones from the library, and draw your own only when there is none
 
-**มีไอคอนทางการของบริการนั้นหรือไม่** เป็นตัวตัดสิน
+**Whether an official icon of that service exists** decides it.
 
-- **ถ้ามี** (AWS · Azure · Google Cloud · Kubernetes · เครื่องมือโอเพนซอร์สส่วนใหญ่) ให้ใช้ของทางการจาก `assets/`
-  คือ 205 ตัวที่คัดไว้ใน `assets/icons/` หรือคลังเต็มผ่าน `python assets/find-icon.py <ชื่อ>` ชุดเหล่านี้เผยแพร่มาเพื่อวาดผังสถาปัตยกรรมโดยเฉพาะ ส่วนรายการกลุ่ม คำสั่ง และสัญญาอนุญาตอยู่ใน [references/icons.md](references/icons.md)
-- **ถ้าไม่มี** หรือเป็นของที่เราสร้างเอง ให้วาดไอคอนเส้นเอง แล้วเขียนที่เชิงอรรถว่า
-  ไอคอนไม่ใช่โลโก้ทางการ (โครง `figure-template.html` มีบรรทัดนี้ให้แล้ว)
-- **ห้ามปนกัน**ในรูปเดียว เพราะโลโก้สีจัดข้าง ๆ ไอคอนเส้นบางทำให้รูปดูไม่เสร็จ
+- **If it exists** (AWS · Azure · Google Cloud · Kubernetes · most open-source tools), use the official one from `assets/`.
+  That means the 205 selected in `assets/icons/`, or the full library through `python assets/find-icon.py <name>`. These sets are published for drawing architecture diagrams. Group lists, commands and licences are in [references/icons.md](references/icons.md).
+- **If it does not exist**, or it is something we built ourselves, draw a line icon yourself, and write in the footnote that
+  the icon is not an official logo (the `figure-template.html` template already has this line).
+- **Never mix** them in one figure, because brightly coloured logos next to thin line icons make the figure look unfinished.
 
-ไอคอนเส้นที่วาดเอง: `viewBox 0 0 24 24` · `stroke-width 1.6` · ไม่มีพื้น · ปลายเส้นมน · ต้องอ่านออกที่ 24px (รายละเอียดเกิน 3 เส้นกลายเป็นก้อนดำ)
+Hand-drawn line icons: `viewBox 0 0 24 24` · `stroke-width 1.6` · no fill · round line caps · must be readable at 24px (detail beyond 3 strokes turns into a black blob)
 
-## 7 · สายเชื่อม
+## 7 · Wires
 
-**ในคอลัมน์เดียวกัน** ใช้ลูกศรลง `.down` · **ข้ามคอลัมน์** ใช้รายการ `WIRES` ท้ายไฟล์ (`{from, fs, to, ts, tp, label}`) ให้สคริปต์ลากหลังจัดหน้า — ห้ามเขียนพิกัดตายตัว
+**Within the same column** use the down arrow `.down`. **Across columns** use the `WIRES` list at the end of the file (`{from, fs, to, ts, tp, label}`) and let the script draw after layout. Never write fixed coordinates.
 
-**กติกาที่ห้ามพลาด:**
+**Rules you must not miss:**
 
-- เส้นตั้งหรือนอนเท่านั้น หักมุมโค้งด้วย `elbow()` (ใช้ `mx` เมื่อหลายเส้นใช้ช่องเดียวกัน) · ห้ามเส้นเฉียง
-- ป้ายต้องแคบกว่าช่องว่างระหว่างคอลัมน์ (ป้ายยาวขึ้น → เพิ่ม `gap` ของ `.stage`)
-- เส้นข้ามคอลัมน์ **ไม่เกิน 5 เส้น** ต่อรูป · ต่อเข้ากล่องเล็กที่สุดที่ถูกต้อง
-- ป้ายบอกว่า**อะไรไหลผ่าน** (`HTTPS 443`) ไม่ใช่ `เชื่อมต่อ` · ไม่มีอะไรจะบอกไม่ต้องใส่ป้าย · เส้นที่ยังไม่ต่อจริงใช้ `planned:true` พร้อมเชิงอรรถ
+- Vertical or horizontal lines only, bent with rounded corners via `elbow()` (use `mx` when several lines share one channel) · no diagonal lines
+- A label must be narrower than the gap between columns (longer label → increase `gap` of `.stage`)
+- **No more than 5** cross-column lines per figure · connect to the smallest box that is correct
+- A label says **what flows through** (`HTTPS 443`), not `เชื่อมต่อ` (connect) · if there is nothing to say, put no label · a line not yet really connected uses `planned:true` with a footnote
 
-ตัวอย่างโค้ด `WIRES` · ที่มาของแต่ละกติกา · `lp` · `tp` → [`references/wires.md`](references/wires.md) — เปิดเมื่อเขียน `WIRES`
+`WIRES` code example · where each rule comes from · `lp` · `tp` → [`references/wires.md`](references/wires.md). Open it when writing `WIRES`.
 
-### 7.1 · จัดวาง — ผังขั้นตอนและผังทีม
+### 7.1 · Layout: process charts and team charts
 
-ผู้ใช้ตั้งกติกานี้หลังเห็นรูปจริง (2026-10-28) เพราะรูปที่เส้นโค้งไปมาและกล่องกระจายไม่เป็นแถวอ่านแล้วงง
+The user set this rule after seeing a real figure (2026-10-28), because a figure with wandering curved lines and boxes scattered out of rows is confusing to read.
 
-- **อ่านจากบนลงล่าง** ชั้นละ 1 ระดับ: ทางเข้า → ตัวกลาง → ผู้รับงาน → ผล · ใช้ซ้ายไปขวาเฉพาะเมื่อมีแกนเวลา (Gantt)
-- **ตัวกลางอยู่กลางรูป** (หัวหน้าทีม · ระบบหลัก · กล่อง `.focus`) และจัดทั้งรูปไว้กลางเป็นหลัก ไม่ชิดซ้ายจนอีกฝั่งโล่ง
-- **ของที่อยู่ระดับเดียวกันอยู่ในกรอบเดียวกัน แถวเดียวกัน** และมีชื่อกลุ่มบนเส้นขอบ เช่น "ทางเข้า" หรือ "agent 8 ตัว"
-  - กรอบเป็นเส้นเดียว ไม่มีพื้น ไม่มีเงา
-  - การ์ดในกรอบเดียวกันสูงเท่ากัน
-  - มีมากจนแถวเดียวไม่พอ ให้ตัดเป็นหลายแถวในกรอบเดิม และจัดแถวสุดท้ายไว้กลาง
-- **ถ้าทุกกล่องในกลุ่มรับของเดียวกัน ให้ลากเส้นเดียวเข้ากรอบ** ไม่แตกเส้นไปทุกกล่อง · ถ้าแต่ละกล่องเป็นทางเลือกต่างกัน ให้ลากเส้นแยกต่อกล่อง แล้วย้ายชื่อกลุ่มไปขอบล่าง เส้นจะได้ไม่ทับชื่อ
-- **รางเส้นอยู่นอกกรอบ** — เส้นที่ออกหรือเข้ากลุ่มหักมุมในช่องว่างระหว่างกรอบ ไม่ทับชื่อกลุ่มหรือการ์ด
-- **ให้ดูนุ่มนวล** — ช่วงตรงของเส้นยังตั้งหรือนอน แต่ทุกมุมที่หักเป็นโค้งรัศมีราว 12 px (ช่วงสั้นกว่า 24 px ลดรัศมีตาม) · การ์ดมุมมน 14 px · กรอบกลุ่มมุมมน 20 px · ป้ายเป็นแคปซูล · ไม่ใช้มุมแหลมกับกล่องหรือเส้น
-- **คำไทยห้ามขาดกลางคำ** — ตัวตัดคำของเบราว์เซอร์แยกบางคำผิด และท่อนที่ได้อาจไม่ตรงขอบคำ (เช่น `เช็|กมิจฉา|ชีพ`) · เก็บรายชื่อคำเหล่านี้ไว้ (ทีละ · สต็อก · ร้านค้า · เช็ก) แล้วห้ามตัดบรรทัดตรงจุดใดที่อยู่กลางคำในรายชื่อ (ห่อด้วย `white-space:nowrap`) · ข้อความยาวที่ไม่มีในรายชื่อ ใส่ `<br>` เองตามข้อ 8 · เปิดรูปดูทุกการ์ด
-- **ทุกกล่องมีชื่อและคำอธิบาย 1 บรรทัด** ไม่ใช่มีแค่ไอคอน · ขั้นที่ต่อกันเป็นลำดับ (1 → 2 → 3) ไม่ต้องใส่กรอบ เพราะไม่ใช่ของระดับเดียวกัน
+- **Read top to bottom**, 1 level per tier: entry → middle → receiver → result · use left to right only when there is a time axis (Gantt)
+- **The middle element sits in the centre of the figure** (team lead · main system · `.focus` box), and the whole figure is centred as a rule, not pushed left leaving the other side empty
+- **Things at the same level go in the same frame, in the same row**, with a group name on the border line, such as "ทางเข้า" (entry) or "agent 8 ตัว" (8 agents)
+  - The frame is a single line, no fill, no shadow
+  - Cards in the same frame have equal height
+  - If there are too many for one row, split into several rows in the same frame and centre the last row
+- **If every box in a group receives the same thing, draw one line into the frame**, do not branch a line to every box · if each box is a different choice, draw a separate line per box and move the group name to the bottom border so the line does not cross the name
+- **Line channels are outside the frame.** Lines leaving or entering a group bend in the gap between frames and do not cross a group name or a card
+- **Keep it soft.** Straight runs of a line are still vertical or horizontal, but every bend is a curve of radius about 12 px (runs shorter than 24 px reduce the radius accordingly) · cards have 14 px corners · group frames have 20 px corners · labels are capsules · no sharp corners on boxes or lines
+- **Thai words must not break mid-word.** The browser's word breaker splits some words wrongly, and the pieces may not fall on word boundaries (for example `เช็|กมิจฉา|ชีพ`). Keep a list of these words (ทีละ · สต็อก · ร้านค้า · เช็ก) and never break a line at any point that is inside a word in the list (wrap with `white-space:nowrap`) · for a long text not in the list, put `<br>` yourself per item 8 · open the figure and look at every card
+- **Every box has a name and a 1-line description**, not only an icon · steps connected in a sequence (1 → 2 → 3) need no frame, because they are not the same level
 
-## 8 · ภาษาไทย
+## 8 · Thai language
 
-- **`line-height` ต่ำกว่า 1.5 ไม่ได้** เพราะสระบนกับวรรณยุกต์ซ้อนกัน 2 ชั้นจะโดนตัด ด้วยเหตุผลเดียวกันจึง **ห้ามกำหนดความสูงตายตัวให้กล่องข้อความ**
-- ฟอนต์เรียงตามนี้ `"Noto Sans Thai","IBM Plex Sans Thai",Tahoma,Loma` ซึ่งตั้งไว้ในโครงแล้ว
-รูปที่จะฝังในเด็ค (`StageDeck` · `html-slide-deck`) ให้ย้าย `"IBM Plex Sans Thai"` ขึ้นเป็นตัวแรก · เอกสาร Word ใช้ฟอนต์ไทยของแบรนด์ ถ้าไม่มีจึงใช้ Tahoma (`branded-document-design` ข้อ 2) รูปในนั้นต่างฟอนต์ได้ · ถ้าเครื่องไม่มีฟอนต์ไทยสักตัว สระจะผิดตำแหน่งแบบเงียบ ๆ ดังนั้น**ต้องเรนเดอร์ดูทุกครั้ง**
-- **ไทยไม่เว้นวรรคระหว่างคำ** เบราว์เซอร์จึงตัดบรรทัดกลางคำ ถ้าข้อความยาวให้ใส่ `<br>` เอง
-- ตัวอักษรไทยดูเล็กกว่าอังกฤษที่ขนาดเท่ากัน ดังนั้นคำอธิบายอย่าต่ำกว่า 12px
+- **`line-height` cannot go below 1.5**, because upper vowels and tone marks stacked in 2 layers get cut off. For the same reason, **never set a fixed height on a text box**.
+- Font order is `"Noto Sans Thai","IBM Plex Sans Thai",Tahoma,Loma`, already set in the templates.
+For a figure to be embedded in a deck (`StageDeck` · `html-slide-deck`), move `"IBM Plex Sans Thai"` to the first position · a Word document uses the brand's Thai font and falls back to Tahoma if it is missing (`branded-document-design` item 2); a figure inside it may use a different font · if the machine has no Thai font at all, vowels silently end up in the wrong position, so **always render and look**.
+- **Thai has no spaces between words**, so the browser breaks a line mid-word. If the text is long, put `<br>` yourself.
+- Thai characters look smaller than English at the same size, so keep descriptions at 12px or more.
 
-## 9 · เรนเดอร์แล้วเปิดดู — ห้ามข้าม
+## 9 · Render and look. Never skip
 
 ```bash
 pip install playwright && playwright install chromium
@@ -162,60 +162,60 @@ python docs/figures/render.py arch-01 --min-px 20             # เฉพาะ�
 python assets/render-figure.py figure.html figure.png 2       # ไฟล์เดียว (สไลด์ · ลองแนว)
 ```
 
-- **script render อยู่ที่ `docs/figures/render.py` ข้างโฟลเดอร์ `src/`** — เป็นเครื่องมือของโปรเจกต์ที่ต้องใช้ทุกครั้งที่แก้รูป ห้ามเก็บไว้ใน `_to_delete/` หรือ scratchpad (ล้างโฟลเดอร์ชั่วคราวแล้วจะเหลือต้นฉบับที่ render ไม่ได้) · ห้ามลบ `docs/figures/src/` เพราะ .png เป็นแค่ผลลัพธ์
-- แบบโฟลเดอร์ได้ 2 ฉบับต่อรูป (ฉบับเต็ม + ฉบับวางในเอกสาร `?embed=1` ตามข้อ 4) และตรวจข้อความให้: ตัวอักษรเล็กกว่า `--min-px` · ชื่อหรือป้ายตกบรรทัด · ข้อความล้นกล่องหรือผ้าใบ · ป้ายทับกัน → `problems: 0` และ exit 0 จึงผ่าน
+- **The render script lives at `docs/figures/render.py`, next to the `src/` folder.** It is a project tool needed every time a figure is edited. Never keep it in `_to_delete/` or a scratchpad (when the temp folder is cleared you are left with sources that cannot be rendered) · never delete `docs/figures/src/`, because .png files are only output
+- The folder mode produces 2 versions per figure (full version + in-document version `?embed=1` per item 4) and checks the text for you: text smaller than `--min-px` · a name or label that wrapped · text overflowing a box or the canvas · overlapping labels → `problems: 0` and exit 0 means pass
 
-ใช้ตัวคูณ **2** เสมอ เพราะตัวคูณ 1 ได้ภาพเบลอเมื่อเอาไปขยายในสไลด์
+Always use multiplier **2**, because multiplier 1 gives a blurry image when enlarged in a slide.
 
-แล้วรันตัวตรวจเรขาคณิต ซึ่งจับเส้นเฉียง มุมที่ไม่ใช่มุมโค้ง ป้ายทับกัน และเส้นพาดผ่านตัวหนังสือ:
+Then run the geometry checker, which catches diagonal lines, corners that are not rounded, overlapping labels, and lines crossing text:
 
 ```bash
 python scripts/check-figure-geometry.py docs/figures/src     # exit 0 = ผ่าน
 python scripts/check-figure-source.py docs/figures/src       # ทุกรูปเริ่มจากโครงของ skill นี้
 ```
 
-จากนั้นเปิดไฟล์ภาพดูด้วยตา แล้วไล่ตามนี้:
+Then open the image file and look with your own eyes, going through this list:
 
-- [ ] สายข้ามคอลัมน์มีหัวลูกศรครบทุกเส้นไหม · เส้นพาดทับกล่องหรือทับตัวหนังสือไหม
-- [ ] ป้ายบนเส้นอ่านออกไหม และไม่ทับกันเองไหม
-- [ ] ข้อความไทยครบไหม สระหรือวรรณยุกต์หายไหม มีคำไหนถูกตัดกลางคำไหม
-- [ ] กล่อง `.focus` มีกล่องเดียวจริงไหม · หัวรูปมีครบ 6 อย่างไหม · โลโก้ขึ้นจริงไหม
-- [ ] ย่อรูปลงเหลือความกว้าง 25% แล้วยังแยกออกไหมว่าอะไรอยู่ตรงไหน
-- [ ] วัดตัวอักษรเล็กสุดใน HTML แล้วคิดเป็น pt ตามขนาดที่จะวางจริง (ข้อ 4) ได้ ≥ 7pt
-- [ ] คนที่ไม่เคยเห็นระบบนี้ ตอบคำถามต้นทางได้ไหม
+- [ ] Does every cross-column wire have an arrowhead? Does any line cross a box or text?
+- [ ] Are the labels on lines readable, and do they not overlap each other?
+- [ ] Is the Thai text complete? Are any vowels or tone marks missing? Is any word cut mid-word?
+- [ ] Is there really only one `.focus` box? Does the header have all 6 parts? Does the logo actually show?
+- [ ] Shrink the figure to 25% width. Can you still tell what is where?
+- [ ] Measure the smallest text in the HTML and convert it to pt at the real placed size (item 4): is it ≥ 7pt?
+- [ ] Can someone who has never seen this system answer the original question?
 
-## 10 · กับดักที่เจอจริง
+## 10 · Pitfalls found in practice
 
-ถ้ารูปออกมาผิด เช่น หัวลูกศรหาย เส้นลากผิดกล่อง สระไทยหาย หรือป้ายทับกล่อง ให้เปิดตารางอาการ → สาเหตุ → ทางแก้ใน [references/pitfalls.md](references/pitfalls.md) ก่อนแก้เอง
+If a figure comes out wrong, for example a missing arrowhead, a line drawn to the wrong box, missing Thai vowels, or a label overlapping a box, open the table of symptom → cause → fix in [references/pitfalls.md](references/pitfalls.md) before fixing it yourself.
 
 ## 11 · Anti-patterns
 
-- **ใช้ skill นี้กับรูปในทีม** — เสียเวลาหลายรอบเพื่อความสวยที่ไม่มีใครต้องการ
-- **ใช้โลโก้ทางการในลักษณะที่ดูเหมือนผู้ให้บริการรับรอง** — ข้อ 6 และ [icons.md](references/icons.md)
-- **กล่อง `.focus` 2 กล่อง** — แปลว่ารูปตอบ 2 คำถาม
-- **ส่งไฟล์ HTML ให้ลูกค้า** — ให้ส่ง PNG ส่วนไฟล์ HTML คือแหล่งที่มา เก็บไว้ใน repo
-- **ไม่เก็บไฟล์ HTML** — ปีหน้าต้องแก้รูป แล้วต้องวาดใหม่ทั้งใบ
-- **รูปไม่มีวันที่และเจ้าของ**
-- **เส้นเฉียงหรือมุมแหลม** — เส้นต้องตั้งหรือนอน หักด้วยมุมโค้ง (ข้อ 4 และ 7)
-- **ของระดับเดียวกันกระจายคนละแถวหรือไม่มีกรอบ · ตัวกลางชิดขอบรูป** — จัดตามข้อ 7.1
-- **ไอคอนต่างสไตล์ปนกัน** — เส้นบางปนเส้นหนา ปนไอคอนทึบ
-- **รูปจืด: การ์ดขาวเท่ากันทุกใบ เส้นบางเท่ากันทุกเส้น** — อ่านออกแต่ไม่มีจุดเด่น ทำตามข้อ 5.1
+- **Using this skill for in-team figures.** It wastes several rounds on beauty nobody needs.
+- **Using an official logo in a way that looks like the provider endorses it.** Item 6 and [icons.md](references/icons.md)
+- **2 `.focus` boxes.** It means the figure answers 2 questions
+- **Sending an HTML file to the client.** Send a PNG; the HTML file is the source, keep it in the repo
+- **Not keeping the HTML file.** Next year the figure needs editing and must be redrawn from scratch
+- **A figure with no date and owner**
+- **Diagonal lines or sharp corners.** Lines must be vertical or horizontal, bent with rounded corners (items 4 and 7)
+- **Same-level things scattered across rows or without a frame · the middle element pushed to the figure's edge.** Lay out per item 7.1
+- **Mixed icon styles.** Thin lines mixed with thick lines, mixed with solid icons
+- **A flat figure: all cards white and alike, all lines equally thin.** Readable but with no focal point. Follow item 5.1
 
-## 12 · เชื่อมกับ skill อื่น
+## 12 · Connect to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use with |
 |---|---|
-| ไดอะแกรมด่วนใน markdown ของ repo ที่ทีมอ่าน (README · Pull Request · โน้ตในโค้ด) | `software-diagrams` (plugin `software-development`) |
-| เลือกวิธีฝังรูปในไฟล์ markdown | `markdown-visuals` |
-| เอารูปไปวางในสไลด์ | `presentation-design` |
-| เอารูปไปวางในไฟล์ Word / PDF | `branded-document-design` |
-| รูปในเอกสาร SRS | `srs-writing` (plugin `software-development`) |
-| สีและระยะห่างของหน้าจอแอป (คนละระบบกับรูปนี้) | `ui-craft` (plugin `software-development`) |
+| A quick diagram in markdown of a repo the team reads (README · Pull Request · code note) | `software-diagrams` (plugin `software-development`) |
+| Choose how to embed a figure in a markdown file | `markdown-visuals` |
+| Put a figure in a slide | `presentation-design` |
+| Put a figure in a Word / PDF file | `branded-document-design` |
+| A figure in an SRS document | `srs-writing` (plugin `software-development`) |
+| Colour and spacing of app screens (a different system from this figure) | `ui-craft` (plugin `software-development`) |
 
-## ไม่ให้ดูเหมือน AI ทำ
+## Not looking AI-made
 
-ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ทุกงานต้องผ่านด่านตา 3.2 ด้วย (หน้าเว็บตอบเพิ่มข้อ 10–14) เพราะสคริปต์ 0 ข้อยังไม่ใช่ผ่าน · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
+Before sending, go through item 3 of `no-ai-look`: for HTML work, run its script · every job must also pass the eye gate 3.2 (web pages also answer items 10–14), because 0 findings from the script is not yet a pass · the prohibitions in this file are specific to this work; the full list for every medium is there.
 
-## ตัวย่อ
+## Abbreviations
 
 HTML — HyperText Markup Language · PNG — Portable Network Graphics · SVG — Scalable Vector Graphics · CSS — Cascading Style Sheets

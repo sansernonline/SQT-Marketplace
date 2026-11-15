@@ -3,82 +3,82 @@ name: youtube-thumbnail
 description: Use when a YouTube video needs a thumbnail
 ---
 
-# youtube-thumbnail — ภาพปกคลิป YouTube ที่อ่านออกบนจอมือถือ
+# youtube-thumbnail — YouTube video thumbnails that stay readable on a phone screen
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the owner's theme → search live references → 3 truly different directions → check `no-ai-look` before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colours and fonts; the search is for this piece's layout) · close the work with the line `ด่านก่อนลงมือ:`
 
-อยู่ใน plugin `graphic-design` · ถ้อยคำเขียนตาม `human-writing` · เจ้าของคือ agent `social-creator` · ขนาดของทุกแพลตฟอร์มอยู่ที่ `social-formats` ไฟล์ `references/platform-sizes.md` หัวข้อ YouTube ซึ่งเก็บลิงก์ให้ค้นสด ไม่เก็บตัวเลข
+Lives in plugin `graphic-design` · wording follows `human-writing` · owned by agent `social-creator` · sizes for every platform are in `social-formats`, file `references/platform-sizes.md`, YouTube section, which keeps links for live lookup and no numbers.
 
-> **กฎข้อเดียว:** ปกต้องอ่านรู้เรื่องที่ขนาดเท่าแสตมป์ · ย่อภาพเหลือกว้าง 168 px (ราวขนาดในรายการแนะนำบนมือถือ · ค่าของเรา ยังไม่ได้วัดกับแอปทุกรุ่น) แล้วยังอ่านคำบนปกออกและรู้ว่าคลิปเรื่องอะไร จึงส่งได้
+> **The one rule:** a thumbnail must be understood at stamp size · shrink the image to 168 px wide (about the size in the recommended list on mobile · our own value, not yet measured on every app version) and if you can still read the words on it and tell what the video is about, it can be sent.
 
-## ใช้เมื่อ
+## Use when
 
-- ทำภาพปกคลิป YouTube ใหม่ หรือแก้ปกที่คนไม่กด
-- ข้อความไทยบนปกเล็กไป จม หรือวรรณยุกต์ชนกัน
-- อยากทดสอบหลายปกว่าแบบไหนดีกว่า
+- Making a new YouTube thumbnail, or fixing a thumbnail people do not click
+- Thai text on the thumbnail is too small, sinks into the background, or has tone marks colliding
+- Wanting to test several thumbnails to see which is better
 
-## ไม่ใช้เมื่อ (ใช้ตัวอื่นแทนหรือคู่กัน)
+## Do not use when (use another, or pair them)
 
-| งาน | ใช้ |
+| Job | Use |
 |---|---|
-| ปก TikTok · Reels · โพสต์ หรือแบนเนอร์ช่อง | `social-formats` |
-| บทพูดหรือ hook ช่วง 5 วินาทีแรกของคลิป | `speaking-script` · `video-script-to-clip` |
-| ภาพคนหรือฉากที่ต้องสร้างด้วย AI | `brief-to-image` · `image-generation` |
-| ปกทั้งซีรีส์ต้องหน้าตาเป็นชุด | `style-consistency` · สีและฟอนต์จาก `brand-kit` |
-| ตรวจความสวยก่อนส่ง | `design-review` |
-| เริ่มออกแบบปกที่ยังไม่มีแนว | **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `social` แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้ |
+| TikTok · Reels · post covers or channel banners | `social-formats` |
+| Script or the hook in the first 5 seconds of the video | `speaking-script` · `video-script-to-clip` |
+| People or scenes that must be made with AI | `brief-to-image` · `image-generation` |
+| A whole series of thumbnails that must look like a set | `style-consistency` · colours and fonts from `brand-kit` |
+| Checking the look before sending | `design-review` |
+| Starting a thumbnail design that has no direction yet | **Search references first:** take the project's words and search live per `design-references` (plugin `superuser`), type `social`, then pull colours from the chosen work · the stored palette library is for when live search is not possible |
 
-## ขั้นตอน
+## Steps
 
-1. **เลือกเรื่องเดียวที่ปกต้องบอก** ให้ปกกับชื่อคลิปช่วยกันเล่า ไม่ซ้ำคำกัน · ชื่อคลิปบอกรายละเอียด ปกบอกอารมณ์หรือผลลัพธ์
-2. **ตั้งหน้า 16:9** ที่ขนาดทำงานตาม YouTube Help (ดูหัวข้อ "ข้อกำหนดของ YouTube") แล้วส่งออกเป็น JPG หรือ PNG · ภาพต้นทางใหญ่กว่าขนาดทำงานได้ถึงขนาดสูงสุดที่หน้านั้นบอก
-3. **ข้อความไม่เกิน 3–4 คำ** ตัวหนา สูงอย่างน้อยราว 1/6 ของความสูงภาพ (ค่าของเรา) · ภาษาไทยเว้นที่บนล่างของบรรทัดให้วรรณยุกต์และสระ (ระยะบรรทัดอย่างน้อย 1.3 เท่าของขนาดตัวอักษร · ค่าของเรา) · ใช้ฟอนต์ไทยที่มีน้ำหนัก Bold หรือ Black จริง ไม่ใช่ตัวปกติที่ทำหนาเทียม
-4. **คอนทราสต์:** ข้อความกับพื้นหลังต่างกันอย่างน้อย 4.5:1 (เกณฑ์ WCAG 2.2 ของตัวอักษรปกติ ใช้ตัวเลขเดียวกับ `brand-kit`) · พื้นรก → ใส่ขอบตัวอักษร เงา หรือแถบสีหลังข้อความ
-5. **เว้นมุมขวาล่าง** YouTube วางป้ายความยาวคลิปทับมุมนั้น (เห็นได้บนทุกหน้ารายการ) · ข้อความและหน้าคนอยู่ทางซ้ายหรือกลาง
-6. **คลิปแนวตั้ง:** YouTube สร้างปก 4:5 ให้อัตโนมัติจากปก 16:9 ในหน้าแรกและหน้าติดตาม · วางเรื่องสำคัญไว้กลางภาพให้รอดการครอป
-7. **ย่อดูที่กว้าง 168 px** (ด้วยสคริปต์หรือโปรแกรมใดก็ได้) แล้วตอบ 2 ข้อ: อ่านข้อความออกไหม · รู้ไหมว่าเรื่องอะไร · ไม่ผ่าน → ตัดคำ ขยายตัวอักษร หรือลดองค์ประกอบ
-8. **กรองก่อนอัปโหลด (เรื่องหน้าตา ใช้เทียบเป็นคู่ ไม่ให้คะแนน)** ปกที่ทำ 2–3 แบบ ย่อให้กว้าง 168 px ให้คนดู 3–5 คนเลือกทีละคู่ว่าปกไหนอยากกดมากกว่า สลับตำแหน่งซ้ายขวาทุกคู่ แล้วใส่ผลใน [`references/thumbnail-pairwise.example.json`](references/thumbnail-pairwise.example.json) แบบเดียวกัน รัน `node <decision-scoring>/scripts/decide.mjs pairwise ไฟล์.json` (`<decision-scoring>` คือโฟลเดอร์ skill `superuser:decision-scoring`) · ผลสูสี (สคริปต์ตอบว่าต่ำกว่า 60%) ส่งทั้ง 2 ปกเข้า Test & compare ให้ YouTube ตัดสิน ไม่ต้องเลือกเอง · ปกที่แพ้ขาดตัดทิ้ง · ตัวอย่างในไฟล์เป็นข้อมูลสมมติ รันผ่านเมื่อ 2026-10-28
-9. **ทดสอบหลายปก (Test & compare)** เมื่อช่องเปิดใช้ได้ (ตารางข้างล่าง) · ทำ 2–3 แบบที่ต่างกันจริง 1 เรื่อง (หน้าคน กับ ภาพสินค้า · ข้อความ กับ ไม่มีข้อความ) ไม่ใช่ต่างแค่สี
+1. **Pick the one thing the thumbnail must say.** Let the thumbnail and the video title tell the story together without repeating words · the title gives detail, the thumbnail gives the feeling or the result.
+2. **Set up a 16:9 page** at the working size from YouTube Help (see the section "YouTube requirements"), then export as JPG or PNG · the source image may be larger than the working size, up to the maximum that page gives.
+3. **Text of at most 3–4 words**, bold, at least about 1/6 of the image height (our own value) · for Thai, leave space above and below the line for tone marks and vowels (line spacing at least 1.3 times the font size · our own value) · use a Thai font that really has a Bold or Black weight, not the regular weight made fake-bold.
+4. **Contrast:** text and background differ by at least 4.5:1 (WCAG 2.2 threshold for normal text, the same number as `brand-kit`) · busy background → add a text outline, shadow, or a colour bar behind the text.
+5. **Leave the bottom-right corner empty.** YouTube puts the video length badge over that corner (visible on every list page) · keep text and faces on the left or in the middle.
+6. **Vertical video:** YouTube makes a 4:5 thumbnail automatically from the 16:9 one on the home and subscriptions pages · put the important part in the middle of the image so it survives the crop.
+7. **Shrink to 168 px wide** (with a script or any program) and answer 2 questions: can you read the text · can you tell what it is about · fail → cut words, enlarge the letters, or remove elements.
+8. **Filter before upload (for looks, compare in pairs, do not score).** Take the 2–3 thumbnails you made, shrink them to 168 px wide, and have 3–5 people choose pair by pair which thumbnail they would rather click, swapping left and right in every pair. Put the result in the same format as [`references/thumbnail-pairwise.example.json`](references/thumbnail-pairwise.example.json) and run `node <decision-scoring>/scripts/decide.mjs pairwise file.json` (`<decision-scoring>` is the folder of skill `superuser:decision-scoring`) · a close result (the script says below 60%) → send both thumbnails into Test & compare and let YouTube decide, no need to choose yourself · drop a thumbnail that loses clearly · the example in the file is made-up data, run and passed on 2026-10-28
+9. **Test several thumbnails (Test & compare)** when the channel has it enabled (table below) · make 2–3 truly different versions of 1 topic (a face vs a product image · with text vs no text), not just different colours.
 
-## ข้อกำหนดของ YouTube
+## YouTube requirements
 
-| เรื่อง | ค่า | สถานะ |
+| Topic | Value | Status |
 |---|---|---|
-| ขนาด | สัดส่วน 16:9 · ปก Shorts 9:16 · ขนาดสูงสุด ขนาดต่ำสุด และขนาดทำงานที่แนะนำ ให้ดูสดจากหน้า YouTube Help | ดูสด |
-| ไฟล์ | ชนิดไฟล์ที่รับ และเพดานขนาดไฟล์ของการอัปจากมือถือกับจากคอมพิวเตอร์ ให้ดูสดจากหน้า YouTube Help | ดูสด |
-| สิทธิ์อัปโหลดปกเอง | ต้องยืนยันบัญชีก่อน · มีจำนวนอัปโหลดต่อวันจำกัด | หน้าทางการ |
-| Test & compare: ทดสอบได้กี่แบบ | ทดสอบได้ปก ชื่อ หรือทั้งคู่ · จำนวนแบบสูงสุดให้ดูสดจากหน้า Test & compare | ดูสด |
-| Test & compare: ใครใช้ได้ | ช่องที่เปิด advanced features · ทำใน YouTube Studio บนคอมพิวเตอร์ · ใช้ไม่ได้กับ Shorts · คลิปสำหรับเด็ก · คลิปสำหรับผู้ใหญ่หรือ 18+ · คลิปส่วนตัว · ไลฟ์ที่ตั้งเวลา · Premiere ที่ยังไม่จบ | หน้าทางการ + 1 แหล่ง |
-| Test & compare: ตัดสินอย่างไร | ใช้ **ส่วนแบ่งเวลาดู (watch time share)** ไม่ใช่อัตราการกด · ไม่มีผู้ชนะชัด → แสดงแบบแรกที่อัปโหลด · ผลขึ้นเป็น Winner หรือ Preferred | ยืนยัน 3 แหล่ง |
-| Test & compare: ใช้เวลานานเท่าไร | ระยะเวลาทดสอบให้ดูสดจากหน้า Test & compare | ดูสด |
+| Size | Ratio 16:9 · Shorts thumbnail 9:16 · maximum size, minimum size and recommended working size: look them up live on the YouTube Help page | Look up live |
+| File | Accepted file types, and the file size ceiling for uploading from mobile and from a computer: look them up live on the YouTube Help page | Look up live |
+| Right to upload custom thumbnails | Account must be verified first · there is a daily upload limit | Official page |
+| Test & compare: how many versions can be tested | Can test thumbnails, titles, or both · look up the maximum number of versions live on the Test & compare page | Look up live |
+| Test & compare: who can use it | Channels with advanced features turned on · done in YouTube Studio on a computer · not usable with Shorts · videos made for kids · adult or 18+ videos · private videos · scheduled live streams · Premieres that have not ended | Official page + 1 source |
+| Test & compare: how it decides | Uses **watch time share**, not click rate · no clear winner → shows the first version uploaded · the result shows as Winner or Preferred | Confirmed by 3 sources |
+| Test & compare: how long it takes | Look up the test length live on the Test & compare page | Look up live |
 
-ผลทดสอบตัดสินด้วยเวลาดู ปกที่ล่อให้กดแต่คนออกเร็วจึงแพ้ · อย่าสัญญาผู้ใช้ว่า "ยอดกดจะเพิ่ม"
+The test result is decided by watch time, so a thumbnail that lures clicks but makes people leave quickly loses · never promise the user "clicks will go up".
 
 Look up live: the thumbnail size, file limit and Test & compare limits (number of variants, test length, who can use it) at the two YouTube Help pages in the sources section. Look it up live (WebSearch/WebFetch) before using it; if the page will not open, mark the value (รอยืนยัน).
 
-## ตัวอย่างจริง
+## Worked example
 
-โจทย์: ช่องสอนทำอาหาร คลิป "ต้มยำกุ้งน้ำข้น 15 นาที"
+Brief: a cooking channel, video "ต้มยำกุ้งน้ำข้น 15 นาที" (creamy tom yum goong in 15 minutes)
 
-| ขั้น | ทำ | ผล |
+| Step | Do | Result |
 |---|---|---|
-| เรื่องเดียว | ปกบอก "เร็ว" ชื่อคลิปบอกเมนู | ข้อความบนปก "15 นาที" 2 คำ |
-| วาง | ชามต้มยำทางซ้าย หน้าคนทำทางขวาบน มุมขวาล่างว่าง | ป้ายความยาวคลิปไม่ทับอะไร |
-| ย่อดู 168 px | "15 นาที" อ่านออก · เห็นชามสีส้ม | ผ่าน |
-| ทดสอบ | แบบ A มีหน้าคน · แบบ B ชามอย่างเดียว | ตั้ง Test & compare แล้วรอผลตามระยะที่หน้า YouTube Help บอก |
+| One thing | The thumbnail says "fast", the title says the dish | Text on the thumbnail "15 นาที", 2 words |
+| Layout | Bowl of tom yum on the left, the cook's face top right, bottom-right corner empty | The length badge covers nothing |
+| Shrink to 168 px | "15 นาที" is readable · the orange bowl is visible | ผ่าน (pass) |
+| Test | Version A has a face · version B the bowl only | Set up Test & compare, then wait for the result for the length of time the YouTube Help page gives |
 
-## ตรวจก่อนส่ง
+## Check before sending
 
-- [ ] 16:9 · ขนาดและไฟล์อยู่ในเพดานที่ดูสดจาก YouTube Help (ทั้งอัปจากมือถือและคอม)
-- [ ] ข้อความ ≤ 4 คำ คอนทราสต์ ≥ 4.5:1 · วรรณยุกต์ไทยไม่ชนขอบหรือบรรทัดอื่น
-- [ ] มุมขวาล่างว่าง · คลิปแนวตั้งมีเรื่องสำคัญอยู่กลางภาพ
-- [ ] ย่อเหลือกว้าง 168 px แล้วยังอ่านออก
-- [ ] ปกตรงกับเนื้อคลิปจริง ไม่หลอกให้กด · ภาพ ฟอนต์ และหน้าคนมีสิทธิ์ใช้
-- [ ] ผ่าน `no-ai-look` ข้อ 3
+- [ ] 16:9 · size and file are within the ceilings looked up live from YouTube Help (both mobile upload and computer)
+- [ ] Text ≤ 4 words, contrast ≥ 4.5:1 · Thai tone marks do not hit the edge or another line
+- [ ] Bottom-right corner empty · vertical video has the important part in the middle of the image
+- [ ] Shrunk to 168 px wide and still readable
+- [ ] The thumbnail matches the real content of the video and does not trick people into clicking · the image, fonts and faces are licensed for use
+- [ ] Passes `no-ai-look` item 3
 
-## ที่มา
+## Sources
 
-- YouTube Help: [Add video thumbnails](https://support.google.com/youtube/answer/72431) (ขนาด · ไฟล์ · ยืนยันบัญชี · ปก 4:5 ของคลิปแนวตั้ง · ดูสด) · [Test & compare thumbnails and titles](https://support.google.com/youtube/answer/13861714) (ทางการ)
-- Test & compare ตรงกับ thumbnailtest.com · digit.in · streamlabs.com (thumbnailtest.com ยังเขียนว่าใช้ได้เฉพาะผู้ทดสอบรุ่นเบต้า ซึ่งเก่าแล้ว)
-- คอนทราสต์: [WCAG 2.2 Understanding 1.4.3](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html) (อ้างผ่าน `brand-kit` ตรวจ 2026-10-06)
-- ค่าที่เขียนว่า "ค่าของเรา" (กว้าง 168 px · ตัวอักษร 1/6 ของความสูง · ระยะบรรทัด 1.3 · มุมขวาล่าง) เป็นแนวทางที่ใช้ภายใน ยังไม่ได้วัดกับแอปจริง
+- YouTube Help: [Add video thumbnails](https://support.google.com/youtube/answer/72431) (size · file · account verification · 4:5 thumbnail for vertical video · look up live) · [Test & compare thumbnails and titles](https://support.google.com/youtube/answer/13861714) (official)
+- Test & compare matches thumbnailtest.com · digit.in · streamlabs.com (thumbnailtest.com still says it is only for beta testers, which is out of date)
+- Contrast: [WCAG 2.2 Understanding 1.4.3](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html) (cited through `brand-kit`, checked 2026-10-06)
+- Values marked "our own value" (168 px wide · letters 1/6 of the height · line spacing 1.3 · bottom-right corner) are internal guidelines, not yet measured on real apps

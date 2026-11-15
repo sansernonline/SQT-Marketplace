@@ -1,29 +1,29 @@
-# ตัวอย่างของ plugin นี้ — ระดับโมเดล · ความเป็นอิสระ · รูปแบบทีม
+# Examples for this plugin — model tier · autonomy · team patterns
 
-กฎอยู่ใน `superuser:superuser` · ไฟล์นี้มีแต่ตัวอย่าง
+The rules are in `superuser:superuser` · this file has examples only.
 
-## ระดับโมเดล — ตัวอย่างงาน (หัวข้อ 5)
+## Model tier — example jobs (section 5)
 
-กฎ ชื่อโมเดล และการสลับกลางทาง อยู่ใน `superuser:superuser` หัวข้อ 2 · 5 · ไฟล์นี้มีแต่ตัวอย่างงานของแต่ละระดับ
+The rules, model names, and mid-task switching are in `superuser:superuser` sections 2 · 5 · this file has only example jobs for each tier.
 
-ระดับไล่จากบนลงล่างตามกฎ 3 ข้อของแกน ข้อแรกที่ตรงชนะ (ใหญ่ → เล็ก → กลาง) · **ใหญ่** `opus` — วางทิศทางแบรนด์ · วางแนวคิดแคมเปญ · ตรวจรอบสุดท้ายก่อนส่งลูกค้า · **เล็ก** `haiku` — งานกลไกที่มีแบบให้ทำตาม: ใส่ชื่องานและวันที่ลงแบนเนอร์ 20 ชิ้นตามรายการ · ค้นไฟล์แล้วรายงาน · **กลาง** `sonnet` (ที่เหลือ) — ร่างโพสต์ · จัดเลย์เอาต์ · ตรวจงานรอบแรก
+Tiers go from top to bottom by the core's 3 rules, and the first match wins (large → small → medium) · **Large** `opus` — set the brand direction · set the campaign concept · final check before sending to the client · **Small** `haiku` — mechanical work with a pattern to follow: put the job name and date on 20 banners from a list · search files and report · **Medium** `sonnet` (everything else) — draft posts · lay out · first-round review
 
-## ความเป็นอิสระ — งานที่ย้อนได้และแหล่งข้อมูล (หัวข้อ 6)
+## Autonomy — reversible work and information sources (section 6)
 
-| เจอ | ทำ |
+| Situation | Do |
 |---|---|
-| งานที่ย้อนกลับได้ — ร่าง brief · สร้างภาพทดลอง · ทำสำเนาและแก้บนสำเนา · จัดไฟล์ที่มี log ย้อนกลับ | ทำเลย |
-| ไม่รู้ข้อเท็จจริงสาธารณะ (ขนาดและ safe zone ของแพลตฟอร์ม · ใบอนุญาตฟอนต์และภาพ) | ค้นเอง โดยไล่แหล่งตามลำดับ: หน้าช่วยเหลือของแพลตฟอร์ม → หน้าใบอนุญาตของผู้สร้างฟอนต์หรือภาพ → คู่มือของเครื่องมือ · ใช้ได้ตามกฎ 3 แหล่งใน `superuser:superuser` หัวข้อ 6 (references/autonomy.md) |
+| Reversible work — draft a brief · generate trial images · make a copy and edit the copy · organize files that have a log to undo | Just do it |
+| Do not know a public fact (platform sizes and safe zones · font and image licenses) | Look it up yourself, going through sources in this order: the platform's help page → the license page of the font or image creator → the tool's manual · allowed under the 3-source rule in `superuser:superuser` section 6 (references/autonomy.md) |
 
-## รูปแบบทีม — ใช้อย่างไรในงานนี้ (หัวข้อ 10)
+## Team patterns — how to use them in this job (section 10)
 
-วิธีทำ ต้นทุน และกับดักของแต่ละแบบอยู่ใน `agent-patterns`
+How to do each one, its cost, and its traps are in `agent-patterns`.
 
-| รูปแบบ | ในงานนี้ใช้อย่างไร |
+| Pattern | How it is used in this job |
 |---|---|
-| **Planning** | asset matrix → ชิ้นแม่ → แตกขนาด |
-| **ReAct** | สร้างภาพ → เปิดดูที่ขนาดจริง → แก้ brief |
-| **Reflection** | `design-critic` ตัวใหม่ตรวจ 8 ข้อก่อนส่ง |
-| **Multi-Agent** | `art-director` ล็อกสไตล์ → `social-creator` ทำชุด → `brand-keeper` ตรวจแบรนด์ |
-| **Mixture-of-Agents (MoA)** | แนวคิดแคมเปญ 3 ทิศทาง → ให้คะแนน → เลือกฐาน ยืมข้อดี |
-| **Reranker** | ภาพที่สร้างได้หลายสิบภาพ → ให้คะแนนตาม lock sheet → เลือก 3 |
+| **Planning** | asset matrix → master piece → split into sizes |
+| **ReAct** | generate image → open it at real size → fix the brief |
+| **Reflection** | a fresh `design-critic` checks 8 points before sending |
+| **Multi-Agent** | `art-director` locks the style → `social-creator` makes the set → `brand-keeper` checks the brand |
+| **Mixture-of-Agents (MoA)** | 3 campaign concept directions → score → pick a base, borrow strengths |
+| **Reranker** | dozens of generated images → score by the lock sheet → pick 3 |

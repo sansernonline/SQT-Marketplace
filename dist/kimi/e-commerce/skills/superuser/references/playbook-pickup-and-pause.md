@@ -1,29 +1,31 @@
-# playbook · pickup-and-pause — รับงานที่ค้างต่อ · หยุดงานให้คนอื่นรับต่อได้
+# playbook · pickup-and-pause — pick up unfinished work · pause so others can take over
 
-ใช้เมื่อ: "ทำต่อจากเมื่อวาน" · "ค้างไว้ตรงไหน" · รับงานต่อจาก agent หรือค่ายอื่น · "พอก่อน เดี๋ยวมาทำต่อ"
-ผลลัพธ์: สรุปสถานะที่ตรวจกับของจริงแล้ว (ตอนรับต่อ) · หัวข้อ "รับงานต่อ" ใน `CONTEXT.md` ที่คนอื่นอ่านแล้วเริ่มได้ทันที (ตอนหยุด)
-รูปแบบหลัก: ReAct · Reflection (`agent-patterns`)
+Use when: "ทำต่อจากเมื่อวาน" (continue from yesterday) · "ค้างไว้ตรงไหน" (where did we leave off) · taking over from another agent or vendor · "พอก่อน เดี๋ยวมาทำต่อ" (enough for now, I'll continue later)
+Result: a status summary checked against the real thing (when picking up) · a "รับงานต่อ" (pick up the work) section in `CONTEXT.md` that someone else can read and start from at once (when pausing)
+Main patterns: ReAct · Reflection (`agent-patterns`)
 
-งานโค้ด (branch · sandbox/docker · server · test) → playbook เดียวกันใน plugin `software-development`
+Code work (branch · sandbox/docker · server · test) → the same playbook in plugin `software-development`
 
-## ขั้นตอน — รับงานต่อ (คัดลง todo ตรงตัว)
+## ขั้นตอน — Steps — picking up (copy into the todo exactly)
 
-1. อ่านหัวข้อ "รับงานต่อ" ใน `CONTEXT.md` · `notes/<แผน>.md` (เทียบโจทย์เดิมกับที่ผู้ใช้สั่งตอนนี้ · ใช้ "คำตอบที่ได้แล้ว" แทนการถามซ้ำ) · `ledger/<แผน>.md` · ข้อความค้างใน `.claude/superuser/inbox/` · ใบส่งงานที่ยังเปิดใน `.claude/superuser/handoff/` (`status` ไม่ใช่ `เสร็จ`) · log ล่าสุดว่าตัวก่อนทำอะไรไปจริง · ใคร: หัวหน้าทีม
-   - อ่านตาราง "รอผู้ใช้" ใน `CONTEXT.md` ด้วย — แถวที่มีคำตอบแล้วใน inbox หรือข้อความล่าสุด → ลบแถวแล้วเริ่มจากงานที่ปลดล็อก
-2. ดูของจริง ไม่เชื่อบันทึกอย่างเดียว · ตรวจด่านที่เสร็จล่าสุดตามไฟล์ติดตาม (รัน test · เปิดไฟล์ของด่านนั้น) · เปิดไฟล์งาน · ตรวจตัวเลขหรือข้อมูลที่บันทึกอ้าง · วันที่แก้ไฟล์ล่าสุด · (ถ้ามี git) `git status` และ `git log --oneline -10` · ใคร: `reviewer` ตัวใหม่
-3. เขียนสรุปสถานะไม่เกิน 10 บรรทัด — เสร็จอะไร · ค้างอะไร · ขัดกับบันทึกตรงไหน · ใคร: หัวหน้าทีม
-   - ผลตรวจด่านล่าสุดไม่ตรงกับบันทึก → กลับไปทำด่านก่อนหน้าให้ผ่าน ลงแถวใน "รอผู้ใช้" แล้วทำส่วนอื่นต่อ · ไม่พบไฟล์ติดตามของงานนี้ → เริ่มใหม่ ไม่ resume เอง
-4. เริ่ม "ทำต่อเป็นข้อแรก" แล้วเลือกหรือประกอบ playbook ของงานที่เหลือ · ใคร: หัวหน้าทีม
+Labels kept in Thai because the validator matches them: `ใคร:` = who · `หัวหน้าทีม` = the lead · `ตัวใหม่` = fresh (a new instance) · `ตัวเดิม (ถือ …)` = the same agent, holding something.
 
-## ขั้นตอน — หยุดงาน (คัดลง todo ตรงตัว)
+1. Read the "รับงานต่อ" section in `CONTEXT.md` · `notes/<plan>.md` (compare the original brief with what the user orders now · use "คำตอบที่ได้แล้ว" (answers already received) instead of asking again) · `ledger/<plan>.md` · messages waiting in `.claude/superuser/inbox/` · handover notes still open in `.claude/superuser/handoff/` (`status` is not `เสร็จ`) · the latest log for what the previous agent really did · ใคร: หัวหน้าทีม
+   - Also read the "รอผู้ใช้" (waiting on the user) table in `CONTEXT.md`: a row that already has an answer in the inbox or the latest message → delete the row and start from the work it unlocks.
+2. Check (ตรวจ) the real thing, do not trust the notes alone. Check the most recently finished gate according to the tracking file (run tests · open that gate's files) · open the work files · check numbers or data the notes claim · the last file-edit date · (if there is git) `git status` and `git log --oneline -10` · ใคร: `reviewer` ตัวใหม่
+3. Write a status summary of no more than 10 lines: what is done · what is left · where it conflicts with the notes · ใคร: หัวหน้าทีม
+   - The latest gate's check result does not match the notes → go back and make the earlier gate pass, add a row in "รอผู้ใช้", then continue with other parts · no tracking file for this work is found → start over, do not resume on your own.
+4. Start with "ทำต่อเป็นข้อแรก" (continue first with), then choose or assemble a playbook for the remaining work · ใคร: หัวหน้าทีม
 
-1. ทำชิ้นที่กำลังทำให้ถึงจุดที่ตรวจได้ หรือถอยไปจุดตรวจได้ล่าสุด — ไม่ทิ้งงานครึ่งทางโดยไม่บอก · ใคร: ตัวเดิม (ถือชิ้นที่ยังไม่บันทึก)
-2. ของที่ยังไม่บันทึกถาวร (ไฟล์ร่าง · การแก้ที่ยังไม่ commit) — ถ้าทำเก็บไม่ได้ ให้สำเนาลง `_to_delete/pause-<วันที่>/` แล้วบอกในรายงาน · ใคร: หัวหน้าทีม
-3. `status-report` อัปเดต "ความคืบหน้า" · `decision-log` จดการตัดสินใจที่ยังไม่จด · ใคร: หัวหน้าทีม
-4. ปิดใบส่งงานที่เสร็จ (ลง `Task N: complete` ใน ledger ของแผน) แล้วเขียนหัวข้อ "รับงานต่อ" ใน `CONTEXT.md` ใหม่ผ่าน `handoff` — ส่งมาแล้ว N ครั้ง (บวก 1) · ทำต่อเป็นข้อแรก · ชิ้นที่ยังเปิด · สิ่งที่ต้องระวัง · ใคร: หัวหน้าทีม · `reviewer` ตัวใหม่ตรวจกับของจริง
+## ขั้นตอน — Steps — pausing (copy into the todo exactly)
 
-รายละเอียดของ notes · ledger · counter อยู่ที่ `handoff` → `team-memory` หัวข้อ 8 · กลไก resume จาก vsql-extension-builder (ไม่ระบุสิทธิ์ เอาแค่กลไก · ดู 2026-11-10)
+1. Bring the piece in progress to a point that can be checked, or roll back to the last checkable point. Do not leave work half-done without saying so · ใคร: ตัวเดิม (ถือ: the piece not yet saved)
+2. Things not yet saved permanently (draft files · uncommitted edits): if they cannot be saved properly, copy them to `_to_delete/pause-<date>/` and say so in the report · ใคร: หัวหน้าทีม
+3. `status-report` updates "ความคืบหน้า" (progress) · `decision-log` records decisions not yet recorded · ใคร: หัวหน้าทีม
+4. Close completed handover notes (write `Task N: complete` in the plan's ledger), then rewrite the "รับงานต่อ" section in `CONTEXT.md` through `handoff`: handed over N times (add 1) · continue first with · pieces still open · what to watch out for · ใคร: หัวหน้าทีม · `reviewer` ตัวใหม่ checks against the real thing
 
-## จบเมื่อ
+Details of notes · ledger · counter are in `handoff` → `team-memory` section 8 · the resume mechanism comes from vsql-extension-builder (no licence stated, take only the mechanism · see 2026-11-10).
 
-คนหรือ bot ที่มารับต่อ จากค่ายไหนก็ได้ อ่านแค่ `CONTEXT.md` แล้วเริ่มงานต่อได้ โดยไม่ต้องถาม
+## Done when
+
+A person or bot taking over, from any vendor, can read only `CONTEXT.md` and continue the work without asking.

@@ -776,16 +776,16 @@ Use when a kept document needs headings, tables and theme
 
 # Polished Document Style
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Gate before starting (every time):** read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" (gate before starting) of `design-references` (plugin `superuser`) even when a brand exists (the brand controls color and font, while the search finds the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
-> **เส้นแบ่ง:** skill นี้ดูแลหน้าตา (หัวข้อ ตาราง กล่องข้อความ ธีม) · ถ้อยคำทุกบรรทัดเป็นของ `human-writing` — เอกสารที่คนเก็บไว้อ่านเปิดทั้งคู่
+> **Boundary:** this skill handles the look (headings, tables, text boxes, theme) · every line of wording belongs to `human-writing` — open both for a document people keep to read
 
 ## When to use this skill
 
 - Output is meant for **general readers** (managers, executives, clients, customers)
 - Document needs **sign-off** or formal review
 - Output will be **shared widely** or converted to PDF/Word later · any doc with 3+ sections or 500+ words
-- จัดหน้าเอกสารที่คนเก็บไว้อ่านทุกชนิด (Markdown · Word · PDF) รวมถึงข้อความไทยในไฟล์ Office
+- Laying out any kind of document people keep to read (Markdown · Word · PDF), including Thai text in Office files
 
 ## When NOT to use
 
@@ -798,26 +798,26 @@ Use when a kept document needs headings, tables and theme
 > `branded-document-design` (plugin `software-development`) on top of it — that skill carries the design tokens,
 > the typography scale, Thai typography rules, and the `brandkit.py` builder.
 
-## อ่านเพิ่มเมื่อ
+## Read more when
 
-| ไฟล์ | เปิดเมื่อ |
+| File | Open when |
 |---|---|
-| [references/markdown-patterns.md](references/markdown-patterns.md) | ถ้าจะเขียนส่วนหัว สารบัญ กล่องข้อความ ตาราง ป้ายสถานะ cover block ตารางเทียบตัวเลือก ส่วนเซ็นรับ หรืออภิธานศัพท์ ให้เปิดดูตัวอย่าง markdown แล้วลอกไปใช้ |
-| [scripts/check_outline.py](scripts/check_outline.py) | ถ้า skill ที่เขียนเอกสารมีไฟล์แบบใน `assets/` ให้รัน `python scripts/check_outline.py <แบบ.md> <เอกสาร.md>` ก่อนส่ง — ตรวจหัวข้อครบและเรียงตามแบบ ช่องตัวหนาครบ หัวตารางตรง และไม่มีช่องที่ยังไม่เติม · ในแบบ ใส่ `<!-- optional -->` ท้ายหัวข้อหรือช่องที่ไม่บังคับ · แก้ตัวตรวจแล้วรัน `--self-test` ก่อน |
-| [references/theme-colors.md](references/theme-colors.md) | ถ้าต้องเลือกสีหลักของเอกสาร หรือใส่สีจริงลงรูป ไฟล์ .docx หรือสไลด์ ให้เปิดดูวิธีประกาศธีม ใครคุมสีส่วนไหน และค่าสีตั้งต้นประจำบ้าน |
-| [references/thai-office.md](references/thai-office.md) | ถ้าสร้างไฟล์ Word · Excel · PDF ที่มีภาษาไทย ให้เปิดดูก่อนเรื่องฟอนต์ การจัดย่อหน้า และการส่งออก |
+| [references/markdown-patterns.md](references/markdown-patterns.md) | When you will write a header, table of contents, text box, table, status badge, cover block, options comparison table, sign-off section, or glossary, open it to see the markdown examples and copy them |
+| [scripts/check_outline.py](scripts/check_outline.py) | If the skill that writes the document has a template in `assets/`, run `python scripts/check_outline.py <template.md> <document.md>` before sending — it checks that headings are complete and in the template's order, bold fields are complete, table headers match, and no field is left unfilled · in a template, put `<!-- optional -->` at the end of a heading or field that is not required · after editing the checker, run `--self-test` first |
+| [references/theme-colors.md](references/theme-colors.md) | When you must choose the document's main color, or put real colors into a figure, .docx file or slides, open it to see how to declare the theme, who controls the color of which part, and the house default colors |
+| [references/thai-office.md](references/thai-office.md) | When creating Word · Excel · PDF files that contain Thai, open it first for fonts, paragraph layout, and export |
 
-## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+## 0 · Find an existing template first (every time)
 
-ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+Before using a structure or template in this file, check whether the user, client or project already has its own:
 
-- **ที่ดู:** มาตรฐานเอกสารของลูกค้าหรือองค์กร: แม่แบบ Word/Google Docs ที่ลูกค้าให้ · เอกสารฉบับก่อนในโปรเจกต์ (`docs/` · `ref/`) · ข้อกำหนดเรื่องรูปแบบใน TOR หรือสัญญา
-- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
-- **ยังต้องมีทุกแบบ:** หัวเอกสาร ลำดับหัวข้อ และธีมในไฟล์นี้เป็นค่าสำรอง · ความอ่านง่าย (หัวข้อชัด ตารางอ่านได้) ใช้ทุกแบบ
+- **Where to look:** the client's or organization's document standard: Word/Google Docs templates the client gave · earlier documents in the project (`docs/` · `ref/`) · format requirements in the TOR (terms of reference) or contract
+- **Result:** found → use that template (headings, order, field names, running numbers) and say in the answer which file it came from · not found → use the template in this file as the fallback and say no existing template was found
+- **Still required for every template:** the document header, heading order and theme in this file are the fallback · readability (clear headings, readable tables) applies to every template
 
 ## Document Header (Always)
 
-Every polished doc MUST start with ส่วนหัวชุดเดียวกัน คือ H1 ข้อความล้วน ตามด้วยกล่อง quote ที่บอกเวอร์ชัน วันที่ สถานะ ผู้เขียน ผู้รีวิว และแท็ก แล้วปิดด้วย `---` ตัวอย่างเต็มอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+Every polished doc MUST start with the same header set: a plain-text H1, then a quote box giving version, date, status, author, reviewer and tags, closed with `---`. A full example is in [references/markdown-patterns.md](references/markdown-patterns.md)
 
 Status values:
 - **Draft** (ร่าง) — work in progress
@@ -825,7 +825,7 @@ Status values:
 - **Approved** (อนุมัติแล้ว) — signed off
 - **Archived** (เก็บถาวร) — historical reference
 
-ชุดนี้ 4 ค่าเท่านั้น เขียนเหมือนกันทุก skill (`status-report` ใช้ชุดเดียวกัน และเพิ่ม `ยังไม่เริ่ม` สำหรับเอกสารที่ยังไม่ลงมือ) · ช่อง Status ในตาราง Sign-off เป็นสถานะของคนเซ็น ใช้ **Approved** · **Review** · **Pending** (ยังไม่ส่งให้ดู) · **Rejected**
+Only these 4 values, written the same in every skill (`status-report` uses the same set and adds `ยังไม่เริ่ม` (not started) for documents where work has not begun) · the Status column in the Sign-off table is the signer's status and uses **Approved** · **Review** · **Pending** (not yet sent for review) · **Rejected**
 
 ## Section Hierarchy
 
@@ -834,28 +834,28 @@ Status values:
 - **H3** — Sub-sections (`### 1.1 Sub-topic`)
 - **H4** — Rare, use only if needed
 
-**Always add Table of Contents** for docs with 5+ sections และต้องกดลิงก์ในสารบัญแล้วไปถึงหัวข้อจริง ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+**Always add Table of Contents** for docs with 5+ sections, and clicking a link in the table of contents must reach the real heading. An example is in [references/markdown-patterns.md](references/markdown-patterns.md)
 
-## ธีมของเอกสาร — ตัดสินใจครั้งเดียว ใช้ทุกที่ในเอกสารนั้น
+## Document theme — decide once, use everywhere in that document
 
-เอกสาร 1 ฉบับผ่านหลาย skill (markdown · `diagram-figures` · `branded-document-design` · `presentation-design`) จึงเลือกสีหลักครั้งเดียว ประกาศเป็น `<!-- doc-theme: accent=… · ที่มา=… · ยืนยันเมื่อ=YYYY-MM-DD -->` ท้ายส่วนหัวของเอกสาร แล้วทุกเครื่องมืออ่านค่าจากที่นั่น · ต้องเลือกสีหรือใส่สีจริงลงรูป .docx สไลด์ → เปิด [references/theme-colors.md](references/theme-colors.md) (ที่มาของสี ค่าตั้งต้นประจำบ้าน สีของสถานะ)
+One document passes through several skills (markdown · `diagram-figures` · `branded-document-design` · `presentation-design`), so choose the main color once, declare it as `<!-- doc-theme: accent=… · ที่มา=… · ยืนยันเมื่อ=YYYY-MM-DD -->` at the end of the document header, and every tool reads the value from there · when you must choose a color or put real colors into a .docx figure or slides → open [references/theme-colors.md](references/theme-colors.md) (where the color comes from, house default, status colors)
 
-## คำกำกับ — ใช้คำ ไม่ใช้อีโมจิ
+## Labels — use words, not emoji
 
-**ไม่มีอีโมจิในเอกสาร** ทั้งหัวข้อ กล่องข้อความ ป้ายสถานะ และตาราง เพราะอีโมจิในหัวข้อและป้ายเป็นสัญญาณว่า AI ทำ (`no-ai-look`) · ใช้คำตัวหนาที่คงที่ทั้งเอกสารแทน
+**No emoji in documents**: not in headings, text boxes, status badges or tables, because emoji in headings and badges signal that an AI made it (`no-ai-look`) · use bold words that stay fixed across the whole document instead.
 
-| ใช้ทำอะไร | คำที่ใช้ |
+| Used for | Words to use |
 |---|---|
-| ระดับความสำคัญ | วิกฤต · สูง · กลาง · ต่ำ |
-| สถานะงาน | เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่ |
-| ผลตรวจ | ผ่าน · ไม่ผ่าน |
-| ชนิดกล่องข้อความ | ข้อแนะนำ (Tip) · ข้อควรจำ (Note) · ข้อควรระวัง (Warning) · อันตราย (Critical) · คำถามที่ยังเปิด (Open Question) |
+| Importance level | วิกฤต · สูง · กลาง · ต่ำ |
+| Work status | เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่ |
+| Check result | ผ่าน · ไม่ผ่าน |
+| Text box type | ข้อแนะนำ (Tip) · ข้อควรจำ (Note) · ข้อควรระวัง (Warning) · อันตราย (Critical) · คำถามที่ยังเปิด (Open Question) |
 
-ช่องใช่/ไม่ในตาราง ใช้เครื่องหมายตัวอักษร `✓` `✗` ได้ (ไม่ใช่อีโมจิสี) หรือเขียน "ใช่" "ไม่" 
+For yes/no cells in a table, you may use the text characters `✓` `✗` (not colored emoji), or write "ใช่" (yes) / "ไม่" (no).
 
 ## Callout Boxes
 
-Use blockquotes with a bold label (no emoji) มี 5 ชนิด คือ **Tip** (ข้อแนะนำ) · **Note** (ข้อควรจำ) · **Warning** (ข้อควรระวัง) · **Critical** (อันตราย) · **Open Question** (คำถามที่ยังเปิด) ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+Use blockquotes with a bold label (no emoji). There are 5 kinds: **Tip** (ข้อแนะนำ) · **Note** (ข้อควรจำ) · **Warning** (ข้อควรระวัง) · **Critical** (อันตราย) · **Open Question** (คำถามที่ยังเปิด). Examples are in [references/markdown-patterns.md](references/markdown-patterns.md)
 
 **Rules:**
 - Keep callouts to 1-3 sentences
@@ -864,45 +864,45 @@ Use blockquotes with a bold label (no emoji) มี 5 ชนิด คือ **T
 
 ## Tables — When and How
 
-Use tables when items have **2+ attributes** ถ้าเขียนเป็น bullet แล้วแต่ละบรรทัดมีหลายค่าคั่นด้วยจุลภาค ให้เปลี่ยนเป็นตาราง ตัวอย่างเทียบกันอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+Use tables when items have **2+ attributes**. If you wrote bullets where each line has several values separated by commas, change them to a table. Side-by-side examples are in [references/markdown-patterns.md](references/markdown-patterns.md)
 
 - Left-align text, center checkmarks/numbers, right-align money
 - Use `—` (em dash) for "not applicable", not `-` or blank
 - Keep cells short — long content goes in body paragraphs
 - Bold key columns: `**email**`
 
-ถ้าเอกสารต้องเทียบตัวเลือกหรือชั่งข้อดีข้อเสีย (strategy, vendor choice, plan options) ให้ใช้ตารางเทียบที่มีคอลัมน์ Recommendation ส่วนเอกสารที่ต้องอนุมัติให้ปิดท้ายด้วยตาราง Sign-off และเอกสารที่มีตัวย่อตั้งแต่ 5 ตัวขึ้นไป (เกณฑ์เดียวกับ `spell-out-abbreviations`) ให้มีอภิธานศัพท์ ตัวอย่างทั้งสามแบบอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+If the document must compare options or weigh pros and cons (strategy, vendor choice, plan options), use a comparison table with a Recommendation column. A document that needs approval ends with a Sign-off table, and a document with 5 or more abbreviations (the same threshold as `spell-out-abbreviations`) gets a glossary. Examples of all three are in [references/markdown-patterns.md](references/markdown-patterns.md)
 
 ## Diagrams
 
-**รูปในเอกสารโปรเจกต์ (รายงาน · ข้อเสนอ · ผังขั้นตอน · ผังข้อมูล) วาดด้วย `diagram-figures` ซึ่งเป็น house style เดียว แล้วฝังเป็นไฟล์ภาพ** · Mermaid (`software-diagrams` ใน plugin `software-development`) ใช้แค่รูปด่วนใน README · PR · โน้ตในโค้ด
-skill นี้คุมเฉพาะเรื่องการวางรูปลงในเอกสาร
+**Figures in project documents (reports · proposals · process flows · data flows) are drawn with `diagram-figures`, the single house style, and embedded as image files** · Mermaid (`software-diagrams` in plugin `software-development`) is only for quick figures in a README · PR · code notes
+This skill controls only how figures are placed in the document.
 
-- วางไว้**หลังย่อหน้าที่อธิบายว่ารูปนี้ตอบคำถามอะไร** ไม่ใช่ลอยขึ้นมาเฉย ๆ
-- ทุกรูปมีคำบรรยายใต้รูป 1 บรรทัด ขึ้นต้นด้วย **รูปที่ N —**
-- รูปเดียวกันอย่าใส่ซ้ำหลายที่ในเอกสาร ให้อ้างถึงเลขรูปแทน
+- Place it **after the paragraph that explains what question the figure answers**, not floating in from nowhere
+- Every figure has a 1-line caption under it, starting with **รูปที่ N —** (Figure N —)
+- Do not put the same figure in several places in the document; refer to the figure number instead
 
 ## Status Badges and Cover Block
 
-ช่องสำคัญในส่วนหัวหรือในตารางให้ใช้ป้ายสถานะเป็นคำตัวหนา เช่น `**Status:** Approved` ส่วนเอกสารทางการ (ข้อเสนอ · รายงานทางการ · สัญญา · postmortem) ให้เปิดด้วย cover block ที่บอกชนิดเอกสาร เวอร์ชัน สถานะ วันที่ ผู้เขียน ผู้รีวิว และเอกสารที่เกี่ยวข้อง ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+For important fields in the header or in a table, use a status badge as a bold word, such as `**Status:** Approved`. A formal document (proposal · formal report · contract · postmortem) opens with a cover block that gives the document type, version, status, date, author, reviewer, and related documents. An example is in [references/markdown-patterns.md](references/markdown-patterns.md)
 
 ## Lists and Code Blocks
 
-**Rule:** ไม่ซ้อน bullet เลย ถ้ารายการต้องมีชั้นย่อย ให้แยกเป็นหัวข้อย่อยหรือใช้ตาราง
-ตัวอย่างรายการที่ดีและรายการที่ซ้อนเกินอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+**Rule:** never nest bullets. If a list needs sub-levels, split into sub-headings or use a table.
+Examples of a good list and an over-nested list are in [references/markdown-patterns.md](references/markdown-patterns.md)
 
-Code blocks ต้องระบุภาษาทุกครั้ง (Always specify language) และถ้าโค้ดยาว ให้ใส่ชื่อไฟล์เป็นคอมเมนต์ในบรรทัดแรก ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+Code blocks must always specify the language (Always specify language), and if the code is long, put the file name as a comment on the first line. An example is in [references/markdown-patterns.md](references/markdown-patterns.md)
 
-## เอกสาร Office ภาษาไทย
+## Thai Office documents
 
-ไฟล์ Word · Excel · PDF ที่มีภาษาไทย (ฟอนต์ complex script · ไม่ justify · ฝังฟอนต์ · CSV แบบ BOM) → เปิด [references/thai-office.md](references/thai-office.md) ก่อนสร้างไฟล์
+Word · Excel · PDF files that contain Thai (complex-script font · no justify · embed fonts · BOM CSV) → open [references/thai-office.md](references/thai-office.md) before creating the file
 
 ## Quality Checklist
 
 Before delivering any polished doc:
 
 - [ ] H1 title in plain text — no emoji in any heading, callout, badge or table
-- [ ] Header block with version, date, status, authors (cover block เฉพาะเอกสารทางการ)
+- [ ] Header block with version, date, status, authors (cover block for formal documents only)
 - [ ] TOC if 5+ sections
 - [ ] All sections numbered consistently
 - [ ] Anchor links in TOC actually work
@@ -911,18 +911,18 @@ Before delivering any polished doc:
 - [ ] Every flow or relationship has a diagram drawn with `diagram-figures` (plugin `software-development` · house style), not default Mermaid
 - [ ] Callout boxes for tips/warnings (not just paragraphs)
 - [ ] Code blocks have language hints
-- [ ] Glossary for docs with 5+ abbreviations (ตัวย่อตั้งแต่ 5 ตัว)
+- [ ] Glossary for docs with 5+ abbreviations
 - [ ] No placeholder text (TBD, TODO, Lorem ipsum) — `(รอยืนยัน)` markers listed in the pending-confirmation list are not placeholders; keep them
 - [ ] Tested rendering in the real viewer (Word · PDF · GitHub preview)
 
-> ไดอะแกรมในเอกสารโปรเจกต์อยู่ใน `diagram-figures` · เอกสารโค้ด (Mermaid ด่วน · ข้อกำหนดซอฟต์แวร์) → ส่วนเพิ่มใน plugin `software-development`
+> Diagrams in project documents are in `diagram-figures` · code documents (quick Mermaid · software requirements) → the addition in plugin `software-development`
 
 ## Anti-patterns
 
 - **Inconsistent terminology** — "user" in one section, "customer" in next
 - **Tables of paragraphs** — if cells are >2 sentences, use headings instead
 
-หน้าตาแบบ AI ทุกสื่อ → ก่อนส่งไล่ข้อ 3 ของ `no-ai-look` · กฎเขียนตัวย่อ → `spell-out-abbreviations`
+AI-looking style in any medium → before sending, go through item 3 of `no-ai-look` · rules for writing abbreviations → `spell-out-abbreviations`
 
 
 ## reference: markdown-patterns.md
@@ -1161,54 +1161,56 @@ Define acronyms on first use, then add to glossary.
 
 ## reference: theme-colors.md
 
-# ตารางสีของธีมเอกสาร
+# Document theme color table
 
-ไฟล์นี้บอกว่าส่วนไหนของเอกสารใครเป็นคนคุมสี และค่าสีตั้งต้นประจำบ้านคืออะไร ใช้ตอนต้องใส่สีจริงลงรูป ไฟล์ .docx หรือสไลด์
+This file says who controls the color of each part of a document, and what the house default colors are. Use it when you must put real colors into a figure, a .docx file or slides.
 
-## ประกาศธีม — ตัดสินใจครั้งเดียว ใช้ทุกที่ในเอกสารนั้น
+## Declare the theme — decide once, use everywhere in that document
 
-เอกสาร 1 ฉบับผ่านหลาย skill: markdown (`polished-document-style`) · รูปจาก `diagram-figures` ·
-ไฟล์ .docx จาก `branded-document-design` · สไลด์จาก `presentation-design` (ทั้งสามอยู่ใน plugin `software-development`)
-ถ้าแต่ละตัวเลือกสีเอง ผู้อ่านจะได้เอกสารที่รูปสีหนึ่ง หัวข้อสีหนึ่ง และสไลด์อีกสีหนึ่ง
+One document passes through several skills: markdown (`polished-document-style`) · figures from `diagram-figures` ·
+.docx files from `branded-document-design` · slides from `presentation-design` (all three are in plugin `software-development`).
+If each one picks its own color, the reader gets a document with figures in one color, headings in another, and slides in a third.
 
-**markdown เป็นต้นฉบับหลัก (source of truth) จึงประกาศธีมไว้ที่นี่** — ใส่ไว้ท้ายส่วนหัวของเอกสารหรือในไฟล์ข้างกัน:
+**Markdown is the main source (source of truth), so the theme is declared here** — put it at the end of the document header or in a file beside it:
 
 ```markdown
 <!-- doc-theme: accent=<สีหลัก> · ที่มา=<แบรนด์ลูกค้า / เสนอจากเนื้องาน> · ยืนยันเมื่อ=YYYY-MM-DD -->
 ```
 
-**สีหลักมาจากเนื้องาน ไม่ใช่จากค่าเริ่มต้นของเครื่องมือ**
-ถ้ามีสีแบรนด์อยู่แล้วให้ใช้สีนั้น ถ้ายังไม่มีให้ค้นต้นแบบตาม `design-references` (plugin `superuser`) ประเภท `document` แล้วถอดสีจากงานที่เลือก · ค้นสดไม่ได้จึงใช้ค่าตั้งต้นประจำบ้าน เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม และเสนอโทนที่เข้ากับเนื้องานไว้ในรายงาน
-(คลังสำรอง: ตารางจับคู่เนื้องานกับโทนสีอยู่ใน `colour-by-domain` ของ skill `diagram-figures` (plugin `software-development`))
+(Keys: `accent` = main color · `ที่มา` = source (client brand / proposed from the work's content) · `ยืนยันเมื่อ` = confirmed on.)
 
-markdown เองไม่มีสี จึงใช้คำกำกับและน้ำหนักตัวอักษรแทน ส่วนไดอะแกรม รูป ไฟล์ .docx และสไลด์อ่านค่าจาก `doc-theme` ถ้า `doc-theme` ยังไม่ประกาศ accent เฉพาะงาน ให้ใช้ค่าตั้งต้นประจำบ้าน ตารางทั้งสองอยู่ข้างล่าง
+**The main color comes from the work's content, not from a tool's default.**
+If a brand color already exists, use it. If not, search for references per `design-references` (plugin `superuser`) of type `document` and extract the color from the chosen work · if live search is not possible, use the house default, write `(รอยืนยัน)` (awaiting confirmation), carry on without stopping to ask, and propose a tone that fits the work's content in the report.
+(Backup: the table matching work content to color tones is in `colour-by-domain` of skill `diagram-figures` (plugin `software-development`).)
 
-**คำสถานะไม่ขึ้นกับธีม** — วิกฤต · ผ่าน ใช้คำเดิมทุกเอกสาร ส่วนสีของสถานะในรูป .docx และสไลด์อยู่ข้างล่าง
+Markdown itself has no color, so use labels and font weight instead. Diagrams, figures, .docx files and slides read the value from `doc-theme`. If `doc-theme` has not declared a work-specific accent, use the house default. Both tables are below.
 
-## ใครคุมสีส่วนไหน
+**Status words do not depend on the theme** — วิกฤต (critical) · ผ่าน (pass) use the same words in every document. Status colors in .docx files and slides are below.
 
-| ส่วนของเอกสาร | ใครคุมสี | อ่านค่าจาก |
+## Who controls the color of which part
+
+| Part of the document | Who controls the color | Read the value from |
 |---|---|---|
-| หัวข้อ ตาราง กล่องข้อความใน markdown | markdown ไม่มีสี ใช้คำกำกับตัวหนาและน้ำหนักตัวอักษรแทน | — |
-| ไดอะแกรม Mermaid | `diagram-figures` → `references/engine-mermaid.md` (README · PR: `software-diagrams` ข้อ 2 ใน plugin `software-development`) | `doc-theme` |
-| รูปที่เป็นไฟล์ภาพ | `diagram-figures` (plugin `software-development`) | `doc-theme` |
-| ไฟล์ .docx / .pdf ที่ส่งออก | `branded-document-design` (plugin `software-development`) ข้อ 0–1 | `doc-theme` |
-| สไลด์ | `presentation-design` (plugin `software-development`) | `doc-theme` |
+| Headings, tables, text boxes in markdown | Markdown has no color; use bold labels and font weight instead | — |
+| Mermaid diagrams | `diagram-figures` → `references/engine-mermaid.md` (README · PR: `software-diagrams` item 2 in plugin `software-development`) | `doc-theme` |
+| Figures that are image files | `diagram-figures` (plugin `software-development`) | `doc-theme` |
+| Exported .docx / .pdf files | `branded-document-design` (plugin `software-development`) items 0–1 | `doc-theme` |
+| Slides | `presentation-design` (plugin `software-development`) | `doc-theme` |
 
-## ค่าตั้งต้นประจำบ้าน (house default)
+## House default
 
-ถ้า `doc-theme` ยังไม่ประกาศ accent เฉพาะงาน ทุก skill ใช้ชุดนี้เป็นค่าตั้งต้น เพื่อให้รูป เอกสาร และสไลด์เป็นชุดสีเดียวกันตั้งแต่แรก ชุดนี้คือชุดเดียวกับ `presentation-design` และ `branded-document-design`:
+If `doc-theme` has not declared a work-specific accent, every skill uses this set as the default, so figures, documents and slides share one palette from the start. This is the same set as `presentation-design` and `branded-document-design`:
 
-| token | ค่า | ใช้กับ |
+| token | Value | Used for |
 |---|---|---|
-| brand | `#2A78D6` | สีหลัก · หัวข้อ · เส้น accent |
-| brand-deep | `#2A4C86` | หัวตาราง · H2 · ชื่อระบบ |
-| brand-2 | `#6A5CD6` | accent รอง (ม่วง) |
-| tint | `#EDF1FB` | พื้นหัวตาราง · พื้นกล่องเน้น |
-| ink / body | `#333B4A` / `#414957` | หัวข้อ / เนื้อความ |
-| muted / faint | `#7D8492` / `#A9AEB9` | คำบรรยาย / หมายเหตุ |
-| line | `#E4E7EE` | เส้นขอบ · เส้นเชื่อม |
-| exception | `#C77A11` | ทาง/โซนที่ไม่ใช่เส้นทางหลัก (ต่างจาก brand เสมอ) |
-| ฟอนต์ | Tahoma (เอกสาร/สไลด์) · Noto Sans Thai → Tahoma (ภาพ) | ทั้งไทยและอังกฤษ |
+| brand | `#2A78D6` | Main color · headings · accent lines |
+| brand-deep | `#2A4C86` | Table headers · H2 · system names |
+| brand-2 | `#6A5CD6` | Secondary accent (purple) |
+| tint | `#EDF1FB` | Table header background · highlight box background |
+| ink / body | `#333B4A` / `#414957` | Headings / body text |
+| muted / faint | `#7D8492` / `#A9AEB9` | Captions / notes |
+| line | `#E4E7EE` | Borders · connector lines |
+| exception | `#C77A11` | A path/zone that is not the main route (always different from brand) |
+| Font | Tahoma (documents/slides) · Noto Sans Thai → Tahoma (images) | Both Thai and English |
 
-เมื่อประกาศ accent เฉพาะงานแล้ว ให้ใช้ค่านั้นแทน brand ส่วนสีอื่นคำนวณจาก accent ตัวนั้น
+Once a work-specific accent is declared, use it in place of brand, and compute the other colors from that accent.

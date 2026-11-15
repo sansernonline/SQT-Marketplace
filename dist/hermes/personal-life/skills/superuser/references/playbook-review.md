@@ -1,22 +1,22 @@
-# playbook · review — ตรวจงานชีวิตประจำวันก่อนส่ง
+# playbook · review — check everyday work before it goes out
 
-ใช้เมื่อ: ตรวจงานก่อนส่งหรือก่อนใช้จริง · "ช่วยดูหน่อยว่ามีอะไรพลาด" · ผู้ใช้ทำมาเองแล้วอยากให้ตรวจ
-ผลลัพธ์: คำตัดสินพร้อมรายการปัญหาที่ยืนยันแล้ว **ไม่แก้เองโดยอัตโนมัติ** และเป็นงานอ่านอย่างเดียว ไม่สร้าง `CONTEXT.md`
-skill หลัก: `weekly-review` · `meeting` · `important-docs` · `household-bills` · `medication-schedule` · `resume-th-en` · `learning-path` · `paper-to-practice` · `cert-prep`
+Use when: checking work before it is sent or really used · "can you look for anything I missed" · the user did it themselves and wants it checked.
+Result: a verdict with a list of confirmed problems. **Does not fix anything automatically**, and it is read-only work that does not create `CONTEXT.md`.
+Main skill: `weekly-review` · `meeting` · `important-docs` · `household-bills` · `medication-schedule` · `resume-th-en` · `learning-path` · `paper-to-practice` · `cert-prep`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน (Steps — copy into the todo as written)
 
-1. กำหนดขอบเขต — ชิ้นงานที่ตรวจ และเอกสารต้นทางที่ต้องเทียบ (อีเมล · ปฏิทิน · โน้ตประชุม · เอกสาร) · ใคร: หัวหน้าทีม
+1. Set the scope — the piece to check, and the source documents to compare it with (email · calendar · meeting notes · documents) · ใคร: หัวหน้าทีม
 <!-- superuser:begin review-steps -->
-2. เตรียมแพ็กเกจรีวิวตาม [`review-lenses`](review-lenses.md) ข้อ 1 — เจตนาของงาน 1 ย่อหน้า (ใครใช้ ใช้ทำอะไร ถ้าไม่แน่ใจ เลือกการตีความที่กระทบน้อยสุด ไม่หยุดถาม) · diff เป็นไฟล์ · เงื่อนไขจาก spec คัดตรงตัว · รหัส `head:` · เหตุผลของผู้ทำแยกไว้ใน `author-notes.md` ไม่ใส่ความเห็นว่าผ่านหรือไม่ผ่านลงใน prompt · ใคร: หัวหน้าทีม
-3. เลือกเลนส์ตามชนิดงานจาก [`review-lenses`](review-lenses.md) ข้อ 2 (ทุกงานมี `spec` กับ `quality`) แล้วตามเช็กลิสต์ของ skill หลักของ playbook นี้ (ไม่มี → skill ที่เกี่ยว) · ใคร: หัวหน้าทีม
-4. ตรวจตามเลนส์ที่เลือก ตอบเช็กลิสต์ `PASS` · `FAIL` พร้อมไฟล์:บรรทัด และให้คำตัดสิน 2 ด้านแยกกัน: ตรงเงื่อนไขของ spec ไหม · คุณภาพพอใช้ไหม · แต่ละตัวถือ 1–3 เลนส์ ไม่เกิน 15 ไฟล์ใหญ่สุดต่อตัวและบอกว่าข้ามกี่ไฟล์ · งานใหญ่หรือเสี่ยงสูง เพิ่มตัวที่ไม่เคยเห็นงานอีกตัวด้วยโมเดลระดับใหญ่ (`model: opus`) · สั่งผู้ตรวจทุกตัวว่า "ห้ามแก้ชิ้นงาน (เขียนรายงานของตัวเองใน `_to_delete/` ได้)" · ใคร: `reviewer` ตัวใหม่ (อ่านอย่างเดียว · งานใหญ่ `model: opus`)
-5. ยืนยันทีละข้อ — ข้อพบแต่ละข้อไปที่ผู้ยืนยัน 1 ตัวต่อ 1 ข้อ ที่ไม่รู้ว่าใครพบ ค่าตั้งต้นคือ `FALSE_POSITIVE` ต้องมีหลักฐานและมั่นใจอย่างน้อย 80 จึงเป็น `ยืนยัน` ตามข้อ 3 ของ `review-lenses` · ใคร: `reviewer` ตัวใหม่ (อ่านอย่างเดียว)
-6. แยก 3 กลุ่ม: สูง · กลาง · ต่ำ (ตามนิยามใน `reviewer`) ข้อที่ยืนยันไม่ได้ให้ติด `ยังไม่ได้ตรวจ` แล้วบันทึกทุกข้อที่ปัดทิ้งลง `ledger.md` พร้อมเหตุผลจากรายการ (`false_positive` · `intentional` · `deferred` · `rejected` · `มีมาก่อน`) แล้วอ่านไฟล์กลับนับให้ตรงกับจำนวนที่ปัด · รอบ 2 ขึ้นไป เทียบข้อรอบก่อนกับ diff ว่าแก้จริง · ใคร: หัวหน้าทีม
-7. ตรวจความสดก่อนรายงาน — เทียบ `head:` ในแพ็กเกจกับของจริงตอนนี้ ไม่ตรง หรือมีผู้ตรวจที่ยังรัน ล้ม ถูกตัดผล → รายงานว่าผลเก่าหรือไม่ครบ ไม่นับเป็นสะอาด · ใคร: หัวหน้าทีม
-8. รายงาน — คำตัดสิน 1 บรรทัด (`ส่งได้` · `ส่งได้หลังแก้` · `ยังไม่ควรส่ง`) แล้วตามด้วยรายการและสรุปงานตาม `superuser` หัวข้อ 7 · ใคร: หัวหน้าทีม
+2. Prepare the review package per [`review-lenses`](review-lenses.md) item 1: the intent of the work in 1 paragraph (who uses it, for what; if unsure, choose the interpretation with the least impact and do not stop to ask) · the diff as a file · the spec's conditions quoted exactly · the `head:` id · the author's reasoning kept separate in `author-notes.md`, with no opinion on pass or fail put in the prompt · ใคร: หัวหน้าทีม
+3. Choose lenses by the kind of work from [`review-lenses`](review-lenses.md) item 2 (every job has `spec` and `quality`), then follow the checklist of this playbook's main skill (none → a related skill) · ใคร: หัวหน้าทีม
+4. Check (ตรวจ) by the chosen lenses. Answer the checklist `PASS` · `FAIL` with file:line, and give a verdict on 2 sides separately: does it meet the spec's conditions · is the quality good enough. Each checker holds 1–3 lenses, at most the 15 largest files per checker, and says how many files it skipped · for large or high-risk work, add one more checker that has never seen the work, on the large tier (`model: opus`) · tell every checker "do not edit the work (you may write your own report in `_to_delete/`)" · ใคร: `reviewer` ตัวใหม่ (read-only · large work `model: opus`)
+5. Confirm (ยืนยัน) item by item. Each finding goes to 1 confirmer per finding, who does not know who found it. The default is `FALSE_POSITIVE`; it becomes `ยืนยัน` (confirmed) only with evidence and confidence of at least 80, per item 3 of `review-lenses` · ใคร: `reviewer` ตัวใหม่ (read-only)
+6. Split into 3 groups: สูง · กลาง · ต่ำ (high · medium · low, as defined in `reviewer`). Items that cannot be confirmed get `ยังไม่ได้ตรวจ`. Record every item you dismiss in `ledger.md` with a reason from the list (`false_positive` · `intentional` · `deferred` · `rejected` · `มีมาก่อน` (pre-existing)), then read the file back and count so it matches the number dismissed. Round 2 and later: compare the previous round's items with the diff to see they were really fixed · ใคร: หัวหน้าทีม
+7. Check freshness before reporting. Compare `head:` in the package with the real current state. Mismatch, or a checker still running, failed, or had its result cut → report that the result is stale or incomplete and do not count it as clean · ใคร: หัวหน้าทีม
+8. Report: a 1-line verdict (`ส่งได้` (ready to deliver) · `ส่งได้หลังแก้` (deliver after fixes) · `ยังไม่ควรส่ง` (not yet ready to deliver)), then the list and a work summary per `superuser` section 7 · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-ทุกข้อในรายงานชี้จุดในชิ้นงานได้ และผ่านการยืนยันแล้ว
+Every item in the report points to a spot in the work and has passed confirmation
 <!-- superuser:end review-steps -->

@@ -1,8 +1,8 @@
-# ตรวจงาน วิจารณ์ ข้อห้าม และข้อจำกัด — ส่วนขยายของ `windows-app-design`
+# Review, critique, prohibitions and limits: extension of `windows-app-design`
 
-เปิดตอนทำข้อ 6 · 7 · 8 ของ `SKILL.md`
+Open when doing items 6 · 7 · 8 of `SKILL.md`
 
-## คำสั่งตัวตรวจ token (ข้อ 6)
+## Token checker command (item 6)
 
 ```bash
 # ไฟล์ token แยก (web-wrapped · mockup ที่ยังวางคู่ fluent.css)
@@ -13,9 +13,9 @@ node ../web-app-design/scripts/check-design-tokens.mjs src/fluent.css src --ext 
 node ../web-app-design/scripts/check-design-tokens.mjs mockup/<รหัส>-mockup.html mockup --ext html --marker "Type ramp" --require "…"
 ```
 
-  แอปเพิ่ม token ของตัวเอง (เช่น `--telex-…`) → ต่อท้าย `--require` ด้วย · ตั้งชื่อ section ในหน้า mockup ขึ้นต้น `s-` (`#s-login`) ไม่ให้ชื่ออย่าง `#add` `#feed` ถูกอ่านเป็นสี
+  If the app adds its own tokens (for example `--telex-…`) → append them to `--require` too · name the sections in the mockup page starting with `s-` (`#s-login`) so names like `#add` `#feed` are not read as colours
 
-## ข้อความสั่งงานผู้วิจารณ์ (ข้อ 6.1)
+## Reviewer instruction message (item 6.1)
 
 ```
 ดูภาพ <path dark/light> ของแอป Windows 11 (<ชนิดแอป>) เป้าคือดูเหมือน Windows Terminal / Settings / File Explorer
@@ -23,35 +23,35 @@ node ../web-app-design/scripts/check-design-tokens.mjs mockup/<รหัส>-moc
 แต่ละข้อมีวิธีแก้ระดับ CSS (ขนาด px · องค์ประกอบไหน) · ไม่ต้องชม · ไม่เกิน 250 คำ
 ```
 
-## Anti-patterns (ข้อ 7)
+## Anti-patterns (item 7)
 
-- **ระบายพื้น accent ทั้งแถวเมนูที่เลือก** — Windows ใช้ขีดเล็กชิดซ้าย
-- **ย้อมสีแบรนด์ที่กรอบหน้าต่าง** (แถบชื่อ · nav · rail · command bar · Mica/Acrylic · เส้นขอบ · ไอคอนเมนู) — กรอบเป็นเทา-ดำตามธีม Windows · accent อยู่ที่ขีดเลือก ปุ่มหลัก และข้อมูล · ย้อมได้เฉพาะเมื่อผู้ใช้สั่ง
-- **มุมโค้ง 12–16px** — นั่นคือหน้าตาเว็บ/มือถือ ส่วน Windows ใช้ 4px กับ 8px
-- **เงาใต้การ์ด** — Windows 11 ใช้เส้นขอบบาง ๆ เงาสงวนไว้ให้ flyout/dialog เท่านั้น
-- **`alert()` / `confirm()`** ในแอปที่ห่อเว็บ — ใช้ InfoBar หรือ ContentDialog
-- **ทำเฉพาะโหมดมืดเพราะภาพต้นแบบเป็นมืด** — Windows 11 ตั้งต้นเป็นโหมดสว่าง และผู้ใช้เลือกได้ทั้งสองแบบ ต้องผ่านทั้งคู่
-- **ฮาร์ดโค้ดสี accent เป็นน้ำเงิน** — ถ้าอยากตามสีที่ผู้ใช้ตั้งไว้ ต้องอ่านจากระบบ
-  (WinUI: อย่า override `AccentFillColorDefaultBrush` · web: `AccentColor` ของ CSS)
-- **แถบเมนูกว้างตามใจ** — 320px เปิด / 48px ย่อ เท่านั้น
-- **ส่ง mockup โดยไม่เคยเรนเดอร์ดู** — ดูข้อ 6
-- **ปุ่มทึบสี accent ทุกแถวของตาราง** — ปุ่มในแถวเป็นไอคอนที่โผล่เมื่อชี้ ปุ่มหลักอยู่ในแผงรายละเอียด (patterns.md ข้อ 1)
-- **ปุ่มและเมนูเป็นข้อความล้วน ไม่มีไอคอน** — ดูเป็น wireframe
-- **เนื้อหาอยู่ครึ่งบน ครึ่งล่างว่าง · ตารางยืดเต็มจอจนคอลัมน์ห่างกัน 400px** — ใช้ list-detail (patterns.md ข้อ 2)
-- **หัวกลุ่ม 11px ตัวพิมพ์ใหญ่ · ป้ายพื้นสีทึบใน status bar · เส้นสีบน tab** — เป็นแบบเว็บ
-- **การ์ดใหญ่หลายใบเรียงกันในหน้าเริ่มต้นของแอป** — ดูเป็น dashboard ของ SaaS ใช้แถวปุ่มทางลัดแทน (หน้าแรกของ mockup ไม่นับ ดู `ui-craft`)
-- **แถบควบคุมของ mockup (รหัสข้อกำหนดเชิงหน้าที่ (Functional Requirement · FR) · ตัวสลับสถานะ) ติดในภาพที่ส่งรีวิว** — ใช้ `screenshot.py --hide`
-- **ทำทุกหน้าในรอบเดียวโดยไม่มีหน้าหลักเป็นแบบ** — ดูข้อ 1
+- **Filling the whole selected menu row with the accent colour.** Windows uses a small bar flush left
+- **Tinting the window frame with the brand colour** (title bar · nav · rail · command bar · Mica/Acrylic · borders · menu icons). The frame is grey-black following the Windows theme · the accent lives in the selection bar, the primary button and the data · tint only when the user orders it
+- **12–16px rounded corners.** That is the look of web/mobile; Windows uses 4px and 8px
+- **Shadows under cards.** Windows 11 uses thin borders; shadows are reserved for flyouts/dialogs only
+- **`alert()` / `confirm()`** in a web-wrapped app: use InfoBar or ContentDialog
+- **Doing only dark mode because the reference image is dark.** Windows 11 defaults to light mode and users can choose either, so both must pass
+- **Hard-coding the accent colour as blue.** To follow the colour the user has set, read it from the system
+  (WinUI: do not override `AccentFillColorDefaultBrush` · web: CSS `AccentColor`)
+- **A menu bar of arbitrary width.** Only 320px open / 48px collapsed
+- **Sending a mockup that was never rendered and looked at.** See item 6
+- **Solid accent-colour buttons on every table row.** Buttons in a row are icons that appear on hover; the primary button lives in the detail panel (patterns.md item 1)
+- **Buttons and menus that are text only, with no icons.** They look like a wireframe
+- **Content in the top half and the bottom half empty · a table stretched across the screen until columns are 400px apart.** Use list-detail (patterns.md item 2)
+- **11px uppercase group headings · solid-colour badges in the status bar · coloured lines on tabs.** These are web styles
+- **Several big cards in a row on the app's start page.** It looks like a SaaS dashboard; use a row of shortcut buttons instead (the first page of a mockup does not count, see `ui-craft`)
+- **The mockup's control bar (Functional Requirement (FR) code · state switcher) left in the image sent for review.** Use `screenshot.py --hide`
+- **Doing every page in one round with no main page as the model.** See item 1
 
-## ข้อจำกัดที่ต้องรู้ (ข้อ 8)
+## Limits to know (item 8)
 
-- ไฟล์ `.xaml` / `.axaml` ในนี้ **ยังไม่ผ่านการคอมไพล์ทดสอบ** ในไฟล์มีแต่ค่า token
-  (Color / SolidColorBrush / x:Double / CornerRadius / Thickness) ที่ใช้ไวยากรณ์
-  มาตรฐาน ตอน build ครั้งแรกให้ดูว่ามี key ไหนชนกับของเฟรมเวิร์กหรือไม่
-- WinUI ต้องเมิร์จ `FluentTokens.xaml` **หลัง** `XamlControlsResources` ไม่งั้นค่าถูกทับ
-- ชื่อ theme dictionary ต่างกัน: WinUI ใช้ `Default`/`Light`/`HighContrast`
-  ส่วน Avalonia ใช้ `Default`/`Light`/`Dark`
-- **โหมดคอนทราสต์สูง** ห้ามใส่สีตายตัว ต้องดึงจากสีระบบ (มีตัวอย่างในไฟล์ XAML)
-- Mica / Acrylic ทำได้จริงเฉพาะ WinUI/Avalonia บน Windows ส่วนบน web-wrapped
-  ให้ใช้สีทึบตาม token แทน อย่าเลียนแบบด้วย `backdrop-filter` เพราะได้ไม่เหมือน
-  และกินเครื่อง
+- The `.xaml` / `.axaml` files here **have not been compile-tested.** The files hold only token values
+  (Color / SolidColorBrush / x:Double / CornerRadius / Thickness) using standard syntax.
+  On the first build, check whether any key collides with the framework's own
+- WinUI must merge `FluentTokens.xaml` **after** `XamlControlsResources`, otherwise the values are overwritten
+- Theme dictionary names differ: WinUI uses `Default`/`Light`/`HighContrast`
+  while Avalonia uses `Default`/`Light`/`Dark`
+- **High-contrast mode:** never put fixed colours; pull them from system colours (there is an example in the XAML files)
+- Mica / Acrylic really work only in WinUI/Avalonia on Windows. For web-wrapped apps,
+  use solid colours per the tokens instead. Do not imitate them with `backdrop-filter`, because the result is not the same
+  and it is heavy on the machine

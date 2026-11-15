@@ -1,36 +1,36 @@
-# ไฟล์ทำงานของทีม — อยู่ที่ไหน เขียนอย่างไร
+# Team working files — where they live, how to write them
 
-ไฟล์นี้เหมือนกันทุก plugin · ต้นฉบับอยู่ที่ plugin `superuser` · หัวหน้าทีมเปิดอ่านตอนสร้างไฟล์ครั้งแรก หรือตอนจะจด `IMPROVEMENTS.md`
+This file is identical in every plugin. The original lives in plugin `superuser`. The lead opens it when creating the files for the first time, or when about to record in `IMPROVEMENTS.md`.
 
-## ที่อยู่
+## Location
 
-รากโปรเจกต์เก็บแค่โฟลเดอร์มาตรฐาน (`ref/` · `docs/` · `mockup/` · `assets/` · `qa/` · `_to_delete/` · `.claude/` · โฟลเดอร์โค้ด) ไฟล์ทำงานของ SuperUser จึงอยู่ใน `.claude/superuser/` · หัวหน้าทีมเขียนคนเดียว (ยกเว้น `handoff/<id>.md` ที่ลูกทีมต่อท้ายใบส่งงานของตัวเองได้)
+The project root keeps only the standard folders (`ref/` · `docs/` · `mockup/` · `assets/` · `qa/` · `_to_delete/` · `.claude/` · code folders), so SuperUser's working files live in `.claude/superuser/`. Only the lead writes them (except `handoff/<id>.md`, where a worker may append its own handover note).
 
-**กติกา commit (ที่เดียว ไฟล์อื่นลิงก์มาที่นี่)** — `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md` อยู่ใน git ได้ · agent commit ได้เมื่อได้รับอนุญาตเท่านั้น ตามกฎข้อ 9 ของ `SKILL.md` (ผู้ใช้สั่ง · `~/.claude/superuser-style.md` · `docs/AGENT-LOOP.md` · หัวข้อ "กติกา" ใน `CONTEXT.md`) → 1 ขั้นที่ตรวจผ่าน = 1 commit ตาม `commit-log` · ไม่ได้อนุญาต → ใส่ข้อความ commit ที่แนะนำในคำตอบ · ไม่ push เว้นแต่ผู้ใช้สั่ง หรือบรรทัด **git อัตโนมัติ** ใน "กติกา" เป็น `auto` · `log/` · `inbox/` · `learn/` · `handoff/` · `notes/` · `ledger/` · `out-of-scope/` · `state.json` และ `_to_delete/` ไม่ commit ใส่ `.gitignore` เพราะ log มีชื่อไฟล์และคำสั่งภายใน
+**Commit rules (one place; other files link here).** `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md` may go in git. An agent may commit only when permitted, per rule 9 of `SKILL.md` (the user orders it · `~/.claude/superuser-style.md` · `docs/AGENT-LOOP.md` · the "กติกา" (rules) section in `CONTEXT.md`) → 1 step that passes its check = 1 commit per `commit-log`. Not permitted → put the suggested commit message in the answer. Do not push unless the user orders it, or the **`git อัตโนมัติ`** (automatic git) line in "กติกา" is `auto`. `log/` · `inbox/` · `learn/` · `handoff/` · `notes/` · `ledger/` · `out-of-scope/` · `state.json` and `_to_delete/` are not committed and go in `.gitignore`, because the log holds internal file names and commands.
 
-| ที่ | เก็บอะไร | กติกา |
+| Where | What it keeps | Rules |
 |---|---|---|
-| `.claude/superuser/CONTEXT.md` | ไฟล์กลาง — งานนี้คืออะไร · **ความคืบหน้า** · กติกา · ของอยู่ไหน · การตัดสินใจ · **รับงานต่อ** | ไม่เกิน 150 บรรทัด · เขียนทับหัวข้อ ไม่ต่อท้าย · ความคืบหน้าเฉพาะงานที่ยังเปิด ไม่เกิน 15 แถว สถานะใช้คำในหัวข้อ 7 ของ `SKILL.md` · การตัดสินใจ 20 แถวล่าสุด · ใครเปิดไฟล์นี้ไฟล์เดียวต้องรู้ภาพรวมและเริ่มข้อแรกได้ |
-| `.claude/superuser/HISTORY.md` | งานที่เสร็จแล้ว (ย้ายจากความคืบหน้าเป็น 1 บรรทัด) · การตัดสินใจที่เกิน 20 แถว | เพิ่มบรรทัดบนสุด ไม่ลบของเดิม |
-| `.claude/superuser/IMPROVEMENTS.md` | ความรู้ใหม่ที่ใช้กับงานอื่นได้ | ดูหัวข้อถัดไป |
-| `.claude/superuser/log/` · `inbox/` · `learn/` | log ที่ hook จด · ข้อความที่ส่งเข้ามา · บันทึกรอบเรียนรู้ | รายละเอียดใน [`learning-loop`](learning-loop.md) |
-| `.claude/superuser/handoff/` | ใบสั่งงาน + ใบส่งงาน 1 ชิ้น 1 ไฟล์ (`<id>.md`) · ผลยาวของชิ้นใน `<id>/` | รูปแบบตาม skill `handoff` · หัวหน้าทีมเขียนใบสั่ง ลูกทีมต่อท้ายใบส่งของตัวเอง |
-| `.claude/superuser/log/SUMMARY.md` | สรุป log ให้คนอ่าน — ราย agent สะสม (ได้รับงาน · จบปกติ · ล้ม · เวลาทำงาน) · งานที่ส่งลูกทีมวันนี้ · รายวัน 30 วัน | hook เขียนเองทุกครั้งที่หัวหน้าทีมจบรอบ ห้ามแก้มือ · "จบปกติ" ไม่ใช่ผลตรวจ ผลตรวจอยู่ที่ `docs/BUILD-PLAN.md` หรือ `CONTEXT.md` |
-| `.claude/superuser/outbound/` | ร่างข้อความถึงคนนอกที่รอผู้ใช้ส่ง | หัวหน้าทีมเขียน · ส่งจริงต้องขออนุมัติ · รายละเอียดใน [`playbook-unattended-run`](playbook-unattended-run.md) ข้อ 5 |
-| `.claude/superuser/notes/` · `ledger/` · `out-of-scope/` · `learn/drop/` | สมุดงานของแผน · ledger · แนวคิดที่ปฏิเสธ · บทเรียนที่ทิ้งไว้ | หัวหน้าทีมเขียน · ก่อนเขียน `git check-ignore` ต้องเจอและ path ไม่เป็น symlink · รายละเอียดใน `handoff` → `team-memory` หัวข้อ 8 |
-| `docs/BRIEF.md` | สรุปงานใหญ่หลัง brainstorm ตาม [`brief-template`](brief-template.md) | งานเปลี่ยนทิศให้เขียนทับ |
-| `_to_delete/` | ของชั่วคราว · ไฟล์ที่ "ลบ" | ไม่ลบจริง ย้ายมาที่นี่ |
+| `.claude/superuser/CONTEXT.md` | The central file: what this job is · **ความคืบหน้า** (progress) · กติกา (rules) · where things are · การตัดสินใจ (decisions) · **รับงานต่อ** (pick up the work) | At most 150 lines · overwrite by section, do not append · progress only for jobs still open, at most 15 rows, with status words from section 7 of `SKILL.md` · decisions: the latest 20 rows · whoever opens only this file must know the overview and be able to start the first item |
+| `.claude/superuser/HISTORY.md` | Finished jobs (moved from progress as 1 line) · decisions beyond 20 rows | Add a line at the very top, do not delete the old |
+| `.claude/superuser/IMPROVEMENTS.md` | New knowledge that fits other jobs | See the next section |
+| `.claude/superuser/log/` · `inbox/` · `learn/` | The log the hook records · incoming messages · learning-round notes | Details in [`learning-loop`](learning-loop.md) |
+| `.claude/superuser/handoff/` | Work order + handover note, 1 piece per file (`<id>.md`) · a piece's long result in `<id>/` | Format per the skill `handoff` · the lead writes the order, a worker appends its own handover note |
+| `.claude/superuser/log/SUMMARY.md` | A log summary for people: cumulative per agent (tasks received · finished normally · failed · working time) · tasks sent to workers today · daily for 30 days | The hook writes it each time the lead finishes a round, never edit by hand · "finished normally" is not a check result; check results are in `docs/BUILD-PLAN.md` or `CONTEXT.md` |
+| `.claude/superuser/outbound/` | Draft messages to outsiders awaiting the user to send | The lead writes them · actually sending needs approval · details in [`playbook-unattended-run`](playbook-unattended-run.md) item 5 |
+| `.claude/superuser/notes/` · `ledger/` · `out-of-scope/` · `learn/drop/` | The plan's notebook · ledger · rejected ideas · lessons dropped along the way | The lead writes them · before writing, `git check-ignore` must find it and the path must not be a symlink · details in `handoff` → `team-memory` section 8 |
+| `docs/BRIEF.md` | Summary of a big job after brainstorming, per [`brief-template`](brief-template.md) | Overwrite when the job changes direction |
+| `_to_delete/` | Temporary things · files that were "deleted" | Never really delete; move them here |
 
-- hook ทำงานเฉพาะโฟลเดอร์ที่มี `.claude/superuser/` และไม่สร้างโฟลเดอร์นี้เอง
-- โปรเจกต์เก่าที่มี `CONTEXT.md` · `IMPROVEMENTS.md` · `.superuser/` ที่ราก ใช้ต่อได้ (hook ยังอ่าน `.superuser/`) แล้วย้ายเข้า `.claude/superuser/` เมื่อสะดวก
-- `AGENTS.md` · `GEMINI.md` สร้างเฉพาะเมื่อโปรเจกต์ใช้ Codex หรือ Gemini จริง และประกาศเป็นข้อยกเว้นของรากใน README ของโฟลเดอร์โค้ด
-- **มีคนอื่นแก้อยู่ไหม** (ถ้ามี git) — ตอนเริ่มจดรายการไฟล์จาก `git status` และ `git diff --stat` ของไฟล์ที่ค้างอยู่แล้ว · รันซ้ำก่อนส่งลูกทีมขนาน · ไฟล์ที่เปลี่ยน**เพิ่มจากตอนเริ่ม**โดยทีมไม่ได้แตะ = มีคนอื่นแก้อยู่ → ไม่แตะไฟล์กลุ่มนั้น ทำส่วนอื่นต่อ แล้วลงรายการไว้ใน **รออนุมัติ** (ไม่หยุดถามกลางงาน)
-- ห้ามใส่ค่าลับ เลขบัตร เลขบัญชีเต็ม หรือข้อมูลของคนอื่นในไฟล์ที่หัวหน้าทีมหรือลูกทีมเขียนใต้ `.claude/superuser/` (log ที่ hook จดเป็นข้อยกเว้น ดูข้อถัดไป · ไฟล์งานในโฟลเดอร์ของผู้ใช้เอง เช่น ประวัติพ่อแม่ เก็บได้ตามที่ผู้ใช้สั่ง)
-- **log เก็บข้อความที่ผู้ใช้พิมพ์ด้วย** (ยาวไม่เกิน 4,000 ตัว) หลังตัดข้อมูลแล้ว — hook ตัดคีย์ token รหัสผ่าน เลขประจำตัวประชาชน 13 หลัก เลขบัตร 13–19 หลัก (ผ่าน Luhn) เลขบัญชีแบบ xxx-x-xxxxx-x และตัวเลขติดกัน 10–12 หลัก (เลขบัญชี · เบอร์โทร) · เบอร์ที่มีขีดคั่น เช่น 08x-xxx-xxxx ไม่ถูกตัด · ข้อมูลสุขภาพหรือชื่อคนยังเข้า log ได้ จึงไม่ commit `log/` · ทดสอบการตัด (hook อยู่ใน plugin `superuser` ที่เดียว): จากราก repo SQT-Marketplace รัน `node plugins/superuser/hooks/superuser-hook.mjs --self-test` · plugin ที่ติดตั้งแล้ว รันไฟล์ `hooks/superuser-hook.mjs --self-test` ในโฟลเดอร์ของ plugin `superuser` ใต้ `~/.claude/plugins/`
+- The hook works only in folders that have `.claude/superuser/` and does not create this folder itself.
+- Old projects that have `CONTEXT.md` · `IMPROVEMENTS.md` · `.superuser/` at the root can keep using them (the hook still reads `.superuser/`), then move into `.claude/superuser/` when convenient.
+- `AGENTS.md` · `GEMINI.md` are created only when the project really uses Codex or Gemini, and are declared as a root exception in the code folder's README.
+- **Is anyone else editing?** (if there is git) At the start, record the file list from `git status` and `git diff --stat` for files already pending · run again before sending parallel workers · a file that changed **beyond the start state** without the team touching it = someone else is editing → do not touch that group of files, continue with other parts, and list it under **รออนุมัติ** (awaiting approval) (do not stop to ask mid-job).
+- Never put secrets, ID card numbers, full account numbers, or other people's data in files that the lead or a worker writes under `.claude/superuser/` (the log the hook records is an exception, see the next item · work files in the user's own folder, such as their parents' records, may be kept as the user orders).
+- **The log also stores messages the user typed** (at most 4,000 characters) after redaction. The hook strips keys, tokens, passwords, 13-digit national ID numbers, 13–19-digit card numbers (passing Luhn), account numbers of the form xxx-x-xxxxx-x, and runs of 10–12 digits (account numbers · phone numbers) · hyphenated phone numbers such as 08x-xxx-xxxx are not stripped · health data or people's names can still enter the log, so `log/` is not committed · to test the redaction (the hook lives only in plugin `superuser`): from the SQT-Marketplace repo root run `node plugins/superuser/hooks/superuser-hook.mjs --self-test` · for an installed plugin, run the file `hooks/superuser-hook.mjs --self-test` in the folder of plugin `superuser` under `~/.claude/plugins/`
 
 ## `IMPROVEMENTS.md`
 
-เจอของใหม่ที่ใช้กับงานอื่นได้ด้วย ให้จด 1 แถว **ทันที** ไม่ต้องรอจบงาน ยังไม่มีไฟล์ก็สร้างใหม่
+When you find something new that also fits other jobs, record 1 row **at once**, without waiting for the job to end. If there is no file yet, create it.
 
 ```markdown
 | วันที่ | เจออะไร | ใครเจอ | หลักฐาน · แหล่ง | ควรไปรวมที่ | ควรรวมไหม | รวมแล้ว |
@@ -38,26 +38,26 @@
 | 2026-10-07 | <เรื่องที่ใช้กับงานอื่นได้> | `<agent>` | <ลิงก์ · ไฟล์ · ผลที่รัน> | `<skill>` | ใหม่ | ยัง |
 ```
 
-- **จดเมื่อ** — best practice หรือข้อเท็จจริงที่เปลี่ยน (อัตรา · ขั้นตอน · กติกาแพลตฟอร์ม) · วิธีที่ skill เดิมไม่ได้บอก · skill หรือ agent บอกผิดหรือล้าสมัย · สคริปต์ที่ประหยัดเวลา · กับดักที่เสียเวลาเกิน 15 นาที
-- **ไม่จด** — เรื่องเฉพาะงานนี้หรือผู้ใช้คนนี้ · ค่าลับ · ข้อมูลส่วนบุคคล · ตัวเลขเงินของผู้ใช้
-- **ควรรวมไหม** — `ใหม่` (ยังไม่ตัดสิน) · `ควรรวม` · `ไม่รวม (<เหตุผล>)` · **รวมแล้ว** — `ยัง` · `แล้ว <วันที่> (<ไฟล์>)` เมื่อแก้ skill จริงแล้ว · แถวที่ไม่รวมใส่ `—` · แถวใหม่อยู่บนสุด
-- **ใครเจอ** — ชื่อ agent เช่น `<plugin>:reviewer` · `หัวหน้าทีม` · `ผู้ใช้` หลายตัวเรียงด้วย → · คนจดลงไฟล์คือหัวหน้าทีมเสมอ
-- **เจอเรื่องเดิมซ้ำ** — เพิ่มหลักฐานในแถวเดิม ไม่เพิ่มแถว
-- **จดแถวใหม่แล้ว** — เพิ่ม 1 แถวในคิวกลาง `~/.claude/superuser/IMPROVEMENTS.md` ด้วย ([`learning-loop`](learning-loop.md))
-- **รวมเข้า skill** — เฉพาะเมื่อผู้ใช้สั่ง "รวมบทเรียน" (playbook [`learn-from-session`](playbook-learn-from-session.md)) · ระหว่างทำงานอื่นห้ามแก้ skill ใน SQT-Marketplace เอง
+- **Record when:** a best practice or a fact that changed (rates · procedures · platform rules) · a method the existing skill does not state · a skill or agent that is wrong or out of date · a script that saves time · a trap that cost more than 15 minutes.
+- **Do not record:** anything specific to this job or this user · secrets · personal data · the user's money figures.
+- **ควรรวมไหม** (should merge?): `ใหม่` (new, not yet decided) · `ควรรวม` (should merge) · `ไม่รวม (<เหตุผล>)` (do not merge) · **รวมแล้ว** (merged): `ยัง` (not yet) · `แล้ว <วันที่> (<ไฟล์>)` (done) once a skill has really been fixed · a row that is not merged gets `—` · new rows go at the top.
+- **ใครเจอ** (who found it): an agent name such as `<plugin>:reviewer` · `หัวหน้าทีม` (the lead) · `ผู้ใช้` (the user) · several are ordered with → · the one who writes it into the file is always the lead.
+- **The same issue found again:** add evidence to the existing row, do not add a row.
+- **After recording a new row:** also add 1 row to the central queue `~/.claude/superuser/IMPROVEMENTS.md` ([`learning-loop`](learning-loop.md)).
+- **Merging into a skill:** only when the user says "รวมบทเรียน" (merge the lessons) (playbook [`learn-from-session`](playbook-learn-from-session.md)) · during other work, never edit a skill in SQT-Marketplace yourself.
 
-## หลาย AI ใน repo เดียว
+## Several AIs in one repo (หลาย AI ใน repo เดียว)
 
-2 session ที่ทำงานในโฟลเดอร์เดียวกันใช้ working tree และพื้นที่ stage ร่วมกัน: ไฟล์ที่อีกตัว stage ไว้จะติดไปกับ commit ของเรา และสคริปต์ที่สร้างไฟล์ (เช่น `dist/`) จะหยิบไฟล์ที่ยังไม่ commit ของอีกตัวไปด้วย · จดในตารางว่าใครทำ branch ไหนไม่ช่วย เพราะยังแก้โฟลเดอร์เดียวกันอยู่ · ต้องแยกโฟลเดอร์
+2 sessions working in the same folder share the working tree and the staging area: a file the other has staged gets swept into our commit, and scripts that generate files (such as `dist/`) pick up the other's uncommitted files · recording in a table who works on which branch does not help, because both still edit the same folder · you must separate the folders.
 
-1. **1 ตัว 1 worktree** · เริ่มงานใหม่จาก branch หลักล่าสุด:
+1. **1 session, 1 worktree.** Start new work from the latest main branch:
    ```bash
    git fetch origin
    git worktree add ../<repo>-<เครื่องมือ>-<งาน> -b <เครื่องมือ>/<งาน> origin/main
    ```
-   แล้วทำงานในโฟลเดอร์นั้นทั้งหมด · โฟลเดอร์หลักของ repo ให้คนใช้ หรือ AI ตัวที่ผู้ใช้กำหนด
-2. **ชื่อ branch ขึ้นต้นด้วยชื่อเครื่องมือ** (`claude/` · `codex/` · `gemini/`) ตามด้วยงาน เช่น `claude/ui-scan-hook` · เห็นชื่อแล้วรู้ว่าใครทำ ไม่ต้องดูแลตารางแยก
-3. **ใครทำอะไรอยู่ ดูจาก git** · `git worktree list` (ใครอยู่โฟลเดอร์ไหน branch อะไร) · `git branch -vv` · ข้อมูลนี้ไม่ต้องจดซ้ำใน `CONTEXT.md` เพราะแต่ละ branch มี `CONTEXT.md` ของตัวเอง จดไปก็เก่าและชนกันตอน merge
-4. **ห้ามแตะ worktree ของตัวอื่น** · ไม่ commit · ไม่ลบ · ไม่ switch branch ในโฟลเดอร์ที่ไม่ใช่ของตัวเอง (ยกเว้นเก็บกวาดตามข้อ 5) · เจอไฟล์ค้างที่ไม่ได้มาจาก input ของ tool ใน session นี้ = ของคนอื่น ห้าม stage
-5. **merge แล้วเก็บกวาด** · ลบ branch (`gh pr merge --delete-branch`) แล้ว `git worktree remove <โฟลเดอร์>` · ถ้า worktree ยังมีไฟล์ค้าง git จะไม่ยอมลบ ให้บอกผู้ใช้ ห้ามใส่ `--force` · ตอนเริ่มและจบงานไล่ดู `git worktree list` ด้วย: branch ไหนมี PR ที่ merge แล้ว (`gh pr list --head <branch> --state merged` เจอ) และ `git -C <โฟลเดอร์> status --porcelain -uall` ว่าง และไม่ได้ล็อก → `git worktree remove <โฟลเดอร์>` แล้ว `git branch -d <branch>` ได้ทันทีโดยไม่ต้องถาม แม้เป็นของ session หรือ AI ตัวอื่น · ไม่เจอ PR ที่ merge (รวม branch ที่เพิ่งแตกและยังไม่มี commit ซึ่ง `--merged` นับว่า merge แล้ว) · มีไฟล์ค้าง · `-d` ไม่ยอม → ไม่แตะ ห้าม `-D` และ `--force`
-6. ไฟล์ที่ไม่อยู่ใน git (`node_modules` · `.venv` · `.env`) ไม่ตามมาใน worktree ใหม่ ต้องติดตั้งหรือคัดลอกเอง · ค่าลับคัดลอกเฉพาะไฟล์ที่ `.gitignore` กันไว้แล้ว
+   then do all the work in that folder · the repo's main folder is for the person, or for the AI the user designates.
+2. **A branch name starts with the tool name** (`claude/` · `codex/` · `gemini/`) followed by the job, for example `claude/ui-scan-hook` · the name tells who is working, with no separate table to maintain.
+3. **See who is doing what from git.** `git worktree list` (who is in which folder on which branch) · `git branch -vv` · this need not be recorded again in `CONTEXT.md`, because each branch has its own `CONTEXT.md`, and a copy would be stale and would collide at merge.
+4. **Never touch another session's worktree.** No commit · no delete · no switching branch in a folder that is not your own (except cleanup per item 5) · a stray file that did not come from this session's tool input = someone else's, never stage it.
+5. **Clean up after merge.** Delete the branch (`gh pr merge --delete-branch`), then `git worktree remove <folder>` · if the worktree still has stray files git refuses to remove it; tell the user, never add `--force` · at the start and end of work also go through `git worktree list`: a branch whose PR has been merged (`gh pr list --head <branch> --state merged` finds one), and `git -C <folder> status --porcelain -uall` is empty, and it is not locked → you may `git worktree remove <folder>` then `git branch -d <branch>` at once without asking, even if it belongs to another session or AI · no merged PR found (including a branch just created with no commits yet, which `--merged` counts as merged) · stray files present · `-d` refuses → do not touch, never `-D` or `--force`.
+6. Files not in git (`node_modules` · `.venv` · `.env`) do not follow into a new worktree and must be installed or copied by hand · copy secrets only for files `.gitignore` already protects.

@@ -40,7 +40,7 @@ Fill every line; delete a line only if it truly does not apply.
 ## Rules
 
 - Benefits first, specs second — buyers scan the first 3 lines on a phone
-- เลือกรูปเดียวทั้งหน้า: หน้าสินค้าไม่ใส่ ค่ะ/ครับ (ระดับ การตลาด) · ถ้าร้านจะใส่ ต้องใส่ทุกบรรทัดที่พูดกับลูกค้า ไม่ใส่บรรทัดเดียว → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ การตลาด
+- Pick one form for the whole page: the product page has no ค่ะ/ครับ (marketing register) · if the shop wants them, put them on every line that speaks to the customer, not on a single line → `human-writing` `references/thai-grammar.md` section 4, the marketing register
 - Metric units; sizes in ซม., never "ประมาณฝ่ามือ"
 - Copy usage and warnings from the actual label; do not add effects the label does not state
 - No LINE ID, phone number or outside link in Shopee/Lazada/TikTok descriptions — against platform rules

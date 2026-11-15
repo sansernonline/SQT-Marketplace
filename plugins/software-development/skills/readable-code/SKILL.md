@@ -3,110 +3,110 @@ name: readable-code
 description: Use when writing or reviewing code for readability
 ---
 
-# โค้ดที่คนอ่านรู้เรื่อง
+# Code that people can read and understand
 
-> **กฎข้อเดียว:** ชื่อที่ต้องเปิดดูข้างในถึงจะเข้าใจ คือชื่อที่ตั้งผิด
+> **The one rule:** a name you must open up to understand is a badly chosen name
 
 ---
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เขียนโค้ดใหม่ · ตั้งชื่อตัวแปร ฟังก์ชัน ไฟล์ หรือโฟลเดอร์
-- รีวิวโค้ดแล้วรู้สึกว่า "ทำงานถูกแต่อ่านยาก"
-- คนใหม่เข้าโปรเจกต์แล้วหาไฟล์ไม่เจอ
-- โฟลเดอร์ `utils/` เริ่มกลายเป็นถังขยะ
+- Writing new code · naming variables, functions, files, or folders
+- Reviewing code that feels "correct but hard to read"
+- A newcomer joins the project and cannot find files
+- The `utils/` folder is starting to become a junk drawer
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use
 
-| สถานการณ์ | ใช้แทน |
+| Situation | Use instead |
 |---|---|
-| ต้องการเขียนโค้ด**น้อยลง** | `lazy-coding` |
-| โครงโฟลเดอร์**ระดับ repo** · README · linter | `project-bootstrap` |
-| รีวิวเรื่องความถูกต้อง ความปลอดภัย การทดสอบ | `code-review-checklist` |
-| ตั้งชื่อ**ไฟล์เอกสาร** | `document-naming` |
-| ตั้งชื่อ**ผลิตภัณฑ์หรือแบรนด์** | `product-naming` |
+| You want to write **less** code | `lazy-coding` |
+| **Repo-level** folder structure · README · linter | `project-bootstrap` |
+| Reviewing for correctness, security, testing | `code-review-checklist` |
+| Naming **documentation files** | `document-naming` |
+| Naming a **product or brand** | `product-naming` |
 
 ---
 
-## 1 · ชื่อต้องตอบสามคำถามโดยไม่ต้องเปิดดูข้างใน
+## 1 · A name must answer three questions without opening it
 
-**มันคืออะไร · หน่วยอะไร · ใช้ได้ตอนไหน**
+**What is it · what unit · when can it be used**
 
-| ✗ | ✓ | ที่ต่างคือ |
+| ✗ | ✓ | The difference |
 |---|---|---|
-| `d` | `daysSinceLastLogin` | มีหน่วย มีจุดอ้างอิง |
-| `list` | `overdueInvoices` | บอกว่าข้างในคืออะไร |
-| `data` | `csvRows` | `data` ไม่ได้ตัดอะไรออกเลย |
-| `temp` | `swapBuffer` | บอกหน้าที่ ไม่ใช่บอกว่าชั่วคราว |
-| `flag` | `hasUnpaidBalance` | อ่านแล้วรู้ว่า `true` แปลว่าอะไร |
-| `timeout` | `timeoutMs` | 30 คือวินาทีหรือมิลลิวินาที |
-| `price` | `priceSatang` | เลขเงินที่ไม่มีหน่วยคือบั๊กรอเกิด |
-| `checkUser()` | `isUserActive()` | `check` ไม่บอกว่าคืน boolean หรือโยน error |
-| `process()` | `normalizePhoneNumber()` | `process` แปลว่าอะไรก็ได้ |
-| `getUser()` ที่ยิง API | `fetchUser()` | `get` แปลว่าเร็วและไม่ล้มเหลว |
+| `d` | `daysSinceLastLogin` | Has a unit and a reference point |
+| `list` | `overdueInvoices` | Says what is inside |
+| `data` | `csvRows` | `data` rules nothing out |
+| `temp` | `swapBuffer` | Names the role, not that it is temporary |
+| `flag` | `hasUnpaidBalance` | You can tell what `true` means |
+| `timeout` | `timeoutMs` | Is 30 seconds or milliseconds? |
+| `price` | `priceSatang` | A money number with no unit is a bug waiting to happen |
+| `checkUser()` | `isUserActive()` | `check` does not say whether it returns a boolean or throws an error |
+| `process()` | `normalizePhoneNumber()` | `process` can mean anything |
+| `getUser()` that calls an API | `fetchUser()` | `get` means fast and never fails |
 
-> **เลขที่มีหน่วยต้องมีหน่วยในชื่อ เสมอ** — `Ms` · `Seconds` · `Bytes` · `Satang` · `Percent` · `Ratio`
-> บั๊กเรื่องหน่วยไม่มีใครเห็นตอนรีวิว แต่จะเห็นตอนลูกค้าโทรมา
-
----
-
-## 2 · คำนำหน้าฟังก์ชัน — หนึ่งคำ หนึ่งความหมาย
-
-**เลือกคำแล้วใช้ให้ตรงทั้งโปรเจกต์** ถ้า `get` บางตัวยิงเน็ต คนอ่านจะเลิกเชื่อชื่อทั้งหมด
-
-ตารางคำนำหน้าทั้ง 10 กลุ่ม (สัญญาว่าอะไร · ล้มเหลวได้ไหม · มีผลข้างเคียงไหม) อยู่ที่ [`assets/naming-reference.md`](assets/naming-reference.md) ข้อ 2 — เช่น `get` ไม่ยิงเน็ต · `validate` โยน error · `ensure` เรียกซ้ำได้
-
-**กฎประกอบ:**
-
-- **boolean ห้ามตั้งชื่อเชิงปฏิเสธ** — `isNotReady` ทำให้เกิด `if (!isNotReady)` ที่ไม่มีใครอ่านออก
-- **collection เป็นพหูพจน์ และบอกชนิดข้างใน** — `userIds` ไม่ใช่ `users` ถ้าข้างในเป็นเลข
-- **ชื่อฟังก์ชันที่มีคำว่า `and` คือฟังก์ชัน 2 ตัว** — `saveAndNotify()` ควรแยกเป็น 2 ตัว
-- **ค่าคงที่ใช้ตัวพิมพ์ใหญ่เฉพาะค่าที่ตั้งครั้งเดียวจริง ๆ** ส่วนค่าที่อ่านจาก config ไม่ใช่ค่าคงที่
-- **ชื่อฟังก์ชันเรียง กริยา → บริบทใหญ่ → บริบทย่อย** — `getUserMessages` (get · user · messages) · `shouldDisplayBanner` · เรียงแบบเดียวกันทั้งโปรเจกต์ คนอ่านจะเดาชื่อที่ยังไม่เคยเห็นถูก
-- **boolean ขึ้นต้นด้วย `is` `has` `should` `can`** — อ่านเป็นคำถามที่ตอบได้แค่ใช่หรือไม่ (`hasUnpaidBalance` · `canRetry`)
-- **ไม่ซ้ำบริบทที่ชื่อรอบนอกบอกแล้ว** — `user.userName` → `user.name` · `Invoice.invoiceTotal` → `Invoice.total`
-
-(3 ข้อท้าย — แนวคิดจาก kettanaito/naming-cheatsheet (MIT) เขียนใหม่ด้วยคำเรา)
+> **A number with a unit must have the unit in its name, always** — `Ms` · `Seconds` · `Bytes` · `Satang` · `Percent` · `Ratio`
+> Nobody sees a unit bug at review, but they will see it when the customer calls
 
 ---
 
-## 3 · ชื่อยาวแค่ไหน ขึ้นกับว่ามันมีชีวิตอยู่กี่บรรทัด
+## 2 · Function prefixes — one word, one meaning
 
-| ระยะจากที่ประกาศถึงที่ใช้ครั้งสุดท้าย | ความยาวชื่อที่เหมาะ | ตัวอย่าง |
+**Pick a word and use it consistently across the whole project.** If some `get` calls hit the network, readers stop trusting every name.
+
+The table of all 10 prefix groups (what each promises · can it fail · does it have side effects) is at [`assets/naming-reference.md`](assets/naming-reference.md) step 2 — for example `get` never hits the network · `validate` throws an error · `ensure` can be called repeatedly
+
+**Combining rules:**
+
+- **Never name a boolean in the negative** — `isNotReady` produces `if (!isNotReady)`, which nobody can read
+- **A collection is plural and says the type inside** — `userIds`, not `users`, if what is inside is numbers
+- **A function name containing `and` is 2 functions** — `saveAndNotify()` should be split into 2
+- **Constants use upper case only for values truly set once**; a value read from config is not a constant
+- **Order function names verb → big context → small context** — `getUserMessages` (get · user · messages) · `shouldDisplayBanner` · with the same order across the project, readers can guess names they have never seen
+- **A boolean starts with `is` `has` `should` `can`** — it reads as a question that can be answered only yes or no (`hasUnpaidBalance` · `canRetry`)
+- **Do not repeat context the surrounding name already gives** — `user.userName` → `user.name` · `Invoice.invoiceTotal` → `Invoice.total`
+
+(The last 3 — idea from kettanaito/naming-cheatsheet (MIT), rewritten in our own words)
+
+---
+
+## 3 · How long a name is depends on how many lines it lives
+
+| Distance from declaration to last use | Suitable name length | Example |
 |---|---|---|
-| ≤ 5 บรรทัด (ตัวนับใน loop) | 1 ตัวอักษร พอ | `i` · `r` · `x` |
-| ในฟังก์ชันเดียว | 1–2 คำ | `total` · `rawRows` |
-| ทั้งคลาสหรือทั้งไฟล์ | 2–3 คำ | `pendingApprovals` |
-| export ออกนอกไฟล์ | เต็ม ไม่ย่อ | `calculateWithholdingTax` |
+| ≤ 5 lines (a loop counter) | 1 character is enough | `i` · `r` · `x` |
+| Within one function | 1–2 words | `total` · `rawRows` |
+| Whole class or whole file | 2–3 words | `pendingApprovals` |
+| Exported outside the file | Full, no abbreviations | `calculateWithholdingTax` |
 
-> **ชื่อยาวขึ้นตามระยะห่างระหว่างที่ประกาศกับที่ใช้** — `i` ใน loop 3 บรรทัดชัดเจนกว่า `currentIndex`
-> แต่ `i` ที่เป็น field ของคลาสคือชื่อที่ไม่มีใครตามได้
-
----
-
-## 4 · คำต้องห้าม — ใส่แล้วไม่ได้ตัดความหมายอะไรออกเลย
-
-**ห้าม `data` `info` `manager` `helper` `util` `do` `temp` และตัวย่อที่คิดเอง** — ทุกอย่างในโปรแกรมคือข้อมูล ชื่อที่ทำอะไรก็ได้คือชื่อที่ไม่บอกอะไร · ตารางเต็มพร้อมคำแทนอยู่ที่ [`assets/naming-reference.md`](assets/naming-reference.md) ข้อ 4
-
-**ข้อยกเว้น:** ตัวย่อที่คนทั้งวงการใช้ — `id` · `url` · `http` · `db` · `api` · `ui` — ใช้ได้เลย ไม่ต้องกาง
-ส่วนชื่อที่ platform หรือ framework ตั้งมาแล้ว (`SensorManager` · Android `Service` · `ChangeNotifier`) ก็ใช้ตามนั้น
-เพราะคำต้องห้ามใช้กับชื่อที่**เราตั้งเอง**เท่านั้น
+> **A name gets longer as the distance between declaration and use grows** — `i` in a 3-line loop is clearer than `currentIndex`
+> but an `i` that is a class field is a name nobody can follow
 
 ---
 
-## 5 · รูปร่างของฟังก์ชัน
+## 4 · Forbidden words — adding them removes no meaning at all
 
-- **หนึ่งฟังก์ชัน หนึ่งระดับนามธรรม** — ฟังก์ชันที่มีทั้ง "ส่งอีเมล" และ "ต่อสตริง SQL" อ่านยากเพราะสมองต้องสลับระดับ
-- **พารามิเตอร์ไม่เกิน 3 ตัว** ถ้าเกินนั้นให้รับเป็น object ที่มีชื่อฟิลด์
-- **ห้ามรับ boolean เป็นพารามิเตอร์** — `render(true)` ที่จุดเรียกอ่านไม่ออกว่า `true` คืออะไร
-  ให้แยกเป็น `renderDraft()` กับ `renderFinal()` หรือรับ `{ mode: "draft" }`
-  **ยกเว้น named parameter** ที่จุดเรียกเห็นชื่อ เช่น `TextField(obscureText: true)` ใน Dart หรือ `enabled: true` ซึ่งอ่านออกอยู่แล้ว
-- **คืนค่าก่อนดีกว่าซ้อน `else`** — เงื่อนไขที่ตัดจบได้ ให้ `return` ทันที ทางหลักจะได้ไม่เยื้อง
-- **ถ้าเยื้องเกิน 3 ชั้น ต้องแตกฟังก์ชัน** ไม่ใช่เพราะกฎ แต่เพราะสมองตามเงื่อนไขซ้อน 4 ชั้นไม่ไหว
+**Do not use `data` `info` `manager` `helper` `util` `do` `temp` or self-invented abbreviations** — everything in a program is data; a name that can do anything is a name that says nothing · the full table with replacement words is at [`assets/naming-reference.md`](assets/naming-reference.md) step 4
+
+**Exception:** abbreviations the whole field uses — `id` · `url` · `http` · `db` · `api` · `ui` — are fine, no need to spell out
+and names already set by a platform or framework (`SensorManager` · Android `Service` · `ChangeNotifier`) are used as they are,
+because the forbidden words apply only to names **we choose ourselves**
 
 ---
 
-## 6 · คอมเมนต์ — เขียน "ทำไม" ไม่ใช่ "ทำอะไร"
+## 5 · The shape of a function
+
+- **One function, one level of abstraction** — a function holding both "send email" and "concatenate an SQL string" is hard to read because the brain must switch levels
+- **No more than 3 parameters**; beyond that, take an object with named fields
+- **Never take a boolean as a parameter** — at the call site, `render(true)` does not show what `true` is
+  split into `renderDraft()` and `renderFinal()`, or take `{ mode: "draft" }`
+  **except a named parameter** where the call site shows the name, such as `TextField(obscureText: true)` in Dart or `enabled: true`, which already reads clearly
+- **Return early rather than nest `else`** — a condition that can end the function should `return` at once, so the main path is not indented
+- **If indentation goes past 3 levels, split the function** — not because of a rule, but because the brain cannot follow conditions nested 4 deep
+
+---
+
+## 6 · Comments — write "why", not "what"
 
 ```ts
 // ผิด: เพิ่มค่า i ทีละ 1
@@ -117,40 +117,40 @@ description: Use when writing or reviewing code for readability
 // ถูก: ต้องเรียงลำดับนี้เท่านั้น — เรียก validate ก่อน normalize จะได้เบอร์ที่ผิดรูปแบบ
 ```
 
-**คอมเมนต์ที่อธิบายว่าโค้ดทำอะไร คือสัญญาณว่าชื่อตั้งผิด** ให้แก้ชื่อแล้วลบคอมเมนต์
+**A comment that explains what the code does is a sign the name is wrong.** Fix the name and delete the comment.
 
-**4 แบบที่ควรมีคอมเมนต์:**
+**4 kinds that should have a comment:**
 
-| แบบ | ตัวอย่าง |
+| Kind | Example |
 |---|---|
-| ข้อจำกัดจากภายนอก | ข้อกำหนดของ API ที่เรียก · กฎหมาย · ข้อจำกัดของฮาร์ดแวร์ |
-| การตัดสินใจที่ดูแปลกแต่ตั้งใจ | "ไม่ใช้ index ที่นี่เพราะตารางเขียนบ่อยกว่าอ่าน" |
-| สูตรหรือกฎธุรกิจที่มีที่มา | อ้างเลขข้อในเอกสาร ไม่ใช่เล่าสูตรซ้ำ |
-| `TODO` ที่มีเจ้าของและเงื่อนไข | `TODO(somchai): ย้ายไป Redis เมื่อรันเกิน 1 process` |
+| An external constraint | Requirements of the API you call · law · hardware limits |
+| A decision that looks odd but is deliberate | "ไม่ใช้ index ที่นี่เพราะตารางเขียนบ่อยกว่าอ่าน" (no index here because the table is written more often than read) |
+| A formula or business rule with a source | Cite the clause number in the document; do not retell the formula |
+| A `TODO` with an owner and a condition | `TODO(somchai): ย้ายไป Redis เมื่อรันเกิน 1 process` (move to Redis when running more than 1 process) |
 
-> **คอมเมนต์ที่โกหกอันตรายกว่าไม่มีคอมเมนต์** ถ้าแก้โค้ดต้องแก้คอมเมนต์ในรอบเดียวกัน
+> **A lying comment is more dangerous than no comment.** If you change the code, change the comment in the same round.
 
-### รอบคัดคอมเมนต์ก่อนรีวิว
+### Comment sorting pass before review
 
-ก่อนส่งรีวิว ไล่ทุกคอมเมนต์ที่ diff เพิ่มหรือแก้ แล้วจัดเข้า 1 ใน 4 ทางในตารางนี้ ถ้า diff ใหญ่ให้ subagent ระดับกลางอ่านอย่างเดียวแล้วทำรายการ ส่วน agent หลักเป็นคนตัดสิน
+Before sending for review, go through every comment the diff adds or edits, and put each into 1 of the 4 ways in this table. If the diff is large, have a mid-level subagent read only and make the list, while the main agent decides.
 
-| คอมเมนต์ | ทำ |
+| Comment | Do |
 |---|---|
-| แปลโค้ดเป็นภาษาคน · ล้าสมัย · โค้ดที่ถูกคอมเมนต์ทิ้ง | ลบ |
-| อธิบายว่าตัวแปรหรือฟังก์ชันคืออะไร | เปลี่ยนชื่อให้บอกเอง แล้วลบ |
-| อ้างข้อจำกัด ("ห้าม null" · "ต้องเรียกหลัง init" · "ค่าไม่เกิน 100") | เปลี่ยนเป็นของที่ตรวจได้ เช่น type · assert · test · lint (`repeated-mistakes-to-checks`) แล้วลบ |
-| 4 แบบในตารางข้างบน | เก็บ |
+| Translates code into human language · outdated · commented-out code | Delete |
+| Explains what a variable or function is | Rename so it says so itself, then delete |
+| States a constraint ("no null" · "must be called after init" · "value at most 100") | Turn it into something checkable, such as a type · assert · test · lint (`repeated-mistakes-to-checks`), then delete |
+| The 4 kinds in the table above | Keep |
 
-รายงานผลเป็นตัวเลข: ลบกี่อัน · เปลี่ยนชื่อกี่อัน · กลายเป็นการตรวจกี่อัน · เก็บกี่อัน
+Report the result as numbers: how many deleted · how many renamed · how many became checks · how many kept
 
 ---
 
-## 7 · โครงสร้างไฟล์ที่คนใหม่หาเจอ
+## 7 · File structure a newcomer can find their way in
 
-**บททดสอบ:** คนที่เพิ่งเข้าโปรเจกต์ ได้ bug report ว่า *"ปุ่มบันทึกใบแจ้งหนี้ไม่ทำงาน"*
-ต้องเดาโฟลเดอร์ถูก**ภายใน 30 วินาที** โดยไม่ต้องถามใคร
+**The test:** a person who just joined the project gets a bug report: *"The save-invoice button does not work"*
+They must guess the right folder **within 30 seconds** without asking anyone.
 
-### จัดตามฟีเจอร์ ไม่ใช่ตามชนิดไฟล์
+### Organize by feature, not by file type
 
 ```
 ผิด: จัดตามชนิด — แก้ฟีเจอร์เดียวต้องเปิด 5 โฟลเดอร์
@@ -168,82 +168,82 @@ src/
   shared/        money.ts  thai-date.ts  http-client.ts
 ```
 
-**กฎ:**
+**Rules:**
 
-- **ชื่อไฟล์คือชื่อของสิ่งที่มัน export เป็นหลัก** — `InvoiceRenderer` อยู่ใน `invoice-renderer.ts`
-  รูปแบบตัวพิมพ์ตามธรรมเนียมของภาษา: Dart/Python ใช้ snake_case (`invoice_renderer.dart`) ส่วน .NET ใช้ `InvoiceRenderer.cs`
-- **ไฟล์ทดสอบอยู่ข้างไฟล์ที่มันทดสอบ** ไม่ใช่ใน `tests/` ที่ต้องไล่หาคู่
-  **ยกเว้น stack ที่เครื่องมือบังคับโฟลเดอร์ทดสอบ** เช่น Flutter (`flutter test` หาใน `test/` และ test ใน `lib/` จะลาก `flutter_test` เข้าแอป) · .NET (โปรเจกต์ทดสอบแยกใน `tests/`) — ตาราง `project-bootstrap` ข้อ 1
-  ให้ใช้โครงโฟลเดอร์ใน `test/` เหมือน `lib/` เป๊ะ เช่น `lib/invoice/renderer.dart` ↔ `test/invoice/renderer_test.dart`
-- **ไม่มี `utils/` ก้อนเดียว** เพราะถ้าของ 2 ชิ้นไม่เกี่ยวกัน ก็ไม่ควรอยู่ไฟล์เดียวกัน
-  `shared/` ยอมได้ แต่ข้างในต้องแตกตามเรื่อง ไม่ใช่กองรวม
-- **`index` ที่ re-export ทั้งโฟลเดอร์ ทำให้ "ไปที่นิยาม" ในเครื่องมือแก้โค้ดพัง** จึงใช้เท่าที่จำเป็นจริง
-- **โฟลเดอร์ที่มีไฟล์เดียวคือโฟลเดอร์ที่ยังไม่ควรมี**
-
----
-
-## 8 · ขนาดและลำดับข้างในไฟล์
-
-- **ไฟล์เกิน ~300 บรรทัด เป็นสัญญาณ ไม่ใช่กฎ** ถ้าเลื่อนหาของเจอง่ายก็ปล่อยไว้
-- **ลำดับในไฟล์: import → ค่าคงที่ → type → สิ่งที่ export → helper ส่วนตัว**
-- **ฟังก์ชันที่ถูกเรียก อยู่ใต้ฟังก์ชันที่เรียกมัน** จะได้อ่านจากบนลงล่างได้เหมือนบทความ
-  ของสำคัญอยู่บน รายละเอียดอยู่ล่าง คนอ่านหยุดตรงไหนก็เข้าใจภาพรวมแล้ว
+- **A file name is the name of what it mainly exports** — `InvoiceRenderer` lives in `invoice-renderer.ts`
+  Letter case follows the language's convention: Dart/Python use snake_case (`invoice_renderer.dart`), while .NET uses `InvoiceRenderer.cs`
+- **A test file sits beside the file it tests**, not in a `tests/` folder where you must hunt for its pair
+  **except stacks where the tooling forces a test folder**, such as Flutter (`flutter test` looks in `test/`, and a test in `lib/` drags `flutter_test` into the app) · .NET (a separate test project in `tests/`) — table in `project-bootstrap` step 1
+  use a folder layout in `test/` that mirrors `lib/` exactly, e.g. `lib/invoice/renderer.dart` ↔ `test/invoice/renderer_test.dart`
+- **No single `utils/` lump**, because if 2 things are unrelated, they should not be in the same file
+  `shared/` is acceptable, but inside it must split by topic, not be a heap
+- **An `index` that re-exports a whole folder breaks "go to definition" in code editors**, so use it only where truly needed
+- **A folder with a single file is a folder that should not exist yet**
 
 ---
 
-## 9 · ภาษาไทยกับอังกฤษในโค้ด
+## 8 · File size and order inside the file
 
-| อะไร | ภาษา |
+- **A file over ~300 lines is a signal, not a rule.** If you can scroll and find things easily, leave it.
+- **Order in a file: import → constants → types → what is exported → private helpers**
+- **A function that is called sits below the function that calls it**, so it reads from top to bottom like an article
+  the important parts on top, the details below; wherever the reader stops, they already understand the overall picture
+
+---
+
+## 9 · Thai and English in code
+
+| What | Language |
 |---|---|
-| ชื่อตัวแปร ฟังก์ชัน คลาส ไฟล์ โฟลเดอร์ ตาราง คอลัมน์ | **อังกฤษเสมอ** |
-| คอมเมนต์ | ไทยได้ ถ้าทีมอ่านไทย |
-| ข้อความที่ผู้ใช้เห็น | ไทย แต่ไม่ฝังในโค้ด (`i18n-and-locale`) |
-| commit message · ชื่อ branch | ตามที่ทีมตกลง เลือกแล้วใช้ให้ตรงกันทั้งทีม |
+| Names of variables, functions, classes, files, folders, tables, columns | **Always English** |
+| Comments | Thai is fine if the team reads Thai |
+| Text users see | Thai, but not embedded in code (`i18n-and-locale`) |
+| Commit message · branch name | As the team agrees; pick one and use it consistently across the team |
 
-- **ห้ามปนครึ่งคำ** — `checkบัตร` · `userชื่อ` อ่านยากและพังใน terminal บางตัว
-- **คำเฉพาะทางไทยที่ไม่มีคำอังกฤษตรง ๆ** ให้หาคำอังกฤษที่ใกล้ที่สุดก่อน
+- **Never mix half-words** — `checkบัตร` · `userชื่อ` are hard to read and break in some terminals
+- **For Thai technical terms with no direct English word**, look for the closest English word first
   (`เลขประจำตัวผู้เสียภาษี` → `taxId` · `ภาษีหัก ณ ที่จ่าย` → `withholdingTax`)
-  ถ้าไม่มีจริง ๆ ให้ใช้ทับศัพท์เต็มคำ แล้วอธิบายไว้ที่ `DATA-DICTIONARY.md`
+  if there really is none, use a full-word transliteration and explain it in `DATA-DICTIONARY.md`
 
 ---
 
-## 10 · รายการตรวจก่อนส่งโค้ด
+## 10 · Checklist before submitting code
 
-ใช้รายการตรวจ 12 ข้อใน [`assets/naming-reference.md`](assets/naming-reference.md) ข้อ 5 — ไล่ทุกข้อก่อนส่ง ข้อไหนไม่ผ่านกลับไปแก้ตามข้อของ skill นี้
+Use the 12-item checklist in [`assets/naming-reference.md`](assets/naming-reference.md) step 5 — go through every item before sending; for any item that fails, go back and fix it by the matching step of this skill.
 
 ---
 
 ## 11 · Anti-patterns
 
-- **แก้ชื่อทั้งไฟล์ในคอมมิตเดียวกับที่แก้ตรรกะ** — รีวิวไม่ได้ว่าอะไรเปลี่ยนจริง ให้แยกคอมมิต
-- **`utils.ts` ที่มี 40 ฟังก์ชันไม่เกี่ยวกัน**
-- **คอมเมนต์หัวไฟล์ที่ generate มาแล้วไม่มีใครอัปเดต** — `@author` `@version` ที่ git บอกได้ดีกว่า
-- **โค้ดที่ถูกคอมเมนต์ทิ้งไว้ "เผื่อได้ใช้"** — git เก็บให้แล้ว ให้ลบทิ้ง
-- **ตั้งชื่อตาม pattern แทนตามหน้าที่** — `InvoiceFactoryStrategyImpl` บอกว่าใช้ pattern อะไร ไม่ได้บอกว่าทำอะไร
-- **เปลี่ยนแบบการตั้งชื่อกลางโปรเจกต์** — ความไม่สม่ำเสมอแย่กว่าแบบที่ไม่สวย
-- **ย่อชื่อเพราะบรรทัดยาวเกิน** — ให้ขึ้นบรรทัดใหม่ อย่าตัดชื่อ
+- **Renaming a whole file in the same commit as a logic change** — reviewers cannot tell what really changed; split the commits
+- **A `utils.ts` with 40 unrelated functions**
+- **A generated file-header comment that nobody updates** — `@author` `@version`, which git tells better
+- **Code commented out "in case it's needed"** — git keeps it already; delete it
+- **Naming by pattern instead of by role** — `InvoiceFactoryStrategyImpl` says which pattern is used, not what it does
+- **Changing the naming style midway through a project** — inconsistency is worse than a style that is not pretty
+- **Abbreviating a name because the line is too long** — wrap the line; do not cut the name
 
 ---
 
-## 12 · ตัวย่อ
+## 12 · Abbreviations
 
 - **API** — Application Programming Interface
 - **SQL** — Structured Query Language
 - **SMS** — Short Message Service
-- **TODO** — สิ่งที่ยังไม่ได้ทำและตั้งใจจะทำ
+- **TODO** — something not yet done that you intend to do
 - **YAGNI** — You Aren't Gonna Need It
 
 ---
 
-## 13 · เชื่อมกับ skill อื่น
+## 13 · Connecting to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---|---|
-| เขียนโค้ดให้น้อยลง | `lazy-coding` |
-| โครง repo · README · linter | `project-bootstrap` |
-| รีวิวความถูกต้องและความปลอดภัย | `code-review-checklist` |
-| รูปแบบ log และชื่อ field ใน log | `logging-standards` |
-| ชื่อตารางและคอลัมน์ในฐานข้อมูล | `database-design` |
-| ชื่อ endpoint และ field ใน API | `api-conventions` |
-| ข้อความที่ผู้ใช้เห็น ไทย-อังกฤษ | `i18n-and-locale` |
-| ตารางอ้างอิงแบบหน้าเดียว | `assets/naming-reference.md` |
+| Write less code | `lazy-coding` |
+| Repo structure · README · linter | `project-bootstrap` |
+| Review for correctness and security | `code-review-checklist` |
+| Log format and field names in logs | `logging-standards` |
+| Table and column names in a database | `database-design` |
+| Endpoint names and fields in an API | `api-conventions` |
+| Text users see, Thai-English | `i18n-and-locale` |
+| One-page reference table | `assets/naming-reference.md` |

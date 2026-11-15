@@ -1,38 +1,38 @@
-# ตัวเลขและขนาดไอคอนตามแพลตฟอร์ม
+# Icon numbers and sizes by platform
 
-ทุกแถวเปิดแหล่งอ่านเมื่อ 2026-10-26 · ตัวเลขเปลี่ยนตามรุ่นของแพลตฟอร์ม ก่อนส่งงานจริงให้เปิดลิงก์ตรวจซ้ำ
+Every row's source was opened and read on 2026-10-26 · numbers change with platform versions, so open the link and re-check before real delivery.
 
-## ไอคอนในหน้าจอ (UI icon)
+## Screen icons (UI icon)
 
-| เรื่อง | ค่า | แหล่ง |
+| Topic | Value | Source |
 |---|---|---|
-| ขนาดแสดงผล | 24 · หนาแน่น 20 · Atlassian ใช้ 16 | Material 1 · Atlassian |
-| พื้นที่วาด (live area) | 20×20 ใน 24 (เว้นขอบ 2 ด้านละ) · Lucide เว้นอย่างน้อย 1 | Material 1 · Lucide |
-| keyline shapes บนกริด 24 | วงกลม 20 · จัตุรัส 18 · แนวตั้ง 16×20 · แนวนอน 20×16 · วงกลมใหญ่กว่าจัตุรัสเพราะตาเห็นวงกลมเล็กกว่าจริง | Material 1 |
-| น้ำหนักเส้น | 2 ทั้งชุด · ชิ้นซับซ้อนลดเป็น 1.5 ได้ · Atlassian ใช้ 1.5 บนกริด 16 | Material 1 · Lucide · Atlassian |
-| มุม | มุมนอกโค้ง radius 2 (รูปเล็กกว่า 8 ใช้ 1) · มุมในแหลม · จุดที่เส้นมาชนกันเกิน 2 เส้นคงมุมแหลม | Lucide · Material 1 · Atlassian |
-| ช่องว่าง | ระหว่างชิ้นอย่างน้อย 2 · ช่องในรูปต้องใส่วงกว้าง 2 ได้ | Lucide |
-| พิกัด | ชิดพิกเซล (กริด 24 ลงที่ .0 หรือ .5 เมื่อเส้นหนา 2 จัดกึ่งกลางเส้น) แต่ห้ามแลกกับการจดจำหรือสมดุล | Lucide · Material 1 |
-| ลำดับความสำคัญ | ความชัด → สมดุลภาพ → ความสม่ำเสมอกับชุด | Lucide |
-| พื้นที่กด | ไอคอน 24 → เป้ากด 48 · 20 → 40 | Material 1 |
-| ป้ายข้อความ | ใส่ป้ายข้อความที่มองเห็นตลอดข้างไอคอน แม้ไอคอนมาตรฐาน · ไอคอนที่คนทั่วโลกเข้าใจตรงกันมีแค่ home · print · search | NN/g (2014-07-27) |
-| metaphor | ตั้งชื่อตามรูป ไม่ใช่ตามหน้าที่ ("Shield, not security") · ตัวเสริม (modifier) อยู่มุมขวาล่าง · ตรวจความหมายทางวัฒนธรรม | Fluent 2 |
-| Apple | น้ำหนัก 9 ระดับและ scale 3 ระดับเทียบตัวอักษรข้าง ๆ · custom symbol เริ่มจาก template ของ symbol ใกล้เคียง · ห้ามใช้ SF Symbols ในไอคอนแอปหรือโลโก้ | HIG SF Symbols |
+| Display size | 24 · dense 20 · Atlassian uses 16 | Material 1 · Atlassian |
+| Drawing area (live area) | 20×20 inside 24 (2 margin on each side) · Lucide keeps at least 1 | Material 1 · Lucide |
+| Keyline shapes on the 24 grid | circle 20 · square 18 · portrait 16×20 · landscape 20×16 · the circle is larger than the square because the eye sees a circle as smaller than it is | Material 1 |
+| Stroke weight | 2 across the set · complex pieces may drop to 1.5 · Atlassian uses 1.5 on a 16 grid | Material 1 · Lucide · Atlassian |
+| Corners | outer corners rounded with radius 2 (shapes smaller than 8 use 1) · inner corners sharp · where more than 2 strokes meet, keep the corner sharp | Lucide · Material 1 · Atlassian |
+| Gaps | at least 2 between pieces · a gap inside a shape must fit a circle of width 2 | Lucide |
+| Coordinates | pixel-aligned (on the 24 grid, land on .0 or .5 when a 2-thick stroke is centered on its line) but do not trade this against recognition or balance | Lucide · Material 1 |
+| Priority order | clarity → visual balance → consistency with the set | Lucide |
+| Touch area | icon 24 → touch target 48 · 20 → 40 | Material 1 |
+| Text label | Put an always-visible text label beside the icon, even a standard icon · the only icons everyone worldwide understands the same way are home · print · search | NN/g (2014-07-27) |
+| metaphor | Name it by the picture, not by the function ("Shield, not security") · the modifier sits at the bottom right · check cultural meaning | Fluent 2 |
+| Apple | 9 weights and 3 scales matched to the neighboring text · a custom symbol starts from the template of a nearby symbol · do not use SF Symbols in app icons or logos | HIG SF Symbols |
 
-## ไอคอนแอป โลโก้ favicon
+## App icons, logos, favicons
 
-| ปลายทาง | ไฟล์และขนาด | ข้อห้าม | แหล่ง |
+| Destination | File and size | Bans | Source |
 |---|---|---|---|
-| iOS · iPadOS · macOS | 1024×1024 จัตุรัส ไม่ตัดมุมเอง ระบบใส่ mask ให้ · พื้นทึบเต็มขอบ · variant default · dark · clear · tinted | ห้ามใส่เงา bevel glow เอง · เลี่ยงข้อความ เส้นบาง มุมแหลม | HIG App icons (แก้ล่าสุด 2026-06-08) |
-| watchOS · visionOS | 1088 · 1024 · ระบบใส่ mask วงกลม | watchOS เลี่ยงพื้นดำล้วน | เหมือนข้างบน |
-| Android adaptive | เลเยอร์ละ 108×108dp · เนื้อหาหลักอยู่ใน 66×66dp กลาง (ขั้นต่ำ 48) · ต้องมีเลเยอร์ monochrome สำหรับ themed icon | ห้ามใส่ mask หรือเงาในไฟล์ OEM เป็นคนตัด | Android Developers |
-| Windows | อย่างน้อย 16 · 24 · 32 · 48 · 256 · ไฟล์ `targetsize-N` แบบ unplated ทั้งธีมมืดและสว่าง ไม่งั้นระบบใส่แผ่นรอง | — | Microsoft Learn (แก้ 2026-08-05) |
-| เว็บ | `favicon.ico` 32 (เพิ่ม 16 ถ้า 32 ย่อแล้วเบลอ) · `icon.svg` รองรับธีมมืดด้วย media query · `apple-touch-icon.png` 180 มี padding และสีพื้น · `icon-192.png` · `icon-512.png` · maskable 512 ลายอยู่ใน 409 กลาง | Google Search ไม่รับ SVG อย่างเดียว ต้องมี PNG หรือ ICO · ขั้นต่ำ 8×8 แนะนำเกิน 48 | Evil Martians (Andrey Sitnik · 2026-01-21) · Google Search Central |
-| plugin ของ Claude Code | ช่อง `icon` ใน `plugin.json` ชี้ไฟล์รูปใน plugin เช่น `./logo.png` · ใช้แค่หน้ารายการตอน `claude.ai/directory/manage` Claude Code ไม่อ่าน | เอกสารไม่กำหนดขนาด รูปทรง หรือธีม (ตรวจ 2026-10-26) · ด่าน directory รับ PNG JPEG GIF WebP SVG · ทำต้นแบบ SVG แล้วส่งออก PNG 512 ไว้ก่อน ใช้กับ Raycast ได้ด้วย | code.claude.com plugins-reference · publish |
+| iOS · iPadOS · macOS | 1024×1024 square, do not cut the corners yourself, the system applies the mask · solid fill to the edge · variants default · dark · clear · tinted | Do not add your own shadow, bevel, or glow · avoid text, thin strokes, sharp corners | HIG App icons (last updated 2026-06-08) |
+| watchOS · visionOS | 1088 · 1024 · the system applies a circular mask | watchOS: avoid a pure black background | Same as above |
+| Android adaptive | each layer 108×108dp · main content inside the central 66×66dp (minimum 48) · must have a monochrome layer for themed icons | Do not put a mask or shadow in the file, the OEM does the cutting | Android Developers |
+| Windows | at least 16 · 24 · 32 · 48 · 256 · `targetsize-N` files, unplated, for both dark and light themes, otherwise the system adds a backplate | — | Microsoft Learn (updated 2026-08-05) |
+| Web | `favicon.ico` 32 (add 16 if 32 scaled down looks blurry) · `icon.svg` supporting dark theme with a media query · `apple-touch-icon.png` 180 with padding and a background color · `icon-192.png` · `icon-512.png` · maskable 512 with the artwork inside the central 409 | Google Search does not accept SVG alone, it needs PNG or ICO · minimum 8×8, recommended over 48 | Evil Martians (Andrey Sitnik · 2026-01-21) · Google Search Central |
+| Claude Code plugin | `icon` field in `plugin.json` points to an image file in the plugin, such as `./logo.png` · used only on the listing page at `claude.ai/directory/manage`, Claude Code does not read it | Docs set no size, shape, or theme (checked 2026-10-26) · the directory gate accepts PNG JPEG GIF WebP SVG · make an SVG master, then export PNG 512 up front, which also works for Raycast | code.claude.com plugins-reference · publish |
 
-## แหล่ง
+## Sources
 
-- Material Design 1 · Icons — https://m1.material.io/style/icons.html (M3 เปิดอ่านไม่ได้เพราะหน้าต้องรัน JavaScript ตัวเลขจึงมาจาก M1)
+- Material Design 1 · Icons — https://m1.material.io/style/icons.html (M3 could not be read because the page needs JavaScript to run, so the numbers come from M1)
 - Lucide · Design principles — https://lucide.dev/contribute/icons/design-principles
 - Atlassian · Iconography — https://atlassian.design/foundations/iconography/
 - Microsoft Fluent 2 · Iconography — https://fluent2.microsoft.design/iconography

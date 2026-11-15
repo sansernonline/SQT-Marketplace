@@ -1,22 +1,22 @@
-# หัวหน้าเรียนรู้ตัวเอง — `~/.claude/superuser/LEAD-PLAYBOOK.md`
+# The lead learns about itself — `~/.claude/superuser/LEAD-PLAYBOOK.md`
 
-ไฟล์นี้เหมือนกันทุก plugin · ต้นฉบับอยู่ที่ plugin `superuser` · เป็นแกน (ไม่ปิดตาม config)
+This file is identical in every plugin. The original lives in plugin `superuser`. It is a core file (not turned off by config).
 
-`IMPROVEMENTS.md` และรอบเรียนรู้ดูว่า **ทีม** พลาดตรงไหน · ไฟล์นี้ดูว่า **หัวหน้า** ตัดสินใจพลาดตรงไหน — จัดขนาดผิด · แจกงานผิดตัว · ให้ระดับโมเดลสูงหรือต่ำไป · แบ่งชิ้นเล็กหรือใหญ่ไป · ตั้งรอบตรวจไม่พอ
+`IMPROVEMENTS.md` and the learning round look at where the **team** went wrong. This file looks at where the **lead** decided wrong: sized wrong · gave work to the wrong worker · set the model tier too high or too low · split pieces too small or too large · set too few check rounds.
 
-## วงจร 3 ขั้น
+## The 3-step loop
 
-1. **คาดก่อนแจกงาน** (หัวข้อ 2 ของ `superuser`) — 1 บรรทัดในตาราง "การตัดสินใจ" ของ `CONTEXT.md` (ไม่มี context → ท้ายคำตอบ):
+1. **Predict before handing out work** (section 2 of `superuser`): 1 line in the "การตัดสินใจ" (decisions) table of `CONTEXT.md` (no context file → at the end of the answer):
    `คาด: ขนาด กลาง · ลูกทีม 3 · รอบตรวจ 2 · ระดับ กลาง`
-2. **เทียบตอนปิดงาน** (หัวข้อ 7) — 1 บรรทัดใต้ **ผล**: `คาด ลูกทีม 3 · รอบ 2 → จริง ลูกทีม 5 · รอบ 3`
-3. **จดเมื่อเข้าเงื่อนไข** — ต่างกันเกิน 2 เท่าในช่องใดช่องหนึ่ง หรือต่างแบบเดิมเป็นครั้งที่ 2 (เช่น งานเอกสารกลางใช้รอบตรวจเกินคาดอีกแล้ว) → เพิ่มหรือแก้ 1 แถวในไฟล์นี้ · ไม่เข้าเงื่อนไขไม่จด
+2. **Compare when closing the job** (section 7): 1 line under **ผล**: `คาด ลูกทีม 3 · รอบ 2 → จริง ลูกทีม 5 · รอบ 3`
+3. **Record when a condition is met**: a difference of more than 2 times in any one field, or the same kind of difference for the 2nd time (for example a medium document job again used more check rounds than predicted) → add or fix 1 row in this file. If no condition is met, do not record.
 
-## ใช้ตอนไหน
+## When to use it
 
-- ก่อนจัดขนาดงานใหม่ทุกครั้ง เปิดไฟล์นี้ถ้ามี (≤ 40 แถว อ่านเร็ว) · เจอแถวที่ตรงกับงาน → ใช้ค่าในช่อง "ทำแบบนี้แทน" แล้วจดในบรรทัด "คาด" ว่าใช้แถวไหน
-- แถวที่ใช้แล้วคาดตรง 3 ครั้งติด → ช่อง "มั่นใจ" เป็น `ใช้ได้` · แถวที่ใช้แล้วยังพลาด 2 ครั้ง → แก้แถวหรือลบ
+- Before sizing any new job, open this file if it exists (≤ 40 rows, quick to read). If you find a row matching the job → use the value in the "ทำแบบนี้แทน" (do this instead) column, and note in the "คาด" line which row you used.
+- A row whose prediction was right 3 times in a row when used → set its "มั่นใจ" (confidence) column to `ใช้ได้` (works). A row that still missed 2 times when used → fix the row or delete it.
 
-## แม่แบบ
+## Template
 
 ```markdown
 # LEAD-PLAYBOOK — บทเรียนการตัดสินใจของหัวหน้า
@@ -31,10 +31,10 @@
 - งานที่มีตัวเลขจากหลายแหล่ง → ตรวจแหล่งก่อน ตรวจภาษาทีหลัง
 ```
 
-ช่อง "มั่นใจ" ใช้ 2 คำ: `ลอง` · `ใช้ได้`
+The "มั่นใจ" column uses 2 words: `ลอง` (trying) · `ใช้ได้` (works).
 
-## ห้าม
+## Do not
 
-- ไม่จดชื่อลูกค้า ตัวเลขเงิน หรือค่าลับ (ไฟล์อยู่นอกโปรเจกต์)
-- ไม่จดบทเรียนของลูกทีม (ไป `TEAM.md` หรือ `IMPROVEMENTS.md`)
-- ไม่แก้ skill หรือ playbook จากไฟล์นี้เอง · ผู้ใช้สั่ง "รวมบทเรียน" → playbook `learn-from-session` อ่านไฟล์นี้ด้วย แล้วเสนอย้าย "กฎที่ตกผลึก" เข้าหัวข้อ 2 ของ `superuser`
+- Do not record customer names, money figures, or secret values (the file lives outside the project).
+- Do not record worker lessons (they go to `TEAM.md` or `IMPROVEMENTS.md`).
+- Do not edit a skill or playbook from this file itself. When the user says "รวมบทเรียน" (merge the lessons) → the playbook `learn-from-session` reads this file too, then proposes moving the "กฎที่ตกผลึก" (crystallised rules) into section 2 of `superuser`.

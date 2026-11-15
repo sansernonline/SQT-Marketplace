@@ -1,50 +1,50 @@
-# เว็บแอป และทราฟฟิกเครือข่าย
+# Web apps and network traffic
 
-แนวคิดดัดแปลงจาก `runtime-observation.md` และ `evidence-workflows.md` ของ REA (MIT · © 2026 morluto) ส่วนไฟล์ทราฟฟิก เขียนใหม่ให้ใช้สคริปต์ในเครื่อง
+Ideas adapted from REA's `runtime-observation.md` and `evidence-workflows.md` (MIT · © 2026 morluto). The traffic-file part is rewritten to use local scripts.
 
-## 1 · เว็บแอปของผู้ใช้
+## 1 · The user's web app
 
-- เป้าหมายต้องเป็นเว็บของผู้ใช้หรือลูกค้าที่มีสัญญา จดโดเมนที่อยู่ในขอบเขตลงบันทึกสิทธิ์ · โดเมนอื่นที่หน้าเว็บเรียก (CDN · analytics · payment) ดูได้แค่ใน capture ไม่ไปยิงเอง
-- โค้ดฝั่งเบราว์เซอร์: เอาจากโฟลเดอร์ build ของผู้ใช้ก่อน ถ้าไม่มีให้ผู้ใช้กด "Save as" หรือส่งไฟล์มา · ต่อด้วย `sourcemap_list.py` และ [javascript-electron](javascript-electron.md)
-- ห้ามยิง request ซ้ำ ห้ามลอง login ห้ามสแกนหาช่องโหว่ ถ้าไม่ได้ตกลงไว้ในขอบเขต · งานทดสอบความปลอดภัยส่งต่อ `security-engineer`
-- หน้าเว็บสาธารณะของคนอื่น อ่านได้แค่หน้าและสคริปต์ที่ใครก็โหลดได้ ตาม robots.txt และเงื่อนไขการใช้งานของเว็บนั้น · ห้ามเข้าส่วนที่ต้อง login ของคนอื่น
-- เจอ CAPTCHA ไม่แก้และไม่หาทางเลี่ยง ให้ผู้ใช้ทำเอง
-- ตรวจว่าเครื่องมีเบราว์เซอร์และ Playwright Core ไหมด้วย `node scripts/check-tools.mjs --target web` · การให้ Playwright กดหรือกรอกเองต้องถามทุกครั้งตาม [runtime-observation](runtime-observation.md)
+- The target must be the web app of the user, or of a customer under contract. Record the in-scope domains in the authorization record. Other domains the page calls (CDN · analytics · payment) may be looked at only in the capture; never send requests to them yourself.
+- Browser-side code: take it from the user's build folder first. If there is none, have the user "Save as" or send the files. Then continue with `sourcemap_list.py` and [javascript-electron](javascript-electron.md).
+- Never replay requests, try logins, or scan for vulnerabilities unless agreed in the scope. Pass security testing work on to `security-engineer`.
+- For someone else's public web page, read only the page and scripts anyone can load, following that site's robots.txt and terms of use. Never enter parts of another party's site that need login.
+- On a CAPTCHA, do not solve it and do not look for a way around it. Let the user do it.
+- Check whether the machine has a browser and Playwright Core with `node scripts/check-tools.mjs --target web`. Letting Playwright click or fill in by itself needs asking every time, per [runtime-observation](runtime-observation.md).
 
-## 2 · ให้ผู้ใช้บันทึก HAR (HTTP Archive) เอง
+## 2 · Have the user record the HAR (HTTP Archive) themselves
 
-ผู้ใช้เป็นคนกด agent ไม่สั่งเบราว์เซอร์เอง:
+The user clicks; the agent does not drive the browser:
 
-1. เปิด DevTools (F12) → แท็บ Network → ติ๊ก "Preserve log"
-2. ทำขั้นตอนที่ต้องการดู 1 รอบ
-3. คลิกขวาในรายการ → "Save all as HAR" (Chrome · Edge) แล้ววางไฟล์ไว้ใน `_to_delete/re/<ชื่อ>/`
+1. Open DevTools (F12) → Network tab → tick "Preserve log"
+2. Do the steps to be observed, once
+3. Right-click in the list → "Save all as HAR" (Chrome · Edge), then put the file in `_to_delete/re/<ชื่อ>/`
 
-**HAR มี cookie token และข้อมูลส่วนตัวเต็ม ๆ** ให้ถือเป็นความลับ เก็บใน `_to_delete/` ไม่ commit ไม่ส่งต่อ และบอกผู้ใช้ให้ลบเมื่อจบงาน · ถ้าใช้ session จริง แนะนำให้ผู้ใช้ logout หลังบันทึก เพื่อให้ token ในไฟล์หมดอายุ
+**A HAR holds cookies, tokens and personal data in full.** Treat it as a secret: keep it in `_to_delete/`, never commit it, never pass it on, and tell the user to delete it when the job ends. If a real session was used, advise the user to log out after recording so the tokens in the file expire.
 
-### 2.1 · บันทึก HAR ด้วยสคริปต์ มี 3 กับดัก (ตัวอย่างจากงานนั้น: เว็บค้นเที่ยวบิน)
+### 2.1 · Recording a HAR with a script: 3 traps (example from that job: a flight search site)
 
-| กับดัก | อาการ | ทางแก้ |
+| Trap | Symptom | Fix |
 |---|---|---|
-| URL มีตัว `\|` ที่ยังไม่ encode (เช่น Google Fonts) | เครื่องมืออ่าน HAR ปฏิเสธไฟล์ดิบ: `HAR schema validation failed ... must match format "uri"` | แปลง `\|` เป็น `%7C` แล้วเขียนเป็นไฟล์ใหม่ ไม่แก้ไฟล์ดิบ |
-| คำขอแบบ stream ที่หน้าเว็บยกเลิกเองเมื่อได้ข้อมูลครบ | HAR ไม่มี body ของคำขอนั้น | ให้สคริปต์เก็บข้อมูลที่ไหลเข้ามาผ่าน CDP (Chrome DevTools Protocol) แล้วเติมลง HAR · เขียนใน `_comment` ของรายการนั้นว่าเติมเอง ไม่ใช่มาจาก HAR ตรง ๆ |
-| Playwright 1.64.1 หา ffmpeg ที่ต้องใช้ไม่เจอ (ในเครื่องมีแค่ ffmpeg-1011) | อัดวิดีโอไม่ได้ | ผูกไว้ที่ 1.64.0-alpha และจดเวอร์ชันลงสมุดหลักฐาน |
+| A URL has an unencoded `\|` (for example Google Fonts) | HAR reading tools reject the raw file: `HAR schema validation failed ... must match format "uri"` | Convert `\|` to `%7C` and write a new file; do not edit the raw file |
+| A streaming request the page cancels itself once it has all the data | The HAR has no body for that request | Have the script collect the incoming data through CDP (Chrome DevTools Protocol) and fill it into the HAR · write in that entry's `_comment` that it was added manually, not from the HAR directly |
+| Playwright 1.64.1 cannot find the ffmpeg it needs (the machine only has ffmpeg-1011) | Cannot record video | Pin to 1.64.0-alpha and record the version in the evidence ledger |
 
-## 3 · สรุป HAR
+## 3 · Summarize a HAR
 
 ```bash
 python -I scripts/har_summary.py <capture.har>                       # ทั้งไฟล์
 python -I scripts/har_summary.py <capture.har> --host api.example.com # เฉพาะ host เดียว
 ```
 
-ได้: host และจำนวนครั้ง · status code · endpoint จัดกลุ่มตาม method + host + รูปแบบ path (เลข id และ uuid กลายเป็น `{id}`) · ชื่อ query parameter · ชนิดข้อมูลที่ตอบ · วิธียืนยันตัวตน
+It reports: hosts and counts · status codes · endpoints grouped by method + host + path pattern (id numbers and uuids become `{id}`) · query parameter names · response content types · authentication method
 
-- ค่าของ header cookie และ query **ถูกตัดทิ้งทั้งหมด** เหลือแค่ชื่อและคำนำหน้าอย่าง `Bearer` `Basic` · ผลจึงแปะในรายงานได้
-- การจัดกลุ่ม path เป็น `อนุมาน` ไม่ใช่ schema ของ server · endpoint ที่ไม่ได้กดใน capture ถือว่ายังไม่รู้ ไม่ใช่ไม่มี
-- ต้องดู body ของ request หรือ response ให้เปิด HAR อ่านเฉพาะ entry ที่ต้องการ แล้วเขียนแต่โครง (ชื่อ field · ชนิด) ลงรายงาน ไม่ใช่ค่า
+- Values of cookie headers and queries are **dropped entirely**, leaving only names and prefixes like `Bearer` `Basic`. So the output can be pasted into a report.
+- The path grouping is `อนุมาน` (inferred), not the server's schema. An endpoint not clicked in the capture is unknown, not absent.
+- To see a request or response body, open the HAR and read only the entries needed, then write only the structure (field names · types) in the report, not the values.
 
-## 4 · ไฟล์ pcap (packet capture)
+## 4 · pcap files (packet capture)
 
-ใช้ Wireshark หรือ tshark ที่ผู้ใช้ติดตั้งจาก wireshark.org (ตรวจด้วย `node scripts/check-tools.mjs --target network`) · การอ่านไฟล์ที่บันทึกแล้วไม่ต้องถามซ้ำ แต่การดักทราฟฟิกสดต้องถามทุกครั้ง · สิทธิ์อ่านไฟล์ที่บันทึกไว้ไม่ได้รวมสิทธิ์ดักใหม่ และห้ามดักหรือถอดรหัสทราฟฟิกของคนอื่น
+Use Wireshark or tshark that the user installed from wireshark.org (check with `node scripts/check-tools.mjs --target network`). Reading an already recorded file needs no repeated asking, but capturing live traffic needs asking every time. Permission to read a saved file does not include permission to capture anew, and never capture or decrypt anyone else's traffic.
 
 ```bash
 tshark -r <file.pcap> -q -z conv,tcp          # ใครคุยกับใคร
@@ -53,24 +53,24 @@ tshark -r <file.pcap> -Y dns -T fields -e dns.qry.name | sort | uniq -c | sort -
 tshark -r <file.pcap> -Y 'tls.handshake.type == 1' -T fields -e tls.handshake.extensions_server_name | sort -u
 ```
 
-- ใส่ display filter (`-Y`) ให้แคบเฉพาะ host หรือ port ของเป้าหมายตั้งแต่แรก ไม่เปิดไฟล์ใหญ่ทั้งไฟล์
+- Put in a display filter (`-Y`) narrowed to the target's host or port from the start. Do not open a whole large file.
 
-- TLS ที่ไม่มี key log อ่านได้แค่ชื่อ host (SNI) และขนาด · อย่าอ้างว่าเห็นเนื้อหา
-- SAZ ของ Fiddler เป็น ZIP ที่มีไฟล์ request/response แยก แตกด้วย `python -m zipfile -e` แล้วอ่านทีละไฟล์
+- TLS without a key log shows only the host name (SNI) and sizes. Never claim to have seen the content.
+- A Fiddler SAZ is a ZIP holding separate request/response files. Extract it with `python -m zipfile -e` and read one file at a time.
 
-## 5 · ดักทราฟฟิกใหม่ผ่าน proxy (mitmproxy)
+## 5 · Capturing new traffic through a proxy (mitmproxy)
 
-ใช้เมื่อไม่มี capture ที่บันทึกไว้ และต้องเห็น request ของแอปที่ไม่ใช่เบราว์เซอร์ · ต้องถามผู้ใช้ทุกครั้ง โดยบอกแอป อุปกรณ์ และช่วงเวลาที่จะดัก
+Use when there is no saved capture and you must see the requests of a non-browser app. Ask the user every time, stating the app, the device and the time window to capture.
 
-- ใช้กับระบบหรือบัญชีทดสอบที่ได้รับอนุญาตเท่านั้น ไม่ใช้บัญชีจริงที่มีข้อมูลลูกค้า
-- บอกผลข้างเคียงก่อนเริ่ม: ต้องติดตั้งใบรับรอง CA ของ mitmproxy ลงเครื่องหรืออุปกรณ์ และต้องตั้ง proxy · แอปที่ตรึงใบรับรองไว้ (certificate pinning) จะเชื่อมต่อไม่ได้ ให้จดเป็นสิ่งที่ยังไม่รู้ ห้ามแก้แอปเพื่อเลี่ยง
-- บันทึกผลลงไฟล์ด้วย `mitmdump -w _to_delete/re/<ชื่อ>/flows.mitm` แล้วอ่านเฉพาะส่วน
-- จบงานแล้วคืนค่าทุกอย่าง: ถอดใบรับรอง CA · ปิด proxy · จดลงสมุดหลักฐานว่าคืนค่าแล้ว
-- ไฟล์ flow มี cookie และ token เหมือน HAR ให้ดูแลแบบเดียวกับหัวข้อ 2
+- Use only on authorized test systems or accounts, never real accounts holding customer data.
+- State the side effects before starting: the mitmproxy CA certificate must be installed on the machine or device, and a proxy must be set. An app with certificate pinning will not connect; record that as an unknown and never modify the app to get around it.
+- Save the results to a file with `mitmdump -w _to_delete/re/<ชื่อ>/flows.mitm`, then read only parts.
+- At the end, restore everything: remove the CA certificate · turn off the proxy · record in the evidence ledger that it was restored.
+- A flow file holds cookies and tokens like a HAR. Handle it the same way as section 2.
 
-## 6 · โปรโตคอลที่ไม่รู้จัก
+## 6 · Unknown protocols
 
-1. เก็บตัวอย่างอย่างน้อย 3 ชุดที่ต่างกันทีละอย่าง (ค่าเดียวเปลี่ยน)
-2. เทียบ byte ต่อ byte หา header · ความยาว · ตัวนับ · checksum
-3. เขียน parser ที่เช็กขนาดก่อนอ่านทุกครั้ง แล้วรันกับตัวอย่างทั้งหมด · ผลตรงทุกชุดจึงติด `ตรวจจริง`
-4. ค่าที่เห็นค่าเดียวในทุกตัวอย่าง จดเป็นสิ่งที่ยังไม่รู้ ไม่ตั้งชื่อให้เอง
+1. Collect at least 3 samples that differ one thing at a time (one value changed).
+2. Compare byte by byte to find headers · lengths · counters · checksums.
+3. Write a parser that checks size before every read, then run it on all the samples. Only when every sample matches, label it `ตรวจจริง` (verified).
+4. For a value that is the same in every sample, record it as an unknown. Do not name it yourself.

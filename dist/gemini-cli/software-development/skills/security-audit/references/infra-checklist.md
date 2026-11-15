@@ -1,28 +1,28 @@
-# สาย infrastructure · cloud · container
+# Lane: infrastructure · cloud · container
 
-เปิดเมื่อ repo มี Terraform · OpenTofu · Pulumi · docker-compose · Dockerfile · Kubernetes YAML · Helm chart · ไฟล์ตั้งค่า cloud หรือเมื่อผู้ใช้สั่ง `/security-scan infra` · รายการนี้ย้ายมาจากรายการตรวจ infrastructure เดิมของคำสั่ง `/security-scan` (ก่อน 2026-11-10 อยู่ใน `security-scan/SKILL.md`)
+Open when the repo has Terraform · OpenTofu · Pulumi · docker-compose · Dockerfile · Kubernetes YAML · Helm charts · cloud config files, or when the user runs `/security-scan infra` · This list was moved from the old infrastructure checklist of the `/security-scan` command (before 2026-11-10 it lived in `security-scan/SKILL.md`)
 
-## กติกาประจำสาย
+## Lane rules
 
-- ตรวจจากไฟล์ใน repo เท่านั้น · ห้ามสแกนพอร์ต ห้ามเรียก cloud จริง ห้ามเปิด bucket ของจริงเพื่อพิสูจน์ เว้นแต่ผู้ใช้อนุญาตเป็นข้อความและเป็นสภาพแวดล้อมทดสอบ
-- ผลจาก `trivy config` · `checkov` · `tfsec` · `hadolint` เป็น candidate ของสายนี้ ยังไม่ใช่ finding (หัวข้อ 3 ของ SKILL.md)
-- สภาพจริงบน cloud อาจต่างจากไฟล์ (แก้ในคอนโซลโดยไม่ผ่าน IaC) จึงมักจบที่ `needs_validation` ถ้าไม่มีสิทธิ์อ่านสภาพจริง
-- วิธีเขียนและแก้ IaC อยู่ที่ [`infra-as-code`](../../infra-as-code/SKILL.md) · [`kubernetes-helm`](../../kubernetes-helm/SKILL.md) ไฟล์นี้บอกแค่ว่าล่าอะไร
+- Check from files in the repo only · never scan ports, never call a real cloud, never open a real bucket to prove it, unless the user allows it in writing and it is a test environment
+- Results from `trivy config` · `checkov` · `tfsec` · `hadolint` are candidates for this lane, not findings yet (section 3 of SKILL.md)
+- The real state on the cloud may differ from the files (edited in the console outside IaC), so these usually end at `needs_validation` if you have no permission to read the real state
+- How to write and fix IaC is in [`infra-as-code`](../../infra-as-code/SKILL.md) · [`kubernetes-helm`](../../kubernetes-helm/SKILL.md) · this file only says what to hunt
 
-## รายการล่า
+## Hunt list
 
-| ประเภท (`class`) | ล่าอะไร | สัญญาณในไฟล์ | พิสูจน์อย่างไร | มักแจ้งผิดเมื่อ |
+| Type (`class`) | What to hunt | Signals in files | How to prove | Often falsely reported when |
 |---|---|---|---|---|
-| `exposed-port` | พอร์ตหรือ service ที่เปิดให้ทั้งอินเทอร์เน็ตทั้งที่ควรเป็นวงใน (ฐานข้อมูล · Redis · SSH · หน้า admin) | security group `0.0.0.0/0` · `ports:` ใน compose ที่ bind `0.0.0.0` · Kubernetes `Service` แบบ `LoadBalancer` · NodePort ของฐานข้อมูล | อ่านกฎ ingress แล้วไล่ว่าทางจากอินเทอร์เน็ตถึง service ผ่านได้จริงหรือมีไฟร์วอลล์ชั้นอื่นกั้น | พอร์ต 80 · 443 ของเว็บที่ตั้งใจเปิด · เครื่องในเครือข่ายส่วนตัวที่ไม่มี public IP |
-| `weak-iam` | สิทธิ์ของ role · service account · user กว้างเกินงาน | `"Action": "*"` · `"Resource": "*"` · `AdministratorAccess` · `roles/owner` · `cluster-admin` ผูกกับแอป · สิทธิ์เขียนทั้งที่งานแค่อ่าน | เทียบสิทธิ์ที่ให้กับสิ่งที่โค้ดเรียกจริง ถ้าเกินและโค้ดถูกเจาะได้ ผลคือเข้าถึงทรัพยากรอื่น | role ของ pipeline ที่ตั้งใจให้สิทธิ์กว้างและมีเงื่อนไขกำกับ · role ของผู้ดูแลที่ไม่ผูกกับแอป |
-| `public-storage` | bucket · blob container · ฐานข้อมูลที่เปิดสาธารณะหรือเข้าได้โดยไม่ต้องยืนยันตัวตน | ACL `public-read` · policy `"Principal": "*"` · ปิด block public access · ฐานข้อมูลไม่มีรหัสผ่านหรือเปิด `0.0.0.0` | อ่าน policy ว่ารายการและอ่านออบเจ็กต์ได้โดยไม่มี credential หรือไม่ และเนื้อหาเป็นข้อมูลอะไร | bucket ของเว็บไซต์สาธารณะที่เก็บเฉพาะไฟล์สาธารณะ (CSS · รูปโลโก้) |
-| `unencrypted-data` | storage หรือการส่งที่ไม่เข้ารหัส | `encrypted = false` · ไม่มี `kms_key` · `ssl_enforcement` ปิด · listener `HTTP` ไม่ redirect · เชื่อมฐานข้อมูลโดยไม่ใช้ TLS | อ่านค่าของ resource ที่เก็บข้อมูลส่วนบุคคลหรือค่าลับ แล้วดูว่าชั้นอื่นเข้ารหัสแทนหรือไม่ | ข้อมูลทดสอบ · volume ชั่วคราวที่ไม่เก็บข้อมูลจริง |
-| `missing-security-headers` | เว็บหรือ API ไม่ส่ง header ป้องกันพื้นฐาน | ไม่มี `Strict-Transport-Security` · `Content-Security-Policy` · `X-Content-Type-Options` · `X-Frame-Options` ในตั้งค่า reverse proxy · CDN · ตัวแอป | อ่านตั้งค่า proxy และโค้ดแอปว่ามีที่ไหนใส่ header ให้หรือไม่ | API ที่ไม่มีหน้าเว็บ (CSP ไม่เกี่ยว) · header ที่ CDN ใส่ให้นอก repo |
-| `insecure-default` | ค่าตั้งต้นที่ไม่ปลอดภัยถูกใช้ต่อ | รหัสผ่านตั้งต้น · debug เปิดบน production · CORS `*` พร้อม credential · cluster เปิด anonymous auth · container รันเป็น `root` · `privileged: true` | ดูว่าค่านั้นถูกใช้ในไฟล์ของ production จริง ไม่ใช่เฉพาะไฟล์ dev | ไฟล์ compose สำหรับเครื่อง dev ที่ไม่ได้ deploy |
-| `container-image-risk` | image ที่มีช่องโหว่หรือที่มาไม่น่าเชื่อถือ | `FROM xxx:latest` · base image เก่าที่ผล `trivy image` มี CVE ระดับสูง · ไม่ pin ด้วย digest · ติดตั้งเครื่องมือ build ค้างใน image สุดท้าย · ลืมตั้ง `USER` | รันหรืออ่านผล `trivy image` แล้วเช็กว่า CVE นั้นถึงโค้ดที่ image ใช้จริงหรือไม่ (เหมือน `vulnerable-dep-reachable` ใน [`classes-supply-chain`](classes-supply-chain.md)) | CVE ในแพ็กเกจที่ image ไม่ได้เรียกใช้ · stage แรกของ multi-stage build ที่ไม่ถูกส่งออก |
+| `exposed-port` | A port or service open to the whole internet that should be internal (database · Redis · SSH · admin page) | security group `0.0.0.0/0` · `ports:` in compose that binds `0.0.0.0` · Kubernetes `Service` of type `LoadBalancer` · a database NodePort | Read the ingress rules, then trace whether a path from the internet to the service is really open or another firewall layer blocks it | Port 80 · 443 of a website that is meant to be open · machines in a private network with no public IP |
+| `weak-iam` | Permissions of a role · service account · user broader than the job | `"Action": "*"` · `"Resource": "*"` · `AdministratorAccess` · `roles/owner` · `cluster-admin` bound to an app · write permission when the job only reads | Compare the permissions granted with what the code really calls; if it is more and the code can be breached, the result is access to other resources | A pipeline role that is meant to be broad and is guarded by conditions · an admin role not bound to the app |
+| `public-storage` | A bucket · blob container · database that is public or reachable without authentication | ACL `public-read` · policy `"Principal": "*"` · block public access turned off · a database with no password or open on `0.0.0.0` | Read the policy to see whether objects can be listed and read without credentials, and what data the content is | The bucket of a public website that holds only public files (CSS · logo images) |
+| `unencrypted-data` | Storage or transport that is not encrypted | `encrypted = false` · no `kms_key` · `ssl_enforcement` off · `HTTP` listener with no redirect · database connection without TLS | Read the values of resources that hold personal data or secrets, then see whether another layer encrypts instead | Test data · temporary volumes that hold no real data |
+| `missing-security-headers` | A web app or API does not send the basic protective headers | No `Strict-Transport-Security` · `Content-Security-Policy` · `X-Content-Type-Options` · `X-Frame-Options` in the reverse proxy · CDN · app config | Read the proxy config and app code to see whether anywhere adds the headers | An API with no web pages (CSP is irrelevant) · headers the CDN adds outside the repo |
+| `insecure-default` | An insecure default value carried into use | default password · debug on in production · CORS `*` with credentials · a cluster with anonymous auth on · a container running as `root` · `privileged: true` | See whether that value is used in the real production files, not only in dev files | A compose file for a dev machine that is never deployed |
+| `container-image-risk` | An image with vulnerabilities or an untrustworthy source | `FROM xxx:latest` · an old base image whose `trivy image` result has high-level CVEs · not pinned by digest · build tools left in the final image · forgot to set `USER` | Run or read the `trivy image` result, then check whether that CVE reaches code the image really uses (like `vulnerable-dep-reachable` in [`classes-supply-chain`](classes-supply-chain.md)) | A CVE in a package the image never calls · the first stage of a multi-stage build that is not shipped |
 
-## เกี่ยวกับสายอื่น
+## Relation to other lanes
 
-- build และ CI/CD (workflow · lockfile · registry) อยู่ที่ [`classes-supply-chain`](classes-supply-chain.md)
-- ค่าลับที่หลุดใน IaC ไปที่หัวข้อ 4 ของ [`attack-classes`](attack-classes.md) · SSRF ไปเมตาดาต้าของ cloud อยู่ที่หัวข้อ 9 ของไฟล์เดียวกัน
-- ระดับความรุนแรงใช้ตามหัวข้อ 5 ของ SKILL.md เฉพาะข้อที่ confirmed
+- build and CI/CD (workflows · lockfiles · registries) are in [`classes-supply-chain`](classes-supply-chain.md)
+- Secrets leaked in IaC go to section 4 of [`attack-classes`](attack-classes.md) · SSRF to cloud metadata is in section 9 of the same file
+- Severity levels follow section 5 of SKILL.md, only for confirmed items

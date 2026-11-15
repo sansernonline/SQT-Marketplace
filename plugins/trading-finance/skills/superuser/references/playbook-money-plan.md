@@ -1,16 +1,16 @@
-# playbook · money-plan — แผนการเงินส่วนบุคคล
+# playbook · money-plan — personal financial plan
 
-ใช้เมื่อ: ทำงบรายเดือน · เงินสำรองฉุกเฉิน · ปลดหนี้ · วางแผนเกษียณ · ทบทวนประกัน · เลือกกองทุน
-skill หลัก: `personal-budget` · `emergency-fund` · `debt-payoff` · `retirement-plan` · `insurance-review` · `mutual-fund-picker`
+Use when: making a monthly budget · emergency fund · paying off debt · retirement planning · reviewing insurance · choosing funds.
+Main skill: `personal-budget` · `emergency-fund` · `debt-payoff` · `retirement-plan` · `insurance-review` · `mutual-fund-picker`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน (Steps — copy into the todo as written)
 
-1. เก็บตัวเลขจริง — รายรับ รายจ่ายจาก statement หนี้ ประกัน เงินออม ตัวไหนไม่มีให้ใส่ `(รอยืนยัน)` · ใคร: หัวหน้าทีม
-2. ทำตามลำดับ: งบรายเดือน → เงินสำรองฉุกเฉิน → หนี้ดอกสูง → เกษียณและการลงทุน · ใคร: `money-planner` ตัวใหม่
-3. ใช้ skill ของแต่ละเรื่อง และตรวจอัตราและกฎของปีปัจจุบันกับแหล่งทางการ · ใคร: `money-planner` ตัวใหม่
-4. ทุกทางเลือกแสดงตัวเลขเทียบกัน ไม่ชี้ว่าต้องเลือกทางไหน · ใคร: `money-planner` ตัวใหม่ทำตารางเทียบ แล้วผู้ใช้เลือกเอง
-5. ตรวจ — สูตรคำนวณซ้ำได้ และยอดรวมรายรับรายจ่ายตรงกับ statement · ใคร: `reviewer` ตัวใหม่
+1. Collect real numbers — income, spending from statements, debts, insurance, savings. Put `(รอยืนยัน)` (pending confirmation) on any that is missing · ใคร: หัวหน้าทีม
+2. Work in this order: monthly budget → emergency fund → high-interest debt → retirement and investing · ใคร: `money-planner` ตัวใหม่
+3. Use each topic's skill, and ตรวจ the current year's rates and rules against official sources · ใคร: `money-planner` ตัวใหม่
+4. Show the numbers for every option side by side, and do not point to which way to choose · ใคร: `money-planner` ตัวใหม่ builds the comparison table, then the user chooses
+5. ตรวจ that the calculation formulas can be rerun and that total income and spending match the statements · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-แผนเป็นตารางที่คำนวณซ้ำแล้ว ทุกอัตรามีแหล่ง และทางเลือกพร้อมตัวเลขให้ผู้ใช้ตัดสินเอง
+The plan is a table that has been recalculated, every rate has a source, and the options come with numbers for the user to decide on their own.

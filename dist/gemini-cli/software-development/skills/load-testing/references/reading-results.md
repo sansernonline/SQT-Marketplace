@@ -1,37 +1,37 @@
-# อ่านผล k6 แล้วเขียนรายงาน
+# Reading k6 results and writing the report
 
-ส่วนขยายของ `load-testing` หัวข้อ 5 · ข้อเท็จจริงของ k6 ตรวจ 2026-10-28 จากหน้าที่ลิงก์ไว้ท้ายไฟล์ · วิธีตีความเป็นแนวปฏิบัติทั่วไป ยังไม่ได้ทดสอบกับระบบจริงในรอบนี้
+Extension of `load-testing` section 5 · k6 facts checked 2026-10-28 from the pages linked at the end of the file · the interpretation is general practice, not yet tested against a real system this round
 
-## 1 · อ่านตามลำดับนี้
+## 1 · Read in this order
 
-| ลำดับ | ดูอะไร | ตีความ |
+| Order | What to look at | Interpretation |
 |---|---|---|
-| 1 | exit code | 0 = ผ่านทุกเกณฑ์ · ไม่ใช่ 0 = ไม่ผ่าน · เกณฑ์ไม่ผ่านมักได้ 99 |
-| 2 | บรรทัด thresholds ท้ายรายงาน | เกณฑ์ข้อไหนผ่าน ข้อไหนไม่ผ่าน และค่าจริงเท่าไร |
-| 3 | `http_req_failed` | error พุ่ง → เวลาตอบที่เร็วอาจเป็นเพราะตอบ error เร็ว อย่าเพิ่งดีใจกับ p95 |
-| 4 | `http_req_duration` p95 และ p99 | ช่วงที่ผู้ใช้ส่วนใหญ่เจอ และหางที่คนส่วนน้อยรอ · ค่าเฉลี่ยใช้ตัดสินไม่ได้ |
-| 5 | `checks` | คำตอบถูกไหม ไม่ใช่แค่ได้ status 200 |
-| 6 | คำเตือนเรื่อง VU ไม่พอ หรือรอบที่ไม่ได้เริ่ม | เครื่องยิงตามปริมาณที่ตั้งไม่ทัน ผลรอบนี้บอกขีดของเครื่องยิง ไม่ใช่ระบบ (ชื่อ metric ของรอบที่หลุด `(ยังไม่ได้ตรวจ)`) |
+| 1 | exit code | 0 = every threshold passed · not 0 = failed · a failed threshold usually gives 99 |
+| 2 | the thresholds line at the end of the report | which thresholds passed, which failed, and the actual values |
+| 3 | `http_req_failed` | if errors spike → a fast response time may only be because errors return fast, so do not celebrate the p95 yet |
+| 4 | `http_req_duration` p95 and p99 | the range most users experience, and the tail a few users wait through · the average cannot be used to decide |
+| 5 | `checks` | whether the answers are correct, not just a status 200 |
+| 6 | warnings about not enough VUs, or rounds that did not start | the load generator could not keep up with the set rate; this run shows the limit of the generator, not the system (metric name of the dropped rounds `(ยังไม่ได้ตรวจ)` — not yet checked) |
 
-## 2 · หาว่าตันตรงไหน
+## 2 · Find where it jams
 
-ดูกราฟของระบบช่วงเวลาเดียวกับการยิง (`observability-basics` หัวข้อ 2):
+Look at the system graphs for the same period as the run (`observability-basics` section 2):
 
-| อาการในกราฟ | สงสัยอะไรก่อน |
+| Symptom in the graph | Suspect first |
 |---|---|
-| CPU ของแอปเต็ม เวลาตอบโตตาม | โค้ดหนักหรือเครื่องน้อยไป · ลองเพิ่มเครื่องแล้วยิงซ้ำ |
-| CPU แอปว่าง แต่เวลาตอบโต | รอของข้างนอก: connection pool ฐานข้อมูล · ล็อกในตาราง · API ภายนอก |
-| error เริ่มที่ปริมาณหนึ่งแล้วพุ่ง | ชนเพดาน (pool · ไฟล์ที่เปิดได้ · rate limit) · หาค่าตั้งที่ปริมาณนั้น |
-| soak: หน่วยความจำขึ้นเรื่อย ๆ ไม่ลง | หน่วยความจำรั่ว · connection ไม่ถูกคืน |
-| เวลาตอบดีตอนแรก แล้วแย่ลงพร้อมข้อมูลที่โต | query ไม่มี index · ตารางโตจากข้อมูลที่ยิงสร้าง |
+| App CPU full, response time grows with it | Heavy code or too few machines · try adding machines and run again |
+| App CPU idle, but response time grows | Waiting on something outside: database connection pool · table locks · an external API |
+| Errors start at a certain load and then spike | Hit a ceiling (pool · open files · rate limit) · find the setting at that load |
+| soak: memory keeps rising and never drops | Memory leak · connections not returned |
+| Response time good at first, then worse as the data grows | Query without an index · table grown from data the run created |
 
-## 3 · ยิงซ้ำให้เทียบได้
+## 3 · Re-run so results are comparable
 
-- สคริปต์เดิม ข้อมูลตั้งต้นเดิม environment เดิม · ล้างข้อมูลที่การยิงรอบก่อนสร้างไว้
-- เปลี่ยนทีละอย่าง (โค้ด หรือ ค่าตั้ง หรือ ขนาดเครื่อง) แล้วยิงเทียบกับ baseline
-- เอกสาร k6 แนะนำรันแบบเดียวกันอย่างน้อย 2 รอบก่อนปล่อยรุ่น เพราะผลแต่ละรอบแกว่ง
+- Same script, same starting data, same environment · clean up the data the previous run created
+- Change one thing at a time (code, or a setting, or machine size) and run against the baseline
+- The k6 docs advise running the same way at least 2 rounds before releasing a version, because each round's result varies
 
-## 4 · แบบรายงาน 1 หน้า
+## 4 · One-page report format
 
 ```markdown
 ## ผล load test · <ระบบ> · <YYYY-MM-DD>
@@ -49,10 +49,10 @@
 ทำต่อ: <ข้อแก้ 1–3 ข้อ> · ยิงซ้ำหลังแก้: <วันที่>
 ```
 
-เขียนผลตามที่ยิงจริงเท่านั้น · ยิงแค่ 50 รอบต่อวินาที → ห้ามเขียนว่า "รับได้ 1,000 คนพร้อมกัน"
+Write results only as actually run · if you only ran 50 rounds per second → never write "can handle 1,000 users at once"
 
-## ที่มา
+## Sources
 
-- exit code https://grafana.com/docs/learning-paths/automate-k6-cicd/handle-exit-code/ (ตรวจ 2026-10-28)
-- thresholds https://grafana.com/docs/k6/latest/using-k6/thresholds/ (ตรวจ 2026-10-28)
-- รันซ้ำอย่างน้อย 2 รอบ https://grafana.com/docs/k6/latest/testing-guides/automated-performance-testing/ (ตรวจ 2026-10-28)
+- exit code https://grafana.com/docs/learning-paths/automate-k6-cicd/handle-exit-code/ (checked 2026-10-28)
+- thresholds https://grafana.com/docs/k6/latest/using-k6/thresholds/ (checked 2026-10-28)
+- run at least 2 rounds again https://grafana.com/docs/k6/latest/testing-guides/automated-performance-testing/ (checked 2026-10-28)

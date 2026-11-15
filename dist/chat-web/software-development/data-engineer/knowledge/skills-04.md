@@ -1672,205 +1672,205 @@ All opened 2026-10-26.
 
 ## reference: deep-research-system.md
 
-> ออกแบบ "ระบบ Deep Research Agent" เป็นผลิตภัณฑ์: ผู้ใช้พิมพ์หัวข้อเดียว ได้รายงานพร้อมอ้างอิง · แหล่งที่เปิดอ่านจริงตรวจเมื่อ 2026-10-27 · `(ยังไม่ได้ตรวจ)` = ยังไม่ได้เปิดอ่าน · `อนุมาน` = ข้อสรุปของเราเอง ไม่ใช่ที่หน้าเว็บบอก
+> Design of a "Deep Research Agent system" as a product: the user types one topic and gets a report with references · sources actually opened were checked on 2026-10-27 · `(ยังไม่ได้ตรวจ)` (not yet checked) = not yet opened and read · `อนุมาน` (inferred) = our own conclusion, not what the web page says
 >
-> ไฟล์นี้เป็นแผนที่ของระบบ ส่วนรายละเอียดของแต่ละชิ้นอยู่ในไฟล์และ skill ที่ชี้ไว้ ไม่ลอกมาซ้ำ
+> This file is a map of the system. The detail of each piece is in the files and skills it points to, not copied again here.
 
-**สารบัญ**
+**Contents**
 
-- [1. สถาปัตยกรรม](#1-สถาปัตยกรรม)
-- [2. คิว](#2-คิว)
-- [3. งบและการหยุด](#3-งบและการหยุด)
-- [4. browser agent](#4-browser-agent)
-- [5. PDF งานวิจัยและ vector DB](#5-pdf-งานวิจัยและ-vector-db)
-- [6. ตรวจอ้างอิง](#6-ตรวจอ้างอิง)
-- [7. เว็บแอปและผู้ใช้](#7-เว็บแอปและผู้ใช้)
-- [8. ตัวชี้วัดที่ต้องเฝ้าดู](#8-ตัวชี้วัดที่ต้องเฝ้าดู)
-- [9. ตัวอย่างจริง](#9-ตัวอย่างจริง)
-- [10. ตรวจก่อนส่ง](#10-ตรวจก่อนส่ง)
-- [11. ที่มา](#11-ที่มา)
+- [1. Architecture](#1-architecture)
+- [2. Queue](#2-queue)
+- [3. Budget and stopping](#3-budget-and-stopping)
+- [4. Browser agent](#4-browser-agent)
+- [5. Research PDFs and vector DB](#5-research-pdfs-and-vector-db)
+- [6. Citation checking](#6-citation-checking)
+- [7. Web app and users](#7-web-app-and-users)
+- [8. Metrics to watch](#8-metrics-to-watch)
+- [9. Worked example](#9-worked-example)
+- [10. Check before sending](#10-check-before-sending)
+- [11. Sources](#11-sources)
 
-## 1. สถาปัตยกรรม
+## 1. Architecture
 
-ก่อนสร้าง ตอบก่อนว่าใช้ multi-agent คุ้มไหม → [`agent-systems.md`](agent-systems.md) หัวข้อ 1 · งานค้นหลายทางที่แยกกันได้เป็นงานที่เหมาะ งานที่ทุกตัวต้องใช้บริบทเดียวกันไม่เหมาะ ([A2])
+Before building, answer first whether multi-agent is worth it → [`agent-systems.md`](agent-systems.md) section 1 · search work that splits into separate paths fits · work where every agent needs the same context does not ([A2])
 
 ```text
 ผู้ใช้ → API → planner → คิว → worker หลายตัว → ตัวตรวจอ้างอิง → writer → รายงาน
                  ↑__________ ถ้าข้อมูลยังไม่พอ planner ออกคำถามย่อยเพิ่ม __________|
 ```
 
-| บทบาท | ทำอะไร | ทำไมแยก |
+| Role | What it does | Why separate |
 |---|---|---|
-| planner (orchestrator) | แตกหัวข้อเป็นคำถามย่อย กำหนดงบ ตัดสินว่าพอหรือยัง | ถือแผนทั้งหมดไว้ที่เดียว ตัวอื่นไม่ต้องรู้ภาพรวม |
-| worker | ค้นคำถามย่อยข้อเดียวด้วยเครื่องมือของตัวเอง (เว็บ · browser · PDF · vector DB) คืนข้อสรุปสั้นพร้อมที่มา | บริบทของแต่ละตัวสะอาด ค้นขนานได้ ล้มตัวเดียวไม่ล้มทั้งงาน |
-| ตัวตรวจอ้างอิง (citation agent) | จับคู่ทุกข้ออ้างกับข้อความในแหล่ง | ไม่ให้คนเขียนตรวจงานตัวเอง |
-| writer | เรียบเรียงรายงาน กราฟ ภาพปก จากข้ออ้างที่ผ่านแล้วเท่านั้น | แยกการหา ออกจากการเขียน |
+| planner (orchestrator) | Splits the topic into sub-questions, sets the budget, decides whether it is enough | Holds the whole plan in one place, so the others need not know the big picture |
+| worker | Searches one sub-question with its own tools (web · browser · PDF · vector DB) and returns a short conclusion with its source | Each one has clean context, searches in parallel, and one failing does not fail the whole job |
+| citation agent | Matches every claim to the text in the source | So the writer does not check its own work |
+| writer | Composes the report, charts, cover image from claims that have already passed only | Separates finding from writing |
 
-ระบบที่มีอยู่จริง (เปิดอ่านแล้ว):
+Systems that really exist (opened and read):
 
-| ระบบ | โครงที่หน้าเอกสารบอก | เอามาใช้อย่างไร |
+| System | Structure the doc page describes | How to use it |
 |---|---|---|
-| Anthropic Research ([A2]) | lead agent วางแผนและเก็บแผนลง memory · subagent ค้นขนานในบริบทของตัวเอง · CitationAgent ท้ายงานหาว่าแต่ละข้ออ้างควรอ้างที่ไหน | แบบอ้างอิงหลักของโครงนี้ |
-| GPT Researcher ([G1]) | planner สร้างคำถาม · execution agent ค้นแต่ละข้อ · สรุปและโยงกลับแหล่ง · publisher รวมเป็นรายงาน · ค้นขนาน | ดูวิธีกรองเนื้อหาก่อนเข้า LLM |
-| LangChain open_deep_research ([L1]) | ใช้โมเดลคนละบทบาท (สรุป · ค้น · บีบ · เขียนรายงาน) · ค้นผ่าน Tavily เป็นค่าตั้งต้น · มี MCP · รุ่นเก่ามี supervisor กับ researcher ขนาน | ดูการแยกโมเดลตามบทบาท (ขั้นตอนของรุ่นปัจจุบันหน้า README ไม่ได้บอก: ยังไม่ได้ตรวจใน `configuration.py`) |
-| Stanford STORM ([S1]) | 2 ช่วง: หาข้อมูลและทำโครง → เขียนบทความพร้อมอ้างอิง · ถามจากหลายมุมมอง · Co-STORM ให้คนร่วมชี้ทิศ | ดูวิธีเปิดมุมมองก่อนแตกคำถามย่อย |
+| Anthropic Research ([A2]) | A lead agent plans and stores the plan in memory · subagents search in parallel in their own context · a CitationAgent at the end finds where each claim should cite | The main reference pattern of this design |
+| GPT Researcher ([G1]) | A planner creates questions · execution agents search each one · summarise and link back to sources · a publisher merges into a report · searches in parallel | See how it filters content before it enters the LLM |
+| LangChain open_deep_research ([L1]) | Uses a different model for each role (summarise · search · compress · write report) · searches through Tavily by default · has MCP · older versions have a supervisor with parallel researchers | See the split of models by role (the steps of the current version are not stated in the README: not yet checked in `configuration.py`) |
+| Stanford STORM ([S1]) | 2 phases: gather information and make an outline → write the article with references · asks from many perspectives · Co-STORM lets a person steer | See how it opens perspectives before splitting sub-questions |
 
-## 2. คิว
+## 2. Queue
 
-| ถามก่อน | ตอบแบบนี้ → Kafka | ตอบแบบนี้ → คิวง่ายกว่าพอ |
+| Ask first | This answer → Kafka | This answer → a simpler queue is enough |
 |---|---|---|
-| ผู้รับ event กี่ราย | หลายราย (worker · ตัวบันทึกความคืบหน้า · ตัวเก็บสถิติ) อ่านชุดเดียวกัน | worker เดียวชนิดเดียวรับงาน |
-| ต้องย้อนอ่านเหตุการณ์ไหม (เล่นซ้ำหลังแก้บั๊ก · ตรวจย้อนว่าทำไมรายงานผิด) | ต้อง | ทำแล้วทิ้ง |
-| มีคนดูแล cluster ไหม | มี หรือใช้บริการ managed | ไม่มี |
+| How many receivers of an event | Several (worker · progress recorder · statistics collector) read the same stream | One kind of worker takes the job |
+| Must we read events back (replay after a bug fix · look back at why a report was wrong) | Yes | Do it and discard |
+| Does anyone look after a cluster | Yes, or use a managed service | No |
 
-เกณฑ์ข้างบนยกจาก [`kafka-streaming`](../../kafka-streaming/SKILL.md) หัวข้อ 1 · ถ้าตอบว่า "รายเดียว ไม่ย้อนอ่าน" ให้ใช้คิวงานเบื้องหลัง (Redis · Simple Queue Service (SQS) · ตารางงานในฐานข้อมูล) ตาม [`background-jobs`](../../background-jobs/SKILL.md) · เริ่มจากแบบง่ายแล้วย้ายเมื่อวัดได้ว่าไม่พอ (`อนุมาน`) · งานของเราส่วนใหญ่ยาวเป็นนาทีและเป็นงานเดียวต่อรายงาน จึงเข้าฝั่ง "ไม่ต้อง Kafka" ได้ตั้งแต่เริ่ม · โจทย์ที่ผู้ใช้ให้มากำหนด Kafka ไว้แล้ว ให้ทำตามนั้นและจดเหตุผล (ผู้รับหลายราย + ย้อนอ่านได้) ลง Architecture Decision Record (ADR) → `adr-writer`
+The criteria above are taken from [`kafka-streaming`](../../kafka-streaming/SKILL.md) section 1 · if the answer is "one receiver, no read-back", use a background job queue (Redis · Simple Queue Service (SQS) · a job table in the database) per [`background-jobs`](../../background-jobs/SKILL.md) · start simple and move when you can measure that it is not enough (`อนุมาน`, inferred) · most of our jobs run for minutes and are one job per report, so they fall on the "no Kafka needed" side from the start · if the user's brief already fixes Kafka, follow it and record the reason (several receivers + read-back) in an Architecture Decision Record (ADR) → `adr-writer`
 
-ถ้าใช้ Kafka:
+If using Kafka:
 
-- 1 คำถามย่อย = 1 ข้อความ ใส่ `report_id` เป็น key เพื่อให้งานของรายงานเดียวอยู่ partition เดียวและเรียงลำดับ
-- worker ต้องทำซ้ำได้โดยผลไม่เปลี่ยน เพราะข้อความอาจมาซ้ำ (at-least-once) · ผลของ worker เขียนด้วย `report_id + question_id` เป็นกุญแจ → `principle-safe-to-rerun`
-- งานที่ล้มซ้ำเกินกำหนดไป dead-letter topic (DLQ) ไม่ใช่วนไม่รู้จบ → `kafka-streaming`
-- ขยาย worker ตามงานค้างด้วย KEDA ดู consumer lag → [`kubernetes-helm/references/keda-queue-scaling.md`](../../kubernetes-helm/references/keda-queue-scaling.md) · เพดานจำนวน worker ตั้งตามงบเงิน ไม่ใช่ตามความยาวคิว (หัวข้อ 3)
+- 1 sub-question = 1 message, with `report_id` as the key so that the jobs of one report stay in one partition and in order
+- A worker must be repeatable with an unchanged result, because a message may arrive twice (at-least-once) · write a worker's result keyed by `report_id + question_id` → `principle-safe-to-rerun`
+- A job that fails more than the limit goes to a dead-letter topic (DLQ), not loops forever → `kafka-streaming`
+- Scale workers by backlog with KEDA reading consumer lag → [`kubernetes-helm/references/keda-queue-scaling.md`](../../kubernetes-helm/references/keda-queue-scaling.md) · set the worker ceiling by money budget, not by queue length (section 3)
 
-## 3. งบและการหยุด
+## 3. Budget and stopping
 
-ตัวเลขจากแหล่ง ([A2]): agent ใช้ token ประมาณ 4 เท่าของแชต · multi-agent ประมาณ 15 เท่า · token อธิบาย 80% ของความต่างผลบน BrowseComp · Anthropic บอกว่าคุ้มเฉพาะงานคุณค่าสูง ตัวเลขนี้เป็นของ Anthropic เองและตอนนั้นใช้ Opus 4 กับ Sonnet 4 ของระบบเราต้องวัดเอง
+Numbers from a source ([A2]): an agent uses about 4 times the tokens of a chat · multi-agent about 15 times · tokens explain 80% of the difference in results on BrowseComp · Anthropic says it pays off only for high-value work. This number is Anthropic's own and at that time used Opus 4 and Sonnet 4; our system must measure its own
 
-| ระดับ | ตั้งอะไร | พฤติกรรมเมื่อชน |
+| Level | What to set | Behaviour on hitting it |
 |---|---|---|
-| ต่อรายงาน | token รวม · จำนวนรอบค้น · จำนวน worker พร้อมกัน · เวลารวม | planner หยุดเปิดคำถามใหม่ แล้วเขียนจากที่มี พร้อมบอกว่าไม่ครบ |
-| ต่อ worker | จำนวนการเรียกเครื่องมือ · token · เวลา | คืนเท่าที่หาได้ ติดป้าย "ไม่ครบ" |
-| ต่อผู้ใช้ | โควตารายเดือนหรือรายวัน หักตามจริงเมื่อ worker จบงาน | ปฏิเสธก่อนเริ่มถ้าประมาณการเกินโควตา · ดูรูปแบบโควตาใน [`saas-platform`](../../saas-platform/SKILL.md) (usage metering) |
-| ทั้งระบบ | เพดาน worker ใน KEDA (`maxReplicaCount`) · เพดานเงินต่อวัน | หยุดรับงานใหม่ แจ้งผู้ใช้ว่าคิวเต็ม |
+| Per report | Total tokens · number of search rounds · number of concurrent workers · total time | The planner stops opening new questions and writes from what it has, stating it is incomplete |
+| Per worker | Number of tool calls · tokens · time | Return what it found and tag it "ไม่ครบ" (incomplete) |
+| Per user | Monthly or daily quota, deducted at actual use when a worker finishes | Refuse before starting if the estimate exceeds the quota · see the quota pattern in [`saas-platform`](../../saas-platform/SKILL.md) (usage metering) |
+| Whole system | KEDA worker ceiling (`maxReplicaCount`) · daily money ceiling | Stop accepting new jobs and tell the user the queue is full |
 
-กฎขนาดแรงงานจาก [A2] ใช้เป็นจุดเริ่มแล้วปรับด้วย eval: ถามข้อเท็จจริงง่าย 1 agent เรียกเครื่องมือ 3–10 ครั้ง · เปรียบเทียบตรง ๆ 2–4 subagent ตัวละ 10–15 ครั้ง · วิจัยซับซ้อนเกิน 10 subagent แบ่งหน้าที่ชัด · planner ต้องเลือกระดับจากความยากของหัวข้อ ไม่ใช้ระดับสูงสุดทุกครั้ง
+The effort-scaling rules from [A2] serve as a starting point, then adjust with eval: a simple fact question 1 agent with 3–10 tool calls · a direct comparison 2–4 subagents with 10–15 calls each · complex research more than 10 subagents with clearly split duties · the planner must choose the level from the difficulty of the topic, not use the top level every time
 
-เงื่อนไขหยุดค้น (ต้องเขียนในคำสั่งของ planner และบังคับในโค้ดด้วย ไม่พึ่งแค่คำสั่ง):
+Conditions to stop searching (must be written in the planner's instructions and enforced in code too, not relying on the instructions alone):
 
-1. ทุกคำถามย่อยมีคำตอบพร้อมที่มาอย่างน้อย 1 แหล่งที่ผ่านการตรวจ
-2. รอบล่าสุดไม่ได้ข้ออ้างใหม่ (ข้อมูลอิ่มตัว)
-3. ชนงบข้อใดข้อหนึ่งในตารางบน
+1. Every sub-question has an answer with at least 1 checked source
+2. The latest round brought no new claims (information saturated)
+3. Any one budget in the table above is hit
 
-เหตุที่ต้องบังคับในโค้ด: Anthropic เห็นตอนจำลอง prompt ว่า agent ทำต่อทั้งที่ได้ผลเพียงพอแล้ว ([A2])
+Why it must be enforced in code: when simulating prompts, Anthropic saw agents keep going even after getting enough results ([A2])
 
-## 4. browser agent
+## 4. Browser agent
 
-agent ที่คลิกเว็บเจอข้อความของคนแปลกหน้าตลอดเวลา · Open Worldwide Application Security Project (OWASP) เรียกสิ่งนี้ว่า indirect prompt injection: เนื้อหาภายนอกมีคำสั่งแฝง แล้วโมเดลทำตาม ([O1]) · Anthropic วัดกับ browser agent ของตัวเองได้อัตราโจมตีสำเร็จ 1.4%–2.4% หลังเพิ่มชั้นป้องกัน ข้ามโมเดล Claude 4 รุ่น (Sonnet 4.5 จาก 13.8% ในโมเดลเปล่าเหลือ 1.9%) และบอกเองว่า 1% ก็ยังเป็นความเสี่ยง ยังไม่แก้หมด ([A3]) จึงต้องออกแบบให้ถือว่ามีคนเจาะได้
+An agent that clicks around the web meets strangers' text all the time · Open Worldwide Application Security Project (OWASP) calls this indirect prompt injection: outside content carries hidden instructions, and the model obeys ([O1]) · Anthropic measured its own browser agent at an attack success rate of 1.4%–2.4% after adding defence layers, across 4 Claude models (Sonnet 4.5 from 13.8% in the bare model down to 1.9%), and says itself that 1% is still a risk and not fully solved ([A3]), so design on the assumption that someone can break in
 
-| ข้อ | ทำ |
+| Item | Do |
 |---|---|
-| ที่รัน | container ที่ใช้ครั้งเดียวทิ้ง ไม่มี secret ไม่มีสิทธิ์เข้า network ภายใน · `docker-sandbox` |
-| ข้อความในหน้าเว็บ | เป็นข้อมูล ไม่ใช่คำสั่ง · ห่อด้วยตัวคั่นและบอกโมเดลว่าเป็นเนื้อหาไม่น่าเชื่อถือ ([O1]) |
-| สิทธิ์ | เท่าที่งานค้นต้องใช้: อ่านอย่างเดียว · ไม่ส่งฟอร์ม ไม่ซื้อ ไม่ลบ · งานเสี่ยงให้คนอนุมัติ ([O1]) |
-| credential ของผู้ใช้ | ไม่ส่งให้ browser agent · หน้าที่ต้องล็อกอินคือนอกขอบเขต แจ้งผู้ใช้ให้ส่งไฟล์มาเอง |
-| ผลลัพธ์ที่ออกจาก worker | ตรวจรูปแบบด้วยโค้ด (schema) · worker ไม่มีเครื่องมือส่งข้อมูลออกนอก ([O1]) |
-| robots.txt และเงื่อนไขเว็บ | อ่านและทำตามก่อนดึง · มาตรฐาน RFC 9309 (กันยายน 2022) บอกว่า robots.txt "ไม่ใช่การอนุญาตให้เข้าถึง" ([R1]) เป็นแค่ข้อตกลงมารยาทของ crawler จึงต้องอ่านเงื่อนไขการใช้ของเว็บด้วย · ไม่ข้ามกำแพงจ่ายเงินหรือล็อกอิน |
-| จำกัดโดเมน | รายชื่อโดเมนห้าม (denylist) และจำกัดอัตราต่อโดเมน |
+| Where it runs | A single-use throwaway container with no secrets and no access to the internal network · `docker-sandbox` |
+| Text in web pages | Is data, not instructions · wrap it in delimiters and tell the model it is untrusted content ([O1]) |
+| Permissions | Only what the search task needs: read-only · no form submits, no purchases, no deletes · risky work gets a person's approval ([O1]) |
+| User credentials | Not given to the browser agent · pages that need login are out of scope, tell the user to send the file themselves |
+| Output leaving the worker | Check the format with code (schema) · the worker has no tool to send data outside ([O1]) |
+| robots.txt and site terms | Read and follow before fetching · the RFC 9309 standard (September 2022) says robots.txt is "not a form of access authorization" ([R1]), only a courtesy agreement for crawlers, so also read the site's terms of use · do not bypass paywalls or logins |
+| Domain limits | A domain denylist and a rate limit per domain |
 
-ทดสอบด้วยหน้าเว็บที่เราทำเองและมีคำสั่งแฝง ให้ผ่านก่อนปล่อย (adversarial test ตาม [O1]) · รวมใน eval ข้อ 6
+Test with web pages we make ourselves that carry hidden instructions, and pass them before release (adversarial test per [O1]) · include in the eval in section 6
 
-## 5. PDF งานวิจัยและ vector DB
+## 5. Research PDFs and vector DB
 
-ขั้นตอนเต็ม (แยกส่วน · chunk · embedding · hybrid search · rerank) อยู่ใน [`rag-architecture.md`](rag-architecture.md) ที่นี่เฉพาะส่วนที่งานวิจัยต่างออกไป:
+The full process (splitting · chunk · embedding · hybrid search · rerank) is in [`rag-architecture.md`](rag-architecture.md). Here is only where research differs:
 
-- ต้องการที่มาระดับหน้าและย่อหน้า: เก็บ metadata ทุก chunk = `source_id` · url หรือ DOI · ชื่อเรื่อง · ผู้เขียน · ปี · หน้า · ตำแหน่งตัวอักษร · วันที่ดึง · hash ของไฟล์ (เพื่อรู้ว่าแหล่งเปลี่ยน)
-- แยก chunk ตามหัวข้อของบทความ (บทคัดย่อ · วิธีวิจัย · ผล) และเก็บ chunk แม่ไว้ให้ writer ใช้บริบทกว้าง ตามแบบ parent-child ใน `rag-architecture.md`
-- ตาราง สูตร ภาพในบทความ: ตรวจว่าตัวแยกข้อความอ่านได้จริง ถ้าไม่ได้ให้ติดป้ายว่า "ตัวเลขจากตารางยังไม่ได้ยืนยัน" ดีกว่าให้ตัวเลขผิด
-- คลังความจำ (vector DB) เก็บผลที่ตรวจแล้วเพื่อใช้ซ้ำข้ามรายงาน ต้องแยกตามผู้ใช้หรือ tenant และใส่วันที่ เพื่อให้ตัดข้อมูลเก่าได้ · ผลที่ยังไม่ผ่านตัวตรวจอย่าเก็บ
-- PDF ที่ผู้ใช้อัปโหลดเป็นข้อมูลส่วนตัวของผู้ใช้นั้น ไม่ปนกับคลังกลาง · ทางเก็บไฟล์ → `file-upload-and-storage`
+- To get provenance at page and paragraph level: store metadata on every chunk = `source_id` · url or DOI · title · author · year · page · character position · fetch date · file hash (to know when the source changed)
+- Split chunks by the article's headings (abstract · method · results) and keep the parent chunk so the writer can use wider context, following the parent-child pattern in `rag-architecture.md`
+- Tables, formulas, figures in articles: check that the text extractor really reads them, and if not, tag "ตัวเลขจากตารางยังไม่ได้ยืนยัน" (numbers from the table not yet confirmed), which is better than giving a wrong number
+- The memory store (vector DB) keeps checked results for reuse across reports, must be split by user or tenant and carry a date so old data can be cut · do not store results that have not passed the checker
+- A PDF the user uploads is that user's private data, not mixed into the shared store · file storage route → `file-upload-and-storage`
 
-## 6. ตรวจอ้างอิง
+## 6. Citation checking
 
-ทุกข้ออ้างในรายงานต้องมีรายการ (claim, source_id, ข้อความที่ยกมา, ตำแหน่ง) ที่ตัวตรวจจับคู่ได้
+Every claim in the report must have a record (claim, source_id, quoted text, location) that the checker can match
 
-1. แยกรายงานร่างเป็นข้ออ้างทีละข้อ (ตัวเลข ชื่อ วันที่ ข้อสรุป)
-2. สำหรับแต่ละข้อ: ดึงข้อความจากแหล่งตามตำแหน่งที่ระบุ แล้วให้ตัวตรวจตอบว่า "ข้อความนี้ยืนยันข้ออ้างหรือไม่" = ยืนยัน · ยืนยันบางส่วน · ไม่ยืนยัน
-3. ไม่ยืนยัน → ตัดออกหรือเขียนใหม่ให้ตรงแหล่ง · ยืนยันบางส่วน → ลดความมั่นใจของประโยค · ห้ามเก็บข้ออ้างที่ไม่มีที่มา
-4. เทียบเลขและชื่อด้วยโค้ดก่อน แล้วค่อยใช้โมเดล (ตรวจด้วยโค้ดถูกกว่าและไม่หลอน) · การตรวจต้องเป็นของจริง ไม่ใช่ให้โมเดลบอกว่าตรวจแล้ว → [`agent-systems.md`](agent-systems.md) หัวข้อ 7
-5. ที่มาที่เป็น URL: เปิดอ่านจริงรอบนี้ ไม่ใช้ลิงก์ที่โมเดลจำมา
+1. Split the draft report into claims one at a time (numbers, names, dates, conclusions)
+2. For each one: pull the text from the source at the stated location and have the checker answer "does this text confirm the claim?" = confirmed · partly confirmed · not confirmed
+3. Not confirmed → cut it or rewrite it to match the source · partly confirmed → lower the confidence of the sentence · never keep a claim with no source
+4. Compare numbers and names with code first, then use the model (checking by code is cheaper and does not hallucinate) · the check must be real, not the model saying it checked → [`agent-systems.md`](agent-systems.md) section 7
+5. A source that is a URL: open it for real this round, do not use a link the model remembered
 
-วัดด้วย eval (ชุดหัวข้อจริงราว 20 หัวข้อเป็นจุดเริ่มตาม [A2] แล้วเพิ่มจากข้อผิดที่เจอ):
+Measure with eval (a set of about 20 real topics as a starting point per [A2], then add from the errors found):
 
-| ตัววัด | ความหมาย |
+| Metric | Meaning |
 |---|---|
-| citation precision | ข้ออ้างที่อ้างแล้วถูกต้อง ÷ ข้ออ้างที่อ้างทั้งหมด |
-| citation recall | ข้ออ้างที่มีที่มาถูกต้อง ÷ ข้ออ้างทั้งหมดที่ควรมีที่มา |
-| faithfulness | คำตอบมีฐานจากบริบทที่ดึงมาหรือไม่ (นิยามใน `llm-evaluation-patterns.md`) |
-| คุณภาพแหล่ง | [A2] ใช้ LLM judge ให้คะแนนความถูกต้อง การอ้างอิง ความครบ คุณภาพแหล่ง ประสิทธิภาพเครื่องมือ และพบว่าต้องมีคนทดสอบด้วย เพราะคนเห็นว่า agent ชอบหยิบเว็บ SEO แทนแหล่งหลัก |
+| citation precision | Claims cited correctly ÷ all claims cited |
+| citation recall | Claims with correct sources ÷ all claims that should have sources |
+| faithfulness | Whether the answer is grounded in the retrieved context (defined in `llm-evaluation-patterns.md`) |
+| source quality | [A2] used an LLM judge to score accuracy, citations, completeness, source quality, and tool efficiency, and found that people must also test, because people saw the agent prefer SEO sites over primary sources |
 
-วิธีสร้างชุดข้อสอบ ตัดสินด้วย LLM judge และ A/B → [`llm-evaluation-patterns.md`](llm-evaluation-patterns.md) · เกณฑ์ผ่านตั้งเป็นตัวเลขก่อนเริ่มวัด (`(รอยืนยัน)` จากเจ้าของโปรเจกต์)
+How to build the test set, judge with an LLM judge, and A/B → [`llm-evaluation-patterns.md`](llm-evaluation-patterns.md) · set the pass threshold as a number before starting to measure (`(รอยืนยัน)` awaiting confirmation from the project owner)
 
-## 7. เว็บแอปและผู้ใช้
+## 7. Web app and users
 
-| เรื่อง | ทำ | ชี้ต่อ |
+| Topic | Do | Pointer |
 |---|---|---|
-| ล็อกอิน | session หรือ OAuth ตามผู้ใช้ · ตรวจสิทธิ์ที่ API ทุกครั้ง ไม่ใช่ที่หน้าจอ | `auth-implementation-patterns` |
-| โควตาต่อผู้ใช้ | จองโควตาตอนรับงาน คืนส่วนที่ไม่ใช้ตอนจบ · แสดงยอดคงเหลือก่อนกดเริ่ม | `saas-platform` |
-| สถานะงาน | ผู้ใช้เห็น "แตกคำถาม → ค้น 7/12 → ตรวจอ้างอิง → เขียน" แบบสตรีม (Server-Sent Events (SSE) หรือ WebSocket) · เก็บสถานะในฐานข้อมูล เปิดหน้าใหม่แล้วยังเห็น | `web-service-essentials` |
-| งานล้มกลางทาง | เก็บ checkpoint ต่อคำถามย่อย ทำต่อจากจุดเดิมไม่เริ่มใหม่ ([A2] แนะนำให้ resume จาก checkpoint) · ปล่อยเวอร์ชันใหม่ต้องไม่ฆ่างานที่วิ่งอยู่ ([A2] ใช้ rainbow deployment) | `jenkins-pipeline` · `kubernetes-helm` |
-| ตั้งเวลาวิจัยซ้ำ | ตารางตั้งเวลาในฐานข้อมูลสร้างงานเข้าคิวเดียวกับงานปกติ นับโควตาเหมือนกัน · กันรันซ้ำด้วยกุญแจ `schedule_id + รอบเวลา` · ผลรอบใหม่เทียบกับรอบก่อนแล้วบอกว่าอะไรเปลี่ยน | `background-jobs` |
-| ข้อมูลส่วนบุคคลในหัวข้อ | หัวข้ออาจมีชื่อคนหรือข้อมูลสุขภาพ · บอกผู้ใช้ก่อนส่ง · ไม่ใส่หัวข้อเต็มใน log (เก็บรหัสงาน) · กำหนดอายุเก็บรายงานและให้ลบได้ · Anthropic เฝ้ารูปแบบการตัดสินใจของ agent ไม่เก็บเนื้อหาสนทนาเพื่อคุ้มครองความเป็นส่วนตัว ([A2]) | `pdpa-compliance` · `logging-standards` |
-| หลังบ้าน | ดูงานตามผู้ใช้ · ต้นทุนต่อรายงาน · ปรับโควตา · หยุดงานที่หลุด · ทุกการกระทำของแอดมินมีบันทึก | `audit-trail` |
+| Login | Session or OAuth per user · check permissions at the API every time, not at the screen | `auth-implementation-patterns` |
+| Per-user quota | Reserve quota when accepting the job, return the unused part at the end · show the remaining balance before pressing start | `saas-platform` |
+| Job status | The user sees "แตกคำถาม → ค้น 7/12 → ตรวจอ้างอิง → เขียน" (split questions → search 7/12 → check citations → write) as a stream (Server-Sent Events (SSE) or WebSocket) · store status in the database so a new page still shows it | `web-service-essentials` |
+| Job fails midway | Keep a checkpoint per sub-question and continue from the same point, not restart ([A2] recommends resuming from a checkpoint) · releasing a new version must not kill running jobs ([A2] uses rainbow deployment) | `jenkins-pipeline` · `kubernetes-helm` |
+| Scheduled repeat research | A schedule table in the database creates jobs into the same queue as normal jobs, counting quota the same way · prevent double runs with the key `schedule_id + time slot` · compare the new round with the previous one and say what changed | `background-jobs` |
+| Personal data in the topic | A topic may contain a person's name or health data · tell the user before sending · do not put the full topic in logs (store the job ID) · set a retention period for reports and allow deletion · Anthropic watches the agents' decision patterns and does not store conversation content, to protect privacy ([A2]) | `pdpa-compliance` · `logging-standards` |
+| Back office | View jobs by user · cost per report · adjust quota · stop runaway jobs · every admin action is logged | `audit-trail` |
 
-## 8. ตัวชี้วัดที่ต้องเฝ้าดู
+## 8. Metrics to watch
 
-วิธีเก็บและตั้งเตือนด้วย Prometheus กับ Grafana → [`observability-basics`](../../observability-basics/SKILL.md) และ [`prometheus-grafana.md`](../../observability-basics/references/prometheus-grafana.md) · ข้างล่างคือสิ่งที่ระบบนี้ต้องมี (ชื่อ metric เป็นข้อเสนอของเรา)
+How to collect and alert with Prometheus and Grafana → [`observability-basics`](../../observability-basics/SKILL.md) and [`prometheus-grafana.md`](../../observability-basics/references/prometheus-grafana.md) · below is what this system must have (the metric names are our proposal)
 
-| ตัวชี้วัด | ตัวอย่างชื่อ | ดูทำไม |
+| Metric | Example name | Why watch |
 |---|---|---|
-| เวลาต่อรายงาน (p50 · p95) | `research_report_duration_seconds` | ผู้ใช้รอนานเกินหรือไม่ |
-| token ต่อรายงาน แยกตามบทบาท | `research_tokens_total{role}` | บอกว่าเงินไปไหน และเทียบกับงบ |
-| งานค้างในคิว | consumer lag (Kafka exporter) | ตัวเดียวกับที่ KEDA ใช้ขยาย |
-| อัตราข้ออ้างที่ตรวจไม่ผ่าน | `research_claims_rejected_total` ÷ ทั้งหมด | พุ่ง = worker หรือแหล่งมีปัญหา |
-| รายงานที่ชนงบก่อนจบ | `research_budget_hit_total{limit}` | งบตั้งต่ำเกินหรือ planner ค้นเปลือง |
-| ข้อผิดของเครื่องมือ | `research_tool_errors_total{tool}` | เว็บบล็อก · browser ค้าง |
+| Time per report (p50 · p95) | `research_report_duration_seconds` | Does the user wait too long |
+| Tokens per report by role | `research_tokens_total{role}` | Shows where the money goes, and compares with the budget |
+| Backlog in the queue | consumer lag (Kafka exporter) | The same one KEDA uses to scale |
+| Rate of claims that fail the check | `research_claims_rejected_total` ÷ total | A spike = a worker or a source has a problem |
+| Reports that hit the budget before finishing | `research_budget_hit_total{limit}` | Budget set too low, or the planner searches wastefully |
+| Tool errors | `research_tool_errors_total{tool}` | Sites blocking · browser hanging |
 
-เก็บ trace ต่อรายงานเพื่อไล่ว่า agent ตัดสินใจอย่างไร · [A2] เพิ่ม production tracing เต็มรูปเพราะ agent ไม่แน่นอนแล้วดีบั๊กยาก · อย่าใช้ `user_id` หรือหัวข้อเป็น label ของ Prometheus (ค่ามากเกินไป)
+Keep a trace per report to follow how the agent decided · [A2] added full production tracing because agents are non-deterministic and hard to debug · do not use `user_id` or the topic as a Prometheus label (too many values)
 
-## 9. ตัวอย่างจริง
+## 9. Worked example
 
-โจทย์ที่ผู้ใช้ให้มา: พิมพ์หัวข้อเดียว ได้รายงานพร้อมอ้างอิง · ตั้งเวลาวิจัยซ้ำได้ · เว็บแอปหน้าลูกค้าและหลังบ้าน · staging แล้ว production
+The user's brief: type one topic, get a report with references · schedule repeat research · a web app for customers and a back office · staging then production
 
-| ชั้น | เลือก | หัวข้อในไฟล์นี้ |
+| Layer | Choice | Section in this file |
 |---|---|---|
-| ผู้ใช้ | เว็บแอป ล็อกอิน โควตาต่อผู้ใช้ สถานะสตรีม | 7 |
-| API | รับหัวข้อ → ตรวจโควตา → สร้างงาน → ส่งต่อ planner | 3 · 7 |
-| planner | แตกคำถามย่อย เลือกระดับแรงงาน ส่งเข้า Kafka topic `research.questions` | 1 · 3 |
-| worker | 4 ชนิด: ค้นเว็บ · browser agent (sandbox) · อ่าน PDF · ค้น vector DB · แต่ละชนิดเป็น deployment ของตัวเอง ขยายด้วย KEDA ตาม lag | 2 · 4 · 5 |
-| ผล | topic `research.findings` → ตัวตรวจอ้างอิง → ข้ออ้างที่ผ่านลงฐานข้อมูล | 6 |
-| writer | เรียบเรียงจากข้ออ้างที่ผ่าน · กราฟ → `data-analysis` · ภาพปก → `graphic-design:image-generation` · ส่งออก Word → `markdown-report-docx` | 1 |
-| ตั้งเวลา | scheduler ในฐานข้อมูล สร้างงานเข้า API ตัวเดียวกัน | 7 |
-| ปล่อย | Docker image → Jenkins ทดสอบ + eval → Helm ลง staging → ตรวจ → production | `jenkins-pipeline` · `kubernetes-helm` |
-| เฝ้าดู | Prometheus + Grafana ตามหัวข้อ 8 | 8 |
+| User | Web app, login, per-user quota, streamed status | 7 |
+| API | Receive topic → check quota → create job → pass to planner | 3 · 7 |
+| planner | Split sub-questions, choose effort level, send into the Kafka topic `research.questions` | 1 · 3 |
+| worker | 4 kinds: web search · browser agent (sandbox) · read PDF · search vector DB · each kind is its own deployment, scaled by KEDA on lag | 2 · 4 · 5 |
+| Results | topic `research.findings` → citation checker → claims that pass go to the database | 6 |
+| writer | Compose from claims that passed · charts → `data-analysis` · cover image → `graphic-design:image-generation` · Word export → `markdown-report-docx` | 1 |
+| Scheduling | A scheduler in the database creates jobs into the same API | 7 |
+| Release | Docker image → Jenkins tests + eval → Helm to staging → check → production | `jenkins-pipeline` · `kubernetes-helm` |
+| Monitoring | Prometheus + Grafana per section 8 | 8 |
 
-ลำดับสร้างที่แนะนำ (`อนุมาน`): ทำ planner + worker ค้นเว็บ + ตัวตรวจอ้างอิง + writer ให้รันในโปรเซสเดียวและผ่าน eval ก่อน → แยกเป็นคิวและ service → เพิ่ม worker ชนิดอื่น (PDF แล้วค่อย browser agent เพราะเสี่ยงสุด) → ตั้งเวลาและโควตา · ถ้ายังไม่ผ่าน eval ตอนรันตัวเดียว การแยก service จะแค่ทำให้ดีบั๊กยากขึ้น
+Recommended build order (`อนุมาน`, inferred): get planner + web-search worker + citation checker + writer running in one process and passing eval first → split into queue and services → add other worker kinds (PDF, then browser agent because it is the riskiest) → add scheduling and quota · if it does not yet pass eval when run as one, splitting services will only make debugging harder
 
-## 10. ตรวจก่อนส่ง
+## 10. Check before sending
 
-- [ ] ข้ออ้างทุกข้อในรายงานตัวอย่าง 20 หัวข้อมีที่มาที่ตัวตรวจจับคู่ได้ และรายงาน citation precision / recall แล้ว
-- [ ] ชนงบทุกระดับแล้วระบบหยุดและรายงานว่า "ไม่ครบ" ไม่ค้าง ไม่ใช้เงินเกิน
-- [ ] หน้าเว็บทดสอบที่มีคำสั่งแฝงไม่ทำให้ worker ทำตามหรือส่งข้อมูลออก
-- [ ] ผู้ใช้ A เห็นและหักโควตาเฉพาะของ A · คลังความจำไม่ปนข้ามผู้ใช้
-- [ ] kill worker กลางงาน แล้วงานทำต่อจาก checkpoint ผลไม่ซ้ำ
-- [ ] KEDA ขยายขึ้นและลงตาม lag ที่ staging และไม่เกินเพดาน
-- [ ] ทุกตัวชี้วัดในหัวข้อ 8 มีกราฟและมีเตือนอย่างน้อย 3 ตัว (เวลา · งานค้าง · ข้ออ้างไม่ผ่าน)
-- [ ] ก่อนส่งงาน รัน `security-gate` และ `principle-prove-it-works`
+- [ ] Every claim in the 20 sample-topic reports has a source the checker can match, and citation precision / recall have been reported
+- [ ] Hit every budget level and the system stops and reports "ไม่ครบ" (incomplete), does not hang, does not overspend
+- [ ] A test web page carrying hidden instructions does not make a worker obey or send data out
+- [ ] User A sees and is charged only A's quota · the memory store does not mix across users
+- [ ] Kill a worker mid-job, and the job continues from the checkpoint with no duplicate results
+- [ ] KEDA scales up and down with lag at staging and does not exceed the ceiling
+- [ ] Every metric in section 8 has a chart, and at least 3 have alerts (time · backlog · claims failing)
+- [ ] Before delivering, run `security-gate` and `principle-prove-it-works`
 
-## 11. ที่มา
+## 11. Sources
 
-ทุกลิงก์เปิดอ่านจริง 2026-10-27 ตัวเลขของบริษัทเป็นที่บริษัทรายงานเอง ไม่มีผู้ตรวจอิสระ
+Every link was actually opened 2026-10-27. Company figures are reported by the company itself, with no independent reviewer
 
-| รหัส | แหล่ง | ใช้ในเรื่อง |
+| Code | Source | Used for |
 |---|---|---|
-| A2 | [Anthropic, How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) (2025-06-13) | โครง orchestrator-worker · CitationAgent · 4x และ 15x · กฎขนาดแรงงาน · eval · production |
-| A3 | [Anthropic, Mitigating the risk of prompt injections in browser use](https://www.anthropic.com/research/prompt-injection-defenses) (2025-11-24) | อัตราโจมตีสำเร็จของ browser agent |
-| O1 | [OWASP, LLM01 Prompt Injection](https://genai.owasp.org/llmrisk/llm01-prompt-injection/) | indirect injection · least privilege · คนอนุมัติ · adversarial test |
-| R1 | [RFC 9309, Robots Exclusion Protocol](https://www.rfc-editor.org/rfc/rfc9309.html) (กันยายน 2022) | robots.txt ไม่ใช่การอนุญาต |
+| A2 | [Anthropic, How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) (2025-06-13) | orchestrator-worker structure · CitationAgent · 4x and 15x · effort-scaling rules · eval · production |
+| A3 | [Anthropic, Mitigating the risk of prompt injections in browser use](https://www.anthropic.com/research/prompt-injection-defenses) (2025-11-24) | Attack success rate of a browser agent |
+| O1 | [OWASP, LLM01 Prompt Injection](https://genai.owasp.org/llmrisk/llm01-prompt-injection/) | indirect injection · least privilege · human approval · adversarial test |
+| R1 | [RFC 9309, Robots Exclusion Protocol](https://www.rfc-editor.org/rfc/rfc9309.html) (September 2022) | robots.txt is not an authorization |
 | G1 | [GPT Researcher](https://github.com/assafelovic/gpt-researcher) | planner · execution · publisher |
-| L1 | [LangChain open_deep_research](https://github.com/langchain-ai/open_deep_research) | แยกโมเดลตามบทบาท |
-| S1 | [Stanford STORM](https://github.com/stanford-oval/storm) (Shao et al., NAACL 2024, arXiv:2402.14207) | pre-writing · หลายมุมมอง |
+| L1 | [LangChain open_deep_research](https://github.com/langchain-ai/open_deep_research) | Split models by role |
+| S1 | [Stanford STORM](https://github.com/stanford-oval/storm) (Shao et al., NAACL 2024, arXiv:2402.14207) | pre-writing · multiple perspectives |
 
-ไม่ได้ตรวจ: ค่าใช้จ่ายจริงต่อรายงานของระบบเรา · ขั้นตอนภายในของ open_deep_research รุ่นปัจจุบัน · เกณฑ์ SQS/Redis เทียบ Kafka ด้วยตัวเลข (ใช้เกณฑ์ใน `kafka-streaming` แทน)
+Not checked: the real cost per report of our system · the internal steps of the current open_deep_research version · numeric criteria of SQS/Redis versus Kafka (use the criteria in `kafka-streaming` instead)
 
 
 ## reference: design-modes.md
@@ -3334,84 +3334,84 @@ Use when a system imports or exports Excel or CSV
 
 ## reference: thai-accounting-apis.md
 
-# ต่อโปรแกรมบัญชี SME ไทยผ่าน API
+# Connecting to Thai SME accounting software through API
 
-ใช้เมื่อระบบของเราต้องส่งเอกสารขายหรือซื้อเข้าโปรแกรมบัญชีของลูกค้า แทนการ export Excel ให้คีย์ซ้ำ · กฎของ `SKILL.md` ใช้เหมือนเดิม: ตรวจให้จบก่อนเขียน · มีหน้าสรุปก่อนยืนยัน · batch id · audit
-ข้อเท็จจริงทุกข้อมาจากเอกสารของผู้ผลิตที่เปิดตรวจ 2026-10-23 · ราคาและค่า API ตรวจซ้ำ 2026-10-26 (ตาราง "ที่มา") · ราคาและเงื่อนไขเปลี่ยนบ่อย ยืนยันกับผู้ขายก่อนเสนอราคาลูกค้า
-ตัวย่อ: small and medium enterprises (SME) · Application Programming Interface (API) · User Acceptance Testing (UAT) คือระบบทดสอบ · Hash-based Message Authentication Code (HMAC) คือลายเซ็นที่สร้างจากกุญแจลับ · Software Development Kit (SDK)
+Use when our system must push sales or purchase documents into the customer's accounting software, instead of exporting Excel for them to re-key. The rules of `SKILL.md` still apply: validate everything before writing · summary page before confirming · batch id · audit.
+Every fact comes from the vendors' documents, opened 2026-10-23. Prices and API fees were rechecked 2026-10-26 (table "Sources"). Prices and terms change often: confirm with the vendor before quoting a customer.
+Abbreviations: small and medium enterprises (SME) · Application Programming Interface (API) · User Acceptance Testing (UAT) is the test system · Hash-based Message Authentication Code (HMAC) is a signature made from a secret key · Software Development Kit (SDK).
 
-## 1 · เลือกทาง
+## 1 · Choose a route
 
-| ทาง | ใช้เมื่อ |
+| Route | Use when |
 |---|---|
-| ส่งไฟล์ตามแม่แบบนำเข้าของโปรแกรมบัญชี (รูปแบบไฟล์ของแต่ละเจ้ายังไม่ได้ตรวจ) | เอกสารน้อย · แพ็กเกจของลูกค้าไม่เปิด API |
-| ต่อ API ตรง (ข้อ 2–3) | เอกสารหลายร้อยใบต่อเดือน · ต้องการสถานะกลับ เช่น ชำระแล้ว |
-| ผ่านแอปพาร์ทเนอร์ที่โปรแกรมบัญชีรับรอง (PEAK: เมนู ตั้งค่า > การเชื่อมต่อแอปพลิเคชันภายนอก) | ร้านค้าออนไลน์ที่ใช้ระบบหลังร้านอยู่แล้ว → `ecommerce-patterns` `references/thai-marketplace-apis.md` |
+| Send a file using the accounting software's import template (file format of each vendor not yet checked) | Few documents · the customer's package has no API |
+| Connect to the API directly (sections 2–3) | Hundreds of documents per month · need status back, such as paid |
+| Through a partner app the accounting software certifies (PEAK: menu ตั้งค่า > การเชื่อมต่อแอปพลิเคชันภายนอก, i.e. Settings > External application connections) | Online shop that already uses a back-office system → `ecommerce-patterns` `references/thai-marketplace-apis.md` |
 
 ## 2 · PEAK
 
-| เรื่อง | ข้อมูล |
+| Topic | Information |
 |---|---|
-| เอกสาร | developers.peakaccount.com (API Integration Guide · ไฟล์ `llms.txt` รวมลิงก์ทุกหน้า) · มี Postman collection |
-| แพ็กเกจ | PEAK PRO Plus (12,000 บาท/ปี) ขึ้นไป · ราคา PEAK PRO Plus ตามหน้า developers เมื่อ 2026-10-26 · ค่าบริการ API จ่ายก่อนขึ้นระบบจริงตามเงื่อนไขแพ็กเกจที่ตกลง เอกสารไม่ระบุจำนวนเงิน (รอยืนยัน · เอกสาร go-live ให้ยืนยันค่า API จำนวนรายการ และเงื่อนไขทดลองกับทีม PEAK ก่อนใส่ในใบเสนอราคา) |
-| ขอสิทธิ์ | กรอกแบบฟอร์ม ทีมงานติดต่อกลับใน 3 วันทำการ · ได้ Connect ID + Application Code · credential ของ UAT กับระบบจริงแยกกัน |
-| ยืนยันตัวตน | Client Token อายุ 24 ชม. (`POST /api/v1/ClientToken`) · User Token ต่อกิจการ ลูกค้ากดสร้างเองในเมนู เชื่อมต่อแอปพลิเคชันภายนอก ด้วย Application Code · header `Time-Stamp` (yyyyMMddHHmmss เวลา UTC) · `Time-Signature` = HMAC-SHA1 ของ Time-Stamp ใช้ connectId เป็นกุญแจ |
-| ของที่ทำได้ | contacts · products (มี adjust) · services · quotations · invoices · billing notes · receipts · credit notes · purchase orders · expenses · daily journals · รับชำระ · void · approve · แนบไฟล์ |
-| e-Tax | มี endpoint ส่ง e-Tax Invoice ของ invoice และ receipt · ส่ง e-Receipt |
-| UAT | `http://peakengineapidev.azurewebsites.net/api/v1` (เป็น http ไม่ใช่ https) · ฟรี 3 เดือน · เปิด จ.–ศ. 08:00–22:00 |
-| ระบบจริง | `https://api.peakaccount.com/api/v1` · ก่อนขึ้นต้องผ่าน Final UAT Review (test case · error case · duplicate case · ผลทางบัญชี) |
-| rate limit | ขอ ClientToken 10 ครั้ง/นาที/IP · รายงานงบทดลอง (`GET /api/v1/FinancialReports/trialbalance`) 10 ครั้ง/นาที และพร้อมกัน 1 · ต่อ User Token: GET พร้อมกัน 20 · POST พร้อมกัน 10 · แนบไฟล์พร้อมกัน 10 · เกิน → HTTP 429 `RATE_LIMITED` พร้อม `retryAfterSeconds` |
-| คิดเงินตาม | POST Create ที่สำเร็จเท่านั้น (invoice · receipt · quotation · billing note · purchase order · expense · daily journal) |
-| webhook | event Create · Edit · Void · PaidPayment · VoidPayment ของเอกสารหลัก (contact · product ได้แค่ Create · Edit) · ตั้ง custom header ต่อ endpoint ได้ เช่น `x-api-key` · เอกสารไม่พูดถึงลายเซ็นและการส่งซ้ำ |
+| Docs | developers.peakaccount.com (API Integration Guide · file `llms.txt` links every page) · has a Postman collection |
+| Package | PEAK PRO Plus (12,000 baht/year) or higher · PEAK PRO Plus price per the developers page on 2026-10-26 · API fee is paid before go-live under the agreed package terms; the docs state no amount (`รอยืนยัน`, pending confirmation · per the go-live document, confirm the API fee, the number of items, and the trial terms with the PEAK team before putting them in a quotation) |
+| Get access | Fill in the form, the team replies within 3 working days · you get Connect ID + Application Code · UAT and production credentials are separate |
+| Authentication | Client Token valid 24 hours (`POST /api/v1/ClientToken`) · User Token per business, the customer creates it in the menu เชื่อมต่อแอปพลิเคชันภายนอก (External application connections) with the Application Code · header `Time-Stamp` (yyyyMMddHHmmss, UTC) · `Time-Signature` = HMAC-SHA1 of the Time-Stamp, with connectId as the key |
+| What it can do | contacts · products (has adjust) · services · quotations · invoices · billing notes · receipts · credit notes · purchase orders · expenses · daily journals · receive payment · void · approve · attach files |
+| e-Tax | Has an endpoint to send e-Tax Invoice for invoice and receipt · sends e-Receipt |
+| UAT | `http://peakengineapidev.azurewebsites.net/api/v1` (http, not https) · free for 3 months · open Mon–Fri 08:00–22:00 |
+| Production | `https://api.peakaccount.com/api/v1` · before go-live must pass the Final UAT Review (test case · error case · duplicate case · accounting result) |
+| rate limit | ClientToken request 10 times/minute/IP · trial balance report (`GET /api/v1/FinancialReports/trialbalance`) 10 times/minute and 1 concurrent · per User Token: GET 20 concurrent · POST 10 concurrent · file attach 10 concurrent · over the limit → HTTP 429 `RATE_LIMITED` with `retryAfterSeconds` |
+| Billed by | Only successful POST Create (invoice · receipt · quotation · billing note · purchase order · expense · daily journal) |
+| webhook | Events Create · Edit · Void · PaidPayment · VoidPayment of the main documents (contact · product only Create · Edit) · can set a custom header per endpoint, such as `x-api-key` · the docs say nothing about signatures or redelivery |
 
 ## 3 · FlowAccount
 
-| เรื่อง | ข้อมูล |
+| Topic | Information |
 |---|---|
-| เอกสาร | developers.flowaccount.com · spec ที่ใช้อยู่จริง `https://developers.flowaccount.com/swagger.yml` (OpenAPI 3.0.2 · 130 path) · SDK หลายภาษาใน github.com/flowaccount |
-| แพ็กเกจ | เฉพาะ Pro Business ที่มี Open API (หน้าราคา 2026-10-26: ฿457/เดือน · ฿5,490/ปี) · Free · Standard (฿1,990/ปี) · Pro (฿2,990/ปี) ไม่มี API · หน้าราคาไม่ระบุค่า API แยก · นำเข้าไม่เกิน 5,000 รายการ/เดือน เกินคิดราคาพิเศษ · หน้า API เขียนว่า "Pay when you go live" ไม่ระบุจำนวนเงิน (รอยืนยัน) |
-| ขอสิทธิ์ | แบบฟอร์ม request-openapi · ทีมติดต่อใน 1–2 วันทำการ · sandbox ใช้ได้ 30 วัน · credential จริงส่งอีเมลเจ้าของกิจการใน 3 วันทำการหลังยืนยันแพ็กเกจ |
-| ยืนยันตัวตน | OAuth 2.0 · Client Credentials = 1 client ต่อ 1 กิจการ · OpenID = พาร์ทเนอร์ 1 client หลายกิจการ (scope `flowaccount-api offline_access` · refresh token ราว 30 วันนับจากครั้งล่าสุด) · token ที่ `https://openapi.flowaccount.com/{test หรือ v1}/token` อายุ 86,400 วินาที · ส่งใน header `Authorization: Bearer` |
-| base URL | sandbox `https://openapi.flowaccount.com/test` · ระบบจริง `https://openapi.flowaccount.com/v1` |
-| ของที่ทำได้ | contacts · products · quotations · billing-notes · tax-invoices · receipts · cash-invoices · purchases · purchases-orders · expenses · withholding-taxes · journal-entries · chart-of-accounts · เปลี่ยนสถานะ · รับชำระ · แนบไฟล์ · export PDF · ส่งอีเมล |
-| อ้างอิงข้ามระบบ | ฟิลด์ `externalDocumentId` "รหัสเอกสารอ้างอิงจากระบบภายนอก" |
-| e-Tax · rate limit · webhook | ไม่พบใน swagger.yml (ค้นคำ webhook · etax · rate limit · 429 ได้ 0 รายการ) และหน้า developers.flowaccount.com · flowaccount.com/en/developers เมื่อ 2026-10-26 (ยังไม่ได้ตรวจกับผู้ขาย · ติดต่อ developer_support@flowaccount.com) |
+| Docs | developers.flowaccount.com · the spec actually in use `https://developers.flowaccount.com/swagger.yml` (OpenAPI 3.0.2 · 130 paths) · SDKs in several languages at github.com/flowaccount |
+| Package | Only Pro Business has Open API (price page 2026-10-26: ฿457/month · ฿5,490/year) · Free · Standard (฿1,990/year) · Pro (฿2,990/year) have no API · the price page lists no separate API fee · import up to 5,000 items/month, beyond that special pricing · the API page says "Pay when you go live" and gives no amount (`รอยืนยัน`, pending confirmation) |
+| Get access | Form request-openapi · team replies within 1–2 working days · sandbox usable for 30 days · real credentials are emailed to the business owner within 3 working days after the package is confirmed |
+| Authentication | OAuth 2.0 · Client Credentials = 1 client per business · OpenID = partner with 1 client for many businesses (scope `flowaccount-api offline_access` · refresh token about 30 days from the last use) · token at `https://openapi.flowaccount.com/{test or v1}/token` valid 86,400 seconds · sent in header `Authorization: Bearer` |
+| base URL | sandbox `https://openapi.flowaccount.com/test` · production `https://openapi.flowaccount.com/v1` |
+| What it can do | contacts · products · quotations · billing-notes · tax-invoices · receipts · cash-invoices · purchases · purchases-orders · expenses · withholding-taxes · journal-entries · chart-of-accounts · change status · receive payment · attach files · export PDF · send email |
+| Cross-system reference | Field `externalDocumentId` "รหัสเอกสารอ้างอิงจากระบบภายนอก" (document id referenced from an external system) |
+| e-Tax · rate limit · webhook | Not found in swagger.yml (searching webhook · etax · rate limit · 429 gave 0 hits) nor on the pages developers.flowaccount.com · flowaccount.com/en/developers on 2026-10-26 (not yet checked with the vendor · contact developer_support@flowaccount.com) |
 
-## 4 · เจ้าอื่น
+## 4 · Other vendors
 
-| โปรแกรม | สิ่งที่พบ |
+| Software | What was found |
 |---|---|
-| TRCLOUD | หน้า API ของผู้ผลิตบอกว่ามี RESTful API · สร้าง API Key จากเมนูตั้งค่า · มี Custom API & Webhook · ไม่พบเอกสารนักพัฒนาสาธารณะ ต้องขอคู่มือจากทีมขาย |
-| AccRevo | ไม่พบ API สาธารณะ · เว็บมีบทความเปิดตัว AccRevoX × MCP (ทำงานกับ Claude) |
-| Express | ค้น 2 รอบไม่พบเว็บผู้ผลิตและไม่พบ API สาธารณะ |
+| TRCLOUD | The vendor's API page says it has a RESTful API · create an API Key from the settings menu · has Custom API & Webhook · no public developer docs found, ask the sales team for the manual |
+| AccRevo | No public API found · the website has a launch article about AccRevoX × MCP (works with Claude) |
+| Express | Searched twice, found no vendor website and no public API |
 
 ## 5 · e-Tax Invoice
 
-- เลือกระบบเดียวเป็นผู้ออกเลขที่ใบกำกับภาษี · ห้ามระบบเรากับโปรแกรมบัญชีออกเลขซ้อนกัน
-- ส่งเข้าโปรแกรมบัญชีเป็นเอกสารต้นทาง แล้วให้โปรแกรมบัญชีออก e-Tax · PEAK มี endpoint ส่ง e-Tax · FlowAccount ไม่พบใน spec ต้องถามผู้ขาย
-- กฎของใบกำกับ (มาตรา 86/4 · e-Tax Invoice & e-Receipt กับ by Email) → `e-commerce:e-tax-invoice` (ถ้าติดตั้ง)
+- Pick one system to issue the tax invoice number · our system and the accounting software must not both issue numbers
+- Send into the accounting software as the source document, then let the accounting software issue the e-Tax · PEAK has an endpoint to send e-Tax · FlowAccount not found in the spec, ask the vendor
+- Tax invoice rules (section 86/4 · e-Tax Invoice & e-Receipt vs by Email) → `e-commerce:e-tax-invoice` (if installed)
 
-## 6 · กันซ้ำและกระทบยอด
+## 6 · Prevent duplicates and reconcile
 
-- เก็บตาราง mapping: รหัสฝั่งเรา ↔ รหัสฝั่งโปรแกรมบัญชี · PEAK แนะนำให้เก็บ External Reference และ mapping เพื่อกันเอกสารซ้ำ · FlowAccount ใช้ `externalDocumentId` เก็บรหัสฝั่งเรา
-- เอกสารของทั้ง 2 เจ้าไม่มี idempotency key → ค้น mapping ก่อน POST create ทุกครั้ง (`principle-safe-to-rerun`)
-- timeout ไม่ได้แปลว่าล้มเหลว · ดึงรายการตามช่วงวันที่มาเทียบก่อนส่งซ้ำ
-- ได้ 429 → รอตาม `retryAfterSeconds` หรือถอยแบบ exponential (1 · 2 · 4 · 8 วินาที ตามที่ PEAK แนะนำ)
-- กระทบยอดทุกวัน: จำนวนเอกสารและยอดรวมของ 2 ระบบต้องตรงกัน → `fintech-payments` (`references/agent-payment-integration.md` หัวข้อ Settlement Reconciliation)
-- ทุกการส่งลง audit: ใครส่ง · เอกสารไหน · รหัสปลายทาง · ผล → `audit-trail`
-- Client Token · client secret · connectId อยู่นอกโค้ด → `config-and-secrets` · UAT ของ PEAK เป็น http จึงใช้ข้อมูลทดสอบเท่านั้น
+- Keep a mapping table: our id ↔ the accounting software's id · PEAK recommends keeping External Reference and a mapping to prevent duplicate documents · FlowAccount uses `externalDocumentId` to hold our id
+- Neither vendor's docs have an idempotency key → look up the mapping before every POST create (`principle-safe-to-rerun`)
+- A timeout does not mean failure · pull the list by date range and compare before resending
+- On 429 → wait per `retryAfterSeconds` or back off exponentially (1 · 2 · 4 · 8 seconds, as PEAK recommends)
+- Reconcile every day: the document count and total of the 2 systems must match → `fintech-payments` (`references/agent-payment-integration.md`, section Settlement Reconciliation)
+- Log every send to audit: who sent · which document · destination id · result → `audit-trail`
+- Client Token · client secret · connectId stay outside the code → `config-and-secrets` · PEAK UAT is http, so use test data only
 
-## ที่มา
+## Sources
 
-| เรื่อง | URL (เปิดตรวจ 2026-10-23) |
+| Topic | URL (opened 2026-10-23) |
 |---|---|
-| PEAK แพ็กเกจ · UAT ฟรี 3 เดือน · คู่มือ | https://www.peakaccount.com/developers · https://developers.peakaccount.com/reference/api-integration-guide |
-| PEAK รายการหน้า API ทั้งหมด | https://developers.peakaccount.com/llms.txt |
-| PEAK token · ลายเซ็น | https://developers.peakaccount.com/reference/peak-api-client-token-guide.md |
-| PEAK rate limit · การนับเงิน · ขึ้นระบบจริง | https://developers.peakaccount.com/reference/copy-of-api-rate-limiting-concurrency-control.md · .../peak-api-transaction-counting.md · .../peak-api-implementation-go-live-guide.md |
-| PEAK webhook · สิทธิ์ API | https://developers.peakaccount.com/reference/webhook.md · .../api-access-rights.md |
-| PEAK ศูนย์ช่วยเหลือ (แพ็กเกจ · User Token) | https://intercom.help/peak/en/articles/13176287 · https://intercom.help/peak/en/articles/10078711 |
-| FlowAccount หน้า API · ราคา (ตรวจซ้ำ 2026-10-26) | https://flowaccount.com/en/developers · https://flowaccount.com/en/pricing |
-| FlowAccount การเชื่อมต่อ · token | https://developers.flowaccount.com/tutorial/connect-open-api · .../tutorial/connect/client-credentials-flow · .../tutorial/connect/open-id-flow |
-| FlowAccount spec · SDK | https://developers.flowaccount.com/swagger.yml · https://github.com/flowaccount/open-api (README ชี้ว่า swagger.yml คือ spec ที่ใช้จริง) |
+| PEAK packages · UAT free 3 months · guide | https://www.peakaccount.com/developers · https://developers.peakaccount.com/reference/api-integration-guide |
+| PEAK list of all API pages | https://developers.peakaccount.com/llms.txt |
+| PEAK token · signature | https://developers.peakaccount.com/reference/peak-api-client-token-guide.md |
+| PEAK rate limit · billing count · go-live | https://developers.peakaccount.com/reference/copy-of-api-rate-limiting-concurrency-control.md · .../peak-api-transaction-counting.md · .../peak-api-implementation-go-live-guide.md |
+| PEAK webhook · API access rights | https://developers.peakaccount.com/reference/webhook.md · .../api-access-rights.md |
+| PEAK help center (packages · User Token) | https://intercom.help/peak/en/articles/13176287 · https://intercom.help/peak/en/articles/10078711 |
+| FlowAccount API page · price (rechecked 2026-10-26) | https://flowaccount.com/en/developers · https://flowaccount.com/en/pricing |
+| FlowAccount connection · token | https://developers.flowaccount.com/tutorial/connect-open-api · .../tutorial/connect/client-credentials-flow · .../tutorial/connect/open-id-flow |
+| FlowAccount spec · SDK | https://developers.flowaccount.com/swagger.yml · https://github.com/flowaccount/open-api (README says swagger.yml is the spec in actual use) |
 | TRCLOUD · AccRevo | https://www.trcloud.co/api.php · https://www.accrevo.com/ |

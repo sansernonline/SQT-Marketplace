@@ -1,16 +1,16 @@
-# playbook · cert-prep — เตรียมสอบใบรับรอง
+# playbook · cert-prep — prepare for a certification exam
 
-ใช้เมื่อ: เตรียมสอบ AWS · Azure · Google Cloud · Kubernetes · Scrum หรือใบรับรองอื่น
-skill หลัก: `cert-prep`
+Use when: preparing for AWS · Azure · Google Cloud · Kubernetes · Scrum or another certification.
+Main skill: `cert-prep`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน (Steps — copy into the todo as written)
 
-1. ดึงคู่มือสอบทางการรุ่นปัจจุบัน — หัวข้อ น้ำหนัก รูปแบบ เวลา แล้วตรวจว่ารหัสข้อสอบยังใช้อยู่ · ใคร: `tech-mentor` ตัวใหม่
-2. ทำแผนที่ช่องว่าง — หัวข้อที่ผู้ใช้รู้แล้ว ยังไม่รู้ ต้องทำ lab · ใคร: หัวหน้าทีม
-3. ทำแผนรายสัปดาห์จนถึงวันสอบ ตามเวลาที่ผู้ใช้มี · ใคร: `tech-mentor` ตัวใหม่
-4. วางรอบสอบฝึก — ทำ → ดูข้อผิด → กลับไปทวนหัวข้อนั้น แล้วบันทึกคะแนนทุกรอบ · ใคร: `tech-mentor` ตัวใหม่
-5. ตรวจว่าทุกหัวข้อในคู่มือสอบอยู่ในแผน และแบ่งเวลาเรียนตามน้ำหนักข้อสอบ · ใคร: `reviewer` ตัวใหม่
+1. Pull the current official exam guide — topics, weights, format, time — then ตรวจ that the exam code is still in use · ใคร: `tech-mentor` ตัวใหม่
+2. Build a gap map — topics the user already knows, does not know yet, and needs a lab for · ใคร: หัวหน้าทีม
+3. Make a weekly plan up to the exam date, based on the time the user has · ใคร: `tech-mentor` ตัวใหม่
+4. Set up practice-exam rounds — take it → review wrong answers → go back and revise that topic, and record the score every round · ใคร: `tech-mentor` ตัวใหม่
+5. ตรวจ that every topic in the exam guide is in the plan and that study time is split by exam weight · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-แผนที่ครอบคลุมคู่มือสอบทางการครบทุกหัวข้อ และตารางคะแนนสอบฝึกพร้อมใช้
+The plan covers every topic in the official exam guide, and a practice-exam score table is ready to use.

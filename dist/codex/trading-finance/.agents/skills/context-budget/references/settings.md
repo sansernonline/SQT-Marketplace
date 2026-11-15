@@ -1,13 +1,13 @@
-# ค่าตั้งที่ช่วยประหยัด context
+# Settings that save context
 
-ย้ายมาจาก `SKILL.md` ข้อ 7 · เปิดเมื่อจะแนะนำผู้ใช้ปรับค่าตั้ง
+Moved from `SKILL.md` item 7. Open it when you are about to advise the user on settings.
 
-| ทำอะไร | ได้อะไร |
+| Action | Effect |
 |---|---|
-| **ปิด MCP server ที่ไม่ได้ใช้ในงานนั้น** · มี CLI ทำได้ใช้ CLI | ชื่อ tool และคำแนะนำของทุก server ยังโหลดทุกเซสชัน |
-| เลือกโมเดลและ effort ตั้งแต่ต้นเซสชัน | เปลี่ยนโมเดลกลางทางทำให้ cache หาย ต้องอ่านบทสนทนาใหม่ทั้งหมด (เปลี่ยน effort บน Opus · Sonnet · Haiku 5.5 และ Fable 5.1 ผ่าน Application Programming Interface (API) key หรือ subscription cache ไม่หาย · ผ่าน Bedrock · Agent Platform · gateway หรือการตั้งค่าพิเศษ ดูเงื่อนไขในลิงก์) · ([Claude Code: prompt caching](https://code.claude.com/docs/en/prompt-caching) · ตรวจ 21 ต.ค. 2569) |
-| fast mode — ผู้ใช้เปิดเองด้วย `/fast` ตอนต้นเซสชัน · agent ไม่เปิดเอง | Opus เท่านั้น · สร้างข้อความเร็วขึ้นสูงสุด 2.5 เท่า แต่ token แรกไม่เร็วขึ้น · ราคา 2 เท่า ผู้ใช้ subscription จ่ายจาก usage credits ไม่ใช่โควตา · คุ้มกับขั้นที่เขียนชิ้นยาว ไม่คุ้มกับขั้นสั้นที่รอ tool · เปิดกลางทางจ่ายราคา fast กับบทสนทนาทั้งหมดที่ไม่มี cache 1 ครั้ง · ([Claude Code: fast mode](https://code.claude.com/docs/en/fast-mode) · [API: fast mode](https://platform.claude.com/docs/en/build-with-claude/fast-mode) · ตรวจ 21 ต.ค. 2569) |
-| ปิดปลั๊กอินที่ไม่เกี่ยวกับงานนั้น | description ของ skill ทุกตัวอยู่ใน context เสมอ |
-| `permissions.deny` ใน `.claude/settings.json` สำหรับโฟลเดอร์ที่ไม่ควรอ่าน | ระบบกันพลาดให้ ไม่ต้องพึ่งวินัย |
-| `/clear` เมื่อเปลี่ยนเรื่อง (ไม่เสียอะไร) · `/compact <สิ่งที่ต้องเก็บ>` ที่จุดพักของงาน ไม่รอจนใกล้เต็ม · เดินผิดทาง → `/rewind` กลับจุดก่อนหน้า | คืนที่ว่าง · `/compact` ตอน cache ยังอุ่นถูก แต่หลังพักนานต้องอ่านทั้งบทสนทนาใหม่ · `/rewind` ตัดกลับไปจุดที่ cache มีอยู่แล้ว |
-| `CLAUDE.md` ของโปรเจกต์ไม่เกิน 40 บรรทัด · `~/.claude/CLAUDE.md` (ใช้ทุกโปรเจกต์) ไม่เกิน 60 บรรทัด — เป็นเพดานของชุดนี้เอง เข้มกว่าเอกสารทางการที่แนะนำไม่เกิน 200 · ตัวที่แจกใน `scripts/install/CLAUDE.global.md` ยาว 84 (เกินเพดาน รอตัด) | ทุกบรรทัดกิน token ทุกเซสชัน |
+| **Turn off MCP servers the task does not use**. If a CLI can do the job, use the CLI | Tool names and instructions of every server still load in every session |
+| Pick the model and effort at the start of the session | Switching model mid-session loses the cache, so the whole conversation is read again (changing effort on Opus · Sonnet · Haiku 5.5 and Fable 5.1 through an Application Programming Interface (API) key or a subscription keeps the cache · through Bedrock · Agent Platform · a gateway or special setups, see the conditions at the link) · ([Claude Code: prompt caching](https://code.claude.com/docs/en/prompt-caching) · checked 21 Oct 2569 BE) |
+| Fast mode — the user turns it on with `/fast` at the start of the session · the agent never turns it on | Opus only · up to 2.5 times faster text generation, but the first token is not faster · 2 times the price, and subscription users pay from usage credits, not the quota · worth it for a step that writes a long piece, not for short steps that wait on tools · turning it on mid-session pays the fast price once for the whole uncached conversation · ([Claude Code: fast mode](https://code.claude.com/docs/en/fast-mode) · [API: fast mode](https://platform.claude.com/docs/en/build-with-claude/fast-mode) · checked 21 Oct 2569 BE) |
+| Turn off plugins unrelated to the task | The description of every skill is always in context |
+| `permissions.deny` in `.claude/settings.json` for folders that should not be read | The system guards it, so you do not depend on discipline |
+| `/clear` when the topic changes (costs nothing) · `/compact <what to keep>` at a rest point in the work, not when nearly full · on the wrong path → `/rewind` to an earlier point | Frees space · `/compact` while the cache is warm is cheap, but after a long pause the whole conversation is read again · `/rewind` cuts back to a point where the cache already exists |
+| Project `CLAUDE.md` at most 40 lines · `~/.claude/CLAUDE.md` (used by every project) at most 60 lines — this set's own cap, stricter than the official docs, which suggest at most 200 · the one shipped in `scripts/install/CLAUDE.global.md` is 84 lines (over the cap, waiting to be cut) | Every line costs tokens in every session |

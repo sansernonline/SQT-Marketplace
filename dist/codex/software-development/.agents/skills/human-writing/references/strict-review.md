@@ -1,51 +1,51 @@
-# ตรวจเข้ม — สำหรับงานวิจัยและงานที่ส่งคนนอก
+# Strict review — for research and work sent to outsiders
 
-ค่าเริ่มต้นของ `human-writing` คือ **ตรวจปกติ**: ไล่ 7 ข้อในหัวข้อ 8 ของ SKILL.md รอบเดียวแล้วส่ง · ไฟล์นี้ใช้เฉพาะเมื่อสั่ง **ตรวจเข้ม**
+The default for `human-writing` is a **normal check**: go through the 7 points in section 8 of SKILL.md once, then send. Use this file only when the user asks for a **strict review** (ตรวจเข้ม).
 
-**ผ่านกฎ ≠ อ่านลื่น** — รอบตรวจจับได้เฉพาะสิ่งที่มีกฎ (โครงประโยค · คำต้องเลี่ยง · ระดับภาษา) · งานที่ผ่านทุกกฎแต่ไม่มีน้ำเสียง เรียกว่า **อ่านแบน** ให้ติดป้ายไว้ ไม่รายงานว่าผ่าน · คำตัดสินว่าอ่านเป็นภาษาคนไหม เป็นของผู้ใช้ที่อ่านออกเสียง ไม่ใช่ของโมเดลที่ตรวจ (โมเดลที่ร่างกับโมเดลที่ตรวจมีจุดบอดเดียวกัน)
+**Passing the rules ≠ reading smoothly.** The review pass catches only what has a rule (sentence structure · words to avoid · register). Work that passes every rule but has no voice is called **flat** (`อ่านแบน`). Label it as flat. Do not report it as passing. Whether it reads like a person wrote it is for the user to decide by reading aloud, not for the model doing the check (the model that drafted and the model that checks share the same blind spots).
 
-## เปิดเมื่อไหร่
+## When to turn it on
 
-- ผู้ใช้พูดว่า "ตรวจเข้ม" · "ตรวจแบบงานวิจัย" · "ขัดภาษาให้สุด" · "วนตรวจจนไม่เจอที่ผิด" · "strict"
-- หรืองานเป็น วิทยานิพนธ์ · IS · บทความวิจัย · รายงานส่งอาจารย์หรือกรรมการ · หนังสือราชการ แล้วผู้ใช้ไม่ได้บอกว่าขอแบบเร็ว
-- โครงเล่ม บทที่ การอ้างอิง ใช้ skill `thesis-writing` (plugin `personal-life`) คู่กัน · ไฟล์นี้ดูแลเรื่องภาษา
+- The user says "ตรวจเข้ม" · "ตรวจแบบงานวิจัย" · "ขัดภาษาให้สุด" · "วนตรวจจนไม่เจอที่ผิด" · "strict"
+- Or the work is a thesis · independent study (IS) · research article · report for a lecturer or committee · official letter, and the user did not ask for the quick version.
+- For book structure, chapters and citations, use skill `thesis-writing` (plugin `personal-life`) alongside. This file covers language only.
 
-## ขั้นตอน
+## Steps
 
-1. **เปิด [`thai-grammar`](thai-grammar.md) ทั้งไฟล์** และ [`thai-line-breaking`](thai-line-breaking.md) ถ้าส่งออกเป็นไฟล์
-2. **เลือกระดับภาษา** ตามตารางหัวข้อ 4 · งานวิจัยใช้ระดับวิชาการ · บอกระดับที่เลือกไว้บรรทัดแรกของผลตรวจ
-3. **อ่านทั้งชิ้นก่อน 1 รอบ** ยังไม่แก้ · งานเกิน 3,000 คำตรวจทีละบท บอกผู้ใช้ว่าแบ่งอย่างไร แล้วทำต่อเลยไม่ต้องหยุดถาม
-4. **รอบตรวจ** — รัน `python scripts/thai_tells.py <ไฟล์>` ก่อน (จับคำต้องเลี่ยง · คำเชื่อมเกินงบ · จุดกลางย่อหน้า · ๆ ไม่เว้นวรรค ให้เครื่องทำ) แล้วอ่านเองหาสิ่งที่สคริปต์ไม่เห็น · จดทุกจุดเป็นตาราง ห้ามแก้ระหว่างจด
+1. **Open [`thai-grammar`](thai-grammar.md) in full**, and [`thai-line-breaking`](thai-line-breaking.md) if the output is a file.
+2. **Choose the register** from the table in section 4. Research uses the academic register. State the chosen register on the first line of the review result.
+3. **Read the whole piece once first** without editing. For work over 3,000 words, review chapter by chapter. Tell the user how you split it, then carry on without stopping to ask.
+4. **Review pass.** Run `python scripts/thai_tells.py <file>` first (the machine catches words to avoid · connectors over budget · mid-paragraph dots · ๆ with no space), then read it yourself for what the script cannot see. Record every spot in a table. Do not edit while recording.
 
-   | # | รหัสกฎ | ข้อความเดิม | แก้เป็น |
+   | # | Rule code | Original text | Fix |
    |---|---|---|---|
    | 1 | `t-chueung` | …ซึ่งพัฒนาโดย… ซึ่งเปิดเป็น… | … |
 
-   **เรียงตามน้ำหนัก ไม่ใช่ตามลำดับที่เจอ** — จุดที่ทำให้คนอ่านรู้ทันทีว่าเครื่องเขียนอยู่บนสุด: ประโยคเปิดสำเร็จรูป · สรุปซ้ำท้ายย่อหน้า · ชุดละ 3 ทุกที่ · คำโฆษณากว้าง ๆ · โครงประโยคซ้ำติดกัน · แล้วค่อยถึงเรื่องเล็ก (คำเชื่อมเกิน · วรรคตอน) · แก้ 5 ข้อบนก่อน มักทำให้ข้อล่างหายไปเองหลายข้อ · ชิ้นสั้นที่เจอแค่เรื่องเล็ก แก้รอบเดียวจบ ไม่ต้องวน
-   **เทียบกับเสียงผู้เขียน** — ถ้ามีข้อความที่ผู้ใช้เขียนเอง (คู่ `ก่อน → หลัง` ใน `~/.claude/superuser-style.md` · อีเมลหรือบทที่ผู้ใช้เขียนก่อนหน้า) ให้อ่านเทียบ: ความยาวประโยค · สรรพนาม · คำท้าย · คำที่ผู้ใช้ไม่เคยใช้ · จุดที่ต่างจากเสียงผู้ใช้จดเป็นรหัส `v-voice` ในตาราง · ไม่มีตัวอย่าง → ตรวจตามกฎอย่างเดียวแล้วติดป้าย `อ่านแบน` ได้ตามปกติ (แนวคิดจาก humanizer ของ blader · MIT)
-5. **รอบแก้** — แก้ตามตาราง แล้วอ่านใหม่ทั้งชิ้น (ไม่ดูแค่จุดที่แก้ เพราะแก้จุดหนึ่งมักทำให้รอยต่อข้าง ๆ สะดุด)
-6. **วนข้อ 4–5** จนรอบตรวจไม่เจออะไร · **สูงสุด 5 รอบ** · ครบ 5 รอบแล้วยังเหลือ ให้รายงานจุดที่เหลือพร้อมเหตุผลที่ยังไม่แก้
-7. ถ้าทำงานใต้ `superuser` ให้รอบตรวจแต่ละรอบเป็น `reviewer` คนใหม่ (โมเดลเล็ก · effort ต่ำ) ส่วนหัวหน้าเป็นคนแก้ · `reviewer` รายงานได้แค่รหัสกฎที่เจอ ไม่ตัดสินว่าอ่านลื่น · รอบแก้ส่งกฎทั้งชุดให้ไม่ใช่แค่ข้อที่ถูกชี้ (ส่งแค่ข้อที่ชี้ ตัวแก้จะแก้วน)
+   **Sort by weight, not by the order found.** At the top are the spots that tell the reader at once a machine wrote it: canned opening sentences · recap at the end of a paragraph · groups of 3 everywhere · broad ad words · repeated sentence structures side by side. Then the small things (extra connectors · punctuation). Fixing the top 5 first often makes several of the lower ones vanish. A short piece with only small findings is fixed in one pass, with no loop.
+   **Compare with the author's voice.** If there is text the user wrote themselves (`ก่อน → หลัง` pairs in `~/.claude/superuser-style.md` · earlier emails or chapters by the user), read against it: sentence length · pronouns · sentence-final particles · words the user never uses. Record each spot that differs from the user's voice with code `v-voice` in the table. If there are no samples, check against the rules only, and label the result `อ่านแบน` as usual (idea from humanizer by blader · MIT).
+5. **Fix pass.** Fix according to the table, then reread the whole piece (do not look only at the fixed spots, because fixing one spot often makes the neighbouring joins stumble).
+6. **Repeat steps 4–5** until the review pass finds nothing. **At most 5 rounds.** If spots remain after 5 rounds, report them with the reason they were not fixed.
+7. If working under `superuser`, make each review round a new `reviewer` (small model · low effort), and let the lead do the fixing. The `reviewer` may report only the rule codes found, and does not judge whether it reads smoothly. For the fix pass, give the fixer the whole rule set, not just the points flagged (if you give only the flagged points, the fixer will keep going in circles).
 
-## สิ่งที่ตรวจเพิ่มในงานวิจัย
+## Extra checks for research
 
-| รหัส | ตรวจ |
+| Code | Check |
 |---|---|
-| `a-register` | ระดับวิชาการทั้งชิ้น · ไม่มีครับ/ค่ะ · ไม่มี ผม/ฉัน (ใช้ `ผู้วิจัย` หรือละ) · คำฝั่งทางการทุกคู่ในตาราง `r-drift` · `สามารถ…ได้` ครบ |
-| `a-term` | ศัพท์เทคนิคใช้คำเดียวทั้งเล่ม · ครั้งแรกเขียน `ไทย (English)` แล้วใช้ไทยต่อ · ตัวย่อเต็มครั้งแรกทุกบท · ตรงกับศัพท์บัญญัติราชบัณฑิตยสภาถ้ามี |
-| `a-claim` | ข้อความที่อ้างข้อเท็จจริงมีการอ้างอิงทุกจุด · ไม่อ้างแหล่งที่ไม่ได้เปิดอ่าน · ความเห็นผู้วิจัยแยกจากข้อเท็จจริงชัด |
-| `a-hedge` | ออกตัวเท่าที่ข้อมูลรองรับ: ผลจากกลุ่มตัวอย่างเล็กพูดว่า `ในกลุ่มตัวอย่างนี้` · ไม่ออกตัวซ้อน · ไม่ยืนยันเกินผล |
-| `a-number` | ตัวเลขมีหน่วย · ทศนิยมเท่ากันทั้งตาราง · ตัวเลขในเนื้อตรงกับตาราง · ร้อยละบอกฐาน |
-| `a-ref` | ตาราง รูป สมการ มีเลขและถูกอ้างในเนื้อก่อนปรากฏ · ชื่อรูปและตารางเป็นข้อสรุป |
-| `a-cite` | รูปแบบอ้างอิงแบบเดียวทั้งเล่ม (APA 7 หรือตามคณะ) · รายการท้ายเล่มครบตามที่อ้างในเนื้อ |
-| `a-tense` | บทวิธีวิจัยและผลเล่าเป็นสิ่งที่ทำแล้ว · ไม่สลับ `จะ` กับ `ได้` ในบทเดียวกัน |
-| `a-break` | ส่งออกแล้วรัน `scripts/thai_linebreak.py --check` และเปิด PDF ดูทุกหน้า |
+| `a-register` | Academic register throughout · no ครับ/ค่ะ · no ผม/ฉัน (use `ผู้วิจัย` or drop the pronoun) · every formal-side word in the pairs of the `r-drift` table · `สามารถ…ได้` complete |
+| `a-term` | One word per technical term across the whole book · first use written as `ไทย (English)`, then Thai afterwards · abbreviations spelled out at first use in every chapter · matches the Royal Society of Thailand's coined terms where they exist |
+| `a-claim` | Every statement of fact has a citation · no citing a source that was not opened · the researcher's opinion is clearly separated from fact |
+| `a-hedge` | Hedge only as far as the data supports: a result from a small sample says `ในกลุ่มตัวอย่างนี้` · no stacked hedges · no claiming more than the result shows |
+| `a-number` | Numbers have units · same decimals across a table · numbers in the text match the table · percentages state the base |
+| `a-ref` | Tables, figures and equations are numbered and referred to in the text before they appear · figure and table titles are conclusions |
+| `a-cite` | One citation style across the whole book (APA 7 or the faculty's) · the reference list at the end covers everything cited in the text |
+| `a-tense` | The method chapter and results are told as things already done · do not switch between `จะ` and `ได้` in one chapter |
+| `a-break` | After export, run `scripts/thai_linebreak.py --check` and open the PDF to look at every page |
 
-## ผลที่ส่งให้ผู้ใช้
+## What to send the user
 
-- บรรทัดแรก: ระดับภาษาที่ใช้ · จำนวนรอบ · `ผ่านกฎ` หรือ `เหลือ N จุด` · ถ้าอ่านแบนให้บอก `ผ่านกฎ · อ่านแบน` พร้อมย่อหน้าที่ควรอ่านออกเสียงดู
-- ตารางจุดที่แก้ รวมทุกรอบ (รหัสกฎ · เดิม · ใหม่) — ใช้ตอบกรรมการได้ว่าแก้อะไรเพราะอะไร
-- จุดที่ไม่แก้และเหตุผล (เช่น ถ้อยคำตามแบบของคณะ · คำพูดที่ยกมา)
-- ไฟล์ที่แก้แล้ว เขียนทับไฟล์เดิม ต้นฉบับเก็บใน `_to_delete/`
+- First line: the register used · the number of rounds · `ผ่านกฎ` (passed the rules) or `เหลือ N จุด` (N spots left) · if flat, say `ผ่านกฎ · อ่านแบน` with the paragraphs worth reading aloud.
+- A table of fixes across all rounds (rule code · old · new). It lets the user answer the committee about what was changed and why.
+- Spots not fixed, and why (for example wording fixed by the faculty's template · quoted speech).
+- The fixed file overwrites the original. Keep the original in `_to_delete/`.
 
-ที่มาของวิธีวนตรวจ: skill `kode-thai` ใน [chakrit/kien-thai](https://github.com/chakrit/kien-thai) (MIT) · ปรับให้มีเพดานรอบ และใช้เฉพาะเมื่อสั่ง เพราะฉบับเต็มกิน token หลายหมื่นต่อรอบ
+Source of the review loop: skill `kode-thai` in [chakrit/kien-thai](https://github.com/chakrit/kien-thai) (MIT) · adapted with a cap on rounds, and used only on request, because the full version costs tens of thousands of tokens per round.

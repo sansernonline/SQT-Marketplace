@@ -1,36 +1,35 @@
-# หลายบัญชี LLM · ตัวคุม event · `claude -p`
+# Multiple LLM accounts · event-driven orchestrator · `claude -p`
 
-## หลายบัญชี LLM — แจกงานข้ามบัญชีตามโควตา
+## Multiple LLM accounts — hand out work across accounts by quota
 
-ใช้เมื่อเปิด Claude Code หรือ Codex หลายตัวคนละบัญชี (คนละ worktree ตาม `team-files`) · subagent ใช้บัญชีเดียวกับตัวที่เรียกเสมอ การแบ่งงานข้ามบัญชีจึงเป็นการแบ่งงานระหว่าง session หลายตัว · แนวคิดจาก KC-QUEST ใน lab `03_KC_QUEST` ของคอร์ส CWN2026 เขียนใหม่ ไม่ได้นำโค้ดมา
+Use this when several Claude Code or Codex sessions run under different accounts (each in its own worktree per `team-files`). A subagent always uses the same account as its caller, so splitting work across accounts means splitting it between sessions. The idea comes from KC-QUEST in lab `03_KC_QUEST` of the CWN2026 course; rewritten, no code copied.
 
-1. **ตั้งชื่อบัญชี:** รันแต่ละบัญชีด้วย `CLAUDE_CONFIG_DIR` (หรือ `CODEX_HOME`) ของตัวเอง ชื่อบัญชีคือชื่อโฟลเดอร์นั้น (ไม่ตั้งเลย = `.claude` หรือ `.codex`) หรือตั้ง `SQT_ACCOUNT` เอง · ชื่อใน `accounts.json` ต้องตรงกับชื่อนี้ ไม่งั้นบัญชีนั้นใช้โควตาเต็มถังเสมอ · hook จดชื่อบัญชีในทุกงานลูกทีม
-2. **บอกขนาดถัง:** คัดลอก `superuser/templates/accounts.json` ไปไว้ที่ `~/.claude/superuser/accounts.json` แล้วแก้ `cap_k` (โควตาเต็มถังเป็น k token โดยประมาณ) · `speed_k_per_hour` · `max_parallel` · `window_hours` · ค่าในแม่แบบเป็นตัวอย่าง ยังไม่ได้วัด · ใส่ `week_cap_k` (ถังรายสัปดาห์ เป็น k token) ด้วย ตัวแบ่งงานและ hook จะใช้ค่าที่น้อยกว่าระหว่าง 2 ถัง และเติมถัง 5 ชม. ได้ไม่เกินที่สัปดาห์เหลือ · ไม่ใส่ = คิดรอบสัปดาห์เป็น % ของถัง 5 ชม. แบบเดิม · ค่าในแม่แบบเป็นตัวอย่าง ยังไม่ได้วัด
-3. **อ่านโควตาที่เหลือ (อ่านในเครื่องเท่านั้น ไม่แตะ credential):**
-   - Claude: ตั้ง status line ของแต่ละบัญชีให้เรียก `node <plugin>/skills/parallel-split-and-merge/scripts/quota.mjs record` · Claude Code ส่งช่อง `rate_limits.five_hour` และ `seven_day` (`used_percentage` · `resets_at`) ให้ status line เฉพาะแผน Pro/Max และหลัง response แรกของ session ([status line](https://code.claude.com/docs/en/statusline) · ตรวจ 2026-10-27) · สคริปต์จดลง `~/.claude/superuser/quota/<บัญชี>.json`
-   - Codex: อ่าน `rate_limits` จาก event `token_count` ในไฟล์ session ใต้ `$CODEX_HOME/sessions` (ตรวจกับไฟล์จริงในเครื่อง 2026-10-27 · ไม่มีหน้าเอกสาร รูปแบบอาจเปลี่ยน)
-   - รวมเป็นไฟล์เดียว: `node quota.mjs snapshot --out quota.json` · ห้ามใช้ endpoint ที่ต้องดึง OAuth token ของบัญชีมาเรียก API เอง เพราะเสี่ยงผิดเงื่อนไขการใช้งาน
-4. **แจกงานครั้งแรก (① จัดลำดับ ② กรอง ③ ให้คะแนน ④ เลือกแล้วจอง):** `node scripts/plan.mjs plan.json --accounts ~/.claude/superuser/accounts.json --quota quota.json --html plan.html` · ชิ้นที่พร้อมเรียงตาม rank · ② ตัดบัญชีที่ผิดกฎเหล็กทิ้งก่อน (ช่องว่างเต็ม · โควตาเหลือน้อยกว่าขนาด × `safety` · `tool` ไม่ตรงกับช่อง `tool` ของชิ้น) · ③ คะแนน = 0.4U + 0.2F + 0.15R + 0.15V − 0.1L (U = 24/(24+ชั่วโมงก่อนรีเซ็ต · F พอดีถัง · R ถังว่าง · V บัญชีเร็วรับชิ้นวิกฤต · L งานค้าง · น้ำหนักแก้ได้ในช่อง `weights`) · ④ จองโควตาทันทีให้ชิ้นถัดไปในรอบเดียวกันเห็นของที่เหลือจริง · ไม่มีบัญชีไหนรับได้ ชิ้นนั้นรอรีเซ็ต
-5. **ระหว่างทำ (⑤ คาดการณ์และย้าย ⑥ เรียนรู้ ✦ ส่งไม้):** `node scripts/plan.mjs plan.json --accounts … --quota quota.json --actual` · ⑤ บัญชีที่โควตาเหลือไม่พอกับงานค้าง × `safety` ขึ้นรายการ "ควรย้าย" พร้อมบัญชีปลายทาง · ✦ ส่งไม้ด้วยใบ `handoff` (ทำถึงไหน · commit อะไร · ต่อจากตรงไหน) แล้วเปิดงานต่อบนบัญชีใหม่ ไม่เริ่มใหม่ · ⑥ ความเร็วจริงต่อบัญชีแบบ EMA ไว้แก้ `speed_k_per_hour`
-- น้ำหนักและสูตรเป็นค่าของคอร์ส ยังไม่ได้วัดกับงานเรา · ด้วยน้ำหนักตั้งต้น F ให้คะแนนถังเล็กที่พอดีสูง ชิ้นวิกฤตจึงอาจได้บัญชีที่ช้ากว่าเมื่อบัญชีเร็วมีถังใหญ่ ถ้าอยากให้ความเร็วชนะ ให้เพิ่มน้ำหนัก V · ข้อมูลโควตาเก่ากว่า 1 รอบ ตาราง `--actual` จะเตือนให้อ่านใหม่ · ไม่มีไฟล์บัญชี planner ทำงานแบบบัญชีเดียวเหมือนเดิม
+1. **Name the accounts:** run each account with its own `CLAUDE_CONFIG_DIR` (or `CODEX_HOME`). The account name is that folder's name (if unset, `.claude` or `.codex`), or set `SQT_ACCOUNT` yourself. Names in `accounts.json` must match this name, otherwise that account always gets a full bucket of quota. The hook records the account name on every team task.
+2. **Give the bucket sizes:** copy `superuser/templates/accounts.json` to `~/.claude/superuser/accounts.json` and edit `cap_k` (full-bucket quota, roughly, in k tokens) · `speed_k_per_hour` · `max_parallel` · `window_hours`. Values in the template are examples, not measured. Also set `week_cap_k` (weekly bucket, in k tokens): the splitter and the hook use the smaller of the 2 buckets and refill the 5-hour bucket no more than the week has left. If not set, the weekly cycle is counted as a % of the 5-hour bucket as before. Values in the template are examples, not measured.
+3. **Read the remaining quota (local read only, never touch credentials):**
+   - Claude: set each account's status line to call `node <plugin>/skills/parallel-split-and-merge/scripts/quota.mjs record`. Claude Code passes the fields `rate_limits.five_hour` and `seven_day` (`used_percentage` · `resets_at`) to the status line only on Pro/Max plans and after the first response of a session ([status line](https://code.claude.com/docs/en/statusline) · checked 2026-10-27). The script writes to `~/.claude/superuser/quota/<account>.json`.
+   - Codex: read `rate_limits` from the `token_count` event in session files under `$CODEX_HOME/sessions` (checked against real local files 2026-10-27 · no doc page, format may change).
+   - Merge into one file: `node quota.mjs snapshot --out quota.json`. Never use an endpoint that needs an account's OAuth token pulled out to call the API yourself, because it risks breaking the terms of use.
+4. **First hand-out (① rank ② filter ③ score ④ pick then reserve):** `node scripts/plan.mjs plan.json --accounts ~/.claude/superuser/accounts.json --quota quota.json --html plan.html`. Ready pieces are sorted by rank. ② Drop accounts that break a hard rule first (slots full · remaining quota less than size × `safety` · `tool` does not match the piece's `tool` field). ③ Score = 0.4U + 0.2F + 0.15R + 0.15V − 0.1L (U = 24/(24 + hours before reset) · F fits the bucket · R bucket is empty · V fast account takes a critical piece · L backlog · weights can be changed in the `weights` field). ④ Reserve quota at once so the next piece in the same round sees what is really left. If no account can take a piece, it waits for the reset.
+5. **During the work (⑤ forecast and move ⑥ learn ✦ pass the baton):** `node scripts/plan.mjs plan.json --accounts … --quota quota.json --actual`. ⑤ An account whose remaining quota is not enough for its backlog × `safety` appears in a "should move" list with a target account. ✦ Pass the baton with a `handoff` sheet (how far it got · what was committed · where to continue) and open the continuing work on the new account, not start over. ⑥ Actual speed per account as an EMA (exponential moving average), used to correct `speed_k_per_hour`.
+- The weights and formula are the course's values, not yet measured on our work. With the starting weights, F scores a small, snug bucket high, so a critical piece may get a slower account when the fast account has a large bucket. To let speed win, raise the weight V. If quota data is older than 1 cycle, the `--actual` table warns you to read it again. With no accounts file, the planner works in single-account mode as before.
 
-## ตัวคุมที่วนรับ event (ตัวอย่างจาก `04_Multi_Agent_Orchestra` ของคอร์ส CWN2026)
+## Orchestrator that loops on events (example from `04_Multi_Agent_Orchestra` of the CWN2026 course)
 
-ใช้เมื่อตัวหลักต้องคุม worker หลายตัวยาว ๆ หลายบัญชี · ตรวจกับ `ORCHESTRA_RECIPE.md` และ `tools/orch.py` แล้ว (orch.py มีทุก event ในตารางและเพดาน 4 รอบ ส่วนกติกาท้ายตารางมีแค่ใน recipe)
+Use this when the main session must run many workers over a long time across several accounts. Checked against `ORCHESTRA_RECIPE.md` and `tools/orch.py` (orch.py has every event in the table and the 4-round cap; the rule after the table is only in the recipe).
 
-| event | ตัวคุมทำอะไร |
+| event | what the orchestrator does |
 |---|---|
-| `DONE` · `HANDOFF` · `LIMIT_HANDOFF` (โควตาหมดกลางงาน ส่งต่อบัญชีอื่น) · `MERGE_CONFLICT` · `INCOMPLETE` (ทำไม่จบ ปล่อยทำต่อ) | รายงานผู้ใช้สั้น ๆ แล้ววนต่อ |
-| `FAILED` (ลองครบ 4 รอบ) | วิเคราะห์ แก้ prompt หรือแบ่งงานใหม่ แล้วปล่อยอีกรอบ |
-| `ORCH_LOW` (บัญชีตัวคุมเหลือน้อย) | เขียนสถานะและสิ่งที่ต้องทำต่อลง `NOTES.md` แล้วหยุด |
+| `DONE` · `HANDOFF` · `LIMIT_HANDOFF` (quota ran out mid-task, hand to another account) · `MERGE_CONFLICT` · `INCOMPLETE` (did not finish, let it continue) | Report to the user briefly, then keep looping |
+| `FAILED` (tried all 4 rounds) | Analyse, fix the prompt or re-split the work, then release it once more |
+| `ORCH_LOW` (the orchestrator's own account is low) | Write the status and what is left to do into `NOTES.md`, then stop |
 
-- ตัวคุมไม่เขียนโค้ดเอง (นอกจากแก้เล็กมาก) มอบงานผ่านไฟล์ใบสั่งเท่านั้น · ความจำคือ `NOTES.md` + `BOARD.md` ให้ตัวคุมคนถัดไปอ่านต่อได้ · ให้บัญชีที่เหลือโควตามากสุดเป็นตัวคุม
-- recipe สั่ง worker (ไม่ใช่โค้ดใน orch.py): ชื่อคิวหรือฐานข้อมูลที่ใช้ร่วมกันต้องไม่ชนกันระหว่างงานที่ทดสอบพร้อมกัน (ให้แต่ละงานมี prefix เช่น `MQ_PREFIX=<id>_`) · โฟลเดอร์ทำงานอยู่นอก bind mount ของ Windows (`node_modules` หลายชุดช้ามาก) · ล็อกเวอร์ชัน `@playwright/test` ให้ตรงกับ Chromium ที่ image มีที่ `/ms-playwright`
+- The orchestrator does not write code itself (except very small fixes) and hands out work only through brief files. Its memory is `NOTES.md` + `BOARD.md` so the next orchestrator can read on from there. Let the account with the most quota left be the orchestrator.
+- The recipe tells workers (this is not code in orch.py): queue or database names that are shared must not collide between tasks tested at the same time (give each task a prefix such as `MQ_PREFIX=<id>_`) · the working folder is outside the Windows bind mount (several `node_modules` sets are very slow) · lock the `@playwright/test` version to match the Chromium the image has at `/ms-playwright`.
 
-## รัน worker แบบ `claude -p` และอ่านผล
+## Run workers with `claude -p` and read the result
 
-- ส่ง `< /dev/null` และ `--no-session-persistence` ทุก call · วาง prompt ก่อน flag ที่รับหลายค่า (`--allowedTools` `--add-dir` `--mcp-config`) ไม่งั้น flag กลืน prompt · exit 0 ไม่ได้แปลว่าสำเร็จ ให้อ่าน `is_error` ในผล JSON · ที่มา: skill `yolo` ในโฟลเดอร์ `00_resource/Remote` ของคอร์ส (ผู้สอนทดสอบเอง)
-- ส่ง path ของข้อมูลแล้วสั่งให้ worker คำนวณเอง (ข้อ 5 ในหัวข้อ "ขั้นตอน" ของ SKILL.md) · ตัวอย่างเดียวจากคอร์ส: ยัดข้อมูลใน prompt ช้ากว่า 4 เท่าและเคยตอบผิด
-- worker หลายตัวที่ใช้ Playwright MCP ห้ามใช้ server ตัวเดียวกัน (ได้ browser กับแท็บชุดเดียวกัน และ config inline ที่เหมือนกันถูกรวมเป็น process เดียว) · ให้ explorer 1 ตัวต่อ 1 browser · อ้างจากเอกสาร issue ที่ผู้สอนเก็บไว้ ยังไม่ได้ทดลองเอง
-- วัดจำนวนที่ทำพร้อมกันสูงสุดจาก log แล้วรายงานตามที่ log เห็น ไม่ใช่ตามที่สั่ง · ตัวอย่างเดียว (lab1 ของคอร์ส): สั่ง 8 ได้สูงสุด 6 เพราะเปิดทีละตัวห่างกันราว 15 วินาที และโมดูลเล็กเสร็จก่อนตัวท้ายเริ่ม
-
+- Pass `< /dev/null` and `--no-session-persistence` on every call · put the prompt before flags that take many values (`--allowedTools` `--add-dir` `--mcp-config`), otherwise the flag swallows the prompt · exit 0 does not mean success, read `is_error` in the JSON result · source: skill `yolo` in the course folder `00_resource/Remote` (tested by the instructor).
+- Pass the path of the data and tell the worker to compute it itself (item 5 under the "ขั้นตอน" (steps) heading of SKILL.md) · the one example from the course: stuffing the data into the prompt was 4 times slower and once gave a wrong answer.
+- Several workers using Playwright MCP must not share one server (they get the same browser and tabs, and identical inline configs are merged into one process) · give 1 explorer per browser · cited from an issue document the instructor kept, not yet tried ourselves.
+- Measure the peak number running at once from the log and report what the log shows, not what was ordered · the one example (lab1 of the course): ordered 8, peak was 6, because they started one at a time about 15 seconds apart and the small modules finished before the last ones started.

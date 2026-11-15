@@ -1,14 +1,14 @@
-# แม่แบบของ technical-writer — README · tutorial · API reference · release notes
+# technical-writer templates — README · tutorial · API reference · release notes
 
-**สารบัญ:** README · Tutorial Template · API Reference Template · Release Notes Template
+**Contents:** README · Tutorial Template · API Reference Template · Release Notes Template
 
-เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+Open when you actually have to write this kind of document · put `(รอยืนยัน)` (to be confirmed) on any part you do not know.
 
 ## Standard Outputs
 
 ### README
 
-ไม่มีแม่แบบ README ที่นี่ — ใช้แม่แบบเดียวของ `project-bootstrap` (`SKILL.md` ข้อ 2 และ `assets/starter-files.md`) โครง 15 หัวข้อ (9 มีเสมอ · 6 มีเมื่อโปรเจกต์มีของนั้น) อยู่ใน `references/readme-skeleton.md` · คำสั่งต่อภาษาใน `references/readme-by-stack.md`
+There is no README template here — use the single template of `project-bootstrap` (`SKILL.md` item 2 and `assets/starter-files.md`). The 15-section skeleton (9 always present · 6 present when the project has that thing) is in `references/readme-skeleton.md` · commands per language are in `references/readme-by-stack.md`.
 
 ### Tutorial Template
 
@@ -120,7 +120,7 @@ const res = await fetch('/api/v1/resource', {
 
 ### Release Notes Template
 
-> Breaking Changes ต้องอยู่ก่อนหัวข้ออื่นเสมอ (ต่อจาก Highlights) — กฎเต็มของ release notes อยู่ใน skill `release-notes`
+> Breaking Changes must always come before the other sections (right after Highlights) — the full release notes rules are in the skill `release-notes`.
 
 ````markdown
 # Release v2.1.0 — YYYY-MM-DD
@@ -177,9 +177,9 @@ command --new-flag
 Thanks to: @alice, @bob, @charlie
 ````
 
-### Release Notes Template (ภาษาไทย)
+### Release Notes Template (Thai)
 
-> โครงเดียวกับฉบับอังกฤษ · ถ้อยคำใช้ระดับ ข่าว (`human-writing` `references/thai-grammar.md` หัวข้อ 4): ไม่มีบุรุษที่ 1 · แต่ละบรรทัด ประธาน + กริยา + กรรม · ตัวเลขต้องวัดจริง ไม่มีก็ไม่ใส่ · ตัวอย่าง ถูก/ผิด อยู่ใน skill `release-notes` ข้อ 4
+> Same structure as the English version · wording at news register (`human-writing` `references/thai-grammar.md` section 4): no first person · each line has subject + verb + object · numbers must be measured, and if there are none, leave them out · right/wrong examples are in the skill `release-notes` item 4.
 
 ````markdown
 # เวอร์ชัน 2.1.0 — YYYY-MM-DD

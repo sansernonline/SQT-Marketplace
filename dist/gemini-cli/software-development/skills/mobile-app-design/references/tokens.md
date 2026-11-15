@@ -1,154 +1,154 @@
-# Token reference — ระบบดีไซน์แอปมือถือสไตล์ Speak Go
+# Token reference — Speak Go-style mobile app design system
 
-> ระวัง: **ค่าสีในไฟล์นี้เป็นตัวอย่างที่ประกอบครบแล้ว ไม่ใช่ค่ามาตรฐาน**
-> เลือกสีจากเนื้องานก่อนเสมอ (ดู `SKILL.md` ข้อ 2 · Design tokens)
-> สิ่งที่ให้ยึดจากไฟล์นี้คือ **รายชื่อ token และหน้าที่ของมัน** ไม่ใช่ค่า
-> สี ฟอนต์ มุม เงา และความกว้างเป็นค่าสำรอง ค่าของงานอยู่ใน `theme.css` (`SKILL.md` ข้อ 2) · ระยะห่าง ขนาดตัวอักษร และ breakpoint ใช้ตามไฟล์นี้
+> Warning: **the color values in this file are a finished example, not a standard.**
+> Always pick colors from the work itself first (see `SKILL.md` item 2 · Design tokens).
+> What to take from this file is **the list of tokens and their roles**, not the values.
+> Colors, fonts, radii, shadows and widths are fallbacks. The project's values live in `theme.css` (`SKILL.md` item 2) · spacing, type sizes and breakpoints follow this file.
 
-นิยามทั้งหมดอยู่ใน `assets/speakgo.css` บล็อก `:root`
-**ทุกอย่างใต้บรรทัด `=== base ===` ห้ามมีสีดิบ** — ใช้ตัวตรวจตัวเดียวกับ `web-app-design` ได้
+All definitions are in `assets/speakgo.css`, in the `:root` block.
+**Nothing below the `=== base ===` line may contain a raw color** — the same checker as `web-app-design` works here.
 
-## สารบัญ
+## Contents
 
-1. [สี](#สี)
-2. [ฟอนต์ — 4 ตระกูล 4 หน้าที่](#ฟอนต์--4-ตระกูล-4-หน้าที่)
-3. [สเกลตัวอักษร](#สเกลตัวอักษร)
-4. [รูปทรง](#รูปทรง)
-5. [เลย์เอาต์และ safe area](#เลย์เอาต์และ-safe-area)
-6. [ธีม](#ธีม)
-7. [ย้ายไปสแต็กอื่น](#ย้ายไปสแต็กอื่น)
-8. [คลาสที่มีให้แล้ว](#คลาสที่มีให้แล้ว)
+1. [Colors](#colors)
+2. [Fonts — 4 families, 4 roles](#fonts--4-families-4-roles)
+3. [Type scale](#type-scale)
+4. [Shapes](#shapes)
+5. [Layout and safe area](#layout-and-safe-area)
+6. [Themes](#themes)
+7. [Moving to another stack](#moving-to-another-stack)
+8. [Ready-made classes](#ready-made-classes)
 
 ---
 
-## สี
+## Colors
 
-| Token | ค่า | ใช้กับ |
+| Token | Value | Used for |
 |---|---|---|
-| `--bg` | `#F2F4F6` | พื้นหน้าจอ — เทาอ่อน ไม่ใช่ขาว การ์ดจะได้ลอยขึ้นมา |
-| `--surface` | `#FFF` | การ์ด · แถบล่าง · ช่องกรอก |
-| `--ink` | `#131A21` | ข้อความหลัก · พื้นปุ่มหลัก · บับเบิลของผู้ใช้ |
-| `--soft` | `#66727E` | ข้อความรอง · คำอธิบาย |
-| `--faint` | `#98A3AD` | ป้ายกำกับ · meta · ไอคอนที่ไม่ active |
-| `--line` | `#E2E7EB` | เส้นขอบ · รางแถบความคืบหน้า |
-| `--signal` | `#2A78D6` (ค่าประจำบ้าน ใช้เมื่อไม่มีสีแบรนด์) | แท็บที่เลือก · ความคืบหน้า · ไมค์ตอนอัด · เป็นพื้นปุ่มที่มีตัวอักษรขาวให้ใช้ `--signal-strong` (ขาวบน `#2A78D6` ได้แค่ 4.42:1 ไม่ถึง 4.5:1) |
-| `--signal-strong` | `#226CC6` | พื้นปุ่มที่มีตัวอักษรขาว (ขาวบนสีนี้ 5.21:1) — ถ้ามีสีแบรนด์ ให้ใช้สีแบรนด์ที่เข้มพอให้ขาวได้ ≥ 4.5:1 |
-| `--signal-soft` | `#E8F1FB` | พื้นป้ายระดับ |
-| `--repair` / `-bg` | `#C0392B` / `#FBEDEB` | จุดที่ต้องแก้ |
-| `--hint` / `-bg` | `#8A6D1F` / `#FBF4E3` | คำใบ้ |
-| `--fav` | `#D9455F` | หัวใจ / ถูกใจ |
-| `--tile1` → `--tile2` | `#0B7076` → `#4338A8` | ไล่สีบนไทล์หมวดหมู่ |
+| `--bg` | `#F2F4F6` | Screen background — light gray, not white, so cards stand out |
+| `--surface` | `#FFF` | Cards · bottom bar · input fields |
+| `--ink` | `#131A21` | Main text · primary button background · user bubble |
+| `--soft` | `#66727E` | Secondary text · descriptions |
+| `--faint` | `#98A3AD` | Labels · meta · inactive icons |
+| `--line` | `#E2E7EB` | Borders · progress bar track |
+| `--signal` | `#2A78D6` (house default, used when there is no brand color) | Selected tab · progress · mic while recording · for a button background with white text use `--signal-strong` instead (white on `#2A78D6` gives only 4.42:1, below 4.5:1) |
+| `--signal-strong` | `#226CC6` | Button background with white text (white on this color is 5.21:1) — if there is a brand color, use a brand color dark enough for white text to reach ≥ 4.5:1 |
+| `--signal-soft` | `#E8F1FB` | Level badge background |
+| `--repair` / `-bg` | `#C0392B` / `#FBEDEB` | Spots that need fixing |
+| `--hint` / `-bg` | `#8A6D1F` / `#FBF4E3` | Hints |
+| `--fav` | `#D9455F` | Heart / like |
+| `--tile1` → `--tile2` | `#0B7076` → `#4338A8` | Gradient on category tiles |
 
-> ชื่อ token ตั้งตาม **หน้าที่** ไม่ใช่ตามสี — `--repair` ไม่ใช่ `--red`
-> พอเปลี่ยนใจว่า "จุดที่ต้องแก้" ควรเป็นสีส้ม ก็แก้ที่เดียวโดยชื่อยังถูกอยู่
+> Token names follow the **role**, not the color — `--repair`, not `--red`.
+> If you later decide "spots that need fixing" should be orange, you change it in one place and the name is still correct.
 
-## ฟอนต์ — 4 ตระกูล 4 หน้าที่
+## Fonts — 4 families, 4 roles
 
-นี่คือสิ่งที่ทำให้ระบบนี้ต่างจากแอปทั่วไป **อย่ายุบให้เหลือตระกูลเดียว**
+This is what sets this system apart from ordinary apps. **Do not collapse it to one family.**
 
-| Token | ฟอนต์ | ใช้กับ |
+| Token | Font | Used for |
 |---|---|---|
-| `--ui` | IBM Plex Sans Thai | ส่วนควบคุมทั้งหมด — ปุ่ม เมนู ป้าย ชื่อหน้า |
-| `--dis` | Space Grotesk | ตัวเลขใหญ่ — คะแนน สถิติ (`.score b`, `.mini b`, `.stat b`) |
-| `--text` | Source Serif 4 | เนื้อหาที่ผู้ใช้ต้อง **อ่าน** — บับเบิล ประโยคตัวอย่าง |
-| `--mono` | system mono | ป้ายกำกับตัวพิมพ์ใหญ่ + `letter-spacing:.14em` — META, LEVEL, TURN 5/12 |
+| `--ui` | IBM Plex Sans Thai | All controls — buttons, menus, labels, page titles |
+| `--dis` | Space Grotesk | Large numbers — scores, stats (`.score b`, `.mini b`, `.stat b`) |
+| `--text` | Source Serif 4 | Content the user must **read** — bubbles, example sentences |
+| `--mono` | system mono | Uppercase labels + `letter-spacing:.14em` — META, LEVEL, TURN 5/12 |
 
-`body[data-lang="en"]` สลับ `--ui` เป็น Space Grotesk
-(IBM Plex Sans Thai มีอักษรละตินแต่หน้าตาไม่คมเท่าเมื่อไม่มีไทยปน)
+`body[data-lang="en"]` switches `--ui` to Space Grotesk
+(IBM Plex Sans Thai has Latin letters, but they look less crisp when no Thai is mixed in).
 
-**ทำไม serif กับบับเบิล:** เนื้อหาที่ต้องอ่านยาวและอ่านซ้ำ serif ช่วยแยกตัวอักษรได้ดีกว่า
-และแยก "สิ่งที่แอปพูด" ออกจาก "ปุ่มของแอป" ได้ทันทีโดยไม่ต้องใช้สี
+**Why serif for bubbles:** for content read at length and re-read, serif separates letters better,
+and it tells "what the app says" apart from "the app buttons" at once, without using color.
 
-## สเกลตัวอักษร
+## Type scale
 
-| ขนาด | ตระกูล | ใช้กับ |
+| Size | Family | Used for |
 |---|---|---|
-| 60 / 44 | dis | คะแนนใหญ่ · verdict |
-| 24 | ui 700 | ชื่อหน้าใน appbar |
-| 19–24 | dis 700 | ตัวเลขสถิติ |
-| 17 | text | บับเบิลสนทนา |
-| 15.5–16 | text | ประโยคตัวอย่าง · กล่องแก้ไข |
-| 16 | ui 600 | ชื่อรายการในการ์ด |
-| 15 | ui | ช่องกรอก · ปุ่มหลัก |
-| 13–14 | ui | เนื้อความ · ปุ่มรอง |
-| 11–12 | ui | คำอธิบาย · ป้ายกำกับ |
-| 9–10 | mono uppercase | meta · LEVEL · ชื่อผู้พูด |
+| 60 / 44 | dis | Big score · verdict |
+| 24 | ui 700 | Page title in appbar |
+| 19–24 | dis 700 | Stat numbers |
+| 17 | text | Conversation bubble |
+| 15.5–16 | text | Example sentences · edit box |
+| 16 | ui 600 | Item title in a card |
+| 15 | ui | Input fields · primary button |
+| 13–14 | ui | Body text · secondary button |
+| 11–12 | ui | Descriptions · labels |
+| 9–10 | mono uppercase | meta · LEVEL · speaker name |
 
-## รูปทรง
+## Shapes
 
-| Token | ค่า | ใช้กับ |
+| Token | Value | Used for |
 |---|---|---|
-| `--r-tile` | 16px | ไทล์ · การ์ดสถิติ · ปุ่ม CTA |
-| `--r-card` | 18px | การ์ดรายการ · บับเบิล · กล่องใหญ่ |
-| `--r-field` | 13px | ช่องกรอก · ปุ่ม outline |
-| `--r-pill` | 22px | ชิป · ช่องค้นหา |
-| — | 50% | ปุ่มไอคอน · หัวใจ · ไมค์ |
+| `--r-tile` | 16px | Tiles · stat cards · CTA buttons |
+| `--r-card` | 18px | List cards · bubbles · large boxes |
+| `--r-field` | 13px | Input fields · outline buttons |
+| `--r-pill` | 22px | Chips · search field |
+| — | 50% | Icon buttons · heart · mic |
 
-**บับเบิลสนทนา** ใช้ 18px ทุกมุม **ยกเว้น** มุมที่ชี้เข้าหาผู้พูดเหลือ **5px**
-(`border-bottom-left-radius` ฝั่ง AI · `border-bottom-right-radius` ฝั่งผู้ใช้)
-เป็นสัญญาณว่าใครพูดโดยไม่ต้องวาดหางบับเบิล
+**Conversation bubbles** use 18px on every corner **except** the corner pointing at the speaker, which is **5px**
+(`border-bottom-left-radius` on the AI side · `border-bottom-right-radius` on the user side).
+This shows who is speaking without drawing a bubble tail.
 
-## เลย์เอาต์และ safe area
+## Layout and safe area
 
-| ค่า | ตัวเลข |
+| Item | Number |
 |---|---|
-| ความกว้างแอปสูงสุด | 430px (iPhone Pro Max) |
-| ขอบซ้าย/ขวา | 16px (`--gutter`) ทุกหน้า |
-| ปุ่มไมค์ | 66px |
-| ปุ่มไอคอน | 38px |
-| ไทล์ | สูงต่ำสุด 118px · 2 คอลัมน์ gap 8px |
-| แถบแท็บ | ไอคอน 22px + ป้าย 10px |
+| Max app width | 430px (iPhone Pro Max) |
+| Left/right margin | 16px (`--gutter`) on every page |
+| Mic button | 66px |
+| Icon button | 38px |
+| Tile | min height 118px · 2 columns, gap 8px |
+| Tab bar | icon 22px + label 10px |
 
-> ตัวอักษร 9–10 ใช้ได้เฉพาะป้าย mono อังกฤษใน mockup เพราะในแอปจริงเล็กสุดคือ 11
+> 9–10 type is allowed only for English mono labels in the mockup, because in a real app the smallest is 11.
 
-**safe area — ห้ามลืม** ไม่อย่างนั้นเนื้อหาจะชนรอยบากด้านบนหรือ home indicator ด้านล่าง:
+**Safe area — never forget it**, or content will hit the notch at the top or the home indicator at the bottom:
 
 ```css
 .appbar  { padding-top:    calc(12px + env(safe-area-inset-top)); }
 .tabbar  { padding-bottom: calc(8px  + env(safe-area-inset-bottom)); }
 .dock    { padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
 ```
-และต้องมี `<meta name="viewport" content="…,viewport-fit=cover">` ไม่งั้น `env()` เป็น 0
+The page also needs `<meta name="viewport" content="…,viewport-fit=cover">`, otherwise `env()` is 0.
 
-ใช้ **`100dvh`** ไม่ใช่ `100vh` — `vh` ไม่หดตามแถบที่อยู่ของเบราว์เซอร์บนมือถือ
-เนื้อหาท่อนล่างจะโดนบัง
+Use **`100dvh`**, not `100vh` — `vh` does not shrink for the browser address bar on mobile,
+so the bottom part of the content gets covered.
 
-## ธีม
+## Themes
 
-| ธีม | เปิดด้วย | ต่างกันตรงไหน |
+| Theme | Enabled by | What differs |
 |---|---|---|
-| เรียบ (ค่าเริ่มต้น) | — | chrome (แถบและปุ่มของแอป) ขาว/เทา · accent ฟ้า (`--signal` = `#2A78D6`) |
-| ไล่สี | `body[data-theme="grad"]` | appbar/ovbar/CTA/ไมค์/บับเบิลผู้ใช้เป็นไล่สี · `--signal` เปลี่ยนเป็นม่วง · คะแนนเป็นตัวอักษรไล่สี |
+| Plain (default) | — | chrome (the app bars and buttons) white/gray · blue accent (`--signal` = `#2A78D6`) |
+| Gradient | `body[data-theme="grad"]` | appbar/ovbar/CTA/mic/user bubble are gradients · `--signal` changes to purple · score is gradient text |
 
-**กฎของธีมไล่สี:** ไล่สีอยู่บน **chrome และปุ่มหลัก** เท่านั้น พื้นที่เนื้อหายังเรียบเสมอ
-ถ้าไล่สีไปอยู่หลังข้อความยาว จะอ่านยากและคอนทราสต์ควบคุมไม่ได้
+**Rule of the gradient theme:** gradients go on **chrome and primary buttons** only. The content area stays plain.
+If a gradient sits behind long text, it is hard to read and the contrast cannot be controlled.
 
-## ย้ายไปสแต็กอื่น
+## Moving to another stack
 
-CSS คือต้นฉบับ ค่าเดียวกันใช้ได้ทุกที่ — ที่ต้องระวังคือกลไก ไม่ใช่ตัวเลข
+CSS is the source. The same values work everywhere — what needs care is the mechanism, not the numbers.
 
-| เรื่อง | React Native | Flutter |
+| Topic | React Native | Flutter |
 |---|---|---|
-| token | ไฟล์ `tokens.ts` เป็น object แล้ว import (ไม่มี CSS variable) | `ThemeExtension` หรือ class `AppTokens` ค่าคงที่ |
+| token | a `tokens.ts` file as an object, then import it (no CSS variables) | `ThemeExtension` or an `AppTokens` class of constants |
 | safe area | `react-native-safe-area-context` → `useSafeAreaInsets()` | `SafeArea` / `MediaQuery.padding` |
-| ฟอนต์ | ต้อง link ไฟล์ฟอนต์เข้าโปรเจกต์ ไม่มี fallback อัตโนมัติ | `pubspec.yaml` → `fontFamily` |
-| ไล่สี | `expo-linear-gradient` | `BoxDecoration(gradient: LinearGradient(...))` |
-| เงา | `shadowColor/Offset/Opacity/Radius` (iOS) + `elevation` (Android) | `BoxShadow` |
-| มุมไม่เท่ากัน | `borderBottomLeftRadius` ฯลฯ | `BorderRadius.only(...)` |
-| กดแล้วยุบ | `Pressable` + `Animated.spring` scale .98 | `InkWell` / `AnimatedScale` |
-| ตัวเลขเรียงหลัก | `fontVariant: ['tabular-nums']` | `FontFeature.tabularFigures()` |
+| fonts | link the font files into the project; there is no automatic fallback | `pubspec.yaml` → `fontFamily` |
+| gradient | `expo-linear-gradient` | `BoxDecoration(gradient: LinearGradient(...))` |
+| shadow | `shadowColor/Offset/Opacity/Radius` (iOS) + `elevation` (Android) | `BoxShadow` |
+| uneven corners | `borderBottomLeftRadius` etc. | `BorderRadius.only(...)` |
+| shrink on press | `Pressable` + `Animated.spring` scale .98 | `InkWell` / `AnimatedScale` |
+| tabular numbers | `fontVariant: ['tabular-nums']` | `FontFeature.tabularFigures()` |
 
-> **ข้อจำกัดที่ต้องรู้:** ตัวเลขในตารางนี้ตรวจแล้วบน HTML/CSS เท่านั้น
-> ส่วน RN/Flutter เป็นการเทียบกลไกที่ **ยังไม่ได้ build ทดสอบ** — ค่าโอนไปใช้ได้ แต่ให้ตรวจหน้าตาจริงบนเครื่องอีกรอบ
+> **Limit to know:** the numbers in this table were verified on HTML/CSS only.
+> The RN/Flutter column is a mechanism comparison that **has not been built and tested** — the values transfer, but check the real look on a device once more.
 
-## คลาสที่มีให้แล้ว
+## Ready-made classes
 
-| กลุ่ม | คลาส |
+| Group | Classes |
 |---|---|
-| โครง | `#app` `.appbar` `.screen(.on)` `.tabbar > .tab(.on)` `.overlay(.on)` `.ovbar` |
-| รายการ | `.tiles > .tile` `.card` `.sg` `.heart(.on)` `.lvl` `.grouphead` `.welcome` `.blank` |
-| ตัวควบคุม | `.chips > .chip(.on)` `.lvlchip(.on)` `#search` `.iconbtn` `.cta(.alt)` `.outline(.danger)` `.seg > button(.on)` |
-| ตั้งค่า | `.sect` `.group > .r2 / .rcol` |
-| สนทนา | `#thread` `.turn(.ai/.me)` `.who` `.bub(.masked)` `.repair` `del` `ins` `.note` `.tag` `.clean` `.hintbox` `.acts > .actbtn(.hintb)` `.sys` `.dots` |
-| แถบไมค์ | `.dock` `#interim` `.dockrow` `#mic(.live/.busy)` `.typerow(.on)` `.txtbtn` |
-| สรุปผล | `.report` `.score` `.mini` `.bar` `.verdict` `.wk` `.stat` `.g4` `.drillrow` `.fixrow` `.dnote` |
+| Structure | `#app` `.appbar` `.screen(.on)` `.tabbar > .tab(.on)` `.overlay(.on)` `.ovbar` |
+| Lists | `.tiles > .tile` `.card` `.sg` `.heart(.on)` `.lvl` `.grouphead` `.welcome` `.blank` |
+| Controls | `.chips > .chip(.on)` `.lvlchip(.on)` `#search` `.iconbtn` `.cta(.alt)` `.outline(.danger)` `.seg > button(.on)` |
+| Settings | `.sect` `.group > .r2 / .rcol` |
+| Conversation | `#thread` `.turn(.ai/.me)` `.who` `.bub(.masked)` `.repair` `del` `ins` `.note` `.tag` `.clean` `.hintbox` `.acts > .actbtn(.hintb)` `.sys` `.dots` |
+| Mic bar | `.dock` `#interim` `.dockrow` `#mic(.live/.busy)` `.typerow(.on)` `.txtbtn` |
+| Result summary | `.report` `.score` `.mini` `.bar` `.verdict` `.wk` `.stat` `.g4` `.drillrow` `.fixrow` `.dnote` |

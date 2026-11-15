@@ -1,81 +1,81 @@
-# เครื่องมือแปลงสคริปต์เป็นคลิป
+# Tools for turning a script into a clip
 
-เปิดไฟล์นี้หลังได้รายการช็อตจากขั้นที่ 5 ของ `SKILL.md` แล้ว ตอนต้องเลือกว่าจะตัดต่อด้วยอะไร ใส่ซับไทยอย่างไร และเพลงกับฟอนต์ใช้ได้แค่ไหน · ทุกข้อตรวจกับหน้าทางการเมื่อ 2026-10-23 ราคาและเงื่อนไขเปลี่ยนบ่อย งานลูกค้าหรือโฆษณาให้เปิดหน้าทางการซ้ำก่อนส่ง · ป้าย (แนวของเรา) คือค่าเริ่มต้นที่ทีมเลือกเอง ไม่ใช่ข้อเท็จจริงจากแหล่ง
+Open this file after you have the shot list from step 5 of `SKILL.md`, when you must choose what to edit with, how to add Thai subtitles, and how far music and fonts can be used · every item was checked against the official pages on 2026-10-23 · prices and terms change often, so for client work or ads, open the official pages again before sending · the label (our approach) marks a default the team chose itself, not a fact from a source
 
-## 1 · เลือกเครื่องมือ
+## 1 · Choose a tool
 
-| เครื่องมือ | เหมาะกับ | ซับไทยอัตโนมัติ | ใช้เพื่อการค้า | ต้องรู้ก่อนใช้ |
+| Tool | Good for | Automatic Thai subtitles | Commercial use | Know before using |
 |---|---|---|---|---|
-| CapCut (มือถือ · เดสก์ท็อป · เว็บ) | คลิปสั้นที่ต้องเสร็จวันนี้ · ลง TikTok | หน้าเครื่องมือภาษาไทยของ CapCut บอกว่าถอดเสียงพูดภาษาไทยเป็นข้อความได้ และส่งออกซับเป็นไฟล์ .srt ได้ · หน้าภาษาอังกฤษไม่มีรายชื่อภาษา | ตัวโปรแกรมใช้ได้ แต่เพลง เทมเพลต และฟอนต์ในแอปมีเงื่อนไข (หัวข้อ 2) | สิทธิ์ใช้วัสดุในแอปเป็นแบบเพิกถอนได้ |
-| DaVinci Resolve 21 รุ่นฟรี (Windows · macOS · Linux) | ตัดต่อจริงจัง แก้สี แก้เสียง · คลิปยาว | แหล่งรองบอกว่าการสร้างซับจากเสียงเป็นของรุ่น Studio และไม่มีภาษาไทยในรายชื่อ (ยังไม่ได้ตรวจกับคู่มือทางการ) · ใช้วิธีนำเข้า .srt ที่แก้แล้วแทน | หน้าผลิตภัณฑ์ไม่พูดถึงเรื่องนี้ · อ่านสัญญาอนุญาตตอนติดตั้ง (ยังไม่ได้ตรวจ) | รุ่นฟรีทำงานกับวิดีโอ 8 บิต สูงสุด 60 fps ที่ 3840 × 2160 · DaVinci AI Neural Engine และการเร่ง H.264/H.265 ด้วยฮาร์ดแวร์อยู่ในรุ่น Studio ราคา $236 (ลดจาก $295) |
-| HyperFrames (โอเพนซอร์สของ HeyGen) | คลิปที่เขียนด้วย HTML และ CSS · ให้ agent สร้างเป็นชุดจากแม่แบบ | ไม่มีตัวถอดเสียงไทยที่ตรวจแล้ว · ใส่ซับจากไฟล์ที่แก้แล้ว | สัญญาอนุญาต Apache-2.0 ใช้เพื่อการค้าได้ · ฟอนต์ เพลง และภาพที่ใส่เข้าไปต้องมีสิทธิ์เอง | ต้องมี Node.js 22 ขึ้นไปและ FFmpeg · `npx hyperframes render` ได้ไฟล์ MP4 |
-| Remotion | คลิปที่เขียนด้วย React · ทำซ้ำหลายร้อยคลิปจากข้อมูล | ไม่มีตัวถอดเสียงไทยที่ตรวจแล้ว | ฟรีสำหรับบุคคล · บริษัทที่หากำไรและมีพนักงานไม่เกิน 3 คน · องค์กรไม่แสวงกำไร · ช่วงลองก่อนใช้เพื่อการค้า · องค์กรอื่นต้องซื้อ Company License | `npx remotion render <entry> <composition-id> <output>` · ไม่ใส่ `--codec` จะได้ H.264 |
+| CapCut (mobile · desktop · web) | Short clips that must be done today · posting to TikTok | CapCut's Thai-language tool page says it can transcribe spoken Thai to text and export subtitles as an .srt file · the English page has no language list | The program itself is usable, but music, templates, and fonts in the app have conditions (section 2) | The right to use materials in the app is revocable |
+| DaVinci Resolve 21 free version (Windows · macOS · Linux) | Serious editing, color correction, audio fixing · long clips | A secondary source says generating subtitles from audio belongs to the Studio version and Thai is not in the language list (not yet checked against the official manual) · use importing a corrected .srt instead | The product page does not mention this · read the license at install time (not yet checked) | The free version works with 8-bit video, at most 60 fps at 3840 × 2160 · DaVinci AI Neural Engine and hardware acceleration of H.264/H.265 are in the Studio version, priced $236 (down from $295) |
+| HyperFrames (HeyGen's open source) | Clips written in HTML and CSS · having an agent build a batch from a template | No verified Thai transcriber · add subtitles from a corrected file | Apache-2.0 license, commercial use allowed · the fonts, music, and images you put in must be licensed by you | Needs Node.js 22 or later and FFmpeg · `npx hyperframes render` gives an MP4 file |
+| Remotion | Clips written in React · repeating hundreds of clips from data | No verified Thai transcriber | Free for individuals · for-profit companies with at most 3 employees · non-profits · a trial period before commercial use · other organizations must buy a Company License | `npx remotion render <entry> <composition-id> <output>` · without `--codec` you get H.264 |
 
-ราคา Company License ของ Remotion: Creators $25 ต่อที่นั่งต่อเดือน · Automators $0.01 ต่อการ render ขั้นต่ำ $100 ต่อเดือน · Enterprise เริ่มที่ $500 ต่อเดือน
+Remotion Company License prices: Creators $25 per seat per month · Automators $0.01 per render with a $100 monthly minimum · Enterprise starts at $500 per month
 
-**เลือกเร็ว** (แนวของเรา)
+**Quick choice** (our approach)
 
-- ทำคลิปเดียวเองแล้วลง TikTok ใช้ CapCut จะเสร็จเร็วที่สุด
-- คลิปของลูกค้าหรือโฆษณาที่ลงหลายแพลตฟอร์ม ให้ตัดใน DaVinci Resolve รุ่นฟรี แล้วใช้เพลงกับฟอนต์ที่มีใบอนุญาต (หัวข้อ 4 และ 5)
-- คลิปหน้าตาเดียวกันหลายสิบตัวที่ราคาหรือข้อความเปลี่ยนตามข้อมูล ใช้ HyperFrames หรือ Remotion · ถ้าบริษัทมีพนักงานเกิน 3 คนแล้วเลือก Remotion ให้ใส่ค่า Company License ในงบด้วย
+- Making a single clip yourself for TikTok: CapCut finishes fastest
+- Client clips or ads that go to several platforms: cut in the DaVinci Resolve free version, then use licensed music and fonts (sections 4 and 5)
+- Dozens of clips with the same look where price or text changes with data: use HyperFrames or Remotion · if the company has more than 3 employees and picks Remotion, put the Company License fee in the budget too
 
-## 2 · CapCut: เพลง เทมเพลต และฟอนต์ ใช้เพื่อการค้าได้แค่ไหน
+## 2 · CapCut: how far music, templates, and fonts can be used commercially
 
-สัญญาที่ผูกพันคือ CapCut Materials License Agreement ผู้ใช้นอกสหรัฐฯ ทำสัญญากับ ByteDance Pte. Ltd. (ปรับปรุงล่าสุด 2026-01-22) · Terms of Service (ปรับปรุงล่าสุด 2026-04-15) ข้อ 10 ส่งต่อมาที่สัญญานี้ และบอกว่าไม่ได้ให้สิทธิ์ในงานเพลงและเสียงบันทึกที่อยู่ในแอป
+The binding contract is the CapCut Materials License Agreement, which users outside the US make with ByteDance Pte. Ltd. (last updated 2026-01-22) · the Terms of Service (last updated 2026-04-15) item 10 passes you on to this contract, and says it does not grant rights in the music and sound recordings in the app
 
-| ของในแอป | ใช้ได้แค่ไหน |
+| Item in the app | How far it can be used |
 |---|---|
-| เทมเพลต สติกเกอร์ ฟอนต์ เอฟเฟกต์เสียงทั่วไป | ใช้ส่วนตัว ไม่ใช่เพื่อการค้า |
-| ของที่มีป้ายใช้เพื่อการค้า (สัญญาเรียกว่า Dual Use Materials) | ใช้เพื่อการค้าได้เฉพาะช่องทาง ระยะเวลา และพื้นที่ที่สัญญาระบุ |
-| คลิปที่ผสมของ 2 แบบข้างบน | ทั้งคลิปใช้ได้แค่ส่วนตัว |
-| เพลงคลังปกติ (Sounds) | ใช้ได้เมื่อคลิปเป็นงานส่วนตัวเพื่อความบันเทิง ไม่ใช่เพื่อการค้า |
-| Commercial Sounds | แชร์คลิปได้ใน CapCut · TikTok · TikTok for Business เท่านั้น · ลงที่อื่นต้องขออนุญาตจากเจ้าของสิทธิ์แยกต่างหาก |
+| Templates, stickers, fonts, general sound effects | Personal use, not commercial |
+| Items with a commercial-use label (the contract calls them Dual Use Materials) | Commercial use only in the channels, period, and territory the contract states |
+| A clip that mixes the 2 kinds above | The whole clip is usable for personal use only |
+| Regular library music (Sounds) | Usable when the clip is personal work for entertainment, not commercial |
+| Commercial Sounds | The clip can be shared only in CapCut · TikTok · TikTok for Business · posting elsewhere needs separate permission from the rights holder |
 
-(แนวของเรา) งานลูกค้าหรือโฆษณาใช้ CapCut เป็นแค่โปรแกรมตัดต่อ ส่วนเพลง ฟอนต์ และภาพ เอามาจากแหล่งที่มีไฟล์ใบอนุญาต (หัวข้อ 4 และ 5) · ถ้าหน้าอื่นของ CapCut เขียนต่างจากสัญญา ให้ยึดสัญญา
+(our approach) For client work or ads, use CapCut only as an editing program, and take music, fonts, and images from sources that have a license file (sections 4 and 5) · if another CapCut page says something different from the contract, follow the contract
 
-## 3 · ค่าส่งออกต่อแพลตฟอร์ม
+## 3 · Export settings per platform
 
-ขนาดตั้งต้นอยู่ใน `social-formats` ส่วนพื้นที่ปลอดภัยให้ค้นสดจากคู่มือของแพลตฟอร์ม (ลิงก์ใน `references/platform-sizes.md` · หัวข้อ 7 คือค่าส่งออกกลางที่ใช้ได้ทุกที่: sRGB · H.264 MP4 · 30 fps · เสียง AAC) ตารางนี้บอกเฉพาะว่าตั้งที่ไหน
+Starting sizes are in `social-formats`, and for safe areas look up live from the platform's guide (links in `references/platform-sizes.md` · section 7 is the neutral export setting that works everywhere: sRGB · H.264 MP4 · 30 fps · AAC audio) · this table says only where to set things
 
-| ส่งไป | ค่าที่ตั้ง |
+| Sending to | Settings |
 |---|---|
-| TikTok · Reels · Shorts | 1080 × 1920 (9:16) · 30 fps · MP4 H.264 กับเสียง AAC · ซับฝังในภาพ |
-| YouTube แนวนอน | 16:9 เช่น 1920 × 1080 · ซับแยกเป็นไฟล์ .srt ได้ (YouTube รับ SubRip แบบพื้นฐาน ไม่อ่านสไตล์ ต้องเป็น UTF-8) |
-| ส่งต่อให้คนตัดต่อคนอื่น | ไฟล์ต้นฉบับ · ไฟล์ .srt · โฟลเดอร์เพลงพร้อมใบอนุญาต ตั้งชื่อตาม `asset-organize` |
+| TikTok · Reels · Shorts | 1080 × 1920 (9:16) · 30 fps · MP4 H.264 with AAC audio · subtitles burned into the picture |
+| YouTube landscape | 16:9, for example 1920 × 1080 · subtitles can be a separate .srt file (YouTube accepts basic SubRip, does not read styles, and it must be UTF-8) |
+| Handing off to another editor | Source files · the .srt file · a music folder with licenses, named per `asset-organize` |
 
-| เครื่องมือ | ตั้งที่ไหน |
+| Tool | Where to set it |
 |---|---|
-| CapCut | ปุ่ม Export: ความละเอียด อัตราเฟรม และรูปแบบไฟล์ (ชื่อเมนูในรุ่นล่าสุด ยังไม่ได้ตรวจ) |
-| DaVinci Resolve | หน้า Deliver: Format MP4 · Codec H.264 (ชื่อ preset ในรุ่น 21 ยังไม่ได้ตรวจ) |
-| HyperFrames | `npx hyperframes render` ได้ MP4 · วิธีตั้งขนาดภาพดูเอกสารของโปรเจกต์ (ยังไม่ได้ตรวจ) |
-| Remotion | ตั้ง `width` `height` `fps` `durationInFrames` ใน `<Composition>` · ไม่ใส่ `--codec` จะได้ H.264 |
+| CapCut | The Export button: resolution, frame rate, and file format (menu names in the latest version, not yet checked) |
+| DaVinci Resolve | The Deliver page: Format MP4 · Codec H.264 (preset names in version 21 not yet checked) |
+| HyperFrames | `npx hyperframes render` gives an MP4 · for how to set the frame size see the project's docs (not yet checked) |
+| Remotion | Set `width` `height` `fps` `durationInFrames` in `<Composition>` · without `--codec` you get H.264 |
 
-## 4 · ซับไทย: ฟอนต์และความยาวบรรทัด
+## 4 · Thai subtitles: fonts and line length
 
-- **ความยาวบรรทัด ความเร็วในการอ่าน เวลาต่อซับ และจุดตัดบรรทัด** ใช้ตาราง Caption and on-screen text rules ใน `SKILL.md` ที่เดียว: ไม่เกิน 35 ตัวอักษรต่อบรรทัด · ไม่เกิน 17 ตัวต่อวินาที · ไม่ตัดกลางคำ
-- **HyperFrames และ Remotion วาดภาพด้วย Chrome แบบไม่มีหน้าต่าง (headless)** กฎ CSS ภาษาไทยจึงใช้ได้ตรง ๆ: ใส่ `lang="th"` และห้าม `word-break: break-all` ตามแถว HTML ใน `human-writing` `references/thai-line-breaking.md`
-- **ฟอนต์ที่สัญญาอนุญาตชัด** IBM Plex Sans Thai (ค่าเริ่มต้นของซับ ดู `subtitles-th`) · Sarabun · Kanit · Noto Sans Thai อยู่ในโฟลเดอร์ `ofl/` ของ google/fonts (SIL Open Font License: OFL) · คำถามที่พบบ่อยของ OFL ข้อ 1.1 และ 1.13 บอกว่าใช้ในงานเพื่อการค้าได้ และภาพหรือวิดีโอที่ทำออกมาไม่ติดเงื่อนไขของ OFL · ข้อห้ามคือขายไฟล์ฟอนต์เดี่ยว ๆ
-- **ฟอนต์ในแอป CapCut นับเป็นวัสดุของ CapCut** ตามข้อ 10 ของ Terms of Service งานเพื่อการค้าจึงใช้ได้เฉพาะฟอนต์ที่มีป้ายใช้เพื่อการค้า หรือฟอนต์ OFL ที่นำเข้าเอง (วิธีนำเข้าฟอนต์ในแต่ละรุ่นของแอป ยังไม่ได้ตรวจ)
-- **ขนาดและพื้นหลัง** อย่างน้อย 48 px บนแคนวาสกว้าง 1080 px มีขอบเข้มหรือกล่องทึบ 60–70% ตาม `SKILL.md` · ใช้น้ำหนัก Medium ขึ้นไป เพราะหัวของตัวอักษรไทยในน้ำหนักบางจะหายเมื่อวิดีโอถูกบีบอัด (แนวของเรา)
-- **ซับจาก AI ทุกเครื่องมือ** ต้องแก้ชื่อคน ชื่อแบรนด์ ราคา และตัวเลขด้วยมือก่อนส่งออก
+- **Line length, reading speed, time per subtitle, and where to break lines** use the Caption and on-screen text rules table in `SKILL.md` in one place: at most 35 characters per line · at most 17 characters per second · do not break mid-word
+- **HyperFrames and Remotion draw the picture with headless Chrome (no window),** so Thai CSS rules apply directly: set `lang="th"` and never `word-break: break-all`, per the HTML row in `human-writing` `references/thai-line-breaking.md`
+- **Fonts with a clear license:** IBM Plex Sans Thai (the subtitle default, see `subtitles-th`) · Sarabun · Kanit · Noto Sans Thai are in the `ofl/` folder of google/fonts (SIL Open Font License: OFL) · OFL FAQ items 1.1 and 1.13 say it can be used in commercial work, and the pictures or videos made are not bound by OFL conditions · the ban is on selling the font file by itself
+- **Fonts in the CapCut app count as CapCut materials** per item 10 of the Terms of Service, so commercial work can use only fonts with a commercial-use label, or OFL fonts you import yourself (how to import fonts in each app version, not yet checked)
+- **Size and background:** at least 48 px on a canvas 1080 px wide, with a dark outline or a 60–70% solid box per `SKILL.md` · use Medium weight or heavier, because the heads of Thai letters in thin weights vanish when the video is compressed (our approach)
+- **AI subtitles from every tool** must have names of people, brand names, prices, and numbers fixed by hand before export
 
-## 5 · เพลง: กฎง่าย ๆ
+## 5 · Music: simple rules
 
-1. **ทางที่ปลอดภัยที่สุด** ใช้คลังเพลงของแพลตฟอร์มที่จะโพสต์ และใช้ภายในแพลตฟอร์มนั้นเท่านั้น · บัญชีธุรกิจมักได้คลังเล็กกว่าบัญชีส่วนตัว (รอยืนยัน รายแพลตฟอร์ม)
-2. **ลงหลายแพลตฟอร์มหรือทำโฆษณา** ใช้เพลง royalty-free ที่ซื้อหรือดาวน์โหลดพร้อมใบอนุญาต แล้วเก็บไฟล์ใบอนุญาตไว้ในโปรเจกต์ข้างไฟล์เพลง เช่น `music/licences/` ให้มี PDF หรือภาพหน้าจอของใบอนุญาต ลิงก์ ชื่อบัญชีที่ซื้อ และวันที่ · royalty-free แปลว่าไม่ต้องจ่ายค่าใช้ทุกครั้งที่ใช้ ไม่ได้แปลว่าฟรี
-3. ใส่ชื่อเพลงและแหล่งใบอนุญาตในช่อง `Music:` ของหัวสคริปต์ใน [shot-list-template.md](shot-list-template.md)
-4. **ห้าม** ดึงเพลงดังจาก YouTube หรือ Spotify มาใส่ · การให้เครดิตเจ้าของเพลงไม่ได้แทนใบอนุญาต · Commercial Sounds ของ CapCut ใช้นอก CapCut และ TikTok ไม่ได้
+1. **The safest way:** use the music library of the platform you will post on, and use it only inside that platform · business accounts often get a smaller library than personal accounts (รอยืนยัน, per platform)
+2. **Posting to several platforms or making ads:** use royalty-free music that you bought or downloaded with a license, and keep the license file in the project next to the music file, for example `music/licences/`, with a PDF or screenshot of the license, a link, the name of the account that bought it, and the date · royalty-free means you do not pay a fee every time you use it, not that it is free
+3. Put the music name and license source in the `Music:` field of the script header in [shot-list-template.md](shot-list-template.md)
+4. **Do not** pull popular music from YouTube or Spotify · crediting the music's owner does not replace a license · CapCut's Commercial Sounds cannot be used outside CapCut and TikTok
 
-## แหล่งที่มา (ตรวจ 2026-10-23)
+## Sources (checked 2026-10-23)
 
-| เรื่อง | ที่มา |
+| Topic | Source |
 |---|---|
-| สัญญาวัสดุของ CapCut (ByteDance Pte. Ltd. · ปรับปรุง 2026-01-22) | capcut.com/clause/material-license-agreement |
-| Terms of Service ข้อ 10 · ไม่ให้สิทธิ์ในเพลง (ปรับปรุง 2026-04-15) | capcut.com/clause/terms-of-service |
-| ถอดเสียงไทย · ส่งออก .srt | capcut.com/th-th/tools/video-to-text · capcut.com/th-th/tools/add-subtitles-to-video · หน้าภาษาอังกฤษ capcut.com/tools/auto-caption-generator ไม่ระบุภาษา |
-| DaVinci Resolve 21 รุ่นฟรีกับ Studio · ราคา | blackmagicdesign.com/products/davinciresolve และหน้า /studio · การใช้รุ่นฟรีเพื่อการค้า: ผลค้นพบกระทู้ในฟอรัม Blackmagic ปี 2020 ที่พนักงานตอบว่าใช้ได้ แต่เปิดอ่านต้นฉบับไม่ได้ (403) จึงยังไม่ได้ตรวจ |
-| สร้างซับจากเสียงใน Resolve | แหล่งรอง (cined.com และบล็อกของผู้ทำเครื่องมือซับ) ยังไม่ได้ตรวจกับคู่มือทางการ |
-| HyperFrames: Apache-2.0 (Copyright 2026 HeyGen, Inc.) · Node.js 22+ · FFmpeg · คำสั่ง | github.com/heygen-com/hyperframes (LICENSE · README) |
-| Remotion: เกณฑ์ใช้ฟรี · Company License · ราคา · คำสั่ง render · props ของ Composition | github.com/remotion-dev/remotion/blob/main/LICENSE.md · remotion.pro/license · remotion.dev/docs/cli/render · remotion.dev/docs/composition |
-| ฟอนต์ OFL | github.com/google/fonts/tree/main/ofl (sarabun · kanit · notosansthai) · openfontlicense.org/ofl-faq |
-| YouTube รับไฟล์ .srt | support.google.com/youtube/answer/2734698 |
+| CapCut materials contract (ByteDance Pte. Ltd. · updated 2026-01-22) | capcut.com/clause/material-license-agreement |
+| Terms of Service item 10 · no rights in music (updated 2026-04-15) | capcut.com/clause/terms-of-service |
+| Thai transcription · .srt export | capcut.com/th-th/tools/video-to-text · capcut.com/th-th/tools/add-subtitles-to-video · the English page capcut.com/tools/auto-caption-generator does not state languages |
+| DaVinci Resolve 21 free vs Studio · prices | blackmagicdesign.com/products/davinciresolve and the /studio page · commercial use of the free version: a search found a 2020 Blackmagic forum thread where staff answered that it is allowed, but the original could not be opened (403), so it is not yet checked |
+| Generating subtitles from audio in Resolve | secondary sources (cined.com and a subtitle-tool maker's blog), not yet checked against the official manual |
+| HyperFrames: Apache-2.0 (Copyright 2026 HeyGen, Inc.) · Node.js 22+ · FFmpeg · commands | github.com/heygen-com/hyperframes (LICENSE · README) |
+| Remotion: free-use criteria · Company License · prices · render command · Composition props | github.com/remotion-dev/remotion/blob/main/LICENSE.md · remotion.pro/license · remotion.dev/docs/cli/render · remotion.dev/docs/composition |
+| OFL fonts | github.com/google/fonts/tree/main/ofl (sarabun · kanit · notosansthai) · openfontlicense.org/ofl-faq |
+| YouTube accepts .srt files | support.google.com/youtube/answer/2734698 |

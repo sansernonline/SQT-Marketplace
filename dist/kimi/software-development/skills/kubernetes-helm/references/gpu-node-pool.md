@@ -1,19 +1,19 @@
-# GPU node pool สำหรับ STT/TTS — แยกจากเว็บ
+# GPU node pool for STT/TTS: separate from the web
 
-ใช้กับขั้น 5 ของ [`SKILL.md`](../SKILL.md) · ตรวจ 2026-10-27 · GPU = Graphics Processing Unit · STT = Speech-to-Text · TTS = Text-to-Speech · node pool สร้างโดยผู้ดู cluster หรือ `infra-as-code` ไม่ใช่ agent นี้เอง (ราคาสูง)
+Used with step 5 of [`SKILL.md`](../SKILL.md) · checked 2026-10-27 · GPU = Graphics Processing Unit · STT = Speech-to-Text · TTS = Text-to-Speech · the node pool is created by the cluster operator or `infra-as-code`, not by this agent itself (high cost)
 
-## ภาพรวม 4 ชั้น
+## Overview: 4 layers
 
-| ชั้น | ใครให้ | หมายเหตุ |
+| Layer | Who provides it | Note |
 |---|---|---|
-| 1 node ที่มี GPU และ driver | node pool ของ cloud | EKS: AMI แบบ accelerated มี driver ให้ แต่**ไม่มี** NVIDIA device plugin ใน AL2023 ต้องลงเอง ([EKS GPU AMI](https://docs.aws.amazon.com/eks/latest/userguide/ml-eks-optimized-ami.html)) · GKE: ใส่ `--accelerator type=...,count=...,gpu-driver-version=default\|latest\|disabled` ([GKE GPUs](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/gpus)) · AKS: แนะนำ AKS-managed GPU node pool ที่ลง driver, device plugin และ DCGM exporter ให้ ([AKS GPUs](https://learn.microsoft.com/en-us/azure/aks/use-nvidia-gpu)) |
-| 2 device plugin | NVIDIA device plugin หรือ GPU Operator | ทำให้ cluster เห็น resource `nvidia.com/gpu` ([Schedule GPUs](https://kubernetes.io/docs/tasks/manage-gpus/scheduling-gpus/)) · GPU Operator ติดตั้ง driver · container toolkit · device plugin · DCGM exporter · GPU Feature Discovery ([overview](https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/latest/overview.html)) |
-| 3 taint และ label | node pool | กันงานอื่นขึ้น GPU node |
-| 4 pod ที่ขอ GPU | chart ของเรา | `nvidia.com/gpu` ใน `limits` · toleration · nodeSelector |
+| 1 A node with a GPU and driver | The cloud's node pool | EKS: the accelerated AMI includes the driver but **does not** include the NVIDIA device plugin in AL2023; install it yourself ([EKS GPU AMI](https://docs.aws.amazon.com/eks/latest/userguide/ml-eks-optimized-ami.html)) · GKE: add `--accelerator type=...,count=...,gpu-driver-version=default\|latest\|disabled` ([GKE GPUs](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/gpus)) · AKS: an AKS-managed GPU node pool is recommended; it installs the driver, device plugin and DCGM exporter for you ([AKS GPUs](https://learn.microsoft.com/en-us/azure/aks/use-nvidia-gpu)) |
+| 2 Device plugin | NVIDIA device plugin or GPU Operator | Lets the cluster see the `nvidia.com/gpu` resource ([Schedule GPUs](https://kubernetes.io/docs/tasks/manage-gpus/scheduling-gpus/)) · GPU Operator installs the driver · container toolkit · device plugin · DCGM exporter · GPU Feature Discovery ([overview](https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/latest/overview.html)) |
+| 3 Taint and label | The node pool | Keeps other workloads off GPU nodes |
+| 4 A pod that asks for a GPU | Our chart | `nvidia.com/gpu` in `limits` · toleration · nodeSelector |
 
-ใช้ GPU Operator กับ EKS AMI แล้ว ต้องปิดไม่ให้ Operator ลง driver และ toolkit ซ้ำ (AL2023) ([EKS GPU AMI](https://docs.aws.amazon.com/eks/latest/userguide/ml-eks-optimized-ami.html)) · ทำตามคู่มือของ cloud ที่ใช้ ไม่ผสมวิธี
+When you use the GPU Operator with the EKS AMI, you must stop the Operator from installing the driver and toolkit again (AL2023) ([EKS GPU AMI](https://docs.aws.amazon.com/eks/latest/userguide/ml-eks-optimized-ami.html)) · follow the guide of the cloud you use; do not mix methods
 
-## ขอ GPU ใน pod
+## Ask for a GPU in a pod
 
 ```yaml
 resources:
@@ -29,30 +29,30 @@ tolerations:
     effect: NoSchedule
 ```
 
-- ระบุ GPU ใน `limits` เท่านั้นก็ได้ (request ถูกตั้งเท่า limit ให้) · ถ้าระบุทั้งสอง ต้องเท่ากัน · ระบุ `requests` อย่างเดียวไม่ได้ ([Schedule GPUs](https://kubernetes.io/docs/tasks/manage-gpus/scheduling-gpus/))
-- toleration แค่อนุญาตให้ขึ้น node ที่ติด taint ไม่ได้บังคับให้ไปที่นั่น ([Taints](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)) จึงต้องมี `nodeSelector` หรือ affinity คู่กันเสมอ
-- เลือกชนิด GPU ด้วย label ของ node (ติดเอง หรือใช้ Node Feature Discovery) ([Schedule GPUs](https://kubernetes.io/docs/tasks/manage-gpus/scheduling-gpus/)) · GKE ติด selector `cloud.google.com/gke-accelerator` ให้เอง
+- You may specify the GPU in `limits` only (the request is set equal to the limit for you) · if you specify both, they must be equal · specifying `requests` alone is not allowed ([Schedule GPUs](https://kubernetes.io/docs/tasks/manage-gpus/scheduling-gpus/))
+- A toleration only allows scheduling onto a tainted node; it does not force the pod to go there ([Taints](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)), so always pair it with `nodeSelector` or affinity
+- Choose the GPU type with node labels (add them yourself, or use Node Feature Discovery) ([Schedule GPUs](https://kubernetes.io/docs/tasks/manage-gpus/scheduling-gpus/)) · GKE adds the selector `cloud.google.com/gke-accelerator` for you
 
-## taint ของแต่ละ cloud
+## Taint of each cloud
 
-| cloud | taint ที่เอกสารระบุ |
+| Cloud | Taint named in the docs |
 |---|---|
-| GKE | ติด `nvidia.com/gpu=present:NoSchedule` ให้เฉพาะเมื่อ cluster มี node pool ที่ไม่ใช่ GPU อย่างน้อย 1 ชุด · ใส่ toleration ให้ pod ที่ขอ GPU อัตโนมัติ (ExtendedResourceToleration) |
-| AKS | ตัวอย่างในเอกสารใช้ `--node-taints sku=gpu:NoSchedule` ตอนสร้าง node pool · taint และขนาด VM แก้ภายหลังไม่ได้ · pod ต้องมี toleration ตรงกัน |
-| EKS | เอกสารหน้า AMI ไม่ระบุ taint · ตั้งเองตอนสร้าง node group `(ยังไม่ได้ตรวจ)` หน้าอื่น |
+| GKE | Adds `nvidia.com/gpu=present:NoSchedule` only when the cluster has at least 1 non-GPU node pool · automatically adds a toleration to pods that ask for a GPU (ExtendedResourceToleration) |
+| AKS | The example in the docs uses `--node-taints sku=gpu:NoSchedule` when creating the node pool · the taint and VM size cannot be changed later · pods must have a matching toleration |
+| EKS | The AMI page names no taint · set it yourself when creating the node group `(ยังไม่ได้ตรวจ)` (not yet checked) on other pages |
 
-เขียน toleration ใน chart ให้เป็นค่าใน values (`gpu.tolerations`) เพราะชื่อ taint ต่างกันตาม cloud
+Write the toleration in the chart as a value in values (`gpu.tolerations`), because taint names differ by cloud
 
-## แยกงาน GPU ออกจากเว็บ
+## Keep GPU work apart from the web
 
-- web และ api ไม่มี toleration ของ GPU และไม่ขอ `nvidia.com/gpu` → ไม่มีวันขึ้น GPU node ที่แพง
-- stt และ tts เป็น Deployment แยก มี `nodeSelector` + toleration + `limits.nvidia.com/gpu` · ตั้ง `startupProbe` ยาวสำหรับโหลดโมเดล · readiness บอกว่าโมเดลพร้อมแล้วจริง
-- แยก namespace หรืออย่างน้อยแยก NetworkPolicy: เฉพาะ voice gateway เรียก stt/tts ได้
-- PDB ของ stt/tts ตามจำนวน GPU node ที่มี: ถ้ามี node เดียว `maxUnavailable: 1` จะทำให้ drain ผ่านแล้วบริการหยุด ต้องตกลงเวลาหยุดกับผู้ใช้
-- scale ด้วย HPA/KEDA ได้ แต่เพดานต้องไม่เกินจำนวน GPU ที่ node pool ขยายได้ และผู้ใช้ตั้งเพดานเงินไว้ก่อน (SKILL.md หัวข้อ "เงินและของนอกเครื่อง")
-- `nvidia.com/gpu` ไม่ overcommit: pod 1 ตัวถือ GPU 1 ตัวทั้งตัว (การแบ่ง GPU เช่น time-slicing หรือ MIG `(ยังไม่ได้ตรวจ)` ต้องเปิดที่ device plugin และอ่านคู่มือ NVIDIA ก่อน)
+- web and api have no GPU toleration and do not ask for `nvidia.com/gpu` → they can never land on the expensive GPU nodes
+- stt and tts are separate Deployments with `nodeSelector` + toleration + `limits.nvidia.com/gpu` · set a long `startupProbe` for model loading · readiness says the model is really ready
+- Separate namespaces, or at least separate NetworkPolicy: only the voice gateway may call stt/tts
+- PDB of stt/tts per the number of GPU nodes available: with a single node, `maxUnavailable: 1` lets the drain pass and then the service stops; agree on the downtime with the user
+- You may scale with HPA/KEDA, but the ceiling must not exceed the number of GPUs the node pool can grow to, and the user must have set a money ceiling first (SKILL.md section "เงินและของนอกเครื่อง" (money and things outside the machine))
+- `nvidia.com/gpu` is not overcommitted: 1 pod holds 1 whole GPU (GPU sharing such as time-slicing or MIG `(ยังไม่ได้ตรวจ)` (not yet checked) must be enabled at the device plugin, and read the NVIDIA guide first)
 
-## ตรวจว่า GPU ใช้ได้จริง
+## Check that the GPU is really usable
 
 ```bash
 kubectl describe node <ชื่อ-gpu-node> | grep -A2 -i "nvidia.com/gpu"   # Capacity และ Allocatable ต้องเห็นเลข
@@ -60,4 +60,4 @@ kubectl get pods -n <ns> -o wide                                         # stt/t
 kubectl exec -n <ns> deploy/stt -- nvidia-smi                            # ต้องมี nvidia-smi ใน image
 ```
 
-ถ้า pod ค้าง `Pending` ดู `kubectl describe pod` ช่อง Events: มักเป็น taint ไม่ตรง · label ไม่ตรง · GPU ถูกถือครบแล้ว · เวอร์ชัน CUDA ใน image ไม่ตรงกับ driver บน node (ดูตารางความเข้ากันของ NVIDIA ที่ AKS อ้างไว้ใน [AKS GPUs](https://learn.microsoft.com/en-us/azure/aks/use-nvidia-gpu))
+If a pod is stuck `Pending`, look at the Events field of `kubectl describe pod`: it is usually a taint mismatch · label mismatch · all GPUs already held · the CUDA version in the image not matching the driver on the node (see the NVIDIA compatibility table that AKS references in [AKS GPUs](https://learn.microsoft.com/en-us/azure/aks/use-nvidia-gpu))

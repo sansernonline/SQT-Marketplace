@@ -1,29 +1,29 @@
-# ภาษาไทยในงานกราฟิก — รายละเอียด
+# Thai in graphic work — details
 
-กฎสั้นอยู่ใน `SKILL.md`
+The short rules are in `SKILL.md`
 
-ไทยมีสระบน (ิ ี ึ ื ั) แล้วยังมีวรรณยุกต์ (่ ้ ๊ ๋) ซ้อนทับอีกชั้น และมีสระล่าง (ุ ู)
+Thai has upper vowels (ิ ี ึ ื ั), and tone marks (่ ้ ๊ ๋) stack on top of them as another layer, and it also has lower vowels (ุ ู)
 
-- **ความสูงบรรทัดอย่างน้อย 1.5** สำหรับเนื้อหา และ **1.4** สำหรับหัวใหญ่
-  (ละติน 1.2–1.4 พอ แต่ไทยไม่พอ)
-- **กล่องข้อความที่ล็อกความสูงไว้จะตัดวรรณยุกต์หาย** — ตั้งความสูงอัตโนมัติเสมอ
-  หรือเผื่อ 25% จากที่คำนวณด้วยละติน
-- ตรวจด้วยคำที่มีครบทั้ง 3 ชั้น: **ที่ ปั๊ม ปุ่ม สื่อ ตื้น**
+- **Line height at least 1.5** for body text and **1.4** for large headings
+  (Latin is fine at 1.2–1.4, but Thai is not)
+- **A text box with a locked height will cut off tone marks** — always set automatic height,
+  or add 25% to what you calculated with Latin
+- Test with words that have all 3 layers: **ที่ ปั๊ม ปุ่ม สื่อ ตื้น**
 
-## ไทยไม่มีช่องว่างระหว่างคำ
+## Thai has no spaces between words
 
-โปรแกรมจะตัดบรรทัดกลางคำ — **ตัดบรรทัดเองทุกครั้งในงานกราฟิก**
-ตัดตรงจุดที่จบใจความ ไม่ใช่ตรงที่พอดีขอบ
+Programs will break a line in the middle of a word — **always break lines yourself in graphic work**
+Break where the meaning ends, not where it happens to fit the edge
 
-## ขนาดที่ตาเห็นไม่เท่ากัน
+## Sizes that the eye sees as unequal
 
-ที่ขนาดจุดเท่ากัน **ไทยดูเล็กกว่าละติน** — บรรทัดที่ปนกันให้เพิ่มไทย 5–10%
-หรือใช้ตระกูลเดียวที่ออกแบบมาให้ 2 ภาษาสมดุลกันแล้ว
+At the same point size, **Thai looks smaller than Latin** — on mixed lines, enlarge the Thai by 5–10%
+or use a single family designed to balance the 2 scripts
 
-## ฟอนต์
+## Fonts
 
-- **ใช้ตระกูลเดียวที่มีทั้งไทยและละติน** — จับคู่คนละตระกูลแล้วความสูงตัวอักษรไม่ตรงกัน
-  บรรทัดจะดูเอียง
-- **ต้องมีน้ำหนักหนาจริง** ตัวหนาที่โปรแกรมปลอมขึ้นทำให้สระและวรรณยุกต์เบลอติดกัน
-- ตระกูลที่เข้ากับงานเรียบแบบเรขาคณิต: **Anuphan · LINE Seed Sans TH · IBM Plex Sans Thai · Noto Sans Thai**
-- **ตรวจลิขสิทธิ์ก่อนใช้เชิงพาณิชย์** ฟอนต์ไทยฟรีหลายตัวห้ามใช้ในงานขาย
+- **Use a single family that has both Thai and Latin** — pair different families and the letter heights do not match,
+  and the line looks tilted
+- **It must have a real bold weight**; a bold faked by the program makes vowels and tone marks blur together
+- Families that suit plain geometric work: **Anuphan · LINE Seed Sans TH · IBM Plex Sans Thai · Noto Sans Thai**
+- **Check the license before commercial use**; many free Thai fonts forbid use in work that is sold

@@ -5,291 +5,291 @@ description: Use with a platform skill when a task produces a screen or mockup
 
 # UI Craft
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Pre-start gate `ด่านก่อนลงมือ` (every time):** read the owner's theme → search live for reference designs → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" (pre-start gate) of `design-references` (plugin `superuser`) even when a brand exists (the brand fixes color and font; the search finds the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
-> **กฎข้อเดียวของ skill นี้:** หน้าจอที่ดูดีไม่ได้มาจากสีสวย มาจาก**ความสม่ำเสมอ**
-> ระยะห่างมาจากสเกลเดียว ขนาดตัวอักษรมาจากสเกลเดียว และมีของสำคัญที่สุดแค่อย่างเดียวต่อหน้า
+> **The one rule of this skill:** a good-looking screen does not come from pretty colors. It comes from **consistency**.
+> Spacing comes from one scale, font sizes come from one scale, and each page has only one most-important thing.
 >
-> **แต่สม่ำเสมออย่างเดียวได้แค่ "ไม่ผิด" ไม่ได้ "ว้าว"** — mockup ที่จะให้คนอนุมัติต้องมีทิศทางภาพ (ข้อ 0.1) และผ่านด่านสวย (ข้อ 9) ด้วย
-> **"ไม่ใช้สีพร่ำเพรื่อ" แปลว่าสีน้อย ไม่ได้แปลว่าสีจาง** — สีแบรนด์ต้องใช้แบบมีน้ำหนักและเห็นได้ทั่วทั้งหน้า**ในส่วนข้อมูลและปุ่มหลัก** (แกน "พลังของสี" ในด่านสวย)
-> **กรอบแอปเป็นสีกลาง** — แถบชื่อหน้าต่าง · แถบหัว · toolbar · rail · nav · เส้นขอบ ใช้เส้นและไอคอนเทา-ดำแบบธีม Windows ไม่ย้อมสีแบรนด์ · สีแบรนด์อยู่ที่ข้อมูล ปุ่มหลัก แถบเลือกเล็ก ๆ และโลโก้ · ย้อมกรอบได้เฉพาะเมื่อผู้ใช้สั่ง
+> **But consistency alone gives "not wrong", not "wow"** — a mockup that someone will approve needs a visual direction (section 0.1) and must pass the beauty gate `ด่านสวย` (section 9) too.
+> **"Don't overuse color" means few colors, not pale colors** — the brand color must carry weight and be visible across the whole page **in the data and the primary buttons** (the "color power" axis of the beauty gate)
+> **The app frame is neutral** — title bar · header bar · toolbar · rail · nav · borders use gray-black lines and icons in the Windows theme style, not tinted with the brand color · the brand color lives in the data, primary buttons, small selection bars and the logo · tint the frame only when the user says so
 
 ---
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ทุกครั้งที่ทำ user interface (UI) — ใช้**คู่กับ** skill แพลตฟอร์ม ไม่ใช่แทนกัน
-- หน้าจอ "ดูแปลก ๆ" แต่บอกไม่ถูกว่าผิดตรงไหน
-- รีวิว UI ที่คนอื่นทำ
-- แพลตฟอร์มที่ยังไม่มี skill เฉพาะ (เช่น แอป TV, kiosk, smart watch)
+- Every time you build a user interface (UI) — use it **together with** a platform skill, not instead of it
+- A screen "looks off" but you cannot say what is wrong
+- Reviewing a UI that someone else made
+- Platforms that have no dedicated skill yet (for example TV apps, kiosk, smart watch)
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-| งาน | ใช้ตัวนี้แทน |
+| Task | Use this instead |
 |---|---|
-| ต้องการสี ฟอนต์ คอมโพเนนต์จริง ๆ | `web-app-design` · `windows-app-design` · `mobile-app-design` |
-| กราฟและแผนภูมิข้อมูล | `web-app-design` ข้อ chart colors |
-| เอกสารที่พิมพ์ออกมา | `branded-document-design` |
-| สไลด์ | `presentation-design` |
+| Need real colors, fonts, components | `web-app-design` · `windows-app-design` · `mobile-app-design` |
+| Charts and data graphs | `web-app-design` section chart colors |
+| Printed documents | `branded-document-design` |
+| Slides | `presentation-design` |
 
-**skill นี้ไม่กำหนดสีและไม่กำหนดฟอนต์** — เอาจาก skill แพลตฟอร์ม
-ที่นี่คุมแค่ *ระยะ ขนาด ลำดับ และสถานะ*
+**This skill sets no colors and no fonts** — take them from the platform skill.
+It controls only *spacing, size, order and states*.
 
 ---
 
-## 0 · ก่อนสร้างหน้าใหม่ — โปรเจกต์มีหน้าตาอยู่แล้วหรือยัง
+## 0 · Before creating a new page — does the project already have a look
 
-> **หน้าตาของโปรเจกต์ชนะธีมตั้งต้นของ skill เสมอ**
-> template และ css ใน `assets/` ของ skill แพลตฟอร์มใช้ได้เฉพาะโปรเจกต์ที่**ยังไม่มีหน้าจอเลย**
+> **The project's own look always beats the skill's starter theme**
+> The templates and css in the platform skill's `assets/` are for projects that have **no screens at all yet**
 >
-> **ยกเว้น 2 กรณี — ไม่ลอกของเดิม ให้ทำข้อ 0.1 ใหม่:** (1) ผู้ใช้หรือ prompt สั่งออกแบบใหม่ หรือบอกว่าหน้าตาเดิมไม่สวย (2) หน้าตาเดิมเป็น mockup ที่ยังไม่ผ่านด่านสวย (ข้อ 9 · **ไม่มีคะแนนด่านสวยบันทึกใน `docs/BUILD-PLAN.md` = ยังไม่ผ่าน**) — ลอกของที่ไม่ผ่านก็จะได้ของที่ไม่ผ่านอีกชุด · ไฟล์เดิมย้ายไป `_to_delete/` ไม่ลบ · หน้าตาที่เป็น**โค้ดจริงที่ส่งมอบแล้ว**ยังชนะเสมอ เว้นแต่มีคำสั่งออกแบบใหม่
+> **Two exceptions — do not copy the existing look; redo section 0.1:** (1) the user or the prompt orders a new design, or says the current look is not nice (2) the current look is a mockup that has not passed the beauty gate (section 9 · **no beauty-gate score recorded in `docs/BUILD-PLAN.md` = not passed**) — copying something that failed gives another set that fails · move the old files to `_to_delete/`, do not delete them · a look that is **real delivered code** still always wins, unless there is a new-design order
 
-ก่อนคัดลอกอะไรจาก skill ให้ดูในโปรเจกต์ก่อน:
+Before copying anything from the skill, look in the project first:
 
-| ดูที่ | หาอะไร |
+| Look at | Look for |
 |---|---|
-| `mockup/**/*.html` · `*.css` | หน้าที่ทำไว้แล้ว · ไฟล์ css ที่หน้าเหล่านั้น `<link>` อยู่ |
-| โฟลเดอร์โค้ด: `styles.css` · `theme.*` · `tokens.*` · `tailwind.config.*` · `lib/core/theme.dart` · `*.xaml` | token และคอมโพเนนต์ที่แอปใช้จริง |
-| `docs/deck/` · `docs/*.html` | เด็คหรือหน้าเอกสารที่มีธีมแล้ว |
-| README ของโปรเจกต์ | บรรทัดที่บอกว่าหน้าตาอ้างจากไฟล์ไหน |
+| `mockup/**/*.html` · `*.css` | pages already made · the css files those pages `<link>` |
+| Code folders: `styles.css` · `theme.*` · `tokens.*` · `tailwind.config.*` · `lib/core/theme.dart` · `*.xaml` | the tokens and components the app really uses |
+| `docs/deck/` · `docs/*.html` | decks or document pages that already have a theme |
+| The project README | a line saying which file the look is taken from |
 
-**เจอ** → รัน `python -I scripts/design_tokens.py <โฟลเดอร์ที่เจอ> --out docs/DESIGN.md` ก่อน ได้ร่างค่าที่โค้ดใช้จริง (token · สี · ฟอนต์ · ขนาด · ระยะ · มุม · เงา) พร้อมจุดที่หลุดสเกล · ไฟล์มีอยู่แล้วสคริปต์ไม่เขียนทับ · แล้วทำตามนี้ ไม่คัดลอก template ของ skill:
+**Found** → first run `python -I scripts/design_tokens.py <folder found> --out docs/DESIGN.md` to get a draft of the values the code really uses (token · color · font · size · spacing · radius · shadow) with the places that fall off the scale · the script does not overwrite an existing file · then do the following, and do not copy the skill's template:
 
-1. เลือก**หน้าพี่น้อง**ที่ใกล้ที่สุด (กลุ่มเดียวกัน เช่น หน้าใหม่ในส่วน admin → ลอกหน้า admin) แล้วคัดลอกโครงทั้งหน้า: `<head>` ฟอนต์ แถบบน เมนูข้าง ระยะขอบ
-2. **`<link>` ไฟล์ css เดิม ไม่คัดลอก token ไปไฟล์ใหม่** — ไฟล์ใหม่มีได้แค่ส่วนที่หน้านี้มีคนเดียว และต้องใช้ `var(--…)` ของไฟล์เดิม · ถ้าคัดลอก token ไป วันที่ไฟล์เดิมเปลี่ยนสี หน้าใหม่จะไม่เปลี่ยนตาม
-   **mockup:** หน้าใหม่ = `<section>` ใหม่ในไฟล์ `mockup/<รหัส>-mockup.html` เดิม ไม่ใช่ไฟล์ใหม่ · ระหว่างทำ `<link>` css · ตอนส่งมอบฝังเนื้อ css ลงใน `<style>` ตามกฎไฟล์เดียวของ skill แพลตฟอร์ม
-3. คอมโพเนนต์ที่มีแล้ว (ปุ่ม การ์ด ตาราง pill) ใช้ class เดิม ไม่เขียนใหม่ที่หน้าตาคล้ายกัน
-4. เปิดหน้าเก่ากับหน้าใหม่ถ่ายภาพที่ความกว้างเดียวกัน วางเทียบกัน — สีพื้น แถบบน ฟอนต์หัวข้อ ปุ่ม ต้องเหมือนกันจนแยกไม่ออกว่าใครทำ
-5. ค่าใน skill นี้ (สเกลระยะ ขนาดตัวอักษร) ขัดกับของเดิมในโปรเจกต์ → **ใช้ของเดิม** แล้วจดไว้ท้ายคำตอบใต้ **ตัดสินใจเอง** · ไม่แก้หน้าเก่าทั้งชุดให้ตรง skill เว้นแต่ถูกสั่ง
+1. Pick the **nearest sibling page** (same group, for example a new page in the admin section → copy an admin page) and copy the whole page structure: `<head>` fonts, top bar, side menu, margins
+2. **`<link>` the existing css file; do not copy tokens into a new file** — the new file may hold only the parts unique to this page, and must use the `var(--…)` of the existing file · if you copy tokens, the day the old file changes color the new page will not follow
+   **mockup:** a new page = a new `<section>` in the existing `mockup/<code>-mockup.html` file, not a new file · while working, `<link>` the css · at delivery, embed the css content in `<style>` per the single-file rule of the platform skill
+3. For components that already exist (button, card, table, pill), use the existing class; do not write a new one that looks similar
+4. Open the old page and the new page, take screenshots at the same width, and put them side by side — background color, top bar, heading font, buttons must be so alike that you cannot tell who made which
+5. A value in this skill (spacing scale, font size) conflicts with the project's existing one → **use the existing one** and note it at the end of the answer under `ตัดสินใจเอง` (decided on my own) · do not change the whole old set of pages to match this skill unless told to
 
-**ไม่เจอ** → ใช้ template ของ skill แพลตฟอร์ม แล้วเขียนลง README ของโปรเจกต์ 1 บรรทัดว่าหน้าตาอ้างจากไฟล์ไหน (เช่น `หน้าตา: mockup/<รหัส>-mockup.html`)
+**Not found** → use the platform skill's template, then write 1 line in the project README saying which file the look is taken from (for example `หน้าตา: mockup/<code>-mockup.html`)
 
-**โปรเจกต์ใหม่ เลือกบุคลิกแอป 1 ใน 6 แบบก่อนวาดหน้าแรก** → [`references/app-character.md`](references/app-character.md) (หน้าตาเดิมของโปรเจกต์ชนะเสมอ)
+**New project: pick 1 of 6 app characters before drawing the first page** → [`references/app-character.md`](references/app-character.md) (the project's existing look always wins)
 
-**ลูกค้าส่งไฟล์ Figma มา** → อ่านผ่าน Figma MCP server แปลง variables เป็น token แล้วทำ mockup HTML ตามข้อนี้ · เมื่อไหร่ควรข้าม Figma → [`references/figma-to-code.md`](references/figma-to-code.md)
-
----
-
-## 0.1 · ทิศทางภาพ — ก่อนวาดหน้าจอแรกของโปรเจกต์ใหม่หรือการออกแบบใหม่
-
-> ค่าตั้งต้นของ skill แพลตฟอร์มคือ**พื้น** ไม่ใช่**เพดาน** · ใช้ธีมตั้งต้นตรง ๆ = ได้หน้าตาเหมือนแอปตัวอย่างของผู้ผลิต ไม่มีใครจำได้
-
-1. **หน้าจอพระเอก 1 หน้า** — เขียน 1 ประโยคว่าช่วงเวลาไหนที่สินค้าทำงานแล้วคนดูร้องว้าว แล้วทำให้หน้านั้นโชว์ช่วงเวลานั้น (แอปกล้อง → ภาพจากกล้องพร้อมผลวิเคราะห์ซ้อน · terminal → session ที่มี log สีจริง · แดชบอร์ด → ตัวเลขที่มีเรื่องเล่า) · **หน้าจอพระเอกไม่ใช่หน้าตั้งค่าหรือฟอร์ม** · หน้าการตลาดหรือ landing: หน้าจอพระเอกคือส่วนเปิด ต้องมีของจริงของสินค้าอย่างน้อย 1 ชิ้น (ภาพหน้าจอตอนใช้งาน · ตัวเลขจริง · เสียงลูกค้าจริง) และที่จอ 1440 ไม่ปล่อยพื้นที่ว่างที่ไม่ได้ตั้งใจเกิน 1/3 ของจอ (ด่านตา `no-ai-look` ข้อ 3.2 ข้อ 10)
-2. **แอปอ้างอิง** — อ่านจาก `docs/README.md` หรือคำขอ (path ในเครื่อง · ชื่อแอป · คำบรรยาย) · ถ่ายภาพหรือเก็บภาพจากหน้าทางการ 2–3 หน้าไว้ที่ `_to_delete/ref-shots/` (ใช้เทียบตอนตรวจเท่านั้น ห้ามใส่ในงานส่งมอบ) แล้วจด 5 อย่างที่ทำให้มันดูดี (ธีม · สี · ความแน่น · กรอบหน้าต่างหรือแถบหัว · เนื้อหาตัวอย่าง) · ไม่ลอกโลโก้หรือภาพ
-   **ค้นสดทุกครั้ง แม้ลูกค้ามีแอปอ้างอิง** (ด่านก่อนลงมือ) · มีแอปอ้างอิง → สีใช้ของแอปนั้น ส่วนการค้นใช้หาโครงและองค์ประกอบ · **ลูกค้าไม่มีแอปอ้างอิง** → **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `web` · `app` · `dashboard` ตามงาน แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้ · คัด 2–3 งานแล้วจด 5 อย่างของแต่ละงานแบบเดียวกัน
-3. **3 แนว ทำขนานกัน** (`parallel-attempts-pick-best` · subagent ตัวใหม่แนวละตัว) — จุดเริ่มของแต่ละแนว (ชุดสี 2 โหมดที่ผ่าน contrast · คู่ฟอนต์ไทย-ละติน · look) ใช้สีที่ถอดจากต้นแบบในข้อ 2 ส่งเข้า [`design-direction-lookup`](../design-direction-lookup/SKILL.md) ผ่าน `--palette` ก่อนเลือกเอง · แต่ละแนวทำแค่หน้าจอพระเอก + 1 หน้าใช้งานหลัก ทั้ง 2 ธีม (ส่งกลับแค่ path ไฟล์กับสรุปไม่เกิน 15 บรรทัดต่อแนว) · แนวต้องต่างกันจริง: (ก) ใกล้แอปอ้างอิง (ไม่มีแอปอ้างอิง → ใกล้บุคลิกที่เลือก) (ข) เนทีฟแพลตฟอร์มแต่ยกระดับ (ค) กล้ากว่า · ทุกแนวบอกบุคลิกแอป (`references/app-character.md`) · สีแบรนด์ · ฟอนต์และบุคลิกตัวอักษรที่เลือกจากพื้นฐานโปรเจกต์ (โค้งนุ่ม · เหลี่ยมเร็ว · เรียบทันสมัย · ทางการ · คลาสสิกหรู · ลายมือ ตาม [`references/font-voice.md`](references/font-voice.md) แล้วส่ง `--voice` เข้า `design_draft.py`) · มุมโค้ง · ความแน่น
-   ทุกแนวบอก look ที่เริ่ม ([`references/web-looks.md`](references/web-looks.md) · 2 แนวห้ามใช้ look เดียวกัน) และ**ความกล้า 1 จุด**ที่แนวนั้นทุ่มให้ (เช่น ภาพจริงเต็มความกว้างในหน้าจอพระเอก · ฟอนต์หัวข้อที่มีบุคลิก) ส่วนที่เหลือเงียบ · แนวคิดทุ่มความกล้าไว้จุดเดียวจาก anthropics/skills `frontend-design` (Apache-2.0 · ตรวจ 2026-10-23) เขียนใหม่ด้วยคำของเรา
-   **เจ้าของมีสไตล์ที่ชอบ** (`~/.claude/superuser-style.md` หัวข้อ "สไตล์ออกแบบที่ชอบ") → แนว (ก) เริ่มจากสไตล์นั้นแทน look ตามอุตสาหกรรม: มุม เงา ความนุ่มของสี ไอคอน และชนิดภาพพระเอกตามต้นแบบที่เจ้าของเลือก (look ที่ใกล้สุดใน `web-looks.md` เช่น soft SaaS) · อุตสาหกรรมกำหนดแค่เนื้อหาและข้อห้าม · เหตุ: หน้าทดลอง 2026-11-06 ได้ quiet utility ตามอุตสาหกรรม ผู้ใช้ตอบ 2026-11-09 ว่า layout ดีขึ้นแต่ขาดมุมโค้ง เงา สีนุ่ม กราฟิก และไอคอน
-   **เรียกลูกทีมไม่ได้** (ไม่มีเครื่องมือเรียก subagent · subagent ล้ม · งบไม่พอ) → ทางขั้นต่ำ ห้ามข้ามไปทำแนวเดียว: ทำ 3 แนวเองเฉพาะส่วนเปิดหรือหน้าจอพระเอก ที่จอ 1440 และ 375 ในไฟล์เดียว · ถ่ายภาพแล้ววิจารณ์ทีละแนวด้วยด่านตา `no-ai-look` ข้อ 3.2 และด่านสวยข้อ 9 · จดคะแนนของแนวนั้นก่อนเปิดดูแนวถัดไป · เลือกคะแนนสูงสุดแล้วจดใต้ `## ตัดสินใจเอง` ว่าไม่มีผู้ตรวจแยก
-4. **หน้าเทียบ** `docs/design/<รหัส>-design-directions.html` — 3 แนวเคียงกัน + ภาพแอปอ้างอิง · ใต้แต่ละแนว token หลักและข้อดี/ข้อเสีย 1 บรรทัด
-5. **เลือก 1 แนว** — ตอนเริ่มงานถามผู้ใช้ครั้งเดียวว่า "เลือกแนวเองไหม" · ใช่ → หยุดให้เลือกที่ขั้นนี้ · ไม่ → ผู้ตรวจด่านสวยตัวใหม่ (เรียง: `graphic-design:design-critic` ถ้าติดตั้ง → `graphic-designer` → `general-purpose` ที่สั่งให้วิจารณ์อย่างเดียว) ให้คะแนนตามข้อ 9 แล้วเลือกคะแนนสูงสุด ลง `## ตัดสินใจเอง`
-6. **ตัวตนครบชุด** — โลโก้ (`graphic-design` · ใช้ได้ที่ 16px) อยู่ในแถบชื่อหน้าต่าง/ไอคอนแอป · สีแบรนด์ของแนวที่เลือกเขียนกลับลง `docs/README.md` ช่อง `doc-theme` ให้เอกสารใช้สีเดียวกัน
-
-**เนื้อหาตัวอย่างต้องเหมือนของจริง** — ข้อมูลสมจริง · รูปถ่ายและภาพประกอบหลัก (hero · การ์ดสินค้าหรือบริการ · รูปคน) ใช้รูปจริงตาม `image-generation` (plugin `graphic-design` · agent `image-artist` · เรียง: สร้างด้วยเครื่องมือของ session → วาด SVG ภาพประกอบเต็มฉาก → รูปถ่ายฟรี · ไม่ต้องตั้งค่า) ถามแนวภาพครั้งเดียวตอนเริ่ม · ห้ามรูปทรงพื้นฐาน (สามเหลี่ยม วงกลม สี่เหลี่ยม) วางแทนของจริง · ห้ามกล่องเทาว่างแทนเนื้อหา ห้าม "ตัวอย่าง" "Lorem" · หมายเหตุของทีม (รหัส requirement · "รอยืนยัน") อยู่ในกล่องควบคุมของ mockup เท่านั้น ห้ามปนข้อความโปรแกรม
+**The customer sends a Figma file** → read it through the Figma MCP server, convert variables to tokens, then make the HTML mockup per this section · when to skip Figma → [`references/figma-to-code.md`](references/figma-to-code.md)
 
 ---
 
-## 1 · สเกลระยะห่าง — ใช้ชุดเดียวทั้งแอป
+## 0.1 · Visual direction — before drawing the first screen of a new project or a new design
+
+> The platform skill's defaults are the **floor**, not the **ceiling** · using the starter theme as is = a look like the maker's sample app, which nobody remembers
+
+1. **1 hero screen** — write 1 sentence on which moment, when the product works, makes the viewer say wow, then make that page show that moment (camera app → the camera image with the analysis overlay · terminal → a session with real colored logs · dashboard → numbers with a story) · **the hero screen is not a settings page or a form** · marketing page or landing: the hero screen is the opening section; it must have at least 1 real thing from the product (a screenshot in use · real numbers · a real customer voice) and at 1440 width must leave no unintended empty space over 1/3 of the screen (eye gate `ด่านตา` of `no-ai-look`, items 3.2 and 10)
+2. **Reference app** — read it from `docs/README.md` or the request (local path · app name · description) · take screenshots or capture images from 2–3 official pages into `_to_delete/ref-shots/` (use for comparison during review only; never put them in the deliverable), then note 5 things that make it look good (theme · color · density · window frame or header bar · sample content) · do not copy the logo or images
+   **Always search live, even if the customer has a reference app** (pre-start gate) · has a reference app → use that app's colors, and use the search for structure and elements · **customer has no reference app** → **search for prototypes first:** take the project's keywords and search live per `design-references` (plugin `superuser`), type `web` · `app` · `dashboard` as the work needs, then extract colors from the chosen work · the stored palette library is for when live search is not possible · pick 2–3 works and note the same 5 things for each
+3. **3 directions, made in parallel** (`parallel-attempts-pick-best` · one new subagent per direction) — the starting point of each direction (a 2-mode palette that passes contrast · a Thai-Latin font pair · look) uses the colors extracted from the prototypes in step 2; pass them into [`design-direction-lookup`](../design-direction-lookup/SKILL.md) via `--palette` before choosing by yourself · each direction makes only the hero screen + 1 main working page, in both themes (return only the file paths and a summary of at most 15 lines per direction) · the directions must be genuinely different: (a) close to the reference app (no reference app → close to the chosen character) (b) platform-native but lifted (c) bolder · every direction states the app character (`references/app-character.md`) · brand color · font and type character chosen from the project basics (soft round · fast angular · plain modern · formal · classic luxury · handwriting, per [`references/font-voice.md`](references/font-voice.md), then pass `--voice` into `design_draft.py`) · corner radius · density
+   Every direction states its starting look ([`references/web-looks.md`](references/web-looks.md) · no 2 directions may use the same look) and the **1 point of boldness** it commits to (for example a full-width real image in the hero screen · a heading font with character), and the rest stays quiet · the idea of committing boldness to a single point comes from anthropics/skills `frontend-design` (Apache-2.0 · checked 2026-10-23), rewritten in our own words
+   **The owner has a preferred style** (`~/.claude/superuser-style.md`, section "สไตล์ออกแบบที่ชอบ" (preferred design style)) → direction (a) starts from that style instead of the industry look: corners, shadows, softness of color, icons, and the type of hero image per the prototypes the owner chose (the nearest look in `web-looks.md`, for example soft SaaS) · the industry sets only the content and the prohibitions · reason: the trial page on 2026-11-06 came out as an industry-standard quiet utility, and the user answered on 2026-11-09 that the layout was better but lacked rounded corners, shadows, soft colors, graphics and icons
+   **Cannot call sub-agents** (no subagent tool · subagent fails · budget not enough) → minimum path, never skip to a single direction: make the 3 directions yourself, only for the opening section or the hero screen, at 1440 and 375 width in one file · take screenshots and critique one direction at a time with the eye gate `ด่านตา` of `no-ai-look` item 3.2 and the beauty gate section 9 · record that direction's score before opening the next one · choose the highest score and note it under `## ตัดสินใจเอง` (decided on my own) that there was no separate reviewer
+4. **Comparison page** `docs/design/<code>-design-directions.html` — the 3 directions side by side + the reference app image · under each direction, the main tokens and 1 line of pros/cons
+5. **Choose 1 direction** — at the start of the work, ask the user once "do you want to choose the direction yourself?" · yes → stop and let them choose at this step · no → a new beauty-gate reviewer (order: `graphic-design:design-critic` if installed → `graphic-designer` → `general-purpose` told to critique only) scores per section 9, then choose the highest score and record it under `## ตัดสินใจเอง`
+6. **Complete identity** — the logo (`graphic-design` · works at 16px) sits in the title bar/app icon · write the chosen direction's brand color back into `docs/README.md`, field `doc-theme`, so documents use the same color
+
+**Sample content must look real** — realistic data · photos and main illustrations (hero · product or service cards · people) use real images per `image-generation` (plugin `graphic-design` · agent `image-artist` · order: generate with the session's tool → draw a full-scene SVG illustration → free stock photo · no setup needed) · ask about the image direction once at the start · no basic shapes (triangle, circle, square) placed in place of the real thing · no empty gray boxes in place of content, no "ตัวอย่าง" (example) or "Lorem" · team notes (requirement codes · "รอยืนยัน" (awaiting confirmation)) live only in the mockup's control box; never mix them into program text
+
+---
+
+## 1 · Spacing scale — one set for the whole app
 
 ```
 4  8  12  16  24  32  48  64
 ```
 
-ทุก padding · margin · gap ต้องเป็นค่าในสเกลนี้ ถ้า skill แพลตฟอร์มขัด ให้ใช้สเกลนี้ — **ยกเว้นค่าที่วัดจากระบบจริงและมีชื่ออยู่ในรายการยกเว้นของ `references/scales.md`** (เช่น Windows: ขอบเนื้อหา 36 · ระยะระหว่าง section 40) · ของที่เกี่ยวกันอยู่ใกล้กันกว่าของที่ไม่เกี่ยว · padding การ์ด ≥ gap ข้างใน
-ตัวอย่างและเหตุผลเต็ม → [`references/scales.md`](references/scales.md)
+Every padding · margin · gap must be a value in this scale. If the platform skill conflicts, use this scale — **except values measured from the real system and named in the exception list of `references/scales.md`** (for example Windows: content edge 36 · gap between sections 40) · things that belong together sit closer than things that do not · card padding ≥ the gap inside
+Examples and the full reason → [`references/scales.md`](references/scales.md)
 
-## 2 · สเกลตัวอักษร
+## 2 · Type scale
 
-ไม่เกิน 5 ขนาดต่อหน้าจอ (lg 22 · md 15 · base 13 · sm 12 · xs 11 สำหรับเว็บ) · เล็กสุด 11 · 2 น้ำหนักต่อหน้าจอ · บรรทัด 45–75 ตัวอักษร · ภาษาไทย line-height +0.1
-ตาราง line-height และเหตุผลเต็ม → [`references/scales.md`](references/scales.md)
-สเกลนี้เป็นของแอป · หน้าการตลาดหรือ landing ที่ไม่มี motion ใช้สเกลตัวอักษรและจังหวะของหน้าการตลาด → [`references/scales.md`](references/scales.md#3--หน้าการตลาดและ-landing-ที่ไม่มี-motion) (มี motion ทีละช่วง → `dynamic-website`)
+No more than 5 sizes per screen (lg 22 · md 15 · base 13 · sm 12 · xs 11 for web) · smallest 11 · 2 weights per screen · lines of 45–75 characters · Thai line-height +0.1
+Line-height table and the full reason → [`references/scales.md`](references/scales.md)
+This scale is for apps · a marketing page or landing page without motion uses the type scale and rhythm of the marketing page → [`references/scales.md`](references/scales.md#3--หน้าการตลาดและ-landing-ที่ไม่มี-motion) (with motion section by section → `dynamic-website`)
 
 ---
 
-## 3 · ลำดับสายตา — หนึ่งหน้าจอ หนึ่งของสำคัญ
+## 3 · Visual order — one screen, one important thing
 
-ถามตัวเองก่อนวางองค์ประกอบ: **ผู้ใช้เปิดหน้านี้มาเพื่อทำอะไร**
-ของชิ้นนั้นได้ความเด่นระดับ 1 ที่เหลือลดหลั่นลงไป
+Ask yourself before placing elements: **what did the user open this page to do**
+That item gets prominence level 1, and the rest step down
 
-| ระดับ | วิธีทำให้เด่น | มีได้กี่อย่างต่อหน้า |
+| Level | How to make it stand out | How many per page |
 |---|---|---|
-| 1 | สีแบรนด์ทึบ + ขนาดใหญ่สุด | **1** |
-| 2 | ตัวหนา หรือ พื้นหลังอ่อน | 2–3 |
-| 3 | สีข้อความปกติ | ไม่จำกัด |
-| 4 | สีข้อความจาง | ไม่จำกัด |
+| 1 | Solid brand color + largest size | **1** |
+| 2 | Bold text or light background | 2–3 |
+| 3 | Normal text color | Unlimited |
+| 4 | Faded text color | Unlimited |
 
-**ทดสอบด้วยตา 2 วินาที:** หรี่ตามองหน้าจอ อะไรเด้งมาก่อน
-ถ้าเด้งมาพร้อมกัน 4 อย่าง แปลว่ายังไม่มีลำดับ
+**2-second eye test:** squint at the screen. What jumps out first?
+If 4 things jump out together, there is no order yet.
 
-**ปุ่มหลักมีได้ปุ่มเดียวต่อหน้าจอ** ที่เหลือเป็นปุ่มรอง (เส้นขอบ) หรือปุ่มเปล่า (ข้อความล้วน)
-ปุ่มอันตราย (ลบ) เป็นปุ่มรองสีแดง ไม่ใช่ปุ่มทึบสีแดง — ไม่งั้นมันแย่งความเด่นไปจากงานหลัก
+**There may be only one primary button per screen**; the rest are secondary buttons (outline) or empty buttons (text only)
+A dangerous (delete) button is a red secondary button, not a solid red button — otherwise it steals prominence from the main task
 
-**ปุ่มที่ซ้ำทุกแถวของรายการ** (เปิด · แก้ไข · ลบ) ห้ามเป็นปุ่มทึบสีแบรนด์ — 8 แถวคือปุ่มหลัก 8 ปุ่ม · ทางเลือก 3 แบบอยู่ใน [`references/states-and-checks.md`](references/states-and-checks.md)
+**Buttons repeated on every row of a list** (open · edit · delete) must not be solid brand-color buttons — 8 rows means 8 primary buttons · the 3 alternatives are in [`references/states-and-checks.md`](references/states-and-checks.md)
 
 ---
 
-## 4 · แยกส่วนด้วยอะไร — เส้น เงา หรือพื้นหลัง
+## 4 · What separates sections — lines, shadows, or backgrounds
 
-เลือกได้ 3 วิธี แต่**ใช้วิธีเดียวต่อ 1 ระดับความลึก** เพราะปนกันเมื่อไหร่จะรกทันที
+There are 3 choices, but **use only one method per depth level**, because mixing them makes it messy at once
 
-| วิธี | ใช้เมื่อ | ระวัง |
+| Method | Use when | Watch out |
 |---|---|---|
-| ระยะห่างอย่างเดียว | แยกกลุ่มในพื้นที่เดียวกัน | **ลองอันนี้ก่อนเสมอ** |
-| เส้น 1px สีอ่อน | ตาราง · รายการ · คั่นส่วน | เส้นต้องอ่อนกว่าที่คิด |
-| พื้นหลังต่างเฉด | การ์ดบนพื้นหน้า | ต่างกัน 2–4% พอ |
-| เงา | ของที่**ลอยจริง** · การ์ดบนหน้าโน้มน้าวของ look soft SaaS (เงาอ่อน 2 ชั้น) | modal · dropdown · toast · หน้าแอปที่ใช้ทั้งวันไม่ใส่เงาการ์ด |
+| Spacing only | Separating groups in the same area | **Always try this first** |
+| 1px light line | Tables · lists · section dividers | The line must be lighter than you think |
+| Background of a different shade | Card on the page background | A 2–4% difference is enough |
+| Shadow | Things that **really float** · cards on a persuasion page of the soft SaaS look (soft 2-layer shadow) | modal · dropdown · toast · app pages used all day get no card shadow |
 
-> เงาไม่ใช่เครื่องประดับ มันแปลว่า "สิ่งนี้อยู่เหนือของอื่นและกดที่อื่นเพื่อปิดได้"
-> การ์ดที่อยู่นิ่ง ๆ ในหน้าแอปไม่ได้ลอย — ไม่ต้องมีเงา · หน้า landing ใช้ตามภาษาความลึกของ look ที่เลือก
+> A shadow is not decoration. It means "this sits above the others, and you can click elsewhere to close it"
+> A card sitting still on an app page is not floating — it needs no shadow · a landing page follows the depth language of the chosen look
 
-**ความลึกมีได้ 3 ระดับพอ:** พื้นหน้า → การ์ด → ของลอย
-เกินนี้ตาแยกไม่ออกแล้ว
+**3 depth levels are enough:** page background → card → floating thing
+Beyond that the eye cannot tell them apart
 
-**มุมโค้ง:** ใช้ 2–3 ค่า และ**ของข้างในต้องโค้งน้อยกว่าของข้างนอกเสมอ**
-การ์ดโค้ง 14 รูปข้างในโค้ง 14 จะเห็นช่องว่างสามเหลี่ยมที่มุม — ข้างในควรเป็น 8–10
+**Corner radius:** use 2–3 values, and **the inside item must always have a smaller radius than the outside one**
+A card with radius 14 and an image inside with radius 14 shows triangular gaps at the corners — the inside should be 8–10
 
-**เงาที่ดูจริง · ผิวกระดาษ ดินปั้น ขอบฉีก · เลือกภาษาความลึกภาษาเดียวต่อโปรเจกต์** → [`references/depth-and-flourish.md`](references/depth-and-flourish.md)
+**Realistic shadows · paper surface, clay, torn edges · choose one depth language per project** → [`references/depth-and-flourish.md`](references/depth-and-flourish.md)
 
 ---
 
-## 5 · ความต่างของสี — ตัวเลขที่ต้องผ่าน
+## 5 · Color contrast — numbers that must pass
 
-| ของ | อัตราส่วนขั้นต่ำ |
+| Item | Minimum ratio |
 |---|---|
-| ข้อความปกติ | 4.5 : 1 |
-| ข้อความใหญ่: ≥ 24px ปกติ หรือ ≥ 18.7px ตัวหนา | 3 : 1 |
-| ขอบ input · ไอคอนที่สื่อความหมาย | 3 : 1 |
-| เส้นคั่นตกแต่ง | ไม่มีเกณฑ์ |
+| Normal text | 4.5 : 1 |
+| Large text: ≥ 24px regular or ≥ 18.7px bold | 3 : 1 |
+| Input borders · icons that carry meaning | 3 : 1 |
+| Decorative divider lines | No threshold |
 
-เกณฑ์ตาม Web Content Accessibility Guidelines (WCAG) 2.2 ระดับ AA (w3.org/TR/WCAG22 · ตรวจ 22 ต.ค. 2569) · ตรวจด้วย DevTools ในเบราว์เซอร์ · Flutter และ native คำนวณจาก token ทั้งโหมดสว่างและมืด (สูตรและวิธีเขียน test ใน [`references/states-and-checks.md`](references/states-and-checks.md))
+Thresholds follow Web Content Accessibility Guidelines (WCAG) 2.2 level AA (w3.org/TR/WCAG22 · checked 22 Oct 2569 BE) · check with the browser DevTools · Flutter and native: calculate from the tokens in both light and dark mode (formula and how to write the test in [`references/states-and-checks.md`](references/states-and-checks.md))
 
-**ข้อที่พลาดกันบ่อย:**
+**Commonly missed:**
 
-- ผิด: ข้อความสีเทาจาง ๆ บนพื้นขาว เพราะ "ดูสะอาดดี" — อ่านไม่ออกบนจอโน้ตบุ๊กกลางแดด
-- ผิด: **สีเป็นตัวบอกสถานะอย่างเดียว** — คนตาบอดสีมองไม่เห็น ต้องมีไอคอนหรือข้อความคู่เสมอ
-- ผิด: placeholder แทน label — พอพิมพ์แล้วผู้ใช้ลืมว่าช่องนี้คืออะไร
+- Wrong: faint gray text on a white background because it "looks clean" — unreadable on a laptop screen in the sun
+- Wrong: **color as the only status signal** — color-blind people cannot see it; always pair it with an icon or text
+- Wrong: placeholder in place of a label — once the user types, they forget what the field is
 
 ---
 
-## 6 · ห้าสถานะที่ทุกหน้าจอต้องมี
+## 6 · The five states every screen must have
 
-ออกแบบแค่สถานะ "มีข้อมูลครบสวยงาม" = ทำงานเสร็จ 20%
+Designing only the "full of data and beautiful" state = 20% of the work done
 
-| สถานะ | ต้องมีอะไร | พลาดบ่อย |
+| State | What it must have | Common miss |
 |---|---|---|
-| **ว่าง** | บอกว่าทำไมว่าง + ปุ่มทำอะไรต่อ | ขึ้นแค่ "ไม่มีข้อมูล" |
-| **กำลังโหลด** | โครงร่างเทา (skeleton) ในรูปทรงของจริง | วงกลมหมุนกลางจอ = จอกระพริบ |
-| **ผิดพลาด** | เกิดอะไร + ทำยังไงต่อ + ปุ่มลองใหม่ | โยน error จากระบบให้ผู้ใช้อ่าน |
-| **มีบางส่วน** | ส่วนที่โหลดได้แสดงเลย ส่วนที่พังบอกเฉพาะจุด | ทั้งหน้าพังเพราะ widget เดียวล่ม |
-| **สำเร็จ** | บอกให้รู้ แล้วหายไปเอง | เด้ง modal ให้กด "ตกลง" |
+| **Empty** | Say why it is empty + a button for what to do next | Shows only "No data" |
+| **Loading** | A gray outline (skeleton) in the shape of the real thing | A spinner in the middle of the screen = the screen flickers |
+| **Error** | What happened + what to do next + a retry button | Throwing the system error at the user to read |
+| **Partial** | The parts that loaded show right away; the broken part says so only at that spot | The whole page breaks because one widget crashes |
+| **Success** | Let the user know, then disappear by itself | A modal popping up to press "OK" |
 
-**สถานะว่างครั้งแรก ≠ สถานะว่างเพราะค้นหาไม่เจอ** — คนละข้อความ คนละปุ่ม
+**First-time empty state ≠ empty because the search found nothing** — different message, different button
 
-**แอปที่อ่าน hardware ใช้ 5 สถานะเดียวกัน แค่ต้นเหตุต่างกัน** — ตัวอย่างเครื่องวัดแสงอยู่ใน [`references/states-and-checks.md`](references/states-and-checks.md)
+**Apps that read hardware use the same 5 states, only the root cause differs** — an example with a light meter is in [`references/states-and-checks.md`](references/states-and-checks.md)
 
-**ข้อความ error บอกว่าเกิดอะไร เพราะอะไร และทำอะไรต่อ** ไม่ใช่ `Error 500` หรือ "เกิดข้อผิดพลาด" ลอย ๆ — ถูก: "บันทึกไม่สำเร็จ เพราะเลขที่เอกสารนี้มีอยู่แล้ว ลองเลขอื่น" (ตัวอย่างเพิ่มใน references)
+**An error message says what happened, why, and what to do next**, not a bare `Error 500` or "an error occurred" — right (a Thai on-screen message, keep as is): "บันทึกไม่สำเร็จ เพราะเลขที่เอกสารนี้มีอยู่แล้ว ลองเลขอื่น" (more examples in the references)
 
-**ถ้อยคำบนหน้าจอ (microcopy)** — กฎเต็มอยู่ใน `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ หน้าจอ
+**On-screen wording (microcopy)** — the full rules are in `human-writing` `references/thai-grammar.md` section 4, level "screen"
 
-| เรื่อง | กฎ |
+| Topic | Rule |
 |---|---|
-| สรรพนาม | `คุณ` หรือไม่มีสรรพนาม · ไม่ใช้ ท่าน |
-| คำสุภาพ | ไม่ซ้อน ครับ/ค่ะ ท่าน กรุณา ในข้อความเดียว · ปกติไม่ต้องมีเลย |
-| ปุ่ม | ขึ้นต้นด้วยกริยา (บันทึก · ส่ง · ลบรายการนี้) ไม่ใช่ ตกลง/ยืนยัน ลอย ๆ |
-| error | เกิดอะไร + ทำอะไรต่อ ในข้อความเดียว |
+| Pronoun | `คุณ` (you) or no pronoun · do not use ท่าน |
+| Polite words | Do not stack ครับ/ค่ะ ท่าน กรุณา in one message · usually have none at all |
+| Buttons | Start with a verb (บันทึก · ส่ง · ลบรายการนี้), not a bare ตกลง/ยืนยัน |
+| Error | What happened + what to do next, in one message |
 
 ---
 
-## 7 · งบการเคลื่อนไหว
+## 7 · Motion budget
 
-| ประเภท | เวลา | เส้นความเร็ว |
+| Type | Time | Easing curve |
 |---|---|---|
-| hover · สีเปลี่ยน | 100–150ms | `ease-out` |
-| เปิด/ปิด dropdown · toast | 150–250ms | `ease-out` |
-| modal · หน้าเปลี่ยน | 250–350ms | `ease-in-out` |
+| hover · color change | 100–150ms | `ease-out` |
+| open/close dropdown · toast | 150–250ms | `ease-out` |
+| modal · page change | 250–350ms | `ease-in-out` |
 
-**เกิน 400ms = ผู้ใช้รู้สึกว่าแอปช้า** ไม่ใช่ว่าแอปหรู
+**Over 400ms = the user feels the app is slow**, not that the app is luxurious
 
-- ของที่**เข้ามา**เร็วกว่าของที่**ออกไป** ไม่ได้ — ออกควรเร็วกว่าหรือเท่ากัน
-- อย่าเคลื่อนไหวของที่ผู้ใช้กำลังจะกด (ปุ่มขยับหนีนิ้ว)
-- **จังหวะให้ยิ้ม ได้ 1 จุดต่อ flow** — เฉพาะตอนงานสำเร็จ (ส่งใบเสนอราคาแล้ว · ชำระเงินผ่าน · ทำครบชุด) ไม่ใช่ตอนโหลดหรือ hover · ไม่เกิน 400ms · ไม่บังปุ่มถัดไป ไม่ต้องรอให้จบก่อนกด · ปิดเมื่อ `prefers-reduced-motion` · ลูกเล่นพื้นผิว (เงาหลายชั้น · เกรน · duotone) ใช้ตาม [`references/depth-and-flourish.md`](references/depth-and-flourish.md) ไม่ใส่เพื่อให้ดูแพง
-- เคารพ `prefers-reduced-motion` — บางคนเวียนหัวจริง ๆ (Flutter: ถ้า `MediaQuery.disableAnimationsOf(context)` เป็น `true` ให้ข้าม animation)
-- **ไม่วาดใหม่เมื่อค่าที่แสดงไม่เปลี่ยน** ให้แจ้ง UI เฉพาะเมื่อค่าบนจอเปลี่ยนจริง (ค่าจาก sensor ที่สั่น: เปลี่ยนเกิน ~1 %) ส่วนค่ารองที่ค่อย ๆ ไหล ให้อัปเดตราว 1 วินาทีครั้ง เพราะถ้าวาดไม่หยุด จะกินแบต โปรแกรมอ่านจอพูดซ้ำ และเครื่องมือทดสอบอ่านหน้าจอไม่ได้
+- Things **entering** must not be faster than things **leaving** — leaving should be faster or equal
+- Do not animate something the user is about to press (a button moving away from the finger)
+- **A moment to smile: 1 per flow** — only when a task succeeds (quote sent · payment passed · full set done), not at loading or hover · no more than 400ms · does not cover the next button, and no need to wait for it to finish before pressing · off under `prefers-reduced-motion` · use surface flourishes (multi-layer shadow · grain · duotone) per [`references/depth-and-flourish.md`](references/depth-and-flourish.md); do not add them just to look expensive
+- Respect `prefers-reduced-motion` — some people really get dizzy (Flutter: if `MediaQuery.disableAnimationsOf(context)` is `true`, skip the animation)
+- **Do not redraw when the displayed value has not changed** — notify the UI only when the value on screen really changes (a jittery sensor value: change over ~1 %) and update slowly drifting secondary values about once per second, because endless redrawing drains the battery, makes the screen reader repeat itself, and keeps test tools from reading the screen
 
 ---
 
-## 8 · ความหนาแน่น — เลือกครั้งเดียวแล้วอยู่กับมัน
+## 8 · Density — choose once and stay with it
 
-| แบบ | แถวสูง | เหมาะกับ |
+| Type | Row height | Suits |
 |---|---|---|
-| แน่น | 32–36px | ตารางข้อมูล · คนใช้ทั้งวัน · ต้องเห็นเยอะ ๆ พร้อมกัน |
-| ปกติ | 40–44px | แอปทั่วไป |
-| โปร่ง | 48–56px | หน้า marketing · แอปที่ใช้นาน ๆ ที |
+| Dense | 32–36px | Data tables · all-day users · need to see a lot at once |
+| Normal | 40–44px | General apps |
+| Airy | 48–56px | Marketing pages · apps used occasionally for long stretches |
 
-**เป้าที่นิ้วกดได้ต้อง ≥ 44×44 pt บน iOS (Apple) · ≥ 48×48 dp บน Android (Material)** ถึงไอคอนจะเล็กกว่านั้นก็ตาม
-(ขยายด้วย padding หรือ pseudo-element ไม่ใช่ขยายไอคอน)
+**A finger tap target must be ≥ 44×44 pt on iOS (Apple) · ≥ 48×48 dp on Android (Material)**, even if the icon is smaller than that
+(enlarge with padding or a pseudo-element, not by enlarging the icon)
 
-**เลือกแบบแน่นแล้วห้ามมีแถวโปร่งแทรก** — ความหนาแน่นที่ไม่คงที่ทำให้
-หน้าจอ "ดูไม่เป็นระบบ" มากที่สุด และคนมองข้ามมากที่สุด
+**Once you choose dense, no airy rows may be mixed in** — inconsistent density makes a
+screen "look unsystematic" the most, and people overlook it the most
 
 ---
 
-## 9 · ตรวจงาน
+## 9 · Check the work
 
-เรนเดอร์ดูจริงเสมอ (skill แพลตฟอร์มบอกวิธีไว้แล้ว) แล้วไล่เช็กลิสต์ 3 ชุดใน [`references/states-and-checks.md`](references/states-and-checks.md): ชุดความถูกต้อง (หรี่ตา · สเกลระยะ · ≤ 5 ขนาด · ปุ่มทึบ 1 ปุ่ม · 5 สถานะ · contrast · ย่อจอ) · ชุดความสวยที่นับได้ (ไอคอน · เนื้อหา ≥ 60 % ของจอ · แถวสูงเท่ากัน · กล่อง ≤ 3 · ซ่อนส่วนควบคุมของ mockup) · และ**ด่านสวย** (ให้คะแนน 7 แกน เทียบภาพแอปอ้างอิง ผ่านเมื่อทุกแกน ≥ 4) — **ผ่าน 2 ชุดแรกครบแล้วยังไม่สวยได้ · mockup ที่ส่งให้คนอนุมัติต้องผ่านด่านสวยด้วย**
+Always render and look (the platform skill says how), then go through the 3 checklists in [`references/states-and-checks.md`](references/states-and-checks.md): the correctness set (squint · spacing scale · ≤ 5 sizes · 1 solid button · 5 states · contrast · shrink the window) · the countable beauty set (icons · content ≥ 60 % of the screen · equal row heights · boxes ≤ 3 · hide the mockup's controls) · and the **beauty gate `ด่านสวย`** (score 7 axes against the reference app image, pass when every axis ≥ 4) — **passing the first 2 sets can still be ugly · a mockup sent for approval must pass the beauty gate too**
 
-**ให้คนที่ไม่ได้ทำวิจารณ์:** ส่งภาพให้ subagent ที่ไม่ได้ทำชิ้นนี้ **พร้อมภาพแอปอ้างอิงขนาดเดียวกัน** ขอคะแนนด่านสวย 7 แกน และปัญหา 2–3 ข้อต่อหน้าพร้อมวิธีแก้ระดับ CSS ห้ามชม · ผู้ตรวจด่านสวยเรียง: `graphic-design:design-critic` ถ้าติดตั้ง → `graphic-designer` → `general-purpose` → เรียกใครไม่ได้เลย ใช้ทางขั้นต่ำในข้อ 0.1 ขั้น 3 · ผู้ตรวจความถูกต้อง (กดปุ่ม · ข้อกำหนดเชิงหน้าที่ (Functional Requirement · FR) · contrast) กับผู้ตรวจความสวยเป็นคนละตัวกัน เพราะตัวที่ตรวจความถูกต้องจะผ่านงานที่ถูกแต่จืด
-ผู้ตรวจด่านสวยตอบเพิ่ม 1 ข้อ: **งานนี้ควรกล้าขึ้นหรือเงียบลง** พร้อมจุดเดียวที่ต้องแก้ (คำถามจากคำสั่ง bolder/quieter ของ pbakaus/impeccable · Apache-2.0 · ตรวจ 2026-10-23) · หน้าเว็บสาธารณะ (หน้าการตลาด · landing page) ส่งให้ agent `design-critic` ของ plugin `graphic-design` ด้วยเสมอ แม้ผู้ตรวจหลักเป็นตัวอื่น · ไม่ได้ติดตั้ง → บอกในรายงาน
-แก้แล้วถ่ายใหม่ · จำนวนรอบใช้เพดานของด่านสวยใน `references/states-and-checks.md` ที่เดียว (คำสั่งตัวอย่างอยู่ใน skill แพลตฟอร์ม เช่น `windows-app-design` ข้อ 6 และ `references/review.md`)
-คนที่ทำเองจะมองงานตัวเองดีกว่าความจริงเสมอ
+**Have someone who did not make it critique it:** send the image to a subagent that did not make this piece, **together with the reference app image at the same size**, and ask for the 7-axis beauty-gate score and 2–3 problems per page with CSS-level fixes; no praise · beauty-gate reviewer order: `graphic-design:design-critic` if installed → `graphic-designer` → `general-purpose` → cannot call anyone at all, use the minimum path in section 0.1 step 3 · the correctness reviewer (button clicks · Functional Requirement (FR) · contrast) and the beauty reviewer are different ones, because a correctness reviewer will pass work that is correct but bland
+The beauty-gate reviewer answers 1 more question: **should this work be bolder or quieter**, with the single point to fix (the question comes from the bolder/quieter commands of pbakaus/impeccable · Apache-2.0 · checked 2026-10-23) · public web pages (marketing page · landing page) always go to the `design-critic` agent of plugin `graphic-design` too, even when the main reviewer is another · not installed → say so in the report
+After fixing, take new screenshots · the number of rounds uses the beauty-gate cap in `references/states-and-checks.md` in that one place only (sample commands are in the platform skill, for example `windows-app-design` section 6 and `references/review.md`)
+The person who made it always sees their own work as better than the truth.
 
-**หน้าผ่านแล้วแต่ชิ้นเดียวยังไม่ลงตัว** → ลองค่าสดในเบราว์เซอร์ หรือทำ 3 แบบของชิ้นนั้นให้ผู้ตรวจเลือก → [`references/live-and-variants.md`](references/live-and-variants.md)
+**The page passed but one piece still does not fit** → try live values in the browser, or make 3 variants of that piece for the reviewer to choose from → [`references/live-and-variants.md`](references/live-and-variants.md)
 
-**งานหลายหน้า:** ทำ 3 หน้าหลักให้ผ่านก่อน แล้วค่อยขยายไปหน้าที่เหลือ — ทำทุกหน้าในรอบเดียวแต่ละหน้าจะได้ความใส่ใจน้อย
+**Multi-page work:** get the 3 main pages to pass first, then extend to the rest — doing every page in one round gives each page less attention
 
-**หน้าแรกของ mockup ไฟล์เดียว (`#s-start`) เป็นสารบัญสำหรับคนรีวิว ไม่ใช่หน้าในแอป** → สร้างด้วย `scripts/mockup-start-page.py` ตามกฎใน [`references/mockup-start-page.md`](references/mockup-start-page.md)
+**The first page of a single-file mockup (`#s-start`) is a table of contents for the reviewer, not a page in the app** → build it with `scripts/mockup-start-page.py` per the rules in [`references/mockup-start-page.md`](references/mockup-start-page.md)
 
 ---
 
 ## 10 · Anti-patterns
 
-ข้อห้าม 17 ข้อ (รวม mockup เก่าแล้วเรียกว่าใหม่ · ธีมตั้งต้นเป็นหน้าตาสุดท้าย · เพิ่มสีแก้ "ไม่สวย" · ปุ่มทึบทุกแถว · เส้นคั่นทุกอย่าง · เงาใต้ทุกการ์ด · animation 600ms ฯลฯ) อยู่ใน [`references/states-and-checks.md`](references/states-and-checks.md)
+17 prohibitions (including relabeling an old mockup as new · the starter theme as the final look · adding colors to fix "not pretty" · solid buttons on every row · dividers on everything · a shadow under every card · 600ms animation, etc.) are in [`references/states-and-checks.md`](references/states-and-checks.md)
 
 ---
 
-## 11 · เชื่อมกับ skill อื่น
+## 11 · Link to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---|---|
-| สี ฟอนต์ คอมโพเนนต์จริงของเว็บ | `web-app-design` |
-| แอป Windows | `windows-app-design` |
-| แอปมือถือ | `mobile-app-design` |
-| user flow ก่อนลงมือวาด | agent `ux-designer` · แม่แบบ user flow และ interaction spec → [`references/ux-spec-outputs.md`](references/ux-spec-outputs.md) |
-| ไดอะแกรมประกอบ spec | `software-diagrams` |
-| สไลด์นำเสนอ | `presentation-design` |
-| ตัดของที่ไม่จำเป็นออก | `simplicity-first` |
-| โลโก้ · โปสเตอร์ · โพสต์ · งานพิมพ์ | `graphic-design` |
+| Colors, fonts, real web components | `web-app-design` |
+| Windows apps | `windows-app-design` |
+| Mobile apps | `mobile-app-design` |
+| User flow before drawing | agent `ux-designer` · user-flow and interaction-spec template → [`references/ux-spec-outputs.md`](references/ux-spec-outputs.md) |
+| Diagrams to go with a spec | `software-diagrams` |
+| Presentation slides | `presentation-design` |
+| Cut out what is not needed | `simplicity-first` |
+| Logo · poster · post · print work | `graphic-design` |
 
 ---
 
-## ไม่ให้ดูเหมือน AI ทำ
+## Do not look AI-made
 
-ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน (ติดตั้ง plugin `superuser` แล้ว hook `ui-scan` รันให้เองทุกครั้งที่แก้ไฟล์ UI · หน้าที่ขึ้นเว็บแล้วใช้ `--url`) · ทุกงานผ่านด่านตาข้อ 3.2 ด้วย (หน้าเว็บตอบเพิ่มข้อ 10–14) เพราะสคริปต์ 0 ข้อไม่ได้แปลว่าผ่าน · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
+Before sending, go through item 3 of `no-ai-look` — for HTML work, run its script (with plugin `superuser` installed, the `ui-scan` hook runs it automatically every time a UI file is edited · for a page that is already on the web use `--url`) · every piece also passes the eye gate item 3.2 (web pages answer items 10–14 too), because 0 script findings does not mean pass · the prohibitions in this file are specific to this work; the full list for every medium is there
 
-**ร่องรอยที่ฟ้องว่า AI วาด — เจอ 2 ข้อขึ้นไปในหน้าเดียวให้แก้ก่อนส่ง**
+**Signs that give away AI drawing — if you find 2 or more on one page, fix them before sending**
 
-| ร่องรอย | แก้เป็น |
+| Sign | Fix to |
 |---|---|
-| gradient ม่วง-น้ำเงินบนปุ่มหลัก · ตัวอักษรไล่สี · พื้นหลังเบลอแบบกระจกทุกการ์ด | สี accent ทึบ 1 สี · ตัวอักษรสีเดียว · แยกส่วนตามข้อ 4 |
-| hero กลางจอ หัวข้อ 2 บรรทัด + ปุ่ม pill 2 ปุ่มคู่กัน | ลำดับสายตาตามข้อ 3 — หน้าจอมีของสำคัญอย่างเดียว |
-| การ์ด 3 คอลัมน์สูงเท่ากัน ไอคอนในวงกลมสีอ่อนทุกใบ | จำนวนคอลัมน์ตามเนื้อหา · ไอคอนเฉพาะที่สื่อความ (`patterns.md` ข้อ 9 ของ skill แพลตฟอร์ม) |
-| emoji แทนไอคอน · ข้อความตัวอย่างแบบ "Welcome back, John" · ตัวเลขกลม ๆ 1,234 | ชุดไอคอนของแพลตฟอร์ม · ข้อมูลตัวอย่างจากโดเมนจริง (ชื่อไทย · ตัวเลขไม่กลม) |
-| มุมโค้ง 16px+ ทุกอย่าง · เงาฟุ้งทุกชั้น · ระยะห่างกว้างเท่ากันหมด | มุมและเงาตามแพลตฟอร์ม · ความหนาแน่นตามข้อ 8 |
-| badge "AI-powered" · ประกายดาว · ปุ่ม "Get started" ที่ไม่บอกว่าเริ่มอะไร | ป้ายและปุ่มเขียนเป็นกริยาของงานจริง |
+| Purple-blue gradient on the primary button · gradient text · blurred glass background on every card | 1 solid accent color · single-color text · separate sections per section 4 |
+| Centered hero with a 2-line heading + 2 pill buttons side by side | Visual order per section 3 — the screen has only one important thing |
+| 3-column equal-height cards, a light-colored circle icon on every card | Column count by the content · icons only where they carry meaning (`patterns.md` item 9 of the platform skill) |
+| emoji in place of icons · sample text like "Welcome back, John" · round numbers like 1,234 | The platform's icon set · sample data from the real domain (Thai names · non-round numbers) |
+| Radius 16px+ on everything · fuzzy shadows on every layer · equally wide spacing everywhere | Corners and shadows per the platform · density per section 8 |
+| "AI-powered" badge · sparkle stars · a "Get started" button that does not say what to start | Badges and buttons written as verbs of the real task |
 
-หน้าเว็บที่โค้ดเป็น HTML/React ให้ไล่กฎแบบ lint ของ Vercel Web Interface Guidelines เพิ่มอีกรอบ (ดึงสดจาก `https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md` — repo เป็น MIT (ตรวจ 2026-10-23) แต่ใช้เป็นลิงก์อย่างเดียว ไม่คัดข้อความมาใส่ เพื่อให้ได้ฉบับล่าสุดเสมอ)
+For a web page whose code is HTML/React, also go through the lint-style rules of the Vercel Web Interface Guidelines one more round (fetch live from `https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md` — the repo is MIT (checked 2026-10-23) but use it as a link only; do not copy its text in, so you always get the latest version)
 
-## ตัวย่อ
+## Abbreviations
 
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
+Always write an abbreviation in full the first time, then put the abbreviation in brackets — for example Model Context Protocol (MCP)
+After that you may use the abbreviation. See the skill `spell-out-abbreviations` for details.

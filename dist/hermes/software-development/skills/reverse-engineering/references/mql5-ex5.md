@@ -1,72 +1,72 @@
-# MetaTrader 5 `.ex5`: ถอดพฤติกรรมแบบกล่องดำ แล้วเขียน MQL5 ใหม่
+# MetaTrader 5 `.ex5`: recover behavior as a black box, then rewrite it in MQL5
 
-ใช้เมื่อมีแค่ไฟล์ `.ex5` (Expert Advisor (EA) · indicator · script) ไม่มี `.mq5` · วิธีเดียวที่ใช้คือ **ดูว่ามันเทรดอย่างไรใน Strategy Tester** แล้วเขียนตัวใหม่ให้เทรดเหมือนกัน · ไม่เปิดเนื้อไฟล์ ไม่ถอดรหัส และไม่แตะการป้องกันลิขสิทธิ์ทุกชนิด · ป้ายหลักฐานและสมุดหลักฐานใช้ตาม SKILL.md หัวข้อ 6 และ [evidence-ledger](evidence-ledger.md) · การรันทุกครั้งต้องถามตาม [runtime-observation](runtime-observation.md)
+Use when you have only an `.ex5` file (Expert Advisor (EA) · indicator · script) and no `.mq5`. The only method is to **watch how it trades in the Strategy Tester**, then write a new one that trades the same way. Never open the file's contents, decrypt it, or touch any kind of copy protection. Evidence labels and the evidence ledger follow SKILL.md section 6 and [evidence-ledger](evidence-ledger.md). Every run needs asking, per [runtime-observation](runtime-observation.md).
 
-| หัวข้อ | |
+| Section | |
 |---|---|
-| [1 · ข้อเท็จจริงที่ต้องรู้ก่อน](#1--ข้อเท็จจริงที่ต้องรู้ก่อน) | [2 · ด่านสิทธิ์ก่อนเริ่ม](#2--ด่านสิทธิ์ก่อนเริ่ม) |
-| [3 · ตรวจความปลอดภัยก่อนรันครั้งแรก](#3--ตรวจความปลอดภัยก่อนรันครั้งแรก) | [4 · ถอดพฤติกรรมใน Strategy Tester](#4--ถอดพฤติกรรมใน-strategy-tester) |
-| [5 · เขียน MQL5 ใหม่ แล้วเทียบผล](#5--เขียน-mql5-ใหม่-แล้วเทียบผล) | [6 · สิ่งที่ห้ามทำ](#6--สิ่งที่ห้ามทำ) |
+| [1 · Facts to know first](#1--facts-to-know-first) | [2 · Permission gate before starting](#2--permission-gate-before-starting) |
+| [3 · Safety checks before the first run](#3--safety-checks-before-the-first-run) | [4 · Recover behavior in the Strategy Tester](#4--recover-behavior-in-the-strategy-tester) |
+| [5 · Rewrite in MQL5, then compare results](#5--rewrite-in-mql5-then-compare-results) | [6 · What must not be done](#6--what-must-not-be-done) |
 
-## 1 · ข้อเท็จจริงที่ต้องรู้ก่อน
+## 1 · Facts to know first
 
-ตรวจทุกข้อเมื่อ 2026-11-10 จากหน้าทางการของ MetaQuotes · ข้อที่เป็นคำอ้างของผู้ผลิตเองเขียนกำกับไว้
+Every item was checked on 2026-11-10 from MetaQuotes' official pages. Items that are the maker's own claims are marked.
 
-| เรื่อง | ข้อเท็จจริง | ป้าย · แหล่ง |
+| Topic | Fact | Label · source |
 |---|---|---|
-| `.ex5` คืออะไร | ไฟล์ที่ MetaEditor compile จาก `.mq5` แล้วรันใน terminal ได้ แจกได้โดยไม่ต้องมีซอร์ส ผู้ผลิตบอกว่าเป็น "รูปแบบเฉพาะที่ซ่อน algorithm เดิม" และ debug ไม่ได้ถ้าไม่มีซอร์ส | จากแหล่ง · [MetaEditor: Compilation](https://www.metatrader5.com/en/metaeditor/help/development/compile) |
-| การป้องกันทั่วไป | MetaQuotes เขียนว่า EX4/EX5 "ป้องกันการ decompile ได้อย่างน่าเชื่อถือ" · เป็นคำอ้างของผู้ผลิต ยังไม่เจอการทดสอบอิสระ | จากแหล่ง (คำอ้างผู้ผลิต) · [MQL5 Cloud Protector](https://www.metatrader5.com/en/metaeditor/help/development/mql5_cloud_protector) |
-| MQL5 Cloud Protector | เปิดให้นักพัฒนาทุกคนตั้งแต่ build 1730 (ประกาศ 22 ธ.ค. 2017) ส่งเฉพาะส่วน executable ไปเข้ารหัสด้วย algorithm แบบอสมมาตรและเซ็นด้วยกุญแจส่วนตัว และ compile เป็น native code แบบเดียวกับสินค้าใน Market · ไฟล์ไม่ผูกกับเครื่อง | จากแหล่ง · [ประกาศ build 1730](https://metatrader5.com/en/news/1732) · [หน้า Cloud Protector](https://www.metatrader5.com/en/metaeditor/help/development/mql5_cloud_protector) |
-| สินค้าจาก MQL5 Market | ผู้ซื้อแต่ละคนได้ "secure version" ที่สร้างให้เครื่องนั้นและสำเนา OS นั้น เปลี่ยนฮาร์ดแวร์แล้วรันไม่ได้ (เรียกว่า Activation) · Market รับเฉพาะไฟล์ EX5/EX4 และห้ามเรียก DLL ทุกตัว | จากแหล่ง · [Market Rules](https://www.mql5.com/en/market/rules) ข้อ IV.1 · IV.2 · IV.15–IV.19 |
-| `.ex5` เริ่มถูกเข้ารหัสตั้งแต่ build ไหน | ไม่เจอเอกสารทางการที่ระบุ build · ที่เจอคือ MT4 build 600 (ก.พ. 2014) ประกาศว่า EX4 จาก Market ได้การป้องกันระดับเดียวกับ MQL5 | (รอยืนยัน) · ผลค้นหาชี้ [ข่าว MT4 build 600](https://www.metaquotes.net/en/metatrader4/news/4207) ยังไม่ได้เปิดอ่านหน้านี้เอง |
+| What `.ex5` is | A file that MetaEditor compiles from `.mq5` and that runs in the terminal. It can be distributed without the source. The maker calls it a "special format that hides the original algorithm", and says it cannot be debugged without the source. | `จากแหล่ง` (from a source) · [MetaEditor: Compilation](https://www.metatrader5.com/en/metaeditor/help/development/compile) |
+| General protection | MetaQuotes writes that EX4/EX5 "reliably protect against decompilation". This is the maker's claim; no independent test found. | `จากแหล่ง` (maker's claim) · [MQL5 Cloud Protector](https://www.metatrader5.com/en/metaeditor/help/development/mql5_cloud_protector) |
+| MQL5 Cloud Protector | Open to all developers since build 1730 (announced 22 Dec 2017). Sends only the executable part to be encrypted with an asymmetric algorithm and signed with a private key, and compiled to native code the same way as Market products. The file is not tied to a machine. | `จากแหล่ง` · [build 1730 announcement](https://metatrader5.com/en/news/1732) · [Cloud Protector page](https://www.metatrader5.com/en/metaeditor/help/development/mql5_cloud_protector) |
+| Products from MQL5 Market | Each buyer gets a "secure version" built for that machine and that OS copy. If the hardware changes, it will not run (called Activation). Market accepts only EX5/EX4 files and forbids calling any DLL. | `จากแหล่ง` · [Market Rules](https://www.mql5.com/en/market/rules) items IV.1 · IV.2 · IV.15–IV.19 |
+| From which build `.ex5` was encrypted | No official document found that names a build. What was found: MT4 build 600 (Feb 2014) announced that EX4 from Market got the same level of protection as MQL5. | `(รอยืนยัน)` (awaiting confirmation) · search results point to [MT4 build 600 news](https://www.metaquotes.net/en/metatrader4/news/4207); this page has not been opened by me |
 
-**ข้อตกลง MQL5 Market ที่ผูกผู้ซื้อ** ([Market Rules](https://www.mql5.com/en/market/rules) · อ่าน 2026-11-10 · หน้าไม่บอกวันแก้ไขล่าสุด):
+**MQL5 Market terms that bind the buyer** ([Market Rules](https://www.mql5.com/en/market/rules) · read 2026-11-10 · the page gives no last-edited date):
 
-| ข้อ | ใจความ |
+| Item | Gist |
 |---|---|
-| III.2 · III.3 | ขายต่อไม่ได้ · การซื้อไม่ได้ซื้อสิทธิ์ในตัวสินค้า ได้มาเพื่อใช้ส่วนตัวเท่านั้น |
-| III.9 | ห้าม decompile และห้ามจ้างคนอื่นทำ · **พยายาม decompile ก็ถือว่าผิดแล้ว ไม่ว่าจะได้ผลหรือไม่** |
-| IX.8 | ห้ามคัดลอก ขาย แจก แก้ ดัดแปลง แปล สร้างงานที่ต่อยอด (derivative products) หรือ reverse engineer · decompile · disassemble เพื่อให้ได้ซอร์ส เว้นแต่ได้รับอนุญาต |
-| IX.9 | ห้ามทำอะไรเพื่อหลบหรือเอาชนะการป้องกันหรือกฎการใช้ของสินค้า |
+| III.2 · III.3 | No resale · buying does not buy rights in the product itself; it is for personal use only |
+| III.9 | No decompiling, and no hiring others to do it · **even attempting to decompile counts as a violation, whether or not it succeeds** |
+| IX.8 | No copying, selling, distributing, modifying, adapting, translating, creating derivative products, or reverse engineering · decompiling · disassembling to obtain source, unless permitted |
+| IX.9 | No doing anything to evade or defeat a product's protection or usage rules |
 
-ข้อเหล่านี้อยู่ในหมวด IX ซึ่งเป็นเหตุให้ MetaQuotes ระงับบริการได้ทันที
+These items are in section IX, which is a reason MetaQuotes can suspend service immediately.
 
-**เครื่องมือหรือบริการที่อ้างว่าแปลง `.ex4`/`.ex5` กลับเป็นซอร์ส**: มีเว็บและผู้ขายอ้างแบบนี้ แต่ไม่เจอหลักฐานที่ตรวจสอบได้ว่าทำได้กับไฟล์รุ่นปัจจุบัน ผู้ผลิตบอกว่าป้องกันไว้ ส่วนผู้ใช้ในฟอรัม mql5.com เขียนว่ายังไม่มีใครพิสูจน์ได้ตั้งแต่ build 600 ซึ่งเป็นแค่ความเห็นในฟอรัม · ป้าย `ยังไม่ได้ตรวจ` · skill นี้ไม่เอ่ยชื่อ ไม่ลิงก์ ไม่แนะนำ ไม่ดาวน์โหลด และไม่ลองเครื่องมือพวกนี้ ไฟล์ที่แจกในนามเครื่องมือเหล่านี้ไม่รู้ที่มา จึงเสี่ยงเป็น malware ด้วย
+**Tools or services that claim to convert `.ex4`/`.ex5` back to source**: websites and sellers make such claims, but no verifiable evidence was found that it works on current files. The maker says the files are protected, and a user on the mql5.com forum wrote that nobody has proven it since build 600 (only a forum opinion). Label `ยังไม่ได้ตรวจ` (not yet checked). This skill does not name, link, recommend, download or try these tools. Files distributed under the name of these tools have unknown origin, so they may also be malware.
 
-## 2 · ด่านสิทธิ์ก่อนเริ่ม
+## 2 · Permission gate before starting
 
-ถามผู้ใช้ 2 ข้อ แล้วจดคำตอบลงบรรทัดแรกของ `_to_delete/re/<ชื่อ EA>/ledger.md` ตามแบบฟอร์มใน [evidence-ledger](evidence-ledger.md) หัวข้อ 1:
+Ask the user 2 questions, then write the answers in the first line of `_to_delete/re/<ชื่อ EA>/ledger.md`, using the form in [evidence-ledger](evidence-ledger.md) section 1:
 
-1. ไฟล์นี้ได้มาจากไหน (เขียนเอง · จ้างเขียน · ซื้อใน MQL5 Market · ซื้อนอก Market · ได้ฟรีจากกลุ่มหรือเว็บ)
-2. จะเอาตัวที่เขียนใหม่ไปทำอะไร (ใช้เองบัญชีเดียว · ใช้ในบริษัท · แจก · ขาย)
+1. Where did this file come from (self-written · commissioned · bought on MQL5 Market · bought outside Market · free from a group or website)
+2. What will the rewrite be used for (own use on one account · use inside a company · distribute · sell)
 
-| ที่มา | ทำได้ | ต้องได้เพิ่มก่อน |
+| Origin | Allowed | Needed first |
 |---|---|---|
-| ผู้ใช้เขียนเอง แต่ซอร์สหาย | ทุกขั้นในหัวข้อ 3–5 | ไม่มี · จดหลักฐานความเป็นเจ้าของที่มี (ซอร์สรุ่นเก่า · ประวัติขาย · บัญชีผู้ขาย) |
-| จ้างคนอื่นเขียน | ทุกขั้น ถ้าสัญญาจ้างให้สิทธิ์ซอร์สหรือสิทธิ์ดัดแปลงกับผู้ใช้ | ถ้าสัญญาไม่ชัด ให้ขอข้อความอนุญาตจากผู้เขียนเป็นลายลักษณ์อักษร |
-| ซื้อจาก MQL5 Market | ทดสอบพฤติกรรมของสำเนาที่ซื้อใน Strategy Tester เพื่อประเมินและตั้งค่าใช้เอง (หัวข้อ 3–4) | **ขั้นเขียนตัวเลียนแบบ (หัวข้อ 5)** ต้องมีข้อความอนุญาตจากผู้ขาย เพราะข้อ IX.8 ห้าม derivative products เว้นแต่ได้รับอนุญาต · ห้ามแจกหรือขายตัวเลียนแบบในทุกกรณี · การเขียนใหม่เพื่อใช้เองอย่างเดียวจะนับเป็น derivative ไหมเป็นคำถามทางกฎหมาย (รอยืนยัน กับผู้ขายหรือนักกฎหมาย) |
-| ซื้อนอก Market | ตามสัญญาอนุญาตที่ได้มา | ไม่มีสัญญาหรือสัญญาห้ามดัดแปลง ให้ทำเฉพาะหัวข้อ 3–4 แล้วถามเจ้าของ |
-| ได้ฟรี · ไม่รู้ที่มา · ไฟล์ที่ถูก crack หรือหลุดมา | **หยุด** | ไฟล์ที่ถูก crack หรือหลุดมาไม่ทำต่อเลย แม้แต่ทดสอบ · ไฟล์ฟรีที่ไม่รู้ที่มาให้ถามหาเจ้าของก่อน |
+| The user wrote it, but the source is lost | Every step in sections 3–5 | Nothing · record the ownership evidence available (an old source version · sales history · seller account) |
+| Commissioned from someone else | Every step, if the contract gives the user source rights or modification rights | If the contract is unclear, ask the author for written permission |
+| Bought from MQL5 Market | Test the behavior of the purchased copy in the Strategy Tester to evaluate it and set it up for own use (sections 3–4) | **The imitation-writing step (section 5)** needs written permission from the seller, because item IX.8 forbids derivative products unless permitted · never distribute or sell the imitation, in any case · whether a rewrite for own use alone counts as derivative is a legal question (`(รอยืนยัน)` with the seller or a lawyer) |
+| Bought outside Market | Per the license obtained | With no license, or a license that forbids modification, do only sections 3–4 and ask the owner |
+| Free · unknown origin · cracked or leaked file | **Stop** | For a cracked or leaked file, do not continue at all, not even testing · for a free file of unknown origin, ask for the owner first |
 
-ไฟล์ล็อกเลขบัญชี วันหมดอายุ หรือเซิร์ฟเวอร์ license จนทดสอบไม่ได้ ให้หยุดแล้วบอกผู้ใช้ให้ขอไฟล์สำหรับทดสอบจากเจ้าของ ไม่หาทางเลี่ยง
+If the file is locked to an account number, an expiry date, or a license server so that testing is impossible, stop and tell the user to ask the owner for a test file. Never look for a way around it.
 
-## 3 · ตรวจความปลอดภัยก่อนรันครั้งแรก
+## 3 · Safety checks before the first run
 
-Strategy Tester รันโค้ดของ `.ex5` จริง จึงต้องถามผู้ใช้ก่อนทุกครั้งตาม SKILL.md หัวข้อ 2 · ผู้ใช้เป็นคนกดใน terminal เอง หรืออนุญาตให้ agent สั่ง `terminal64.exe /config:` เป็นรายครั้ง
+The Strategy Tester runs the `.ex5`'s real code, so ask the user before every run, per SKILL.md section 2. The user clicks in the terminal themselves, or allows the agent to run `terminal64.exe /config:` one run at a time.
 
-| ตรวจอะไร | ทำอย่างไร | ป้าย · แหล่ง |
+| Check | How | Label · source |
 |---|---|---|
-| terminal แยกสำหรับงานนี้ | ติดตั้ง MetaTrader 5 อีกชุดหรือใช้ data folder แยก login **บัญชี demo เท่านั้น** ตลอดงาน · เปิด "Disable automated trading when switching accounts" ไว้ · ไฟล์ที่ยังไม่น่าไว้ใจให้รันใน Windows Sandbox หรือ VM ที่ผู้ใช้เตรียมเอง ([runtime-observation](runtime-observation.md) หัวข้อ 2) | จากแหล่ง · [Platform Settings](https://www.metatrader5.com/en/terminal/help/startworking/settings) |
-| เรียก DLL ไหม | ลากไฟล์ใส่กราฟแล้วดูแท็บ **Dependencies** ในหน้าต่างตั้งค่า · แท็บนี้ขึ้นเมื่อ EA import ฟังก์ชันจาก EX5 หรือ DLL ไอคอนแดงคือ DLL · ปิด **Allow DLL imports** ไว้ (ผู้ผลิตแนะนำให้ปิดกับ EA ที่ไม่รู้จัก) ถ้าปิดอยู่ ปุ่ม OK จะไม่ขึ้นและ EA จะไม่เริ่ม | จากแหล่ง · [Expert Advisors and Custom Indicators](https://www.metatrader5.com/en/terminal/help/algotrading/trade_robots_indicators) |
-| ถ้ามี DLL | จดชื่อ DLL เป็นหลักฐาน · DLL เป็นเป้าหมายใหม่ที่ต้องได้สิทธิ์แยก แล้วดูแบบ static ด้วย `pe_elf_info.py` ตาม [native-binaries](native-binaries.md) ก่อนคิดจะเปิด · DLL ทำได้ทุกอย่างนอก sandbox ของ MQL5 | อนุมาน |
-| ติดต่อเว็บไหม | `WebRequest` เรียกได้เฉพาะ URL ที่ผู้ใช้ใส่ใน Tools → Options → Expert Advisors ซึ่งปิดเป็นค่าเริ่ม · ปล่อยรายการว่างไว้ · เพิ่ม URL ได้ทีละตัวเมื่อผู้ใช้อนุญาตเท่านั้น · ใน Strategy Tester ฟังก์ชันนี้ใช้ไม่ได้ และ indicator เรียกไม่ได้ | จากแหล่ง · [WebRequest](https://www.mql5.com/en/docs/network/webrequest) |
-| เขียนไฟล์ไหน | MQL5 เขียนไฟล์ได้แค่ใน `MQL5\Files` ของ terminal และโฟลเดอร์ Common ที่ใช้ร่วมกัน · เก็บรายชื่อไฟล์ใน 2 ที่นี้ก่อนและหลังรันแล้ว `diff` · ตอนอยู่ใน tester ไฟล์อาจไปอยู่ในโฟลเดอร์ของ tester agent | จากแหล่ง · [File Functions](https://www.mql5.com/en/docs/files) · โฟลเดอร์ของ agent (ยังไม่ได้ตรวจ) |
+| A separate terminal for this job | Install another MetaTrader 5 or use a separate data folder · log in to a **demo account only** for the whole job · keep "Disable automated trading when switching accounts" on · run a file not yet trusted in Windows Sandbox or a VM the user prepares ([runtime-observation](runtime-observation.md) section 2) | `จากแหล่ง` · [Platform Settings](https://www.metatrader5.com/en/terminal/help/startworking/settings) |
+| Does it call DLLs | Drag the file onto a chart and look at the **Dependencies** tab in the settings window · this tab appears when the EA imports functions from an EX5 or DLL · a red icon is a DLL · keep **Allow DLL imports** off (the maker recommends off for unknown EAs) · if it is off, the OK button will not appear and the EA will not start | `จากแหล่ง` · [Expert Advisors and Custom Indicators](https://www.metatrader5.com/en/terminal/help/algotrading/trade_robots_indicators) |
+| If there is a DLL | Record the DLL name as evidence · a DLL is a new target needing separate permission, then look at it statically with `pe_elf_info.py` per [native-binaries](native-binaries.md) before thinking of opening it · a DLL can do anything outside the MQL5 sandbox | `อนุมาน` (inferred) |
+| Does it contact the web | `WebRequest` can call only URLs the user adds in Tools → Options → Expert Advisors, which is off by default · leave the list empty · add a URL one at a time only when the user allows · in the Strategy Tester this function does not work, and an indicator cannot call it | `จากแหล่ง` · [WebRequest](https://www.mql5.com/en/docs/network/webrequest) |
+| Which files it writes | MQL5 can write files only in the terminal's `MQL5\Files` and the shared Common folder · list the files in these 2 places before and after the run, then `diff` · inside the tester, files may go to the tester agent's folder | `จากแหล่ง` · [File Functions](https://www.mql5.com/en/docs/files) · agent folder (`ยังไม่ได้ตรวจ`, not yet checked) |
 
-พฤติกรรมที่พึ่งเว็บ (ตัวกรองข่าว · สัญญาณจากเซิร์ฟเวอร์ · ตรวจ license) จะไม่เกิดใน tester · ให้จดเป็นสิ่งที่ยังไม่รู้ ไม่สรุปว่าไม่มี
+Behavior that depends on the web (news filter · signals from a server · license check) will not occur in the tester. Record it as an unknown; do not conclude it is absent.
 
-## 4 · ถอดพฤติกรรมใน Strategy Tester
+## 4 · Recover behavior in the Strategy Tester
 
-**4.1 ตั้งค่าเดียวกันทุกครั้ง**: โหมด **Every tick based on real ticks** (ใช้ tick จริงที่โบรกเกอร์เก็บไว้ ไม่จำลอง) · เซิร์ฟเวอร์ symbol timeframe ทุน leverage เดียวกันทุกรอบ · จดรุ่น build ของ terminal ลงสมุดหลักฐาน · รันจาก command line ด้วยไฟล์ ini ได้ ([หน้าเอกสาร](https://www.metatrader5.com/en/terminal/help/start_advanced/start) · ตรวจ 2026-11-10):
+**4.1 Same settings every time**: **Every tick based on real ticks** mode (uses real ticks the broker stored, not simulated) · the same server, symbol, timeframe, deposit and leverage every run · record the terminal's build version in the evidence ledger · it can run from the command line with an ini file ([documentation page](https://www.metatrader5.com/en/terminal/help/start_advanced/start) · checked 2026-11-10):
 
 ```ini
 [Tester]
@@ -84,29 +84,29 @@ ReplaceReport=1
 ShutdownTerminal=1
 ```
 
-ไม่ใส่ `Login=` เพื่อปลอมเลขบัญชีให้ EA ที่ล็อกบัญชี เพราะเป็นการเลี่ยง license (หัวข้อ 6)
+Do not put in `Login=` to fake the account number for an EA that locks to an account, because that is evading the license (section 6).
 
-**4.2 หลายช่วงตลาด**: อย่างน้อย 4 ช่วงที่ต่างกัน คือ ขาขึ้น · ขาลง · ไซด์เวย์ผันผวนต่ำ · ช่วงข่าวแรง · และ symbol หรือ timeframe อื่นถ้า EA รองรับ · กันไว้ 1 ช่วงที่**ไม่ใช้ตอนอนุมานกฎ** เพื่อใช้ตัดสินในข้อ 5
+**4.2 Several market periods**: at least 4 different periods: uptrend · downtrend · low-volatility sideways · a strong-news period · and another symbol or timeframe if the EA supports it. Set aside 1 period that is **not used when inferring the rules**, to judge with in section 5.
 
-**4.3 กวาดค่า input**: กด Save ในแท็บ Inputs เก็บค่าเริ่มเป็น `.set` แล้วเปลี่ยนทีละตัว (หรือใช้ optimization แบบ Slow complete algorithm กับ input ตัวเดียว) เพื่อดูว่า input ไหนเปลี่ยนเวลาเข้า ระยะ SL/TP หรือขนาดล็อต
+**4.3 Sweep input values**: click Save in the Inputs tab to keep the defaults as a `.set`, then change one at a time (or use the Slow complete algorithm optimization on a single input) to see which input changes entry time, SL/TP distance or lot size.
 
-**4.4 ส่งออกผล**: ไฟล์ `.htm` ที่ได้จาก `Report=` มีตาราง Orders และ Deals (คอลัมน์ Deals: Time · Deal · Symbol · Type · Direction · Volume · Price · Order · Commission · Swap · Profit · Balance · Comment ตาม [บทความ mql5.com](https://www.mql5.com/en/articles/5436) ซึ่งเป็นชื่อที่ผู้เขียนบทความตั้ง (รอยืนยัน กับรายงานจริง)) · บันทึกจากหน้าจอได้ด้วยคลิกขวาที่แท็บผล → Report → HTML หรือ Open XML (ชื่อเมนูจากคู่มือของบุคคลที่สาม (รอยืนยัน)) · จด SHA-256 ของทุกรายงานเป็นหลักฐาน · terminal ที่ตั้งภาษาไทยอาจได้หัวคอลัมน์เป็นภาษาไทย ให้ตั้ง terminal เป็นภาษาอังกฤษก่อนส่งออก (ยังไม่ได้ตรวจ)
+**4.4 Export results**: the `.htm` file from `Report=` holds Orders and Deals tables (Deals columns: Time · Deal · Symbol · Type · Direction · Volume · Price · Order · Commission · Swap · Profit · Balance · Comment, per an [mql5.com article](https://www.mql5.com/en/articles/5436); these are the names the article's author used (`(รอยืนยัน)` against a real report)). From the screen, right-click the result tab → Report → HTML or Open XML (menu names from a third-party manual (`(รอยืนยัน)`)). Record the SHA-256 of every report as evidence. A terminal set to Thai may give Thai column headings, so set the terminal to English before exporting (`ยังไม่ได้ตรวจ`, not yet checked).
 
-**4.5 ตารางสังเกต**: 1 แถวต่อ 1 ไม้ ลงไฟล์ `_to_delete/re/<ชื่อ EA>/trades.md` หรือ CSV:
+**4.5 Observation table**: 1 row per trade, in the file `_to_delete/re/<ชื่อ EA>/trades.md` or a CSV:
 
-| ช่อง | ดูอะไร |
+| Field | What to look at |
 |---|---|
-| เวลาเข้า | ตรงเวลาเปิดแท่งไหม (เช่น 10:00:00 ทุกไม้ = ตัดสินตอนแท่งใหม่) · มีช่วงเวลาหรือวันที่ไม่เคยเข้าไหม |
-| ทิศ · ราคาเข้า | เข้าตามเทรนด์หรือสวน · เข้าหลังราคาทะลุระดับไหน |
-| indicator ที่น่าจะใช้ | เขียน script ของเราเองดึงค่า indicator ที่สงสัย (MA · RSI · Bollinger · ATR) ณ เวลาเข้าแต่ละไม้ แล้วดูว่าค่าไหนอยู่ในช่วงเดียวกันทุกไม้ |
-| SL · TP | ระยะเป็นจุดคงที่ · เป็นเท่าของ ATR · เลื่อนตาม (trailing) · ไม่มี |
-| ล็อต | คงที่ · ตามสัดส่วนทุน · คูณขึ้นหลังไม้แพ้ (martingale) |
-| จำนวนไม้ที่เปิดพร้อมกัน | เปิดไม้ทิศเดียวกันซ้อนห่างเท่า ๆ กัน = grid |
-| เหตุออก | ชน SL · ชน TP · ปิดตามเวลา · ปิดตามสัญญาณกลับทิศ |
+| Entry time | Does it match the bar open time (for example 10:00:00 on every trade = decides at a new bar)? Are there times or dates it never enters? |
+| Direction · entry price | With the trend or against it · entry after price breaks which level |
+| Likely indicators | Write our own script to pull the suspected indicators' values (MA · RSI · Bollinger · ATR) at each entry time, then see which value is in the same range on every trade |
+| SL · TP | Fixed distance in points · a multiple of ATR · trailing · none |
+| Lots | Fixed · proportional to equity · multiplied after a losing trade (martingale) |
+| Number of simultaneous trades | Stacked same-direction trades at equal spacing = grid |
+| Exit reason | Hit SL · hit TP · closed by time · closed by a reverse signal |
 
-เจอ martingale หรือ grid ให้บอกผู้ใช้ทันที เพราะแบบนี้ทำให้ขาดทุนหนักได้ในช่วงตลาดวิ่งทางเดียว
+If you find martingale or grid, tell the user at once, because this style can cause heavy losses when the market runs one way.
 
-**4.6 สมมติฐานลงสมุดหลักฐาน**: ผลรายงานแต่ละไฟล์เป็น E-id (`จากแหล่ง` หรือ `ตรวจจริง` ถ้าเห็นตอนรันใน tester ที่ได้อนุญาต) · กฎที่เดาจากหลายไม้เป็น `อนุมาน` ชี้ E-id ที่เป็นฐาน · กฎที่อธิบายไม่ได้ลงตาราง "สิ่งที่ยังไม่รู้":
+**4.6 Hypotheses into the evidence ledger**: each report file's result is an E-id (`จากแหล่ง` or `ตรวจจริง` (verified) if seen during a run in a tester that was permitted) · a rule guessed from many trades is `อนุมาน` pointing to the E-ids it rests on · a rule that cannot be explained goes in the "สิ่งที่ยังไม่รู้" (unknowns) table:
 
 ```markdown
 | # | ข้อสรุป | หลักฐาน | ป้าย |
@@ -115,49 +115,49 @@ ShutdownTerminal=1
 | H2 | SL 300 จุดคงที่ทุกไม้ | E3 · E4 | อนุมาน |
 ```
 
-## 5 · เขียน MQL5 ใหม่ แล้วเทียบผล
+## 5 · Rewrite in MQL5, then compare results
 
-1. **ผู้ใช้ยืนยันสมมติฐานก่อน** แล้วเขียน spec ของพฤติกรรมทีละข้อ แต่ละข้อชี้ H-id
-2. **เขียนด้วยโค้ดของเราตาม `stack-mql`** จาก spec ไม่ใช่จากไฟล์ `.ex5` · ไม่ใช้ชื่อสินค้า คำบรรยาย หรือรูปของต้นฉบับ
-3. **ตั้งเกณฑ์ความตรงก่อนรัน** แล้วจดลงสมุดหลักฐาน ไม่ปรับเกณฑ์หลังเห็นผล · ตัวเลขด้านล่างเป็น `ตัวอย่าง` ที่เราเสนอ ไม่ใช่มาตรฐาน:
+1. **The user confirms the hypotheses first**, then write a spec of the behavior item by item, each pointing to an H-id.
+2. **Write with our own code following `stack-mql`**, from the spec and not from the `.ex5` file · do not use the original's product name, description or images.
+3. **Set the match criteria before running** and record them in the evidence ledger. Do not adjust the criteria after seeing results. The numbers below are `ตัวอย่าง` (example) that we propose, not a standard:
 
-| เกณฑ์ | ตัวอย่าง |
+| Criterion | Example |
 |---|---|
-| ไม้เข้าที่ symbol ทิศ และเวลาตรงกัน (ห่างไม่เกิน 60 วินาที) | อย่างน้อย 90% ของจำนวนไม้ที่มากกว่า |
-| ขนาดล็อตตรงกันในไม้ที่จับคู่ได้ | อย่างน้อย 95% |
-| ช่วงที่กันไว้ในข้อ 4.2 | ผ่านเกณฑ์เดียวกัน ถ้าผ่านแค่ช่วงที่ใช้อนุมาน แปลว่ากฎยังจับไม่ครบ |
+| Trades with matching symbol, direction and time (within 60 seconds) | At least 90% of the larger trade count |
+| Lot size matches in matched trades | At least 95% |
+| The period set aside in 4.2 | Must pass the same criteria; if it passes only the period used for inference, the rules are not fully captured yet |
 
-4. **รันทั้ง 2 ตัวด้วยการตั้งค่าเดียวกัน** (เซิร์ฟเวอร์ · ช่วงวันที่ · Model 4 · `.set` ที่ตรงกัน) แล้วเทียบ:
+4. **Run both with the same settings** (server · date range · Model 4 · matching `.set`), then compare:
 
 ```bash
 python -I scripts/compare_trades.py original-2023.htm rewrite-2023.htm --tolerance 60 --threshold 90
 python -I scripts/compare_trades.py original.csv rewrite.csv --leg all --json > _to_delete/re/<ชื่อ EA>/compare.json
 ```
 
-สคริปต์อ่านตาราง Deals จากรายงาน HTML (UTF-16 หรือ UTF-8) หรือ CSV ที่มีหัว Time · Symbol · Type · Direction แล้วจับคู่ไม้ที่ symbol ฝั่ง (buy/sell) และ Direction (in/out) ตรงกัน และเวลาห่างไม่เกิน `--tolerance` · บอก % ที่ตรง · % ล็อตที่ตรง · ไม้ที่มีแต่ฝั่งเดียว · ต่ำกว่า `--threshold` ออก exit 1 · ทดสอบแล้ว 2026-11-10 ด้วย `--self-test` และข้อมูลตัวอย่างที่สร้างเอง 50 ไม้ (2026-11-11 เพิ่มกรณี `--leg all` ที่ไม้เข้ากับไม้ออกฝั่งเดียวกันต้องไม่ถูกจับคู่) ยังไม่ได้ลองกับรายงานจริงจาก terminal (รอยืนยัน)
+The script reads the Deals table from an HTML report (UTF-16 or UTF-8) or a CSV with the headers Time · Symbol · Type · Direction, then pairs trades whose symbol, side (buy/sell) and Direction (in/out) match and whose time differs by no more than `--tolerance`. It reports % matched · % of lots matched · trades present on one side only · below `--threshold` it exits with code 1. Tested 2026-11-10 with `--self-test` and sample data we generated, 50 trades (2026-11-11 added the `--leg all` case where an entry and an exit on the same side must not be paired). Not yet tried on a real report from a terminal (`(รอยืนยัน)`).
 
-5. ไม้ที่มีแต่ฝั่งเดียวคือที่มาของกฎที่ยังขาด ให้ไล่ดูทีละไม้แล้วแก้สมมติฐาน ไม่ปรับโค้ดให้ตรงเป็นรายไม้ · ผ่านเกณฑ์ = ตรงเฉพาะช่วงและการตั้งค่าที่ทดสอบ ไม่ใช่เหมือนต้นฉบับทุกสภาพตลาด
-6. ก่อนผู้ใช้เอาตัวใหม่ไปใช้บัญชีจริง ให้ผ่านรายการตรวจของ `stack-mql` หัวข้อ 8 และรันกับบัญชี demo ช่วงหนึ่งก่อน · การตัดสินใจเปิดบัญชีจริงเป็นของผู้ใช้
+5. Trades present on one side only point to missing rules. Go through them one by one and fix the hypotheses; do not adjust the code to match trade by trade. Passing the criteria = matching only for the periods and settings tested, not identical to the original in every market condition.
+6. Before the user puts the new version on a real account, it must pass the checklist in `stack-mql` section 8 and run on a demo account for a while. The decision to go live belongs to the user.
 
-## 6 · สิ่งที่ห้ามทำ
+## 6 · What must not be done
 
-1. ห้าม decompile · disassemble · เปิด `.ex5` ด้วย hex editor · รัน `triage.py --strings` หรือ `--pattern` กับ `.ex5` · ทำกับ `.ex5` ได้แค่จด SHA-256 ขนาด และที่มา
-2. ห้ามค้น ดาวน์โหลด แนะนำ ลิงก์ หรือจ้างเครื่องมือหรือบริการที่อ้างว่าถอด `.ex4`/`.ex5`
-3. ห้ามถอดรหัสหรือแกะชั้นป้องกันของ MQL5 Cloud Protector หรือ secure version จาก Market
-4. ห้ามปลดหรือเลี่ยง license: ปลอมเลขบัญชี (รวม `Login=` ใน tester ini) · เปลี่ยนเวลาเครื่องหนีวันหมดอายุ · ทำเซิร์ฟเวอร์ license ปลอม · แก้ไฟล์ hosts · ทำ DLL ปลอมมาแทนตัวจริง
-5. ห้ามคัดลอกไฟล์จาก Market ไปเครื่องอื่นเพื่อเลี่ยงจำนวน activation
-6. ห้ามแจกหรือขายตัวที่เขียนเลียนแบบไฟล์ที่ไม่ใช่ของผู้ใช้ เว้นแต่เจ้าของอนุญาตเป็นลายลักษณ์อักษร
-7. ห้ามรันกับบัญชีจริงระหว่างงาน · ห้ามเปิด Allow DLL imports หรือเพิ่ม URL ใน WebRequest ให้ไฟล์ที่ยังไม่น่าไว้ใจ
-8. ห้ามทำต่อกับไฟล์ที่ถูก crack หรือหลุดมา แม้ผู้ใช้จะบอกว่าแค่ทดสอบ
+1. Never decompile · disassemble · open an `.ex5` with a hex editor · run `triage.py --strings` or `--pattern` on an `.ex5`. For an `.ex5`, only record the SHA-256, size and origin.
+2. Never search for, download, recommend, link or hire tools or services that claim to extract `.ex4`/`.ex5`.
+3. Never decrypt or unpack the protection layers of MQL5 Cloud Protector or a Market secure version.
+4. Never remove or evade a license: faking the account number (including `Login=` in the tester ini) · changing the system clock to escape an expiry date · building a fake license server · editing the hosts file · making a fake DLL to replace the real one.
+5. Never copy a file from Market to another machine to evade the activation count.
+6. Never distribute or sell an imitation of a file that is not the user's, unless the owner permits in writing.
+7. Never run against a real account during the job · never turn on Allow DLL imports or add a URL to WebRequest for a file not yet trusted.
+8. Never continue with a cracked or leaked file, even if the user says it is only a test.
 
-## ที่มา
+## Sources
 
-อ่านทุกหน้าเมื่อ 2026-11-10
+All pages read on 2026-11-10
 
 - [MetaEditor: Compilation](https://www.metatrader5.com/en/metaeditor/help/development/compile)
-- [MQL5 Cloud Protector](https://www.metatrader5.com/en/metaeditor/help/development/mql5_cloud_protector) · [ประกาศ build 1730](https://metatrader5.com/en/news/1732)
+- [MQL5 Cloud Protector](https://www.metatrader5.com/en/metaeditor/help/development/mql5_cloud_protector) · [build 1730 announcement](https://metatrader5.com/en/news/1732)
 - [MQL5 Market Rules](https://www.mql5.com/en/market/rules)
-- [Strategy Tester: Testing](https://www.metatrader5.com/en/terminal/help/algotrading/testing) · [Platform start (ไฟล์ ini)](https://www.metatrader5.com/en/terminal/help/start_advanced/start)
+- [Strategy Tester: Testing](https://www.metatrader5.com/en/terminal/help/algotrading/testing) · [Platform start (ini file)](https://www.metatrader5.com/en/terminal/help/start_advanced/start)
 - [Platform Settings](https://www.metatrader5.com/en/terminal/help/startworking/settings) · [Expert Advisors and Custom Indicators](https://www.metatrader5.com/en/terminal/help/algotrading/trade_robots_indicators)
 - [WebRequest](https://www.mql5.com/en/docs/network/webrequest) · [File Functions](https://www.mql5.com/en/docs/files)
-- [Analyzing trading results using HTML reports](https://www.mql5.com/en/articles/5436) (บทความใน mql5.com ไม่ใช่เอกสารทางการ)
+- [Analyzing trading results using HTML reports](https://www.mql5.com/en/articles/5436) (an article on mql5.com, not official documentation)

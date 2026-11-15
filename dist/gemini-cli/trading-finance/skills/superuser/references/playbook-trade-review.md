@@ -1,16 +1,16 @@
-# playbook · trade-review — ทบทวนผลเทรดรายสัปดาห์หรือรายเดือน
+# playbook · trade-review — review trading results weekly or monthly
 
-ใช้เมื่อ: "สรุปผลเทรด" · ขาดทุนแบบเดิมซ้ำ · ครบรอบทบทวน
-skill หลัก: `trade-journal` (โหมด 2 ทบทวนผล) · agent `trade-journal-coach`
+Use when: "summarise my trading results" · losing the same way again and again · the review cycle is due.
+Main skill: `trade-journal` (mode 2, review results) · agent `trade-journal-coach`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน (Steps — copy into the todo as written)
 
-1. อ่านบันทึกการเทรดเฉพาะช่วงนั้น (กรองตามวันปิดไม้ ไม่เปิดทั้งไฟล์) ส่งกลับสรุปไม่เกิน 20 บรรทัด · ใคร: `trade-journal-coach` ตัวใหม่
-2. คำนวณ win rate expectancy และ drawdown ด้วย `scripts/trade-stats.mjs` ของ `trade-journal` · ใคร: `trade-journal-coach` ตัวใหม่
-3. หารูปแบบความผิดพลาดที่ซ้ำมากที่สุด 1 ข้อ พร้อมตัวอย่างไม้จริง · ใคร: `trade-journal-coach` ตัวใหม่
-4. แปลงเป็นกฎใหม่ 1 ข้อที่ทดสอบได้ในเดือนหน้า และตัดสินกฎของเดือนก่อน (ใช้ต่อ · ปรับ · ทิ้ง) · ใคร: `trade-journal-coach` ตัวใหม่เสนอ แล้วลงใน "รออนุมัติ"
-5. ตรวจ — คำนวณสถิติซ้ำแล้วตรงกับบันทึก · ใคร: `reviewer` ตัวใหม่
+1. Read the trade journal for that period only (filter by the date the position closed, do not open the whole file) and return a summary of at most 20 lines · ใคร: `trade-journal-coach` ตัวใหม่
+2. Calculate win rate, expectancy and drawdown with `scripts/trade-stats.mjs` of `trade-journal` · ใคร: `trade-journal-coach` ตัวใหม่
+3. Find the single most repeated error pattern, with real trades as examples · ใคร: `trade-journal-coach` ตัวใหม่
+4. Turn it into 1 new rule that can be tested next month, and decide on last month's rule (keep · adjust · drop) · ใคร: `trade-journal-coach` ตัวใหม่ proposes, then it goes under "รออนุมัติ" (awaiting approval)
+5. ตรวจ that recalculating the statistics matches the journal · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-สถิติที่คำนวณซ้ำแล้ว ความผิดพลาด 1 ข้อ และกฎ 1 ข้อสำหรับเดือนหน้า
+Statistics that have been recalculated, 1 error pattern, and 1 rule for next month.

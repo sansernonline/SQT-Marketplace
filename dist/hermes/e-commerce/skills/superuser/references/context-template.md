@@ -1,28 +1,28 @@
-# แม่แบบไฟล์กลาง — e-commerce
+# Context file template — e-commerce
 
-หัวหน้าทีมใช้แม่แบบนี้ตอนสร้างไฟล์ครั้งแรก กติกาการเขียนอยู่ในหัวข้อ 9 ของ `superuser`
+The team lead uses this template when it first creates the file. The writing rules are in section 9 of `superuser`.
 
-## ค่าของ plugin นี้
+## Values for this plugin
 
-ใส่แทนช่องว่างในแม่แบบด้านล่าง
+Fill these in place of the blanks in the template below.
 
-**งานฝั่งขาย**
-- ชื่องาน: ร้านเสื้อผ้าออนไลน์
-- งานนี้คืออะไร: ขายอะไร บนแพลตฟอร์มไหน ประเภทร้าน
-- กติกา: ไฟล์สต็อกหลักอยู่ที่ไหน · margin เป้า · น้ำเสียงของร้าน
-- ตัวอย่างแถว IMPROVEMENTS: แพลตฟอร์มหนึ่งเพิ่มค่าธรรมเนียมโครงการส่งฟรีในบางหมวด · หลักฐาน: หน้าประกาศของแพลตฟอร์ม + Seller Centre · ไปรวมที่ `marketplace-fees-pricing` references/fee-structures.md
+**Sales work**
+- Job name: online clothing shop
+- What the job is: what is sold, on which platform, shop type
+- Rules (`กติกา`): where the main stock file is · target margin · the shop's tone of voice
+- Example IMPROVEMENTS row: a platform added a fee for its free-shipping program in some categories · evidence: the platform's announcement page + Seller Centre · merge into `marketplace-fees-pricing` references/fee-structures.md
 
-**งานฝั่งซื้อ**
-- ชื่องาน: ร้องเรียน ตู้เย็นเสีย
-- งานนี้คืออะไร: เรื่องอะไร กับร้านไหน ต้องการอะไร อยู่ขั้นไหน
-- กติกา: วันหมดเขตของสิทธิ์ · ช่องทางที่ใช้แล้ว · หลักฐานเก็บที่ไหน
-- ตัวอย่างแถว IMPROVEMENTS: แพลตฟอร์มย้ายปุ่มเปิดข้อพิพาทไปอยู่ในหน้ารายละเอียดคำสั่งซื้อ · หลักฐาน: หน้าช่วยเหลือแพลตฟอร์ม + ทดลองในแอป · ไปรวมที่ `refund-request`
+**Buying work**
+- Job name: complaint, broken refrigerator
+- What the job is: what happened, with which shop, what is wanted, which step it is at
+- Rules (`กติกา`): deadline of the right · channels already used · where the evidence is kept
+- Example IMPROVEMENTS row: a platform moved the dispute button into the order detail page · evidence: the platform's help page + a trial in the app · merge into `refund-request`
 
-**งานหลังบ้าน (ภาษี เงินเดือน PDPA LINE OA)**
-- ชื่องาน: หลังบ้าน บริษัท ตัวอย่าง จำกัด
-- งานนี้คืออะไร: บริษัทอะไร จด VAT ไหม พนักงานกี่คน รอบบัญชี
-- กติกา: ไฟล์เงินเดือนอยู่ที่ไหน · นักบัญชีและผู้สอบบัญชีคือใคร · ค่าลับ LINE อยู่ในไฟล์ไหน (ห้ามเปิดดู)
-- ตัวอย่างแถว IMPROVEMENTS: ระบบยื่นแบบออนไลน์ย้ายเมนูหักภาษี ณ ที่จ่ายไปอยู่ใน e-WHT · หลักฐาน: เว็บกรมสรรพากร + 2 แหล่ง · ไปรวมที่ `tax-vat-th`
+**Back-office work (tax, payroll, PDPA, LINE OA)**
+- Job name: back office, Example Co., Ltd.
+- What the job is: which company, VAT registered or not, how many employees, accounting period
+- Rules (`กติกา`): where the payroll file is · who the accountant and auditor are · which file holds the LINE secrets (do not open it)
+- Example IMPROVEMENTS row: the online filing system moved the withholding tax menu into e-WHT · evidence: Revenue Department website + 2 sources · merge into `tax-vat-th`
 
 <!-- superuser:begin context -->
 ## CONTEXT.md

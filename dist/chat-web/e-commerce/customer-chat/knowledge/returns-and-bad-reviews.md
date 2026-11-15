@@ -92,9 +92,9 @@ Low-review replies still follow the rules above; the monthly review never offers
 
 # Public review reply templates (Thai)
 
-Short is better — คง ขอโทษ / ขอบคุณ / นะคะ ไว้ ตัดเฉพาะข้อเท็จจริงที่ซ้ำ. Fill `<...>`; never include order details or personal data.
+Short is better — keep ขอโทษ / ขอบคุณ / นะคะ, and cut only repeated facts. Fill `<...>`; never include order details or personal data.
 
-ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ แชตร้าน
+Thai text → `human-writing` `references/thai-grammar.md` section 4, the shop-chat register
 
 ## Product defect (1–2 stars)
 > ขอโทษคุณลูกค้าจริง ๆ ค่ะที่ได้รับสินค้า<ปัญหา> ร้านทักแชทไป <เปลี่ยนสินค้าใหม่/คืนเงิน> ให้แล้วนะคะ และส่งล็อตนี้ตรวจเพิ่มแล้วค่ะ ขอบคุณที่แจ้งให้ร้านทราบค่ะ

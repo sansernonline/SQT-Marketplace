@@ -1,16 +1,16 @@
-# กับดักของ shell บน Windows
+# Shell traps on Windows
 
-เปิดเมื่อทำงานบนเครื่อง Windows ผ่าน Git Bash หรือ PowerShell · ทุกข้อเกิดจริงใน repo SQT-Marketplace ระหว่าง 2026-10-23 ถึง 25 · เขียนเป็นไฟล์อ้างอิงก่อน ถ้าเกิดซ้ำอีกจึงยกเป็น skill
+Open it when working on a Windows machine through Git Bash or PowerShell · every item happened in the SQT-Marketplace repo between 2026-10-23 and 25 · kept as a reference file first; if it happens again, promote it to a skill.
 
-| อาการ | เกิดจาก | ทำแบบนี้แทน |
+| Symptom | Cause | Do this instead |
 |---|---|---|
-| ลบโฟลเดอร์ที่ผู้ใช้สั่งเก็บไปหมด (2026-10-25) | `ls` ในเครื่องถูกตั้ง alias เป็น `ls -F` ชื่อโฟลเดอร์จึงมี `/` ต่อท้าย รายการเก็บที่เขียนด้วย regex ไม่ตรงสักชื่อ แล้ว `rm -rf` ลบทุกตัว · `rm` ใน Git Bash ไม่ผ่านถังขยะ | ทำรายการด้วย `find <dir> -mindepth 1 -maxdepth 1 -printf '%f\n'` หรือ `\ls -1A` · พิมพ์รายการลบกับรายการเก็บออกมาเทียบก่อนรัน `rm` · ย้ายเข้า `_to_delete/` แทนการลบ |
-| pattern ใน JSON หรือ regex เพี้ยน `\\b` เหลือ `\b` (2026-10-23) | ส่งโค้ด Python ผ่าน heredoc ในเครื่องมือ Bash แล้วตัว escape ถูกตีความซ้ำ | แก้ไฟล์ด้วยเครื่องมือ Edit · หรือเขียนสคริปต์ลงไฟล์ก่อนแล้วค่อยรัน · ตรวจผลด้วยการอ่านค่าที่ได้จริง · `\r` ที่กลายเป็นตัว CR จริงใน .md ตัวตรวจของ SQT-Marketplace จับได้แล้ว (2026-10-25) แต่ `\b` ที่หายยังจับไม่ได้ |
-| validator ล้มว่า "เอกสารไม่ตรงกับของจริง" ทั้งที่เนื้อหาตรง · zip ใน `dist/` เปลี่ยนทั้งที่ไม่ได้แก้ (2026-10-25) | worktree ใหม่ที่ `core.autocrlf=true` checkout ไฟล์เป็น CRLF แต่สคริปต์สร้างข้อความเป็น LF | สคริปต์ที่เทียบหรือสร้างไฟล์ต้องเปลี่ยน CRLF เป็น LF ก่อน (`sync-docs` · `writeZip` ทำแล้ว) · ไฟล์ที่ต้องเป็น CRLF ประกาศใน `.gitattributes` · ดูว่าต่างจริงไหมด้วย `git diff --ignore-cr-at-eol --stat` |
-| hook ของ plugin ไม่ทำงานเลยโดยไม่มี error (2026-10-25) | เช็กว่าเป็นไฟล์หลักด้วย `fileURLToPath(import.meta.url) === process.argv[1]` ซึ่งไม่ตรงกันบน Windows เมื่อเรียกผ่าน `${CLAUDE_PLUGIN_ROOT}/…` | เทียบแบบ `process.argv[1].replace(/\\/g, "/").endsWith("<ชื่อไฟล์>")` เหมือนใน `superuser-hook.mjs` · ทดสอบ hook ด้วยการเรียกผ่าน path จริงที่ Claude Code ใช้ |
+| Deleted every folder the user told you to keep (2026-10-25) | `ls` on the machine is aliased to `ls -F`, so folder names end with `/`. The keep list written as a regex matched no name, and then `rm -rf` deleted all of them · `rm` in Git Bash does not use the recycle bin | Build the list with `find <dir> -mindepth 1 -maxdepth 1 -printf '%f\n'` or `\ls -1A` · print the delete list and the keep list and compare them before running `rm` · move to `_to_delete/` instead of deleting |
+| A pattern in JSON or a regex is wrong: `\b` became `\b` (2026-10-23) | Python code was sent through a heredoc in the Bash tool, and the escapes were interpreted twice | Edit the file with the Edit tool · or write the script to a file first and then run it · check the result by reading the actual value · a `\r` that became a real CR character in a .md is now caught by the SQT-Marketplace checker (2026-10-25), but a lost `\b` is still not caught |
+| The validator fails with "documents do not match the real ones" though the content matches · the zip in `dist/` changes though nothing was edited (2026-10-25) | A new worktree with `core.autocrlf=true` checks files out as CRLF, but the scripts build text with LF | Scripts that compare or build files must convert CRLF to LF first (`sync-docs` · `writeZip` already do) · files that must be CRLF are declared in `.gitattributes` · check whether they really differ with `git diff --ignore-cr-at-eol --stat` |
+| A plugin hook does nothing, with no error (2026-10-25) | It checks it is the main file with `fileURLToPath(import.meta.url) === process.argv[1]`, which does not match on Windows when called through `${CLAUDE_PLUGIN_ROOT}/…` | Compare with `process.argv[1].replace(/\/g, "/").endsWith("<file name>")` as in `superuser-hook.mjs` · test the hook by calling it through the real path Claude Code uses |
 
-## ข้อเล็กที่ควรรู้
+## Small things worth knowing
 
-- คำสั่ง `perl -i` หรือ `sed -i` บนไฟล์ CRLF: regex ที่ยึดท้ายบรรทัดด้วย `$` ต้องเผื่อ `\r` (`(\r?)$`) ไม่งั้นแก้ไม่ติดโดยไม่ฟ้อง
-- `cd` ใน Bash ไม่ข้ามคำสั่ง · ใช้ path เต็มที่ใส่เครื่องหมายคำพูด เพราะชื่อโฟลเดอร์มักมีช่องว่างและ `&`
-- สคริปต์ `.cmd` ที่จบด้วย `pause` จะรอปุ่มกด · รันจาก agent ให้ส่ง stdin ว่าง (`< /dev/null`) และเก็บผลลงไฟล์แล้วดูท้ายไฟล์
+- `perl -i` or `sed -i` on a CRLF file: a regex anchored to the line end with `$` must allow for `\r` (`(\r?)$`), or the edit silently does not apply
+- `cd` in Bash does not carry across commands · use a full quoted path, because folder names often contain spaces and `&`
+- A `.cmd` script that ends with `pause` waits for a key · when running it from an agent, pass empty stdin (`< /dev/null`), save the output to a file, and read the end of the file

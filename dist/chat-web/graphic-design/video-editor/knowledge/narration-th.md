@@ -2,100 +2,100 @@
 
 Use when Thai narration must come from text-to-speech
 
-# narration-th — เสียงบรรยายไทยจากสคริปต์ (text-to-speech)
+# narration-th — Thai narration from a script (text-to-speech)
 
-อยู่ใน plugin `graphic-design` · ถ้อยคำเขียนตาม `human-writing` · agent ที่ทำงานนี้คือ `video-editor` · ตัด ต่อ ปรับความดัง และต่อสไลด์กับเสียงอยู่ใน `video-editing`
+Lives in plugin `graphic-design` · write wording per `human-writing` · the agent that does this job is `video-editor` · cutting, joining, adjusting loudness, and pairing slides with audio are in `video-editing`
 
-> **กฎข้อเดียว:** ฟังครบทุกซับก่อนบอกว่าเสร็จ และเสียงต้นแบบที่ใช้เลียนต้องเป็นเสียงของผู้ใช้เอง หรือเจ้าของเสียงยินยอมเป็นหนังสือ
+> **One rule:** listen to every subtitle cue before saying done, and the reference voice used for cloning must be the user's own voice, or the voice owner must have consented in writing
 
-## ใช้เมื่อ
+## Use when
 
-- ไม่อยากอัดเสียงเอง: สร้างเสียงบรรยายไทยจากสคริปต์ทีละซับ ได้ซับและเวลาสไลด์ในรอบเดียว
+- The user does not want to record audio: generate Thai narration from the script, one cue at a time, and get subtitles and slide timing in one round
 
-## ไม่ใช้เมื่อ (ใช้ตัวอื่นแทนหรือคู่กัน)
+## Do not use when (use something else instead or together)
 
-| งาน | ใช้ |
+| Job | Use |
 |---|---|
-| เขียนสคริปต์ให้ฟังเป็นภาษาพูดก่อนทำเสียง | `speaking-script` |
-| เลียนเสียงคนดังหรือคนที่ไม่ได้ยินยอม | ไม่ทำ บอกผู้ใช้ว่าทำไม่ได้ |
-| ตัด ต่อ ปรับความดัง หรือต่อสไลด์กับเสียงเป็นวิดีโอ | `video-editing` |
-| ซับไทย (ถอดเสียง · ตรวจ · ฝัง) | `subtitles-th` |
+| Write the script in spoken language before making the audio | `speaking-script` |
+| Clone the voice of a famous person or someone who has not consented | Do not do it, tell the user why it cannot be done |
+| Cut, join, adjust loudness, or pair slides with audio into a video | `video-editing` |
+| Thai subtitles (transcribe · check · burn in) | `subtitles-th` |
 
-## ขั้นตอน
+## Steps
 
-สร้างเสียงทีละซับจากสคริปต์ ซับจึงได้ข้อความจากสคริปต์และเวลาจากเสียงจริง ไม่ต้องถอดเสียง · เขียนสคริปต์ตาม `speaking-script` ก่อน
+Generate audio one cue at a time from the script, so each subtitle gets its text from the script and its timing from the real audio, with no transcription needed · write the script per `speaking-script` first
 
-**เลือกเครื่องสร้างเสียง**
+**Choose the voice engine**
 
-| เครื่อง | ใช้ทำ | ค่าใช้จ่ายและสิทธิ์ | ที่เจอจริงบนเครื่องทดสอบ (2026-10-24) |
+| Engine | Use for | Cost and rights | What was actually found on the test machine (2026-10-24) |
 |---|---|---|---|
-| F5-TTS-THAI `--engine f5` | เสียงตัวจริงที่เลียนเสียงผู้ใช้จากคลิปต้นแบบ 5–10 วินาที | ฟรี รันในเครื่อง ข้อความไม่ออกนอกเครื่อง · โค้ด MIT · การ์ดโมเดลไทยเขียน CC-BY-4.0 แต่โมเดลฐาน F5-TTS เป็น CC-BY-NC (รอยืนยัน) จะใช้กับคลิปหารายได้ต้องตรวจสัญญาก่อน | ต้องมีการ์ดจอ NVIDIA จึงใช้งานจริงได้ · บน CPU (หน่วยประมวลผลกลาง · Core Ultra 7 258V) เสียง 8.4 วินาทีใช้ 198.8 วินาทีที่ NFE 16 (NFE คือจำนวนรอบที่โมเดลเกลาเสียง ยิ่งน้อยยิ่งเร็ว) · NFE 7 ใช้ราว 13.5 วินาทีต่อซับ (วัด 1 ซับ · คุณภาพยังไม่ได้ฟังเทียบ) · รันข้อความยาวบน CPU จนหน่วยความจำเกือบหมด |
-| edge-tts `--engine edge` | งานภายในและร่างที่อยากได้เสียงดี | ฟรี ไม่ต้องมีบัญชี · เรียกปลายทางอ่านออกเสียงของ Edge ด้วย token ที่ฝังในแพ็กเกจ ไม่ใช่ API ที่มีสัญญาสำหรับนักพัฒนา (อนุมานจากโค้ดของ edge-tts) จึงไม่ใช้กับคลิปหารายได้ · ข้อความออกนอกเครื่อง | เสียง th-TH-PremwadeeNeural และ th-TH-NiwatNeural · บริการตอบว่าไม่มีเสียงเป็นพัก ๆ ข้อความเดิมลองใหม่แล้วผ่าน สคริปต์จึงลองให้ 3 ครั้ง · อ่านศัพท์อังกฤษที่เขียนเป็นไทยได้ดี ความเร็วที่ผู้ใช้ฟังแล้วเลือกคือ Niwat +0% และ Premwadee −2% (+10%/+8% เร็วไป · 2026-11-09) |
-| เสียงที่มากับ Windows เช่น Pattara `--engine windows` | ร่างเพื่อจับเวลาและตรวจซับ | ฟรี รันในเครื่อง · สัญญาอนุญาตของ Windows (`license.rtf` ในเครื่อง ปรับปรุง April 2024) ไม่พูดถึงการเผยแพร่เสียงที่สร้าง (รอยืนยัน) | 9 ซับสร้างใน 0.9–9.1 วินาที (รอบแรกที่ PowerShell ยังไม่ได้โหลดช้ากว่า) · System.Speech มองไม่เห็นเสียงนี้ ต้องเรียกผ่าน WinRT (Windows Runtime API) |
-| Azure AI Speech แบบจ่าย · Google Cloud TTS | คลิปหารายได้ที่ต้องสิทธิ์ชัด | Product Terms ให้สิทธิ์ใช้เสียงที่สร้างรวมถึงเชิงพาณิชย์ "For Customers of the paid tier TTS Service only" (รอยืนยัน · คำตอบในฟอรัม Microsoft Q&A ขัดกัน) · Google Chirp 3 HD มีเสียงไทย (th-TH) · ทั้งคู่ต้องมีบัญชีและคีย์ · ราคาและโควตาฟรีเปลี่ยนบ่อย จึงไม่เก็บตัวเลขไว้ที่นี่ (ดูบรรทัดล่างตาราง) | ยังไม่มีในสคริปต์ เพิ่มเมื่อผู้ใช้มีคีย์ |
-| Lunarlist ผ่าน PyThaiTTS 0.8.0 | ไม่ใช้ | ฟรี · MIT | อ่านอักษรละตินไม่ได้ (Git · commit ถูกข้าม) · บางวลีพูดไม่หยุด วลี 3 วินาทีออกมา 58 วินาที |
+| F5-TTS-THAI `--engine f5` | A real-sounding voice that clones the user's voice from a 5–10 second reference clip | Free, runs locally, text does not leave the machine · code is MIT · the Thai model card says CC-BY-4.0 but the base model F5-TTS is CC-BY-NC (รอยืนยัน), so check the terms before using it for monetized clips | Needs an NVIDIA graphics card to be usable in practice · on CPU (central processing unit · Core Ultra 7 258V) 8.4 seconds of audio took 198.8 seconds at NFE 16 (NFE is the number of rounds the model refines the sound, fewer is faster) · NFE 7 took about 13.5 seconds per cue (1 cue measured · quality not yet compared by ear) · running long text on CPU nearly exhausted memory |
+| edge-tts `--engine edge` | Internal work and drafts that should sound good | Free, no account needed · calls Edge's read-aloud endpoint with a token embedded in the package, not an API with a developer contract (inferred from edge-tts's code), so do not use it for monetized clips · text leaves the machine | Voices th-TH-PremwadeeNeural and th-TH-NiwatNeural · the service sometimes answers that there is no audio, and the same text passes on retry, so the script retries 3 times · reads English terms written in Thai well · the speeds the user listened to and chose are Niwat +0% and Premwadee −2% (+10%/+8% were too fast · 2026-11-09) |
+| Voices that ship with Windows, such as Pattara `--engine windows` | Drafts to time and check subtitles | Free, runs locally · the Windows license (`license.rtf` on the machine, updated April 2024) does not mention distributing generated audio (รอยืนยัน) | 9 cues generated in 0.9–9.1 seconds (the first run, before PowerShell was loaded, was slower) · System.Speech cannot see this voice, it must be called through WinRT (Windows Runtime API) |
+| Paid Azure AI Speech · Google Cloud TTS | Monetized clips that need clear rights | Product Terms grant the right to use generated audio including commercially "For Customers of the paid tier TTS Service only" (รอยืนยัน · answers in the Microsoft Q&A forum conflict) · Google Chirp 3 HD has a Thai voice (th-TH) · both need an account and key · prices and free quotas change often, so no figures are kept here (see the line below the table) | Not in the script yet, add it when the user has a key |
+| Lunarlist via PyThaiTTS 0.8.0 | Do not use | Free · MIT | Cannot read Latin letters (Git · commit are skipped) · some phrases never stop, a 3-second phrase came out as 58 seconds |
 
 Look up live: the Azure AI Speech and Google Cloud TTS price per million characters and Google's free monthly quota at https://cloud.google.com/text-to-speech/pricing and the Azure pricing page. Look it up live (WebSearch/WebFetch) before using it; if the page will not open, mark the value (รอยืนยัน).
 
-**เมื่อเลือกเครื่องสำหรับคลิปหารายได้** ใช้กฎเหล็ก "สิทธิ์เชิงพาณิชย์ชัด" ตัดเครื่องที่ตารางบอก (รอยืนยัน) หรือไม่พูดถึงออกก่อน แล้วค่อยเทียบต้นทุนกับขั้นติดตั้ง: `node <decision-scoring>/scripts/decide.mjs score ไฟล์.json` (`<decision-scoring>` คือโฟลเดอร์ skill `superuser:decision-scoring`) · ตัวอย่าง [`references/tts-engine-score.example.json`](references/tts-engine-score.example.json) (ตัวเลขทั้งหมดเป็นตัวอย่าง รวมต้นทุน Azure ในไฟล์ ซึ่งไม่ใช่ราคาปัจจุบัน · รันผ่าน 2026-10-28: ตัดทิ้ง 2 เหลือ 2 อันดับ 1 นิ่งเมื่อขยับน้ำหนัก ±20%) · งานภายในหรือร่างไม่ต้องใช้กฎนี้ · น้ำหนัก 0.5/0.5 เป็นค่าตั้งต้น ยังไม่ได้วัด
+**When choosing an engine for a monetized clip,** apply the hard rule "clear commercial rights": first drop engines the table marks (รอยืนยัน) or does not mention, then compare cost against setup effort: `node <decision-scoring>/scripts/decide.mjs score file.json` (`<decision-scoring>` is the folder of skill `superuser:decision-scoring`) · example [`references/tts-engine-score.example.json`](references/tts-engine-score.example.json) (all numbers are examples, including the Azure cost in the file, which is not a current price · ran fine 2026-10-28: dropped 2, left 2, rank 1 stayed stable when weights moved ±20%) · internal work or drafts do not need this rule · weights of 0.5/0.5 are a starting value, not measured
 
-0. **สคริปต์ podcast เขียนแบบนี้ (ไม่ใช้ hook และ CTA ของ `speaking-script`)** ผู้ฟังมาเอาเนื้อหา ไม่ใช่เอาการต้อนรับ
-   - ประโยคแรกเข้าเนื้อหาเลย ไม่ทักทาย ไม่แนะนำตัวหรือรายการ ไม่บอกว่าตอนนี้พูดเรื่องอะไร
-   - ไม่คุยกับผู้ฟัง: ไม่ถามกลับ ไม่ชวนติดตามหรือคอมเมนต์ ไม่ลาตอนจบ ปิดด้วยประโยคเนื้อหาสุดท้าย
-   - ประโยคละ 1 ใจความ ตัดคำขยาย คำเชื่อมซ้ำ และการพูดวนซ้ำสิ่งที่เพิ่งพูด · ข้อมูลเดียวพูดครั้งเดียว
-   - **1 บรรทัดในไฟล์ = 1 ประโยคจบ** อย่าหั่นประโยคกลางคำด้วย `|` เพราะแต่ละบรรทัดคือการอ่าน 1 รอบ เสียงจะตกและหยุดทุกรอบ · podcast ไม่มีซับบนจอ จึงข้ามข้อจำกัด 35 ตัวต่อบรรทัดได้ แล้วใช้ `--gap 0.15`
-   - ไม่เว้นวรรคกลางประโยค (เว้นได้เฉพาะระหว่างประโยคที่ขึ้นบรรทัดใหม่) เพราะช่องว่างคือจุดที่เครื่องหยุดหายใจ · `tts_cues.py` ตัดช่องว่างระหว่างอักษรไทยให้เองก่อนส่งเครื่องอ่านแล้ว แต่ซับยังแสดงข้อความตามที่เขียน
-   - ตัวเลขเขียนเป็นเลขอารบิกได้ (ปี 2569 · 1,250,000 · 3.5) `tts_cues.py` แปลงเป็นคำไทยทั้งก้อนให้ · ปีอ่านเป็นจำนวนเต็ม (สองพันห้าร้อยหกสิบเก้า) ไม่แยกครึ่ง · เลขที่ขึ้นต้นด้วย 0 อ่านทีละตัว · เลขติดอักษรละติน (ESP32) ไม่แตะ ใช้ `words.tsv`
-1. **แบ่งสคริปต์เป็นซับ** เขียนตาม `speaking-script` แล้วให้ 1 บรรทัดเป็น 1 ซับ บรรทัดหนึ่งไม่เกิน 35 ตัว ใช้ `|` แบ่งเป็น 2 บรรทัด · ใส่ `[สไลด์ n]` ก่อนบรรทัดที่สไลด์เปลี่ยน · บรรทัดที่ขึ้นต้นด้วย `#` เป็นหมายเหตุ เครื่องไม่อ่าน
-2. **ทำไฟล์คำอ่าน** `words.tsv` บรรทัดละ `คำ<TAB>คำอ่าน` สำหรับคำอังกฤษ ชื่อเฉพาะ และตัวย่อ เช่น `Git<TAB>กิต` · เครื่องอ่านตามคำอ่าน แต่ซับยังแสดงคำเดิม · คำอังกฤษจับโดยไม่สนตัวพิมพ์เล็กใหญ่ · บรรทัดที่ขึ้นต้นด้วย `#` และแถวหัวตาราง (`คำ` หรือ `word`) ถูกข้าม · ตัวเลข: `tts_cues.py` แปลงเลขอารบิกเป็นคำไทยให้ทุกเครื่อง (ปี จำนวนเต็ม ทศนิยม เบอร์ขึ้นต้น 0) ฟังตรวจในข้อ 5 · ตัวที่อ่านได้หลายแบบแต่ไม่ใช่แบบนี้ (เช่น 2569 ที่อยากให้อ่านแยกเป็น "ยี่สิบห้า หกสิบเก้า") เขียนเป็นคำในสคริปต์
-   - **คำอ่านถูกแต่เสียงอ่านเพี้ยน** ใส่ใน `respell.tsv` บรรทัดละ `คำอ่าน<TAB>คำที่สะกดให้หูได้ยินถูก` เช่น `คอนโทรลเลอร์<TAB>คอนโทรเล่อ` · `ซิงเกิลบอร์ด<TAB>ซิงเกิ้ลบอร์ด` (ไม้เอก ไม้โท และการเว้นวรรคช่วยให้ลงน้ำหนักและเว้นจังหวะถูก) · แยกจาก `words.tsv` เพราะคำอ่านใช้กับทุกเครื่อง ส่วนการสะกดใหม่ใช้เฉพาะกับเสียงที่ฟังแล้วพบว่าเพี้ยน
-   - **ฟังศัพท์ทุกคำก่อนสร้างทั้งตอน** (edge) `python scripts/term_sample.py --lexicon words.tsv --respell respell.tsv --script ep01.txt -o terms` ได้ `term-sample-male.mp3` กับ `term-sample-female.mp3` อ่านทีละคำแบบ "1, คอนโทรเล่อ" และ `term-sample-list.md` ที่จับคู่เลขกับคำ · ผู้ใช้บอกเลขคำที่เพี้ยน แก้ใน `respell.tsv` แล้วรันซ้ำ สร้างใหม่เฉพาะคำที่เปลี่ยน · ฟังคำ 300 คำใช้ราว 20 นาที เร็วกว่าฟังทั้งตอนแล้วหาคำผิด
-3. **ทำร่างด้วยเสียง Windows ก่อน** `python scripts/tts_cues.py ep01.txt -o draft --engine windows --lexicon words.tsv` ดูความยาวรวมกับเวลาสไลด์ แล้วรัน `srt_check.py` ของ `subtitles-th` กับ `draft/narration.srt` แก้สคริปต์จนผ่าน
-4. **สร้างเสียงตัวจริง**
+0. **Write a podcast script this way (no hook and CTA from `speaking-script`).** Listeners come for the content, not for a welcome
+   - The first sentence goes straight into the content: no greeting, no introducing yourself or the show, no saying what this episode is about
+   - Do not talk to the listener: no questions back, no invitation to follow or comment, no sign-off · close with a final content sentence
+   - 1 idea per sentence · cut modifiers, repeated connectors, and going back over what was just said · say each piece of information once
+   - **1 line in the file = 1 complete sentence.** Do not chop a sentence mid-phrase with `|`, because each line is one reading pass and the voice falls and pauses every time · a podcast has no on-screen subtitles, so it may skip the 35-characters-per-line limit, and use `--gap 0.15`
+   - No spaces inside a sentence (spaces are allowed only between sentences on new lines), because a space is where the engine pauses to breathe · `tts_cues.py` already strips spaces between Thai letters before sending to the engine, but the subtitle still shows the text as written
+   - Numbers may be written as Arabic digits (year 2569 · 1,250,000 · 3.5), and `tts_cues.py` converts the whole number to Thai words · a year is read as a whole number (สองพันห้าร้อยหกสิบเก้า), not split in half · a number starting with 0 is read digit by digit · a number attached to Latin letters (ESP32) is left alone, use `words.tsv`
+1. **Split the script into cues.** Write per `speaking-script`, then make 1 line = 1 cue, at most 35 characters per line, using `|` to split into 2 lines · put `[สไลด์ n]` (slide n) before the line where the slide changes · a line starting with `#` is a note the engine does not read
+2. **Make the pronunciation file** `words.tsv`, one line per `word<TAB>reading` (`คำ<TAB>คำอ่าน`), for English words, proper names, and abbreviations, such as `Git<TAB>กิต` · the engine reads by the reading, but the subtitle still shows the original word · English words match regardless of case · lines starting with `#` and the header row (`คำ` or `word`) are skipped · numbers: `tts_cues.py` converts Arabic digits to Thai words for every engine (years, whole numbers, decimals, numbers starting with 0), and you check by ear in step 5 · a number that can be read several ways but not this way (for example 2569 that you want read split as "ยี่สิบห้า หกสิบเก้า") is written out as words in the script
+   - **The reading is right but the audio reads it wrong:** put it in `respell.tsv`, one line per `reading<TAB>spelling that sounds right to the ear` (`คำอ่าน<TAB>คำที่สะกดให้หูได้ยินถูก`), such as `คอนโทรลเลอร์<TAB>คอนโทรเล่อ` · `ซิงเกิลบอร์ด<TAB>ซิงเกิ้ลบอร์ด` (tone marks and spacing help place stress and pauses correctly) · kept apart from `words.tsv` because readings apply to every engine, while respelling applies only to a voice that was heard to be wrong
+   - **Listen to every term before generating the whole episode** (edge) `python scripts/term_sample.py --lexicon words.tsv --respell respell.tsv --script ep01.txt -o terms` gives `term-sample-male.mp3` and `term-sample-female.mp3`, read one term at a time like "1, คอนโทรเล่อ", and `term-sample-list.md` that pairs numbers with terms · the user says the numbers of the wrong terms, you fix them in `respell.tsv` and rerun, regenerating only the changed terms · listening to 300 terms takes about 20 minutes, faster than listening to a whole episode hunting for wrong words
+3. **Make a draft with the Windows voice first.** `python scripts/tts_cues.py ep01.txt -o draft --engine windows --lexicon words.tsv` · look at the total length against the slide timing, then run `srt_check.py` of `subtitles-th` on `draft/narration.srt` and fix the script until it passes
+4. **Generate the real voice**
    - F5: `python scripts/tts_cues.py ep01.txt -o final --engine f5 --lexicon words.tsv --f5-python <F5>/venv/Scripts/python.exe --f5-root <F5> --ref me.wav --ref-text "ข้อความที่พูดใน me.wav ตรงทุกคำ"`
-   - `--ref` เป็นคลิปเสียงของผู้ใช้ยาว 5–10 วินาที ไม่มีเสียงรบกวน · `--nfe` ค่าตั้งต้น 32 ลดได้ถึง 7 ถ้าอยากได้เร็ว ซึ่งหน้าเว็บของ F5-TTS-THAI บอกว่าเสียงยังพอฟังได้
-   - edge: `--engine edge --voice th-TH-PremwadeeNeural --rate=-2% --respell respell.tsv` (Niwat ใช้ `--rate=+0%`) ต้องติดตั้ง `edge-tts` ใน venv ของงานก่อน (`python -m pip install edge-tts`)
-   - งานล้มกลางทางแล้วรันซ้ำได้ เสียงที่สร้างเสร็จเก็บใน `final/cues/` สคริปต์สร้างใหม่เฉพาะซับที่ข้อความหรือค่าตั้งเปลี่ยน
-5. **ฟังทุกซับ** จดคำที่อ่านผิด แก้ใน `words.tsv` หรือในสคริปต์ แล้วรันคำสั่งเดิมซ้ำ
-6. **ตรวจแล้วต่อ** `srt_check.py final/narration.srt` ต้องผ่าน · ความยาวของ `narration.wav` ต้องเท่ากับ `total` ใน `cues.json` · ปรับความดังตาม `video-editing` ขั้นตอนข้อ 5 (Apple Podcasts -16 LUFS) · คัด `data_at` ของแต่ละสไลด์จาก `cues.json` ใส่เด็ค แล้วทำต่อตาม `video-editing` หัวข้อสไลด์กับเสียงบรรยาย
-7. **บอกผู้ฟัง** ใน show notes หรือคำอธิบายคลิปว่าเสียงบรรยายสร้างด้วย AI (Code of Conduct for Microsoft AI Services ข้อ 3 บังคับกับ Azure · ใช้กับทุกเครื่องเพื่อความโปร่งใส)
+   - `--ref` is a 5–10 second clip of the user's voice with no noise · `--nfe` defaults to 32 and can drop as low as 7 for speed, which the F5-TTS-THAI web page says still sounds acceptable
+   - edge: `--engine edge --voice th-TH-PremwadeeNeural --rate=-2% --respell respell.tsv` (Niwat uses `--rate=+0%`) · `edge-tts` must be installed in the job's venv first (`python -m pip install edge-tts`)
+   - If the job fails midway, you can rerun · finished audio is kept in `final/cues/`, and the script regenerates only cues whose text or settings changed
+5. **Listen to every cue.** Note words read wrongly, fix them in `words.tsv` or in the script, then rerun the same command
+6. **Check, then continue.** `srt_check.py final/narration.srt` must pass · the length of `narration.wav` must equal `total` in `cues.json` · adjust loudness per `video-editing` Steps item 5 (Apple Podcasts -16 LUFS) · copy each slide's `data_at` from `cues.json` into the deck, then continue per `video-editing` section "สไลด์กับเสียงบรรยาย" (slides with narration)
+7. **Tell the listeners** in the show notes or clip description that the narration was made with AI (Code of Conduct for Microsoft AI Services item 3 requires it for Azure · apply it to every engine for transparency)
 
-| อาการ | สาเหตุ | แก้ |
+| Symptom | Cause | Fix |
 |---|---|---|
-| F5 ล้มพร้อมข้อความ `Could not load libtorchcodec` | torchaudio 2.9 ขึ้นไปอ่านไฟล์เสียงผ่าน torchcodec ซึ่งต้องมีไฟล์ไลบรารี (DLL) ของ FFmpeg รุ่น shared · ffmpeg.exe แบบไฟล์เดียวใช้ไม่ได้ | `f5_worker.py` อ่านไฟล์ด้วย soundfile แทนแล้ว · หน้าเว็บของ F5 ยังล้มอยู่ ต้องติดตั้ง FFmpeg รุ่น shared แล้วเพิ่มโฟลเดอร์ลงใน PATH (รายชื่อโฟลเดอร์ที่ Windows ใช้หาโปรแกรม) · ข้อนี้รออนุมัติ |
-| เครื่องช้ามากหรือหน่วยความจำเกือบหมดตอนรัน F5 | รันบน CPU | ทำตอนสั้นทีละตอน · NFE 16 · ย้ายไปเครื่องที่มีการ์ดจอ NVIDIA |
-| เสียง Windows ออกมาไฟล์เดียวแทนทุกซับ | `ConvertFrom-Json` ของ PowerShell 5.1 ส่ง array ออกมาเป็นก้อนเดียว | อย่าห่อผลด้วย `@()` (แก้แล้วใน `windows_tts.ps1`) |
-| คำอังกฤษหายหรืออ่านเพี้ยน | โมเดลไทยรู้จักอักษรไทยเป็นหลัก | ใส่คำอ่านใน `words.tsv` |
-| คำอ่านไทยถูกแล้วแต่เสียงอ่านแปลก | เสียงอ่านตามตัวสะกดไทย ไม่ใช่ตามหูคนพูด | สะกดใหม่ใน `respell.tsv` แล้วฟังซ้ำด้วย `term_sample.py` |
-| ผสมเสียงไทยกับเสียงอังกฤษในประโยคเดียว ฟังแล้วกระตุก | น้ำเสียงและจังหวะเปลี่ยนกลางประโยค | ให้เสียงไทยอ่านทั้งประโยค แล้วเขียนคำอังกฤษเป็นไทยใน `words.tsv` (ลองแบบผสม Niwat กับ Andrew และ Emma เมื่อ 2026-11-07 แล้ว podcast ตัวจริงใช้ไทยล้วน) |
-| ซับแสดงคำอ่านแทนคำเดิม | เขียนคำอ่านลงในสคริปต์ตรง ๆ | ย้ายไปใส่ใน `words.tsv` |
-| ซับสั้นอยู่บนจอไม่ถึง 5/6 วินาที (ราว 0.83 วินาที ค่าต่ำสุดในตาราง caption ของ `video-script-to-clip`) | ประโยคสั้นมาก เช่น "สวัสดีครับ" | สคริปต์ยืดเวลาซับให้อย่างน้อย 0.9 วินาทีแล้ว แต่ไม่ให้ทับซับถัดไป |
+| F5 fails with the message `Could not load libtorchcodec` | torchaudio 2.9 and later reads audio files through torchcodec, which needs the FFmpeg shared-build library files (DLLs) · a single-file ffmpeg.exe does not work | `f5_worker.py` now reads files with soundfile instead · the F5 web page still fails, and needs the FFmpeg shared build installed with its folder added to PATH (the list of folders Windows searches for programs) · this item awaits approval (รออนุมัติ) |
+| The machine is very slow or memory nearly runs out when running F5 | Running on CPU | Do short episodes one at a time · NFE 16 · move to a machine with an NVIDIA graphics card |
+| The Windows voice produces a single file instead of one per cue | PowerShell 5.1's `ConvertFrom-Json` returns the array as one lump | Do not wrap the result in `@()` (fixed in `windows_tts.ps1`) |
+| English words vanish or are read wrongly | The Thai model mainly knows Thai letters | Put readings in `words.tsv` |
+| The Thai reading is right but the audio sounds strange | The voice reads by Thai spelling, not by how a person says it | Respell in `respell.tsv`, then listen again with `term_sample.py` |
+| Mixing a Thai voice and an English voice in one sentence sounds jerky | Tone and rhythm change mid-sentence | Have the Thai voice read the whole sentence, and write English words as Thai in `words.tsv` (tried mixing Niwat with Andrew and Emma on 2026-11-07, and the real podcast used Thai only) |
+| The subtitle shows the reading instead of the original word | The reading was written straight into the script | Move it into `words.tsv` |
+| A short subtitle is on screen for less than 5/6 second (about 0.83 second, the lowest value in the caption table of `video-script-to-clip`) | A very short sentence such as "สวัสดีครับ" | The script already stretches cue time to at least 0.9 second, without overlapping the next cue |
 
-## ตัวอย่างจริง
+## Real example
 
-- **โจทย์ (เสียงบรรยายจากสคริปต์):** บทเรียน Git ตอนที่ 1 มี 9 ซับ 3 สไลด์ มีคำอังกฤษ ตัวเลข และวรรณยุกต์ซ้อน (ก๋วยเตี๋ยว)
-- **สิ่งที่ทำ:** รันด้วย 3 เครื่อง · เสียง Windows ใช้ `words.tsv` · edge ไม่ใช้ · F5 ทดสอบ 2 ซับที่ NFE 16 ด้วยคลิปต้นแบบที่มากับโปรแกรม · เอา `data_at` จาก `cues.json` ใส่เด็ค 3 แผ่นแล้วต่อด้วย `slides_to_video.py` · ฝังซับแล้วดึงภาพที่วินาทีที่ 12 กับ 28
-- **ผล** (ตรวจจริง 2026-10-24 · ffmpeg 9.0.2 บน Windows):
-  - เสียง Windows: 9 ซับใช้ 0.9 วินาที (รอบแรกหลังเปิดเครื่องช้าได้ถึง 9.1 วินาที) · ยาวรวม 32.21 วินาที ffprobe วัดได้ตรงกัน · รันซ้ำแล้วใช้เสียงเดิมทั้ง 9 ซับ
-  - edge: ยาวรวม 28.73 วินาที · รอบแรกบริการไม่ส่งเสียงที่ซับ 5 รอบสองใช้เสียง 4 ซับเดิมแล้วสร้างต่อจนครบ
-  - F5: ซับละ 35–42 วินาที ได้เสียงพูด 5.38 วินาที · ทีละซับเร็วกว่าท่อนยาว 8.4 วินาทีที่ใช้ 198.8 วินาทีราว 1.6 เท่า (เทียบเฉพาะเสียงพูด) · อ่าน "ง่าย ๆ" เป็น "ง่ายง่าย"
-  - ทุกเครื่อง `srt_check.py` ผ่าน · วิดีโอยาว 32.21 วินาทีเท่าเสียง · ซับวางวรรณยุกต์ตรงตำแหน่ง และแสดง "commit" ตามสคริปต์ขณะที่เสียงอ่าน "คอมมิต"
-- **รอบทดสอบกับ agent (haiku · 2026-10-24 · โจทย์เสียง Windows):** ตัวที่ไม่มี skill เขียนสคริปต์เอง 232 บรรทัด สร้างทีละประโยค ผลผ่านเหมือนกัน (`srt_check.py` ผ่าน) แต่ใช้ 205k token 10.3 นาที · ตัวที่มี skill ใช้ 144k token 4.8 นาที (ตัวนับของการรัน agent ทั้ง 2 ตัว) ได้เสียง 32.66 วินาทีเท่ากับ `total` ใน `cues.json` · ที่วัดได้คือหัวข้อนี้ช่วยเรื่องเวลาและให้สคริปต์ที่ใช้ซ้ำได้ ไม่ได้ทำให้งานเสียง Windows ผ่านมากขึ้น · ส่วนเรื่อง F5 กับสิทธิ์ยังไม่ได้วัดกับ agent (อนุมาน) · ข้อที่ agent บอกว่าไม่ชัด (5/6 วินาที · ตัวเลขของเสียง Windows) แก้แล้ว · ผู้ใช้จึงเลือกรวมเป็นหัวข้อใน `video-editing` แทน skill แยก (2026-10-24) แล้วเลือกแยกออกมาเป็น skill นี้เมื่อ 2026-10-28 เพราะ `video-editing` ยาวราว 42 KB
+- **Task (narration from a script):** Git lesson episode 1 has 9 cues and 3 slides, with English words, numbers, and stacked tone marks (ก๋วยเตี๋ยว)
+- **What was done:** ran with 3 engines · the Windows voice used `words.tsv` · edge did not · F5 was tested on 2 cues at NFE 16 with the reference clip that ships with the program · put `data_at` from `cues.json` into a 3-slide deck and joined with `slides_to_video.py` · burned in the subtitles and pulled frames at seconds 12 and 28
+- **Result** (verified 2026-10-24 · ffmpeg 9.0.2 on Windows):
+  - Windows voice: 9 cues took 0.9 second (the first run after boot could take up to 9.1 seconds) · total length 32.21 seconds, matching ffprobe · on rerun it reused the same audio for all 9 cues
+  - edge: total length 28.73 seconds · on the first run the service did not send audio for cue 5 · the second run reused the audio of 4 existing cues and generated the rest until complete
+  - F5: 35–42 seconds per cue for 5.38 seconds of speech · cue by cue was about 1.6 times faster than the long 8.4-second piece that took 198.8 seconds (comparing speech only) · read "ง่าย ๆ" as "ง่ายง่าย"
+  - Every engine passed `srt_check.py` · the video was 32.21 seconds, same as the audio · the subtitle placed tone marks correctly and showed "commit" as in the script while the voice read "คอมมิต"
+- **Agent test round (haiku · 2026-10-24 · Windows voice task):** the one without the skill wrote its own 232-line script and generated sentence by sentence · the result passed the same way (`srt_check.py` passed), but used 205k tokens and 10.3 minutes · the one with the skill used 144k tokens and 4.8 minutes (counters of the two agent runs) and got audio of 32.66 seconds, equal to `total` in `cues.json` · what was measured is that this section helps with time and gives a reusable script, and does not make the Windows voice job pass more often · F5 and rights were not measured with an agent (inferred) · the items the agent said were unclear (5/6 second · the Windows voice numbers) were fixed · so the user chose to merge it as a section in `video-editing` instead of a separate skill (2026-10-24), and then chose to split it out as this skill on 2026-10-28 because `video-editing` is about 42 KB long
 
-- **โจทย์ (ศัพท์ใน podcast):** podcast ทบทวนสอบวิชา IoT มีศัพท์อังกฤษ 338 คำ · ใช้ `words.tsv` 360 คำ และ `respell.tsv` 105 คำ ที่ได้จากการฟังทดสอบ · รัน `term_sample.py` (ต้นแบบจากงานนี้)
-- **ผล** (2026-11-09 · edge-tts): ได้ไฟล์ชาย 19 นาที 11 วินาที และหญิง 21 นาที 5 วินาที ที่ +0%/−2% · บริการไม่ส่งเสียง 3 จาก 676 คำ รันซ้ำแล้วครบ · รอบแรกที่หยุดกลางทางทิ้งไฟล์ว่างไว้ ทำให้รอบถัดไปข้ามคำนั้น จึงเขียนลง `.part` ก่อน แล้วค่อยเปลี่ยนชื่อเมื่อไฟล์ไม่ว่าง · ผู้ใช้ฟังแล้วบอกว่าเสียงอ่านศัพท์อังกฤษโอเค ขอแค่ช้าลง
+- **Task (terms in a podcast):** an IoT exam-review podcast with 338 English terms · used a 360-term `words.tsv` and a 105-term `respell.tsv` obtained from listening tests · ran `term_sample.py` (a prototype from this job)
+- **Result** (2026-11-09 · edge-tts): got a male file of 19 minutes 11 seconds and a female file of 21 minutes 5 seconds at +0%/−2% · the service sent no audio for 3 of 676 terms, and rerunning completed them · a first run that stopped midway left an empty file, which made the next run skip that term, so it now writes to `.part` first and renames once the file is non-empty · the user listened and said the English terms sounded fine, and only asked for it to be slower
 
-## ตรวจก่อนส่ง
+## Check before sending
 
-- [ ] เครื่องใหม่หรือแก้สคริปต์: `python -B scripts/tts_cues.py --self-test` และ `python -B scripts/term_sample.py --self-test` ผ่าน (term_sample ทดสอบ 2026-11-10) (ทดสอบ 2026-10-28 จากพาธใหม่หลังแยก skill · ffmpeg 9.0.2)
-- [ ] เสียงบรรยายจากสคริปต์: เสียงต้นแบบเป็นเสียงของผู้ใช้หรือมีหนังสือยินยอม · สิทธิ์ของเครื่องสร้างเสียงตรงกับการใช้ (ถ้าเป็นคลิปหารายได้ ใช้ Azure แบบจ่ายหรือ Google หรือตรวจสัญญาของ F5 ก่อน)
-- [ ] เสียงบรรยายจากสคริปต์: มีศัพท์อังกฤษ → ให้ผู้ใช้ฟังไฟล์จาก `term_sample.py` ก่อน · ฟังครบทุกซับ · `srt_check.py` ผ่าน · ความยาวไฟล์เสียงเท่ากับ `total` ใน `cues.json` · บอกผู้ฟังแล้วว่าเป็นเสียง AI
+- [ ] New machine or edited script: `python -B scripts/tts_cues.py --self-test` and `python -B scripts/term_sample.py --self-test` pass (term_sample tested 2026-11-10) (tested 2026-10-28 from the new path after the skill was split out · ffmpeg 9.0.2)
+- [ ] Narration from a script: the reference voice is the user's or there is a written consent · the engine's rights match the use (for a monetized clip, use paid Azure or Google, or check F5's terms first)
+- [ ] Narration from a script: with English terms → have the user listen to the files from `term_sample.py` first · listen to every cue · `srt_check.py` passes · the audio file's length equals `total` in `cues.json` · listeners have been told it is AI voice
 
-## ที่มา
+## Sources
 
-- F5-TTS-THAI: [VYNCX/F5-TTS-THAI](https://github.com/VYNCX/F5-TTS-THAI) (โค้ด MIT · `f5_tts_webui.py` ให้ค่า NFE และ cfg strength (น้ำหนักที่บังคับให้เสียงตามข้อความ) และคำแนะนำเรื่องคลิปต้นแบบกับคำอังกฤษ · commit `7b0989f`) · โมเดล [VIZINTZOR/F5-TTS-THAI](https://huggingface.co/VIZINTZOR/F5-TTS-THAI) (การ์ด CC-BY-4.0) · โมเดลฐาน [SWivid/F5-TTS](https://github.com/SWivid/F5-TTS) (CC-BY-NC เพราะข้อมูลฝึก Emilia) (ดู 2026-10-24)
-- [rany2/edge-tts](https://github.com/rany2/edge-tts) (LGPL-3.0 · รุ่น 7.3.1 จาก PyPI · ดู 2026-10-24)
-- Google Cloud [Text-to-Speech pricing](https://cloud.google.com/text-to-speech/pricing) (ดูราคาสด) · [Chirp 3: HD](https://docs.cloud.google.com/text-to-speech/docs/chirp3-hd) (มี th-TH · หน้าอัปเดต 2026-10-22)
-- Azure AI Speech: [Microsoft Product Terms](https://www.microsoft.com/licensing/terms/productoffering/MicrosoftAzure/EAEAS) หมวด Text-to-Speech (TTS) Services ข้อสิทธิ์ใช้เสียงที่สร้าง และหน้าราคา (agent ค้นข้อมูลอ่านเมื่อ 2026-10-24 · รอยืนยัน) · [Code of Conduct for Microsoft AI Services](https://learn.microsoft.com/en-us/legal/ai-code-of-conduct) ข้อ 3 ให้บอกว่าเสียงเป็นเสียงสังเคราะห์ (ฉบับ 4.0 · 2026-05-01 · ตรวจ 2026-10-24)
-- Windows: สัญญาอนุญาตในเครื่อง `C:\Windows\System32\license.rtf` (ปรับปรุง April 2024 · agent ค้นข้อมูลอ่านเมื่อ 2026-10-24)
-- [pythainlp/pythaitts](https://github.com/pythainlp/pythaitts) 0.8.0 (Apache-2.0) · โมเดล Lunarlist ONNX (MIT) · ทดสอบ 2026-10-24
+- F5-TTS-THAI: [VYNCX/F5-TTS-THAI](https://github.com/VYNCX/F5-TTS-THAI) (code MIT · `f5_tts_webui.py` gives the NFE value and cfg strength (the weight that forces the voice to follow the text) and advice on the reference clip and English words · commit `7b0989f`) · model [VIZINTZOR/F5-TTS-THAI](https://huggingface.co/VIZINTZOR/F5-TTS-THAI) (card CC-BY-4.0) · base model [SWivid/F5-TTS](https://github.com/SWivid/F5-TTS) (CC-BY-NC because of the Emilia training data) (seen 2026-10-24)
+- [rany2/edge-tts](https://github.com/rany2/edge-tts) (LGPL-3.0 · version 7.3.1 from PyPI · seen 2026-10-24)
+- Google Cloud [Text-to-Speech pricing](https://cloud.google.com/text-to-speech/pricing) (look up the live price) · [Chirp 3: HD](https://docs.cloud.google.com/text-to-speech/docs/chirp3-hd) (has th-TH · page updated 2026-10-22)
+- Azure AI Speech: [Microsoft Product Terms](https://www.microsoft.com/licensing/terms/productoffering/MicrosoftAzure/EAEAS) section Text-to-Speech (TTS) Services, the clause on rights to use generated audio, and the pricing page (an agent searched and read them on 2026-10-24 · รอยืนยัน) · [Code of Conduct for Microsoft AI Services](https://learn.microsoft.com/en-us/legal/ai-code-of-conduct) item 3 requires disclosing that the voice is synthetic (version 4.0 · 2026-05-01 · checked 2026-10-24)
+- Windows: the on-machine license `C:\Windows\System32\license.rtf` (updated April 2024 · an agent searched and read it on 2026-10-24)
+- [pythainlp/pythaitts](https://github.com/pythainlp/pythaitts) 0.8.0 (Apache-2.0) · Lunarlist ONNX model (MIT) · tested 2026-10-24

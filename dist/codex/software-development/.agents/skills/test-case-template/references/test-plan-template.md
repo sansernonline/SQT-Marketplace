@@ -1,8 +1,8 @@
-# แม่แบบแผนทดสอบ (test plan)
+# Test plan template
 
-**สารบัญ:** แม่แบบเต็ม 1 บล็อก: Objective · Scope · Test Approach · Entry & Exit Criteria · Test Environment · Schedule · Risks · Plan Quality · Sign-off
+**Contents:** 1 full template block: Objective · Scope · Test Approach · Entry & Exit Criteria · Test Environment · Schedule · Risks · Plan Quality · Sign-off
 
-เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+Open it when you really must write this kind of document · mark anything you do not know `(รอยืนยัน)` (pending confirmation)
 
 ## Standard Output: Polished Test Plan
 
@@ -46,7 +46,7 @@
 | Functional, boundary, negative | Performance (separate plan) |
 | Integration with X | Mobile app (Phase 2) |
 
-แถว Out of Scope ทุกแถวต้องมีเหตุผลและเลขคำถาม (เช่น "ยังไม่รู้เกณฑ์ → Q13 · ทดสอบเฉพาะจุดที่รู้") ไม่ปล่อยเป็นหัวข้อเปล่า
+Every Out of Scope row needs a reason and a question number (for example "ยังไม่รู้เกณฑ์ → Q13 · ทดสอบเฉพาะจุดที่รู้" — criteria not known yet → Q13 · test only the parts that are known). Do not leave it as an empty heading.
 
 ## 3. Test Approach
 
@@ -94,8 +94,8 @@ Every BR in the traceability table at the end of the test-case file has at least
 | Test data | Synthetic data (generator) · production copies only with anonymisation that the data owner signs off (Personal Data Protection Act, PDPA) |
 | Browsers | Chromium (every run) · WebKit/iPhone (nightly, pre-prod) · Firefox (pre-prod only, drop if users don't use it) |
 | Devices | iPhone 15, Galaxy S24, iPad Pro |
-| ข้อตกลงการรันกลาง | ทุก test reset ข้อมูลก่อนเริ่ม · `workers: 1` ต่อเว็บที่ใช้ร่วมกัน · test ที่ทดสอบ rate limit ติด tag แล้วรันท้ายสุดด้วยบัญชีของตัวเอง · กติกา `{run}` ในอีเมลและการรันขนาน ดู `e2e-testing-patterns` → `references/ci-and-parallel.md` |
-| TEST-DATA | ไฟล์ข้อมูลทดสอบที่เจ้าของงานตรวจและยืนยัน (ถือเป็น `[D]`): วัน "วันนี้" ที่ล็อก · ผู้ใช้ตัวอย่าง · ข้อมูลที่มีอยู่ก่อน · ตารางค่าขอบจากทุก BR พร้อมผลที่ถูกและวิธีคิดเงิน · ค่าที่ยังไม่ยืนยันติด `(รอยืนยัน)` · เลือกวันล็อกให้ชนขอบ (ตัวอย่างจากงานนั้น: ล็อก 10:00 ทำให้นัดพรุ่งนี้ 10:00 เป็นขอบ 24 ชม. พอดีโดยไม่ต้องสร้างข้อมูลพิเศษ) · ค่าขอบที่ทดสอบผ่านหน้าเว็บไม่ได้ ให้ระบุว่าเป็น unit test |
+| Shared-run agreement | Every test resets data before it starts · `workers: 1` per shared website · tests that exercise a rate limit get a tag and run last, with their own account · for the `{run}` rule in emails and parallel runs, see `e2e-testing-patterns` → `references/ci-and-parallel.md` |
+| TEST-DATA | A test-data file that the work owner reviews and confirms (counts as `[D]`): the locked "today" date · sample users · pre-existing data · a table of edge values from every BR with the correct results and how the money is worked out · unconfirmed values get `(รอยืนยัน)` (pending confirmation) · choose the locked date so it lands on an edge (example from that project: locking 10:00 makes a booking tomorrow at 10:00 sit exactly on the 24 h edge with no special data to create) · an edge value that cannot be tested through the web page: say it is a unit test |
 
 ## 6. Schedule
 
@@ -129,13 +129,13 @@ Every BR in the traceability table at the end of the test-case file has at least
 
 A break with no case that fails → add a case, then add the row again.
 
-**ให้ผู้รีวิวอิสระตรวจแผนก่อนรันจริง** (ไม่ใช่คนที่เขียนแผน):
-- ตรวจทุก TC ด้วย 6 เกณฑ์: ① ผลที่คาดหวังตรวจได้ ② ตัวเลขเงินคิดใหม่เองแล้วตรง ③ ไม่กำกวม ④ ไม่ซ้ำกับข้ออื่น ⑤ ขั้นตอนทำตามได้จริง ⑥ ระดับ ที่มา กฎ และเทคนิคถูก
-- พฤติกรรมหนึ่งเรื่อง = TC เจ้าของ 1 ข้อ ข้ออื่นที่ตรวจซ้ำให้ตัดออกหรือตัดขั้นซ้ำ ไม่งั้นบั๊กเดียวทำให้ล้มหลายข้อและระดับไม่ตรงกัน
-- นับจำนวน TC ก่อนและหลังแก้ด้วยสคริปต์ ไม่นับมือ (ตัวอย่างจากงานนั้น: 344 → 339 TC · พบ 156 เรื่อง)
-- ผลรีวิวเป็นหลักฐาน (ตัวอย่างจากงานสอน อีกชุด ตรวจเมื่อ 2026-11-04 จากตารางผลรีวิว): ผลที่คาดหวังตรวจได้ 36/40 → 42/42 · ข้อที่บอกจังหวะตรวจ (ทันที/หลังรีโหลด) 0/14 → 16/16
-- ส่วนผสมเทคนิคของชุดใหญ่หลังรีวิว (ตัวอย่างจากแผน 339 TC ไม่ใช่เกณฑ์): Happy 91 · Negative 129 · Boundary 69 · Equivalence 62 · State 87 · Security 54 (1 TC นับได้หลายเทคนิค)
-- ข้อควรระวัง: ตัวเลข "เหลือ 0 เรื่อง" ในตัวอย่างนั้นมาจาก log ของผู้แก้เอง ผู้รีวิวอิสระยังไม่ได้ตรวจรอบสอง สคริปต์ยืนยันได้แค่โครงตารางกับการโยงกฎ
+**Have an independent reviewer check the plan before the real run** (not the person who wrote the plan):
+- Check every TC against 6 criteria: ① the expected result can be verified ② money figures recomputed independently and they match ③ not ambiguous ④ not a duplicate of another item ⑤ the steps can really be followed ⑥ the level, source, rule, and technique are correct
+- One behavior = one owning TC. Cut the other items that check it again, or cut the repeated steps, otherwise one bug fails many items and the levels do not match
+- Count TCs before and after fixing with a script, not by hand (example from that project: 344 → 339 TCs · 156 issues found)
+- The review result is the evidence (example from another teaching project, checked 2026-11-04 from the review result table): verifiable expected results 36/40 → 42/42 · items that state when to check (immediate / after reload, `ทันที` / `หลังรีโหลด`) 0/14 → 16/16
+- Technique mix of the large set after review (example from a 339-TC plan, not a standard): Happy 91 · Negative 129 · Boundary 69 · Equivalence 62 · State 87 · Security 54 (1 TC can count under several techniques)
+- Caution: the figure "0 issues left" in that example comes from the fixer's own log; an independent reviewer has not yet done a second check; the script can only confirm the table structure and the rule links
 
 ## Sign-off
 

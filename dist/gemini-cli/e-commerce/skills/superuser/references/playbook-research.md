@@ -1,20 +1,22 @@
-# playbook · research — หาข้อมูลที่ยืนยันได้
+# playbook · research — find information that can be confirmed
 
-ใช้เมื่อ: ต้องหาคำตอบที่ต้องมีหลักฐาน · เทียบตัวเลือก · "ช่วยหาข้อมูล" · ตัวเลขหรือกฎที่อาจเปลี่ยนแล้ว
-ผลลัพธ์: คำตอบพร้อมแหล่ง วันที่ตรวจ และป้ายตาม [`evidence`](evidence.md) (`ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ`) · ข้อมูลของผู้ใช้ที่ไม่รู้ใส่ `(รอยืนยัน)`
-รูปแบบหลัก: Reranker · ReAct (`agent-patterns`)
-โหมดลึก: คำถามย่อยตั้งแต่ 4 ข้อ · ผู้ใช้ขอ "deep research" หรือ "วิจัยละเอียด" · รายงานที่ต้องอ้างอิงทุกย่อหน้า → ใช้ [`deep-research`](deep-research.md) แทน 7 ขั้นข้างล่าง (คิวไฟล์ · ลูกทีมค้นพร้อมกัน · ตรวจทุกข้ออ้าง)
+Use when: you must find an answer that needs evidence · compare options · "ช่วยหาข้อมูล" (help me find information) · numbers or rules that may have changed
+Result: an answer with sources, the date checked, and labels per [`evidence`](evidence.md) (`ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ`) · user data you do not know gets `(รอยืนยัน)`
+Main patterns: Reranker · ReAct (`agent-patterns`)
+Deep mode: 4 or more sub-questions · the user asks for "deep research" or "วิจัยละเอียด" (research in detail) · a report needing a citation in every paragraph → use [`deep-research`](deep-research.md) instead of the 7 steps below (file queue · workers search in parallel · every claim checked)
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน — Steps (copy into the todo exactly)
 
-1. เขียนคำถามให้ชัด 1–3 ข้อ แล้วระบุว่าผู้ใช้จะเอาคำตอบไปทำอะไร และตอบได้แค่ไหนถึงพอ · ใคร: หัวหน้าทีม
-2. รวบรวมกว้าง 10–30 แหล่ง — แหล่งทางการก่อน แล้วมาตรฐาน แล้วผู้ดูแลเครื่องมือหรือผู้เชี่ยวชาญที่ระบุชื่อ · ใคร: `general-purpose` ตัวใหม่ · ส่งกลับตาราง แหล่ง · ลิงก์ · ข้อสรุป ไม่เกินราว 40 บรรทัด ผลยาวเขียนลงไฟล์แล้วส่ง path
-3. ให้คะแนนแต่ละแหล่ง 0–3 ใน 4 ข้อ: ตรงคำถาม · น่าเชื่อถือ · ใหม่พอ · ครบ ถ้าแหล่งเยอะ ให้ subagent ระดับเล็กคัดรอบแรก · ใคร: `general-purpose` ตัวใหม่ (ระดับเล็ก)
-4. อ่านเต็มเฉพาะ 3–5 แหล่งที่คะแนนสูงสุด แล้วจดคำตอบพร้อมลิงก์และวันที่ · ใคร: `general-purpose` ตัวใหม่
-5. ตัดสิน — ถ้ามีแหล่งอิสระตรงกัน ≥ 3 แหล่ง ให้ติดป้าย `จากแหล่ง` (มั่นใจสูงเมื่อมีแหล่งทางการ) · ข้อที่คิดต่อจากแหล่ง ติด `อนุมาน` · ถ้าไม่ถึง 3 หรือขัดกัน ให้ใช้ค่าจากแหล่งทางการ ติด `จากแหล่ง` ลดความมั่นใจ 1 ระดับ ต่อท้าย `(รอยืนยัน)` และบอกว่าขัดกันตรงไหน · ใคร: หัวหน้าทีม
-6. ตรวจ — subagent ตัวใหม่สุ่มตรวจตัวเลขสำคัญ 3 ตัวกับแหล่งจริง · ใคร: `reviewer` ตัวใหม่
-7. รายงาน — คำตอบขึ้นก่อน ตารางคะแนนแหล่งไว้ท้าย ส่วนเรื่องที่ยังไม่รู้ให้บอกตรง ๆ · ใคร: หัวหน้าทีม
+Labels kept in Thai because the validator matches them: `ใคร:` = who · `หัวหน้าทีม` = the lead · `ตัวใหม่` = fresh (a new instance) · `ตัวเดิม (ถือ …)` = the same agent, holding something.
 
-## จบเมื่อ
+1. Write 1–3 clear questions, then state what the user will do with the answer and how much of an answer is enough · ใคร: หัวหน้าทีม
+2. Gather widely, 10–30 sources: official sources first, then standards, then named tool maintainers or experts · ใคร: `general-purpose` ตัวใหม่ · return a table of source · link · conclusion of no more than about 40 lines; a long result is written to a file and the path is sent
+3. Score each source 0–3 on 4 items: matches the question · credible · recent enough · complete. If there are many sources, have a small-tier subagent do the first cut · ใคร: `general-purpose` ตัวใหม่ (small tier)
+4. Read in full only the 3–5 top-scoring sources, then record the answer with link and date · ใคร: `general-purpose` ตัวใหม่
+5. Decide. If ≥ 3 independent sources agree, label it `จากแหล่ง` (high confidence when an official source is among them) · what you reasoned from a source gets `อนุมาน` · if fewer than 3 or they conflict, use the value from the official source, label it `จากแหล่ง`, lower the confidence 1 level, append `(รอยืนยัน)`, and say where they conflict · ใคร: หัวหน้าทีม
+6. Check (ตรวจ): a fresh subagent spot-checks 3 important numbers against the real source · ใคร: `reviewer` ตัวใหม่
+7. Report: answer first, the source scoring table at the end, and say plainly what is still unknown · ใคร: หัวหน้าทีม
 
-ทุกตัวเลขและข้ออ้างในคำตอบมีแหล่ง วันที่ และป้ายกำกับ
+## Done when
+
+Every number and claim in the answer has a source, a date, and a label

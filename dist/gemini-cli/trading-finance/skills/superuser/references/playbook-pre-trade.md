@@ -1,17 +1,17 @@
-# playbook · pre-trade — ก่อนเปิดสถานะ
+# playbook · pre-trade — before opening a position
 
-ใช้เมื่อ: จะซื้อหรือขายหุ้น · "ซื้อกี่หุ้นดี" · "เข้าตอนนี้ดีไหม"
-skill หลัก: `watchlist-setup` · `technical-signals` · `news-impact` · `position-sizing` · `trade-journal`
+Use when: about to buy or sell a stock · "how many shares should I buy" · "is it good to enter now".
+Main skill: `watchlist-setup` · `technical-signals` · `news-impact` · `position-sizing` · `trade-journal`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน (Steps — copy into the todo as written)
 
-1. อ่าน thesis ของหุ้นตัวนี้จาก watchlist ถ้ายังไม่มี ให้เขียน thesis (เหตุผลที่ซื้อ) จุดเข้า และจุดที่ thesis ผิด ตาม `watchlist-setup` · ใคร: หัวหน้าทีม (เหตุผลจากคำตอบตอนเริ่ม ไม่มีก็ใส่ `(รอยืนยัน)`)
-2. ดูราคาและสัญญาณตาม `technical-signals` และข่าวที่กระทบตาม `news-impact` — ทุกตัวเลขมีเวลาอ้างอิง · ใคร: `market-analyst` ตัวใหม่
-3. ให้ `risk-manager` คำนวณขนาดไม้ตาม `position-sizing` จากทุน ความเสี่ยงต่อไม้ และระยะตัดขาดทุน แล้วตรวจการกระจุกตัวของพอร์ต · ใคร: `risk-manager` ตัวใหม่
-4. ถ้าไม่มีจุดตัดขาดทุน ให้หยุดที่ข้อนี้ ไม่คำนวณขนาด · ใคร: `risk-manager` ตัวใหม่
-5. เขียนใบสั่งที่ผู้ใช้กดเองได้ — ราคา จำนวน จุดตัดขาดทุน เป้า แล้วร่างบันทึกการเทรดตาม `trade-journal` · ใคร: หัวหน้าทีม (การกดส่งคำสั่งอยู่ใน "รออนุมัติ" ผู้ใช้กดเองหลังจบ)
-6. ตรวจใบสั่ง — ขนาดไม้ตรงผลข้อ 3 มีจุดตัดขาดทุน ตัวเลขทุกตัวมีเวลาอ้างอิง · ใคร: `reviewer` ตัวใหม่
+1. Read the thesis for this stock from the watchlist. If there is none, write the thesis (the reason to buy), the entry point, and the point where the thesis is wrong, under `watchlist-setup` · ใคร: หัวหน้าทีม (reason from the answer at the start; if none, put `(รอยืนยัน)` (pending confirmation))
+2. Look at the price and signals under `technical-signals` and the affecting news under `news-impact` — every number has a reference time · ใคร: `market-analyst` ตัวใหม่
+3. Have `risk-manager` calculate the position size under `position-sizing` from capital, risk per trade and stop-loss distance, then check the portfolio's concentration · ใคร: `risk-manager` ตัวใหม่
+4. If there is no stop-loss point, stop at this step and do not calculate the size · ใคร: `risk-manager` ตัวใหม่
+5. Write an order the user places themselves — price, quantity, stop-loss point, target — then draft the trade journal entry under `trade-journal` · ใคร: หัวหน้าทีม (pressing send on the order is under "รออนุมัติ" (awaiting approval); the user presses it after the run ends)
+6. ตรวจ the order — the position size matches the result of step 3, there is a stop-loss point, every number has a reference time · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-มีใบสั่งพร้อมกดที่มีจุดตัดขาดทุน ขนาดผ่าน `risk-manager` และมีบันทึกก่อนเข้า โดยผู้ใช้เป็นคนส่งคำสั่งเอง
+There is an order ready to press that has a stop-loss point, a size that passed `risk-manager`, and a pre-entry journal entry, with the user sending the order themselves.

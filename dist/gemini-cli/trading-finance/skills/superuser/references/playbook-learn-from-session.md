@@ -1,30 +1,32 @@
-# playbook · learn-from-session — ทำให้ทีมเก่งขึ้นทุกรอบ
+# playbook · learn-from-session — make the team better every round
 
-ใช้เมื่อ: ผู้ใช้สั่ง "รวมบทเรียน" หรือ "reflect" เท่านั้น ถ้าผู้ใช้แก้ทีมเรื่องเดิมเป็นครั้งที่สอง หรือ `.claude/superuser/learn/` มีบันทึกรอเกิน 5 ไฟล์ ให้บอกผู้ใช้ในรายงานว่าควรสั่ง "รวมบทเรียน" แต่ไม่เริ่มเอง
-หลักคิด: พลาดเรื่องเดียวกันหลายครั้ง แปลว่าต้องแก้เครื่องมือของทีม (skill · playbook · การตรวจ) ไม่ใช่แค่บอก agent ให้ระวัง
-ไฟล์นี้เหมือนกันทุก plugin · ต้นฉบับอยู่ที่ plugin `superuser`
+Use when: the user says "รวมบทเรียน" (merge the lessons) or "reflect", and only then. If the user corrects the team on the same issue for the second time, or `.claude/superuser/learn/` has more than 5 notes waiting, tell the user in the report that they should say "รวมบทเรียน", but do not start it yourself.
+Principle: making the same mistake several times means fixing the team's tools (skill · playbook · checks), not just telling an agent to be careful.
+This file is identical in every plugin. The original lives in plugin `superuser`.
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน — Steps (copy into the todo exactly)
 
-1. **รวบรวม** ตามลำดับ · ใคร: หัวหน้าทีม
-   - คิวกลาง `~/.claude/superuser/IMPROVEMENTS.md` และ `IMPROVEMENTS.md` — แถวที่ "รวมแล้ว" = `ยัง` และ "ควรรวมไหม" ≠ `ไม่รวม` เรียงตาม "ครั้ง" มากไปน้อย แล้วเปิดหลักฐานตาม "ที่มา" · แถวในคิวกลาง (ช่องนี้มีเฉพาะในคิวกลาง) ที่รวมแล้วและถึง "ตรวจวันที่" ให้ดู log แล้วใส่ "ผลหลังรวม" · เกิดอีก 2 ครั้ง → แถวนั้นกลับมาเป็นงานรอบนี้: ทำเป็นตัวตรวจหรือถอยการแก้กลับ
-   - `.claude/superuser/learn/*.md` ของโปรเจกต์ที่เปิดอยู่ — ตาราง "ควรปรับทีม" (บันทึกเก่า: "ควรปรับ skill") เรื่องเดียวกันรวมเป็นแถวเดียวแล้วนับครั้ง
-2. **แยกประเภท** · ใคร: หัวหน้าทีม
-   - **นับชนิดพลาดก่อน** — ทุกแถวติดป้าย `ไม่ได้เปิด skill` · `เปิดแต่ไม่ทำตาม` · `ไม่มีกฎ` (นิยามใน agent `learning-reviewer`) แล้วนับ · ส่วนใหญ่เป็น `ไม่ได้เปิด` → งานรอบนี้คือแก้การบอก skill (`triggers.md` · `hooks/skill-router.json`) ไม่ใช่เขียนข้อความเพิ่มใน skill
-   - **skill ที่รับบทเรียนรวมแล้ว 3 ข้อแต่พลาดไม่ลด** — หยุดเพิ่มข้อความ เสนอตัวตรวจ ตัวอย่างคู่ (ก่อน → หลัง) หรือถอยการแก้กลับ อย่างใดอย่างหนึ่ง
-   - **ความผิดที่ทำซ้ำ** (เจอ 2 ครั้งขึ้นไป · `correction: true` ใน log เรื่องเดียวกัน) ทำเป็นตัวตรวจ ไม่เขียนเตือนเพิ่ม (`repeated-mistakes-to-checks` ถ้ามี ไม่งั้นสคริปต์ตรวจหรือข้อในรายการตรวจก่อนส่ง)
-   - **วิธีที่ได้ผล หรือ skill ที่บอกผิด** แก้ย่อหน้าใน SKILL.md (`session-lessons-to-skills` ถ้ามี)
-   - **playbook ที่ประกอบเองแล้วใช้ซ้ำ 2 ครั้งขึ้นไป** ให้เสนอเป็น playbook ถาวรตาม [`playbook-template`](playbook-template.md)
-   - **แก้ agent หรือ playbook** — แก้ย่อหน้าแบบเดียวกัน · playbook ต้องยังผ่าน `validate-marketplace.mjs`
-   - **กฎผู้ใช้** — 1 บรรทัดใน `~/.claude/superuser-style.md` ทำได้จากทุกโปรเจกต์
-   - **ตัด** — ลบบรรทัดที่ตัวตรวจจับได้แล้ว หรือที่ซ้ำกับไฟล์อื่น
-   - **skill หรือ agent ใหม่** — เฉพาะแถวที่ผู้ใช้ `รับ` แล้ว และแก้ของเดิมไม่ได้ · agent ใหม่ต้องมีเหตุผลเรื่อง context เครื่องมือ หรือโมเดล ไม่งั้นทำเป็น skill
-3. **ทิ้งเรื่องที่เกิดครั้งเดียว** — ครั้งเดียวยังไม่ใช่บทเรียน · ใคร: หัวหน้าทีม
-4. **ทุกบทเรียนต้องจบเป็นการแก้ที่จับต้องได้** — ตัวตรวจ · สคริปต์ · ย่อหน้าที่แก้ ถ้าแก้ของเดิมได้ก็ไม่สร้างใหม่ ถ้าข้อใหม่ขัดกับข้อเดิม ให้แก้ข้อเดิม ไม่ต่อท้าย · ใคร: หัวหน้าทีม
-5. **เสนอผู้ใช้** — ตาราง: ชนิด · ที่ไหน · เดิม → ใหม่ · หลักฐาน · ครั้ง · คาดว่า · ตรวจวันที่ ให้ตอบทีละข้อ `รับ` · `ไม่รับ` · `ไว้ทีหลัง` · ข้อที่ยังไม่ `รับ` ลง "รออนุมัติ" และยังไม่แก้ไฟล์ · ใคร: หัวหน้าทีม
-6. **แก้เฉพาะข้อที่ `รับ` แล้ว** (ตอบมา หรือ `ควรรวม` ในคิว) ทีละย่อหน้า ไม่เขียนทั้งไฟล์ใหม่ · ตัวตรวจใหม่ต้องรันกับเหตุการณ์เดิมให้เห็นว่า**ล้มก่อนแก้ และผ่านหลังแก้** แล้วเก็บเหตุการณ์นั้นไว้เป็นกรณีทดสอบ (self-test หรือ test ของสคริปต์) · ของกลางแก้ที่ plugin `superuser` แล้วรัน `node scripts/sync/sync-superuser.mjs` กับ `validate-marketplace.mjs` (ติดตั้ง plugin เดี่ยว: เสนอ เดิม → ใหม่ ให้ผู้ใช้แก้ใน repo SQT-Marketplace) · ใคร: หัวหน้าทีมแก้ · `reviewer` ตัวใหม่ตรวจกับหลักฐาน
-7. **ปิดรายการ** — ย้ายบันทึกที่จัดการแล้วไป `.claude/superuser/learn/done/` แล้วใน `IMPROVEMENTS.md` และคิวกลาง ใส่ช่อง "ควรรวมไหม" เป็น `ควรรวม` หรือ `ไม่รวม (<เหตุผล>)` และใส่ช่อง "รวมแล้ว" เป็น `แล้ว <วันที่> (<ไฟล์>)` เฉพาะแถวที่แก้ไฟล์จริงแล้ว · ใคร: หัวหน้าทีม
+Labels kept in Thai because the validator matches them: `ใคร:` = who · `หัวหน้าทีม` = the lead · `ตัวใหม่` = fresh (a new instance) · `ตัวเดิม (ถือ …)` = the same agent, holding something.
 
-## จบเมื่อ
+1. **Gather**, in this order · ใคร: หัวหน้าทีม
+   - The central queue `~/.claude/superuser/IMPROVEMENTS.md` and `IMPROVEMENTS.md`: rows where "รวมแล้ว" (merged) = `ยัง` (not yet) and "ควรรวมไหม" (should merge?) ≠ `ไม่รวม` (do not merge), sorted by "ครั้ง" (times) high to low, then open the evidence under "ที่มา" (source). For a central-queue row (this column exists only in the central queue) that is merged and has reached its "ตรวจวันที่" (check date), look at the log and fill "ผลหลังรวม" (result after merge). It happened again 2 times → that row comes back as this round's job: make it a checker or roll the fix back.
+   - `.claude/superuser/learn/*.md` of the open projects: the "ควรปรับทีม" (team should change) table (older notes: "ควรปรับ skill"). Merge rows about the same issue into one row and count the times.
+2. **Classify**, ใคร: หัวหน้าทีม
+   - **Count the mistake types first.** Tag every row `ไม่ได้เปิด skill` (did not open the skill) · `เปิดแต่ไม่ทำตาม` (opened but did not follow) · `ไม่มีกฎ` (no rule) (definitions in the agent `learning-reviewer`), then count. Mostly `ไม่ได้เปิด` → this round's job is to fix how skills are signalled (`triggers.md` · `hooks/skill-router.json`), not to write more text in the skill.
+   - **A skill that has absorbed 3 merged lessons but mistakes did not drop.** Stop adding text. Propose one of: a checker, a paired example (before → after), or rolling the fix back.
+   - **A repeated mistake** (found 2 or more times · `correction: true` in the log for the same issue): make it a checker, do not write more warnings (`repeated-mistakes-to-checks` if present, otherwise a check script or an item in the pre-send checklist).
+   - **A method that worked, or a skill that says something wrong:** fix the paragraph in SKILL.md (`session-lessons-to-skills` if present).
+   - **A playbook assembled on the spot and reused 2 or more times:** propose it as a permanent playbook per [`playbook-template`](playbook-template.md).
+   - **Fixing an agent or playbook:** fix the matching paragraph · a playbook must still pass `validate-marketplace.mjs`.
+   - **A user rule:** 1 line in `~/.claude/superuser-style.md`, which works from every project.
+   - **Cut:** delete lines a checker already catches, or that duplicate another file.
+   - **A new skill or agent:** only for rows the user has `รับ` (accepted) and that cannot be fixed by changing the existing one · a new agent needs a reason about context, tools, or model, otherwise make it a skill.
+3. **Drop one-off events.** Once is not yet a lesson · ใคร: หัวหน้าทีม
+4. **Every lesson must end as a concrete fix:** a checker · a script · a corrected paragraph. If the existing thing can be fixed, do not create a new one. If a new item contradicts an old one, fix the old one, do not append · ใคร: หัวหน้าทีม
+5. **Propose to the user.** A table: type · where · old → new · evidence · times · expected · check date. Ask them to answer item by item `รับ` (accept) · `ไม่รับ` (decline) · `ไว้ทีหลัง` (later). Items not yet `รับ` go under "รออนุมัติ" and the files are not edited yet · ใคร: หัวหน้าทีม
+6. **Fix only items that are `รับ`** (answered, or `ควรรวม` (should merge) in the queue), one paragraph at a time, never rewriting the whole file. A new checker must be run against the original event to show that it **fails before the fix and passes after**, then keep that event as a test case (a self-test or the script's test). Shared things are fixed in plugin `superuser`, then run `node scripts/sync/sync-superuser.mjs` and `validate-marketplace.mjs` (single-plugin install: propose old → new for the user to fix in the SQT-Marketplace repo) · ใคร: หัวหน้าทีม fixes · `reviewer` ตัวใหม่ checks against the evidence
+7. **Close the list.** Move handled notes to `.claude/superuser/learn/done/`, then in `IMPROVEMENTS.md` and the central queue set the "ควรรวมไหม" field to `ควรรวม` or `ไม่รวม (<reason>)` and the "รวมแล้ว" field to `แล้ว <date> (<file>)` (done <date> (<file>)), only for rows where files were really fixed · ใคร: หัวหน้าทีม
 
-ทุกบทเรียนชี้ได้ว่าไปอยู่ที่ไฟล์ไหน · ความผิดที่ทำซ้ำมีตัวตรวจที่พิสูจน์แล้วว่าจับกรณีจริงได้ · ช่อง "ควรรวมไหม" และ "รวมแล้ว" ในคิวกลางตรงกับที่ทำจริง
+## Done when
+
+Every lesson can point to the file it went into · a repeated mistake has a checker proven to catch the real case · the "ควรรวมไหม" and "รวมแล้ว" fields in the central queue match what was actually done

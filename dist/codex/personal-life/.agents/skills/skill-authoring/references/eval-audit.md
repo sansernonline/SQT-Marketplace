@@ -1,46 +1,46 @@
-# ตรวจชุด eval ที่รับช่วงมา และวัดข้าม CLI
+# Auditing an inherited eval set, and measuring across CLIs
 
-## ตรวจชุด eval — ตารางรายการแล้ววินิจฉัยทีละช่อง
+## Eval audit: make an inventory table, then diagnose cell by cell
 
-ใช้เมื่อรับชุด eval ที่ไม่ได้เขียนเอง · หลังเปลี่ยนโมเดล · หรือคะแนนเขียวแต่ skill ยังพลาดในงานจริง · คำถามเดียว: **ชุดนี้จับความล้มเหลวจริงได้ไหม**
+Use when you take over an eval set you did not write · after a model change · or when scores are green but the skill still fails in real work. One question: **does this set catch real failures?**
 
-1. **ทำตารางรายการ** อ่านจากไฟล์จริง ไม่เดา:
+1. **Make the inventory table.** Read from the real files, do not guess:
 
-| ช่อง | ตอบอะไร |
+| Column | What it answers |
 |---|---|
-| เคส | ชื่อ · แบบ (trigger · behaviour · regression · guard · no-trigger) · จำนวนรอบ |
-| ตัวตรวจ | ชนิด grader (`regex` · `tool_used` · `llm` …) · ตรวจสิ่งที่เห็นได้ในคำตอบจริงไหม |
-| ผู้ตัดสิน | โมเดล · เกณฑ์เขียนอย่างไร · เคยปรับกับป้ายของคนไหม ([`eval-loop-rules`](eval-loop-rules.md) หัวข้อ 5) |
-| ข้อมูล | โจทย์มาจากไหน (งานจริง · เขียนเอง) · ใครเขียน · เห็น description ก่อนไหม |
-| ความครอบคลุม | กฎของ skill แต่ละข้อมีเคสตรวจกี่เคส · ข้อไหนไม่มีเลย |
+| Case | Name · type (trigger · behaviour · regression · guard · no-trigger) · number of rounds |
+| Grader | Grader kind (`regex` · `tool_used` · `llm` …) · does it check something visible in the real answer? |
+| Judge | Model · how the criteria are written · has it ever been calibrated against human labels ([`eval-loop-rules`](eval-loop-rules.md) section 5)? |
+| Data | Where the prompts came from (real work · self-written) · who wrote them · did the writer see the description first? |
+| Coverage | How many cases check each rule of the skill · which rules have none at all |
 
-2. **วินิจฉัยทีละแถว** ด้วยคำถามชุดนี้ · เจอข้อไหนจดข้อเสนอแก้ 1 ข้อต่อ 1 ปัญหา:
+2. **Diagnose row by row** with this set of questions. For each finding, write down 1 proposed fix per problem:
 
-| อาการ | วินิจฉัย | แก้ |
+| Symptom | Diagnosis | Fix |
 |---|---|---|
-| เคสผ่านทั้ง 2 แขน (Δ ≈ 0) | โจทย์ง่ายเกินหรือ skill ไม่ช่วย | ทำโจทย์ให้ยากขึ้น หรือย่อ skill |
-| เคส "ต้องไม่เกิด" ไม่มีเคสคู่ | ชุดตายก็ผ่าน | เติมเคสคู่ (หัวข้อ 2 ของ eval-loop-rules) |
-| เคสที่ `llm` ล้วน | แกว่ง ตรวจแบบเดียวกับคนไม่ได้พิสูจน์ | ย้ายข้อเท็จจริงเป็น `regex` · ปรับ judge กับป้าย |
-| กฎของ skill ไม่มีเคสตรวจ | ถอยหลังแล้วไม่รู้ | เขียนเคสจากกฎนั้น |
-| โจทย์ trigger เขียนโดยคนที่เห็น description | วัดเกินจริง | ให้ agent ที่ไม่เคยเห็นเขียนใหม่ |
-| ไม่มีรายงานโทเคนหรือเวลา | skill ที่ช้าลงหรือแพงขึ้นผ่านได้ | อ่าน `costUsd` ต่อแขน |
+| Case passes in both arms (Δ ≈ 0) | The prompt is too easy, or the skill does not help | Make the prompt harder, or shorten the skill |
+| A "must not happen" case has no paired case | A dead set would pass too | Add the paired case (section 2 of eval-loop-rules) |
+| Case is all `llm` | It wobbles, and checking the same way as a person is not proven | Move facts to `regex` · calibrate the judge against labels |
+| A rule of the skill has no case | Regress and nobody knows | Write a case from that rule |
+| Trigger prompt written by someone who saw the description | Measures too high | Have an agent that never saw it rewrite it |
+| No token or time report | A skill that got slower or costlier can pass | Read `costUsd` per arm |
 
-3. ตัวเลขสรุปและข้อเสนอแก้ให้ผู้ใช้ตัดสิน · ไม่แก้เคสหรือเกณฑ์เองในรอบตรวจ
+3. Give the user the summary numbers and the proposed fixes to decide. Do not edit cases or criteria yourself during the audit.
 
-เครื่องช่วยนับส่วนที่เป็นกลไก: `node scripts/evals/scorecard.mjs` (นับเคสต่อ skill) · `node scripts/evals/skill-grades.mjs` (อัตราผ่านพร้อมช่วงความเชื่อมั่น)
+Tools that count the mechanical parts: `node scripts/evals/scorecard.mjs` (counts cases per skill) · `node scripts/evals/skill-grades.mjs` (pass rate with confidence interval)
 
-## วัดสถานการณ์ข้าม CLI (ทางเลือก ใช้เมื่อ skill ต้องใช้ได้นอก Claude Code)
+## Measure scenarios across CLIs (optional, use when the skill must work outside Claude Code)
 
-เมื่อ skill ถูกแจกผ่าน `dist/` ไปให้ agent ตัวอื่น (Codex · Gemini CLI) การวัดใน Claude Code อย่างเดียวบอกไม่ได้ว่าใช้ได้ที่นั่น:
+When a skill is distributed through `dist/` to other agents (Codex · Gemini CLI), measuring in Claude Code alone cannot tell you it works there:
 
-- **สถานการณ์ 1 ข้อ = โจทย์ + เกณฑ์ตรวจ** (เกณฑ์เขียนเป็นสิ่งที่เห็นในผล เช่น "ใช้ API ที่ถูก ไม่เรียก HTTP ดิบ")
-- รันโจทย์เดียวกันใต้แต่ละ CLI โดยให้อ่าน skill ฉบับ `dist/` · เก็บคำตอบและบันทึกการเรียกเครื่องมือ
-- **ให้ agent ตัวอื่นตัดสิน** ไม่ใช่ตัวที่ทำงาน · ผู้ตัดสินไม่รู้ว่าผลมาจาก CLI ไหน
-- **เก็บในเครื่องเท่านั้น** ผลและคำตอบไม่ส่งออกนอกเครื่อง (อาจมีโค้ดหรือข้อมูลโปรเจกต์)
-- ได้ผลที่ Claude Code ไม่เห็น: skill ถูกแก้แล้วทำให้เรียก API ตรงหรือเลือกกลไกผิด
-- ตอนนี้มีตัวรันของ Claude Code เท่านั้น · เครื่องนี้มี `codex` แต่ยังไม่มี `gemini` (ตรวจ 2026-11-10) จึงยังไม่มีสคริปต์ข้าม CLI · เมื่อเขียน ให้ใช้โครงเดียวกับ `scripts/evals/ab/ab-run.mjs` (cases.json + คะแนน regex) และรันใน worktree แยกตาม `AGENTS.md`
+- **1 scenario = a prompt + a grading criterion** (write the criterion as something visible in the result, such as "uses the correct API, does not call raw HTTP")
+- Run the same prompt under each CLI, having it read the `dist/` version of the skill · keep the answer and the log of tool calls
+- **Have a different agent judge**, not the one that did the work · the judge does not know which CLI the result came from
+- **Keep it on this machine only.** Results and answers do not leave the machine (they may contain code or project data)
+- It finds what Claude Code does not show: a skill that was edited and now calls an API directly or picks the wrong mechanism
+- For now only the Claude Code runner exists · this machine has `codex` but not `gemini` (checked 2026-11-10), so there is no cross-CLI script yet · when you write one, use the same structure as `scripts/evals/ab/ab-run.mjs` (cases.json + regex score) and run it in a separate worktree per `AGENTS.md`
 
-## ที่มา
+## Sources
 
-- outputai (Apache-2.0) · skills/output-eval-audit/SKILL.md · ดู 2026-11-10 → ตารางรายการและวินิจฉัย
-- netlify-skills (MIT) · axis-scenarios/README.md · ดู 2026-11-10 → วัดข้าม CLI
+- outputai (Apache-2.0) · skills/output-eval-audit/SKILL.md · viewed 2026-11-10 → the inventory table and diagnosis
+- netlify-skills (MIT) · axis-scenarios/README.md · viewed 2026-11-10 → measuring across CLIs

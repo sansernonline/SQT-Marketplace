@@ -1,95 +1,97 @@
-# สเกลระยะห่างและตัวอักษร
+# Spacing and type scales
 
-รายละเอียดของ `ui-craft` ข้อ 1–2 และสเกลของหน้าการตลาด (ข้อ 3) · กฎสรุปอยู่ใน `SKILL.md`
+Details of `ui-craft` sections 1–2 and the scale for marketing pages (section 3) · the summary rules are in `SKILL.md`
 
-## 1 · สเกลระยะห่าง — ใช้ชุดเดียวทั้งแอป
+## 1 · Spacing scale — one set for the whole app
 
 ```
 4  8  12  16  24  32  48  64
 ```
 
-ทุก padding, margin, gap ต้องเป็นค่าใดค่าหนึ่งในนี้ ห้ามมี `13px` `18px` `22px`
-ถ้ารู้สึกว่า `16` แน่นไป `24` ห่างไป — เลือก `16` แล้วแก้อย่างอื่นแทน
-(ปกติปัญหาอยู่ที่ขนาดตัวอักษรหรือความยาวบรรทัด ไม่ใช่ระยะห่าง)
+Every padding, margin, gap must be one of these values. No `13px` `18px` `22px`.
+If `16` feels too tight and `24` too loose — choose `16` and fix something else instead
+(usually the problem is the font size or the line length, not the spacing).
 
-**ถ้าค่าใน skill แพลตฟอร์มขัดกับสเกลนี้ ให้ใช้สเกลนี้** — ยกเว้นค่าในรายการข้างล่างเท่านั้น
-สเกลนี้คุมแค่ padding · margin · gap ส่วนมุมโค้งและขนาดคอมโพเนนต์ (ปุ่ม 38 · มุม 13) skill แพลตฟอร์มเป็นคนกำหนด
+**If a value in the platform skill conflicts with this scale, use this scale** — except the values in the list below only
+This scale controls only padding · margin · gap; corner radius and component sizes (button 38 · corner 13) are set by the platform skill
 
-**รายการยกเว้น — ค่าที่วัดจากระบบจริง ใช้ค่าแพลตฟอร์ม ไม่ปัดเข้าสเกล** (เพิ่มได้เมื่อวัดจากระบบจริงและเขียนชื่อไว้ที่นี่)
+**Exception list — values measured from the real system; use the platform value and do not round to the scale** (add one only when it was measured from the real system, and write its name here)
 
-| แพลตฟอร์ม | ค่า | ที่มา |
+| Platform | Value | Source |
 |---|---|---|
-| Windows | ขอบเนื้อหาซ้าย/ขวา 36 · ระยะระหว่าง section 40 | `windows-app-design` → `references/tokens.md` (วัดจาก Windows 11) |
+| Windows | content edge left/right 36 · gap between sections 40 | `windows-app-design` → `references/tokens.md` (measured from Windows 11) |
 
-ค่าอื่นของ skill แพลตฟอร์มที่ไม่อยู่ในตารางนี้ ใช้สเกลนี้
+Other values of the platform skill that are not in this table use this scale
 
-**กฎระยะห่างที่คนมองข้ามบ่อยที่สุด:**
+**The spacing rule people overlook most:**
 
-> ของที่เกี่ยวข้องกันต้องอยู่ใกล้กันมากกว่าของที่ไม่เกี่ยว
+> Things that belong together must sit closer than things that do not
 
 ```
 ผิด: label และ input ห่าง 16px   ระหว่างฟิลด์ห่าง 16px เท่ากัน
 ถูก: label และ input ห่าง 8px   ระหว่างฟิลด์ห่าง 24px
 ```
 
-ตาอ่านกลุ่มจากระยะห่าง ไม่ใช่จากเส้น — ถ้าจัดระยะถูก เส้นคั่นส่วนใหญ่จะไม่จำเป็น
+(Wrong: label and input 16px apart, fields 16px apart, the same. Right: label and input 8px apart, fields 24px apart.)
 
-**ระยะในการ์ด:** padding การ์ด ≥ gap ระหว่างของข้างใน เสมอ
-การ์ด padding `16` แล้วข้างในห่างกัน `24` จะดูเหมือนของล้นออกนอกกรอบ
+The eye reads groups from spacing, not from lines — if the spacing is right, most divider lines are unnecessary
+
+**Spacing in a card:** card padding ≥ the gap between the items inside, always
+A card with padding `16` and items `24` apart inside looks like things spilling out of the frame
 
 ---
 
-## 2 · สเกลตัวอักษร
+## 2 · Type scale
 
-ขั้นบน (lg · md · base) ห่างกันชัดเจน ขั้นล่างห่างกันแค่ 1px — ค่าในตารางเป็นตัวอย่างที่ใช้ได้จริง ไม่ได้มาจากอัตราส่วนคงที่ และ**ใช้ไม่เกิน 5 ขนาดต่อหน้าจอ**
+The upper steps (lg · md · base) are clearly apart and the lower steps are only 1px apart — the values in the table are workable examples, not from a fixed ratio, and **use no more than 5 sizes per screen**
 
-| ขั้น | ตัวอย่าง (เว็บ) | ใช้กับ |
+| Step | Example (web) | Used for |
 |---|---|---|
-| lg | 22 | หัวหน้าจอ · มีได้หน้าละ 1 |
-| md | 15 | หัวการ์ด · หัวตาราง |
-| base | 13 | เนื้อหาทั้งหมด |
-| sm | 12 | label · คำอธิบายใต้ฟิลด์ |
+| lg | 22 | Screen heading · 1 per page |
+| md | 15 | Card heading · table heading |
+| base | 13 | All content |
+| sm | 12 | label · description under a field |
 | xs | 11 | timestamp · badge |
 
-**ความสูงบรรทัด (line-height):**
+**Line height (line-height):**
 
-| ขนาด | line-height | เหตุผล |
+| Size | line-height | Reason |
 |---|---|---|
-| หัวข้อใหญ่ | 1.2–1.3 | ตัวใหญ่อยู่แล้ว ไม่ต้องการอากาศ |
-| เนื้อหา | 1.5–1.6 | ตาต้องหาต้นบรรทัดถัดไปเจอ |
-| ภาษาไทย | +0.1 จากค่าข้างบน | สระบนล่างชนกัน |
+| Large heading | 1.2–1.3 | Already large, needs no air |
+| Content | 1.5–1.6 | The eye must find the start of the next line |
+| Thai | +0.1 from the values above | Upper and lower vowels collide |
 
-**ความยาวบรรทัด:** 45–75 ตัวอักษร ยาวกว่านี้ตาหลงบรรทัด
-บนหน้าจอกว้างให้จำกัดความกว้างคอลัมน์ข้อความ ไม่ใช่ปล่อยเต็มจอ
+**Line length:** 45–75 characters; longer and the eye loses its line
+On a wide screen, limit the width of the text column; do not let it fill the screen
 
-**ขนาดเล็กสุด 11** สำหรับข้อความที่ต้องอ่าน (ทุกแพลตฟอร์ม ไม่มีข้อยกเว้น) — สเกลของ skill แพลตฟอร์มมีขนาดให้เลือกมากกว่า 5 ได้ แต่**1 หน้าจอยังใช้ไม่เกิน 5** (ตัวเลขใหญ่ที่โชว์ค่าหลักนับเป็น 1 ขนาด)
+**Smallest size 11** for text that must be read (every platform, no exception) — a platform skill's scale may offer more than 5 sizes, but **1 screen still uses no more than 5** (a large number showing the main value counts as 1 size)
 
-**น้ำหนักตัวอักษร:** ใช้ 2 น้ำหนักพอต่อหน้าจอ (ปกติ + หนา) — ฟอนต์มีครบ 400–700 ได้ แต่หน้าเดียวไม่ควรใช้เกิน 2
-ถ้าอยากเน้น ให้เปลี่ยน**สี**หรือ**ขนาด**ก่อน อย่าเพิ่งเพิ่มน้ำหนักตัวที่ 3
+**Font weight:** 2 weights per screen are enough (regular + bold) — a font may have all of 400–700, but one page should not use more than 2
+If you want emphasis, change the **color** or the **size** first; do not rush to add a 3rd weight
 
 ---
 
 ## 3 · หน้าการตลาดและ landing ที่ไม่มี motion
 
-ใช้กับหน้าที่คนอ่านไล่ลงทีละส่วน (หน้าขาย · หน้าแรกของสินค้า · หน้าเปิดตัว) · แอปและแดชบอร์ดใช้ข้อ 1–2 · หน้าที่ขยับทีละช่วงตามการเลื่อน → `dynamic-website`
+Use for pages people read down one section at a time (sales page · product home page · launch page) · apps and dashboards use sections 1–2 · pages that move section by section with scrolling → `dynamic-website`
 
-ค่าในตารางเป็นค่าเริ่ม ตั้งจากงานลองหน้าจริง 2026-11-06 ยังไม่ได้วัดจากเว็บต้นแบบ · เลือกต้นแบบแล้ว (`design-references`) ให้วัดขนาดจากต้นแบบมาแทนได้ แล้วจดที่มาไว้ข้าง token
+The values in the table are starting values, set from the real page trial of 2026-11-06 and not yet measured from a prototype site · once a prototype is chosen (`design-references`), you may measure the sizes from the prototype instead and note the source beside the token
 
-| ขั้น | จอ 1440 | จอ 375 | ใช้กับ |
+| Step | 1440 screen | 375 screen | Used for |
 |---|---|---|---|
-| display | 48–64 | 32–40 | หัวข้อส่วนเปิด · มีได้หน้าละ 1 |
-| h2 | 28–36 | 24–28 | หัวของแต่ละส่วน |
-| lead | 18–20 | 17–18 | ย่อหน้าแรกใต้หัว |
-| body | 16–18 | 16 | เนื้อหา |
-| small | 14 | 14 | คำบรรยายภาพ · ที่มาของตัวเลข |
+| display | 48–64 | 32–40 | Opening-section heading · 1 per page |
+| h2 | 28–36 | 24–28 | Heading of each section |
+| lead | 18–20 | 17–18 | First paragraph under the heading |
+| body | 16–18 | 16 | Content |
+| small | 14 | 14 | Image caption · source of a number |
 
-- ยังใช้ไม่เกิน 5 ขนาดต่อหน้า · เล็กสุด 14 ไม่ใช่ 11 เพราะคนอ่านหน้านี้ครั้งเดียว ไม่ได้ใช้ทุกวันจนคุ้นตา · line-height ตามตารางในข้อ 2
-- **ตรวจ:** display ใหญ่กว่า h2 อย่างน้อย 1.5 เท่าไหม ถ้าไม่ หัวส่วนเปิดจะไม่เด่นกว่าหัวส่วนอื่น
+- Still no more than 5 sizes per page · smallest 14, not 11, because people read this page once and do not use it every day until it feels familiar · line-height per the table in section 2
+- **Check:** is display at least 1.5 times larger than h2? If not, the opening heading will not stand out from the other section headings.
 
-**จังหวะของหน้า**
+**Page rhythm**
 
-- ระยะระหว่างส่วนต่อสเกลข้อ 1 ขึ้นอีก 2 ค่า คือ 96 และ 128 (จอ 375 ใช้ 64) · ระยะภายในส่วนยังใช้สเกลข้อ 1
-- คอลัมน์ข้อความกว้าง 45–75 ตัวอักษรเหมือนเดิม แต่ส่วนเปิดและภาพของจริงใช้ความกว้างเต็มกรอบได้ · **ตรวจ:** ที่จอ 1440 ทุกส่วนกว้างเท่าคอลัมน์ข้อความแล้วปล่อยฝั่งขวาว่างไหม ถ้าใช่ ให้ขยายภาพของจริงหรือแบ่งเป็น 2 คอลัมน์
-- **ตรวจ:** ย่อภาพทั้งหน้าแล้วมี 2 ส่วนติดกันที่ใช้เลย์เอาต์เดียวกันไหม ถ้ามี ให้เปลี่ยนส่วนหนึ่ง
-- **ตรวจ:** นอกจากส่วนเปิด มีส่วนที่เด่นกว่าส่วนอื่น (ภาพเต็มความกว้าง · พื้นสีทึบ · ตัวเลขใหญ่) 1–2 ส่วนไหม ถ้าไม่มีเลย ทุกส่วนจะดังเท่ากันจนอ่านเป็นรายการ ถ้ามีเกิน 2 จะแย่งกันเด่น
-- ความหนาแน่นใช้แบบโปร่งตามข้อ 8 ของ `SKILL.md`
+- Gap between sections takes 2 more values beyond the section 1 scale: 96 and 128 (the 375 screen uses 64) · spacing inside a section still uses the section 1 scale
+- Text columns are still 45–75 characters wide, but the opening section and real images may use the full frame width · **Check:** at the 1440 screen, is every section as wide as the text column, leaving the right side empty? If so, enlarge the real image or split into 2 columns.
+- **Check:** shrink the whole page; are there 2 adjacent sections using the same layout? If so, change one of them.
+- **Check:** besides the opening section, are there 1–2 sections that stand out from the others (full-width image · solid color background · large number)? If there are none, every section is equally loud and it reads as a list; if there are more than 2, they fight for prominence.
+- Density uses the airy type per section 8 of `SKILL.md`

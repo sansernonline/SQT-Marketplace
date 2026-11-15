@@ -1,8 +1,8 @@
-# โครงหน้าต่างและคอมโพเนนต์ใน fluent.css — ส่วนขยายของ `windows-app-design`
+# Window frame and components in fluent.css: extension of `windows-app-design`
 
-เปิดตอนวางหน้าตั้งค่า/dashboard (ข้อ 3) หรือหาคลาสที่มีให้แล้ว (ข้อ 4) · แอปเครื่องมือที่ข้อมูลแน่นดู `patterns.md`
+Open when laying out a settings page/dashboard (item 3) or looking for ready-made classes (item 4) · for data-dense tool apps see `patterns.md`
 
-## โครงหน้าต่าง หน้าตั้งค่าและ dashboard (ข้อ 3)
+## Window frame, settings page and dashboard (item 3)
 
 ```
 ┌──────────────────────────────────────────────── 48px title bar ─┐
@@ -20,17 +20,17 @@
    ↑ ล่างสุดเสมอ        ↑ ขอบซ้าย/ขวา 36px · ระยะระหว่าง section 40px
 ```
 
-## คอมโพเนนต์ที่มีให้แล้วใน fluent.css (ข้อ 4)
+## Components already in fluent.css (item 4)
 
-| องค์ประกอบ | คลาส | หมายเหตุ |
+| Element | Class | Note |
 |---|---|---|
-| Title bar + ปุ่มหน้าต่าง | `.win-titlebar` | Electron: มี `-webkit-app-region: drag` ให้แล้ว |
-| NavigationView | `.win-nav` / `.nav-item.selected` | ย่อเป็นไอคอนอัตโนมัติเมื่อ < 1008px |
-| การ์ด | `.win-card` | |
-| แถวตั้งค่าแบบ Windows | `.win-setting` | ไอคอน + ชื่อ + คำอธิบาย + คอนโทรลขวา |
-| InfoBar | `.win-infobar.success/caution/critical` | **ใช้แทน `alert()` เสมอ** |
+| Title bar + window buttons | `.win-titlebar` | Electron: `-webkit-app-region: drag` is already included |
+| NavigationView | `.win-nav` / `.nav-item.selected` | Collapses to icons automatically below 1008px |
+| Card | `.win-card` | |
+| Windows-style settings row | `.win-setting` | Icon + name + description + control on the right |
+| InfoBar | `.win-infobar.success/caution/critical` | **Always use it instead of `alert()`** |
 | Status pill | `.win-pill.success/caution/critical` | |
-| KPI | `.win-kpis .kpi` | 3–5 ช่อง · เกินนั้นตัวเลขเล็กจนไม่เด่น |
+| KPI | `.win-kpis .kpi` | 3–5 slots · more than that and the numbers get too small to stand out |
 | Toggle switch | `.win-toggle` | |
-| ตาราง | `.win-table` | |
-| ลิงก์ | `.win-link` | สี accent-text ไม่ใช่ accent |
+| Table | `.win-table` | |
+| Link | `.win-link` | accent-text colour, not accent |

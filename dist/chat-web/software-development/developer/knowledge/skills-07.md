@@ -465,86 +465,86 @@ Use when a system imports or exports Excel or CSV
 
 ## reference: thai-accounting-apis.md
 
-# ต่อโปรแกรมบัญชี SME ไทยผ่าน API
+# Connecting to Thai SME accounting software through API
 
-ใช้เมื่อระบบของเราต้องส่งเอกสารขายหรือซื้อเข้าโปรแกรมบัญชีของลูกค้า แทนการ export Excel ให้คีย์ซ้ำ · กฎของ `SKILL.md` ใช้เหมือนเดิม: ตรวจให้จบก่อนเขียน · มีหน้าสรุปก่อนยืนยัน · batch id · audit
-ข้อเท็จจริงทุกข้อมาจากเอกสารของผู้ผลิตที่เปิดตรวจ 2026-10-23 · ราคาและค่า API ตรวจซ้ำ 2026-10-26 (ตาราง "ที่มา") · ราคาและเงื่อนไขเปลี่ยนบ่อย ยืนยันกับผู้ขายก่อนเสนอราคาลูกค้า
-ตัวย่อ: small and medium enterprises (SME) · Application Programming Interface (API) · User Acceptance Testing (UAT) คือระบบทดสอบ · Hash-based Message Authentication Code (HMAC) คือลายเซ็นที่สร้างจากกุญแจลับ · Software Development Kit (SDK)
+Use when our system must push sales or purchase documents into the customer's accounting software, instead of exporting Excel for them to re-key. The rules of `SKILL.md` still apply: validate everything before writing · summary page before confirming · batch id · audit.
+Every fact comes from the vendors' documents, opened 2026-10-23. Prices and API fees were rechecked 2026-10-26 (table "Sources"). Prices and terms change often: confirm with the vendor before quoting a customer.
+Abbreviations: small and medium enterprises (SME) · Application Programming Interface (API) · User Acceptance Testing (UAT) is the test system · Hash-based Message Authentication Code (HMAC) is a signature made from a secret key · Software Development Kit (SDK).
 
-## 1 · เลือกทาง
+## 1 · Choose a route
 
-| ทาง | ใช้เมื่อ |
+| Route | Use when |
 |---|---|
-| ส่งไฟล์ตามแม่แบบนำเข้าของโปรแกรมบัญชี (รูปแบบไฟล์ของแต่ละเจ้ายังไม่ได้ตรวจ) | เอกสารน้อย · แพ็กเกจของลูกค้าไม่เปิด API |
-| ต่อ API ตรง (ข้อ 2–3) | เอกสารหลายร้อยใบต่อเดือน · ต้องการสถานะกลับ เช่น ชำระแล้ว |
-| ผ่านแอปพาร์ทเนอร์ที่โปรแกรมบัญชีรับรอง (PEAK: เมนู ตั้งค่า > การเชื่อมต่อแอปพลิเคชันภายนอก) | ร้านค้าออนไลน์ที่ใช้ระบบหลังร้านอยู่แล้ว → `ecommerce-patterns` `references/thai-marketplace-apis.md` |
+| Send a file using the accounting software's import template (file format of each vendor not yet checked) | Few documents · the customer's package has no API |
+| Connect to the API directly (sections 2–3) | Hundreds of documents per month · need status back, such as paid |
+| Through a partner app the accounting software certifies (PEAK: menu ตั้งค่า > การเชื่อมต่อแอปพลิเคชันภายนอก, i.e. Settings > External application connections) | Online shop that already uses a back-office system → `ecommerce-patterns` `references/thai-marketplace-apis.md` |
 
 ## 2 · PEAK
 
-| เรื่อง | ข้อมูล |
+| Topic | Information |
 |---|---|
-| เอกสาร | developers.peakaccount.com (API Integration Guide · ไฟล์ `llms.txt` รวมลิงก์ทุกหน้า) · มี Postman collection |
-| แพ็กเกจ | PEAK PRO Plus (12,000 บาท/ปี) ขึ้นไป · ราคา PEAK PRO Plus ตามหน้า developers เมื่อ 2026-10-26 · ค่าบริการ API จ่ายก่อนขึ้นระบบจริงตามเงื่อนไขแพ็กเกจที่ตกลง เอกสารไม่ระบุจำนวนเงิน (รอยืนยัน · เอกสาร go-live ให้ยืนยันค่า API จำนวนรายการ และเงื่อนไขทดลองกับทีม PEAK ก่อนใส่ในใบเสนอราคา) |
-| ขอสิทธิ์ | กรอกแบบฟอร์ม ทีมงานติดต่อกลับใน 3 วันทำการ · ได้ Connect ID + Application Code · credential ของ UAT กับระบบจริงแยกกัน |
-| ยืนยันตัวตน | Client Token อายุ 24 ชม. (`POST /api/v1/ClientToken`) · User Token ต่อกิจการ ลูกค้ากดสร้างเองในเมนู เชื่อมต่อแอปพลิเคชันภายนอก ด้วย Application Code · header `Time-Stamp` (yyyyMMddHHmmss เวลา UTC) · `Time-Signature` = HMAC-SHA1 ของ Time-Stamp ใช้ connectId เป็นกุญแจ |
-| ของที่ทำได้ | contacts · products (มี adjust) · services · quotations · invoices · billing notes · receipts · credit notes · purchase orders · expenses · daily journals · รับชำระ · void · approve · แนบไฟล์ |
-| e-Tax | มี endpoint ส่ง e-Tax Invoice ของ invoice และ receipt · ส่ง e-Receipt |
-| UAT | `http://peakengineapidev.azurewebsites.net/api/v1` (เป็น http ไม่ใช่ https) · ฟรี 3 เดือน · เปิด จ.–ศ. 08:00–22:00 |
-| ระบบจริง | `https://api.peakaccount.com/api/v1` · ก่อนขึ้นต้องผ่าน Final UAT Review (test case · error case · duplicate case · ผลทางบัญชี) |
-| rate limit | ขอ ClientToken 10 ครั้ง/นาที/IP · รายงานงบทดลอง (`GET /api/v1/FinancialReports/trialbalance`) 10 ครั้ง/นาที และพร้อมกัน 1 · ต่อ User Token: GET พร้อมกัน 20 · POST พร้อมกัน 10 · แนบไฟล์พร้อมกัน 10 · เกิน → HTTP 429 `RATE_LIMITED` พร้อม `retryAfterSeconds` |
-| คิดเงินตาม | POST Create ที่สำเร็จเท่านั้น (invoice · receipt · quotation · billing note · purchase order · expense · daily journal) |
-| webhook | event Create · Edit · Void · PaidPayment · VoidPayment ของเอกสารหลัก (contact · product ได้แค่ Create · Edit) · ตั้ง custom header ต่อ endpoint ได้ เช่น `x-api-key` · เอกสารไม่พูดถึงลายเซ็นและการส่งซ้ำ |
+| Docs | developers.peakaccount.com (API Integration Guide · file `llms.txt` links every page) · has a Postman collection |
+| Package | PEAK PRO Plus (12,000 baht/year) or higher · PEAK PRO Plus price per the developers page on 2026-10-26 · API fee is paid before go-live under the agreed package terms; the docs state no amount (`รอยืนยัน`, pending confirmation · per the go-live document, confirm the API fee, the number of items, and the trial terms with the PEAK team before putting them in a quotation) |
+| Get access | Fill in the form, the team replies within 3 working days · you get Connect ID + Application Code · UAT and production credentials are separate |
+| Authentication | Client Token valid 24 hours (`POST /api/v1/ClientToken`) · User Token per business, the customer creates it in the menu เชื่อมต่อแอปพลิเคชันภายนอก (External application connections) with the Application Code · header `Time-Stamp` (yyyyMMddHHmmss, UTC) · `Time-Signature` = HMAC-SHA1 of the Time-Stamp, with connectId as the key |
+| What it can do | contacts · products (has adjust) · services · quotations · invoices · billing notes · receipts · credit notes · purchase orders · expenses · daily journals · receive payment · void · approve · attach files |
+| e-Tax | Has an endpoint to send e-Tax Invoice for invoice and receipt · sends e-Receipt |
+| UAT | `http://peakengineapidev.azurewebsites.net/api/v1` (http, not https) · free for 3 months · open Mon–Fri 08:00–22:00 |
+| Production | `https://api.peakaccount.com/api/v1` · before go-live must pass the Final UAT Review (test case · error case · duplicate case · accounting result) |
+| rate limit | ClientToken request 10 times/minute/IP · trial balance report (`GET /api/v1/FinancialReports/trialbalance`) 10 times/minute and 1 concurrent · per User Token: GET 20 concurrent · POST 10 concurrent · file attach 10 concurrent · over the limit → HTTP 429 `RATE_LIMITED` with `retryAfterSeconds` |
+| Billed by | Only successful POST Create (invoice · receipt · quotation · billing note · purchase order · expense · daily journal) |
+| webhook | Events Create · Edit · Void · PaidPayment · VoidPayment of the main documents (contact · product only Create · Edit) · can set a custom header per endpoint, such as `x-api-key` · the docs say nothing about signatures or redelivery |
 
 ## 3 · FlowAccount
 
-| เรื่อง | ข้อมูล |
+| Topic | Information |
 |---|---|
-| เอกสาร | developers.flowaccount.com · spec ที่ใช้อยู่จริง `https://developers.flowaccount.com/swagger.yml` (OpenAPI 3.0.2 · 130 path) · SDK หลายภาษาใน github.com/flowaccount |
-| แพ็กเกจ | เฉพาะ Pro Business ที่มี Open API (หน้าราคา 2026-10-26: ฿457/เดือน · ฿5,490/ปี) · Free · Standard (฿1,990/ปี) · Pro (฿2,990/ปี) ไม่มี API · หน้าราคาไม่ระบุค่า API แยก · นำเข้าไม่เกิน 5,000 รายการ/เดือน เกินคิดราคาพิเศษ · หน้า API เขียนว่า "Pay when you go live" ไม่ระบุจำนวนเงิน (รอยืนยัน) |
-| ขอสิทธิ์ | แบบฟอร์ม request-openapi · ทีมติดต่อใน 1–2 วันทำการ · sandbox ใช้ได้ 30 วัน · credential จริงส่งอีเมลเจ้าของกิจการใน 3 วันทำการหลังยืนยันแพ็กเกจ |
-| ยืนยันตัวตน | OAuth 2.0 · Client Credentials = 1 client ต่อ 1 กิจการ · OpenID = พาร์ทเนอร์ 1 client หลายกิจการ (scope `flowaccount-api offline_access` · refresh token ราว 30 วันนับจากครั้งล่าสุด) · token ที่ `https://openapi.flowaccount.com/{test หรือ v1}/token` อายุ 86,400 วินาที · ส่งใน header `Authorization: Bearer` |
-| base URL | sandbox `https://openapi.flowaccount.com/test` · ระบบจริง `https://openapi.flowaccount.com/v1` |
-| ของที่ทำได้ | contacts · products · quotations · billing-notes · tax-invoices · receipts · cash-invoices · purchases · purchases-orders · expenses · withholding-taxes · journal-entries · chart-of-accounts · เปลี่ยนสถานะ · รับชำระ · แนบไฟล์ · export PDF · ส่งอีเมล |
-| อ้างอิงข้ามระบบ | ฟิลด์ `externalDocumentId` "รหัสเอกสารอ้างอิงจากระบบภายนอก" |
-| e-Tax · rate limit · webhook | ไม่พบใน swagger.yml (ค้นคำ webhook · etax · rate limit · 429 ได้ 0 รายการ) และหน้า developers.flowaccount.com · flowaccount.com/en/developers เมื่อ 2026-10-26 (ยังไม่ได้ตรวจกับผู้ขาย · ติดต่อ developer_support@flowaccount.com) |
+| Docs | developers.flowaccount.com · the spec actually in use `https://developers.flowaccount.com/swagger.yml` (OpenAPI 3.0.2 · 130 paths) · SDKs in several languages at github.com/flowaccount |
+| Package | Only Pro Business has Open API (price page 2026-10-26: ฿457/month · ฿5,490/year) · Free · Standard (฿1,990/year) · Pro (฿2,990/year) have no API · the price page lists no separate API fee · import up to 5,000 items/month, beyond that special pricing · the API page says "Pay when you go live" and gives no amount (`รอยืนยัน`, pending confirmation) |
+| Get access | Form request-openapi · team replies within 1–2 working days · sandbox usable for 30 days · real credentials are emailed to the business owner within 3 working days after the package is confirmed |
+| Authentication | OAuth 2.0 · Client Credentials = 1 client per business · OpenID = partner with 1 client for many businesses (scope `flowaccount-api offline_access` · refresh token about 30 days from the last use) · token at `https://openapi.flowaccount.com/{test or v1}/token` valid 86,400 seconds · sent in header `Authorization: Bearer` |
+| base URL | sandbox `https://openapi.flowaccount.com/test` · production `https://openapi.flowaccount.com/v1` |
+| What it can do | contacts · products · quotations · billing-notes · tax-invoices · receipts · cash-invoices · purchases · purchases-orders · expenses · withholding-taxes · journal-entries · chart-of-accounts · change status · receive payment · attach files · export PDF · send email |
+| Cross-system reference | Field `externalDocumentId` "รหัสเอกสารอ้างอิงจากระบบภายนอก" (document id referenced from an external system) |
+| e-Tax · rate limit · webhook | Not found in swagger.yml (searching webhook · etax · rate limit · 429 gave 0 hits) nor on the pages developers.flowaccount.com · flowaccount.com/en/developers on 2026-10-26 (not yet checked with the vendor · contact developer_support@flowaccount.com) |
 
-## 4 · เจ้าอื่น
+## 4 · Other vendors
 
-| โปรแกรม | สิ่งที่พบ |
+| Software | What was found |
 |---|---|
-| TRCLOUD | หน้า API ของผู้ผลิตบอกว่ามี RESTful API · สร้าง API Key จากเมนูตั้งค่า · มี Custom API & Webhook · ไม่พบเอกสารนักพัฒนาสาธารณะ ต้องขอคู่มือจากทีมขาย |
-| AccRevo | ไม่พบ API สาธารณะ · เว็บมีบทความเปิดตัว AccRevoX × MCP (ทำงานกับ Claude) |
-| Express | ค้น 2 รอบไม่พบเว็บผู้ผลิตและไม่พบ API สาธารณะ |
+| TRCLOUD | The vendor's API page says it has a RESTful API · create an API Key from the settings menu · has Custom API & Webhook · no public developer docs found, ask the sales team for the manual |
+| AccRevo | No public API found · the website has a launch article about AccRevoX × MCP (works with Claude) |
+| Express | Searched twice, found no vendor website and no public API |
 
 ## 5 · e-Tax Invoice
 
-- เลือกระบบเดียวเป็นผู้ออกเลขที่ใบกำกับภาษี · ห้ามระบบเรากับโปรแกรมบัญชีออกเลขซ้อนกัน
-- ส่งเข้าโปรแกรมบัญชีเป็นเอกสารต้นทาง แล้วให้โปรแกรมบัญชีออก e-Tax · PEAK มี endpoint ส่ง e-Tax · FlowAccount ไม่พบใน spec ต้องถามผู้ขาย
-- กฎของใบกำกับ (มาตรา 86/4 · e-Tax Invoice & e-Receipt กับ by Email) → `e-commerce:e-tax-invoice` (ถ้าติดตั้ง)
+- Pick one system to issue the tax invoice number · our system and the accounting software must not both issue numbers
+- Send into the accounting software as the source document, then let the accounting software issue the e-Tax · PEAK has an endpoint to send e-Tax · FlowAccount not found in the spec, ask the vendor
+- Tax invoice rules (section 86/4 · e-Tax Invoice & e-Receipt vs by Email) → `e-commerce:e-tax-invoice` (if installed)
 
-## 6 · กันซ้ำและกระทบยอด
+## 6 · Prevent duplicates and reconcile
 
-- เก็บตาราง mapping: รหัสฝั่งเรา ↔ รหัสฝั่งโปรแกรมบัญชี · PEAK แนะนำให้เก็บ External Reference และ mapping เพื่อกันเอกสารซ้ำ · FlowAccount ใช้ `externalDocumentId` เก็บรหัสฝั่งเรา
-- เอกสารของทั้ง 2 เจ้าไม่มี idempotency key → ค้น mapping ก่อน POST create ทุกครั้ง (`principle-safe-to-rerun`)
-- timeout ไม่ได้แปลว่าล้มเหลว · ดึงรายการตามช่วงวันที่มาเทียบก่อนส่งซ้ำ
-- ได้ 429 → รอตาม `retryAfterSeconds` หรือถอยแบบ exponential (1 · 2 · 4 · 8 วินาที ตามที่ PEAK แนะนำ)
-- กระทบยอดทุกวัน: จำนวนเอกสารและยอดรวมของ 2 ระบบต้องตรงกัน → `fintech-payments` (`references/agent-payment-integration.md` หัวข้อ Settlement Reconciliation)
-- ทุกการส่งลง audit: ใครส่ง · เอกสารไหน · รหัสปลายทาง · ผล → `audit-trail`
-- Client Token · client secret · connectId อยู่นอกโค้ด → `config-and-secrets` · UAT ของ PEAK เป็น http จึงใช้ข้อมูลทดสอบเท่านั้น
+- Keep a mapping table: our id ↔ the accounting software's id · PEAK recommends keeping External Reference and a mapping to prevent duplicate documents · FlowAccount uses `externalDocumentId` to hold our id
+- Neither vendor's docs have an idempotency key → look up the mapping before every POST create (`principle-safe-to-rerun`)
+- A timeout does not mean failure · pull the list by date range and compare before resending
+- On 429 → wait per `retryAfterSeconds` or back off exponentially (1 · 2 · 4 · 8 seconds, as PEAK recommends)
+- Reconcile every day: the document count and total of the 2 systems must match → `fintech-payments` (`references/agent-payment-integration.md`, section Settlement Reconciliation)
+- Log every send to audit: who sent · which document · destination id · result → `audit-trail`
+- Client Token · client secret · connectId stay outside the code → `config-and-secrets` · PEAK UAT is http, so use test data only
 
-## ที่มา
+## Sources
 
-| เรื่อง | URL (เปิดตรวจ 2026-10-23) |
+| Topic | URL (opened 2026-10-23) |
 |---|---|
-| PEAK แพ็กเกจ · UAT ฟรี 3 เดือน · คู่มือ | https://www.peakaccount.com/developers · https://developers.peakaccount.com/reference/api-integration-guide |
-| PEAK รายการหน้า API ทั้งหมด | https://developers.peakaccount.com/llms.txt |
-| PEAK token · ลายเซ็น | https://developers.peakaccount.com/reference/peak-api-client-token-guide.md |
-| PEAK rate limit · การนับเงิน · ขึ้นระบบจริง | https://developers.peakaccount.com/reference/copy-of-api-rate-limiting-concurrency-control.md · .../peak-api-transaction-counting.md · .../peak-api-implementation-go-live-guide.md |
-| PEAK webhook · สิทธิ์ API | https://developers.peakaccount.com/reference/webhook.md · .../api-access-rights.md |
-| PEAK ศูนย์ช่วยเหลือ (แพ็กเกจ · User Token) | https://intercom.help/peak/en/articles/13176287 · https://intercom.help/peak/en/articles/10078711 |
-| FlowAccount หน้า API · ราคา (ตรวจซ้ำ 2026-10-26) | https://flowaccount.com/en/developers · https://flowaccount.com/en/pricing |
-| FlowAccount การเชื่อมต่อ · token | https://developers.flowaccount.com/tutorial/connect-open-api · .../tutorial/connect/client-credentials-flow · .../tutorial/connect/open-id-flow |
-| FlowAccount spec · SDK | https://developers.flowaccount.com/swagger.yml · https://github.com/flowaccount/open-api (README ชี้ว่า swagger.yml คือ spec ที่ใช้จริง) |
+| PEAK packages · UAT free 3 months · guide | https://www.peakaccount.com/developers · https://developers.peakaccount.com/reference/api-integration-guide |
+| PEAK list of all API pages | https://developers.peakaccount.com/llms.txt |
+| PEAK token · signature | https://developers.peakaccount.com/reference/peak-api-client-token-guide.md |
+| PEAK rate limit · billing count · go-live | https://developers.peakaccount.com/reference/copy-of-api-rate-limiting-concurrency-control.md · .../peak-api-transaction-counting.md · .../peak-api-implementation-go-live-guide.md |
+| PEAK webhook · API access rights | https://developers.peakaccount.com/reference/webhook.md · .../api-access-rights.md |
+| PEAK help center (packages · User Token) | https://intercom.help/peak/en/articles/13176287 · https://intercom.help/peak/en/articles/10078711 |
+| FlowAccount API page · price (rechecked 2026-10-26) | https://flowaccount.com/en/developers · https://flowaccount.com/en/pricing |
+| FlowAccount connection · token | https://developers.flowaccount.com/tutorial/connect-open-api · .../tutorial/connect/client-credentials-flow · .../tutorial/connect/open-id-flow |
+| FlowAccount spec · SDK | https://developers.flowaccount.com/swagger.yml · https://github.com/flowaccount/open-api (README says swagger.yml is the spec in actual use) |
 | TRCLOUD · AccRevo | https://www.trcloud.co/api.php · https://www.accrevo.com/ |
 
 
@@ -752,87 +752,87 @@ queue_depth_jobs                 ค่า ณ ขณะนั้น
 
 ## reference: prometheus-grafana.md
 
-# Prometheus และ Grafana — ใช้ให้ถูก
+# Prometheus and Grafana — using them correctly
 
-อยู่ใน `observability-basics` · หลักคิดเรื่องอะไรควรวัดและควรเตือนอยู่ใน `SKILL.md` ข้อ 2 · 4 · 5 ไฟล์นี้บอกวิธีทำใน Prometheus และ Grafana · ชื่อ metric และตัวเลขที่ติดป้าย `ตัวอย่าง` เป็นข้อมูลสมมุติ ต้องปรับให้ตรงกับระบบจริง
+Part of `observability-basics` · the thinking about what to measure and what to alert on is in `SKILL.md` sections 2 · 4 · 5 · this file says how to do it in Prometheus and Grafana · metric names and numbers labelled `ตัวอย่าง` (example) are hypothetical data and must be adjusted to the real system
 
-## สารบัญ
+## Contents
 
-- [1 · metric 4 ชนิด](#1--metric-4-ชนิด)
-- [2 · ชื่อและหน่วย](#2--ชื่อและหน่วย)
-- [3 · label และ cardinality](#3--label-และ-cardinality)
-- [4 · PromQL ที่ใช้บ่อย](#4--promql-ที่ใช้บ่อย)
-- [5 · กฎ alert](#5--กฎ-alert)
+- [1 · The 4 metric types](#1--the-4-metric-types)
+- [2 · Names and units](#2--names-and-units)
+- [3 · Labels and cardinality](#3--labels-and-cardinality)
+- [4 · Common PromQL](#4--common-promql)
+- [5 · Alert rules](#5--alert-rules)
 - [6 · Grafana](#6--grafana)
-- [7 · ตัวอย่างระบบ voice agent](#7--ตัวอย่างระบบ-voice-agent)
-- [8 · ตรวจก่อนส่ง](#8--ตรวจก่อนส่ง)
-- [9 · ที่มา](#9--ที่มา)
+- [7 · Voice agent system example](#7--voice-agent-system-example)
+- [8 · Check before sending](#8--check-before-sending)
+- [9 · Sources](#9--sources)
 
-## 1 · metric 4 ชนิด
+## 1 · The 4 metric types
 
-| ชนิด | คืออะไร | ใช้เมื่อ | ตัวอย่าง |
+| Type | What it is | Use when | Example |
 |---|---|---|---|
-| counter | ค่าสะสม เพิ่มอย่างเดียว กลับเป็น 0 เมื่อ process เริ่มใหม่ | นับเหตุการณ์ที่เกิดแล้ว (คำขอ · error · งานที่เสร็จ) · อ่านด้วย `rate()` ไม่อ่านค่าดิบ | `http_requests_total` |
-| gauge | ค่า ณ ขณะนั้น ขึ้นลงได้ | ของที่นับค้างอยู่หรือวัดได้ตอนนี้ (สายที่กำลังคุย · ความยาวคิว · หน่วยความจำ) | `voice_calls_active` |
-| histogram | นับค่าที่วัดได้ลงช่วง (bucket) พร้อมผลรวมและจำนวน | ระยะเวลาหรือขนาดที่ต้องหา p95 · p99 และรวมข้ามหลาย instance ได้ | `http_request_duration_seconds` |
-| summary | คำนวณ quantile ที่ฝั่งแอป ในช่วงเวลาเลื่อน | ใช้เมื่อไม่ต้องรวมข้าม instance เท่านั้น · quantile และช่วงเวลาเลือกตอนเขียนโค้ด เปลี่ยนทีหลังไม่ได้ | หายาก ปกติเลือก histogram |
+| counter | A cumulative value that only goes up and returns to 0 when the process restarts | Counting events that have happened (requests · errors · finished jobs) · read with `rate()`, never the raw value | `http_requests_total` |
+| gauge | The value at that moment, can go up and down | Things that are pending or measurable right now (calls in progress · queue length · memory) | `voice_calls_active` |
+| histogram | Counts measured values into ranges (buckets), with a sum and a count | Durations or sizes where you need p95 · p99 and want to aggregate across many instances | `http_request_duration_seconds` |
+| summary | Computes quantiles on the app side, over a sliding time window | Use only when you do not need to aggregate across instances · the quantiles and window are chosen when writing the code and cannot be changed later | Rare; normally choose histogram |
 
-- ห้ามเอา quantile จาก summary หลาย instance มาเฉลี่ยกัน ผลที่ได้ไม่มีความหมายทางสถิติ (เอกสาร Prometheus ใช้คำนี้)
-- **เลือกอย่างไร** (prometheus.io/docs/practices/histograms/ ตรวจ 2026-10-27): ถ้า library และ Prometheus ที่ใช้รองรับ ให้ใช้ native histogram ก่อน เพราะเปลี่ยน percentile และช่วงเวลาทีหลังใน PromQL ได้ · ไม่รองรับแต่ต้องรวมข้าม instance ให้ใช้ classic histogram · summary เฉพาะเมื่อไม่ต้องรวมข้าม instance
-- เอกสาร Prometheus แนะนำ native histogram ก่อน แต่ library ที่รองรับยังจำกัด ถ้า library ไม่รองรับให้ใช้ classic histogram แล้ววาง bucket ให้มีขอบอยู่ตรงค่า SLO ไม่งั้น p95 ที่ประมาณได้จะคลาด (ตัวอย่างในเอกสาร: p95 จริงราว 320 ms ประมาณได้ 443 ms เพราะ bucket กว้างตั้งแต่ 300 ถึง 450 ms)
+- Never average quantiles from a summary across several instances; the result has no statistical meaning (the Prometheus docs use this wording)
+- **How to choose** (prometheus.io/docs/practices/histograms/ checked 2026-10-27): if the library and Prometheus you use support it, use a native histogram first, because you can change the percentile and time window later in PromQL · if not supported but you need to aggregate across instances, use a classic histogram · use a summary only when you do not need to aggregate across instances
+- The Prometheus docs recommend native histograms first, but the libraries that support them are still limited; if your library does not support them, use a classic histogram and place buckets so that an edge sits at the SLO value, otherwise the estimated p95 will be off (example in the docs: true p95 about 320 ms is estimated as 443 ms because the bucket is wide from 300 to 450 ms)
 
-## 2 · ชื่อและหน่วย
+## 2 · Names and units
 
-| กฎ | ถูก | ผิด |
+| Rule | Right | Wrong |
 |---|---|---|
-| ขึ้นต้นด้วยคำเดียวบอกระบบ | `voice_stage_duration_seconds` | `stage_duration` |
-| ใช้หน่วยพื้นฐาน: วินาที · byte · ratio 0 ถึง 1 | `_seconds` · `_bytes` · `_ratio` | `_milliseconds` · `_megabytes` · `_percent` |
-| หน่วยเป็นรูปพหูพจน์ต่อท้าย | `node_memory_usage_bytes` | `node_memory_usage_byte` |
-| counter ลงท้าย `_total` (ถ้ามีหน่วย หน่วยมาก่อน) | `process_cpu_seconds_total` · `http_requests_total` | `http_requests_count` |
-| 1 ชื่อ 1 หน่วย 1 ความหมาย | วินาทีทั้งชื่อ | ครึ่งหนึ่งวินาทีครึ่งหนึ่งมิลลิวินาที |
-| ไม่ใส่ชื่อ label ซ้ำในชื่อ metric | `http_requests_total{route=…}` | `http_requests_by_route_total` |
+| Start with one word that names the system | `voice_stage_duration_seconds` | `stage_duration` |
+| Use base units: seconds · bytes · ratio 0 to 1 | `_seconds` · `_bytes` · `_ratio` | `_milliseconds` · `_megabytes` · `_percent` |
+| The unit goes at the end, in plural form | `node_memory_usage_bytes` | `node_memory_usage_byte` |
+| A counter ends in `_total` (if it has a unit, the unit comes first) | `process_cpu_seconds_total` · `http_requests_total` | `http_requests_count` |
+| 1 name, 1 unit, 1 meaning | All in seconds | Half in seconds, half in milliseconds |
+| Do not put a label name again in the metric name | `http_requests_total{route=…}` | `http_requests_by_route_total` |
 
-## 3 · label และ cardinality
+## 3 · Labels and cardinality
 
-ทุกชุดค่า label ที่ไม่ซ้ำกันคือ time series ใหม่ 1 เส้น เอกสาร Prometheus เตือนให้เลี่ยง label ที่ค่าไม่จำกัด เช่น user id หรืออีเมล
+Every unique set of label values is 1 new time series. The Prometheus docs warn you to avoid labels whose values are unbounded, such as user id or email.
 
-| ห้ามเป็น label | ให้ใช้แทน |
+| Must not be a label | Use instead |
 |---|---|
-| `user_id` · `customer_id` · เบอร์โทร · อีเมล | ไม่ใส่เลย · เก็บใน log หรือ trace · ถ้าต้องนับรายคน ใช้ฐานข้อมูล ไม่ใช่ metric |
-| `call_id` · `session_id` · `request_id` · `trace_id` | log และ trace ที่ผูกกับ id เดียวกัน (`logging-standards`) |
-| URL เต็มที่มี id หรือ query string | แม่แบบเส้นทาง เช่น `/orders/{id}` |
-| ข้อความ error ที่มีค่าแปรผัน | รหัส error ที่มีจำนวนจำกัด เช่น `reason="timeout"` |
+| `user_id` · `customer_id` · phone number · email | Leave it out · keep it in logs or traces · if you must count per person, use a database, not a metric |
+| `call_id` · `session_id` · `request_id` · `trace_id` | Logs and traces tied to the same id (`logging-standards`) |
+| A full URL that has an id or query string | A route template such as `/orders/{id}` |
+| An error message with variable values | A limited set of error codes such as `reason="timeout"` |
 
-- label ที่ใช้ได้ต้องนับค่าที่เป็นไปได้ทั้งหมดได้ล่วงหน้า (stage = 3 ค่า · status = 5 กลุ่ม) · จำนวน series ของ metric หนึ่งใกล้เคียงผลคูณของจำนวนค่าในแต่ละ label · histogram คูณจำนวน bucket เข้าไปอีก
-- ตรวจว่า metric ไหนทำ series ระเบิด: เปิดหน้า TSDB status ใน Prometheus UI · เครื่องมือ `tsdb_stats` ของ `prometheus-mcp` ให้ข้อมูลทำนองเดียวกัน (ดู `mcp-server` ข้อ 1.1)
+- A label you may use must have all its possible values countable in advance (stage = 3 values · status = 5 groups) · the number of series of one metric is close to the product of the number of values in each label · a histogram multiplies by the number of buckets on top
+- To find which metric makes series explode: open the TSDB status page in the Prometheus UI · the `tsdb_stats` tool of `prometheus-mcp` gives similar information (see `mcp-server` step 1.1)
 
-## 4 · PromQL ที่ใช้บ่อย
+## 4 · Common PromQL
 
-| ต้องการ | คำสั่ง | หมายเหตุ |
+| Need | Query | Note |
 |---|---|---|
-| คำขอต่อวินาที | `sum by (route) (rate(http_requests_total[5m]))` | ช่วง `[5m]` ควรยาวหลายเท่าของระยะ scrape (ยังไม่ได้ตรวจตัวเลขกับเอกสาร) |
-| อัตรา error | `sum(rate(http_requests_total{status=~"5.."}[5m])) / sum(rate(http_requests_total[5m]))` | นับ 5xx (เราผิด) แยกจาก 4xx · ตอนไม่มีทราฟฟิกผลหารเป็น NaN กฎ alert จะไม่ fire ซึ่งอาจซ่อนระบบที่ไม่มีคำขอเข้าเลย ให้เตือนเรื่องไม่มีคำขอแยกอีกกฎ |
-| p95 ของ latency (classic histogram) | `histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket[5m])))` | ต้องคง `le` ไว้ใน `sum by` · แยกตาม route ให้เติม `route` ใน `by` |
-| p95 (native histogram) | `histogram_quantile(0.95, sum(rate(http_request_duration_seconds[5m])))` | ใช้เมื่อ library และ Prometheus รองรับ |
-| ค่าเฉลี่ย latency (ประกอบเท่านั้น ห้ามใช้ตัดสิน) | `rate(http_request_duration_seconds_sum[5m]) / rate(http_request_duration_seconds_count[5m])` | ดู `SKILL.md` ข้อ 2 |
-| disk จะเต็มใน 4 ชั่วโมง | `predict_linear(node_filesystem_avail_bytes[1h], 4*3600) < 0` | ตัวอย่างของ saturation ที่เตือนล่วงหน้า (ยังไม่ได้ตรวจกับเอกสาร PromQL) |
+| Requests per second | `sum by (route) (rate(http_requests_total[5m]))` | The `[5m]` range should be several times the scrape interval (number not yet checked against the docs) |
+| Error rate | `sum(rate(http_requests_total{status=~"5.."}[5m])) / sum(rate(http_requests_total[5m]))` | Count 5xx (our fault) apart from 4xx · with no traffic the quotient is NaN and the alert rule will not fire, which can hide a system receiving no requests at all; add a separate rule that alerts on no requests |
+| p95 of latency (classic histogram) | `histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket[5m])))` | Keep `le` in `sum by` · to split by route, add `route` to `by` |
+| p95 (native histogram) | `histogram_quantile(0.95, sum(rate(http_request_duration_seconds[5m])))` | Use when the library and Prometheus support it |
+| Average latency (for context only, never for deciding) | `rate(http_request_duration_seconds_sum[5m]) / rate(http_request_duration_seconds_count[5m])` | See `SKILL.md` section 2 |
+| Disk will be full in 4 hours | `predict_linear(node_filesystem_avail_bytes[1h], 4*3600) < 0` | An example of saturation that warns ahead of time (not yet checked against the PromQL docs) |
 
-## 5 · กฎ alert
+## 5 · Alert rules
 
-หลักจากเอกสาร Prometheus: เตือนจากอาการที่ผู้ใช้รู้สึก (latency · error) ที่จุดสูงในสแตกเท่าที่ทำได้ · ปลุกคนเรื่อง latency ที่จุดเดียวของสแตก · สาเหตุ (CPU · GPU · lag ของ consumer) ใส่ในแดชบอร์ดไว้ไล่หา ไม่ปลุกคน · ยกเว้นเรื่องที่ต้องมีคนลงมือก่อนระบบล่ม เช่นความจุ
+Principle from the Prometheus docs: alert on symptoms users feel (latency · errors) at the highest point in the stack you can · wake someone for latency at a single point of the stack · put causes (CPU · GPU · consumer lag) on the dashboard for tracing, and do not wake anyone for them · except for things a person must act on before the system goes down, such as capacity
 
-ข้อยกเว้น: ตัวเลขที่ผู้ใช้รู้สึกโดยตรงนับเป็นอาการ แม้มาจากระบบข้างใต้ เช่น consumer lag ของ Kafka ที่ทำให้ผู้โทรต้องรอคำตอบ (ข้อ 7) ปลุกคนได้ · lag ที่ไม่กระทบใครทันที เช่นงานรายงานหลังจบสาย เป็นสาเหตุ ใส่แดชบอร์ดหรือแชตทีม
+Exception: a number users feel directly counts as a symptom even if it comes from an underlying system, such as Kafka consumer lag that makes callers wait for an answer (section 7); it may wake someone · lag that affects nobody right away, such as a report job after the call ends, is a cause; put it on the dashboard or the team chat
 
-ทุกกฎต้องมี 4 อย่าง
+Every rule must have 4 things
 
-| อย่าง | ใส่ที่ไหน | เหตุผล |
+| Item | Where | Reason |
 |---|---|---|
-| `for:` | ในกฎ | ไม่เตือนทันทีที่ค่าพุ่งครั้งเดียว · ถ้าไม่ใส่ กฎจะ fire ตั้งแต่รอบประเมินแรก |
-| ระดับความรุนแรง | label `severity` (ชื่อและค่าเป็นธรรมเนียมที่ทีมตั้ง ไม่ใช่ข้อบังคับของ Prometheus) | ให้ Alertmanager ส่งต่อถูกที่ · ใช้ 3 ระดับตาม `SKILL.md` ข้อ 4: ปลุกคน · ดูในเวลางาน · บันทึกไว้ |
-| ลิงก์ runbook | annotation `runbook_url` (ชื่อ key เป็นธรรมเนียม เอกสารบอกแค่ว่า annotation ใส่ลิงก์ runbook ได้) | ให้คนรับเริ่มจากขั้นตอน ไม่ใช่เริ่มจากศูนย์ตอนตี 3 |
-| `summary` บอกอาการและผู้ที่กระทบ | annotation | อ่านจากโทรศัพท์แล้วรู้ว่าต้องทำอะไร |
+| `for:` | In the rule | Do not alert the moment the value spikes once · if omitted, the rule fires from the first evaluation round |
+| Severity level | Label `severity` (the name and values are a convention the team sets, not required by Prometheus) | Lets Alertmanager route it to the right place · use 3 levels per `SKILL.md` section 4: wake someone · look during work hours · log it |
+| Runbook link | Annotation `runbook_url` (the key name is a convention; the docs say only that an annotation can hold a runbook link) | The responder starts from a procedure, not from zero at 3 a.m. |
+| `summary` stating the symptom and who is affected | Annotation | Reading it on a phone tells you what to do |
 
-ตัวอย่าง (เกณฑ์สมมุติ ต้องตั้งจาก SLO จริง):
+Example (hypothetical thresholds; set them from the real SLO):
 
 ```yaml
 groups:
@@ -850,21 +850,21 @@ groups:
           runbook_url: https://runbooks.example.com/voice/turn-latency
 ```
 
-`keep_firing_for` กันเตือนเด้งไปมาเมื่อค่าแกว่งรอบเกณฑ์ · แจ้งเตือนแบบ burn rate ดู `SKILL.md` ข้อ 4.1
+`keep_firing_for` stops alerts from flapping when the value hovers around the threshold · for burn rate alerts see `SKILL.md` section 4.1
 
 ## 6 · Grafana
 
-| เรื่อง | ทำอย่างไร |
+| Topic | How |
 |---|---|
-| 1 dashboard ต่อ 1 service | service ที่รับคำขอใช้ RED: Rate · Errors · Duration · ทรัพยากร (CPU · GPU · disk · connection pool) ใช้ USE: Utilization · Saturation · Errors · เอกสาร Grafana ว่า RED เป็นตัวแทนประสบการณ์ผู้ใช้ จึงตั้ง alert จาก RED ส่วน USE ใช้ไล่หาสาเหตุ |
-| เก็บเป็นโค้ด | JSON ของ dashboard อยู่ใน git · เอกสาร Grafana ถือว่าไม่เก็บ JSON ใน version control เป็นสัญญาณว่าระบบยังไม่เป็นระเบียบ · เมื่อมีหลาย dashboard หน้าตาเหมือนกัน สร้างด้วย grafonnet (Jsonnet) หรือ grafanalib (Python) |
-| โหลดอัตโนมัติ | ไฟล์ provider YAML ใน `provisioning/dashboards/` ชี้ `options.path` ไปโฟลเดอร์ JSON |
-| ไม่ให้แก้ในเบราว์เซอร์แล้วหาย | ตั้ง `allowUiUpdates: false` · ใครอยากแก้ให้แก้ JSON ใน git แล้วเปิด PR · การโหลดจากไฟล์เขียนทับฉบับในฐานข้อมูลเสมอ |
-| ไม่ copy dashboard | ใช้ template variable (เลือก service · environment) บน dashboard แม่ · เอกสาร Grafana เตือนว่าการ copy ทำให้ไม่ได้การแก้จากต้นฉบับ |
-| dashboard ชั่วคราว | ตั้งชื่อขึ้นต้น `TEST:` แล้วลบเมื่อเสร็จ |
-| uid | ตั้ง `uid` คงที่ใน JSON ให้ลิงก์จาก alert ไม่พัง · `uid` และ `title` ต้องไม่ซ้ำกันในโฟลเดอร์เดียวกัน |
+| 1 dashboard per 1 service | A service that takes requests uses RED: Rate · Errors · Duration · resources (CPU · GPU · disk · connection pool) use USE: Utilization · Saturation · Errors · the Grafana docs say RED stands for the user experience, so set alerts from RED and use USE to trace causes |
+| Keep it as code | Dashboard JSON lives in git · the Grafana docs treat not keeping JSON in version control as a sign the system is not yet in order · when many dashboards look alike, generate them with grafonnet (Jsonnet) or grafanalib (Python) |
+| Load automatically | A provider YAML file in `provisioning/dashboards/` points `options.path` to the JSON folder |
+| Stop edits in the browser from being lost | Set `allowUiUpdates: false` · whoever wants a change edits the JSON in git and opens a PR · loading from files always overwrites the version in the database |
+| Do not copy a dashboard | Use template variables (choose service · environment) on a parent dashboard · the Grafana docs warn that copying means you do not get fixes from the original |
+| Temporary dashboards | Name them starting with `TEST:` and delete when done |
+| uid | Set a fixed `uid` in the JSON so links from alerts do not break · `uid` and `title` must be unique within the same folder |
 
-ตัวอย่าง provider (ตรวจกับเอกสาร Grafana 2026-10-27):
+Example provider (checked against the Grafana docs 2026-10-27):
 
 ```yaml
 apiVersion: 1
@@ -878,58 +878,58 @@ providers:
       foldersFromFilesStructure: true
 ```
 
-## 7 · ตัวอย่างระบบ voice agent
+## 7 · Voice agent system example
 
-ชื่อ metric ในหัวข้อนี้ทีมตั้งเองทั้งหมด (ตัวอย่าง) ยกเว้น `DCGM_FI_DEV_GPU_UTIL` และ `kafka_consumergroup_lag*` ที่มาจาก exporter
+All metric names in this section are set by the team (examples), except `DCGM_FI_DEV_GPU_UTIL` and `kafka_consumergroup_lag*`, which come from exporters
 
-**latency แต่ละช่วงของสาย** · 1 histogram แยกช่วงด้วย label `stage` ที่มีค่าจำกัด
+**Latency of each stage of a call** · 1 histogram split by stage with a `stage` label that has limited values
 
 ```
 voice_stage_duration_seconds_bucket{stage="stt|llm|tts", le="…"}
 voice_turn_duration_seconds_bucket{le="…"}   # จากผู้โทรพูดจบถึงเสียงตอบแรกออก
 ```
 
-- วาง bucket ให้ถี่ช่วง 0.1 ถึง 3 วินาที เช่น `0.1, 0.2, 0.3, 0.5, 0.8, 1.2, 1.5, 2, 3, 5` โดยมีขอบตรงเกณฑ์ที่ตั้ง (1.5 วินาทีในตัวอย่างข้อ 5)
-- p95 แยกช่วง: `histogram_quantile(0.95, sum by (le, stage) (rate(voice_stage_duration_seconds_bucket[5m])))` · วางเป็นกราฟเดียว 3 เส้น เห็นทันทีว่าช่วงไหนกินเวลา
-- เตือนที่ `voice_turn_duration_seconds` (อาการที่ผู้โทรรู้สึก) ไม่เตือนทุก stage · stage ไว้ไล่หาสาเหตุ
-- ห้ามใส่ `call_id` หรือเบอร์ผู้โทรเป็น label · call id ลง log และ trace
+- Place buckets densely in the range 0.1 to 3 seconds, for example `0.1, 0.2, 0.3, 0.5, 0.8, 1.2, 1.5, 2, 3, 5`, with an edge at the threshold you set (1.5 seconds in the example of section 5)
+- p95 per stage: `histogram_quantile(0.95, sum by (le, stage) (rate(voice_stage_duration_seconds_bucket[5m])))` · put it in one chart with 3 lines and you see at once which stage eats the time
+- Alert on `voice_turn_duration_seconds` (the symptom callers feel); do not alert on every stage · stages are for tracing causes
+- Never put `call_id` or the caller's phone number as a label · the call id goes to logs and traces
 
-**consumer lag ของ Kafka** · เมื่อ pipeline ส่งเหตุการณ์ของสายผ่าน Kafka
+**Kafka consumer lag** · when the pipeline sends call events through Kafka
 
-- ค่า lag มาจาก exporter ของ Kafka · `kafka_exporter` (danielqsj · Apache-2.0 · ไม่ใช่โครงการทางการของ Apache · ตรวจ 2026-10-27) ให้ `kafka_consumergroup_lag{consumergroup,topic,partition}` และ `kafka_consumergroup_lag_sum{consumergroup,topic}` · ถ้าใช้ exporter ตัวอื่น ชื่ออาจต่าง
-- ปลุกคนเมื่อ lag ของ consumer ที่ทำให้ผู้โทรรอ (เช่นตัวสรุปสายแบบทันที) สูงและไม่ลดนาน · ตัวอย่าง `sum by (consumergroup, topic) (kafka_consumergroup_lag_sum) > 1000` ด้วย `for: 10m` (เกณฑ์สมมุติ) · lag ของงานรายงานหลังจบสายส่งแชตทีมพอ
-- label `partition` ใช้เฉพาะกราฟเจาะลึก ไม่ใส่ในกฎ alert
+- The lag value comes from a Kafka exporter · `kafka_exporter` (danielqsj · Apache-2.0 · not an official Apache project · checked 2026-10-27) gives `kafka_consumergroup_lag{consumergroup,topic,partition}` and `kafka_consumergroup_lag_sum{consumergroup,topic}` · if you use another exporter, the names may differ
+- Wake someone when the lag of a consumer that makes callers wait (such as the real-time call summarizer) is high and does not fall for a long time · example `sum by (consumergroup, topic) (kafka_consumergroup_lag_sum) > 1000` with `for: 10m` (hypothetical threshold) · lag of a report job after the call ends is fine to send to the team chat
+- The `partition` label is only for drill-down charts; do not put it in alert rules
 
-**GPU utilization** · exporter คือ NVIDIA `dcgm-exporter`
+**GPU utilization** · the exporter is NVIDIA `dcgm-exporter`
 
-- `DCGM_FI_DEV_GPU_UTIL` เป็น gauge หน่วย % (ตรวจจาก `etc/default-counters.csv` ของ repo 2026-10-27) · ชื่อนี้ exporter ตั้งมาเอง ไม่ตามกฎข้อ 2 ให้ใช้ตามเดิม
-- GPU เป็นสาเหตุ (USE) ไม่ใช่อาการ · ใส่ในแดชบอร์ดคู่กับ latency ของ stage ที่ใช้ GPU (STT · TTS) · utilization สูงพร้อม p95 ของ stage นั้นสูง แปลว่าเครื่องอิ่มตัว ต้องเพิ่มเครื่องหรือลดโหลด
-- GPU สูงต่อเนื่องหลายชั่วโมงเตือนเป็นระดับดูในเวลางาน ไม่ปลุกคน
+- `DCGM_FI_DEV_GPU_UTIL` is a gauge in % (checked from `etc/default-counters.csv` of the repo 2026-10-27) · this name was set by the exporter and does not follow the rules of section 2; use it as it is
+- GPU is a cause (USE), not a symptom · put it on the dashboard next to the latency of the stages that use the GPU (STT · TTS) · high utilization together with a high p95 of that stage means the machine is saturated and you must add machines or reduce load
+- GPU that stays high for many hours alerts at the look-during-work-hours level; it does not wake anyone
 
-## 8 · ตรวจก่อนส่ง
+## 8 · Check before sending
 
-- [ ] ทุก metric มีหน่วยและ `_total` ตามกฎ · ไม่มี label ที่ค่าไม่จำกัด (user · เบอร์ · call id)
-- [ ] latency เป็น histogram ที่มีขอบ bucket ตรงเกณฑ์ SLO · ไม่ใช้ค่าเฉลี่ยตัดสิน
-- [ ] ทุก alert มี `for:` · `severity` · `runbook_url` · `summary` · เตือนจากอาการ ไม่ใช่ CPU หรือ GPU
-- [ ] dashboard เป็น JSON ใน git · provision ด้วยไฟล์ · `allowUiUpdates: false`
-- [ ] มี dashboard RED ต่อ service และ USE ต่อทรัพยากร
+- [ ] Every metric has a unit and `_total` per the rules · no label with unbounded values (user · phone · call id)
+- [ ] Latency is a histogram with a bucket edge at the SLO threshold · no decisions from averages
+- [ ] Every alert has `for:` · `severity` · `runbook_url` · `summary` · alerts on symptoms, not on CPU or GPU
+- [ ] Dashboards are JSON in git · provisioned from files · `allowUiUpdates: false`
+- [ ] There is a RED dashboard per service and USE per resource
 
-## 9 · ที่มา
+## 9 · Sources
 
-ตรวจ 2026-10-27
+Checked 2026-10-27
 
-| เรื่อง | ที่มา |
+| Topic | Source |
 |---|---|
-| ชนิด metric | prometheus.io/docs/concepts/metric_types/ |
-| ชื่อ หน่วย label cardinality | prometheus.io/docs/practices/naming/ |
+| Metric types | prometheus.io/docs/concepts/metric_types/ |
+| Names, units, label cardinality | prometheus.io/docs/practices/naming/ |
 | histogram · summary · `histogram_quantile` · native histogram | prometheus.io/docs/practices/histograms/ |
-| หลักการ alert จากอาการ | prometheus.io/docs/practices/alerting/ |
-| ไวยากรณ์กฎ `for` · `keep_firing_for` · annotations | prometheus.io/docs/prometheus/latest/configuration/alerting_rules/ |
+| Principle of alerting on symptoms | prometheus.io/docs/practices/alerting/ |
+| Rule syntax `for` · `keep_firing_for` · annotations | prometheus.io/docs/prometheus/latest/configuration/alerting_rules/ |
 | RED · USE · dashboard as code · sprawl | grafana.com/docs/grafana/latest/dashboards/build-dashboards/best-practices/ |
-| provisioning dashboard | grafana.com/docs/grafana/latest/administration/provisioning/ |
+| Dashboard provisioning | grafana.com/docs/grafana/latest/administration/provisioning/ |
 | `DCGM_FI_DEV_GPU_UTIL` | github.com/NVIDIA/dcgm-exporter → etc/default-counters.csv |
-| `kafka_consumergroup_lag` | github.com/danielqsj/kafka_exporter (ไม่ใช่ทางการของ Kafka) |
-| `predict_linear` · ช่วง `[5m]` เทียบระยะ scrape · พฤติกรรม NaN เมื่อหารด้วย 0 | ความรู้ทั่วไปของทีม (ยังไม่ได้ตรวจกับหน้า PromQL ทางการ) |
+| `kafka_consumergroup_lag` | github.com/danielqsj/kafka_exporter (not official to Kafka) |
+| `predict_linear` · `[5m]` range vs scrape interval · NaN behavior when dividing by 0 | General team knowledge (not yet checked against the official PromQL pages) |
 
 
 ---
@@ -1138,41 +1138,41 @@ locales/
 
 ## reference: thai-text-tools.md
 
-# เครื่องมือประมวลผลข้อความไทย — เฉพาะที่ตรวจจากเอกสารทางการแล้ว (2026-10-23)
+# Thai text processing tools — only what was checked against official docs (2026-10-23)
 
-ใช้คู่กับ `i18n-and-locale` (เก็บค่ากลาง แปลงตอนแสดง) และ `translate-th-en` (plugin `superuser`) · ทุกข้อ `จากแหล่ง` เว้นที่ติดป้าย
+Use together with `i18n-and-locale` (store a neutral value, convert at display time) and `translate-th-en` (plugin `superuser`) · every item is `จากแหล่ง` (from a source) except those with a label
 
-## ตัดคำ ถอดเสียง วันที่ ตัวเลข — PyThaiNLP (Python · Apache-2.0)
+## Word segmentation, transliteration, dates, numbers — PyThaiNLP (Python · Apache-2.0)
 
-| งาน | ฟังก์ชัน | หมายเหตุ |
+| Task | Function | Note |
 |---|---|---|
-| ตัดคำ | `pythainlp.tokenize.word_tokenize(text, engine="newmm")` | ค่าเริ่มต้น `newmm` (พจนานุกรม + maximal matching) · engine อื่น `attacut` `deepcut` `icu` `longest` `nlpo3` · ใส่ `custom_dict` เป็น Trie สำหรับศัพท์เฉพาะโปรเจกต์ |
-| ถอดเป็นโรมันตามราชบัณฑิตยสภา (RTGS) | `pythainlp.transliterate.romanize(text, engine="royin")` | ค่าเริ่มต้น `royin` = RTGS · ใช้ทำ slug และชื่อที่เจ้าของยังไม่มีสะกดอังกฤษ (ชื่อคนให้ใช้สะกดของเจ้าของก่อนเสมอ) |
-| วันที่ไทย | `pythainlp.util.thai_strftime(dt, "%-d %b %y")` · `thai_strptime(text, fmt, year="be")` · `convert_years(year, src="be", target="ad")` | ชื่อเดือนไทยและปี พ.ศ. ตอนแสดงผล · เก็บในระบบเป็น ค.ศ. เสมอ |
-| ตัวเลขเป็นคำ | `pythainlp.util.bahttext(1500.50)` · `num_to_thaiword(n)` · `thaiword_to_num(s)` · `thai_digit_to_arabic_digit(s)` | `bahttext` ให้ "หนึ่งพันห้าร้อยบาทห้าสิบสตางค์" ใช้ในใบเสนอราคาและใบเสร็จ |
-| ล้างข้อความ | `pythainlp.util.normalize(text)` | ลบ zero-width · ช่องว่างซ้ำ · สระซ้ำ · ตัวลอย — รันก่อนเทียบหรือเก็บ และเก็บเป็น Unicode NFC |
+| Word segmentation | `pythainlp.tokenize.word_tokenize(text, engine="newmm")` | default `newmm` (dictionary + maximal matching) · other engines `attacut` `deepcut` `icu` `longest` `nlpo3` · pass `custom_dict` as a Trie for project-specific terms |
+| Romanization by the Royal Institute (RTGS) | `pythainlp.transliterate.romanize(text, engine="royin")` | default `royin` = RTGS · use for slugs and names whose owner has no English spelling yet (for personal names always use the owner's own spelling first) |
+| Thai dates | `pythainlp.util.thai_strftime(dt, "%-d %b %y")` · `thai_strptime(text, fmt, year="be")` · `convert_years(year, src="be", target="ad")` | Thai month names and Buddhist Era years at display time · always store as Common Era in the system |
+| Numbers as words | `pythainlp.util.bahttext(1500.50)` · `num_to_thaiword(n)` · `thaiword_to_num(s)` · `thai_digit_to_arabic_digit(s)` | `bahttext` gives "หนึ่งพันห้าร้อยบาทห้าสิบสตางค์", used in quotations and receipts |
+| Clean text | `pythainlp.util.normalize(text)` | removes zero-width characters · repeated spaces · repeated vowels · stray marks — run before comparing or storing, and store as Unicode NFC |
 
-แหล่ง: [pythainlp.org/docs/5.1](https://pythainlp.org/docs/5.1/) (api/tokenize · api/transliterate · api/util) · ดู 2026-10-23 · สัญญาอนุญาต Apache-2.0 ตามท้ายหน้าเอกสาร (ยังไม่ได้เปิดไฟล์ LICENSE ใน repo)
+Source: [pythainlp.org/docs/5.1](https://pythainlp.org/docs/5.1/) (api/tokenize · api/transliterate · api/util) · viewed 2026-10-23 · license Apache-2.0 per the foot of the docs page (the LICENSE file in the repo was not opened)
 
-## เลขบัตรประชาชน 13 หลัก — ตรวจ checksum
+## 13-digit Thai national ID number — check the checksum
 
-- สูตร: หลักที่ 1–12 คูณน้ำหนัก 13 ลงมาถึง 2 รวมกัน · `r = ผลรวม mod 11` · หลักตรวจ = `(11 − r) mod 10` ต้องเท่ากับหลักที่ 13
-- PyThaiNLP **ไม่มี** ฟังก์ชันนี้ (ตรวจดัชนี util แล้ว) · ใช้ `python-stdnum` โมดูล `stdnum.th.pin` (`validate` · `is_valid` · `calc_check_digit` · รุ่น 2.2 · LGPL-2.1+) — [arthurdejong.org/python-stdnum/doc/stdnum.th.pin](https://arthurdejong.org/python-stdnum/doc/stdnum.th.pin) · หรือสคริปต์ `thai-id-validate` (validate.py · validate.ts · MIT) ใน [Boom-Vitt/claude-thai-skills](https://github.com/Boom-Vitt/claude-thai-skills)
-- JavaScript: แพ็กเกจ `thai-id-validator` บน npm (ไม่มี dependency · สัญญาอนุญาตยังไม่ได้ตรวจ) · สูตร 4 บรรทัดเขียนเองได้ ไม่จำเป็นต้องติดตั้ง
-- checksum ผ่าน = รูปแบบถูก ไม่ได้แปลว่าเลขนี้มีอยู่จริง · เลขบัตรเป็นข้อมูลส่วนบุคคล เก็บและ log ตาม `pdpa-compliance`
+- Formula: digits 1–12 multiplied by weights 13 down to 2 and summed · `r = sum mod 11` · check digit = `(11 − r) mod 10` must equal digit 13
+- PyThaiNLP **does not have** this function (the util index was checked) · use `python-stdnum` module `stdnum.th.pin` (`validate` · `is_valid` · `calc_check_digit` · version 2.2 · LGPL-2.1+) — [arthurdejong.org/python-stdnum/doc/stdnum.th.pin](https://arthurdejong.org/python-stdnum/doc/stdnum.th.pin) · or the `thai-id-validate` script (validate.py · validate.ts · MIT) in [Boom-Vitt/claude-thai-skills](https://github.com/Boom-Vitt/claude-thai-skills)
+- JavaScript: the npm package `thai-id-validator` (no dependencies · license not checked) · the 4-line formula can be written yourself, no need to install
+- A passing checksum = the format is right, not that this number really exists · an ID number is personal data; store and log it per `pdpa-compliance`
 
-## ที่อยู่ไทย — แยกช่อง
+## Thai addresses — split into fields
 
-- ไม่มีไลบรารีทั่วไปที่ตรวจแล้วว่าแยกที่อยู่ไทยได้ครบ (ยังไม่ได้ตรวจตัวอื่น) · ที่มีโค้ดและ test: `thai-address` (parse.py · parse.ts · MIT · 11 ช่อง · ตาราง 77 จังหวัดและรหัสไปรษณีย์ → จังหวัด) ใน Boom-Vitt/claude-thai-skills — ผู้เขียนระบุว่าไม่ใช่สำหรับจัดเส้นทางส่งของ
-- ทางที่ปลอดภัยกว่าในฟอร์ม: ให้ผู้ใช้เลือก จังหวัด → อำเภอ → ตำบล จากรายการ แล้วรหัสไปรษณีย์เติมเอง · เก็บแยกช่องตั้งแต่ต้น ไม่เก็บเป็นบรรทัดเดียวแล้วค่อยแยก
+- No general library has been verified to split Thai addresses completely (other libraries not checked) · one with code and tests: `thai-address` (parse.py · parse.ts · MIT · 11 fields · a table of 77 provinces and postal code → province) in Boom-Vitt/claude-thai-skills — the author states it is not for routing deliveries
+- A safer way in a form: let the user pick province → district → subdistrict from a list, and fill the postal code automatically · store in separate fields from the start, not as one line to split later
 
-## เรียงลำดับ นับความยาว ตัดข้อความ
+## Sorting, counting length, truncating text
 
-- เรียงไทยห้ามเรียงตาม codepoint · ใช้ ICU: JavaScript `new Intl.Collator("th")` · PostgreSQL collation `th-TH-x-icu` · MySQL `utf8mb4_thai_520_w2`
-- นับความยาวและตัดข้อความที่ขอบ grapheme cluster (สระและวรรณยุกต์ไม่แยกจากพยัญชนะ): JavaScript `Intl.Segmenter("th", { granularity: "grapheme" })` · Python regex `\X` · ตัดที่ขอบคำใช้ `word_tokenize` ก่อน
-- ไฟล์เก่าเข้ารหัส TIS-620 / cp874 ให้ถอดรหัสก่อน (`pandas.read_csv(..., encoding="cp874")`) · `chardet` เดาผิดบ่อยกับข้อความไทยสั้น
+- Do not sort Thai by codepoint · use ICU: JavaScript `new Intl.Collator("th")` · PostgreSQL collation `th-TH-x-icu` · MySQL `utf8mb4_thai_520_w2`
+- Count length and truncate at grapheme cluster boundaries (vowels and tone marks are not separated from the consonant): JavaScript `Intl.Segmenter("th", { granularity: "grapheme" })` · Python regex `\X` · to cut at a word boundary, run `word_tokenize` first
+- Old files encoded in TIS-620 / cp874 must be decoded first (`pandas.read_csv(..., encoding="cp874")`) · `chardet` often guesses wrong on short Thai text
 
-แหล่งหัวข้อ 3 ข้อหลัง: `thai-text-processing` และ `thai-id-validate` `thai-address` ใน Boom-Vitt/claude-thai-skills (MIT · ดู 2026-10-23) · เรียบเรียงใหม่ ไม่คัดลอก
+Source for the last 3 sections: `thai-text-processing` and `thai-id-validate` `thai-address` in Boom-Vitt/claude-thai-skills (MIT · viewed 2026-10-23) · reworded, not copied
 
 
 ---
@@ -1493,60 +1493,60 @@ README ของแต่ละงานไม่เหมือนกัน · 
 
 ## reference: readme-skeleton.md
 
-# โครง README และเอกสารคู่ — ฉบับเต็ม
+# README skeleton and companion documents — full version
 
-กฎอยู่ใน `SKILL.md` ข้อ 2 · แม่แบบที่คัดลอกไปใช้ได้อยู่ใน `assets/starter-files.md` · คำสั่งและไฟล์ของแต่ละภาษาอยู่ใน [`readme-by-stack.md`](readme-by-stack.md)
+The rules are in `SKILL.md` item 2 · a copy-ready template is in `assets/starter-files.md` · commands and files for each language are in [`readme-by-stack.md`](readme-by-stack.md)
 
-## 1 · หัวข้อ README เรียงตามลำดับที่คนใหม่ต้องใช้
+## 1 · README sections in the order a newcomer needs them
 
-> ตารางนี้คือค่าสำรองและเกณฑ์ความยาวของชั้น 3 ใน `SKILL.md` ข้อ 2 · หัวข้อจริงของแต่ละโปรเจกต์มาจากผลสำรวจชั้น 2 (อ่านโปรเจกต์ · เอกสารทางการ · README ของโปรเจกต์ประเภทเดียวกัน) · หัวข้อที่โปรเจกต์ประเภทนั้นต้องมีแต่ไม่อยู่ในตาราง ให้เพิ่มได้
+> This table is the fallback and the length criteria for layer 3 in `SKILL.md` item 2 · the real sections of each project come from the layer 2 survey (read the project · official docs · READMEs of projects of the same type) · a section that this type of project needs but that is not in the table may be added.
 
-ลำดับนี้ไล่ตามที่คนเพิ่งมาถึงต้องการ: นี่คืออะไร → ติดตั้ง → รัน → แก้โค้ด → ส่งขึ้นระบบ · คอลัมน์ "แหล่ง" คือจำนวนแหล่งใน 5 แหล่งหลัก (หัวข้อ 4) ที่แนะนำหัวข้อนั้น · แถวที่รวมหลายเรื่องบอกเป็นช่วง · "—" คือไม่มีแหล่งหลักแนะนำ เป็นการตัดสินของ skill นี้
+The order follows what someone who has just arrived needs: what is this → install → run → change code → ship · the "Sources" column is the number of the 5 main sources (item 4) that recommend the section · a row that merges several topics gives a range · "—" means no main source recommends it; it is this skill's own judgment. The section names in the "Section" column are the Thai headings written into the README, so they stay Thai (English gloss in brackets).
 
-| # | หัวข้อ | ตอบคำถามอะไร | มีเมื่อ | ยาวแค่ไหน · ยาวเกินย้ายไปไหน | แหล่ง |
+| # | Section | Question it answers | Present when | How long · where to move it if longer | Sources |
 |:--:|---|---|---|---|:--:|
-| 1 | ชื่อ + ทำอะไรให้ใคร | นี่คืออะไร ใครใช้ | เสมอ | 2–3 บรรทัด · บรรทัดแรกไม่เกิน 120 ตัวอักษร | 5 |
-| 2 | บรรทัดสถานะ | ยังพัฒนาอยู่ไหม ใครเป็นเจ้าของ เอกสารอยู่ไหน | เสมอ | 1 บรรทัด: สถานะ · เจ้าของ · ลิงก์ `docs/README.md` | 2–4 (สถานะ 2 · เจ้าของ 4 · ลิงก์เอกสาร 4) |
-| 3 | ภาพหน้าจอหรือตัวอย่างผล | หน้าตาหรือผลลัพธ์เป็นแบบไหน | มีหน้าจอหรือผลที่ดูได้ | 1 รูป หรือคำสั่งตัวอย่างพร้อมผล | 2 (ตัวอย่างการใช้ 3) |
-| 4 | ต้องมีบนเครื่อง | ต้องลงอะไรก่อน รุ่นไหน | เสมอ | ตาราง: เครื่องมือ · รุ่น · ปักรุ่นไว้ที่ไฟล์ไหน (`.nvmrc` · `global.json`) | 3 |
-| 5 | เริ่มใช้งาน | ติดตั้งและรันยังไง | เสมอ | คำสั่งที่คัดลอกไปวางแล้วรันได้ ไม่เกิน 6 คำสั่ง · เกินนั้นทำเป็น `scripts/setup` | 4 |
-| 6 | ตั้งค่า | ต้องตั้งค่าอะไร มีกี่ environment สลับยังไง | โปรเจกต์อ่านค่าจากภายนอก | ตาราง: ชื่อตัวแปร · ใช้ทำอะไร · ต้องมีไหม · ค่าตัวอย่าง (ไม่ใส่ค่าจริง) · ค่าลับบอกแค่ชื่อและที่ขอ · ไม่มีเลยเขียน "ไม่มีค่าตั้งภายนอก" | 0 · อิง Twelve-Factor |
-| 7 | คำสั่งที่ใช้บ่อย | dev · test · lint · format · build สั่งยังไง | เสมอ | ตาราง 4–8 แถว · test ต้องเป็น 1 คำสั่ง | 2 |
-| 8 | โครงโปรเจกต์ | อะไรอยู่โฟลเดอร์ไหน | เสมอ | ผังชั้นเดียว ไม่เกิน 15 บรรทัด · เกิน → `ARCHITECTURE.md` หัวข้อแผนที่โค้ด | 1 |
-| 9 | สถาปัตยกรรมย่อ | ระบบมีกี่ส่วน คุยกันยังไง | มีมากกว่า 1 ส่วน (หน้าเว็บ + API + ฐานข้อมูล · คิว · บริการภายนอก) | 3–5 บรรทัด + รูป Mermaid ระดับ Context หรือ Container · เต็ม → `ARCHITECTURE.md` | — · อิง matklad และ C4 |
-| 10 | build และไฟล์ที่ได้ | ทำตัวส่งมอบยังไง ได้ไฟล์อะไร อยู่ไหน | มีของที่ต้อง build (เว็บ · แอป · binary · package) | คำสั่ง build ต่อเป้าหมาย + path ของไฟล์ที่ได้ | 2 (นับรวม deploy) |
-| 11 | deploy | ขึ้นระบบที่ไหน ใครกด ผ่าน Continuous Integration (CI) ตัวไหน ย้อนยังไง | ขึ้นระบบได้ | 3–5 บรรทัด · ขั้นเต็ม → `docs/runbook-deploy.md` | 2 (นับรวม build) |
-| 12 | ติดปัญหา | อาการที่เจอบ่อยและวิธีแก้ | เสมอ | ตาราง อาการ · แก้ · เริ่มจากที่เจอเองตอนเขียน README | — |
-| 13 | ร่วมพัฒนา | branch · commit · pull request (PR) · ตรวจอะไรก่อนส่ง | มีคนอื่นแก้โค้ด | 3–5 บรรทัด · ยาว → `CONTRIBUTING.md` | 4 |
-| 14 | ติดต่อและขอความช่วยเหลือ | ติดขัดถามใคร ช่องทางไหน | เสมอ | 1–2 บรรทัด | 4 |
-| 15 | สัญญาอนุญาต | เอาไปใช้ต่อได้แค่ไหน | เสมอ · เป็นหัวข้อสุดท้าย | 1 บรรทัด + ไฟล์ `LICENSE` · งานภายในเขียน "ใช้ภายใน <บริษัท> ห้ามเผยแพร่" | 2 |
+| 1 | ชื่อ + ทำอะไรให้ใคร (name + what it does for whom) | What is this, who uses it | always | 2–3 lines · first line at most 120 characters | 5 |
+| 2 | บรรทัดสถานะ (status line) | Is it still in development, who owns it, where are the docs | always | 1 line: status · owner · link to `docs/README.md` | 2–4 (status 2 · owner 4 · docs link 4) |
+| 3 | ภาพหน้าจอหรือตัวอย่างผล (screenshot or sample output) | What does it look like or produce | there is a screen or output to look at | 1 image, or a sample command with its output | 2 (usage example 3) |
+| 4 | ต้องมีบนเครื่อง (needed on the machine) | What must be installed first, which version | always | table: tool · version · which file pins the version (`.nvmrc` · `global.json`) | 3 |
+| 5 | เริ่มใช้งาน (getting started) | How to install and run | always | commands that can be copied, pasted and run, at most 6 commands · more than that becomes `scripts/setup` | 4 |
+| 6 | ตั้งค่า (configuration) | What must be configured, how many environments, how to switch | the project reads values from outside | table: variable name · what it is for · required or not · sample value (no real values) · for a secret give only the name and where to get it · if there is none, write "ไม่มีค่าตั้งภายนอก" (no external config) | 0 · based on Twelve-Factor |
+| 7 | คำสั่งที่ใช้บ่อย (common commands) | How to run dev · test · lint · format · build | always | table of 4–8 rows · test must be 1 command | 2 |
+| 8 | โครงโปรเจกต์ (project layout) | What is in which folder | always | a one-level tree, at most 15 lines · more → `ARCHITECTURE.md`, code-map section | 1 |
+| 9 | สถาปัตยกรรมย่อ (short architecture) | How many parts the system has, how they talk | more than 1 part (web page + API + database · queue · external service) | 3–5 lines + a Mermaid diagram at Context or Container level · full → `ARCHITECTURE.md` | — · based on matklad and C4 |
+| 10 | build และไฟล์ที่ได้ (build and output files) | How to make the deliverable, what files come out, where | there is something to build (web · app · binary · package) | build command per target + the path of the output file | 2 (counted together with deploy) |
+| 11 | deploy | Where it goes live, who triggers it, through which Continuous Integration (CI), how to roll back | it can be deployed | 3–5 lines · full steps → `docs/runbook-deploy.md` | 2 (counted together with build) |
+| 12 | ติดปัญหา (troubleshooting) | Common symptoms and fixes | always | table of symptom · fix · start from what you hit yourself while writing the README | — |
+| 13 | ร่วมพัฒนา (contributing) | branch · commit · pull request (PR) · what to check before sending | other people change the code | 3–5 lines · longer → `CONTRIBUTING.md` | 4 |
+| 14 | ติดต่อและขอความช่วยเหลือ (contact and help) | Whom to ask when stuck, which channel | always | 1–2 lines | 4 |
+| 15 | สัญญาอนุญาต (license) | How far it can be reused | always · the last section | 1 line + the `LICENSE` file · for internal work write "ใช้ภายใน <บริษัท> ห้ามเผยแพร่" (internal use at <company>, do not distribute) | 2 |
 
-**กฎของโครง**
-- หัวข้อที่ไม่มีของ ตัดทิ้ง ไม่เขียนว่า "ไม่มี" · ยกเว้นหัวข้อ 6 ที่ต้องบอกว่าไม่มีค่าตั้งภายนอก
-- README มีแค่สิ่งที่คนใหม่ต้องใช้ใน 30 นาทีแรก · ของที่ยาวกว่านั้นย้ายไปไฟล์ในหัวข้อ 2 แล้วลิงก์กลับ ไม่ลบทิ้ง
-- ยาวเกิน 100 บรรทัด → ใส่สารบัญใต้บรรทัดสถานะ
-- แก้ README ใน commit เดียวกับโค้ดที่ทำให้คำสั่งหรือค่าตั้งเปลี่ยน
-- แต่ละภาษามีหัวข้อที่ต้องเพิ่ม (flavor ของ Flutter · `user-secrets` ของ .NET) → [`readme-by-stack.md`](readme-by-stack.md) หัวข้อ 3
+**Skeleton rules**
+- Cut a section that has nothing in it; do not write "none" · except section 6, which must say there is no external config.
+- The README holds only what a newcomer needs in the first 30 minutes · anything longer moves to the file named in column 2, with a link back; do not delete it.
+- Longer than 100 lines → put a table of contents under the status line.
+- Edit the README in the same commit as the code that changes a command or setting.
+- Each language has sections to add (Flutter flavors · .NET `user-secrets`) → [`readme-by-stack.md`](readme-by-stack.md) section 3.
 
-## 2 · ของที่แยกไปไฟล์อื่น
+## 2 · What goes into other files
 
-| ไฟล์ | อยู่ที่ | เนื้อหา | สร้างเมื่อ |
+| File | Lives at | Content | Create when |
 |---|---|---|---|
-| `ARCHITECTURE.md` | `<project-name>/` | แผนที่โค้ดสำหรับคนแก้โค้ด (หัวข้อ 3) | ผังโฟลเดอร์ใน README เกิน 15 บรรทัด หรือระบบมีมากกว่า 1 ส่วน |
-| `CHANGELOG.md` | `<project-name>/` | สิ่งที่ผู้ใช้เห็นเปลี่ยนในแต่ละรุ่น | ตามตารางใน `SKILL.md` ข้อ 3 |
-| `CONTRIBUTING.md` | `<project-name>/` | ตั้งเครื่องนักพัฒนา · branch · commit · PR · lint และ test ก่อนส่ง | หัวข้อ 13 ของ README ยาวเกิน 5 บรรทัด |
-| `LICENSE` | `<project-name>/` | ข้อความสัญญาอนุญาตเต็ม | repo เปิดสาธารณะ หรือสัญญาจ้างระบุ |
-| `SECURITY.md` | `<project-name>/` หรือ `.github/` | ช่องทางแจ้งช่องโหว่ · รุ่นที่ยังดูแล | repo เปิดสาธารณะ หรือส่งมอบให้ลูกค้าดูแลต่อ |
-| `CODEOWNERS` | `.github/` | โฟลเดอร์ไหนใครต้องตรวจ PR | มีหลายทีมหรือหลายเจ้าของ |
-| `runbook-deploy.md` | `docs/` ที่ราก | ขั้น build → release → run · ตั้งค่าแต่ละ environment · ย้อนรุ่น | ขั้น deploy ยาวเกิน 5 บรรทัด |
-| `decisions/ADR-NNNN-<slug>.md` | `docs/` ที่ราก | บันทึกการตัดสินใจ (Architecture Decision Record (ADR)) ทีละเรื่อง | ตัดสินใจเรื่องที่ย้อนยาก (`adr-writer`) |
-| Architecture ฉบับส่งมอบ | `docs/` ที่ราก | เอกสารสถาปัตยกรรมแบบ arc42 | ส่งมอบลูกค้าหรือมีผู้ตรวจรับ (`project-doc-set`) |
+| `ARCHITECTURE.md` | `<project-name>/` | a code map for people who change the code (section 3) | the folder tree in the README exceeds 15 lines, or the system has more than 1 part |
+| `CHANGELOG.md` | `<project-name>/` | what users see changing in each version | per the table in `SKILL.md` item 3 |
+| `CONTRIBUTING.md` | `<project-name>/` | developer machine setup · branch · commit · PR · lint and test before sending | README section 13 is longer than 5 lines |
+| `LICENSE` | `<project-name>/` | the full license text | the repo is public, or the contract requires it |
+| `SECURITY.md` | `<project-name>/` or `.github/` | how to report a vulnerability · versions still supported | the repo is public, or delivered to a customer who maintains it |
+| `CODEOWNERS` | `.github/` | which folder whom must review in a PR | there are several teams or owners |
+| `runbook-deploy.md` | `docs/` at the root | build → release → run steps · each environment's setup · rolling back | the deploy steps are longer than 5 lines |
+| `decisions/ADR-NNNN-<slug>.md` | `docs/` at the root | decision records (Architecture Decision Record (ADR)), one per decision | a hard-to-reverse decision is made (`adr-writer`) |
+| Architecture, delivery edition | `docs/` at the root | an arc42-style architecture document | delivering to a customer or there is an acceptance reviewer (`project-doc-set`) |
 
-ที่อยู่ของ `docs/` ตามผังแบบ B ใน `project-doc-set` ข้อ 1 · GitHub หา `CONTRIBUTING` และ `CODEOWNERS` ใน `.github/` ก่อน แล้วราก repo แล้ว `docs/` · เอกสารใน `docs/` แบ่งตามสิ่งที่ผู้อ่านต้องการได้ 4 แบบ (Diátaxis): เรียนรู้ (tutorial) · ทำงานให้เสร็จ (how-to เช่น runbook) · เปิดหาข้อเท็จจริง (reference เช่น ตารางค่าตั้ง API) · เข้าใจเหตุผล (explanation เช่น ARCHITECTURE · ADR)
+The location of `docs/` follows layout B in `project-doc-set` item 1 · GitHub looks for `CONTRIBUTING` and `CODEOWNERS` in `.github/` first, then the repo root, then `docs/` · documents in `docs/` can be split by what the reader needs into 4 kinds (Diátaxis): learning (tutorial) · getting a job done (how-to, e.g. a runbook) · looking up facts (reference, e.g. an API settings table) · understanding the reasons (explanation, e.g. ARCHITECTURE · ADR)
 
 ## 3 · ARCHITECTURE.md
 
-**ค่าเริ่ม: แบบสั้นของ matklad** — ผู้อ่านคือคนที่จะแก้โค้ดและอยากรู้ว่าของที่ทำ X อยู่ตรงไหน
+**Default: matklad's short form** — the reader is someone who will change the code and wants to know where the thing that does X lives.
 
 ```markdown
 # สถาปัตยกรรม
@@ -1567,21 +1567,21 @@ README ของแต่ละงานไม่เหมือนกัน · 
 <log · error · สิทธิ์ · config · การทดสอบ — ทำแบบไหน อยู่ที่ไหน>
 ```
 
-- สั้น ใส่เฉพาะของที่ไม่ค่อยเปลี่ยน · เอ่ยชื่อไฟล์ โมดูล หรือ type ได้ แต่ไม่ใส่ลิงก์ เพราะลิงก์เสียเมื่อย้ายไฟล์ ให้คนค้นด้วยชื่อแทน
-- ไม่อธิบายทุกโมดูลละเอียด · ไม่ไล่แก้ทุก commit · ทบทวนปีละ 2–3 ครั้ง
-- รูปใช้แค่ 2 ระดับของ C4 คือ Context กับ Container ซึ่ง c4model.com บอกว่าพอสำหรับทีมส่วนใหญ่ · ระดับ Code ไม่วาดเก็บ · วาดด้วย Mermaid ตาม `software-diagrams`
+- Short; include only what rarely changes · you may name a file, module or type, but put no links, because links break when files move; let people search by name instead.
+- Do not explain every module in detail · do not chase every commit · review 2–3 times a year.
+- Diagrams use only the 2 C4 levels, Context and Container, which c4model.com says are enough for most teams · do not draw the Code level · draw with Mermaid per `software-diagrams`.
 
-**ใช้ arc42 แทนเมื่อ** ส่งมอบให้ลูกค้าหรือทีมอื่นดูแลต่อ · มีข้อกำหนดคุณภาพ (ความเร็ว ความปลอดภัย) ที่ต้องพิสูจน์ · ต้องมีผู้ตรวจรับ — เลือกเฉพาะหัวข้อที่มีของจริงจาก 12 หัวข้อ: เป้าหมาย · ข้อจำกัด · ขอบเขตและบริบท · แนวทางแก้ · ส่วนประกอบ · การทำงานขณะรัน · การติดตั้ง (deployment) · แนวคิดที่ตัดผ่าน · การตัดสินใจ (ชี้ไป ADR) · ข้อกำหนดคุณภาพ · ความเสี่ยงและหนี้เทคนิค · อภิธานศัพท์ · ฉบับนี้อยู่ `docs/` ตาม `project-doc-set` ไม่ใช่ในโฟลเดอร์โค้ด
+**Use arc42 instead when** delivering to a customer or another team who will maintain it · there are quality requirements (speed, security) that must be proven · an acceptance reviewer is needed — choose only the sections that have real content from the 12 sections: goals · constraints · scope and context · solution strategy · building blocks · runtime view · deployment · cross-cutting concepts · decisions (point to ADRs) · quality requirements · risks and technical debt · glossary · this edition lives in `docs/` per `project-doc-set`, not in the code folder.
 
-## 4 · แหล่ง (เปิดอ่าน 2026-11-07)
+## 4 · Sources (read 2026-11-07)
 
-5 แหล่งหลักที่ใช้นับคอลัมน์ "แหล่ง" ในหัวข้อ 1:
-- [standard-readme spec](https://github.com/RichardLitt/standard-readme/blob/main/spec.md) — หัวข้อบังคับ · สัญญาอนุญาตอยู่ท้าย · สารบัญเมื่อเกิน 100 บรรทัด
-- [Make a README](https://www.makeareadme.com/) — ยาวดีกว่าสั้น ยาวเกินให้ย้าย ไม่ใช่ลบ
+The 5 main sources used to count the "Sources" column in item 1:
+- [standard-readme spec](https://github.com/RichardLitt/standard-readme/blob/main/spec.md) — required sections · license at the end · table of contents when over 100 lines
+- [Make a README](https://www.makeareadme.com/) — long is better than short; if too long, move, do not delete
 - [GitHub Docs: About READMEs](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes)
-- [Google documentation guide: READMEs](https://google.github.io/styleguide/docguide/READMEs.html) · [Best practices](https://google.github.io/styleguide/docguide/best_practices.html) — แก้เอกสารพร้อมโค้ด
-- [Microsoft Engineering Playbook: Project and Repositories](https://microsoft.github.io/code-with-engineering-playbook/documentation/guidance/project-and-repositories/) — โครงโฟลเดอร์ · compile test build deploy
+- [Google documentation guide: READMEs](https://google.github.io/styleguide/docguide/READMEs.html) · [Best practices](https://google.github.io/styleguide/docguide/best_practices.html) — change docs together with code
+- [Microsoft Engineering Playbook: Project and Repositories](https://microsoft.github.io/code-with-engineering-playbook/documentation/guidance/project-and-repositories/) — folder layout · compile test build deploy
 
-แหล่งประกอบ: [GitHub community health files](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/creating-a-default-community-health-file) · [About code owners](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners) · [matklad: ARCHITECTURE.md](https://matklad.github.io/2021/02/06/ARCHITECTURE.md.html) · [arc42](https://arc42.org/overview) · [C4 model diagrams](https://c4model.com/diagrams) · [Diátaxis](https://diataxis.fr/) · [Twelve-Factor: Config](https://12factor.net/config) · [Build, release, run](https://12factor.net/build-release-run)
+Supporting sources: [GitHub community health files](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/creating-a-default-community-health-file) · [About code owners](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners) · [matklad: ARCHITECTURE.md](https://matklad.github.io/2021/02/06/ARCHITECTURE.md.html) · [arc42](https://arc42.org/overview) · [C4 model diagrams](https://c4model.com/diagrams) · [Diátaxis](https://diataxis.fr/) · [Twelve-Factor: Config](https://12factor.net/config) · [Build, release, run](https://12factor.net/build-release-run)
 
-ลำดับหัวข้อ · เพดาน 15 บรรทัดและ 6 คำสั่ง · ตารางตั้งค่า · หัวข้อติดปัญหาและสถาปัตยกรรมย่อ เป็นการตัดสินของ skill นี้ ไม่ใช่คำของแหล่ง
+The section order · the 15-line and 6-command ceilings · the configuration table · the troubleshooting and short-architecture sections are this skill's own judgment, not the sources' words.

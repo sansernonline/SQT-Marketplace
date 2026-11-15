@@ -1,32 +1,34 @@
-# playbook · unattended-run — งานยาวที่ผู้ใช้ไม่อยู่ดู
+# playbook · unattended-run — long jobs the user will not watch
 
-ใช้เมื่อ: "ทำให้เสร็จ เดี๋ยวกลับมาดู" · "ไม่ต้องถาม" · งานหลายขั้นที่ผู้ใช้จะมาตรวจทีเดียว — เช่น จัดทะเบียนเอกสารทั้งบ้าน · คัดอินบ็อกซ์ย้อนหลัง 1 เดือน
-เป็นตัวห่องาน ไม่ได้แทน playbook ของงาน — คุมการทำต่อจนจบ ส่วนแต่ละชิ้นข้างในยังเลือก playbook ตามงานตามปกติ
-skill หลัก: ตาราง "การตัดสินใจ" และ "รับงานต่อ" ใน `CONTEXT.md` · หัวข้อ 6 และ 7 ของ `superuser`
-ลูกทีมต่อชิ้น: agent สาขาตามบทบาทของชิ้น (`life-admin` · `doc-caretaker` · `meeting-prep` · `home-manager` · `family-planner` · `health-organizer` · `career-coach` · `interview-coach`) ตัวใหม่ · งานเรียนรู้ใช้ `tech-mentor` ตัวใหม่
-ผู้ตรวจต่อชิ้น: `reviewer` ตัวใหม่
-รออนุมัติที่เจอบ่อย: ส่งอีเมล · ยกเลิกบริการ · ลบอีเมลจำนวนมาก · สมัครสอบ · ซื้อคอร์ส · push repo สาธารณะ
+Use when: "finish it, I will check back later" · "don't ask" · multi-step work the user will review all at once — for example registering all the household documents · triaging a month of past inbox.
+This is a wrapper, not a replacement for the job's playbook. It controls carrying on to the end, while each piece inside still picks a playbook by its kind of work.
+Main skill: the "การตัดสินใจ" (decisions) and "รับงานต่อ" (pick up the work) tables in `CONTEXT.md` · sections 6 and 7 of `superuser`
+`ลูกทีมต่อชิ้น` (workers per piece): the branch agent for the piece's role (`life-admin` · `doc-caretaker` · `meeting-prep` · `home-manager` · `family-planner` · `health-organizer` · `career-coach` · `interview-coach`), a fresh one · learning work uses a fresh `tech-mentor`
+`ผู้ตรวจต่อชิ้น` (checker per piece): a fresh `reviewer`
+`รออนุมัติที่เจอบ่อย` (common items awaiting approval): sending email · cancelling a service · deleting a lot of email · registering for an exam · buying a course · pushing to a public repo
 
 <!-- superuser:begin unattended-steps -->
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน — Steps (copy into the todo exactly)
 
-1. เขียนเงื่อนไขจบที่ตรวจได้ — ไฟล์ไหนต้องมี · ตารางไหนต้องครบ · ร่างไหนต้องพร้อมส่ง · รันด้วย `claude -p` → ใส่ `--max-budget-usd <งบ>` เสมอ (ไม่รู้งบ → ถามรวมในคำถามครั้งเดียวตอนเริ่ม) ชนเพดาน = `ติด` แล้วรายงานว่าทำถึงไหน · ใคร: หัวหน้าทีม
-2. แตกงานเป็นชิ้นที่แต่ละชิ้นจบด้วยการตรวจ ลงตาราง "ความคืบหน้า" ใน `CONTEXT.md` เลือก playbook ย่อยให้แต่ละชิ้น แล้วแจกให้ subagent ตัวใหม่ทีละชิ้น · ใคร: หัวหน้าทีม
-   - **ตรวจเครื่องมือภายนอกก่อนแจกชิ้นแรก** — ชิ้นไหนต้องใช้ MCP (Model Context Protocol) tool ให้โหลด tool นั้นตามชื่อด้วย ToolSearch แล้วเรียกทดสอบ 1 ครั้งตอนนี้ (ก่อนผู้ใช้ออกไป) · เรียกไม่ได้ → ชิ้นนั้นลง `ติด` ทันที พร้อมวิธีแก้ที่เขียนเป็นขั้น ๆ (ต่อ server ไหน · ล็อกอินอย่างไร) แล้วทำชิ้นอื่นต่อ · ไม่เรียก API ตรงด้วย curl หรือ token ในคำสั่งแทน เพราะคือการทำเกินสิทธิ์ที่ผู้ใช้ให้ไว้
-3. ทำทีละชิ้น — ผ่านเกณฑ์หัวข้อ 4 แล้วค่อยไปชิ้นถัดไป พัง 2 รอบ → แตกเป็นขั้นย่อย ไม่ลองแบบเดิมซ้ำ · ครบ 3 รอบ → ลงเป็น `ติด` แล้วไปชิ้นอื่น · ใคร: ลูกทีมตามบรรทัด `ลูกทีมต่อชิ้น` ด้านบน ตัวใหม่ต่อชิ้น · ตรวจ: ตามบรรทัด `ผู้ตรวจต่อชิ้น` ด้านบน
-   - **หลังติด** — จดใน "ค้างอยู่" ว่าลองอะไรไปแล้ว · ปัญหาน่าจะอยู่ตรงไหน · ต้องได้อะไรถึงไปต่อ · เก็บงานค้างแยกไว้เป็นร่าง ไม่ทับชิ้นที่ผ่านแล้ว
-   - **ชิ้นที่ต้องรอชิ้นที่ติด** — ลงเป็น `ติด` เหตุผล `รอ <ชิ้น>` โดยไม่ต้องลอง
-   - **ทำชิ้นอื่นหมดแล้ว** — ให้ agent ตัวใหม่ที่ใช้โมเดลขนาดใหญ่ขึ้นลองอีก 1 รอบจากบันทึกนั้น (มีคำตอบใน inbox → เริ่มจากคำตอบ)
-   - **ยังติด** — คงไว้ในรายงานพร้อมบอกว่าต้องการอะไรจากผู้ใช้ · ผู้ใช้ตอบทีหลัง → session ใหม่อ่าน `CONTEXT.md` แล้วทำต่อจากชิ้นนั้น
-   - **ติดเพราะต้องเป็นผู้ใช้** (ตัดสิน · ตรวจด้วยตาหรือหู · ใช้เงินหรือ token · รับรองข้อความที่ agent เขียนแทน) — เพิ่มแถวในตาราง "รอผู้ใช้" ของ `CONTEXT.md` แล้วไปทำชิ้นอื่นต่อ ไม่หยุดรอ
-4. ทุกการเลือกทางเอง จดในตาราง "การตัดสินใจ" ทันที ไม่รวบไปเขียนตอนจบ · ใคร: หัวหน้าทีม
-5. ถ้าเจอรายการ "รออนุมัติ" (ตัวอย่างในบรรทัด `รออนุมัติที่เจอบ่อย` ด้านบน · รายการเต็มใน `autonomy` หัวข้อ "รออนุมัติ — ทุกสาขา" ของ `superuser`) ให้เตรียมให้พร้อมกด ห้ามทำเอง ส่วนคำถามที่ผู้ใช้ต้องตอบให้ใส่ไว้ใน "ค้างอยู่" · ใคร: หัวหน้าทีม (อนุมัติ: ผู้ใช้)
-   - **ข้อความถึงคนนอกเขียนเป็นร่างในกล่องขาออก** — ร่างอีเมล คำตอบ รีวิว หรือโพสต์ ลงไฟล์ `.claude/superuser/outbound/<วันที่>-<เรื่อง>.md` (ผู้รับ · ช่องทาง · เนื้อความที่พร้อมส่ง · เหตุที่ส่ง) แล้วทำชิ้นต่อไป ไม่หยุดรอคน · การร่างไม่ต้องขออนุมัติ การส่งจริงต้องขอ · ผู้ใช้ส่งเองหรือสั่งส่งทีหลังในนามของเขา · ลงรายการกล่องขาออกในแถว "รอผู้ใช้" ของ `CONTEXT.md` 1 แถวต่อไฟล์
-6. จบแต่ละชิ้นแล้วอัปเดต "ความคืบหน้า" และ "รับงานต่อ" แล้วดู `.claude/superuser/inbox/` ผู้ใช้กลับมากลางทางจะได้เห็นสถานะล่าสุด · เริ่ม session ใหม่กลางงาน → รันตัวตรวจ "เสร็จเมื่อ" ของชิ้นล่าสุดที่ `เสร็จ` 1 ครั้งก่อนทำชิ้นถัดไป ไม่ผ่าน → แก้ชิ้นนั้นก่อน · ใคร: หัวหน้าทีม
-7. จบงานแล้วตรวจเงื่อนไขข้อ 1 ทั้งหมดอีกรอบ ทำรอบเรียนรู้ แล้วรายงานครั้งเดียว: เสร็จอะไร · ติดอะไร · ตัดสินใจเองกี่ข้อ · รออนุมัติอะไร · ค้างอะไร · ใคร: หัวหน้าทีม (ตรวจเงื่อนไขซ้ำ: `reviewer` ตัวใหม่)
-   - รายงานปิดด้วยตาราง `ขั้น | ผล | หลักฐาน` 1 แถวต่อเงื่อนไขในข้อ 1 · หลักฐานคือ path ไฟล์ · ลิงก์ · ผลตรวจ · สรุปเป็น **"ผ่าน X / N"** นับจากตัวตรวจจริง ไม่ใช่จากที่ลูกทีมบอก · ข้อที่ต้องใช้ตาคนตรวจไม่นับว่าผ่าน แยกเป็นแถว `ต้องให้คนดู` · ข้อที่ไม่ผ่านให้ใส่สาเหตุ 1 บรรทัด
+Labels kept in Thai because the validator matches them: `ใคร:` = who · `หัวหน้าทีม` = the lead · `ตัวใหม่` = fresh (a new instance) · `ตัวเดิม (ถือ …)` = the same agent, holding something.
 
-## จบเมื่อ
+1. Write a checkable end condition: which file must exist · which table must be complete · which draft must be ready to send · running with `claude -p` → always add `--max-budget-usd <budget>` (budget unknown → ask in the single set of questions at the start). Hitting the ceiling = `ติด`, then report how far it got · ใคร: หัวหน้าทีม
+2. Split the work into pieces that each end with a check, record them in the "ความคืบหน้า" (progress) table in `CONTEXT.md`, choose a sub-playbook for each piece, and hand them out to fresh subagents one piece at a time · ใคร: หัวหน้าทีม
+   - **Check external tools before handing out the first piece.** For any piece that needs an MCP (Model Context Protocol) tool, load that tool by name with ToolSearch and call it once to test now (before the user leaves). Cannot call it → mark that piece `ติด` at once, with the fix written step by step (which server to connect · how to log in), then carry on with other pieces. Do not call the API directly with curl or a token in a command instead, because that goes beyond the permission the user gave.
+3. Do one piece at a time. Pass the section 4 criteria, then go to the next piece. Breaks twice → split into sub-steps, do not retry the same way · after 3 rounds → record it as `ติด` and go to other pieces · ใคร: workers per the `ลูกทีมต่อชิ้น` line above, a fresh one per piece · check (ตรวจ): per the `ผู้ตรวจต่อชิ้น` line above
+   - **After getting stuck.** Record in "ค้างอยู่" (pending) what was tried · where the problem probably is · what is needed to go on. Keep the unfinished work separately as a draft, not over pieces that already passed.
+   - **A piece that must wait for a stuck piece.** Record it as `ติด` with reason `รอ <piece>` (waiting for <piece>), without trying.
+   - **All other pieces are done.** Have a fresh agent on a larger model try once more from that note (an answer in the inbox → start from the answer).
+   - **Still stuck.** Keep it in the report with what is needed from the user · the user answers later → a new session reads `CONTEXT.md` and continues from that piece.
+   - **Stuck because it must be the user** (a decision · a check by eye or ear · spending money or tokens · endorsing text an agent wrote on their behalf): add a row to the "รอผู้ใช้" (waiting on the user) table of `CONTEXT.md` and go on to other pieces, without stopping to wait.
+4. Every time you choose a path on your own, record it in the "การตัดสินใจ" (decisions) table at once, do not bundle it to write at the end · ใคร: หัวหน้าทีม
+5. If you meet an item that is "รออนุมัติ" (example in the `รออนุมัติที่เจอบ่อย` line above · full list in `autonomy`, section "รออนุมัติ — ทุกสาขา" of `superuser`), prepare it ready to press, never do it yourself; put questions the user must answer under "ค้างอยู่" · ใคร: หัวหน้าทีม (approval: the user)
+   - **Messages to outsiders are written as drafts in the outbox.** An email draft, a reply, a review, or a post goes into a file `.claude/superuser/outbound/<date>-<topic>.md` (recipient · channel · ready-to-send text · reason for sending), then move on to the next piece without stopping to wait for a person · drafting needs no approval, actually sending does · the user sends it, or orders it sent later on their behalf · list the outbox item in the "รอผู้ใช้" table of `CONTEXT.md`, 1 row per file.
+6. After finishing each piece, update "ความคืบหน้า" and "รับงานต่อ" (pick up the work), then look in `.claude/superuser/inbox/`, so a user coming back midway sees the latest status · starting a new session mid-job → run the "เสร็จเมื่อ" (done when) checker of the latest `เสร็จ` piece once before the next piece; fail → fix that piece first · ใคร: หัวหน้าทีม
+7. When the job is finished, check all the step 1 conditions once more, run the learning round, then report once: what is done · what is stuck · how many decisions made on your own · what awaits approval · what is pending · ใคร: หัวหน้าทีม (re-checking the conditions: `reviewer` ตัวใหม่)
+   - End the report with a table `ขั้น | ผล | หลักฐาน` (step | result | evidence), 1 row per condition in step 1 · evidence is a file path · link · check result · summarise as **"ผ่าน X / N"** (passed X of N) counted from the real checker, not from what workers say · an item that needs a human eye does not count as passed, put it in a separate row `ต้องให้คนดู` (needs a person to look) · for items that failed, give the cause in 1 line.
 
-เงื่อนไขข้อ 1 ผ่านทั้งหมด หรือชิ้นที่เหลือทุกชิ้นมีเหตุผลว่าทำไมติด
+## Done when
+
+All the step 1 conditions pass, or every remaining piece has a reason why it is stuck
 <!-- superuser:end unattended-steps -->

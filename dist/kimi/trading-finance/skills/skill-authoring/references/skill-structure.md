@@ -1,45 +1,45 @@
-# โครงของ skill และ plugin — ก่อนเขียน แยกของ ไฟล์คำสั่ง และกฎกลาง
+# Structure of a skill and a plugin: before writing, separating things, command files and shared rules
 
-## สารบัญ
-- [1 · ประกาศก่อนเขียน](#1--ประกาศก่อนเขียน)
-- [2 · แยกความรู้ สัญญา และขั้นตอน](#2--แยกความรู้-สัญญา-และขั้นตอน)
-- [3 · ไฟล์คำสั่ง 4 หัวข้อ](#3--ไฟล์คำสั่ง-4-หัวข้อ)
-- [4 · ไฟล์เจตนาของ plugin](#4--ไฟล์เจตนาของ-plugin)
-- [5 · เมื่อ CLI ปฏิเสธคำสั่งที่ skill ระบุ](#5--เมื่อ-cli-ปฏิเสธคำสั่งที่-skill-ระบุ)
+## Contents
+- [1 · Declaration before writing](#1--declaration-before-writing)
+- [2 · Separate knowledge, contract and procedure](#2--separate-knowledge-contract-and-procedure)
+- [3 · The 4-heading command file](#3--the-4-heading-command-file)
+- [4 · The plugin intent file](#4--the-plugin-intent-file)
+- [5 · When the CLI rejects a command the skill names](#5--when-the-cli-rejects-a-command-the-skill-names)
 
-## 1 · ประกาศก่อนเขียน
+## 1 · Declaration before writing
 
-ก่อนเขียนไฟล์แรกของ skill ให้ผู้เขียน (คนหรือ agent) พิมพ์ประกาศ 5 บรรทัดนี้ แล้วเก็บไว้ท้าย PR หรือในใบสั่งงาน:
+Before writing the first file of a skill, the author (person or agent) writes out these 5 lines, and keeps them at the end of the PR or in the work order:
 
-1. `name` และ `description` ที่จะใช้ (ตามหัวข้อ 1 ของ SKILL.md)
-2. **3 หัวข้อที่ skill นี้จะไม่ครอบคลุม** พร้อมชื่อ skill ที่รับแทน · เขียนไม่ออก 3 ข้อ = ขอบเขตยังกว้าง ให้ตัดก่อน
-3. ขนาดเป้าหมาย: SKILL.md กี่บรรทัด (ปกติ 100–250 · เพดาน 500) · references กี่ไฟล์
-4. **ตารางว่าอะไรอยู่ไฟล์ไหน**
-5. เคสทดสอบ 3 เคสที่จะเขียน (หัวข้อ 6 ของ SKILL.md)
+1. The `name` and `description` to use (per section 1 of SKILL.md)
+2. **3 topics this skill will not cover**, with the name of the skill that takes each one · if you cannot write 3, the scope is still too wide, so cut it first
+3. Target size: how many lines of SKILL.md (normally 100–250 · cap 500) · how many reference files
+4. **A table of what lives in which file**
+5. The 3 test cases you will write (section 6 of SKILL.md)
 
-| ของ | อยู่ที่ | เหตุผล |
+| Item | Lives in | Reason |
 |---|---|---|
-| กฎที่ต้องจำทุกครั้งที่ใช้ skill · กล่อง "กฎข้อเดียว" · ตาราง "ใช้เมื่อ" | `SKILL.md` | โหลดเมื่อ skill ถูกเรียก |
-| รายละเอียดที่ใช้บางงาน · ตัวอย่างยาว · หลักฐาน | `references/<เรื่อง>.md` (ลิงก์จาก SKILL.md ตรง ๆ) | ไม่กิน context ถ้าไม่ใช้ |
-| งานที่เครื่องทำได้ (นับ · ตรวจ · แปลงรูป) | `scripts/` | รันโดยไม่อ่านเข้า context |
-| แม่แบบที่คัดลอกไปใช้ | `templates/` หรือ `assets/` | |
-| ค่าคงที่ ตารางค้นหา | ไฟล์ข้อมูล (หัวข้อ 2) | เปลี่ยนด้วยเหตุอื่นจากขั้นตอน |
+| Rules to remember every time the skill is used · the "one rule" box · the "use when" table | `SKILL.md` | Loaded when the skill is invoked |
+| Details used for some jobs only · long examples · evidence | `references/<topic>.md` (linked directly from SKILL.md) | Costs no context if unused |
+| Work a machine can do (counting · checking · converting images) | `scripts/` | Runs without being read into context |
+| Templates to copy and use | `templates/` or `assets/` | |
+| Constants and lookup tables | Data file (section 2) | Changes for reasons other than the procedure |
 
-## 2 · แยกความรู้ สัญญา และขั้นตอน
+## 2 · Separate knowledge, contract and procedure
 
-skill ที่มีของ 3 ชนิดปนในไฟล์เดียว จะต้องแก้ทั้งไฟล์ทุกครั้งที่ค่าเปลี่ยน · แยกเป็น 3 ที่:
+A skill that mixes 3 kinds of things in one file must edit the whole file every time a value changes. Separate them into 3 places:
 
-| ชนิด | คืออะไร | ตัวอย่าง | อยู่ที่ |
+| Kind | What it is | Example | Lives in |
 |---|---|---|---|
-| ความรู้ | ตารางค่าคงที่ · อัตรา · รายชื่อ | อัตราภาษี · ขนาดรูปต่อแพลตฟอร์ม | `references/<ชื่อ>.md` เป็นตาราง หรือ `data/*.json` ถ้าสคริปต์ต้องอ่าน |
-| สัญญา | รูปร่างของของที่ส่งต่อ | schema ของใบส่งต่อ · หัวคอลัมน์ไฟล์นำเข้า | `*.schema.json` หรือหัวข้อ "รูปแบบ" แยก |
-| ขั้นตอน | วิธีตัดสินและลำดับทำ | SKILL.md | SKILL.md |
+| Knowledge | Tables of constants · rates · lists | Tax rates · image sizes per platform | `references/<name>.md` as a table, or `data/*.json` if a script must read it |
+| Contract | The shape of what is handed over | Schema of a handoff note · column headings of an import file | `*.schema.json` or a separate "format" section |
+| Procedure | How to decide and the order of work | SKILL.md | SKILL.md |
 
-**คำถามทดสอบ:** สิ่งนี้จะเปลี่ยนด้วยเหตุที่ไม่เกี่ยวกับขั้นตอนไหม · ถ้าใช่ (กฎหมายปรับอัตรา · แพลตฟอร์มเปลี่ยนขนาด) ย้ายออกไปไว้ที่ความรู้หรือสัญญา · ผลที่ได้: แก้อัตราแล้วไม่ต้องแตะขั้นตอน และ eval ของขั้นตอนไม่ต้องรันใหม่
+**Test question:** will this thing change for reasons unrelated to the procedure? If yes (the law adjusts a rate · a platform changes a size), move it out to knowledge or contract. Result: changing a rate does not touch the procedure, and the procedure's evals do not need to run again.
 
-## 3 · ไฟล์คำสั่ง 4 หัวข้อ
+## 3 · The 4-heading command file
 
-ใช้กับไฟล์คำสั่ง (slash command · ไฟล์ใน `commands/`) และ skill ที่ลงมือแก้ของนอกไฟล์ · repo นี้ยังไม่มี `commands/` (ตรวจ 2026-11-10) จึงใช้เป็นแม่แบบเมื่อมี · playbook มีโครงของตัวเองตามหัวข้อ 3 ของ SKILL.md
+Use for command files (slash commands · files in `commands/`) and for skills that act on things outside the files. This repo has no `commands/` yet (checked 2026-11-10), so this serves as the template for when it does. A playbook has its own structure per section 3 of SKILL.md.
 
 ```markdown
 ## Preflight
@@ -55,33 +55,33 @@ skill ที่มีของ 3 ชนิดปนในไฟล์เดี�
 อ่านสถานะซ้ำจากของจริง (ไม่เชื่อ exit code อย่างเดียว) · รายงานสิ่งที่เปลี่ยนจริง
 ```
 
-## 4 · ไฟล์เจตนาของ plugin
+## 4 · The plugin intent file
 
-plugin ที่มีตั้งแต่ 3 skill ขึ้นไป และมีกฎที่ทุก skill ต้องทำตาม ให้เขียนกฎนั้นไว้ที่เดียว ไม่คัดลอกไปทุก SKILL.md:
+For a plugin with 3 or more skills and a rule that every skill must follow, write that rule in one place and do not copy it into every SKILL.md:
 
-- ที่อยู่: `plugins/<plugin>/INTENT.md` (สั้น ไม่เกิน 40 บรรทัด) · skill แต่ละตัวชี้ไปด้วยบรรทัดเดียว
-- เนื้อ: กฎร่วม เป็นรายการเลข เช่น (1) มีแหล่งความจริงเดียวต่อข้อมูล (2) การกระทำที่คนอื่นเห็น (ส่งข้อความ · เผยแพร่) ต้องถามก่อน (3) ข้อเท็จจริงที่ไม่รู้ใส่ `(รอยืนยัน)` ไม่แต่ง (4) skill เริ่มต้นระบบเป็นเงื่อนไขก่อนทำ ไม่ใช่ตัวเลือกคู่กับตัวอื่น
-- ต่างจาก `plugins/superuser/hooks/core-rules.md`: ตัวนั้นเป็นกฎทุก session ของทั้งเครื่อง · `INTENT.md` เป็นกฎเฉพาะ plugin นั้น
-- skill ที่ขัดกับ `INTENT.md` ต้องแก้ skill หรือแก้ไฟล์นั้น พร้อมบอกในเอกสาร ไม่ปล่อยให้ขัดกันเงียบ ๆ
+- Location: `plugins/<plugin>/INTENT.md` (short, at most 40 lines) · each skill points to it with one line
+- Content: the shared rules as a numbered list, for example (1) one source of truth per piece of data (2) an action others can see (sending a message · publishing) must be asked first (3) facts you do not know get `(รอยืนยัน)` (pending confirmation), never invented (4) a system-bootstrap skill is a precondition to do first, not an option beside the others
+- Different from `plugins/superuser/hooks/core-rules.md`: that one holds the rules for every session on the whole machine · `INTENT.md` holds rules for that plugin only
+- A skill that conflicts with `INTENT.md` must be fixed, or that file must be fixed, and the document must say so. Do not leave them in silent conflict.
 
-## 5 · เมื่อ CLI ปฏิเสธคำสั่งที่ skill ระบุ
+## 5 · When the CLI rejects a command the skill names
 
-skill ที่เรียกคำสั่งของเครื่องมือภายนอก อาจใหม่กว่าเครื่องมือที่ลงไว้ · ใส่สูตรนี้ใน skill นั้น:
+A skill that calls an outside tool's command may be newer than the installed tool. Put this recipe in that skill:
 
-1. คำสั่งถูกปฏิเสธ (flag ไม่รู้จัก · subcommand ไม่มี) → รัน `<เครื่องมือ> --version` เทียบกับรุ่นล่าสุด (จากช่องทางที่ติดตั้งมา เช่น `npm view`) แล้วบอกผู้ใช้ทั้ง 2 รุ่น
-2. **ถามผู้ใช้ก่อนอัปเกรด** (การอัปเกรดเปลี่ยนเครื่องของเขา)
-3. ได้รับอนุญาต → อัปเกรดผ่านช่องทางเดียวกับที่ติดตั้ง (npm → npm · winget → winget) ไม่ข้ามช่องทาง
-4. ลองคำสั่งเดิมใหม่ **1 ครั้ง** · ยังไม่ผ่าน → รายงานข้อความ error จริงและรุ่นก่อนหลัง ไม่วนลอง
-5. skill ระบุรุ่นขั้นต่ำที่ทดสอบไว้ในเนื้อ (เช่น "Claude Code 2.1.269 ขึ้นไป") เพื่อให้ขั้น 1 เทียบได้
+1. The command is rejected (unknown flag · missing subcommand) → run `<tool> --version` and compare with the latest version (from the channel it was installed through, such as `npm view`), then tell the user both versions
+2. **Ask the user before upgrading** (an upgrade changes their machine)
+3. If permitted → upgrade through the same channel as the install (npm → npm · winget → winget), never across channels
+4. Retry the original command **1 time** · if it still fails → report the real error message and the versions before and after, do not loop
+5. The skill states the minimum tested version in its body (for example "Claude Code 2.1.269 or later") so step 1 can compare
 
-ตัวอย่าง: `claude plugin eval` ต้อง 2.1.269 ขึ้นไป · รุ่นต่ำกว่าไม่มีคำสั่งนี้
+Example: `claude plugin eval` needs 2.1.269 or later · lower versions do not have this command
 
-## ที่มา
+## Sources
 
-เรียบเรียงเป็นถ้อยคำของเราเอง · รูปแบบ `plugin (ใบอนุญาต) · ไฟล์ · วันที่ดู`
+Rewritten in our own words · format `plugin (licence) · file · date viewed`
 
-- buildkite (MIT) · CONVENTIONS.md · ดู 2026-11-10 → หัวข้อ 1
-- migration-to-aws (awslabs/startups · ยังไม่ได้ตรวจชนิดใบอนุญาต) · docs/01-concepts.md หัวข้อ 3 · ดู 2026-11-10 → หัวข้อ 2
-- vercel (มีไฟล์ LICENSE ยังไม่ได้ตรวจชนิด) · commands/_conventions.md · ดู 2026-11-10 → หัวข้อ 3
-- postman (มีไฟล์ LICENSE ยังไม่ได้ตรวจชนิด) · intent.md · ดู 2026-11-10 → หัวข้อ 4
-- mergify (ใบอนุญาตเขียนเอง ไม่ได้จัดประเภท · เอาแค่แนวคิด) · skills/mergify-cli-upgrade/SKILL.md · ดู 2026-11-10 → หัวข้อ 5
+- buildkite (MIT) · CONVENTIONS.md · viewed 2026-11-10 → section 1
+- migration-to-aws (awslabs/startups · licence type not checked) · docs/01-concepts.md section 3 · viewed 2026-11-10 → section 2
+- vercel (has a LICENSE file, type not checked) · commands/_conventions.md · viewed 2026-11-10 → section 3
+- postman (has a LICENSE file, type not checked) · intent.md · viewed 2026-11-10 → section 4
+- mergify (self-written licence, not classified · only the idea taken) · skills/mergify-cli-upgrade/SKILL.md · viewed 2026-11-10 → section 5

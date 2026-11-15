@@ -1,54 +1,54 @@
-# หลักฐาน — ป้ายสั้นและบันทึกเต็ม
+# Evidence — short labels and the full record
 
-ไฟล์นี้เหมือนกันทุก plugin · ต้นฉบับอยู่ที่ plugin `superuser` · ใช้กับทุกงานที่ต้องอ้างว่าอะไรจริง ทั้งตอนลงมือ ตอนตรวจ และตอนเรียนรู้
+This file is identical in every plugin. The original lives in plugin `superuser`. Use it for any work that must claim what is true: while doing, while checking, and while learning.
 
-## ป้ายสั้น — ทุกข้ออ้าง
+## Short labels — for every claim
 
-ต่อท้ายประโยคด้วยป้าย 1 ใน 4 คำนี้ ใช้ชุดเดียวกันทุกไฟล์
+End a sentence with 1 of these 4 labels. Use the same set in every file.
 
-| ป้าย | ใช้เมื่อ |
+| Label | Use when |
 |---|---|
-| `ตรวจจริง` | รัน วัด หรือเห็นผลเองในรอบนี้ (ผล test · คำสั่งที่รัน · หน้าจอ) |
-| `จากแหล่ง` | อ่านจากไฟล์ เอกสาร หรือเว็บทางการ แต่ไม่ได้รันหรือวัดเอง |
-| `อนุมาน` | คิดต่อจากข้ออื่น ยังไม่มีอะไรยืนยันตรง ๆ (รวมที่เคยเรียกว่า "เดา" — ความมั่นใจ `ต่ำ`: กลาง ลด 1 เพราะอาศัยสมมติฐานที่ยังไม่ยืนยัน) |
-| `ยังไม่ได้ตรวจ` | ยังไม่ได้ดู · บอกตรง ๆ ดีกว่าเดาแล้วเล่าเหมือนตรวจแล้ว |
+| `ตรวจจริง` (verified) | You ran, measured, or saw the result yourself this round (test result · command run · screen) |
+| `จากแหล่ง` (from a source) | You read it from a file, document, or official web page but did not run or measure it yourself |
+| `อนุมาน` (inferred) | Reasoned from other items, with nothing confirming it directly (includes what used to be called "guess": confidence `ต่ำ` (low); `กลาง` (medium) drops 1 level because it relies on an unconfirmed assumption) |
+| `ยังไม่ได้ตรวจ` (not yet checked) | You have not looked · saying so plainly beats guessing and then telling it as if checked |
 
-ข้ออ้างที่ซ้ำกันในหลายเอกสารยังไม่นับว่ายืนยันแล้ว (สำเนาอ้างสำเนา) — ข้ออ้างสำคัญให้ไล่กลับไปถึงแหล่งแรก (ต้นฉบับ · ผลที่รัน · ประกาศทางการ) แล้วติดป้ายตามแหล่งนั้น
+A claim repeated across many documents is not yet confirmed (copies citing copies). For an important claim, trace it back to the first source (original · result you ran · official announcement) and label it by that source.
 
-`(รอยืนยัน)` ไม่ใช่ป้ายหลักฐาน แต่ต่อท้ายได้ 2 กรณี: ข้อมูลของผู้ใช้ที่ไม่รู้ (งบ · ชื่อ · วันที่) · ข้อเท็จจริงสาธารณะที่แหล่งไม่ถึง 3 หรือขัดกัน (ใช้ค่าจากแหล่งทางการ ติด `จากแหล่ง` ลดความมั่นใจ แล้วต่อ `(รอยืนยัน)`)
+`(รอยืนยัน)` (awaiting confirmation) is not an evidence label, but it can be appended in 2 cases: user data you do not know (budget · name · date) · a public fact where sources number fewer than 3 or conflict (use the value from the official source, label it `จากแหล่ง`, lower the confidence, then append `(รอยืนยัน)`).
 
-## บันทึกเต็ม — ข้ออ้างที่ใช้ตัดสินเรื่องสำคัญ
+## Full record — claims that decide something important
 
-ใช้เมื่อข้ออ้างนั้นตัดสินเรื่องเงิน กฎหมาย สุขภาพ ทางที่เลือก หรืองานที่จะส่ง
+Use it when the claim decides money, law, health, the chosen path, or work to be delivered.
 
-| ช่อง | ใส่อะไร | ตัวอย่าง |
+| Field | What to put | Example |
 |---|---|---|
-| ดูอะไร | ของที่ตรวจ + รุ่น · วันที่ · ที่อยู่เว็บ (URL) · ถ้าเป็นไฟล์ใส่ค่าแฮช Secure Hash Algorithm 256 (SHA-256) (ลายนิ้วมือของไฟล์ ไฟล์เปลี่ยนแม้ 1 ตัวอักษร ค่าก็เปลี่ยน) | `contract.pdf` sha256 `3fa1…` · ประกาศกรมสรรพากร ฉบับที่ … ลงวันที่ … |
-| ใครตอบ · ทำยังไง | agent + คำสั่งหรือวิธี | `reviewer` · เปิดเทียบยอดกับใบแจ้งหนี้ทีละใบ |
-| ได้มายังไง | ป้ายสั้น 1 ใน 4 | `ตรวจจริง` |
-| มาจากข้อไหน | เฉพาะ `อนุมาน`: ชี้ไปข้อที่เป็นฐาน | มาจากข้อ 2 และ 4 |
-| มั่นใจแค่ไหน | สูง · กลาง · ต่ำ ตามกติกาด้านล่าง | กลาง (ลด 1: ข้อมูลปี 2568) |
-| ยังมองไม่เห็นอะไร | สาเหตุที่ไม่แน่ใจ และสิ่งที่ยังไม่ได้ดู | ยังไม่ได้รันบน production |
-| เจอที่ไหน | `path:line` · URL + วันที่เปิด · หน้า · รูปที่ | `report.docx` หน้า 4 |
+| ดูอะไร (what was examined) | The thing checked + version · date · web address (URL) · for a file, put the Secure Hash Algorithm 256 (SHA-256) hash (a file's fingerprint: change even 1 character and the value changes) | `contract.pdf` sha256 `3fa1…` · ประกาศกรมสรรพากร ฉบับที่ … ลงวันที่ … |
+| ใครตอบ · ทำยังไง (who answered · how) | The agent + the command or method | `reviewer` · เปิดเทียบยอดกับใบแจ้งหนี้ทีละใบ |
+| ได้มายังไง (how it was obtained) | 1 of the 4 short labels | `ตรวจจริง` |
+| มาจากข้อไหน (derived from which) | `อนุมาน` only: point to the base items | มาจากข้อ 2 และ 4 |
+| มั่นใจแค่ไหน (how confident) | สูง · กลาง · ต่ำ (high · medium · low) per the rules below | กลาง (ลด 1: ข้อมูลปี 2568) |
+| ยังมองไม่เห็นอะไร (what is still unseen) | The reason for doubt and what has not been looked at | ยังไม่ได้รันบน production |
+| เจอที่ไหน (where found) | `path:line` · URL + date opened · page · figure number | `report.docx` หน้า 4 |
 
-## มั่นใจแค่ไหน — เริ่มจากแหล่ง แล้วลดตามเหตุ
+## How confident — start from the source, then lower for causes
 
-1. **จุดเริ่ม** — `ตรวจจริง` = สูง · `จากแหล่ง` = สูง ถ้าเป็นแหล่งทางการหรือต้นฉบับ (โค้ด · บิล · ฉลาก · เอกสารตัวจริง) ไม่งั้นกลาง · `อนุมาน` = กลาง · `ยังไม่ได้ตรวจ` = ไม่ให้ระดับ
-2. **ลด 1 ระดับต่อเหตุ** และเขียนเหตุไว้ในวงเล็บ: ข้อมูลเก่า · ข้อมูลน้อยหรือตัวอย่างเดียว · แหล่งขัดกัน · ไม่ตรงกับคำถามพอดี (คนละรุ่น คนละประเทศ) · อาศัยสมมติฐานที่ยังไม่ยืนยัน
-3. **ห้ามสูงกว่าจุดเริ่ม** · ความมั่นใจลอย ๆ ที่ไม่มีเหตุไม่นับ
+1. **Starting point.** `ตรวจจริง` = สูง · `จากแหล่ง` = สูง if it is an official source or the original (code · bill · label · the real document), otherwise กลาง · `อนุมาน` = กลาง · `ยังไม่ได้ตรวจ` = no level given.
+2. **Lower 1 level per cause** and write the cause in brackets: old data · little data or a single example · sources conflict · not an exact match for the question (different version, different country) · relies on an unconfirmed assumption.
+3. **Never higher than the starting point.** Free-floating confidence with no cause does not count.
 
-## คำบอกโอกาส — ใช้กับการคาดการณ์เท่านั้น
+## Chance words — for forecasts only
 
-ข้อเท็จจริงใช้ "มั่นใจแค่ไหน" · สิ่งที่ยังไม่เกิด (ผลของทางที่เลือก · บทเรียนจะลดความผิดได้ไหม) ใช้คำชุดนี้ และแยกจากความมั่นใจ
+Facts use "how confident". Things that have not happened (the result of a chosen path · whether a lesson will reduce mistakes) use this word set, kept separate from confidence.
 
-| คำ | ประมาณ | ช่วงของ ICD 203 ที่รวมไว้ |
+| Word | About | ICD 203 ranges merged |
 |---|---|---|
-| แทบเป็นไปไม่ได้ | 1–5% | almost no chance 1–5% |
-| ไม่น่าจะ | 5–45% | very unlikely 5–20% · unlikely 20–45% |
-| พอ ๆ กัน | 45–55% | roughly even chance 45–55% |
-| น่าจะ | 55–95% | likely 55–80% · very likely 80–95% |
-| แทบแน่นอน | 95–99% | almost certain 95–99% |
+| แทบเป็นไปไม่ได้ (almost impossible) | 1–5% | almost no chance 1–5% |
+| ไม่น่าจะ (unlikely) | 5–45% | very unlikely 5–20% · unlikely 20–45% |
+| พอ ๆ กัน (even) | 45–55% | roughly even chance 45–55% |
+| น่าจะ (likely) | 55–95% | likely 55–80% · very likely 80–95% |
+| แทบแน่นอน (almost certain) | 95–99% | almost certain 95–99% |
 
-ช่วงตัวเลขย่อจาก ICD 203 (รวม 7 ช่วงเหลือ 5 · ข้อ D.6.e(2)(a) ฉบับลงนาม 2 ม.ค. 2015 · dni.gov · ตรวจ 22 ต.ค. 2569) · ต้องการละเอียดกว่านี้ ใช้ 7 ช่วงเดิมในคอลัมน์ขวาได้
+The number ranges are condensed from ICD 203 (7 ranges merged into 5 · item D.6.e(2)(a), version signed 2 Jan 2015 · dni.gov · checked 22 Oct 2026). If you need more detail, use the original 7 ranges in the right column.
 
-ที่มา: GRADE (Grading of Recommendations Assessment, Development and Evaluation — วิธีให้ระดับหลักฐานทางการแพทย์ · gradeworkinggroup.org) · ICD 203 (Intelligence Community Directive 203 มาตรฐานการวิเคราะห์ของหน่วยข่าวกรองสหรัฐ · dni.gov) · World Wide Web Consortium (W3C) PROV (มาตรฐานบันทึกที่มาของข้อมูล · w3.org/TR/prov-overview)
+Sources: GRADE (Grading of Recommendations Assessment, Development and Evaluation — a method for rating medical evidence · gradeworkinggroup.org) · ICD 203 (Intelligence Community Directive 203, the US intelligence community's analytic standards · dni.gov) · World Wide Web Consortium (W3C) PROV (a standard for recording where data came from · w3.org/TR/prov-overview)

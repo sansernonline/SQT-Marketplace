@@ -43,4 +43,4 @@ General information, not legal advice. Advertising rules come from สำนั�
 - [ ] No before/after body photo
 - [ ] Live script and video captions use the same safe wording (`live-selling-script`)
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.fda.moph.go.th · https://www.thansettakij.com/health-wellness/health/665172 · ฆอ. permit scope (รอยืนยัน)
+Last checked 2026-10-06 · Sources: https://www.fda.moph.go.th · https://www.thansettakij.com/health-wellness/health/665172 · ฆอ. permit scope (รอยืนยัน)

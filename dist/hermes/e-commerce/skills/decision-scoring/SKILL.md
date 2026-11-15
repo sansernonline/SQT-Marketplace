@@ -3,93 +3,93 @@ name: decision-scoring
 description: Use when ranking options by numbers, not gut feel
 ---
 
-# decision-scoring — ตัดสินด้วยตัวเลข ไม่ใช่ความรู้สึก
+# decision-scoring — decide with numbers, not feelings
 
-อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies` · ถ้อยคำตาม `human-writing`
+Lives only in plugin `superuser`; other plugins share it through `dependencies` · wording follows `human-writing`
 
-> **กฎข้อเดียว:** ทุกการตัดสินที่มีตัวเลือกตั้งแต่ 2 ตัว ใส่ตัวเลขลงไฟล์ JSON แล้วให้ `decide.mjs` คิด · กฎเหล็กกรองทิ้งก่อน ไม่เอาไปคิดเป็นคะแนน · ผลที่ยังไม่นิ่งหรือเป็นเรื่องเงิน กฎหมาย สุขภาพ เป็นข้อเสนอ คนตัดสิน
+> **One rule:** for every decision with 2 or more options, put the numbers into a JSON file and let `decide.mjs` do the thinking · hard rules filter options out first and are never turned into scores · a result that is not stable, or that concerns money, law or health, is a proposal and a person decides
 
-## ใช้เมื่อ
+## Use when
 
-- เลือก 1 จากหลายตัวเลือก (กองทุน · ขนส่ง · ข้อเสนองาน · ใบเสนอราคา · ซื้อหรือทำเอง)
-- ผลขึ้นกับอนาคตที่ไม่แน่นอน (ดอกเบี้ยขึ้นหรือลง · สู้เคลมหรือคืนเงิน · ซื้อประกันขยายไหม)
-- เลือกหลายอย่างภายใต้งบ เวลา หรือโควตา (ลดหย่อนภาษี · ชิ้น flash deal · segment ที่จะ broadcast)
-- จัดลำดับงาน (บั๊ก · ช่องโหว่ · อีเมล · งานประจำวัน)
-- เลือกผลดีสุดจากหลายแบบที่ทำมาแล้ว · ตัดสินว่าจะตรวจงานอีกรอบไหม
+- Choosing 1 from several options (funds · carriers · job offers · quotations · buy or build)
+- The result depends on an uncertain future (interest rates up or down · fight the claim or take the refund · buy the extended warranty or not)
+- Choosing several things under a budget, time or quota (tax deductions · flash-deal items · segments to broadcast to)
+- Ordering work (bugs · vulnerabilities · emails · daily tasks)
+- Picking the best result from several attempts already made · deciding whether to review one more round
 
-ไม่ใช้เมื่อ: มีสูตรตรงอยู่แล้ว (ค่างวด · ภาษี · ขนาด position) → ใช้สูตรใน skill ของงานนั้น · เรื่องรสนิยม (สี ไอคอน น้ำเสียง) → คนดูเอง · ตัวเลือกเดียว ไม่มีอะไรให้เทียบ
+Do not use when: a direct formula already exists (loan installment · tax · position size) → use the formula in that task's skill · matters of taste (color, icon, tone) → a person looks · only one option, nothing to compare
 
-## ใช้ตัวอื่นแทนหรือคู่กัน
+## Use another skill instead, or together
 
-| สถานการณ์ | ใช้ | เหตุผล |
+| Situation | Use | Reason |
 |---|---|---|
-| ยังไม่มีตัวเลขของตัวเลือก (ราคา อัตรา ค่าธรรมเนียม) | `research-with-sources` ก่อน | สูตรดีแค่ไหน ถ้าตัวเลขเข้าผิดก็ได้ผลผิด |
-| ยังไม่มีตัวเลือก ต้องคิดทางก่อน | `brainstormer` | skill นี้ให้คะแนนตัวเลือกที่มีอยู่ ไม่ได้คิดตัวเลือกให้ |
-| แตกงานใหญ่ ลำดับ ชิ้นไหนก่อน กี่ลูกทีม | `parallel-split-and-merge` (`plan.mjs`) | กราฟงานมีสูตร Critical Path Method (CPM) ของมันเอง |
-| model ไหนเหมาะกับขั้นไหน · ขนาดชิ้นงานจากงานเก่า | `model-scorecard` | ใช้ log จริงของโปรเจกต์ |
-| จดว่าตัดสินอะไรไปและทำไม | `decision-log` | วางตารางผลของ skill นี้ลงตารางนั้นได้เลย |
+| The options' numbers (price, rate, fee) are not available yet | `research-with-sources` first | However good the formula, wrong input numbers give a wrong result |
+| No options yet, need to think of paths first | `brainstormer` | This skill scores options that exist; it does not think of options |
+| Split big work, order, which piece first, how many sub-agents | `parallel-split-and-merge` (`plan.mjs`) | A task graph has its own Critical Path Method (CPM) formula |
+| Which model fits which step · size of a piece of work from old work | `model-scorecard` | Uses the project's real log |
+| Record what was decided and why | `decision-log` | You can paste this skill's result table straight into that table |
 
-## หา path ของสคริปต์
+## Find the script path
 
-ติดตั้งจาก marketplace: `ls -d ~/.claude/plugins/cache/*/superuser/*/skills/decision-scoring/scripts/decide.mjs | sort -V | tail -1` · ทำงานใน repo SQT-Marketplace: `plugins/superuser/skills/decision-scoring/scripts/decide.mjs` · ใช้ Node อย่างเดียว ไม่มี dependency
+Installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/superuser/*/skills/decision-scoring/scripts/decide.mjs | sort -V | tail -1` · working in the SQT-Marketplace repo: `plugins/superuser/skills/decision-scoring/scripts/decide.mjs` · Node only, no dependencies
 
-## 1 · เลือกคำสั่งให้ตรงคำถาม
+## 1 · Pick the command that matches the question
 
-| คำถาม | คำสั่ง | วิธีคิด | ตัวอย่างไฟล์ |
+| Question | Command | How it thinks | Example file |
 |---|---|---|---|
-| ตัวไหนดีสุด หลายเกณฑ์ | `score` | กฎเหล็กตัดทิ้ง → ทำทุกเกณฑ์เป็นสเกล 0–1 (min-max) → ถ่วงน้ำหนัก → ขยับน้ำหนักทีละเกณฑ์ ±20% ดูว่าอันดับ 1 พลิกไหม | `templates/score.json` |
-| ผลขึ้นกับอนาคต | `payoff` | ค่าคาดหวัง (ถ้ารู้โอกาส) และเสียดายมากสุดน้อยที่สุด (minimax regret) ถ้าไม่รู้โอกาสหรือย้อนไม่ได้ | `templates/payoff.json` |
-| เลือกหลายอย่างภายใต้งบ | `knapsack` | ไม่เกิน 20 รายการ ลองทุกชุดได้คำตอบดีสุดจริง และบอก**ชุดรองลงมา**ว่าห่างกี่ % · มากกว่านั้นเรียงตามค่าที่ได้ต่อต้นทุนแล้วเทียบกับชิ้นเดียวที่ค่าสูงสุด (ใกล้เคียง ไม่รับประกันดีสุด) · `max_items` จำกัดจำนวน · `must` บังคับเลือก · `groups` + `group` เพดานต้นทุนต่อกลุ่ม | `templates/knapsack.json` |
-| ทำอะไรก่อน | `priority` | `rice` คนที่โดน × ผลกระทบ × ความมั่นใจ ÷ แรงงาน · `wsjf` (คุณค่า + เร่งตามเวลา + ลดเสี่ยง) ÷ ขนาด · `eisenhower` แบ่ง 4 กลุ่ม แล้วด่วน × สำคัญ ÷ นาที · ข้อที่ทำให้ผลผิดหรือไม่ปลอดภัยใส่ `"must_first": true` ขึ้นบนสุดโดยไม่ดูคะแนน · `rice` รับ impact 0.25–3 เท่านั้น · ชื่อซ้ำขึ้นคำเตือน | `templates/priority.json` |
-| แบบไหนดีกว่า เมื่อให้คะแนนตรง ๆ ยาก | `pairwise` | เทียบทีละคู่ สลับตำแหน่งทุกคู่ แล้วคิดความแข็งแบบ Bradley-Terry · คู่ที่สลับแล้วตัวที่วางก่อน (หรือหลัง) ชนะทุกครั้ง นับเสมอ | `templates/pairwise.json` |
-| ตรวจอีกรอบคุ้มไหม | `review` | ค่าของข้อที่คาดว่ารอบหน้าจะเจอ (ค่ารอบนี้ × อัตราลด) เทียบราคา 1 รอบ · ข้อสูงยังเหลือต้องตรวจซ้ำเสมอ · เพดานรอบเป็นกฎเหล็ก | `templates/review.json` |
+| Which is best, on several criteria | `score` | Hard rules cut options → turn every criterion into a 0–1 scale (min-max) → apply weights → shift each criterion's weight ±20% one at a time to see whether rank 1 flips | `templates/score.json` |
+| The result depends on the future | `payoff` | Expected value (if the odds are known) and minimax regret (smallest worst-case regret) if the odds are unknown or the choice cannot be undone | `templates/payoff.json` |
+| Choose several things under a budget | `knapsack` | Up to 20 items: tries every set and gets the truly best answer, and tells you how far behind the **runner-up set** is, in % · more than that: sorts by value per cost, then compares with the single item of highest value (close, not guaranteed best) · `max_items` limits the count · `must` forces a pick · `groups` + `group` set a cost cap per group | `templates/knapsack.json` |
+| What to do first | `priority` | `rice` people affected × impact × confidence ÷ effort · `wsjf` (value + time urgency + risk reduction) ÷ size · `eisenhower` splits into 4 groups, then urgent × important ÷ minutes · an item that makes the result wrong or unsafe gets `"must_first": true` and goes to the top regardless of score · `rice` accepts impact 0.25–3 only · duplicate names raise a warning | `templates/priority.json` |
+| Which version is better, when scoring directly is hard | `pairwise` | Compare one pair at a time, swap positions in every pair, then compute strength with Bradley-Terry · a pair where the one placed first (or last) wins every time always counts | `templates/pairwise.json` |
+| Is one more review worth it | `review` | Value of the items expected to be found next round (this round's value × decay rate) against the price of 1 round · a remaining high item always needs a re-check · the round cap is a hard rule | `templates/review.json` |
 
-รัน: `node decide.mjs <คำสั่ง> <ไฟล์.json>` ได้ตาราง markdown พร้อมบรรทัด **ผล** · เพิ่ม `--json` เมื่อจะเอาผลไปคิดต่อ · ไฟล์ input เก็บไว้ใน `_to_delete/` ของงาน (หรือแนบใน `decision-log` ถ้าต้องตรวจย้อน)
+Run: `node decide.mjs <command> <file.json>` gives a markdown table with a **ผล** (result) line · add `--json` when you will use the result for further calculation · keep the input file in the work's `_to_delete/` (or attach it in `decision-log` if it must be checked later)
 
-## 2 · ขั้นตอน
+## 2 · Steps
 
-1. **เขียนกฎเหล็กก่อน** — ข้อที่ไม่ผ่านแล้วตัดทิ้งทันทีไม่ว่าคะแนนอื่นดีแค่ไหน (เกินงบ · ความเสี่ยงเกินที่รับได้ · ผิดกฎหมาย · อยู่ในรายการรออนุมัติ) ใส่ใน `must` · ห้ามแปลงกฎเหล็กเป็นน้ำหนัก เพราะคะแนนข้ออื่นจะกลบมันได้
-2. **เลือกเกณฑ์ไม่เกิน 5–6 ข้อ** ที่วัดเป็นตัวเลขได้ บอก `better` (`high` หรือ `low`) · เกณฑ์ที่เป็นความเห็นให้คะแนน 1–5 แล้วเขียนว่าใครให้
-3. **น้ำหนักมาจากผู้ใช้** ถ้าไม่บอก ใช้ค่าที่ skill ของงานนั้นเสนอ แล้วจดลง **ตัดสินใจเอง** · ไม่มีทั้งคู่ให้ถ่วงเท่ากัน
-4. **ตัวเลขทุกตัวมีที่มา** — ตัวเลขที่เปลี่ยนตามเวลามีแหล่งและวันที่ตรวจ · ไม่รู้ให้ถามหรือใส่ `(รอยืนยัน)` ไม่เดาใส่ไฟล์ · ขาดค่าเกณฑ์ไหน สคริปต์ตัดตัวเลือกนั้นออกและบอกเหตุผล ไม่เติมศูนย์ให้
-5. **รัน แล้วอ่านบรรทัดผล** — `ยังไม่นิ่ง` หรือ `2 เกณฑ์ไม่ตรงกัน` หรือ `สูสี` = ส่งตัวเลือกที่ติดอันดับพร้อมเกณฑ์ที่ทำให้พลิกให้คนตัดสิน ไม่เลือกแทน
-6. **ตอบผู้ใช้** ด้วยตารางจากสคริปต์ + ผล 1 บรรทัด + เกณฑ์ที่ทำให้พลิก (ถ้ามี) · เรื่องเงิน กฎหมาย สุขภาพ ปิดด้วยว่าเป็นข้อมูลประกอบ ผู้ใช้ตัดสิน
+1. **Write the hard rules first** — an item that fails is cut right away no matter how good its other scores are (over budget · risk above what is acceptable · illegal · on the awaiting-approval list). Put them in `must` · never convert a hard rule into a weight, because other scores can drown it
+2. **Choose at most 5–6 criteria** that can be measured as numbers, and say `better` (`high` or `low`) · for a criterion that is an opinion, score 1–5 and write who gave the score
+3. **Weights come from the user.** If they give none, use the values that task's skill proposes and record it under **ตัดสินใจเอง** (decided on my own) · if neither exists, weight equally
+4. **Every number has a source** — a number that changes over time has a source and the date checked · if you do not know, ask or write `(รอยืนยัน)` (awaiting confirmation), never guess into the file · if a criterion's value is missing, the script drops that option and gives the reason, and does not fill in zero
+5. **Run, then read the result line** — `ยังไม่นิ่ง` (not stable) or `2 เกณฑ์ไม่ตรงกัน` (2 criteria disagree) or `สูสี` (too close to call) = give the person the top-ranked options with the criteria that cause the flip, and do not choose for them
+6. **Answer the user** with the script's table + 1 line of result + the criteria that cause the flip (if any) · for money, law, health, close by saying it is supporting information and the user decides
 
-## 3 · กับดักที่ต้องรู้
+## 3 · Traps to know
 
-- **min-max กับตัวเลือก 2 ตัว** ได้ 0 กับ 100 ทุกเกณฑ์ ความต่างเล็กนิดเดียวก็ดูเป็นเรื่องใหญ่ ให้ดูตัวเลขดิบในวงเล็บด้วย
-- **Goodhart's law** — ตัวเลขที่ถูกใช้ควบคุมจะเลิกบอกความจริง (Strathern 1997 สรุปว่า "เมื่อตัววัดกลายเป็นเป้า มันก็เลิกเป็นตัววัดที่ดี") คนหรือ agent จะทำให้คะแนนดีแทนการทำงานให้ดี จึงใช้หลายเกณฑ์ และให้คนสุ่มตรวจบ้าง
-- **LLM ที่เป็นผู้ตัดสินเอียงตามตำแหน่งและชอบคำตอบยาว** — `pairwise` ต้องสลับตำแหน่งทุกคู่ · ให้คะแนนตรงจะเอียงยิ่งกว่า
-- **ค่าตั้งต้นในสคริปต์เป็นค่าที่ตั้งเอง ยังไม่ได้วัด** — ข้อสูง 3 · ข้อกลาง 1 · ราคารอบตรวจ 2 ปรับในไฟล์ input ได้ (`value` · `round_cost`) · ขยับน้ำหนัก ±20% · สูสีต่ำกว่า 60% (pairwise) · ชุดรองลงมาห่างไม่ถึง 10% (knapsack) เป็นค่าคงที่ในสคริปต์
-- **ไม่ใช้ Kelly criterion กับเงินจริง** — ประเมินโอกาสผิดนิดเดียวก็ลงเงินเกินตัว ขนาด position ใช้ `position-sizing`
+- **min-max with 2 options** gives 0 and 100 on every criterion, so a tiny difference looks like a big deal; also look at the raw numbers in brackets
+- **Goodhart's law** — a number used for control stops telling the truth (Strathern 1997 summarized it: "when a measure becomes a target, it ceases to be a good measure"). People or agents will make the score good instead of doing the work well, so use several criteria and have a person spot-check now and then
+- **An LLM acting as judge leans by position and favours long answers** — `pairwise` must swap positions in every pair · direct scoring leans even more
+- **Defaults in the script are self-set, not measured** — high item 3 · medium item 1 · review round price 2 are adjustable in the input file (`value` · `round_cost`) · shifting weights ±20% · too-close below 60% (pairwise) · runner-up set closer than 10% (knapsack) are constants in the script
+- **Do not use the Kelly criterion with real money** — a slightly wrong estimate of the odds bets more than you can afford; position size uses `position-sizing`
 
-## ตัวอย่างจริง
+## Real example
 
-**โจทย์:** เลือกกองทุน 1 กองจาก 3 กอง รับความเสี่ยงได้ไม่เกินระดับ 6 ซื้อขั้นต่ำไม่เกิน 1,000 บาท (ตัวเลขสมมติใน `templates/score.json`)
-**ทำ:** `node decide.mjs score templates/score.json`
-**ผล (รัน 2026-10-27):** กองทุน C ถูกตัดทิ้งเพราะเสี่ยงระดับ 8 ทั้งที่ผลตอบแทนสูงสุด · กองทุน A 60 คะแนน B 40 · ขยับน้ำหนักทีละเกณฑ์ ±20% แล้ว A ยังที่ 1 จึงบอกว่านิ่ง
+**Task:** choose 1 fund of 3, accepting risk no higher than level 6, minimum purchase no more than 1,000 baht (hypothetical numbers in `templates/score.json`)
+**Do:** `node decide.mjs score templates/score.json`
+**Result (run 2026-10-27):** fund C was cut because its risk is level 8, though its return is the highest · fund A scored 60, B 40 · shifting each criterion's weight ±20%, A stayed at rank 1, so it is called stable
 
-## ตรวจก่อนส่ง
+## Check before sending
 
-- [ ] `node decide.mjs --self-test` ผ่านทุกข้อ (2026-10-27: 19/19)
-- [ ] กฎเหล็กอยู่ใน `must` ไม่ได้ปนเป็นน้ำหนัก
-- [ ] ทุกตัวเลขใน input มีที่มา หรือติด `(รอยืนยัน)`
-- [ ] ผลที่ไม่นิ่ง สูสี หรือ 2 เกณฑ์ขัดกัน ส่งให้คนตัดสิน ไม่เลือกแทน
+- [ ] `node decide.mjs --self-test` passes every case (2026-10-27: 19/19)
+- [ ] Hard rules are in `must` and not mixed in as weights
+- [ ] Every number in the input has a source or is marked `(รอยืนยัน)` (awaiting confirmation)
+- [ ] A result that is not stable, too close, or where 2 criteria conflict goes to a person to decide, and you do not choose for them
 
-## ที่มา
+## Sources
 
-แหล่งหลักที่เปิดอ่านจริง 2026-10-27 · แต่ละวิธีมีแหล่งอิสระอย่างน้อย 3 แหล่ง รายการเต็มเก็บไว้ในรอบค้นคว้าของงานนี้ · ต้นฉบับหลายชิ้น (Savage 1951 · Fishburn 1967 · Malcolm 1959 · Bradley & Terry 1952 · Dantzig 1957) ติดสิทธิ์ จึงอ้างผ่านงานที่อ้างต้นฉบับ
+The main sources really opened on 2026-10-27 · each method has at least 3 independent sources, and the full list is kept in this work's research round · several originals (Savage 1951 · Fishburn 1967 · Malcolm 1959 · Bradley & Terry 1952 · Dantzig 1957) are under copyright, so they are cited through works that cite the original
 
-| วิธี | แหล่งหลัก | หมายเหตุ |
+| Method | Main source | Note |
 |---|---|---|
 | minimax regret | [Stoye 2011 · Axioms for Minimax Regret](https://stoye.economics.cornell.edu/docs/AxiomsRegret.pdf) · [TU Delft · Games Against Nature](https://ocw.tudelft.nl/wp-content/uploads/Lecture_Slides_Chapter_10_.pdf) | |
 | weighted sum + min-max | [Roszkowska 2026 · Entropy 28(1):114](https://pmc.ncbi.nlm.nih.gov/articles/PMC12839561/) · [Krishnan 2022 · Frontiers in Big Data](https://www.frontiersin.org/journals/big-data/articles/10.3389/fdata.2022.990699/full) | |
-| ขยับน้ำหนักดูความไว | [O'Shea และคณะ 2026 · weight stability intervals ของ WSM](https://research.ucc.ie/en/publications/weight-stability-intervals-for-multi-criteria-decision-analysis-u/) | อ่อน: เห็นแค่บทคัดย่อ · ±20% เป็นค่าที่ตั้งเอง |
-| PERT 3 จุด (ใน `model-scorecard`) | [IBM · PERT General Information Manual E20-8067-1](https://bitsavers.org/pdf/ibm/generalInfo/E20-8067-1_PERT_A_Dynamic_Project_Planning_and_Control_Method.pdf) | |
-| Eisenhower | [Eisenhower 1954 · สุนทรพจน์ที่ Evanston](https://www.presidency.ucsb.edu/documents/address-the-second-assembly-the-world-council-churches-evanston-illinois) | ท่านยกคำของคนอื่น · ตาราง 4 ช่องมาจาก Covey ทีหลัง |
+| Shifting weights to see sensitivity | [O'Shea et al. 2026 · weight stability intervals of WSM](https://research.ucc.ie/en/publications/weight-stability-intervals-for-multi-criteria-decision-analysis-u/) | Weak: only the abstract was seen · ±20% is self-set |
+| PERT 3-point (in `model-scorecard`) | [IBM · PERT General Information Manual E20-8067-1](https://bitsavers.org/pdf/ibm/generalInfo/E20-8067-1_PERT_A_Dynamic_Project_Planning_and_Control_Method.pdf) | |
+| Eisenhower | [Eisenhower 1954 · speech at Evanston](https://www.presidency.ucsb.edu/documents/address-the-second-assembly-the-world-council-churches-evanston-illinois) | He quoted someone else · the 4-box table came later from Covey |
 | Goodhart's law | [Strathern 1997 · Improving ratings](https://www.gwern.net/doc/statistics/decision/1997-strathern.pdf) · [Manheim & Garrabrant · arXiv 1803.04585](https://arxiv.org/pdf/1803.04585) | |
-| Bradley-Terry + ความเอียงตามตำแหน่ง | [Chatbot Arena · arXiv 2403.04132](https://arxiv.org/pdf/2403.04132) · [Zheng และคณะ · arXiv 2306.05685](https://arxiv.org/pdf/2306.05685) · [Wang และคณะ · arXiv 2305.17926](https://arxiv.org/pdf/2305.17926) | คิดค่าด้วยวิธี MM ของ Hunter 2004 (ยังไม่ได้เปิดต้นฉบับ) |
+| Bradley-Terry + position bias | [Chatbot Arena · arXiv 2403.04132](https://arxiv.org/pdf/2403.04132) · [Zheng et al. · arXiv 2306.05685](https://arxiv.org/pdf/2306.05685) · [Wang et al. · arXiv 2305.17926](https://arxiv.org/pdf/2305.17926) | Computed with the MM method of Hunter 2004 (original not opened) |
 | WSJF | [SAFe · WSJF](https://framework.scaledagile.com/wsjf) | |
-| RICE | [Intercom · RICE](https://www.intercom.com/blog/rice-simple-prioritization-for-product-managers/) | แหล่งหลักแหล่งเดียว เป็นของผู้คิดวิธี |
-| knapsack | [Duke CS 330 · Greedy Algorithm II](https://courses.cs.duke.edu/spring20/compsci330/lecture8scribe.pdf) | greedy ตามอัตราส่วนดีสุดเฉพาะแบบหยิบเศษได้ จึงลองทุกชุดเมื่อไม่เกิน 20 รายการ |
-| marginal value ของรอบตรวจ | — | ค่าและอัตราลดเป็นค่าที่ตั้งเอง ยังไม่ได้วัด · กฎหยุดเมื่อไม่คืบมาจาก `team-roles` |
+| RICE | [Intercom · RICE](https://www.intercom.com/blog/rice-simple-prioritization-for-product-managers/) | Only one primary source, and it is by the method's inventor |
+| knapsack | [Duke CS 330 · Greedy Algorithm II](https://courses.cs.duke.edu/spring20/compsci330/lecture8scribe.pdf) | Greedy by best ratio is optimal only when fractions can be taken, so every set is tried when there are 20 items or fewer |
+| marginal value of a review round | — | Value and decay rate are self-set, not measured · the stop-when-no-progress rule comes from `team-roles` |

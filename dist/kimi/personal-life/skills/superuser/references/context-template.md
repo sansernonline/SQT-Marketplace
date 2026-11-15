@@ -1,39 +1,39 @@
-# แม่แบบไฟล์กลาง — personal-life
+# Central file template — personal-life
 
-หัวหน้าทีมใช้แม่แบบนี้ตอนสร้างไฟล์ครั้งแรก กติกาการเขียนอยู่ในหัวข้อ 9 ของ `superuser`
+The team lead uses this template when it first creates the files. The writing rules are in section 9 of `superuser`.
 
-- สารบัญ: [ค่าของ plugin นี้](#ค่าของ-plugin-นี้) · [CONTEXT.md](#contextmd) · [IMPROVEMENTS.md](#improvementsmd)
+- Contents: [Values for this plugin](#values-for-this-plugin) · [CONTEXT.md](#contextmd) · [IMPROVEMENTS.md](#improvementsmd)
 
-## ค่าของ plugin นี้
+## Values for this plugin
 
-ใส่แทนช่องว่างในแม่แบบด้านล่าง — เลือกชุดที่ตรงหมวดของงาน
+Fill the blanks in the template below. Pick the set that matches the kind of work.
 
-**จัดการชีวิต**
+**Life admin**
 - ชื่องาน: งานส่วนตัว
-- งานนี้คืออะไร: ดูแลเรื่องอะไรบ้าง อยู่รอบไหน
-- กติกา: ไฟล์ทะเบียนเอกสารอยู่ที่ไหน · วันทบทวนประจำสัปดาห์ · plugin อีเมลที่ใช้
-- ตัวอย่างแถว IMPROVEMENTS: บริการสตรีมมิงหนึ่งย้ายปุ่มยกเลิกไปไว้ในเว็บ ไม่มีในแอป · หลักฐาน: หน้าช่วยเหลือของบริการ + ทดลองดู · ไปรวมที่ `subscription-audit` references/cancel-steps.md
+- งานนี้คืออะไร: what it covers, and on what cycle
+- กติกา: where the document register file is · the weekly review day · which email plugin to use
+- Example IMPROVEMENTS row: a streaming service moved its cancel button to the website and removed it from the app · evidence: the service's help page + a trial · merge into `subscription-audit` references/cancel-steps.md
 
-**บ้านและครอบครัว**
+**Home and family**
 - ชื่องาน: งานบ้าน
-- งานนี้คืออะไร: ดูแลอะไรบ้าง บ้านไหน ใครในบ้านรับผิดชอบอะไร
-- กติกา: ไฟล์ตารางบิลอยู่ที่ไหน · งบต่อหัว · ใครรับเตือนเรื่องอะไร
-- ตัวอย่างแถว IMPROVEMENTS: ต่อภาษีรถออนไลน์ได้สำหรับรถที่ต้องตรวจสภาพ เมื่อตรวจที่ตรอ.ก่อน · หลักฐาน: เว็บกรมการขนส่งทางบก + 2 แหล่ง · ไปรวมที่ `vehicle-care`
+- งานนี้คืออะไร: what is covered, which home, who in the household is responsible for what
+- กติกา: where the bills sheet is · budget per person · who gets reminders about what
+- Example IMPROVEMENTS row: car tax can be renewed online for cars that need an inspection, once inspected at a private inspection centre (ตรอ.) · evidence: Department of Land Transport website + 2 sources · merge into `vehicle-care`
 
-**สุขภาพ**
+**Health**
 - ชื่องาน: สุขภาพ แม่
-- งานนี้คืออะไร: ดูแลเรื่องอะไรให้ใคร มีนัดหรือรอบอะไรอยู่
-- กติกา: ไฟล์ตารางยาอยู่ที่ไหน · ใครเป็นผู้ดูแลหลัก · ห้ามส่งข้อมูลออกนอกโฟลเดอร์
-- ตัวอย่างแถว IMPROVEMENTS: เว็บประกันสังคมย้ายหน้ารายการสิทธิ์ตรวจสุขภาพ · หลักฐาน: ลิงก์หน้าทางการใหม่ · ไปรวมที่ `annual-checkup`
+- งานนี้คืออะไร: who is cared for and what, which appointments or cycles are running
+- กติกา: where the medication schedule file is · who is the main caregiver · do not send data out of the folder
+- Example IMPROVEMENTS row: the Social Security Office website moved its health-check entitlement list page · evidence: link to the new official page · merge into `annual-checkup`
 
-**อาชีพ**
+**Career**
 - ชื่องาน: หางาน 2026
-- งานนี้คืออะไร: เป้าหมายอาชีพ ตำแหน่งที่กำลังสมัคร สถานะโดยรวม
-- กติกา: ภาษาของ CV · ไฟล์ CV ฉบับหลักอยู่ที่ไหน · ห้ามเปิดเผยเงินเดือนปัจจุบันในเอกสารที่ส่งออก (ตัวเลขจริงเก็บในไฟล์ของผู้ใช้ ไม่ใส่ที่นี่)
-- ตัวอย่างแถว IMPROVEMENTS: ระบบ ATS ของบริษัทใหญ่หลายแห่งอ่านคอลัมน์คู่ใน PDF ผิดลำดับ · หลักฐาน: ทดลองแปลงไฟล์เป็นข้อความ · ลิงก์คู่มือผู้ให้บริการ 3 แหล่ง · ไปรวมที่ `resume-th-en`
+- งานนี้คืออะไร: career goal, positions being applied for, overall status
+- กติกา: CV language · where the main CV file is · never reveal the current salary in documents that go out (keep the real figure in the user's own file, not here)
+- Example IMPROVEMENTS row: the applicant tracking systems (ATS) of several large companies read two-column PDFs in the wrong order · evidence: converted the file to text as a test · links to 3 vendor guides · merge into `resume-th-en`
 
-**เรียนรู้** — ชื่องาน: เรียน Rust · งานนี้คืออะไร: เรียนอะไร เพื่อใช้กับงานไหน อยู่ milestone ไหน
-- กติกา: เวลาต่อสัปดาห์ · คำสั่งรันตัวอย่าง · วันสอบ (ถ้ามี) · ห้ามใส่ค่าลับหรือ token ของบัญชีคลาวด์ที่ใช้ทำ lab · ตัวอย่างแถว IMPROVEMENTS: คู่มือสอบรุ่นใหม่ของใบรับรองหนึ่งเปลี่ยนน้ำหนักหัวข้อ · หลักฐาน: ลิงก์คู่มือสอบทางการ · ไปรวมที่ `cert-prep` references/exam-facts.md
+**Learning** — ชื่องาน: เรียน Rust · งานนี้คืออะไร: what is being learned, for which job, which milestone it is at
+- กติกา: hours per week · command to run the examples · exam date (if any) · never put secrets or tokens of the cloud account used for labs · example IMPROVEMENTS row: a new exam guide for one certification changed the topic weights · evidence: link to the official exam guide · merge into `cert-prep` references/exam-facts.md
 
 <!-- superuser:begin context -->
 ## CONTEXT.md

@@ -1,31 +1,31 @@
-# ตัวอย่างสถานะ การเคลื่อนไหว เช็กลิสต์ และข้อห้าม — ส่วนขยายของ `ui-craft`
+# State examples, motion, checklists and prohibitions — an extension of `ui-craft`
 
-กฎหลักอยู่ใน `SKILL.md` ไฟล์นี้เก็บตัวอย่างและรายการตรวจฉบับเต็ม เปิดตอนทำข้อ 0.1 · 6 · 7 · 9 · 10
+The main rules are in `SKILL.md`. This file holds the examples and the full checklists. Open it when doing sections 0.1 · 6 · 7 · 9 · 10
 
-## สารบัญ
+## Contents
 
-1. [5 สถานะของแอปที่อ่าน hardware](#5-สถานะของแอปที่อ่าน-hardware-ข้อ-6)
-2. [ข้อความ error ที่ใช้ได้](#ข้อความ-error-ที่ใช้ได้-ข้อ-6)
-3. [CSS สำหรับ prefers-reduced-motion](#css-สำหรับ-prefers-reduced-motion-ข้อ-7)
-4. [เช็กลิสต์ตรวจงาน — ชุดที่ 1 และ 2](#เช็กลิสต์ตรวจงาน-ข้อ-9)
-5. [ด่านสวย — ชุดที่ 3](#ด่านสวย--ชุดที่-3-ข้อ-01--ข้อ-9)
-6. [Anti-patterns](#anti-patterns-ข้อ-10)
-7. [ปุ่มที่ซ้ำทุกแถว](#ปุ่มที่ซ้ำทุกแถว--เลือกแบบไหน-ข้อ-3)
-8. [วิธีวัด contrast](#วิธีวัด-contrast-ข้อ-5)
+1. [5 states of a hardware-reading app](#5-states-of-a-hardware-reading-app-section-6)
+2. [Usable error messages](#usable-error-messages-section-6)
+3. [CSS for prefers-reduced-motion](#css-for-prefers-reduced-motion-section-7)
+4. [Review checklist — sets 1 and 2](#review-checklist-section-9)
+5. [Beauty gate — set 3](#beauty-gate--set-3-section-01--section-9)
+6. [Anti-patterns](#anti-patterns-section-10)
+7. [Buttons repeated on every row](#buttons-repeated-on-every-row--which-kind-section-3)
+8. [How to measure contrast](#how-to-measure-contrast-section-5)
 
 ---
 
-## 5 สถานะของแอปที่อ่าน hardware (ข้อ 6)
+## 5 states of a hardware-reading app (section 6)
 
-| สถานะ | ตัวอย่าง (เครื่องวัดแสง) |
+| State | Example (light meter) |
 |---|---|
-| ว่าง | ยังไม่ได้ให้สิทธิ์กล้อง ให้แสดงการ์ดอธิบายพร้อมปุ่มเดียว |
-| กำลังโหลด | sensor กำลังอุ่นเครื่องและยังไม่มีค่าแรก ให้แสดงโครงร่างของตัวเลข ไม่ใช่ `0` |
-| ผิดพลาด | เครื่องไม่มี sensor หรือสิทธิ์ถูกบล็อก ให้บอกเหตุและทางไปต่อ (ใช้กล้องแทน · เปิดหน้าตั้งค่า) |
-| มีบางส่วน | ค่าเกินช่วงที่วัดได้ (อิ่มตัว) ให้แสดง "มากกว่า X" ไม่ใช่ตัวเลขผิด ๆ |
-| สำเร็จ | บันทึกจุดวัดแล้ว ให้ขึ้น SnackBar สั้น ๆ ที่ไม่บังปุ่ม |
+| Empty | Camera permission not yet granted: show an explanation card with a single button |
+| Loading | The sensor is warming up and has no first value: show a skeleton of the number, not `0` |
+| Error | The device has no sensor or permission is blocked: give the cause and the way forward (use the camera instead · open the settings page) |
+| Partial | The value is beyond the measurable range (saturated): show "more than X", not a wrong number |
+| Success | A measurement point was saved: show a short SnackBar that does not cover the button |
 
-## ข้อความ error ที่ใช้ได้ (ข้อ 6)
+## Usable error messages (section 6)
 
 ```
 ผิด: Error 500: Internal Server Error
@@ -34,9 +34,9 @@
    แล้วกดบันทึกอีกครั้ง [ลองใหม่]
 ```
 
-ข้อความ error = เกิดอะไร + ทำอะไรต่อ ในข้อความเดียว · สรรพนามใช้ `คุณ` หรือละ · ไม่ซ้อน ครับ/ค่ะ ท่าน กรุณา · ถ้อยคำบนหน้าจอ → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ หน้าจอ
+An error message = what happened + what to do next, in one message · for the pronoun use `คุณ` (you) or leave it out · never stack ครับ/ค่ะ ท่าน กรุณา · on-screen wording → `human-writing` `references/thai-grammar.md` section 4, level "screen"
 
-## CSS สำหรับ prefers-reduced-motion (ข้อ 7)
+## CSS for prefers-reduced-motion (section 7)
 
 ```css
 @media (prefers-reduced-motion: reduce) {
@@ -47,96 +47,96 @@
 }
 ```
 
-## เช็กลิสต์ตรวจงาน (ข้อ 9)
+## Review checklist (section 9)
 
-- [ ] หรี่ตามอง — มีของเด้งมาก่อนอย่างเดียวใช่ไหม
-- [ ] วัดระยะห่าง 5 จุดแบบสุ่ม — อยู่ในสเกล `4 8 12 16 24 32 48 64` ทุกจุดไหม
-- [ ] นับขนาดตัวอักษรในหน้า — เกิน 5 ขนาดไหม
-- [ ] นับปุ่มทึบสีแบรนด์ — เกิน 1 ปุ่มไหม
-- [ ] ของที่เกี่ยวข้องกันอยู่ใกล้กว่าของที่ไม่เกี่ยวไหม
-- [ ] ครบ 5 สถานะไหม (ไม่ใช่แค่สถานะมีข้อมูล)
-- [ ] ข้อความ error บอกว่า**ทำอะไรต่อ**ไหม
-- [ ] contrast ผ่าน 4.5:1 ไหม
-- [ ] สถานะที่บอกด้วยสี มีไอคอนหรือข้อความคู่ไหม
-- [ ] มุมของข้างในโค้งน้อยกว่าของข้างนอกไหม
-- [ ] เงามีเฉพาะของที่ลอยจริงไหม (ยกเว้นการ์ดบนหน้าโน้มน้าวของ look soft SaaS ตาม `depth-and-flourish.md` · หน้าแอปที่ใช้ทั้งวันยังตามกฎนี้)
-- [ ] ย่อจอเหลือครึ่งหนึ่ง (เว็บ) · ตัวอักษรระบบ 200 % + หมุนจอแนวนอน (มือถือ) — พังตรงไหน
-- [ ] ใส่ข้อมูลยากของจริง: ชื่อไทยยาวที่สุดไม่มีวรรค (ไทยไม่มีช่องว่างให้ตัดบรรทัด) · ตัวเลข 7 หลักขึ้นไป · ช่องที่ไม่บังคับปล่อยว่าง · ไทยปนอังกฤษ — ไม่ล้นปุ่ม หัวตาราง และการ์ด
-- [ ] เน็ตช้า (throttle 3G ในเครื่องมือนักพัฒนา) — เห็นโครงกำลังโหลด ไม่ใช่จอขาวหรือปุ่มกดซ้ำได้
-- [ ] เป้ากดบนจอสัมผัส ≥ 44×44px และห่างกัน ≥ 8px
+- [ ] Squint: does only one thing jump out first?
+- [ ] Measure 5 random spacings — is every one in the scale `4 8 12 16 24 32 48 64`?
+- [ ] Count the font sizes on the page — more than 5?
+- [ ] Count the solid brand-color buttons — more than 1?
+- [ ] Do things that belong together sit closer than things that do not?
+- [ ] Are all 5 states present (not just the has-data state)?
+- [ ] Does the error message say **what to do next**?
+- [ ] Does contrast pass 4.5:1?
+- [ ] Does every status shown by color have an icon or text beside it?
+- [ ] Do inside items have a smaller corner radius than outside ones?
+- [ ] Do only things that really float have shadows? (except cards on a persuasion page of the soft SaaS look per `depth-and-flourish.md` · an app page used all day still follows this rule)
+- [ ] Shrink the window to half (web) · system font 200 % + rotate to landscape (mobile) — what breaks?
+- [ ] Put in real hard data: the longest Thai name with no spaces (Thai has no spaces to break lines at) · numbers of 7 digits or more · optional fields left empty · Thai mixed with English — nothing overflows buttons, table headings and cards
+- [ ] Slow network (throttle 3G in developer tools) — you see a loading skeleton, not a white screen or a button that can be pressed twice
+- [ ] Touch targets ≥ 44×44px and ≥ 8px apart
 
-**ข้างบนวัดความถูกต้อง ผ่านครบแล้วยังไม่สวยได้** ตรวจต่อด้วยข้อที่นับได้:
+**The above measures correctness; passing all of it can still be ugly.** Continue with the countable items:
 
-- [ ] ปุ่มและเมนูมีไอคอน (ข้อความล้วนทั้งหน้า = wireframe)
-- [ ] เนื้อหาใช้พื้นที่ ≥ 60 % ของความสูงจอ หรือพื้นที่ว่างนั้นตั้งใจ (หน้าว่าง · หน้าเข้าสู่ระบบ)
-- [ ] แถวชนิดเดียวกันสูงเท่ากันทุกจุดในหน้า (รายการในการ์ด A กับการ์ด B)
-- [ ] กล่องมีกรอบไม่เกิน 3 กล่องต่อหน้า และไม่มีกล่องซ้อนกล่อง
-- [ ] ส่วนควบคุมของ mockup (รหัส requirement · ตัวสลับสถานะ) ไม่ติดในภาพที่ส่งรีวิว
+- [ ] Buttons and menus have icons (text only across the whole page = wireframe)
+- [ ] Content uses ≥ 60 % of the screen height, or the empty space is intended (empty page · sign-in page)
+- [ ] Rows of the same kind have equal height everywhere on the page (list in card A and card B)
+- [ ] No more than 3 bordered boxes per page, and no box inside a box
+- [ ] The mockup's controls (requirement codes · state switcher) are not stuck in the image sent for review
 
-**ผ่าน 2 ชุดข้างบนแล้วยังจืดได้** — ชุดที่ 3 คือด่านสวย ใช้กับ mockup ที่จะส่งให้คนอนุมัติ
+**Passing the 2 sets above can still be bland** — set 3 is the beauty gate (`ด่านสวย`), used for a mockup that will be sent to someone for approval
 
-## ด่านสวย — ชุดที่ 3 (ข้อ 0.1 · ข้อ 9)
+## Beauty gate — set 3 (section 0.1 · section 9)
 
-ถ่ายภาพหน้าจอพระเอก + หน้าใช้บ่อย 2 หน้า ทั้ง 2 ธีม วางเคียงภาพแอปอ้างอิงที่ขนาดเดียวกัน (ภาพจาก `_to_delete/ref-shots/` · ไม่มีแอปอ้างอิง → `assets/app-character-sheet.webp` แถวบุคลิกที่เลือก) · **ผู้ตรวจ 2 ตัวที่ไม่ได้ทำ ให้คะแนนแยกกัน แล้วใช้คะแนนที่ต่ำกว่า** · ดูจากภาพ ไม่อ่านโค้ด · ทุกแกนเขียนเหตุผล 1 บรรทัด
+Take screenshots of the hero screen + 2 frequently used pages, in both themes, and place them beside the reference app image at the same size (images from `_to_delete/ref-shots/` · no reference app → `assets/app-character-sheet.webp`, the row of the chosen character) · **2 reviewers who did not make it score separately, then use the lower score** · judge from the image, do not read the code · write a 1-line reason for every axis
 
-| แกน | ได้ 4 เมื่อ (ตรวจด้วยตาได้) | ได้ 5 เมื่อ |
+| Axis | Scores 4 when (checkable by eye) | Scores 5 when |
 |---|---|---|
-| ความประทับใจแรก | ส่งภาพหน้าจอพระเอกให้ subagent ตัวใหม่ที่ไม่รู้โจทย์ดู 5 วินาที แล้วบอกได้ว่าแอปทำอะไร ตรงกับประโยคหน้าจอพระเอก (ข้อ 0.1) | ได้ 4 และ subagent นั้นบอกเองว่าอยากลองใช้ หรือชี้จุดที่ดึงดูดได้ 1 จุด |
-| หน้าจอพระเอก | มีหน้าที่โชว์ช่วงเวลาที่สินค้าทำงาน (ไม่ใช่ฟอร์ม · ตาราง · หน้าตั้งค่า) ด้วยเนื้อหาที่ดูเหมือนของจริง | ได้ 4 และมีการเคลื่อนไหวหรือสถานะที่เล่าเรื่องได้ในภาพเดียว |
-| ตัวตน | มีโลโก้ (แถบชื่อหน้าต่างหรือแถบหัว) + สีแบรนด์ปรากฏ ≥ 2 จุดที่ไม่ใช่ปุ่มและไม่ใช่กรอบแอป (ข้อมูล · ตัวเลขหลัก · หน้าจอพระเอก · แถบเลือก) + ไม่ใช่ธีมตั้งต้นของ skill แพลตฟอร์ม | ได้ 4 และปิดโลโก้แล้วยังจำได้ว่าเป็นแอปนี้ (สี · รูปทรง · หน้าจอพระเอก) |
-| ความประณีต | ชุดที่ 2 ข้างบนตก 1 ข้อ | ชุดที่ 2 ตก 0 ข้อ |
-| เทียบแอปอ้างอิง | วางภาพคู่โดยไม่บอกว่าภาพไหนของใคร ผู้ตรวจบอกว่า "ใกล้เคียงกัน" | ผู้ตรวจเลือกภาพของเราว่าดีกว่า |
-| พลังของสี | หรี่ตาดูภาพแล้วเห็นสีแบรนด์ ≥ 3 จุดในส่วนเนื้อหา กระจายทั้งส่วนบน กลาง และล่างของภาพ (กรอบแอปเป็นสีกลาง ไม่นับ) · ป้ายที่ต้องหาให้เจอเร็ว (สถานะ · ผู้รับผิดชอบ · เลขขั้น) เห็นได้ทันทีตามแบบของแพลตฟอร์ม (ดูหมายเหตุใต้ตาราง) · สีเสริมเป็นสีอิ่ม ใช้สีพาสเทลได้แค่เป็นพื้นที่มีตัวหนังสือหรือขอบสีเข้มคู่กัน | ได้ 4 และมีก้อนสีทึบใหญ่ ≥ 1 ก้อนในส่วนเนื้อหา (ตามหมายเหตุแพลตฟอร์ม) หรือมีสีตัดกับสีแบรนด์ 1 สีที่ใช้เน้นจุดสำคัญจุดเดียว |
-| มิติและภาพ | ทุกหน้า: มุมโค้งและเงาตรงภาษาความลึกของ look ที่เลือก ([`depth-and-flourish.md`](depth-and-flourish.md)) · ไอคอนจากชุดเดียวตาม `icon-design` ข้อ 2 (ถ้าติดตั้ง graphic-design · ไม่มีใช้ Lucide · Tabler หรือ Fluent ชุดเดียว) ในจุดที่ช่วยกวาดตา · มีภาพหรือกราฟิกพระเอก ≥ 1 ชิ้นที่ไม่ใช่ข้อความในกรอบ (หน้าแอปและ dashboard นับกราฟข้อมูลได้) · หน้าโน้มน้าว (landing · หน้าขาย) เพิ่ม: เทาและพื้นจางอมสีแบรนด์ ไม่ใช่เทาล้วนคู่สีเข้มจัด · หน้าแอปให้กรอบแอปเป็นเทาตามหมายเหตุข้างล่าง | ได้ 4 และวางเคียงต้นแบบที่เจ้าของเลือก (`~/.claude/superuser-style.md` ถ้ามี · ไม่มี → ภาพจาก `design-references` รอบนี้) แล้วผู้ตรวจบอกว่าอยู่ตระกูลเดียวกัน |
+| First impression | Show the hero-screen image for 5 seconds to a new subagent that does not know the brief, and it can say what the app does, matching the hero-screen sentence (section 0.1) | Scores 4 and that subagent says by itself it would like to try it, or points to 1 attractive spot |
+| Hero screen | Has a page that shows the moment the product works (not a form · table · settings page) with content that looks real | Scores 4 and has motion or a state that tells a story in a single image |
+| Identity | Has a logo (title bar or header bar) + the brand color appears at ≥ 2 spots that are not buttons and not the app frame (data · main number · hero screen · selection bar) + is not the platform skill's starter theme | Scores 4 and with the logo covered, you still recognize it as this app (color · shape · hero screen) |
+| Polish | Set 2 above fails 1 item | Set 2 fails 0 items |
+| Compared with the reference app | Place the images as a pair without saying whose is whose, and the reviewer says "close to each other" | The reviewer picks our image as better |
+| Color power | Squint at the image and see the brand color at ≥ 3 spots in the content area, spread across the top, middle and bottom of the image (the app frame is neutral and does not count) · labels that must be found quickly (status · owner · step number) are visible at once in the platform's style (see the note under the table) · secondary colors are saturated; pastel may be used only as a surface paired with text or a dark-colored border | Scores 4 and has ≥ 1 large solid block of color in the content area (per the platform note) or has 1 color contrasting with the brand color used to highlight a single important spot |
+| Depth and imagery | Every page: corners and shadows match the depth language of the chosen look ([`depth-and-flourish.md`](depth-and-flourish.md)) · icons from a single set per `icon-design` section 2 (if graphic-design is installed; if not, use one set of Lucide · Tabler or Fluent) at spots that help the eye sweep · has ≥ 1 hero image or graphic that is not text in a frame (app pages and dashboards may count a data chart) · persuasion pages (landing · sales page) add: grays and light surfaces tinted with the brand color, not pure gray paired with a very dark color · app pages keep the app frame gray per the note below | Scores 4 and placed beside the prototype the owner chose (`~/.claude/superuser-style.md` if present · if not, an image from this round's `design-references`), the reviewer says they are the same family |
 
-**หมายเหตุต่อแพลตฟอร์ม (แกนตัวตน · พลังของสี · มิติและภาพ):**
+**Platform notes (axes identity · color power · depth and imagery):**
 
-- **ทุกแพลตฟอร์ม:** กรอบแอป (แถบชื่อหน้าต่าง · แถบหัว · toolbar · rail · nav · เส้นขอบ) เป็นเส้นและไอคอนเทา-ดำ ไม่ย้อมสีแบรนด์ เว้นแต่ผู้ใช้สั่ง · สีแบรนด์อยู่ที่ข้อมูลและปุ่มหลัก
-- **web · mobile:** ป้ายสถานะเป็นพื้นสีทึบ ไม่ใช่กรอบขาวเส้นบาง · ก้อนสีทึบใหญ่ = การ์ดตัวเลขหลัก · hero · กราฟ
-- **Windows · แกนมิติและภาพ:** ความลึกใช้ Mica และ elevation ของ Fluent ไม่ใส่เงาการ์ดเพิ่ม ไอคอนใช้ Fluent — ทำตามนี้ไม่นับเป็นข้อตก
-- **Windows:** สีมาทางแถบเลือก 3×16px · หน้าจอพระเอก · ตัวเลขตัวชี้วัดหลัก (Key Performance Indicator · KPI) และกราฟ · ปุ่มหลัก 1 ปุ่ม · ป้ายสถานะเป็นจุด 6–8px + ข้อความ ไม่ใช้พื้นทึบ และแถบข่าวสารเป็นพื้นกลาง (`windows-app-design` → `references/patterns.md` ข้อ 7–8) — ทำตามนี้ไม่นับเป็นข้อตก
+- **Every platform:** the app frame (title bar · header bar · toolbar · rail · nav · borders) is gray-black lines and icons, not tinted with the brand color unless the user says so · the brand color lives in the data and primary buttons
+- **web · mobile:** status labels are solid-background, not thin white outlines · a large solid block of color = the main-number card · hero · chart
+- **Windows · depth and imagery axis:** depth uses Mica and Fluent elevation, no extra card shadows, and icons use Fluent — doing this does not count as a failed item
+- **Windows:** color comes through the 3×16px selection bar · hero screen · main metric numbers (Key Performance Indicator · KPI) and charts · 1 primary button · status labels are a 6–8px dot + text, not a solid background, and the notice bar is a neutral background (`windows-app-design` → `references/patterns.md` items 7–8) — doing this does not count as a failed item
 
-ต่ำกว่า 4 ในแกนใดก็ตาม = ระดับ 3 หรือต่ำกว่า · แกนหน้าจอพระเอกไม่มีหน้าพระเอกเลย = 1
+Below 4 on any axis = level 3 or lower · for the hero-screen axis, no hero page at all = 1
 
-- **ผ่านเมื่อทุกแกน ≥ 4** · บันทึกคะแนนทุกรอบลง `docs/BUILD-PLAN.md` (ไม่มีคะแนนบันทึก = ยังไม่ผ่าน)
-- ต่ำกว่า 4 → ปัญหา 2–3 ข้อต่อหน้าพร้อมวิธีแก้ระดับ CSS · แก้แล้วตรวจใหม่โดยผู้ตรวจตัวใหม่ · **เพดาน 3 รอบ** (ตัวเลขนี้อยู่ที่นี่ที่เดียว) · ครบ 3 รอบยังไม่ผ่าน → กลับไปเลือกทิศทางภาพใหม่ (ข้อ 0.1) ไม่แก้ต่อทีละจุด
-- เพิ่ม**จำนวน**สีไม่ใช่วิธีแก้แกน "ตัวตน" — ตัวตนมาจากโลโก้ หน้าจอพระเอก รูปทรง และสีแบรนด์ที่ใช้ถูกที่ (ข้อมูล · ปุ่มหลัก) · ไม่ย้อมกรอบแอปเพื่อให้ได้คะแนน
-- แกน "พลังของสี" ต่ำ → เพิ่ม**น้ำหนัก**ของสีที่มีอยู่แล้วในส่วนเนื้อหา ไม่เพิ่มสีใหม่ ไม่ย้อมกรอบ: ตัวเลขหลักและกราฟใช้สีอิ่ม · สีพาสเทลเปลี่ยนเป็นสีอิ่มของสีเดิม · web/mobile: ป้ายกรอบเส้นเปลี่ยนเป็นพื้นทึบ · กล่องสรุปตัวเลขหลักเป็นพื้นสีเข้ม (ไม่ใช้แถบสีหนาข้างการ์ดมุมมน ซึ่งเป็นสัญญาณ AI ใน `no-ai-look` เว้นแต่การ์ดนั้นบอกสถานะ) · Windows: ทำตามหมายเหตุแพลตฟอร์มข้างบน
+- **Pass when every axis ≥ 4** · record the score every round in `docs/BUILD-PLAN.md` (no recorded score = not passed)
+- Below 4 → 2–3 problems per page with CSS-level fixes · after fixing, a new reviewer checks again · **cap of 3 rounds** (this number lives only here) · after 3 rounds still not passing → go back and choose the visual direction again (section 0.1), do not keep fixing spot by spot
+- Adding the **number** of colors is not the fix for the "identity" axis — identity comes from the logo, the hero screen, the shape, and the brand color used in the right places (data · primary button) · do not tint the app frame to get a score
+- Low "color power" axis → add **weight** to the colors already present in the content area; do not add new colors, do not tint the frame: main numbers and charts use saturated colors · pastel colors change to a saturated shade of the same color · web/mobile: outline labels change to solid backgrounds · the main-number summary box gets a dark background (do not use a thick color bar beside a rounded card, which is an AI sign in `no-ai-look`, unless that card signals status) · Windows: follow the platform note above
 
-## Anti-patterns (ข้อ 10)
+## Anti-patterns (section 10)
 
-- **รวม mockup เก่าเป็นไฟล์ใหม่แล้วเรียกว่าทำใหม่** — ได้หน้าตาเดิมที่จืดอีกรอบ ดูข้อ 0 ข้อยกเว้น
-- **ใช้ธีมตั้งต้นของ skill แพลตฟอร์มตรง ๆ เป็นหน้าตาสุดท้าย** — ได้แอปตัวอย่างของผู้ผลิต ไม่ใช่สินค้า
-- **หน้าจอหลักเป็นหน้าตั้งค่า** — ขายสินค้าด้วยหน้าตั้งค่าไม่ได้
-- **กล่องเทาว่างแทนเนื้อหา** — ภาพจำลองวาดด้วย SVG/CSS ได้เสมอ
+- **Merging an old mockup into a new file and calling it redone** — you get the same bland look again; see the exceptions in section 0
+- **Using the platform skill's starter theme as is for the final look** — you get the maker's sample app, not a product
+- **The main screen is a settings page** — you cannot sell a product with a settings page
+- **Empty gray boxes in place of content** — a mock image can always be drawn with SVG/CSS
 
-- **แก้ "ดูไม่สวย" ด้วยการเพิ่มจำนวนสี** — ถ้าดูรก ปัญหาเกือบทุกครั้งคือระยะห่างไม่เป็นระบบ · แต่ถ้าดูซีด ให้แก้ตามแกน "พลังของสี" ด้วยการเพิ่มน้ำหนักของสีเดิม
-- **ซีดแล้วเรียกว่าเรียบ** — พื้นครีม การ์ดขาว ตัวหนังสือเทา และมีสีแค่แถบหัว คือภาพที่ไม่ผิด แต่ไม่มีใครจำได้
-- **ถือว่าผ่านเช็กลิสต์ครบ = สวย** — เช็กลิสต์จับได้แค่ของผิด ต้องดูด้วยตาและให้คนอื่นวิจารณ์
-- **ปุ่มทึบสีแบรนด์ทุกแถวของรายการ** — ดูข้อ 3
-- **เส้นคั่นทุกอย่าง** — ลองลบเส้นแล้วเพิ่มระยะห่างแทน ดีขึ้นเกือบทุกครั้ง
-- **เงาใต้ทุกการ์ด** — เงาแปลว่าลอย การ์ดที่อยู่นิ่งไม่ได้ลอย
-- **ตัวหนาเพื่อเน้น จนหนาไปหมดทั้งหน้า** — เมื่อทุกอย่างเน้น = ไม่มีอะไรเน้น
-- **ขนาดตัวอักษรใหม่ทุกครั้งที่รู้สึกว่าไม่พอดี** — จบที่ 9 ขนาดในหน้าเดียว
-- **สร้าง state ตอนเจอ bug** — ออกแบบทั้ง 5 สถานะตั้งแต่แรก
-- **placeholder แทน label**
-- **สีอย่างเดียวบอกสถานะ**
-- **animation 600ms เพราะดูนุ่มนวลดี** — ผู้ใช้อ่านว่า "ช้า"
-- **จัดกึ่งกลางข้อความยาว ๆ** — ตาหาต้นบรรทัดไม่เจอ ชิดซ้ายเสมอสำหรับเนื้อหา
-- **ส่งงานโดยไม่เคยย่อจอดู** (มือถือ: ไม่เคยขยายตัวอักษรระบบดู)
+- **Fixing "looks not pretty" by adding more colors** — if it looks cluttered, the problem is almost always unsystematic spacing · but if it looks washed out, fix it per the "color power" axis by adding weight to the existing colors
+- **Washed out and called plain** — a cream background, white cards, gray text, and color only in the header bar is a picture that is not wrong, but nobody remembers it
+- **Treating a passed checklist as pretty** — a checklist catches only what is wrong; you must look with your eyes and have someone else critique it
+- **Solid brand-color buttons on every row of a list** — see section 3
+- **Divider lines on everything** — try deleting the lines and adding spacing instead; it improves almost every time
+- **A shadow under every card** — a shadow means floating; a card sitting still is not floating
+- **Bold for emphasis until the whole page is bold** — when everything is emphasized = nothing is emphasized
+- **A new font size every time it feels not right** — ends at 9 sizes on one page
+- **Building a state when a bug appears** — design all 5 states from the start
+- **placeholder in place of label**
+- **Color alone signaling status**
+- **600ms animation because it feels smooth** — users read it as "slow"
+- **Centering long text** — the eye cannot find the start of the line; always left-align content
+- **Delivering without ever shrinking the window** (mobile: never enlarging the system font)
 
-## ปุ่มที่ซ้ำทุกแถว — เลือกแบบไหน (ข้อ 3)
+## Buttons repeated on every row — which kind (section 3)
 
-| แบบ | ใช้เมื่อ |
+| Kind | Use when |
 |---|---|
-| ปุ่มไอคอนเปล่า โผล่เมื่อชี้หรือเลือกแถว (เดสก์ท็อป) | ทำงานหลักด้วยดับเบิลคลิกหรือ Enter ได้ |
-| ปุ่มหลักอยู่ที่แผงรายละเอียดของแถวที่เลือก | หน้าจอกว้างพอวางแผงข้าง (list-detail) |
-| ปัดแถว · กดค้าง · เมนู ⋯ (มือถือ) | ไม่มี hover |
+| An empty icon button, appearing on hover or row selection (desktop) | The main action can be done with double-click or Enter |
+| The primary button sits in the detail panel of the selected row | The screen is wide enough for a side panel (list-detail) |
+| Swipe a row · long-press · ⋯ menu (mobile) | There is no hover |
 
-ห้ามใช้ปุ่มทึบสีแบรนด์ในทุกแถว — 8 แถวคือปุ่มหลัก 8 ปุ่ม
+Never use a solid brand-color button on every row — 8 rows means 8 primary buttons
 
-## วิธีวัด contrast (ข้อ 5)
+## How to measure contrast (section 5)
 
-ตรวจในเบราว์เซอร์: DevTools → เลือก element → ช่องสีใน Styles บอกค่าให้เลย
-ถ้าไม่ใช่เบราว์เซอร์ (Flutter · native) ให้คำนวณจากค่าสีใน token ตามสูตร Web Content Accessibility Guidelines (WCAG) `(L1 + 0.05) / (L2 + 0.05)` โดย L คือ relative luminance (ความสว่างสัมพัทธ์) ของสีที่สว่างกว่า (L1) และเข้มกว่า (L2)
-เขียนเป็น test สั้น ๆ ที่วนตรวจทุกคู่ข้อความกับพื้น ทั้งโหมดสว่างและมืด หรือใช้เครื่องมือตรวจคอนทราสต์ตัวไหนก็ได้ (Flutter มี `textContrastGuideline` ใน widget test)
+Check in the browser: DevTools → select the element → the color field in Styles gives the value directly
+If it is not a browser (Flutter · native), calculate from the color values in the tokens by the Web Content Accessibility Guidelines (WCAG) formula `(L1 + 0.05) / (L2 + 0.05)`, where L is the relative luminance (relative brightness) of the lighter color (L1) and the darker (L2)
+Write it as a short test that loops over every text-and-background pair, in both light and dark mode, or use any contrast-checking tool (Flutter has `textContrastGuideline` in widget tests)

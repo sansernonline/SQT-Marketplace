@@ -1,81 +1,81 @@
-# แบบหน้าจอที่ใช้บ่อย — แอป Windows
+# Common screen patterns: Windows apps
 
-> token และกฎขนาดอยู่ใน `tokens.md` · ไฟล์นี้ตอบคำถามว่า **จัดหน้าจอยังไงให้ดูเป็นแอปจริง**
-> ทุกแบบมีตัวอย่างที่กดได้ใน `assets/tool-app-template.html` (แอปเครื่องมือ) หรือ `assets/mockup-template.html` (หน้าตั้งค่า/dashboard)
+> Tokens and size rules are in `tokens.md` · this file answers the question **how to lay out a screen so it looks like a real app**
+> Every pattern has a clickable example in `assets/tool-app-template.html` (tool apps) or `assets/mockup-template.html` (settings page/dashboard)
 
-ที่มา: หน้าจอที่ผ่านเช็กลิสต์ครบทุกข้อ (token ถูก ขนาดถูก contrast ผ่าน) แต่ยังดูเหมือน wireframe
-มักพลาดซ้ำ 6 อย่าง ได้แก่ ปุ่มทึบทุกแถว · ไม่มีไอคอน · จอว่างครึ่งล่าง · หัวกลุ่มตัวพิมพ์ใหญ่เล็กจิ๋ว · ป้ายสีแบบเว็บ · กล่องมีกรอบเต็มหน้า
-แบบในไฟล์นี้แก้ทั้ง 6 อย่าง
+Background: screens that pass every item of the checklist (tokens right, sizes right, contrast passes) but still look like a wireframe
+usually repeat the same 6 mistakes: solid buttons on every row · no icons · the bottom half of the screen empty · tiny uppercase group headings · web-style coloured badges · bordered boxes over the whole page.
+The patterns in this file fix all 6.
 
-**สารบัญ**
+**Contents**
 
-- [0 · เลือกโครงก่อนวาด](#0--เลือกโครงก่อนวาด)
-- [1 · รายการที่มีปุ่มในแต่ละแถว](#1--รายการที่มีปุ่มในแต่ละแถว)
-- [2 · รายการ + แผงรายละเอียด](#2--รายการ--แผงรายละเอียด-list-detail)
+- [0 · Choose the structure before drawing](#0--choose-the-structure-before-drawing)
+- [1 · Lists with buttons in each row](#1--lists-with-buttons-in-each-row)
+- [2 · List + detail panel (list-detail)](#2--list--detail-panel-list-detail)
 - [3 · Command bar](#3--command-bar)
-- [4 · หัวกลุ่มในรายการ](#4--หัวกลุ่มในรายการ)
-- [5 · Tab ใน title bar](#5--tab-ใน-title-bar-แบบ-windows-terminal)
+- [4 · Group headings in a list](#4--group-headings-in-a-list)
+- [5 · Tabs in the title bar (Windows Terminal style)](#5--tabs-in-the-title-bar-windows-terminal-style)
 - [6 · Icon rail](#6--icon-rail)
 - [7 · Status bar](#7--status-bar)
-- [8 · หน้าเริ่มต้น](#8--หน้าเริ่มต้น-welcome--start)
-- [9 · ไอคอน — ต้องมีที่ไหน](#9--ไอคอน--ต้องมีที่ไหน)
-- [ตรวจด้วยตา](#ตรวจด้วยตา--นับได้-ไม่ต้องใช้ความรู้สึก)
+- [8 · Start page (welcome / start)](#8--start-page-welcome--start)
+- [9 · Icons: where they are required](#9--icons-where-they-are-required)
+- [Check by eye: countable, no gut feeling](#check-by-eye-countable-no-gut-feeling)
 
 ---
 
-## 0 · เลือกโครงก่อนวาด
+## 0 · Choose the structure before drawing
 
-| แอปเป็นแบบไหน | โครง | template |
+| What kind of app | Structure | template |
 |---|---|---|
-| ตั้งค่า · dashboard · แอปที่เปิดนาน ๆ ที | NavigationView 320px + เนื้อหากว้างไม่เกิน 1064px | `mockup-template.html` |
-| เครื่องมือที่ข้อมูลแน่น (terminal client · file manager · admin tool) | icon rail 48px + รายการ + แผงรายละเอียด 360px | `tool-app-template.html` |
-| เอกสารหลายชิ้นเปิดพร้อมกัน (editor · terminal · browser) | tab ใน title bar แบบ Windows Terminal | `tool-app-template.html` ส่วน title bar |
+| Settings · dashboard · an app opened only now and then | NavigationView 320px + content no wider than 1064px | `mockup-template.html` |
+| Data-dense tool (terminal client · file manager · admin tool) | icon rail 48px + list + detail panel 360px | `tool-app-template.html` |
+| Several documents open at once (editor · terminal · browser) | Tabs in the title bar, Windows Terminal style | `tool-app-template.html`, title bar part |
 
-**ห้ามเอา template หน้าตั้งค่าไปทำแอปเครื่องมือ** — ได้หน้าจอที่เนื้อหาลอยอยู่ครึ่งบน และพื้นที่ขวาว่าง
+**Never use the settings-page template to make a tool app.** You get a screen where the content floats in the top half and the right side is empty
 
-### 0.1 · เทียบกับแอปจริงบน Windows 11 และคอนโทรล WinUI 3
+### 0.1 · Compare with real apps on Windows 11 and WinUI 3 controls
 
-ปรับจาก microsoft/winappCli `winui-design` (MIT · ตรวจ LICENSE ในสำเนา repo 23 ต.ค. 2569) — ใช้ตอนเลือกโครง และตอนส่งต่อ mockup ให้คนเขียน XAML จะได้ไม่ต้องเดาชื่อคอนโทรล
+Adapted from microsoft/winappCli `winui-design` (MIT · LICENSE checked in the repo copy on 23 Oct 2026). Use it when choosing the structure, and when handing a mockup to the person writing XAML so they need not guess control names
 
-**เลือกเงาแอปจริงก่อนวาง layout** — แถวไหนใกล้แอปที่จะทำที่สุด ให้ยึดโครงนั้น
+**Choose a real-app model before laying out.** Whichever row is closest to the app you will make, follow that structure
 
-| แอปเป็นแบบไหน | คอนโทรลหลัก (WinUI 3) | แอปจริงที่ดูเป็นตัวอย่าง |
+| What kind of app | Main controls (WinUI 3) | Real app to look at as an example |
 |---|---|---|
-| ตั้งค่า · config | `NavigationView` ซ้าย + `SettingsCard` / `SettingsExpander` | Windows Settings |
-| แก้เอกสารหรือ session | `TabView` + เนื้อหาเต็มหน้าต่าง กรอบน้อย | Windows Terminal · Notepad · VS Code |
-| ท่องโครงสร้างเป็นชั้น | `TreeView` + `ListView` + `BreadcrumbBar` | File Explorer · Outlook |
-| เครื่องมือนักพัฒนา · dashboard | `NavigationView` + การ์ด | Dev Home · GitHub Desktop |
-| เครื่องมือจุดประสงค์เดียว | ตัวสลับโหมด + ตารางปุ่มแน่น | Calculator · Snipping Tool |
-| สื่อ · canvas · ภาพใหญ่ | `Grid` มีพื้นผิว hero + ปุ่มลอย **ไม่มี** `NavigationView` | Photos · Clipchamp |
+| Settings · config | `NavigationView` on the left + `SettingsCard` / `SettingsExpander` | Windows Settings |
+| Editing documents or sessions | `TabView` + content filling the window, minimal chrome | Windows Terminal · Notepad · VS Code |
+| Browsing a layered structure | `TreeView` + `ListView` + `BreadcrumbBar` | File Explorer · Outlook |
+| Developer tools · dashboard | `NavigationView` + cards | Dev Home · GitHub Desktop |
+| Single-purpose tool | Mode switcher + dense button grid | Calculator · Snipping Tool |
+| Media · canvas · large images | `Grid` with a hero surface + floating buttons, **no** `NavigationView` | Photos · Clipchamp |
 
-**แปลงความต้องการเป็นคอนโทรล** — กันสัญชาตญาณจากเว็บ (`<select>` · `<input type=date>` · DataGrid ของ WPF)
+**Turn requirements into controls.** This guards against web instincts (`<select>` · `<input type=date>` · WPF's DataGrid)
 
-| ต้องการ | ใช้ |
+| Need | Use |
 |---|---|
-| นำทาง 2–7 หมวด | `NavigationView` · tab เอกสาร → `TabView` · เส้นทาง → `BreadcrumbBar` · 2–3 โหมด → `SelectorBar` |
-| รายการแนวตั้ง · ตารางกระเบื้อง · ต้นไม้ | `ListView` · `GridView` หรือ `ItemsRepeater` + `UniformGridLayout` · `TreeView` |
-| ตารางข้อมูล | `ListView` ที่ `ItemTemplate` เป็น `Grid` + หัวตารางเป็น `Grid` อีกตัว — WinUI 3 ไม่มี `DataGrid` และตัวของ CommunityToolkit ใช้ `x:Bind` ในคอลัมน์ไม่ได้ |
-| รายการ + รายละเอียด | `ListView` + `Grid` ฝั่งรายละเอียด |
-| กรอกข้อความ · ตัวเลข · ค้นหา · วันที่ · เปิดปิด | `TextBox` · `NumberBox` · `AutoSuggestBox` · `CalendarDatePicker` · `ToggleSwitch` |
-| เลือก 1 จาก 2–3 · เลือก 1 จาก 4 ขึ้นไป | `RadioButtons` · `ComboBox` |
-| ต้องตัดสินใจก่อนไปต่อ · เมนูตามบริบท · คำแนะนำครั้งแรก | `ContentDialog` · `Flyout` / `MenuFlyout` · `TeachingTip` |
-| สถานะในหน้า · กำลังทำงาน | `InfoBar` (ตรงกับกฎ InfoBar แทน `alert()` ในข้อ 4 ของ SKILL.md) · แจ้งเตือนระบบ → `AppNotification` |
+| Navigate 2–7 categories | `NavigationView` · document tabs → `TabView` · path → `BreadcrumbBar` · 2–3 modes → `SelectorBar` |
+| Vertical list · tile grid · tree | `ListView` · `GridView` or `ItemsRepeater` + `UniformGridLayout` · `TreeView` |
+| Data table | `ListView` whose `ItemTemplate` is a `Grid`, + the table header as another `Grid`. WinUI 3 has no `DataGrid`, and the CommunityToolkit one cannot use `x:Bind` in columns |
+| List + detail | `ListView` + a `Grid` on the detail side |
+| Enter text · numbers · search · dates · on/off | `TextBox` · `NumberBox` · `AutoSuggestBox` · `CalendarDatePicker` · `ToggleSwitch` |
+| Choose 1 of 2–3 · choose 1 of 4 or more | `RadioButtons` · `ComboBox` |
+| Must decide before continuing · context menu · first-time tip | `ContentDialog` · `Flyout` / `MenuFlyout` · `TeachingTip` |
+| In-page status · in progress | `InfoBar` (matches the rule InfoBar instead of `alert()` in item 4 of SKILL.md) · system notification → `AppNotification` |
 
-**ขนาดหน้าต่างเริ่มต้น** — WinUI 3 ไม่มี `SizeToContent` ถ้าไม่ตั้ง จะได้ประมาณ 1024×768 ซึ่งใหญ่เกินสำหรับเครื่องมือส่วนใหญ่ ให้คำนวณใน constructor ของ `MainWindow`
+**Initial window size.** WinUI 3 has no `SizeToContent`. If not set, you get about 1024×768, which is too big for most tools. Compute it in the `MainWindow` constructor
 
-| ค่า | วิธีคิด |
+| Value | How to work it out |
 |---|---|
-| กว้าง | แถวที่กว้างสุด + 48 (ขอบ) แล้วปัดขึ้นเป็นหลัก 20 |
-| สูง | 32 (title bar) + ความสูงทุกแถว + ระยะห่างทุกช่อง + 48 (ขอบ) แล้วปัดขึ้นเป็นหลัก 20 |
-| ปัดทางไหน | ปัดขึ้นเสมอ — เนื้อหาโดนตัดแย่กว่าหน้าต่างกว้างไปนิด |
-| ช่วงที่มักได้ | เครื่องมือจุดประสงค์เดียว 440–560 กว้าง · ฟอร์มหน้าเดียว 600–800 × 640–800 · nav + เนื้อหา 1100–1300 × 720–840 · editor สื่อหรือเอกสาร 1280+ กว้าง |
-| กับดัก | `AppWindow.Resize` รับ **พิกเซลจริง** ไม่ใช่ DIP ต้องคูณ DPI scale ของจอ (`GetDpiForWindow(hwnd) / 96.0`) · ห้ามตั้ง `Width`/`Height` ที่ `Grid` ราก เพราะตัดเนื้อหา ไม่ได้ย่อหน้าต่าง |
+| Width | The widest row + 48 (margins), then round up to a multiple of 20 |
+| Height | 32 (title bar) + the height of every row + every gap + 48 (margins), then round up to a multiple of 20 |
+| Which way to round | Always up: clipped content is worse than a slightly wide window |
+| Ranges you usually get | Single-purpose tool 440–560 wide · single-page form 600–800 × 640–800 · nav + content 1100–1300 × 720–840 · media or document editor 1280+ wide |
+| Trap | `AppWindow.Resize` takes **real pixels**, not DIPs; multiply by the screen's DPI scale (`GetDpiForWindow(hwnd) / 96.0`) · never set `Width`/`Height` on the root `Grid`, because that clips content and does not shrink the window |
 
-mockup HTML ของเราจึงควรตั้ง `width`/`height` ของ `.window` ตามรูบริกนี้ ไม่ใช่เต็ม viewport เสมอ
+So our HTML mockup should set `width`/`height` of `.window` per this rubric, not always fill the viewport
 
 ---
 
-## 1 · รายการที่มีปุ่มในแต่ละแถว
+## 1 · Lists with buttons in each row
 
 ```
 ผิด: ทุกแถวมี [Connect] สีทึบ + [Edit]       → ปุ่มทึบ 8 ปุ่มแย่งกันเด่น
@@ -83,19 +83,19 @@ mockup HTML ของเราจึงควรตั้ง `width`/`height` �
    ปุ่มหลัก (สีทึบ) อยู่ที่แผงรายละเอียดของแถวที่เลือก · ดับเบิลคลิก = ทำงานหลัก
 ```
 
-- ปุ่มในแถว: `btn subtle icon` 32×32 · ซ่อนด้วย `visibility: hidden` (ไม่ใช่ `display: none` ไม่งั้นคอลัมน์จะขยับ)
-- คอลัมน์ปุ่มกว้างตายตัว (ราว 112px ต่อ 3 ปุ่ม) ไม่งั้นคอลัมน์ "ล่าสุด" จะไม่ตรงกับปุ่ม
-- แถวที่เลือก: พื้น `--win-subtle-selected` + ขีด accent 3px ชิดซ้าย
+- Buttons in a row: `btn subtle icon` 32×32 · hide with `visibility: hidden` (not `display: none`, otherwise columns shift)
+- The button column has a fixed width (about 112px for 3 buttons), otherwise the "Latest" column will not line up with the buttons
+- Selected row: `--win-subtle-selected` fill + a 3px accent bar flush left
 
-## 2 · รายการ + แผงรายละเอียด (list-detail)
+## 2 · List + detail panel (list-detail)
 
-ใช้เมื่อหน้าต่างกว้าง ≥ 1100px และรายการมีข้อมูลมากกว่าที่แถวเดียวแสดงได้
+Use when the window is ≥ 1100px wide and the list has more data than a single row can show
 
-- แผงขวากว้าง 360px พื้น `--win-card` · padding 24px · ระยะระหว่างส่วน 24px
-- บนลงล่าง: ไอคอน 48px + ชื่อ 20px → ปุ่มหลัก (ยืดเต็มแถว) + ปุ่มรอง → คู่ ชื่อ/ค่า (label 112px) → ประวัติ (แถว 32px มีเส้นคั่น) → หมายเหตุ
-- หน้าต่างแคบกว่า 1100px ให้ซ่อนแผง แล้วเปิดเป็นหน้าใหม่แทน
+- The right panel is 360px wide, `--win-card` fill · 24px padding · 24px gap between parts
+- Top to bottom: 48px icon + 20px name → primary button (stretched full row) + secondary button → name/value pairs (label 112px) → history (32px rows with dividers) → notes
+- When the window is narrower than 1100px, hide the panel and open it as a new page instead
 
-**จอว่างเกินครึ่งคือสัญญาณว่าควรใช้แบบนี้** ไม่ใช่สัญญาณให้ยืดตาราง
+**A screen more than half empty is the signal to use this pattern,** not a signal to stretch the table
 
 ## 3 · Command bar
 
@@ -103,67 +103,67 @@ mockup HTML ของเราจึงควรตั้ง `width`/`height` �
 [+ สร้างใหม่] [📁 กลุ่มใหม่] │ [⇥ นำเข้า] [↦ ส่งออก]          [ทั้งหมด|SSH|RDP]  [🔍 กรอง…]
 ```
 
-- ปุ่มทุกปุ่มเป็น subtle + ไอคอน 16px + ข้อความ · คั่นกลุ่มด้วยเส้นตั้ง 1×20px
-- ไม่มีปุ่มทึบใน command bar ถ้าหน้านั้นมีแผงรายละเอียด (ปุ่มหลักอยู่ในแผง)
-- ช่องค้นหาชิดขวา กว้าง 240–320px · มีไอคอนแว่นขยายนำหน้า
+- Every button is subtle + 16px icon + text · separate groups with a 1×20px vertical line
+- No solid button in the command bar if the page has a detail panel (the primary button lives in the panel)
+- The search box is flush right, 240–320px wide · has a magnifier icon in front
 
-## 4 · หัวกลุ่มในรายการ
+## 4 · Group headings in a list
 
 ```
 ผิด: PRODUCTION · 3      (11px ตัวพิมพ์ใหญ่ สีจาง — แบบเว็บ)
 ถูก: ⌄ Production  3     (14px semibold · ตัวเลขสีรอง · แถว 32–40px · กดพับได้)
 ```
 
-## 5 · Tab ใน title bar (แบบ Windows Terminal)
+## 5 · Tabs in the title bar (Windows Terminal style)
 
-- tab สูง 32px ชิดล่างของ title bar 40px · มุมบน 8px
-- tab ที่เลือก = พื้นเดียวกับเนื้อหาด้านล่าง (ดูต่อกันเป็นแผ่นเดียว) · tab อื่นพื้นใส
-- สถานะบอกด้วยจุด 8px + ข้อความ/tooltip **ไม่ใช้เส้นสีบน tab** (ดูเหมือน error)
-- ท้าย tab มี `+` และ `⌄` (รายการ tab)
+- Tabs are 32px tall, flush with the bottom of a 40px title bar · 8px top corners
+- The selected tab = the same fill as the content below (so they look like one sheet) · other tabs have a transparent fill
+- Status is shown with an 8px dot + text/tooltip, **never a coloured line on the tab** (it looks like an error)
+- At the end of the tabs there are `+` and `⌄` (tab list)
 
 ## 6 · Icon rail
 
-- กว้าง 48px · ปุ่ม 40×40 · ไอคอน 18px · ห่างกัน 4px
-- ที่เลือก: พื้น `--win-subtle-selected` + ขีด accent 3×16px ชิดซ้าย
-- ตั้งค่าอยู่ล่างสุดเสมอ · ทุกปุ่มมี `title` (tooltip) เพราะไม่มีข้อความ
+- 48px wide · 40×40 buttons · 18px icons · 4px apart
+- Selected: `--win-subtle-selected` fill + a 3×16px accent bar flush left
+- Settings always at the very bottom · every button has a `title` (tooltip) because there is no text
 
 ## 7 · Status bar
 
-- สูง 24px · ข้อความ 12px สีรอง · ห่างกัน 16px
-- สถานะใช้จุด 6–8px + ข้อความ **ไม่ใช้ป้ายพื้นสีทึบ** (เป็นแบบเว็บ) — `ui-craft` ด่านสวยแกน "พลังของสี" ยกเว้นข้อนี้ให้ Windows แล้ว (สีมาทางขีดเลือก · หน้าจอพระเอก · ตัวเลขตัวชี้วัดหลัก (Key Performance Indicator · KPI) · ปุ่มหลัก)
+- 24px tall · 12px text in secondary colour · 16px apart
+- Status uses a 6–8px dot + text, **never a solid-colour badge** (that is a web style) · the "colour power" axis of the `ui-craft` beauty gate already exempts this item for Windows (colour comes through the selection bar · the hero screen · the main Key Performance Indicator (KPI) numbers · the primary button)
 
-## 8 · หน้าเริ่มต้น (welcome / start)
+## 8 · Start page (welcome / start)
 
-> ข้อนี้ใช้กับหน้าเริ่มต้นในแอป ส่วนหน้าแรกของ mockup (`#s-start`) ที่คนรีวิวเปิดดูเป็นสารบัญ ใช้การ์ดพร้อมภาพย่อได้ ดู `ui-craft` → `references/mockup-start-page.md`
+> This item applies to the start page inside the app. The first page of a mockup (`#s-start`), which reviewers open as a table of contents, may use cards with thumbnails; see `ui-craft` → `references/mockup-start-page.md`
 
-- เนื้อหากว้างไม่เกิน 1064px อยู่กลาง · บนสุดคือช่องค้นหาช่องเดียวที่ทำได้ทั้งค้นหาและเชื่อมต่อ (ไม่แยก 2 ช่อง)
-- ทางลัดเป็นแถวปุ่มสูง 40px (ไอคอน + ข้อความ + ปุ่มลัด) **ไม่ใช่การ์ดใหญ่ 4 ใบ**
-- กล่องมีกรอบได้ไม่เกิน 2 กล่อง (เช่น ล่าสุด · รายการโปรด) · ข่าวสารเป็นแถบ 40px พื้นกลาง ไม่ใช้สีแบรนด์
+- Content no wider than 1064px, centred · at the top is a single search box that does both search and connect (do not split into 2 boxes)
+- Shortcuts are 40px-tall button rows (icon + text + hotkey), **not 4 big cards**
+- At most 2 bordered boxes (for example Recent · Favourites) · news is a 40px neutral-fill strip, not in the brand colour
 
-## 9 · ไอคอน — ต้องมีที่ไหน
+## 9 · Icons: where they are required
 
-| ที่ | ต้องมี | ขนาด |
+| Where | Required | Size |
 |---|---|---|
-| ปุ่มใน nav / rail | ✓ | 16 / 18px |
-| ปุ่มใน command bar | ✓ คู่ข้อความ | 16px |
-| ปุ่มในแถว | ✓ ไอคอนอย่างเดียว + tooltip | 16px |
-| ชนิดของรายการ (SSH · ไฟล์ · RDP) | ✓ ในกล่อง 24px มุม 4px | 14px |
-| หัวแผงรายละเอียด | ✓ กล่อง 48px มุม 8px | 24px |
-| ปุ่มหลักใน dialog | ไม่จำเป็น | — |
+| Buttons in nav / rail | ✓ | 16 / 18px |
+| Buttons in the command bar | ✓ together with text | 16px |
+| Buttons in a row | ✓ icon only + tooltip | 16px |
+| Item type (SSH · file · RDP) | ✓ in a 24px box with 4px corners | 14px |
+| Detail panel header | ✓ 48px box with 8px corners | 24px |
+| Primary button in a dialog | Not required | — |
 
-รหัสที่ใช้บ่อย (Segoe Fluent Icons): เพิ่ม `E710` · ค้นหา `E721` · ตั้งค่า `E713` · แก้ไข `E70F` · อื่น ๆ `E712` · เล่น/เปิด `E768`
-· โฟลเดอร์ `E8B7` · กลุ่มใหม่ `E8F4` · นำเข้า `E8B5` · ส่งออก `EDE1` · terminal `E756` · จอ `E7F4` · ลิงก์ `E71B` · กุญแจ `E8D7`
-· clipboard `E77F` · ลูกโลก `E774` · ประวัติ `E81C` · ดาว `E734` / `E735` · บ้าน `E80F` · ลูกศรลง `E70D` · ลูกศรขวา `E76C` · ปิด `E8BB`
+Commonly used codes (Segoe Fluent Icons): add `E710` · search `E721` · settings `E713` · edit `E70F` · more `E712` · play/open `E768`
+· folder `E8B7` · new group `E8F4` · import `E8B5` · export `EDE1` · terminal `E756` · screen `E7F4` · link `E71B` · key `E8D7`
+· clipboard `E77F` · globe `E774` · history `E81C` · star `E734` / `E735` · home `E80F` · down arrow `E70D` · right arrow `E76C` · close `E8BB`
 
 ---
 
-## ตรวจด้วยตา — นับได้ ไม่ต้องใช้ความรู้สึก
+## Check by eye: countable, no gut feeling
 
-| ข้อ | ผ่านเมื่อ |
+| Item | Passes when |
 |---|---|
-| ปุ่มทึบสี accent | ≤ 1 ต่อหน้าจอ (`grep -c "btn primary"` ต่อ section) |
-| ไอคอน | ครบทุกที่ในตารางข้อ 9 |
-| พื้นที่ว่าง | เนื้อหาใช้พื้นที่ ≥ 60% ของความสูงหน้าต่างที่ 1440×900 หรือมีเหตุผล (หน้าว่างที่ตั้งใจ) |
-| ความสูงแถว | แถวชนิดเดียวกันสูงเท่ากันทุกการ์ดในหน้า |
-| กล่องมีกรอบ | ≤ 3 กล่องต่อหน้า · ไม่มีกล่องซ้อนกล่อง |
-| ส่วนควบคุมของ mockup | ไม่ติดในภาพ (`screenshot.py --hide`) |
+| Solid accent-colour buttons | ≤ 1 per screen (`grep -c "btn primary"` per section) |
+| Icons | Present everywhere in the table of item 9 |
+| Empty space | Content uses ≥ 60% of the window height at 1440×900, or has a reason (a deliberately empty page) |
+| Row height | Rows of the same kind have equal height on every card in the page |
+| Bordered boxes | ≤ 3 boxes per page · no box inside a box |
+| Mockup controls | Not in the image (`screenshot.py --hide`) |

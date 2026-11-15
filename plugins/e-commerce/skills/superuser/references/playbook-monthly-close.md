@@ -1,17 +1,17 @@
-# playbook · monthly-close — ปิดเดือน — เงินเดือน ภาษี ประกันสังคม
+# playbook · monthly-close — month-end close — payroll, tax, social security
 
-ใช้เมื่อ: ทำเงินเดือนประจำเดือน · ยื่นภาษีหัก ณ ที่จ่าย ภาษีมูลค่าเพิ่ม และประกันสังคม
-skill หลัก: `payroll-th` · `social-security-th` · `tax-vat-th` · agent `tax-helper`
+Use when: running the monthly payroll · filing withholding tax, value added tax and social security
+Main skills: `payroll-th` · `social-security-th` · `tax-vat-th` · agent `tax-helper`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน (Steps — copy into the todo exactly)
 
-1. เก็บข้อมูลจริงของเดือน — รายชื่อพนักงาน เงินเดือน OT เบี้ยขยัน หักขาดลา กองทุนสำรองเลี้ยงชีพ ถ้าข้อมูลไม่ครบให้ใส่ `(รอยืนยัน)` · ใคร: หัวหน้าทีม
-2. ตรวจอัตราและเพดานปีนี้จากเว็บทางการ — ฐานค่าจ้างประกันสังคม อัตราภาษี · ใคร: `tax-helper` ตัวใหม่
-3. คำนวณ gross → net ต่อคนด้วยสูตรในสเปรดชีตตาม `payroll-th` (ภาษีหักแบบประมาณทั้งปี) · ใคร: `tax-helper` ตัวใหม่
-4. ทำรายการแบบที่ต้องยื่นเดือนนี้พร้อมวันครบกำหนด ตาม `tax-vat-th` และ `social-security-th` · ใคร: `tax-helper` ตัวใหม่
-5. เตรียมไฟล์ยื่นและขั้นตอนทีละคลิกบนระบบ e-Filing — การยื่นและชำระจริงต้องรออนุมัติ · ใคร: `tax-helper` ตัวใหม่เตรียม แล้วผู้ใช้ยื่นและชำระเอง
-6. ตรวจ — ยอดรวมในแบบและไฟล์ยื่นต้องตรงกับตารางเงินเดือน และคำนวณซ้ำด้วยมือ 1 คน · ใคร: `reviewer` ตัวใหม่
+1. Collect the real data for the month — employee list, salary, overtime, attendance bonus, absence and leave deductions, provident fund. If the data is incomplete, put `(รอยืนยัน)` (to be confirmed) · ใคร: หัวหน้าทีม
+2. Check this year's rates and caps on official websites — the social security wage base and tax rates · ใคร: `tax-helper` ตัวใหม่
+3. Calculate gross → net per person with spreadsheet formulas following `payroll-th` (tax withheld by the annualised estimate) · ใคร: `tax-helper` ตัวใหม่
+4. Make the list of forms due this month with their due dates, following `tax-vat-th` and `social-security-th` · ใคร: `tax-helper` ตัวใหม่
+5. Prepare the filing files and click-by-click steps on the e-Filing system — the actual filing and payment must wait for approval · ใคร: `tax-helper` ตัวใหม่ prepares, then the user files and pays personally
+6. Check (ตรวจ) — the totals in the forms and filing files must match the payroll table, and recalculate 1 person by hand · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-ตารางเงินเดือนที่คำนวณซ้ำแล้ว และชุดยื่นทุกแบบของเดือนพร้อมยื่นก่อนวันครบกำหนด
+A payroll table that has been recalculated, and the filing set for every form of the month ready to file before the due date.

@@ -1,30 +1,30 @@
-# ตัวอย่างของ plugin นี้ — ระดับโมเดล · ความเป็นอิสระ · รูปแบบทีม
+# Examples for this plugin — model tiers · autonomy · team patterns
 
-ย้ายมาจาก `SKILL.md` หัวข้อ 5 · 6 · 10 · กฎอยู่ใน `superuser:superuser` (แกนกลาง) ไฟล์นี้มีแต่ตัวอย่าง
+Moved from `SKILL.md` sections 5 · 6 · 10. The rules are in `superuser:superuser` (the core). This file holds examples only.
 
-## ระดับโมเดล — ตัวอย่างงาน (หัวข้อ 5)
+## Model tiers — example jobs (section 5)
 
-กฎ ชื่อโมเดล และการสลับกลางทาง อยู่ใน `superuser:superuser` หัวข้อ 5 · ไฟล์นี้มีแต่ตัวอย่างงานของแต่ละระดับ
+The rules, the model names and mid-task switching are in `superuser:superuser` section 5. This file holds only example jobs for each tier.
 
-ระดับไล่จากบนลงล่างตามกฎ 3 ข้อของแกน ข้อแรกที่ตรงชนะ (ใหญ่ → เล็ก → กลาง) · **ใหญ่** `opus` — ทุกชิ้นที่คิดหรือแตะเงิน ภาษี สัญญา สิทธิ์ผู้บริโภค หรือส่งถึงลูกค้าโดยตรง: วิเคราะห์ว่าทำไมขาดทุน · วางกลยุทธ์ราคาโปร · วิเคราะห์ว่ากรณีเข้าสิทธิ์ข้อไหน · ตอบลูกค้าที่ขัดแย้งหนัก · เรียงขั้นบันไดร้องเรียนที่มีกรอบเวลาของสิทธิ์ · ตรวจร่างจดหมายก่อนส่ง · วางไทม์ไลน์ปิดปี · ตรวจสัญญา · รับมือเหตุข้อมูลรั่ว · คำนวณภาษีเงินเดือน · **เล็ก** `haiku` — งานกลไกที่มีแบบให้ทำตาม: เติมข้อมูลสินค้าตามแม่แบบ · ค้นไฟล์แล้วรายงาน · **กลาง** `sonnet` (ที่เหลือ) — ร่างเอกสารภายใน · จัดตาราง
+Tiers are checked from top to bottom by the core's 3 rules, and the first match wins (large → small → medium). **Large** `opus` — every piece that involves thinking or touches money, tax, contracts, consumer rights, or goes straight to a customer: analyse why a product loses money · plan promotion pricing strategy · analyse which right a case falls under · reply to a heavily conflicted customer · order the complaint ladder with its right-based time limits · review a draft letter before sending · plan the year-end close timeline · review a contract · handle a data breach · calculate payroll tax · **small** `haiku` — mechanical work with a pattern to follow: fill in product data from a template · search files and report · **medium** `sonnet` (everything else) — draft internal documents · format tables
 
-## ความเป็นอิสระ — งานที่ย้อนได้และแหล่งข้อมูล (หัวข้อ 6)
+## Autonomy — reversible work and sources (section 6)
 
-| เจอ | ทำ |
+| Situation | Action |
 |---|---|
-| งานที่ย้อนกลับได้ — ร่าง listing · ร่างคำตอบ · ร่างจดหมาย · ทำตารางราคา ตารางเปรียบเทียบ และไฟล์สต็อกในเครื่อง · จัดทะเบียน · เรียงไทม์ไลน์ · ทำตารางเงินเดือนและแบบในเครื่อง · ตั้งค่าในบัญชีทดสอบ | ทำเลย |
-| ไม่รู้ข้อเท็จจริงสาธารณะ (ค่าธรรมเนียมแพลตฟอร์ม · นโยบายคืนสินค้า · ค่าขนส่ง · กรอบเวลาของสิทธิ์ · ช่องทางร้องเรียน · เงื่อนไขของธนาคาร · เกณฑ์ภาษี) | ค้นเอง ไล่แหล่งตามลำดับ: Seller Centre และหน้าช่วยเหลือของแพลตฟอร์ม → เว็บหน่วยงานรัฐและกฎหมายที่เกี่ยว → เว็บขนส่งและธนาคาร → สำนักข่าว · ใช้ตามกฎ 3 แหล่งใน `superuser:superuser` หัวข้อ 6 |
-| ไม่รู้ข้อเท็จจริงของงานหลังบ้าน (อัตราภาษี · เพดานประกันสังคม · วันยื่นแบบ · วันหยุด · โควตา LINE) | ไล่แหล่งตามลำดับ: เว็บกรมสรรพากร สำนักงานประกันสังคม กรมพัฒนาธุรกิจการค้า สำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล → ราชกิจจานุเบกษา → เอกสารทางการของ LINE · ใช้ตามกฎ 3 แหล่งเหมือนกัน |
+| Reversible work — draft a listing · draft a reply · draft a letter · build price tables, comparison tables and local stock files · register records · order a timeline · build local payroll tables and forms · set up in a test account | Just do it |
+| A public fact is unknown (platform fees · return policy · shipping cost · time limit of a right · complaint channel · bank terms · tax threshold) | Search yourself. Go through sources in this order: Seller Centre and the platform's help pages → government and relevant law websites → courier and bank websites → news outlets · apply the 3-source rule in `superuser:superuser` section 6 |
+| A back-office fact is unknown (tax rate · social security cap · filing date · holiday · LINE quota) | Go through sources in this order: Revenue Department, Social Security Office, Department of Business Development, Personal Data Protection Committee Office websites → Royal Gazette → LINE's official documents · apply the same 3-source rule |
 
-## รูปแบบทีม — ใช้อย่างไรในงานนี้ (หัวข้อ 10)
+## Team patterns — how to use them in this work (section 10)
 
-วิธีทำ ต้นทุน และกับดักของแต่ละแบบอยู่ใน `agent-patterns`
+How to run each pattern, its cost and its traps are in `agent-patterns`.
 
-| รูปแบบ | ในงานนี้ใช้อย่างไร |
+| Pattern | How it is used in this work |
 |---|---|
-| **Planning** | ลงสินค้าใหม่ → ราคา → listing → สต็อก · ไทม์ไลน์ → ขั้นบันไดร้องเรียน → ทีละขั้น · ปฏิทินยื่นแบบ → ทีละแบบ |
-| **ReAct** | คิดราคา → คำนวณซ้ำ → แก้ · ร่างจดหมาย → เทียบหลักฐาน → แก้ · คำนวณเงินเดือน → คำนวณซ้ำ 1 คน → แก้ |
-| **Reflection** | `reviewer` ตัวใหม่ (อ่านอย่างเดียว ไม่ใช่ agent ที่ทำงานชิ้นนั้น) ตรวจคำโฆษณาต้องห้ามและตัวเลขก่อนลง · อ่านจดหมายแบบเจ้าหน้าที่รับเรื่อง · ตรวจยอดในแบบภาษีกับตารางต้นทาง |
-| **Multi-Agent** | `shop-manager` → `customer-chat` → `live-seller` ส่งต่อด้วยไฟล์สินค้า · ชิ้นหลักฐาน · ชิ้นจดหมาย · ชิ้นช่องทางร้องเรียน แยกกันทำ · `tax-helper` → `thai-doc-writer` → `compliance-helper` |
-| **Mixture-of-Agents (MoA)** | ชื่อสินค้าและคำบรรยาย → 3 แบบ → ให้คะแนน → เลือกฐาน · ซื้อของราคาสูง → 3 มุม: ราคาตลอดอายุ · การรับประกัน · รีวิวจริง แล้วรวม · ร่างสัญญา → 3 มุม: ผู้จ้าง · ผู้รับจ้าง · ทนาย แล้วรวมจุดเสี่ยง |
-| **Reranker** | คำค้นหลายสิบคำ → ให้คะแนนตรงสินค้า · ความนิยม → ใส่ 5 คำแรกในชื่อสินค้า · รีวิวสินค้า 20–30 รีวิว → ให้คะแนนความน่าเชื่อถือ → อ่านเต็ม 3–5 รีวิวบนสุด · แหล่งอัตราภาษีหลายแหล่ง → ให้คะแนนความเป็นทางการและความใหม่ → ใช้ 3 แหล่งแรก |
+| **Planning** | list a new product → price → listing → stock · timeline → complaint ladder → step by step · filing calendar → one form at a time |
+| **ReAct** | work out the price → recalculate → fix · draft a letter → compare with the evidence → fix · calculate payroll → recalculate 1 person → fix |
+| **Reflection** | a fresh `reviewer` (read-only, not the agent that did the piece) checks prohibited ad claims and numbers before listing · reads the letter as the officer who receives it would · checks totals in the tax form against the source table |
+| **Multi-Agent** | `shop-manager` → `customer-chat` → `live-seller` hand off through the product file · evidence piece, letter piece and complaint-channel piece are built separately · `tax-helper` → `thai-doc-writer` → `compliance-helper` |
+| **Mixture-of-Agents (MoA)** | product name and description → 3 versions → score → pick a base · buying a high-priced item → 3 angles: lifetime price · warranty · real reviews, then merge · draft a contract → 3 angles: employer · contractor · lawyer, then merge the risk points |
+| **Reranker** | dozens of search terms → score by match to the product · popularity → put the top 5 in the product title · 20–30 product reviews → score credibility → read the top 3–5 in full · several tax-rate sources → score by officialness and recency → use the top 3 |

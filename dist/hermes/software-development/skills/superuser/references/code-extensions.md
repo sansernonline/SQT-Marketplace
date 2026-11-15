@@ -1,36 +1,36 @@
-# ส่วนเพิ่มงานโค้ด ของ skill กลาง
+# Code-work additions to the central skill
 
-skill กลางอยู่ใน plugin `superuser` และเขียนให้ใช้กับงานทุกสาขา · ไฟล์นี้เก็บส่วนที่ใช้เฉพาะงานโค้ด · ใช้คู่กับ skill กลางตัวนั้นเสมอ ไม่ใช้แทน
+The central skill lives in plugin `superuser` and is written for work in every domain. This file holds the parts that apply only to code work. Always use it together with that central skill, never in place of it.
 
-## สารบัญ
+## Contents
 
 - [context-budget](#context-budget)
 - [principle-small-verifiable-steps](#principle-small-verifiable-steps)
 - [principle-user-experience-first](#principle-user-experience-first)
 - [status-report](#status-report)
-- [parallel-split-and-merge](#parallel-split-and-merge-worktree-ต่อตัว)
+- [parallel-split-and-merge](#parallel-split-and-merge-one-worktree-per-agent)
 - [parallel-attempts-pick-best](#parallel-attempts-pick-best)
-- [team-roles แบ่งงาน](#team-roles-แบ่งงาน)
+- [team-roles](#team-roles-splitting-work)
 - [adversarial-review-panel](#adversarial-review-panel)
-- [document-naming](#document-naming-แถวเฉพาะงานโค้ด)
-- [spell-out-abbreviations](#spell-out-abbreviations-ตัวย่อฝั่งโค้ด)
-- [temp-file-discipline](#temp-file-discipline-โฟลเดอร์ย่อยเฉพาะงานโค้ด)
+- [document-naming](#document-naming-code-work-rows)
+- [spell-out-abbreviations](#spell-out-abbreviations-code-side-abbreviations)
+- [temp-file-discipline](#temp-file-discipline-code-work-subfolders)
 
 ## context-budget
 
-ย้ายมาจากหัวข้อ 6 ของ SKILL.md (ส่วนเพิ่มสำหรับงานโค้ด)
+Moved from section 6 of SKILL.md (the additions for code work)
 
-โปรเจกต์โค้ดที่กลับมาทำบ่อย ควรมีแผนที่โปรเจกต์สั้น ๆ ที่ **โหลดอัตโนมัติ**
+A code project that is revisited often should have a short project map that **loads automatically**.
 
-| ไฟล์ | โหลดเอง | เหมาะกับ |
+| File | Auto-loaded | Good for |
 |---|:--:|---|
-| **`<project>/CLAUDE.md`** | โหลด | แผนที่โปรเจกต์ · คำสั่งที่ใช้บ่อย · กฎเฉพาะโปรเจกต์ |
-| `<project>/<โฟลเดอร์ใหญ่>/CLAUDE.md` | โหลดเมื่อทำงานในโฟลเดอร์นั้น | โมดูลที่ซับซ้อนเป็นพิเศษ |
-| `context.md` · `notes.md` ชื่ออื่น | ไม่โหลด | **ต้องสั่งให้อ่านทุกครั้ง จึงเสียเปล่า** |
+| **`<project>/CLAUDE.md`** | loaded | project map · frequently used commands · project-specific rules |
+| `<project>/<big folder>/CLAUDE.md` | loaded when working in that folder | an especially complex module |
+| `context.md` · `notes.md` or other names | not loaded | **must be told to read it every time, so it is wasted** |
 
-อย่าตั้งชื่อไฟล์แผนที่เป็นอย่างอื่น เพราะ `CLAUDE.md` ถูกอ่านให้อัตโนมัติ ส่วนไฟล์ชื่ออื่นต้องมีคนสั่งให้อ่าน
+Do not name the map file anything else, because `CLAUDE.md` is read automatically while a file with another name needs someone to tell the agent to read it.
 
-สิ่งที่ควรอยู่ในแผนที่ของโปรเจกต์ สั้น ๆ ไม่เกิน 40 บรรทัด:
+What belongs in a project's map, short, at most 40 lines:
 
 ```markdown
 ## แผนที่
@@ -45,19 +45,19 @@ skill กลางอยู่ใน plugin `superuser` และเขียน
 - ห้ามแก้ `generated/` เป็นไฟล์ที่สร้างอัตโนมัติ
 ```
 
-ไม่ควรมี: เนื้อหาที่อ่านจากโค้ดได้อยู่แล้ว · รายการไฟล์ทั้งหมด · ประวัติการเปลี่ยนแปลง
+What should not be there: content that can already be read from the code · a list of all files · change history.
 
-**hook กรอง output ของ test** — hook `PreToolUse` บน `Bash` ดูคำสั่งก่อนรัน ถ้าเป็นคำสั่ง test (`npm test` · `pytest` · `dotnet test` · `go test`) ก็ต่อท้ายด้วยตัวกรองที่เหลือแค่บรรทัด FAIL/ERROR แล้วส่งคำสั่งใหม่กลับใน `hookSpecificOutput.updatedInput` · ใส่ใน `.claude/settings.json` ของโปรเจกต์ · บน Windows เขียน script เป็น PowerShell หรือรันผ่าน Git Bash · ตัวอย่างเต็มอยู่ในหัวข้อ "Offload processing to hooks and skills" ของ [Claude Code: Manage costs](https://code.claude.com/docs/en/costs) (ตรวจ 21 ต.ค. 2569)
+**Hook that filters test output** — a `PreToolUse` hook on `Bash` looks at the command before it runs. If it is a test command (`npm test` · `pytest` · `dotnet test` · `go test`), append a filter that keeps only the FAIL/ERROR lines and send the new command back in `hookSpecificOutput.updatedInput` · put it in the project's `.claude/settings.json` · on Windows write the script in PowerShell or run it through Git Bash · a full example is in the section "Offload processing to hooks and skills" of [Claude Code: Manage costs](https://code.claude.com/docs/en/costs) (checked 2026-10-21)
 
-**hook ตัด output ยาวที่ไม่ใช่ test** — hook `PostToolUse` คืน `updatedToolOutput` แทนผลของ tool ได้ (เช่น เหลือ 100 บรรทัดท้ายของ build log) · ([Claude Code: hooks](https://code.claude.com/docs/en/hooks) · ตรวจ 21 ต.ค. 2569)
+**Hook that trims long non-test output** — a `PostToolUse` hook can return `updatedToolOutput` in place of the tool's result (for example, keep only the last 100 lines of a build log) · ([Claude Code: hooks](https://code.claude.com/docs/en/hooks) · checked 2026-10-21)
 
-**plugin code intelligence** — Language Server Protocol (LSP) · "go to definition" 1 ครั้งแทน grep + อ่านหลายไฟล์ · เห็น type error หลังแก้ทันทีโดยไม่ต้อง build · ติดตั้ง 2 ส่วน: (1) ตัว language server บน `PATH` — C# `csharp-ls` · TypeScript `typescript-language-server` (`npm install -g typescript-language-server typescript`) · Python `pyright-langserver` (2) plugin ใน Claude Code — `/plugin install csharp-lsp@claude-plugins-official` (หรือ `typescript-lsp` · `pyright-lsp`) · ใช้ได้ใน terminal ไม่ทำงานใน cloud session · ([Claude Code: code intelligence](https://code.claude.com/docs/en/plugins/code-intelligence) · ตรวจ 21 ต.ค. 2569)
+**Code intelligence plugin** — Language Server Protocol (LSP) · 1 "go to definition" replaces grep plus reading several files · type errors show right after an edit without a build · install 2 parts: (1) the language server on `PATH` — C# `csharp-ls` · TypeScript `typescript-language-server` (`npm install -g typescript-language-server typescript`) · Python `pyright-langserver` (2) the plugin in Claude Code — `/plugin install csharp-lsp@claude-plugins-official` (or `typescript-lsp` · `pyright-lsp`) · works in a terminal, does not work in a cloud session · ([Claude Code: code intelligence](https://code.claude.com/docs/en/plugins/code-intelligence) · checked 2026-10-21)
 
 ## status-report
 
-ย้ายมาจากข้อ 2 ของ SKILL.md เดิม (แบบ `docs/BUILD-PLAN.md` สำหรับงานโค้ด)
+Moved from item 2 of the old SKILL.md (the `docs/BUILD-PLAN.md` format for code work)
 
-ตัวอย่างหัวข้อ `## สถานะล่าสุด` เต็ม:
+A full example of the `## สถานะล่าสุด` (latest status) section:
 
 ```markdown
 ## สถานะล่าสุด
@@ -93,18 +93,18 @@ skill กลางอยู่ใน plugin `superuser` และเขียน
 1. ย้ายตัวตรวจ input ไปไว้จุดเดียวที่ขอบ API — ลด if ซ้ำ 14 จุด · แรงกลาง
 ```
 
-ประเภทเพิ่มเติม: `โค้ด` · `build` คือไฟล์ release ที่สร้างแล้ว (Android Package (APK) · Android App Bundle (AAB) · installer) ส่วน `ส่งมอบ` คือถึงมือผู้ใช้หรือขึ้นร้านค้าแล้ว
+Extra types: `โค้ด` (code) · `build` means a built release file (Android Package (APK) · Android App Bundle (AAB) · installer) while `ส่งมอบ` (delivered) means it has reached the user or gone to the store.
 
-สถานะ (โค้ด · build): `เสร็จ` · `ทำอยู่` · `ติด` · `รออนุมัติ` · `ค้างอยู่` — ตรงกับตารางงานของ `spec-to-code-loop` รหัสงานใช้รหัส FR ของ SRS ถ้ามี
+Status (code · build): `เสร็จ` · `ทำอยู่` · `ติด` · `รออนุมัติ` · `ค้างอยู่` (done · in progress · blocked · awaiting approval · pending) — matches the task table of `spec-to-code-loop`. For the task ID, use the FR ID from the SRS if there is one.
 
-แอปมือถือ: หลักฐานต้องบอกเครื่องที่รัน — `ผ่าน — emulator Pixel 6 API 34 · ค่าเซนเซอร์ฉีดเข้า` หรือ `ผ่าน — เครื่องจริง <รุ่น> Android 14` ถ้ายังไม่ได้ลองเครื่องจริงให้เขียนไว้ในช่อง ค้าง
+Mobile app: the evidence must name the device it ran on — `ผ่าน — emulator Pixel 6 API 34 · ค่าเซนเซอร์ฉีดเข้า` (pass — emulator Pixel 6 API 34 · sensor values injected) or `ผ่าน — เครื่องจริง <รุ่น> Android 14` (pass — real device <model> Android 14). If a real device has not been tried yet, write that in the pending column.
 
-โค้ดที่สถานะเท่ากันรวมเป็นช่วงรหัสได้ (`FR-001 ถึง FR-012`)
+Code items with the same status can be merged into an ID range (`FR-001 ถึง FR-012`, meaning FR-001 to FR-012).
 
-## parallel-split-and-merge (worktree ต่อตัว)
+## parallel-split-and-merge (one worktree per agent)
 
-- **`git status` สะอาด** → subagent ใส่ `isolation: worktree` และตั้ง `"worktree": { "baseRef": "head" }` ใน `.claude/settings.json` · ถ้าไม่ตั้ง worktree จะแตกจาก branch หลักบน remote = ได้โค้ดเก่า
-- **มีงานที่ยังไม่ commit** (ปกติ เพราะ commit ต้องรออนุมัติ) → worktree ในตัวมองไม่เห็นงานนั้น · หัวหน้าทีมสร้างเองแบบไม่ commit และไม่แตะ branch (ใส่ `.claude/worktrees/` ใน `.git/info/exclude` ก่อน ไม่แตะ `.gitignore` ของผู้ใช้):
+- **`git status` clean** → give the subagent `isolation: worktree` and set `"worktree": { "baseRef": "head" }` in `.claude/settings.json` · if not set, the worktree branches from the main branch on the remote = old code.
+- **There is uncommitted work** (normal, because commit has to wait for approval) → the built-in worktree cannot see that work · the team lead creates the worktree itself without committing and without touching a branch (put `.claude/worktrees/` in `.git/info/exclude` first, and do not touch the user's `.gitignore`):
   ```bash
   W=.claude/worktrees/<ชิ้น>; P=_to_delete/patches; mkdir -p "$P"
   base=$(git stash create); base=${base:-HEAD}       # ถ่ายภาพไฟล์ที่ track ไว้ โฟลเดอร์งานไม่เปลี่ยน
@@ -112,42 +112,42 @@ skill กลางอยู่ใน plugin `superuser` และเขียน
   git ls-files --others --exclude-standard -z -- . ':!.claude/worktrees' | xargs -0 -r -I{} cp --parents {} "$W/"   # ไฟล์ใหม่ที่ยังไม่ track
   git -C "$W" add -A && git -C "$W" write-tree > "$P/<ชิ้น>.base"   # จุดตั้งต้นรวมไฟล์ที่คัดลอกไป · จดลงไฟล์เพราะตัวแปรไม่ข้ามการรันคำสั่งแต่ละครั้ง
   ```
-  `cp --parents` ใช้ได้บน Linux และ Git Bash · macOS ใช้ `rsync -R` แทน · ไฟล์ที่ gitignore แต่ต้องใช้ (เช่น `.env`) ใส่ใน `.worktreeinclude`
-- **รวมกลับ** → patch มีเฉพาะสิ่งที่ลูกทีมแก้ (ไฟล์ที่คัดลอกไปไม่ติดมาเป็นไฟล์ใหม่) แล้วหัวหน้าทีม `git apply` ทีละชิ้นในโฟลเดอร์งาน รัน test หลังแต่ละชิ้น · ชนกัน → หยุดชิ้นนั้น ลง `ติด` · เสร็จแล้ว `git worktree remove --force "$W"` · ไม่ commit เอง
+  `cp --parents` works on Linux and Git Bash · on macOS use `rsync -R` instead · a file that is gitignored but needed (such as `.env`) goes in `.worktreeinclude`
+- **Merge back** → the patch holds only what the worker changed (the copied files do not come along as new files). Then the team lead runs `git apply` one piece at a time in the work folder and runs tests after each piece · on a conflict → stop that piece and log it as `ติด` (blocked) · when done, `git worktree remove --force "$W"` · do not commit by yourself
   ```bash
   git -C "$W" add -A && git -C "$W" diff --cached "$(cat "$P/<ชิ้น>.base")" > "$P/<ชิ้น>.patch"
   git apply "$P/<ชิ้น>.patch"
   ```
-- worktree คือ checkout ใหม่ → ต้องติดตั้ง dependency ใหม่ (ใช้ cache ของ package manager ช่วย) · ห้อง Docker (`docker-sandbox -Isolated`) เก็บไว้ใช้กับงานที่ต้องแยกเครื่องจริง: ติดตั้งของทั้งระบบ · รันโค้ดที่ไม่ไว้ใจ · งานทั้งคืน
-- **dynamic workflow ในงานโค้ด** — ตัวอย่างคำขอ: `ultracode: audit every route handler under src/routes/ for missing auth checks` · `use a workflow to run npx tsc --noEmit and keep fixing until it passes or two rounds make no progress` · migrate ทีละไฟล์ให้สั่ง "each file in its own isolated copy" · ยังมีงานไม่ commit → ใช้วิธีสร้าง worktree เองข้างบน
+- A worktree is a fresh checkout → dependencies must be installed again (use the package manager's cache to help) · keep the Docker room (`docker-sandbox -Isolated`) for work that needs a truly separate machine: system-wide installs · running untrusted code · overnight jobs
+- **Dynamic workflow in code work** — example requests: `ultracode: audit every route handler under src/routes/ for missing auth checks` · `use a workflow to run npx tsc --noEmit and keep fixing until it passes or two rounds make no progress` · to migrate one file at a time, say "each file in its own isolated copy" · if there is still uncommitted work → use the way of creating the worktree yourself above.
 
 ## parallel-attempts-pick-best
 
-- ผู้แข่งแต่ละตัวใช้ git worktree ของตัวเองตามหัวข้อ "parallel-split-and-merge (worktree ต่อตัว)" ข้างบน · เกณฑ์ให้คะแนนงานโค้ด: โค้ดน้อย · อ่านง่าย · ผ่าน test · ทำตามข้อกำหนดครบ · ใกล้กันให้เลือกตัวที่ขอบเขตสะอาดกว่าและ Application Programming Interface (API) เล็กกว่า (`lazy-coding`)
-- ห้อง Docker (`docker-sandbox -Isolated`) เฉพาะงานที่ต้องแยกเครื่องจริง
+- Each competitor uses its own git worktree per the section "parallel-split-and-merge (one worktree per agent)" above · scoring criteria for code work: less code · easy to read · passes tests · meets every requirement · if close, choose the one with the cleaner scope and the smaller Application Programming Interface (API) (`lazy-coding`)
+- The Docker room (`docker-sandbox -Isolated`) only for work that needs a truly separate machine.
 
-## team-roles (แบ่งงาน)
+## team-roles (splitting work)
 
-- งานโค้ดที่คุ้มแตก = โค้ดรวมที่คาดว่าจะเขียน ≥ 200 บรรทัด (วัดจาก bench 2026-11-11: 4 โมดูลรวมราว 100 บรรทัด แตกแล้วแพงขึ้น 1.6 เท่าไม่เร็วขึ้น) · ของกลาง = type · interface · ชื่อฟังก์ชัน · `package.json` · index · กติกาในใบสั่งงานชี้ `stack-*` + `lazy-coding` + `readable-code` · ผลส่งกลับมีผล test · ตอนรวมรัน test ทั้งชุดก่อนส่ง `reviewer`
-- งานใหญ่ หัวหน้าทีมไม่เขียนโค้ดชิ้นใหญ่เอง ส่ง `developer` · ของกลางและชิ้นเล็กยังทำเองได้
+- Code work worth splitting = the total code expected to be written is ≥ 200 lines (measured by the 2026-11-11 bench: 4 modules totalling about 100 lines cost 1.6 times more when split and were not faster) · shared items = types · interfaces · function names · `package.json` · index · the rules in the work order point to `stack-*` + `lazy-coding` + `readable-code` · the returned result includes the test result · when merging, run the whole test suite before sending to `reviewer`
+- On big work, the team lead does not write large pieces of code itself and sends them to `developer` · shared items and small pieces it can still do itself.
 
 ## adversarial-review-panel
 
-- **ขอบเขต** — `git diff --stat main...HEAD` แล้วเปิด diff รายไฟล์ หรือ `git status --short` ถ้ายังไม่มี commit
-- **มุมเพิ่มของงานโค้ด** — ก: ทำงานพร้อมกัน · error ที่ถูกกลืน · รันซ้ำแล้วได้ผลต่าง · ข: input ที่ไม่ได้ตรวจ · ค: test ที่ผ่านทั้งที่ผิด
+- **Scope** — `git diff --stat main...HEAD` and then open the diff file by file, or `git status --short` if there is no commit yet
+- **Extra angles for code work** — A: concurrency · swallowed errors · re-running gives a different result · B: unchecked input · C: tests that pass even though the code is wrong
 
-### มุมรีวิวแอปมือถือ
+### Mobile app review angle
 
-   ถ้ารีวิวแอปมือถือ ให้ผู้ตรวจ ก เพิ่มมุม **วงจรชีวิตแอป** — process ถูกฆ่าแล้วกลับมา (state หาย) · แอปไปอยู่เบื้องหลังแต่เซนเซอร์หรือกล้องยังเปิด (แบตหมด) · ผู้ใช้ถอนสิทธิ์กลางทาง · หมุนจอ
+   If reviewing a mobile app, give reviewer A the extra angle **app lifecycle** — the process is killed and comes back (state lost) · the app goes to the background but the sensor or camera is still on (battery drain) · the user revokes a permission midway · screen rotation
 
-## document-naming (แถวเฉพาะงานโค้ด)
+## document-naming (code-work rows)
 
-- ชุดเอกสารโปรเจกต์ docx: Project Plan · Business Requirements Document (BRD) · Software Requirements Specification (SRS) · Architecture · Functional Specification Document (FSD) · Test Plan (`project-doc-set` ข้อ 2.1) · ใบตรวจรับ User Acceptance Testing (UAT) — รูปแบบ docx มีคนเซ็น ต้องล็อกฉบับ
-- Architecture Decision Record (ADR) · API spec · data dictionary · runbook · README → markdown — ADR `docs/decisions/` และ runbook `docs/` ที่ราก (`project-doc-set` ข้อ 1) · README ในโฟลเดอร์โค้ด · เปลี่ยนตามโค้ด ต้อง diff ได้
-- ชื่อไฟล์ ADR: `ADR-NNNN-<slug>.md` เรียงเลขต่อเนื่อง ใน `docs/decisions/` เช่น `docs/decisions/ADR-0007-choose-whisper.md`
-- ตัวอย่างเดิม: `TRS-SRS-v1.2-APPROVED.docx` · `TRS-FSD-recording-v0.3-DRAFT.docx` · `docs/runbook-recording.md`
+- docx project document set: Project Plan · Business Requirements Document (BRD) · Software Requirements Specification (SRS) · Architecture · Functional Specification Document (FSD) · Test Plan (`project-doc-set` item 2.1) · User Acceptance Testing (UAT) sign-off sheet — the docx format is signed by people, so the version must be locked
+- Architecture Decision Record (ADR) · API spec · data dictionary · runbook · README → markdown — ADRs in `docs/decisions/` and runbooks in `docs/` at the root (`project-doc-set` item 1) · README in the code folder · they change with the code and must be diffable
+- ADR file name: `ADR-NNNN-<slug>.md`, numbered in sequence, in `docs/decisions/`, for example `docs/decisions/ADR-0007-choose-whisper.md`
+- Earlier examples: `TRS-SRS-v1.2-APPROVED.docx` · `TRS-FSD-recording-v0.3-DRAFT.docx` · `docs/runbook-recording.md`
 
-## spell-out-abbreviations (ตัวย่อฝั่งโค้ด)
+## spell-out-abbreviations (code-side abbreviations)
 
 Model Context Protocol (MCP) · Application Programming Interface (API) ·
 Service Level Agreement (SLA) · Role-Based Access Control (RBAC) ·
@@ -158,24 +158,24 @@ Personally Identifiable Information (PII) · Proof of Concept (POC) ·
 Business Requirements Document (BRD) · Functional Specification Document (FSD) ·
 Architecture Decision Record (ADR) · User Interface (UI) · User Experience (UX)
 
-## temp-file-discipline (โฟลเดอร์ย่อยเฉพาะงานโค้ด)
+## temp-file-discipline (code-work subfolders)
 
-| โฟลเดอร์ย่อย | ใส่อะไร | skill ที่ใช้ |
+| Subfolder | What goes in | Skill that uses it |
 |---|---|---|
-| `verify-runs/` | ภาพหน้าจอและผลรันของแอปจริงตอนตรวจ (หลักฐาน verify) | `app-verifier-setup` · `spec-to-code-loop` |
-| `screenshots/` | ภาพเรนเดอร์ของดีไซน์หรือ mockup (เดิมอ้าง) | `mobile-app-design` · `web-app-design` · `windows-app-design` |
-| `security/` | ผลสแกนดิบ | `security-gate` |
-| `check/` | ชื่อเดิมของ `spec-to-code-loop` สำหรับภาพตรวจ ส่วนงานใหม่ใช้ `verify-runs/` แทน | `spec-to-code-loop` |
+| `verify-runs/` | Screenshots and run output of the real app during checking (verify evidence) | `app-verifier-setup` · `spec-to-code-loop` |
+| `screenshots/` | Rendered images of a design or mockup (previously referenced) | `mobile-app-design` · `web-app-design` · `windows-app-design` |
+| `security/` | Raw scan output | `security-gate` |
+| `check/` | The old name `spec-to-code-loop` used for check images; new work uses `verify-runs/` instead | `spec-to-code-loop` |
 
 ## principle-small-verifiable-steps
 
-- ทุก commit อ่านจบในตัวเองและ build ผ่าน คนรีวิวจึงไล่ทีละ commit แล้วเชื่อได้
-- Pull Request (PR) ที่เปลี่ยนเกิน 400 บรรทัด ให้แบ่งเป็นหลาย PR ต่อกัน (เกณฑ์เดียวกับ `pr-description-template` และ `code-review-checklist`)
-- รูปแบบข้อความใช้ `commit-log` · ตั้ง commitlint หรือ release อัตโนมัติ → `commit-message-format`
-- ลำดับ: ของที่คนอื่นพึ่ง (type · schema · ฟังก์ชันกลาง) ก่อนของที่เรียกใช้ · เปลี่ยนของเดิม → `principle-replace-then-delete`
+- Every commit is readable on its own and builds, so a reviewer can go through it commit by commit and trust it
+- A Pull Request (PR) that changes more than 400 lines should be split into several PRs in a chain (the same threshold as `pr-description-template` and `code-review-checklist`)
+- For message format use `commit-log` · if setting up commitlint or automatic releases → `commit-message-format`
+- Order: things others depend on (types · schemas · shared functions) before the things that call them · changing existing things → `principle-replace-then-delete`
 
 ## principle-user-experience-first
 
-- หน้าจอทุกจอมีสถานะ 5 แบบ และเรียงความสำคัญในหน้า → `ui-craft`
-- ข้อความ วันที่ ตัวเลข เงิน หลายภาษา → `i18n-and-locale`
-- ตรวจของจริงด้วยการเปิดแอป → `app-verifier-setup`
+- Every screen has 5 states and ranks importance on the page → `ui-craft`
+- Text, dates, numbers, money, multiple languages → `i18n-and-locale`
+- Check the real thing by opening the app → `app-verifier-setup`

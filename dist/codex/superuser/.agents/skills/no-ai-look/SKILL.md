@@ -3,62 +3,62 @@ name: no-ai-look
 description: Use when making visuals so they do not look AI-made
 ---
 
-# no-ai-look — งานที่ดูเหมือนคนออกแบบ ไม่ใช่ AI
+# no-ai-look — work that looks designed by a person, not by AI
 
-> **กฎข้อเดียว:** ทุกการเลือก (สี ฟอนต์ เลย์เอาต์ รูป คำ) ต้องตอบได้ว่า "เลือกเพราะโปรเจกต์นี้" ไม่ใช่ "เพราะเป็นค่าตั้งต้น"
-> ค่าตั้งต้นของโมเดลและ framework คือค่าเฉลี่ยของงานทั้งโลก งานที่ใช้ค่าเฉลี่ยจึงหน้าตาเหมือนกันหมด และคนดูจำได้ทันทีว่า AI ทำ
+> **One rule:** every choice (color, font, layout, image, word) must be answerable as "chosen because of this project", not "because it is the default."
+> The defaults of models and frameworks are the average of everyone's work, so work that uses the average all looks the same, and viewers recognize at once that AI made it.
 
 **Last line of every answer that makes or reviews a visual piece, including a quick "is it OK to send?" check:** the `no-ai-look:` log line from section 3.3, filled with the real counts (eye check `ด่านตา n/9`, web pages add `(หน้าเว็บ n/14)`) · items you could not check count as not passed, so the line reads below 9/9 · A script result of 0 alone never makes the line pass, because the script reads only values in the code · Script not run (no shell in this session) → write `สคริปต์ ไม่ได้รัน` in its slot · When the `ด่านก่อนลงมือ:` line of `design-references` is also due, it goes right above this one
 
-อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies` · รายการเต็มทุกสื่อพร้อมที่มา → [`references/catalog.md`](references/catalog.md)
+Lives only in plugin `superuser`; other plugins share it through `dependencies` · the full list for every medium with sources → [`references/catalog.md`](references/catalog.md)
 
-## ใช้คู่กับอะไร
+## Use together with
 
-skill นี้คุมแค่ "ดูเหมือน AI หรือไม่" ส่วนระยะ สี ฟอนต์ และคอมโพเนนต์ยังเป็นของ skill งานนั้น เช่น `ui-craft` กับ skill แพลตฟอร์ม · `presentation-design` · `graphic-design` · `brand-kit` · `brief-to-image` · `image-generation` (plugin `graphic-design`) · ส่วนคำในงานใช้ `human-writing`
+This skill controls only "does it look like AI". Spacing, color, fonts and components still belong to that job's skill, such as `ui-craft` with the platform skills · `presentation-design` · `graphic-design` · `brand-kit` · `brief-to-image` · `image-generation` (plugin `graphic-design`). Words in the work use `human-writing`.
 
-**หน้าตาที่โปรเจกต์อนุมัติแล้วชนะเสมอ** (brand kit · house style ของ diagram · ธีมที่ส่งมอบแล้ว) ถ้าของที่อนุมัติแล้วตรงกับข้อห้ามในนี้ ให้คงไว้ แล้วจดว่าเป็นของที่ตั้งใจ (ข้อ 3)
-
----
-
-## 1 · ก่อนลงมือ — ตัดสินใจ 5 อย่างแล้วจดไว้
-
-ทำก่อนวาดชิ้นแรก จดไว้ที่ที่โปรเจกต์เก็บหน้าตาอยู่แล้ว (`docs/README.md` ช่อง `doc-theme` · token ของแอป · brand kit) ไม่สร้างไฟล์ใหม่ถ้ามีที่อยู่แล้ว
-
-1. **งานนี้มีไว้ทำอะไร** — เลือก 1: โน้มน้าว (หน้าขาย · โพสต์) · ใช้งาน (แอป · แดชบอร์ด) · อ่าน (เอกสาร · บทความ) · ประสบการณ์ (เกม · งานโชว์) · เลย์เอาต์มาจากข้อนี้ ไม่ใช่จากโครงสำเร็จรูป · ร่างเลย์เอาต์เป็น ASCII 2–3 แบบที่ต่างกันจริง แล้วเลือกแบบที่เข้ากับเนื้อหาและคนใช้งานนี้ พร้อมเหตุผล 1 บรรทัด ไม่ใช้แบบแรกที่นึกออก เพราะแบบแรกมักเป็นค่าตั้งต้น (แนวคิดจาก anthropics/skills `frontend-design` หัวข้อ Process · Apache-2.0 · ที่มารหัส AN ใน `catalog`)
-2. **สีหลัก 1 สี** ที่ผูกกับธุรกิจนี้ แล้วไล่สีกลางจากสีนั้น · ห้ามใช้สีที่ framework และ tutorial ใช้บ่อยเป็นสีแบรนด์ (indigo-500 `#6366f1` ของ Tailwind · ปุ่มเทาเข้มตั้งต้นของ shadcn/ui)
-3. **ฟอนต์ 2 ตัว** — หัวข้อ 1 ตัวที่มีบุคลิก + เนื้อหา 1 ตัวที่อ่านง่าย · เขียนเหตุผลที่เลือกคนละ 1 บรรทัด · งานไทยต้องเป็นตระกูลที่มีไทยครบ
-4. **แหล่งแรงบันดาลใจจริง** — โลกของสินค้านั้นเอง (วัสดุ · ป้ายหน้าร้าน · เอกสารในวงการ) หรือแนวที่มีชื่อ (Swiss · risograph · โปสเตอร์ท่องเที่ยวยุค 60) · ห้ามสั่งด้วยคำคุณศัพท์ลอย ๆ ("พรีเมียม" "ทันสมัย" "สดใส") เพราะได้ค่าเฉลี่ยของหมวดนั้น · **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท ที่ตรงงาน แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้
-5. **เนื้อหาจริง** — ชื่อ ตัวเลข วันที่ ภาพหน้าจอจริง รูปคนหรือลูกค้าจริง · ยังไม่มีให้ใส่ `(รอยืนยัน)` ไม่แต่งขึ้นเอง
-
-**ทดสอบ:** เอาโลโก้ออกแล้วงานนี้ยังใช้กับคู่แข่งได้ไหม ถ้าได้ แปลว่ายังเฉลี่ยเกิน ให้เพิ่มสิ่งที่โปรเจกต์นี้มีคนเดียว
+**A look the project has already approved always wins** (brand kit · a diagram's house style · a theme already delivered). If what is approved matches a ban here, keep it and note that it is intentional (item 3).
 
 ---
 
-## 2 · สัญญาณที่เจอบ่อยที่สุด — ห้ามใช้เป็นค่าตั้งต้น
+## 1 · Before starting — decide 5 things and write them down
 
-แต่ละข้อใช้ได้ถ้ามีเหตุผลจากโปรเจกต์ (ข้อ 3) · ทางแก้และที่มาของทุกข้ออยู่ใน catalog
+Do this before drawing the first piece. Write them where the project already keeps its look (`docs/README.md` field `doc-theme` · app tokens · brand kit); do not create a new file if a place already exists.
 
-| กลุ่ม | สัญญาณ | ใช้แทน |
+1. **What the work is for** — choose 1: persuade (sales page · post) · use (app · dashboard) · read (document · article) · experience (game · showpiece). The layout comes from this item, not from a ready-made structure. Sketch 2–3 really different layouts in ASCII, then choose the one that fits this content and these users, with a 1-line reason; do not use the first one that comes to mind, because the first is usually the default (idea from anthropics/skills `frontend-design` section Process · Apache-2.0 · source code AN in `catalog`).
+2. **1 main color** tied to this business, then derive the neutrals from it. Never use a color that frameworks and tutorials use often as the brand color (Tailwind's indigo-500 `#6366f1` · shadcn/ui's default dark gray button).
+3. **2 fonts** — 1 heading font with personality + 1 body font that reads easily. Write the reason for each in 1 line. Thai work needs a family with full Thai coverage.
+4. **A real source of inspiration** — the product's own world (materials · shop signs · documents of the field) or a named style (Swiss · risograph · 1960s travel posters). Never order with floating adjectives ("พรีเมียม" "ทันสมัย" "สดใส"), because you get the average of that category. **Search references first:** take the project's words and search live per `design-references` (plugin `superuser`) with the type that fits the work, then extract colors from the chosen work. The stored color library is used when live search is impossible.
+5. **Real content** — names, numbers, dates, real screenshots, real people or clients. If you do not have it, put `(รอยืนยัน)` (awaiting confirmation); never invent it.
+
+**Test:** take the logo off; could this work still be used by a competitor? If yes, it is still too average; add what only this project has.
+
+---
+
+## 2 · The most common signals — never use them as the default
+
+Each item is allowed if there is a reason from the project (item 3). Fixes and sources for every item are in the catalog.
+
+| Group | Signal | Use instead |
 |---|---|---|
-| สี | ไล่สีม่วง-น้ำเงิน-ฟ้า · ตัวอักษรไล่สี · นีออนบนพื้นมืด · แสงฟุ้งวงกลมหลังเนื้อหา · พื้นครีมเพราะ "ดูมีรสนิยม" · ชุดครีม + ส้มอิฐ (terracotta) + เซอริฟ ที่โผล่ทุกงาน "แบบอบอุ่น" | สีแบรนด์ทึบ 1 สี · เน้นด้วยขนาดหรือน้ำหนัก |
-| พื้นผิว | กระจกฝ้าทั่วหน้า · ลายกริดหรือลายทางตกแต่ง · เส้นบาง + เงากว้างบนกล่องเดียว | พื้นเรียบ · เลือกเส้นหรือเงาอย่างเดียว |
-| การ์ด | แถบสีหนาข้างการ์ดมุมมน · การ์ดซ้อนการ์ด · มุมโค้งใหญ่จนเป็นก้อน · กริดการ์ดหน้าตาเหมือนกัน 3–6 ใบ | ระยะห่างและตัวอักษร · จัดกลุ่มตามความสำคัญ |
-| หัวข้อ | ป้ายเล็กเหนือหัวข้อ ("Introducing") · ไอคอนในกรอบมนเหนือหัวข้อ · เลข 01/02/03 ที่ไม่มีลำดับจริง · เซอริฟตัวเอียงขนาดยักษ์ · Inter/Geist ทุกงาน | ใส่คำที่มีประโยชน์ในหัวข้อเลย · ฟอนต์ตามข้อ 1 |
-| โครงหน้า | ฮีโร่กลางจอ → การ์ด 3 ใบ → โลโก้ลูกค้า → ราคา → FAQ ทุกหน้า · ส่วนเปิด → รายการคุณสมบัติ → ทำงานอย่างไร 1–6 → ปุ่มติดตั้ง · ตัวเลขยักษ์ + ป้ายเล็ก 3 ช่อง · สไลด์ทุกหน้าเป็นหัว + 3–4 bullet | โครงจากเป้าหมายของหน้า · เปลี่ยนเลย์เอาต์ตามเนื้อหา |
-| ไอคอน | อีโมจิแทนไอคอนหรือในหัวข้อ · ไอคอนเส้นบางชุดเดียวขนาด 16 ทุกที่ · ไอคอนใหญ่กว่าเนื้อหา | ชุดไอคอน SVG ชุดเดียวที่ตั้งใจเลือก · ภาพหน้าจอหรือกราฟจริงแทนไอคอน |
-| การเคลื่อนไหว | fade-up ทุกชิ้น · จุดกระพริบไม่หยุด · เคอร์เซอร์กระพริบในข้อความนิ่ง · ตัวเลื่อนเอง · easing เด้ง · รูปซูมเมื่อชี้ | ขยับเฉพาะที่มีความหมาย 150–300 ms ease-out ใช้ transform/opacity |
-| รูป AI | ผิวเนียนเหมือนพลาสติก · แสงทองหรือแสงดราม่าทุกฉาก · โทนเขียวอมฟ้า-ส้ม · ฉากสะอาดเกินจริง · คนหน้าตาเฉลี่ย · มือ ฟัน ตัวหนังสือเพี้ยน · 3D ดินปั้นหรือ isometric มันวาว | แสงจากแหล่งเดียวที่มีเหตุผล · ร่องรอยการใช้งาน · ระบุแนวและสีใน prompt · ตัดต่อ ไม่ใช้ภาพแรกที่ได้ |
-| โลโก้ | วงกลมไล่สีมีรูตรงกลาง · ลายวงจร · อินฟินิตี้ · เส้นโค้งพุ่ง · ตัวอักษรละลาย · รายละเอียดหายที่ 16 px | รูปทรงจากสิ่งเฉพาะของแบรนด์ · ส่งเป็น vector · ทดสอบที่ขนาด favicon |
-| เอกสาร | อีโมจิหน้าหัวข้อ · ทุก bullet ขึ้นต้นตัวหนา · Title Case ทุกหัว · ทุกส่วนเป็นรายการ · หัวข้อ 4 ชั้นในโน้ตสั้น · จบทุกส่วนด้วยสรุป · Mermaid หน้าตาตั้งต้น | ร้อยแก้วสั้น · หัวข้อเท่าที่จำเป็น · diagram ตาม house style |
-| คำ | คำโฆษณากว้าง ๆ (supercharge · ยกระดับ · ไร้รอยต่อ) · "ไม่ใช่แค่ X แต่คือ Y" แบบสโลแกน · ชุดละ 3 ทุกที่ · ขีดยาวถี่ · ประโยคเปิดสำเร็จรูป ("ในยุคดิจิทัลที่…") | ตาม `human-writing` · บอกว่าผู้ใช้ทำอะไรได้ พร้อมตัวเลข · ภาษาไทยตรวจด้วย `thai-grammar` ไม่ใช่กฎอังกฤษ (จุด ขีด การตัดคำ ต่างกัน) |
+| Color | Purple-blue-cyan gradient · gradient text · neon on dark · a circular glow behind the content · cream background because it "looks tasteful" · the cream + terracotta + serif set that shows up on every "warm" job | 1 solid brand color · emphasis by size or weight |
+| Surface | Frosted glass across the page · decorative grid or stripes · thin line + wide shadow on one box | Plain background · pick either line or shadow |
+| Cards | A thick colored bar on the side of a rounded card · cards inside cards · corner radius so big it becomes a blob · a grid of 3–6 identical-looking cards | Spacing and type · group by importance |
+| Headings | A small badge above the heading ("Introducing") · an icon in a rounded tile above the heading · numbers 01/02/03 with no real sequence · giant italic serif · Inter/Geist on every job | Put the useful words in the heading itself · fonts per item 1 |
+| Page structure | Centered hero → 3 cards → customer logos → pricing → FAQ on every page · opening section → feature list → how it works 1–6 → install button · giant number + small label in 3 boxes · every slide is a title + 3–4 bullets | Structure from the page's goal · change the layout with the content |
+| Icons | Emoji in place of icons or in headings · one thin-line icon set at size 16 everywhere · icons bigger than the content | One deliberately chosen SVG icon set · real screenshots or charts instead of icons |
+| Motion | fade-up on every piece · a dot that blinks nonstop · a blinking cursor in still text · self-scrolling elements · bouncy easing · an image that zooms on hover | Move only what has meaning, 150–300 ms ease-out, using transform/opacity |
+| AI images | Plastic-smooth skin · golden or dramatic light in every scene · teal-orange tone · an unnaturally clean scene · average-looking people · hands, teeth, text that are off · clay 3D or glossy isometric | One light source with a reason · signs of use · specify style and color in the prompt · edit, never use the first image you get |
+| Logos | A gradient circle with a hole in the middle · circuit patterns · infinity · swoosh curves · melting letters · details lost at 16 px | A shape from something specific to the brand · deliver as vector · test at favicon size |
+| Documents | Emoji before headings · every bullet starts in bold · Title Case on every heading · every section a list · 4 levels of headings in a short note · ending every section with a summary · default-looking Mermaid | Short prose · only the headings needed · diagrams in the house style |
+| Words | Broad ad words (supercharge · ยกระดับ · ไร้รอยต่อ) · the slogan "ไม่ใช่แค่ X แต่คือ Y" · sets of 3 everywhere · frequent long dashes · canned opening sentences ("ในยุคดิจิทัลที่…") | Follow `human-writing` · say what the user can do, with numbers · check Thai with `thai-grammar`, not English rules (full stops, dashes, word breaks differ) |
 
-**อย่าแก้ด้วยการเปลี่ยนค่าตั้งต้นหนึ่งไปเป็นอีกค่าตั้งต้นหนึ่ง** — เลิกม่วงแล้วไปใช้ครีม + ส้มอิฐ + เซอริฟ (หรือ + เขียวขี้ม้า) ก็ยังเป็นสูตรสำเร็จ ชุดนี้คือ "ค่าตั้งต้นของคนที่รู้ว่าม่วงคือค่าตั้งต้น" · bento grid และพื้นไล่สีแบบ mesh ไม่ได้เป็นสัญญาณในตัวเอง อย่าไล่ตัดทุกอย่างที่ดูทันสมัย
+**Do not fix it by swapping one default for another** — dropping purple for cream + terracotta + serif (or + olive green) is still a formula. This set is "the default of someone who knows purple is the default". A bento grid and mesh-style gradient backgrounds are not signals in themselves; do not hunt to cut everything that looks modern.
 
 ---
 
-## 3 · ตรวจก่อนส่ง
+## 3 · Check before sending
 
-### 3.1 งานที่เป็น HTML/CSS (mockup · หน้าเว็บ · เด็ค HTML · ปกเอกสาร HTML)
+### 3.1 HTML/CSS work (mockup · web page · HTML deck · HTML document cover)
 
 ```bash
 python <path ของ skill นี้>/scripts/slop_scan.py <ไฟล์หรือโฟลเดอร์>          # ตาราง
@@ -67,61 +67,61 @@ python <path ของ skill นี้>/scripts/slop_scan.py --url https://...  
 python <path ของ skill นี้>/scripts/slop_scan.py --self-test                  # รันก่อน ถ้าแก้สคริปต์
 ```
 
-- **hook `ui-scan` ของ plugin `superuser` รันสคริปต์นี้ให้เองทุกครั้งที่ Write/Edit ไฟล์ UI** (`.html` `.css` `.scss` `.less` `.jsx` `.tsx` `.vue` `.svelte` `.astro` รวมไฟล์ใน `_to_delete/` · ไม่ตรวจ `node_modules` `dist` `build` `.claude` `vendor` และไฟล์ `.min.`) — P0/P1 ถูกส่งกลับให้แก้ทันที · P2 แจ้งเป็นบริบท · ผลเดิมไม่เตือนซ้ำ · ปิดด้วย `"ui_scan": false` ใน `.claude/superuser/config.json` · hook ตรวจทีละไฟล์ ก่อนส่งยังต้องรันทั้งโฟลเดอร์ 1 รอบ
-- หน้าที่วาดด้วย JavaScript ทั้งหน้า (SPA) `--url` เห็นแค่โครง → ตรวจโค้ดต้นทาง หรือบันทึกหน้าจากเบราว์เซอร์เป็น .html แล้วตรวจไฟล์นั้น
+- **The `ui-scan` hook of plugin `superuser` runs this script by itself every time a UI file is Written/Edited** (`.html` `.css` `.scss` `.less` `.jsx` `.tsx` `.vue` `.svelte` `.astro`, including files in `_to_delete/` · it skips `node_modules` `dist` `build` `.claude` `vendor` and `.min.` files). P0/P1 are sent back to be fixed at once · P2 is passed as context · an unchanged result is not warned again · turn it off with `"ui_scan": false` in `.claude/superuser/config.json`. The hook checks one file at a time; before sending, still run the whole folder once.
+- A page drawn entirely by JavaScript (SPA): `--url` sees only the skeleton → check the source code, or save the page from the browser as .html and check that file.
 
-- ตรวจ 43 กฎจากโค้ด (สี การ์ด ตัวอักษร การเคลื่อนไหว คำ รูปเสีย ช่องกรอกไม่มี label คอนทราสต์ class ของ Tailwind) · ไม่ต้องติดตั้งอะไรเพิ่ม
-- ระดับ: P0 ใช้ไม่ได้ · P1 อ่านยาก · P2 สัญญาณ AI ชัด · P3 ให้ดูอีกครั้ง (อาจตั้งใจ) · มี P0 หรือ P1 → exit 1
-- **แก้ P0 และ P1 ก่อน** แล้วค่อยแก้ P2 · ของที่ตั้งใจให้เขียน `/* slop-ok: <กฎ> <เหตุผล> */` หรือ `<!-- slop-ok: <กฎ> <เหตุผล> -->` ในไฟล์นั้น เหตุผลจะขึ้นในรายงานให้ผู้ตรวจเห็น
-- ตรวจ 0 ไฟล์ = ผิด ไม่ใช่ผ่าน (สคริปต์ออก exit 2)
-- ผลจากสคริปต์คือเหตุผลให้ดูซ้ำ ไม่ใช่คำสั่งให้แก้ทุกข้อ · สคริปต์ไม่เห็นภาพ ข้อใน 3.2 ต้องผ่านด่านตาเสมอ
-- **สคริปต์ 0 ข้อไม่ได้แปลว่าผ่าน:** สคริปต์จับได้แค่ค่าตั้งต้นที่อ่านจากโค้ด ส่วนงานที่ทั้งหน้าเป็นค่าเฉลี่ยของหมวดสคริปต์ไม่เห็น (หน้า landing ที่ลองจริง 2026-11-06 ได้ 0 ข้อ แต่ยังดูเหมือน AI ทำ) · งานส่งได้เมื่อผ่านทั้งสคริปต์และด่านตา 3.2
+- Checks 43 rules from the code (colors, cards, type, motion, words, broken images, inputs with no label, contrast of Tailwind classes) · nothing extra to install
+- Levels: P0 unusable · P1 hard to read · P2 clear AI signal · P3 look again (may be intentional) · any P0 or P1 → exit 1
+- **Fix P0 and P1 first**, then P2. For things that are intentional, write `/* slop-ok: <rule> <reason> */` or `<!-- slop-ok: <rule> <reason> -->` in that file; the reason shows up in the report for the reviewer.
+- Checking 0 files = wrong, not a pass (the script exits 2)
+- A script result is a reason to look again, not an order to fix every item. The script does not see images; the items in 3.2 must always pass the eye gate.
+- **0 script items does not mean pass:** the script catches only defaults readable from code, and work whose whole page is the category average is invisible to it (a landing page really tried 2026-11-06 got 0 items but still looked AI-made). Work can be sent when it passes both the script and the eye gate 3.2.
 
-### 3.2 ด่านตา (ทุกสื่อ รวมรูป สไลด์ PPTX โปสเตอร์ เอกสาร Word)
+### 3.2 Eye gate (every medium, including images, PPTX slides, posters, Word documents)
 
-เรนเดอร์เป็นภาพที่ขนาดใช้จริงแล้วตอบทีละข้อว่า ใช่ หรือ ไม่ · นับผ่านหรือไม่ผ่านตามเกณฑ์ที่เขียนในข้อนั้น (บางข้อ "ใช่" คือไม่ผ่าน) · ข้อที่มีหลายคำถาม ต้องผ่านทุกคำถามจึงนับ 1 · ข้อไหนตอบแล้วไม่ผ่าน ให้แก้ หรือจดเหตุผลที่ตั้งใจคงไว้ใต้ `## ตัดสินใจเอง`
+Render to an image at real size and answer item by item, yes or no. Count pass or fail by the criterion written in that item (in some items "yes" means fail). An item with several questions must pass every question to count as 1. For any item that fails, fix it, or note the reason it is kept on purpose under `## ตัดสินใจเอง` (decided on my own).
 
-1. **ปิดโลโก้และชื่อสินค้าแล้ว ยังรู้ไหมว่าเป็นของใคร** — ไม่รู้ = ไม่ผ่าน · ทดสอบเพิ่ม: แทนชื่อสินค้าด้วยชื่อคู่แข่ง 1 ราย ถ้าทุกประโยคและทุกภาพยังจริง = ไม่ผ่าน
-2. **หรี่ตา** — มีของเด่นอย่างเดียวไหม หรือทุกอย่างเรียกร้องพร้อมกัน
-3. **นับสัญญาณในข้อ 2** — 3 ข้อขึ้นไปในชิ้นเดียว = ดูเหมือน AI ทำ
-4. **เนื้อหาจริง** — มีชื่อ ตัวเลข ภาพจริงไหม หรือเป็นคำกลาง ๆ กับภาพสต็อก
-5. **ชุดเดียวกัน** — สไลด์ทุกหน้า โพสต์ทุกโพสต์ ใช้ระบบเดียวกัน แต่เลย์เอาต์ไม่ซ้ำกันทุกหน้า · ชิ้นเดี่ยว (โพสต์ 1 ภาพ · ปก 1 ใบ) ตอบ `ไม่ใช้` และนับข้อนี้เป็นผ่าน
-6. **รูป AI** — ดูมือ ฟัน ตัวหนังสือ เงา แสง ขนาดของจริง ซูม 200 % ก่อนใช้
-7. **พื้นที่ว่าง** — มีที่ให้ของสำคัญหายใจไหม ไม่ได้อัดเต็มขอบ
-8. **คำ** — อ่านหัวข้อออกเสียงแล้วฟังเหมือนคนบอกเพื่อนไหม หรือฟังเหมือนสโลแกนบนป้าย (สโลแกน = ไม่ผ่าน · `human-writing` ข้อ 8) · หัวข้อตัดบรรทัดกลางวลีไหม (หน้าเว็บดูที่จอกว้าง 375 · สไลด์ โพสต์ ปก ดูที่ขนาดจริงของชิ้น) (เช่น "ทำงานเป็น / ทีม") ถ้าตัด = ไม่ผ่าน ให้กำหนดจุดตัดเองด้วย `<wbr>` หรือ `text-wrap: balance` · หัวข้อที่ผู้ใช้กำหนดถ้อยคำมาเอง ใช้ตามนั้น จดเป็นข้อที่ตั้งใจคงไว้ · **ตัวไทยขนาดใหญ่:** ซูมดูสระบนและวรรณยุกต์ (ที่ · ทั้ง · ปี่) ว่าไม่ชนหรือทับบรรทัดบน และสระล่าง (ุ · ู) ไม่ทับบรรทัดล่าง · ชน = ไม่ผ่าน ให้เพิ่มระยะบรรทัดตามตารางใน `human-writing` [`thai-line-breaking`](../human-writing/references/thai-line-breaking.md) (หัวข้อไทยไม่ต่ำกว่า 1.4) · เหตุการณ์จริง 2026-11-06: โพสต์ที่หัวข้อ line-height แน่น วรรณยุกต์ของบรรทัดล่างชนบรรทัดบน แต่ผู้ทำรายงานว่าตัวไทยไม่แตก
-9. **ตัดออก 1 ชิ้นก่อนส่ง** — หาของที่เอาออกแล้วงานไม่เสียอะไร (เงา · เส้นกรอบ · ไอคอนประดับ · ป้ายเหนือหัวข้อ · การเคลื่อนไหว · ไล่สี · ย่อหน้าสรุป) แล้วเอาออกจริง · หาไม่เจอเลยค่อยส่ง · ไม่ตัดเงา มุมโค้ง ภาพพระเอก หรือไอคอนที่ภาษาความลึกของ look หรือสไตล์ที่เจ้าของเลือกกำหนดไว้ เพราะตัดจนแบนก็พลาดอีกทาง (ผู้ใช้ขอมุมโค้ง เงา และไอคอนคืน 2026-11-09) · งาน AI มักมีของเกิน 1 ชิ้นเสมอ เพราะโมเดลเติมมากกว่าตัด (แนวคิดจาก frontend-design ของ Anthropic · Apache-2.0)
+1. **With the logo and product name covered, can you still tell whose it is?** — if not = fail · extra test: replace the product name with one competitor's name; if every sentence and image is still true = fail
+2. **Squint** — is there one dominant element, or does everything demand attention at once?
+3. **Count the signals in item 2** — 3 or more in one piece = looks AI-made
+4. **Real content** — are there names, numbers, real images, or only generic words and stock photos?
+5. **One set** — every slide, every post uses one system, but the layout does not repeat on every page. A single piece (a 1-image post · a single cover) answers `ไม่ใช้` (not applicable) and counts this item as passed.
+6. **AI images** — look at hands, teeth, text, shadows, light, real-world scale; zoom to 200% before use
+7. **Blank space** — is there room for the important things to breathe, not packed edge to edge?
+8. **Words** — read the headings aloud; do they sound like a person telling a friend, or like a slogan on a sign? (a slogan = fail · `human-writing` item 8) · does a heading break a line in the middle of a phrase? (web pages: look at width 375; slides, posts, covers: look at the piece's real size) (such as "ทำงานเป็น / ทีม"); if it breaks = fail, set the break yourself with `<wbr>` or `text-wrap: balance` · a heading whose wording the user set themselves: use it as given, and note it as kept on purpose · **Large Thai type:** zoom in on upper vowels and tone marks (ที่ · ทั้ง · ปี่) to see that they do not collide with or overlap the line above, and that lower vowels (ุ · ู) do not overlap the line below · a collision = fail; increase the line spacing per the table in `human-writing` [`thai-line-breaking`](../human-writing/references/thai-line-breaking.md) (Thai headings no lower than 1.4) · real incident 2026-11-06: a post with tight heading line-height, where the tone marks of the lower line hit the upper line, but the maker reported that Thai type did not break
+9. **Cut 1 piece before sending** — find something that can be removed without the work losing anything (a shadow · a border line · a decorative icon · a label above a heading · motion · a gradient · a summary paragraph) and really remove it · send only if you find nothing · do not cut shadows, rounded corners, the hero image, or icons that the depth language of the look or the owner's chosen style requires, because cutting until it is flat is the mistake on the other side (user asked for rounded corners, shadows and icons back 2026-11-09) · AI work almost always has at least 1 extra piece, because models add more than they cut (idea from Anthropic's frontend-design · Apache-2.0)
 
-**หน้าเว็บ หน้าการตลาด landing และหน้าแรกของสินค้า ตอบเพิ่มอีก 5 ข้อ** (โพสต์ แบนเนอร์ ปก และภาพเดี่ยว ใช้แค่ข้อ 1–9) (ส่วนเปิด = จอแรกที่เห็นก่อนเลื่อน หรือ hero):
+**Web pages, marketing landing pages and a product's home page answer 5 more items** (posts, banners, covers and single images use only items 1–9) (opening section = the first screen seen before scrolling, or the hero):
 
-10. **ส่วนเปิดมีของจริงของสินค้าอย่างน้อย 1 ชิ้นไหม:** ภาพหน้าจอตอนใช้งานจริง · ตัวเลขจริงพร้อมที่มา · เสียงลูกค้าจริงที่มีชื่อ · ผลงานจริง · ไม่มี = ไม่ผ่าน · ที่จอกว้าง 1440 ส่วนเปิดมีพื้นที่ว่างที่ไม่ได้ตั้งใจเกิน 1/3 ของจอไหม ถ้ามี = ไม่ผ่าน (ช่องว่างนั้นคือที่ของของจริง)
-11. **ลำดับส่วนเรียงตามเรื่องของสินค้านี้ ไม่ใช่สูตร เปิด → รายการคุณสมบัติ → ทำงานอย่างไร → ปุ่มติดตั้งหรือราคา ใช่ไหม:** ไม่ใช่ = ไม่ผ่าน ให้เขียน 1 ประโยคว่าเรื่องของสินค้านี้ควรเล่าอย่างไร (เริ่มจากปัญหาที่ผู้ใช้เจอ · เริ่มจากสาธิตของจริง · เริ่มจากผลงานลูกค้า) แล้วเรียงส่วนตามประโยคนั้น · คงสูตรเดิมได้เมื่อประโยคนั้นพาไปลำดับเดียวกันจริง และต้องจดไว้
-12. **แถวช่องเท่ากัน (3–6 ช่อง ขนาดและหน้าตาเหมือนกัน) มีเหตุจากเนื้อหาไหม:** เหตุคือแต่ละช่องสำคัญเท่ากันและยาวพอ ๆ กันจริง · ไม่มีเหตุ = ไม่ผ่าน ให้ช่องที่สำคัญกว่าใหญ่กว่า หรือเปลี่ยนเป็นรายการ ร้อยแก้ว หรือภาพเดียว · เลขลำดับเล็กบนหัวช่องใช้ได้เฉพาะเมื่อต้องทำตามลำดับจริง
-13. **สีของหน้ามีที่มานอกจากโลโก้หรือไอคอนไหม:** ที่มาที่นับ: ต้นแบบที่ค้นในรอบนี้ (`design-references`) · วัสดุหรือโลกของสินค้า · แบรนด์ที่อนุมัติแล้ว · ดึงจากไอคอนอย่างเดียว = ไม่ผ่าน
-14. **ฟอนต์ mono ทุกจุดอยู่บนโค้ด คำสั่ง ชื่อไฟล์ หรือตัวเลขที่ต้องเรียงหลักไหม:** mono บนชื่อแบรนด์ เมนู หัวตาราง หรือคำบรรยาย เพื่อให้ "ดูเป็นของนักพัฒนา" คือเครื่องแต่งตัว = ไม่ผ่าน
+10. **Does the opening section have at least 1 real thing from the product?** A screenshot of real use · real numbers with a source · a named real customer's voice · real work done · none = fail · at width 1440, does the opening section have unintended blank space over 1/3 of the screen? If yes = fail (that blank space is the place for the real thing)
+11. **Is the order of sections built on this product's story, not the formula opening → feature list → how it works → install button or pricing?** If not = fail. Write 1 sentence on how this product's story should be told (start from the problem the user meets · start from a demo of the real thing · start from customer results) and order the sections by that sentence · you may keep the usual formula when that sentence really leads to the same order, and you must note it.
+12. **Does a row of equal cells (3–6 cells of identical size and look) have a reason from the content?** The reason is that each cell is really equally important and about equally long. No reason = fail; make the more important cell bigger, or change to a list, prose or a single image. A small sequence number on a cell heading is allowed only when the steps must really be followed in order.
+13. **Does the page's color have a source other than the logo or icon?** Sources that count: a reference searched this round (`design-references`) · the product's materials or world · an approved brand. Pulled from the icon alone = fail.
+14. **Is every mono font spot on code, commands, file names, or numbers that must line up in columns?** Mono on brand names, menus, table headers or captions, to make it "look like a developer's", is costume = fail
 
-**คนที่ไม่ได้ทำต้องตรวจด้วยตา ทุกงานก่อนส่ง** — คนทำมองไม่เห็นค่าตั้งต้นของตัวเอง (2026-11-06: คนทำรายงานว่าตัวไทยไม่แตก แต่อีกคนเปิดภาพแล้วเห็นวรรณยุกต์ชนบรรทัดบน)
-- ส่ง**ภาพที่เรนเดอร์แล้วขนาดใช้จริง** (ไม่ใช่โค้ด) ให้ subagent ตัวใหม่ที่ไม่ได้ร่วมทำ: `design-critic` (graphic-design) ไม่มีใช้ `reviewer` · ส่งข้อ 3.2 กับโจทย์ของงาน ไม่ส่งคำตอบหรือความเห็นของคนทำ เพราะผู้ตรวจมักคล้อยตาม
-- ขอ 2 อย่าง: คำตอบทีละข้อของ 3.2 · จุดที่ดูเหมือน AI ทำ 3 จุดพร้อมวิธีแก้ ห้ามชม
-- ข้อที่ผู้ตรวจกับคนทำตอบไม่ตรงกัน ใช้คำตอบของผู้ตรวจ แล้วแก้หรือจดเหตุผลที่คงไว้ · แก้แล้วส่งภาพใหม่ให้ผู้ตรวจตัวใหม่ดูเฉพาะข้อที่แก้
-- ถ้าคนทำเป็น subagent ที่เรียก agent อื่นไม่ได้ ให้ส่ง path ของภาพกลับไปให้หัวหน้าเรียกผู้ตรวจ แล้วเขียนช่องตรวจตาว่า `รอหัวหน้า`
-- ข้ามได้เฉพาะหน้า board ของต้นแบบ (ยังไม่ใช่งานของเรา) และงานที่เจ้าของสั่งให้ข้าม · 3 แนวที่ส่งให้เจ้าของเลือกตอนจบต้องผ่านการตรวจก่อนส่ง · ถ้าข้าม บรรทัดผลเขียน `ตรวจตา ข้าม เพราะ…`
+**Someone who did not make it must check by eye, on every job before sending** — the maker cannot see their own defaults (2026-11-06: the maker reported Thai type did not break, but another person opened the image and saw the tone marks hit the line above).
+- Send the **rendered image at real size** (not code) to a fresh subagent who did not take part: `design-critic` (graphic-design), or `reviewer` if there is none · send 3.2 with the job's brief, never the maker's answer or opinion, because reviewers tend to go along
+- Ask for 2 things: the item-by-item answers of 3.2 · 3 places that look AI-made with how to fix them; no praise
+- For an item where reviewer and maker disagree, use the reviewer's answer, then fix it or note the reason it is kept · after fixing, send the new image to a new reviewer to look only at the items fixed
+- If the maker is a subagent that cannot call other agents, send the image path back to the lead to call the reviewer, and write `รอหัวหน้า` (waiting for the lead) in the eye-check field
+- Skippable only for the reference board page (not yet our work) and work the owner ordered skipped · the 3 directions sent to the owner to pick at the end must pass the check before sending · if skipped, the result line says `ตรวจตา ข้าม เพราะ…` (eye check skipped because…)
 
-### 3.3 บันทึกผล
+### 3.3 Record the result
 
-ท้ายคำตอบหรือรายงาน 1 บรรทัด: `no-ai-look: สคริปต์ P0 0 · P1 0 · P2 n (ตั้งใจ n) · ด่านตา 9/9 (หน้าเว็บ 14/14) · ตรวจตา <agent ที่ตรวจ> ไม่ตรงกับคนทำ n ข้อ · ตัดออก: <ชิ้นที่ตัด>` · ด่านตาไม่ครบ หรือคนทำตอบเองคนเดียว = ยังไม่ผ่าน แม้สคริปต์ 0 ข้อ · ข้อที่ตั้งใจคงไว้ให้ลง `## ตัดสินใจเอง` พร้อมเหตุผล · งานสร้างใหม่ต้องมีบรรทัด `ด่านก่อนลงมือ:` ของ `design-references` คู่กัน ครบ 7 ช่องตาม `design-references` ด่านข้อ 6 เพราะตรวจปลายทางอย่างเดียวจับงานที่ไม่ได้ค้นก่อนไม่ได้
-
----
-
-## 4 · เขียน brief ให้เครื่องมือสร้างภาพ หรือใบสั่งงานให้ subagent
-
-ใส่ทุกครั้ง ไม่งั้นได้ค่าเฉลี่ย:
-
-- แนวที่มีชื่อ + ภาพอ้างอิงจริง 1–3 ภาพ (ไม่ใช่คำคุณศัพท์)
-- สี hex ของแบรนด์ · แหล่งแสงและเวลา · เลนส์หรือมุมกล้อง
-- รายละเอียดที่สังเกตจากของจริง (สถานที่ ร่องรอย ฤดู คนแบบไหน)
-- สิ่งที่ไม่เอา: โทนเขียวอมฟ้า-ส้ม · ผิวเนียนพลาสติก · แสงทองทุกฉาก · ตัวหนังสือในภาพ (ใส่ตัวหนังสือเป็นชั้นแยกที่แก้ได้)
-- ได้ภาพมาแล้วต้อง**แก้** — ครอป ตัดต่อ ปรับแสง ไม่ใช้ภาพแรกที่ออกมา
+1 line at the end of the answer or report: `no-ai-look: สคริปต์ P0 0 · P1 0 · P2 n (ตั้งใจ n) · ด่านตา 9/9 (หน้าเว็บ 14/14) · ตรวจตา <agent ที่ตรวจ> ไม่ตรงกับคนทำ n ข้อ · ตัดออก: <ชิ้นที่ตัด>` · an incomplete eye gate, or answers by the maker alone = not yet passed, even with 0 script items · items kept on purpose go under `## ตัดสินใจเอง` with the reason · new builds must have the `design-references` line `ด่านก่อนลงมือ:` alongside, all 7 fields per `design-references` gate item 6, because checking only at the end cannot catch work that did not search first
 
 ---
 
-กฎเขียนตัวย่อ → `spell-out-abbreviations`
+## 4 · Writing a brief for an image tool, or a task sheet for a subagent
+
+Put these in every time, otherwise you get the average:
+
+- A named style + 1–3 real reference images (not adjectives)
+- The brand's hex colors · light source and time · lens or camera angle
+- Details observed from the real thing (place, signs of use, season, what kind of people)
+- What you do not want: teal-orange tone · plastic-smooth skin · golden light in every scene · text in the image (put text as a separate editable layer)
+- Once you get an image you must **edit** it: crop, retouch, adjust the light; never use the first image that comes out
+
+---
+
+Rules for writing abbreviations → `spell-out-abbreviations`

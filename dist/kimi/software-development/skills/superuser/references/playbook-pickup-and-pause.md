@@ -1,22 +1,22 @@
-# playbook · pickup-and-pause — รับงานที่ค้างต่อ · หยุดงานให้คนอื่นรับต่อได้
+# playbook · pickup-and-pause — pick up unfinished work · pause so someone else can take over
 
-ใช้เมื่อ: "ทำต่อจากเมื่อวาน" · "ค้างไว้ตรงไหน" · รับงานต่อจาก agent ตัวอื่น · "พอก่อน เดี๋ยวมาทำต่อ" (รวม `session pickup` · `pause safely` · skill `recall` ของ pstack)
-skill หลัก: `handoff` · `status-report` · `decision-log`
+Use when: "Continue from yesterday" · "Where did we leave off" · taking over from another agent · "That's enough for now, I'll continue later" (covers pstack's `session pickup` · `pause safely` · skill `recall`)
+Main skills: `handoff` · `status-report` · `decision-log`
 
-## ขั้นตอน — รับงานต่อ (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps — pick up (copy into the todo as written)
 
-1. อ่าน `CONTEXT.md` หัวข้อ "รับงานต่อ" · ข้อความค้างใน `.claude/superuser/inbox/` · `docs/BUILD-PLAN.md` (สถานะล่าสุด · ค้างอยู่ · ตัดสินใจเอง) · ดู log ล่าสุดใน `.claude/superuser/log/` ว่าตัวก่อนทำอะไรไปจริง · ใคร: หัวหน้าทีม
-2. ดูของจริง ไม่เชื่อบันทึกอย่างเดียว — `git status` · `git log -10` · branch ที่อยู่ · sandbox ที่รันอยู่ (`.sandbox/sandbox.ps1 list`) · test ล่าสุดผ่านไหม · ใคร: `qa-tester` ตัวใหม่
-3. เขียนสรุปสถานะปัจจุบันไม่เกิน 10 บรรทัด — ทำอะไรเสร็จ · ค้างอะไร · ขัดกับบันทึกตรงไหน · ใคร: หัวหน้าทีม
-4. เลือก playbook ของงานที่เหลือ แล้วทำต่อ · ใคร: หัวหน้าทีม
+1. Read `CONTEXT.md` section "รับงานต่อ" (pick up) · pending messages in `.claude/superuser/inbox/` · `docs/BUILD-PLAN.md` (latest status · `ค้างอยู่` (pending) · `ตัดสินใจเอง` (decided on own)) · look at the latest log in `.claude/superuser/log/` to see what the previous instance really did · ใคร: หัวหน้าทีม
+2. Look at the real thing, do not trust the notes alone — `git status` · `git log -10` · the current branch · the sandbox that is running (`.sandbox/sandbox.ps1 list`) · whether the latest tests pass · ใคร: `qa-tester` ตัวใหม่
+3. Write a summary of the current state in at most 10 lines — what is done · what is pending · where it conflicts with the notes · ใคร: หัวหน้าทีม
+4. Choose the playbook for the remaining work, then continue · ใคร: หัวหน้าทีม
 
-## ขั้นตอน — หยุดงาน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps — pause (copy into the todo as written)
 
-1. ทำชิ้นที่กำลังทำให้ถึงจุดที่ตรวจได้ หรือถอยกลับไปจุดตรวจได้ล่าสุด — ไม่ทิ้งโค้ดครึ่งทางที่ test แดงโดยไม่บอก · ใคร: `developer` ตัวเดิม (ถือชิ้นที่ยังไม่บันทึก)
-2. งานที่ยังไม่ commit — ถ้าผู้ใช้ไม่อนุญาตให้ commit ให้เก็บ `git diff` ลง `_to_delete/pause-<วันที่>.patch` และบอกในรายงาน · ใคร: หัวหน้าทีม
-3. หยุด dev server หรือ process ที่เปิดไว้ ส่วน sandbox ปล่อยรันต่อได้ แต่จดชื่อไว้ · ใคร: หัวหน้าทีม
-4. `status-report` และเขียนหัวข้อ "รับงานต่อ" ใน `CONTEXT.md` ใหม่ (`handoff` หัวข้อ 5) — เขียนว่า: ขั้นถัดไปต้องทำอะไรก่อน · คำสั่งที่ใช้ทำซ้ำ · ของที่ต้องระวัง · ใคร: หัวหน้าทีม · `reviewer` ตัวใหม่ตรวจกับ `git status` จริง
+1. Bring the piece in progress to a point that can be checked, or go back to the latest checkable point — do not leave half-done code with red tests without saying so · ใคร: `developer` ตัวเดิม (ถือ the piece not yet saved)
+2. Work not yet committed — if the user does not allow commits, save `git diff` to `_to_delete/pause-<วันที่>.patch` and say so in the report · ใคร: หัวหน้าทีม
+3. Stop the dev server or processes you opened. A sandbox may keep running, but note its name · ใคร: หัวหน้าทีม
+4. `status-report`, and rewrite the "รับงานต่อ" (pick up) section in `CONTEXT.md` (`handoff` section 5) — write: what the next step must do first · the commands to repeat · things to watch out for · ใคร: หัวหน้าทีม · `reviewer` ตัวใหม่ checks (ตรวจ) against the real `git status`
 
-## จบเมื่อ
+## Done when
 
-คนหรือ bot ที่มารับต่อ จากค่ายไหนก็ได้ อ่านแค่ `CONTEXT.md` แล้วเริ่มงานต่อได้
+A person or bot taking over, from any vendor, can read only `CONTEXT.md` and start work again

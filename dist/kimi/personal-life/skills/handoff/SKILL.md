@@ -3,30 +3,30 @@ name: handoff
 description: Use when work passes to a subagent, session or person
 ---
 
-# handoff — ส่งงานต่อ ให้คนรับไม่ต้องเดา
+# handoff — pass work on so the receiver does not have to guess
 
-ส่วนหนึ่งของ `superuser` · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies` · ถ้อยคำเขียนตาม `human-writing`
+Part of `superuser` · lives only in plugin `superuser`; other plugins share it through `dependencies` · wording follows `human-writing`
 
-> **หลักข้อเดียว:** คนรับงาน (ลูกทีมตัวใหม่ · session ใหม่ · โมเดลใหม่ · คน · bot อื่น) จำอะไรไม่ได้เลย → ส่งต่อได้แค่สิ่งที่เขียนลงไฟล์ · เขียนให้คนที่ไม่เคยเห็นแชตเปิดอ่านแล้วเริ่มงานได้ใน 2 นาที
+> **One principle:** whoever receives the work (a new subagent · a new session · a new model · a person · another bot) remembers nothing → only what is written to a file can be passed on. Write it so that someone who never saw the chat can open it and start work within 2 minutes.
 
 ---
 
-## 1 · ส่งต่อตอนไหน ใช้อะไร
+## 1 · When to hand off and what to use
 
-| จังหวะ | ใช้ | ใครเขียน |
+| Moment | Use | Who writes |
 |---|---|---|
-| หัวหน้าทีม → ลูกทีม | **ใบสั่งงาน** (หัวข้อ 3) | หัวหน้าทีม |
-| ลูกทีม → หัวหน้าทีม | **ใบส่งงาน** ต่อท้ายใบสั่งงาน (หัวข้อ 4) | ลูกทีม (ตัวที่เขียนไฟล์ไม่ได้ ส่งในข้อความ หัวหน้าทีมวางให้) |
-| session นี้ → session ถัดไป · สลับโมเดล · context ใกล้เต็ม | **รับงานต่อ** ใน `CONTEXT.md` (หัวข้อ 5) | หัวหน้าทีม |
-| ทีม → คน · bot อื่น · Quix · Agent Desk | **ชุดส่งต่อ** (หัวข้อ 6) | หัวหน้าทีม |
+| Lead → worker | **Task sheet** (`ใบสั่งงาน`, section 3) | Lead |
+| Worker → lead | **Delivery sheet** (`ใบส่งงาน`) appended to the task sheet (section 4) | Worker (a worker that cannot write files sends it in the message and the lead places it) |
+| This session → next session · switching model · context nearly full | **Resume** (`รับงานต่อ`) in `CONTEXT.md` (section 5) | Lead |
+| Team → a person · another bot · Quix · Agent Desk | **Hand-off package** (section 6) | Lead |
 
-> **Quix · Agent Desk** = เครื่องมือภายนอกที่ไม่บังคับ — Quix เป็นตัวจัดคิวงานให้ agent · Agent Desk เป็นกระดานงานของทีม agent · ทั้งสองอ่านหัวไฟล์ `handoff/*.md` · ไม่ได้ติดตั้งก็ใช้ skill นี้ได้ครบทุกข้อ
+> **Quix · Agent Desk** = optional external tools. Quix queues work for agents; Agent Desk is a task board for a team of agents. Both read the header of `handoff/*.md`. This skill is complete in every item without them installed.
 
 ---
 
-## 2 · `.claude/superuser` — ที่เก็บกลางของทีม
+## 2 · `.claude/superuser` — the team's shared store
 
-ทุกอย่างอยู่ใต้ `.claude/superuser/` · ไฟล์ทั้งหมด การเปิดใช้ครั้งแรก inbox และ log อยู่ใน [`team-memory`](references/team-memory.md) · กติกา commit อยู่ใน [`team-files`](../superuser/references/team-files.md)
+Everything lives under `.claude/superuser/`. All the files, first-time setup, inbox and log are in [`team-memory`](references/team-memory.md). The commit rules are in [`team-files`](../superuser/references/team-files.md).
 
 ```
 .claude/superuser/
@@ -38,16 +38,16 @@ description: Use when work passes to a subagent, session or person
 └─ log/ · inbox/ · learn/            ของเดิม (learn/drop/ = บทเรียนที่ทิ้งไว้ข้อละไฟล์)
 ```
 
-- **ชื่อชิ้น** `<วันที่>-<ลำดับ 2 หลัก>-<คำสั้นภาษาอังกฤษ>` · ใช้ชื่อเดียวกันทั้งไฟล์ โฟลเดอร์ และใน log
-- **ชิ้นงานจริง** (โค้ด · เอกสาร · รูป) อยู่ในโฟลเดอร์ปกติของโปรเจกต์ · `handoff/` เก็บแค่คำสั่ง ผลสรุป และของระหว่างทาง
-- **ไม่ commit** `handoff/` `notes/` `ledger/` `out-of-scope/` (ใส่ `.gitignore` คู่กับ `log/`) · ก่อนเขียนลงที่เหล่านี้ `git check-ignore <path>` ต้องเจอและ path ต้องไม่ใช่ symlink ไม่ผ่านก็ไม่เขียน บอกผู้ใช้ให้ใส่ `.gitignore` · งานจบแล้วชิ้นไหนยังมีค่า → ย้ายสาระขึ้น `CONTEXT.md` หรือ `HISTORY.md`
-- **ห้ามใส่** ค่าลับ · เลขบัตร · เลขบัญชีเต็ม · ข้อมูลของคนอื่น
+- **Piece name** `<date>-<2-digit sequence>-<short English words>` · use the same name for the file, the folder and in the log.
+- **The real work product** (code · documents · images) lives in the project's normal folders. `handoff/` keeps only instructions, summaries and in-between material.
+- **Do not commit** `handoff/` `notes/` `ledger/` `out-of-scope/` (put them in `.gitignore` along with `log/`). Before writing to these, `git check-ignore <path>` must find it and the path must not be a symlink. If that fails, do not write; tell the user to add it to `.gitignore`. When the work is done, for any piece that still has value → move its substance up to `CONTEXT.md` or `HISTORY.md`.
+- **Never put in** secrets · ID card numbers · full account numbers · other people's data.
 
 ---
 
-## 3 · ใบสั่งงาน
+## 3 · Task sheet (`ใบสั่งงาน`)
 
-หัวไฟล์เป็นข้อมูลให้เครื่องอ่าน (Quix · Agent Desk อ่านช่องเหล่านี้) · เนื้อหาเป็นภาษาคน · **ครบ 5 หัวข้อ ไม่งั้นยังไม่ส่ง**
+The file header is machine-readable data (Quix · Agent Desk read these fields). The content is in human language. **All 5 sections must be there, or it is not sent yet.**
 
 ```markdown
 ---
@@ -79,18 +79,18 @@ files_allowed: [research/shipping/**]
 ใบส่งงานต่อท้ายไฟล์นี้ · ข้อความกลับหัวหน้าทีมไม่เกินราว 40 บรรทัด (สิ่งที่เปลี่ยน · ผลตรวจ · สิ่งที่ไม่แน่ใจ)
 ```
 
-- **งานโค้ด** ใช้ใบเดียวกัน ต่างแค่ช่อง: `to: software-development:developer` · `files_allowed: [src/auth/**]` · เสร็จเมื่อ = `npm test` ผ่าน · skill = `stack-*` (plugin `software-development`)
-- **ชิ้นปกติใส่ใบ 5 ข้อในข้อความส่งงาน** (แกนของ `superuser` หัวข้อ 5) · เขียนเป็นไฟล์เฉพาะชิ้นที่ข้าม session หรือส่งต่อให้คนหรือ bot อื่น (โมดูล `handoff`) แล้วคำสั่งไปถึง agent เป็นบรรทัดเดียว: `ทำตาม .claude/superuser/handoff/<id>.md` · ส่ง path ไม่ส่งเนื้อหา ลูกทีมเปิดอ่านเอง
-- **brief ที่จะถูกหยิบทำหลายวันหลังเขียน** ใช้แม่แบบ `superuser/templates/DURABLE-BRIEF.md` — เขียนพฤติกรรมกับชื่อ interface ไม่ใส่ path หรือเลขบรรทัด (ไฟล์ย้ายแล้ว brief เก่า) · มีเกณฑ์รับงานที่ทดสอบได้กับรายการนอกขอบเขต · ใบสั่งงานปกติของชิ้นที่ทำวันนี้ใช้ path ได้
-- **บอกเจตนาของกฎ** ไม่ใช่แค่เงื่อนไข · รอบแก้หรือลองใหม่ → เพิ่มหัวข้อ `## รอบก่อน` (รายงานของตัวก่อน + สิ่งที่ต้องเปลี่ยน) แล้วส่งตัวใหม่
-- **ใบสั่งถึง `reviewer`** ไม่มีความเห็นของหัวหน้าทีม (กฎใน `superuser` หัวข้อ 5)
-- **ลูกทีมที่ตรวจหรือค้นคว้า** — ข้อสรุปว่าของในงาน "ล้าสมัย" "ผิด" หรือ "ขัดกัน" ต้องแนบ `ไฟล์:บรรทัด` และบอกว่าดูแล้วเป็นแบบนั้นโดยตั้งใจไหม (ส่วนประวัติ · ตัวเลขที่สคริปต์สร้าง · ข้อยกเว้นที่จดไว้) · ใส่ข้อนี้ในใบสั่งงานทุกครั้ง · หัวหน้าทีมสุ่มเปิดดูก่อนเชื่อ (บทเรียน 2026-10-26: "PLUGINS.md ล้าสมัย" คือหัวข้อ Roadmap ที่ตั้งใจเก็บ · "skill 49 ผิด" คือตัวเลขรวมของกลาง)
+- **Code work** uses the same sheet, differing only in fields: `to: software-development:developer` · `files_allowed: [src/auth/**]` · done-when = `npm test` passes · skill = `stack-*` (plugin `software-development`).
+- **A normal piece puts the 5-item sheet in the message that sends the task** (the core of `superuser` section 5). Write a file only for a piece that crosses sessions or goes to another person or bot (module `handoff`); then the instruction reaches the agent as one line: `ทำตาม .claude/superuser/handoff/<id>.md`. Pass the path, not the content; the worker opens and reads it itself.
+- **A brief that will be picked up several days after it is written** uses the template `superuser/templates/DURABLE-BRIEF.md`: write behavior and interface names, not paths or line numbers (files move, then the old brief is stale). It has testable acceptance criteria and a list of what is out of scope. A normal task sheet for a piece done today may use paths.
+- **State the intent of the rule**, not only the condition. For a fix or retry round → add a `## รอบก่อน` (previous round) section (the previous worker's report + what must change) and send a new worker.
+- **A sheet to `reviewer`** has no lead opinion in it (rule in `superuser` section 5).
+- **Workers that review or research** — a conclusion that something in the work is "outdated", "wrong" or "contradictory" must attach `file:line` and say whether it looked and found it so on purpose (history sections · numbers a script generates · noted exceptions). Put this in every task sheet. The lead opens a few at random before believing them (lesson 2026-10-26: "PLUGINS.md is outdated" was a Roadmap section kept on purpose · "skill 49 is wrong" was a shared total).
 
 ---
 
-## 4 · ใบส่งงาน
+## 4 · Delivery sheet (`ใบส่งงาน`)
 
-ลูกทีมต่อท้ายใบสั่งงานของตัวเอง แล้วแก้ `status:` · ข้อความกลับหัวหน้าทีม = path + ผล + สรุป 1 บรรทัด
+The worker appends it to its own task sheet, then edits `status:`. The message back to the lead = path + result + 1-line summary.
 
 ```markdown
 ## ส่ง — 2026-10-21 14:20 · general-purpose · sonnet
@@ -102,68 +102,68 @@ files_allowed: [research/shipping/**]
 - **ค้างอยู่ · ไม่แน่ใจ:** เจ้าที่ 3 ไม่บอกค่าเก็บเงินปลายทาง (รอยืนยัน)
 ```
 
-- **ผล** ใช้ 1 ใน 4 ค่าตามแกน `superuser` หัวข้อ 5: `เสร็จ` · `เสร็จ มีข้อกังวล` · `ขาดบริบท` · `ติด`
-- **"เสร็จ" ต้องมีหลักฐาน** ใน `ตรวจแล้วด้วย` · ไม่มี → `status: ติด` หรือ `ค้างอยู่`
-- **ลองแล้วพัง** จดทุกทางที่ลองแล้วไม่ได้ผลพร้อมเหตุผล 1 บรรทัด (ช่อง `dead_ends` ในหัวไฟล์ถ้าเครื่องต้องอ่าน) · ทางตันที่ไม่จด คือทางที่ตัวต่อไปจะเสียเวลาเดินซ้ำ
-- **ผลยาวเกิน 40 บรรทัด** → เขียนลง `handoff/<id>/` แล้วอ้าง path
-- **หัวหน้าทีมรับผิดชอบผล** — อ่านใบส่งงาน ตรวจกับ "เสร็จเมื่อ" เอง แล้วย้าย `ตัดสินใจเอง` ที่กระทบงานอื่นขึ้นตาราง "การตัดสินใจ" ใน `CONTEXT.md`
+- **ผล** (result) uses 1 of 4 values per `superuser` section 5: `เสร็จ` · `เสร็จ มีข้อกังวล` · `ขาดบริบท` · `ติด`
+- **"เสร็จ" needs evidence** in `ตรวจแล้วด้วย` (checked with). If there is none → `status: ติด` or `ค้างอยู่`.
+- **ลองแล้วพัง** (tried and failed): note every path tried that did not work, with a 1-line reason (the `dead_ends` field in the header if a machine must read it). A dead end that is not noted is a path the next worker will waste time walking again.
+- **A result longer than 40 lines** → write it to `handoff/<id>/` and cite the path.
+- **The lead is responsible for the result** — read the delivery sheet, check it against "เสร็จเมื่อ" (done-when) yourself, then move any `ตัดสินใจเอง` that affects other work up to the "การตัดสินใจ" (decisions) table in `CONTEXT.md`.
 
 ---
 
-## 5 · รับงานต่อ — ข้าม session · สลับโมเดล · context ใกล้เต็ม
+## 5 · Resuming work (`รับงานต่อ`) — across sessions · switching model · context nearly full
 
-หัวข้อ `## รับงานต่อ` ใน `CONTEXT.md` ใช้กติกาชุดนี้ชุดเดียว · ตาราง `## ความคืบหน้า` ที่อยู่ข้างกันเป็นของ `status-report`
+The section `## รับงานต่อ` in `CONTEXT.md` uses this one set of rules. The table `## ความคืบหน้า` (progress) beside it belongs to `status-report`.
 
-**ก่อนส่ง** — อัปเดตหัวข้อ "รับงานต่อ" ใน `CONTEXT.md` ก่อนจบ session · ก่อนสลับโมเดล · เมื่อ context ใช้ไปเกินครึ่งในงานยาว
-- **ทำต่อเป็นข้อแรก:** 1 ข้อ ทำได้ทันที ชี้ไฟล์หรือ `handoff/<id>.md`
-- **ชิ้นที่ยังเปิด:** รายการ `id` ที่ `status` ไม่ใช่ `เสร็จ`
-- **รออนุมัติ:** งานที่พร้อมแล้วแต่ย้อนไม่ได้ บอกไฟล์หรือคำสั่งที่พร้อมใช้ (ไม่มีก็ไม่ต้องใส่)
-- **ค้างอยู่:** คำถามที่ agent ไปต่อเองไม่ได้ บอกว่าถามใคร (ไม่มีให้เขียน `ไม่มี`)
-- **ระวัง:** กับดักที่เจอ · สิ่งที่ห้ามรื้อ (ตัดสินแล้ว) · ทางที่ลองแล้วพัง (รวมจากใบส่งงานทุกชิ้น)
-- **ส่งมาแล้ว N ครั้ง:** นับเฉพาะการส่งต่อจริง (จบ session · สลับโมเดล) ไม่นับตอน `/compact` · ตัวรับเห็น N ตั้งแต่ 2 ขึ้นไป → ข้อความเก่าอาจค้างอยู่ ตรวจกับของจริงก่อนทำตาม
-- **สมุดงาน:** ชี้ `notes/<แผน>.md` และ `ledger/<แผน>.md` ของแผนที่เปิดอยู่ (หัวข้อ 8 ของ `team-memory`) · แผนมีหลายชิ้น เสร็จ = มีบรรทัด `Task N: complete` ใน ledger ของแผนนั้นเท่านั้น
-- **ทุกข้อติดป้าย** `ตรวจจริง` (เห็นเองใน session นี้) หรือ `ยังไม่ได้ตรวจ` (จำมาจากรอบก่อน) · ตัวรับงานเชื่อข้อแรกได้เลย ส่วนข้อหลังต้องตรวจก่อนใช้ · ไม่มีป้าย = ถือว่ายังไม่ได้ตรวจ
+**Before handing over** — update the "รับงานต่อ" section in `CONTEXT.md` before ending a session · before switching model · when context use passes half in a long job.
+- **ทำต่อเป็นข้อแรก (do first):** 1 item, doable at once, pointing to a file or `handoff/<id>.md`
+- **ชิ้นที่ยังเปิด (open pieces):** a list of `id` whose `status` is not `เสร็จ`
+- **รออนุมัติ (awaiting approval):** work that is ready but cannot be undone; name the file or the command that is ready to use (leave it out if there is none)
+- **ค้างอยู่ (pending):** questions the agent cannot continue past on its own; say whom to ask (write `ไม่มี` if none)
+- **ระวัง (watch out):** traps found · what must not be torn up (already decided) · paths tried that failed (gathered from every piece's delivery sheet)
+- **ส่งมาแล้ว N ครั้ง (handed over N times):** count only real handoffs (end of session · switching model), not `/compact`. If the receiver sees N of 2 or more → old text may be lingering; check against the real thing before following it.
+- **สมุดงาน (workbooks):** point to `notes/<plan>.md` and `ledger/<plan>.md` of the plan that is open (section 8 of `team-memory`). A plan with several pieces is done only when the line `Task N: complete` is in that plan's ledger.
+- **Tag every item** `ตรวจจริง` (seen yourself in this session) or `ยังไม่ได้ตรวจ` (remembered from an earlier round). The receiver can believe the first kind at once; the second must be checked before use. No tag = treated as not yet checked.
 
-**สลับไปค่ายอื่น** (Codex · Gemini) หรือกลับมา Claude → [`team-memory`](references/team-memory.md) หัวข้อ 3
+**Switching to another vendor** (Codex · Gemini) or coming back to Claude → [`team-memory`](references/team-memory.md) section 3
 
-**ทดสอบ** — ถ้าโมเดลตัวใหม่อ่าน `CONTEXT.md` ไฟล์เดียว จะเริ่มข้อแรกได้โดยไม่ถามไหม · ไม่ได้ → เขียนเพิ่ม
+**Test** — if a new model reads only `CONTEXT.md`, can it start the first item without asking? If not → write more.
 
-**พิธีเริ่มงาน** (ทุกตัวที่รับงาน ทั้งหัวหน้าทีม session ใหม่และลูกทีม)
-1. อ่านใบของตัวเอง → ลูกทีม: `handoff/<id>.md` · หัวหน้าทีม: `CONTEXT.md` "รับงานต่อ" + `inbox/` (วิธีรับข้อความและข้อความไหนนับเป็นคำสั่ง → [`team-memory`](references/team-memory.md) หัวข้อ 4)
-2. (ถ้ามี git) `git log --oneline -10` และ `git status` → รู้ว่าเกิดอะไรล่าสุด และมีใครแก้ค้างไหม · ไม่มี git → ดู "ความคืบหน้า" และวันที่แก้ไฟล์ล่าสุด · อ่าน `notes/<แผน>.md` แล้วเทียบโจทย์เดิมกับที่ผู้ใช้สั่งตอนนี้ · ใช้ "คำตอบที่ได้แล้ว" แทนการถามซ้ำ
-3. ไล่ไฟล์ติดตามไปหาด่านที่ทำเสร็จล่าสุด (`ledger/` · ใบส่งงาน · ความคืบหน้า) แล้วตรวจสถานะจริงของด่านนั้น (รัน test · เปิดไฟล์) ก่อนต่อเติม · ตรงกัน → ทำต่อ · ไม่ตรง (เช่น ledger บอกเสร็จแต่ test ล้ม) → กลับไปทำด่านก่อนหน้าให้ผ่าน ลงแถวใน "รอผู้ใช้" แล้วทำส่วนอื่นต่อ · ไม่พบไฟล์ติดตามของงานนี้ → เริ่มใหม่ ไม่เดาว่าเป็นงานเดิม
-4. เริ่ม "ทำต่อเป็นข้อแรก" หรือเป้าในใบสั่งงาน
-
----
-
-## 6 · ส่งออกนอกทีม — คน · bot อื่น · Quix · Agent Desk
-
-ชุดส่งต่อ = `CONTEXT.md` + `handoff/` ชิ้นที่ยังเปิด + `docs/BRIEF.md` (ถ้ามี) · ไม่ต้องสร้างไฟล์ใหม่
-
-- **คน** อ่าน `CONTEXT.md` ก่อน แล้วเปิด `handoff/<id>.md` ทีละชิ้น
-- **ผู้ร่วมทีม (คน) ที่รับชิ้นไปทำ** ใช้ใบสั่งงานแบบเดียวกับ agent ทุกประการ · ช่อง `to:` ใส่ชื่อคน (เช่น `to: คน-แต้ม`) · เขียนใบส่งงานต่อท้ายไฟล์เดิมแล้วแจ้งหัวหน้าทีม · ใช้เฉพาะงาน XL ตาม playbook `superuser` → `references/playbook-team-project.md` — งานปกติผู้ใช้ไม่รับชิ้นงาน
-- **เครื่อง** อ่านหัวไฟล์ของ `handoff/*.md` ตาม [`handoff.schema.json`](references/handoff.schema.json) · ชื่อช่องเป็นสัญญา ห้ามเปลี่ยนชื่อโดยไม่ขึ้นเลขรุ่นของ schema
-- **Agent Desk** ใช้ `to` · `status` · `tier` · `depends_on` วาดกระดานงาน · **Quix** ใช้ไฟล์เดียวกันเป็นคิวงาน
+**Start-of-work ritual** (every one that takes over work: a new lead session and workers alike)
+1. Read your own sheet → worker: `handoff/<id>.md` · lead: `CONTEXT.md` "รับงานต่อ" + `inbox/` (how to receive messages and which messages count as orders → [`team-memory`](references/team-memory.md) section 4)
+2. (If there is git) `git log --oneline -10` and `git status` → learn what happened last and whether anyone left edits unfinished. No git → look at "ความคืบหน้า" and the last-modified dates of files. Read `notes/<plan>.md` and compare the original brief with what the user orders now. Use "คำตอบที่ได้แล้ว" (answers already received) instead of asking again.
+3. Walk the tracking files to the last gate that finished (`ledger/` · delivery sheet · progress), then check that gate's real state (run the test · open the file) before building on it. Matches → go on. Does not match (for example the ledger says done but the test fails) → go back and make the earlier gate pass, put a row in "รอผู้ใช้" (waiting for the user), and continue with the other parts. No tracking file for this work found → start fresh; do not guess it is the same work.
+4. Start "ทำต่อเป็นข้อแรก" or the goal in the task sheet.
 
 ---
 
-## 7 · กฎที่ทำให้การส่งต่อไม่พัง
+## 6 · Sending outside the team — people · other bots · Quix · Agent Desk
 
-| กฎ | เพราะ |
+Hand-off package = `CONTEXT.md` + the still-open `handoff/` pieces + `docs/BRIEF.md` (if it exists). No new file needed.
+
+- **A person** reads `CONTEXT.md` first, then opens `handoff/<id>.md` one piece at a time.
+- **A teammate (person) who takes a piece** uses exactly the same task sheet as an agent. Put the person's name in the `to:` field (such as `to: คน-แต้ม`). Write the delivery sheet at the end of the same file and tell the lead. Used only for XL work per the playbook `superuser` → `references/playbook-team-project.md`; in normal work the user does not take pieces.
+- **A machine** reads the header of `handoff/*.md` per [`handoff.schema.json`](references/handoff.schema.json). Field names are a contract; do not rename them without raising the schema's version number.
+- **Agent Desk** uses `to` · `status` · `tier` · `depends_on` to draw the task board · **Quix** uses the same files as a work queue.
+
+---
+
+## 7 · Rules that keep handoffs from breaking
+
+| Rule | Because |
 |---|---|
-| ส่ง path ไม่ส่งเนื้อหา | ส่งต่อหลายทอดแล้วข้อมูลหาย ("เกมกระซิบ") และเปลือง token |
-| 1 ไฟล์ 1 คนเขียน · ไฟล์กลางหัวหน้าทีมเขียนคนเดียว | หลาย agent เขียนที่เดียวกัน การตัดสินใจกระจาย ชนกัน |
-| แบ่งเฉพาะชิ้นที่ทำขนานได้จริง · ชิ้นที่ต้องรู้เรื่องเดียวกันมาก ทำตัวเดียว | แบ่ง context แล้วลูกทีมเข้าใจโจทย์คนละแบบ |
-| ตัดสินแล้วจดลง "การตัดสินใจ" · คนรับงานเห็นต่าง → ลง "รออนุมัติ" ไม่รื้อเอง | กันการเถียงเรื่องเดิมทุก session |
-| เสร็จดูจากชิ้นงานและผลตรวจ ไม่ใช่จากคำว่า "เสร็จ" | คำพูดในบทสนทนาตรวจไม่ได้ |
-| ผู้ตรวจรับแค่ชิ้นงาน + เกณฑ์ ไม่รับ context ของคนทำ | ผู้ตรวจที่เห็นเหตุผลของคนทำมักคล้อยตาม |
+| Pass the path, not the content | Over several hops, data gets lost ("telephone game") and tokens are wasted |
+| 1 file, 1 writer · shared files are written by the lead alone | Several agents writing the same place scatters decisions and they collide |
+| Split only pieces that can really run in parallel · pieces that must know much of the same thing go to one worker | Splitting context makes workers understand the brief differently |
+| Once decided, note it in "การตัดสินใจ" · if the receiver disagrees → put it in "รออนุมัติ", do not tear it up alone | Stops arguing the same thing every session |
+| Done is judged from the work product and the check result, not the word "done" | Words in a conversation cannot be checked |
+| The reviewer gets only the work product + criteria, not the maker's context | A reviewer who sees the maker's reasons tends to go along |
 
-ที่มาของกลไกสมุดงานและ resume: code-modernization (Apache-2.0) · mercadopago (Apache-2.0) · math-proof (Apache-2.0) · superpowers (MIT) · mattpocock-skills (MIT) · aws (Apache-2.0) · vsql-extension-builder (ไม่ระบุสิทธิ์ เอาแค่กลไก) · claude-remember (ห้ามแจกจ่ายซ้ำ เอาแค่กลไก) · ดู 2026-11-10 · รายละเอียดแต่ละไฟล์ใน `team-memory` หัวข้อ 8
+Sources of the workbook and resume mechanisms: code-modernization (Apache-2.0) · mercadopago (Apache-2.0) · math-proof (Apache-2.0) · superpowers (MIT) · mattpocock-skills (MIT) · aws (Apache-2.0) · vsql-extension-builder (license not stated, mechanism only) · claude-remember (no redistribution, mechanism only) · seen 2026-11-10 · details per file in `team-memory` section 8
 
-ที่มา (`จากแหล่ง`): Anthropic — *How we built our multi-agent research system* (2025-06) · *Effective harnesses for long-running agents* (2025-11) · *Effective context engineering for AI agents* (2025-09) · Cognition — *Don't Build Multi-Agents* (2025-06) · *Multi-Agents: What's Actually Working* (2026-04)
+Sources (`จากแหล่ง`): Anthropic — *How we built our multi-agent research system* (2025-06) · *Effective harnesses for long-running agents* (2025-11) · *Effective context engineering for AI agents* (2025-09) · Cognition — *Don't Build Multi-Agents* (2025-06) · *Multi-Agents: What's Actually Working* (2026-04)
 
 ---
 
-## 8 · ไฟล์ของเรากับหน่วยความจำในตัว Claude Code
+## 8 · Our files versus Claude Code's built-in memory
 
-จะจดอะไรสักอย่างแล้วไม่แน่ใจว่าลง `CONTEXT.md` · `CLAUDE.md` · `.claude/rules/` หรือ auto memory → เปิด [`team-memory`](references/team-memory.md) หัวข้อ 7
+If you want to note something and are unsure whether it goes into `CONTEXT.md` · `CLAUDE.md` · `.claude/rules/` or auto memory → open [`team-memory`](references/team-memory.md) section 7

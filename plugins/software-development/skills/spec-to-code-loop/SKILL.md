@@ -3,32 +3,32 @@ name: spec-to-code-loop
 description: Use when building test-first from a spec and mockups
 ---
 
-> **ใน SuperUser:** ลูปนี้คือแกนของ playbook [`feature`](../superuser/references/playbook-feature.md) และ [`new-project`](../superuser/references/playbook-new-project.md) ถ้าเปิด superuser อยู่ ให้ทำตาม playbook แล้วใช้ไฟล์นี้เป็นรายละเอียดของลูป
+> **In SuperUser:** this loop is the core of the playbooks [`feature`](../superuser/references/playbook-feature.md) and [`new-project`](../superuser/references/playbook-new-project.md). If superuser is open, follow the playbook and use this file as the detail of the loop.
 
-# วงรอบจากข้อกำหนดไปเป็นโค้ด
+# The loop from requirements to code
 
-> **กฎข้อเดียว:** วงรอบต้องมีเงื่อนไขหยุดที่**รันแล้วรู้ผลทันที**
-> "ทำตามข้อกำหนดให้เสร็จ" เครื่องตรวจไม่ได้ ส่วน "test ทั้ง 47 ตัวเขียว" ตรวจได้
+> **The one rule:** the loop needs a stop condition that **gives a result the moment you run it**.
+> "Finish implementing the requirements" cannot be checked by a machine, while "all 47 tests are green" can.
 
 ---
 
-## ต้องมีครบก่อนเริ่ม
+## What you must have before starting
 
-| สิ่งที่ต้องมี | ถ้าไม่มี |
+| What you need | If missing |
 |---|---|
-| ข้อกำหนดที่แต่ละข้อทดสอบได้ มีรหัสกำกับ เช่น `FR-AUTH-010` (FR = ข้อกำหนดเชิงหน้าที่ Functional Requirement) | หยุด ใช้ `srs-writing` ทำให้ทดสอบได้ก่อน |
-| คำสั่งรัน test 1 บรรทัดที่รันได้จริง | หยุด ตั้งค่าโครง test ก่อน ใช้ `testing-standards` |
-| คำสั่งรันแอปขึ้นมาดูได้ (ถ้ามีหน้าจอ) | ข้ามขั้นเทียบภาพไปก่อน แล้วบอกผู้ใช้ว่าข้าม |
-| ภาพ mockup ที่ตั้งชื่อตรงกับหน้าจอ | ขอจากผู้ใช้ ไม่งั้น UI จะไม่มีวันตรง |
+| Requirements that are each testable, with an ID such as `FR-AUTH-010` (FR = Functional Requirement) | Stop and use `srs-writing` to make them testable first |
+| A 1-line test command that really runs | Stop and set up the test skeleton first, using `testing-standards` |
+| A command to run the app and look at it (if there are screens) | Skip the image-comparison step for now, and tell the user it was skipped |
+| Mockup images named to match the screens | Ask the user, otherwise the UI will never match |
 
-**ถ้าไม่ครบแล้วยังเริ่ม ก็เท่ากับเขียนโค้ดที่ไม่มีใครรู้ว่าถูกหรือผิด**
+**Starting without all of these amounts to writing code that nobody can tell is right or wrong**
 
 ---
 
-## 1 · รอบที่ศูนย์ — วางแผน ยังไม่เขียนโค้ด
+## 1 · Round zero — plan, no code yet
 
-อ่านข้อกำหนดและ mockup ให้ครบก่อน แล้วแตกเป็นงานย่อย **งานละ 1 ข้อกำหนด**
-เขียนลง `docs/BUILD-PLAN.md`
+Read the requirements and mockups in full, then break them into sub-tasks, **1 requirement per task**
+and write them to `docs/BUILD-PLAN.md`
 
 ```markdown
 | # | รหัส | milestone | สิ่งที่ต้องได้ | ไฟล์ที่จะแตะ | test ที่จะเขียน | สถานะ | commit |
@@ -37,37 +37,37 @@ description: Use when building test-first from a spec and mockups
 | 2 | FR-AUTH-020 | M2 | ล็อกผู้ใช้หลังผิด 5 ครั้ง | auth/lockout.ts | lockout_FR-AUTH-020 | ค้างอยู่ | |
 ```
 
-คอลัมน์ `milestone` ใส่รหัส `M…` จากแผนโครงการหรือไทม์ไลน์ใน `BUILD-PLAN.md` (playbook `new-project` ขั้น 1) · ไม่มีไทม์ไลน์ → ว่างได้
+The `milestone` column takes an `M…` ID from the project plan or the timeline in `BUILD-PLAN.md` (playbook `new-project` step 1) · no timeline → may be empty
 
-**เอกสารขัดกัน → ยึดตามลำดับ ไม่เดา** — เขียนลำดับความสำคัญของเอกสาร 1 บรรทัดไว้บนสุดของ `BUILD-PLAN.md` ก่อนแตกงาน เช่น `ลำดับเอกสาร: TEST-DATA.md > REQUIREMENTS.md > DESIGN.md > mockup`
-- ผู้ใช้กำหนดลำดับมาแล้ว → ใช้ตามนั้น
-- ไม่ได้กำหนด → ใช้ค่าเริ่ม: ข้อมูลทดสอบที่มีค่าคาดหวัง (ตัวเลขชัดที่สุด) > ข้อกำหนด (Software Requirements Specification — SRS) > เอกสารออกแบบ > mockup แล้วลง `decision-log` พร้อม `(รอยืนยัน)`
-- เจอจุดที่ขัดกันจริง → ทำตามเอกสารที่อยู่ลำดับสูงกว่า แล้วจดคู่ที่ขัด (ไฟล์ · หัวข้อ · ค่าทั้ง 2 ฝั่ง) ไว้ใน "ค้างอยู่" ให้เจ้าของแก้ต้นฉบับ · ห้ามแก้เอกสารต้นฉบับเอง
+**Documents conflict → follow the order, do not guess** — write a 1-line priority order of the documents at the very top of `BUILD-PLAN.md` before splitting the work, for example `ลำดับเอกสาร: TEST-DATA.md > REQUIREMENTS.md > DESIGN.md > mockup` (document order: …)
+- The user has already set an order → use it
+- Not set → use the default: test data with expected values (the clearest numbers) > requirements (Software Requirements Specification — SRS) > design document > mockup, and log it in `decision-log` with `(รอยืนยัน)` (awaiting confirmation)
+- A real conflict found → follow the higher-ranked document, and record the conflicting pair (file · section · both values) under "ค้างอยู่" (pending) for the owner to fix the source · never edit the source documents yourself
 
-**ข้อไหนกำกวมจนเขียน test ไม่ได้ ห้ามเดา** — รวมเป็นรายการคำถามไว้ท้ายไฟล์ และใส่ในหัวข้อ **"ค้างอยู่"** ครั้งเดียว แล้วทำข้ออื่นต่อ
+**If an item is so ambiguous that you cannot write a test, do not guess** — collect it into a list of questions at the end of the file, put it under the heading **"ค้างอยู่"** (pending) once, and carry on with the other items
 
-> คำถามที่ต้องถามแทนการเดา: ค่าขอบเขตเป็นเท่าไหร่ · ผิดแล้วต้องเกิดอะไร ·
-> ใครเห็นข้อมูลนี้ได้บ้าง · ถ้าของเดิมมีอยู่แล้วจะทับหรือจะเตือน
+> Questions to ask instead of guessing: what is the boundary value · what must happen on failure ·
+> who may see this data · if the item already exists, overwrite or warn
 
-**ตรวจแผนเองก่อนส่ง — 5 ข้อ ทำเองไม่ต้องส่ง agent** (ปรับจาก superpowers `writing-plans` · MIT)
+**Check the plan yourself before sending — 5 items, do it yourself, no need to send an agent** (adapted from superpowers `writing-plans` · MIT)
 
-| ข้อ | ถาม | เจอแล้วทำ |
+| Item | Ask | If found, do |
 |---|---|---|
-| ครบ | ไล่ทุกข้อกำหนดใน SRS หรือ FSD ชี้แถวในตารางได้ไหม | ชี้ไม่ได้ → เพิ่มแถว |
-| ขนาด | แต่ละแถวให้คนเขียนได้ 1 อย่างที่สมเหตุสมผล ไม่กว้างจนเดา ไม่ละเอียดจนเป็นโค้ด | กว้าง → แตก · ละเอียด → เหลือลายเซ็นกับชื่อ test |
-| ชื่อตรงกัน | type · ฟังก์ชัน · คอลัมน์ ที่แถวหลังอ้าง สะกดเหมือนที่แถวแรกตั้ง | ต่างกัน → แก้ให้เป็นชื่อเดียว |
-| เคสที่กัด | input แต่ละแบบและทางล้มที่ข้อกำหนดบอกเป็นนัย มี test ในแถวไหน | ไม่มี → เพิ่มชื่อ test ในแถวเจ้าของ |
-| สัดส่วน | แผนยาวกว่าข้อกำหนดหลายเท่า = ถอดโค้ดล่วงหน้า ไม่ใช่แผน | ตัดเนื้อโค้ดเหลือลายเซ็นและ assertion |
+| Complete | Going through every requirement in the SRS or FSD, can you point to a row in the table | Cannot point → add a row |
+| Size | Each row gives a writer 1 sensible thing, not so wide they must guess, not so detailed it becomes code | Wide → split · detailed → leave the signature and the test name |
+| Names match | The types · functions · columns that later rows reference are spelled as the first row set them | Different → fix to one name |
+| Biting cases | Each kind of input and failure path the requirement implies: which row has a test for it | None → add a test name to the owning row |
+| Proportion | A plan many times longer than the requirements = pre-written code, not a plan | Cut the code body to signatures and assertions |
 
-เจอแล้วแก้ในที่ ไม่ต้องตรวจซ้ำอีกรอบ
+Fix in place when found, no need to check again
 
-จบรอบที่ศูนย์ **ต้องหยุด** ให้ผู้ใช้อ่านแผนก่อน — อย่าไหลต่อไปเขียนโค้ดเอง
+At the end of round zero you **must stop** and let the user read the plan first — do not flow on to write code yourself
 
-ถ้าสร้างจากพรอมต์สร้างระบบ (build prompt) ฉบับเดียว: อ่านพรอมต์ให้จบก่อนวาง ตรงไหนไม่ตรงกับข้อกำหนดให้แก้ก่อน แล้ววางในเซสชันใหม่ที่ความจำว่าง เพื่อพิสูจน์ว่าพรอมต์ครบจริง (บอกเล่าจากงานสอน ไม่ได้วัดเทียบ)
+If building from a single build prompt: read the prompt through before pasting, fix anything that does not match the requirements first, then paste in a fresh session with empty memory to prove the prompt is really complete (reported from the training exercise, not measured against a baseline)
 
 ---
 
-## 2 · วงรอบต่อหนึ่งข้อกำหนด
+## 2 · The loop per requirement
 
 ```
 อ่าน BUILD-PLAN.md  →  หยิบข้อแรกที่ยังไม่ทำ
@@ -80,49 +80,49 @@ description: Use when building test-first from a spec and mockups
   →  วนข้อถัดไป
 ```
 
-**ขั้นที่ 2 คนข้ามบ่อยที่สุด และพลาดแล้วแพงที่สุด** — test ที่ไม่เคยเห็นแดง
-อาจผ่านตลอดไม่ว่าโค้ดจะถูกหรือผิด
+**Step 2 is the one people skip most, and the costliest to get wrong** — a test that has never been seen red
+may pass forever whether the code is right or wrong
 
-**ถ้าผู้ใช้พูดว่า TDD · test-driven · "เขียน test ก่อน"** — คือวงรอบนี้เอง ไม่ต้องหาวิธีอื่น: red = ขั้น 1–2 (test ที่ตั้งชื่อด้วยรหัสข้อกำหนด และต้องเห็นแดงจริง) · green = ขั้น 3 (โค้ดน้อยที่สุดที่ทำให้เขียว ตาม `lazy-coding`) · refactor = ทำระหว่างขั้น 4 โดย test ทั้งชุดยังเขียว ไม่เพิ่มพฤติกรรมใหม่ในรอบนั้น · หน่วยของ 1 รอบคือ 1 ข้อกำหนด ไม่ใช่ 1 ฟังก์ชัน จึงเล็กกว่าที่คนคิดและใหญ่กว่า TDD ตำรา · โครง test · คำสั่งรัน · สัดส่วน unit กับ integration ดู `testing-standards` · ไม่มีข้อกำหนดที่ทดสอบได้ → ยังทำ TDD ไม่ได้ กลับไป "ต้องมีครบก่อนเริ่ม"
-
----
-
-## 3 · กฎเหล็ก
-
-1. **ห้ามแก้หรือลบ test เพื่อให้ผ่าน** — test แดงแปลว่าโค้ดผิด ไม่ใช่ test ผิด
-   จะแก้ test ได้ต่อเมื่อพิสูจน์ได้ว่า test เขียนผิดจากข้อกำหนด และต้องบอกผู้ใช้ทุกครั้ง
-2. **1 ข้อต่อ 1 รอบ** — ห้ามรวบหลายข้อเพราะ "มันคล้ายกัน"
-3. **ข้อเดียวลองได้ไม่เกิน 3 รอบ** — พัง 2 รอบ → แตกเป็นขั้นย่อย ไม่ลองแบบเดิมซ้ำ · ครบ 3 รอบ → **ลงเป็น `ติด` แล้วทำตาม "หลังติด" ข้างล่าง** อย่าลองต่อไปเรื่อย ๆ
-4. **ห้าม mock สิ่งที่กำลังทดสอบ** — mock ของข้างนอกได้ mock ตัวเองไม่ได้
-5. **ห้ามข้ามไปทำข้อที่ง่ายกว่า** ก่อนลองครบ 3 รอบ — ลำดับในแผนคือลำดับจริง ข้ามได้เฉพาะข้อที่ลง `ติด` แล้ว
-
-### หลังติด — 5 ขั้น
-
-1. **จดว่าติดเพราะอะไร** ใน "ค้างอยู่": ลองอะไรไปแล้วทั้ง 3 รอบ · คิดว่าปัญหาอยู่ตรงไหน · ต้องได้อะไรถึงจะไปต่อ (คำตอบ · ข้อมูล · สิทธิ์)
-2. **ถอยกลับไปจุดที่ test เขียวล่าสุด** — เก็บงานค้างไว้ใน branch `stuck/<รหัส>` (ไม่ได้รับอนุญาตให้ commit → เก็บเป็น patch ใน `_to_delete/patches/stuck-<รหัส>.patch` แทน) แล้วคืนสายงานให้ test ทั้งชุดเขียว test ของข้อที่ติดอยู่ใน branch หรือ patch นั้นด้วย ห้ามลบ
-3. **ข้อที่ต้องรอข้อที่ติด** ลงเป็น `ติด` เหตุผล `รอ <รหัส>` โดยไม่ต้องลอง แล้วไปข้อถัดไปตามลำดับในแผนที่ไม่ต้องรอข้อนั้น
-4. **ลองอีก 1 รอบตอนท้าย** — ทำข้ออื่นหมดแล้ว ให้ agent ตัวใหม่ที่ใช้โมเดลขนาดใหญ่ขึ้นลอง 1 รอบจาก branch `stuck/<รหัส>` (หรือ patch ที่เก็บไว้) และบันทึกในขั้น 1 · มีคำตอบใน inbox (`.claude/superuser/inbox/`) แล้ว → เริ่มจากคำตอบนั้น
-5. **ยังติด** → คง `ติด` ไว้ในรายงานปิดงาน พร้อมบอกว่าต้องการอะไรจากผู้ใช้ · ผู้ใช้ตอบทีหลัง → ทำต่อจากข้อนั้นตาม playbook `pickup-and-pause`
+**If the user says TDD · test-driven · "write the test first"** — that is this very loop, no need to look for another way: red = steps 1–2 (a test named with the requirement ID, which must really be seen red) · green = step 3 (the least code that makes it green, per `lazy-coding`) · refactor = done during step 4 with the whole test set still green, adding no new behaviour in that round · the unit of 1 round is 1 requirement, not 1 function, so it is smaller than people think and larger than textbook TDD · for test skeleton · run command · ratio of unit to integration see `testing-standards` · no testable requirement → you cannot do TDD yet, go back to "What you must have before starting"
 
 ---
 
-## 4 · ไฟล์สถานะ — context หมดแน่นอน
+## 3 · Iron rules
 
-วงรอบยาวเกินกว่าที่ 1 รอบสนทนาจะจำได้เสมอ **สถานะต้องอยู่ในไฟล์ ไม่ใช่ในหัว**
+1. **Never edit or delete a test to make it pass** — a red test means the code is wrong, not the test
+   A test may be edited only when you can prove it was written wrongly against the requirement, and you must tell the user every time
+2. **1 requirement per round** — never bundle several because "they are similar"
+3. **A single requirement may be tried at most 3 rounds** — fails 2 rounds → split into sub-steps, do not retry the same way · 3 rounds reached → **mark it `ติด` (blocked) and follow "After stuck" below**, do not keep trying on and on
+4. **Never mock the thing under test** — you may mock external things, you may not mock yourself
+5. **Never skip to an easier requirement** before trying 3 rounds — the order in the plan is the real order, and only items already marked `ติด` (blocked) may be skipped
 
-- `docs/BUILD-PLAN.md` — แผนและสถานะ **อ่านไฟล์นี้ก่อนเริ่มทุกรอบ**
-  นี่คือไฟล์เดียวที่วงรอบนี้เพิ่มเข้าไปในโฟลเดอร์เอกสารหลัก
-- สถานะมี 5 ค่าเท่านั้น (ชุดเดียวกับ `superuser`): `เสร็จ` · `ทำอยู่` · `ติด` · `รออนุมัติ` · `ค้างอยู่` — งานที่ยังไม่เริ่มใช้ `ค้างอยู่`
-- `ติด` ต้องมีเหตุผลต่อท้าย 1 บรรทัด
-- ทุกข้อที่ `เสร็จ` ต้องมีเลข commit — ไม่มีเลข แปลว่ายังไม่เสร็จจริง · ยกเว้นยังไม่ได้รับอนุญาตให้ commit (commit เมื่อได้รับอนุญาตเท่านั้น): ใส่ข้อความ commit ที่แนะนำ + `(รอ commit)` และหลักฐาน test (ชื่อ test + ผลรัน) แทนเลข แล้วถือว่า `เสร็จ` ได้
-- จบแต่ละรอบให้อัปเดตหัวข้อ `## สถานะล่าสุด` และ `## ประวัติสถานะ` บนสุดของไฟล์ตาม `status-report` — ตารางงานกับตารางสถานะอยู่ไฟล์เดียวกันแต่คนละหัวข้อ
+### After stuck — 5 steps
 
-**เริ่มรอบใหม่โดยไม่อ่านไฟล์นี้ก่อน คือสาเหตุอันดับ 1 ที่งานต้องทำซ้ำ**
+1. **Record why it is stuck** under "ค้างอยู่" (pending): what was tried across all 3 rounds · where you think the problem is · what you need to go on (an answer · data · permission)
+2. **Go back to the last point where tests were green** — keep the pending work in a branch `stuck/<ID>` (if not permitted to commit → keep it as a patch at `_to_delete/patches/stuck-<ID>.patch` instead) and return the line of work to where the whole test set is green. The test of the stuck item stays in that branch or patch too, never delete it
+3. **Items that wait on the stuck item** are marked `ติด` (blocked) with the reason `รอ <ID>` (waiting for <ID>) without trying, then go to the next item in plan order that does not wait on it
+4. **Try 1 more round at the end** — once everything else is done, have a new agent on a larger model try 1 round from branch `stuck/<ID>` (or the kept patch) and record it in step 1 · if an answer is already in the inbox (`.claude/superuser/inbox/`) → start from that answer
+5. **Still stuck** → keep `ติด` (blocked) in the closing report, stating what is needed from the user · if the user answers later → continue from that item per the playbook `pickup-and-pause`
 
-### ไฟล์ที่วงรอบสร้างขึ้นระหว่างทาง — ไปที่ `_to_delete/` ทั้งหมด
+---
 
-เอกสารข้อกำหนดมักเป็น `.docx` หรือ `.pdf` ต้องแปลงเป็นข้อความก่อนจึงอ่านซ้ำได้ถูก
-**ไฟล์ที่แปลงออกมาไม่ใช่เอกสาร** เป็นของใช้ชั่วคราวของวงรอบ
+## 4 · The status file — context will certainly run out
+
+A loop is always longer than one conversation can remember. **State must live in a file, not in the head**
+
+- `docs/BUILD-PLAN.md` — the plan and status. **Read this file before starting every round**
+  This is the only file this loop adds to the main documents folder
+- Status has only 5 values (the same set as `superuser`): `เสร็จ` (done) · `ทำอยู่` (in progress) · `ติด` (blocked) · `รออนุมัติ` (awaiting approval) · `ค้างอยู่` (pending) — work not yet started uses `ค้างอยู่`
+- `ติด` must have a 1-line reason after it
+- Every `เสร็จ` item must have a commit number — no number means not really done · except when not yet permitted to commit (commit only when permitted): put the recommended commit message + `(รอ commit)` (awaiting commit) and test evidence (test name + run result) in place of the number, and it may count as `เสร็จ`
+- At the end of each round, update the headings `## สถานะล่าสุด` (latest status) and `## ประวัติสถานะ` (status history) at the top of the file per `status-report` — the task table and the status table are in the same file under different headings
+
+**Starting a new round without reading this file first is the number 1 cause of rework**
+
+### Files the loop creates along the way — all go to `_to_delete/`
+
+Requirements documents are often `.docx` or `.pdf` and must be converted to text before they can be re-read correctly.
+**A converted file is not a document**, it is a temporary working item of the loop
 
 ```
 _to_delete/
@@ -131,24 +131,24 @@ _to_delete/
   logs/            ← ผลรัน test ที่เก็บไว้ดูย้อนหลัง
 ```
 
-| ไฟล์ | ไปไหน |
+| File | Goes where |
 |---|---|
-| เอกสารที่แปลงรูปแบบมาให้อ่านง่าย | `_to_delete/extracted/` |
-| ภาพหน้าจอที่ถ่ายไว้ตรวจ | `_to_delete/check/` |
-| ผลรัน test · log | `_to_delete/logs/` |
-| แผนและสถานะ `BUILD-PLAN.md` | `docs/` — เป็นเอกสารจริง |
-| โค้ดและ test | โฟลเดอร์โปรเจกต์ |
+| Documents converted to a readable format | `_to_delete/extracted/` |
+| Screenshots taken for checking | `_to_delete/check/` |
+| Test run results · logs | `_to_delete/logs/` |
+| The plan and status `BUILD-PLAN.md` | `docs/` — it is a real document |
+| Code and tests | The project folder |
 
-**ห้ามเขียนไฟล์แปลงลง `docs/` ปนกับเอกสารต้นฉบับ** — อีก 3 เดือนไม่มีใครรู้ว่า
-ไฟล์ไหนคือของจริงที่ลูกค้าเซ็นรับ และไฟล์ไหนคือของที่เครื่องแปลงมา
+**Never write converted files into `docs/` mixed with the original documents** — in 3 months nobody will know
+which file is the real one the customer signed and which a machine converted
 
-รายละเอียดเต็มอยู่ใน `temp-file-discipline`
+Full detail is in `temp-file-discipline`
 
 ---
 
-## 5 · เทียบ mockup ด้วยภาพจริง
+## 5 · Compare to the mockup with a real image
 
-อ่านโค้ดแล้วบอกว่า "ตรงแล้ว" ใช้ไม่ได้ ต้องเปิดจริงแล้วดู
+Reading the code and saying "it matches" does not work. You must really open it and look
 
 ```python
 page.set_viewport_size({"width": 1280, "height": 900})   # ให้เท่ากับความกว้าง mockup
@@ -156,105 +156,105 @@ page.goto(url); page.wait_for_timeout(500)
 page.screenshot(path="_to_delete/check/login.png")
 ```
 
-แล้วเปิดทั้ง 2 ภาพดูเทียบกันตาม 5 ข้อนี้:
+Then open both images and compare by these 5 items:
 
-- [ ] ลำดับและการจัดกลุ่มขององค์ประกอบตรงกันไหม
-- [ ] ระยะห่างและขนาดตัวอักษรใกล้เคียงไหม (ไม่ต้องเป๊ะพิกเซล)
-- [ ] สถานะที่ mockup แสดงไว้ มีครบไหม — ว่าง · กำลังโหลด · ผิดพลาด
-- [ ] ข้อความตรงกับ mockup ไหม หรือไปแต่งเอง
-- [ ] ภาษาไทยตกบรรทัดหรือสระหายไหม
+- [ ] Do the order and grouping of elements match
+- [ ] Are spacing and font size close (not pixel-exact)
+- [ ] Are all the states the mockup shows present — empty · loading · error
+- [ ] Does the text match the mockup, or was it made up
+- [ ] Does Thai wrap badly or lose vowels
 
-ต่างตรงไหน**บอกเป็นรายการ** อย่าเงียบแล้วเคลมว่าเสร็จ
-ภาพที่ถ่ายไว้ตรวจเป็นไฟล์ชั่วคราว — ไปที่ `_to_delete/` ตาม `temp-file-discipline`
-
----
-
-## 6 · การสืบย้อน
-
-ชื่อ test ต้องมีรหัสข้อกำหนดอยู่ในชื่อ เช่น `test_lockout_after_5_failures_FR_AUTH_020`
-จะได้ค้นด้วยคำสั่งเดียวว่าข้อไหนยังไม่มี test ครอบ
-
-ปิดงานด้วยตารางสืบย้อน: ข้อกำหนดทุกข้อ → test ที่ครอบ → ผลล่าสุด
-
-> **ข้อไหนไม่มี test ครอบ ให้บอกตรง ๆ ว่าไม่มี** — ห้ามเขียน test ตื้น ๆ มาเติมให้ตารางเต็ม
-> ตารางที่เต็มเพราะเติมเอง อันตรายกว่าตารางที่มีช่องว่าง
+Wherever they differ, **say so as a list**; do not stay silent and claim done
+Screenshots taken for checking are temporary files — they go to `_to_delete/` per `temp-file-discipline`
 
 ---
 
-## 7 · เมื่อไหร่แตกหลาย agent
+## 6 · Traceability
 
-**เกณฑ์เดียว: ไฟล์ที่จะแตะต้องไม่ทับกันเลย** — ดูคอลัมน์ "ไฟล์ที่จะแตะ" ในแผน
+A test name must contain the requirement ID, for example `test_lockout_after_5_failures_FR_AUTH_020`
+so one command can search which requirement has no test covering it
 
-| แตกได้ | แตกไม่ได้ |
+Close the job with a traceability table: every requirement → the test that covers it → the latest result
+
+> **For any requirement with no test covering it, say plainly that there is none** — never write a shallow test to fill the table
+> A table that is full because you filled it yourself is more dangerous than a table with gaps
+
+---
+
+## 7 · When to split into multiple agents
+
+**One criterion: the files to be touched must not overlap at all** — see the "files to touch" column in the plan
+
+| Can split | Cannot split |
 |---|---|
-| คนละโมดูล คนละหน้าจอ ไฟล์ไม่ทับกัน | แตะไฟล์เดียวกันแม้แต่ไฟล์เดียว — งานจะทับกัน |
-| agent ตรวจงานแบบ**อ่านอย่างเดียว** วิ่งคู่กับ agent ที่เขียนโค้ด | งานที่ต้องรอผลจากอีกงานอยู่แล้ว |
-| แปลงข้อกำหนดเป็น test หลายโมดูลพร้อมกัน | ตอนยังไม่มีแผน — ต้องมีแผนก่อนถึงจะรู้ว่าแตกตรงไหนได้ |
+| Different modules, different screens, files that do not overlap | Touching the same file, even just one — the work will overwrite each other |
+| A **read-only** checking agent running alongside an agent that writes code | Work that already has to wait for the result of another task |
+| Turning requirements into tests for several modules at once | When there is no plan yet — you need a plan first to know where you can split |
 
-**agent ที่เขียนไฟล์แต่ละตัวต้องได้ worktree ของตัวเอง** ตามสูตรใน `superuser/references/code-extensions.md` หัวข้อ "parallel-split-and-merge" (รวมวิธีจัดการงานที่ยังไม่ commit)
+**Each agent that writes files must get its own worktree**, per the recipe in `superuser/references/code-extensions.md` section "parallel-split-and-merge" (including how to handle uncommitted work)
 
-ทุก agent ที่แตกออกไปต้องได้รับ: รหัสข้อที่รับผิดชอบ · รายการไฟล์ที่แตะได้ ·
-คำสั่งรัน test · และกฎข้อ 3 ทั้งหมด
+Every agent that is split off must receive: the IDs of the requirements it owns · the list of files it may touch ·
+the test command · and all of rule 3
 
-**ห้ามให้ agent ที่แตกออกไปแก้ `BUILD-PLAN.md` เอง** — ให้รายงานกลับ แล้วตัวหลักเขียนไฟล์เดียว
-ไม่งั้นไฟล์สถานะจะพังก่อนโค้ด
+**Never let a split-off agent edit `BUILD-PLAN.md` itself** — have it report back, and the main agent writes the one file
+otherwise the status file breaks before the code does
 
 ---
 
-## 8 · สัญญาณว่าวงรอบกำลังพัง
+## 8 · Signs the loop is breaking
 
-| อาการ | ความหมายจริง |
+| Symptom | What it really means |
 |---|---|
-| test เขียวหมดตั้งแต่รอบแรกโดยไม่เคยแดง | test ไม่ได้ทดสอบอะไร |
-| จำนวน test เพิ่มเร็วกว่าจำนวนข้อกำหนดที่ปิด | กำลังเขียน test ให้ตัวเองผ่าน |
-| commit เดียวแตะ 15 ไฟล์ | รวบหลายข้อ ย้อนกลับไม่ได้แล้วเมื่อพัง |
-| ข้อเดิมวนเกิน 3 รอบ | ข้อกำหนดกำกวม ไม่ใช่โค้ดยาก ให้กลับไปถาม |
-| ไม่มีใครอัปเดต `BUILD-PLAN.md` มา 2 รอบ | สถานะอยู่ในหัว รอบหน้าจะทำซ้ำ |
-| ตัวเลขดีขึ้น แต่คนใช้ไม่ได้ (ข้อความพ้นจอ สีจาง ช่องกรอกตัดคำ) | ลูปกำลังไล่ตัวชี้วัด ไม่ได้แก้ปัญหา → ข้อ 10 เรื่องตัวกัน |
-| ข้อที่เหลือแก้ได้ด้วยการเพิ่มข้อมูลปลอมหรือซ่อนเนื้อหาเท่านั้น | ถึงเพดานของข้อมูลแล้ว → ข้อ 10 เรื่องกฎหยุด |
+| All tests green from the first round without ever being red | The tests test nothing |
+| The number of tests grows faster than the number of requirements closed | Writing tests to make itself pass |
+| One commit touches 15 files | Several requirements bundled, cannot be reverted when it breaks |
+| The same item loops past 3 rounds | The requirement is ambiguous, not the code hard, so go back and ask |
+| Nobody has updated `BUILD-PLAN.md` for 2 rounds | State is in the head, the next round will redo work |
+| Numbers improve but people cannot use it (text off-screen, pale colours, input fields cutting words) | The loop is chasing the metric, not solving the problem → item 10 on guards |
+| The remaining items can be fixed only by adding fake data or hiding content | The ceiling of the data has been reached → item 10 on stop rules |
 
 ---
 
 ## 9 · Anti-patterns
 
-- **โยนข้อกำหนดทั้งฉบับให้รอบเดียว** — สาเหตุอันดับ 1 ที่ได้โค้ดมั่ว
-- **เขียนโค้ดก่อนแล้วค่อยเขียน test ตาม** — ได้ test ที่ยืนยันสิ่งที่เพิ่งเขียน ไม่ใช่สิ่งที่ต้องการ
-- **เดาเมื่อข้อกำหนดกำกวม** — ผิดตั้งแต่ต้น แต่มารู้ตอนส่งมอบ
-- **แก้ test ให้ผ่าน** แล้วรายงานว่าเสร็จ
-- **แตก agent ขนานบนไฟล์เดียวกัน**
-- **เคลมว่า UI ตรง mockup โดยไม่เคยเปิดดู**
-- **ปิดงานโดยไม่มีตารางสืบย้อน** — ไม่มีใครรู้ว่าอะไรยังไม่ได้ทำ
-- **ปลอมข้อมูล ซ่อนเนื้อหา หรือผ่อนเกณฑ์** ให้ตัวเลขดี
+- **Throwing the whole requirements document in one round** — the number 1 cause of messy code
+- **Writing the code first and the tests after** — you get tests that confirm what was just written, not what is needed
+- **Guessing when a requirement is ambiguous** — wrong from the start, but discovered at delivery
+- **Editing a test to make it pass** and then reporting done
+- **Splitting parallel agents on the same file**
+- **Claiming the UI matches the mockup without ever opening it**
+- **Closing the job with no traceability table** — nobody knows what is not yet done
+- **Faking data, hiding content, or relaxing the criteria** to make numbers look good
 
 ---
 
-## 10 · ลูปที่ปรับตามตัวเลข
+## 10 · A loop that adjusts by numbers
 
-ใช้เมื่อลูปไล่ตัวชี้วัด (ตรงกับระบบเดิม · ตรงกับ mockup · คะแนนที่วัดได้) ไม่ได้ปิดทีละข้อกำหนด · สัญญาของลูป ตัวกันการโกงตัวเลข กฎหยุด และตัวอย่างวัดจริง อยู่ใน [`references/metric-loop.md`](references/metric-loop.md) · ต้องเปิดอ่านก่อนเริ่มลูปแบบนี้
+Use it when the loop chases a metric (match the existing system · match the mockup · a measurable score) rather than closing requirement by requirement · the loop's contract, the guards against gaming the numbers, the stop rules, and a real measured example are in [`references/metric-loop.md`](references/metric-loop.md) · it must be opened and read before starting this kind of loop
 
 ---
 
-## 11 · เชื่อมกับ skill อื่น
+## 11 · Connecting to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---|---|
-| ทำข้อกำหนดให้ทดสอบได้ก่อน | `srs-writing` |
-| แปลงข้อกำหนดเป็น test case | `test-case-template` |
-| โครง test กรอบทดสอบ ชื่อ ความครอบคลุม | `testing-standards` |
-| test ระดับเปิดเบราว์เซอร์จริง | `e2e-testing-patterns` |
-| เขียนโค้ดให้เรียบง่ายที่สุดที่ใช้ได้ | `lazy-coding` |
-| แก้เมื่อ test แดงหรือผลไม่ตรง | `targeted-fix` |
-| รูปแบบข้อความ commit | `commit-message-format` |
-| ไฟล์ภาพที่ถ่ายไว้ตรวจ | `temp-file-discipline` |
-| ข้อสอบและตัววัดของลูปที่ไล่ตัวเลข | `test-evidence` ข้อ 5 · `e2e-testing-patterns` (oracle-and-mutation) |
-| บันทึกสถานะข้ามรอบสนทนา | `handoff` |
-| ตารางสรุปสถานะเมื่อจบรอบ | `status-report` |
+| Make requirements testable first | `srs-writing` |
+| Turn requirements into test cases | `test-case-template` |
+| Test skeleton, test framework, names, coverage | `testing-standards` |
+| Tests that open a real browser | `e2e-testing-patterns` |
+| Write the simplest code that works | `lazy-coding` |
+| Fix when a test is red or the result does not match | `targeted-fix` |
+| Commit message format | `commit-message-format` |
+| Screenshot files taken for checking | `temp-file-discipline` |
+| Test sets and metrics for a number-chasing loop | `test-evidence` item 5 · `e2e-testing-patterns` (oracle-and-mutation) |
+| Record state across conversation rounds | `handoff` |
+| Status summary table at the end of a round | `status-report` |
 
 ---
 
-## ตัวย่อ
+## Abbreviations
 
-- **test** — ชุดทดสอบอัตโนมัติ
-- **mockup** — ภาพต้นแบบหน้าจอ
-- **commit** — การบันทึกการเปลี่ยนแปลงลงระบบควบคุมเวอร์ชัน
-- **UI** — User Interface (ส่วนติดต่อผู้ใช้)
+- **test** — an automated test suite
+- **mockup** — a prototype image of a screen
+- **commit** — recording a change into the version control system
+- **UI** — User Interface

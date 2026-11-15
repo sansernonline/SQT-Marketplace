@@ -5,108 +5,108 @@ description: Use when writing a Software Requirements Specification
 
 # SRS Writing
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write every line of wording by `human-writing` — this skill gives the format and structure, while human-writing says how to write so people can follow.
 
-> **กฎข้อเดียวของ skill นี้:** ข้อกำหนดทุกข้อต้องเขียน **test case** จากมันได้ทันที
-> ถ้าเขียนไม่ได้ นั่นไม่ใช่ข้อกำหนด แค่ความหวัง
+> **The one rule of this skill:** every requirement must let you write a **test case** from it right away.
+> If you cannot, it is not a requirement, just a hope.
 
 ---
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เขียนเอกสาร Software Requirements Specification (SRS)
-- รีวิว SRS ที่คนอื่นเขียน ก่อนเซ็นรับ
-- แปลงบันทึกการประชุมเป็นข้อกำหนดที่ใช้งานได้
-- เตรียมเอกสารสำหรับประมูลงานหรือ statement of work (SOW)
+- Writing a Software Requirements Specification (SRS)
+- Reviewing an SRS someone else wrote, before signing off
+- Turning meeting notes into usable requirements
+- Preparing documents for a tender or statement of work (SOW)
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use
 
-| งาน | ใช้ตัวนี้แทน |
+| Task | Use this instead |
 |---|---|
-| user story สำหรับ sprint | `user-story-writer` |
-| บันทึกเหตุผลที่เลือกเทคโนโลยี | `adr-writer` |
-| Functional Specification Document (FSD) ระดับหน้าจอ | `fsd-writing` |
-| หน้าตาไฟล์ Word ที่ส่งออก | `branded-document-design` |
-| รูปในเอกสาร | `software-diagrams` · `diagram-figures` |
+| User stories for a sprint | `user-story-writer` |
+| Record of why a technology was chosen | `adr-writer` |
+| Screen-level Functional Specification Document (FSD) | `fsd-writing` |
+| Look of the exported Word file | `branded-document-design` |
+| Figures in the document | `software-diagrams` · `diagram-figures` |
 
 ---
 
-## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+## 0 · Find an existing format first (every time)
 
-ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+Before using the structure or template in this file, check whether the user, customer, or project already has its own format:
 
-- **ที่ดู:** ข้อกำหนดเรื่องรูปแบบจากผู้ว่าจ้าง: TOR (Terms of Reference) · ขอบเขตงานในสัญญา · แบบฟอร์มของหน่วยงาน · SRS ฉบับก่อนของระบบเดียวกันใน `docs/` · ถ้าไม่มีไฟล์ ถามผู้ใช้ข้อเดียวว่าผู้ว่าจ้างกำหนดแบบเอกสารไหม
-- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
-- **ยังต้องมีทุกแบบ:** ขนาดงานเลือกความลึก: ระบบภายในเล็ก ๆ ตัดหัวข้อที่ไม่มีของ · ระบบที่มีกฎหมายหรือผู้ตรวจรับ ใช้ครบตามที่ TOR สั่ง · รหัสข้อกำหนดที่ทดสอบได้ยังต้องมีทุกแบบ
+- **Where to look:** format requirements from the client: TOR (Terms of Reference) · scope of work in the contract · the agency's forms · the earlier SRS of the same system in `docs/` · if there is no file, ask the user one question: does the client require a document format?
+- **Result:** found → use that format (headings, order, field names, running numbers) and say in the reply which file it came from · not found → use the template in this file as the fallback and say that no earlier format was found.
+- **Every format still needs:** job size sets the depth: a small internal system drops sections that have nothing in them · a system with legal rules or an inspector uses everything the TOR orders · testable requirement IDs are needed in every format.
 
-## 1 · ลำดับการทำงาน
+## 1 · Order of work
 
-1. **เก็บข้อมูลให้ครบก่อนเขียน** — ใครใช้ · ตอนนี้ทำงานยังไง · อะไรคือปัญหา ·
-   สำเร็จแล้ววัดจากอะไร · ระบบอื่นที่ต้องต่อ · ข้อบังคับทางกฎหมาย
-2. **ร่างโครงก่อน** — ใช้ `assets/srs-outline.md` วางหัวข้อให้ครบ ยังไม่ต้องเขียนเนื้อ
-3. **เขียนขอบเขตและผู้เกี่ยวข้องก่อนข้อกำหนด** — ถ้ายังไม่รู้ว่าใครใช้ จะเขียนข้อกำหนดผิดคน
-4. **เขียนข้อกำหนดตามข้อ 3** ทีละข้อ ให้รหัสทันทีที่เขียน
-5. **ทำตารางสอบย้อนกลับ (traceability matrix)** — ทุกข้อกำหนดต้องมีที่มา
-6. **รีวิวตามข้อ 8** แล้วค่อยส่ง
+1. **Collect all the information before writing** — who uses it · how work is done now · what the problem is ·
+   how success is measured · other systems to connect · legal obligations
+2. **Draft the outline first** — use `assets/srs-outline.md` to lay out all the headings, no body text yet
+3. **Write scope and stakeholders before requirements** — if you do not yet know who uses it, you will write requirements for the wrong person
+4. **Write requirements by section 3**, one at a time, and assign the ID as soon as you write it
+5. **Build the traceability matrix** — every requirement needs a source
+6. **Review by section 8** and then send
 
-> ข้อ 5 คนข้ามบ่อยที่สุด แต่เป็นข้อที่ทำให้เอกสารมีค่าจริงตอนมีคำขอเปลี่ยนแปลง
+> Step 5 is the one people skip most, but it is what gives the document real value when a change request arrives
 
 ---
 
-## 2 · โครงเอกสาร
+## 2 · Document structure
 
-อิงตาม ISO/IEC/IEEE 29148 (มาตรฐานสากลสำหรับกระบวนการข้อกำหนด)
-ส่วนฉบับเต็มพร้อมคำใบ้ว่าแต่ละหัวข้อต้องมีอะไรอยู่ใน **`assets/srs-outline.md`**
+Based on ISO/IEC/IEEE 29148 (the international standard for requirements processes).
+The full version, with hints on what each section must contain, is in **`assets/srs-outline.md`**
 
-เอกสารความต้องการฝั่งธุรกิจ (Business Requirements Document — BRD) ที่มักเขียนก่อน SRS ใช้แม่แบบใน [`references/brd-template.md`](references/brd-template.md)
+For the Business Requirements Document (BRD), which is often written before the SRS, use the template in [`references/brd-template.md`](references/brd-template.md)
 
-| # | หัวข้อ | ตอบคำถามว่า | ข้ามได้ไหม |
+| # | Section | Answers the question | Can it be skipped |
 |---|---|---|---|
-| 1 | บทนำ · วัตถุประสงค์ · ขอบเขต · คำนิยาม | เอกสารนี้พูดถึงอะไร ไม่พูดถึงอะไร | ไม่ได้ |
-| 2 | ภาพรวมระบบ · ผู้ใช้ · ข้อจำกัด · ข้อสมมติ | ระบบอยู่ตรงไหนของโลก | ไม่ได้ |
-| 3 | ข้อกำหนดเชิงหน้าที่ (functional requirement) | ระบบต้องทำอะไรได้ | ไม่ได้ |
-| 4 | ข้อกำหนดด้านส่วนต่อประสาน (interface) | ต่อกับระบบอื่นยังไง | ถ้าไม่ต่อกับใครเลย |
-| 5 | ข้อกำหนดที่ไม่ใช่หน้าที่ (non-functional requirement) | ต้องเร็วแค่ไหน ปลอดภัยแค่ไหน | ไม่ได้ |
-| 6 | ข้อมูลและกฎทางธุรกิจ | ข้อมูลหน้าตายังไง กฎอะไรบังคับ | ไม่ได้ |
-| 7 | เกณฑ์การตรวจรับ | ถือว่าเสร็จเมื่อไหร่ | ไม่ได้ |
-| 8 | ตารางสอบย้อนกลับ | ข้อกำหนดนี้มาจากไหน | ไม่ได้ |
-| 9 | ภาคผนวก · ประวัติการแก้ไข | ใครแก้อะไรเมื่อไหร่ | ไม่ได้ |
+| 1 | Introduction · purpose · scope · definitions | What this document covers and does not cover | No |
+| 2 | System overview · users · constraints · assumptions | Where the system sits in the world | No |
+| 3 | Functional requirements | What the system must be able to do | No |
+| 4 | Interface requirements | How it connects to other systems | If it connects to nothing |
+| 5 | Non-functional requirements | How fast, how secure | No |
+| 6 | Data and business rules | What the data looks like, which rules apply | No |
+| 7 | Acceptance criteria | When it counts as done | No |
+| 8 | Traceability matrix | Where this requirement came from | No |
+| 9 | Appendices · revision history | Who changed what, when | No |
 
-**หัวข้อ 1.2 ขอบเขต ต้องมีทั้ง "อยู่ในขอบเขต" และ "ไม่อยู่ในขอบเขต"** —
-ในเอกสารทั้งฉบับ รายการ "ไม่อยู่ในขอบเขต" กันข้อพิพาทได้มากที่สุด
+**Section 1.2 Scope must have both "in scope" and "out of scope"** —
+in the whole document, the "out of scope" list prevents the most disputes
 
-**2 หัวข้อย่อยที่ ISO 29148 มีแต่เรามักลืม** (แนวคิดจาก jam01/SRS-Template ซึ่งไม่ระบุ licence จึงเขียนใหม่ด้วยคำเรา ไม่คัดข้อความ)
+**2 subsections that ISO 29148 has but we often forget** (idea from jam01/SRS-Template, which states no licence, so it is rewritten in our own words, no text copied)
 
-| หัวข้อย่อย | ใส่อะไร | เมื่อไหร่ต้องมี |
+| Subsection | What to put in | When it is needed |
 |---|---|---|
-| 2.6 การจัดสรรข้อกำหนด (apportioning) | ตารางว่าข้อกำหนดแต่ละชุดไปอยู่ release · milestone หรือ subsystem ไหน และข้อไหน **เลื่อนไปรอบหลัง** — ข้อที่ยังไม่รู้ว่าไปไหนให้เขียนว่ายังไม่จัดสรร แล้วตามเป็นงานค้าง | มีมากกว่า 1 release หรือ 1 ทีม · ตรงกับคอลัมน์ `milestone` ของ `spec-to-code-loop` |
-| 3.6 ระบบที่มี AI/ML | 6 ข้อ: โมเดลทำอะไรและวัดผ่านด้วยตัวเลขอะไร · ข้อมูลฝึกมาจากไหน ใครยินยอม เก็บยังไง · รั้วกั้น (ตรวจ input · กรอง output · จำกัด action ที่ทำได้ · ทางถอย) · ความเป็นธรรมและการอธิบายผล · จุดที่คนต้องตรวจก่อนมีผล · การปล่อย เฝ้าดู ฝึกใหม่ และปลดโมเดล | ทุกระบบที่เรียก LLM หรือมีโมเดล — เขียนคู่กับ `llm-engineering` และ `pdpa-compliance` |
+| 2.6 Apportioning of requirements | A table of which release · milestone or subsystem each group of requirements goes to, and which items are **deferred to a later round** — for an item whose destination is not yet known, write "not yet apportioned" and track it as a pending task | More than 1 release or 1 team · matches the `milestone` column of `spec-to-code-loop` |
+| 3.6 Systems with AI/ML | 6 items: what the model does and which number measures a pass · where training data comes from, who consented, how it is stored · guardrails (check input · filter output · limit the actions it can take · fallback) · fairness and explainability · points where a person must check before it takes effect · release, monitoring, retraining, and retiring the model | Every system that calls an LLM or has a model — write it together with `llm-engineering` and `pdpa-compliance` |
 
-**เลือกหัวข้อตามโปรเจกต์ ไม่กรอกครบทุกช่องเพราะแม่แบบมี** — ก่อนเริ่มเขียนให้ประกาศบรรทัดเดียวบนสุดว่าหัวข้อไหน `เขียน` · `ข้าม (เหตุผล)` · `ตัดออก` ตามชุดนี้
+**Choose sections by project, do not fill every slot just because the template has it** — before writing, declare one line at the very top saying which section is `เขียน` (write) · `ข้าม (เหตุผล)` (skip (reason)) · `ตัดออก` (drop), following this set
 
-| โปรเจกต์ | เขียนเพิ่มจากแกน 1 2 3 5 6 7 8 9 | ตัดได้ |
+| Project | Write in addition to core 1 2 3 5 6 7 8 9 | Can drop |
 |---|---|---|
-| เว็บหรือแอปภายในองค์กร ไม่ต่อระบบอื่น | — | 4 interface · 2.6 · 3.6 |
-| ต่อ API หรืออุปกรณ์ภายนอก | 4 interface (ทุกฝั่ง) | 3.6 |
-| หลาย release หรือหลายทีม | 2.6 | 3.6 ถ้าไม่มี AI |
-| มี LLM หรือโมเดล | 3.6 + หมวดความปลอดภัยและข้อมูลส่วนบุคคลใน 5 | — |
-| งานที่มีผู้กำกับดูแล (การเงิน · สุขภาพ · ประกัน) | หมวดการปฏิบัติตามกฎใน 5 แยกเป็นหัวข้อ อ้างกฎหมายพร้อมวันที่ตรวจ | — |
+| Internal web or app, no other systems | — | 4 interface · 2.6 · 3.6 |
+| Connects to an external API or device | 4 interface (both sides) | 3.6 |
+| Multiple releases or teams | 2.6 | 3.6 if no AI |
+| Has an LLM or model | 3.6 + the security and personal-data categories in 5 | — |
+| Regulated work (finance · health · insurance) | The compliance category in 5 as its own section, citing the law with the date checked | — |
 
 ---
 
-## 3 · เขียนข้อกำหนดหนึ่งข้อยังไง
+## 3 · How to write one requirement
 
-### คำบังคับ
+### Mandatory words
 
-| คำ | ความหมาย | ผลทางสัญญา |
+| Word | Meaning | Contract effect |
 |---|---|---|
-| **ต้อง** (shall) | บังคับ | ถ้าไม่มี ถือว่าไม่ผ่านการตรวจรับ |
-| **ควร** (should) | แนะนำ | ไม่มีได้ ถ้ามีเหตุผลบันทึกไว้ |
-| **อาจ** (may) | ทางเลือก | ไม่มีก็ได้ |
+| **ต้อง** (shall) | Mandatory | If missing, fails acceptance |
+| **ควร** (should) | Recommended | May be absent if the reason is recorded |
+| **อาจ** (may) | Optional | May be absent |
 
-**ใช้ "ต้อง" กับ "จะ" ปนกันไม่ได้** — เลือกคำเดียวแล้วใช้ตลอดเล่ม
+**Do not mix "ต้อง" and "จะ" (will)** — pick one word and use it through the whole document
 
-### รูปประโยค
+### Sentence form
 
 ```
 <รหัส> · <ผู้กระทำ> ต้อง <ทำอะไร> <เงื่อนไข/ขีดจำกัดที่วัดได้>
@@ -119,32 +119,32 @@ description: Use when writing a Software Requirements Specification
    เมื่อฐานข้อมูลมีคำสั่งซื้อไม่เกิน 500,000 รายการ
 ```
 
-### กฎเจ็ดข้อ
+### Seven rules
 
-1. **1 ข้อ 1 ความต้องการ** — เจอคำว่า "และ" ให้สงสัยไว้ก่อนว่าควรแยกเป็น 2 ข้อ
-2. **ระบุผู้กระทำเสมอ** เช่น "ระบบ" · "ผู้อนุมัติ" · "งานตามเวลา" ห้ามเขียนประโยคไม่มีประธาน
-3. **ตัวเลขแทนคำคุณศัพท์** — "เร็ว" "เยอะ" "ง่าย" "เสถียร" ต้องแปลงเป็นตัวเลขทุกคำ
-4. **ห้ามใส่วิธีทำ** — ข้อกำหนดบอกว่า *ต้องได้อะไร* ไม่ใช่ *ทำยังไง*
-   (`ต้องเก็บใน Redis` ผิด · `ต้องคืนผลภายใน 200ms` ถูก)
-5. **ห้าม "เป็นต้น" "ฯลฯ" "และ/หรือ"** — ผู้รับเหมาจะตีความแคบสุดเสมอ
-6. **ทดสอบได้** — อ่านแล้วต้องบอกได้ทันทีว่า *จะพิสูจน์ยังไงว่าผ่าน*
-7. **ไม่ขัดกับข้ออื่น** — เขียนเสร็จแล้วไล่หาข้อที่ขัดกันเอง
+1. **1 requirement per item** — when you see the word "and" (และ), suspect it should be split into 2 items
+2. **Always name the actor**, such as "the system" (ระบบ) · "the approver" (ผู้อนุมัติ) · "the scheduled job" (งานตามเวลา); never write a sentence with no subject
+3. **Numbers instead of adjectives** — "fast" "many" "easy" "stable" must each be converted to a number
+4. **Do not state the method** — a requirement says *what must be obtained*, not *how*
+   (`ต้องเก็บใน Redis` is wrong · `ต้องคืนผลภายใน 200ms` is right)
+5. **No "etc." (เป็นต้น, ฯลฯ) and no "and/or" (และ/หรือ)** — the contractor will always read it as narrowly as possible
+6. **Testable** — on reading it you must be able to say at once *how to prove it passes*
+7. **No conflict with other items** — after writing, go through and look for items that contradict each other
 
-### วิธีแปลงคำคลุมเครือ
+### How to convert vague words
 
-| ลูกค้าพูดว่า | ถามกลับว่า | เขียนลงไปว่า |
+| Customer says | Ask back | Write down |
 |---|---|---|
-| "ต้องเร็ว" | เร็วแค่ไหน วัดที่ไหน ตอนมีคนใช้กี่คน | คืนผลภายใน 2 วินาที ที่เปอร์เซ็นไทล์ 95 เมื่อมีผู้ใช้พร้อมกัน 200 คน |
-| "ใช้ง่าย" | ผู้ใช้ใหม่ต้องทำอะไรได้ ในเวลาเท่าไหร่ โดยไม่ต้องอบรม | ผู้ใช้ใหม่สร้างคำสั่งซื้อแรกได้ภายใน 5 นาที โดยไม่ต้องเปิดคู่มือ |
-| "ปลอดภัย" | กันใคร ทำอะไรไม่ได้ | ผู้ใช้สิทธิ์ "ผู้ดู" ต้องเรียก API ที่เปลี่ยนแปลงข้อมูลไม่ได้ และได้รหัส 403 |
-| "รองรับคนเยอะ" | กี่คนพร้อมกัน ช่วงไหนหนักสุด | รองรับผู้ใช้พร้อมกัน 500 คน ในช่วงปิดยอดสิ้นเดือน |
-| "รายงานครบ" | รายงานอะไรบ้าง ใครดู ดูบ่อยแค่ไหน | แจกแจงเป็นข้อ ๆ ข้อละรายงาน |
+| "ต้องเร็ว" (must be fast) | How fast, measured where, with how many users | Return results within 2 seconds at the 95th percentile with 200 concurrent users |
+| "ใช้ง่าย" (easy to use) | What must a new user be able to do, in how long, without training | A new user creates their first order within 5 minutes without opening the manual |
+| "ปลอดภัย" (secure) | Against whom, what must they be unable to do | A user with the "viewer" role must be unable to call an API that changes data, and gets code 403 |
+| "รองรับคนเยอะ" (supports many people) | How many at once, which period is heaviest | Supports 500 concurrent users during month-end closing |
+| "รายงานครบ" (complete reports) | Which reports, who views them, how often | List them item by item, one report per item |
 
 ---
 
-## 4 · รหัสและการสอบย้อนกลับ
+## 4 · IDs and traceability
 
-### ระบบรหัส
+### ID scheme
 
 ```
 FR-<โมดูล>-<เลข 3 หลัก>      ข้อกำหนดเชิงหน้าที่    FR-ORD-010
@@ -153,136 +153,136 @@ BR-<เลข 3 หลัก>              กฎทางธุรกิจ    
 IF-<ระบบปลายทาง>-<เลข>       ส่วนต่อประสาน           IF-LINE-010
 ```
 
-**เว้นเลขทีละ 10** — เพิ่มข้อแทรกทีหลังได้โดยไม่ต้องเรียงใหม่ทั้งเล่ม
+**Number in steps of 10** — you can insert items later without renumbering the whole document
 
-**รหัสที่ออกไปแล้วห้ามนำกลับมาใช้ซ้ำ** ข้อที่ยกเลิกแล้วให้ทำเครื่องหมาย `(ยกเลิก v1.3)`
-ไว้ที่เดิม — ไม่ใช่ลบทิ้ง ไม่งั้นคนที่ถือเอกสารเก่าจะอ่านคนละเรื่องกัน
+**An ID that has been issued must never be reused.** Mark a cancelled item `(ยกเลิก v1.3)` (cancelled v1.3)
+in place — do not delete it, or people holding the old document will read different things
 
-### ตารางสอบย้อนกลับ
+### Traceability table
 
 | รหัส | ที่มา | โมดูล | ความสำคัญ | ทดสอบด้วย | สถานะ |
 |---|---|---|---|---|---|
 | FR-ORD-010 | ประชุม 12 ส.ค. ข้อ 3 | คำสั่งซื้อ | ต้องมี | TC-ORD-001..004 | ตกลงแล้ว |
 | NFR-PERF-010 | สัญญา ข้อ 7.2 | ทั้งระบบ | ต้องมี | TC-PERF-001 | ตกลงแล้ว |
 
-- **ทุกข้อกำหนดต้องมีที่มา** — ข้อที่ไม่มีที่มาคือข้อที่ทีมคิดเอง ต้องไปถามให้ได้คำตอบ
-- **ทุกข้อกำหนดต้องมี test case อย่างน้อย 1 ตัว**
-- ความสำคัญใช้ MoSCoW: ต้องมี (Must) · ควรมี (Should) · มีก็ดี (Could) · ไว้ทีหลัง (Won't)
-  **ถ้า "ต้องมี" เกิน 60% ของทั้งหมด แปลว่ายังไม่ได้จัดลำดับจริง**
+- **Every requirement needs a source** — an item with no source is one the team made up, and you must go ask to get an answer
+- **Every requirement needs at least 1 test case**
+- Priority uses MoSCoW: ต้องมี (Must) · ควรมี (Should) · มีก็ดี (Could) · ไว้ทีหลัง (Won't)
+  **If "ต้องมี" (Must) exceeds 60% of the total, the items have not really been prioritised**
 
-**ตารางกฎธุรกิจ (BR) ใส่คอลัมน์ "ค่าขอบที่ต้องทดสอบ"** — กฎที่มีตัวเลขเขียน 3 ค่า: ต่ำกว่าขอบ · ที่ขอบ · เกินขอบ · และเกณฑ์ยอมรับของ story ใส่ตัวเลขขอบด้วย (เช่น ฿9,999 กับ ฿10,000) เพราะบั๊กที่ฝังไว้ทดสอบ 3 ตัวในงานสอนอยู่ที่ขอบทั้งหมด (ตัวอย่างจากงานนั้น ไม่ใช่เกณฑ์)
+**The business-rule (BR) table gets a column "boundary values to test"** — for a rule with a number, write 3 values: below the boundary · at the boundary · over the boundary · and put the boundary numbers in a story's acceptance criteria too (for example ฿9,999 and ฿10,000), because the 3 bugs planted for testing in the training exercise were all at the boundaries (an example from that exercise, not a criterion)
 
-**สอบย้อนกลับสองทาง** — ตารางข้างบนไล่จากข้อกำหนดไปหาที่มาทางเดียว ปิดท้ายเพิ่มตาราง story | ข้อกำหนดเชิงหน้าที่ (FR) | กฎธุรกิจ (BR) แล้วตั้งกฎผ่านว่า "ไม่ตกหล่น": ทุก story ต้องมี FR หรือ BR รองรับ ข้อที่ไม่มีให้ทำเครื่องหมายแล้วแก้ก่อนส่ง (ตัวอย่างจากงานนั้น: 36 story ครบ 36/36)
+**Two-way traceability** — the table above traces one way, from requirement to source. At the end add a table story | functional requirement (FR) | business rule (BR) and set a pass rule of "nothing dropped": every story must be backed by an FR or BR, and for any that is not, mark it and fix it before sending (example from that exercise: 36 stories, 36/36 covered)
 
 ---
 
-## 5 · ข้อกำหนดที่ไม่ใช่หน้าที่ — หมวดที่ต้องถามทุกครั้ง
+## 5 · Non-functional requirements — categories to ask about every time
 
-หมวดที่ลืมแล้วเจ็บที่สุดคือ **ความสามารถในการดูแลรักษา** และ **การสำรองข้อมูล** —
-ไม่มีใครถามตอนเซ็นสัญญา แต่ทุกคนถามตอนระบบล่ม
+The categories that hurt most when forgotten are **maintainability** and **backup** —
+nobody asks at contract signing, but everyone asks when the system goes down
 
-| หมวด | ต้องถามว่า | ตัวอย่างที่เขียนได้ |
+| Category | Must ask | Example that can be written |
 |---|---|---|
-| ประสิทธิภาพ | ช้าสุดที่ยอมได้เท่าไหร่ วัดที่เปอร์เซ็นไทล์ไหน | หน้ารายการโหลดภายใน 1.5 วิ ที่ p95 |
-| ความจุ | ข้อมูลโตปีละเท่าไหร่ ใช้ไปกี่ปี | รองรับ 2 ล้านรายการใน 3 ปี |
-| ผู้ใช้พร้อมกัน | ช่วงไหนหนักสุด กี่คน | 500 คน ช่วงปิดยอดสิ้นเดือน |
-| ความพร้อมใช้งาน | ปิดปรับปรุงได้ไหม ช่วงไหน | 99.5% ต่อเดือน · ปิดได้คืนวันอาทิตย์ 01:00–03:00 |
-| การสำรองข้อมูล | ย้อนได้ถึงเมื่อไหร่ กู้คืนนานแค่ไหน | สำรองทุกวัน · เก็บ 90 วัน · กู้คืนภายใน 4 ชม. |
-| ความปลอดภัย | สิทธิ์กี่ระดับ ข้อมูลอ่อนไหวอะไรบ้าง · เว็บแอปและ API ใส่ NFR-SEC ตาม `security-gate/references/owasp-contract-clause.md` | 4 บทบาท · เลขบัตรประชาชนเข้ารหัสตอนพัก |
-| การบันทึกร่องรอย | ต้องรู้ว่าใครแก้อะไรเมื่อไหร่ไหม | บันทึกทุกการเปลี่ยนสถานะ เก็บ 2 ปี |
-| ความเข้ากันได้ | เบราว์เซอร์อะไร มือถือไหม | Chrome/Edge 2 รุ่นล่าสุด · จอ ≥ 360px |
-| ภาษา | 2 ภาษาไหม สกุลเงิน เขตเวลา | ไทย/อังกฤษ · Asia/Bangkok · พ.ศ. ในรายงาน |
-| การดูแลรักษา | ใครดูแลต่อ ส่งมอบอะไรบ้าง | ส่งมอบซอร์สโค้ด · คู่มือติดตั้ง · อบรม 2 วัน |
-| กฎหมาย | ข้อบังคับอะไรบ้าง | พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA) |
+| Performance | What is the slowest acceptable, at which percentile | หน้ารายการโหลดภายใน 1.5 วิ ที่ p95 |
+| Capacity | How much data grows per year, how many years it will be used | รองรับ 2 ล้านรายการใน 3 ปี |
+| Concurrent users | Which period is heaviest, how many people | 500 คน ช่วงปิดยอดสิ้นเดือน |
+| Availability | Can it be shut down for maintenance, when | 99.5% ต่อเดือน · ปิดได้คืนวันอาทิตย์ 01:00–03:00 |
+| Backup | How far back can it restore, how long does recovery take | สำรองทุกวัน · เก็บ 90 วัน · กู้คืนภายใน 4 ชม. |
+| Security | How many permission levels, which data is sensitive · for web apps and APIs, put in NFR-SEC per `security-gate/references/owasp-contract-clause.md` | 4 บทบาท · เลขบัตรประชาชนเข้ารหัสตอนพัก |
+| Audit trail | Must we know who changed what, when | บันทึกทุกการเปลี่ยนสถานะ เก็บ 2 ปี |
+| Compatibility | Which browsers, mobile or not | Chrome/Edge 2 รุ่นล่าสุด · จอ ≥ 360px |
+| Language | 2 languages, currency, time zone | ไทย/อังกฤษ · Asia/Bangkok · พ.ศ. ในรายงาน |
+| Maintenance | Who takes over, what is handed over | ส่งมอบซอร์สโค้ด · คู่มือติดตั้ง · อบรม 2 วัน |
+| Legal | Which regulations apply | พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA) |
 
-ตัวเลขทุกตัวต้องมาจาก**ลูกค้า** ไม่ใช่จากคนเขียนเอกสาร
-ถ้าลูกค้าไม่รู้ ให้เสนอตัวเลขแล้ว**บันทึกว่าเป็นข้อสมมติ** ในหัวข้อ 2
+Every number must come from the **customer**, not from the document writer.
+If the customer does not know, propose a number and **record it as an assumption** in section 2
 
-**ข้อเท็จจริงที่ผู้ให้สัมภาษณ์ไม่ได้บอก ห้ามเดาเงียบ ๆ** (เช่น เวลาหรือราคาของบริการ · ส่วนลดซ้อนกันได้ไหม · ค่ารถคิดต่อคันหรือต่อคน) ติดธง "(รอยืนยัน)" ที่ข้อนั้น เขียนสมมติฐานที่ใช้ และใส่เลขคำถามต้นทาง แล้วสรุปเป็นตารางท้ายเอกสาร: คำถาม → สมมติฐาน → กฎธุรกิจที่ใช้ค่านั้น (ตัวอย่างจากงานนั้น: สมมติฐาน 20 ข้อ A1–A20)
+**Facts the interviewee did not state must never be guessed silently** (for example the time or price of a service · whether discounts can stack · whether travel cost is charged per vehicle or per person). Flag that item "(รอยืนยัน)" (awaiting confirmation), write the assumption used, and give the number of the source question, then summarise in a table at the end of the document: question → assumption → business rule that uses that value (example from that exercise: 20 assumptions A1–A20)
 
-**ทุก NFR มีคอลัมน์ "วิธีวัด"** (เช่น `scrollWidth ≤ 375` · คำขอส่งรูปออกจากเครื่อง = 0) และใส่ NFR เรื่อง "ทดสอบได้" ตั้งแต่ขั้นข้อกำหนด: ส่วนที่ใช้ AI ใช้กฎตายตัว (ถามเหมือนเดิมได้คำตอบเดิม) · มีปุ่มรีเซ็ตข้อมูลทดสอบ · ล็อกวัน "วันนี้" ของระบบได้ · ทุกปุ่มมีป้ายชื่อให้เครื่องมือหาเจอ (ข้อนี้บอกเล่าจากงานสอน ไม่ได้วัดเทียบว่าช่วยได้เท่าไหร่)
+**Every NFR has a "how to measure" column** (for example `scrollWidth ≤ 375` · requests sending images off the device = 0) and put NFRs on "testability" in from the requirements stage: the AI part uses fixed rules (asking the same thing gets the same answer) · a button to reset test data · the system's "today" date can be locked · every button has a label so tools can find it (this is reported from the training exercise, not measured against how much it helps)
 
 ---
 
-## 6 · รูปในเอกสาร
+## 6 · Figures in the document
 
-SRS ที่ไม่มีรูปเลย คนอ่านต้องนึกภาพเอง และแต่ละคนนึกไม่เหมือนกัน
-**รูปในตัว SRS ใช้ house style เดียว:**
+An SRS with no figures at all makes readers imagine the picture, and each imagines it differently.
+**Figures in the SRS itself use one house style:**
 
-| รูปอะไร | วาดด้วย |
+| Which figure | Draw with |
 |---|---|
-| ทุกรูปในตัว SRS (ภาพรวม · ผังขั้นตอน · sequence · ER · สถานะ) ไม่ว่าส่งเป็น markdown, .docx หรือ PDF | `diagram-figures` — ไฟล์ภาพคมชัด คุมตำแหน่งเองได้ เก็บไฟล์ต้นทางใน repo ให้ git ตามได้ |
-| รูปด่วนใน README · PR · โน้ตในโค้ด ที่อยู่นอกตัว SRS | `software-diagrams` (Mermaid) |
+| Every figure in the SRS itself (overview · flowchart · sequence · ER · state), whether delivered as markdown, .docx or PDF | `diagram-figures` — sharp image files, placement under your own control, source files kept in the repo so git can track them |
+| Quick figures in a README · PR · code note, outside the SRS itself | `software-diagrams` (Mermaid) |
 
-**ทุกรูปในเอกสารฉบับเดียวต้องใช้ธีมสีชุดเดียวกัน** — ประกาศธีมไว้ที่ต้นเอกสารตาม
-`polished-document-style` หัวข้อ "ธีมของเอกสาร" แล้วทุกเครื่องมืออ่านค่าจากที่เดียวกัน
+**Every figure in one document must use the same colour theme** — declare the theme at the top of the document per
+`polished-document-style` section "ธีมของเอกสาร" (Document theme), and every tool reads values from that one place
 
-รูปขั้นต่ำที่ควรมี:
+Minimum figures to have:
 
-| หัวข้อ | รูป |
+| Section | Figure |
 |---|---|
-| 2 ภาพรวมระบบ | C4 ระดับ 1 — ระบบคุยกับใครบ้าง |
-| 2 ผู้ใช้ | ตารางบทบาทและสิทธิ์ |
-| 3 ข้อกำหนดเชิงหน้าที่ | ผังขั้นตอนงานของกระบวนการหลัก |
-| 3 กระบวนการที่ซับซ้อน | sequence diagram |
-| 6 ข้อมูล | ER diagram + ผังสถานะของเอกสารหลัก |
+| 2 System overview | C4 level 1 — who the system talks to |
+| 2 Users | Table of roles and permissions |
+| 3 Functional requirements | Work-flow chart of the main process |
+| 3 Complex processes | sequence diagram |
+| 6 Data | ER diagram + state diagram of the main document |
 
 ---
 
-## 7 · เอกสารสองภาษา
+## 7 · Bilingual documents
 
-- **เลือกภาษาหลัก 1 ภาษา** แล้วอีกภาษาเป็นวงเล็บหรือคอลัมน์ที่ 2 — ห้ามสลับไปมา
-- **ศัพท์เทคนิคครั้งแรกเขียน ไทย (ชื่อเต็มอังกฤษ: ตัวย่อ)** เช่น ปัญญาประดิษฐ์ (Artificial Intelligence: AI) ตามกฎ "เอกสารภาษาไทย" ใน `spell-out-abbreviations` · ครั้งต่อไปใช้ไทยหรือตัวย่อแบบเดียวทั้งเอกสาร
-- ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ ธุรกิจ
-- **ชื่อฟิลด์ ชื่อ API ชื่อสถานะในฐานข้อมูล ใช้อังกฤษเสมอ** ถึงเอกสารจะเป็นไทย —
-  ไม่งั้นเวลาเขียนโค้ดจะแปลกันคนละแบบ
-- ทำ**อภิธานศัพท์**ในหัวข้อ 1.3 ให้ครบ: คำไทย · คำอังกฤษ · ความหมาย · ชื่อในระบบ
-- ฟอนต์และการจัดหน้าไฟล์ Word ดู `branded-document-design`
+- **Choose 1 main language** and put the other in brackets or in a 2nd column — never switch back and forth
+- **First time a technical term appears, write Thai (full English name: abbreviation)**, for example ปัญญาประดิษฐ์ (Artificial Intelligence: AI), per the rule "เอกสารภาษาไทย" (Thai-language documents) in `spell-out-abbreviations` · afterwards use the Thai or the abbreviation, one way through the document
+- Thai text → `human-writing` `references/thai-grammar.md` section 4, the business register
+- **Field names, API names, and status names in the database are always English** even if the document is Thai —
+  otherwise people will translate them differently when writing code
+- Complete the **glossary** in section 1.3: Thai term · English term · meaning · name in the system
+- For fonts and page layout of the Word file, see `branded-document-design`
 
 ---
 
-## 8 · รีวิวความครบถ้วน
+## 8 · Completeness review
 
-ไล่ checklist ใน [`references/review-checklist.md`](references/review-checklist.md) ให้ครบก่อนส่งทุกครั้ง (ขอบเขต · ข้อกำหนดรายข้อ · ความครบของหมวด · เอกสาร)
-เพราะข้อที่ไม่ผ่านจะกลายเป็นข้อพิพาทตอนตรวจรับ
+Go through the checklist in [`references/review-checklist.md`](references/review-checklist.md) in full before every send (scope · each requirement · category completeness · document)
+because items that fail become disputes at acceptance
 
-**ทดสอบด้วยผู้อ่านใหม่** ต่อจาก checklist: ให้ agent ตัวใหม่ที่ได้เฉพาะไฟล์ SRS ตอบ 8–10 คำถามที่ developer และ QA จะถาม ข้อที่ตอบผิดหรือตอบว่า "ไม่รู้" คือจุดที่ต้องแก้ ยังไม่ผ่านก็ไม่ส่งลูกค้า → [`references/reader-test.md`](references/reader-test.md)
+**Fresh-reader test** after the checklist: have a new agent that gets only the SRS file answer 8–10 questions a developer and QA would ask. An item answered wrong or answered "don't know" is a point to fix. If it has not passed, do not send to the customer → [`references/reader-test.md`](references/reader-test.md)
 
 ---
 
 ## 9 · Anti-patterns
 
-- **คัดลอกบันทึกการประชุมมาวางเป็นข้อกำหนด** — คนละรูปแบบ คนละระดับความละเอียด
-- **"ระบบต้องใช้งานง่าย"** — ไม่มีใครตรวจรับข้อนี้ได้
-- **ใส่หน้าจอที่ออกแบบไว้แล้วลงใน SRS** — ล็อกวิธีทำตั้งแต่ยังไม่รู้ความต้องการครบ
-  (ภาพร่างหน้าจอไปอยู่ใน FSD)
-- **ไม่มีหัวข้อ "ไม่อยู่ในขอบเขต"** — ต้นเหตุอันดับ 1 ของงานเพิ่มที่ไม่ได้เงิน
-- **ทุกข้อเป็น "ต้องมี"** — แปลว่ายังไม่ได้คุยเรื่องลำดับความสำคัญกับลูกค้า
-- **ข้อกำหนดที่ไม่ใช่หน้าที่เขียนรวมเป็นย่อหน้าเดียว** — ต้องแตกเป็นข้อ ๆ มีรหัส
-- **ตัวเลขที่คนเขียนคิดเอง** โดยไม่ได้ถามลูกค้า แล้วไม่บอกว่าเป็นข้อสมมติ
-- **ไม่มีเลขรุ่นและประวัติการแก้ไข** — ไม่มีใครรู้ว่าถือฉบับล่าสุดอยู่หรือเปล่า
-- **ใช้รหัสซ้ำกับข้อที่ยกเลิกไปแล้ว**
-- **ส่งไฟล์ Word หน้าตาเริ่มต้น** — ดู `branded-document-design`
+- **Pasting meeting notes in as requirements** — different form, different level of detail
+- **"The system must be easy to use"** — nobody can accept this item
+- **Putting already-designed screens into the SRS** — locks the method before all requirements are known
+  (screen sketches belong in the FSD)
+- **No "out of scope" section** — the number 1 cause of unpaid extra work
+- **Every item is "Must"** — means priorities have not been discussed with the customer
+- **Non-functional requirements written together as one paragraph** — must be split into items with IDs
+- **Numbers the writer made up** without asking the customer and without saying they are assumptions
+- **No version number and revision history** — nobody knows whether they hold the latest version
+- **Reusing an ID of a cancelled item**
+- **Sending a Word file with the default look** — see `branded-document-design`
 
 ---
 
-## 10 · เชื่อมกับ skill อื่น
+## 10 · Connecting to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---|---|
-| หน้าตาไฟล์ .docx ที่ส่งออก | `branded-document-design` |
-| รูปแบบ markdown ระหว่างร่าง | `polished-document-style` |
-| รูปในเอกสาร (ดูข้อ 6 ว่าเลือกตัวไหน) | `software-diagrams` · `diagram-figures` |
-| ธีมสีของทั้งเอกสาร | `polished-document-style` หัวข้อ "ธีมของเอกสาร" |
-| ลงรายละเอียดระดับที่ developer ลงมือได้ | `fsd-writing` |
-| แตกเป็น user story ตอนเริ่มทำจริง | `user-story-writer` |
-| แปลงข้อกำหนดเป็น test case | `test-case-template` |
-| ตัดสิ่งที่ไม่จำเป็นออกจากเอกสาร | `simplicity-first` |
-| นำเสนอ SRS ให้ผู้บริหาร | `presentation-design` |
+| Look of the exported .docx file | `branded-document-design` |
+| Markdown format while drafting | `polished-document-style` |
+| Figures in the document (see section 6 for which to choose) | `software-diagrams` · `diagram-figures` |
+| Colour theme of the whole document | `polished-document-style` section "ธีมของเอกสาร" (Document theme) |
+| Detail at a level a developer can start work from | `fsd-writing` |
+| Break into user stories when real work starts | `user-story-writer` |
+| Turn requirements into test cases | `test-case-template` |
+| Cut unnecessary things out of the document | `simplicity-first` |
+| Present the SRS to executives | `presentation-design` |
 
 ---
 
-## ตัวย่อ
+## Abbreviations
 
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
+Always write the abbreviation in full the first time, then put the abbreviation in brackets — for example Model Context Protocol (MCP)
+After that you may use the abbreviation. See the skill `spell-out-abbreviations` for details.

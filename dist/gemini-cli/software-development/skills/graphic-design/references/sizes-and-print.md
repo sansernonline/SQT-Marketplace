@@ -1,107 +1,107 @@
-# ขนาดงานโซเชียลและงานพิมพ์
+# Social media sizes and print work
 
-> ระวัง: **ตัวเลขแพลตฟอร์มเปลี่ยนได้** — บันทึกเมื่อ ก.ย. 2569
-> ก่อนส่งงานจริงให้เปิดเอกสารของแพลตฟอร์มยืนยันอีกครั้ง
-> ส่วนตัวเลขงานพิมพ์ (ข้อ 3) เป็นมาตรฐานอุตสาหกรรม ไม่ค่อยเปลี่ยน
+> Caution: **platform numbers can change** — recorded Sep 2569 (Buddhist Era)
+> Before sending real work, open the platform's documents and confirm again
+> The print numbers (section 3) are industry standards and rarely change
 >
-> ข้อ 1–2 เป็นฉบับสำรองสำหรับตอนไม่ได้ติดตั้ง plugin `graphic-design` — ติดตั้งอยู่ → ใช้ `graphic-design:social-formats` (ให้ค้นพื้นที่ปลอดภัยสดจากคู่มือของแพลตฟอร์ม ลิงก์อยู่ใน `social-formats/references/platform-sizes.md`) และถ้าตัวเลขต่างกัน ให้ถือของ plugin นั้น
+> Sections 1–2 are a backup version for when the plugin `graphic-design` is not installed — if it is installed → use `graphic-design:social-formats` (it searches the platform guides live for safe areas, links are in `social-formats/references/platform-sizes.md`), and if the numbers differ, treat the plugin's as correct
 
-## สารบัญ
+## Contents
 
-| # | หัวข้อ |
+| # | Heading |
 |---|---|
 | 1 | [LINE Official Account](#1--line-official-account-line-oa) |
-| 2 | [โซเชียลอื่น](#2--โซเชียลอื่น) |
-| 3 | [งานพิมพ์](#3--งานพิมพ์) |
-| 4 | [ไฟล์ที่ต้องส่งมอบ](#4--ไฟล์ที่ต้องส่งมอบ) |
+| 2 | [Other social platforms](#2--other-social-platforms) |
+| 3 | [Print work](#3--print-work) |
+| 4 | [ไฟล์ที่ต้องส่งมอบ](#4--ไฟล์ที่ต้องส่งมอบ) (files to deliver) |
 
 ---
 
 ## 1 · LINE Official Account (LINE OA)
 
-| ของ | ขนาด | หมายเหตุ |
+| Item | Size | Note |
 |---|---|---|
-| Rich menu ใหญ่ | 2500 × 1686 px | template ใน LINE Official Account Manager แบ่งได้ถึง 6 ช่อง · ถ้าตั้งผ่าน Messaging API กำหนดจุดกดได้สูงสุด 20 จุด |
-| Rich menu เล็ก | 2500 × 843 px | template แบ่งได้ถึง 3 ช่อง · ผ่าน Messaging API สูงสุด 20 จุดเช่นกัน |
-| Rich message | 1040 × 1040 px | สี่เหลี่ยมจัตุรัส |
-| รูปโปรไฟล์ | 640 × 640 px | โดนครอบวงกลม |
-| ภาพพื้นหลังหน้าบัญชี | 1080 × 878 px | ส่วนบนโดนบังด้วยชื่อบัญชี |
+| Large rich menu | 2500 × 1686 px | The template in LINE Official Account Manager splits into up to 6 cells · if set through the Messaging API, up to 20 tap areas can be defined |
+| Small rich menu | 2500 × 843 px | The template splits into up to 3 cells · through the Messaging API also up to 20 tap areas |
+| Rich message | 1040 × 1040 px | Square |
+| Profile picture | 640 × 640 px | Cropped to a circle |
+| Account page background image | 1080 × 878 px | The top part is covered by the account name |
 
-> ตรวจ 2026-10-14: จำนวน 20 จุด และขนาดรูปที่รับ (2500×1686, 2500×843, 1200×810, 1200×405, 800×540, 800×270 · ไฟล์ไม่เกิน 1 MB) มาจากเอกสารรองที่อ้าง Messaging API reference (bottender.js.org, dev.classmethod.jp) เพราะหน้า developers.line.biz/en/reference/messaging-api/#rich-menu-object โหลดเนื้อหาด้วย JavaScript อ่านอัตโนมัติไม่ได้ (รอยืนยัน) กับหน้าทางการก่อนใช้งานจริง
+> Checked 2026-10-14: the figure of 20 tap areas and the accepted image sizes (2500×1686, 2500×843, 1200×810, 1200×405, 800×540, 800×270 · file no more than 1 MB) come from secondary documents that cite the Messaging API reference (bottender.js.org, dev.classmethod.jp), because the page developers.line.biz/en/reference/messaging-api/#rich-menu-object loads its content with JavaScript and cannot be read automatically · (รอยืนยัน) (pending confirmation) against the official page before real use
 
-**ข้อควรระวังของ rich menu** — ผู้ใช้กดด้วยนิ้ว ช่องเล็กสุดจึงควรกว้างไม่ต่ำกว่า
-1/3 ของความกว้าง และข้อความในช่องต้องอ่านออกตอนย่อลงเหลือความกว้างจอมือถือจริง
-(ประมาณ 1/3 ของ 2500 px)
+**Cautions for rich menus** — users tap with a finger, so the smallest cell should be no narrower than
+1/3 of the width, and the text in the cell must stay readable when scaled down to a real phone screen width
+(about 1/3 of 2500 px)
 
 ---
 
-## 2 · โซเชียลอื่น
+## 2 · Other social platforms
 
-| แพลตฟอร์ม | ของ | ขนาด |
+| Platform | Item | Size |
 |---|---|---|
-| TikTok | วิดีโอ · ภาพปก | 1080 × 1920 px (9:16) |
-| Facebook | โพสต์สี่เหลี่ยม | 1080 × 1080 px |
-| Facebook | ภาพลิงก์ | 1200 × 630 px |
-| Facebook | ภาพปกเพจ | 1640 × 856 px |
-| Instagram | ฟีดแนวตั้ง | 1080 × 1350 px (4:5) |
-| Instagram | สตอรี · รีล | 1080 × 1920 px |
-| YouTube | ภาพปกคลิป | 1280 × 720 px |
+| TikTok | Video · cover image | 1080 × 1920 px (9:16) |
+| Facebook | Square post | 1080 × 1080 px |
+| Facebook | Link image | 1200 × 630 px |
+| Facebook | Page cover image | 1640 × 856 px |
+| Instagram | Vertical feed | 1080 × 1350 px (4:5) |
+| Instagram | Story · reel | 1080 × 1920 px |
+| YouTube | Video thumbnail | 1280 × 720 px |
 
-**พื้นที่ปลอดภัยของคลิปแนวตั้ง** — เว้นบน 15% และล่าง 20% ไว้
-เพราะโดนปุ่มและคำบรรยายของแอปทับ
+**Safe area of a vertical clip** — keep the top 15% and bottom 20% clear,
+because the app's buttons and captions cover them
 
-**ภาพลิงก์ 1200 × 630** — ตัวอักษรต้องใหญ่พอให้อ่านออกตอนแสดงที่ความกว้างประมาณ 500 px
+**Link image 1200 × 630** — text must be large enough to read when shown at a width of about 500 px
 
 ---
 
-## 3 · งานพิมพ์
+## 3 · Print work
 
-| เรื่อง | ค่า |
+| Topic | Value |
 |---|---|
-| ความละเอียด | **300 จุดต่อนิ้ว ที่ขนาดจริง** |
-| ระยะตัดตก (bleed) | **3 มม. รอบด้าน** |
-| ระยะปลอดภัยจากขอบตัด | 3–5 มม. |
-| ระบบสี | ใช้ CMYK สำหรับออฟเซ็ต และระบุ Pantone ถ้าสีแบรนด์สำคัญ |
-| ดำสนิทพื้นใหญ่ | C60 M40 Y40 K100 |
-| ดำของตัวอักษรเล็ก | **K100 ล้วน** |
-| เส้นบางสุด | 0.25 pt |
-| ตัวอักษรเล็กสุด | 6 pt (ไทยควร 7 pt ขึ้นไป เพราะสระล่างจะตัน) |
+| Resolution | **300 dots per inch at actual size** |
+| Bleed | **3 mm on all sides** |
+| Safe distance from the trim edge | 3–5 mm |
+| Color system | Use CMYK for offset and specify Pantone if the brand color matters |
+| Rich black on large areas | C60 M40 Y40 K100 |
+| Black for small text | **K100 only** |
+| Thinnest line | 0.25 pt |
+| Smallest text | 6 pt (Thai should be 7 pt and up, because the lower vowels fill in) |
 
-**ผิดบ่อยสุด 3 ข้อ**
+**The 3 most common mistakes**
 
-1. **ย่อ-ขยายแล้วยังคิดว่า 300 จุดต่อนิ้ว** — ภาพ 300 จุดต่อนิ้วที่ 10 ซม.
-   พอขยายเป็น 20 ซม. เหลือ 150 จุดต่อนิ้ว
-2. **ลืมตัดตก** — งานที่ทำพอดีขอบ พอเครื่องตัดเหลื่อม 1 มม. จะเห็นขอบขาว
-3. **ส่งไฟล์ RGB ให้โรงพิมพ์** — สีสดบนจอหลายสีพิมพ์ไม่ออกใน CMYK
-   โดยเฉพาะน้ำเงินสด เขียวนีออน ส้มสด
+1. **Scaling up or down and still thinking it is 300 dots per inch** — an image at 300 dots per inch at 10 cm
+   drops to 150 dots per inch when enlarged to 20 cm
+2. **Forgetting bleed** — work made exactly to the edge shows a white edge when the cutter shifts by 1 mm
+3. **Sending an RGB file to the printer** — many vivid colors on screen cannot be printed in CMYK,
+   especially bright blue, neon green, vivid orange
 
-**ขนาดมาตรฐานไทย**
+**Standard Thai sizes**
 
-| ของ | ขนาดสำเร็จ | ขนาดรวมตัดตก |
+| Item | Finished size | Size with bleed |
 |---|---|---|
-| นามบัตร | 90 × 54 มม. | 96 × 60 มม. |
-| A4 | 210 × 297 มม. | 216 × 303 มม. |
-| A5 | 148 × 210 มม. | 154 × 216 มม. |
-| โปสเตอร์ A3 | 297 × 420 มม. | 303 × 426 มม. |
+| Business card | 90 × 54 mm | 96 × 60 mm |
+| A4 | 210 × 297 mm | 216 × 303 mm |
+| A5 | 148 × 210 mm | 154 × 216 mm |
+| A3 poster | 297 × 420 mm | 303 × 426 mm |
 
 ---
 
 ## 4 · ไฟล์ที่ต้องส่งมอบ
 
-**โลโก้** — ส่งแค่ไฟล์ภาพแบบจุดไม่พอ
+**Logo** — sending only a pixel-based image file is not enough
 
-| ไฟล์ | ใช้ทำอะไร |
+| File | What it is for |
 |---|---|
-| SVG | ต้นฉบับที่ขยายได้ไม่แตก ใช้บนเว็บได้ |
-| PDF | ส่งโรงพิมพ์ |
-| PNG พื้นใส | 64 · 256 · 512 · 1024 · 2048 px · ชุดโลโก้คู่ชื่อเพิ่ม @2x |
-| ICO | ทำจากภาพ raster รวม 16 · 32 · 48 · 256 px ในไฟล์เดียว |
+| SVG | The original that scales without breaking, usable on the web |
+| PDF | Sent to the printer |
+| Transparent PNG | 64 · 256 · 512 · 1024 · 2048 px · the logo + name lockup also adds @2x |
+| ICO | Made from raster images, with 16 · 32 · 48 · 256 px together in one file |
 
-**นี่คือชุดส่งออกชุดเดียว** — `logo-design.md` ข้อ 6 ลิงก์มาที่ตารางนี้ แก้ที่นี่ที่เดียว
+**This is the single export set** — `logo-design.md` step 6 links to this table; edit only here
 
-**แต่ละแบบต้องมี 4 เวอร์ชัน** — สีปกติ · กลับสี (ขาว) · ดำล้วน · ขาวล้วน
+**Each type must have 4 versions** — normal color · inverted (white) · solid black · solid white
 
-**เอกสารกำกับ** — พื้นที่ว่างรอบโลโก้ · ขนาดเล็กสุด (px และ มม.) · สิ่งที่ห้ามทำ
+**Accompanying document** — clear space around the logo · smallest size (px and mm) · what not to do
 
-**บททดสอบว่าส่งครบไหม** — ถ้าคนรับเปิดโฟลเดอร์แล้วต้องถามกลับว่า
-"มีเวอร์ชันขาวไหม" แปลว่ายังไม่ครบ
+**Test for whether the delivery is complete** — if the recipient opens the folder and has to ask back
+"Is there a white version?", it is not complete yet

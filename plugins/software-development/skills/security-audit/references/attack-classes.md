@@ -1,85 +1,85 @@
-# ประเภทการโจมตี — กลุ่มหลัก ของที่มักหลุด และไฟล์ตามสาย
+# Attack classes — main groups, what often slips through, and files by lane
 
-ใช้ตอนสร้าง ledger (เลือก `class` ต่อหน่วย) และตอนประกอบ brief ลูกทีมล่า (วางหัวข้อที่เลือกทั้งก้อน) · เลือกจากขอบเขตที่เจอในขั้นสำรวจ ไม่ใช่เพราะเห็นชื่อไลบรารี · ไม่ใช่ทุกกลุ่มใช้กับทุกระบบ
+Use when building the ledger (pick a `class` per unit) and when assembling the brief for hunting sub-agents (paste the chosen sections whole) · Choose from the scope found in the recon step, not because you saw a library name · Not every group applies to every system
 
-## เลือกไฟล์ตามสาย
+## Pick files by lane
 
-| เจออะไรในขั้นสำรวจ | เปิดไฟล์ |
+| What recon found | Open file |
 |---|---|
-| เว็บแอป · API · login · session · JWT · OAuth · LINE Login · หน้าเว็บที่รัน JavaScript | [`classes-web-auth`](classes-web-auth.md) |
-| ข้อมูลหลายลูกค้าหรือหลายร้านในฐานเดียว · export · backup · ลบข้อมูล · cache · search | [`classes-data-tenant`](classes-data-tenant.md) |
-| เรียก LLM · RAG · AI agent ที่เรียกเครื่องมือ · MCP server หรือ client | [`classes-ai-mcp`](classes-ai-mcp.md) |
-| dependency · CI/CD · Dockerfile · สคริปต์ build · plugin ที่โหลดได้ · ระบบอัปเดต | [`classes-supply-chain`](classes-supply-chain.md) |
-| Terraform · docker-compose · Kubernetes · Helm · ไฟล์ตั้งค่า cloud (IAM · พอร์ต · bucket · การเข้ารหัส · image) | [`infra-checklist`](infra-checklist.md) |
-| webhook (รับหรือส่ง) · คิว · job เบื้องหลัง · gRPC · GraphQL · WebSocket | [`classes-messaging-webhook`](classes-messaging-webhook.md) |
-| LINE OA · LIFF · PromptPay · สลิป · payment gateway ไทย · e-Tax Invoice · เลขบัตรประชาชน | [`classes-thai`](classes-thai.md) |
+| Web app · API · login · session · JWT · OAuth · LINE Login · pages that run JavaScript | [`classes-web-auth`](classes-web-auth.md) |
+| Data of many customers or shops in one database · export · backup · data deletion · cache · search | [`classes-data-tenant`](classes-data-tenant.md) |
+| Calls an LLM · RAG · an AI agent that calls tools · an MCP server or client | [`classes-ai-mcp`](classes-ai-mcp.md) |
+| dependencies · CI/CD · Dockerfile · build scripts · loadable plugins · update system | [`classes-supply-chain`](classes-supply-chain.md) |
+| Terraform · docker-compose · Kubernetes · Helm · cloud config files (IAM · ports · buckets · encryption · images) | [`infra-checklist`](infra-checklist.md) |
+| webhook (incoming or outgoing) · queues · background jobs · gRPC · GraphQL · WebSocket | [`classes-messaging-webhook`](classes-messaging-webhook.md) |
+| LINE OA · LIFF · PromptPay · slips · Thai payment gateways · e-Tax Invoice · national ID numbers | [`classes-thai`](classes-thai.md) |
 
-สายที่ยังไม่มีไฟล์ของตัวเอง ใช้หัวข้อในไฟล์นี้: cloud และ deployment (หัวข้อ 9) · ทรัพยากรหมดหรือระบบล่ม (หัวข้อ 10) · แอปมือถือและ desktop ใช้ `security-gate/references/android.md` ร่วมกับไฟล์ web-auth สำหรับ backend · โค้ด native (C · C++) และไฟล์ไบนารี ส่งต่อ `reverse-engineering`
+Lanes with no file of their own use the sections in this file: cloud and deployment (section 9) · resource exhaustion or outage (section 10) · mobile and desktop apps use `security-gate/references/android.md` together with the web-auth file for the backend · native code (C · C++) and binaries go to `reverse-engineering`
 
-## 1 · injection — input ไปถึงจุดที่ถูกตีความเป็นคำสั่ง
+## 1 · injection — input reaches a point where it is interpreted as a command
 
-- ล่า: SQL ต่อสตริง · คำสั่ง shell · template engine · path ไฟล์ · LDAP · XPath · regex จาก input · HTML ที่ไม่ escape · header ที่มีขึ้นบรรทัดใหม่ · log
-- มักหลุด: ข้อมูลที่เก็บอย่างปลอดภัยแล้ว ถูกโค้ดอีกตัวดึงไปใช้ในที่อันตราย (second-order) · input ที่เป็นชื่อฟิลด์ ชื่อคอลัมน์ ทิศการเรียง ไม่ใช่แค่ค่า · ORM ที่มีช่อง raw (`$queryRawUnsafe` · `FromSqlRaw` · `.extra()`) · ระบบรองที่รับข้อมูลต่อ (search index · ตัวสร้าง PDF · ไฟล์ Excel)
+- Hunt: SQL built by string concatenation · shell commands · template engines · file paths · LDAP · XPath · regex built from input · unescaped HTML · headers containing newlines · logs
+- Often missed: data stored safely and later pulled by other code into a dangerous place (second-order) · input that is a field name, column name, or sort direction, not just a value · an ORM with a raw escape hatch (`$queryRawUnsafe` · `FromSqlRaw` · `.extra()`) · downstream systems that take the data on (search index · PDF generator · Excel file)
 - `class`: `sqli` · `cmdi` · `ssti` · `path-traversal` · `xss-stored` · `xss-reflected` · `header-injection` · `log-injection`
 
-## 2 · access control — ทำได้เกินสิทธิ์ของตัวเอง
+## 2 · access control — doing more than your own permission allows
 
-- ล่า: endpoint ที่ตรวจแค่ว่า login แต่ไม่ตรวจว่ามีสิทธิ์ · ตรวจสิทธิ์ผิดตัว (ตรวจสิทธิ์อ่านแต่ทำการแก้) · ตรวจเจ้าของจาก id ใน body แทน session · ฟิลด์ใน body ที่ทับค่าที่ระบบตั้งใจคุม (`role` · `shopId` · `price`)
-- มักหลุด: ทางคู่ขนานที่ไปถึงผลเดียวกันแต่ตรวจอ่อนกว่า (API รุ่นเก่า · หน้าแอดมิน · batch · export · import) · bulk ที่ตรวจแค่รายการแรก · เปลี่ยน method (`GET` ได้ `DELETE` ไม่ตรวจ) · ทางที่ใช้ตอน error หรือ retry
+- Hunt: an endpoint that checks only that you are logged in but not that you have permission · checking the wrong permission (checks read permission but performs an edit) · checking the owner from an id in the body instead of the session · body fields that overwrite values the system means to control (`role` · `shopId` · `price`)
+- Often missed: parallel paths that reach the same result with weaker checks (old API version · admin page · batch · export · import) · bulk operations that check only the first item · changing the method (`GET` is allowed but `DELETE` is not checked) · paths used on error or retry
 - `class`: `idor` · `missing-authz` · `mass-assignment` · `privilege-escalation` · `authn-bypass`
 
-## 3 · ไฟล์และทรัพยากร
+## 3 · files and resources
 
-- ล่า: path traversal รวมผ่าน symlink และการ encode · เซิร์ฟเวอร์ไปดึง URL ที่ผู้ใช้ส่งมา (SSRF) รวมหลัง redirect · แตก zip แล้วไฟล์ออกนอกโฟลเดอร์ (zip slip) · deserialize ข้อมูลภายนอก · อัปโหลดไฟล์ที่ตรวจแค่นามสกุล · ไฟล์ชั่วคราวที่คนอื่นเดาชื่อได้ · ตรวจแล้วค่อยใช้ห่างกันจนเปลี่ยนได้ระหว่างนั้น
-- มักหลุด: URL สำหรับรับแจ้งเตือนหรือ webhook ที่ผู้ใช้ตั้งเอง · ตัวสร้าง PDF หรือภาพตัวอย่างที่ไปโหลดรูปจาก URL · URL ของ object storage ที่ลงชื่อแล้วแต่ใช้ได้นานหรือกว้างเกิน
+- Hunt: path traversal, including through symlinks and encoding · the server fetching a URL the user sent (SSRF), including after a redirect · extracting a zip so files land outside the folder (zip slip) · deserializing outside data · file uploads checked only by extension · temp files whose names others can guess · check and use far enough apart that the thing can change in between
+- Often missed: notification or webhook URLs the user sets themselves · PDF generators or preview makers that load images from a URL · signed object storage URLs that last too long or are too broad
 - `class`: `ssrf` · `zip-slip` · `unsafe-deserialization` · `upload-type` · `toctou`
 
-## 4 · การเข้ารหัสและค่าลับ
+## 4 · cryptography and secrets
 
-- ล่า: ค่าสุ่มที่ใช้เป็น token มาจากตัวสุ่มที่เดาได้ (`Math.random` · `random.random`) · ค่าลับในโค้ด log ข้อความ error URL หรือ response · ไม่ตรวจ HMAC หรือเทียบแบบเวลาไม่คงที่ · mode เข้ารหัสที่ไม่ตรวจความถูกต้อง · IV คงที่ · รหัสผ่านเก็บด้วย hash เร็ว
-- มักหลุด: ทางที่การเข้ารหัสล้มแล้วโค้ดทำต่อแบบไม่เข้ารหัส · ค่าลับในประวัติ git ที่ลบจากไฟล์แล้ว (ใช้ผล gitleaks)
+- Hunt: random values used as tokens that come from a guessable generator (`Math.random` · `random.random`) · secrets in code, logs, error messages, URLs or responses · HMAC not verified or compared in non-constant time · encryption modes that do not check integrity · fixed IV · passwords stored with a fast hash
+- Often missed: paths where encryption fails and the code carries on unencrypted · secrets in git history that were deleted from the file (use the gitleaks result)
 - `class`: `weak-random` · `secret-exposure` · `signature-bypass` · `weak-crypto` · `password-storage`
 
-## 5 · ตรรกะธุรกิจ — สแกนเนอร์หาไม่เจอ แต่ผลกระทบสูง
+## 5 · business logic — scanners cannot find it, but impact is high
 
-- ล่า: ข้ามขั้นตอน ย้อนขั้น หรือทำขั้นที่จบแล้วซ้ำ · 2 คำขอพร้อมกันได้ผล 2 เท่า (ใช้คูปองซ้ำ · ถอนเงินซ้ำ · ตัดของซ้ำ) · จำนวนติดลบ ศูนย์ ทศนิยม ปัดเศษ หรือตัวเลขที่ส่งเป็นสตริง · หมดอายุตรงวินาทีขอบ · เขตเวลาต่างกันระหว่างส่วนของระบบ
-- มักหลุด: ขั้น 2 ใน 3 ล้มแล้วขั้น 1 ไม่ย้อน · ค่าที่ "ตรวจแล้วตอนเข้า" แต่ถูกเขียนจากทางอื่นที่ไม่ตรวจ · ค่าเริ่มต้นเมื่อ config หาย feature flag ปิด หรือระบบอยู่ระหว่าง migrate
+- Hunt: skipping a step, going back a step, or repeating a finished step · 2 simultaneous requests getting a 2x result (reusing a coupon · withdrawing twice · deducting stock twice) · negative numbers, zero, decimals, rounding, or numbers sent as strings · expiry at the exact boundary second · different time zones between parts of the system
+- Often missed: step 2 of 3 fails and step 1 is not rolled back · a value "checked on entry" but written from another path that does not check · defaults when config is missing, a feature flag is off, or the system is mid-migration
 - `class`: `race-condition` · `workflow-bypass` · `numeric-abuse` · `replay` · `fail-open`
 
-## 6 · ใช้ฟีเจอร์ผิดทาง
+## 6 · using a feature the wrong way
 
-- ล่า: export หรือ backup ที่ได้ข้อมูลเกินสิทธิ์ · import ที่ทับข้อมูลคนอื่นหรือข้าม validation · search filter sort ที่ใช้เดาข้อมูลที่มองไม่เห็น · ข้อความ error เวลา หรือขนาด response ที่ต่างกันจนนับรายชื่อผู้ใช้ได้ · ลิงก์ preview หรือร่างที่เปิดได้กว้างเกิน · cache ที่เก็บหน้าส่วนตัวแล้วเสิร์ฟให้คนอื่น
+- Hunt: export or backup that yields data beyond permission · import that overwrites others' data or skips validation · search, filter, sort used to guess data that is not visible · error messages, timing, or response sizes that differ enough to enumerate users · preview or draft links that open too widely · a cache that stores a private page and serves it to others
 - `class`: `export-scope` · `import-abuse` · `enumeration` · `search-oracle` · `preview-leak`
 
-## 7 · ช่องโหว่ต่อกันเป็นโซ่
+## 7 · vulnerabilities chained together
 
-- ล่า: ของเล็ก 2 อย่างที่แต่ละอย่างไม่ใช่ช่องโหว่ แต่ต่อกันแล้วข้ามขอบเขตได้ · ส่วน A ตรวจแล้วส่งต่อให้ B แต่ B เชื่อมากกว่าที่ A รับประกัน (ตัดความยาว · แปลงชนิด · normalise) · สิทธิ์ที่กว้างขึ้นหลัง refresh token เปลี่ยนบทบาท หรือมอบสิทธิ์ต่อ · กู้คืน ยกเลิก หรือย้อนรุ่น ที่ไม่ตรวจสิทธิ์ปัจจุบัน
-- กติกา: ทุกข้อต่อในโซ่ต้องยืนยันแยกกันได้ ห้ามสมมุติผลขั้นถัดไป · `class`: `chain` + ชื่อปลายทาง เช่น `chain-account-takeover`
+- Hunt: 2 small things that are each not a vulnerability but together cross a boundary · part A checks and passes on to B, but B trusts more than A guarantees (truncating length · type conversion · normalising) · permission that widens after a refresh token changes role, or on delegation · recovery, cancel, or rollback that does not check current permission
+- Rule: every link in the chain must be confirmable separately, never assume the result of the next step · `class`: `chain` + the destination name, such as `chain-account-takeover`
 
-## 8 · หาสิ่งที่ไม่อยู่ในหมวด (wildcard) และของพื้นฐานที่ทุกคนคิดว่ามีคนตรวจแล้ว
+## 8 · find what fits no category (wildcard) and the basics everyone assumes someone checked
 
-**wildcard** — 1 ตัวต่องาน ไม่ได้รับหมวด ให้อ่านโค้ดที่ดูแปลก ครึ่ง ๆ กลาง ๆ หรือชื่อ `temp` `hack` `legacy` · API ที่หน้าเว็บไม่เคยเรียก · route และ header ที่ไม่มีในเอกสาร · ฟีเจอร์ 2 ตัวที่ไม่ได้ออกแบบมาใช้ด้วยกัน · ประวัติ git ที่ถอยการแก้ความปลอดภัย · test ที่ไม่มี (เทียบกรณีที่ dev คิดไว้กับที่ไม่ได้คิด) · คอมเมนต์ที่อธิบายว่าทำไมปลอดภัย ให้ตรวจว่าจริง
+**wildcard** — 1 per job, takes no category: read code that looks odd, half-finished, or named `temp` `hack` `legacy` · APIs the web page never calls · routes and headers not in the docs · 2 features not designed to be used together · git history that rolled back a security fix · tests that are missing (compare the cases the dev thought of with those they did not) · comments explaining why something is safe, check whether it is true
 
-**ของพื้นฐาน** — ตรวจทีละข้อแบบตรงตัว และทุกข้อที่เจอต้องตามเส้นทางจนเห็นผลก่อนเสนอ (cookie ไม่มี `HttpOnly` ต้องดูว่าเก็บอะไร):
+**the basics** — check one by one literally, and every one found must be traced along its path until you see the effect before proposing it (a cookie without `HttpOnly`: look at what it holds):
 
-1. รหัสผ่าน key token ในโค้ด (`password` · `secret` · `apikey` · `Bearer` · `-----BEGIN`) และไฟล์ `.env` `*.pem` `*.key` `credentials.json` ที่ commit
-2. คอมเมนต์ `TODO` `FIXME` `HACK` ที่พูดถึง auth หรือ validate
-3. โหมด debug เปิดได้ใน production ผ่าน env query หรือ header · บัญชีตัวอย่างหรือ seed ที่ใช้ได้จริง
-4. `/debug` `/admin` `/test` `/metrics` `/env` `/.env` `/config` `/swagger` ที่ไม่มีการป้องกัน
-5. `.gitignore` ไม่ครอบไฟล์ลับ ไฟล์อัปโหลด และ config ในเครื่อง
-6. `eval` · `exec` · `child_process` · `Function()` · `vm` · dynamic `import()` ที่รับ input
-7. CORS เปิด `*` คู่กับ credentials หรือสะท้อน Origin กลับโดยไม่ตรวจ
-8. redirect จากพารามิเตอร์ `redirect` `return` `next` `url` `goto` โดยไม่ตรวจปลายทาง
-9. error ใน production ที่ส่ง stack trace path ภายใน หรือ SQL กลับไป
-10. endpoint ที่ยังเป็น HTTP ล้วน
+1. Passwords, keys, tokens in code (`password` · `secret` · `apikey` · `Bearer` · `-----BEGIN`) and committed `.env` `*.pem` `*.key` `credentials.json` files
+2. `TODO` `FIXME` `HACK` comments that mention auth or validation
+3. Debug mode that can be turned on in production through env, query, or header · sample or seed accounts that really work
+4. `/debug` `/admin` `/test` `/metrics` `/env` `/.env` `/config` `/swagger` with no protection
+5. `.gitignore` that does not cover secret files, uploaded files, and local config
+6. `eval` · `exec` · `child_process` · `Function()` · `vm` · dynamic `import()` that takes input
+7. CORS open with `*` together with credentials, or reflecting the Origin back without checking
+8. Redirect from the parameters `redirect` `return` `next` `url` `goto` without checking the destination
+9. Production errors that send back a stack trace, internal paths, or SQL
+10. An endpoint that is still plain HTTP
 
-## 9 · cloud และ deployment (รายการตรวจอยู่ใน [`infra-checklist.md`](infra-checklist.md))
+## 9 · cloud and deployment (the checklist is in [`infra-checklist.md`](infra-checklist.md))
 
-- ล่า: สิทธิ์ของ service account กว้างเกินงาน · แอปเชื่อ header จาก proxy (`X-Forwarded-For` · `X-User-Id`) โดยไม่ตรวจว่ามาจาก proxy จริง · เข้าถึง metadata ของ cloud (`169.254.169.254`) ผ่าน SSRF · bucket หรือ storage ที่เปิดสาธารณะ · ค่าลับที่ workload อื่นอ่านได้ · ระบบตั้งค่าที่ล้มแล้วเปิดทาง
-- ส่วนใหญ่อยู่นอก repo จึงมักเป็น `needs_validation` · IaC ที่อยู่ใน repo (Terraform · compose · Kubernetes YAML) ตรวจได้จริง ใช้ผล `trivy config` เป็น candidate
+- Hunt: service account permissions broader than the job · an app trusting proxy headers (`X-Forwarded-For` · `X-User-Id`) without checking they came from the real proxy · reaching cloud metadata (`169.254.169.254`) through SSRF · public buckets or storage · secrets readable by other workloads · config systems that fail open
+- Mostly outside the repo, so usually `needs_validation` · IaC inside the repo (Terraform · compose · Kubernetes YAML) can really be checked, use the `trivy config` result as a candidate
 
-## 10 · ทรัพยากรหมดหรือระบบล่ม (ยังไม่มีไฟล์ตามสาย)
+## 10 · resource exhaustion or outage (no lane file yet)
 
-- ล่า: regex หรือ parser ที่ช้าแบบทวีคูณกับ input บางแบบ · ไฟล์บีบอัดที่แตกแล้วใหญ่มาก · query ที่ไม่มี limit หรือ N+1 จาก input · งานหนักที่ทำก่อน login · quota ที่นับผิดขอบเขตหรือรีเซ็ตได้ · retry ที่ทวีคูณ · ข้อความเสีย 1 ชิ้นที่ทำคิวค้างทั้งคิว
-- กติกา: ต้องชี้ได้ว่าผู้ใช้คนหนึ่งทำให้คนอื่นใช้ระบบไม่ได้ หรือทำให้เจ้าของเสียเงินค่า cloud หรือ LLM · งานหนักที่กระทบแค่ตัวเองไม่ใช่ finding · ห้ามพิสูจน์ด้วยการยิงระบบจริง ให้วัดในห้องด้วย input เล็กที่เห็นการโตแบบทวีคูณ
+- Hunt: a regex or parser that goes exponentially slow on certain input · compressed files that become huge when extracted · queries with no limit, or N+1 from input · heavy work done before login · quotas counted over the wrong scope or resettable · exponential retries · 1 bad message that stalls the whole queue
+- Rule: you must be able to show that one user makes the system unusable for others, or makes the owner pay cloud or LLM costs · heavy work that affects only themselves is not a finding · never prove it by hitting the live system, measure in the lab with small input that shows exponential growth
 - `class`: `redos` · `decompression-bomb` · `unbounded-query` · `preauth-work` · `quota-bypass` · `poison-message`

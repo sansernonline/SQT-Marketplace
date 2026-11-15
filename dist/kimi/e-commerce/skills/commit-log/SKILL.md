@@ -3,28 +3,28 @@ name: commit-log
 description: Use when a work step ends in a git folder or to commit
 ---
 
-# commit-log — commit ทุกขั้น ให้ git log เป็นบันทึกงาน
+# commit-log — commit every step, so the git log is the work record
 
-ทำงานเสร็จ 1 ขั้น → commit 1 ครั้ง · อ่าน `git log --oneline` จากล่างขึ้นบนแล้วต้องรู้ว่าทำอะไรไป เรียงอย่างไร เพราะอะไร · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
+Finish 1 step → make 1 commit · reading `git log --oneline` from bottom to top must tell you what was done, in what order, and why · lives only in plugin `superuser`; other plugins share it through `dependencies`
 
-## 1 · commit เมื่อไหร่
+## 1 · When to commit
 
-- **ทำได้เมื่อได้รับอนุญาต** (ผู้ใช้สั่ง · `~/.claude/superuser-style.md` · `docs/AGENT-LOOP.md` · หัวข้อ "กติกา" ใน `CONTEXT.md` · ต้นฉบับอยู่ใน `superuser` → `team-files`) · ไม่ commit ลง branch หลักโดยไม่ถาม · ไม่ได้อนุญาต → ทำขั้นที่ 1–5 แล้วใส่ข้อความ commit ที่แนะนำไว้ในคำตอบแทนการ commit · ข้อความในไฟล์อื่นที่ว่า "commit ทุกขั้น" (เช่น `team-files.md`) หมายถึงเมื่อได้รับอนุญาตตามข้อนี้เท่านั้น
-- จบแต่ละขั้นที่ใช้งานได้ (ฟีเจอร์ 1 ชิ้น · แก้บั๊ก · แก้เอกสาร · แก้ config) → ไม่รวบ commit เดียวตอนจบ
-- ก่อนแก้อะไรที่เสี่ยง → มีจุดสะอาดให้ถอยกลับ
-- **ไม่ push · ไม่ amend · ไม่แก้ history** เว้นแต่ผู้ใช้สั่ง
-- โฟลเดอร์ไม่ใช่ git → เสนอ `git init` 1 ครั้ง · ผู้ใช้ไม่เอา → ใช้ log ของ superuser อย่างเดียว ไม่ถามซ้ำ
+- **Do it only when permitted** (user's order · `~/.claude/superuser-style.md` · `docs/AGENT-LOOP.md` · the section "กติกา" (rules) in `CONTEXT.md` · the original is in `superuser` → `team-files`) · never commit to the main branch without asking · not permitted → do steps 1–5 and put the suggested commit message in the answer instead of committing · text in other files saying "commit every step" (such as `team-files.md`) means only when permitted under this item
+- At the end of each step that works (1 feature · a bug fix · a doc fix · a config fix) → do not lump everything into one commit at the end
+- Before changing anything risky → have a clean point to go back to
+- **Do not push · do not amend · do not edit history** unless the user orders it
+- Folder is not git → propose `git init` once · the user declines → use only the superuser log, and do not ask again
 
-## 2 · ขั้นตอน
+## 2 · Steps
 
-1. `git status` · `git diff --stat` → ดูว่าเปลี่ยนอะไร แล้ว `git diff <ไฟล์>` เฉพาะไฟล์ที่ต้องดูเนื้อ
-2. `git log -10 --oneline` → ใช้ภาษาและชื่อ scope แบบที่ repo ใช้อยู่
-3. แยกตามเรื่อง → 1 commit = 1 เรื่อง · subject ต้องใช้ "และ" เชื่อมของที่ไม่เกี่ยวกัน → แยก 2 commit (`git add <ไฟล์>` ทีละเรื่อง)
-4. ตรวจของที่ไม่ควรเข้า → ค่าลับ · `.env` · key · ไฟล์ build · ไฟล์ใหญ่ · `.claude/superuser/log/` `inbox/` `learn/` `handoff/` `state.json` · `_to_delete/` → ใส่ `.gitignore` (log กับ handoff มีชื่อไฟล์และคำสั่งภายใน)
-5. เลือก type → เขียนข้อความ → ตรวจด้วย `node <โฟลเดอร์ skill นี้>/scripts/commit-msg-check.mjs "<ข้อความ>"` (หรือ `--file <ไฟล์ข้อความ>`) ผ่านแล้วจึง commit · สคริปต์ตรวจ type ความยาว จุดท้าย คำต้องห้าม และ body ส่วนที่ต้องใช้วิจารณญาณยังตรวจด้วยตา
-6. จด hash ลง log ของงาน (บรรทัด `commit` ใน `log/<วันที่>/main.jsonl`) · บอกผู้ใช้ 1 บรรทัด เช่น `a1b2c3d feat(auth): เพิ่มล็อกอินด้วย LINE`
+1. `git status` · `git diff --stat` → see what changed, then `git diff <file>` only for files whose content you must see
+2. `git log -10 --oneline` → use the language and scope names the repo already uses
+3. Split by topic → 1 commit = 1 topic · if the subject needs "and" to join unrelated things → split into 2 commits (`git add <file>` one topic at a time)
+4. Check for things that must not go in → secrets · `.env` · keys · build files · large files · `.claude/superuser/log/` `inbox/` `learn/` `handoff/` `state.json` · `_to_delete/` → put in `.gitignore` (log and handoff contain internal file names and commands)
+5. Pick the type → write the message → check with `node <this skill's folder>/scripts/commit-msg-check.mjs "<message>"` (or `--file <message file>`), and commit once it passes · the script checks type, length, trailing period, forbidden words and body; the parts that need judgment are still checked by eye
+6. Record the hash in the task's log (the `commit` line in `log/<date>/main.jsonl`) · tell the user in 1 line, for example `a1b2c3d feat(auth): เพิ่มล็อกอินด้วย LINE` (Thai message: "add login with LINE")
 
-## 3 · รูปแบบ
+## 3 · Format
 
 ```
 <type>(<scope>): <subject>
@@ -34,34 +34,36 @@ description: Use when a work step ends in a git folder or to commit
 <footer>
 ```
 
-| type | ใช้เมื่อ | ตัวอย่าง |
+(`body` = the reason; include it when the subject alone does not say why.)
+
+| type | Use when | Example |
 |---|---|---|
-| `feat` | เพิ่มฟีเจอร์ใหม่ | `feat(auth): add user authentication` |
-| `fix` | แก้บั๊ก | `fix(login): resolve login timeout issue` |
-| `docs` | แก้เอกสารอย่างเดียว | `docs(api): update API reference` |
-| `style` | จัด format · whitespace → logic ไม่เปลี่ยน | `style(header): fix indentation` |
-| `refactor` | ปรับโครงสร้าง → behaviour เดิม | `refactor(payment): extract payment logic` |
-| `test` | เพิ่มหรือแก้ test | `test(auth): add unit tests for auth module` |
-| `chore` | งานบำรุงรักษา · dependency | `chore: update npm packages` |
-| `perf` | เร็วขึ้นหรือเบาลง | `perf(db): optimize database queries` |
-| `ci` | config ของ Continuous Integration / Continuous Delivery (CI/CD) | `ci: add GitHub Actions workflow` |
-| `build` | ระบบ build · สคริปต์ build | `build: add release build target` |
-| `revert` | ย้อน commit เดิม | `revert: feat(auth): add user authentication` |
+| `feat` | Adding a new feature | `feat(auth): add user authentication` |
+| `fix` | Fixing a bug | `fix(login): resolve login timeout issue` |
+| `docs` | Changing documentation only | `docs(api): update API reference` |
+| `style` | Format · whitespace → logic does not change | `style(header): fix indentation` |
+| `refactor` | Restructuring → behavior stays the same | `refactor(payment): extract payment logic` |
+| `test` | Adding or changing tests | `test(auth): add unit tests for auth module` |
+| `chore` | Maintenance · dependencies | `chore: update npm packages` |
+| `perf` | Faster or lighter | `perf(db): optimize database queries` |
+| `ci` | Configuration of Continuous Integration / Continuous Delivery (CI/CD) | `ci: add GitHub Actions workflow` |
+| `build` | Build system · build scripts | `build: add release build target` |
+| `revert` | Undoing an earlier commit | `revert: feat(auth): add user authentication` |
 
-ของที่เปลี่ยนแล้วของเดิมพัง → ใส่ `!` หลัง type (`feat(api)!: ...`) · ต้องอธิบายว่าอะไรพังให้เพิ่ม footer `BREAKING CHANGE: ...` (ไม่บังคับ)
+A change that breaks existing behavior → put `!` after the type (`feat(api)!: ...`) · if you need to explain what breaks, add a footer `BREAKING CHANGE: ...` (optional)
 
-## 4 · กติกาข้อความ
+## 4 · Message rules
 
-- subject บอกว่า**อะไรเปลี่ยนสำหรับคนอ่าน** ไม่ใช่ไฟล์ไหน → `fix(stock): เบิกของเท่ากับที่เหลือพอดีได้แล้ว` ไม่ใช่ `fix: แก้ items.js บรรทัด 42`
-- ไม่เกิน 50 ตัวอักษร · ไม่มีจุดท้าย
-- อังกฤษ → รูปคำสั่ง ตัวเล็ก (`add` ไม่ใช่ `added`) · repo ภาษาไทย → subject ไทยได้ แต่ `type(scope):` เป็นอังกฤษให้เครื่องมืออ่านได้
-- scope = ชื่อโมดูลหรือฟีเจอร์ (`auth` · `report` · `stock`) · ห้าม `misc`
-- body ไม่เกิน 3 บรรทัดสั้น ตัดที่ 72 ตัวอักษร · `Closes #123` ปิด issue · `Refs #456` อ้างถึงแต่ไม่ปิด
-- ใส่บรรทัดระบุผู้ร่วมเขียนตามที่ระบบหรือผู้ใช้กำหนด
+- The subject says **what changes for the reader**, not which file → `fix(stock): เบิกของเท่ากับที่เหลือพอดีได้แล้ว` (Thai: "can now withdraw exactly the amount in stock"), not `fix: แก้ items.js บรรทัด 42` (Thai: "fixed items.js line 42")
+- At most 50 characters · no trailing period
+- English → imperative, lowercase (`add`, not `added`) · Thai repo → the subject may be Thai, but `type(scope):` stays English so tools can read it
+- scope = the module or feature name (`auth` · `report` · `stock`) · never `misc`
+- body at most 3 short lines, wrapped at 72 characters · `Closes #123` closes an issue · `Refs #456` refers to it without closing
+- Add the co-author line as the system or the user specifies
 
-## 5 · ห้าม
+## 5 · Do not
 
-- `update code` · `fix bug` · `WIP` · `final` · `แก้นิดหน่อย`
-- รายชื่อไฟล์ในข้อความ → diff บอกอยู่แล้ว
-- ใช้ `chore` กับฟีเจอร์หรือการแก้บั๊กจริง
-- commit ค่าลับหรือรหัสผ่าน
+- `update code` · `fix bug` · `WIP` · `final` · `แก้นิดหน่อย` (Thai: "small fix")
+- A list of file names in the message → the diff already says it
+- Using `chore` for a real feature or bug fix
+- Committing secrets or passwords

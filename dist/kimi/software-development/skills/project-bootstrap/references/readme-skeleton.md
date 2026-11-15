@@ -1,57 +1,57 @@
-# โครง README และเอกสารคู่ — ฉบับเต็ม
+# README skeleton and companion documents — full version
 
-กฎอยู่ใน `SKILL.md` ข้อ 2 · แม่แบบที่คัดลอกไปใช้ได้อยู่ใน `assets/starter-files.md` · คำสั่งและไฟล์ของแต่ละภาษาอยู่ใน [`readme-by-stack.md`](readme-by-stack.md)
+The rules are in `SKILL.md` item 2 · a copy-ready template is in `assets/starter-files.md` · commands and files for each language are in [`readme-by-stack.md`](readme-by-stack.md)
 
-## 1 · หัวข้อ README เรียงตามลำดับที่คนใหม่ต้องใช้
+## 1 · README sections in the order a newcomer needs them
 
-> ตารางนี้คือค่าสำรองและเกณฑ์ความยาวของชั้น 3 ใน `SKILL.md` ข้อ 2 · หัวข้อจริงของแต่ละโปรเจกต์มาจากผลสำรวจชั้น 2 (อ่านโปรเจกต์ · เอกสารทางการ · README ของโปรเจกต์ประเภทเดียวกัน) · หัวข้อที่โปรเจกต์ประเภทนั้นต้องมีแต่ไม่อยู่ในตาราง ให้เพิ่มได้
+> This table is the fallback and the length criteria for layer 3 in `SKILL.md` item 2 · the real sections of each project come from the layer 2 survey (read the project · official docs · READMEs of projects of the same type) · a section that this type of project needs but that is not in the table may be added.
 
-ลำดับนี้ไล่ตามที่คนเพิ่งมาถึงต้องการ: นี่คืออะไร → ติดตั้ง → รัน → แก้โค้ด → ส่งขึ้นระบบ · คอลัมน์ "แหล่ง" คือจำนวนแหล่งใน 5 แหล่งหลัก (หัวข้อ 4) ที่แนะนำหัวข้อนั้น · แถวที่รวมหลายเรื่องบอกเป็นช่วง · "—" คือไม่มีแหล่งหลักแนะนำ เป็นการตัดสินของ skill นี้
+The order follows what someone who has just arrived needs: what is this → install → run → change code → ship · the "Sources" column is the number of the 5 main sources (item 4) that recommend the section · a row that merges several topics gives a range · "—" means no main source recommends it; it is this skill's own judgment. The section names in the "Section" column are the Thai headings written into the README, so they stay Thai (English gloss in brackets).
 
-| # | หัวข้อ | ตอบคำถามอะไร | มีเมื่อ | ยาวแค่ไหน · ยาวเกินย้ายไปไหน | แหล่ง |
+| # | Section | Question it answers | Present when | How long · where to move it if longer | Sources |
 |:--:|---|---|---|---|:--:|
-| 1 | ชื่อ + ทำอะไรให้ใคร | นี่คืออะไร ใครใช้ | เสมอ | 2–3 บรรทัด · บรรทัดแรกไม่เกิน 120 ตัวอักษร | 5 |
-| 2 | บรรทัดสถานะ | ยังพัฒนาอยู่ไหม ใครเป็นเจ้าของ เอกสารอยู่ไหน | เสมอ | 1 บรรทัด: สถานะ · เจ้าของ · ลิงก์ `docs/README.md` | 2–4 (สถานะ 2 · เจ้าของ 4 · ลิงก์เอกสาร 4) |
-| 3 | ภาพหน้าจอหรือตัวอย่างผล | หน้าตาหรือผลลัพธ์เป็นแบบไหน | มีหน้าจอหรือผลที่ดูได้ | 1 รูป หรือคำสั่งตัวอย่างพร้อมผล | 2 (ตัวอย่างการใช้ 3) |
-| 4 | ต้องมีบนเครื่อง | ต้องลงอะไรก่อน รุ่นไหน | เสมอ | ตาราง: เครื่องมือ · รุ่น · ปักรุ่นไว้ที่ไฟล์ไหน (`.nvmrc` · `global.json`) | 3 |
-| 5 | เริ่มใช้งาน | ติดตั้งและรันยังไง | เสมอ | คำสั่งที่คัดลอกไปวางแล้วรันได้ ไม่เกิน 6 คำสั่ง · เกินนั้นทำเป็น `scripts/setup` | 4 |
-| 6 | ตั้งค่า | ต้องตั้งค่าอะไร มีกี่ environment สลับยังไง | โปรเจกต์อ่านค่าจากภายนอก | ตาราง: ชื่อตัวแปร · ใช้ทำอะไร · ต้องมีไหม · ค่าตัวอย่าง (ไม่ใส่ค่าจริง) · ค่าลับบอกแค่ชื่อและที่ขอ · ไม่มีเลยเขียน "ไม่มีค่าตั้งภายนอก" | 0 · อิง Twelve-Factor |
-| 7 | คำสั่งที่ใช้บ่อย | dev · test · lint · format · build สั่งยังไง | เสมอ | ตาราง 4–8 แถว · test ต้องเป็น 1 คำสั่ง | 2 |
-| 8 | โครงโปรเจกต์ | อะไรอยู่โฟลเดอร์ไหน | เสมอ | ผังชั้นเดียว ไม่เกิน 15 บรรทัด · เกิน → `ARCHITECTURE.md` หัวข้อแผนที่โค้ด | 1 |
-| 9 | สถาปัตยกรรมย่อ | ระบบมีกี่ส่วน คุยกันยังไง | มีมากกว่า 1 ส่วน (หน้าเว็บ + API + ฐานข้อมูล · คิว · บริการภายนอก) | 3–5 บรรทัด + รูป Mermaid ระดับ Context หรือ Container · เต็ม → `ARCHITECTURE.md` | — · อิง matklad และ C4 |
-| 10 | build และไฟล์ที่ได้ | ทำตัวส่งมอบยังไง ได้ไฟล์อะไร อยู่ไหน | มีของที่ต้อง build (เว็บ · แอป · binary · package) | คำสั่ง build ต่อเป้าหมาย + path ของไฟล์ที่ได้ | 2 (นับรวม deploy) |
-| 11 | deploy | ขึ้นระบบที่ไหน ใครกด ผ่าน Continuous Integration (CI) ตัวไหน ย้อนยังไง | ขึ้นระบบได้ | 3–5 บรรทัด · ขั้นเต็ม → `docs/runbook-deploy.md` | 2 (นับรวม build) |
-| 12 | ติดปัญหา | อาการที่เจอบ่อยและวิธีแก้ | เสมอ | ตาราง อาการ · แก้ · เริ่มจากที่เจอเองตอนเขียน README | — |
-| 13 | ร่วมพัฒนา | branch · commit · pull request (PR) · ตรวจอะไรก่อนส่ง | มีคนอื่นแก้โค้ด | 3–5 บรรทัด · ยาว → `CONTRIBUTING.md` | 4 |
-| 14 | ติดต่อและขอความช่วยเหลือ | ติดขัดถามใคร ช่องทางไหน | เสมอ | 1–2 บรรทัด | 4 |
-| 15 | สัญญาอนุญาต | เอาไปใช้ต่อได้แค่ไหน | เสมอ · เป็นหัวข้อสุดท้าย | 1 บรรทัด + ไฟล์ `LICENSE` · งานภายในเขียน "ใช้ภายใน <บริษัท> ห้ามเผยแพร่" | 2 |
+| 1 | ชื่อ + ทำอะไรให้ใคร (name + what it does for whom) | What is this, who uses it | always | 2–3 lines · first line at most 120 characters | 5 |
+| 2 | บรรทัดสถานะ (status line) | Is it still in development, who owns it, where are the docs | always | 1 line: status · owner · link to `docs/README.md` | 2–4 (status 2 · owner 4 · docs link 4) |
+| 3 | ภาพหน้าจอหรือตัวอย่างผล (screenshot or sample output) | What does it look like or produce | there is a screen or output to look at | 1 image, or a sample command with its output | 2 (usage example 3) |
+| 4 | ต้องมีบนเครื่อง (needed on the machine) | What must be installed first, which version | always | table: tool · version · which file pins the version (`.nvmrc` · `global.json`) | 3 |
+| 5 | เริ่มใช้งาน (getting started) | How to install and run | always | commands that can be copied, pasted and run, at most 6 commands · more than that becomes `scripts/setup` | 4 |
+| 6 | ตั้งค่า (configuration) | What must be configured, how many environments, how to switch | the project reads values from outside | table: variable name · what it is for · required or not · sample value (no real values) · for a secret give only the name and where to get it · if there is none, write "ไม่มีค่าตั้งภายนอก" (no external config) | 0 · based on Twelve-Factor |
+| 7 | คำสั่งที่ใช้บ่อย (common commands) | How to run dev · test · lint · format · build | always | table of 4–8 rows · test must be 1 command | 2 |
+| 8 | โครงโปรเจกต์ (project layout) | What is in which folder | always | a one-level tree, at most 15 lines · more → `ARCHITECTURE.md`, code-map section | 1 |
+| 9 | สถาปัตยกรรมย่อ (short architecture) | How many parts the system has, how they talk | more than 1 part (web page + API + database · queue · external service) | 3–5 lines + a Mermaid diagram at Context or Container level · full → `ARCHITECTURE.md` | — · based on matklad and C4 |
+| 10 | build และไฟล์ที่ได้ (build and output files) | How to make the deliverable, what files come out, where | there is something to build (web · app · binary · package) | build command per target + the path of the output file | 2 (counted together with deploy) |
+| 11 | deploy | Where it goes live, who triggers it, through which Continuous Integration (CI), how to roll back | it can be deployed | 3–5 lines · full steps → `docs/runbook-deploy.md` | 2 (counted together with build) |
+| 12 | ติดปัญหา (troubleshooting) | Common symptoms and fixes | always | table of symptom · fix · start from what you hit yourself while writing the README | — |
+| 13 | ร่วมพัฒนา (contributing) | branch · commit · pull request (PR) · what to check before sending | other people change the code | 3–5 lines · longer → `CONTRIBUTING.md` | 4 |
+| 14 | ติดต่อและขอความช่วยเหลือ (contact and help) | Whom to ask when stuck, which channel | always | 1–2 lines | 4 |
+| 15 | สัญญาอนุญาต (license) | How far it can be reused | always · the last section | 1 line + the `LICENSE` file · for internal work write "ใช้ภายใน <บริษัท> ห้ามเผยแพร่" (internal use at <company>, do not distribute) | 2 |
 
-**กฎของโครง**
-- หัวข้อที่ไม่มีของ ตัดทิ้ง ไม่เขียนว่า "ไม่มี" · ยกเว้นหัวข้อ 6 ที่ต้องบอกว่าไม่มีค่าตั้งภายนอก
-- README มีแค่สิ่งที่คนใหม่ต้องใช้ใน 30 นาทีแรก · ของที่ยาวกว่านั้นย้ายไปไฟล์ในหัวข้อ 2 แล้วลิงก์กลับ ไม่ลบทิ้ง
-- ยาวเกิน 100 บรรทัด → ใส่สารบัญใต้บรรทัดสถานะ
-- แก้ README ใน commit เดียวกับโค้ดที่ทำให้คำสั่งหรือค่าตั้งเปลี่ยน
-- แต่ละภาษามีหัวข้อที่ต้องเพิ่ม (flavor ของ Flutter · `user-secrets` ของ .NET) → [`readme-by-stack.md`](readme-by-stack.md) หัวข้อ 3
+**Skeleton rules**
+- Cut a section that has nothing in it; do not write "none" · except section 6, which must say there is no external config.
+- The README holds only what a newcomer needs in the first 30 minutes · anything longer moves to the file named in column 2, with a link back; do not delete it.
+- Longer than 100 lines → put a table of contents under the status line.
+- Edit the README in the same commit as the code that changes a command or setting.
+- Each language has sections to add (Flutter flavors · .NET `user-secrets`) → [`readme-by-stack.md`](readme-by-stack.md) section 3.
 
-## 2 · ของที่แยกไปไฟล์อื่น
+## 2 · What goes into other files
 
-| ไฟล์ | อยู่ที่ | เนื้อหา | สร้างเมื่อ |
+| File | Lives at | Content | Create when |
 |---|---|---|---|
-| `ARCHITECTURE.md` | `<project-name>/` | แผนที่โค้ดสำหรับคนแก้โค้ด (หัวข้อ 3) | ผังโฟลเดอร์ใน README เกิน 15 บรรทัด หรือระบบมีมากกว่า 1 ส่วน |
-| `CHANGELOG.md` | `<project-name>/` | สิ่งที่ผู้ใช้เห็นเปลี่ยนในแต่ละรุ่น | ตามตารางใน `SKILL.md` ข้อ 3 |
-| `CONTRIBUTING.md` | `<project-name>/` | ตั้งเครื่องนักพัฒนา · branch · commit · PR · lint และ test ก่อนส่ง | หัวข้อ 13 ของ README ยาวเกิน 5 บรรทัด |
-| `LICENSE` | `<project-name>/` | ข้อความสัญญาอนุญาตเต็ม | repo เปิดสาธารณะ หรือสัญญาจ้างระบุ |
-| `SECURITY.md` | `<project-name>/` หรือ `.github/` | ช่องทางแจ้งช่องโหว่ · รุ่นที่ยังดูแล | repo เปิดสาธารณะ หรือส่งมอบให้ลูกค้าดูแลต่อ |
-| `CODEOWNERS` | `.github/` | โฟลเดอร์ไหนใครต้องตรวจ PR | มีหลายทีมหรือหลายเจ้าของ |
-| `runbook-deploy.md` | `docs/` ที่ราก | ขั้น build → release → run · ตั้งค่าแต่ละ environment · ย้อนรุ่น | ขั้น deploy ยาวเกิน 5 บรรทัด |
-| `decisions/ADR-NNNN-<slug>.md` | `docs/` ที่ราก | บันทึกการตัดสินใจ (Architecture Decision Record (ADR)) ทีละเรื่อง | ตัดสินใจเรื่องที่ย้อนยาก (`adr-writer`) |
-| Architecture ฉบับส่งมอบ | `docs/` ที่ราก | เอกสารสถาปัตยกรรมแบบ arc42 | ส่งมอบลูกค้าหรือมีผู้ตรวจรับ (`project-doc-set`) |
+| `ARCHITECTURE.md` | `<project-name>/` | a code map for people who change the code (section 3) | the folder tree in the README exceeds 15 lines, or the system has more than 1 part |
+| `CHANGELOG.md` | `<project-name>/` | what users see changing in each version | per the table in `SKILL.md` item 3 |
+| `CONTRIBUTING.md` | `<project-name>/` | developer machine setup · branch · commit · PR · lint and test before sending | README section 13 is longer than 5 lines |
+| `LICENSE` | `<project-name>/` | the full license text | the repo is public, or the contract requires it |
+| `SECURITY.md` | `<project-name>/` or `.github/` | how to report a vulnerability · versions still supported | the repo is public, or delivered to a customer who maintains it |
+| `CODEOWNERS` | `.github/` | which folder whom must review in a PR | there are several teams or owners |
+| `runbook-deploy.md` | `docs/` at the root | build → release → run steps · each environment's setup · rolling back | the deploy steps are longer than 5 lines |
+| `decisions/ADR-NNNN-<slug>.md` | `docs/` at the root | decision records (Architecture Decision Record (ADR)), one per decision | a hard-to-reverse decision is made (`adr-writer`) |
+| Architecture, delivery edition | `docs/` at the root | an arc42-style architecture document | delivering to a customer or there is an acceptance reviewer (`project-doc-set`) |
 
-ที่อยู่ของ `docs/` ตามผังแบบ B ใน `project-doc-set` ข้อ 1 · GitHub หา `CONTRIBUTING` และ `CODEOWNERS` ใน `.github/` ก่อน แล้วราก repo แล้ว `docs/` · เอกสารใน `docs/` แบ่งตามสิ่งที่ผู้อ่านต้องการได้ 4 แบบ (Diátaxis): เรียนรู้ (tutorial) · ทำงานให้เสร็จ (how-to เช่น runbook) · เปิดหาข้อเท็จจริง (reference เช่น ตารางค่าตั้ง API) · เข้าใจเหตุผล (explanation เช่น ARCHITECTURE · ADR)
+The location of `docs/` follows layout B in `project-doc-set` item 1 · GitHub looks for `CONTRIBUTING` and `CODEOWNERS` in `.github/` first, then the repo root, then `docs/` · documents in `docs/` can be split by what the reader needs into 4 kinds (Diátaxis): learning (tutorial) · getting a job done (how-to, e.g. a runbook) · looking up facts (reference, e.g. an API settings table) · understanding the reasons (explanation, e.g. ARCHITECTURE · ADR)
 
 ## 3 · ARCHITECTURE.md
 
-**ค่าเริ่ม: แบบสั้นของ matklad** — ผู้อ่านคือคนที่จะแก้โค้ดและอยากรู้ว่าของที่ทำ X อยู่ตรงไหน
+**Default: matklad's short form** — the reader is someone who will change the code and wants to know where the thing that does X lives.
 
 ```markdown
 # สถาปัตยกรรม
@@ -72,21 +72,21 @@
 <log · error · สิทธิ์ · config · การทดสอบ — ทำแบบไหน อยู่ที่ไหน>
 ```
 
-- สั้น ใส่เฉพาะของที่ไม่ค่อยเปลี่ยน · เอ่ยชื่อไฟล์ โมดูล หรือ type ได้ แต่ไม่ใส่ลิงก์ เพราะลิงก์เสียเมื่อย้ายไฟล์ ให้คนค้นด้วยชื่อแทน
-- ไม่อธิบายทุกโมดูลละเอียด · ไม่ไล่แก้ทุก commit · ทบทวนปีละ 2–3 ครั้ง
-- รูปใช้แค่ 2 ระดับของ C4 คือ Context กับ Container ซึ่ง c4model.com บอกว่าพอสำหรับทีมส่วนใหญ่ · ระดับ Code ไม่วาดเก็บ · วาดด้วย Mermaid ตาม `software-diagrams`
+- Short; include only what rarely changes · you may name a file, module or type, but put no links, because links break when files move; let people search by name instead.
+- Do not explain every module in detail · do not chase every commit · review 2–3 times a year.
+- Diagrams use only the 2 C4 levels, Context and Container, which c4model.com says are enough for most teams · do not draw the Code level · draw with Mermaid per `software-diagrams`.
 
-**ใช้ arc42 แทนเมื่อ** ส่งมอบให้ลูกค้าหรือทีมอื่นดูแลต่อ · มีข้อกำหนดคุณภาพ (ความเร็ว ความปลอดภัย) ที่ต้องพิสูจน์ · ต้องมีผู้ตรวจรับ — เลือกเฉพาะหัวข้อที่มีของจริงจาก 12 หัวข้อ: เป้าหมาย · ข้อจำกัด · ขอบเขตและบริบท · แนวทางแก้ · ส่วนประกอบ · การทำงานขณะรัน · การติดตั้ง (deployment) · แนวคิดที่ตัดผ่าน · การตัดสินใจ (ชี้ไป ADR) · ข้อกำหนดคุณภาพ · ความเสี่ยงและหนี้เทคนิค · อภิธานศัพท์ · ฉบับนี้อยู่ `docs/` ตาม `project-doc-set` ไม่ใช่ในโฟลเดอร์โค้ด
+**Use arc42 instead when** delivering to a customer or another team who will maintain it · there are quality requirements (speed, security) that must be proven · an acceptance reviewer is needed — choose only the sections that have real content from the 12 sections: goals · constraints · scope and context · solution strategy · building blocks · runtime view · deployment · cross-cutting concepts · decisions (point to ADRs) · quality requirements · risks and technical debt · glossary · this edition lives in `docs/` per `project-doc-set`, not in the code folder.
 
-## 4 · แหล่ง (เปิดอ่าน 2026-11-07)
+## 4 · Sources (read 2026-11-07)
 
-5 แหล่งหลักที่ใช้นับคอลัมน์ "แหล่ง" ในหัวข้อ 1:
-- [standard-readme spec](https://github.com/RichardLitt/standard-readme/blob/main/spec.md) — หัวข้อบังคับ · สัญญาอนุญาตอยู่ท้าย · สารบัญเมื่อเกิน 100 บรรทัด
-- [Make a README](https://www.makeareadme.com/) — ยาวดีกว่าสั้น ยาวเกินให้ย้าย ไม่ใช่ลบ
+The 5 main sources used to count the "Sources" column in item 1:
+- [standard-readme spec](https://github.com/RichardLitt/standard-readme/blob/main/spec.md) — required sections · license at the end · table of contents when over 100 lines
+- [Make a README](https://www.makeareadme.com/) — long is better than short; if too long, move, do not delete
 - [GitHub Docs: About READMEs](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes)
-- [Google documentation guide: READMEs](https://google.github.io/styleguide/docguide/READMEs.html) · [Best practices](https://google.github.io/styleguide/docguide/best_practices.html) — แก้เอกสารพร้อมโค้ด
-- [Microsoft Engineering Playbook: Project and Repositories](https://microsoft.github.io/code-with-engineering-playbook/documentation/guidance/project-and-repositories/) — โครงโฟลเดอร์ · compile test build deploy
+- [Google documentation guide: READMEs](https://google.github.io/styleguide/docguide/READMEs.html) · [Best practices](https://google.github.io/styleguide/docguide/best_practices.html) — change docs together with code
+- [Microsoft Engineering Playbook: Project and Repositories](https://microsoft.github.io/code-with-engineering-playbook/documentation/guidance/project-and-repositories/) — folder layout · compile test build deploy
 
-แหล่งประกอบ: [GitHub community health files](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/creating-a-default-community-health-file) · [About code owners](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners) · [matklad: ARCHITECTURE.md](https://matklad.github.io/2021/02/06/ARCHITECTURE.md.html) · [arc42](https://arc42.org/overview) · [C4 model diagrams](https://c4model.com/diagrams) · [Diátaxis](https://diataxis.fr/) · [Twelve-Factor: Config](https://12factor.net/config) · [Build, release, run](https://12factor.net/build-release-run)
+Supporting sources: [GitHub community health files](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/creating-a-default-community-health-file) · [About code owners](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners) · [matklad: ARCHITECTURE.md](https://matklad.github.io/2021/02/06/ARCHITECTURE.md.html) · [arc42](https://arc42.org/overview) · [C4 model diagrams](https://c4model.com/diagrams) · [Diátaxis](https://diataxis.fr/) · [Twelve-Factor: Config](https://12factor.net/config) · [Build, release, run](https://12factor.net/build-release-run)
 
-ลำดับหัวข้อ · เพดาน 15 บรรทัดและ 6 คำสั่ง · ตารางตั้งค่า · หัวข้อติดปัญหาและสถาปัตยกรรมย่อ เป็นการตัดสินของ skill นี้ ไม่ใช่คำของแหล่ง
+The section order · the 15-line and 6-command ceilings · the configuration table · the troubleshooting and short-architecture sections are this skill's own judgment, not the sources' words.

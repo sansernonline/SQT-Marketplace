@@ -1,18 +1,18 @@
-# Helm chart — โครง values ต่อ environment ค่าลับ และคำสั่ง
+# Helm chart: values structure per environment, secrets, and commands
 
-ใช้กับขั้น 4 6 7 8 9 ของ [`SKILL.md`](../SKILL.md) · ตรวจ 2026-10-27 · Helm 4 เป็นรุ่นที่หน้า [helm.sh/docs](https://helm.sh/docs/overview/) ระบุว่าใหม่สุด (4.3.1) · Helm 3 ยังมีเอกสาร (3.22.1)
+Used with steps 4 6 7 8 9 of [`SKILL.md`](../SKILL.md) · checked 2026-10-27 · Helm 4 is the version the [helm.sh/docs](https://helm.sh/docs/overview/) page names as newest (4.3.1) · Helm 3 still has docs (3.22.1)
 
-สารบัญ
+Contents
 
-- [โครง chart](#โครง-chart)
-- [values ต่อ environment](#values-ต่อ-environment)
-- [ค่าลับ](#ค่าลับไม่อยู่ใน-values)
-- [ตรวจแบบไม่แตะ cluster](#ตรวจแบบไม่แตะ-cluster)
-- [ล็อกรุ่น chart](#ล็อกรุ่น-chart)
+- [Chart structure](#chart-structure)
+- [values per environment](#values-per-environment)
+- [Secrets stay out of values](#secrets-stay-out-of-values)
+- [Check without touching the cluster](#check-without-touching-the-cluster)
+- [Pin chart versions](#pin-chart-versions)
 - [deploy](#deploy)
 - [rollback](#rollback)
 
-## โครง chart
+## Chart structure
 
 ```
 deploy/chart/clinic-voice/
@@ -24,10 +24,10 @@ deploy/chart/clinic-voice/
 └─ templates/            # deployment · service · pdb · hpa หรือ scaledobject · networkpolicy · externalsecret
 ```
 
-- แยก 1 chart ต่อระบบที่ปล่อยพร้อมกัน แล้วใช้ค่า `services.<ชื่อ>` ต่อ service · หรือ 1 chart ต่อ service ถ้าปล่อยแยกรุ่น · เลือกอย่างเดียวทั้งโปรเจกต์
-- เขียนค่าเป็น camelCase เริ่มด้วยตัวเล็ก · ใช้ map ตามชื่อแทน list (override ด้วย `--set` ได้) · ใส่คำอธิบายทุกค่า ([Values best practices](https://helm.sh/docs/chart_best_practices/values/))
+- Use 1 chart per system that is released together, with the value `services.<name>` per service · or 1 chart per service if they are released with separate versions · choose one approach for the whole project
+- Write values in camelCase starting with a lowercase letter · use maps keyed by name instead of lists (so `--set` can override) · comment every value ([Values best practices](https://helm.sh/docs/chart_best_practices/values/))
 
-## values ต่อ environment
+## values per environment
 
 ```yaml
 # values.yaml  (ค่าเริ่มต้น)
@@ -46,30 +46,30 @@ api:
   replicas: 3
 ```
 
-template ประกอบ image แบบนี้ เพื่อบังคับว่ามี digest: `{{ .repository }}@{{ required "api.image.digest is required" .digest }}`
+The template builds the image like this to force a digest to be present: `{{ .repository }}@{{ required "api.image.digest is required" .digest }}`
 
-| environment | ต่างจากค่าเริ่มต้นเรื่อง | ห้ามต่าง |
+| environment | Differs from default in | Must not differ |
 |---|---|---|
-| staging | replica น้อย · ทรัพยากรน้อย · โดเมนทดสอบ · GPU 1 ตัว | digest ของ image ต้องเป็นตัวที่จะขึ้น production |
-| production | replica มาก · PDB เข้ม · HPA/KEDA เพดานสูงกว่า | โครง template · ชนิด probe · securityContext |
+| staging | Fewer replicas · fewer resources · test domain · 1 GPU | The image digest must be the one that goes to production |
+| production | More replicas · strict PDB · higher HPA/KEDA ceiling | Template structure · probe types · securityContext |
 
-ลำดับ `-f` มีผล: ไฟล์ขวาสุดชนะ (`-f values.yaml -f values-production.yaml`) ([helm upgrade](https://helm.sh/docs/helm/helm_upgrade/))
+The order of `-f` matters: the rightmost file wins (`-f values.yaml -f values-production.yaml`) ([helm upgrade](https://helm.sh/docs/helm/helm_upgrade/))
 
-## ค่าลับไม่อยู่ใน values
+## Secrets stay out of values
 
-- ห้ามใส่รหัสผ่าน token key ใน `values*.yaml` `--set` หรือ `Chart.yaml` · Secret ของ Kubernetes แค่เข้ารหัส base64 ซึ่ง "provides no additional confidentiality" และเก็บใน etcd แบบไม่เข้ารหัสโดยปริยาย ([Secrets good practices](https://kubernetes.io/docs/concepts/security/secrets-good-practices/))
-- ทางเลือก (เลือกอย่างเดียวต่อโปรเจกต์ และดู [`config-and-secrets`](../../config-and-secrets/SKILL.md) หัวข้อ 6):
+- Never put passwords, tokens or keys in `values*.yaml`, `--set` or `Chart.yaml` · a Kubernetes Secret is only base64-encoded, which "provides no additional confidentiality", and is stored unencrypted in etcd by default ([Secrets good practices](https://kubernetes.io/docs/concepts/security/secrets-good-practices/))
+- Options (choose one per project, and see [`config-and-secrets`](../../config-and-secrets/SKILL.md) item 6):
 
-| ทาง | เหมาะเมื่อ | ข้อควรรู้ (ตรวจ 2026-10-27) |
+| Way | Suits when | Good to know (checked 2026-10-27) |
 |---|---|---|
-| External Secrets Operator | มี vault หรือ secret manager ของ cloud อยู่แล้ว | `SecretStore` เก็บการเชื่อมต่อ · `ExternalSecret` บอกว่าดึงค่าไหน แล้วสร้าง Secret ให้และอัปเดตเมื่อต้นทางเปลี่ยน ([ESO](https://external-secrets.io/latest/introduction/overview/)) |
-| Sealed Secrets | ไม่มี vault ทีมเล็ก อยากเก็บค่าที่เข้ารหัสใน git | `kubeseal` เข้ารหัส เฉพาะ controller ใน cluster นั้นถอดได้ · ต้องสำรอง key ของ controller ไม่งั้นกู้ไม่ได้ · key หมุนทุก 30 วันโดยปริยาย แต่ไม่แทนการเปลี่ยนรหัสจริง ([sealed-secrets](https://github.com/bitnami-labs/sealed-secrets)) |
-| Secrets Store CSI Driver | ไม่อยากให้ค่าลับเป็น Secret ใน cluster | mount จาก store ภายนอกเป็น volume เฉพาะ pod ที่อนุญาต ([Secrets good practices](https://kubernetes.io/docs/concepts/security/secrets-good-practices/)) |
+| External Secrets Operator | You already have a vault or a cloud secret manager | `SecretStore` holds the connection · `ExternalSecret` says which value to pull, then creates the Secret and updates it when the source changes ([ESO](https://external-secrets.io/latest/introduction/overview/)) |
+| Sealed Secrets | No vault, a small team, want encrypted values kept in git | `kubeseal` encrypts; only the controller in that cluster can decrypt · you must back up the controller's key or you cannot recover · the key rotates every 30 days by default, but that does not replace really changing the password ([sealed-secrets](https://github.com/bitnami-labs/sealed-secrets)) |
+| Secrets Store CSI Driver | You do not want secrets to be Secrets in the cluster | Mounts from an external store as a volume only for allowed pods ([Secrets good practices](https://kubernetes.io/docs/concepts/security/secrets-good-practices/)) |
 
-- chart ของเราสร้างแค่ `ExternalSecret` หรือ `SealedSecret` และให้ pod อ้างชื่อ Secret ผ่าน `secretKeyRef` · ค่าจริงไม่ผ่านมือ agent
-- ให้ RBAC อ่าน Secret เฉพาะชื่อที่ต้องใช้ (`resourceNames`) · สิทธิ์ `list` Secret เท่ากับอ่านค่าได้ทั้งหมด
+- Our chart creates only an `ExternalSecret` or `SealedSecret` and lets pods reference the Secret name through `secretKeyRef` · the real values never pass through the agent's hands
+- Let RBAC read Secrets only by the names needed (`resourceNames`) · the `list` permission on Secrets is the same as being able to read all values
 
-## ตรวจแบบไม่แตะ cluster
+## Check without touching the cluster
 
 ```bash
 helm lint deploy/chart/clinic-voice --strict -f deploy/chart/clinic-voice/values-production.yaml
@@ -80,21 +80,21 @@ helm template clinic deploy/chart/clinic-voice \
       -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'
 ```
 
-- `helm lint --strict` ทำให้ warning ล้มด้วย · ERROR คือ chart ติดตั้งไม่ได้ ([helm lint](https://helm.sh/docs/helm/helm_lint/))
-- `kubeconform`: `-strict` ปฏิเสธ field ที่ไม่มีใน schema · `-kubernetes-version` ค่าเริ่มต้นคือ `master` จึงต้องระบุให้ตรง cluster · `-schema-location default` ต้องใส่คู่กับ catalog ของ CRD ไม่งั้นชนิดในตัวหาไม่เจอ · CRD ที่ไม่มีใน catalog (ScaledObject มีอยู่ใน catalog ของ datreeio ตรวจ 2026-10-27) ใช้ `-ignore-missing-schemas` แล้วจดไว้ ([kubeconform](https://github.com/yannh/kubeconform))
-- รัน lint+template ทั้ง 2 ไฟล์ values (staging และ production) ไม่ใช่แค่ไฟล์เดียว
-- ตรวจ policy เพิ่มด้วยเครื่องมือของทีมถ้ามี (ยังไม่ได้ตรวจ ว่าทีมเลือกตัวไหน)
+- `helm lint --strict` makes warnings fail too · ERROR means the chart cannot be installed ([helm lint](https://helm.sh/docs/helm/helm_lint/))
+- `kubeconform`: `-strict` rejects fields not in the schema · the default of `-kubernetes-version` is `master`, so set it to match the cluster · `-schema-location default` must be paired with the CRD catalog, otherwise built-in types are not found · for a CRD not in the catalog (ScaledObject is in the datreeio catalog, checked 2026-10-27) use `-ignore-missing-schemas` and note it ([kubeconform](https://github.com/yannh/kubeconform))
+- Run lint+template on both values files (staging and production), not just one
+- Also check policy with the team's tool if there is one (`ยังไม่ได้ตรวจ` (not yet checked) which one the team chose)
 
-## ล็อกรุ่น chart
+## Pin chart versions
 
-- chart ที่ติดตั้งจาก registry ระบุ `--version` เสมอ (ถ้าไม่ระบุใช้รุ่นล่าสุด) ([helm upgrade](https://helm.sh/docs/helm/helm_upgrade/))
-- chart แบบ OCI: `helm upgrade --install <release> oci://<registry>/<repo>/<chart> --version <x.y.z>` · ล็อกด้วย digest ได้โดยต่อ `@sha256:<digest>` ท้าย URL และเอกสารว่า "more secure than a tag because digests are immutable" ([Registries](https://helm.sh/docs/topics/registries/) · หน้านั้นบอกว่ายังไม่ปรับให้ตรง Helm 4)
-- chart ภายนอก (ingress controller · KEDA · GPU Operator) ล็อก `--version` ใน pipeline และอัปเดตผ่าน PR
-- ลงลายเซ็นได้ด้วย provenance: เทียบ chart กับไฟล์ provenance เพื่อยืนยันว่าไม่ถูกแก้และรู้ว่าใครเซ็น ([Provenance](https://helm.sh/docs/topics/provenance/)) · ใช้เมื่อ chart มาจากภายนอกทีม
+- For a chart installed from a registry, always give `--version` (if omitted, the latest is used) ([helm upgrade](https://helm.sh/docs/helm/helm_upgrade/))
+- OCI chart: `helm upgrade --install <release> oci://<registry>/<repo>/<chart> --version <x.y.z>` · you can pin by digest by appending `@sha256:<digest>` to the URL, and the docs say "more secure than a tag because digests are immutable" ([Registries](https://helm.sh/docs/topics/registries/) · that page says it has not yet been updated for Helm 4)
+- External charts (ingress controller · KEDA · GPU Operator): pin `--version` in the pipeline and update through a PR
+- You can sign with provenance: compare the chart against the provenance file to confirm it was not altered and to know who signed ([Provenance](https://helm.sh/docs/topics/provenance/)) · use it when the chart comes from outside the team
 
 ## deploy
 
-Helm 3 (`--atomic` = rollback เมื่อพลาด และเปิด `--wait` ให้เอง ([Helm 3 upgrade](https://helm.sh/docs/v3/helm/helm_upgrade/))):
+Helm 3 (`--atomic` = roll back on failure, and turns on `--wait` by itself ([Helm 3 upgrade](https://helm.sh/docs/v3/helm/helm_upgrade/))):
 
 ```bash
 helm upgrade --install clinic deploy/chart/clinic-voice \
@@ -103,11 +103,11 @@ helm upgrade --install clinic deploy/chart/clinic-voice \
   --atomic --timeout 10m
 ```
 
-Helm 4: หน้า [Helm 4.3.1 upgrade](https://helm.sh/docs/helm/helm_upgrade/) (ตรวจ 2026-10-27) ไม่แสดงธง `--atomic` แสดงแต่ `--rollback-on-failure` ซึ่งเอกสารบอกว่าตั้ง `--wait` เป็น `watcher` เมื่อใช้ · ที่ว่า `--atomic` ยังรับอยู่แต่ deprecated มาจาก source ([upgrade.go](https://raw.githubusercontent.com/helm/helm/main/pkg/cmd/upgrade.go) ตรวจ 2026-10-27) ไม่ใช่หน้าเอกสาร จึงใน Helm 4 ให้ใช้ `--rollback-on-failure` เท่านั้น · ใช้ `helm version` ดูรุ่นของเครื่อง build แล้วเลือกธงให้ตรง
+Helm 4: the [Helm 4.3.1 upgrade](https://helm.sh/docs/helm/helm_upgrade/) page (checked 2026-10-27) does not show the `--atomic` flag; it shows only `--rollback-on-failure`, which the docs say sets `--wait` to `watcher` when used · the claim that `--atomic` is still accepted but deprecated comes from the source ([upgrade.go](https://raw.githubusercontent.com/helm/helm/main/pkg/cmd/upgrade.go) checked 2026-10-27), not from a docs page, so in Helm 4 use only `--rollback-on-failure` · use `helm version` to see the build machine's version and pick the matching flag
 
-- `--timeout` ค่าเริ่มต้น 5 นาที ต่อ 1 การทำงาน (เช่น hook job) · workload GPU ที่ต้องดึง image ใหญ่และโหลดโมเดลต้องตั้งยาวกว่านั้น ค่าจริง `(ยังไม่ได้วัด)`
-- `--cleanup-on-fail` ลบ resource ใหม่ที่เกิดจาก upgrade ที่ล้มเหลว
-- `--install` สร้าง release ถ้ายังไม่มี มิฉะนั้น upgrade
+- `--timeout` defaults to 5 minutes per operation (for example a hook job) · a GPU workload that must pull a big image and load a model needs a longer value; the real value is `(ยังไม่ได้วัด)` (not yet measured)
+- `--cleanup-on-fail` deletes new resources created by a failed upgrade
+- `--install` creates the release if it does not exist, otherwise upgrades
 
 ## rollback
 
@@ -116,4 +116,4 @@ helm history clinic -n clinic-production
 helm rollback clinic <revision> -n clinic-production --wait
 ```
 
-ไม่ระบุ revision (หรือ 0) = กลับรุ่นก่อนหน้า · `--wait` รอจน resource พร้อม ([helm rollback](https://helm.sh/docs/helm/helm_rollback/)) · rollback ย้อนได้เฉพาะสิ่งที่ chart คุม: migration ฐานข้อมูลและข้อความที่เข้า Kafka แล้วไม่ย้อนตาม ดู [`cicd-and-release`](../../cicd-and-release/SKILL.md) หัวข้อ 7 และ 9
+No revision (or 0) = go back to the previous version · `--wait` waits until resources are ready ([helm rollback](https://helm.sh/docs/helm/helm_rollback/)) · rollback reverses only what the chart controls: database migrations and messages already in Kafka are not reversed; see [`cicd-and-release`](../../cicd-and-release/SKILL.md) items 7 and 9

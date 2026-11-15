@@ -1,18 +1,18 @@
-# ขยาย worker ตามงานค้างในคิวด้วย KEDA (Kafka consumer lag)
+# Scale workers by queue backlog with KEDA (Kafka consumer lag)
 
-ใช้กับขั้น 3 ข้อย่อย "ขยายตามคิว" ของ [`SKILL.md`](../SKILL.md) · แหล่งทั้งหมดมาจาก keda.sh ตรวจ 2026-10-27 (KEDA 2.21 เป็นรุ่นล่าสุดที่หน้าเอกสารระบุ) · ฝั่ง Kafka เอง (partition · consumer group · commit offset) ดู [`kafka-streaming`](../../kafka-streaming/SKILL.md)
+Used with step 3, sub-item "ขยายตามคิว" (scale by queue), of [`SKILL.md`](../SKILL.md) · all sources are from keda.sh, checked 2026-10-27 (KEDA 2.21 is the latest version the docs page names) · for Kafka itself (partitions · consumer group · offset commit) see [`kafka-streaming`](../../kafka-streaming/SKILL.md)
 
-## KEDA ต่างจาก HPA อย่างไร
+## How KEDA differs from HPA
 
-| เรื่อง | HPA ธรรมดา (`manifest-checklist.md`) | KEDA |
+| Topic | Plain HPA (`manifest-checklist.md`) | KEDA |
 |---|---|---|
-| ดูอะไร | CPU หรือ memory ของ pod | งานค้างจากแหล่งข้างนอก เช่น consumer lag ของ Kafka |
-| ลงมาเหลือ 0 pod | ไม่ได้ | ได้ เมื่อไม่ใช้ trigger แบบ CPU หรือ memory |
-| ใครตัดสินจำนวน pod | HPA controller | KEDA สร้างและดูแล HPA ให้ · KEDA คุมช่วง 0↔1 ส่วน HPA คุมช่วง 1↔N |
+| What it watches | CPU or memory of the pod | Backlog from an outside source, such as Kafka consumer lag |
+| Scale down to 0 pods | Cannot | Can, when no CPU or memory trigger is used |
+| Who decides the pod count | The HPA controller | KEDA creates and manages an HPA for you · KEDA controls the 0↔1 range and HPA controls the 1↔N range |
 
-เหตุผลที่ต้องใช้: worker ที่ประมวลผลงานค้างอาจ CPU ต่ำ แต่คิวยาวเป็นหมื่น HPA แบบ CPU จะไม่ขยาย ([Concepts](https://keda.sh/docs/latest/concepts/) · [Scaling Deployments](https://keda.sh/docs/latest/concepts/scaling-deployments/))
+Why you need it: a worker processing a backlog may have low CPU while the queue is tens of thousands long, and a CPU-based HPA will not scale ([Concepts](https://keda.sh/docs/latest/concepts/) · [Scaling Deployments](https://keda.sh/docs/latest/concepts/scaling-deployments/))
 
-ติดตั้ง (ผู้ดู cluster เป็นคนทำ ไม่ใช่ agent เอง) ([Deploy](https://keda.sh/docs/latest/deploy/)):
+Install (done by the cluster operator, not by the agent itself) ([Deploy](https://keda.sh/docs/latest/deploy/)):
 
 ```bash
 helm repo add kedacore https://kedacore.github.io/charts
@@ -20,11 +20,11 @@ helm repo update
 helm install keda kedacore/keda --namespace keda --create-namespace   # ล็อก --version ตามขั้น 4
 ```
 
-หน้าเอกสารบอกว่า KEDA 2.21 ทดสอบกับ Kubernetes 1.34–1.36 · เทียบกับรุ่น cluster ของโปรเจกต์ก่อนติดตั้ง
+The docs page says KEDA 2.21 was tested with Kubernetes 1.34–1.36 · compare with the project's cluster version before installing
 
-## ตัวอย่าง: worker ของ Deep Research Agent
+## Example: Deep Research Agent worker
 
-โจทย์: งานค้นข้อมูลเข้า topic `research-jobs` (12 partition) · worker อ่านด้วย consumer group `research-workers` · ไม่มีงาน = ไม่ต้องมี worker
+Problem: research jobs arrive on topic `research-jobs` (12 partitions) · workers read with consumer group `research-workers` · no jobs = no worker needed
 
 ```yaml
 apiVersion: keda.sh/v1alpha1
@@ -49,25 +49,25 @@ spec:
         limitToPartitionsWithLag: "true"
 ```
 
-| ช่อง | ความหมายและค่าเริ่มต้น ([Kafka scaler](https://keda.sh/docs/latest/scalers/apache-kafka/) · [ScaledObject spec](https://keda.sh/docs/latest/reference/scaledobject-spec/)) |
+| Field | Meaning and default ([Kafka scaler](https://keda.sh/docs/latest/scalers/apache-kafka/) · [ScaledObject spec](https://keda.sh/docs/latest/reference/scaledobject-spec/)) |
 |---|---|
-| `lagThreshold` | lag รวมทุก partition ที่ต่อ 1 replica · ค่าเริ่มต้น 10 · ตัวอย่างตั้ง 5 เพราะ 1 งานค้นหนักและนาน (ค่าจริงต้องวัด `(ยังไม่ได้วัด)`) |
-| `activationLagThreshold` | lag ที่ปลุกจาก 0 · ค่าเริ่มต้น 0 |
-| `limitToPartitionsWithLag` | replica ไม่เกินจำนวน partition ที่ยังมี lag · ต้องระบุ `topic` และใช้คู่กับ `allowIdleConsumers: true` ไม่ได้ · ค่าเริ่มต้น false |
-| `allowIdleConsumers` | true = replica เกินจำนวน partition ได้ · ค่าเริ่มต้น false · **ห้ามเปิด** เพราะ consumer ส่วนเกินนั่งว่าง |
-| `minReplicaCount` / `maxReplicaCount` | ค่าเริ่มต้น 0 / 100 · ตั้ง max ให้ไม่เกินจำนวน partition (โดยปริยาย KEDA ก็ไม่ขยายเกินจำนวน partition อยู่แล้ว) |
-| `cooldownPeriod` | รอ 300 วินาทีหลัง trigger เงียบก่อนลงเหลือ 0 · ใช้กับช่วงลงเหลือ 0 เท่านั้น |
-| `pollingInterval` | ตรวจ trigger ทุก 30 วินาที (ค่าเริ่มต้น) |
-| `fallback` | จำนวน replica สำรองเมื่อ scaler อ่านค่าไม่ได้ (เช่น Kafka ล่ม) · ถ้าใส่ต้องมี `failureThreshold` และ `replicas` |
+| `lagThreshold` | Total lag across all partitions per 1 replica · default 10 · the example sets 5 because 1 research job is heavy and long (the real value must be measured `(ยังไม่ได้วัด)` (not yet measured)) |
+| `activationLagThreshold` | Lag that wakes it from 0 · default 0 |
+| `limitToPartitionsWithLag` | Replicas do not exceed the number of partitions that still have lag · requires `topic` and cannot be used together with `allowIdleConsumers: true` · default false |
+| `allowIdleConsumers` | true = replicas may exceed the number of partitions · default false · **never turn on**, because the extra consumers sit idle |
+| `minReplicaCount` / `maxReplicaCount` | Default 0 / 100 · set max to no more than the number of partitions (by default KEDA does not scale beyond the partition count anyway) |
+| `cooldownPeriod` | Waits 300 seconds after the trigger goes quiet before scaling to 0 · applies only to the scale-to-0 step |
+| `pollingInterval` | Checks the trigger every 30 seconds (default) |
+| `fallback` | Fallback replica count when the scaler cannot read a value (for example Kafka is down) · if set, it needs `failureThreshold` and `replicas` |
 
-ถ้าต้องการให้มี worker อย่างน้อย 1 ตัวเสมอ (ไม่รับ cold start) ตั้ง `minReplicaCount: 1`
+If you want at least 1 worker always present (no cold start), set `minReplicaCount: 1`
 
-## ข้อควรระวัง
+## Cautions
 
-- **จำนวน partition คือเพดานจริง.** เพิ่ม partition ภายหลังทำให้ลำดับ key เปลี่ยนและ rebalance · ตัดสินใจจำนวน partition ตั้งแต่ออกแบบ topic ([`kafka-streaming`](../../kafka-streaming/SKILL.md)) ก่อนตั้ง `maxReplicaCount`
-- **ห้ามมี HPA ของเราเองคู่กับ ScaledObject บน Deployment เดียวกัน.** KEDA สร้าง HPA ให้แล้ว admission webhook ของ KEDA ตรวจกรณี ScaledObject 2 ตัวชี้ Deployment เดียวกัน ([Concepts](https://keda.sh/docs/latest/concepts/)) · จะย้าย HPA เดิมให้ KEDA ดู ให้ใช้ annotation `scaledobject.keda.sh/transfer-hpa-ownership: "true"` ตาม [Scaling Deployments](https://keda.sh/docs/latest/concepts/scaling-deployments/) · เอา `spec.replicas` ออกจาก Deployment เหมือนกรณี HPA
-- **trigger CPU หรือ memory ลงเหลือ 0 ไม่ได้** · ใช้ Kafka trigger อย่างเดียวถ้าต้องการ scale-to-zero
-- **worker ที่ทำงานนาน** ต้องตั้ง `terminationGracePeriodSeconds` ให้พอจบงานที่ถืออยู่ และ commit offset หลังทำเสร็จ ไม่ใช่ตอนรับ · ไม่งั้นตอนลดจำนวน pod งานหาย หรือถูกทำซ้ำ (ทำซ้ำได้ต้องออกแบบให้ idempotent ตาม `principle-safe-to-rerun`) · ลำดับที่ HPA เลือก pod ที่จะถอด `(ยังไม่ได้ตรวจ)`
-- **Kafka มี SASL หรือ TLS** ต้องใส่ข้อมูลยืนยันตัวตนให้ scaler ผ่าน `TriggerAuthentication` ที่อ้าง Secret ของ cluster ไม่ใส่รหัสใน `metadata` · รูปแบบดูหัวข้อ SASL/TLS ในหน้า [Kafka scaler](https://keda.sh/docs/latest/scalers/apache-kafka/) (ยังไม่ได้ตรวจรายละเอียดช่องในหน้านั้น)
-- **ใน Helm chart** เขียน ScaledObject เป็น template ที่เปิดด้วย `keda.enabled` และปิด HPA ตัวเดิมด้วยค่า `autoscaling.enabled` ตรงข้าม เพื่อไม่ให้ 2 ตัวชน · ตรวจด้วย `helm template` ว่าไม่มีทั้ง HPA และ ScaledObject ของ Deployment เดียวกัน
-- **kubeconform** ไม่มี schema ของ ScaledObject ในตัว เพราะเป็น CRD · catalog ของ datreeio มี `keda.sh/scaledobject_v1alpha1.json` ([ไดเรกทอรี](https://github.com/datreeio/CRDs-catalog/tree/main/keda.sh) · ตรวจ 2026-10-27) จึงใส่ `-schema-location` ของ catalog ได้ · CRD ตัวอื่นที่ไม่มีใน catalog ใช้ `-ignore-missing-schemas` แล้วจดไว้ว่าข้ามตัวไหน (ดู [`helm-chart.md`](helm-chart.md))
+- **The partition count is the real ceiling.** Adding partitions later changes key ordering and causes a rebalance · decide the partition count when designing the topic ([`kafka-streaming`](../../kafka-streaming/SKILL.md)), before setting `maxReplicaCount`
+- **Never have our own HPA alongside a ScaledObject on the same Deployment.** KEDA already creates an HPA, and KEDA's admission webhook checks the case of 2 ScaledObjects pointing at the same Deployment ([Concepts](https://keda.sh/docs/latest/concepts/)) · to hand an existing HPA over to KEDA, use the annotation `scaledobject.keda.sh/transfer-hpa-ownership: "true"` per [Scaling Deployments](https://keda.sh/docs/latest/concepts/scaling-deployments/) · remove `spec.replicas` from the Deployment, as in the HPA case
+- **A CPU or memory trigger cannot scale to 0.** Use only the Kafka trigger if you need scale-to-zero
+- **A long-running worker** must set `terminationGracePeriodSeconds` long enough to finish the job it holds, and commit the offset after finishing, not on receipt · otherwise when pods are reduced, work is lost or done twice (repeating must be designed to be idempotent per `principle-safe-to-rerun`) · the order in which HPA chooses which pod to remove `(ยังไม่ได้ตรวจ)` (not yet checked)
+- **Kafka with SASL or TLS:** give the scaler credentials through a `TriggerAuthentication` that references a cluster Secret; do not put the password in `metadata` · for the format see the SASL/TLS section of the [Kafka scaler](https://keda.sh/docs/latest/scalers/apache-kafka/) page (field details on that page not yet checked)
+- **In the Helm chart,** write the ScaledObject as a template turned on by `keda.enabled` and turn off the existing HPA with the opposite of the value `autoscaling.enabled`, so the 2 do not collide · check with `helm template` that there is not both an HPA and a ScaledObject for the same Deployment
+- **kubeconform** has no built-in schema for ScaledObject because it is a CRD · the datreeio catalog has `keda.sh/scaledobject_v1alpha1.json` ([directory](https://github.com/datreeio/CRDs-catalog/tree/main/keda.sh) · checked 2026-10-27), so you can add the catalog's `-schema-location` · for other CRDs not in the catalog, use `-ignore-missing-schemas` and note which ones were skipped (see [`helm-chart.md`](helm-chart.md))

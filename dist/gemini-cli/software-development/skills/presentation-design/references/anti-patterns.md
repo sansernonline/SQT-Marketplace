@@ -1,17 +1,17 @@
-# Anti-patterns ของสไลด์
+# Slide anti-patterns
 
-ใช้ตอนตรวจเด็คก่อนส่ง
+Use when checking a deck before sending.
 
-- **หัวสไลด์เป็นชื่อหัวข้อ** — "ภาพรวมระบบ" ไม่ได้บอกอะไรเลย
-- **หัวสไลด์ย่อจนต้องเดา** — 2 วลีวางเรียงกันโดยไม่มีคำเชื่อม หรือใช้ศัพท์ที่คนฟังไม่รู้ ("Guard" · "โค้ด") กับผู้ฟังทั่วไป
-- **สไลด์เป็นเอกสาร** — ย่อหน้าเต็มแผ่น ตัวอักษร 12 pt
-- **อ่านสไลด์ให้ผู้ฟังฟัง** — ถ้าทุกคำอยู่บนจอแล้ว ไม่ต้องมีคนพูด
-- **ลดขนาดตัวอักษรเพื่อให้เนื้อหาพอดี** — ให้ตัดเนื้อหาแทน
-- **บูลเล็ตซ้อน 3 ชั้น** — มากสุดคือ 2 ชั้น ถ้าถึง 3 ชั้นแปลว่าควรแยกแผ่น
-- **แอนิเมชันเข้าทีละบูลเล็ตทุกแผ่น** — ช้า และผู้ฟังรำคาญตั้งแต่แผ่นที่ 3
-- **ภาพสต๊อกที่ไม่เกี่ยวกับเนื้อหา** — คนจับมือกัน ลูกศรพุ่งขึ้น
-- **ตารางข้อมูล 15 แถวบนสไลด์** — ย้ายไปเอกสารแนบ
-- **กราฟที่คัดลอกจาก Excel มาทั้งดุ้น** พร้อมเส้นตารางและคำอธิบายครบ
-- **สีแบรนด์บนทุกอย่าง** — สีแบรนด์ใช้กับสิ่งที่ต้องการให้มองเท่านั้น
-- **ไม่มีเลขหน้า** — ผู้ฟังอ้างถึงแผ่นไม่ได้
-- **ส่งเด็คโดยไม่เคยดูเป็นภาพย่อทั้งชุด**
+- **The slide title is a topic name.** "ภาพรวมระบบ" (system overview) says nothing
+- **The slide title is shortened until it must be guessed.** 2 phrases placed side by side with no connector, or jargon the audience does not know ("Guard" · "โค้ด" (code)) for a general audience
+- **The slide is a document.** A full page of paragraphs, 12 pt text
+- **Reading the slide aloud to the audience.** If every word is already on screen, no one needs to speak
+- **Shrinking the text to make the content fit.** Cut content instead
+- **Bullets nested 3 levels.** The maximum is 2 levels; reaching 3 means you should split the slide
+- **Animating in one bullet at a time on every slide.** Slow, and the audience is annoyed from slide 3
+- **Stock images unrelated to the content.** People shaking hands, arrows shooting up
+- **A 15-row data table on a slide.** Move it to an attachment
+- **A chart copied whole from Excel,** with gridlines and a full legend
+- **Brand colour on everything.** Use the brand colour only for what you want people to look at
+- **No page numbers.** The audience cannot refer to a slide
+- **Sending the deck without ever viewing the whole set as thumbnails**

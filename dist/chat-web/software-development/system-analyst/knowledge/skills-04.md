@@ -86,61 +86,65 @@ Personally Identifiable Information (PII) · Proof of Concept (POC)
 
 Use when an answer needs prose, a table or a diagram
 
-# รูปทรงของคำตอบ
+# The shape of an answer
 
-skill นี้บอกรูปทรงและโครง ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
+This skill gives the shape and structure; every line of wording follows `human-writing` · lives only in plugin `superuser`; other plugins share it through `dependencies`
 
-> **กฎข้อเดียว:** เนื้อหามีโครงสร้างอะไร คำตอบใช้รูปทรงนั้น
-> เปรียบเทียบ → ตาราง · เชื่อมโยง → รูป · เรื่องเดียว → ประโยค
+> **One rule:** whatever structure the content has, the answer uses that shape.
+> Comparison → table · connections → figure · one thing → sentences
 
 ---
 
-## เลือกรูปทรงจากสัญญาณในคำถาม
+## Pick the shape from signals in the question
 
-| สัญญาณ | รูปทรง |
+The quoted signals are Thai user phrasings; English meanings are in brackets.
+
+| Signal | Shape |
 |---|---|
-| "แบบไหนดีกว่า" · "ต่างกันยังไง" · "มีทางเลือกอะไรบ้าง" | **ตารางเปรียบเทียบ** |
-| "อะไรต่อกับอะไร" · "ข้อมูลไหลยังไง" · "ลำดับเป็นยังไง" | **รูป** |
-| "มีอะไรบ้าง" ที่ไม่ได้เทียบกัน | **รายการหัวข้อย่อย** |
-| "ทำไม" · "แปลว่าอะไร" · เรื่องเดียวไม่มีแขนง | **ประโยคธรรมดา** |
-| ตัวเลขหลายตัวที่ต้องดูพร้อมกัน | **ตาราง** |
-| ขั้นตอนที่ต้องทำเรียงกัน | **รายการมีเลข** |
-| ทำต่อไม่ได้ · ต้องรอของจากผู้ใช้ | **รายการสั้น: ติดอะไร → ต้องการอะไร** |
+| "แบบไหนดีกว่า" · "ต่างกันยังไง" · "มีทางเลือกอะไรบ้าง" ("which is better" · "how do they differ" · "what options are there") | **Comparison table** |
+| "อะไรต่อกับอะไร" · "ข้อมูลไหลยังไง" · "ลำดับเป็นยังไง" ("what connects to what" · "how does data flow" · "what is the sequence") | **Figure** |
+| "มีอะไรบ้าง" ("what are there") when the items are not compared | **Bullet list** |
+| "ทำไม" · "แปลว่าอะไร" ("why" · "what does it mean") · one thing with no branches | **Plain sentences** |
+| Several numbers that must be seen together | **Table** |
+| Steps that must be done in order | **Numbered list** |
+| Cannot continue · must wait for something from the user | **Short list: what is blocking → what is needed** |
 
-**สัญญาณสำคัญที่สุดคือมี "สิ่งที่ถูกเทียบ" ตั้งแต่ 2 ตัวขึ้นไป** แบบนี้ให้ใช้ตาราง
-เพราะถ้าเขียนเป็นย่อหน้า ผู้อ่านต้องจำตัวแรกไว้ในหัวระหว่างอ่านตัวที่ 2
+**The most important signal is having 2 or more "things being compared"**; use a table then,
+because in a paragraph the reader must hold the first one in their head while reading the second.
 
 ---
 
-## ตารางที่อ่านง่าย
+## A table that reads easily
 
-- **คอลัมน์แรกคือสิ่งที่ถูกเทียบ** คอลัมน์ถัดไปคือแง่มุมที่เทียบ
-- **3–5 คอลัมน์** เกินนี้อ่านไม่ทัน ส่วนแถวไม่เกิน 8 แถวในคำตอบแชต
-- **ทุกช่องต้องมีเนื้อ** — ช่องว่างแปลว่าคอลัมน์นั้นไม่ควรมี หรือข้อมูลยังไม่ครบ ถ้าไม่มีข้อมูลให้เขียนว่า "ไม่มี" ตรง ๆ · ช่องที่เขียน "ขึ้นอยู่กับ" ทุกช่องก็ไม่มีเนื้อ
-- **ช่องละไม่เกิน 1 บรรทัด** ถ้ายาวกว่านั้นให้ยกไปเขียนใต้ตาราง
-- **เรียงแถวตามน้ำหนัก** ตัวที่แนะนำหรือตัวที่ใช้บ่อยที่สุดอยู่บนสุด ไม่ใช่เรียงตามตัวอักษร
-- **หัวคอลัมน์เป็นคำถามที่ผู้อ่านมีในหัว** ไม่ใช่ชื่อสาขาวิชา
+- **The first column is the thing being compared**, and the next columns are the aspects compared
+- **3–5 columns**; more than that cannot be read in time, and at most 8 rows in a chat answer
+- **Every cell must have content** — an empty cell means that column should not exist, or the data is incomplete; if there is no data, write "ไม่มี" (none) plainly · a table where every cell says "it depends" also has no content
+- **At most 1 line per cell**; if longer, move it below the table
+- **Order rows by weight**: the recommended one or the most used one on top, not alphabetical
+- **Column headings are the questions in the reader's head**, not names of academic fields
 
 ```
 ผิด: | ตัวเลือก | ประสิทธิภาพ | ความซับซ้อน |
 ถูก: | ตัวเลือก | เร็วแค่ไหน | ต้องดูแลมากไหม |
 ```
 
-**ปิดท้ายตารางด้วยข้อสรุป 1 บรรทัดเสมอ** — ตารางบอกข้อมูล ไม่ได้บอกว่าควรเลือกอะไร
+(Gloss: wrong = "Option | Performance | Complexity" · right = "Option | How fast | Does it need much upkeep".)
+
+**Always close a table with a 1-line conclusion** — a table gives data; it does not say what to choose
 
 ---
 
-## เมื่อไหร่รูปชนะตาราง
+## When a figure beats a table
 
-ใช้รูปเมื่อ**ความสัมพันธ์คือคำตอบ** — ตารางบอกคุณสมบัติได้ แต่บอกไม่ได้ว่าอะไรต่อกับอะไร
+Use a figure when **the relationship is the answer** — a table can give properties, but cannot say what connects to what.
 
-| ใช้รูป | ใช้ตาราง |
+| Use a figure | Use a table |
 |---|---|
-| อะไรต่อกับอะไร · อะไรอยู่ในอะไร | ตัวไหนดีกว่าตัวไหนในแง่ใด |
-| ลำดับที่มีทางแยกหรือวนกลับ | ขั้นตอนเรียงตรงไม่มีแขนง (ใช้รายการมีเลขพอ) |
-| สิ่งเดียวกันในหลายสถานะ | สิ่งต่างกันในแง่มุมเดียวกัน |
+| What connects to what · what sits inside what | Which is better than which, and in what respect |
+| A sequence with forks or loops back | A straight sequence of steps with no branches (a numbered list is enough) |
+| The same thing in several states | Different things on the same aspects |
 
-ในแชต **รูปเล็ก ๆ แบบ ASCII หรือ Mermaid สั้น ๆ ก็พอ** — ไม่ต้องเปิดเครื่องมือวาด
+In chat, **a small ASCII figure or a short Mermaid is enough** — no need to open a drawing tool
 
 ```
 กล้อง ──DICOM──▶ Orthanc ──▶ API ──▶ รายงาน
@@ -148,27 +152,29 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
                     └──▶ ที่เก็บถาวร
 ```
 
-รูปที่ต้องเป็นไฟล์จริงเพื่อใส่เอกสารหรือสไลด์ ให้ใช้ skill วาดรูปของ plugin นั้น (ถ้ามี)
+(Gloss: กล้อง = camera/scanner · รายงาน = report · ที่เก็บถาวร = permanent storage.)
+
+A figure that must be a real file to go into a document or slides uses the figure-drawing skill of that plugin (if there is one)
 
 ---
 
-## เมื่อไหร่ประโยคชนะทั้งคู่
+## When sentences beat both
 
-- คำตอบสั้นกว่า 3 บรรทัด — ตาราง 2 แถวเป็นแค่การตกแต่ง ไม่ได้อธิบายอะไร
-- คำถามที่ตอบว่า "ใช่" หรือ "ไม่ใช่" แล้วตามด้วยเหตุผล 1 ประโยค
-- เรื่องที่**เหตุผลสำคัญกว่าตัวเลือก** — ตารางจะตัดเหตุผลทิ้งเพื่อให้พอดีช่อง
+- The answer is shorter than 3 lines — a 2-row table is only decoration and explains nothing
+- A question answered "yes" or "no" followed by 1 sentence of reason
+- A matter where **the reason matters more than the options** — a table cuts the reason to fit the cell
 
-> ตารางที่มีแถวเดียวหรือ 2 แถวสั้น ๆ แปลว่าใช้ผิดรูปทรง · รูปที่วาดสิ่งที่ประโยคเดียวบอกได้ก็เช่นกัน
+> A table with one row or 2 short rows means the wrong shape was used · a figure that draws what one sentence can say is the same
 
 ---
 
-## เมื่อทำต่อไม่ได้
+## When you cannot continue
 
-ติดขัดเมื่อไหร่ → บอกเป็นข้อ ๆ แค่ 2 อย่าง: **ติดอะไร** และ **ต้องการอะไรจากผู้ใช้**
+Whenever you are blocked → list only 2 things: **what is blocking** and **what you need from the user**
 
-- ข้อละ 1 บรรทัด · ไม่เกิน 4 ข้อ
-- ไม่เล่าสาเหตุยาว ไม่ตอบเรื่องข้างเคียง ไม่วางแผนงานล่วงหน้า — รอได้ของก่อนค่อยทำ
-- ถ้ามีหลายทางให้ผู้ใช้เลือก → แต่ละทางเป็น 1 ข้อ ทางที่ง่ายสุดอยู่บนสุด
+- 1 line per item · at most 4 items
+- Do not tell the cause at length, do not answer side topics, do not plan the work ahead — wait until you have the thing, then do it
+- If there are several paths for the user to choose → each path is 1 item, the easiest on top
 
 ```
 ผิด: ย่อหน้ายาวเล่าว่า container ใหม่ · โฟลเดอร์ว่าง · OneDrive หาย · แล้ววางแผนแก้ 3 ข้อรอไว้
@@ -178,16 +184,18 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
    - แนบ Mockup.html มา หรือบอก path ใหม่
 ```
 
+(Gloss: wrong = a long paragraph telling that the container is new · the folder is empty · OneDrive is gone · and then planning 3 fixes while waiting · right = "Blocked on 1 thing: cannot see the file — the linked folder is empty. Need 1 thing: attach Mockup.html or give the new path.")
+
 ---
 
-## ตัวย่อ
+## Abbreviations
 
-ตัวย่อที่ใช้ในไฟล์นี้ · กฎเขียนตัวย่อ → `spell-out-abbreviations`
+Abbreviations used in this file · rules for writing abbreviations → `spell-out-abbreviations`
 
-- **ASCII** — American Standard Code for Information Interchange (การวาดรูปด้วยตัวอักษรธรรมดา)
-- **Mermaid** — ภาษาเขียนไดอะแกรมเป็นข้อความ แล้วให้โปรแกรมวาดให้
-- **DICOM** — Digital Imaging and Communications in Medicine (มาตรฐานไฟล์และการส่งภาพทางการแพทย์)
-- **API** — Application Programming Interface (ช่องทางที่โปรแกรมหนึ่งเรียกใช้อีกโปรแกรมหนึ่ง)
+- **ASCII** — American Standard Code for Information Interchange (drawing figures with plain characters)
+- **Mermaid** — a language that writes diagrams as text and lets a program draw them
+- **DICOM** — Digital Imaging and Communications in Medicine (a standard for medical image files and transfer)
+- **API** — Application Programming Interface (the channel through which one program calls another)
 
 
 ---
@@ -196,56 +204,56 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
 
 Use when a task writes temporary files into a project
 
-# ระเบียบไฟล์ชั่วคราว
+# Temporary file discipline
 
-> **กฎข้อเดียว:** อะไรที่ไม่ใช่ผลงานจริง ต้องอยู่ใน `_to_delete/` เท่านั้น
-> ห้ามวางไว้ที่รากโปรเจกต์ ห้ามวางปนกับไฟล์งาน
+> **One rule:** anything that is not a real work product must live only in `_to_delete/`.
+> Never leave it in the project root, and never mix it with work files.
 
 ---
 
-## เลือกที่วาง
+## Choose where to put it
 
-| ไฟล์นั้นคืออะไร | วางที่ |
+| What the file is | Put it in |
 |---|---|
-| ของชั่วคราวของงานในโปรเจกต์ผู้ใช้ (ภาพตรวจ · log · สคริปต์ครั้งเดียว · ผลรัน) | `_to_delete/<โฟลเดอร์งาน>/` ที่รากโปรเจกต์ (หัวข้อ "วิธีใช้") ผู้ใช้จะได้ตรวจย้อนได้ |
-| ขั้นกลางที่ไม่ผูกกับโปรเจกต์ใด (ไม่ได้ทำงานในโฟลเดอร์ผู้ใช้) | พื้นที่ทำงานของเซสชัน |
-| ผลงานที่ผู้ใช้จะเก็บไว้ | โฟลเดอร์ปลายทางของงานนั้น |
+| Temporary items of work in the user's project (check images · logs · one-off scripts · run results) | `_to_delete/<task folder>/` at the project root (section "How to use"), so the user can check back later |
+| An intermediate step not tied to any project (not working in the user's folder) | The session's workspace |
+| A work product the user will keep | The destination folder of that work |
 
-**รากโปรเจกต์ต้องไม่มีไฟล์ชั่วคราวเลย**
-- ถ้า agent สร้างไฟล์ชั่วคราวแล้วไปตกที่ราก (log · ภาพ · สคริปต์ลอง) ให้ย้ายเข้า `_to_delete/` ทันที
-- ถ้าไม่แน่ใจว่าผู้ใช้สร้างหรือใช้ไฟล์นั้นอยู่ ไม่ต้องย้ายเอง ให้บอกผู้ใช้
-- รันจากในโฟลเดอร์ย่อย (เช่น โฟลเดอร์โค้ด ดู `project-bootstrap` ใน plugin `software-development`) ให้เขียนของชั่วคราวไปที่ `_to_delete/` ของ**รากโปรเจกต์** ไม่สร้างซ้อน
-
----
-
-## อะไรคือไฟล์ชั่วคราว
-
-- ไฟล์บีบอัดที่ส่งผ่านแชทเพื่อเอาไฟล์ลงเครื่อง และโฟลเดอร์ที่แตกออกมา
-- ภาพที่เรนเดอร์ไว้ตรวจงาน · ภาพหน้าจอ · ไฟล์ตัวอย่างที่ทำไว้เทียบ
-- สำเนาสำรองของไฟล์ที่กำลังแก้ · ไฟล์ `.bak` `.old` `.tmp` `ไฟล์ (1).xlsx`
-- สคริปต์ที่เขียนขึ้นใช้ครั้งเดียว · ไฟล์ log จากการรันครั้งเดียว
-- ไฟล์รูปแบบกลางระหว่างแปลง เช่น `.svg` ที่แปลงต่อเป็น `.png` แล้ว
-- **เอกสารที่แปลงรูปแบบมาเพื่อให้อ่านหรือประมวลผลง่าย** — `.docx` หรือ `.pdf` ที่แปลงเป็น `.md`
-  ต้นฉบับคือของจริง ส่วนตัวที่แปลงคือของชั่วคราว **ห้ามวางปนกันในโฟลเดอร์เอกสาร**
-  ไม่งั้นอีก 3 เดือนไม่มีใครรู้ว่าไฟล์ไหนคือฉบับที่ลูกค้าเซ็นรับ
-- เวอร์ชันเก่าของไฟล์ที่เพิ่งแทนที่ไป
-
-**ไฟล์ที่เลิกใช้แล้วก็คือไฟล์ชั่วคราว** — เมื่อแทนที่ไฟล์เก่าด้วยของใหม่แล้ว ให้ย้ายตัวเก่าเข้า `_to_delete/`
-ไม่ทิ้งไว้ข้าง ๆ กัน
+**The project root must hold no temporary files at all.**
+- If an agent creates a temporary file and it lands in the root (log · image · trial script), move it into `_to_delete/` right away
+- If you are not sure whether the user created or is using that file, do not move it yourself; tell the user
+- When running from inside a subfolder (for example the code folder, see `project-bootstrap` in plugin `software-development`), write temporary things to the **project root's** `_to_delete/`, and do not create a nested one
 
 ---
 
-## อะไรไม่ใช่
+## What counts as a temporary file
 
-- ผลงานที่ผู้ใช้ขอ
-- ไฟล์ต้นทางของผลงาน เช่น ไฟล์ออกแบบ `.psd` `.fig` · `.py` ที่ผลิตรูป · `.html` ที่เป็นแหล่งที่มาของภาพ —
-  **ปีหน้าจะแก้ก็ต้องมีไฟล์ต้นทาง** จึงเก็บไว้ในโฟลเดอร์ย่อยข้างผลงาน ไม่ใช่ `_to_delete/`
-- ไฟล์ที่ผู้ใช้วางไว้เอง แม้จะดูเหมือนขยะ — **ห้ามย้ายของผู้ใช้โดยไม่ถาม**
-- output ของเครื่องมือ build (`build/` · `node_modules/`) — ปล่อยไว้ ตรวจว่าอยู่ใน `.gitignore` และห้ามย้ายเข้า `_to_delete/`
+- A compressed file sent through chat to get files onto the machine, and the folder it was extracted to
+- Images rendered to check work · screenshots · sample files made for comparison
+- Backup copies of a file being edited · files `.bak` `.old` `.tmp` `ไฟล์ (1).xlsx` (`ไฟล์` = "file")
+- Scripts written for one use · log files from a one-time run
+- Intermediate-format files during a conversion, such as an `.svg` already converted to `.png`
+- **Documents converted to another format to make them easier to read or process** — a `.docx` or `.pdf` converted to `.md`
+  The original is the real thing and the converted one is temporary. **Never mix them in the documents folder**,
+  or in 3 months nobody knows which file is the version the client signed off
+- Old versions of a file that was just replaced
+
+**A file no longer in use is a temporary file** — when you replace an old file with a new one, move the old one into `_to_delete/`
+and do not leave them side by side.
 
 ---
 
-## วิธีใช้
+## What does not count
+
+- A work product the user asked for
+- Source files of a work product, such as design files `.psd` `.fig` · a `.py` that produces an image · an `.html` that is the source of an image —
+  **if you will edit next year, you need the source file**, so keep it in a subfolder beside the work product, not in `_to_delete/`
+- Files the user placed themselves, even if they look like junk — **never move the user's things without asking**
+- Output of build tools (`build/` · `node_modules/`) — leave it, check that it is in `.gitignore`, and never move it into `_to_delete/`
+
+---
+
+## How to use
 
 ```
 โปรเจกต์/
@@ -260,49 +268,51 @@ Use when a task writes temporary files into a project
     └── superuser-lock/            ← ของเครื่องมือ ไม่ใช่ของงาน
 ```
 
-- มีโฟลเดอร์ `_to_delete/` เดียวที่**รากของโปรเจกต์** · ข้างในแบ่ง **1 โฟลเดอร์ต่อ 1 งาน** ของจะได้ไม่ปนกัน และลบทั้งงานได้ในครั้งเดียว
-- **ชื่อโฟลเดอร์งาน** `YYYY-MM-DD-<เรื่อง>` · วันที่คือวันเริ่มงาน · เรื่องเป็นอังกฤษตัวเล็กคั่น `-` ยาว 2–5 คำ บอกว่าทำอะไร (`2026-11-06-temp-task-folders` ไม่ใช่ `2026-11-06-task1`) · เรียงตามชื่อแล้วได้ลำดับเวลาเลย
-- **ตั้งโฟลเดอร์ตอนเริ่มงาน** ก่อนเขียนไฟล์ชั่วคราวไฟล์แรก · งานเดิมที่สั่งต่อหลายรอบหรือข้าม session ใช้โฟลเดอร์เดิม (หาจาก `find _to_delete -mindepth 1 -maxdepth 1 -type d -printf '%f\n'`) · เรื่องใหม่ตั้งโฟลเดอร์ใหม่ · งานแตกให้ลูกทีม ลูกทีมเขียนลงโฟลเดอร์งานของหัวหน้า บอก path ในใบสั่งงาน
-- **ห้ามวางไฟล์ไว้ตรง `_to_delete/`** · ยกเว้นของที่เครื่องมือหรือ hook สร้างเองที่ตำแหน่งตายตัว (`superuser-lock/` · `STOP`) และแผนลบ `delete-plan.txt` (สคริปต์ตรวจบังคับให้อยู่ตรง `_to_delete/`) ซึ่งไม่ย้าย
-- **skill อื่นเขียน `_to_delete/<x>`** (เช่น `_to_delete/screenshots/` · `_to_delete/deck-check`) ให้อ่านเป็น `_to_delete/<โฟลเดอร์งาน>/<x>` เสมอ · สคริปต์ที่มีค่าเริ่มต้นเป็น `_to_delete/...` ส่ง `--out` ชี้เข้าโฟลเดอร์งาน
-- โฟลเดอร์ย่อยมาตรฐาน**ในโฟลเดอร์งาน** ที่ skill อื่นใช้ — ใช้ชื่อเดียวกันนี้เท่านั้น:
+(Gloss: `โปรเจกต์/` = project · `ผลงานจริง` = real work products · `ของเครื่องมือ ไม่ใช่ของงาน` = belongs to the tool, not to a task.)
 
-  | โฟลเดอร์ย่อย | ใส่อะไร | skill ที่ใช้ |
+- There is exactly one `_to_delete/` folder at the **project root** · inside, **1 folder per task**, so things do not mix and a whole task can be deleted at once
+- **Task folder name** `YYYY-MM-DD-<topic>` · the date is the day the task started · the topic is lowercase English joined by `-`, 2–5 words, saying what is being done (`2026-11-06-temp-task-folders`, not `2026-11-06-task1`) · sorting by name gives time order directly
+- **Create the folder when the task starts**, before writing the first temporary file · a task that continues over several rounds or across sessions uses the same folder (find it with `find _to_delete -mindepth 1 -maxdepth 1 -type d -printf '%f\n'`) · a new topic gets a new folder · when the task is split to sub-agents, they write into the lead's task folder, and the path is given in the brief
+- **Never place a file directly in `_to_delete/`** · except things a tool or hook creates itself at a fixed location (`superuser-lock/` · `STOP`) and the delete plan `delete-plan.txt` (the check script requires it directly in `_to_delete/`), which do not move
+- **When another skill writes `_to_delete/<x>`** (for example `_to_delete/screenshots/` · `_to_delete/deck-check`), always read it as `_to_delete/<task folder>/<x>` · for a script whose default is `_to_delete/...`, pass `--out` pointing into the task folder
+- Standard subfolders **inside the task folder** that other skills use — use only these names:
+
+  | Subfolder | What goes in | Skill that uses it |
   |---|---|---|
-  | `drafts/` | ร่างชั่วคราวที่ยังไม่ใช่ต้นฉบับ (ต้นฉบับ markdown ที่ render ซ้ำอยู่ถาวรที่ `docs/src/<เรื่อง>.md`) | `superuser:document-naming` |
-  | `attempts-<เรื่อง>/` | งานของแต่ละตัวที่แข่งกัน | [`parallel-attempts-pick-best`](../parallel-attempts-pick-best/SKILL.md) |
-  | `screenshots/` | ภาพเรนเดอร์ของดีไซน์ mockup หรือภาพตรวจงาน | skill ออกแบบทุกตัว |
-  | `logs/` | log จากการรันครั้งเดียว | ทุกตัว |
+  | `drafts/` | Temporary drafts that are not the original (the markdown original that is re-rendered lives permanently at `docs/src/<topic>.md`) | `superuser:document-naming` |
+  | `attempts-<topic>/` | Work of each competing agent | [`parallel-attempts-pick-best`](../parallel-attempts-pick-best/SKILL.md) |
+  | `screenshots/` | Rendered images of a design mockup or images for checking work | every design skill |
+  | `logs/` | Logs from a one-time run | every skill |
 
-  งานโค้ด (`verify-runs/` · `security/` · `check/`) → ส่วนเพิ่มใน plugin `software-development` → `superuser` → `references/code-extensions.md`
-- ใส่ `_to_delete/` ลงใน `.gitignore` ทุกโปรเจกต์ที่ใช้ git — ตรวจก่อน ถ้ายังไม่มีให้เพิ่ม
-- โปรเจกต์ที่ README ระบุโฟลเดอร์ชั่วคราวอื่นไว้แล้ว (เช่น `tmp/` `scratch/`) → ใช้ตามนั้น แล้วจด 1 แถวในตาราง "การตัดสินใจ" · ไม่มีระบุ → `_to_delete/` · ห้ามใช้ `.cache/` (เป็นของเครื่องมือ ปนกับสถานะของเครื่องมือได้)
+  Code work (`verify-runs/` · `security/` · `check/`) → the addition in plugin `software-development` → `superuser` → `references/code-extensions.md`
+- Put `_to_delete/` into `.gitignore` in every project that uses git — check first, and add it if missing
+- A project whose README already names another temporary folder (for example `tmp/` `scratch/`) → follow that, then record 1 row in the "การตัดสินใจ" (decisions) table · none named → `_to_delete/` · never use `.cache/` (it belongs to tools and can mix with tool state)
 
 ---
 
-## ตอนจบงาน
+## At the end of the work
 
-1. **บอกว่าของชั่วคราวของงานนี้อยู่โฟลเดอร์ไหน** เป็นบรรทัดเดียว (`_to_delete/2026-11-06-login-page-redesign/`) ไม่ต้องลงรายการยาว
-2. **ห้ามลบเอง** — ลบเมื่อผู้ใช้สั่งเท่านั้น การลบในโฟลเดอร์ผู้ใช้กู้คืนไม่ได้
-3. **ผู้ใช้สั่งลบ** → ย้ายเข้า `_to_delete/` ก่อน (ตามกฎกลาง) แล้วบอกผู้ใช้ · ลบจริงเฉพาะของใน `_to_delete/` เมื่อผู้ใช้สั่งตรง ๆ โดยทำ 3 ขั้น:
-   1. เขียนแผนลงไฟล์ `_to_delete/delete-plan.txt` 1 พาธต่อบรรทัด นับจากรากโปรเจกต์ (`_to_delete/2026-11-06-login-page-redesign`) · ลบทั้งงานใส่โฟลเดอร์งานบรรทัดเดียว
-   2. รัน `node <โฟลเดอร์ skill นี้>/scripts/delete-plan-check.mjs _to_delete/delete-plan.txt` → พิมพ์รายการลบกับรายการเก็บมาเทียบ · พาธไหนหลุดออกนอก `_to_delete/` (`..` · พาธเต็ม · ลิงก์ชี้ออกข้างนอก) จะ exit 1 ห้ามลบ
-   3. ผ่านแล้วจึงลบตามรายการ "ลบ" ทีละบรรทัด สคริปต์ไม่ลบเอง · อย่าสร้างรายการจาก `ls` (บน Windows อาจมี `/` ต่อท้ายชื่อ ดู `context-budget` → [`windows-shell`](../context-budget/references/windows-shell.md))
-4. **ก่อนบอกว่าจบงาน** รัน `node <โฟลเดอร์ skill นี้>/scripts/root-check.mjs <รากโปรเจกต์>` → ลงรายการของที่รากนอกรายการอนุญาต (`ref` `docs` `mockup` `assets` `qa` `_to_delete` `.claude` โฟลเดอร์โค้ด และของใน `.gitignore`) · ของที่โปรเจกต์ตั้งใจวางไว้ที่ราก ใส่ `--allow README.md,LICENSE`
+1. **Say where this task's temporary things are**, in one line (`_to_delete/2026-11-06-login-page-redesign/`), with no long list
+2. **Never delete on your own** — delete only when the user orders it; deletion in the user's folder cannot be undone
+3. **When the user orders deletion** → move into `_to_delete/` first (per the central rule), then tell the user · actually delete only things inside `_to_delete/` when the user orders it directly, in 3 steps:
+   1. Write the plan into the file `_to_delete/delete-plan.txt`, 1 path per line, counted from the project root (`_to_delete/2026-11-06-login-page-redesign`) · to delete a whole task, put the task folder on one line
+   2. Run `node <this skill's folder>/scripts/delete-plan-check.mjs _to_delete/delete-plan.txt` → it prints the delete list and the keep list to compare · any path that escapes `_to_delete/` (`..` · full path · a link pointing outside) makes it exit 1, and you must not delete
+   3. Only after it passes, delete line by line from the "delete" list; the script does not delete by itself · never build the list from `ls` (on Windows names may end in `/`, see `context-budget` → [`windows-shell`](../context-budget/references/windows-shell.md))
+4. **Before saying the work is finished**, run `node <this skill's folder>/scripts/root-check.mjs <project root>` → it lists things in the root outside the allowed list (`ref` `docs` `mockup` `assets` `qa` `_to_delete` `.claude` the code folder, and things in `.gitignore`) · for things the project deliberately keeps in the root, add `--allow README.md,LICENSE`
 
 ---
 
 ## Anti-patterns
 
-- **แตกไฟล์ zip ลงรากโปรเจกต์** แล้วค่อยเก็บกวาดทีหลัง — ทีหลังไม่เคยมาถึง
-- **ตั้งชื่อ `ไฟล์-v2` `ไฟล์-final` `ไฟล์-ใหม่จริง`** วางไว้ข้างของเดิม
-- **ลบไฟล์ผู้ใช้เพราะคิดว่าไม่ใช้แล้ว**
-- **ทิ้งไฟล์ชั่วคราวของงานในโปรเจกต์ไว้ในพื้นที่เซสชัน** — เซสชันจบแล้วผู้ใช้ตรวจย้อนไม่ได้
-- **ตั้งโฟลเดอร์ย่อยชื่อใหม่ให้ของเดิม** (`shots/` `img-check/`) — ใช้ชื่อในตารางข้างบน
-- **วางไฟล์ตรง `_to_delete/` หรือใช้ `screenshots/` ร่วมกันหลายงาน** — อีกสัปดาห์ไม่มีใครรู้ว่าภาพไหนของงานไหน ลบงานเดียวก็ไม่ได้
-- **เก็บไฟล์ต้นทางของผลงานไว้ใน `_to_delete/`** — นั่นไม่ใช่ของชั่วคราว
-- **ทิ้งไฟล์ค้างโดยไม่บอก** — ผู้ใช้จะมาเจอเองอีกหลายเดือนถัดไป
+- **Extracting a zip into the project root** and cleaning up later — later never comes
+- **Naming files `file-v2` `file-final` `file-really-new`** (Thai: `ไฟล์-v2` `ไฟล์-final` `ไฟล์-ใหม่จริง`) and leaving them beside the original
+- **Deleting a user's file because you think it is no longer used**
+- **Leaving a project task's temporary files in the session workspace** — after the session ends the user cannot check back
+- **Making a new subfolder name for an existing kind of thing** (`shots/` `img-check/`) — use the names in the table above
+- **Placing files directly in `_to_delete/` or sharing `screenshots/` across several tasks** — a week later nobody knows which image belongs to which task, and you cannot delete one task alone
+- **Keeping a work product's source file in `_to_delete/`** — that is not temporary
+- **Leaving stray files without telling anyone** — the user will find them on their own months later
 
 ---
 
-ตัวย่อและศัพท์เทคนิคในข้อความถึงผู้ใช้ เขียนตาม `spell-out-abbreviations`
+Abbreviations and technical terms in messages to the user follow `spell-out-abbreviations`.

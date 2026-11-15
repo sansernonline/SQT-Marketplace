@@ -1,20 +1,20 @@
-# playbook · refactor — เปลี่ยนโครงสร้าง พฤติกรรมเท่าเดิม
+# playbook · refactor — change the structure, behavior stays the same
 
-ใช้เมื่อ: ย้ายไฟล์ · แยกโมดูล · เปลี่ยนชื่อทั้งระบบ · ยุบชั้นที่ไม่จำเป็น · เปลี่ยน API ภายใน (ย้ายหน้าจอที่หน้าตาต้องเหมือนเดิม → `visual-parity`)
-skill หลัก: [`code-orientation`](../../code-orientation/SKILL.md) · skill ตาม stack · `lazy-coding` · `readable-code` · `principle-build-a-tool-not-handwork`
+Use when: moving files · splitting a module · renaming across the system · collapsing unnecessary layers · changing an internal API (moving a screen whose look must stay the same → `visual-parity`)
+Main skills: [`code-orientation`](../../code-orientation/SKILL.md) · the skill for the stack · `lazy-coding` · `readable-code` · `principle-build-a-tool-not-handwork`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. เขียนพฤติกรรมที่ต้องเท่าเดิมเป็นรายการที่ตรวจได้ แล้วตรวจว่ามี test หรือ skill ตรวจแอปครอบไว้ ถ้าไม่มี ให้เพิ่ม test ที่ล็อกพฤติกรรมเดิมก่อนแตะโค้ด · ใคร: `qa-tester` ตัวใหม่
-2. บันทึกผลก่อนเปลี่ยน — test ทั้งชุด · ภาพหน้าจอหรือผลลัพธ์ที่ใช้เทียบ · ใคร: `qa-tester` ตัวใหม่
-3. ลบโค้ดตายและชั้นที่มีผู้เรียกแค่ที่เดียวก่อน · ใคร: `developer` ตัวใหม่
-4. แก้รูปแบบเดียวกันหลายจุด ใช้เครื่องมือตาม `principle-build-a-tool-not-handwork` · ใคร: `developer` ตัวใหม่
-5. ถ้ามี API ภายในใหม่ ให้ย้ายผู้เรียกทุกตัวแล้วลบของเก่าตาม [`principle-replace-then-delete`](../../principle-replace-then-delete/SKILL.md) · ใคร: `developer` ตัวใหม่
-6. หาผลกระทบนอกจุดที่แก้ตาม [`blast-radius`](../../blast-radius/SKILL.md) — ผู้เรียกทางอ้อม · ข้อมูลที่บันทึกไว้แล้ว · ระบบนอก repo · ใคร: `Explore` ตัวใหม่
-7. รัน test ชุดเดิมและเทียบผลกับข้อ 2 — ต้องเท่ากันทุกข้อ · ใคร: `qa-tester` ตัวใหม่
-8. รีวิว diff ตาม `code-review-checklist` — พฤติกรรมเท่าเดิมตามรายการข้อ 1 ผลข้อ 7 ตรงข้อ 2 และไม่มีของใหม่แอบเข้ามา · ไม่ผ่าน → `developer` ตัวใหม่แก้ แล้ววนตามรอบตรวจใน [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
-9. ส่งมอบตามกฎ commit ใน `superuser` หัวข้อ 6 แต่ละชิ้นต้องผ่าน test แล้วจบด้วย `status-report` · ใคร: หัวหน้าทีม
+1. Write the behaviour that must stay the same as a checkable list, then check (ตรวจ) that a test or app-check skill covers it. If not, add a test that locks the existing behaviour before touching the code · ใคร: `qa-tester` ตัวใหม่
+2. Record the result before the change — the whole test suite · screenshots or outputs to compare against · ใคร: `qa-tester` ตัวใหม่
+3. Delete dead code and layers with only one caller first · ใคร: `developer` ตัวใหม่
+4. Where the same pattern needs fixing in many places, use a tool per `principle-build-a-tool-not-handwork` · ใคร: `developer` ตัวใหม่
+5. If there is a new internal API, move every caller over, then delete the old one per [`principle-replace-then-delete`](../../principle-replace-then-delete/SKILL.md) · ใคร: `developer` ตัวใหม่
+6. Find the impact outside the changed spot per [`blast-radius`](../../blast-radius/SKILL.md) — indirect callers · data already saved · systems outside the repo · ใคร: `Explore` ตัวใหม่
+7. Run (รัน) the original test suite and compare the result with step 2 — every item must match · ใคร: `qa-tester` ตัวใหม่
+8. Check (ตรวจ) the diff per `code-review-checklist` — behaviour is unchanged per the list in step 1, the result of step 7 matches step 2, and nothing new snuck in · if it fails → a fresh `developer` fixes, then repeat per the review rounds in [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
+9. Deliver per the commit rules in `superuser` section 6, each piece must pass tests, then finish with `status-report` · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-test ชุดเดิมผ่านเท่าเดิม · ผลลัพธ์ที่เทียบในข้อ 2 ตรงกัน · จำนวนบรรทัดรวมใน diff ลดลง หรือมีเหตุผลชัดว่าทำไมไม่ลด
+The same test suite passes as before · the outputs compared in step 2 match · the total line count in the diff went down, or there is a clear reason why it did not

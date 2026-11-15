@@ -2,7 +2,7 @@
 
 Swap ค่ะ/คะ for ครับ to match the shop voice. Fill every `<...>`.
 
-ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ แชตร้าน
+Thai text → `human-writing` `references/thai-grammar.md` section 4, the shop-chat register
 
 ## Contents
 - T1 Price question

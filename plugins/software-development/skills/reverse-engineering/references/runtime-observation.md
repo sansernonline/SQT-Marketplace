@@ -1,55 +1,55 @@
-# ดูเป้าหมายตอนรัน
+# Observing the target at runtime
 
-แนวคิดดัดแปลงจาก `runtime-observation.md` ของ REA (MIT · © 2026 morluto) · ต้นฉบับให้ agent เรียก tool ที่รันเป้าหมายได้โดยไม่ต้องขอรายครั้ง ไฟล์นี้เปลี่ยนเป็น **ต้องถามผู้ใช้ทุกครั้ง**
+Ideas adapted from REA's `runtime-observation.md` (MIT · © 2026 morluto). The original lets the agent call tools that run the target without asking each time. This file changes that to **ask the user every time**.
 
-ใช้ runtime เฉพาะเมื่อหลักฐานแบบ static ตอบคำถามไม่ได้จริง และจดเหตุผลไว้ในสมุดหลักฐาน
+Use runtime only when static evidence truly cannot answer the question, and record the reason in the evidence ledger.
 
-## 1 · ก่อนรันอะไรทุกครั้ง
+## 1 · Before running anything
 
-ถามผู้ใช้ด้วยข้อความเดียวที่บอกครบ แล้วรอคำตอบ:
+Ask the user in one message that says everything, then wait for the answer:
 
-- จะรันอะไร (คำสั่งเต็ม) · กับไฟล์หรือแอปไหน · ที่ไหน (container ชื่ออะไร หรือ emulator ตัวไหน) · นานแค่ไหน · จะเก็บอะไรกลับมา
-- เป้าหมายจะออกเครือข่ายได้ไหม (ค่าเริ่ม: ปิด)
+- What will run (full command) · on which file or app · where (which container, or which emulator) · for how long · what will be collected
+- Whether the target may reach the network (default: off)
 
-ผู้ใช้ตอบ no ให้จดลงบันทึกสิทธิ์ช่อง "การรันที่ถูกปฏิเสธ" และห้ามขอซ้ำด้วยคำสั่งเดิม · ทำต่อเท่าที่ static ได้ แล้วจดส่วนที่ขาดเป็นสิ่งที่ยังไม่รู้
+If the user answers no, record it in the authorization record's field "การรันที่ถูกปฏิเสธ" (runs refused) and never ask again with the same command. Continue as far as static work allows, and record the missing part as an unknown.
 
-## 2 · รันที่ไหน
+## 2 · Where to run
 
-| เป้าหมาย | ที่รัน |
+| Target | Where to run |
 |---|---|
-| ไม่รู้ที่มา · ไม่น่าไว้ใจ · malware | container ของ `docker-sandbox` เท่านั้น · ปิดเครือข่าย (`--network none`) เว้นแต่ผู้ใช้อนุญาต · ไม่ mount โฟลเดอร์ของผู้ใช้ นอกจากโฟลเดอร์งานใน `_to_delete/re/` |
-| ของผู้ใช้เอง ที่ผู้ใช้รันอยู่ทุกวันแล้ว | เครื่องผู้ใช้ได้ ถ้าผู้ใช้อนุญาต |
-| แอป Android | emulator ที่สร้างไว้สำหรับงานนี้ ไม่ใช้โทรศัพท์ส่วนตัว |
-| แอป Windows ที่ไม่น่าไว้ใจ | container Linux รันไม่ได้ · ใช้ Windows Sandbox หรือ VM ที่ผู้ใช้เตรียมเอง แล้วให้ผู้ใช้เป็นคนรัน |
+| Unknown origin · untrusted · malware | `docker-sandbox` container only · network off (`--network none`) unless the user allows it · mount no user folder except the work folder in `_to_delete/re/` |
+| The user's own software that the user already runs every day | The user's machine is allowed, if the user permits |
+| Android app | An emulator created for this job, not a personal phone |
+| Untrusted Windows app | A Linux container cannot run it · use Windows Sandbox or a VM the user prepares, and have the user run it |
 
-การดูตอนรันเป็นหลักฐานพฤติกรรม ไม่ใช่การกักขัง · debugger และ Frida ไม่ได้กันเป้าหมายจากเครื่อง
+Runtime observation is behavior evidence, not containment. A debugger and Frida do not keep the target away from the machine.
 
-## 3 · ใครเป็นคนกด
+## 3 · Who clicks
 
-| ผู้ลงมือ | วิธี | ต้องถาม |
+| Actor | Method | Must ask |
 |---|---|---|
-| ผู้ใช้กดเอง agent ดูผล | ผู้ใช้เปิด DevTools หรือบันทึก HAR แล้วส่งไฟล์มา | ถามครั้งเดียวว่าจะดูหน้าไหน ขั้นไหน |
-| agent สั่งเบราว์เซอร์หรือแอปเอง | Playwright ใน `docker-sandbox` ตามขั้นที่ประกาศ | **ทุกครั้ง** · เปิดหน้าใหม่อาจล้างฟอร์มที่ยังไม่ได้บันทึก บอกผู้ใช้ก่อน |
+| The user clicks, the agent reads the result | The user opens DevTools or records a HAR and sends the file | Ask once which page and which step to look at |
+| The agent drives the browser or app itself | Playwright in `docker-sandbox`, following the announced steps | **Every time** · opening a new page may wipe an unsaved form; tell the user first |
 
-รายงานให้ชัดว่าใครกด · การดูเฉย ๆ ห้ามเขียนว่า agent กด เปิดหน้า หรือเห็นสิ่งที่เกิดก่อนเริ่มบันทึก
+Report clearly who clicked. For passive viewing, never write that the agent clicked, opened a page, or saw what happened before recording began.
 
 ## 4 · Electron
 
-- ต่อ DevTools ของ main process ด้วย `--inspect` ได้เฉพาะเมื่อ fuse `EnableNodeCliInspectArguments` เปิดอยู่ · ปิดแล้วแอปจะไม่สน `--inspect` ไม่ต้องหาทางเลี่ยง
-- หน้าต่าง renderer ที่เปิด DevTools ได้ (Ctrl+Shift+I) ให้ผู้ใช้เปิดเอง
-- ห้ามแก้ไฟล์ asar หรือ fuse ของแอปเพื่อเปิดทาง ถือเป็นการแก้เป้าหมาย
+- You may attach DevTools to the main process with `--inspect` only when the fuse `EnableNodeCliInspectArguments` is on. If it is off, the app ignores `--inspect`; do not look for a way around it.
+- For a renderer window that can open DevTools (Ctrl+Shift+I), the user opens it.
+- Never edit the app's asar file or fuses to open a way in. That counts as modifying the target.
 
-## 5 · เครื่องมือรันและเกาะ process
+## 5 · Tools that run and attach to processes
 
-ทุกตัวในตารางนี้ต้องถามทุกครั้ง และผู้ใช้เป็นคนติดตั้งจากแหล่งทางการ
+Every tool in this table needs asking every time, and the user installs it from the official source.
 
-| เครื่องมือ | ใช้ทำอะไร | ติดตั้งจาก |
+| Tool | Used for | Install from |
 |---|---|---|
-| x64dbg · WinDbg | debug โปรแกรม Windows | x64dbg.com · Microsoft Store / learn.microsoft.com |
-| GDB · LLDB | debug Linux · macOS | ตัวจัดการแพ็กเกจของระบบ |
-| Frida | ฉีดสคริปต์เข้า process | `pip install frida-tools` จาก PyPI (ผู้ใช้รันเอง) |
-| adb | สั่งอุปกรณ์ Android | Android SDK Platform-Tools |
-| Process Monitor | ดูไฟล์และ registry ที่โปรแกรมแตะ | Sysinternals (learn.microsoft.com) |
+| x64dbg · WinDbg | Debug Windows programs | x64dbg.com · Microsoft Store / learn.microsoft.com |
+| GDB · LLDB | Debug Linux · macOS | The system package manager |
+| Frida | Inject scripts into a process | `pip install frida-tools` from PyPI (the user runs it) |
+| adb | Control an Android device | Android SDK Platform-Tools |
+| Process Monitor | See files and registry the program touches | Sysinternals (learn.microsoft.com) |
 
-- เกาะ process ที่ผู้ใช้กำลังใช้งาน (เช่น เบราว์เซอร์ที่ login ธนาคารอยู่) ห้ามทำ แม้ผู้ใช้อนุญาต ให้เปิดตัวใหม่ใน sandbox แทน
-- ผลที่เห็นตอนรันติดป้าย `ตรวจจริง` พร้อมคำสั่ง เวลา และที่รัน · ค่าลับที่เห็นในหน่วยความจำหรือ log รายงานแค่ชื่อ
+- Never attach to a process the user is currently using (for example a browser logged in to a bank), even if the user permits. Start a new one in a sandbox instead.
+- Label results seen at runtime `ตรวจจริง` (verified) with the command, time and where it ran. For secrets seen in memory or logs, report only the name.

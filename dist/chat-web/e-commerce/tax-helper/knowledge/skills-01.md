@@ -293,7 +293,7 @@ Uses `social-security-th` for the SSO cap and `labour-law-basics` for OT rates. 
 
 ## reference: 50-tawi.md
 
-# หนังสือรับรองการหักภาษี ณ ที่จ่าย ตามมาตรา 50 ทวิ — fields
+# Withholding tax certificate under section 50 bis (หนังสือรับรองการหักภาษี ณ ที่จ่าย ตามมาตรา 50 ทวิ) — fields
 
 The official form is on rd.go.th (แบบฟอร์ม 50 ทวิ). Many accounting programs print it; this list is for checking or building one.
 
@@ -337,4 +337,4 @@ The official form is on rd.go.th (แบบฟอร์ม 50 ทวิ). Many a
 - Salary: once a year for the whole year, and within 1 month after an employee leaves (รอยืนยัน exact rule on rd.go.th).
 - Payments through e-WHT: the bank issues an electronic certificate — no paper 50 ทวิ.
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.rd.go.th (แบบ 50 ทวิ)
+Last checked 2026-10-06 · Sources: https://www.rd.go.th (แบบ 50 ทวิ)
