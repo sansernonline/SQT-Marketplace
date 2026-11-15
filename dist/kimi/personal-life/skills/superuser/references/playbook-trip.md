@@ -1,15 +1,15 @@
-# playbook · trip — เตรียมเดินทาง
+# playbook · trip — prepare for a trip
 
-ใช้เมื่อ: 1–2 สัปดาห์ก่อนเดินทาง · พาสปอร์ตใกล้หมด
-skill หลัก: `travel-prep`
+Use when: 1–2 weeks before a trip · the passport is about to expire
+Main skill: `travel-prep`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ตรวจพาสปอร์ตและวีซ่าของประเทศปลายทางจากเว็บทางการ (กระทรวงการต่างประเทศ · สถานทูต) · ใคร: `life-admin` ตัวใหม่
-2. ทำเช็กลิสต์ตาม `travel-prep` — ประกันเดินทาง ปลั๊ก เงิน อินเทอร์เน็ต · ใคร: `life-admin` ตัวใหม่
-3. รวมการจองทุกรายการพร้อมเลขยืนยันไว้ในไฟล์เดียว · ใคร: `life-admin` ตัวใหม่
-4. ตั้งเตือนเช็กอินและเวลาออกจากบ้าน · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ตรวจทั้งชุด (วีซ่า · วันหมดอายุ · เลขยืนยัน) กับแหล่งทางการ
+1. Check (ตรวจ) the passport and the destination country's visa rules on official websites (Ministry of Foreign Affairs · embassy) · ใคร: `life-admin` ตัวใหม่
+2. Make a checklist per `travel-prep`: travel insurance, plug adapters, money, internet · ใคร: `life-admin` ตัวใหม่
+3. Put every booking, with its confirmation number, in one file · ใคร: `life-admin` ตัวใหม่
+4. Set reminders for check-in and the time to leave home · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the whole set (visa · expiry dates · confirmation numbers) against official sources
 
-## จบเมื่อ
+## Done when
 
-เช็กลิสต์และไฟล์แผนเดินทางเดียว ตรวจกับแหล่งทางการแล้ว
+A checklist and a single trip plan file, checked against official sources

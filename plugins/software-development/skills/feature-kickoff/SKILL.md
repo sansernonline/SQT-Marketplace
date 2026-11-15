@@ -5,7 +5,7 @@ argument-hint: <feature description>
 disable-model-invocation: true
 ---
 
-> **ทางลัดเข้า SuperUser:** เปิด skill `superuser` ด้วย playbook `feature` แล้วคัดลอกขั้นตอนของ playbook ลง todo ก่อน ส่วนขั้นตอนด้านล่างบอกรูปแบบงานและ output ของคำสั่งนี้ ให้ใช้คู่กับ playbook ไม่ได้ใช้แทน
+> **Shortcut into SuperUser:** open the `superuser` skill with the `feature` playbook, then copy the playbook's steps into the todo first. The steps below give the work format and the output of this command; use them together with the playbook, not in place of it.
 
 You will run a complete feature kickoff workflow. The feature is:
 

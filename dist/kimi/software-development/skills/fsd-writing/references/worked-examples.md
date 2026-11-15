@@ -1,8 +1,8 @@
-# ตัวอย่างเต็มของ use case หน้าจอ ผังสถานะ และกฎทางธุรกิจ
+# Full examples of a use case, screen, state diagram, and business rule
 
-ตัวอย่างทั้งไฟล์ใช้เรื่องเดียวกัน คือการยกเลิกคำสั่งซื้อ ลอกรูปแบบไปใช้ได้ทันที ส่วนกฎของแต่ละแบบอยู่ใน `SKILL.md`
+Every example in this file follows one story: cancelling an order. Copy the format and use it right away. The rules for each format are in `SKILL.md`. The Thai text inside the code blocks is sample output for a Thai FSD, so it stays in Thai.
 
-## use case (ข้อ 4)
+## Use case (item 4)
 
 ```markdown
 ### UC-ORD-010 · ยกเลิกคำสั่งซื้อ
@@ -39,7 +39,7 @@
 | 010-E2 | 4 | คืนสต็อกไม่สำเร็จ | "ระบบขัดข้อง กรุณาลองใหม่" + รหัสอ้างอิง | ย้อนกลับทั้งรายการ · บันทึก log ระดับ error |
 ```
 
-## ข้อกำหนดหน้าจอ (ข้อ 5)
+## Screen requirement (item 5)
 
 ```markdown
 ### SC-ORD-020 · หน้ารายละเอียดคำสั่งซื้อ
@@ -52,16 +52,16 @@
 | หมายเหตุภายใน | ข้อความยาว | เจ้าหน้าที่ ✓ · ลูกค้าไม่เห็นช่องนี้ | ไม่เกิน 500 ตัวอักษร | "กรุณากรอกหมายเหตุ" · "หมายเหตุยาวเกิน 500 ตัวอักษร" | ว่าง |
 ```
 
-## ตารางการเปลี่ยนสถานะ (ข้อ 6)
+## State transition table (item 6)
 
-| จาก | ไป | ใครทำได้ | เงื่อนไข | ผลข้างเคียง |
+| From | To | Who can do it | Condition | Side effects |
 |---|---|---|---|---|
-| `draft` | `confirmed` | ลูกค้า | มีสินค้าอย่างน้อย 1 รายการ · ที่อยู่ครบ | ตัดสต็อก · ส่งอีเมล |
-| `confirmed` | `cancelled` | ลูกค้า · เจ้าหน้าที่ | BR-030 | คืนสต็อก · ส่งอีเมล |
-| `confirmed` | `shipped` | เจ้าหน้าที่คลัง | มีเลขพัสดุ | ส่ง SMS |
-| `shipped` | `cancelled` | — | **ทำไม่ได้** | — |
+| `draft` | `confirmed` | Customer | At least 1 item · complete address | Deduct stock · send email |
+| `confirmed` | `cancelled` | Customer · staff | BR-030 | Return stock · send email |
+| `confirmed` | `shipped` | Warehouse staff | Has a tracking number | Send SMS |
+| `shipped` | `cancelled` | — | **Not allowed** | — |
 
-## กฎทางธุรกิจ (ข้อ 7)
+## Business rules (item 7)
 
 ```markdown
 **BR-030 · ยกเลิกคำสั่งซื้อได้เมื่อไหร่**

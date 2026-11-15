@@ -1,225 +1,225 @@
-# SVG/Python engine — รูปที่ generate จากข้อมูลหรือโค้ด
+# SVG/Python engine — figures generated from data or code
 
-ทางที่ 2 ของ `diagram-figures` ใช้แทนโครง HTML เมื่อรูปต้องสร้างจากข้อมูลหรือโค้ด เช่น รูปหลายใบที่ต้องออกซ้ำทุกครั้งที่ข้อมูลเปลี่ยน หรือรูปที่ต้องคุมตำแหน่งทุกจุดเองบนกริดด้วยเส้นตั้งฉากมุมโค้ง
-Python เขียน SVG ลงกริดแล้วเรนเดอร์เป็น PNG ส่วนไอคอนและโลโก้มาจากคลังเดียวกับโครง HTML ([icons.md](icons.md))
+Route 2 of `diagram-figures`. Use it instead of the HTML skeleton when a figure must be generated from data or code. Examples: several figures that must be re-exported every time the data changes, or a figure where you control every position on a grid with right-angle lines and rounded corners.
+Python writes the SVG onto the grid, then renders it to PNG. Icons and logos come from the same library as the HTML skeleton ([icons.md](icons.md)).
 
-ข้อเสียคือใช้เวลา เพราะ 1 รูปต้องแก้หลายรอบ ดังนั้นให้ใช้เฉพาะรูปที่คนนอกทีมจะเห็นและเห็นซ้ำ
+The cost is time, because 1 figure takes several rounds of fixes. So use it only for figures that people outside the team will see, and see repeatedly.
 
-> **สีหลัก = สีหลักของโปรเจกต์** · หาตามลำดับใน `diagram-figures` ข้อ 5 (ระบบสี) แล้วใส่ใน `ACCENT` ของ `theme.py` · ชุดประจำบ้าน `#2A78D6` ใช้เฉพาะเมื่อลำดับนั้นหาไม่เจอเลย
-
----
-
-**สารบัญ**
-- [0 · สีมาจากเนื้องาน — ไม่หยุดถาม](#0--สีมาจากเนื้องาน--ไม่หยุดถาม)
-- [1 · ลำดับการทำงาน](#1--ลำดับการทำงาน)
-- [2 · โครงไฟล์](#2--โครงไฟล์)
-- [3 · กฎข้อที่หนึ่ง — กริดก่อน เส้นทีหลัง](#3--กฎข้อที่หนึ่ง--กริดก่อน-เส้นทีหลัง)
-- [4 · เส้นเชื่อม](#4--เส้นเชื่อม)
-- [5 · ป้ายบนเส้น — สองบทบาทเท่านั้น](#5--ป้ายบนเส้น--สองบทบาทเท่านั้น)
-- [6 · โซน](#6--โซน)
-- [7 · ไอคอนและโลโก้](#7--ไอคอนและโลโก้)
-- [8 · เรนเดอร์](#8--เรนเดอร์)
-- [9 · วงจรตรวจงาน — ห้ามข้าม](#9--วงจรตรวจงาน--ห้ามข้าม)
-- [10 · ค่าคงที่ที่ใช้ได้จริง](#10--ค่าคงที่ที่ใช้ได้จริง)
-- [11 · แถบสัญลักษณ์](#11--แถบสัญลักษณ์)
-- [ตัวย่อ](#ตัวย่อ)
-
-## 0 · สีมาจากเนื้องาน — ไม่หยุดถาม
-
-**ถ้าเอกสารต้นทางประกาศ `doc-theme` ไว้แล้ว ให้ใช้ค่านั้นและอย่าถามซ้ำ**
-(ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร") ถ้ายังไม่มี ให้ทำตามข้างล่างนี้แล้วเขียนกลับลง `doc-theme`
-
-**ไม่มีสีแบรนด์ → ทำตามลำดับใน `diagram-figures` ข้อ 5:** ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` ไว้ในรายงาน แล้วทำต่อ ไม่หยุดถาม
-เสนอโทนจากเนื้องานตามตารางใน [colour-by-domain.md](colour-by-domain.md) ไว้ในรายงานให้เลือกทีหลัง
-
-ใส่**สีหลักสีเดียว**ที่ `ACCENT` ใน `assets/svg-engine/theme.py` แล้วเฉดอ่อนและเข้มทั้งหมด
-จะคำนวณจากสีนั้นด้วย `tint()` โค้ดวาดรูปจึงไม่มีสีอื่นฝังอยู่
-
-สีเดียวที่ไม่ผูกกับ `ACCENT` คือ `EXCEPT_HUE` สำหรับป้าย "ข้อยกเว้น" ซึ่งต้องต่างจากสีหลักเสมอ
-ถ้าสีหลักเป็นส้มอยู่แล้ว ให้เปลี่ยน `EXCEPT_HUE` เป็นสีอื่นที่ตัดกัน
+> **Main colour = the project's main colour.** Find it in the order given in `diagram-figures` section 5 (colour system), then put it in `ACCENT` in `theme.py`. Use the house colour `#2A78D6` only when that order finds nothing at all.
 
 ---
 
-## 1 · ลำดับการทำงาน
+**Contents**
+- [0 · Colour comes from the work — do not stop to ask](#0--colour-comes-from-the-work--do-not-stop-to-ask)
+- [1 · Order of work](#1--order-of-work)
+- [2 · File layout](#2--file-layout)
+- [3 · Rule 1 — grid first, lines after](#3--rule-1--grid-first-lines-after)
+- [4 · Connector lines](#4--connector-lines)
+- [5 · Labels on lines — only two roles](#5--labels-on-lines--only-two-roles)
+- [6 · Zones](#6--zones)
+- [7 · Icons and logos](#7--icons-and-logos)
+- [8 · Rendering](#8--rendering)
+- [9 · Check loop — do not skip](#9--check-loop--do-not-skip)
+- [10 · Constants that work](#10--constants-that-work)
+- [11 · Legend bar](#11--legend-bar)
+- [Abbreviations](#abbreviations)
 
-1. อ่านไดอะแกรมที่มีอยู่ทั้งหมดก่อน แล้วถามว่า**รูปนี้ตอบคำถามอะไร** — 1 รูปตอบ 1 คำถาม
-2. เลือกสีตามข้อ 0 (ไม่มีสี → ค่าประจำบ้าน + `(รอยืนยัน)`)
-3. **วางตำแหน่งทุกกล่องลงกริดก่อนลากเส้น** — ข้อนี้สำคัญที่สุด ดูข้อ 3
-4. แก้ `theme.py` และ `ref.py` ให้เสร็จก่อน แล้วค่อยเขียนไฟล์รูป
-5. **เรนเดอร์แล้วเปิดไฟล์ภาพดูจริง** ไม่ใช่แค่เช็กว่าสคริปต์รันผ่าน
-6. เมื่อได้รูปที่สะอาดแล้ว จึงเขียนลงโฟลเดอร์ปลายทาง ส่วนรูปเก่าให้ย้ายไป `_to_delete/`
+## 0 · Colour comes from the work — do not stop to ask
+
+**If the source document already declares a `doc-theme`, use that value and do not ask again.**
+(See `polished-document-style`, section "Document theme".) If there is none yet, follow the steps below, then write the result back into `doc-theme`.
+
+**No brand colour → follow the order in `diagram-figures` section 5:** use the house value `#2A78D6`, write `(รอยืนยัน)` (awaiting confirmation) in the report, and carry on without stopping to ask.
+Put a tone suggested from the content, using the table in [colour-by-domain.md](colour-by-domain.md), in the report so the user can choose later.
+
+Put **one main colour** in `ACCENT` in `assets/svg-engine/theme.py`. All light and dark shades
+are computed from it with `tint()`, so the drawing code has no other colour hard-coded.
+
+The only colour not tied to `ACCENT` is `EXCEPT_HUE`, for the "exception" label. It must always differ from the main colour.
+If the main colour is already orange, change `EXCEPT_HUE` to another contrasting colour.
 
 ---
 
-## 2 · โครงไฟล์
+## 1 · Order of work
+
+1. Read all existing diagrams first, then ask **what question this figure answers**. 1 figure answers 1 question.
+2. Pick the colour by section 0 (no colour → house value + `(รอยืนยัน)`).
+3. **Place every box on the grid before drawing any line.** This is the most important step. See section 3.
+4. Finish `theme.py` and `ref.py` first, then write the figure file.
+5. **Render, then open the image file and look at it.** Checking that the script ran without errors is not enough.
+6. Once the figure is clean, write it to the target folder. Move the old figure to `_to_delete/`.
+
+---
+
+## 2 · File layout
 
 ```
 architecture/
-  01-system-context.png      ← ผลลัพธ์ เลขนำหน้าเรียงตามลำดับการอ่าน
+  01-system-context.png      ← output; the number prefix follows reading order
   _src/
-    theme.py                 ← สีทั้งหมด — แก้ที่นี่ที่เดียว
-    ref.py                   ← ภาษาภาพ: โซน หน่วย เส้น ป้าย แถบสัญลักษณ์
-    render.py                ← SVG → PNG ด้วย Playwright ที่ 2 เท่า
-    d01.py … dNN.py          ← หนึ่งไฟล์ต่อหนึ่งรูป มีแต่การจัดวาง
-    logos/                   ← โลโก้ผลิตภัณฑ์ + colors.json
+    theme.py                 ← all colours — edit here only
+    ref.py                   ← visual language: zones, units, lines, labels, legend bar
+    render.py                ← SVG → PNG with Playwright at 2x
+    d01.py … dNN.py          ← one file per figure; layout only
+    logos/                   ← product logos + colors.json
 ```
 
-ให้คัดลอกทั้งโฟลเดอร์ [`assets/svg-engine/`](../assets/svg-engine/) ไปเป็น `_src/` แล้วเริ่มงาน — [`d01.py`](../assets/svg-engine/d01.py) เป็นรูปตัวอย่างที่เรนเดอร์ได้จริง
+Copy the whole folder [`assets/svg-engine/`](../assets/svg-engine/) to `_src/` and start from there. [`d01.py`](../assets/svg-engine/d01.py) is a sample figure that really renders.
 
 ---
 
-## 3 · กฎข้อที่หนึ่ง — กริดก่อน เส้นทีหลัง
+## 3 · Rule 1 — grid first, lines after
 
-เส้นเฉียงทำให้อ่านยาก แต่การดัดเส้นทีหลังไม่ช่วย **ต้องแก้ที่ตำแหน่ง**
+Diagonal lines are hard to read, and bending the lines afterwards does not help. **Fix the positions.**
 
 ```python
-CA,CB,CC,CD,CE,CF = 178,452,678,896,1080,1312   # คอลัมน์
-R1,R2,R3          = 288,458,624                  # แถว ห่างกัน ~170
+CA,CB,CC,CD,CE,CF = 178,452,678,896,1080,1312   # columns
+R1,R2,R3          = 288,458,624                  # rows, spaced ~170 apart
 ```
 
-ทุกกล่องอยู่บนจุดตัดของคอลัมน์กับแถว และไม่มีตัวไหนหลุดกริด
-เมื่อทุกจุดอยู่บนเส้นเดียวกัน เส้นเชื่อมก็ตั้งฉากได้เองโดยไม่ต้องดัด
+Every box sits on an intersection of a column and a row, and none strays off the grid.
+When all points sit on the same lines, the connectors are right-angled by themselves with no bending.
 
-### กฎจุดกึ่งกลาง
+### Midpoint rule
 
-ตัวที่รับหลายทางต้องอยู่**กึ่งกลางของทางเหล่านั้น** ไม่ใช่เกาะแถวใดแถวหนึ่ง
-และถ้าส่งต่อหลายทาง ก็ต้องอยู่กึ่งกลางของทางที่ส่งออกด้วย
+A node that receives from several paths must sit **midway between those paths**, not stick to one row.
+If it also sends on to several paths, it must sit midway between the outgoing paths too.
 
-ให้ใช้**จุดรวมเดียวและจุดแยกเดียว** เพื่อให้เส้นสมมาตร
+Use **one merge point and one split point** so the lines are symmetric.
 
 ```python
-RM = (R1+R2)//2      # Nginx อยู่กึ่งกลางของสองแถวที่รับเข้ามา
+RM = (R1+R2)//2      # Nginx sits midway between the two incoming rows
 J1, J2 = CB-74, CB+86
 
-flow([(CA+34,R1),(J1,R1),(J1,RM),(CB-30,RM)])   # เข้าจากบน
-flow([(CA+34,R2),(J1,R2),(J1,RM),(CB-30,RM)])   # เข้าจากล่าง
-flow([(CB+30,RM),(J2,RM),(J2,R1),(CC-30,R1)])   # ออกขึ้นบน
-flow([(CB+30,RM),(J2,RM),(J2,R2),(CC-30,R2)])   # ออกลงล่าง
+flow([(CA+34,R1),(J1,R1),(J1,RM),(CB-30,RM)])   # enters from above
+flow([(CA+34,R2),(J1,R2),(J1,RM),(CB-30,RM)])   # enters from below
+flow([(CB+30,RM),(J2,RM),(J2,R1),(CC-30,R1)])   # leaves going up
+flow([(CB+30,RM),(J2,RM),(J2,R2),(CC-30,R2)])   # leaves going down
 ```
 
-### ช่องเดินสาย
+### Wiring channels
 
-เส้นที่ต้องข้ามกริด **ห้ามวิ่งทับแถวที่มีกล่อง** ให้จองช่องว่างไว้เฉพาะ
+A line that must cross the grid **must not run over a row that holds boxes.** Reserve separate channels for it.
 
 ```python
-TB = 238        # ช่องบน — ห่างจากขอบโซนอย่างน้อย 36
-MB = R3-48      # ช่องกลาง — ระหว่างแถว
+TB = 238        # top channel — at least 36 from the zone edge
+MB = R3-48      # middle channel — between rows
 ```
 
 ---
 
-## 4 · เส้นเชื่อม
+## 4 · Connector lines
 
-เส้นตั้งฉากทั้งหมดและมุมโค้งรัศมี 14 — จุดนี้ทำให้ดูประณีตขึ้นมากโดยไม่เสียความชัดเจน
-`ref.flow(pts, dashed=False, arrow=True)` คำนวณมุมโค้งให้เอง
+All lines are right-angled, with corners rounded at radius 14. This makes the figure look much more refined without losing clarity.
+`ref.flow(pts, dashed=False, arrow=True)` computes the rounded corners itself.
 
-**หัวลูกศรต้องจบที่ขอบไอคอน ไม่ใช่ที่ป้ายชื่อ** — เช่น `CD-30` เมื่อไอคอนกว้าง 46
+**The arrowhead must end at the icon edge, not at the name label.** For example `CD-30` when the icon is 46 wide.
 
 ---
 
-## 5 · ป้ายบนเส้น — สองบทบาทเท่านั้น
+## 5 · Labels on lines — only two roles
 
-| บทบาท | สี | ใช้กับ |
+| Role | Colour | Use for |
 |---|---|---|
-| ปกติ | เฉดอ่อนของ `ACCENT` | สิ่งที่ไหลผ่านเส้นตามปกติ |
-| ข้อยกเว้น | `EXCEPT_HUE` | ทางที่ไม่ผ่านประตูหน้า · กรณีพิเศษ |
+| Normal | light shade of `ACCENT` | what normally flows along the line |
+| Exception | `EXCEPT_HUE` | a path that does not pass the front gate · special cases |
 
-**ข้อยกเว้นมีได้ป้ายเดียวต่อรูป** ถ้ามีตั้งแต่ 2 ป้าย แปลว่าไม่มีป้ายไหนเด่นจริง
+**A figure may have only one exception label.** If there are 2 or more, no label really stands out.
 
-ป้ายบอกว่า**อะไรไหลผ่าน** เช่น `SQL` `/api/` `DICOM 11112` ไม่ใช่ `เชื่อมต่อ`
+A label says **what flows through**, such as `SQL` `/api/` `DICOM 11112`, not `เชื่อมต่อ` (connect).
 
 ---
 
-## 6 · โซน
+## 6 · Zones
 
-โซนเป็นกรอบพื้นสีอ่อนมาก ส่วนป้ายชื่อเป็นแคปซูลพื้นขาวคร่อมเส้นขอบและมีจุดสีนำหน้า
+A zone is a frame with a very light fill. Its name label is a white capsule that straddles the border and has a coloured dot in front.
 
 ```python
 zone(x, y, w, h, "ห้อง Server ของโรงพยาบาล", "physical")
 ```
 
-| ชนิด | เส้น | ความหมาย |
+| Type | Line | Meaning |
 |---|---|---|
-| `physical` | ทึบ | ขอบเขตของจริงทางกายภาพ — ห้อง อาคาร เครื่อง |
-| `logical` | ประ | ขอบเขตเชิงตรรกะ — Docker Compose · namespace · VPC |
-| `outside` | ประ | นอกระบบที่เราดูแล |
+| `physical` | solid | A real physical boundary: room, building, machine |
+| `logical` | dashed | A logical boundary: Docker Compose · namespace · VPC |
+| `outside` | dashed | Outside the system we look after |
 
-ผู้อ่านจะเห็นทันทีว่าอันไหนมีอยู่จริง และซ้อนโซนได้ไม่เกิน 3 ชั้น
+The reader sees at once which one physically exists. Nest zones no more than 3 levels deep.
 
 ---
 
-## 7 · ไอคอนและโลโก้
+## 7 · Icons and logos
 
-ไอคอน**ลอยบนพื้น ไม่มีกรอบ ไม่มีไทล์** ส่วนชื่อและคำอธิบายอยู่ใต้ภาพ
+Icons **float on the background with no frame and no tile.** The name and description sit below the image.
 
 ```python
 unit(cx, cy, "Nginx", "ประตูเดียวที่เข้าระบบได้", slug="nginx")
-#  มี logos/<slug>.svg → ใช้โลโก้จริง เติมสีจาก colors.json
-#  ไม่มี              → ใช้สัญลักษณ์เส้นที่ออกแบบเอง
+#  logos/<slug>.svg exists → use the real logo, filled with the colour from colors.json
+#  does not exist         → use a line symbol of our own design
 ```
 
-ค่าที่ใช้ได้จริง: ไอคอน 46 · ชื่อ 11.5 ตัวหนา ห่างจากกึ่งกลาง `size/2+20` · คำอธิบาย 10 ห่าง `size/2+35`
+Values that work: icon 46 · name 11.5 bold, placed `size/2+20` from the centre · description 10, placed `size/2+35` from the centre.
 
-โลโก้เอามาจากคลังไอคอนของ skill นี้ ([icons.md](icons.md)) ให้รัน `python assets/find-icon.py --group brands <ชื่อ>` จากโฟลเดอร์ `diagram-figures/` แล้ว `--copy` ไปไว้ใน `_src/logos/`
-Simple Icons ให้ SVG สีเดียว `viewBox 0 0 24 24` และมาพร้อม `colors.json` ที่เก็บรหัสสีทางการของแต่ละแบรนด์
+Take logos from this skill's icon library ([icons.md](icons.md)). Run `python assets/find-icon.py --group brands <name>` from the `diagram-figures/` folder, then `--copy` the result into `_src/logos/`.
+Simple Icons gives single-colour SVG with `viewBox 0 0 24 24` and comes with `colors.json`, which holds each brand's official colour code.
 
-### เรื่องเครื่องหมายการค้า — ห้ามข้าม
+### Trademarks — do not skip
 
-- โลโก้เป็นของเจ้าของ ใช้เพื่ออ้างถึงตัวผลิตภัณฑ์ในผังได้
-  แต่**ห้ามดัดแปลงรูปทรง ห้ามยืดบีบ และห้ามทำให้ดูเหมือนเจ้าของมารับรอง**
-- ถ้าตัวไหนไม่มีไฟล์โลโก้ ให้ใช้สัญลักษณ์แทน แล้ว**ระบุชื่อตัวนั้นไว้ในหมายเหตุท้ายรูป**
-- อย่าไปดาวน์โหลดโลโก้ใหม่มาเอง ให้ใช้จากชุดที่มีอยู่ หรือให้ผู้ใช้หาจากหน้า brand ของโครงการนั้น
+- A logo belongs to its owner. You may use it to refer to the product itself in the diagram,
+  but **do not alter its shape, do not stretch or squash it, and do not make it look as if the owner endorses the figure.**
+- If a product has no logo file, use a symbol instead, and **name that product in the note under the figure.**
+- Do not download new logos on your own. Use the set that exists, or have the user get them from that project's brand page.
 
 ---
 
-## 8 · เรนเดอร์
+## 8 · Rendering
 
 ```bash
 pip install playwright && playwright install chromium
 python render.py d01.svg ../01-architecture.png 1400 860
 ```
 
-เรนเดอร์ที่ 2 เท่าเสมอ เพราะ 1 เท่าได้ภาพเบลอเมื่อขยายในสไลด์
+Always render at 2x, because 1x gives a blurry image when enlarged on a slide.
 
-ภาษาไทยต้องมีฟอนต์ไทยในเครื่องที่เรนเดอร์ แล้วประกาศไว้ใน `font-family` ของ `<svg>`
-**อย่าใช้ Python Imaging Library (PIL) วาดข้อความไทยปนอังกฤษ** เพราะจะได้กล่องสี่เหลี่ยมแทนตัวอักษร
-
----
-
-## 9 · วงจรตรวจงาน — ห้ามข้าม
-
-เรนเดอร์ → เปิดไฟล์ภาพดูจริง → แก้ → เรนเดอร์ใหม่ จนกว่าจะสะอาด
-**6 ข้อนี้เจอซ้ำทุกครั้ง ให้ตรวจทุกรอบ:**
-
-1. **ป้ายบนเส้นทับไอคอนหรือชื่อ** — ย้ายไปกึ่งกลางช่วงที่ยาวที่สุด หรือย้ายไปบนขาตั้ง
-2. **เส้นที่ออกจากไอคอนตัดคำอธิบายของตัวเอง** — เริ่มเส้นที่ `cy+58` ไม่ใช่ `cy+32`
-3. **ขอบโซนตัดคำอธิบายแถวล่างสุด** — ขอบล่างโซนต้อง ≥ `R_ล่างสุด + 58 + 24`
-4. **ข้อความกำกับโซนนั่งทับเส้นขอบ** — รวมกับชื่อในแคปซูลเดียว
-5. **หัวลูกศรไปจบที่ป้ายชื่อ ไม่ใช่ที่ไอคอน** — ให้จบที่ขอบไอคอน
-6. **ข้อความล้นกรอบ** — ไทย 11.5px ≈ 6.0 px/ตัว · หัวเรื่อง 15px ≈ 7.5 px/ตัว
-   ถ้าที่ไม่พอ ให้ตัดคำ **อย่าลดขนาดตัวอักษร**
+Thai text needs a Thai font on the machine that renders, declared in the `font-family` of `<svg>`.
+**Do not use Python Imaging Library (PIL) to draw mixed Thai and English text**, because it produces square boxes in place of letters.
 
 ---
 
-## 10 · ค่าคงที่ที่ใช้ได้จริง
+## 9 · Check loop — do not skip
+
+Render → open the image and look → fix → render again, until it is clean.
+**These 6 problems come up every time. Check them in every round:**
+
+1. **A label on a line covers an icon or a name.** Move it to the midpoint of the longest segment, or onto the stub.
+2. **A line leaving an icon cuts through its own description.** Start the line at `cy+58`, not `cy+32`.
+3. **A zone edge cuts the description of the bottom row.** The zone's bottom edge must be ≥ `R_bottom + 58 + 24`.
+4. **Zone caption text sits on the border.** Merge it with the name into one capsule.
+5. **An arrowhead ends at the name label, not the icon.** Make it end at the icon edge.
+6. **Text overflows its frame.** Thai 11.5px ≈ 6.0 px/char · heading 15px ≈ 7.5 px/char.
+   If space is short, cut words. **Do not shrink the font.**
+
+---
+
+## 10 · Constants that work
 
 ```
-ความกว้าง 1400 · ขอบ 56
-หัวเรื่องกลางหน้า 22 · คำอธิบายใต้หัว 12.5
-ชื่อหน่วย 11.5 ตัวหนา · คำอธิบาย 10 · ป้ายบนเส้น 10.5
-เส้นเชื่อม 1.6 · ขอบโซน 1.4 · รัศมีมุมโค้ง 14 · ป้ายสูง 21
+width 1400 · margin 56
+centred title 22 · subtitle under title 12.5
+unit name 11.5 bold · description 10 · label on line 10.5
+connector 1.6 · zone border 1.4 · corner radius 14 · label height 21
 ```
 
 ---
 
-## 11 · แถบสัญลักษณ์
+## 11 · Legend bar
 
-ทุกรูปปิดท้ายด้วยแถบเดียวที่บอกว่ากรอบแต่ละแบบคืออะไร และป้าย 2 สีต่างกันตรงไหน
-แล้วต่อด้วยหมายเหตุ 2–4 บรรทัด ซึ่งรวมบรรทัดเรื่องเครื่องหมายการค้า และการอ้างถึงรูปอื่นที่เกี่ยวข้อง
+Every figure ends with a single bar that says what each kind of frame means and where the 2 label colours differ.
+After it come 2–4 lines of notes. These include the trademark line and references to other related figures.
 
 ---
 
-## ตัวย่อ
+## Abbreviations
 
 - **SVG** — Scalable Vector Graphics
 - **PNG** — Portable Network Graphics

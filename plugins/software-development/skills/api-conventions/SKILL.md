@@ -3,112 +3,112 @@ name: api-conventions
 description: Use when adding API endpoints or checking API consistency
 ---
 
-# ข้อตกลงของ Application Programming Interface (API)
+# Application Programming Interface (API) conventions
 
-> **กฎข้อเดียว:** ตัดสินใจครั้งเดียว ใช้ทุก endpoint
-> API ที่ทุก endpoint ทำเหมือนกัน แม้ "ไม่ค่อยถูกตามทฤษฎี" ใช้ง่ายกว่า
-> API ที่แต่ละ endpoint ถูกต้องคนละแบบ เพราะแบบหลังฝั่งเรียกต้องเดาใหม่ทุกครั้ง
+> **The one rule:** decide once, apply to every endpoint.
+> An API where every endpoint behaves the same, even if "not quite right in theory", is easier to use
+> than an API where each endpoint is correct in its own way, because with the latter the caller must guess again every time.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เริ่มออกแบบ API ตัวแรกของโปรเจกต์
-- จะเพิ่ม endpoint ใน API เดิม และอยากให้เข้ากับของเดิม
-- รีวิว API แล้วรู้สึกว่าแต่ละส่วนไม่เหมือนกัน
-- ต้องตอบว่า "เปลี่ยนแบบนี้แล้ว client พังไหม"
+- Starting to design the first API of a project
+- Adding an endpoint to an existing API and wanting it to match what is there
+- Reviewing an API and feeling that its parts are not alike
+- Needing to answer "if we change it this way, will clients break?"
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill instead, or alongside
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| ออกแบบ endpoint ของฟีเจอร์หนึ่ง ๆ ให้ครบ | command `/api-design` | แทน |
-| health check, error envelope, graceful shutdown | `web-service-essentials` | แทน |
-| ตาราง คอลัมน์ ความสัมพันธ์ | `database-design` | แทน |
-| token, scope, สิทธิ์ | `auth-implementation-patterns` | แทน |
-| correlation id ที่โผล่ใน error | `logging-standards` | คู่ |
-| test สัญญาระหว่างระบบ | `testing-standards` | คู่ |
-| บันทึกเหตุผลที่เลือกข้อตกลงนี้ | `adr-writer` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| Design all the endpoints of one feature | command `/api-design` | instead |
+| Health check, error envelope, graceful shutdown | `web-service-essentials` | instead |
+| Tables, columns, relations | `database-design` | instead |
+| Tokens, scopes, permissions | `auth-implementation-patterns` | alongside |
+| Correlation id that appears in errors | `logging-standards` | alongside |
+| Contract tests between systems | `testing-standards` | alongside |
+| Recording why this convention was chosen | `adr-writer` | alongside |
+| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
 
-**แม่แบบเอกสารข้อตกลงที่คัดลอกไปใช้ได้เลย** → `assets/API-CONVENTIONS.md`
-
----
-
-## 1 · เอกสารข้อตกลงต้องมีจริง
-
-วางไฟล์ `docs/API-CONVENTIONS.md` (แม่แบบอยู่ที่ `assets/API-CONVENTIONS.md`)
-ทุกข้อในหน้านี้ที่ตัดสินใจแล้ว ให้เขียนลงไฟล์นั้น พร้อมวันที่และเหตุผลสั้น ๆ
-
-> ข้อตกลงที่อยู่ในหัวคนใดคนหนึ่ง ไม่ใช่ข้อตกลง — คนที่เข้าทีมเดือนหน้าจะทำอีกแบบ
+**A template of the conventions document that you can copy and use** → `assets/API-CONVENTIONS.md`
 
 ---
 
-## 2 · ตั้งชื่อ URL
+## 1 · The conventions document must exist
+
+Put the file `docs/API-CONVENTIONS.md` in place (the template is at `assets/API-CONVENTIONS.md`).
+Write every decision made from this page into that file, with the date and a short reason.
+
+> A convention that lives in one person's head is not a convention — someone who joins the team next month will do it another way.
+
+---
+
+## 2 · Naming URLs
 
 ```
-GET    /v1/orders                 รายการ
-POST   /v1/orders                 สร้าง
-GET    /v1/orders/{id}            รายตัว
-PATCH  /v1/orders/{id}            แก้บางส่วน
-PUT    /v1/orders/{id}            แทนที่ทั้งตัว
-DELETE /v1/orders/{id}            ลบ
-GET    /v1/orders/{id}/items      ทรัพยากรลูก
-POST   /v1/orders/{id}/cancel     การกระทำที่ไม่ใช่ CRUD (Create, Read, Update, Delete)
+GET    /v1/orders                 list
+POST   /v1/orders                 create
+GET    /v1/orders/{id}            single item
+PATCH  /v1/orders/{id}            partial update
+PUT    /v1/orders/{id}            replace the whole item
+DELETE /v1/orders/{id}            delete
+GET    /v1/orders/{id}/items      child resource
+POST   /v1/orders/{id}/cancel     an action that is not CRUD (Create, Read, Update, Delete)
 ```
 
-| กฎ | ✓ | ✗ |
+| Rule | ✓ | ✗ |
 |---|---|---|
-| คำนาม พหูพจน์ | `/orders` | `/getOrders`, `/order` |
-| ตัวพิมพ์เล็ก ขีดกลาง | `/purchase-orders` | `/purchaseOrders`, `/purchase_orders` |
-| ความลึกไม่เกิน 2 ชั้น | `/orders/{id}/items` | `/customers/{a}/orders/{b}/items/{c}/logs` |
-| กริยาใช้เมื่อไม่ใช่ CRUD จริง ๆ | `POST /orders/{id}/cancel` | `POST /orders/cancelOrder` |
+| Plural nouns | `/orders` | `/getOrders`, `/order` |
+| Lowercase, hyphens | `/purchase-orders` | `/purchaseOrders`, `/purchase_orders` |
+| At most 2 levels deep | `/orders/{id}/items` | `/customers/{a}/orders/{b}/items/{c}/logs` |
+| Use a verb only when it is truly not CRUD | `POST /orders/{id}/cancel` | `POST /orders/cancelOrder` |
 
-**การกระทำที่ไม่ใช่ CRUD** (อนุมัติ ยกเลิก ส่งซ้ำ) — ใช้ `POST /{resource}/{id}/{action}`
-อย่าดัดให้เป็น `PATCH` ที่แก้ `status` เพราะการเปลี่ยนสถานะมักมีผลข้างเคียงมากกว่าการแก้ฟิลด์ทั่วไป
+**An action that is not CRUD** (approve, cancel, resend) uses `POST /{resource}/{id}/{action}`.
+Do not bend it into a `PATCH` that edits `status`, because a status change usually has more side effects than an ordinary field edit.
 
-**วิธี `PATCH`:** เลือกแบบเดียวทั้งระบบ โดยแนะนำให้ส่งเฉพาะฟิลด์ที่แก้ (`merge patch`)
-และต้องกำหนดให้ชัดว่า `null` แปลว่า "ล้างค่า" หรือ "ไม่แตะ" (ดูข้อ 6)
+**How to use `PATCH`:** pick one style for the whole system. Sending only the changed fields (`merge patch`) is recommended,
+and you must define clearly whether `null` means "clear the value" or "leave it alone" (see section 6).
 
 ---
 
-## 3 · versioning
+## 3 · Versioning
 
-| วิธี | ข้อดี | ข้อเสีย |
+| Method | Pros | Cons |
 |---|---|---|
-| **ใน path** `/v1/orders` | เห็นชัด ทดสอบง่าย แคชง่าย | URL เปลี่ยนตอนขึ้นเวอร์ชัน |
-| ใน header `Accept: application/vnd.acme.v1+json` | URL คงที่ | มองไม่เห็นตอน debug ลืมส่งบ่อย |
+| **In the path** `/v1/orders` | Obvious, easy to test, easy to cache | The URL changes when the version goes up |
+| In a header `Accept: application/vnd.acme.v1+json` | The URL stays fixed | Invisible when debugging, often forgotten |
 
-> **เลือก path** ถ้าไม่มีเหตุผลเฉพาะ — ทุกคนเห็นเวอร์ชันได้จากบรรทัดเดียวใน log
+> **Choose the path** unless there is a specific reason — everyone can see the version from a single line in the log.
 
-**เปลี่ยนแบบไหนแล้วฝั่งเรียกพัง:**
+**Which changes break callers:**
 
-| การเปลี่ยน | พังไหม |
+| Change | Breaks? |
 |---|:--:|
-| เพิ่ม endpoint ใหม่ | ไม่ |
-| เพิ่มฟิลด์ **ที่ไม่บังคับ** ใน request | ไม่ |
-| เพิ่มฟิลด์ใน response | ไม่* |
-| เพิ่มค่า enum ใหม่ | **พัง** — client ที่ `switch` ครบทุกค่าจะเจอค่าที่ไม่รู้จัก |
-| ลบ/เปลี่ยนชื่อฟิลด์ | **พัง** |
-| เปลี่ยนชนิดข้อมูล (`"12"` → `12`) | **พัง** |
-| ทำให้ฟิลด์ที่เคยไม่บังคับกลายเป็นบังคับ | **พัง** |
-| เปลี่ยน HTTP status ที่คืนในกรณีเดิม | **พัง** |
-| ทำให้กฎ validation เข้มขึ้น | **พัง** |
+| Add a new endpoint | No |
+| Add an **optional** field to a request | No |
+| Add a field to a response | No* |
+| Add a new enum value | **Breaks** — a client whose `switch` covers every value will meet an unknown one |
+| Remove/rename a field | **Breaks** |
+| Change a data type (`"12"` → `12`) | **Breaks** |
+| Make a formerly optional field required | **Breaks** |
+| Change the HTTP status returned in an existing case | **Breaks** |
+| Make a validation rule stricter | **Breaks** |
 
-\* ต่อเมื่อบอกฝั่งเรียกไว้แต่แรกว่า "ฟิลด์ที่ไม่รู้จักให้ข้ามไป"
-ข้อนี้ต้องเขียนไว้ใน `API-CONVENTIONS.md` ไม่ใช่หวังเอาเอง
+\* Only when callers were told from the start to "skip fields you do not recognize".
+This must be written in `API-CONVENTIONS.md`, not left to hope.
 
-**ขึ้นเวอร์ชันใหญ่เมื่อจำเป็นจริง** เพราะทุกเวอร์ชันที่ยังเปิดอยู่คือโค้ดอีกชุดที่ต้องดูแล
+**Raise the major version only when truly needed**, because every version still open is another body of code to maintain.
 
 ---
 
-## 4 · pagination
+## 4 · Pagination
 
-**ทุก endpoint ที่คืนรายการต้องมี pagination ตั้งแต่วันแรก** ไม่มีข้อยกเว้น
-รายการที่ "มีไม่กี่รายการหรอก" อีก 2 ปีจะมี 10,000 รายการ
+**Every endpoint that returns a list must have pagination from day one**, with no exceptions.
+A list that "only has a few items" will have 10,000 in 2 years.
 
-| วิธี | ใช้เมื่อ | ข้อจำกัด |
+| Method | Use when | Limits |
 |---|---|---|
-| **cursor** `?limit=50&cursor=eyJ...` | ค่าเริ่มต้น · ข้อมูลเยอะ · มีข้อมูลเพิ่มระหว่างเปิดดู | กระโดดไปหน้า 7 ไม่ได้ |
-| offset `?limit=50&offset=100` | ต้องมีเลขหน้าให้กด · ข้อมูลไม่เยอะ | ยิ่งหน้าลึกยิ่งช้า · ถ้ามีแถวแทรกระหว่างเปิดดู ข้อมูลจะซ้ำหรือหาย |
+| **cursor** `?limit=50&cursor=eyJ...` | Default · lots of data · data is added while the user is browsing | Cannot jump to page 7 |
+| offset `?limit=50&offset=100` | Page numbers must be clickable · little data | Slower the deeper the page · if a row is inserted while browsing, data repeats or goes missing |
 
 ```jsonc
 // GET /v1/orders?limit=2 → 200
@@ -116,158 +116,158 @@ POST   /v1/orders/{id}/cancel     การกระทำที่ไม่ใ�
   "data": [ { "id": "1042" }, { "id": "1041" } ],
   "page": {
     "limit": 2,
-    "nextCursor": "eyJpZCI6MTA0MX0",   // null เมื่อหมดแล้ว
+    "nextCursor": "eyJpZCI6MTA0MX0",   // null when there is no more
     "hasMore": true
   }
 }
 ```
 
-- ห่อรายการไว้ใน `data` เสมอ เพราะถ้าตอบเป็นอาเรย์เปล่า ๆ วันหลังจะเติมข้อมูลหน้าไม่ได้
-- `limit` มีค่าเริ่มต้นและ**เพดานที่บังคับฝั่งเซิร์ฟเวอร์** (เช่น เริ่มต้น 20 สูงสุด 100)
-- `totalCount` นับแพง จึงให้ขอเป็นตัวเลือก `?includeTotal=true` อย่านับทุกครั้ง
-- **cursor ต้องทึบ** (ฝั่งเรียกห้ามแกะหรือประกอบเอง)
+- Always wrap the list in `data`, because a bare array leaves no room to add page information later.
+- `limit` has a default and a **ceiling enforced on the server** (for example default 20, maximum 100).
+- `totalCount` is expensive to count, so make it optional with `?includeTotal=true`. Do not count every time.
+- **The cursor must be opaque** (callers must never decode or build one themselves).
 
 ---
 
-## 5 · filtering · sorting · ฟิลด์ที่ขอ
+## 5 · Filtering · sorting · requested fields
 
 ```
 GET /v1/orders?status=confirmed&createdAt[gte]=2026-01-01&sort=-createdAt&fields=id,orderNo,total
 ```
 
-| เรื่อง | ข้อตกลง |
+| Topic | Convention |
 |---|---|
-| กรองค่าเท่ากับ | `?status=confirmed` |
-| หลายค่า | `?status=confirmed,shipped` |
-| ช่วง | `?createdAt[gte]=...&createdAt[lt]=...` |
-| เรียง | `?sort=-createdAt,orderNo` — `-` คือมากไปน้อย |
-| ค้นหาข้อความ | `?q=สมชาย` แยกจากการกรอง |
-| เลือกฟิลด์ | `?fields=id,orderNo` |
+| Filter by equal value | `?status=confirmed` |
+| Several values | `?status=confirmed,shipped` |
+| Range | `?createdAt[gte]=...&createdAt[lt]=...` |
+| Sort | `?sort=-createdAt,orderNo` — `-` means descending |
+| Text search | `?q=สมชาย` kept separate from filtering |
+| Select fields | `?fields=id,orderNo` |
 
-- **รับเฉพาะฟิลด์ที่กำหนดไว้** ถ้ารับชื่อฟิลด์อะไรก็ได้ จะเกิดช่องโหว่ และ query ที่ไม่มี index
-- พารามิเตอร์ที่ไม่รู้จัก ตอบ `400` ดีกว่าข้ามเงียบ ๆ ไม่งั้นฝั่งเรียกพิมพ์ผิดแล้วได้ข้อมูลผิดโดยไม่รู้ตัว
+- **Accept only the fields you have defined.** If any field name is accepted, you get security holes and queries with no index.
+- For an unknown parameter, answering `400` is better than skipping it silently. Otherwise a caller who mistypes gets wrong data without knowing.
 
 ---
 
-## 6 · รูปแบบข้อมูล
+## 6 · Data formats
 
-| ข้อมูล | รูปแบบ | ตัวอย่าง |
+| Data | Format | Example |
 |---|---|---|
-| ชื่อฟิลด์ | `camelCase` ทั้งระบบ | `createdAt` |
-| เวลา | RFC 3339 · UTC · ลงท้าย `Z` | `"2026-09-25T09:42:13.482Z"` |
-| วันที่ล้วน | `YYYY-MM-DD` | `"2026-09-25"` |
-| เงิน | ตัวเลขเป็น**สตริง** + สกุลเงินแยก | `{ "amount": "1250.00", "currency": "THB" }` |
-| identifier | **สตริงเสมอ** | `"1042"` ไม่ใช่ `1042` |
-| enum | `SCREAMING_SNAKE` หรือ `lower_snake` เลือกแบบเดียว | `"CONFIRMED"` |
-| ระยะเวลา | วินาทีเป็นตัวเลข ตั้งชื่อให้รู้หน่วย | `"timeoutSeconds": 30` |
-| ประเทศ / สกุลเงิน / ภาษา | ISO 3166 · ISO 4217 · BCP 47 | `"TH"` · `"THB"` · `"th-TH"` |
+| Field names | `camelCase` across the system | `createdAt` |
+| Time | RFC 3339 · UTC · ends with `Z` | `"2026-09-25T09:42:13.482Z"` |
+| Date only | `YYYY-MM-DD` | `"2026-09-25"` |
+| Money | the number as a **string** + a separate currency | `{ "amount": "1250.00", "currency": "THB" }` |
+| identifier | **always a string** | `"1042"` not `1042` |
+| enum | `SCREAMING_SNAKE` or `lower_snake`, pick one style | `"CONFIRMED"` |
+| Duration | seconds as a number, named so the unit is clear | `"timeoutSeconds": 30` |
+| Country / currency / language | ISO 3166 · ISO 4217 · BCP 47 | `"TH"` · `"THB"` · `"th-TH"` |
 
-> **id เป็นตัวเลขใน JSON คือระเบิดเวลา** — JavaScript เก็บจำนวนเต็มได้ปลอดภัยถึง 9,007,199,254,740,991
-> `bigint` ที่เกินนั้นจะถูกปัดเศษเงียบ ๆ ตอน `JSON.parse` และถ้าจะเปลี่ยนเป็นสตริงทีหลังก็เป็น breaking change
+> **A numeric id in JSON is a time bomb** — JavaScript stores integers safely up to 9,007,199,254,740,991.
+> A `bigint` above that is silently rounded at `JSON.parse`, and changing it to a string later is a breaking change.
 >
-> **เงินเป็น float ใน JSON** — `1250.10` ที่ผ่าน 2 ภาษาโปรแกรมอาจกลายเป็น `1250.0999999999999`
+> **Money as a float in JSON** — `1250.10` passed through 2 programming languages may become `1250.0999999999999`.
 
-**`null` กับ "ไม่มีฟิลด์" ต้องหมายถึงคนละอย่าง:**
+**`null` and "no field" must mean different things:**
 
-- ใน response ฟิลด์ที่มีแต่ไม่มีค่าให้ส่ง `null` ไม่ตัดทิ้ง ฝั่งเรียกจะได้ไม่ต้องเช็ค 2 แบบ
-- ใน `PATCH` ถ้าส่ง `{"note": null}` แปลว่าล้างค่า ถ้าไม่ส่งคีย์ `note` เลยแปลว่าไม่แตะ
+- In a response, a field that exists but has no value is sent as `null`, not dropped, so callers do not have to check 2 cases.
+- In a `PATCH`, sending `{"note": null}` means clear the value, and leaving out the `note` key entirely means leave it alone.
 
-**อาเรย์ว่างคือ `[]` ไม่ใช่ `null`** ฝั่งเรียกจะวนลูปได้เลย
-
----
-
-## 7 · error
-
-รูปแบบ error (RFC 9457 · `requestId` · `errors` แบบ array `{field, code, message}`) และตัวอย่างอยู่ที่ `web-service-essentials` ข้อ 2 ที่เดียว ใช้ตามนั้น
-ที่ต้องตกลงเพิ่มคือ **error ระดับฟิลด์**:
-
-- **`code` ให้โปรแกรมอ่าน · `message` ให้คนอ่าน** อย่าให้ฝั่งเรียกต้องเอาข้อความไปเขียนเงื่อนไข
-- ชี้ตำแหน่งฟิลด์ด้วยเส้นทางเต็ม รวมดัชนีของอาเรย์
-- **คืน error ครบทุกฟิลด์ในครั้งเดียว** ไม่ใช่ทีละตัว ผู้ใช้จะได้ไม่ต้องกดส่ง 5 รอบ
-- ถ้ารองรับหลายภาษา ให้เลือกข้อความไทยหรืออังกฤษจาก `Accept-Language`
-
-**เลือก status ให้ตรง:** `400` รูปแบบคำขอผิด · `401` ยังไม่ได้ยืนยันตัวตน · `403` ยืนยันแล้วแต่ไม่มีสิทธิ์ ·
-`404` ไม่มีหรือไม่ให้รู้ว่ามี · `409` ชนกับสถานะปัจจุบัน · `422` รูปแบบถูกแต่ข้อมูลไม่ผ่านกฎ · `429` เรียกถี่เกิน
+**An empty array is `[]`, not `null`**, so callers can loop over it directly.
 
 ---
 
-## 8 · เรียกซ้ำไม่เกิดผลซ้ำ และการแก้ชนกัน
+## 7 · Errors
 
-### idempotency key (รหัสกำกับคำขอ — ส่งซ้ำแล้วไม่ทำงานซ้ำ)
+The error format (RFC 9457 · `requestId` · an `errors` array of `{field, code, message}`) and examples live in one place, `web-service-essentials` section 2. Follow that.
+What still needs agreement is the **field-level error**:
 
-**บังคับกับทุก `POST` ที่มีผลทางการเงินหรือส่งของออกไปข้างนอก**
+- **`code` is for programs, `message` is for people.** Never make callers write conditions against the message text.
+- Point to the field location with the full path, including array indexes.
+- **Return the errors for all fields at once**, not one at a time, so users do not have to submit 5 times.
+- If several languages are supported, choose Thai or English text from `Accept-Language`.
+
+**Pick the status to match:** `400` malformed request · `401` not authenticated · `403` authenticated but not permitted ·
+`404` does not exist, or you do not want to reveal that it exists · `409` conflicts with the current state · `422` well-formed but the data fails the rules · `429` too many calls
+
+---
+
+## 8 · Repeat calls without repeat effects, and edit conflicts
+
+### idempotency key (a request code — sending it again does not do the work again)
+
+**Required on every `POST` that has a financial effect or sends something out to the outside world.**
 
 ```
 POST /v1/payments
-Idempotency-Key: 7f3c1e10-...        ← ฝั่งเรียกสร้าง เก็บไว้ใช้ตอน retry
+Idempotency-Key: 7f3c1e10-...        ← created by the caller, kept for use when retrying
 ```
 
-- เซิร์ฟเวอร์เก็บ key คู่กับผลลัพธ์ไว้อย่างน้อย 24 ชั่วโมง
-- key เดิมกับเนื้อหาเดิม ให้คืนผลเดิม ไม่ทำงานซ้ำ
-- key เดิมแต่เนื้อหา**ต่าง** ให้ตอบ `422` ไม่ทำงานใหม่
-- เครือข่ายขาดระหว่างรอคำตอบเป็นเรื่องปกติ ไม่ใช่กรณีพิเศษ ฝั่งเรียกจึง retry เสมอ
+- The server stores the key together with the result for at least 24 hours.
+- Same key with the same body: return the earlier result and do not repeat the work.
+- Same key with a **different** body: answer `422` and do not do new work.
+- A network drop while waiting for the answer is normal, not a special case, so callers always retry.
 
-### แก้ชนกัน (optimistic concurrency)
+### Edit conflicts (optimistic concurrency)
 
 ```
 GET   /v1/orders/1042        → 200  ETag: "v7"
 PATCH /v1/orders/1042        If-Match: "v7"
-                             → 200 ปกติ · 412 ถ้ามีคนแก้ไปก่อนแล้ว
+                             → 200 normally · 412 if someone edited it first
 ```
 
-ถ้าไม่มี คนที่กดบันทึกทีหลังจะทับงานของคนแรกโดยไม่มีใครรู้
+Without this, whoever saves second overwrites the first person's work and nobody knows.
 
 ---
 
-## 9 · rate limit
+## 9 · Rate limit
 
 ```
 X-RateLimit-Limit: 1000
 X-RateLimit-Remaining: 997
 X-RateLimit-Reset: 1758790000
-Retry-After: 42                ← ต้องมีคู่กับ 429 เสมอ
+Retry-After: 42                ← must always accompany a 429
 ```
 
-ถ้า `429` ไม่มี `Retry-After` ฝั่งเรียกต้องเดาเอง และส่วนใหญ่เดาว่า "ลองใหม่ทันที"
+If a `429` has no `Retry-After`, the caller must guess, and most guess "try again at once".
 
 ---
 
-## 10 · การเลิกใช้ endpoint
+## 10 · Retiring an endpoint
 
-1. ประกาศล่วงหน้า พร้อมบอกว่าใช้อะไรแทน
-2. ส่ง header ในทุก response ของ endpoint นั้น:
+1. Announce in advance, and say what to use instead.
+2. Send these headers in every response of that endpoint:
    ```
    Deprecation: @1790812800
    Sunset: Wed, 31 Dec 2026 23:59:59 GMT
    Link: <https://docs.acme.co/v2/orders>; rel="successor-version"
    ```
-   `Deprecation` ตามมาตรฐาน Request for Comments (RFC) 9745 (มี.ค. 2025) ต้องเป็นวันที่แบบ `@<วินาที unix>` (ตัวอย่างนี้คือ 1 ต.ค. 2026 00:00 UTC) ไม่ใช่ `true` · ตรวจ 22 ต.ค. 2569
-3. **ดูจาก log ว่ายังมีใครเรียกอยู่** แล้วติดต่อเขาตรง ๆ อย่ารอให้เงียบไปเอง
-4. ปิดจริงหลังวันที่ประกาศ ไม่ใช่ก่อน
+   `Deprecation` follows the Request for Comments (RFC) 9745 standard (Mar 2025). It must be a date in the form `@<unix seconds>` (this example is 1 Oct 2026 00:00 UTC), not `true`. Checked 22 Oct 2026 (B.E. 2569).
+3. **Check the logs for who still calls it**, then contact them directly. Do not wait for them to go quiet on their own.
+4. Close it only after the announced date, not before.
 
-ระยะเวลาที่พอดี: API ภายในให้ 1 รอบ release ส่วน API ที่คนนอกใช้ให้อย่างน้อย 6 เดือน
+A fitting period: for an internal API, 1 release cycle. For an API used by outsiders, at least 6 months.
 
 ---
 
-## 11 · ตรวจก่อนปล่อย endpoint ใหม่
+## 11 · Check before releasing a new endpoint
 
-ไล่ทุกข้อกับ endpoint ที่เพิ่ม ตกข้อเดียวยังไม่ merge (แนวคิดจาก ECC api-design)
+Go through every item against the endpoint you added. Fail one and it is not merged yet (idea from ECC api-design).
 
-- [ ] URL เป็นคำนามพหูพจน์ตามข้อ 2 · อยู่ใต้เวอร์ชันตามข้อ 3 · ไม่มี `GET` ที่เปลี่ยนข้อมูล
-- [ ] รายการทุกตัวมี pagination และเพดานขนาดหน้า (ข้อ 4) · filter และ sort ใช้ชื่อพารามิเตอร์เดียวกับ endpoint เดิม (ข้อ 5)
-- [ ] วันที่ · id · เงิน อยู่ในรูปแบบของข้อ 6 · response ไม่ใช่ entity ของฐานข้อมูลตรง ๆ
-- [ ] error ทุกตัวตาม `web-service-essentials` §2 และมี `code` คงที่ (ข้อ 7) · คำขอที่สร้างหรือจ่ายเงินรับ idempotency key · การแก้รับ `If-Match` (ข้อ 8)
-- [ ] ระบุ auth และ rate limit (ข้อ 9) · อยู่ใน OpenAPI แล้ว และตัวอย่าง cURL ในเอกสารรันผ่านจริง
-- [ ] มี contract test หรือ test ระดับ endpoint อย่างน้อย 1 กรณีสำเร็จ 1 กรณี error — ตรวจ response กับ OpenAPI ใน CI · Pact เมื่อผู้เรียกแยกทีม · `oasdiff breaking` ทุก PR: [`references/contract-testing.md`](references/contract-testing.md)
+- [ ] The URL is a plural noun per section 2 · sits under a version per section 3 · has no `GET` that changes data
+- [ ] Every list has pagination and a page-size ceiling (section 4) · filter and sort use the same parameter names as existing endpoints (section 5)
+- [ ] Dates · ids · money are in the formats of section 6 · the response is not a raw database entity
+- [ ] Every error follows `web-service-essentials` §2 and has a fixed `code` (section 7) · a request that creates or pays accepts an idempotency key · an edit accepts `If-Match` (section 8)
+- [ ] Auth and rate limit are stated (section 9) · it is in OpenAPI, and the cURL examples in the docs really run
+- [ ] There is a contract test or an endpoint-level test with at least 1 success case and 1 error case — check the response against OpenAPI in CI · Pact when the caller is on another team · `oasdiff breaking` on every PR: [`references/contract-testing.md`](references/contract-testing.md)
 
 ## 12 · Anti-patterns
 
-- **`200 OK` พร้อม `{"success": false}`** — ตัวเฝ้าระบบและ log ทั้งหมดจะมองไม่เห็นว่าพัง
-- **กริยาใน URL** — `/createOrder`, `/getOrderById`
-- **รายการที่ไม่มี pagination** — วันหนึ่งจะคืนข้อมูล 50,000 แถวในครั้งเดียว
-- **รูปแบบวันที่คนละแบบในแต่ละ endpoint** — เช่น `"25/09/2026"` ที่ไม่มีใครรู้ว่าวันหรือเดือนขึ้นก่อน
-- **ส่ง entity ของฐานข้อมูลออกไปตรง ๆ** — เพิ่มคอลัมน์ทีไร API เปลี่ยนตามโดยไม่ตั้งใจ และเสี่ยงข้อมูลภายในหลุด
-- **ชื่อฟิลด์ปนกัน** `created_at` กับ `updatedAt` ใน response เดียวกัน
-- **`GET` ที่เปลี่ยนข้อมูล** — ตัวโหลดหน้าเว็บล่วงหน้าจะยิงเองโดยไม่มีใครกด
-- **error message เปลี่ยนไปเรื่อย ๆ** โดยไม่มี `code` คงที่
-- **ไม่มีเอกสาร** — OpenAPI ที่สร้างจากโค้ดจริง ดีกว่าเอกสารที่เขียนมือแล้วไม่ตรง
+- **`200 OK` with `{"success": false}`** — monitors and logs will not see that it failed.
+- **Verbs in the URL** — `/createOrder`, `/getOrderById`
+- **A list with no pagination** — one day it will return 50,000 rows at once.
+- **A different date format on each endpoint** — for example `"25/09/2026"`, where nobody knows whether day or month comes first.
+- **Sending a database entity out as is** — every time a column is added, the API changes by accident, and internal data may leak.
+- **Mixed field names** such as `created_at` and `updatedAt` in one response.
+- **A `GET` that changes data** — a web page prefetcher will fire it by itself with nobody clicking.
+- **Error messages that keep changing** with no fixed `code`.
+- **No documentation** — an OpenAPI generated from the real code is better than hand-written docs that do not match.

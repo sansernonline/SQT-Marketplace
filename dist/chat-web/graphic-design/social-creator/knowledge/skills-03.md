@@ -4,7 +4,7 @@ Use when a LINE OA needs a rich menu built
 
 # LINE Rich Menu
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Pre-work gate (every time):** read the owner's theme → search live for prototypes → 3 genuinely different directions → run `no-ai-look` before sending · follow the "ด่านก่อนลงมือ" section of `design-references` (plugin `superuser`) even when a brand exists (the brand sets colours and fonts, while the search finds the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
 The rich menu is the shop front. 6 clear buttons work better than 12 tiny ones.
 
@@ -62,7 +62,7 @@ A ready JSON for a 6-button full menu with the grid coordinates: [references/ric
 ## 5. Workflow
 
 1. Pick the 6 main customer tasks from chat history.
-2. Designer brief — size, grid, safe margins, brand colours, text per cell · no brand yet → **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `app` แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้.
+2. Designer brief — size, grid, safe margins, brand colours, text per cell · no brand yet → **search for prototypes first:** take the project's keywords and search live per `design-references` (plugin `superuser`) type `app`, then pull the colours from the chosen piece · use the stored palette library only when live search is not possible.
 3. Export ≤ 1 MB (PNG-8 or JPEG quality ~80).
 4. Check locally first: `python scripts/richmenu_check.py menu.json menu.png` (size, 20 areas, 14 characters, areas inside the image, 1 MB; limits in [references/richmenu-limits.json](references/richmenu-limits.json), checked 2026-10-26 · `--self-test` 8/8). Then the API: validate → create → upload → test on one user → **ask approval** → set default → test on iOS and Android.
 5. Text fallback: the greeting message lists the same 6 keywords.

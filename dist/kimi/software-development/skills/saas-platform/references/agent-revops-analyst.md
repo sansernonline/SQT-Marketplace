@@ -53,7 +53,7 @@ Use: B2B SaaS standard
 
 ## Billing Systems (2026)
 
-> รายชื่อเครื่องมือจากความรู้ของโมเดล ยังไม่ได้ตรวจกับเว็บทางการ (รอยืนยัน · 2026-10-14) — ตรวจก่อนแนะนำลูกค้า
+> The tool list comes from the model's own knowledge and has not been checked against official websites (รอยืนยัน · 2026-10-14). Check it before recommending to a customer.
 
 | System | Best for |
 |--------|----------|

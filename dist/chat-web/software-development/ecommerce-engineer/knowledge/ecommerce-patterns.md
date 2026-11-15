@@ -4,9 +4,9 @@ Use when building shop software with cart and checkout
 
 # ecommerce-patterns
 
-ร้านค้าออนไลน์ — checkout และ conversion · สต็อกหลายคลัง · ระบบแนะนำสินค้า
+Online shops — checkout and conversion · multi-warehouse stock · product recommendation
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** — ไม่ต้องอ่านทั้งหมด แต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
+**Open only the files that match the job.** Do not read them all. Each file is the full guide to its topic.
 
 ## หัวข้อ
 
@@ -19,7 +19,7 @@ Use when building shop software with cart and checkout
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
+An agent called in for this area opens its own role file before starting.
 
 | บทบาท | อ่าน | agent |
 |---|---|---|

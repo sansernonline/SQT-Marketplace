@@ -6,9 +6,9 @@ argument-hint: <transaction-flow-design | pci-audit> <details>
 
 # fintech-payments
 
-ระบบที่มีเงินไหลผ่าน — payment gateway · KYC/AML · PCI-DSS · โมเดลความเสี่ยงการเงิน
+Systems that money flows through — payment gateway · KYC/AML · PCI-DSS · financial risk models
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทุกไฟล์ เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้นอยู่แล้ว
+**Open only the files that match the job.** Do not read every file, because each file is already the full guide to its topic.
 
 ## หัวข้อ
 
@@ -21,7 +21,7 @@ argument-hint: <transaction-flow-design | pci-audit> <details>
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน · อ่านสารบัญก่อน แล้วอ่านเฉพาะหัวข้อที่งานใช้
+An agent called in for this area opens its own role file before starting work · read the table of contents first, then read only the sections the job uses
 
 | บทบาท | อ่าน | agent |
 |---|---|---|

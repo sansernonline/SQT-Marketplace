@@ -1,16 +1,16 @@
-# playbook · promotion-case — ประเมินตัวเองและขอเลื่อนตำแหน่ง
+# playbook · promotion-case — self-review and asking for a promotion
 
-ใช้เมื่อ: ประเมินผลงานกลางปีหรือปลายปี · อยากขอเลื่อนตำแหน่งหรือขึ้นเงินเดือน · เริ่มจดผลงาน
-skill หลัก: `performance-self-review` · `salary-negotiation`
+Use when: the mid-year or year-end performance review · the user wants to ask for a promotion or a raise · starting to log achievements
+Main skills: `performance-self-review` · `salary-negotiation`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. รวบรวมผลงานจากของจริง — อีเมลชม · รายงาน · ตัวเลขระบบ · เป้า KPI ปีนี้ · ใคร: หัวหน้าทีม
-2. เขียนผลงานแต่ละชิ้นเป็นผลต่อธุรกิจ (เงิน · เวลา · ความเสี่ยง · ลูกค้า) พร้อมตัวเลข · ใคร: `career-coach` ตัวใหม่
-3. เทียบกับเกณฑ์ของตำแหน่งถัดไป แยกข้อที่ถึงแล้วพร้อมหลักฐาน กับข้อที่ยังขาด · ใคร: `career-coach` ตัวใหม่
-4. ร่างแบบประเมินตัวเองตามแบบฟอร์มบริษัท และร่างบทพูดกับหัวหน้า 3 นาที · ใคร: `career-coach` ตัวใหม่
-5. ตรวจว่าทุกข้ออ้างชี้ไปที่หลักฐานได้ และไม่มีตัวเลขที่ผู้ใช้ไม่ได้ให้มา · ใคร: `reviewer` ตัวใหม่
+1. Collect achievements from real material: praise emails · reports · system figures · this year's KPI targets · ใคร: หัวหน้าทีม
+2. Write each achievement as its effect on the business (money · time · risk · customers), with numbers · ใคร: `career-coach` ตัวใหม่
+3. Compare with the criteria of the next position. Separate the criteria already met, with evidence, from the ones still missing · ใคร: `career-coach` ตัวใหม่
+4. Draft the self-review on the company's form, and draft a 3-minute talk for the manager · ใคร: `career-coach` ตัวใหม่
+5. Check (ตรวจ) that every claim points to evidence, and that there are no figures the user did not provide · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-แบบประเมินและบทพูดพร้อมใช้ ทุกข้ออ้างมีหลักฐาน
+The self-review and the talk are ready to use, and every claim has evidence

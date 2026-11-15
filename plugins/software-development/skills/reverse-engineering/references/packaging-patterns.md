@@ -1,49 +1,49 @@
-# รูปแบบการแพ็กแอปที่เจอบ่อย
+# Common app packaging patterns
 
-รู้ว่าแอปแพ็กแบบไหน ก็ไปถึงชั้นที่อ่านได้เลย — ดูหัวข้อนี้ก่อนเปิด decompiler · ทุกคำสั่งในไฟล์นี้ **อ่านหรือแตกไฟล์อย่างเดียว** ยกเว้นที่ติดป้าย **ถามก่อน** (ตามตารางสิทธิ์ใน `SKILL.md` §2)
+Once you know how an app is packed, you can go straight to the layer you can read. Check this page before opening a decompiler. Every command here **only reads or extracts files**, except those marked **ask first** (see the permission table in `SKILL.md` §2).
 
-## แอปของ Mozilla (Firefox · Thunderbird)
+## Mozilla apps (Firefox · Thunderbird)
 
-- ตัวติดตั้งเต็มบน Windows คือ **7-Zip SFX stub** (PE32 เล็ก มี 3 section) ที่ต่อ archive ของแอปไว้ท้ายไฟล์ · `7z x setup.exe` ได้ `core/` กับ `setup.exe`
-- `core/application.ini` — เวอร์ชัน · BuildID · repository ต้นทาง · SourceStamp (หลักฐานว่าสร้างจากซอร์สไหน)
-- `core/omni.ja` — ไฟล์ ZIP (Thunderbird 97MB ขึ้นไป) เก็บ JavaScript ของแอปเกือบทั้งหมด (`modules/` · `chrome/`) และค่าเริ่มต้น (`defaults/pref/*.js`) · แตกด้วย 7z แล้ว Grep หา feature · `omni.ja` มักเป็นทางที่ถูกที่สุดที่ได้คำตอบครบ
-- DLL ใหญ่ ๆ คือชั้น native: `xul.dll` (เอนจิน Gecko) · `nss3.dll`/`freebl3.dll` (การเข้ารหัส) · `rnp.dll` (OpenPGP) · `libotr.dll` (เข้ารหัสแชต)
-- `thunderbird.exe` เป็นแค่ตัวเรียก (launcher stub)
+- The full Windows installer is a **7-Zip SFX stub** (a small PE32 with 3 sections) with the app archive appended at the end. `7z x setup.exe` gives `core/` and `setup.exe`.
+- `core/application.ini` — version · BuildID · source repository · SourceStamp (evidence of which source it was built from)
+- `core/omni.ja` — a ZIP file (97 MB or more for Thunderbird) holding almost all of the app's JavaScript (`modules/` · `chrome/`) and the defaults (`defaults/pref/*.js`). Extract it with 7z, then Grep for the feature. `omni.ja` is often the cheapest route to a full answer.
+- The large DLLs are the native layer: `xul.dll` (Gecko engine) · `nss3.dll`/`freebl3.dll` (cryptography) · `rnp.dll` (OpenPGP) · `libotr.dll` (chat encryption)
+- `thunderbird.exe` is only a launcher stub.
 
-## แอป Electron / Node
+## Electron / Node apps
 
-- `app.asar` — archive แบบ ASAR · `python -I scripts/asar_extract.py extract app.asar outdir` (ดู javascript-electron.md) · JS ฝั่ง renderer มัก minify แต่ยังอ่านได้ · ไฟล์ `.map` (source map) อาจมีซอร์สต้นฉบับ (`scripts/sourcemap_list.py`)
-- `resources/app/package.json` บอกชื่อแอป · จุดเริ่มทำงาน · รายการ dependency
-- native module: ไฟล์ `*.node` (เป็น PE DLL) — ถือเป็น native binary
+- `app.asar` — an ASAR archive. Use `python -I scripts/asar_extract.py extract app.asar outdir` (see javascript-electron.md). Renderer-side JS is usually minified but still readable. A `.map` file (source map) may hold the original source (`scripts/sourcemap_list.py`).
+- `resources/app/package.json` gives the app name · the start point · the dependency list.
+- Native modules: `*.node` files (these are PE DLLs) — treat them as native binaries.
 
-## แอป .NET
+## .NET apps
 
-- PE ที่มี CLI header (triage รายงาน `.NET / managed PE`) · `ilspycmd -p -o <out> <dll>` ได้ project C# ใกล้ต้นฉบับ — ลองกับงานจริงแล้ว: logic เหมือนเดิม SQL ครบ หายแค่คอมเมนต์กับชื่อตัวแปรในฟังก์ชัน
-- `.pdb` ข้าง dll คืนชื่อไฟล์และเลขบรรทัดเดิม · `.dll.config` เก็บค่าตั้ง (และมักมีความลับ)
-- ASP.NET MVC ที่ precompile view: `.cshtml` กลับมาเป็นคลาสใต้ `<Assembly>.Views.<Controller>`
-- APK ของ Xamarin: โค้ด C# อยู่ใน `assemblies/*.dll` ใน APK (บางทีบีบด้วย LZ4 เป็น `XALZ`) — decompile ไฟล์พวกนี้ ไม่ใช่ `classes.dex`
-- ดูว่าเป็น bundled / single-file deployment (แตกตัวเองตอนรัน) หรือไม่ — แตกออกมาก่อน
-- การประกาศ P/Invoke บอกว่าโค้ด managed เรียกฟังก์ชันไหนใน DLL native
+- A PE with a CLI header (triage reports `.NET / managed PE`). `ilspycmd -p -o <out> <dll>` gives a C# project close to the original. Tried on real work: the logic matched, all SQL was present, and only the comments and local variable names were lost.
+- A `.pdb` next to the dll restores the original file names and line numbers. A `.dll.config` holds settings (and often secrets).
+- ASP.NET MVC with precompiled views: each `.cshtml` comes back as a class under `<Assembly>.Views.<Controller>`.
+- Xamarin APK: the C# code sits in `assemblies/*.dll` inside the APK (sometimes LZ4-compressed as `XALZ`). Decompile these files, not `classes.dex`.
+- Check whether it is a bundled or single-file deployment (it unpacks itself at run time). If so, extract it first.
+- A P/Invoke declaration tells you which function in a native DLL the managed code calls.
 
 ## Android APK
 
-- เป็น ZIP · มี `classes.dex` (Dalvik bytecode — ใช้ `jadx` หรือ `apktool` ได้โค้ดใกล้ Java) · `AndroidManifest.xml` (XML แบบ binary — `scripts/apk_inventory.py` ถอดได้ ไม่งั้นใช้ `apktool` หรือ `aapt2`) · `resources.arsc` · native lib ใต้ `lib/`
+- A ZIP. It holds `classes.dex` (Dalvik bytecode — `jadx` or `apktool` gives code close to Java) · `AndroidManifest.xml` (binary XML — `scripts/apk_inventory.py` can decode it, otherwise use `apktool` or `aapt2`) · `resources.arsc` · native libraries under `lib/`
 
-## ตัวติดตั้ง Windows ทั่วไป
+## Common Windows installers
 
-- 7-Zip SFX: แตกด้วย `7z x`
-- NSIS: แตกด้วย `7z x` (triage เจอ marker `NullsoftInstall`)
-- MSI: **ใช้ `7z x file.msi` หรือ `lessmsi x file.msi <out>\` ก่อน** — อ่านไฟล์อย่างเดียว ไม่เรียก Windows Installer · `msiexec /a file.msi /qb TARGETDIR=<out>` (administrative install) **ถามก่อน** เพราะเป็นการรัน Windows Installer บนเครื่องผู้ใช้ (บอกว่าจะรันอะไร กับไฟล์ไหน) · ไฟล์ที่ไม่รู้ที่มา → รันใน `docker-sandbox` เท่านั้น
-- MSI transform และ stub ที่ดาวน์โหลดตัวจริงทีหลัง อาจไม่มี payload เลย — ดูให้รู้แต่แรกจะได้ไม่เสียแรง
+- 7-Zip SFX: extract with `7z x`
+- NSIS: extract with `7z x` (triage finds the `NullsoftInstall` marker)
+- MSI: **try `7z x file.msi` or `lessmsi x file.msi <out>\` first.** These only read the file and never call Windows Installer. `msiexec /a file.msi /qb TARGETDIR=<out>` (administrative install) is **ask first**, because it runs Windows Installer on the user's machine (say what you will run and on which file). For a file of unknown origin, run it only in `docker-sandbox`.
+- An MSI transform, or a stub that downloads the real payload later, may have no payload at all. Learn this at the start so you do not waste effort.
 
-## ไฟล์รายงานและ ETL (Extract-Transform-Load) ขององค์กร
+## Organisation report files and ETL (Extract-Transform-Load) files
 
-บ่อยครั้งเป็นที่เดียวที่สูตรคำนวณอยู่ · ไม่ต้องใช้ decompiler เลย
+These are often the only place where the calculation formulas live. You do not need a decompiler at all.
 
-| ไฟล์ | คืออะไร | ชั้นที่อ่านได้ |
+| File | What it is | Layer you can read |
 |---|---|---|
-| `.rpt` Crystal Reports | OLE compound file | `strings` เห็น SQL ชื่อตารางและฟิลด์ · สูตรต้องใช้ Crystal Designer หรือ export ด้วย RptToXml |
-| `.pbix` Power BI | ZIP | `Report/Layout` เป็น JSON แบบ UTF-16 (หน้า visual filter) · measure ใน `DataModel` ต้องใช้ pbi-tools หรือ Tabular Editor |
-| `.dtsx` SQL Server Integration Services (SSIS) | XML | ค้น `SqlCommand` · `ConnectionManager` · `DTS:ObjectName` · ลำดับ package ดูใน master package |
-| `.rdl` SQL Server Reporting Services (SSRS) | XML | `CommandText` ของแต่ละ dataset |
-| `.mdb` / `.accdb` | ฐานข้อมูล Access | query และโมดูล VBA · เปิดด้วย mdbtools หรือ Access |
+| `.rpt` Crystal Reports | OLE compound file | `strings` shows the SQL, table names and fields. For formulas, use Crystal Designer or export with RptToXml |
+| `.pbix` Power BI | ZIP | `Report/Layout` is UTF-16 JSON (page and visual filters). Measures in `DataModel` need pbi-tools or Tabular Editor |
+| `.dtsx` SQL Server Integration Services (SSIS) | XML | Search for `SqlCommand` · `ConnectionManager` · `DTS:ObjectName`. The package order is in the master package |
+| `.rdl` SQL Server Reporting Services (SSRS) | XML | The `CommandText` of each dataset |
+| `.mdb` / `.accdb` | Access database | Queries and VBA modules. Open with mdbtools or Access |

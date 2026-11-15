@@ -75,7 +75,7 @@ Pay through a bank that supports e-WHT and the bank deducts, files and remits �
 | ค่าปรับอาญา for a late return | Up to 2,000 baht (ม.35); usual settlement 100–200 baht per WHT return and 300–500 baht per ภ.พ.30 (รอยืนยัน) |
 | Under-estimated ภ.ง.ด.51 | Estimate more than 25% below actual profit without reasonable cause: 20% surcharge on the shortfall |
 
-ตรวจล่าสุด 2026-10-25 (เบี้ยปรับ VAT) · แหล่ง: https://www.rd.go.th/3361.html , https://www.prosofterp.com/Article/Detail/141129 , https://www.auditorasia.com/th/process_add_money · ค่าปรับอาญา 100/200 และ 300/500 บาท (ยื่นช้าไม่เกิน 7 วัน / เกิน 7 วัน) พบแค่แหล่งรอง ยังไม่พบระเบียบทางการ
+Last checked 2026-10-25 (VAT surcharge) · sources: https://www.rd.go.th/3361.html , https://www.prosofterp.com/Article/Detail/141129 , https://www.auditorasia.com/th/process_add_money · criminal fines of 100/200 and 300/500 baht (filing late by no more than 7 days / more than 7 days) were found only in secondary sources; no official regulation found yet
 
 ## Workflow
 

@@ -337,108 +337,108 @@ Sources: code-modernization (Apache-2.0) · progress/summary · seen 2026-11-10 
 
 Use when naming or filing a document others keep
 
-# ตั้งชื่อและจัดเวอร์ชันเอกสาร
+# Naming and versioning documents
 
-> **กฎข้อเดียว:** ไฟล์ที่มีระบบเก็บประวัติให้อยู่แล้ว (git · ประวัติเวอร์ชันของ Google Docs) **ห้ามใส่เวอร์ชันในชื่อ**
-> ไฟล์ที่ออกไปนอกระบบนั้น **ต้องใส่** เพราะไม่มีอะไรบอกได้อีกแล้วว่าใครถือฉบับไหน
+> **The one rule:** a file that a system already keeps history for (git · Google Docs version history) **must not carry a version in its name.**
+> A file that leaves that system **must carry one**, because nothing else can tell you who holds which copy.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- สร้างเอกสารใหม่ที่ทีมหรือลูกค้าจะเก็บไว้
-- ส่งเอกสารออกไปให้คนนอกทีม
-- โฟลเดอร์เริ่มมี `final`, `final2`, `ล่าสุด`, `แก้แล้ว`
-- มีคนถามว่า "ตกลงยึดฉบับไหน"
+- Creating a new document that the team or the client will keep.
+- Sending a document to people outside the team.
+- A folder starts to fill with `final`, `final2`, `ล่าสุด` (latest), `แก้แล้ว` (edited).
+- Someone asks "so which version do we go with?"
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill instead, or together
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| เนื้อหาข้างในเอกสาร | `human-writing` (งานโค้ด: `srs-writing` · `fsd-writing` ใน plugin `software-development`) | แทน |
-| รูปแบบ markdown | `polished-document-style` | แทน |
-| หน้าตาไฟล์ที่ render ออกมา | `branded-document-design` (plugin `software-development`) | แทน |
-| ไฟล์ชั่วคราวระหว่างทำงาน | `superuser:temp-file-discipline` | แทน |
-| งานโค้ด: ข้อความ commit · เวอร์ชันของ **โปรแกรม** · สารบัญเอกสารโปรเจกต์ | `commit-message-format` · `cicd-and-release` · `project-bootstrap` (plugin `software-development`) | แทน/คู่ |
-| ตัวย่อในงานที่คนอ่าน | [`spell-out-abbreviations`](../spell-out-abbreviations/SKILL.md) | คู่ |
+| The content inside the document | `human-writing` (code work: `srs-writing` · `fsd-writing` in plugin `software-development`) | instead |
+| Markdown formatting | `polished-document-style` | instead |
+| The look of the rendered file | `branded-document-design` (plugin `software-development`) | instead |
+| Temporary files during work | `superuser:temp-file-discipline` | instead |
+| Code work: commit messages · version of the **program** · the project document index | `commit-message-format` · `cicd-and-release` · `project-bootstrap` (plugin `software-development`) | instead / together |
+| Abbreviations in work people read | [`spell-out-abbreviations`](../spell-out-abbreviations/SKILL.md) | together |
 
-**แม่แบบตารางประวัติการแก้ไข และรายการชื่อไฟล์มาตรฐาน** อยู่ใน `assets/naming-cheatsheet.md`
+**The revision-history table template and the standard file-name list** are in `assets/naming-cheatsheet.md`.
 
 ---
 
-## 1 · เลือกรูปแบบก่อนตั้งชื่อ
+## 1 · Pick the format before naming
 
-**เกณฑ์เดียว: ถ้ามีคนเซ็นหรือส่งออกนอกทีม ให้ทำเป็นไฟล์ส่งมอบ ส่วนเอกสารที่เปลี่ยนตามเนื้องานให้เป็น markdown ในโฟลเดอร์เอกสาร (เช่น `docs/`)**
+**One test: if someone signs it or it goes outside the team, make it a deliverable file. A document that changes with the work stays markdown in the documents folder (e.g. `docs/`).**
 
-| เอกสาร | รูปแบบ | เหตุผล |
+| Document | Format | Reason |
 |---|---|---|
-| ข้อเสนอ · ใบเสนอราคา · รายงานส่งมอบ · ใบตรวจรับงาน · สัญญา (ชุดเอกสารโปรเจกต์ซอฟต์แวร์ → plugin `software-development`) | **docx** | มีคนเซ็น ต้องล็อกฉบับ |
-| คู่มือผู้ใช้ | **docx + PDF** | ผู้ใช้ปลายทางเปิดได้ทุกเครื่อง |
-| สไลด์นำเสนอ | **pptx** · ขอ html → .html ไฟล์เดียว (ชนิดไฟล์ตาม `presentation-design` ใน plugin `software-development`) · PDF เมื่อเครื่องปลายทางไม่มีฟอนต์ | |
-| ขั้นตอนทำงาน · คู่มือภายใน · README · บันทึกประชุม · บันทึกการตัดสินใจ (งานโค้ด → plugin `software-development`) | **markdown** ในโฟลเดอร์เอกสาร | เปลี่ยนบ่อย ต้องเทียบความต่างได้ ค้นหาง่าย |
+| Proposal · quotation · handover report · acceptance certificate · contract (software project document sets → plugin `software-development`) | **docx** | Someone signs it, so the version must be locked |
+| User manual | **docx + PDF** | End users can open it on any machine |
+| Presentation slides | **pptx** · if html is requested → a single .html file (file type per `presentation-design` in plugin `software-development`) · PDF when the target machine lacks the fonts | |
+| Work procedures · internal guides · README · meeting notes · decision records (code work → plugin `software-development`) | **markdown** in the documents folder | It changes often, needs diffs, and is easy to search |
 
-> 🚨 **ต้นฉบับ markdown ที่ render ซ้ำได้ เก็บถาวรใน `docs/src/<เรื่อง>.md` แล้ว render เป็น docx ลงโฟลเดอร์เอกสาร (`docs/`)**
-> `docs/` มีเอกสารส่งมอบของเรื่องนั้นฉบับเดียวคือ .docx — ไม่มี .md และ .pdf ของเรื่องเดียวกันวางซ้ำข้างกัน (ต้นฉบับอยู่ใน `docs/src/` · ไม่ใช่ `_to_delete/` เพราะต้องใช้ทุกรอบที่แก้)
-> แก้รอบถัดไป → แก้ที่ `docs/src/` แล้ว render ใหม่ ไม่เปิด Word แก้มือ (ตรงกับ `markdown-report-docx`) · บรรทัด "ต้นฉบับ" บนปกชี้ไปที่ไฟล์นี้
+> 🚨 **Markdown source that can be re-rendered is kept permanently in `docs/src/<topic>.md`, then rendered to docx into the documents folder (`docs/`).**
+> `docs/` holds exactly one deliverable for that topic, the .docx. No .md or .pdf of the same topic sits beside it. (The source lives in `docs/src/`, not `_to_delete/`, because it is needed every time you revise.)
+> On the next revision, edit `docs/src/` and render again. Never open Word and edit by hand (matches `markdown-report-docx`). The "ต้นฉบับ" (source) line on the cover points to this file.
 
-**PDF ทำเฉพาะคู่มือผู้ใช้ หรือเมื่อลูกค้าขอ** — นอกนั้น docx ฉบับเดียว
+**Make a PDF only for user manuals, or when the client asks.** Otherwise, one docx.
 
 ---
 
-## 2 · รูปแบบชื่อไฟล์
+## 2 · File name format
 
 ```
-<รหัสโปรเจกต์>-<ประเภท>-<เรื่อง>-v<M.m>-<สถานะ>.docx
+<project code>-<type>-<topic>-v<M.m>-<status>.docx
 ```
 
-| ประเภทเอกสาร | รูปแบบ | ตัวอย่าง |
+| Document type | Format | Example |
 |---|---|---|
-| ไฟล์ส่งออก | `<โปรเจกต์>-<ประเภท>-v<M.m>-<สถานะ>.docx` | `ACME-QUOTE-v1.2-APPROVED.docx` |
-| มีหลายเรื่อง | เติมเรื่องต่อจากประเภท | `ACME-REPORT-sales-v0.3-DRAFT.docx` |
-| ฉบับที่ส่งให้ลูกค้าจริง | เติมวันที่ตามมาตรฐาน International Organization for Standardization (ISO) 8601 ท้ายสุด | `ACME-QUOTE-v1.2-APPROVED-2026-09-25.docx` |
-| เอกสาร markdown | `<ประเภท>-<เรื่อง>.md` ตัวพิมพ์เล็ก ขีดกลาง | `docs/guide-onboarding.md` |
-| บันทึกประชุม (ข้อยกเว้น: วันที่ขึ้นก่อน) | `YYYY-MM-DD-<เรื่อง>.md` | `docs/meetings/2026-09-25-kickoff.md` |
+| Exported file | `<project>-<type>-v<M.m>-<status>.docx` | `ACME-QUOTE-v1.2-APPROVED.docx` |
+| Several topics | Add the topic after the type | `ACME-REPORT-sales-v0.3-DRAFT.docx` |
+| Version actually sent to the client | Add the date at the very end, in International Organization for Standardization (ISO) 8601 format | `ACME-QUOTE-v1.2-APPROVED-2026-09-25.docx` |
+| Markdown document | `<type>-<topic>.md`, lowercase, hyphens | `docs/guide-onboarding.md` |
+| Meeting notes (exception: date first) | `YYYY-MM-DD-<topic>.md` | `docs/meetings/2026-09-25-kickoff.md` |
 
-**กฎชื่อไฟล์:**
+**File name rules:**
 
-- ไม่มีเว้นวรรค ใช้ขีดกลาง — เว้นวรรคทำให้ลิงก์และคำสั่งใน command line พัง
-- **วันที่เป็น ISO `YYYY-MM-DD` เสมอ** และวางท้ายสุด — เรียงตามชื่อแล้วได้เรียงตามเวลาเอง · ข้อยกเว้นเดียว: บันทึกประชุมวางวันที่ไว้หน้าสุด เพราะโฟลเดอร์ `docs/meetings/` มีแต่บันทึกประชุม จึงเรียงตามวันได้ทันที
-- ชื่อไฟล์เป็นอังกฤษ แม้เนื้อหาเป็นไทย — กันปัญหาตอนแนบอีเมลและ zip ข้ามระบบ
-- ห้ามใส่ชื่อคนในชื่อไฟล์ — `-somchai-edit` คือสัญญาณว่าไม่ได้ใช้ต้นฉบับเดียว
+- No spaces; use hyphens. Spaces break links and command-line commands.
+- **The date is always ISO `YYYY-MM-DD`** and goes at the very end, so sorting by name also sorts by time. The one exception: meeting notes put the date first, because the `docs/meetings/` folder holds only meeting notes, so it sorts by date at once.
+- File names are in English even when the content is Thai. This avoids trouble when attaching to email and zipping across systems.
+- Never put a person's name in a file name. `-somchai-edit` is a sign that people are not working from one source.
 
-**ตรวจด้วยสคริปต์:** `node <โฟลเดอร์ skill นี้>/scripts/doc-name-check.mjs docs/*` → บอกชื่อที่ผิดพร้อมชื่อที่เสนอ · เปลี่ยนชื่อหลายไฟล์: เติม `--plan _to_delete/renames.json` ได้แผนโดยยังไม่แตะไฟล์ ตรวจหรือแก้แผนแล้วรัน `--plan _to_delete/renames.json --apply` · สคริปต์ไม่เปลี่ยนชื่อไฟล์ `APPROVED` และไม่ทับไฟล์ที่มีอยู่ · ไม่ใส่ไฟล์ที่ได้รับมา (`ref/`) เข้าแผน
+**Check with the script:** `node <this skill's folder>/scripts/doc-name-check.mjs docs/*` → it lists wrong names with a proposed name. To rename many files, add `--plan _to_delete/renames.json` to get a plan without touching files, check or edit the plan, then run `--plan _to_delete/renames.json --apply`. The script does not rename `APPROVED` files, does not overwrite existing files, and does not put received files (`ref/`) in the plan.
 
 ---
 
-## 3 · เวอร์ชัน
+## 3 · Versions
 
-| ขึ้นเลขไหน | เมื่อ |
+| Which number goes up | When |
 |---|---|
-| **major** (1.x → 2.0) | ขอบเขตเปลี่ยน · โครงเอกสารเปลี่ยน · ต้องเซ็นรับใหม่ |
-| **minor** (1.1 → 1.2) | เพิ่มหรือแก้เนื้อหา ยังเป็นเรื่องเดิม |
-| ไม่ขึ้นเลข | แก้คำผิด จัดหน้า — แต่**ยังต้องลงประวัติการแก้ไข** |
+| **major** (1.x → 2.0) | Scope changes · document structure changes · needs a new sign-off |
+| **minor** (1.1 → 1.2) | Content added or edited, still the same topic |
+| No number change | Typo fixes, layout, but you **must still log it in the revision history** |
 
-- ฉบับที่ส่งให้คนดูครั้งแรกคือ `v0.1` ส่วนฉบับแรกที่มีคนเซ็นคือ `v1.0`
-- **เลขเวอร์ชันเดินหน้าอย่างเดียว** ไม่ย้อนกลับไปใช้เลขเดิม
-- ไฟล์ที่ระบบเก็บประวัติให้ ไม่มีเลขเวอร์ชันในชื่อ — ถ้าต้องอ้างถึงฉบับหนึ่ง ให้อ้าง tag · commit หรือประวัติเวอร์ชัน
+- The first version shown to anyone is `v0.1`, and the first version someone signs is `v1.0`.
+- **Version numbers only move forward.** Never go back to an old number.
+- A file that a system keeps history for has no version number in its name. To refer to a version, use a tag, commit, or version history.
 
 ---
 
-## 4 · สถานะ — คนละเรื่องกับเวอร์ชัน
+## 4 · Status is a different thing from version
 
-| สถานะ | แปลว่า | ใครแก้ได้ |
+| Status | Means | Who may edit |
 |---|---|---|
-| `DRAFT` | ยังเขียนอยู่ | ผู้เขียน |
-| `REVIEW` | ส่งให้ตรวจแล้ว รอความเห็น | ผู้เขียน ตามความเห็นที่ได้ |
-| `APPROVED` | เซ็นรับแล้ว | **ห้ามแก้** ต้องขึ้นเวอร์ชันใหม่เป็น DRAFT |
+| `DRAFT` | Still being written | The author |
+| `REVIEW` | Sent for review, awaiting comments | The author, following the comments received |
+| `APPROVED` | Signed off | **No edits.** Raise a new version as DRAFT |
 
-> **`APPROVED` แล้วห้ามแก้ไฟล์เดิม** แม้จะเป็นแค่คำผิด
-> ถ้าแก้ได้ ฉบับที่ลูกค้าถือกับที่เราถือจะไม่เหมือนกัน ทั้งที่ชื่อไฟล์เหมือนกันทุกตัวอักษร
+> **Once `APPROVED`, never edit the original file**, even for a typo.
+> If you can, the version the client holds and the one we hold will differ, even though the file names match letter for letter.
 
 ---
 
-## 5 · ประวัติการแก้ไขต้องอยู่ในไฟล์
+## 5 · The revision history must be in the file
 
-**ชื่อไฟล์บอกได้แค่ว่านี่คือฉบับไหน ไม่ได้บอกว่าเปลี่ยนอะไร**
-ทุกเอกสารส่งออกต้องมีตารางนี้ในหน้าแรก
+**A file name says only which version this is, not what changed.**
+Every exported document must have this table on the first page.
 
 ```markdown
 | เวอร์ชัน | วันที่ | ผู้แก้ | แก้อะไร | เหตุผล |
@@ -448,31 +448,31 @@ Use when naming or filing a document others keep
 | 1.0 | 2026-09-01 | สมชาย | ฉบับเซ็นรับ | — |
 ```
 
-- **คอลัมน์ "แก้อะไร" ต้องเป็นรูปธรรม** — "ปรับปรุงเนื้อหา" ไม่มีประโยชน์กับใครเลย
-- เรียงใหม่อยู่บน — คนเปิดอ่านอยากรู้ว่าเปลี่ยนอะไรล่าสุด
+- **The "แก้อะไร" (what changed) column must be concrete.** "Improved the content" helps nobody.
+- Put the newest on top. A reader opening the file wants to know what changed last.
 
 ---
 
-## 6 · ที่เก็บและการส่ง
+## 6 · Storage and sending
 
-| เรื่อง | กฎ |
+| Topic | Rule |
 |---|---|
-| ต้นฉบับ | อยู่ใน `docs/src/` ของงานที่เดียว (งานโค้ด: `project-doc-set` ใน plugin `software-development`) |
-| ไฟล์ส่งออก | อยู่ในโฟลเดอร์เอกสาร (`docs/`) หรือที่เก็บของลูกค้า **ไม่ใช่รากโปรเจกต์** |
-| ไฟล์ที่ได้รับมา | เก็บชื่อเดิมของเขาไว้ ห้ามเปลี่ยน — เขาอ้างถึงชื่อนั้น |
-| ไฟล์ระหว่างแปลง | `_to_delete/` (ดู `superuser:temp-file-discipline`) |
-| ส่งทางแชตหรืออีเมล | ส่งไฟล์ที่มีเวอร์ชันและสถานะในชื่อเสมอ ไม่ส่ง `เอกสาร.docx` |
+| Source | Lives in `docs/src/` of the work, in one place only (code work: `project-doc-set` in plugin `software-development`) |
+| Exported files | Live in the documents folder (`docs/`) or the client's storage, **not the project root** |
+| Received files | Keep their original name; never rename. They refer to that name |
+| Files mid-conversion | `_to_delete/` (see `superuser:temp-file-discipline`) |
+| Sending by chat or email | Always send a file with the version and status in the name. Never send `เอกสาร.docx` |
 
 ---
 
 ## 7 · Anti-patterns
 
-- **`final.docx`, `final2.docx`, `final_ล่าสุด.docx`** — ไม่มีใครรู้ว่าอันไหนใหม่กว่า
-- **`ใบเสนอราคา แก้แล้ว.docx`** — แก้จากฉบับไหน แก้อะไร
-- **ใส่เวอร์ชันในชื่อไฟล์ที่มีระบบเก็บประวัติให้แล้ว** — จะได้ `spec-v1.md` กับ `spec-v2.md` อยู่คู่กันตลอดไป
-- **แก้ไฟล์ที่ `APPROVED` แล้ว** แม้แต่คำผิดเดียว
-- **ไม่มีตารางประวัติการแก้ไข** — แล้วต้องเปิดเทียบทีละหน้า
-- **วันที่แบบ `25-09-2026` หรือ `250926`** — เรียงไม่ได้ และคนอ่านคนละแบบ
+- **`final.docx`, `final2.docx`, `final_ล่าสุด.docx`**: nobody knows which is newer.
+- **`ใบเสนอราคา แก้แล้ว.docx`**: edited from which version, and what was edited?
+- **Putting a version in the name of a file that a system keeps history for.** You get `spec-v1.md` and `spec-v2.md` side by side forever.
+- **Editing a file that is already `APPROVED`**, even a single typo.
+- **No revision-history table.** Then you must open and compare page by page.
+- **Dates like `25-09-2026` or `250926`.** They do not sort, and people read them differently.
 
 
 ---
@@ -481,116 +481,116 @@ Use when naming or filing a document others keep
 
 Use when choosing a project doc set or open-items Excel
 
-# ชุดเอกสารโปรเจกต์
+# Project doc set
 
-> **กฎข้อเดียว:** เอกสารทุกชิ้นต้องตอบได้ว่า **ใครอ่าน** และ **อ่านแล้วตัดสินใจอะไร**
-> ถ้าตอบไม่ได้ ก็ไม่ต้องเขียน
+> **One rule:** every doc must answer **who reads it** and **what they decide after reading**.
+> If it cannot answer, do not write it.
 
 ---
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-เปิดโปรเจกต์ใหม่แล้วต้องตัดสินว่ามีเอกสารอะไร · เอกสารกระจัดกระจายไม่รู้ว่าอันไหนตัวจริง · ลูกค้าถามว่าส่งมอบอะไรบ้าง · จะเขียนเอกสารแต่ไม่แน่ใจว่าต้องมีอะไรก่อน
+Use it when: opening a new project and deciding which docs it needs · docs are scattered and nobody knows which is the real one · a client asks what will be delivered · about to write a doc but unsure what must come first.
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-| สถานการณ์ | ใช้แทน |
+| Situation | Use instead |
 |---|---|
-| โครงโฟลเดอร์ของ**โค้ด** (รวม `docs/` ในโค้ดของแบบ A) · README · CHANGELOG · linter | `project-bootstrap` |
-| ตั้ง**ชื่อไฟล์** และเลขเวอร์ชันของเอกสาร | `document-naming` |
-| ลงมือเขียนเอกสารชิ้นใดชิ้นหนึ่ง | skill ของเอกสารนั้น (ตารางข้อ 4) |
-| จัดรูปแบบหน้าเอกสารให้สวย | `branded-document-design` |
+| Folder layout of the **code** (including the `docs/` inside code in type A) · README · CHANGELOG · linter | `project-bootstrap` |
+| Naming **files** and version numbers of docs | `document-naming` |
+| Actually writing one doc | The skill for that doc (table in section 4) |
+| Making document pages look good | `branded-document-design` |
 
 ---
 
-## 1 · เอกสารอยู่ในหรืออยู่นอก repo
+## 1 · Docs inside or outside the repo
 
-**ตัดสินข้อนี้ก่อน** (ย้ายทีหลังต้องแก้ลิงก์ทั้งโปรเจกต์) · **ค่าเริ่มต้นคือแบบ B** แม้เอกสารเป็น markdown ล้วน โค้ดอยู่ใน `<project-name>/` (ตัวพิมพ์เล็กคั่น `-`) · แบบ A เมื่อผู้ใช้ขอเท่านั้น
+**Decide this first** (moving later means fixing links across the whole project). **The default is type B**, even when the docs are pure markdown. The code lives in `<project-name>/` (lowercase, joined with `-`). Use type A only when the user asks.
 
-- **แบบ B** (เอกสารนอก repo) — ใช้กับทุกขนาดชุด (S · M · L) · `.docx` / `.xlsx` / mockup / PNG ที่ลูกค้าต้องเห็นไม่ปนใน pull request · ผังรากอยู่ข้างล่าง (ข้อนี้คือเจ้าของผังราก)
-- **แบบ A** (เอกสารใน repo) — เฉพาะเมื่อผู้ใช้ขอ และเอกสารเป็น markdown ล้วน · เอกสารกับโค้ดเปลี่ยนใน pull request เดียวกัน · รากเหมือนแบบ B แต่ไม่มี `docs/` ที่ราก — `docs/` อยู่ในโฟลเดอร์โค้ด ผังข้างในเป็นของ `project-bootstrap` ข้อ 1
-- แบบ A ที่โตจนมีเอกสารส่งมอบ → ย้ายเป็นแบบ B **ทั้งชุดในครั้งเดียว** เอกสารที่อยู่ 2 ที่คือมี 2 เวอร์ชัน
+- **Type B** (docs outside the repo): use it for every set size (S · M · L). `.docx` / `.xlsx` / mockups / PNGs that the client must see stay out of pull requests. The root layout is below (this section owns the root layout).
+- **Type A** (docs inside the repo): only when the user asks and the docs are pure markdown. Docs and code change in the same pull request. The root looks like type B but has no root `docs/`. The `docs/` folder sits inside the code folder, and its inner layout belongs to `project-bootstrap` section 1.
+- A type A project that grows deliverable docs moves to type B **as a whole set in one go**. A doc that lives in 2 places means 2 versions.
 
-### โครงของแบบ B
+### Type B layout
 
 ```
-<ชื่อโปรเจกต์>/
-├─ ref/                 ของที่ได้รับมา — TOR · บันทึกประชุม · ภาพหน้าจอระบบเดิม · ไฟล์จากลูกค้า  **อ่านอย่างเดียว ห้ามแก้**
-├─ docs/                เอกสารทุกชิ้นที่เราเขียน — .docx ส่งมอบ และ .md เชิงเทคนิค อยู่ด้วยกัน
-│  ├─ figures/          รูปที่ export แล้ว — .png เท่านั้น        [มีเมื่อมีรูปในเอกสารส่งมอบ]
-│  │  └─ src/           ไฟล์ต้นทางของรูป (.html · .mmd · .drawio)
-│  ├─ decisions/        ADR-NNNN-<slug>.md หนึ่งการตัดสินใจต่อไฟล์  [ทางเลือก]
-│  ├─ runbook-<เรื่อง>.md  คู่มือเมื่อระบบมีปัญหา ไฟล์ละเรื่อง        [ทางเลือก]
-│  └─ research/         research แอปต้นแบบ (`reference-app-research`) [ทางเลือก]
-├─ mockup/              .html ที่เปิดแล้วกดได้จริง
-├─ qa/                  test case · ผลทดสอบ · bugs/ รายงานบั๊ก
-├─ assets/              โลโก้ · ไอคอนทุกขนาด · favicon · wordmark (ต้นทาง .svg + ไฟล์ export)
-├─ _to_delete/          ของชั่วคราวทุกอย่าง
-├─ .claude/            skill ของโปรเจกต์ (เช่น verify) — ต้องอยู่ที่ที่เปิด Claude Code
-│  └─ superuser/        ไฟล์ทำงานของ SuperUser — CONTEXT.md · HISTORY.md · IMPROVEMENTS.md · log/ · inbox/ · learn/
-└─ <project-name>/      repo โค้ด ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-` — โครงข้างในเป็นของ `project-bootstrap`
+<project-name>/
+├─ ref/                 things received — TOR · meeting notes · screenshots of the old system · client files  **read-only, never edit**
+├─ docs/                every doc we write — delivered .docx and technical .md live together
+│  ├─ figures/          exported figures — .png only        [exists when delivered docs have figures]
+│  │  └─ src/           source files of the figures (.html · .mmd · .drawio)
+│  ├─ decisions/        ADR-NNNN-<slug>.md, one decision per file  [optional]
+│  ├─ runbook-<topic>.md  guide for when the system has problems, one topic per file  [optional]
+│  └─ research/         research on a reference app (`reference-app-research`) [optional]
+├─ mockup/              .html that opens and really clicks
+├─ qa/                  test cases · test results · bugs/ bug reports
+├─ assets/              logos · icons in all sizes · favicon · wordmark (.svg source + exports)
+├─ _to_delete/          every kind of temporary item
+├─ .claude/            project skills (such as verify) — must sit where Claude Code is opened
+│  └─ superuser/        SuperUser working files — CONTEXT.md · HISTORY.md · IMPROVEMENTS.md · log/ · inbox/ · learn/
+└─ <project-name>/      code repo, project name lowercase joined with `-` — inner layout belongs to `project-bootstrap`
 ```
 
-**ไฟล์ของ SuperUser** (`.claude/superuser/` · `docs/BRIEF.md` · `AGENTS.md`/`GEMINI.md`) — ต้นฉบับอยู่ที่ [`superuser/references/team-files.md`](../superuser/references/team-files.md) ที่เดียว
+**SuperUser files** (`.claude/superuser/` · `docs/BRIEF.md` · `AGENTS.md`/`GEMINI.md`): the single source is [`superuser/references/team-files.md`](../superuser/references/team-files.md).
 
-**ADR และ runbook อยู่ใน `docs/` ที่ราก ไม่ใช่ `<project-name>/docs/`** (แบบ A ย้ายทั้ง `docs/` เข้าโฟลเดอร์โค้ด ผังข้างในเหมือนกัน) (`docs/decisions/ADR-NNNN-<slug>.md` · `docs/runbook-<เรื่อง>.md`) — ข้อนี้คือที่เดียวที่กำหนด
+**ADRs and runbooks live in the root `docs/`, not in `<project-name>/docs/`.** Type A moves the whole `docs/` into the code folder, with the same inner layout. Paths: `docs/decisions/ADR-NNNN-<slug>.md` · `docs/runbook-<topic>.md`. This section is the only place that defines this.
 
-**ข้อยกเว้นของราก:** `.sandbox/` อยู่ที่รากได้เมื่อใช้ `docker-sandbox` · `AGENTS.md` / `GEMINI.md` ตามเงื่อนไขข้างบน — ทุกข้อยกเว้นต้องประกาศใน README ของโฟลเดอร์โค้ด
+**Root exceptions:** `.sandbox/` may sit at the root when you use `docker-sandbox` · `AGENTS.md` / `GEMINI.md` under the conditions above. Declare every exception in the README of the code folder.
 
-**โฟลเดอร์สร้างเมื่อมีของจริง ไม่สร้างเผื่อ:** `ref/` เมื่อได้ไฟล์จากลูกค้าหรือระบบเดิม (ห้ามปนใน `docs/`) · `docs/figures/` เมื่อมีรูปวาดเองในเอกสารส่งมอบ (ไม่งั้นรูปติดอยู่ใน `.docx` แก้ไม่ได้) · `docs/decisions/` เมื่อมีการตัดสินใจที่ต้องอธิบายทีหลัง · `docs/research/` เมื่อผู้ใช้อยากได้แอปแบบที่มีอยู่ · `qa/` เมื่อมี test case (test case อยู่ที่นี่เสมอ `docs/test-plan.md` มีแค่แผน) · `assets/` เมื่อมีโลโก้หรือไอคอน
+**Create folders when real content exists, not in advance:** `ref/` when you get files from the client or the old system (never mix them into `docs/`) · `docs/figures/` when a delivered doc has a self-drawn figure (otherwise the figure is stuck inside the `.docx` and cannot be edited) · `docs/decisions/` when a decision needs explaining later · `docs/research/` when the user wants an app like an existing one · `qa/` when test cases exist (test cases always live here; `docs/test-plan.md` holds only the plan) · `assets/` when there is a logo or icon.
 
-**โปรเจกต์แบบ ecosystem** (sub-project ≥ 2 ตัว แต่ละตัวมีเอกสารชุดของตัวเอง) → โฟลเดอร์ชื่อ `ecosystem/` เสมอ (ห้าม `projects/` `modules/` `apps/`) · `ecosystem/<รหัส>-<SUB>/` มี `docs/` `mockup/` `qa/` และ repo ของตัวเอง · เอกสารที่ครอบทุกตัวอยู่ `docs/` ที่รากที่เดียว · ผังและกฎเต็ม → [`references/ecosystem.md`](references/ecosystem.md)
+**Ecosystem project** (2 or more sub-projects, each with its own doc set): the folder is always named `ecosystem/` (never `projects/` `modules/` `apps/`). `ecosystem/<code>-<SUB>/` holds `docs/` `mockup/` `qa/` and its own repo. Docs that cover all sub-projects live in one place, the root `docs/`. Full layout and rules: [`references/ecosystem.md`](references/ecosystem.md).
 
 
-**กฎของโฟลเดอร์ (ใช้ได้ทั้ง 2 แบบ):**
+**Folder rules (both types):**
 
-- **`.docx` กับ `.md` อยู่ใน `docs/` เดียวกันได้** ไม่ต้องแยกโฟลเดอร์ เพราะนามสกุลบอกอยู่แล้วว่าใครอ่าน
-- **ไฟล์ต้นทางของรูปห้ามหาย** เพราะถ้าปีหน้าต้องแก้รูปแล้วเหลือแต่ PNG ก็ต้องวาดใหม่ทั้งใบ
-- **ทุกปุ่มใน mockup ต้องกดได้จริง** เพราะปุ่มหลอกทำให้รีวิวผิด
-- **`.docx` / `.xlsx` อยู่ใน `docs/` และ `qa/` เท่านั้น** ไม่กระจายไปรากโปรเจกต์
-- **ของชั่วคราวลง `_to_delete/`** (`temp-file-discipline`)
-- **`docs/README.md` เป็นสารบัญ** บอกว่าอ่านอะไรก่อนและใครเป็นเจ้าของ (แม่แบบใน `project-bootstrap` → `assets/starter-files.md`)
+- **`.docx` and `.md` may share one `docs/`.** No need for separate folders, because the extension already says who reads it.
+- **Never lose the source files of figures.** If a figure must change next year and only the PNG is left, the whole figure must be redrawn.
+- **Every button in a mockup must really click**, because a fake button makes the review wrong.
+- **`.docx` / `.xlsx` live only in `docs/` and `qa/`.** Do not scatter them to the project root.
+- **Temporary items go to `_to_delete/`** (`temp-file-discipline`).
+- **`docs/README.md` is the index.** It says what to read first and who owns what (template in `project-bootstrap` → `assets/starter-files.md`).
 
 ---
 
-## 2 · เลือกชุดเอกสารตามขนาดงาน
+## 2 · Choose the doc set by project size
 
-ขนาดวัดจาก **ระยะเวลา × จำนวนคนที่ต้องเห็นพ้องกัน** ไม่ใช่จำนวนบรรทัดโค้ด
+Size is measured by **duration × number of people who must agree**, not by lines of code.
 
-**S** ≤ 2 สัปดาห์ · ทีมเดียว · ไม่มีใครนอกทีมต้องเซ็น — **M** 1–3 เดือน · ผู้ว่าจ้างภายใน · ส่งมอบเป็นรอบ — **L** > 3 เดือน · ลูกค้าภายนอกเซ็นรับ · มีข้อผูกพันตามสัญญา
+**S** ≤ 2 weeks · one team · nobody outside the team signs — **M** 1–3 months · internal client · delivered in rounds — **L** > 3 months · external client signs off · contractual obligations
 
-### 2.1 · เอกสารส่งมอบ — คนอ่านและเซ็น
+### 2.1 · Deliverable docs: people read and sign them
 
-| เอกสาร | รูปแบบ | ผู้อ่าน | S | M | L |
+| Doc | Format | Readers | S | M | L |
 |---|---|---|:-:|:-:|:-:|
-| Project Plan | `.docx` | ผู้ว่าจ้าง · ทีม | ○ | ● | ● |
-| SRS | `.docx` | dev · ผู้ว่าจ้าง | ○ | ● | ● |
+| Project Plan | `.docx` | client · team | ○ | ● | ● |
+| SRS | `.docx` | dev · client | ○ | ● | ● |
 | Architecture | `.docx` | dev · ops | ○ | ● | ● |
-| Test Plan | `.docx` | QA · ผู้ว่าจ้าง | ○ | ● | ● |
-| คู่มือผู้ใช้ (`MAN`) | `.docx` → `.pdf` | ผู้ใช้ปลายทาง | ○ | ● | ● |
+| Test Plan | `.docx` | QA · client | ○ | ● | ● |
+| User guide (`MAN`) | `.docx` → `.pdf` | end users | ○ | ● | ● |
 | FSD | `.docx` | dev · QA | ○ | ○ | ● |
-| BRD | `.docx` | ฝ่ายธุรกิจ | ○ | ○ | ● |
-| Document Checklist | `.docx` | ทุกฝ่าย | ○ | ○ | ● |
+| BRD | `.docx` | business side | ○ | ○ | ● |
+| Document Checklist | `.docx` | everyone | ○ | ○ | ● |
 | Test Cases | `.xlsx` | QA | ○ | ○ | ● |
 
-● ต้องมี · ○ ไม่ต้อง เว้นแต่มีเหตุผลเฉพาะ
-**ชุด S ไม่มีเอกสารกลุ่มนี้เลย** — ถูกแล้ว
+● required · ○ not needed unless there is a specific reason
+**Set S has none of these docs.** That is correct.
 
 ---
 
-### 2.2 · เอกสารเชิงเทคนิค — ทีมและ agent ใช้ระหว่างสร้าง
+### 2.2 · Technical docs: the team and agents use them while building
 
-เป็น markdown ทั้งหมด และ**ขึ้นกับว่าโปรเจกต์มีอะไร** ไม่ใช่ขนาดงาน · ตารางเต็ม (ไฟล์ · ตอบคำถามอะไร) → [`references/technical-docs.md`](references/technical-docs.md)
+All markdown. They **depend on what the project contains**, not on project size. Full table (file · question answered): [`references/technical-docs.md`](references/technical-docs.md).
 
-- **เสมอ:** `<project-name>/README.md` · `docs/BUILD-PLAN.md`
-- **มีเงื่อนไข:** USER-STORIES และ `docs/sprints/sprint-NN.md` (ทำงานเป็น sprint) · AGENT-LOOP (agent เขียนโค้ดเป็นรอบ) · API-SPEC (มี API ที่คนอื่นเรียก) · DATA-DICTIONARY (มีฐานข้อมูล) · EVALUATION-POLICY และ PROMPT-LIBRARY (ใช้ LLM) · `docs/decisions/ADR-NNNN-<slug>.md` (การตัดสินใจที่จะถูกถามซ้ำ) · `docs/runbook-<เรื่อง>.md` (ระบบใช้งานจริงและมีคนอยู่เวร)
-- ตัวที่คนลืมบ่อยสุดคือ 4 ตัวเรื่อง LLM · API · ฐานข้อมูล แล้วต้องถาม agent ซ้ำทุกรอบว่า prompt ตัวไหนคือตัวจริง
+- **Always:** `<project-name>/README.md` · `docs/BUILD-PLAN.md`
+- **Conditional:** USER-STORIES and `docs/sprints/sprint-NN.md` (work runs in sprints) · AGENT-LOOP (an agent writes code in rounds) · API-SPEC (an API that others call) · DATA-DICTIONARY (a database exists) · EVALUATION-POLICY and PROMPT-LIBRARY (LLM used) · `docs/decisions/ADR-NNNN-<slug>.md` (decisions that will be questioned again) · `docs/runbook-<topic>.md` (system in real use and someone on call)
+- People forget the 4 docs about LLM · API · database most often, and then must ask the agent every round which prompt is the real one.
 
 ---
 
-## 3 · ลำดับการเขียน
+## 3 · Writing order
 
-**สายส่งมอบ** — ห้ามข้ามขั้นที่อยู่ในชุดของขนาดงานนั้น (ขั้นที่ไม่อยู่ในชุด เช่น BRD · FSD ของชุด M ให้ข้ามไป)
+**Delivery track.** Never skip a step that belongs to the set for that size. Skip steps that are not in the set, such as BRD · FSD in set M.
 
 ```
 Project Plan ─► BRD ─► SRS ─┬─► mockup
@@ -599,95 +599,95 @@ Project Plan ─► BRD ─► SRS ─┬─► mockup
               User Guide ◄─ Test Cases ◄─ Test Plan
 ```
 
-**ชิ้นถัดไปเขียนต่อบนฉบับ DRAFT ของชิ้นก่อนหน้าได้** ข้อที่ยังไม่ยืนยันใส่ `(รอยืนยัน)` ไว้ทั้งสองชิ้น · ห้ามเปลี่ยนสถานะชิ้นถัดไปเป็น APPROVED ก่อนชิ้นก่อนหน้า เพราะถ้าชิ้นต้นทางเปลี่ยนต้องรื้อทั้งสาย
-ข้อยกเว้นเดียว: **mockup ทำคู่ไปกับ SRS ได้** เพราะภาพหน้าจอช่วยให้ SRS ถูกยืนยันเร็วขึ้น
+**The next doc may build on the DRAFT of the previous one.** Put `(รอยืนยัน)` (awaiting confirmation) on every unconfirmed item in both docs. Never set the next doc to APPROVED before the previous one, because if the upstream doc changes, the whole chain must be redone.
+The one exception: **the mockup may run in parallel with the SRS**, because screenshots help the SRS get confirmed faster.
 
-### 3.1 · ทะเบียนจุดค้าง — ผู้ใช้ถามว่า "ยังติดตรงไหน" ตอบเป็นไฟล์ Excel ไม่ใช่ข้อความในแชต
+### 3.1 · Open-items register: when the user asks "what is still stuck", answer with an Excel file, not chat text
 
-ป้าย `(รอยืนยัน)` · `(รอวัดใน Phase 0)` และตารางคำถามกระจายอยู่ทุกเอกสาร ผู้ตัดสินใจจึงไม่เห็นภาพรวม · รวมเป็นไฟล์เดียวด้วยสคริปต์ ไม่ไล่อ่านเอง:
+Labels such as `(รอยืนยัน)` · `(รอวัดใน Phase 0)` (awaiting measurement in Phase 0) and question tables are spread over every doc, so the decision maker sees no overall picture. Merge them into one file with the script. Do not read them all by hand:
 
 ```
-python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE>    # ทดสอบสคริปต์: --self-test
+python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE>    # test the script: --self-test
 ```
 
-- อ่านทุก `.docx` ใน `docs/`: ตารางคำถาม · ตารางข้อสมมติที่ยังไม่ตัดสิน · ตารางลงนามที่ยัง "รอ" · ป้ายในเนื้อหา · ข้ามประวัติการแก้ไข สารบัญ บรรทัดอธิบายป้าย และ `(รอบหลัง)`
-- แผ่น **สรุป** นับตามเอกสาร × ประเภทด้วยสูตร · แผ่น **รายการค้าง** มีหัวข้อในเอกสาร · ใครตอบ · ตัดสินภายใน · ค่าที่ใช้ไปก่อน · ข้อที่อ้างถึงกัน · ช่อง "สถานะ" และ "คำตอบ" ให้กรอก
-- ประเภท: **เจ้าของตัดสิน** (ค้นเว็บแล้วปิดไม่ได้) · **ทีมตัดสิน** (BA · SA) · **กฎหมาย** · **วัดจริง** (ไม่มีตัวเลขเผยแพร่) · **ลงนาม** — คำถามที่อ้างคำถามของเจ้าของในเอกสารอื่นถูกนับเป็น "เจ้าของตัดสิน" ด้วย
-- **ก่อนส่ง เปิดอ่านรายการด้วยตาเอง** — สคริปต์จับจากถ้อยคำ แถวที่ตอบไปแล้วแต่เขียนไม่ตรงคำว่า "ตอบแล้ว · ปิดแล้ว · ตัดสินแล้ว" ยังติดมา · ในชุดตัวอย่างหนึ่ง (6 ฉบับ) ได้ 75 รายการ มีแถวแบบนี้ราว 3 แถว
-- ผู้ใช้กรอกคำตอบแล้ว → เติมคำตอบลงเอกสารต้นทาง ลบป้าย บันทึกในประวัติการแก้ไข แล้วรันสคริปต์ซ้ำ · ไฟล์นี้เป็นรายการงาน ไม่ใช่ต้นฉบับ อย่าแก้คำตอบในไฟล์นี้แทนเอกสาร
+- It reads every `.docx` in `docs/`: question tables · tables of undecided assumptions · sign-off tables still "waiting" · labels in the body. It skips revision history, table of contents, label-explanation lines and `(รอบหลัง)` (later round).
+- The **สรุป** (summary) sheet counts by document × type with formulas. The **รายการค้าง** (open items) sheet has the heading in the doc · who answers · decide by · value used for now · cross-references · and "สถานะ" (status) and "คำตอบ" (answer) columns for people to fill in.
+- Types (ประเภทที่ต้องเลือก), shown in Thai in the sheet: **เจ้าของตัดสิน** (owner decides: a web search cannot close it) · **ทีมตัดสิน** (team decides: BA · SA) · **กฎหมาย** (legal) · **วัดจริง** (needs a real-world number: none is published) · **ลงนาม** (sign-off). A question that cites an owner question in another doc also counts as "เจ้าของตัดสิน".
+- **Before sending, read the list by eye.** The script matches wording. A row that was already answered but does not use the words "ตอบแล้ว · ปิดแล้ว · ตัดสินแล้ว" (answered · closed · decided) still gets through. In one sample set (6 docs) it found 75 items, and about 3 rows were like this.
+- When the user fills in answers: write the answer into the source doc, remove the label, record it in the revision history, then rerun the script. This file is a work list, not a source. Do not edit answers in this file in place of the doc.
 
-**สายเทคนิค** — เขียนเมื่อถึงจุดที่ต้องใช้ ไม่ต้องรอใคร: README · BUILD-PLAN ก่อนโค้ดบรรทัดแรก · DATA-DICTIONARY ตอนออกแบบตารางแรก · API-SPEC ตอน endpoint แรก · PROMPT-LIBRARY ตอน prompt แรกที่ใช้จริง · ADR ตอนตัดสินใจ (ไม่ใช่ตอนสรุปท้าย เพราะเหตุผลจริงหายแล้ว) · Runbook ก่อนขึ้นระบบจริง — ตารางเต็มใน [`references/technical-docs.md`](references/technical-docs.md)
-
----
-
-## 4 · ใครเขียนชิ้นไหน ด้วย skill อะไร
-
-ตารางเต็ม (agent · skill ต่อเอกสาร 16 ชนิด) → [`references/technical-docs.md`](references/technical-docs.md) · หลัก ๆ: SRS → `srs-writing` · FSD → `fsd-writing` · ADR → `adr-writer` · Test → `test-case-template` · mockup → `web-app-design` + `ui-craft` · README → `project-bootstrap`
+**Technical track.** Write when you reach the point of need. No need to wait for anyone: README · BUILD-PLAN before the first line of code · DATA-DICTIONARY when designing the first table · API-SPEC at the first endpoint · PROMPT-LIBRARY at the first prompt really used · ADR at decision time (not in the final wrap-up, because the real reasons are gone by then) · Runbook before going live. Full table in [`references/technical-docs.md`](references/technical-docs.md).
 
 ---
 
-## 5 · รูปในเอกสาร — เลือกให้ถูกตั้งแต่ต้น
+## 4 · Who writes which doc, with which skill
 
-- รูปในเอกสารโปรเจกต์ทุกชนิด (BRD · SRS · FSD · ADR · ER · ผังขั้นตอน) · สไลด์ · งานพิมพ์ → `diagram-figures` (house style เดียว) เก็บ `docs/figures/` + ต้นทางใน `src/` · **Mermaid ค่าเริ่มต้นห้ามเข้าเอกสารโปรเจกต์**
-- รูปด่วนใน README · PR · โน้ตในโค้ด → Mermaid (`software-diagrams`) ฝังใน `.md` (สีสุ่มไม่มีความหมาย ไทยล้นกรอบ ย่อลง A4 แล้วอ่านไม่ออก)
-
-**หัวรูปทุกใบต้องมีครบ 6 อย่าง** — โลโก้โปรเจกต์ · ชื่อ · คำขยาย 1 บรรทัด · เลขรูป · เวอร์ชันกับวันที่ · เจ้าของ (รายละเอียดอยู่ใน `diagram-figures` ข้อ 3)
-รูปสถาปัตยกรรมถูกก๊อปไปวางในอีเมลและสไลด์แล้วอยู่ต่ออีกเป็นปี **รูปที่ไม่มีวันที่ ไม่มีใครกล้าแก้**
+Full table (agent · skill for each of 16 doc types): [`references/technical-docs.md`](references/technical-docs.md). Main ones: SRS → `srs-writing` · FSD → `fsd-writing` · ADR → `adr-writer` · Test → `test-case-template` · mockup → `web-app-design` + `ui-craft` · README → `project-bootstrap`
 
 ---
 
-## 6 · ธีมสีของชุดเอกสาร
+## 5 · Figures in docs: choose correctly from the start
 
-ประกาศครั้งเดียวต่อโปรเจกต์ บนหัวไฟล์ต้นทางของทุกเอกสาร:
+- Figures in every kind of project doc (BRD · SRS · FSD · ADR · ER · flowcharts) · slides · print work → `diagram-figures` (one house style). Keep them in `docs/figures/` with sources in `src/`. **Default Mermaid is banned from project docs.**
+- Quick figures in a README · PR · code notes → Mermaid (`software-diagrams`) embedded in `.md` (colours are random and meaningless, Thai overflows the boxes, and shrunk to A4 it is unreadable).
+
+**Every figure header needs all 6 items:** project logo · title · 1-line subtitle · figure number · version and date · owner (details in `diagram-figures` section 3).
+Architecture figures get copied into emails and slides and then live on for a year. **Nobody dares to edit a figure with no date.**
+
+---
+
+## 6 · Colour theme of the doc set
+
+Declare it once per project, at the top of every doc's source file:
 
 ```markdown
 <!-- doc-theme: accent=#2A78D6 -->
 ```
 
-(ตัวอย่างใช้สีประจำบ้าน `#2A78D6` — แทนด้วยสีหลักของโปรเจกต์)
+(The example uses the house colour `#2A78D6`. Replace it with the project's main colour.)
 
 `branded-document-design` · `presentation-design` · `diagram-figures`
-อ่านค่านี้แทนการเลือกสีเอง เอกสาร สไลด์ และรูปทุกใบจึงเป็นชุดเดียวกัน
+read this value instead of picking colours themselves, so docs, slides and every figure form one set.
 
-**สีมาจากเนื้องาน ไม่ใช่จากรสนิยม** — มีสีแบรนด์ใช้สีแบรนด์ · ยังไม่มีใช้สีประจำบ้านของ `branded-document-design` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม
-ข้อยกเว้นที่ไม่เปลี่ยนตามธีม: สีโลโก้ผู้ให้บริการ · สีเทาของเส้นโครงสร้าง · เขียว = ผ่าน / แดง = ไม่ผ่าน
+**Colour comes from the work, not from taste.** If there is a brand colour, use it. If not, use the house colour of `branded-document-design`, write `(รอยืนยัน)`, and carry on without stopping to ask.
+Exceptions that do not follow the theme: service provider logo colours · grey structural lines · green = pass / red = fail
 
 ---
 
-## 7 · รายการตรวจก่อนส่งมอบชุดเอกสาร
+## 7 · Checklist before delivering the doc set
 
-- [ ] ทุกไฟล์ `.docx` เปิด Navigation Pane แล้ว**เห็นหัวข้อครบ** (ใช้ Heading style จริง ไม่ใช่ตัวหนา)
-- [ ] ทุกเอกสารมีหน้าประวัติการแก้ไข · เลขเวอร์ชัน · วันที่ · ผู้จัดทำ
-- [ ] ทุกรูปมีเลขรูปและถูกอ้างในเนื้อความอย่างน้อย 1 ครั้ง
-- [ ] ไฟล์ต้นทางของทุกรูปอยู่ใน `docs/figures/src/` (ถ้ามีโฟลเดอร์นี้)
-- [ ] เอกสารเชิงเทคนิคที่เข้าเงื่อนไขในข้อ 2.2 มีครบ เช่น ถ้ามี API ต้องมี API-SPEC และถ้าใช้ LLM ต้องมี PROMPT-LIBRARY
-- [ ] ตัวย่อทุกตัวเขียนเต็มครั้งแรกที่ปรากฏ
-- [ ] ชื่อไฟล์ตรงตาม `document-naming` — ไม่มี `final2` ไม่มี `ล่าสุด`
-- [ ] เอกสารในชุดอ้างเวอร์ชันของกันและกันตรงกัน
-- [ ] รัน `scripts/open_items.py` แล้วทะเบียนจุดค้างไม่มีแถวสถานะ "เปิด" (หรือผู้ว่าจ้างรับรู้ทุกแถวที่ยังเปิด)
-- [ ] บอกผู้ใช้ว่ามีอะไรค้างใน `_to_delete/` (ไม่ลบเอง — ลบเมื่อผู้ใช้สั่งเท่านั้น)
+- [ ] In every `.docx`, open the Navigation Pane and **see all headings** (use real Heading styles, not bold text)
+- [ ] Every doc has a revision history page · version number · date · author
+- [ ] Every figure has a figure number and is cited in the body at least once
+- [ ] The source file of every figure is in `docs/figures/src/` (if this folder exists)
+- [ ] Technical docs that meet the conditions in section 2.2 are all present. For example, if there is an API there must be an API-SPEC, and if an LLM is used there must be a PROMPT-LIBRARY
+- [ ] Every abbreviation is spelled out at first appearance
+- [ ] File names follow `document-naming`: no `final2`, no `ล่าสุด` ("latest")
+- [ ] Docs in the set cite each other's versions consistently
+- [ ] Run `scripts/open_items.py`, and the open-items register has no row with status "เปิด" (open), or the client knows about every row still open
+- [ ] Tell the user what is left in `_to_delete/` (do not delete it yourself; delete only when the user says so)
 
 ---
 
 ## 8 · Anti-patterns
 
-ผิด: `.docx` ไม่มี Heading style · เก็บแต่ PNG ไม่เก็บต้นทาง · `.docx` และ mockup ใน repo โค้ด (ถึงจุดนี้ต้องย้ายเป็นแบบ B) · เอกสารอยู่ 2 ที่ (= 2 เวอร์ชัน) · FSD ก่อน SRS ยืนยัน · ใช้ LLM แต่ไม่มี PROMPT-LIBRARY · sub-project ชื่อ `projects/` `modules/` `apps/` · โฟลเดอร์ว่างสร้างเผื่อ · เอกสารชิ้นเดียวตอบทุกคำถาม
+Wrong: `.docx` with no Heading style · keeping only the PNG and not the source · `.docx` and mockups inside the code repo (at this point move to type B) · a doc in 2 places (= 2 versions) · FSD before the SRS is confirmed · using an LLM with no PROMPT-LIBRARY · sub-projects named `projects/` `modules/` `apps/` · empty folders created in advance · one doc that answers every question
 
 ---
 
-## 9 · ตัวย่อ
+## 9 · Abbreviations
 
 ADR Architecture Decision Record · BRD Business Requirements Document · FSD Functional Specification Document · QA Quality Assurance · SRS Software Requirements Specification · TOC Table of Contents
 
 ---
 
-## 10 · เชื่อมกับ skill อื่น
+## 10 · Links to other skills
 
-นอกจากตาราง "ไม่ใช้" ด้านบน: วาดรูป → `diagram-figures` (เอกสารโปรเจกต์) · `software-diagrams` (README · PR) · ของชั่วคราว → `temp-file-discipline` · สถานะเอกสารใน `docs/BUILD-PLAN.md` → `status-report` · รายการตรวจฉบับพิมพ์ → `assets/doc-set-checklist.md`
+Besides the "not for" table above: drawing figures → `diagram-figures` (project docs) · `software-diagrams` (README · PR) · temporary items → `temp-file-discipline` · doc status in `docs/BUILD-PLAN.md` → `status-report` · checklist for the printed version → `assets/doc-set-checklist.md`
 
-**อ่านเพิ่มเมื่อต้องใช้:** [`references/writer-templates.md`](references/writer-templates.md) — แม่แบบเอกสารของ `technical-writer` (tutorial · API reference · release notes · README ดู `project-bootstrap`)
+**Read more when needed:** [`references/writer-templates.md`](references/writer-templates.md): `technical-writer` doc templates (tutorial · API reference · release notes · for README see `project-bootstrap`)
 
-**คู่มือต้องขึ้นเว็บ ค้นได้ มีหลายรุ่น:** [`references/docs-site.md`](references/docs-site.md) · เลือก MkDocs Material · Docusaurus · Starlight · VitePress · ผลทดสอบค้นหาภาษาไทย · ที่วางเว็บ · ฟอนต์ไทย
+**When the guide must go on the web, be searchable and have many versions:** [`references/docs-site.md`](references/docs-site.md): choosing MkDocs Material · Docusaurus · Starlight · VitePress · Thai search test results · hosting · Thai fonts
 
 
 ## reference: docs-site.md
@@ -781,77 +781,77 @@ A document that outsiders must not see does not go on a public site. Keep it as 
 
 ## reference: ecosystem.md
 
-# โปรเจกต์แบบ ecosystem — 1 ระบบ แบ่งเป็นหลาย sub-project
+# Ecosystem project: 1 system split into several sub-projects
 
-อ่านเมื่อโปรเจกต์มี sub-project ตั้งแต่ 2 ตัวและแต่ละตัวมีเอกสารชุดของตัวเอง · กฎย่ออยู่ใน `SKILL.md` ข้อ 1
+Read this when a project has 2 or more sub-projects and each one has its own doc set. The short rule is in `SKILL.md` section 1.
 
-ใช้เมื่อโปรเจกต์เป็นชุดผลิตภัณฑ์ที่มี sub-project ตั้งแต่ 2 ตัวขึ้นไป และแต่ละตัวมีเอกสารชุดของตัวเอง (SRS · mockup · สถาปัตยกรรม) เช่น Quanton ที่แบ่งเป็น CONNECT · LAB · INTEL · DESK
-**ชื่อโฟลเดอร์ต้องเป็น `ecosystem/` เสมอ** ห้ามใช้ `projects/` `modules/` หรือ `apps/` เพราะพอเปิดโฟลเดอร์แล้วต้องรู้ทันทีว่าทุกตัวข้างในเป็นชิ้นของระบบเดียวกัน
+Use it when the project is a product suite with 2 or more sub-projects, and each has its own doc set (SRS · mockup · architecture). Example: Quanton, split into CONNECT · LAB · INTEL · DESK.
+**The folder must always be named `ecosystem/`.** Never use `projects/`, `modules/` or `apps/`. When someone opens the folder, they must see at once that everything inside is a piece of one system.
 
 ```
-<ชื่อโปรเจกต์>/
-├─ docs/                เอกสารระดับ ecosystem — README (สารบัญ) · BUILD-PLAN · project-plan · BRD · figures/
+<project-name>/
+├─ docs/                ecosystem-level docs — README (index) · BUILD-PLAN · project-plan · BRD · figures/
 ├─ ecosystem/
-│  └─ <รหัส>-<SUB>/     1 โฟลเดอร์ต่อ 1 sub-project เช่น QTN-CONNECT
+│  └─ <code>-<SUB>/     1 folder per sub-project, e.g. QTN-CONNECT
 │     ├─ docs/          srs.md · architecture.md · decisions/ · figures/ · fsd-*.md · test-plan.md
 │     ├─ mockup/
 │     ├─ qa/
-│     └─ <sub-name>/    repo โค้ดของ sub-project นี้ (ตัวพิมพ์เล็กคั่น `-`)
-├─ ref/ · assets/ · _to_delete/ · .claude/   ใช้ร่วมกันทั้ง ecosystem (กติกาเดียวกับแบบ B)
+│     └─ <sub-name>/    code repo of this sub-project (lowercase, joined with `-`)
+├─ ref/ · assets/ · _to_delete/ · .claude/   shared by the whole ecosystem (same rules as type B)
 ```
 
-- เอกสารที่ครอบทุก sub-project (BRD · แผนโครงการ · BUILD-PLAN) อยู่ใน `docs/` ที่รากที่เดียว ห้ามก๊อปไปไว้ในแต่ละ sub-project
-- สร้างโฟลเดอร์ sub-project เมื่อเริ่มเขียนเอกสารของตัวนั้นจริง ไม่สร้างเผื่อ
-- ชื่อโฟลเดอร์ sub-project = รหัสโปรเจกต์ + ชื่อ sub-project ตัวพิมพ์ใหญ่ (`QTN-CONNECT`) ใช้รหัสเดียวกับที่เอกสารอ้าง
-- โปรเจกต์ที่ใช้ `projects/` อยู่แล้ว → เปลี่ยนชื่อเป็น `ecosystem/` แล้วแก้ path ในเอกสารและสคริปต์ทุกไฟล์ในรอบเดียวกัน
-- โปรเจกต์ที่มีผลิตภัณฑ์เดียว ไม่ต้องมี `ecosystem/` ใช้แบบ B ตามปกติ
+- Docs that cover every sub-project (BRD · project plan · BUILD-PLAN) live in one place, the root `docs/`. Never copy them into each sub-project.
+- Create a sub-project folder when you start writing that sub-project's docs. Do not create folders in advance.
+- Sub-project folder name = project code + sub-project name in capitals (`QTN-CONNECT`). Use the same code the docs cite.
+- If a project already uses `projects/`, rename it to `ecosystem/` and fix the paths in every doc and script in the same pass.
+- A project with a single product does not need `ecosystem/`. Use type B as usual.
 
 
 ## reference: technical-docs.md
 
-# เอกสารเชิงเทคนิค — ตาราง ลำดับเขียน และใครเขียน
+# Technical docs: table, writing order and who writes what
 
-อ่านเมื่อเลือกชุดเอกสารเชิงเทคนิค หรือกำลังจะเขียนชิ้นใดชิ้นหนึ่ง · สรุปอยู่ใน `SKILL.md` ข้อ 2.2–4
+Read this when choosing the technical doc set or about to write one of them. The summary is in `SKILL.md` sections 2.2–4.
 
-## เอกสารเชิงเทคนิค (ข้อ 2.2)
+## Technical docs (section 2.2)
 
-กลุ่มนี้เป็น **markdown ทั้งหมด** และ**ไม่ได้ขึ้นกับขนาดงาน** แต่ขึ้นกับว่าโปรเจกต์มีอะไร
+This group is **all markdown** and **does not depend on project size**. It depends on what the project contains.
 
-| เอกสาร | ไฟล์ | ตอบคำถามว่า | ต้องมีเมื่อ |
+| Doc | File | Answers the question | Needed when |
 |---|---|---|---|
-| README | `<project-name>/README.md` | ติดตั้งและรันยังไง | **เสมอ** |
-| BUILD-PLAN | `docs/BUILD-PLAN.md` | จะสร้างอะไรก่อนหลัง · ตอนนี้ถึงไหนแล้ว | **เสมอ** |
-| USER-STORIES | `docs/USER-STORIES.md` | จะสร้างอะไรให้ใคร · story ไหนพร้อมเข้า sprint · AC คืออะไร | ทำงานเป็น sprint หรือมี backlog (`user-story-writer`) |
-| Sprint plan | `docs/sprints/sprint-NN.md` | sprint นี้รับ story ไหน · เป้าหมายคืออะไร · เสี่ยงอะไร | ทำงานเป็น sprint (`/sprint-plan`) — ไฟล์ละ sprint ไม่เขียนทับของเก่า |
-| AGENT-LOOP | `docs/AGENT-LOOP.md` | agent ทำงานเป็นวงจรแบบไหน · อะไรคือเงื่อนไขว่าจบ | ให้ agent เขียนโค้ดเป็นรอบ ๆ (`spec-to-code-loop`) |
-| API-SPEC | `docs/API-SPEC.md` | endpoint ไหนรับอะไร คืนอะไร พังยังไง | มี API ที่คนอื่นเรียก (`api-conventions`) |
-| DATA-DICTIONARY | `docs/DATA-DICTIONARY.md` | ฟิลด์นี้แปลว่าอะไร · ค่าที่เป็นไปได้มีอะไรบ้าง | มีฐานข้อมูลหรือสคีมาข้อมูล (`database-design`) |
-| EVALUATION-POLICY | `docs/EVALUATION-POLICY.md` | วัดว่าผลลัพธ์ดีพอหรือยังด้วยอะไร · เกณฑ์ผ่านเท่าไร | ผลลัพธ์มาจากโมเดลหรือ LLM ที่ไม่ได้ถูกเสมอ |
-| PROMPT-LIBRARY | `docs/PROMPT-LIBRARY.md` | prompt ตัวจริงคือตัวไหน เวอร์ชันอะไร เปลี่ยนอะไรไป | ใช้ LLM ในเส้นทางหลักของระบบ |
-| ADR | `docs/decisions/ADR-*.md` | ทำไมถึงเลือกทางนี้ ไม่เลือกทางนั้น | มีการตัดสินใจที่จะถูกถามซ้ำ (`adr-writer`) |
-| Runbook | `docs/runbook-<เรื่อง>.md` ไฟล์ละเรื่อง | ระบบล่มตอนตี 2 ต้องทำอะไร | มีระบบที่รันอยู่จริงและมีคนอยู่เวร |
+| README | `<project-name>/README.md` | How to install and run | **Always** |
+| BUILD-PLAN | `docs/BUILD-PLAN.md` | What to build first and next · where we are now | **Always** |
+| USER-STORIES | `docs/USER-STORIES.md` | What to build for whom · which story is ready for a sprint · what the AC (acceptance criteria) are | Work runs in sprints or there is a backlog (`user-story-writer`) |
+| Sprint plan | `docs/sprints/sprint-NN.md` | Which stories this sprint takes · what the goal is · what the risks are | Work runs in sprints (`/sprint-plan`). One file per sprint; never overwrite old ones |
+| AGENT-LOOP | `docs/AGENT-LOOP.md` | How the agent works in a cycle · what the stop condition is | An agent writes code in rounds (`spec-to-code-loop`) |
+| API-SPEC | `docs/API-SPEC.md` | What each endpoint accepts, returns and how it fails | There is an API that others call (`api-conventions`) |
+| DATA-DICTIONARY | `docs/DATA-DICTIONARY.md` | What a field means · what values it can take | There is a database or data schema (`database-design`) |
+| EVALUATION-POLICY | `docs/EVALUATION-POLICY.md` | What measures whether the output is good enough · what the pass threshold is | Output comes from a model or LLM that is not always right |
+| PROMPT-LIBRARY | `docs/PROMPT-LIBRARY.md` | Which prompt is the real one · which version · what changed | An LLM sits on the system's main path |
+| ADR | `docs/decisions/ADR-*.md` | Why we chose this way and not the other | A decision will be questioned again (`adr-writer`) |
+| Runbook | `docs/runbook-<topic>.md`, one topic per file | What to do when the system goes down at 2 a.m. | A system is really running and someone is on call |
 
-> **เอกสาร 4 ตัวที่มีเงื่อนไขเรื่อง LLM · API · ฐานข้อมูล คือตัวที่คนลืมบ่อยที่สุด**
-> แล้วไปจบด้วยการถาม agent ซ้ำทุกรอบว่า "prompt ตัวไหนคือตัวจริง" หรือ "ฟิลด์นี้แปลว่าอะไร"
+> **The 4 conditional docs (LLM · API · database) are the ones people forget most often.**
+> The team then ends up asking the agent every round "which prompt is the real one" or "what does this field mean".
 
-## สายเทคนิค — เขียนเมื่อไหร่ (ข้อ 3)
+## Technical track: when to write (section 3)
 
-| เขียนเมื่อ | เอกสาร |
+| Write when | Doc |
 |---|---|
-| ก่อนเขียนโค้ดบรรทัดแรก | README · BUILD-PLAN |
-| ก่อนปล่อย agent ทำงานเป็นรอบ | AGENT-LOOP |
-| ตอนออกแบบตารางแรก | DATA-DICTIONARY |
-| ตอนออกแบบ endpoint แรก | API-SPEC |
-| ตอนเขียน prompt ตัวแรกที่จะใช้จริง | PROMPT-LIBRARY · EVALUATION-POLICY |
-| ตอนตัดสินใจเรื่องที่จะถูกถามซ้ำ | ADR |
-| ก่อนขึ้นระบบจริง | Runbook |
+| Before the first line of code | README · BUILD-PLAN |
+| Before letting an agent work in rounds | AGENT-LOOP |
+| When designing the first table | DATA-DICTIONARY |
+| When designing the first endpoint | API-SPEC |
+| When writing the first prompt that will really be used | PROMPT-LIBRARY · EVALUATION-POLICY |
+| When deciding something that will be questioned again | ADR |
+| Before going live | Runbook |
 
-> **ADR กับ DATA-DICTIONARY เขียนตอนที่ตัดสินใจ ไม่ใช่ตอนสรุปท้ายโปรเจกต์**
-> เขียนย้อนหลังก็ได้ แต่ตอนนั้นเหตุผลจริงหายไปแล้ว
+> **Write the ADR and DATA-DICTIONARY at decision time, not in the project wrap-up.**
+> You can write them afterwards, but the real reasons are gone by then.
 
-## ใครเขียนชิ้นไหน ด้วย skill อะไร (ข้อ 4)
+## Who writes which doc, with which skill (section 4)
 
-| เอกสาร | agent | skill ที่ใช้ |
+| Doc | agent | skill used |
 |---|---|---|
 | README · CHANGELOG | `technical-writer` | `project-bootstrap` |
 | Project Plan | `project-manager` | `branded-document-design` |
@@ -862,13 +862,13 @@ A document that outsiders must not see does not go on a public site. Keep it as 
 | ADR | `solution-architect` | `adr-writer` |
 | Test Plan · Test Cases | `qa-tester` | `test-case-template` |
 | mockups | `ux-designer` | `web-app-design` · `ui-craft` |
-| คู่มือผู้ใช้ (`MAN`) | `technical-writer` | `polished-document-style` |
+| User guide (`MAN`) | `technical-writer` | `polished-document-style` |
 | Runbook | `devops-engineer` | `incident-runbook-template` |
 | BUILD-PLAN | `project-manager` | `simplicity-first` |
 | AGENT-LOOP | `developer` | `spec-to-code-loop` |
 | API-SPEC | `system-analyst` | `api-conventions` |
 | DATA-DICTIONARY | `system-analyst` | `database-design` |
-| PROMPT-LIBRARY · EVALUATION-POLICY | `developer` | — (คู่กับ skill `llm-engineering`) |
+| PROMPT-LIBRARY · EVALUATION-POLICY | `developer` | none (pairs with skill `llm-engineering`) |
 
 
 ## reference: writer-templates.md

@@ -5,200 +5,200 @@ description: Use when designing a web app screen or mockup
 
 # Web App Design
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Gate before starting (every time) (`ด่านก่อนลงมือ`):** read the owner's theme → search live prototypes → 3 genuinely different directions → check `no-ai-look` before sending · follow the "Gate before starting" section of `design-references` (plugin `superuser`), even when a brand exists (the brand controls colors and fonts, while the search is for finding this piece's structure) · close the work with the line `ด่านก่อนลงมือ:`
 
-> **กฎข้อเดียว:** สีทุกสีในโค้ดคอมโพเนนต์ต้องมาจาก token
-> ถ้า `#hex` โผล่นอกไฟล์ token แปลว่าระบบดีไซน์เริ่มพังแล้ว และพังแบบเงียบ ๆ
+> **The one rule:** every color in component code must come from a token.
+> If a `#hex` shows up outside the token file, the design system has started to break, and it breaks silently.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ทำหน้าจอเว็บแอป: แดชบอร์ด, admin panel, เครื่องมือภายใน, SaaS
-- ต้องการให้ทุกหน้าที่คนละคนทำออกมาหน้าตาเป็นชุดเดียวกัน
-- ต้องรองรับหลายแบรนด์/หลายธีมโดยไม่แตะโค้ดคอมโพเนนต์
-- ใช้ได้กับ Angular / React / Vue / Svelte / HTML เปล่า — CSS ล้วน ไม่ผูกเฟรมเวิร์ก
+- Building web app screens: dashboard, admin panel, internal tool, SaaS
+- Wanting every page, made by different people, to look like one set
+- Needing to support several brands or themes without touching component code
+- Works with Angular / React / Vue / Svelte / plain HTML. It is pure CSS and tied to no framework.
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-- แอปเดสก์ท็อป Windows ให้ใช้ `windows-app-design`
-- เอกสาร .docx/.pptx ให้ใช้ `branded-document-design`
-- เว็บไซต์การตลาด/landing page เพราะระบบนี้ออกแบบมาสำหรับ **แอป** ที่ต้องอัดข้อมูล
-  ตัวหนังสือฐาน 13px จึงเล็กเกินไปสำหรับหน้าขาย
+- A Windows desktop app: use `windows-app-design`
+- A .docx/.pptx document: use `branded-document-design`
+- A marketing website or landing page, because this system is built for **apps** that pack in data.
+  A 13px base text is too small for a sales page.
 
 ---
 
-## 1 · ลำดับการทำงาน — mockup ก่อนเสมอ
+## 1 · Working order: mockup first, always
 
-> **โปรเจกต์มีหน้าจออยู่แล้ว → ลอกหน้าเดิมตาม `ui-craft` ข้อ 0 ไม่ใช้ appstrack** (ยกเว้นสั่งออกแบบใหม่ หรือหน้าเดิมยังไม่ผ่านด่านสวย) · ลำดับด้านล่างสำหรับโปรเจกต์ที่ยังไม่มีหน้าตาเลย หรือกำลังออกแบบใหม่ · appstrack ให้แค่คลาสคอมโพเนนต์และค่าสำรอง หน้าตาของงานมาจาก `theme.css` ที่ได้จากการค้น
+> **The project already has screens → copy the existing pages by `ui-craft` item 0 and do not use appstrack** (unless the owner asked for a redesign, or the existing pages have not passed the beauty gate (`ด่านสวย`)) · the order below is for projects with no look yet, or being redesigned · appstrack gives only the component classes and fallback values. The look of the work comes from the `theme.css` produced by the search.
 
 ```
-0. ทิศทางภาพตาม ui-craft ข้อ 0.1 (ค้นต้นแบบตาม design-references ประเภท web หรือ dashboard แล้วถอดสี · หน้าจอพระเอก · แอปอ้างอิง · 3 แนว · เลือก 1 · โลโก้) → คัดลอก assets/theme-template.css เป็น mockup/theme.css แล้วเติมค่าทั้ง 4 กลุ่มในข้อ 2 จากแนวที่เลือก พร้อมที่มาทุกค่า
-   หน้าที่มีรูป (hero · สินค้า · บริการ · ทีม) → `graphic-design:image-artist` หารูปตาม image-generation ลง public/images/ ก่อนขั้น 2 · ไม่วาดรูปทรงพื้นฐานแทนของจริงเอง
-1. คัดลอก assets/mockup-template.html + assets/appstrack.css ไปไว้คู่กับ theme.css (หน้าตาค่าสำรอง: assets/mockup-template-preview.webp · ไม่ใช่เป้าหมาย)
-   โครงหน้า (sidebar · แถบบน · แบ่ง 2 ฝั่ง · หน้าเดียวไม่มีเมนู) เลือกจากต้นแบบที่ค้นและจำนวนเมนูของแอป ไม่ยึดโครงในแม่แบบ
-2. แก้เนื้อหาเป็นหน้าจริงที่จะทำ (ยังไม่แตะโค้ดแอป)
-3. python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 1440
-   python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 900
-   python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 420
-4. เปิดภาพดูจริงทุกความกว้าง แก้จนพอใจ แล้วค่อยให้คนอื่นรีวิว
-5. อนุมัติแล้วจึงแปลงเป็นคอมโพเนนต์ — copy คลาสเดิม ไม่เขียน CSS ใหม่
-6. ต่อ scripts/check-design-tokens.mjs เข้า CI ตั้งแต่วันแรก
+0. Visual direction by ui-craft item 0.1 (search prototypes by design-references, type web or dashboard, then extract colors · hero screen · reference apps · 3 directions · pick 1 · logo) → copy assets/theme-template.css to mockup/theme.css and fill the 4 groups of values in section 2 from the chosen direction, with the source of every value
+   Pages with pictures (hero · product · service · team) → `graphic-design:image-artist` finds the pictures by image-generation into public/images/ before step 2 · never draw basic shapes yourself in place of real ones
+1. Copy assets/mockup-template.html + assets/appstrack.css next to theme.css (fallback look: assets/mockup-template-preview.webp · not the goal)
+   Choose the page structure (sidebar · top bar · 2-side split · single page with no menu) from the prototypes you found and the number of menu items in the app, not from the template's structure
+2. Edit the content into the real page to build (do not touch app code yet)
+3. python scripts/screenshot.py mockup/<code>-mockup.html _to_delete/screenshots/ --width 1440
+   python scripts/screenshot.py mockup/<code>-mockup.html _to_delete/screenshots/ --width 900
+   python scripts/screenshot.py mockup/<code>-mockup.html _to_delete/screenshots/ --width 420
+4. Open the images and look at every width, fix until satisfied, and only then let others review
+5. Convert to components only after approval: copy the existing classes, write no new CSS
+6. Wire scripts/check-design-tokens.mjs into CI from day one
 ```
 
-**mockup ส่งมอบเป็นไฟล์เดียว** (`mockup/<รหัส>-mockup.html` ทุกหน้าจอเป็น section) → ฝังเนื้อ `appstrack.css` แล้วตามด้วย `theme.css` ลงใน `<style>` แทน `<link>` ก่อนส่ง · ตรวจ token ด้วยไฟล์ mockup เป็นไฟล์ token เอง: `node scripts/check-design-tokens.mjs mockup/<รหัส>-mockup.html mockup --ext html`
+**The mockup is delivered as one file** (`mockup/<code>-mockup.html`, every screen a section) → before sending, embed the contents of `appstrack.css` followed by `theme.css` in `<style>` instead of `<link>` · check tokens with the mockup file as its own token file: `node scripts/check-design-tokens.mjs mockup/<code>-mockup.html mockup --ext html`
 
-ข้อ 6 สำคัญกว่าที่คิด เพราะระบบดีไซน์ที่ไม่มีตัวตรวจบังคับจะค่อย ๆ เพี้ยนจาก
-"ขอ hardcode แค่ครั้งเดียว" ภายใน 3 สัปดาห์ และไม่มีใครรู้ตัวจนเปลี่ยนธีมแล้วพัง
+Step 6 matters more than it seems. A design system with no enforcing checker slowly drifts because of
+"just one hardcode, please" within 3 weeks, and nobody notices until a theme change breaks it.
 
 ---
 
 ## 2 · Design tokens
 
-> **หน้าตามาจากการค้นของงานนี้ — ไม่หยุดถาม**
-> ลำดับหาค่า: สีแบรนด์และฟอนต์ของลูกค้า (มีแล้วใช้เลย) → ต้นแบบที่ค้นสดตาม `design-references` และพาเลตที่ถอดด้วย `design-direction-lookup` ข้อ 2 → ค้นไม่ได้เลย (ไม่มีเน็ต · ผู้ใช้สั่งใช้ของเดิม) จึงใช้ค่าสำรองใน `assets/appstrack.css` เขียน `(รอยืนยัน)` แล้วทำต่อ
-> ตารางเนื้องานกับโทนสีใน `colour-by-domain` (`diagram-figures` → `references/colour-by-domain.md`) เป็นจุดตั้งต้นของคำค้น ไม่ใช่คำตอบ
-> **สีแบรนด์ต้องผ่าน 4.5:1 ทั้งตัวขาวบนพื้นแบรนด์ และสีแบรนด์บนพื้นหน้า** — สีลูกค้าที่สว่างเกิน ให้ทำเฉดเข้มขึ้นสำหรับ `--brand` แล้วเก็บสีเดิมไว้ที่โลโก้และกราฟ
+> **The look comes from this job's search. Do not stop to ask.**
+> Order for finding values: the client's brand colors and fonts (if they exist, use them at once) → prototypes searched live by `design-references` and palettes extracted by `design-direction-lookup` item 2 → only if nothing can be searched at all (no internet · the user ordered the old look kept), use the fallback values in `assets/appstrack.css`, write `(รอยืนยัน)` (awaiting confirmation), and keep going.
+> The table of work type versus color tone in `colour-by-domain` (`diagram-figures` → `references/colour-by-domain.md`) is a starting point for search terms, not an answer.
+> **Brand colors must pass 4.5:1 for both white text on the brand background and the brand color on the page background.** If a client's color is too light, make a darker shade for `--brand` and keep the original color for the logo and charts.
 
-**ค่าไหนตายตัว ค่าไหนมาจากการค้น**
+**Which values are fixed and which come from the search**
 
-| กลุ่ม | token | มาจาก | ค่าสำรอง (appstrack) |
+| Group | token | Comes from | Fallback (appstrack) |
 |---|---|---|---|
-| สี | `--brand` `--brand-2` `--brand-50` `--brand-100` · พื้นและข้อความเมื่อแนวที่เลือกต้องการ | แบรนด์ลูกค้า → พาเลตที่ถอดจากต้นแบบ | `#226CC6` (เฉดเข้มของ `#2A78D6`) |
-| ตัวอักษร | `--font` · `--fs-xs` … `--fs-xl` | ฟอนต์แบรนด์ → คู่ฟอนต์ไทย-ละตินที่ต้นแบบในวงการใช้ · ขนาดฐานตามความแน่นของงาน (อัดข้อมูล 13 · อ่านเยอะ 14–15) | Inter + Noto Sans Thai · 11/12/13/15/22 |
-| รูปทรง | `--radius` `--radius-sm` `--radius-pill` · `--shadow` `--shadow-lg` | แนวที่เลือก (เหลี่ยมเรียบ · มนนุ่ม · การ์ดลอย) | 14 · 9 · 99 · การ์ดไม่มีเงา |
-| เลย์เอาต์ | `--sidebar-w` `--topbar-h` `--content-max` | จำนวนเมนู ชื่อเมนูยาวแค่ไหน งานหลักต้องการพื้นที่กว้างไหม | 232 · 56 · 1160 |
-| **ตายตัวทุกงาน** | ใช้ token เท่านั้น · คอนทราสต์ ≥ 4.5:1 · สีสถานะตามความหมาย · กรอบแอปสีกลาง · ปุ่มหลัก 1 ปุ่มต่อหน้า · กฎภาษาไทยข้อ 5 | กฎของระบบ ไม่ขึ้นกับงาน | — |
+| Color | `--brand` `--brand-2` `--brand-50` `--brand-100` · background and text when the chosen direction needs them | Client brand → palette extracted from prototypes | `#226CC6` (a darker shade of `#2A78D6`) |
+| Type | `--font` · `--fs-xs` … `--fs-xl` | Brand font → the Thai-Latin font pair that prototypes in the field use · base size by how dense the work is (data-packed 13 · reading-heavy 14–15) | Inter + Noto Sans Thai · 11/12/13/15/22 |
+| Shape | `--radius` `--radius-sm` `--radius-pill` · `--shadow` `--shadow-lg` | The chosen direction (flat square · soft round · floating cards) | 14 · 9 · 99 · cards with no shadow |
+| Layout | `--sidebar-w` `--topbar-h` `--content-max` | Number of menu items, how long menu names are, whether the main work needs wide space | 232 · 56 · 1160 |
+| **Fixed for every job** | tokens only · contrast ≥ 4.5:1 · status colors by meaning · neutral app frame · 1 primary button per page · Thai rules in section 5 | System rules, independent of the job | — |
 
-ค่าของงานอยู่ใน `theme.css` ไฟล์เดียว (แม่แบบ `assets/theme-template.css`) · ทุกบรรทัดมีคอมเมนต์ที่มา · `appstrack.css` ไม่แก้ เพื่อให้คลาสคอมโพเนนต์อัปเดตตาม skill ได้
+The job's values live in the single file `theme.css` (template `assets/theme-template.css`) · every line has a comment giving its source · do not edit `appstrack.css`, so the component classes can update along with the skill.
 
-96 token อยู่ในบล็อก `:root` ของ `assets/appstrack.css` ส่วนรายละเอียดครบอยู่ใน **`references/tokens.md`**
+The 96 tokens are in the `:root` block of `assets/appstrack.css`, and the full details are in **`references/tokens.md`**.
 
-**เปลี่ยนสีแบรนด์ทั้งแอป = แก้ 4 ค่า** (`--brand --brand-2 --brand-50 --brand-100`)
-สีที่เหลือคำนวณหรืออ้างอิงจาก 4 ค่านี้ ถ้าต้องแก้สีค่าที่ 5 แปลว่ามีที่ไหน hardcode อยู่
+**Changing the brand color of the whole app = editing 4 values** (`--brand --brand-2 --brand-50 --brand-100`).
+The other colors are computed from or refer to these 4. If you need to edit a 5th color, something is hardcoded somewhere.
 
-`assets/appstrack.css` มีชุดสีตัวอย่างมาให้ 5 ชุด (ocean · emerald · sunset · plum · graphite)
-สลับด้วย `body[data-theme]` และ sidebar สว่าง/เข้มด้วย `body[data-side='dark']` (เข้ม = เทาเข้มกลาง ไม่ย้อมสีแบรนด์)
-**ชุดพวกนี้มีไว้ทดสอบว่าระบบเปลี่ยนสีได้จริง ไม่ใช่ตัวเลือกให้หยิบใช้** — สีของงานมาจาก `theme.css` เสมอ
+`assets/appstrack.css` ships 5 sample color sets (ocean · emerald · sunset · plum · graphite).
+Switch them with `body[data-theme]`, and switch sidebar light/dark with `body[data-side='dark']` (dark = a neutral dark gray, not tinted with the brand color).
+**These sets exist to test that the system can really change color, not as options to pick from.** The job's colors always come from `theme.css`.
 
-**สีสถานะ (สำเร็จ · เตือน · ผิดพลาด) ไม่เปลี่ยนตามแบรนด์** — เขียวคือผ่าน แดงคือไม่ผ่าน เสมอ
+**Status colors (success · warning · error) do not change with the brand.** Green always means pass, and red always means fail.
 
-**กรอบแอปเป็นสีกลาง** (ตามความชอบของเจ้าของ และ `ui-craft` ด่านสวย หมายเหตุแพลตฟอร์ม) — sidebar · topbar · เส้นขอบ · ไอคอนเมนู เป็นเทา-ดำ · สีแบรนด์อยู่ที่ข้อมูล ปุ่มหลัก ลิงก์ ขีดเลือกเมนู 3px และโลโก้ · ย้อมกรอบได้เฉพาะเมื่อผู้ใช้สั่ง
+**The app frame is neutral** (by the owner's preference, and the `ui-craft` beauty gate, platform note): sidebar · topbar · borders · menu icons are gray-black · brand color goes on data, primary buttons, links, the 3px menu selection bar and the logo · tint the frame only when the user asks.
 
 ---
 
-## 3 · โครงหน้าจอ
+## 3 · Screen layout
 
-ผังข้างล่างคือโครงสำรองแบบ sidebar + แถบบน · แอปที่เมนูน้อย (≤ 5) หรือเป็นงานหน้าเดียว ให้เลือกโครงจากต้นแบบที่ค้น เช่น แถบบนอย่างเดียว หรือแบ่ง 2 ฝั่ง · ขนาดในผังเป็นค่าสำรอง ค่าจริงอยู่ใน `theme.css`
+The diagram below is the fallback structure, sidebar + top bar · for apps with few menu items (≤ 5) or a single-page job, choose the structure from the prototypes you found, such as top bar only or a 2-side split · the sizes in the diagram are fallback values, and the real values live in `theme.css`.
 
 ```
 ┌──────────┬─────────────────────────────────────────────────┐
-│ 232px    │ topbar 56px · พื้นทึบ · sticky                   │
+│ 232px    │ topbar 56px · solid background · sticky          │
 │ sidebar  ├─────────────────────────────────────────────────┤
-│          │  ชื่อหน้า h1 22px          [ปุ่มรอง] [ปุ่มหลัก]   │
-│ • เมนู   │  คำอธิบาย 12px สีรอง                             │
-│ • เมนู   │                                                 │
-│          │  ┌─ stat-grid: การ์ดตัวเลข auto-fit 190px ─────┐ │
+│          │  Page title h1 22px  [secondary btn] [primary]   │
+│ • menu   │  Description 12px, secondary color               │
+│ • menu   │                                                 │
+│          │  ┌─ stat-grid: number cards auto-fit 190px ────┐ │
 │  ─────   │  └─────────────────────────────────────────────┘ │
-│ กลุ่มที่2 │  ┌─ card ────────────────┐ ┌─ card ──────────┐  │
-│ • เมนู   │  │ ตาราง / ฟอร์ม          │ │ กิจกรรม / สรุป  │  │
+│ Group 2  │  ┌─ card ────────────────┐ ┌─ card ──────────┐  │
+│ • menu   │  │ table / form          │ │ activity/summary│  │
 │          │  └───────────────────────┘ └─────────────────┘  │
-│ ⚙ ตั้งค่า │             ← เนื้อหากว้างสุด 1160px จัดกลาง →     │
+│ ⚙ Settings│        ← content max 1160px, centered →         │
 └──────────┴─────────────────────────────────────────────────┘
 ```
 
-- **เมนูตั้งค่าอยู่ล่างสุดของ sidebar** (`.foot` มี `margin-top:auto`)
-- **หน้าละ 1 h1** และมีคำอธิบายใต้ h1 เสมอ — หน้าที่ไม่บอกว่าตัวเองทำอะไร = หน้าที่ยังไม่เสร็จ
-- **ปุ่มหลัก 1 ปุ่มต่อหน้า** (`.btn-primary` สีแบรนด์ทึบ ไม่มี gradient ไม่มีเงา) ที่เหลือเป็น `.btn` หรือ `.btn-ghost`
-- **KPI 3–5 ใบ** ถ้าเกินนั้นตัวเลขจะเล็กจนไม่เด่น
-- ตัวเลขทุกตัวที่เรียงเป็นคอลัมน์ต้องมีคลาส `.num` ไม่งั้นหลักไม่ตรง
+- **The settings menu sits at the bottom of the sidebar** (`.foot` has `margin-top:auto`)
+- **1 h1 per page**, always with a description under the h1. A page that does not say what it does is a page that is not finished.
+- **1 primary button per page** (`.btn-primary`, solid brand color, no gradient, no shadow). The rest are `.btn` or `.btn-ghost`.
+- **3–5 KPI cards.** More than that and the numbers get too small to stand out.
+- Every number laid out in a column needs the `.num` class, or the digits will not line up.
 
 ---
 
-## 4 · คอมโพเนนต์ที่มีให้แล้ว
+## 4 · Components already provided
 
-โครง `.app-shell/.app-sidebar/.app-topbar/.app-main` · การ์ด `.card/.card-head/.card-body` ·
-KPI `.stat-grid > .card.stat` · สถานะ `.pill-*` 7 โทน · ปุ่ม 4 แบบ ·
-ฟอร์ม `.field/.input/.select/.textarea` · ตาราง `.tb-wrap > .tb` ·
-ตัวกรอง `.chips/.tabs` · `.prog` · `.ava` · `.md-html` · `.empty` · `.skeleton` · `.spinner` ·
-`.toasts/.toast` · `.backdrop + .modal` · ยูทิลิตี `.row/.col/.grow/.ellipsis/.num`
+Shell `.app-shell/.app-sidebar/.app-topbar/.app-main` · card `.card/.card-head/.card-body` ·
+KPI `.stat-grid > .card.stat` · status `.pill-*` in 7 tones · 4 kinds of button ·
+form `.field/.input/.select/.textarea` · table `.tb-wrap > .tb` ·
+filters `.chips/.tabs` · `.prog` · `.ava` · `.md-html` · `.empty` · `.skeleton` · `.spinner` ·
+`.toasts/.toast` · `.backdrop + .modal` · utilities `.row/.col/.grow/.ellipsis/.num`
 
-รายการเต็มพร้อมคำอธิบายอยู่ท้าย `references/tokens.md`
+The full list with descriptions is at the end of `references/tokens.md`.
 
-**ไอคอน:** inline SVG stroke 2 ขนาด 15px ใน sidebar / 14px ในปุ่ม / 11px ใน pill
-ใช้ `stroke="currentColor"` เสมอ แล้วไอคอนจะเปลี่ยนสีตาม state ให้เอง
-
----
-
-## 5 · ภาษาไทย
-
-- `--font` ต้องมีฟอนต์ที่มีอักษรไทยในชุดเสมอ (ค่าสำรอง `Inter` ไม่มีไทย จึงต่อ `Noto Sans Thai`) · ฟอนต์ที่เลือกจากการค้นต้องเปิดดูกับข้อความไทยจริงก่อนใช้
-- ระยะบรรทัด 1.6 (เนื้อความ) / 1.85 (`.md-html`) — ไทยต้องการมากกว่าอังกฤษ
-- **ห้าม justify** · **ห้าม `text-transform: uppercase` กับข้อความไทย** (ไม่มีผล แต่
-  `letter-spacing` ที่มากับมันจะดันวรรณยุกต์เพี้ยน) — หัวตารางที่เป็นไทยให้เอา uppercase ออก
-- ปุ่มไทยกว้างกว่าอังกฤษ ~20% อย่า fix ความกว้างปุ่ม
-- ทดสอบด้วยข้อความไทยจริง ไม่ใช่ Lorem ipsum
+**Icons:** inline SVG stroke, 15px in the sidebar / 14px in buttons / 11px in pills.
+Always use `stroke="currentColor"`, so the icon changes color with the state by itself.
 
 ---
 
-## 6 · ตรวจงาน
+## 5 · Thai language
+
+- `--font` must always include a font that has Thai glyphs (the fallback `Inter` has no Thai, so `Noto Sans Thai` is chained on) · a font chosen from the search must be opened with real Thai text before use
+- Line height 1.6 (body text) / 1.85 (`.md-html`). Thai needs more than English.
+- **No justify** · **no `text-transform: uppercase` on Thai text** (it has no effect, but the
+  `letter-spacing` that comes with it throws the tone marks off) · for Thai table headers, remove uppercase
+- Thai buttons are about 20% wider than English ones, so do not fix button widths
+- Test with real Thai text, not Lorem ipsum
+
+---
+
+## 6 · Check the work
 
 ```bash
-# 1. ระบบดีไซน์ยังสะอาดอยู่ไหม
+# 1. Is the design system still clean?
 node scripts/check-design-tokens.mjs src/styles.css src/app
 
-# 2. หน้าตายังถูกทุกความกว้างไหม
-python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 1440
-python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 900
-python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 420
+# 2. Does the look still hold at every width?
+python scripts/screenshot.py mockup/<code>-mockup.html _to_delete/screenshots/ --width 1440
+python scripts/screenshot.py mockup/<code>-mockup.html _to_delete/screenshots/ --width 900
+python scripts/screenshot.py mockup/<code>-mockup.html _to_delete/screenshots/ --width 420
 ```
 
-แล้วเปิดภาพดูจริง ตรวจ:
+Then open the images and check:
 
-- [ ] ไม่มีสี hardcode (ตัวตรวจต้องขึ้น ✓)
-- [ ] ที่ 1024px sidebar หดเหลือไอคอน ส่วนที่ 720px กลายเป็น drawer และมีปุ่มเปิด
-- [ ] ตารางกว้างเกินจอเลื่อนเฉพาะในกรอบ **ไม่ใช่ทั้งหน้า** (ลากดูแนวนอนแล้ว sidebar ต้องไม่ขยับ)
-- [ ] ธีมของงาน (`theme.css`) + sidebar สว่าง/เข้ม ไม่มีข้อความกลืนพื้น · ทุกค่าใน `theme.css` มีคอมเมนต์ที่มา
-- [ ] ข้อความไทยไม่ล้นปุ่ม · วรรณยุกต์ไม่ชนสระ
-- [ ] คอนทราสต์ ≥ 4.5:1 ทุกคู่ข้อความกับพื้น รวมตัวขาวบน `--brand` (`--text-faint` บน `--bg` คือจุดที่เฉียดที่สุด 4.65 — ห้ามทำให้จางกว่านี้ · สีแบรนด์ใหม่ต้องวัดก่อนใช้)
-- [ ] เดินด้วย Tab ได้ครบและเห็นวงแหวนโฟกัสทุกจุด
-- [ ] มี empty state ทุกที่ที่รายการอาจว่าง (`.empty`) และ loading ทุกที่ที่ต้องรอ: เนื้อหาใช้โครงร่าง `.skeleton` ในรูปทรงของจริง · `.spinner` ใช้เฉพาะรอสั้น ๆ ในปุ่มหรือข้างข้อความ ไม่วางกลางจอ
+- [ ] No hardcoded colors (the checker must show ✓)
+- [ ] At 1024px the sidebar shrinks to icons, and at 720px it becomes a drawer with an open button
+- [ ] A table wider than the screen scrolls only inside its frame, **not the whole page** (drag sideways and the sidebar must not move)
+- [ ] The job's theme (`theme.css`) + sidebar light/dark: no text blends into the background · every value in `theme.css` has a source comment
+- [ ] Thai text does not overflow buttons · tone marks do not collide with vowels
+- [ ] Contrast ≥ 4.5:1 for every text-on-background pair, including white on `--brand` (`--text-faint` on `--bg` is the closest call at 4.65. Never make it paler · measure any new brand color before use)
+- [ ] Tab reaches every control, and a focus ring shows at every point
+- [ ] An empty state (`.empty`) wherever a list may be empty, and loading wherever there is a wait: content uses a `.skeleton` outline in the shape of the real thing · `.spinner` only for short waits inside a button or beside text, never in the middle of the screen
 
 ---
 
 ## 7 · Anti-patterns
 
-- **`#hex` ในไฟล์คอมโพเนนต์** — ต้นเหตุอันดับ 1 ของธีมพัง ให้ตัวตรวจจับไว้
-- **gradient บนปุ่ม chip หรือกราฟ · topbar กระจกฝ้า** — สัญญาณ AI ใน `no-ai-look` และค่าสีบนกราฟต้องคงที่ ใช้ `--brand` และ `--c-*` ทึบ
-- **ย้อมสีแบรนด์ที่ sidebar topbar หรือเส้นขอบ** — กรอบแอปเป็นสีกลาง (ข้อ 2)
-- **เงาใต้การ์ด** — การ์ดนิ่งไม่ได้ลอย แยกด้วยเส้นและพื้นต่างเฉด · `--shadow` สำหรับ dropdown/tooltip · `--shadow-lg` สำหรับ modal/toast เท่านั้น
-- **ปุ่มหลักหลายปุ่มในหน้าเดียว** — ผู้ใช้ไม่รู้ว่าต้องกดอะไร
-- **`overflow-x` ที่ `<body>`** เพื่อแก้ตารางล้น — ต้องแก้ที่ `.tb-wrap`
-- **`alert()` / `confirm()`** — ใช้ `.toast` และ `.modal`
-- **สร้างขนาดตัวอักษรใหม่** นอก `--fs-*` ของงาน (`ui-craft` ข้อ 2 · เล็กสุด 11 · ≤ 5 ขนาดต่อหน้าจอ)
-- **ส่ง mockup หน้าตาค่าสำรองโดยไม่ได้ค้น** — ทุกงานหน้าตาเหมือน Apps Track · ใช้ค่าสำรองได้เฉพาะเมื่อค้นไม่ได้ และต้องเขียน `(รอยืนยัน)`
-- **`.modal` ที่ไม่ตั้ง `position`** — จะจมอยู่ใต้ `.backdrop` แล้วคลิกอะไรไม่ได้เลย
-  (มีคอมเมนต์อธิบายไว้ใน CSS แล้ว อย่าลบ)
-- **ส่ง mockup โดยไม่เคยเรนเดอร์ดู**
+- **`#hex` in component files.** The number 1 cause of a broken theme. Let the checker catch it.
+- **Gradients on buttons, chips or charts · a frosted-glass topbar.** These are AI signals in `no-ai-look`, and chart colors must stay fixed. Use solid `--brand` and `--c-*`.
+- **Tinting the sidebar, topbar or borders with the brand color.** The app frame is neutral (section 2).
+- **Shadows under cards.** Static cards do not float. Separate them with lines and shifted background shades. `--shadow` is for dropdowns and tooltips only · `--shadow-lg` is for modals and toasts only.
+- **Several primary buttons on one page.** Users do not know what to press.
+- **`overflow-x` on `<body>`** to fix an overflowing table. Fix it at `.tb-wrap`.
+- **`alert()` / `confirm()`.** Use `.toast` and `.modal`.
+- **Inventing new font sizes** outside the job's `--fs-*` (`ui-craft` item 2 · minimum 11 · ≤ 5 sizes per screen)
+- **Sending a fallback-look mockup without searching.** Every job then looks like Apps Track. Use the fallback only when searching is impossible, and write `(รอยืนยัน)`.
+- **A `.modal` with no `position` set.** It sinks under `.backdrop` and nothing can be clicked
+  (the CSS already has a comment explaining this. Do not delete it.)
+- **Sending a mockup that was never rendered and looked at**
 
 ---
 
-## 8 · เชื่อมกับ skill อื่น
+## 8 · Link to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---|---|
-| user flow / IA ก่อนลงสี | agent `ux-designer` |
-| แอปเดสก์ท็อป Windows โทนเดียวกัน | `windows-app-design` |
-| เอกสาร spec ของหน้าจอ | `polished-document-style` + `branded-document-design` |
-| ไดอะแกรมประกอบ spec | `markdown-visuals` |
-| กฎระยะห่าง ลำดับสายตา และ 5 สถานะของหน้าจอ | `ui-craft` |
-| ไดอะแกรมสถาปัตยกรรม | `software-diagrams` |
+| User flow / IA before coloring | agent `ux-designer` |
+| A Windows desktop app in the same tone | `windows-app-design` |
+| Screen spec document | `polished-document-style` + `branded-document-design` |
+| Diagrams to go with the spec | `markdown-visuals` |
+| Spacing rules, visual order and the 5 states of a screen | `ui-craft` |
+| Architecture diagrams | `software-diagrams` |
 
 ---
 
-## ไม่ให้ดูเหมือน AI ทำ
+## Do not look AI-made
 
-ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ทุกงานต้องผ่านด่านตา 3.2 ด้วย (หน้าเว็บตอบเพิ่มข้อ 10–14) เพราะสคริปต์ 0 ข้อยังไม่ใช่ผ่าน · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
+Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script · every job must also pass the eye gate 3.2 (web pages answer items 10–14 too), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for every medium lives there.
 
-## ตัวย่อ
+## Abbreviations
 
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
+Always spell out an abbreviation in full the first time, then put the abbreviation in brackets, such as Model Context Protocol (MCP).
+After that you may use the abbreviation. See the skill `spell-out-abbreviations` for details.

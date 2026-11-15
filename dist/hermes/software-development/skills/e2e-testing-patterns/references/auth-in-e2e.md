@@ -1,6 +1,6 @@
 # Authentication in E2E — ตัวอย่างการล็อกอินในเทสต์
 
-สามวิธีล็อกอินในชุดทดสอบ เรียงจากแย่ไปดี พร้อมโค้ดตัวอย่างของ Playwright
+Three ways to log in within a test suite, ordered from worst to best, with Playwright code examples
 
 ## Bad: log in via UI every test
 ```

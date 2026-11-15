@@ -3,39 +3,39 @@ name: blast-radius
 description: Use when a small change touches shared code
 ---
 
-# blast radius — แก้นิดเดียว กระทบอะไรบ้าง
+# blast radius — a tiny edit, what does it affect
 
-> แก้นิดเดียวไม่ได้แปลว่ากระทบน้อย เพราะ helper ตัวเดียวอาจถูกเรียกจาก 40 ที่
-> ห้ามตอบว่า "น่าจะไม่กระทบ" ต้องหาให้ครบ แล้วรันจริงเพื่อพิสูจน์จุดที่เสี่ยงที่สุด
+> A tiny edit does not mean a small impact, because a single helper may be called from 40 places.
+> Never answer "it probably affects nothing." Find every place, then run something real to prove the riskiest spot.
 
-## ขั้นตอน
+## Steps
 
-1. **ระบุสิ่งที่เปลี่ยน**: ชื่อ symbol · field · คอลัมน์ · class · ค่า config · พฤติกรรมที่ต่างจากเดิม
-2. **หาทุกจุดที่การเปลี่ยนนี้ไปถึง** ด้วยคำสั่งที่รันซ้ำได้ และเก็บคำสั่งไว้ในรายงาน
+1. **Name what changes**: the symbol name · field · column · class · config value · behavior that differs from before
+2. **Find every place this change reaches** with commands that can be rerun, and keep the commands in the report
 
-   | ตามหา | ด้วย |
+   | Look for | With |
    |---|---|
-   | ผู้เรียกตรง | find references ของ IDE หรือ language server · `grep -rn` ชื่อเต็ม (จำกัดผลด้วย `head -50`) |
-   | ผู้เรียกทางอ้อม | ชื่อในสตริง · reflection · route · การลงทะเบียน dependency injection (DI) · template · SQL ดิบ |
-   | ข้อมูลที่บันทึกไว้แล้ว | แถวในฐานข้อมูล · cache · ไฟล์ · ข้อความในคิว ที่ยังเป็นรูปเดิม |
-   | นอก repo | API สาธารณะ · แอปมือถือรุ่นเก่า · job ตามเวลา · ระบบอื่นที่อ่านตารางเดียวกัน |
+   | Direct callers | find references in the IDE or language server · `grep -rn` the full name (limit the output with `head -50`) |
+   | Indirect callers | names in strings · reflection · routes · dependency injection (DI) registration · templates · raw SQL |
+   | Data already stored | rows in the database · cache · files · queue messages that still have the old shape |
+   | Outside the repo | public API · old mobile app versions · scheduled jobs · other systems that read the same table |
 
-3. **แบ่ง 3 กลุ่ม:** ปลอดภัยแน่ (มีเหตุผล 1 บรรทัด) · ต้องตรวจ · ไม่รู้
-4. **พิสูจน์จุดที่สำคัญที่สุด** เลือกจุดที่ถ้าพังจะเสียหายที่สุด แล้วรันจริง: test ที่ครอบเส้นทางนั้น · เรียกแอปผ่าน verify skill · query ข้อมูลใน sandbox ส่วน "type check ผ่าน" ไม่นับเป็นหลักฐาน
-5. **กลุ่ม "ไม่รู้" ห้ามหายเงียบ** ต้องตรวจให้ได้ หรือเขียนในรายงานว่ายังเสี่ยง
-6. **หลังแก้เสร็จ เทียบแผนกับ diff จริง** (`git diff --stat`) · ไฟล์ที่แตะแต่ไม่อยู่ในตารางข้อ 2 → กลับไปค้นข้อ 2 ใหม่สำหรับไฟล์นั้น · จุดในตารางที่สุดท้ายไม่ได้แตะ → เขียนเหตุผล 1 บรรทัด ไม่ลบแถวเงียบ ๆ (แนวคิดจาก ECC change-impact)
+3. **Sort into 3 groups:** surely safe (with a 1-line reason) · needs checking · unknown
+4. **Prove the most important spot.** Pick the spot where a failure would cost the most, then run something real: a test that covers that path · call the app through a verify skill · query data in a sandbox. "Type check passed" does not count as evidence.
+5. **The "unknown" group must not vanish quietly.** Either check it, or write in the report that it is still risky.
+6. **After the edit is done, compare the plan with the real diff** (`git diff --stat`). A file touched but not in the step 2 table → go back to step 2 for that file. A spot in the table that was finally not touched → write a 1-line reason, and do not delete the row silently (idea from ECC change-impact).
 
-## รายงาน
+## Report
 
-| จุดที่กระทบถึง | กลุ่ม | หลักฐาน |
+| Spot reached | Group | Evidence |
 |---|---|---|
 
-ต่อท้ายด้วยคำสั่งค้นที่ใช้ และผลการรันในข้อ 4
+Follow it with the search commands used and the run results from step 4.
 
-## ใน SuperUser
+## In SuperUser
 
-เป็นขั้นก่อนส่งงานใน playbook `bug-fix` · `refactor` · `review` เมื่อ diff แตะโค้ดที่ใช้ร่วมกัน และใช้คู่กับ `targeted-fix`
+This is a step before delivery in the playbooks `bug-fix` · `refactor` · `review` when the diff touches shared code, and it is used together with `targeted-fix`.
 
-## ไม่ต้องทำเมื่อ
+## Skip when
 
-โค้ดที่เพิ่งเขียนในงานนี้และยังไม่มีใครเรียก
+Code just written in this task that nobody calls yet

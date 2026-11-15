@@ -291,18 +291,18 @@ Same bag, **VAT-registered** shop on Shopee: formula price ฿228.50 → ฿229.
 
 ## Script
 
-`price-calc.mjs` ใช้สูตรด้านบนกับสินค้าทีละชิ้น: ได้ราคาตามสูตร ราคาที่ปัดให้ลงท้าย 9 หรือ 0 ค่าธรรมเนียมแต่ละบรรทัด กำไรและ % ที่ราคาที่ปัด และกำไรช่วงแคมเปญถ้าใส่มา (ติดลบ = ไม่ควรร่วม)
+`price-calc.mjs` applies the formula above to one item at a time: it gives the formula price, the price rounded to end in 9 or 0, the fee on each line, the profit and its % at the rounded price, and the profit during a campaign if one is given (negative = do not join)
 
 ```
 node price-calc.mjs <file.json> [--json]     # example file: scripts/example.json
 node price-calc.mjs --self-test
 ```
 
-ไฟล์ input: `{ "rates_checked": "2026-10-06", "items": [ { "name": "...", "cost": 120, "shipping": 15, "fixed": 1.07, "margin_pct": 20, "vat_registered": false, "fees_pct": { "commission": 10.7, "transaction": 3.21 }, "campaign": { "extra_pct": 3, "voucher": 20 } } ] }` · `fees_pct` เป็น % ที่รวม VAT แล้ว ใส่กี่ช่องก็ได้ · `campaign` ไม่บังคับ · สคริปต์ไม่มีอัตราของแพลตฟอร์มในโค้ด ต้องใส่จาก Seller Centre ของร้านเอง และ `rates_checked` คือวันที่ตรวจ สคริปต์พิมพ์ออกมาในผล และขึ้นคำเตือนเมื่อเก่ากว่า 30 วัน (ค่าตั้งต้น ยังไม่ได้วัด) ให้เปิด Seller Centre ดูอัตราใหม่ก่อนใช้ราคา · ต้นทุนรวม 0 ทำให้สคริปต์หยุด · `margin_pct` ที่น้อยกว่า 1 (เช่น 0.2 แทน 20) และ voucher ที่ตั้งแต่ราคาขายขึ้นไปได้คำเตือน · ช่องที่ผิดทำให้สคริปต์หยุดพร้อมข้อความที่ชื่อช่อง · ถ้าค่าธรรมเนียม + VAT + กำไรที่ต้องการรวมกันตั้งแต่ 100% สคริปต์บอกว่าหาราคาไม่ได้
+Input file: `{ "rates_checked": "2026-10-06", "items": [ { "name": "...", "cost": 120, "shipping": 15, "fixed": 1.07, "margin_pct": 20, "vat_registered": false, "fees_pct": { "commission": 10.7, "transaction": 3.21 }, "campaign": { "extra_pct": 3, "voucher": 20 } } ] }` · `fees_pct` is the % already including VAT, and you can give any number of fields · `campaign` is optional · the script holds no platform rates in code, so enter them from the shop's own Seller Centre · `rates_checked` is the date checked, which the script prints in the result and warns about when it is older than 30 days (a default, not yet measured) · when it warns, open Seller Centre and read the new rates before using the prices · a total cost of 0 stops the script · a `margin_pct` below 1 (for example 0.2 instead of 20) and a voucher at or above the selling price raise a warning · a wrong field makes the script stop with a message that names the field · if fees + VAT + the wanted margin add up to 100% or more, the script says no price can be found
 
 **Script path:** ติดตั้งจาก marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/marketplace-fees-pricing/scripts/price-calc.mjs | sort -V | tail -1` · ใน repo SQT-Marketplace: `plugins/e-commerce/skills/marketplace-fees-pricing/scripts/price-calc.mjs` · Node อย่างเดียว ไม่มี dependency
 
-ผลเป็นข้อมูลประกอบ ไม่ใช่คำแนะนำด้านบัญชีหรือภาษี
+The result is supporting information, not accounting or tax advice.
 
 ## Price sheet columns
 

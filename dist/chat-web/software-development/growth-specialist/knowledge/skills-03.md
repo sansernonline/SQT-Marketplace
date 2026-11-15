@@ -4,9 +4,9 @@ Use when building shop software with cart and checkout
 
 # ecommerce-patterns
 
-ร้านค้าออนไลน์ — checkout และ conversion · สต็อกหลายคลัง · ระบบแนะนำสินค้า
+Online shops — checkout and conversion · multi-warehouse stock · product recommendation
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** — ไม่ต้องอ่านทั้งหมด แต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
+**Open only the files that match the job.** Do not read them all. Each file is the full guide to its topic.
 
 ## หัวข้อ
 
@@ -19,7 +19,7 @@ Use when building shop software with cart and checkout
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
+An agent called in for this area opens its own role file before starting.
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -2664,9 +2664,9 @@ Use when building a mobile app in code
 
 # mobile-engineering
 
-วิศวกรรมแอปมือถือ — สถาปัตยกรรม · ประสิทธิภาพ · หน้าร้านใน App Store / Play Store (ออกแบบหน้าจอใช้ `mobile-app-design`)
+Mobile app engineering: architecture · performance · App Store / Play Store listings (for screen design use `mobile-app-design`)
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** — ไม่ต้องอ่านทั้งหมด แต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
+**Open only the files that match the job.** Do not read them all, because each file is the full guide to its topic.
 
 ## หัวข้อ
 
@@ -2678,7 +2678,7 @@ Use when building a mobile app in code
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
+An agent called in for this area opens its own role file before starting.
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -2940,7 +2940,7 @@ Card(
 - [ ] AAB (Android App Bundle) signed
 - [ ] Pre-launch report green
 - [ ] Internal testing complete
-- [ ] บัญชีนักพัฒนาส่วนตัวใหม่: ต้องทำ closed test ≥ 12 คน ที่เข้าร่วมต่อเนื่องอย่างน้อย 14 วัน ก่อนขอ production (Play Console Help 14151465, ตรวจ 22 ต.ค. 2569)
+- [ ] New personal developer account: run a closed test with ≥ 12 people who stay opted in for at least 14 days before applying for production (Play Console Help 14151465, checked 22 Oct 2026 (B.E. 2569))
 
 ### Play Store Review Tracks
 - Internal (immediate, team only)
@@ -3003,13 +3003,13 @@ Card(
 
 ## reference: agent-aso-specialist.md
 
-> เดิมคือ agent `aso-specialist` ใน plugin `software-development-mobile` — รวมเข้า agent `growth-specialist` ใน v2.0.0 แล้ว ตอนนี้ไฟล์นี้ใช้เป็นคู่มือบทบาท
+> This was the agent `aso-specialist` in the plugin `software-development-mobile`. It was merged into the agent `growth-specialist` in v2.0.0, and this file now serves as the role guide.
 
-**สารบัญ:** 
+**Contents:**
 
 - [Your Responsibilities](#your-responsibilities)
 - [Initial Discovery](#initial-discovery)
-- [เป้าหมายและตัวเลข](#เป้าหมายและตัวเลข)
+- [Goals and numbers](#goals-and-numbers)
 - [Things You Don't Do](#things-you-dont-do)
 - [When to Hand Off](#when-to-hand-off)
 - [Reference](#reference)
@@ -3026,7 +3026,7 @@ You are an **App Store Optimization (ASO) Specialist**. You improve app store li
 6. **Conversion Analytics** — How many who see the listing go on to install
 7. **Competitive Analysis** — Track competitors and respond
 
-> ข้อเท็จจริงทั้งหมดของ ASO (ขีดจำกัดตัวอักษรของแต่ละร้าน · การทดสอบ A/B · การขอรีวิว · แปลภาษา · ข้อผิดพลาดที่พบบ่อย) อยู่ใน [app-store-optimization.md](app-store-optimization.md) ที่เดียว — ไฟล์นี้เก็บเฉพาะบทบาท คำถามเริ่มงาน และการส่งต่อ
+> All ASO facts (character limits of each store · A/B testing · asking for reviews · translation · common mistakes) live in one place, [app-store-optimization.md](app-store-optimization.md). This file keeps only the role, the starting questions, and the hand-offs.
 
 ## Initial Discovery
 
@@ -3036,11 +3036,11 @@ You are an **App Store Optimization (ASO) Specialist**. You improve app store li
 4. **Competitor positioning**
 5. **Budget for paid** user acquisition (UA), or organic only?
 
-## เป้าหมายและตัวเลข
+## Goals and numbers
 
-- **Conversion rate:** อัตราคนเห็นหน้าร้านแล้วติดตั้ง — ต่างกันมากตามหมวดแอปและร้าน ไม่มีเกณฑ์กลางที่ยืนยันได้ (รอยืนยัน) ให้วัดค่าฐานของแอปเองแล้วตั้งเป้าเทียบกับค่านั้น
+- **Conversion rate:** the share of people who see the store page and then install — it varies widely by app category and store, and there is no confirmed common benchmark (`รอยืนยัน`, awaiting confirmation). Measure the app's own baseline, then set the target against that.
 - **Keyword rankings:** track and improve
-- **Rating:** เป้าภายในของทีม เช่น 4.5/5 ขึ้นไป (ไม่ใช่มาตรฐานของร้าน)
+- **Rating:** an internal team target, for example 4.5/5 or higher (not a store standard)
 - **Recent reviews:** new ones keep coming in steadily
 - **Visual A/B testing:** always running
 
@@ -3063,7 +3063,7 @@ You are an **App Store Optimization (ASO) Specialist**. You improve app store li
 - [App Store Connect Help](https://developer.apple.com/help/app-store-connect/)
 - [Play Console Help](https://support.google.com/googleplay/android-developer)
 - [AppTweak](https://www.apptweak.com/)
-- [Sensor Tower](https://sensortower.com/) (รวม data.ai แล้วตั้งแต่ มี.ค. 2567)
+- [Sensor Tower](https://sensortower.com/) (merged with data.ai since March 2024 (B.E. 2567))
 - [Mobile Action](https://www.mobileaction.co/)
 
 
@@ -3173,7 +3173,7 @@ function ProductList() {
 
 ### New Architecture (Fabric + Turbo Modules)
 - React Native 0.82 (ต.ค. 2568) เป็นเวอร์ชันแรกที่ใช้ New Architecture อย่างเดียว — ตั้ง `newArchEnabled=false` จะถูกเมินแล้ว (reactnative.dev/blog/2025/10/08/react-native-0.82 ตรวจ 22 ต.ค. 2569)
-- เวอร์ชันเก่ากว่า 0.82 ต้องเปิดเองหรือดูค่าเริ่มต้นของเวอร์ชันนั้น
+- For versions older than 0.82, turn it on yourself or check that version's default
 - Native module เขียนแบบ Turbo Module หรือ Expo Modules ไม่ใช่ `NativeModules` แบบเก่า
 
 ## Flutter Patterns
@@ -3364,7 +3364,7 @@ You are an **iOS Engineer**. You build native iOS apps that feel right at home o
 
 ## SwiftUI Patterns (2026 default)
 
-iOS 17+ ใช้แมโคร `@Observable` คู่กับ `@State` (ค่าเริ่มต้นในปัจจุบัน):
+On iOS 17+ use the `@Observable` macro together with `@State` (the current default):
 
 ```swift
 @MainActor
@@ -3899,7 +3899,7 @@ Use `mobile-engineer` agent for: **$ARGUMENTS**
 
 Workflow:
 1. **Discovery:** platforms, team, performance, complexity
-2. **Apply `mobile-engineering` skill** (สถาปัตยกรรม · ประสิทธิภาพ · งบประสิทธิภาพ)
+2. **Apply `mobile-engineering` skill** (architecture · performance · performance budget)
 3. **Choose framework** (native, React Native (RN), Flutter, Kotlin Multiplatform (KMP)) with tradeoffs
 4. **Design architecture** (Model-View-ViewModel (MVVM), Model-View-Intent (MVI), Clean) by complexity
 5. **Choose state management**
@@ -4328,12 +4328,12 @@ Platform-specific bridges:
 | Warm start | < 1s |
 | Frame rate (เฟรมต่อวินาที, fps) | 60fps (or 120fps on hardware that supports it) |
 | Frame budget | 16.67ms (60fps), 8.33ms (120fps) |
-| App Not Responding (ANR) rate ที่ผู้ใช้รู้สึก (Android) | เกณฑ์ "พฤติกรรมแย่" ของ Google Play = 0.47% · เป้าภายในที่เข้มกว่าเป็นของทีมเอง (ไม่ใช่มาตรฐาน) |
-| Crash rate ที่ผู้ใช้รู้สึก (Android) | เกณฑ์ "พฤติกรรมแย่" ของ Google Play = 1.09% · เป้าภายในที่เข้มกว่าเป็นของทีมเอง (ไม่ใช่มาตรฐาน) |
+| App Not Responding (ANR) rate users feel (Android) | Google Play "bad behavior" threshold = 0.47% · a stricter internal target is the team's own (not a standard) |
+| Crash rate users feel (Android) | Google Play "bad behavior" threshold = 1.09% · a stricter internal target is the team's own (not a standard) |
 | Memory | within device class budget |
 | Battery | < 5% drain per hour active use |
 
-แหล่ง: Android vitals (developer.android.com/topic/performance/vitals) ตรวจ 22 ต.ค. 2569 — ทั้งภาพรวมและต่อรุ่นเครื่อง (ต่อรุ่น = 8%) ถ้าเกินเกณฑ์ แอปจะถูกลดการมองเห็นบน Google Play
+Source: Android vitals (developer.android.com/topic/performance/vitals), checked 22 Oct 2026 (B.E. 2569). The threshold applies to both the overall rate and the per-device-model rate (per model = 8%). If the app goes over the threshold, Google Play reduces its visibility.
 
 ## Launch Time Optimization
 
@@ -4390,7 +4390,7 @@ Avoid heavy init in:
 2. Heavy layout / measure
 3. Overdraw
 4. Allocation in hot paths
-5. JavaScript thread ที่งานหนักหรือเรียกข้ามไป native บ่อย (RN)
+5. A JavaScript thread that does heavy work or crosses into native often (RN)
 
 ### Strategies
 

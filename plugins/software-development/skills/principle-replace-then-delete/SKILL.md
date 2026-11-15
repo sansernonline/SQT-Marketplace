@@ -3,32 +3,32 @@ name: principle-replace-then-delete
 description: Use when replacing an API, table or component
 ---
 
-# principle · replace then delete — ย้ายให้ครบ แล้วลบของเก่าในรอบเดียวกัน
+# principle · replace then delete — migrate everything, then delete the old thing in the same round
 
-> ของเก่าที่ "เก็บไว้ก่อนเผื่อใช้" จะอยู่ตลอดไป และคนต่อไปไม่รู้ว่าควรใช้ตัวไหน
+> An old thing "kept for now in case we need it" stays forever, and the next person cannot tell which one to use.
 
-## ขั้นตอน
+## Steps
 
-1. **ลบก่อนเพิ่ม** — เอาโค้ดตาย · validator ที่ซ้ำ · stub · flag ที่เปิดถาวรแล้ว ออกก่อน แล้วสร้างบนฐานที่เล็กลง
-2. **นับผู้ใช้ของเก่าทั้งหมด** ด้วยคำสั่งที่รันซ้ำได้ (grep · find references) — ตัวเลขนี้คือหลักฐาน
-3. **สร้างของใหม่ตามรูปที่ควรเป็น** ไม่ดัดให้หน้าตาเหมือนของเก่า
-4. **ย้ายผู้ใช้ทุกตัว** — ถ้าเกิน 10 จุดให้ใช้ codemod (`principle-build-a-tool-not-handwork`)
-5. **ลบของเก่าใน PR หรือชุดเดียวกัน** แล้วรันคำสั่งในข้อ 2 ซ้ำ ซึ่งต้องเหลือ 0 จุด
+1. **Delete before you add.** Remove dead code · duplicate validators · stubs · flags that are now permanently on. Then build on the smaller base.
+2. **Count every user of the old thing** with a repeatable command (grep · find references). This number is the evidence.
+3. **Build the new thing in the shape it should have.** Do not bend it to look like the old one.
+4. **Migrate every user.** If there are more than 10 places, use a codemod (`principle-build-a-tool-not-handwork`).
+5. **Delete the old thing in the same PR or batch**, then rerun the command from step 2. It must show 0 places.
 
-## ห้าม
+## Do not
 
-- wrapper ที่เรียกของใหม่ผ่านชื่อเก่า "ชั่วคราว"
-- flag สลับเก่า-ใหม่ที่ไม่มีวันถอด
-- โค้ดที่รองรับสภาพครึ่งทางระหว่างเฟสของ migration ที่วางแผนไว้แล้ว ให้ไปถึงปลายทางตรง ๆ เลย
+- A wrapper that calls the new thing through the old name "temporarily"
+- A flag that switches between old and new and never gets removed
+- Code that supports the halfway state between phases of an already planned migration. Go straight to the end state.
 
-## ข้อยกเว้น — ต้องมีชั้นรองรับจริง
+## Exceptions — a real compatibility layer is needed
 
-| กรณี | ทำ |
+| Case | Do this |
 |---|---|
-| API สาธารณะที่คนนอกเรียก | deprecate ตาม `api-conventions` แล้วกำหนดวันลบ |
-| ตารางฐานข้อมูลที่รันอยู่จริง | expand-and-contract ตาม `database-design` |
-| แอปมือถือรุ่นเก่ายังใช้งานอยู่ | รองรับถึงรุ่นขั้นต่ำที่บังคับอัปเดต |
+| A public API that outsiders call | Deprecate per `api-conventions` and set a removal date |
+| A database table that is live | Expand-and-contract per `database-design` |
+| Old mobile app versions still in use | Support down to the minimum version that is forced to update |
 
-จดทุกข้อยกเว้นใน `decision-log` พร้อมวันที่จะลบ
+Record every exception in `decision-log` with the date it will be removed.
 
-อัปเกรด framework ทั้งระบบ (.NET Framework → .NET 8 · Angular major · Python 2 → 3 · Node LTS) ใช้หลักเดียวกันทีละ package — playbook ต่อ stack อยู่ที่ [`legacy-spec-recovery/references/framework-upgrade.md`](../legacy-spec-recovery/references/framework-upgrade.md)
+Upgrading a whole framework (.NET Framework → .NET 8 · Angular major · Python 2 → 3 · Node LTS) follows the same principle, one package at a time. The playbook per stack is at [`legacy-spec-recovery/references/framework-upgrade.md`](../legacy-spec-recovery/references/framework-upgrade.md)

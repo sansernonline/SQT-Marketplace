@@ -319,7 +319,7 @@ Fill in the blanks of the template below.
 - ชื่องาน (job name): แคมเปญ 11.11
 - งานนี้คืออะไร (what this job is): which brand or campaign, where it is used, overall status
 - กติกา (rules): where the brand kit is · which image-generation tool is used · credit budget per job
-- ตัวอย่างแถว IMPROVEMENTS: แพลตฟอร์มหนึ่งเปลี่ยน safe zone ของวิดีโอแนวตั้ง · หลักฐาน: หน้าช่วยเหลือของแพลตฟอร์ม + ภาพทดสอบ · ไปรวมที่ `social-formats` references/platform-sizes.md
+- Example IMPROVEMENTS row: a platform changed the safe zone of vertical video · evidence: the platform's help page + a test image · merge into `social-formats` references/platform-sizes.md
 
 <!-- superuser:begin context -->
 ## CONTEXT.md
@@ -644,23 +644,23 @@ Every row of the asset table has a really exported file, with the right size, th
 
 ## reference: playbook-image-series.md
 
-# playbook · image-series — ชุดภาพจาก AI ที่ดูเป็นชุดเดียวกัน
+# playbook · image-series — AI images that look like one set
 
-ใช้เมื่อ: ภาพสินค้าหลายชิ้น · โพสต์ทั้งสัปดาห์ · storyboard · ตัวละครที่ใช้ซ้ำ · ต้องแก้ภาพที่มีอยู่
-skill หลัก: `brief-to-image` · `style-consistency` · `image-editing-brief` · agent `art-director`
+Use when: several product images · a week of posts · a storyboard · a character that appears repeatedly · fixing an existing image
+Main skills: `brief-to-image` · `style-consistency` · `image-editing-brief` · agent `art-director`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. เขียน style lock sheet (แผ่นล็อกสไตล์) ตาม `style-consistency` — สี แสง องค์ประกอบ เลนส์ สิ่งต้องห้าม · ใคร: `art-director` ตัวใหม่
-2. เขียน brief และ prompt ทีละภาพตาม `brief-to-image` โดยทุกภาพอ้าง lock sheet เดียวกัน · ใคร: `art-director` ตัวใหม่
-3. สร้างภาพผ่านเครื่องมือที่ผู้ใช้ติดตั้ง ถ้าไม่มีเครื่องมือให้ส่ง brief ที่พร้อมวางใช้ · ใคร: `art-director` ตัวใหม่
-4. เทียบทุกภาพกับ lock sheet — ภาพที่หลุดสไตล์ให้เขียน `image-editing-brief` (อะไรคงไว้ · อะไรเปลี่ยน) แทนการสร้างใหม่ทั้งภาพ · ใคร: `design-critic` ตัวใหม่เทียบกับ lock sheet · `art-director` ตัวใหม่เขียน brief แก้
-5. สร้างภาพที่ต้องแก้ใหม่ตาม brief แก้ ถ้าไม่มีเครื่องมือให้ส่ง brief ที่พร้อมวางใช้ · ใคร: `art-director` ตัวใหม่
-6. รัน `design-review` กับชุดภาพทั้งชุด · ใคร: `design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์)
+1. Write a style lock sheet per `style-consistency` — color, light, composition, lens, what is forbidden · ใคร: `art-director` ตัวใหม่
+2. Write the brief and prompt for each image per `brief-to-image`, with every image citing the same lock sheet · ใคร: `art-director` ตัวใหม่
+3. Generate the images through the tool the user has installed. If there is no tool, hand over a brief that is ready to paste · ใคร: `art-director` ตัวใหม่
+4. Check (ตรวจ) every image against the lock sheet. For an image that drifts from the style, write an `image-editing-brief` (what to keep · what to change) instead of regenerating the whole image · ใคร: `design-critic` ตัวใหม่ compares against the lock sheet · `art-director` ตัวใหม่ writes the fix brief
+5. Regenerate the images that need fixing following the fix brief. If there is no tool, hand over a brief that is ready to paste · ใคร: `art-director` ตัวใหม่
+6. Check (ตรวจ) the whole set by running `design-review` on it · ใคร: `design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์ — read-only)
 
-## จบเมื่อ
+## Done when
 
-ทุกภาพผ่าน lock sheet และ `design-review` และเก็บ brief ไว้ให้สร้างซ้ำได้
+Every image passes the lock sheet and `design-review`, and the briefs are kept so the set can be regenerated
 
 
 ## reference: playbook-learn-from-session.md

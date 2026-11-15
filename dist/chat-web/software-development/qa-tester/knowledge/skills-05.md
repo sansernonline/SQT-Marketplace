@@ -2,153 +2,153 @@
 
 Use when an agent has no scripted way to run the app
 
-# app-verifier-setup — ให้ agent มีมือและตา
+# app-verifier-setup — give the agent hands and eyes
 
-> ถ้า agent มองไม่เห็นผลงานตัวเอง ก็ปรับงานต่อเองไม่ได้ และคนต้องคอยส่งต่อสิ่งที่เห็นบนจอให้ agent
-> skill นี้สร้างเครื่องมือครั้งเดียว ให้ agent ทุกตัวหลังจากนี้ใช้ซ้ำ
+> If an agent cannot see its own work, it cannot adjust that work, and a person must keep relaying what is on the screen.
+> This skill builds the tool once, so every later agent can reuse it.
 
-**ผลลัพธ์:** 2 ชิ้น คือสคริปต์ที่อยู่กับ test ของโปรเจกต์ และ skill ที่เป็นแค่คู่มือสั้น ๆ ให้ agent
+**Output:** 2 things, a script that lives with the project's tests, and a skill that is only a short guide for agents.
 
 ```
-<โปรเจกต์>/
-├─ <project-name>/test/e2e/verify.*         สคริปต์ขับแอปจริง เปิดและปิดแอปเอง (อยู่ในโฟลเดอร์โค้ด ดู project-bootstrap)
-│                                           รายการฟีเจอร์และ check อยู่ในไฟล์นี้ที่เดียว (แผนที่ฟีเจอร์)
-├─ .claude/skills/verify-<โปรเจกต์>/SKILL.md   รันอย่างไร · อ่านผลอย่างไร · ข้อห้าม (ที่ราก — ที่ Claude Code เปิด)
-└─ _to_delete/verify-runs/                  หลักฐานแต่ละรอบ — สคริปต์หา path จากที่อยู่ของตัวเอง ไม่ขึ้นกับโฟลเดอร์ที่รัน
+<project>/
+├─ <project-name>/test/e2e/verify.*         script that drives the real app and opens and closes it itself (in the code folder, see project-bootstrap)
+│                                           the list of features and checks lives only in this file (the feature map)
+├─ .claude/skills/verify-<project>/SKILL.md   how to run · how to read results · what not to do (at the root, where Claude Code looks)
+└─ _to_delete/verify-runs/                  evidence from each run — the script finds paths from its own location, so it does not depend on the folder it runs from
 ```
 
-(Codex · Gemini ใช้ `.agents/skills/` · `skills/` แทน `.claude/skills/`) ตัวอย่างที่ทำจริงแล้ว: โปรเจกต์ `calculator-demo` (เว็บ) · แอป Flutter Android `Lumio - Light Meter` → `lumio-light-meter/test/e2e/verify.mjs` (Node ขับ `adb` สรุปไว้ใน [`references/android-native.md`](references/android-native.md))
+(Codex · Gemini use `.agents/skills/` · `skills/` instead of `.claude/skills/`.) Examples already built: the `calculator-demo` project (web) · the Flutter Android app `Lumio - Light Meter` → `lumio-light-meter/test/e2e/verify.mjs` (Node driving `adb`, summarized in [`references/android-native.md`](references/android-native.md)).
 
-**ทำไมไม่เขียนขั้นตอนแยกเป็นไฟล์ข้อความ** เพราะลองแล้วในโปรเจกต์ตัวอย่าง ขั้นตอนในไฟล์ `.md` กับใน script ไม่ตรงกันตั้งแต่รอบแรก จึงเก็บข้อมูลไว้ในสคริปต์ที่เดียว แล้วให้ skill ชี้ไปหา
+**Why not write the steps as a separate text file.** In the sample project, the steps in a `.md` file and in the script disagreed from the first round. So keep the information in the script only, and let the skill point to it.
 
 ---
 
-## ขั้นตอน
+## Steps
 
-1. **หาวิธีรันที่มีอยู่แล้ว** จาก README · `package.json` · `Makefile` · `docker-compose` · launch config (`.vscode/launch.json`) · `pubspec.yaml` (Flutter) · `build.gradle(.kts)` / `gradlew` (Android) ถ้ามีของเดิมให้ใช้ของเดิม ไม่สร้างใหม่
-2. **เลือกวิธีขับตามชนิดแอป**
+1. **Find the existing way to run the app** from the README · `package.json` · `Makefile` · `docker-compose` · launch config (`.vscode/launch.json`) · `pubspec.yaml` (Flutter) · `build.gradle(.kts)` / `gradlew` (Android). If one exists, use it and do not build a new one.
+2. **Choose how to drive it by app type**
 
-   | ชนิด | ขับด้วย | อ่านผลจาก |
+   | Type | Drive with | Read results from |
    |---|---|---|
-   | เว็บ | Playwright (ถ้ามี Chromium ติดตั้งอยู่แล้ว ห้ามดาวน์โหลดใหม่) | ภาพหน้าจอ · DOM · console · network |
-   | Electron · desktop | Playwright `_electron` หรือ Chrome DevTools Protocol (CDP) · Windows ใช้ pywinauto (WinAppDriver รุ่นล่าสุดน่าจะออกปี 2020 และยังไม่ยืนยันว่า Microsoft ยังดูแลอยู่ (รอยืนยัน)) | ภาพหน้าจอ · log |
-   | command line · TUI | เรียกคำสั่งจริงพร้อม input ตายตัว | stdout · stderr · exit code · ไฟล์ที่สร้าง |
-   | API · service | `curl` หรือ client ที่ repo ใช้ | status · body · log · ค่าในฐานข้อมูลทดสอบ |
-   | มือถือแบบเว็บ (progressive web app (PWA) · web-wrapped) | Playwright mobile viewport | ภาพหน้าจอ · DOM |
-   | มือถือ native · Flutter (Android) | สคริปต์ Node/Python เรียก `adb` + `uiautomator dump` (แบบ Lumio) · หรือ `integration_test` ของ Flutter · หรือ Maestro · Playwright ขับ APK ไม่ได้ | ภาพ `adb exec-out screencap -p` · ข้อความ/Semantics label จาก `uiautomator` · `dumpsys` · `logcat` |
+   | Web | Playwright (if Chromium is already installed, never download it again) | Screenshot · DOM · console · network |
+   | Electron · desktop | Playwright `_electron` or Chrome DevTools Protocol (CDP) · on Windows use pywinauto (the latest WinAppDriver release was probably in 2020 and it is not confirmed that Microsoft still maintains it (`รอยืนยัน`, awaiting confirmation)) | Screenshot · log |
+   | Command line · TUI | Run the real command with fixed input | stdout · stderr · exit code · created files |
+   | API · service | `curl` or the client the repo uses | Status · body · log · values in the test database |
+   | Web-based mobile (progressive web app (PWA) · web-wrapped) | Playwright mobile viewport | Screenshot · DOM |
+   | Native mobile · Flutter (Android) | A Node/Python script calling `adb` + `uiautomator dump` (the Lumio way) · or Flutter `integration_test` · or Maestro · Playwright cannot drive an APK | Image from `adb exec-out screencap -p` · text/Semantics labels from `uiautomator` · `dumpsys` · `logcat` |
 
-   - ถ้าโปรเจกต์มี `.sandbox/` ให้ขับเบราว์เซอร์ใน container ซึ่งค่าเริ่มคือ headless (ไม่เปิดหน้าต่าง) ถ้าอยากให้คนดูได้ ให้เปิด `up -Browser` (ดู [`docker-sandbox`](../docker-sandbox/SKILL.md) ข้อ 5) ส่วน Android emulator รันใน Docker บน Windows ไม่ได้ (ต้องมี KVM) จึงให้รัน emulator บนเครื่อง host แล้วบอกในรายงาน
-   - หน้าที่มี CAPTCHA ให้ใช้ค่าทดสอบของผู้ให้บริการหรือปิดใน environment ทดสอบ ห้ามเขียนสคริปต์แก้ CAPTCHA
-   - แอปที่อ่าน hardware (sensor · กล้อง · GPS) ให้ป้อนค่าที่รู้ล่วงหน้า ผ่าน emulator (`adb emu sensor set light 420`, กล้องเสมือน) หรือแหล่งข้อมูลปลอมที่เปิดได้เฉพาะ debug build แล้วติดป้ายทุก check ว่า `emulator` หรือ `เครื่องจริง` เพราะความแม่นของ sensor จริงพิสูจน์บน emulator ไม่ได้ ถ้ายังไม่ได้รันบนเครื่องจริง ให้เขียนว่า "ยังไม่ได้ตรวจบนเครื่องจริง"
+   - If the project has `.sandbox/`, drive the browser in the container. The default is headless (no window). To let a person watch, turn on `up -Browser` (see [`docker-sandbox`](../docker-sandbox/SKILL.md) step 5). An Android emulator cannot run in Docker on Windows (it needs KVM), so run the emulator on the host machine and say so in the report.
+   - For a page with CAPTCHA, use the provider's test keys or turn it off in the test environment. Never write a script that solves CAPTCHAs.
+   - For an app that reads hardware (sensor · camera · GPS), feed values known in advance, through the emulator (`adb emu sensor set light 420`, virtual camera) or a fake data source that can be turned on only in a debug build. Label every check `emulator` or `เครื่องจริง` (real device), because real sensor accuracy cannot be proven on an emulator. If it has not run on a real device, write "ยังไม่ได้ตรวจบนเครื่องจริง" (not yet checked on a real device).
 
-3. **เขียน `test/e2e/verify.*`** ให้เปิดแอปเองบนพอร์ตที่ไม่ชน (มือถือ: ติดตั้ง APK แล้วล้างข้อมูลแอป) ใส่ข้อมูลทดสอบ (seed) และรอจนพร้อม**โดยมีเวลาจำกัด** (เว็บ: ถ้าไม่ขึ้นใน 10 วินาทีถือว่าล้ม · มือถือ: ตั้งเวลาแยกสำหรับ build · boot emulator · เปิดแอป · แต่ละ check ดู reference) ปิดแอปเมื่อจบเสมอ และรันซ้ำต้องได้ผลเดิม (`principle-build-a-tool-not-handwork`)
-   - **เว็บหรือ API ที่ต้องเปิดเซิร์ฟเวอร์ก่อน** ใช้ [`scripts/with_server.py`](scripts/with_server.py) เปิด รอพอร์ตพร้อม รันสคริปต์ แล้วปิดให้ครบ เช่น `python -I scripts/with_server.py --server "npm run dev" --port 5173 -- node test/e2e/verify.mjs` (เปิดหลายตัวได้โดยใส่ `--server` กับ `--port` ซ้ำ · log อยู่ใน `--log-dir` ค่าเริ่ม `_to_delete/with-server-logs` ซึ่งสร้างให้เองถ้ายังไม่มี) · ทดสอบบน Windows 2026-11-10 กับ `python -m http.server` แล้วพอร์ตปิดจริงหลังจบ · แอปไดนามิกให้รอ `networkidle` (Playwright `page.wait_for_load_state("networkidle")`) หรือ `data-ready="true"` ก่อนอ่าน DOM ไม่เดา `sleep`
+3. **Write `test/e2e/verify.*`** so it opens the app itself on a port that does not clash (mobile: install the APK and clear app data), seeds test data, and waits until ready **with a time limit** (web: if it is not up in 10 seconds, count it as failed · mobile: set separate times for build · emulator boot · app start · each check, see the reference). Always close the app at the end, and a second run must give the same result (`principle-build-a-tool-not-handwork`).
+   - **For a web app or API that needs a server started first**, use [`scripts/with_server.py`](scripts/with_server.py). It starts the server, waits for the port, runs the script, then shuts everything down. For example `python -I scripts/with_server.py --server "npm run dev" --port 5173 -- node test/e2e/verify.mjs` (start several servers by repeating `--server` and `--port` · logs go to `--log-dir`, default `_to_delete/with-server-logs`, created automatically if missing). Tested on Windows on 2026-11-10 with `python -m http.server`, and the port was really closed afterwards. For dynamic apps, wait for `networkidle` (Playwright `page.wait_for_load_state("networkidle")`) or `data-ready="true"` before reading the DOM. Never guess with `sleep`.
 
-4. **รายการฟีเจอร์เป็นข้อมูลในสคริปต์** ไล่จากเมนู · route · command list · SRS แล้วเขียน 1 กลุ่มต่อฟีเจอร์ 1 บรรทัดต่อ check (`ทำอะไร → ต้องเห็นอะไร`) อย่างน้อย 3 ฟีเจอร์หลัก และกรณีผิดพลาด 1 กรณีต่อฟีเจอร์ **ทุก check เริ่มจากสถานะสะอาด** รันเดี่ยวหรือสลับลำดับได้ และพิมพ์ผล `PASS/FAIL` พร้อม expected กับ actual
-5. **สคริปต์ต้องไม่ผ่านลอย ๆ** (ผ่านทั้งที่ไม่ได้ตรวจอะไรจริง) ถ้าชื่อฟีเจอร์ไม่มีจริงให้ exit 1 ถ้าแอปไม่ขึ้นให้ exit 1 และถ้าไม่มี check ไหนได้รันก็ให้ exit 1 (ตรวจ 0 รายการถือว่าพัง ไม่ใช่ผ่าน)
-   - **check ที่ตรวจว่า "หยุด/ปล่อยแล้ว" ต้องตรวจเงื่อนไขก่อนเสมอ** (เช่น กล้องถูกถืออยู่ก่อนกด Home) ไม่งั้นจะผ่านลอย ๆ และรอผลด้วยการวนตรวจจนหมดเวลา ไม่ใช่ `sleep` ค่าเดา
-   - **ต้องแน่ใจว่าอ่านหน้าจอล่าสุด** โดยลบไฟล์ผลเก่าก่อนอ่านใหม่ และกดเมื่อตำแหน่งเป้าหมายนิ่ง 2 รอบติด ถ้าอ่านหน้าจอไม่ได้เพราะแอปวาดไม่หยุด ถือเป็นบั๊กของแอป ไม่ใช่ของสคริปต์
-6. **พิสูจน์ว่าสคริปต์จับของผิดได้** โดยแก้แอปให้ผิด 1 จุดชั่วคราว รันแล้วต้อง `FAIL` แล้วค่อยคืนค่า
-7. **พิสูจน์ว่า skill ใช้ได้จริง** โดยส่ง agent `qa-tester` ตัวใหม่ที่ไม่เคยเห็นโค้ด ให้ใช้แค่ skill นี้ทดสอบ 1 ฟีเจอร์ตั้งแต่เปิดแอปจนถ่ายภาพผล ติดตรงไหนให้แก้ skill ตรงนั้น
-8. **เก็บหลักฐานไว้ใน `_to_delete/verify-runs/<เวลา>/`** ทั้งภาพหน้าจอและ log ของการทดสอบ ไม่ปนกับโค้ด (เป็นของชั่วคราว ผู้ใช้ลบเองได้เมื่อส่งงานแล้ว · agent ไม่ลบ)
+4. **Keep the feature list as data in the script.** Go through the menu · routes · command list · SRS, and write 1 group per feature with 1 line per check (`what to do → what must be seen`). Cover at least 3 main features and 1 error case per feature. **Every check starts from a clean state**, can run alone or in a different order, and prints `PASS/FAIL` with expected and actual values.
+5. **The script must never pass emptily** (pass without really checking anything). If a feature name does not exist, exit 1. If the app does not come up, exit 1. If no check ran, exit 1 (checking 0 items counts as broken, not as a pass).
+   - **A check that verifies "stopped/released" must check the precondition first** (for example, the camera is held before pressing Home). Otherwise it passes emptily. Wait for the result by polling until a timeout, not with a guessed `sleep`.
+   - **Make sure you read the latest screen**: delete the old result file before each new read, and tap only when the target position has been steady for 2 reads in a row. If the screen cannot be read because the app never stops redrawing, treat it as an app bug, not a script bug.
+6. **Prove the script catches wrong behavior** by breaking the app in 1 place temporarily. Run it, it must `FAIL`, and then restore the change.
+7. **Prove the skill works in practice** by sending a fresh `qa-tester` agent that has never seen the code. It uses only this skill to test 1 feature from opening the app to taking a screenshot of the result. Wherever it gets stuck, fix the skill at that point.
+8. **Keep the evidence in `_to_delete/verify-runs/<time>/`**, both screenshots and test logs, apart from the code (it is temporary, the user can delete it after delivery, and the agent never deletes it).
 
-## สัญญาสำหรับทดสอบ — ใส่ในแอปตั้งแต่หน้าจอแรก
+## Testing contract — build it into the app from the first screen
 
-verify ต้องพึ่งของที่แอปเตรียมไว้ให้ ไม่ใช่เดาจากข้อความหรือ CSS · เขียนสัญญานี้ลงแผนที่ฟีเจอร์ในสคริปต์ และให้ developer ทำตามตั้งแต่ฟีเจอร์แรก
+verify must depend on things the app provides, not guess from text or CSS. Write this contract into the feature map in the script, and have the developer follow it from the first feature.
 
-| สิ่งที่แอปต้องมี | ใช้ทำอะไร | กฎ |
+| What the app must have | What it is for | Rule |
 |---|---|---|
-| `data-testid="<หน้า>-<สิ่งนั้น>"` แบบ kebab-case บนทุกปุ่ม ช่องกรอก ผลลัพธ์ และข้อความ error | หาองค์ประกอบโดยไม่ผูกกับข้อความหรือ CSS → เปลี่ยนภาษาหรือดีไซน์แล้ว check ไม่พัง | เช่น `book-submit` · `summary-total` · `book-error` · ห้ามซ้ำในหน้าเดียว · รายการ testid ทั้งหมดอยู่ในแผนที่ฟีเจอร์ |
-| `<html data-ready="false">` → `"true"` เมื่อหน้าโหลดข้อมูลเสร็จ | รอแบบมีเงื่อนไขแทน `sleep` ค่าเดา (ข้อ 5) | ตั้ง `true` หลังข้อมูลชุดสุดท้ายมาถึง ไม่ใช่ตอน component mount |
-| reset endpoint เช่น `POST /api/test/reset` → ล้างแล้วใส่ seed ใหม่ ภายใน 5 วินาที | ทุก check เริ่มจากสถานะสะอาด (ข้อ 4) | มีเฉพาะเมื่อตั้ง `ALLOW_TEST_RESET=1` · ไม่ตั้ง → ตอบ 404 · ห้ามเปิดใน production |
-| ล็อกนาฬิกา: reset รับ `{"now":"<ISO + offset>"}` แล้วกฎทุกข้ออ่าน "วันนี้" จากโมดูลเดียว (`clock`) | ทดสอบกฎที่ขึ้นกับวันเวลา (หมดอายุ · ยกเลิกก่อน 24 ชั่วโมง) ให้ได้ผลเดิมทุกครั้ง | ไม่ส่ง `now` → ใช้วันเริ่มที่เขียนใน seed · ปิด flag → ใช้เวลาจริง · ห้ามเรียก `Date.now()` / `DateTime.Now` ตรง ๆ ในกฎ |
+| `data-testid="<page>-<thing>"` in kebab-case on every button, input, result, and error message | Find elements without tying to text or CSS, so checks do not break when language or design changes | For example `book-submit` · `summary-total` · `book-error` · no duplicates on one page · the full list of testids lives in the feature map |
+| `<html data-ready="false">` → `"true"` when the page has finished loading data | Wait on a condition instead of a guessed `sleep` (step 5) | Set `true` after the last batch of data arrives, not when the component mounts |
+| A reset endpoint such as `POST /api/test/reset` → clears and re-seeds within 5 seconds | Every check starts from a clean state (step 4) | Exists only when `ALLOW_TEST_RESET=1` is set · if not set, answer 404 · never enable in production |
+| Clock lock: reset accepts `{"now":"<ISO + offset>"}` and every rule reads "today" from one module (`clock`) | Test date-dependent rules (expiry · cancel at least 24 hours ahead) with the same result every time | If `now` is not sent, use the start date written in the seed · flag off, use real time · never call `Date.now()` / `DateTime.Now` directly in a rule |
 
-แอปที่ไม่ใช่เว็บใช้แนวเดียวกัน: Flutter → `Key` / Semantics label ชื่อเดียวกัน · Android → `resource-id` · command line → ตัวเลือก `--now` หรือตัวแปร `APP_NOW` · reset บนมือถือเปิดได้เฉพาะ debug build
+Non-web apps follow the same idea: Flutter → a `Key` / Semantics label with the same name · Android → `resource-id` · command line → a `--now` option or an `APP_NOW` variable · a reset on mobile can be enabled only in a debug build.
 
-## SKILL.md ของ verify skill ต้องมี
+## What the SKILL.md of the verify skill must contain
 
-- description บอกว่าใช้เมื่อ "ต้องพิสูจน์ว่าฟีเจอร์ใช้ได้บนแอปจริง · ทำบั๊กให้เกิดซ้ำ · ตรวจก่อนส่ง"
-- คำสั่งเริ่มด้วย `with_server.py` (ถ้าแอปต้องเปิดเซิร์ฟเวอร์) และกฎรอ `networkidle` หรือ `data-ready` ก่อนอ่าน DOM
-- คำสั่งเริ่ม · หยุด · ข้อมูลทดสอบ (บัญชีทดสอบอยู่ไฟล์ไหน — **ห้ามใส่รหัสผ่านจริง**)
-- ลิงก์ไปแผนที่ฟีเจอร์
-- ข้อห้าม: ไม่แตะฐานข้อมูลจริง · ไม่เรียก API ภายนอกที่เสียเงินหรือส่งข้อความจริง
+- A description saying to use it when you "must prove a feature works on the real app · reproduce a bug · check before shipping".
+- Commands that start with `with_server.py` (if the app needs a server) and the rule to wait for `networkidle` or `data-ready` before reading the DOM.
+- Start · stop commands · test data (which file holds the test accounts — **never put real passwords**).
+- A link to the feature map.
+- Prohibitions: do not touch the real database · do not call external APIs that cost money or send real messages.
 
-## สิ่งที่ห้ามทำ
+## What not to do
 
-| อย่าทำ | เพราะ |
+| Do not | Because |
 |---|---|
-| เขียนขั้นตอนทดสอบเป็นภาษาคนอย่างเดียว ไม่มีสคริปต์ | agent แต่ละตัวจะสร้างวิธีรันใหม่เองทุกครั้ง และแต่ละครั้งไม่เหมือนกัน |
-| ใส่ทุกฟีเจอร์ตั้งแต่วันแรก | แผนที่ใหญ่ที่ไม่ได้ทดสอบ เสียเร็วกว่าแผนที่เล็กที่ใช้ได้จริง |
-| ให้ verify skill ชี้ไปที่ระบบจริง (production) | ตรวจไปตรวจมา กลายเป็นแก้ข้อมูลลูกค้า |
-| บอกว่าเสร็จโดยไม่ได้ทำข้อ 7 | ยังไม่รู้ว่า agent ตัวอื่นใช้ได้หรือไม่ |
+| Write test steps only in human language with no script | Each agent will invent its own way to run them every time, and no two runs are alike. |
+| Put in every feature from day one | A big map that has not been tested decays faster than a small map that really works. |
+| Point the verify skill at the real system (production) | Checking turns into editing customer data. |
+| Say it is done without doing step 7 | You do not yet know whether other agents can use it. |
 
-## เชื่อมกับ skill อื่น
+## Links to other skills
 
-- [`references/builtin-verify.md`](references/builtin-verify.md) — Claude Code มี `/verify` ติดเครื่อง: โปรเจกต์ที่รันบน Claude Code ให้สร้าง skill ชื่อ `verify` ที่ `.claude/skills/verify/SKILL.md` ในรูปแบบนั้น แทน `verify-<โปรเจกต์>`
-- [`app-verifier-upkeep`](../app-verifier-upkeep/SKILL.md) — แก้เมื่อแอปเปลี่ยนจนแผนที่ไม่ตรง
-- `e2e-testing-patterns` — ถ้าจะยกขั้นตอนบางส่วนขึ้นเป็น test อัตโนมัติใน continuous integration (CI)
-- [`superuser`](../superuser/SKILL.md) — playbook `bug-fix` และ `feature` เรียกใช้ skill ที่สร้างจากที่นี่
+- [`references/builtin-verify.md`](references/builtin-verify.md) — Claude Code ships with `/verify`: for a project running on Claude Code, create a skill named `verify` at `.claude/skills/verify/SKILL.md` in that format, instead of `verify-<project>`.
+- [`app-verifier-upkeep`](../app-verifier-upkeep/SKILL.md) — fix it when the app has changed so much that the map no longer matches.
+- `e2e-testing-patterns` — if you want to lift some steps into automated tests in continuous integration (CI).
+- [`superuser`](../superuser/SKILL.md) — the playbooks `bug-fix` and `feature` call the skill built here.
 
 
 ## reference: android-native.md
 
-# ขับแอป Android native / Flutter บน emulator
+# Driving a native Android / Flutter app on an emulator
 
-> สรุปจากแอปจริง `Lumio - Light Meter` (Flutter · Android) · สคริปต์ที่รันผ่านแล้วคือ `lumio-light-meter/test/e2e/verify.mjs`
-> ค่าที่เขียนว่า "วัดแล้ว" มาจาก emulator บน Windows ที่ใช้ GPU แบบซอฟต์แวร์ เครื่องอื่นอาจเร็วกว่า
+> Summarized from a real app, `Lumio - Light Meter` (Flutter · Android). The script that ran and passed is `lumio-light-meter/test/e2e/verify.mjs`.
+> Values marked "measured" come from an emulator on Windows using software GPU rendering. Other machines may be faster.
 
-## เลือกวิธีขับ
+## Choose how to drive
 
-| วิธี | ดีตรงไหน | ข้อจำกัด | ใช้เมื่อ |
+| Method | Strength | Limit | Use when |
 |---|---|---|---|
-| Node/Python เรียก `adb` + `uiautomator dump` | ไม่ต้องลงอะไรเพิ่ม · ขับ sensor และกล้องเสมือนได้ · ตรวจ `dumpsys` ได้ | อ่านหน้าจอ 3–4 วินาทีต่อครั้ง (วัดแล้ว) | ค่าเริ่ม · ทดสอบทั้งเส้นทาง hardware → native → Dart → จอ |
-| Flutter `integration_test` (`flutter test integration_test/`) | หา widget ด้วย `find` ได้ตรง · เร็ว | ป้อนค่า sensor จริงไม่ได้ ต้องใช้แหล่งข้อมูลปลอม · ตรวจสถานะระบบ (กล้องถูกปล่อยไหม) ไม่ได้ | ลำดับหน้าจอยาว ๆ ที่ไม่แตะ hardware |
-| Maestro | เขียน flow เป็น YAML อ่านง่าย | ต้องติดตั้งเพิ่ม · ยังไม่ได้ทดสอบในชุดนี้ | ทีมมี Maestro อยู่แล้ว |
+| Node/Python calling `adb` + `uiautomator dump` | Nothing extra to install · can drive the virtual sensor and camera · can check `dumpsys` | Reading the screen takes 3–4 seconds each time (measured) | Default · tests the whole path hardware → native → Dart → screen |
+| Flutter `integration_test` (`flutter test integration_test/`) | Finds widgets directly with `find` · fast | Cannot feed real sensor values, so it needs a fake data source · cannot check system state (was the camera released?) | Long screen sequences that do not touch hardware |
+| Maestro | Flows written in readable YAML | Needs an extra install · not yet tested in this setup | The team already uses Maestro |
 
-## โครงสคริปต์ (แบบ verify.mjs)
+## Script structure (verify.mjs style)
 
-1. **ตรวจก่อนเริ่ม** ว่ามีเครื่องต่ออยู่ (`adb devices`) และมี APK (`build/app/outputs/flutter-apk/app-debug.apk`) ถ้าไม่ครบ ให้ exit 1 พร้อมบอกคำสั่งที่ต้องรัน
-2. **ติดตั้ง** `adb install -r <apk>` แล้ว **เริ่มสะอาดทุกฟีเจอร์** `adb shell pm clear <package>` → `adb shell am start -n <package>/.MainActivity` → รอข้อความหน้าแรก
-3. **อ่านหน้าจอ** `rm -f /sdcard/ui.xml` → `uiautomator dump /sdcard/ui.xml` → `exec-out cat` → ดึง `text` และ `content-desc` พร้อมจุดกึ่งกลางจาก `bounds`
-4. **กด** `adb shell input tap x y` · **ป้อนค่า** `adb emu sensor set light <lux>` · **ถ่ายภาพ** `adb exec-out screencap -p > shot.png`
-5. **ผล** `PASS/FAIL` พร้อม expected กับ actual และ exit 0 เฉพาะเมื่อมี check ได้รันอย่างน้อย 1 ข้อและผ่านทั้งหมด
+1. **Check before starting** that a device is connected (`adb devices`) and the APK exists (`build/app/outputs/flutter-apk/app-debug.apk`). If either is missing, exit 1 and print the command to run.
+2. **Install** with `adb install -r <apk>`, then **start clean for every feature**: `adb shell pm clear <package>` → `adb shell am start -n <package>/.MainActivity` → wait for the text on the first screen.
+3. **Read the screen**: `rm -f /sdcard/ui.xml` → `uiautomator dump /sdcard/ui.xml` → `exec-out cat` → pull `text` and `content-desc` with the center point from `bounds`.
+4. **Tap** with `adb shell input tap x y` · **feed a value** with `adb emu sensor set light <lux>` · **take a screenshot** with `adb exec-out screencap -p > shot.png`.
+5. **Result**: `PASS/FAIL` with expected and actual values, and exit 0 only when at least 1 check ran and all checks passed.
 
-## กฎที่ได้จากการรันจริง
+## Rules learned from real runs
 
-| เรื่อง | ทำอย่างนี้ | เพราะ |
+| Topic | Do this | Because |
 |---|---|---|
-| ข้อความใน Flutter | ใส่ `Semantics(label: ...)` ให้ค่าที่ต้องตรวจ | label ขึ้นเป็น `content-desc` ใน `uiautomator dump` จึงใช้ตรวจได้ และช่วยผู้ใช้โปรแกรมอ่านจอด้วย |
-| ไฟล์ dump เก่า | ลบ `/sdcard/ui.xml` ก่อน dump ทุกครั้ง | dump ล้มแล้ว**ไม่เขียนทับ**ไฟล์เดิม จะอ่านได้หน้าจอเก่าโดยไม่รู้ตัว |
-| "could not get idle state" | ถือเป็นบั๊กของแอป แก้ที่แอป | แอปวาดใหม่ตลอด (Lumio วาด 5 ครั้ง/วินาทีทั้งที่ค่าไม่เปลี่ยน) ทำให้เปลืองแบต และ TalkBack พูดซ้ำ ให้แก้โดยแจ้ง UI เฉพาะเมื่อค่าที่แสดงเปลี่ยนจริง (sensor ที่ค่าแกว่ง: เปลี่ยนเกิน 1 %) ส่วนค่ารองที่ค่อย ๆ ขยับ ให้อัปเดตราว 1 วินาทีครั้ง |
-| ตำแหน่งที่ขยับ | กดเมื่ออ่าน 2 ครั้งติดได้ตำแหน่งเดียวกัน | dialog เลื่อนขึ้นตอนคีย์บอร์ดเปิด ถ้ากดตำแหน่งเก่าจะโดนฉากหลังแล้ว dialog ปิด (น่าจะเป็นต้นเหตุของ flake (ผลไม่คงที่) ที่เหลือ 1 ครั้ง แต่ยังไม่ได้ตรวจซ้ำ) |
-| สิทธิ์ | `adb shell pm grant <package> android.permission.CAMERA` ก่อน check ที่ไม่ได้ทดสอบหน้าขอสิทธิ์ | หน้าต่างขอสิทธิ์ของระบบไม่ใช่สิ่งที่ check นั้นตรวจ |
-| check "ปล่อยแล้ว" | ตรวจเงื่อนไขก่อน (กล้องถูกถืออยู่) → กด Home → วนตรวจ `dumpsys media.camera` หา "Active Camera Clients" ทุก 1 วินาที นานสุด 20 วินาที | emulator ปล่อยกล้อง 5–8 วินาที (วัดแล้ว) ถ้าไม่ตรวจเงื่อนไขก่อน check จะผ่านทั้งที่ไม่ได้ตรวจอะไร |
-| Git Bash | เรียก `adb` จาก Node/Python (`execFile`) หรือตั้ง `MSYS_NO_PATHCONV=1` | Git Bash แปลง `/sdcard/...` เป็น `C:/Program Files/Git/sdcard/...` |
+| Text in Flutter | Add `Semantics(label: ...)` to every value you must check | The label appears as `content-desc` in `uiautomator dump`, so it can be checked, and it also helps screen-reader users. |
+| Stale dump file | Delete `/sdcard/ui.xml` before every dump | When a dump fails it does **not overwrite** the old file, so you may read an old screen without knowing. |
+| "could not get idle state" | Treat it as an app bug and fix the app | The app redraws constantly (Lumio redrew 5 times per second even when the value did not change). That wastes battery and makes TalkBack repeat itself. Fix it by notifying the UI only when the displayed value really changes (for a jittery sensor: a change over 1 %). For a secondary value that drifts slowly, update about once per second. |
+| Moving targets | Tap only when 2 reads in a row give the same position | A dialog shifts up when the keyboard opens. A tap at the old position hits the backdrop and the dialog closes (probably the cause of the 1 remaining flaky (inconsistent) result, but not yet re-checked). |
+| Permissions | Run `adb shell pm grant <package> android.permission.CAMERA` before any check that does not test the permission screen | The system permission dialog is not what that check is testing. |
+| "Released" check | Check the precondition first (the camera is held) → press Home → poll `dumpsys media.camera` for "Active Camera Clients" every 1 second for up to 20 seconds | The emulator releases the camera in 5–8 seconds (measured). Without the precondition check, the check passes while testing nothing. |
+| Git Bash | Call `adb` from Node/Python (`execFile`) or set `MSYS_NO_PATHCONV=1` | Git Bash rewrites `/sdcard/...` into `C:/Program Files/Git/sdcard/...`. |
 
-## ป้อนค่า hardware
+## Feeding hardware values
 
-| สิ่งที่ป้อน | บน emulator | หมายเหตุ |
+| What to feed | On the emulator | Note |
 |---|---|---|
-| sensor แสง | `adb emu sensor set light <lux>` แล้วแอปได้ค่าผ่าน `Sensor.TYPE_LIGHT` (วัดแล้ว) | sensor อื่นใช้ `adb emu sensor set <ชื่อ> <ค่า>` (ยังไม่ได้ตรวจทีละตัว) |
-| กล้อง | กล้องหน้าเสมือนส่งภาพพร้อม ISO และเวลาเปิดรับแสง (วัดแล้ว) | ภาพเป็นฉากสังเคราะห์ จึงตรวจได้แค่ว่า "มีค่าออกมา" ตรวจความแม่นไม่ได้ |
-| อื่น ๆ หรือ emulator ทำไม่ได้ | แหล่งข้อมูลปลอมที่ compile เข้าเฉพาะ debug build | ห้ามหลุดไป release build |
+| Light sensor | `adb emu sensor set light <lux>`, and the app receives the value through `Sensor.TYPE_LIGHT` (measured) | For other sensors use `adb emu sensor set <name> <value>` (not checked one by one) |
+| Camera | The virtual front camera sends an image with ISO and exposure time (measured) | The image is a synthetic scene, so you can only check that "a value comes out", not its accuracy |
+| Anything else, or what the emulator cannot do | A fake data source compiled into the debug build only | It must never leak into a release build |
 
-ติดป้ายทุก check: `emulator` แปลว่าทางเดินข้อมูลถูก ส่วน `เครื่องจริง` แปลว่าค่าถูก ถ้า check ไหนต้องใช้เครื่องจริงแต่ยังไม่ได้รัน ให้รายงานว่า "ยังไม่ได้ตรวจบนเครื่องจริง"
+Label every check: `emulator` means the data path is right, and `เครื่องจริง` (real device) means the value is right. If a check needs a real device but has not run there, report "ยังไม่ได้ตรวจบนเครื่องจริง" (not yet checked on a real device).
 
-## เวลาและหน่วยความจำ
+## Time and memory
 
-| ขั้น | เวลาที่วัดได้ | ตั้ง timeout แยก |
+| Step | Measured time | Set a separate timeout |
 |---|---|---|
-| Gradle build ครั้งแรก (ดาวน์โหลด NDK · platform) | ~10 นาที | 20 นาที |
-| Gradle build ครั้งต่อไป | 1–2 นาที | 5 นาที |
-| boot emulator | หลายนาที (ยังไม่ได้จับเวลา) | วนตรวจ `adb shell getprop sys.boot_completed` = 1 |
-| เปิดแอปจนเห็นหน้าแรก | ไม่กี่วินาที | 20 วินาที |
-| ต่อ check (รอค่าบนจอ) | 3–4 วินาทีต่อการอ่าน | 15–20 วินาที |
+| First Gradle build (downloads NDK · platform) | ~10 minutes | 20 minutes |
+| Later Gradle builds | 1–2 minutes | 5 minutes |
+| Emulator boot | Several minutes (not timed) | Poll `adb shell getprop sys.boot_completed` = 1 |
+| Open the app until the first screen shows | A few seconds | 20 seconds |
+| Per check (waiting for a value on screen) | 3–4 seconds per read | 15–20 seconds |
 
-- emulator กับ Gradle กินหน่วยความจำมาก จน Claude Code เคยปิด emulator ที่รันเบื้องหลังเพราะหน่วยความจำไม่พอ
-- เปิด emulator ตัวเดียว และหยุด Gradle daemon หลัง build (`gradlew --stop` ใน `android/`)
-- ถ้า emulator ถูกปิดกลางทาง ให้รายงานว่า "ยังไม่ได้รันซ้ำ" พร้อมรายชื่อ check ที่ไม่ได้รัน ห้ามลองใหม่เงียบ ๆ แล้วรายงานเฉพาะผลรอบหลัง
-- ไม่มี Docker: emulator ใน Docker ต้องมี KVM ซึ่ง Docker Desktop บน Windows ไม่มี จึงให้รันบน host
+- The emulator and Gradle use a lot of memory. Claude Code once closed a background emulator because memory ran out.
+- Run one emulator only, and stop the Gradle daemon after the build (`gradlew --stop` in `android/`).
+- If the emulator is closed midway, report "ยังไม่ได้รันซ้ำ" (not yet re-run) with the list of checks that did not run. Never retry silently and report only the later run.
+- No Docker: an emulator in Docker needs KVM, which Docker Desktop on Windows does not have, so run it on the host.
 
 
 ## reference: builtin-verify.md
@@ -191,27 +191,27 @@ Source: code.claude.com/docs/en/skills (read 2026-10-23) · the version numbers 
 
 Use when a project verify skill no longer matches the app
 
-# app-verifier-upkeep — ดูแลมือและตาให้ตรงกับแอป
+# app-verifier-upkeep — keep the hands and eyes in step with the app
 
-> verify skill ที่บอกขั้นตอนผิด อันตรายกว่าไม่มีเลย เพราะ agent จะเชื่อแล้วรายงานว่าผ่าน
+> A verify skill that gives wrong steps is more dangerous than none, because the agent will trust it and report a pass.
 
-ใช้กับ skill ที่สร้างจาก [`app-verifier-setup`](../app-verifier-setup/SKILL.md) · บน Claude Code ไฟล์นั้นคือ `.claude/skills/verify/SKILL.md` (ดู [`app-verifier-setup/references/builtin-verify.md`](../app-verifier-setup/references/builtin-verify.md)) — ดูแลไฟล์เดียว ไม่สร้าง `verify-<โปรเจกต์>` ซ้อน
+Use it with a skill built by [`app-verifier-setup`](../app-verifier-setup/SKILL.md). On Claude Code that file is `.claude/skills/verify/SKILL.md` (see [`app-verifier-setup/references/builtin-verify.md`](../app-verifier-setup/references/builtin-verify.md)). Maintain that one file and do not create a second `verify-<project>`.
 
-## ขั้นตอน
+## Steps
 
-1. **ทำรายการฟีเจอร์จริง** โดยดึงจาก route · เมนู · command list · Software Requirements Specification (SRS) ล่าสุด เทียบกับแผนที่ฟีเจอร์ในสคริปต์ `<project-name>/test/e2e/verify.*` แล้วแยกเป็น 3 กลุ่ม: ตรงกัน · หายจากแผนที่ฟีเจอร์ · ไม่มีในแอปแล้ว
-2. **อ่านโค้ดพร้อมกันหลายตัว** ส่ง agent `qa-tester` ตัวใหม่ 1 ตัวต่อกลุ่มฟีเจอร์ (ไม่เกิน 5 ฟีเจอร์ต่อตัว) ให้อ่านอย่างเดียว แล้วรายงานว่า check ของแต่ละฟีเจอร์ใน `verify.*` ยังตรงกับโค้ดไหม พร้อมไฟล์และเลขบรรทัด โดยใช้ `parallel-split-and-merge`
-3. **ขับแอปจริงรอบเดียว** ใช้ agent ตัวเดียว รัน `verify.*` (สคริปต์เปิดและปิดแอปเอง) ทุกฟีเจอร์ แล้วบันทึกผ่านหรือล้ม · ภาพหน้าจอ · ขั้นที่ล้ม
-4. **แก้เฉพาะสิ่งที่พิสูจน์แล้ว** ทุกจุดที่แก้ต้องมีหลักฐานจากข้อ 2 หรือ 3 ถ้าฟีเจอร์ล้มเพราะแอปพังจริง ไม่ใช่เพราะขั้นตอนผิด ให้แยกเป็นรายงานบั๊ก (`bug-report-template`) อย่าแก้ขั้นตอนให้ผ่าน
-5. **เพิ่มฟีเจอร์ที่หายจากแผนที่** ตามรูปแบบเดิม และรันจริงอย่างน้อย 1 ครั้งก่อนบันทึก
-6. **รวมการแก้เป็นชุดเดียว** เตรียมไว้เป็น commit เดียวหรือ Pull Request (PR) เดียว (commit เมื่อผู้ใช้สั่งเท่านั้น) และในข้อความบอกจำนวนแต่ละกลุ่ม: ตรงกัน · แก้ · เพิ่ม · ลบ · บั๊กที่พบ
-7. `status-report` ประเภท `ตรวจ`
+1. **List the real features** by pulling from routes · menu · command list · the latest Software Requirements Specification (SRS). Compare against the feature map in the script `<project-name>/test/e2e/verify.*`, and split into 3 groups: matching · missing from the feature map · no longer in the app.
+2. **Read the code in parallel.** Send 1 fresh `qa-tester` agent per feature group (at most 5 features each). Each reads only, then reports whether each feature's checks in `verify.*` still match the code, with file and line number, using `parallel-split-and-merge`.
+3. **Drive the real app once.** Use 1 agent to run `verify.*` (the script opens and closes the app itself) for every feature, and record pass or fail · screenshots · the step that failed.
+4. **Fix only what is proven.** Every fix needs evidence from step 2 or 3. If a feature fails because the app is really broken, not because the steps are wrong, file it as a bug report (`bug-report-template`). Do not edit the steps to make it pass.
+5. **Add the features missing from the map** in the existing format, and run each at least once for real before saving.
+6. **Bundle the fixes into one set**, prepared as a single commit or a single Pull Request (PR) (commit only when the user says so), and state the count of each group in the message: matching · fixed · added · removed · bugs found.
+7. `status-report` type `ตรวจ` (check).
 
-## สิ่งที่ห้ามทำ
+## What not to do
 
-- แก้ขั้นตอนให้ผ่านทั้งที่แอปทำงานผิด เพราะเท่ากับซ่อนบั๊กไว้ในเครื่องมือตรวจ
-- ลบฟีเจอร์ออกจากแผนที่เพราะทดสอบยาก
-- แตก PR เป็นหลายชิ้นเล็ก ๆ เพราะคนรีวิวต้องเห็นภาพรวมของการเปลี่ยนในรอบเดียว
+- Edit the steps to pass when the app behaves wrongly, because that hides the bug inside the checking tool.
+- Remove a feature from the map because it is hard to test.
+- Split the PR into many small pieces, because the reviewer needs to see the whole change in one round.
 
 
 ---
@@ -220,158 +220,158 @@ Use when a project verify skill no longer matches the app
 
 Use when a project needs a Docker sandbox for untrusted code
 
-# docker-sandbox — ห้องทดลองต่อโปรเจกต์
+# docker-sandbox: one lab per project
 
-> เครื่องเราเป็นคนสั่ง ห้องทดลองเป็นที่ลงมือ
-> ข้างในติดตั้ง ลบ รันเซิร์ฟเวอร์ ทำฐานข้อมูลทดสอบได้เต็มที่ เพราะพังแล้วล้างทิ้งสร้างใหม่ได้ในคำสั่งเดียว
-> ข้างนอก (เครื่องจริง · ระบบจริง · บัญชีจริง) แตะไม่ได้ เพราะไม่มีทางเข้าจากข้างใน
+> Our machine gives the orders; the lab is where the work happens.
+> Inside, you can install, delete, run servers, and build test databases freely, because when something breaks you wipe it and rebuild with one command.
+> Outside (the real machine · real systems · real accounts) cannot be touched, because there is no way in from the inside.
 
-ใช้คู่กับ [`superuser`](../superuser/SKILL.md) — โปรเจกต์ที่มี `.sandbox/` งานติดตั้งและรันทุกอย่างทำในห้องนี้
+Use together with [`superuser`](../superuser/SKILL.md). In a project that has `.sandbox/`, all install and run work happens in this lab.
 
-ไม่ใช้เมื่อ: เขียน Dockerfile หรือ image สำหรับ deploy จริง → [`kubernetes-helm`](../kubernetes-helm/SKILL.md) เพราะห้องทดลองเป็นที่รันงานชั่วคราว ไม่ใช่ image ที่ขึ้น production
+Do not use when: writing a Dockerfile or image for a real deploy → [`kubernetes-helm`](../kubernetes-helm/SKILL.md), because the lab is a temporary place to run work, not an image that goes to production.
 
 ---
 
-## 1 · หนึ่งโปรเจกต์ = หนึ่งห้อง
+## 1 · One project = one lab
 
-- **ห้องเดียวต่อโปรเจกต์** ชื่อ `sandbox-agent-<ชื่อโฟลเดอร์>-<วันที่สร้าง>` (เช่น `sandbox-agent-sample-app-20260125`)
-  - ตั้งชื่อครั้งเดียวตอน `up` แรก แล้วเก็บในไฟล์ `.sandbox/.name-<ชื่อโฟลเดอร์>` คำสั่งทีหลังอ่านชื่อจากไฟล์นี้ ชื่อจึงไม่เปลี่ยนตามวัน
-  - prefix `sandbox-agent-` บอกว่า agent สร้างห้องนี้ ไม่ใช่คนตั้ง ส่วนวันที่สร้างเก็บซ้ำไว้ใน label `sqt.created`
-  - ถ้าโปรเจกต์ต้องมีฐานข้อมูล cache หรือเบราว์เซอร์ ให้เพิ่มเป็น service ใน**ห้องเดียวกัน** (stack เดียว) ไม่แยกห้องใหม่
-- **image ฐานใช้ร่วมกันทั้งเครื่อง** — `sqt-sandbox-base:1` (Node · Python · Git · Playwright Chromium · Claude Code) build ครั้งเดียว ส่วน image ของแต่ละโปรเจกต์เพิ่มแค่ชั้นบาง ๆ ที่โปรเจกต์นั้นต้องใช้ จึงไม่กินดิสก์ซ้ำ
-- **ห้องที่หยุดอยู่ไม่กิน CPU และหน่วยความจำ** กินแค่ดิสก์ จบงานแล้วให้ `stop` และเลิกงานทั้งวันให้ `stop-all`
-- **ห้องเพิ่มชั่วคราว** (`-Name <โปรเจกต์>-a1`) ใช้เฉพาะตอนลองหลายทางพร้อมกันที่ต้องแยกเครื่องจริง (งานลองหลายทางทั่วไปใช้ git worktree ต่อตัวตาม `parallel-split-and-merge` เร็วกว่า) แล้ว `destroy` ทิ้งทันทีที่เลือกได้
-- **ไม่รวมหลายโปรเจกต์ไว้ห้องเดียว** — เพราะของที่ติดตั้งจะชนกัน โปรเจกต์หนึ่งพังแล้วลามไปอีกโปรเจกต์ และล้างทีละโปรเจกต์ไม่ได้
+- **One lab per project**, named `sandbox-agent-<folder name>-<creation date>` (e.g. `sandbox-agent-sample-app-20260125`).
+  - The name is set once at the first `up` and stored in the file `.sandbox/.name-<folder name>`. Later commands read the name from this file, so the name does not change with the date.
+  - The prefix `sandbox-agent-` says an agent created this lab, not a person. The creation date is also kept in the label `sqt.created`.
+  - If the project needs a database, cache, or browser, add it as a service in the **same lab** (one stack). Do not create a separate lab.
+- **The base image is shared across the whole machine.** `sqt-sandbox-base:1` (Node · Python · Git · Playwright Chromium · Claude Code) is built once. Each project's image adds only a thin layer the project needs, so disk is not used twice.
+- **A stopped lab uses no CPU or memory**, only disk. Run `stop` when you finish a task, and `stop-all` when you finish for the day.
+- **Extra temporary labs** (`-Name <project>-a1`) are for trying several paths in parallel when they need truly separate machines. (For ordinary multi-path trials, use one git worktree per attempt following `parallel-split-and-merge`; it is faster.) `destroy` them as soon as you pick a path.
+- **Never put several projects in one lab**, because installed things collide, one project's breakage spreads to another, and you cannot wipe one project at a time.
 
-## 2 · สองแบบ เลือกตามงาน
+## 2 · Two modes: choose by the work
 
-| | **mount** (ค่าเริ่ม) | **isolated** (`-Isolated`) |
+| | **mount** (default) | **isolated** (`-Isolated`) |
 |---|---|---|
-| ไฟล์โปรเจกต์ | โฟลเดอร์จริงต่อเข้าไปที่ `/work` แก้แล้วเห็นบนเครื่องทันที | สำเนาอยู่ใน volume โฟลเดอร์จริงต่อเข้าไปแบบอ่านอย่างเดียวที่ `/src` |
-| ใครแก้ไฟล์ | Claude Code บนเครื่องแก้ไฟล์ตามปกติ (`sandbox.ps1 claude` ใช้ไม่ได้ในโหมดนี้) | Claude Code **ในห้อง** (`sandbox.ps1 claude`) |
-| ใครรันคำสั่ง | ส่งเข้าห้องด้วย `sandbox.ps1 exec "..."` | Claude Code ในห้องรันเอง ไม่มีหน้าต่างขออนุญาต |
-| ผลกลับมาอย่างไร | อยู่ในโฟลเดอร์แล้ว | `sandbox.ps1 sync` → patch ใน `_to_delete\sandbox\` แล้วคนสั่ง `git apply` |
-| ใช้เมื่อ | งานประจำวันที่คนดูอยู่ | งานทั้งคืน · งานเสี่ยง · ลองหลายทางที่ต้องแยกเครื่องจริง (ห้องละทาง) |
+| Project files | The real folder is attached at `/work`; edits show on the machine at once | A copy lives in a volume; the real folder is attached read-only at `/src` |
+| Who edits files | Claude Code on the machine edits files as usual (`sandbox.ps1 claude` does not work in this mode) | Claude Code **inside the lab** (`sandbox.ps1 claude`) |
+| Who runs commands | Sent into the lab with `sandbox.ps1 exec "..."` | Claude Code in the lab runs them itself, with no permission prompt |
+| How results come back | Already in the folder | `sandbox.ps1 sync` → a patch in `_to_delete\sandbox\`, then the person runs `git apply` |
+| Use when | Daily work while a person is watching | Overnight work · risky work · trying several paths that need separate machines (one lab per path) |
 
-เพิ่ม `-Locked` ได้ทั้งสองแบบ — ปิดอินเทอร์เน็ตขาออก เหลือเฉพาะโฮสต์ใน `allowlist.txt` เหมาะกับงานที่รันโค้ดที่ยังไม่ไว้ใจ
-
----
-
-## 3 · ตั้งห้องให้โปรเจกต์ (ครั้งแรก)
-
-1. ตรวจว่า Docker Desktop รันอยู่ — `docker version` ต้องเห็นทั้ง Client และ Server ถ้าไม่เห็น ให้บอกผู้ใช้ให้เปิด Docker Desktop แล้วหยุดเฉพาะงานนี้
-2. คัดลอกทุกไฟล์ใน `assets/` ของ skill นี้ไปที่ `<โปรเจกต์>/.sandbox/` (ที่ราก) แล้วประกาศ `.sandbox/` เป็นข้อยกเว้นของรากใน README ของโฟลเดอร์โค้ด ตาม `project-doc-set` ข้อ 1
-3. ปรับ `Dockerfile` (ชั้นของโปรเจกต์)
-   - ถ้าเป็น .NET ให้ตั้ง `INSTALL_DOTNET=1` แล้วเพิ่ม `apt-get install` ของที่โปรเจกต์ต้องใช้
-   - **อย่าแก้ `base.Dockerfile`** ถ้าไม่จำเป็น เพราะทุกโปรเจกต์ใช้ร่วมกัน
-   - ถ้าต้องมีฐานข้อมูลทดสอบ ให้เพิ่มเป็น service ใหม่ใน `compose.yaml` (ไม่เปิด port ออกนอก)
-4. เพิ่ม `.sandbox/.mode-*` และ `.sandbox/.name-*` ใน `.gitignore`
-5. เปิดห้อง — `.\.sandbox\sandbox.ps1 up` (หรือ `up -Isolated` · `up -Browser`) โปรเจกต์แรกของเครื่องต้อง build image ฐานก่อน ใช้เวลาราว 5–15 นาที ส่วนโปรเจกต์ถัดไปจะเร็วขึ้นมาก
-6. **พิสูจน์ว่าใช้ได้** — `sandbox.ps1 exec "node -v && python3 --version && git status"` ถ้าโปรเจกต์มีคำสั่ง test ให้รันผ่าน `exec` 1 ครั้ง ส่วนโหมด `-Locked` ต้องเห็นบรรทัด `check passed`
-7. ลงใน `docs/README.md` ของโปรเจกต์ — ชื่อห้อง (`sandbox-agent-<ชื่อโฟลเดอร์>-<วันที่>`) · โหมด · port · คำสั่ง test ในห้อง
-
-**ทดสอบจริงแล้ว** บน Windows + Docker Desktop 4.46 (2026-10-05, โปรเจกต์ `sample-app`) — build ห้องได้ · unit test ผ่าน 15/15 · e2e บน Chromium ผ่าน 14/14 ในห้อง
-
-บั๊กที่เจอระหว่างทดสอบแก้ในสคริปต์แล้ว: PowerShell 5.1 กับ stderr · Playwright คนละรุ่นกับ image ฐาน · พอร์ตชน
-
-ถ้าสคริปต์พังบนเครื่องอื่น ให้ใช้ playbook `bug-fix` กับตัวสคริปต์
-
-**พอร์ต** — `up` หาพอร์ตว่างเอง เริ่มที่ 3000 แล้วบอกว่าได้พอร์ตไหน
-- ในห้องตั้งตัวแปร `APP_PORT` และ `PORT` เป็นพอร์ตนั้น และ `HOST=0.0.0.0`
-- แอปต้องฟังที่ `HOST` เพราะถ้าฟังแค่ `127.0.0.1` ในห้อง เครื่องจะเข้าไม่ถึง
-- ฝั่งเครื่องยังเปิดแค่ `127.0.0.1` เหมือนเดิม จึงเข้าจากเครื่องที่ `http://127.0.0.1:<พอร์ต>`
-
-**Playwright คนละรุ่น** — image ฐานมี Chromium รุ่นล่าสุด ถ้าโปรเจกต์ล็อก Playwright รุ่นอื่นไว้ ให้รัน `npx playwright install chromium` ในห้อง 1 ครั้งหลัง `npm ci` (ไม่ต้อง `--with-deps` เพราะ image มีให้แล้ว)
+You can add `-Locked` to either mode. It blocks outbound internet, leaving only the hosts in `allowlist.txt`. It suits work that runs code you do not yet trust.
 
 ---
 
-## 4 · ใช้ทุกวัน
+## 3 · Set up the lab for a project (first time)
 
-| ต้องการ | คำสั่ง (รันที่รากโปรเจกต์บนเครื่อง) |
+1. Check that Docker Desktop is running: `docker version` must show both Client and Server. If it does not, tell the user to open Docker Desktop and stop only this task.
+2. Copy every file in this skill's `assets/` to `<project>/.sandbox/` (at the root). Then declare `.sandbox/` as a root exception in the README of the code folder, following `project-doc-set` item 1.
+3. Adjust the `Dockerfile` (the project layer).
+   - For .NET, set `INSTALL_DOTNET=1` and add an `apt-get install` for whatever the project needs.
+   - **Do not edit `base.Dockerfile`** unless necessary, because every project shares it.
+   - If you need a test database, add it as a new service in `compose.yaml` (do not open a port to the outside).
+4. Add `.sandbox/.mode-*` and `.sandbox/.name-*` to `.gitignore`.
+5. Start the lab with `.\.sandbox\sandbox.ps1 up` (or `up -Isolated` · `up -Browser`). The first project on a machine must build the base image first, which takes about 5–15 minutes. Later projects are much faster.
+6. **Prove it works:** `sandbox.ps1 exec "node -v && python3 --version && git status"`. If the project has a test command, run it once through `exec`. In `-Locked` mode you must see the line `check passed`.
+7. Record in the project's `docs/README.md`: the lab name (`sandbox-agent-<folder name>-<date>`) · mode · port · test command in the lab.
+
+**Tested for real** on Windows + Docker Desktop 4.46 (2026-10-05, project `sample-app`): the lab built · unit tests passed 15/15 · e2e on Chromium passed 14/14 in the lab.
+
+Bugs found during testing are already fixed in the script: PowerShell 5.1 with stderr · Playwright a different version from the base image · port collisions.
+
+If the script breaks on another machine, use the `bug-fix` playbook on the script itself.
+
+**Ports:** `up` finds a free port itself, starting at 3000, and says which port it got.
+- Inside the lab it sets the variables `APP_PORT` and `PORT` to that port, and `HOST=0.0.0.0`.
+- The app must listen on `HOST`, because if it listens only on `127.0.0.1` inside the lab, the machine cannot reach it.
+- On the machine side the port is still opened only on `127.0.0.1`, so you reach it from the machine at `http://127.0.0.1:<port>`.
+
+**A different Playwright version:** the base image has the latest Chromium. If the project pins another Playwright version, run `npx playwright install chromium` in the lab once after `npm ci` (no `--with-deps` needed, because the image already has them).
+
+---
+
+## 4 · Daily use
+
+| Need | Command (run at the project root on the machine) |
 |---|---|
-| รันคำสั่งในห้อง (agent ใช้อันนี้) | `.\.sandbox\sandbox.ps1 exec "npm test"` |
-| เปิด shell ในห้อง | `.\.sandbox\sandbox.ps1 shell` |
-| ให้ Claude Code ทำงานในห้องเต็มที่ (**isolated เท่านั้น**) | `.\.sandbox\sandbox.ps1 claude` (ล็อกอินครั้งแรกครั้งเดียว volume เก็บไว้ · โหมด mount สคริปต์จะปฏิเสธ เพราะ `/work` คือโฟลเดอร์จริง) |
-| เอางานจากห้อง isolated ออกมา | `.\.sandbox\sandbox.ps1 sync` แล้วอ่าน patch ก่อน `git apply` |
-| ห้องทั้งหมดในเครื่อง | `.\.sandbox\sandbox.ps1 list` |
-| ล้างห้องให้สะอาด เริ่มใหม่ | `reset` แล้ว `up` |
-| หยุดทุกห้องในเครื่อง คืนหน่วยความจำ | `.\.sandbox\sandbox.ps1 stop-all` |
-| ห้องหลายห้องของโปรเจกต์เดียว | ใส่ `-Name <โปรเจกต์>-a1` ทุกคำสั่ง |
+| Run a command in the lab (agents use this one) | `.\.sandbox\sandbox.ps1 exec "npm test"` |
+| Open a shell in the lab | `.\.sandbox\sandbox.ps1 shell` |
+| Let Claude Code work fully in the lab (**isolated only**) | `.\.sandbox\sandbox.ps1 claude` (log in once the first time; the volume keeps it · in mount mode the script refuses, because `/work` is the real folder) |
+| Bring work out of an isolated lab | `.\.sandbox\sandbox.ps1 sync`, then read the patch before `git apply` |
+| All labs on the machine | `.\.sandbox\sandbox.ps1 list` |
+| Wipe the lab clean and start over | `reset`, then `up` |
+| Stop every lab on the machine and free memory | `.\.sandbox\sandbox.ps1 stop-all` |
+| Several labs for one project | Put `-Name <project>-a1` on every command |
 
-**กฎของ agent เมื่อโปรเจกต์มี `.sandbox/`**
-- install · build · test · dev server · migration และสคริปต์ใด ๆ ให้รันผ่าน `sandbox.ps1 exec` ไม่รันบนเครื่อง
-- skill ตรวจแอปของโปรเจกต์ (`app-verifier-setup`) รัน Playwright ในห้องแบบไม่มีหน้าจอ แล้วคัดภาพออกด้วย `docker compose cp` มาไว้ `_to_delete/`
-- ถ้าห้องหยุดอยู่ ให้ `up` เองได้เลย (ย้อนได้) ถ้าห้องพังจนแก้ไม่ได้ ก็ `reset` เองได้ เพราะของในห้องไม่ใช่ของผู้ใช้ — **ยกเว้น** ห้อง isolated ที่ยังไม่ได้ `sync` ต้อง sync ก่อนแล้วค่อย reset
+**Agent rules when a project has `.sandbox/`**
+- Run install · build · test · dev server · migration and any script through `sandbox.ps1 exec`. Never run them on the machine.
+- The project's app-checking skill (`app-verifier-setup`) runs Playwright headless in the lab, then copies the images out with `docker compose cp` into `_to_delete/`.
+- If the lab is stopped, you may `up` it yourself (reversible). If the lab breaks beyond repair, you may `reset` it yourself, because what is in the lab is not the user's. **Exception:** an isolated lab that has not been `sync`ed must be synced first, then reset.
 
 ---
 
-## 5 · เบราว์เซอร์เสมือนสำหรับทดสอบ
+## 5 · Virtual browser for testing
 
-| แบบ | ใช้เมื่อ | วิธี |
+| Type | Use when | How |
 |---|---|---|
-| headless ในห้อง (ค่าเริ่ม) | test อัตโนมัติ · verify skill · ไม่ต้องมีใครดู | Playwright Chromium มากับ image ฐานแล้ว |
-| **มองเห็นได้** (`up -Browser`) | อยากดู agent กดจริงทีละขั้น · ตรวจหน้าจอด้วยตา · อัดภาพ | เบราว์เซอร์จริงในคอนเทนเนอร์แยก ดูสดที่ `http://127.0.0.1:7900` และ Playwright ในห้องจะขับผ่าน `SELENIUM_REMOTE_URL` ให้เอง (Playwright เรียกความสามารถนี้ว่ายังทดลอง) |
-| ให้ Claude Code ในห้องคุมเบราว์เซอร์เอง | งานสำรวจหน้าเว็บที่ยังไม่มีสคริปต์ | ติดตั้ง Playwright MCP server ในห้อง (`.mcp.json` ของโปรเจกต์) ให้ทำงานแบบ headless |
+| Headless in the lab (default) | Automated tests · verify skill · nobody needs to watch | Playwright Chromium already comes with the base image |
+| **Visible** (`up -Browser`) | You want to watch the agent click step by step · check the screen by eye · record images | A real browser in a separate container, watched live at `http://127.0.0.1:7900`. Playwright in the lab drives it through `SELENIUM_REMOTE_URL` automatically (Playwright calls this capability experimental) |
+| Let Claude Code in the lab control the browser itself | Exploring web pages that have no script yet | Install the Playwright MCP server in the lab (the project's `.mcp.json`) and run it headless |
 
-- เบราว์เซอร์ในห้องไม่มีบัญชี ไม่มีคุกกี้ ไม่มีรหัสผ่านของผู้ใช้ — ล็อกอินด้วยบัญชีทดสอบของโปรเจกต์เท่านั้น
-- ภาพและวิดีโอจากการทดสอบ คัดออกมาที่ `_to_delete/` ด้วย `docker compose cp`
-- Playwright MCP ในห้อง (ตัวอย่างจากงานสอน ยังไม่ใช่เกณฑ์): รันเป็น root ต้องใส่ `--no-sandbox` · ค่า `--browser` ต้องตรงกับ `--help` ของรุ่นที่ลง (`chromium` หรือ `chrome` ถ้าไม่ตรงจะหาเบราว์เซอร์ไม่เจอ) · ภาพ screenshot ที่ตั้งชื่อแบบ relative ไปลงที่ working directory ของ process ไม่ใช่ `--output-dir` ต้องย้ายเอง · คลิกแล้ว timeout "not visible/stable" อาจเป็นแท็บเบื้องหลัง ดู `e2e-testing-patterns`
-- เบราว์เซอร์ของผู้ใช้บนเครื่อง (Chrome ที่ล็อกอินอยู่) ใช้กับเว็บจริงที่ต้องใช้บัญชีจริงเท่านั้น และทำตามกติกาของเครื่องมือนั้น ไม่ใช่ที่ทดสอบ
+- The browser in the lab has no accounts, cookies, or user passwords. Log in only with the project's test accounts.
+- Copy images and videos from tests out to `_to_delete/` with `docker compose cp`.
+- Playwright MCP in the lab (examples from teaching work, not yet a standard): running as root needs `--no-sandbox` · the `--browser` value must match the `--help` of the installed version (`chromium` or `chrome`; if it does not match, it cannot find the browser) · screenshots with a relative file name land in the process's working directory, not `--output-dir`, so move them yourself · a click that times out with "not visible/stable" may be a background tab; see `e2e-testing-patterns`.
+- The user's own browser on the machine (the logged-in Chrome) is for real websites that need a real account, and follows that tool's rules. It is not a place to test.
 
 ## 6 · CAPTCHA
 
-- **ระบบของเราเอง** — CAPTCHA ไม่ควรขวางการทดสอบตั้งแต่ต้น
-  - ใช้ค่าทดสอบ (test site key) ที่ผู้ให้บริการแจกไว้ ซึ่งผ่านทุกครั้ง reCAPTCHA · hCaptcha · Cloudflare Turnstile มีให้ทุกเจ้า ดูค่าได้จากเอกสารผู้ให้บริการ
-  - หรือปิดด้วยค่าตั้งเฉพาะ environment ทดสอบ (`CAPTCHA_ENABLED=false`)
-  - **ค่าทดสอบต้องไม่หลุดไปถึงระบบจริง** — ใส่ตัวตรวจตอนเริ่มระบบว่า production ห้ามใช้ test key (`config-and-secrets`)
-- **เว็บของคนอื่น** — agent **ไม่แก้ CAPTCHA และไม่หาทางหลบ** (ไม่ใช้บริการรับแก้ ไม่ปลอมตัวเป็นคน) ถ้าเจอ CAPTCHA ให้หยุดขั้นนั้น บอกผู้ใช้ให้ทำเอง แล้วทำส่วนอื่นต่อ ถ้าต้องดึงข้อมูลจากเว็บนั้นบ่อย ให้หา API ทางการแทน
-- เหตุผล — CAPTCHA คือเจ้าของเว็บบอกว่า "ห้ามบอท" การหลบจึงเท่ากับฝ่าข้อตกลงของเขา และทำให้ IP หรือบัญชีถูกแบน
+- **Our own system:** a CAPTCHA should not block testing from the start.
+  - Use the test site keys the provider publishes, which pass every time. reCAPTCHA · hCaptcha · Cloudflare Turnstile all have them; see the provider's documentation for the values.
+  - Or turn it off with a setting for the test environment only (`CAPTCHA_ENABLED=false`).
+  - **Test values must never reach the real system.** Add a startup check that production must not use a test key (`config-and-secrets`).
+- **Other people's websites:** the agent **does not solve a CAPTCHA and does not look for a way around it** (no solving services, no pretending to be a person). If you meet a CAPTCHA, stop that step, tell the user to do it themselves, and continue with the other parts. If you need data from that site often, look for an official API instead.
+- Reason: a CAPTCHA is the site owner saying "no bots." Getting around it breaks their terms and gets the IP or account banned.
 
-## 7 · ในห้องทำได้เต็มที่
+## 7 · What you may do freely in the lab
 
-ติดตั้งโปรแกรม (`sudo apt-get` · `npm -g` · `pip`) · ลบไฟล์ในห้อง · รันเซิร์ฟเวอร์และฐานข้อมูลทดสอบ · ดาวน์โหลด dependency · commit ในสำเนาของโหมด isolated · ทดลองทำลายแล้วสร้างใหม่
+Install programs (`sudo apt-get` · `npm -g` · `pip`) · delete files in the lab · run servers and test databases · download dependencies · commit in the copy in isolated mode · try destroying things and rebuild.
 
-เรื่องที่ยังอยู่ใน "รออนุมัติ" แม้อยู่ในห้อง (เตรียมไว้ ไม่ทำเอง) — เพราะผลออกไปนอกห้อง:
-- ส่งข้อมูล อีเมล ข้อความ หรือเรียก API ที่มีผลจริงกับคนหรือระบบภายนอก
-- ใช้บัญชีจริง ค่าลับจริง ฐานข้อมูลจริง
-- push ขึ้น remote · deploy
-- ในโหมด mount — ลบหรือเขียนทับไฟล์ของผู้ใช้ใน `/work` ที่ไม่ใช่ผลงานของรอบนี้ (มันคือโฟลเดอร์จริง)
+These still stay under "รออนุมัติ" (awaiting approval) even inside the lab (prepare them, do not do them yourself), because the result leaves the lab:
+- Sending data, email, or messages, or calling an API that has a real effect on people or outside systems.
+- Using real accounts, real secrets, or the real database.
+- Pushing to a remote · deploying.
+- In mount mode: deleting or overwriting the user's files in `/work` that are not this round's work (it is the real folder).
 
 ---
 
-## 8 · ห้ามแก้ compose ให้มีสิ่งเหล่านี้
+## 8 · Never edit compose to include these
 
-| ห้าม | เพราะ |
+| Never | Because |
 |---|---|
-| `privileged: true` · `pid: host` · `network_mode: host` | ห้องจะมองเห็นและแตะเครื่องจริงได้ |
-| mount `/var/run/docker.sock` หรือ `//./pipe/docker_engine` | คุม Docker ได้ = คุมเครื่องได้ |
-| mount โฟลเดอร์ home · `.ssh` · `.aws` · `.azure` · `.claude` ของเครื่อง · โปรไฟล์เบราว์เซอร์ · ไดรฟ์ทั้งลูก | ค่าลับหลุดได้ทันทีที่โค้ดในห้องอ่าน |
-| เปิด port แบบ `"3000:3000"` (ทุกการ์ดแลน) | คนในเครือข่ายเดียวกันเข้าถึงได้ — ใช้ `127.0.0.1:` เสมอ |
-| ใส่ค่าลับจริงใน `Dockerfile` หรือ image | ค่าลับติดไปกับ image ตลอด |
-| ปิดหรือเพิ่ม limit `cpus` `mem_limit` `pids_limit` จนเครื่องค้าง | ห้องที่วนไม่จบจะกินเครื่องทั้งเครื่อง |
-| mount ของจากเครื่องแบบเขียนได้ ทั้งที่ห้องแค่ต้องอ่าน (`ref/` · ข้อมูลตัวอย่าง · cache SDK ที่แชร์ · ซอร์สต้นทางของโหมด isolated) | โค้ดในห้องที่ถูกหลอกจะเขียนกลับเครื่องได้ — ใส่ `:ro` ทุก mount ที่ไม่ใช่ผลงานของรอบนี้ แล้วให้ห้องคัดลอกเข้าพื้นที่ของตัวเองถ้าต้องแก้ (แนวคิดจาก anthropics/claude-code devcontainer และ trailofbits/skills) |
+| `privileged: true` · `pid: host` · `network_mode: host` | The lab could see and touch the real machine |
+| Mounting `/var/run/docker.sock` or `//./pipe/docker_engine` | Controlling Docker = controlling the machine |
+| Mounting the machine's home folder · `.ssh` · `.aws` · `.azure` · `.claude` · browser profiles · a whole drive | Secrets can leak the moment code in the lab reads them |
+| Opening a port like `"3000:3000"` (every network card) | People on the same network can reach it. Always use `127.0.0.1:` |
+| Putting real secrets in the `Dockerfile` or image | The secret stays in the image forever |
+| Removing or raising the limits `cpus` `mem_limit` `pids_limit` until the machine hangs | A lab stuck in a loop will eat the whole machine |
+| Mounting things from the machine as writable when the lab only needs to read (`ref/` · sample data · a shared SDK cache · the source folder of isolated mode) | Tricked code in the lab can write back to the machine. Add `:ro` to every mount that is not this round's work, and have the lab copy into its own space if it must edit (idea from anthropics/claude-code devcontainer and trailofbits/skills) |
 
-เอกสารของ Claude Code เตือนไว้ว่า แม้ในคอนเทนเนอร์ การรันแบบไม่มีหน้าต่างขออนุญาต (`--dangerously-skip-permissions`) ยังกันไม่ได้ถ้าโค้ดในโปรเจกต์ตั้งใจขโมยของที่อยู่ในห้อง รวมถึง token ของ Claude Code เอง — ใช้กับ repo ที่ไว้ใจเท่านั้น และใช้ `-Locked` เมื่อไม่แน่ใจ
+The Claude Code documentation warns that even in a container, running without permission prompts (`--dangerously-skip-permissions`) cannot stop project code that deliberately steals what is in the lab, including Claude Code's own token. Use it only with a repo you trust, and use `-Locked` when unsure.
 
-`sandbox.ps1 claude` จึงรันได้เฉพาะโหมด isolated — โหมด mount สคริปต์ปฏิเสธ เพราะ `/work` คือโฟลเดอร์จริงของผู้ใช้ (§7 ข้อสุดท้าย)
+So `sandbox.ps1 claude` runs only in isolated mode. In mount mode the script refuses, because `/work` is the user's real folder (§7, last item).
 
-**ขีดจำกัดของ `-Locked`** — DNS ออกได้เฉพาะ resolver ที่ห้องได้รับ (ของ Docker) ไม่ใช่ DNS server ใดก็ได้ แต่ resolver นั้นยังส่งต่อคำถามออกนอก จึงยังแอบส่งข้อมูลผ่าน DNS (DNS tunnelling) ได้ งานที่ห้ามข้อมูลรั่วเด็ดขาดให้รันแบบไม่มีเครือข่ายเลย
+**Limits of `-Locked`:** DNS can go out only through the resolver the lab was given (Docker's), not any DNS server. But that resolver still forwards queries outward, so data can still be smuggled out through DNS (DNS tunnelling). For work where data must never leak, run with no network at all.
 
 ---
 
-## 9 · หมายเหตุ Windows
+## 9 · Windows notes
 
-- Docker Desktop ใช้ WSL 2 ไฟล์บนไดรฟ์ `C:` ที่ mount เข้าไปจึงช้ากว่าไฟล์ใน volume ถ้า build หรือ test ช้ามาก ให้ใช้ `-Isolated` (ตรวจจริง: `npm ci` แค่ 2 แพ็กเกจใช้ 52 วินาทีบนโฟลเดอร์ OneDrive)
-- **โปรเจกต์ในโฟลเดอร์ OneDrive** — โหมด mount จะทำให้ `node_modules` และไฟล์ build ถูก sync ขึ้นคลาวด์ จึงควรใช้ `-Isolated` หรือย้ายโปรเจกต์ออกจาก OneDrive
-- ถ้ารัน `sandbox.ps1` ไม่ได้ ให้ใช้ `powershell -ExecutionPolicy Bypass -File .\.sandbox\sandbox.ps1 <คำสั่ง>`
-- `-Locked` อ่าน IP ของโฮสต์ครั้งเดียวตอนเปิด บริการที่เปลี่ยน IP บ่อยอาจหลุด ให้ `up -Locked` ใหม่
+- Docker Desktop uses WSL 2. Files on drive `C:` that are mounted in are slower than files in a volume. If build or test is very slow, use `-Isolated` (verified: `npm ci` for just 2 packages took 52 seconds on a OneDrive folder).
+- **Projects in a OneDrive folder:** mount mode makes `node_modules` and build files sync to the cloud, so use `-Isolated` or move the project out of OneDrive.
+- If you cannot run `sandbox.ps1`, use `powershell -ExecutionPolicy Bypass -File .\.sandbox\sandbox.ps1 <command>`.
+- `-Locked` reads the host's IP once at startup. A service whose IP changes often may drop out; run `up -Locked` again.
 
-## เชื่อมกับ skill อื่น
+## Links to other skills
 
-- `parallel-attempts-pick-best` — ปกติผู้แข่งใช้ git worktree ต่อตัว · ใช้ห้อง isolated ต่อตัว (`-Name <โปรเจกต์>-a1` …) เฉพาะงานที่ต้องแยกเครื่องจริง
-- [`app-verifier-setup`](../app-verifier-setup/SKILL.md) — สคริปต์ `start` ของ verify skill รันในห้อง
-- `config-and-secrets` — ค่าทดสอบใส่ `.env` ที่ไม่เข้า git และไม่ bake ลง image
-- playbook `housekeeping` ของ `superuser` — เก็บกวาดห้องและ image เก่า
+- `parallel-attempts-pick-best`: normally competitors use one git worktree each. Use one isolated lab each (`-Name <project>-a1` …) only for work that needs truly separate machines.
+- [`app-verifier-setup`](../app-verifier-setup/SKILL.md): the verify skill's `start` script runs in the lab.
+- `config-and-secrets`: put test values in a `.env` that stays out of git, and do not bake them into the image.
+- The `superuser` playbook `housekeeping`: cleans up old labs and images.
 
 
 ---
@@ -380,76 +380,76 @@ Use when a project needs a Docker sandbox for untrusted code
 
 Use when about to ship or merge code, as a security check
 
-# security-gate — ประตูความปลอดภัยก่อนส่งงาน
+# security-gate — a security gate before shipping
 
-> เครื่องมือสแกนหาเจอเร็วแต่แจ้งผิดเยอะ ส่วนคนตรวจเข้าใจบริบทแต่ช้า
-> ประตูนี้ให้เครื่องหาก่อน แล้ว agent ยืนยันทุกข้อกับโค้ดจริง ก่อนจะถึงมือคน
+> Scanners find issues fast but raise many false alarms. Human reviewers understand context but are slow.
+> This gate lets the tools search first, then the agent confirms every finding against the real code, before it reaches a person.
 
-ใช้ร่วมกับ [`principle-secure-by-default`](../principle-secure-by-default/SKILL.md) ส่วนรายงานเชิงลึกให้ใช้ agent `security-engineer`
+Use it together with [`principle-secure-by-default`](../principle-secure-by-default/SKILL.md). For an in-depth report, use the `security-engineer` agent.
 
-## ขั้นตอน
+## Steps
 
-1. **รันในห้อง** (sandbox ของโปรเจกต์) — ถ้าโปรเจกต์มี `.sandbox/` ให้รันทุกคำสั่งผ่าน `sandbox.ps1 exec` ส่วนเครื่องมือที่ยังไม่มีให้ติดตั้งในห้องได้เลย ไม่ติดตั้งบนเครื่องผู้ใช้
-2. **สแกน 3 ด้าน** (เลือกตามที่โปรเจกต์มี)
+1. **Run in the sandbox** (the project's sandbox) — if the project has `.sandbox/`, run every command through `sandbox.ps1 exec`. Install any missing tool inside the sandbox. Never install on the user's machine.
+2. **Scan 3 areas** (pick what the project has)
 
-   | ด้าน | เครื่องมือแนะนำ | คำสั่งตัวอย่าง |
+   | Area | Recommended tool | Example command |
    |---|---|---|
-   | ค่าลับหลุด (รวมประวัติ git) | gitleaks 8.19+ | ประวัติ git: `gitleaks git . --redact` · ไฟล์ที่ยังไม่ commit: `gitleaks dir . --redact` (`detect`/`protect` ถูก deprecate ตั้งแต่ v8.19.0 — ที่มา github.com/gitleaks/gitleaks/releases/tag/v8.19.0 · ตรวจ 22 ต.ค. 2569) |
-   | dependency มีช่องโหว่ | ตัวที่มากับภาษา + trivy หรือ osv-scanner | `npm audit --omit=dev` · `pip-audit` · `dotnet list package --vulnerable --include-transitive` · `trivy fs --scanners vuln .` |
-   | โค้ดเขียนแบบเสี่ยง (static analysis) | semgrep | มีเน็ต: `semgrep scan --config p/default --metrics=off` · ห้อง `-Locked` หรือเข้า semgrep.dev ไม่ได้: `semgrep scan --config <skill นี้>/assets/semgrep-offline.yml --metrics=off` |
-   | dependency ของ Dart / Flutter และ Gradle | osv-scanner (อ่าน `pubspec.lock` และ `gradle.lockfile`) | `osv-scanner scan source -r .` (ยังไม่ได้ตรวจบนเครื่องนี้) · ใช้ `flutter pub outdated` ดูของที่ค้างเวอร์ชัน · ถ้า Gradle ไม่มี lockfile ต้องเปิด `dependencyLocking` ก่อนถึงจะสแกนได้ |
-   | Dockerfile · compose · IaC (ถ้ามี) | trivy | `trivy config .` ส่วนแอป Android ไม่มีส่วนนี้ ให้อ่าน `android/app/build.gradle*` ด้วยตาแทน (signingConfig ต้องไม่ฝังรหัสผ่าน และ release ต้องเปิด minify) |
-   | แอป Android (ถ้ามี) | ตรวจด้วยตาตาม [`references/android.md`](references/android.md) ถ้าต้องการเชิงลึกให้ใช้ MobSF (Mobile Security Framework) | — |
+   | Leaked secrets (including git history) | gitleaks 8.19+ | Git history: `gitleaks git . --redact` · uncommitted files: `gitleaks dir . --redact` (`detect`/`protect` are deprecated since v8.19.0 — source github.com/gitleaks/gitleaks/releases/tag/v8.19.0 · checked 22 Oct 2026 (B.E. 2569)) |
+   | Vulnerable dependencies | The language's own tool + trivy or osv-scanner | `npm audit --omit=dev` · `pip-audit` · `dotnet list package --vulnerable --include-transitive` · `trivy fs --scanners vuln .` |
+   | Risky code patterns (static analysis) | semgrep | With internet: `semgrep scan --config p/default --metrics=off` · in a `-Locked` sandbox or without access to semgrep.dev: `semgrep scan --config <this skill>/assets/semgrep-offline.yml --metrics=off` |
+   | Dart / Flutter and Gradle dependencies | osv-scanner (reads `pubspec.lock` and `gradle.lockfile`) | `osv-scanner scan source -r .` (`ยังไม่ได้ตรวจ` on this machine) · use `flutter pub outdated` to see stale versions · if Gradle has no lockfile, turn on `dependencyLocking` before the scan can work |
+   | Dockerfile · compose · IaC (if present) | trivy | `trivy config .` An Android app has none of these, so read `android/app/build.gradle*` by eye instead (signingConfig must not hard-code passwords, and release must enable minify) |
+   | Android app (if present) | Check by eye with [`references/android.md`](references/android.md). For a deeper check, use MobSF (Mobile Security Framework) | — |
 
-   **รายการตรวจ Android** → [`references/android.md`](references/android.md)
+   **Android checklist** → [`references/android.md`](references/android.md)
 
-   เก็บผลดิบใน `_to_delete/security/`
-   - **ห้ามใช้ `--config auto` คู่กับ `--metrics=off`** — semgrep ไม่ยอมรัน (เจอจริงในโปรเจกต์ตัวอย่าง)
-   - **ชุดกฎ semgrep เลือกตามภาษาที่เจอ ไม่ใช่ `p/default` อย่างเดียว** (แนวคิดจาก trailofbits/skills `semgrep` · CC-BY-SA เขียนใหม่ด้วยคำเรา) — ทุกโปรเจกต์: `p/security-audit` + `p/secrets` รันครั้งเดียวทั้ง repo · แล้วเพิ่มตามภาษา: `p/python` (+`p/django` หรือ `p/flask`) · `p/javascript` + `p/typescript` (+`p/react` · `p/nodejs`) · `p/csharp` · `p/dockerfile` · มีหลายภาษาใส่ `--config` หลายตัวในคำสั่งเดียวได้ · ชุดกฎไหนโหลดไม่ได้ (ไม่มีเน็ต · ชื่อผิด) ต้องขึ้นในรายงานว่าไม่ได้รัน ไม่ใช่หายเงียบ
-   - ชุดออฟไลน์มี 6 กฎที่แทบไม่มีกรณีปลอดภัย (eval · HTML จากตัวแปร · shell จากตัวแปร · SQL ต่อสตริง · ค่าลับในโค้ด) และพิสูจน์แล้วว่าจับได้ครบในไฟล์ที่ตั้งใจเขียนผิด ถ้าเครื่องมือไหนรันไม่ได้ ให้เขียนในรายงานว่า `ยังไม่ได้ตรวจ` พร้อมเหตุผล
-   - **semgrep รองรับ Dart น้อยมาก และกฎออฟไลน์เขียนไว้สำหรับเว็บกับ backend** ถ้า semgrep ไม่เจออะไรในโปรเจกต์ Flutter ก็ไม่ได้แปลว่าปลอดภัย รายงานต้องเขียนว่าโค้ด Dart `ยังไม่ได้ตรวจด้วย static analysis` แล้วพึ่ง `flutter analyze` กับการอ่านโค้ดแทน ห้ามสรุปว่า `ผ่าน` จากผลว่าง
-3. **ยืนยันทุกข้อ** — เปิดโค้ดจริงดูว่าใช้ได้จริงไหม (เช่น ช่องโหว่อยู่ในฟังก์ชันที่โปรเจกต์ไม่ได้เรียก) แล้วติดป้าย `ยืนยันแล้ว` / `แจ้งผิด` / `ยังไม่ยืนยัน` พร้อมเหตุผล · `ยังไม่ยืนยัน` ไม่ติดระดับ และบอกว่าขาดหลักฐานอะไร · ลูกค้าขอตรวจลึกทั้งระบบ หรือเจอข้อที่ต้องไล่เส้นทางข้อมูลข้ามหลายไฟล์ → [`security-audit`](../security-audit/SKILL.md) (ผู้ยืนยันเป็นตัวใหม่ ไม่ใช่ตัวที่สแกน)
-4. **จัดระดับและตัดสิน**
+   Keep raw output in `_to_delete/security/`
+   - **Never use `--config auto` together with `--metrics=off`** — semgrep refuses to run (seen in a real sample project).
+   - **Choose semgrep rulesets by the languages found, not `p/default` alone** (idea from trailofbits/skills `semgrep` · CC-BY-SA, rewritten in our own words). For every project, run `p/security-audit` + `p/secrets` once over the whole repo. Then add per language: `p/python` (+`p/django` or `p/flask`) · `p/javascript` + `p/typescript` (+`p/react` · `p/nodejs`) · `p/csharp` · `p/dockerfile`. For several languages, pass several `--config` flags in one command. If a ruleset cannot load (no internet · wrong name), the report must say it did not run. It must not vanish silently.
+   - The offline set has 6 rules that almost never have a safe case (eval · HTML from a variable · shell from a variable · SQL built by concatenation · secrets in code), and it was proven to catch every one in files deliberately written wrong. If any tool cannot run, write `ยังไม่ได้ตรวจ` (not yet checked) with the reason in the report.
+   - **semgrep supports Dart very poorly, and the offline rules were written for web and backend.** If semgrep finds nothing in a Flutter project, that does not mean it is safe. The report must say the Dart code is `ยังไม่ได้ตรวจด้วย static analysis` (not yet checked with static analysis) and rely on `flutter analyze` and reading the code instead. Never conclude `ผ่าน` from an empty result.
+3. **Confirm every finding** — open the real code and see whether it applies (for example, the vulnerability is in a function the project never calls). Then label it `ยืนยันแล้ว` (confirmed) / `แจ้งผิด` (false alarm) / `ยังไม่ยืนยัน` (not yet confirmed) with a reason. Give `ยังไม่ยืนยัน` no severity and say what evidence is missing. If the customer asks for a deep check of the whole system, or you find an item that needs tracing data flow across several files → [`security-audit`](../security-audit/SKILL.md) (the confirmer is a fresh agent, not the one that scanned).
+4. **Rate and decide**
 
-   | ระดับ | ทำอะไร |
+   | Level | What to do |
    |---|---|
-   | ค่าลับจริงหลุด | **หยุดทันที บอกผู้ใช้** ต้องเปลี่ยนค่าลับที่ผู้ให้บริการ เพราะลบจากไฟล์อย่างเดียวไม่พอ และ agent ไม่แก้ประวัติ git เอง |
-   | critical · high ที่ยืนยันแล้ว | **ห้ามส่ง** จนกว่าจะแก้ หรือผู้ใช้ยอมรับความเสี่ยงเป็นลายลักษณ์อักษรใน `decision-log` |
-   | medium | แก้ในรอบนี้ถ้าประเมินว่าใช้ไม่เกิน 1 ชั่วโมง (ค่าตั้งต้น ยังไม่ได้วัด · ปรับตามทีมได้) · เกินนั้นเปิดเป็นงานแยกเข้าคิว แล้วเรียงด้วย `decision-scoring` คำสั่ง `priority` แบบ `rice` (คนหรือระบบที่โดน × ผลกระทบ × ความมั่นใจ ÷ ชั่วโมงแก้) · ผลสูสีให้คนเลือก |
-   | low · แจ้งผิด | บันทึกเหตุผล ไม่ต้องแก้ |
+   | Real secret leaked | **Stop at once and tell the user.** The secret must be rotated at the provider, because deleting it from the file is not enough, and the agent never rewrites git history itself. |
+   | Confirmed critical · high | **Do not ship** until fixed, or until the user accepts the risk in writing in `decision-log`. |
+   | medium | Fix it in this round if the estimate is 1 hour or less (a starting value, not yet measured · adjust per team). If it takes longer, open a separate task in the queue and rank it with `decision-scoring` command `priority` in `rice` mode (people or systems affected × impact × confidence ÷ hours to fix). If the scores are close, let a person choose. |
+   | low · false alarm | Record the reason. No fix needed. |
 
-5. **แก้**
-   - ช่องโหว่ใน dependency ให้อัปเดตเป็นเวอร์ชันที่แก้แล้ว แล้วรัน test
-   - ช่องโหว่ในโค้ดให้ใช้ playbook `bug-fix` (หาต้นเหตุ + เขียน test ที่ล้มก่อนแก้ + ค้นจุดอื่นที่เขียนแบบเดียวกัน)
-   - รูปแบบที่เจอซ้ำให้ส่งต่อ `repeated-mistakes-to-checks` ไปทำเป็นกฎ lint
-6. **รายงาน** — `qa/security/<ปี-เดือน-วัน>-gate.md` ตาราง `| ระดับ | เรื่อง | ไฟล์:บรรทัด หรือแพ็กเกจ | ยืนยัน | ทำอะไร |` พร้อมคำตัดสิน 1 บรรทัด (`ผ่าน` · `ผ่านหลังแก้` · `ไม่ผ่าน`) ห้ามคัดค่าลับลงรายงาน (ให้ใช้ผลแบบ `--redact`) แล้วรายงานสถานะด้วย `status-report` ประเภท `ตรวจ`
-   - **ต้องมีหัวข้อ "ไม่ได้รัน"** ก่อนคำตัดสิน: เครื่องมือหรือชุดกฎที่ติดตั้งไม่ได้ · ออก exit code ไม่ใช่ 0 · ภาษาที่สแกนเนอร์ไม่รองรับ (เช่น Dart) · ไฟล์หรือโฟลเดอร์ที่ข้าม — ระบุชื่อและเหตุผลทีละรายการ · รายงานที่สแกนไม่ครบแต่เขียนเหมือนครบ แย่กว่าไม่สแกน · ถ้ามีรายการในหัวข้อนี้ คำตัดสิน `ผ่าน` ต้องต่อท้ายว่า `(ยกเว้นที่ไม่ได้รัน)`
-   - ก่อนส่งมอบลูกค้า หรือสัญญาระบุ OWASP → กรอกรายงานรายข้อ A01–A10 ตาม [`references/owasp-top10.md`](references/owasp-top10.md) เพิ่มอีกไฟล์ `qa/security/<ปี-เดือน-วัน>-owasp.md` · ผลสแกนของ gate นี้ใช้เป็นหลักฐานข้อ A02 · A03 · A04 · A05 · A08
+5. **Fix**
+   - For a vulnerable dependency, update to a fixed version, then run the tests.
+   - For a vulnerability in code, use the playbook `bug-fix` (find the root cause + write a test that fails before the fix + search for other places written the same way).
+   - For a pattern that keeps coming back, pass it to `repeated-mistakes-to-checks` to turn into a lint rule.
+6. **Report** — `qa/security/<year-month-day>-gate.md`, a table `| ระดับ | เรื่อง | ไฟล์:บรรทัด หรือแพ็กเกจ | ยืนยัน | ทำอะไร |` (level · issue · file:line or package · confirmed · action), with a 1-line verdict (`ผ่าน` · `ผ่านหลังแก้` (passed after fixes) · `ไม่ผ่าน`). Never copy secrets into the report (use `--redact` output). Then report status with `status-report` type `ตรวจ` (check).
+   - **The report must have a section "ไม่ได้รัน" (not run)** before the verdict. List by name, with a reason each: tools or rulesets that could not be installed · tools that exited with a non-zero code · languages the scanner does not support (such as Dart) · files or folders skipped. A report that scanned partly but reads as complete is worse than no scan. If this section has any entry, a `ผ่าน` verdict must end with `(ยกเว้นที่ไม่ได้รัน)` (except what was not run).
+   - Before handing over to a customer, or when the contract names OWASP → fill in the per-item report A01–A10 following [`references/owasp-top10.md`](references/owasp-top10.md), as a second file `qa/security/<year-month-day>-owasp.md`. This gate's scan results serve as evidence for items A02 · A03 · A04 · A05 · A08.
 
-## เมื่อไรต้องรัน
+## When to run
 
-- ทุกครั้งก่อน playbook `ship` และก่อนส่งมอบงานลูกค้า
-- หลังเพิ่มหรืออัปเดต dependency — ผลสแกนมีรายการ ให้ทำตาม [`references/dependency-updates.md`](references/dependency-updates.md) (จัดกลุ่มตามความเสี่ยงจริง · ลำดับ patch → minor → major · พิสูจน์ · ลง CHANGELOG)
-- สัญญาหรือข้อกำหนดความปลอดภัยระบุว่าเว็บแอปหรือ API ต้องผ่าน OWASP Top 10:2025 → อ่าน [`references/owasp-top10.md`](references/owasp-top10.md) (ตาราง A01–A10 ที่ต้องมีและพิสูจน์ด้วย · เกณฑ์ส่งมอบ · ข้อสัญญา [`owasp-contract-clause.md`](references/owasp-contract-clause.md) · วิธีตาม stack [`owasp-stack-checks.md`](references/owasp-stack-checks.md) · แม่แบบรายงาน [`assets/owasp-report.md`](assets/owasp-report.md))
-- โปรเจกต์ที่ยังใช้งานอยู่ให้รันสัปดาห์ละครั้งตามรอบ (scheduled task) เพราะช่องโหว่ใหม่ถูกประกาศทุกวันแม้โค้ดไม่เปลี่ยน
+- Every time before the `ship` playbook and before handing work to a customer.
+- After adding or updating a dependency — if the scan lists findings, follow [`references/dependency-updates.md`](references/dependency-updates.md) (group by real risk · order patch → minor → major · prove · write in CHANGELOG).
+- When the contract or a security requirement says the web app or API must pass OWASP Top 10:2025 → read [`references/owasp-top10.md`](references/owasp-top10.md) (the A01–A10 table to cover and prove · delivery criteria · contract clause [`owasp-contract-clause.md`](references/owasp-contract-clause.md) · per-stack methods [`owasp-stack-checks.md`](references/owasp-stack-checks.md) · report template [`assets/owasp-report.md`](assets/owasp-report.md)).
+- For a project still in use, run it once a week as a scheduled task, because new vulnerabilities are announced every day even when the code does not change.
 
-## ไม่ใช่หน้าที่ของ skill นี้
+## Not the job of this skill
 
-- ทดสอบเจาะระบบจริงหรือระบบของคนอื่น เพราะ skill นี้ทำเฉพาะโค้ดและ environment ทดสอบของโปรเจกต์นี้
-- รับรองว่าปลอดภัย 100% รายงานบอกแค่ว่าตรวจอะไร ด้วยอะไร และอะไรที่ยังไม่ได้ตรวจ
-- รีวิวตรรกะและการออกแบบของ diff → `code-review-checklist` (ก่อน merge รันทั้งสองตัว)
+- Real penetration testing, or testing someone else's system, because this skill covers only this project's code and test environment.
+- Certifying 100% safety. The report says only what was checked, with what, and what was not checked.
+- Reviewing the logic and design of a diff → `code-review-checklist` (run both before merge).
 
 
 ## reference: android.md
 
-# รายการตรวจ Android — ใช้กับ `security-gate` ข้อ 2
+# Android checklist — used by `security-gate` step 2
 
-**รายการตรวจ Android** — ดู `AndroidManifest.xml` ที่รวมแล้ว (merged manifest) ไม่ใช่แค่ไฟล์ต้นฉบับ เพราะ plugin เติม permission ให้เอง · โฟลเดอร์เปลี่ยนตามเวอร์ชัน Android Gradle Plugin (AGP) (`merged_manifests/<variant>/` หรือ `merged_manifest/<variant>/process<Variant>MainManifest/` — ยังไม่ได้ตรวจ) ให้หาด้วย `find build -path '*merged_manifest*' -name AndroidManifest.xml` หลัง build release
-- `android:exported` — ให้มีแค่ activity หลักที่เป็น `true` ส่วนตัวอื่นต้องมีเหตุผล
-- `android:allowBackup` / `dataExtractionRules` — ตั้งชัดว่าข้อมูลไหนสำรองได้ ไม่ปล่อยค่าเริ่มต้น
-- `android:debuggable` ต้องไม่มีใน release และ `usesCleartextTraffic` ต้องไม่เป็น `true`
-- permission เท่าที่ใช้จริง — แอปออฟไลน์ต้องไม่มี `INTERNET` และต้องตรวจตัวที่ plugin เติมมาด้วย
-- `key.properties` · `*.jks` · `*.keystore` ไม่อยู่ใน git (`git ls-files` แล้วค้น)
+**Android checklist** — Read the merged `AndroidManifest.xml`, not just the source file, because plugins add permissions on their own. The folder changes with the Android Gradle Plugin (AGP) version (`merged_manifests/<variant>/` or `merged_manifest/<variant>/process<Variant>MainManifest/` — `ยังไม่ได้ตรวจ`). After a release build, find it with `find build -path '*merged_manifest*' -name AndroidManifest.xml`.
+- `android:exported` — only the main activity may be `true`. Every other component needs a stated reason.
+- `android:allowBackup` / `dataExtractionRules` — state clearly which data may be backed up. Do not leave the defaults.
+- `android:debuggable` must not appear in release, and `usesCleartextTraffic` must not be `true`.
+- Request only the permissions the app really uses. An offline app must not have `INTERNET`, and you must also check the permissions plugins added.
+- `key.properties` · `*.jks` · `*.keystore` must not be in git (run `git ls-files` and search the output).
 
 
 ## reference: dependency-updates.md
@@ -505,15 +505,15 @@ Automatic route: turn on **Renovate** or **Dependabot** to file PRs in the order
 
 ## reference: owasp-contract-clause.md
 
-# ข้อกำหนด OWASP Top 10:2025 ในสัญญาและ SRS
+# OWASP Top 10:2025 clause for contracts and the Software Requirements Specification (SRS)
 
-ร่างนี้ใช้เป็นจุดเริ่ม ไม่ใช่คำแนะนำทางกฎหมาย · สัญญาจริงให้ `legal-compliance-officer` หรือทนายของผู้ว่าจ้างตรวจ · ร่างสัญญาภาษาไทยทั้งฉบับใช้ `e-commerce:doc-contract-th`
+This draft is a starting point, not legal advice. Have `legal-compliance-officer` or the client's lawyer review the real contract. For a full Thai contract draft, use `e-commerce:doc-contract-th`.
 
-## ทำไมต้องเขียนให้วัดได้
+## Why the clause must be measurable
 
-"ระบบต้องปลอดภัยตาม OWASP" วัดไม่ได้ แล้วจะเถียงกันตอนส่งมอบ · ให้เขียนเป็น **เกณฑ์รับงาน** ที่ตรวจได้ทีละข้อ และบอกขอบเขตที่ไม่รวม
+"The system must be secure per OWASP" cannot be measured, and the two sides will argue at handover. Write it as **acceptance criteria** that can be checked one item at a time, and state what is out of scope.
 
-## ร่างข้อกำหนด (ภาษาไทย)
+## Draft clause (Thai, paste into the contract as written)
 
 > **ข้อ X ความปลอดภัยของระบบ**
 >
@@ -529,7 +529,7 @@ Automatic route: turn on **Renovate** or **Dependabot** to file PRs in the order
 >
 > X.6 การตรวจตามข้อนี้ไม่ใช่การรับรองว่าระบบปลอดภัยโดยสมบูรณ์
 
-## ร่างใน SRS — หมวดความต้องการที่ไม่ใช่ฟังก์ชัน ด้านความปลอดภัย (Non-Functional Requirement (NFR))
+## Draft for the SRS — security non-functional requirements (NFR) section (Thai, paste as written)
 
 | รหัส | ความต้องการ | วิธีตรวจรับ |
 |---|---|---|
@@ -539,88 +539,88 @@ Automatic route: turn on **Renovate** or **Dependabot** to file PRs in the order
 | NFR-SEC-04 | admin และธุรกรรมเงินใช้การยืนยันตัวตนหลายชั้น (MFA) | ชุด test ด้าน login (A07) |
 | NFR-SEC-05 | เหตุการณ์ความปลอดภัยมี log และแจ้งเตือน | ชุด test ด้าน log (A09) + ตัวอย่าง log |
 
-เพิ่มหรือตัดแถวตามระบบ · ทุกแถวต้องมี "วิธีตรวจรับ" ที่ทำได้จริง
+Add or remove rows to fit the system. Every row needs an acceptance check ("วิธีตรวจรับ") that can really be done.
 
 
 ## reference: owasp-stack-checks.md
 
-# OWASP Top 10:2025 ตาม stack ที่ทีมใช้
+# OWASP Top 10:2025 by the stacks the team uses
 
-เปิดไฟล์นี้ตอนเขียนโค้ดและตอนกรอกรายงาน · แต่ละข้อบอก "ใช้อะไร" และ "อย่าทำ" · ค่าเริ่มของ framework ที่ปลอดภัยอยู่แล้ว ให้ใช้ตามนั้น ไม่เขียนเอง
+Open this file when writing code and when filling in the report. Each item says what to use and what to avoid. Where a framework default is already secure, use it and do not write your own.
 
 - [.NET / ASP.NET Core](#net--aspnet-core)
 - [TypeScript · Node · Angular](#typescript--node--angular)
 - [Python (FastAPI · Django · Flask)](#python-fastapi--django--flask)
 - [SQL (SQL Server · PostgreSQL · MySQL)](#sql-sql-server--postgresql--mysql)
-- [เครื่องมือที่ใช้พิสูจน์](#เครื่องมือที่ใช้พิสูจน์)
+- [Tools for proving each item](#tools-for-proving-each-item)
 
 ---
 
 ## .NET / ASP.NET Core
 
-| ข้อ | ใช้อะไร | อย่าทำ |
+| Item | Use | Avoid |
 |---|---|---|
-| A01 | `FallbackPolicy` = ต้อง login ทุก endpoint แล้วเปิดเฉพาะที่ตั้งใจด้วย `[AllowAnonymous]` · ตรวจเจ้าของ record ด้วย `IAuthorizationService` + resource-based policy · ASP.NET MVC แบบเก่าใช้ `[Authorize]` ระดับ controller + filter กลาง · antiforgery token ทุก form (`[ValidateAntiForgeryToken]` หรือ `AutoValidateAntiforgeryTokenAttribute` ทั้งแอป) · รับ input ผ่าน ViewModel หรือ DTO ไม่ bind entity ตรง | ซ่อนปุ่มใน view แล้วถือว่าคุมสิทธิ์แล้ว · ใช้ id จาก URL ค้น DB โดยไม่กรองด้วย user |
-| A02 | `app.UseExceptionHandler` + `UseHsts` ใน production · `customErrors mode="RemoteOnly"` (MVC เก่า) · ลบ header `Server` · `X-Powered-By` | เปิด `UseDeveloperExceptionPage` บน production · เก็บ connection string ใน `appsettings.json` ที่ commit |
-| A03 | `dotnet list package --vulnerable --include-transitive` · `Directory.Packages.props` คุมเวอร์ชันที่เดียว · SBOM: `dotnet CycloneDX` | ใช้แพ็กเกจที่ไม่มีคนดูแลแล้ว (ดูวันออกล่าสุด) |
-| A04 | ASP.NET Core Identity (PBKDF2) หรือ `Rfc2898DeriveBytes.Pbkdf2` · Data Protection API สำหรับค่าที่ต้องถอดกลับ · ค่าลับใน User Secrets หรือ Key Vault | `MD5` · `SHA1` · `DES` · เขียน crypto เอง |
-| A05 | EF Core LINQ · `FromSqlInterpolated` · Dapper พร้อม parameter · Razor encode HTML ให้เอง | `FromSqlRaw` ต่อสตริง · `Html.Raw` กับข้อมูลผู้ใช้ · `Process.Start` กับ input |
-| A07 | Identity: `Lockout.MaxFailedAccessAttempts` + `PasswordSignInAsync(..., lockoutOnFailure: true)` (หน้า Login ที่ scaffold มาตั้งเป็น false) · cookie `HttpOnly` `Secure` `SameSite` · JWT: ตั้ง `ValidateIssuer` `ValidateAudience` `ValidateLifetime` `ValidateIssuerSigningKey` = true | `ValidateLifetime = false` · รับ algorithm `none` |
-| A08 | `System.Text.Json` · webhook ตรวจลายเซ็น Hash-based Message Authentication Code (HMAC) ด้วย `CryptographicOperations.FixedTimeEquals` | `BinaryFormatter` · `TypeNameHandling.All` ของ Newtonsoft |
-| A09 | `ILogger` แบบ structured (Serilog) · log ผล login · ถูกปฏิเสธสิทธิ์ · ตัดค่าลับด้วย destructuring policy | log ทั้ง request body ที่มีรหัสผ่าน |
-| A10 | ตัวจับกลาง `IExceptionHandler` (.NET 8 ขึ้นไป · ลงทะเบียน `AddExceptionHandler<T>()` + `AddProblemDetails()` **และ** ต้องมี `app.UseExceptionHandler()` ใน pipeline ไม่งั้นตัวจับไม่ทำงาน) คืน `ProblemDetails` · .NET เก่ากว่าใช้ `UseExceptionHandler` กับ lambda หรือ path · `TransactionScope` หรือ `BeginTransaction` ครอบงานหลายขั้น · `CancellationToken` + timeout ของ `HttpClient` | `catch { }` ว่าง · `catch` แล้วคืน `true` จากตัวตรวจสิทธิ์ |
+| A01 | `FallbackPolicy` so every endpoint requires login, then open only the intended ones with `[AllowAnonymous]` · check record ownership with `IAuthorizationService` + a resource-based policy · old ASP.NET MVC: `[Authorize]` at controller level + a global filter · antiforgery token on every form (`[ValidateAntiForgeryToken]` or `AutoValidateAntiforgeryTokenAttribute` app-wide) · take input through a ViewModel or DTO, never bind an entity directly | Hiding a button in the view and calling that access control · looking up the DB by the id in the URL without filtering by user |
+| A02 | `app.UseExceptionHandler` + `UseHsts` in production · `customErrors mode="RemoteOnly"` (old MVC) · remove the `Server` · `X-Powered-By` headers | Enabling `UseDeveloperExceptionPage` in production · keeping the connection string in a committed `appsettings.json` |
+| A03 | `dotnet list package --vulnerable --include-transitive` · `Directory.Packages.props` to control versions in one place · SBOM: `dotnet CycloneDX` | Using packages nobody maintains any more (check the last release date) |
+| A04 | ASP.NET Core Identity (PBKDF2) or `Rfc2898DeriveBytes.Pbkdf2` · Data Protection API for values that must be decrypted · secrets in User Secrets or Key Vault | `MD5` · `SHA1` · `DES` · writing your own crypto |
+| A05 | EF Core LINQ · `FromSqlInterpolated` · Dapper with parameters · Razor encodes HTML itself | `FromSqlRaw` with string concatenation · `Html.Raw` with user data · `Process.Start` with input |
+| A07 | Identity: `Lockout.MaxFailedAccessAttempts` + `PasswordSignInAsync(..., lockoutOnFailure: true)` (the scaffolded Login page sets it to false) · cookie `HttpOnly` `Secure` `SameSite` · JWT: set `ValidateIssuer` `ValidateAudience` `ValidateLifetime` `ValidateIssuerSigningKey` = true | `ValidateLifetime = false` · accepting algorithm `none` |
+| A08 | `System.Text.Json` · verify webhook Hash-based Message Authentication Code (HMAC) signatures with `CryptographicOperations.FixedTimeEquals` | `BinaryFormatter` · Newtonsoft `TypeNameHandling.All` |
+| A09 | structured `ILogger` (Serilog) · log login results and permission denials · strip secrets with a destructuring policy | Logging the whole request body when it holds passwords |
+| A10 | A central `IExceptionHandler` (.NET 8 and later; register `AddExceptionHandler<T>()` + `AddProblemDetails()` **and** put `app.UseExceptionHandler()` in the pipeline, or the handler never runs) that returns `ProblemDetails` · older .NET: `UseExceptionHandler` with a lambda or path · wrap multi-step work in `TransactionScope` or `BeginTransaction` · `CancellationToken` + an `HttpClient` timeout | An empty `catch { }` · a `catch` that returns `true` from an authorization check |
 
 ## TypeScript · Node · Angular
 
-| ข้อ | ใช้อะไร | อย่าทำ |
+| Item | Use | Avoid |
 |---|---|---|
-| A01 | middleware ตรวจสิทธิ์ตัวเดียวที่ router ระดับบน (ปฏิเสธเป็นค่าเริ่ม) · query กรองด้วย `userId` ของ session ทุกครั้ง · Angular route guard ใช้แค่ซ่อนหน้า ส่วนสิทธิ์จริงตรวจที่ API · SSRF: allowlist host ก่อน `fetch` URL ที่ผู้ใช้ส่ง · CSRF token เมื่อใช้ cookie session · ตรวจ body ด้วย schema (zod) แล้วหยิบเฉพาะฟิลด์ที่อนุญาต | เชื่อ `role` ที่ client ส่งมา · `Object.assign(entity, req.body)` · `cors({ origin: true, credentials: true })` |
-| A02 | `helmet()` · `NODE_ENV=production` · ปิด source map ใน production build · Express `app.disable("x-powered-by")` | ส่ง `err.stack` กลับ client |
-| A03 | `npm ci` + `package-lock.json` · `npm audit --omit=dev` · SBOM: `npx @cyclonedx/cyclonedx-npm` · ตรวจ `postinstall` ของแพ็กเกจใหม่ | `npm install` แพ็กเกจที่ชื่อคล้ายของดัง (typosquat) โดยไม่ดูผู้ดูแล |
-| A04 | `argon2` หรือ `bcrypt` · `crypto.randomBytes` · `crypto.timingSafeEqual` | `Math.random()` ทำ token · `crypto.createHash("md5")` กับรหัสผ่าน |
-| A05 | ORM (Prisma · TypeORM) หรือ parameter `$1` · Angular escape ให้เอง · `execFile` พร้อม argument เป็น array | `innerHTML` · `bypassSecurityTrustHtml` กับข้อมูลผู้ใช้ · `eval` · `exec` ต่อสตริง · `new Function` |
-| A07 | `express-rate-limit` ที่ `/login` · cookie `httpOnly` `secure` `sameSite` · JWT: `jwt.verify(token, key, { algorithms: ["RS256"], issuer, audience })` (ระบุ algorithm ที่ใช้จริงตายตัว) | เก็บ token ใน `localStorage` ของระบบที่มีข้อมูลอ่อนไหว · `jwt.decode` แทน `verify` |
-| A08 | ตรวจลายเซ็น webhook ก่อน `JSON.parse` · Subresource Integrity (SRI) กับ script จาก CDN | `node-serialize` · โหลด script จาก CDN โดยไม่มี `integrity` |
-| A09 | pino หรือ winston แบบ JSON · `redact: ["req.headers.authorization", "*.password"]` | `console.log(req.body)` |
-| A10 | Express error middleware ตัวสุดท้าย · `process.on("unhandledRejection")` log แล้วปิดอย่างเป็นระเบียบ · transaction ของ ORM · `AbortSignal.timeout()` กับ `fetch` | `.catch(() => {})` · promise ที่ไม่มีใคร await |
+| A01 | One authorization middleware on the top-level router (deny by default) · filter every query by the session's `userId` · an Angular route guard only hides pages, so check real permissions at the API · SSRF: allowlist hosts before `fetch` on a user-supplied URL · CSRF token when using cookie sessions · validate the body with a schema (zod), then pick only the allowed fields | Trusting a `role` sent by the client · `Object.assign(entity, req.body)` · `cors({ origin: true, credentials: true })` |
+| A02 | `helmet()` · `NODE_ENV=production` · turn off source maps in the production build · Express `app.disable("x-powered-by")` | Sending `err.stack` back to the client |
+| A03 | `npm ci` + `package-lock.json` · `npm audit --omit=dev` · SBOM: `npx @cyclonedx/cyclonedx-npm` · check `postinstall` of new packages | Running `npm install` on a package whose name looks like a popular one (typosquat) without checking the maintainer |
+| A04 | `argon2` or `bcrypt` · `crypto.randomBytes` · `crypto.timingSafeEqual` | `Math.random()` for tokens · `crypto.createHash("md5")` on passwords |
+| A05 | An ORM (Prisma · TypeORM) or `$1` parameters · Angular escapes by itself · `execFile` with arguments as an array | `innerHTML` · `bypassSecurityTrustHtml` with user data · `eval` · `exec` with string concatenation · `new Function` |
+| A07 | `express-rate-limit` on `/login` · cookie `httpOnly` `secure` `sameSite` · JWT: `jwt.verify(token, key, { algorithms: ["RS256"], issuer, audience })` (fix the algorithm you really use) | Keeping tokens in `localStorage` in a system with sensitive data · `jwt.decode` instead of `verify` |
+| A08 | Verify the webhook signature before `JSON.parse` · Subresource Integrity (SRI) on scripts from a CDN | `node-serialize` · loading a CDN script without `integrity` |
+| A09 | pino or winston in JSON · `redact: ["req.headers.authorization", "*.password"]` | `console.log(req.body)` |
+| A10 | An Express error middleware as the last one · `process.on("unhandledRejection")` logs, then shuts down cleanly · ORM transactions · `AbortSignal.timeout()` with `fetch` | `.catch(() => {})` · a promise nobody awaits |
 
 ## Python (FastAPI · Django · Flask)
 
-| ข้อ | ใช้อะไร | อย่าทำ |
+| Item | Use | Avoid |
 |---|---|---|
-| A01 | FastAPI `Depends(current_user)` ระดับ router · Django `LoginRequiredMixin` + `get_object_or_404(Model, pk=..., owner=request.user)` · SSRF: allowlist host ก่อน `httpx.get` · Django CSRF middleware เปิดไว้ · รับ input ด้วย Pydantic model หรือ Django `ModelForm(fields=[...])` | `Model.objects.get(pk=id)` โดยไม่กรองเจ้าของ · `fields = "__all__"` · `@csrf_exempt` ทั้ง view โดยไม่มีเหตุผล |
-| A02 | Django `DEBUG=False` · `SECURE_*` settings · `python manage.py check --deploy` · FastAPI ปิด `/docs` บน production ถ้าไม่ได้ตั้งใจเปิด | `DEBUG=True` · `ALLOWED_HOSTS=["*"]` |
-| A03 | lockfile (`uv.lock` · `poetry.lock` · `requirements.txt` ที่ pin เวอร์ชัน + `--require-hashes`) · `pip-audit` · SBOM: `cyclonedx-py environment` (หรือ `requirements` · `poetry`) | `pip install` จาก URL ที่ไม่รู้จัก |
-| A04 | `argon2-cffi` · Django password hasher ค่าเริ่ม · `secrets.token_urlsafe` · `hmac.compare_digest` | `hashlib.md5(password)` · `random` ทำ token |
-| A05 | ORM หรือ `cursor.execute(sql, params)` · Jinja2 `autoescape=True` · `subprocess.run([...])` แบบ list | f-string ใน SQL · `shell=True` กับ input · `eval` |
-| A07 | `slowapi` หรือ django-axes กัน login รัว · PyJWT: `jwt.decode(token, key, algorithms=["RS256"], audience=..., issuer=...)` (ระบุ algorithm ที่ใช้จริงตายตัว) | `jwt.decode(..., options={"verify_signature": False})` |
-| A08 | ตรวจลายเซ็น webhook ด้วย `hmac.compare_digest` · `yaml.safe_load` · `json` | `pickle.loads` · `yaml.load` กับข้อมูลภายนอก |
-| A09 | `logging` แบบ structured (structlog) · filter ตัดค่าลับ | log `request.headers` ทั้งก้อน |
-| A10 | FastAPI `@app.exception_handler(Exception)` · Django `handler500` · `with transaction.atomic():` · timeout ทุกการเรียก `httpx` | `except Exception: pass` · ตัวตรวจสิทธิ์ที่ `except` แล้ว `return True` |
+| A01 | FastAPI `Depends(current_user)` at router level · Django `LoginRequiredMixin` + `get_object_or_404(Model, pk=..., owner=request.user)` · SSRF: allowlist hosts before `httpx.get` · keep the Django CSRF middleware on · take input with a Pydantic model or Django `ModelForm(fields=[...])` | `Model.objects.get(pk=id)` without filtering by owner · `fields = "__all__"` · `@csrf_exempt` on a whole view without a reason |
+| A02 | Django `DEBUG=False` · `SECURE_*` settings · `python manage.py check --deploy` · turn off FastAPI `/docs` in production unless it is meant to be open | `DEBUG=True` · `ALLOWED_HOSTS=["*"]` |
+| A03 | A lockfile (`uv.lock` · `poetry.lock` · `requirements.txt` with pinned versions + `--require-hashes`) · `pip-audit` · SBOM: `cyclonedx-py environment` (or `requirements` · `poetry`) | `pip install` from an unknown URL |
+| A04 | `argon2-cffi` · the Django default password hasher · `secrets.token_urlsafe` · `hmac.compare_digest` | `hashlib.md5(password)` · `random` for tokens |
+| A05 | An ORM or `cursor.execute(sql, params)` · Jinja2 `autoescape=True` · `subprocess.run([...])` as a list | An f-string in SQL · `shell=True` with input · `eval` |
+| A07 | `slowapi` or django-axes against rapid login attempts · PyJWT: `jwt.decode(token, key, algorithms=["RS256"], audience=..., issuer=...)` (fix the algorithm you really use) | `jwt.decode(..., options={"verify_signature": False})` |
+| A08 | Verify the webhook signature with `hmac.compare_digest` · `yaml.safe_load` · `json` | `pickle.loads` · `yaml.load` on external data |
+| A09 | Structured `logging` (structlog) · a filter that strips secrets | Logging the whole of `request.headers` |
+| A10 | FastAPI `@app.exception_handler(Exception)` · Django `handler500` · `with transaction.atomic():` · a timeout on every `httpx` call | `except Exception: pass` · an authorization check that does `except` then `return True` |
 
 ## SQL (SQL Server · PostgreSQL · MySQL)
 
-| ข้อ | ใช้อะไร | อย่าทำ |
+| Item | Use | Avoid |
 |---|---|---|
-| A01 | user ของแอปมีสิทธิ์เท่าที่ใช้ (ไม่ใช่ `sa` · `postgres` · `root`) · แยก user อ่านอย่างเดียวสำหรับรายงาน · Row-Level Security (RLS) ของ PostgreSQL หรือ SQL Server สำหรับระบบหลายลูกค้า (multi-tenant) | ให้แอปใช้ user เจ้าของ database |
-| A02 | ปิด port DB จากภายนอก · บังคับ TLS ของการเชื่อมต่อ · ปิด `xp_cmdshell` | เปิด DB ออก internet |
-| A04 | Transparent Data Encryption (TDE) หรือเข้ารหัสระดับดิสก์ · คอลัมน์อ่อนไหวเข้ารหัสระดับแอป หรือ Always Encrypted · backup เข้ารหัส | เก็บเลขบัตรประชาชน · เลขบัตรเครดิตเป็นข้อความเปล่า |
-| A05 | stored procedure หรือ query ที่รับ parameter · ถ้าต้องสร้าง SQL แบบ dynamic ใช้ `sp_executesql` พร้อม parameter และ `QUOTENAME` กับชื่อ object | `EXEC('... ' + @input)` · ต่อชื่อตารางจาก input |
-| A09 | audit ตารางเงินและสิทธิ์ (trigger หรือ temporal table) · log login ล้มของ DB | ปิด audit เพื่อให้เร็ว |
-| A10 | `BEGIN TRY ... BEGIN CATCH ... ROLLBACK` · `SET XACT_ABORT ON` · migration รันซ้ำได้ (`IF NOT EXISTS`) | migration ที่ล้มกลางทางแล้วทิ้งตารางครึ่ง ๆ |
+| A01 | The app's user has only the rights it needs (not `sa` · `postgres` · `root`) · a separate read-only user for reports · Row-Level Security (RLS) in PostgreSQL or SQL Server for multi-tenant systems | Letting the app use the database owner's user |
+| A02 | Close the DB port to the outside · force TLS on connections · turn off `xp_cmdshell` | Exposing the DB to the internet |
+| A04 | Transparent Data Encryption (TDE) or disk-level encryption · encrypt sensitive columns at app level or with Always Encrypted · encrypted backups | Storing national ID numbers or credit card numbers as plain text |
+| A05 | Stored procedures or parameterized queries · if you must build dynamic SQL, use `sp_executesql` with parameters and `QUOTENAME` on object names | `EXEC('... ' + @input)` · building table names from input |
+| A09 | Audit the money and permission tables (trigger or temporal table) · log failed DB logins | Turning off auditing for speed |
+| A10 | `BEGIN TRY ... BEGIN CATCH ... ROLLBACK` · `SET XACT_ABORT ON` · migrations that can run again (`IF NOT EXISTS`) | A migration that fails halfway and leaves half-built tables |
 
-## เครื่องมือที่ใช้พิสูจน์
+## Tools for proving each item
 
-| ใช้ทำอะไร | เครื่องมือ | ครอบข้อ |
+| Purpose | Tool | Covers |
 |---|---|---|
-| ค่าลับ · dependency · โค้ดเสี่ยง · ไฟล์ตั้งค่าโครงสร้างพื้นฐาน (Infrastructure as Code (IaC)) | ตาม [`security-gate`](../../security-gate/SKILL.md) (gitleaks · npm audit · pip-audit · dotnet · osv-scanner · trivy · semgrep) | A02 · A03 · A04 · A05 · A08 |
-| semgrep ชุดเฉพาะ OWASP | `semgrep scan --config p/owasp-top-ten --metrics=off` (ต้องมีเน็ต) · ออฟไลน์ใช้ชุดของ `security-gate` | A01 · A04 · A05 · A08 |
-| สแกนแอปที่รันอยู่ (header · cookie · error page) | OWASP ZAP (Zed Attack Proxy) baseline กับ environment ทดสอบของโปรเจกต์เท่านั้น: `docker run --rm -t ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t <URL ทดสอบ>` | A02 · A05 · A07 |
-| SBOM | CycloneDX ตามภาษา (ข้างบน) เก็บที่ `qa/security/sbom/` | A03 |
-| test สิทธิ์ · login · error · webhook | integration test ของโปรเจกต์ ตั้งชื่อขึ้นต้นด้วยรหัสข้อ (`A01_...`) | A01 · A06 · A07 · A08 · A09 · A10 |
+| Secrets · dependencies · risky code · Infrastructure as Code (IaC) config files | As in [`security-gate`](../../security-gate/SKILL.md) (gitleaks · npm audit · pip-audit · dotnet · osv-scanner · trivy · semgrep) | A02 · A03 · A04 · A05 · A08 |
+| OWASP-specific semgrep rules | `semgrep scan --config p/owasp-top-ten --metrics=off` (needs internet) · offline, use the `security-gate` ruleset | A01 · A04 · A05 · A08 |
+| Scan a running app (headers · cookies · error pages) | OWASP ZAP (Zed Attack Proxy) baseline, against the project's own test environment only: `docker run --rm -t ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t <test URL>` | A02 · A05 · A07 |
+| SBOM | CycloneDX per language (above), stored in `qa/security/sbom/` | A03 |
+| Tests for permissions · login · errors · webhooks | The project's integration tests, with names starting with the item code (`A01_...`) | A01 · A06 · A07 · A08 · A09 · A10 |
 
-- ZAP ยิงจริง → ใช้กับ environment ทดสอบที่ทีม deploy เองเท่านั้น ห้ามยิง production หรือระบบของคนอื่นโดยไม่มีหนังสืออนุญาต
-- เครื่องมือไหนรันไม่ได้ ให้เขียน `ยังไม่ได้ตรวจ` พร้อมเหตุผลในรายงาน ห้ามสรุปว่าผ่านจากผลว่าง
+- ZAP sends real attacks. Use it only on a test environment the team deployed itself. Never run it on production or on someone else's system without written permission.
+- If a tool cannot run, write `ยังไม่ได้ตรวจ` (not yet checked) with the reason in the report. Never conclude "pass" from an empty result.
 
 
 ## reference: owasp-top10.md
@@ -721,43 +721,43 @@ How to write it for the team's stacks (.NET · TypeScript/Node/Angular · Python
 
 Use for an adversarial review or stress test before shipping
 
-# adversarial-review-panel — คณะรีวิวที่ตั้งใจหาเรื่อง
+# adversarial-review-panel — a review panel that deliberately hunts for faults
 
-> ผู้ตรวจคนเดียวเห็นแค่มุมเดียว ส่วนคณะที่ถูกสั่งให้ "พยายามทำให้มันพัง" คนละมุม จะจับสิ่งที่คนเดียวมองข้ามได้
-> ผลลัพธ์คือคำตัดสิน **ไม่ใช่การแก้งาน**
+> A single reviewer sees only one angle. A panel told to "try to break it," each from a different angle, catches what one person overlooks.
+> The output is a verdict, **not a fix to the work.**
 
-เส้นแบ่งกับ [`parallel-attempts-pick-best`](../parallel-attempts-pick-best/SKILL.md): panel โจมตีงานที่เสร็จแล้ว 1 ชิ้นก่อนส่ง · ยังไม่มีงานหรือยังไม่รู้ว่ารูปแบบไหนดี (แผน · ดีไซน์ · ร่าง) → สร้างหลายแบบแล้วเลือกด้วย pick-best ก่อน
+The line between this and [`parallel-attempts-pick-best`](../parallel-attempts-pick-best/SKILL.md): the panel attacks 1 finished piece of work before shipping · if there is no work yet, or you do not know which form is best (plan · design · draft), build several versions and choose with pick-best first.
 
-## ขั้นตอน
+## Steps
 
-1. **ขอบเขต** — สิ่งที่จะรีวิว เช่น เอกสาร · แผน · ผลวิจัย · รายการสินค้า · ชุดไฟล์ที่สร้างหรือแก้ในรอบนี้ รวมของรอบข้างที่ต้องอ่านประกอบ
-2. **แพ็กเกจและเจตนา** — สร้างแพ็กเกจรีวิวตาม [`review-lenses`](../superuser/references/review-lenses.md) ข้อ 1 (diff เป็นไฟล์ · เงื่อนไข spec คัดตรงตัว · รหัส `head:`) แล้วเขียนเจตนา 1 ย่อหน้าว่างานนี้ตั้งใจทำอะไร โดยดูจากคำขอ · บันทึกงาน · ตัวงานเอง ถ้าไม่แน่ใจให้เลือกการตีความที่ผลกระทบน้อยสุด แล้วจดลง [`decision-log`](../decision-log/SKILL.md) โดยไม่หยุดถาม
-3. **ตั้งคณะ 3 คน ต่างมุมกัน** (แต่ละคนคือ agent `reviewer` ตัวใหม่ อ่านอย่างเดียว · งานชิ้นเดียวที่ไม่เสี่ยงใช้ `reviewer` ตัวเดียวพอ) — ใน Claude Code โมเดลทุกตัวมาจากค่ายเดียวกัน ความต่างจึงต้องมาจากมุมที่สั่งให้ดู และการผสมโมเดลหลายขนาด
+1. **Scope**: what will be reviewed, such as a document · plan · research result · product list · the set of files created or changed this round, including neighboring items that must be read alongside.
+2. **Package and intent**: build the review package by [`review-lenses`](../superuser/references/review-lenses.md) item 1 (diff as a file · spec conditions quoted verbatim · a `head:` code), then write a 1-paragraph intent saying what the work means to do, from the request · the work log · the work itself. If unsure, choose the interpretation with the least impact and note it in the [`decision-log`](../decision-log/SKILL.md) without stopping to ask.
+3. **Form a panel of 3 with different angles** (each is a fresh read-only `reviewer` agent · for a single low-risk piece 1 `reviewer` is enough). In Claude Code every model comes from the same vendor, so the difference must come from the angle assigned and from mixing model sizes.
 
-   | ผู้ตรวจ | มุม | ระดับโมเดล |
+   | Reviewer | Angle | Model tier |
    |---|---|---|
-   | ก | ความถูกต้อง — ข้อเท็จจริงผิด · ตัวเลขไม่ตรง · กรณีขอบ · ข้อมูลว่าง | ใหญ่ |
-   | ข | ความเสี่ยงและข้อมูล — ข้อมูลส่วนบุคคล · ค่าลับ · สิทธิ์ · เงินหรือการกระทำที่ย้อนกลับไม่ได้ · ข้อกฎหมายหรือข้อตกลงที่ละเมิด | ใหญ่ |
-   | ค | ความเรียบง่ายและคนใช้ต่อ — ส่วนเกินจำเป็น · ขัดกันเอง · คำหรือชื่อที่ชวนเข้าใจผิด · คนอ่านหรือลูกค้าจริงจะติดตรงไหน | กลาง |
+   | A | Correctness: wrong facts · numbers that do not match · edge cases · empty data | large |
+   | B | Risk and data: personal data · secrets · permissions · money or irreversible actions · legal or contract terms violated | large |
+   | C | Simplicity and next users: what is more than needed · self-contradiction · misleading words or names · where a real reader or customer would get stuck | medium |
 
-   งานโค้ด (ขอบเขตจาก git · มุมเพิ่มของแต่ละผู้ตรวจ · แอปมือถือ) → ส่วนเพิ่มใน plugin `software-development` → `superuser` → `references/code-extensions.md`
+   For code work (scope from git · extra angles for each reviewer · mobile apps) → the add-on in plugin `software-development` → `superuser` → `references/code-extensions.md`.
 
-   **ผู้ตรวจจากค่ายอื่น (ถ้ามี)** — ถ้าเครื่องมี Command-Line Interface (CLI) ของโมเดลค่ายอื่นติดตั้งไว้แล้ว (เช่น `codex` · `gemini`) ให้ใช้แทนผู้ตรวจ ค ด้วย prompt และมุมเดิม ในโหมดอ่านอย่างเดียว เพราะโมเดลต่างค่ายอาจพลาดไม่เหมือนกัน (ยังไม่มีหลักฐานวัดเทียบว่าดีกว่าค่ายเดียว) แต่ **เนื้องานจะถูกส่งออกไปยังผู้ให้บริการนั้น** จึงใช้ได้เฉพาะเมื่ออนุญาตไว้ล่วงหน้าใน `~/.claude/superuser-style.md` หรือ `docs/AGENT-LOOP.md` ถ้าไม่มี CLI หรือไม่ได้อนุญาต ให้ใช้คณะค่ายเดียวตามตาราง
+   **A reviewer from another vendor (if available)**: if the machine has the Command-Line Interface (CLI) of another vendor's model installed (such as `codex` · `gemini`), use it in place of reviewer C, with the same prompt and angle, in read-only mode, because models from different vendors may miss different things (no measured evidence yet that it beats a single vendor). But **the work content is sent out to that provider**, so use it only when permitted in advance in `~/.claude/superuser-style.md` or `docs/AGENT-LOOP.md`. If there is no CLI or no permission, use the single-vendor panel in the table.
 
-   ข้อควรรู้ว่าความเป็นอิสระมาจากไหน: ในบันทึกรอบเดียวของคอร์ส CWN2026 (2026-11-04) ผู้ตัดสิน Codex เขียนข้อสอบรับงาน 47 ข้อก่อนแอปมี · 25 ข้อ (53%) ใช้ไม่ได้เมื่อรันกับของจริงต้นฉบับ · จับของที่ผู้สร้างพลาดได้ 2 ข้อ (ผ่าน 20/22 → 22/22) · ข้อมูลที่ 2 ฝั่งใช้ร่วมกันผิด (ตรงจอจริง 278/300) และถูกจับเพราะรันซ้ำกับต้นฉบับจริง ไม่ใช่เพราะต่างค่าย · เส้นที่สำคัญจึงเป็น **คำตอบมาจากต้นฉบับจริง** ไม่ใช่ยี่ห้อโมเดล · ไม่มีกลุ่มควบคุม จึงแยกผลของยี่ห้อโมเดลออกไม่ได้
+   Where independence comes from, worth knowing: in one recorded round of the CWN2026 course (2026-11-04), the Codex judge wrote 47 acceptance exam items before the app existed · 25 items (53%) were unusable when run against the real original · it caught 2 things the builder missed (pass 20/22 → 22/22) · data wrongly shared by both sides (matching the real screen 278/300) was caught because it was rerun against the real original, not because of the different vendor · so the line that matters is **the answer comes from the real original**, not the model brand · there was no control group, so the effect of the model brand cannot be separated out.
 
-4. **ปล่อยพร้อมกันในข้อความเดียว อ่านอย่างเดียว** — ทุกคนได้ path แพ็กเกจและเจตนาเดียวกัน ต่างกันแค่มุม (มุมของแต่ละคนคือเลนส์ใน `review-lenses` ข้อ 2) · prompt ไม่มีความเห็นของหัวหน้าทีมว่างานดีหรือไม่ ให้ส่งผลเป็นตาราง `| ปัญหา | ที่ไหน (หน้า · ข้อ · ไฟล์:บรรทัด) | ทำให้พังอย่างไร (ขั้นตอนหรือ input) | ความรุนแรง |` ไม่เกิน 40 บรรทัดต่อคน และ **ห้ามแก้ไฟล์**
-5. **ยืนยันทุกข้อ ทีละข้อ** — ข้อละ 1 ผู้ยืนยัน (`reviewer` ตัวใหม่ ค่าตั้งต้น `FALSE_POSITIVE` มั่นใจต่ำกว่า 80 ไม่เข้ารายงาน ตาม `review-lenses` ข้อ 3) ตรวจกับต้นฉบับจริงหรือรันให้เห็น ข้อที่ยืนยันไม่ได้ให้ติด `PLAUSIBLE` (เป็นไปได้ แต่ยังพิสูจน์ไม่ได้) หรือทิ้งพร้อมเหตุผล ส่วนข้อ `PLAUSIBLE` ให้ตัดสินเองโดยเลือกทางที่ผลกระทบน้อยสุด แล้วจดลงรายการ ยกเว้นเรื่องในรายการ "รออนุมัติ" ของ `superuser` (ลบหรือเขียนทับของผู้ใช้ · commit/push · ส่งออกนอกเครื่อง) ให้เตรียมไว้และจดลงรายการ ไม่ทำเอง
-6. **ซักค้าน (เฉพาะงานเสี่ยงสูง หรือเมื่อตาราง 3 ใบขัดกัน)** — ผู้โหวต 3 คน **คงที่ 3 เสมอ** ไม่ลดไม่เพิ่มตามงบ เพื่อให้ความมั่นใจเทียบข้ามรอบได้ · ถือคนละเลนส์ `security-reach` · `security-impact` · `security-defense` (หรือเลนส์ที่เหมาะกับข้อนั้น) ยืนยันได้ต้องอ้าง `ไฟล์:บรรทัด` ของทางเข้า จุดที่พัง และตัวกันที่ขาด ไม่ครบถือว่าไม่ยืนยัน · รวม 3 ตารางเป็นใบเดียว ตัดชื่อคนเจอออก แล้วส่งกลับให้ผู้ตรวจแต่ละคน (ตัวเดิมผ่าน `SendMessage` ไม่ต้องอ่านไฟล์ใหม่) ตอบทีละข้อว่า `ยืนยัน` · `ค้าน` (พร้อมเหตุผลหรือขั้นที่ทำให้ไม่พัง) · `ไม่รู้` · ข้อ `PLAUSIBLE` จากข้อ 5 เข้ารอบนี้ด้วย · งานปกติข้ามข้อนี้ เพราะเป็นอีก 3 รอบ token
-7. **ให้น้ำหนัก 4 กลุ่ม** — `ยืนยันข้าม` (2 คนขึ้นไปเจอเองโดยอิสระ) > `เห็นพ้อง` (เจอคนเดียว ซักค้านแล้วคนอื่นยืนยัน) > `คนเดียว` (ไม่มีใครค้านแต่ไม่มีใครยืนยัน · จริงต่อเมื่อมีขั้นตอนทำให้พังชัด) > `ขัดแย้ง` (มีคนค้าน — หัวหน้าทีมตัดสินเองจากต้นฉบับ ไม่นับเสียง) · ไม่ได้ซักค้าน → มีแค่ `ยืนยันข้าม` กับ `คนเดียว` · ความเห็นเรื่องรสนิยมเป็นแค่ข้อสังเกตทุกกลุ่ม (แนวคิดจาก adverse ของ addyosmani · MIT)
-8. **คำตัดสิน** — ก่อนเขียน เทียบ `head:` ในแพ็กเกจกับของจริง ไม่ตรงหรือมีผู้ตรวจที่ล้ม ยังรัน หรือถูกตัดผล ให้รายงานตามนั้น ห้ามนับเป็นสะอาด · 1 บรรทัด: `ส่งได้` · `ส่งได้หลังแก้` · `ยังไม่ควรส่ง` แล้วตามด้วยรายการ: สูง · กลาง · ต่ำ (ตามนิยามใน `reviewer`) แต่ละข้อบอกกลุ่มจากข้อ 7 · ข้อที่ปัดทิ้งบันทึกใน `ledger.md` พร้อมเหตุผลจากรายการของ `review-lenses` ข้อ 4
-9. การสั่งแก้ต่อเป็นหน้าที่ของผู้ใช้หรือ playbook ส่วน skill นี้หยุดที่คำตัดสิน
+4. **Launch all at once in one message, read-only**: everyone gets the same package and intent paths and differs only in angle (each person's angle is the lens in `review-lenses` item 2) · the prompt holds no opinion from the team lead on whether the work is good. Send results as a table `| ปัญหา | ที่ไหน (หน้า · ข้อ · ไฟล์:บรรทัด) | ทำให้พังอย่างไร (ขั้นตอนหรือ input) | ความรุนแรง |` (problem · where (page · item · file:line) · how it breaks (steps or input) · severity), at most 40 lines per person, and **no editing files.**
+5. **Verify every finding, one at a time**: 1 verifier per finding (a fresh `reviewer`, default `FALSE_POSITIVE`, confidence below 80 stays out of the report, per `review-lenses` item 3) who checks against the real original or runs it to show it. A finding that cannot be verified gets `PLAUSIBLE` (possible but not yet proven) or is dropped with a reason. For `PLAUSIBLE` items, decide yourself by choosing the path with the least impact and note it in the log, except matters on the `superuser` "awaiting approval" (`รออนุมัติ`) list (deleting or overwriting the user's things · commit/push · sending off the machine): prepare those and note them in the log, but do not do them yourself.
+6. **Cross-examination (only for high-risk work, or when the 3 tables contradict)**: the 3 voters are **always fixed at 3**, never reduced or increased by budget, so confidence is comparable across rounds · each holds a different lens: `security-reach` · `security-impact` · `security-defense` (or the lens that fits the item) · to confirm, a voter must cite the `file:line` of the entry point, the breaking spot and the missing guard, and an incomplete citation counts as not confirmed · merge the 3 tables into 1, strip the finders' names, and send it back to each reviewer (the same instance through `SendMessage`, no need to reread files), who answers item by item `ยืนยัน` (confirm) · `ค้าน` (object, with a reason or the step that makes it not break) · `ไม่รู้` (do not know) · `PLAUSIBLE` items from step 5 join this round too · normal work skips this step, because it is another 3 rounds of tokens.
+7. **Weight into 4 groups**: `ยืนยันข้าม` (cross-confirmed: 2 or more found it independently) > `เห็นพ้อง` (agreed: 1 found it, and after cross-examination others confirmed) > `คนเดียว` (single: nobody objected but nobody confirmed · true only when a clear breaking step exists) > `ขัดแย้ง` (disputed: someone objected, and the team lead decides from the original without counting votes) · with no cross-examination there are only `ยืนยันข้าม` and `คนเดียว` · opinions about taste are only observations in every group (idea from adverse by addyosmani · MIT).
+8. **Verdict**: before writing, compare `head:` in the package with the real one. If it does not match, or a reviewer failed, is still running, or had its result cut, report it that way and never count it as clean · 1 line: `ส่งได้` (can ship) · `ส่งได้หลังแก้` (can ship after fixes) · `ยังไม่ควรส่ง` (should not ship yet), followed by the list: high · medium · low (by the definitions in `reviewer`), each item naming its group from step 7 · items dismissed are recorded in `ledger.md` with a reason from the list in `review-lenses` item 4.
+9. Ordering the fixes is the job of the user or a playbook. This skill stops at the verdict.
 
-## ข้อควรระวัง
+## Cautions
 
-- คณะรีวิวใช้ token ราว 3 เท่าของ `reviewer` ตัวเดียว · เลือกคณะเมื่อ ราคาของการพลาด × โอกาสพลาด มากกว่าค่าผู้ตรวจที่เพิ่มอีก 2 ตัว (คิดด้วย `decision-scoring` คำสั่ง `review`) · ถ้าประเมินไม่ได้ ใช้ค่าตั้งต้น (ยังไม่ได้วัด): งานที่ส่งคนนอก เงิน กฎหมาย สุขภาพ หรือเลือกทางที่ย้อนไม่ได้ → คณะ 3 มุม · ที่เหลือ → `reviewer` ตัวเดียว · งานโค้ดดู `code-review-checklist` · `pr-description-template` (plugin `software-development`)
-- ผู้ตรวจ Artificial Intelligence (AI) ก็แจ้งปัญหาที่ไม่มีจริงได้ ทุกข้อจึงต้องผ่านข้อ 5 ก่อนเข้ารายงาน
+- A panel uses about 3 times the tokens of a single `reviewer`. Choose a panel when the price of a miss × the chance of a miss is more than the cost of 2 extra reviewers (compute with `decision-scoring`, command `review`) · if you cannot estimate, use the default (not yet measured): work sent to outsiders, money, law, health, or choosing an irreversible path → a 3-angle panel · everything else → a single `reviewer` · for code work see `code-review-checklist` · `pr-description-template` (plugin `software-development`).
+- An Artificial Intelligence (AI) reviewer can also report problems that do not exist, so every finding must pass step 5 before entering the report.
 
-## ที่มา
+## Sources
 
-ผู้โหวต 3 เลนส์ ค่าตั้งต้น false positive · claude-security (All rights reserved · เอาแค่กลไก) · agents/scan-verifier.md · ดู 2026-11-10 · ผู้ยืนยันทีละข้อ · code-review (Anthropic) · ดู 2026-11-10 · ความสดของผลรีวิว · qodo · skills/qodo-review-resolver/SKILL.md · ดู 2026-11-10 · รายละเอียดอื่นดู `review-lenses` หัวข้อ "ที่มา"
+3-lens voters, default false positive · claude-security (All rights reserved · mechanism only) · agents/scan-verifier.md · viewed 2026-11-10 · one-by-one verifiers · code-review (Anthropic) · viewed 2026-11-10 · freshness of review results · qodo · skills/qodo-review-resolver/SKILL.md · viewed 2026-11-10 · for other details see `review-lenses`, section "Sources"

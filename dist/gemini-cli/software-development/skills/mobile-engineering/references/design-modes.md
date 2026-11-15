@@ -17,7 +17,7 @@ Use `mobile-engineer` agent for: **$ARGUMENTS**
 
 Workflow:
 1. **Discovery:** platforms, team, performance, complexity
-2. **Apply `mobile-engineering` skill** (สถาปัตยกรรม · ประสิทธิภาพ · งบประสิทธิภาพ)
+2. **Apply `mobile-engineering` skill** (architecture · performance · performance budget)
 3. **Choose framework** (native, React Native (RN), Flutter, Kotlin Multiplatform (KMP)) with tradeoffs
 4. **Design architecture** (Model-View-ViewModel (MVVM), Model-View-Intent (MVI), Clean) by complexity
 5. **Choose state management**

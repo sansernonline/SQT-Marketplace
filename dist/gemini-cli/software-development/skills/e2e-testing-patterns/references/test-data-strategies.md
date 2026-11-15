@@ -1,6 +1,6 @@
 # Test Data Strategy — ทางเลือกทั้ง 4 แบบ
 
-ข้อดีข้อเสียของการเตรียมข้อมูลทดสอบแต่ละแบบ พร้อมโค้ดตัวอย่างของแบบที่แนะนำ
+The pros and cons of each way to prepare test data, with code examples of the recommended way
 
 ## Option 1: Shared test DB (popular, problematic)
 ```

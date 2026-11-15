@@ -4,221 +4,221 @@ Use for a one-off logo or poster, not a full brand kit
 
 # Graphic Design
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Pre-work gate "ด่านก่อนลงมือ" (every time):** read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search is for finding the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
-> **กฎข้อเดียวของ skill นี้:** เขียนทิศทางเป็นไฟล์ก่อน แล้วค่อยแตะพิกเซลแรก
-> ทิศทางที่ไม่ได้เขียนไว้ จะถูกลืมตอนทำแผ่นที่ 3
+> **The one rule of this skill:** write the direction into a file first, then touch the first pixel.
+> A direction that is not written down gets forgotten by the third sheet.
 
 ---
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-โลโก้ · ระบบสีและตัวอักษรของแบรนด์ · โปสเตอร์ · ใบปลิว · โพสต์โซเชียล ·
-rich menu ของ LINE Official Account (LINE OA) · ฉลากสินค้า · นามบัตร · ภาพปก
+Logos · a brand's colour and type system · posters · flyers · social posts ·
+rich menus for a LINE Official Account (LINE OA) · product labels · business cards · cover images
 
-รวมถึงตอนรีวิวงานที่ "ดูเหมือน AI ทำ" แต่บอกไม่ถูกว่าเพราะอะไร
+Also when reviewing work that "looks AI-made" and you cannot say why.
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-| งาน | ใช้ตัวนี้แทน |
+| Work | Use this instead |
 |---|---|
-| หน้าจอแอป เว็บ มือถือ Windows | `ui-craft` + skill แพลตฟอร์ม |
-| เลย์เอาต์สไลด์ | `presentation-design` |
-| หน้าตาไฟล์ Word / PowerPoint | `branded-document-design` |
-| ไดอะแกรมซอฟต์แวร์ | `software-diagrams` |
-| กราฟข้อมูล | `web-app-design` → `references/tokens.md` หัวข้อ "สีข้อมูล (กราฟ)" |
-| rich menu ของ LINE OA (ขนาด · พื้นที่กด · JSON) | `graphic-design:line-richmenu` (ถ้าติดตั้ง) |
-| ภาพจาก AI | `image-generation` · `graphic-design:brief-to-image` (ถ้าติดตั้ง) |
+| App, web, mobile or Windows screens | `ui-craft` + the platform skill |
+| Slide layout | `presentation-design` |
+| Look of a Word / PowerPoint file | `branded-document-design` |
+| Software diagrams | `software-diagrams` |
+| Data charts | `web-app-design` → `references/tokens.md` section "สีข้อมูล (กราฟ)" (data colours, charts) |
+| LINE OA rich menu (size · tap areas · JSON) | `graphic-design:line-richmenu` (if installed) |
+| AI images | `image-generation` · `graphic-design:brief-to-image` (if installed) |
 
-**ติดตั้ง plugin `graphic-design` อยู่:** งานออกแบบลึก ๆ (ชุดแบรนด์ · ชุดแคมเปญ · ภาพ AI · วิดีโอ · ตรวจงานออกแบบ) ใช้ `graphic-design:brand-kit` · `graphic-design:campaign-set` · `graphic-design:design-review` และขนาดแต่ละแพลตฟอร์มจาก `graphic-design:social-formats` · ไม่มี plugin นั้น → ทำตาม skill นี้ต่อไป
-
----
-
-## 1 · ลำดับการทำงาน
-
-0. **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `logo` · `social` · `illustration` ตามงาน แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้
-1. **เขียนทิศทางลงไฟล์** — คัดลอก `assets/brand-direction.md` ไปกรอก
-2. **เลือกตำแหน่งบน 4 แกน** (ข้อ 2) แล้วเขียนเหตุผลแกนละ 1 บรรทัด
-3. **เขียนรายการสิ่งที่ไม่เอา** — ส่วนที่มีประโยชน์ที่สุดในไฟล์ทั้งหมด
-4. ทำงานจริง
-5. **รอบสองต้องเป็นการตัดออก ไม่ใช่การเพิ่ม** (ข้อ 8)
-6. เรนเดอร์ดูขนาดจริง (ข้อ 8)
-
-**ข้อ 1–3 ใช้เวลาไม่เกิน 15 นาที** และเป็นสิ่งเดียวที่กันไม่ให้งานชิ้นที่ 2 ถึง 10
-หลุดไปคนละทางกับชิ้นแรก
-
-> ทำงานให้ SQT หรือโปรเจกต์ที่มีไฟล์ทิศทางอยู่แล้ว — **อ่านไฟล์นั้น ไม่ต้องเขียนใหม่**
-> ถ้าเนื้องานขัดกับไฟล์ ให้ทักก่อน อย่าแก้ไฟล์เงียบ ๆ
+**If plugin `graphic-design` is installed:** for deeper design work (brand kit · campaign set · AI images · video · design review), use `graphic-design:brand-kit` · `graphic-design:campaign-set` · `graphic-design:design-review`, and take each platform's sizes from `graphic-design:social-formats`. If that plugin is missing, keep following this skill.
 
 ---
 
-## 2 · สี่แกน — เลือกตำแหน่ง ไม่ใช่บรรยายความรู้สึก
+## 1 · Work sequence
 
-เลือกแกนละ 1 ตำแหน่ง **บอกผู้ใช้ก่อนเริ่มทำ เพื่อให้แย้งได้**
+0. **Search for references first:** take the project's keywords and search live as in `design-references` (plugin `superuser`), type `logo` · `social` · `illustration` as the work needs, then pull colours from the chosen work. Use the stored colour library when live search is not possible.
+1. **Write the direction into a file.** Copy `assets/brand-direction.md` and fill it in.
+2. **Pick a position on the 4 axes** (section 2), then write 1 line of reasoning per axis.
+3. **Write the list of things to avoid.** It is the most useful part of the whole file.
+4. Do the real work.
+5. **The second round must cut, not add** (section 8).
+6. Render it at real size (section 8).
 
-| แกน | ตำแหน่ง |
+**Steps 1–3 take at most 15 minutes.** They are the only thing that stops pieces 2 to 10
+from drifting away from the first piece.
+
+> Working for SQT or a project that already has a direction file: **read that file; do not rewrite it.**
+> If the work conflicts with the file, raise it first. Do not edit the file quietly.
+
+---
+
+## 2 · The four axes: pick a position, do not describe a feeling
+
+Pick 1 position per axis. **Tell the user before you start, so they can object.**
+
+| Axis | Positions |
 |---|---|
-| **น้ำเสียง** | ทางการ · เป็นกันเอง · ขี้เล่น · ท้าทาย |
-| **ความประณีต** | เรียบจัด · เนี้ยบมาตรฐาน · แน่นแบบคุมได้ · แน่นแบบปล่อย |
-| **ความสัมพันธ์กับผู้ชม** | ผู้รู้ · เพื่อนร่วมทาง · เพื่อน · โค้ช |
-| **ความทะเยอทะยาน** | ใช้งานได้ · ตั้งใจ · ต้องจำได้ |
+| **Tone** | formal · friendly · playful · challenging |
+| **Polish** | very clean · standard neat · dense but controlled · dense and loose |
+| **Relationship with the audience** | expert · fellow traveller · friend · coach |
+| **Ambition** | usable · deliberate · must be remembered |
 
-**วิธีเลือก:** ดูว่าคู่แข่งในหมวดเดียวกันอยู่ตรงไหน แล้วเลือกให้ต่าง —
-ถ้าทั้งหมวดดูน่าเบื่อ ความขี้เล่นคือความต่าง ส่วนถ้าทั้งหมวดตะโกนแข่งกัน ความเรียบคือความต่าง
+**How to choose:** look at where competitors in the same category sit, then choose to differ.
+If the whole category looks boring, playfulness is the difference. If the whole category shouts, calm is the difference.
 
-**งานที่เป็นแอป** ให้เทียบตำแหน่งที่เลือกกับบุคลิกแอป 6 แบบใน `ui-craft` → `references/app-character.md` เช่น แอปการเงินไม่ควรอยู่ตำแหน่ง "ขี้เล่น"
+**For app work,** compare the chosen position with the 6 app characters in `ui-craft` → `references/app-character.md`. For example, a finance app should not sit at "playful".
 
-**คู่ที่ขัดกันเอง** ให้ทักก่อนทำ: ใช้งานได้ + ท้าทาย · ผู้รู้ + ใช้งานได้ (มักออกมาเป็นน้ำเสียงสั่งสอน)
-
----
-
-## 3 · ระบบสีและตัวอักษร
-
-**สี 5–8 ค่าพอ** — แบรนด์หลัก 1 · รอง 1–3 · กลาง (เทา/ขาว/ดำ) · สีสถานะ
-
-- **สีกลางกินพื้นที่ 80%** ของงาน ส่วนที่เหลือเป็นสีแบรนด์
-- บันทึกทุกค่าเป็น **Hex · RGB · CMYK · Pantone** ถ้ามีงานพิมพ์
-- ความต่างของสีข้อความกับพื้น (contrast) ต้องผ่าน **4.5:1** สำหรับข้อความปกติ และ **3:1** สำหรับตัวใหญ่หรือหนา
-- ผู้ชายราว 8% ตาบอดสี — **ห้ามให้สีเป็นตัวบอกความหมายอย่างเดียว**
-
-**ตัวอักษร 2 ตระกูลพอ** — ตระกูลเดียวที่มีหลายน้ำหนักยิ่งดี
-
-ใช้สเกลขนาด 5–8 ขั้นที่อัตราส่วนคงที่ และน้ำหนัก 2–3 ค่า **ห้ามใช้ตัวหนาปลอม**
-ที่โปรแกรมสร้างเอง เพราะไทยจะเบลอ (ข้อ 6)
+**Pairs that contradict each other:** raise them before working. Usable + challenging · expert + usable (often comes out as a preachy tone).
 
 ---
 
-## 4 · โลโก้
+## 3 · Colour and type system
 
-โลโก้มี 5 สถาปัตยกรรม (ตัวอักษรล้วน · สัญลักษณ์ + ตัวอักษร · สัญลักษณ์ล้วน · ตัวอักษรเป็นสัญลักษณ์ · อักษรย่อ) · **ชุดที่ใช้งานได้จริงต้องมี 3 แบบ** — ตัวหลักสำหรับพื้นที่กว้าง · อักษรย่อสำหรับช่องสี่เหลี่ยม · ตัวอักษรเป็นสัญลักษณ์สำหรับ favicon และงานปัก
+**5–8 colour values are enough:** 1 main brand colour · 1–3 secondary · neutrals (grey/white/black) · status colours
 
-ตารางห้าสถาปัตยกรรมพร้อมตัวอย่าง · ตารางทดสอบบริบท · วิธีทำโลโก้ให้ "ว้าว" · รัศมีมุมของรูปทรงแท่ง → [`references/logo-design.md`](references/logo-design.md) — เปิดเมื่อออกแบบหรือตรวจโลโก้
+- **Neutrals take 80% of the area** of the piece. The rest is brand colour.
+- Record every value as **Hex · RGB · CMYK · Pantone** if there is print work.
+- Contrast between text and background must pass **4.5:1** for normal text and **3:1** for large or bold text.
+- About 8% of men are colour blind. **Never let colour alone carry the meaning.**
 
-**เก็บไฟล์ที่ `assets/` ที่รากโปรเจกต์** ทั้งไฟล์ต้นทาง `.svg` ทุกตัวและไฟล์ export ทุกขนาด (`.png` · favicon `.ico`) แล้วตั้งชื่อแบบ `<ชื่อแบรนด์>-<แบบ>-<ขนาด>.<นามสกุล>` ส่วนงานที่ไม่ใช่โลโก้ (โปสเตอร์ rich menu) ให้ไปที่ `assets/<ชื่องาน>/` และไฟล์ร่างกับตัวเลือกที่ไม่ได้ใช้ให้ย้ายลง `_to_delete/`
+**2 type families are enough.** One family with many weights is even better.
 
-### ทดสอบบริบท — ตกเกิน 2 ข้อ ตัดทิ้ง
-
-โลโก้ต้องผ่านบริบทจริง **ตกเกิน 2 ข้อ ตัดทิ้ง** — favicon 16px · ไอคอนแอป 28px · ปักเสื้อ 1.5 นิ้ว · ขาวดำ · กลับสี · ป้ายหน้าร้าน · รูปโปรไฟล์ 60–80px (ตัวเลขข้อจำกัดของแต่ละบริบท → `references/logo-design.md`)
-
-### สี่ข้อทดสอบความเรียบ
-
-1. **หรี่ตา** — ตัดตัวอักษรออก เงาที่เหลือยังจำได้ไหม
-2. **วาดจากความจำ** — ให้คนดู 30 วินาทีแล้ววาด ออกมาใกล้เคียงไหม
-3. **หนึ่งสี** — พิมพ์ขาวดำขนาด 1 นิ้ว ยังอ่านออกไหม
-4. **ซ้ำใคร** — ค้นภาพ "โลโก้ + ชื่อหมวดธุรกิจ" ถ้าเจอที่คล้ายกันตั้งแต่ 3 อันขึ้นไป ให้ถือว่าซ้ำ
-
-**โลโก้สื่อได้ 1 ความคิด บางทีได้ 2 แต่ 3 ถือว่ามากไป**
-
-**ทำโลโก้ให้ "ว้าว":** ให้อย่างน้อย 1 แนวมาจากสิ่งที่ผู้ใช้เห็นทุกวัน · ทำ 3 แนวพร้อมกันแล้วเลือกจากภาพจริง · ทำแผ่นตัวอย่าง (preview sheet) ทุกรอบ · แปลงชื่อเป็นเส้นจากฟอนต์เปิด (SIL Open Font License (OFL)) เท่านั้น · ส่งออกครบชุดเดียวกันทุกครั้ง (ชุดเดียวอยู่ใน `references/sizes-and-print.md` ข้อ 4) · รูปทรงแท่งใช้**เหลี่ยมขอบมนรัศมี 0.25–0.35 ของความหนาแท่ง** → ขั้นตอนเต็มและตารางรัศมีใน [`references/logo-design.md`](references/logo-design.md)
+Use a size scale of 5–8 steps at a fixed ratio, and 2–3 weights. **Never use fake bold**
+generated by the software, because Thai turns blurry (section 6).
 
 ---
 
-## 5 · ขนาดงานพิมพ์และโซเชียล
+## 4 · Logo
 
-ตัวเลขทั้งหมดอยู่ใน **`references/sizes-and-print.md`** (ฉบับสำรอง — ติดตั้ง plugin `graphic-design` อยู่ → ต้นฉบับขนาดแพลตฟอร์มคือ `graphic-design:social-formats`) — LINE OA, TikTok, Facebook,
-Instagram, งานพิมพ์ (ระยะตัดตก ความละเอียด ระบบสี)
+A logo has 5 architectures (wordmark only · symbol + wordmark · symbol only · lettermark as symbol · initials). **A usable set needs 3 versions:** the main one for wide areas · the initials version for square slots · the lettermark as symbol for favicons and embroidery.
 
-**3 ข้อที่พลาดบ่อยสุด:**
+The table of the five architectures with examples · the context test table · how to make a logo "wow" · the corner radius for bar shapes → [`references/logo-design.md`](references/logo-design.md). Open it when designing or reviewing a logo.
 
-- **ระยะตัดตก 3 มม. รอบด้าน** และของสำคัญห่างขอบตัดเข้ามาอีก 3–5 มม.
-- **300 จุดต่อนิ้ว ที่ขนาดจริง** ไม่ใช่ 300 จุดต่อนิ้วที่ขนาดย่อแล้วขยาย
-- **ดำสนิทในงานพิมพ์ไม่ใช่ K100** — พื้นดำใหญ่ ๆ ใช้ C60 M40 Y40 K100
-  ส่วนตัวอักษรเล็กใช้ K100 ล้วน ไม่งั้นพิมพ์เหลื่อมแล้วขอบเบลอ
+**Store files in `assets/` at the project root:** every `.svg` source and every size of export (`.png` · favicon `.ico`), named `<brand>-<version>-<size>.<extension>`. Non-logo work (poster, rich menu) goes in `assets/<piece-name>/`. Move drafts and unused options to `_to_delete/`.
 
----
+### Context test: fail more than 2, drop it
 
-## 6 · ภาษาไทยในงานกราฟิก
+A logo must pass real contexts. **Fail more than 2 and drop it:** favicon 16px · app icon 28px · embroidery on a shirt at 1.5 inches · black and white · inverted colours · shop sign · profile picture 60–80px (the limit numbers for each context → `references/logo-design.md`)
 
-**ส่วนนี้ไม่มีในคู่มือออกแบบสากลเล่มไหน** และเป็นจุดที่งานไทยพังบ่อยที่สุด
+### Four simplicity tests
 
-### สระและวรรณยุกต์ซ้อนสองชั้น
+1. **Squint:** remove the lettering. Is the remaining silhouette still recognisable?
+2. **Draw from memory:** let someone look for 30 seconds, then draw it. Does it come out close?
+3. **One colour:** print it in black and white at 1 inch. Is it still readable?
+4. **Who else:** search images for "logo + business category". If you find 3 or more similar ones, count it as a duplicate.
 
-กฎที่ห้ามพลาด:
+**A logo can carry 1 idea, sometimes 2, but 3 is too many.**
 
-- **ความสูงบรรทัดอย่างน้อย 1.5** (เนื้อหา) · **1.4** (หัวใหญ่) · **ห้ามล็อกความสูงกล่องข้อความ** (หรือเผื่อ 25%) ไม่งั้นวรรณยุกต์โดนตัด · ตรวจด้วย **ที่ ปั๊ม ปุ่ม สื่อ ตื้น**
-- ไทยไม่มีช่องว่างระหว่างคำ → **ตัดบรรทัดเองทุกครั้ง** ตรงจุดที่จบใจความ
-- ไทยดูเล็กกว่าละตินที่ขนาดเท่ากัน → บรรทัดปนกันเพิ่มไทย 5–10%
-- **ตระกูลเดียวที่มีทั้งไทยและละติน** · ต้องมีน้ำหนักหนาจริง (ห้ามตัวหนาปลอม) · **ตรวจลิขสิทธิ์ก่อนใช้เชิงพาณิชย์** (Anuphan · LINE Seed Sans TH · IBM Plex Sans Thai · Noto Sans Thai)
-
-คำอธิบายเต็มของแต่ละหัวข้อ → [`references/thai-in-graphics.md`](references/thai-in-graphics.md)
-
+**Making a logo "wow":** have at least 1 direction come from something the user sees every day · make 3 directions at the same time and choose from real images · make a preview sheet every round · convert the name to outlines only from open fonts (SIL Open Font License (OFL)) · export the same full set every time (the set is in `references/sizes-and-print.md` item 4) · for bar shapes use **rounded rectangles with a radius of 0.25–0.35 of the bar thickness** → full steps and the radius table in [`references/logo-design.md`](references/logo-design.md)
 
 ---
 
-## 7 · สิ่งที่ห้ามทำ — พร้อมของที่ใช้แทน
+## 5 · Print and social sizes
 
-ห้ามเฉย ๆ ไม่ได้ผล ต้องบอกว่าใช้อะไรแทน
+All the numbers are in **`references/sizes-and-print.md`** (a backup copy. If plugin `graphic-design` is installed, the source for platform sizes is `graphic-design:social-formats`): LINE OA, TikTok, Facebook,
+Instagram, print (bleed, resolution, colour mode).
 
-| ✗ อย่าทำ | ✓ ใช้แทน |
+**The 3 most common mistakes:**
+
+- **3 mm bleed on all sides,** and important items another 3–5 mm inside the trim edge.
+- **300 dots per inch at actual size,** not 300 dots per inch at a reduced size and then enlarged.
+- **Rich black in print is not K100:** for large black areas use C60 M40 Y40 K100,
+  and for small text use pure K100, otherwise misregistration blurs the edges.
+
+---
+
+## 6 · Thai in graphic work
+
+**No international design handbook covers this part,** and it is where Thai work breaks most often.
+
+### Stacked vowels and tone marks
+
+Rules you must not miss:
+
+- **Line height at least 1.5** (body) · **1.4** (large headings) · **never lock the height of a text box** (or leave 25% spare), otherwise tone marks get clipped · test with **ที่ ปั๊ม ปุ่ม สื่อ ตื้น**
+- Thai has no spaces between words → **always break lines by hand** at a point where the meaning ends.
+- Thai looks smaller than Latin at the same size → in mixed lines, add 5–10% to the Thai.
+- **One family with both Thai and Latin** · it must have a truly bold weight (no fake bold) · **check the licence before commercial use** (Anuphan · LINE Seed Sans TH · IBM Plex Sans Thai · Noto Sans Thai)
+
+Full explanation of each topic → [`references/thai-in-graphics.md`](references/thai-in-graphics.md)
+
+
+---
+
+## 7 · What not to do, with what to use instead
+
+A bare "don't" does not work. Say what to use instead.
+
+| ✗ Don't | ✓ Use instead |
 |---|---|
-| ไล่สีม่วง-น้ำเงิน หรือไล่สีรุ้ง | สีแบรนด์ทึบ · ไล่สีเฉดเดียวที่ต่างกันไม่เกิน 10 องศา · พื้นผิวด้าน · ภาพถ่ายเต็มพื้น |
-| วงกลมเรืองแสงลอย ๆ สื่อถึง "เทคโนโลยี" | ภาพของจริง หรือพื้นที่ว่าง |
-| การ์ดมุมมนที่มีแถบสีคาดซ้าย | แผงเต็มความกว้าง · เลขลำดับ · กรอบตาราง · ทรงตั๋ว |
-| วาดสินค้าเป็น SVG แทนภาพจริง | ภาพถ่ายจริง ถ้าไม่มี ให้บอกว่าไม่มีและใส่กล่องว่างไว้ |
-| อีโมจิเป็นหัวข้อย่อย | จุด เลข หรือหัวข้อที่ใช้ตัวหนา |
-| ฟอนต์ที่ใคร ๆ ก็ใช้ (Inter, Roboto, Montserrat) | เลือกจากข้อ 6 แล้วยืนยันว่าเลือกเพราะอะไร |
-| ตัวเลขปลอมในกราฟเพื่อความสวย | ตัวเลขจริง ถ้ายังไม่มีให้เว้นว่างและระบุว่ารอข้อมูล |
-| สามคอลัมน์ไอคอน-หัวข้อ-คำอธิบาย | เลือกโครงจากเนื้อหา ไม่ใช่จากความเคยชิน |
-| ภาพสต๊อกคนจับมือ ลูกศรพุ่งขึ้น | ภาพงานจริง ของจริง คนจริง |
+| Purple-blue gradients or rainbow gradients | Solid brand colour · a one-hue gradient that differs by no more than 10 degrees · matte texture · a full-bleed photo |
+| Floating glowing circles meaning "technology" | A real image, or empty space |
+| Rounded cards with a coloured stripe on the left | A full-width panel · sequence numbers · table borders · a ticket shape |
+| Drawing the product as an SVG instead of a real image | A real photo. If none exists, say so and leave an empty box |
+| Emoji as bullet points | Dots, numbers, or bold headings |
+| Fonts everyone uses (Inter, Roboto, Montserrat) | Choose from section 6 and confirm why you chose it |
+| Fake numbers in charts to make them look good | Real numbers. If you do not have them yet, leave it empty and say you are waiting for data |
+| Three columns of icon-heading-description | Choose the structure from the content, not from habit |
+| Stock photos of people shaking hands, arrows pointing up | Photos of real work, real things, real people |
 
-**บททดสอบสุดท้าย:** งานนี้ดูเหมือนมาจากนักออกแบบคนหนึ่งที่มีตัวตน
-หรือดูเหมือนออกมาจากเครื่องไหนก็ได้
-
----
-
-## 8 · ตรวจงาน
-
-**รอบสองต้องตัดออก ไม่ใช่เพิ่มเข้า** — ถ้ามือกำลังจะวาดของใหม่ ให้หยุดแล้วถามว่า
-ของที่มีอยู่แล้วทำให้ดีขึ้นได้ยังไง
-
-- [ ] เปิดดูที่**ขนาดใช้จริง** ไม่ใช่ขนาดที่ทำงาน — โปสเตอร์ให้ดูที่ระยะ 2 เมตร ส่วนโพสต์ให้ดูบนจอมือถือ
-- [ ] หรี่ตา — มีของเด้งมาก่อนอย่างเดียวไหม
-- [ ] ข้อความไทยครบ ไม่มีวรรณยุกต์โดนตัด (ทดสอบด้วย ที่ ปั๊ม ปุ่ม สื่อ ตื้น)
-- [ ] บรรทัดไทยตัดตรงจบใจความ ไม่ตัดกลางคำ
-- [ ] contrast ผ่าน 4.5:1
-- [ ] ไม่มีของหลุดขอบ ไม่มีของทับกัน
-- [ ] งานพิมพ์ — ตัดตกครบ 3 มม. · 300 จุดต่อนิ้วที่ขนาดจริง · แปลงเป็น CMYK แล้ว
-- [ ] เทียบกับไฟล์ทิศทาง — ขัดข้อไหนไหม
-- [ ] อ่านรายการสิ่งที่ไม่เอา แล้วดูว่าเผลอใส่เข้าไปไหม
+**Final test:** does this piece look like it came from one designer with a personality,
+or like it could have come out of any machine?
 
 ---
 
-## 9 · เชื่อมกับ skill อื่น
+## 8 · Review
 
-| ต้องการ | ใช้คู่กับ |
+**The second round must cut, not add.** If your hand is about to draw something new, stop and ask how
+to improve what is already there.
+
+- [ ] Open it at **real use size**, not the working size. For a poster, view from 2 metres. For a post, view on a phone screen.
+- [ ] Squint: does only one thing pop out first?
+- [ ] Thai text is complete, with no tone marks clipped (test with ที่ ปั๊ม ปุ่ม สื่อ ตื้น)
+- [ ] Thai lines break where the meaning ends, not in the middle of a word
+- [ ] Contrast passes 4.5:1
+- [ ] Nothing spills over an edge, nothing overlaps
+- [ ] Print work: full 3 mm bleed · 300 dots per inch at actual size · converted to CMYK
+- [ ] Compare with the direction file: does anything contradict it?
+- [ ] Read the list of things to avoid, and check whether you slipped any in
+
+---
+
+## 9 · Links to other skills
+
+| Need | Use together with |
 |---|---|
-| ระยะห่าง ลำดับสายตา 5 สถานะ | `ui-craft` |
-| เอาระบบสีไปใช้ในเอกสาร | `branded-document-design` |
-| เอาไปใช้ในสไลด์ | `presentation-design` |
-| เอาไปใช้บนหน้าจอแอป | `web-app-design` · `mobile-app-design` · `windows-app-design` |
-| ตัดสิ่งที่ไม่จำเป็นออก | `simplicity-first` |
+| Spacing, visual hierarchy, 5 states | `ui-craft` |
+| Apply the colour system in documents | `branded-document-design` |
+| Use it in slides | `presentation-design` |
+| Use it on app screens | `web-app-design` · `mobile-app-design` · `windows-app-design` |
+| Cut out what is not needed | `simplicity-first` |
 
 ---
 
-## ไม่ให้ดูเหมือน AI ทำ
+## Do not look AI-made
 
-ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ทุกงานต้องผ่านด่านตา 3.2 ด้วย (หน้าเว็บตอบเพิ่มข้อ 10–14) เพราะสคริปต์ 0 ข้อยังไม่ใช่ผ่าน · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
+Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script. Every piece must also pass the eye check (ด่านตา) 3.2 (web pages answer items 10–14 as well), because a script result of 0 items does not yet mean a pass. The bans in this file are specific to this work. The full list for every medium is there.
 
-## ตัวย่อ
+## Abbreviations
 
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
+Always spell out an abbreviation in full the first time, then put the abbreviation in brackets, for example Model Context Protocol (MCP).
+After that you can use the abbreviation. For details see the skill `spell-out-abbreviations`.
 
-**อ่านเพิ่มเมื่อต้องใช้:** [`references/designer-outputs.md`](references/designer-outputs.md) — รูปแบบงานส่งของนักออกแบบ
+**Read more when needed:** [`references/designer-outputs.md`](references/designer-outputs.md) — formats for a designer's deliverables
 
 
 ## reference: designer-outputs.md
 
-# แม่แบบงานของ graphic-designer — ไฟล์ทิศทาง · ข้อเสนอโลโก้ · ข้อกำหนดชิ้นงาน · รีวิว
+# graphic-designer templates — direction file · logo proposal · piece spec · review
 
-เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+Open this when you really have to write one of these documents. Mark anything you do not know with `(รอยืนยัน)` (awaiting confirmation).
 
 ## Standard Outputs
 
-### ไฟล์ทิศทาง
-คัดลอก `assets/brand-direction.md` ของ skill นี้ไปไว้ที่รากโปรเจกต์ แล้วกรอก งานทุกชิ้นหลังจากนั้นให้อ้างอิงไฟล์นี้
+### Direction file
+Copy this skill's `assets/brand-direction.md` to the project root and fill it in. Every piece after that refers to this file.
 
-### ข้อเสนอโลโก้
+### Logo proposal
 ```markdown
 ## แบบที่ 01 — [ชื่อ เช่น "ตัวอักษรล้วน เรขาคณิต"]
 
@@ -230,7 +230,7 @@ Instagram, งานพิมพ์ (ระยะตัดตก ความล
 **ทดสอบบริบท:** favicon ✓ · ปัก ✓ · ขาวดำ ✓ · กลับสี ✗ ช่องในตัว ก ตัน · ป้าย ✓ · โปรไฟล์ ✓
 ```
 
-### ข้อกำหนดชิ้นงาน
+### Piece spec
 ```markdown
 ## [ชื่อชิ้นงาน]
 
@@ -242,10 +242,10 @@ Instagram, งานพิมพ์ (ระยะตัดตก ความล
 **เก็บที่:** `assets/` (โลโก้ ไอคอน favicon) หรือ `assets/<ชื่องาน>/` (ชิ้นงานอื่น) — ต้นทาง `.svg` คู่กับไฟล์ export เสมอ
 ```
 
-### รีวิวงาน
-บอกเป็นข้อ ๆ ว่าอะไรผิด และ**ผิดเมื่อเทียบกับอะไร**: ทิศทางที่ตกลงไว้ · ตัวเลขมาตรฐาน · รายการสิ่งที่ไม่เอา
+### Design review
+List the faults one by one, and say **what each is wrong against**: the agreed direction · standard numbers · the list of things to avoid.
 
-ความเห็นส่วนตัวให้บอกว่าเป็นความเห็น
+If something is a personal opinion, say it is an opinion.
 
 
 ## reference: logo-design.md
@@ -1313,29 +1313,29 @@ The column template and the values used in each field live in one place, the [qu
 
 ## reference: playbook-bug-fix.md
 
-# playbook · bug-fix — แก้ของพังด้วยหลักฐาน
+# playbook · bug-fix — fix broken things with evidence
 
-ใช้เมื่อ: error · stack trace · test ล้ม · หน้าจอผิด · หน่วยความจำรั่ว · CPU วิ่งตอนว่าง · ผู้ใช้แจ้งปัญหา · ของที่ไม่ควรเกิดเลย (ถ้าใช้ได้อยู่แต่อยากให้เร็วหรือเบาขึ้นถึงเป้า → `performance`) (รวม `bug fix` · `runtime forensics` · `trace forensics` ของ pstack)
-skill หลัก: [`code-orientation`](../../code-orientation/SKILL.md) · skill ตาม stack · `targeted-fix` · `principle-fix-root-cause` · `principle-prove-it-works`
+Use when: an error · stack trace · failing test · wrong screen · memory leak · CPU busy while idle · a user report · something that should never happen (if it works but you want it faster or lighter to a target → `performance`) (covers pstack's `bug fix` · `runtime forensics` · `trace forensics`)
+Main skills: [`code-orientation`](../../code-orientation/SKILL.md) · the skill for the stack · `targeted-fix` · `principle-fix-root-cause` · `principle-prove-it-works`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. คัดอาการตรงตัว — ข้อความ error · ชื่อ test · ภาพหน้าจอ · ขั้นตอนที่ผู้ใช้ทำ · ใคร: หัวหน้าทีม
-2. **ทำให้เกิดซ้ำเองในที่เดียวกับที่ผู้ใช้เจอ** — ถ้าเป็นหน้าเว็บ ให้ใช้ skill ตรวจแอปของโปรเจกต์ (ถ้ายังไม่มี ให้ทำ `app-verifier-setup` ก่อน) ถ้าเป็น API ให้ใช้คำสั่งเรียกจริง ถ้าทำซ้ำไม่ได้ ให้บอกว่าขาดอะไร (ข้อมูล · สภาพแวดล้อม · ขั้นตอน) แล้วหยุดเฉพาะบั๊กนี้ ส่วนโปรเจกต์ที่มี `.sandbox/` (ข้อยกเว้นของรากตาม `project-doc-set` ข้อ 1) ให้ทำซ้ำใน sandbox · ใคร: `qa-tester` ตัวใหม่
-   - อาการที่เกิดตอนรัน (รั่ว · ค้างเป็นพัก ๆ · วิ่งตอนว่าง) ให้ใส่การวัดหรือ log ชั่วคราว เพื่อให้อาการกลายเป็นตัวเลขก่อนแก้ ถ้าได้ไฟล์ profile มา (cpuprofile · heap snapshot · trace) ให้อ่านด้วยเครื่องมือของไฟล์ชนิดนั้น ไม่เดาจากโค้ด
-3. **เขียน test ที่ล้มเพราะบั๊กนี้ก่อน** แล้วรันให้เห็นว่าแดง (`testing-standards`) ถ้าโปรเจกต์ยังไม่มี test เลย ให้ตั้ง test ตัวแรกให้รันได้ก่อน ถ้าทำ test ไม่ได้จริง (เช่น อาการที่เกิดตอนรันบนเครื่องผู้ใช้) ให้เขียนเหตุผลลงรายงาน และต้องมีขั้นตอนทำซ้ำที่รันได้แทน · ใคร: `developer` ตัวใหม่
-   - ถ้ายังไม่ได้อ่านส่วนนี้ใน session นี้ ให้ทำ [`code-orientation`](../../code-orientation/SKILL.md) ก่อนไล่ต้นเหตุ
-4. หาต้นเหตุตาม `principle-fix-root-cause` · ต้นเหตุที่หายากหรือหลายชั้น ส่ง agent ด้วย `model: opus` (`superuser` หัวข้อ 5) · ใคร: `developer` ตัวใหม่ (ส่งผลขั้น 3)
-5. ถ้าจะแก้ของที่ใช้ร่วม (helper · type · config · schema) ให้หาทุกจุดที่กระทบตาม [`blast-radius`](../../blast-radius/SKILL.md) ก่อนแก้ · **บั๊กด้านความปลอดภัย** ให้ค้นทั้ง repo หาจุดที่เขียนแบบเดียวกันด้วย · ส่งรายการจุดให้ขั้น 6 · ใคร: `Explore` ตัวใหม่
-6. แก้ให้เล็กที่สุดที่ยังถูก (`lazy-coding`) ครบทุกจุดจากขั้น 4–5 ในรอบเดียว — ส่งตำแหน่งไฟล์และต้นเหตุไปด้วย · บั๊กความปลอดภัยลงรายงานใน `qa/security/` ถ้ามีค่าลับหลุด ให้บอกผู้ใช้ให้เปลี่ยนค่าทันที · ใคร: `developer` ตัวใหม่
-7. พิสูจน์ — รันกรณีที่เคยล้มให้ผ่าน รันกรณีใกล้เคียงว่ายังผ่าน แล้วลองทำซ้ำในที่เดิมอีกครั้งด้วยตัวเอง · ใคร: `qa-tester` ตัวใหม่
-8. **รีวิว diff ก่อนบอกว่าเสร็จ** — ตาม `code-review-checklist`: แก้ที่ต้นเหตุ ไม่ลามนอกจุด ผลขั้น 7 ครอบกรณีที่เคยล้ม · บั๊กความปลอดภัยดูครบทุกจุดจากขั้น 5 · ไม่ผ่าน → `developer` ตัวใหม่แก้ แล้ววนตามรอบตรวจใน [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
-9. ถ้าบั๊กนี้เป็นแบบที่ agent เคยทำมาแล้ว ให้ใช้ `repeated-mistakes-to-checks` · ใคร: หัวหน้าทีม
-10. ส่งมอบตามกฎ commit ใน `superuser` หัวข้อ 6 แล้วจบด้วย `status-report` · ใคร: หัวหน้าทีม
+1. Copy the symptom exactly — the error message · test name · screenshot · the steps the user took · ใคร: หัวหน้าทีม
+2. **Reproduce it yourself in the same place the user hit it.** For a web page, use the project's app-checking skill (if there is none yet, do `app-verifier-setup` first). For an API, use a real call. If you cannot reproduce it, say what is missing (data · environment · steps) and stop on this bug only. In a project that has `.sandbox/` (the root exception in `project-doc-set` item 1), reproduce inside the sandbox · ใคร: `qa-tester` ตัวใหม่
+   - For a symptom that appears at run time (leak · intermittent hang · busy while idle), add temporary measurement or logging so the symptom becomes a number before you fix it. If you were given a profile file (cpuprofile · heap snapshot · trace), read it with the tool for that file type. Do not guess from the code.
+3. **Write a test that fails because of this bug first**, and run it to see it red (`testing-standards`). If the project has no tests at all, first set up a first test that runs. If you truly cannot write a test (for example a symptom that happens at run time on the user's machine), write the reason in the report, and provide a runnable reproduction procedure instead · ใคร: `developer` ตัวใหม่
+   - If you have not read this part in this session, do [`code-orientation`](../../code-orientation/SKILL.md) before tracing the cause
+4. Find the root cause per `principle-fix-root-cause` · for a rare or multi-layer cause, send an agent with `model: opus` (`superuser` section 5) · ใคร: `developer` ตัวใหม่ (pass in the step 3 result)
+5. If you will change something shared (helper · type · config · schema), find every spot it affects per [`blast-radius`](../../blast-radius/SKILL.md) before changing it · for a **security bug**, also search the whole repo for places written the same way · pass the list of spots to step 6 · ใคร: `Explore` ตัวใหม่
+6. Make the smallest fix that is still correct (`lazy-coding`), covering every spot from steps 4–5 in one round — pass the file locations and the root cause along · write a security bug up in the report under `qa/security/` · if a secret leaked, tell the user to rotate it at once · ใคร: `developer` ตัวใหม่
+7. Prove it — run the case that used to fail and see it pass, run the nearby cases and see they still pass, then try to reproduce it in the original place once more yourself · ใคร: `qa-tester` ตัวใหม่
+8. **Check (ตรวจ) the diff by review before saying done** — per `code-review-checklist`: the fix is at the root cause, does not spread beyond the spot, and the step 7 result covers the case that used to fail · for a security bug, look at every spot from step 5 · if it fails → a fresh `developer` fixes it, then loop per the check rounds in [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
+9. If this bug is the kind an agent has made before, use `repeated-mistakes-to-checks` · ใคร: หัวหน้าทีม
+10. Deliver per the commit rules in `superuser` section 6, then finish with `status-report` · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-`ต้นเหตุ: … · แก้: … · พิสูจน์: <กรณีที่เคยล้มและตอนนี้ผ่าน + วิธีที่รัน>`
+`ต้นเหตุ: … · แก้: … · พิสูจน์: <the case that used to fail and now passes + how it was run>` (root cause · fix · proof)
 
 
 ## reference: playbook-feature.md
@@ -1383,25 +1383,25 @@ Every pass criterion of the requirements has evidence — a test that actually r
 
 ## reference: playbook-housekeeping.md
 
-# playbook · housekeeping — เก็บกวาดเครื่องและโปรเจกต์
+# playbook · housekeeping — clean up the machine and the project
 
-ใช้เมื่อ: ดิสก์เต็ม · worktree หรือ branch ค้างเยอะ · sandbox และ image เก่าสะสม · `_to_delete/` ใหญ่ (รวม `worktree cleanup` ของ pstack)
-หลัก: เก็บกวาดคือการลบ อะไรที่อาจมีงานของคนอยู่ให้ **ใส่ไว้ใน "รออนุมัติ"** พร้อมคำสั่งลบ ไม่ลบเอง
+Use when: the disk is full · many leftover worktrees or branches · old sandboxes and images pile up · `_to_delete/` is large (covers pstack's `worktree cleanup`)
+Principle: cleaning up means deleting. Anything that may hold someone's work goes **under "รออนุมัติ"** (awaiting approval) with its delete command, and you do not delete it yourself.
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ทำรายการ ขั้นนี้ยังไม่ลบอะไร · ใคร: หัวหน้าทีม
-   - git worktree และ branch ที่ merge แล้วหรือไม่ได้แตะเกิน 30 วัน (`git worktree list` · `git branch --merged`)
-   - sandbox ของ SQT (`docker ps -a --filter label=sqt.sandbox=true`) · image และ volume ที่ไม่มีคอนเทนเนอร์ใช้
-   - ขนาด `_to_delete/` ของแต่ละโปรเจกต์
-2. แยกเป็น 2 กลุ่ม คือกลุ่มที่ลบได้แน่ (merge แล้ว · ไม่มีไฟล์ค้าง) และกลุ่มที่ต้องให้คนตัดสิน (มีงานที่ยังไม่ commit · ไม่แน่ใจ) · ใคร: หัวหน้าทีม
-3. แสดงตาราง `| ของ | ขนาด | เหตุผลที่ลบได้ | ความเสี่ยง |` ให้ผู้ใช้ ใต้หัวข้อ **"รออนุมัติ"** พร้อมคำสั่งลบที่กดได้ทันที ส่วนข้อที่ไม่แน่ใจให้ลงใน "ค้างอยู่" · ใคร: หัวหน้าทีมเสนอ · ผู้ใช้อนุมัติ
-4. เมื่อผู้ใช้อนุมัติแล้ว ให้ลบเฉพาะรายการที่อนุมัติ worktree ที่มีไฟล์ค้างให้เก็บ patch ไว้ก่อนลบ ส่วน sandbox ให้ใช้ `.sandbox/sandbox.ps1 destroy` (`.sandbox/` เองอยู่ที่รากต่อได้ตาม `project-doc-set` ข้อ 1) · ใคร: หัวหน้าทีม
-5. รายงานพื้นที่ที่ได้คืน แล้วจบด้วย `status-report` · ใคร: หัวหน้าทีม
+1. Make the list. Delete nothing in this step · ใคร: หัวหน้าทีม
+   - git worktrees and branches that are merged or untouched for more than 30 days (`git worktree list` · `git branch --merged`)
+   - SQT sandboxes (`docker ps -a --filter label=sqt.sandbox=true`) · images and volumes no container uses
+   - the size of each project's `_to_delete/`
+2. Split into 2 groups: what is surely deletable (merged · no leftover files) and what needs a person to decide (uncommitted work · unsure) · ใคร: หัวหน้าทีม
+3. Show the user the table `| ของ | ขนาด | เหตุผลที่ลบได้ | ความเสี่ยง |` (item · size · reason it can be deleted · risk) under the heading **"รออนุมัติ"**, with delete commands ready to run at once. Put the unsure items under "ค้างอยู่" (pending) · ใคร: หัวหน้าทีมเสนอ · ผู้ใช้อนุมัติ
+4. Once the user approves, delete only the approved items. For a worktree with leftover files, keep a patch before deleting. For a sandbox, use `.sandbox/sandbox.ps1 destroy` (`.sandbox/` itself may stay at the root per `project-doc-set` item 1) · ใคร: หัวหน้าทีม
+5. Report the space recovered, then finish with `status-report` · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-ลบเฉพาะสิ่งที่ผู้ใช้อนุมัติ และไม่มีงานของใครหายไปโดยไม่มี patch สำรอง
+Only what the user approved was deleted, and no one's work was lost without a backup patch
 
 
 ## reference: playbook-investigation.md
@@ -1568,24 +1568,24 @@ Every document ordered has a status in `docs/BUILD-PLAN.md` and its check result
 
 ## reference: playbook-prototype.md
 
-# playbook · prototype — ทดลองให้ผลรันเป็นคนตัดสิน
+# playbook · prototype — experiment, and let the run result decide
 
-ใช้เมื่อ: กำลังจะถามคนว่า "แบบไหนดี" แต่คำตอบดูได้จากการรัน — ความเร็ว · หน้าตา · พฤติกรรม · ผลลัพธ์
-ห้ามใช้เมื่อ: เป็นเรื่องรสนิยมหรือการตัดสินใจทางธุรกิจที่ทดลองไม่ได้ — อันนั้นถามคน
+Use when: you are about to ask a person "which one is better?" but the answer can be seen by running it — speed · looks · behavior · output
+Do not use when: it is a matter of taste or a business decision that an experiment cannot settle — ask a person for that
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. เขียนคำถามที่จะให้การทดลองตอบ และเกณฑ์ตัดสินเป็นตัวเลขหรือสิ่งที่เห็นได้ ก่อนลงมือ · ใคร: หัวหน้าทีม
-2. สร้างทางเลือก 2–3 ทาง แบบเล็กที่สุดที่ยังตอบคำถามได้ ใน `_to_delete/prototype-<เรื่อง>/` ถ้าทางเลือกเยอะหรือใหญ่ ให้ใช้ `parallel-attempts-pick-best` · ใคร: `developer` ตัวใหม่ทางละตัว (ยังไม่รู้ว่าจะลองทางไหน: `brainstormer` ตัวใหม่เสนอก่อน)
-3. รันทุกทางด้วยวิธีวัดเดียวกัน — ข้อมูลชุดเดียวกัน เครื่องเดียวกัน แล้วบันทึกผลดิบ · ใคร: `qa-tester` ตัวใหม่
-4. ตัดสินตามเกณฑ์ข้อ 1 ถ้าผลก้ำกึ่ง ให้เลือกทางที่โค้ดน้อยและแก้ทีหลังง่ายกว่า · ใคร: หัวหน้าทีม
-5. ตรวจการตัดสิน — ตัวเลขมาจากผลดิบข้อ 3 จริง วัดแบบเดียวกันทุกทาง และเกณฑ์ตรงกับข้อ 1 · ใคร: `reviewer` ตัวใหม่
-6. ลงผลใน `decision-log` — เลือก · ไม่เลือก · ตัวเลขที่วัดได้ · ใคร: หัวหน้าทีม
-7. กลับไปทำ playbook เดิมต่อด้วยทางที่ชนะ แต่ไม่ย้ายโค้ดทดลองเข้าโปรเจกต์ตรง ๆ · ใคร: หัวหน้าทีม
+1. Before starting, write the question the experiment will answer, and the deciding criterion as a number or something visible · ใคร: หัวหน้าทีม
+2. Build 2–3 options, each as small as can still answer the question, in `_to_delete/prototype-<topic>/`. If the options are many or large, use `parallel-attempts-pick-best` · ใคร: `developer` ตัวใหม่ one per option (if it is not yet known which options to try: `brainstormer` ตัวใหม่ proposes first)
+3. Run every option with the same way of measuring — the same data, the same machine — and record the raw results · ใคร: `qa-tester` ตัวใหม่
+4. Decide by the criterion from step 1. If the result is close, choose the option with less code that is easier to change later · ใคร: หัวหน้าทีม
+5. Check (ตรวจ) the decision — the numbers really come from the raw results in step 3, every option was measured the same way, and the criterion matches step 1 · ใคร: `reviewer` ตัวใหม่
+6. Record the result in `decision-log` — chosen · not chosen · the measured numbers · ใคร: หัวหน้าทีม
+7. Return to the original playbook with the winning option, but do not move the experiment code straight into the project · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-มีตัวเลขหรือภาพเทียบที่ตอบคำถามข้อ 1 ได้ และการตัดสินถูกบันทึกแล้ว
+There are numbers or a side-by-side picture that answer the step 1 question, and the decision is recorded
 
 
 ## reference: playbook-refactor.md
@@ -1826,26 +1826,26 @@ All the step 1 conditions pass, or every remaining piece has a reason why it is 
 
 ## reference: playbook-visual-parity.md
 
-# playbook · visual-parity — หน้าจอจริงต้องตรงกับต้นแบบ
+# playbook · visual-parity — the real screen must match the reference
 
-ใช้เมื่อ: ทำหน้าจอให้ตรง mockup · ย้ายหน้าจอจากเทคโนโลยีเก่าไปใหม่แล้วต้องเหมือนเดิม · ผู้ใช้บอกว่า "ไม่เหมือนแบบ"
-skill หลัก: skill ตรวจแอปของโปรเจกต์ (`app-verifier-setup`) · `ui-craft` · `principle-prove-it-works`
+Use when: making a screen match a mockup · moving a screen from an old technology to a new one and it must look the same · the user says "ไม่เหมือนแบบ" (it does not look like the design)
+Main skills: the project's app-checking skill (`app-verifier-setup`) · `ui-craft` · `principle-prove-it-works`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ระบุต้นแบบ (ไฟล์ใน `mockup/` หรือหน้าจอระบบเดิม) และหน้าจอจริงที่จะเทียบ เป็นคู่ ๆ · ใคร: หัวหน้าทีม
-2. ถ่ายภาพทั้งสองฝั่งด้วยขนาดหน้าต่างเดียวกัน ข้อมูลชุดเดียวกัน ด้วย skill ตรวจแอป แล้วเก็บใน `_to_delete/parity/` · ใคร: `qa-tester` ตัวใหม่
-3. เทียบด้วยเครื่องมือ — ใช้ภาพต่าง (pixel diff) ถ้ามี ถ้าไม่มีให้เทียบทีละส่วน: ระยะห่าง · ขนาดตัวอักษร · สี · ลำดับ · สถานะว่าง/โหลด/ผิดพลาด · ใคร: `qa-tester` ตัวใหม่
-4. ทำรายการต่างที่พบ `| จุด | ต้นแบบ | ของจริง | แก้ที่ไฟล์ |` เรียงจากที่ผู้ใช้เห็นก่อน · ใคร: `qa-tester` ตัวใหม่
-5. แก้ทีละกลุ่ม แล้วถ่ายภาพเทียบใหม่ทุกครั้ง · ใคร: `developer` ตัวใหม่ต่อกลุ่ม · `qa-tester` ตัวใหม่ถ่ายเทียบ
-6. จุดที่ต่างโดยตั้งใจ (ต้นแบบผิดหลัก `ui-craft` หรือทำจริงไม่ได้) ไม่ต้องแก้ตาม แต่ให้ลงเหตุผลใน `decision-log` · ใคร: หัวหน้าทีม
-7. กดทุกปุ่มบนหน้าจอจริงว่าทำงาน ไม่ดูแค่หน้าตาเหมือน · ใคร: `qa-tester` ตัวใหม่
-8. ตรวจว่ารายการต่างข้อ 4 ปิดครบ ภาพเทียบล่าสุดตรงต้นแบบ และเหตุผลข้อ 6 ฟังขึ้น · ไม่ผ่าน → วนตามรอบตรวจใน [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
-9. จบด้วย `status-report` · ใคร: หัวหน้าทีม
+1. Identify the reference (a file in `mockup/` or the old system's screen) and the real screen to compare, as pairs · ใคร: หัวหน้าทีม
+2. Capture both sides at the same window size with the same data, using the app-checking skill, and keep them in `_to_delete/parity/` · ใคร: `qa-tester` ตัวใหม่
+3. Compare with a tool — use a pixel diff if there is one. If not, compare part by part: spacing · font size · colour · order · empty/loading/error states · ใคร: `qa-tester` ตัวใหม่
+4. Make a list of the differences found, `| จุด | ต้นแบบ | ของจริง | แก้ที่ไฟล์ |` (spot · reference · real · file to fix), ordered by what the user sees first · ใคร: `qa-tester` ตัวใหม่
+5. Fix one group at a time, and capture a new comparison after each · ใคร: `developer` ตัวใหม่ per group · `qa-tester` ตัวใหม่ captures the comparison
+6. For differences that are deliberate (the reference breaks `ui-craft` rules or cannot really be built), do not fix them to match, but record the reason in `decision-log` · ใคร: หัวหน้าทีม
+7. Click every button on the real screen to confirm it works. Do not stop at looking the same · ใคร: `qa-tester` ตัวใหม่
+8. Check (ตรวจ) that every difference in the step 4 list is closed, the latest comparison matches the reference, and the step 6 reasons hold up · if it fails → loop per the check rounds in [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
+9. Finish with `status-report` · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-ทุกคู่มีภาพเทียบล่าสุด และรายการต่างที่เหลือมีเหตุผลกำกับทุกข้อ
+Every pair has a latest comparison image, and every remaining difference has a reason attached
 
 
 ## reference: playbooks.md

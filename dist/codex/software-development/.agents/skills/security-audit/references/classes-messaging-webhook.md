@@ -1,52 +1,52 @@
-# สาย webhook · คิว · job เบื้องหลัง · RPC
+# Class family: webhook · queue · background job · RPC
 
-เปิดเมื่อระบบรับ webhook (ชำระเงิน · LINE · ขนส่ง · marketplace) · ส่ง webhook ไปหาระบบอื่น · มีคิวหรือ broker · มี job ตามเวลา · ใช้ gRPC GraphQL หรือ WebSocket · วางหัวข้อที่เลือกลง brief ลูกทีมทั้งก้อน · webhook ของผู้ให้บริการไทยโดยเฉพาะ ใช้ `classes-thai` คู่กัน
+Open this when the system receives webhooks (payment · LINE · shipping · marketplace) · sends webhooks to other systems · has a queue or broker · has scheduled jobs · uses gRPC, GraphQL or WebSocket. Paste the chosen sections into the sub-agent brief whole. For webhooks from Thai providers in particular, use `classes-thai` alongside.
 
-## กติกาประจำสาย
+## Rules for this family
 
-- คนที่ส่งข้อความเข้า webhook หรือคิวได้ คือผู้กระทำคนหนึ่ง ต้องถามว่าใครส่งได้บ้าง (ทั้งเน็ต · ระบบภายใน · ผู้เช่ารายอื่น) และโค้ดรู้ได้อย่างไรว่าเป็นผู้ส่งตัวจริง
-- ตรวจลายเซ็นต้องทำกับ byte ดิบที่ได้รับ ก่อน parse และก่อนทำอะไรที่มีผล · ตรวจแล้วยังต้องดูว่าผูกกับอะไร (เวลา · id ของเหตุการณ์ · ร้าน)
-- ข้อความเดียวกันมาซ้ำได้ มาสลับลำดับได้ และมาหลังสถานะเปลี่ยนไปแล้วได้ ระบบต้องทนทั้ง 3 แบบ (`principle-safe-to-rerun`)
-- ผู้ให้บริการส่งซ้ำเมื่อไม่ได้ 2xx ไม่ใช่เหตุให้รับทุกอย่างก่อนตรวจ
-- ตัวคุมที่อยู่นอก repo (IP allowlist ที่ load balancer · ACL ของ broker) → `needs_validation`
+- Anyone who can send a message into a webhook or queue is an actor. Ask who can send (the whole internet · internal systems · other tenants) and how the code knows the sender is genuine.
+- Check the signature on the raw bytes received, before parsing and before anything with effect. After the check, see what it is bound to (time · event id · shop).
+- The same message can arrive twice, out of order, or after the state has already changed. The system must survive all 3 cases (`principle-safe-to-rerun`).
+- A provider that resends when it gets no 2xx is no reason to accept everything before checking.
+- A control outside the repo (an IP allowlist at the load balancer · a broker ACL) → `needs_validation`.
 
-## รับ webhook
+## Receiving webhooks
 
-| ประเภท (`class`) | ล่าอะไร | สัญญาณในโค้ด | พิสูจน์อย่างไร | มักแจ้งผิดเมื่อ |
+| Class (`class`) | What it hunts | Signal in code | How to prove it | Often misreported when |
 |---|---|---|---|---|
-| `webhook-signature` | ไม่ตรวจลายเซ็น · ตรวจหลัง parse และ serialize ใหม่ · ตรวจแต่ไม่ปฏิเสธเมื่อไม่ตรง | handler อ่าน `req.body` ที่ parse แล้วก่อนตรวจ · `express.json()` ครอบ route ก่อนเก็บ raw body · `if (!valid) log(...)` แล้วทำต่อ | test ส่ง body ที่ลายเซ็นผิด ต้องได้ 401 และไม่มีผลใด ๆ | ตรวจที่ proxy ใน repo (ตรวจในไฟล์ config ได้) · ถ้า proxy อยู่นอก repo = needs_validation |
-| `webhook-compare` | เทียบลายเซ็นด้วย `==` | `signature == expected` | อ่านโค้ด · ผลจริงขึ้นกับสภาพเครือข่าย จึงมักเป็นระดับต่ำ | ภาษาหรือไลบรารีเทียบแบบเวลาคงที่ให้แล้ว |
-| `webhook-replay` | ข้อความเก่าที่ลายเซ็นถูกต้องส่งซ้ำแล้วได้ผลซ้ำ | ไม่ตรวจ timestamp ในลายเซ็น · ไม่จำ event id ที่ทำแล้ว | ส่งข้อความเดิม 2 ครั้งในห้อง แล้วดูว่าสถานะหรือของในคลังเปลี่ยน 2 ครั้งไหม | handler ตรวจสถานะปัจจุบันก่อนทำ (เช่น จ่ายแล้วไม่ทำซ้ำ) |
-| `webhook-trust-payload` | เชื่อยอดเงิน สถานะ หรือ id ร้านจาก payload โดยไม่ดึงซ้ำจาก API ผู้ให้บริการ หรือไม่เทียบกับคำสั่งซื้อ | `order.paid = body.status === 'successful'` โดยไม่ดูยอด | ส่ง payload ที่ลายเซ็นถูกแต่ยอดไม่ตรงคำสั่งซื้อ (ในห้องด้วย secret ปลอม) | โค้ดดึงสถานะจาก API ด้วย id แล้วเทียบยอดกับคำสั่งซื้อ |
-| `webhook-tenant` | webhook ของร้าน A ไปเปลี่ยนข้อมูลของร้าน B (ระบบหลายร้าน) | หา order ด้วย reference จาก payload โดยไม่ผูกกับ secret ของร้าน | ส่ง payload ที่ลงชื่อด้วย secret ร้าน A แต่อ้าง order ร้าน B | secret แยกต่อร้านและ order ถูกกรองด้วยร้านของ secret |
+| `webhook-signature` | No signature check · checked after parsing and re-serializing · checked but not rejected on mismatch | The handler reads the parsed `req.body` before checking · `express.json()` wraps the route before the raw body is saved · `if (!valid) log(...)` and then carries on | A test sends a body with a wrong signature. It must get 401 and cause no effect | The check happens at a proxy inside the repo (you can verify this in a config file). A proxy outside the repo = needs_validation |
+| `webhook-compare` | Compares the signature with `==` | `signature == expected` | Read the code. The real impact depends on network conditions, so it is usually low severity | The language or library already compares in constant time |
+| `webhook-replay` | An old message with a valid signature is resent and has its effect again | No timestamp check in the signature · does not remember event ids already handled | Send the same message twice in the lab. See whether the state or the stock changes twice | The handler checks the current state before acting (for example, an order already paid is not processed again) |
+| `webhook-trust-payload` | Trusts the amount, status or shop id from the payload without re-fetching from the provider's API, or without comparing against the order | `order.paid = body.status === 'successful'` with no look at the amount | Send a payload with a valid signature whose amount does not match the order (in the lab, with a fake secret) | The code fetches the status from the API by id and compares the amount with the order |
+| `webhook-tenant` | Shop A's webhook changes shop B's data (multi-shop systems) | Finds the order by a reference from the payload without binding it to the shop's secret | Send a payload signed with shop A's secret that names shop B's order | Secrets are separate per shop, and the order is filtered by the shop that owns the secret |
 
-## ส่ง webhook และ callback
+## Sending webhooks and callbacks
 
-| ประเภท (`class`) | ล่าอะไร | สัญญาณในโค้ด | พิสูจน์อย่างไร | มักแจ้งผิดเมื่อ |
+| Class (`class`) | What it hunts | Signal in code | How to prove it | Often misreported when |
 |---|---|---|---|---|
-| `webhook-ssrf` | ผู้ใช้ตั้ง URL ปลายทางเป็นที่อยู่ภายในได้ | `fetch(shop.webhookUrl)` โดยไม่ตรวจ IP ปลายทางหลัง resolve และหลัง redirect | ตั้ง URL เป็น `http://127.0.0.1:<port>` ในห้อง ดูว่าคำขอวิ่งไปไหม | ตรวจ IP หลัง resolve และปิด redirect แล้ว |
-| `callback-correlation` | callback หรือ reply ผูกกับคำขอผิดตัว เพราะ id เดาได้หรือไม่ผูกผู้ใช้ | correlation id เป็นเลขเรียง · ไม่เทียบผู้ใช้ตอนรับผล | ส่ง callback ด้วย id ของคำขออื่น | id สุ่มยาวและผูก session |
+| `webhook-ssrf` | A user can set the destination URL to an internal address | `fetch(shop.webhookUrl)` without checking the destination IP after resolve and after redirect | Set the URL to `http://127.0.0.1:<port>` in the lab. See whether the request goes through | The IP is checked after resolve and redirects are off |
+| `callback-correlation` | A callback or reply is tied to the wrong request because the id is guessable or not bound to the user | The correlation id is a sequential number · the user is not compared when the result comes back | Send a callback with the id of another request | The id is long and random and bound to the session |
 
-## คิว job และลำดับ
+## Queue, job and ordering
 
-| ประเภท (`class`) | ล่าอะไร | สัญญาณในโค้ด | พิสูจน์อย่างไร | มักแจ้งผิดเมื่อ |
+| Class (`class`) | What it hunts | Signal in code | How to prove it | Often misreported when |
 |---|---|---|---|---|
-| `duplicate-delivery` | ข้อความเดียวมา 2 ครั้งแล้วตัดของ ส่งอีเมล หรือเติมเครดิต 2 ครั้ง | ไม่มี unique key ของ event · ack ก่อนทำเสร็จ หรือทำเสร็จแต่ ack ล้ม | ส่งข้อความซ้ำในห้อง นับผล | ทุกการกระทำเป็น upsert ด้วย event id |
-| `out-of-order` | ข้อความเก่ามาทีหลังแล้วทับสถานะใหม่ (เช่น `pending` ทับ `paid`) | update สถานะโดยไม่เทียบลำดับหรือเวลา | ส่ง 2 ข้อความสลับลำดับในห้อง | state machine ไม่ยอมเดินถอยหลัง |
-| `partial-transition` | ทำงานไปครึ่งหนึ่งแล้วล้ม เหลือสถานะที่ใช้ประโยชน์ได้ (จ่ายแล้วแต่ไม่มีคำสั่งซื้อ · ตัดของแล้วแต่ไม่ได้เงิน) | หลายขั้นโดยไม่มี transaction หรือขั้นชดเชย | ทำให้ขั้นกลางล้มในห้อง แล้วดูสถานะ | ขั้นชดเชยมีและทดสอบแล้ว |
-| `queue-scope` | ผู้เช่าหรือบริการหนึ่ง subscribe หรือส่งเข้าหัวข้อของอีกตัวได้ | ชื่อ topic สร้างจาก input · ใช้ credential เดียวทุกบริการ | ดู ACL ที่อยู่ใน repo · ที่เหลือ needs_validation | broker แยกต่อผู้เช่า |
-| `dlq-disclosure` | dead-letter queue หรือ log ของข้อความเสียเก็บข้อมูลส่วนบุคคลหรือค่าลับ ให้คนที่สิทธิ์กว้างอ่าน | เก็บ payload ทั้งก้อนใน DLQ หรือ log error | ทำให้ข้อความล้มในห้องแล้วดูว่าเก็บอะไร | DLQ อยู่ในที่ที่สิทธิ์เท่าระบบหลัก |
-| `untrusted-producer` | ข้อความจากผู้ส่งที่สิทธิ์ต่ำ ถูกเชื่อเป็นคำสั่งควบคุม (เปลี่ยนสิทธิ์ ลบข้อมูล) | consumer ทำตามฟิลด์ `action` จากข้อความโดยไม่ตรวจผู้ส่ง | ส่งข้อความที่มี action แอดมินจาก producer ธรรมดาในห้อง | มีแต่บริการภายในที่ส่งเข้าคิวนี้ได้ (ยืนยันใน config) |
+| `duplicate-delivery` | One message arrives twice and stock is deducted, email is sent or credit is added twice | No unique key for the event · ack before the work is done, or the work is done but the ack fails | Send the message twice in the lab and count the effects | Every action is an upsert keyed by event id |
+| `out-of-order` | An old message arrives late and overwrites a newer state (for example `pending` over `paid`) | Updates the status without comparing order or time | Send 2 messages in swapped order in the lab | The state machine refuses to move backward |
+| `partial-transition` | The work stops halfway and leaves a state someone can exploit (paid but no order · stock deducted but no money) | Several steps with no transaction or compensating step | Make a middle step fail in the lab, then inspect the state | A compensating step exists and is tested |
+| `queue-scope` | One tenant or service can subscribe or publish to another's topic | The topic name is built from input · one credential for every service | Check the ACL that lives in the repo. The rest is needs_validation | The broker is separate per tenant |
+| `dlq-disclosure` | A dead-letter queue or the log of failed messages keeps personal data or secrets that a wide group can read | Stores the whole payload in the DLQ or in the error log | Make a message fail in the lab and see what is stored | The DLQ sits where the rights equal the main system's |
+| `untrusted-producer` | A message from a low-rights sender is trusted as a control command (change rights, delete data) | The consumer follows the `action` field from the message without checking the sender | Send a message with an admin action from an ordinary producer in the lab | Only internal services can send into this queue (confirm in config) |
 
-## RPC GraphQL WebSocket
+## RPC, GraphQL, WebSocket
 
-| ประเภท (`class`) | ล่าอะไร | สัญญาณในโค้ด | พิสูจน์อย่างไร | มักแจ้งผิดเมื่อ |
+| Class (`class`) | What it hunts | Signal in code | How to prove it | Often misreported when |
 |---|---|---|---|---|
-| `rpc-interceptor-gap` | interceptor ตรวจสิทธิ์ครอบบาง method หรือ path ไม่ครบ | allowlist ของ method ที่ "ไม่ต้องตรวจ" กว้างเกิน · stream ไม่ผ่าน interceptor | เรียก method ที่หลุดด้วยผู้ใช้ไม่มีสิทธิ์ในห้อง | method นั้นเป็นสาธารณะตามออกแบบ |
-| `graphql-field-authz` | ตรวจสิทธิ์ที่ query บนสุด แต่ field ที่ซ้อนเข้าไปถึงข้อมูลของคนอื่น | resolver ของ field ไม่ตรวจ · batch query ไม่จำกัด | query ซ้อนผ่าน relation ไปหา record ของคนอื่น | ทุก resolver ใช้ตัวตรวจกลาง |
-| `stream-item-authz` | ตรวจสิทธิ์ครั้งเดียวตอนเปิด stream หรือ WebSocket แล้วข้อความต่อมาไม่ตรวจ | subscribe ด้วย id ใดก็ได้หลังเชื่อมต่อ | เชื่อมต่อแล้ว subscribe ห้องของคนอื่น | ทุกข้อความตรวจสิทธิ์ต่อ resource |
+| `rpc-interceptor-gap` | The rights interceptor covers some methods or paths but not all | The allowlist of methods that "need no check" is too broad · streams do not pass through the interceptor | Call the missed method as a user without rights in the lab | That method is public by design |
+| `graphql-field-authz` | Rights are checked at the top-level query, but a nested field reaches someone else's data | A field resolver does not check · batch queries are unlimited | A nested query through a relation reaches another person's record | Every resolver uses a central checker |
+| `stream-item-authz` | Rights are checked once when the stream or WebSocket opens, and later messages are not checked | Subscribes to any id after connecting | Connect, then subscribe to someone else's room | Every message is checked for rights on its resource |
 
-## วิธีไล่ที่ใช้ได้ทั้งสาย
+## Method that works across the family
 
-- ต่อทางเข้า 1 ทาง ถาม 4 ข้อ: ใครส่งได้ · รู้ได้อย่างไรว่าเป็นตัวจริง · มาซ้ำแล้วเกิดอะไร · มาช้าหรือสลับลำดับแล้วเกิดอะไร
-- เทียบทางที่ทำงานเดียวกัน: webhook กับหน้า "ตรวจสถานะ" ที่ผู้ใช้กด · job ตามเวลาที่ดึงสถานะ · แอดมินที่กดยืนยันเอง ทุกทางต้องตรวจเท่ากัน
+- For each entry point, ask 4 questions: who can send · how do we know it is genuine · what happens when it arrives twice · what happens when it arrives late or out of order.
+- Compare the paths that do the same work: the webhook versus a "check status" page the user clicks · a scheduled job that pulls the status · an admin who confirms by hand. Every path must check equally.

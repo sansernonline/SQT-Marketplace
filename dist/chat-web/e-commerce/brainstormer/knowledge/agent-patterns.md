@@ -2,49 +2,49 @@
 
 Use when planning how agents run a task, like ReAct
 
-# agent-patterns — 6 รูปแบบการทำงานของทีม agent
+# agent-patterns — 6 working patterns for an agent team
 
-หัวหน้าทีมเลือกตอนวางแผน · ขั้นตอนและกับดักอยู่ใน [`pattern-details`](references/pattern-details.md)
+The team lead chooses at planning time · the steps and traps are in [`pattern-details`](references/pattern-details.md)
 
-| รูปแบบ | ทำอย่างไร | เวลา | ใช้เมื่อ | ไม่ต้องใช้เมื่อ |
+| Pattern | How it works | Time | Use when | Skip when |
 |---|---|---|---|---|
-| **Planning** | แผนที่ทุกข้อมี "เสร็จเมื่อ" → ทำทีละข้อ · แผนผิด → แก้แผนและจด | +1 ขั้นตอนต้น | งานเกิน 3 ขั้น · ผู้ใช้ไม่อยู่ดู | คำถามเดียว · แก้จุดเดียว |
-| **ReAct** | คิด → ทำ 1 อย่าง → อ่านผลจริง · พัง 2 รอบ → แตกขั้นย่อยหรือเปลี่ยนวิธี · ครบ 3 รอบ → `ติด` | 1 รอบต่อการกระทำ · เรียก tool ที่ไม่พึ่งกันในข้อความเดียวเพื่อลดรอบ | ทุกขั้นที่ลงมือจริง | — ใช้เสมอ |
-| **Reflection** | `reviewer` (หรือผู้ตรวจเฉพาะทาง) **ตัวใหม่** ระดับเท่าหรือสูงกว่าคนทำ ตรวจตามเกณฑ์ หลังขั้นสุดท้ายที่ลงมือ · หัวหน้ายืนยันก่อนสั่งแก้ | รอบต่อเนื่อง ขนานไม่ได้ → ตัวกินเวลาหลัก · รอบ 2 ขึ้นไปตรวจแค่ข้อเดิม + diff | คนอื่นจะใช้ · พลาดแล้วเสียหาย | ร่างที่ผู้ใช้แก้ต่อเอง |
-| **Multi-Agent** | 1 ชิ้นต่อ 1 agent ส่งต่อด้วยไฟล์ · ไม่เขียนไฟล์เดียวกัน | ชิ้นที่ไม่รอกัน ≈ ชิ้นที่นานสุด · ชิ้นที่รอกัน = บวกต่อกันเป็นสาย | หลายความถนัด · แยกชิ้นได้ | agent เดียวทำจบ |
-| **MoA** (Mixture-of-Agents) | 3 ตัว (เช่น `brainstormer`) โจทย์เดียวคนละมุม → agent ใหม่รวม · แรง 3–5 เท่า | ≈ 2 รอบ (3 ตัวพร้อมกัน + รวม) เมื่อส่งในข้อความเดียว | เลือกผิดแล้วแพง · ต้องการมุมที่ขัดกัน | คำตอบเดียวที่ตรวจได้ |
-| **Reranker** | รวบรวม 10–30 ชิ้น → ให้คะแนน → อ่านเต็ม 3–5 ชิ้นบนสุด | ให้คะแนนพร้อมกันได้ + อ่าน 1 รอบ | ของมากเกินอ่านหมด | ไม่เกิน 3 ชิ้น |
+| **Planning** | A plan where every item has a `เสร็จเมื่อ` (done when) line → do them one at a time · if the plan is wrong → fix the plan and note it | +1 step at the start | more than 3 steps · the user is not watching | a single question · a single-spot fix |
+| **ReAct** | think → do 1 thing → read the real result · broken 2 rounds → split into smaller steps or change method · 3 rounds → `ติด` | 1 round per action · call independent tools in one message to cut rounds | every step that really acts | — always use it |
+| **Reflection** | A **new** `reviewer` (or a specialist reviewer) at the same level as the doer or higher checks against the criteria after the last acting step · the lead confirms before ordering a fix | rounds run in sequence and cannot be parallel → the main time cost · round 2 onward checks only the earlier items + the diff | someone else will use it · a miss causes damage | a draft the user will edit themselves |
+| **Multi-Agent** | 1 piece per agent, hand off through files · never write the same file | pieces that do not wait on each other ≈ the longest piece · pieces that wait on each other add up in a chain | several skills needed · the work splits into pieces | one agent can finish it |
+| **MoA** (Mixture-of-Agents) | 3 agents (for example `brainstormer`) take the same problem from different angles → a new agent merges · 3–5 times the effort | ≈ 2 rounds (3 at once + merge) when sent in one message | a wrong choice is costly · you need conflicting angles | one answer that can be verified |
+| **Reranker** | collect 10–30 items → score them → read the top 3–5 in full | scoring can run in parallel + 1 round of reading | too much to read it all | no more than 3 items |
 
-**สูตรปกติ:** Planning → ReAct → Reflection ก่อนส่ง · งานใหญ่ + Multi-Agent · ทางสำคัญ + MoA · ข้อมูลเยอะ + Reranker · ชิ้นที่ทำพร้อมกันเกิน 8 หรืองานซ้ำทีละไฟล์ → workflow script ของ Claude Code (ผู้ใช้เป็นคนเริ่ม · [`parallel-split-and-merge`](../parallel-split-and-merge/SKILL.md) หัวข้อ dynamic workflow · คนละเรื่องกับแบบ Dynamic ในตารางล่าง)
+**Usual recipe:** Planning → ReAct → Reflection before sending · big job + Multi-Agent · an important path + MoA · lots of data + Reranker · more than 8 pieces at once, or repeated work file by file → a Claude Code workflow script (the user starts it · [`parallel-split-and-merge`](../parallel-split-and-merge/SKILL.md) section on dynamic workflow · not the same thing as the Dynamic style in the table below)
 
-**workflow 3 แบบ เลือกจากว่าใครกำหนดลำดับงานและกำหนดเมื่อไหร่** (คำเรียกตามคอร์สที่นิยมสอน · กลไกเต็มใน [`pattern-details`](references/pattern-details.md))
+**3 workflow styles, chosen by who sets the order of work and when** (names follow a popular course · full mechanics in [`pattern-details`](references/pattern-details.md))
 
-| แบบ | ลำดับงาน | ใช้เมื่อ | ของเราคือ |
+| Style | Order of work | Use when | Ours is |
 |---|---|---|---|
-| **Loop** | ตายตัว: ทำ → ตรวจ → แก้ซ้ำ | ชิ้นงานเดียวที่มีเกณฑ์ตรวจชัด | ReAct + Reflection · ตัวตรวจต้องเทียบกับของจริง (test · ไฟล์ · แหล่ง) และหยุดเมื่อข้อเดิมไม่ดีขึ้น 2 รอบ (หัวข้อ 3) |
-| **Graph** | วาดครั้งเดียวตอนเริ่ม (Directed Acyclic Graph (DAG) ของทั้งงาน): งานย่อยมีลำดับพึ่งกัน แยกทำแล้วรวม | งานแตกเป็นชิ้นที่ไม่พึ่งกัน รู้ทางตั้งแต่ต้น | Multi-Agent + `parallel-split-and-merge` · ตกลงรูปข้อมูลก่อนแยก · ข้อกำหนดขัดกันแยกเป็นชิ้นเก็บข้อขัดแย้ง (หัวข้อ 4) · ทุกชิ้นมีขนาด rank และเจ้าของไฟล์ · จำนวนลูกทีมคิดจากความกว้างของกราฟ ปล่อยชิ้น rank สูงก่อน (`superuser` → `references/team-roles.md` "แบ่งงาน") |
-| **Dynamic** | ปรับระหว่างทาง: วางแผน → ทำทีละชิ้น → ประเมินว่าแผนยังใช้ได้ไหม | ข้อเท็จจริงหรือข้อกำหนดเปลี่ยนกลางงาน | Planning แบบปรับแผน: แผนมีเลขรุ่น · ปรับเฉพาะเมื่อเข้าเหตุ 3 ข้อ · ไม่เกิน 3 ครั้ง (หัวข้อ 1) |
+| **Loop** | fixed: do → check → fix again | a single piece of work with a clear check criterion | ReAct + Reflection · the checker must compare against the real thing (test · file · source) and stop when the same items do not improve for 2 rounds (section 3) |
+| **Graph** | drawn once at the start (a Directed Acyclic Graph (DAG) of the whole job): sub-jobs depend on each other in order, split apart then merge | the job breaks into independent pieces and you know the route from the start | Multi-Agent + `parallel-split-and-merge` · agree the data shape before splitting · conflicting requirements go to a piece that holds the conflicts (section 4) · every piece has a size, a rank, and a file owner · the number of team members comes from the width of the graph, and high-rank pieces are released first (`superuser` → `references/team-roles.md` "แบ่งงาน", split the work) |
+| **Dynamic** | adjusts along the way: plan → do one piece at a time → judge whether the plan still holds | facts or requirements change mid-job | Planning with plan adjustment: the plan has a version number · adjust only for one of 3 causes · at most 3 times (section 1) |
 
-**หัวหน้าเลือกแบบเอง ไม่ถามผู้ใช้** — ผู้ใช้สั่งแค่ "แก้บั๊กนี้" หรือ "เพิ่มฟีเจอร์นี้" ก็พอ · ผู้ใช้ระบุแบบมาเองให้ใช้ตามนั้น · ถ้าไม่ระบุ ให้เลือกจากตารางนี้ แล้วเขียนแบบที่เลือกท้ายบรรทัด **เสร็จเมื่อ**
+**The lead picks the style, without asking the user.** The user needs to say only "fix this bug" or "add this feature." If the user names a style, follow it. If not, choose from this table and write the chosen style at the end of the **เสร็จเมื่อ** (done when) line.
 
-| คำขอ | แบบตั้งต้น | เปลี่ยนเมื่อ |
+| Request | Default style | Change when |
 |---|---|---|
-| แก้บั๊กที่ทำซ้ำได้ | Loop: เขียน test ที่ล้มก่อน → แก้ → รันจนผ่าน | ทำซ้ำไม่ได้ หรือสาเหตุอยู่หลายส่วน ให้เปลี่ยนเป็น Dynamic เพราะผลสืบแต่ละรอบเปลี่ยนแผน |
-| เพิ่มฟีเจอร์ที่ agent ตัวเดียวทำจบได้ แม้แตะหลายชั้น (เพิ่มช่องในฟอร์ม · เพิ่ม 1 endpoint) | Loop ต่อ 1 ข้อกำหนด (`spec-to-code-loop`) | — |
-| เพิ่มฟีเจอร์ที่แต่ละส่วนใหญ่พอเป็นงานของตัวเอง และไม่ใช้ไฟล์ร่วมกัน (ตารางใหม่ · ชุด API · หน้าตั้งค่า) | Graph: ตกลงรูปข้อมูลก่อน แล้วแยกทำ แล้วรวม · ข้างในแต่ละชิ้นเป็น Loop | ชิ้นต้องตัดสินใจย่อยให้ตรงกันมาก ให้ทำทีละชิ้นด้วย agent เดียว |
-| สั่งหลายงานในคำขอเดียว (แก้บั๊ก + เพิ่มฟีเจอร์) | Graph: งานละ 1 ชิ้น · ชิ้นที่แตะไฟล์เดียวกันให้ทำต่อกัน ไม่ทำพร้อมกัน | — |
-| สืบหาสาเหตุ · ย้ายระบบ · ค้นคว้ากว้าง · โจทย์ยังไม่ชัด | Dynamic | — |
-| ไม่เข้าแถวไหน | Loop เพราะเรียบง่ายสุด | — |
+| Fix a reproducible bug | Loop: write a failing test first → fix → run until it passes | it cannot be reproduced, or the cause spans several parts: switch to Dynamic, because each round of findings changes the plan |
+| Add a feature one agent can finish, even if it touches several layers (add a form field · add 1 endpoint) | Loop per requirement (`spec-to-code-loop`) | — |
+| Add a feature whose parts are each big enough to be their own job and share no files (a new table · a set of APIs · a settings page) | Graph: agree the data shape first, then split, then merge · each piece is a Loop inside | the pieces need many small decisions to match: do one piece at a time with one agent |
+| Several jobs in one request (fix a bug + add a feature) | Graph: 1 piece per job · pieces that touch the same file run one after another, not at once | — |
+| Hunting a cause · migrating a system · broad research · a vague problem | Dynamic | — |
+| Fits none | Loop, because it is the simplest | — |
 
-งานเล็ก (แก้จุดเดียว · เขียนไฟล์เดียว เช่น README) ไม่ต้องระบุแบบ · เปลี่ยนแบบกลางทางได้ แต่ต้องมีเหตุจากผลจริง และจด 1 แถวตาม `decision-log`
+A small job (a single-spot fix · writing one file such as a README) needs no style named · you may change style midway, but only for a reason found in real results, and note 1 row per `decision-log`
 
-ตารางนี้คือวิธีทำงานของทีม agent ของเราเอง · ถ้าลูกค้าจะสร้างระบบ agent ในผลิตภัณฑ์ (เลือก framework · checkpoint · คนอนุมัติ · eval) → `llm-engineering` ของ software-development (`references/agent-systems.md`) คู่กับ `mcp-server` และ `background-jobs` · ใช้ 3 แบบนี้ผ่านแชตโดยไม่เขียนโค้ด → [`chat-prompt-workflows`](../chat-prompt-workflows/SKILL.md)
+This table is how our own agent team works. If a customer will build an agent system into a product (choosing a framework · checkpoints · human approval · evals) → `llm-engineering` of software-development (`references/agent-systems.md`) together with `mcp-server` and `background-jobs`. To use these 3 styles through chat without writing code → [`chat-prompt-workflows`](../chat-prompt-workflows/SKILL.md)
 
-**ไม่เปิด agent teams เป็นค่าเริ่ม** — ใช้ subagent แทน เพราะ agent teams ยังเป็นของทดลองและปิดอยู่ · ใช้ token มากกว่ามาก (ราว 7 เท่าเมื่อ teammate อยู่ใน plan mode) · เปิดแล้ว subagent ที่ตั้งชื่อจะกลายเป็น teammate เอง · teammate แบบ in-process (ค่าเริ่ม) ส่ง subagent เบื้องหลังไม่ได้ · teammate คุยกันเอง ขัดกับหลักทุกอย่างผ่านหัวหน้าทีม · ยกเว้นผู้ใช้เปิดไว้แล้วและงานเป็น debug หลายสมมติฐานที่ต้องให้ถกล้มทฤษฎีกัน · ([Claude Code: agent teams](https://code.claude.com/docs/en/agent-teams) · ตรวจ 21 ต.ค. 2569)
+**Do not turn on agent teams by default** — use subagents instead, because agent teams are still experimental and off · they use far more tokens (about 7 times when a teammate is in plan mode) · once on, a named subagent becomes a teammate by itself · an in-process teammate (the default) cannot send background subagents · teammates talk among themselves, which breaks the principle that everything goes through the team lead · the exception is when the user has already turned them on and the job is debugging with several hypotheses that need debate to knock down theories · ([Claude Code: agent teams](https://code.claude.com/docs/en/agent-teams) · checked 21 Oct 2026 (B.E. 2569))
 
-**ข้อสรุปที่ต้องพิสูจน์ทีละข้อ** → บัญชี `PROVED · REFUTED · OPEN` + `scripts/ledger.mjs` (พิมพ์ขั้นถัดไปให้ · ต้องตรวจอย่างน้อย 2 รอบก่อนปิดข้อ) · รอลูกทีมนาน ๆ → `scripts/keep-waiting.mjs` · วิธีใช้ใน [`pattern-details`](references/pattern-details.md) หัวข้อ 7 · รอบแก้ที่ขยับคนตามรอบ → หัวข้อ 3 ข้อ 7
+**Conclusions that must be proved one by one** → a ledger of `PROVED · REFUTED · OPEN` + `scripts/ledger.mjs` (prints the next step · check at least 2 rounds before closing an item) · waiting long on team members → `scripts/keep-waiting.mjs` · how to use them is in [`pattern-details`](references/pattern-details.md) section 7 · fix rounds that move people by round → section 3 item 7
 
-**บอกในรายงาน** เฉพาะเมื่อมันเปลี่ยนการตัดสินใจ เช่น `Reranker (คัด 24 → 4 แหล่ง)`
+**Say in the report** only what changes a decision, for example `Reranker (คัด 24 → 4 แหล่ง)` (Reranker, narrowed 24 → 4 sources)
 
 
 ## reference: pattern-details.md

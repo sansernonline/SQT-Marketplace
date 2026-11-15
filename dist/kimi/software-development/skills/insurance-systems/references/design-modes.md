@@ -2,7 +2,7 @@
 
 Use when the user asks to design an insurance claims flow or underwriting model. Modes — claims-flow-design · underwriting-model-design.
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดในเอกสารที่ได้ เขียนตาม `human-writing` — command นี้บอกขั้นตอน ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write every line of wording in the resulting document per `human-writing`. This command gives the steps; human-writing gives the way to write so people understand.
 
 Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
 

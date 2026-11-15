@@ -1,51 +1,51 @@
-# สายเว็บ login และฝั่ง browser
+# Class family: web login and the browser side
 
-เปิดเมื่อระบบมีเว็บหรือ API ที่ผู้ใช้ login · ใช้ session cookie · JWT · OAuth หรือ LINE Login · มีหน้าเว็บที่รัน JavaScript · วางหัวข้อที่เลือกลง brief ลูกทีมทั้งก้อน
+Open this when the system has a web app or API where users log in · uses session cookies · JWT · OAuth or LINE Login · has web pages that run JavaScript. Paste the chosen sections into the sub-agent brief whole.
 
-## กติกาประจำสาย
+## Rules for this family
 
-- credential ทุกชนิด (cookie · JWT · API key · OAuth code) ต้องหาให้เจอว่าตรวจลายเซ็นที่ไหน และผูกกับอะไร (ผู้ออก · ผู้รับ · ผู้ใช้ · เวลา) · ตรวจลายเซ็นแต่ไม่ผูก = ยังข้ามได้
-- header ที่มาจากผู้ใช้ (`Host` · `X-Forwarded-*` · `Origin` · `Referer`) คือการตัดสินใจเรื่องความไว้ใจ ให้ตามไปว่าค่าไปลงที่ไหน
-- ไม่มี header · ไม่มี flag ของ cookie · ไม่มี MFA · ไม่มี rate limit เฉย ๆ ยังไม่ใช่ finding ต้องเห็นคำขอที่ไม่ควรผ่านแต่ผ่าน หรือผลที่ตกกับคนอื่น
-- ตัดสินที่ proxy · CDN · ผู้ให้บริการ identity ที่ไม่อยู่ใน repo → `needs_validation`
+- For every kind of credential (cookie · JWT · API key · OAuth code), find where the signature is checked and what it is bound to (issuer · audience · user · time). A signature that is checked but not bound can still be bypassed.
+- A header that comes from the user (`Host` · `X-Forwarded-*` · `Origin` · `Referer`) is a trust decision. Follow where the value ends up.
+- A missing header · a missing cookie flag · no MFA · no rate limit is not a finding by itself. You must see a request that should be blocked get through, or an effect that lands on someone else.
+- A decision made at a proxy · CDN · identity provider that is not in the repo → `needs_validation`.
 
-## login session และ token
+## Login, session and token
 
-| ประเภท (`class`) | ล่าอะไร | สัญญาณในโค้ด | พิสูจน์อย่างไร | มักแจ้งผิดเมื่อ |
+| Class (`class`) | What it hunts | Signal in code | How to prove it | Often misreported when |
 |---|---|---|---|---|
-| `jwt-verify` | token ที่ไม่ได้ตรวจลายเซ็น หรือรับ `alg: none` · ไม่ตรวจ `aud` `iss` `exp` | `jwt.decode(` แทน `verify` · `algorithms` ไม่ได้ล็อก · ตรวจ `exp` เอง | test ส่ง token ที่แก้ payload หรือหมดอายุ ต้องได้ 401 | ตัว verify อยู่ใน middleware กลางที่ครอบ route แล้ว |
-| `session-fixation` | session id เดิมใช้ต่อหลัง login · logout แล้ว token ยังใช้ได้ | ไม่มี `regenerate()` หลัง login · logout แค่ลบ cookie ฝั่ง client | login แล้วเทียบ session id ก่อนและหลัง · ใช้ token หลัง logout | token อายุสั้นมากและระบบประกาศว่ายอมรับ |
-| `csrf` | คำขอที่เปลี่ยนข้อมูลผ่าน cookie โดยไม่มี token หรือไม่ตรวจ Origin | route `POST` ที่ไม่มี csrf middleware · `SameSite=None` | ส่ง POST จากอีก origin พร้อม cookie ในห้อง ต้องได้ 403 | ระบบใช้ header `Authorization` อย่างเดียว ไม่ใช้ cookie |
-| `cookie-scope` | cookie ที่เก็บ session ส่งข้าม subdomain หรือผ่าน HTTP · อ่านได้จาก JavaScript | `domain=.example.com` · ไม่มี `Secure` `HttpOnly` | ดูว่า cookie นั้นเก็บของลับไหม และ JavaScript ต้องอ่านจริงหรือเปล่า | cookie เก็บแค่ค่าภาษาหรือธีม |
-| `oauth-binding` | callback ไม่ตรวจ `state` · `redirect_uri` เทียบแบบขึ้นต้นด้วย · ไม่ใช้ PKCE ในแอปที่ไม่มีความลับ | เทียบ `startsWith` · ไม่มี `state` ใน session | test callback ด้วย state ผิด · redirect_uri ที่ต่อท้าย | ผู้ให้บริการบังคับ redirect_uri ตรงตัวอยู่แล้ว (ตรวจที่ console = needs_validation) |
-| `password-reset` | token รีเซ็ตเดาได้ ใช้ซ้ำได้ ไม่ผูกบัญชี · ลิงก์ใช้ `Host` จากคำขอ | token จาก `Math.random` หรือ timestamp · URL สร้างจาก `req.headers.host` | ขอรีเซ็ตบัญชี A แล้วใช้ token กับ B · ส่ง Host ปลอมแล้วดูลิงก์ในอีเมลปลอม | token ยาวสุ่มจาก CSPRNG และผูกกับ user id แล้ว |
-| `mfa-bypass` | ทางที่ข้ามขั้น MFA ได้ (API รุ่นเก่า · login ด้วย token จำเครื่อง) · ปิด MFA โดยไม่ยืนยันซ้ำ | flag `mfaPassed` ตั้งก่อนตรวจรหัส · route ที่ไม่ผ่านขั้น MFA | login แล้วเรียก route ที่ต้อง MFA โดยไม่ทำขั้นที่ 2 | route นั้นไม่ได้อยู่ในขอบเขตที่ระบบสัญญาว่าต้อง MFA |
-| `account-linking` | เชื่อมบัญชี LINE หรือ Google เข้ากับบัญชีเดิมด้วยอีเมลที่ยังไม่ยืนยัน | หา user ด้วย email จาก provider โดยไม่ดู `email_verified` | สร้างบัญชีปลอมที่อีเมลตรงกันแล้วดูว่าเข้าบัญชีเดิมได้ไหม | provider ยืนยันอีเมลเสมอและโค้ดตรวจ flag แล้ว |
-| `api-key-scope` | key ของร้าน A ใช้กับข้อมูลร้าน B ได้ · key อยู่ใน URL หรือ log | ตรวจแค่ว่า key มีอยู่ ไม่ดูว่าเป็นของใคร | test key ของ tenant หนึ่งกับ id ของอีก tenant | key เป็นของระบบภายในตัวเดียว ไม่มีหลายเจ้าของ |
+| `jwt-verify` | A token whose signature is not checked, or that accepts `alg: none` · does not check `aud` `iss` `exp` | `jwt.decode(` instead of `verify` · `algorithms` not pinned · checks `exp` by hand | A test sends a token with an edited payload or an expired one. It must get 401 | The verify step sits in a central middleware that already wraps the route |
+| `session-fixation` | The same session id is kept after login · after logout the token still works | No `regenerate()` after login · logout only deletes the cookie on the client | Log in and compare the session id before and after · use the token after logout | The token is very short-lived and the system states it accepts that |
+| `csrf` | A request that changes data through a cookie with no token and no Origin check | A `POST` route with no csrf middleware · `SameSite=None` | Send a POST from another origin with the cookie in the lab. It must get 403 | The system uses the `Authorization` header only, no cookies |
+| `cookie-scope` | A cookie holding the session is sent across subdomains or over HTTP · readable from JavaScript | `domain=.example.com` · no `Secure` or `HttpOnly` | Check whether that cookie holds a secret and whether JavaScript really needs to read it | The cookie only holds a language or theme value |
+| `oauth-binding` | The callback does not check `state` · `redirect_uri` is compared by prefix · no PKCE in an app that cannot keep a secret | Compares with `startsWith` · no `state` in the session | Test the callback with a wrong state and a redirect_uri with a suffix appended | The provider already enforces an exact redirect_uri (checking at its console = needs_validation) |
+| `password-reset` | The reset token is guessable, reusable, or not bound to the account · the link uses the `Host` from the request | A token from `Math.random` or a timestamp · the URL built from `req.headers.host` | Request a reset for account A and use the token on B · send a fake Host and look at the link in the fake email | The token is long, random from a CSPRNG and already bound to the user id |
+| `mfa-bypass` | A path that skips the MFA step (an old API version · login with a remember-this-device token) · MFA is turned off without re-confirmation | An `mfaPassed` flag set before the code is checked · a route that does not go through the MFA step | Log in and call an MFA-protected route without doing step 2 | That route is outside the scope the system promised to protect with MFA |
+| `account-linking` | Links a LINE or Google account to an existing account by an unverified email | Finds the user by the provider's email without looking at `email_verified` | Create a fake account with a matching email and see whether it reaches the existing account | The provider always verifies email and the code checks the flag |
+| `api-key-scope` | Shop A's key works on shop B's data · the key sits in a URL or log | Checks only that the key exists, not whose it is | Test one tenant's key against another tenant's id | The key belongs to a single internal system with no multiple owners |
 
-## framing cache และ header
+## Framing, cache and headers
 
-| ประเภท (`class`) | ล่าอะไร | สัญญาณในโค้ด | พิสูจน์อย่างไร | มักแจ้งผิดเมื่อ |
+| Class (`class`) | What it hunts | Signal in code | How to prove it | Often misreported when |
 |---|---|---|---|---|
-| `host-header` | ลิงก์ในอีเมล redirect หรือ cache key สร้างจาก `Host` ที่ผู้ใช้ส่ง | `req.headers.host` · `request.host` ในการสร้าง URL | test ส่ง Host ปลอม ดูลิงก์ที่ได้ | framework ตั้ง allowed hosts แล้ว (`ALLOWED_HOSTS` · `AllowedHosts`) |
-| `cache-deception` | หน้าส่วนตัวถูก cache แล้วคนอื่นเปิดได้ · cache key ไม่รวมผู้ใช้ | `Cache-Control: public` บน route ที่ต้อง login · cache ใน memory ใช้ key แค่ path | 2 บัญชีปลอมเรียก route เดียวกันผ่าน cache ในห้อง | cache อยู่ที่ CDN นอก repo → needs_validation |
-| `response-splitting` | ค่าผู้ใช้ไปลง header โดยไม่ตัดขึ้นบรรทัดใหม่ | `setHeader(..., input)` · `Content-Disposition` จากชื่อไฟล์ | test ส่ง `%0d%0a` ในค่า | framework รุ่นใหม่ปฏิเสธ CRLF ใน header เองแล้ว |
-| `request-smuggling` | proxy กับแอปอ่านขอบเขตคำขอต่างกัน | parser HTTP เขียนเอง · ใช้ทั้ง `Content-Length` และ `Transfer-Encoding` | ต้องมีทั้ง proxy และแอปในห้อง ส่วนใหญ่จึงเป็น needs_validation | ไม่มี parser ของตัวเอง ใช้ server มาตรฐานอย่างเดียว |
+| `host-header` | A link in an email, a redirect or a cache key is built from the `Host` the user sent | `req.headers.host` · `request.host` when building a URL | A test sends a fake Host. Look at the resulting link | The framework sets allowed hosts (`ALLOWED_HOSTS` · `AllowedHosts`) |
+| `cache-deception` | A private page is cached and others can open it · the cache key leaves out the user | `Cache-Control: public` on a route that needs login · an in-memory cache keyed by path only | Two fake accounts call the same route through the cache in the lab | The cache is at a CDN outside the repo → needs_validation |
+| `response-splitting` | A user value goes into a header without stripping newlines | `setHeader(..., input)` · `Content-Disposition` built from a file name | A test sends `%0d%0a` in the value | Newer frameworks already reject CRLF in headers |
+| `request-smuggling` | The proxy and the app read request boundaries differently | A hand-written HTTP parser · uses both `Content-Length` and `Transfer-Encoding` | Needs both the proxy and the app in the lab, so it is mostly needs_validation | No parser of its own, only a standard server |
 
-## ฝั่ง browser
+## Browser side
 
-| ประเภท (`class`) | ล่าอะไร | สัญญาณในโค้ด | พิสูจน์อย่างไร | มักแจ้งผิดเมื่อ |
+| Class (`class`) | What it hunts | Signal in code | How to prove it | Often misreported when |
 |---|---|---|---|---|
-| `xss-dom` | ค่าจาก URL storage หรือ API ลง DOM เป็น HTML | `innerHTML` · `dangerouslySetInnerHTML` · `v-html` · `[innerHTML]` · `bypassSecurityTrust*` | render ในห้องด้วย `<img src=x onerror=...>` แล้วดูว่ารัน | ค่าผ่าน sanitizer (DOMPurify) ก่อนลง หรือมาจากค่าคงที่ |
-| `postmessage-origin` | รับ `message` โดยไม่ตรวจ `event.origin` แล้วทำงานที่มีผล | `addEventListener('message'` ที่ไม่มี `origin ===` | test ส่ง message จาก origin อื่นใน browser ในห้อง | handler แค่ log หรือไม่มีผลต่อสถานะ |
-| `cors-credentials` | สะท้อน Origin กลับพร้อม `Allow-Credentials: true` | `origin: true` · `callback(null, true)` สำหรับทุก origin | test ส่ง Origin ปลอม ดู header ที่ตอบ | response ไม่มีข้อมูลส่วนตัว หรือไม่ใช้ cookie |
-| `websocket-origin` | WebSocket ใช้ cookie แต่ไม่ตรวจ Origin ตอน handshake | ไม่มีการตรวจ origin ใน `upgrade` | เปิด WebSocket จากอีก origin พร้อม cookie | ใช้ token ใน message แรกแทน cookie |
-| `storage-token` | token ที่อายุยาวเก็บใน `localStorage` คู่กับมี XSS | `localStorage.setItem('token'` | ต้องมี XSS ที่ยืนยันแล้วเป็นข้อต่อ จึงเป็นโซ่ | ไม่มี XSS ที่ยืนยันได้ (เป็นแค่ hardening) |
-| `clickjacking` | หน้าที่มีปุ่มเปลี่ยนเงินหรือสิทธิ์ ใส่ใน iframe ของคนอื่นได้ | ไม่มี `frame-ancestors` หรือ `X-Frame-Options` บนหน้านั้น | เปิดหน้าใน iframe จากอีก origin ในห้อง | หน้าไม่มีการกระทำที่มีผล |
-| `open-redirect` | redirect ไปที่ใดก็ได้จากพารามิเตอร์ | `res.redirect(req.query.next)` | test `next=https://evil.example` | ปลายทางถูกเทียบกับ allowlist หรือบังคับเป็น path ภายใน |
+| `xss-dom` | A value from the URL, storage or an API goes into the DOM as HTML | `innerHTML` · `dangerouslySetInnerHTML` · `v-html` · `[innerHTML]` · `bypassSecurityTrust*` | Render `<img src=x onerror=...>` in the lab and see whether it runs | The value goes through a sanitizer (DOMPurify) first, or comes from a constant |
+| `postmessage-origin` | Receives `message` without checking `event.origin`, then does something with effect | `addEventListener('message'` with no `origin ===` | A test sends a message from another origin in the lab browser | The handler only logs, or has no effect on state |
+| `cors-credentials` | Reflects the Origin back with `Allow-Credentials: true` | `origin: true` · `callback(null, true)` for every origin | A test sends a fake Origin. Look at the response headers | The response holds no private data, or no cookies are used |
+| `websocket-origin` | A WebSocket uses a cookie but does not check Origin at the handshake | No origin check in `upgrade` | Open a WebSocket from another origin with the cookie | A token in the first message is used instead of a cookie |
+| `storage-token` | A long-lived token in `localStorage` paired with an XSS | `localStorage.setItem('token'` | A confirmed XSS must be the other link, which makes it a chain | There is no confirmable XSS (it is only hardening) |
+| `clickjacking` | A page with a button that changes money or rights can be placed in someone else's iframe | No `frame-ancestors` or `X-Frame-Options` on that page | Open the page in an iframe from another origin in the lab | The page has no action with effect |
+| `open-redirect` | Redirects to any destination from a parameter | `res.redirect(req.query.next)` | Test `next=https://evil.example` | The destination is checked against an allowlist or forced to be an internal path |
 
-## วิธีไล่ที่ใช้ได้ทั้งสาย
+## Method that works across the family
 
-- ไล่ credential ทุกตัวตามวงจร: ออก → เก็บ → ส่ง → ใช้ → ต่ออายุ → เพิกถอน แล้วเทียบทางปกติกับทาง error retry และรุ่นเก่า
-- นับทุกประตูที่ไปถึงตัวตนเดียวกัน และทุกทางที่ไปถึงงานสำคัญเดียวกัน · ความปลอดภัยจริงเท่ากับทางที่อ่อนที่สุด ไม่ใช่ทางที่หน้าเว็บใช้
-- กู้บัญชีและเชื่อมบัญชี: วาดว่าบัญชีก่อนและหลังเชื่อมกับอะไร ทุกเส้นต้องมีหลักฐานว่าคนที่ทำเป็นเจ้าของจริง
+- Trace every credential through its life cycle: issue → store → send → use → renew → revoke. Then compare the normal path with the error, retry and old-version paths.
+- Count every door that reaches the same identity and every path that reaches the same important job. Real security equals the weakest path, not the path the web page uses.
+- Account recovery and account linking: map what the account is linked to before and after. Every edge needs evidence that the person acting really owns the account.

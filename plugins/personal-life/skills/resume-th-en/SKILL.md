@@ -89,7 +89,7 @@ English verbs: Led · Built · Cut · Grew · Launched · Automated · Negotiate
 
 Fill-in templates (English, Thai, cover email) → [references/templates.md](references/templates.md)
 
-ข้อความภาษาไทย (CV, cover email) → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ สมัครงาน · ไม่ใช้ขีดยาว (—) ในข้อความที่จะส่ง ใช้เว้นวรรค "โดย" หรือวงเล็บแทน
+Thai text (CV, cover email) → `human-writing` `references/thai-grammar.md` section 4, the job-application register · no long dash (—) in text that will be sent; use a space, "โดย" or brackets instead
 
 ## Not an AI look
 

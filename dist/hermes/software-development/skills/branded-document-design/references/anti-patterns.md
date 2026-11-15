@@ -1,14 +1,14 @@
-# Anti-patterns — เหตุผลและสิ่งที่ใช้แทน
+# Anti-patterns — reasons and what to use instead
 
-หัวข้อสั้นอยู่ใน `SKILL.md`
+The short headings are in `SKILL.md`.
 
-- **ใช้ Heading style ที่มากับ Word** — จะทับสีที่ตั้งไว้ ให้ใช้ `h1()/h2()/h3()`
-  ซึ่งตั้ง `outlineLvl` เอง สารบัญ (TOC) จึงยังเห็นหัวข้อ
-- **เส้นตารางดำหนาแบบค่าเริ่มต้น** — เอกสารดูเก่าทันที ใช้เส้นสี `line` หนา 0.5pt ระหว่างแถว (ใต้แถวหัวคือเส้นแบรนด์ 1.5pt)
-- **ตัวอักษรสีดำสนิท** — ให้ใช้ `text_body` ซึ่งเป็นเทาเข้ม เนื้อความจะนุ่มขึ้นมาก
-- **หัวตารางตัวหนาแต่ไม่มีพื้นสี** — ตารางข้ามหน้าแล้วคนอ่านไม่รู้ว่าเริ่มตรงไหน
-- **ปล่อยความกว้างคอลัมน์ให้ Word คิดเอง** — ต้อง `fixed_widths()` เสมอ
-  ไม่งั้นคอลัมน์รหัสจะกว้างเท่าคอลัมน์รายละเอียด
-- **อีโมจิเยอะเกิน** — 1 ตัวต่อ callout พอ ไม่ใส่ในหัวข้อทุกอัน
-- **ส่งไฟล์โดยไม่เคย render ดู** — ดูข้อ 6
-- **สร้าง .docx โดยไม่เก็บ markdown ต้นฉบับ** — รอบหน้าแก้ไม่ได้
+- **Using Word's built-in Heading styles** — they override the colors you set. Use `h1()/h2()/h3()`,
+  which set `outlineLvl` themselves, so the table of contents (TOC) still shows the headings.
+- **Thick black default table borders** — the document looks dated at once. Use lines in the `line` color at 0.5pt between rows (under the header row is the 1.5pt brand line).
+- **Pure black text** — use `text_body`, a dark gray. The body text becomes much softer.
+- **Bold table headers with no fill color** — when a table spans pages, readers cannot tell where it starts.
+- **Letting Word work out column widths** — always call `fixed_widths()`.
+  Otherwise the code column ends up as wide as the detail column.
+- **Too many emoji** — 1 per callout is enough. Do not put one in every heading.
+- **Sending the file without ever rendering it** — see item 6.
+- **Creating the .docx without keeping the source markdown** — you cannot edit it next time.

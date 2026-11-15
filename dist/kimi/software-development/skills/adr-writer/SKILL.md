@@ -5,7 +5,7 @@ description: Use when recording why an architecture choice was made
 
 # Architecture Decision Record (ADR) Writer
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write every line of wording following `human-writing`. This skill gives the format and structure. `human-writing` says how to write so readers understand.
 
 ## When to use this skill
 
@@ -14,13 +14,13 @@ description: Use when recording why an architecture choice was made
 - Deprecating a technology or pattern
 - Documenting "why" for future team members
 
-## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+## 0 · Find the existing format first (every time)
 
-ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+Before using the structure or template in this file, check whether the user, client or project already has its own format:
 
-- **ที่ดู:** ADR (Architecture Decision Record) ที่มีอยู่: `docs/adr/` · `docs/decisions/` · `doc/architecture/decisions/` · `adr/` · ไฟล์ `.adr-dir` → ดูรูปแบบ (Nygard · MADR · Y-statement) ชื่อไฟล์ และเลขล่าสุด
-- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
-- **ยังต้องมีทุกแบบ:** ต่อเลขจากไฟล์ล่าสุด · ใช้ชื่อสถานะเดิมของทีม
+- **Where to look:** existing ADRs (Architecture Decision Records): `docs/adr/` · `docs/decisions/` · `doc/architecture/decisions/` · `adr/` · the `.adr-dir` file → check the format (Nygard · MADR · Y-statement), the file naming and the latest number.
+- **Result:** if found, use that format (headings, order, field names, running number) and say in the reply which file it came from. If not found, use the template in this file as the fallback and say that no existing format was found.
+- **Always, whichever format:** continue the number from the latest file. Use the team's existing status names.
 
 ## ADR Numbering
 

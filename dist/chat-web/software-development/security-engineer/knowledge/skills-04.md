@@ -2,72 +2,72 @@
 
 Use when settings differ by environment or secrets need hiding
 
-# Config และ Secret
+# Config and secrets
 
-> **กฎ 2 ข้อ:**
-> 1. โค้ดชุดเดียวกันต้องรันได้ทุก environment ความต่างอยู่ที่ config เท่านั้น
-> 2. secret ต้องไม่อยู่ใน git ไม่อยู่ใน log และไม่อยู่ในไฟล์ที่ส่งไปให้เบราว์เซอร์
+> **2 rules:**
+> 1. The same code must run in every environment. The only difference is config.
+> 2. A secret must not be in git, not in logs, and not in any file sent to the browser.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เริ่มโปรเจกต์ หรือเพิ่ม environment ใหม่
-- ต้องเก็บ connection string, API key, ใบรับรอง, กุญแจสำหรับเซ็น
-- เจอค่าคงที่ฝังอยู่ในโค้ด (hardcode) แล้วต้องย้ายออก
-- secret หลุดเข้า git หรือสงสัยว่าหลุด ให้ไปข้อ 8 ทันที
+- Starting a project, or adding a new environment.
+- You need to store a connection string, API key, certificate, or signing key.
+- You find a hardcoded value in code and must move it out.
+- A secret leaked into git, or you suspect it did: go to step 8 at once.
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill instead, or together
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| เก็บ secret ใน pipeline · ด่านอนุมัติ | `cicd-and-release` | แทน |
-| ค่าลับใน Jenkinsfile (`withCredentials` · single quote) | `jenkins-pipeline` | คู่ |
-| Secret ของ Kubernetes ไม่อยู่ใน values.yaml (External Secrets · SealedSecret) | `kubernetes-helm` | คู่ |
-| ออกแบบ login, token, สิทธิ์ผู้ใช้ | `auth-implementation-patterns` | แทน |
-| กันไม่ให้ค่าอ่อนไหวโผล่ใน log | `logging-standards` | แทน |
-| connection string ของฐานข้อมูล | `database-design` | คู่ |
-| บันทึกเหตุการณ์หลัง secret หลุด | `postmortem-template` | คู่ |
-| ขั้นตอนตอนเกิดเหตุ | `incident-runbook-template` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| Storing secrets in a pipeline · approval gates | `cicd-and-release` | instead |
+| Secrets in a Jenkinsfile (`withCredentials` · single quote) | `jenkins-pipeline` | together |
+| Kubernetes secrets kept out of values.yaml (External Secrets · SealedSecret) | `kubernetes-helm` | together |
+| Designing login, tokens, user permissions | `auth-implementation-patterns` | instead |
+| Keeping sensitive values out of logs | `logging-standards` | instead |
+| Database connection strings | `database-design` | together |
+| Recording the incident after a secret leak | `postmortem-template` | together |
+| Steps during an incident | `incident-runbook-template` | together |
+| Abbreviations in work people read | `spell-out-abbreviations` | together |
 
-**วิธีทำจริงในแต่ละภาษาและเฟรมเวิร์ก** อยู่ใน `references/per-stack.md`
+**How to do it in each language and framework** is in `references/per-stack.md`.
 
 ---
 
-## 1 · แยก config กับ secret ให้ออกก่อน
+## 1 · Tell config and secret apart first
 
 | | config | secret |
 |---|---|---|
-| ตัวอย่าง | ที่อยู่ API, ระดับ log, จำนวนต่อหน้า, โซนเวลา, feature flag | รหัสผ่านฐานข้อมูล, API key, กุญแจเซ็น token, ใบรับรอง |
-| อยู่ใน git ได้ | ✓ ได้ | ✗ ไม่ได้เด็ดขาด |
-| ใครเห็นได้ | ทั้งทีม | เฉพาะที่จำเป็น |
-| หลุดแล้วเป็นไร | ไม่เป็นไร | ต้องเพิกถอนและเปลี่ยนทันที |
-| เปลี่ยนบ่อย | ตามงาน | ตามรอบหมุนเวียน |
+| Examples | API address, log level, page size, time zone, feature flag | Database password, API key, token signing key, certificate |
+| Allowed in git | ✓ yes | ✗ never |
+| Who can see it | The whole team | Only those who need it |
+| If it leaks | No harm | Must be revoked and replaced at once |
+| Changes how often | With the work | On a rotation schedule |
 
-> **ถ้าตัดสินใจไม่ได้ว่าเป็นแบบไหน ให้ถือว่าเป็น secret** เพราะระวังเกินไปเสียแค่ความรำคาญเล็กน้อย
-> แต่ถ้าเดาผิด กุญแจจะอยู่ในประวัติ git ตลอดไป
-
----
-
-## 2 · ลำดับความสำคัญ — ค่าหลังทับค่าก่อน
-
-```
-1. ค่าเริ่มต้นในโค้ด        (ปลอดภัย ใช้ได้จริงสำหรับ dev)
-2. ไฟล์ config ตาม environment  (appsettings.Production.json, config/production.yaml)
-3. ตัวแปรสภาพแวดล้อม        (environment variable)
-4. secret store              (Key Vault, Secrets Manager, Kubernetes secret)
-5. อาร์กิวเมนต์ตอนสั่งรัน     (ใช้ตอนไล่ปัญหาเท่านั้น)
-```
-
-**ค่าเริ่มต้นต้องปลอดภัย** ถ้าลืมตั้งค่า ระบบต้องทำงานแบบเข้มงวดที่สุด
-เช่น `DEBUG=false` · `ALLOWED_ORIGINS=` ว่าง · เปิด Transport Layer Security (TLS) ไม่ใช่ตรงกันข้าม
+> **If you cannot decide which one it is, treat it as a secret.** Being too careful costs only a small annoyance.
+> But if you guess wrong, the key stays in git history forever.
 
 ---
 
-## 3 · ตรวจตอนบูต — ขาดค่าไหนให้ตายทันที
+## 2 · Order of priority: later values override earlier ones
 
-> **สำคัญ:** ข้อนี้คุ้มที่สุดในหน้านี้
-> ระบบที่บูตขึ้นมาได้ทั้งที่ config ผิด จะไปพังตอนตี 2 ในฟังก์ชันที่นาน ๆ ใช้ที
-> ระบบที่ **ไม่ยอมบูต** เมื่อ config ผิด ทำให้รู้ตั้งแต่ตอน deploy ซึ่งยัง rollback ได้
+```
+1. Defaults in code             (safe, really usable for dev)
+2. Config file per environment  (appsettings.Production.json, config/production.yaml)
+3. Environment variables
+4. Secret store                 (Key Vault, Secrets Manager, Kubernetes secret)
+5. Arguments at launch          (for troubleshooting only)
+```
+
+**Defaults must be safe.** If someone forgets to set a value, the system must run in its strictest mode.
+For example `DEBUG=false` · `ALLOWED_ORIGINS=` empty · Transport Layer Security (TLS) on, not the opposite.
+
+---
+
+## 3 · Check at boot: if any value is missing, die at once
+
+> **Important:** this step is worth the most on this page.
+> A system that boots with wrong config will break at 2 a.m. in a function that is rarely used.
+> A system that **refuses to boot** on wrong config tells you at deploy time, when you can still roll back.
 
 ```ts
 // Node — zod
@@ -79,44 +79,44 @@ const Env = z.object({
   LOG_LEVEL:     z.enum(['debug','info','warn','error']).default('info'),
 });
 
-export const env = Env.parse(process.env);   // ผิด = process ตายพร้อมบอกว่าตัวไหนผิด
+export const env = Env.parse(process.env);   // invalid = the process dies and says which value is wrong
 ```
 
-**สิ่งที่ต้องตรวจ:** มีค่าครบ · ชนิดถูก · อยู่ในช่วงที่ยอมรับ ·
-กุญแจยาวพอ · ค่าที่ห้ามใช้บน production (`JWT_SECRET=dev-secret` ต้องไม่ผ่าน)
+**What to check:** every value is present · types are right · values are in the accepted range ·
+keys are long enough · values banned on production (`JWT_SECRET=dev-secret` must fail).
 
-**พิมพ์สรุป config ตอนบูต**: ชื่อค่า และค่าที่ไม่ใช่ secret
-ส่วน secret พิมพ์แค่ "มีค่าแล้ว" หรือ 4 ตัวท้าย ไม่พิมพ์ค่าเต็ม
+**Print a config summary at boot:** the value names, and the values that are not secrets.
+For a secret, print only "set" or the last 4 characters, never the full value.
 
 ---
 
-## 4 · ตั้งชื่อตัวแปรสภาพแวดล้อม
+## 4 · Naming environment variables
 
 ```
-<ระบบ>_<กลุ่ม>_<ชื่อ>
+<system>_<group>_<name>
 
 APP_DB_HOST          APP_DB_PASSWORD
 APP_REDIS_URL        APP_SMTP_PASSWORD
 APP_FEATURE_NEW_CHECKOUT
 ```
 
-| กฎ | เหตุผล |
+| Rule | Reason |
 |---|---|
-| ตัวพิมพ์ใหญ่ ขีดล่าง | ข้อตกลงของทุกระบบปฏิบัติการ |
-| มีคำนำหน้าของระบบ | กัน `PATH`, `HOME`, `USER` ของระบบชนกัน |
-| ชื่อเดียวกันทุก environment | ค่าต่างได้ แต่ชื่อห้ามต่าง ไม่งั้นย้าย environment ทีไรต้องแก้โค้ด |
-| ใส่หน่วยในชื่อ | `APP_TIMEOUT_SECONDS` ไม่ใช่ `APP_TIMEOUT` |
-| อย่าใส่ชื่อ environment ในชื่อตัวแปร | ✗ `APP_PROD_DB_HOST` |
+| Uppercase with underscores | The convention on every operating system |
+| Start with a system prefix | Avoids clashing with the system's `PATH`, `HOME`, `USER` |
+| Same name in every environment | Values may differ, but names must not, or every move between environments means editing code |
+| Put the unit in the name | `APP_TIMEOUT_SECONDS`, not `APP_TIMEOUT` |
+| Do not put the environment name in the variable name | ✗ `APP_PROD_DB_HOST` |
 
 ---
 
-## 5 · `.env` และ `.env.example`
+## 5 · `.env` and `.env.example`
 
-| ไฟล์ | อยู่ใน git | หน้าที่ |
+| File | In git | Role |
 |---|:--:|---|
-| `.env.example` | ✓ | รายชื่อค่าที่ต้องมี **ทั้งหมด** พร้อมคำอธิบาย และค่าตัวอย่างที่ไม่ใช่ของจริง |
-| `.env` | ✗ | ค่าจริงบนเครื่องนักพัฒนาแต่ละคน |
-| `.env.production` | ✗ | **ไม่ควรมีไฟล์นี้เลย** เพราะ production ใช้ secret store |
+| `.env.example` | ✓ | The list of **all** required values, with explanations and example values that are not real |
+| `.env` | ✗ | Real values on each developer's machine |
+| `.env.production` | ✗ | **This file should not exist at all**, because production uses a secret store |
 
 ```bash
 # .gitignore
@@ -127,110 +127,110 @@ APP_FEATURE_NEW_CHECKOUT
 
 ```bash
 # .env.example
-APP_DB_HOST=localhost              # ที่อยู่ฐานข้อมูล
-APP_DB_PASSWORD=change-me          # สำคัญ: ค่าจริงอยู่ใน 1Password ห้องทีม
-APP_JWT_SECRET=                    # สำคัญ: สร้างด้วย: openssl rand -base64 48
+APP_DB_HOST=localhost              # database address
+APP_DB_PASSWORD=change-me          # important: the real value is in the team's 1Password vault
+APP_JWT_SECRET=                    # important: generate with: openssl rand -base64 48
 APP_LOG_LEVEL=debug
 ```
 
-**`.env.example` ต้องอัปเดตในคอมมิตเดียวกับที่เพิ่มค่าใหม่**
-ไม่งั้นคนถัดไปที่ clone จะเจอ error ที่ไม่มีใครอธิบายได้
+**Update `.env.example` in the same commit that adds a new value.**
+Otherwise the next person who clones hits an error nobody can explain.
 
-> **`.env` ที่ใส่ `.gitignore` ไม่ทัน**: ไฟล์ถูก track ไปแล้วแม้ครั้งเดียว
-> การเพิ่มใน `.gitignore` ทีหลัง**ไม่ลบมันออกจากประวัติ** ต้อง `git rm --cached` และถือว่า secret หลุดแล้ว
+> **A `.env` added to `.gitignore` too late:** once the file has been tracked, even once,
+> adding it to `.gitignore` later **does not remove it from history.** Run `git rm --cached` and treat the secret as leaked.
 
-**ด่านก่อน commit** (แนวคิดจาก wshobson secrets-management): `.gitignore` กันแค่ไฟล์ที่รู้ชื่อ แต่กุญแจที่เผลอวางในโค้ดหรือ YAML ต้องมีตัวสแกน — ติดตั้ง gitleaks เป็น pre-commit hook ของทุก repo (`gitleaks git --pre-commit --staged` ใน gitleaks 8.19 ขึ้นไป · รุ่นก่อนหน้าใช้ `gitleaks protect --staged`) และรันซ้ำใน CI ทั้งประวัติด้วย `gitleaks git --redact` · hook ตกแล้วห้าม `--no-verify` ให้ย้ายค่าออกก่อน · เจอใน history แล้วไปข้อ 8 ทันที ไม่ใช่แค่ลบบรรทัด
+**Pre-commit gate** (idea from wshobson secrets-management): `.gitignore` blocks only files you know by name, but a key pasted by mistake into code or YAML needs a scanner. Install gitleaks as a pre-commit hook in every repo (`gitleaks git --pre-commit --staged` in gitleaks 8.19 and later · earlier versions use `gitleaks protect --staged`) and rerun it in CI over the whole history with `gitleaks git --redact`. If the hook fails, never use `--no-verify`; move the value out first. If you find one in history, go to step 8 at once, not just delete the line.
 
 ---
 
-## 6 · เก็บ secret ไว้ที่ไหน
+## 6 · Where to keep secrets
 
-| สถานการณ์ | ใช้ | หมายเหตุ |
+| Situation | Use | Note |
 |---|---|---|
-| เครื่องนักพัฒนา | `.env` ที่ไม่เข้า git ส่วน .NET ใช้ `dotnet user-secrets` | ห้ามใช้ค่าของ production |
-| ทีมเล็ก แชร์กัน | ตัวจัดการรหัสผ่านของทีม (1Password, Bitwarden) | ไม่ใช่แชต ไม่ใช่อีเมล ไม่ใช่ Google Sheet |
-| production บนคลาวด์ | Azure Key Vault · AWS Secrets Manager · Google Secret Manager | ให้สิทธิ์ด้วย managed identity ไม่ใช่ key อีกอัน |
-| Kubernetes | External Secrets Operator ดึงจาก vault ข้างบน | secret ของ Kubernetes เองเป็นแค่ base64 **ไม่ใช่การเข้ารหัส** |
-| ต้องเก็บใน git จริง ๆ | SOPS หรือ sealed-secrets (เข้ารหัสก่อน commit) | ทางเลือกสุดท้าย |
+| Developer machine | A `.env` that stays out of git; for .NET use `dotnet user-secrets` | Never use production values |
+| Small team sharing | The team's password manager (1Password, Bitwarden) | Not chat, not email, not a Google Sheet |
+| Production in the cloud | Azure Key Vault · AWS Secrets Manager · Google Secret Manager | Grant access with a managed identity, not another key |
+| Kubernetes | External Secrets Operator pulling from a vault above | A Kubernetes secret is only base64, **not encryption** |
+| You really must store in git | SOPS or sealed-secrets (encrypt before commit) | Last resort |
 
-**สิทธิ์:** แต่ละ service อ่านได้เฉพาะ secret ของตัวเอง environment แยกกันสนิท และ
-ไม่มีบัญชีไหนอ่านได้ทุกอัน ยกเว้นบัญชีดูแลระบบที่บันทึกการเข้าถึง
+**Permissions:** each service reads only its own secrets, environments are fully separate, and
+no account can read all of them, except an admin account whose access is logged.
 
 ---
 
-## 7 · การหมุนเวียน (rotation)
+## 7 · Rotation
 
-**ออกแบบให้รองรับตั้งแต่วันแรก** ไม่ใช่รอถึงตอนต้องหมุนจริง
+**Design for it from day one**, not when you finally have to rotate.
 
-| ต้องมี | รายละเอียด |
+| Must have | Detail |
 |---|---|
-| ใช้ 2 ค่าพร้อมกันได้ | ระหว่างเปลี่ยน ทั้งค่าเก่าและใหม่ต้องใช้ได้ ไม่งั้นต้องปิดระบบ |
-| โหลดใหม่โดยไม่ต้อง restart | หรือยอมรับว่าต้อง deploy 1 รอบ และจดไว้ว่าต้องทำ |
-| รอบเวลา | กุญแจเซ็น token 90 วัน · รหัสฐานข้อมูล 180 วัน · ใบรับรองก่อนหมดอายุ 30 วัน |
-| ทำอัตโนมัติ | เพราะงานที่ต้องจำทำเอง สุดท้ายไม่มีใครทำ |
+| Two values valid at once | During the change, both the old and the new value must work, or you must shut the system down |
+| Reload without restart | Or accept that you need one deploy, and write down that it must be done |
+| Schedule | Token signing key 90 days · database password 180 days · certificate 30 days before expiry |
+| Automatic | A task that depends on someone remembering ends up done by nobody |
 
-**กุญแจสำหรับเซ็น token ต้องมี id กำกับ (key id)** เพื่อให้เซ็น token ใหม่ด้วยกุญแจใหม่แล้ว
-ก็ยังตรวจ token เก่าที่ยังไม่หมดอายุได้
-
----
-
-## 8 · เมื่อ secret หลุด — ลำดับสำคัญกว่าความเร็ว
-
-1. **เพิกถอนค่าเดิมก่อน**: ปิด key นั้นที่ต้นทาง
-2. ออกค่าใหม่ แล้ว deploy
-3. ตรวจ log ย้อนหลังว่ามีใครใช้จากที่ที่ไม่ใช่ของเราไหม
-4. ลบออกจากประวัติ git (`git filter-repo`) และแจ้งทุกคนให้ clone ใหม่ (ถ้าต้อง force push ให้รอผู้ใช้อนุมัติก่อน · แจ้งทีมก่อน)
-5. บันทึกเหตุการณ์ด้วย `postmortem-template`
-
-> **ข้อ 4 ไม่ใช่ข้อ 1** เพราะลบ commit แล้วกุญแจก็ไม่ปลอดภัยขึ้นเลย
-> ใครที่ fork หรือ clone ไปแล้ว รวมถึงข้อมูลสำรองของผู้ให้บริการ ยังมีค่าเดิมอยู่
-> **ถือว่าทุก secret ที่เคยเข้า git คือหลุดแล้ว** แม้ repo จะเป็น private
+**A token signing key must carry an id (key id)**, so that after signing new tokens with the new key,
+you can still verify old tokens that have not expired.
 
 ---
 
-## 9 · อย่าให้ secret ไหลออกทางอื่น
+## 8 · When a secret leaks: order matters more than speed
 
-| ทางรั่ว | วิธีปิด |
+1. **Revoke the old value first:** disable that key at its source.
+2. Issue a new value, then deploy.
+3. Check past logs for anyone using it from a place that is not ours.
+4. Remove it from git history (`git filter-repo`) and tell everyone to clone again. (If you must force push, wait for the user's approval and tell the team first.)
+5. Record the incident with `postmortem-template`.
+
+> **Step 4 is not step 1**, because deleting the commit does not make the key any safer.
+> Anyone who forked or cloned already, and the provider's backups, still have the old value.
+> **Treat every secret that has ever been in git as leaked**, even if the repo is private.
+
+---
+
+## 9 · Do not let secrets flow out other ways
+
+| Leak path | How to close it |
 |---|---|
-| log | รายการคำที่ต้องปิดบัง ดูที่ `logging-standards` |
-| ข้อความ error ที่ส่งให้ client | คืนเฉพาะ `requestId` ไม่ใช่ stack trace หรือ connection string |
-| รายงาน crash / ตัวติดตามข้อผิดพลาด | ตั้งตัวกรองข้อมูลอ่อนไหวก่อนส่งออก |
-| ประวัติคำสั่งใน shell | ใช้ `read -s` หรืออ่านจากไฟล์ แทนการพิมพ์ค่าลงบรรทัดคำสั่ง |
-| `docker history` | อย่าใส่ secret ใน `ARG`/`ENV` ตอน build ให้ใช้ mount ตอนรันแทน |
-| ไฟล์สำรองข้อมูลและ dump | เข้ารหัส และเก็บที่ที่คุมสิทธิ์ได้ |
-| ภาพหน้าจอในเอกสารและ issue | ปิดบังก่อนแนบเสมอ |
+| Logs | The list of terms to mask is in `logging-standards` |
+| Error messages sent to the client | Return only a `requestId`, not a stack trace or connection string |
+| Crash reports / error trackers | Set a sensitive-data filter before sending out |
+| Shell command history | Use `read -s` or read from a file, instead of typing the value on the command line |
+| `docker history` | Do not put secrets in `ARG`/`ENV` at build time; use a mount at run time instead |
+| Backup files and dumps | Encrypt them and store them where you control access |
+| Screenshots in documents and issues | Always mask before attaching |
 
 ---
 
-## 10 · config ของ frontend — ไม่มีอะไรลับ
+## 10 · Frontend config: nothing in it is secret
 
-> **สำคัญ:** ทุกอย่างที่อยู่ในไฟล์ที่เบราว์เซอร์โหลด **คือข้อมูลสาธารณะ**
-> ไม่ว่าจะชื่อว่า `VITE_SECRET_KEY` หรืออยู่ในไฟล์ที่ถูกย่อจนอ่านไม่ออกก็ตาม
-> การย่อโค้ดไม่ใช่การเข้ารหัส เปิด DevTools ก็เห็น
+> **Important:** everything in a file the browser loads **is public information**,
+> whether it is named `VITE_SECRET_KEY` or sits in a file minified until it is unreadable.
+> Minifying code is not encryption. Open DevTools and you can see it.
 
-| ใส่ใน frontend ได้ | ต้องอยู่ฝั่งเซิร์ฟเวอร์เท่านั้น |
+| Allowed in the frontend | Must stay on the server only |
 |---|---|
-| ที่อยู่ API · ชื่อ environment | API key ของบริการภายนอกทุกชนิด |
-| กุญแจสาธารณะ (publishable key) ของผู้ให้บริการชำระเงิน | กุญแจลับ (secret key) ของผู้ให้บริการเดียวกัน |
-| feature flag ที่ไม่ลับ | กฎการคิดราคา · เกณฑ์อนุมัติ |
-| รหัสเว็บของตัววัดสถิติ | token ที่เรียก API ของบุคคลที่สาม |
+| API address · environment name | API keys of any external service |
+| Publishable key of a payment provider | The secret key of the same provider |
+| Feature flags that are not secret | Pricing rules · approval thresholds |
+| Web ID of an analytics tool | Tokens that call a third party's API |
 
-**ถ้าต้องการเปลี่ยนค่าโดยไม่ build ใหม่** ให้โหลด `/config.json` ตอนแอปเริ่มทำงาน
-แทนการฝังค่าตอน build (`import.meta.env`) ที่ล็อกค่าติดไปกับไฟล์ที่ build ได้
+**If you need to change a value without rebuilding,** load `/config.json` when the app starts,
+instead of embedding the value at build time (`import.meta.env`), which locks the value into the built files.
 
 ---
 
 ## 11 · Anti-patterns
 
-- **connection string ในโค้ด** แม้จะเป็นของ dev เพราะสักวันจะมีคนลอกแบบนี้ไปใช้กับ production
-- **`.env` ของ production วางไว้บนเซิร์ฟเวอร์** ใครเข้าเครื่องได้ก็อ่านได้ และไม่มีบันทึกว่าใครอ่าน
-- **secret เดียวกันทุก environment** พอ staging หลุด production ก็หลุดด้วย
-- **ส่ง secret ทางแชตหรืออีเมล** ค่าจะอยู่ในนั้นตลอดไป และค้นเจอด้วย
-- **ไม่มี `.env.example`** คนใหม่จะเสียเวลาครึ่งวันเดาว่าต้องมีค่าอะไรบ้าง
-- **บูตผ่านทั้งที่ config ไม่ครบ** แล้วไปพังตอนใช้งานจริง
-- **พิมพ์ config ทั้งก้อนลง log ตอนบูต** รวม secret
-- **`ALLOWED_ORIGINS=*` บน production** เพราะ "ตอน dev มันติด Cross-Origin Resource Sharing (CORS)"
-- **กุญแจที่ไม่เคยเปลี่ยนเลยตั้งแต่ปีแรก**
+- **A connection string in code**, even a dev one, because one day someone will copy it for production.
+- **A production `.env` placed on the server.** Anyone who can enter the machine can read it, and nothing records who read it.
+- **The same secret in every environment.** When staging leaks, production leaks too.
+- **Sending secrets by chat or email.** The value stays there forever, and is searchable.
+- **No `.env.example`.** A new person wastes half a day guessing which values are needed.
+- **Booting successfully with incomplete config,** then breaking in real use.
+- **Printing the whole config to the log at boot,** secrets included.
+- **`ALLOWED_ORIGINS=*` on production** because "it was blocked by Cross-Origin Resource Sharing (CORS) in dev."
+- **A key that has never changed since the first year.**
 
 
 ## reference: per-stack.md
@@ -476,29 +476,29 @@ $b = New-Object byte[] 48
 
 Use when a system must record who did what and when
 
-# ร่องรอยการใช้งาน (audit trail)
+# Audit trail
 
-> **กฎข้อเดียว:** ร่องรอยย้อนหลังสร้างไม่ได้
-> วันที่ลูกค้าถามว่า "ใครเปลี่ยนราคาอันนี้" ถ้าไม่ได้เก็บไว้ก่อน ก็ตอบไม่ได้ตลอดไป
+> **One rule:** a trail cannot be built after the fact.
+> The day a customer asks "who changed this price", if it was not recorded beforehand, it can never be answered.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ระบบมีงานอนุมัติ การเงิน สิทธิ์ผู้ใช้ หรือข้อมูลส่วนบุคคล
-- ลูกค้าหรือผู้ตรวจสอบถามได้ว่า "ใครทำ เมื่อไหร่ เปลี่ยนจากอะไรเป็นอะไร"
-- มีข้อพิพาทเรื่องข้อมูลที่ถูกแก้ แล้วไม่มีใครตอบได้
-- ระบบอยู่ภายใต้ พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล (Personal Data Protection Act: PDPA) หรือมาตรฐานที่ต้องตรวจย้อนหลังได้
+- The system has approvals, money, user permissions, or personal data
+- A customer or auditor can ask "who did it, when, and what was changed from what to what"
+- There was a dispute over edited data and nobody could answer
+- The system falls under the Personal Data Protection Act (PDPA) or a standard that must be checkable after the fact
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill, or together
 
-| งาน | skill | |
+| Job | skill | |
 |---|---|---|
-| log สำหรับไล่ปัญหาทางเทคนิค | `logging-standards` | แทน |
-| ตัวชี้วัดและการแจ้งเตือน | `observability-basics` | แทน |
-| คอลัมน์ `created_by` `updated_at` ในตารางงาน | `database-design` | แทน |
-| สิทธิ์และการยืนยันตัวตน | `auth-implementation-patterns` | แทน |
-| ความยินยอมและสิทธิเจ้าของข้อมูล | `pdpa-compliance` | แทน |
-| ข้อกำหนดว่าต้องเก็บอะไรกี่ปี | `srs-writing` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| Logs for technical troubleshooting | `logging-standards` | instead |
+| Metrics and alerts | `observability-basics` | instead |
+| Columns `created_by` `updated_at` in working tables | `database-design` | instead |
+| Permissions and identity verification | `auth-implementation-patterns` | instead |
+| Consent and data-subject rights | `pdpa-compliance` | instead |
+| Requirements on what to keep and for how many years | `srs-writing` | together |
+| Abbreviations in work that people read | `spell-out-abbreviations` | together |
 
 ---
 
@@ -506,67 +506,67 @@ Use when a system must record who did what and when
 
 | | application log | **audit log** |
 |---|---|---|
-| มีไว้ให้ใครอ่าน | developer ตอนไล่ปัญหา | ผู้ตรวจสอบ · ลูกค้า · ฝ่ายกฎหมาย |
-| เขียนอะไร | อะไรก็ได้ที่ช่วยไล่ปัญหา | **เฉพาะเหตุการณ์ที่มีความหมายทางธุรกิจ** |
-| เก็บที่ไหน | ไฟล์ · ระบบรวบรวม log | **ตารางในฐานข้อมูล** หรือที่เก็บที่เขียนทับไม่ได้ |
-| อายุ | 7–90 วัน | **เป็นปี ตามที่กฎหมายหรือสัญญากำหนด** |
-| แก้ได้ไหม | ไม่สำคัญ | **ห้ามแก้ ห้ามลบ** |
-| หายได้ไหม | หายบ้างรับได้ | **หายไม่ได้** ถ้าเขียนไม่สำเร็จ ธุรกรรมต้องล้มตาม |
+| Who reads it | developers, when troubleshooting | auditors · customers · the legal team |
+| What it records | anything that helps troubleshooting | **only events with business meaning** |
+| Where it is kept | files · a log collection system | **a table in the database**, or storage that cannot be overwritten |
+| Lifetime | 7–90 days | **years, as the law or contract requires** |
+| Can it be edited | does not matter | **never edit, never delete** |
+| Can it be lost | some loss is acceptable | **cannot be lost.** If the write fails, the transaction must fail with it |
 
-> **2 อย่างนี้แยกกันเสมอ** เพราะ audit log ที่ปนอยู่ในไฟล์ log ทั่วไป
-> จะถูกลบตามอายุการเก็บ (retention) ของ log ภายในเดือนเดียว และไม่มีใครค้นเจอตอนที่ต้องใช้
+> **Always keep these 2 separate.** An audit log mixed into the general log files
+> gets deleted by the log retention period within a month, and nobody finds it when it is needed.
 
 ---
 
-## 2 · ฟิลด์ที่ทุกรายการต้องมี
+## 2 · Fields every entry must have
 
-| ฟิลด์ | ตัวอย่าง | หมายเหตุ |
+| Field | Example | Note |
 |---|---|---|
-| `id` | UUIDv7 | เรียงตามเวลาได้ |
-| `occurred_at` | `2026-09-25T09:42:13.482Z` | **UTC** และเป็นเวลาที่เกิด ไม่ใช่เวลาที่บันทึก |
-| `actor_id` | `1042` | id ผู้ใช้ ไม่ใช่ชื่อ เพราะชื่อเปลี่ยนได้ |
-| `actor_type` | `user` · `system` · `api_client` | งานอัตโนมัติก็ต้องมีตัวตน |
-| `actor_ip` · `user_agent` | | เก็บเมื่อจำเป็นต่อการตรวจสอบเท่านั้น |
-| `action` | `order.cancelled` | **คำกริยารูปอดีต** แบบเดียวกันทั้งระบบ |
-| `entity_type` · `entity_id` | `order` · `1042` | ของที่ถูกกระทำ |
-| `changes` | `{"status":{"from":"confirmed","to":"cancelled"}}` | เฉพาะฟิลด์ที่เปลี่ยน |
-| `reason` | "ลูกค้าโทรแจ้งยกเลิก" | บังคับกับการกระทำที่ต้องมีเหตุผล |
-| `correlation_id` | `01J9Z8…` | เชื่อมกลับไปที่ application log |
-| `result` | `success` · `denied` | **ต้องบันทึกครั้งที่ถูกปฏิเสธด้วย** |
+| `id` | UUIDv7 | sortable by time |
+| `occurred_at` | `2026-09-25T09:42:13.482Z` | **UTC**, and the time it happened, not the time it was recorded |
+| `actor_id` | `1042` | the user id, not the name, because names can change |
+| `actor_type` | `user` · `system` · `api_client` | automated jobs need an identity too |
+| `actor_ip` · `user_agent` | | keep only when needed for the audit |
+| `action` | `order.cancelled` | **a past-tense verb**, in one style across the system |
+| `entity_type` · `entity_id` | `order` · `1042` | the thing acted on |
+| `changes` | `{"status":{"from":"confirmed","to":"cancelled"}}` | only the fields that changed |
+| `reason` | "ลูกค้าโทรแจ้งยกเลิก" (customer phoned to cancel) | required for actions that need a reason |
+| `correlation_id` | `01J9Z8…` | links back to the application log |
+| `result` | `success` · `denied` | **denied attempts must be recorded too** |
 
-> **การกระทำที่ถูกปฏิเสธมีค่ามากกว่าที่สำเร็จ** เพราะคนที่พยายามเข้าถึงสิ่งที่ไม่มีสิทธิ์
-> คือสิ่งที่ผู้ตรวจสอบอยากเห็นที่สุด และเป็นสัญญาณเตือนที่ดีที่สุดที่มี
+> **A denied action is worth more than a successful one**, because someone trying to reach something
+> they have no right to is what auditors most want to see, and it is the best warning sign there is.
 
 ---
 
-## 3 · เก็บเหตุการณ์ไหน
+## 3 · Which events to record
 
-**เก็บ:**
+**Record:**
 
-| กลุ่ม | ตัวอย่าง |
+| Group | Examples |
 |---|---|
-| เงินและสัญญา | สร้าง/ยกเลิก/คืนเงิน · เปลี่ยนราคา · เปลี่ยนส่วนลด |
-| การอนุมัติ | อนุมัติ · ปฏิเสธ · ส่งกลับแก้ |
-| สิทธิ์และตัวตน | ให้/เพิกถอนสิทธิ์ · สร้าง/ปิดบัญชี · เปลี่ยนรหัสผ่าน · เข้าสู่ระบบล้มเหลวติดกัน |
-| ข้อมูลส่วนบุคคล | ดู · แก้ · ส่งออก · ลบ |
-| ค่าตั้งของระบบ | เปลี่ยนค่าที่กระทบทั้งระบบ |
-| การเข้าถึงข้อมูลจำนวนมาก | ส่งออกรายงาน · ดาวน์โหลดรายชื่อ |
+| money and contracts | create/cancel/refund · price change · discount change |
+| approvals | approve · reject · send back for fixing |
+| permissions and identity | grant/revoke permission · create/close account · change password · consecutive failed logins |
+| personal data | view · edit · export · delete |
+| system settings | changing a value that affects the whole system |
+| bulk data access | exporting a report · downloading a name list |
 
-**ไม่เก็บ:** เปิดดูหน้าจอทั่วไป · ค้นหา · เรียงลำดับ · กดปุ่มที่ไม่เปลี่ยนอะไร
-audit log ที่เก็บทุกอย่าง มีค่าเท่ากับไม่มีเลย เพราะค้นไม่เจอ
+**Do not record:** ordinary screen views · searches · sorting · clicks that change nothing.
+An audit log that records everything is worth the same as none, because nothing can be found in it.
 
-**ตั้งชื่อ action แบบเดียวทั้งระบบ:** `<entity>.<กริยาอดีต>` เช่น `order.cancelled` · `user.role_granted` ·
+**Name actions in one style across the system:** `<entity>.<past-tense verb>`, for example `order.cancelled` · `user.role_granted` ·
 `invoice.exported` · `patient_record.viewed`
 
 ---
 
-## 4 · เก็บ "เปลี่ยนอะไร" ยังไง
+## 4 · How to record "what changed"
 
-| วิธี | ดี | เสีย |
+| Method | Good | Bad |
 |---|---|---|
-| **เก็บเฉพาะฟิลด์ที่เปลี่ยน (from/to)** ✓ | เล็ก อ่านรู้เรื่องทันที | อยากเห็นภาพรวมต้องไล่ย้อน |
-| เก็บทั้งแถวก่อนและหลัง | ได้ภาพเต็ม | โตเร็วมาก และเสี่ยงเก็บข้อมูลอ่อนไหวเกินจำเป็น |
-| เก็บเฉพาะว่า "แก้แล้ว" | เล็กสุด | **ตอบคำถามไม่ได้** ไม่ควรใช้ |
+| **Record only the changed fields (from/to)** ✓ | small, readable at once | to see the whole picture you must trace back |
+| Record the whole row before and after | full picture | grows very fast and risks keeping more sensitive data than needed |
+| Record only that "it was edited" | smallest | **cannot answer the question**, so do not use it |
 
 ```jsonc
 "changes": {
@@ -575,7 +575,7 @@ audit log ที่เก็บทุกอย่าง มีค่าเท่
 }
 ```
 
-**ฟิลด์อ่อนไหวเก็บแค่ว่าเปลี่ยน ไม่เก็บค่า:**
+**For sensitive fields, record only that it changed, not the value:**
 
 ```jsonc
 "changes": { "password_hash": { "changed": true } }
@@ -583,58 +583,58 @@ audit log ที่เก็บทุกอย่าง มีค่าเท่
 
 ---
 
-## 5 · เขียนแล้วห้ามแก้
+## 5 · Never edit after writing
 
-- ตาราง audit ให้สิทธิ์แค่ **INSERT และ SELECT** · บัญชีที่แอปใช้ต้องไม่มีสิทธิ์ UPDATE หรือ DELETE
-- เขียนใน transaction เดียวกับการเปลี่ยนข้อมูลจริง **ถ้าเขียน audit ไม่สำเร็จ ธุรกรรมต้องล้มตาม**
-- ห้ามแก้ประวัติเพื่อ "จัดระเบียบ" ถ้าบันทึกผิด ให้เพิ่มรายการแก้ไข ไม่เขียนทับ
-- ระบบที่ต้องเข้มกว่านั้นให้ทำ hash ต่อกันเป็นสาย เพื่อพิสูจน์ว่าไม่มีใครแทรกหรือลบ
+- Grant the audit table only **INSERT and SELECT**. The account the app uses must have no UPDATE or DELETE permission.
+- Write in the same transaction as the real data change. **If the audit write fails, the transaction must fail with it.**
+- Never edit history to "tidy up". If a record is wrong, add a correction entry. Do not overwrite.
+- A system that needs stronger protection should chain the entries with hashes, to prove nobody inserted or deleted anything.
 
-**อายุการเก็บ** ตั้งตามกฎหมายหรือสัญญา เอกสารทางบัญชีในไทยมักต้องเก็บ 5 ปี
-เมื่อครบอายุให้ย้ายไปที่เก็บราคาถูก ไม่ลบทิ้งโดยไม่มีใครอนุมัติ
+**Retention** follows the law or the contract. Accounting documents in Thailand usually must be kept 5 years.
+When the period ends, move them to cheap storage. Never delete them without someone's approval.
 
 ---
 
-## 6 · ใครดูได้ และห้ามเก็บอะไร
+## 6 · Who can view, and what must not be recorded
 
-| เรื่อง | กฎ |
+| Topic | Rule |
 |---|---|
-| สิทธิ์อ่าน | เฉพาะบทบาทที่มีหน้าที่ตรวจสอบ และ**การอ่าน audit log ก็ต้องบันทึกลง audit ด้วย** |
-| การส่งออก | บันทึกทุกครั้งว่าใครส่งออกช่วงไหน |
-| **ห้ามเก็บ** | รหัสผ่าน · token · เลขบัตร · ข้อมูลสุขภาพ · เนื้อหาของข้อมูลส่วนบุคคล |
-| เก็บได้แทน | ชี้ว่า**ของชิ้นไหน**ถูกดูหรือถูกแก้ ไม่ใช่เนื้อหาข้างใน |
+| Read permission | only roles with an audit duty, and **reading the audit log must also be recorded in the audit** |
+| Export | record every time who exported which period |
+| **Must not record** | passwords · tokens · ID card numbers · health data · the content of personal data |
+| Record instead | point to **which item** was viewed or edited, not the content inside |
 
-> `patient_record.viewed` กับ `entity_id` ก็พอแล้ว **ห้ามคัดลอกผลตรวจลงไปใน audit log**
-> ไม่งั้น audit log จะกลายเป็นที่รวมข้อมูลอ่อนไหวที่สุดในระบบ โดยไม่มีใครตั้งใจ
+> `patient_record.viewed` with the `entity_id` is enough. **Never copy test results into the audit log.**
+> Otherwise the audit log becomes the most sensitive data store in the system, without anyone meaning it to.
 
 ---
 
-## 7 · แสดงให้คนอ่าน
+## 7 · Show it to people
 
-หน้าจอประวัติต้องกรองได้อย่างน้อย 4 อย่าง: **ช่วงเวลา · ผู้ทำ · ประเภทการกระทำ · ของชิ้นไหน**
+The history screen must filter by at least 4 things: **time period · actor · action type · which item**.
 
-แสดงเป็นประโยคที่คนอ่านรู้เรื่อง ไม่ใช่ JSON ดิบ:
+Show it as a sentence people can read, not raw JSON (the sample below is the Thai text shown to Thai users: on 25 Sep 2569 [B.E.; 2026] at 16:42, Somchai (sales) cancelled order SO-2026-00042, status: confirmed → cancelled, reason: customer phoned to cancel):
 
 ```
 25 ก.ย. 2569 16:42  สมชาย (ฝ่ายขาย)  ยกเลิกคำสั่งซื้อ SO-2026-00042
                     สถานะ: ยืนยันแล้ว → ยกเลิก · เหตุผล: ลูกค้าโทรแจ้งยกเลิก
 ```
 
-แสดงเวลาตามเขตเวลาของผู้ดู แต่เก็บเป็น UTC (ดู `i18n-and-locale`)
+Show the time in the viewer's time zone, but store it as UTC (see `i18n-and-locale`).
 
 ---
 
 ## 8 · Anti-patterns
 
-- **เก็บ audit ในไฟล์ log ทั่วไป** — ถูกลบตาม retention ภายในเดือนเดียว
-- **เก็บชื่อผู้ทำแทน id** — พอเขาเปลี่ยนนามสกุล ประวัติเก่าก็กลายเป็นคนละคน
-- **บันทึกเฉพาะที่สำเร็จ** — ครั้งที่ถูกปฏิเสธคือสิ่งที่ผู้ตรวจสอบตามหา
-- **บันทึกแค่ "แก้ไขข้อมูล"** โดยไม่บอกว่าจากอะไรเป็นอะไร
-- **แอปมีสิทธิ์ UPDATE ตาราง audit** — ร่องรอยที่แก้ได้ ไม่ใช่ร่องรอย
-- **เขียน audit นอก transaction** — ธุรกรรมสำเร็จแต่ไม่มีบันทึก
-- **บันทึกทุกการคลิก** — ของสำคัญจมอยู่ในกองข้อมูลที่ไม่มีใครใช้
-- **คัดลอกข้อมูลอ่อนไหวลง audit** — เกิดช่องรั่วใหม่โดยไม่ตั้งใจ
-- **ไม่มีหน้าจอให้ดู** — มีข้อมูลแต่ต้องให้ developer query ทุกครั้งที่ลูกค้าถาม
+- **Keeping the audit in general log files**: deleted by retention within a month
+- **Recording the actor's name instead of the id**: when they change their surname, the old history turns into a different person
+- **Recording only successes**: the denied attempts are what auditors look for
+- **Recording only "edited data"** without saying from what to what
+- **The app has UPDATE permission on the audit table**: a trail that can be edited is not a trail
+- **Writing the audit outside the transaction**: the transaction succeeds but there is no record
+- **Recording every click**: the important entries sink in a pile of data nobody uses
+- **Copying sensitive data into the audit**: it creates a new leak by accident
+- **No screen to view it**: the data exists, but a developer must run a query every time a customer asks
 
 
 ---
@@ -643,149 +643,149 @@ audit log ที่เก็บทุกอย่าง มีค่าเท่
 
 Use when users upload files or an app serves stored files
 
-# รับไฟล์อัปโหลดและการเก็บไฟล์
+# Accepting file uploads and storing files
 
-> **กฎข้อเดียว:** ไฟล์ที่ผู้ใช้ส่งมาคือข้อมูลที่เชื่อไม่ได้
-> ชื่อไฟล์ นามสกุล ชนิดที่เบราว์เซอร์แจ้งมา และขนาดที่บอกไว้ — **ปลอมได้ทั้งหมด**
+> **One rule:** a file a user sends is untrusted data.
+> The file name, the extension, the type the browser reports, and the size it claims can **all be faked**.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- มีหน้าจอให้ผู้ใช้แนบไฟล์ รูป หรือเอกสาร
-- ระบบต้องเก็บไฟล์แล้วส่งกลับให้ดูหรือดาวน์โหลด
-- ต้องตัดสินใจว่าเก็บไฟล์ไว้ที่ไหน
-- มีไฟล์ที่ไม่ควรให้คนอื่นเห็น แต่ตอนนี้ใครมีลิงก์ก็เปิดได้
+- A screen lets users attach files, images, or documents.
+- The system must store files and send them back for viewing or download.
+- You must decide where to keep the files.
+- Some files should be hidden from others, but right now anyone with the link can open them.
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill instead, or together
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| นำเข้า Excel/CSV แล้วเอาข้อมูลเข้าระบบ | `data-import-export` | แทน |
-| สิทธิ์ว่าใครเข้าถึงอะไรได้ | `auth-implementation-patterns` | แทน |
-| ประมวลผลไฟล์ใหญ่เป็นงานเบื้องหลัง | `background-jobs` | แทน |
-| ตาราง metadata ของไฟล์ | `database-design` | คู่ |
-| endpoint และ error ของการอัปโหลด | `api-conventions` · `web-service-essentials` | คู่ |
-| อายุการเก็บไฟล์ที่มีข้อมูลบุคคล | `pdpa-compliance` | คู่ |
-| ขนาดพื้นที่ที่ใช้และการแจ้งเตือน | `observability-basics` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| Import Excel/CSV and load the data into the system | `data-import-export` | instead |
+| Permissions: who may access what | `auth-implementation-patterns` | instead |
+| Process large files as a background job | `background-jobs` | instead |
+| The file metadata table | `database-design` | together |
+| Upload endpoints and errors | `api-conventions` · `web-service-essentials` | together |
+| Retention of files that hold personal data | `pdpa-compliance` | together |
+| Storage used and alerts | `observability-basics` | together |
+| Abbreviations in anything a person reads | `spell-out-abbreviations` | together |
 
 ---
 
-## 1 · ตรวจก่อนรับ
+## 1 · Check before accepting
 
-| ตรวจอะไร | ทำยังไง |
+| What to check | How |
 |---|---|
-| **ชนิดไฟล์** | อ่าน**เนื้อในไฟล์** (magic bytes) ไม่ใช่เชื่อนามสกุลหรือ `Content-Type` |
-| **ขนาด** | บังคับที่เซิร์ฟเวอร์ **และ**ที่ตัวรับคำขอด้านหน้า — ตรวจฝั่งเบราว์เซอร์เป็นแค่ความสะดวก |
-| จำนวนไฟล์ต่อครั้ง | ตั้งเพดาน |
-| ขนาดรวมต่อผู้ใช้ | ตั้งโควตา ไม่งั้นคนเดียวกินพื้นที่หมด |
-| ชนิดที่อนุญาต | **รายการที่อนุญาต ไม่ใช่รายการที่ห้าม** |
+| **File type** | Read the **contents** (magic bytes). Do not trust the extension or `Content-Type`. |
+| **Size** | Enforce it on the server **and** at the front-facing request receiver. A check in the browser is only a convenience. |
+| Files per request | Set a limit. |
+| Total size per user | Set a quota, or one person uses up all the space. |
+| Allowed types | **An allow list, not a deny list.** |
 
 ```
-รายการที่อนุญาตทั่วไป: jpg · png · webp · pdf · xlsx · docx · csv
-ห้ามเสมอ: ไฟล์รันได้ (exe, sh, bat) · ไฟล์สคริปต์ของเซิร์ฟเวอร์ (php, aspx, jsp) · svg ที่ไม่ได้ทำความสะอาด
+Typical allow list: jpg · png · webp · pdf · xlsx · docx · csv
+Always forbidden: executables (exe, sh, bat) · server script files (php, aspx, jsp) · svg that has not been sanitised
 ```
 
-> **SVG คือ HTML** — มันรันสคริปต์ได้ ถ้าจะรับต้องทำความสะอาดก่อน หรือแปลงเป็น PNG
+> **SVG is HTML.** It can run scripts. To accept it, sanitise it first or convert it to PNG.
 >
-> **ตรวจขนาดก่อนอ่านไฟล์เข้าหน่วยความจำ** — ไม่งั้นไฟล์ 5 GB ทำให้เซิร์ฟเวอร์ตาย
-> ก่อนที่โค้ดตรวจขนาดจะได้ทำงาน
+> **Check the size before reading the file into memory.** Otherwise a 5 GB file kills the server
+> before the size-check code gets to run.
 
-**สแกนไวรัส** สำหรับไฟล์ที่คนอื่นจะดาวน์โหลดต่อ — ระหว่างรอผลสแกนให้สถานะเป็น `pending`
-และยังไม่ให้ใครเข้าถึง
+**Virus-scan** any file that other people will download. While the scan result is pending, set the status to `pending`
+and give nobody access.
 
 ---
 
-## 2 · เก็บที่ไหน
+## 2 · Where to store
 
-| ที่เก็บ | เหมาะกับ | หมายเหตุ |
+| Store | Good for | Note |
 |---|---|---|
-| **object storage** (S3 · Azure Blob · GCS) | ค่าเริ่มต้นที่ควรใช้ | ขยายได้ · มีลิงก์หมดอายุในตัว |
-| ดิสก์ของเซิร์ฟเวอร์ | ระบบเล็ก เครื่องเดียว | **ต้องอยู่นอกโฟลเดอร์ที่เว็บเสิร์ฟ** และต้องสำรองข้อมูล |
-| ในฐานข้อมูล | ไฟล์เล็กมากและต้องอยู่ใน transaction เดียวกัน | โตเร็ว · สำรองข้อมูลช้าลงมาก |
+| **object storage** (S3 · Azure Blob · GCS) | The default to use | Scales · has expiring links built in |
+| The server's disk | A small, single-machine system | **Must sit outside the folder the web serves**, and must be backed up |
+| In the database | Very small files that must be in the same transaction | Grows fast · backups get much slower |
 
-> ผิด: **เก็บไฟล์ในโฟลเดอร์ของแอป** — deploy ทีไรหาย และถ้ามีหลาย instance ก็ไม่เห็นกัน
-> ผิด: **เก็บไฟล์ในโฟลเดอร์ที่เว็บเสิร์ฟตรง ๆ** — อัปโหลดไฟล์สคริปต์แล้วเรียกรันได้
+> Wrong: **keeping files in the app's folder.** They vanish on every deploy, and with several instances they cannot see each other.
+> Wrong: **keeping files directly in the folder the web serves.** Someone uploads a script file and runs it.
 
-**ฐานข้อมูลเก็บแค่ metadata ส่วนตัวไฟล์เก็บที่อื่น** — ตาราง metadata ต้องมีคอลัมน์
+**The database holds only metadata; the file itself lives elsewhere.** The metadata table needs the columns
 `id` · `original_name` · `stored_key` · `content_type` · `size_bytes` · `checksum` ·
 `uploaded_by` · `uploaded_at` · `scan_status` · `owner_entity_type` · `owner_entity_id`
 
 ---
 
-## 3 · ตั้งชื่อไฟล์ที่เก็บ
+## 3 · Naming the stored file
 
-**ห้ามใช้ชื่อไฟล์ที่ผู้ใช้ส่งมาเป็นชื่อจริงที่เก็บ**
+**Never use the file name the user sent as the real stored name.**
 
 ```
-ผิด: uploads/รายงาน (1).xlsx              เว้นวรรค · ภาษาไทย · วงเล็บ
-ผิด: uploads/../../etc/passwd             หลุดออกนอกโฟลเดอร์
-ถูก: 2026/09/25/01J9Z8K7X2M4.xlsx         สุ่ม · แยกโฟลเดอร์ตามวันที่
+Wrong: uploads/รายงาน (1).xlsx              spaces · Thai · brackets
+Wrong: uploads/../../etc/passwd             escapes the folder
+Right: 2026/09/25/01J9Z8K7X2M4.xlsx         random · split into folders by date
 ```
 
-- ชื่อจริงที่เก็บเป็นค่าสุ่ม (UUIDv7 หรือ ULID) + นามสกุลที่**ตรวจแล้ว**
-- ชื่อเดิมของผู้ใช้เก็บไว้ในฐานข้อมูล แล้วส่งกลับตอนดาวน์โหลดผ่าน header
-- แยกโฟลเดอร์ตามวันที่ — โฟลเดอร์เดียวที่มีไฟล์เป็นล้านจะช้าและเปิดดูไม่ไหว
-- เก็บ checksum ไว้ด้วย — ตรวจไฟล์ซ้ำและตรวจว่าไฟล์ไม่เสีย
+- The real stored name is a random value (UUIDv7 or ULID) + an extension that you have **verified**.
+- Keep the user's original name in the database, and send it back on download through a header.
+- Split folders by date. One folder with millions of files is slow and cannot be browsed.
+- Store a checksum too. It detects duplicates and checks the file is not corrupted.
 
 ---
 
-## 4 · ส่งไฟล์กลับให้ผู้ใช้
+## 4 · Sending files back to the user
 
-| ไฟล์ | วิธีส่ง |
+| File | How to send |
 |---|---|
-| สาธารณะ (โลโก้ รูปสินค้า) | URL ตรงผ่าน CDN ได้ |
-| **ส่วนตัว** (เอกสาร ใบเสร็จ รูปผู้ใช้) | **ลิงก์ที่มีลายเซ็นและหมดอายุ** 5–15 นาที |
+| Public (logo, product image) | A direct URL through a CDN is fine |
+| **Private** (document, receipt, user photo) | **A signed link that expires** in 5–15 minutes |
 
-> **"ลิงก์เดายาก" ไม่ใช่การควบคุมสิทธิ์** — ลิงก์ถูกส่งต่อ ถูกบันทึกใน log ของ proxy
-> และติดอยู่ใน `Referer` เสมอ ไฟล์ส่วนตัวต้อง**ตรวจสิทธิ์ทุกครั้ง**แล้วค่อยออกลิงก์ชั่วคราวให้
+> **A "hard-to-guess link" is not access control.** Links get forwarded, logged by proxies,
+> and left in the `Referer` header. For a private file, **check permission every time**, then issue a temporary link.
 
-- ไฟล์ใหญ่ให้ผู้ใช้อัปโหลดตรงไปที่ object storage ด้วยลิงก์ที่เราเซ็นให้ ตัวไฟล์ไม่ต้องผ่านแอป
-  **แต่การตรวจใน §1 ยังต้องครบ** — ทางนี้ข้ามแอปไป เลยต้องคืนการตรวจกลับมาแบบนี้:
-  - **ตอนเซ็นลิงก์:** จำกัดขนาดและชนิดไว้ในลายเซ็น — S3 ใช้ presigned POST ที่ policy มี `content-length-range` และเงื่อนไข `Content-Type` (presigned PUT บังคับขนาดไม่ได้) · ผู้ให้บริการอื่นใช้ตัวเทียบเท่า เช่น GCS ใช้ header `x-goog-content-length-range`
-  - **ตอนเซ็นลิงก์:** กำหนด key เอง (ชื่อสุ่มตาม §3) ลงที่โฟลเดอร์พักไฟล์ · ลิงก์หมดอายุสั้น · บันทึกแถว metadata ด้วย `scan_status = pending`
-  - **หลังอัปโหลดเสร็จ** (event จาก storage หรือผู้ใช้แจ้งว่าเสร็จ): อ่าน magic bytes จริงจาก object · เทียบขนาดจริงกับเพดาน · สแกนไวรัส → ผ่านแล้วย้ายไปที่เก็บจริง และเปลี่ยนเป็น `clean` · ไม่ผ่านให้ลบหรือกักไว้
-  - ระหว่าง `pending` ห้ามออกลิงก์ดาวน์โหลดให้ใคร
-- ตอนส่งไฟล์ให้ดาวน์โหลด ต้องตั้ง `Content-Disposition` และ `Content-Type` ให้ถูก
-  และห้ามส่ง HTML ที่ผู้ใช้อัปโหลดกลับมาแบบให้เบราว์เซอร์เรนเดอร์
-- ถ้าทำได้ ให้เสิร์ฟไฟล์ของผู้ใช้จากคนละโดเมนกับแอป เพื่อกันสคริปต์ในไฟล์เข้าถึง cookie ของแอป
-
----
-
-## 5 · รูปภาพ
-
-- **ห้ามส่งรูปต้นฉบับจากกล้องลงหน้าจอ** — รูป 8 MB บนมือถือคือหน้าเว็บที่โหลดไม่ขึ้น
-- สร้างขนาดย่อไว้ล่วงหน้า 2–3 ขนาด (thumbnail · ขนาดกลาง · ขนาดเต็มที่ย่อแล้ว)
-- **ลบ EXIF ออก** — ในรูปมีพิกัดที่ถ่าย ผู้ใช้ไม่รู้ว่ากำลังเผยแพร่ออกไป
-- แปลงเป็น WebP ถ้าเบราว์เซอร์รองรับ
-- หมุนรูปตาม EXIF ก่อนลบ EXIF ทิ้ง ไม่งั้นรูปจากมือถือจะตะแคง
-- ถ้าไฟล์ใหญ่หรือมีหลายไฟล์ ให้ย่อรูปเป็นงานเบื้องหลัง (ดู `background-jobs`)
+- For large files, let the user upload straight to object storage with a link we sign, so the file does not pass through the app.
+  **The checks in §1 are still all required.** This route bypasses the app, so restore the checks like this:
+  - **When signing the link:** limit size and type inside the signature. S3 uses a presigned POST whose policy has `content-length-range` and a `Content-Type` condition (a presigned PUT cannot enforce size). Other providers have equivalents, for example GCS uses the header `x-goog-content-length-range`.
+  - **When signing the link:** set the key yourself (a random name as in §3) in a holding folder · keep the link's expiry short · save a metadata row with `scan_status = pending`.
+  - **After the upload finishes** (a storage event, or the user reports it done): read the real magic bytes from the object · compare the real size with the limit · virus-scan. If it passes, move it to the real store and set `clean`. If it fails, delete or quarantine it.
+  - While `pending`, issue no download link to anyone.
+- When serving a file for download, set `Content-Disposition` and `Content-Type` correctly,
+  and never send back user-uploaded HTML in a way that lets the browser render it.
+- If you can, serve user files from a different domain than the app, so scripts in a file cannot reach the app's cookies.
 
 ---
 
-## 6 · ลบและอายุการเก็บ
+## 5 · Images
 
-| เรื่อง | กฎ |
+- **Never send the original camera image to the screen.** An 8 MB photo on a phone is a page that does not load.
+- Pre-generate 2–3 sizes (thumbnail · medium · a downsized full size).
+- **Strip EXIF.** The photo holds the location where it was taken, and users do not know they are publishing it.
+- Convert to WebP if the browser supports it.
+- Rotate the image according to EXIF before you strip EXIF, or phone photos come out sideways.
+- If the file is large or there are many, resize as a background job (see `background-jobs`).
+
+---
+
+## 6 · Deleting and retention
+
+| Topic | Rule |
 |---|---|
-| ลบข้อมูลต้นเรื่อง | ต้องมีงานคอยตามลบไฟล์กำพร้าที่เหลืออยู่ด้วย |
-| ลำดับการลบ | ลบ metadata ก่อน แล้วค่อยลบไฟล์ — ไฟล์กำพร้าไม่อันตราย แต่ metadata ที่ชี้ไปหาไฟล์ที่หายไปแล้วทำให้หน้าจอพัง |
-| ไฟล์ที่อัปโหลดแล้วไม่ถูกผูกกับอะไร | ลบทิ้งหลัง 24 ชั่วโมง |
-| อายุการเก็บ | กำหนดต่อประเภทไฟล์ · ไฟล์ที่มีข้อมูลบุคคลต้องมีวันหมดอายุ (ดู `pdpa-compliance`) |
-| สำรองข้อมูล | ไฟล์ต้องอยู่ในแผนสำรองเหมือนฐานข้อมูล **และต้องเคยทดสอบกู้คืนจริง** |
+| Deleting the parent record | A job must also hunt down and delete the orphan files left behind. |
+| Order of deletion | Delete the metadata first, then the file. An orphan file is harmless, but metadata pointing to a file that is gone breaks the screen. |
+| An uploaded file never linked to anything | Delete it after 24 hours. |
+| Retention | Set it per file type · a file with personal data needs an expiry date (see `pdpa-compliance`). |
+| Backup | Files belong in the backup plan just like the database, **and a restore must have been tested for real.** |
 
 ---
 
 ## 7 · Anti-patterns
 
-- **เชื่อนามสกุลไฟล์** — เปลี่ยนชื่อไฟล์เป็น `.jpg` ใครก็ทำได้
-- **ตรวจขนาดแค่ฝั่งเบราว์เซอร์** — ข้ามได้ใน 3 วินาที
-- **ใช้ชื่อไฟล์ของผู้ใช้เป็นเส้นทางจริง** — `../` พาไปไหนก็ได้
-- **เก็บไฟล์ในโฟลเดอร์ที่เว็บเสิร์ฟ** — อัปโหลดสคริปต์แล้วเรียกรันได้
-- **"ลิงก์เดายาก" แทนการตรวจสิทธิ์**
-- **รับ SVG โดยไม่ทำความสะอาด** — สคริปต์ทำงานในเบราว์เซอร์คนอื่น
-- **ส่งรูปต้นฉบับ 8 MB ลงมือถือ**
-- **ไม่ลบ EXIF** — พิกัดบ้านผู้ใช้หลุดออกไปโดยไม่มีใครตั้งใจ
-- **ไฟล์ไม่อยู่ในแผนสำรองข้อมูล** — ฐานข้อมูลกู้ได้ แต่เอกสารหายหมด
-- **อ่านไฟล์ทั้งก้อนเข้าหน่วยความจำ** — ไฟล์ใหญ่ทำให้ process ตาย
+- **Trusting the file extension.** Anyone can rename a file to `.jpg`.
+- **Checking size only in the browser.** It is bypassed in 3 seconds.
+- **Using the user's file name as the real path.** `../` leads anywhere.
+- **Keeping files in the folder the web serves.** Someone uploads a script and runs it.
+- **A "hard-to-guess link" instead of a permission check.**
+- **Accepting SVG without sanitising it.** The script runs in other people's browsers.
+- **Sending an 8 MB original image to a phone.**
+- **Not stripping EXIF.** The coordinates of the user's home leak out and nobody meant it to.
+- **Files outside the backup plan.** The database can be restored, but every document is gone.
+- **Reading the whole file into memory.** A large file kills the process.
 
 
 ---
@@ -794,182 +794,183 @@ Use when users upload files or an app serves stored files
 
 Use when writing code that can fail, with retry and timeout
 
-# จัดการข้อผิดพลาด
+# Error handling
 
-> **กฎข้อเดียว:** จับ error เฉพาะตอนที่**ทำอะไรกับมันได้จริง**
-> จับแล้วไม่ทำอะไร แย่กว่าไม่จับ เพราะระบบจะเดินต่อทั้งที่ข้างในพังไปแล้ว
+> **The one rule:** catch an error only when you **can really do something about it.**
+> Catching it and doing nothing is worse than not catching, because the system keeps going while it is already broken inside.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เขียนโค้ดที่เรียกเครือข่าย ฐานข้อมูล ไฟล์ หรือระบบของทีมอื่น
-- ต้องตัดสินใจว่าจะ retry ไหม กี่ครั้ง รอเท่าไหร่
-- ผู้ใช้เจอข้อความว่า "เกิดข้อผิดพลาด" แล้วไม่รู้ต้องทำอะไรต่อ
-- ไล่ปัญหาแล้วพบว่า log ไม่มีอะไรให้ดูเลย เพราะมีคน catch ทิ้ง
+- Writing code that calls the network, a database, files, or another team's system
+- Deciding whether to retry, how many times, and how long to wait
+- The user sees "an error occurred" and does not know what to do next
+- Tracing a problem and finding nothing in the log because someone caught and discarded the error
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill, or use it alongside
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| รูปร่าง JSON ของ error ที่ API ส่งออก | `web-service-essentials` · `api-conventions` | แทน |
-| รูปแบบบรรทัด log และการปิดบังข้อมูล | `logging-standards` | แทน |
-| แก้บั๊กเฉพาะจุดที่มีคนแจ้งมา | `targeted-fix` | แทน |
-| ขั้นตอนตอนระบบล่มจริง | `incident-runbook-template` | แทน |
-| ตัวชี้วัดอัตรา error และการแจ้งเตือน | `observability-basics` | คู่ |
-| งานเบื้องหลังที่ล้มแล้วต้องไปไหนต่อ | `background-jobs` | คู่ |
-| ข้อความ error ที่ต้องแปลหลายภาษา | `i18n-and-locale` | คู่ |
-| test กรณีล้มเหลว | `testing-standards` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| The JSON shape of errors the API sends out | `web-service-essentials` · `api-conventions` | instead |
+| Log line format and data masking | `logging-standards` | instead |
+| Fixing one specific bug someone reported | `targeted-fix` | instead |
+| Steps when the system is really down | `incident-runbook-template` | instead |
+| Error-rate metrics and alerts | `observability-basics` | alongside |
+| Where a failed background job goes next | `background-jobs` | alongside |
+| Error messages that must be translated into several languages | `i18n-and-locale` | alongside |
+| Tests for failure cases | `testing-standards` | alongside |
+| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
 
 ---
 
-## 1 · จับที่ไหน ปล่อยที่ไหน
+## 1 · Where to catch, where to let it pass
 
-| ชั้น | ทำอะไร |
+| Layer | What to do |
 |---|---|
-| ชั้นในสุด (เรียก DB, HTTP, ไฟล์) | **ปล่อยผ่าน** หรือแปลงเป็น error ของโดเมนที่มีความหมาย |
-| ชั้นตรรกะธุรกิจ | จับเฉพาะที่มีทางเลือกสำรองจริง ๆ (มีค่าเริ่มต้น มีแหล่งข้อมูลสำรอง) |
-| **ชั้นนอกสุด** (controller, handler, main) | **จับทุกอย่าง** · log 1 ครั้ง · แปลงเป็นคำตอบที่ผู้ใช้เข้าใจ |
+| Innermost layer (calls DB, HTTP, files) | **let it pass**, or convert it into a domain error that has meaning |
+| Business logic layer | catch only where there is a real fallback (a default value, a backup data source) |
+| **Outermost layer** (controller, handler, main) | **catch everything** · log once · convert to an answer the user understands |
 
-> **log ที่เดียว คือชั้นนอกสุด** — ถ้าทุกชั้น catch แล้ว log แล้ว throw ต่อ
-> error 1 ตัวจะกลายเป็น 10 บรรทัดใน log และไม่มีใครรู้ว่าเป็นเรื่องเดียวกัน
+> **Log in one place only, the outermost layer.** If every layer catches, logs, and rethrows,
+> 1 error becomes 10 log lines and nobody knows they are the same event.
 
-**3 อย่างที่ห้ามทำเด็ดขาด:**
+**3 things you must never do:**
 
 ```csharp
-try { ... } catch { }                      // ผิด: กลืนเงียบ
-try { ... } catch (Exception) { return null; }   // ผิด: ผู้เรียกเจอ null โดยไม่รู้ว่าเกิดอะไร
-catch (Exception ex) { log.Error(ex); throw; }   // ผิด: log ซ้ำทุกชั้น
+try { ... } catch { }                      // wrong: swallowed silently
+try { ... } catch (Exception) { return null; }   // wrong: the caller gets null and never learns what happened
+catch (Exception ex) { log.Error(ex); throw; }   // wrong: logs again at every layer
 ```
 
-**ถ้าตั้งใจจะกลืนจริง ๆ ต้องเขียนเหตุผลไว้:**
+**If you really mean to swallow it, write the reason:**
 
 ```csharp
 catch (SmtpException ex)
 {
-    // ตั้งใจกลืน — ส่งอีเมลแจ้งไม่สำเร็จไม่ควรทำให้การสั่งซื้อล้ม
+    // swallowed on purpose — a failed notification email should not make the order fail
     log.Warning(ex, "ส่งอีเมลยืนยันไม่สำเร็จ orderId={OrderId}", order.Id);
 }
 ```
 
 ---
 
-## 2 · ข้อความถึงผู้ใช้ ≠ ข้อความใน log
+## 2 · The message to the user ≠ the message in the log
 
-| | ผู้ใช้เห็น | log เก็บ |
+| | The user sees | The log keeps |
 |---|---|---|
-| เนื้อหา | เกิดอะไร · ต้องทำอะไรต่อ | stack trace · ค่าตัวแปร · id ของคำขอ |
-| ภาษา | ภาษาของผู้ใช้ | อังกฤษก็ได้ |
-| รายละเอียดภายใน | **ไม่มีเลย** | มีได้ |
-| ตัวเชื่อม 2 ฝั่ง | **รหัสอ้างอิง** | รหัสเดียวกัน |
+| Content | what happened · what to do next | stack trace · variable values · request id |
+| Language | the user's language | English is fine |
+| Internal detail | **none at all** | allowed |
+| Link between the 2 sides | **a reference code** | the same code |
 
 ```
-ผิด: "เกิดข้อผิดพลาด"                    ผู้ใช้ทำอะไรต่อไม่ได้
-ผิด: "SqlException: timeout expired"      หลุดรายละเอียดภายใน และเขาก็อ่านไม่ออก
-ถูก: "บันทึกไม่สำเร็จเพราะระบบตอบช้า ลองอีกครั้งใน 1 นาที (อ้างอิง: 01J9Z8K)"
+Wrong: "เกิดข้อผิดพลาด" (An error occurred)   the user cannot tell what to do
+Wrong: "SqlException: timeout expired"      leaks internal detail, and they cannot read it anyway
+Right: "บันทึกไม่สำเร็จเพราะระบบตอบช้า ลองอีกครั้งใน 1 นาที (อ้างอิง: 01J9Z8K)"
+       (Save failed because the system was slow. Try again in 1 minute. Reference: 01J9Z8K)
 ```
 
-**ข้อความที่ดีมี 3 ส่วน** — เกิดอะไร · เพราะอะไร (ถ้าบอกได้) · ต้องทำอะไรต่อ
-รหัสอ้างอิงคือ correlation id ตัวเดียวกับใน `logging-standards`
+**A good message has 3 parts**: what happened · why (if you can say) · what to do next.
+The reference code is the same correlation id as in `logging-standards`.
 
 ---
 
-## 3 · แยกประเภทก่อนตัดสินใจ
+## 3 · Classify before deciding
 
-| ประเภท | ตัวอย่าง | ทำยังไง | log ระดับ |
+| Type | Example | What to do | Log level |
 |---|---|---|---|
-| **ผู้ใช้ทำผิด** | กรอกไม่ครบ ค่าผิดรูปแบบ | บอกให้แก้ · **ห้าม retry** | ไม่ต้อง log |
-| **ชั่วคราว** | timeout · 503 · deadlock · เชื่อมต่อหลุด | **retry ได้** | warning |
-| **ถูกจำกัดอัตรา** | 429 Too Many Requests | retry ได้ **หลังเวลาที่ `Retry-After` บอก** (ไม่มีค่านี้ → ใช้สูตร §4) · ห้ามยิงถี่กว่านั้น | warning |
-| **ถาวร** | 404 · 401 · ข้อมูลไม่ตรงเงื่อนไข | ไม่ retry · บอกให้ชัด | warning |
-| **บั๊กของเรา** | null reference · แปลงชนิดไม่ได้ | ไม่ retry · **ต้องมีคนแก้** | error |
-| **ข้อมูลไม่สอดคล้อง** | ยอดไม่ตรง สถานะเป็นไปไม่ได้ | หยุด · **เรียกคน** | error + แจ้งเตือน |
+| **User mistake** | incomplete input, wrong format | tell them to fix it · **do not retry** | no log needed |
+| **Transient** | timeout · 503 · deadlock · dropped connection | **may retry** | warning |
+| **Rate limited** | 429 Too Many Requests | may retry **after the time `Retry-After` gives** (if absent, use the formula in §4) · never fire faster than that | warning |
+| **Permanent** | 404 · 401 · data fails a condition | do not retry · say so clearly | warning |
+| **Our bug** | null reference · cannot convert the type | do not retry · **someone must fix it** | error |
+| **Inconsistent data** | totals do not match, an impossible state | stop · **call a person** | error + alert |
 
-> **การ retry error ที่ลองกี่ครั้งก็ไม่หาย คือการยิงซ้ำใส่ระบบที่ล้มอยู่ให้ล้มหนักขึ้น**
-> `400` กับ `401` ยิงอีก 100 ครั้งก็ได้คำตอบเดิม
+> **Retrying an error that no number of tries will cure means firing again at a system that is already down, so it falls harder.**
+> Sending `400` or `401` another 100 times gets the same answer.
 
 ---
 
-## 4 · timeout และการลองใหม่
+## 4 · Timeout and retry
 
-**ทุกการเรียกออกนอก process ต้องมี timeout** — ค่าเริ่มต้นของไลบรารีส่วนใหญ่คือ "รอตลอดไป"
+**Every call that leaves the process needs a timeout** — the default in most libraries is "wait forever"
 
-| การเรียก | timeout ที่ใช้ได้ทั่วไป |
+| Call | A timeout that works in general |
 |---|---|
-| ฐานข้อมูล query ปกติ | 5–10 วินาที |
-| HTTP ภายใน | 3–5 วินาที |
-| HTTP ภายนอก | 10–30 วินาที |
-| งานเบื้องหลังที่หนัก | ตั้งตามของจริง แล้วต้องตัดจบได้ |
+| Ordinary database query | 5–10 seconds |
+| Internal HTTP | 3–5 seconds |
+| External HTTP | 10–30 seconds |
+| Heavy background job | set it from the real work, and it must be possible to cut it off |
 
-**สูตรการลองใหม่** (service เรียก service · งานในคิวใช้ตัวเลขของ [`background-jobs`](../background-jobs/SKILL.md) §4 · มีคนนั่งรอหน้าจอ → ดูข้อสุดท้ายด้านล่าง):
+**The retry formula** (service-to-service calls · jobs in a queue use the numbers in [`background-jobs`](../background-jobs/SKILL.md) §4 · when a person sits waiting on the screen → see the last item below):
 
 ```
-ลองไม่เกิน 3 ครั้ง · หน่วงแบบทวีคูณ + สุ่ม
-ครั้งที่ 1 รอ 1 วินาที · ครั้งที่ 2 รอ 2 · ครั้งที่ 3 รอ 4  (แต่ละครั้ง ±20% แบบสุ่ม)
+at most 3 tries · exponential delay + jitter
+try 1 waits 1 second · try 2 waits 2 · try 3 waits 4  (each ±20% random)
 ```
 
-- **ต้องมีตัวสุ่ม** — ไม่งั้นทุก instance จะลองใหม่พร้อมกันเป๊ะ แล้วทับระบบปลายทางซ้ำ
-- **เวลารวมของการลองใหม่ต้องน้อยกว่า timeout ของผู้เรียก** ไม่งั้นเขาเลิกรอไปแล้วแต่เรายังลองอยู่
-- **retry การเขียนต้องมี idempotency key** ไม่งั้นลูกค้าถูกตัดเงิน 2 รอบ (ดู `api-conventions`)
-- **มีคนนั่งรออยู่หน้าจอ** → ลองใหม่อัตโนมัติไม่เกิน 1 ครั้ง แล้วแสดงปุ่ม "ลองอีกครั้ง" ให้เขากดเอง (ไม่ใช้ 3 ครั้งของสูตรด้านบน)
+- **You need the random part** — otherwise every instance retries at the exact same moment and hits the target system again together
+- **The total retry time must be less than the caller's timeout**, or the caller has given up while we are still trying
+- **Retrying a write needs an idempotency key**, or the customer is charged twice (see `api-conventions`)
+- **A person sits waiting on the screen** → at most 1 automatic retry, then show a "ลองอีกครั้ง" (try again) button for them to press (do not use the 3 tries of the formula above)
 
 ---
 
-## 5 · ตัดวงจร (circuit breaker)
+## 5 · Circuit breaker
 
-เมื่อปลายทางล้ม การยิงต่อไม่ได้ช่วยอะไร แค่ทำให้เราค้างตามไปด้วย
+When the target is down, firing more does not help. It only makes us hang along with it.
 
 ```
-ปิด (ปกติ) → ล้มติดกัน N ครั้ง → เปิด (ไม่ยิงเลย ตอบ error ทันที)
-           → รอ X วินาที → ครึ่งเปิด (half-open): ปล่อยให้ลอง 1 คำขอ → สำเร็จก็กลับไปปิด · ล้มก็เปิดต่อ
+closed (normal) → N failures in a row → open (do not call at all, answer with an error at once)
+                → wait X seconds → half-open: let 1 request try → success: back to closed · failure: stay open
 ```
 
-ค่าเริ่มต้นที่ใช้ได้: ถ้าล้ม 5 ครั้งติดกันภายใน 30 วินาที ให้เปิดวงจรไว้ 60 วินาที
+A default that works: if 5 calls fail in a row within 30 seconds, keep the circuit open for 60 seconds.
 
-**ควรใส่เมื่อ** — เรียกระบบภายนอกที่เคยล่ม · เรียกข้ามหลาย service · ปลายทางช้าแล้วลามมาถึงเรา
-**ไม่ต้องใส่เมื่อ** — เรียกฐานข้อมูลของตัวเอง · งานที่วิ่งครั้งเดียวต่อวัน
+**Add one when** — calling an external system that has gone down before · calling across several services · a slow target spreads the slowness to us
+**Not needed when** — calling your own database · a job that runs once a day
 
 ---
 
-## 6 · ล้มบางส่วน
+## 6 · Partial failure
 
-งานที่ทำหลายรายการ ต้องตอบให้ได้ว่า **"ทำได้ 8 จาก 10 แล้วอีก 2 ไปไหน"**
+Work that handles many items must be able to answer **"8 of 10 succeeded, where did the other 2 go?"**
 
-| แบบ | เหมาะกับ |
+| Style | Fits |
 |---|---|
-| ทั้งหมดหรือไม่ทำเลย (transaction) | เงิน · สต็อก · อะไรที่ครึ่ง ๆ แล้วพัง |
-| ทำเท่าที่ได้ แล้วรายงานรายการที่ไม่ผ่าน | นำเข้าข้อมูล · ส่งแจ้งเตือนหลายคน |
+| All or nothing (transaction) | money · stock · anything that breaks when half done |
+| Do what you can, then report the items that failed | data import · notifying many people |
 
-แบบที่สองต้อง**คืนรายการที่ล้มพร้อมเหตุผลรายตัว** ไม่ใช่บอกว่า "บางรายการไม่สำเร็จ"
+The second style must **return the failed items with a reason for each**, not just say "some items failed".
 
-**งานเก็บกวาดต้องรันเสมอ** ไม่ว่างานหลักจะสำเร็จหรือไม่ เช่น ปิดไฟล์ คืน connection ลบไฟล์ชั่วคราว
-ให้ใช้ `finally` / `using` / `with` / `defer` แทนการเขียนซ้ำในทุกทางออก
+**Cleanup must always run**, whether or not the main work succeeds: closing files, returning connections, deleting temp files.
+Use `finally` / `using` / `with` / `defer` instead of repeating it on every exit path.
 
 ---
 
-## 7 · ตรวจก่อนส่ง
+## 7 · Check before sending
 
-ไล่กับ diff ทุกครั้งที่แตะโค้ดที่เรียกออกนอก process (แนวคิดจาก ECC error-handling)
+Go through this against the diff every time you touch code that calls outside the process (idea from ECC error-handling)
 
-- [ ] ทุก `catch` ทำอย่างใดอย่างหนึ่งชัด ๆ: จัดการแล้วไปต่อ · แปลงเป็น error ของชั้นตัวเองแล้วโยนต่อ · ปล่อยไปให้ชั้นนอกสุด log (ข้อ 1) — ไม่มี `catch` ที่ log แล้วโยนต่อ
-- [ ] ทุกการเรียกออกนอก (HTTP · DB · คิว · ไฟล์) มี timeout ที่ตั้งใจ และ retry เฉพาะประเภทชั่วคราวในข้อ 3 · การเขียนที่ retry มี idempotency key (ข้อ 4)
-- [ ] ข้อความถึงผู้ใช้บอกว่าทำอะไรต่อ · ไม่มี stack trace หรือชื่อตารางออกไป (ข้อ 2) · log ของ error เดียวกันมี correlation id และข้อมูลพอให้ทำซ้ำ
-- [ ] ผลที่ธุรกิจคาดไว้ (ไม่พบ · ยอดไม่พอ · ซ้ำ) เป็นค่าคืนหรือ type ที่ผู้เรียกต้องจัดการ ไม่ใช่ exception
-- [ ] dependency ภายนอกแต่ละตัวมี test เส้นทางล้มอย่างน้อย 1 กรณี (timeout · 5xx · payload ผิด) และ test ยืนยันว่าระบบล้มบางส่วนตามข้อ 6 ไม่ล้มทั้งหน้า
-- [ ] ไม่มีการกลืนความล้มเหลวเงียบ ๆ 4 แบบนี้ (เรียบเรียงจาก silent-failure-hunter ของ pr-review-toolkit · claude-plugins-official · Apache-2.0 · ดู 2026-11-10):
-  - **optional chaining หรือ `?? ค่าเริ่มต้น`** ที่ทำให้ค่าที่หายไปผ่านไปโดยไม่มีใครรู้ (`order?.total ?? 0` ทำให้ออเดอร์ที่โหลดไม่ขึ้นกลายเป็นยอดศูนย์)
-  - **fallback ไปใช้ mock หรือข้อมูลตัวอย่างนอก test** — ระบบจริงโชว์ข้อมูลปลอมแล้วดูเหมือนปกติ
-  - **retry หมดแล้วเงียบ** — ครบรอบแล้วคืนค่าว่างหรือสำเร็จ ไม่โยน error และไม่แจ้งผู้เรียก
-  - **catch ที่ log แล้วไปต่อใน UI** — ผู้ใช้เห็นหน้าจอปกติทั้งที่ข้อมูลไม่มา ต้องแสดงสถานะผิดพลาดให้เห็น
+- [ ] Every `catch` clearly does one of these: handles it and goes on · converts it to an error of its own layer and throws on · lets it pass to the outermost layer to log (section 1) — no `catch` that logs and rethrows
+- [ ] Every outside call (HTTP · DB · queue · file) has a deliberate timeout and retries only the transient types in section 3 · a write that retries has an idempotency key (section 4)
+- [ ] The message to the user says what to do next · no stack trace or table name goes out (section 2) · the log for the same error has a correlation id and enough data to reproduce it
+- [ ] Outcomes the business expects (not found · insufficient balance · duplicate) are return values or types the caller must handle, not exceptions
+- [ ] Each outside dependency has at least 1 failure-path test (timeout · 5xx · bad payload), and a test confirms that partial failure follows section 6 and does not fail the whole page
+- [ ] None of these 4 kinds of silent failure swallowing (adapted from silent-failure-hunter in pr-review-toolkit · claude-plugins-official · Apache-2.0 · viewed 2026-11-10):
+  - **optional chaining or `?? default`** that lets a missing value pass with nobody knowing (`order?.total ?? 0` turns an order that failed to load into a zero total)
+  - **falling back to a mock or sample data outside tests** — the live system shows fake data and looks normal
+  - **retries run out, then silence** — after the last try it returns empty or success, throws no error, and tells the caller nothing
+  - **a catch that logs and carries on in the UI** — the user sees a normal screen although the data never arrived; show an error state they can see
 
 ## 8 · Anti-patterns
 
-- **`catch` ว่างเปล่า** — ปัญหาที่หายากที่สุดคือปัญหาที่ไม่มีร่องรอย
-- **คืน `null` แทนการโยน error** — ผู้เรียกไม่รู้ว่าไม่มีข้อมูล หรือระบบพัง
-- **`catch (Exception)` ที่ชั้นในสุด** — กลืนบั๊กของตัวเองไปด้วย
-- **log แล้ว throw ต่อทุกชั้น** — error 1 ตัวได้ 10 บรรทัด
-- **"เกิดข้อผิดพลาด"** — ไม่บอกว่าต้องทำอะไรต่อ
-- **ส่ง stack trace ให้ผู้ใช้** — เปิดโครงสร้างภายในให้คนที่กำลังหาช่องโหว่เห็น
-- **retry แบบไม่หน่วง** — ยิงรัวใส่ระบบที่ล้มอยู่
-- **retry การเขียนโดยไม่มี idempotency key** — ได้รายการซ้ำ
-- **ไม่มี timeout** — thread ค้างสะสมจนระบบตาย
-- **ใช้ error เป็นตัวควบคุมการทำงานปกติ** — เช่นโยน exception เมื่อ "ไม่พบข้อมูล" ซึ่งเป็นเรื่องปกติ
+- **An empty `catch`** — the hardest problem to find is the one that leaves no trace
+- **Returning `null` instead of throwing an error** — the caller cannot tell "no data" from "the system broke"
+- **`catch (Exception)` in the innermost layer** — swallows your own bugs too
+- **Log and rethrow at every layer** — 1 error gets 10 lines
+- **"เกิดข้อผิดพลาด" ("an error occurred")** — does not say what to do next
+- **Sending a stack trace to the user** — shows the internal structure to someone hunting for a hole
+- **Retry with no delay** — hammering a system that is already down
+- **Retrying a write with no idempotency key** — you get duplicate records
+- **No timeout** — threads pile up until the system dies
+- **Using errors to control normal flow** — for example throwing an exception on "not found", which is a normal event

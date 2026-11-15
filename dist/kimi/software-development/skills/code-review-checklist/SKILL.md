@@ -98,7 +98,7 @@ As a reviewer:
 
 `/software-development:code-review-checklist <file path or PR description>`
 
-> **ทางลัดเข้า SuperUser:** เปิด skill `superuser` ด้วย playbook `review` แล้วคัดลอกขั้นตอนของ playbook ลง todo ก่อน ส่วนขั้นตอนด้านล่างบอกรูปแบบงานและ output ของคำสั่งนี้ ให้ใช้คู่กับ playbook ไม่ได้ใช้แทน
+> **Shortcut into SuperUser:** open the skill `superuser` with the playbook `review`, then copy the playbook steps into the todo first · the steps below describe the shape of the work and the output of this command · use them together with the playbook, not in place of it
 
 Use a new `reviewer` agent (read-only) to perform a thorough code review of: **$ARGUMENTS** · high-stakes or contested change → `adversarial-review-panel`
 

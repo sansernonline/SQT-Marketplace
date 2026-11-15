@@ -3,37 +3,37 @@ name: principle-safe-to-rerun
 description: Use when code may run twice or stop halfway
 ---
 
-# principle · safe to rerun — รันกี่รอบก็ได้ผลเหมือนกัน
+# principle · safe to rerun — the same result however many times it runs
 
-> ของที่รันได้ครั้งเดียวจะพังในวันที่มันถูกรัน 2 ครั้ง — retry · คนกดซ้ำ · เครื่องดับกลางทาง
-> เขียนให้รันกี่รอบผลสุดท้ายก็เหมือนเดิม (idempotent)
+> Something that can run only once will break on the day it runs twice — a retry · someone clicking twice · a machine going down halfway.
+> Write it so the final result is the same however many times it runs (idempotent).
 
-## รูปแบบ
+## Patterns
 
-| แทนที่จะ | ทำแบบนี้ |
+| Instead of | Do this |
 |---|---|
-| `INSERT` เปล่า | upsert ด้วย key ธรรมชาติ หรือมี unique constraint กันซ้ำ |
+| A bare `INSERT` | Upsert on a natural key, or add a unique constraint to block duplicates |
 | `CREATE TABLE` · `mkdir` | `IF NOT EXISTS` · `mkdir -p` |
-| `balance = balance + 100` | บันทึกรายการด้วย id ที่ไม่ซ้ำ แล้วคำนวณยอดจากรายการ |
-| รับ webhook แล้วทำทันที | เก็บ event id ที่ทำแล้ว ถ้าเจอซ้ำให้ข้าม |
-| API ที่สร้างของ | รับ `Idempotency-Key` จาก client (`api-conventions`) |
-| สคริปต์แก้ไฟล์ | เช็กก่อนว่าแก้แล้วหรือยัง และแทนค่าเดิม ไม่ต่อท้ายซ้ำ |
-| ทำทั้งก้อนรวดเดียว | ทำทีละชุดและบันทึกจุดที่ทำถึง รันใหม่ก็เริ่มต่อจากจุดนั้น |
+| `balance = balance + 100` | Record entries with unique ids, then compute the balance from the entries |
+| Receive a webhook and act at once | Store the event ids already handled, and skip a repeat |
+| An API that creates things | Accept an `Idempotency-Key` from the client (`api-conventions`) |
+| A script that edits a file | Check first whether it was already edited, and replace the old value instead of appending again |
+| Do the whole batch in one go | Do it in chunks and record how far you got, so a rerun continues from that point |
 
-## โหมดลองก่อน
+## Trial mode
 
-สคริปต์ที่แก้ข้อมูลจริงมี `--dry-run` ที่พิมพ์ว่าจะเปลี่ยนอะไรโดยยังไม่เปลี่ยน
+A script that changes real data has a `--dry-run` that prints what it would change without changing it.
 
-## พิสูจน์
+## Prove it
 
-- รัน 2 ครั้งติดกัน แล้วเทียบผลกับการรันรอบเดียว ผลต้องเหมือนกัน
-- หยุดกลางทาง (kill) แล้วรันใหม่ งานต้องจบครบและไม่มีของซ้ำ
-- ใส่ 2 ข้อนี้เป็น test ของ migration และสคริปต์ที่ใช้ซ้ำ
+- Run it twice in a row, and compare the result with a single run. The results must match.
+- Stop it halfway (kill), then run again. The job must finish completely with no duplicates.
+- Add these 2 checks as tests for migrations and for scripts that are reused.
 
-## ดูต่อ
+## See also
 
-งานเบื้องหลังใช้ `background-jobs` ส่วน migration ฐานข้อมูลใช้ `database-design`
+Use `background-jobs` for background work, and `database-design` for database migrations.
 
-## ไม่ต้องทำเมื่อ
+## Not needed when
 
-คำสั่งอ่านอย่างเดียว หรือสคริปต์ที่ใช้ครั้งเดียวแล้วทิ้งใน `_to_delete/`
+A read-only command, or a one-off script that is thrown away in `_to_delete/`.

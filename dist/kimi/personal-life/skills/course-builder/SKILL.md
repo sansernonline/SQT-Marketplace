@@ -3,164 +3,164 @@ name: course-builder
 description: Use when designing a course or workshop you will teach
 ---
 
-# course-builder · ออกแบบหลักสูตรฝั่งผู้สอน
+# course-builder · designing a course from the teacher's side
 
-> **กฎข้อเดียวของ skill นี้:** ทุกช่วงในตารางสอนต้องชี้กลับไปที่ผลลัพธ์การเรียนรู้ข้อใดข้อหนึ่ง และทุกผลลัพธ์ต้องมีแบบฝึกกับการประเมินที่เห็นผลได้ ถ้าช่วงไหนชี้กลับไม่ได้ ให้ตัดช่วงนั้นออก
+> **The one rule of this skill:** every session in the teaching schedule must point back to one learning outcome, and every outcome must have an exercise and an assessment that show results. If a session cannot point back, cut it.
 
-skill นี้ใช้ตอนคุณเป็นคนสอน ส่วนตอนเป็นคนเรียนใช้ `learning-path` · ผลงานคือโฟลเดอร์ `course/` 1 ชุด: โจทย์จากผู้จัด · ผลลัพธ์การเรียนรู้ · ตารางสอนพร้อมเวลา · แบบฝึก · rubric · สไลด์และเอกสารแจก · แบบประเมินหลังอบรม · บันทึกหลังสอน
+Use this skill when you are the teacher. When you are the learner, use `learning-path`. The product is 1 `course/` folder: the organizer's brief · learning outcomes · a timed schedule · exercises · rubric · slides and handouts · a post-training feedback form · a post-teaching log.
 
-ตัวเลขที่ติดป้าย (แนวของเรา) เป็นค่าเริ่มต้นที่ทีมเลือกเอง ยังไม่ได้ตรวจกับงานวิจัย ให้ใช้เป็นจุดเริ่มแล้วปรับจากบันทึกหลังสอน (หัวข้อ 7 ใน references/materials-feedback-online-copyright.md)
+Numbers labeled `แนวของเรา` (our rule of thumb) are defaults the team chose itself and has not checked against research. Use them as a starting point, then adjust from the post-teaching log (section 7 in references/materials-feedback-online-copyright.md).
 
-## เมื่อไหร่ใช้
+## When to use
 
-| สถานการณ์ | ใช้ |
+| Situation | Use |
 |---|---|
-| จะสอน workshop · อบรมในบริษัท · คอร์สออนไลน์ · ติวเพื่อนร่วมทีม | skill นี้ |
-| อยากเรียนเองให้ใช้เป็น | `learning-path` |
-| เนื้อหาพร้อมแล้ว ต้องการแค่สไลด์ | `presentation-design` (software-development) |
-| เตรียมสอบใบรับรอง | `cert-prep` |
-| สอนให้คนทั่วไปใช้ AI แบบหลายขั้นในแชต (Loop · Graph · Dynamic) | skill นี้วางหลักสูตร แล้วใช้แม่แบบ prompt จาก `superuser:chat-prompt-workflows` เป็นแบบฝึก |
-| สอนวิชาในสถาบันการศึกษาที่มีแบบฟอร์มรายวิชาของตัวเอง | กรอกแบบฟอร์มของสถาบันเป็นหลัก แล้วใช้หัวข้อ 2 ถึง 5 ของ skill นี้เติมเนื้อ |
+| Teaching a workshop · in-company training · online course · tutoring a teammate | this skill |
+| Wanting to learn something well yourself | `learning-path` |
+| Content is ready and you only need slides | `presentation-design` (software-development) |
+| Preparing for a certification exam | `cert-prep` |
+| Teaching ordinary people to use AI in multi-step chat (Loop · Graph · Dynamic) | this skill plans the course, then uses the prompt templates from `superuser:chat-prompt-workflows` as exercises |
+| Teaching a subject at an institution that has its own course form | fill in the institution's form first, then use sections 2 to 5 of this skill to fill in the content |
 
-## 1 · รู้จักผู้เรียนก่อนเขียนเนื้อหา
+## 1 · Know the learners before writing content
 
-ถามผู้จัด (ฝ่ายบุคคลหรือหัวหน้าทีม) รวดเดียว 6 ข้อ แล้วจดลง `course/brief.md`
+Ask the organizer (HR or the team lead) 6 questions in one go, then write the answers to `course/brief.md`.
 
-1. ใครเรียน กี่คน ทำงานตำแหน่งอะไร
-2. เรียนจบแล้วกลับไปทำอะไรที่งานได้ คำตอบข้อนี้คือเป้าของทั้งหลักสูตร
-3. ตอนนี้ติดอะไรอยู่ ขอเหตุการณ์จริง 1–2 เรื่อง
-4. มีเวลาทั้งหมดกี่ชั่วโมง เริ่มและเลิกกี่โมง
-5. สอนในห้องหรือออนไลน์ ใช้เครื่องของใคร ติดตั้งโปรแกรมเองได้ไหม
-6. วัดผลอย่างไร ต้องส่งคะแนนหรือออกใบประกาศไหม
+1. Who is learning, how many, and in what roles?
+2. After the course, what can they do at work? The answer is the goal of the whole course.
+3. What are they stuck on now? Ask for 1–2 real incidents.
+4. How many hours in total, and what are the start and end times?
+5. In the room or online? Whose machines? Can they install software themselves?
+6. How is it measured? Do you need to submit scores or issue certificates?
 
-- **ความรู้ที่ต้องมีก่อนเรียน (prerequisites)** เขียนเป็นสิ่งที่ทำได้ ไม่เขียนว่า "มีพื้นฐาน" เช่น "เปิด terminal แล้วใช้ cd ย้ายโฟลเดอร์ได้" · ส่งแบบเช็ก 5 ข้อล่วงหน้า 3 วัน ถ้าผลห่างกันมาก ให้จับคู่คนคล่องกับคนเพิ่งเริ่ม หรือเปิดช่วงปูพื้น 30 นาทีก่อนวันจริง (แนวของเรา)
-- **เป้าของผู้เรียน** จดเหตุผลที่ผู้เรียนต้องการทักษะนี้ไว้ที่เดียวใน `brief.md` แล้วใช้ตัดสินว่าเนื้อหาไหนได้ไปต่อ เนื้อหาไหนตัด (แนวคิดจาก `teach` ของ mattpocock/skills · MIT · เรียบเรียงใหม่)
+- **Prerequisites** are written as things the learner can do, never "has a background." Example: "can open a terminal and move folders with cd." Send a 5-item check 3 days ahead. If results differ widely, pair a fluent learner with a beginner, or open a 30-minute warm-up before the real day (แนวของเรา).
+- **The learner's goal**: record the reason the learners need this skill in one place in `brief.md`, then use it to decide which content stays and which is cut (idea from `teach` in mattpocock/skills · MIT · rewritten).
 
-## 2 · ผลลัพธ์การเรียนรู้ใช้กริยาที่มองเห็นได้
+## 2 · Learning outcomes use visible verbs
 
-ผลลัพธ์การเรียนรู้ (learning outcome) 1 ข้อบอกว่าผู้เรียนทำอะไรได้ที่คนอื่นเห็นหรือตรวจได้ ภายใต้เงื่อนไขไหน และต้องดีแค่ไหน
+A learning outcome says what the learner can do that others can see or check, under which conditions, and how well.
 
-รูปประโยค: **เมื่อจบหลักสูตร ผู้เรียน + กริยาที่มองเห็นได้ + สิ่งที่ทำ + เงื่อนไข + เกณฑ์** เช่น "แยก branch แก้ไฟล์ แล้ว merge กลับ main ได้เองโดยไม่เปิดโน้ต และไม่มีงานของอีกฝั่งหาย"
+Sentence form: **At the end of the course, the learner + visible verb + what they do + condition + criterion.** Example: "Branch, edit a file, and merge back into main alone without opening notes, with no work from the other side lost."
 
-เลือกกริยาจากอนุกรมวิธานของบลูมฉบับปรับปรุง (revised Bloom's taxonomy) ด้านกระบวนการคิด 6 ระดับ (Krathwohl 2002) · ชื่อระดับไม่ใช่กริยาที่เอาไปเขียน ให้ใช้กริยาในคอลัมน์ที่ 3
+Pick verbs from the revised Bloom's taxonomy, cognitive process dimension, 6 levels (Krathwohl 2002). The level names are not verbs to write into an outcome. Use the verbs in column 3.
 
-| ระดับ | ความหมาย | กริยาที่มองเห็นได้ | ตัวอย่างในหลักสูตร Git |
+| Level | Meaning | Visible verbs | Example in a Git course |
 |---|---|---|---|
-| 1 จำ (Remember) | ดึงความรู้ที่เกี่ยวข้องออกจากความจำ | บอกชื่อ · ระบุ · เขียนคำสั่ง | บอกคำสั่งที่ใช้ดูสถานะไฟล์ |
-| 2 เข้าใจ (Understand) | สรุปความหมายของสิ่งที่สอน ทั้งคำพูด ข้อความ และภาพ | อธิบายด้วยคำของตัวเอง · ยกตัวอย่าง · เปรียบเทียบ | อธิบายว่า `add` ต่างจาก `commit` อย่างไร |
-| 3 ประยุกต์ใช้ (Apply) | ทำตามวิธีในสถานการณ์ที่กำหนด | ใช้ · รัน · ทำตามขั้น · แก้โจทย์ | commit การแก้ 3 ครั้ง ข้อความบอกว่าแก้อะไร |
-| 4 วิเคราะห์ (Analyze) | แยกเป็นส่วนแล้วหาว่าแต่ละส่วนเกี่ยวกันอย่างไร | แยกแยะ · หาสาเหตุ · จัดกลุ่ม | ไล่ `git log` หา commit ที่ทำให้ราคาผิด |
-| 5 ประเมิน (Evaluate) | ตัดสินตามเกณฑ์หรือมาตรฐาน | ตรวจตามเกณฑ์ · เลือกพร้อมเหตุผล · วิจารณ์ | เลือกว่าจะย้อนทั้ง commit หรือแก้ไฟล์เดียว พร้อมเหตุผล |
-| 6 สร้างสรรค์ (Create) | ประกอบชิ้นส่วนเป็นของใหม่ที่ใช้ได้ทั้งชิ้น | ออกแบบ · วางแผน · สร้าง | ออกแบบกติกาตั้งชื่อ branch ของทีม |
+| 1 Remember | Retrieve relevant knowledge from memory | name · identify · write the command | Name the command that shows file status |
+| 2 Understand | Work out the meaning of what was taught, in speech, text and pictures | explain in own words · give an example · compare | Explain how `add` differs from `commit` |
+| 3 Apply | Carry out a method in a given situation | use · run · follow the steps · solve a task | Commit 3 changes, with messages saying what changed |
+| 4 Analyze | Break into parts and find how the parts relate | distinguish · find the cause · group | Walk through `git log` to find the commit that made the price wrong |
+| 5 Evaluate | Judge against a criterion or standard | check against criteria · choose with reasons · critique | Choose between undoing a whole commit and editing one file, with reasons |
+| 6 Create | Put parts together into a new whole that works | design · plan · build | Design the team's branch naming rules |
 
-- **ห้ามใช้ "เข้าใจ" "รู้" "ตระหนัก" "คุ้นเคยกับ" เป็นกริยาของผลลัพธ์** เพราะตรวจไม่ได้ ให้ถามต่อว่า "ถ้าเข้าใจจริง เขาจะทำอะไรต่างไปจากเดิม" แล้วเขียนสิ่งนั้นแทน (Eberly Center ของ Carnegie Mellon) · Krathwohl เล่าไว้ว่าเวลาครูบอกว่าอยากให้ผู้เรียน "เข้าใจจริง ๆ" ความหมายกินตั้งแต่ระดับเข้าใจไปถึงการสร้างงานใหม่ คำนี้จึงไม่บอกระดับ
-- หลักสูตร 1 วันมีผลลัพธ์ 3–5 ข้อ ส่วนใหญ่อยู่ระดับ 3–4 และระดับ 6 ไม่เกิน 1 ข้อ เพราะงานสร้างใหม่ใช้เวลาลงมือนาน (แนวของเรา)
-- จับคู่ผลลัพธ์ทุกข้อกับช่วงที่สอน แบบฝึก และการประเมินไว้ในตารางเดียว ถ้าผลลัพธ์ข้อไหนไม่มีแบบฝึก แปลว่าสอนแต่ไม่ได้ให้ลองทำ (ตารางจับคู่อยู่ในหัวข้อ 10)
+- **Never use "understand," "know," "be aware of," or "be familiar with" as the verb of an outcome**, because they cannot be checked. Ask "If they truly understood, what would they do differently?" and write that instead (Eberly Center, Carnegie Mellon). Krathwohl notes that when teachers say they want learners to "really understand," the meaning ranges from the understand level up to creating new work, so the word gives no level.
+- A 1-day course has 3–5 outcomes, mostly at levels 3–4, and at most 1 at level 6, because creating something new takes long hands-on time (แนวของเรา).
+- Map every outcome to its teaching session, exercise and assessment in one table. An outcome with no exercise means you taught it but never let learners try it (the alignment table is in section 10).
 
-## 3 · ตารางสอนแบ่งช่วงพร้อมเวลา
+## 3 · A schedule split into timed sessions
 
-**สมมุติฐานของวันอบรม** (ใช้ในตัวอย่าง ไม่ใช่ข้อเท็จจริง): อบรมในบริษัทไทย 1 วัน 09:00–16:00 พักเช้าและพักบ่ายช่วงละ 15 นาที พักเที่ยง 60 นาที เหลือเวลาสอนจริง 5 ชั่วโมง 30 นาที · ทุกงานให้ถามเวลาจริงจากผู้จัด เพราะแต่ละที่ต่างกัน บางที่มีพิธีเปิดหรือถ่ายรูปหมู่กินเวลาเพิ่มด้วย
+**Assumptions for the training day** (used in the example, not facts): 1 in-company training day in Thailand, 09:00–16:00, with a 15-minute morning break, a 15-minute afternoon break and a 60-minute lunch, leaving 5 hours 30 minutes of real teaching time. For every job, ask the organizer for the real times, because each place differs. Some have an opening ceremony or a group photo that takes extra time.
 
-| เวลา | ช่วง | ผลลัพธ์ข้อ | สอน (นาที) | ลงมือ (นาที) | ทำอะไร · ของที่ต้องเตรียม |
+| Time | Session | Outcome no. | Teach (min) | Hands-on (min) | What happens · what to prepare |
 |---|---|---|---:|---:|---|
-| 09:00–10:30 | 1 · ชื่อช่วง | 1 | 25 | 65 | กิจกรรม · ไฟล์ที่แจก |
+| 09:00–10:30 | 1 · Session name | 1 | 25 | 65 | Activity · files to hand out |
 
-กฎตอนจัดช่วง (แนวของเรา)
+Rules for arranging sessions (แนวของเรา):
 
-- พูดต่อเนื่องไม่เกิน 20 นาที แล้วให้ลงมือหรือตอบคำถาม
-- หลักสูตรทักษะใช้เวลาพูดราว 30% และลงมือราว 70%
-- ช่วงหลังพักเที่ยงเป็นงานลงมือ ไม่ใช่บรรยาย
-- เผื่อเวลา 10% ในทุกช่วงสำหรับเครื่องมีปัญหาและคำถาม
-- เปิดทุกช่วงด้วยคำถามทวน 3 ข้อจากช่วงก่อน ให้ตอบโดยไม่เปิดโน้ต (ฝึกดึงความรู้ออกมาใช้ หรือ retrieval practice) และช่วงท้ายวันวนกลับมาใช้ทักษะของช่วงแรกอีกรอบ (ทวนแบบเว้นระยะ หรือ spacing) · หลักการ 2 ข้อนี้มาจาก `teach` (เรียบเรียงใหม่)
-- 20 นาทีสุดท้ายของวันใช้ทวน ทำแบบประเมิน (หัวข้อ 7) และบอกว่าจะไปฝึกต่อที่ไหน
+- Talk for at most 20 minutes at a stretch, then let learners do something or answer questions.
+- A skills course uses about 30% talking and about 70% hands-on.
+- The session after lunch is hands-on work, not lecture.
+- Keep a 10% buffer in every session for machine problems and questions.
+- Open every session with 3 review questions from the previous session, answered without notes (retrieval practice). Near the end of the day, loop back to use the first session's skill once more (spaced review, or spacing). These 2 principles come from `teach` (rewritten).
+- Use the last 20 minutes of the day to review, fill in the feedback form (section 7) and say where to keep practicing.
 
-## 4 · แบบฝึกจากมีคนพาทำไปจนทำเองได้
+## 4 · Exercises, from guided to alone
 
-ทุกทักษะไล่ 4 ขั้น ไม่กระโดดจากดูผู้สอนทำไปทำเองทันที
+Every skill goes through 4 stages. Do not jump from watching the teacher straight to doing it alone.
 
-| ขั้น | ผู้สอนทำ | ผู้เรียนทำ | ตัวช่วยที่ให้ |
+| Stage | Teacher does | Learner does | Support given |
 |---|---|---|---|
-| 1 ดู | ทำให้ดูบนจอ พูดสิ่งที่คิดออกมาดัง ๆ | ดูและจด | ทุกขั้นอยู่บนสไลด์ |
-| 2 ทำตาม | ทำไปพร้อมกันทีละคำสั่ง หยุดรอที่จุดตรวจ | ทำตามบนเครื่องตัวเอง | ใบขั้นตอนครบทุกขั้น |
-| 3 ทำเองมีตัวช่วย | เดินดู ตอบเมื่อผู้เรียนถาม | ทำโจทย์ใหม่ที่คล้ายของเดิม | ไฟล์เริ่มต้น · คำใบ้ 3 ขั้น |
-| 4 ทำเอง | ไม่ช่วย จดว่าใครติดตรงไหน | ทำโจทย์ในเรื่องใหม่ | ไม่มี ใช้ประเมินด้วย rubric |
+| 1 Watch | Demonstrates on screen, saying thoughts aloud | Watches and takes notes | Every step is on the slides |
+| 2 Follow along | Works together one command at a time, pausing at checkpoints | Follows on their own machine | An instruction sheet with every step |
+| 3 Do it with help | Walks around, answers when learners ask | Does a new task similar to the earlier one | Starter files · a 3-step hint |
+| 4 Do it alone | Gives no help, notes who is stuck where | Does a task on a new topic | None · scored with a rubric |
 
-**แบบฝึก 1 ชิ้นมีครบ 7 อย่าง:** ผลลัพธ์ข้อไหน · ไฟล์เริ่มต้น · ขั้นตอนหรือโจทย์ · **เสร็จเมื่อ** (ผลที่ตรวจได้ เช่น คำสั่งไหนต้องแสดงอะไร) · คำใบ้ 3 ขั้น (ชี้ทิศ แล้วบอกชื่อคำสั่ง แล้วบอกเกือบทั้งหมด) · เฉลยแยกไฟล์ · โจทย์เสริมสำหรับคนที่เสร็จก่อน
+**Each exercise has all 7 parts:** which outcome · starter files · steps or task · **เสร็จเมื่อ** (done when: a checkable result, such as which command must show what) · a 3-step hint (point the direction, then name the command, then say almost all of it) · an answer key in a separate file · an extension task for those who finish early.
 
-- **ใช้เรื่องที่ผู้เรียนเจอในงาน** ทีมบัญชีใช้ไฟล์งบ ทีมทดสอบใช้ test case ไม่ใช้ชื่อลอย ๆ แบบ `foo` `bar` (หลักเดียวกับกฎผูกกับโปรเจกต์จริงของ `learning-path`)
-- **โฟลเดอร์แบบฝึก** ตั้งเลขนำหน้าตามลำดับช่วง แต่ละแบบฝึกแยก `problem/` (โจทย์ที่มีจุดให้เติม) · `solution/` (เฉลย) · `explainer/` (คำอธิบาย) มี README สั้น ๆ ทุกโฟลเดอร์ · ย้ายหรือเปลี่ยนเลขด้วย `git mv` ประวัติไฟล์จะได้ไม่หาย (แนวคิดจาก `scaffold-exercises` ของ mattpocock/skills · MIT · เรียบเรียงใหม่)
-- **คำถามแบบเลือกตอบ** ทำตัวเลือกทุกข้อให้ยาวใกล้กัน และสลับตำแหน่งข้อที่ถูก ผู้เรียนจะได้เดาจากหน้าตาตัวเลือกไม่ได้ (แนวคิดจาก `teach`)
-- **ลองทำแบบฝึกเองก่อนสอนทุกครั้ง** บนเครื่องรุ่นเดียวกับผู้เรียน แล้วจดเวลาที่ใช้ คูณ 3 เป็นเวลาของผู้เรียนมือใหม่ (แนวของเรา)
+- **Use topics the learners meet at work.** The accounting team uses a financial statement file, the testing team uses test cases. Do not use bare names like `foo` and `bar` (same principle as the real-project rule of `learning-path`).
+- **Exercise folders**: number the prefix by session order. Each exercise splits into `problem/` (a task with gaps to fill) · `solution/` (the answer) · `explainer/` (the explanation), with a short README in every folder. Move or renumber with `git mv` so file history is not lost (idea from `scaffold-exercises` in mattpocock/skills · MIT · rewritten).
+- **Multiple-choice questions**: make all options similar in length and shuffle the position of the correct one, so learners cannot guess from how the options look (idea from `teach`).
+- **Try every exercise yourself before teaching**, on the same machine type as the learners, and note the time it takes. Multiply by 3 for a beginner's time (แนวของเรา).
 
-## 5 · การประเมิน: rubric 3–4 ระดับพร้อมงานตัวอย่าง
+## 5 · Assessment: a rubric with 3–4 levels and sample work
 
-rubric คือชุดเกณฑ์ของงาน ที่บรรยายว่างานแต่ละระดับคุณภาพหน้าตาเป็นอย่างไร (Brookhart · ASCD)
+A rubric is a set of criteria for a task that describes what work at each quality level looks like (Brookhart · ASCD).
 
-1. เกณฑ์ 3–5 ข้อ แต่ละข้อผูกกับผลลัพธ์ 1 ข้อ
-2. ระดับ 3–4 ระดับ · 4 ระดับไม่มีตรงกลาง ผู้ประเมินต้องเลือกว่าผ่านหรือยัง · 3 ระดับเร็วกว่า เหมาะกับงานสั้น (แนวของเรา)
-3. ช่องในตารางบรรยายสิ่งที่เห็นในงาน ไม่ใช้คำตัดสินลอย ๆ อย่าง "ดี" "ดีมาก" "ครบถ้วน"
-4. **งานตัวอย่างประจำระดับ (anchor)** เก็บงานจริงระดับละ 1 ชิ้นจากรอบทดลองสอน ลบชื่อออกและขออนุญาตเจ้าของก่อน แล้วให้ผู้ประเมิน 2 คนให้คะแนนงานชุดเดียวกัน ถ้าต่างกันเกิน 1 ระดับ ให้แก้ถ้อยคำในช่องนั้น
-5. **ผ่านหรือไม่ดูทีละเกณฑ์ ไม่ใช้คะแนนรวม** ทุกเกณฑ์ต้องถึงระดับ "ทำได้เอง" เพราะคะแนนรวมให้ข้อที่ทำได้ดีมากลบข้อที่ทำไม่ได้ (แนวของเรา)
-6. แจก rubric ให้ผู้เรียนดูก่อนทำโจทย์ ไม่ใช่หลังให้คะแนน
+1. 3–5 criteria, each tied to 1 outcome.
+2. 3–4 levels. 4 levels have no middle, so the assessor must decide pass or not yet. 3 levels are faster and suit short tasks (แนวของเรา).
+3. Each cell in the table describes what is visible in the work. Do not use bare verdicts like "good," "very good" or "complete."
+4. **Sample work for each level (anchor)**: keep 1 real piece per level from the pilot run, remove names, and ask the owner's permission first. Then have 2 assessors score the same set. If they differ by more than 1 level, rewrite the wording in that cell.
+5. **Judge pass or fail one criterion at a time, not by total score.** Every criterion must reach the level "can do alone," because a total score lets a strong item cancel out an item the learner cannot do (แนวของเรา).
+6. Give the rubric to learners before they start the task, not after scoring.
 
-แบบทดสอบก่อนและหลังเรียน (5 ข้อชุดเดียวกัน) บอกว่าความรู้เพิ่มขึ้นไหม ส่วน rubric บอกว่าทำได้จริงไหม · ใช้ทั้ง 2 อย่าง
+A pre-test and post-test (the same 5 items) show whether knowledge grew. The rubric shows whether they can really do it. Use both.
 
-## 6–9 · สื่อ แบบประเมิน ออนไลน์ ลิขสิทธิ์
+## 6–9 · Materials, feedback form, online, copyright
 
-รายละเอียดอยู่ใน [references/materials-feedback-online-copyright.md](references/materials-feedback-online-copyright.md) · เปิดเมื่อถึงขั้นนั้น
+The details are in [references/materials-feedback-online-copyright.md](references/materials-feedback-online-copyright.md) · open it when you reach that step.
 
-| หัวข้อ | เปิดเมื่อ | แกนที่ต้องจำ |
+| Section | Open when | Core point to remember |
 |---|---|---|
-| 6 · สื่อการสอน | ทำสไลด์และเอกสารแจก | สไลด์ไม่ใช่เอกสารแจก · รายละเอียดและคำสั่งอยู่ในเอกสารแจก · รัน `thai_tells.py` ก่อนพิมพ์ |
-| 7 · แบบประเมินหลังอบรม | ออกแบบแบบประเมิน · ทบทวนหลังสอน | ไม่เกิน 7 ข้อ 3 นาที ไม่ต้องใส่ชื่อ · ทบทวนใน 48 ชั่วโมง · แก้ไม่เกิน 3 อย่างต่อรอบ |
-| 8 · ออนไลน์กับในห้อง | สอนออนไลน์ | ช่วงละไม่เกิน 60 นาที · ส่งคู่มือติดตั้งล่วงหน้า 3 วัน · แจ้งก่อนอัดวิดีโอ (ตัวเลขเป็นแนวของเรา) |
-| 9 · ลิขสิทธิ์ | ใส่ภาพ ข้อความ หรือโค้ดของคนอื่น · ขายหรือสอนลูกค้า | ของคนอื่นต้องบอกที่มา · อบรมที่เก็บเงินไม่ควรพึ่งข้อยกเว้นเพื่อการสอน · ไม่บอกสัญญาอนุญาต ถือว่าใช้ไม่ได้ · ไม่ใช่คำปรึกษากฎหมาย |
+| 6 · Teaching materials | Making slides and handouts | Slides are not handouts · details and commands go in the handout · run `thai_tells.py` before printing |
+| 7 · Post-training feedback form | Designing the form · reviewing after teaching | At most 7 items, 3 minutes, no name · review within 48 hours · fix at most 3 things per round |
+| 8 · Online versus in the room | Teaching online | At most 60 minutes per session · send the install guide 3 days ahead · announce before recording video (numbers are แนวของเรา) |
+| 9 · Copyright | Using other people's pictures, text or code · selling or teaching clients | Credit other people's work · paid training should not rely on the teaching exception · no stated license means unusable · not legal advice |
 
-## 10 · ตัวอย่าง: หลักสูตร "Git สำหรับมือใหม่" 1 วัน
+## 10 · Example: a 1-day "Git สำหรับมือใหม่" (Git for beginners) course
 
-ตัวอย่างเต็มอยู่ที่ [references/git-one-day-example.md](references/git-one-day-example.md): ผลลัพธ์ 3 ข้อ · ตาราง 4 ช่วง (สอน 95 นาที ลงมือ 235 นาที ราว 29% ต่อ 71%) · แบบฝึก 2 ชุด · rubric 4 ระดับ · ตารางจับคู่ · คำสั่ง Git ทุกบรรทัดรันจริงด้วย Git 2.54 บน Windows (2026-10-23)
+The full example is at [references/git-one-day-example.md](references/git-one-day-example.md): 3 outcomes · a table of 4 sessions (95 minutes of teaching, 235 minutes hands-on, about 29% to 71%) · 2 exercise sets · a 4-level rubric · an alignment table · every Git command line really run with Git 2.54 on Windows (2026-10-23).
 
-บทเรียน 2 ข้อจากการทดสอบตัวอย่างนี้ ใช้กับแบบฝึกที่เตรียม repo ไว้ล่วงหน้าทุกชุด:
+2 lessons from testing this example apply to every exercise that uses a pre-built repo:
 
-- **repo ที่ให้ย้อนการแก้ด้วย `git revert`** อย่าให้ commit หลังจากนั้นแก้บรรทัดที่ติดกับบรรทัดที่จะย้อน เพราะ `revert` จะ conflict และกลายเป็นบทเรียนเรื่อง conflict ก่อนเวลา (เจอจริงตอนทดสอบ 2026-10-23)
-- **คำเตือนที่ไม่ใช่ error** เช่น `LF will be replaced by CRLF` บน Windows ให้บอกผู้เรียนก่อนเจอ และใส่ `--no-edit` ในคำสั่งที่จะเปิดโปรแกรมแก้ข้อความซึ่งมือใหม่ปิดไม่เป็น
+- **A repo where learners undo a change with `git revert`**: make sure no later commit edits a line next to the line being undone. Otherwise `revert` hits a conflict and becomes the conflict lesson too early (seen in testing, 2026-10-23).
+- **Warnings that are not errors**, such as `LF will be replaced by CRLF` on Windows: tell learners before they see it. Add `--no-edit` to commands that would open a message editor that beginners cannot close.
 
-## 11 · ตรวจก่อนส่ง
+## 11 · Check before sending
 
-- [ ] ผลลัพธ์ทุกข้อใช้กริยาที่มองเห็นได้ ไม่มี "เข้าใจ" "รู้" "ตระหนัก"
-- [ ] ทุกช่วงชี้ไปที่ผลลัพธ์ และทุกผลลัพธ์มีแบบฝึกกับการประเมินในตารางจับคู่
-- [ ] เวลาในตารางรวมแล้วเท่ากับเวลาสอนจริงที่ผู้จัดยืนยัน ถ้ายังไม่ยืนยันให้เขียนว่าเป็นสมมุติฐาน
-- [ ] แบบฝึกไล่ครบ 4 ขั้น ทุกชิ้นมี "เสร็จเมื่อ" ที่ตรวจได้ และคำสั่งทุกบรรทัดรันจริงแล้วบนเครื่องรุ่นเดียวกับผู้เรียน
-- [ ] rubric 3–4 ระดับ ช่องบรรยายสิ่งที่เห็นในงาน ผ่านหรือไม่ดูทีละเกณฑ์ และแจกก่อนทำโจทย์
-- [ ] เอกสารแจกผ่าน `human-writing` และ `thai_tells.py` · สไลด์กับเอกสารใช้ศัพท์ชุดเดียวกัน
-- [ ] ภาพ ข้อความ และโค้ดของคนอื่นมีที่มาและสัญญาอนุญาต · อบรมที่เก็บเงินไม่มีงาน NC · แบบฝึกไม่มีข้อมูลส่วนบุคคลจริง
-- [ ] แบบประเมินไม่เกิน 7 ข้อ และนัดทบทวนหลังสอนไว้ในปฏิทินแล้ว
+- [ ] Every outcome uses a visible verb, with no "understand," "know" or "be aware of."
+- [ ] Every session points to an outcome, and every outcome has an exercise and an assessment in the alignment table.
+- [ ] The times in the table add up to the real teaching time the organizer confirmed. If not yet confirmed, write that it is an assumption.
+- [ ] Exercises cover all 4 stages, each has a checkable "เสร็จเมื่อ," and every command line has really been run on the same machine type as the learners.
+- [ ] The rubric has 3–4 levels, cells describe what is visible in the work, pass or fail is judged one criterion at a time, and it is handed out before the task.
+- [ ] Handouts pass `human-writing` and `thai_tells.py` · slides and handouts use the same terms.
+- [ ] Other people's pictures, text and code have a source and a license · paid training has no NC work · exercises hold no real personal data.
+- [ ] The feedback form has at most 7 items, and the post-teaching review is booked in the calendar.
 
-## 12 · ข้อผิดพลาดที่เจอบ่อย
+## 12 · Common mistakes
 
-- **สไลด์มากจนไม่เหลือเวลาลงมือ** นับเวลาจากตารางสอน ไม่ใช่จากจำนวนสไลด์
-- **ผลลัพธ์เขียนว่า "เข้าใจ Git"** ตรวจไม่ได้ เลยออกแบบแบบฝึกและการประเมินไม่ได้ไปด้วย
-- **แบบฝึกมีแต่ขั้นทำตาม** ผู้เรียนทำได้ในห้อง แต่กลับไปที่โต๊ะแล้วทำเองไม่ได้
-- **rubric ใช้คำว่า "ดี" กับ "ดีมาก"** ผู้ประเมิน 2 คนให้คะแนนงานเดียวกันไม่ตรงกัน
-- **แบบประเมินถามแต่ความพอใจ** รอบหน้าเลยไม่รู้ว่าต้องแก้อะไร
-- **ติดตั้งโปรแกรมในวันสอน** ช่วงแรกหายไปกับการแก้เครื่อง ให้ส่งคู่มือติดตั้งและนัดเช็กเครื่องล่วงหน้า
-- **ใช้ภาพจากผลค้นหาโดยไม่ดูสัญญาอนุญาต** ดูหัวข้อ 9 ใน references/materials-feedback-online-copyright.md
+- **So many slides that no time is left for hands-on work.** Count time from the schedule, not from the number of slides.
+- **An outcome written as "understand Git."** It cannot be checked, so exercises and assessment cannot be designed either.
+- **Exercises with only the follow-along stage.** Learners can do it in the room but cannot do it alone back at their desk.
+- **A rubric that says "good" and "very good."** Two assessors score the same work differently.
+- **A feedback form that asks only about satisfaction.** Next round you do not know what to fix.
+- **Installing software on the teaching day.** The first part of the session is lost to fixing machines. Send the install guide and schedule a machine check ahead.
+- **Using pictures from search results without checking the license.** See section 9 in references/materials-feedback-online-copyright.md.
 
-## เชื่อมกับ skill อื่น
+## Link to other skills
 
-| ต้องการ | ใช้ |
+| Need | Use |
 |---|---|
-| ฝั่งผู้เรียน: วางเส้นทางเรียนเอง | `learning-path` |
-| สไลด์ที่คนจะนำเสนอ (เรื่องเล่า หัวสไลด์ ฟอนต์ไทย) | `presentation-design` (software-development) |
-| สไลด์ HTML ไฟล์เดียว เปิดได้ไม่ต้องต่อเน็ต มีโน้ตผู้พูด | `html-slide-deck` (software-development) |
-| เอกสารแจกเป็น Word จาก Markdown | `markdown-report-docx` (software-development) |
-| ภาษาไทยในเอกสารแจก สไลด์ และแบบประเมิน | `human-writing` · ตัดคำไทยในไฟล์ส่งออก `references/thai-line-breaking.md` |
-| ผู้เรียนอยากสอบใบรับรองต่อ | `cert-prep` |
-| เก็บชื่อหรืออีเมลผู้เรียน · อัดวิดีโอการสอน | `pdpa-workflow` (e-commerce) |
-| สัญญาจ้างสอนและสิทธิ์ในสื่อ | `doc-contract-th` (e-commerce) |
-| ใบเสนอราคาค่าอบรม | `doc-quotation` (e-commerce) |
-| คลิปสั้นโปรโมตหลักสูตร | `video-script-to-clip` (graphic-design) |
+| Learner side: planning your own learning path | `learning-path` |
+| Slides someone will present (storyline, slide titles, Thai fonts) | `presentation-design` (software-development) |
+| Single-file HTML slides that open offline, with speaker notes | `html-slide-deck` (software-development) |
+| Handouts as Word from Markdown | `markdown-report-docx` (software-development) |
+| Thai in handouts, slides and feedback forms | `human-writing` · Thai word breaking in exported files: `references/thai-line-breaking.md` |
+| Learners who want to go on to a certification exam | `cert-prep` |
+| Collecting learners' names or emails · recording teaching video | `pdpa-workflow` (e-commerce) |
+| Teaching contract and rights in the materials | `doc-contract-th` (e-commerce) |
+| Quotation for training fees | `doc-quotation` (e-commerce) |
+| Short clip promoting the course | `video-script-to-clip` (graphic-design) |
 
-## แหล่งที่มา (ตรวจ 2026-10-23)
+## Sources (checked 2026-10-23)
 
-ตารางแหล่งที่มาทุกข้อ (Bloom · rubric · Kirkpatrick · ลิขสิทธิ์ · Creative Commons · Git): [references/sources.md](references/sources.md)
+The full table of sources (Bloom · rubric · Kirkpatrick · copyright · Creative Commons · Git): [references/sources.md](references/sources.md)

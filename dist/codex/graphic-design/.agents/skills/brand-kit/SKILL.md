@@ -6,7 +6,7 @@ argument-hint: '[brand or company name]'
 
 # Brand Kit
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
 
 One folder, one README, everything the brand needs to look like itself. A small shop needs a kit it can read in 5 minutes, not a 60-page brand book.
 
@@ -14,7 +14,7 @@ For app or product screens, the `software-development` plugin's `design-system` 
 
 ## Workflow
 
-0. **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `logo` (สีใช้ `color`) แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้
+0. **Search for references first:** take the project's keywords and search live as `design-references` (plugin `superuser`) says, type `logo` (use `color` for colours), then pull the colours from the piece you choose · use the stored palette library only when a live search is not possible
 1. **Collect** — brand name (Thai and English), 1-sentence positioning, audience, 3 personality adjectives, existing logo files, and 2 competitors to look different from
 2. **Copy the folder template** in [kit-template.md](references/kit-template.md) to `brand-kit/v1/`
 3. **Logo** — collect or request the 4 versions (full colour · reversed white · solid black · solid white), set clear space and minimum size (below)
@@ -82,10 +82,10 @@ Draw the clear-space box on a page in the kit (`logo/usage.png`) — people foll
 
 ## เขียนเป็นเอกสาร (full brand guideline)
 
-ใช้เมื่อองค์กรหรือทีมต้องมีคู่มือเต็ม (น้ำเสียง ข้อความหลัก กติกาอนุมัติงาน การเก็บไฟล์) หรือต้องซิงก์สีเข้า design token · ร้านเล็กใช้ Workflow ข้างบนก็พอ
+Use this when an organisation or team needs a full guide (tone of voice, key messages, approval rules, file storage) or must sync colours into design tokens · a small shop is fine with the Workflow above
 
-- **ไฟล์เดียว:** `docs/brand-guidelines.md` ที่ทุกคนและทุก agent อ่านจากที่เดียว · สีและฟอนต์ในนั้นเป็นต้นทาง ไฟล์ token ทำตามนั้น
-- เริ่มจาก `templates/brand-guidelines-starter.md` · ข้อมูลที่ไม่มีใส่ `(รอยืนยัน)` ไม่แต่งเอง
+- **One file:** `docs/brand-guidelines.md`, which every person and every agent reads from one place · its colours and fonts are the source, and the token file follows them
+- Start from `templates/brand-guidelines-starter.md` · put `(รอยืนยัน)` (awaiting confirmation) for any data you do not have, and do not invent it
 - ซิงก์ token: `node scripts/sync-brand-to-tokens.cjs` · ตรวจไฟล์: `scripts/validate-asset.cjs` · เทียบสีภาพ: `scripts/extract-colors.cjs` · สรุปแบรนด์แปะ prompt: `scripts/inject-brand-context.cjs`
 - ขั้นตอนเต็ม ตารางหัวข้อ/ไฟล์ต้นฉบับ ข้อจำกัด และรายการตรวจ: [references/brand-guidelines.md](references/brand-guidelines.md)
 

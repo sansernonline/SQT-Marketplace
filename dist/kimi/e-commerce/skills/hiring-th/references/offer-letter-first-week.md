@@ -1,8 +1,8 @@
-# จดหมายเสนองาน · สัปดาห์แรก
+# Offer letter · first week
 
-หัวข้อ 7–8 ของ `hiring-th` ย้ายมาจาก `../SKILL.md` · เลขหัวข้อคงเดิม · ตัวย่อ: พระราชบัญญัติ (พ.ร.บ.) · มาตรา (ม.)
+Sections 7–8 of `hiring-th`, moved from `../SKILL.md`. Section numbers stay the same. Abbreviations: Act (พ.ร.บ.) · Section (ม.).
 
-## 7 · จดหมายเสนองาน (offer letter)
+## 7 · Offer letter
 
 ```
 {หัวกระดาษบริษัท}
@@ -30,39 +30,42 @@
 ลงชื่อ ................................ ({ชื่อผู้สมัคร})  วันที่ ................
 ```
 
-**ทดลองงาน การบอกกล่าว และค่าชดเชย ที่จดหมายต้องไม่ขัด**
+**Probation, notice and severance: what the letter must not contradict**
 
-- พ.ร.บ.คุ้มครองแรงงานไม่ได้กำหนดว่าทดลองงานต้องนานเท่าไร คนที่ทดลองงานก็เป็นลูกจ้างที่ได้รับความคุ้มครองตามกฎหมาย
-- เลิกจ้างระหว่างทดลองงานยังต้องบอกกล่าวล่วงหน้าเป็นหนังสือในหรือก่อนวันจ่ายค่าจ้างคราวใดคราวหนึ่ง ให้เลิกสัญญามีผลเมื่อถึงวันจ่ายค่าจ้างคราวถัดไป (ม.17 วรรคสอง · ใช้กับสัญญาจ้างที่ไม่มีกำหนดระยะเวลา · สัญญาที่มีกำหนดสิ้นสุดเมื่อครบกำหนดโดยไม่ต้องบอกกล่าว ตาม ม.17 วรรคหนึ่ง) · ไม่บอกกล่าว ต้องจ่ายเงินเท่าค่าจ้างที่ลูกจ้างควรได้ตั้งแต่วันที่ให้ออกจนถึงวันที่การเลิกสัญญามีผล โดยจ่ายในวันที่ให้ออก (ม.17/1) · ถ้าไม่ระบุเหตุผลในหนังสือเลิกจ้าง จะยกเหตุตาม ม.119 ขึ้นอ้างภายหลังไม่ได้ (ม.17 วรรคสาม) · ตรวจ 2026-10-26 ม.17 กับตัวบทในราชกิจจานุเบกษา เล่ม 115 ตอนที่ 8 ก 20 ก.พ. 2541 หน้า 6 (สำเนาที่ web.archive.org ของ ratchakitcha.soc.go.th) · ม.17/1 กับพระราชบัญญัติคุ้มครองแรงงาน (ฉบับที่ 7) พ.ศ. 2562 ตามที่สำนักงานเลขาธิการวุฒิสภายกไว้ใน senate.go.th/assets/portals/93/fileups/272/files/Sub_Jun/12know/k147.pdf หน้า 141 (ยังไม่ได้เทียบราชกิจจาฉบับที่ 7 โดยตรง และยังไม่ได้ไล่ว่า ฉบับที่ 8 กับ 9 ไม่ได้แก้ ม.17)
-- ค่าชดเชยเมื่อนายจ้างเลิกจ้างโดยลูกจ้างไม่มีความผิด เริ่มที่ทำงานติดต่อกันครบ 120 วัน การกำหนดทดลองงาน 119 วันจึงพบบ่อย แต่ไม่ได้ทำให้เลิกจ้างได้โดยไม่บอกกล่าว
+- The Labour Protection Act does not set how long probation may last. A person on probation is an employee protected by law (พ.ร.บ.คุ้มครองแรงงาน).
+- Ending employment during probation still needs advance written notice, given on or before any pay day, so that the termination takes effect on the next pay day (Section 17 paragraph 2). This applies to contracts with no fixed term. A fixed-term contract ends when the term ends, with no notice needed, under Section 17 paragraph 1.
+- Without notice, the employer must pay an amount equal to the wages the employee would have earned from the day of dismissal to the day the termination takes effect. Pay it on the day of dismissal (Section 17/1).
+- If the termination letter gives no reason, the employer cannot cite the Section 119 grounds later (Section 17 paragraph 3).
+- Checked 2026-10-26. Section 17 against the text in the Royal Gazette, volume 115, part 8 ก, 20 Feb 1998 (B.E. 2541), page 6 (copy at web.archive.org of ratchakitcha.soc.go.th). Section 17/1 against the Labour Protection Act (No. 7) B.E. 2562 (2019), as cited by the Secretariat of the Senate at senate.go.th/assets/portals/93/fileups/272/files/Sub_Jun/12know/k147.pdf page 141. Not yet compared directly with the Royal Gazette issue for Act No. 7. Not yet checked that Acts No. 8 and 9 did not amend Section 17.
+- Severance when the employer dismisses an employee who is not at fault starts once the employee has worked 120 days in a row. So a 119-day probation is common. It does not allow dismissal without notice.
 
-| ทำงานติดต่อกัน | ค่าชดเชย (ค่าจ้างอัตราสุดท้าย) |
+| Continuous service | Severance (last wage rate) |
 |---|---|
-| 120 วัน แต่ไม่ครบ 1 ปี | 30 วัน |
-| 1 ปี แต่ไม่ครบ 3 ปี | 90 วัน |
-| 3 ปี แต่ไม่ครบ 6 ปี | 180 วัน |
-| 6 ปี แต่ไม่ครบ 10 ปี | 240 วัน |
-| 10 ปี แต่ไม่ครบ 20 ปี | 300 วัน |
-| 20 ปีขึ้นไป | 400 วัน |
+| 120 days but under 1 year | 30 days |
+| 1 year but under 3 years | 90 days |
+| 3 years but under 6 years | 180 days |
+| 6 years but under 10 years | 240 days |
+| 10 years but under 20 years | 300 days |
+| 20 years or more | 400 days |
 
-ไม่ต้องจ่ายค่าชดเชยเมื่อ: ลูกจ้างลาออกเอง · ทุจริตต่อหน้าที่หรือทำผิดอาญาโดยเจตนาแก่นายจ้าง · จงใจทำให้นายจ้างเสียหาย · ประมาทเลินเล่อจนนายจ้างเสียหายร้ายแรง · ฝ่าฝืนข้อบังคับหรือคำสั่งที่ชอบด้วยกฎหมายหลังได้หนังสือเตือนแล้ว (หนังสือเตือนมีผลไม่เกิน 1 ปีนับจากวันที่ทำผิด กรณีร้ายแรงไม่ต้องเตือน) · ละทิ้งหน้าที่ 3 วันทำงานติดต่อกันโดยไม่มีเหตุอันสมควร · ได้รับโทษจำคุกตามคำพิพากษาถึงที่สุด · และกรณีจ้างที่มีกำหนดเวลาแน่นอนตามที่กฎหมายเขียนไว้
+No severance is due when: the employee resigns · acts dishonestly in duty or commits an intentional crime against the employer · intentionally damages the employer · is negligent and causes the employer serious damage · breaks a lawful rule or order after receiving a written warning (a warning is valid for 1 year from the date of the offence; a serious case needs no warning) · abandons duty for 3 working days in a row without good reason · is sentenced to prison by a final judgment · and the fixed-term cases as the law states them.
 
-ตรวจล่าสุด 2026-10-23 · แหล่ง: https://www.labour.go.th/index.php/hm7/56-2011-06-02-03-42-46 (ตารางค่าชดเชยและข้อยกเว้น · หน้านี้ยังมีตัวเลขวันลาคลอดชุดเก่า จึงใช้เฉพาะส่วนค่าชดเชย)
+Last checked 2026-10-23 · Source: https://www.labour.go.th/index.php/hm7/56-2011-06-02-03-42-46 (severance table and exceptions · the page still shows the old maternity leave figures, so use only the severance part)
 
-**ระวัง** ผู้สมัครตอบรับแล้วบริษัทฯ ถอนข้อเสนอ อาจกลายเป็นข้อพิพาทเรื่องผิดสัญญา (รอยืนยัน) ให้ถามทนายก่อนถอน · สัญญาจ้างฉบับเต็มทำด้วย `doc-contract-th`
+**Caution:** If the applicant accepts and the company then withdraws the offer, it may become a breach of contract dispute (`รอยืนยัน`, awaiting confirmation). Ask a lawyer before withdrawing. Draft the full employment contract with `doc-contract-th`.
 
-## 8 · สัปดาห์แรก: ส่งต่อให้ skill อื่น
+## 8 · First week: hand off to other skills
 
-| เรื่อง | กำหนด | ใช้ |
+| Topic | Deadline | Use |
 |---|---|---|
-| ขึ้นทะเบียนลูกจ้างเป็นผู้ประกันตน | ภายใน 30 วันนับจากวันที่รับเข้าทำงาน · ล่าช้าหรือจงใจเลี่ยง มีโทษจำคุกไม่เกิน 6 เดือน หรือปรับไม่เกิน 20,000 บาท หรือทั้งจำทั้งปรับ | `social-security-th` |
-| ทะเบียนนายจ้าง | ห้างหุ้นส่วนและบริษัทที่จดทะเบียนแล้วได้ทะเบียนนายจ้างโดยอัตโนมัติ · นายจ้างที่เป็นบุคคลธรรมดาต้องขึ้นทะเบียนนายจ้างเอง | `social-security-th` |
-| แบบแจ้งค่าลดหย่อน · บัญชีธนาคาร · ข้อมูลภาษี เข้ารอบเงินเดือน | ก่อนรอบจ่ายแรก | `payroll-th` |
-| สัญญาจ้างลงนาม | วันเริ่มงาน | `doc-contract-th` |
-| สิทธิวันลาและแบบฟอร์มลา | สัปดาห์แรก | `doc-leave` · `labour-law-basics` |
-| ประกาศความเป็นส่วนตัวสำหรับพนักงาน · สิทธิเข้าระบบ | วันแรก | `pdpa-workflow` |
-| ข้อบังคับเกี่ยวกับการทำงาน (ลูกจ้าง 10 คนขึ้นไป) | ตามที่ skill นั้นระบุ | `labour-law-basics` |
-| วันหยุดตามประเพณีของปี | สัปดาห์แรก | `thai-holidays` |
-| ลูกจ้างครบ 100 คน | นับจำนวน ณ 1 ต.ค. ทุกปี · รับคนพิการ 1 คนต่อลูกจ้างที่ไม่พิการ 100 คน เศษเกิน 50 คนรับเพิ่ม 1 คน · ไม่ครบให้ส่งเงินเข้ากองทุน (ม.34) หรือใช้ทางเลือกตาม ม.35 · อัตราเงินและวันส่งของปีนั้นตรวจที่ dep.go.th (รอยืนยัน ปี 2570) | ไม่มี skill เฉพาะ |
+| Register the employee as an insured person | Within 30 days of the hire date · late or deliberately avoided registration carries up to 6 months in prison, or a fine up to 20,000 baht, or both | `social-security-th` |
+| Employer registration | Registered partnerships and companies get an employer number automatically · an employer who is an individual must register as an employer | `social-security-th` |
+| Allowance form · bank account · tax data into the payroll run | Before the first pay run | `payroll-th` |
+| Employment contract signed | Start date | `doc-contract-th` |
+| Leave entitlement and leave forms | First week | `doc-leave` · `labour-law-basics` |
+| Privacy notice for employees · system access rights | Day 1 | `pdpa-workflow` |
+| Work rules (10 or more employees) | As that skill states | `labour-law-basics` |
+| Public holidays for the year | First week | `thai-holidays` |
+| 100 employees reached | Count on 1 Oct every year · hire 1 person with a disability per 100 employees without disability, and 1 more for a remainder above 50 · if short, pay into the fund (Section 34) or use the alternatives under Section 35 · check the year's rate and payment date at dep.go.th (`รอยืนยัน` for 2027, B.E. 2570) | No dedicated skill |
 
-ตรวจล่าสุด 2026-10-23 · แหล่ง: ข่าวสำนักงานประกันสังคม 30 ต.ค. 2567 https://www.sso.go.th/wpr/main/news/%E0%B8%82%E0%B9%88%E0%B8%B2%E0%B8%A7%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%8A%E0%B8%B2%E0%B8%AA%E0%B8%B1%E0%B8%A1%E0%B8%9E%E0%B8%B1%E0%B8%99%E0%B8%98%E0%B9%8C_detail_detail_1_16_0/28904_28904 · ทะเบียนนายจ้างอัตโนมัติ: คู่มือนิติบุคคลตั้งใหม่ของกรมพัฒนาธุรกิจการค้า https://www.dbd.go.th/storage/manual/644ffb30-f6bf-4e60-a3be-9db74a65509b.pdf · โควตาคนพิการ: ถาม-ตอบของกองทุนส่งเสริมและพัฒนาคุณภาพชีวิตคนพิการ https://dfund.dep.go.th/%E0%B8%96%E0%B8%B2%E0%B8%A1-%E0%B8%95%E0%B8%AD%E0%B8%9A-%E0%B8%88%E0%B9%89%E0%B8%B2%E0%B8%87%E0%B8%87%E0%B8%B2%E0%B8%99%E0%B8%84%E0%B8%99%E0%B8%9E%E0%B8%B4%E0%B8%81%E0%B8%B2%E0%B8%A3/ · สายด่วน 1506 กด 3 หรือ 1546: https://www.labour.go.th/index.php/labor-law
+Last checked 2026-10-23 · Sources: Social Security Office news, 30 Oct 2024 https://www.sso.go.th/wpr/main/news/%E0%B8%82%E0%B9%88%E0%B8%B2%E0%B8%A7%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%8A%E0%B8%B2%E0%B8%AA%E0%B8%B1%E0%B8%A1%E0%B8%9E%E0%B8%B1%E0%B8%99%E0%B8%98%E0%B9%8C_detail_detail_1_16_0/28904_28904 · automatic employer registration: Department of Business Development guide for newly formed legal entities https://www.dbd.go.th/storage/manual/644ffb30-f6bf-4e60-a3be-9db74a65509b.pdf · disability quota: Q&A of the Fund for Promotion and Development of the Quality of Life of Persons with Disabilities https://dfund.dep.go.th/%E0%B8%96%E0%B8%B2%E0%B8%A1-%E0%B8%95%E0%B8%AD%E0%B8%9A-%E0%B8%88%E0%B9%89%E0%B8%B2%E0%B8%87%E0%B8%87%E0%B8%B2%E0%B8%99%E0%B8%84%E0%B8%99%E0%B8%9E%E0%B8%B4%E0%B8%81%E0%B8%B2%E0%B8%A3/ · hotline 1506 press 3, or 1546: https://www.labour.go.th/index.php/labor-law

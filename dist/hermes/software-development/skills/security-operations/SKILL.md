@@ -6,9 +6,9 @@ argument-hint: <soc-design | threat-hunt> <details>
 
 # security-operations
 
-งานความปลอดภัยฝั่งปฏิบัติการ — รับมือเหตุ · Security Operations Center (SOC — ทีมเฝ้าระวังความปลอดภัย) · กฎตรวจจับ · ล่าภัย · สถาปัตยกรรมความปลอดภัย (ฝั่งโค้ดใช้ `security-gate` · `principle-secure-by-default`)
+Operational security work — incident response · Security Operations Center (SOC, the team that watches for security events) · detection rules · threat hunting · security architecture (for code, use `security-gate` · `principle-secure-by-default`)
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทั้งหมด เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
+**Open only the files that match the job.** Do not read them all, because each file is the full guide to its topic.
 
 ## หัวข้อ
 
@@ -20,7 +20,7 @@ argument-hint: <soc-design | threat-hunt> <details>
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
+An agent called in for this area opens its own role file before starting.
 
 | บทบาท | อ่าน | agent |
 |---|---|---|

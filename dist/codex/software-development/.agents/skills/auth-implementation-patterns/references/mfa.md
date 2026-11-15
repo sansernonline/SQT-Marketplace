@@ -1,6 +1,6 @@
 # Pattern 4: Multi-Factor Authentication (MFA)
 
-รายละเอียดของการยืนยันตัวตนหลายขั้นทั้ง 3 แบบ ใช้ตอนเลือกหรือลงมือทำ MFA
+Details of all 3 types of multi-factor authentication. Use it when choosing or building MFA
 
 ## TOTP (Google Authenticator, Authy)
 **When:** standard two-factor login (2FA), easy for users. TOTP = time-based one-time password.

@@ -3,36 +3,36 @@ name: principle-small-verifiable-steps
 description: Use when work has many steps to cut into pieces
 ---
 
-# principle · small verifiable steps — ตัดเป็นชิ้นเล็กที่ตรวจได้ทีละชิ้น
-> ใช้คู่กัน: `principle-build-a-tool-not-handwork` (เขียนสคริปต์ทำงานซ้ำ) · `parallel-split-and-merge` (รันหลายชิ้นพร้อมกัน)
+# principle · small verifiable steps — cut the work into small pieces and check them one at a time
+> Use together with: `principle-build-a-tool-not-handwork` (write a script for repeated work) · `parallel-split-and-merge` (run several pieces at once)
 
-> งานยาวที่ตรวจทีเดียวตอนจบ ถ้าพังจะไม่รู้ว่าพังที่ชิ้นไหน
-> ให้ตัดเป็นชิ้นเล็กที่แต่ละชิ้นจบในสภาพที่ตรวจได้ พังเมื่อไรก็รู้ทันทีว่าชิ้นไหน
+> Long work checked only once at the end gives no clue which piece broke when it fails.
+> Cut it into small pieces that each end in a checkable state, so a failure points straight to its piece.
 
-## วิธีตัด
+## How to cut
 
-1. เขียนรายการชิ้นลง todo ก่อนเริ่ม โดยแต่ละชิ้นมีเกณฑ์ "ผ่านเมื่อ" 1 บรรทัด · งานเกิน 5 ชิ้น หรือข้าม session หรือส่งให้ตัวอื่นทำต่อ → เขียนเป็นไฟล์แผนจาก [`templates/plan.md`](templates/plan.md) (แต่ละข้อมีไฟล์ · คำสั่งตรวจ · เสร็จเมื่อ · ติ๊กทีละข้อ)
-2. 1 ชิ้นเปลี่ยนเรื่องเดียว และจบในสภาพที่ตรวจได้ (ไฟล์เปิดได้ · ยอดรวมตรง · โค้ด: build กับ test ผ่าน)
-3. ทำทีละชิ้น ตรวจ แล้วบันทึกก่อนขึ้นชิ้นถัดไป ถ้าเป็นโค้ดให้ commit ตามกฎ commit (`superuser` หัวข้อ 1 ข้อ 9 · งานโค้ด: `superuser` ของ plugin `software-development` หัวข้อ 6) ถ้าไม่ได้อนุญาตหรือไม่ใช่โค้ด ให้บันทึกชิ้นที่ผ่านไว้ในตาราง "ความคืบหน้า" ของ `CONTEXT.md` แทน (โปรเจกต์ที่มี `docs/BUILD-PLAN.md` ใช้ไฟล์นั้น)
-4. ชิ้นไหนตรวจไม่ผ่าน ให้หยุดแก้ที่ชิ้นนั้น ห้ามข้ามไปชิ้นถัดไปแล้วค่อยกลับมา
-5. ทุกรอบที่รันใหม่เก็บลงโฟลเดอร์ใหม่ ไม่เขียนทับผลตั้งต้น · เก็บ prompt ที่ใช้จริง (`prompt-used.md`) และสำเนาแผนหลังจบทุกชิ้น (`plans/after-T1.json`) เพื่อย้อนดูได้ · แนวจาก RUN RECORD ใน lab 04_Basic_AI_WORFLOW ของคอร์ส (รันในแชตเดียวด้วยบทบาทจำลอง จึงเป็นข้อมูลอ้าง ไม่ใช่ผลวัดจริง)
+1. Write the list of pieces into the todo before starting, and give each piece a 1-line "ผ่านเมื่อ" (passes when) criterion. If the work has more than 5 pieces, spans sessions, or is handed to another agent, write a plan file from [`templates/plan.md`](templates/plan.md) (each item has a file · a check command · done-when · ticked one at a time).
+2. 1 piece changes 1 thing and ends in a checkable state (file opens · totals match · code: build and tests pass).
+3. Do one piece at a time, check it, and record it before moving to the next. For code, commit following the commit rules (`superuser` section 1 item 9 · for code work: `superuser` of plugin `software-development` section 6). If commits are not allowed or the work is not code, record the passed piece in the "ความคืบหน้า" (progress) table of `CONTEXT.md` instead (a project with `docs/BUILD-PLAN.md` uses that file).
+4. If a piece fails its check, stop and fix that piece. Do not skip to the next piece and come back later.
+5. Save every re-run into a new folder and never overwrite the baseline result. Keep the prompt actually used (`prompt-used.md`) and a copy of the plan after every piece finishes (`plans/after-T1.json`) so you can look back. The idea comes from the RUN RECORD in lab 04_Basic_AI_WORFLOW of the course (run in a single chat with simulated roles, so it is reference data, not a real measurement).
 
-## ลำดับ
+## Order
 
-| ทำก่อน | ทำหลัง |
+| Do first | Do after |
 |---|---|
-| ของที่คนอื่นพึ่ง (หัวข้อหลัก · แม่แบบ · ตารางต้นทาง · type · schema) | ของที่เรียกใช้ |
-| เพิ่มของใหม่ | ย้ายผู้ใช้ แล้วลบของเก่า (`principle-replace-then-delete` (plugin `software-development`)) |
-| ชิ้นที่เสี่ยงที่สุด | ชิ้นที่รู้แน่ว่าทำได้ |
+| What others depend on (main headings · templates · source tables · types · schemas) | What calls it |
+| Add the new thing | Move users over, then delete the old one (`principle-replace-then-delete` (plugin `software-development`)) |
+| The riskiest piece | The piece you know for sure can be done |
 
-## ส่งงานเป็นชิ้น
+## Hand over in pieces
 
-ทุกชิ้นอ่านจบในตัวเอง ผู้ตรวจจึงไล่ทีละชิ้นแล้วเชื่อได้ (เช่น ปรับราคา 200 รายการ → ทีละ 20 รายการ) · งานโค้ด → ส่วนเพิ่มใน plugin `software-development` → `superuser` → `references/code-extensions.md`
+Every piece reads complete on its own, so the reviewer can go through piece by piece and trust the result (for example, change the price of 200 items → 20 items at a time). For code work → the extension in plugin `software-development` → `superuser` → `references/code-extensions.md`
 
-## งานที่ปล่อยทำเอง
+## Work left to run unattended
 
-playbook `unattended-run` บันทึกชิ้นที่ผ่านแล้วลงตาราง "ความคืบหน้า" ใน `CONTEXT.md` ทุกชิ้น (โปรเจกต์ที่มี `docs/BUILD-PLAN.md` ใช้ไฟล์นั้น) ถ้าหยุดกลางทางก็รับต่อจากชิ้นสุดท้ายที่ผ่านได้
+The `unattended-run` playbook records each passed piece in the "ความคืบหน้า" table in `CONTEXT.md` (a project with `docs/BUILD-PLAN.md` uses that file). If it stops midway, resume from the last piece that passed.
 
-## ไม่ต้องทำเมื่อ
+## Not needed when
 
-งานชิ้นเดียวที่ตรวจครั้งเดียวจบ
+A single piece of work that is checked once and done.

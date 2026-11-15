@@ -1,44 +1,44 @@
-# สาย supply chain · build · CI/CD · การปล่อยรุ่น
+# Class family: supply chain · build · CI/CD · releases
 
-เปิดเมื่อ repo มี lockfile · Dockerfile · workflow ของ GitHub Actions หรือ Azure DevOps · สคริปต์ build ที่ดึงของจากเน็ต · ระบบ plugin หรือ extension · ระบบอัปเดตตัวเอง · วางหัวข้อที่เลือกลง brief ลูกทีมทั้งก้อน
+Open this when the repo has a lockfile · Dockerfile · GitHub Actions or Azure DevOps workflows · build scripts that pull from the internet · a plugin or extension system · a self-updating system. Paste the chosen sections into the sub-agent brief whole.
 
-ผล `npm audit` · `pip-audit` · `osv-scanner` · `trivy` จาก `security-gate` เป็น candidate ของสายนี้ · ไฟล์นี้เน้นของที่สแกนเนอร์ไม่เห็น
+Results from `npm audit` · `pip-audit` · `osv-scanner` · `trivy` via `security-gate` are candidates for this family. This file focuses on what scanners do not see.
 
-## กติกาประจำสาย
+## Rules for this family
 
-- dependency ที่มี CVE เป็น finding ได้ต่อเมื่อโค้ดเรียกส่วนที่มีช่องโหว่ด้วย input ที่ผู้โจมตีคุมได้ · ไม่มีทางเรียก → `rejected` แล้วใส่ "อัปเดต" ในหัวข้อ hardening (ทำตาม `security-gate/references/dependency-updates.md`)
-- ผู้โจมตีของสายนี้คือคนที่เปิด PR · คนที่ตั้งชื่อแพ็กเกจ · เจ้าของ registry หรือ action ที่ถูกเจาะ · ต้องบอกว่าเขาได้อะไร (ค่าลับของ CI · โค้ดใน release · สิทธิ์ push)
-- การตั้งค่าที่อยู่ใน GitHub หรือ cloud (branch protection · environment secret · สิทธิ์ของ token) ไม่อยู่ใน repo → `needs_validation`
-- ห้ามพิสูจน์ด้วยการ push หรือเปิด PR จริง · ใช้ `act` หรืออ่าน workflow แล้วไล่ว่าข้อมูลจาก PR ไปถึงคำสั่งไหน
+- A dependency with a CVE is a finding only if the code calls the vulnerable part with input an attacker controls. If no path calls it → `rejected`, then add "update" under the hardening heading (follow `security-gate/references/dependency-updates.md`).
+- The attackers here are whoever opens a PR · whoever names a package · the owner of a compromised registry or action. State what they gain (CI secrets · code in a release · push rights).
+- Settings that live in GitHub or the cloud (branch protection · environment secrets · token permissions) are not in the repo → `needs_validation`.
+- Never prove it by really pushing or opening a PR. Use `act`, or read the workflow and trace which command the PR data reaches.
 
-## dependency และของที่ใช้ตอน build
+## Dependencies and build-time inputs
 
-| ประเภท (`class`) | ล่าอะไร | สัญญาณในโค้ด | พิสูจน์อย่างไร | มักแจ้งผิดเมื่อ |
+| Class (`class`) | What it hunts | Signal in code | How to prove it | Often misreported when |
 |---|---|---|---|---|
-| `dependency-confusion` | แพ็กเกจภายในที่ชื่อไม่มี scope ดึงจาก registry สาธารณะได้ | `.npmrc` ไม่ผูก scope กับ registry ภายใน · `--extra-index-url` ใน pip | ดูลำดับ registry ใน config · ตรวจว่าชื่อนั้นว่างใน registry สาธารณะ (อ่านอย่างเดียว) | ใช้ scope ที่จดไว้และผูก registry แล้ว |
-| `unpinned-input` | build ดึงของรุ่นลอย (`latest` · branch · URL ที่ไม่มี hash) | `FROM node:latest` · ผล `curl` ส่งเข้า `sh` ตรง ๆ · ไม่มี lockfile · action ใช้ `@main` | ไล่ทุกบรรทัดที่ดึงของจากเน็ตใน Dockerfile และ workflow | รุ่นลอยแต่ build ไม่เข้า release (เป็น hardening) |
-| `vulnerable-dep-reachable` | CVE ในแพ็กเกจที่โค้ดเรียกจริงด้วย input ภายนอก | ฟังก์ชันที่ประกาศใน advisory ถูก import และเรียก | ไล่ call path จาก route ถึงฟังก์ชันนั้น · ทำซ้ำด้วยตัวอย่างใน advisory ในห้อง | เรียกแค่ส่วนที่ไม่เกี่ยวกับช่องโหว่ |
-| `build-context-leak` | ไฟล์ลับหรือ `.git` ติดเข้า image หรือ artifact | `COPY . .` โดยไม่มี `.dockerignore` · artifact รวมทั้งโฟลเดอร์ | build ในห้องแล้วดูไฟล์ใน image (`docker run --rm <img> ls -la`) | ไฟล์ที่ติดไปไม่มีของลับ |
+| `dependency-confusion` | An internal package with an unscoped name can be pulled from the public registry | `.npmrc` does not bind the scope to the internal registry · `--extra-index-url` in pip | Check the registry order in config · check whether the name is free on the public registry (read-only) | A registered scope is used and bound to the registry |
+| `unpinned-input` | The build pulls floating versions (`latest` · a branch · a URL with no hash) | `FROM node:latest` · `curl` output piped straight into `sh` · no lockfile · an action pinned to `@main` | Go through every line in the Dockerfile and workflows that pulls from the internet | The version floats but the build does not reach a release (hardening) |
+| `vulnerable-dep-reachable` | A CVE in a package that the code really calls with external input | The function named in the advisory is imported and called | Trace the call path from a route to that function · reproduce with the advisory's example in the lab | Only a part unrelated to the vulnerability is called |
+| `build-context-leak` | A secret file or `.git` gets into an image or artifact | `COPY . .` with no `.dockerignore` · the artifact bundles the whole folder | Build in the lab and inspect the files in the image (`docker run --rm <img> ls -la`) | The files that got in hold no secrets |
 
-## CI และงานอัตโนมัติ
+## CI and automation
 
-| ประเภท (`class`) | ล่าอะไร | สัญญาณในโค้ด | พิสูจน์อย่างไร | มักแจ้งผิดเมื่อ |
+| Class (`class`) | What it hunts | Signal in code | How to prove it | Often misreported when |
 |---|---|---|---|---|
-| `ci-untrusted-code` | workflow ที่รันโค้ดจาก PR ของคนนอก ด้วยสิทธิ์หรือค่าลับของ repo | `pull_request_target` คู่กับ checkout `head.sha` · `workflow_run` ที่ใช้ artifact จาก PR | ไล่ว่าขั้นไหนรันโค้ดจาก PR และขั้นนั้นเห็น secret อะไร | repo เป็น private และคนเปิด PR ได้มีแต่ทีม (needs_validation จนยืนยันการตั้งค่า) |
-| `ci-expression-injection` | ชื่อ branch หัว PR หรือ issue ไปลงคำสั่ง shell ตรง ๆ | `run: echo "${{ github.event.pull_request.title }}"` | ไล่ทุก `${{ github.event.* }}` ที่อยู่ใน `run:` | ค่าผ่าน `env:` แล้วอ้างเป็นตัวแปร shell ในเครื่องหมายคำพูด |
-| `ci-cache-poisoning` | cache หรือ artifact ที่งานของ PR เขียนได้ ถูกงาน release อ่านต่อ | key ของ cache เหมือนกันทั้ง PR และ main | เทียบ key และ scope ของ cache ระหว่างงาน | แพลตฟอร์มแยก cache ตาม branch (ตรวจในเอกสารของแพลตฟอร์มรุ่นที่ใช้) |
-| `ci-token-scope` | token ของ workflow มีสิทธิ์เขียนเกินงาน · ค่าลับพิมพ์ลง log | ไม่มีบล็อก `permissions:` · `echo $SECRET` · `set -x` | อ่าน workflow · ดูว่าค่าลับถูก mask หรือถูกแปลงจนหลุด mask | การตั้งค่าเริ่มของ org เป็นอ่านอย่างเดียว (needs_validation) |
+| `ci-untrusted-code` | A workflow runs code from an outsider's PR with the repo's rights or secrets | `pull_request_target` paired with a checkout of `head.sha` · a `workflow_run` that uses an artifact from a PR | Trace which step runs code from the PR and which secrets that step sees | The repo is private and only the team can open PRs (needs_validation until the settings are confirmed) |
+| `ci-expression-injection` | A branch name, PR title or issue goes straight into a shell command | `run: echo "${{ github.event.pull_request.title }}"` | Go through every `${{ github.event.* }}` inside `run:` | The value goes through `env:` and is referenced as a quoted shell variable |
+| `ci-cache-poisoning` | A cache or artifact that a PR job can write is later read by a release job | The cache key is the same for the PR and main | Compare the cache key and scope across jobs | The platform separates caches by branch (check the platform's documentation for the version in use) |
+| `ci-token-scope` | The workflow token has write rights beyond the job · secrets are printed to the log | No `permissions:` block · `echo $SECRET` · `set -x` | Read the workflow · check whether secrets are masked or transformed so they escape the mask | The org's default is read-only (needs_validation) |
 
-## ปล่อยรุ่นและอัปเดต
+## Releases and updates
 
-| ประเภท (`class`) | ล่าอะไร | สัญญาณในโค้ด | พิสูจน์อย่างไร | มักแจ้งผิดเมื่อ |
+| Class (`class`) | What it hunts | Signal in code | How to prove it | Often misreported when |
 |---|---|---|---|---|
-| `release-substitution` | ของที่ทดสอบกับของที่ deploy เป็นคนละชิ้น · build ใหม่ตอน deploy | deploy สร้าง image ใหม่แทนใช้ digest ที่ test แล้ว | ไล่ว่า digest หรือ hash ส่งต่อระหว่างขั้นไหม | ใช้ digest เดิมตลอด |
-| `update-integrity` | แอปดาวน์โหลดอัปเดตแล้วไม่ตรวจลายเซ็น · ยอมรุ่นเก่ากว่า | ดาวน์โหลดผ่าน HTTP · ตรวจแค่ checksum ที่มาจากที่เดียวกัน · ไม่เทียบเลขรุ่น | ป้อนไฟล์อัปเดตปลอมให้ตัวอัปเดตในห้อง | ใช้ระบบอัปเดตของ store หรือ OS ที่ตรวจลายเซ็นให้ |
-| `plugin-trust` | plugin หรือ extension ที่โหลดได้ ได้สิทธิ์เท่าตัวแอปโดยไม่มีขอบเขต | `require(userPath)` · โหลด DLL จากโฟลเดอร์ที่ผู้ใช้เขียนได้ | วาง plugin ปลอมในห้องแล้วดูว่าเข้าถึงอะไรได้ | มีแต่แอดมินที่ติดตั้ง plugin ได้ และระบบประกาศไว้ |
+| `release-substitution` | What was tested and what is deployed are different artifacts · a new build happens at deploy | Deploy builds a new image instead of using the digest that was tested | Trace whether the digest or hash is passed between steps | The same digest is used throughout |
+| `update-integrity` | The app downloads an update without checking the signature · accepts an older version | Download over HTTP · checks only a checksum that comes from the same place · does not compare version numbers | Feed a fake update file to the updater in the lab | The app uses the store's or the OS's update system, which verifies signatures |
+| `plugin-trust` | A loadable plugin or extension gets the app's full rights with no boundary | `require(userPath)` · loads a DLL from a folder the user can write to | Place a fake plugin in the lab and see what it can reach | Only admins can install plugins, and the system states this |
 
-## วิธีไล่ที่ใช้ได้ทั้งสาย
+## Method that works across the family
 
-- วาดเส้นทางของโค้ดจาก commit → build → test → artifact → deploy · ทุกเส้นเขียนว่าใครเขียนได้ และขั้นถัดไปเชื่ออะไร
-- นับทุกที่ที่ดึงของจากเน็ตตอน build และตอนรัน แล้วถามว่าถ้าปลายทางถูกเจาะ ได้อะไร
-- เทียบสิทธิ์ของงานที่รันกับ PR และงานที่รันกับ main ต้องไม่มีของที่ไหลจากฝั่งแรกไปฝั่งหลังโดยไม่ตรวจ
+- Draw the code path from commit → build → test → artifact → deploy. For each edge, write who can write to it and what the next step trusts.
+- Count every place that pulls from the internet at build time and at run time, and ask what an attacker gains if that destination is compromised.
+- Compare the rights of jobs that run on a PR with jobs that run on main. Nothing may flow from the first to the second without a check.

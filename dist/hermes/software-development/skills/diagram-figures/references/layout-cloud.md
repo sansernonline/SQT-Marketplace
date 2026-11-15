@@ -1,20 +1,20 @@
-# โครง `figure-cloud.html` — ผังคลาวด์พร้อมโลโก้ผู้ให้บริการ
+# Skeleton `figure-cloud.html` — cloud diagram with provider logos
 
-โครงนี้ตอบคำถาม "ใช้บริการอะไรของคลาวด์บ้าง" ไฟล์โครงอยู่ที่ [`assets/figure-cloud.html`](../assets/figure-cloud.html)
+This skeleton answers "which cloud services do we use?" The skeleton file is at [`assets/figure-cloud.html`](../assets/figure-cloud.html).
 
-ใช้เมื่อผู้อ่านคาดหวังจะเห็นไอคอน Amazon Web Services (AWS) · Azure · Google Cloud ·
-Kubernetes ของจริง แบบผังอ้างอิงที่ผู้ให้บริการเผยแพร่ ไอคอนหาได้จากคลังตาม [icons.md](icons.md)
+Use it when the reader expects to see real Amazon Web Services (AWS) · Azure · Google Cloud ·
+Kubernetes icons, like the reference diagrams the providers publish. Find the icons in the library, per [icons.md](icons.md).
 
 ```html
 <div class="unit"><img src="icons/aws/ec2.png" alt="">
   <div class="name">Web Server</div><div class="desc">AZ-1</div></div>
 ```
 
-**กติกาเฉพาะโครงนี้:**
+**Rules specific to this skeleton:**
 
-- **สายที่ข้ามขอบเขต ให้ออกจากขอบของกล่องขอบเขต** (`n-region`) ไม่ใช่จากกล่องข้างใน
-  — เพราะถ้าต่อจากกล่องข้างใน เส้นจะพาดทะแยงทับทุกอย่างที่ขวางทาง
-- **เส้นประ = ขอบเขตที่ผู้ให้บริการจัดการให้** ส่วนเส้นทึบสีส้ม = เครื่องที่เราดูแลเอง
-  และให้ใส่ความหมายไว้ในคำอธิบายสัญลักษณ์เสมอ
-- ไอคอนแสดงเปล่า ๆ ไม่ต้องมีกรอบ เพราะโลโก้มีสีและรูปทรงของตัวเองอยู่แล้ว
-- ชื่อบริการใช้ชื่อทางการ (`Amazon RDS`) ส่วนคำอธิบายใต้ชื่อเป็นภาษาไทยได้
+- **A line that crosses a boundary leaves from the edge of the boundary box** (`n-region`), not from a box inside it,
+  because a line that starts from an inner box cuts diagonally across everything in the way.
+- **Dashed line = a boundary the provider manages for you.** A solid orange line = a machine we look after ourselves.
+  Always put these meanings in the legend.
+- Show icons bare, with no frame, because a logo already has its own colour and shape.
+- Use the official service name (`Amazon RDS`). The description under the name may be in Thai.

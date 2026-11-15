@@ -67,24 +67,24 @@ Method from ม.50(1) ประมวลรัษฎากร:
 | 2,000,001 – 5,000,000 | 30% | 900,000 | 1,265,000 |
 | over 5,000,000 | 35% | | |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.rd.go.th (อัตราภาษีเงินได้บุคคลธรรมดา, ม.48) · SSO cap: https://www.infoquest.co.th/2025/550753
+Last checked 2026-10-06 · Sources: https://www.rd.go.th (personal income tax rates, section 48) · SSO cap: https://www.infoquest.co.th/2025/550753
 
 ### Script
 
-`payroll.mjs` ทำขั้นตอนในส่วน 2 ให้ครบ: เงินได้ทั้งปี → หักค่าใช้จ่าย → ลดหย่อน → ภาษีขั้นบันได → หาร 12 งวด พร้อมประกันสังคม (5% ของค่าจ้าง ฐานขั้นต่ำ 1,650 ถึงเพดาน ปัดเป็นบาท) และ PVD ลูกจ้าง ได้ภาษีหัก ณ ที่จ่ายต่อเดือนและเงินสุทธิต่อคน
+`payroll.mjs` runs all the steps in section 2: annual income → deduct expenses → allowances → progressive tax → divide by 12 periods, together with social security (5% of wages, floor base 1,650 up to the cap, rounded to whole baht) and the employee's PVD (provident fund) contribution · it gives the monthly withholding tax and the net pay per person
 
 ```
 node payroll.mjs <file.json> [--json]     # example file: scripts/example.json
 node payroll.mjs --self-test
 ```
 
-ไฟล์ input: `{ "employees": [ { "name": "...", "gross": 50000, "pvd_employee_pct": 0, "pvd_employer_pct": 0, "spouse": false, "children": 0, "children_2nd_plus": 0, "parents": 0, "other_deductions": 0, "periods": 12 } ] }` · มีแค่ `name` กับ `gross` ก็รันได้ ที่เหลือเริ่มต้นเป็น 0 / false / 12 · ช่องที่ผิดทำให้สคริปต์หยุดพร้อมข้อความที่ชื่อช่อง · ประกันสังคมคิดจากค่าจ้างเฉลี่ยต่อเดือน (`gross` × `periods` ÷ 12) แล้วกระจายเป็นต่องวด ลดหย่อนทั้งปีจึงเท่ากับ 12 เดือนเสมอ · PVD ลูกจ้างเกิน 15% ของค่าจ้างสคริปต์เตือนและลดหย่อนให้แค่ 15%
+Input file: `{ "employees": [ { "name": "...", "gross": 50000, "pvd_employee_pct": 0, "pvd_employer_pct": 0, "spouse": false, "children": 0, "children_2nd_plus": 0, "parents": 0, "other_deductions": 0, "periods": 12 } ] }` · `name` and `gross` alone are enough to run, and the rest default to 0 / false / 12 · a wrong field makes the script stop with a message that names the field · social security is computed from the average monthly wage (`gross` × `periods` ÷ 12) and spread across periods, so the annual allowance always equals 12 months · if the employee PVD exceeds 15% of wages, the script warns and allows only 15% as a deduction
 
-ขั้นบันไดภาษี เพดานประกันสังคม และค่าลดหย่อนอยู่ใน `scripts/rates.json` (มีวันที่ตรวจและแหล่ง สคริปต์พิมพ์ออกมาในผล และเตือนเมื่อเก่ากว่า 90 วัน) · เพดานประกันสังคมและอัตราขั้นสูงสุดถูกเช็กกับ `scripts/check/facts.json` ที่ราก repo SQT-Marketplace (ไม่ติดไปกับ plugin) · เงินสุทธิติดลบ และ PVD ที่ใส่น้อยกว่า 1 (เช่น 0.05 แทน 5) ได้คำเตือน · ปีภาษีเปลี่ยนให้แก้ `rates.json` ก่อนรันเดือนมกราคม · ยังไม่รวมโบนัส พนักงานเข้ากลางปี และเงินได้ที่จ่ายไปแล้ว ให้คิดตามส่วนโบนัสด้านล่างเอง
+The tax brackets, the social security cap and the allowances live in `scripts/rates.json` (it carries the date checked and the source; the script prints them in the result and warns when they are older than 90 days) · the social security cap and the top rate are checked against `scripts/check/facts.json` at the root of the SQT-Marketplace repo (it does not ship with the plugin) · negative net pay, and a PVD value below 1 (for example 0.05 instead of 5), raise a warning · when the tax year changes, edit `rates.json` before running in January · bonuses, mid-year hires and income already paid are not included, so work them out yourself using the bonus section below
 
 **Script path:** ติดตั้งจาก marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/payroll-th/scripts/payroll.mjs | sort -V | tail -1` · ใน repo SQT-Marketplace: `plugins/e-commerce/skills/payroll-th/scripts/payroll.mjs` · Node อย่างเดียว ไม่มี dependency
 
-ผลเป็นข้อมูลประกอบ ไม่ใช่คำแนะนำด้านภาษี
+The result is supporting information, not tax advice.
 
 ### Worked example
 
@@ -111,7 +111,7 @@ Compute tax on (annual salary + bonus) and on annual salary alone; the differenc
 - **ภ.ง.ด.1** monthly — 1 line per employee paid: tax ID, name, pay date, amount paid, tax withheld. Nil months: no return needed if nothing was paid.
 - **ภ.ง.ด.1ก** yearly — totals per employee for the calendar year; must agree with the 12 ภ.ง.ด.1 returns and the 50 ทวิ issued. Differences are the usual audit question.
 
-## 4. หนังสือรับรองการหักภาษี ณ ที่จ่าย (50 ทวิ)
+## 4. Withholding tax certificate (หนังสือรับรองการหักภาษี ณ ที่จ่าย, 50 ทวิ)
 
 Field list and fill-in template: [references/50-tawi.md](references/50-tawi.md).
 

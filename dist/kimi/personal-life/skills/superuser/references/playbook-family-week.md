@@ -1,15 +1,15 @@
-# playbook · family-week — วางแผนสัปดาห์ของครอบครัว
+# playbook · family-week — plan the family's week
 
-ใช้เมื่อ: วางแผนอาหาร ของต้องซื้อ งานโรงเรียน นัดผู้สูงอายุ และสัตว์เลี้ยงของสัปดาห์หน้า
-skill หลัก: `meal-plan-grocery` · `kids-school` · `elder-care` · `pet-care` · agent `family-planner`
+Use when: planning next week's meals, shopping list, school tasks, appointments for older adults, and pet care
+Main skills: `meal-plan-grocery` · `kids-school` · `elder-care` · `pet-care` · agent `family-planner`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. เก็บข้อมูลสัปดาห์ — สมาชิก งบต่อหัว นัดหมาย งานโรงเรียน ยา วัคซีนสัตว์ที่ใกล้ครบ · ใคร: หัวหน้าทีม
-2. วางเมนูและรายการซื้อตาม `meal-plan-grocery` ภายในงบ โดยคิดถึงอาหารของเด็กและผู้สูงอายุด้วย · ใคร: `family-planner` ตัวใหม่
-3. ใส่งานโรงเรียน นัดผู้สูงอายุ ยา และงานสัตว์เลี้ยงลงตารางเดียวกัน · ใคร: `family-planner` ตัวใหม่
-4. ตรวจว่าทุกงานมีวัน เวลา และคนรับผิดชอบ และยอดรวมของต้องซื้อไม่เกินงบ · ใคร: `reviewer` ตัวใหม่
+1. Collect the week's information: family members, budget per head, appointments, school tasks, medicines, pet vaccines that are almost due · ใคร: หัวหน้าทีม
+2. Plan the menu and shopping list per `meal-plan-grocery` within the budget, and think about the food that children and older adults need · ใคร: `family-planner` ตัวใหม่
+3. Put the school tasks, appointments for older adults, medicines, and pet tasks into the same schedule · ใคร: `family-planner` ตัวใหม่
+4. Check (ตรวจ) that every task has a day, a time, and a person responsible, and that the total of the shopping list stays within the budget · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-ตารางสัปดาห์เดียวที่ส่งในกลุ่มครอบครัวได้
+One weekly schedule that can be sent to the family group

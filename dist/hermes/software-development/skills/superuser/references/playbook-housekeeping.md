@@ -1,19 +1,19 @@
-# playbook · housekeeping — เก็บกวาดเครื่องและโปรเจกต์
+# playbook · housekeeping — clean up the machine and the project
 
-ใช้เมื่อ: ดิสก์เต็ม · worktree หรือ branch ค้างเยอะ · sandbox และ image เก่าสะสม · `_to_delete/` ใหญ่ (รวม `worktree cleanup` ของ pstack)
-หลัก: เก็บกวาดคือการลบ อะไรที่อาจมีงานของคนอยู่ให้ **ใส่ไว้ใน "รออนุมัติ"** พร้อมคำสั่งลบ ไม่ลบเอง
+Use when: the disk is full · many leftover worktrees or branches · old sandboxes and images pile up · `_to_delete/` is large (covers pstack's `worktree cleanup`)
+Principle: cleaning up means deleting. Anything that may hold someone's work goes **under "รออนุมัติ"** (awaiting approval) with its delete command, and you do not delete it yourself.
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ทำรายการ ขั้นนี้ยังไม่ลบอะไร · ใคร: หัวหน้าทีม
-   - git worktree และ branch ที่ merge แล้วหรือไม่ได้แตะเกิน 30 วัน (`git worktree list` · `git branch --merged`)
-   - sandbox ของ SQT (`docker ps -a --filter label=sqt.sandbox=true`) · image และ volume ที่ไม่มีคอนเทนเนอร์ใช้
-   - ขนาด `_to_delete/` ของแต่ละโปรเจกต์
-2. แยกเป็น 2 กลุ่ม คือกลุ่มที่ลบได้แน่ (merge แล้ว · ไม่มีไฟล์ค้าง) และกลุ่มที่ต้องให้คนตัดสิน (มีงานที่ยังไม่ commit · ไม่แน่ใจ) · ใคร: หัวหน้าทีม
-3. แสดงตาราง `| ของ | ขนาด | เหตุผลที่ลบได้ | ความเสี่ยง |` ให้ผู้ใช้ ใต้หัวข้อ **"รออนุมัติ"** พร้อมคำสั่งลบที่กดได้ทันที ส่วนข้อที่ไม่แน่ใจให้ลงใน "ค้างอยู่" · ใคร: หัวหน้าทีมเสนอ · ผู้ใช้อนุมัติ
-4. เมื่อผู้ใช้อนุมัติแล้ว ให้ลบเฉพาะรายการที่อนุมัติ worktree ที่มีไฟล์ค้างให้เก็บ patch ไว้ก่อนลบ ส่วน sandbox ให้ใช้ `.sandbox/sandbox.ps1 destroy` (`.sandbox/` เองอยู่ที่รากต่อได้ตาม `project-doc-set` ข้อ 1) · ใคร: หัวหน้าทีม
-5. รายงานพื้นที่ที่ได้คืน แล้วจบด้วย `status-report` · ใคร: หัวหน้าทีม
+1. Make the list. Delete nothing in this step · ใคร: หัวหน้าทีม
+   - git worktrees and branches that are merged or untouched for more than 30 days (`git worktree list` · `git branch --merged`)
+   - SQT sandboxes (`docker ps -a --filter label=sqt.sandbox=true`) · images and volumes no container uses
+   - the size of each project's `_to_delete/`
+2. Split into 2 groups: what is surely deletable (merged · no leftover files) and what needs a person to decide (uncommitted work · unsure) · ใคร: หัวหน้าทีม
+3. Show the user the table `| ของ | ขนาด | เหตุผลที่ลบได้ | ความเสี่ยง |` (item · size · reason it can be deleted · risk) under the heading **"รออนุมัติ"**, with delete commands ready to run at once. Put the unsure items under "ค้างอยู่" (pending) · ใคร: หัวหน้าทีมเสนอ · ผู้ใช้อนุมัติ
+4. Once the user approves, delete only the approved items. For a worktree with leftover files, keep a patch before deleting. For a sandbox, use `.sandbox/sandbox.ps1 destroy` (`.sandbox/` itself may stay at the root per `project-doc-set` item 1) · ใคร: หัวหน้าทีม
+5. Report the space recovered, then finish with `status-report` · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-ลบเฉพาะสิ่งที่ผู้ใช้อนุมัติ และไม่มีงานของใครหายไปโดยไม่มี patch สำรอง
+Only what the user approved was deleted, and no one's work was lost without a backup patch

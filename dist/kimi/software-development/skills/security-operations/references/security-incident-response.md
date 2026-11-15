@@ -89,7 +89,7 @@ Decision: declare incident OR continue investigation
 
 ## Phase 3: Containment
 
-> **ถามผู้ใช้ก่อนทุกครั้ง** — ทุกขั้นที่เปลี่ยนระบบในเฟส Containment · Eradication · Recovery (ตัดเครือข่ายเครื่อง · ปิดบัญชี · บล็อก IP · เพิกถอนกุญแจ/ใบรับรอง · ลบ persistence · ลบมัลแวร์ · rebuild · ปิดบริการ) agent **เสนอทีละขั้น** เป็นแถว `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` แล้ว **รอให้ผู้ใช้อนุมัติขั้นนั้นก่อนรัน** — อนุมัติขั้นหนึ่งไม่ได้แปลว่าอนุมัติขั้นถัดไป · ทุกขั้นที่รันแล้วให้บันทึกลง timeline ของเหตุ (เวลา UTC · ใครอนุมัติ · คำสั่ง · ผล) · งานอ่านอย่างเดียว (ดู log · ทำสำเนาหลักฐาน) ทำได้เลย
+> **Ask the user first, every time.** For every step that changes a system in the Containment · Eradication · Recovery phases (isolate a host from the network · disable an account · block an IP · revoke keys/certificates · remove persistence · remove malware · rebuild · shut down a service), the agent **proposes one step at a time** as a row of `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` (command · target · impact · how to roll back) and **waits for the user to approve that step before running it**. Approving one step does not approve the next. Log every step that ran in the incident timeline (time in UTC · who approved · command · result). Read-only work (reading logs · copying evidence) can be done right away.
 
 ### Two phases
 
@@ -122,7 +122,7 @@ Decision: declare incident OR continue investigation
 
 ## Phase 4: Eradication
 
-> ทุกขั้นในเฟสนี้เปลี่ยนระบบ — ใช้กฎ **ถามผู้ใช้ก่อนทุกครั้ง** ที่หัวข้อ Phase 3 (เสนอ `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` → รออนุมัติ → บันทึกลง timeline)
+> Every step in this phase changes a system. Use the **ask the user first, every time** rule in the Phase 3 section (propose `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` → wait for approval → log in the timeline)
 
 ### Goals
 - Remove adversary access
@@ -268,7 +268,7 @@ Public: per disclosure obligations
 | GDPR | 72h | Personal data breach |
 | HIPAA | 60d | PHI breach |
 | State (US) | Varies | Per state law |
-| PDPA Thailand (พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562) | 72 h ถึงสำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล (สคส.) นับแต่ทราบเหตุ (ม.37(4)) · แจ้งเจ้าของข้อมูลโดยไม่ชักช้าเมื่อมีความเสี่ยงสูง · รายละเอียด → `pdpa-compliance` §8 | Personal data breach (ยกเว้นไม่มีความเสี่ยงต่อสิทธิและเสรีภาพ) |
+| PDPA Thailand (พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562, Personal Data Protection Act B.E. 2562) | 72 h to the Office of the Personal Data Protection Committee (สคส., PDPC) from when you learn of the incident (s.37(4)) · tell data subjects without delay when the risk is high · details → `pdpa-compliance` §8 | Personal data breach (except when there is no risk to rights and freedoms) |
 | SEC (US public) | 4 business days | Material cyber incident |
 | PCI-DSS | Immediate | Card data compromise |
 

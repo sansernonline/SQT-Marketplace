@@ -31,12 +31,12 @@
 | Warm start | < 1s |
 | Frame rate (เฟรมต่อวินาที, fps) | 60fps (or 120fps on hardware that supports it) |
 | Frame budget | 16.67ms (60fps), 8.33ms (120fps) |
-| App Not Responding (ANR) rate ที่ผู้ใช้รู้สึก (Android) | เกณฑ์ "พฤติกรรมแย่" ของ Google Play = 0.47% · เป้าภายในที่เข้มกว่าเป็นของทีมเอง (ไม่ใช่มาตรฐาน) |
-| Crash rate ที่ผู้ใช้รู้สึก (Android) | เกณฑ์ "พฤติกรรมแย่" ของ Google Play = 1.09% · เป้าภายในที่เข้มกว่าเป็นของทีมเอง (ไม่ใช่มาตรฐาน) |
+| App Not Responding (ANR) rate users feel (Android) | Google Play "bad behavior" threshold = 0.47% · a stricter internal target is the team's own (not a standard) |
+| Crash rate users feel (Android) | Google Play "bad behavior" threshold = 1.09% · a stricter internal target is the team's own (not a standard) |
 | Memory | within device class budget |
 | Battery | < 5% drain per hour active use |
 
-แหล่ง: Android vitals (developer.android.com/topic/performance/vitals) ตรวจ 22 ต.ค. 2569 — ทั้งภาพรวมและต่อรุ่นเครื่อง (ต่อรุ่น = 8%) ถ้าเกินเกณฑ์ แอปจะถูกลดการมองเห็นบน Google Play
+Source: Android vitals (developer.android.com/topic/performance/vitals), checked 22 Oct 2026 (B.E. 2569). The threshold applies to both the overall rate and the per-device-model rate (per model = 8%). If the app goes over the threshold, Google Play reduces its visibility.
 
 ## Launch Time Optimization
 
@@ -93,7 +93,7 @@ Avoid heavy init in:
 2. Heavy layout / measure
 3. Overdraw
 4. Allocation in hot paths
-5. JavaScript thread ที่งานหนักหรือเรียกข้ามไป native บ่อย (RN)
+5. A JavaScript thread that does heavy work or crosses into native often (RN)
 
 ### Strategies
 

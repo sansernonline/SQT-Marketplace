@@ -1,16 +1,16 @@
-# playbook · doctor-visit — เตรียมไปหาหมอ และสรุปหลังพบ
+# playbook · doctor-visit — prepare for a doctor visit and summarize afterward
 
-ใช้เมื่อ: ก่อนนัดแพทย์หรือโรงพยาบาล · หลังพบแพทย์อยากจดสิ่งที่ได้ยิน
-skill หลัก: `doctor-visit-prep` · `medication-schedule`
+Use when: before an appointment with a doctor or hospital · after the visit, when the user wants to write down what they heard
+Main skills: `doctor-visit-prep` · `medication-schedule`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. เรียงไทม์ไลน์อาการจากคำของผู้ใช้ — เริ่มเมื่อไร เป็นอย่างไร อะไรทำให้ดีขึ้นหรือแย่ลง โดยไม่ตีความ · ใคร: หัวหน้าทีม
-2. ทำรายการยาที่ใช้อยู่และประวัติแพ้ยาจากฉลากจริง · ใคร: `health-organizer` ตัวใหม่
-3. เขียนคำถามที่สำคัญที่สุด 3 ข้อ (หมอมักมีเวลาแค่ 3 ข้อ) · ใคร: `health-organizer` ตัวใหม่
-4. รวมเป็นการ์ด 1 หน้าที่พกไปได้ · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ตรวจก่อนถึงผู้ใช้
-5. หลังพบแพทย์ — จดสิ่งที่แพทย์บอก ยาที่สั่ง นัดครั้งถัดไป ตามที่ผู้ใช้เล่า แล้วอัปเดต `medication-schedule` · ใคร: หัวหน้าทีมจดจากผู้ใช้ · `health-organizer` ตัวใหม่อัปเดตตารางยา · `reviewer` ตัวใหม่ตรวจตารางยากับที่แพทย์สั่ง
+1. Put the symptoms in a timeline from the user's own words: when it started, what it is like, what makes it better or worse. Do not interpret · ใคร: หัวหน้าทีม
+2. List the medicines in use and the drug allergy history from the real labels · ใคร: `health-organizer` ตัวใหม่
+3. Write the 3 most important questions (the doctor often has time for only 3) · ใคร: `health-organizer` ตัวใหม่
+4. Combine everything into a 1-page card the user can carry · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) before it reaches the user
+5. After the visit, write down what the doctor said, the medicines prescribed, and the next appointment, as the user tells it, then update `medication-schedule` · ใคร: หัวหน้าทีม writes it down from the user · `health-organizer` ตัวใหม่ updates the medicine table · `reviewer` ตัวใหม่ checks (ตรวจ) the medicine table against what the doctor prescribed
 
-## จบเมื่อ
+## Done when
 
-การ์ด 1 หน้าพร้อมพก และบันทึกหลังพบ (ถ้ามี) ที่ไม่มีข้อความวินิจฉัยใด ๆ
+The 1-page card is ready to carry, and the after-visit note (if any) contains no diagnosis wording

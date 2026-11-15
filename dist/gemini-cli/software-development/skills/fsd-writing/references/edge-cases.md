@@ -1,17 +1,17 @@
-# ข้อผิดพลาดและกรณีขอบที่ต้องตอบให้ครบ
+# Errors and edge cases to answer in full
 
-ทีมทดสอบจะใช้ตารางนี้ และเป็นส่วนที่ FSD ส่วนใหญ่ขาด ให้ไล่ทุกแถวที่เกี่ยวกับฟีเจอร์ แล้วเขียนคำตอบลงหัวข้อ 9 ของเอกสาร
+The test team uses this table, and most FSDs lack it. Go through every row that touches the feature, then write the answers into section 9 of the document.
 
-| กรณี | คำถามที่ต้องตอบ |
+| Case | Question to answer |
 |---|---|
-| ไม่มีข้อมูล | หน้าจอว่างเปล่าแสดงอะไร มีปุ่มพาไปทำอะไรต่อไหม |
-| ข้อมูลเยอะมาก | กี่รายการต่อหน้า · เรียงยังไง · ค้นหาได้ไหม |
-| กดปุ่มรัว ๆ | กันงานซ้ำยังไง (ดู idempotency key ใน `api-conventions`) |
-| สองคนแก้พร้อมกัน | ใครชนะ · อีกคนเห็นอะไร (ดู ETag ใน `api-conventions`) |
-| เน็ตหลุดกลางทาง | ข้อมูลที่กรอกหายไหม · ลองใหม่แล้วซ้ำไหม |
-| หมดเวลา session | เด้งออกทันที หรือเก็บสิ่งที่กรอกไว้ |
-| ค่าที่ขอบเขต | 0 · ค่าติดลบ · วันนี้ · วันสุดท้ายของเดือน · ปีอธิกสุรทิน |
-| ข้อความยาวผิดปกติ | ชื่อ 200 ตัวอักษรทำให้เลย์เอาต์พังไหม |
-| ภาษาไทยและอักขระพิเศษ | เรียงลำดับถูกไหม · ค้นหาเจอไหม · อีโมจิพังไหม |
-| ระบบภายนอกไม่ตอบ | รอกี่วินาที · ลองใหม่กี่ครั้ง · ผู้ใช้เห็นอะไรระหว่างนั้น |
-| สิทธิ์ไม่พอ | เห็นแต่กดไม่ได้ หรือไม่เห็นเลย — **ต้องเลือกให้ชัด** |
+| No data | What does the empty screen show? Is there a button that points to the next step? |
+| Very large data | How many items per page? How are they sorted? Can the user search? |
+| Rapid repeated clicks | How do you prevent duplicate work? (See idempotency key in `api-conventions`) |
+| Two people edit at once | Who wins? What does the other person see? (See ETag in `api-conventions`) |
+| Connection drops midway | Is the entered data lost? Does a retry create a duplicate? |
+| Session timeout | Does the user get kicked out at once, or is their input kept? |
+| Boundary values | 0 · negative values · today · last day of the month · leap year |
+| Unusually long text | Does a 200-character name break the layout? |
+| Thai text and special characters | Does sorting work? Does search find it? Do emoji break anything? |
+| External system does not respond | How many seconds to wait? How many retries? What does the user see meanwhile? |
+| Insufficient permission | Visible but not clickable, or not visible at all? **Choose one clearly.** |

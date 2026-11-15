@@ -4,82 +4,82 @@ Use when writing user stories with acceptance criteria
 
 # User Story Writer
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
-> ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ ธุรกิจ
+> **Language:** write every line of wording following `human-writing`. This skill sets the format and structure, and human-writing sets how to write so readers understand.
+> Thai text → `human-writing` `references/thai-grammar.md` section 4, business register
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ผู้ใช้ขอให้เขียน user story ใหม่
-- มี requirement เป็นข้อความยาว ต้องแตกเป็น stories
-- ต้องเขียน acceptance criteria
-- ต้อง review/refine user story เดิมที่ไม่ชัดเจน
+- The user asks for a new user story
+- A requirement arrives as long text and must be split into stories
+- You must write acceptance criteria
+- You must review or refine an existing user story that is unclear
 
-ไม่ใช้เมื่อ: ต้องการเอกสาร requirement เต็ม → `srs-writing` · สเปกหน้าจอ → `fsd-writing` · เขียนกรณีทดสอบ → `test-case-template`
+Do not use when: you need a full requirements document → `srs-writing` · a screen spec → `fsd-writing` · writing test cases → `test-case-template`
 
-## ขั้นตอนการทำงาน
+## Workflow
 
-1. **เก็บข้อมูลให้ครบ** ก่อนเขียน ถ้าขาดอะไรให้ถาม:
-   - ใครคือ user (persona/role)
-   - เขาต้องการทำอะไร
-   - ทำเพื่ออะไร (business value)
-   - มีข้อจำกัด/business rule อะไรไหม
+1. **Collect complete information** before writing. Ask if anything is missing:
+   - Who is the user (persona/role)
+   - What do they want to do
+   - Why (business value)
+   - Are there any constraints or business rules
 
-2. **เขียน user story ตาม format**:
+2. **Write the user story in this format**:
    ```
    As a <type of user>
    I want <some goal>
    So that <some reason / business value>
    ```
 
-3. **เขียนเกณฑ์การยอมรับ (Acceptance Criteria · AC)** แบบ Given-When-Then:
+3. **Write the acceptance criteria (AC)** in Given-When-Then form:
    ```
    Given <precondition>
    When <action>
    Then <expected result>
    ```
-   - อย่างน้อย 1 happy path
-   - อย่างน้อย 1 edge case / error case
+   - At least 1 happy path
+   - At least 1 edge case / error case
 
-4. **ใส่ metadata เพิ่มเติม**:
+4. **Add extra metadata**:
    - Priority (High/Medium/Low)
-   - Story Points — ใช้ Fibonacci: 1, 2, 3, 5, 8, 13 · **คนประเมินคือนักพัฒนาหรือทีม** · ผู้เขียน story (เช่น `business-analyst`) เว้นว่างไว้ หรือใส่ค่าเสนอพร้อมเขียน `(เสนอ · รอทีมประเมิน)`
-   - Dependencies (ถ้ามี)
+   - Story Points — use Fibonacci: 1, 2, 3, 5, 8, 13 · **the developers or the team estimate** · the story author (for example `business-analyst`) leaves it blank, or enters a proposed value with `(เสนอ · รอทีมประเมิน)` (proposed · awaiting team estimate)
+   - Dependencies (if any)
 
-5. **บันทึกลงไฟล์** — ดูหัวข้อถัดไป story ที่อยู่แค่ในแชตถือว่ายังไม่ได้เขียน
+5. **Save to a file** — see the next section. A story that exists only in chat counts as not yet written.
 
-## เขียนลงไฟล์ไหน
+## Which file to write to
 
-ทุก story อยู่ใน **`docs/USER-STORIES.md`** ไฟล์เดียว เริ่มจากแบบฟอร์ม [assets/user-stories.md](assets/user-stories.md)
+Every story lives in the single file **`docs/USER-STORIES.md`**, starting from the template [assets/user-stories.md](assets/user-stories.md)
 
-- **อ่านไฟล์ก่อนเขียนเสมอ** ถ้ามีอยู่แล้ว ให้ต่อเลข ID จากตัวสุดท้าย และแก้ story เดิมในที่เดิม ไม่สร้างซ้ำ
-- **ID ไม่นำกลับมาใช้ซ้ำ** story ที่เลิกทำแล้วให้เปลี่ยนสถานะเป็น Dropped ไม่ลบทิ้ง
-- **ตารางสารบัญด้านบนต้องตรงกับเนื้อหาเสมอ** เพิ่มหรือแก้ story แล้วต้องแก้แถวในตารางในรอบเดียวกัน `/sprint-plan` อ่านจากตารางนี้
-- **คอลัมน์อ้างอิง** ใส่ที่มาของ story เช่นข้อกำหนดในเอกสารข้อกำหนดซอฟต์แวร์ (Software Requirements Specification · SRS) (`REQ-xxx`), กฎธุรกิจ (`BR-xxx`) หรือ change request (`CR-xxx`) เพื่อให้ไล่กลับไปหาได้
-- **story ที่เริ่มทำหรือทำเสร็จแล้ว (In sprint หรือ Done) ถ้าแก้ AC** ให้บันทึกในส่วนประวัติการเปลี่ยนท้ายไฟล์ แล้วค้นใน `qa/` หา test case ที่อ้าง `US-xxx, ACn` นั้น ใส่ชื่อลงช่อง test case ที่ต้องแก้ — ไม่แก้ไฟล์ของทีมประกันคุณภาพ (Quality Assurance · QA) เอง
-- **เกิน 30 story หรือมีหลาย epic ที่แยกทีมกันทำ** ให้ย้ายเนื้อหาไปไว้ที่ `docs/stories/<epic>.md` ส่วนตารางสารบัญยังคงอยู่ใน `docs/USER-STORIES.md` ที่เดียว
+- **Always read the file before writing.** If it exists, continue the ID numbering from the last one, and edit an existing story in place instead of creating a duplicate.
+- **Never reuse an ID.** For a story that is dropped, change its status to Dropped and do not delete it.
+- **The index table at the top must always match the content.** When you add or change a story, update its table row in the same round. `/sprint-plan` reads from this table.
+- **The reference column** holds the story's source, such as a requirement in the Software Requirements Specification (SRS) (`REQ-xxx`), a business rule (`BR-xxx`) or a change request (`CR-xxx`), so it can be traced back.
+- **When you change the AC of a story that has started or finished (In sprint or Done)**, record it in the change history section at the end of the file. Then search `qa/` for test cases that cite that `US-xxx, ACn`, and put their names in the "test cases to fix" cell. Do not edit the Quality Assurance (QA) team's files yourself.
+- **Over 30 stories, or several epics worked by separate teams:** move the content to `docs/stories/<epic>.md`. The index table stays in `docs/USER-STORIES.md` only.
 
-## เมื่อเริ่มจากบันทึกสัมภาษณ์
+## When starting from interview notes
 
-- **ครบทุกคนที่พูด** — ไล่ทีละคน ทุกคนต้องมี story อย่างน้อย 1 ข้อ หรือมีเหตุผลว่าทำไมไม่มี
-- **คำพูดที่ขัดกันเอง ห้ามตัดทิ้ง** — เขียน story ที่เคารพกติกาของร้านก่อน แล้วยกความขัดแย้งเป็นคำถาม (ตัวอย่างจากงานนั้น: ร้านห้ามเก็บรูปหน้าลูกค้า แต่ลูกค้าอยากอัปโหลดเซลฟี่ → story ให้วิเคราะห์ในเครื่องโดยไม่เก็บ แล้วถามร้านว่ารับไหม)
-- **ปิดไฟล์ด้วยหัวข้อ "คำถามที่ยังไม่ชัด"** ทุกข้อมีเลข ตัวเลือกที่เสนอ และ story ที่ติดอยู่ (ตัวอย่างจากงานนั้น: 36 story · 19 คำถาม)
-- **ผู้ใช้ที่ไม่มีใครพูดถึง** — เจ้าของร้านต้องมี story ของตัวเองเสมอ (เช่น กดว่าใช้บริการเสร็จ) · ของที่คนสร้างเติมให้เองโดยไม่มีใครขอ (หน้า admin · บัญชีเจ้าของ) ให้ลงรายการ "ระบบมีแต่ร้านไม่ได้ขอ" แล้วถามกลับว่ารับไหม ไม่ปล่อยให้ถือว่าตกลงแล้ว (ตัวอย่างจากงานนั้น: 6 รายการ)
+- **Cover everyone who spoke.** Go person by person. Every person needs at least 1 story, or a reason why there is none.
+- **Never drop statements that contradict each other.** Write the story that respects the shop's rule first, then raise the conflict as a question. (Example from that job: the shop forbids storing customers' face photos, but customers want to upload selfies → the story analyzes on the device without storing, then asks the shop whether it accepts.)
+- **Close the file with a section "คำถามที่ยังไม่ชัด" (open questions).** Every item has a number, the proposed options and the story it blocks. (Example from that job: 36 stories · 19 questions)
+- **Users nobody mentioned.** The shop owner always needs their own story (for example, mark a service as finished). Anything the builders added on their own that nobody asked for (an admin page · an owner account) goes in a list "ระบบมีแต่ร้านไม่ได้ขอ" (things the system has that the shop did not ask for), and you ask back whether the shop accepts it. Never leave it to be treated as agreed. (Example from that job: 6 items)
 
-## INVEST Checklist (ตรวจก่อนส่ง)
+## INVEST Checklist (check before sending)
 
-ทุก story ต้องผ่านเกณฑ์เหล่านี้:
+Every story must meet these criteria:
 
-- [ ] **I**ndependent — ไม่ขึ้นกับ story อื่น
-- [ ] **N**egotiable — เปิดให้คุยรายละเอียดได้
-- [ ] **V**aluable — มี business value ชัดเจน
-- [ ] **E**stimable — ประเมิน effort ได้
-- [ ] **S**mall — เล็กพอจะทำเสร็จใน 1 sprint
-- [ ] **T**estable — ทดสอบได้
+- [ ] **I**ndependent — does not depend on another story
+- [ ] **N**egotiable — open to discussion of details
+- [ ] **V**aluable — has clear business value
+- [ ] **E**stimable — effort can be estimated
+- [ ] **S**mall — small enough to finish within 1 sprint
+- [ ] **T**estable — can be tested
 
 ## Output Template
 
 ```markdown
-## US-XXX: <ชื่อสั้นๆ>
+## US-XXX: <short title>
 
 **Story**
 As a <role>
@@ -88,49 +88,49 @@ So that <value>
 
 **Acceptance Criteria**
 
-AC1: <ชื่อ scenario>
+AC1: <scenario name>
 - Given <context>
 - When <action>
 - Then <result>
 
-AC2: <ชื่อ scenario>
+AC2: <scenario name>
 - Given ...
 - When ...
 - Then ...
 
 **Priority:** High | Medium | Low
 **Story Points:** X
-**Blocked by:** US-YYY (story ที่ต้องเสร็จก่อนถึงจะเริ่มข้อนี้ได้) · ไม่มี → เขียน `None (เริ่มได้ทันที)`
-**Notes:** ข้อมูลเพิ่มเติม / business rules
+**Blocked by:** US-YYY (a story that must finish before this one can start) · none → write `None (เริ่มได้ทันที)`
+**Notes:** extra information / business rules
 ```
 
-**Blocked by ใส่เฉพาะที่กั้นจริง** (ปรับจาก mattpocock `to-tickets` · MIT) — story A กั้น B เมื่อ B เริ่มไม่ได้ถ้า A ยังไม่เสร็จ (ต้องใช้ตาราง · API · หน้าจอของ A) ไม่ใช่แค่ "ควรทำก่อน" · เรียงลำดับใน `USER-STORIES.md` ให้ตัวที่กั้นอยู่ก่อนตัวที่ถูกกั้น · ทีมหรือ agent หยิบงานจากชุด "ทุกตัวที่กั้นเสร็จแล้ว" ซึ่งเป็นชุดที่ทำขนานกันได้ · ถ้าใช้ tracker จริง (GitHub · Linear) ให้ใช้ความสัมพันธ์ blocking ของมัน ไม่ใช่เขียนในข้อความอย่างเดียว
+**List in Blocked by only real blockers** (adapted from mattpocock `to-tickets` · MIT). Story A blocks B when B cannot start until A is done (it needs A's table, API or screen), not merely when A "should come first". Order `USER-STORIES.md` so a blocker comes before the story it blocks. The team or agent picks work from the set "every story whose blockers are all done", which is the set that can run in parallel. If you use a real tracker (GitHub · Linear), use its blocking relationship, not only text in the description.
 
-## ตัวอย่าง
+## Example
 
-ดูตัวอย่างเต็มได้ที่ `examples/login-story.md`
+See the full example at `examples/login-story.md`
 
-## ข้อห้าม
+## Prohibitions
 
-- อย่าเขียน technical solution ใน story (เช่น "ใช้ JWT")
-- อย่าเขียน UI detail (เช่น "ปุ่มสีฟ้า") — ให้ designer ตัดสิน
-- อย่าใช้ "user" เฉยๆ ต้องระบุ role เจาะจง (admin, customer, guest)
-- อย่าเขียน story ใหญ่เกิน 13 points — ให้แตกออก
+- Do not write a technical solution in a story (for example "use JWT")
+- Do not write UI detail (for example "blue button") — the designer decides
+- Do not use plain "user". Name a specific role (admin, customer, guest).
+- Do not write a story bigger than 13 points — split it
 
 ---
 
-## หน้าตาของเอกสาร
+## How the document looks
 
-skill นี้ตัดสินว่า**เนื้อหาต้องมีอะไร** ไม่ได้ตัดสินว่า**หน้าตาเป็นอย่างไร** —
-โหลด skill ที่ตรงกับปลายทางก่อนเริ่มเขียน ไม่ใช่ตอนเขียนเสร็จ:
+This skill decides **what content the document needs**, not **how it looks**.
+Load the skill that matches the destination before you start writing, not after you finish:
 
-| ส่งมอบเป็นอะไร | โหลด |
+| Delivered as | Load |
 |---|---|
-| markdown ที่คนอ่าน (repo · wiki · ระบบติดตามงาน) | `polished-document-style` |
-| ไฟล์ `.docx` / `.pptx` / PDF ที่ผู้มีส่วนได้เสียเซ็นรับ | `branded-document-design` |
-| ต้องมีภาพถึงจะเข้าใจ | `diagram-figures` (house style ของเอกสารโปรเจกต์) |
+| Markdown that people read (repo · wiki · tracker) | `polished-document-style` |
+| A `.docx` / `.pptx` / PDF that stakeholders sign off | `branded-document-design` |
+| Needs a picture to be understood | `diagram-figures` (the house style of project documents) |
 
-การปล่อยรูปแบบเริ่มต้นไว้ไม่ได้ทำให้ดูเป็นกลาง คนอ่านจะมองว่างานยังไม่เสร็จ
+Leaving the default format in place does not make it look neutral. Readers will see the work as unfinished.
 
 
 ---
@@ -846,29 +846,29 @@ The column template and the values used in each field live in one place, the [qu
 
 ## reference: playbook-bug-fix.md
 
-# playbook · bug-fix — แก้ของพังด้วยหลักฐาน
+# playbook · bug-fix — fix broken things with evidence
 
-ใช้เมื่อ: error · stack trace · test ล้ม · หน้าจอผิด · หน่วยความจำรั่ว · CPU วิ่งตอนว่าง · ผู้ใช้แจ้งปัญหา · ของที่ไม่ควรเกิดเลย (ถ้าใช้ได้อยู่แต่อยากให้เร็วหรือเบาขึ้นถึงเป้า → `performance`) (รวม `bug fix` · `runtime forensics` · `trace forensics` ของ pstack)
-skill หลัก: [`code-orientation`](../../code-orientation/SKILL.md) · skill ตาม stack · `targeted-fix` · `principle-fix-root-cause` · `principle-prove-it-works`
+Use when: an error · stack trace · failing test · wrong screen · memory leak · CPU busy while idle · a user report · something that should never happen (if it works but you want it faster or lighter to a target → `performance`) (covers pstack's `bug fix` · `runtime forensics` · `trace forensics`)
+Main skills: [`code-orientation`](../../code-orientation/SKILL.md) · the skill for the stack · `targeted-fix` · `principle-fix-root-cause` · `principle-prove-it-works`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. คัดอาการตรงตัว — ข้อความ error · ชื่อ test · ภาพหน้าจอ · ขั้นตอนที่ผู้ใช้ทำ · ใคร: หัวหน้าทีม
-2. **ทำให้เกิดซ้ำเองในที่เดียวกับที่ผู้ใช้เจอ** — ถ้าเป็นหน้าเว็บ ให้ใช้ skill ตรวจแอปของโปรเจกต์ (ถ้ายังไม่มี ให้ทำ `app-verifier-setup` ก่อน) ถ้าเป็น API ให้ใช้คำสั่งเรียกจริง ถ้าทำซ้ำไม่ได้ ให้บอกว่าขาดอะไร (ข้อมูล · สภาพแวดล้อม · ขั้นตอน) แล้วหยุดเฉพาะบั๊กนี้ ส่วนโปรเจกต์ที่มี `.sandbox/` (ข้อยกเว้นของรากตาม `project-doc-set` ข้อ 1) ให้ทำซ้ำใน sandbox · ใคร: `qa-tester` ตัวใหม่
-   - อาการที่เกิดตอนรัน (รั่ว · ค้างเป็นพัก ๆ · วิ่งตอนว่าง) ให้ใส่การวัดหรือ log ชั่วคราว เพื่อให้อาการกลายเป็นตัวเลขก่อนแก้ ถ้าได้ไฟล์ profile มา (cpuprofile · heap snapshot · trace) ให้อ่านด้วยเครื่องมือของไฟล์ชนิดนั้น ไม่เดาจากโค้ด
-3. **เขียน test ที่ล้มเพราะบั๊กนี้ก่อน** แล้วรันให้เห็นว่าแดง (`testing-standards`) ถ้าโปรเจกต์ยังไม่มี test เลย ให้ตั้ง test ตัวแรกให้รันได้ก่อน ถ้าทำ test ไม่ได้จริง (เช่น อาการที่เกิดตอนรันบนเครื่องผู้ใช้) ให้เขียนเหตุผลลงรายงาน และต้องมีขั้นตอนทำซ้ำที่รันได้แทน · ใคร: `developer` ตัวใหม่
-   - ถ้ายังไม่ได้อ่านส่วนนี้ใน session นี้ ให้ทำ [`code-orientation`](../../code-orientation/SKILL.md) ก่อนไล่ต้นเหตุ
-4. หาต้นเหตุตาม `principle-fix-root-cause` · ต้นเหตุที่หายากหรือหลายชั้น ส่ง agent ด้วย `model: opus` (`superuser` หัวข้อ 5) · ใคร: `developer` ตัวใหม่ (ส่งผลขั้น 3)
-5. ถ้าจะแก้ของที่ใช้ร่วม (helper · type · config · schema) ให้หาทุกจุดที่กระทบตาม [`blast-radius`](../../blast-radius/SKILL.md) ก่อนแก้ · **บั๊กด้านความปลอดภัย** ให้ค้นทั้ง repo หาจุดที่เขียนแบบเดียวกันด้วย · ส่งรายการจุดให้ขั้น 6 · ใคร: `Explore` ตัวใหม่
-6. แก้ให้เล็กที่สุดที่ยังถูก (`lazy-coding`) ครบทุกจุดจากขั้น 4–5 ในรอบเดียว — ส่งตำแหน่งไฟล์และต้นเหตุไปด้วย · บั๊กความปลอดภัยลงรายงานใน `qa/security/` ถ้ามีค่าลับหลุด ให้บอกผู้ใช้ให้เปลี่ยนค่าทันที · ใคร: `developer` ตัวใหม่
-7. พิสูจน์ — รันกรณีที่เคยล้มให้ผ่าน รันกรณีใกล้เคียงว่ายังผ่าน แล้วลองทำซ้ำในที่เดิมอีกครั้งด้วยตัวเอง · ใคร: `qa-tester` ตัวใหม่
-8. **รีวิว diff ก่อนบอกว่าเสร็จ** — ตาม `code-review-checklist`: แก้ที่ต้นเหตุ ไม่ลามนอกจุด ผลขั้น 7 ครอบกรณีที่เคยล้ม · บั๊กความปลอดภัยดูครบทุกจุดจากขั้น 5 · ไม่ผ่าน → `developer` ตัวใหม่แก้ แล้ววนตามรอบตรวจใน [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
-9. ถ้าบั๊กนี้เป็นแบบที่ agent เคยทำมาแล้ว ให้ใช้ `repeated-mistakes-to-checks` · ใคร: หัวหน้าทีม
-10. ส่งมอบตามกฎ commit ใน `superuser` หัวข้อ 6 แล้วจบด้วย `status-report` · ใคร: หัวหน้าทีม
+1. Copy the symptom exactly — the error message · test name · screenshot · the steps the user took · ใคร: หัวหน้าทีม
+2. **Reproduce it yourself in the same place the user hit it.** For a web page, use the project's app-checking skill (if there is none yet, do `app-verifier-setup` first). For an API, use a real call. If you cannot reproduce it, say what is missing (data · environment · steps) and stop on this bug only. In a project that has `.sandbox/` (the root exception in `project-doc-set` item 1), reproduce inside the sandbox · ใคร: `qa-tester` ตัวใหม่
+   - For a symptom that appears at run time (leak · intermittent hang · busy while idle), add temporary measurement or logging so the symptom becomes a number before you fix it. If you were given a profile file (cpuprofile · heap snapshot · trace), read it with the tool for that file type. Do not guess from the code.
+3. **Write a test that fails because of this bug first**, and run it to see it red (`testing-standards`). If the project has no tests at all, first set up a first test that runs. If you truly cannot write a test (for example a symptom that happens at run time on the user's machine), write the reason in the report, and provide a runnable reproduction procedure instead · ใคร: `developer` ตัวใหม่
+   - If you have not read this part in this session, do [`code-orientation`](../../code-orientation/SKILL.md) before tracing the cause
+4. Find the root cause per `principle-fix-root-cause` · for a rare or multi-layer cause, send an agent with `model: opus` (`superuser` section 5) · ใคร: `developer` ตัวใหม่ (pass in the step 3 result)
+5. If you will change something shared (helper · type · config · schema), find every spot it affects per [`blast-radius`](../../blast-radius/SKILL.md) before changing it · for a **security bug**, also search the whole repo for places written the same way · pass the list of spots to step 6 · ใคร: `Explore` ตัวใหม่
+6. Make the smallest fix that is still correct (`lazy-coding`), covering every spot from steps 4–5 in one round — pass the file locations and the root cause along · write a security bug up in the report under `qa/security/` · if a secret leaked, tell the user to rotate it at once · ใคร: `developer` ตัวใหม่
+7. Prove it — run the case that used to fail and see it pass, run the nearby cases and see they still pass, then try to reproduce it in the original place once more yourself · ใคร: `qa-tester` ตัวใหม่
+8. **Check (ตรวจ) the diff by review before saying done** — per `code-review-checklist`: the fix is at the root cause, does not spread beyond the spot, and the step 7 result covers the case that used to fail · for a security bug, look at every spot from step 5 · if it fails → a fresh `developer` fixes it, then loop per the check rounds in [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
+9. If this bug is the kind an agent has made before, use `repeated-mistakes-to-checks` · ใคร: หัวหน้าทีม
+10. Deliver per the commit rules in `superuser` section 6, then finish with `status-report` · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-`ต้นเหตุ: … · แก้: … · พิสูจน์: <กรณีที่เคยล้มและตอนนี้ผ่าน + วิธีที่รัน>`
+`ต้นเหตุ: … · แก้: … · พิสูจน์: <the case that used to fail and now passes + how it was run>` (root cause · fix · proof)
 
 
 ## reference: playbook-feature.md
@@ -916,25 +916,25 @@ Every pass criterion of the requirements has evidence — a test that actually r
 
 ## reference: playbook-housekeeping.md
 
-# playbook · housekeeping — เก็บกวาดเครื่องและโปรเจกต์
+# playbook · housekeeping — clean up the machine and the project
 
-ใช้เมื่อ: ดิสก์เต็ม · worktree หรือ branch ค้างเยอะ · sandbox และ image เก่าสะสม · `_to_delete/` ใหญ่ (รวม `worktree cleanup` ของ pstack)
-หลัก: เก็บกวาดคือการลบ อะไรที่อาจมีงานของคนอยู่ให้ **ใส่ไว้ใน "รออนุมัติ"** พร้อมคำสั่งลบ ไม่ลบเอง
+Use when: the disk is full · many leftover worktrees or branches · old sandboxes and images pile up · `_to_delete/` is large (covers pstack's `worktree cleanup`)
+Principle: cleaning up means deleting. Anything that may hold someone's work goes **under "รออนุมัติ"** (awaiting approval) with its delete command, and you do not delete it yourself.
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ทำรายการ ขั้นนี้ยังไม่ลบอะไร · ใคร: หัวหน้าทีม
-   - git worktree และ branch ที่ merge แล้วหรือไม่ได้แตะเกิน 30 วัน (`git worktree list` · `git branch --merged`)
-   - sandbox ของ SQT (`docker ps -a --filter label=sqt.sandbox=true`) · image และ volume ที่ไม่มีคอนเทนเนอร์ใช้
-   - ขนาด `_to_delete/` ของแต่ละโปรเจกต์
-2. แยกเป็น 2 กลุ่ม คือกลุ่มที่ลบได้แน่ (merge แล้ว · ไม่มีไฟล์ค้าง) และกลุ่มที่ต้องให้คนตัดสิน (มีงานที่ยังไม่ commit · ไม่แน่ใจ) · ใคร: หัวหน้าทีม
-3. แสดงตาราง `| ของ | ขนาด | เหตุผลที่ลบได้ | ความเสี่ยง |` ให้ผู้ใช้ ใต้หัวข้อ **"รออนุมัติ"** พร้อมคำสั่งลบที่กดได้ทันที ส่วนข้อที่ไม่แน่ใจให้ลงใน "ค้างอยู่" · ใคร: หัวหน้าทีมเสนอ · ผู้ใช้อนุมัติ
-4. เมื่อผู้ใช้อนุมัติแล้ว ให้ลบเฉพาะรายการที่อนุมัติ worktree ที่มีไฟล์ค้างให้เก็บ patch ไว้ก่อนลบ ส่วน sandbox ให้ใช้ `.sandbox/sandbox.ps1 destroy` (`.sandbox/` เองอยู่ที่รากต่อได้ตาม `project-doc-set` ข้อ 1) · ใคร: หัวหน้าทีม
-5. รายงานพื้นที่ที่ได้คืน แล้วจบด้วย `status-report` · ใคร: หัวหน้าทีม
+1. Make the list. Delete nothing in this step · ใคร: หัวหน้าทีม
+   - git worktrees and branches that are merged or untouched for more than 30 days (`git worktree list` · `git branch --merged`)
+   - SQT sandboxes (`docker ps -a --filter label=sqt.sandbox=true`) · images and volumes no container uses
+   - the size of each project's `_to_delete/`
+2. Split into 2 groups: what is surely deletable (merged · no leftover files) and what needs a person to decide (uncommitted work · unsure) · ใคร: หัวหน้าทีม
+3. Show the user the table `| ของ | ขนาด | เหตุผลที่ลบได้ | ความเสี่ยง |` (item · size · reason it can be deleted · risk) under the heading **"รออนุมัติ"**, with delete commands ready to run at once. Put the unsure items under "ค้างอยู่" (pending) · ใคร: หัวหน้าทีมเสนอ · ผู้ใช้อนุมัติ
+4. Once the user approves, delete only the approved items. For a worktree with leftover files, keep a patch before deleting. For a sandbox, use `.sandbox/sandbox.ps1 destroy` (`.sandbox/` itself may stay at the root per `project-doc-set` item 1) · ใคร: หัวหน้าทีม
+5. Report the space recovered, then finish with `status-report` · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-ลบเฉพาะสิ่งที่ผู้ใช้อนุมัติ และไม่มีงานของใครหายไปโดยไม่มี patch สำรอง
+Only what the user approved was deleted, and no one's work was lost without a backup patch
 
 
 ## reference: playbook-investigation.md
@@ -1101,24 +1101,24 @@ Every document ordered has a status in `docs/BUILD-PLAN.md` and its check result
 
 ## reference: playbook-prototype.md
 
-# playbook · prototype — ทดลองให้ผลรันเป็นคนตัดสิน
+# playbook · prototype — experiment, and let the run result decide
 
-ใช้เมื่อ: กำลังจะถามคนว่า "แบบไหนดี" แต่คำตอบดูได้จากการรัน — ความเร็ว · หน้าตา · พฤติกรรม · ผลลัพธ์
-ห้ามใช้เมื่อ: เป็นเรื่องรสนิยมหรือการตัดสินใจทางธุรกิจที่ทดลองไม่ได้ — อันนั้นถามคน
+Use when: you are about to ask a person "which one is better?" but the answer can be seen by running it — speed · looks · behavior · output
+Do not use when: it is a matter of taste or a business decision that an experiment cannot settle — ask a person for that
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. เขียนคำถามที่จะให้การทดลองตอบ และเกณฑ์ตัดสินเป็นตัวเลขหรือสิ่งที่เห็นได้ ก่อนลงมือ · ใคร: หัวหน้าทีม
-2. สร้างทางเลือก 2–3 ทาง แบบเล็กที่สุดที่ยังตอบคำถามได้ ใน `_to_delete/prototype-<เรื่อง>/` ถ้าทางเลือกเยอะหรือใหญ่ ให้ใช้ `parallel-attempts-pick-best` · ใคร: `developer` ตัวใหม่ทางละตัว (ยังไม่รู้ว่าจะลองทางไหน: `brainstormer` ตัวใหม่เสนอก่อน)
-3. รันทุกทางด้วยวิธีวัดเดียวกัน — ข้อมูลชุดเดียวกัน เครื่องเดียวกัน แล้วบันทึกผลดิบ · ใคร: `qa-tester` ตัวใหม่
-4. ตัดสินตามเกณฑ์ข้อ 1 ถ้าผลก้ำกึ่ง ให้เลือกทางที่โค้ดน้อยและแก้ทีหลังง่ายกว่า · ใคร: หัวหน้าทีม
-5. ตรวจการตัดสิน — ตัวเลขมาจากผลดิบข้อ 3 จริง วัดแบบเดียวกันทุกทาง และเกณฑ์ตรงกับข้อ 1 · ใคร: `reviewer` ตัวใหม่
-6. ลงผลใน `decision-log` — เลือก · ไม่เลือก · ตัวเลขที่วัดได้ · ใคร: หัวหน้าทีม
-7. กลับไปทำ playbook เดิมต่อด้วยทางที่ชนะ แต่ไม่ย้ายโค้ดทดลองเข้าโปรเจกต์ตรง ๆ · ใคร: หัวหน้าทีม
+1. Before starting, write the question the experiment will answer, and the deciding criterion as a number or something visible · ใคร: หัวหน้าทีม
+2. Build 2–3 options, each as small as can still answer the question, in `_to_delete/prototype-<topic>/`. If the options are many or large, use `parallel-attempts-pick-best` · ใคร: `developer` ตัวใหม่ one per option (if it is not yet known which options to try: `brainstormer` ตัวใหม่ proposes first)
+3. Run every option with the same way of measuring — the same data, the same machine — and record the raw results · ใคร: `qa-tester` ตัวใหม่
+4. Decide by the criterion from step 1. If the result is close, choose the option with less code that is easier to change later · ใคร: หัวหน้าทีม
+5. Check (ตรวจ) the decision — the numbers really come from the raw results in step 3, every option was measured the same way, and the criterion matches step 1 · ใคร: `reviewer` ตัวใหม่
+6. Record the result in `decision-log` — chosen · not chosen · the measured numbers · ใคร: หัวหน้าทีม
+7. Return to the original playbook with the winning option, but do not move the experiment code straight into the project · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-มีตัวเลขหรือภาพเทียบที่ตอบคำถามข้อ 1 ได้ และการตัดสินถูกบันทึกแล้ว
+There are numbers or a side-by-side picture that answer the step 1 question, and the decision is recorded
 
 
 ## reference: playbook-refactor.md
@@ -1359,26 +1359,26 @@ All the step 1 conditions pass, or every remaining piece has a reason why it is 
 
 ## reference: playbook-visual-parity.md
 
-# playbook · visual-parity — หน้าจอจริงต้องตรงกับต้นแบบ
+# playbook · visual-parity — the real screen must match the reference
 
-ใช้เมื่อ: ทำหน้าจอให้ตรง mockup · ย้ายหน้าจอจากเทคโนโลยีเก่าไปใหม่แล้วต้องเหมือนเดิม · ผู้ใช้บอกว่า "ไม่เหมือนแบบ"
-skill หลัก: skill ตรวจแอปของโปรเจกต์ (`app-verifier-setup`) · `ui-craft` · `principle-prove-it-works`
+Use when: making a screen match a mockup · moving a screen from an old technology to a new one and it must look the same · the user says "ไม่เหมือนแบบ" (it does not look like the design)
+Main skills: the project's app-checking skill (`app-verifier-setup`) · `ui-craft` · `principle-prove-it-works`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ระบุต้นแบบ (ไฟล์ใน `mockup/` หรือหน้าจอระบบเดิม) และหน้าจอจริงที่จะเทียบ เป็นคู่ ๆ · ใคร: หัวหน้าทีม
-2. ถ่ายภาพทั้งสองฝั่งด้วยขนาดหน้าต่างเดียวกัน ข้อมูลชุดเดียวกัน ด้วย skill ตรวจแอป แล้วเก็บใน `_to_delete/parity/` · ใคร: `qa-tester` ตัวใหม่
-3. เทียบด้วยเครื่องมือ — ใช้ภาพต่าง (pixel diff) ถ้ามี ถ้าไม่มีให้เทียบทีละส่วน: ระยะห่าง · ขนาดตัวอักษร · สี · ลำดับ · สถานะว่าง/โหลด/ผิดพลาด · ใคร: `qa-tester` ตัวใหม่
-4. ทำรายการต่างที่พบ `| จุด | ต้นแบบ | ของจริง | แก้ที่ไฟล์ |` เรียงจากที่ผู้ใช้เห็นก่อน · ใคร: `qa-tester` ตัวใหม่
-5. แก้ทีละกลุ่ม แล้วถ่ายภาพเทียบใหม่ทุกครั้ง · ใคร: `developer` ตัวใหม่ต่อกลุ่ม · `qa-tester` ตัวใหม่ถ่ายเทียบ
-6. จุดที่ต่างโดยตั้งใจ (ต้นแบบผิดหลัก `ui-craft` หรือทำจริงไม่ได้) ไม่ต้องแก้ตาม แต่ให้ลงเหตุผลใน `decision-log` · ใคร: หัวหน้าทีม
-7. กดทุกปุ่มบนหน้าจอจริงว่าทำงาน ไม่ดูแค่หน้าตาเหมือน · ใคร: `qa-tester` ตัวใหม่
-8. ตรวจว่ารายการต่างข้อ 4 ปิดครบ ภาพเทียบล่าสุดตรงต้นแบบ และเหตุผลข้อ 6 ฟังขึ้น · ไม่ผ่าน → วนตามรอบตรวจใน [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
-9. จบด้วย `status-report` · ใคร: หัวหน้าทีม
+1. Identify the reference (a file in `mockup/` or the old system's screen) and the real screen to compare, as pairs · ใคร: หัวหน้าทีม
+2. Capture both sides at the same window size with the same data, using the app-checking skill, and keep them in `_to_delete/parity/` · ใคร: `qa-tester` ตัวใหม่
+3. Compare with a tool — use a pixel diff if there is one. If not, compare part by part: spacing · font size · colour · order · empty/loading/error states · ใคร: `qa-tester` ตัวใหม่
+4. Make a list of the differences found, `| จุด | ต้นแบบ | ของจริง | แก้ที่ไฟล์ |` (spot · reference · real · file to fix), ordered by what the user sees first · ใคร: `qa-tester` ตัวใหม่
+5. Fix one group at a time, and capture a new comparison after each · ใคร: `developer` ตัวใหม่ per group · `qa-tester` ตัวใหม่ captures the comparison
+6. For differences that are deliberate (the reference breaks `ui-craft` rules or cannot really be built), do not fix them to match, but record the reason in `decision-log` · ใคร: หัวหน้าทีม
+7. Click every button on the real screen to confirm it works. Do not stop at looking the same · ใคร: `qa-tester` ตัวใหม่
+8. Check (ตรวจ) that every difference in the step 4 list is closed, the latest comparison matches the reference, and the step 6 reasons hold up · if it fails → loop per the check rounds in [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
+9. Finish with `status-report` · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-ทุกคู่มีภาพเทียบล่าสุด และรายการต่างที่เหลือมีเหตุผลกำกับทุกข้อ
+Every pair has a latest comparison image, and every remaining difference has a reason attached
 
 
 ## reference: playbooks.md

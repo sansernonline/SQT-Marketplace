@@ -3,93 +3,93 @@ name: image-generation
 description: Use when a page needs images and a route must be picked
 ---
 
-# สร้างรูปจริงด้วย AI
+# Generate real images with AI
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Gate before you start (every time):** read the owner's theme → search for live references → 3 genuinely different directions → check `no-ai-look` before sending. Follow the "ด่านก่อนลงมือ" (pre-start gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece). Close the work with a `ด่านก่อนลงมือ:` line.
 
-รูปใน hero · การ์ดสินค้าหรือบริการ · สไลด์ · โพสต์ร้านค้า · ภาพประกอบรายงาน → **รูปที่ดูตั้งใจทำ** ไม่ใช่รูปทรงพื้นฐานวางแทนของจริง
-ไม่ต้องตั้งค่าอะไร ไม่ต้องมี API key → สร้างด้วยเครื่องมือของ session → วาด Scalable Vector Graphics (SVG) แบบภาพประกอบเต็มฉาก → รูปถ่ายฟรี
+Images in a hero · product or service cards · slides · shop posts · report illustrations → **images that look deliberate**, not basic shapes standing in for the real thing.
+No setup and no API key needed → generate with the session's tool → draw a full-scene Scalable Vector Graphics (SVG) illustration → free photos.
 
-## 1 · ถามแนวภาพ ครั้งเดียวตอนเริ่ม
+## 1 · Ask about the style, once at the start
 
-| แนว | หน้าตา | เหมาะกับ |
+| Style | Look | Suits |
 |---|---|---|
-| `photo` | ภาพถ่ายจริง | สปา โรงแรม ร้านอาหาร ร้านค้า อสังหา คลินิก |
-| `flat` | ภาพวาดแบน สีเรียบ | SaaS แอป บริการออนไลน์ หน้า onboarding |
-| `3d` | ภาพ 3D ผิวนุ่ม | fintech เกม ของเล่น หน้าเปิดตัวสินค้าเทค |
-| `watercolor` | สีน้ำ วาดมือ | งานไทย งานฝีมือ คาเฟ่ ร้านดอกไม้ งานเด็ก |
-| `line` | ลายเส้นสีเดียว | คู่มือ เอกสาร หน้าที่ต้องเรียบมาก |
-| `isometric` | มุมเฉียง 3 มิติ | อธิบายระบบ โรงงาน IoT โลจิสติกส์ |
+| `photo` | Real photograph | Spas, hotels, restaurants, shops, real estate, clinics |
+| `flat` | Flat drawing, plain colours | SaaS, apps, online services, onboarding pages |
+| `3d` | Soft-surface 3D picture | Fintech, games, toys, tech product launch pages |
+| `watercolor` | Hand-painted watercolor | Thai themes, crafts, cafes, florists, children's work |
+| `line` | Single-colour line art | Manuals, documents, pages that must be very plain |
+| `isometric` | Angled 3D view | Explaining systems, factories, IoT, logistics |
 
-- ผู้ใช้บอกแล้ว → ใช้ตามนั้น
-- ถามได้ → ถามพร้อมคำถามอื่นตอนเริ่มงานในข้อความเดียว
-- ไม่มีคนตอบ (งานรันเอง) → เลือกจากคอลัมน์ "เหมาะกับ" แล้วจดใน `## ตัดสินใจเอง` ว่าเลือกแนวไหน เพราะอะไร
-- 1 โปรเจกต์ = 1 แนว · ผสมแนวเฉพาะเมื่อผู้ใช้สั่ง
-- คำ prompt ของแต่ละแนว → [`references/styles.md`](references/styles.md)
+- The user already said → use that
+- You can ask → ask together with the other start-of-work questions in one message
+- Nobody answers (an unattended run) → choose from the "Suits" column and note in `## ตัดสินใจเอง` (decided on my own) which style you chose and why
+- 1 project = 1 style · mix styles only when the user orders it
+- Prompt wording for each style → [`references/styles.md`](references/styles.md)
 
-## 2 · ล็อกสไตล์ก่อนสร้างรูปแรก
+## 2 · Lock the style before the first image
 
-ก่อนรูปแรก เขียน **1 ย่อหน้าว่าภาพชุดนี้คืออะไร** (ไม่เกิน 4 ประโยค) ไว้บนสุดของ `image-style.md`: ใครดู · ดูแล้วต้องรู้สึกอะไร · ภาพชุดนี้จะไม่มีวันเป็นแบบไหน (เช่น "ไม่ใช่โฆษณาเงา ๆ") — ทุก prompt และทุกรูปที่เลือกเทียบกับย่อหน้านี้ก่อน ไม่ใช่เทียบกับรสนิยมตอนนั้น
-เขียน `image-style.md` (เก็บที่ `docs/design/` หรือโฟลเดอร์ของงานนั้น): แนว · สี 3–5 สี (เอาจากสีแบรนด์ · ไม่มีแบรนด์ → **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `illustration` แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้) · แสง · มุมกล้อง · สิ่งที่ห้ามมี
-→ ทุกรูปต่อท้าย prompt ด้วยบล็อกนี้ → 20 รูปก็ยังดูเป็นชุดเดียวกัน
-(วิธีเขียน brief และ prompt → `brief-to-image`)
+Before the first image, write **1 paragraph on what this set of images is** (at most 4 sentences) at the top of `image-style.md`: who views it · what they should feel · what this set will never be (for example "not a glossy ad"). Every prompt and every chosen image is compared against this paragraph, not against your taste at the moment.
+Write `image-style.md` (kept in `docs/design/` or the work's own folder): style · 3–5 colours (from the brand colours · with no brand → **search for references first:** take the project's keywords and search live following `design-references` (plugin `superuser`), type `illustration`, then extract the colours from the chosen work · the stored palette library is for when live search is impossible) · light · camera angle · what must not appear
+→ append this block to every image's prompt → even 20 images still look like one set
+(How to write the brief and prompt → `brief-to-image`)
 
-## เขียน brief และ prompt
+## Write the brief and prompt
 
-เส้นแบ่งของสอง skill: **ไฟล์นี้ตัดสินว่าจะได้รูปทางไหน** (สร้าง วาด SVG หรือหารูปฟรี) และทำรายการรูป · **`brief-to-image` เขียน brief กับ prompt** เมื่อเลือกทางสร้างแล้ว รวมวิธีเลือกภาพจาก 3–4 แบบ (`decision-scoring` คำสั่ง `score` · ให้คะแนนยากใช้ `pairwise` · ผลสูสีผู้ใช้เลือก) และวิธีแก้เมื่อภาพพลาด · ไม่ใส่ข้อความไทยในภาพที่สร้าง ให้วางทีหลังด้วยฟอนต์แบรนด์
+The line between the two skills: **this file decides how to get the images** (generate, draw SVG, or find free ones) and makes the image list · **`brief-to-image` writes the brief and prompt** once the generate route is chosen, including how to pick from 3–4 variants (`decision-scoring`, command `score` · for hard scoring use `pairwise` · if results are close, the user chooses) and how to fix a bad image · do not put Thai text inside a generated image, and place it afterward with the brand font
 
-**ภาพเป็นชุดให้เหมือนกัน** — ใช้บล็อก `image-style.md` ข้างบนกับทุกรูป · ล็อกมุมกล้องและแสงเดียวกัน · คนหรือตัวละครที่ซ้ำ → ทำภาพอ้างอิง 1 ภาพก่อน แล้วใช้ภาพอ้างอิงหรือ seed เดิม · วางทุกรูปเทียบกันก่อนส่ง วิธีเต็ม → `style-consistency`
+**Keep a set of images consistent** — apply the `image-style.md` block above to every image · lock the same camera angle and light · for a recurring person or character, make 1 reference image first, then reuse the reference image or the same seed · lay all images side by side before sending. Full method → `style-consistency`
 
-## 3 · ทำรายการรูป
+## 3 · Make the image list
 
-`image-list.md` (โฟลเดอร์เดียวกัน) ตาราง: ชื่อไฟล์ · ใช้ที่ไหน · สัดส่วน · สิ่งที่ต้องเห็น · สถานะ · ที่มา (prompt หรือคำค้น)
-→ ไม่มีรูปตกหล่น ไม่สร้างเกิน และสร้างซ้ำได้ทีหลัง
+`image-list.md` (same folder), a table: file name · where used · aspect ratio · what must be visible · status · source (prompt or search terms)
+→ no image is missed, none is made beyond need, and each can be recreated later
 
-## 4 · หารูป — เรียงตามนี้ ใช้ทางแรกที่ได้ผล
+## 4 · Get the images — in this order, use the first route that works
 
-| ลำดับ | ทาง | ใช้เมื่อ |
+| Order | Route | Use when |
 |---|---|---|
-| 1 | **สร้างด้วยเครื่องมือสร้างภาพที่ session มี** (Model Context Protocol (MCP) server หรือ plugin สร้างภาพ) | session มีเครื่องมือนี้ · ได้ทุกแนวภาพ |
-| 2 | **วาด SVG เป็นภาพประกอบเต็มฉาก ทั้งชุด** | ไม่มีทาง 1 · แนว `photo` → วาดเป็นภาพประกอบละเอียดแทน แล้วจดใน `## ตัดสินใจเอง` |
-| 3 | **รูปถ่ายฟรีจาก Openverse** — `scripts/fetch_free_image.py` ไม่ต้องใช้ key | SVG ไม่ผ่านด่านสวย · หรือผู้ใช้บอกว่าต้องเป็นรูปถ่ายจริง |
+| 1 | **Generate with the image tool the session has** (a Model Context Protocol (MCP) server or an image plugin) | The session has this tool · every style is possible |
+| 2 | **Draw SVG as full-scene illustrations, the whole set** | Route 1 is unavailable · for style `photo` → draw detailed illustrations instead and note it in `## ตัดสินใจเอง` |
+| 3 | **Free photos from Openverse** — `scripts/fetch_free_image.py`, no key needed | The SVGs fail the beauty gate · or the user says it must be a real photo |
 
-**ทาง 1 — สร้าง:** prompt = เรื่องในรูป + บรรทัดแนวภาพ (`references/styles.md`) + บล็อกสไตล์ · สร้าง 3 แบบต่อรูป → เปิดดูด้วย `Read` → ให้คะแนนตามเกณฑ์: ตรง brief · ข้อความอ่านได้ · ตรง `image-style.md` · ครอปได้ · จุดผิดทางกายภาพเป็นกฎเหล็กตัดทิ้ง ไม่ใช่คะแนน (คำสั่ง `score` ของ `decision-scoring` · รายละเอียดใน `brief-to-image`) → เลือกอันดับ 1 · พลาดเรื่องเดียวแก้บรรทัดเดียว · พลาดเรื่องเดิม 3 รอบ → เขียน brief ใหม่
+**Route 1 — generate:** prompt = the subject + the style line (`references/styles.md`) + the style block · generate 3 variants per image → open them with `Read` → score by these criteria: matches the brief · text is legible · matches `image-style.md` · can be cropped · a physical impossibility is an iron rule that eliminates the image, not a score (command `score` of `decision-scoring` · details in `brief-to-image`) → pick rank 1 · if only 1 thing is wrong, fix 1 line · if the same thing fails 3 rounds in a row → write a new brief
 
-**ทาง 2 — วาด SVG:** ต้องประณีต ดูแล้วรู้ทันทีว่าเป็นภาพอะไร ไม่ใช่รูปทรงพื้นฐานวางเรียง (สามเหลี่ยมแทนหลังคา วงกลมแทนดวงอาทิตย์ = ต้นเหตุที่เว็บดูเหมือนการ์ตูนเด็ก) · ขั้นตอนและเทคนิคเต็ม → [`references/svg-illustration.md`](references/svg-illustration.md)
-- ดูภาพอ้างอิงของจริงก่อนวาด · วาดทีละรูป
-- อย่างน้อย 3 ชั้น: พื้นหลัง · กลาง · หน้า · มีมิติด้วยไล่สี (gradient) และเงานุ่ม
-- มีรายละเอียดที่ทำให้จำได้ว่าเป็นของอะไร (ลายผ้า เส้นใบไม้ ไอน้ำ เนื้อไม้) · วาดจากเส้นโค้ง `path` ไม่ใช่ `rect` `circle` ล้วน
-- สีจาก `image-style.md` เท่านั้น · ความหนาเส้น มุมโค้ง ทิศแสงเหมือนกันทุกรูป
-- 1 ไฟล์ต่อรูป `public/images/<ชื่อ>.svg` · `viewBox` ตามสัดส่วนใน `image-list.md` · ไม่ฝังใน HTML
-- เรนเดอร์เป็น PNG ดูจริงด้วย playwright (`_to_delete/`) → **ทดสอบทายภาพ**: subagent (haiku · ตอบไม่เกิน 3 บรรทัด) ที่ไม่รู้ชื่อไฟล์ต้องบอกได้ว่าเป็นภาพอะไร → ผู้ตรวจอีกตัวให้คะแนนด่านสวย (`ui-craft` (plugin `software-development`) ข้อ 9 · ตอบไม่เกิน 10 บรรทัด) · ไม่ผ่านแก้ 1 รอบ → ยังไม่ผ่าน → ไปทาง 3 ทั้งชุด
+**Route 2 — draw SVG:** it must be crafted, and the viewer must see at once what it depicts, not basic shapes stacked up (a triangle for a roof, a circle for the sun = the reason websites look like children's cartoons). Full steps and techniques → [`references/svg-illustration.md`](references/svg-illustration.md)
+- Look at real reference images before drawing · draw one image at a time
+- At least 3 layers: background · middle · front · add depth with gradients and soft shadows
+- Include details that tell what the thing is (fabric pattern, leaf veins, steam, wood grain) · draw with curved `path`s, not just `rect` and `circle`
+- Colours only from `image-style.md` · the same line weight, corner radius and light direction in every image
+- 1 file per image `public/images/<name>.svg` · `viewBox` follows the aspect ratio in `image-list.md` · do not embed in HTML
+- Render to PNG and look at it for real with playwright (`_to_delete/`) → **guess test**: a subagent (haiku · answers in at most 3 lines) that does not know the file name must say what the image shows → a second reviewer scores the beauty gate (`ui-craft` (plugin `software-development`) item 9 · answers in at most 10 lines) · if it fails, fix once → if it still fails → go to route 3 for the whole set
 
-**ทาง 3 — รูปถ่ายฟรี:**
+**Route 3 — free photos:**
 ```
 python <skill>/scripts/fetch_free_image.py --query "thai massage room" \
   --out public/images/hero.webp --aspect 16:9 --n 3
 ```
-- คำค้นเป็นภาษาอังกฤษ สั้น ชี้ของในรูป (`spa towels orchid` ดีกว่า `relaxing spa`)
-- ได้ `hero-1` ถึง `hero-3` → เปิดดูทุกรูป → เลือก 1 เปลี่ยนชื่อเป็น `hero.webp` → ที่เหลือย้ายไป `_to_delete/` แล้วลบแถวของมันใน `CREDITS.md`
-- ไม่ตรงสไตล์ (สีหรือแสงไม่เข้าชุด) → ค้นคำใหม่ ดีกว่าใช้รูปที่หลุดชุด
-- **ใช้เฉพาะรูปที่อนุญาตทั้งใช้เชิงพาณิชย์และดัดแปลง** — สคริปต์กรองให้แล้ว (`license_type=commercial,modification` ของ Openverse) จึงไม่ได้รูป CC BY-NC (ห้ามใช้เชิงพาณิชย์) หรือ CC BY-ND (ห้ามดัดแปลง ครอปก็นับ) · รูปที่หามาเองนอกสคริปต์ต้องตรวจข้อนี้เอง เพราะหน้าร้านและหน้าขายของคือการใช้เชิงพาณิชย์
-- รูป CC BY ต้องให้เครดิต → ใส่ลิงก์ "เครดิตรูปภาพ" ที่ footer ชี้ไปหน้าที่แสดง `CREDITS.md`
+- Search terms in English, short, pointing at things in the picture (`spa towels orchid` is better than `relaxing spa`)
+- You get `hero-1` to `hero-3` → open every image → pick 1 and rename it `hero.webp` → move the rest to `_to_delete/` and delete their rows in `CREDITS.md`
+- If the style does not match (colour or light does not fit the set) → search new terms, which is better than using an image that breaks the set
+- **Use only images that allow both commercial use and modification.** The script already filters (Openverse `license_type=commercial,modification`), so you will not get CC BY-NC (no commercial use) or CC BY-ND (no modification, and cropping counts). Images you find yourself outside the script must be checked for this by you, because a storefront and a sales page are commercial use.
+- CC BY images need credit → add an "เครดิตรูปภาพ" (image credits) link in the footer pointing to the page that shows `CREDITS.md`
 
-**ทั้งชุดใช้ทางเดียวกัน** — ไม่ผสมรูปถ่ายกับภาพวาดในหน้าเดียว ยกเว้นผู้ใช้สั่ง
-ข้อความ ราคา ภาษาไทย → ใส่ใน HTML ไม่ใส่ในรูป
-รูปไหนยังไม่ได้ → ใส่ `<img>` ตามชื่อใน `image-list.md` พร้อม `alt` · รายงานสถานะว่า `รอรูป` ไม่ใช่ `เสร็จ`
+**Use the same route for the whole set** — do not mix photos and drawings on one page unless the user orders it
+Text, prices and Thai wording → put them in HTML, not in the image
+For any image not yet done → put an `<img>` using the name in `image-list.md` with `alt` · report the status as `รอรูป` (awaiting image), not `เสร็จ`
 
-## ตรวจก่อนส่ง
+## Check before sending
 
-- เปิดดูทุกรูปที่ใช้จริง: มือ นิ้ว ใบหน้า ตัวหนังสือมั่วในรูป ของลอย → เจอ = สร้างใหม่
-- ทุกรูปตรงกับ `image-style.md` (สี แสง มุม) เมื่อวางเรียงกัน
-- ไฟล์ `.webp` กว้างไม่เกิน 1920 px · ไม่เกิน 300 KB ต่อรูป · มี `alt` ทุกรูป
-- เปิดงานจริง (หน้าเว็บ สไลด์ โพสต์ เอกสาร) แล้วดูว่ารูปเข้ากับ layout
+- Open every image actually used: hands, fingers, faces, garbled lettering in the picture, floating objects → if found, regenerate
+- Every image matches `image-style.md` (colour, light, angle) when laid side by side
+- `.webp` files at most 1920 px wide · at most 300 KB per image · every image has `alt`
+- Open the real work (web page, slide, post, document) and check that the images fit the layout
 
-## ข้อห้าม
+## Prohibitions
 
-- คนจริงที่ระบุตัวได้ · โลโก้ ตัวละคร หรือสินค้าของแบรนด์อื่น
-- รูปจากเว็บทั่วไปที่ไม่รู้สัญญาอนุญาต · รูปฟรีที่ไม่ได้จดเครดิต · รูป NC หรือ ND ในงานเชิงพาณิชย์
+- Identifiable real people · another brand's logos, characters or products
+- Images from general websites with unknown license · free images with no credit recorded · NC or ND images in commercial work
 
-## ไม่ให้ดูเหมือน AI ทำ
+## Avoid the AI-made look
 
-ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ทุกงานต้องผ่านด่านตา 3.2 ด้วย (หน้าเว็บตอบเพิ่มข้อ 10–14) เพราะสคริปต์ 0 ข้อยังไม่ใช่ผ่าน · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น · prompt ทุกตัวใส่ครบตามข้อ 4 ของ `no-ai-look` (แนวที่มีชื่อ · hex · แสง · สิ่งที่ไม่เอา)
+Before sending, go through item 3 of `no-ai-look` — for HTML work, run its script · every work must also pass eye gate 3.2 (web pages also answer items 10–14), because a script result of 0 issues is not yet a pass · the prohibitions in this file are the part specific to this work, and the full list for every medium is there · every prompt must contain everything required by item 4 of `no-ai-look` (a named style · hex · light · what you do not want)

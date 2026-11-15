@@ -1,16 +1,16 @@
-# playbook · pdpa-setup — ตั้งระบบ PDPA ของ SME
+# playbook · pdpa-setup — set up PDPA (Personal Data Protection Act) for an SME
 
-ใช้เมื่อ: เริ่มทำ PDPA · ทำแบบขอความยินยอม · มีคำขอจากเจ้าของข้อมูล · ข้อมูลรั่ว
-skill หลัก: `pdpa-workflow` · agent `compliance-helper`
+Use when: starting PDPA work · making a consent form · a data subject has made a request · data has leaked
+Main skills: `pdpa-workflow` · agent `compliance-helper`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ถ้ามีข้อมูลรั่วอยู่ตอนนี้ ให้ทำขั้นตอนรับมือเหตุละเมิดใน `pdpa-workflow` ก่อนอย่างอื่น และเริ่มนับเวลาที่ต้องแจ้งหน่วยงาน · ใคร: หัวหน้าทีม (คุยกับผู้ใช้ทันที)
-2. ทำรายการข้อมูลส่วนบุคคลที่บริษัทเก็บ — เก็บอะไร ของใคร เพื่ออะไร ฐานทางกฎหมาย เก็บนานเท่าไร · ใคร: `compliance-helper` ตัวใหม่
-3. ร่างแบบขอความยินยอม ประกาศความเป็นส่วนตัว และบันทึกรายการกิจกรรมประมวลผล · ใคร: `compliance-helper` ตัวใหม่
-4. วางขั้นตอนรับคำขอจากเจ้าของข้อมูลพร้อมกรอบเวลา · ใคร: `compliance-helper` ตัวใหม่
-5. ตรวจ — ทุกกิจกรรมต้องมีฐานทางกฎหมาย และจุดที่ต้องให้ทนายดูติดธงแล้ว · ใคร: `reviewer` ตัวใหม่
+1. If data is leaking right now, run the breach-response steps in `pdpa-workflow` before anything else, and start the clock for notifying the authority · ใคร: หัวหน้าทีม (talk to the user at once)
+2. List the personal data the company keeps — what, whose, why, the legal basis, and how long · ใคร: `compliance-helper` ตัวใหม่
+3. Draft the consent form, the privacy notice, and the record of processing activities · ใคร: `compliance-helper` ตัวใหม่
+4. Set out the steps for handling data subject requests, with deadlines · ใคร: `compliance-helper` ตัวใหม่
+5. Check (ตรวจ) — every activity has a legal basis, and every point that needs a lawyer is flagged · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-ชุดเอกสาร PDPA พร้อมใช้ และขั้นตอนรับคำขอและเหตุละเมิดที่มีกรอบเวลาชัด
+The PDPA document set is ready to use, and the steps for requests and breaches have clear deadlines.

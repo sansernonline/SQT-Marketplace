@@ -2,7 +2,7 @@
 
 Use when learning trading techniques step by step
 
-# Trading Technique Course (หลักสูตรเทคนิคเทรดแบบมีด่าน)
+# Trading Technique Course (a trading technique course with gates)
 
 A course with levels. Each level teaches one technique as written rules, tests it on past charts, practises it on paper, and measures it in the journal. The next level opens only when the gate is met. General information, not investment advice. Wording follows `human-writing`.
 

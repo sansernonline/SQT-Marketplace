@@ -2,117 +2,117 @@
 
 Use when a Thai employer hires staff
 
-# จ้างพนักงาน 1 ตำแหน่ง (ฝั่งนายจ้างไทย)
+# Hiring one position (Thai employer side)
 
-skill นี้พาจ้างคน 1 ตำแหน่ง ตั้งแต่ร่างประกาศรับสมัครจนพนักงานเริ่มงานครบสัปดาห์แรก ผู้สมัครทุกคนได้คำถามและเกณฑ์ชุดเดียวกัน ข้อมูลผู้สมัครเก็บตามกฎหมายคุ้มครองข้อมูลส่วนบุคคล และจดหมายเสนองานไม่ขัดกฎหมายแรงงาน · ฝั่งผู้สมัคร (CV · ซ้อมสัมภาษณ์ · ต่อรองเงินเดือน) ใช้ `resume-th-en` `interview-prep` `salary-negotiation` ใน plugin `personal-life`
+This skill walks through hiring one position, from drafting the job ad to the new employee finishing the first week. Every applicant gets the same questions and criteria. Applicant data is kept under the personal data protection law. The offer letter does not conflict with labour law. For the applicant side (CV · interview practice · salary negotiation), use `resume-th-en` `interview-prep` `salary-negotiation` in plugin `personal-life`.
 
-เนื้อหานี้เป็นข้อมูลทั่วไป ไม่ใช่คำปรึกษากฎหมาย ข้อพิพาทให้ถามพนักงานตรวจแรงงาน (สายด่วน 1506 กด 3 หรือ 1546) หรือทนายความด้านแรงงาน
+This content is general information, not legal advice. For disputes, ask a labour inspector (hotline 1506 press 3, or 1546) or a labour lawyer.
 
-ตัวย่อในไฟล์นี้: พระราชบัญญัติ (พ.ร.บ.) · มาตรา (ม.) · พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA)
+Abbreviations in this file: Act (พ.ร.บ.) · Section (ม.) · Personal Data Protection Act B.E. 2562 (2019) (PDPA).
 
-## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+## 0 · Find the existing template first (every time)
 
-ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+Before you use the outline or templates in this file, check whether the user, client or project already has its own:
 
-- **ที่ดู:** ประกาศเดิมของบริษัทและหน้ารับสมัครงานของบริษัท (น้ำเสียง สวัสดิการที่ประกาศอยู่แล้ว) · ค้นประกาศตำแหน่งเดียวกันในพื้นที่หรือวงการเดียวกัน 3–5 ประกาศ (JobThai · JobsDB · LinkedIn) เพื่อดูหน้าที่ ทักษะ และช่วงเงินเดือนที่ตลาดเขียน
-- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
-- **ยังต้องมีทุกแบบ:** แม่แบบประกาศในข้อ 2 เป็นค่าสำรอง · กฎห้ามเลือกปฏิบัติในข้อ 2 ใช้ทุกแบบ
+- **Where to look:** the company's earlier job ads and careers page (tone, benefits already advertised) · search 3–5 ads for the same position in the same area or industry (JobThai · JobsDB · LinkedIn) to see the duties, skills and salary range the market writes
+- **Result:** if found, use that template (headings, order, field names, running numbers) and say in the reply which file's template you used. If not found, use the templates in this file as the fallback and say that no earlier template was found.
+- **Still required in every template:** the ad template in section 2 is the fallback · the anti-discrimination rules in section 2 apply to every template
 
-## 1 · ลำดับงาน
+## 1 · Work sequence
 
-| # | ขั้น | ได้อะไร | หัวข้อ |
+| # | Step | Output | Section |
 |---|---|---|---|
-| 1 | เขียนงานที่ต้องทำได้ใน 90 วันแรก แล้วแปลงเป็นเกณฑ์ 4–6 ข้อพร้อมน้ำหนัก | ใบคัดกรอง (scorecard) | 3 |
-| 2 | ร่างประกาศรับสมัคร TH/EN จากเกณฑ์ข้อ 1 แล้วตัดคุณสมบัติที่เลือกปฏิบัติออก | ประกาศพร้อมลง | 2 |
-| 3 | คัดใบสมัครด้วยใบคัดกรอง ทุกคนให้คะแนนเองก่อนคุยกัน | รายชื่อเรียกสัมภาษณ์ | 3 |
-| 4 | สัมภาษณ์ด้วยคำถามชุดเดียวกัน คณะ 2–3 คน จดคำตอบ | คะแนนรายคน | 4 |
-| 5 | ตรวจบุคคลอ้างอิงเฉพาะคนที่จะเสนองาน หลังได้ความยินยอม | บันทึกผลตรวจ | 5 |
-| 6 | ส่งจดหมายเสนองาน | ข้อเสนอที่ลงนามตอบรับแล้ว | 7 |
-| 7 | แจ้งผลคนที่ไม่ได้รับเลือก แล้วตั้งวันลบข้อมูล | อีเมลแจ้งผล · วันลบในปฏิทิน | 6 |
-| 8 | สัปดาห์แรก: ประกันสังคม · เงินเดือน · สัญญาจ้าง · วันลา | เช็กลิสต์ครบ | 8 |
+| 1 | Write the work to be done in the first 90 days, then turn it into 4–6 criteria with weights | Scorecard | 3 |
+| 2 | Draft the TH/EN job ad from the criteria in step 1, then remove discriminatory requirements | Ad ready to post | 2 |
+| 3 | Screen applications with the scorecard. Everyone scores alone before discussing | Interview shortlist | 3 |
+| 4 | Interview with the same questions, panel of 2–3, write down the answers | Score per candidate | 4 |
+| 5 | Check references only for the person who will get an offer, after consent | Check record | 5 |
+| 6 | Send the offer letter | Offer signed and accepted | 7 |
+| 7 | Tell the candidates not selected, then set the data deletion date | Result emails · deletion date in the calendar | 6 |
+| 8 | First week: social security · payroll · employment contract · leave | Completed checklist | 8 |
 
-ขั้น 2 · 5 · 6 · 7 มีงานที่ต้องรออนุมัติก่อน (หัวข้อ 10)
+Steps 2 · 5 · 6 · 7 contain work that needs approval first (section 10).
 
-## 2 · ประกาศรับสมัครที่ไม่เลือกปฏิบัติ
+## 2 · A job ad that does not discriminate
 
-### กฎหมายที่แตะประกาศรับสมัคร
+### Laws that touch a job ad
 
-| กฎหมาย | ผลต่อประกาศรับสมัคร |
+| Law | Effect on the job ad |
 |---|---|
-| พ.ร.บ.คุ้มครองแรงงาน พ.ศ. 2541 ม.15 | นายจ้างต้องปฏิบัติต่อลูกจ้างชายและหญิงเท่าเทียมกันในการจ้างงาน เว้นแต่ลักษณะหรือสภาพของงานทำเช่นนั้นไม่ได้ · งานเหมือนกันต้องได้ค่าจ้างเท่ากันไม่ว่าชายหรือหญิง (ม.53) |
-| พ.ร.บ.ความเท่าเทียมระหว่างเพศ พ.ศ. 2558 (มีผล 9 ก.ย. 2558) | ห้ามแบ่งแยก กีดกัน หรือจำกัดสิทธิประโยชน์ทั้งทางตรงและทางอ้อมอย่างไม่ชอบธรรม เพราะเป็นชาย หญิง หรือแสดงออกต่างจากเพศกำเนิด · คู่มือของรัฐยกกรณีบริษัทประกาศ "รับเลขานุการเฉพาะเพศหญิง" ทั้งที่ผู้สมัครชายมีคุณสมบัติครบ เป็นตัวอย่างการเลือกปฏิบัติโดยไม่เป็นธรรมระหว่างเพศ · ไม่ทำตามคำสั่งคณะกรรมการวินิจฉัยการเลือกปฏิบัติโดยไม่เป็นธรรมระหว่างเพศ (วลพ.) จำคุกไม่เกิน 6 เดือน หรือปรับไม่เกิน 20,000 บาท หรือทั้งจำทั้งปรับ |
-| PDPA ม.26 | ศาสนา สุขภาพ ความพิการ ประวัติอาชญากรรม ข้อมูลชีวภาพ และข้อมูลอ่อนไหวอื่นในมาตรานี้ เก็บได้เมื่อเจ้าของให้ความยินยอมโดยชัดแจ้ง หรือเข้าข้อยกเว้นที่มาตรานี้เขียนไว้ |
-| อายุ | ยังไม่พบกฎหมายที่ห้ามนายจ้างเอกชนระบุช่วงอายุในประกาศรับสมัครโดยตรง · รัฐธรรมนูญ พ.ศ. 2560 ม.27 วรรคสาม ห้ามเลือกปฏิบัติโดยไม่เป็นธรรมด้วยเหตุอายุ เพศ ความพิการ ศาสนา และเหตุอื่น แต่จะใช้บังคับกับนายจ้างเอกชนได้แค่ไหน ยังไม่ได้ตรวจ (รอยืนยัน) |
+| Labour Protection Act B.E. 2541 (1998) Section 15 | The employer must treat male and female employees equally in employment, unless the nature or condition of the work makes that impossible · the same work must get the same pay for men and women (Section 53) |
+| Gender Equality Act B.E. 2558 (2015) (in force 9 Sep 2015) | Bans unjust direct or indirect discrimination, exclusion or restriction of benefits because a person is male, female, or expresses a gender different from their birth sex · the government guide gives the example of a company advertising "รับเลขานุการเฉพาะเพศหญิง" (secretary, women only) when a qualified male applicant exists, as unjust discrimination between genders · not following an order of the Committee on Unjust Gender Discrimination (วลพ.) carries up to 6 months in prison, or a fine up to 20,000 baht, or both |
+| PDPA Section 26 | Religion, health, disability, criminal record, biometric data and the other sensitive data in this section can be collected only with the data subject's explicit consent, or under an exception that the section states |
+| Age | No law found that directly bans a private employer from stating an age range in a job ad · Constitution B.E. 2560 (2017) Section 27 paragraph 3 bans unjust discrimination because of age, sex, disability, religion and other grounds, but how far it binds private employers is not yet checked (`รอยืนยัน`, awaiting confirmation) |
 
-ตรวจล่าสุด 2026-10-23 · แหล่ง: labour.go.th (ม.15 · ม.53) · คู่มือ พ.ร.บ.ความเท่าเทียมระหว่างเพศ (tmd.go.th) · ตัวบท PDPA (mdes.go.th) · รัฐธรรมนูญ ม.27 (senate.go.th) — URL เต็มใน [references/sources.md](references/sources.md)
+Last checked 2026-10-23 · Sources: labour.go.th (Section 15 · Section 53) · Gender Equality Act guide (tmd.go.th) · PDPA text (mdes.go.th) · Constitution Section 27 (senate.go.th) — full URLs in [references/sources.md](references/sources.md)
 
-### คำที่ต้องแก้ก่อนลงประกาศ
+### Wording to fix before posting
 
-| เขียนแบบนี้ | เขียนใหม่ | เพราะ |
+| Written like this | Rewrite as | Because |
 |---|---|---|
-| "รับเฉพาะเพศหญิง" · "ชายเท่านั้น" | ไม่ระบุเพศ เขียนงานที่ต้องทำแทน · ถ้าสภาพงานต้องใช้เพศใดจริง ให้จดเหตุผลของงานเก็บไว้ | ม.15 · พ.ร.บ.ความเท่าเทียมระหว่างเพศ |
-| "โสด ไม่มีบุตร" | ตัดออก | ไม่เกี่ยวกับความสามารถในงาน (แนวปฏิบัติที่แนะนำ) · คู่มือของรัฐยกกรณีนี้เป็นคำถามชวนคิด แต่ไม่ได้ชี้ขาด |
-| "อายุ 22–30 ปี" | "มีประสบการณ์ปิดงบรายเดือนอย่างน้อย 1 ปี" | กฎหมายยังไม่ห้ามโดยตรง แต่อายุวัดความสามารถไม่ได้ และตัดคนเก่งออกโดยไม่จำเป็น (แนวปฏิบัติที่แนะนำ) |
-| "บุคลิกดี หน้าตาดี" | "คุยกับลูกค้าหน้าร้านได้วันละ 50 คน" | สิ่งที่วัดไม่ได้ ให้คะแนนอย่างเป็นธรรมไม่ได้ |
-| "ไม่มีโรคประจำตัว" · ถามศาสนาในใบสมัคร | ตัดออก · งานที่กฎหมายบังคับตรวจสุขภาพ ให้ตรวจหลังเสนองานพร้อมขอความยินยอมโดยชัดแจ้ง | PDPA ม.26 |
-| "แนบรูปถ่ายเต็มตัว" | ไม่ขอรูป | รูปชวนให้ตัดสินจากหน้าตา (แนวปฏิบัติที่แนะนำ) |
-| "ต้องวางเงินค้ำประกันการทำงาน" | ตรวจข้อจำกัดตามกฎหมายแรงงานก่อน | ดู `doc-contract-th` หัวข้อ 4 (รอยืนยัน กฎกระทรวงเรื่องหลักประกัน) |
+| "รับเฉพาะเพศหญิง" · "ชายเท่านั้น" | Do not state gender. Write the work to be done instead · if the nature of the work truly needs one gender, record the reason for the work | Section 15 · Gender Equality Act |
+| "โสด ไม่มีบุตร" | Remove | Unrelated to ability to do the job (recommended practice) · the government guide raises this case as a question to think about but does not rule on it |
+| "อายุ 22–30 ปี" | "มีประสบการณ์ปิดงบรายเดือนอย่างน้อย 1 ปี" | The law does not yet ban it directly, but age does not measure ability and it removes strong candidates for no need (recommended practice) |
+| "บุคลิกดี หน้าตาดี" | "คุยกับลูกค้าหน้าร้านได้วันละ 50 คน" | It cannot be measured, so it cannot be scored fairly |
+| "ไม่มีโรคประจำตัว" · asking religion on the application | Remove · for jobs where the law requires a health check, do it after the offer, with explicit consent | PDPA Section 26 |
+| "แนบรูปถ่ายเต็มตัว" | Do not ask for a photo | A photo invites judging by looks (recommended practice) |
+| "ต้องวางเงินค้ำประกันการทำงาน" | Check the labour law limits first | See `doc-contract-th` section 4 (`รอยืนยัน`, awaiting confirmation: ministerial regulation on security deposits) |
 
-### แม่แบบประกาศรับสมัคร
+### Job ad templates
 
-ภาษาไทย: [references/job-ad-thai.md](references/job-ad-thai.md) · English: [references/job-ad-english.md](references/job-ad-english.md) · ทั้ง 2 ฉบับขึ้นด้วยงาน 90 วันแรกและคุณสมบัติที่วัดได้ ปิดท้ายด้วยประโยคไม่เลือกปฏิบัติและลิงก์ประกาศความเป็นส่วนตัวสำหรับผู้สมัคร
+Thai: [references/job-ad-thai.md](references/job-ad-thai.md) · English: [references/job-ad-english.md](references/job-ad-english.md) · Both open with the first-90-days work and measurable requirements, and end with the non-discrimination sentence and the link to the applicant privacy notice.
 
-## 3 · ใบคัดกรอง (scorecard)
+## 3 · Scorecard
 
-กฎของใบคัดกรอง
+Scorecard rules:
 
-1. เกณฑ์ 4–6 ข้อ ผูกกับงานใน 90 วันแรก น้ำหนักรวม 100
-2. ให้คะแนน 1–5 และเขียนคำอธิบายของคะแนน 1 · 3 · 5 ไว้ก่อนเปิดใบสมัครใบแรก (คะแนน 2 กับ 4 อยู่ระหว่างกลาง)
-3. คะแนนรวม = ผลรวมของ (น้ำหนัก × คะแนน) ÷ 5 จะได้คะแนนเต็ม 100
-4. ข้อขั้นต่ำที่ตัดทิ้งทันทีใช้เฉพาะสิ่งที่กฎหมายหรืองานบังคับจริง เช่น ใบอนุญาตประกอบวิชาชีพ
-5. ทุกคนในคณะให้คะแนนเองก่อนคุยกัน ถ้าคะแนนเกณฑ์เดียวกันห่างกันตั้งแต่ 2 ขึ้นไป ให้เปิดโน้ตดูหลักฐานด้วยกันแล้วค่อยปรับ
-6. รวมคะแนนแล้ว ดูความนิ่งด้วย `decision-scoring` คำสั่ง `score` (`node decide.mjs score <ไฟล์.json>` · น้ำหนักใบคัดกรอง ÷ 100 · ทุกเกณฑ์ `better: high` · ข้อขั้นต่ำตามข้อ 4 ใส่ใน `must`) สคริปต์ขยับน้ำหนักทีละเกณฑ์ ±20% แล้วบอกว่าอันดับ 1 `นิ่ง` หรือ `ยังไม่นิ่ง` · นิ่ง → เสนองานคนอันดับ 1 · ยังไม่นิ่ง (รวมคะแนนเสมอ) → คณะสัมภาษณ์ตัดสินเองระหว่าง 2 คนบน โดยดูว่าเกณฑ์ที่ทำให้พลิกสำคัญกับงานแค่ไหน แล้วจดเหตุผลไว้ · แม่แบบ `templates/score-example.json`
+1. 4–6 criteria, tied to the work in the first 90 days, total weight 100.
+2. Score 1–5, and write the descriptions for scores 1 · 3 · 5 before opening the first application (scores 2 and 4 sit in between).
+3. Total score = sum of (weight × score) ÷ 5, which gives a maximum of 100.
+4. A minimum requirement that rejects an applicant at once applies only to what the law or the job truly requires, such as a professional licence.
+5. Everyone on the panel scores alone before discussing. If scores on the same criterion differ by 2 or more, open the notes, look at the evidence together, and then adjust.
+6. After totalling, check stability with `decision-scoring` command `score` (`node decide.mjs score <file.json>` · scorecard weight ÷ 100 · every criterion `better: high` · minimum requirements from rule 4 go in `must`). The script shifts each criterion's weight by ±20% and reports whether the rank 1 result is `นิ่ง` (stable) or `ยังไม่นิ่ง` (not stable). If stable, make the offer to rank 1. If not stable (including tied totals), the panel decides between the top 2 itself, looking at how much the criterion that flipped the result matters to the job, and records the reason. Template: `templates/score-example.json`
 
-| เกณฑ์ | น้ำหนัก | 1 = | 3 = | 5 = | หลักฐานจากไหน |
+| Criterion | Weight | 1 = | 3 = | 5 = | Evidence from |
 |---|---|---|---|---|---|
-| {งานหลักข้อ 1} | {…} | {ยังทำไม่ได้} | {ทำได้โดยมีคนตรวจ} | {ทำเองได้ครบ มีผลงานให้ดู} | CV · แบบทดสอบ · คำถามสัมภาษณ์ข้อ {…} |
-| {ทักษะเครื่องมือ} | {…} | | | | แบบทดสอบ {…} นาที |
-| {การทำงานกับคนอื่น} | {…} | | | | คำถามสัมภาษณ์ข้อ {…} |
+| {main duty 1} | {…} | {cannot do it yet} | {can do it with someone checking} | {does it alone fully, has work to show} | CV · test · interview question {…} |
+| {tool skill} | {…} | | | | Test {…} minutes |
+| {working with others} | {…} | | | | Interview question {…} |
 
-## 4–8 · รายละเอียดแยกไฟล์
+## 4–8 · Details in separate files
 
-| หัวข้อ | ไฟล์ |
+| Section | File |
 |---|---|
-| 4 แผนสัมภาษณ์ · 5 ตรวจบุคคลอ้างอิงและประวัติ · 6 ข้อมูลผู้สมัครตาม PDPA | [references/interview-reference-check-pdpa.md](references/interview-reference-check-pdpa.md) |
-| 7 จดหมายเสนองาน · 8 สัปดาห์แรก | [references/offer-letter-first-week.md](references/offer-letter-first-week.md) |
+| 4 Interview plan · 5 Reference and background checks · 6 Applicant data under the PDPA | [references/interview-reference-check-pdpa.md](references/interview-reference-check-pdpa.md) |
+| 7 Offer letter · 8 First week | [references/offer-letter-first-week.md](references/offer-letter-first-week.md) |
 
-## 9 · ตัวอย่าง: เจ้าหน้าที่บัญชี 1 ตำแหน่ง
+## 9 · Example: one accountant position
 
-ใบคัดกรอง 5 เกณฑ์ · คะแนน 3 คน · ผล `decide.mjs score` ที่ขึ้น `ยังไม่นิ่ง` แล้วคณะสัมภาษณ์ตัดสินเอง · ข้อเสนอพร้อมทดลองงาน 119 วันและค่าชดเชยถ้าเลิกจ้างหลัง 120 วัน → [references/example-accountant.md](references/example-accountant.md) (เปิดเมื่อต้องการดูตัวอย่างเต็ม)
+Scorecard with 5 criteria · scores for 3 candidates · the `decide.mjs score` result showing `ยังไม่นิ่ง` (not stable), then the panel decides · an offer with a 119-day probation and the severance due if dismissed after 120 days → [references/example-accountant.md](references/example-accountant.md) (open it when you want the full example)
 
-## 10 · รออนุมัติ
+## 10 · Awaiting approval
 
-ย้อนไม่ได้หรือกระทบคนนอก agent เตรียมร่างให้ แต่ไม่ทำเอง
+These cannot be undone or affect people outside. The agent prepares drafts but does not do them.
 
-- ลงประกาศรับสมัครบนเว็บหางานหรือโซเชียลในนามบริษัท
-- ส่งจดหมายเสนองาน (ผูกพันบริษัทเมื่อผู้สมัครตอบรับ)
-- แจ้งผลไม่ผ่านถึงผู้สมัคร
-- ติดต่อบุคคลอ้างอิงหรือยื่นขอตรวจประวัติอาชญากรรม
-- ลบข้อมูลผู้สมัครจริง (agent เตรียมรายการที่ถึงวันลบให้ผู้ใช้ยืนยันก่อน)
+- Posting the job ad on a job site or social media in the company's name
+- Sending the offer letter (it binds the company once the applicant accepts)
+- Telling an applicant they did not pass
+- Contacting a referee or applying for a criminal record check
+- Deleting real applicant data (the agent prepares the list of items past their deletion date for the user to confirm first)
 
-## 11 · เชื่อมกับ skill อื่น
+## 11 · Links to other skills
 
-| ต้องการ | ใช้ |
+| Need | Use |
 |---|---|
-| สัญญาจ้างแรงงานฉบับเต็ม และข้อที่ต้องติดธงให้ทนายดู | `doc-contract-th` |
-| ทดลองงาน การบอกกล่าว ค่าชดเชย วันลา ค่าจ้างขั้นต่ำ | `labour-law-basics` |
-| ขึ้นทะเบียนผู้ประกันตน และเงินสมทบ | `social-security-th` |
-| รอบเงินเดือนแรก ภาษีหัก ณ ที่จ่าย และแบบแจ้งค่าลดหย่อน | `payroll-th` |
-| ใบลาและยอดวันลาคงเหลือ | `doc-leave` |
-| ประกาศความเป็นส่วนตัว ROPA และคำขอของเจ้าของข้อมูล | `pdpa-workflow` + agent `compliance-helper` |
-| จดหมายแจ้งผลหรือหนังสือถึงหน่วยงาน | `doc-thai-official` + agent `thai-doc-writer` |
-| ฝั่งผู้สมัคร: CV · ซ้อมสัมภาษณ์ · ต่อรองเงินเดือน | `resume-th-en` · `interview-prep` · `salary-negotiation` (plugin `personal-life`) |
-| ถ้อยคำทุกบรรทัด | `human-writing` |
+| Full employment contract, and the clauses to flag for a lawyer | `doc-contract-th` |
+| Probation, notice, severance, leave, minimum wage | `labour-law-basics` |
+| Register insured persons and contributions | `social-security-th` |
+| First payroll run, withholding tax and allowance forms | `payroll-th` |
+| Leave forms and remaining leave balance | `doc-leave` |
+| Privacy notice, ROPA and data subject requests | `pdpa-workflow` + agent `compliance-helper` |
+| Result letters or letters to agencies | `doc-thai-official` + agent `thai-doc-writer` |
+| Applicant side: CV · interview practice · salary negotiation | `resume-th-en` · `interview-prep` · `salary-negotiation` (plugin `personal-life`) |
+| Wording of every line | `human-writing` |
 
 
 ## reference: example-accountant.md
@@ -156,41 +156,41 @@ Rank 1 can flip, so the score cannot decide in place of people. The interview pa
 
 ## reference: interview-reference-check-pdpa.md
 
-# สัมภาษณ์ · ตรวจบุคคลอ้างอิง · ข้อมูลผู้สมัครตาม PDPA
+# Interviews · reference checks · applicant data under the PDPA
 
-หัวข้อ 4–6 ของ `hiring-th` ย้ายมาจาก `../SKILL.md` · เลขหัวข้อคงเดิม หัวข้อ 1–3 และ 9–11 อยู่ใน SKILL.md · ตัวย่อ: พระราชบัญญัติ (พ.ร.บ.) · มาตรา (ม.) · พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA)
+Sections 4–6 of `hiring-th`, moved from `../SKILL.md`. Section numbers stay the same. Sections 1–3 and 9–11 are in SKILL.md. Abbreviations: Act (พ.ร.บ.) · Section (ม.) · Personal Data Protection Act B.E. 2562 (2019) (PDPA).
 
-## 4 · แผนสัมภาษณ์
+## 4 · Interview plan
 
-**โครง 45–60 นาที (แนวปฏิบัติที่แนะนำ)**
+**45–60 minute outline (recommended practice)**
 
-| ช่วง | เวลา | ทำอะไร |
+| Part | Time | What happens |
 |---|---|---|
-| เปิด | 5 นาที | แนะนำคณะ บอกขั้นตอน และบอกว่าจะจดคำตอบ |
-| คำถามชุดเดียวกัน | 30 นาที | 6–8 ข้อ ผูกกับเกณฑ์ในใบคัดกรอง · ข้อเล่าประสบการณ์ ("เล่าครั้งที่คุณ…") สลับกับข้อสถานการณ์ ("ถ้า… คุณจะทำอย่างไร") |
-| แบบทดสอบงานจริง | 0–20 นาที | ถ้ายังไม่ได้ทดสอบก่อนหน้า ให้ทุกคนได้โจทย์และเวลาเท่ากัน |
-| ผู้สมัครถาม | 10 นาที | ตอบเรื่องงาน ทีม และขั้นตอนต่อไป |
-| ปิด | 2 นาที | บอกวันที่จะแจ้งผล |
+| Opening | 5 minutes | Introduce the panel, explain the steps, and say that you will take notes on the answers |
+| Same questions for everyone | 30 minutes | 6–8 questions tied to the criteria on the scorecard · alternate experience questions ("เล่าครั้งที่คุณ…") with situation questions ("ถ้า… คุณจะทำอย่างไร") |
+| Real work test | 0–20 minutes | If the candidate was not tested earlier, give everyone the same task and the same time |
+| Candidate's questions | 10 minutes | Answer about the job, the team and the next steps |
+| Closing | 2 minutes | Give the date when you will announce the result |
 
-**คณะสัมภาษณ์** 2–3 คน (หัวหน้างาน · คนที่จะทำงานด้วยกัน · HR) แบ่งเกณฑ์กันถาม คนเดิมถามคำถามเดิมกับผู้สมัครทุกคน แล้วให้คะแนนทันทีหลังจบแต่ละคน
+**Panel:** 2–3 people (line manager · a future teammate · HR). Split the criteria among them. The same person asks the same question of every candidate. Each person scores right after each interview ends.
 
-**จดโน้ตอย่างไร** จดสิ่งที่ผู้สมัครพูดและตัวเลขที่เล่า ("ปิดงบ 3 บริษัท ตรงเวลา 11 จาก 12 เดือน") ไม่จดความรู้สึก ("ดูไม่มั่นใจ") · โน้ตเป็นข้อมูลส่วนบุคคล เก็บและลบตามหัวข้อ 6
+**How to take notes:** Write what the candidate said and the numbers they gave ("ปิดงบ 3 บริษัท ตรงเวลา 11 จาก 12 เดือน"). Do not write impressions ("ดูไม่มั่นใจ"). Notes are personal data: keep and delete them as in section 6.
 
-**ไม่ถาม** แผนแต่งงานหรือมีบุตร · ศาสนา · โรคประจำตัว · รสนิยมทางเพศ · ความพิการที่ไม่เกี่ยวกับงาน · ถ้างานต้องใช้ความสามารถทางกายจริง ให้ถามว่า "ทำงาน {X} ได้ไหม" กับทุกคนเหมือนกัน (เพราะ ม.15 · พ.ร.บ.ความเท่าเทียมระหว่างเพศ · PDPA ม.26)
+**Do not ask about:** plans to marry or have children · religion · chronic illness · sexual orientation · disability unrelated to the job. If the job truly needs a physical ability, ask every candidate the same question, "ทำงาน {X} ได้ไหม" (because of Section 15 · the Gender Equality Act · PDPA Section 26).
 
-## 5 · ตรวจบุคคลอ้างอิงและประวัติ
+## 5 · Reference and background checks
 
-PDPA ม.25 ห้ามเก็บข้อมูลส่วนบุคคลจากแหล่งอื่นที่ไม่ใช่เจ้าของโดยตรง เว้นแต่แจ้งเจ้าของภายใน 30 วันนับจากวันที่เก็บและได้ความยินยอม หรือเป็นกรณีที่ยกเว้นตาม ม.24 หรือ ม.26 · ทางที่ง่ายที่สุดคือขอความยินยอมเป็นลายลักษณ์อักษรก่อนโทร · ประวัติอาชญากรรมเป็นข้อมูลอ่อนไหวตาม ม.26 ต้องได้ความยินยอมโดยชัดแจ้ง
+PDPA Section 25 bans collecting personal data from any source other than the data subject. The exceptions: you tell the subject within 30 days of collecting and get consent, or the case is exempt under Section 24 or 26. The easiest route is to get written consent before you call. Criminal records are sensitive data under Section 26 and need explicit consent.
 
-ตรวจล่าสุด 2026-10-23 · แหล่ง: PDPA ม.24 · ม.25 · ม.26 ในหนังสือกฎหมายของสำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล (ลิงก์ mdes.go.th ในหัวข้อ 2)
+Last checked 2026-10-23 · Source: PDPA Sections 24 · 25 · 26 in the law book of the Personal Data Protection Committee Office (mdes.go.th link in section 2).
 
-1. ตรวจเฉพาะคนที่จะเสนองาน 1–2 คนสุดท้าย
-2. ขอความยินยอม: ชื่อและเบอร์บุคคลอ้างอิงที่ผู้สมัครเลือกเอง · คำถามที่จะถาม · ใช้ผลทำอะไร · เก็บนานแค่ไหน · ไม่โทรหานายจ้างปัจจุบันถ้าผู้สมัครไม่อนุญาต (แนวปฏิบัติที่แนะนำ)
-3. ถามบุคคลอ้างอิงทุกคนด้วย 5 ข้อเดียวกัน
-4. จดคำตอบตามที่ได้ยิน ใช้ประกอบคะแนน ไม่ใช้ตัดสินเดี่ยว ๆ
-5. ตรวจประวัติอาชญากรรมเฉพาะตำแหน่งที่เกี่ยวข้องจริง (เงินสด ข้อมูลลูกค้า เด็ก) จดผลแค่ "ผ่าน" หรือ "ต้องคุยต่อ" แล้วลบสำเนาเมื่อพิจารณาเสร็จ
+1. Check only the 1–2 final people who will get an offer.
+2. Ask for consent covering: the names and phone numbers of referees the candidate chose · the questions you will ask · what you will use the answers for · how long you will keep them · no call to the current employer if the candidate does not allow it (recommended practice).
+3. Ask every referee the same 5 questions.
+4. Write the answers as heard. Use them as input to the score, never as the only basis for a decision.
+5. Check criminal records only for roles where it truly matters (cash, customer data, children). Record only "ผ่าน" or "ต้องคุยต่อ", then delete the copy once the decision is made.
 
-**คำถาม 5 ข้อ**
+**The 5 questions**
 
 1. คุณทำงานกับ {ชื่อผู้สมัคร} ในบทบาทอะไร ช่วงไหน
 2. งานหลักที่เขารับผิดชอบคืออะไร ผลงานที่จำได้มีอะไรบ้าง
@@ -198,36 +198,36 @@ PDPA ม.25 ห้ามเก็บข้อมูลส่วนบุคค�
 4. เรื่องไหนที่เขาควรพัฒนาต่อ
 5. ถ้ามีโอกาส คุณจะร่วมงานกับเขาอีกไหม เพราะอะไร
 
-## 6 · ข้อมูลผู้สมัครตาม PDPA
+## 6 · Applicant data under the PDPA
 
-**ประกาศความเป็นส่วนตัวสำหรับผู้สมัคร** แจ้งก่อนหรือขณะเก็บข้อมูล (ม.23) ให้ครบ 6 เรื่อง
+**Privacy notice for applicants.** Give it before or when you collect data (Section 23). It must cover 6 points.
 
-| เรื่องที่ ม.23 กำหนด | เขียนในประกาศว่า |
+| Point required by Section 23 | What the notice says |
 |---|---|
-| วัตถุประสงค์ | ใช้พิจารณารับเข้าทำงานตำแหน่ง {…} · ฐานกฎหมาย: ดำเนินการตามคำขอของผู้สมัครก่อนเข้าทำสัญญา (ม.24(3)) |
-| ต้องให้ข้อมูลไหม และถ้าไม่ให้เป็นอย่างไร | ไม่ให้ CV หรือช่องทางติดต่อ บริษัทฯ พิจารณาใบสมัครไม่ได้ |
-| ข้อมูลที่เก็บและเก็บนานเท่าไร | ข้อมูลในใบสมัคร · โน้ตสัมภาษณ์ · ผลแบบทดสอบ · ผลตรวจบุคคลอ้างอิง · ระยะเวลาตามตารางข้างล่าง |
-| ใครเห็นข้อมูล | คณะสัมภาษณ์ · HR · {ผู้ให้บริการระบบรับสมัคร} |
-| ผู้ควบคุมข้อมูลและช่องทางติดต่อ | {ชื่อบริษัท ที่อยู่ อีเมล} · {เจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล ถ้ามี} |
-| สิทธิของผู้สมัคร | ขอดู ขอสำเนา ขอแก้ ขอลบ คัดค้าน และถอนความยินยอม ตามสิทธิที่ ม.23(6) อ้างถึง · วิธียื่นคำขอใช้ `pdpa-workflow` |
+| Purpose | Used to consider hiring for the position {…} · legal basis: taking steps at the applicant's request before entering a contract (Section 24(3)) |
+| Whether the data is required, and what happens if not given | Without a CV or a contact channel, the company cannot consider the application |
+| Data collected and how long it is kept | Application data · interview notes · test results · reference check results · retention periods as in the table below |
+| Who sees the data | The interview panel · HR · {the applicant tracking system provider} |
+| Data controller and contact channel | {company name, address, email} · {Data Protection Officer, if any} |
+| Applicant's rights | Access, copy, correct, delete, object, and withdraw consent, as the rights referred to in Section 23(6) · use `pdpa-workflow` for how to file a request |
 
-**อายุเก็บข้อมูล** (แนวปฏิบัติที่แนะนำ ไม่ใช่ตัวเลขในกฎหมาย · กฎหมายกำหนดแค่ว่าต้องมีระบบลบเมื่อพ้นระยะเก็บหรือเกินความจำเป็น ตาม ม.37(3))
+**Retention periods.** These are recommended practice, not figures in the law. The law only says you must have a system to delete data once the retention period ends or it is no longer needed, under Section 37(3).
 
-| ข้อมูล | เก็บนานเท่าไร | เพราะ |
+| Data | How long to keep | Because |
 |---|---|---|
-| ใบสมัคร โน้ต และคะแนนของคนที่ไม่ได้รับเลือก | 6 เดือนหลังปิดตำแหน่ง แล้วลบ | ครอบช่วงทดลองงานของคนที่รับ ถ้าไม่ผ่านจะติดต่อคนลำดับถัดไปได้ และพอให้ตอบคำถามเรื่องผลการคัดเลือก |
-| คลังผู้สมัคร (talent pool) | 12 เดือน เฉพาะคนที่ให้ความยินยอมแยกต่างหาก | ความยินยอมถอนได้ทุกเมื่อ |
-| ผลตรวจประวัติอาชญากรรม | จดผล "ผ่าน" แล้วลบสำเนาเมื่อพิจารณาเสร็จ | ข้อมูลอ่อนไหว ม.26 ยิ่งเก็บน้อยยิ่งเสี่ยงน้อย |
-| เอกสารของคนที่รับเข้าทำงาน | ย้ายเข้าแฟ้มพนักงาน ใช้อายุเก็บของแฟ้มพนักงาน | ดู `pdpa-workflow` และ `payroll-th` |
+| Applications, notes and scores of people not selected | 6 months after the position closes, then delete | Covers the probation of the person hired. If that person fails, you can contact the next candidate. It is also long enough to answer questions about the selection result |
+| Talent pool | 12 months, only for people who gave separate consent | Consent can be withdrawn at any time |
+| Criminal record check results | Record "ผ่าน", then delete the copy once the decision is made | Sensitive data under Section 26. The less you keep, the lower the risk |
+| Documents of the person hired | Move to the employee file and use the employee file's retention period | See `pdpa-workflow` and `payroll-th` |
 
-ตั้งวันลบในปฏิทินตั้งแต่วันปิดตำแหน่ง แล้วจดลง ROPA (บันทึกรายการกิจกรรมการประมวลผล) ตาม `pdpa-workflow`
+Set the deletion date in the calendar from the day the position closes. Then record it in the ROPA (Record of Processing Activities) as in `pdpa-workflow`.
 
 
 ## reference: job-ad-english.md
 
 # แม่แบบประกาศรับสมัคร (English)
 
-ย้ายมาจาก `../SKILL.md` หัวข้อ 2 · กฎเรื่องคำที่ต้องแก้ก่อนลงประกาศอยู่ใน SKILL.md หัวข้อ 2
+Moved from `../SKILL.md` section 2 · the rules on words to fix before posting an ad stay in SKILL.md section 2
 
 ```
 Role: {title} · {team} · reports to {manager title}
@@ -287,11 +287,11 @@ Moved from `SKILL.md` section 2 · the English version is in [job-ad-english.md]
 
 ## reference: offer-letter-first-week.md
 
-# จดหมายเสนองาน · สัปดาห์แรก
+# Offer letter · first week
 
-หัวข้อ 7–8 ของ `hiring-th` ย้ายมาจาก `../SKILL.md` · เลขหัวข้อคงเดิม · ตัวย่อ: พระราชบัญญัติ (พ.ร.บ.) · มาตรา (ม.)
+Sections 7–8 of `hiring-th`, moved from `../SKILL.md`. Section numbers stay the same. Abbreviations: Act (พ.ร.บ.) · Section (ม.).
 
-## 7 · จดหมายเสนองาน (offer letter)
+## 7 · Offer letter
 
 ```
 {หัวกระดาษบริษัท}
@@ -319,42 +319,45 @@ Moved from `SKILL.md` section 2 · the English version is in [job-ad-english.md]
 ลงชื่อ ................................ ({ชื่อผู้สมัคร})  วันที่ ................
 ```
 
-**ทดลองงาน การบอกกล่าว และค่าชดเชย ที่จดหมายต้องไม่ขัด**
+**Probation, notice and severance: what the letter must not contradict**
 
-- พ.ร.บ.คุ้มครองแรงงานไม่ได้กำหนดว่าทดลองงานต้องนานเท่าไร คนที่ทดลองงานก็เป็นลูกจ้างที่ได้รับความคุ้มครองตามกฎหมาย
-- เลิกจ้างระหว่างทดลองงานยังต้องบอกกล่าวล่วงหน้าเป็นหนังสือในหรือก่อนวันจ่ายค่าจ้างคราวใดคราวหนึ่ง ให้เลิกสัญญามีผลเมื่อถึงวันจ่ายค่าจ้างคราวถัดไป (ม.17 วรรคสอง · ใช้กับสัญญาจ้างที่ไม่มีกำหนดระยะเวลา · สัญญาที่มีกำหนดสิ้นสุดเมื่อครบกำหนดโดยไม่ต้องบอกกล่าว ตาม ม.17 วรรคหนึ่ง) · ไม่บอกกล่าว ต้องจ่ายเงินเท่าค่าจ้างที่ลูกจ้างควรได้ตั้งแต่วันที่ให้ออกจนถึงวันที่การเลิกสัญญามีผล โดยจ่ายในวันที่ให้ออก (ม.17/1) · ถ้าไม่ระบุเหตุผลในหนังสือเลิกจ้าง จะยกเหตุตาม ม.119 ขึ้นอ้างภายหลังไม่ได้ (ม.17 วรรคสาม) · ตรวจ 2026-10-26 ม.17 กับตัวบทในราชกิจจานุเบกษา เล่ม 115 ตอนที่ 8 ก 20 ก.พ. 2541 หน้า 6 (สำเนาที่ web.archive.org ของ ratchakitcha.soc.go.th) · ม.17/1 กับพระราชบัญญัติคุ้มครองแรงงาน (ฉบับที่ 7) พ.ศ. 2562 ตามที่สำนักงานเลขาธิการวุฒิสภายกไว้ใน senate.go.th/assets/portals/93/fileups/272/files/Sub_Jun/12know/k147.pdf หน้า 141 (ยังไม่ได้เทียบราชกิจจาฉบับที่ 7 โดยตรง และยังไม่ได้ไล่ว่า ฉบับที่ 8 กับ 9 ไม่ได้แก้ ม.17)
-- ค่าชดเชยเมื่อนายจ้างเลิกจ้างโดยลูกจ้างไม่มีความผิด เริ่มที่ทำงานติดต่อกันครบ 120 วัน การกำหนดทดลองงาน 119 วันจึงพบบ่อย แต่ไม่ได้ทำให้เลิกจ้างได้โดยไม่บอกกล่าว
+- The Labour Protection Act does not set how long probation may last. A person on probation is an employee protected by law (พ.ร.บ.คุ้มครองแรงงาน).
+- Ending employment during probation still needs advance written notice, given on or before any pay day, so that the termination takes effect on the next pay day (Section 17 paragraph 2). This applies to contracts with no fixed term. A fixed-term contract ends when the term ends, with no notice needed, under Section 17 paragraph 1.
+- Without notice, the employer must pay an amount equal to the wages the employee would have earned from the day of dismissal to the day the termination takes effect. Pay it on the day of dismissal (Section 17/1).
+- If the termination letter gives no reason, the employer cannot cite the Section 119 grounds later (Section 17 paragraph 3).
+- Checked 2026-10-26. Section 17 against the text in the Royal Gazette, volume 115, part 8 ก, 20 Feb 1998 (B.E. 2541), page 6 (copy at web.archive.org of ratchakitcha.soc.go.th). Section 17/1 against the Labour Protection Act (No. 7) B.E. 2562 (2019), as cited by the Secretariat of the Senate at senate.go.th/assets/portals/93/fileups/272/files/Sub_Jun/12know/k147.pdf page 141. Not yet compared directly with the Royal Gazette issue for Act No. 7. Not yet checked that Acts No. 8 and 9 did not amend Section 17.
+- Severance when the employer dismisses an employee who is not at fault starts once the employee has worked 120 days in a row. So a 119-day probation is common. It does not allow dismissal without notice.
 
-| ทำงานติดต่อกัน | ค่าชดเชย (ค่าจ้างอัตราสุดท้าย) |
+| Continuous service | Severance (last wage rate) |
 |---|---|
-| 120 วัน แต่ไม่ครบ 1 ปี | 30 วัน |
-| 1 ปี แต่ไม่ครบ 3 ปี | 90 วัน |
-| 3 ปี แต่ไม่ครบ 6 ปี | 180 วัน |
-| 6 ปี แต่ไม่ครบ 10 ปี | 240 วัน |
-| 10 ปี แต่ไม่ครบ 20 ปี | 300 วัน |
-| 20 ปีขึ้นไป | 400 วัน |
+| 120 days but under 1 year | 30 days |
+| 1 year but under 3 years | 90 days |
+| 3 years but under 6 years | 180 days |
+| 6 years but under 10 years | 240 days |
+| 10 years but under 20 years | 300 days |
+| 20 years or more | 400 days |
 
-ไม่ต้องจ่ายค่าชดเชยเมื่อ: ลูกจ้างลาออกเอง · ทุจริตต่อหน้าที่หรือทำผิดอาญาโดยเจตนาแก่นายจ้าง · จงใจทำให้นายจ้างเสียหาย · ประมาทเลินเล่อจนนายจ้างเสียหายร้ายแรง · ฝ่าฝืนข้อบังคับหรือคำสั่งที่ชอบด้วยกฎหมายหลังได้หนังสือเตือนแล้ว (หนังสือเตือนมีผลไม่เกิน 1 ปีนับจากวันที่ทำผิด กรณีร้ายแรงไม่ต้องเตือน) · ละทิ้งหน้าที่ 3 วันทำงานติดต่อกันโดยไม่มีเหตุอันสมควร · ได้รับโทษจำคุกตามคำพิพากษาถึงที่สุด · และกรณีจ้างที่มีกำหนดเวลาแน่นอนตามที่กฎหมายเขียนไว้
+No severance is due when: the employee resigns · acts dishonestly in duty or commits an intentional crime against the employer · intentionally damages the employer · is negligent and causes the employer serious damage · breaks a lawful rule or order after receiving a written warning (a warning is valid for 1 year from the date of the offence; a serious case needs no warning) · abandons duty for 3 working days in a row without good reason · is sentenced to prison by a final judgment · and the fixed-term cases as the law states them.
 
-ตรวจล่าสุด 2026-10-23 · แหล่ง: https://www.labour.go.th/index.php/hm7/56-2011-06-02-03-42-46 (ตารางค่าชดเชยและข้อยกเว้น · หน้านี้ยังมีตัวเลขวันลาคลอดชุดเก่า จึงใช้เฉพาะส่วนค่าชดเชย)
+Last checked 2026-10-23 · Source: https://www.labour.go.th/index.php/hm7/56-2011-06-02-03-42-46 (severance table and exceptions · the page still shows the old maternity leave figures, so use only the severance part)
 
-**ระวัง** ผู้สมัครตอบรับแล้วบริษัทฯ ถอนข้อเสนอ อาจกลายเป็นข้อพิพาทเรื่องผิดสัญญา (รอยืนยัน) ให้ถามทนายก่อนถอน · สัญญาจ้างฉบับเต็มทำด้วย `doc-contract-th`
+**Caution:** If the applicant accepts and the company then withdraws the offer, it may become a breach of contract dispute (`รอยืนยัน`, awaiting confirmation). Ask a lawyer before withdrawing. Draft the full employment contract with `doc-contract-th`.
 
-## 8 · สัปดาห์แรก: ส่งต่อให้ skill อื่น
+## 8 · First week: hand off to other skills
 
-| เรื่อง | กำหนด | ใช้ |
+| Topic | Deadline | Use |
 |---|---|---|
-| ขึ้นทะเบียนลูกจ้างเป็นผู้ประกันตน | ภายใน 30 วันนับจากวันที่รับเข้าทำงาน · ล่าช้าหรือจงใจเลี่ยง มีโทษจำคุกไม่เกิน 6 เดือน หรือปรับไม่เกิน 20,000 บาท หรือทั้งจำทั้งปรับ | `social-security-th` |
-| ทะเบียนนายจ้าง | ห้างหุ้นส่วนและบริษัทที่จดทะเบียนแล้วได้ทะเบียนนายจ้างโดยอัตโนมัติ · นายจ้างที่เป็นบุคคลธรรมดาต้องขึ้นทะเบียนนายจ้างเอง | `social-security-th` |
-| แบบแจ้งค่าลดหย่อน · บัญชีธนาคาร · ข้อมูลภาษี เข้ารอบเงินเดือน | ก่อนรอบจ่ายแรก | `payroll-th` |
-| สัญญาจ้างลงนาม | วันเริ่มงาน | `doc-contract-th` |
-| สิทธิวันลาและแบบฟอร์มลา | สัปดาห์แรก | `doc-leave` · `labour-law-basics` |
-| ประกาศความเป็นส่วนตัวสำหรับพนักงาน · สิทธิเข้าระบบ | วันแรก | `pdpa-workflow` |
-| ข้อบังคับเกี่ยวกับการทำงาน (ลูกจ้าง 10 คนขึ้นไป) | ตามที่ skill นั้นระบุ | `labour-law-basics` |
-| วันหยุดตามประเพณีของปี | สัปดาห์แรก | `thai-holidays` |
-| ลูกจ้างครบ 100 คน | นับจำนวน ณ 1 ต.ค. ทุกปี · รับคนพิการ 1 คนต่อลูกจ้างที่ไม่พิการ 100 คน เศษเกิน 50 คนรับเพิ่ม 1 คน · ไม่ครบให้ส่งเงินเข้ากองทุน (ม.34) หรือใช้ทางเลือกตาม ม.35 · อัตราเงินและวันส่งของปีนั้นตรวจที่ dep.go.th (รอยืนยัน ปี 2570) | ไม่มี skill เฉพาะ |
+| Register the employee as an insured person | Within 30 days of the hire date · late or deliberately avoided registration carries up to 6 months in prison, or a fine up to 20,000 baht, or both | `social-security-th` |
+| Employer registration | Registered partnerships and companies get an employer number automatically · an employer who is an individual must register as an employer | `social-security-th` |
+| Allowance form · bank account · tax data into the payroll run | Before the first pay run | `payroll-th` |
+| Employment contract signed | Start date | `doc-contract-th` |
+| Leave entitlement and leave forms | First week | `doc-leave` · `labour-law-basics` |
+| Privacy notice for employees · system access rights | Day 1 | `pdpa-workflow` |
+| Work rules (10 or more employees) | As that skill states | `labour-law-basics` |
+| Public holidays for the year | First week | `thai-holidays` |
+| 100 employees reached | Count on 1 Oct every year · hire 1 person with a disability per 100 employees without disability, and 1 more for a remainder above 50 · if short, pay into the fund (Section 34) or use the alternatives under Section 35 · check the year's rate and payment date at dep.go.th (`รอยืนยัน` for 2027, B.E. 2570) | No dedicated skill |
 
-ตรวจล่าสุด 2026-10-23 · แหล่ง: ข่าวสำนักงานประกันสังคม 30 ต.ค. 2567 https://www.sso.go.th/wpr/main/news/%E0%B8%82%E0%B9%88%E0%B8%B2%E0%B8%A7%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%8A%E0%B8%B2%E0%B8%AA%E0%B8%B1%E0%B8%A1%E0%B8%9E%E0%B8%B1%E0%B8%99%E0%B8%98%E0%B9%8C_detail_detail_1_16_0/28904_28904 · ทะเบียนนายจ้างอัตโนมัติ: คู่มือนิติบุคคลตั้งใหม่ของกรมพัฒนาธุรกิจการค้า https://www.dbd.go.th/storage/manual/644ffb30-f6bf-4e60-a3be-9db74a65509b.pdf · โควตาคนพิการ: ถาม-ตอบของกองทุนส่งเสริมและพัฒนาคุณภาพชีวิตคนพิการ https://dfund.dep.go.th/%E0%B8%96%E0%B8%B2%E0%B8%A1-%E0%B8%95%E0%B8%AD%E0%B8%9A-%E0%B8%88%E0%B9%89%E0%B8%B2%E0%B8%87%E0%B8%87%E0%B8%B2%E0%B8%99%E0%B8%84%E0%B8%99%E0%B8%9E%E0%B8%B4%E0%B8%81%E0%B8%B2%E0%B8%A3/ · สายด่วน 1506 กด 3 หรือ 1546: https://www.labour.go.th/index.php/labor-law
+Last checked 2026-10-23 · Sources: Social Security Office news, 30 Oct 2024 https://www.sso.go.th/wpr/main/news/%E0%B8%82%E0%B9%88%E0%B8%B2%E0%B8%A7%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%8A%E0%B8%B2%E0%B8%AA%E0%B8%B1%E0%B8%A1%E0%B8%9E%E0%B8%B1%E0%B8%99%E0%B8%98%E0%B9%8C_detail_detail_1_16_0/28904_28904 · automatic employer registration: Department of Business Development guide for newly formed legal entities https://www.dbd.go.th/storage/manual/644ffb30-f6bf-4e60-a3be-9db74a65509b.pdf · disability quota: Q&A of the Fund for Promotion and Development of the Quality of Life of Persons with Disabilities https://dfund.dep.go.th/%E0%B8%96%E0%B8%B2%E0%B8%A1-%E0%B8%95%E0%B8%AD%E0%B8%9A-%E0%B8%88%E0%B9%89%E0%B8%B2%E0%B8%87%E0%B8%87%E0%B8%B2%E0%B8%99%E0%B8%84%E0%B8%99%E0%B8%9E%E0%B8%B4%E0%B8%81%E0%B8%B2%E0%B8%A3/ · hotline 1506 press 3, or 1546: https://www.labour.go.th/index.php/labor-law
 
 
 ## reference: sources.md
@@ -375,213 +378,213 @@ Last checked 2026-10-23
 
 Use when starting a Thai business
 
-# ตั้งธุรกิจในไทย: เลือกรูปแบบและจดทะเบียน
+# Starting a business in Thailand: choose a form and register
 
-skill นี้ช่วยเลือกว่าจะทำธุรกิจในนามตัวเอง ห้างหุ้นส่วน หรือบริษัท พาจดทะเบียน และไล่เช็กลิสต์หลังจดทะเบียน · เนื้อหานี้เป็นข้อมูลทั่วไป ไม่ใช่คำปรึกษาภาษีหรือกฎหมาย ตัวเลขภาษีของกิจการจริงให้นักบัญชีคิดซ้ำ
+This skill helps the user choose between trading as an individual, a partnership or a company. It walks them through registration, then through the checklist after registration. The content is general information, not tax or legal advice. An accountant should recalculate the tax figures for a real business.
 
-ตัวย่อในไฟล์นี้: กรมพัฒนาธุรกิจการค้า (DBD) · ภาษีมูลค่าเพิ่ม (VAT) · วิสาหกิจขนาดกลางและขนาดย่อม (SME)
+Abbreviations in this file: Department of Business Development (DBD) · value added tax (VAT) · small and medium enterprise (SME)
 
-## 1 · เลือกรูปแบบธุรกิจ
+## 1 · Choosing a business form
 
-เทียบ 4 รูปแบบ (บุคคลธรรมดา + ทะเบียนพาณิชย์ · ห้างหุ้นส่วนสามัญนิติบุคคล · ห้างหุ้นส่วนจำกัด · บริษัทจำกัด) ตามความรับผิดต่อหนี้ ทุน ที่จด ค่าธรรมเนียม และภาษี (บุคคลธรรมดาอัตราก้าวหน้า 0–35% ส่วนนิติบุคคลอัตราของนิติบุคคล) · ตารางเต็ม ลำดับคำถามเลือกรูปแบบ และแหล่งที่ตรวจ 2026-10-23 อยู่ใน [`references/business-forms.md`](references/business-forms.md) · เปิดไฟล์นั้นก่อนตอบว่าควรจดแบบไหน
+Compare 4 forms (individual + commercial registration (ทะเบียนพาณิชย์) · registered ordinary partnership (ห้างหุ้นส่วนสามัญนิติบุคคล) · limited partnership (ห้างหุ้นส่วนจำกัด) · limited company (บริษัทจำกัด)) by liability for debts, capital, where to register, fees and tax (progressive 0–35% for an individual, the juristic person rate for the others). The full table, the order of questions for choosing a form and the sources checked 2026-10-23 are in [`references/business-forms.md`](references/business-forms.md). Open that file before answering which form to register.
 
-## 2 · ภาษีเงินได้: บุคคลธรรมดาเทียบนิติบุคคล
+## 2 · Income tax: individual vs juristic person
 
-ขั้นบันไดภาษีบุคคลธรรมดา (ปีภาษี 2568) อัตราของนิติบุคคล SME การคิด 3 สถานการณ์ของกำไร และวิธีรัน `decide.mjs` กับ `tax-compare.mjs` อยู่ใน [`references/income-tax-compare.md`](references/income-tax-compare.md) · ตัวเลขนี้ยังไม่รวมภาษีชั้นที่ 2 ตอนจ่ายเงินออกจากบริษัท · เปิดไฟล์นั้นก่อนเทียบตัวเลข
+The individual tax brackets (tax year 2025 (B.E. 2568)), the SME juristic person rates, the 3 profit scenarios and how to run `decide.mjs` with `tax-compare.mjs` are in [`references/income-tax-compare.md`](references/income-tax-compare.md). These figures do not yet include the second layer of tax when money leaves the company. Open that file before comparing numbers.
 
-## 3 · จดทะเบียน
+## 3 · Registration
 
-บุคคลธรรมดาจดทะเบียนพาณิชย์ (ขายออนไลน์ต้องจด) · ห้างหุ้นส่วนและบริษัทจดผ่าน DBD Biz Regist (ออนไลน์ช่องทางเดียวตั้งแต่ 1 พ.ย. 2569) · ขั้นตอน ค่าธรรมเนียม และแหล่งที่ตรวจอยู่ใน [`references/registration.md`](references/registration.md) · ดูอัตราในระบบก่อนชำระทุกครั้ง
+An individual registers commercial registration (anyone selling online must register). Partnerships and companies register through DBD Biz Regist (online only from 1 Nov 2026 (B.E. 2569)). The steps, fees and sources checked are in [`references/registration.md`](references/registration.md). Check the rate in the system before every payment.
 
-## 4 · หลังจดทะเบียน: เช็กลิสต์
+## 4 · After registration: checklist
 
-| งาน | เมื่อไร | ใช้ |
+| Task | When | Use |
 |---|---|---|
-| เปิดบัญชีธนาคารในชื่อกิจการ แยกจากเงินส่วนตัว | ทันที | แนวปฏิบัติที่แนะนำ |
-| นิติบุคคล: ทำบัญชีตั้งแต่วันที่จดทะเบียน · จัดหาผู้ทำบัญชีที่มีคุณสมบัติ · ปิดบัญชีครั้งแรกภายใน 12 เดือน · เก็บบัญชีและเอกสารไม่น้อยกว่า 5 ปีนับจากวันปิดบัญชี | ทันที | `dbd-annual-filing` |
-| จด VAT เมื่อรายรับจากการขายสินค้าหรือให้บริการเกิน 1.8 ล้านบาทต่อปี ยื่นคำขอภายใน 30 วันนับจากวันที่รายรับเกิน · รายรับไม่ถึงก็ขอจดเองได้ · นิติบุคคลยื่นคำขอจด VAT พร้อมคำขอจดตั้งได้ | ตามรายรับ | `tax-vat-th` |
-| ออกใบกำกับภาษีอิเล็กทรอนิกส์ (e-Tax Invoice) | หลังจด VAT | `e-tax-invoice` |
-| จ้างคนแรก: ขึ้นทะเบียนลูกจ้างเป็นผู้ประกันตนภายใน 30 วันนับจากวันเริ่มงาน · นายจ้างที่เป็นบุคคลธรรมดาต้องขึ้นทะเบียนนายจ้างเอง | เมื่อจ้าง | `hiring-th` · `social-security-th` |
-| ภาษีหัก ณ ที่จ่ายและ VAT รายเดือน | ทุกเดือน | `tax-vat-th` |
-| เงินเดือน | ทุกเดือน | `payroll-th` |
-| งบการเงินและภาษีประจำปี | หลังปิดปีบัญชี | `dbd-annual-filing` |
-| ประกาศความเป็นส่วนตัวสำหรับลูกค้าและพนักงาน | ก่อนเก็บข้อมูล | `pdpa-workflow` |
-| ใบเสนอราคา ใบแจ้งหนี้ ใบเสร็จ · QR พร้อมเพย์ | ตอนเปิดขาย | `doc-quotation` · `promptpay-qr` |
+| Open a bank account in the business name, separate from personal money | Right away | Recommended practice |
+| Juristic person: keep books from the registration date · appoint a qualified bookkeeper · close the first accounting period within 12 months · keep books and documents for at least 5 years from the closing date | Right away | `dbd-annual-filing` |
+| Register for VAT when revenue from selling goods or services exceeds 1.8 million baht a year. File the request within 30 days of the date revenue passes it · below that, the owner can still register voluntarily · a juristic person can file the VAT request together with the incorporation request | By revenue | `tax-vat-th` |
+| Issue electronic tax invoices (e-Tax Invoice) | After VAT registration | `e-tax-invoice` |
+| First hire: register the employee as an insured person within 30 days of the start date · an employer who is an individual must register as an employer themselves | When hiring | `hiring-th` · `social-security-th` |
+| Withholding tax and monthly VAT | Every month | `tax-vat-th` |
+| Payroll | Every month | `payroll-th` |
+| Financial statements and yearly tax | After the accounting year closes | `dbd-annual-filing` |
+| Privacy notice for customers and staff | Before collecting data | `pdpa-workflow` |
+| Quotation, invoice, receipt · PromptPay QR | When sales open | `doc-quotation` · `promptpay-qr` |
 
-ตรวจล่าสุด 2026-10-23 · แหล่ง: เกณฑ์จด VAT https://www.rd.go.th/7061.html · หน้าที่ทำบัญชี จด VAT พร้อมจดตั้ง และทะเบียนนายจ้างอัตโนมัติ: คู่มือนิติบุคคลตั้งใหม่ของ DBD (ลิงก์ในหัวข้อ 1) · ขึ้นทะเบียนลูกจ้าง 30 วัน: ข่าวสำนักงานประกันสังคม 30 ต.ค. 2567 (ลิงก์ใน `hiring-th/references/offer-letter-first-week.md` หัวข้อ 8)
+Last checked 2026-10-23 · Sources: VAT registration threshold https://www.rd.go.th/7061.html · bookkeeping duty, VAT registration with incorporation and automatic employer registration: the DBD manual for newly registered juristic persons (link in section 1) · employee registration within 30 days: Social Security Office news of 30 Oct 2024 (B.E. 2567) (link in `hiring-th/references/offer-letter-first-week.md` section 8)
 
-## 5 · ต้นทุนนำเข้าจากจีน
+## 5 · Import cost from China
 
-ย้ายไป skill `import-landed-cost` แล้ว (สูตร CIF อากร VAT · กติกาปี 2569 · ทางรถหรือทางเรือ · สคริปต์ `landed-cost.mjs`)
+Moved to the skill `import-landed-cost` (CIF formula, duty and VAT · 2026 rules · by road or by sea · script `landed-cost.mjs`).
 
-## 6 · เมื่อไหร่ต้องถามนักบัญชีหรือทนาย
+## 6 · When to ask an accountant or lawyer
 
-- ก่อนเลือกรูปแบบ ถ้ากำไรคาดว่าเกิน 1 ล้านบาทต่อปี หรือหุ้นส่วนลงเงินไม่เท่ากัน (แนวปฏิบัติที่แนะนำ)
-- มีผู้ถือหุ้น หุ้นส่วน หรือกรรมการเป็นคนต่างด้าว · DBD ขอเอกสารเพิ่มตามคำสั่งสำนักงานทะเบียนหุ้นส่วนบริษัทกลาง (บริษัท: ที่ 2/2569 · ห้างหุ้นส่วน: ที่ 205/2555) และกฎหมายการประกอบธุรกิจของคนต่างด้าวต้องให้ทนายดู
-- ทุนจดทะเบียนเกิน 5 ล้านบาท · DBD ขอเอกสารเพิ่มตามคำสั่งที่ 1/2567
-- รายรับใกล้ 1.8 ล้านบาท หรือกำลังจะจด VAT
-- ยื่นงบการเงินหรือภาษีล่าช้ามาแล้ว (ค่าปรับเพิ่มทุกวัน ดู `dbd-annual-filing`)
+- Before choosing a form, if profit is expected to exceed 1 million baht a year or partners put in unequal amounts (recommended practice)
+- A shareholder, partner or director is a foreigner · DBD asks for extra documents under the orders of the Central Partnership and Company Registration Office (company: no. 2/2569 · partnership: no. 205/2555), and the law on foreign business operation needs a lawyer's review
+- Registered capital over 5 million baht · DBD asks for extra documents under order no. 1/2567
+- Revenue is near 1.8 million baht, or the business is about to register for VAT
+- Financial statements or tax were filed late (penalties grow every day; see `dbd-annual-filing`)
 
-## 7 · รออนุมัติ
+## 7 · รออนุมัติ (awaiting approval)
 
-ย้อนไม่ได้หรือกระทบคนนอก agent เตรียมข้อมูลและร่างให้ แต่ไม่ทำเอง
+These steps cannot be undone or they affect outsiders. The agent prepares the data and drafts, but does not do them.
 
-- ยื่นจดทะเบียนจริง ยืนยันตัวตน หรือชำระค่าธรรมเนียมในระบบของรัฐ
-- ลงนามสัญญาหุ้นส่วน หรือสัญญาเช่า
-- ยื่นคำขอจด VAT
-- ใส่รหัสผ่าน รหัสยืนยันตัวตน หรือเลขบัญชีของผู้ใช้
+- Filing a real registration, verifying identity or paying a fee in a government system
+- Signing a partnership agreement or a lease
+- Filing a VAT registration request
+- Entering the user's password, identity verification code or account number
 
-## 8 · เชื่อมกับ skill อื่น
+## 8 · Links to other skills
 
-| ต้องการ | ใช้ |
+| Need | Use |
 |---|---|
-| ภาษีคนขายออนไลน์แบบบุคคลธรรมดา (หักค่าใช้จ่าย · ภ.ง.ด.90 และ 94) | `seller-tax-basics` |
-| ยื่นภาษีรายเดือน VAT หัก ณ ที่จ่าย และค่าปรับ | `tax-vat-th` + agent `tax-helper` |
-| ใบกำกับภาษีอิเล็กทรอนิกส์ | `e-tax-invoice` |
-| ปิดปี งบการเงิน บอจ.5 ภ.ง.ด.50 | `dbd-annual-filing` |
-| จ้างพนักงานคนแรก | `hiring-th` · `social-security-th` · `payroll-th` |
-| สัญญาหุ้นส่วน เช่า และจ้างทำของ | `doc-contract-th` |
-| ใบเสนอราคา ใบแจ้งหนี้ ใบเสร็จ | `doc-quotation` |
-| ตั้งราคาขายบน Shopee Lazada TikTok Shop หลังรู้ต้นทุน | `marketplace-fees-pricing` |
-| เทียบขนส่งในประเทศ | `shipping-compare` |
-| ตั้งชื่อธุรกิจก่อนจองชื่อ | `product-naming` (plugin `software-development`) |
-| ถ้อยคำทุกบรรทัด | `human-writing` |
+| Tax for an online seller who is an individual (deducting expenses · ภ.ง.ด.90 (PND 90) and 94 (PND 94)) | `seller-tax-basics` |
+| Monthly filing of VAT, withholding tax and penalties | `tax-vat-th` + agent `tax-helper` |
+| Electronic tax invoice | `e-tax-invoice` |
+| Year-end close, financial statements, บอจ.5, ภ.ง.ด.50 | `dbd-annual-filing` |
+| Hiring the first employee | `hiring-th` · `social-security-th` · `payroll-th` |
+| Partnership, lease and work-for-hire contracts | `doc-contract-th` |
+| Quotation, invoice, receipt | `doc-quotation` |
+| Setting a selling price on Shopee, Lazada and TikTok Shop once the cost is known | `marketplace-fees-pricing` |
+| Comparing domestic carriers | `shipping-compare` |
+| Naming the business before reserving the name | `product-naming` (plugin `software-development`) |
+| Wording of every line | `human-writing` |
 
-ที่มาของแนวคิด: ลำดับคำถามเลือกรูปแบบธุรกิจได้แนวคิดจาก https://github.com/Boom-Vitt/claude-thai-business-skills (MIT License · Copyright (c) 2026 Vittawat (boombignose) · ตรวจไฟล์ LICENSE 2026-10-23) · เขียนใหม่ทั้งหมด ไม่คัดลอกข้อความ และตรวจตัวเลขทุกตัวกับแหล่งทางการใหม่
+Origin of the idea: the order of questions for choosing a business form took its idea from https://github.com/Boom-Vitt/claude-thai-business-skills (MIT License · Copyright (c) 2026 Vittawat (boombignose) · LICENSE file checked 2026-10-23). It was rewritten from scratch with no copied text, and every figure was rechecked against official sources.
 
 
 ## reference: business-forms.md
 
-# เลือกรูปแบบธุรกิจ (ย้ายมาจาก SKILL.md หัวข้อ 1)
+# Choosing a business form (moved from SKILL.md section 1)
 
-อยู่ใน skill `thai-business-setup` · ตัวย่อดูหัวไฟล์ SKILL.md
+Part of the skill `thai-business-setup`. For the abbreviations, see the top of SKILL.md.
 
-## 1 · เลือกรูปแบบธุรกิจ
+## 1 · Choosing a business form
 
-| เรื่อง | บุคคลธรรมดา + ทะเบียนพาณิชย์ | ห้างหุ้นส่วนสามัญนิติบุคคล | ห้างหุ้นส่วนจำกัด | บริษัทจำกัด |
+| Topic | Individual + commercial registration (บุคคลธรรมดา + ทะเบียนพาณิชย์) | Registered ordinary partnership (ห้างหุ้นส่วนสามัญนิติบุคคล) | Limited partnership (ห้างหุ้นส่วนจำกัด) | Limited company (บริษัทจำกัด) |
 |---|---|---|---|---|
-| คนตั้ง | 1 คน | หุ้นส่วน 2 คนขึ้นไป | หุ้นส่วน 2 คนขึ้นไป | ผู้เริ่มก่อการ 2 คนขึ้นไป |
-| รับผิดต่อหนี้ | เจ้าของรับเองทั้งหมด ธุรกิจไม่แยกจากตัวคน | หุ้นส่วนทุกคนรับผิดร่วมกันไม่จำกัดจำนวน | หุ้นส่วนจำกัดความรับผิด: ไม่เกินเงินที่ลงหุ้นและจัดการกิจการไม่ได้ · หุ้นส่วนไม่จำกัดความรับผิด: ไม่จำกัดจำนวนและเป็นหุ้นส่วนผู้จัดการ | ผู้ถือหุ้นรับผิดไม่เกินค่าหุ้นที่ยังชำระไม่ครบ |
-| ลงทุนด้วย | เงินของเจ้าของ | เงิน ทรัพย์สิน หรือแรงงาน | เงิน ทรัพย์สิน หรือแรงงาน (หุ้นส่วนจำกัดความรับผิดลงแรงงานไม่ได้) | หุ้นมูลค่าไม่ต่ำกว่า 5 บาท เรียกชำระอย่างน้อย 25% |
-| จดที่ | สำนักงานเขต (กรุงเทพฯ) · เทศบาล · องค์การบริหารส่วนตำบล (อบต.) · เมืองพัทยา | DBD Biz Regist (ออนไลน์) | DBD Biz Regist | DBD Biz Regist |
-| ค่าธรรมเนียมรัฐ | 50 บาท | 1,000 บาท | 1,000 บาท | 5,500 บาท (หนังสือบริคณห์สนธิ 500 + จดตั้งบริษัท 5,000) + อากรแสตมป์ 200 (+200 ถ้ามีข้อบังคับ) |
-| บัญชีและผู้สอบบัญชี | ไม่มีผู้สอบบัญชี เก็บหลักฐานรายรับรายจ่ายไว้ยื่นภาษี (รอยืนยัน หน้าที่ทำบัญชีของบุคคลธรรมดา) | ผู้ทำบัญชีที่มีคุณสมบัติ · ผู้สอบบัญชีรับอนุญาต ยกเว้นห้างฯ ที่ทุนไม่เกิน 5 ล้าน สินทรัพย์ไม่เกิน 30 ล้าน และรายได้ไม่เกิน 30 ล้านบาท (แต่ ภ.ง.ด.50 ต้องแนบรายงานของผู้ตรวจสอบและรับรองบัญชี) | เหมือนห้างหุ้นส่วนสามัญนิติบุคคล | ผู้ทำบัญชีที่มีคุณสมบัติ + ผู้สอบบัญชีรับอนุญาตตรวจงบทุกปี |
-| ภาษีเงินได้ | อัตราก้าวหน้า 0–35% (หัวข้อ 2) | ภาษีเงินได้นิติบุคคล (หัวข้อ 2) | ภาษีเงินได้นิติบุคคล | ภาษีเงินได้นิติบุคคล |
-| งานประจำปี | ภ.ง.ด.90 และ ภ.ง.ด.94 (ดู `seller-tax-basics`) | งบการเงิน + ภ.ง.ด.50 (ดู `dbd-annual-filing`) | งบการเงิน + ภ.ง.ด.50 | ประชุมผู้ถือหุ้น + งบการเงิน + บอจ.5 + ภ.ง.ด.50 |
+| Founders | 1 person | 2 or more partners | 2 or more partners | 2 or more promoters (ผู้เริ่มก่อการ) |
+| Liability for debts | The owner is fully liable. The business is not separate from the person. | Every partner is jointly liable without limit. | Limited-liability partners: up to the amount they invested, and they cannot manage the business. Unlimited-liability partners: no limit, and they act as managing partners. | Shareholders are liable only for unpaid share value. |
+| Contribution | The owner's money | Money, property or labour | Money, property or labour (limited-liability partners cannot contribute labour) | Shares with a par value of at least 5 baht, with at least 25% called up |
+| Register at | District office (Bangkok) · municipality · subdistrict administrative organization (อบต.) · Pattaya City | DBD Biz Regist (online) | DBD Biz Regist | DBD Biz Regist |
+| Government fee | 50 baht | 1,000 baht | 1,000 baht | 5,500 baht (memorandum of association 500 + company registration 5,000) + stamp duty 200 (+200 if there are articles of association) |
+| Accounting and auditor | No auditor. Keep income and expense records for tax filing (รอยืนยัน (awaiting confirmation): an individual's bookkeeping duty). | A qualified bookkeeper · a licensed auditor, except a partnership with capital up to 5 million, assets up to 30 million and revenue up to 30 million baht (but ภ.ง.ด.50 (PND 50, corporate income tax return) must attach the report of the person who audited and certified the accounts) | Same as the registered ordinary partnership | A qualified bookkeeper + a licensed auditor who audits the financial statements every year |
+| Income tax | Progressive rate 0–35% (section 2) | Corporate income tax (section 2) | Corporate income tax | Corporate income tax |
+| Yearly filings | ภ.ง.ด.90 and ภ.ง.ด.94 (PND 90 and PND 94, individual income tax returns; see `seller-tax-basics`) | Financial statements + ภ.ง.ด.50 (see `dbd-annual-filing`) | Financial statements + ภ.ง.ด.50 | Shareholder meeting + financial statements + บอจ.5 (shareholder list) + ภ.ง.ด.50 |
 
-**ตัดสินด้วยคำถาม 5 ข้อ**
+**Decide with 5 questions**
 
-1. ทำคนเดียวหรือมีหุ้นส่วน · คนเดียวเริ่มแบบบุคคลธรรมดาได้ ส่วนบริษัทต้องมีผู้เริ่มก่อการ 2 คนขึ้นไป
-2. ธุรกิจมีโอกาสเป็นหนี้ก้อนใหญ่หรือถูกฟ้องไหม (กู้เงิน · สัญญามูลค่าสูง · สินค้าที่อาจทำให้คนบาดเจ็บ) ถ้าใช่ ให้เลือกรูปแบบที่จำกัดความรับผิด
-3. กำไรต่อปีประมาณเท่าไร แล้วเทียบภาษีตามหัวข้อ 2 · ที่กำไรราว 1 ล้านบาท ภาษี 2 แบบใกล้กัน สิ่งที่ต่างคือภาระบัญชีและผู้สอบบัญชีทุกปี
-4. ลูกค้าเป็นบริษัทที่ต้องการใบกำกับภาษีและหัก ณ ที่จ่ายไหม · ลูกค้าธุรกิจหลายรายสะดวกซื้อกับนิติบุคคลมากกว่า (แนวปฏิบัติที่พบบ่อย ไม่ใช่กฎหมาย)
-5. รับภาระทำบัญชีและสอบบัญชีทุกปีไหวไหม · ขอใบเสนอราคาจากสำนักงานบัญชี 2–3 แห่งก่อนจด เพราะค่าบริการเป็นราคาตลาด ไม่มีอัตราทางการ
+1. Are you working alone or with partners? One person can start as an individual. A company needs 2 or more promoters.
+2. Could the business take on a large debt or be sued (a loan · a high-value contract · a product that could injure someone)? If so, choose a form that limits liability.
+3. About how much is the yearly profit? Then compare the tax as in section 2. At a profit of about 1 million baht, the tax is close for both forms. What differs is the yearly bookkeeping and audit burden.
+4. Are your customers companies that want a tax invoice and withhold tax? Many business customers find it easier to buy from a juristic person (common practice, not law).
+5. Can you carry the yearly bookkeeping and audit cost? Get quotes from 2–3 accounting firms before registering. The fees are market prices, with no official rate.
 
-เริ่มเล็กแล้วขยับทีหลังได้: ห้างหุ้นส่วนแปรสภาพเป็นบริษัทได้ ค่าธรรมเนียม 5,000 บาท
+You can start small and move up later: a partnership can convert into a company for a 5,000 baht fee.
 
-ตรวจล่าสุด 2026-10-23 · แหล่ง: คู่มือนิติบุคคลตั้งใหม่ของ DBD (ความรับผิด · ผู้ทำบัญชี · ผู้สอบบัญชี · ทะเบียนนายจ้าง) https://www.dbd.go.th/storage/manual/644ffb30-f6bf-4e60-a3be-9db74a65509b.pdf · จดตั้งห้างหุ้นส่วน https://www.dbd.go.th/storage/manual/66c900f7-4df6-4344-b0c4-cd11a2ab7b20.pdf · จดตั้งบริษัทในวันเดียว https://www.dbd.go.th/storage/manual/0097faba-992d-4e07-8f37-d029a4d6c133.pdf · ทะเบียนพาณิชย์ https://www.dbd.go.th/storage/manual/43eec450-c4b5-4fe5-9b9e-2814d961eeec.pdf · กฎกระทรวงค่าธรรมเนียมห้างหุ้นส่วนและบริษัทจำกัด พ.ศ. 2563 (ราชกิจจานุเบกษา เล่ม 137 ตอนที่ 106 ก) https://www.dbd.go.th/data-storage/attachment/561b5f78c634931010a7d26420.PDF
+Last checked 2026-10-23 · Sources: the DBD manual for newly registered juristic persons (liability · bookkeeper · auditor · employer registration) https://www.dbd.go.th/storage/manual/644ffb30-f6bf-4e60-a3be-9db74a65509b.pdf · registering a partnership https://www.dbd.go.th/storage/manual/66c900f7-4df6-4344-b0c4-cd11a2ab7b20.pdf · registering a company in one day https://www.dbd.go.th/storage/manual/0097faba-992d-4e07-8f37-d029a4d6c133.pdf · commercial registration https://www.dbd.go.th/storage/manual/43eec450-c4b5-4fe5-9b9e-2814d961eeec.pdf · Ministerial Regulation on partnership and limited company fees, B.E. 2563 (2020) (กฎกระทรวงค่าธรรมเนียมห้างหุ้นส่วนและบริษัทจำกัด พ.ศ. 2563, Royal Gazette vol. 137, part 106 ก) https://www.dbd.go.th/data-storage/attachment/561b5f78c634931010a7d26420.PDF
 
 
 ## reference: income-tax-compare.md
 
-# ภาษีเงินได้ บุคคลธรรมดาเทียบนิติบุคคล (ย้ายมาจาก SKILL.md หัวข้อ 2)
+# Income tax: individual vs juristic person (moved from SKILL.md section 2)
 
-อยู่ใน skill `thai-business-setup` · `seller-tax-basics/scripts/tax-compare.mjs` อ้างตัวเลขชุดนี้
+Part of the skill `thai-business-setup`. `seller-tax-basics/scripts/tax-compare.mjs` uses this set of figures.
 
-## 2 · ภาษีเงินได้: บุคคลธรรมดาเทียบนิติบุคคล
+## 2 · Income tax: individual vs juristic person
 
-**บุคคลธรรมดา** (ปีภาษี 2568 ตามคำอธิบาย ภ.ง.ด.90)
+**Individual** (tax year 2025 (B.E. 2568), per the ภ.ง.ด.90 (PND 90, individual income tax return) instructions)
 
-| เงินได้สุทธิ (บาท/ปี) | อัตรา | ภาษีสะสมถึงขั้นบน |
+| Net income (baht/year) | Rate | Cumulative tax up to the top of the band |
 |---|---|---|
-| ไม่เกิน 150,000 | ยกเว้น | 0 |
+| Up to 150,000 | Exempt | 0 |
 | 150,001–300,000 | 5% | 7,500 |
 | 300,001–500,000 | 10% | 27,500 |
 | 500,001–750,000 | 15% | 65,000 |
 | 750,001–1,000,000 | 20% | 115,000 |
 | 1,000,001–2,000,000 | 25% | 365,000 |
 | 2,000,001–5,000,000 | 30% | 1,265,000 |
-| เกิน 5,000,000 | 35% | |
+| Over 5,000,000 | 35% | |
 
-คนที่มีเงินได้อื่นนอกจากเงินเดือนตั้งแต่ 120,000 บาท ต้องคิดอีกวิธีด้วย คือเงินได้พึงประเมิน (ไม่รวมเงินเดือน) × 0.5% แล้วเสียตามวิธีที่ได้ภาษีมากกว่า เว้นแต่วิธีนี้คิดแล้วไม่เกิน 5,000 บาท ก็เสียตามตารางข้างบน · ลดหย่อนส่วนตัว 60,000 บาท · การหักค่าใช้จ่ายของคนขายของใช้ `seller-tax-basics`
+Someone with income other than salary of 120,000 baht or more must also use a second method: assessable income (excluding salary) × 0.5%. They pay whichever method gives more tax. If the second method comes to 5,000 baht or less, they pay by the table above. The personal allowance is 60,000 baht. For how a seller deducts expenses, use `seller-tax-basics`.
 
-**นิติบุคคล**
+**Juristic person**
 
-| ประเภท | กำไรสุทธิ | อัตรา |
+| Type | Net profit | Rate |
 |---|---|---|
-| SME: ทุนชำระแล้ว ณ วันสุดท้ายของรอบบัญชีไม่เกิน 5 ล้านบาท และรายได้จากขายสินค้าและบริการไม่เกิน 30 ล้านบาท | ไม่เกิน 300,000 | ยกเว้น |
+| SME: paid-up capital at the last day of the accounting period of up to 5 million baht, and revenue from goods and services of up to 30 million baht | Up to 300,000 | Exempt |
 | | 300,001–3,000,000 | 15% |
-| | เกิน 3,000,000 | 20% |
-| ไม่เข้าเกณฑ์ SME | ทุกบาท | 20% |
+| | Over 3,000,000 | 20% |
+| Does not meet the SME criteria | Every baht | 20% |
 
-ตรวจล่าสุด 2026-10-23 · แหล่ง: คำอธิบายวิธีกรอก ภ.ง.ด.90 ปีภาษี 2568 (ตารางอัตรา · วิธีที่ 2 คูณ 0.005 · ลดหย่อนส่วนตัว) https://www.rd.go.th/fileadmin/tax_pdf/pit/2568/Ins90_241268.pdf · อัตรานิติบุคคลสำหรับรอบบัญชีตั้งแต่ 1 ม.ค. 2560 เป็นต้นไป https://www.rd.go.th/26218.html และเกณฑ์ SME https://www.rd.go.th/841.html (2 หน้านี้ปรับปรุงล่าสุดปี 2017 และ 2020 · ยังไม่พบประกาศเปลี่ยนอัตรา)
+Last checked 2026-10-23 · Sources: the ภ.ง.ด.90 instructions for tax year 2025 (B.E. 2568) (rate table · method 2 × 0.005 · personal allowance) https://www.rd.go.th/fileadmin/tax_pdf/pit/2568/Ins90_241268.pdf · juristic person rates for accounting periods from 1 Jan 2017 onward https://www.rd.go.th/26218.html and the SME criteria https://www.rd.go.th/841.html (these 2 pages were last updated in 2017 and 2020 · no announcement of a rate change found)
 
-**ตัวอย่าง** กำไรก่อนภาษี 1,000,000 บาทต่อปี (ตัวเลขสมมุติ)
+**Example** Profit before tax of 1,000,000 baht a year (assumed figures)
 
-| รูปแบบ | วิธีคิด | ภาษี (บาท) |
+| Form | Calculation | Tax (baht) |
 |---|---|---|
-| บุคคลธรรมดา (กำไรหลังหักค่าใช้จ่ายจริง แล้วหักลดหย่อนส่วนตัว 60,000) | เงินได้สุทธิ 940,000 → 65,000 + (940,000 − 750,000) × 20% | 103,000 |
-| วิธีที่ 2 ของบุคคลธรรมดา (สมมุติรายรับ 4,000,000) | 4,000,000 × 0.5% = 20,000 ต่ำกว่าวิธีแรก จึงเสียตามวิธีแรก | ไม่ใช้ |
-| บริษัทที่เข้าเกณฑ์ SME | (1,000,000 − 300,000) × 15% | 105,000 |
+| Individual (profit after actual expenses, then the 60,000 personal allowance) | Net income 940,000 → 65,000 + (940,000 − 750,000) × 20% | 103,000 |
+| Individual, method 2 (assuming revenue of 4,000,000) | 4,000,000 × 0.5% = 20,000, which is below the first method, so pay by the first method | Not used |
+| Company that meets the SME criteria | (1,000,000 − 300,000) × 15% | 105,000 |
 
-ภาษี 2 แบบใกล้กัน แต่เงิน 895,000 บาทที่เหลือในบริษัทยังเป็นของบริษัท ถ้าจ่ายออกมาเป็นเงินเดือนกรรมการหรือเงินปันผลจะมีภาษีอีกชั้น ให้นักบัญชีคิดรวมทั้ง 2 ชั้นก่อนตัดสิน
+The tax is close for both forms. But the remaining 895,000 baht in the company still belongs to the company. Paying it out as director salary or dividends adds a second layer of tax. Have an accountant work out both layers before deciding.
 
-### กำไรค่าเดียวหลอกได้ ให้คิด 3 สถานการณ์
+### Profit alone can mislead, so work out 3 scenarios
 
-ที่กำไร 1,000,000 บุคคลธรรมดาถูกกว่านิดเดียว แต่ที่กำไร 3,000,000 บริษัทถูกกว่าเกือบ 2 แสน · เปลี่ยนรูปแบบกิจการแล้วย้อนยาก จึงต้องดูหลายสถานการณ์
+At a profit of 1,000,000 the individual pays slightly less. At a profit of 3,000,000 the company pays almost 200,000 less. Changing the business form is hard to undo, so look at several scenarios.
 
-1. ถามผู้ใช้ 3 อย่าง: กำไรต่อปีแบบแย่ กลาง ดี · โอกาสของแต่ละแบบ (รวมกันได้ 1) · ค่าทำบัญชีและสอบบัญชีที่บริษัทต้องจ่ายเพิ่มจากใบเสนอราคาจริง · ห้ามใส่โอกาสหรือค่าทำบัญชีแทนผู้ใช้
-2. ต้องมี Node · ใส่ลงไฟล์แบบ `seller-tax-basics/scripts/example-company.json` แล้วรัน 2 คำสั่ง
+1. Ask the user for 3 things: yearly profit in a bad, middle and good case · the probability of each case (they add up to 1) · the extra bookkeeping and audit cost the company would pay, from real quotes · never fill in the probabilities or the bookkeeping cost for the user.
+2. Node is required. Put the data in a file shaped like `seller-tax-basics/scripts/example-company.json`, then run 2 commands.
 
 ```bash
-node <path>/tax-compare.mjs company.json            # <path> ดู Script path ข้างล่าง · ตารางภาษีทั้ง 2 แบบต่อสถานการณ์
+node <path>/tax-compare.mjs company.json            # <path>: see Script path below · tax table for both forms per scenario
 node tax-compare.mjs company.json --payoff > payoff.json
-node decide.mjs payoff payoff.json                    # decision-scoring: ค่าคาดหวัง · แย่สุด · เสียดายมากสุด
+node decide.mjs payoff payoff.json                    # decision-scoring: expected value · worst case · maximum regret
 ```
 
-**Script path:** ติดตั้งจาก marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/seller-tax-basics/scripts/tax-compare.mjs | sort -V | tail -1` · ใน repo SQT-Marketplace: `plugins/e-commerce/skills/seller-tax-basics/scripts/tax-compare.mjs` · `decide.mjs` อยู่ใน skill `decision-scoring` ของ plugin `superuser` (ไม่ได้ติดตั้ง → เล่าตาราง 2 แบบให้ผู้ใช้เลือกเอง)
+**Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/seller-tax-basics/scripts/tax-compare.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/e-commerce/skills/seller-tax-basics/scripts/tax-compare.mjs` · `decide.mjs` is in the `decision-scoring` skill of plugin `superuser` (if it is not installed, walk the user through the table for both forms and let them choose).
 
-3. อ่านบรรทัดผล · ค่าคาดหวังกับเสียดายน้อยสุดชี้คนละทาง (ตัวอย่างโอกาส 0.4 · 0.4 · 0.2 และค่าทำบัญชี 60,000 ได้ "2 เกณฑ์ไม่ตรงกัน": ค่าคาดหวังเลือกบุคคลธรรมดา 172,400 ต่อ 183,000 · เสียดายน้อยสุดเลือกบริษัท 62,000 ต่อ 182,000) แปลว่าคำตอบขึ้นกับโอกาสที่ผู้ใช้ให้ · การเปลี่ยนรูปแบบย้อนยาก จึงเล่าทั้ง 2 เกณฑ์แล้วให้ผู้ใช้กับนักบัญชีตัดสิน · ทั้งหมดยังไม่รวมภาษีชั้นที่ 2 ตอนจ่ายเงินออกจากบริษัท
+3. Read the result line. Expected value and minimum regret may point different ways. With probabilities 0.4 · 0.4 · 0.2 and a bookkeeping cost of 60,000, the output says "2 เกณฑ์ไม่ตรงกัน" (the 2 criteria disagree): expected value picks the individual, 172,400 vs 183,000. Minimum regret picks the company, 62,000 vs 182,000. This means the answer depends on the probabilities the user gave. Changing the form is hard to undo, so explain both criteria and let the user and the accountant decide. None of this includes the second layer of tax when money leaves the company.
 
 
 ## reference: registration.md
 
-# จดทะเบียน (ย้ายมาจาก SKILL.md หัวข้อ 3)
+# Registration (moved from SKILL.md section 3)
 
-อยู่ใน skill `thai-business-setup`
+Part of the skill `thai-business-setup`.
 
-## 3 · จดทะเบียน
+## 3 · Registration
 
-### บุคคลธรรมดา: ทะเบียนพาณิชย์
+### Individual: commercial registration (ทะเบียนพาณิชย์)
 
-- ต้องจดเมื่อทำกิจการตามประกาศกระทรวงพาณิชย์ พ.ศ. 2567 เช่น ขายสินค้าได้วันละ 300 บาทขึ้นไปหรือมีสินค้าไว้ขาย 10,000 บาทขึ้นไป · ซื้อขายสินค้าหรือบริการผ่านอินเทอร์เน็ต · เป็นนายหน้าหรือตัวแทนค้าต่างที่สินค้ามีค่าวันละ 300 บาทขึ้นไป · ผลิตแล้วขายตามเกณฑ์เดียวกัน
-- จดภายใน 30 วันนับจากวันเริ่มประกอบการ และจดเปลี่ยนแปลงหรือเลิกภายใน 30 วันเช่นกัน
-- กรุงเทพฯ ยื่นที่สำนักงานเขต 50 เขต (หรือสำนักงานมาตรฐานการคลังและทรัพย์สิน สำนักการคลัง) · ต่างจังหวัดยื่นที่เทศบาล อบต. หรือเมืองพัทยา ตามที่ตั้งสำนักงานใหญ่
-- ค่าธรรมเนียม: จดใหม่ 50 บาท · เปลี่ยนแปลงครั้งละ 20 บาท · เลิก 20 บาท · ใบแทน 30 บาท
-- แสดงใบทะเบียนพาณิชย์ที่สำนักงานใหญ่ (หรือแสดงทางอิเล็กทรอนิกส์) และติดป้ายชื่อหน้าสำนักงานใหญ่และสาขา
+- You must register when you run a business covered by the Ministry of Commerce announcement of 2024 (B.E. 2567). Examples: selling goods at 300 baht a day or more, or holding 10,000 baht or more of stock for sale · buying and selling goods or services over the internet · acting as a broker or agent for goods worth 300 baht a day or more · making goods and selling them under the same criteria.
+- Register within 30 days of starting the business. Register a change or closure within 30 days as well.
+- In Bangkok, file at one of the 50 district offices (or the Standards, Finance and Property Office, Finance Bureau). Outside Bangkok, file at the municipality, the subdistrict administrative organization (อบต.) or Pattaya City, according to where the head office is.
+- Fees: new registration 50 baht · each change 20 baht · closure 20 baht · replacement certificate 30 baht.
+- Display the commercial registration certificate at the head office (or display it electronically). Put up a name sign at the head office and every branch.
 
-### ห้างหุ้นส่วนและบริษัท: DBD Biz Regist
+### Partnership and company: DBD Biz Regist
 
-ตั้งแต่ 1 ก.ค. 2569 การจดตั้งห้างหุ้นส่วนและบริษัทใหม่ทำผ่านระบบจดทะเบียนนิติบุคคลดิจิทัล (DBD Biz Regist) ช่องทางเดียว ไม่รับกระดาษแล้ว · ตั้งแต่ 1 พ.ย. 2569 คำขอจดทะเบียนห้างหุ้นส่วนและบริษัททุกประเภทยื่นออนไลน์ช่องทางเดียว · สงสัยการใช้ระบบโทร Call Center 1570
+From 1 Jul 2026 (B.E. 2569), new partnerships and companies register only through the digital juristic person registration system (DBD Biz Regist). Paper is no longer accepted. From 1 Nov 2026, every kind of partnership and company registration request is filed online only. For help with the system, call the Call Center on 1570.
 
-1. ตรวจและจองชื่อนิติบุคคลที่ reserve.dbd.go.th (ตั้งชื่อก่อนจองใช้ `product-naming` ได้)
-2. เตรียมข้อมูล: ที่ตั้งสำนักงานใหญ่พร้อมเลขรหัสประจำบ้าน · วัตถุที่ประสงค์ · ทุนและจำนวนหุ้นหรือเงินลงหุ้น · ผู้เริ่มก่อการหรือหุ้นส่วน · กรรมการและอำนาจลงนาม (บริษัท) หรือหุ้นส่วนผู้จัดการ (ห้างฯ) · ผู้สอบบัญชีรับอนุญาตและค่าตอบแทน (บริษัท) · พยาน 2 คน (บริษัท)
-3. บริษัทจดหนังสือบริคณห์สนธิและจดตั้งบริษัทพร้อมกันในวันเดียวได้ เมื่อทำครบ: มีผู้เข้าชื่อซื้อหุ้นครบ · ประชุมจัดตั้งบริษัทและทุกคนเห็นชอบ · ผู้เริ่มก่อการมอบกิจการให้กรรมการ · เรียกชำระค่าหุ้นแล้วอย่างน้อย 25%
-4. ยื่นคำขอใน DBD Biz Regist แล้วชำระค่าธรรมเนียมตามตาราง
-5. ได้เลขทะเบียนนิติบุคคล 13 หลัก เลขนี้ใช้เป็นเลขประจำตัวผู้เสียภาษี และได้ทะเบียนนายจ้างประกันสังคมโดยอัตโนมัติ
-6. ทุนจดทะเบียนเกิน 5 ล้านบาท หรือมีผู้ถือหุ้นหรือกรรมการผู้มีอำนาจเป็นคนต่างด้าว ต้องส่งเอกสารเพิ่มตามคำสั่งนายทะเบียน (ดูหัวข้อ 6)
+1. Check and reserve the juristic person's name at reserve.dbd.go.th (if you still need to pick a name, use `product-naming`).
+2. Prepare the data: head office address with the house code number · business objectives · capital and number of shares or invested amounts · promoters or partners · directors and signing authority (company) or the managing partner (partnership) · licensed auditor and fee (company) · 2 witnesses (company).
+3. A company can register the memorandum of association and the company itself on the same day when all of these are done: every subscriber has signed for shares · the incorporation meeting is held and everyone agrees · the promoters hand the business over to the directors · at least 25% of the share value has been called up.
+4. File the request in DBD Biz Regist and pay the fees in the table.
+5. You receive a 13-digit juristic person registration number. This number serves as the taxpayer ID, and the social security employer registration is created automatically.
+6. If the registered capital is over 5 million baht, or a shareholder or an authorized director is a foreigner, send extra documents as the registrar orders (see section 6).
 
-| รายการ | ค่าธรรมเนียม (บาท) |
+| Item | Fee (baht) |
 |---|---|
-| จดทะเบียนห้างหุ้นส่วน | 1,000 |
-| จดทะเบียนหนังสือบริคณห์สนธิ | 500 |
-| จดทะเบียนบริษัทจำกัด | 5,000 |
-| อากรแสตมป์หนังสือบริคณห์สนธิ · ข้อบังคับ (ถ้ามี) | 200 · 200 |
-| หนังสือรับรอง | รายการละ 40 |
-| ใบสำคัญแสดงการจดทะเบียน | ฉบับละ 100 |
-| รับรองสำเนาเอกสาร | หน้าละ 50 |
-| แปรสภาพห้างหุ้นส่วนเป็นบริษัท | 5,000 |
+| Partnership registration | 1,000 |
+| Memorandum of association registration | 500 |
+| Limited company registration | 5,000 |
+| Stamp duty on the memorandum of association · articles of association (if any) | 200 · 200 |
+| Certificate | 40 per item |
+| Registration certificate | 100 per copy |
+| Certified copy of a document | 50 per page |
+| Converting a partnership into a company | 5,000 |
 
-ส่วนลด 50% สำหรับการยื่นออนไลน์ตามกฎกระทรวง พ.ศ. 2563 ใช้ได้ถึง 31 ธ.ค. 2566 เท่านั้น ปัจจุบันยื่นออนไลน์จ่ายเท่ากับอัตราในตาราง · DBD มีร่างกฎกระทรวงค่าธรรมเนียมฉบับใหม่ที่เปิดรับฟังความเห็นช่วง มี.ค.–เม.ย. 2569 (รอยืนยัน ว่าประกาศใช้แล้วหรือยัง) จึงต้องดูอัตราในระบบก่อนชำระทุกครั้ง
+The 50% discount for online filing under the 2020 (B.E. 2563) ministerial regulation was valid only until 31 Dec 2023. Today online filing costs the same as the rates in the table. DBD has a draft of a new fee regulation that was open for comment in Mar–Apr 2026 (รอยืนยัน (awaiting confirmation) whether it has been issued). So check the rate in the system before every payment.
 
-ตรวจล่าสุด 2026-10-23 · แหล่ง: ข่าว DBD 23 ต.ค. 2569 เรื่องให้บริการออนไลน์ช่องทางเดียวตั้งแต่ 1 พ.ย. 2569 https://www.dbd.go.th/news/37630092569 · ประกาศสำนักงานพาณิชย์จังหวัดลพบุรี 29 พ.ค. 2569 เรื่องยุติรับจดตั้งแบบกระดาษ 1 ก.ค. 2569 https://lopburi.moc.go.th/th/content/category/detail/id/161/iid/166937 · ค่าธรรมเนียมและขั้นตอน: คู่มือ DBD 3 ฉบับและกฎกระทรวงในหัวข้อ 1
+Last checked 2026-10-23 · Sources: DBD news of 23 Oct 2026 (B.E. 2569) on online-only service from 1 Nov 2026 https://www.dbd.go.th/news/37630092569 · Lopburi Provincial Commerce Office announcement of 29 May 2026 on ending paper registration on 1 Jul 2026 https://lopburi.moc.go.th/th/content/category/detail/id/161/iid/166937 · fees and steps: the 3 DBD manuals and the ministerial regulation listed in section 1

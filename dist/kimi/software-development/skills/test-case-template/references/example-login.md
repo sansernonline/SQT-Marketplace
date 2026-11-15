@@ -1,6 +1,6 @@
 # Example: Login Feature Test Cases
 
-**สารบัญ:** (หัวข้อเคสอยู่ในกรอบโค้ด จึงลิงก์ไม่ได้ — เลื่อนหาตามรหัสเคส)
+**Contents:** (the case headings are inside a code block, so they cannot be linked. Scroll to the case code.)
 
 - TC-LOGIN-001: Successful login with valid credentials
 - TC-LOGIN-002: Empty email field

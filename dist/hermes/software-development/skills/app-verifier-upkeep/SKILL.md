@@ -3,24 +3,24 @@ name: app-verifier-upkeep
 description: Use when a project verify skill no longer matches the app
 ---
 
-# app-verifier-upkeep — ดูแลมือและตาให้ตรงกับแอป
+# app-verifier-upkeep — keep the hands and eyes in step with the app
 
-> verify skill ที่บอกขั้นตอนผิด อันตรายกว่าไม่มีเลย เพราะ agent จะเชื่อแล้วรายงานว่าผ่าน
+> A verify skill that gives wrong steps is more dangerous than none, because the agent will trust it and report a pass.
 
-ใช้กับ skill ที่สร้างจาก [`app-verifier-setup`](../app-verifier-setup/SKILL.md) · บน Claude Code ไฟล์นั้นคือ `.claude/skills/verify/SKILL.md` (ดู [`app-verifier-setup/references/builtin-verify.md`](../app-verifier-setup/references/builtin-verify.md)) — ดูแลไฟล์เดียว ไม่สร้าง `verify-<โปรเจกต์>` ซ้อน
+Use it with a skill built by [`app-verifier-setup`](../app-verifier-setup/SKILL.md). On Claude Code that file is `.claude/skills/verify/SKILL.md` (see [`app-verifier-setup/references/builtin-verify.md`](../app-verifier-setup/references/builtin-verify.md)). Maintain that one file and do not create a second `verify-<project>`.
 
-## ขั้นตอน
+## Steps
 
-1. **ทำรายการฟีเจอร์จริง** โดยดึงจาก route · เมนู · command list · Software Requirements Specification (SRS) ล่าสุด เทียบกับแผนที่ฟีเจอร์ในสคริปต์ `<project-name>/test/e2e/verify.*` แล้วแยกเป็น 3 กลุ่ม: ตรงกัน · หายจากแผนที่ฟีเจอร์ · ไม่มีในแอปแล้ว
-2. **อ่านโค้ดพร้อมกันหลายตัว** ส่ง agent `qa-tester` ตัวใหม่ 1 ตัวต่อกลุ่มฟีเจอร์ (ไม่เกิน 5 ฟีเจอร์ต่อตัว) ให้อ่านอย่างเดียว แล้วรายงานว่า check ของแต่ละฟีเจอร์ใน `verify.*` ยังตรงกับโค้ดไหม พร้อมไฟล์และเลขบรรทัด โดยใช้ `parallel-split-and-merge`
-3. **ขับแอปจริงรอบเดียว** ใช้ agent ตัวเดียว รัน `verify.*` (สคริปต์เปิดและปิดแอปเอง) ทุกฟีเจอร์ แล้วบันทึกผ่านหรือล้ม · ภาพหน้าจอ · ขั้นที่ล้ม
-4. **แก้เฉพาะสิ่งที่พิสูจน์แล้ว** ทุกจุดที่แก้ต้องมีหลักฐานจากข้อ 2 หรือ 3 ถ้าฟีเจอร์ล้มเพราะแอปพังจริง ไม่ใช่เพราะขั้นตอนผิด ให้แยกเป็นรายงานบั๊ก (`bug-report-template`) อย่าแก้ขั้นตอนให้ผ่าน
-5. **เพิ่มฟีเจอร์ที่หายจากแผนที่** ตามรูปแบบเดิม และรันจริงอย่างน้อย 1 ครั้งก่อนบันทึก
-6. **รวมการแก้เป็นชุดเดียว** เตรียมไว้เป็น commit เดียวหรือ Pull Request (PR) เดียว (commit เมื่อผู้ใช้สั่งเท่านั้น) และในข้อความบอกจำนวนแต่ละกลุ่ม: ตรงกัน · แก้ · เพิ่ม · ลบ · บั๊กที่พบ
-7. `status-report` ประเภท `ตรวจ`
+1. **List the real features** by pulling from routes · menu · command list · the latest Software Requirements Specification (SRS). Compare against the feature map in the script `<project-name>/test/e2e/verify.*`, and split into 3 groups: matching · missing from the feature map · no longer in the app.
+2. **Read the code in parallel.** Send 1 fresh `qa-tester` agent per feature group (at most 5 features each). Each reads only, then reports whether each feature's checks in `verify.*` still match the code, with file and line number, using `parallel-split-and-merge`.
+3. **Drive the real app once.** Use 1 agent to run `verify.*` (the script opens and closes the app itself) for every feature, and record pass or fail · screenshots · the step that failed.
+4. **Fix only what is proven.** Every fix needs evidence from step 2 or 3. If a feature fails because the app is really broken, not because the steps are wrong, file it as a bug report (`bug-report-template`). Do not edit the steps to make it pass.
+5. **Add the features missing from the map** in the existing format, and run each at least once for real before saving.
+6. **Bundle the fixes into one set**, prepared as a single commit or a single Pull Request (PR) (commit only when the user says so), and state the count of each group in the message: matching · fixed · added · removed · bugs found.
+7. `status-report` type `ตรวจ` (check).
 
-## สิ่งที่ห้ามทำ
+## What not to do
 
-- แก้ขั้นตอนให้ผ่านทั้งที่แอปทำงานผิด เพราะเท่ากับซ่อนบั๊กไว้ในเครื่องมือตรวจ
-- ลบฟีเจอร์ออกจากแผนที่เพราะทดสอบยาก
-- แตก PR เป็นหลายชิ้นเล็ก ๆ เพราะคนรีวิวต้องเห็นภาพรวมของการเปลี่ยนในรอบเดียว
+- Edit the steps to pass when the app behaves wrongly, because that hides the bug inside the checking tool.
+- Remove a feature from the map because it is hard to test.
+- Split the PR into many small pieces, because the reviewer needs to see the whole change in one round.

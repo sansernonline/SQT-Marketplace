@@ -6,13 +6,13 @@ Use when sending broadcast messages to LINE OA friends
 
 Every broadcast uses message quota and customers' patience. Check both before you send.
 
-## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+## 0 · Look for an existing format first (every time)
 
-ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+Before using the structure or templates in this file, check whether the user, customer or project already has its own format:
 
-- **ที่ดู:** ผลบรอดแคสต์ครั้งก่อนของร้านใน LINE Official Account Manager (อัตราเปิด อัตราคลิก จำนวนบล็อกหลังส่ง) · ข้อความที่ได้ผลดีที่สุด 2–3 ครั้ง · น้ำเสียงร้านจากแชตจริง
-- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
-- **ยังต้องมีทุกแบบ:** แม่แบบในข้อ 4 เป็นค่าสำรอง · ข้อความยาวเกินหรือส่งถี่จนคนบล็อก ดูจากตัวเลขของร้านเอง
+- **Where to look:** the shop's previous broadcast results in LINE Official Account Manager (open rate · click rate · number of blocks after sending) · the 2–3 best-performing messages · the shop's tone from real chats
+- **Result:** found → use it (headings, order, field names, running numbers) and say in the reply which file the format came from · Not found → use the template in this file as a fallback and say that no earlier format was found
+- **Always required in every format:** the template in section 4 is a fallback · judge whether a message is too long or sends so often that people block by the shop's own numbers
 
 ## 1. Quota math
 

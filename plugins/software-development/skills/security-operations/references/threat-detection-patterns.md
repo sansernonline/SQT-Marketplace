@@ -80,9 +80,9 @@ Impact                Mass file modification, encryption
 
 ## Detection Examples (Splunk SPL)
 
-> **ยังไม่ได้ตรวจ** — query ด้านล่างเขียนตามไวยากรณ์ใน Splunk docs แต่ยังไม่ได้รันกับ Splunk จริง ชื่อ index และชื่อ field ขึ้นกับ add-on ที่ติดตั้ง (ตัวอย่างใช้ `index=sysmon` = Microsoft Sysmon ผ่าน Splunk Add-on for Sysmon และ `index=wineventlog` = Windows Security log) — ปรับให้ตรงของจริงแล้วทดสอบกับข้อมูลย้อนหลังก่อนเปิดใช้
+> **ยังไม่ได้ตรวจ** — the queries below follow the syntax in the Splunk docs but have not been run against a real Splunk. Index names and field names depend on the installed add-ons (the examples use `index=sysmon` = Microsoft Sysmon through the Splunk Add-on for Sysmon, and `index=wineventlog` = the Windows Security log). Adjust them to the real setup and test against historical data before enabling.
 >
-> กฎไวยากรณ์ที่พลาดบ่อย: wildcard `*` ใช้ได้ใน `search` (ต้นท่อ) เท่านั้น — ใน `where` ต้องใช้ `like(field, "%x")` หรือ `match(field, "regex")` · หมายเหตุใน SPL เขียนด้วย triple backtick ไม่ใช่ `#` · `stdev()` เป็นฟังก์ชันของ `stats` ใช้ใน `eval` ไม่ได้
+> Syntax rules that are often missed: the wildcard `*` works only in `search` (the start of the pipeline) — in `where` use `like(field, "%x")` or `match(field, "regex")` · write comments in SPL with triple backticks, not `#` · `stdev()` is a `stats` function and cannot be used in `eval`
 
 Event ที่ใช้: Sysmon `EventCode=1` = process create · `10` = process access · `13` = registry value set · Windows Security `4688` = process create (ต้องเปิด audit + command line) · `4624`/`4625` = logon สำเร็จ/ล้มเหลว · `4697` = ติดตั้ง service · `4698` = สร้าง scheduled task
 

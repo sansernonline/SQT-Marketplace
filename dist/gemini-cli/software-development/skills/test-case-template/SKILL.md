@@ -13,14 +13,14 @@ argument-hint: <feature or user story>
 - Building a regression test suite
 - Reviewing test coverage gaps
 
-## ไม่ใช้เมื่อ
+## When not to use
 
-| งาน | ใช้ตัวนี้แทน |
+| Task | Use this instead |
 |---|---|
-| รายงานข้อบกพร่องที่เจอแล้ว 1 เรื่อง | `bug-report-template` |
-| รันเคสแล้วเก็บหลักฐาน (GIF) · รายงานผ่าน/ไม่ผ่าน | `test-evidence` |
-| คัดรายงานบั๊กที่กองอยู่ในกล่องข้อความ | `bug-inbox-triage` |
-| ตัดสินสัดส่วน unit · integration · end-to-end (E2E) หรือเขียนโค้ด test | `testing-standards` · `e2e-testing-patterns` |
+| A report of 1 defect that was already found | `bug-report-template` |
+| Running the cases and collecting evidence (GIF) · pass/fail report | `test-evidence` |
+| Sorting bug reports piled up in an inbox | `bug-inbox-triage` |
+| Deciding the ratio of unit · integration · end-to-end (E2E) tests, or writing test code | `testing-standards` · `e2e-testing-patterns` |
 
 ## Where test cases live
 
@@ -33,13 +33,13 @@ Test cases go in the `qa/` folder at the project root, never inside `docs/`. Use
 - Columns `test_result` (what actually happened) and `evidence` (GIF link) follow `result`, added empty if the table lacks them. After a run, `--results qa/evidence/<run-id>/results.csv` fills all three — see `test-evidence`. A workbook the user made themselves → `test-evidence/scripts/record_results.py`.
 - Check: open it in Excel; the Overview totals must equal the source row count.
 
-## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+## 0 · Look for an existing format first (every time)
 
-ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+Before using the structure or template in this file, check whether the user, the customer, or the project already has its own format:
 
-- **ที่ดู:** แบบ test case ของลูกค้าหรือทีม QA: ไฟล์ Excel/CSV ใน `docs/` หรือ `ref/` · เครื่องมือที่ใช้อยู่ (TestRail · Zephyr · Xray · Azure Test Plans) และฟิลด์บังคับของมัน · test case ชุดก่อนของโปรเจกต์ → ดูคอลัมน์ ระบบรหัส และระดับความสำคัญ
-- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
-- **ยังต้องมีทุกแบบ:** รหัสต้องต่อจากชุดเดิม · ผลที่คาดหวังต้องมาจากข้อกำหนดเหมือนเดิม
+- **Where to look:** the test case format of the customer or QA team: Excel/CSV files in `docs/` or `ref/` · the tool in use (TestRail · Zephyr · Xray · Azure Test Plans) and its mandatory fields · the project's earlier test case set → look at the columns, the ID system, and the priority levels
+- **Result:** found → use that format (headings, order, field names, run numbers) and say in the answer which file the format came from · not found → use the template in this file as a fallback and say that no existing format was found
+- **Still required in every format:** IDs must continue from the existing set · expected results must still come from the requirements
 
 ## Test Case ID Convention
 
@@ -62,34 +62,34 @@ Copy **[`assets/test-case.md`](assets/test-case.md)** once per test case and fil
 
   It flags missing or reordered headings, missing fields, changed table headers, and anything still unfilled (`<...>`, `YYYY-MM-DD`, `XXXX`, `...`, a field still listing every option).
 
-## ผลที่คาดหวังมาจากไหน (oracle)
+## Where the expected result comes from (oracle)
 
-ทุก TC บอกในช่อง **Oracle** ว่าผลที่คาดหวังมาจากใคร
+Every TC says in the **Oracle** field who the expected result comes from.
 
-| ป้าย | ฟังจาก | เชื่อได้ |
+| Label | Heard from | Trust |
 |---|---|---|
-| `[D]` เจ้าของงาน | ลูกค้า · เจ้าของระบบ → `docs/USER-STORIES.md` · REQUIREMENTS · ข้อมูลทดสอบที่เขายืนยัน | ✓ สูงสุด |
-| `[R]` กฎทั่วไป | คณิตศาสตร์ · กฎหมาย · มาตรฐาน · สามัญสำนึก → เขียนเหตุผลกำกับ | ดี |
-| `[A]` คนสร้าง | SPEC · README · คำอ้างของคนหรือ AI ที่เขียนระบบ | ต่ำ — ตรวจงานตัวเอง |
-| `[O]` หน้าจอ | สิ่งที่เห็นตอนสำรวจระบบ | ต่ำสุด — ระบบอาจผิดอยู่แล้ว |
+| `[D]` the work owner | the customer · the system owner → `docs/USER-STORIES.md` · REQUIREMENTS · test data they confirmed | ✓ highest |
+| `[R]` general rule | mathematics · law · standards · common sense → write the reason beside it | good |
+| `[A]` the builder | SPEC · README · claims of the person or AI who wrote the system | low — it checks its own work |
+| `[O]` the screen | what was seen while exploring the system | lowest — the system may already be wrong |
 
-- ทุก TC ต้องมี `[D]` หรือ `[R]` · มีแค่ `[A]` / `[O]` → ใส่ `[O-ยังไม่ยืนยัน]` แล้วเพิ่มเป็นคำถามถึงเจ้าของงาน (ผ่าน BA หรือหัวหน้าทีม)
-- ทุก `[O-ยังไม่ยืนยัน]` ต้องมีเลขคำถามกำกับ (เช่น `Q7`) ไม่ใช้ป้ายลอย ๆ
-- **ระดับความสำคัญ:** TC ด้าน Security (XSS · open redirect · IDOR · ยิง API ข้ามการตรวจของหน้าเว็บ · แก้ราคา/สต็อกฝั่งเครื่องแล้วสั่งได้) เป็น P1 เสมอ ไม่ว่าอยู่ฟีเจอร์ไหน · TC อื่นใช้ระดับเดียวกับฟีเจอร์
-- **ระบบตอนนี้ทำผิดอยู่แล้ว:** เขียนผลที่คาดหวังเป็นพฤติกรรมที่ถูก แล้วต่อท้าย `(ตอนนี้ล้ม: …)` ว่าระบบให้ผลอะไร · นับข้อที่มีป้ายนี้และแยกตามระดับ เพื่อคาดการณ์ว่ารอบแรกจะไม่ผ่านเกณฑ์ออกกี่ข้อ (ตัวอย่างจากงานนั้น: 88 ข้อมีป้าย ในนั้น 39 ข้อเป็น P1)
-- `[A]` ใช้ได้กับรายละเอียดที่เจ้าของงานไม่สนใจ เช่น ข้อความ error คำต่อคำ · แต่ "ต้องห้าม / ต้องเตือน" ต้องมี `[D]` หรือ `[R]` รองรับ
-- **อย่าอบบั๊กลงในผลที่คาดหวัง** → ตัวเลขเงิน แต้ม ยอดรวม คิดจาก `[D]` + `[R]` **ก่อนเปิดระบบ** และเขียนวิธีคิดไว้ (`฿800 − 5% (฿40) = ฿760`) · ห้ามลอกค่าจากหน้าจอ เพราะถ้าระบบผิดอยู่แล้ว test จะผ่านตลอดไป
+- Every TC needs `[D]` or `[R]`. If it has only `[A]` / `[O]`, put `[O-ยังไม่ยืนยัน]` (observed, not confirmed) and add it as a question to the work owner (through the BA or the team lead).
+- Every `[O-ยังไม่ยืนยัน]` must carry a question number (for example `Q7`). Never use the label by itself.
+- **Priority:** a Security TC (XSS · open redirect · IDOR · calling the API around the web page's checks · changing price/stock on the client and still being able to order) is always P1, whichever feature it sits in. Other TCs use the same priority as the feature.
+- **The system is already wrong today:** write the expected result as the correct behavior, then append `(ตอนนี้ล้ม: …)` (currently failing: …) with what the system returns. Count the items with this label and split them by priority, to forecast how many items will fail the exit criteria in the first round (example from that work: 88 items had the label, 39 of them P1).
+- `[A]` is fine for details the work owner does not care about, such as the exact wording of an error message. But a "must not / must warn" rule needs `[D]` or `[R]` behind it.
+- **Do not bake the bug into the expected result.** Work out money, points, and totals from `[D]` + `[R]` **before opening the system**, and write the working (`฿800 − 5% (฿40) = ฿760`). Never copy a value from the screen, because if the system is already wrong, the test will pass forever.
 
-**ค่าขอบผูกกับกฎ** → กฎธุรกิจ (Business Rule, BR) ที่มีตัวเลข 1 ข้อ = 3 ค่า: ต่ำกว่าขอบ · ที่ขอบ · เกินขอบ เช่น `ส่งฟรี ≤ 5 กม.` → 4.9 · 5.0 · 5.1 · ช่อง Related อ้าง BR ด้วย
+**Boundary values tied to rules.** A business rule (BR) with a number gives 3 values: below the edge · at the edge · over the edge. For example `free delivery ≤ 5 km` → 4.9 · 5.0 · 5.1. The Related field cites the BR too.
 
-**จังหวะตรวจ** → TC ที่เปลี่ยนข้อมูล (จอง · ยกเลิก · แต้ม · สต็อก · สิทธิ์) ใส่ **Check when** = `ทันที` · `หลังรีโหลด` · `ทั้งสอง` · ถูกทันทีแต่หายหลังรีโหลด = ไม่ได้บันทึกจริง
+**When to check.** A TC that changes data (booking · cancelling · points · stock · permissions) gets **Check when** = `ทันที` (immediately) · `หลังรีโหลด` (after reload) · `ทั้งสอง` (both). Right at once but gone after a reload = it was not really saved.
 
-**ครอบคลุมและโยงกลับ** → ท้ายไฟล์ test case มี 2 ตาราง
+**Coverage and tracing back.** At the end of the test case file there are 2 tables.
 
-| ตาราง | หน้าตา | กติกา |
+| Table | Looks like | Rule |
 |---|---|---|
-| Coverage matrix | ฟีเจอร์ × เทคนิค (Happy · Negative · Boundary · Equivalence · State · Security/API) | ช่องที่ควรมีแต่ยังว่าง → ระวัง + เหตุผล · ไม่เกี่ยว → `—` |
-| Traceability | FR / BR → รหัส TC | BR ทุกข้อมี ≥ 1 TC · ไม่มี → ระวัง แล้วเพิ่ม TC |
+| Coverage matrix | feature × technique (Happy · Negative · Boundary · Equivalence · State · Security/API) | A cell that should have a case but is empty → `ระวัง` (watch out) + the reason · not relevant → `—` |
+| Traceability | FR / BR → TC ID | Every BR has ≥ 1 TC · if none → `ระวัง`, then add a TC |
 
 ## Test Case Categories (Coverage Guide)
 
@@ -181,7 +181,7 @@ Each test case should:
 - Only happy-path tests (must include negative + boundary)
 - Tests with no traceability to requirements
 - Expected result copied from the screen or the builder's SPEC — it bakes the bug into the test
-- Test fails → expected result edited to match the system. Triage first (`qa-tester` → เมื่อผลไม่ตรง)
+- Test fails → expected result edited to match the system. Triage first (`qa-tester` → "when the result does not match")
 
 ---
 
@@ -198,9 +198,9 @@ load the matching skill before writing, not after:
 
 Default formatting is not neutral — it reads as unfinished work.
 
-**อ่านเพิ่มเมื่อต้องใช้:** [`references/test-plan-template.md`](references/test-plan-template.md) — แม่แบบ
+**Read more when needed:** [`references/test-plan-template.md`](references/test-plan-template.md) — template
 
-## เรียกเป็นคำสั่ง
+## Run as a command
 
 `/software-development:test-case-template <feature or user story>`
 

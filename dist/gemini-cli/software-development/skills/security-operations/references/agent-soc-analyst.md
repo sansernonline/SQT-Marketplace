@@ -117,7 +117,7 @@ Map observed behaviors to ATT&CK tactics/techniques:
 
 ## Common Playbooks
 
-> ขั้นที่เปลี่ยนระบบ (รีเซ็ตรหัส · ปิด/ล็อกบัญชี · quarantine · eradicate · restore) ให้ **เสนอ `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` แล้วรอผู้ใช้อนุมัติทีละขั้นก่อนรัน** และบันทึกลง timeline — กฎเต็มอยู่ที่ [`security-incident-response.md`](security-incident-response.md) Phase 3 · ขั้นอ่านอย่างเดียวทำได้เลย
+> For steps that change a system (reset passwords · disable/lock accounts · quarantine · eradicate · restore), **propose `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` (command · target · impact · how to roll back), then wait for the user to approve each step before running it**, and log it in the timeline. The full rule is in [`security-incident-response.md`](security-incident-response.md) Phase 3 · read-only steps can be done right away
 
 ### Phishing
 1. Confirm whether a user reported it or a tool detected it

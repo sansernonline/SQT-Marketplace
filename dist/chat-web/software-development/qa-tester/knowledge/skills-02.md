@@ -309,19 +309,19 @@ Always use together with `lazy-coding` and `readable-code`, because less code an
 
 ## reference: mobile.md
 
-# principle-secure-by-default · แอปมือถือและแอปที่ไม่มีเซิร์ฟเวอร์
+# principle-secure-by-default · mobile apps and apps with no server
 
-เปิดไฟล์นี้เมื่องานเป็นแอปมือถือหรือเครื่องมือบนเครื่อง · กฎ 10 ข้อใน [`SKILL.md`](../SKILL.md) ยังใช้ทั้งหมด
+Open this file when the work is a mobile app or an on-device tool · the 10 rules in [`SKILL.md`](../SKILL.md) all still apply.
 
-**แอปที่ไม่มีเซิร์ฟเวอร์** (แอปมือถือออฟไลน์ · เครื่องมือบนเครื่อง) ข้อ 2 · 3 · 4 และบัญชีฐานข้อมูลในข้อ 8 มักไม่เกี่ยว แต่ต้องผ่านข้อเพิ่มของมือถือ:
+**An app with no server** (an offline mobile app · an on-device tool) usually does not need items 2 · 3 · 4 and the database accounts in item 8, but it must pass the extra mobile rules:
 
-| # | กฎสำหรับแอปมือถือ | ตัวอย่างที่ผิด → ที่ถูก |
+| # | Rule for mobile apps | Wrong example → right example |
 |---|---|---|
-| M1 | **permission เท่าที่ใช้จริง** รวมที่ plugin เติมให้ | แอปออฟไลน์มี `INTERNET` → ลบออก แล้วตรวจ manifest ที่รวมแล้ว (`security-gate`) |
-| M2 | **component ที่ไม่ต้องให้แอปอื่นเรียก ต้อง `exported="false"`** | activity · service · receiver เปิดหมด → เปิดแค่ activity หลัก |
-| M3 | **ตั้งการสำรองข้อมูลให้ชัด** (`allowBackup` · `dataExtractionRules`) | ปล่อยค่าเริ่มต้นแล้วข้อมูลส่วนตัวไปอยู่ในสำรองบนคลาวด์ → เลือกเองว่าอะไรสำรองได้ |
-| M4 | **ส่งไฟล์ออกผ่าน share sheet ของระบบ / `FileProvider`** | เขียนไฟล์ลงที่ที่ทุกแอปอ่านได้แล้วส่ง path → แชร์ผ่าน URI ชั่วคราวที่ให้สิทธิ์เฉพาะแอปปลายทาง |
-| M5 | **กุญแจเซ็นแอปไม่อยู่ในแอปหรือ repo** | `key.properties` · `*.jks` ใน git → gitignore + เก็บใน secret store ของ CI และสำรองไว้ (`cicd-and-release`) |
+| M1 | **Only the permissions actually used**, including those a plugin adds | An offline app has `INTERNET` → remove it, then check the merged manifest (`security-gate`) |
+| M2 | **A component that other apps do not need to call must be `exported="false"`** | Every activity · service · receiver is open → open only the main activity |
+| M3 | **Set data backup explicitly** (`allowBackup` · `dataExtractionRules`) | Leave the default and personal data ends up in a cloud backup → choose what may be backed up |
+| M4 | **Send files out through the system share sheet / `FileProvider`** | Write a file where every app can read it and pass the path → share through a temporary URI that grants access only to the receiving app |
+| M5 | **The app signing key is not in the app or the repo** | `key.properties` · `*.jks` in git → gitignore them + keep them in the CI secret store and back them up (`cicd-and-release`) |
 
 
 ---
@@ -583,21 +583,21 @@ Command details and config files for each framework are in `references/per-stack
 
 ## reference: per-stack.md
 
-# ตั้งค่าและตัวอย่างต่อสแต็ก
+# Setup and examples per stack
 
-> ตัวอย่างในไฟล์นี้ **ยังไม่ได้รันทดสอบ** (ยกเว้นหัวข้อ Flutter ที่มาจากแอปจริง Lumio) ส่วนที่เหลือเป็นการตั้งค่ามาตรฐานของแต่ละ framework
-> ตอนรันครั้งแรกให้ดูว่าคำสั่งและ path ตรงกับโครงโปรเจกต์จริงไหม
+> The examples in this file are **not yet run or tested** (except the Flutter section, which comes from a real app, Lumio). The rest is the standard setup of each framework.
+> On the first run, check whether the commands and paths match the real project layout.
 
 ---
 
-## สารบัญ
+## Contents
 
 1. [.NET — xUnit](#net--xunit)
 2. [Node / TypeScript — Vitest](#node--typescript--vitest)
 3. [Python — pytest](#python--pytest)
 4. [Angular](#angular)
 5. [Flutter / Dart — flutter_test](#flutter--dart--flutter_test)
-6. [ตารางเทียบ](#ตารางเทียบ)
+6. [Comparison table](#comparison-table)
 
 ---
 
@@ -606,8 +606,8 @@ Command details and config files for each framework are in `references/per-stack
 ```bash
 dotnet new xunit -o tests/MyApp.Tests
 dotnet add tests/MyApp.Tests reference src/MyApp
-dotnet add tests/MyApp.Tests package AwesomeAssertions     # assert ที่อ่านเป็นประโยค (.Should()) · ใช้แทน FluentAssertions ตั้งแต่ v8 ที่ต้องซื้อไลเซนส์ Xceed เมื่อใช้เชิงพาณิชย์ · AwesomeAssertions ฟรี Apache-2.0 ตรวจ 22 ต.ค. 2569 จาก nuget.org
-dotnet add tests/MyApp.Tests package NSubstitute           # mock ที่ syntax สั้นกว่า Moq
+dotnet add tests/MyApp.Tests package AwesomeAssertions     # assertions that read like sentences (.Should()) · use instead of FluentAssertions since v8, which needs a paid Xceed license for commercial use · AwesomeAssertions is free, Apache-2.0, checked 22 Oct 2026 (B.E. 2569) on nuget.org
+dotnet add tests/MyApp.Tests package NSubstitute           # mocks with shorter syntax than Moq
 dotnet add tests/MyApp.Tests package Microsoft.AspNetCore.Mvc.Testing   # integration
 dotnet add tests/MyApp.Tests package Testcontainers.PostgreSql
 ```
@@ -628,7 +628,7 @@ public class DiscountCalculatorTests
         result.Should().Be(150m);
     }
 
-    // Theory = ทดสอบหลายเคสด้วยโค้ดชุดเดียว — ห้ามเขียนลูปเอง
+    // Theory = test many cases with one body of code — never write the loop yourself
     [Theory]
     [InlineData(MemberTier.None, 0)]
     [InlineData(MemberTier.Silver, 50)]
@@ -639,7 +639,7 @@ public class DiscountCalculatorTests
 }
 ```
 
-Integration ผ่าน `WebApplicationFactory` — ยิง HTTP จริงเข้า pipeline จริงโดยไม่ต้องเปิดพอร์ต:
+Integration through `WebApplicationFactory` — sends real HTTP into the real pipeline without opening a port:
 
 ```csharp
 public class OrdersApiTests(WebApplicationFactory<Program> factory)
@@ -655,8 +655,8 @@ public class OrdersApiTests(WebApplicationFactory<Program> factory)
 ```
 
 ```bash
-dotnet test                                        # ทั้งหมด
-dotnet test --filter "FullyQualifiedName!~Integration"   # เฉพาะ unit
+dotnet test                                        # everything
+dotnet test --filter "FullyQualifiedName!~Integration"   # unit tests only
 dotnet test --collect:"XPlat Code Coverage"
 ```
 
@@ -678,7 +678,7 @@ export default defineConfig({
     globals: true,
     environment: 'node',
     include: ['src/**/*.test.ts'],
-    // ไฟล์ setup ใช้ตั้ง fake timer / ล้าง mock ให้ทุกไฟล์เหมือนกัน
+    // the setup file sets fake timers / clears mocks the same way for every file
     setupFiles: ['./test/setup.ts'],
     coverage: {
       provider: 'v8',
@@ -695,7 +695,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { DiscountCalculator } from '../src/discount';
 
 describe('DiscountCalculator', () => {
-  beforeEach(() => vi.restoreAllMocks());   // กันสถานะรั่วข้าม test
+  beforeEach(() => vi.restoreAllMocks());   // stop state leaking across tests
 
   it('gives gold members a 15 percent discount', () => {
     const sut = new DiscountCalculator();
@@ -710,12 +710,12 @@ describe('DiscountCalculator', () => {
 });
 ```
 
-คุมเวลาแทนการ `sleep`:
+Control time instead of using `sleep`:
 
 ```ts
 vi.useFakeTimers();
 vi.setSystemTime(new Date('2026-01-15T10:00:00+07:00'));
-await vi.advanceTimersByTimeAsync(5000);   // เดินเวลา 5 วิ ทันที
+await vi.advanceTimersByTimeAsync(5000);   // advance 5 seconds at once
 vi.useRealTimers();
 ```
 
@@ -728,8 +728,8 @@ vi.useRealTimers();
 } }
 ```
 
-> **Jest แทน Vitest:** API เกือบเหมือนกัน (`jest.fn` ↔ `vi.fn`) แต่ต้องตั้ง `ts-jest`
-> หรือ babel เพิ่มสำหรับ TypeScript เลือก Jest เมื่อทีมคุ้นอยู่แล้วหรือมี preset ที่ต้องใช้
+> **Jest instead of Vitest:** The API is almost the same (`jest.fn` ↔ `vi.fn`), but you must set up `ts-jest`
+> or babel for TypeScript. Choose Jest when the team already knows it or you need one of its presets.
 
 ---
 
@@ -745,7 +745,7 @@ pip install pytest pytest-cov pytest-randomly
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q --strict-markers --cov=src --cov-report=term-missing"
-markers = ["integration: ต้องมี DB/network — รันแยกจาก unit"]
+markers = ["integration: needs DB/network — run separately from unit"]
 ```
 
 ```python
@@ -764,7 +764,7 @@ def test_create_order_persists_to_db(db_session):
     ...
 ```
 
-`conftest.py` — fixture ที่ใช้ร่วมกัน (คืนสถานะเดิมทุก test):
+`conftest.py` — shared fixtures (restore the original state after every test):
 
 ```python
 import pytest
@@ -774,28 +774,28 @@ def db_session(engine):
     conn = engine.connect()
     tx = conn.begin()
     yield Session(bind=conn)
-    tx.rollback()          # ทุก test เริ่มจากฐานสะอาดเสมอ
+    tx.rollback()          # every test always starts from a clean database
     conn.close()
 ```
 
 ```bash
-pytest                        # ทั้งหมด (pytest-randomly สลับลำดับให้เอง = จับ test ที่พึ่งกัน)
-pytest -m "not integration"   # เฉพาะ unit
-pytest --lf                   # เฉพาะที่แดงรอบก่อน
+pytest                        # everything (pytest-randomly shuffles the order itself = catches tests that depend on each other)
+pytest -m "not integration"   # unit tests only
+pytest --lf                   # only the ones that failed last time
 ```
 
 ---
 
 ## Angular
 
-**Vitest ที่มากับ Angular CLI** (โปรเจกต์ใหม่ — builder `@angular/build:unit-test` ตั้งให้แล้ว รัน `ng test` ไม่ต้องลง plugin เพิ่ม · Karma ยังใช้ได้ · ตรวจ 22 ต.ค. 2569 จาก angular.dev/guide/testing) · เพิ่ม Testing Library ถ้าต้องการ query แบบผู้ใช้จริง
+**Vitest that ships with the Angular CLI** (new projects — the builder `@angular/build:unit-test` is already configured, run `ng test` with no extra plugin · Karma still works · checked 22 Oct 2026 (B.E. 2569) on angular.dev/guide/testing) · add Testing Library if you want queries the way a real user finds things
 
 ```bash
 ng test
 npm i -D @testing-library/angular @testing-library/user-event
 ```
 
-โปรเจกต์ Angular รุ่นเก่า (ไม่มี builder นี้) → ย้ายจาก Karma ตามคู่มือ angular.dev/guide/testing/migrating-to-vitest หรือใช้ `@analogjs/vite-plugin-angular` คู่กับ `vitest` และ `jsdom`
+For older Angular projects (without this builder) → migrate from Karma following angular.dev/guide/testing/migrating-to-vitest, or use `@analogjs/vite-plugin-angular` with `vitest` and `jsdom`
 
 ```ts
 import { render, screen } from '@testing-library/angular';
@@ -811,10 +811,10 @@ it('shows a required error when the name is empty on submit', async () => {
 });
 ```
 
-> ทดสอบจาก**มุมผู้ใช้** — หาปุ่มด้วยข้อความที่คนเห็น (`getByRole`, `getByText`)
-> ไม่ใช่ `By.css('.btn-primary')` เพราะพอเปลี่ยนคลาส CSS test จะแดงทั้งที่ UI ยังทำงานถูก
+> Test from the **user's point of view** — find a button by the text people see (`getByRole`, `getByText`),
+> not `By.css('.btn-primary')`, because once the CSS class changes the test turns red even though the UI still works correctly.
 
-**Jasmine + Karma** (ค่าเริ่มต้นเดิมของ Angular — ใช้ต่อได้ถ้าโปรเจกต์มีอยู่แล้ว):
+**Jasmine + Karma** (Angular's old default — keep using it if the project already has it):
 
 ```ts
 describe('DiscountService', () => {
@@ -831,29 +831,29 @@ describe('DiscountService', () => {
 ```
 
 ```bash
-ng test --watch=false --browsers=ChromeHeadless --code-coverage    # สำหรับ CI
+ng test --watch=false --browsers=ChromeHeadless --code-coverage    # for CI
 ```
 
 ---
 
 ## Flutter / Dart — flutter_test
 
-มากับ SDK ไม่ต้องลงอะไร ไฟล์ test อยู่ใน `test/` และล้อโครง `lib/` (`lib/features/measure/lux_math.dart` → `test/features/measure/lux_math_test.dart`) ส่วนชื่อไฟล์ใช้ snake_case ตามธรรมเนียม Dart
+It ships with the SDK, so there is nothing to install. Test files live in `test/` and mirror the structure of `lib/` (`lib/features/measure/lux_math.dart` → `test/features/measure/lux_math_test.dart`). File names use snake_case, the Dart convention.
 
 ```dart
-// fake ของสะพานไปฝั่ง native: implements คลาสจริงได้เลย ไม่ต้องสร้าง interface ใหม่
+// fake of the bridge to the native side: you can implement the real class directly, with no new interface
 class FakeDeviceLight implements DeviceLight {
   final _lux = StreamController<double>.broadcast();
   void emitSensor(double lux) => _lux.add(lux);
   @override
   Stream<double> sensorLux() => _lux.stream;
-  // ...override ที่เหลือคืนค่าที่ test เลือก (มี sensor ไหม · สิทธิ์กล้อง)
+  // ...the remaining overrides return the values the test chooses (has a sensor or not · camera permission)
 }
 
 void main() {
   group('measure screen', () {
     testWidgets('shows live lux and verdict', (tester) async {
-      // จอทดสอบเริ่มต้น 800×600 — ตั้งเป็นขนาดมือถือ ไม่งั้นปุ่มอยู่นอกจอแล้วกดพลาด
+      // the default test screen is 800×600 — set it to a phone size, or the button sits off-screen and the tap misses
       tester.view.physicalSize = const Size(1080, 2400);
       tester.view.devicePixelRatio = 2.75;
       addTearDown(tester.view.reset);
@@ -862,47 +862,47 @@ void main() {
       final meter = MeterController(device);
       await tester.pumpWidget(App(meter: meter));
       device.emitSensor(420);
-      await tester.pump(MeterController.tick);   // ไม่ใช้ pumpAndSettle เมื่อมี Timer วนอยู่
+      await tester.pump(MeterController.tick);   // do not use pumpAndSettle when a Timer is looping
 
       expect(find.textContaining('420 lux'), findsOneWidget);
-      meter.dispose();   // ปิด Timer ในตัว test เอง ไม่งั้นล้มด้วย "A Timer is still pending"
+      meter.dispose();   // close the Timer inside the test itself, or it fails with "A Timer is still pending"
     });
   });
 }
 ```
 
-| เรื่อง | ทำอย่างนี้ |
+| Topic | Do this |
 |---|---|
-| ชั้น test | unit (`test`) ใช้กับตรรกะล้วน ส่วน widget (`testWidgets`) ใช้กับหน้าจอและเป็นชั้นกลางหลัก ถ้าเป็น E2E บนเครื่อง ใช้ `integration_test` (`flutter test integration_test/`) หรือสคริปต์ `adb` ตาม `app-verifier-setup` |
-| platform channel | fake ด้วยคลาสที่ `implements` คลาสสะพานของจริง แล้วค่อยลง `mocktail` เมื่อ fake ด้วยมือเริ่มยาวเท่านั้น |
-| `pumpAndSettle` | ใช้ได้เมื่อหน้าจอหยุดนิ่งจริง ถ้ามี Timer หรือ animation วนตลอด จอจะไม่มีวันนิ่งจนหมดเวลา ให้ใช้ `pump(duration)` แทน |
-| Timer ค้าง | dispose controller ที่ถือ Timer ในตัว test เองก่อนบรรทัดสุดท้าย เพราะ Timer ที่ยังวิ่งอยู่ตอนจบจะทำให้ test ล้ม |
-| จอเล็ก | test แยก 1 ชุดที่ 360×800 dp ภาษาไทย + `textScaler` ใหญ่ เพื่อจับข้อความล้น (Flutter ฟ้อง overflow เป็น exception ใน test) |
-| SnackBar บังปุ่ม | widget test จับได้ โดยกดปุ่มล่างหลัง SnackBar ขึ้น แล้ว assert **ผลของการกด** (`tester.tap` ที่โดนของบังแค่พิมพ์คำเตือน ไม่ทำให้ล้ม) |
-| golden test | ไม่บังคับ เพราะภาพต่างกันตามเครื่องและฟอนต์ ใช้เมื่อทีมมีเครื่อง CI ตายตัว |
+| Test layers | unit (`test`) is for pure logic, while widget (`testWidgets`) is for screens and is the main middle layer. For on-device E2E, use `integration_test` (`flutter test integration_test/`) or an `adb` script per `app-verifier-setup` |
+| platform channel | fake it with a class that `implements` the real bridge class, and add `mocktail` only when the hand-written fake grows long |
+| `pumpAndSettle` | Fine when the screen really settles. If a Timer or animation loops forever, the screen never settles until it times out, so use `pump(duration)` instead |
+| Pending Timer | Dispose the controller that holds a Timer inside the test itself before the last line, because a Timer still running at the end makes the test fail |
+| Small screen | Add 1 separate test set at 360×800 dp with Thai text + a large `textScaler` to catch overflow (Flutter reports overflow as an exception in tests) |
+| SnackBar covers a button | A widget test catches it by tapping the lower button after the SnackBar appears, then asserting **the result of the tap** (a `tester.tap` that hits something covering it only prints a warning and does not fail) |
+| golden test | Optional, because images differ by machine and font. Use it when the team has a fixed CI machine. |
 | coverage | `flutter test --coverage` → `coverage/lcov.info` |
-| พิสูจน์ว่า test ใช้ได้ | แก้โค้ดให้ผิด 1 จุด รันแล้วต้องแดง แล้วแก้กลับ |
+| Prove the test is useful | Break the code in 1 place, run it, and it must go red, then fix it back |
 
 ```bash
-flutter test                              # ทั้งหมด
-flutter test test/features/measure        # โฟลเดอร์เดียว
+flutter test                              # everything
+flutter test test/features/measure        # one folder
 flutter test --coverage
-flutter test integration_test/            # ต้องมี emulator หรือเครื่องจริงต่ออยู่
+flutter test integration_test/            # needs an emulator or a real device connected
 ```
 
 ---
 
-## ตารางเทียบ
+## Comparison table
 
-| เรื่อง | xUnit | Vitest | pytest | Angular (Vitest) | flutter_test |
+| Topic | xUnit | Vitest | pytest | Angular (Vitest) | flutter_test |
 |---|---|---|---|---|---|
-| หลายเคส | `[Theory]` + `[InlineData]` | `it.each` | `@pytest.mark.parametrize` | `it.each` | วน `for` สร้าง `test(...)` ใน `group` |
-| mock | NSubstitute `Substitute.For<T>()` | `vi.fn()` / `vi.mock()` | `unittest.mock` / `mocker` | `vi.fn()` + `providers` | คลาส `implements` · `mocktail` |
-| ก่อน/หลังแต่ละ test | constructor / `IDisposable` | `beforeEach` / `afterEach` | fixture | `beforeEach` | `setUp` / `tearDown` / `addTearDown` |
-| คุมเวลา | inject `TimeProvider` | `vi.useFakeTimers()` | `freezegun` | `vi.useFakeTimers()` | `tester.pump(duration)` · `fakeAsync` |
-| DB จริง | Testcontainers | Testcontainers | Testcontainers / `pytest-postgresql` | — | — (`SharedPreferences.setMockInitialValues`) |
+| Many cases | `[Theory]` + `[InlineData]` | `it.each` | `@pytest.mark.parametrize` | `it.each` | a `for` loop that creates `test(...)` inside a `group` |
+| mock | NSubstitute `Substitute.For<T>()` | `vi.fn()` / `vi.mock()` | `unittest.mock` / `mocker` | `vi.fn()` + `providers` | an `implements` class · `mocktail` |
+| Before/after each test | constructor / `IDisposable` | `beforeEach` / `afterEach` | fixture | `beforeEach` | `setUp` / `tearDown` / `addTearDown` |
+| Control time | inject `TimeProvider` | `vi.useFakeTimers()` | `freezegun` | `vi.useFakeTimers()` | `tester.pump(duration)` · `fakeAsync` |
+| Real DB | Testcontainers | Testcontainers | Testcontainers / `pytest-postgresql` | — | — (`SharedPreferences.setMockInitialValues`) |
 | coverage | `--collect:"XPlat Code Coverage"` | `--coverage` | `--cov` | `--coverage` | `--coverage` |
-| สลับลำดับ | ไม่มีในตัว | `--sequence.shuffle` | `pytest-randomly` | `--sequence.shuffle` | `--test-randomize-ordering-seed random` |
+| Shuffle order | Not built in | `--sequence.shuffle` | `pytest-randomly` | `--sequence.shuffle` | `--test-randomize-ordering-seed random` |
 
 
 ---
@@ -911,7 +911,7 @@ flutter test integration_test/            # ต้องมี emulator หร�
 
 Use when writing end-to-end tests or fixing flaky ones
 
-> **ใน SuperUser:** ถ้าอยากให้ agent รันแอปและพิสูจน์ผลเอง ให้ใช้ [`app-verifier-setup`](../app-verifier-setup/SKILL.md) ส่วน skill นี้คือหลักออกแบบชุดทดสอบ E2E (end-to-end) ที่ verifier นั้นเรียกใช้
+> **In SuperUser:** to have an agent run the app and prove the result itself, use [`app-verifier-setup`](../app-verifier-setup/SKILL.md). This skill holds the design principles for the E2E (end-to-end) test suite that verifier calls.
 
 # End-to-End Testing Patterns
 
@@ -932,17 +932,17 @@ Use when writing end-to-end tests or fixing flaky ones
 | Writing manual test cases (steps, expected result) | `test-case-template` |
 | Unit or integration tests, test ratio and scope | `testing-standards` |
 
-## อ่านเพิ่มเมื่อ
+## Read more when
 
-| ไฟล์ | เปิดเมื่อ |
+| File | Open when |
 |---|---|
-| [references/page-object-model.md](references/page-object-model.md) | ถ้าจะตั้งโครงชุดทดสอบใหม่ หรือเจอเทสต์ที่ลอกขั้นตอนล็อกอินซ้ำกัน ให้เปิดดูโค้ดเทียบแบบไม่ดีกับแบบ Page Object |
-| [references/test-data-strategies.md](references/test-data-strategies.md) | ตอนเลือกวิธีเตรียมข้อมูลทดสอบ และอยากเห็นข้อดีข้อเสียของทั้ง 4 แบบพร้อมโค้ดตัวอย่าง |
-| [references/flaky-tests.md](references/flaky-tests.md) | ถ้าเทสต์ผ่านบ้างไม่ผ่านบ้าง ให้เปิดดูโค้ดเทียบการรอแบบ sleep กับการรอตามเหตุการณ์ |
-| [references/auth-in-e2e.md](references/auth-in-e2e.md) | ตอนวางวิธีล็อกอินในชุดทดสอบ และต้องการโค้ด `storageState` หรือการฉีด cookie ผ่าน API |
-| [references/ci-and-parallel.md](references/ci-and-parallel.md) | ตอนตั้งการรันขนานหรือแบ่งรอบการรัน E2E ใน CI และต้องรู้ว่าต้องเก็บไฟล์อะไรเมื่อเทสต์ล้ม |
-| [references/coverage-and-libraries.md](references/coverage-and-libraries.md) | ตอนทำตารางความครอบคลุมของเส้นทางผู้ใช้ หรือย้ายคำสั่งระหว่าง Playwright กับ Cypress |
-| [references/oracle-and-mutation.md](references/oracle-and-mutation.md) | ถ้ามีระบบเดิมให้เทียบ (differential) · จะเทียบโครงสร้างหน้าด้วย accessibility tree · อยากรู้ว่าชุดทดสอบจับบั๊กได้จริงไหม (mutation) · หรือต้องบันทึกแล้วเล่นซ้ำคำขอเครือข่ายให้นิ่ง |
+| [references/page-object-model.md](references/page-object-model.md) | You are setting up a new suite structure, or you find tests that copy the same login steps. It shows code comparing the bad way with the Page Object way. |
+| [references/test-data-strategies.md](references/test-data-strategies.md) | You are choosing how to prepare test data and want the pros and cons of all 4 options with sample code. |
+| [references/flaky-tests.md](references/flaky-tests.md) | Tests pass sometimes and fail sometimes. It shows code comparing a sleep wait with an event-based wait. |
+| [references/auth-in-e2e.md](references/auth-in-e2e.md) | You are planning how to log in within the suite and need the `storageState` code or cookie injection through the API. |
+| [references/ci-and-parallel.md](references/ci-and-parallel.md) | You are setting up parallel runs or splitting E2E run rounds in CI, and need to know which files to keep when a test fails. |
+| [references/coverage-and-libraries.md](references/coverage-and-libraries.md) | You are building the user-path coverage table, or translating commands between Playwright and Cypress. |
+| [references/oracle-and-mutation.md](references/oracle-and-mutation.md) | You have an old system to compare against (differential) · you will compare page structure with the accessibility tree · you want to know whether the suite really catches bugs (mutation) · or you must record and replay network requests to keep them stable. |
 
 ## The Testing Pyramid (Get This Right First)
 
@@ -976,7 +976,7 @@ Use when writing end-to-end tests or fixing flaky ones
 
 ## Test Structure: Page Object Model (POM)
 
-ถ้าทุกเทสต์เขียน `page.fill` และ `page.click` ของหน้าเดียวกันซ้ำ ๆ ให้ย้ายขั้นตอนเหล่านั้นไปไว้ในคลาสของหน้านั้น แล้วให้เทสต์เรียกเมธอดแทน โค้ดเทียบอยู่ใน [references/page-object-model.md](references/page-object-model.md)
+If every test repeats the same `page.fill` and `page.click` calls for one page, move those steps into that page's class and have the tests call its methods instead. Comparison code is in [references/page-object-model.md](references/page-object-model.md)
 
 > **One Page Object per page or major component.**
 
@@ -985,25 +985,25 @@ Use when writing end-to-end tests or fixing flaky ones
 ```
 Most resilient ─────────────────────────► Most brittle
 
-ถูก: Role + accessible name      page.getByRole('button', { name: 'Submit' })
-ถูก: Test IDs                     page.getByTestId('submit-btn')
-กลาง: Visible text              page.getByText('Submit')
-กลาง: Label                     page.getByLabel('Email')
-ผิด: CSS classes               page.locator('.btn-primary')
-ผิด: Tag + index               page.locator('button:nth-child(3)')
-ผิด: XPath                        page.locator('//div[2]/button')
+Good:   Role + accessible name   page.getByRole('button', { name: 'Submit' })
+Good:   Test IDs                page.getByTestId('submit-btn')
+Medium: Visible text            page.getByText('Submit')
+Medium: Label                   page.getByLabel('Email')
+Bad:    CSS classes             page.locator('.btn-primary')
+Bad:    Tag + index             page.locator('button:nth-child(3)')
+Bad:    XPath                   page.locator('//div[2]/button')
 ```
 
 **Rule:** Prefer queries that survive refactoring.
 
 ## Test Data Strategy
 
-มี 4 แบบ คือ shared test DB · per-test setup · API setup กับ UI verification · database snapshot กับ rollback
-แบบที่แนะนำคือ **Option 3: API setup, UI verification (best)** — เตรียมข้อมูลผ่าน API ให้เร็วและแน่นอน แล้วค่อยทดสอบ UI จริง ส่วน shared test DB ทำให้เทสต์พึ่งลำดับกัน รันขนานยาก และข้อมูลปนกัน ส่วนข้อดีข้อเสียครบทุกแบบอยู่ใน [references/test-data-strategies.md](references/test-data-strategies.md)
+There are 4 options: shared test DB · per-test setup · API setup with UI verification · database snapshot with rollback.
+The recommended one is **Option 3: API setup, UI verification (best)**. Prepare data through the API so it is fast and certain, then test the real UI. A shared test DB makes tests depend on order, makes parallel runs hard and mixes data. The pros and cons of every option are in [references/test-data-strategies.md](references/test-data-strategies.md)
 
 ## What to Test E2E (Not Everything!)
 
-### ถูก: DO test E2E
+### DO test E2E
 - Critical user journeys (login → checkout → confirmation)
 - Multi-step workflows that span multiple pages
 - Integration with external services (payment, email)
@@ -1019,19 +1019,19 @@ Most resilient ─────────────────────�
 
 > **Rule of thumb:** If a unit/integration test can verify it, don't add E2E.
 
-ให้ทำตารางความครอบคลุมของเส้นทางผู้ใช้ (Critical Path Coverage Matrix) ที่บอกว่าแต่ละเส้นทางครอบคลุมแล้วหรือยัง และสำคัญระดับ P1 P2 หรือ P3 (scale เดียวกับ `test-case-template` และ tag ด้านล่าง · P1 สำคัญสุด) ตัวอย่างอยู่ใน [references/coverage-and-libraries.md](references/coverage-and-libraries.md)
+Make a Critical Path Coverage Matrix that says whether each path is covered yet and how important it is: P1, P2 or P3 (the same scale as `test-case-template` and the tags below · P1 is most important). An example is in [references/coverage-and-libraries.md](references/coverage-and-libraries.md)
 
 ## Expected Values and Failing Tests
 
-ชุด E2E ที่แปลงมาจากแผนทดสอบ (`test-case-template`):
+For an E2E suite converted from a test plan (`test-case-template`):
 
-- ชื่อ test ขึ้นต้นด้วยรหัส TC · tag `@<module>` `@P1|@P2|@P3` · ใส่ผลที่คาดหวังและ oracle เป็น annotation
+- Start each test name with the TC code · tag `@<module>` `@P1|@P2|@P3` · put the expected result and the oracle in an annotation
   `test.info().annotations.push({ type: 'expected', description: '฿760 · [D] BR-03' })`
-- ค่าที่คาดหวังเป็นค่าคงที่จากแผน · ห้ามอ่านค่าจากหน้าจอแล้ว assert กลับ เช่น อ่านราคาจากการ์ดแล้วเทียบยอดรวม → ผิดทั้งคู่ก็ผ่าน
-- reset ข้อมูลก่อนทุก TC (API reset หรือ seed) · ล็อก "วันนี้" ด้วย `page.clock.setFixedTime()` · `timezoneId` · `locale` ใน config
-- TC ที่มี **Check when** `หลังรีโหลด` → `page.reload()` แล้ว assert อีกครั้ง
-- รันทุกเบราว์เซอร์ที่แผนระบุ · เกณฑ์ผ่านคิดแยกทีละเบราว์เซอร์
-- test ล้ม → ห้ามแก้ค่าที่คาดหวัง · จำแนก `app` / `plan` / `test` ตาม agent `qa-tester` ลง `triage.json` · ใน CI ห้าม retry จนผ่านแล้วถือว่าจบ
+- Expected values are constants from the plan · never read a value from the screen and assert it back, for example reading the price from the card and comparing it with the total → if both are wrong, the test still passes
+- Reset data before every TC (API reset or seed) · lock "today" with `page.clock.setFixedTime()` · `timezoneId` · `locale` in the config
+- A TC with **Check when** `หลังรีโหลด` (after reload) → call `page.reload()` and assert again
+- Run every browser the plan names · judge pass criteria per browser separately
+- When a test fails → never edit the expected value · classify it as `app` / `plan` / `test` per the `qa-tester` agent into `triage.json` · in CI, never retry until green and call it done
 
 ## Fighting Flaky Tests
 
@@ -1046,7 +1046,7 @@ Most resilient ─────────────────────�
 | Element not stable | `expect(el).toBeVisible()` before interacting |
 | Click times out "not visible/stable" but the site works | The tab may be in the background (`document.visibilityState === "hidden"`, common with Playwright MCP sharing one browser). Check with `browser_evaluate`, switch to the tab, then click. Do not retry blindly |
 
-ห้ามใช้ `page.waitForTimeout` รอแบบกำหนดเวลา ให้รอเหตุการณ์จริง เช่น response ของ API แทน โค้ดเทียบอยู่ใน [references/flaky-tests.md](references/flaky-tests.md)
+Never use `page.waitForTimeout` for a fixed-time wait. Wait for a real event instead, such as the API response. Comparison code is in [references/flaky-tests.md](references/flaky-tests.md)
 
 ### Retry strategy
 - **In CI:** retry at most 1 time, **only to collect a trace** (`retries: 1` + `trace: 'on-first-retry'`)
@@ -1057,13 +1057,13 @@ Most resilient ─────────────────────�
 
 ## Authentication in E2E
 
-อย่าล็อกอินผ่าน UI ในทุกเทสต์ เพราะช้า เปราะ และโค้ดซ้ำ ให้ล็อกอินครั้งเดียวแล้วแชร์สถานะ (`storageState`) หรือดีกว่านั้นคือล็อกอินผ่าน API แล้วฉีด cookie เข้า browser context โค้ดทั้งสามแบบอยู่ใน [references/auth-in-e2e.md](references/auth-in-e2e.md)
+Do not log in through the UI in every test, because it is slow, brittle and repeats code. Log in once and share the state (`storageState`), or better, log in through the API and inject the cookie into the browser context. Code for all three ways is in [references/auth-in-e2e.md](references/auth-in-e2e.md)
 
 ## Parallelization and CI
 
-เงื่อนไขก่อนรันขนาน (Requirements for safe parallel) อยู่ใน [references/ci-and-parallel.md](references/ci-and-parallel.md)
+The requirements for safe parallel runs are in [references/ci-and-parallel.md](references/ci-and-parallel.md)
 
-แบ่ง E2E ใน CI เป็น 3 รอบ คือ smoke ทุก pull request (PR) บน Chromium ตัวเดียว ที่ล้มแล้วบล็อกการ merge → full ตอน merge เข้า main และทุกคืน บน Chromium + WebKit (จอ iPhone) → pre-prod ก่อน deploy ที่ต้องผ่าน P1 และ P2 บนครบ 3 browser (เพิ่ม Firefox) เมื่อเทสต์ล้มต้องเก็บ screenshot · video · trace · console log · network log ไว้เสมอ ส่วนระดับการรันขนานตาราง browser แต่ละรอบ และรายละเอียดของแต่ละรอบอยู่ใน [references/ci-and-parallel.md](references/ci-and-parallel.md)
+Split E2E in CI into 3 rounds. First, smoke on every pull request (PR) on Chromium only; a failure blocks the merge. Second, full on merge into main and every night, on Chromium + WebKit (iPhone screen). Third, pre-prod before deploy, which must pass P1 and P2 on all 3 browsers (adding Firefox). When a test fails, always keep the screenshot · video · trace · console log · network log. The parallel level, the browser table for each round and the details of each round are in [references/ci-and-parallel.md](references/ci-and-parallel.md)
 
 ## Anti-patterns
 
@@ -1084,14 +1084,14 @@ Most resilient ─────────────────────�
 - Pass rate in main: > 95%
 - Mean time to fix flake: < 2 days
 
-ตารางเทียบคำสั่งที่ใช้บ่อยของ Playwright กับ Cypress (Library Quick Reference) อยู่ใน [references/coverage-and-libraries.md](references/coverage-and-libraries.md)
+The table comparing common Playwright and Cypress commands (Library Quick Reference) is in [references/coverage-and-libraries.md](references/coverage-and-libraries.md)
 
 
 ## reference: auth-in-e2e.md
 
 # Authentication in E2E — ตัวอย่างการล็อกอินในเทสต์
 
-สามวิธีล็อกอินในชุดทดสอบ เรียงจากแย่ไปดี พร้อมโค้ดตัวอย่างของ Playwright
+Three ways to log in within a test suite, ordered from worst to best, with Playwright code examples
 
 ## Bad: log in via UI every test
 ```
@@ -1227,7 +1227,7 @@ Pure-logic tests → Chromium alone is enough.
 
 # Critical Path Coverage Matrix และ Library Quick Reference
 
-ตัวอย่างตารางความครอบคลุมของเส้นทางผู้ใช้ และตารางเทียบคำสั่งที่ใช้บ่อยของ Playwright กับ Cypress
+An example user-journey coverage table, and a table comparing commonly used Playwright and Cypress commands
 
 ## Critical Path Coverage Matrix
 
@@ -1260,9 +1260,9 @@ Priority uses the `test-case-template` scale (P1 = most important, P3 = least), 
 
 ## reference: flaky-tests.md
 
-# Fighting Flaky Tests — ตัวอย่างการรอที่ถูกวิธี
+# Fighting Flaky Tests — examples of waiting the right way
 
-โค้ดเทียบการรอแบบกำหนดเวลากับการรอตามเหตุการณ์ ส่วนตารางสาเหตุและกลยุทธ์การรันซ้ำอยู่ใน `SKILL.md`
+Code comparing a fixed-time wait with an event-based wait. The cause table and the retry strategy are in `SKILL.md`.
 
 ## Bad (sleep hack)
 ```typescript
@@ -1365,7 +1365,7 @@ Observations:
 
 # Page Object Model (POM) — ตัวอย่างโค้ด
 
-ตัวอย่างเทียบเทสต์ที่ไม่มี abstraction กับเทสต์ที่ใช้ Page Object ใช้ตอนตั้งโครงชุดทดสอบหรือรีวิวเทสต์ที่ลอกขั้นตอนซ้ำกัน
+An example comparing a test with no abstraction and a test that uses a Page Object · use it when setting up a test suite or reviewing tests that copy the same steps
 
 ## Bad (no abstraction)
 ```typescript
@@ -1418,7 +1418,7 @@ test('user can login', async ({ page }) => {
 
 # Test Data Strategy — ทางเลือกทั้ง 4 แบบ
 
-ข้อดีข้อเสียของการเตรียมข้อมูลทดสอบแต่ละแบบ พร้อมโค้ดตัวอย่างของแบบที่แนะนำ
+The pros and cons of each way to prepare test data, with code examples of the recommended way
 
 ## Option 1: Shared test DB (popular, problematic)
 ```

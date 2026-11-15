@@ -4,7 +4,7 @@ Use for platform sizes, ratios and safe zones before designing
 
 # Social Formats
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
 
 Right size first, design second. A beautiful post in the wrong ratio gets cropped by the platform, and the crop always takes the headline.
 
@@ -12,7 +12,7 @@ Platforms change sizes, safe zones and file limits without notice, so this skill
 
 ## Workflow
 
-0. **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `social` แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้
+0. **Find reference work first:** search live for the project's terms per `design-references` (plugin `superuser`), type `social`, and take the colours from the chosen work · the stored palette library is used when live search is not possible
 1. **List placements** the campaign really needs (from the `campaign-set` matrix) — only the platforms the audience uses, not every platform
 2. **Group by ratio** — most needs fit 4 canvases: **9:16** (stories, reels, TikTok, Shorts), **4:5** (feed), **1.91:1 / 16:9** (link, X, YouTube), **special** (LINE rich menu, covers)
 3. **Design the master** at the largest canvas of the main ratio (e.g. 1440 × 2560 for 9:16 if ads, 1080 × 1920 for organic)
@@ -160,7 +160,7 @@ Use when one campaign needs assets for many platforms
 
 # Campaign Set
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **ด่านก่อนลงมือ** (pre-work gate, every time): read the owner theme → search live references → 3 directions that really differ → check `no-ai-look` before sending. Follow the "ด่านก่อนลงมือ" section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search is for the layout of this piece). Close the work with the line `ด่านก่อนลงมือ:`
 
 1 concept, every format it needs, in the right order. 5 one-off designs are not a campaign. 1 idea shown 5 ways is.
 

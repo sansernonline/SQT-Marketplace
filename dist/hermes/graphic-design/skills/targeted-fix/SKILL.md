@@ -14,8 +14,8 @@ Resist the urge to rewrite, "improve while you're here", or guess.
 
 | งาน | ใช้ตัวนี้แทน |
 |---|---|
-| ยังไม่รู้ว่าพังเพราะอะไร ต้องไล่หาสาเหตุ (error · ยอดไม่ตรง · flaky test) | `principle-fix-root-cause` แล้วค่อยกลับมาแก้ตรงจุดด้วย skill นี้ |
-| แก้ของที่ใช้ร่วมกันหลายที่ (แม่แบบ · ชีตต้นทาง · helper · type · schema) | ไล่ดูว่าใครใช้ก่อนแก้ (โค้ด: `blast-radius` (plugin `software-development`)) |
+| The cause of the breakage is not known yet and must be traced (error · totals that do not match · flaky test) | `principle-fix-root-cause`, then come back and make the targeted fix with this skill |
+| Editing something shared by many places (template · source sheet · helper · type · schema) | Find out who uses it before editing (code: `blast-radius` (plugin `software-development`)) |
 | ยังไม่เคยอ่านงานส่วนนี้ | อ่านก่อน (โค้ด: `code-orientation` (plugin `software-development`)) |
 
 ## กฎ
@@ -73,4 +73,4 @@ big — split it.
 
 ## ที่มา
 
-mlflow (Apache-2.0) · `mlflow-agent-improvement/SKILL.md` · ดู 2026-11-10 (กรณีที่ต้องไม่เกิดคู่กับเทสต์ล้ม · คำขออธิบายไม่ใช่ใบอนุญาตแก้)
+mlflow (Apache-2.0) · `mlflow-agent-improvement/SKILL.md` · seen 2026-11-10 (cases that must not occur together with a failing test · a request to explain is not permission to edit)

@@ -5,7 +5,7 @@ description: Use when an image needs edits like a background swap
 
 # Image Editing Brief
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสดของผลที่อยากได้ → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) · แก้ภาพเดิมทำ 1 แนวได้ · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Pre-work gate (every time):** read the owner's theme → search live references for the result you want → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) · editing an existing image needs only 1 direction · close the work with a `ด่านก่อนลงมือ:` line
 
 Change only what the brief names. AI edits drift: ask for a new cup and the lighting, the face and the palette change too. The keep list is the anchor.
 

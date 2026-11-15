@@ -1,66 +1,66 @@
-# ทำ 3 แนวแล้วโหวต 2 ใน 3
+# Make 3 styles, then vote 2 of 3
 
-ใช้กับ `SKILL.md` ข้อ 7 · เป็นรูปแบบหนึ่งของ `parallel-attempts-pick-best` ที่เปลี่ยนจาก "คนกลาง 1 ตัว" เป็น "ผู้ตรวจ 3 ตัวโหวต"
-ค่าแรง: ราว 3–5 เท่าของทำแนวเดียว — ใช้ตอนตั้งหน้าตาของโปรเจกต์ครั้งแรก ไม่ใช้ทุกครั้งที่ขึ้นเวอร์ชัน
+Used with `SKILL.md` step 7. It is a variant of `parallel-attempts-pick-best` that swaps "1 middleman agent" for "3 reviewers who vote".
+Cost: about 3–5 times the work of a single style. Use it when you set a project's look for the first time, not at every version bump.
 
-## 1 · เตรียมก่อนปล่อย
+## 1 · Prepare before launching
 
-1. **สำรวจ** (agent ตัวกลาง 1 ตัว อ่านอย่างเดียว) → `_to_delete/cover-lab/survey/SURVEY.md`: คำอธิบายแอป · กริยาหลัก · ไฟล์โลโก้ · สี · ฟอนต์ · ภาพจอหลักจาก mockup · ภาพปกเดิมหน้า 1 (Word ผ่าน COM ซึ่งเป็นช่องสั่งงานโปรแกรมของ Windows → PDF → `pdftoppm`) พร้อมคำติ
-2. **research** (agent ตัวกลาง 1 ตัว ขนานกับข้อ 1) → `research/RESEARCH.md`: ปกเอกสารของบริษัทเทคที่ดูดี · แนวโน้ม · ของที่ดูถูก · เทคนิคภาพจากโค้ด · ข้อจำกัดของ Word · ทุกข้ออ้างมี URL
-3. **โจทย์เดียวกันทุกตัว** `BRIEF.md` — ให้ทุกตัวอ่าน `EXAMPLES.md` และดูภาพรวมปกจริงก่อน (`real-examples.md`) · เริ่มจากเครื่องสร้างปกที่ build ใน Word ได้แล้ว ไม่เขียนใหม่: ของที่ต้องส่ง (ปก SRS ทุกโปรเจกต์ · ภาพชุด BRD/SRS/ARCH · ปกพิมพ์อย่างน้อย 1 ใบ · `src/` รันซ้ำได้ · `METHOD.md` ≤ 90 บรรทัด) · กฎแข็ง (ข้อ 3 และ 9 ของ SKILL.md) · ห้ามเปิดโฟลเดอร์ของตัวอื่น
-4. **เกณฑ์โหวตเก็บไว้กับหัวหน้าทีม** ไม่ส่งให้ผู้ออกแบบ (วางใน scratchpad ไม่ใช่ใน `cover-lab/`)
+1. **Survey** (1 middleman agent, read-only) → `_to_delete/cover-lab/survey/SURVEY.md`: app description · main verbs · logo files · colors · fonts · main-screen images from the mockup · image of the current cover, page 1 (Word through COM, the Windows automation interface → PDF → `pdftoppm`) with critique.
+2. **Research** (1 middleman agent, in parallel with step 1) → `research/RESEARCH.md`: good-looking tech-company covers · trends · cheap-looking things · image techniques done in code · Word limits · every claim has a URL.
+3. **Same brief for every designer**, `BRIEF.md`. Every designer reads `EXAMPLES.md` and looks at the overview sheet of real covers first (`real-examples.md`). Start from the cover builder that already builds in Word; do not rewrite it. The brief lists the deliverables (an SRS cover for every project · the image set for BRD/SRS/ARCH · at least 1 print cover · repeatable `src/` · `METHOD.md` ≤ 90 lines), the hard rules (items 3 and 9 of SKILL.md), and a ban on opening other designers' folders.
+4. **The team lead keeps the voting criteria** and does not send them to designers (put them in the scratchpad, not in `cover-lab/`).
 
-## 2 · ผู้ออกแบบ 3 ตัว — ต่างกันที่แนว ไม่ใช่แค่สุ่ม
+## 2 · 3 designers — they differ by style, not just by random draw
 
-| ตัว | แนว (ข้อจำกัดที่ส่งให้) |
+| Designer | Style (constraint sent) |
 |---|---|
-| A | พฤติกรรมของแอปวาดเป็นศิลปะจากข้อมูลจริง · ตาราง Swiss |
-| B | แอปเป็นพระเอก แบบปกนิตยสาร · หน้าจอจริงจาก mockup จัดวางอย่างตั้งใจ |
-| C | รูปทรงโลโก้เป็นสถาปัตยกรรม · ตัวอักษรเป็นโครง · ห้ามภาพวาด ภาพหน้าจอ แสงเรือง |
+| A | The app's behavior drawn as art from real data · Swiss grid |
+| B | The app as hero, magazine-cover style · real mockup screens placed with intent |
+| C | Logo shapes as architecture · type as structure · no illustration, screenshot, or glow |
 
-- ใช้โมเดลระดับใหญ่ · ส่งพร้อมกันในข้อความเดียว · โฟลเดอร์ละตัว `_to_delete/cover-lab/attempt-<A|B|C>/`
-- **agent ต้องมี Bash** เพื่อ render แล้วเปิดดูภาพเอง (เพดาน 3 รอบแก้) · ตรวจรายการเครื่องมือของ agent ที่**ติดตั้งอยู่**ก่อนปล่อย — ประวัติ: ใน bake-off จริง (2026-10-15) `graphic-designer` ของ plugin รุ่น 2.3.0 ที่ติดตั้งไว้ไม่มี Bash (รุ่นปัจจุบันใน repo มีแล้ว) ทั้ง 3 ตัวจึงส่งโค้ดที่ไม่เคยเห็นภาพ หัวหน้าทีมต้อง render ให้แล้วส่ง `general-purpose` ตัวใหม่ทำรอบแก้ · ไม่มี Bash → ใช้ `general-purpose` แนบบทบาทนักออกแบบในคำสั่ง
+- Use a large-tier model · launch all 3 in one message · one folder each: `_to_delete/cover-lab/attempt-<A|B|C>/`.
+- **Each agent needs Bash** so it can render and look at its own images (cap of 3 fix rounds). Before launching, check the tool list of the agent as **installed**. History: in the real bake-off (2026-10-15), the installed `graphic-designer` of plugin version 2.3.0 had no Bash (the current version in the repo has it). All 3 designers therefore sent code they had never seen rendered. The team lead had to render it and send a fresh `general-purpose` agent to do the fix round. If there is no Bash, use `general-purpose` and attach the designer role in the instruction.
 
-## 3 · ผู้ตรวจ 3 ตัว — อ่านอย่างเดียว คนละมุม เกณฑ์เดียวกัน
+## 3 · 3 reviewers — read-only, different angles, same criteria
 
-| ตัว | มุม |
+| Reviewer | Angle |
 |---|---|
-| 1 | ผู้กำกับศิลป์ — ว้าวจริงไหม ดูเป็นงาน AI ไหม |
-| 2 | นักกลยุทธ์แบรนด์ + ลูกค้าไทยที่อ่าน BRD — จำแอปได้ไหม รู้ว่าแอปทำอะไรไหม ชุด 6–15 ฉบับไปด้วยกันไหม |
-| 3 | วิศวกรการผลิต + คนเขียน skill — agent ทำซ้ำกับโปรเจกต์ใหม่ได้ไหม · ตัวเลขเฉพาะโปรเจกต์กี่ตัว · ภาพพื้นสำหรับ Word ซ่อนข้อความครบไหม · เวอร์ชันถูกฝังในภาพไหม |
+| 1 | Art director: is it a real wow, does it look AI-made? |
+| 2 | Brand strategist + Thai client who reads the BRD: can they remember the app, do they know what it does, does a set of 6–15 documents go together? |
+| 3 | Production engineer + skill author: can an agent repeat it on a new project, how many numbers are project-specific, do the background images for Word hide all the text, is the version embedded in the image? |
 
-ตัวเลือกที่โหวตต้องมี**ปกปัจจุบัน**ด้วยเสมอ (ถ้ามี)
+The options voted on must always include the **current cover** (if there is one).
 
-ให้คะแนน 1–5 ทั้ง 7 เกณฑ์: ว้าวเทียบปกเดิม · ไม่ซ้ำกันระหว่างโปรเจกต์ · บอกความจริงของแอป · ระบบชุดเอกสาร · ความประณีต (ไทย · คอนทราสต์ · ตัวเล็กสุด · ปกพิมพ์ · Word ตรงกับภาพตัวอย่าง) · เรียนจากปกจริง (ยืมโครง ไม่ลอก) · สร้างใน Word ได้และทำซ้ำได้
-แล้วโหวต: `overall` 1 แนว · `per_project` แนวที่ดีที่สุดของแต่ละโปรเจกต์ · `steal` ไม่เกิน 2 ชิ้นจากแนวที่แพ้
+Score each of 7 criteria from 1 to 5: wow compared with the old cover · no repeats between projects · tells the truth about the app · document-set system · polish (Thai · contrast · smallest text · print cover · Word matches the sample image) · learned from real covers (borrow structure, do not copy) · buildable in Word and repeatable.
+Then vote: `overall` 1 style · `per_project` the best style for each project · `steal` at most 2 pieces from losing styles.
 
-## 4 · นับเสียง
+## 4 · Count the votes
 
-- แนวที่ได้ **2 ใน 3** ชนะ ทั้ง `overall` และรายโปรเจกต์ (รายโปรเจกต์ต่างจาก overall ได้)
-- เสียงแตก 3 ทาง → หัวหน้าทีมดูคะแนนรวมรายเกณฑ์ เกณฑ์ "ทำซ้ำได้" เป็นตัวตัดสินเมื่อคะแนนใกล้กัน แล้วลง `decision-log`
-- หัวหน้าทีมดูภาพเองทั้งหมดก่อนอ่านผลโหวต แล้วเทียบ · ไม่ตรงกัน → อ่านเหตุผลของทั้งสองฝ่ายก่อนตัดสิน
+- The style with **2 of 3** wins, for both `overall` and per project (per-project winners may differ from overall).
+- If the vote splits 3 ways, the team lead reads the total score per criterion. The "repeatable" criterion decides when scores are close. Then log it in `decision-log`.
+- The team lead looks at all the images before reading the votes, then compares. If they disagree, read both sides' reasons before deciding.
 
-## 5 · รวมผล
+## 5 · Merge the results
 
-agent ตัวใหม่ 1 ตัว (มี Bash) ทำใน `_to_delete/cover-lab/final/`: ใช้แนวที่ชนะรายโปรเจกต์ · ยกส่วนที่โหวตให้ steal · แก้จุดที่ผู้ตรวจทัก · ทำภาพพื้น 300 dpi ครบทุกฉบับ · สร้าง .docx ตัวอย่างด้วย `brandkit.py` แล้ว render ใน Word จริงดู · เขียน `NOTES.md`
-ไม่เขียนทับ .docx ของผู้ใช้ — สร้าง render ใหม่จาก markdown ต้นฉบับ (ที่มาของกฎนี้: ชุด prompt ของ SQT-Marketplace `prompt/software-development/prompt-new-project.md` ฉบับ 14 — อยู่นอก plugin นี้)
+1 new agent (with Bash) works in `_to_delete/cover-lab/final/`: use the per-project winning style · bring in the voted `steal` pieces · fix what reviewers flagged · make 300 dpi background images for every document · build a sample .docx with `brandkit.py` and render it in real Word to look at it · write `NOTES.md`.
+Do not overwrite the user's .docx. Build a new render from the source markdown. (Origin of this rule: SQT-Marketplace prompt set `prompt/software-development/prompt-new-project.md`, version 14, which lives outside this plugin.)
 
-## ผลจริงครั้งแรก (2026-10-15 · รายงานผู้ตรวจเต็มอยู่ใน `_to_delete/cover-lab/votes.md` ของ repo ตอนทำ — ไฟล์ชั่วคราว)
+## First real result (2026-10-15 · the full reviewer report was in `_to_delete/cover-lab/votes.md` of the repo at the time, a temporary file)
 
-| | A ข้อมูลจริง | B หน้าจอจริง | C รูปทรงโลโก้ |
+| | A real data | B real screens | C logo shapes |
 |---|---|---|---|
-| คะแนนรวม ผู้ตรวจ 1 / 2 / 3 | 23.5 / 21 / 23 | 23 / 24 / 24 | 27 / 27 / 22 |
-| overall | — | 1 เสียง | **2 เสียง** |
+| Total score, reviewer 1 / 2 / 3 | 23.5 / 21 / 23 | 23 / 24 / 24 | 27 / 27 / 22 |
+| overall | — | 1 vote | **2 votes** |
 | LiteNet · Telex · SwipeOS | 1 · 0 · 0 | 0 · **2** · 0 | **2** · 1 · **3** |
 
-### รอบ 2 — เรียนจากปกจริง 35 ใบ แล้วเทียบกับปกรอบ 1 (R1)
+### Round 2: learned from 35 real covers, then compared with the round 1 cover (R1)
 
-| | R1 | X ชุดสถาบัน | Y ศิลปะแบบสำนักพิมพ์ | Z ต่อยอด R1 |
+| | R1 | X institutional set | Y editorial art | Z builds on R1 |
 |---|---|---|---|---|
-| คะแนนรวม ผู้ตรวจ 1 / 2 / 3 (7 เกณฑ์) | 26 / 24 / 24 | 24 / 24 / 24 | 26 / 26 / 30 | 31 / 29 / 28 |
+| Total score, reviewer 1 / 2 / 3 (7 criteria) | 26 / 24 / 24 | 24 / 24 / 24 | 26 / 26 / 30 | 31 / 29 / 28 |
 | overall | — | — | 1 | **2** |
 | LiteNet · Telex · SwipeOS | 0 · 0 · 0 | 0 · 0 · 0 | 0 · 1 · **2** | **3** · **2** · 1 |
 
-บทเรียน: **ใส่ปกเดิมเป็นตัวเลือกในการโหวตทุกครั้ง** จะได้รู้ว่าดีขึ้นจริงไหม · เพิ่มเกณฑ์ที่ 7 "เรียนจากปกจริง" · ส่วนที่ยกมา: บรรทัดชื่อชุด (X) · เวอร์ชันเป็นข้อความ Word ในป้าย (X) · สีต่อชนิดเอกสารในตระกูลแบรนด์ (Y)
+Lesson: **put the old cover in the vote every time**, so you know whether the new one is really better. Add criterion 7, "learned from real covers". Pieces taken: the series-name line (X) · version as Word text in a badge (X) · one color per document type in the brand family (Y).
 
-ส่วนที่ยกมารอบ 1: ประโยคบอกงานใต้ชื่อ (จาก B) · ทดสอบความจริงของทุกรูป (จาก A) · `checks.json` (จาก C ไปใส่ B)
+Pieces taken in round 1: the sentence under the title saying what the app does (from B) · the truth test for every image (from A) · `checks.json` (from C, put into B).

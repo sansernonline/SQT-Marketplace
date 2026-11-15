@@ -20,10 +20,10 @@ description: Use when building login with sessions, JWT, OAuth or SSO
 
 | ไฟล์ | เปิดเมื่อ |
 |---|---|
-| [references/auth-flows.md](references/auth-flows.md) | ถ้าจะลงมือเขียน session · JWT · OAuth กับ PKCE หรือการรีเซ็ตรหัสผ่าน ให้เปิดดูลำดับขั้นทีละข้อ |
-| [references/mfa.md](references/mfa.md) | ตอนเลือกหรือลงมือทำ MFA และต้องการขั้นตั้งค่า TOTP · การใช้ WebAuthn · ข้อจำกัดของ SMS |
+| [references/auth-flows.md](references/auth-flows.md) | When writing session, JWT, OAuth with PKCE or password reset code, open it for the step-by-step order |
+| [references/mfa.md](references/mfa.md) | When choosing or building MFA and you need TOTP setup steps, WebAuthn usage or the limits of SMS |
 | [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md) | ถ้าออกแบบการยืนยันตัวตนของ API หรือ API key หรือต้องการตัวอย่าง RBAC กับ ABAC ให้เปิดไฟล์นี้ |
-| [references/libraries-and-code.md](references/libraries-and-code.md) | ตอนเลือกไลบรารีตามภาษา หรือต้องการโค้ดตัวอย่างการ hash รหัสผ่านและเครื่องมือจำกัดจำนวนครั้ง |
+| [references/libraries-and-code.md](references/libraries-and-code.md) | When choosing a library by language, or you need sample code for password hashing and rate limiting |
 
 ## Choose the Right Pattern
 
@@ -107,7 +107,7 @@ What's authenticating?
 
 ## Pattern 4: Multi-Factor Authentication (MFA)
 
-มี 3 แบบ ถ้าเป็นแอปใหม่ให้ใช้ WebAuthn (passkeys) เป็นค่าเริ่มต้น เพราะไม่มีความลับร่วมให้ถูกหลอกเอาไป ถ้าต้องการ 2FA มาตรฐานที่ผู้ใช้ตั้งเองได้ง่ายให้ใช้ TOTP ส่วน SMS หรือ email ให้ใช้เป็นทางสุดท้ายเท่านั้น เพราะ SMS ไม่ปลอดภัยจากการสลับซิม (SIM swap) รายละเอียดทั้ง 3 แบบอยู่ใน [references/mfa.md](references/mfa.md)
+There are 3 types. For a new app, use WebAuthn (passkeys) as the default, because there is no shared secret to steal. If you need 2FA that users can set up easily and that is standard, use TOTP. Use SMS or email only as a last resort, because SMS is not safe against SIM swap. Details of all 3 are in [references/mfa.md](references/mfa.md)
 
 ## Pattern 5: Password Management
 
@@ -125,7 +125,7 @@ What's authenticating?
 
 ### Password reset flow
 
-ข้อที่ห้ามพลาดในการรีเซ็ตรหัสผ่าน: ข้อความตอบต้องเหมือนกันไม่ว่าอีเมลจะมีในระบบหรือไม่ token ต้องสุ่มอย่างน้อย 256 bits เก็บแบบ hash และหมดอายุใน 15 นาที และเมื่อตั้งรหัสใหม่แล้วต้องยกเลิกทุก session เดิมและส่งอีเมลยืนยัน ลำดับขั้นครบทั้ง 9 ข้ออยู่ใน [references/auth-flows.md](references/auth-flows.md)
+Must-haves for password reset: the response message must be the same whether or not the email exists in the system. The token must be random with at least 256 bits, stored as a hash, and expire in 15 minutes. After the new password is set, revoke all old sessions and send a confirmation email. All 9 steps in order are in [references/auth-flows.md](references/auth-flows.md)
 
 ## Pattern 6: Account Lockout & Rate Limiting
 
@@ -140,11 +140,11 @@ Lockout messaging:
 ผิด: "Account locked." (reveals account exists)
 ```
 
-ให้ใช้เครื่องมือที่มีอยู่แล้วแทนการเขียนเอง รายชื่อเครื่องมืออยู่ใน [references/libraries-and-code.md](references/libraries-and-code.md)
+Use existing tools instead of writing your own. The list of tools is in [references/libraries-and-code.md](references/libraries-and-code.md)
 
 ## Pattern 7: API Authentication
 
-เลือกตามผู้เรียก: API key สำหรับ server-to-server แบบง่าย · OAuth 2.0 Client Credentials สำหรับ service-to-service · mTLS สำหรับระบบภายในที่ต้องการความปลอดภัยสูง · HMAC signing สำหรับตรวจ webhook ส่วน API key ต้องแสดง secret ครั้งเดียวตอนสร้าง เก็บแบบ hash และให้ผู้ใช้ยกเลิกได้ทันที ตารางเทียบและหลักการครบอยู่ใน [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md)
+Choose by caller: API key for simple server-to-server · OAuth 2.0 Client Credentials for service-to-service · mTLS for internal systems that need high security · HMAC signing for verifying webhooks. For an API key, show the secret only once at creation, store it as a hash, and let users revoke it immediately. The comparison table and full principles are in [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md)
 
 ## Authorization Patterns (after authentication)
 

@@ -2,7 +2,7 @@
 
 Use when the user asks to design a FHIR API or run a HIPAA or PDPA readiness audit. Modes — fhir-design · hipaa-audit.
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดในเอกสารที่ได้ เขียนตาม `human-writing` — command นี้บอกขั้นตอน ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write every line of wording in the output per `human-writing`. This command gives the steps, while human-writing gives how to write so people can understand.
 
 Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
 

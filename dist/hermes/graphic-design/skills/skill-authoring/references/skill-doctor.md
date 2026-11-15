@@ -2,9 +2,9 @@
 
 Moved from SKILL.md section 8. "หัวข้อ 4" means the wiring list in [`wiring-and-validator`](wiring-and-validator.md).
 
-## 8 · อ่านผล `/skill-doctor`
+## 8 · Read the `/skill-doctor` result
 
-- `/skill-doctor` (Claude Code 2.1.252 ขึ้นไป · ในโหมดโต้ตอบเปิดแท็บ Stats ของ `/plugin` · โหมด `-p` พิมพ์เป็นข้อความ) บอกต้นทุน context ของแต่ละ skill และจำนวนครั้งที่ถูกเรียก พร้อมธง **ไม่เคยถูกเรียก** = อยู่ในรายการแต่ไม่เคยเปิดเลย · เริ่มดูจากตัวที่ธงขึ้นและกิน context มากที่สุด (`จากแหล่ง` หน้า skills · ช่วงเวลาที่นับยังไม่ได้ตรวจ)
-- skill ของเราไม่เคยถูกเรียก ไล่ตามลำดับ: (1) YAML พังไหม → รัน validator (2) description บอก "ใช้เมื่อ" ด้วยคำที่ผู้ใช้พิมพ์จริงไหม → แก้แล้วรันเคส `-trigger` (3) hook router มีแถวไหม → หัวข้อ 4 (4) งานนั้นเกิดจริงไหม → ไม่เกิดใน 1 เดือน ย้าย skill ไป plugin ที่งานนั้นอยู่ หรือยุบรวมกับตัวที่ใกล้กัน แล้วบันทึกใน CHANGELOG
-- **เขียนไว้ใน settings ไม่เท่ากับติดตั้งแล้ว** — หลังติดตั้งให้เปิดแชตใหม่แล้วนับ skill ที่ agent เห็นจริง (คอร์ส 2026-11-04: 13 จาก 21 โต๊ะไม่มี `core` ทั้งที่แม่แบบเขียนชื่อไว้) · กฎ "ห้ามเด็ดขาด" อย่าให้อยู่แค่ใน skill เพราะ skill อาจไม่ถูกเรียก ใส่ใน hook หรือ CLAUDE.md ด้วย (ชั้นของตัวตรวจดู `repeated-mistakes-to-checks`)
-- skill ของ plugin ปิดได้จาก `/plugin` เท่านั้น (`skillOverrides` ใน settings ใช้กับ skill ส่วนตัวและโปรเจกต์) · `/doctor` บอกต้นทุน context ของรายการทั้งชุด
+- `/skill-doctor` (Claude Code 2.1.252 or later · in interactive mode it opens the Stats tab of `/plugin` · in `-p` mode it prints text) reports the context cost of each skill and how many times it was called, with a flag **never called** = it is in the list but was never opened. Start with the flagged skills that use the most context (`จากแหล่ง` (from a source): the skills page · the counting period is `ยังไม่ได้ตรวจ` (not yet checked)).
+- If one of our skills is never called, go in this order: (1) Is the YAML broken? → run the validator. (2) Does the description say "use when" with words users really type? → fix it, then run the `-trigger` case. (3) Does the hook router have a row for it? → section 4. (4) Does that kind of work really happen? → if not within 1 month, move the skill to the plugin where that work lives, or merge it into a close neighbour, and record it in the CHANGELOG.
+- **Written in settings is not the same as installed.** After installing, open a new chat and count the skills the agent really sees (course, 2026-11-04: 13 of 21 desks had no `core`, even though the template named it). Do not leave a "never ever" rule only in a skill, because the skill may never be called. Put it in a hook or CLAUDE.md too (for the layers of checks see `repeated-mistakes-to-checks`).
+- A plugin's skills can be turned off only from `/plugin` (`skillOverrides` in settings applies to personal and project skills) · `/doctor` reports the context cost of the whole list.

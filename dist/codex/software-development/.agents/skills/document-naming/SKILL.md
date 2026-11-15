@@ -3,108 +3,108 @@ name: document-naming
 description: Use when naming or filing a document others keep
 ---
 
-# ตั้งชื่อและจัดเวอร์ชันเอกสาร
+# Naming and versioning documents
 
-> **กฎข้อเดียว:** ไฟล์ที่มีระบบเก็บประวัติให้อยู่แล้ว (git · ประวัติเวอร์ชันของ Google Docs) **ห้ามใส่เวอร์ชันในชื่อ**
-> ไฟล์ที่ออกไปนอกระบบนั้น **ต้องใส่** เพราะไม่มีอะไรบอกได้อีกแล้วว่าใครถือฉบับไหน
+> **The one rule:** a file that a system already keeps history for (git · Google Docs version history) **must not carry a version in its name.**
+> A file that leaves that system **must carry one**, because nothing else can tell you who holds which copy.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- สร้างเอกสารใหม่ที่ทีมหรือลูกค้าจะเก็บไว้
-- ส่งเอกสารออกไปให้คนนอกทีม
-- โฟลเดอร์เริ่มมี `final`, `final2`, `ล่าสุด`, `แก้แล้ว`
-- มีคนถามว่า "ตกลงยึดฉบับไหน"
+- Creating a new document that the team or the client will keep.
+- Sending a document to people outside the team.
+- A folder starts to fill with `final`, `final2`, `ล่าสุด` (latest), `แก้แล้ว` (edited).
+- Someone asks "so which version do we go with?"
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill instead, or together
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| เนื้อหาข้างในเอกสาร | `human-writing` (งานโค้ด: `srs-writing` · `fsd-writing` ใน plugin `software-development`) | แทน |
-| รูปแบบ markdown | `polished-document-style` | แทน |
-| หน้าตาไฟล์ที่ render ออกมา | `branded-document-design` (plugin `software-development`) | แทน |
-| ไฟล์ชั่วคราวระหว่างทำงาน | `superuser:temp-file-discipline` | แทน |
-| งานโค้ด: ข้อความ commit · เวอร์ชันของ **โปรแกรม** · สารบัญเอกสารโปรเจกต์ | `commit-message-format` · `cicd-and-release` · `project-bootstrap` (plugin `software-development`) | แทน/คู่ |
-| ตัวย่อในงานที่คนอ่าน | [`spell-out-abbreviations`](../spell-out-abbreviations/SKILL.md) | คู่ |
+| The content inside the document | `human-writing` (code work: `srs-writing` · `fsd-writing` in plugin `software-development`) | instead |
+| Markdown formatting | `polished-document-style` | instead |
+| The look of the rendered file | `branded-document-design` (plugin `software-development`) | instead |
+| Temporary files during work | `superuser:temp-file-discipline` | instead |
+| Code work: commit messages · version of the **program** · the project document index | `commit-message-format` · `cicd-and-release` · `project-bootstrap` (plugin `software-development`) | instead / together |
+| Abbreviations in work people read | [`spell-out-abbreviations`](../spell-out-abbreviations/SKILL.md) | together |
 
-**แม่แบบตารางประวัติการแก้ไข และรายการชื่อไฟล์มาตรฐาน** อยู่ใน `assets/naming-cheatsheet.md`
+**The revision-history table template and the standard file-name list** are in `assets/naming-cheatsheet.md`.
 
 ---
 
-## 1 · เลือกรูปแบบก่อนตั้งชื่อ
+## 1 · Pick the format before naming
 
-**เกณฑ์เดียว: ถ้ามีคนเซ็นหรือส่งออกนอกทีม ให้ทำเป็นไฟล์ส่งมอบ ส่วนเอกสารที่เปลี่ยนตามเนื้องานให้เป็น markdown ในโฟลเดอร์เอกสาร (เช่น `docs/`)**
+**One test: if someone signs it or it goes outside the team, make it a deliverable file. A document that changes with the work stays markdown in the documents folder (e.g. `docs/`).**
 
-| เอกสาร | รูปแบบ | เหตุผล |
+| Document | Format | Reason |
 |---|---|---|
-| ข้อเสนอ · ใบเสนอราคา · รายงานส่งมอบ · ใบตรวจรับงาน · สัญญา (ชุดเอกสารโปรเจกต์ซอฟต์แวร์ → plugin `software-development`) | **docx** | มีคนเซ็น ต้องล็อกฉบับ |
-| คู่มือผู้ใช้ | **docx + PDF** | ผู้ใช้ปลายทางเปิดได้ทุกเครื่อง |
-| สไลด์นำเสนอ | **pptx** · ขอ html → .html ไฟล์เดียว (ชนิดไฟล์ตาม `presentation-design` ใน plugin `software-development`) · PDF เมื่อเครื่องปลายทางไม่มีฟอนต์ | |
-| ขั้นตอนทำงาน · คู่มือภายใน · README · บันทึกประชุม · บันทึกการตัดสินใจ (งานโค้ด → plugin `software-development`) | **markdown** ในโฟลเดอร์เอกสาร | เปลี่ยนบ่อย ต้องเทียบความต่างได้ ค้นหาง่าย |
+| Proposal · quotation · handover report · acceptance certificate · contract (software project document sets → plugin `software-development`) | **docx** | Someone signs it, so the version must be locked |
+| User manual | **docx + PDF** | End users can open it on any machine |
+| Presentation slides | **pptx** · if html is requested → a single .html file (file type per `presentation-design` in plugin `software-development`) · PDF when the target machine lacks the fonts | |
+| Work procedures · internal guides · README · meeting notes · decision records (code work → plugin `software-development`) | **markdown** in the documents folder | It changes often, needs diffs, and is easy to search |
 
-> 🚨 **ต้นฉบับ markdown ที่ render ซ้ำได้ เก็บถาวรใน `docs/src/<เรื่อง>.md` แล้ว render เป็น docx ลงโฟลเดอร์เอกสาร (`docs/`)**
-> `docs/` มีเอกสารส่งมอบของเรื่องนั้นฉบับเดียวคือ .docx — ไม่มี .md และ .pdf ของเรื่องเดียวกันวางซ้ำข้างกัน (ต้นฉบับอยู่ใน `docs/src/` · ไม่ใช่ `_to_delete/` เพราะต้องใช้ทุกรอบที่แก้)
-> แก้รอบถัดไป → แก้ที่ `docs/src/` แล้ว render ใหม่ ไม่เปิด Word แก้มือ (ตรงกับ `markdown-report-docx`) · บรรทัด "ต้นฉบับ" บนปกชี้ไปที่ไฟล์นี้
+> 🚨 **Markdown source that can be re-rendered is kept permanently in `docs/src/<topic>.md`, then rendered to docx into the documents folder (`docs/`).**
+> `docs/` holds exactly one deliverable for that topic, the .docx. No .md or .pdf of the same topic sits beside it. (The source lives in `docs/src/`, not `_to_delete/`, because it is needed every time you revise.)
+> On the next revision, edit `docs/src/` and render again. Never open Word and edit by hand (matches `markdown-report-docx`). The "ต้นฉบับ" (source) line on the cover points to this file.
 
-**PDF ทำเฉพาะคู่มือผู้ใช้ หรือเมื่อลูกค้าขอ** — นอกนั้น docx ฉบับเดียว
+**Make a PDF only for user manuals, or when the client asks.** Otherwise, one docx.
 
 ---
 
-## 2 · รูปแบบชื่อไฟล์
+## 2 · File name format
 
 ```
-<รหัสโปรเจกต์>-<ประเภท>-<เรื่อง>-v<M.m>-<สถานะ>.docx
+<project code>-<type>-<topic>-v<M.m>-<status>.docx
 ```
 
-| ประเภทเอกสาร | รูปแบบ | ตัวอย่าง |
+| Document type | Format | Example |
 |---|---|---|
-| ไฟล์ส่งออก | `<โปรเจกต์>-<ประเภท>-v<M.m>-<สถานะ>.docx` | `ACME-QUOTE-v1.2-APPROVED.docx` |
-| มีหลายเรื่อง | เติมเรื่องต่อจากประเภท | `ACME-REPORT-sales-v0.3-DRAFT.docx` |
-| ฉบับที่ส่งให้ลูกค้าจริง | เติมวันที่ตามมาตรฐาน International Organization for Standardization (ISO) 8601 ท้ายสุด | `ACME-QUOTE-v1.2-APPROVED-2026-09-25.docx` |
-| เอกสาร markdown | `<ประเภท>-<เรื่อง>.md` ตัวพิมพ์เล็ก ขีดกลาง | `docs/guide-onboarding.md` |
-| บันทึกประชุม (ข้อยกเว้น: วันที่ขึ้นก่อน) | `YYYY-MM-DD-<เรื่อง>.md` | `docs/meetings/2026-09-25-kickoff.md` |
+| Exported file | `<project>-<type>-v<M.m>-<status>.docx` | `ACME-QUOTE-v1.2-APPROVED.docx` |
+| Several topics | Add the topic after the type | `ACME-REPORT-sales-v0.3-DRAFT.docx` |
+| Version actually sent to the client | Add the date at the very end, in International Organization for Standardization (ISO) 8601 format | `ACME-QUOTE-v1.2-APPROVED-2026-09-25.docx` |
+| Markdown document | `<type>-<topic>.md`, lowercase, hyphens | `docs/guide-onboarding.md` |
+| Meeting notes (exception: date first) | `YYYY-MM-DD-<topic>.md` | `docs/meetings/2026-09-25-kickoff.md` |
 
-**กฎชื่อไฟล์:**
+**File name rules:**
 
-- ไม่มีเว้นวรรค ใช้ขีดกลาง — เว้นวรรคทำให้ลิงก์และคำสั่งใน command line พัง
-- **วันที่เป็น ISO `YYYY-MM-DD` เสมอ** และวางท้ายสุด — เรียงตามชื่อแล้วได้เรียงตามเวลาเอง · ข้อยกเว้นเดียว: บันทึกประชุมวางวันที่ไว้หน้าสุด เพราะโฟลเดอร์ `docs/meetings/` มีแต่บันทึกประชุม จึงเรียงตามวันได้ทันที
-- ชื่อไฟล์เป็นอังกฤษ แม้เนื้อหาเป็นไทย — กันปัญหาตอนแนบอีเมลและ zip ข้ามระบบ
-- ห้ามใส่ชื่อคนในชื่อไฟล์ — `-somchai-edit` คือสัญญาณว่าไม่ได้ใช้ต้นฉบับเดียว
+- No spaces; use hyphens. Spaces break links and command-line commands.
+- **The date is always ISO `YYYY-MM-DD`** and goes at the very end, so sorting by name also sorts by time. The one exception: meeting notes put the date first, because the `docs/meetings/` folder holds only meeting notes, so it sorts by date at once.
+- File names are in English even when the content is Thai. This avoids trouble when attaching to email and zipping across systems.
+- Never put a person's name in a file name. `-somchai-edit` is a sign that people are not working from one source.
 
-**ตรวจด้วยสคริปต์:** `node <โฟลเดอร์ skill นี้>/scripts/doc-name-check.mjs docs/*` → บอกชื่อที่ผิดพร้อมชื่อที่เสนอ · เปลี่ยนชื่อหลายไฟล์: เติม `--plan _to_delete/renames.json` ได้แผนโดยยังไม่แตะไฟล์ ตรวจหรือแก้แผนแล้วรัน `--plan _to_delete/renames.json --apply` · สคริปต์ไม่เปลี่ยนชื่อไฟล์ `APPROVED` และไม่ทับไฟล์ที่มีอยู่ · ไม่ใส่ไฟล์ที่ได้รับมา (`ref/`) เข้าแผน
+**Check with the script:** `node <this skill's folder>/scripts/doc-name-check.mjs docs/*` → it lists wrong names with a proposed name. To rename many files, add `--plan _to_delete/renames.json` to get a plan without touching files, check or edit the plan, then run `--plan _to_delete/renames.json --apply`. The script does not rename `APPROVED` files, does not overwrite existing files, and does not put received files (`ref/`) in the plan.
 
 ---
 
-## 3 · เวอร์ชัน
+## 3 · Versions
 
-| ขึ้นเลขไหน | เมื่อ |
+| Which number goes up | When |
 |---|---|
-| **major** (1.x → 2.0) | ขอบเขตเปลี่ยน · โครงเอกสารเปลี่ยน · ต้องเซ็นรับใหม่ |
-| **minor** (1.1 → 1.2) | เพิ่มหรือแก้เนื้อหา ยังเป็นเรื่องเดิม |
-| ไม่ขึ้นเลข | แก้คำผิด จัดหน้า — แต่**ยังต้องลงประวัติการแก้ไข** |
+| **major** (1.x → 2.0) | Scope changes · document structure changes · needs a new sign-off |
+| **minor** (1.1 → 1.2) | Content added or edited, still the same topic |
+| No number change | Typo fixes, layout, but you **must still log it in the revision history** |
 
-- ฉบับที่ส่งให้คนดูครั้งแรกคือ `v0.1` ส่วนฉบับแรกที่มีคนเซ็นคือ `v1.0`
-- **เลขเวอร์ชันเดินหน้าอย่างเดียว** ไม่ย้อนกลับไปใช้เลขเดิม
-- ไฟล์ที่ระบบเก็บประวัติให้ ไม่มีเลขเวอร์ชันในชื่อ — ถ้าต้องอ้างถึงฉบับหนึ่ง ให้อ้าง tag · commit หรือประวัติเวอร์ชัน
+- The first version shown to anyone is `v0.1`, and the first version someone signs is `v1.0`.
+- **Version numbers only move forward.** Never go back to an old number.
+- A file that a system keeps history for has no version number in its name. To refer to a version, use a tag, commit, or version history.
 
 ---
 
-## 4 · สถานะ — คนละเรื่องกับเวอร์ชัน
+## 4 · Status is a different thing from version
 
-| สถานะ | แปลว่า | ใครแก้ได้ |
+| Status | Means | Who may edit |
 |---|---|---|
-| `DRAFT` | ยังเขียนอยู่ | ผู้เขียน |
-| `REVIEW` | ส่งให้ตรวจแล้ว รอความเห็น | ผู้เขียน ตามความเห็นที่ได้ |
-| `APPROVED` | เซ็นรับแล้ว | **ห้ามแก้** ต้องขึ้นเวอร์ชันใหม่เป็น DRAFT |
+| `DRAFT` | Still being written | The author |
+| `REVIEW` | Sent for review, awaiting comments | The author, following the comments received |
+| `APPROVED` | Signed off | **No edits.** Raise a new version as DRAFT |
 
-> **`APPROVED` แล้วห้ามแก้ไฟล์เดิม** แม้จะเป็นแค่คำผิด
-> ถ้าแก้ได้ ฉบับที่ลูกค้าถือกับที่เราถือจะไม่เหมือนกัน ทั้งที่ชื่อไฟล์เหมือนกันทุกตัวอักษร
+> **Once `APPROVED`, never edit the original file**, even for a typo.
+> If you can, the version the client holds and the one we hold will differ, even though the file names match letter for letter.
 
 ---
 
-## 5 · ประวัติการแก้ไขต้องอยู่ในไฟล์
+## 5 · The revision history must be in the file
 
-**ชื่อไฟล์บอกได้แค่ว่านี่คือฉบับไหน ไม่ได้บอกว่าเปลี่ยนอะไร**
-ทุกเอกสารส่งออกต้องมีตารางนี้ในหน้าแรก
+**A file name says only which version this is, not what changed.**
+Every exported document must have this table on the first page.
 
 ```markdown
 | เวอร์ชัน | วันที่ | ผู้แก้ | แก้อะไร | เหตุผล |
@@ -114,28 +114,28 @@ description: Use when naming or filing a document others keep
 | 1.0 | 2026-09-01 | สมชาย | ฉบับเซ็นรับ | — |
 ```
 
-- **คอลัมน์ "แก้อะไร" ต้องเป็นรูปธรรม** — "ปรับปรุงเนื้อหา" ไม่มีประโยชน์กับใครเลย
-- เรียงใหม่อยู่บน — คนเปิดอ่านอยากรู้ว่าเปลี่ยนอะไรล่าสุด
+- **The "แก้อะไร" (what changed) column must be concrete.** "Improved the content" helps nobody.
+- Put the newest on top. A reader opening the file wants to know what changed last.
 
 ---
 
-## 6 · ที่เก็บและการส่ง
+## 6 · Storage and sending
 
-| เรื่อง | กฎ |
+| Topic | Rule |
 |---|---|
-| ต้นฉบับ | อยู่ใน `docs/src/` ของงานที่เดียว (งานโค้ด: `project-doc-set` ใน plugin `software-development`) |
-| ไฟล์ส่งออก | อยู่ในโฟลเดอร์เอกสาร (`docs/`) หรือที่เก็บของลูกค้า **ไม่ใช่รากโปรเจกต์** |
-| ไฟล์ที่ได้รับมา | เก็บชื่อเดิมของเขาไว้ ห้ามเปลี่ยน — เขาอ้างถึงชื่อนั้น |
-| ไฟล์ระหว่างแปลง | `_to_delete/` (ดู `superuser:temp-file-discipline`) |
-| ส่งทางแชตหรืออีเมล | ส่งไฟล์ที่มีเวอร์ชันและสถานะในชื่อเสมอ ไม่ส่ง `เอกสาร.docx` |
+| Source | Lives in `docs/src/` of the work, in one place only (code work: `project-doc-set` in plugin `software-development`) |
+| Exported files | Live in the documents folder (`docs/`) or the client's storage, **not the project root** |
+| Received files | Keep their original name; never rename. They refer to that name |
+| Files mid-conversion | `_to_delete/` (see `superuser:temp-file-discipline`) |
+| Sending by chat or email | Always send a file with the version and status in the name. Never send `เอกสาร.docx` |
 
 ---
 
 ## 7 · Anti-patterns
 
-- **`final.docx`, `final2.docx`, `final_ล่าสุด.docx`** — ไม่มีใครรู้ว่าอันไหนใหม่กว่า
-- **`ใบเสนอราคา แก้แล้ว.docx`** — แก้จากฉบับไหน แก้อะไร
-- **ใส่เวอร์ชันในชื่อไฟล์ที่มีระบบเก็บประวัติให้แล้ว** — จะได้ `spec-v1.md` กับ `spec-v2.md` อยู่คู่กันตลอดไป
-- **แก้ไฟล์ที่ `APPROVED` แล้ว** แม้แต่คำผิดเดียว
-- **ไม่มีตารางประวัติการแก้ไข** — แล้วต้องเปิดเทียบทีละหน้า
-- **วันที่แบบ `25-09-2026` หรือ `250926`** — เรียงไม่ได้ และคนอ่านคนละแบบ
+- **`final.docx`, `final2.docx`, `final_ล่าสุด.docx`**: nobody knows which is newer.
+- **`ใบเสนอราคา แก้แล้ว.docx`**: edited from which version, and what was edited?
+- **Putting a version in the name of a file that a system keeps history for.** You get `spec-v1.md` and `spec-v2.md` side by side forever.
+- **Editing a file that is already `APPROVED`**, even a single typo.
+- **No revision-history table.** Then you must open and compare page by page.
+- **Dates like `25-09-2026` or `250926`.** They do not sort, and people read them differently.

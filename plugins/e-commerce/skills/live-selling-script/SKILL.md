@@ -8,13 +8,13 @@ argument-hint: <platform> <length in minutes> <products with price and stock>
 
 Viewers arrive and leave every few seconds. A live that works repeats a short loop — hook, show, prove, price, call to action — so a viewer who joins at minute 23 can still buy within a minute. Unscripted lives drift into greetings and dead air.
 
-## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+## 0 · Look for an existing format first (every time)
 
-ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+Before using the structure or templates in this file, check whether the user, the client or the project already has its own format:
 
-- **ที่ดู:** ไลฟ์ครั้งก่อนของร้าน: ยอดขายต่อช่วง จำนวนคนดูสูงสุดช่วงไหน สินค้าที่ขายดี (จากหน้าสถิติไลฟ์ของแพลตฟอร์ม) · ความยาวไลฟ์ที่ร้านทำได้จริง · ค้นไลฟ์ร้านในหมวดเดียวกัน 2–3 ร้านว่าเปิดและปิดดีลแบบไหน
-- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
-- **ยังต้องมีทุกแบบ:** run sheet 60 นาทีด้านล่างเป็นค่าสำรอง · ปรับความยาวรอบและจังหวะดีลตามตัวเลขของร้าน · ข้อกฎหมายใน Compliance ใช้ทุกแบบ
+- **What to look at:** the shop's earlier lives: sales per segment, when the viewer count peaked, which products sold well (from the platform's live statistics page) · the live length the shop can really sustain · 2–3 lives from shops in the same category, to see how they open and close deals
+- **Result:** if found, use it (headings, order, field names, running numbers) and say in the reply which file the format came from. If not found, use the template in this file as the fallback and say that no existing format was found
+- **Every format still needs:** the 60-minute run sheet below is the fallback · adjust the round length and deal rhythm to the shop's numbers · the legal rules in Compliance apply to every format
 
 ## Workflow
 

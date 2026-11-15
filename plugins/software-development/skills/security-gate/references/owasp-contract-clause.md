@@ -1,12 +1,12 @@
-# ข้อกำหนด OWASP Top 10:2025 ในสัญญาและ SRS
+# OWASP Top 10:2025 clause for contracts and the Software Requirements Specification (SRS)
 
-ร่างนี้ใช้เป็นจุดเริ่ม ไม่ใช่คำแนะนำทางกฎหมาย · สัญญาจริงให้ `legal-compliance-officer` หรือทนายของผู้ว่าจ้างตรวจ · ร่างสัญญาภาษาไทยทั้งฉบับใช้ `e-commerce:doc-contract-th`
+This draft is a starting point, not legal advice. Have `legal-compliance-officer` or the client's lawyer review the real contract. For a full Thai contract draft, use `e-commerce:doc-contract-th`.
 
-## ทำไมต้องเขียนให้วัดได้
+## Why the clause must be measurable
 
-"ระบบต้องปลอดภัยตาม OWASP" วัดไม่ได้ แล้วจะเถียงกันตอนส่งมอบ · ให้เขียนเป็น **เกณฑ์รับงาน** ที่ตรวจได้ทีละข้อ และบอกขอบเขตที่ไม่รวม
+"The system must be secure per OWASP" cannot be measured, and the two sides will argue at handover. Write it as **acceptance criteria** that can be checked one item at a time, and state what is out of scope.
 
-## ร่างข้อกำหนด (ภาษาไทย)
+## Draft clause (Thai, paste into the contract as written)
 
 > **ข้อ X ความปลอดภัยของระบบ**
 >
@@ -22,7 +22,7 @@
 >
 > X.6 การตรวจตามข้อนี้ไม่ใช่การรับรองว่าระบบปลอดภัยโดยสมบูรณ์
 
-## ร่างใน SRS — หมวดความต้องการที่ไม่ใช่ฟังก์ชัน ด้านความปลอดภัย (Non-Functional Requirement (NFR))
+## Draft for the SRS — security non-functional requirements (NFR) section (Thai, paste as written)
 
 | รหัส | ความต้องการ | วิธีตรวจรับ |
 |---|---|---|
@@ -32,4 +32,4 @@
 | NFR-SEC-04 | admin และธุรกรรมเงินใช้การยืนยันตัวตนหลายชั้น (MFA) | ชุด test ด้าน login (A07) |
 | NFR-SEC-05 | เหตุการณ์ความปลอดภัยมี log และแจ้งเตือน | ชุด test ด้าน log (A09) + ตัวอย่าง log |
 
-เพิ่มหรือตัดแถวตามระบบ · ทุกแถวต้องมี "วิธีตรวจรับ" ที่ทำได้จริง
+Add or remove rows to fit the system. Every row needs an acceptance check ("วิธีตรวจรับ") that can really be done.

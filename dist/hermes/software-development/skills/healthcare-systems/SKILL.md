@@ -6,9 +6,9 @@ argument-hint: <fhir-design | hipaa-audit> <details>
 
 # healthcare-systems
 
-ซอฟต์แวร์ที่แตะข้อมูลผู้ป่วย — workflow ทางคลินิก · FHIR · HIPAA · การวิเคราะห์ข้อมูลคลินิก
+Software that touches patient data — clinical workflow · FHIR · HIPAA · clinical data analytics
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทั้งหมด เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้นอยู่แล้ว
+**Open only the files that match the job.** Do not read them all, because each file is the full guide to its topic.
 
 ## หัวข้อ
 
@@ -21,7 +21,7 @@ argument-hint: <fhir-design | hipaa-audit> <details>
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน · อ่านสารบัญก่อน แล้วอ่านเฉพาะหัวข้อที่งานใช้
+An agent called to work in this area opens its own role file before starting · read the table of contents first, then read only the sections the job uses
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -46,7 +46,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 `/software-development:healthcare-systems <fhir-design | hipaa-audit> <details>`
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดในเอกสารที่ได้ เขียนตาม `human-writing` — command นี้บอกขั้นตอน ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write every line of wording in the output per `human-writing`. This command gives the steps, while human-writing gives how to write so people can understand.
 
 Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
 

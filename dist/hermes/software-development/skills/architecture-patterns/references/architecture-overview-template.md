@@ -1,8 +1,8 @@
-# แม่แบบเอกสารภาพรวมสถาปัตยกรรม
+# Architecture Overview Document Template
 
 **สารบัญ:** แม่แบบเต็ม 1 บล็อก: Context · Quality Attributes · High-Level Architecture · Components · Data Flow · Tech Stack · Cross-Cutting Concerns · Trade-offs · References
 
-เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+Open this only when you actually need to write this kind of document · put `(รอยืนยัน)` (awaiting confirmation) on anything you do not know
 
 ## Standard Output: Polished Architecture Overview
 

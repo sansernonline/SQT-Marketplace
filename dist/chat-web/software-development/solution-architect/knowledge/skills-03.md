@@ -2,116 +2,116 @@
 
 Use when choosing a project doc set or open-items Excel
 
-# ชุดเอกสารโปรเจกต์
+# Project doc set
 
-> **กฎข้อเดียว:** เอกสารทุกชิ้นต้องตอบได้ว่า **ใครอ่าน** และ **อ่านแล้วตัดสินใจอะไร**
-> ถ้าตอบไม่ได้ ก็ไม่ต้องเขียน
+> **One rule:** every doc must answer **who reads it** and **what they decide after reading**.
+> If it cannot answer, do not write it.
 
 ---
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-เปิดโปรเจกต์ใหม่แล้วต้องตัดสินว่ามีเอกสารอะไร · เอกสารกระจัดกระจายไม่รู้ว่าอันไหนตัวจริง · ลูกค้าถามว่าส่งมอบอะไรบ้าง · จะเขียนเอกสารแต่ไม่แน่ใจว่าต้องมีอะไรก่อน
+Use it when: opening a new project and deciding which docs it needs · docs are scattered and nobody knows which is the real one · a client asks what will be delivered · about to write a doc but unsure what must come first.
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-| สถานการณ์ | ใช้แทน |
+| Situation | Use instead |
 |---|---|
-| โครงโฟลเดอร์ของ**โค้ด** (รวม `docs/` ในโค้ดของแบบ A) · README · CHANGELOG · linter | `project-bootstrap` |
-| ตั้ง**ชื่อไฟล์** และเลขเวอร์ชันของเอกสาร | `document-naming` |
-| ลงมือเขียนเอกสารชิ้นใดชิ้นหนึ่ง | skill ของเอกสารนั้น (ตารางข้อ 4) |
-| จัดรูปแบบหน้าเอกสารให้สวย | `branded-document-design` |
+| Folder layout of the **code** (including the `docs/` inside code in type A) · README · CHANGELOG · linter | `project-bootstrap` |
+| Naming **files** and version numbers of docs | `document-naming` |
+| Actually writing one doc | The skill for that doc (table in section 4) |
+| Making document pages look good | `branded-document-design` |
 
 ---
 
-## 1 · เอกสารอยู่ในหรืออยู่นอก repo
+## 1 · Docs inside or outside the repo
 
-**ตัดสินข้อนี้ก่อน** (ย้ายทีหลังต้องแก้ลิงก์ทั้งโปรเจกต์) · **ค่าเริ่มต้นคือแบบ B** แม้เอกสารเป็น markdown ล้วน โค้ดอยู่ใน `<project-name>/` (ตัวพิมพ์เล็กคั่น `-`) · แบบ A เมื่อผู้ใช้ขอเท่านั้น
+**Decide this first** (moving later means fixing links across the whole project). **The default is type B**, even when the docs are pure markdown. The code lives in `<project-name>/` (lowercase, joined with `-`). Use type A only when the user asks.
 
-- **แบบ B** (เอกสารนอก repo) — ใช้กับทุกขนาดชุด (S · M · L) · `.docx` / `.xlsx` / mockup / PNG ที่ลูกค้าต้องเห็นไม่ปนใน pull request · ผังรากอยู่ข้างล่าง (ข้อนี้คือเจ้าของผังราก)
-- **แบบ A** (เอกสารใน repo) — เฉพาะเมื่อผู้ใช้ขอ และเอกสารเป็น markdown ล้วน · เอกสารกับโค้ดเปลี่ยนใน pull request เดียวกัน · รากเหมือนแบบ B แต่ไม่มี `docs/` ที่ราก — `docs/` อยู่ในโฟลเดอร์โค้ด ผังข้างในเป็นของ `project-bootstrap` ข้อ 1
-- แบบ A ที่โตจนมีเอกสารส่งมอบ → ย้ายเป็นแบบ B **ทั้งชุดในครั้งเดียว** เอกสารที่อยู่ 2 ที่คือมี 2 เวอร์ชัน
+- **Type B** (docs outside the repo): use it for every set size (S · M · L). `.docx` / `.xlsx` / mockups / PNGs that the client must see stay out of pull requests. The root layout is below (this section owns the root layout).
+- **Type A** (docs inside the repo): only when the user asks and the docs are pure markdown. Docs and code change in the same pull request. The root looks like type B but has no root `docs/`. The `docs/` folder sits inside the code folder, and its inner layout belongs to `project-bootstrap` section 1.
+- A type A project that grows deliverable docs moves to type B **as a whole set in one go**. A doc that lives in 2 places means 2 versions.
 
-### โครงของแบบ B
+### Type B layout
 
 ```
-<ชื่อโปรเจกต์>/
-├─ ref/                 ของที่ได้รับมา — TOR · บันทึกประชุม · ภาพหน้าจอระบบเดิม · ไฟล์จากลูกค้า  **อ่านอย่างเดียว ห้ามแก้**
-├─ docs/                เอกสารทุกชิ้นที่เราเขียน — .docx ส่งมอบ และ .md เชิงเทคนิค อยู่ด้วยกัน
-│  ├─ figures/          รูปที่ export แล้ว — .png เท่านั้น        [มีเมื่อมีรูปในเอกสารส่งมอบ]
-│  │  └─ src/           ไฟล์ต้นทางของรูป (.html · .mmd · .drawio)
-│  ├─ decisions/        ADR-NNNN-<slug>.md หนึ่งการตัดสินใจต่อไฟล์  [ทางเลือก]
-│  ├─ runbook-<เรื่อง>.md  คู่มือเมื่อระบบมีปัญหา ไฟล์ละเรื่อง        [ทางเลือก]
-│  └─ research/         research แอปต้นแบบ (`reference-app-research`) [ทางเลือก]
-├─ mockup/              .html ที่เปิดแล้วกดได้จริง
-├─ qa/                  test case · ผลทดสอบ · bugs/ รายงานบั๊ก
-├─ assets/              โลโก้ · ไอคอนทุกขนาด · favicon · wordmark (ต้นทาง .svg + ไฟล์ export)
-├─ _to_delete/          ของชั่วคราวทุกอย่าง
-├─ .claude/            skill ของโปรเจกต์ (เช่น verify) — ต้องอยู่ที่ที่เปิด Claude Code
-│  └─ superuser/        ไฟล์ทำงานของ SuperUser — CONTEXT.md · HISTORY.md · IMPROVEMENTS.md · log/ · inbox/ · learn/
-└─ <project-name>/      repo โค้ด ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-` — โครงข้างในเป็นของ `project-bootstrap`
+<project-name>/
+├─ ref/                 things received — TOR · meeting notes · screenshots of the old system · client files  **read-only, never edit**
+├─ docs/                every doc we write — delivered .docx and technical .md live together
+│  ├─ figures/          exported figures — .png only        [exists when delivered docs have figures]
+│  │  └─ src/           source files of the figures (.html · .mmd · .drawio)
+│  ├─ decisions/        ADR-NNNN-<slug>.md, one decision per file  [optional]
+│  ├─ runbook-<topic>.md  guide for when the system has problems, one topic per file  [optional]
+│  └─ research/         research on a reference app (`reference-app-research`) [optional]
+├─ mockup/              .html that opens and really clicks
+├─ qa/                  test cases · test results · bugs/ bug reports
+├─ assets/              logos · icons in all sizes · favicon · wordmark (.svg source + exports)
+├─ _to_delete/          every kind of temporary item
+├─ .claude/            project skills (such as verify) — must sit where Claude Code is opened
+│  └─ superuser/        SuperUser working files — CONTEXT.md · HISTORY.md · IMPROVEMENTS.md · log/ · inbox/ · learn/
+└─ <project-name>/      code repo, project name lowercase joined with `-` — inner layout belongs to `project-bootstrap`
 ```
 
-**ไฟล์ของ SuperUser** (`.claude/superuser/` · `docs/BRIEF.md` · `AGENTS.md`/`GEMINI.md`) — ต้นฉบับอยู่ที่ [`superuser/references/team-files.md`](../superuser/references/team-files.md) ที่เดียว
+**SuperUser files** (`.claude/superuser/` · `docs/BRIEF.md` · `AGENTS.md`/`GEMINI.md`): the single source is [`superuser/references/team-files.md`](../superuser/references/team-files.md).
 
-**ADR และ runbook อยู่ใน `docs/` ที่ราก ไม่ใช่ `<project-name>/docs/`** (แบบ A ย้ายทั้ง `docs/` เข้าโฟลเดอร์โค้ด ผังข้างในเหมือนกัน) (`docs/decisions/ADR-NNNN-<slug>.md` · `docs/runbook-<เรื่อง>.md`) — ข้อนี้คือที่เดียวที่กำหนด
+**ADRs and runbooks live in the root `docs/`, not in `<project-name>/docs/`.** Type A moves the whole `docs/` into the code folder, with the same inner layout. Paths: `docs/decisions/ADR-NNNN-<slug>.md` · `docs/runbook-<topic>.md`. This section is the only place that defines this.
 
-**ข้อยกเว้นของราก:** `.sandbox/` อยู่ที่รากได้เมื่อใช้ `docker-sandbox` · `AGENTS.md` / `GEMINI.md` ตามเงื่อนไขข้างบน — ทุกข้อยกเว้นต้องประกาศใน README ของโฟลเดอร์โค้ด
+**Root exceptions:** `.sandbox/` may sit at the root when you use `docker-sandbox` · `AGENTS.md` / `GEMINI.md` under the conditions above. Declare every exception in the README of the code folder.
 
-**โฟลเดอร์สร้างเมื่อมีของจริง ไม่สร้างเผื่อ:** `ref/` เมื่อได้ไฟล์จากลูกค้าหรือระบบเดิม (ห้ามปนใน `docs/`) · `docs/figures/` เมื่อมีรูปวาดเองในเอกสารส่งมอบ (ไม่งั้นรูปติดอยู่ใน `.docx` แก้ไม่ได้) · `docs/decisions/` เมื่อมีการตัดสินใจที่ต้องอธิบายทีหลัง · `docs/research/` เมื่อผู้ใช้อยากได้แอปแบบที่มีอยู่ · `qa/` เมื่อมี test case (test case อยู่ที่นี่เสมอ `docs/test-plan.md` มีแค่แผน) · `assets/` เมื่อมีโลโก้หรือไอคอน
+**Create folders when real content exists, not in advance:** `ref/` when you get files from the client or the old system (never mix them into `docs/`) · `docs/figures/` when a delivered doc has a self-drawn figure (otherwise the figure is stuck inside the `.docx` and cannot be edited) · `docs/decisions/` when a decision needs explaining later · `docs/research/` when the user wants an app like an existing one · `qa/` when test cases exist (test cases always live here; `docs/test-plan.md` holds only the plan) · `assets/` when there is a logo or icon.
 
-**โปรเจกต์แบบ ecosystem** (sub-project ≥ 2 ตัว แต่ละตัวมีเอกสารชุดของตัวเอง) → โฟลเดอร์ชื่อ `ecosystem/` เสมอ (ห้าม `projects/` `modules/` `apps/`) · `ecosystem/<รหัส>-<SUB>/` มี `docs/` `mockup/` `qa/` และ repo ของตัวเอง · เอกสารที่ครอบทุกตัวอยู่ `docs/` ที่รากที่เดียว · ผังและกฎเต็ม → [`references/ecosystem.md`](references/ecosystem.md)
+**Ecosystem project** (2 or more sub-projects, each with its own doc set): the folder is always named `ecosystem/` (never `projects/` `modules/` `apps/`). `ecosystem/<code>-<SUB>/` holds `docs/` `mockup/` `qa/` and its own repo. Docs that cover all sub-projects live in one place, the root `docs/`. Full layout and rules: [`references/ecosystem.md`](references/ecosystem.md).
 
 
-**กฎของโฟลเดอร์ (ใช้ได้ทั้ง 2 แบบ):**
+**Folder rules (both types):**
 
-- **`.docx` กับ `.md` อยู่ใน `docs/` เดียวกันได้** ไม่ต้องแยกโฟลเดอร์ เพราะนามสกุลบอกอยู่แล้วว่าใครอ่าน
-- **ไฟล์ต้นทางของรูปห้ามหาย** เพราะถ้าปีหน้าต้องแก้รูปแล้วเหลือแต่ PNG ก็ต้องวาดใหม่ทั้งใบ
-- **ทุกปุ่มใน mockup ต้องกดได้จริง** เพราะปุ่มหลอกทำให้รีวิวผิด
-- **`.docx` / `.xlsx` อยู่ใน `docs/` และ `qa/` เท่านั้น** ไม่กระจายไปรากโปรเจกต์
-- **ของชั่วคราวลง `_to_delete/`** (`temp-file-discipline`)
-- **`docs/README.md` เป็นสารบัญ** บอกว่าอ่านอะไรก่อนและใครเป็นเจ้าของ (แม่แบบใน `project-bootstrap` → `assets/starter-files.md`)
+- **`.docx` and `.md` may share one `docs/`.** No need for separate folders, because the extension already says who reads it.
+- **Never lose the source files of figures.** If a figure must change next year and only the PNG is left, the whole figure must be redrawn.
+- **Every button in a mockup must really click**, because a fake button makes the review wrong.
+- **`.docx` / `.xlsx` live only in `docs/` and `qa/`.** Do not scatter them to the project root.
+- **Temporary items go to `_to_delete/`** (`temp-file-discipline`).
+- **`docs/README.md` is the index.** It says what to read first and who owns what (template in `project-bootstrap` → `assets/starter-files.md`).
 
 ---
 
-## 2 · เลือกชุดเอกสารตามขนาดงาน
+## 2 · Choose the doc set by project size
 
-ขนาดวัดจาก **ระยะเวลา × จำนวนคนที่ต้องเห็นพ้องกัน** ไม่ใช่จำนวนบรรทัดโค้ด
+Size is measured by **duration × number of people who must agree**, not by lines of code.
 
-**S** ≤ 2 สัปดาห์ · ทีมเดียว · ไม่มีใครนอกทีมต้องเซ็น — **M** 1–3 เดือน · ผู้ว่าจ้างภายใน · ส่งมอบเป็นรอบ — **L** > 3 เดือน · ลูกค้าภายนอกเซ็นรับ · มีข้อผูกพันตามสัญญา
+**S** ≤ 2 weeks · one team · nobody outside the team signs — **M** 1–3 months · internal client · delivered in rounds — **L** > 3 months · external client signs off · contractual obligations
 
-### 2.1 · เอกสารส่งมอบ — คนอ่านและเซ็น
+### 2.1 · Deliverable docs: people read and sign them
 
-| เอกสาร | รูปแบบ | ผู้อ่าน | S | M | L |
+| Doc | Format | Readers | S | M | L |
 |---|---|---|:-:|:-:|:-:|
-| Project Plan | `.docx` | ผู้ว่าจ้าง · ทีม | ○ | ● | ● |
-| SRS | `.docx` | dev · ผู้ว่าจ้าง | ○ | ● | ● |
+| Project Plan | `.docx` | client · team | ○ | ● | ● |
+| SRS | `.docx` | dev · client | ○ | ● | ● |
 | Architecture | `.docx` | dev · ops | ○ | ● | ● |
-| Test Plan | `.docx` | QA · ผู้ว่าจ้าง | ○ | ● | ● |
-| คู่มือผู้ใช้ (`MAN`) | `.docx` → `.pdf` | ผู้ใช้ปลายทาง | ○ | ● | ● |
+| Test Plan | `.docx` | QA · client | ○ | ● | ● |
+| User guide (`MAN`) | `.docx` → `.pdf` | end users | ○ | ● | ● |
 | FSD | `.docx` | dev · QA | ○ | ○ | ● |
-| BRD | `.docx` | ฝ่ายธุรกิจ | ○ | ○ | ● |
-| Document Checklist | `.docx` | ทุกฝ่าย | ○ | ○ | ● |
+| BRD | `.docx` | business side | ○ | ○ | ● |
+| Document Checklist | `.docx` | everyone | ○ | ○ | ● |
 | Test Cases | `.xlsx` | QA | ○ | ○ | ● |
 
-● ต้องมี · ○ ไม่ต้อง เว้นแต่มีเหตุผลเฉพาะ
-**ชุด S ไม่มีเอกสารกลุ่มนี้เลย** — ถูกแล้ว
+● required · ○ not needed unless there is a specific reason
+**Set S has none of these docs.** That is correct.
 
 ---
 
-### 2.2 · เอกสารเชิงเทคนิค — ทีมและ agent ใช้ระหว่างสร้าง
+### 2.2 · Technical docs: the team and agents use them while building
 
-เป็น markdown ทั้งหมด และ**ขึ้นกับว่าโปรเจกต์มีอะไร** ไม่ใช่ขนาดงาน · ตารางเต็ม (ไฟล์ · ตอบคำถามอะไร) → [`references/technical-docs.md`](references/technical-docs.md)
+All markdown. They **depend on what the project contains**, not on project size. Full table (file · question answered): [`references/technical-docs.md`](references/technical-docs.md).
 
-- **เสมอ:** `<project-name>/README.md` · `docs/BUILD-PLAN.md`
-- **มีเงื่อนไข:** USER-STORIES และ `docs/sprints/sprint-NN.md` (ทำงานเป็น sprint) · AGENT-LOOP (agent เขียนโค้ดเป็นรอบ) · API-SPEC (มี API ที่คนอื่นเรียก) · DATA-DICTIONARY (มีฐานข้อมูล) · EVALUATION-POLICY และ PROMPT-LIBRARY (ใช้ LLM) · `docs/decisions/ADR-NNNN-<slug>.md` (การตัดสินใจที่จะถูกถามซ้ำ) · `docs/runbook-<เรื่อง>.md` (ระบบใช้งานจริงและมีคนอยู่เวร)
-- ตัวที่คนลืมบ่อยสุดคือ 4 ตัวเรื่อง LLM · API · ฐานข้อมูล แล้วต้องถาม agent ซ้ำทุกรอบว่า prompt ตัวไหนคือตัวจริง
+- **Always:** `<project-name>/README.md` · `docs/BUILD-PLAN.md`
+- **Conditional:** USER-STORIES and `docs/sprints/sprint-NN.md` (work runs in sprints) · AGENT-LOOP (an agent writes code in rounds) · API-SPEC (an API that others call) · DATA-DICTIONARY (a database exists) · EVALUATION-POLICY and PROMPT-LIBRARY (LLM used) · `docs/decisions/ADR-NNNN-<slug>.md` (decisions that will be questioned again) · `docs/runbook-<topic>.md` (system in real use and someone on call)
+- People forget the 4 docs about LLM · API · database most often, and then must ask the agent every round which prompt is the real one.
 
 ---
 
-## 3 · ลำดับการเขียน
+## 3 · Writing order
 
-**สายส่งมอบ** — ห้ามข้ามขั้นที่อยู่ในชุดของขนาดงานนั้น (ขั้นที่ไม่อยู่ในชุด เช่น BRD · FSD ของชุด M ให้ข้ามไป)
+**Delivery track.** Never skip a step that belongs to the set for that size. Skip steps that are not in the set, such as BRD · FSD in set M.
 
 ```
 Project Plan ─► BRD ─► SRS ─┬─► mockup
@@ -120,95 +120,95 @@ Project Plan ─► BRD ─► SRS ─┬─► mockup
               User Guide ◄─ Test Cases ◄─ Test Plan
 ```
 
-**ชิ้นถัดไปเขียนต่อบนฉบับ DRAFT ของชิ้นก่อนหน้าได้** ข้อที่ยังไม่ยืนยันใส่ `(รอยืนยัน)` ไว้ทั้งสองชิ้น · ห้ามเปลี่ยนสถานะชิ้นถัดไปเป็น APPROVED ก่อนชิ้นก่อนหน้า เพราะถ้าชิ้นต้นทางเปลี่ยนต้องรื้อทั้งสาย
-ข้อยกเว้นเดียว: **mockup ทำคู่ไปกับ SRS ได้** เพราะภาพหน้าจอช่วยให้ SRS ถูกยืนยันเร็วขึ้น
+**The next doc may build on the DRAFT of the previous one.** Put `(รอยืนยัน)` (awaiting confirmation) on every unconfirmed item in both docs. Never set the next doc to APPROVED before the previous one, because if the upstream doc changes, the whole chain must be redone.
+The one exception: **the mockup may run in parallel with the SRS**, because screenshots help the SRS get confirmed faster.
 
-### 3.1 · ทะเบียนจุดค้าง — ผู้ใช้ถามว่า "ยังติดตรงไหน" ตอบเป็นไฟล์ Excel ไม่ใช่ข้อความในแชต
+### 3.1 · Open-items register: when the user asks "what is still stuck", answer with an Excel file, not chat text
 
-ป้าย `(รอยืนยัน)` · `(รอวัดใน Phase 0)` และตารางคำถามกระจายอยู่ทุกเอกสาร ผู้ตัดสินใจจึงไม่เห็นภาพรวม · รวมเป็นไฟล์เดียวด้วยสคริปต์ ไม่ไล่อ่านเอง:
+Labels such as `(รอยืนยัน)` · `(รอวัดใน Phase 0)` (awaiting measurement in Phase 0) and question tables are spread over every doc, so the decision maker sees no overall picture. Merge them into one file with the script. Do not read them all by hand:
 
 ```
-python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE>    # ทดสอบสคริปต์: --self-test
+python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE>    # test the script: --self-test
 ```
 
-- อ่านทุก `.docx` ใน `docs/`: ตารางคำถาม · ตารางข้อสมมติที่ยังไม่ตัดสิน · ตารางลงนามที่ยัง "รอ" · ป้ายในเนื้อหา · ข้ามประวัติการแก้ไข สารบัญ บรรทัดอธิบายป้าย และ `(รอบหลัง)`
-- แผ่น **สรุป** นับตามเอกสาร × ประเภทด้วยสูตร · แผ่น **รายการค้าง** มีหัวข้อในเอกสาร · ใครตอบ · ตัดสินภายใน · ค่าที่ใช้ไปก่อน · ข้อที่อ้างถึงกัน · ช่อง "สถานะ" และ "คำตอบ" ให้กรอก
-- ประเภท: **เจ้าของตัดสิน** (ค้นเว็บแล้วปิดไม่ได้) · **ทีมตัดสิน** (BA · SA) · **กฎหมาย** · **วัดจริง** (ไม่มีตัวเลขเผยแพร่) · **ลงนาม** — คำถามที่อ้างคำถามของเจ้าของในเอกสารอื่นถูกนับเป็น "เจ้าของตัดสิน" ด้วย
-- **ก่อนส่ง เปิดอ่านรายการด้วยตาเอง** — สคริปต์จับจากถ้อยคำ แถวที่ตอบไปแล้วแต่เขียนไม่ตรงคำว่า "ตอบแล้ว · ปิดแล้ว · ตัดสินแล้ว" ยังติดมา · ในชุดตัวอย่างหนึ่ง (6 ฉบับ) ได้ 75 รายการ มีแถวแบบนี้ราว 3 แถว
-- ผู้ใช้กรอกคำตอบแล้ว → เติมคำตอบลงเอกสารต้นทาง ลบป้าย บันทึกในประวัติการแก้ไข แล้วรันสคริปต์ซ้ำ · ไฟล์นี้เป็นรายการงาน ไม่ใช่ต้นฉบับ อย่าแก้คำตอบในไฟล์นี้แทนเอกสาร
+- It reads every `.docx` in `docs/`: question tables · tables of undecided assumptions · sign-off tables still "waiting" · labels in the body. It skips revision history, table of contents, label-explanation lines and `(รอบหลัง)` (later round).
+- The **สรุป** (summary) sheet counts by document × type with formulas. The **รายการค้าง** (open items) sheet has the heading in the doc · who answers · decide by · value used for now · cross-references · and "สถานะ" (status) and "คำตอบ" (answer) columns for people to fill in.
+- Types (ประเภทที่ต้องเลือก), shown in Thai in the sheet: **เจ้าของตัดสิน** (owner decides: a web search cannot close it) · **ทีมตัดสิน** (team decides: BA · SA) · **กฎหมาย** (legal) · **วัดจริง** (needs a real-world number: none is published) · **ลงนาม** (sign-off). A question that cites an owner question in another doc also counts as "เจ้าของตัดสิน".
+- **Before sending, read the list by eye.** The script matches wording. A row that was already answered but does not use the words "ตอบแล้ว · ปิดแล้ว · ตัดสินแล้ว" (answered · closed · decided) still gets through. In one sample set (6 docs) it found 75 items, and about 3 rows were like this.
+- When the user fills in answers: write the answer into the source doc, remove the label, record it in the revision history, then rerun the script. This file is a work list, not a source. Do not edit answers in this file in place of the doc.
 
-**สายเทคนิค** — เขียนเมื่อถึงจุดที่ต้องใช้ ไม่ต้องรอใคร: README · BUILD-PLAN ก่อนโค้ดบรรทัดแรก · DATA-DICTIONARY ตอนออกแบบตารางแรก · API-SPEC ตอน endpoint แรก · PROMPT-LIBRARY ตอน prompt แรกที่ใช้จริง · ADR ตอนตัดสินใจ (ไม่ใช่ตอนสรุปท้าย เพราะเหตุผลจริงหายแล้ว) · Runbook ก่อนขึ้นระบบจริง — ตารางเต็มใน [`references/technical-docs.md`](references/technical-docs.md)
-
----
-
-## 4 · ใครเขียนชิ้นไหน ด้วย skill อะไร
-
-ตารางเต็ม (agent · skill ต่อเอกสาร 16 ชนิด) → [`references/technical-docs.md`](references/technical-docs.md) · หลัก ๆ: SRS → `srs-writing` · FSD → `fsd-writing` · ADR → `adr-writer` · Test → `test-case-template` · mockup → `web-app-design` + `ui-craft` · README → `project-bootstrap`
+**Technical track.** Write when you reach the point of need. No need to wait for anyone: README · BUILD-PLAN before the first line of code · DATA-DICTIONARY when designing the first table · API-SPEC at the first endpoint · PROMPT-LIBRARY at the first prompt really used · ADR at decision time (not in the final wrap-up, because the real reasons are gone by then) · Runbook before going live. Full table in [`references/technical-docs.md`](references/technical-docs.md).
 
 ---
 
-## 5 · รูปในเอกสาร — เลือกให้ถูกตั้งแต่ต้น
+## 4 · Who writes which doc, with which skill
 
-- รูปในเอกสารโปรเจกต์ทุกชนิด (BRD · SRS · FSD · ADR · ER · ผังขั้นตอน) · สไลด์ · งานพิมพ์ → `diagram-figures` (house style เดียว) เก็บ `docs/figures/` + ต้นทางใน `src/` · **Mermaid ค่าเริ่มต้นห้ามเข้าเอกสารโปรเจกต์**
-- รูปด่วนใน README · PR · โน้ตในโค้ด → Mermaid (`software-diagrams`) ฝังใน `.md` (สีสุ่มไม่มีความหมาย ไทยล้นกรอบ ย่อลง A4 แล้วอ่านไม่ออก)
-
-**หัวรูปทุกใบต้องมีครบ 6 อย่าง** — โลโก้โปรเจกต์ · ชื่อ · คำขยาย 1 บรรทัด · เลขรูป · เวอร์ชันกับวันที่ · เจ้าของ (รายละเอียดอยู่ใน `diagram-figures` ข้อ 3)
-รูปสถาปัตยกรรมถูกก๊อปไปวางในอีเมลและสไลด์แล้วอยู่ต่ออีกเป็นปี **รูปที่ไม่มีวันที่ ไม่มีใครกล้าแก้**
+Full table (agent · skill for each of 16 doc types): [`references/technical-docs.md`](references/technical-docs.md). Main ones: SRS → `srs-writing` · FSD → `fsd-writing` · ADR → `adr-writer` · Test → `test-case-template` · mockup → `web-app-design` + `ui-craft` · README → `project-bootstrap`
 
 ---
 
-## 6 · ธีมสีของชุดเอกสาร
+## 5 · Figures in docs: choose correctly from the start
 
-ประกาศครั้งเดียวต่อโปรเจกต์ บนหัวไฟล์ต้นทางของทุกเอกสาร:
+- Figures in every kind of project doc (BRD · SRS · FSD · ADR · ER · flowcharts) · slides · print work → `diagram-figures` (one house style). Keep them in `docs/figures/` with sources in `src/`. **Default Mermaid is banned from project docs.**
+- Quick figures in a README · PR · code notes → Mermaid (`software-diagrams`) embedded in `.md` (colours are random and meaningless, Thai overflows the boxes, and shrunk to A4 it is unreadable).
+
+**Every figure header needs all 6 items:** project logo · title · 1-line subtitle · figure number · version and date · owner (details in `diagram-figures` section 3).
+Architecture figures get copied into emails and slides and then live on for a year. **Nobody dares to edit a figure with no date.**
+
+---
+
+## 6 · Colour theme of the doc set
+
+Declare it once per project, at the top of every doc's source file:
 
 ```markdown
 <!-- doc-theme: accent=#2A78D6 -->
 ```
 
-(ตัวอย่างใช้สีประจำบ้าน `#2A78D6` — แทนด้วยสีหลักของโปรเจกต์)
+(The example uses the house colour `#2A78D6`. Replace it with the project's main colour.)
 
 `branded-document-design` · `presentation-design` · `diagram-figures`
-อ่านค่านี้แทนการเลือกสีเอง เอกสาร สไลด์ และรูปทุกใบจึงเป็นชุดเดียวกัน
+read this value instead of picking colours themselves, so docs, slides and every figure form one set.
 
-**สีมาจากเนื้องาน ไม่ใช่จากรสนิยม** — มีสีแบรนด์ใช้สีแบรนด์ · ยังไม่มีใช้สีประจำบ้านของ `branded-document-design` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม
-ข้อยกเว้นที่ไม่เปลี่ยนตามธีม: สีโลโก้ผู้ให้บริการ · สีเทาของเส้นโครงสร้าง · เขียว = ผ่าน / แดง = ไม่ผ่าน
+**Colour comes from the work, not from taste.** If there is a brand colour, use it. If not, use the house colour of `branded-document-design`, write `(รอยืนยัน)`, and carry on without stopping to ask.
+Exceptions that do not follow the theme: service provider logo colours · grey structural lines · green = pass / red = fail
 
 ---
 
-## 7 · รายการตรวจก่อนส่งมอบชุดเอกสาร
+## 7 · Checklist before delivering the doc set
 
-- [ ] ทุกไฟล์ `.docx` เปิด Navigation Pane แล้ว**เห็นหัวข้อครบ** (ใช้ Heading style จริง ไม่ใช่ตัวหนา)
-- [ ] ทุกเอกสารมีหน้าประวัติการแก้ไข · เลขเวอร์ชัน · วันที่ · ผู้จัดทำ
-- [ ] ทุกรูปมีเลขรูปและถูกอ้างในเนื้อความอย่างน้อย 1 ครั้ง
-- [ ] ไฟล์ต้นทางของทุกรูปอยู่ใน `docs/figures/src/` (ถ้ามีโฟลเดอร์นี้)
-- [ ] เอกสารเชิงเทคนิคที่เข้าเงื่อนไขในข้อ 2.2 มีครบ เช่น ถ้ามี API ต้องมี API-SPEC และถ้าใช้ LLM ต้องมี PROMPT-LIBRARY
-- [ ] ตัวย่อทุกตัวเขียนเต็มครั้งแรกที่ปรากฏ
-- [ ] ชื่อไฟล์ตรงตาม `document-naming` — ไม่มี `final2` ไม่มี `ล่าสุด`
-- [ ] เอกสารในชุดอ้างเวอร์ชันของกันและกันตรงกัน
-- [ ] รัน `scripts/open_items.py` แล้วทะเบียนจุดค้างไม่มีแถวสถานะ "เปิด" (หรือผู้ว่าจ้างรับรู้ทุกแถวที่ยังเปิด)
-- [ ] บอกผู้ใช้ว่ามีอะไรค้างใน `_to_delete/` (ไม่ลบเอง — ลบเมื่อผู้ใช้สั่งเท่านั้น)
+- [ ] In every `.docx`, open the Navigation Pane and **see all headings** (use real Heading styles, not bold text)
+- [ ] Every doc has a revision history page · version number · date · author
+- [ ] Every figure has a figure number and is cited in the body at least once
+- [ ] The source file of every figure is in `docs/figures/src/` (if this folder exists)
+- [ ] Technical docs that meet the conditions in section 2.2 are all present. For example, if there is an API there must be an API-SPEC, and if an LLM is used there must be a PROMPT-LIBRARY
+- [ ] Every abbreviation is spelled out at first appearance
+- [ ] File names follow `document-naming`: no `final2`, no `ล่าสุด` ("latest")
+- [ ] Docs in the set cite each other's versions consistently
+- [ ] Run `scripts/open_items.py`, and the open-items register has no row with status "เปิด" (open), or the client knows about every row still open
+- [ ] Tell the user what is left in `_to_delete/` (do not delete it yourself; delete only when the user says so)
 
 ---
 
 ## 8 · Anti-patterns
 
-ผิด: `.docx` ไม่มี Heading style · เก็บแต่ PNG ไม่เก็บต้นทาง · `.docx` และ mockup ใน repo โค้ด (ถึงจุดนี้ต้องย้ายเป็นแบบ B) · เอกสารอยู่ 2 ที่ (= 2 เวอร์ชัน) · FSD ก่อน SRS ยืนยัน · ใช้ LLM แต่ไม่มี PROMPT-LIBRARY · sub-project ชื่อ `projects/` `modules/` `apps/` · โฟลเดอร์ว่างสร้างเผื่อ · เอกสารชิ้นเดียวตอบทุกคำถาม
+Wrong: `.docx` with no Heading style · keeping only the PNG and not the source · `.docx` and mockups inside the code repo (at this point move to type B) · a doc in 2 places (= 2 versions) · FSD before the SRS is confirmed · using an LLM with no PROMPT-LIBRARY · sub-projects named `projects/` `modules/` `apps/` · empty folders created in advance · one doc that answers every question
 
 ---
 
-## 9 · ตัวย่อ
+## 9 · Abbreviations
 
 ADR Architecture Decision Record · BRD Business Requirements Document · FSD Functional Specification Document · QA Quality Assurance · SRS Software Requirements Specification · TOC Table of Contents
 
 ---
 
-## 10 · เชื่อมกับ skill อื่น
+## 10 · Links to other skills
 
-นอกจากตาราง "ไม่ใช้" ด้านบน: วาดรูป → `diagram-figures` (เอกสารโปรเจกต์) · `software-diagrams` (README · PR) · ของชั่วคราว → `temp-file-discipline` · สถานะเอกสารใน `docs/BUILD-PLAN.md` → `status-report` · รายการตรวจฉบับพิมพ์ → `assets/doc-set-checklist.md`
+Besides the "not for" table above: drawing figures → `diagram-figures` (project docs) · `software-diagrams` (README · PR) · temporary items → `temp-file-discipline` · doc status in `docs/BUILD-PLAN.md` → `status-report` · checklist for the printed version → `assets/doc-set-checklist.md`
 
-**อ่านเพิ่มเมื่อต้องใช้:** [`references/writer-templates.md`](references/writer-templates.md) — แม่แบบเอกสารของ `technical-writer` (tutorial · API reference · release notes · README ดู `project-bootstrap`)
+**Read more when needed:** [`references/writer-templates.md`](references/writer-templates.md): `technical-writer` doc templates (tutorial · API reference · release notes · for README see `project-bootstrap`)
 
-**คู่มือต้องขึ้นเว็บ ค้นได้ มีหลายรุ่น:** [`references/docs-site.md`](references/docs-site.md) · เลือก MkDocs Material · Docusaurus · Starlight · VitePress · ผลทดสอบค้นหาภาษาไทย · ที่วางเว็บ · ฟอนต์ไทย
+**When the guide must go on the web, be searchable and have many versions:** [`references/docs-site.md`](references/docs-site.md): choosing MkDocs Material · Docusaurus · Starlight · VitePress · Thai search test results · hosting · Thai fonts
 
 
 ## reference: docs-site.md
@@ -302,77 +302,77 @@ A document that outsiders must not see does not go on a public site. Keep it as 
 
 ## reference: ecosystem.md
 
-# โปรเจกต์แบบ ecosystem — 1 ระบบ แบ่งเป็นหลาย sub-project
+# Ecosystem project: 1 system split into several sub-projects
 
-อ่านเมื่อโปรเจกต์มี sub-project ตั้งแต่ 2 ตัวและแต่ละตัวมีเอกสารชุดของตัวเอง · กฎย่ออยู่ใน `SKILL.md` ข้อ 1
+Read this when a project has 2 or more sub-projects and each one has its own doc set. The short rule is in `SKILL.md` section 1.
 
-ใช้เมื่อโปรเจกต์เป็นชุดผลิตภัณฑ์ที่มี sub-project ตั้งแต่ 2 ตัวขึ้นไป และแต่ละตัวมีเอกสารชุดของตัวเอง (SRS · mockup · สถาปัตยกรรม) เช่น Quanton ที่แบ่งเป็น CONNECT · LAB · INTEL · DESK
-**ชื่อโฟลเดอร์ต้องเป็น `ecosystem/` เสมอ** ห้ามใช้ `projects/` `modules/` หรือ `apps/` เพราะพอเปิดโฟลเดอร์แล้วต้องรู้ทันทีว่าทุกตัวข้างในเป็นชิ้นของระบบเดียวกัน
+Use it when the project is a product suite with 2 or more sub-projects, and each has its own doc set (SRS · mockup · architecture). Example: Quanton, split into CONNECT · LAB · INTEL · DESK.
+**The folder must always be named `ecosystem/`.** Never use `projects/`, `modules/` or `apps/`. When someone opens the folder, they must see at once that everything inside is a piece of one system.
 
 ```
-<ชื่อโปรเจกต์>/
-├─ docs/                เอกสารระดับ ecosystem — README (สารบัญ) · BUILD-PLAN · project-plan · BRD · figures/
+<project-name>/
+├─ docs/                ecosystem-level docs — README (index) · BUILD-PLAN · project-plan · BRD · figures/
 ├─ ecosystem/
-│  └─ <รหัส>-<SUB>/     1 โฟลเดอร์ต่อ 1 sub-project เช่น QTN-CONNECT
+│  └─ <code>-<SUB>/     1 folder per sub-project, e.g. QTN-CONNECT
 │     ├─ docs/          srs.md · architecture.md · decisions/ · figures/ · fsd-*.md · test-plan.md
 │     ├─ mockup/
 │     ├─ qa/
-│     └─ <sub-name>/    repo โค้ดของ sub-project นี้ (ตัวพิมพ์เล็กคั่น `-`)
-├─ ref/ · assets/ · _to_delete/ · .claude/   ใช้ร่วมกันทั้ง ecosystem (กติกาเดียวกับแบบ B)
+│     └─ <sub-name>/    code repo of this sub-project (lowercase, joined with `-`)
+├─ ref/ · assets/ · _to_delete/ · .claude/   shared by the whole ecosystem (same rules as type B)
 ```
 
-- เอกสารที่ครอบทุก sub-project (BRD · แผนโครงการ · BUILD-PLAN) อยู่ใน `docs/` ที่รากที่เดียว ห้ามก๊อปไปไว้ในแต่ละ sub-project
-- สร้างโฟลเดอร์ sub-project เมื่อเริ่มเขียนเอกสารของตัวนั้นจริง ไม่สร้างเผื่อ
-- ชื่อโฟลเดอร์ sub-project = รหัสโปรเจกต์ + ชื่อ sub-project ตัวพิมพ์ใหญ่ (`QTN-CONNECT`) ใช้รหัสเดียวกับที่เอกสารอ้าง
-- โปรเจกต์ที่ใช้ `projects/` อยู่แล้ว → เปลี่ยนชื่อเป็น `ecosystem/` แล้วแก้ path ในเอกสารและสคริปต์ทุกไฟล์ในรอบเดียวกัน
-- โปรเจกต์ที่มีผลิตภัณฑ์เดียว ไม่ต้องมี `ecosystem/` ใช้แบบ B ตามปกติ
+- Docs that cover every sub-project (BRD · project plan · BUILD-PLAN) live in one place, the root `docs/`. Never copy them into each sub-project.
+- Create a sub-project folder when you start writing that sub-project's docs. Do not create folders in advance.
+- Sub-project folder name = project code + sub-project name in capitals (`QTN-CONNECT`). Use the same code the docs cite.
+- If a project already uses `projects/`, rename it to `ecosystem/` and fix the paths in every doc and script in the same pass.
+- A project with a single product does not need `ecosystem/`. Use type B as usual.
 
 
 ## reference: technical-docs.md
 
-# เอกสารเชิงเทคนิค — ตาราง ลำดับเขียน และใครเขียน
+# Technical docs: table, writing order and who writes what
 
-อ่านเมื่อเลือกชุดเอกสารเชิงเทคนิค หรือกำลังจะเขียนชิ้นใดชิ้นหนึ่ง · สรุปอยู่ใน `SKILL.md` ข้อ 2.2–4
+Read this when choosing the technical doc set or about to write one of them. The summary is in `SKILL.md` sections 2.2–4.
 
-## เอกสารเชิงเทคนิค (ข้อ 2.2)
+## Technical docs (section 2.2)
 
-กลุ่มนี้เป็น **markdown ทั้งหมด** และ**ไม่ได้ขึ้นกับขนาดงาน** แต่ขึ้นกับว่าโปรเจกต์มีอะไร
+This group is **all markdown** and **does not depend on project size**. It depends on what the project contains.
 
-| เอกสาร | ไฟล์ | ตอบคำถามว่า | ต้องมีเมื่อ |
+| Doc | File | Answers the question | Needed when |
 |---|---|---|---|
-| README | `<project-name>/README.md` | ติดตั้งและรันยังไง | **เสมอ** |
-| BUILD-PLAN | `docs/BUILD-PLAN.md` | จะสร้างอะไรก่อนหลัง · ตอนนี้ถึงไหนแล้ว | **เสมอ** |
-| USER-STORIES | `docs/USER-STORIES.md` | จะสร้างอะไรให้ใคร · story ไหนพร้อมเข้า sprint · AC คืออะไร | ทำงานเป็น sprint หรือมี backlog (`user-story-writer`) |
-| Sprint plan | `docs/sprints/sprint-NN.md` | sprint นี้รับ story ไหน · เป้าหมายคืออะไร · เสี่ยงอะไร | ทำงานเป็น sprint (`/sprint-plan`) — ไฟล์ละ sprint ไม่เขียนทับของเก่า |
-| AGENT-LOOP | `docs/AGENT-LOOP.md` | agent ทำงานเป็นวงจรแบบไหน · อะไรคือเงื่อนไขว่าจบ | ให้ agent เขียนโค้ดเป็นรอบ ๆ (`spec-to-code-loop`) |
-| API-SPEC | `docs/API-SPEC.md` | endpoint ไหนรับอะไร คืนอะไร พังยังไง | มี API ที่คนอื่นเรียก (`api-conventions`) |
-| DATA-DICTIONARY | `docs/DATA-DICTIONARY.md` | ฟิลด์นี้แปลว่าอะไร · ค่าที่เป็นไปได้มีอะไรบ้าง | มีฐานข้อมูลหรือสคีมาข้อมูล (`database-design`) |
-| EVALUATION-POLICY | `docs/EVALUATION-POLICY.md` | วัดว่าผลลัพธ์ดีพอหรือยังด้วยอะไร · เกณฑ์ผ่านเท่าไร | ผลลัพธ์มาจากโมเดลหรือ LLM ที่ไม่ได้ถูกเสมอ |
-| PROMPT-LIBRARY | `docs/PROMPT-LIBRARY.md` | prompt ตัวจริงคือตัวไหน เวอร์ชันอะไร เปลี่ยนอะไรไป | ใช้ LLM ในเส้นทางหลักของระบบ |
-| ADR | `docs/decisions/ADR-*.md` | ทำไมถึงเลือกทางนี้ ไม่เลือกทางนั้น | มีการตัดสินใจที่จะถูกถามซ้ำ (`adr-writer`) |
-| Runbook | `docs/runbook-<เรื่อง>.md` ไฟล์ละเรื่อง | ระบบล่มตอนตี 2 ต้องทำอะไร | มีระบบที่รันอยู่จริงและมีคนอยู่เวร |
+| README | `<project-name>/README.md` | How to install and run | **Always** |
+| BUILD-PLAN | `docs/BUILD-PLAN.md` | What to build first and next · where we are now | **Always** |
+| USER-STORIES | `docs/USER-STORIES.md` | What to build for whom · which story is ready for a sprint · what the AC (acceptance criteria) are | Work runs in sprints or there is a backlog (`user-story-writer`) |
+| Sprint plan | `docs/sprints/sprint-NN.md` | Which stories this sprint takes · what the goal is · what the risks are | Work runs in sprints (`/sprint-plan`). One file per sprint; never overwrite old ones |
+| AGENT-LOOP | `docs/AGENT-LOOP.md` | How the agent works in a cycle · what the stop condition is | An agent writes code in rounds (`spec-to-code-loop`) |
+| API-SPEC | `docs/API-SPEC.md` | What each endpoint accepts, returns and how it fails | There is an API that others call (`api-conventions`) |
+| DATA-DICTIONARY | `docs/DATA-DICTIONARY.md` | What a field means · what values it can take | There is a database or data schema (`database-design`) |
+| EVALUATION-POLICY | `docs/EVALUATION-POLICY.md` | What measures whether the output is good enough · what the pass threshold is | Output comes from a model or LLM that is not always right |
+| PROMPT-LIBRARY | `docs/PROMPT-LIBRARY.md` | Which prompt is the real one · which version · what changed | An LLM sits on the system's main path |
+| ADR | `docs/decisions/ADR-*.md` | Why we chose this way and not the other | A decision will be questioned again (`adr-writer`) |
+| Runbook | `docs/runbook-<topic>.md`, one topic per file | What to do when the system goes down at 2 a.m. | A system is really running and someone is on call |
 
-> **เอกสาร 4 ตัวที่มีเงื่อนไขเรื่อง LLM · API · ฐานข้อมูล คือตัวที่คนลืมบ่อยที่สุด**
-> แล้วไปจบด้วยการถาม agent ซ้ำทุกรอบว่า "prompt ตัวไหนคือตัวจริง" หรือ "ฟิลด์นี้แปลว่าอะไร"
+> **The 4 conditional docs (LLM · API · database) are the ones people forget most often.**
+> The team then ends up asking the agent every round "which prompt is the real one" or "what does this field mean".
 
-## สายเทคนิค — เขียนเมื่อไหร่ (ข้อ 3)
+## Technical track: when to write (section 3)
 
-| เขียนเมื่อ | เอกสาร |
+| Write when | Doc |
 |---|---|
-| ก่อนเขียนโค้ดบรรทัดแรก | README · BUILD-PLAN |
-| ก่อนปล่อย agent ทำงานเป็นรอบ | AGENT-LOOP |
-| ตอนออกแบบตารางแรก | DATA-DICTIONARY |
-| ตอนออกแบบ endpoint แรก | API-SPEC |
-| ตอนเขียน prompt ตัวแรกที่จะใช้จริง | PROMPT-LIBRARY · EVALUATION-POLICY |
-| ตอนตัดสินใจเรื่องที่จะถูกถามซ้ำ | ADR |
-| ก่อนขึ้นระบบจริง | Runbook |
+| Before the first line of code | README · BUILD-PLAN |
+| Before letting an agent work in rounds | AGENT-LOOP |
+| When designing the first table | DATA-DICTIONARY |
+| When designing the first endpoint | API-SPEC |
+| When writing the first prompt that will really be used | PROMPT-LIBRARY · EVALUATION-POLICY |
+| When deciding something that will be questioned again | ADR |
+| Before going live | Runbook |
 
-> **ADR กับ DATA-DICTIONARY เขียนตอนที่ตัดสินใจ ไม่ใช่ตอนสรุปท้ายโปรเจกต์**
-> เขียนย้อนหลังก็ได้ แต่ตอนนั้นเหตุผลจริงหายไปแล้ว
+> **Write the ADR and DATA-DICTIONARY at decision time, not in the project wrap-up.**
+> You can write them afterwards, but the real reasons are gone by then.
 
-## ใครเขียนชิ้นไหน ด้วย skill อะไร (ข้อ 4)
+## Who writes which doc, with which skill (section 4)
 
-| เอกสาร | agent | skill ที่ใช้ |
+| Doc | agent | skill used |
 |---|---|---|
 | README · CHANGELOG | `technical-writer` | `project-bootstrap` |
 | Project Plan | `project-manager` | `branded-document-design` |
@@ -383,13 +383,13 @@ A document that outsiders must not see does not go on a public site. Keep it as 
 | ADR | `solution-architect` | `adr-writer` |
 | Test Plan · Test Cases | `qa-tester` | `test-case-template` |
 | mockups | `ux-designer` | `web-app-design` · `ui-craft` |
-| คู่มือผู้ใช้ (`MAN`) | `technical-writer` | `polished-document-style` |
+| User guide (`MAN`) | `technical-writer` | `polished-document-style` |
 | Runbook | `devops-engineer` | `incident-runbook-template` |
 | BUILD-PLAN | `project-manager` | `simplicity-first` |
 | AGENT-LOOP | `developer` | `spec-to-code-loop` |
 | API-SPEC | `system-analyst` | `api-conventions` |
 | DATA-DICTIONARY | `system-analyst` | `database-design` |
-| PROMPT-LIBRARY · EVALUATION-POLICY | `developer` | — (คู่กับ skill `llm-engineering`) |
+| PROMPT-LIBRARY · EVALUATION-POLICY | `developer` | none (pairs with skill `llm-engineering`) |
 
 
 ## reference: writer-templates.md
@@ -862,11 +862,11 @@ Phase 1:    Phase 2:           Phase 3:
 
 ## reference: architecture-overview-template.md
 
-# แม่แบบเอกสารภาพรวมสถาปัตยกรรม
+# Architecture Overview Document Template
 
 **สารบัญ:** แม่แบบเต็ม 1 บล็อก: Context · Quality Attributes · High-Level Architecture · Components · Data Flow · Tech Stack · Cross-Cutting Concerns · Trade-offs · References
 
-เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+Open this only when you actually need to write this kind of document · put `(รอยืนยัน)` (awaiting confirmation) on anything you do not know
 
 ## Standard Output: Polished Architecture Overview
 
@@ -1354,48 +1354,48 @@ The result is not "which one to use" but **"where is the gap"** · the compariso
 
 ## reference: licenses.md
 
-# สัญญาอนุญาตและข้อสัญญา
+# Licences and contract terms
 
-ส่วนของ `prior-art-review` ข้อ 4 · ตรวจก่อนลงมือใช้ ไม่ใช่หลังใช้ไปแล้ว
+Part of `prior-art-review` item 4 · check before you start using something, not after.
 
-**เรื่องนี้รู้ช้าเจ็บที่สุด** เพราะต้องรื้อตอนใกล้ส่งมอบ
+**This hurts most when learned late**, because you have to tear things out close to delivery.
 
-| กลุ่ม | ตัวอย่าง | ใช้ในของที่ขายได้ไหม |
+| Group | Examples | Can it go in something sold? |
 |---|---|---|
-| ปล่อยเสรี | MIT · Apache-2.0 · BSD | ได้ แต่ Apache-2.0 มีเงื่อนไขเรื่องสิทธิบัตรเพิ่ม |
-| ต้องเปิดโค้ดต่อ | GPL-3.0 · AGPL-3.0 | ได้แต่**ต้องเปิดโค้ดของเรา** และ AGPL นับรวมการให้บริการผ่านเครือข่ายด้วย |
-| ห้ามเชิงพาณิชย์ | CC BY-NC · โมเดลที่เขียนว่า research only | **ขายไม่ได้** แต่ใช้ทดลองและเทียบผลได้ |
-| ซื้อหรือเช่า (แม่แบบ ภาพ ฟอนต์ บริการ) | ต้องอ่านสัญญาจริง | ดูว่าใช้เชิงพาณิชย์ได้ไหม · เอาข้อมูลออกได้ไหม · ขึ้นราคาหรือเลิกบริการได้เมื่อไหร่ |
+| Permissive | MIT · Apache-2.0 · BSD | Yes, but Apache-2.0 adds patent conditions |
+| Must open the code in turn | GPL-3.0 · AGPL-3.0 | Yes, but **you must open your own code**, and AGPL also counts offering the software as a service over a network |
+| No commercial use | CC BY-NC · models marked research only | **Cannot be sold**, but fine for experiments and comparing results |
+| Bought or rented (templates, images, fonts, services) | Read the actual contract | Check whether commercial use is allowed · whether you can take your data out · when the price can rise or the service can end |
 
-**กฎ 2 ข้อที่พลาดกันบ่อย**
+**2 rules that people often get wrong**
 
-1. **โมเดลปัญญาประดิษฐ์มีสัญญาแยกจากโค้ด** — โค้ดอาจเป็น MIT แต่น้ำหนักโมเดลเป็น non-commercial ก็ได้
-2. **สัญญาตกทอดไปถึงโมเดลที่ต่อยอด** — เช่น โมเดลที่ fine-tune มาจากโมเดล non-commercial ก็ยัง non-commercial
+1. **An AI model has a licence separate from its code.** The code may be MIT while the model weights are non-commercial.
+2. **The licence passes down to models built on top.** For example, a model fine-tuned from a non-commercial model is still non-commercial.
 
-ทุกตัวที่จะใช้จริง ต้อง**เขียนชื่อสัญญาอนุญาตลงไฟล์** ไม่ใช่จำไว้
+For every item you will really use, **write the licence name into a file**. Do not rely on memory.
 
-## ชื่อเต็มของสัญญาอนุญาต
+## Full names of the licences
 
-- **MIT** — Massachusetts Institute of Technology License (สัญญาอนุญาตแบบปล่อยเสรี)
-- **GPL** — General Public License (ใช้ได้แต่ต้องเปิดโค้ดที่ต่อยอด)
-- **AGPL** — Affero General Public License (เหมือน GPL และนับรวมการให้บริการผ่านเครือข่าย)
+- **MIT** — Massachusetts Institute of Technology License (a permissive licence)
+- **GPL** — General Public License (usable, but derived code must be opened)
+- **AGPL** — Affero General Public License (like GPL, and it also counts offering the software as a service over a network)
 - **BSD** — Berkeley Software Distribution License
-- **CC BY-NC** — Creative Commons Attribution-NonCommercial (ห้ามใช้เชิงพาณิชย์)
+- **CC BY-NC** — Creative Commons Attribution-NonCommercial (no commercial use)
 
 
 ## reference: research-edition.md
 
-# ฉบับงานวิจัย
+# Research edition
 
-ส่วนของ `prior-art-review` ข้อ 8 · ใช้เมื่อสำรวจงานวิจัยก่อนตั้งโจทย์ แทนการเลือกเครื่องมือ
+Part of `prior-art-review` item 8 · use it when surveying research before setting the problem, instead of choosing a tool.
 
-ผลลัพธ์ไม่ใช่ "ใช้ตัวไหน" แต่คือ **"ช่องว่างอยู่ตรงไหน"**
+The output is not "which one to use" but **"where the gap is"**.
 
-- เปลี่ยนคอลัมน์ของตารางเทียบเป็น: งาน · ปี · วิธีที่ใช้ · ชุดข้อมูล · ผลที่รายงาน · ข้อจำกัดที่เขาบอกเอง
-- **คอลัมน์ "ข้อจำกัดที่เขาบอกเอง" คือที่มาของช่องว่าง** เพราะส่วนใหญ่ผู้เขียนบอกไว้เองในหัวข้อสุดท้าย
-- ช่องว่างที่ใช้ได้ต้องเป็นอย่างใดอย่างหนึ่ง: ยังไม่มีใครทดสอบกับบริบทนี้ · วิธีเดิมใช้ไม่ได้เมื่อเงื่อนไขเปลี่ยน · ผลที่รายงานทำซ้ำไม่ได้
-- **ห้ามอ้างงานที่ยังไม่ได้อ่านตัวเต็ม** เพราะการอ่านแค่บทคัดย่อแล้วอ้าง คือความผิดพลาดที่กรรมการจับได้เร็วที่สุด
-- งานที่หาโค้ดหรือชุดข้อมูลไม่ได้ ให้ระบุว่าทำซ้ำไม่ได้
+- Change the columns of the comparison table to: work · year · method used · dataset · reported result · limitations the authors state themselves
+- **The column "limitations the authors state themselves" is where gaps come from**, because most authors state them in the last section.
+- A usable gap must be one of these: nobody has tested it in this context · the existing method fails when conditions change · the reported result cannot be reproduced
+- **Never cite a work you have not read in full**, because reading only the abstract and then citing it is the mistake a reviewer catches fastest.
+- For work whose code or dataset you cannot find, state that it cannot be reproduced.
 
 
 ---
@@ -1404,60 +1404,60 @@ The result is not "which one to use" but **"where is the gap"** · the compariso
 
 Use when one attempt may lock in a wrong design or plan
 
-# parallel-attempts-pick-best — ลองหลายทาง เลือกทางที่ดีที่สุด
+# parallel-attempts-pick-best — try several ways, pick the best
 
-> ทางแรกที่คิดได้มักไม่ใช่ทางที่ดีที่สุด แต่ถ้าลงมือไปแล้วจะไม่มีใครย้อนกลับมาลองทางอื่น
+> The first way you think of is often not the best, but once you start building, nobody comes back to try another.
 
-มาจาก `arena` ของ pstack
+Comes from `arena` in pstack.
 
-แค่อยากได้ทางเลือกบนกระดาษก่อนลงมือ ไม่ต้องสร้างจริง → agent `brainstormer`
+If you only want options on paper before starting, with nothing built, use the agent `brainstormer`.
 
-เส้นแบ่งกับ [`adversarial-review-panel`](../adversarial-review-panel/SKILL.md): skill นี้สร้างหลายแบบก่อนเลือก (ยังไม่มีงาน หรือรูปแบบยังไม่ลงตัว) · panel โจมตีงานที่เสร็จแล้ว 1 ชิ้นก่อนส่ง · ใช้ต่อกันได้: เลือกแบบที่ชนะแล้วส่งเข้า panel
+The line between this and [`adversarial-review-panel`](../adversarial-review-panel/SKILL.md): this skill builds several versions before choosing (no work yet, or the form is not settled) · the panel attacks 1 finished piece before shipping · they chain: pick the winning version, then send it to the panel.
 
-## 1 · ตั้งโจทย์
+## 1 · Set the task
 
-0. **งานที่ตัดสินด้วยรสนิยม (ไอคอน · โลโก้ · หน้าตา · สี) ขอตัวอย่างที่ผู้ใช้ชอบ 2–3 ชิ้นก่อนแข่ง** แล้วใส่ไว้ในโจทย์ทุกตัว · ไม่มีตัวอย่าง ทุกแนวก็เดารสนิยมกันเอง ผู้ใช้จะไม่ชอบสักแนว (ไอคอน plugin 3 แนวถูกปฏิเสธทั้งหมด 2026-10-26) · ก่อนขอ ให้ค้นงานจริงในหมวดเดียวกันเองแบบนักออกแบบตาม `design-references` ประเภทที่ตรงงาน (ของที่จะวางข้างกัน · กฎของปลายทาง · แนวที่ใช้จนเฝือ) แล้วเสนอ 3–4 แนวพร้อมลิงก์ให้ผู้ใช้เลือก ไม่เสนอแนวจากความรู้สึก (ผู้ใช้ขอ 2026-10-26)
-1. บอกให้ชัดว่าทุกตัวต้องส่งอะไร (ฉบับร่างข้อเสนอ · ข้อความขาย · หน้าสไลด์ · แผน · ฟังก์ชัน) — ทุกตัวได้โจทย์เดียวกัน เพราะโจทย์คือสัญญา
-2. เขียนเกณฑ์ให้คะแนน 3–6 ข้อที่ตรวจได้ เช่น (งานเขียน) อ่านลื่นเมื่ออ่านออกเสียง · ครบตามข้อกำหนด · ถูกกว่า X · (โค้ด) ผ่าน test — **เกณฑ์เก็บไว้กับตัวเลือก ไม่ส่งให้ผู้แข่ง** · คุณภาพภาษาไทยของงานเขียนไม่ให้โมเดลโหวตจัดอันดับ เจ้าของเป็นคนเลือกเอง โมเดลทำได้แค่ไล่รหัสกฎจาก `human-writing` ที่เจอในแต่ละตัว
-3. เลือกจำนวน ปกติใช้ 3 ตัว ส่วนงานใหญ่หรือแพงใช้ไม่เกิน 4
-4. ความต่างต้องมาจากที่ไหนสักแห่ง เพราะใน Claude Code โมเดลมาจากค่ายเดียวกัน
-   - **ค่าเริ่ม:** ให้แต่ละตัวมีข้อจำกัดต่างกัน เช่น "ไม่เกิน 1 หน้า" · "เริ่มจากคำถามของผู้อ่าน" · ทุกตัวใช้ชนิด agent + โมเดล + effort เดียวกัน
-   - ข้อจำกัดยังไม่ทำให้ต่างพอ → ผสมระดับโมเดล (ใหญ่ · กลาง — ชื่อจริงดูหัวข้อ 5 ใน `superuser`) (ต่างโมเดล = ต่าง cache)
-5. กำหนดที่ส่งงานแยกกัน — โฟลเดอร์แยกต่อตัว `_to_delete/attempts-<เรื่อง>/<n>/` ห้ามเขียนที่เดียวกัน (เหมือน [`parallel-split-and-merge`](../parallel-split-and-merge/SKILL.md)) · งานโค้ด → ส่วนเพิ่มใน plugin `software-development` → `superuser` → `references/code-extensions.md`
+0. **For work decided by taste (icons · logos · looks · colors), ask for 2–3 examples the user likes before the contest**, and put them in every contestant's task · with no examples, every direction guesses the taste on its own and the user will like none (3 plugin icon directions were all rejected on 2026-10-26) · before asking, search real work in the same category yourself, the way a designer would, by `design-references`, the type that fits the work (things that will sit side by side · the destination's rules · directions that are overused), then offer 3–4 directions with links for the user to choose from. Do not offer directions from a gut feeling (the user asked for this on 2026-10-26).
+1. Say clearly what every contestant must deliver (a draft proposal · sales copy · a slide page · a plan · a function). Every contestant gets the same task, because the task is the contract.
+2. Write 3–6 checkable scoring criteria, such as (writing) reads smoothly aloud · meets the requirements · cheaper than X · (code) passes tests — **keep the criteria with the chooser and do not give them to the contestants** · for the Thai language quality of writing, do not let models vote a ranking. The owner chooses, and a model can only list the `human-writing` rule codes it finds in each entry.
+3. Choose the number. Normally 3 contestants, and at most 4 for big or costly work.
+4. The difference must come from somewhere, because in Claude Code the models come from one vendor.
+   - **Default:** give each contestant a different constraint, such as "at most 1 page" · "start from the reader's question" · all use the same agent type + model + effort.
+   - If constraints do not make them different enough → mix model tiers (large · medium; for real names see section 5 in `superuser`) (different model = different cache).
+5. Set separate delivery spots: 1 folder per contestant, `_to_delete/attempts-<topic>/<n>/`, and never write to the same place (like [`parallel-split-and-merge`](../parallel-split-and-merge/SKILL.md)) · code work → the add-on in plugin `software-development` → `superuser` → `references/code-extensions.md`.
 
-## 2 · ปล่อยพร้อมกัน
+## 2 · Launch all at once
 
-ส่ง subagent ทุกตัวในข้อความเดียว รันเบื้องหลัง แต่ละตัวได้รับ: โจทย์ · ตำแหน่งไฟล์อ้างอิง · ที่ส่งงานของตัวเอง
-ให้ส่งงาน (path) พร้อมเหตุผลสั้น ๆ ไม่เกินราว 40 บรรทัด ว่าคิดทางไหนไว้บ้าง และตัดทางไหนทิ้งเพราะอะไร ถ้าตัวไหนไม่ส่งงาน ให้ไปต่อกับตัวที่เหลือแล้วจดไว้
+Send every subagent in one message, running in the background. Each receives: the task · the location of reference files · its own delivery spot.
+Each delivers the work (path) with a short reason of about 40 lines at most saying which ways it considered and which it cut and why. If a contestant delivers nothing, go on with the rest and note it.
 
-## 3 · ให้คนกลางตัดสินอีกเสียง
+## 3 · Get a second vote from a neutral party
 
-หลังทุกตัวเสร็จ ส่ง subagent ตัวใหม่ (`reviewer` · อ่านอย่างเดียว · ไม่ใช่ผู้แข่ง) ให้คะแนนตามเกณฑ์ทีละข้อ
+After all finish, send a fresh subagent (`reviewer` · read-only · not a contestant) to score each criterion in turn.
 
-## 4 · เลือกฐาน
+## 4 · Choose the base
 
-อ่านทุกตัวจนจบก่อนตัดสิน ให้คะแนนทีละเกณฑ์ ไม่ใช่ตามความรู้สึกรวม แล้วเทียบกับคะแนนของคนกลาง
-- **เลือกอันดับด้วย `decision-scoring` คำสั่ง `pairwise`:** ให้ผู้ตรวจเทียบทีละคู่ และสลับตำแหน่งทุกคู่ (ผู้ตรวจที่เป็น LLM เอียงตามตำแหน่งที่เห็นก่อน · Zheng et al. arXiv 2306.05685) · คู่ที่สลับแล้วผลกลับข้างนับเสมอ · ผลสูสี (โอกาสชนะอันดับ 2 ต่ำกว่า 60%) ให้คนดูทั้ง 2 ตัว · เกณฑ์ที่วัดเป็นตัวเลขได้ (test ผ่านกี่ข้อ · ราคา · ขนาด) ใช้คะแนนตรงด้วยคำสั่ง `score` ได้ ไม่ต้องเทียบคู่
-- กฎเหล็กของงาน (ข้อกำหนดที่ต้องมี) กรองตัวที่ไม่ผ่านออกก่อนเทียบ
-- ถ้าตรงกัน ถือว่ายืนยันแล้ว
-- ถ้าไม่ตรงกัน แปลว่าเกณฑ์กำกวมหรือมีฝ่ายลำเอียง ให้อ่านเหตุผลของทั้ง 2 ฝ่ายก่อนตัดสิน
-- ถ้าคะแนนใกล้กัน ให้เลือกตัวที่แก้ต่อได้ง่ายที่สุด คือขอบเขตชัดกว่าและส่วนประกอบน้อยกว่า (`lazy-coding` (plugin `software-development`))
-- **ผ่านเกณฑ์ไม่ถึง 2 ตัว → ถอยเป็นงานตัวเดียว** — ไม่มีอะไรให้เทียบ ข้ามข้อ 5 เอาตัวที่ใกล้ผ่านสุดเป็นร่าง แล้วแก้ต่อตามรอบตรวจปกติของ `superuser` · ไม่ปล่อยรอบใหม่ เพราะทุกตัวตกพร้อมกันมักแปลว่าโจทย์หรือเกณฑ์ไม่ชัด ไม่ใช่ผู้แข่งไม่เก่ง · จดใน `decision-log` ว่า bake-off ไม่ได้ผลเพราะอะไร (แนวคิดจาก best-of-n ของ paulingham)
+Read every entry to the end before deciding. Score criterion by criterion, not by overall feeling, then compare with the neutral party's scores.
+- **Rank with `decision-scoring`, command `pairwise`:** have the reviewer compare pair by pair, and swap the positions of every pair (an LLM reviewer leans toward the position it sees first · Zheng et al. arXiv 2306.05685) · a pair whose result flips when swapped always counts · a close result (chance that 2nd place wins is below 60%) → a human looks at both entries · criteria that can be measured as numbers (how many tests pass · price · size) can use direct scoring with the command `score`, with no pairwise comparison.
+- The job's hard rules (required specs) filter out entries that fail, before comparing.
+- If the scores agree, treat it as confirmed.
+- If they disagree, the criteria are ambiguous or one side is biased. Read both sides' reasons before deciding.
+- If scores are close, choose the entry that is easiest to keep working on, meaning clearer scope and fewer parts (`lazy-coding` (plugin `software-development`)).
+- **Fewer than 2 entries pass the criteria → fall back to a single piece of work.** There is nothing to compare. Skip step 5, take the entry closest to passing as the draft, and fix it by the normal review round of `superuser`. Do not launch a new round, because every entry failing together usually means the task or criteria are unclear, not that the contestants are weak. Note in `decision-log` why the bake-off did not work (idea from best-of-n by paulingham).
 
-## 5 · ยกส่วนเด่นมาใส่
+## 5 · Lift the strong parts in
 
-ไล่ดูตัวที่แพ้อีกรอบ หาสิ่งที่ควรยกมา — ปกติตัวละ 1–2 อย่าง ไม่ใช่เกือบทั้งหมด
-เขียนเข้าไปในฐานเองให้กลมกลืน ห้ามแปะทั้งก้อน ผลต้องอ่านแล้วเป็นความคิดเดียว
+Go through the losing entries once more and look for what is worth lifting, usually 1–2 things per entry, not almost the whole thing.
+Write them into the base yourself so they blend in, never paste a whole block. The result must read as one idea.
 
-## 6 · ตรวจ
+## 6 · Check
 
-ตรวจผลที่รวมแล้วด้วยเกณฑ์ข้อ 1 อีกครั้ง และด้วยวิธีจริงของงานนั้น (เปิดดูของจริง · งานโค้ดรัน test)
-ลง [`decision-log`](../decision-log/SKILL.md) — ฐานคือตัวไหน · ยกอะไรมาจากตัวไหน · ทิ้งอะไรเพราะอะไร · คนกลางว่าอย่างไร
+Check the merged result against the criteria in step 1 again, and by the job's real method (open the real thing · for code, run the tests).
+Record in [`decision-log`](../decision-log/SKILL.md): which entry is the base · what was lifted from which entry · what was dropped and why · what the neutral party said.
 
-## ไม่ควรใช้เมื่อ
+## When not to use
 
-- งานกลไกที่มีคำตอบเดียว เพราะเปลืองแรงเปล่า
-- งานที่ตัดสินได้ด้วยการวัดตัวเลขตัวเดียว ให้วัดตัวเลขนั้นตรง ๆ แทน (งานโค้ด: playbook `prototype` ของ `superuser` ใน plugin `software-development`)
+- Mechanical work with a single answer, because it wastes effort
+- Work that one number can decide: measure that number directly instead (code work: the `prototype` playbook of `superuser` in plugin `software-development`)
 
 
 ---
@@ -1466,43 +1466,43 @@ Use when one attempt may lock in a wrong design or plan
 
 Use for an adversarial review or stress test before shipping
 
-# adversarial-review-panel — คณะรีวิวที่ตั้งใจหาเรื่อง
+# adversarial-review-panel — a review panel that deliberately hunts for faults
 
-> ผู้ตรวจคนเดียวเห็นแค่มุมเดียว ส่วนคณะที่ถูกสั่งให้ "พยายามทำให้มันพัง" คนละมุม จะจับสิ่งที่คนเดียวมองข้ามได้
-> ผลลัพธ์คือคำตัดสิน **ไม่ใช่การแก้งาน**
+> A single reviewer sees only one angle. A panel told to "try to break it," each from a different angle, catches what one person overlooks.
+> The output is a verdict, **not a fix to the work.**
 
-เส้นแบ่งกับ [`parallel-attempts-pick-best`](../parallel-attempts-pick-best/SKILL.md): panel โจมตีงานที่เสร็จแล้ว 1 ชิ้นก่อนส่ง · ยังไม่มีงานหรือยังไม่รู้ว่ารูปแบบไหนดี (แผน · ดีไซน์ · ร่าง) → สร้างหลายแบบแล้วเลือกด้วย pick-best ก่อน
+The line between this and [`parallel-attempts-pick-best`](../parallel-attempts-pick-best/SKILL.md): the panel attacks 1 finished piece of work before shipping · if there is no work yet, or you do not know which form is best (plan · design · draft), build several versions and choose with pick-best first.
 
-## ขั้นตอน
+## Steps
 
-1. **ขอบเขต** — สิ่งที่จะรีวิว เช่น เอกสาร · แผน · ผลวิจัย · รายการสินค้า · ชุดไฟล์ที่สร้างหรือแก้ในรอบนี้ รวมของรอบข้างที่ต้องอ่านประกอบ
-2. **แพ็กเกจและเจตนา** — สร้างแพ็กเกจรีวิวตาม [`review-lenses`](../superuser/references/review-lenses.md) ข้อ 1 (diff เป็นไฟล์ · เงื่อนไข spec คัดตรงตัว · รหัส `head:`) แล้วเขียนเจตนา 1 ย่อหน้าว่างานนี้ตั้งใจทำอะไร โดยดูจากคำขอ · บันทึกงาน · ตัวงานเอง ถ้าไม่แน่ใจให้เลือกการตีความที่ผลกระทบน้อยสุด แล้วจดลง [`decision-log`](../decision-log/SKILL.md) โดยไม่หยุดถาม
-3. **ตั้งคณะ 3 คน ต่างมุมกัน** (แต่ละคนคือ agent `reviewer` ตัวใหม่ อ่านอย่างเดียว · งานชิ้นเดียวที่ไม่เสี่ยงใช้ `reviewer` ตัวเดียวพอ) — ใน Claude Code โมเดลทุกตัวมาจากค่ายเดียวกัน ความต่างจึงต้องมาจากมุมที่สั่งให้ดู และการผสมโมเดลหลายขนาด
+1. **Scope**: what will be reviewed, such as a document · plan · research result · product list · the set of files created or changed this round, including neighboring items that must be read alongside.
+2. **Package and intent**: build the review package by [`review-lenses`](../superuser/references/review-lenses.md) item 1 (diff as a file · spec conditions quoted verbatim · a `head:` code), then write a 1-paragraph intent saying what the work means to do, from the request · the work log · the work itself. If unsure, choose the interpretation with the least impact and note it in the [`decision-log`](../decision-log/SKILL.md) without stopping to ask.
+3. **Form a panel of 3 with different angles** (each is a fresh read-only `reviewer` agent · for a single low-risk piece 1 `reviewer` is enough). In Claude Code every model comes from the same vendor, so the difference must come from the angle assigned and from mixing model sizes.
 
-   | ผู้ตรวจ | มุม | ระดับโมเดล |
+   | Reviewer | Angle | Model tier |
    |---|---|---|
-   | ก | ความถูกต้อง — ข้อเท็จจริงผิด · ตัวเลขไม่ตรง · กรณีขอบ · ข้อมูลว่าง | ใหญ่ |
-   | ข | ความเสี่ยงและข้อมูล — ข้อมูลส่วนบุคคล · ค่าลับ · สิทธิ์ · เงินหรือการกระทำที่ย้อนกลับไม่ได้ · ข้อกฎหมายหรือข้อตกลงที่ละเมิด | ใหญ่ |
-   | ค | ความเรียบง่ายและคนใช้ต่อ — ส่วนเกินจำเป็น · ขัดกันเอง · คำหรือชื่อที่ชวนเข้าใจผิด · คนอ่านหรือลูกค้าจริงจะติดตรงไหน | กลาง |
+   | A | Correctness: wrong facts · numbers that do not match · edge cases · empty data | large |
+   | B | Risk and data: personal data · secrets · permissions · money or irreversible actions · legal or contract terms violated | large |
+   | C | Simplicity and next users: what is more than needed · self-contradiction · misleading words or names · where a real reader or customer would get stuck | medium |
 
-   งานโค้ด (ขอบเขตจาก git · มุมเพิ่มของแต่ละผู้ตรวจ · แอปมือถือ) → ส่วนเพิ่มใน plugin `software-development` → `superuser` → `references/code-extensions.md`
+   For code work (scope from git · extra angles for each reviewer · mobile apps) → the add-on in plugin `software-development` → `superuser` → `references/code-extensions.md`.
 
-   **ผู้ตรวจจากค่ายอื่น (ถ้ามี)** — ถ้าเครื่องมี Command-Line Interface (CLI) ของโมเดลค่ายอื่นติดตั้งไว้แล้ว (เช่น `codex` · `gemini`) ให้ใช้แทนผู้ตรวจ ค ด้วย prompt และมุมเดิม ในโหมดอ่านอย่างเดียว เพราะโมเดลต่างค่ายอาจพลาดไม่เหมือนกัน (ยังไม่มีหลักฐานวัดเทียบว่าดีกว่าค่ายเดียว) แต่ **เนื้องานจะถูกส่งออกไปยังผู้ให้บริการนั้น** จึงใช้ได้เฉพาะเมื่ออนุญาตไว้ล่วงหน้าใน `~/.claude/superuser-style.md` หรือ `docs/AGENT-LOOP.md` ถ้าไม่มี CLI หรือไม่ได้อนุญาต ให้ใช้คณะค่ายเดียวตามตาราง
+   **A reviewer from another vendor (if available)**: if the machine has the Command-Line Interface (CLI) of another vendor's model installed (such as `codex` · `gemini`), use it in place of reviewer C, with the same prompt and angle, in read-only mode, because models from different vendors may miss different things (no measured evidence yet that it beats a single vendor). But **the work content is sent out to that provider**, so use it only when permitted in advance in `~/.claude/superuser-style.md` or `docs/AGENT-LOOP.md`. If there is no CLI or no permission, use the single-vendor panel in the table.
 
-   ข้อควรรู้ว่าความเป็นอิสระมาจากไหน: ในบันทึกรอบเดียวของคอร์ส CWN2026 (2026-11-04) ผู้ตัดสิน Codex เขียนข้อสอบรับงาน 47 ข้อก่อนแอปมี · 25 ข้อ (53%) ใช้ไม่ได้เมื่อรันกับของจริงต้นฉบับ · จับของที่ผู้สร้างพลาดได้ 2 ข้อ (ผ่าน 20/22 → 22/22) · ข้อมูลที่ 2 ฝั่งใช้ร่วมกันผิด (ตรงจอจริง 278/300) และถูกจับเพราะรันซ้ำกับต้นฉบับจริง ไม่ใช่เพราะต่างค่าย · เส้นที่สำคัญจึงเป็น **คำตอบมาจากต้นฉบับจริง** ไม่ใช่ยี่ห้อโมเดล · ไม่มีกลุ่มควบคุม จึงแยกผลของยี่ห้อโมเดลออกไม่ได้
+   Where independence comes from, worth knowing: in one recorded round of the CWN2026 course (2026-11-04), the Codex judge wrote 47 acceptance exam items before the app existed · 25 items (53%) were unusable when run against the real original · it caught 2 things the builder missed (pass 20/22 → 22/22) · data wrongly shared by both sides (matching the real screen 278/300) was caught because it was rerun against the real original, not because of the different vendor · so the line that matters is **the answer comes from the real original**, not the model brand · there was no control group, so the effect of the model brand cannot be separated out.
 
-4. **ปล่อยพร้อมกันในข้อความเดียว อ่านอย่างเดียว** — ทุกคนได้ path แพ็กเกจและเจตนาเดียวกัน ต่างกันแค่มุม (มุมของแต่ละคนคือเลนส์ใน `review-lenses` ข้อ 2) · prompt ไม่มีความเห็นของหัวหน้าทีมว่างานดีหรือไม่ ให้ส่งผลเป็นตาราง `| ปัญหา | ที่ไหน (หน้า · ข้อ · ไฟล์:บรรทัด) | ทำให้พังอย่างไร (ขั้นตอนหรือ input) | ความรุนแรง |` ไม่เกิน 40 บรรทัดต่อคน และ **ห้ามแก้ไฟล์**
-5. **ยืนยันทุกข้อ ทีละข้อ** — ข้อละ 1 ผู้ยืนยัน (`reviewer` ตัวใหม่ ค่าตั้งต้น `FALSE_POSITIVE` มั่นใจต่ำกว่า 80 ไม่เข้ารายงาน ตาม `review-lenses` ข้อ 3) ตรวจกับต้นฉบับจริงหรือรันให้เห็น ข้อที่ยืนยันไม่ได้ให้ติด `PLAUSIBLE` (เป็นไปได้ แต่ยังพิสูจน์ไม่ได้) หรือทิ้งพร้อมเหตุผล ส่วนข้อ `PLAUSIBLE` ให้ตัดสินเองโดยเลือกทางที่ผลกระทบน้อยสุด แล้วจดลงรายการ ยกเว้นเรื่องในรายการ "รออนุมัติ" ของ `superuser` (ลบหรือเขียนทับของผู้ใช้ · commit/push · ส่งออกนอกเครื่อง) ให้เตรียมไว้และจดลงรายการ ไม่ทำเอง
-6. **ซักค้าน (เฉพาะงานเสี่ยงสูง หรือเมื่อตาราง 3 ใบขัดกัน)** — ผู้โหวต 3 คน **คงที่ 3 เสมอ** ไม่ลดไม่เพิ่มตามงบ เพื่อให้ความมั่นใจเทียบข้ามรอบได้ · ถือคนละเลนส์ `security-reach` · `security-impact` · `security-defense` (หรือเลนส์ที่เหมาะกับข้อนั้น) ยืนยันได้ต้องอ้าง `ไฟล์:บรรทัด` ของทางเข้า จุดที่พัง และตัวกันที่ขาด ไม่ครบถือว่าไม่ยืนยัน · รวม 3 ตารางเป็นใบเดียว ตัดชื่อคนเจอออก แล้วส่งกลับให้ผู้ตรวจแต่ละคน (ตัวเดิมผ่าน `SendMessage` ไม่ต้องอ่านไฟล์ใหม่) ตอบทีละข้อว่า `ยืนยัน` · `ค้าน` (พร้อมเหตุผลหรือขั้นที่ทำให้ไม่พัง) · `ไม่รู้` · ข้อ `PLAUSIBLE` จากข้อ 5 เข้ารอบนี้ด้วย · งานปกติข้ามข้อนี้ เพราะเป็นอีก 3 รอบ token
-7. **ให้น้ำหนัก 4 กลุ่ม** — `ยืนยันข้าม` (2 คนขึ้นไปเจอเองโดยอิสระ) > `เห็นพ้อง` (เจอคนเดียว ซักค้านแล้วคนอื่นยืนยัน) > `คนเดียว` (ไม่มีใครค้านแต่ไม่มีใครยืนยัน · จริงต่อเมื่อมีขั้นตอนทำให้พังชัด) > `ขัดแย้ง` (มีคนค้าน — หัวหน้าทีมตัดสินเองจากต้นฉบับ ไม่นับเสียง) · ไม่ได้ซักค้าน → มีแค่ `ยืนยันข้าม` กับ `คนเดียว` · ความเห็นเรื่องรสนิยมเป็นแค่ข้อสังเกตทุกกลุ่ม (แนวคิดจาก adverse ของ addyosmani · MIT)
-8. **คำตัดสิน** — ก่อนเขียน เทียบ `head:` ในแพ็กเกจกับของจริง ไม่ตรงหรือมีผู้ตรวจที่ล้ม ยังรัน หรือถูกตัดผล ให้รายงานตามนั้น ห้ามนับเป็นสะอาด · 1 บรรทัด: `ส่งได้` · `ส่งได้หลังแก้` · `ยังไม่ควรส่ง` แล้วตามด้วยรายการ: สูง · กลาง · ต่ำ (ตามนิยามใน `reviewer`) แต่ละข้อบอกกลุ่มจากข้อ 7 · ข้อที่ปัดทิ้งบันทึกใน `ledger.md` พร้อมเหตุผลจากรายการของ `review-lenses` ข้อ 4
-9. การสั่งแก้ต่อเป็นหน้าที่ของผู้ใช้หรือ playbook ส่วน skill นี้หยุดที่คำตัดสิน
+4. **Launch all at once in one message, read-only**: everyone gets the same package and intent paths and differs only in angle (each person's angle is the lens in `review-lenses` item 2) · the prompt holds no opinion from the team lead on whether the work is good. Send results as a table `| ปัญหา | ที่ไหน (หน้า · ข้อ · ไฟล์:บรรทัด) | ทำให้พังอย่างไร (ขั้นตอนหรือ input) | ความรุนแรง |` (problem · where (page · item · file:line) · how it breaks (steps or input) · severity), at most 40 lines per person, and **no editing files.**
+5. **Verify every finding, one at a time**: 1 verifier per finding (a fresh `reviewer`, default `FALSE_POSITIVE`, confidence below 80 stays out of the report, per `review-lenses` item 3) who checks against the real original or runs it to show it. A finding that cannot be verified gets `PLAUSIBLE` (possible but not yet proven) or is dropped with a reason. For `PLAUSIBLE` items, decide yourself by choosing the path with the least impact and note it in the log, except matters on the `superuser` "awaiting approval" (`รออนุมัติ`) list (deleting or overwriting the user's things · commit/push · sending off the machine): prepare those and note them in the log, but do not do them yourself.
+6. **Cross-examination (only for high-risk work, or when the 3 tables contradict)**: the 3 voters are **always fixed at 3**, never reduced or increased by budget, so confidence is comparable across rounds · each holds a different lens: `security-reach` · `security-impact` · `security-defense` (or the lens that fits the item) · to confirm, a voter must cite the `file:line` of the entry point, the breaking spot and the missing guard, and an incomplete citation counts as not confirmed · merge the 3 tables into 1, strip the finders' names, and send it back to each reviewer (the same instance through `SendMessage`, no need to reread files), who answers item by item `ยืนยัน` (confirm) · `ค้าน` (object, with a reason or the step that makes it not break) · `ไม่รู้` (do not know) · `PLAUSIBLE` items from step 5 join this round too · normal work skips this step, because it is another 3 rounds of tokens.
+7. **Weight into 4 groups**: `ยืนยันข้าม` (cross-confirmed: 2 or more found it independently) > `เห็นพ้อง` (agreed: 1 found it, and after cross-examination others confirmed) > `คนเดียว` (single: nobody objected but nobody confirmed · true only when a clear breaking step exists) > `ขัดแย้ง` (disputed: someone objected, and the team lead decides from the original without counting votes) · with no cross-examination there are only `ยืนยันข้าม` and `คนเดียว` · opinions about taste are only observations in every group (idea from adverse by addyosmani · MIT).
+8. **Verdict**: before writing, compare `head:` in the package with the real one. If it does not match, or a reviewer failed, is still running, or had its result cut, report it that way and never count it as clean · 1 line: `ส่งได้` (can ship) · `ส่งได้หลังแก้` (can ship after fixes) · `ยังไม่ควรส่ง` (should not ship yet), followed by the list: high · medium · low (by the definitions in `reviewer`), each item naming its group from step 7 · items dismissed are recorded in `ledger.md` with a reason from the list in `review-lenses` item 4.
+9. Ordering the fixes is the job of the user or a playbook. This skill stops at the verdict.
 
-## ข้อควรระวัง
+## Cautions
 
-- คณะรีวิวใช้ token ราว 3 เท่าของ `reviewer` ตัวเดียว · เลือกคณะเมื่อ ราคาของการพลาด × โอกาสพลาด มากกว่าค่าผู้ตรวจที่เพิ่มอีก 2 ตัว (คิดด้วย `decision-scoring` คำสั่ง `review`) · ถ้าประเมินไม่ได้ ใช้ค่าตั้งต้น (ยังไม่ได้วัด): งานที่ส่งคนนอก เงิน กฎหมาย สุขภาพ หรือเลือกทางที่ย้อนไม่ได้ → คณะ 3 มุม · ที่เหลือ → `reviewer` ตัวเดียว · งานโค้ดดู `code-review-checklist` · `pr-description-template` (plugin `software-development`)
-- ผู้ตรวจ Artificial Intelligence (AI) ก็แจ้งปัญหาที่ไม่มีจริงได้ ทุกข้อจึงต้องผ่านข้อ 5 ก่อนเข้ารายงาน
+- A panel uses about 3 times the tokens of a single `reviewer`. Choose a panel when the price of a miss × the chance of a miss is more than the cost of 2 extra reviewers (compute with `decision-scoring`, command `review`) · if you cannot estimate, use the default (not yet measured): work sent to outsiders, money, law, health, or choosing an irreversible path → a 3-angle panel · everything else → a single `reviewer` · for code work see `code-review-checklist` · `pr-description-template` (plugin `software-development`).
+- An Artificial Intelligence (AI) reviewer can also report problems that do not exist, so every finding must pass step 5 before entering the report.
 
-## ที่มา
+## Sources
 
-ผู้โหวต 3 เลนส์ ค่าตั้งต้น false positive · claude-security (All rights reserved · เอาแค่กลไก) · agents/scan-verifier.md · ดู 2026-11-10 · ผู้ยืนยันทีละข้อ · code-review (Anthropic) · ดู 2026-11-10 · ความสดของผลรีวิว · qodo · skills/qodo-review-resolver/SKILL.md · ดู 2026-11-10 · รายละเอียดอื่นดู `review-lenses` หัวข้อ "ที่มา"
+3-lens voters, default false positive · claude-security (All rights reserved · mechanism only) · agents/scan-verifier.md · viewed 2026-11-10 · one-by-one verifiers · code-review (Anthropic) · viewed 2026-11-10 · freshness of review results · qodo · skills/qodo-review-resolver/SKILL.md · viewed 2026-11-10 · for other details see `review-lenses`, section "Sources"

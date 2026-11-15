@@ -3,64 +3,64 @@ name: repeated-mistakes-to-checks
 description: Use when the same mistake gets corrected twice
 ---
 
-# repeated-mistakes-to-checks — ความผิดที่ทำซ้ำ ต้องเกิดไม่ได้อีก
+# repeated-mistakes-to-checks: a mistake that repeats must become impossible
 
-> agent ไม่ต้องจำกฎร้อยข้อ ถ้าทางเดินมีราวกั้นในจุดที่ถูก มันจะชนแล้วถูกหยุดในจังหวะที่ใช่เอง
-> ข้อความเตือนใน SKILL.md คือราวกั้นที่อ่อนที่สุด ใช้เป็นทางสุดท้าย
+> The agent does not need to remember a hundred rules. If the path has guard rails at the right places, it hits one and gets stopped at the right moment on its own.
+> A warning in SKILL.md is the weakest guard rail. Use it as the last resort.
 
-มาจากคำสั่ง correct และ rules-as-checks ของ pstack (ไม่มีใน marketplace นี้)
+This comes from pstack's correct command and rules-as-checks (not in this marketplace).
 
-## ไม่ใช้เมื่อ
+## Do not use when
 
-ใช้ตัวไหนระหว่าง `session-lessons-to-skills` · `repeated-mistakes-to-checks` · `owner-style-capture` → ตารางกลางใน [`session-lessons-to-skills`](../session-lessons-to-skills/SKILL.md) หัวข้อ "ใช้ตัวไหน"
+For choosing among `session-lessons-to-skills` · `repeated-mistakes-to-checks` · `owner-style-capture`, see the central table in [`session-lessons-to-skills`](../session-lessons-to-skills/SKILL.md), under the heading "Which one to use".
 
-## ขั้นตอน
+## Steps
 
-1. **เก็บหลักฐาน** — ผู้ใช้แก้อะไรบ้าง (ข้อความในบทสนทนานี้ · บรรทัด `correction: true` ใน `.claude/superuser/log/` · เรื่องที่ซ้ำใน `.claude/superuser/learn/` · ตาราง "การตัดสินใจ" ที่ขึ้นต้น `ผู้ใช้แก้ —` · ความเห็นในการรีวิว · งานที่ลูกค้าตีกลับ · commit ที่ revert ซ้ำ ๆ) ต้องมีอย่างน้อย 2 ครั้งที่เป็นเรื่องเดียวกัน ถ้าเกิดครั้งเดียวยังไม่นับ
-   - **ไม่ต้องรอผู้ใช้พูดซ้ำ — ขุดเอง:** อ่านข้อความของผู้ใช้ในบทสนทนาย้อนจากล่าสุด หาสัญญาณ 3 แบบ: คำสั่งห้าม ("อย่า…" · "ไม่ต้อง…") · "ฉันไม่ได้ขอ" หรือให้ทำใหม่ · การ revert หรือแก้ทับงานที่ agent เพิ่งเสร็จ · แล้วจัดตามความหนักก่อนไปข้อ 2
+1. **Gather evidence:** what the user corrected (messages in this conversation · lines with `correction: true` in `.claude/superuser/log/` · repeated topics in `.claude/superuser/learn/` · rows of the "การตัดสินใจ" (decisions) table that start with `ผู้ใช้แก้ —` (user corrected) · review comments · work a client sent back · commits reverted repeatedly). You need at least 2 incidents of the same thing. One incident does not count yet.
+   - **Do not wait for the user to say it again; dig it out yourself.** Read the user's messages in the conversation, working back from the latest, and look for 3 kinds of signal: a prohibition ("อย่า…" · "ไม่ต้อง…") · "ฉันไม่ได้ขอ" (I did not ask for that) or a request to redo · a revert or overwrite of work the agent just finished. Then rank by severity before going to step 2.
 
-     | หนัก | สัญญาณ | ทำอะไรต่อ |
+     | Severity | Signal | Next |
      |---|---|---|
-     | สูง | revert · ลบสิ่งที่ agent เพิ่ม · "ทำไมแตะไฟล์นี้" | ทำเป็นตัวตรวจเลย แม้เกิดครั้งเดียว ถ้าตรวจด้วยเครื่องได้ |
-     | กลาง | "อย่า…" · "ไม่ได้ขอ" ซ้ำ 2 ครั้งขึ้นไป | เข้าข้อ 2 ตามปกติ |
-     | เบา | ความชอบเรื่องถ้อยคำหรือรูปแบบ | `owner-style-capture` |
-2. **จัดเป็นประเภท** — ตั้งชื่อความผิดแต่ละประเภทให้สั้นและชัด เช่น "ใช้ราคาไม่รวม VAT ในใบเสนอราคา" · "ลืมวันที่แหล่งข้อมูลในรายงาน" · "ใช้ปี พ.ศ. ในฐานข้อมูล"
-3. **เลือกชั้นที่แก้ — สูงสุดที่ทำได้**
+     | High | A revert · deleting something the agent added · "ทำไมแตะไฟล์นี้" (why did you touch this file) | Build a check right away, even after one incident, if a machine can check it |
+     | Medium | "อย่า…" · "ไม่ได้ขอ" repeated 2 or more times | Go to step 2 as usual |
+     | Low | A preference about wording or format | `owner-style-capture` |
+2. **Sort into types.** Name each type of mistake short and clear, e.g. "using a price excluding VAT in a quotation" · "forgetting the source date in a report" · "using Buddhist Era years in the database".
+3. **Choose the layer to fix at: the highest you can.**
 
-   | ชั้น | ตัวอย่าง | เหตุที่ดีกว่าชั้นล่าง |
+   | Layer | Examples | Why it beats the layer below |
    |---|---|---|
-   | โครงสร้าง | แม่แบบที่เหลือช่องให้เติมแค่ที่ต้องเติม · เหลือวิธีทำวิธีเดียว · ลบของเก่าที่ทำให้สับสน | ทางผิดหายไปเลย |
-   | ชนิดข้อมูล | ช่องวันที่ในชีตตั้งให้รับแค่วันที่ · งานโค้ด: type แยก `ThaiYear` กับ `Year` | เครื่องหยุดให้ |
-   | สคริปต์ตรวจ | สูตรเทียบยอดรวมในชีต · สคริปต์ grep หาคำต้องห้ามในเอกสาร · lint ใน CI · **ข้อความ error บอกวิธีแก้** | ชนแล้วรู้ทันทีว่าต้องทำอะไร |
-   | ตัวอย่างตรวจ | ชุดตัวอย่างที่ต้องผ่านก่อนส่ง · test ที่ล้มเมื่อพฤติกรรมผิด | จับได้ก่อนส่งหรือ merge |
-   | ข้อความ | แก้ย่อหน้าใน SKILL.md หรือ agent | ใช้เมื่อชั้นบนทำไม่ได้จริงเท่านั้น · กฎ "ห้ามเด็ดขาด" อย่าอยู่แค่ใน skill เพราะ skill อาจไม่ถูกเรียก (คอร์ส CWN2026 2026-11-04: ถามเรื่องแผนโดยไม่เรียก skill agent เปิดหัวข้อเฉลยทั้งไฟล์) ใส่ใน hook หรือ CLAUDE.md ด้วย |
+   | Structure | A template that leaves only the fields that must be filled · leave only one way to do it · delete old things that cause confusion | The wrong path disappears |
+   | Data type | A date field in a sheet set to accept only dates · in code: separate types `ThaiYear` and `Year` | The machine stops you |
+   | Check script | A formula that compares totals in a sheet · a grep script that finds banned words in documents · lint in CI · **an error message that says how to fix it** | On a hit you know at once what to do |
+   | Check examples | A set of examples that must pass before sending · a test that fails when behavior is wrong | Catches it before sending or merging |
+   | Text | Edit a paragraph in SKILL.md or an agent | Use only when the layers above are truly impossible. A "never" rule must not live only in a skill, because the skill may not be called (course CWN2026 2026-11-04: asked about the plan without calling the skill, the agent opened the whole answer-key heading). Put it in a hook or CLAUDE.md too |
 
-4. **สร้างการตรวจ** — เขียนแบบเล็กที่สุดที่จับประเภทนั้นได้ ([`principle-build-a-tool-not-handwork`](../principle-build-a-tool-not-handwork/SKILL.md))
-   - ร่างกฎที่จับด้วย regex ได้ก่อน: ระบุเครื่องมือหรือไฟล์ที่กฎคุม · pattern · ข้อความที่แสดงเมื่อชน (บอกวิธีแก้) · ตัวอย่างที่ต้องชน 1 ตัวและตัวอย่างที่ต้องไม่ชน 1 ตัว (ใช้ในข้อ 5) · จับด้วย regex ไม่ได้ → ลงชั้นข้อความและบอกว่าเพราะอะไร
-5. **พิสูจน์ว่ามันจับได้จริง** — ย้อนเอาโค้ดหรือเอกสารจากความผิดครั้งจริง (หรือสร้างซ้ำให้เหมือน) แล้วรันการตรวจ ซึ่ง**ต้องล้ม** จากนั้นรันกับของปัจจุบัน ซึ่งต้องผ่าน เพราะตัวตรวจที่ไม่เคยล้มเลยคือตัวตรวจที่พัง
-6. **ลงตาราง** — `| ความผิด | ชั้นที่แก้ | ตัวตรวจ (ไฟล์) | พิสูจน์ด้วย |` ลงใน `.claude/superuser/IMPROVEMENTS.md` (งานโค้ดใช้ `docs/AGENT-RULES.md` หรือ `README` ของ repo skill ก็ได้) แล้วเพิ่ม 1 บรรทัดในหัวข้อ "กติกา" ของ `CONTEXT.md` ชี้ไปหา
-7. ทำซ้ำทุกครั้งที่ผู้ใช้แก้เรื่องใหม่เป็นครั้งที่ 2
+4. **Build the check.** Write the smallest form that catches that type ([`principle-build-a-tool-not-handwork`](../principle-build-a-tool-not-handwork/SKILL.md)).
+   - Draft a rule that a regex can catch first: name the tool or file the rule governs · the pattern · the message shown on a hit (saying how to fix) · 1 example that must hit and 1 example that must not hit (used in step 5). If a regex cannot catch it → use the text layer and say why.
+5. **Prove it really catches.** Take the code or document from the real mistake (or recreate it faithfully) and run the check, which **must fail.** Then run it on the current version, which must pass. A check that has never failed is a broken check.
+6. **Log it in the table:** `| ความผิด | ชั้นที่แก้ | ตัวตรวจ (ไฟล์) | พิสูจน์ด้วย |` (mistake · layer fixed · check (file) · proven by) in `.claude/superuser/IMPROVEMENTS.md` (for code work, `docs/AGENT-RULES.md` or the `README` of the skill repo also works). Then add 1 line under the "กติกา" (rules) heading of `CONTEXT.md` that points to it.
+7. Repeat every time the user corrects a new topic for the 2nd time.
 
-## ไม่ต้องรอให้ผิดซ้ำ — สัญญาณที่ควรทำเป็นการตรวจเลย
+## Do not wait for a repeat: signs you should build a check right away
 
-- ถ้ากฎเดียวกันอยู่ในหลายไฟล์ (เช่น เขียนซ้ำในทุก prompt) ให้ย้ายไปไว้ที่เดียว แล้วให้ที่อื่นอ้างถึง
-- ถ้ากำลังจะเขียน "ห้าม..." เพิ่มอีกบรรทัด ทั้งที่ตรวจด้วยเครื่องได้ (grep · สูตร · CI) ให้ทำเป็นตัวตรวจแทน
-- ข้อความ error ของตัวตรวจต้องบอกวิธีแก้ ไม่ใช่แค่บอกว่าผิด
+- If the same rule lives in several files (e.g. repeated in every prompt), move it to one place and let the others refer to it.
+- If you are about to write one more "never..." line when a machine could check it (grep · formula · CI), build a check instead.
+- A check's error message must say how to fix it, not just say it is wrong.
 
-ตัวอย่างในชุดนี้:
+Examples in this set:
 
-| กฎ | เคยเป็นข้อความ | ตอนนี้เป็น |
+| Rule | Used to be | Now it is |
 |---|---|---|
-| description ของ skill ห้ามมี `": "` โดยไม่ครอบเครื่องหมายคำพูด | คำเตือนในเอกสาร | `scripts/check/validate-marketplace.mjs` + `--self-test` |
-| ตัวเลขใน README ต้องตรงกับของจริง | แก้มือ | `scripts/sync/sync-docs.mjs --check` |
-| ของกลาง SuperUser ต้องเหมือนกันทุก plugin | ข้อความ "แก้ให้ครบทุกตัว" | `scripts/sync/sync-superuser.mjs --check` |
+| A skill's description must not contain `": "` without quotation marks | A warning in a document | `scripts/check/validate-marketplace.mjs` + `--self-test` |
+| Numbers in the README must match reality | Edited by hand | `scripts/sync/sync-docs.mjs --check` |
+| SuperUser shared files must be identical in every plugin | A text line "edit every copy" | `scripts/sync/sync-superuser.mjs --check` |
 
-## สิ่งที่ห้ามทำ
+## What not to do
 
-- เพิ่มข้อความ "ห้าม..." ใน SKILL.md ทั้งที่ทำเป็นตัวตรวจได้
-- สร้างกฎที่ไม่ได้พิสูจน์ด้วยความผิดจริง เพราะกฎที่ยิงไม่โดนเป้าทำให้ทุกคนเชื่อผิด ๆ ว่าปลอดภัย
-- ตรวจกว้างเกินจนจับของถูกด้วย เพราะสุดท้ายทุกคนจะเรียนรู้ที่จะข้ามมัน
+- Add a "never..." text to SKILL.md when it could be a check.
+- Create a rule that was not proven with a real mistake, because a rule that misses its target makes everyone wrongly believe they are safe.
+- Check so broadly that it also catches correct things, because in the end everyone learns to skip it.
 
-## ที่มา
+## Source
 
-hookify (Apache-2.0) · `agents/conversation-analyzer.md` · ดู 2026-11-10 (ขุดสัญญาณแก้ของผู้ใช้ย้อนจากล่าสุด จัดตามความหนัก ร่างกฎแบบ regex)
+hookify (Apache-2.0) · `agents/conversation-analyzer.md` · viewed 2026-11-10 (dig out the user's correction signals working back from the latest, rank by severity, draft regex-style rules).

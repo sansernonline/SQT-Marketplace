@@ -2,81 +2,81 @@
 
 Use when designing or changing a database schema
 
-# ออกแบบฐานข้อมูล
+# Database design
 
-> **กฎข้อเดียว:** schema คือของที่แก้ยากที่สุดในระบบ
-> โค้ดผิดแก้วันนี้จบวันนี้ แต่ schema ผิดต้องอยู่กับมัน 3 ปี พร้อมข้อมูลจริงอีก 10 ล้านแถวที่ต้องย้ายตาม
+> **One rule:** the schema is the hardest thing in a system to change.
+> A code bug fixed today is done today, but a wrong schema stays for 3 years, with another 10 million real rows to migrate along with it.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ออกแบบฐานข้อมูลของระบบใหม่ หรือ module ใหม่
-- จะเพิ่ม/แก้ตาราง คอลัมน์ ความสัมพันธ์ หรือ index
-- จะเขียน migration โดยเฉพาะตอนที่ระบบมีข้อมูลจริงแล้ว
-- query ช้าแล้วสงสัยว่าเป็นที่ schema หรือที่ index
+- Designing the database of a new system or a new module
+- Adding or changing a table, column, relationship or index
+- Writing a migration, especially once the system holds real data
+- A query is slow and you suspect the schema or an index
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill instead, or together
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` | แทน |
-| ออกแบบ endpoint และรูปร่าง JSON | `api-conventions` | แทน |
-| เก็บรหัสผ่าน token สิทธิ์ผู้ใช้ | `auth-implementation-patterns` | แทน |
-| ที่เก็บ connection string | `config-and-secrets` | แทน |
-| รัน migration ใน pipeline | `cicd-and-release` | แทน |
-| วาดผัง Entity-Relationship (ER) | `diagram-figures` หรือ `markdown-visuals` | คู่ |
-| บันทึกเหตุผลที่เลือกฐานข้อมูลตัวนี้ | `adr-writer` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| Choose the overall architecture | `architecture-patterns` | instead |
+| Design endpoints and JSON shapes | `api-conventions` | instead |
+| Store passwords, tokens, user permissions | `auth-implementation-patterns` | instead |
+| Where to keep connection strings | `config-and-secrets` | instead |
+| Run migrations in a pipeline | `cicd-and-release` | instead |
+| Draw an Entity-Relationship (ER) diagram | `diagram-figures` or `markdown-visuals` | together |
+| Record why this database was chosen | `adr-writer` | together |
+| Abbreviations in work people read | `spell-out-abbreviations` | together |
 
-**ไวยากรณ์เฉพาะแต่ละฐานข้อมูล ชนิดข้อมูลเทียบกัน และคำสั่ง migration ของแต่ละ Object-Relational Mapping (ORM)** อยู่ใน `references/per-stack.md`
+**Syntax specific to each database, data types compared, and the migration commands of each Object-Relational Mapping (ORM) tool** are in `references/per-stack.md`.
 
 ---
 
-## 1 · เลือกชนิดฐานข้อมูลก่อน
+## 1 · Choose the database type first
 
-| เกณฑ์ | Relational (PostgreSQL, SQL Server, MySQL) | Document (MongoDB) |
+| Criterion | Relational (PostgreSQL, SQL Server, MySQL) | Document (MongoDB) |
 |---|---|---|
-| ข้อมูลมีความสัมพันธ์ชัด ต้อง join | ✓ | ✗ ต้องทำมือ |
-| รูปร่างข้อมูลไม่แน่นอน ต่างกันรายตัว | ระวัง ใช้คอลัมน์ JSON | ✓ |
-| ต้องการ transaction ข้ามหลายตาราง | ✓ | ระวัง ได้แต่แพงกว่า |
-| รายงาน ผลรวม การวิเคราะห์ | ✓ | ✗ |
-| เขียนหนักมาก log/telemetry | ระวัง | ✓ หรือใช้ time-series |
+| Data has clear relationships and needs joins | ✓ | ✗ must be done by hand |
+| Data shape is uncertain and differs per record | Careful: use a JSON column | ✓ |
+| Needs transactions across several tables | ✓ | Careful: possible but costlier |
+| Reports, totals, analysis | ✓ | ✗ |
+| Very heavy writes, log/telemetry | Careful | ✓ or use a time-series database |
 
-> **ค่าเริ่มต้นคือ relational** ให้เลือก document เมื่อ**ตอบได้ว่าทำไม**
-> "ยืดหยุ่นกว่า" ไม่ใช่เหตุผล แต่แปลว่ายังไม่ได้ออกแบบ
-> ระบบส่วนใหญ่ที่เลือก document เพราะยืดหยุ่น สุดท้ายเขียนโค้ด join เองในแอป
+> **The default is relational.** Choose document only when you **can answer why**.
+> "More flexible" is not a reason. It means the design is not done yet.
+> Most systems that chose document for flexibility end up writing join code by hand in the app.
 
-**ผสมกันได้**: ใช้ relational เป็นหลัก แล้วเก็บข้อมูลที่รูปร่างไม่แน่นอนเป็นคอลัมน์ `jsonb`
-เกือบทุกกรณี ทางนี้ดีกว่าแยกฐานข้อมูล 2 ตัว
+**You can mix them**: use relational as the base, and store data of uncertain shape in a `jsonb` column.
+In almost every case this is better than running 2 separate databases.
 
 ---
 
-## 2 · กฎตั้งชื่อ — เลือกครั้งเดียว ใช้ทั้งระบบ
+## 2 · Naming rules — choose once, use across the whole system
 
-| สิ่งที่ตั้งชื่อ | รูปแบบ | ตัวอย่าง |
+| What you name | Format | Example |
 |---|---|---|
-| ตาราง | `snake_case` **พหูพจน์** | `orders`, `order_items` |
-| คอลัมน์ | `snake_case` เอกพจน์ | `created_at`, `total_amount` |
+| Table | `snake_case` **plural** | `orders`, `order_items` |
+| Column | `snake_case` singular | `created_at`, `total_amount` |
 | primary key | `id` | `id` |
-| foreign key | `<ตารางเอกพจน์>_id` | `customer_id` |
-| ตารางเชื่อม | `<a>_<b>` เรียงตามตัวอักษร | `role_users` ✓ (ไม่ใช่ `user_roles`) |
-| index | `ix_<ตาราง>_<คอลัมน์>` | `ix_orders_customer_id` |
-| unique | `ux_<ตาราง>_<คอลัมน์>` | `ux_users_email` |
-| foreign key constraint | `fk_<ตาราง>_<ตารางปลายทาง>` | `fk_orders_customers` |
-| check constraint | `ck_<ตาราง>_<เรื่อง>` | `ck_orders_total_non_negative` |
+| foreign key | `<singular table>_id` | `customer_id` |
+| Join table | `<a>_<b>` in alphabetical order | `role_users` ✓ (not `user_roles`) |
+| index | `ix_<table>_<column>` | `ix_orders_customer_id` |
+| unique | `ux_<table>_<column>` | `ux_users_email` |
+| foreign key constraint | `fk_<table>_<target table>` | `fk_orders_customers` |
+| check constraint | `ck_<table>_<topic>` | `ck_orders_total_non_negative` |
 
-**สิ่งที่ห้ามทำ:**
+**Do not:**
 
-- ผิด: ใส่ชนิดข้อมูลในชื่อ เช่น `name_varchar`, `is_active_bit`
-- ผิด: ใส่ชื่อตารางนำหน้าคอลัมน์ เช่น `order_order_date` (มันอยู่ในตาราง `orders` อยู่แล้ว)
-- ผิด: ใช้คำสงวน เช่น `user`, `order`, `group`, `key` ซึ่งต้องใส่เครื่องหมายคำพูดทุกครั้ง ให้ใช้ `users`, `orders` แทน
-- ผิด: ตัวย่อที่คนอ่านไม่ออก เช่น `cst_nm` ประหยัดได้ 8 ตัวอักษร แต่แลกกับความสับสน 3 ปี
+- Wrong: put the data type in the name, such as `name_varchar`, `is_active_bit`
+- Wrong: prefix a column with the table name, such as `order_order_date` (it is already in the `orders` table)
+- Wrong: use reserved words such as `user`, `order`, `group`, `key`, which need quotes every time. Use `users`, `orders` instead.
+- Wrong: use abbreviations people cannot read, such as `cst_nm`. It saves 8 characters but costs 3 years of confusion.
 
-> SQL Server ใช้ `PascalCase` ก็ได้ ถ้าโปรเจกต์เดิมใช้อยู่แล้ว
-> **ใช้แบบเดียวกันทั้งระบบสำคัญกว่าว่าแบบไหนถูก** อย่าเปลี่ยนกลางทาง
+> SQL Server may use `PascalCase` if the existing project already does.
+> **Using one style across the whole system matters more than which style is right.** Do not switch midway.
 
 ---
 
-## 3 · คอลัมน์ที่ทุกตารางต้องมี
+## 3 · Columns every table must have
 
 ```sql
 id           bigint / uuid   PRIMARY KEY
@@ -84,68 +84,68 @@ created_at   timestamptz     NOT NULL DEFAULT now()
 updated_at   timestamptz     NOT NULL DEFAULT now()
 ```
 
-เพิ่มตามความจำเป็น:
+Add these as needed:
 
-| คอลัมน์ | ใส่เมื่อ | หมายเหตุ |
+| Column | Add when | Note |
 |---|---|---|
-| `deleted_at timestamptz` | ต้องกู้ข้อมูลคืนได้ หรือกฎหมายบังคับให้เก็บ | **ทุก query ต้องกรอง** ไม่งั้นข้อมูลที่ลบแล้วโผล่ |
-| `created_by` / `updated_by` | ต้องตอบได้ว่าใครแก้ | เก็บ id ผู้ใช้ ไม่ใช่ชื่อ |
-| `row_version` / `xmin` | มีคนแก้พร้อมกันได้ | ใช้คู่กับ ETag ใน `api-conventions` |
-| `tenant_id` | ระบบหลายผู้เช่า | ดูข้อ 10 |
+| `deleted_at timestamptz` | Data must be recoverable, or the law requires keeping it | **Every query must filter on it**, or deleted data shows up |
+| `created_by` / `updated_by` | You must be able to say who changed it | Store the user id, not the name |
+| `row_version` / `xmin` | Several people can edit at the same time | Use with the ETag in `api-conventions` |
+| `tenant_id` | Multi-tenant system | See section 10 |
 
-> **soft delete (ลบโดยแค่ติดป้าย) มีต้นทุน** คือทุก unique constraint ต้องคิดใหม่
-> `ux_users_email` จะกันไม่ให้สมัครอีเมลเดิมซ้ำ แม้บัญชีเก่าถูกลบไปแล้ว
-> แก้ด้วย partial index: `CREATE UNIQUE INDEX ... WHERE deleted_at IS NULL`
+> **soft delete (delete by only setting a flag) has a cost**: every unique constraint must be rethought.
+> `ux_users_email` will block signing up with the same email again, even though the old account was deleted.
+> Fix it with a partial index: `CREATE UNIQUE INDEX ... WHERE deleted_at IS NULL`
 
 ---
 
-## 4 · เลือกชนิด identifier
+## 4 · Choose the identifier type
 
-| ชนิด | ข้อดี | ข้อเสีย | ใช้เมื่อ |
+| Type | Pros | Cons | Use when |
 |---|---|---|---|
-| `bigint` เรียงเพิ่ม | เล็ก เร็ว index ไม่แตก อ่านง่ายตอนไล่ปัญหา | เดา id ถัดไปได้ · รวมข้อมูลหลายที่แล้วชนกัน | ค่าเริ่มต้น ระบบเดียว ฐานข้อมูลเดียว |
-| **UUIDv7 / ULID** | เรียงตามเวลา · สร้างจากฝั่งแอปได้ · ไม่ชนกัน | 16 ไบต์ · อ่านด้วยตายาก | ระบบกระจาย · ต้องสร้าง id ก่อนบันทึก · id โผล่ใน URL |
-| `UUIDv4` สุ่มล้วน | ไม่ชนกัน เดาไม่ได้ | **index แตกกระจาย เขียนช้าลงชัดเจนเมื่อข้อมูลเยอะ** | เลี่ยงถ้าเลือกได้ |
+| `bigint` auto-increment | Small, fast, index does not fragment, easy to read when tracing problems | Next id can be guessed · ids collide when merging data from several places | Default, single system, single database |
+| **UUIDv7 / ULID** | Sorted by time · can be generated on the app side · no collisions | 16 bytes · hard to read by eye | Distributed system · id needed before saving · id appears in a URL |
+| `UUIDv4` fully random | No collisions, cannot be guessed | **index fragments, and writes get clearly slower with lots of data** | Avoid if you can |
 
-> **UUIDv4 เป็น primary key คือกับดักที่เจอบ่อยที่สุด**
-> ค่าสุ่มล้วนทำให้ทุก insert ไปแทรกกลางโครงสร้าง index
-> ข้อมูลหลักหมื่นยังไม่รู้สึก แต่พอถึงหลักสิบล้านจะช้าจนต้องรื้อ
-> ถ้าต้องใช้ UUID ให้ใช้ **v7** ซึ่งขึ้นต้นด้วยเวลา จึงเรียงเพิ่มเหมือน bigint
+> **UUIDv4 as a primary key is the most common trap.**
+> Fully random values make every insert land in the middle of the index structure.
+> You do not feel it at tens of thousands of rows, but at tens of millions it gets so slow you must rebuild.
+> If you must use a UUID, use **v7**, which starts with the time, so it grows in order like bigint.
 
-**เลขที่คนเห็นไม่ใช่ primary key**: เลขใบสั่งซื้อ `SO-2026-00042` ที่ลูกค้าอ้างถึง
-ให้เก็บเป็นคอลัมน์ต่างหากที่มี unique constraint และไม่เอา primary key ไปโชว์
-
----
-
-## 5 · normalisation แค่ไหนพอ
-
-**เริ่มที่ Third Normal Form (3NF) เสมอ**: ข้อเท็จจริง 1 อย่างเก็บที่เดียว
-
-denormalise (ยอมเก็บข้อมูลซ้ำ) ได้เมื่อครบ 3 ข้อนี้เท่านั้น:
-
-1. วัดแล้วว่าช้าจริง (มีตัวเลข ไม่ใช่ความรู้สึก)
-2. รู้ว่าข้อมูลซ้ำจะถูกอัปเดตยังไงให้ตรงกัน
-3. เขียนเหตุผลไว้ในคอมเมนต์ของตาราง
-
-**ข้อยกเว้นที่ยอมรับกันทั่วไป**: ข้อมูลที่ต้อง "แช่แข็ง" ณ เวลาหนึ่ง
-ราคาสินค้าในใบสั่งซื้อต้องคัดลอกลง `order_items.unit_price`
-ไม่ join ไปหา `products.price` เพราะราคาวันนี้ไม่ใช่ราคาวันที่ลูกค้าซื้อ
+**A number people see is not the primary key**: a purchase order number such as `SO-2026-00042` that the customer refers to
+should be stored as a separate column with a unique constraint, and the primary key should not be shown.
 
 ---
 
-## 6 · สี่ชนิดข้อมูลที่พลาดกันประจำ
+## 5 · How much normalisation is enough
 
-รายละเอียด 4 ชนิดข้อมูลที่พลาดกันประจำ (เงิน · เวลา · enum หรือสถานะ · boolean) พร้อมตัวอย่าง อยู่ใน [`data-types`](references/data-types.md)
+**Always start at Third Normal Form (3NF)**: each fact is stored in one place.
 
-## 7 · index — วางตรงไหนถึงได้ผล
+You may denormalise (accept duplicated data) only when all 3 of these hold:
 
-**ต้องมี:**
+1. You measured and it is truly slow (with numbers, not a feeling).
+2. You know how the duplicated data will be updated so that the copies match.
+3. You wrote the reason in the table comment.
 
-- ทุก foreign key (ฐานข้อมูลส่วนใหญ่ **ไม่สร้างให้อัตโนมัติ**)
-- คอลัมน์ที่อยู่ใน `WHERE` ของ query ที่รันบ่อย
-- คอลัมน์ที่ใช้ `ORDER BY` คู่กับ pagination
+**A commonly accepted exception**: data that must be "frozen" at a point in time.
+The product price in a purchase order must be copied into `order_items.unit_price`
+and not joined to `products.price`, because today's price is not the price on the day the customer bought.
 
-**composite index (index หลายคอลัมน์): ลำดับคอลัมน์สำคัญ**
+---
+
+## 6 · Four data types people get wrong all the time
+
+Details of the 4 data types people get wrong all the time (money · time · enum or status · boolean), with examples, are in [`data-types`](references/data-types.md).
+
+## 7 · index — where to put one so it works
+
+**Must have:**
+
+- Every foreign key (most databases **do not create it automatically**)
+- Columns in the `WHERE` of frequently run queries
+- Columns used in `ORDER BY` together with pagination
+
+**composite index (an index on several columns): column order matters**
 
 ```sql
 -- query: WHERE tenant_id = ? AND status = ? ORDER BY created_at DESC
@@ -153,94 +153,94 @@ CREATE INDEX ix_orders_tenant_status_created
   ON orders (tenant_id, status, created_at DESC);
 ```
 
-เรียงคอลัมน์ตามเงื่อนไข: **เท่ากับ → ช่วง → เรียงลำดับ**
-index `(a, b)` ใช้กับ query ที่กรองด้วย `a` อย่างเดียวได้ แต่กรองด้วย `b` อย่างเดียว**ไม่ได้**
+Order the columns by condition type: **equals → range → sort**.
+An index `(a, b)` works for a query that filters on `a` alone, but **not** for one that filters on `b` alone.
 
-**อย่าใส่ index เมื่อ:**
+**Do not add an index when:**
 
-- ตารางเล็กกว่าไม่กี่พันแถว เพราะฐานข้อมูลอ่านทั้งตารางเร็วกว่า
-- คอลัมน์มีค่าซ้ำเยอะ เช่น `is_active` ที่ 95% เป็น true
-- ตารางเขียนบ่อยกว่าอ่านมาก เพราะทุก index เพิ่มต้นทุนทุกครั้งที่เขียน
+- The table has fewer than a few thousand rows, because the database reads the whole table faster
+- The column has many repeated values, such as `is_active` where 95% are true
+- The table is written far more often than read, because every index adds cost on every write
 
-> **วัดก่อนเดา**: `EXPLAIN ANALYZE` (PostgreSQL) หรือ execution plan (SQL Server)
-> บอกได้ว่า index ถูกใช้จริงไหม ส่วนการเดาว่า "น่าจะช่วย" ผิดบ่อยกว่าถูก
+> **Measure before guessing**: `EXPLAIN ANALYZE` (PostgreSQL) or the execution plan (SQL Server)
+> tells you whether the index is really used. Guessing that it "should help" is wrong more often than right.
 
 ---
 
-## 8 · constraint อยู่ที่ฐานข้อมูล ไม่ใช่แค่ที่แอป
+## 8 · Constraints live in the database, not only in the app
 
-| กฎ | ที่ควรอยู่ |
+| Rule | Where it should live |
 |---|---|
-| อีเมลห้ามซ้ำ | `UNIQUE` ที่ฐานข้อมูล **และ** ตรวจในแอปเพื่อให้ข้อความ error สวย |
-| ยอดเงินห้ามติดลบ | `CHECK (total_amount >= 0)` |
-| ใบสั่งซื้อต้องมีลูกค้าจริง | `FOREIGN KEY` |
-| สถานะต้องเป็นค่าที่กำหนด | `CHECK` หรือ lookup table |
+| Email must not repeat | `UNIQUE` in the database **and** a check in the app so the error message looks nice |
+| Amount must not be negative | `CHECK (total_amount >= 0)` |
+| A purchase order must have a real customer | `FOREIGN KEY` |
+| Status must be one of the defined values | `CHECK` or a lookup table |
 
-> **เหตุผล:** แอปไม่ใช่ทางเดียวที่แตะข้อมูล ยังมี script แก้ข้อมูลด่วน
-> งาน import ตอนตี 3 และ service ตัวที่ 2 ที่เขียนทีหลัง
-> constraint ที่ฐานข้อมูลคือด่านสุดท้ายที่ไม่มีใครข้ามได้
+> **Reason:** the app is not the only thing that touches the data. There are also urgent data-fix scripts,
+> import jobs at 3 a.m., and a 2nd service written later.
+> A constraint in the database is the last gate that nobody can skip.
 
-**`ON DELETE` ต้องเลือกอย่างตั้งใจ:**
+**Choose `ON DELETE` on purpose:**
 
-| ตัวเลือก | ความหมาย | ใช้กับ |
+| Option | Meaning | Use with |
 |---|---|---|
-| `RESTRICT` (ค่าเริ่มต้นที่ควรใช้) | ลบไม่ได้ถ้ายังมีลูก | เกือบทุกกรณี |
-| `CASCADE` | ลบลูกตามทั้งหมด | ของที่เป็นส่วนประกอบจริง ๆ เช่น `order_items` |
-| `SET NULL` | ลูกกลายเป็นไม่มีพ่อ | ความสัมพันธ์ที่ไม่บังคับ |
+| `RESTRICT` (the default you should use) | Cannot delete while children exist | Almost every case |
+| `CASCADE` | Delete all the children too | True components, such as `order_items` |
+| `SET NULL` | Child becomes parentless | Optional relationships |
 
-ถ้าใส่ `CASCADE` ผิดที่เดียว ลบลูกค้า 1 คน แล้วประวัติการซื้อ 10 ปีจะหายตาม
+If you put `CASCADE` in the wrong place just once, deleting 1 customer wipes 10 years of purchase history with it.
 
 ---
 
-## 9 · migration — เปลี่ยน schema โดยไม่ต้องปิดระบบ
+## 9 · migration — change the schema without taking the system down
 
-ขั้นตอน expand-and-contract และตัวอย่าง migration ที่ deploy ได้โดยไม่ปิดระบบ อยู่ใน [`migrations`](references/migrations.md)
+The expand-and-contract steps, and example migrations that deploy without downtime, are in [`migrations`](references/migrations.md).
 
-คลังข้อมูลเพื่อวิเคราะห์ (star schema · SCD · ELT) อยู่ใน [`warehouse-modeling`](references/warehouse-modeling.md) · pipeline ที่รันซ้ำได้ (incremental · backfill · ทดสอบคุณภาพข้อมูล · checklist ก่อนขึ้น production) อยู่ใน [`data-pipeline-patterns`](references/data-pipeline-patterns.md)
+Data warehouses for analysis (star schema · SCD · ELT) are in [`warehouse-modeling`](references/warehouse-modeling.md) · pipelines that can rerun safely (incremental · backfill · data quality tests · checklist before going to production) are in [`data-pipeline-patterns`](references/data-pipeline-patterns.md).
 
-## 10 · ระบบหลายผู้เช่า (multi-tenant)
+## 10 · Multi-tenant systems
 
-| แบบ | แยกกันแค่ไหน | ต้นทุน | เหมาะกับ |
+| Style | How separate | Cost | Fits |
 |---|---|---|---|
-| คอลัมน์ `tenant_id` ในทุกตาราง | ต่ำ พลาดที่เดียวข้อมูลก็รั่วข้ามผู้เช่า | ถูกสุด | ผู้เช่าเยอะ ข้อมูลต่อรายไม่ใหญ่ |
-| schema แยกต่อผู้เช่า | กลาง | migration ต้องวนทุก schema | ผู้เช่าหลักสิบถึงหลักร้อย |
-| ฐานข้อมูลแยกต่อผู้เช่า | สูงสุด | แพงสุด | ลูกค้าองค์กรที่บังคับให้แยก |
+| A `tenant_id` column in every table | Low: one slip and data leaks across tenants | Cheapest | Many tenants, small data per tenant |
+| A separate schema per tenant | Medium | Migrations must loop over every schema | Tens to hundreds of tenants |
+| A separate database per tenant | Highest | Most expensive | Enterprise customers who require separation |
 
-> **สำคัญ:** ถ้าเลือกแบบ `tenant_id` ให้**บังคับที่ชั้นล่างสุด ไม่ใช่ใส่ใน query ทีละตัว**
-> ใช้ row-level security ของฐานข้อมูล หรือ global filter ของ ORM
-> query ที่ลืมใส่ `WHERE tenant_id = ?` แค่ตัวเดียว ก็ทำให้ข้อมูลลูกค้ารายหนึ่งโผล่ให้อีกรายเห็น
-> และไม่มี error ให้เห็นเลย
+> **Important:** if you choose the `tenant_id` style, **enforce it at the lowest layer, not by adding it to each query**.
+> Use the database's row-level security, or the ORM's global filter.
+> A single query that forgets `WHERE tenant_id = ?` shows one customer's data to another,
+> and no error appears at all.
 
 ---
 
-## 11 · ข้อมูลส่วนบุคคล
+## 11 · Personal data
 
-- ทำรายการว่า **คอลัมน์ไหนเป็นข้อมูลส่วนบุคคล** ถ้าไม่มีรายการนี้จะตอบคำถาม "ข้อมูลฉันอยู่ที่ไหนบ้าง" ไม่ได้
-- เลขบัตรประชาชน หมายเลขบัตรเครดิต และข้อมูลสุขภาพ ให้เข้ารหัสระดับคอลัมน์ หรือไม่เก็บเลยถ้าไม่จำเป็น
-- กำหนด **อายุการเก็บ** ต่อตาราง และมีงานลบจริงตามนั้น
-- ต้องลบได้เมื่อเจ้าของขอ และ soft delete อย่างเดียวไม่นับว่าลบ
-- ห้ามคัดลอกข้อมูลจริงลงเครื่อง developer โดยไม่ปิดบัง
+- Keep a list of **which columns are personal data**. Without this list you cannot answer the question "where is my data?".
+- National ID numbers, credit card numbers and health data: encrypt at the column level, or do not store them at all if not needed.
+- Set a **retention period** per table, and have a real job that deletes accordingly.
+- Data must be deletable when the owner asks, and soft delete alone does not count as deleting.
+- Never copy real data onto a developer machine without masking it.
 
 ---
 
 ## 12 · Anti-patterns
 
-- **ตารางเดียวเก็บทุกอย่าง** (`entity` / `attribute` / `value`) query อะไรก็ยากไปหมด
-- **`varchar(255)` ทุกคอลัมน์** ตัวเลขนี้ไม่มีความหมายอะไร ให้กำหนดจากข้อมูลจริง
-- **เก็บหลายค่าในคอลัมน์เดียว** เช่น `"1,4,7"` ค้นไม่ได้ ใส่ constraint ไม่ได้ ให้ใช้ตารางเชื่อม
-- **ไม่มี foreign key เพราะ "แอปดูแลเอง"** สักวันจะมีแถวกำพร้า
-- **index ทุกคอลัมน์เผื่อไว้** เขียนช้าลง พื้นที่บาน โดยไม่มีใครได้ประโยชน์
-- **`SELECT *` ในโค้ดจริง** เพิ่มคอลัมน์ทีไรโค้ดพังทุกที
-- **ตรรกะธุรกิจใน trigger** ไล่ปัญหาไม่เจอ เพราะไม่มีใครเห็นว่ามันทำงาน
-- **migration ที่เขียนข้อมูลด้วย** ปนกับที่เปลี่ยนโครงสร้าง พอ rollback ข้อมูลก็หาย
-- **แก้ schema บน production ด้วยมือ** deploy รอบหน้า schema จะไม่ตรงกัน
+- **One table that stores everything** (`entity` / `attribute` / `value`): every query becomes hard.
+- **`varchar(255)` on every column**: this number means nothing. Set it from real data.
+- **Several values in one column**, such as `"1,4,7"`: cannot search it, cannot add a constraint. Use a join table.
+- **No foreign key because "the app takes care of it"**: one day you will have orphan rows.
+- **An index on every column just in case**: writes get slower and storage bloats, with no one benefiting.
+- **`SELECT *` in real code**: the code breaks every time a column is added.
+- **Business logic in triggers**: problems are untraceable, because nobody sees it running.
+- **A migration that also writes data**, mixed with the structure change: on rollback the data is lost.
+- **Changing the schema on production by hand**: at the next deploy the schema will not match.
 
 
 ## reference: data-pipeline-patterns.md
 
 # Data pipeline patterns — incremental, backfill, quality, catalog
 
-ทุก pipeline ต้องรันซ้ำได้ผลเท่าเดิม (`principle-safe-to-rerun`) และส่งค่าเข้า SQL เป็น parameter เสมอ
+Every pipeline must give the same result when run again (`principle-safe-to-rerun`) and must always pass values into SQL as parameters.
 
 **สารบัญ:**
 
@@ -464,11 +464,11 @@ may take 40 minutes on production and hold the table lock the whole time
 
 ## reference: per-stack.md
 
-# ไวยากรณ์และเครื่องมือแยกตามฐานข้อมูล/ORM
+# Syntax and tools per database and ORM
 
-**สารบัญ:** 1 ชนิดข้อมูลเทียบกัน · 2 PostgreSQL · 3 SQL Server · 4 MySQL / MariaDB · 5 MongoDB · 6 Entity Framework Core (.NET) · 7 Prisma / Drizzle (Node) · 8 Alembic (Python) · 9 คำสั่งตรวจ query ช้า
+**Contents:** 1 Data types compared · 2 PostgreSQL · 3 SQL Server · 4 MySQL / MariaDB · 5 MongoDB · 6 Entity Framework Core (.NET) · 7 Prisma / Drizzle (Node) · 8 Alembic (Python) · 9 Slow query commands
 
-1. [ชนิดข้อมูลเทียบกัน](#1--ชนิดข้อมูลเทียบกัน)
+1. [Data types compared](#1--data-types-compared)
 2. [PostgreSQL](#2--postgresql)
 3. [SQL Server](#3--sql-server)
 4. [MySQL / MariaDB](#4--mysql--mariadb)
@@ -476,30 +476,30 @@ may take 40 minutes on production and hold the table lock the whole time
 6. [Entity Framework Core (.NET)](#6--entity-framework-core-net)
 7. [Prisma / Drizzle (Node)](#7--prisma--drizzle-node)
 8. [Alembic (Python)](#8--alembic-python)
-9. [คำสั่งตรวจ query ช้า](#9--คำสั่งตรวจ-query-ช้า)
+9. [Slow query commands](#9--slow-query-commands)
 
 ---
 
-## 1 · ชนิดข้อมูลเทียบกัน
+## 1 · Data types compared
 
-| ต้องการเก็บ | PostgreSQL | SQL Server | MySQL |
+| To store | PostgreSQL | SQL Server | MySQL |
 |---|---|---|---|
-| id เรียงเพิ่ม | `bigint GENERATED ALWAYS AS IDENTITY` | `bigint IDENTITY(1,1)` | `BIGINT AUTO_INCREMENT` |
-| UUID | `uuid` | `uniqueidentifier` | `BINARY(16)` หรือ `CHAR(36)` |
-| เงิน | `numeric(19,4)` | `decimal(19,4)` | `DECIMAL(19,4)` |
-| เวลา + โซนเวลา | `timestamptz` | `datetimeoffset(3)` | `TIMESTAMP` (เก็บ UTC) |
-| วันที่ล้วน | `date` | `date` | `DATE` |
-| ข้อความยาวไม่จำกัด | `text` | `nvarchar(max)` | `TEXT` / `LONGTEXT` |
-| ข้อความไทย | `text` (UTF-8 อยู่แล้ว) | **`nvarchar` เท่านั้น** | `utf8mb4` |
-| จริง/เท็จ | `boolean` | `bit` | `TINYINT(1)` |
-| JSON | `jsonb` (มี index ได้) | `nvarchar(max)` + `JSON_VALUE` | `JSON` |
-| ไฟล์ไบนารี | `bytea` (หรือเก็บนอกฐานข้อมูล) | `varbinary(max)` | `BLOB` |
+| Auto-increment id | `bigint GENERATED ALWAYS AS IDENTITY` | `bigint IDENTITY(1,1)` | `BIGINT AUTO_INCREMENT` |
+| UUID | `uuid` | `uniqueidentifier` | `BINARY(16)` or `CHAR(36)` |
+| Money | `numeric(19,4)` | `decimal(19,4)` | `DECIMAL(19,4)` |
+| Time + time zone | `timestamptz` | `datetimeoffset(3)` | `TIMESTAMP` (store UTC) |
+| Date only | `date` | `date` | `DATE` |
+| Unlimited-length text | `text` | `nvarchar(max)` | `TEXT` / `LONGTEXT` |
+| Thai text | `text` (already UTF-8) | **`nvarchar` only** | `utf8mb4` |
+| True/false | `boolean` | `bit` | `TINYINT(1)` |
+| JSON | `jsonb` (can be indexed) | `nvarchar(max)` + `JSON_VALUE` | `JSON` |
+| Binary file | `bytea` (or store outside the database) | `varbinary(max)` | `BLOB` |
 
-> **SQL Server + ภาษาไทย**: `varchar` ทำให้ตัวอักษรไทยกลายเป็น `?`
-> ต้องใช้ `nvarchar` และเขียนค่าคงที่เป็น `N'ข้อความ'` เสมอ
+> **SQL Server + Thai**: `varchar` turns Thai characters into `?`.
+> Use `nvarchar` and always write literals as `N'ข้อความ'`.
 >
-> **MySQL ต้องเป็น `utf8mb4`** เพราะชุดอักขระชื่อ `utf8` เฉย ๆ ของ MySQL
-> เก็บได้แค่ 3 ไบต์ต่อตัว อีโมจิและอักขระบางตัวจึงหาย
+> **MySQL must use `utf8mb4`**, because MySQL's character set named plain `utf8`
+> stores only 3 bytes per character, so emoji and some other characters are lost.
 
 ---
 
@@ -526,14 +526,14 @@ CREATE INDEX ix_orders_customer_id ON orders (customer_id);
 CREATE INDEX ix_orders_status_created ON orders (status, created_at DESC);
 ```
 
-**สร้าง index โดยไม่ล็อกตาราง:**
+**Create an index without locking the table:**
 
 ```sql
 CREATE INDEX CONCURRENTLY ix_orders_status ON orders (status);
--- ห้ามอยู่ใน transaction · ถ้าล้มจะเหลือ index สถานะ invalid ต้อง DROP แล้วทำใหม่
+-- Must not run inside a transaction · if it fails it leaves an index in invalid state: DROP it and redo
 ```
 
-**อัปเดต `updated_at` อัตโนมัติ:**
+**Update `updated_at` automatically:**
 
 ```sql
 CREATE OR REPLACE FUNCTION touch_updated_at() RETURNS trigger AS $$
@@ -544,28 +544,28 @@ CREATE TRIGGER trg_orders_touch BEFORE UPDATE ON orders
 FOR EACH ROW EXECUTE FUNCTION touch_updated_at();
 ```
 
-**row-level security สำหรับระบบหลายผู้เช่า:**
+**Row-level security for multi-tenant systems:**
 
 ```sql
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 CREATE POLICY tenant_isolation ON orders
   USING (tenant_id = current_setting('app.tenant_id')::bigint);
--- แอปตั้งค่าต่อ connection: SET app.tenant_id = '42';
+-- The app sets this per connection: SET app.tenant_id = '42';
 ```
 
-**กับดักที่เจอบ่อยใน PostgreSQL** (แนวคิดจาก wshobson postgresql-table-design · เลขรุ่นคือรุ่นที่พฤติกรรมเริ่มเป็นแบบนี้)
+**Common PostgreSQL traps** (ideas from wshobson postgresql-table-design · version numbers are the version where the behaviour began)
 
-| กับดัก | ทำแบบนี้แทน |
+| Trap | Do this instead |
 |---|---|
-| `timestamp` (ไม่มี time zone) ทิ้ง offset เงียบ ๆ เครื่อง `+07:00` กับ UTC เก็บค่าคนละความหมาย | `timestamptz` เสมอ |
-| `serial` สร้าง sequence แยกที่สิทธิ์และ `DROP` ไม่ตามตาราง | `GENERATED ALWAYS AS IDENTITY` (PG 10+) |
-| `ADD COLUMN ... NOT NULL` บนตารางใหญ่กลัวล็อกนาน | ถ้าใส่ `DEFAULT` ค่าคงที่ ไม่เขียนตารางใหม่แล้ว (PG 11+) · DEFAULT ที่เป็นฟังก์ชันเช่น `now()` ยังเขียนใหม่ทั้งตาราง |
-| `ADD CONSTRAINT` (FK · CHECK) สแกนทั้งตารางขณะถือล็อก | `... NOT VALID` ก่อน แล้ว `VALIDATE CONSTRAINT` แยกคำสั่ง (ล็อกเบากว่า) |
-| DDL ต่อคิวหลัง transaction ยาว แล้วทุก query หลังมันค้างตาม | `SET lock_timeout = '5s'` ก่อน DDL ทุกครั้ง ตกแล้วรันใหม่ |
-| unique index ปล่อยให้ `NULL` ซ้ำได้หลายแถว | `UNIQUE NULLS NOT DISTINCT` (PG 15+) หรือ partial index `WHERE col IS NOT NULL` |
-| `LIKE '%คำ%'` และ `ILIKE` ไม่ใช้ btree index | extension `pg_trgm` + GIN index · ค้นข้อความจริงจังใช้ `tsvector` |
-| `jsonb` ค้นด้วย `->>` ไม่ใช้ index | GIN index บนคอลัมน์ (`@>` · `?`) หรือ expression index บน `(meta->>'key')` |
-| `count(*)` ทั้งตารางเพื่อแสดงจำนวนหน้า | ใช้ค่าประมาณจาก `pg_class.reltuples` หรือเลิกแสดงจำนวนรวม (cursor pagination) |
+| `timestamp` (no time zone) silently drops the offset, so a `+07:00` machine and UTC store values with different meanings | Always `timestamptz` |
+| `serial` creates a separate sequence whose permissions and `DROP` do not follow the table | `GENERATED ALWAYS AS IDENTITY` (PG 10+) |
+| `ADD COLUMN ... NOT NULL` on a big table risks a long lock | With a constant `DEFAULT` the table is no longer rewritten (PG 11+) · a function DEFAULT such as `now()` still rewrites the whole table |
+| `ADD CONSTRAINT` (FK · CHECK) scans the whole table while holding the lock | Use `... NOT VALID` first, then run `VALIDATE CONSTRAINT` as a separate statement (lighter lock) |
+| DDL queues behind a long transaction, and every query after it waits too | Run `SET lock_timeout = '5s'` before every DDL, and rerun if it times out |
+| A unique index lets `NULL` repeat on many rows | `UNIQUE NULLS NOT DISTINCT` (PG 15+) or a partial index `WHERE col IS NOT NULL` |
+| `LIKE '%คำ%'` and `ILIKE` do not use a btree index | Extension `pg_trgm` + GIN index · for serious text search use `tsvector` |
+| `jsonb` search with `->>` does not use an index | GIN index on the column (`@>` · `?`) or an expression index on `(meta->>'key')` |
+| `count(*)` over the whole table to show a page count | Use the estimate from `pg_class.reltuples`, or drop the total count (cursor pagination) |
 
 ---
 
@@ -586,12 +586,12 @@ CREATE TABLE orders (
 );
 
 CREATE INDEX ix_orders_status_created ON orders (status, created_at DESC)
-  WITH (ONLINE = ON);   -- Enterprise / Azure SQL เท่านั้น
+  WITH (ONLINE = ON);   -- Enterprise / Azure SQL only
 ```
 
-- `rowversion` ใช้เป็น ETag ตรวจว่ามีคนแก้ชนกันได้ตรง ๆ
-- ถ้าต้องเรียงลำดับภาษาไทย ให้ตั้ง collation `Thai_100_CI_AS` ที่ระดับคอลัมน์หรือฐานข้อมูล
-- `datetime` แบบเก่าละเอียดแค่ 3.33 มิลลิวินาที ให้ใช้ `datetime2` / `datetimeoffset` แทน
+- `rowversion` works directly as an ETag to detect conflicting edits.
+- To sort Thai correctly, set the collation `Thai_100_CI_AS` at the column or database level.
+- The old `datetime` has a precision of only 3.33 milliseconds. Use `datetime2` / `datetimeoffset` instead.
 
 ---
 
@@ -611,8 +611,8 @@ CREATE TABLE orders (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 ```
 
-- MySQL 8.0.12 ขึ้นไป `ADD COLUMN` ใช้ `ALGORITHM=INSTANT` ได้ (ก่อน 8.0.29 เพิ่มได้เฉพาะท้ายตาราง) ส่วนการเปลี่ยนชนิดข้อมูลยังเขียนตารางใหม่ (dev.mysql.com online DDL, ตรวจ 22 ต.ค. 2569) ตารางใหญ่ที่ต้อง rebuild จึงควรใช้ `pt-online-schema-change` หรือ `gh-ost`
-- ตั้งเวลาเซิร์ฟเวอร์เป็น UTC (`default_time_zone = '+00:00'`)
+- From MySQL 8.0.12, `ADD COLUMN` can use `ALGORITHM=INSTANT` (before 8.0.29 it could add only at the end of the table). Changing a data type still rewrites the table (dev.mysql.com online DDL, checked 22 Oct 2026 (B.E. 2569)). For big tables that need a rebuild, use `pt-online-schema-change` or `gh-ost`.
+- Set the server time to UTC (`default_time_zone = '+00:00'`).
 
 ---
 
@@ -626,7 +626,7 @@ db.createCollection("orders", {
     properties: {
       orderNo:     { bsonType: "string" },
       customerId:  { bsonType: "objectId" },
-      totalAmount: { bsonType: "decimal" },   // ผิด: อย่าใช้ double กับเงิน
+      totalAmount: { bsonType: "decimal" },   // wrong: do not use double for money
       createdAt:   { bsonType: "date" }
     }
   }}
@@ -635,9 +635,9 @@ db.orders.createIndex({ orderNo: 1 }, { unique: true });
 db.orders.createIndex({ customerId: 1, createdAt: -1 });
 ```
 
-- ฝัง (embed) เมื่อข้อมูลลูก **อ่านคู่กับพ่อเสมอ และไม่โตไม่จำกัด** นอกนั้นใช้การอ้างอิง
-- เอกสาร 1 ใบมีเพดาน 16 MB อาเรย์ที่โตเรื่อย ๆ จึงชนเพดานสักวัน
-- เงินใช้ `Decimal128` เท่านั้น
+- Embed when the child data is **always read together with the parent and does not grow without limit**. Otherwise use references.
+- One document has a 16 MB ceiling, so an array that keeps growing will hit it one day.
+- Use `Decimal128` for money, and nothing else.
 
 ---
 
@@ -645,20 +645,20 @@ db.orders.createIndex({ customerId: 1, createdAt: -1 });
 
 ```bash
 dotnet ef migrations add AddOrderStatus
-dotnet ef migrations script <from> <to> -o migrate.sql   # ถูก: ตรวจ SQL ก่อนรันจริง
-dotnet ef database update                                # dev เท่านั้น
+dotnet ef migrations script <from> <to> -o migrate.sql   # right: review the SQL before the real run
+dotnet ef database update                                # dev only
 ```
 
-> **บน production รัน script ที่ตรวจแล้ว ไม่ใช่ `database update`**
-> คำสั่งนั้นต้องให้ connection ของแอปมีสิทธิ์แก้ schema ซึ่งไม่ควรมีตั้งแต่แรก
+> **On production, run the reviewed script, not `database update`.**
+> That command needs the app's connection to have permission to change the schema, which it should not have in the first place.
 
 ```csharp
 modelBuilder.Entity<Order>(e => {
     e.ToTable("orders");
     e.Property(x => x.TotalAmount).HasColumnType("decimal(19,4)");
     e.HasIndex(x => new { x.Status, x.CreatedAt }).HasDatabaseName("ix_orders_status_created");
-    e.HasQueryFilter(x => x.DeletedAt == null);          // soft delete ทั้งระบบ
-    e.Property(x => x.RowVersion).IsRowVersion();        // ตรวจการแก้ชนกัน
+    e.HasQueryFilter(x => x.DeletedAt == null);          // soft delete across the whole system
+    e.Property(x => x.RowVersion).IsRowVersion();        // detect conflicting edits
 });
 ```
 
@@ -682,12 +682,12 @@ model Order {
 ```
 
 ```bash
-npx prisma migrate dev --name add_order_status   # dev — สร้างไฟล์ migration
-npx prisma migrate deploy                        # production — รันเฉพาะที่มีอยู่แล้ว
+npx prisma migrate dev --name add_order_status   # dev — creates the migration file
+npx prisma migrate deploy                        # production — runs only the existing ones
 ```
 
-- `Decimal` ของ Prisma คืนค่าเป็น object ไม่ใช่ number ให้คำนวณด้วย `decimal.js` อย่าแปลงเป็น float
-- `BigInt` แปลงเป็น JSON ตรง ๆ ไม่ได้ ต้องแปลงเป็น string ที่ชั้น API
+- Prisma's `Decimal` returns an object, not a number. Calculate with `decimal.js` and do not convert to float.
+- `BigInt` cannot be converted to JSON directly. Convert it to a string at the API layer.
 
 ---
 
@@ -699,49 +699,49 @@ alembic upgrade head
 alembic downgrade -1
 ```
 
-แยกเป็น 3 migration (1 migration ทำเรื่องเดียว):
+Split into 3 migrations (1 migration does one thing):
 
 ```python
-# 1) schema: เพิ่มคอลัมน์ที่ยังว่างได้
+# 1) schema: add a nullable column
 def upgrade():
     op.add_column("orders", sa.Column("status", sa.String(20), nullable=True))
 
-# 2) ข้อมูล: เติมค่าเดิม (ตารางใหญ่ให้ทำเป็นชุดเล็ก ๆ)
+# 2) data: backfill existing values (on a big table, do it in small batches)
 def upgrade():
     op.execute("UPDATE orders SET status = 'draft' WHERE status IS NULL")
 
-# 3) schema: บังคับ NOT NULL และสร้าง index
+# 3) schema: enforce NOT NULL and create the index
 def upgrade():
     op.alter_column("orders", "status", nullable=False)
-    # CREATE INDEX CONCURRENTLY ห้ามอยู่ใน transaction จึงต้องออกจาก transaction ของ Alembic
+    # CREATE INDEX CONCURRENTLY must not run inside a transaction, so step out of Alembic's transaction
     with op.get_context().autocommit_block():
         op.create_index("ix_orders_status_created", "orders", ["status", "created_at"],
                         postgresql_concurrently=True)
 ```
 
-> `--autogenerate` **ไม่เห็น** การเปลี่ยนชื่อ (มองเป็นลบแล้วเพิ่มใหม่ ข้อมูลจึงหาย)
-> อ่านไฟล์ที่มันสร้างก่อน commit ทุกครั้ง
+> `--autogenerate` **does not see** renames (it reads them as a drop plus a new add, so the data is lost).
+> Always read the file it generates before you commit.
 
 ---
 
-## 9 · คำสั่งตรวจ query ช้า
+## 9 · Slow query commands
 
-| ฐานข้อมูล | คำสั่ง |
+| Database | Command |
 |---|---|
-| PostgreSQL | `EXPLAIN (ANALYZE, BUFFERS) <query>;` · ส่วนขยาย `pg_stat_statements` |
-| SQL Server | เปิด "Include Actual Execution Plan" · `sys.dm_exec_query_stats` |
+| PostgreSQL | `EXPLAIN (ANALYZE, BUFFERS) <query>;` · extension `pg_stat_statements` |
+| SQL Server | Turn on "Include Actual Execution Plan" · `sys.dm_exec_query_stats` |
 | MySQL | `EXPLAIN ANALYZE <query>;` · `performance_schema` |
 | MongoDB | `db.orders.find(...).explain("executionStats")` |
 
-**สัญญาณอันตรายที่ต้องแก้:** `Seq Scan` / `Table Scan` บนตารางใหญ่ ·
-จำนวนแถวที่ประมาณไว้ต่างจากที่ได้จริงเกิน 10 เท่า · `Nested Loop` ที่วนหลักแสนรอบ
+**Danger signs to fix:** `Seq Scan` / `Table Scan` on a big table ·
+estimated row count differs from the actual by more than 10 times · a `Nested Loop` that runs hundreds of thousands of times
 
 
 ## reference: warehouse-modeling.md
 
 # Warehouse modeling — ELT, stack, star schema, SCD
 
-สำหรับคลังข้อมูลเพื่อวิเคราะห์ (analytics warehouse) ไม่ใช่ฐานข้อมูลของแอป
+For an analytics warehouse, not an application database.
 
 **สารบัญ:**
 
@@ -768,7 +768,7 @@ Source → Load raw → Transform in warehouse
 
 ## Tech Stack (2026 Recommendations)
 
-> รายชื่อเครื่องมือจากความรู้ของโมเดล ยังไม่ได้ตรวจกับเว็บทางการ (รอยืนยัน) — ตรวจก่อนแนะนำ
+> The tool list comes from model knowledge and has not been checked against official websites (รอยืนยัน, awaiting confirmation). Check before recommending.
 
 ### Warehouse / Lake
 | Tool | Best for | Cost |
@@ -1568,29 +1568,29 @@ The column template and the values used in each field live in one place, the [qu
 
 ## reference: playbook-bug-fix.md
 
-# playbook · bug-fix — แก้ของพังด้วยหลักฐาน
+# playbook · bug-fix — fix broken things with evidence
 
-ใช้เมื่อ: error · stack trace · test ล้ม · หน้าจอผิด · หน่วยความจำรั่ว · CPU วิ่งตอนว่าง · ผู้ใช้แจ้งปัญหา · ของที่ไม่ควรเกิดเลย (ถ้าใช้ได้อยู่แต่อยากให้เร็วหรือเบาขึ้นถึงเป้า → `performance`) (รวม `bug fix` · `runtime forensics` · `trace forensics` ของ pstack)
-skill หลัก: [`code-orientation`](../../code-orientation/SKILL.md) · skill ตาม stack · `targeted-fix` · `principle-fix-root-cause` · `principle-prove-it-works`
+Use when: an error · stack trace · failing test · wrong screen · memory leak · CPU busy while idle · a user report · something that should never happen (if it works but you want it faster or lighter to a target → `performance`) (covers pstack's `bug fix` · `runtime forensics` · `trace forensics`)
+Main skills: [`code-orientation`](../../code-orientation/SKILL.md) · the skill for the stack · `targeted-fix` · `principle-fix-root-cause` · `principle-prove-it-works`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. คัดอาการตรงตัว — ข้อความ error · ชื่อ test · ภาพหน้าจอ · ขั้นตอนที่ผู้ใช้ทำ · ใคร: หัวหน้าทีม
-2. **ทำให้เกิดซ้ำเองในที่เดียวกับที่ผู้ใช้เจอ** — ถ้าเป็นหน้าเว็บ ให้ใช้ skill ตรวจแอปของโปรเจกต์ (ถ้ายังไม่มี ให้ทำ `app-verifier-setup` ก่อน) ถ้าเป็น API ให้ใช้คำสั่งเรียกจริง ถ้าทำซ้ำไม่ได้ ให้บอกว่าขาดอะไร (ข้อมูล · สภาพแวดล้อม · ขั้นตอน) แล้วหยุดเฉพาะบั๊กนี้ ส่วนโปรเจกต์ที่มี `.sandbox/` (ข้อยกเว้นของรากตาม `project-doc-set` ข้อ 1) ให้ทำซ้ำใน sandbox · ใคร: `qa-tester` ตัวใหม่
-   - อาการที่เกิดตอนรัน (รั่ว · ค้างเป็นพัก ๆ · วิ่งตอนว่าง) ให้ใส่การวัดหรือ log ชั่วคราว เพื่อให้อาการกลายเป็นตัวเลขก่อนแก้ ถ้าได้ไฟล์ profile มา (cpuprofile · heap snapshot · trace) ให้อ่านด้วยเครื่องมือของไฟล์ชนิดนั้น ไม่เดาจากโค้ด
-3. **เขียน test ที่ล้มเพราะบั๊กนี้ก่อน** แล้วรันให้เห็นว่าแดง (`testing-standards`) ถ้าโปรเจกต์ยังไม่มี test เลย ให้ตั้ง test ตัวแรกให้รันได้ก่อน ถ้าทำ test ไม่ได้จริง (เช่น อาการที่เกิดตอนรันบนเครื่องผู้ใช้) ให้เขียนเหตุผลลงรายงาน และต้องมีขั้นตอนทำซ้ำที่รันได้แทน · ใคร: `developer` ตัวใหม่
-   - ถ้ายังไม่ได้อ่านส่วนนี้ใน session นี้ ให้ทำ [`code-orientation`](../../code-orientation/SKILL.md) ก่อนไล่ต้นเหตุ
-4. หาต้นเหตุตาม `principle-fix-root-cause` · ต้นเหตุที่หายากหรือหลายชั้น ส่ง agent ด้วย `model: opus` (`superuser` หัวข้อ 5) · ใคร: `developer` ตัวใหม่ (ส่งผลขั้น 3)
-5. ถ้าจะแก้ของที่ใช้ร่วม (helper · type · config · schema) ให้หาทุกจุดที่กระทบตาม [`blast-radius`](../../blast-radius/SKILL.md) ก่อนแก้ · **บั๊กด้านความปลอดภัย** ให้ค้นทั้ง repo หาจุดที่เขียนแบบเดียวกันด้วย · ส่งรายการจุดให้ขั้น 6 · ใคร: `Explore` ตัวใหม่
-6. แก้ให้เล็กที่สุดที่ยังถูก (`lazy-coding`) ครบทุกจุดจากขั้น 4–5 ในรอบเดียว — ส่งตำแหน่งไฟล์และต้นเหตุไปด้วย · บั๊กความปลอดภัยลงรายงานใน `qa/security/` ถ้ามีค่าลับหลุด ให้บอกผู้ใช้ให้เปลี่ยนค่าทันที · ใคร: `developer` ตัวใหม่
-7. พิสูจน์ — รันกรณีที่เคยล้มให้ผ่าน รันกรณีใกล้เคียงว่ายังผ่าน แล้วลองทำซ้ำในที่เดิมอีกครั้งด้วยตัวเอง · ใคร: `qa-tester` ตัวใหม่
-8. **รีวิว diff ก่อนบอกว่าเสร็จ** — ตาม `code-review-checklist`: แก้ที่ต้นเหตุ ไม่ลามนอกจุด ผลขั้น 7 ครอบกรณีที่เคยล้ม · บั๊กความปลอดภัยดูครบทุกจุดจากขั้น 5 · ไม่ผ่าน → `developer` ตัวใหม่แก้ แล้ววนตามรอบตรวจใน [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
-9. ถ้าบั๊กนี้เป็นแบบที่ agent เคยทำมาแล้ว ให้ใช้ `repeated-mistakes-to-checks` · ใคร: หัวหน้าทีม
-10. ส่งมอบตามกฎ commit ใน `superuser` หัวข้อ 6 แล้วจบด้วย `status-report` · ใคร: หัวหน้าทีม
+1. Copy the symptom exactly — the error message · test name · screenshot · the steps the user took · ใคร: หัวหน้าทีม
+2. **Reproduce it yourself in the same place the user hit it.** For a web page, use the project's app-checking skill (if there is none yet, do `app-verifier-setup` first). For an API, use a real call. If you cannot reproduce it, say what is missing (data · environment · steps) and stop on this bug only. In a project that has `.sandbox/` (the root exception in `project-doc-set` item 1), reproduce inside the sandbox · ใคร: `qa-tester` ตัวใหม่
+   - For a symptom that appears at run time (leak · intermittent hang · busy while idle), add temporary measurement or logging so the symptom becomes a number before you fix it. If you were given a profile file (cpuprofile · heap snapshot · trace), read it with the tool for that file type. Do not guess from the code.
+3. **Write a test that fails because of this bug first**, and run it to see it red (`testing-standards`). If the project has no tests at all, first set up a first test that runs. If you truly cannot write a test (for example a symptom that happens at run time on the user's machine), write the reason in the report, and provide a runnable reproduction procedure instead · ใคร: `developer` ตัวใหม่
+   - If you have not read this part in this session, do [`code-orientation`](../../code-orientation/SKILL.md) before tracing the cause
+4. Find the root cause per `principle-fix-root-cause` · for a rare or multi-layer cause, send an agent with `model: opus` (`superuser` section 5) · ใคร: `developer` ตัวใหม่ (pass in the step 3 result)
+5. If you will change something shared (helper · type · config · schema), find every spot it affects per [`blast-radius`](../../blast-radius/SKILL.md) before changing it · for a **security bug**, also search the whole repo for places written the same way · pass the list of spots to step 6 · ใคร: `Explore` ตัวใหม่
+6. Make the smallest fix that is still correct (`lazy-coding`), covering every spot from steps 4–5 in one round — pass the file locations and the root cause along · write a security bug up in the report under `qa/security/` · if a secret leaked, tell the user to rotate it at once · ใคร: `developer` ตัวใหม่
+7. Prove it — run the case that used to fail and see it pass, run the nearby cases and see they still pass, then try to reproduce it in the original place once more yourself · ใคร: `qa-tester` ตัวใหม่
+8. **Check (ตรวจ) the diff by review before saying done** — per `code-review-checklist`: the fix is at the root cause, does not spread beyond the spot, and the step 7 result covers the case that used to fail · for a security bug, look at every spot from step 5 · if it fails → a fresh `developer` fixes it, then loop per the check rounds in [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
+9. If this bug is the kind an agent has made before, use `repeated-mistakes-to-checks` · ใคร: หัวหน้าทีม
+10. Deliver per the commit rules in `superuser` section 6, then finish with `status-report` · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-`ต้นเหตุ: … · แก้: … · พิสูจน์: <กรณีที่เคยล้มและตอนนี้ผ่าน + วิธีที่รัน>`
+`ต้นเหตุ: … · แก้: … · พิสูจน์: <the case that used to fail and now passes + how it was run>` (root cause · fix · proof)
 
 
 ## reference: playbook-feature.md
@@ -1638,25 +1638,25 @@ Every pass criterion of the requirements has evidence — a test that actually r
 
 ## reference: playbook-housekeeping.md
 
-# playbook · housekeeping — เก็บกวาดเครื่องและโปรเจกต์
+# playbook · housekeeping — clean up the machine and the project
 
-ใช้เมื่อ: ดิสก์เต็ม · worktree หรือ branch ค้างเยอะ · sandbox และ image เก่าสะสม · `_to_delete/` ใหญ่ (รวม `worktree cleanup` ของ pstack)
-หลัก: เก็บกวาดคือการลบ อะไรที่อาจมีงานของคนอยู่ให้ **ใส่ไว้ใน "รออนุมัติ"** พร้อมคำสั่งลบ ไม่ลบเอง
+Use when: the disk is full · many leftover worktrees or branches · old sandboxes and images pile up · `_to_delete/` is large (covers pstack's `worktree cleanup`)
+Principle: cleaning up means deleting. Anything that may hold someone's work goes **under "รออนุมัติ"** (awaiting approval) with its delete command, and you do not delete it yourself.
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ทำรายการ ขั้นนี้ยังไม่ลบอะไร · ใคร: หัวหน้าทีม
-   - git worktree และ branch ที่ merge แล้วหรือไม่ได้แตะเกิน 30 วัน (`git worktree list` · `git branch --merged`)
-   - sandbox ของ SQT (`docker ps -a --filter label=sqt.sandbox=true`) · image และ volume ที่ไม่มีคอนเทนเนอร์ใช้
-   - ขนาด `_to_delete/` ของแต่ละโปรเจกต์
-2. แยกเป็น 2 กลุ่ม คือกลุ่มที่ลบได้แน่ (merge แล้ว · ไม่มีไฟล์ค้าง) และกลุ่มที่ต้องให้คนตัดสิน (มีงานที่ยังไม่ commit · ไม่แน่ใจ) · ใคร: หัวหน้าทีม
-3. แสดงตาราง `| ของ | ขนาด | เหตุผลที่ลบได้ | ความเสี่ยง |` ให้ผู้ใช้ ใต้หัวข้อ **"รออนุมัติ"** พร้อมคำสั่งลบที่กดได้ทันที ส่วนข้อที่ไม่แน่ใจให้ลงใน "ค้างอยู่" · ใคร: หัวหน้าทีมเสนอ · ผู้ใช้อนุมัติ
-4. เมื่อผู้ใช้อนุมัติแล้ว ให้ลบเฉพาะรายการที่อนุมัติ worktree ที่มีไฟล์ค้างให้เก็บ patch ไว้ก่อนลบ ส่วน sandbox ให้ใช้ `.sandbox/sandbox.ps1 destroy` (`.sandbox/` เองอยู่ที่รากต่อได้ตาม `project-doc-set` ข้อ 1) · ใคร: หัวหน้าทีม
-5. รายงานพื้นที่ที่ได้คืน แล้วจบด้วย `status-report` · ใคร: หัวหน้าทีม
+1. Make the list. Delete nothing in this step · ใคร: หัวหน้าทีม
+   - git worktrees and branches that are merged or untouched for more than 30 days (`git worktree list` · `git branch --merged`)
+   - SQT sandboxes (`docker ps -a --filter label=sqt.sandbox=true`) · images and volumes no container uses
+   - the size of each project's `_to_delete/`
+2. Split into 2 groups: what is surely deletable (merged · no leftover files) and what needs a person to decide (uncommitted work · unsure) · ใคร: หัวหน้าทีม
+3. Show the user the table `| ของ | ขนาด | เหตุผลที่ลบได้ | ความเสี่ยง |` (item · size · reason it can be deleted · risk) under the heading **"รออนุมัติ"**, with delete commands ready to run at once. Put the unsure items under "ค้างอยู่" (pending) · ใคร: หัวหน้าทีมเสนอ · ผู้ใช้อนุมัติ
+4. Once the user approves, delete only the approved items. For a worktree with leftover files, keep a patch before deleting. For a sandbox, use `.sandbox/sandbox.ps1 destroy` (`.sandbox/` itself may stay at the root per `project-doc-set` item 1) · ใคร: หัวหน้าทีม
+5. Report the space recovered, then finish with `status-report` · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-ลบเฉพาะสิ่งที่ผู้ใช้อนุมัติ และไม่มีงานของใครหายไปโดยไม่มี patch สำรอง
+Only what the user approved was deleted, and no one's work was lost without a backup patch
 
 
 ## reference: playbook-investigation.md
@@ -1823,24 +1823,24 @@ Every document ordered has a status in `docs/BUILD-PLAN.md` and its check result
 
 ## reference: playbook-prototype.md
 
-# playbook · prototype — ทดลองให้ผลรันเป็นคนตัดสิน
+# playbook · prototype — experiment, and let the run result decide
 
-ใช้เมื่อ: กำลังจะถามคนว่า "แบบไหนดี" แต่คำตอบดูได้จากการรัน — ความเร็ว · หน้าตา · พฤติกรรม · ผลลัพธ์
-ห้ามใช้เมื่อ: เป็นเรื่องรสนิยมหรือการตัดสินใจทางธุรกิจที่ทดลองไม่ได้ — อันนั้นถามคน
+Use when: you are about to ask a person "which one is better?" but the answer can be seen by running it — speed · looks · behavior · output
+Do not use when: it is a matter of taste or a business decision that an experiment cannot settle — ask a person for that
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. เขียนคำถามที่จะให้การทดลองตอบ และเกณฑ์ตัดสินเป็นตัวเลขหรือสิ่งที่เห็นได้ ก่อนลงมือ · ใคร: หัวหน้าทีม
-2. สร้างทางเลือก 2–3 ทาง แบบเล็กที่สุดที่ยังตอบคำถามได้ ใน `_to_delete/prototype-<เรื่อง>/` ถ้าทางเลือกเยอะหรือใหญ่ ให้ใช้ `parallel-attempts-pick-best` · ใคร: `developer` ตัวใหม่ทางละตัว (ยังไม่รู้ว่าจะลองทางไหน: `brainstormer` ตัวใหม่เสนอก่อน)
-3. รันทุกทางด้วยวิธีวัดเดียวกัน — ข้อมูลชุดเดียวกัน เครื่องเดียวกัน แล้วบันทึกผลดิบ · ใคร: `qa-tester` ตัวใหม่
-4. ตัดสินตามเกณฑ์ข้อ 1 ถ้าผลก้ำกึ่ง ให้เลือกทางที่โค้ดน้อยและแก้ทีหลังง่ายกว่า · ใคร: หัวหน้าทีม
-5. ตรวจการตัดสิน — ตัวเลขมาจากผลดิบข้อ 3 จริง วัดแบบเดียวกันทุกทาง และเกณฑ์ตรงกับข้อ 1 · ใคร: `reviewer` ตัวใหม่
-6. ลงผลใน `decision-log` — เลือก · ไม่เลือก · ตัวเลขที่วัดได้ · ใคร: หัวหน้าทีม
-7. กลับไปทำ playbook เดิมต่อด้วยทางที่ชนะ แต่ไม่ย้ายโค้ดทดลองเข้าโปรเจกต์ตรง ๆ · ใคร: หัวหน้าทีม
+1. Before starting, write the question the experiment will answer, and the deciding criterion as a number or something visible · ใคร: หัวหน้าทีม
+2. Build 2–3 options, each as small as can still answer the question, in `_to_delete/prototype-<topic>/`. If the options are many or large, use `parallel-attempts-pick-best` · ใคร: `developer` ตัวใหม่ one per option (if it is not yet known which options to try: `brainstormer` ตัวใหม่ proposes first)
+3. Run every option with the same way of measuring — the same data, the same machine — and record the raw results · ใคร: `qa-tester` ตัวใหม่
+4. Decide by the criterion from step 1. If the result is close, choose the option with less code that is easier to change later · ใคร: หัวหน้าทีม
+5. Check (ตรวจ) the decision — the numbers really come from the raw results in step 3, every option was measured the same way, and the criterion matches step 1 · ใคร: `reviewer` ตัวใหม่
+6. Record the result in `decision-log` — chosen · not chosen · the measured numbers · ใคร: หัวหน้าทีม
+7. Return to the original playbook with the winning option, but do not move the experiment code straight into the project · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-มีตัวเลขหรือภาพเทียบที่ตอบคำถามข้อ 1 ได้ และการตัดสินถูกบันทึกแล้ว
+There are numbers or a side-by-side picture that answer the step 1 question, and the decision is recorded
 
 
 ## reference: playbook-refactor.md
@@ -2081,26 +2081,26 @@ All the step 1 conditions pass, or every remaining piece has a reason why it is 
 
 ## reference: playbook-visual-parity.md
 
-# playbook · visual-parity — หน้าจอจริงต้องตรงกับต้นแบบ
+# playbook · visual-parity — the real screen must match the reference
 
-ใช้เมื่อ: ทำหน้าจอให้ตรง mockup · ย้ายหน้าจอจากเทคโนโลยีเก่าไปใหม่แล้วต้องเหมือนเดิม · ผู้ใช้บอกว่า "ไม่เหมือนแบบ"
-skill หลัก: skill ตรวจแอปของโปรเจกต์ (`app-verifier-setup`) · `ui-craft` · `principle-prove-it-works`
+Use when: making a screen match a mockup · moving a screen from an old technology to a new one and it must look the same · the user says "ไม่เหมือนแบบ" (it does not look like the design)
+Main skills: the project's app-checking skill (`app-verifier-setup`) · `ui-craft` · `principle-prove-it-works`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ระบุต้นแบบ (ไฟล์ใน `mockup/` หรือหน้าจอระบบเดิม) และหน้าจอจริงที่จะเทียบ เป็นคู่ ๆ · ใคร: หัวหน้าทีม
-2. ถ่ายภาพทั้งสองฝั่งด้วยขนาดหน้าต่างเดียวกัน ข้อมูลชุดเดียวกัน ด้วย skill ตรวจแอป แล้วเก็บใน `_to_delete/parity/` · ใคร: `qa-tester` ตัวใหม่
-3. เทียบด้วยเครื่องมือ — ใช้ภาพต่าง (pixel diff) ถ้ามี ถ้าไม่มีให้เทียบทีละส่วน: ระยะห่าง · ขนาดตัวอักษร · สี · ลำดับ · สถานะว่าง/โหลด/ผิดพลาด · ใคร: `qa-tester` ตัวใหม่
-4. ทำรายการต่างที่พบ `| จุด | ต้นแบบ | ของจริง | แก้ที่ไฟล์ |` เรียงจากที่ผู้ใช้เห็นก่อน · ใคร: `qa-tester` ตัวใหม่
-5. แก้ทีละกลุ่ม แล้วถ่ายภาพเทียบใหม่ทุกครั้ง · ใคร: `developer` ตัวใหม่ต่อกลุ่ม · `qa-tester` ตัวใหม่ถ่ายเทียบ
-6. จุดที่ต่างโดยตั้งใจ (ต้นแบบผิดหลัก `ui-craft` หรือทำจริงไม่ได้) ไม่ต้องแก้ตาม แต่ให้ลงเหตุผลใน `decision-log` · ใคร: หัวหน้าทีม
-7. กดทุกปุ่มบนหน้าจอจริงว่าทำงาน ไม่ดูแค่หน้าตาเหมือน · ใคร: `qa-tester` ตัวใหม่
-8. ตรวจว่ารายการต่างข้อ 4 ปิดครบ ภาพเทียบล่าสุดตรงต้นแบบ และเหตุผลข้อ 6 ฟังขึ้น · ไม่ผ่าน → วนตามรอบตรวจใน [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
-9. จบด้วย `status-report` · ใคร: หัวหน้าทีม
+1. Identify the reference (a file in `mockup/` or the old system's screen) and the real screen to compare, as pairs · ใคร: หัวหน้าทีม
+2. Capture both sides at the same window size with the same data, using the app-checking skill, and keep them in `_to_delete/parity/` · ใคร: `qa-tester` ตัวใหม่
+3. Compare with a tool — use a pixel diff if there is one. If not, compare part by part: spacing · font size · colour · order · empty/loading/error states · ใคร: `qa-tester` ตัวใหม่
+4. Make a list of the differences found, `| จุด | ต้นแบบ | ของจริง | แก้ที่ไฟล์ |` (spot · reference · real · file to fix), ordered by what the user sees first · ใคร: `qa-tester` ตัวใหม่
+5. Fix one group at a time, and capture a new comparison after each · ใคร: `developer` ตัวใหม่ per group · `qa-tester` ตัวใหม่ captures the comparison
+6. For differences that are deliberate (the reference breaks `ui-craft` rules or cannot really be built), do not fix them to match, but record the reason in `decision-log` · ใคร: หัวหน้าทีม
+7. Click every button on the real screen to confirm it works. Do not stop at looking the same · ใคร: `qa-tester` ตัวใหม่
+8. Check (ตรวจ) that every difference in the step 4 list is closed, the latest comparison matches the reference, and the step 6 reasons hold up · if it fails → loop per the check rounds in [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
+9. Finish with `status-report` · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-ทุกคู่มีภาพเทียบล่าสุด และรายการต่างที่เหลือมีเหตุผลกำกับทุกข้อ
+Every pair has a latest comparison image, and every remaining difference has a reason attached
 
 
 ## reference: playbooks.md

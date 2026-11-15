@@ -2,91 +2,91 @@
 
 Use before changing code you have not yet read
 
-# code-orientation — อ่านโค้ดเดิมให้เข้าใจก่อนแตะ
+# code-orientation — understand the existing code before touching it
 
-> โค้ดที่ agent เขียนพังส่วนใหญ่ไม่ใช่เพราะเขียนไม่เป็น แต่เพราะไม่รู้ว่าโค้ดเดิมทำงานยังไง และทำไมถึงเขียนแบบนี้
-> 10 นาทีที่อ่าน ประหยัดรอบแก้ได้หลายรอบ
+> Most code an agent writes breaks not because the agent cannot write, but because it does not know how the old code works or why it was written that way.
+> 10 minutes of reading saves several rounds of fixes.
 
-ให้ใช้ก่อน playbook `feature` · `bug-fix` · `refactor` · `review` ทุกครั้งที่ยังไม่ได้อ่านส่วนนั้นใน session นี้
+Use it before every `feature` · `bug-fix` · `refactor` · `review` playbook, whenever you have not yet read that part of the code in this session.
 
-ข้ามได้เมื่อแก้ข้อความหรือค่าคงที่จุดเดียว หรือเขียนไฟล์ใหม่ที่ไม่มีใครเรียก
+Skip it when you change one piece of text or one constant, or when you write a new file that nothing calls.
 
 ---
 
-## ไม่ใช้เมื่อ
+## Do not use when
 
-| งาน | ใช้ตัวนี้แทน |
+| Job | Use this instead |
 |---|---|
-| ระบบเดิมทั้งระบบไม่มีเอกสาร ต้องกู้ spec ก่อนรับงานแก้ | `legacy-spec-recovery` |
-| ไม่มีซอร์สโค้ด มีแต่ไฟล์ที่ compile แล้ว | `reverse-engineering` |
-| คนใหม่ต้องรู้จักทั้ง repo (ติดตั้ง รัน โครงทั้งหมด) ไม่ใช่แค่ส่วนที่จะแก้ | `/onboard` |
+| The whole existing system has no documents and you must recover the spec before taking the fix | `legacy-spec-recovery` |
+| There is no source code, only compiled files | `reverse-engineering` |
+| A newcomer must learn the whole repo (install, run, full structure), not just the part to be changed | `/onboard` |
 
-## 1 · How — โค้ดทำงานยังไง
+## 1 · How — how the code works
 
-1. **หาทางเข้า** — route · controller · command · job · event handler ที่รับงานนี้ โดยค้นจากข้อความบนหน้าจอ URL หรือชื่อ API ที่ผู้ใช้พูดถึง (`rg -n "ข้อความ" --glob '!**/node_modules/**'`)
-2. **ไล่เส้นทางจริง** — จากทางเข้า → กฎธุรกิจ → ที่เก็บข้อมูล แล้วจดชื่อไฟล์และฟังก์ชันตามลำดับที่เรียก ไม่เดาจากชื่อ แต่เปิดอ่านจริง
-3. **หาจุดที่ใช้ร่วม** — ฟังก์ชันหรือ type ที่จะแตะ ถูกเรียกจากที่ไหนอีก (`rg -n "ชื่อฟังก์ชัน\("`) ถ้ามีหลายจุดต้องใช้ `blast-radius` ตอนแก้
-4. **รันดูจริงถ้าทำได้** — ใส่ log ชั่วคราวหรือ breakpoint 1–2 จุด แล้วทำตามขั้นตอนของผู้ใช้ เพราะเห็นค่าจริงดีกว่าอ่านอย่างเดียว และลบ log ชั่วคราวก่อนส่ง
+1. **Find the entry point.** This is the route · controller · command · job · event handler that takes this work. Search from the on-screen text, the URL or the API name the user mentioned (`rg -n "ข้อความ" --glob '!**/node_modules/**'`).
+2. **Follow the real path.** Go from the entry point → business rules → data store, and note file and function names in the order they are called. Do not guess from names. Open and read them.
+3. **Find the shared points.** Check where else the function or type you will touch is called (`rg -n "ชื่อฟังก์ชัน\("`). If there are several callers, use `blast-radius` when you make the change.
+4. **Run it for real if you can.** Add 1–2 temporary logs or breakpoints, then follow the user's steps. Seeing real values beats reading alone. Remove the temporary logs before you hand in.
 
-ถ้าโค้ดยาว ให้ส่ง subagent โมเดลเล็ก (haiku) หรือกลาง (sonnet) ไปไล่ แล้วรับแค่แผนที่กลับมาไม่เกิน 30 บรรทัด (`context-budget`)
+If the code is long, send a small-model (haiku) or mid-model (sonnet) subagent to trace it, and take back only a map of at most 30 lines (`context-budget`).
 
-## 2 · Why — ทำไมถึงเขียนแบบนี้
+## 2 · Why — why it was written this way
 
-ก่อนเปลี่ยนสิ่งที่ดูแปลก ให้หาเหตุผลก่อน เพราะโค้ดแปลก ๆ มักกันบั๊กที่เคยเกิด
+Before you change something that looks odd, look for the reason first, because odd code often guards against a bug that happened before.
 
-| ดูที่ | คำสั่ง |
+| Look at | Command |
 |---|---|
-| ใครแก้บรรทัดนี้ เพราะอะไร | `git log -L <เริ่ม>,<จบ>:<ไฟล์> \| head -40` · `git blame -w -L <เริ่ม>,<จบ> <ไฟล์>` แล้ว `git show <commit>` |
-| commit ที่พูดถึงเรื่องนี้ | `git log --oneline -n 20 -S "ชื่อฟังก์ชัน"` · `git log --oneline -n 20 --grep "คำค้น"` |
-| เอกสาร | `docs/` · ADR · `CONTEXT.md` · comment ที่บอก "ทำไม" |
-| test ที่ล็อกพฤติกรรมไว้ | ค้นชื่อฟังก์ชันในโฟลเดอร์ test เพราะ test บอกเจตนาได้ดีกว่า comment |
+| Who changed this line, and why | `git log -L <เริ่ม>,<จบ>:<ไฟล์> \| head -40` · `git blame -w -L <เริ่ม>,<จบ> <ไฟล์>` then `git show <commit>` |
+| Commits that mention this | `git log --oneline -n 20 -S "ชื่อฟังก์ชัน"` · `git log --oneline -n 20 --grep "คำค้น"` |
+| Documents | `docs/` · ADR · `CONTEXT.md` · comments that say "why" |
+| Tests that lock the behaviour | Search for the function name in the test folder, because tests show intent better than comments |
 
-ถ้าหาเหตุผลไม่เจอ อย่าเพิ่งลบทิ้ง ให้จดเป็น `(รอยืนยัน)` ในแผนที่ แล้วเขียน test ล็อกพฤติกรรมเดิมก่อนเปลี่ยน
+If you cannot find the reason, do not delete the code yet. Note it as `(รอยืนยัน)` (awaiting confirmation) in the map, and write a test that locks the old behaviour before you change it.
 
-## 3 · แบบแผนของ repo
+## 3 · Repo conventions
 
-อ่านไฟล์ที่คล้ายกับที่จะเขียน 2–3 ไฟล์ แล้วจด:
-- **คำสั่ง** — install · build · test · lint · format · รัน test ตัวเดียว (จาก README · `package.json` · `*.csproj` · `pyproject.toml` · CI config)
-- **โครง** — วางไฟล์แบบไหน · ตั้งชื่อแบบไหน · จัดการ error และ log แบบไหน · test เขียนแบบไหน
-- **รายการตรวจแบบแผน** (จดเฉพาะที่ต่างจากค่าเริ่มต้นของภาษา · แนวคิดจาก ECC codebase-onboarding)
+Read 2–3 files similar to the one you will write, then note:
+- **Commands** — install · build · test · lint · format · run a single test (from README · `package.json` · `*.csproj` · `pyproject.toml` · CI config)
+- **Structure** — how files are placed · how things are named · how errors and logs are handled · how tests are written
+- **Convention checklist** (note only what differs from the language default · idea from ECC codebase-onboarding)
 
-  | ดู | หลักฐานที่เปิด |
+  | Look at | Evidence to open |
   |---|---|
-  | ชื่อไฟล์ คลาส ฟังก์ชัน ตัวแปร (`PascalCase` · `kebab-case` · prefix `I` · suffix `Service`) | ไฟล์พี่น้อง 2–3 ไฟล์ในโฟลเดอร์เดียวกัน |
-  | lint และ format ที่ใช้จริง | `.editorconfig` · `.eslintrc*` · `.prettierrc` · `ruff.toml` · `.globalconfig` หรือ `Directory.Build.props` (.NET) · pre-commit |
-  | import (path alias · ลำดับ · barrel file) · error (throw vs Result) · log (library · ฟิลด์) · async (Promise vs Observable · `async`/`await` vs callback) | ไฟล์ทางเข้าและ 1 ไฟล์ใน layer เดียวกับที่จะแก้ |
-  | test: ชื่อไฟล์ · วางข้างโค้ดหรือแยกโฟลเดอร์ · fixture หรือ builder ที่ repo มีอยู่ | โฟลเดอร์ test ที่ใกล้ที่สุด |
-- **stack** — เปิด skill ตามภาษา: `stack-dotnet` · `stack-typescript` · `stack-python` · `stack-sql`
+  | Names of files, classes, functions, variables (`PascalCase` · `kebab-case` · prefix `I` · suffix `Service`) | 2–3 sibling files in the same folder |
+  | The lint and format tools actually used | `.editorconfig` · `.eslintrc*` · `.prettierrc` · `ruff.toml` · `.globalconfig` or `Directory.Build.props` (.NET) · pre-commit |
+  | Imports (path alias · order · barrel file) · errors (throw vs Result) · logs (library · fields) · async (Promise vs Observable · `async`/`await` vs callback) | The entry file and 1 file in the same layer as the code to change |
+  | Tests: file names · beside the code or in a separate folder · fixtures or builders the repo already has | The nearest test folder |
+- **Stack** — open the skill for the language: `stack-dotnet` · `stack-typescript` · `stack-python` · `stack-sql`
 
-ทำตามแบบของ repo แม้ไม่ใช่แบบที่ชอบ ถ้าอยากเปลี่ยนแบบแผนให้เสนอในรายงาน ไม่เปลี่ยนเงียบ ๆ กลางงาน
+Follow the repo's style even if it is not the style you like. If you want to change a convention, propose it in the report. Do not change it quietly in the middle of the work.
 
-## 4 · แผนที่ 10 บรรทัด
+## 4 · The 10-line map
 
-เขียนลง todo หรือคำตอบก่อนเริ่มแก้ แล้วส่งให้ subagent ที่จะเขียนโค้ดด้วย
+Write it into the todo or the reply before you start the change, and pass it to the subagent that will write the code.
 
 ```text
-งาน: <1 บรรทัด>
-ทางเข้า: <ไฟล์:บรรทัด>
-เส้นทาง: <A.fn> → <B.fn> → <C.fn> → <ตาราง/ไฟล์>
-จุดที่จะแก้: <ไฟล์:ฟังก์ชัน>
-ใช้ร่วมกับ: <จุดอื่นที่เรียก> (blast-radius: ใช่/ไม่)
-ทำไมเขียนแบบนี้: <เหตุผลจาก commit หรือ docs> · ไม่รู้ → (รอยืนยัน)
-แบบแผน: <ชื่อ · error · test ที่ต้องตาม>
-คำสั่ง: build <...> · test <...> · test ตัวเดียว <...>
-test ที่ล็อกพฤติกรรมอยู่: <ไฟล์> · ไม่มี → เขียนก่อนแก้
-เสี่ยง: <อะไรพังได้>
+Task: <1 line>
+Entry point: <file:line>
+Path: <A.fn> → <B.fn> → <C.fn> → <table/file>
+Place to change: <file:function>
+Shared with: <other callers> (blast-radius: yes/no)
+Why it is written this way: <reason from commit or docs> · unknown → (รอยืนยัน)
+Conventions: <naming · error · test to follow>
+Commands: build <...> · test <...> · single test <...>
+Tests that lock the behaviour: <file> · none → write before the change
+เสี่ยง: <what could break>
 ```
 
-## 5 · กับดัก
+## 5 · Traps
 
-- อ่านแค่ไฟล์ที่ชื่อตรงกับงาน แล้วพลาด wrapper หรือ middleware ที่แปลงข้อมูลก่อนถึง
-- เชื่อ comment เก่าที่ไม่ตรงกับโค้ดแล้ว ทั้งที่โค้ดและ test คือความจริง
-- ไล่โค้ดทั้ง repo จน context เต็ม ทั้งที่ควรอ่านเฉพาะเส้นทางของงานนี้
-- "ปรับให้สะอาด" ระหว่างทางโดยไม่มี test ซึ่งควรแยกเป็นงาน refactor
+- Reading only the file whose name matches the task, and missing a wrapper or middleware that transforms the data before it arrives.
+- Trusting an old comment that no longer matches the code, when the code and tests are the truth.
+- Tracing the whole repo until the context is full, when you should read only the path of this task.
+- "Cleaning up" along the way without a test. That should be a separate refactor task.
 
-## 6 · เชื่อมกับ skill อื่น
+## 6 · Link to other skills
 
-`context-budget` (อ่านเยอะ) · `blast-radius` (แก้ของใช้ร่วม) · `principle-fix-root-cause` (bug) · `readable-code` · `lazy-coding` · `testing-standards` · skill ตาม stack
+`context-budget` (heavy reading) · `blast-radius` (changing shared code) · `principle-fix-root-cause` (bug) · `readable-code` · `lazy-coding` · `testing-standards` · the stack skill
 
 
 ---
@@ -660,21 +660,21 @@ Command details and config files for each framework are in `references/per-stack
 
 ## reference: per-stack.md
 
-# ตั้งค่าและตัวอย่างต่อสแต็ก
+# Setup and examples per stack
 
-> ตัวอย่างในไฟล์นี้ **ยังไม่ได้รันทดสอบ** (ยกเว้นหัวข้อ Flutter ที่มาจากแอปจริง Lumio) ส่วนที่เหลือเป็นการตั้งค่ามาตรฐานของแต่ละ framework
-> ตอนรันครั้งแรกให้ดูว่าคำสั่งและ path ตรงกับโครงโปรเจกต์จริงไหม
+> The examples in this file are **not yet run or tested** (except the Flutter section, which comes from a real app, Lumio). The rest is the standard setup of each framework.
+> On the first run, check whether the commands and paths match the real project layout.
 
 ---
 
-## สารบัญ
+## Contents
 
 1. [.NET — xUnit](#net--xunit)
 2. [Node / TypeScript — Vitest](#node--typescript--vitest)
 3. [Python — pytest](#python--pytest)
 4. [Angular](#angular)
 5. [Flutter / Dart — flutter_test](#flutter--dart--flutter_test)
-6. [ตารางเทียบ](#ตารางเทียบ)
+6. [Comparison table](#comparison-table)
 
 ---
 
@@ -683,8 +683,8 @@ Command details and config files for each framework are in `references/per-stack
 ```bash
 dotnet new xunit -o tests/MyApp.Tests
 dotnet add tests/MyApp.Tests reference src/MyApp
-dotnet add tests/MyApp.Tests package AwesomeAssertions     # assert ที่อ่านเป็นประโยค (.Should()) · ใช้แทน FluentAssertions ตั้งแต่ v8 ที่ต้องซื้อไลเซนส์ Xceed เมื่อใช้เชิงพาณิชย์ · AwesomeAssertions ฟรี Apache-2.0 ตรวจ 22 ต.ค. 2569 จาก nuget.org
-dotnet add tests/MyApp.Tests package NSubstitute           # mock ที่ syntax สั้นกว่า Moq
+dotnet add tests/MyApp.Tests package AwesomeAssertions     # assertions that read like sentences (.Should()) · use instead of FluentAssertions since v8, which needs a paid Xceed license for commercial use · AwesomeAssertions is free, Apache-2.0, checked 22 Oct 2026 (B.E. 2569) on nuget.org
+dotnet add tests/MyApp.Tests package NSubstitute           # mocks with shorter syntax than Moq
 dotnet add tests/MyApp.Tests package Microsoft.AspNetCore.Mvc.Testing   # integration
 dotnet add tests/MyApp.Tests package Testcontainers.PostgreSql
 ```
@@ -705,7 +705,7 @@ public class DiscountCalculatorTests
         result.Should().Be(150m);
     }
 
-    // Theory = ทดสอบหลายเคสด้วยโค้ดชุดเดียว — ห้ามเขียนลูปเอง
+    // Theory = test many cases with one body of code — never write the loop yourself
     [Theory]
     [InlineData(MemberTier.None, 0)]
     [InlineData(MemberTier.Silver, 50)]
@@ -716,7 +716,7 @@ public class DiscountCalculatorTests
 }
 ```
 
-Integration ผ่าน `WebApplicationFactory` — ยิง HTTP จริงเข้า pipeline จริงโดยไม่ต้องเปิดพอร์ต:
+Integration through `WebApplicationFactory` — sends real HTTP into the real pipeline without opening a port:
 
 ```csharp
 public class OrdersApiTests(WebApplicationFactory<Program> factory)
@@ -732,8 +732,8 @@ public class OrdersApiTests(WebApplicationFactory<Program> factory)
 ```
 
 ```bash
-dotnet test                                        # ทั้งหมด
-dotnet test --filter "FullyQualifiedName!~Integration"   # เฉพาะ unit
+dotnet test                                        # everything
+dotnet test --filter "FullyQualifiedName!~Integration"   # unit tests only
 dotnet test --collect:"XPlat Code Coverage"
 ```
 
@@ -755,7 +755,7 @@ export default defineConfig({
     globals: true,
     environment: 'node',
     include: ['src/**/*.test.ts'],
-    // ไฟล์ setup ใช้ตั้ง fake timer / ล้าง mock ให้ทุกไฟล์เหมือนกัน
+    // the setup file sets fake timers / clears mocks the same way for every file
     setupFiles: ['./test/setup.ts'],
     coverage: {
       provider: 'v8',
@@ -772,7 +772,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { DiscountCalculator } from '../src/discount';
 
 describe('DiscountCalculator', () => {
-  beforeEach(() => vi.restoreAllMocks());   // กันสถานะรั่วข้าม test
+  beforeEach(() => vi.restoreAllMocks());   // stop state leaking across tests
 
   it('gives gold members a 15 percent discount', () => {
     const sut = new DiscountCalculator();
@@ -787,12 +787,12 @@ describe('DiscountCalculator', () => {
 });
 ```
 
-คุมเวลาแทนการ `sleep`:
+Control time instead of using `sleep`:
 
 ```ts
 vi.useFakeTimers();
 vi.setSystemTime(new Date('2026-01-15T10:00:00+07:00'));
-await vi.advanceTimersByTimeAsync(5000);   // เดินเวลา 5 วิ ทันที
+await vi.advanceTimersByTimeAsync(5000);   // advance 5 seconds at once
 vi.useRealTimers();
 ```
 
@@ -805,8 +805,8 @@ vi.useRealTimers();
 } }
 ```
 
-> **Jest แทน Vitest:** API เกือบเหมือนกัน (`jest.fn` ↔ `vi.fn`) แต่ต้องตั้ง `ts-jest`
-> หรือ babel เพิ่มสำหรับ TypeScript เลือก Jest เมื่อทีมคุ้นอยู่แล้วหรือมี preset ที่ต้องใช้
+> **Jest instead of Vitest:** The API is almost the same (`jest.fn` ↔ `vi.fn`), but you must set up `ts-jest`
+> or babel for TypeScript. Choose Jest when the team already knows it or you need one of its presets.
 
 ---
 
@@ -822,7 +822,7 @@ pip install pytest pytest-cov pytest-randomly
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q --strict-markers --cov=src --cov-report=term-missing"
-markers = ["integration: ต้องมี DB/network — รันแยกจาก unit"]
+markers = ["integration: needs DB/network — run separately from unit"]
 ```
 
 ```python
@@ -841,7 +841,7 @@ def test_create_order_persists_to_db(db_session):
     ...
 ```
 
-`conftest.py` — fixture ที่ใช้ร่วมกัน (คืนสถานะเดิมทุก test):
+`conftest.py` — shared fixtures (restore the original state after every test):
 
 ```python
 import pytest
@@ -851,28 +851,28 @@ def db_session(engine):
     conn = engine.connect()
     tx = conn.begin()
     yield Session(bind=conn)
-    tx.rollback()          # ทุก test เริ่มจากฐานสะอาดเสมอ
+    tx.rollback()          # every test always starts from a clean database
     conn.close()
 ```
 
 ```bash
-pytest                        # ทั้งหมด (pytest-randomly สลับลำดับให้เอง = จับ test ที่พึ่งกัน)
-pytest -m "not integration"   # เฉพาะ unit
-pytest --lf                   # เฉพาะที่แดงรอบก่อน
+pytest                        # everything (pytest-randomly shuffles the order itself = catches tests that depend on each other)
+pytest -m "not integration"   # unit tests only
+pytest --lf                   # only the ones that failed last time
 ```
 
 ---
 
 ## Angular
 
-**Vitest ที่มากับ Angular CLI** (โปรเจกต์ใหม่ — builder `@angular/build:unit-test` ตั้งให้แล้ว รัน `ng test` ไม่ต้องลง plugin เพิ่ม · Karma ยังใช้ได้ · ตรวจ 22 ต.ค. 2569 จาก angular.dev/guide/testing) · เพิ่ม Testing Library ถ้าต้องการ query แบบผู้ใช้จริง
+**Vitest that ships with the Angular CLI** (new projects — the builder `@angular/build:unit-test` is already configured, run `ng test` with no extra plugin · Karma still works · checked 22 Oct 2026 (B.E. 2569) on angular.dev/guide/testing) · add Testing Library if you want queries the way a real user finds things
 
 ```bash
 ng test
 npm i -D @testing-library/angular @testing-library/user-event
 ```
 
-โปรเจกต์ Angular รุ่นเก่า (ไม่มี builder นี้) → ย้ายจาก Karma ตามคู่มือ angular.dev/guide/testing/migrating-to-vitest หรือใช้ `@analogjs/vite-plugin-angular` คู่กับ `vitest` และ `jsdom`
+For older Angular projects (without this builder) → migrate from Karma following angular.dev/guide/testing/migrating-to-vitest, or use `@analogjs/vite-plugin-angular` with `vitest` and `jsdom`
 
 ```ts
 import { render, screen } from '@testing-library/angular';
@@ -888,10 +888,10 @@ it('shows a required error when the name is empty on submit', async () => {
 });
 ```
 
-> ทดสอบจาก**มุมผู้ใช้** — หาปุ่มด้วยข้อความที่คนเห็น (`getByRole`, `getByText`)
-> ไม่ใช่ `By.css('.btn-primary')` เพราะพอเปลี่ยนคลาส CSS test จะแดงทั้งที่ UI ยังทำงานถูก
+> Test from the **user's point of view** — find a button by the text people see (`getByRole`, `getByText`),
+> not `By.css('.btn-primary')`, because once the CSS class changes the test turns red even though the UI still works correctly.
 
-**Jasmine + Karma** (ค่าเริ่มต้นเดิมของ Angular — ใช้ต่อได้ถ้าโปรเจกต์มีอยู่แล้ว):
+**Jasmine + Karma** (Angular's old default — keep using it if the project already has it):
 
 ```ts
 describe('DiscountService', () => {
@@ -908,29 +908,29 @@ describe('DiscountService', () => {
 ```
 
 ```bash
-ng test --watch=false --browsers=ChromeHeadless --code-coverage    # สำหรับ CI
+ng test --watch=false --browsers=ChromeHeadless --code-coverage    # for CI
 ```
 
 ---
 
 ## Flutter / Dart — flutter_test
 
-มากับ SDK ไม่ต้องลงอะไร ไฟล์ test อยู่ใน `test/` และล้อโครง `lib/` (`lib/features/measure/lux_math.dart` → `test/features/measure/lux_math_test.dart`) ส่วนชื่อไฟล์ใช้ snake_case ตามธรรมเนียม Dart
+It ships with the SDK, so there is nothing to install. Test files live in `test/` and mirror the structure of `lib/` (`lib/features/measure/lux_math.dart` → `test/features/measure/lux_math_test.dart`). File names use snake_case, the Dart convention.
 
 ```dart
-// fake ของสะพานไปฝั่ง native: implements คลาสจริงได้เลย ไม่ต้องสร้าง interface ใหม่
+// fake of the bridge to the native side: you can implement the real class directly, with no new interface
 class FakeDeviceLight implements DeviceLight {
   final _lux = StreamController<double>.broadcast();
   void emitSensor(double lux) => _lux.add(lux);
   @override
   Stream<double> sensorLux() => _lux.stream;
-  // ...override ที่เหลือคืนค่าที่ test เลือก (มี sensor ไหม · สิทธิ์กล้อง)
+  // ...the remaining overrides return the values the test chooses (has a sensor or not · camera permission)
 }
 
 void main() {
   group('measure screen', () {
     testWidgets('shows live lux and verdict', (tester) async {
-      // จอทดสอบเริ่มต้น 800×600 — ตั้งเป็นขนาดมือถือ ไม่งั้นปุ่มอยู่นอกจอแล้วกดพลาด
+      // the default test screen is 800×600 — set it to a phone size, or the button sits off-screen and the tap misses
       tester.view.physicalSize = const Size(1080, 2400);
       tester.view.devicePixelRatio = 2.75;
       addTearDown(tester.view.reset);
@@ -939,47 +939,47 @@ void main() {
       final meter = MeterController(device);
       await tester.pumpWidget(App(meter: meter));
       device.emitSensor(420);
-      await tester.pump(MeterController.tick);   // ไม่ใช้ pumpAndSettle เมื่อมี Timer วนอยู่
+      await tester.pump(MeterController.tick);   // do not use pumpAndSettle when a Timer is looping
 
       expect(find.textContaining('420 lux'), findsOneWidget);
-      meter.dispose();   // ปิด Timer ในตัว test เอง ไม่งั้นล้มด้วย "A Timer is still pending"
+      meter.dispose();   // close the Timer inside the test itself, or it fails with "A Timer is still pending"
     });
   });
 }
 ```
 
-| เรื่อง | ทำอย่างนี้ |
+| Topic | Do this |
 |---|---|
-| ชั้น test | unit (`test`) ใช้กับตรรกะล้วน ส่วน widget (`testWidgets`) ใช้กับหน้าจอและเป็นชั้นกลางหลัก ถ้าเป็น E2E บนเครื่อง ใช้ `integration_test` (`flutter test integration_test/`) หรือสคริปต์ `adb` ตาม `app-verifier-setup` |
-| platform channel | fake ด้วยคลาสที่ `implements` คลาสสะพานของจริง แล้วค่อยลง `mocktail` เมื่อ fake ด้วยมือเริ่มยาวเท่านั้น |
-| `pumpAndSettle` | ใช้ได้เมื่อหน้าจอหยุดนิ่งจริง ถ้ามี Timer หรือ animation วนตลอด จอจะไม่มีวันนิ่งจนหมดเวลา ให้ใช้ `pump(duration)` แทน |
-| Timer ค้าง | dispose controller ที่ถือ Timer ในตัว test เองก่อนบรรทัดสุดท้าย เพราะ Timer ที่ยังวิ่งอยู่ตอนจบจะทำให้ test ล้ม |
-| จอเล็ก | test แยก 1 ชุดที่ 360×800 dp ภาษาไทย + `textScaler` ใหญ่ เพื่อจับข้อความล้น (Flutter ฟ้อง overflow เป็น exception ใน test) |
-| SnackBar บังปุ่ม | widget test จับได้ โดยกดปุ่มล่างหลัง SnackBar ขึ้น แล้ว assert **ผลของการกด** (`tester.tap` ที่โดนของบังแค่พิมพ์คำเตือน ไม่ทำให้ล้ม) |
-| golden test | ไม่บังคับ เพราะภาพต่างกันตามเครื่องและฟอนต์ ใช้เมื่อทีมมีเครื่อง CI ตายตัว |
+| Test layers | unit (`test`) is for pure logic, while widget (`testWidgets`) is for screens and is the main middle layer. For on-device E2E, use `integration_test` (`flutter test integration_test/`) or an `adb` script per `app-verifier-setup` |
+| platform channel | fake it with a class that `implements` the real bridge class, and add `mocktail` only when the hand-written fake grows long |
+| `pumpAndSettle` | Fine when the screen really settles. If a Timer or animation loops forever, the screen never settles until it times out, so use `pump(duration)` instead |
+| Pending Timer | Dispose the controller that holds a Timer inside the test itself before the last line, because a Timer still running at the end makes the test fail |
+| Small screen | Add 1 separate test set at 360×800 dp with Thai text + a large `textScaler` to catch overflow (Flutter reports overflow as an exception in tests) |
+| SnackBar covers a button | A widget test catches it by tapping the lower button after the SnackBar appears, then asserting **the result of the tap** (a `tester.tap` that hits something covering it only prints a warning and does not fail) |
+| golden test | Optional, because images differ by machine and font. Use it when the team has a fixed CI machine. |
 | coverage | `flutter test --coverage` → `coverage/lcov.info` |
-| พิสูจน์ว่า test ใช้ได้ | แก้โค้ดให้ผิด 1 จุด รันแล้วต้องแดง แล้วแก้กลับ |
+| Prove the test is useful | Break the code in 1 place, run it, and it must go red, then fix it back |
 
 ```bash
-flutter test                              # ทั้งหมด
-flutter test test/features/measure        # โฟลเดอร์เดียว
+flutter test                              # everything
+flutter test test/features/measure        # one folder
 flutter test --coverage
-flutter test integration_test/            # ต้องมี emulator หรือเครื่องจริงต่ออยู่
+flutter test integration_test/            # needs an emulator or a real device connected
 ```
 
 ---
 
-## ตารางเทียบ
+## Comparison table
 
-| เรื่อง | xUnit | Vitest | pytest | Angular (Vitest) | flutter_test |
+| Topic | xUnit | Vitest | pytest | Angular (Vitest) | flutter_test |
 |---|---|---|---|---|---|
-| หลายเคส | `[Theory]` + `[InlineData]` | `it.each` | `@pytest.mark.parametrize` | `it.each` | วน `for` สร้าง `test(...)` ใน `group` |
-| mock | NSubstitute `Substitute.For<T>()` | `vi.fn()` / `vi.mock()` | `unittest.mock` / `mocker` | `vi.fn()` + `providers` | คลาส `implements` · `mocktail` |
-| ก่อน/หลังแต่ละ test | constructor / `IDisposable` | `beforeEach` / `afterEach` | fixture | `beforeEach` | `setUp` / `tearDown` / `addTearDown` |
-| คุมเวลา | inject `TimeProvider` | `vi.useFakeTimers()` | `freezegun` | `vi.useFakeTimers()` | `tester.pump(duration)` · `fakeAsync` |
-| DB จริง | Testcontainers | Testcontainers | Testcontainers / `pytest-postgresql` | — | — (`SharedPreferences.setMockInitialValues`) |
+| Many cases | `[Theory]` + `[InlineData]` | `it.each` | `@pytest.mark.parametrize` | `it.each` | a `for` loop that creates `test(...)` inside a `group` |
+| mock | NSubstitute `Substitute.For<T>()` | `vi.fn()` / `vi.mock()` | `unittest.mock` / `mocker` | `vi.fn()` + `providers` | an `implements` class · `mocktail` |
+| Before/after each test | constructor / `IDisposable` | `beforeEach` / `afterEach` | fixture | `beforeEach` | `setUp` / `tearDown` / `addTearDown` |
+| Control time | inject `TimeProvider` | `vi.useFakeTimers()` | `freezegun` | `vi.useFakeTimers()` | `tester.pump(duration)` · `fakeAsync` |
+| Real DB | Testcontainers | Testcontainers | Testcontainers / `pytest-postgresql` | — | — (`SharedPreferences.setMockInitialValues`) |
 | coverage | `--collect:"XPlat Code Coverage"` | `--coverage` | `--cov` | `--coverage` | `--coverage` |
-| สลับลำดับ | ไม่มีในตัว | `--sequence.shuffle` | `pytest-randomly` | `--sequence.shuffle` | `--test-randomize-ordering-seed random` |
+| Shuffle order | Not built in | `--sequence.shuffle` | `pytest-randomly` | `--sequence.shuffle` | `--test-randomize-ordering-seed random` |
 
 
 ---
@@ -1082,7 +1082,7 @@ As a reviewer:
 
 `/software-development:code-review-checklist <file path or PR description>`
 
-> **ทางลัดเข้า SuperUser:** เปิด skill `superuser` ด้วย playbook `review` แล้วคัดลอกขั้นตอนของ playbook ลง todo ก่อน ส่วนขั้นตอนด้านล่างบอกรูปแบบงานและ output ของคำสั่งนี้ ให้ใช้คู่กับ playbook ไม่ได้ใช้แทน
+> **Shortcut into SuperUser:** open the skill `superuser` with the playbook `review`, then copy the playbook steps into the todo first · the steps below describe the shape of the work and the output of this command · use them together with the playbook, not in place of it
 
 Use a new `reviewer` agent (read-only) to perform a thorough code review of: **$ARGUMENTS** · high-stakes or contested change → `adversarial-review-panel`
 

@@ -4,9 +4,9 @@ Use when a system calls an LLM with prompts or RAG
 
 # llm-engineering
 
-ทุกเรื่องของระบบที่เรียก Large Language Model (LLM): prompt · RAG (ค้นเอกสารมาประกอบคำตอบ) · การวัดคุณภาพ · บทบาทวิศวกร Machine Learning (ML) และ LLM
+Everything about systems that call a Large Language Model (LLM): prompts · RAG (retrieval-augmented generation, which searches documents to ground the answer) · quality measurement · the roles of Machine Learning (ML) and LLM engineers
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทุกไฟล์ เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้นอยู่แล้ว
+**Open only the files that match the job.** Do not read every file, because each file is already the full guide to its topic.
 
 ## หัวข้อ
 
@@ -20,7 +20,7 @@ Use when a system calls an LLM with prompts or RAG
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
+An agent called in for this area opens its own role file before starting.
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -2064,10 +2064,10 @@ similarity = cosine_similarity(
 
 Use [RAGAS framework](https://docs.ragas.io/) for this.
 
-**ออกข้อสอบ RAG จากเอกสารจริง** (ตัวอย่างจากงานสอน ร้านวัสดุก่อสร้าง ไม่ใช่เกณฑ์):
-- เปิดอ่านหน้าจริงของ PDF ทีละไฟล์ แล้วให้แต่ละข้อระบุ ไฟล์ + หน้าที่มีคำตอบ + `key_facts` · ผสมตาราง หัวตาราง 2 ชั้น เชิงอรรถ คำตอบข้ามหน้า และข้อที่เอกสารไม่มีคำตอบ (ตอบว่าไม่มีข้อมูลคือถูก)
-- แยกเป็น 3 ชุดตามที่มาของคำตอบ: จาก PDF (169 ข้อ) · จากฐานข้อมูลที่คำนวณด้วยสูตรและ SQL (79 ข้อ) · บทสนทนาหลายตา (ตรวจว่าเข้าใจ "อันนั้น" "ตัวเมื่อกี้")
-- อะไรที่โค้ดตรวจได้ ให้โค้ดตรวจ (หน้าที่ค้นมาถูกไหม ตัวเลขตรงไหม) ส่วนที่เหลือให้ผู้ตัดสินหลายตัวช่วยกันขนาน ให้คะแนน 0 / 0.5 / 1 พร้อมเหตุผล · ผู้ตัดสินต้องไม่ใช่โมเดลตัวที่ถูกวัด
+**Writing a RAG exam from real documents** (an example from a teaching project, a building-materials shop; not a standard):
+- Open each PDF and read the real pages, then have each question state the file + the page that holds the answer + `key_facts` · mix tables, 2-level table headers, footnotes, answers that span pages, and questions the documents cannot answer (replying that there is no information is correct)
+- Split into 3 sets by where the answer comes from: from the PDFs (169 questions) · from the database, computed with formulas and SQL (79 questions) · multi-turn conversations (check that it understands "อันนั้น" (that one) and "ตัวเมื่อกี้" (the one just now))
+- Let code check whatever code can check (was the right page retrieved, do the numbers match). For the rest, have several judges work in parallel and score 0 / 0.5 / 1 with a reason · the judge must not be the model being measured
 - ผลรอบนั้น: ชุด PDF ผ่าน 95.9%
 
 ### Operational Metrics (Always Track)
@@ -3018,7 +3018,7 @@ final = [doc for doc, score in ranked[:5]]
 
 > **Tip:** Retrieve top-20, re-rank to top-5. Big quality gain, modest cost.
 
-**พิสูจน์ว่า reranker คุ้ม ด้วย ablation (ถอดทีละชิ้น)**: ให้ปิดชิ้นส่วนด้วย env flag (เช่น `RERANK=off`) · รันซ้ำเฉพาะชุดคำถามที่เกี่ยวข้อง · ตั้งกลับเป็นเปิด · รายงานเป็นตาราง เปิด / ปิด / ผลต่าง (ตัวอย่างจากงานสอน: หน้าที่ถูกอยู่ใน 4 ย่อหน้าแรก 80.8% → 95.4% · ตอบถูก 84.0% → 91.7% ไม่ใช่เกณฑ์)
+**Prove a reranker is worth it with an ablation (remove one part at a time)**: switch the part off with an env flag (for example `RERANK=off`) · re-run only the relevant question set · set it back to on · report a table of on / off / difference (an example from a teaching project: the right page within the first 4 paragraphs 80.8% → 95.4% · correct answers 84.0% → 91.7%; not a standard)
 
 ## Stage 7: Context Construction
 
@@ -3197,139 +3197,139 @@ final = await retrieve(refined_query)
 
 Use when a system imports or exports Excel or CSV
 
-# นำเข้าและส่งออกข้อมูล
+# Importing and exporting data
 
-> **กฎข้อเดียว:** ตรวจให้จบก่อน แล้วค่อยเขียน
-> ถ้าเขียนไปครึ่งทางแล้วเจอแถวผิด ข้อมูลจะค้างอยู่ครึ่ง ๆ และไม่มีใครรู้ว่าต้องแก้ตรงไหน
+> **The one rule:** validate everything first, then write.
+> If you write halfway and then find a bad row, the data is left half-done and nobody knows what to fix.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- มีหน้าจอให้ผู้ใช้อัปโหลด Excel หรือ CSV เพื่อนำข้อมูลเข้าระบบ
-- มีปุ่มส่งออกเป็น Excel หรือ CSV
-- ย้ายข้อมูลจากระบบเก่าเข้าระบบใหม่
-- ผู้ใช้อัปโหลดแล้วได้ข้อความว่า "ไฟล์ไม่ถูกต้อง" แล้วไม่รู้ว่าผิดตรงไหน
+- A screen lets users upload Excel or CSV to bring data into the system
+- A button exports to Excel or CSV
+- Moving data from an old system into a new one
+- A user uploads and gets the message "ไฟล์ไม่ถูกต้อง" (file is invalid) without knowing what is wrong
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill instead, or together
 
-| งาน | skill | |
+| Job | skill | |
 |---|---|---|
-| รับไฟล์อัปโหลดทั่วไป (รูป เอกสาร) | `file-upload-and-storage` | แทน |
-| สร้างไฟล์ Excel ที่จัดรูปแบบสวยงาม | `anthropic-skills:xlsx` | แทน |
-| กลไกคิวและความคืบหน้า | `background-jobs` | แทน |
-| ปี พ.ศ. และการเรียงลำดับไทย | `i18n-and-locale` | แทน |
-| ส่งเอกสารเข้าโปรแกรมบัญชีไทย (PEAK · FlowAccount) ผ่าน API แทนไฟล์ | [`references/thai-accounting-apis.md`](references/thai-accounting-apis.md) | แทน |
-| บันทึกว่าใครนำเข้าหรือส่งออกอะไร | `audit-trail` | คู่ |
-| ปิดบังข้อมูลส่วนบุคคลในไฟล์ส่งออก | `pdpa-compliance` | คู่ |
-| แจ้งผู้ใช้เมื่อนำเข้าเสร็จ | `notifications` | คู่ |
-| ข้อจำกัดและ constraint ของตารางปลายทาง | `database-design` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| Receiving general file uploads (images, documents) | `file-upload-and-storage` | Instead |
+| Building a nicely formatted Excel file | `anthropic-skills:xlsx` | Instead |
+| Queue mechanics and progress | `background-jobs` | Instead |
+| Buddhist Era (B.E.) years and Thai sorting order | `i18n-and-locale` | Instead |
+| Sending documents into Thai accounting software (PEAK · FlowAccount) through an API instead of a file | [`references/thai-accounting-apis.md`](references/thai-accounting-apis.md) | Instead |
+| Recording who imported or exported what | `audit-trail` | Together |
+| Masking personal data in export files | `pdpa-compliance` | Together |
+| Telling the user when an import finishes | `notifications` | Together |
+| Limits and constraints of the target table | `database-design` | Together |
+| Abbreviations in work people read | `spell-out-abbreviations` | Together |
 
 ---
 
-## 1 · ให้แม่แบบ อย่าให้เดา
+## 1 · Give a template, do not make people guess
 
-**ทุกหน้าจอนำเข้าต้องมีปุ่มดาวน์โหลดแม่แบบ** ในแม่แบบมี
+**Every import screen needs a button to download a template.** The template contains
 
-- หัวคอลัมน์ตรงกับที่ระบบต้องการเป๊ะ
-- **แถวตัวอย่าง 1–2 แถวที่ถูกต้อง**
-- แถวคำอธิบายว่าคอลัมน์ไหนบังคับ รูปแบบอะไร ค่าที่รับได้มีอะไรบ้าง
-- ชีตแยกสำหรับรายการค่าที่เลือกได้ (สถานะ ประเภท หน่วย)
+- Column headers that match exactly what the system needs
+- **1–2 correct sample rows**
+- A row explaining which columns are required, what format, and which values are accepted
+- A separate sheet for lists of selectable values (status, type, unit)
 
-| ไฟล์ต่างจากแม่แบบแบบไหน | ทำ |
+| How the file differs from the template | Do this |
 |---|---|
-| ลำดับคอลัมน์สลับ | ✓ อ่านจากชื่อหัวคอลัมน์ ไม่ใช่ตำแหน่ง |
-| หัวคอลัมน์มีเว้นวรรคเกิน ตัวพิมพ์ต่าง | ✓ ตัดช่องว่างและเทียบแบบไม่สนตัวพิมพ์ |
-| มีคอลัมน์เกินที่ไม่รู้จัก | ✓ ข้ามไป แต่**บอกให้รู้ว่าข้ามอะไร** |
-| ขาดคอลัมน์บังคับ | ✗ หยุดทันที บอกว่าขาดคอลัมน์ไหน |
+| Column order swapped | ✓ Read by header name, not by position |
+| Header has extra spaces or different letter case | ✓ Trim spaces and compare case-insensitively |
+| Extra unknown columns | ✓ Skip them, but **tell the user what was skipped** |
+| A required column is missing | ✗ Stop at once and say which column is missing |
 
 ---
 
-## 2 · ตรวจสามชั้น ก่อนเขียนอะไรทั้งนั้น
+## 2 · Three layers of validation before writing anything
 
-| ชั้น | ตรวจอะไร | ตัวอย่างข้อความ |
+| Layer | Checks | Example message |
 |:--:|---|---|
-| 1 · ไฟล์ | เปิดได้ · มีชีตที่ต้องการ · คอลัมน์บังคับครบ · ไม่เกินจำนวนแถวสูงสุด | "ไม่พบคอลัมน์ 'รหัสสินค้า'" |
-| 2 · รายแถว | ชนิดข้อมูล · ค่าบังคับ · อยู่ในรายการที่กำหนด · ช่วงตัวเลข | "แถว 42 คอลัมน์ 'จำนวน' ต้องเป็นตัวเลขมากกว่า 0 (พบ '-5')" |
-| 3 · ความสัมพันธ์ | รหัสมีอยู่จริงในระบบ · ไม่ซ้ำกันเองในไฟล์ · กฎทางธุรกิจ | "แถว 88 ไม่พบลูกค้ารหัส C-1042" |
+| 1 · File | Opens · has the needed sheet · all required columns present · within the maximum row count | "ไม่พบคอลัมน์ 'รหัสสินค้า'" (column 'product code' not found) |
+| 2 · Per row | Data type · required values · in the allowed list · number range | "แถว 42 คอลัมน์ 'จำนวน' ต้องเป็นตัวเลขมากกว่า 0 (พบ '-5')" (row 42, column 'quantity' must be a number above 0, found '-5') |
+| 3 · Relationships | The code exists in the system · no duplicates within the file · business rules | "แถว 88 ไม่พบลูกค้ารหัส C-1042" (row 88, customer code C-1042 not found) |
 
-**รายงานความผิดพลาดต้องระบุ: แถว · คอลัมน์ · ค่าที่พบ · ค่าที่ควรเป็น**
+**An error report must state: row · column · value found · value expected**
 
 ```
-ผิด: "ไฟล์ไม่ถูกต้อง"
-ผิด: "พบข้อผิดพลาด 37 รายการ"
-ถูก: ตารางผลตรวจ พร้อมปุ่มดาวน์โหลดไฟล์เดิมที่มีคอลัมน์ "ข้อผิดพลาด" ต่อท้าย
+Wrong: "ไฟล์ไม่ถูกต้อง"
+Wrong: "พบข้อผิดพลาด 37 รายการ"
+Right: a table of check results, with a button to download the original file with an "ข้อผิดพลาด" (error) column appended
 ```
 
-> **รายงานข้อผิดพลาดทั้งหมดในครั้งเดียว ไม่หยุดที่แถวแรกที่ผิด**
-> ผู้ใช้จะได้แก้รอบเดียวจบ ไม่ใช่อัปโหลดใหม่ 37 รอบ
+> **Report all errors in one pass. Do not stop at the first bad row.**
+> The user then fixes everything in one round, instead of uploading 37 times.
 
 ---
 
-## 3 · เขียนลงระบบ
+## 3 · Writing into the system
 
-| แบบ | ใช้เมื่อ |
+| Mode | Use when |
 |---|---|
-| **ทั้งหมดหรือไม่ทำเลย** | ค่าเริ่มต้น ไฟล์ต้องถูกหมดถึงจะนำเข้า |
-| ทำเท่าที่ผ่าน ข้ามแถวที่ผิด | ไฟล์ใหญ่มากและแต่ละแถวไม่เกี่ยวกัน โดย**ผู้ใช้ต้องเลือกเอง ระบบไม่ตัดสินใจแทน** |
+| **All or nothing** | The default. The file must be fully correct to be imported |
+| Do what passes, skip the bad rows | The file is very large and the rows are unrelated, and **the user must choose this, the system does not decide for them** |
 
-- **ทุกครั้งต้องมีหน้าสรุปก่อนยืนยัน** เช่น "จะเพิ่ม 120 · แก้ 45 · ข้าม 3 · ผิด 0" แล้วให้กดยืนยัน
-- ถ้าเจอแถวซ้ำในไฟล์ ให้หยุดและบอก ไม่ใช่ใช้แถวสุดท้ายเงียบ ๆ
-- ถ้าข้อมูลมีอยู่แล้วในระบบ ให้ผู้ใช้เลือก: ข้าม · เขียนทับ · หยุด
-- **นำเข้าทุกครั้งต้องบันทึกใน audit** ว่าใครนำเข้า ไฟล์อะไร กระทบกี่แถว (ดู `audit-trail`)
-- **เก็บไฟล์ต้นฉบับไว้** พอมีปัญหาจะได้ย้อนดูว่าไฟล์ที่ส่งมาหน้าตาอย่างไรจริง ๆ
-- ทำให้ย้อนกลับได้: บันทึก batch id (รหัสรอบนำเข้า) ไว้กับทุกแถวที่นำเข้า
+- **Always show a summary page before confirming**, such as "จะเพิ่ม 120 · แก้ 45 · ข้าม 3 · ผิด 0" (will add 120 · update 45 · skip 3 · error 0), then have the user click confirm
+- If the file has duplicate rows, stop and say so. Do not silently use the last row
+- If the data already exists in the system, let the user choose: skip · overwrite · stop
+- **Every import must be recorded in the audit log**: who imported, which file, how many rows affected (see `audit-trail`)
+- **Keep the original file**, so when there is a problem you can look back at what the submitted file really looked like
+- Make it reversible: store a batch id (the id of the import run) on every imported row
 
-**ไฟล์ใหญ่ทำเป็นงานเบื้องหลัง**: ถ้าเกินประมาณ 1,000 แถวให้เข้าคิว
-แบ่งเป็นชุดละ 500 แถว แสดงความคืบหน้า และยกเลิกได้ (ดู `background-jobs`)
+**Large files run as background jobs.** Above roughly 1,000 rows, put them in a queue,
+split into batches of 500 rows, show progress, and allow cancel (see `background-jobs`).
 
 ---
 
-## 4 · กับดักของ Excel และ CSV
+## 4 · Excel and CSV traps
 
-| กับดัก | ผลที่เกิด | ทางแก้ |
+| Trap | What happens | Fix |
 |---|---|---|
-| **ภาษาไทยใน CSV เพี้ยน** | เปิดใน Excel แล้วตัวอักษรอ่านไม่ออก | บันทึกเป็น UTF-8 **พร้อม BOM** หรือแนะให้ใช้ .xlsx |
-| **รหัสที่ขึ้นต้นด้วย 0 หาย** | `0812345678` กลายเป็น `812345678` | อ่านเป็นข้อความเสมอ ส่วนตอนส่งออกให้ตั้งรูปแบบเซลล์เป็นข้อความ |
-| **เลขยาวกลายเป็นเลขยกกำลัง** | เลขบัตร 13 หลัก → `1.23457E+12` | เหมือนข้างบน |
-| **วันที่ถูกตีความเอง** | `03/04/2026` เป็นมีนาคมหรือเมษายน | บังคับ `YYYY-MM-DD` ในแม่แบบ |
-| **ปี พ.ศ. กับ ค.ศ. ปนกัน** | เพี้ยน 543 ปีเงียบ ๆ | **ถามในหน้าจอนำเข้าว่าไฟล์ใช้ปีแบบไหน** |
-| ช่องว่างท้ายค่า | จับคู่รหัสไม่เจอ | ตัดช่องว่างหัวท้ายทุกค่า |
-| เซลล์ที่เป็นสูตร | ได้สูตรแทนค่า | อ่านค่าที่คำนวณแล้ว |
-| **สูตรที่ขึ้นต้นด้วย `=` `+` `-` `@` ในไฟล์ส่งออก** | ผู้ใช้เปิดแล้ว Excel รันคำสั่ง | เติม `'` นำหน้าค่าที่ขึ้นต้นด้วยอักขระเหล่านี้ |
+| **Thai in CSV garbled** | Opened in Excel, the characters are unreadable | Save as UTF-8 **with a BOM**, or recommend .xlsx |
+| **Codes starting with 0 lose it** | `0812345678` becomes `812345678` | Always read as text, and on export set the cell format to text |
+| **Long numbers turn into scientific notation** | A 13-digit ID card number → `1.23457E+12` | Same as above |
+| **Dates interpreted automatically** | Is `03/04/2026` March or April | Force `YYYY-MM-DD` in the template |
+| **B.E. and C.E. years mixed** | Silently off by 543 years | **Ask on the import screen which year style the file uses** |
+| Trailing spaces in a value | Code matching fails | Trim leading and trailing spaces on every value |
+| Cells that are formulas | You get the formula instead of the value | Read the calculated value |
+| **Values starting with `=` `+` `-` `@` in an export file** | Excel runs a command when the user opens it | Prefix with `'` any value that starts with these characters |
 
-> **ช่องโหว่ที่คนไม่ค่อยรู้**: ชื่อลูกค้าที่เป็น `=cmd|'/c calc'!A1` ถ้าส่งออกดิบ ๆ
-> แล้วมีคนเปิดใน Excel มันจะพยายามรันคำสั่งจริง ตอนส่งออกจึงต้อง escape เสมอ
+> **A vulnerability people rarely know about:** a customer name of `=cmd|'/c calc'!A1`, if exported raw
+> and someone opens it in Excel, will try to run the command for real. So always escape on export.
 
 ---
 
-## 5 · ส่งออก
+## 5 · Export
 
-| เรื่อง | กฎ |
+| Topic | Rule |
 |---|---|
-| ขนาด | ถ้าเกินประมาณ 50,000 แถว ให้ทำเป็นงานเบื้องหลัง แล้วส่งลิงก์ให้ดาวน์โหลด |
-| สิทธิ์ | **ส่งออกได้เฉพาะข้อมูลที่ผู้ใช้คนนั้นมีสิทธิ์เห็นอยู่แล้ว** เพราะนี่คือจุดรั่วที่พบบ่อยที่สุด |
-| audit | บันทึกทุกครั้งว่าใครส่งออกข้อมูลอะไร ช่วงไหน กี่แถว |
-| ข้อมูลส่วนบุคคล | ปิดบังคอลัมน์ที่ไม่จำเป็น (ดู `pdpa-compliance`) |
-| ชื่อไฟล์ | `<เรื่อง>-<ช่วงวันที่>-<เวลาที่ส่งออก>.xlsx` |
-| ส่วนหัวของไฟล์ | ใส่เงื่อนไขกรองที่ใช้ และเวลาที่ส่งออก ไม่งั้นอีก 3 เดือนไม่มีใครรู้ว่าไฟล์นี้คือข้อมูลอะไร |
-| ลิงก์ดาวน์โหลด | ต้องหมดอายุ (ดู `file-upload-and-storage`) |
-| รูปแบบ | `.xlsx` สำหรับคนอ่าน · CSV สำหรับเครื่องอ่าน |
+| Size | Above roughly 50,000 rows, run it as a background job and send a download link |
+| Permission | **Export only data that this user already has permission to see**, because this is the most common leak |
+| audit | Record every time who exported what data, which period, how many rows |
+| Personal data | Mask columns that are not needed (see `pdpa-compliance`) |
+| File name | `<เรื่อง>-<ช่วงวันที่>-<เวลาที่ส่งออก>.xlsx` |
+| File header | Put in the filter conditions used and the export time. Otherwise in 3 months nobody knows what data this file is |
+| Download link | Must expire (see `file-upload-and-storage`) |
+| Format | `.xlsx` for people to read · CSV for machines to read |
 
 ---
 
 ## 6 · Anti-patterns
 
-- **"ไฟล์ไม่ถูกต้อง"** ผู้ใช้ทำอะไรต่อไม่ได้
-- **หยุดที่แถวแรกที่ผิด** ผู้ใช้ต้องอัปโหลดใหม่ 30 รอบ
-- **เขียนไปตรวจไป** พอล้มกลางทาง ข้อมูลก็ค้างครึ่ง ๆ
-- **ไม่มีหน้าสรุปก่อนยืนยัน** เขียนทับข้อมูลจริงโดยไม่มีใครทันได้ดู
-- **ไม่มีแม่แบบให้ดาวน์โหลด** ผู้ใช้ต้องเดาหัวคอลัมน์
-- **อ่านคอลัมน์ตามตำแหน่ง** ผู้ใช้แทรกคอลัมน์เดียวก็พังทั้งไฟล์
-- **อ่านรหัสเป็นตัวเลข** เลข 0 นำหน้าหายทุกครั้ง
-- **ไม่ถามว่าปีเป็น พ.ศ. หรือ ค.ศ.** ปีเพี้ยน 543 ปีโดยไม่มีใครรู้
-- **ส่งออกโดยไม่ escape สูตร** เปิดไฟล์แล้วรันคำสั่ง
-- **ส่งออกได้เกินสิทธิ์ที่มี** ข้อมูลรั่วผ่านปุ่มที่เราทำเอง
-- **ไม่เก็บไฟล์ต้นฉบับ** มีปัญหาแล้วย้อนดูไม่ได้
+- **"ไฟล์ไม่ถูกต้อง"** (file is invalid): the user cannot do anything next
+- **Stopping at the first bad row**: the user must upload 30 times
+- **Writing while validating**: if it fails midway, the data is left half-done
+- **No summary page before confirming**: real data is overwritten before anyone could look
+- **No template to download**: the user has to guess the headers
+- **Reading columns by position**: the user inserts one column and the whole file breaks
+- **Reading codes as numbers**: the leading 0 is lost every time
+- **Not asking whether the year is B.E. or C.E.**: years are off by 543 and nobody knows
+- **Exporting without escaping formulas**: opening the file runs a command
+- **Exporting more than the user's permission**: data leaks through a button we built ourselves
+- **Not keeping the original file**: when there is a problem, you cannot look back
 
 
 ## reference: thai-accounting-apis.md

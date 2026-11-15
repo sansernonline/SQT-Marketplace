@@ -2,6 +2,8 @@
 
 ## KB sheet columns
 
+Columns after `intent_id`: sample questions · approved answer · live data source · owner · last checked · `handoff?`. The sample rows below are Thai because the bot answers Thai customers.
+
 | intent_id | ตัวอย่างคำถาม | คำตอบที่อนุมัติ | แหล่งข้อมูลสด | เจ้าของ | ตรวจล่าสุด | handoff? |
 |---|---|---|---|---|---|---|
 | hours | เปิดกี่โมง, วันนี้เปิดไหม | ร้านเปิดทุกวัน 09:00–18:00 น. ปิดวันหยุดนักขัตฤกษ์ค่ะ | — | ฝ่ายขาย | 2026-10-01 | no |
@@ -9,6 +11,8 @@
 | refund | ขอคืนเงิน, ของเสีย | — | — | หัวหน้า CS | — | **always** |
 
 ## Handoff and system messages (ค่ะ persona)
+
+Send these Thai messages as written.
 
 - รับเรื่องแล้วค่ะ ขอส่งต่อให้เจ้าหน้าที่ดูแลนะคะ จะตอบกลับภายใน 30 นาทีในเวลาทำการค่ะ
 - ตอนนี้นอกเวลาทำการ (09:00–18:00 น.) เจ้าหน้าที่จะตอบกลับวันทำการถัดไปค่ะ

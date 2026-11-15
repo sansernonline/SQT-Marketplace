@@ -1,16 +1,16 @@
-# playbook · profile-refresh — ปรับ CV และ LinkedIn ทั้งชุด
+# playbook · profile-refresh — refresh the CV and LinkedIn as a set
 
-ใช้เมื่อ: ยังไม่มีงานเป้าหมายแต่อยากเตรียมตัว · CV เก่าหลายปี · เปลี่ยนสายงาน
-skill หลัก: `resume-th-en` · `linkedin-profile`
+Use when: the user has no target job yet but wants to be ready · the CV is several years old · changing career track
+Main skills: `resume-th-en` · `linkedin-profile`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. อ่าน CV และโปรไฟล์ปัจจุบัน ทำรายการตำแหน่ง วันที่ ผลงาน แล้วจดจุดที่ข้อมูลขัดกัน · ใคร: `career-coach` ตัวใหม่
-2. กำหนดสายงานเป้าหมาย 1–2 สาย แล้วหาคำค้นที่ผู้สรรหาใช้จากประกาศงานจริงอย่างน้อย 5 ประกาศ · ใคร: `career-coach` ตัวใหม่ (สายจากคำตอบตอนเริ่ม ไม่มีให้เลือกสายที่ตรงประวัติที่สุดแล้วติด `(รอยืนยัน)`)
-3. เขียน CV ฉบับหลัก (master) ที่ใส่ทุกอย่าง แล้วทำฉบับสั้นต่อสายงาน · ใคร: `career-coach` ตัวใหม่
-4. ปรับ LinkedIn — headline · About · Featured · ทักษะ ให้ตรงกับ CV ฉบับหลัก · ใคร: `career-coach` ตัวใหม่
-5. ตรวจว่าวันที่และตำแหน่งตรงกันทุกที่ และไม่มีข้อมูลส่วนตัวที่ไม่ควรใส่ (อายุ · ศาสนา · เลขบัตร) เว้นแต่ผู้ใช้สั่ง · ใคร: `reviewer` ตัวใหม่
+1. Read the current CV and profile. List the positions, dates, and achievements, and note where the information conflicts · ใคร: `career-coach` ตัวใหม่
+2. Set 1–2 target tracks, then find the keywords recruiters use from at least 5 real job ads · ใคร: `career-coach` ตัวใหม่ (take the tracks from the answer given at the start; if there is none, pick the track that best fits the history and tag it `(รอยืนยัน)` (awaiting confirmation))
+3. Write a master CV that includes everything, then make a short version for each track · ใคร: `career-coach` ตัวใหม่
+4. Adjust LinkedIn (headline · About · Featured · skills) to match the master CV · ใคร: `career-coach` ตัวใหม่
+5. Check (ตรวจ) that dates and positions match everywhere, and that there is no personal data that should not be included (age · religion · ID number) unless the user asks for it · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-CV ฉบับหลัก ฉบับต่อสายงาน และร่าง LinkedIn ตรงกันทุกเอกสาร
+The master CV, the per-track versions, and the LinkedIn draft match in every document

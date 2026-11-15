@@ -141,10 +141,10 @@ similarity = cosine_similarity(
 
 Use [RAGAS framework](https://docs.ragas.io/) for this.
 
-**ออกข้อสอบ RAG จากเอกสารจริง** (ตัวอย่างจากงานสอน ร้านวัสดุก่อสร้าง ไม่ใช่เกณฑ์):
-- เปิดอ่านหน้าจริงของ PDF ทีละไฟล์ แล้วให้แต่ละข้อระบุ ไฟล์ + หน้าที่มีคำตอบ + `key_facts` · ผสมตาราง หัวตาราง 2 ชั้น เชิงอรรถ คำตอบข้ามหน้า และข้อที่เอกสารไม่มีคำตอบ (ตอบว่าไม่มีข้อมูลคือถูก)
-- แยกเป็น 3 ชุดตามที่มาของคำตอบ: จาก PDF (169 ข้อ) · จากฐานข้อมูลที่คำนวณด้วยสูตรและ SQL (79 ข้อ) · บทสนทนาหลายตา (ตรวจว่าเข้าใจ "อันนั้น" "ตัวเมื่อกี้")
-- อะไรที่โค้ดตรวจได้ ให้โค้ดตรวจ (หน้าที่ค้นมาถูกไหม ตัวเลขตรงไหม) ส่วนที่เหลือให้ผู้ตัดสินหลายตัวช่วยกันขนาน ให้คะแนน 0 / 0.5 / 1 พร้อมเหตุผล · ผู้ตัดสินต้องไม่ใช่โมเดลตัวที่ถูกวัด
+**Writing a RAG exam from real documents** (an example from a teaching project, a building-materials shop; not a standard):
+- Open each PDF and read the real pages, then have each question state the file + the page that holds the answer + `key_facts` · mix tables, 2-level table headers, footnotes, answers that span pages, and questions the documents cannot answer (replying that there is no information is correct)
+- Split into 3 sets by where the answer comes from: from the PDFs (169 questions) · from the database, computed with formulas and SQL (79 questions) · multi-turn conversations (check that it understands "อันนั้น" (that one) and "ตัวเมื่อกี้" (the one just now))
+- Let code check whatever code can check (was the right page retrieved, do the numbers match). For the rest, have several judges work in parallel and score 0 / 0.5 / 1 with a reason · the judge must not be the model being measured
 - ผลรอบนั้น: ชุด PDF ผ่าน 95.9%
 
 ### Operational Metrics (Always Track)

@@ -3,7 +3,7 @@ name: credit-bureau
 description: Use when a loan is refused or checking an NCB report
 ---
 
-# Credit Bureau (เครดิตบูโร · รายงานข้อมูลเครดิตของตัวเอง)
+# Credit Bureau (เครดิตบูโร · reading your own credit report)
 
 General information, not legal advice. Paying debts down is `debt-payoff`; a "credit repair" agent asking for a fee is `scam-check`.
 

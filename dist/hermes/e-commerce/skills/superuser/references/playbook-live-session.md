@@ -1,15 +1,15 @@
-# playbook · live-session — เตรียมไลฟ์ขายของ
+# playbook · live-session — prepare a live sales stream
 
-ใช้เมื่อ: จะไลฟ์บน TikTok Shop · Shopee Live · Lazada Live · Facebook Live
-skill หลัก: `live-selling-script` · `product-listing` · agent `live-seller`
+Use when: going live on TikTok Shop · Shopee Live · Lazada Live · Facebook Live
+Main skills: `live-selling-script` · `product-listing` · agent `live-seller`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. เลือกสินค้าและดีลของไลฟ์ ตรวจสต็อกและราคาว่ายังมีกำไร · ใคร: `shop-manager` ตัวใหม่
-2. ทำ run sheet รายนาทีตาม `live-selling-script` — hook เปิด · ลำดับสินค้า · จังหวะ flash deal · ประโยคปิดการขาย · ใคร: `live-seller` ตัวใหม่
-3. ทำเช็กลิสต์หลังบ้าน — คนตอบแชต สต็อกที่ล็อกไว้ ลิงก์สินค้า · ใคร: `live-seller` ตัวใหม่
-4. ตรวจคำพูดทุกบรรทัดกับรายการคำโฆษณาต้องห้าม และเช็กลิสต์กับสต็อกจริง · ใคร: `reviewer` ตัวใหม่
+1. Choose the products and deals for the live, and check that stock and prices still leave a profit · ใคร: `shop-manager` ตัวใหม่
+2. Make a minute-by-minute run sheet per `live-selling-script` — opening hook · product order · flash deal timing · closing lines · ใคร: `live-seller` ตัวใหม่
+3. Make the back-office checklist — who answers chat, which stock is locked, product links · ใคร: `live-seller` ตัวใหม่
+4. Check (ตรวจ) every spoken line against the list of banned advertising words, and check the checklist against real stock · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-run sheet และเช็กลิสต์พร้อมใช้ ผ่านการตรวจคำต้องห้ามทุกบรรทัด
+The run sheet and checklist are ready to use, and every line has passed the banned-word check.

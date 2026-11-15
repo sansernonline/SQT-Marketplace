@@ -1,6 +1,6 @@
 # API Authentication และ Authorization Patterns
 
-วิธียืนยันตัวตนของ API แต่ละแบบ หลักการจัดการ API key และตัวอย่าง RBAC กับ ABAC
+How each type of API authentication works, principles for managing API keys, and examples of RBAC and ABAC
 
 ## Pattern 7: API Authentication
 

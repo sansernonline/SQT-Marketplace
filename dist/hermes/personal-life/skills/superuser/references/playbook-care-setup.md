@@ -1,16 +1,16 @@
-# playbook · care-setup — ตั้งระบบดูแลผู้สูงอายุ เด็ก หรือสัตว์เลี้ยง
+# playbook · care-setup — set up care for an older adult, a child, or a pet
 
-ใช้เมื่อ: เริ่มดูแลพ่อแม่สูงอายุ · เด็กเข้าเรียนหรือย้ายโรงเรียน · รับสัตว์เลี้ยงใหม่
-skill หลัก: `elder-care` · `kids-school` · `pet-care`
+Use when: starting to care for an elderly parent · a child starts school or changes school · a new pet arrives
+Main skills: `elder-care` · `kids-school` · `pet-care`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ทำรายการสิทธิ์ที่เกี่ยว (เบี้ยยังชีพ · สิทธิ์รักษา · เงินอุดหนุนเด็ก · ลดหย่อน) ตรวจกับเว็บหน่วยงานทางการ พร้อมเอกสารที่ต้องใช้และขั้นตอนยื่น · ใคร: `family-planner` ตัวใหม่
-2. ทำบันทึกประจำตัว — นัดแพทย์และยาของผู้สูงอายุ · ปฏิทินเทอม · ประวัติวัคซีนสัตว์ · ถ้าดูแลผู้สูงอายุ เพิ่มเช็กลิสต์ป้องกันการหกล้มในบ้านและบันทึกส่งต่อผู้ดูแล · ใคร: `family-planner` ตัวใหม่
-3. ทำไฟล์เตือน `.ics` ทุกวันครบกำหนด ให้ผู้ใช้นำเข้าปฏิทินเอง · ใคร: `family-planner` ตัวใหม่
-4. ตรวจทั้งชุด (สิทธิ์ · ยา · นัด · วันในไฟล์ `.ics`) กับเว็บทางการและเอกสารจริง · ใคร: `reviewer` ตัวใหม่
-   ไม่ผ่าน → `family-planner` ตัวใหม่แก้ แล้ว `reviewer` ตัวใหม่ตรวจซ้ำ (ไม่เกิน 5 รอบ)
+1. List the related entitlements (elderly living allowance · medical coverage · child subsidy · tax deductions). Check (ตรวจ) them against official agency websites, with the documents needed and the filing steps · ใคร: `family-planner` ตัวใหม่
+2. Make a personal record: the older adult's doctor appointments and medicines · the school term calendar · the pet's vaccine history. For elder care, add a home fall-prevention checklist and a handover note for caregivers · ใคร: `family-planner` ตัวใหม่
+3. Make an `.ics` reminder file for every due date, for the user to import into their own calendar · ใคร: `family-planner` ตัวใหม่
+4. Check (ตรวจ) the whole set (entitlements · medicines · appointments · dates in the `.ics` file) against official websites and the real documents · ใคร: `reviewer` ตัวใหม่
+   If it fails, a fresh `family-planner` fixes it and a fresh `reviewer` checks again (at most 5 rounds)
 
-## จบเมื่อ
+## Done when
 
-บันทึกประจำตัวและรายการสิทธิ์ที่ตรวจกับแหล่งทางการแล้ว พร้อมเตือนครบ
+The personal record and the entitlement list are checked against official sources, with all reminders set

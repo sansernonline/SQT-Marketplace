@@ -5,7 +5,7 @@ description: Use when writing a blameless post-incident review
 
 # Blameless Postmortem Template
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write every line per `human-writing`. This skill gives the format and the structure, while human-writing says how to write so a person can follow it.
 > ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ ธุรกิจ
 
 ## When to use this skill
@@ -19,17 +19,17 @@ description: Use when writing a blameless post-incident review
 
 | งาน | ใช้ตัวนี้แทน |
 |---|---|
-| เหตุยังเกิดอยู่ ต้องรู้ว่าจะทำอะไรตอนนี้ | `incident-runbook-template` |
-| บั๊กธรรมดาที่ไม่ได้ทำให้ระบบจริงล่ม | `bug-report-template` |
-| action item "เพิ่ม load test" (ระบบล่มเพราะคนเยอะหรือ connection pool เต็ม) | `load-testing` — ตั้งเกณฑ์ p95 กับอัตรา error · ด่านอนุญาตก่อนยิง · smoke ใน CI |
+| The incident is still happening and you need to know what to do now | `incident-runbook-template` |
+| An ordinary bug that did not take the real system down | `bug-report-template` |
+| Action item "add a load test" (the system went down because of heavy traffic or a full connection pool) | `load-testing` — set p95 and error-rate thresholds · permission gate before firing · smoke test in CI |
 
-## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+## 0 · Look for an existing format first (every time)
 
-ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+Before using the structure or template in this file, check whether the user, customer or project already has its own format:
 
-- **ที่ดู:** แบบรายงานเหตุขัดข้องขององค์กร · ระดับความรุนแรงที่องค์กรนิยามไว้ (SEV/P1–P4) · postmortem ฉบับก่อนใน `docs/postmortems/` หรือที่ผู้ใช้ชี้
-- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
-- **ยังต้องมีทุกแบบ:** ใช้ชื่อระดับความรุนแรงขององค์กร · หลักไม่กล่าวโทษบุคคล ไทม์ไลน์ และ action item ที่มีเจ้าของยังต้องมีทุกแบบ
+- **Where to look:** the organisation's incident report format · the severity levels the organisation defines (SEV/P1–P4) · earlier postmortems in `docs/postmortems/` or where the user points
+- **Result:** found → use that format (headings, order, field names, numbering) and say in the reply which file's format you used · not found → use the template in this file as a fallback and say that no existing format was found
+- **Still required either way:** use the organisation's severity names · the blameless principle, a timeline, and action items with owners are required in every format
 
 ## Core Principles
 

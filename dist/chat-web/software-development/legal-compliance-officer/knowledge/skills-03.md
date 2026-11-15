@@ -2,29 +2,29 @@
 
 Use when a system must record who did what and when
 
-# ร่องรอยการใช้งาน (audit trail)
+# Audit trail
 
-> **กฎข้อเดียว:** ร่องรอยย้อนหลังสร้างไม่ได้
-> วันที่ลูกค้าถามว่า "ใครเปลี่ยนราคาอันนี้" ถ้าไม่ได้เก็บไว้ก่อน ก็ตอบไม่ได้ตลอดไป
+> **One rule:** a trail cannot be built after the fact.
+> The day a customer asks "who changed this price", if it was not recorded beforehand, it can never be answered.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ระบบมีงานอนุมัติ การเงิน สิทธิ์ผู้ใช้ หรือข้อมูลส่วนบุคคล
-- ลูกค้าหรือผู้ตรวจสอบถามได้ว่า "ใครทำ เมื่อไหร่ เปลี่ยนจากอะไรเป็นอะไร"
-- มีข้อพิพาทเรื่องข้อมูลที่ถูกแก้ แล้วไม่มีใครตอบได้
-- ระบบอยู่ภายใต้ พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล (Personal Data Protection Act: PDPA) หรือมาตรฐานที่ต้องตรวจย้อนหลังได้
+- The system has approvals, money, user permissions, or personal data
+- A customer or auditor can ask "who did it, when, and what was changed from what to what"
+- There was a dispute over edited data and nobody could answer
+- The system falls under the Personal Data Protection Act (PDPA) or a standard that must be checkable after the fact
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill, or together
 
-| งาน | skill | |
+| Job | skill | |
 |---|---|---|
-| log สำหรับไล่ปัญหาทางเทคนิค | `logging-standards` | แทน |
-| ตัวชี้วัดและการแจ้งเตือน | `observability-basics` | แทน |
-| คอลัมน์ `created_by` `updated_at` ในตารางงาน | `database-design` | แทน |
-| สิทธิ์และการยืนยันตัวตน | `auth-implementation-patterns` | แทน |
-| ความยินยอมและสิทธิเจ้าของข้อมูล | `pdpa-compliance` | แทน |
-| ข้อกำหนดว่าต้องเก็บอะไรกี่ปี | `srs-writing` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| Logs for technical troubleshooting | `logging-standards` | instead |
+| Metrics and alerts | `observability-basics` | instead |
+| Columns `created_by` `updated_at` in working tables | `database-design` | instead |
+| Permissions and identity verification | `auth-implementation-patterns` | instead |
+| Consent and data-subject rights | `pdpa-compliance` | instead |
+| Requirements on what to keep and for how many years | `srs-writing` | together |
+| Abbreviations in work that people read | `spell-out-abbreviations` | together |
 
 ---
 
@@ -32,67 +32,67 @@ Use when a system must record who did what and when
 
 | | application log | **audit log** |
 |---|---|---|
-| มีไว้ให้ใครอ่าน | developer ตอนไล่ปัญหา | ผู้ตรวจสอบ · ลูกค้า · ฝ่ายกฎหมาย |
-| เขียนอะไร | อะไรก็ได้ที่ช่วยไล่ปัญหา | **เฉพาะเหตุการณ์ที่มีความหมายทางธุรกิจ** |
-| เก็บที่ไหน | ไฟล์ · ระบบรวบรวม log | **ตารางในฐานข้อมูล** หรือที่เก็บที่เขียนทับไม่ได้ |
-| อายุ | 7–90 วัน | **เป็นปี ตามที่กฎหมายหรือสัญญากำหนด** |
-| แก้ได้ไหม | ไม่สำคัญ | **ห้ามแก้ ห้ามลบ** |
-| หายได้ไหม | หายบ้างรับได้ | **หายไม่ได้** ถ้าเขียนไม่สำเร็จ ธุรกรรมต้องล้มตาม |
+| Who reads it | developers, when troubleshooting | auditors · customers · the legal team |
+| What it records | anything that helps troubleshooting | **only events with business meaning** |
+| Where it is kept | files · a log collection system | **a table in the database**, or storage that cannot be overwritten |
+| Lifetime | 7–90 days | **years, as the law or contract requires** |
+| Can it be edited | does not matter | **never edit, never delete** |
+| Can it be lost | some loss is acceptable | **cannot be lost.** If the write fails, the transaction must fail with it |
 
-> **2 อย่างนี้แยกกันเสมอ** เพราะ audit log ที่ปนอยู่ในไฟล์ log ทั่วไป
-> จะถูกลบตามอายุการเก็บ (retention) ของ log ภายในเดือนเดียว และไม่มีใครค้นเจอตอนที่ต้องใช้
+> **Always keep these 2 separate.** An audit log mixed into the general log files
+> gets deleted by the log retention period within a month, and nobody finds it when it is needed.
 
 ---
 
-## 2 · ฟิลด์ที่ทุกรายการต้องมี
+## 2 · Fields every entry must have
 
-| ฟิลด์ | ตัวอย่าง | หมายเหตุ |
+| Field | Example | Note |
 |---|---|---|
-| `id` | UUIDv7 | เรียงตามเวลาได้ |
-| `occurred_at` | `2026-09-25T09:42:13.482Z` | **UTC** และเป็นเวลาที่เกิด ไม่ใช่เวลาที่บันทึก |
-| `actor_id` | `1042` | id ผู้ใช้ ไม่ใช่ชื่อ เพราะชื่อเปลี่ยนได้ |
-| `actor_type` | `user` · `system` · `api_client` | งานอัตโนมัติก็ต้องมีตัวตน |
-| `actor_ip` · `user_agent` | | เก็บเมื่อจำเป็นต่อการตรวจสอบเท่านั้น |
-| `action` | `order.cancelled` | **คำกริยารูปอดีต** แบบเดียวกันทั้งระบบ |
-| `entity_type` · `entity_id` | `order` · `1042` | ของที่ถูกกระทำ |
-| `changes` | `{"status":{"from":"confirmed","to":"cancelled"}}` | เฉพาะฟิลด์ที่เปลี่ยน |
-| `reason` | "ลูกค้าโทรแจ้งยกเลิก" | บังคับกับการกระทำที่ต้องมีเหตุผล |
-| `correlation_id` | `01J9Z8…` | เชื่อมกลับไปที่ application log |
-| `result` | `success` · `denied` | **ต้องบันทึกครั้งที่ถูกปฏิเสธด้วย** |
+| `id` | UUIDv7 | sortable by time |
+| `occurred_at` | `2026-09-25T09:42:13.482Z` | **UTC**, and the time it happened, not the time it was recorded |
+| `actor_id` | `1042` | the user id, not the name, because names can change |
+| `actor_type` | `user` · `system` · `api_client` | automated jobs need an identity too |
+| `actor_ip` · `user_agent` | | keep only when needed for the audit |
+| `action` | `order.cancelled` | **a past-tense verb**, in one style across the system |
+| `entity_type` · `entity_id` | `order` · `1042` | the thing acted on |
+| `changes` | `{"status":{"from":"confirmed","to":"cancelled"}}` | only the fields that changed |
+| `reason` | "ลูกค้าโทรแจ้งยกเลิก" (customer phoned to cancel) | required for actions that need a reason |
+| `correlation_id` | `01J9Z8…` | links back to the application log |
+| `result` | `success` · `denied` | **denied attempts must be recorded too** |
 
-> **การกระทำที่ถูกปฏิเสธมีค่ามากกว่าที่สำเร็จ** เพราะคนที่พยายามเข้าถึงสิ่งที่ไม่มีสิทธิ์
-> คือสิ่งที่ผู้ตรวจสอบอยากเห็นที่สุด และเป็นสัญญาณเตือนที่ดีที่สุดที่มี
+> **A denied action is worth more than a successful one**, because someone trying to reach something
+> they have no right to is what auditors most want to see, and it is the best warning sign there is.
 
 ---
 
-## 3 · เก็บเหตุการณ์ไหน
+## 3 · Which events to record
 
-**เก็บ:**
+**Record:**
 
-| กลุ่ม | ตัวอย่าง |
+| Group | Examples |
 |---|---|
-| เงินและสัญญา | สร้าง/ยกเลิก/คืนเงิน · เปลี่ยนราคา · เปลี่ยนส่วนลด |
-| การอนุมัติ | อนุมัติ · ปฏิเสธ · ส่งกลับแก้ |
-| สิทธิ์และตัวตน | ให้/เพิกถอนสิทธิ์ · สร้าง/ปิดบัญชี · เปลี่ยนรหัสผ่าน · เข้าสู่ระบบล้มเหลวติดกัน |
-| ข้อมูลส่วนบุคคล | ดู · แก้ · ส่งออก · ลบ |
-| ค่าตั้งของระบบ | เปลี่ยนค่าที่กระทบทั้งระบบ |
-| การเข้าถึงข้อมูลจำนวนมาก | ส่งออกรายงาน · ดาวน์โหลดรายชื่อ |
+| money and contracts | create/cancel/refund · price change · discount change |
+| approvals | approve · reject · send back for fixing |
+| permissions and identity | grant/revoke permission · create/close account · change password · consecutive failed logins |
+| personal data | view · edit · export · delete |
+| system settings | changing a value that affects the whole system |
+| bulk data access | exporting a report · downloading a name list |
 
-**ไม่เก็บ:** เปิดดูหน้าจอทั่วไป · ค้นหา · เรียงลำดับ · กดปุ่มที่ไม่เปลี่ยนอะไร
-audit log ที่เก็บทุกอย่าง มีค่าเท่ากับไม่มีเลย เพราะค้นไม่เจอ
+**Do not record:** ordinary screen views · searches · sorting · clicks that change nothing.
+An audit log that records everything is worth the same as none, because nothing can be found in it.
 
-**ตั้งชื่อ action แบบเดียวทั้งระบบ:** `<entity>.<กริยาอดีต>` เช่น `order.cancelled` · `user.role_granted` ·
+**Name actions in one style across the system:** `<entity>.<past-tense verb>`, for example `order.cancelled` · `user.role_granted` ·
 `invoice.exported` · `patient_record.viewed`
 
 ---
 
-## 4 · เก็บ "เปลี่ยนอะไร" ยังไง
+## 4 · How to record "what changed"
 
-| วิธี | ดี | เสีย |
+| Method | Good | Bad |
 |---|---|---|
-| **เก็บเฉพาะฟิลด์ที่เปลี่ยน (from/to)** ✓ | เล็ก อ่านรู้เรื่องทันที | อยากเห็นภาพรวมต้องไล่ย้อน |
-| เก็บทั้งแถวก่อนและหลัง | ได้ภาพเต็ม | โตเร็วมาก และเสี่ยงเก็บข้อมูลอ่อนไหวเกินจำเป็น |
-| เก็บเฉพาะว่า "แก้แล้ว" | เล็กสุด | **ตอบคำถามไม่ได้** ไม่ควรใช้ |
+| **Record only the changed fields (from/to)** ✓ | small, readable at once | to see the whole picture you must trace back |
+| Record the whole row before and after | full picture | grows very fast and risks keeping more sensitive data than needed |
+| Record only that "it was edited" | smallest | **cannot answer the question**, so do not use it |
 
 ```jsonc
 "changes": {
@@ -101,7 +101,7 @@ audit log ที่เก็บทุกอย่าง มีค่าเท่
 }
 ```
 
-**ฟิลด์อ่อนไหวเก็บแค่ว่าเปลี่ยน ไม่เก็บค่า:**
+**For sensitive fields, record only that it changed, not the value:**
 
 ```jsonc
 "changes": { "password_hash": { "changed": true } }
@@ -109,58 +109,58 @@ audit log ที่เก็บทุกอย่าง มีค่าเท่
 
 ---
 
-## 5 · เขียนแล้วห้ามแก้
+## 5 · Never edit after writing
 
-- ตาราง audit ให้สิทธิ์แค่ **INSERT และ SELECT** · บัญชีที่แอปใช้ต้องไม่มีสิทธิ์ UPDATE หรือ DELETE
-- เขียนใน transaction เดียวกับการเปลี่ยนข้อมูลจริง **ถ้าเขียน audit ไม่สำเร็จ ธุรกรรมต้องล้มตาม**
-- ห้ามแก้ประวัติเพื่อ "จัดระเบียบ" ถ้าบันทึกผิด ให้เพิ่มรายการแก้ไข ไม่เขียนทับ
-- ระบบที่ต้องเข้มกว่านั้นให้ทำ hash ต่อกันเป็นสาย เพื่อพิสูจน์ว่าไม่มีใครแทรกหรือลบ
+- Grant the audit table only **INSERT and SELECT**. The account the app uses must have no UPDATE or DELETE permission.
+- Write in the same transaction as the real data change. **If the audit write fails, the transaction must fail with it.**
+- Never edit history to "tidy up". If a record is wrong, add a correction entry. Do not overwrite.
+- A system that needs stronger protection should chain the entries with hashes, to prove nobody inserted or deleted anything.
 
-**อายุการเก็บ** ตั้งตามกฎหมายหรือสัญญา เอกสารทางบัญชีในไทยมักต้องเก็บ 5 ปี
-เมื่อครบอายุให้ย้ายไปที่เก็บราคาถูก ไม่ลบทิ้งโดยไม่มีใครอนุมัติ
+**Retention** follows the law or the contract. Accounting documents in Thailand usually must be kept 5 years.
+When the period ends, move them to cheap storage. Never delete them without someone's approval.
 
 ---
 
-## 6 · ใครดูได้ และห้ามเก็บอะไร
+## 6 · Who can view, and what must not be recorded
 
-| เรื่อง | กฎ |
+| Topic | Rule |
 |---|---|
-| สิทธิ์อ่าน | เฉพาะบทบาทที่มีหน้าที่ตรวจสอบ และ**การอ่าน audit log ก็ต้องบันทึกลง audit ด้วย** |
-| การส่งออก | บันทึกทุกครั้งว่าใครส่งออกช่วงไหน |
-| **ห้ามเก็บ** | รหัสผ่าน · token · เลขบัตร · ข้อมูลสุขภาพ · เนื้อหาของข้อมูลส่วนบุคคล |
-| เก็บได้แทน | ชี้ว่า**ของชิ้นไหน**ถูกดูหรือถูกแก้ ไม่ใช่เนื้อหาข้างใน |
+| Read permission | only roles with an audit duty, and **reading the audit log must also be recorded in the audit** |
+| Export | record every time who exported which period |
+| **Must not record** | passwords · tokens · ID card numbers · health data · the content of personal data |
+| Record instead | point to **which item** was viewed or edited, not the content inside |
 
-> `patient_record.viewed` กับ `entity_id` ก็พอแล้ว **ห้ามคัดลอกผลตรวจลงไปใน audit log**
-> ไม่งั้น audit log จะกลายเป็นที่รวมข้อมูลอ่อนไหวที่สุดในระบบ โดยไม่มีใครตั้งใจ
+> `patient_record.viewed` with the `entity_id` is enough. **Never copy test results into the audit log.**
+> Otherwise the audit log becomes the most sensitive data store in the system, without anyone meaning it to.
 
 ---
 
-## 7 · แสดงให้คนอ่าน
+## 7 · Show it to people
 
-หน้าจอประวัติต้องกรองได้อย่างน้อย 4 อย่าง: **ช่วงเวลา · ผู้ทำ · ประเภทการกระทำ · ของชิ้นไหน**
+The history screen must filter by at least 4 things: **time period · actor · action type · which item**.
 
-แสดงเป็นประโยคที่คนอ่านรู้เรื่อง ไม่ใช่ JSON ดิบ:
+Show it as a sentence people can read, not raw JSON (the sample below is the Thai text shown to Thai users: on 25 Sep 2569 [B.E.; 2026] at 16:42, Somchai (sales) cancelled order SO-2026-00042, status: confirmed → cancelled, reason: customer phoned to cancel):
 
 ```
 25 ก.ย. 2569 16:42  สมชาย (ฝ่ายขาย)  ยกเลิกคำสั่งซื้อ SO-2026-00042
                     สถานะ: ยืนยันแล้ว → ยกเลิก · เหตุผล: ลูกค้าโทรแจ้งยกเลิก
 ```
 
-แสดงเวลาตามเขตเวลาของผู้ดู แต่เก็บเป็น UTC (ดู `i18n-and-locale`)
+Show the time in the viewer's time zone, but store it as UTC (see `i18n-and-locale`).
 
 ---
 
 ## 8 · Anti-patterns
 
-- **เก็บ audit ในไฟล์ log ทั่วไป** — ถูกลบตาม retention ภายในเดือนเดียว
-- **เก็บชื่อผู้ทำแทน id** — พอเขาเปลี่ยนนามสกุล ประวัติเก่าก็กลายเป็นคนละคน
-- **บันทึกเฉพาะที่สำเร็จ** — ครั้งที่ถูกปฏิเสธคือสิ่งที่ผู้ตรวจสอบตามหา
-- **บันทึกแค่ "แก้ไขข้อมูล"** โดยไม่บอกว่าจากอะไรเป็นอะไร
-- **แอปมีสิทธิ์ UPDATE ตาราง audit** — ร่องรอยที่แก้ได้ ไม่ใช่ร่องรอย
-- **เขียน audit นอก transaction** — ธุรกรรมสำเร็จแต่ไม่มีบันทึก
-- **บันทึกทุกการคลิก** — ของสำคัญจมอยู่ในกองข้อมูลที่ไม่มีใครใช้
-- **คัดลอกข้อมูลอ่อนไหวลง audit** — เกิดช่องรั่วใหม่โดยไม่ตั้งใจ
-- **ไม่มีหน้าจอให้ดู** — มีข้อมูลแต่ต้องให้ developer query ทุกครั้งที่ลูกค้าถาม
+- **Keeping the audit in general log files**: deleted by retention within a month
+- **Recording the actor's name instead of the id**: when they change their surname, the old history turns into a different person
+- **Recording only successes**: the denied attempts are what auditors look for
+- **Recording only "edited data"** without saying from what to what
+- **The app has UPDATE permission on the audit table**: a trail that can be edited is not a trail
+- **Writing the audit outside the transaction**: the transaction succeeds but there is no record
+- **Recording every click**: the important entries sink in a pile of data nobody uses
+- **Copying sensitive data into the audit**: it creates a new leak by accident
+- **No screen to view it**: the data exists, but a developer must run a query every time a customer asks
 
 
 ---
@@ -344,20 +344,20 @@ After that the abbreviation may be used. See the skill `spell-out-abbreviations`
 
 ## reference: anti-patterns.md
 
-# Anti-patterns — เหตุผลและสิ่งที่ใช้แทน
+# Anti-patterns — reasons and what to use instead
 
-หัวข้อสั้นอยู่ใน `SKILL.md`
+The short headings are in `SKILL.md`.
 
-- **ใช้ Heading style ที่มากับ Word** — จะทับสีที่ตั้งไว้ ให้ใช้ `h1()/h2()/h3()`
-  ซึ่งตั้ง `outlineLvl` เอง สารบัญ (TOC) จึงยังเห็นหัวข้อ
-- **เส้นตารางดำหนาแบบค่าเริ่มต้น** — เอกสารดูเก่าทันที ใช้เส้นสี `line` หนา 0.5pt ระหว่างแถว (ใต้แถวหัวคือเส้นแบรนด์ 1.5pt)
-- **ตัวอักษรสีดำสนิท** — ให้ใช้ `text_body` ซึ่งเป็นเทาเข้ม เนื้อความจะนุ่มขึ้นมาก
-- **หัวตารางตัวหนาแต่ไม่มีพื้นสี** — ตารางข้ามหน้าแล้วคนอ่านไม่รู้ว่าเริ่มตรงไหน
-- **ปล่อยความกว้างคอลัมน์ให้ Word คิดเอง** — ต้อง `fixed_widths()` เสมอ
-  ไม่งั้นคอลัมน์รหัสจะกว้างเท่าคอลัมน์รายละเอียด
-- **อีโมจิเยอะเกิน** — 1 ตัวต่อ callout พอ ไม่ใส่ในหัวข้อทุกอัน
-- **ส่งไฟล์โดยไม่เคย render ดู** — ดูข้อ 6
-- **สร้าง .docx โดยไม่เก็บ markdown ต้นฉบับ** — รอบหน้าแก้ไม่ได้
+- **Using Word's built-in Heading styles** — they override the colors you set. Use `h1()/h2()/h3()`,
+  which set `outlineLvl` themselves, so the table of contents (TOC) still shows the headings.
+- **Thick black default table borders** — the document looks dated at once. Use lines in the `line` color at 0.5pt between rows (under the header row is the 1.5pt brand line).
+- **Pure black text** — use `text_body`, a dark gray. The body text becomes much softer.
+- **Bold table headers with no fill color** — when a table spans pages, readers cannot tell where it starts.
+- **Letting Word work out column widths** — always call `fixed_widths()`.
+  Otherwise the code column ends up as wide as the detail column.
+- **Too many emoji** — 1 per callout is enough. Do not put one in every heading.
+- **Sending the file without ever rendering it** — see item 6.
+- **Creating the .docx without keeping the source markdown** — you cannot edit it next time.
 
 
 ## reference: api.md
@@ -724,80 +724,80 @@ Other rules for Thai documents:
 
 ## reference: tokens-and-type.md
 
-# Design tokens · สเกลตัวอักษร · องค์ประกอบที่ใช้ซ้ำ
+# Design tokens · type scale · reusable elements
 
-สารบัญ: tokens → ความหมายของสี → สเกลตัวอักษร → องค์ประกอบที่ใช้ซ้ำ
+Contents: tokens → color meanings → type scale → reusable elements
 
-ตารางนี้กำหนด**หน้าที่**ของแต่ละ token ไม่ได้กำหนดค่าสี
-ค่าจริงมาจากข้อ 0 แล้วตั้งครั้งเดียวด้วย `use_brand(...)`
+This table sets the **job** of each token, not the color value.
+The real values come from item 0, then you set them once with `use_brand(...)`.
 
-| Token | หน้าที่ | ได้มาจาก |
+| Token | Job | Comes from |
 |-------|---------|----------|
-| `brand` | หัวข้อ H1 · ตัวเลข KPI · แถบ accent · ลิงก์ (ถ้า `brand` ต่ำกว่า 4.5:1 บนพื้นขาว ใช้ `brand_deep` กับลิงก์) | สีแบรนด์ (ไม่มี → ค่าประจำบ้าน + `(รอยืนยัน)`) |
-| `brand_2` | accent รอง · ขีดใต้หัวข้อสไลด์ · ปลายไล่สี | เพื่อนบ้านของสีหลักบนวงล้อสี |
-| `brand_deep` | หัวข้อ H2 · ตัวอักษรหัวตาราง | สีหลักผสมดำ ให้ contrast ≥ 7:1 บนพื้นขาว |
-| `brand_tint` | พื้นหัวตาราง · การ์ด KPI · พื้นหน้าปก | สีหลักผสมขาวประมาณ 90% |
-| `brand_tint_2` | แถวสลับ (zebra) ในตารางยาว | สีหลักผสมขาวประมาณ 96% |
-| `text` | หัวข้อ H3 · ข้อความเน้น | เทาเข้มอมโทนเดียวกับสีหลัก |
-| `text_body` | เนื้อความทั้งหมด | เทาเข้มอ่อนกว่า `text` 1 ขั้น **ไม่ใช่ดำสนิท เพราะดำสนิทล้าตา** |
-| `text_muted` | คำบรรยายรูป · meta · footer | เทากลาง contrast ≥ 4.5:1 บนพื้นขาวและ `brand_tint` |
-| `line` | เส้นตาราง เส้นคั่น | เทาอ่อนมาก เห็นได้แต่ไม่แย่งสายตา |
+| `brand` | H1 headings · KPI numbers · accent bars · links (if `brand` is below 4.5:1 on a white background, use `brand_deep` for links) | The brand color (none → the house default + `(รอยืนยัน)` (awaiting confirmation)) |
+| `brand_2` | Secondary accent · underline under slide headings · end of a gradient | A neighbor of the main color on the color wheel |
+| `brand_deep` | H2 headings · table header text | The main color mixed with black, giving contrast ≥ 7:1 on white |
+| `brand_tint` | Table header fill · KPI cards · cover background | The main color mixed with white, about 90% |
+| `brand_tint_2` | Alternating (zebra) rows in long tables | The main color mixed with white, about 96% |
+| `text` | H3 headings · emphasized text | A dark gray tinted toward the main color |
+| `text_body` | All body text | A dark gray 1 step lighter than `text`. **Not pure black, because pure black tires the eyes** |
+| `text_muted` | Figure captions · meta · footer | A mid gray with contrast ≥ 4.5:1 on white and on `brand_tint` |
+| `line` | Table lines, dividers | A very light gray, visible but not competing for attention |
 
-**สีสถานะ 6 ตัว** (แต่ละตัวมีคู่สีพื้นกับสีตัวอักษร): สำเร็จ · ข้อมูล · เตือน · ผิดพลาด · เน้น · เป็นกลาง
-สีสถานะ**ไม่เปลี่ยนตามแบรนด์** เพราะเขียวคือผ่าน แดงคือไม่ผ่าน ในทุกเอกสาร
-พื้นคือเฉดอ่อนมาก ตัวอักษรคือเฉดเข้มของสีเดียวกัน ให้ contrast ≥ 4.5:1
+**6 status colors** (each has a fill color and a text color as a pair): success · info · warning · error · highlight · neutral
+Status colors **do not change with the brand**, because green means pass and red means fail in every document.
+The fill is a very light shade and the text is a dark shade of the same color, giving contrast ≥ 4.5:1.
 
-**ความหมายของแต่ละสี — เลือกสีตามความหมายเสมอ** (เหมือนกันทั้งเอกสารและไดอะแกรม)
+**What each color means — always choose a color by its meaning** (the same for documents and diagrams)
 
-| สี | หมายความว่า | ใช้กับ (callout / pill / กล่อง / เส้นในรูป) |
+| Color | Means | Used for (callout / pill / box / line in a figure) |
 |---|---|---|
-| แดง | อันตราย · ห้าม · ลบทิ้ง · ผิดพลาด · เลยกำหนด | `critical` · สถานะ "ค้าง/ล้มเหลว" · ขั้นที่ทำลายข้อมูล · เส้นที่พัง |
-| เหลือง/ส้ม | ระวัง · รอดำเนินการ · ข้อแม้ · ทางที่ไม่ใช่เส้นหลัก | `warning` · สถานะ "กำลังทำ" · โซน/เส้นข้อยกเว้น (`#C77A11`) |
-| เขียว | สำเร็จ · ผ่าน · ปลอดภัย · เสร็จแล้ว | `success` · สถานะ "เสร็จ" · ผลลัพธ์ที่ยืนยันแล้ว |
-| สีหลัก (สีแบรนด์ ไม่มีแบรนด์ใช้น้ำเงินประจำบ้าน) | ข้อมูล · การกระทำหลัก · เส้นทางปกติ | `tip` · ปุ่มหลัก · กล่อง/เส้นเส้นทางหลัก |
-| ม่วง | คำถาม · ทางเลือก · หมายเหตุเสริม | `question` · ของเสริมที่ไม่บังคับ |
-| เทา | เป็นกลาง · ปิดใช้งาน · ของภายนอก | `note` · ระบบภายนอก · ส่วนที่ปิดอยู่ |
+| Red | Danger · forbidden · delete · error · overdue | `critical` · status "stuck/failed" · a step that destroys data · a broken line |
+| Yellow/orange | Caution · waiting for action · caveat · a path that is not the main line | `warning` · status "in progress" · exception zone/line (`#C77A11`) |
+| Green | Success · pass · safe · done | `success` · status "done" · a confirmed result |
+| Main color (the brand color; with no brand, the house blue) | Information · main action · normal path | `tip` · primary button · box/line of the main path |
+| Purple | Question · option · side note | `question` · optional extras |
+| Gray | Neutral · disabled · external | `note` · external system · a part that is switched off |
 
-กฎเดียว: **เลือกสีตามความหมาย ไม่ใช่ตามความสวย** อย่าใช้แดงเพราะอยากให้เด่น ใช้แดงเฉพาะเมื่ออันตรายหรือผิดจริง และไดอะแกรมก็ใช้ชุดความหมายเดียวกันนี้ (ดู `software-diagrams` · `diagram-figures` ที่มี `EXCEPT_HUE` ส้มสำหรับทางที่ไม่ผ่านเส้นหลัก)
+The one rule: **choose a color by meaning, not by looks.** Do not use red just to stand out. Use red only when something is truly dangerous or wrong. Diagrams use this same set of meanings too (see `software-diagrams` · `diagram-figures`, which has the orange `EXCEPT_HUE` for paths that leave the main line).
 
-> **เกณฑ์ที่ต้องผ่านทุกชุดสี:** เนื้อความและ `text_muted` บนพื้น ≥ 4.5:1 · H2 และหัวตาราง (`brand_deep`) ≥ 7:1 ·
-> H1 และตัวเลข KPI (`brand` ตัวใหญ่ ตามนิยามตัวใหญ่ของ WCAG 2.2 ข้อ 1.4.3) ≥ 3:1 ·
-> พิมพ์ขาวดำแล้วยังแยกลำดับชั้นออก ถ้าไม่ผ่านให้ปรับความเข้ม ไม่เปลี่ยนสี
+> **Thresholds every color set must pass:** body text and `text_muted` on the background ≥ 4.5:1 · H2 and table headers (`brand_deep`) ≥ 7:1 ·
+> H1 and KPI numbers (`brand` in large size, per the WCAG 2.2 large-text definition, criterion 1.4.3) ≥ 3:1 ·
+> printed in black and white, the hierarchy must still be distinguishable. If a set fails, adjust the intensity and do not change the color.
 >
-> **ตัวอย่างชุดสีที่เคยใช้จริง** (ไม่ใช่ค่ามาตรฐาน อย่าคัดลอกไปใช้โดยไม่ดูเนื้องาน) → `references/palette-examples.md`
+> **A color set that was really used** (not a standard value; do not copy it without looking at the content of the work) → `references/palette-examples.md`
 
-> **เปลี่ยนแบรนด์ทั้งชุดในบรรทัดเดียว:**
+> **Change the whole brand in one line:**
 > `use_brand(brand="C1121F", brand_deep="780000", brand_tint="FDECEC")`
 
-## สเกลตัวอักษร (pt)
+## Type scale (pt)
 
-| ระดับ | Word | Slide | น้ำหนัก · สี |
+| Level | Word | Slide | Weight · color |
 |-------|------|-------|--------------|
-| ชื่อบนปก | 20 | 40 | bold · `brand` (Word) / `brand_deep` (สไลด์) |
+| Cover title | 20 | 40 | bold · `brand` (Word) / `brand_deep` (slides) |
 | H1 | 16 | 26 | bold · `brand` |
 | H2 | 12.5 | — | bold · `brand_deep` |
 | H3 | 11.5 | — | bold · `text` |
-| เนื้อความ | 11 | 17 | regular · `text_body` |
-| ตาราง | 11 | 12.5 | regular · `text_body` |
-| คำบรรยาย/footer | 8.5–9 | 10–12 | italic หรือ regular · `text_muted` |
+| Body | 11 | 17 | regular · `text_body` |
+| Table | 11 | 12.5 | regular · `text_body` |
+| Caption/footer | 8.5–9 | 10–12 | italic or regular · `text_muted` |
 
-**อย่าเพิ่มขนาดนอกสเกลนี้** เพราะทุกขนาดที่เพิ่มทำให้เอกสารดูไม่สม่ำเสมอ และคนอ่านสังเกตเห็น
+**Do not add sizes outside this scale.** Every extra size makes the document look inconsistent, and readers notice.
 
-## องค์ประกอบที่ใช้ซ้ำ (จากข้อ 4)
+## Reusable elements (from item 4)
 
-| องค์ประกอบ | หน้าตา | เมธอด |
+| Element | Look | Method |
 |-----------|--------|-------|
-| หน้าปก | โลโก้ + ชื่อสีแบรนด์ กลางหน้า | `cover()` |
-| ตาราง | หัวพื้น `brand_tint` ตัวอักษร `brand_deep` · เส้นแบรนด์ 1.5pt ใต้แถวหัว · เส้นระหว่างแถว `line` 0.5pt · หัวซ้ำทุกหน้า | `table()` |
-| ตารางสถานะ | คอลัมน์สถานะย้อมสีตามค่า | `pill_table()` |
-| แถบตัวเลขสรุป | การ์ดพื้น `brand_tint` ตัวเลขใหญ่สีแบรนด์ + ป้ายเทาเล็ก | `kpi_row()` |
-| กล่องข้อความ | พื้นสีอ่อน + แถบสีหนาด้านซ้าย + อีโมจิ 1 ตัว | `callout()` |
-| รูปพร้อมคำบรรยาย | รูปกลางหน้า + "รูปที่ N — ..." เอียงเทาใต้รูป | `figure()` |
-| บล็อกโค้ด | พื้นเทาอ่อน ฟอนต์ Consolas 9pt | `code()` |
-| ตารางเซ็น | บทบาท / ชื่อ / ลายเซ็น / วันที่ | `signoff()` |
+| Cover page | Logo + title in the brand color, centered on the page | `cover()` |
+| Table | Header fill `brand_tint` with `brand_deep` text · 1.5pt brand line under the header row · `line` 0.5pt between rows · header repeats on every page | `table()` |
+| Status table | The status column is tinted by value | `pill_table()` |
+| Summary figure strip | Cards with `brand_tint` fill, a big number in the brand color + a small gray label | `kpi_row()` |
+| Text box | Light fill + a thick colored bar on the left + 1 emoji | `callout()` |
+| Figure with caption | Figure centered on the page + "รูปที่ N — ..." in gray italic under the figure | `figure()` |
+| Code block | Light gray fill, Consolas 9pt font | `code()` |
+| Sign-off table | Role / name / signature / date | `signoff()` |
 
-**สัดส่วนที่พอดี:** callout ไม่เกิน 3–5 กล่องต่อ 10 หน้า · แถบตัวเลขสรุป (KPI strip) 3–5 ช่อง (ตั้งแต่ 6 ช่อง ตัวเลขจะเล็กจนไม่เด่น) ·
-ตารางเกิน 6 คอลัมน์ให้เปลี่ยนเป็นหน้าแนวนอน (`landscape_section()`)
+**Good proportions:** no more than 3–5 callouts per 10 pages · a summary figure strip (KPI strip) of 3–5 cells (from 6 cells on, the numbers get too small to stand out) ·
+a table with more than 6 columns should move to a landscape page (`landscape_section()`).
 
 
 ## reference: visual-check.md

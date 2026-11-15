@@ -3,72 +3,72 @@ name: config-and-secrets
 description: Use when settings differ by environment or secrets need hiding
 ---
 
-# Config และ Secret
+# Config and secrets
 
-> **กฎ 2 ข้อ:**
-> 1. โค้ดชุดเดียวกันต้องรันได้ทุก environment ความต่างอยู่ที่ config เท่านั้น
-> 2. secret ต้องไม่อยู่ใน git ไม่อยู่ใน log และไม่อยู่ในไฟล์ที่ส่งไปให้เบราว์เซอร์
+> **2 rules:**
+> 1. The same code must run in every environment. The only difference is config.
+> 2. A secret must not be in git, not in logs, and not in any file sent to the browser.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เริ่มโปรเจกต์ หรือเพิ่ม environment ใหม่
-- ต้องเก็บ connection string, API key, ใบรับรอง, กุญแจสำหรับเซ็น
-- เจอค่าคงที่ฝังอยู่ในโค้ด (hardcode) แล้วต้องย้ายออก
-- secret หลุดเข้า git หรือสงสัยว่าหลุด ให้ไปข้อ 8 ทันที
+- Starting a project, or adding a new environment.
+- You need to store a connection string, API key, certificate, or signing key.
+- You find a hardcoded value in code and must move it out.
+- A secret leaked into git, or you suspect it did: go to step 8 at once.
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill instead, or together
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| เก็บ secret ใน pipeline · ด่านอนุมัติ | `cicd-and-release` | แทน |
-| ค่าลับใน Jenkinsfile (`withCredentials` · single quote) | `jenkins-pipeline` | คู่ |
-| Secret ของ Kubernetes ไม่อยู่ใน values.yaml (External Secrets · SealedSecret) | `kubernetes-helm` | คู่ |
-| ออกแบบ login, token, สิทธิ์ผู้ใช้ | `auth-implementation-patterns` | แทน |
-| กันไม่ให้ค่าอ่อนไหวโผล่ใน log | `logging-standards` | แทน |
-| connection string ของฐานข้อมูล | `database-design` | คู่ |
-| บันทึกเหตุการณ์หลัง secret หลุด | `postmortem-template` | คู่ |
-| ขั้นตอนตอนเกิดเหตุ | `incident-runbook-template` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| Storing secrets in a pipeline · approval gates | `cicd-and-release` | instead |
+| Secrets in a Jenkinsfile (`withCredentials` · single quote) | `jenkins-pipeline` | together |
+| Kubernetes secrets kept out of values.yaml (External Secrets · SealedSecret) | `kubernetes-helm` | together |
+| Designing login, tokens, user permissions | `auth-implementation-patterns` | instead |
+| Keeping sensitive values out of logs | `logging-standards` | instead |
+| Database connection strings | `database-design` | together |
+| Recording the incident after a secret leak | `postmortem-template` | together |
+| Steps during an incident | `incident-runbook-template` | together |
+| Abbreviations in work people read | `spell-out-abbreviations` | together |
 
-**วิธีทำจริงในแต่ละภาษาและเฟรมเวิร์ก** อยู่ใน `references/per-stack.md`
+**How to do it in each language and framework** is in `references/per-stack.md`.
 
 ---
 
-## 1 · แยก config กับ secret ให้ออกก่อน
+## 1 · Tell config and secret apart first
 
 | | config | secret |
 |---|---|---|
-| ตัวอย่าง | ที่อยู่ API, ระดับ log, จำนวนต่อหน้า, โซนเวลา, feature flag | รหัสผ่านฐานข้อมูล, API key, กุญแจเซ็น token, ใบรับรอง |
-| อยู่ใน git ได้ | ✓ ได้ | ✗ ไม่ได้เด็ดขาด |
-| ใครเห็นได้ | ทั้งทีม | เฉพาะที่จำเป็น |
-| หลุดแล้วเป็นไร | ไม่เป็นไร | ต้องเพิกถอนและเปลี่ยนทันที |
-| เปลี่ยนบ่อย | ตามงาน | ตามรอบหมุนเวียน |
+| Examples | API address, log level, page size, time zone, feature flag | Database password, API key, token signing key, certificate |
+| Allowed in git | ✓ yes | ✗ never |
+| Who can see it | The whole team | Only those who need it |
+| If it leaks | No harm | Must be revoked and replaced at once |
+| Changes how often | With the work | On a rotation schedule |
 
-> **ถ้าตัดสินใจไม่ได้ว่าเป็นแบบไหน ให้ถือว่าเป็น secret** เพราะระวังเกินไปเสียแค่ความรำคาญเล็กน้อย
-> แต่ถ้าเดาผิด กุญแจจะอยู่ในประวัติ git ตลอดไป
-
----
-
-## 2 · ลำดับความสำคัญ — ค่าหลังทับค่าก่อน
-
-```
-1. ค่าเริ่มต้นในโค้ด        (ปลอดภัย ใช้ได้จริงสำหรับ dev)
-2. ไฟล์ config ตาม environment  (appsettings.Production.json, config/production.yaml)
-3. ตัวแปรสภาพแวดล้อม        (environment variable)
-4. secret store              (Key Vault, Secrets Manager, Kubernetes secret)
-5. อาร์กิวเมนต์ตอนสั่งรัน     (ใช้ตอนไล่ปัญหาเท่านั้น)
-```
-
-**ค่าเริ่มต้นต้องปลอดภัย** ถ้าลืมตั้งค่า ระบบต้องทำงานแบบเข้มงวดที่สุด
-เช่น `DEBUG=false` · `ALLOWED_ORIGINS=` ว่าง · เปิด Transport Layer Security (TLS) ไม่ใช่ตรงกันข้าม
+> **If you cannot decide which one it is, treat it as a secret.** Being too careful costs only a small annoyance.
+> But if you guess wrong, the key stays in git history forever.
 
 ---
 
-## 3 · ตรวจตอนบูต — ขาดค่าไหนให้ตายทันที
+## 2 · Order of priority: later values override earlier ones
 
-> **สำคัญ:** ข้อนี้คุ้มที่สุดในหน้านี้
-> ระบบที่บูตขึ้นมาได้ทั้งที่ config ผิด จะไปพังตอนตี 2 ในฟังก์ชันที่นาน ๆ ใช้ที
-> ระบบที่ **ไม่ยอมบูต** เมื่อ config ผิด ทำให้รู้ตั้งแต่ตอน deploy ซึ่งยัง rollback ได้
+```
+1. Defaults in code             (safe, really usable for dev)
+2. Config file per environment  (appsettings.Production.json, config/production.yaml)
+3. Environment variables
+4. Secret store                 (Key Vault, Secrets Manager, Kubernetes secret)
+5. Arguments at launch          (for troubleshooting only)
+```
+
+**Defaults must be safe.** If someone forgets to set a value, the system must run in its strictest mode.
+For example `DEBUG=false` · `ALLOWED_ORIGINS=` empty · Transport Layer Security (TLS) on, not the opposite.
+
+---
+
+## 3 · Check at boot: if any value is missing, die at once
+
+> **Important:** this step is worth the most on this page.
+> A system that boots with wrong config will break at 2 a.m. in a function that is rarely used.
+> A system that **refuses to boot** on wrong config tells you at deploy time, when you can still roll back.
 
 ```ts
 // Node — zod
@@ -80,44 +80,44 @@ const Env = z.object({
   LOG_LEVEL:     z.enum(['debug','info','warn','error']).default('info'),
 });
 
-export const env = Env.parse(process.env);   // ผิด = process ตายพร้อมบอกว่าตัวไหนผิด
+export const env = Env.parse(process.env);   // invalid = the process dies and says which value is wrong
 ```
 
-**สิ่งที่ต้องตรวจ:** มีค่าครบ · ชนิดถูก · อยู่ในช่วงที่ยอมรับ ·
-กุญแจยาวพอ · ค่าที่ห้ามใช้บน production (`JWT_SECRET=dev-secret` ต้องไม่ผ่าน)
+**What to check:** every value is present · types are right · values are in the accepted range ·
+keys are long enough · values banned on production (`JWT_SECRET=dev-secret` must fail).
 
-**พิมพ์สรุป config ตอนบูต**: ชื่อค่า และค่าที่ไม่ใช่ secret
-ส่วน secret พิมพ์แค่ "มีค่าแล้ว" หรือ 4 ตัวท้าย ไม่พิมพ์ค่าเต็ม
+**Print a config summary at boot:** the value names, and the values that are not secrets.
+For a secret, print only "set" or the last 4 characters, never the full value.
 
 ---
 
-## 4 · ตั้งชื่อตัวแปรสภาพแวดล้อม
+## 4 · Naming environment variables
 
 ```
-<ระบบ>_<กลุ่ม>_<ชื่อ>
+<system>_<group>_<name>
 
 APP_DB_HOST          APP_DB_PASSWORD
 APP_REDIS_URL        APP_SMTP_PASSWORD
 APP_FEATURE_NEW_CHECKOUT
 ```
 
-| กฎ | เหตุผล |
+| Rule | Reason |
 |---|---|
-| ตัวพิมพ์ใหญ่ ขีดล่าง | ข้อตกลงของทุกระบบปฏิบัติการ |
-| มีคำนำหน้าของระบบ | กัน `PATH`, `HOME`, `USER` ของระบบชนกัน |
-| ชื่อเดียวกันทุก environment | ค่าต่างได้ แต่ชื่อห้ามต่าง ไม่งั้นย้าย environment ทีไรต้องแก้โค้ด |
-| ใส่หน่วยในชื่อ | `APP_TIMEOUT_SECONDS` ไม่ใช่ `APP_TIMEOUT` |
-| อย่าใส่ชื่อ environment ในชื่อตัวแปร | ✗ `APP_PROD_DB_HOST` |
+| Uppercase with underscores | The convention on every operating system |
+| Start with a system prefix | Avoids clashing with the system's `PATH`, `HOME`, `USER` |
+| Same name in every environment | Values may differ, but names must not, or every move between environments means editing code |
+| Put the unit in the name | `APP_TIMEOUT_SECONDS`, not `APP_TIMEOUT` |
+| Do not put the environment name in the variable name | ✗ `APP_PROD_DB_HOST` |
 
 ---
 
-## 5 · `.env` และ `.env.example`
+## 5 · `.env` and `.env.example`
 
-| ไฟล์ | อยู่ใน git | หน้าที่ |
+| File | In git | Role |
 |---|:--:|---|
-| `.env.example` | ✓ | รายชื่อค่าที่ต้องมี **ทั้งหมด** พร้อมคำอธิบาย และค่าตัวอย่างที่ไม่ใช่ของจริง |
-| `.env` | ✗ | ค่าจริงบนเครื่องนักพัฒนาแต่ละคน |
-| `.env.production` | ✗ | **ไม่ควรมีไฟล์นี้เลย** เพราะ production ใช้ secret store |
+| `.env.example` | ✓ | The list of **all** required values, with explanations and example values that are not real |
+| `.env` | ✗ | Real values on each developer's machine |
+| `.env.production` | ✗ | **This file should not exist at all**, because production uses a secret store |
 
 ```bash
 # .gitignore
@@ -128,107 +128,107 @@ APP_FEATURE_NEW_CHECKOUT
 
 ```bash
 # .env.example
-APP_DB_HOST=localhost              # ที่อยู่ฐานข้อมูล
-APP_DB_PASSWORD=change-me          # สำคัญ: ค่าจริงอยู่ใน 1Password ห้องทีม
-APP_JWT_SECRET=                    # สำคัญ: สร้างด้วย: openssl rand -base64 48
+APP_DB_HOST=localhost              # database address
+APP_DB_PASSWORD=change-me          # important: the real value is in the team's 1Password vault
+APP_JWT_SECRET=                    # important: generate with: openssl rand -base64 48
 APP_LOG_LEVEL=debug
 ```
 
-**`.env.example` ต้องอัปเดตในคอมมิตเดียวกับที่เพิ่มค่าใหม่**
-ไม่งั้นคนถัดไปที่ clone จะเจอ error ที่ไม่มีใครอธิบายได้
+**Update `.env.example` in the same commit that adds a new value.**
+Otherwise the next person who clones hits an error nobody can explain.
 
-> **`.env` ที่ใส่ `.gitignore` ไม่ทัน**: ไฟล์ถูก track ไปแล้วแม้ครั้งเดียว
-> การเพิ่มใน `.gitignore` ทีหลัง**ไม่ลบมันออกจากประวัติ** ต้อง `git rm --cached` และถือว่า secret หลุดแล้ว
+> **A `.env` added to `.gitignore` too late:** once the file has been tracked, even once,
+> adding it to `.gitignore` later **does not remove it from history.** Run `git rm --cached` and treat the secret as leaked.
 
-**ด่านก่อน commit** (แนวคิดจาก wshobson secrets-management): `.gitignore` กันแค่ไฟล์ที่รู้ชื่อ แต่กุญแจที่เผลอวางในโค้ดหรือ YAML ต้องมีตัวสแกน — ติดตั้ง gitleaks เป็น pre-commit hook ของทุก repo (`gitleaks git --pre-commit --staged` ใน gitleaks 8.19 ขึ้นไป · รุ่นก่อนหน้าใช้ `gitleaks protect --staged`) และรันซ้ำใน CI ทั้งประวัติด้วย `gitleaks git --redact` · hook ตกแล้วห้าม `--no-verify` ให้ย้ายค่าออกก่อน · เจอใน history แล้วไปข้อ 8 ทันที ไม่ใช่แค่ลบบรรทัด
+**Pre-commit gate** (idea from wshobson secrets-management): `.gitignore` blocks only files you know by name, but a key pasted by mistake into code or YAML needs a scanner. Install gitleaks as a pre-commit hook in every repo (`gitleaks git --pre-commit --staged` in gitleaks 8.19 and later · earlier versions use `gitleaks protect --staged`) and rerun it in CI over the whole history with `gitleaks git --redact`. If the hook fails, never use `--no-verify`; move the value out first. If you find one in history, go to step 8 at once, not just delete the line.
 
 ---
 
-## 6 · เก็บ secret ไว้ที่ไหน
+## 6 · Where to keep secrets
 
-| สถานการณ์ | ใช้ | หมายเหตุ |
+| Situation | Use | Note |
 |---|---|---|
-| เครื่องนักพัฒนา | `.env` ที่ไม่เข้า git ส่วน .NET ใช้ `dotnet user-secrets` | ห้ามใช้ค่าของ production |
-| ทีมเล็ก แชร์กัน | ตัวจัดการรหัสผ่านของทีม (1Password, Bitwarden) | ไม่ใช่แชต ไม่ใช่อีเมล ไม่ใช่ Google Sheet |
-| production บนคลาวด์ | Azure Key Vault · AWS Secrets Manager · Google Secret Manager | ให้สิทธิ์ด้วย managed identity ไม่ใช่ key อีกอัน |
-| Kubernetes | External Secrets Operator ดึงจาก vault ข้างบน | secret ของ Kubernetes เองเป็นแค่ base64 **ไม่ใช่การเข้ารหัส** |
-| ต้องเก็บใน git จริง ๆ | SOPS หรือ sealed-secrets (เข้ารหัสก่อน commit) | ทางเลือกสุดท้าย |
+| Developer machine | A `.env` that stays out of git; for .NET use `dotnet user-secrets` | Never use production values |
+| Small team sharing | The team's password manager (1Password, Bitwarden) | Not chat, not email, not a Google Sheet |
+| Production in the cloud | Azure Key Vault · AWS Secrets Manager · Google Secret Manager | Grant access with a managed identity, not another key |
+| Kubernetes | External Secrets Operator pulling from a vault above | A Kubernetes secret is only base64, **not encryption** |
+| You really must store in git | SOPS or sealed-secrets (encrypt before commit) | Last resort |
 
-**สิทธิ์:** แต่ละ service อ่านได้เฉพาะ secret ของตัวเอง environment แยกกันสนิท และ
-ไม่มีบัญชีไหนอ่านได้ทุกอัน ยกเว้นบัญชีดูแลระบบที่บันทึกการเข้าถึง
+**Permissions:** each service reads only its own secrets, environments are fully separate, and
+no account can read all of them, except an admin account whose access is logged.
 
 ---
 
-## 7 · การหมุนเวียน (rotation)
+## 7 · Rotation
 
-**ออกแบบให้รองรับตั้งแต่วันแรก** ไม่ใช่รอถึงตอนต้องหมุนจริง
+**Design for it from day one**, not when you finally have to rotate.
 
-| ต้องมี | รายละเอียด |
+| Must have | Detail |
 |---|---|
-| ใช้ 2 ค่าพร้อมกันได้ | ระหว่างเปลี่ยน ทั้งค่าเก่าและใหม่ต้องใช้ได้ ไม่งั้นต้องปิดระบบ |
-| โหลดใหม่โดยไม่ต้อง restart | หรือยอมรับว่าต้อง deploy 1 รอบ และจดไว้ว่าต้องทำ |
-| รอบเวลา | กุญแจเซ็น token 90 วัน · รหัสฐานข้อมูล 180 วัน · ใบรับรองก่อนหมดอายุ 30 วัน |
-| ทำอัตโนมัติ | เพราะงานที่ต้องจำทำเอง สุดท้ายไม่มีใครทำ |
+| Two values valid at once | During the change, both the old and the new value must work, or you must shut the system down |
+| Reload without restart | Or accept that you need one deploy, and write down that it must be done |
+| Schedule | Token signing key 90 days · database password 180 days · certificate 30 days before expiry |
+| Automatic | A task that depends on someone remembering ends up done by nobody |
 
-**กุญแจสำหรับเซ็น token ต้องมี id กำกับ (key id)** เพื่อให้เซ็น token ใหม่ด้วยกุญแจใหม่แล้ว
-ก็ยังตรวจ token เก่าที่ยังไม่หมดอายุได้
-
----
-
-## 8 · เมื่อ secret หลุด — ลำดับสำคัญกว่าความเร็ว
-
-1. **เพิกถอนค่าเดิมก่อน**: ปิด key นั้นที่ต้นทาง
-2. ออกค่าใหม่ แล้ว deploy
-3. ตรวจ log ย้อนหลังว่ามีใครใช้จากที่ที่ไม่ใช่ของเราไหม
-4. ลบออกจากประวัติ git (`git filter-repo`) และแจ้งทุกคนให้ clone ใหม่ (ถ้าต้อง force push ให้รอผู้ใช้อนุมัติก่อน · แจ้งทีมก่อน)
-5. บันทึกเหตุการณ์ด้วย `postmortem-template`
-
-> **ข้อ 4 ไม่ใช่ข้อ 1** เพราะลบ commit แล้วกุญแจก็ไม่ปลอดภัยขึ้นเลย
-> ใครที่ fork หรือ clone ไปแล้ว รวมถึงข้อมูลสำรองของผู้ให้บริการ ยังมีค่าเดิมอยู่
-> **ถือว่าทุก secret ที่เคยเข้า git คือหลุดแล้ว** แม้ repo จะเป็น private
+**A token signing key must carry an id (key id)**, so that after signing new tokens with the new key,
+you can still verify old tokens that have not expired.
 
 ---
 
-## 9 · อย่าให้ secret ไหลออกทางอื่น
+## 8 · When a secret leaks: order matters more than speed
 
-| ทางรั่ว | วิธีปิด |
+1. **Revoke the old value first:** disable that key at its source.
+2. Issue a new value, then deploy.
+3. Check past logs for anyone using it from a place that is not ours.
+4. Remove it from git history (`git filter-repo`) and tell everyone to clone again. (If you must force push, wait for the user's approval and tell the team first.)
+5. Record the incident with `postmortem-template`.
+
+> **Step 4 is not step 1**, because deleting the commit does not make the key any safer.
+> Anyone who forked or cloned already, and the provider's backups, still have the old value.
+> **Treat every secret that has ever been in git as leaked**, even if the repo is private.
+
+---
+
+## 9 · Do not let secrets flow out other ways
+
+| Leak path | How to close it |
 |---|---|
-| log | รายการคำที่ต้องปิดบัง ดูที่ `logging-standards` |
-| ข้อความ error ที่ส่งให้ client | คืนเฉพาะ `requestId` ไม่ใช่ stack trace หรือ connection string |
-| รายงาน crash / ตัวติดตามข้อผิดพลาด | ตั้งตัวกรองข้อมูลอ่อนไหวก่อนส่งออก |
-| ประวัติคำสั่งใน shell | ใช้ `read -s` หรืออ่านจากไฟล์ แทนการพิมพ์ค่าลงบรรทัดคำสั่ง |
-| `docker history` | อย่าใส่ secret ใน `ARG`/`ENV` ตอน build ให้ใช้ mount ตอนรันแทน |
-| ไฟล์สำรองข้อมูลและ dump | เข้ารหัส และเก็บที่ที่คุมสิทธิ์ได้ |
-| ภาพหน้าจอในเอกสารและ issue | ปิดบังก่อนแนบเสมอ |
+| Logs | The list of terms to mask is in `logging-standards` |
+| Error messages sent to the client | Return only a `requestId`, not a stack trace or connection string |
+| Crash reports / error trackers | Set a sensitive-data filter before sending out |
+| Shell command history | Use `read -s` or read from a file, instead of typing the value on the command line |
+| `docker history` | Do not put secrets in `ARG`/`ENV` at build time; use a mount at run time instead |
+| Backup files and dumps | Encrypt them and store them where you control access |
+| Screenshots in documents and issues | Always mask before attaching |
 
 ---
 
-## 10 · config ของ frontend — ไม่มีอะไรลับ
+## 10 · Frontend config: nothing in it is secret
 
-> **สำคัญ:** ทุกอย่างที่อยู่ในไฟล์ที่เบราว์เซอร์โหลด **คือข้อมูลสาธารณะ**
-> ไม่ว่าจะชื่อว่า `VITE_SECRET_KEY` หรืออยู่ในไฟล์ที่ถูกย่อจนอ่านไม่ออกก็ตาม
-> การย่อโค้ดไม่ใช่การเข้ารหัส เปิด DevTools ก็เห็น
+> **Important:** everything in a file the browser loads **is public information**,
+> whether it is named `VITE_SECRET_KEY` or sits in a file minified until it is unreadable.
+> Minifying code is not encryption. Open DevTools and you can see it.
 
-| ใส่ใน frontend ได้ | ต้องอยู่ฝั่งเซิร์ฟเวอร์เท่านั้น |
+| Allowed in the frontend | Must stay on the server only |
 |---|---|
-| ที่อยู่ API · ชื่อ environment | API key ของบริการภายนอกทุกชนิด |
-| กุญแจสาธารณะ (publishable key) ของผู้ให้บริการชำระเงิน | กุญแจลับ (secret key) ของผู้ให้บริการเดียวกัน |
-| feature flag ที่ไม่ลับ | กฎการคิดราคา · เกณฑ์อนุมัติ |
-| รหัสเว็บของตัววัดสถิติ | token ที่เรียก API ของบุคคลที่สาม |
+| API address · environment name | API keys of any external service |
+| Publishable key of a payment provider | The secret key of the same provider |
+| Feature flags that are not secret | Pricing rules · approval thresholds |
+| Web ID of an analytics tool | Tokens that call a third party's API |
 
-**ถ้าต้องการเปลี่ยนค่าโดยไม่ build ใหม่** ให้โหลด `/config.json` ตอนแอปเริ่มทำงาน
-แทนการฝังค่าตอน build (`import.meta.env`) ที่ล็อกค่าติดไปกับไฟล์ที่ build ได้
+**If you need to change a value without rebuilding,** load `/config.json` when the app starts,
+instead of embedding the value at build time (`import.meta.env`), which locks the value into the built files.
 
 ---
 
 ## 11 · Anti-patterns
 
-- **connection string ในโค้ด** แม้จะเป็นของ dev เพราะสักวันจะมีคนลอกแบบนี้ไปใช้กับ production
-- **`.env` ของ production วางไว้บนเซิร์ฟเวอร์** ใครเข้าเครื่องได้ก็อ่านได้ และไม่มีบันทึกว่าใครอ่าน
-- **secret เดียวกันทุก environment** พอ staging หลุด production ก็หลุดด้วย
-- **ส่ง secret ทางแชตหรืออีเมล** ค่าจะอยู่ในนั้นตลอดไป และค้นเจอด้วย
-- **ไม่มี `.env.example`** คนใหม่จะเสียเวลาครึ่งวันเดาว่าต้องมีค่าอะไรบ้าง
-- **บูตผ่านทั้งที่ config ไม่ครบ** แล้วไปพังตอนใช้งานจริง
-- **พิมพ์ config ทั้งก้อนลง log ตอนบูต** รวม secret
-- **`ALLOWED_ORIGINS=*` บน production** เพราะ "ตอน dev มันติด Cross-Origin Resource Sharing (CORS)"
-- **กุญแจที่ไม่เคยเปลี่ยนเลยตั้งแต่ปีแรก**
+- **A connection string in code**, even a dev one, because one day someone will copy it for production.
+- **A production `.env` placed on the server.** Anyone who can enter the machine can read it, and nothing records who read it.
+- **The same secret in every environment.** When staging leaks, production leaks too.
+- **Sending secrets by chat or email.** The value stays there forever, and is searchable.
+- **No `.env.example`.** A new person wastes half a day guessing which values are needed.
+- **Booting successfully with incomplete config,** then breaking in real use.
+- **Printing the whole config to the log at boot,** secrets included.
+- **`ALLOWED_ORIGINS=*` on production** because "it was blocked by Cross-Origin Resource Sharing (CORS) in dev."
+- **A key that has never changed since the first year.**

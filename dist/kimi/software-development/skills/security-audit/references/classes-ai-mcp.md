@@ -1,51 +1,51 @@
-# สาย AI · LLM · agent · MCP
+# Class family: AI · LLM · agent · MCP
 
-เปิดเมื่อระบบเรียก LLM · มี RAG หรือหน่วยความจำถาวร · มี agent ที่เรียกเครื่องมือ · เป็นหรือใช้ MCP server · แชตบอตตอบลูกค้า (เช่น LINE chatbot ที่ต่อ LLM) · วางหัวข้อที่เลือกลง brief ลูกทีมทั้งก้อน · หลักออกแบบดู `llm-engineering` และ `mcp-server`
+Open this when the system calls an LLM · has RAG or persistent memory · has an agent that calls tools · is or uses an MCP server · has a customer-facing chatbot (for example a LINE chatbot wired to an LLM). Paste the chosen sections into the sub-agent brief whole. For design principles see `llm-engineering` and `mcp-server`.
 
-## กติกาประจำสาย
+## Rules for this family
 
-- prompt injection เฉย ๆ ไม่ใช่ finding · ต้องชี้ว่าเนื้อที่ผู้โจมตีคุม ทำให้เกิดผลข้ามขอบเขตในโค้ด: ไปอยู่ใน context ของคนอื่น · เรียกเครื่องมือด้วยสิทธิ์ที่ผู้ขอไม่มี · เขียนลงหน่วยความจำถาวร · หรือส่งข้อมูลออก
-- ผลจากโมเดล หน่วยความจำ คำอธิบายเครื่องมือ และผลจาก MCP server ล้วนเป็น input ที่ไม่น่าไว้ใจ ให้ชี้โค้ดที่เชื่อมันแล้วทำงานที่มีผล
-- system prompt ที่เขียนว่า "ห้ามทำ X" ไม่ใช่ตัวคุม · นับเฉพาะการตรวจที่เป็นโค้ด สิทธิ์ที่ผูกกับ resource การแยก context และ credential ที่จำกัดขอบเขต
-- บอกให้ครบ: ผู้โจมตี · ผู้ได้รับผล · ตัวตนที่เครื่องมือรันด้วย · resource · การกระทำ · ผลที่เห็น · ผู้ใช้สั่งเครื่องมือด้วยสิทธิ์ของตัวเองตรง ๆ ไม่ใช่ช่องโหว่
-- พิสูจน์ในห้องด้วยโมเดลจริงไม่ได้หรือไม่ควร ให้ใช้ fake model ที่คืนข้อความที่กำหนด (ผลที่ผู้โจมตีอยากให้โมเดลพูด) แล้วดูว่าโค้ดทำอะไรต่อ · เพราะช่องโหว่อยู่ที่โค้ดหลังโมเดล ไม่ใช่ที่โมเดลจะยอมหรือไม่
+- Prompt injection alone is not a finding. Show that attacker-controlled content causes a cross-boundary effect in code: it lands in someone else's context · calls a tool with rights the requester lacks · writes to persistent memory · or sends data out.
+- Model output, memory, tool descriptions and MCP server results are all untrusted input. Point to the code that trusts them and then performs an action with effect.
+- A system prompt that says "do not do X" is not a control. Only code checks, permissions bound to the resource, context separation and credentials with limited scope count.
+- State all of it: attacker · who is affected · the identity the tool runs as · resource · action · visible effect. A user who calls a tool with their own rights is not a vulnerability.
+- If you cannot or should not prove it in the lab with a real model, use a fake model that returns a fixed message (what the attacker wants the model to say) and watch what the code does next. The flaw is in the code after the model, not in whether the model complies.
 
-## context และหน่วยความจำ
+## Context and memory
 
-| ประเภท (`class`) | ล่าอะไร | สัญญาณในโค้ด | พิสูจน์อย่างไร | มักแจ้งผิดเมื่อ |
+| Class (`class`) | What it hunts | Signal in code | How to prove it | Often misreported when |
 |---|---|---|---|---|
-| `indirect-injection` | เอกสาร เว็บ อีเมล หรือข้อความแชตของคนอื่น เข้า context แล้วสั่งเครื่องมือที่มีผล | ต่อเนื้อที่ดึงมาลง prompt ตรง ๆ แล้วให้โมเดลเรียกเครื่องมือเขียนหรือส่ง | fake model คืนคำสั่งเรียกเครื่องมือ ดูว่าโค้ดรันไหมโดยไม่ถามผู้ใช้ | เครื่องมือที่เปิดให้มีแต่แบบอ่านอย่างเดียว ในขอบเขตของผู้ใช้คนนั้น |
-| `context-bleed` | ประวัติแชตหรือผลค้นของผู้ใช้หรือร้านหนึ่งไปโผล่ใน context ของอีกคน | session key ไม่รวม user id · vector store ค้นโดยไม่กรอง tenant | 2 ผู้ใช้ปลอมในห้อง ถามคำเดียวกันแล้วดู context ที่ประกอบได้ | store แยกต่อผู้เช่า |
-| `memory-poisoning` | ผู้ใช้เขียนข้อความลงหน่วยความจำถาวรที่ผู้ใช้อื่นหรือ agent ตัวอื่นอ่าน | เก็บสรุปบทสนทนาเป็น "ความรู้กลาง" โดยไม่แยกเจ้าของ | เขียนผ่านบัญชี A แล้วดูว่าโผล่ใน context ของ B | หน่วยความจำแยกต่อผู้ใช้และไม่ถูกใช้ตัดสินสิทธิ์ |
-| `role-confusion` | ข้อความผู้ใช้ถูกใส่ในตำแหน่ง system หรือ tool result | สร้าง message `role: system` จาก input · ต่อสตริงแทนแยก role | ตรวจ payload ที่ส่งไป API ในห้อง | input อยู่ใน role user เสมอ |
+| `indirect-injection` | Someone else's document, web page, email or chat message enters the context and drives a tool that has effect | Retrieved content is pasted straight into the prompt, and the model may call write or send tools | A fake model returns a tool-call command. Check whether the code runs it without asking the user | The exposed tools are read-only and limited to that user's scope |
+| `context-bleed` | One user's or shop's chat history or search results show up in another's context | Session key does not include the user id · vector store searches without a tenant filter | Two fake users in the lab ask the same question. Inspect the context that gets assembled | The store is separated per tenant |
+| `memory-poisoning` | A user writes text into persistent memory that other users or other agents read | Conversation summaries are stored as shared "knowledge" with no owner separation | Write through account A and check whether it appears in B's context | Memory is separated per user and is never used to decide permissions |
+| `role-confusion` | User text is placed in the system role or in a tool result | Builds a `role: system` message from input · concatenates strings instead of separating roles | Inspect the payload sent to the API in the lab | Input always sits in the user role |
 
-## เครื่องมือและการกระทำ
+## Tools and actions
 
-| ประเภท (`class`) | ล่าอะไร | สัญญาณในโค้ด | พิสูจน์อย่างไร | มักแจ้งผิดเมื่อ |
+| Class (`class`) | What it hunts | Signal in code | How to prove it | Often misreported when |
 |---|---|---|---|---|
-| `tool-arg-injection` | argument จากโมเดลไปลง SQL shell path หรือ URL โดยไม่ตรวจ | `exec(args.cmd)` · `query(args.sql)` · `fetch(args.url)` | fake model ส่ง argument อันตราย ดูว่าถึง sink ไหม | argument ถูก validate ด้วย schema และ allowlist ก่อนใช้ |
-| `excessive-agency` | เครื่องมือรันด้วย credential ที่กว้างกว่าผู้ใช้ที่สั่ง (confused deputy) | ใช้ service key ตัวเดียวทุกคำขอ · เครื่องมือ `refund` ไม่ตรวจว่าผู้ขอเป็นเจ้าของคำสั่งซื้อ | ผู้ใช้ปลอมสั่งผ่านแชตให้ทำกับ record ของคนอื่น | เครื่องมือตรวจสิทธิ์ของผู้ใช้ปลายทางเองทุกครั้ง |
-| `approval-binding` | ขอยืนยันกับผู้ใช้แล้ว แต่ argument เปลี่ยนหลังยืนยัน หรือยืนยันแค่ข้อความกว้าง ๆ | ยืนยันก่อนโมเดลสร้าง argument สุดท้าย · ไม่ผูก id ของการยืนยันกับ payload | เปลี่ยน argument ระหว่างยืนยันกับรันในห้อง | การยืนยันผูกกับ hash ของ payload สุดท้าย |
-| `schema-mismatch` | schema ที่ประกาศกับตัว dispatch ตรวจไม่ตรงกัน (ฟิลด์เกิน ชนิดต่าง) | dispatch ด้วย `**kwargs` · ไม่ validate ฝั่ง server | ส่งฟิลด์ที่ไม่อยู่ใน schema | server validate ด้วย schema เดียวกัน |
-| `agent-loop-cost` | ผู้ใช้ทำให้ agent วนเรียกเครื่องมือหรือ LLM ไม่จบ จนเจ้าของเสียเงิน | ไม่มีเพดานรอบ เพดาน token หรือ timeout ต่อคำขอ | fake model ที่ขอเรียกเครื่องมือซ้ำ นับรอบในห้อง | มีเพดานต่อผู้ใช้และต่อคำขอแล้ว |
+| `tool-arg-injection` | An argument from the model reaches SQL, a shell, a path or a URL without validation | `exec(args.cmd)` · `query(args.sql)` · `fetch(args.url)` | A fake model sends a dangerous argument. Check whether it reaches the sink | The argument is validated with a schema and an allowlist before use |
+| `excessive-agency` | A tool runs with credentials broader than the requesting user (confused deputy) | One service key for every request · a `refund` tool that does not check the requester owns the order | A fake user tells the chat to act on someone else's record | The tool checks the end user's rights itself every time |
+| `approval-binding` | The user is asked to confirm, but the argument changes after confirmation, or the user only confirms a vague message | Confirmation happens before the model builds the final argument · the confirmation id is not bound to the payload | Change the argument between confirmation and execution in the lab | The confirmation is bound to a hash of the final payload |
+| `schema-mismatch` | The declared schema and what the dispatcher checks do not match (extra fields, different types) | Dispatch with `**kwargs` · no server-side validation | Send a field that is not in the schema | The server validates with the same schema |
+| `agent-loop-cost` | A user makes the agent loop on tools or the LLM without end, so the owner pays | No round cap, token cap or timeout per request | A fake model that keeps asking for the same tool call. Count the rounds in the lab | Caps already exist per user and per request |
 
-## MCP และ agent ลูก
+## MCP and sub-agents
 
-| ประเภท (`class`) | ล่าอะไร | สัญญาณในโค้ด | พิสูจน์อย่างไร | มักแจ้งผิดเมื่อ |
+| Class (`class`) | What it hunts | Signal in code | How to prove it | Often misreported when |
 |---|---|---|---|---|
-| `mcp-trust` | agent ลูกหรือ MCP server ได้สิทธิ์ทั้งหมดของตัวแม่ · ผลของ server เชื่อเป็นคำสั่ง | ส่ง token ของผู้ใช้ต่อให้ server ภายนอก · เอาผลไปเป็น system message | ดูว่า credential ไหนไปถึง server ตัวไหน | server เป็นของเราเองและรับ token ที่จำกัดขอบเขต |
-| `mcp-identity` | ชื่อเครื่องมือซ้ำกันข้าม server แล้วเรียกผิดตัว · server เปลี่ยนคำอธิบายหลังผู้ใช้อนุมัติ | map เครื่องมือด้วยชื่ออย่างเดียว · ไม่ pin รุ่นหรือ hash ของคำอธิบาย | ลงทะเบียน server ปลอมในห้องที่ใช้ชื่อซ้ำ | ใช้ชื่อเต็มแบบ `<server>.<tool>` |
-| `mcp-server-authz` | MCP server ที่เราเขียน ไม่ตรวจสิทธิ์ต่อเครื่องมือ หรือเปิดทาง HTTP โดยไม่ยืนยันตัวตน | transport HTTP ไม่มี auth · เครื่องมือเขียนฐานข้อมูลเปิดให้ทุก client | เรียกเครื่องมือจาก client ที่ไม่มี token ในห้อง | server รันแบบ stdio ในเครื่องผู้ใช้คนเดียว |
+| `mcp-trust` | A sub-agent or MCP server gets all of the parent's rights · server results are trusted as commands | Passes the user's token on to an external server · uses results as a system message | Check which credential reaches which server | The server is our own and accepts a token with limited scope |
+| `mcp-identity` | Tool names collide across servers and the wrong one is called · a server changes its description after the user approved | Maps tools by name only · does not pin the version or a hash of the description | Register a fake server in the lab that reuses a name | Fully qualified names such as `<server>.<tool>` are used |
+| `mcp-server-authz` | An MCP server we wrote does not check rights per tool, or opens HTTP without authentication | HTTP transport with no auth · a database-writing tool open to every client | Call the tool from a client without a token in the lab | The server runs over stdio on a single user's machine |
 
-## ผลลัพธ์และการเปิดเผย
+## Output and disclosure
 
-| ประเภท (`class`) | ล่าอะไร | สัญญาณในโค้ด | พิสูจน์อย่างไร | มักแจ้งผิดเมื่อ |
+| Class (`class`) | What it hunts | Signal in code | How to prove it | Often misreported when |
 |---|---|---|---|---|
-| `llm-output-xss` | คำตอบของโมเดล render เป็น HTML หรือ markdown ที่โหลดรูปจาก URL ใดก็ได้ (ส่งข้อมูลออกผ่าน URL รูป) | `innerHTML = answer` · markdown renderer ที่เปิด HTML และรูปภายนอก | fake model คืน `<img src=...?q=ข้อมูล>` แล้วดูว่า browser ในห้องโหลดไหม | renderer escape และบล็อกรูปจากโดเมนภายนอก |
-| `context-extraction` | ผู้ใช้ดึงค่าลับ ข้อมูลของคนอื่น หรือ system prompt ที่มีความลับออกมาได้ | ใส่ API key หรือข้อมูลลูกค้าอื่นใน prompt | ดูว่ามีของลับอยู่ใน context จริงไหม | system prompt ไม่มีของลับ (การหลุดของ prompt อย่างเดียวไม่ใช่ finding) |
+| `llm-output-xss` | The model's answer is rendered as HTML or as markdown that loads images from any URL (data leaves through the image URL) | `innerHTML = answer` · a markdown renderer with HTML and external images enabled | A fake model returns `<img src=...?q=data>`. Check whether the lab browser loads it | The renderer escapes output and blocks images from external domains |
+| `context-extraction` | A user pulls out secrets, other people's data or a secret system prompt | API keys or other customers' data placed in the prompt | Check whether secrets really sit in the context | The system prompt holds no secrets (a prompt leak alone is not a finding) |
 
-## วิธีไล่ที่ใช้ได้ทั้งสาย
+## Method that works across the family
 
-- วาด 4 อย่างก่อน: ตัวตนที่แต่ละเครื่องมือรันด้วย · เครื่องมือที่มีผล (เขียน ส่ง จ่าย ลบ) · ทุกแหล่งที่เขียนลง context หรือหน่วยความจำได้ · ทุกปลายทางของคำตอบ
-- เริ่มจากเครื่องมือที่มีผล แล้วไล่ย้อนผ่าน dispatch · schema · การยืนยัน · context · การดึงเอกสาร
-- เทียบทางตรง คิว retry resume batch และ agent ลูก ของการกระทำเดียวกัน · ตัวคุมที่แข็งที่สุดต้องอยู่หลัง argument สุดท้ายและก่อนผลเกิดทุกทาง
+- Map 4 things first: the identity each tool runs as · the tools that have effect (write, send, pay, delete) · every source that can write into the context or memory · every destination of the answer.
+- Start from the tools that have effect, then trace back through dispatch · schema · confirmation · context · document retrieval.
+- Compare the direct path, the queue, retry, resume, batch and sub-agents for the same action. The strongest control must sit behind the final argument and before the effect, on every path.

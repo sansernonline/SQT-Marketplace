@@ -712,42 +712,42 @@ The column template and the values used in each field live in one place, the [qu
 
 ## reference: playbook-bills.md
 
-# playbook · bills — อ่านบิลและติดตามค่าใช้จ่ายรายเดือน
+# playbook · bills — read bills and track monthly costs
 
-ใช้เมื่อ: บิลไฟหรือน้ำแพงขึ้น · อยากติดตามค่าบ้านทุกเดือน · ตั้งตัดบัญชีอัตโนมัติ
-skill หลัก: `household-bills`
+Use when: the electricity or water bill went up · the user wants to track household costs every month · setting up automatic payment
+Main skill: `household-bills`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. อ่านบิลจริงที่ผู้ใช้ส่งมา คัดหน่วย ยอด ค่า Ft วันครบกำหนด ลงตารางติดตาม · ใคร: `home-manager` ตัวใหม่
-2. เทียบกับ 3 เดือนก่อน ถ้าขึ้นเกิน 20% ให้ไล่หาเหตุตาม `household-bills` (อัตราใหม่ · จำนวนวันในรอบ · เครื่องใช้ใหม่ · รั่ว) · ใคร: `home-manager` ตัวใหม่
-3. ตรวจอัตราปัจจุบันจากเว็บการไฟฟ้าหรือการประปาของพื้นที่ · ใคร: `home-manager` ตัวใหม่
-4. สรุปเหตุที่เป็นไปได้เรียงจากน่าจะเป็นที่สุด และสิ่งที่ผู้ใช้ตรวจเองได้ในบ้าน · ใคร: `home-manager` ตัวใหม่
-5. ตั้งเตือนวันครบกำหนดของทุกบิล · ใคร: `home-manager` ตัวใหม่ · `reviewer` ตัวใหม่ตรวจทั้งชุดกับบิลจริงและเว็บทางการ
+1. Read the real bill the user sent. Copy the units, amount, Ft charge, and due date into the tracking table · ใคร: `home-manager` ตัวใหม่
+2. Compare with the 3 months before. If the bill rose by more than 20%, look for the cause per `household-bills` (new rate · number of days in the cycle · new appliance · leak) · ใคร: `home-manager` ตัวใหม่
+3. Check (ตรวจ) the current rate on the website of the local electricity or water authority · ใคร: `home-manager` ตัวใหม่
+4. Summarize the possible causes from most to least likely, and what the user can check at home · ใคร: `home-manager` ตัวใหม่
+5. Set a reminder for the due date of every bill · ใคร: `home-manager` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the whole set against the real bills and the official websites
 
-## จบเมื่อ
+## Done when
 
-ตารางบิลตรงกับบิลจริง และคำอธิบายเหตุบิลขึ้นที่ตรวจได้
+The bill table matches the real bills, and the explanation of why the bill rose is something that can be checked
 
 
 ## reference: playbook-care-setup.md
 
-# playbook · care-setup — ตั้งระบบดูแลผู้สูงอายุ เด็ก หรือสัตว์เลี้ยง
+# playbook · care-setup — set up care for an older adult, a child, or a pet
 
-ใช้เมื่อ: เริ่มดูแลพ่อแม่สูงอายุ · เด็กเข้าเรียนหรือย้ายโรงเรียน · รับสัตว์เลี้ยงใหม่
-skill หลัก: `elder-care` · `kids-school` · `pet-care`
+Use when: starting to care for an elderly parent · a child starts school or changes school · a new pet arrives
+Main skills: `elder-care` · `kids-school` · `pet-care`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ทำรายการสิทธิ์ที่เกี่ยว (เบี้ยยังชีพ · สิทธิ์รักษา · เงินอุดหนุนเด็ก · ลดหย่อน) ตรวจกับเว็บหน่วยงานทางการ พร้อมเอกสารที่ต้องใช้และขั้นตอนยื่น · ใคร: `family-planner` ตัวใหม่
-2. ทำบันทึกประจำตัว — นัดแพทย์และยาของผู้สูงอายุ · ปฏิทินเทอม · ประวัติวัคซีนสัตว์ · ถ้าดูแลผู้สูงอายุ เพิ่มเช็กลิสต์ป้องกันการหกล้มในบ้านและบันทึกส่งต่อผู้ดูแล · ใคร: `family-planner` ตัวใหม่
-3. ทำไฟล์เตือน `.ics` ทุกวันครบกำหนด ให้ผู้ใช้นำเข้าปฏิทินเอง · ใคร: `family-planner` ตัวใหม่
-4. ตรวจทั้งชุด (สิทธิ์ · ยา · นัด · วันในไฟล์ `.ics`) กับเว็บทางการและเอกสารจริง · ใคร: `reviewer` ตัวใหม่
-   ไม่ผ่าน → `family-planner` ตัวใหม่แก้ แล้ว `reviewer` ตัวใหม่ตรวจซ้ำ (ไม่เกิน 5 รอบ)
+1. List the related entitlements (elderly living allowance · medical coverage · child subsidy · tax deductions). Check (ตรวจ) them against official agency websites, with the documents needed and the filing steps · ใคร: `family-planner` ตัวใหม่
+2. Make a personal record: the older adult's doctor appointments and medicines · the school term calendar · the pet's vaccine history. For elder care, add a home fall-prevention checklist and a handover note for caregivers · ใคร: `family-planner` ตัวใหม่
+3. Make an `.ics` reminder file for every due date, for the user to import into their own calendar · ใคร: `family-planner` ตัวใหม่
+4. Check (ตรวจ) the whole set (entitlements · medicines · appointments · dates in the `.ics` file) against official websites and the real documents · ใคร: `reviewer` ตัวใหม่
+   If it fails, a fresh `family-planner` fixes it and a fresh `reviewer` checks again (at most 5 rounds)
 
-## จบเมื่อ
+## Done when
 
-บันทึกประจำตัวและรายการสิทธิ์ที่ตรวจกับแหล่งทางการแล้ว พร้อมเตือนครบ
+The personal record and the entitlement list are checked against official sources, with all reminders set
 
 
 ## reference: playbook-cert-prep.md
@@ -772,182 +772,182 @@ The plan covers every topic in the official exam guide, and a practice-exam scor
 
 ## reference: playbook-checkup-cycle.md
 
-# playbook · checkup-cycle — รอบตรวจสุขภาพประจำปี
+# playbook · checkup-cycle — the yearly health checkup
 
-ใช้เมื่อ: วางแผนตรวจสุขภาพประจำปี · เทียบแพ็กเกจโรงพยาบาล · บันทึกผลตรวจหลายปี
-skill หลัก: `annual-checkup`
+Use when: planning the yearly health checkup · comparing hospital packages · recording results across several years
+Main skill: `annual-checkup`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ดูช่วงอายุและเพศของผู้ที่จะตรวจ และสิทธิ์ที่มี (ประกันสังคม · บัตรทอง · สวัสดิการบริษัท) · ใคร: หัวหน้าทีม
-2. ทำรายการตรวจตามช่วงอายุจาก `annual-checkup` และตรวจกับเว็บหน่วยงานทางการว่ารายการไหนฟรีตามสิทธิ์ · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ตรวจกับเว็บทางการ
-3. เทียบแพ็กเกจที่ผู้ใช้ส่งมากับรายการที่ฟรีอยู่แล้ว แล้วบอกว่าจ่ายเพิ่มได้อะไร · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ตรวจก่อนถึงผู้ใช้
-4. เตรียมเช็กลิสต์วันตรวจ — งดอาหาร เอกสาร คำถาม · ใคร: `health-organizer` ตัวใหม่
-5. หลังตรวจ คัดค่าจากใบผลลงตารางติดตามหลายปี **ตรงตัว ไม่แปลผล** ส่วนค่าที่ห้องแล็บทำเครื่องหมายว่าผิดปกติ ให้จดเป็นคำถามถึงแพทย์ · ใคร: `health-organizer` ตัวใหม่คัดค่า · `reviewer` ตัวใหม่ตรวจกับใบผลและตรวจเช็กลิสต์วันตรวจข้อ 4 ก่อนถึงผู้ใช้
+1. Note the age range and sex of the person being checked, and the entitlements they have (Social Security · Gold Card (universal coverage) · company benefits) · ใคร: หัวหน้าทีม
+2. Make the checkup list for the age range from `annual-checkup`, and check (ตรวจ) it against official agency websites to see which items are free under the entitlement · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) against the official websites
+3. Compare the package the user sent with the items that are already free, and say what extra the user could pay for · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) before it reaches the user
+4. Prepare the checkup-day checklist: fasting · documents · questions · ใคร: `health-organizer` ตัวใหม่
+5. After the checkup, copy the values from the result sheet into the multi-year tracking table **exactly, with no interpretation**. For a value the lab flags as abnormal, write it down as a question for the doctor · ใคร: `health-organizer` ตัวใหม่ copies the values · `reviewer` ตัวใหม่ checks (ตรวจ) against the result sheet, and checks the checkup-day checklist from step 4, before it reaches the user
 
-## จบเมื่อ
+## Done when
 
-แผนตรวจตามสิทธิ์ที่ตรวจกับแหล่งทางการแล้ว และตารางผลที่คัดตรงตัวจากใบผล (เมื่อมีใบผลแล้ว)
+The checkup plan follows the user's entitlements and is checked against official sources, and the results table is copied exactly from the result sheet (once there is a result sheet)
 
 
 ## reference: playbook-decide-and-goals.md
 
-# playbook · decide-and-goals — การตัดสินใจครั้งใหญ่และเป้าหมาย
+# playbook · decide-and-goals — big decisions and goals
 
-ใช้เมื่อ: จะตัดสินใจเรื่องใหญ่ (งาน คอนโด รถ ย้ายบ้าน ลงทุนก้อน) · ตั้งเป้าไตรมาสหรือปีใหม่ · สร้างหรือเลิกนิสัย
-skill หลัก: `decision-journal` · `goal-and-habit`
+Use when: making a big decision (job · condo · car · moving house · a large investment) · setting quarterly or new-year goals · building or dropping a habit
+Main skills: `decision-journal` · `goal-and-habit`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ถ้าเป็นการตัดสินใจ ให้บันทึกตาม `decision-journal`: ทางเลือก เหตุผล ผลที่คาด ความมั่นใจ วันทบทวน · ใคร: หัวหน้าทีม
-2. ถ้าเป็นเป้าหมาย ให้ตั้งไม่เกิน 3 เป้าที่วัดได้ และออกแบบนิสัยตามกฎ 2 นาที ตาม `goal-and-habit` · ใคร: `life-admin` ตัวใหม่
-3. ตั้งเตือนวันทบทวน · ใคร: `life-admin` ตัวใหม่
-4. ตรวจว่าทุกเป้าวัดได้ด้วยตัวเลขหรือใช่/ไม่ใช่ และบันทึกการตัดสินใจเขียนไว้ก่อนรู้ผล · ใคร: `reviewer` ตัวใหม่
+1. For a decision, record it per `decision-journal`: options, reasons, expected result, confidence, review date · ใคร: หัวหน้าทีม
+2. For goals, set at most 3 measurable goals and design the habit with the 2-minute rule, per `goal-and-habit` · ใคร: `life-admin` ตัวใหม่
+3. Set a reminder for the review date · ใคร: `life-admin` ตัวใหม่
+4. Check (ตรวจ) that every goal can be measured by a number or by yes/no, and that the decision record was written before the result was known · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-บันทึกหรือแผนเป้าหมายพร้อมวันทบทวน
+A decision record or goal plan with a review date
 
 
 ## reference: playbook-digital-safety.md
 
-# playbook · digital-safety — ความปลอดภัยดิจิทัลของครอบครัว
+# playbook · digital-safety — digital safety for the family
 
-ใช้เมื่อ: ตั้งหรือตรวจรหัสผ่าน 2FA passkey · ย้าย LINE ไปเครื่องใหม่ · สงสัยถูกแฮกหรือถูกหลอก
-skill หลัก: `digital-hygiene`
+Use when: setting up or checking passwords, 2FA, and passkeys · moving LINE to a new phone · suspecting a hack or a scam
+Main skill: `digital-hygiene`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ถ้ากำลังถูกแฮกหรือถูกหลอกโอนเงินอยู่ตอนนี้ ให้ทำขั้นตอนชั่วโมงแรกใน `digital-hygiene` ก่อนอย่างอื่น · ใคร: หัวหน้าทีม (คุยกับผู้ใช้ทันที)
-2. ทำรายการบัญชีสำคัญของแต่ละคน — อีเมล ธนาคาร LINE โซเชียล และถามสถานะ (password manager · 2FA หรือ passkey · สำรองรูป) ครั้งเดียวตอนเริ่มงาน ไม่รู้ → `(รอยืนยัน)` · ใคร: หัวหน้าทีม
-3. ทำตารางสถานะ password manager · 2FA หรือ passkey · สำรองรูป จากคำตอบที่ผู้ใช้ให้ตอนเริ่มงาน (ไม่รู้ → `(รอยืนยัน)`) · ใคร: `life-admin` ตัวใหม่
-4. เขียนขั้นตอนทีละคลิกให้ผู้ใช้ทำเอง เรียงจากบัญชีที่เสี่ยงที่สุด · ใคร: `life-admin` ตัวใหม่ (ผู้ใช้ทำตามเอง)
-5. ร่างข้อความเตือนมิจฉาชีพให้ครอบครัว · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ตรวจทั้งชุดก่อนถึงผู้ใช้
+1. If the user is being hacked or tricked into transferring money right now, do the first-hour steps in `digital-hygiene` before anything else · ใคร: หัวหน้าทีม (talk to the user at once)
+2. List each person's important accounts: email, bank, LINE, social media. Ask about their status (password manager · 2FA or passkey · photo backup) once, at the start of the work. If the user does not know, write `(รอยืนยัน)` (awaiting confirmation) · ใคร: หัวหน้าทีม
+3. Make a status table for password manager · 2FA or passkey · photo backup, from the answers the user gave at the start (if unknown, `(รอยืนยัน)`) · ใคร: `life-admin` ตัวใหม่
+4. Write click-by-click steps for the user to do themselves, starting with the riskiest account · ใคร: `life-admin` ตัวใหม่ (the user follows the steps themselves)
+5. Draft a scam warning message for the family · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the whole set before it reaches the user
 
-## จบเมื่อ
+## Done when
 
-ตารางสถานะบัญชีและขั้นตอนทีละคลิกพร้อมทำ โดยผู้ใช้เป็นคนกดเอง
+The account status table and the click-by-click steps are ready, and the user is the one who clicks
 
 
 ## reference: playbook-doctor-visit.md
 
-# playbook · doctor-visit — เตรียมไปหาหมอ และสรุปหลังพบ
+# playbook · doctor-visit — prepare for a doctor visit and summarize afterward
 
-ใช้เมื่อ: ก่อนนัดแพทย์หรือโรงพยาบาล · หลังพบแพทย์อยากจดสิ่งที่ได้ยิน
-skill หลัก: `doctor-visit-prep` · `medication-schedule`
+Use when: before an appointment with a doctor or hospital · after the visit, when the user wants to write down what they heard
+Main skills: `doctor-visit-prep` · `medication-schedule`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. เรียงไทม์ไลน์อาการจากคำของผู้ใช้ — เริ่มเมื่อไร เป็นอย่างไร อะไรทำให้ดีขึ้นหรือแย่ลง โดยไม่ตีความ · ใคร: หัวหน้าทีม
-2. ทำรายการยาที่ใช้อยู่และประวัติแพ้ยาจากฉลากจริง · ใคร: `health-organizer` ตัวใหม่
-3. เขียนคำถามที่สำคัญที่สุด 3 ข้อ (หมอมักมีเวลาแค่ 3 ข้อ) · ใคร: `health-organizer` ตัวใหม่
-4. รวมเป็นการ์ด 1 หน้าที่พกไปได้ · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ตรวจก่อนถึงผู้ใช้
-5. หลังพบแพทย์ — จดสิ่งที่แพทย์บอก ยาที่สั่ง นัดครั้งถัดไป ตามที่ผู้ใช้เล่า แล้วอัปเดต `medication-schedule` · ใคร: หัวหน้าทีมจดจากผู้ใช้ · `health-organizer` ตัวใหม่อัปเดตตารางยา · `reviewer` ตัวใหม่ตรวจตารางยากับที่แพทย์สั่ง
+1. Put the symptoms in a timeline from the user's own words: when it started, what it is like, what makes it better or worse. Do not interpret · ใคร: หัวหน้าทีม
+2. List the medicines in use and the drug allergy history from the real labels · ใคร: `health-organizer` ตัวใหม่
+3. Write the 3 most important questions (the doctor often has time for only 3) · ใคร: `health-organizer` ตัวใหม่
+4. Combine everything into a 1-page card the user can carry · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) before it reaches the user
+5. After the visit, write down what the doctor said, the medicines prescribed, and the next appointment, as the user tells it, then update `medication-schedule` · ใคร: หัวหน้าทีม writes it down from the user · `health-organizer` ตัวใหม่ updates the medicine table · `reviewer` ตัวใหม่ checks (ตรวจ) the medicine table against what the doctor prescribed
 
-## จบเมื่อ
+## Done when
 
-การ์ด 1 หน้าพร้อมพก และบันทึกหลังพบ (ถ้ามี) ที่ไม่มีข้อความวินิจฉัยใด ๆ
+The 1-page card is ready to carry, and the after-visit note (if any) contains no diagnosis wording
 
 
 ## reference: playbook-documents.md
 
-# playbook · documents — ทะเบียนเอกสารสำคัญ
+# playbook · documents — register of important documents
 
-ใช้เมื่อ: ต้นปี · เอกสารหมดอายุโดยไม่รู้ตัว · หาเอกสารไม่เจอ
-skill หลัก: `important-docs` · `personal-kb` · agent `doc-caretaker`
+Use when: start of the year · documents expire without anyone noticing · documents cannot be found
+Main skills: `important-docs` · `personal-kb` · agent `doc-caretaker`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ทำรายการเอกสารตามหมวดของ `important-docs` — บัตร พาสปอร์ต บ้าน รถ ประกัน สัญญา การศึกษา · ใคร: `doc-caretaker` ตัวใหม่
-2. แต่ละแถวบอกว่าอยู่ที่ไหน (ตัวจริง · สแกน) หมดอายุวันไหน และต้องต่อที่ไหน — **ไม่ใส่เลขบัตรหรือเลขบัญชีเต็ม** · ใคร: `doc-caretaker` ตัวใหม่
-3. ตั้งชื่อไฟล์สแกนให้ค้นเจอตาม `important-docs` (รูปแบบ `YYYY-MM-DD_ผู้ถือ_รายการ.ext`) · ใคร: `doc-caretaker` ตัวใหม่
-4. ตั้งเตือนก่อนหมดอายุตามระยะที่แต่ละเอกสารต้องใช้ · ใคร: `doc-caretaker` ตัวใหม่ แล้ว `reviewer` ตัวใหม่ตรวจวันหมดอายุและที่เก็บกับทะเบียน
+1. List the documents by the categories in `important-docs`: ID cards, passports, house, car, insurance, contracts, education · ใคร: `doc-caretaker` ตัวใหม่
+2. Each row says where the document is kept (original · scan), when it expires, and where to renew it. **Do not write full ID or account numbers** · ใคร: `doc-caretaker` ตัวใหม่
+3. Name the scan files so they can be found, per `important-docs` (format `YYYY-MM-DD_ผู้ถือ_รายการ.ext`, that is, date_holder_item) · ใคร: `doc-caretaker` ตัวใหม่
+4. Set reminders before expiry, at the lead time each document needs · ใคร: `doc-caretaker` ตัวใหม่ then `reviewer` ตัวใหม่ checks (ตรวจ) the expiry dates and storage places against the register
 
-## จบเมื่อ
+## Done when
 
-ทะเบียนครบทุกหมวด ทุกแถวมีที่เก็บและวันหมดอายุ และเตือนตั้งครบ
+The register covers every category, every row has a storage place and an expiry date, and all reminders are set
 
 
 ## reference: playbook-family-week.md
 
-# playbook · family-week — วางแผนสัปดาห์ของครอบครัว
+# playbook · family-week — plan the family's week
 
-ใช้เมื่อ: วางแผนอาหาร ของต้องซื้อ งานโรงเรียน นัดผู้สูงอายุ และสัตว์เลี้ยงของสัปดาห์หน้า
-skill หลัก: `meal-plan-grocery` · `kids-school` · `elder-care` · `pet-care` · agent `family-planner`
+Use when: planning next week's meals, shopping list, school tasks, appointments for older adults, and pet care
+Main skills: `meal-plan-grocery` · `kids-school` · `elder-care` · `pet-care` · agent `family-planner`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. เก็บข้อมูลสัปดาห์ — สมาชิก งบต่อหัว นัดหมาย งานโรงเรียน ยา วัคซีนสัตว์ที่ใกล้ครบ · ใคร: หัวหน้าทีม
-2. วางเมนูและรายการซื้อตาม `meal-plan-grocery` ภายในงบ โดยคิดถึงอาหารของเด็กและผู้สูงอายุด้วย · ใคร: `family-planner` ตัวใหม่
-3. ใส่งานโรงเรียน นัดผู้สูงอายุ ยา และงานสัตว์เลี้ยงลงตารางเดียวกัน · ใคร: `family-planner` ตัวใหม่
-4. ตรวจว่าทุกงานมีวัน เวลา และคนรับผิดชอบ และยอดรวมของต้องซื้อไม่เกินงบ · ใคร: `reviewer` ตัวใหม่
+1. Collect the week's information: family members, budget per head, appointments, school tasks, medicines, pet vaccines that are almost due · ใคร: หัวหน้าทีม
+2. Plan the menu and shopping list per `meal-plan-grocery` within the budget, and think about the food that children and older adults need · ใคร: `family-planner` ตัวใหม่
+3. Put the school tasks, appointments for older adults, medicines, and pet tasks into the same schedule · ใคร: `family-planner` ตัวใหม่
+4. Check (ตรวจ) that every task has a day, a time, and a person responsible, and that the total of the shopping list stays within the budget · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-ตารางสัปดาห์เดียวที่ส่งในกลุ่มครอบครัวได้
+One weekly schedule that can be sent to the family group
 
 
 ## reference: playbook-habit-tracking.md
 
-# playbook · habit-tracking — เริ่มออกกำลังกายหรือบันทึกการนอน
+# playbook · habit-tracking — start exercising or log sleep
 
-ใช้เมื่อ: อยากเริ่มออกกำลังกาย · นอนไม่ดีหรือเพลียแม้นอนพอ · จะไปหาหมอเรื่องการนอน
-skill หลัก: `exercise-plan` · `sleep-log`
+Use when: the user wants to start exercising · sleeps badly or feels tired despite enough sleep · is going to see a doctor about sleep
+Main skills: `exercise-plan` · `sleep-log`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ตรวจคำถามคัดกรองก่อนเริ่มออกกำลังกายใน `exercise-plan` — ถ้าตอบ "ใช่" ข้อไหน ให้ปรึกษาแพทย์ก่อน · ใคร: หัวหน้าทีม
-2. ตั้งจุดทบทวนหลัง 2 สัปดาห์ — ดูจากบันทึกจริง ไม่ใช่ความรู้สึก · ใคร: หัวหน้าทีม
-3. ถ้าเป็นเรื่องออกกำลังกาย ให้ทำแผนเริ่มต้นตามแนวทางกิจกรรมทางกายขององค์การอนามัยโลก แล้วค่อย ๆ เพิ่ม · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ตรวจก่อนถึงผู้ใช้
-4. ถ้าเป็นเรื่องการนอน ให้ใช้ไดอารีการนอน 2 สัปดาห์และเช็กลิสต์สุขอนามัยการนอนจาก `sleep-log` · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ตรวจก่อนถึงผู้ใช้
+1. Check (ตรวจ) the screening questions in `exercise-plan` before starting to exercise. If the user answers "yes" to any of them, they should see a doctor first · ใคร: หัวหน้าทีม
+2. Set a review point after 2 weeks, based on the real log and not on feelings · ใคร: หัวหน้าทีม
+3. For exercise, make a starter plan that follows the World Health Organization physical activity guidelines, then increase slowly · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) before it reaches the user
+4. For sleep, use a 2-week sleep diary and the sleep hygiene checklist from `sleep-log` · ใคร: `health-organizer` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) before it reaches the user
 
-## จบเมื่อ
+## Done when
 
-แผนหรือไดอารีพร้อมใช้ และวันทบทวนที่ตั้งไว้
+The plan or diary is ready to use, and the review date is set
 
 
 ## reference: playbook-interview.md
 
-# playbook · interview — เตรียมสัมภาษณ์
+# playbook · interview — prepare for an interview
 
-ใช้เมื่อ: มีนัดสัมภาษณ์ · อยากซ้อมสัมภาษณ์ · ต้องตอบคำถามยากของ HR (เงินเดือนที่คาดหวัง · ทำไมลาออก · จุดอ่อน)
-skill หลัก: `interview-prep` · `salary-negotiation` (คำถามเงินเดือน) · agent `interview-coach`
+Use when: an interview is scheduled · the user wants to practice · the user must answer hard HR questions (expected salary · why leaving · weaknesses)
+Main skills: `interview-prep` · `salary-negotiation` (salary questions) · agent `interview-coach`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. เก็บข้อมูล — บริษัท ตำแหน่ง รอบไหน ใครสัมภาษณ์ ภาษาอะไร วันเวลา · ใคร: หัวหน้าทีม
-2. ค้นบริษัทจากแหล่งทางการ (เว็บบริษัท · รายงานประจำปี · ข่าวจากสำนักข่าว) สรุปสิ่งที่ควรรู้ 3 ข้อ · ใคร: `interview-coach` ตัวใหม่
-3. สร้างคลังเรื่อง STAR 6–8 เรื่องจากประสบการณ์จริง ผูกกับข้อต้องมีของงาน · ใคร: `interview-coach` ตัวใหม่
-4. เตรียมคำตอบคำถามประจำของ HR ไทยและคำถามเงินเดือน โดยเอาตัวเลขที่คาดหวังมาจาก `salary-negotiation` · ใคร: `interview-coach` ตัวใหม่
-5. เตรียมชุดซ้อม 10 ข้อ พร้อมเกณฑ์ให้คะแนน 1–5 · จุดแก้ 1 ข้อต่อข้อ · คำตอบตัวอย่างต่อข้อ · ใคร: `interview-coach` ตัวใหม่
-6. เตรียมคำถามถามกลับ 3 ข้อ และร่างอีเมลขอบคุณหลังสัมภาษณ์ · ใคร: `interview-coach` ตัวใหม่ แล้ว `reviewer` ตัวใหม่ตรวจชุดเตรียมสัมภาษณ์ทั้งชุดก่อนถึงผู้ใช้
+1. Collect the details: company, position, which round, who interviews, which language, date and time · ใคร: หัวหน้าทีม
+2. Research the company from official sources (company website · annual report · news from news outlets) and summarize 3 things the user should know · ใคร: `interview-coach` ตัวใหม่
+3. Build a bank of 6–8 STAR stories from real experience, tied to the job's must-haves · ใคร: `interview-coach` ตัวใหม่
+4. Prepare answers to the standard questions Thai HR asks and to the salary question, taking the expected figure from `salary-negotiation` · ใคร: `interview-coach` ตัวใหม่
+5. Prepare a practice set of 10 questions, with a 1–5 scoring rubric · 1 fix point per question · a sample answer per question · ใคร: `interview-coach` ตัวใหม่
+6. Prepare 3 questions to ask back, and draft a thank-you email for after the interview · ใคร: `interview-coach` ตัวใหม่ then `reviewer` ตัวใหม่ checks (ตรวจ) the whole interview prep set before it reaches the user
 
-## จบเมื่อ
+## Done when
 
-มีการ์ดเตรียมสัมภาษณ์ 1 หน้า ชุดซ้อม 10 ข้อพร้อมเกณฑ์ให้คะแนน และร่างอีเมลขอบคุณพร้อมส่ง · หลังส่งงาน หัวหน้าทีมเสนอซ้อมสดทีละคำถามกับผู้ใช้ (เป็นข้อเสนอ ไม่ใช่เงื่อนไขจบ)
+There is a 1-page interview prep card, a 10-question practice set with a scoring rubric, and a thank-you email draft ready to send. After handing over the work, the team lead offers to run a live practice with the user, one question at a time (an offer, not a condition for finishing)
 
 
 ## reference: playbook-job-application.md
 
-# playbook · job-application — สมัครงานตำแหน่งหนึ่งให้ครบชุด
+# playbook · job-application — apply for one position with a complete set
 
-ใช้เมื่อ: มีประกาศงานที่จะสมัคร · "ช่วยสมัครงานนี้" · เปลี่ยนงานแล้วมีเป้าหมายชัด
-skill หลัก: `resume-th-en` · `linkedin-profile` · `interview-prep`
+Use when: there is a job ad to apply to · "ช่วยสมัครงานนี้" · changing jobs with a clear target
+Main skills: `resume-th-en` · `linkedin-profile` · `interview-prep`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. เก็บวัตถุดิบ — CV ปัจจุบัน · ประกาศงาน · ลิงก์ LinkedIn · ภาษาที่บริษัทใช้ ชิ้นไหนไม่มีให้ใส่ `(รอยืนยัน)` แล้วทำต่อ · ใคร: หัวหน้าทีม
-2. อ่านประกาศงาน แล้วแยกเป็น 3 กลุ่ม: ต้องมี · ควรมี · คำค้นที่ระบบ Applicant Tracking System (ATS) จะหา เขียนเป็นตารางสั้นในคำตอบ · ใคร: `career-coach` ตัวใหม่
-3. จับคู่ประสบการณ์กับข้อต้องมีทีละข้อ ข้อที่ไม่มีหลักฐานให้ลงช่อง "ช่องว่าง" ไม่แต่งเติม · ใคร: `career-coach` ตัวใหม่
-4. เขียน CV ฉบับสำหรับงานนี้ด้วย `resume-th-en` ทุก bullet ต้องมีการกระทำ + ผล + ตัวเลข และใช้ภาษาตามผู้อ่าน (ไทย · อังกฤษ · ทั้งสอง) · ใคร: `career-coach` ตัวใหม่
-5. ปรับ headline และ About ของ LinkedIn ให้ตรงกับ CV ด้วย `linkedin-profile` ตำแหน่งและวันที่ต้องไม่ขัดกัน · ใคร: `career-coach` ตัวใหม่
-6. ร่างข้อความสมัครหรือ cover letter สั้น ๆ ที่พูดถึงข้อต้องมี 2–3 ข้อด้วยหลักฐาน · ใคร: `career-coach` ตัวใหม่
-7. ตรวจว่าคำค้นจากข้อ 2 อยู่ใน CV ครบ วันที่และตำแหน่งตรงกันทุกเอกสาร และระบบ ATS อ่านไฟล์ได้ (ไม่มีตาราง กล่องข้อความ หรือรูปแทนข้อความ) · ใคร: `reviewer` ตัวใหม่
-8. ถ้าผู้ใช้ต้องการ ให้เตรียมสัมภาษณ์รอบแรกด้วย playbook `interview` ส่วนการกดส่งใบสมัครอยู่ใน "รออนุมัติ" · ใคร: หัวหน้าทีม (กดส่ง: ผู้ใช้)
+1. Collect the raw material: current CV · job ad · LinkedIn link · the language the company uses. For any item that is missing, write `(รอยืนยัน)` (awaiting confirmation) and carry on · ใคร: หัวหน้าทีม
+2. Read the job ad and split it into 3 groups: must-haves · nice-to-haves · keywords the Applicant Tracking System (ATS) will search for. Write them as a short table in the reply · ใคร: `career-coach` ตัวใหม่
+3. Match the experience to each must-have, one by one. For a must-have with no evidence, put it in the "ช่องว่าง" (gap) column and do not invent anything · ใคร: `career-coach` ตัวใหม่
+4. Write the CV for this job with `resume-th-en`. Every bullet needs an action + a result + a number, and uses the language of the reader (Thai · English · both) · ใคร: `career-coach` ตัวใหม่
+5. Adjust the LinkedIn headline and About section to match the CV with `linkedin-profile`. Positions and dates must not conflict · ใคร: `career-coach` ตัวใหม่
+6. Draft a short application message or cover letter that speaks to 2–3 must-haves with evidence · ใคร: `career-coach` ตัวใหม่
+7. Check (ตรวจ) that every keyword from step 2 appears in the CV, that dates and positions match in every document, and that the ATS can read the file (no tables, text boxes, or images in place of text) · ใคร: `reviewer` ตัวใหม่
+8. If the user wants, prepare for the first-round interview with the playbook `interview`. Submitting the application sits under "รออนุมัติ" (awaiting approval) · ใคร: หัวหน้าทีม (submit: the user)
 
-## จบเมื่อ
+## Done when
 
-CV · ข้อความสมัคร · LinkedIn ตรงกัน ผ่านเกณฑ์ 3 ข้อ (หัวข้อ 4 ของ superuser) และร่างไว้พร้อมให้ผู้ใช้กดส่งเอง
+The CV · application message · LinkedIn match, pass the 3 criteria (section 4 of superuser), and are drafted ready for the user to submit themselves
 
 
 ## reference: playbook-learn-from-session.md
@@ -1008,43 +1008,43 @@ The plan is in steps that fit the time, and the first milestone really runs.
 
 ## reference: playbook-maintenance.md
 
-# playbook · maintenance — แผนดูแลบ้านทั้งปีและเทียบใบเสนอราคาช่าง
+# playbook · maintenance — year-round home care plan and comparing contractor quotes
 
-ใช้เมื่อ: อยากมีตารางดูแลบ้านตามฤดู · จะจ้างช่างและต้องเทียบราคา
-skill หลัก: `home-maintenance`
+Use when: the user wants a seasonal home maintenance schedule · is about to hire a contractor and must compare prices
+Main skill: `home-maintenance`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. สำรวจบ้านจากที่ผู้ใช้เล่า — แอร์กี่เครื่อง ปั๊มน้ำ หลังคา อายุบ้าน · ใคร: หัวหน้าทีม
-2. ทำปฏิทิน 12 เดือนตามฤดูร้อน ฝน หนาว จาก `home-maintenance` · ใคร: `home-manager` ตัวใหม่
-3. เทียบใบเสนอราคาช่าง — ขอบเขตงานเท่ากันไหม วัสดุ ประกันงาน เงื่อนไขมัดจำ · ใคร: `home-manager` ตัวใหม่
-4. ทำรายการคำถามถึงช่างก่อนจ่ายมัดจำ · ใคร: `home-manager` ตัวใหม่
-5. ตรวจว่าทุกงานในปฏิทินมีเดือนและคนรับผิดชอบ และตัวเลขในตารางตรงกับใบเสนอราคา · ใคร: `reviewer` ตัวใหม่
+1. Survey the house from what the user tells you: how many air conditioners, the water pump, the roof, the age of the house · ใคร: หัวหน้าทีม
+2. Make a 12-month calendar by season (hot, rainy, cool) from `home-maintenance` · ใคร: `home-manager` ตัวใหม่
+3. Compare the contractor quotes: is the scope of work the same, the materials, the warranty, the deposit terms · ใคร: `home-manager` ตัวใหม่
+4. List the questions to ask the contractor before paying a deposit · ใคร: `home-manager` ตัวใหม่
+5. Check (ตรวจ) that every task in the calendar has a month and a person responsible, and that the numbers in the table match the quotes · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-ปฏิทิน 12 เดือนและตารางเทียบราคา (ถ้ามี) ที่คัดตรงจากเอกสาร
+The 12-month calendar and the price comparison table (if any), copied exactly from the documents
 
 
 ## reference: playbook-medication-routine.md
 
-# playbook · medication-routine — ตารางยาและการเตือนเติมยา
+# playbook · medication-routine — medicine schedule and refill reminders
 
-ใช้เมื่อ: ตัวเองหรือคนในบ้านกินยาที่แพทย์สั่งหลายตัว · ลืมกิน · ยาหมดบ่อย
-skill หลัก: `medication-schedule`
+Use when: the user or someone at home takes several prescribed medicines · forgets doses · runs out of medicine often
+Main skill: `medication-schedule`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. คัดชื่อยา ขนาด เวลา ก่อนหรือหลังอาหาร จากฉลากตรงตัวทีละตัว ถ้าไม่ครบให้ใส่ `[ถามเภสัชกร]` · ใคร: `health-organizer` ตัวใหม่
-2. จัดเป็นตารางรายวันตามมื้อ · ใคร: `health-organizer` ตัวใหม่
-3. คำนวณวันที่ยาจะหมดจากจำนวนที่เหลือ แล้วตั้งเตือนก่อนหมด 7 วัน · ใคร: `health-organizer` ตัวใหม่
-4. ทำรายการแพ้ยาและรายการยาสำหรับพกไปพบแพทย์ · ใคร: `health-organizer` ตัวใหม่
-5. ตรวจว่าทุกแถวตรงกับฉลาก ไม่มีคำแนะนำเรื่องขนาดยา และชี้เฉพาะยาชื่อและขนาดเดียวกันที่ซ้ำกัน (ไม่ตัดสินเรื่องยาตีกัน) · ใคร: `reviewer` ตัวใหม่
-6. ยืนยันข้อที่พบเอง แล้วใส่รายการยาทั้งหมดเป็น 1 คำถามถึงเภสัชกรให้ตรวจว่ายาตัวไหนตีกันหรือไม่ รวมยาที่ซ้ำในรายงาน · ใคร: หัวหน้าทีม
+1. Copy the drug name, dose, time, and before or after meals from the label exactly, one drug at a time. If anything is missing, write `[ถามเภสัชกร]` (ask the pharmacist) · ใคร: `health-organizer` ตัวใหม่
+2. Arrange them in a daily table by meal · ใคร: `health-organizer` ตัวใหม่
+3. Calculate the date each medicine will run out from the amount left, then set a reminder 7 days before · ใคร: `health-organizer` ตัวใหม่
+4. Make a drug allergy list and a medicine list to carry to the doctor · ใคร: `health-organizer` ตัวใหม่
+5. Check (ตรวจ) that every row matches the label, that there is no dosing advice, and flag only duplicates with the same name and dose (do not judge drug interactions) · ใคร: `reviewer` ตัวใหม่
+6. Confirm what was found yourself, then put the whole medicine list in as 1 question for the pharmacist to check whether any drugs interact, and include the duplicates in the report · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-ตารางที่ทุกแถวตรงกับฉลาก และเตือนเติมยาตั้งครบ
+A table where every row matches the label, with all refill reminders set
 
 
 ## reference: playbook-meeting.md
@@ -1068,23 +1068,23 @@ The card or summary is ready to use, and every task has an owner and a date.
 
 ## reference: playbook-offer-negotiation.md
 
-# playbook · offer-negotiation — เทียบข้อเสนอและต่อรองเงินเดือน
+# playbook · offer-negotiation — compare offers and negotiate salary
 
-ใช้เมื่อ: ได้ข้อเสนองาน · มี 2 ข้อเสนอให้เลือก · ขอขึ้นเงินเดือน · ได้ counter-offer
-skill หลัก: `salary-negotiation` · ถ้าต้องดูภาษี (ถ้าติดตั้ง plugin `trading-finance`) ใช้ `trading-finance:tax-basics-th` ไม่มีก็ใช้ความรู้ทั่วไปพร้อม `(รอยืนยัน)`
+Use when: the user got a job offer · has 2 offers to choose from · is asking for a raise · got a counter-offer
+Main skill: `salary-negotiation` · for tax (ถ้าติดตั้ง plugin `trading-finance`) use `trading-finance:tax-basics-th`; if it is not, use general knowledge with `(รอยืนยัน)` (awaiting confirmation)
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. เก็บตัวเลขจากเอกสารจริง — จดหมายเสนองาน · สลิปเงินเดือน · สวัสดิการ ถ้าไม่มีตัวเลขให้ใส่ `(รอยืนยัน)` · ใคร: หัวหน้าทีม
-2. แปลงทุกข้อเสนอเป็นรายได้รวมต่อปีในตารางเดียว — ฐาน × 12 · โบนัส · เงินสมทบกองทุน · ประกัน · ค่าเดินทาง · ใคร: `career-coach` ตัวใหม่
-3. หาข้อมูลตลาดของตำแหน่งจากแหล่งที่ระบุชื่อและปี ถ้าได้ไม่ถึง 3 แหล่ง ให้ติดป้าย `จากแหล่ง` ลดความมั่นใจ แล้วต่อ `(รอยืนยัน)` · ใคร: `career-coach` ตัวใหม่
-4. ตั้งตัวเลขเป้า ตัวเลขต่ำสุดที่รับได้ และเหตุผลที่อ้างได้ · ใคร: `career-coach` ตัวใหม่ร่าง (ตัวเลขที่ผู้ใช้ไม่ได้ให้ติด `(รอยืนยัน)` · ส่งตัวเลขจริงอยู่ใน "รออนุมัติ")
-5. ร่างสิ่งที่จะพูดหรือเขียน ทั้งไทยและอังกฤษ — ขอบคุณ · ตัวเลขที่ขอ · เหตุผล · สิ่งที่ยืดหยุ่นได้ · ใคร: `career-coach` ตัวใหม่
-6. ตรวจโดยคำนวณทุกช่องซ้ำด้วยสูตร และดูว่าไม่มีประโยคไหนโกหกเงินเดือนปัจจุบัน · ใคร: `reviewer` ตัวใหม่
+1. Collect the figures from real documents: offer letter · payslip · benefits. If a figure is missing, write `(รอยืนยัน)` · ใคร: หัวหน้าทีม
+2. Convert every offer to total yearly income in one table: base × 12 · bonus · provident fund contribution · insurance · travel allowance · ใคร: `career-coach` ตัวใหม่
+3. Find market data for the position from named sources with a year. If you get fewer than 3 sources, add the `จากแหล่ง` label, lower the confidence, and append `(รอยืนยัน)` · ใคร: `career-coach` ตัวใหม่
+4. Set the target figure, the lowest acceptable figure, and the reasons the user can cite · ใคร: `career-coach` ตัวใหม่ drafts (any figure the user did not give gets `(รอยืนยัน)` · sending the real figure sits under "รออนุมัติ" (awaiting approval))
+5. Draft what to say or write, in Thai and English: thanks · the figure asked for · the reason · what is flexible · ใคร: `career-coach` ตัวใหม่
+6. Check (ตรวจ) by recalculating every cell with a formula, and make sure no sentence misstates the current salary · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-มีตารางรายได้รวมต่อปีที่คำนวณซ้ำแล้ว และร่างข้อความต่อรองพร้อมส่ง ส่วนการตอบรับหรือปฏิเสธข้อเสนออยู่ใน "รออนุมัติ"
+There is a yearly total income table that has been recalculated, and a negotiation message ready to send. Accepting or declining the offer sits under "รออนุมัติ"
 
 
 ## reference: playbook-paper-to-practice.md
@@ -1109,42 +1109,42 @@ The sample code runs and passes with its output, and there is a 1-page note.
 
 ## reference: playbook-profile-refresh.md
 
-# playbook · profile-refresh — ปรับ CV และ LinkedIn ทั้งชุด
+# playbook · profile-refresh — refresh the CV and LinkedIn as a set
 
-ใช้เมื่อ: ยังไม่มีงานเป้าหมายแต่อยากเตรียมตัว · CV เก่าหลายปี · เปลี่ยนสายงาน
-skill หลัก: `resume-th-en` · `linkedin-profile`
+Use when: the user has no target job yet but wants to be ready · the CV is several years old · changing career track
+Main skills: `resume-th-en` · `linkedin-profile`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. อ่าน CV และโปรไฟล์ปัจจุบัน ทำรายการตำแหน่ง วันที่ ผลงาน แล้วจดจุดที่ข้อมูลขัดกัน · ใคร: `career-coach` ตัวใหม่
-2. กำหนดสายงานเป้าหมาย 1–2 สาย แล้วหาคำค้นที่ผู้สรรหาใช้จากประกาศงานจริงอย่างน้อย 5 ประกาศ · ใคร: `career-coach` ตัวใหม่ (สายจากคำตอบตอนเริ่ม ไม่มีให้เลือกสายที่ตรงประวัติที่สุดแล้วติด `(รอยืนยัน)`)
-3. เขียน CV ฉบับหลัก (master) ที่ใส่ทุกอย่าง แล้วทำฉบับสั้นต่อสายงาน · ใคร: `career-coach` ตัวใหม่
-4. ปรับ LinkedIn — headline · About · Featured · ทักษะ ให้ตรงกับ CV ฉบับหลัก · ใคร: `career-coach` ตัวใหม่
-5. ตรวจว่าวันที่และตำแหน่งตรงกันทุกที่ และไม่มีข้อมูลส่วนตัวที่ไม่ควรใส่ (อายุ · ศาสนา · เลขบัตร) เว้นแต่ผู้ใช้สั่ง · ใคร: `reviewer` ตัวใหม่
+1. Read the current CV and profile. List the positions, dates, and achievements, and note where the information conflicts · ใคร: `career-coach` ตัวใหม่
+2. Set 1–2 target tracks, then find the keywords recruiters use from at least 5 real job ads · ใคร: `career-coach` ตัวใหม่ (take the tracks from the answer given at the start; if there is none, pick the track that best fits the history and tag it `(รอยืนยัน)` (awaiting confirmation))
+3. Write a master CV that includes everything, then make a short version for each track · ใคร: `career-coach` ตัวใหม่
+4. Adjust LinkedIn (headline · About · Featured · skills) to match the master CV · ใคร: `career-coach` ตัวใหม่
+5. Check (ตรวจ) that dates and positions match everywhere, and that there is no personal data that should not be included (age · religion · ID number) unless the user asks for it · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-CV ฉบับหลัก ฉบับต่อสายงาน และร่าง LinkedIn ตรงกันทุกเอกสาร
+The master CV, the per-track versions, and the LinkedIn draft match in every document
 
 
 ## reference: playbook-promotion-case.md
 
-# playbook · promotion-case — ประเมินตัวเองและขอเลื่อนตำแหน่ง
+# playbook · promotion-case — self-review and asking for a promotion
 
-ใช้เมื่อ: ประเมินผลงานกลางปีหรือปลายปี · อยากขอเลื่อนตำแหน่งหรือขึ้นเงินเดือน · เริ่มจดผลงาน
-skill หลัก: `performance-self-review` · `salary-negotiation`
+Use when: the mid-year or year-end performance review · the user wants to ask for a promotion or a raise · starting to log achievements
+Main skills: `performance-self-review` · `salary-negotiation`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. รวบรวมผลงานจากของจริง — อีเมลชม · รายงาน · ตัวเลขระบบ · เป้า KPI ปีนี้ · ใคร: หัวหน้าทีม
-2. เขียนผลงานแต่ละชิ้นเป็นผลต่อธุรกิจ (เงิน · เวลา · ความเสี่ยง · ลูกค้า) พร้อมตัวเลข · ใคร: `career-coach` ตัวใหม่
-3. เทียบกับเกณฑ์ของตำแหน่งถัดไป แยกข้อที่ถึงแล้วพร้อมหลักฐาน กับข้อที่ยังขาด · ใคร: `career-coach` ตัวใหม่
-4. ร่างแบบประเมินตัวเองตามแบบฟอร์มบริษัท และร่างบทพูดกับหัวหน้า 3 นาที · ใคร: `career-coach` ตัวใหม่
-5. ตรวจว่าทุกข้ออ้างชี้ไปที่หลักฐานได้ และไม่มีตัวเลขที่ผู้ใช้ไม่ได้ให้มา · ใคร: `reviewer` ตัวใหม่
+1. Collect achievements from real material: praise emails · reports · system figures · this year's KPI targets · ใคร: หัวหน้าทีม
+2. Write each achievement as its effect on the business (money · time · risk · customers), with numbers · ใคร: `career-coach` ตัวใหม่
+3. Compare with the criteria of the next position. Separate the criteria already met, with evidence, from the ones still missing · ใคร: `career-coach` ตัวใหม่
+4. Draft the self-review on the company's form, and draft a 3-minute talk for the manager · ใคร: `career-coach` ตัวใหม่
+5. Check (ตรวจ) that every claim points to evidence, and that there are no figures the user did not provide · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-แบบประเมินและบทพูดพร้อมใช้ ทุกข้ออ้างมีหลักฐาน
+The self-review and the talk are ready to use, and every claim has evidence
 
 
 ## reference: playbook-review.md
@@ -1194,22 +1194,22 @@ There is 1 project with a clear "done" definition, and the minimum skeleton runs
 
 ## reference: playbook-subscriptions.md
 
-# playbook · subscriptions — ตัดค่าสมาชิกที่ไม่ใช้
+# playbook · subscriptions — cut subscriptions the user does not use
 
-ใช้เมื่อ: อยากหาและตัดรายการรายเดือน · ทดลองใช้ฟรีใกล้หมด
-skill หลัก: `subscription-audit`
+Use when: the user wants to find and cancel monthly charges · a free trial is about to end
+Main skill: `subscription-audit`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. อ่าน statement ธนาคารหรือบัตรที่ผู้ใช้ส่งมา หารายการซ้ำรายเดือนตามรูปแบบใน `subscription-audit` · ใคร: `life-admin` ตัวใหม่
-2. ทำตารางค่าใช้จ่ายต่อการใช้ 1 ครั้ง · ใคร: `life-admin` ตัวใหม่
-3. ตัดสินแต่ละรายการ: ยกเลิก · ลดแพ็กเกจ · สลับเดือน · เก็บ พร้อมเหตุผล · ใคร: `life-admin` ตัวใหม่เสนอ (ผู้ใช้ตัดสินใน "รออนุมัติ")
-4. เขียนขั้นตอนยกเลิกทีละคลิกของแต่ละบริการ — การกดยกเลิกจริงอยู่ใน "รออนุมัติ" · ใคร: `life-admin` ตัวใหม่
-5. ตั้งเตือนก่อนทดลองใช้ฟรีหมด · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ตรวจยอดและขั้นตอนกับ statement
+1. Read the bank or card statement the user sent, and find the monthly repeat charges using the patterns in `subscription-audit` · ใคร: `life-admin` ตัวใหม่
+2. Make a table of the cost per use · ใคร: `life-admin` ตัวใหม่
+3. Decide on each item: cancel · downgrade · switch to a different month · keep, with the reason · ใคร: `life-admin` ตัวใหม่ proposes (the user decides under "รออนุมัติ" (awaiting approval))
+4. Write click-by-click cancellation steps for each service. The real act of cancelling sits under "รออนุมัติ" · ใคร: `life-admin` ตัวใหม่
+5. Set a reminder before each free trial ends · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the amounts and steps against the statement
 
-## จบเมื่อ
+## Done when
 
-ตารางรายการทั้งหมดพร้อมคำตัดสิน และขั้นตอนยกเลิกพร้อมทำ
+A table of all items with the verdicts, and the cancellation steps ready to follow
 
 
 ## reference: playbook-team-project.md
@@ -1307,21 +1307,21 @@ How to use this template
 
 ## reference: playbook-trip.md
 
-# playbook · trip — เตรียมเดินทาง
+# playbook · trip — prepare for a trip
 
-ใช้เมื่อ: 1–2 สัปดาห์ก่อนเดินทาง · พาสปอร์ตใกล้หมด
-skill หลัก: `travel-prep`
+Use when: 1–2 weeks before a trip · the passport is about to expire
+Main skill: `travel-prep`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ตรวจพาสปอร์ตและวีซ่าของประเทศปลายทางจากเว็บทางการ (กระทรวงการต่างประเทศ · สถานทูต) · ใคร: `life-admin` ตัวใหม่
-2. ทำเช็กลิสต์ตาม `travel-prep` — ประกันเดินทาง ปลั๊ก เงิน อินเทอร์เน็ต · ใคร: `life-admin` ตัวใหม่
-3. รวมการจองทุกรายการพร้อมเลขยืนยันไว้ในไฟล์เดียว · ใคร: `life-admin` ตัวใหม่
-4. ตั้งเตือนเช็กอินและเวลาออกจากบ้าน · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ตรวจทั้งชุด (วีซ่า · วันหมดอายุ · เลขยืนยัน) กับแหล่งทางการ
+1. Check (ตรวจ) the passport and the destination country's visa rules on official websites (Ministry of Foreign Affairs · embassy) · ใคร: `life-admin` ตัวใหม่
+2. Make a checklist per `travel-prep`: travel insurance, plug adapters, money, internet · ใคร: `life-admin` ตัวใหม่
+3. Put every booking, with its confirmation number, in one file · ใคร: `life-admin` ตัวใหม่
+4. Set reminders for check-in and the time to leave home · ใคร: `life-admin` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the whole set (visa · expiry dates · confirmation numbers) against official sources
 
-## จบเมื่อ
+## Done when
 
-เช็กลิสต์และไฟล์แผนเดินทางเดียว ตรวจกับแหล่งทางการแล้ว
+A checklist and a single trip plan file, checked against official sources
 
 
 ## reference: playbook-unattended-run.md
@@ -1364,21 +1364,21 @@ All the step 1 conditions pass, or every remaining piece has a reason why it is 
 
 ## reference: playbook-vehicle.md
 
-# playbook · vehicle — ต่อภาษี พ.ร.บ. ตรวจสภาพ และเช็กระยะรถ
+# playbook · vehicle — renew tax and พ.ร.บ. (compulsory motor insurance), inspection, and service mileage
 
-ใช้เมื่อ: ภาษีรถหรือ พ.ร.บ. ใกล้หมด · ต้องตรวจสภาพ · เลือกชั้นประกัน · เช็กระยะ
-skill หลัก: `vehicle-care`
+Use when: the car tax or พ.ร.บ. is about to expire · an inspection is needed · choosing an insurance class · checking service mileage
+Main skill: `vehicle-care`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. อ่านข้อมูลจากเล่มทะเบียนหรือกรมธรรม์ — วันหมดอายุภาษี พ.ร.บ. ประกัน ใบขับขี่ · ใคร: `home-manager` ตัวใหม่
-2. ตรวจเงื่อนไขปัจจุบันจากเว็บกรมการขนส่งทางบก — ต้องตรวจสภาพไหม ต่อออนไลน์ได้ไหม · ใคร: `home-manager` ตัวใหม่
-3. ทำลำดับขั้นตาม `vehicle-care` — ตรอ. ตรวจสภาพ (ถ้าต้อง) → พ.ร.บ. → ภาษี พร้อมเอกสารที่ต้องใช้ · ใคร: `home-manager` ตัวใหม่
-4. ตั้งเตือนตาม `vehicle-care` — ภาษี 90 วันก่อนหมดอายุ · พ.ร.บ. ประกัน และใบขับขี่ 30 วันก่อนหมดอายุ — และเช็กระยะตามกิโลเมตร · ใคร: `home-manager` ตัวใหม่ · `reviewer` ตัวใหม่ตรวจทั้งชุดกับเล่มจริงและเว็บทางการ
+1. Read the data from the registration book or the policy: expiry dates of the tax, พ.ร.บ., insurance, and driving licence · ใคร: `home-manager` ตัวใหม่
+2. Check (ตรวจ) the current conditions on the Department of Land Transport website: is an inspection needed, can it be renewed online · ใคร: `home-manager` ตัวใหม่
+3. Make the sequence of steps per `vehicle-care`: private inspection centre (ตรอ.) inspection (if needed) → พ.ร.บ. → tax, with the documents needed · ใคร: `home-manager` ตัวใหม่
+4. Set reminders per `vehicle-care`: tax 90 days before expiry · พ.ร.บ., insurance, and driving licence 30 days before expiry. Also set service reminders by kilometres · ใคร: `home-manager` ตัวใหม่ · `reviewer` ตัวใหม่ checks (ตรวจ) the whole set against the real registration book and official websites
 
-## จบเมื่อ
+## Done when
 
-ลำดับขั้นพร้อมเอกสาร ตรวจกับแหล่งทางการแล้ว และเตือนตั้งครบ
+The sequence of steps with documents is checked against official sources, and all reminders are set
 
 
 ## reference: playbook-weekly-reset.md

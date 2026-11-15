@@ -4,9 +4,9 @@ Use when money moves through software via Stripe or PromptPay
 
 # fintech-payments
 
-ระบบที่มีเงินไหลผ่าน — payment gateway · KYC/AML · PCI-DSS · โมเดลความเสี่ยงการเงิน
+Systems that money flows through — payment gateway · KYC/AML · PCI-DSS · financial risk models
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทุกไฟล์ เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้นอยู่แล้ว
+**Open only the files that match the job.** Do not read every file, because each file is already the full guide to its topic.
 
 ## หัวข้อ
 
@@ -19,7 +19,7 @@ Use when money moves through software via Stripe or PromptPay
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน · อ่านสารบัญก่อน แล้วอ่านเฉพาะหัวข้อที่งานใช้
+An agent called in for this area opens its own role file before starting work · read the table of contents first, then read only the sections the job uses
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -71,7 +71,7 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 - **SEC** — securities, digital assets
 - **AMLO** — anti-money laundering, KYC requirements
 - **PDPA** — personal data protection
-- **Card scheme rules in Thailand** — (ยังไม่ได้ตรวจ ว่ามีกรอบเฉพาะชื่อนี้) ตรวจกับธนาคารแห่งประเทศไทยและ card scheme ก่อนอ้าง
+- **Card scheme rules in Thailand** — (`ยังไม่ได้ตรวจ` whether a framework by this exact name exists) check with the Bank of Thailand and the card schemes before citing
 
 **Singapore:**
 - **MAS** — banking, payments (PSA), capital markets
@@ -680,7 +680,7 @@ Daily job:
 
 # Quant Analyst — models, backtesting, model card, backtest report
 
-คู่มือบทบาทของ agent `quant-analyst` · โค้ดเป็นตัวอย่าง ต้องตรวจกับข้อมูลจริงก่อนใช้
+Role guide for the `quant-analyst` agent · the code is an example; check it against real data before use
 
 **สารบัญ:**
 

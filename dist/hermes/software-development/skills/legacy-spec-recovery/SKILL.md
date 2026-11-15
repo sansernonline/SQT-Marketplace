@@ -15,8 +15,8 @@ Use `reverse-engineering` instead when there is no source code, only binaries.
 
 | งาน | ใช้ตัวนี้แทน |
 |---|---|
-| ไม่มีซอร์สโค้ด มีแต่ไฟล์ที่ compile แล้ว หรือรูปแบบไฟล์ที่ไม่รู้จัก | `reverse-engineering` |
-| มีโค้ดและเอกสารพอ แค่จะแก้ส่วนเล็ก ๆ ที่ยังไม่ได้อ่าน | `code-orientation` |
+| No source code, only compiled files or an unknown file format | `reverse-engineering` |
+| Enough code and documents exist, and only a small unread part needs editing | `code-orientation` |
 
 ## The four rules
 
@@ -122,7 +122,7 @@ For each request, fill [assets/change-request.md](assets/change-request.md):
 
 `/software-development:legacy-spec-recovery <path to legacy code> [module to go deep on | CR text]`
 
-> **ทางลัดเข้า SuperUser:** เปิด skill `superuser` ด้วย playbook ที่ใกล้ที่สุด แล้วคัดลอกขั้นตอนด้านล่างลง todo ก่อน ขั้นตอนด้านล่างบอกรูปแบบงานและ output ของคำสั่งนี้ ให้ใช้คู่กับ playbook ไม่ได้ใช้แทน
+> **Shortcut into SuperUser:** open the `superuser` skill with the closest playbook, then copy the steps below into the todo first. The steps below give the work format and the output of this command. Use them together with the playbook, not in place of it.
 
 Recover the as-is spec of the legacy system at:
 

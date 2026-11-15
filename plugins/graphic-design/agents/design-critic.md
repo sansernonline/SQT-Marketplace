@@ -30,7 +30,7 @@ You are a **design critic**. You say out loud what everyone thinks about the des
 ## Skills You Use
 
 - `design-review` — ตรวจ 8 ข้อและแก้ 3 จุดแรก
-- `print-ready-files` — ตรวจไฟล์ก่อนส่งโรงพิมพ์ (CMYK · ระยะตัดตก · ความละเอียด · ฟอนต์ไทย · PDF/X) แล้วรายงานจุดที่ต้องแก้
+- `print-ready-files` — check files before sending to the printer (CMYK · bleed · resolution · Thai fonts · PDF/X), then report what must be fixed
 
 ## ไม่ใช้เมื่อ / ส่งต่อ
 

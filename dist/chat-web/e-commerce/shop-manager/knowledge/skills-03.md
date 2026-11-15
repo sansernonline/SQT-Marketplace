@@ -2,137 +2,137 @@
 
 Use when importing goods from China and costing each unit
 
-# ต้นทุนนำเข้าจากจีนต่อชิ้น (landed cost)
+# Landed cost per unit for goods imported from China
 
-อยู่ใน plugin `e-commerce` · ถ้อยคำเขียนตาม `human-writing` · skill นี้คิดต้นทุนจริงต่อชิ้นของสินค้าที่สั่งจากจีน แยกออกมาจาก `thai-business-setup` หัวข้อ 5 เมื่อ 2026-10-28 · เนื้อหานี้เป็นข้อมูลทั่วไป ไม่ใช่คำปรึกษาภาษีหรือกฎหมาย ตัวเลขภาษีของกิจการจริงให้นักบัญชีคิดซ้ำ
+Part of plugin `e-commerce`. The wording follows `human-writing`. This skill works out the true cost per unit of goods ordered from China. It was split out of `thai-business-setup` section 5 on 2026-10-28. The content is general information, not tax or legal advice. An accountant should recompute the tax figures of a real business.
 
-ตัวย่อในไฟล์นี้: ภาษีมูลค่าเพิ่ม (VAT) · ราคาสินค้ารวมค่าประกันภัยและค่าขนส่งถึงด่านศุลกากรไทย (CIF) · รหัสพิกัดศุลกากร (HS code) · ลูกบาศก์เมตร (คิว)
+Abbreviations in this file: value added tax (VAT) · price of goods plus insurance and freight to the Thai customs border (CIF) · Harmonized System tariff code (HS code) · cubic metre (CBM, called "คิว" in Thai)
 
-> **กฎข้อเดียว:** อัตราอากรไม่มีค่าตั้งต้น ต้องค้นพิกัดแล้วใส่เองทุกล็อต และให้สคริปต์คิด ไม่คิดมือ
+> **One rule:** there is no default duty rate. Look up the tariff code and enter the rate yourself for every lot, and let the script do the calculation, never by hand.
 
-## ใช้เมื่อ
+## Use when
 
-- สั่งสินค้าจากจีน (1688 · Taobao · โรงงาน) ผ่านชิปปิ้ง แล้วอยากรู้ต้นทุนถึงร้านต่อชิ้น
-- เทียบใบเสนอราคาชิปปิ้งทางรถกับทางเรือ หรือแบบเหมาภาษีกับแยกจ่าย
+- Ordering goods from China (1688 · Taobao · a factory) through a freight forwarder, and wanting the cost per unit delivered to the shop
+- Comparing a forwarder's quote for truck versus sea, or an all-in tax package versus paying taxes separately
 
-ไม่ใช้เมื่อ: เลือกรูปแบบธุรกิจหรือจดทะเบียน → `thai-business-setup` · ตั้งราคาขายบนแพลตฟอร์มหลังรู้ต้นทุนแล้ว → `marketplace-fees-pricing` · ยื่น VAT รายเดือนและใช้ภาษีซื้อ → `tax-vat-th`
+Do not use when: choosing a business form or registering → `thai-business-setup` · setting selling prices on a platform once the cost is known → `marketplace-fees-pricing` · filing monthly VAT and using input tax → `tax-vat-th`
 
-## 1 · สูตร
+## 1 · Formula
 
 ```
-CIF            = ค่าสินค้า + ค่าขนส่งถึงด่านศุลกากรไทย + ค่าประกันภัย
-อากรขาเข้า      = CIF × อัตราอากรตามพิกัด
-ภาษีสรรพสามิต   = เฉพาะสินค้าที่มี (ราคาขายปลีกแนะนำ × อัตรา)
-VAT            = (CIF + อากร + สรรพสามิต + ภาษีอื่นถ้ามี) × 7%
-ต้นทุนถึงร้าน    = CIF + อากร + สรรพสามิต + VAT + ค่าบริการชิปปิ้งและพิธีการ + ค่าส่งในไทย
+CIF                  = goods cost + freight to the Thai customs border + insurance
+import duty          = CIF × duty rate of the tariff code
+excise tax           = only for goods that have it (recommended retail price × rate)
+VAT                  = (CIF + duty + excise + other taxes if any) × 7%
+cost delivered to shop = CIF + duty + excise + VAT + forwarder and clearance fees + delivery within Thailand
 ```
 
-กิจการที่จด VAT แล้วและนำเข้าในชื่อตัวเอง เอา VAT ตอนนำเข้าไปเป็นภาษีซื้อได้ เพราะใบเสร็จรับเงินของกรมศุลกากรเป็นใบกำกับภาษีเฉพาะส่วนที่เป็น VAT จึงไม่ต้องนับ VAT ก้อนนี้เป็นต้นทุน
+A business that is VAT-registered and imports in its own name can claim the import VAT as input tax. The Customs Department receipt serves as a tax invoice for the VAT part only, so this VAT is not counted as cost.
 
-## 2 · กติกาปี 2569: ยกเลิกยกเว้นอากร 1,500 บาทแล้ว
+## 2 · Rules for 2026 (B.E. 2569): the 1,500 baht duty exemption is cancelled
 
-- ตั้งแต่ 1 ม.ค. 2569 ของที่ยกเว้นอากรเหลือเฉพาะของที่แต่ละรายมีราคาศุลกากรไม่เกิน 1 บาท ตามประกาศกรมศุลกากร ที่ 219/2568 (ยกเลิกประกาศ ที่ 191/2561) · ผลจริงคือเสียอากรตั้งแต่บาทแรก
-- VAT ของนำเข้าราคาไม่เกิน 1,500 บาท เก็บแล้วตั้งแต่ 5 ก.ค. 2567
-- อัตรา VAT 7%: พระราชกฤษฎีกา (ฉบับที่ 807) พ.ศ. 2569 คงอัตรา 6.3% สำหรับการขาย การให้บริการ และการนำเข้า ถึง 30 ก.ย. 2570 รวมภาษีท้องถิ่นแล้วเป็น 7% ตามที่ `tax-vat-th` สรุป
-- ยังไม่พบประกาศกระทรวงการคลังที่ต่อการยกเว้นอากร 1,500 บาทมาถึงปี 2569 ถ้ามีประกาศใหม่ ให้แก้หัวข้อนี้
+- From 1 Jan 2026 (B.E. 2569), the only goods exempt from duty are those whose customs value per consignee is no more than 1 baht, under Customs Department Notification No. 219/2568 (ประกาศกรมศุลกากร ที่ 219/2568, which cancels Notification No. 191/2561). In practice, duty is due from the first baht.
+- VAT on imports valued at 1,500 baht or less has been collected since 5 Jul 2024 (B.E. 2567).
+- VAT rate of 7%: Royal Decree (No. 807) B.E. 2569 (พระราชกฤษฎีกา ฉบับที่ 807) keeps the 6.3% rate for sales, services and imports until 30 Sep 2027 (B.E. 2570). With the local tax added, the total is 7%, as `tax-vat-th` summarises.
+- No Ministry of Finance notification has been found that extends the 1,500 baht duty exemption into 2026 (B.E. 2569). If a new notification appears, fix this section.
 
-## 3 · หาอัตราอากรและข้อห้าม
+## 3 · Find the duty rate and prohibitions
 
-1. หา HS code 8 หลัก แล้วดูอัตราที่เมนู "ค้นหาพิกัดอัตราอากรขาเข้า" ในฐานข้อมูลพิกัดของกรมศุลกากร http://itd.customs.go.th/igtf/viewerCont.do?param=main · ไม่แน่ใจพิกัดถาม Call Center กรมศุลกากร 1164
-2. สินค้าจากจีนขอลดหรือยกเว้นอากรตามความตกลงการค้าเสรีอาเซียน-จีน (ACFTA) ได้ ถ้ามีหนังสือรับรองถิ่นกำเนิดสินค้า Form E แสดงต่อกรมศุลกากรไทย · ถามชิปปิ้งตั้งแต่แรกว่าทำ Form E ให้ได้ไหม
-3. ตรวจว่าเป็น "ของต้องกำกัด" (ต้องได้รับอนุญาตหรือทำตามเงื่อนไขก่อนนำเข้า) ไหม เช่น อาหาร ยา และเครื่องสำอาง (สำนักงานคณะกรรมการอาหารและยา: อย.) · เครื่องวิทยุคมนาคม (สำนักงาน กสทช.) · สินค้าที่มีมาตรฐานบังคับ (สำนักงานมาตรฐานผลิตภัณฑ์อุตสาหกรรม: สมอ.) (รอยืนยัน รายการสินค้าของแต่ละหน่วยงาน)
+1. Find the 8-digit HS code, then read the rate in the menu "ค้นหาพิกัดอัตราอากรขาเข้า" (search import duty tariff rates) in the Customs Department tariff database http://itd.customs.go.th/igtf/viewerCont.do?param=main · if unsure of the code, ask the Customs Department Call Center on 1164
+2. Goods from China can get a reduced or zero duty under the ASEAN-China Free Trade Agreement (ACFTA) if a Form E certificate of origin is presented to Thai Customs · ask the forwarder from the start whether they can arrange Form E
+3. Check whether the goods are "ของต้องกำกัด" (restricted goods: need permission or must meet conditions before import), such as food, drugs and cosmetics (Food and Drug Administration, อย.) · radio communication equipment (NBTC office, สำนักงาน กสทช.) · goods under a compulsory standard (Thai Industrial Standards Institute, สมอ.) (รอยืนยัน, the product list of each agency)
 
-## 4 · ส่งทางรถหรือทางเรือ
+## 4 · Truck or sea
 
-| เรื่อง | ทางรถ | ทางเรือ |
+| Topic | Truck | Sea |
 |---|---|---|
-| เหมาะกับ | ของเบา มูลค่าสูง อยากได้เร็ว | ของหนักหรือเทอะทะ ล็อตใหญ่ รอได้ |
-| เวลา | สั้นกว่า | ยาวกว่า |
-| ราคาต่อคิว | แพงกว่า | ถูกกว่า |
-| คิดเงิน | ต่อกิโลกรัมหรือต่อคิว ใช้แบบที่ได้เงินมากกว่า | เหมือนกัน |
+| Suits | light, high-value goods needed fast | heavy or bulky goods, large lots, can wait |
+| Time | shorter | longer |
+| Price per CBM | higher | lower |
+| Charged by | per kilogram or per CBM, whichever pays more | same |
 
-ตารางนี้เป็นลักษณะทั่วไปของตลาดชิปปิ้ง (อนุมาน ไม่ใช่ตัวเลขทางการ) · ขอใบเสนอราคาจริงจากชิปปิ้ง 2–3 เจ้า แล้วถาม 5 ข้อนี้
+This table describes the general shape of the forwarding market (อนุมาน, inferred; not official figures). Get real quotes from 2–3 forwarders, and ask these 5 questions:
 
-1. คิดราคาต่อกิโลกรัมหรือต่อคิว ขั้นต่ำเท่าไร ปัดเศษอย่างไร
-2. ราคารวมอากรและ VAT แล้วหรือยัง ("เหมาภาษี" หรือแยกจ่าย)
-3. นำเข้าในชื่อใคร และจะได้ใบขนสินค้ากับใบเสร็จของกรมศุลกากรในชื่อกิจการเราไหม · ถ้าเป็นชื่อชิปปิ้ง VAT ก้อนนั้นเอาไปเป็นภาษีซื้อของเราไม่ได้ (อนุมาน จากหลักที่ใบเสร็จศุลกากรเป็นใบกำกับภาษี)
-4. สินค้าเสียหายหรือหาย ชดเชยเท่าไร
-5. สำแดงราคาตามจริงไหม · การสำแดงราคาต่ำกว่าจริงเป็นความเสี่ยงทางกฎหมายของผู้นำเข้า (รอยืนยัน มาตราและโทษใน พ.ร.บ.ศุลกากร พ.ศ. 2560)
+1. Is the price per kilogram or per CBM, what is the minimum, and how is it rounded
+2. Does the price already include duty and VAT ("เหมาภาษี", an all-in tax package, or paid separately)
+3. In whose name is the import made, and will the customs declaration and the Customs Department receipt come in our business's name · if it is in the forwarder's name, that VAT cannot be used as our input tax (อนุมาน, inferred from the principle that the customs receipt is a tax invoice)
+4. How much is paid if goods are damaged or lost
+5. Is the price declared truthfully · declaring a price lower than the real one is a legal risk for the importer (รอยืนยัน, the sections and penalties in the Customs Act B.E. 2560 [2017], พ.ร.บ.ศุลกากร พ.ศ. 2560)
 
-ตรวจล่าสุด 2026-10-23 · แหล่ง: ประกาศกรมศุลกากร ที่ 219/2568 (ลงนาม 4 ธ.ค. 2568 มีผล 1 ม.ค. 2569) https://www.customs.go.th/cont_strc_download_with_docno_date.php?lang=th&top_menu=menu_homepage&current_id=14232a32414d505f4a464b47464b4a · VAT ของนำเข้าราคาต่ำเริ่ม 5 ก.ค. 2567: เอกสารมาตรการจัดเก็บรายได้ปีงบประมาณ 2569 ของกรมศุลกากร https://www.customs.go.th/data_files/8342f73dce85665090d55bb44eb9a0e4.pdf · พ.ร.ฎ. ฉบับที่ 807 (ราชกิจจานุเบกษา เล่ม 143 ตอนที่ 50 ก 23 ส.ค. 2569) https://rd.go.th/fileadmin/user_upload/kormor/newlaw/dc807.pdf · ฐาน VAT การนำเข้า ประมวลรัษฎากร ม.79/2 https://www.rd.go.th/5205.html · สูตรอากรและ VAT ของกรมศุลกากร http://ccc.customs.go.th/data_files/bdab2d48d4dd6ac677eeecd215c82ba2.pdf · ใบเสร็จศุลกากรเป็นใบกำกับภาษีเฉพาะส่วน VAT https://www.rd.go.th/7047.html · Form E https://www.dft.go.th/th-th/DFT-Service/ServiceData-Information/dft-service-data-privilege/Detail-dft-service-data-privilege/ArticleId/23580/Test · นิยามของต้องกำกัด https://www.customs.go.th/cont_strc_simple.php?ini_content=business_160426_03_160930_01_160930_01&ini_menu=menu_goods_control_permit&lang=th&left_menu=menu_goods_control_permit
+Last checked 2026-10-23. Sources: Customs Department Notification No. 219/2568 (signed 4 Dec 2025 [B.E. 2568], effective 1 Jan 2026 [B.E. 2569]) https://www.customs.go.th/cont_strc_download_with_docno_date.php?lang=th&top_menu=menu_homepage&current_id=14232a32414d505f4a464b47464b4a · VAT on low-value imports starting 5 Jul 2024 (B.E. 2567): Customs Department revenue collection measures document for fiscal year 2026 (B.E. 2569) https://www.customs.go.th/data_files/8342f73dce85665090d55bb44eb9a0e4.pdf · Royal Decree No. 807 (Royal Gazette volume 143, part 50 ก, 23 Aug 2026 [B.E. 2569]) https://rd.go.th/fileadmin/user_upload/kormor/newlaw/dc807.pdf · VAT base on imports, Revenue Code section 79/2 https://www.rd.go.th/5205.html · Customs Department duty and VAT formula http://ccc.customs.go.th/data_files/bdab2d48d4dd6ac677eeecd215c82ba2.pdf · customs receipt as a tax invoice for the VAT part only https://www.rd.go.th/7047.html · Form E https://www.dft.go.th/th-th/DFT-Service/ServiceData-Information/dft-service-data-privilege/Detail-dft-service-data-privilege/ArticleId/23580/Test · definition of restricted goods https://www.customs.go.th/cont_strc_simple.php?ini_content=business_160426_03_160930_01_160930_01&ini_menu=menu_goods_control_permit&lang=th&left_menu=menu_goods_control_permit
 
-## 5 · ตัวอย่าง: กระเป๋าผ้า 200 ใบจาก 1688 ส่งทางรถ
+## 5 · Example: 200 fabric bags from 1688 by truck
 
-ทุกตัวเลขในหัวข้อนี้เป็น**ตัวอย่าง** ใช้แสดงวิธีคิดเท่านั้น
+Every figure in this section is an **example**, used only to show the method.
 
-| สมมุติฐาน | ค่าที่ใช้ |
+| Assumption | Value used |
 |---|---|
-| ราคาสินค้า | 25 หยวนต่อใบ × 200 ใบ = 5,000 หยวน |
-| อัตราแลกเปลี่ยน | 5.00 บาทต่อหยวน (ใช้อัตราจริงของวันจ่ายเงิน) |
-| ค่าส่งในจีนถึงโกดังชิปปิ้ง | 100 หยวน |
-| ค่าขนส่งจีนถึงไทยทางรถ | 0.4 คิว × 6,000 บาทต่อคิว |
-| ค่าประกันภัย | 1% ของค่าสินค้า |
-| อัตราอากร | 20% (ค้นอัตราจริงของพิกัดสินค้า และดูสิทธิ Form E) |
-| ค่าบริการชิปปิ้งและพิธีการ | 1,000 บาทต่อล็อต |
-| ค่าส่งในไทยถึงร้าน | 300 บาท |
+| Goods price | 25 yuan each × 200 = 5,000 yuan |
+| Exchange rate | 5.00 baht per yuan (use the real rate of the payment day) |
+| Shipping within China to the forwarder's warehouse | 100 yuan |
+| Freight China to Thailand by truck | 0.4 CBM × 6,000 baht per CBM |
+| Insurance | 1% of goods cost |
+| Duty rate | 20% (look up the real rate of the tariff code, and check Form E entitlement) |
+| Forwarder and clearance fee | 1,000 baht per lot |
+| Delivery within Thailand to the shop | 300 baht |
 
-| บรรทัด | วิธีคิด | บาท |
+| Line | How it is worked out | Baht |
 |---|---|---|
-| ค่าสินค้า | 5,000 × 5.00 | 25,000.00 |
-| ค่าส่งในจีน | 100 × 5.00 | 500.00 |
-| ค่าขนส่งจีนถึงไทย | 0.4 × 6,000 | 2,400.00 |
-| ค่าประกันภัย | 25,000 × 1% | 250.00 |
-| **CIF** | รวม 4 บรรทัดบน | **28,150.00** |
-| อากรขาเข้า | 28,150 × 20% | 5,630.00 |
+| Goods cost | 5,000 × 5.00 | 25,000.00 |
+| Shipping within China | 100 × 5.00 | 500.00 |
+| Freight China to Thailand | 0.4 × 6,000 | 2,400.00 |
+| Insurance | 25,000 × 1% | 250.00 |
+| **CIF** | sum of the 4 lines above | **28,150.00** |
+| Import duty | 28,150 × 20% | 5,630.00 |
 | VAT | (28,150 + 5,630) × 7% | 2,364.60 |
-| ค่าบริการชิปปิ้งและพิธีการ | | 1,000.00 |
-| ค่าส่งในไทย | | 300.00 |
-| **รวมจ่ายจริง** | | **37,444.60** |
-| **ต้นทุนต่อใบ (ยังไม่จด VAT)** | 37,444.60 ÷ 200 | **187.22** |
-| ต้นทุนต่อใบ (จด VAT และนำเข้าในชื่อตัวเอง) | (37,444.60 − 2,364.60) ÷ 200 | 175.40 |
+| Forwarder and clearance fee | | 1,000.00 |
+| Delivery within Thailand | | 300.00 |
+| **Total actually paid** | | **37,444.60** |
+| **Cost per bag (not VAT-registered)** | 37,444.60 ÷ 200 | **187.22** |
+| Cost per bag (VAT-registered, imported in own name) | (37,444.60 − 2,364.60) ÷ 200 | 175.40 |
 
-ราคาหน้าเว็บ 25 หยวนคิดเป็น 125 บาท แต่ต้นทุนถึงร้านอยู่ที่ 175–187 บาท สูงขึ้น 40–50% · เอาต้นทุนนี้ไปตั้งราคาขายต่อด้วย `marketplace-fees-pricing`
+The web price of 25 yuan is 125 baht, but the cost delivered to the shop is 175–187 baht, 40–50% higher. Take this cost to set the resale price with `marketplace-fees-pricing`.
 
-## 6 · ให้สคริปต์คิด ไม่คิดมือ
+## 6 · Let the script calculate, never by hand
 
-`scripts/landed-cost.mjs` คิดตารางข้างบนครบทุกบรรทัดในครั้งเดียว ได้ต้นทุนต่อชิ้นทั้ง 2 แบบ (จด VAT หรือยัง) · อัตรา VAT อยู่ใน `scripts/rates.json` พร้อมวันที่ตรวจ เตือนเมื่อเก่ากว่า 90 วันหรือเลย 30 ก.ย. 2570 · อัตราอากรไม่มีค่าตั้งต้น ต้องค้นพิกัดแล้วใส่เองทุกล็อต
+`scripts/landed-cost.mjs` works out every line of the table above in one run, and gives the cost per unit both ways (VAT-registered or not). The VAT rate is in `scripts/rates.json` with the date checked. The script warns when it is older than 90 days or past 30 Sep 2027 (B.E. 2570). There is no default duty rate. Look up the tariff code and enter the rate yourself for every lot.
 
 ```bash
-node scripts/landed-cost.mjs scripts/example.json     # ตัวอย่างกระเป๋า 200 ใบ → 187.22 และ 175.40 ต่อใบ
+node scripts/landed-cost.mjs scripts/example.json     # 200-bag example → 187.22 and 175.40 per bag
 node scripts/landed-cost.mjs --self-test
 ```
 
-**Script path:** ติดตั้งจาก marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/import-landed-cost/scripts/landed-cost.mjs | sort -V | tail -1` · ใน repo SQT-Marketplace: `plugins/e-commerce/skills/import-landed-cost/scripts/landed-cost.mjs` · Node อย่างเดียว ไม่มี dependency
+**Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/import-landed-cost/scripts/landed-cost.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/e-commerce/skills/import-landed-cost/scripts/landed-cost.mjs` · Node only, no dependencies
 
-## 7 · เมื่อไหร่ต้องถามนักบัญชีหรือทนาย
+## 7 · When to ask an accountant or a lawyer
 
-- นำเข้าสินค้าที่อาจเป็นของต้องกำกัด หรือไม่แน่ใจ HS code
+- Importing goods that may be restricted, or unsure of the HS code
 
-## 8 · รออนุมัติ
+## 8 · รออนุมัติ (awaiting approval)
 
-ย้อนไม่ได้หรือกระทบคนนอก agent เตรียมข้อมูลและร่างให้ แต่ไม่ทำเอง
+These cannot be undone or affect outside people. The agent prepares the information and drafts, but does not do them itself.
 
-- โอนเงินซื้อสินค้า จ่ายค่าชิปปิ้ง หรือชำระอากรและภาษี
-- ลงนามสัญญากับชิปปิ้ง
-- ใส่รหัสผ่าน รหัสยืนยันตัวตน หรือเลขบัญชีของผู้ใช้
+- Transferring money to buy goods, paying the forwarder, or paying duty and taxes
+- Signing a contract with the forwarder
+- Entering the user's password, identity verification code or account number
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Links to other skills
 
-| ต้องการ | ใช้ |
+| Need | Use |
 |---|---|
-| ตั้งราคาขายบน Shopee Lazada TikTok Shop หลังรู้ต้นทุน | `marketplace-fees-pricing` |
-| เลือกรูปแบบธุรกิจ จดทะเบียน และจด VAT | `thai-business-setup` |
-| ยื่น VAT รายเดือนและภาษีซื้อ | `tax-vat-th` + agent `tax-helper` |
-| เทียบขนส่งในประเทศ | `shipping-compare` |
-| ถ้อยคำทุกบรรทัด | `human-writing` |
+| Set the selling price on Shopee Lazada TikTok Shop once the cost is known | `marketplace-fees-pricing` |
+| Choose a business form, register, and register for VAT | `thai-business-setup` |
+| File monthly VAT and input tax | `tax-vat-th` + agent `tax-helper` |
+| Compare domestic shipping | `shipping-compare` |
+| The wording of every line | `human-writing` |
 
-## ตรวจก่อนส่ง
+## Check before sending
 
-1. อัตราอากรมาจากพิกัดจริงของสินค้า ไม่ใช่ค่าในตัวอย่าง และบอกว่าดูสิทธิ Form E แล้วหรือยัง
-2. ตัวเลขทุกบรรทัดมาจาก `landed-cost.mjs` และคำเตือนของสคริปต์ (rates.json เก่า · อัตราอากรผิดหน่วย) ส่งต่อให้ผู้ใช้ครบ
-3. บอกต้นทุนต่อชิ้นทั้ง 2 แบบ (จด VAT หรือยัง) และบอกว่า VAT นำเข้าเป็นภาษีซื้อได้เฉพาะเมื่อนำเข้าในชื่อกิจการเอง
+1. The duty rate comes from the real tariff code of the goods, not from the example, and say whether Form E entitlement was checked
+2. Every figure comes from `landed-cost.mjs`, and the script's warnings (rates.json too old · duty rate in the wrong unit) are passed on to the user in full
+3. State the cost per unit both ways (VAT-registered or not), and say that import VAT is input tax only when the import is in the business's own name
 
-ที่มาของแนวคิด: โครงคำนวณ landed cost ได้แนวคิดจาก https://github.com/Boom-Vitt/claude-thai-business-skills (MIT License · Copyright (c) 2026 Vittawat (boombignose) · ตรวจไฟล์ LICENSE 2026-10-23) · เขียนใหม่ทั้งหมด ไม่คัดลอกข้อความ และตรวจตัวเลขทุกตัวกับแหล่งทางการใหม่ · ต้นทางยังเขียนว่าพัสดุราคาต่ำกว่า 1,500 บาทอาจไม่เสียอากร ซึ่งไม่ตรงกับกติกาตั้งแต่ 1 ม.ค. 2569
+Origin of the idea: the landed cost calculation structure took its idea from https://github.com/Boom-Vitt/claude-thai-business-skills (MIT License · Copyright (c) 2026 Vittawat (boombignose) · LICENSE file checked 2026-10-23) · fully rewritten, no text copied, and every figure rechecked against official sources · the original still says parcels under 1,500 baht may pay no duty, which does not match the rules from 1 Jan 2026 (B.E. 2569)
 
 
 ---

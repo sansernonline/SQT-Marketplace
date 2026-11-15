@@ -1,63 +1,63 @@
-# course-builder · หัวข้อ 6–9 (สื่อ แบบประเมิน ออนไลน์ ลิขสิทธิ์)
+# course-builder · sections 6–9 (materials, feedback form, online, copyright)
 
-ย้ายมาจาก [SKILL.md](../SKILL.md) · กฎหลักของ skill (ผลลัพธ์ชี้กลับทุกช่วง) อยู่ใน SKILL.md · เลขหัวข้อคงเดิม
+Moved from [SKILL.md](../SKILL.md) · the skill's main rule (outcomes point back from every session) stays in SKILL.md · section numbers are unchanged.
 
-## 6 · สื่อการสอน: สไลด์และเอกสารแจกภาษาไทย
+## 6 · Teaching materials: Thai slides and handouts
 
-- **สไลด์** โครงเรื่อง หัวสไลด์ที่เป็นข้อสรุป layout และฟอนต์ไทย ใช้ `presentation-design` (software-development) · ถ้าต้องเปิดได้โดยไม่ต่อเน็ต เป็นไฟล์เดียว มีโน้ตผู้พูด ใช้ `html-slide-deck` (software-development) · ถ้ายังไม่ได้ติดตั้ง plugin นั้น ให้บอกผู้ใช้ แล้วใช้หัวข้อ 6 ของ `human-writing` (หัวสไลด์คือข้อสรุปของหน้า)
-- **สไลด์ไม่ใช่เอกสารแจก** สไลด์มีหัวที่เป็นข้อสรุป ภาพ หรือโค้ดสั้น ส่วนรายละเอียดและคำสั่งที่ต้องพิมพ์ตามอยู่ในเอกสารแจก ผู้เรียนจะได้ไม่ต้องถ่ายรูปจอ
-- **เอกสารแจกภาษาไทย** เขียนตาม `human-writing` ระดับภาษา "อธิบาย" (ไม่มีครับหรือค่ะในเนื้อ) · คำสั่งอยู่ใน code block คัดลอกไปวางแล้วรันได้ · ตัวย่อเขียนเต็มครั้งแรก · สิ่งเดียวกันเรียกคำเดียวทั้งสไลด์ เอกสาร และแบบฝึก · รัน `thai_tells.py` ก่อนส่งพิมพ์
-- **สรุป 1 หน้า (cheat sheet)** คำสั่งที่ใช้บ่อยพร้อมตัวอย่าง ผู้เรียนเอากลับไปวางข้างจอได้
-- ส่งออกเป็น Word หรือ PDF ใช้ `markdown-report-docx` (software-development) · ตัดคำไทยในไฟล์ส่งออกตาม `human-writing` `references/thai-line-breaking.md`
-- ชื่อไฟล์มีรุ่นและวันที่ เช่น `git-basics-handout-v02-2026-11-05.pdf` ผู้เรียนจะได้รู้ว่าถือฉบับไหนอยู่
+- **Slides**: for storyline, conclusion-style slide titles, layout and Thai fonts, use `presentation-design` (software-development). If the deck must open offline, as a single file, with speaker notes, use `html-slide-deck` (software-development). If that plugin is not installed, tell the user, then use section 6 of `human-writing` (a slide title is the conclusion of the page).
+- **Slides are not handouts.** A slide has a conclusion-style title, a picture, or a short piece of code. Details and commands to type along go in the handout, so learners do not need to photograph the screen.
+- **Thai handouts**: write them by `human-writing` at the "explain" register (no ครับ or ค่ะ in the body) · commands go in a code block that can be copied, pasted and run · spell out abbreviations on first use · call the same thing by one word across slides, handouts and exercises · run `thai_tells.py` before sending to print.
+- **1-page summary (cheat sheet)**: the commonly used commands with examples, which learners can take back and keep beside the screen.
+- To export to Word or PDF, use `markdown-report-docx` (software-development) · break Thai words in the exported file by `human-writing` `references/thai-line-breaking.md`.
+- Put the version and date in the file name, such as `git-basics-handout-v02-2026-11-05.pdf`, so learners know which copy they hold.
 
-## 7 · แบบประเมินหลังอบรม และสิ่งที่จะแก้รอบหน้า
+## 7 · Post-training feedback form, and what to fix next round
 
-แบบจำลองของ Kirkpatrick วัดผลการอบรม 4 ระดับ: ปฏิกิริยา (ผู้เรียนรู้สึกกับการอบรมอย่างไร) · การเรียนรู้ (ได้ความรู้และทักษะตามเป้าไหม) · พฤติกรรม (กลับไปทำจริงที่งานไหม) · ผลลัพธ์ (เป้าขององค์กรขยับไหม) · หลักสูตร 1 วันวัด 2 ระดับแรกในวันนั้น แล้วนัดถามระดับ 3 หลังอบรม 30 วัน (แนวของเรา)
+Kirkpatrick's model measures training results at 4 levels: reaction (how learners feel about the training) · learning (whether they gained the knowledge and skills in the goals) · behavior (whether they actually do it back at work) · results (whether the organization's goals move). A 1-day course measures the first 2 levels on the day, then schedules a level 3 follow-up 30 days after training (แนวของเรา, our rule of thumb).
 
-แบบประเมินไม่เกิน 7 ข้อ กรอกเสร็จใน 3 นาที ไม่ต้องใส่ชื่อ
+The feedback form has at most 7 items, takes 3 minutes to fill in, and needs no name.
 
-1. ความมั่นใจ 1–5 ต่อผลลัพธ์แต่ละข้อ (ใส่ข้อความผลลัพธ์จริงลงในแบบ)
-2. ช่วงไหนได้ใช้มากที่สุด
-3. ช่วงไหนเสียเวลา
-4. ความเร็ว: ช้าไป · พอดี · เร็วไป
-5. สัปดาห์หน้าจะเอาเรื่องไหนไปใช้ 1 เรื่อง
-6. ถ้าแก้หลักสูตรได้ 1 อย่าง จะแก้อะไร
-7. จะแนะนำให้เพื่อนร่วมงานมาเรียนไหม เพราะอะไร
+1. Confidence 1–5 for each outcome (put the real outcome text into the form).
+2. Which session was used the most.
+3. Which session wasted time.
+4. Pace: too slow · just right · too fast.
+5. Which 1 topic they will use next week.
+6. If they could change 1 thing in the course, what it would be.
+7. Whether they would recommend it to a coworker, and why.
 
-ถ้าต้องเก็บชื่อหรืออีเมล เช่น เพื่อส่งใบประกาศ ให้แจ้งว่าเก็บไปทำอะไรและเก็บนานเท่าไร ตาม พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล (Personal Data Protection Act: PDPA) · ขั้นตอนอยู่ใน `pdpa-workflow` (e-commerce)
+If you must collect a name or email, for example to send a certificate, tell people what it is kept for and for how long, under the Personal Data Protection Act (PDPA). The steps are in `pdpa-workflow` (e-commerce).
 
-**ทบทวนหลังสอนภายใน 48 ชั่วโมง** แล้วจดลง `course/course-log.md` พร้อมวันที่สอน จำนวนผู้เรียน และรุ่นของสื่อ
+**Review within 48 hours after teaching**, then record it in `course/course-log.md` with the teaching date, number of learners and version of the materials.
 
-| ตัดสินใจ | หลักฐาน | รอบหน้า |
+| Decision | Evidence | Next round |
 |---|---|---|
-| เก็บ | ช่วง 3 ได้ความมั่นใจเฉลี่ย 4.5 จาก 5 (ตัวอย่าง) | คงไว้ |
-| แก้ | 5 จาก 12 คนติด conflict นานกว่า 20 นาที (ตัวอย่าง) | เพิ่มภาพหน้าจอในใบขั้นตอน และคำใบ้ขั้นแรก |
-| ตัด | ช่วงประวัติของ Git ไม่มีใครเลือกว่าได้ใช้ (ตัวอย่าง) | เหลือ 1 สไลด์ |
+| Keep | Session 3 got average confidence of 4.5 out of 5 (ตัวอย่าง, example) | Keep it |
+| Fix | 5 of 12 people were stuck on a conflict for more than 20 minutes (ตัวอย่าง) | Add screenshots to the instruction sheet, and a hint for the first step |
+| Cut | Nobody picked the Git history session as one they used (ตัวอย่าง) | Reduce to 1 slide |
 
-แก้ไม่เกิน 3 อย่างต่อรอบ จะได้รู้ว่าอะไรช่วยจริง (แนวของเรา)
+Fix at most 3 things per round, so you can tell what really helped (แนวของเรา).
 
-## 8 · ออนไลน์กับในห้องต่างกันตรงไหน
+## 8 · How online differs from in the room
 
-| เรื่อง | ในห้อง | ออนไลน์ |
+| Topic | In the room | Online |
 |---|---|---|
-| ความยาวต่อช่วง | 75–90 นาที | ไม่เกิน 60 นาทีแล้วพัก 5–10 นาที · หลักสูตร 1 วันแบ่งเป็น 2 ครึ่งวันคนละวัน |
-| เครื่องและโปรแกรม | มีเครื่องสำรองในห้อง 1–2 เครื่อง | ส่งคู่มือติดตั้งล่วงหน้า 3 วัน · นัดเช็กเครื่อง 15 นาทีก่อนวันจริง |
-| ผู้ช่วยสอน | 1 คนต่อผู้เรียน 10–12 คนในช่วงลงมือ | 1 คนดูแชตและห้องย่อย (breakout room) |
-| ดูว่าใครติด | เดินดูจอ | ให้แชร์จอ หรือส่งภาพผลลงแชตที่จุดตรวจ |
-| งานกลุ่ม | กลุ่มโต๊ะละ 3–4 คน | ห้องย่อยละ 3–4 คน เขียนโจทย์และเวลาไว้ในแชตก่อนแยกห้อง |
-| คำถาม | ยกมือถาม | ถามในแชตหรือ poll · ผู้สอนหยุดอ่านแชตทุก 10 นาที |
-| การอัดวิดีโอ | ส่วนใหญ่ไม่อัด | อัดได้ แต่แจ้งก่อนเริ่ม และบอกว่าเก็บที่ไหน นานเท่าไร (PDPA) |
-| เอกสาร | พิมพ์แจก | ส่ง PDF และลิงก์ก่อนเริ่ม |
+| Length per session | 75–90 minutes | At most 60 minutes, then a 5–10 minute break · split a 1-day course into 2 half-days on different days |
+| Machines and software | 1–2 spare machines in the room | Send the install guide 3 days ahead · schedule a 15-minute machine check before the real day |
+| Teaching assistant | 1 per 10–12 learners during hands-on time | 1 person watches the chat and the breakout rooms |
+| Seeing who is stuck | Walk around and look at screens | Ask them to share their screen, or post a picture of the result in the chat at a checkpoint |
+| Group work | Groups of 3–4 per table | Breakout rooms of 3–4 · write the task and time in the chat before splitting |
+| Questions | Raise a hand | Ask in the chat or a poll · the trainer stops to read the chat every 10 minutes |
+| Recording video | Mostly not recorded | Can record, but say so before starting, and tell people where it is kept and for how long (PDPA) |
+| Documents | Print and hand out | Send the PDF and links before starting |
 
-ตัวเลขในตารางนี้เป็นแนวของเรา ให้ปรับจาก `course-log.md`
+The numbers in this table are our rule of thumb (แนวของเรา). Adjust them from `course-log.md`.
 
-## 9 · ลิขสิทธิ์ของสื่อการสอน
+## 9 · Copyright of teaching materials
 
-ข้อมูลทั่วไป ไม่ใช่คำปรึกษากฎหมาย · สื่อที่จะขายหรือใช้กับลูกค้าหลายราย ให้นักกฎหมายตรวจก่อน
+General information, not legal advice · for materials you will sell or use with many clients, have a lawyer check first.
 
-- **ใช้ตัวอย่างของตัวเอง** แต่งโค้ด สถานการณ์ และข้อมูลตัวอย่างขึ้นเอง · ข้อมูลจริงของลูกค้าหรือพนักงานห้ามใส่ในแบบฝึก เพราะเป็นข้อมูลส่วนบุคคล ให้แต่งชื่อและตัวเลขใหม่ทั้งหมด
-- **ของคนอื่นต้องบอกที่มา** ทุกภาพ ข้อความ และโค้ดที่ไม่ได้ทำเอง ใส่ชื่องาน ผู้สร้าง ลิงก์ สัญญาอนุญาต และวันที่เปิดดู ไว้ใต้ภาพหรือท้ายเอกสาร
-- **ข้อยกเว้นเพื่อการสอนใช้ได้เมื่อไม่หากำไร** พ.ร.บ.ลิขสิทธิ์ พ.ศ. 2537 มาตรา 32 (6) และ (7) ยกเว้นให้ผู้สอนและสถาบันศึกษาที่ทำซ้ำหรือแจกงานเพื่อการสอนที่ไม่หากำไร · อบรมที่เก็บเงินหรือรับจ้างสอนจึงไม่ควรพึ่งข้อยกเว้นนี้ (อนุมาน) · มาตรา 33 ให้คัดหรืออ้างงานบางตอนได้ตามสมควร ถ้าบอกว่าใครเป็นเจ้าของ
-- **สัญญาอนุญาต Creative Commons (CC)** BY ต้องให้เครดิต · SA งานดัดแปลงต้องใช้สัญญาเดียวกัน · NC ใช้เพื่อการค้าไม่ได้ อบรมที่เก็บเงินจึงเลี่ยงงาน NC · ND ห้ามดัดแปลง · งานที่ไม่บอกสัญญาอนุญาตเลย ให้ถือว่าใช้ไม่ได้จนกว่าเจ้าของอนุญาต (แนวของเรา)
-- **สื่อที่คุณทำเป็นของใคร** ทำในฐานะพนักงาน ลิขสิทธิ์เป็นของผู้สร้างถ้าไม่ได้ทำหนังสือตกลงไว้เป็นอย่างอื่น แต่นายจ้างนำออกเผยแพร่ตามวัตถุประสงค์ของการจ้างได้ (มาตรา 9) · รับจ้างทำให้คนอื่น ลิขสิทธิ์เป็นของผู้ว่าจ้าง เว้นแต่ตกลงไว้เป็นอย่างอื่น (มาตรา 10) · วิทยากรอิสระที่อยากเอาสไลด์ไปสอนที่อื่นต่อ ให้เขียนเรื่องนี้ไว้ในสัญญาก่อนเริ่มงาน ใช้ `doc-contract-th` (e-commerce)
+- **Use your own examples.** Write the code, scenarios and sample data yourself. Never put real client or employee data in an exercise, because it is personal data. Invent all names and numbers anew.
+- **Credit other people's work.** For every picture, text and piece of code you did not make, put the work's title, creator, link, license and the date you viewed it under the picture or at the end of the document.
+- **The teaching exception applies only when not for profit.** The Copyright Act B.E. 2537 (1994), section 32 (6) and (7), exempts teachers and educational institutions that copy or distribute works for non-profit teaching. Paid training or teaching for hire therefore should not rely on this exception (อนุมาน, inferred). Section 33 allows copying or quoting a reasonable part of a work if you say who owns it.
+- **Creative Commons (CC) licenses.** BY means you must give credit · SA means adaptations must use the same license · NC means no commercial use, so paid training avoids NC works · ND means no adaptation. A work that states no license at all should be treated as unusable until the owner allows it (แนวของเรา).
+- **Who owns the material you make.** If you made it as an employee, the copyright belongs to the creator unless a written agreement says otherwise, but the employer may publish it within the purpose of the employment (section 9). If you made it under a commission for someone else, the copyright belongs to the commissioner unless agreed otherwise (section 10). An independent trainer who wants to reuse the slides elsewhere should write that into the contract before the work starts. Use `doc-contract-th` (e-commerce).

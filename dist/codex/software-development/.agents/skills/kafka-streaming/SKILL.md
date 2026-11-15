@@ -3,140 +3,140 @@ name: kafka-streaming
 description: Use when services pass events via Kafka
 ---
 
-# kafka-streaming — ออกแบบ topic · producer · consumer ของ Apache Kafka ไม่ให้ event หายหรือซ้ำแบบเงียบ ๆ
+# kafka-streaming — design Apache Kafka topics, producers and consumers so events are never silently lost or duplicated
 
-อยู่ใน plugin `software-development` · ถ้อยคำในไฟล์นี้และเอกสารที่ได้จากมัน เขียนตาม `human-writing` · ค่าตั้งและรุ่นทุกตัวมีลิงก์กับวันที่ตรวจ 2026-10-27 ในหัวข้อ "ที่มา" และ [`config-table`](references/config-table.md)
+Part of the `software-development` plugin. Follow `human-writing` for the wording of this file and of documents made from it. Every setting and version has a link and the check date 2026-10-27 in the "Sources" section and in [`config-table`](references/config-table.md).
 
-> **กฎข้อเดียว:** Kafka ส่งให้ "อย่างน้อยหนึ่งครั้ง" ไม่ใช่ "ครั้งเดียว" · ฝั่งส่งต้องไม่ทิ้ง event (ส่งยืนยันครบ + outbox) ฝั่งรับต้องทำซ้ำได้ (เช็ก `event_id`) และ commit offset หลังทำเสร็จเท่านั้น · ขาดข้อใดข้อหนึ่ง event จะหายหรือซ้ำโดยไม่มีใครเห็น
+> **One rule:** Kafka delivers "at least once", not "exactly once". The sender must not drop events (confirm every send, plus an outbox). The receiver must be safe to repeat (check `event_id`) and must commit the offset only after the work is done. If either side is missing, events are lost or duplicated and nobody sees it.
 
-## ใช้เมื่อ
+## Use when
 
-- service 2 ตัวขึ้นไปต้องรับ event เดียวกัน และต้องย้อนอ่านซ้ำได้ (เช่น สรุปสายโทรลง CRM กับแจ้งเตือน LINE จาก event ชุดเดียว)
-- ต้องรักษาลำดับ event ต่อสายหรือต่อนัด (เริ่มสาย → จบสาย → สรุป · จอง → เลื่อน → ยกเลิก)
-- ผู้ใช้พูดว่า Kafka · topic · consumer group · offset · partition · DLQ · "event หาย" · "event ซ้ำ" · "ส่ง event ระหว่าง service"
-- consumer lag โตหรือ consumer ถูก rebalance ไม่หยุด
+- 2 or more services must receive the same event, and must be able to read it again (for example, a call summary goes to the CRM and a LINE notification from one set of events)
+- Event order must be kept per call or per appointment (start call → end call → summary · book → reschedule → cancel)
+- The user says Kafka · topic · consumer group · offset · partition · DLQ · "event หาย" · "event ซ้ำ" · "ส่ง event ระหว่าง service"
+- Consumer lag keeps growing, or a consumer keeps being rebalanced
 
-ไม่ใช้เมื่อ: งานเบื้องหลังของ service เดียว (ส่งเมล ทำรายงาน ตั้งเวลา) มีผู้รับเดียว ไม่ต้องย้อนอ่าน → [`background-jobs`](../background-jobs/SKILL.md) พอ · เลือกสถาปัตยกรรมทั้งระบบ → [`architecture-patterns`](../architecture-patterns/SKILL.md) ก่อน · ข้อมูลที่ส่งเป็นของอุปกรณ์ IoT → `iot-systems`
+Do not use when: the work is a background job of a single service (send mail, build a report, run a timer) with one receiver and no need to read again → [`background-jobs`](../background-jobs/SKILL.md) is enough · you are choosing the architecture of the whole system → [`architecture-patterns`](../architecture-patterns/SKILL.md) first · the data comes from IoT devices → `iot-systems`
 
-## ใช้ตัวอื่นแทนหรือคู่กัน
+## Use something else instead, or alongside
 
-| สถานการณ์ | ใช้ | เกี่ยวกับ skill นี้อย่างไร |
+| Situation | Use | How it relates to this skill |
 |---|---|---|
-| คิวงานธรรมดา มีผู้รับเดียว | [`background-jobs`](../background-jobs/SKILL.md) | หัวข้อ 1 ตัดสินว่าต้องใช้ Kafka จริงไหม |
-| คิวงานที่ต้องแจกให้ worker พร้อม retry และ dead letter ใช้ RabbitMQ | [`rabbitmq-messaging`](../rabbitmq-messaging/SKILL.md) | หัวข้อ 1 ของไฟล์นั้นเทียบ 2 ตัว |
-| งานที่อาจรันซ้ำหรือหยุดกลางทาง | [`principle-safe-to-rerun`](../principle-safe-to-rerun/SKILL.md) | consumer ทุกตัวต้องผ่านหลักนี้ (หัวข้อ 4) |
-| ปลายทางเป็นอีเมล LINE push SMS | [`notifications`](../notifications/SKILL.md) | consumer แจ้งเตือนใช้กฎช่องทางและโควตาของ skill นั้น |
-| เลือก event-driven เทียบแบบอื่น | [`architecture-patterns`](../architecture-patterns/SKILL.md) | Kafka เป็นเครื่องมือ ไม่ใช่ตัวเลือกสถาปัตยกรรม |
-| event มีเบอร์โทร ชื่อ เสียง | [`pdpa-compliance`](../pdpa-compliance/SKILL.md) | หัวข้อ 6 ย่อ ส่วนสิทธิ์ของเจ้าของข้อมูลอยู่ที่นั่น |
-| ตั้งเฝ้า lag และ alert | [`observability-basics`](../observability-basics/SKILL.md) | หัวข้อ 7 บอกว่าเฝ้าอะไร |
-| ออกแบบ pipeline ข้อมูลทั้งสาย | agent `data-engineer` | skill นี้ให้กฎของ Kafka ที่เขาต้องใช้ |
+| A plain job queue with one receiver | [`background-jobs`](../background-jobs/SKILL.md) | Section 1 decides whether you really need Kafka |
+| A job queue that hands work to workers with retry and dead letter, using RabbitMQ | [`rabbitmq-messaging`](../rabbitmq-messaging/SKILL.md) | Section 1 of that file compares the 2 |
+| Work that may run twice or stop halfway | [`principle-safe-to-rerun`](../principle-safe-to-rerun/SKILL.md) | Every consumer must pass this principle (section 4) |
+| The destination is email, LINE push or SMS | [`notifications`](../notifications/SKILL.md) | A notification consumer follows that skill's channel and quota rules |
+| Choosing event-driven against other styles | [`architecture-patterns`](../architecture-patterns/SKILL.md) | Kafka is a tool, not an architecture choice |
+| Events contain phone numbers, names or voice | [`pdpa-compliance`](../pdpa-compliance/SKILL.md) | Section 6 is a short version. The data subject's rights are covered there |
+| Setting up lag monitoring and alerts | [`observability-basics`](../observability-basics/SKILL.md) | Section 7 says what to watch |
+| Designing a whole data pipeline | agent `data-engineer` | This skill gives the Kafka rules that agent must use |
 
-## 1 · ควรใช้ Kafka เมื่อไหร่
+## 1 · When to use Kafka
 
-| ถามก่อน | ตอบแบบนี้ → Kafka | ตอบแบบนี้ → ไม่ต้อง |
+| Ask first | Answer like this → Kafka | Answer like this → not needed |
 |---|---|---|
-| ผู้รับกี่ราย | 2 รายขึ้นไป อ่านชุดเดียวกันคนละจังหวะ | รายเดียว |
-| ต้องย้อนอ่าน event เก่าไหม (เติม CRM ใหม่ แก้บั๊กแล้วเล่นซ้ำ) | ต้อง | ทำแล้วทิ้ง |
-| ลำดับสำคัญไหม | สำคัญต่อ key (สาย นัด) | ไม่สำคัญ |
-| มีคนดูแล cluster ไหม | มี หรือใช้บริการที่มีคนดูแล | ไม่มี และปริมาณเป็นหลักร้อยต่อชั่วโมง |
+| How many receivers | 2 or more, reading the same set at different times | 1 |
+| Must you re-read old events (refill a new CRM, replay after a bug fix) | Yes | Process once and discard |
+| Does order matter | It matters per key (call, appointment) | It does not |
+| Does someone run the cluster | Yes, or a managed service is used | No, and volume is in the hundreds per hour |
 
-ปริมาณคลินิกเดียวมักน้อยจน Kafka เกินจำเป็น · ถ้าตอบ "รายเดียว ไม่ย้อนอ่าน" ใช้ `background-jobs` แล้วบอกผู้ใช้ตรง ๆ · ตัดสินแล้วจดเหตุผลลง ADR (`adr-writer`) · ต้นทุน cluster และบริการจัดการต่อเดือน `(ยังไม่ได้ตรวจ)`
+The volume of a single clinic is usually so small that Kafka is more than needed. If the answer is "1 receiver, no re-reading", use `background-jobs` and tell the user plainly. Write the decision and its reasons in an ADR (`adr-writer`). The monthly cost of a cluster and managed service is `(ยังไม่ได้ตรวจ)` (not yet checked).
 
-## 2 · topic
+## 2 · Topic
 
-| เรื่อง | ทำ | เหตุผล |
+| Item | Do | Reason |
 |---|---|---|
-| ชื่อ | `<โดเมน>.<เรื่อง>.events.v<เลข>` เช่น `clinic.call.events.v1` · 1 topic ต่อ 1 เรื่องที่ลำดับต้องรักษา | ชื่อบอกเจ้าของ · เวอร์ชันไว้ย้ายเมื่อ schema หักแบบเข้ากันไม่ได้ |
-| key | id ของสิ่งที่ลำดับสำคัญ (`call_id` · `appointment_id`) · ห้ามปล่อย key ว่าง | key เดียวกันลง partition เดียว อ่านตามลำดับที่เขียน · ข้าม partition ไม่รับประกันลำดับ |
-| จำนวน partition | วัดจากปริมาณจริง ให้ไม่น้อยกว่า max(เป้า÷ความเร็วเขียนต่อ partition, เป้า÷ความเร็วอ่านต่อ partition) แล้วเผื่อเล็กน้อย · เริ่ม 3–6 สำหรับคลินิกเล็ก `(ประมาณ ยังไม่ได้วัด)` | เพิ่มได้ ลดไม่ได้ · เพิ่มแล้ว key เดิมอาจย้าย partition ลำดับของ key เก่าเพี้ยน |
-| replication factor (RF) | 3 บน cluster จริง · 1 ได้แค่เครื่อง dev | RF 3 คือค่าที่ใช้กันทั่วไปใน production |
-| `min.insync.replicas` | 2 คู่กับ RF 3 และ `acks=all` | เขียนสำเร็จเมื่อมีสำเนาที่ทันอย่างน้อย 2 ตัว · ล่มได้ 1 เครื่องโดยไม่หายและไม่หยุดเขียน · ค่าเริ่มต้นคือ 1 |
-| retention | `retention.ms` ค่าเริ่มต้น 7 วัน · ตั้งให้ยาวกว่าเวลาที่ consumer ดับนานสุดที่ยอมรับ · event ที่มีข้อมูลส่วนบุคคลให้สั้นสุดเท่าที่ใช้ (หัวข้อ 6) | consumer ที่ดับนานกว่า retention จะอ่าน event ที่ถูกลบไปแล้วไม่ได้ |
-| compaction | ใช้กับ topic "สถานะล่าสุดต่อ key" เท่านั้น (`cleanup.policy=compact`) · topic event ที่ต้องเก็บประวัติ ใช้ `delete` | compaction เก็บค่าล่าสุดของแต่ละ key ประวัติ จอง→เลื่อน→ยกเลิก จะหาย |
-| สร้าง topic | สร้างด้วยโค้ดหรือสคริปต์ที่รีวิวได้ · ปิด `auto.create.topics.enable` | ค่าเริ่มต้นเปิด และ `default.replication.factor` เริ่มที่ 1 พิมพ์ชื่อ topic ผิดอาจได้ topic ใหม่ที่ไม่มีสำเนา (ข้อสรุปจากค่าเริ่มต้นสองตัว ยังไม่ได้ทดลอง) |
+| Name | `<โดเมน>.<เรื่อง>.events.v<เลข>` for example `clinic.call.events.v1` · 1 topic per subject whose order must be kept | The name shows the owner · the version is for moving when the schema breaks compatibility |
+| Key | The id of the thing whose order matters (`call_id` · `appointment_id`) · never leave the key empty | The same key goes to the same partition and is read in write order · order is not guaranteed across partitions |
+| Number of partitions | Measure from real volume. Use at least max(target ÷ write speed per partition, target ÷ read speed per partition), then add a small margin · start at 3–6 for a small clinic `(ประมาณ ยังไม่ได้วัด)` (estimate, not measured) | You can add, not remove · after adding, an existing key may move to another partition and the order of old events for that key breaks |
+| Replication factor (RF) | 3 on a real cluster · 1 only on a dev machine | RF 3 is the common production value |
+| `min.insync.replicas` | 2, together with RF 3 and `acks=all` | A write succeeds when at least 2 up-to-date copies exist · 1 machine can fail with no loss and no write stop · the default is 1 |
+| retention | `retention.ms` defaults to 7 days · set it longer than the longest consumer outage you accept · keep events with personal data as short as use allows (section 6) | A consumer that is down longer than retention cannot read events that were already deleted |
+| compaction | Use it only for a "latest state per key" topic (`cleanup.policy=compact`) · an event topic that must keep history uses `delete` | Compaction keeps the latest value of each key. The history book → reschedule → cancel is lost |
+| Creating topics | Create them with code or a script that can be reviewed · turn off `auto.create.topics.enable` | The default is on and `default.replication.factor` starts at 1. A mistyped topic name may create a new topic with no copies (a conclusion from two defaults, not tested) |
 
-## 3 · producer
+## 3 · Producer
 
-1. ตั้ง `acks=all` และ `enable.idempotence=true` ชัด ๆ แม้รุ่นใหม่เป็นค่าเริ่มต้นแล้ว · ไฟล์ตั้งค่าไม่ควรขึ้นกับรุ่นของ client ที่เครื่องไหนติดตั้ง
-2. เปิด idempotent producer = broker ตัดสำเนาที่เกิดจาก retry ของ producer ตัวเดียวกันให้ · **ไม่กัน** สำเนาที่เกิดจากแอปส่งซ้ำเองหลัง restart
-3. รอผลส่งทุกครั้ง (callback หรือ future) · ส่งแล้วไม่ดูผล = ทิ้ง event เงียบ ๆ · ผลส่งล้ม ให้ธุรกรรมของแอปรู้
-4. เขียน DB กับส่ง event ในธุรกรรมเดียวไม่ได้ (ส่งก่อน commit แล้ว DB ล้ม · commit แล้วแอปตายก่อนส่ง) → **outbox**: เขียนแถวลงตาราง `outbox` ในธุรกรรมเดียวกับข้อมูลธุรกิจ แล้วมีตัวส่ง (relay) อ่านแถวที่ยังไม่ส่งไปลง Kafka แล้วทำเครื่องหมาย · relay ตายหลังส่งก่อนทำเครื่องหมาย = ส่งซ้ำ จึงต้องมี `event_id` ใน event ทุกตัว
-5. Kafka transaction ครอบ Kafka → Kafka เท่านั้น · เขียนลง CRM หรือ LINE ไม่นับ → ใช้ at-least-once + consumer ทำซ้ำได้ ไม่ต้องไล่ exactly-once
-6. event 1 ก้อนมี `event_id` · `type` · `occurred_at` · `schema_version` · id ของเรื่อง · ข้อมูลเท่าที่ผู้รับต้องใช้ (โครงเต็มใน [`clinic-example`](references/clinic-example.md))
+1. Set `acks=all` and `enable.idempotence=true` explicitly, even though newer versions default to them. A config file should not depend on which client version a machine has installed.
+2. An idempotent producer means the broker removes duplicates caused by retries of the same producer. It does **not** stop duplicates when the app itself resends after a restart.
+3. Always wait for the send result (callback or future). Sending without looking at the result drops events silently. If the send fails, let the app's transaction know.
+4. You cannot write to the DB and send an event in one transaction (send before commit and the DB fails · commit and the app dies before sending). Use an **outbox**: write a row into an `outbox` table in the same transaction as the business data. A sender (relay) then reads unsent rows, sends them to Kafka and marks them. If the relay dies after sending but before marking, the event is sent twice, so every event needs an `event_id`.
+5. A Kafka transaction covers Kafka → Kafka only. Writing to the CRM or LINE does not count. Use at-least-once and a repeat-safe consumer, and do not chase exactly-once.
+6. Each event carries `event_id` · `type` · `occurred_at` · `schema_version` · the id of the subject · only the data the receiver needs (full structure in [`clinic-example`](references/clinic-example.md)).
 
-## 4 · consumer
+## 4 · Consumer
 
-1. `enable.auto.commit=false` แล้ว commit offset **หลัง** งานเสร็จและเขียนผลลง DB แล้ว · commit ก่อนทำ = ตายกลางทางแล้ว event หาย · auto commit ที่เปิดอยู่เป็นค่าเริ่มต้น commit ตามเวลา ไม่ตามงาน
-2. ทำซ้ำได้: ตาราง `processed_events(event_id primary key)` เขียนในธุรกรรมเดียวกับผลงาน · เจอ `event_id` เดิม ข้ามแล้ว commit · ขั้นตอนคิดตาม `principle-safe-to-rerun`
-3. ตรวจลำดับด้วยข้อมูลใน event ไม่ใช่เวลารับ: ถ้า event "เลื่อนนัด" มาก่อน "จองนัด" ให้รอหรือส่งเข้าลองใหม่ ไม่ใช่เขียนทับ
-4. ล้มชั่วคราว (CRM ช้า LINE ตอบ 5xx) → ลองใหม่ในโปรเซสด้วยหน่วงเวลาเพิ่มขึ้น จำนวนครั้งจำกัด · ล้มถาวร (ข้อมูลผิดรูป schema ไม่ตรง) หรือหมดรอบลอง → ส่งเข้า **DLQ** (dead letter queue คือ topic เก็บ event ที่ประมวลผลไม่ได้) `<topic>.dlq` พร้อม header บอก topic · partition · offset เดิมและชนิด error แล้ว commit ต่อ · ไม่ลองใหม่ไม่รู้จบ เพราะ partition นั้นติดทั้งแถว
-5. DLQ ไม่ว่าง = มีงานของคน · ตั้ง alert (หัวข้อ 7) และมีคนรับผิดชอบเล่นซ้ำหลังแก้
-6. `auto.offset.reset` ค่าเริ่มต้น `latest` · consumer group ใหม่หรือ offset หมดอายุจะข้าม event เก่าเงียบ ๆ → service ที่ต้องเริ่มจากต้น ตั้ง `earliest` (หรือ `by_duration:<ระยะเวลา ISO 8601>` เช่น `by_duration:PT6M` ที่เอกสารแนะเมื่อเพิ่ม partition · ต้องยาวกว่าเวลาที่ consumer ใช้ค้นพบ partition ใหม่)
-7. rebalance: ถ้างานต่อ record ช้า (เรียก LINE) ลด `max.poll.records` (ค่าเริ่มต้น 500) หรือเพิ่ม `max.poll.interval.ms` (ค่าเริ่มต้น 5 นาที) ให้รอบหนึ่งจบทัน · เกินแล้วกลุ่มคิดว่า consumer ตาย แล้ว rebalance ทำให้ event ถูกทำซ้ำ · deploy บน container ที่รีสตาร์ทบ่อย พิจารณา `group.instance.id` (static membership) · `group.protocol=consumer` (โปรโตคอลใหม่) เป็นทางเลือก `(ยังไม่ได้ตรวจความพร้อมของ client ที่ใช้)` ใช้ค่าเริ่มต้น `classic` ไปก่อน
-8. จำนวน consumer ที่ทำงานได้สูงสุดในกลุ่มเท่ากับจำนวน partition · ตัวที่เกินจะว่าง
+1. Set `enable.auto.commit=false`, then commit the offset **after** the work is done and the result is written to the DB. Committing before the work means that if the consumer dies midway, the event is lost. Auto commit, on by default, commits by time, not by work.
+2. Make it repeat-safe: a `processed_events(event_id primary key)` table written in the same transaction as the result. If the `event_id` already exists, skip and commit. Work out the steps with `principle-safe-to-rerun`.
+3. Check order with data inside the event, not receive time. If a "reschedule appointment" event arrives before "book appointment", wait or send it to retry. Do not overwrite.
+4. For a temporary failure (CRM slow, LINE answers 5xx), retry in the process with increasing delay and a limited number of tries. For a permanent failure (malformed data, schema mismatch) or when retries run out, send the event to the **DLQ** (dead letter queue, a topic that holds events that cannot be processed) `<topic>.dlq` with headers giving the original topic · partition · offset and the error type, then keep committing. Never retry forever, because that partition is blocked for every event behind it.
+5. A DLQ that is not empty means a person has work to do. Set an alert (section 7) and have someone responsible for replaying after the fix.
+6. `auto.offset.reset` defaults to `latest`. A new consumer group, or an expired offset, silently skips old events. A service that must start from the beginning sets `earliest` (or `by_duration:<ระยะเวลา ISO 8601>`, for example `by_duration:PT6M`, which the docs recommend when adding partitions · it must be longer than the time the consumer takes to discover new partitions).
+7. Rebalance: if work per record is slow (calling LINE), lower `max.poll.records` (default 500) or raise `max.poll.interval.ms` (default 5 minutes) so one round finishes in time. If it runs over, the group thinks the consumer died and rebalances, and events are processed again. When deployed on containers that restart often, consider `group.instance.id` (static membership). `group.protocol=consumer` (the new protocol) is an option `(ยังไม่ได้ตรวจความพร้อมของ client ที่ใช้)` (client readiness not checked). Keep the default `classic` for now.
+8. The maximum number of working consumers in a group equals the number of partitions. Extra consumers sit idle.
 
-## 5 · schema
+## 5 · Schema
 
-1. กำหนด schema ให้ทุก event · ใช้ Schema Registry กับ Avro หรือ JSON Schema ถ้ามี cluster รองรับ · ไม่มี registry ให้ใส่ `schema_version` ใน event และให้ผู้รับอ่านแบบยอมรับฟิลด์ที่ไม่รู้จัก
-2. ตั้งโหมด `BACKWARD` (ค่าเริ่มต้นของ Confluent Schema Registry) หรือ `BACKWARD_TRANSITIVE` ถ้ามีหลายรุ่นค้างใน topic นาน
-3. เปลี่ยนแบบที่ผ่าน: เพิ่มฟิลด์ที่มีค่าปริยาย · ลบฟิลด์ที่เดิมมีค่าปริยาย · **ห้าม** เปลี่ยนชื่อ เปลี่ยนชนิด ลบฟิลด์บังคับ · ต้องหักจริง ให้สร้าง topic `v2` แล้วย้าย
-4. ลำดับขึ้น: BACKWARD ต้องอัปเกรด **consumer ก่อน** แล้วค่อยให้ producer ส่งรูปใหม่
-5. กฎเต็มของ JSON Schema (open หรือ closed content model) ซับซ้อนกว่า Avro อ่านหน้าทางการก่อนเลือก `(ยังไม่ได้ตรวจรายละเอียด)`
+1. Define a schema for every event. Use Schema Registry with Avro or JSON Schema if the cluster supports it. Without a registry, put `schema_version` in the event and have receivers accept unknown fields.
+2. Set the mode to `BACKWARD` (the default of Confluent Schema Registry), or `BACKWARD_TRANSITIVE` if several versions stay in a topic for a long time.
+3. Changes that pass: add a field with a default · remove a field that had a default. **Never** rename, change a type or remove a required field. If you must break, create a `v2` topic and migrate.
+4. Upgrade order: BACKWARD requires upgrading the **consumers first**, and only then letting the producer send the new shape.
+5. The full rules for JSON Schema (open or closed content model) are more complex than Avro. Read the official page before choosing `(ยังไม่ได้ตรวจรายละเอียด)` (details not checked).
 
-## 6 · event ที่มีข้อมูลส่วนบุคคล (PDPA)
+## 6 · Events that hold personal data (PDPA)
 
-PDPA คือพระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล · log ของ Kafka เป็นแบบเพิ่มท้าย ลบรายการเดียวตามคำขอเจ้าของข้อมูลไม่สะดวก (ข้อสรุปจากโครงสร้าง log ยังไม่ได้ทดลอง) จึงออกแบบให้ไม่ต้องลบ
+PDPA is the Personal Data Protection Act. Kafka's log is append-only, so deleting a single record on a data subject's request is inconvenient (a conclusion from the log structure, not tested). Design so that nothing needs deleting.
 
-- ใส่เฉพาะ id (`call_id` · `appointment_id` · `patient_id`) ไม่ใส่เบอร์โทร ชื่อ เนื้อเสียง ข้อความถอดเสียง หรืออาการ · ผู้รับที่มีสิทธิ์ไปดึงจากระบบต้นทางด้วย id เอง
-- เสียงและถอดเสียงอยู่ที่เก็บของมันเอง event มีแค่ id ของไฟล์
-- `retention.ms` ของ topic ที่มี id คนไข้ ตั้งสั้นสุดที่ consumer ฟื้นตัวทัน · DLQ ก็เป็นข้อมูลเช่นกัน ตั้ง retention เท่ากัน
-- ผู้ใช้ขอให้ลบข้อมูล → ลบที่ระบบต้นทาง · event ที่เหลือมีแต่ id ที่ชี้ไปหาใครไม่ได้อีก · นโยบายเก็บข้อมูลและสิทธิ์เจ้าของข้อมูลตาม `pdpa-compliance` · ข้อมูลสุขภาพเป็นข้อมูลอ่อนไหว ถามฝ่ายกฎหมายก่อนส่งข้าม service `(รอยืนยัน)`
-- เปิดการเข้ารหัสระหว่างทางและสิทธิ์อ่านต่อ topic (ACL) · ค่าลับของ cluster ไม่เข้า git (`config-and-secrets`)
+- Put in only ids (`call_id` · `appointment_id` · `patient_id`). Do not put phone numbers, names, audio, transcripts or symptoms. A receiver with permission fetches details from the source system by id.
+- Audio and transcripts live in their own storage. The event holds only the file id.
+- Set `retention.ms` of a topic that holds patient ids to the shortest time the consumers can still recover in. The DLQ is data too, so give it the same retention.
+- If a user asks for data to be deleted → delete at the source system. The remaining events hold only ids that point to no one. Retention policy and data subject rights follow `pdpa-compliance`. Health data is sensitive, so ask the legal team before sending it across services `(รอยืนยัน)` (awaiting confirmation).
+- Turn on encryption in transit and read permission per topic (ACL). Cluster secrets stay out of git (`config-and-secrets`).
 
-## 7 · ทดสอบและเฝ้าดู
+## 7 · Testing and monitoring
 
-| ทดสอบ | วิธี |
+| Test | Method |
 |---|---|
-| ใช้ Kafka จริงในเทสต์ | Testcontainers โมดูล Kafka (Java ใช้ `KafkaContainer` กับอิมเมจ `apache/kafka`) หรือ Kafka ในเครื่องผ่าน docker compose · ไม่ mock client เพราะ mock ไม่เห็นปัญหา offset และ rebalance |
-| 4 เคสที่ต้องมี | event เดิมเข้า 2 ครั้ง ผลเขียนครั้งเดียว · ตายก่อน commit แล้วเริ่มใหม่ ไม่มี event หาย · event เสียเข้า DLQ แล้ว partition ไม่ติด · event key เดียวกัน 3 ตัวมาตามลำดับ |
+| Use real Kafka in tests | Testcontainers Kafka module (Java uses `KafkaContainer` with the `apache/kafka` image) or local Kafka through docker compose · do not mock the client, because a mock cannot show offset and rebalance problems |
+| The 4 cases you must have | The same event arrives twice and the result is written once · die before commit and restart with no event lost · a bad event goes to the DLQ and the partition does not block · 3 events with the same key arrive in order |
 
-เฝ้าดูตามหลัก `observability-basics`: **consumer lag** ต่อกลุ่มและ partition (`kafka-consumer-groups.sh --describe --group <กลุ่ม>` ให้ค่า LAG) · จำนวน event ใน DLQ · อายุของแถว `outbox` ที่เก่าสุดที่ยังไม่ส่ง · จำนวนครั้ง rebalance · ค่าเกณฑ์ alert ตั้งจากปริมาณจริงของระบบ `(รอยืนยัน)`
+Monitor following `observability-basics`: **consumer lag** per group and partition (`kafka-consumer-groups.sh --describe --group <กลุ่ม>` gives the LAG value) · number of events in the DLQ · age of the oldest unsent `outbox` row · number of rebalances · set alert thresholds from the system's real volume `(รอยืนยัน)`.
 
-## ตัวอย่างจริง 1 ชุด
+## One real example
 
-ป้าย `ตัวอย่าง` — ออกแบบบนกระดาษ ยังไม่ได้รันกับ Kafka จริง
+Label `ตัวอย่าง` (example) — designed on paper, not yet run on real Kafka.
 
-**โจทย์:** voice agent คลินิกทันตกรรมส่ง event สายโทร (เริ่ม · จบ · สรุป) และนัดหมาย (จอง · เลื่อน · ยกเลิก) ไปให้ service สรุปลง CRM (Customer Relationship Management คือระบบข้อมูลลูกค้า) กับ service แจ้งเตือนทาง LINE
+**Task:** a dental clinic's voice agent sends call events (start · end · summary) and appointment events (book · reschedule · cancel) to a service that writes the summary to the CRM (Customer Relationship Management, the customer data system) and to a service that sends LINE notifications.
 
-| เรื่อง | ที่เลือก | เหตุผล |
+| Item | Choice | Reason |
 |---|---|---|
-| ต้องใช้ Kafka ไหม | ใช้ · ผู้รับ 2 ราย ต้องเล่นซ้ำเติม CRM ได้ ลำดับสำคัญ | ตรงตามตารางหัวข้อ 1 · ถ้าเหลือผู้รับรายเดียวให้กลับไป `background-jobs` |
-| topic | `clinic.call.events.v1` key `call_id` · `clinic.appointment.events.v1` key `appointment_id` | ลำดับต่อสายและต่อนัด |
-| ค่า topic | RF 3 · `min.insync.replicas=2` · retention 7 วัน · partition 3 | หัวข้อ 2 |
-| ส่ง | voice agent เขียนสรุปสายกับแถว outbox ใน DB ธุรกรรมเดียว · relay ส่งด้วย `acks=all` | หัวข้อ 3 |
-| รับ | CRM กับ LINE คนละ consumer group · `processed_events` · commit หลังเขียน · DLQ ต่อ topic | หัวข้อ 4 |
-| ข้อมูลใน event | `call_id` · `patient_id` · ชนิด · เวลา · ไม่มีเบอร์โทร ชื่อ เสียง | ผู้รับดึงรายละเอียดเองจากระบบต้นทางตามสิทธิ์ |
+| Is Kafka needed | Yes · 2 receivers, the CRM must be refillable by replay, order matters | Matches the table in section 1 · if only 1 receiver is left, go back to `background-jobs` |
+| Topics | `clinic.call.events.v1` key `call_id` · `clinic.appointment.events.v1` key `appointment_id` | Order per call and per appointment |
+| Topic settings | RF 3 · `min.insync.replicas=2` · retention 7 days · 3 partitions | Section 2 |
+| Send | The voice agent writes the call summary and an outbox row in one DB transaction · the relay sends with `acks=all` | Section 3 |
+| Receive | The CRM and LINE use separate consumer groups · `processed_events` · commit after the write · one DLQ per topic | Section 4 |
+| Data in the event | `call_id` · `patient_id` · type · time · no phone number, name or audio | Receivers fetch details from the source system under their own permission |
 
-โครง event · SQL outbox · โค้ด consumer แบบย่อ · ค่า properties ครบอยู่ใน [`clinic-example`](references/clinic-example.md)
+The event structure · outbox SQL · short consumer code · full properties are in [`clinic-example`](references/clinic-example.md).
 
-## ตรวจก่อนส่ง
+## Check before sending
 
-1. มีคำตอบเรื่อง "ต้องใช้ Kafka จริงไหม" พร้อมเหตุผล ไม่ได้ใช้เพราะตามกระแส
-2. topic ทุกตัวมี key ที่ตรงกับสิ่งที่ลำดับสำคัญ · RF · `min.insync.replicas` · retention ระบุชัด · ปิดสร้าง topic อัตโนมัติ
-3. producer `acks=all` + idempotent · รอผลส่ง · ทางเขียน DB แล้วส่ง event ใช้ outbox
-4. consumer ปิด auto commit · commit หลังเสร็จ · มี `event_id` กันซ้ำในธุรกรรมเดียวกับผล · มี DLQ และคนดู
-5. `auto.offset.reset` ตั้งตามที่ service ต้องการ ไม่ปล่อยค่าเริ่มต้นโดยไม่คิด
-6. schema มีโหมดเข้ากันได้และลำดับอัปเกรด · event ไม่มีเบอร์โทร ชื่อ เสียง
-7. เทสต์ 4 เคสผ่านบน Kafka จริง · มี alert consumer lag กับ DLQ
-8. ทุกค่าที่อ้างมีลิงก์หรือป้าย `(ยังไม่ได้ตรวจ)` · ไม่เขียนว่า exactly-once ข้ามระบบภายนอก
+1. There is an answer to "do we really need Kafka" with reasons, not chosen to follow a trend.
+2. Every topic has a key that matches what must stay in order · RF · `min.insync.replicas` · retention are stated · automatic topic creation is off.
+3. The producer has `acks=all` + idempotence · waits for the send result · the DB-write-then-send path uses an outbox.
+4. The consumer has auto commit off · commits after the work · has an `event_id` check in the same transaction as the result · has a DLQ and someone watching it.
+5. `auto.offset.reset` is set to what the service needs, not left at the default without thought.
+6. The schema has a compatibility mode and an upgrade order · events carry no phone number, name or audio.
+7. The 4 test cases pass on real Kafka · there are alerts for consumer lag and the DLQ.
+8. Every value cited has a link or the label `(ยังไม่ได้ตรวจ)` · nothing claims exactly-once across external systems.
 
-## ที่มา
+## Sources
 
-ตรวจ 2026-10-27 (เปิดอ่านผ่านเครื่องมือดึงหน้าเว็บ ค่าตัวเลขคัดจากหน้าที่ดึงมา)
+Checked 2026-10-27 (opened with a web page fetch tool; figures are copied from the fetched pages).
 
-- Apache Kafka 4.4 · ค่าตั้ง producer https://kafka.apache.org/44/configuration/producer-configs/ · consumer https://kafka.apache.org/44/configuration/consumer-configs/ · topic https://kafka.apache.org/44/configuration/topic-configs/ · broker https://kafka.apache.org/44/configuration/broker-configs/
-- การรับประกันส่ง ลำดับ idempotent producer transaction offset https://kafka.apache.org/44/design/design/ · key กับ partition https://kafka.apache.org/44/getting-started/introduction/ · เพิ่ม partition และดู lag https://kafka.apache.org/44/operations/basic-kafka-operations/
-- Confluent Schema Registry https://docs.confluent.io/platform/current/schema-registry/fundamentals/schema-evolution.html · ความหมายการส่ง https://docs.confluent.io/kafka/design/delivery-semantics.html · การรวมกลุ่ม consumer https://docs.confluent.io/kafka/design/consumer-design.html · DLQ (ของ Kafka Connect ใช้เป็นแนวคิดอ้างอิง ไม่ใช่ของ consumer ทั่วไป) https://docs.confluent.io/platform/current/connect/index.html#dead-letter-queue
-- เลือกจำนวน partition (บทความปี 2015 ตรวจรุ่นใหม่ก่อนใช้ตัวเลข) https://www.confluent.io/blog/how-choose-number-topics-partitions-kafka-cluster/
+- Apache Kafka 4.4 · producer settings https://kafka.apache.org/44/configuration/producer-configs/ · consumer https://kafka.apache.org/44/configuration/consumer-configs/ · topic https://kafka.apache.org/44/configuration/topic-configs/ · broker https://kafka.apache.org/44/configuration/broker-configs/
+- Delivery guarantees, order, idempotent producer, transaction, offset https://kafka.apache.org/44/design/design/ · key and partition https://kafka.apache.org/44/getting-started/introduction/ · adding partitions and viewing lag https://kafka.apache.org/44/operations/basic-kafka-operations/
+- Confluent Schema Registry https://docs.confluent.io/platform/current/schema-registry/fundamentals/schema-evolution.html · delivery semantics https://docs.confluent.io/kafka/design/delivery-semantics.html · consumer group coordination https://docs.confluent.io/kafka/design/consumer-design.html · DLQ (the Kafka Connect one, used as a reference idea, not the one for ordinary consumers) https://docs.confluent.io/platform/current/connect/index.html#dead-letter-queue
+- Choosing the number of partitions (a 2015 article; check newer versions before using its numbers) https://www.confluent.io/blog/how-choose-number-topics-partitions-kafka-cluster/
 - Transactional outbox https://microservices.io/patterns/data/transactional-outbox.html
 - Testcontainers Kafka https://java.testcontainers.org/modules/kafka/

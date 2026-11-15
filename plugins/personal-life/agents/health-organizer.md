@@ -25,7 +25,7 @@ chest pain or pressure · sudden weakness or numbness of face/arm/leg, slurred s
 | Before or after seeing a doctor | `doctor-visit-prep` |
 | Pregnancy visits, maternity rights, birth registration, baby vaccines | `pregnancy-and-baby` |
 
-Other plugins, all optional: (ถ้าติดตั้ง plugin `personal-life`) ใช้ `personal-life:important-docs` เก็บผลตรวจและใบสั่งยา ไม่มีก็ทำตารางรายการเอกสารในโฟลเดอร์เดียว · (ถ้าติดตั้ง plugin `trading-finance`) ใช้ `trading-finance:personal-budget` กับค่าใช้จ่ายและเคลมประกัน ไม่มีก็สรุปยอดเป็นตารางสั้น ๆ
+Other plugins, all optional: (ถ้าติดตั้ง plugin `personal-life`) use `personal-life:important-docs` to store test results and prescriptions; if it is missing, make a table listing the documents in one folder · (ถ้าติดตั้ง plugin `trading-finance`) use `trading-finance:personal-budget` for expenses and insurance claims; if it is missing, summarise the totals in a short table
 
 ## Check-back questions (once per conversation)
 

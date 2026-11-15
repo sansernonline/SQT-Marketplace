@@ -2,300 +2,300 @@
 
 Use when naming a product, shop, app or brand
 
-# ตั้งชื่อผลิตภัณฑ์
+# Naming a product
 
-> **กฎข้อเดียว:** ชื่อที่ดีคือชื่อที่คน**พิมพ์ถูกตั้งแต่ครั้งแรก หลังได้ยินครั้งเดียว**
-> ความหมายลึกซึ้งมาทีหลังได้ แต่ถ้าสะกดผิด ลูกค้าก็หาไม่เจอ
+> **The one rule:** a good name is one a person **types correctly the first time, after hearing it once.**
+> Deeper meaning can come later, but if people misspell the name, customers cannot find you.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ตั้งชื่อผลิตภัณฑ์ ร้าน บริการ แอป แบรนด์ โมดูล หรือชื่อโครงการภายใน
-- มีชื่ออยู่แล้วแต่รู้สึกว่าเชย ยาว หรือซ้ำกับคนอื่น
-- มีผลิตภัณฑ์หลายตัวและอยากให้ชื่อเป็นตระกูลเดียวกัน
-- ต้องเลือกจากรายการชื่อที่ระดมมาแล้ว แต่ตัดสินใจไม่ลง
+- Naming a product, shop, service, app, brand, module or internal project
+- A name exists but feels dated, long or the same as someone else's
+- There are several products and the names should form one family
+- You must choose from a brainstormed list of names and cannot decide
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-| งาน | ใช้ตัวนี้แทน |
+| Job | Use this instead |
 |---|---|
-| โลโก้ สี ตัวอักษรของแบรนด์ | `graphic-design` (plugin `software-development`) |
-| ตั้งชื่อไฟล์เอกสาร | `document-naming` |
-| ตั้งชื่อตาราง คอลัมน์ (งานซอฟต์แวร์) | `database-design` (plugin `software-development`) |
-| ตั้งชื่อ endpoint (งานซอฟต์แวร์) | `api-conventions` (plugin `software-development`) |
+| Logo, colours, brand typography | `graphic-design` (plugin `software-development`) |
+| Naming document files | `document-naming` |
+| Naming tables and columns (software work) | `database-design` (plugin `software-development`) |
+| Naming endpoints (software work) | `api-conventions` (plugin `software-development`) |
 
 ---
 
-## 1 · หกข้อที่ตัดชื่อทิ้งทันที
+## 1 · Six tests that cut a name at once
 
-ทดสอบก่อนคิดต่อ ถ้าตกข้อไหนข้อหนึ่งให้ตัดทิ้งเลย ไม่ต้องเสียดาย
+Test before you think further. If a name fails any one, cut it. Do not feel sorry.
 
-| # | ทดสอบ | ตกเมื่อ |
+| # | Test | Fails when |
 |:--:|---|---|
-| 1 | **ทดสอบโทรศัพท์** — พูดชื่อให้คนฟังทางโทรศัพท์ เขาพิมพ์ถูกไหม | ต้องสะกดให้ฟัง |
-| 2 | **ความยาว** | เกิน 3 พยางค์ หรือเกิน 12 ตัวอักษร |
-| 3 | **โดเมนและ handle** | `.com` และ `.co` ถูกจับหมด และ handle โซเชียลไม่ว่างสักที่ |
-| 4 | **ชนของที่มีอยู่** | มีผลิตภัณฑ์ ร้าน หรือบริการในหมวดเดียวกันชื่อเดียวกันหรือใกล้กันมาก |
-| 5 | **ความหมายในภาษาอื่น** | แปลว่าอะไรไม่ดีในภาษาที่ลูกค้าพูด |
-| 6 | **คนไทยออกเสียงได้** | มีเสียงควบที่คนไทยเลี่ยง หรือลงท้ายด้วยเสียงที่กลืนหาย |
+| 1 | **Phone test**: say the name to someone over the phone. Do they type it correctly? | You have to spell it out |
+| 2 | **Length** | More than 3 syllables, or more than 12 letters |
+| 3 | **Domain and handle** | `.com` and `.co` are both taken and no social handle is free anywhere |
+| 4 | **Collision with what exists** | A product, shop or service in the same category has the same or a very close name |
+| 5 | **Meaning in other languages** | It means something bad in a language your customers speak |
+| 6 | **Thai speakers can pronounce it** | It has a consonant cluster Thai speakers avoid, or ends in a sound that gets swallowed |
 
-> **ข้อ 1 คือข้อที่ฆ่าชื่อมากที่สุด** เพราะชื่อที่สะกดแปลกเพื่อให้ได้โดเมน
-> ต้องแลกกับการที่ลูกค้าทุกคนพิมพ์ผิดตลอดไป
+> **Test 1 kills the most names**, because a name spelled oddly to get a domain
+> means every customer mistypes it forever.
 >
-> **ข้อ 6 คนมักลืม** — ถ้าชื่อมี `th` `v` `z` ท้ายคำ หรือควบ `str-` `spl-`
-> คนไทยจะออกเสียงเพี้ยนแล้วพิมพ์ตามที่ได้ยิน
+> **People often forget test 6.** If the name has `th`, `v` or `z` at the end of a word, or a cluster like `str-` or `spl-`,
+> Thai speakers will pronounce it off and type what they heard.
 
 ---
 
-## 2 · เก้าสูตรผลิตชื่อ
+## 2 · Nine formulas for producing names
 
-อย่านั่งนึกลอย ๆ ให้เดินทีละสูตร คิดสูตรละ 5–10 ชื่อ แล้วค่อยคัด
+Do not sit and think in the air. Walk through the formulas one at a time, come up with 5–10 names per formula, then select.
 
-| # | สูตร | วิธี | ตัวอย่าง |
+| # | Formula | Method | Example |
 |:--:|---|---|---|
-| 1 | **คำจริง ตัดท้าย** | เอาคำอังกฤษมาตัดพยางค์สุดท้ายทิ้ง | `figure` → **Figma** · `velocity` → **Velo** |
-| 2 | **2 คำชนกัน** | ตัดหัวท้าย 2 คำมาต่อกัน | `fold`+`drop` → **Foldrop** · `data`+`dog` → **Datadog** |
-| 3 | **คำ + ปัจจัย** | เติม `-io` `-ly` `-ify` `-o` `-a` `-ex` | `home`+`ify` → **Homify** · `aurum`+`io` → **Aurio** |
-| 4 | **รากละติน/กรีก** | หาคำรากของสิ่งที่ทำ แล้วย่อให้สั้น | `lumen` → **Lumo** · `nexus` → **Nexa** |
-| 5 | **ตัวอักษรตระกูล** | คำบอกหน้าที่ + ตัวต่อท้ายประจำตระกูล | **TradeXI · TelXI · DockXI · SoundXI** |
-| 6 | **คำสั้นไร้ความหมาย** | 4–5 ตัวอักษร พยัญชนะ-สระ-พยัญชนะ อ่านได้ทันที | **Quix · Zeno · Riva · Volt** |
-| 7 | **คำจริงยืมข้ามบริบท** | คำธรรมดาที่ไม่เกี่ยวกับงาน แต่ให้ความรู้สึกตรง | **Slack · Notion · Arc · Linear** |
-| 8 | **2 พยางค์อ่านลื่น** | คำจริง 2 คำสั้น ๆ วางคู่กัน | **Speak Go · Cash App** |
-| 9 | **คำเต็ม 2 คำที่ไม่เกี่ยวกัน** | เอาคำจริง 2 คำที่ไม่เกี่ยวกับสินค้าและไม่เกี่ยวกันเอง มาต่อเป็นคำเดียว | **Tailscale · Snowflake · Firebase · Basecamp** |
+| 1 | **Real word, cut the end** | Take an English word and drop the last syllable | `figure` → **Figma** · `velocity` → **Velo** |
+| 2 | **2 words collided** | Cut the head and tail of 2 words and join them | `fold`+`drop` → **Foldrop** · `data`+`dog` → **Datadog** |
+| 3 | **Word + suffix** | Add `-io` `-ly` `-ify` `-o` `-a` `-ex` | `home`+`ify` → **Homify** · `aurum`+`io` → **Aurio** |
+| 4 | **Latin/Greek root** | Find the root word for what it does, then shorten it | `lumen` → **Lumo** · `nexus` → **Nexa** |
+| 5 | **Family letters** | A word for the function + a family ending | **TradeXI · TelXI · DockXI · SoundXI** |
+| 6 | **Short meaningless word** | 4–5 letters, consonant-vowel-consonant, readable at once | **Quix · Zeno · Riva · Volt** |
+| 7 | **Real word borrowed across contexts** | An ordinary word unrelated to the work that gives the right feeling | **Slack · Notion · Arc · Linear** |
+| 8 | **2 syllables that read smoothly** | 2 short real words side by side | **Speak Go · Cash App** |
+| 9 | **2 whole unrelated words** | Join 2 real words that relate neither to the product nor to each other into one word | **Tailscale · Snowflake · Firebase · Basecamp** |
 
-**สูตรที่ให้ชื่อ "cool + clean" มากที่สุด** คือสูตร 1 · 4 · 6 เพราะได้ชื่อสั้น ไร้ความหมายตรงตัว และจำง่าย
-**สูตร 7 ได้ชื่อที่ดูโตแล้ว** แต่โดเมนหายากที่สุด
+**The formulas that give the most "cool + clean" names** are 1 · 4 · 6, because they give short names with no literal meaning that are easy to remember.
+**Formula 7 gives names that look grown-up**, but its domains are the hardest to find.
 
-**ตัวอักษรที่ให้ความรู้สึกทันสมัย** — ขึ้นต้นด้วย `x` `z` `q` `v` หรือลงท้ายด้วย `-o` `-a` `-ix` `-ex`
-**ตัวอักษรที่ทำให้ดูเชย** — ต่อท้ายด้วย `-soft` `-tech` `-sys` `-pro` `-plus` `-max`
+**Letters that feel modern:** start with `x` `z` `q` `v`, or end with `-o` `-a` `-ix` `-ex`.
+**Letters that look dated:** ending with `-soft` `-tech` `-sys` `-pro` `-plus` `-max`.
 
 ---
 
-**สูตร 9 ลงลึก** — เอาคำจริง 2 คำเต็ม ๆ (ไม่ตัดอะไร) ที่ไม่เกี่ยวกับสินค้าและไม่เกี่ยวกันเอง วางติดกัน · รวมไม่เกิน 3 พยางค์ · คำแรกเป็นรูปธรรม · อ่านออกเสียงทุกคู่ก่อนเลือก → เหตุผล กฎ และคลังคำ A/B สำหรับจับคู่ใน [`references/formula-9-deep-dive.md`](references/formula-9-deep-dive.md) — เปิดเมื่อใช้สูตร 9
+**Formula 9 in depth:** take 2 whole real words (cut nothing) that relate neither to the product nor to each other, and put them side by side · at most 3 syllables in total · the first word concrete · read every pair aloud before choosing → reasons, rules and the A/B word pools for pairing are in [`references/formula-9-deep-dive.md`](references/formula-9-deep-dive.md). Open it when you use formula 9.
 
-## 3 · ใส่ความหมายให้ชื่อ
+## 3 · Giving the name a meaning
 
-ชื่อสั้นและทันสมัยไม่จำเป็นต้องไร้ความหมาย เพราะความหมายมาได้ 2 ทาง
+A short, modern name does not have to be meaningless, because meaning can arrive 2 ways.
 
-| ทาง | สูตรที่ให้มา | ตัวอย่าง |
+| Way | Formulas that give it | Example |
 |---|---|---|
-| **มีมาแต่กำเนิด** | 4 รากละติน/กรีก · 7 คำจริงยืมข้ามบริบท | `Aurio` จาก *aurum* ทอง · `Anchor` ความมั่นคง |
-| **ใส่ทีหลัง** | 6 คำสั้นไร้ความหมาย | `Quix` ตั้งก่อน แล้วค่อยผูกกับความเร็ว |
+| **Built in from birth** | 4 Latin/Greek roots · 7 real words borrowed across contexts | `Aurio` from *aurum*, gold · `Anchor`, stability |
+| **Added later** | 6 short meaningless words | `Quix` is chosen first, then tied to speed |
 
-> **ทางที่ 2 ใช้ได้จริงและปลอดภัยกว่า** ดู Kodak, Häagen-Dazs, Apple ไม่มีชื่อไหนบอกว่าขายอะไร
-> ความหมายถูกสร้างขึ้นหลังจากนั้นทั้งหมด
+> **Way 2 works in practice and is safer.** Look at Kodak, Häagen-Dazs, Apple: no name says what is sold.
+> The meaning was built entirely afterward.
 
-**กฎของความหมาย:** หารากจาก**สิ่งที่ผู้ใช้ได้** ไม่ใช่สิ่งที่ระบบทำ
-เช่น ระบบจัดการคลังทอง ให้ใช้ราก "ทอง" ไม่ใช่ราก "คลังสินค้า"
+**Rule for meaning:** find the root from **what the user gets**, not from what the system does.
+For example, for a gold inventory system, use the root "gold", not the root "warehouse".
 
-**ทดสอบ:** เขียนความหมายเป็น **1 บรรทัด** ได้ไหม
-"Aurio — จาก aurum ภาษาละตินแปลว่าทอง" แค่นี้จบ ถ้าต้องอธิบายเกิน 1 ประโยค แปลว่าความหมายอ่อนเกินไป
+**Test:** can you write the meaning in **1 line**?
+"Aurio: from Latin aurum, meaning gold." That is all. If it takes more than 1 sentence to explain, the meaning is too weak.
 
-**คลังช่วยคิด** — ตารางรากละติน/กรีกที่ใช้ได้จริง (แสง · ทอง · เชื่อมต่อ · เวลา · ปกป้อง ฯลฯ) และตารางคำจริงยืมข้ามบริบทแยกตามความรู้สึก (เร็ว · มั่นคง · ชัดเจน · เป็นระเบียบ · เชื่อมโยง · นำทาง · เงียบ) → [`references/meaning-libraries.md`](references/meaning-libraries.md) — เปิดเมื่อใช้สูตร 4 หรือ 7 · คำจริงหาโดเมนยากที่สุด ต้องมีแผนสำรอง (`arc.app` · `getprism.com`)
+**Thinking libraries:** a table of Latin/Greek roots that work in practice (light · gold · connect · time · protect and others) and a table of real words borrowed across contexts, grouped by feeling (fast · stable · clear · orderly · connected · guiding · quiet) → [`references/meaning-libraries.md`](references/meaning-libraries.md). Open it when you use formula 4 or 7. Real words are the hardest to find domains for, so keep a fallback (`arc.app` · `getprism.com`).
 
-**เรื่องเล่า:** สั้น จำได้ เล่าต่อได้ (ไม่ใช่ตัวย่อต่อกัน หรือชื่อหมาที่บ้าน) → ตัวอย่างดี/แย่ใน `references/meaning-libraries.md`
+**The story:** short, memorable, easy to retell (not a chain of initials, and not the family dog's name) → good and bad examples in `references/meaning-libraries.md`
 
-**เขียนความหมายลงเอกสารแบรนด์** ตั้งแต่วันเลือกชื่อ ไม่ใช่รอให้มีคนถาม
-ทีมขายจะได้เล่าเหมือนกันทุกคน
+**Write the meaning into the brand document** on the day you pick the name, not when someone asks.
+That way the sales team tells it the same way every time.
 
 ---
 
-## 4 · ตระกูลชื่อ เมื่อมีหลายผลิตภัณฑ์
+## 4 · Name families, when there are several products
 
-เลือกแบบเดียว แล้วใช้ทั้งตระกูล
+Pick one pattern and use it for the whole family.
 
-| แบบ | หน้าตา | ดี | เสีย |
+| Pattern | Looks like | Good | Bad |
 |---|---|---|---|
-| **ต่อท้ายเหมือนกัน** | `TradeXI` `TelXI` `DockXI` | รู้ทันทีว่าบ้านเดียวกัน และตั้งชื่อตัวใหม่ง่าย | ถ้าตัวเดียวเสียชื่อ จะกระทบทั้งตระกูล |
-| **นำหน้าเหมือนกัน** | `QuixChat` `QuixFlow` | แบรนด์แม่เด่น | ชื่อยาวขึ้นทุกตัว |
-| **อิสระ** | `Aurio` `Homify` `Foldrop` | แต่ละตัวขายตัวเองได้ และขายแยกได้ | ต้องสร้างแบรนด์ใหม่ทุกตัว |
+| **Same ending** | `TradeXI` `TelXI` `DockXI` | You know at once they share a house, and new names are easy to make | If one name is damaged, the whole family suffers |
+| **Same prefix** | `QuixChat` `QuixFlow` | The parent brand stands out | Every name gets longer |
+| **Independent** | `Aurio` `Homify` `Foldrop` | Each one sells itself and can be sold separately | You must build a new brand for each |
 
-**เกณฑ์เลือก:** ถ้าขายรวมเป็นชุด ให้ใช้ตระกูลเดียวกัน แต่ถ้าอาจขายแยกหรือขายกิจการทีหลัง ให้ตั้งแบบอิสระ
+**How to choose:** if you sell them as a bundle, use one family. If you might sell them separately or sell the business later, make them independent.
 
-> **จดชื่อตระกูลไว้เป็นเอกสาร** พร้อมกฎการตั้งชื่อตัวถัดไป
-> ไม่งั้นตัวที่ 5 จะหลุดแบบ แล้วทั้งชุดดูมั่ว
+> **Write the family's naming rules down in a document**, together with the rule for naming the next one.
+> Otherwise the 5th name breaks the pattern and the whole set looks messy.
 
 ---
 
-## 5 · ตรวจของว่างก่อนตกหลุมรัก
+## 5 · Check what is available before you fall in love
 
-**ตรวจตอนเหลือ 5 ชื่อ ไม่ใช่ตอนเหลือชื่อเดียว** เพราะถ้าชอบชื่อไหนมากแล้วมารู้ว่าใช้ไม่ได้ จะเจ็บกว่า
+**Check when 5 names are left, not when 1 is left.** If you love a name and then learn you cannot use it, it hurts more.
 
-| ตรวจอะไร | ที่ไหน | ตกเมื่อ |
+| Check what | Where | Fails when |
 |---|---|---|
-| โดเมน | ผู้ให้บริการจดโดเมน | `.com` และ `.co` ถูกจับ และตัวสำรองก็ไม่เหลือ |
-| เครื่องหมายการค้าไทย | กรมทรัพย์สินทางปัญญา | มีของจดไว้ในหมวดสินค้าหรือบริการของเรา |
-| เครื่องหมายการค้าสากล | ฐานข้อมูล WIPO | เหมือนข้อบน ถ้าจะขายต่างประเทศ |
-| ชื่อแพ็กเกจ (ถ้าเป็นซอฟต์แวร์) | npm · PyPI · NuGet | ถูกใช้แล้วในระบบนิเวศที่จะเผยแพร่ |
-| ชื่อในแอปสโตร์ (ถ้าเป็นแอป) | App Store · Play Store | มีแอปชื่อเดียวกันในหมวดเดียวกัน |
-| handle โซเชียล | X · Instagram · Facebook · TikTok · GitHub · LINE | ไม่ว่างสักที่ |
-| ค้นหาธรรมดา | เสิร์ชเอนจิน | หน้าแรกเต็มไปด้วยของคนอื่น |
+| Domain | Domain registrar | `.com` and `.co` are taken and no fallback is left |
+| Thai trademark | กรมทรัพย์สินทางปัญญา (Department of Intellectual Property) | A registration exists in our goods or services category |
+| International trademark | WIPO database | Same as above, if you will sell abroad |
+| Package name (if software) | npm · PyPI · NuGet | Already used in the ecosystem you will publish to |
+| App store name (if an app) | App Store · Play Store | An app with the same name exists in the same category |
+| Social handles | X · Instagram · Facebook · TikTok · GitHub · LINE | None is free |
+| Plain search | Search engine | The first page is full of other people's results |
 
-**เกณฑ์ตัดสิน:** โดเมนหลักต้องได้ handle ต้องว่างอย่างน้อยครึ่งหนึ่ง และ
-เครื่องหมายการค้าในหมวดของเราต้องไม่ชน 3 ข้อนี้ไม่มีข้อยกเว้น
+**Decision rule:** you must get the main domain, at least half the handles must be free, and
+there must be no trademark collision in our category. These 3 have no exceptions.
 
 ---
 
-## 6 · เสียงและการพิมพ์ในบริบทไทย
+## 6 · Sound and typing in the Thai context
 
-| เรื่อง | กฎ |
+| Topic | Rule |
 |---|---|
-| ลูกค้าไทยจะเขียนชื่อเป็นภาษาไทยแน่นอน | ลองเขียนดูเองก่อน เช่น `Aurio` เป็น "ออริโอ" แล้วดูว่าอ่านลื่นไหม |
-| เลือกคำไทยทางการ 1 แบบ | เขียนตามหลักเกณฑ์ทับศัพท์ของราชบัณฑิตยสภา ไม่ใส่วรรณยุกต์ (ซอฟต์แวร์ ไม่ใช่ ซ้อฟต์แว่ร์) · บันทึกลง brand kit · แบบอื่นที่ลูกค้าพิมพ์กันจริงเก็บเป็นคำค้น (search keyword) ไม่ใช้ในงาน |
-| เสียงที่คนไทยกลืน | `-th` `-v` `-s` ท้ายคำ หายเกือบทุกครั้ง |
-| เสียงควบที่เลี่ยงกัน | `str-` `spl-` `thr-` |
-| ชื่อที่พิมพ์ผิดง่ายบนแป้นไทย | เลี่ยงตัวที่อยู่ใกล้กันจนสลับได้ |
-| ความยาวเมื่อเขียนไทย | ไม่ควรเกิน 5 พยางค์ไทย |
+| Thai customers will certainly write the name in Thai | Try writing it yourself first, for example `Aurio` as "ออริโอ", and see if it reads smoothly |
+| Choose 1 official Thai form | Follow the transliteration rules of the Royal Society of Thailand (ราชบัณฑิตยสภา) with no tone marks (ซอฟต์แวร์, not ซ้อฟต์แว่ร์) · record it in the brand kit · keep other forms that customers actually type as search keywords, not for the work itself |
+| Sounds Thai speakers swallow | `-th` `-v` `-s` at the end of a word vanish almost every time |
+| Clusters they avoid | `str-` `spl-` `thr-` |
+| Names easy to mistype on a Thai keyboard | Avoid letters so close together that they can swap |
+| Length when written in Thai | No more than 5 Thai syllables |
 
-**ทดสอบจริง** — พูดชื่อให้คนไทย 3 คนฟังทางโทรศัพท์ แล้วให้เขาพิมพ์ลงไลน์ส่งกลับมา
-ถ้ามีสักคนพิมพ์ไม่ตรง ชื่อนั้นตก
+**Real test:** say the name to 3 Thai speakers over the phone and have them type it in LINE and send it back.
+If even 1 person types it differently, the name fails.
 
 ---
 
-## 7 · ห้าข้อทดสอบก่อนตัดสินใจครั้งสุดท้าย
+## 7 · Five tests before the final decision
 
-| # | ทดสอบ | ผ่านเมื่อ |
+| # | Test | Passes when |
 |:--:|---|---|
-| 1 | เขียนในประโยคจริง | "ลองใช้ ___ ดูสิ" ฟังแล้วไม่ขัด |
-| 2 | เขียนคู่กับคำบอกหมวด | "___ — ระบบจัดการคลังทอง" อ่านแล้วเข้าใจ |
-| 3 | ย่อเป็นไอคอน | ตัวแรกหรือ 2 ตัวแรกทำเป็นสัญลักษณ์ได้ |
-| 4 | อยู่รอดเมื่อขอบเขตโต | ชื่อที่มีคำว่า "ทอง" จะพังวันที่ขายเงินด้วย |
-| 5 | ทนต่อการล้อ | ลองคิดมุกล้อชื่อตัวเอง ถ้าคิดออกง่ายเกินไป ระวัง |
+| 1 | Write it in a real sentence | "ลองใช้ ___ ดูสิ" (Thai for "try ___") sounds natural |
+| 2 | Write it next to the category word | "___ — ระบบจัดการคลังทอง" (Thai for "___, a gold inventory system") reads and makes sense |
+| 3 | Shrink it to an icon | The first letter or 2 can become a symbol |
+| 4 | Survives when the scope grows | A name with the word "gold" breaks the day you also sell silver |
+| 5 | Resists teasing | Try making up jokes about your own name. If they come too easily, beware |
 
-**ข้อ 4 สำคัญที่สุดสำหรับสิ่งที่จะโตต่อ (ผลิตภัณฑ์ ร้าน แบรนด์)** — ชื่อที่บอกความสามารถวันนี้
-จะกลายเป็นกรงขังเมื่อผลิตภัณฑ์โตขึ้น ชื่อไร้ความหมายจึงปลอดภัยกว่าในระยะยาว
+**Test 4 matters most for anything that will keep growing (a product, shop, brand).** A name that states today's ability
+becomes a cage when the product grows. A meaningless name is therefore safer in the long run.
 
 ---
 
 ## 8 · Anti-patterns
 
-- **สะกดแปลกเพื่อให้ได้โดเมน** — `Kleen` `Fyre` `Qwik` ลูกค้าพิมพ์ผิดตลอดไป
-- **ต่อท้ายด้วย `-soft` `-tech` `-sys` `-solutions`** — ดูเป็นปี 2005
-- **ใส่ตัวเลขในชื่อ** — `App360` `Pro24` ตกรุ่นทันทีที่เปลี่ยนรุ่น
-- **ชื่อที่บอกความสามารถเฉพาะ** — `InvoiceMaster` แล้ววันที่ทำเรื่องอื่นด้วย
-- **3 คำขึ้นไป** — ไม่มีใครพูดเต็ม จะถูกย่อจนจำไม่ได้
-- **คำไทยทับศัพท์ที่ฝรั่งอ่านไม่ออก** ถ้าคิดจะขายต่างประเทศ
-- **ชื่อที่ต้องอธิบายว่าทำไมถึงตั้งชื่อนี้** — ลูกค้าไม่มีเวลาฟัง
-- **เลือกชื่อก่อนตรวจโดเมนและเครื่องหมายการค้า** — เสียเวลา 2 รอบ
-- **ระดมชื่อคนเดียวในหัว** — ได้ชื่อจากมุมเดียว ให้เดินตาม 9 สูตรแทน
+- **Odd spelling to get a domain**: `Kleen` `Fyre` `Qwik`. Customers mistype forever
+- **Ending with `-soft` `-tech` `-sys` `-solutions`**: looks like 2005
+- **Numbers in the name**: `App360` `Pro24` become outdated as soon as the version changes
+- **A name that states one specific ability**: `InvoiceMaster`, and then the day you do something else too
+- **3 or more words**: nobody says the whole thing, so it gets shortened until it cannot be recognised
+- **A Thai transliteration that foreigners cannot read**, if you plan to sell abroad
+- **A name you must explain the reason for**: customers have no time to listen
+- **Choosing the name before checking domains and trademarks**: wastes 2 rounds
+- **Brainstorming alone in your head**: you get names from a single angle. Walk through the 9 formulas instead
 
 ---
 
-## 9 · ตัวย่อ
+## 9 · Abbreviations
 
-- **portmanteau** — คำที่เกิดจากการเอา 2 คำมาตัดต่อกัน
-- **handle** — ชื่อบัญชีบนโซเชียล เช่น `@quixapp`
-- **WIPO** — World Intellectual Property Organization (องค์การทรัพย์สินทางปัญญาโลก)
-- **npm · PyPI · NuGet** — คลังแพ็กเกจของ Node, Python และ .NET ตามลำดับ
+- **portmanteau**: a word made by cutting 2 words and joining them
+- **handle**: an account name on social media, such as `@quixapp`
+- **WIPO**: World Intellectual Property Organization
+- **npm · PyPI · NuGet**: package registries for Node, Python and .NET respectively
 
-## 10 · เชื่อมกับ skill อื่น
+## 10 · Links to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---|---|
-| โลโก้ สี ตัวอักษรของชื่อที่เลือกแล้ว | `graphic-design` (plugin `software-development`) |
-| เช็กว่ามีคนทำของแบบเดียวกันชื่อนี้อยู่แล้วไหม | `prior-art-review` |
-| ชื่อที่ใช้ในเอกสารและไฟล์ส่งมอบ | `document-naming` |
-| คำที่ใช้เรียกฟีเจอร์ในตัวผลิตภัณฑ์ | `i18n-and-locale` (plugin `software-development`) |
-| นำเสนอชื่อที่คัดแล้วให้ผู้มีอำนาจตัดสินใจ | `presentation-design` |
+| Logo, colours, typography for the chosen name | `graphic-design` (plugin `software-development`) |
+| Check whether someone already makes the same thing under this name | `prior-art-review` |
+| Names used in documents and deliverable files | `document-naming` |
+| Terms for features inside the product | `i18n-and-locale` (plugin `software-development`) |
+| Present the shortlisted names to the decision maker | `presentation-design` |
 
-**ตารางคัดชื่อที่กรอกต่อได้ทันที** → `assets/name-shortlist.md`
+**A shortlist table you can fill in right away** → `assets/name-shortlist.md`
 
 
 ## reference: formula-9-deep-dive.md
 
-# สูตร 9 ลงลึก
+# Formula 9 in depth
 
-เปิดเมื่อผลิตชื่อด้วยสูตร 9
+Open this when you generate names with formula 9.
 
-## แบบที่ให้ชื่อดูเท่าที่สุดโดยไม่ต้องประดิษฐ์คำ
+## The pattern that makes a name look coolest without inventing a word
 
-`Tailscale` = *tail* + *scale* ซึ่งทั้ง 2 คำไม่เกี่ยวกับเครือข่ายส่วนตัวเลย และไม่เกี่ยวกันเองด้วย
+`Tailscale` = *tail* + *scale*. Neither word has anything to do with private networks, and the two words have nothing to do with each other either.
 
-| ต่างจากสูตร 2 ตรงไหน | |
+| How it differs from formula 2 | |
 |---|---|
-| สูตร 2 | **ตัด**พยางค์ก่อนต่อ เช่น `fold`+`drop` → Foldrop คำที่ได้จึงไม่ใช่คำจริง |
-| สูตร 9 | **ไม่ตัดอะไรเลย** เอาคำจริง 2 คำเต็ม ๆ วางติดกัน |
+| Formula 2 | **Cuts** syllables before joining, such as `fold`+`drop` → Foldrop, so the result is not a real word |
+| Formula 9 | **Cuts nothing.** Put 2 whole real words side by side |
 
-**ทำไมได้ผล**
+**Why it works**
 
-| เหตุผล | |
+| Reason | |
 |---|---|
-| จำง่าย | ผู้ฟังรู้จักทั้ง 2 คำอยู่แล้ว ไม่ต้องจำการสะกดใหม่ |
-| ไม่ซ้ำใคร | คู่คำที่ไม่มีเหตุผลต้องอยู่ด้วยกัน จึงไม่มีใครเคยจับคู่ไว้ |
-| โดเมนหาง่าย | มักหาง่ายกว่าคำเดี่ยว แต่ยังต้องตรวจตามหัวข้อ 5 ใน `SKILL.md` |
-| ผ่านทดสอบโทรศัพท์ | พูดแล้วพิมพ์ถูกทันที เพราะเป็นคำที่เขารู้จัก |
+| Easy to remember | The listener already knows both words, so there is no new spelling to learn |
+| Unique | Nothing forces these words together, so nobody has paired them before |
+| Domains are easier to find | Usually easier than a single word, but still check them as in section 5 of `SKILL.md` |
+| Passes the phone test | The listener types it correctly at once, because the words are familiar |
 
-**กฎของสูตรนี้**
+**Rules for this formula**
 
-- รวมกันไม่เกิน **3 พยางค์** — `Tailscale` 2 · `Basecamp` 2 · `Snowflake` 2
-- **คำแรกควรเป็นรูปธรรม** คือสิ่งที่นึกภาพออก (tail, snow, fire, base, bit, black, cloud)
-- อย่าให้คู่คำอธิบายสินค้า เพราะถ้าอธิบายได้ มันจะกลายเป็นชื่อเชย ๆ แบบ `DataSync`
-- **ห้ามให้ความหมายรวมกันแล้วแปลก** ลองอ่านออกเสียงและนึกภาพก่อน
-- ตัวสะกดต้องไม่ชนกันจนอ่านยาก ให้เลี่ยงคำแรกที่ลงท้ายด้วยตัวเดียวกับที่คำหลังขึ้นต้น
+- Total of at most **3 syllables**: `Tailscale` 2 · `Basecamp` 2 · `Snowflake` 2
+- **The first word should be concrete**, something you can picture (tail, snow, fire, base, bit, black, cloud)
+- Do not let the pair describe the product. If it explains the product, it becomes a dated name like `DataSync`
+- **The combined meaning must not come out odd.** Read it aloud and picture it first
+- Spellings must not collide into something hard to read. Avoid a first word that ends with the same letter the second word starts with
 
-**วิธีผลิต** — ทำ 2 คลังแยกกัน แล้วสุ่มจับคู่และอ่านออกเสียงทุกคู่
+**How to generate** — build 2 separate pools, then pair at random and read every pair aloud
 
-| คลัง A — รูปธรรม | คลัง B — โครงสร้าง/มาตรา |
+| Pool A: concrete | Pool B: structure/measure |
 |---|---|
 | tail · snow · fire · bit · black · cloud · iron · salt · moon · north · glass · pine | scale · flake · base · bucket · camp · bird · flare · stack · frame · gate · port · line |
 
-ตัวอย่างที่ได้จากการจับคู่ — `Saltframe` · `Pinegate` · `Moonstack` · `Ironport` · `Glassline`
+Example pairs: `Saltframe` · `Pinegate` · `Moonstack` · `Ironport` · `Glassline`
 
-> **ความหมายใส่ทีหลังได้เต็มที่** (ดูข้อ 3) — `Tailscale` ไม่ได้มีความหมายตั้งแต่แรก
-> แต่พอใช้ไปสักพัก คนก็ผูกมันกับเรื่องของเครือข่ายที่ขยายได้ไปเอง
+> **Meaning can be added fully afterward** (see item 3). `Tailscale` had no meaning at the start,
+> but after some use, people tied it to the idea of a network that can scale.
 
 
 ## reference: meaning-libraries.md
 
-# คลังช่วยคิดความหมายของชื่อ
+# Libraries for developing a name's meaning
 
-สารบัญ: คลังรากละติน/กรีก → คลังคำจริงยืมข้ามบริบท → เรื่องเล่าที่ดีกับที่แย่
+Contents: Latin/Greek root library → real words borrowed across contexts → good and bad stories
 
-## คลังรากละติน/กรีก ที่ใช้ได้จริง
+## Latin/Greek roots that work in practice
 
-| ความหมาย | ราก | ชื่อที่ได้ |
+| Meaning | Root | Resulting names |
 |---|---|---|
-| แสง · ความชัด | *lux · lumen* | Lumo · Lumen · Lucent |
-| ทอง · มีค่า | *aurum* | Aurio · Aura |
-| เชื่อมต่อ | *nexus · syn-* | Nexa · Syno · Nexo |
-| พลัง · ไฟฟ้า | *volta · vis* | Volta · Vira |
-| วง · โลก | *orbis · kyklos* | Orbis · Kyklo |
-| เวลา · จังหวะ | *tempus · chronos · kairos* | Tempo · Chrono · Kairo |
-| ไหล · เคลื่อน | *fluxus · kinesis* | Flux · Kinet |
-| เสียง | *sonus · vox* | Sona · Voxa |
-| เก็บ · หีบ | *arca* | Arca · Arka |
-| ปกป้อง · โล่ | *aegis · scutum* | Aegis · Scuto |
-| ดูแล · รักษา | *cura* | Cura · Curo |
-| จุดเริ่ม | *arche* | Arka · Archo |
-| รูปแบบ | *morphe* | Morpho · Forma |
-| คำ · ภาษา | *lexis · verbum* | Lexi · Verba |
-| มอง · ตรวจ | *specto* | Specta · Scopo |
-| ใหม่ | *nova* | Nova · Novo |
-| จริง | *veritas* | Vera · Verio |
-| งาน · ผลงาน | *opus* | Opus · Opero |
-| ท่า · ประตู | *portus · porta* | Porta · Portio |
+| light · clarity | *lux · lumen* | Lumo · Lumen · Lucent |
+| gold · valuable | *aurum* | Aurio · Aura |
+| connect | *nexus · syn-* | Nexa · Syno · Nexo |
+| power · electricity | *volta · vis* | Volta · Vira |
+| circle · world | *orbis · kyklos* | Orbis · Kyklo |
+| time · rhythm | *tempus · chronos · kairos* | Tempo · Chrono · Kairo |
+| flow · move | *fluxus · kinesis* | Flux · Kinet |
+| sound | *sonus · vox* | Sona · Voxa |
+| store · chest | *arca* | Arca · Arka |
+| protect · shield | *aegis · scutum* | Aegis · Scuto |
+| care · look after | *cura* | Cura · Curo |
+| beginning | *arche* | Arka · Archo |
+| form | *morphe* | Morpho · Forma |
+| word · language | *lexis · verbum* | Lexi · Verba |
+| look · inspect | *specto* | Specta · Scopo |
+| new | *nova* | Nova · Novo |
+| true | *veritas* | Vera · Verio |
+| work · output | *opus* | Opus · Opero |
+| port · door | *portus · porta* | Porta · Portio |
 
-## คลังคำจริงยืมข้ามบริบท แยกตามความรู้สึก
+## Real words borrowed across contexts, grouped by feeling
 
-| ความรู้สึก | คำ |
+| Feeling | Words |
 |---|---|
-| เร็ว · คล่อง | Arc · Bolt · Dash · Swift · Rush · Skim |
-| มั่นคง · ปลอดภัย | Anchor · Vault · Keel · Bastion · Forge · Bedrock |
-| ชัดเจน · เห็นได้ | Prism · Lens · Beacon · Signal · Facet |
-| เป็นระเบียบ | Grid · Frame · Ledger · Atlas · Index · Stack |
-| เชื่อมโยง | Bridge · Relay · Mesh · Loom · Thread · Weave |
-| นำทาง | Compass · Pilot · Helm · North · Trail |
-| เงียบ · เรียบ | Slate · Quill · Linen · Drift · Still |
+| fast · agile | Arc · Bolt · Dash · Swift · Rush · Skim |
+| stable · safe | Anchor · Vault · Keel · Bastion · Forge · Bedrock |
+| clear · visible | Prism · Lens · Beacon · Signal · Facet |
+| orderly | Grid · Frame · Ledger · Atlas · Index · Stack |
+| connected | Bridge · Relay · Mesh · Loom · Thread · Weave |
+| guiding | Compass · Pilot · Helm · North · Trail |
+| quiet · smooth | Slate · Quill · Linen · Drift · Still |
 
-> ระวัง: **คำจริงหาโดเมนยากที่สุด** จึงต้องเตรียมแผนสำรอง เช่น เติมคำบอกหมวด (`arc.app`, `getprism.com`)
-> หรือใช้โดเมนสั้นแบบอื่น
+> Warning: **real words are the hardest to find domains for**, so prepare a fallback, such as adding a category word (`arc.app`, `getprism.com`)
+> or using another short domain style.
 
-## เรื่องเล่าที่ดีกับที่แย่
+## Good and bad stories
 
-| | ตัวอย่าง |
+| | Example |
 |---|---|
-| ✓ ดี | "Aegis คือโล่ของเทพซุส — ระบบนี้มีไว้ปกป้อง" — สั้น จำได้ เล่าต่อได้ |
-| ✗ แย่ | "A มาจาก Advanced, U มาจาก Unified, R มาจาก Realtime…" — ไม่มีใครจำ |
-| ✗ แย่ | "ชื่อนี้มาจากชื่อหมาที่บ้าน" — ความหมายส่วนตัว ลูกค้าไม่รู้สึกด้วย |
+| ✓ Good | "Aegis is the shield of Zeus. This system exists to protect." Short, memorable, easy to retell |
+| ✗ Bad | "A stands for Advanced, U for Unified, R for Realtime…" Nobody remembers it |
+| ✗ Bad | "The name comes from the family dog's name." A personal meaning, so customers feel nothing |
 
 
 ---
@@ -574,20 +574,20 @@ After that the abbreviation may be used. See the skill `spell-out-abbreviations`
 
 ## reference: anti-patterns.md
 
-# Anti-patterns — เหตุผลและสิ่งที่ใช้แทน
+# Anti-patterns — reasons and what to use instead
 
-หัวข้อสั้นอยู่ใน `SKILL.md`
+The short headings are in `SKILL.md`.
 
-- **ใช้ Heading style ที่มากับ Word** — จะทับสีที่ตั้งไว้ ให้ใช้ `h1()/h2()/h3()`
-  ซึ่งตั้ง `outlineLvl` เอง สารบัญ (TOC) จึงยังเห็นหัวข้อ
-- **เส้นตารางดำหนาแบบค่าเริ่มต้น** — เอกสารดูเก่าทันที ใช้เส้นสี `line` หนา 0.5pt ระหว่างแถว (ใต้แถวหัวคือเส้นแบรนด์ 1.5pt)
-- **ตัวอักษรสีดำสนิท** — ให้ใช้ `text_body` ซึ่งเป็นเทาเข้ม เนื้อความจะนุ่มขึ้นมาก
-- **หัวตารางตัวหนาแต่ไม่มีพื้นสี** — ตารางข้ามหน้าแล้วคนอ่านไม่รู้ว่าเริ่มตรงไหน
-- **ปล่อยความกว้างคอลัมน์ให้ Word คิดเอง** — ต้อง `fixed_widths()` เสมอ
-  ไม่งั้นคอลัมน์รหัสจะกว้างเท่าคอลัมน์รายละเอียด
-- **อีโมจิเยอะเกิน** — 1 ตัวต่อ callout พอ ไม่ใส่ในหัวข้อทุกอัน
-- **ส่งไฟล์โดยไม่เคย render ดู** — ดูข้อ 6
-- **สร้าง .docx โดยไม่เก็บ markdown ต้นฉบับ** — รอบหน้าแก้ไม่ได้
+- **Using Word's built-in Heading styles** — they override the colors you set. Use `h1()/h2()/h3()`,
+  which set `outlineLvl` themselves, so the table of contents (TOC) still shows the headings.
+- **Thick black default table borders** — the document looks dated at once. Use lines in the `line` color at 0.5pt between rows (under the header row is the 1.5pt brand line).
+- **Pure black text** — use `text_body`, a dark gray. The body text becomes much softer.
+- **Bold table headers with no fill color** — when a table spans pages, readers cannot tell where it starts.
+- **Letting Word work out column widths** — always call `fixed_widths()`.
+  Otherwise the code column ends up as wide as the detail column.
+- **Too many emoji** — 1 per callout is enough. Do not put one in every heading.
+- **Sending the file without ever rendering it** — see item 6.
+- **Creating the .docx without keeping the source markdown** — you cannot edit it next time.
 
 
 ## reference: api.md
@@ -954,80 +954,80 @@ Other rules for Thai documents:
 
 ## reference: tokens-and-type.md
 
-# Design tokens · สเกลตัวอักษร · องค์ประกอบที่ใช้ซ้ำ
+# Design tokens · type scale · reusable elements
 
-สารบัญ: tokens → ความหมายของสี → สเกลตัวอักษร → องค์ประกอบที่ใช้ซ้ำ
+Contents: tokens → color meanings → type scale → reusable elements
 
-ตารางนี้กำหนด**หน้าที่**ของแต่ละ token ไม่ได้กำหนดค่าสี
-ค่าจริงมาจากข้อ 0 แล้วตั้งครั้งเดียวด้วย `use_brand(...)`
+This table sets the **job** of each token, not the color value.
+The real values come from item 0, then you set them once with `use_brand(...)`.
 
-| Token | หน้าที่ | ได้มาจาก |
+| Token | Job | Comes from |
 |-------|---------|----------|
-| `brand` | หัวข้อ H1 · ตัวเลข KPI · แถบ accent · ลิงก์ (ถ้า `brand` ต่ำกว่า 4.5:1 บนพื้นขาว ใช้ `brand_deep` กับลิงก์) | สีแบรนด์ (ไม่มี → ค่าประจำบ้าน + `(รอยืนยัน)`) |
-| `brand_2` | accent รอง · ขีดใต้หัวข้อสไลด์ · ปลายไล่สี | เพื่อนบ้านของสีหลักบนวงล้อสี |
-| `brand_deep` | หัวข้อ H2 · ตัวอักษรหัวตาราง | สีหลักผสมดำ ให้ contrast ≥ 7:1 บนพื้นขาว |
-| `brand_tint` | พื้นหัวตาราง · การ์ด KPI · พื้นหน้าปก | สีหลักผสมขาวประมาณ 90% |
-| `brand_tint_2` | แถวสลับ (zebra) ในตารางยาว | สีหลักผสมขาวประมาณ 96% |
-| `text` | หัวข้อ H3 · ข้อความเน้น | เทาเข้มอมโทนเดียวกับสีหลัก |
-| `text_body` | เนื้อความทั้งหมด | เทาเข้มอ่อนกว่า `text` 1 ขั้น **ไม่ใช่ดำสนิท เพราะดำสนิทล้าตา** |
-| `text_muted` | คำบรรยายรูป · meta · footer | เทากลาง contrast ≥ 4.5:1 บนพื้นขาวและ `brand_tint` |
-| `line` | เส้นตาราง เส้นคั่น | เทาอ่อนมาก เห็นได้แต่ไม่แย่งสายตา |
+| `brand` | H1 headings · KPI numbers · accent bars · links (if `brand` is below 4.5:1 on a white background, use `brand_deep` for links) | The brand color (none → the house default + `(รอยืนยัน)` (awaiting confirmation)) |
+| `brand_2` | Secondary accent · underline under slide headings · end of a gradient | A neighbor of the main color on the color wheel |
+| `brand_deep` | H2 headings · table header text | The main color mixed with black, giving contrast ≥ 7:1 on white |
+| `brand_tint` | Table header fill · KPI cards · cover background | The main color mixed with white, about 90% |
+| `brand_tint_2` | Alternating (zebra) rows in long tables | The main color mixed with white, about 96% |
+| `text` | H3 headings · emphasized text | A dark gray tinted toward the main color |
+| `text_body` | All body text | A dark gray 1 step lighter than `text`. **Not pure black, because pure black tires the eyes** |
+| `text_muted` | Figure captions · meta · footer | A mid gray with contrast ≥ 4.5:1 on white and on `brand_tint` |
+| `line` | Table lines, dividers | A very light gray, visible but not competing for attention |
 
-**สีสถานะ 6 ตัว** (แต่ละตัวมีคู่สีพื้นกับสีตัวอักษร): สำเร็จ · ข้อมูล · เตือน · ผิดพลาด · เน้น · เป็นกลาง
-สีสถานะ**ไม่เปลี่ยนตามแบรนด์** เพราะเขียวคือผ่าน แดงคือไม่ผ่าน ในทุกเอกสาร
-พื้นคือเฉดอ่อนมาก ตัวอักษรคือเฉดเข้มของสีเดียวกัน ให้ contrast ≥ 4.5:1
+**6 status colors** (each has a fill color and a text color as a pair): success · info · warning · error · highlight · neutral
+Status colors **do not change with the brand**, because green means pass and red means fail in every document.
+The fill is a very light shade and the text is a dark shade of the same color, giving contrast ≥ 4.5:1.
 
-**ความหมายของแต่ละสี — เลือกสีตามความหมายเสมอ** (เหมือนกันทั้งเอกสารและไดอะแกรม)
+**What each color means — always choose a color by its meaning** (the same for documents and diagrams)
 
-| สี | หมายความว่า | ใช้กับ (callout / pill / กล่อง / เส้นในรูป) |
+| Color | Means | Used for (callout / pill / box / line in a figure) |
 |---|---|---|
-| แดง | อันตราย · ห้าม · ลบทิ้ง · ผิดพลาด · เลยกำหนด | `critical` · สถานะ "ค้าง/ล้มเหลว" · ขั้นที่ทำลายข้อมูล · เส้นที่พัง |
-| เหลือง/ส้ม | ระวัง · รอดำเนินการ · ข้อแม้ · ทางที่ไม่ใช่เส้นหลัก | `warning` · สถานะ "กำลังทำ" · โซน/เส้นข้อยกเว้น (`#C77A11`) |
-| เขียว | สำเร็จ · ผ่าน · ปลอดภัย · เสร็จแล้ว | `success` · สถานะ "เสร็จ" · ผลลัพธ์ที่ยืนยันแล้ว |
-| สีหลัก (สีแบรนด์ ไม่มีแบรนด์ใช้น้ำเงินประจำบ้าน) | ข้อมูล · การกระทำหลัก · เส้นทางปกติ | `tip` · ปุ่มหลัก · กล่อง/เส้นเส้นทางหลัก |
-| ม่วง | คำถาม · ทางเลือก · หมายเหตุเสริม | `question` · ของเสริมที่ไม่บังคับ |
-| เทา | เป็นกลาง · ปิดใช้งาน · ของภายนอก | `note` · ระบบภายนอก · ส่วนที่ปิดอยู่ |
+| Red | Danger · forbidden · delete · error · overdue | `critical` · status "stuck/failed" · a step that destroys data · a broken line |
+| Yellow/orange | Caution · waiting for action · caveat · a path that is not the main line | `warning` · status "in progress" · exception zone/line (`#C77A11`) |
+| Green | Success · pass · safe · done | `success` · status "done" · a confirmed result |
+| Main color (the brand color; with no brand, the house blue) | Information · main action · normal path | `tip` · primary button · box/line of the main path |
+| Purple | Question · option · side note | `question` · optional extras |
+| Gray | Neutral · disabled · external | `note` · external system · a part that is switched off |
 
-กฎเดียว: **เลือกสีตามความหมาย ไม่ใช่ตามความสวย** อย่าใช้แดงเพราะอยากให้เด่น ใช้แดงเฉพาะเมื่ออันตรายหรือผิดจริง และไดอะแกรมก็ใช้ชุดความหมายเดียวกันนี้ (ดู `software-diagrams` · `diagram-figures` ที่มี `EXCEPT_HUE` ส้มสำหรับทางที่ไม่ผ่านเส้นหลัก)
+The one rule: **choose a color by meaning, not by looks.** Do not use red just to stand out. Use red only when something is truly dangerous or wrong. Diagrams use this same set of meanings too (see `software-diagrams` · `diagram-figures`, which has the orange `EXCEPT_HUE` for paths that leave the main line).
 
-> **เกณฑ์ที่ต้องผ่านทุกชุดสี:** เนื้อความและ `text_muted` บนพื้น ≥ 4.5:1 · H2 และหัวตาราง (`brand_deep`) ≥ 7:1 ·
-> H1 และตัวเลข KPI (`brand` ตัวใหญ่ ตามนิยามตัวใหญ่ของ WCAG 2.2 ข้อ 1.4.3) ≥ 3:1 ·
-> พิมพ์ขาวดำแล้วยังแยกลำดับชั้นออก ถ้าไม่ผ่านให้ปรับความเข้ม ไม่เปลี่ยนสี
+> **Thresholds every color set must pass:** body text and `text_muted` on the background ≥ 4.5:1 · H2 and table headers (`brand_deep`) ≥ 7:1 ·
+> H1 and KPI numbers (`brand` in large size, per the WCAG 2.2 large-text definition, criterion 1.4.3) ≥ 3:1 ·
+> printed in black and white, the hierarchy must still be distinguishable. If a set fails, adjust the intensity and do not change the color.
 >
-> **ตัวอย่างชุดสีที่เคยใช้จริง** (ไม่ใช่ค่ามาตรฐาน อย่าคัดลอกไปใช้โดยไม่ดูเนื้องาน) → `references/palette-examples.md`
+> **A color set that was really used** (not a standard value; do not copy it without looking at the content of the work) → `references/palette-examples.md`
 
-> **เปลี่ยนแบรนด์ทั้งชุดในบรรทัดเดียว:**
+> **Change the whole brand in one line:**
 > `use_brand(brand="C1121F", brand_deep="780000", brand_tint="FDECEC")`
 
-## สเกลตัวอักษร (pt)
+## Type scale (pt)
 
-| ระดับ | Word | Slide | น้ำหนัก · สี |
+| Level | Word | Slide | Weight · color |
 |-------|------|-------|--------------|
-| ชื่อบนปก | 20 | 40 | bold · `brand` (Word) / `brand_deep` (สไลด์) |
+| Cover title | 20 | 40 | bold · `brand` (Word) / `brand_deep` (slides) |
 | H1 | 16 | 26 | bold · `brand` |
 | H2 | 12.5 | — | bold · `brand_deep` |
 | H3 | 11.5 | — | bold · `text` |
-| เนื้อความ | 11 | 17 | regular · `text_body` |
-| ตาราง | 11 | 12.5 | regular · `text_body` |
-| คำบรรยาย/footer | 8.5–9 | 10–12 | italic หรือ regular · `text_muted` |
+| Body | 11 | 17 | regular · `text_body` |
+| Table | 11 | 12.5 | regular · `text_body` |
+| Caption/footer | 8.5–9 | 10–12 | italic or regular · `text_muted` |
 
-**อย่าเพิ่มขนาดนอกสเกลนี้** เพราะทุกขนาดที่เพิ่มทำให้เอกสารดูไม่สม่ำเสมอ และคนอ่านสังเกตเห็น
+**Do not add sizes outside this scale.** Every extra size makes the document look inconsistent, and readers notice.
 
-## องค์ประกอบที่ใช้ซ้ำ (จากข้อ 4)
+## Reusable elements (from item 4)
 
-| องค์ประกอบ | หน้าตา | เมธอด |
+| Element | Look | Method |
 |-----------|--------|-------|
-| หน้าปก | โลโก้ + ชื่อสีแบรนด์ กลางหน้า | `cover()` |
-| ตาราง | หัวพื้น `brand_tint` ตัวอักษร `brand_deep` · เส้นแบรนด์ 1.5pt ใต้แถวหัว · เส้นระหว่างแถว `line` 0.5pt · หัวซ้ำทุกหน้า | `table()` |
-| ตารางสถานะ | คอลัมน์สถานะย้อมสีตามค่า | `pill_table()` |
-| แถบตัวเลขสรุป | การ์ดพื้น `brand_tint` ตัวเลขใหญ่สีแบรนด์ + ป้ายเทาเล็ก | `kpi_row()` |
-| กล่องข้อความ | พื้นสีอ่อน + แถบสีหนาด้านซ้าย + อีโมจิ 1 ตัว | `callout()` |
-| รูปพร้อมคำบรรยาย | รูปกลางหน้า + "รูปที่ N — ..." เอียงเทาใต้รูป | `figure()` |
-| บล็อกโค้ด | พื้นเทาอ่อน ฟอนต์ Consolas 9pt | `code()` |
-| ตารางเซ็น | บทบาท / ชื่อ / ลายเซ็น / วันที่ | `signoff()` |
+| Cover page | Logo + title in the brand color, centered on the page | `cover()` |
+| Table | Header fill `brand_tint` with `brand_deep` text · 1.5pt brand line under the header row · `line` 0.5pt between rows · header repeats on every page | `table()` |
+| Status table | The status column is tinted by value | `pill_table()` |
+| Summary figure strip | Cards with `brand_tint` fill, a big number in the brand color + a small gray label | `kpi_row()` |
+| Text box | Light fill + a thick colored bar on the left + 1 emoji | `callout()` |
+| Figure with caption | Figure centered on the page + "รูปที่ N — ..." in gray italic under the figure | `figure()` |
+| Code block | Light gray fill, Consolas 9pt font | `code()` |
+| Sign-off table | Role / name / signature / date | `signoff()` |
 
-**สัดส่วนที่พอดี:** callout ไม่เกิน 3–5 กล่องต่อ 10 หน้า · แถบตัวเลขสรุป (KPI strip) 3–5 ช่อง (ตั้งแต่ 6 ช่อง ตัวเลขจะเล็กจนไม่เด่น) ·
-ตารางเกิน 6 คอลัมน์ให้เปลี่ยนเป็นหน้าแนวนอน (`landscape_section()`)
+**Good proportions:** no more than 3–5 callouts per 10 pages · a summary figure strip (KPI strip) of 3–5 cells (from 6 cells on, the numbers get too small to stand out) ·
+a table with more than 6 columns should move to a landscape page (`landscape_section()`).
 
 
 ## reference: visual-check.md

@@ -4,9 +4,9 @@ Use when software handles patient or clinical data
 
 # healthcare-systems
 
-ซอฟต์แวร์ที่แตะข้อมูลผู้ป่วย — workflow ทางคลินิก · FHIR · HIPAA · การวิเคราะห์ข้อมูลคลินิก
+Software that touches patient data — clinical workflow · FHIR · HIPAA · clinical data analytics
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทั้งหมด เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้นอยู่แล้ว
+**Open only the files that match the job.** Do not read them all, because each file is the full guide to its topic.
 
 ## หัวข้อ
 
@@ -19,7 +19,7 @@ Use when software handles patient or clinical data
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน · อ่านสารบัญก่อน แล้วอ่านเฉพาะหัวข้อที่งานใช้
+An agent called to work in this area opens its own role file before starting · read the table of contents first, then read only the sections the job uses
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -44,7 +44,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 `/software-development:healthcare-systems <fhir-design | hipaa-audit> <details>`
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดในเอกสารที่ได้ เขียนตาม `human-writing` — command นี้บอกขั้นตอน ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write every line of wording in the output per `human-writing`. This command gives the steps, while human-writing gives how to write so people can understand.
 
 Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
 
@@ -775,7 +775,7 @@ Use `polished-document-style` skill to produce:
 
 # Clinical analytics — cohorts, measures, risk adjustment, report
 
-คู่มือของ agent `clinical-data-analyst` · SQL ทุกตัวเป็นตัวอย่าง ต้องปรับชื่อตารางและรหัสให้ตรงระบบจริง
+Guide for the `clinical-data-analyst` agent · every SQL query is an example; adapt table names and codes to the real system
 
 **สารบัญ:**
 
@@ -1395,7 +1395,7 @@ interface PlannedActivity {
 
 Use when the user asks to design a FHIR API or run a HIPAA or PDPA readiness audit. Modes — fhir-design · hipaa-audit.
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดในเอกสารที่ได้ เขียนตาม `human-writing` — command นี้บอกขั้นตอน ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write every line of wording in the output per `human-writing`. This command gives the steps, while human-writing gives how to write so people can understand.
 
 Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
 
@@ -2193,9 +2193,9 @@ Use when money moves through software via Stripe or PromptPay
 
 # fintech-payments
 
-ระบบที่มีเงินไหลผ่าน — payment gateway · KYC/AML · PCI-DSS · โมเดลความเสี่ยงการเงิน
+Systems that money flows through — payment gateway · KYC/AML · PCI-DSS · financial risk models
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทุกไฟล์ เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้นอยู่แล้ว
+**Open only the files that match the job.** Do not read every file, because each file is already the full guide to its topic.
 
 ## หัวข้อ
 
@@ -2208,7 +2208,7 @@ Use when money moves through software via Stripe or PromptPay
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน · อ่านสารบัญก่อน แล้วอ่านเฉพาะหัวข้อที่งานใช้
+An agent called in for this area opens its own role file before starting work · read the table of contents first, then read only the sections the job uses
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -2260,7 +2260,7 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 - **SEC** — securities, digital assets
 - **AMLO** — anti-money laundering, KYC requirements
 - **PDPA** — personal data protection
-- **Card scheme rules in Thailand** — (ยังไม่ได้ตรวจ ว่ามีกรอบเฉพาะชื่อนี้) ตรวจกับธนาคารแห่งประเทศไทยและ card scheme ก่อนอ้าง
+- **Card scheme rules in Thailand** — (`ยังไม่ได้ตรวจ` whether a framework by this exact name exists) check with the Bank of Thailand and the card schemes before citing
 
 **Singapore:**
 - **MAS** — banking, payments (PSA), capital markets
@@ -2869,7 +2869,7 @@ Daily job:
 
 # Quant Analyst — models, backtesting, model card, backtest report
 
-คู่มือบทบาทของ agent `quant-analyst` · โค้ดเป็นตัวอย่าง ต้องตรวจกับข้อมูลจริงก่อนใช้
+Role guide for the `quant-analyst` agent · the code is an example; check it against real data before use
 
 **สารบัญ:**
 
@@ -4268,76 +4268,76 @@ Before QSA arrives:
 
 Use when about to ship or merge code, as a security check
 
-# security-gate — ประตูความปลอดภัยก่อนส่งงาน
+# security-gate — a security gate before shipping
 
-> เครื่องมือสแกนหาเจอเร็วแต่แจ้งผิดเยอะ ส่วนคนตรวจเข้าใจบริบทแต่ช้า
-> ประตูนี้ให้เครื่องหาก่อน แล้ว agent ยืนยันทุกข้อกับโค้ดจริง ก่อนจะถึงมือคน
+> Scanners find issues fast but raise many false alarms. Human reviewers understand context but are slow.
+> This gate lets the tools search first, then the agent confirms every finding against the real code, before it reaches a person.
 
-ใช้ร่วมกับ [`principle-secure-by-default`](../principle-secure-by-default/SKILL.md) ส่วนรายงานเชิงลึกให้ใช้ agent `security-engineer`
+Use it together with [`principle-secure-by-default`](../principle-secure-by-default/SKILL.md). For an in-depth report, use the `security-engineer` agent.
 
-## ขั้นตอน
+## Steps
 
-1. **รันในห้อง** (sandbox ของโปรเจกต์) — ถ้าโปรเจกต์มี `.sandbox/` ให้รันทุกคำสั่งผ่าน `sandbox.ps1 exec` ส่วนเครื่องมือที่ยังไม่มีให้ติดตั้งในห้องได้เลย ไม่ติดตั้งบนเครื่องผู้ใช้
-2. **สแกน 3 ด้าน** (เลือกตามที่โปรเจกต์มี)
+1. **Run in the sandbox** (the project's sandbox) — if the project has `.sandbox/`, run every command through `sandbox.ps1 exec`. Install any missing tool inside the sandbox. Never install on the user's machine.
+2. **Scan 3 areas** (pick what the project has)
 
-   | ด้าน | เครื่องมือแนะนำ | คำสั่งตัวอย่าง |
+   | Area | Recommended tool | Example command |
    |---|---|---|
-   | ค่าลับหลุด (รวมประวัติ git) | gitleaks 8.19+ | ประวัติ git: `gitleaks git . --redact` · ไฟล์ที่ยังไม่ commit: `gitleaks dir . --redact` (`detect`/`protect` ถูก deprecate ตั้งแต่ v8.19.0 — ที่มา github.com/gitleaks/gitleaks/releases/tag/v8.19.0 · ตรวจ 22 ต.ค. 2569) |
-   | dependency มีช่องโหว่ | ตัวที่มากับภาษา + trivy หรือ osv-scanner | `npm audit --omit=dev` · `pip-audit` · `dotnet list package --vulnerable --include-transitive` · `trivy fs --scanners vuln .` |
-   | โค้ดเขียนแบบเสี่ยง (static analysis) | semgrep | มีเน็ต: `semgrep scan --config p/default --metrics=off` · ห้อง `-Locked` หรือเข้า semgrep.dev ไม่ได้: `semgrep scan --config <skill นี้>/assets/semgrep-offline.yml --metrics=off` |
-   | dependency ของ Dart / Flutter และ Gradle | osv-scanner (อ่าน `pubspec.lock` และ `gradle.lockfile`) | `osv-scanner scan source -r .` (ยังไม่ได้ตรวจบนเครื่องนี้) · ใช้ `flutter pub outdated` ดูของที่ค้างเวอร์ชัน · ถ้า Gradle ไม่มี lockfile ต้องเปิด `dependencyLocking` ก่อนถึงจะสแกนได้ |
-   | Dockerfile · compose · IaC (ถ้ามี) | trivy | `trivy config .` ส่วนแอป Android ไม่มีส่วนนี้ ให้อ่าน `android/app/build.gradle*` ด้วยตาแทน (signingConfig ต้องไม่ฝังรหัสผ่าน และ release ต้องเปิด minify) |
-   | แอป Android (ถ้ามี) | ตรวจด้วยตาตาม [`references/android.md`](references/android.md) ถ้าต้องการเชิงลึกให้ใช้ MobSF (Mobile Security Framework) | — |
+   | Leaked secrets (including git history) | gitleaks 8.19+ | Git history: `gitleaks git . --redact` · uncommitted files: `gitleaks dir . --redact` (`detect`/`protect` are deprecated since v8.19.0 — source github.com/gitleaks/gitleaks/releases/tag/v8.19.0 · checked 22 Oct 2026 (B.E. 2569)) |
+   | Vulnerable dependencies | The language's own tool + trivy or osv-scanner | `npm audit --omit=dev` · `pip-audit` · `dotnet list package --vulnerable --include-transitive` · `trivy fs --scanners vuln .` |
+   | Risky code patterns (static analysis) | semgrep | With internet: `semgrep scan --config p/default --metrics=off` · in a `-Locked` sandbox or without access to semgrep.dev: `semgrep scan --config <this skill>/assets/semgrep-offline.yml --metrics=off` |
+   | Dart / Flutter and Gradle dependencies | osv-scanner (reads `pubspec.lock` and `gradle.lockfile`) | `osv-scanner scan source -r .` (`ยังไม่ได้ตรวจ` on this machine) · use `flutter pub outdated` to see stale versions · if Gradle has no lockfile, turn on `dependencyLocking` before the scan can work |
+   | Dockerfile · compose · IaC (if present) | trivy | `trivy config .` An Android app has none of these, so read `android/app/build.gradle*` by eye instead (signingConfig must not hard-code passwords, and release must enable minify) |
+   | Android app (if present) | Check by eye with [`references/android.md`](references/android.md). For a deeper check, use MobSF (Mobile Security Framework) | — |
 
-   **รายการตรวจ Android** → [`references/android.md`](references/android.md)
+   **Android checklist** → [`references/android.md`](references/android.md)
 
-   เก็บผลดิบใน `_to_delete/security/`
-   - **ห้ามใช้ `--config auto` คู่กับ `--metrics=off`** — semgrep ไม่ยอมรัน (เจอจริงในโปรเจกต์ตัวอย่าง)
-   - **ชุดกฎ semgrep เลือกตามภาษาที่เจอ ไม่ใช่ `p/default` อย่างเดียว** (แนวคิดจาก trailofbits/skills `semgrep` · CC-BY-SA เขียนใหม่ด้วยคำเรา) — ทุกโปรเจกต์: `p/security-audit` + `p/secrets` รันครั้งเดียวทั้ง repo · แล้วเพิ่มตามภาษา: `p/python` (+`p/django` หรือ `p/flask`) · `p/javascript` + `p/typescript` (+`p/react` · `p/nodejs`) · `p/csharp` · `p/dockerfile` · มีหลายภาษาใส่ `--config` หลายตัวในคำสั่งเดียวได้ · ชุดกฎไหนโหลดไม่ได้ (ไม่มีเน็ต · ชื่อผิด) ต้องขึ้นในรายงานว่าไม่ได้รัน ไม่ใช่หายเงียบ
-   - ชุดออฟไลน์มี 6 กฎที่แทบไม่มีกรณีปลอดภัย (eval · HTML จากตัวแปร · shell จากตัวแปร · SQL ต่อสตริง · ค่าลับในโค้ด) และพิสูจน์แล้วว่าจับได้ครบในไฟล์ที่ตั้งใจเขียนผิด ถ้าเครื่องมือไหนรันไม่ได้ ให้เขียนในรายงานว่า `ยังไม่ได้ตรวจ` พร้อมเหตุผล
-   - **semgrep รองรับ Dart น้อยมาก และกฎออฟไลน์เขียนไว้สำหรับเว็บกับ backend** ถ้า semgrep ไม่เจออะไรในโปรเจกต์ Flutter ก็ไม่ได้แปลว่าปลอดภัย รายงานต้องเขียนว่าโค้ด Dart `ยังไม่ได้ตรวจด้วย static analysis` แล้วพึ่ง `flutter analyze` กับการอ่านโค้ดแทน ห้ามสรุปว่า `ผ่าน` จากผลว่าง
-3. **ยืนยันทุกข้อ** — เปิดโค้ดจริงดูว่าใช้ได้จริงไหม (เช่น ช่องโหว่อยู่ในฟังก์ชันที่โปรเจกต์ไม่ได้เรียก) แล้วติดป้าย `ยืนยันแล้ว` / `แจ้งผิด` / `ยังไม่ยืนยัน` พร้อมเหตุผล · `ยังไม่ยืนยัน` ไม่ติดระดับ และบอกว่าขาดหลักฐานอะไร · ลูกค้าขอตรวจลึกทั้งระบบ หรือเจอข้อที่ต้องไล่เส้นทางข้อมูลข้ามหลายไฟล์ → [`security-audit`](../security-audit/SKILL.md) (ผู้ยืนยันเป็นตัวใหม่ ไม่ใช่ตัวที่สแกน)
-4. **จัดระดับและตัดสิน**
+   Keep raw output in `_to_delete/security/`
+   - **Never use `--config auto` together with `--metrics=off`** — semgrep refuses to run (seen in a real sample project).
+   - **Choose semgrep rulesets by the languages found, not `p/default` alone** (idea from trailofbits/skills `semgrep` · CC-BY-SA, rewritten in our own words). For every project, run `p/security-audit` + `p/secrets` once over the whole repo. Then add per language: `p/python` (+`p/django` or `p/flask`) · `p/javascript` + `p/typescript` (+`p/react` · `p/nodejs`) · `p/csharp` · `p/dockerfile`. For several languages, pass several `--config` flags in one command. If a ruleset cannot load (no internet · wrong name), the report must say it did not run. It must not vanish silently.
+   - The offline set has 6 rules that almost never have a safe case (eval · HTML from a variable · shell from a variable · SQL built by concatenation · secrets in code), and it was proven to catch every one in files deliberately written wrong. If any tool cannot run, write `ยังไม่ได้ตรวจ` (not yet checked) with the reason in the report.
+   - **semgrep supports Dart very poorly, and the offline rules were written for web and backend.** If semgrep finds nothing in a Flutter project, that does not mean it is safe. The report must say the Dart code is `ยังไม่ได้ตรวจด้วย static analysis` (not yet checked with static analysis) and rely on `flutter analyze` and reading the code instead. Never conclude `ผ่าน` from an empty result.
+3. **Confirm every finding** — open the real code and see whether it applies (for example, the vulnerability is in a function the project never calls). Then label it `ยืนยันแล้ว` (confirmed) / `แจ้งผิด` (false alarm) / `ยังไม่ยืนยัน` (not yet confirmed) with a reason. Give `ยังไม่ยืนยัน` no severity and say what evidence is missing. If the customer asks for a deep check of the whole system, or you find an item that needs tracing data flow across several files → [`security-audit`](../security-audit/SKILL.md) (the confirmer is a fresh agent, not the one that scanned).
+4. **Rate and decide**
 
-   | ระดับ | ทำอะไร |
+   | Level | What to do |
    |---|---|
-   | ค่าลับจริงหลุด | **หยุดทันที บอกผู้ใช้** ต้องเปลี่ยนค่าลับที่ผู้ให้บริการ เพราะลบจากไฟล์อย่างเดียวไม่พอ และ agent ไม่แก้ประวัติ git เอง |
-   | critical · high ที่ยืนยันแล้ว | **ห้ามส่ง** จนกว่าจะแก้ หรือผู้ใช้ยอมรับความเสี่ยงเป็นลายลักษณ์อักษรใน `decision-log` |
-   | medium | แก้ในรอบนี้ถ้าประเมินว่าใช้ไม่เกิน 1 ชั่วโมง (ค่าตั้งต้น ยังไม่ได้วัด · ปรับตามทีมได้) · เกินนั้นเปิดเป็นงานแยกเข้าคิว แล้วเรียงด้วย `decision-scoring` คำสั่ง `priority` แบบ `rice` (คนหรือระบบที่โดน × ผลกระทบ × ความมั่นใจ ÷ ชั่วโมงแก้) · ผลสูสีให้คนเลือก |
-   | low · แจ้งผิด | บันทึกเหตุผล ไม่ต้องแก้ |
+   | Real secret leaked | **Stop at once and tell the user.** The secret must be rotated at the provider, because deleting it from the file is not enough, and the agent never rewrites git history itself. |
+   | Confirmed critical · high | **Do not ship** until fixed, or until the user accepts the risk in writing in `decision-log`. |
+   | medium | Fix it in this round if the estimate is 1 hour or less (a starting value, not yet measured · adjust per team). If it takes longer, open a separate task in the queue and rank it with `decision-scoring` command `priority` in `rice` mode (people or systems affected × impact × confidence ÷ hours to fix). If the scores are close, let a person choose. |
+   | low · false alarm | Record the reason. No fix needed. |
 
-5. **แก้**
-   - ช่องโหว่ใน dependency ให้อัปเดตเป็นเวอร์ชันที่แก้แล้ว แล้วรัน test
-   - ช่องโหว่ในโค้ดให้ใช้ playbook `bug-fix` (หาต้นเหตุ + เขียน test ที่ล้มก่อนแก้ + ค้นจุดอื่นที่เขียนแบบเดียวกัน)
-   - รูปแบบที่เจอซ้ำให้ส่งต่อ `repeated-mistakes-to-checks` ไปทำเป็นกฎ lint
-6. **รายงาน** — `qa/security/<ปี-เดือน-วัน>-gate.md` ตาราง `| ระดับ | เรื่อง | ไฟล์:บรรทัด หรือแพ็กเกจ | ยืนยัน | ทำอะไร |` พร้อมคำตัดสิน 1 บรรทัด (`ผ่าน` · `ผ่านหลังแก้` · `ไม่ผ่าน`) ห้ามคัดค่าลับลงรายงาน (ให้ใช้ผลแบบ `--redact`) แล้วรายงานสถานะด้วย `status-report` ประเภท `ตรวจ`
-   - **ต้องมีหัวข้อ "ไม่ได้รัน"** ก่อนคำตัดสิน: เครื่องมือหรือชุดกฎที่ติดตั้งไม่ได้ · ออก exit code ไม่ใช่ 0 · ภาษาที่สแกนเนอร์ไม่รองรับ (เช่น Dart) · ไฟล์หรือโฟลเดอร์ที่ข้าม — ระบุชื่อและเหตุผลทีละรายการ · รายงานที่สแกนไม่ครบแต่เขียนเหมือนครบ แย่กว่าไม่สแกน · ถ้ามีรายการในหัวข้อนี้ คำตัดสิน `ผ่าน` ต้องต่อท้ายว่า `(ยกเว้นที่ไม่ได้รัน)`
-   - ก่อนส่งมอบลูกค้า หรือสัญญาระบุ OWASP → กรอกรายงานรายข้อ A01–A10 ตาม [`references/owasp-top10.md`](references/owasp-top10.md) เพิ่มอีกไฟล์ `qa/security/<ปี-เดือน-วัน>-owasp.md` · ผลสแกนของ gate นี้ใช้เป็นหลักฐานข้อ A02 · A03 · A04 · A05 · A08
+5. **Fix**
+   - For a vulnerable dependency, update to a fixed version, then run the tests.
+   - For a vulnerability in code, use the playbook `bug-fix` (find the root cause + write a test that fails before the fix + search for other places written the same way).
+   - For a pattern that keeps coming back, pass it to `repeated-mistakes-to-checks` to turn into a lint rule.
+6. **Report** — `qa/security/<year-month-day>-gate.md`, a table `| ระดับ | เรื่อง | ไฟล์:บรรทัด หรือแพ็กเกจ | ยืนยัน | ทำอะไร |` (level · issue · file:line or package · confirmed · action), with a 1-line verdict (`ผ่าน` · `ผ่านหลังแก้` (passed after fixes) · `ไม่ผ่าน`). Never copy secrets into the report (use `--redact` output). Then report status with `status-report` type `ตรวจ` (check).
+   - **The report must have a section "ไม่ได้รัน" (not run)** before the verdict. List by name, with a reason each: tools or rulesets that could not be installed · tools that exited with a non-zero code · languages the scanner does not support (such as Dart) · files or folders skipped. A report that scanned partly but reads as complete is worse than no scan. If this section has any entry, a `ผ่าน` verdict must end with `(ยกเว้นที่ไม่ได้รัน)` (except what was not run).
+   - Before handing over to a customer, or when the contract names OWASP → fill in the per-item report A01–A10 following [`references/owasp-top10.md`](references/owasp-top10.md), as a second file `qa/security/<year-month-day>-owasp.md`. This gate's scan results serve as evidence for items A02 · A03 · A04 · A05 · A08.
 
-## เมื่อไรต้องรัน
+## When to run
 
-- ทุกครั้งก่อน playbook `ship` และก่อนส่งมอบงานลูกค้า
-- หลังเพิ่มหรืออัปเดต dependency — ผลสแกนมีรายการ ให้ทำตาม [`references/dependency-updates.md`](references/dependency-updates.md) (จัดกลุ่มตามความเสี่ยงจริง · ลำดับ patch → minor → major · พิสูจน์ · ลง CHANGELOG)
-- สัญญาหรือข้อกำหนดความปลอดภัยระบุว่าเว็บแอปหรือ API ต้องผ่าน OWASP Top 10:2025 → อ่าน [`references/owasp-top10.md`](references/owasp-top10.md) (ตาราง A01–A10 ที่ต้องมีและพิสูจน์ด้วย · เกณฑ์ส่งมอบ · ข้อสัญญา [`owasp-contract-clause.md`](references/owasp-contract-clause.md) · วิธีตาม stack [`owasp-stack-checks.md`](references/owasp-stack-checks.md) · แม่แบบรายงาน [`assets/owasp-report.md`](assets/owasp-report.md))
-- โปรเจกต์ที่ยังใช้งานอยู่ให้รันสัปดาห์ละครั้งตามรอบ (scheduled task) เพราะช่องโหว่ใหม่ถูกประกาศทุกวันแม้โค้ดไม่เปลี่ยน
+- Every time before the `ship` playbook and before handing work to a customer.
+- After adding or updating a dependency — if the scan lists findings, follow [`references/dependency-updates.md`](references/dependency-updates.md) (group by real risk · order patch → minor → major · prove · write in CHANGELOG).
+- When the contract or a security requirement says the web app or API must pass OWASP Top 10:2025 → read [`references/owasp-top10.md`](references/owasp-top10.md) (the A01–A10 table to cover and prove · delivery criteria · contract clause [`owasp-contract-clause.md`](references/owasp-contract-clause.md) · per-stack methods [`owasp-stack-checks.md`](references/owasp-stack-checks.md) · report template [`assets/owasp-report.md`](assets/owasp-report.md)).
+- For a project still in use, run it once a week as a scheduled task, because new vulnerabilities are announced every day even when the code does not change.
 
-## ไม่ใช่หน้าที่ของ skill นี้
+## Not the job of this skill
 
-- ทดสอบเจาะระบบจริงหรือระบบของคนอื่น เพราะ skill นี้ทำเฉพาะโค้ดและ environment ทดสอบของโปรเจกต์นี้
-- รับรองว่าปลอดภัย 100% รายงานบอกแค่ว่าตรวจอะไร ด้วยอะไร และอะไรที่ยังไม่ได้ตรวจ
-- รีวิวตรรกะและการออกแบบของ diff → `code-review-checklist` (ก่อน merge รันทั้งสองตัว)
+- Real penetration testing, or testing someone else's system, because this skill covers only this project's code and test environment.
+- Certifying 100% safety. The report says only what was checked, with what, and what was not checked.
+- Reviewing the logic and design of a diff → `code-review-checklist` (run both before merge).
 
 
 ## reference: android.md
 
-# รายการตรวจ Android — ใช้กับ `security-gate` ข้อ 2
+# Android checklist — used by `security-gate` step 2
 
-**รายการตรวจ Android** — ดู `AndroidManifest.xml` ที่รวมแล้ว (merged manifest) ไม่ใช่แค่ไฟล์ต้นฉบับ เพราะ plugin เติม permission ให้เอง · โฟลเดอร์เปลี่ยนตามเวอร์ชัน Android Gradle Plugin (AGP) (`merged_manifests/<variant>/` หรือ `merged_manifest/<variant>/process<Variant>MainManifest/` — ยังไม่ได้ตรวจ) ให้หาด้วย `find build -path '*merged_manifest*' -name AndroidManifest.xml` หลัง build release
-- `android:exported` — ให้มีแค่ activity หลักที่เป็น `true` ส่วนตัวอื่นต้องมีเหตุผล
-- `android:allowBackup` / `dataExtractionRules` — ตั้งชัดว่าข้อมูลไหนสำรองได้ ไม่ปล่อยค่าเริ่มต้น
-- `android:debuggable` ต้องไม่มีใน release และ `usesCleartextTraffic` ต้องไม่เป็น `true`
-- permission เท่าที่ใช้จริง — แอปออฟไลน์ต้องไม่มี `INTERNET` และต้องตรวจตัวที่ plugin เติมมาด้วย
-- `key.properties` · `*.jks` · `*.keystore` ไม่อยู่ใน git (`git ls-files` แล้วค้น)
+**Android checklist** — Read the merged `AndroidManifest.xml`, not just the source file, because plugins add permissions on their own. The folder changes with the Android Gradle Plugin (AGP) version (`merged_manifests/<variant>/` or `merged_manifest/<variant>/process<Variant>MainManifest/` — `ยังไม่ได้ตรวจ`). After a release build, find it with `find build -path '*merged_manifest*' -name AndroidManifest.xml`.
+- `android:exported` — only the main activity may be `true`. Every other component needs a stated reason.
+- `android:allowBackup` / `dataExtractionRules` — state clearly which data may be backed up. Do not leave the defaults.
+- `android:debuggable` must not appear in release, and `usesCleartextTraffic` must not be `true`.
+- Request only the permissions the app really uses. An offline app must not have `INTERNET`, and you must also check the permissions plugins added.
+- `key.properties` · `*.jks` · `*.keystore` must not be in git (run `git ls-files` and search the output).
 
 
 ## reference: dependency-updates.md
@@ -4393,15 +4393,15 @@ Automatic route: turn on **Renovate** or **Dependabot** to file PRs in the order
 
 ## reference: owasp-contract-clause.md
 
-# ข้อกำหนด OWASP Top 10:2025 ในสัญญาและ SRS
+# OWASP Top 10:2025 clause for contracts and the Software Requirements Specification (SRS)
 
-ร่างนี้ใช้เป็นจุดเริ่ม ไม่ใช่คำแนะนำทางกฎหมาย · สัญญาจริงให้ `legal-compliance-officer` หรือทนายของผู้ว่าจ้างตรวจ · ร่างสัญญาภาษาไทยทั้งฉบับใช้ `e-commerce:doc-contract-th`
+This draft is a starting point, not legal advice. Have `legal-compliance-officer` or the client's lawyer review the real contract. For a full Thai contract draft, use `e-commerce:doc-contract-th`.
 
-## ทำไมต้องเขียนให้วัดได้
+## Why the clause must be measurable
 
-"ระบบต้องปลอดภัยตาม OWASP" วัดไม่ได้ แล้วจะเถียงกันตอนส่งมอบ · ให้เขียนเป็น **เกณฑ์รับงาน** ที่ตรวจได้ทีละข้อ และบอกขอบเขตที่ไม่รวม
+"The system must be secure per OWASP" cannot be measured, and the two sides will argue at handover. Write it as **acceptance criteria** that can be checked one item at a time, and state what is out of scope.
 
-## ร่างข้อกำหนด (ภาษาไทย)
+## Draft clause (Thai, paste into the contract as written)
 
 > **ข้อ X ความปลอดภัยของระบบ**
 >
@@ -4417,7 +4417,7 @@ Automatic route: turn on **Renovate** or **Dependabot** to file PRs in the order
 >
 > X.6 การตรวจตามข้อนี้ไม่ใช่การรับรองว่าระบบปลอดภัยโดยสมบูรณ์
 
-## ร่างใน SRS — หมวดความต้องการที่ไม่ใช่ฟังก์ชัน ด้านความปลอดภัย (Non-Functional Requirement (NFR))
+## Draft for the SRS — security non-functional requirements (NFR) section (Thai, paste as written)
 
 | รหัส | ความต้องการ | วิธีตรวจรับ |
 |---|---|---|
@@ -4427,88 +4427,88 @@ Automatic route: turn on **Renovate** or **Dependabot** to file PRs in the order
 | NFR-SEC-04 | admin และธุรกรรมเงินใช้การยืนยันตัวตนหลายชั้น (MFA) | ชุด test ด้าน login (A07) |
 | NFR-SEC-05 | เหตุการณ์ความปลอดภัยมี log และแจ้งเตือน | ชุด test ด้าน log (A09) + ตัวอย่าง log |
 
-เพิ่มหรือตัดแถวตามระบบ · ทุกแถวต้องมี "วิธีตรวจรับ" ที่ทำได้จริง
+Add or remove rows to fit the system. Every row needs an acceptance check ("วิธีตรวจรับ") that can really be done.
 
 
 ## reference: owasp-stack-checks.md
 
-# OWASP Top 10:2025 ตาม stack ที่ทีมใช้
+# OWASP Top 10:2025 by the stacks the team uses
 
-เปิดไฟล์นี้ตอนเขียนโค้ดและตอนกรอกรายงาน · แต่ละข้อบอก "ใช้อะไร" และ "อย่าทำ" · ค่าเริ่มของ framework ที่ปลอดภัยอยู่แล้ว ให้ใช้ตามนั้น ไม่เขียนเอง
+Open this file when writing code and when filling in the report. Each item says what to use and what to avoid. Where a framework default is already secure, use it and do not write your own.
 
 - [.NET / ASP.NET Core](#net--aspnet-core)
 - [TypeScript · Node · Angular](#typescript--node--angular)
 - [Python (FastAPI · Django · Flask)](#python-fastapi--django--flask)
 - [SQL (SQL Server · PostgreSQL · MySQL)](#sql-sql-server--postgresql--mysql)
-- [เครื่องมือที่ใช้พิสูจน์](#เครื่องมือที่ใช้พิสูจน์)
+- [Tools for proving each item](#tools-for-proving-each-item)
 
 ---
 
 ## .NET / ASP.NET Core
 
-| ข้อ | ใช้อะไร | อย่าทำ |
+| Item | Use | Avoid |
 |---|---|---|
-| A01 | `FallbackPolicy` = ต้อง login ทุก endpoint แล้วเปิดเฉพาะที่ตั้งใจด้วย `[AllowAnonymous]` · ตรวจเจ้าของ record ด้วย `IAuthorizationService` + resource-based policy · ASP.NET MVC แบบเก่าใช้ `[Authorize]` ระดับ controller + filter กลาง · antiforgery token ทุก form (`[ValidateAntiForgeryToken]` หรือ `AutoValidateAntiforgeryTokenAttribute` ทั้งแอป) · รับ input ผ่าน ViewModel หรือ DTO ไม่ bind entity ตรง | ซ่อนปุ่มใน view แล้วถือว่าคุมสิทธิ์แล้ว · ใช้ id จาก URL ค้น DB โดยไม่กรองด้วย user |
-| A02 | `app.UseExceptionHandler` + `UseHsts` ใน production · `customErrors mode="RemoteOnly"` (MVC เก่า) · ลบ header `Server` · `X-Powered-By` | เปิด `UseDeveloperExceptionPage` บน production · เก็บ connection string ใน `appsettings.json` ที่ commit |
-| A03 | `dotnet list package --vulnerable --include-transitive` · `Directory.Packages.props` คุมเวอร์ชันที่เดียว · SBOM: `dotnet CycloneDX` | ใช้แพ็กเกจที่ไม่มีคนดูแลแล้ว (ดูวันออกล่าสุด) |
-| A04 | ASP.NET Core Identity (PBKDF2) หรือ `Rfc2898DeriveBytes.Pbkdf2` · Data Protection API สำหรับค่าที่ต้องถอดกลับ · ค่าลับใน User Secrets หรือ Key Vault | `MD5` · `SHA1` · `DES` · เขียน crypto เอง |
-| A05 | EF Core LINQ · `FromSqlInterpolated` · Dapper พร้อม parameter · Razor encode HTML ให้เอง | `FromSqlRaw` ต่อสตริง · `Html.Raw` กับข้อมูลผู้ใช้ · `Process.Start` กับ input |
-| A07 | Identity: `Lockout.MaxFailedAccessAttempts` + `PasswordSignInAsync(..., lockoutOnFailure: true)` (หน้า Login ที่ scaffold มาตั้งเป็น false) · cookie `HttpOnly` `Secure` `SameSite` · JWT: ตั้ง `ValidateIssuer` `ValidateAudience` `ValidateLifetime` `ValidateIssuerSigningKey` = true | `ValidateLifetime = false` · รับ algorithm `none` |
-| A08 | `System.Text.Json` · webhook ตรวจลายเซ็น Hash-based Message Authentication Code (HMAC) ด้วย `CryptographicOperations.FixedTimeEquals` | `BinaryFormatter` · `TypeNameHandling.All` ของ Newtonsoft |
-| A09 | `ILogger` แบบ structured (Serilog) · log ผล login · ถูกปฏิเสธสิทธิ์ · ตัดค่าลับด้วย destructuring policy | log ทั้ง request body ที่มีรหัสผ่าน |
-| A10 | ตัวจับกลาง `IExceptionHandler` (.NET 8 ขึ้นไป · ลงทะเบียน `AddExceptionHandler<T>()` + `AddProblemDetails()` **และ** ต้องมี `app.UseExceptionHandler()` ใน pipeline ไม่งั้นตัวจับไม่ทำงาน) คืน `ProblemDetails` · .NET เก่ากว่าใช้ `UseExceptionHandler` กับ lambda หรือ path · `TransactionScope` หรือ `BeginTransaction` ครอบงานหลายขั้น · `CancellationToken` + timeout ของ `HttpClient` | `catch { }` ว่าง · `catch` แล้วคืน `true` จากตัวตรวจสิทธิ์ |
+| A01 | `FallbackPolicy` so every endpoint requires login, then open only the intended ones with `[AllowAnonymous]` · check record ownership with `IAuthorizationService` + a resource-based policy · old ASP.NET MVC: `[Authorize]` at controller level + a global filter · antiforgery token on every form (`[ValidateAntiForgeryToken]` or `AutoValidateAntiforgeryTokenAttribute` app-wide) · take input through a ViewModel or DTO, never bind an entity directly | Hiding a button in the view and calling that access control · looking up the DB by the id in the URL without filtering by user |
+| A02 | `app.UseExceptionHandler` + `UseHsts` in production · `customErrors mode="RemoteOnly"` (old MVC) · remove the `Server` · `X-Powered-By` headers | Enabling `UseDeveloperExceptionPage` in production · keeping the connection string in a committed `appsettings.json` |
+| A03 | `dotnet list package --vulnerable --include-transitive` · `Directory.Packages.props` to control versions in one place · SBOM: `dotnet CycloneDX` | Using packages nobody maintains any more (check the last release date) |
+| A04 | ASP.NET Core Identity (PBKDF2) or `Rfc2898DeriveBytes.Pbkdf2` · Data Protection API for values that must be decrypted · secrets in User Secrets or Key Vault | `MD5` · `SHA1` · `DES` · writing your own crypto |
+| A05 | EF Core LINQ · `FromSqlInterpolated` · Dapper with parameters · Razor encodes HTML itself | `FromSqlRaw` with string concatenation · `Html.Raw` with user data · `Process.Start` with input |
+| A07 | Identity: `Lockout.MaxFailedAccessAttempts` + `PasswordSignInAsync(..., lockoutOnFailure: true)` (the scaffolded Login page sets it to false) · cookie `HttpOnly` `Secure` `SameSite` · JWT: set `ValidateIssuer` `ValidateAudience` `ValidateLifetime` `ValidateIssuerSigningKey` = true | `ValidateLifetime = false` · accepting algorithm `none` |
+| A08 | `System.Text.Json` · verify webhook Hash-based Message Authentication Code (HMAC) signatures with `CryptographicOperations.FixedTimeEquals` | `BinaryFormatter` · Newtonsoft `TypeNameHandling.All` |
+| A09 | structured `ILogger` (Serilog) · log login results and permission denials · strip secrets with a destructuring policy | Logging the whole request body when it holds passwords |
+| A10 | A central `IExceptionHandler` (.NET 8 and later; register `AddExceptionHandler<T>()` + `AddProblemDetails()` **and** put `app.UseExceptionHandler()` in the pipeline, or the handler never runs) that returns `ProblemDetails` · older .NET: `UseExceptionHandler` with a lambda or path · wrap multi-step work in `TransactionScope` or `BeginTransaction` · `CancellationToken` + an `HttpClient` timeout | An empty `catch { }` · a `catch` that returns `true` from an authorization check |
 
 ## TypeScript · Node · Angular
 
-| ข้อ | ใช้อะไร | อย่าทำ |
+| Item | Use | Avoid |
 |---|---|---|
-| A01 | middleware ตรวจสิทธิ์ตัวเดียวที่ router ระดับบน (ปฏิเสธเป็นค่าเริ่ม) · query กรองด้วย `userId` ของ session ทุกครั้ง · Angular route guard ใช้แค่ซ่อนหน้า ส่วนสิทธิ์จริงตรวจที่ API · SSRF: allowlist host ก่อน `fetch` URL ที่ผู้ใช้ส่ง · CSRF token เมื่อใช้ cookie session · ตรวจ body ด้วย schema (zod) แล้วหยิบเฉพาะฟิลด์ที่อนุญาต | เชื่อ `role` ที่ client ส่งมา · `Object.assign(entity, req.body)` · `cors({ origin: true, credentials: true })` |
-| A02 | `helmet()` · `NODE_ENV=production` · ปิด source map ใน production build · Express `app.disable("x-powered-by")` | ส่ง `err.stack` กลับ client |
-| A03 | `npm ci` + `package-lock.json` · `npm audit --omit=dev` · SBOM: `npx @cyclonedx/cyclonedx-npm` · ตรวจ `postinstall` ของแพ็กเกจใหม่ | `npm install` แพ็กเกจที่ชื่อคล้ายของดัง (typosquat) โดยไม่ดูผู้ดูแล |
-| A04 | `argon2` หรือ `bcrypt` · `crypto.randomBytes` · `crypto.timingSafeEqual` | `Math.random()` ทำ token · `crypto.createHash("md5")` กับรหัสผ่าน |
-| A05 | ORM (Prisma · TypeORM) หรือ parameter `$1` · Angular escape ให้เอง · `execFile` พร้อม argument เป็น array | `innerHTML` · `bypassSecurityTrustHtml` กับข้อมูลผู้ใช้ · `eval` · `exec` ต่อสตริง · `new Function` |
-| A07 | `express-rate-limit` ที่ `/login` · cookie `httpOnly` `secure` `sameSite` · JWT: `jwt.verify(token, key, { algorithms: ["RS256"], issuer, audience })` (ระบุ algorithm ที่ใช้จริงตายตัว) | เก็บ token ใน `localStorage` ของระบบที่มีข้อมูลอ่อนไหว · `jwt.decode` แทน `verify` |
-| A08 | ตรวจลายเซ็น webhook ก่อน `JSON.parse` · Subresource Integrity (SRI) กับ script จาก CDN | `node-serialize` · โหลด script จาก CDN โดยไม่มี `integrity` |
-| A09 | pino หรือ winston แบบ JSON · `redact: ["req.headers.authorization", "*.password"]` | `console.log(req.body)` |
-| A10 | Express error middleware ตัวสุดท้าย · `process.on("unhandledRejection")` log แล้วปิดอย่างเป็นระเบียบ · transaction ของ ORM · `AbortSignal.timeout()` กับ `fetch` | `.catch(() => {})` · promise ที่ไม่มีใคร await |
+| A01 | One authorization middleware on the top-level router (deny by default) · filter every query by the session's `userId` · an Angular route guard only hides pages, so check real permissions at the API · SSRF: allowlist hosts before `fetch` on a user-supplied URL · CSRF token when using cookie sessions · validate the body with a schema (zod), then pick only the allowed fields | Trusting a `role` sent by the client · `Object.assign(entity, req.body)` · `cors({ origin: true, credentials: true })` |
+| A02 | `helmet()` · `NODE_ENV=production` · turn off source maps in the production build · Express `app.disable("x-powered-by")` | Sending `err.stack` back to the client |
+| A03 | `npm ci` + `package-lock.json` · `npm audit --omit=dev` · SBOM: `npx @cyclonedx/cyclonedx-npm` · check `postinstall` of new packages | Running `npm install` on a package whose name looks like a popular one (typosquat) without checking the maintainer |
+| A04 | `argon2` or `bcrypt` · `crypto.randomBytes` · `crypto.timingSafeEqual` | `Math.random()` for tokens · `crypto.createHash("md5")` on passwords |
+| A05 | An ORM (Prisma · TypeORM) or `$1` parameters · Angular escapes by itself · `execFile` with arguments as an array | `innerHTML` · `bypassSecurityTrustHtml` with user data · `eval` · `exec` with string concatenation · `new Function` |
+| A07 | `express-rate-limit` on `/login` · cookie `httpOnly` `secure` `sameSite` · JWT: `jwt.verify(token, key, { algorithms: ["RS256"], issuer, audience })` (fix the algorithm you really use) | Keeping tokens in `localStorage` in a system with sensitive data · `jwt.decode` instead of `verify` |
+| A08 | Verify the webhook signature before `JSON.parse` · Subresource Integrity (SRI) on scripts from a CDN | `node-serialize` · loading a CDN script without `integrity` |
+| A09 | pino or winston in JSON · `redact: ["req.headers.authorization", "*.password"]` | `console.log(req.body)` |
+| A10 | An Express error middleware as the last one · `process.on("unhandledRejection")` logs, then shuts down cleanly · ORM transactions · `AbortSignal.timeout()` with `fetch` | `.catch(() => {})` · a promise nobody awaits |
 
 ## Python (FastAPI · Django · Flask)
 
-| ข้อ | ใช้อะไร | อย่าทำ |
+| Item | Use | Avoid |
 |---|---|---|
-| A01 | FastAPI `Depends(current_user)` ระดับ router · Django `LoginRequiredMixin` + `get_object_or_404(Model, pk=..., owner=request.user)` · SSRF: allowlist host ก่อน `httpx.get` · Django CSRF middleware เปิดไว้ · รับ input ด้วย Pydantic model หรือ Django `ModelForm(fields=[...])` | `Model.objects.get(pk=id)` โดยไม่กรองเจ้าของ · `fields = "__all__"` · `@csrf_exempt` ทั้ง view โดยไม่มีเหตุผล |
-| A02 | Django `DEBUG=False` · `SECURE_*` settings · `python manage.py check --deploy` · FastAPI ปิด `/docs` บน production ถ้าไม่ได้ตั้งใจเปิด | `DEBUG=True` · `ALLOWED_HOSTS=["*"]` |
-| A03 | lockfile (`uv.lock` · `poetry.lock` · `requirements.txt` ที่ pin เวอร์ชัน + `--require-hashes`) · `pip-audit` · SBOM: `cyclonedx-py environment` (หรือ `requirements` · `poetry`) | `pip install` จาก URL ที่ไม่รู้จัก |
-| A04 | `argon2-cffi` · Django password hasher ค่าเริ่ม · `secrets.token_urlsafe` · `hmac.compare_digest` | `hashlib.md5(password)` · `random` ทำ token |
-| A05 | ORM หรือ `cursor.execute(sql, params)` · Jinja2 `autoescape=True` · `subprocess.run([...])` แบบ list | f-string ใน SQL · `shell=True` กับ input · `eval` |
-| A07 | `slowapi` หรือ django-axes กัน login รัว · PyJWT: `jwt.decode(token, key, algorithms=["RS256"], audience=..., issuer=...)` (ระบุ algorithm ที่ใช้จริงตายตัว) | `jwt.decode(..., options={"verify_signature": False})` |
-| A08 | ตรวจลายเซ็น webhook ด้วย `hmac.compare_digest` · `yaml.safe_load` · `json` | `pickle.loads` · `yaml.load` กับข้อมูลภายนอก |
-| A09 | `logging` แบบ structured (structlog) · filter ตัดค่าลับ | log `request.headers` ทั้งก้อน |
-| A10 | FastAPI `@app.exception_handler(Exception)` · Django `handler500` · `with transaction.atomic():` · timeout ทุกการเรียก `httpx` | `except Exception: pass` · ตัวตรวจสิทธิ์ที่ `except` แล้ว `return True` |
+| A01 | FastAPI `Depends(current_user)` at router level · Django `LoginRequiredMixin` + `get_object_or_404(Model, pk=..., owner=request.user)` · SSRF: allowlist hosts before `httpx.get` · keep the Django CSRF middleware on · take input with a Pydantic model or Django `ModelForm(fields=[...])` | `Model.objects.get(pk=id)` without filtering by owner · `fields = "__all__"` · `@csrf_exempt` on a whole view without a reason |
+| A02 | Django `DEBUG=False` · `SECURE_*` settings · `python manage.py check --deploy` · turn off FastAPI `/docs` in production unless it is meant to be open | `DEBUG=True` · `ALLOWED_HOSTS=["*"]` |
+| A03 | A lockfile (`uv.lock` · `poetry.lock` · `requirements.txt` with pinned versions + `--require-hashes`) · `pip-audit` · SBOM: `cyclonedx-py environment` (or `requirements` · `poetry`) | `pip install` from an unknown URL |
+| A04 | `argon2-cffi` · the Django default password hasher · `secrets.token_urlsafe` · `hmac.compare_digest` | `hashlib.md5(password)` · `random` for tokens |
+| A05 | An ORM or `cursor.execute(sql, params)` · Jinja2 `autoescape=True` · `subprocess.run([...])` as a list | An f-string in SQL · `shell=True` with input · `eval` |
+| A07 | `slowapi` or django-axes against rapid login attempts · PyJWT: `jwt.decode(token, key, algorithms=["RS256"], audience=..., issuer=...)` (fix the algorithm you really use) | `jwt.decode(..., options={"verify_signature": False})` |
+| A08 | Verify the webhook signature with `hmac.compare_digest` · `yaml.safe_load` · `json` | `pickle.loads` · `yaml.load` on external data |
+| A09 | Structured `logging` (structlog) · a filter that strips secrets | Logging the whole of `request.headers` |
+| A10 | FastAPI `@app.exception_handler(Exception)` · Django `handler500` · `with transaction.atomic():` · a timeout on every `httpx` call | `except Exception: pass` · an authorization check that does `except` then `return True` |
 
 ## SQL (SQL Server · PostgreSQL · MySQL)
 
-| ข้อ | ใช้อะไร | อย่าทำ |
+| Item | Use | Avoid |
 |---|---|---|
-| A01 | user ของแอปมีสิทธิ์เท่าที่ใช้ (ไม่ใช่ `sa` · `postgres` · `root`) · แยก user อ่านอย่างเดียวสำหรับรายงาน · Row-Level Security (RLS) ของ PostgreSQL หรือ SQL Server สำหรับระบบหลายลูกค้า (multi-tenant) | ให้แอปใช้ user เจ้าของ database |
-| A02 | ปิด port DB จากภายนอก · บังคับ TLS ของการเชื่อมต่อ · ปิด `xp_cmdshell` | เปิด DB ออก internet |
-| A04 | Transparent Data Encryption (TDE) หรือเข้ารหัสระดับดิสก์ · คอลัมน์อ่อนไหวเข้ารหัสระดับแอป หรือ Always Encrypted · backup เข้ารหัส | เก็บเลขบัตรประชาชน · เลขบัตรเครดิตเป็นข้อความเปล่า |
-| A05 | stored procedure หรือ query ที่รับ parameter · ถ้าต้องสร้าง SQL แบบ dynamic ใช้ `sp_executesql` พร้อม parameter และ `QUOTENAME` กับชื่อ object | `EXEC('... ' + @input)` · ต่อชื่อตารางจาก input |
-| A09 | audit ตารางเงินและสิทธิ์ (trigger หรือ temporal table) · log login ล้มของ DB | ปิด audit เพื่อให้เร็ว |
-| A10 | `BEGIN TRY ... BEGIN CATCH ... ROLLBACK` · `SET XACT_ABORT ON` · migration รันซ้ำได้ (`IF NOT EXISTS`) | migration ที่ล้มกลางทางแล้วทิ้งตารางครึ่ง ๆ |
+| A01 | The app's user has only the rights it needs (not `sa` · `postgres` · `root`) · a separate read-only user for reports · Row-Level Security (RLS) in PostgreSQL or SQL Server for multi-tenant systems | Letting the app use the database owner's user |
+| A02 | Close the DB port to the outside · force TLS on connections · turn off `xp_cmdshell` | Exposing the DB to the internet |
+| A04 | Transparent Data Encryption (TDE) or disk-level encryption · encrypt sensitive columns at app level or with Always Encrypted · encrypted backups | Storing national ID numbers or credit card numbers as plain text |
+| A05 | Stored procedures or parameterized queries · if you must build dynamic SQL, use `sp_executesql` with parameters and `QUOTENAME` on object names | `EXEC('... ' + @input)` · building table names from input |
+| A09 | Audit the money and permission tables (trigger or temporal table) · log failed DB logins | Turning off auditing for speed |
+| A10 | `BEGIN TRY ... BEGIN CATCH ... ROLLBACK` · `SET XACT_ABORT ON` · migrations that can run again (`IF NOT EXISTS`) | A migration that fails halfway and leaves half-built tables |
 
-## เครื่องมือที่ใช้พิสูจน์
+## Tools for proving each item
 
-| ใช้ทำอะไร | เครื่องมือ | ครอบข้อ |
+| Purpose | Tool | Covers |
 |---|---|---|
-| ค่าลับ · dependency · โค้ดเสี่ยง · ไฟล์ตั้งค่าโครงสร้างพื้นฐาน (Infrastructure as Code (IaC)) | ตาม [`security-gate`](../../security-gate/SKILL.md) (gitleaks · npm audit · pip-audit · dotnet · osv-scanner · trivy · semgrep) | A02 · A03 · A04 · A05 · A08 |
-| semgrep ชุดเฉพาะ OWASP | `semgrep scan --config p/owasp-top-ten --metrics=off` (ต้องมีเน็ต) · ออฟไลน์ใช้ชุดของ `security-gate` | A01 · A04 · A05 · A08 |
-| สแกนแอปที่รันอยู่ (header · cookie · error page) | OWASP ZAP (Zed Attack Proxy) baseline กับ environment ทดสอบของโปรเจกต์เท่านั้น: `docker run --rm -t ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t <URL ทดสอบ>` | A02 · A05 · A07 |
-| SBOM | CycloneDX ตามภาษา (ข้างบน) เก็บที่ `qa/security/sbom/` | A03 |
-| test สิทธิ์ · login · error · webhook | integration test ของโปรเจกต์ ตั้งชื่อขึ้นต้นด้วยรหัสข้อ (`A01_...`) | A01 · A06 · A07 · A08 · A09 · A10 |
+| Secrets · dependencies · risky code · Infrastructure as Code (IaC) config files | As in [`security-gate`](../../security-gate/SKILL.md) (gitleaks · npm audit · pip-audit · dotnet · osv-scanner · trivy · semgrep) | A02 · A03 · A04 · A05 · A08 |
+| OWASP-specific semgrep rules | `semgrep scan --config p/owasp-top-ten --metrics=off` (needs internet) · offline, use the `security-gate` ruleset | A01 · A04 · A05 · A08 |
+| Scan a running app (headers · cookies · error pages) | OWASP ZAP (Zed Attack Proxy) baseline, against the project's own test environment only: `docker run --rm -t ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t <test URL>` | A02 · A05 · A07 |
+| SBOM | CycloneDX per language (above), stored in `qa/security/sbom/` | A03 |
+| Tests for permissions · login · errors · webhooks | The project's integration tests, with names starting with the item code (`A01_...`) | A01 · A06 · A07 · A08 · A09 · A10 |
 
-- ZAP ยิงจริง → ใช้กับ environment ทดสอบที่ทีม deploy เองเท่านั้น ห้ามยิง production หรือระบบของคนอื่นโดยไม่มีหนังสืออนุญาต
-- เครื่องมือไหนรันไม่ได้ ให้เขียน `ยังไม่ได้ตรวจ` พร้อมเหตุผลในรายงาน ห้ามสรุปว่าผ่านจากผลว่าง
+- ZAP sends real attacks. Use it only on a test environment the team deployed itself. Never run it on production or on someone else's system without written permission.
+- If a tool cannot run, write `ยังไม่ได้ตรวจ` (not yet checked) with the reason in the report. Never conclude "pass" from an empty result.
 
 
 ## reference: owasp-top10.md
@@ -5316,29 +5316,29 @@ The column template and the values used in each field live in one place, the [qu
 
 ## reference: playbook-bug-fix.md
 
-# playbook · bug-fix — แก้ของพังด้วยหลักฐาน
+# playbook · bug-fix — fix broken things with evidence
 
-ใช้เมื่อ: error · stack trace · test ล้ม · หน้าจอผิด · หน่วยความจำรั่ว · CPU วิ่งตอนว่าง · ผู้ใช้แจ้งปัญหา · ของที่ไม่ควรเกิดเลย (ถ้าใช้ได้อยู่แต่อยากให้เร็วหรือเบาขึ้นถึงเป้า → `performance`) (รวม `bug fix` · `runtime forensics` · `trace forensics` ของ pstack)
-skill หลัก: [`code-orientation`](../../code-orientation/SKILL.md) · skill ตาม stack · `targeted-fix` · `principle-fix-root-cause` · `principle-prove-it-works`
+Use when: an error · stack trace · failing test · wrong screen · memory leak · CPU busy while idle · a user report · something that should never happen (if it works but you want it faster or lighter to a target → `performance`) (covers pstack's `bug fix` · `runtime forensics` · `trace forensics`)
+Main skills: [`code-orientation`](../../code-orientation/SKILL.md) · the skill for the stack · `targeted-fix` · `principle-fix-root-cause` · `principle-prove-it-works`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. คัดอาการตรงตัว — ข้อความ error · ชื่อ test · ภาพหน้าจอ · ขั้นตอนที่ผู้ใช้ทำ · ใคร: หัวหน้าทีม
-2. **ทำให้เกิดซ้ำเองในที่เดียวกับที่ผู้ใช้เจอ** — ถ้าเป็นหน้าเว็บ ให้ใช้ skill ตรวจแอปของโปรเจกต์ (ถ้ายังไม่มี ให้ทำ `app-verifier-setup` ก่อน) ถ้าเป็น API ให้ใช้คำสั่งเรียกจริง ถ้าทำซ้ำไม่ได้ ให้บอกว่าขาดอะไร (ข้อมูล · สภาพแวดล้อม · ขั้นตอน) แล้วหยุดเฉพาะบั๊กนี้ ส่วนโปรเจกต์ที่มี `.sandbox/` (ข้อยกเว้นของรากตาม `project-doc-set` ข้อ 1) ให้ทำซ้ำใน sandbox · ใคร: `qa-tester` ตัวใหม่
-   - อาการที่เกิดตอนรัน (รั่ว · ค้างเป็นพัก ๆ · วิ่งตอนว่าง) ให้ใส่การวัดหรือ log ชั่วคราว เพื่อให้อาการกลายเป็นตัวเลขก่อนแก้ ถ้าได้ไฟล์ profile มา (cpuprofile · heap snapshot · trace) ให้อ่านด้วยเครื่องมือของไฟล์ชนิดนั้น ไม่เดาจากโค้ด
-3. **เขียน test ที่ล้มเพราะบั๊กนี้ก่อน** แล้วรันให้เห็นว่าแดง (`testing-standards`) ถ้าโปรเจกต์ยังไม่มี test เลย ให้ตั้ง test ตัวแรกให้รันได้ก่อน ถ้าทำ test ไม่ได้จริง (เช่น อาการที่เกิดตอนรันบนเครื่องผู้ใช้) ให้เขียนเหตุผลลงรายงาน และต้องมีขั้นตอนทำซ้ำที่รันได้แทน · ใคร: `developer` ตัวใหม่
-   - ถ้ายังไม่ได้อ่านส่วนนี้ใน session นี้ ให้ทำ [`code-orientation`](../../code-orientation/SKILL.md) ก่อนไล่ต้นเหตุ
-4. หาต้นเหตุตาม `principle-fix-root-cause` · ต้นเหตุที่หายากหรือหลายชั้น ส่ง agent ด้วย `model: opus` (`superuser` หัวข้อ 5) · ใคร: `developer` ตัวใหม่ (ส่งผลขั้น 3)
-5. ถ้าจะแก้ของที่ใช้ร่วม (helper · type · config · schema) ให้หาทุกจุดที่กระทบตาม [`blast-radius`](../../blast-radius/SKILL.md) ก่อนแก้ · **บั๊กด้านความปลอดภัย** ให้ค้นทั้ง repo หาจุดที่เขียนแบบเดียวกันด้วย · ส่งรายการจุดให้ขั้น 6 · ใคร: `Explore` ตัวใหม่
-6. แก้ให้เล็กที่สุดที่ยังถูก (`lazy-coding`) ครบทุกจุดจากขั้น 4–5 ในรอบเดียว — ส่งตำแหน่งไฟล์และต้นเหตุไปด้วย · บั๊กความปลอดภัยลงรายงานใน `qa/security/` ถ้ามีค่าลับหลุด ให้บอกผู้ใช้ให้เปลี่ยนค่าทันที · ใคร: `developer` ตัวใหม่
-7. พิสูจน์ — รันกรณีที่เคยล้มให้ผ่าน รันกรณีใกล้เคียงว่ายังผ่าน แล้วลองทำซ้ำในที่เดิมอีกครั้งด้วยตัวเอง · ใคร: `qa-tester` ตัวใหม่
-8. **รีวิว diff ก่อนบอกว่าเสร็จ** — ตาม `code-review-checklist`: แก้ที่ต้นเหตุ ไม่ลามนอกจุด ผลขั้น 7 ครอบกรณีที่เคยล้ม · บั๊กความปลอดภัยดูครบทุกจุดจากขั้น 5 · ไม่ผ่าน → `developer` ตัวใหม่แก้ แล้ววนตามรอบตรวจใน [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
-9. ถ้าบั๊กนี้เป็นแบบที่ agent เคยทำมาแล้ว ให้ใช้ `repeated-mistakes-to-checks` · ใคร: หัวหน้าทีม
-10. ส่งมอบตามกฎ commit ใน `superuser` หัวข้อ 6 แล้วจบด้วย `status-report` · ใคร: หัวหน้าทีม
+1. Copy the symptom exactly — the error message · test name · screenshot · the steps the user took · ใคร: หัวหน้าทีม
+2. **Reproduce it yourself in the same place the user hit it.** For a web page, use the project's app-checking skill (if there is none yet, do `app-verifier-setup` first). For an API, use a real call. If you cannot reproduce it, say what is missing (data · environment · steps) and stop on this bug only. In a project that has `.sandbox/` (the root exception in `project-doc-set` item 1), reproduce inside the sandbox · ใคร: `qa-tester` ตัวใหม่
+   - For a symptom that appears at run time (leak · intermittent hang · busy while idle), add temporary measurement or logging so the symptom becomes a number before you fix it. If you were given a profile file (cpuprofile · heap snapshot · trace), read it with the tool for that file type. Do not guess from the code.
+3. **Write a test that fails because of this bug first**, and run it to see it red (`testing-standards`). If the project has no tests at all, first set up a first test that runs. If you truly cannot write a test (for example a symptom that happens at run time on the user's machine), write the reason in the report, and provide a runnable reproduction procedure instead · ใคร: `developer` ตัวใหม่
+   - If you have not read this part in this session, do [`code-orientation`](../../code-orientation/SKILL.md) before tracing the cause
+4. Find the root cause per `principle-fix-root-cause` · for a rare or multi-layer cause, send an agent with `model: opus` (`superuser` section 5) · ใคร: `developer` ตัวใหม่ (pass in the step 3 result)
+5. If you will change something shared (helper · type · config · schema), find every spot it affects per [`blast-radius`](../../blast-radius/SKILL.md) before changing it · for a **security bug**, also search the whole repo for places written the same way · pass the list of spots to step 6 · ใคร: `Explore` ตัวใหม่
+6. Make the smallest fix that is still correct (`lazy-coding`), covering every spot from steps 4–5 in one round — pass the file locations and the root cause along · write a security bug up in the report under `qa/security/` · if a secret leaked, tell the user to rotate it at once · ใคร: `developer` ตัวใหม่
+7. Prove it — run the case that used to fail and see it pass, run the nearby cases and see they still pass, then try to reproduce it in the original place once more yourself · ใคร: `qa-tester` ตัวใหม่
+8. **Check (ตรวจ) the diff by review before saying done** — per `code-review-checklist`: the fix is at the root cause, does not spread beyond the spot, and the step 7 result covers the case that used to fail · for a security bug, look at every spot from step 5 · if it fails → a fresh `developer` fixes it, then loop per the check rounds in [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
+9. If this bug is the kind an agent has made before, use `repeated-mistakes-to-checks` · ใคร: หัวหน้าทีม
+10. Deliver per the commit rules in `superuser` section 6, then finish with `status-report` · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-`ต้นเหตุ: … · แก้: … · พิสูจน์: <กรณีที่เคยล้มและตอนนี้ผ่าน + วิธีที่รัน>`
+`ต้นเหตุ: … · แก้: … · พิสูจน์: <the case that used to fail and now passes + how it was run>` (root cause · fix · proof)
 
 
 ## reference: playbook-feature.md
@@ -5386,25 +5386,25 @@ Every pass criterion of the requirements has evidence — a test that actually r
 
 ## reference: playbook-housekeeping.md
 
-# playbook · housekeeping — เก็บกวาดเครื่องและโปรเจกต์
+# playbook · housekeeping — clean up the machine and the project
 
-ใช้เมื่อ: ดิสก์เต็ม · worktree หรือ branch ค้างเยอะ · sandbox และ image เก่าสะสม · `_to_delete/` ใหญ่ (รวม `worktree cleanup` ของ pstack)
-หลัก: เก็บกวาดคือการลบ อะไรที่อาจมีงานของคนอยู่ให้ **ใส่ไว้ใน "รออนุมัติ"** พร้อมคำสั่งลบ ไม่ลบเอง
+Use when: the disk is full · many leftover worktrees or branches · old sandboxes and images pile up · `_to_delete/` is large (covers pstack's `worktree cleanup`)
+Principle: cleaning up means deleting. Anything that may hold someone's work goes **under "รออนุมัติ"** (awaiting approval) with its delete command, and you do not delete it yourself.
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ทำรายการ ขั้นนี้ยังไม่ลบอะไร · ใคร: หัวหน้าทีม
-   - git worktree และ branch ที่ merge แล้วหรือไม่ได้แตะเกิน 30 วัน (`git worktree list` · `git branch --merged`)
-   - sandbox ของ SQT (`docker ps -a --filter label=sqt.sandbox=true`) · image และ volume ที่ไม่มีคอนเทนเนอร์ใช้
-   - ขนาด `_to_delete/` ของแต่ละโปรเจกต์
-2. แยกเป็น 2 กลุ่ม คือกลุ่มที่ลบได้แน่ (merge แล้ว · ไม่มีไฟล์ค้าง) และกลุ่มที่ต้องให้คนตัดสิน (มีงานที่ยังไม่ commit · ไม่แน่ใจ) · ใคร: หัวหน้าทีม
-3. แสดงตาราง `| ของ | ขนาด | เหตุผลที่ลบได้ | ความเสี่ยง |` ให้ผู้ใช้ ใต้หัวข้อ **"รออนุมัติ"** พร้อมคำสั่งลบที่กดได้ทันที ส่วนข้อที่ไม่แน่ใจให้ลงใน "ค้างอยู่" · ใคร: หัวหน้าทีมเสนอ · ผู้ใช้อนุมัติ
-4. เมื่อผู้ใช้อนุมัติแล้ว ให้ลบเฉพาะรายการที่อนุมัติ worktree ที่มีไฟล์ค้างให้เก็บ patch ไว้ก่อนลบ ส่วน sandbox ให้ใช้ `.sandbox/sandbox.ps1 destroy` (`.sandbox/` เองอยู่ที่รากต่อได้ตาม `project-doc-set` ข้อ 1) · ใคร: หัวหน้าทีม
-5. รายงานพื้นที่ที่ได้คืน แล้วจบด้วย `status-report` · ใคร: หัวหน้าทีม
+1. Make the list. Delete nothing in this step · ใคร: หัวหน้าทีม
+   - git worktrees and branches that are merged or untouched for more than 30 days (`git worktree list` · `git branch --merged`)
+   - SQT sandboxes (`docker ps -a --filter label=sqt.sandbox=true`) · images and volumes no container uses
+   - the size of each project's `_to_delete/`
+2. Split into 2 groups: what is surely deletable (merged · no leftover files) and what needs a person to decide (uncommitted work · unsure) · ใคร: หัวหน้าทีม
+3. Show the user the table `| ของ | ขนาด | เหตุผลที่ลบได้ | ความเสี่ยง |` (item · size · reason it can be deleted · risk) under the heading **"รออนุมัติ"**, with delete commands ready to run at once. Put the unsure items under "ค้างอยู่" (pending) · ใคร: หัวหน้าทีมเสนอ · ผู้ใช้อนุมัติ
+4. Once the user approves, delete only the approved items. For a worktree with leftover files, keep a patch before deleting. For a sandbox, use `.sandbox/sandbox.ps1 destroy` (`.sandbox/` itself may stay at the root per `project-doc-set` item 1) · ใคร: หัวหน้าทีม
+5. Report the space recovered, then finish with `status-report` · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-ลบเฉพาะสิ่งที่ผู้ใช้อนุมัติ และไม่มีงานของใครหายไปโดยไม่มี patch สำรอง
+Only what the user approved was deleted, and no one's work was lost without a backup patch
 
 
 ## reference: playbook-investigation.md
@@ -5571,24 +5571,24 @@ Every document ordered has a status in `docs/BUILD-PLAN.md` and its check result
 
 ## reference: playbook-prototype.md
 
-# playbook · prototype — ทดลองให้ผลรันเป็นคนตัดสิน
+# playbook · prototype — experiment, and let the run result decide
 
-ใช้เมื่อ: กำลังจะถามคนว่า "แบบไหนดี" แต่คำตอบดูได้จากการรัน — ความเร็ว · หน้าตา · พฤติกรรม · ผลลัพธ์
-ห้ามใช้เมื่อ: เป็นเรื่องรสนิยมหรือการตัดสินใจทางธุรกิจที่ทดลองไม่ได้ — อันนั้นถามคน
+Use when: you are about to ask a person "which one is better?" but the answer can be seen by running it — speed · looks · behavior · output
+Do not use when: it is a matter of taste or a business decision that an experiment cannot settle — ask a person for that
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. เขียนคำถามที่จะให้การทดลองตอบ และเกณฑ์ตัดสินเป็นตัวเลขหรือสิ่งที่เห็นได้ ก่อนลงมือ · ใคร: หัวหน้าทีม
-2. สร้างทางเลือก 2–3 ทาง แบบเล็กที่สุดที่ยังตอบคำถามได้ ใน `_to_delete/prototype-<เรื่อง>/` ถ้าทางเลือกเยอะหรือใหญ่ ให้ใช้ `parallel-attempts-pick-best` · ใคร: `developer` ตัวใหม่ทางละตัว (ยังไม่รู้ว่าจะลองทางไหน: `brainstormer` ตัวใหม่เสนอก่อน)
-3. รันทุกทางด้วยวิธีวัดเดียวกัน — ข้อมูลชุดเดียวกัน เครื่องเดียวกัน แล้วบันทึกผลดิบ · ใคร: `qa-tester` ตัวใหม่
-4. ตัดสินตามเกณฑ์ข้อ 1 ถ้าผลก้ำกึ่ง ให้เลือกทางที่โค้ดน้อยและแก้ทีหลังง่ายกว่า · ใคร: หัวหน้าทีม
-5. ตรวจการตัดสิน — ตัวเลขมาจากผลดิบข้อ 3 จริง วัดแบบเดียวกันทุกทาง และเกณฑ์ตรงกับข้อ 1 · ใคร: `reviewer` ตัวใหม่
-6. ลงผลใน `decision-log` — เลือก · ไม่เลือก · ตัวเลขที่วัดได้ · ใคร: หัวหน้าทีม
-7. กลับไปทำ playbook เดิมต่อด้วยทางที่ชนะ แต่ไม่ย้ายโค้ดทดลองเข้าโปรเจกต์ตรง ๆ · ใคร: หัวหน้าทีม
+1. Before starting, write the question the experiment will answer, and the deciding criterion as a number or something visible · ใคร: หัวหน้าทีม
+2. Build 2–3 options, each as small as can still answer the question, in `_to_delete/prototype-<topic>/`. If the options are many or large, use `parallel-attempts-pick-best` · ใคร: `developer` ตัวใหม่ one per option (if it is not yet known which options to try: `brainstormer` ตัวใหม่ proposes first)
+3. Run every option with the same way of measuring — the same data, the same machine — and record the raw results · ใคร: `qa-tester` ตัวใหม่
+4. Decide by the criterion from step 1. If the result is close, choose the option with less code that is easier to change later · ใคร: หัวหน้าทีม
+5. Check (ตรวจ) the decision — the numbers really come from the raw results in step 3, every option was measured the same way, and the criterion matches step 1 · ใคร: `reviewer` ตัวใหม่
+6. Record the result in `decision-log` — chosen · not chosen · the measured numbers · ใคร: หัวหน้าทีม
+7. Return to the original playbook with the winning option, but do not move the experiment code straight into the project · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-มีตัวเลขหรือภาพเทียบที่ตอบคำถามข้อ 1 ได้ และการตัดสินถูกบันทึกแล้ว
+There are numbers or a side-by-side picture that answer the step 1 question, and the decision is recorded
 
 
 ## reference: playbook-refactor.md
@@ -5829,26 +5829,26 @@ All the step 1 conditions pass, or every remaining piece has a reason why it is 
 
 ## reference: playbook-visual-parity.md
 
-# playbook · visual-parity — หน้าจอจริงต้องตรงกับต้นแบบ
+# playbook · visual-parity — the real screen must match the reference
 
-ใช้เมื่อ: ทำหน้าจอให้ตรง mockup · ย้ายหน้าจอจากเทคโนโลยีเก่าไปใหม่แล้วต้องเหมือนเดิม · ผู้ใช้บอกว่า "ไม่เหมือนแบบ"
-skill หลัก: skill ตรวจแอปของโปรเจกต์ (`app-verifier-setup`) · `ui-craft` · `principle-prove-it-works`
+Use when: making a screen match a mockup · moving a screen from an old technology to a new one and it must look the same · the user says "ไม่เหมือนแบบ" (it does not look like the design)
+Main skills: the project's app-checking skill (`app-verifier-setup`) · `ui-craft` · `principle-prove-it-works`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. ระบุต้นแบบ (ไฟล์ใน `mockup/` หรือหน้าจอระบบเดิม) และหน้าจอจริงที่จะเทียบ เป็นคู่ ๆ · ใคร: หัวหน้าทีม
-2. ถ่ายภาพทั้งสองฝั่งด้วยขนาดหน้าต่างเดียวกัน ข้อมูลชุดเดียวกัน ด้วย skill ตรวจแอป แล้วเก็บใน `_to_delete/parity/` · ใคร: `qa-tester` ตัวใหม่
-3. เทียบด้วยเครื่องมือ — ใช้ภาพต่าง (pixel diff) ถ้ามี ถ้าไม่มีให้เทียบทีละส่วน: ระยะห่าง · ขนาดตัวอักษร · สี · ลำดับ · สถานะว่าง/โหลด/ผิดพลาด · ใคร: `qa-tester` ตัวใหม่
-4. ทำรายการต่างที่พบ `| จุด | ต้นแบบ | ของจริง | แก้ที่ไฟล์ |` เรียงจากที่ผู้ใช้เห็นก่อน · ใคร: `qa-tester` ตัวใหม่
-5. แก้ทีละกลุ่ม แล้วถ่ายภาพเทียบใหม่ทุกครั้ง · ใคร: `developer` ตัวใหม่ต่อกลุ่ม · `qa-tester` ตัวใหม่ถ่ายเทียบ
-6. จุดที่ต่างโดยตั้งใจ (ต้นแบบผิดหลัก `ui-craft` หรือทำจริงไม่ได้) ไม่ต้องแก้ตาม แต่ให้ลงเหตุผลใน `decision-log` · ใคร: หัวหน้าทีม
-7. กดทุกปุ่มบนหน้าจอจริงว่าทำงาน ไม่ดูแค่หน้าตาเหมือน · ใคร: `qa-tester` ตัวใหม่
-8. ตรวจว่ารายการต่างข้อ 4 ปิดครบ ภาพเทียบล่าสุดตรงต้นแบบ และเหตุผลข้อ 6 ฟังขึ้น · ไม่ผ่าน → วนตามรอบตรวจใน [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
-9. จบด้วย `status-report` · ใคร: หัวหน้าทีม
+1. Identify the reference (a file in `mockup/` or the old system's screen) and the real screen to compare, as pairs · ใคร: หัวหน้าทีม
+2. Capture both sides at the same window size with the same data, using the app-checking skill, and keep them in `_to_delete/parity/` · ใคร: `qa-tester` ตัวใหม่
+3. Compare with a tool — use a pixel diff if there is one. If not, compare part by part: spacing · font size · colour · order · empty/loading/error states · ใคร: `qa-tester` ตัวใหม่
+4. Make a list of the differences found, `| จุด | ต้นแบบ | ของจริง | แก้ที่ไฟล์ |` (spot · reference · real · file to fix), ordered by what the user sees first · ใคร: `qa-tester` ตัวใหม่
+5. Fix one group at a time, and capture a new comparison after each · ใคร: `developer` ตัวใหม่ per group · `qa-tester` ตัวใหม่ captures the comparison
+6. For differences that are deliberate (the reference breaks `ui-craft` rules or cannot really be built), do not fix them to match, but record the reason in `decision-log` · ใคร: หัวหน้าทีม
+7. Click every button on the real screen to confirm it works. Do not stop at looking the same · ใคร: `qa-tester` ตัวใหม่
+8. Check (ตรวจ) that every difference in the step 4 list is closed, the latest comparison matches the reference, and the step 6 reasons hold up · if it fails → loop per the check rounds in [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
+9. Finish with `status-report` · ใคร: หัวหน้าทีม
 
-## จบเมื่อ
+## Done when
 
-ทุกคู่มีภาพเทียบล่าสุด และรายการต่างที่เหลือมีเหตุผลกำกับทุกข้อ
+Every pair has a latest comparison image, and every remaining difference has a reason attached
 
 
 ## reference: playbooks.md

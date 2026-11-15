@@ -6,7 +6,7 @@ Use when a Thai household moves or changes address
 
 One date drives everything: the day you actually move in (วันที่ย้ายเข้าอยู่จริง). The house registration (ทะเบียนบ้าน) clock runs 15 days from it, the old utilities close on it, and the rental deposit clock starts when the landlord takes the old unit back.
 
-General information, not legal advice. Authorities: กรมการปกครอง (call 1548; bora.dopa.go.th), การไฟฟ้านครหลวง (กฟน., MEA, 1130) / การไฟฟ้าส่วนภูมิภาค (กฟภ., PEA, 1129), การประปานครหลวง (กปน., MWA, 1125) / การประปาส่วนภูมิภาค (กปภ., PWA), สำนักงานคณะกรรมการคุ้มครองผู้บริโภค (สคบ., 1166).
+General information, not legal advice. Authorities: กรมการปกครอง (Department of Provincial Administration; call 1548; bora.dopa.go.th), การไฟฟ้านครหลวง (กฟน., MEA, Metropolitan Electricity Authority, 1130) / การไฟฟ้าส่วนภูมิภาค (กฟภ., PEA, Provincial Electricity Authority, 1129), การประปานครหลวง (กปน., MWA, Metropolitan Waterworks Authority, 1125) / การประปาส่วนภูมิภาค (กปภ., PWA, Provincial Waterworks Authority), สำนักงานคณะกรรมการคุ้มครองผู้บริโภค (สคบ., Office of the Consumer Protection Board, 1166).
 
 ## Scope
 

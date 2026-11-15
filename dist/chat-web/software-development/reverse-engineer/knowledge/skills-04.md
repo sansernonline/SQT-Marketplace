@@ -57,19 +57,19 @@ Always use together with `lazy-coding` and `readable-code`, because less code an
 
 ## reference: mobile.md
 
-# principle-secure-by-default · แอปมือถือและแอปที่ไม่มีเซิร์ฟเวอร์
+# principle-secure-by-default · mobile apps and apps with no server
 
-เปิดไฟล์นี้เมื่องานเป็นแอปมือถือหรือเครื่องมือบนเครื่อง · กฎ 10 ข้อใน [`SKILL.md`](../SKILL.md) ยังใช้ทั้งหมด
+Open this file when the work is a mobile app or an on-device tool · the 10 rules in [`SKILL.md`](../SKILL.md) all still apply.
 
-**แอปที่ไม่มีเซิร์ฟเวอร์** (แอปมือถือออฟไลน์ · เครื่องมือบนเครื่อง) ข้อ 2 · 3 · 4 และบัญชีฐานข้อมูลในข้อ 8 มักไม่เกี่ยว แต่ต้องผ่านข้อเพิ่มของมือถือ:
+**An app with no server** (an offline mobile app · an on-device tool) usually does not need items 2 · 3 · 4 and the database accounts in item 8, but it must pass the extra mobile rules:
 
-| # | กฎสำหรับแอปมือถือ | ตัวอย่างที่ผิด → ที่ถูก |
+| # | Rule for mobile apps | Wrong example → right example |
 |---|---|---|
-| M1 | **permission เท่าที่ใช้จริง** รวมที่ plugin เติมให้ | แอปออฟไลน์มี `INTERNET` → ลบออก แล้วตรวจ manifest ที่รวมแล้ว (`security-gate`) |
-| M2 | **component ที่ไม่ต้องให้แอปอื่นเรียก ต้อง `exported="false"`** | activity · service · receiver เปิดหมด → เปิดแค่ activity หลัก |
-| M3 | **ตั้งการสำรองข้อมูลให้ชัด** (`allowBackup` · `dataExtractionRules`) | ปล่อยค่าเริ่มต้นแล้วข้อมูลส่วนตัวไปอยู่ในสำรองบนคลาวด์ → เลือกเองว่าอะไรสำรองได้ |
-| M4 | **ส่งไฟล์ออกผ่าน share sheet ของระบบ / `FileProvider`** | เขียนไฟล์ลงที่ที่ทุกแอปอ่านได้แล้วส่ง path → แชร์ผ่าน URI ชั่วคราวที่ให้สิทธิ์เฉพาะแอปปลายทาง |
-| M5 | **กุญแจเซ็นแอปไม่อยู่ในแอปหรือ repo** | `key.properties` · `*.jks` ใน git → gitignore + เก็บใน secret store ของ CI และสำรองไว้ (`cicd-and-release`) |
+| M1 | **Only the permissions actually used**, including those a plugin adds | An offline app has `INTERNET` → remove it, then check the merged manifest (`security-gate`) |
+| M2 | **A component that other apps do not need to call must be `exported="false"`** | Every activity · service · receiver is open → open only the main activity |
+| M3 | **Set data backup explicitly** (`allowBackup` · `dataExtractionRules`) | Leave the default and personal data ends up in a cloud backup → choose what may be backed up |
+| M4 | **Send files out through the system share sheet / `FileProvider`** | Write a file where every app can read it and pass the path → share through a temporary URI that grants access only to the receiving app |
+| M5 | **The app signing key is not in the app or the repo** | `key.properties` · `*.jks` in git → gitignore them + keep them in the CI secret store and back them up (`cicd-and-release`) |
 
 
 ---
@@ -78,17 +78,17 @@ Always use together with `lazy-coding` and `readable-code`, because less code an
 
 Use when an agent makes its own call in unattended work
 
-# decision-log — ทุกการตัดสินใจเองต้องตรวจย้อนได้
+# decision-log — every decision the agent makes itself must be traceable
 
-> agent ทำต่อเองโดยไม่ถามได้ ก็ต่อเมื่อคนกลับมาดูได้ว่ามันเลือกอะไรไปบ้าง และกลับคำตัดสินทีละข้อได้
+> An agent may carry on without asking only if a person can come back later, see what it chose, and reverse each decision one by one.
 
-ใช้ไฟล์เดียวกับ [`status-report`](../status-report/SKILL.md)
+It uses the same file as [`status-report`](../status-report/SKILL.md).
 
-## เขียนที่ไหน
+## Where to write
 
-ค่าตั้งต้น: ตาราง "การตัดสินใจ" ใน `.claude/superuser/CONTEXT.md` (เก็บ 20 แถวล่าสุด แถวเก่าย้ายไป `HISTORY.md` ตาม [`team-files`](../superuser/references/team-files.md))
-ถ้าโปรเจกต์มี `docs/BUILD-PLAN.md` ให้ลง `## ตัดสินใจเอง` ซึ่งเป็นหัวข้อสุดท้ายของไฟล์นั้นแทน (ลำดับ `## สถานะล่าสุด` → ตารางงาน → `## ประวัติสถานะ` → `## ตัดสินใจเอง`) ถ้ายังไม่มีหัวข้อให้สร้างขึ้น และเพิ่ม 2 คอลัมน์หน้า `เลือก` คือ `งาน` · `เรื่อง`
-subagent ไม่เขียนตารางเอง แต่**รายงานการตัดสินใจกลับมา** ให้ตัวหลักลงตาราง
+Default: the "การตัดสินใจ" (decisions) table in `.claude/superuser/CONTEXT.md` (keep the latest 20 rows, and move older rows to `HISTORY.md` per [`team-files`](../superuser/references/team-files.md)).
+If the project has `docs/BUILD-PLAN.md`, write under `## ตัดสินใจเอง` (decided on my own) instead. That is the last section of the file (order: `## สถานะล่าสุด` → task table → `## ประวัติสถานะ` → `## ตัดสินใจเอง`). If the section does not exist yet, create it, and add 2 columns before `เลือก`: `งาน` · `เรื่อง`.
+A subagent does not write the table itself. It **reports its decisions back**, and the main agent adds them to the table.
 
 ```markdown
 | วันที่ | เลือก | ไม่เลือก | เหตุผล · หลักฐาน |
@@ -98,40 +98,40 @@ subagent ไม่เขียนตารางเอง แต่**ราย�
 | 2026-10-04 16:20 | เก็บไฟล์แนบบนดิสก์ + path ในฐานข้อมูล | object storage | งานขนาด S · ย้ายทีหลังได้ · ADR-0004 |
 ```
 
-## ต้องลงเมื่อ
+## When to log
 
-- ผู้ใช้แก้หรือเปลี่ยนทิศงาน ให้ช่อง "เหตุผล · หลักฐาน" ขึ้นต้นว่า `ผู้ใช้แก้ —` (agent `learning-reviewer` ใช้หาจุดที่ผู้ใช้แก้)
-- เลือกระหว่างหลายทางที่ใช้ได้ทั้งคู่
-- เอกสารไม่ได้บอก แล้ว agent เติมค่าเอง
-- เอกสาร 2 ฉบับขัดกัน แล้วเลือกยึดฉบับหนึ่ง · ถ้าเป็นข้อเท็จจริงที่ตรวจได้ ให้ยึดฉบับที่มีหลักฐาน · ถ้าเป็นกฎหรือนโยบายของเจ้าของงาน ไม่เลือกเอง ให้จดทั้ง 2 ฝั่งติด `(รอยืนยัน)` แล้วทำส่วนที่ไม่ขึ้นกับข้อนี้ต่อ (`agent-patterns` หัวข้อ 4 ข้อ 9)
-- ข้ามขั้นตอนหรือฉบับที่สั่ง เพราะทำไม่ได้หรือไม่จำเป็น
-- ผลทดลองหรือเทียบทางเลือกเป็นตัวตัดสิน (เช่น `parallel-attempts-pick-best`)
+- The user corrects or changes the direction of the work. Start the "เหตุผล · หลักฐาน" (reason · evidence) cell with `ผู้ใช้แก้ —` (user corrected). The agent `learning-reviewer` uses this to find where the user made corrections.
+- You choose among several ways that would all work.
+- The document does not say, and the agent fills in a value itself.
+- Two documents conflict, and you choose to follow one. If it is a checkable fact, follow the one with evidence. If it is a rule or policy of the owner, do not choose yourself: write both sides, mark them `(รอยืนยัน)` (awaiting confirmation), and carry on with the parts that do not depend on this point (`agent-patterns` section 4 item 9).
+- You skip an ordered step or document because it cannot be done or is not needed.
+- An experiment or a comparison of options decides it (for example `parallel-attempts-pick-best`).
 
-**ไม่ต้องลง**: เรื่องที่ skill หรือเอกสารสั่งไว้ชัดแล้ว และรายละเอียดเล็กที่ไม่เปลี่ยนผลงาน (ชื่อไฟล์ชั่วคราว · ชื่อตัวแปร)
-**ไม่ใช่ที่นี่ (ผู้ใช้ต้องตัดสิน)**: เรื่องที่ agent ตัดสินเองไม่ได้และต้องรอคำตอบก่อนทำส่วนนั้นต่อ (ไฟล์เก่า ตัวเลขผิด ขั้นที่ติด) → [`flag-and-propose`](../flag-and-propose/SKILL.md) · skill นี้จดเฉพาะเรื่องที่ agent ตัดสินเองแล้วทำต่อ
-**ไม่ใช่ที่นี่ (เรื่องยาว)**: การเลือกที่ต้องอยู่ยาวและมีคนถามทีหลังว่าทำไม (ผู้ขายหลัก · รูปแบบสัญญา · สถาปัตยกรรม) → เขียนเป็นบันทึกแยก เช่น `adr-writer` (plugin `software-development`) แล้วตารางนี้ลงแค่ 1 แถวชี้ไปหา
+**Do not log:** anything a skill or document already orders clearly, and small details that do not change the result (temporary file names · variable names).
+**Not here (the user must decide):** anything the agent cannot decide itself and must wait on before continuing that part (an old file, a wrong number, a blocked step) → [`flag-and-propose`](../flag-and-propose/SKILL.md). This skill records only what the agent decided itself and then carried on.
+**Not here (long-lived choices):** a choice that must stand for a long time and that people will later ask about (main vendor · contract form · architecture) → write a separate record such as `adr-writer` (plugin `software-development`), and add just 1 row to this table pointing to it.
 
-## หลักการเลือกเมื่อต้องตัดสินเอง
+## How to choose when you must decide yourself
 
-เลือกทางที่กระทบน้อยสุด: ย้อนกลับง่าย · แก้ไฟล์น้อย · ตรงกับที่เอกสารหรือ repo ใช้อยู่ · ไม่ปิดทางเลือกอื่น
-**เกณฑ์ขัดกัน** (เช่น ทางหนึ่งแก้ไฟล์น้อยแต่ไม่ตรงแบบ repo) และมี 3 ทางขึ้นไป → ให้คะแนนแทนการเดา: ย้อนกลับได้เป็นกฎเหล็ก อีก 3 เกณฑ์ถ่วงน้ำหนัก ตามแม่แบบ [`templates/score.json`](templates/score.json) แล้วรัน `node <plugin>/skills/decision-scoring/scripts/decide.mjs score score.json` · ช่องเหตุผลใส่คะแนนและคำว่า นิ่ง หรือ ยังไม่นิ่ง · ยังไม่นิ่งแปลว่าสูสี ถือเป็นข้อที่เปลี่ยนแล้วกระทบงาน → โหวตตามบรรทัดถัดไป · 2 ทางหรือข้อเล็ก เลือกเองได้เลยตาม `voting.md`
-**ข้อที่เปลี่ยนแล้วกระทบงาน** ตัดสินด้วยการค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 → `references/voting.md` · ช่อง "เหตุผล · หลักฐาน" ขึ้นต้นด้วยผลโหวต เช่น `โหวต 2/3 (ต้นทุน ✔ · ความเสี่ยง ✘ · ส่งเร็ว ✔) —` แล้วตามด้วยแหล่ง
-**ค่าตั้งต้นของเจ้าของ** ใน `~/.claude/superuser-style.md` (ชื่อคนในบทบาทที่ว่าง · นโยบายค่าใช้จ่าย) ใช้แทนการถามได้ ช่องเหตุผลขึ้นต้นว่า `ค่าตั้งต้นของเจ้าของ —`
-**ข้อเท็จจริงที่เหลือ** (ตัวเลข ชื่อ วันที่ งบ ที่ค้นไม่ได้และไม่มีค่าตั้งต้น) ห้ามเดา ใส่ `(รอยืนยัน)` ตรงที่ต้องใช้ (ค่าที่มาจากหลักฐาน เช่น ตัวเลขที่ตรวจจริง ใส่ได้พร้อมป้าย) แล้วลงคำถามในส่วน "ค้างอยู่" ของ `status-report` ส่วนงานที่ย้อนไม่ได้ให้เตรียมคำสั่ง ร่างอีเมล หรือ diff ไว้ในส่วน "รออนุมัติ" ไม่ลงมือเอง
+Choose the way with the least impact: easy to reverse · edits few files · matches what the documents or repo already use · does not close other options.
+**When the criteria conflict** (for example, one way edits few files but does not match the repo's style) and there are 3 or more ways → score instead of guessing. Reversibility is a hard rule, and the other 3 criteria are weighted. Use the template [`templates/score.json`](templates/score.json) and run `node <plugin>/skills/decision-scoring/scripts/decide.mjs score score.json`. In the reason cell, write the scores and the word `นิ่ง` (stable) or `ยังไม่นิ่ง` (not stable). Not stable means the scores are close, which counts as a point whose change affects the work → vote per the next line. For 2 ways or a small point, choose yourself per `voting.md`.
+**A point whose change affects the work** is decided by searching and then a vote of 3 agents, per skill `superuser` section 6 → `references/voting.md`. Start the "เหตุผล · หลักฐาน" cell with the vote result, for example `โหวต 2/3 (ต้นทุน ✔ · ความเสี่ยง ✘ · ส่งเร็ว ✔) —` (vote 2/3: cost, risk, fast delivery), then the source.
+**The owner's defaults** in `~/.claude/superuser-style.md` (names of people in empty roles · spending policy) can replace asking. Start the reason cell with `ค่าตั้งต้นของเจ้าของ —` (owner's default).
+**Remaining facts** (numbers, names, dates, budgets that you cannot look up and that have no default) must never be guessed. Put `(รอยืนยัน)` where they are needed (a value that comes from evidence, such as a number that was `ตรวจจริง`, may be entered with its label). Then write the question under "ค้างอยู่" (pending) in `status-report`. For work that cannot be undone, prepare the command, the draft email, or the diff under "รออนุมัติ" (awaiting approval) and do not act yourself.
 
-## กติกาของแถว
+## Row rules
 
-- 1 แถวต่อ 1 การตัดสินใจ ลงทันทีที่ตัดสิน ไม่รวบไปเขียนตอนจบ
-- "ไม่เลือก" ต้องมีอย่างน้อย 1 ทาง ถ้าไม่มีทางอื่นเลยก็ไม่ใช่การตัดสินใจ · ทางที่ไม่เลือกต้องเป็นทางที่มีจริงตามหลักฐาน ไม่ใช่ทางที่แต่งขึ้นให้ครบช่อง เพราะตอนจบจะถูกยกไปเป็นตัวเลือกให้ผู้ใช้ `คงไว้` หรือเปลี่ยน (skill `superuser` หัวข้อ 6)
-- "เหตุผล · หลักฐาน" ระบุที่มา: ไฟล์ · ADR · ตัวเลขที่วัด ถ้าเป็นตัวเลขให้ติดป้าย `ตรวจจริง` / `จากแหล่ง` / `อนุมาน`
-- ไม่ลบและไม่แก้แถวเก่า ถ้าผู้ใช้ไม่เห็นด้วยให้เพิ่มแถวใหม่ไว้บนสุด ช่อง "เหตุผล · หลักฐาน" ขึ้นต้นว่า `ผู้ใช้แก้ — แทนแถว <วันที่>` แล้วทำใหม่เฉพาะงานนั้น — แถวเดิมยังอยู่ให้เห็นว่าเคยเลือกอะไรไว้
-- คอลัมน์ `ทบทวนเมื่อ` ใส่ได้ถ้าต้องการ — วันที่หรือเหตุการณ์ที่ควรกลับมาดูว่าการตัดสินนั้นยังถูกอยู่ไหม (เช่น หลังรุ่นถัดไป · เมื่อมีผู้ใช้เกิน 100 คน)
-- ถ้า**ผู้ใช้เป็นคนตัดสินเอง** (เช่น ยอมรับความเสี่ยงที่ถูกเตือน) ให้ลงตารางเดียวกัน และเพิ่มคอลัมน์ท้าย `ผู้ตัดสิน` ใส่ `agent` หรือ `ผู้ใช้` ถ้าตารางไม่มีคอลัมน์นี้ แปลว่า agent ตัดสินทุกแถว
+- 1 row per decision. Log it the moment you decide, and never save it all for the end.
+- "ไม่เลือก" (not chosen) needs at least 1 option. If there is no other option at all, it is not a decision. An unchosen option must really exist per the evidence, not be made up to fill the cell, because at the end it is shown to the user as a choice: `คงไว้` (keep) or change (skill `superuser` section 6).
+- "เหตุผล · หลักฐาน" names the source: file · ADR · measured number. If it is a number, add the label `ตรวจจริง` / `จากแหล่ง` / `อนุมาน`.
+- Never delete or edit an old row. If the user disagrees, add a new row at the top. Start its "เหตุผล · หลักฐาน" cell with `ผู้ใช้แก้ — แทนแถว <วันที่>` (user corrected, replaces the row of <date>), then redo only that piece of work. The old row stays so people can see what was chosen before.
+- You may add a column `ทบทวนเมื่อ` (review when) if you want — a date or event when someone should check that the decision is still right (for example, after the next release · when there are over 100 users).
+- If **the user decides** (for example, accepts a risk that was warned about), log it in the same table, and add a last column `ผู้ตัดสิน` (decided by) with `agent` or `ผู้ใช้` (user). If the table has no such column, it means the agent decided every row.
 
-## ในคำตอบตอนจบ
+## In the closing answer
 
-ท้ายคำตอบมีหัวข้อ **ตัดสินใจเอง** แสดง**ทุกแถวของรอบนี้** แถวละ 1 บรรทัด (เลือกอะไร · ไม่เลือกอะไร · ทำไม) แล้วชี้ไปที่ตารางเต็ม
-ถ้าเกิน 15 แถว สรุปเป็นกลุ่มได้ (เช่น "เลือกแหล่งข้อมูล 6 แหล่ง") แต่ต้องบอกจำนวนรวมและลิงก์ไปที่ตาราง ส่วนแถวที่กระทบผลมากยังต้องแสดงเต็ม
+The end of the answer has a section **ตัดสินใจเอง**, showing **every row of this round**, 1 line per row (what was chosen · what was not · why), then pointing to the full table.
+If there are more than 15 rows, you may summarize by group (for example "chose 6 data sources"), but you must give the total count and a link to the table, and rows that affect the result strongly must still be shown in full.
 
 
 ---
@@ -150,8 +150,8 @@ Use `reverse-engineering` instead when there is no source code, only binaries.
 
 | งาน | ใช้ตัวนี้แทน |
 |---|---|
-| ไม่มีซอร์สโค้ด มีแต่ไฟล์ที่ compile แล้ว หรือรูปแบบไฟล์ที่ไม่รู้จัก | `reverse-engineering` |
-| มีโค้ดและเอกสารพอ แค่จะแก้ส่วนเล็ก ๆ ที่ยังไม่ได้อ่าน | `code-orientation` |
+| No source code, only compiled files or an unknown file format | `reverse-engineering` |
+| Enough code and documents exist, and only a small unread part needs editing | `code-orientation` |
 
 ## The four rules
 
@@ -257,7 +257,7 @@ For each request, fill [assets/change-request.md](assets/change-request.md):
 
 `/software-development:legacy-spec-recovery <path to legacy code> [module to go deep on | CR text]`
 
-> **ทางลัดเข้า SuperUser:** เปิด skill `superuser` ด้วย playbook ที่ใกล้ที่สุด แล้วคัดลอกขั้นตอนด้านล่างลง todo ก่อน ขั้นตอนด้านล่างบอกรูปแบบงานและ output ของคำสั่งนี้ ให้ใช้คู่กับ playbook ไม่ได้ใช้แทน
+> **Shortcut into SuperUser:** open the `superuser` skill with the closest playbook, then copy the steps below into the todo first. The steps below give the work format and the output of this command. Use them together with the playbook, not in place of it.
 
 Recover the as-is spec of the legacy system at:
 

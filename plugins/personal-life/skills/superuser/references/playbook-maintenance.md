@@ -1,16 +1,16 @@
-# playbook · maintenance — แผนดูแลบ้านทั้งปีและเทียบใบเสนอราคาช่าง
+# playbook · maintenance — year-round home care plan and comparing contractor quotes
 
-ใช้เมื่อ: อยากมีตารางดูแลบ้านตามฤดู · จะจ้างช่างและต้องเทียบราคา
-skill หลัก: `home-maintenance`
+Use when: the user wants a seasonal home maintenance schedule · is about to hire a contractor and must compare prices
+Main skill: `home-maintenance`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. สำรวจบ้านจากที่ผู้ใช้เล่า — แอร์กี่เครื่อง ปั๊มน้ำ หลังคา อายุบ้าน · ใคร: หัวหน้าทีม
-2. ทำปฏิทิน 12 เดือนตามฤดูร้อน ฝน หนาว จาก `home-maintenance` · ใคร: `home-manager` ตัวใหม่
-3. เทียบใบเสนอราคาช่าง — ขอบเขตงานเท่ากันไหม วัสดุ ประกันงาน เงื่อนไขมัดจำ · ใคร: `home-manager` ตัวใหม่
-4. ทำรายการคำถามถึงช่างก่อนจ่ายมัดจำ · ใคร: `home-manager` ตัวใหม่
-5. ตรวจว่าทุกงานในปฏิทินมีเดือนและคนรับผิดชอบ และตัวเลขในตารางตรงกับใบเสนอราคา · ใคร: `reviewer` ตัวใหม่
+1. Survey the house from what the user tells you: how many air conditioners, the water pump, the roof, the age of the house · ใคร: หัวหน้าทีม
+2. Make a 12-month calendar by season (hot, rainy, cool) from `home-maintenance` · ใคร: `home-manager` ตัวใหม่
+3. Compare the contractor quotes: is the scope of work the same, the materials, the warranty, the deposit terms · ใคร: `home-manager` ตัวใหม่
+4. List the questions to ask the contractor before paying a deposit · ใคร: `home-manager` ตัวใหม่
+5. Check (ตรวจ) that every task in the calendar has a month and a person responsible, and that the numbers in the table match the quotes · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-ปฏิทิน 12 เดือนและตารางเทียบราคา (ถ้ามี) ที่คัดตรงจากเอกสาร
+The 12-month calendar and the price comparison table (if any), copied exactly from the documents

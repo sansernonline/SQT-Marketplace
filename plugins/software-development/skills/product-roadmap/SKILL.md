@@ -53,7 +53,7 @@ The product manager should:
 8. **Produce polished roadmap document** using `polished-document-style` skill:
    - Cover with version/status
    - Strategic themes table
-   - Gantt timeline (รูปตามแบบประจำบ้านของ skill `diagram-figures` — ไม่ใช้ Mermaid ในเอกสารโปรเจกต์)
+   - Gantt timeline (a figure in the house style of the skill `diagram-figures` — no Mermaid in project documents)
    - RICE prioritization table
    - KPI dashboard
    - Strategic risk register

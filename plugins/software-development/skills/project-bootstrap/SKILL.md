@@ -3,156 +3,156 @@ name: project-bootstrap
 description: Use when starting a repository or setting up a new machine
 ---
 
-# ตั้งต้นโปรเจกต์
+# Project bootstrap
 
-> **กฎข้อเดียว:** คนที่ไม่เคยเห็นโปรเจกต์นี้มาก่อน ต้องรันได้ภายใน **30 นาที**
-> โดยอ่านแค่ `README.md` และไม่ต้องถามใคร
+> **The one rule:** someone who has never seen this project must be able to run it within **30 minutes**,
+> reading only `README.md` and asking nobody.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-เริ่ม repository ใหม่ · คนใหม่ใช้ครึ่งวันกว่าจะรันได้ · pull request diff ทั้งไฟล์เพราะตัวจัดรูปแบบไม่ตรงกัน · ไม่มีใครรู้ว่าเอกสารอยู่ไหน
+Starting a new repository · a newcomer needs half a day before the project runs · a pull request shows a whole-file diff because formatters disagree · nobody knows where the documents are
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-| งาน | ใช้ตัวนี้แทน |
+| Task | Use this instead |
 |---|---|
-| ตั้ง pipeline build และ deploy | `cicd-and-release` |
-| ค่าตั้งต่อ environment และ secret | `config-and-secrets` |
-| เลือกสถาปัตยกรรม | `architecture-patterns` |
-| ตั้ง test framework | `testing-standards` |
-| ตั้งชื่อเอกสาร | `document-naming` |
+| Set up the build and deploy pipeline | `cicd-and-release` |
+| Per-environment settings and secrets | `config-and-secrets` |
+| Choose an architecture | `architecture-patterns` |
+| Set up a test framework | `testing-standards` |
+| Name documents | `document-naming` |
 
 ---
 
-## 1 · โครงโฟลเดอร์
+## 1 · Folder layout
 
-**ราก (โฟลเดอร์ที่ผู้ใช้เปิด) จัดตาม `project-doc-set` ข้อ 1 แบบ B** — ผังราก แบบ ecosystem และที่อยู่ไฟล์ของ SuperUser (`.claude/superuser/`) อยู่ที่นั่นที่เดียว · โค้ดอยู่ใน `<project-name>/` โครงข้างในเป็นแบบนี้:
+**The root (the folder the user opens) follows `project-doc-set` item 1, layout B.** The root tree, the ecosystem layout and the SuperUser file locations (`.claude/superuser/`) are defined there and only there. Code lives in `<project-name>/`. Its inner layout is:
 
-ใน `<project-name>/` (ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-`): `README.md` (ข้อ 2) · `CHANGELOG.md` · `ARCHITECTURE.md` · `CONTRIBUTING.md` · `LICENSE` (3 ตัวนี้เมื่อมีเงื่อนไขใน `references/readme-skeleton.md` หัวข้อ 2) · `.env.example` (เฉพาะเมื่ออ่าน environment variable จริง · `config-and-secrets`) · `.editorconfig` · `.gitattributes` · `.gitignore` (build output · ค่าลับ · `_to_delete/`) · `src/` (unit test อยู่ข้างไฟล์โค้ด · `readable-code` ข้อ 7) · `tests/` (เฉพาะ integration · e2e หรือ stack ที่เครื่องมือบังคับ ดูตารางข้อ 1) · `scripts/` (setup · seed · migrate) — ผังพร้อมคำอธิบาย [`references/code-folder.md`](references/code-folder.md) · ADR และ runbook อยู่ใน `docs/` ที่ราก ไม่ใช่ในโฟลเดอร์โค้ด (`project-doc-set` ข้อ 1)
+Inside `<project-name>/` (lowercase project name, words joined by `-`): `README.md` (item 2) · `CHANGELOG.md` · `ARCHITECTURE.md` · `CONTRIBUTING.md` · `LICENSE` (these 3 only when the conditions in `references/readme-skeleton.md` section 2 apply) · `.env.example` (only when the project really reads environment variables · `config-and-secrets`) · `.editorconfig` · `.gitattributes` · `.gitignore` (build output · secrets · `_to_delete/`) · `src/` (unit tests sit beside the code files · `readable-code` item 7) · `tests/` (integration · e2e only, or stacks whose tools require it, see the table in this item) · `scripts/` (setup · seed · migrate). The annotated tree is in [`references/code-folder.md`](references/code-folder.md). ADRs (architecture decision records) and runbooks live in `docs/` at the root, not in the code folder (`project-doc-set` item 1).
 
-**ชื่อโฟลเดอร์โค้ด** — เอาชื่อโฟลเดอร์โปรเจกต์มาทำเป็นตัวพิมพ์เล็ก เว้นวรรคและเครื่องหมายเปลี่ยนเป็น `-` ตัวเดียว:
+**Code folder name.** Take the project folder name, lowercase it, and turn each run of spaces and punctuation into a single `-`:
 `Lumio - Light Meter/` → `lumio-light-meter/`
-คำสั่ง build test และ run ทุกตัวรันจากในโฟลเดอร์นี้ ส่วนชื่อแพ็กเกจในภาษาที่บังคับรูปแบบ (Dart `name:` ใน pubspec · Python package) ยังตั้งตามกฎของภาษา เพราะกฎนี้คุมแค่ชื่อโฟลเดอร์
+Run every build, test and run command from inside this folder. In languages that force a package-name format (Dart `name:` in pubspec · Python package), keep naming the package by the language's rules, because this rule governs only the folder name.
 
-**กฎของราก (ชั้นบนสุดของโฟลเดอร์โปรเจกต์):**
-- มีแค่ของในผัง `project-doc-set` ข้อ 1 · ข้อยกเว้นประกาศใน README ของโปรเจกต์ · README, CHANGELOG และไฟล์ตั้งค่าอยู่ใน repo · `.docx`/`.xlsx` ที่ได้รับมาอยู่ `ref/` ที่เราเขียนอยู่ `docs/`
-- **ของชั่วคราวไม่เคยอยู่ที่ราก** — ถ้าไฟล์ชั่วคราวที่ agent สร้างไปตกที่ราก ให้ย้ายเข้า `_to_delete/` ทันที
-- ถ้า build แล้วมีโฟลเดอร์งอกที่ราก (เช่น `build/` `lib/` ว่างหลังย้ายโค้ด) แปลว่า cache ของเครื่องมือยังจำ path เก่า ให้ล้าง cache (`flutter clean` · ลบ `obj/`) แล้ว build ใหม่
-- ชื่อโฟลเดอร์และไฟล์ใน repo เป็นตัวพิมพ์เล็กคั่นด้วยขีดกลาง ไม่มีเว้นวรรค **ยกเว้นภาษาที่มีธรรมเนียมของตัวเอง** ให้ตามภาษานั้น
+**Root rules (the top level of the project folder):**
+- Hold only what is in the `project-doc-set` item 1 layout. Exceptions are declared in the project's README. README, CHANGELOG and config files live in the repo. Received `.docx`/`.xlsx` files go in `ref/`. Ones we write go in `docs/`.
+- **Temporary files never live at the root.** If a temp file an agent created lands at the root, move it into `_to_delete/` at once.
+- If a build leaves a stray folder at the root (such as an empty `build/` or `lib/` after moving the code), a tool cache still remembers the old path. Clear the cache (`flutter clean` · delete `obj/`) and build again.
+- Folder and file names in the repo are lowercase with hyphens and no spaces. **The exception is a language with its own convention.** Follow that language.
 
-**ข้อยกเว้นตาม stack** — ชื่อโฟลเดอร์โค้ด โฟลเดอร์ทดสอบ และชื่อไฟล์ใน repo ใช้ตามที่เครื่องมือของภาษาคาดไว้
-ไม่ฝืนให้เป็น `src/` · ปกติไฟล์ทดสอบอยู่ข้างไฟล์โค้ด ใช้โฟลเดอร์ทดสอบแยกเฉพาะ stack ที่เครื่องมือบังคับ (ช่องที่เขียนว่า **บังคับ**):
+**Exceptions by stack.** The code folder name, the test folder and the file names in the repo follow what the language's tools expect.
+Do not force `src/`. Test files normally sit beside the code files. Use a separate test folder only for stacks whose tools require one (the cells marked **required**):
 
-| Stack | โค้ด | ทดสอบ | ชื่อไฟล์ |
+| Stack | Code | Tests | File names |
 |---|---|---|---|
-| Node | `src/` | unit test ข้างไฟล์โค้ด (`*.test.ts`) · integration และ e2e ไว้ใน `tests/` | `kebab-case` |
-| .NET | `src/` | `tests/` **บังคับ** (โปรเจกต์ทดสอบแยก `.csproj`) | `PascalCase.cs` |
-| Python | `src/<package>/` | unit test ข้างไฟล์โค้ด (`test_*.py`) · integration และ e2e ไว้ใน `tests/` | `snake_case.py` |
-| Dart / Flutter | `lib/` | `test/` · `integration_test/` **บังคับ** (โครงเหมือน `lib/`) | `snake_case.dart` (lint `file_names`) · `android/` `ios/` อยู่ใน repo |
+| Node | `src/` | Unit tests beside the code files (`*.test.ts`) · integration and e2e in `tests/` | `kebab-case` |
+| .NET | `src/` | `tests/` **required** (a separate test `.csproj` project) | `PascalCase.cs` |
+| Python | `src/<package>/` | Unit tests beside the code files (`test_*.py`) · integration and e2e in `tests/` | `snake_case.py` |
+| Dart / Flutter | `lib/` | `test/` · `integration_test/` **required** (same layout as `lib/`) | `snake_case.dart` (lint `file_names`) · `android/` `ios/` stay in the repo |
 
-skill อื่นที่เขียน `tests/` หรือ `test/` ให้อ่านว่า "โฟลเดอร์ทดสอบของ stack นั้น" แล้วเลือกชื่อเดียวใช้ทั้ง repo
+When another skill writes `tests/` or `test/`, read it as "the test folder of that stack". Pick one name and use it across the whole repo.
 
-**แบบ A** (ใช้เมื่อผู้ใช้ขอเท่านั้น · ข้อนี้คือเจ้าของผัง) — เพิ่ม `<project-name>/docs/` ในโฟลเดอร์โค้ด เป็น markdown ล้วน ผังข้างในเหมือน `docs/` ของแบบ B (`README.md` สารบัญ · `decisions/ADR-NNNN-<slug>.md` · `runbook-<เรื่อง>.md` · `research/`) ไม่มี `.docx` หรือ PNG ส่งมอบ · ส่วนที่เหลือของรากยังตามผัง `project-doc-set` ข้อ 1 โดยไม่มี `docs/` ที่ราก
+**Layout A** (use only when the user asks · this item owns the layout). Add `<project-name>/docs/` inside the code folder, as plain markdown. The inner layout matches the `docs/` of layout B (`README.md` index · `decisions/ADR-NNNN-<slug>.md` · `runbook-<topic>.md` · `research/`). It has no `.docx` or PNG deliverables. The rest of the root still follows the `project-doc-set` item 1 layout, without a `docs/` at the root.
 
-**`docs/README.md` คือสารบัญ ไม่ใช่เนื้อหา:**
+**`docs/README.md` is an index, not content:**
 
-แม่แบบ → `assets/starter-files.md` (คอลัมน์ เอกสาร · อ่านเมื่อ · เจ้าของ · อัปเดตล่าสุด)
+Template → `assets/starter-files.md` (columns: document · read when · owner · last updated)
 
 ---
 
-## 2 · README — โครงกว้าง แล้วสำรวจโปรเจกต์ก่อนเลือกหัวข้อ
+## 2 · README — broad outline, then survey the project before choosing sections
 
-README ของแต่ละงานไม่เหมือนกัน · แอปเว็บ · library · CLI (Command-Line Interface) · แอปมือถือ · monorepo · infra หรือสคริปต์ ต้องการหัวข้อและคำสั่งต่างกัน จึงทำ 3 ชั้น:
+READMEs differ from job to job. A web app · library · CLI (Command-Line Interface) · mobile app · monorepo · infra or script project needs different sections and commands. So work in 3 layers:
 
-**ชั้น 1 · โครงกว้าง (ตายตัว)** — README ต้องตอบคำถามเหล่านี้ให้คนใหม่ ตามลำดับที่ต้องใช้:
-นี่คืออะไร ใครใช้ → ต้องมีอะไรบนเครื่อง → ติดตั้งและรัน → ตั้งค่า → คำสั่งที่ใช้บ่อย (test) → โครงสร้างโปรเจกต์ → สถาปัตยกรรม → build → deploy → ติดปัญหา → ร่วมพัฒนา → ติดต่อ → สัญญาอนุญาต
-คำถามไหนไม่มีของในโปรเจกต์ ตัดทิ้ง ยกเว้น "ตั้งค่า" ที่ต้องบอกว่าไม่มีค่าตั้งภายนอก
+**Layer 1 · Broad outline (fixed).** The README must answer these questions for a newcomer, in the order they need them:
+What is this and who uses it → what must be on the machine → install and run → configure → common commands (test) → project structure → architecture → build → deploy → troubleshooting → contributing → contact → license
+Drop any question the project has nothing for. The exception is "configure", which must say there are no external settings.
 
-**ชั้น 2 · สำรวจก่อนเขียน (ทุกครั้ง)** — จดผลลง `_to_delete/readme-survey.md` แล้วใช้ตัดสินชั้น 3
-1. **อ่านโปรเจกต์:** ไฟล์ประกาศแพ็กเกจ (`package.json` · `*.csproj` · `pyproject.toml` · `pubspec.yaml` ฯลฯ) · ไฟล์ปักรุ่น · `Dockerfile` / `compose` · ไฟล์ CI (Continuous Integration) · `Makefile` / สคริปต์ · `.env.example` · โฟลเดอร์บนสุด → ได้ประเภทงาน stack คำสั่งที่มีอยู่จริง และส่วนประกอบของระบบ (`code-orientation` ถ้าโค้ดเยอะ)
-2. **ค้นเอกสารทางการของ stack นั้น** (`research-with-sources`): คำสั่งติดตั้ง รัน test build และไฟล์ที่ควร commit ของรุ่นที่โปรเจกต์ใช้ · ห้ามเอาคำสั่งจากความจำหรือจากตารางสำรองลง README โดยไม่ตรวจ
-3. **ดู README ของโปรเจกต์ดังประเภทเดียวกัน 2–3 ตัว** (ค้นด้วยประเภทงาน + stack) เพื่อดูว่าวงการนั้นคนอ่านคาดหวังหัวข้อไหนเพิ่ม เช่น library มีตัวอย่างโค้ดและตารางรุ่นที่รองรับ · CLI มีตัวเลือกคำสั่ง · infra มีสิ่งที่ต้องเตรียมในบัญชี cloud · แอปมือถือมี flavor และวิธีเซ็นแอป
-4. ค้นไม่ได้ (ไม่มีเน็ต) → ใช้ชั้น 3 ค่าสำรอง แล้วติด `(รอยืนยัน)` ที่คำสั่งที่ยังไม่ได้ตรวจ
+**Layer 2 · Survey before writing (every time).** Record the results in `_to_delete/readme-survey.md` and use them to decide layer 3.
+1. **Read the project:** package manifest files (`package.json` · `*.csproj` · `pyproject.toml` · `pubspec.yaml` and so on) · version-pin files · `Dockerfile` / `compose` · CI (Continuous Integration) files · `Makefile` / scripts · `.env.example` · top-level folders → this gives the project type, stack, the commands that really exist and the system's components (`code-orientation` if the code is large).
+2. **Search the official documentation for that stack** (`research-with-sources`): install, run, test and build commands, and which files to commit, for the version the project uses. Never put commands from memory or from the fallback table into the README without checking them.
+3. **Look at 2–3 READMEs of well-known projects of the same type** (search by project type + stack) to see which extra sections readers in that field expect. For example, a library has code samples and a table of supported versions · a CLI has command options · infra has what to prepare in the cloud account · a mobile app has flavors and how to sign the app.
+4. If search is impossible (no internet), use the layer 3 fallback tables and mark each unchecked command `(รอยืนยัน)` (awaiting confirmation).
 
-**ชั้น 3 · เลือกหัวข้อและคำสั่ง** — จัดหัวข้อจากชั้น 1 + หัวข้อเพิ่มที่ได้จากข้อ 3 · คำสั่งจากข้อ 1–2 · ตารางเต็ม (ตอบอะไร · ยาวแค่ไหน · ยาวเกินย้ายไปไหน) → [`references/readme-skeleton.md`](references/readme-skeleton.md) เป็นค่าสำรองและเกณฑ์ความยาว ไม่ใช่รายการที่ต้องมีครบ
+**Layer 3 · Choose sections and commands.** Arrange the sections from layer 1 plus the extra sections found in step 3. Take commands from steps 1–2. The full table (what each section answers · how long it should be · where to move it when too long) is in [`references/readme-skeleton.md`](references/readme-skeleton.md). It is a fallback and a length guide, not a list that must be complete.
 
-- **README มีแค่สิ่งที่คนใหม่ใช้ใน 30 นาทีแรก** — ยาวเกินย้ายไป `ARCHITECTURE.md` · `CONTRIBUTING.md` · `docs/runbook-deploy.md` แล้วลิงก์กลับ (ตาราง "แยกไปไฟล์อื่น" และแม่แบบ `ARCHITECTURE.md` ในไฟล์เดียวกัน)
-- **ตารางสำรองตามภาษา** (Node · .NET · Python · Java · Go · Flutter · Rust · Laravel) → [`references/readme-by-stack.md`](references/readme-by-stack.md) · ใช้เป็นจุดตั้งต้นของคำค้นในชั้น 2 ข้อ 2 · stack ที่ไม่อยู่ในตาราง ค้นจากเอกสารทางการตรง ๆ
-- แม่แบบที่คัดลอกไปใช้ (Node · Flutter / Android) → `assets/starter-files.md` · แอปที่ไม่มี DB หรือ Docker ก็ต้องบอกของบนเครื่องให้ครบ
+- **The README holds only what a newcomer uses in the first 30 minutes.** Move anything longer to `ARCHITECTURE.md` · `CONTRIBUTING.md` · `docs/runbook-deploy.md` and link back (see the "split into other files" table and the `ARCHITECTURE.md` template in the same file).
+- **Fallback tables by language** (Node · .NET · Python · Java · Go · Flutter · Rust · Laravel) → [`references/readme-by-stack.md`](references/readme-by-stack.md). Use them as the starting point for the layer 2 step 2 search. For a stack not in the tables, search the official documentation directly.
+- Copy-ready templates (Node · Flutter / Android) → `assets/starter-files.md`. An app with no DB or Docker must still list everything needed on the machine.
 
-> **ทุกคำสั่งต้องเคยรันจริงบนเครื่องเปล่า** เพราะ README ส่วนใหญ่ผิดตรงที่คนเขียน
-> มีของครบอยู่แล้วบนเครื่องตัวเอง จึงไม่เห็นว่ามีขั้นตอนที่หายไป
+> **Every command must have been run on a clean machine.** Most READMEs are wrong because the author
+> already has everything on their own machine and cannot see the missing steps.
 >
-> **1 คำสั่งติดตั้ง 1 คำสั่งรัน** — ถ้ามี 12 ขั้นตอน ให้เขียนเป็น `scripts/setup.sh`
+> **1 install command, 1 run command.** If there are 12 steps, write them as `scripts/setup.sh`.
 
 ---
 
 ## 3 · CHANGELOG
 
-รูปแบบ Keep a Changelog 1.1.0 · หัวข้อในแต่ละรุ่นเรียงแบบนี้ ตัดหัวข้อที่ไม่มีของ: **เปลี่ยนที่ทำให้ของเดิมพัง** (ของเราเพิ่ม อยู่บนสุดเสมอ) · เพิ่ม · เปลี่ยน · จะเลิกใช้ · เอาออก · แก้ · ความปลอดภัย · มี `[ยังไม่ปล่อย]` รอไว้บนสุดเสมอ · รุ่นใหม่อยู่บน วันที่แบบ `YYYY-MM-DD` — ตัวอย่างเต็ม [`references/changelog-examples.md`](references/changelog-examples.md)
+Use the Keep a Changelog 1.1.0 format. Order the headings in each version as follows and drop headings with no items: **เปลี่ยนที่ทำให้ของเดิมพัง** (breaking changes; our own addition, always on top) · เพิ่ม · เปลี่ยน · จะเลิกใช้ · เอาออก · แก้ · ความปลอดภัย. Keep `[ยังไม่ปล่อย]` (unreleased) at the top at all times. Put the newest version first. Write dates as `YYYY-MM-DD`. The full example is in [`references/changelog-examples.md`](references/changelog-examples.md).
 
-**ต้องมี CHANGELOG ไหม**
+**Is a CHANGELOG needed?**
 
-| สถานการณ์ | CHANGELOG |
+| Situation | CHANGELOG |
 |---|---|
-| ส่งงานให้ลูกค้า มีรอบ UAT หรือมีเลขเวอร์ชัน | ต้องมี — ลูกค้าและผู้ตรวจรับดูว่ารอบนี้ได้อะไร |
-| คนอื่นเรียกใช้ (API · library · แอปที่มีผู้ใช้) | ต้องมี — เขารู้ว่าต้องแก้อะไรฝั่งตัวเองไหม |
-| ต้นแบบ · สคริปต์ส่วนตัว · ทำคนเดียวและไม่มีรอบปล่อย | ไม่ต้อง — `git log` พอ · เขียนเหตุผลไว้ใน README |
+| Delivered to a customer, with a UAT (user acceptance testing) round or a version number | Required — the customer and the acceptance reviewer see what this round delivers |
+| Others call it (API · library · app with users) | Required — they learn whether they must change anything on their side |
+| Prototype · personal script · solo work with no release rounds | Not needed — `git log` is enough · write the reason in the README |
 
-**เขียนให้คนใช้งานอ่าน** — 1 ข้อ 1 บรรทัด บอกผลที่ผู้ใช้เห็น ไม่ใช่รายการ commit ชื่อไฟล์หรือเลข ticket · งานที่มองไม่เห็นไม่ใส่ เว้นแต่รู้สึกได้ · "เปลี่ยนที่ทำให้ของเดิมพัง" อยู่บนสุดเสมอ · กฎเต็มและตัวอย่าง ผิด → ถูก ใน [`references/changelog-examples.md`](references/changelog-examples.md)
-- เลขเวอร์ชันและกฎการขึ้นเลข ดู `cicd-and-release`
-
----
-
-## 4 · ตัวจัดรูปแบบและ linter — จบการเถียงเรื่องสไตล์
-
-- `.editorconfig` (เว้นวรรค · ตัวขึ้นบรรทัด · encoding) ทุกภาษา · แม่แบบพร้อม `.gitattributes` → `assets/starter-files.md`
-- ตัวจัดรูปแบบจัดสไตล์ตอนบันทึก (Prettier · dotnet format · black/ruff · `dart format`) · linter จับของที่ผิดจริงเท่านั้น (ESLint · analyzer ของ .NET · ruff · `flutter analyze`)
-- ตั้ง `end_of_line = lf` และ `.gitattributes` `* text=auto eol=lf` — ไม่งั้นทีมที่ใช้ Windows ปนระบบอื่นจะเจอ pull request ที่ diff ทั้งไฟล์
-- **ตัวจัดรูปแบบตัดสินใจแทนคน** จะเลือกค่าไหนก็ได้ แต่ต้องเป็นค่าเดียวกันทั้งทีม
-- ให้ CI ตรวจด้วย ไม่ใช่พึ่งว่าทุกคนตั้งเครื่องเหมือนกัน
-- เวลาเปิดใช้กับโปรเจกต์เก่า ให้จัดรูปแบบทั้ง repo ใน **commit เดียวที่ไม่มีอย่างอื่นปน**
-  แล้วใส่ commit นั้นใน `.git-blame-ignore-revs`
+**Write for the people who use the product.** 1 item per line, stating the result the user sees, not a commit list, file names or ticket numbers. Leave out invisible work unless it can be felt. "เปลี่ยนที่ทำให้ของเดิมพัง" is always on top. The full rules and the wrong → right examples are in [`references/changelog-examples.md`](references/changelog-examples.md).
+- For version numbers and bump rules, see `cicd-and-release`.
 
 ---
 
-## 5 · Dependency
+## 4 · Formatters and linters — end the style arguments
 
-- **commit lock file เสมอ** และติดตั้งบน CI ด้วยคำสั่งที่ยึด lock (`npm ci` · `flutter pub get --enforce-lockfile`) ไม่งั้น build แต่ละวันได้คนละชุด
-- ตรวจช่องโหว่ใน pipeline (`cicd-and-release`) · อัปเดตเป็นรอบ: patch เดือนละครั้ง minor ไตรมาสละครั้ง ไม่ใช่รอพัง
-- dependency ใหม่ต้องมีเหตุผลใน pull request (`lazy-coding`)
-
-**ก่อนเพิ่มไลบรารี ถาม 3 ข้อ** — มาตรฐานของภาษาทำได้ไหม โครงการยังมีชีวิตอยู่ไหม และ
-สัญญาอนุญาตใช้ได้กับงานที่ขายไหม (ดู `prior-art-review`)
+- `.editorconfig` (indentation · line endings · encoding) for every language · template with `.gitattributes` → `assets/starter-files.md`
+- The formatter fixes style on save (Prettier · dotnet format · black/ruff · `dart format`). The linter catches only real mistakes (ESLint · .NET analyzers · ruff · `flutter analyze`).
+- Set `end_of_line = lf` and `.gitattributes` `* text=auto eol=lf`. Otherwise a team mixing Windows with other systems gets pull requests that diff the whole file.
+- **The formatter decides for people.** Any setting is fine, but the whole team must use the same one.
+- Have CI check it too, instead of trusting that everyone set up their machine the same way.
+- When turning it on in an old project, format the whole repo in **one commit with nothing else in it**,
+  then add that commit to `.git-blame-ignore-revs`.
 
 ---
 
-## 6 · รายการตรวจเมื่อเปิดโปรเจกต์ใหม่
+## 5 · Dependencies
 
-ติ๊ก `[x]` เฉพาะข้อที่**รันหรือเปิดดูแล้วในรอบนี้** ข้อที่ยังไม่ได้สร้างหรือยังไม่ได้รัน ให้ใส่ `[ ]` พร้อมบอกว่าค้างอะไร ส่วนข้อที่ไม่เกี่ยวกับโปรเจกต์นี้ ให้ใส่ `N/A — <เหตุผล>`
+- **Always commit the lock file**, and install on CI with a command that follows the lock (`npm ci` · `flutter pub get --enforce-lockfile`). Otherwise each day's build gets a different set.
+- Check for vulnerabilities in the pipeline (`cicd-and-release`). Update on a schedule: patch monthly, minor quarterly, not only when something breaks.
+- A new dependency needs a reason in the pull request (`lazy-coding`).
 
-- [ ] `README.md` ตอบคำถามในชั้น 1 ที่โปรเจกต์มีของครบ · หัวข้อและคำสั่งมาจากผลสำรวจชั้น 2 (มี `_to_delete/readme-survey.md`) · คำสั่งเคยรันจริงบนเครื่องเปล่า
-- [ ] รากตรงผังใน `project-doc-set` ข้อ 1 (repo ชื่อโปรเจกต์ตัวเล็กคั่น `-` · ecosystem ใช้ `ecosystem/`) และไม่มีไฟล์ชั่วคราวหรือ `.docx` ที่ราก
-- [ ] `.env.example` มีค่าครบทุกตัวพร้อมคอมเมนต์ ถ้าโปรเจกต์ไม่อ่าน environment variable เลย (เช่นแอปมือถือออฟไลน์) ก็ไม่ต้องสร้าง แต่ให้เขียนใน README ว่า "ไม่มีค่าตั้งภายนอก"
-- [ ] `.editorconfig` · `.gitattributes` · ตัวจัดรูปแบบ · linter ตั้งแล้ว และ CI ตรวจ
-- [ ] `.gitignore` ครอบคลุม `.env` · โฟลเดอร์ build · `_to_delete/` · Android: `key.properties` · `*.jks` · `*.keystore`
-- [ ] `docs/README.md` เป็นสารบัญ พร้อมเจ้าของแต่ละเอกสาร
-- [ ] `CHANGELOG.md` มีหัวข้อ "ยังไม่ปล่อย" รออยู่
-- [ ] test อย่างน้อย 1 ตัวที่รันผ่าน เพื่อพิสูจน์ว่าโครงใช้ได้
-- [ ] `main` ถูกป้องกัน ต้องผ่าน pull request และ CI ส่วน repo ที่ยังไม่มี remote หรือทำคนเดียวข้ามข้อนี้ได้ แต่ต้องเขียนเหตุผลไว้ใน README และรัน test กับ linter ก่อน commit แทน
-- [ ] **ให้คนที่ไม่ได้ตั้งโปรเจกต์ลองทำตาม README แล้วจับเวลา**
+**Before adding a library, ask 3 questions:** can the language's standard library do it, is the project still alive, and
+does the license allow use in work that is sold (see `prior-art-review`)?
+
+---
+
+## 6 · Checklist when opening a new project
+
+Tick `[x]` only for items you **ran or opened in this round**. For an item not yet built or run, write `[ ]` and say what is pending. For an item that does not apply to this project, write `N/A — <reason>`.
+
+- [ ] `README.md` answers the layer 1 questions the project has content for · sections and commands come from the layer 2 survey results (`_to_delete/readme-survey.md` exists) · commands have been run on a clean machine
+- [ ] The root matches the layout in `project-doc-set` item 1 (repo named as the lowercase project name joined by `-` · an ecosystem uses `ecosystem/`) and has no temp files or `.docx` at the root
+- [ ] `.env.example` lists every value with comments. If the project reads no environment variables at all (for example an offline mobile app), do not create it, but write "ไม่มีค่าตั้งภายนอก" (no external settings) in the README
+- [ ] `.editorconfig` · `.gitattributes` · formatter · linter are set up, and CI checks them
+- [ ] `.gitignore` covers `.env` · build folders · `_to_delete/` · Android: `key.properties` · `*.jks` · `*.keystore`
+- [ ] `docs/README.md` is an index, with an owner for each document
+- [ ] `CHANGELOG.md` has an "ยังไม่ปล่อย" heading waiting
+- [ ] At least 1 test runs and passes, to prove the layout works
+- [ ] `main` is protected and needs a pull request and CI. A repo with no remote, or a solo repo, may skip this, but must write the reason in the README and run tests and the linter before each commit instead.
+- [ ] **Have someone who did not set up the project follow the README, and time them**
 
 ---
 
 ## 7 · Anti-patterns
 
-ผิด: README มีแต่ชื่อ · คำสั่งที่ไม่เคยรันบนเครื่องเปล่า · "ขอ `.env` จากพี่คนนั้น" (ไม่มี `.env.example`) · ไม่ commit lock file · ไม่มี `.editorconfig` · linter เถียงเรื่องสไตล์ · ไฟล์ทดลองที่ราก (`test.js` `backup_final.zip`) · เอกสารกระจายในแชตและ Drive ไม่มีสารบัญ · CHANGELOG ที่ก๊อปรายการ commit
+Wrong: a README with only a title · commands never run on a clean machine · "ask so-and-so for the `.env`" (no `.env.example`) · no committed lock file · no `.editorconfig` · a linter that argues about style · experiment files at the root (`test.js` `backup_final.zip`) · documents scattered across chats and Drive with no index · a CHANGELOG that copies the commit list
 
 
-## 8 · ตัวย่อ
+## 8 · Abbreviations
 
-**lock file** ไฟล์ตรึงเวอร์ชัน dependency · **linter** ตัวตรวจโค้ดหาของที่น่าจะผิด · **formatter** ตัวจัดรูปแบบอัตโนมัติ · **LF** Line Feed ตัวขึ้นบรรทัดแบบ Unix (Windows ใช้ CRLF) · **CI** Continuous Integration การตรวจอัตโนมัติทุกครั้งที่รวมโค้ด
+**lock file** a file that pins dependency versions · **linter** a checker that finds code likely to be wrong · **formatter** an automatic style fixer · **LF** Line Feed, the Unix line ending (Windows uses CRLF) · **CI** Continuous Integration, an automatic check on every code merge
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Links to other skills
 
-นอกจากตาราง "ไม่ใช้" ด้านบน: ของชั่วคราว → `temp-file-discipline` · commit ที่สร้าง CHANGELOG ได้ → `commit-message-format` · ก่อนเพิ่ม dependency → `lazy-coding` · `prior-art-review` · แม่แบบไฟล์ทั้งหมด → `assets/starter-files.md`
+Besides the "not for" table above: temp files → `temp-file-discipline` · commits that can build a CHANGELOG → `commit-message-format` · before adding a dependency → `lazy-coding` · `prior-art-review` · all file templates → `assets/starter-files.md`

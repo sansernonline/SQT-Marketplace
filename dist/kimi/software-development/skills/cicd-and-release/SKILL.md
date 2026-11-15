@@ -3,256 +3,256 @@ name: cicd-and-release
 description: Use when setting up or fixing a CI/CD pipeline
 ---
 
-# Continuous Integration / Continuous Delivery (CI/CD) และการปล่อยของ
+# Continuous Integration / Continuous Delivery (CI/CD) and releasing
 
-> **กฎข้อเดียว:** build ครั้งเดียว แล้วเอา **artifact ตัวเดิม** ไปทุก environment
-> ถ้า build ใหม่ตอนขึ้น production ของที่ทดสอบผ่านกับของที่ลูกค้าใช้จะไม่ใช่ตัวเดียวกัน
+> **The one rule:** build once, then carry the **same artifact** to every environment.
+> If you rebuild when going to production, what passed testing and what the customer runs are not the same thing.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ตั้ง pipeline ให้โปรเจกต์ใหม่ หรือรื้อของเดิมที่ช้าหรือผลไม่น่าเชื่อ
-- ต้องตัดสินใจเรื่อง branch, เวอร์ชัน, environment, หรือวิธีปล่อยของ
-- deploy แล้วพังบ่อย หรือ rollback ไม่ได้
-- มีคนถามว่า "ตอนนี้ production รันเวอร์ชันอะไร commit ไหน"
+- Setting up a pipeline for a new project, or rebuilding an old one that is slow or gives untrustworthy results
+- Deciding about branches, versions, environments, or how to release
+- Deploys often break, or you cannot roll back
+- Someone asks "which version and which commit is production running right now?"
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill, or use it alongside
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| ที่เก็บ secret และการหมุนเวียน | `config-and-secrets` | แทน |
-| pipeline อยู่บน Jenkins (Jenkinsfile · credentials · input อนุมัติ) | `jenkins-pipeline` | คู่ |
-| Dockerfile · Helm chart · deploy ขึ้น Kubernetes | `kubernetes-helm` | คู่ |
-| สัดส่วนและขอบเขตของ test | `testing-standards` | แทน |
-| เขียน migration | `database-design` | แทน |
-| ขั้นตอนตอนระบบล่ม | `incident-runbook-template` | แทน |
-| เขียนบันทึกการปล่อยให้ผู้ใช้อ่าน | command `/release-notes` | แทน |
-| สัดส่วน test แต่ละชั้นใน pipeline | `testing-standards` · `e2e-testing-patterns` | คู่ |
-| health check ที่ pipeline ใช้ตัดสิน | `web-service-essentials` | คู่ |
-| ขั้นตอนเมื่อ deploy แล้วล่ม | `incident-runbook-template` · `postmortem-template` | คู่ |
-| ข้อความ commit ที่สร้างบันทึกการปล่อยอัตโนมัติได้ | `commit-message-format` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| Where secrets are stored and how they rotate | `config-and-secrets` | instead |
+| The pipeline runs on Jenkins (Jenkinsfile · credentials · approval input) | `jenkins-pipeline` | alongside |
+| Dockerfile · Helm chart · deploy to Kubernetes | `kubernetes-helm` | alongside |
+| Proportion and scope of tests | `testing-standards` | instead |
+| Writing a migration | `database-design` | instead |
+| Steps when the system is down | `incident-runbook-template` | instead |
+| Writing release notes for users to read | command `/release-notes` | instead |
+| Test proportion for each layer in the pipeline | `testing-standards` · `e2e-testing-patterns` | alongside |
+| Health check the pipeline uses to decide | `web-service-essentials` | alongside |
+| Steps when a deploy breaks the system | `incident-runbook-template` · `postmortem-template` | alongside |
+| Commit messages that can generate release notes automatically | `commit-message-format` | alongside |
+| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
 
-**ไฟล์ pipeline ที่ใช้ได้จริงของ GitHub Actions, Azure DevOps และ GitLab** อยู่ใน `references/per-platform.md`
-**อ่านเพิ่มเมื่อต้องใช้:** [`references/deployment-plan-template.md`](references/deployment-plan-template.md) — แม่แบบแผน
+**Working pipeline files for GitHub Actions, Azure DevOps and GitLab** are in `references/per-platform.md`.
+**Read more when needed:** [`references/deployment-plan-template.md`](references/deployment-plan-template.md) — plan template
 
 ---
 
-## 1 · ขั้นตอนใน pipeline
+## 1 · Pipeline stages
 
-| ลำดับ | ขั้น | บล็อกเมื่อ | เวลาที่ยอมรับได้ |
+| Order | Stage | Blocks when | Acceptable time |
 |:--:|---|---|---|
-| 1 | ตรวจรูปแบบโค้ด + lint | ผิดกฎ | < 1 นาที |
-| 2 | build | คอมไพล์ไม่ผ่าน · มี warning ที่ตั้งเป็น error | < 3 นาที |
-| 3 | unit test | มี test ตก · ความครอบคลุมต่ำกว่าเกณฑ์ | < 5 นาที |
-| 4 | ตรวจ dependency + secret ที่หลุดเข้า git | พบช่องโหว่ระดับสูง · พบ secret | < 2 นาที |
-| 5 | สร้าง artifact + ประทับเวอร์ชัน | — | < 2 นาที |
-| 6 | deploy ลง staging | — | |
-| 7 | integration + end-to-end test | test ตก | < 15 นาที |
-| 8 | **ด่านคน** (เฉพาะ production) | ยังไม่มีคนกดอนุมัติ | |
-| 9 | deploy ลง production | — | |
-| 10 | ตรวจหลัง deploy | health check ไม่ผ่านจะ rollback อัตโนมัติ | < 2 นาที |
+| 1 | Check code format + lint | a rule is broken | < 1 minute |
+| 2 | Build | compile fails · a warning set as an error appears | < 3 minutes |
+| 3 | Unit test | a test fails · coverage is below the threshold | < 5 minutes |
+| 4 | Check dependencies + secrets leaked into git | a high-severity vulnerability or a secret is found | < 2 minutes |
+| 5 | Create the artifact + stamp the version | — | < 2 minutes |
+| 6 | Deploy to staging | — | |
+| 7 | Integration + end-to-end test | a test fails | < 15 minutes |
+| 8 | **Human gate** (production only) | nobody has clicked approve yet | |
+| 9 | Deploy to production | — | |
+| 10 | Post-deploy check | a failed health check triggers an automatic rollback | < 2 minutes |
 
-**ขั้น 1–5 คือ CI ต้องรันกับทุก pull request** ไม่ใช่เฉพาะตอน merge
-**ขั้น 1–5 รวมกันควรจบใน 10 นาที** ถ้านานกว่านั้นคนจะเริ่มหาทางข้าม
-
----
-
-## 2 · build ครั้งเดียว แล้วเลื่อนขั้น
-
-```
-commit → build → artifact v1.4.0+abc1234 ─┬→ staging  (ตัวนี้)
-                                           ├→ uat      (ตัวเดิม)
-                                           └→ production (ตัวเดิม)
-```
-
-- artifact คือไฟล์ที่ deploy ได้จริง: container image · ไฟล์ zip ที่ publish แล้ว · แพ็กเกจ
-- **environment ต่างกันได้แค่ที่ config ตอนรัน** ไม่ใช่ build ใหม่
-- เก็บ artifact ไว้ให้ย้อนกลับได้อย่างน้อย 30 วัน เพราะ rollback คือ deploy artifact เก่า ไม่ใช่ build ย้อนจาก commit เก่า
-
-> ผิด: **`git pull` บนเครื่อง production แล้ว build ตรงนั้น** ทำให้ไม่มีใครรู้ว่าของที่รันอยู่คือ commit ไหน
-> และ dependency ที่ดึงตอนนั้นอาจไม่ใช่ชุดเดียวกับที่ทดสอบ
+**Stages 1–5 are CI. They must run on every pull request**, not only at merge.
+**Stages 1–5 together should finish within 10 minutes.** If they take longer, people start looking for ways to skip them.
 
 ---
 
-## 3 · เวอร์ชันต้องไล่กลับไปหา commit ได้
+## 2 · Build once, then promote
 
-ใช้ Semantic Versioning (SemVer): `MAJOR.MINOR.PATCH`
+```
+commit → build → artifact v1.4.0+abc1234 ─┬→ staging  (this one)
+                                           ├→ uat      (same one)
+                                           └→ production (same one)
+```
 
-| ขึ้นเลขไหน | เมื่อ |
+- An artifact is a file that can really be deployed: a container image · a published zip file · a package
+- **Environments may differ only in the config applied at run time**, not in a new build
+- Keep artifacts for at least 30 days so you can go back, because a rollback means deploying an old artifact, not rebuilding from an old commit
+
+> Wrong: **running `git pull` on the production machine and building there.** Nobody then knows which commit is running,
+> and the dependencies pulled at that moment may not be the set that was tested.
+
+---
+
+## 3 · A version must trace back to a commit
+
+Use Semantic Versioning (SemVer): `MAJOR.MINOR.PATCH`
+
+| Which number goes up | When |
 |---|---|
-| MAJOR | เปลี่ยนแล้วฝั่งที่เรียกใช้พัง (ดูตารางใน `api-conventions`) |
-| MINOR | เพิ่มความสามารถ ของเดิมยังใช้ได้ |
-| PATCH | แก้บั๊ก |
+| MAJOR | a change that breaks the callers (see the table in `api-conventions`) |
+| MINOR | a new capability; old behavior still works |
+| PATCH | a bug fix |
 
-- **ยึด tag ใน git เป็นหลัก** · `v1.4.0` ชี้ commit เดียวเท่านั้น
-- artifact แปะ commit hash ไว้ด้วย เช่น `1.4.0+abc1234`
-- `/version` endpoint ต้องคืนค่าเดียวกันนี้ (ดู `web-service-essentials`) ส่วนแอปมือถือที่ไม่มี endpoint ให้แสดงในหน้า "เกี่ยวกับ" แทน
-- **ยกเว้น Flutter / Android** ตัวเลขหลัง `+` ใน `pubspec.yaml` คือ versionCode ซึ่งต้องเป็นจำนวนเต็ม จึงใส่ hash ไม่ได้ (ดูหัวข้อ "แอป Android / Flutter")
-- ก่อน 1.0.0 ใช้ `0.x` และถือว่ายังเปลี่ยนใหญ่ได้
+- **The git tag is the source of truth.** `v1.4.0` points to exactly one commit.
+- Attach the commit hash to the artifact too, for example `1.4.0+abc1234`
+- The `/version` endpoint must return the same value (see `web-service-essentials`). A mobile app with no endpoint shows it on the "About" page instead.
+- **Exception for Flutter / Android:** the number after `+` in `pubspec.yaml` is the versionCode, which must be an integer, so it cannot hold a hash (see the section "Android / Flutter apps")
+- Before 1.0.0, use `0.x` and treat big changes as still allowed
 
 ---
 
-## 4 · branch
+## 4 · Branches
 
-| แบบ | วิธี | เหมาะกับ |
+| Style | How | Fits |
 |---|---|---|
-| **trunk-based** (แนะนำ) | branch อายุสั้น 1–2 วัน merge เข้า `main` บ่อย · งานที่ยังไม่เสร็จซ่อนไว้ด้วย feature flag | ทีมส่วนใหญ่ · ปล่อยของบ่อย |
-| release branch | `main` + `release/1.4` สำหรับแก้ด่วน | ซอฟต์แวร์ที่ลูกค้าติดตั้งเอง · ต้องดูแลหลายเวอร์ชันพร้อมกัน |
-| gitflow | `develop` + `feature` + `release` + `hotfix` | ปล่อยของเป็นรอบใหญ่ นาน ๆ ครั้ง · ส่วนใหญ่ซับซ้อนเกินจำเป็น |
+| **trunk-based** (recommended) | short-lived branches of 1–2 days, merged into `main` often · unfinished work hidden behind a feature flag | most teams · frequent releases |
+| release branch | `main` + `release/1.4` for urgent fixes | software that customers install themselves · several versions to maintain at once |
+| gitflow | `develop` + `feature` + `release` + `hotfix` | big releases, rarely · usually more complex than needed |
 
-**กฎที่ไม่ขึ้นกับแบบที่เลือก:**
+**Rules that hold whichever style you pick:**
 
-- `main` ต้อง deploy ได้ตลอดเวลา
-- ป้องกัน `main` ไว้ ให้ต้องผ่าน pull request และ CI เขียว ห้าม push ตรง
-- branch ที่อายุเกิน 1 สัปดาห์ให้เตรียมเจอ merge conflict
-- merge แล้วลบ branch ทันที (`gh pr merge --delete-branch`) · เปิด "Automatically delete head branches" ใน Settings → General ของ repo บน GitHub ให้ลบเองทุก PR · branch ที่ลบแล้วกู้จากหน้า PR ได้
+- `main` must be deployable at all times
+- Protect `main`: require a pull request and a green CI, and never push directly
+- Expect merge conflicts on any branch older than 1 week
+- Delete the branch right after merging (`gh pr merge --delete-branch`) · turn on "Automatically delete head branches" in the repo's Settings → General on GitHub so it deletes after every PR · a deleted branch can be restored from the PR page
 
 ---
 
-## 5 · environment และด่าน
+## 5 · Environments and gates
 
-| environment | ข้อมูล | ใครกด deploy | ต้องผ่านอะไร |
+| Environment | Data | Who deploys | What it must pass |
 |---|---|---|---|
-| dev | ปลอม | อัตโนมัติทุก commit | build ผ่าน |
-| staging | คล้ายจริง (ปิดบังแล้ว) | อัตโนมัติเมื่อ merge เข้า `main` | unit + integration |
-| uat | คล้ายจริง | ทีมกด | ผู้ใช้ทดสอบผ่าน |
-| production | จริง | **คนกดอนุมัติ** | ทุกอย่างข้างบน |
+| dev | fake | automatic on every commit | build passes |
+| staging | production-like (masked) | automatic on merge into `main` | unit + integration |
+| uat | production-like | the team clicks | users pass their testing |
+| production | real | **a person clicks approve** | everything above |
 
-- staging ต้องใกล้เคียง production ให้มากที่สุด: เวอร์ชันฐานข้อมูล ระบบปฏิบัติการ ค่า config
-- **ห้ามคัดลอกข้อมูลจริงลง staging โดยไม่ปิดบังข้อมูลส่วนบุคคล**
-- ถ้ามี environment เดียวเพราะงบจำกัด ให้บอกตรง ๆ ในเอกสาร และใช้ feature flag ช่วยแทน
-
----
-
-## 6 · secret ใน pipeline
-
-- เก็บใน secret store ของแพลตฟอร์ม ไม่ใช่ในไฟล์ pipeline
-- ให้สิทธิ์เท่าที่ขั้นนั้นต้องใช้ เช่น ขั้น build ไม่ต้องรู้รหัสฐานข้อมูล production
-- pipeline ที่รันจาก fork ของคนนอก **ห้ามเห็น secret**
-- ตัวตรวจ secret ที่หลุดเข้า git ต้องอยู่ในขั้นที่ 4 ไม่ใช่ตรวจปีละครั้ง
-
-รายละเอียดทั้งหมดอยู่ใน `config-and-secrets`
+- Staging must be as close to production as possible: database version, operating system, config values
+- **Never copy real data into staging without masking personal data**
+- If you have only one environment because of budget, say so plainly in the documents and use feature flags to help
 
 ---
 
-## 7 · migration ฐานข้อมูลใน pipeline
+## 6 · Secrets in the pipeline
+
+- Store them in the platform's secret store, not in pipeline files
+- Grant only the permissions that stage needs. For example, the build stage does not need the production database password.
+- A pipeline that runs from an outsider's fork **must not see secrets**
+- The tool that detects secrets leaked into git must sit at stage 4, not run once a year
+
+Full detail is in `config-and-secrets`.
+
+---
+
+## 7 · Database migration in the pipeline
 
 ```
-deploy schema (ขยาย) → deploy โค้ด → ตรวจ → deploy schema (บีบ) รอบถัดไป
+deploy schema (expand) → deploy code → check → deploy schema (contract) in the next round
 ```
 
-- migration รันเป็น**ขั้นของตัวเอง** ก่อน deploy โค้ด ไม่ใช่รันตอนแอปบูต
-  (ถ้าแอปหลาย instance บูตพร้อมกัน migration จะรันชนกันจนข้อมูลพังได้)
-- ใช้บัญชีที่แก้ schema ได้เฉพาะขั้นนี้ ส่วนบัญชีที่แอปใช้รันต้องแก้ schema ไม่ได้
-- migration ต้องใช้ได้กับโค้ดเวอร์ชันก่อนหน้าด้วย ไม่งั้น rollback โค้ดแล้วระบบจะพัง
-- สำรองข้อมูลก่อนเสมอ และ**ทดสอบว่ากู้คืนได้จริง**
-- **ข้อยกเว้น: ฐานข้อมูลในเครื่องผู้ใช้** (SQLite · sqflite · drift บนมือถือ) ต้อง migrate ตอนแอปเปิด เพราะไม่มีทางอื่น
-  กฎข้างบนใช้กับฐานข้อมูลบนเซิร์ฟเวอร์ที่หลาย instance ใช้ร่วมกัน ส่วน migration ในเครื่องต้องมี test ไล่จากทุกเวอร์ชัน schema ที่เคยปล่อย
+- Run the migration as **its own stage** before the code deploy, not when the app boots
+  (if several app instances boot at once, the migrations collide and can corrupt data)
+- Use an account that can change the schema only in this stage. The account the app runs with must not be able to change the schema.
+- A migration must work with the previous code version too, or rolling back the code will break the system
+- Always back up first, and **test that the restore really works**
+- **Exception: databases on the user's device** (SQLite · sqflite · drift on mobile) must migrate when the app opens, because there is no other way.
+  The rules above apply to server databases shared by several instances. For an on-device migration, write tests that start from every schema version ever released.
 
-วิธี expand/contract ดูที่ `database-design` ข้อ 9
+For the expand/contract method, see `database-design` item 9.
 
 ---
 
-## 8 · วิธีปล่อยของ
+## 8 · Release methods
 
-| วิธี | ทำงานยังไง | ต้องมี | เหมาะกับ |
+| Method | How it works | Needs | Fits |
 |---|---|---|---|
-| หยุดแล้วเปลี่ยน | ปิด → เปลี่ยน → เปิด | ไม่มี | ระบบภายใน · ปิดได้ตอนกลางคืน |
-| **rolling** | ทยอยเปลี่ยนทีละเครื่อง | health check ที่เชื่อถือได้ · ใช้ร่วมกันได้ทั้ง 2 เวอร์ชัน | ค่าเริ่มต้นของระบบที่รันหลาย instance |
-| blue-green | ยกชุดใหม่ขึ้นครบ แล้วสลับ traffic | ทรัพยากร 2 เท่าชั่วคราว | ต้อง rollback ได้ในไม่กี่วินาที |
-| canary | ปล่อยให้ผู้ใช้ 5% ก่อน แล้วค่อยขยาย 5 → 25 → 100% ตามเกณฑ์ตัวเลขด้านล่าง | ตัวชี้วัดที่แยกตามเวอร์ชันได้ | ระบบใหญ่ · ความเสี่ยงสูง |
+| stop and replace | shut down → replace → start | nothing | internal systems · can shut down at night |
+| **rolling** | replace machines one at a time | a reliable health check · both versions can run together | the default for systems that run several instances |
+| blue-green | bring up the whole new set, then switch traffic | 2 times the resources, temporarily | must roll back within seconds |
+| canary | release to 5% of users first, then widen 5 → 25 → 100% by the numeric criteria below | metrics that split by version | large systems · high risk |
 
-> **rolling มีเรื่องที่คนมักลืม** คือระหว่าง deploy เวอร์ชันเก่าและใหม่ให้บริการพร้อมกัน
-> API และ schema จึงต้องใช้ได้กับทั้ง 2 เวอร์ชัน ถ้าไม่ได้ออกแบบเผื่อไว้ ผู้ใช้บางคนจะเจอ error ทุกครั้งที่ deploy
+> **Rolling has a point people often forget:** during the deploy, the old and new versions serve at the same time.
+> The API and schema must therefore work with both versions. If you did not design for this, some users will hit errors on every deploy.
 
-**เกณฑ์ขยาย canary (เป็นตัวเลข ตกลงก่อน deploy)** ใช้ burn rate (อัตราเผางบความผิดพลาด) ตามสูตรใน [`observability-basics`](../observability-basics/SKILL.md) หัวข้อ 4.1 โดยวัดเฉพาะทราฟฟิกของเวอร์ชันใหม่ ไม่คัดลอกสูตรมาไว้ที่นี่
+**Criteria for widening a canary (numeric, agreed before the deploy).** Use burn rate (the rate at which the error budget is spent) by the formula in [`observability-basics`](../observability-basics/SKILL.md) section 4.1, measured on the new version's traffic only. Do not copy the formula here.
 
-| ขั้น | ทราฟฟิก | ค้างอย่างน้อย | ขยายต่อเมื่อ (ต้องผ่านทุกข้อ) |
+| Step | Traffic | Hold at least | Widen when (all must pass) |
 |---|---|---|---|
-| 1 | 5% | 30 นาที และมีคำขอไม่น้อยกว่า 1,000 รายการ | burn rate ช่วงสั้น < 1 · เวลาตอบ p95 (95th percentile latency) ไม่เกิน 1.2 เท่าของเวอร์ชันเดิม (ค่าตั้งต้น ยังไม่ได้วัด) · health check ผ่านทุกเครื่อง |
-| 2 | 25% | 1 ชั่วโมง | เกณฑ์เดิมซ้ำ |
-| 3 | 100% | เฝ้า 1 ชั่วโมงแรก | burn rate ช่วงสั้น < 1 |
+| 1 | 5% | 30 minutes and at least 1,000 requests | short-window burn rate < 1 · p95 (95th percentile) latency no more than 1.2 times the old version (starting value, not yet measured) · health check passes on every machine |
+| 2 | 25% | 1 hour | same criteria again |
+| 3 | 100% | watch the first hour | short-window burn rate < 1 |
 
-ค้างและจำนวนคำขอขั้นต่ำเป็นค่าตั้งต้น ยังไม่ได้วัด ปรับตามทราฟฟิกจริง · ทราฟฟิกน้อยจนไม่ถึง 1,000 คำขอใน 30 นาที ให้ค้างนานขึ้นจนถึงจำนวนนั้น ไม่ลดเกณฑ์ · ระบบที่ไม่มี SLO (Service Level Objective เป้าหมายระดับบริการ) ใช้เกณฑ์แทน: error ของเวอร์ชันใหม่ ≤ max(2 เท่าของเวอร์ชันเดิม, เวอร์ชันเดิม + 0.5 จุดเปอร์เซ็นต์) (ค่าตั้งต้น ยังไม่ได้วัด)
+The hold time and the minimum request count are starting values, not yet measured. Adjust them to real traffic. If traffic is too low to reach 1,000 requests in 30 minutes, hold longer until it does. Do not lower the criteria. For a system with no SLO (Service Level Objective), use this criterion instead: the new version's errors ≤ max(2 times the old version, the old version + 0.5 percentage points) (starting value, not yet measured).
 
-**feature flag** (สวิตช์เปิดปิดฟีเจอร์) ช่วยแยก "ปล่อยโค้ด" ออกจาก "เปิดใช้ฟีเจอร์"
+A **feature flag** (a switch that turns a feature on or off) separates "releasing the code" from "turning the feature on".
 
-- merge โค้ดที่ยังไม่เสร็จเข้า `main` ได้ โดยปิด flag ไว้
-- เปิดให้คนบางกลุ่มก่อน ปิดได้ทันทีโดยไม่ต้อง deploy
-- **flag ต้องมีวันหมดอายุ** เพราะ flag ที่ค้าง 1 ปีจะกลายเป็นโค้ด 2 เส้นทางที่ไม่มีใครกล้าลบ
-  กำหนดให้ลบภายใน 2 sprint หลังเปิดใช้ 100%
-
----
-
-## 9 · rollback
-
-**เกณฑ์ที่ต้องกำหนดล่วงหน้า** ไม่ใช่มาตัดสินตอนทุกคนกำลังตกใจ แล้วเถียงกันว่าควรรอดูอีกหน่อยไหม · ใช้ burn rate จาก [`observability-basics`](../observability-basics/SKILL.md) หัวข้อ 4.1 แทน "error เกิน X%":
-
-| เงื่อนไข (ทราฟฟิกของเวอร์ชันใหม่) | ทำ |
-|---|---|
-| burn rate ≥ 14.4 ทั้งช่วง 1 ชั่วโมงและ 5 นาที | rollback ทันที ไม่ต้องรอใคร |
-| burn rate ≥ 6 ทั้งช่วง 6 ชั่วโมงและ 30 นาที | rollback และเปิดเหตุการณ์ |
-| burn rate 1–6 | หยุดขยาย ค้างที่ขั้นเดิม ให้คนดู |
-| เวลาตอบ p95 เกิน 2 เท่าของเวอร์ชันเดิมนาน 10 นาที (ค่าตั้งต้น ยังไม่ได้วัด) หรือ health check ไม่ผ่าน | rollback |
-
-ตอน canary 5% ที่ช่วง 1 ชั่วโมงยังไม่เต็ม ให้ใช้ช่วงสั้น (5 นาที) กับเกณฑ์ 14.4 ได้ แต่ต้องมีคำขอครบจำนวนขั้นต่ำของขั้นนั้นก่อนจึงเชื่อตัวเลข
-
-| ต้องมี | เกณฑ์ |
-|---|---|
-| คำสั่ง rollback | ทำได้ด้วยคำสั่งเดียว |
-| เวลาที่ใช้ | ต่ำกว่า 5 นาที |
-| **ซ้อมจริง** | อย่างน้อยไตรมาสละ 1 ครั้ง บน staging |
-| ข้อมูล | migration ที่ทำไปแล้วต้องไม่ทำให้โค้ดเก่าพัง |
-
-> **rollback ที่ไม่เคยซ้อม เท่ากับไม่มี rollback** เพราะจะรู้ว่าใช้ไม่ได้ก็ตอนที่ต้องใช้พอดี
+- You can merge unfinished code into `main` with the flag off
+- Turn it on for some groups first, and turn it off instantly without a deploy
+- **A flag needs an expiry date**, because a flag left for 1 year becomes two code paths that nobody dares to delete.
+  Remove it within 2 sprints after it reaches 100%.
 
 ---
 
-## 10 · pipeline ต้องเร็วและน่าเชื่อถือ
+## 9 · Rollback
 
-| ปัญหา | วิธีแก้ |
+**Set the criteria in advance.** Do not decide while everyone is panicking and arguing over whether to wait a little longer. Use the burn rate from [`observability-basics`](../observability-basics/SKILL.md) section 4.1 instead of "errors above X%":
+
+| Condition (new version's traffic) | Action |
 |---|---|
-| ช้า | แคช dependency · รัน test พร้อมกันหลายชุด · แยก test ที่ช้าไปรันกลางคืน |
-| test ที่ผลไม่คงที่ (flaky) | **แยกออกทันที** แล้วเปิดงานตามแก้ เพราะ test ที่ตกบ้างผ่านบ้างทำให้คนเลิกอ่านผล |
-| ทุกคนรอคิว | เพิ่มตัวรัน · ให้ pull request รันเฉพาะส่วนที่เกี่ยวข้อง |
-| build ไม่เหมือนเดิมทุกครั้ง | ล็อกเวอร์ชัน dependency (lock file) · ปักหมุดเวอร์ชัน image ด้วย digest |
+| burn rate ≥ 14.4 over both the 1-hour and the 5-minute windows | roll back at once, without waiting for anyone |
+| burn rate ≥ 6 over both the 6-hour and the 30-minute windows | roll back and open an incident |
+| burn rate 1–6 | stop widening, stay at the current step, have a person look |
+| p95 latency above 2 times the old version for 10 minutes (starting value, not yet measured) or the health check fails | roll back |
 
-**ตัวชี้วัดที่ควรดู:** ปล่อยของบ่อยแค่ไหน · จาก commit ถึงขึ้นจริงใช้เวลาเท่าไร ·
-deploy แล้วพังกี่เปอร์เซ็นต์ · กู้คืนใช้เวลาเท่าไร
+During a 5% canary, when the 1-hour window is not yet full, you may use the short window (5 minutes) with the 14.4 criterion. But the request count must first reach the minimum for that step before you trust the number.
 
-**อาการที่เจอบ่อยและจุดแรกที่ดู** (แนวคิดจาก wshobson deployment-pipeline-design)
-
-| อาการ | ดูตรงนี้ก่อน |
+| Required | Criterion |
 |---|---|
-| ผ่านบนเครื่อง ตกบน CI | lock file ไม่ได้ commit · ตัวแปรสภาพแวดล้อมที่มีแค่ในเครื่อง · ชื่อไฟล์ตัวพิมพ์ใหญ่เล็ก (Linux แยก) · time zone ของ runner เป็น UTC |
-| ตกเป็นบางครั้ง | test ที่ผลไม่คงที่ (แถวบน) · job ที่รันพร้อมกันแย่ง port หรือฐานข้อมูลเดียวกัน · runner หน่วยความจำไม่พอ |
-| ช้าขึ้นทุกสัปดาห์ | cache key เปลี่ยนทุกครั้งจึงไม่เคยโดน · image ไม่ pin จึง pull ใหม่ · test ชุดเดียวโตไม่แยก |
-| deploy เขียว แต่ของบนเซิร์ฟเวอร์ไม่เปลี่ยน | ใช้ artifact หรือ tag `latest` ตัวเก่าซ้ำ · cache ของ CDN หรือ reverse proxy · instance เก่ายังรับ traffic |
-| permission denied หรือ secret ว่างบน branch หรือ PR | PR จาก fork ไม่ได้ secret · environment protection rule · token หมดอายุหรือ scope ไม่พอ |
+| Rollback command | works with a single command |
+| Time taken | under 5 minutes |
+| **Real rehearsal** | at least once a quarter, on staging |
+| Data | a migration already applied must not break the old code |
+
+> **A rollback that has never been rehearsed is the same as no rollback**, because you find out it does not work at the moment you need it.
 
 ---
 
-## แอป Android / Flutter — ข้อที่ต่างจากเซิร์ฟเวอร์
+## 10 · The pipeline must be fast and trustworthy
 
-| เรื่อง | กฎ |
+| Problem | Fix |
 |---|---|
-| เลขเวอร์ชัน | `pubspec.yaml` `version: X.Y.Z+N` · `X.Y.Z` ตาม SemVer · **`N` คือ versionCode เป็นจำนวนเต็มที่ขึ้นอย่างเดียว** (เช่นเลขรอบของ CI) · commit hash ส่งผ่าน `--dart-define=GIT_SHA=<hash>` แล้วแสดงในหน้า "เกี่ยวกับ" |
-| build ครั้งเดียว | `flutter build appbundle --release` ได้ Android App Bundle (AAB) ไฟล์เดียว แล้วเลื่อนไฟล์เดิมผ่าน track ของ Play: internal → closed → production · ไม่ build ใหม่ต่อ track |
-| ปล่อยทีละส่วน | production ใช้ staged rollout เป็น % (เช่น 5 → 20 → 50 → 100) แทน canary ของเซิร์ฟเวอร์ · track ของ Play แทน environment ในข้อ 5 |
-| rollback | **ย้อนเวอร์ชันบน Play ไม่ได้** เพราะ versionCode ลดไม่ได้ และเครื่องที่ติดตั้งแล้วไม่ถอยกลับ ให้หยุด rollout (halt) แล้วปล่อยตัวแก้ที่ versionCode สูงกว่า และซ้อมขั้นตอนนี้แทนข้อ 9 |
-| กุญแจเซ็น | upload key เก็บใน secret store ของ CI เป็น base64 + รหัสผ่านแยกเป็น secret · `android/key.properties` และ `*.jks` อยู่ใน `.gitignore` · **สำรองกุญแจไว้นอก CI อย่างน้อย 1 ที่** ถ้าทำหายจะอัปเดตแอปไม่ได้จนกว่าจะขอ Play support รีเซ็ต (ใช้ Play App Signing ให้ Google ถือกุญแจจริง) |
+| Slow | cache dependencies · run several test sets in parallel · move slow tests to a nightly run |
+| Tests with unstable results (flaky) | **quarantine at once** and open a task to fix, because a test that sometimes fails and sometimes passes makes people stop reading results |
+| Everyone waits in the queue | add runners · let pull requests run only the relevant parts |
+| The build is not the same every time | lock dependency versions (lock file) · pin image versions by digest |
+
+**Metrics worth watching:** how often you release · how long from commit to live ·
+what percentage of deploys break · how long recovery takes
+
+**Common symptoms and the first place to look** (idea from wshobson deployment-pipeline-design)
+
+| Symptom | Look here first |
+|---|---|
+| Passes on the machine, fails on CI | lock file not committed · environment variables that exist only locally · file name letter case (Linux tells them apart) · the runner's time zone is UTC |
+| Fails sometimes | flaky tests (row above) · jobs running at the same time fight over the same port or database · runner out of memory |
+| Slower every week | the cache key changes every time so it never hits · an unpinned image is pulled again · one test suite grows and is not split |
+| Deploy is green but nothing changes on the server | reusing an old artifact or the `latest` tag · CDN or reverse proxy cache · an old instance still receives traffic |
+| permission denied or an empty secret on a branch or PR | a PR from a fork gets no secrets · environment protection rule · the token expired or its scope is too small |
+
+---
+
+## Android / Flutter apps — differences from servers
+
+| Topic | Rule |
+|---|---|
+| Version number | `pubspec.yaml` `version: X.Y.Z+N` · `X.Y.Z` follows SemVer · **`N` is the versionCode, an integer that only goes up** (for example the CI run number) · pass the commit hash through `--dart-define=GIT_SHA=<hash>` and show it on the "About" page |
+| Build once | `flutter build appbundle --release` gives one Android App Bundle (AAB) file, then promote that same file through the Play tracks: internal → closed → production · do not rebuild per track |
+| Staged release | production uses a staged rollout in % (for example 5 → 20 → 50 → 100) instead of a server canary · Play tracks stand in for the environments in section 5 |
+| Rollback | **you cannot roll back a version on Play**, because the versionCode cannot go down and devices that already installed it do not go back. Halt the rollout, then release a fix with a higher versionCode, and rehearse this procedure instead of section 9 |
+| Signing key | keep the upload key in the CI secret store as base64 + the password as a separate secret · `android/key.properties` and `*.jks` go in `.gitignore` · **back up the key outside CI in at least 1 place.** If you lose it, you cannot update the app until Play support resets it (use Play App Signing so Google holds the real key) |
 
 ---
 
 ## 11 · Anti-patterns
 
-- **build ใหม่ตอนขึ้น production** ทำให้ของที่ทดสอบไม่ใช่ของที่ปล่อย
-- **deploy ด้วยมือตามขั้นตอนใน Word** · วันไหนคนเขียนลาป่วย วันนั้น deploy ไม่ได้
-- **secret ในไฟล์ pipeline** · ใครอ่านโค้ดได้ก็อ่าน secret ได้
-- **test ตกแล้วปล่อยผ่าน** ทำครั้งเดียว คนก็เลิกเชื่อผลไปตลอด
-- **deploy วันศุกร์เย็น** ในทีมที่ยัง rollback ไม่ได้ด้วยคำสั่งเดียว
-- **migration ของฐานข้อมูลบนเซิร์ฟเวอร์รันตอนแอปบูต** · หลาย instance ชนกัน (ฐานข้อมูลในเครื่องมือถือยกเว้น ดูข้อ 7)
-- **ไม่มี artifact เก็บไว้** ทำให้ rollback กลายเป็นการ build ย้อนจาก commit เก่า
-- **environment ที่ config ต่างกันจนคาดเดาไม่ได้** · "บน staging ผ่านนะ"
-- **feature flag ที่ไม่มีวันลบ**
-- **pipeline ใช้เวลา 45 นาที** คนจะเริ่ม merge โดยไม่รอผล
+- **Rebuilding when going to production** means what was tested is not what is released
+- **Deploying by hand from steps in a Word file** · on the day the author is out sick, nobody can deploy
+- **Secrets in pipeline files** · anyone who can read the code can read the secrets
+- **Letting a failed test pass** once makes people stop trusting results for good
+- **Deploying on Friday evening** in a team that cannot yet roll back with a single command
+- **Server database migration run at app boot** · several instances collide (mobile on-device databases are the exception, see section 7)
+- **No artifact kept** turns a rollback into rebuilding from an old commit
+- **Environments whose config differs unpredictably** · "it passed on staging"
+- **A feature flag with no removal date**
+- **A pipeline that takes 45 minutes** · people start merging without waiting for the result

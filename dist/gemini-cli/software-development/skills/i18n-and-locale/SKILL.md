@@ -3,199 +3,199 @@ name: i18n-and-locale
 description: Use when a system shows text, dates or money in Thai and English
 ---
 
-# ภาษาและรูปแบบท้องถิ่น
+# Language and Locale Formats
 
-> **กฎข้อเดียว:** เก็บเป็นค่ากลาง แปลงตอนแสดงผล
-> เวลาเก็บเป็น UTC ปีเก็บเป็น ค.ศ. ส่วนเงินเก็บเป็นตัวเลขคู่กับรหัสสกุลเงิน
-> อะไรที่ "แปลงไว้ก่อนแล้วค่อยเก็บ" จะกลายเป็นข้อมูลที่แปลงกลับไม่ได้
+> **The one rule:** Store a neutral value, convert at display time.
+> Store time in UTC, store years in C.E. (Common Era), and store money as a number paired with a currency code.
+> Anything "converted first and stored after" becomes data you cannot convert back.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ระบบมีผู้ใช้ทั้งไทยและอังกฤษ หรืออาจมีในอนาคต
-- ต้องแสดงวันที่แบบ พ.ศ. ควบคู่กับการเก็บ ค.ศ.
-- เรียงชื่อภาษาไทยแล้วลำดับไม่ถูก หรือค้นหาแล้วไม่เจอ
-- ข้อความไทยตัดบรรทัดกลางคำ หรือล้นออกนอกปุ่ม
+- The system has Thai and English users, or may have them in the future
+- You must show dates in B.E. (Buddhist Era) while storing C.E.
+- Thai names sort in the wrong order, or search does not find them
+- Thai text breaks a line in the middle of a word, or overflows a button
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-| งาน | ใช้ตัวนี้แทน |
+| Task | Use this instead |
 |---|---|
-| ชนิดข้อมูลวันเวลาในฐานข้อมูล | `database-design` |
-| รูปแบบวันเวลาใน JSON | `api-conventions` |
-| ฟอนต์ไทยและการจัดหน้าเอกสาร | `branded-document-design` |
-| ฟอนต์ไทยบนหน้าจอ | skill แพลตฟอร์ม + `ui-craft` |
+| Date and time data types in the database | `database-design` |
+| Date and time format in JSON | `api-conventions` |
+| Thai fonts and document layout | `branded-document-design` |
+| Thai fonts on screen | the platform skill + `ui-craft` |
 
 ---
 
-## 1 · ข้อความแปล
+## 1 · Translated text
 
-**ห้ามมีข้อความที่ผู้ใช้เห็นฝังอยู่ในโค้ด** แม้โครงการจะมีภาษาเดียววันนี้
+**No user-visible text may be embedded in code**, even if the project has only one language today.
 
 ```
 locales/
-  th.json        ← ภาษาหลัก เป็นแหล่งความจริง
+  th.json        ← main language, the source of truth
   en.json
 ```
 
-| Stack | ไฟล์ข้อความแปล | รูปแบบคีย์ |
+| Stack | Translation files | Key format |
 |---|---|---|
-| เว็บ / ไลบรารีที่ใช้ JSON | `locales/th.json` · `en.json` | จุดคั่นตามที่อยู่ `order.cancel.confirmTitle` |
-| Flutter (`gen-l10n`) | `lib/l10n/app_th.arb` · `app_en.arb` + `l10n.yaml` ที่รากของโฟลเดอร์โค้ด | **camelCase ไม่มีจุด** `orderCancelConfirmTitle` — คีย์ ARB กลายเป็นชื่อ getter ของ Dart จุดจึงใช้ไม่ได้ |
+| Web / libraries that use JSON | `locales/th.json` · `en.json` | Dot-separated by location, `order.cancel.confirmTitle` |
+| Flutter (`gen-l10n`) | `lib/l10n/app_th.arb` · `app_en.arb` + `l10n.yaml` at the root of the code folder | **camelCase, no dots**, `orderCancelConfirmTitle`. An ARB key becomes a Dart getter name, so dots do not work. |
 
-**ตั้งชื่อคีย์ตามที่มันอยู่ ไม่ใช่ตามเนื้อความ:**
+**Name a key by where it lives, not by its content:**
 
 ```jsonc
-// ถูก: เปลี่ยนคำได้โดยไม่ต้องแก้คีย์
+// Right: you can change the wording without changing the key
 "order.cancel.confirmTitle": "ยืนยันการยกเลิกคำสั่งซื้อ"
-// ผิด: พอเปลี่ยนคำ คีย์กับเนื้อหาก็ไม่ตรงกัน
+// Wrong: once the wording changes, the key and the content no longer match
 "ยืนยันการยกเลิก": "ยืนยันการยกเลิกคำสั่งซื้อ"
 ```
 
-| กฎ | เหตุผล |
+| Rule | Reason |
 |---|---|
-| ตัวแปรใช้ชื่อ ไม่ใช่ลำดับ — `"เหลือ {count} รายการ"` | ลำดับคำแต่ละภาษาไม่เหมือนกัน |
-| **ห้ามต่อประโยคจากชิ้นส่วน** | ภาษาอื่นเรียงคำคนละแบบ ประโยคที่ได้จะผิดไวยากรณ์ |
-| คีย์ที่ขาดให้แสดงคีย์ ไม่ใช่ค่าว่าง | ค่าว่างทำให้ปุ่มไม่มีข้อความ และไม่มีใครเห็นว่าพัง |
-| ตรวจใน Continuous Integration (CI) ว่าทุกภาษามีคีย์ครบ | ไม่งั้นจะรู้ตอนลูกค้าเห็นแล้ว |
+| Variables use names, not positions — `"เหลือ {count} รายการ"` | Word order differs in each language |
+| **Never build a sentence from fragments** | Other languages order words differently, so the resulting sentence is ungrammatical |
+| For a missing key, show the key, not an empty value | An empty value leaves a button with no text, and nobody sees that it broke |
+| Check in Continuous Integration (CI) that every language has every key | Otherwise you find out when a customer sees it |
 
 ```
-ผิด: t("มีทั้งหมด") + count + t("รายการ")
-ถูก: t("list.total", { count })
+Wrong: t("มีทั้งหมด") + count + t("รายการ")
+Right: t("list.total", { count })
 ```
 
-**ถ้อยคำในไฟล์ภาษาไทย**
+**Wording in the Thai file**
 
-- เขียนข้อความไทยตรง ๆ จากสิ่งที่หน้าจอต้องบอก ไม่แปลจากคีย์หรือจากข้อความอังกฤษทีละคำ
-- 1 การกระทำ 1 คำทั้งแอป (บันทึก ไม่ใช่ เซฟ ปนกับ บันทึก) · เก็บคู่คำไว้ใน `locales/glossary.md` แล้วตรวจกับไฟล์นี้ทุกครั้งที่เพิ่มคีย์
-- ถ้อยคำบนปุ่ม ป้าย และข้อความ error → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ หน้าจอ
+- Write the Thai text directly from what the screen must say. Do not translate word by word from the key or from English text.
+- 1 action, 1 word across the whole app (บันทึก, not a mix of เซฟ and บันทึก). Keep the word pairs in `locales/glossary.md` and check against that file every time you add a key.
+- For wording on buttons, labels, and error messages, see `human-writing` `references/thai-grammar.md` section 4, screen register.
 
 ---
 
-## 2 · เวลา — เก็บ UTC แสดงตามเขตเวลาผู้ดู
+## 2 · Time — store UTC, show in the viewer's time zone
 
 ```
-เก็บ:   2026-09-25T02:42:13.482Z          (UTC เสมอ)
-แสดง:   25 ก.ย. 2569 09:42                (Asia/Bangkok ของผู้ดู)
+Store:  2026-09-25T02:42:13.482Z          (always UTC)
+Show:   25 ก.ย. 2569 09:42                (viewer's Asia/Bangkok)
 ```
 
-| เรื่อง | กฎ |
+| Topic | Rule |
 |---|---|
-| เวลาที่เกิดเหตุการณ์ | `timestamptz` เก็บเป็น UTC แล้วแปลงตอนแสดง |
-| วันเกิด วันครบกำหนด | `date` ล้วน **ห้ามมีเวลาและโซนเวลา** |
-| "วันนี้" ในรายงาน | ต้องระบุว่าเป็นวันนี้ของเขตเวลาไหน รายงานยอดขายรายวันเพี้ยนเพราะข้อนี้บ่อยมาก |
-| ช่วงเวลาทำการ | เก็บเป็น `time` + เขตเวลาของสาขา |
+| Time an event happened | `timestamptz`, stored as UTC and converted at display time |
+| Birth date, due date | Plain `date`. **No time and no time zone.** |
+| "Today" in a report | Say whose time zone "today" means. Daily sales reports go wrong because of this very often. |
+| Business hours | Store as `time` + the branch's time zone |
 
-> **ไทยไม่มี daylight saving (ปรับเวลาตามฤดู) จึงไม่เคยเจอปัญหา จนถึงวันที่ขายให้ลูกค้าต่างประเทศ**
-> โค้ดที่บวก 7 ชั่วโมงเองจะผิดทันทีที่มีผู้ใช้นอกประเทศ จึงต้องใช้ไลบรารีเขตเวลาเสมอ
+> **Thailand has no daylight saving (seasonal clock change), so it never hits this problem, until the day you sell to a customer abroad.**
+> Code that adds 7 hours by hand breaks the moment a user is outside the country, so always use a time zone library.
 
 ---
 
-## 3 · พุทธศักราช
+## 3 · Buddhist Era
 
-**เก็บ ค.ศ. เสมอ แปลงเป็น พ.ศ. ตอนแสดงผลเท่านั้น** (`พ.ศ. = ค.ศ. + 543`)
+**Always store C.E., and convert to B.E. only at display time.** (`B.E. = C.E. + 543`)
 
-| จุดที่ต้องระวัง | ทำยังไง |
+| Point to watch | What to do |
 |---|---|
-| ผู้ใช้กรอก "2569" | รับเข้ามาแล้วแปลงเป็น 2026 ทันทีที่ชั้นรับข้อมูล |
-| ปี 2 หลัก "69" | **ห้ามเดา** ให้บังคับกรอก 4 หลัก หรือถามให้ชัด · ถ้าสเปกบอกว่าเป็น พ.ศ. 2 หลักแน่ ๆ (เอกสารราชการ) ให้แปลง 2 ขั้นและเขียน test ไว้: `68 → 2568 → 2025` |
-| นำเข้าไฟล์ Excel | ตรวจก่อนว่าคอลัมน์ปีเป็น พ.ศ. หรือ ค.ศ. ถ้าพลาด ปีจะเพี้ยน 543 ปีโดยไม่มี error |
-| ส่งออกให้ระบบอื่น | ส่งเป็น ค.ศ. เสมอ เว้นแต่ปลายทางระบุว่าต้องการ พ.ศ. |
-| เลขไทย ๒๕๖๙ | ใช้แสดงได้ แต่**ห้ามเก็บ** · แปลง ๐–๙ → 0–9 ที่ชั้นรับข้อมูลก่อน parse (ฟอร์มที่ผู้ใช้วางข้อความจากเอกสารราชการเจอบ่อย) |
+| The user enters "2569" | Accept it, then convert to 2026 as soon as it enters the input layer |
+| A 2-digit year "69" | **Never guess.** Force 4 digits, or ask clearly. If the spec says it is definitely a 2-digit B.E. year (official documents), convert in 2 steps and write a test: `68 → 2568 → 2025` |
+| Importing an Excel file | First check whether the year column is B.E. or C.E. If you get it wrong, years are off by 543 with no error |
+| Exporting to another system | Always send C.E., unless the destination says it needs B.E. |
+| Thai digits ๒๕๖๙ | You may display them, but **never store them**. Convert ๐–๙ → 0–9 at the input layer before parsing (forms where users paste text from official documents hit this often) |
 
-**ถ้าระบบมีผู้ใช้ทั้ง 2 แบบ ให้ผู้ใช้เลือกปฏิทินได้** แต่ค่าที่เก็บยังเป็นแบบเดิม
+**If the system has both kinds of users, let the user pick the calendar**, but the stored value stays the same.
 
-**ตัวตรวจ** — เขียนสคริปต์สั้น ๆ กวาดโค้ดหา ข้อความไทยที่ฝังในโค้ดนอกไฟล์แปล · ตัวเลขปี 25xx ที่เขียนตายตัว · `new Date("…")` ที่รับสตริงไม่ระบุเขตเวลา แล้วรันใน CI ก่อน merge (แนวคิดจาก BV thai-date-format: ตัวแปลงต้องมี test ของมันเอง)
+**Checker** — write a short script that sweeps the code for Thai text embedded in code outside the translation files · hard-coded year numbers 25xx · `new Date("…")` that takes a string with no time zone. Run it in CI before merge. (The idea comes from BV thai-date-format: a converter needs its own tests.)
 
 ---
 
-## 4 · การเรียงลำดับและการค้นหาภาษาไทย
+## 4 · Sorting and searching Thai
 
-การเรียงแบบมาตรฐาน (ตามรหัสอักขระ) **ผิดสำหรับภาษาไทย** เพราะสระหน้าอย่าง เ แ โ ใ ไ
-อยู่หน้าพยัญชนะที่มันออกเสียงตาม
+Standard sorting (by character code) **is wrong for Thai**, because leading vowels such as เ แ โ ใ ไ
+sit before the consonant they are pronounced after.
 
-| ต้องการ | ทำยังไง |
+| Need | What to do |
 |---|---|
-| เรียงชื่อไทย | ใช้ collation ของภาษาไทย เช่น PostgreSQL `th-TH-x-icu` และ SQL Server `Thai_100_CI_AS` |
-| เรียงชื่อไทยในแอป Flutter | Dart ไม่มี collation ไทยในตัว (`compareTo` เรียงตามรหัสอักขระ) จึงต้องใช้ `Collator` ของ platform ผ่าน plugin หรือ platform channel ถ้าไม่คุ้มให้เรียงตามเวลาที่สร้างแทนแล้วบอกผู้ใช้ (ยังไม่ได้ตรวจ package ที่ทำเรื่องนี้) |
-| ค้นหาไม่สนตัวพิมพ์และวรรณยุกต์ | normalize ข้อความก่อน แล้วเก็บลงคอลัมน์ค้นหาที่แยกไว้ต่างหาก |
-| ค้นหาคำกลางประโยค | ภาษาไทยไม่มีเว้นวรรค full-text search ที่แบ่งคำด้วยเว้นวรรคจึงใช้ไม่ได้ |
+| Sort Thai names | Use a Thai collation, such as PostgreSQL `th-TH-x-icu` and SQL Server `Thai_100_CI_AS` |
+| Sort Thai names in a Flutter app | Dart has no built-in Thai collation (`compareTo` sorts by character code), so use the platform `Collator` through a plugin or platform channel. If that is not worth it, sort by creation time instead and tell the user. (`ยังไม่ได้ตรวจ` any package that does this) |
+| Search ignoring case and tone marks | Normalize the text first, then store it in a separate search column |
+| Search for a word mid-sentence | Thai has no spaces, so full-text search that splits words on spaces does not work |
 
-> **ภาษาไทยเขียนติดกันไม่มีเว้นวรรคระหว่างคำ** จึงกระทบ 3 เรื่อง:
-> ค้นหา (ต้องมีตัวตัดคำ) · ตัดบรรทัด (เบราว์เซอร์ตัดกลางคำ) · ตัดข้อความด้วย `...`
+> **Thai is written without spaces between words**, which affects 3 things:
+> search (you need a word segmenter) · line breaking (browsers break mid-word) · truncating text with `...`
 >
-> เรื่องตัดบรรทัด: เบราว์เซอร์หลักตัดคำไทยด้วยพจนานุกรมให้อยู่แล้ว **ห้ามใส่ `word-break: break-all`** เพราะจะตัดกลางคำ
-> (`line-break: strict` เปลี่ยนแค่กฎเครื่องหมายวรรคตอนของจีน ญี่ปุ่น เกาหลี ไม่ช่วยภาษาไทย)
-> แล้วทดสอบด้วยข้อความไทยจริง อย่าทดสอบด้วย Lorem ipsum เพราะมีเว้นวรรคทุกคำ
+> On line breaking: major browsers already break Thai with a dictionary. **Never add `word-break: break-all`**, because it breaks mid-word.
+> (`line-break: strict` only changes the punctuation rules for Chinese, Japanese, and Korean, and does not help Thai.)
+> Then test with real Thai text. Do not test with Lorem ipsum, because it has a space after every word.
 >
-> Flutter `Text` ตัดบรรทัดไทยด้วยตัวตัดคำของ engine เอง และไม่มี CSS ให้ตั้ง
-> จึงต้องตรวจด้วยข้อความไทยยาวจริงบนเครื่องจริงทั้ง 2 ขนาดจอ แล้วเผื่อ `maxLines` + `overflow: TextOverflow.ellipsis`
+> Flutter `Text` breaks Thai lines with the engine's own word segmenter and has no CSS to set.
+> So check with real long Thai text on a real device at both screen sizes, and allow for `maxLines` + `overflow: TextOverflow.ellipsis`.
 
 ---
 
-## 5 · ตัวเลข เงิน และหน่วย
+## 5 · Numbers, money, and units
 
-| ข้อมูล | เก็บ | แสดง |
+| Data | Store | Show |
 |---|---|---|
-| เงิน | ทศนิยมแบบตรงตัว ไม่ใช่ float (ฐานข้อมูลใช้ `decimal(19,4)` ตาม `stack-sql`) + รหัสสกุลเงิน | `1,250.00 บาท` หรือ `฿1,250.00` |
-| ตัวคั่นหลักพันและจุดทศนิยม | ไม่เก็บ | ตามท้องถิ่น บางประเทศใช้สลับกับไทย |
-| เปอร์เซ็นต์ | เก็บเป็นสัดส่วนทศนิยม (`0.075`) หรือ basis points (`750` = 7.5%) **เลือกแบบเดียวทั้งระบบ** · ห้ามเก็บเป็นจำนวนเต็มเปอร์เซ็นต์ เพราะ 7.5% จะกลายเป็น 7 หรือ 8 | `7.5%` |
-| ที่อยู่ | แยกฟิลด์ตามโครงของไทย (แขวง/เขต หรือ ตำบล/อำเภอ) | |
-| เบอร์โทร | เก็บรูปแบบสากล `+66812345678` | แสดง `081-234-5678` |
+| Money | Exact decimal, not float (in the database use `decimal(19,4)` per `stack-sql`) + currency code | `1,250.00 บาท` or `฿1,250.00` |
+| Thousands separator and decimal point | Not stored | Per locale. Some countries swap them relative to Thailand. |
+| Percent | Store as a decimal fraction (`0.075`) or basis points (`750` = 7.5%). **Pick one form for the whole system.** Never store as a whole-number percent, because 7.5% would become 7 or 8 | `7.5%` |
+| Address | Separate fields following the Thai structure (แขวง/เขต or ตำบล/อำเภอ — sub-district/district) | |
+| Phone number | Store in international format `+66812345678` | Show `081-234-5678` |
 
-**พหูพจน์และเพศ** — ภาษาไทยไม่มีรูปพหูพจน์ แต่ภาษาอังกฤษมี
-จึงควรให้ไลบรารีจัดการ อย่าเขียน `if (count > 1)` เอง เพราะบางภาษามีมากกว่า 2 รูป
+**Plurals and gender** — Thai has no plural form, but English does.
+So let a library handle it. Do not write `if (count > 1)` yourself, because some languages have more than 2 forms.
 
 ---
 
-## 6 · หน้าจอ
+## 6 · Screens
 
-| เรื่อง | กฎ |
+| Topic | Rule |
 |---|---|
-| ความยาวข้อความ | อังกฤษยาวกว่าไทยได้ถึง 1.5 เท่า จึงต้อง**เผื่อที่ อย่าตรึงความกว้างปุ่ม** |
-| ความสูงบรรทัด | ไทยต้องการมากกว่า เพราะมีสระบนและวรรณยุกต์ซ้อนกัน 2 ชั้น |
-| ฟอนต์ | ต้องมีน้ำหนักครบทั้งไทยและอังกฤษ ไม่งั้นระบบจะวาดตัวหนาปลอมขึ้นเอง |
-| ทดสอบ | ทดสอบด้วยข้อความจริงของทั้ง 2 ภาษา **ไม่ใช่ Lorem ipsum** |
-| สลับภาษา | จำค่าไว้ที่โปรไฟล์ผู้ใช้ ไม่ใช่แค่ใน session ส่วนแอปที่ไม่มีบัญชีผู้ใช้ (แอปมือถือออฟไลน์) ให้เก็บค่าในเครื่อง โดยค่าเริ่มต้นคือ "ตามภาษาของเครื่อง" |
-| ส่งออก CSV ให้คนไทยเปิดใน Excel | ใช้ UTF-8 แบบ**มี BOM** (ไม่งั้นไทยเพี้ยน) ทศนิยมใช้ `.` และเวลาเป็น ISO 8601 UTC เช่น `2026-10-05T03:15:00Z` ดูเพิ่มที่ `data-import-export` |
+| Text length | English can be up to 1.5 times longer than Thai, so **leave room and do not fix a button's width** |
+| Line height | Thai needs more, because upper vowels and tone marks stack 2 levels high |
+| Fonts | Must have every weight for both Thai and English, or the system draws a fake bold |
+| Testing | Test with real text in both languages, **not Lorem ipsum** |
+| Switching language | Save the choice in the user profile, not only in the session. For an app with no user accounts (an offline mobile app), store the value on the device, with the default "follow the device language". |
+| Exporting CSV for Thai users to open in Excel | Use UTF-8 **with a BOM** (otherwise Thai text is garbled). Use `.` for decimals and ISO 8601 UTC for time, such as `2026-10-05T03:15:00Z`. See also `data-import-export`. |
 
 ---
 
 ## 7 · Anti-patterns
 
-- **ข้อความฝังในโค้ด** เพราะ "ตอนนี้มีภาษาเดียว"
-- **ต่อประโยคจากชิ้นส่วน** — ภาษาอื่นเรียงคำคนละแบบ
-- **เก็บ พ.ศ. ลงฐานข้อมูล** — ทุกฟังก์ชันจะคำนวณช่วงเวลาผิด
-- **บวก 7 ชั่วโมงเองในโค้ด** — พังทันทีที่มีผู้ใช้นอกเขตเวลาไทย
-- **เรียงชื่อไทยด้วย collation มาตรฐาน** — ลำดับผิดโดยไม่มี error
-- **ทดสอบหน้าจอด้วย Lorem ipsum** — ไม่เจอปัญหาการตัดบรรทัดของไทยเลย
-- **`if (count > 1) "s"`** — ใช้ได้แค่ภาษาอังกฤษ
-- **ปี 2 หลัก** — "69" คือ 1969, 2069 หรือ 2569
-- **นำเข้า Excel โดยไม่ถามว่าปีเป็น พ.ศ. หรือ ค.ศ.** — ปีเพี้ยน 543 ปีโดยไม่มีอะไรเตือน
-- **คีย์แปลที่หายแล้วแสดงค่าว่าง** — ได้ปุ่มเปล่าที่ไม่มีใครสังเกต
+- **Text embedded in code** because "there is only one language for now"
+- **Building a sentence from fragments** — other languages order words differently
+- **Storing B.E. in the database** — every function will compute time spans wrongly
+- **Adding 7 hours by hand in code** — breaks the moment there are users outside the Thai time zone
+- **Sorting Thai names with the standard collation** — wrong order with no error
+- **Testing screens with Lorem ipsum** — you never see Thai line-breaking problems
+- **`if (count > 1) "s"`** — works only for English
+- **2-digit years** — "69" is 1969, 2069, or 2569
+- **Importing Excel without asking whether the year is B.E. or C.E.** — years are off by 543 with nothing to warn you
+- **A translation key that is missing and shows an empty value** — you get an empty button nobody notices
 
 ---
 
-## 8 · ตัวย่อ
+## 8 · Abbreviations
 
-- **i18n** — internationalization (การทำให้รองรับหลายภาษาและท้องถิ่น ที่ย่อแบบนี้เพราะมีตัวอักษร 18 ตัวระหว่าง i กับ n)
-- **locale** — ชุดค่าประจำท้องถิ่น ได้แก่ ภาษา รูปแบบวันที่ ตัวเลข และสกุลเงิน
-- **collation** — กฎการเรียงลำดับและเปรียบเทียบข้อความของฐานข้อมูล
-- **UTC** — Coordinated Universal Time (เวลามาตรฐานสากล ไทยคือ UTC+7)
-- **ICU** — International Components for Unicode (ไลบรารีมาตรฐานสำหรับกฎภาษาและการเรียงลำดับ)
-- **BCP 47** — Best Current Practice (BCP) 47 มาตรฐานรหัสภาษา เช่น `th-TH`, `en-US`
-- **ARB** — Application Resource Bundle (ไฟล์ข้อความแปลแบบ JSON ที่ Flutter `gen-l10n` ใช้)
-- **BOM** — Byte Order Mark (3 ไบต์ต้นไฟล์ที่บอก Excel ว่าเป็น UTF-8)
+- **i18n** — internationalization (making software support many languages and locales; abbreviated this way because 18 letters sit between i and n)
+- **locale** — the set of local conventions: language, date format, numbers, and currency
+- **collation** — a database's rules for ordering and comparing text
+- **UTC** — Coordinated Universal Time (the world standard time; Thailand is UTC+7)
+- **ICU** — International Components for Unicode (the standard library for language rules and sorting)
+- **BCP 47** — Best Current Practice (BCP) 47, the standard for language codes such as `th-TH`, `en-US`
+- **ARB** — Application Resource Bundle (the JSON-style translation file that Flutter `gen-l10n` uses)
+- **BOM** — Byte Order Mark (the 3 bytes at the start of a file that tell Excel it is UTF-8)
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Links to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use with |
 |---|---|
-| ชนิดข้อมูลวันเวลาและ collation | `database-design` |
-| รูปแบบวันเวลาและเงินใน JSON | `api-conventions` |
-| ข้อความ error ที่ต้องแปล | `error-handling-patterns` |
-| ฟอนต์ไทยบนหน้าจอ | `ui-craft` + skill แพลตฟอร์ม |
-| ฟอนต์ไทยในเอกสารและสไลด์ | `branded-document-design` · `presentation-design` |
-| นำเข้าไฟล์ที่ปีเป็น พ.ศ. · ส่งออก CSV ที่ Excel เปิดแล้วไทยไม่เพี้ยน | `data-import-export` |
-| แม่แบบข้อความแจ้งเตือนหลายภาษา | `notifications` |
-| แปลเอกสารหรือข้อความหน้าจอทั้งชุด ไทย↔อังกฤษ · glossary ต่อโปรเจกต์ | `translate-th-en` (plugin `superuser`) |
-| ตัดคำ · ถอดเสียงเป็นอักษรโรมัน · ตรวจเลขบัตรประชาชน ในโค้ด | [`references/thai-text-tools.md`](references/thai-text-tools.md) |
+| Date and time data types and collation | `database-design` |
+| Date, time, and money format in JSON | `api-conventions` |
+| Error messages that must be translated | `error-handling-patterns` |
+| Thai fonts on screen | `ui-craft` + the platform skill |
+| Thai fonts in documents and slides | `branded-document-design` · `presentation-design` |
+| Importing files with B.E. years · exporting CSV that opens in Excel without garbled Thai | `data-import-export` |
+| Multi-language notification message templates | `notifications` |
+| Translating a whole set of documents or screen text, Thai↔English · a glossary per project | `translate-th-en` (plugin `superuser`) |
+| Word segmentation · transliteration to Roman letters · validating national ID numbers in code | [`references/thai-text-tools.md`](references/thai-text-tools.md) |

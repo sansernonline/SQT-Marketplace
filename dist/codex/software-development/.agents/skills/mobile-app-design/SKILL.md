@@ -5,191 +5,191 @@ description: Use when designing a phone app screen or mockup
 
 # Mobile App Design
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Gate before starting (every time):** read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending. Follow the "gate before starting" section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search is for the structure of this piece). Close the work with a line `ด่านก่อนลงมือ:`.
 
-> **กฎข้อเดียว:** หน้าจอมือถือมีที่ให้แสดงน้อยกว่าที่คุณคิดครึ่งหนึ่ง
-> ทุกอย่างที่ไม่ใช่เนื้อหาต้องเงียบลงจนแทบมองไม่เห็น
+> **One rule:** a phone screen has half the room you think it has.
+> Everything that is not content must go quiet until it is almost invisible.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ทำหน้าจอแอปมือถือ: รายการเนื้อหา, บทสนทนา/แชท, หน้าสรุปผล, ตั้งค่า, onboarding
-- PWA · เว็บที่ห่อเป็นแอป (Capacitor / Cordova / WebView) · React Native · Flutter
-- แอปที่มีเนื้อหาให้อ่านเยอะ — เรียนภาษา, อ่านบทความ, คอร์สออนไลน์
-- ต้องรองรับไทย–อังกฤษปนกัน
+- Making phone app screens: content lists, conversation/chat, result summary, settings, onboarding
+- PWA · web wrapped as an app (Capacitor / Cordova / WebView) · React Native · Flutter
+- Apps with a lot of content to read: language learning, article reading, online courses
+- Must support mixed Thai–English
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-- เว็บแอปบนเดสก์ท็อป (แดชบอร์ด/admin) ให้ใช้ `web-app-design`
-- แอปเดสก์ท็อป Windows ให้ใช้ `windows-app-design`
-- เอกสาร .docx/.pptx ให้ใช้ `branded-document-design`
+- Desktop web apps (dashboard/admin): use `web-app-design`
+- Windows desktop apps: use `windows-app-design`
+- .docx/.pptx documents: use `branded-document-design`
 
 ---
 
-## 1 · ลำดับการทำงาน — mockup ก่อนเสมอ (ยกเว้น Flutter / native ดูข้อ 4.1)
+## 1 · Work order: mockup first, always (except Flutter / native, see section 4.1)
 
-> **โปรเจกต์มีหน้าจออยู่แล้ว → ลอกหน้าเดิมตาม `ui-craft` ข้อ 0 ไม่ใช้ speakgo** (ยกเว้นสั่งออกแบบใหม่ หรือหน้าเดิมยังไม่ผ่านด่านสวย) · ลำดับด้านล่างสำหรับโปรเจกต์ที่ยังไม่มีหน้าตาเลย หรือกำลังออกแบบใหม่ · speakgo ให้แค่คลาสคอมโพเนนต์และค่าสำรอง หน้าตาของงานมาจาก `theme.css` ที่ได้จากการค้น
+> **The project already has screens → copy the existing pages per `ui-craft` section 0, and do not use speakgo** (unless told to redesign, or the existing pages have not yet passed the beauty gate). The order below is for projects with no look yet, or being redesigned. speakgo gives only component classes and fallback values. The look of the work comes from the `theme.css` produced by the search.
 
 ```
-0. ทิศทางภาพตาม ui-craft ข้อ 0.1 (ค้นต้นแบบตาม design-references ประเภท app แล้วถอดสี · หน้าจอพระเอก · แอปอ้างอิง · 3 แนว · เลือก 1 · โลโก้) → คัดลอก assets/theme-template.css เป็น mockup/theme.css แล้วเติมค่าทั้ง 4 กลุ่มในข้อ 2 จากแนวที่เลือก พร้อมที่มาทุกค่า
-1. คัดลอก assets/mockup-template.html + assets/speakgo.css ไปไว้คู่กับ theme.css (หน้าตาค่าสำรอง: assets/mockup-template-preview.webp · ไม่ใช่เป้าหมาย)
-   รูปแบบนำทาง (แท็บล่าง · ลิ้นชัก · หน้าเดียว) เลือกจากต้นแบบที่ค้นและจำนวนงานหลักของแอป ไม่ยึดแม่แบบ
-2. แก้เนื้อหาให้เป็นหน้าจริง (ยังไม่แตะโค้ดแอป)
-3. python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 390 --height 844   # iPhone
-   python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 360 --height 800   # Android
-   python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 430 --height 932   # Pro Max
-4. เปิดภาพดูจริงทุกขนาด แก้จนพอใจ แล้วค่อยให้คนอื่นรีวิว
-5. อนุมัติแล้วจึงแปลงเป็นโค้ดจริง — ใช้ token ชุดเดิม ไม่ออกแบบใหม่
+0. Visual direction per ui-craft section 0.1 (search references per design-references type app, then extract colours · hero screen · reference apps · 3 directions · choose 1 · logo) → copy assets/theme-template.css to mockup/theme.css and fill the 4 groups of values in section 2 from the chosen direction, with the source of every value
+1. Copy assets/mockup-template.html + assets/speakgo.css next to theme.css (fallback look: assets/mockup-template-preview.webp · not the goal)
+   Choose the navigation style (bottom tabs · drawer · single page) from the references found and the number of main tasks in the app. Do not follow the template.
+2. Edit the content into real pages (do not touch the app code yet)
+3. python scripts/screenshot.py mockup/<code>-mockup.html _to_delete/screenshots/ --width 390 --height 844   # iPhone
+   python scripts/screenshot.py mockup/<code>-mockup.html _to_delete/screenshots/ --width 360 --height 800   # Android
+   python scripts/screenshot.py mockup/<code>-mockup.html _to_delete/screenshots/ --width 430 --height 932   # Pro Max
+4. Open the images and really look at every size. Fix until satisfied, then let others review
+5. Convert to real code only after approval. Use the same tokens; do not redesign
 ```
 
-**mockup ส่งมอบเป็นไฟล์เดียว** (`mockup/<รหัส>-mockup.html` ทุกหน้าจอเป็น section) → ฝังเนื้อ `speakgo.css` แล้วตามด้วย `theme.css` ลงใน `<style>` แทน `<link>` ก่อนส่ง
+**The mockup is delivered as a single file** (`mockup/<code>-mockup.html`, every screen a section). Before sending, embed the content of `speakgo.css` followed by `theme.css` in `<style>` instead of `<link>`.
 
-ถ้าเป็น Flutter / Android native ให้ข้ามไปทำตาม **ข้อ 4.1** ได้เลย จะทำ mockup HTML ด้วยหรือไม่ก็ได้ แต่ภาพที่ใช้ตรวจต้องมาจากแอปจริง
+For Flutter / Android native, skip straight to **section 4.1**. Making an HTML mockup too is optional, but the images used for checking must come from the real app.
 
-เปิด mockup บนจอคอมกว้างกว่า 560px จะเห็นเป็น **กรอบเครื่องลอยบนพื้นเข้ม**
-ส่งลิงก์ให้ลูกค้าดูได้เลยโดยไม่ต้องอธิบายว่านี่คือหน้าจอมือถือ
+Opened on a desktop screen wider than 560px, the mockup shows as a **device frame floating on a dark background**.
+You can send the link to the client without explaining that this is a phone screen.
 
 ---
 
 ## 2 · Design tokens
 
-> **หน้าตามาจากการค้นของงานนี้ — ไม่หยุดถาม**
-> ลำดับหาค่า: `doc-theme` ของโปรเจกต์ หรือสีและฟอนต์แบรนด์ (มีแล้วใช้เลย) → ต้นแบบแอปที่ค้นสดตาม `design-references` (ประเภท app) และพาเลตที่ถอดด้วย `design-direction-lookup` ข้อ 2 → ค้นไม่ได้เลย (ไม่มีเน็ต · ผู้ใช้สั่งใช้ของเดิม) จึงใช้ค่าสำรองใน `assets/speakgo.css` เขียน `(รอยืนยัน)` แล้วทำต่อ
-> ตารางเนื้องานกับโทนสีใน `diagram-figures` ข้อ 5 เป็นจุดตั้งต้นของคำค้น ไม่ใช่คำตอบ
+> **The look comes from this job's search. Do not stop to ask.**
+> Order for finding values: the project's `doc-theme`, or brand colours and fonts (if they exist, use them at once) → app references found live per `design-references` (type app) and the palette extracted per `design-direction-lookup` section 2 → only if nothing can be searched (no internet · user says keep the existing look) use the fallback values in `assets/speakgo.css`, write `(รอยืนยัน)` (awaiting confirmation) and carry on.
+> The table of work type and colour tone in `diagram-figures` section 5 is a starting point for search terms, not the answer.
 
-**ค่าไหนตายตัว ค่าไหนมาจากการค้น**
+**Which values are fixed and which come from the search**
 
-| กลุ่ม | token | มาจาก | ค่าสำรอง (speakgo) |
+| Group | token | Comes from | Fallback (speakgo) |
 |---|---|---|---|
-| สี | `--signal` `--signal-soft` · `--tile1` `--tile2` · พื้นและข้อความเมื่อแนวที่เลือกต้องการ | แบรนด์ลูกค้า → พาเลตที่ถอดจากต้นแบบแอปในวงการ | เขียวน้ำทะเลของ Speak Go |
-| ฟอนต์ | `--ui` `--dis` `--text` `--mono` (หน้าที่ 4 ช่องคงไว้ ฟอนต์ในแต่ละช่องเปลี่ยนได้) | ฟอนต์แบรนด์ → คู่ฟอนต์ไทย-ละตินที่ต้นแบบใช้ · แอปเครื่องมือใช้ฟอนต์ระบบได้ (ข้อ 3) | IBM Plex Sans Thai · Space Grotesk · Source Serif 4 · system mono |
-| รูปทรง | `--r-tile` `--r-card` `--r-field` `--r-pill` · `--shadow-card` `--shadow-float` | แนวที่เลือก | ตามไฟล์ speakgo |
-| เลย์เอาต์ | `--app-max` `--gutter` | ขนาดเครื่องเป้าหมายและความแน่นของงาน | 430 · ตามไฟล์ |
-| **ตายตัวทุกงาน** | ใช้ token เท่านั้น · คอนทราสต์ ≥ 4.5:1 · สีสถานะตามความหมาย · ชื่อ token ตามหน้าที่ · กฎมือถือข้อ 4 (`100dvh` · safe area · เป้าแตะ 44/48) | กฎของระบบ ไม่ขึ้นกับงาน | — |
+| colour | `--signal` `--signal-soft` · `--tile1` `--tile2` · background and text when the chosen direction needs it | client brand → palette extracted from industry app references | Speak Go sea green |
+| fonts | `--ui` `--dis` `--text` `--mono` (keep the 4 roles; the font in each slot can change) | brand font → the Thai-Latin font pair the references use · tool apps may use system fonts (section 3) | IBM Plex Sans Thai · Space Grotesk · Source Serif 4 · system mono |
+| shape | `--r-tile` `--r-card` `--r-field` `--r-pill` · `--shadow-card` `--shadow-float` | chosen direction | as in the speakgo file |
+| layout | `--app-max` `--gutter` | target device size and how dense the work is | 430 · as in the file |
+| **fixed for every job** | tokens only · contrast ≥ 4.5:1 · status colours by meaning · token names by role · mobile rules in section 4 (`100dvh` · safe area · touch targets 44/48) | system rules, independent of the job | none |
 
-ค่าของงานอยู่ใน `theme.css` ไฟล์เดียว (แม่แบบ `assets/theme-template.css`) · ทุกบรรทัดมีคอมเมนต์ที่มา · `speakgo.css` ไม่แก้
+The values of the job live in a single `theme.css` (template `assets/theme-template.css`). Every line has a comment with its source. Do not edit `speakgo.css`.
 
-token ทั้งหมดอยู่ใน `assets/speakgo.css` ส่วนตารางเต็มอยู่ใน **`references/tokens.md`**
+All tokens are in `assets/speakgo.css`, and the full table is in **`references/tokens.md`**.
 
-| Token | หน้าที่ | ได้มาจาก |
+| Token | Role | Comes from |
 |---|---|---|
-| พื้นหน้าจอ / การ์ด | พื้นเป็น**เทาอ่อน ไม่ใช่ขาว** การ์ดจะได้ลอยขึ้นมาโดยไม่ต้องมีเงา | เทาอ่อนมาก / ขาว |
-| ข้อความ 3 ระดับ | หลัก · รอง · จาง | ไล่จากเข้มไปอ่อน ข้อความหลักต้อง contrast ≥ 4.5:1 |
-| `--signal` (accent) | แท็บที่เลือก · ความคืบหน้า · ปุ่มหลัก | `doc-theme` → สีแบรนด์ → ไม่มีใช้ `#2A78D6` + `(รอยืนยัน)` |
-| ไทล์ไล่สี | ปลายสองข้างของ gradient | สีหลัก → สีข้างเคียงบนวงล้อสี |
-| สีบอกสถานะของเนื้อหา | ต้องแก้ · คำใบ้ · ถูกใจ — **มีสีพื้นอ่อนคู่กันทุกตัว** | ตามความหมาย ไม่ตามแบรนด์ |
+| screen / card background | The background is **light grey, not white**, so cards lift up without needing a shadow | very light grey / white |
+| 3 text levels | primary · secondary · faint | from dark to light; primary text needs contrast ≥ 4.5:1 |
+| `--signal` (accent) | selected tab · progress · primary button | `doc-theme` → brand colour → if none, `#2A78D6` + `(รอยืนยัน)` |
+| gradient tile | the two ends of the gradient | main colour → a neighbouring colour on the colour wheel |
+| content status colours | needs fixing · hint · liked: **each has a matching soft background** | by meaning, not by brand |
 
-**สีที่บอกสถานะไม่เปลี่ยนตามแบรนด์** — แดงคือจุดที่ต้องแก้ ไม่ว่าแบรนด์จะเป็นสีอะไร
-ถ้าสีแบรนด์ชนกับสีสถานะ ให้เลี่ยงการใช้แบรนด์ในบริบทนั้น ไม่ใช่เปลี่ยนสีสถานะ
+**Status colours do not change with the brand.** Red marks a place that needs fixing, whatever colour the brand is.
+If the brand colour clashes with a status colour, avoid using the brand in that context. Do not change the status colour.
 
-**ชื่อ token ตั้งตามหน้าที่ ไม่ใช่ตามสี** — `--repair` ไม่ใช่ `--red`
-วันที่เปลี่ยนใจว่าจุดที่ต้องแก้ควรเป็นสีส้ม แก้ค่าเดียวโดยชื่อยังถูกอยู่
+**Name tokens by role, not by colour.** Use `--repair`, not `--red`.
+The day you decide that fix marks should be orange, you change one value and the name is still right.
 
-`assets/speakgo.css` มาพร้อมชุดสีหนึ่งชุดที่**ประกอบครบแล้ว** เป็นค่าสำรองเมื่อค้นไม่ได้ ไม่ใช่ค่าเริ่มของทุกงาน
+`assets/speakgo.css` ships with one **fully built** colour set. It is a fallback for when searching is impossible, not the default for every job.
 
 ---
 
-## 3 · ฟอนต์ 4 หน้าที่ — หัวใจของระบบนี้ (สำหรับแอปที่มีเนื้อหาให้อ่าน)
+## 3 · The 4 font roles: the heart of this system (for apps with content to read)
 
-สิ่งที่ตายตัวคือ **หน้าที่ 4 ช่อง** ฟอนต์ในตารางเป็นค่าสำรอง ฟอนต์ของงานเลือกจากการค้น (ข้อ 2) แล้วใส่ใน `theme.css`
+What is fixed is the **4 roles**. The fonts in the table are fallbacks. Choose the job's fonts from the search (section 2) and put them in `theme.css`.
 
-> แอปเครื่องมือที่ไม่มีเนื้อหาให้อ่านยาว ๆ (เครื่องวัด เครื่องคิดเลข ตัวจับเวลา) ใช้ฟอนต์ระบบได้
-> อย่างมากเพิ่มตระกูลเดียวสำหรับตัวเลขใหญ่ — ไม่ต้อง bundle 4 ตระกูลให้ไฟล์แอปโตเปล่า ๆ
+> Tool apps with no long reading content (meters, calculators, timers) may use system fonts.
+> At most add one family for large numbers. Do not bundle 4 families and make the app file bigger for nothing.
 
-| Token | ฟอนต์สำรอง | หน้าที่ |
+| Token | Fallback font | Role |
 |---|---|---|
-| `--ui` | IBM Plex Sans Thai | ปุ่ม เมนู ป้าย ชื่อหน้า — ทุกอย่างที่เป็น "แอป" |
-| `--dis` | Space Grotesk | ตัวเลขใหญ่ — คะแนน สถิติ |
-| `--text` | Source Serif 4 | เนื้อหาที่ผู้ใช้ต้อง **อ่าน** — บับเบิล ประโยคตัวอย่าง |
-| `--mono` | system mono | ป้ายกำกับพิมพ์ใหญ่ + `letter-spacing:.14em` — META · LEVEL · TURN 5/12 |
+| `--ui` | IBM Plex Sans Thai | buttons, menus, labels, page titles: everything that is "the app" |
+| `--dis` | Space Grotesk | large numbers: scores, stats |
+| `--text` | Source Serif 4 | content the user must **read**: bubbles, example sentences |
+| `--mono` | system mono | uppercase labels + `letter-spacing:.14em`: META · LEVEL · TURN 5/12 |
 
-**แอปที่มีเนื้อหาให้อ่าน อย่ายุบให้เหลือตระกูลเดียว** — การแยกฟอนต์ทำให้ผู้ใช้แยก "สิ่งที่แอปพูด"
-ออกจาก "ปุ่มของแอป" ได้ทันทีโดยไม่ต้องพึ่งสี ซึ่งสำคัญมากบนจอเล็ก
+**For apps with content to read, do not collapse to one family.** Separate fonts let users tell "what the app says"
+from "the app's buttons" at once without relying on colour, which matters a lot on a small screen.
 
-`body[data-lang="en"]` สลับ `--ui` เป็น Space Grotesk เมื่อ UI เป็นอังกฤษล้วน
+`body[data-lang="en"]` switches `--ui` to Space Grotesk when the UI is all English.
 
 ---
 
-## 4 · โครงหน้าจอ
+## 4 · Screen layout
 
-ภาพโครงหน้าจอ (`#app` กว้างไม่เกิน 430px · `100dvh` · appbar · `.screen` เลื่อนได้ · tabbar 3–5 แท็บ · `.overlay` เต็มจอแทน modal สำหรับงานที่ใช้เวลานาน) อยู่ใน [`references/screen-and-components.md`](references/screen-and-components.md)
+The screen layout diagram (`#app` at most 430px wide · `100dvh` · appbar · scrollable `.screen` · tabbar with 3–5 tabs · full-screen `.overlay` instead of a modal for long tasks) is in [`references/screen-and-components.md`](references/screen-and-components.md).
 
-กฎที่คนทำเว็บมาทำมือถือมักพลาด:
+Rules that people coming from the web often get wrong when doing mobile:
 
-- **`100dvh` ไม่ใช่ `100vh`** — `vh` ไม่หดตามแถบที่อยู่ของเบราว์เซอร์ เนื้อหาท่อนล่างจะโดนบัง
-- **`env(safe-area-inset-*)`** ที่ appbar/tabbar/dock + `viewport-fit=cover` ใน meta viewport
-  ไม่งั้นชนรอยบากบนและ home indicator ล่าง
-- **เลื่อนที่ `.screen` ไม่ใช่ที่ `body`** — ตั้ง `body{overflow:hidden}` แถบบน/ล่างจะได้อยู่นิ่ง
-- **ไม่มี hover บนมือถือ** — สถานะที่ผู้ใช้เห็นได้มีแค่ `:active` ทุกอย่างที่กดได้ต้องยุบ
-  (`transform:scale(.98)`) และตั้ง `-webkit-tap-highlight-color:transparent`
-- **เป้าแตะ ≥ 44×44 pt บน iOS (แนวทาง Apple) · ≥ 48×48 dp บน Android (Material)** — ปุ่มไอคอน 38px ต้องมี padding รอบให้ถึง ส่วนแอปที่ลงทั้งสองระบบให้ใช้ 48
-- **แท็บล่าง 3–5 อัน** เกินนั้นนิ้วโป้งเอื้อมไม่ถึงและป้ายจะตัดคำ
+- **`100dvh`, not `100vh`.** `vh` does not shrink with the browser address bar, so the bottom of the content gets covered.
+- **`env(safe-area-inset-*)`** on the appbar/tabbar/dock + `viewport-fit=cover` in the meta viewport.
+  Otherwise content collides with the top notch and the bottom home indicator.
+- **Scroll on `.screen`, not on `body`.** Set `body{overflow:hidden}` so the top and bottom bars stay still.
+- **There is no hover on mobile.** The only state users can see is `:active`. Everything tappable must shrink
+  (`transform:scale(.98)`) and set `-webkit-tap-highlight-color:transparent`.
+- **Touch targets ≥ 44×44 pt on iOS (Apple guideline) · ≥ 48×48 dp on Android (Material).** A 38px icon button needs enough padding around it to reach that. For apps shipping on both systems, use 48.
+- **3–5 bottom tabs.** More than that, the thumb cannot reach and the labels get cut.
 
 ### 4.1 · Flutter / Android native
 
-ตาราง 10 เรื่องอยู่ใน [`references/screen-and-components.md`](references/screen-and-components.md): token ใน `ColorScheme` + `ThemeExtension` · ตรวจสีดิบด้วย grep · โหมดมืดชุดที่สอง · ภาพจากแอปจริงด้วย `adb` · edge-to-edge + `SafeArea` · ปัดย้อนกลับ หมุนจอ ตัวอักษร 200 % · ขอสิทธิ์ · hardware ไม่มี · SnackBar ใน Scaffold ซ้อน · `SegmentedButton`
+The table of 10 topics is in [`references/screen-and-components.md`](references/screen-and-components.md): tokens in `ColorScheme` + `ThemeExtension` · raw colour check with grep · second dark-mode set · images from the real app with `adb` · edge-to-edge + `SafeArea` · back swipe, rotation, 200 % text · permission requests · missing hardware · SnackBar in nested Scaffolds · `SegmentedButton`
 
 ---
 
-## 5 · คอมโพเนนต์ที่มีให้แล้ว
+## 5 · Ready-made components
 
-ตารางคลาสใน `speakgo.css` (รายการ · ตัวควบคุม · ตั้งค่า · สนทนา · แถบไมค์ · สรุปผล) อยู่ใน [`references/screen-and-components.md`](references/screen-and-components.md)
+The table of classes in `speakgo.css` (list · controls · settings · conversation · mic bar · result summary) is in [`references/screen-and-components.md`](references/screen-and-components.md).
 
-**บับเบิลสนทนา:** มุม 18px ทุกด้าน ยกเว้นมุมที่ชี้เข้าหาผู้พูดเหลือ **5px** —
-บอกว่าใครพูดโดยไม่ต้องวาดหางบับเบิล
+**Conversation bubble:** 18px corners on every side, except the corner pointing toward the speaker, which drops to **5px**.
+This shows who is speaking without drawing a bubble tail.
 
-**กล่องแก้ไข (`.repair`):** ใช้ `<del>` ขีดฆ่า + `<ins>` ขีดเส้นใต้ —
-สื่อความหมายได้แม้ผู้ใช้ตาบอดสี ห้ามใช้สีอย่างเดียว
-
----
-
-## 6 · ภาษาไทยบนจอเล็ก
-
-- **IBM Plex Sans Thai** วรรณยุกต์ไม่ชนสระที่ขนาดเล็ก และมีน้ำหนัก 400–700 ครบ
-- ระยะบรรทัด **1.5–1.75** — ไทยต้องการมากกว่าอังกฤษ ยิ่งจอเล็กยิ่งต้องเว้นที่ให้มาก
-- **ห้าม `text-transform:uppercase` กับข้อความไทย** — ไม่มีผลกับตัวไทย แต่
-  `letter-spacing` ที่มักมาคู่กันจะดันวรรณยุกต์เพี้ยน ป้าย mono ใช้กับอังกฤษเท่านั้น
-- ปุ่มไทยกว้างกว่าอังกฤษ ~20% — อย่า fix ความกว้างปุ่ม ให้ปุ่มหลักเต็มความกว้างไปเลย
-- ทดสอบด้วยข้อความไทยจริง ไม่ใช่ Lorem ipsum
+**Correction box (`.repair`):** use `<del>` strikethrough + `<ins>` underline.
+It communicates even to colour-blind users. Never use colour alone.
 
 ---
 
-## 7 · ตรวจงาน
+## 6 · Thai on a small screen
 
-ถ่ายภาพ 3 ขนาด (390×844 · 360×800 · 430×932) และรันตัวตรวจ token ของ `web-app-design` ด้วย `--require` ชุดของระบบนี้ (คำสั่งและเช็กลิสต์ 10 ข้ออยู่ใน [`references/review.md`](references/review.md)) แล้วเปิดภาพดูจริง · สีดิบที่ยอมได้มีแค่ `<meta name="theme-color">`
+- **IBM Plex Sans Thai**: tone marks do not collide with vowels at small sizes, and it has the full 400–700 weights.
+- Line height **1.5–1.75**. Thai needs more than English, and the smaller the screen the more room it needs.
+- **Never use `text-transform:uppercase` on Thai text.** It has no effect on Thai characters, but
+  the `letter-spacing` that usually comes with it distorts tone marks. Use mono labels for English only.
+- Thai buttons are ~20% wider than English ones. Do not fix button widths. Make the primary button full width.
+- Test with real Thai text, not Lorem ipsum.
+
+---
+
+## 7 · Review
+
+Capture images at 3 sizes (390×844 · 360×800 · 430×932) and run the token checker of `web-app-design` with `--require` set to this system's set (the command and the 10-item checklist are in [`references/review.md`](references/review.md)). Then really look at the images. The only raw colour allowed is `<meta name="theme-color">`.
 
 ---
 
 ## 8 · Anti-patterns
 
-ข้อห้าม 9 ข้อ (`100vh` · ลืม safe-area · แท็บ 6+ · modal เล็กสำหรับงานยาว · ยุบฟอนต์ · ไล่สีหลังข้อความยาว · สีอย่างเดียว · ไม่มี `:active` · ไม่เรนเดอร์ดู) อยู่ใน [`references/review.md`](references/review.md)
+The 9 prohibitions (`100vh` · forgetting safe-area · 6+ tabs · small modal for a long task · collapsing fonts · gradient behind long text · colour alone · no `:active` · never rendering to look) are in [`references/review.md`](references/review.md).
 
 ---
 
-## 9 · ข้อจำกัดที่ต้องรู้
+## 9 · Limits to know
 
-ข้อจำกัด 3 ข้ออยู่ใน [`references/review.md`](references/review.md) — ตาราง React Native ยังไม่ได้ build ทดสอบ · แอปจริงต้อง bundle ฟอนต์ · `speakgo.css` มีแค่โหมดสว่าง
+The 3 limits are in [`references/review.md`](references/review.md): the React Native table has not been built and tested · a real app must bundle fonts · `speakgo.css` has light mode only.
 
 ---
 
-## 10 · เชื่อมกับ skill อื่น
+## 10 · Links to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use with |
 |---|---|
-| user flow / IA ก่อนลงสี | agent `ux-designer` |
-| เว็บแอปเดสก์ท็อปของระบบเดียวกัน | `web-app-design` |
-| ตัวตรวจ hardcode สีใน CI | `web-app-design` → `scripts/check-design-tokens.mjs` |
-| เอกสาร spec ของหน้าจอ | `polished-document-style` + `branded-document-design` |
+| user flow / IA before colouring | agent `ux-designer` |
+| desktop web app of the same system | `web-app-design` |
+| hardcoded colour checker in CI | `web-app-design` → `scripts/check-design-tokens.mjs` |
+| spec document of the screens | `polished-document-style` + `branded-document-design` |
 | App Store Optimization | `mobile-engineering` |
-| กฎระยะห่าง ลำดับสายตา และ 5 สถานะของหน้าจอ | `ui-craft` |
-| ไดอะแกรมสถาปัตยกรรม | `software-diagrams` |
+| spacing rules, eye order and the 5 screen states | `ui-craft` |
+| architecture diagrams | `software-diagrams` |
 
 ---
 
-## ไม่ให้ดูเหมือน AI ทำ
+## Do not look AI-made
 
-ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ทุกงานต้องผ่านด่านตา 3.2 ด้วย (หน้าเว็บตอบเพิ่มข้อ 10–14) เพราะสคริปต์ 0 ข้อยังไม่ใช่ผ่าน · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
+Before sending, walk through section 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass the eye gate 3.2 (web pages answer items 10–14 as well), because a script score of 0 is not yet a pass. The prohibitions in this file are specific to this work, and the full list for every medium is there.
 
-## ตัวย่อ
+## Abbreviations
 
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้เลย ดูรายละเอียดใน skill `spell-out-abbreviations`
+Always spell out an abbreviation the first time, then put the abbreviation in brackets, for example Model Context Protocol (MCP).
+After that you may use the abbreviation. See the `spell-out-abbreviations` skill for details.

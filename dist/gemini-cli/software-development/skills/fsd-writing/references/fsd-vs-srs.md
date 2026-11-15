@@ -1,12 +1,12 @@
-# FSD ต่างจาก SRS ยังไง
+# How an FSD differs from an SRS
 
-ตารางเทียบเอกสารสองฉบับทีละมิติ ใช้ตอนต้องตัดสินว่าเนื้อหาชิ้นหนึ่งควรอยู่ใน SRS หรือใน FSD
+This table compares the two documents one dimension at a time. Use it when you must decide whether a piece of content belongs in the SRS or the FSD.
 
 | | SRS | FSD |
 |---|---|---|
-| ตอบคำถาม | ระบบ**ต้องทำอะไรได้** | ระบบ**ทำสิ่งนั้นอย่างไร** |
-| คนอ่านหลัก | ลูกค้า · ผู้บริหาร · คนเซ็นรับ | developer · tester · ux |
-| ระดับรายละเอียด | "ระบบต้องให้ผู้ใช้ยกเลิกคำสั่งซื้อได้" | ปุ่มอยู่ตรงไหน · ยกเลิกได้ในสถานะไหนบ้าง · ใครมีสิทธิ์ · ยืนยันด้วยอะไร · ข้อความตอนทำไม่ได้ว่าอะไร · ระบบทำอะไรต่อ |
-| เปลี่ยนแปลง | ต้องผ่านการอนุมัติ มีผลต่อสัญญา | เปลี่ยนได้ในทีม ตราบใดที่ยังตอบ SRS ข้อเดิม |
-| หน่วยเนื้อหา | ข้อกำหนด (`FR-…`) | use case (`UC-…`) + ข้อกำหนดหน้าจอ (`SC-…`) |
-| ตัวเลข | มาจากลูกค้า | มาจาก SRS ห้ามคิดใหม่ |
+| Question answered | What the system **must be able to do** | **How** the system does it |
+| Main readers | Customer · executives · the person who signs off | developer · tester · ux |
+| Level of detail | "The system must let users cancel an order" | Where the button sits · which statuses allow cancelling · who has permission · what confirms it · what message appears when cancelling is impossible · what the system does next |
+| Changes | Need approval and affect the contract | Can change inside the team, as long as they still meet the same SRS item |
+| Content unit | Requirement (`FR-…`) | Use case (`UC-…`) + screen requirement (`SC-…`) |
+| Numbers | Come from the customer | Come from the SRS; never invent new ones |

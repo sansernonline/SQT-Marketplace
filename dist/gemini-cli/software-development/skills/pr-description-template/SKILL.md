@@ -5,7 +5,7 @@ description: Use when writing a pull request description
 
 # Pull Request Description Template
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write every line of wording per `human-writing`. This skill gives the format and structure; human-writing gives the way to write so people understand.
 > ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ ธุรกิจ
 
 ## When to use this skill
@@ -21,13 +21,13 @@ description: Use when writing a pull request description
 | Reviewing someone's PR or self-reviewing the code | `code-review-checklist` |
 | Adversarial review of a risky or contested change | `adversarial-review-panel` |
 
-## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+## 0 · Look for an existing format first (every time)
 
-ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+Before using the structure or templates in this file, check whether the user, the client or the project already has its own format:
 
-- **ที่ดู:** แม่แบบ PR ใน repo: `.github/pull_request_template.md` · `.github/PULL_REQUEST_TEMPLATE/*.md` · `docs/pull_request_template.md` · `PULL_REQUEST_TEMPLATE.md` ที่ราก · และ PR ที่ merge ล่าสุด 3 ตัว (`gh pr list --state merged -L 3`) ว่าทีมเขียนแบบไหน
-- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
-- **ยังต้องมีทุกแบบ:** ส่วนที่ทีมไม่มีแต่ skill นี้ถือว่าต้องมี (วิธีทดสอบ · ความเสี่ยงตอน merge) เติมต่อท้ายแบบของทีม ไม่รื้อโครงของทีม
+- **What to look at:** PR templates in the repo: `.github/pull_request_template.md` · `.github/PULL_REQUEST_TEMPLATE/*.md` · `docs/pull_request_template.md` · `PULL_REQUEST_TEMPLATE.md` at the root · and the 3 most recently merged PRs (`gh pr list --state merged -L 3`) to see how the team writes them
+- **Result:** if found, use it (headings, order, field names, running numbers) and say in the reply which file the format came from · if not found, use the template in this file as the fallback and say that no existing format was found
+- **Every format still needs the content:** parts the team's format lacks but this skill requires (how to test · merge risk) are added at the end of the team's format, without reworking the team's structure
 
 ## Output Template
 
@@ -114,9 +114,9 @@ description: Use when writing a pull request description
 
 If your PR is huge, split into:
 1. Refactoring PR (no behavior change)
-2. Feature PR (small, focused) — พร้อมเทสที่พิสูจน์ว่างานนั้นใช้ได้ใน PR เดียวกัน ไม่แยกเป็น PR เทสต่างหาก
+2. Feature PR (small, focused) — with tests that prove the work functions, in the same PR, not a separate test PR
 
-> การ push branch หรือเปิด PR ทำเมื่อผู้ใช้สั่งเท่านั้น — เตรียมคำอธิบาย PR ไว้ให้ก่อนได้ แต่ไม่ push และไม่เปิดเอง
+> Pushing a branch or opening a PR is done only when the user asks — you may prepare the PR description in advance, but do not push or open it yourself
 
 ## Summary Writing
 

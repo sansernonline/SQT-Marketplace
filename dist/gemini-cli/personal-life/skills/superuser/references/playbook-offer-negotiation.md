@@ -1,17 +1,17 @@
-# playbook · offer-negotiation — เทียบข้อเสนอและต่อรองเงินเดือน
+# playbook · offer-negotiation — compare offers and negotiate salary
 
-ใช้เมื่อ: ได้ข้อเสนองาน · มี 2 ข้อเสนอให้เลือก · ขอขึ้นเงินเดือน · ได้ counter-offer
-skill หลัก: `salary-negotiation` · ถ้าต้องดูภาษี (ถ้าติดตั้ง plugin `trading-finance`) ใช้ `trading-finance:tax-basics-th` ไม่มีก็ใช้ความรู้ทั่วไปพร้อม `(รอยืนยัน)`
+Use when: the user got a job offer · has 2 offers to choose from · is asking for a raise · got a counter-offer
+Main skill: `salary-negotiation` · for tax (ถ้าติดตั้ง plugin `trading-finance`) use `trading-finance:tax-basics-th`; if it is not, use general knowledge with `(รอยืนยัน)` (awaiting confirmation)
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. เก็บตัวเลขจากเอกสารจริง — จดหมายเสนองาน · สลิปเงินเดือน · สวัสดิการ ถ้าไม่มีตัวเลขให้ใส่ `(รอยืนยัน)` · ใคร: หัวหน้าทีม
-2. แปลงทุกข้อเสนอเป็นรายได้รวมต่อปีในตารางเดียว — ฐาน × 12 · โบนัส · เงินสมทบกองทุน · ประกัน · ค่าเดินทาง · ใคร: `career-coach` ตัวใหม่
-3. หาข้อมูลตลาดของตำแหน่งจากแหล่งที่ระบุชื่อและปี ถ้าได้ไม่ถึง 3 แหล่ง ให้ติดป้าย `จากแหล่ง` ลดความมั่นใจ แล้วต่อ `(รอยืนยัน)` · ใคร: `career-coach` ตัวใหม่
-4. ตั้งตัวเลขเป้า ตัวเลขต่ำสุดที่รับได้ และเหตุผลที่อ้างได้ · ใคร: `career-coach` ตัวใหม่ร่าง (ตัวเลขที่ผู้ใช้ไม่ได้ให้ติด `(รอยืนยัน)` · ส่งตัวเลขจริงอยู่ใน "รออนุมัติ")
-5. ร่างสิ่งที่จะพูดหรือเขียน ทั้งไทยและอังกฤษ — ขอบคุณ · ตัวเลขที่ขอ · เหตุผล · สิ่งที่ยืดหยุ่นได้ · ใคร: `career-coach` ตัวใหม่
-6. ตรวจโดยคำนวณทุกช่องซ้ำด้วยสูตร และดูว่าไม่มีประโยคไหนโกหกเงินเดือนปัจจุบัน · ใคร: `reviewer` ตัวใหม่
+1. Collect the figures from real documents: offer letter · payslip · benefits. If a figure is missing, write `(รอยืนยัน)` · ใคร: หัวหน้าทีม
+2. Convert every offer to total yearly income in one table: base × 12 · bonus · provident fund contribution · insurance · travel allowance · ใคร: `career-coach` ตัวใหม่
+3. Find market data for the position from named sources with a year. If you get fewer than 3 sources, add the `จากแหล่ง` label, lower the confidence, and append `(รอยืนยัน)` · ใคร: `career-coach` ตัวใหม่
+4. Set the target figure, the lowest acceptable figure, and the reasons the user can cite · ใคร: `career-coach` ตัวใหม่ drafts (any figure the user did not give gets `(รอยืนยัน)` · sending the real figure sits under "รออนุมัติ" (awaiting approval))
+5. Draft what to say or write, in Thai and English: thanks · the figure asked for · the reason · what is flexible · ใคร: `career-coach` ตัวใหม่
+6. Check (ตรวจ) by recalculating every cell with a formula, and make sure no sentence misstates the current salary · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-มีตารางรายได้รวมต่อปีที่คำนวณซ้ำแล้ว และร่างข้อความต่อรองพร้อมส่ง ส่วนการตอบรับหรือปฏิเสธข้อเสนออยู่ใน "รออนุมัติ"
+There is a yearly total income table that has been recalculated, and a negotiation message ready to send. Accepting or declining the offer sits under "รออนุมัติ"

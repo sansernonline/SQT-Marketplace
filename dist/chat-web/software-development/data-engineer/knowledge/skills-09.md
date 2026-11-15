@@ -243,11 +243,11 @@ Phase 1:    Phase 2:           Phase 3:
 
 ## reference: architecture-overview-template.md
 
-# แม่แบบเอกสารภาพรวมสถาปัตยกรรม
+# Architecture Overview Document Template
 
 **สารบัญ:** แม่แบบเต็ม 1 บล็อก: Context · Quality Attributes · High-Level Architecture · Components · Data Flow · Tech Stack · Cross-Cutting Concerns · Trade-offs · References
 
-เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+Open this only when you actually need to write this kind of document · put `(รอยืนยัน)` (awaiting confirmation) on anything you do not know
 
 ## Standard Output: Polished Architecture Overview
 
@@ -754,7 +754,7 @@ Write a condition as a full sentence with a connector (section 2):
 | 6 | Words by reader | General reader: "ระบบ" "ตรวจขาเข้า" instead of "โค้ด" "Guard" |
 | 6 | No "คน" for non-people | "ให้ระบบตัดสิน" |
 
-Sources: ISO 24495-1 (plain language) · GOV.UK clear language · Microsoft Writing Style Guide · Wikipedia: Signs of AI writing · คู่มือการร่างเอกสารภาษาไทย
+Sources: ISO 24495-1 (plain language) · GOV.UK clear language · Microsoft Writing Style Guide · Wikipedia: Signs of AI writing · คู่มือการร่างเอกสารภาษาไทย (guide to drafting Thai documents)
 
 
 ## reference: strict-review.md

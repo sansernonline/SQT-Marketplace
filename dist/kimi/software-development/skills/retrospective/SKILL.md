@@ -4,22 +4,22 @@ description: "Run a sprint retrospective covering what went well, what didn't, a
 disableModelInvocation: true
 ---
 
-> retro นี้เป็นของ**ทีมคน** — ผลคือเอกสาร retro และ action items เท่านั้น **ไม่แก้ skill · agent · playbook** · ถ้าอยากให้บทเรียนเข้า skill ของทีม agent ผู้ใช้ต้องสั่ง "รวมบทเรียน" แยกเอง (playbook `learn-from-session` ของ `superuser`)
+> This retro belongs to the **human team**. The result is only the retro document and action items. **Do not edit any skill · agent · playbook.** If the user wants the lessons to go into the agent team's skills, the user must give a separate "รวมบทเรียน" (collect lessons) order (the `learn-from-session` playbook of `superuser`).
 
 Use the `project-manager` agent to facilitate a retrospective for: **$ARGUMENTS**
 
 The PM should run this structured retro:
 
-## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+## 0 · Look for an existing format first (every time)
 
-ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+Before using the structure or template in this file, check whether the user, the customer or the project already has its own format:
 
-- **ที่ดู:** รูปแบบ retro ที่ทีมใช้รอบก่อน (บันทึกใน `docs/retros/` หรือบอร์ดที่ผู้ใช้ชี้) · action item ค้างจากรอบก่อน · ขนาดทีมและปัญหาหลักของรอบนี้
-- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
-- **ยังต้องมีทุกแบบ:** เลือกรูปแบบตามรอบนี้: รอบปกติใช้ Start/Stop/Continue ได้ · รอบที่มีเหตุใหญ่ใช้ไทม์ไลน์ · ทีมเงียบใช้แบบเขียนก่อนพูด · เปิดด้วย action item ค้างของรอบก่อนเสมอ
+- **Where to look:** the retro format the team used last round (recorded in `docs/retros/` or on the board the user points to) · action items left open from the last round · team size and the main problem of this round
+- **Result:** found → use that format (headings, order, field names, running numbers) and say in the answer which file it came from · not found → use the template in this file as a fallback and say that no earlier format was found
+- **Every format still needs:** choose the style to fit this round: a normal round can use Start/Stop/Continue · a round with a major event uses a timeline · a quiet team uses write-first-then-speak · always open with the action items left open from the last round
 
 ## 1. Set the Stage
-Ask the user once, at the start, all of the following (sprint facts and the retro input in step 2); do not stop to ask again. Anything the user doesn't know → write `(รอยืนยัน)` and keep going:
+Ask the user once, at the start, all of the following (sprint facts and the retro input in step 2); do not stop to ask again. Anything the user doesn't know → write `(รอยืนยัน)` (awaiting confirmation) and keep going:
 - What was the sprint goal?
 - Was it achieved? (yes/partial/no)
 - Any major events during sprint?

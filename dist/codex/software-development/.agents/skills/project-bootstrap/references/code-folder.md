@@ -1,19 +1,19 @@
-# โครงในโฟลเดอร์โค้ด — ผังเต็ม
+# Code folder layout — full tree
 
-กฎอยู่ใน `SKILL.md` ข้อ 1 · ผังรากอยู่ใน `project-doc-set` ข้อ 1 · ADR และ runbook อยู่ใน `docs/` ที่ราก ไม่ใช่ที่นี่
+The rules are in `SKILL.md` item 1. The root tree is in `project-doc-set` item 1. ADRs (architecture decision records) and runbooks live in `docs/` at the root, not here.
 
 ```
-<project-name>/          ← ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่นด้วย `-`
-  README.md              ← ข้อ 2 · โครงกว้าง + สำรวจโปรเจกต์ก่อนเลือกหัวข้อ
-  CHANGELOG.md           ← สิ่งที่เปลี่ยนในแต่ละเวอร์ชัน
-  ARCHITECTURE.md        ← แผนที่โค้ด · มีเมื่อผังใน README เกิน 15 บรรทัดหรือระบบมีหลายส่วน (references/readme-skeleton.md)
-  CONTRIBUTING.md        ← มีเมื่อหัวข้อร่วมพัฒนาใน README ยาวเกิน 5 บรรทัด
-  LICENSE                ← repo เปิดสาธารณะหรือสัญญาจ้างระบุ
-  .env.example           ← ค่าที่ต้องมีทั้งหมด (ดู config-and-secrets) · มีเฉพาะเมื่อโปรเจกต์อ่าน environment variable จริง
-  .editorconfig          ← ข้อ 4
+<project-name>/          ← lowercase project name, words joined by `-`
+  README.md              ← item 2 · broad outline + survey the project before choosing sections
+  CHANGELOG.md           ← what changed in each version
+  ARCHITECTURE.md        ← code map · add it when the README tree passes 15 lines or the system has many parts (references/readme-skeleton.md)
+  CONTRIBUTING.md        ← add it when the contributing section in the README passes 5 lines
+  LICENSE                ← public repo, or the contract requires it
+  .env.example           ← every required value (see config-and-secrets) · only when the project really reads environment variables
+  .editorconfig          ← item 4
   .gitattributes
-  .gitignore             ← build output · ค่าลับ · `_to_delete/`
-  src/                   ← โค้ดจริง (หรือโครงตามธรรมเนียมของ stack ใน `SKILL.md` ข้อ 1)
-  tests/                 ← บังคับใน .NET · Flutter (`test/`) · Node และ Python ใช้เก็บเฉพาะ integration และ e2e (unit test อยู่ข้างไฟล์โค้ด) — ตาราง stack อยู่ใน `SKILL.md` ข้อ 1
-  scripts/               ← setup, seed, migrate — สคริปต์ที่คนต้องรัน
+  .gitignore             ← build output · secrets · `_to_delete/`
+  src/                   ← the real code (or the layout the stack expects, per `SKILL.md` item 1)
+  tests/                 ← required in .NET · Flutter (`test/`) · Node and Python keep only integration and e2e here (unit tests sit beside the code files) — the stack table is in `SKILL.md` item 1
+  scripts/               ← setup, seed, migrate — scripts a person has to run
 ```

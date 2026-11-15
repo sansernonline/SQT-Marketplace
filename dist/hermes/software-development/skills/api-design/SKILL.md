@@ -3,7 +3,7 @@ name: "api-design"
 description: "Design an API spec with the system-analyst agent — endpoints, schemas, errors, examples."
 ---
 
-> **ทางลัดเข้า SuperUser:** เปิด skill `superuser` ด้วย playbook `feature` (หรือ `project-docs` ถ้าทำแค่เอกสาร) แล้วคัดลอกขั้นตอนของ playbook ลง todo ก่อน ส่วนขั้นตอนด้านล่างบอกรูปแบบงานและ output ของคำสั่งนี้ ให้ใช้คู่กับ playbook ไม่ได้ใช้แทน
+> **Shortcut into SuperUser:** open the `superuser` skill with the `feature` playbook (or `project-docs` if the work is documents only) and copy the playbook's steps into the todo first. The steps below describe the work format and output of this command. Use them together with the playbook, not instead of it.
 
 Use the `system-analyst` agent to design API specifications for: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**
 

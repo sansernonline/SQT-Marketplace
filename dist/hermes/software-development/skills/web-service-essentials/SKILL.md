@@ -5,61 +5,61 @@ description: Use when building or reviewing an HTTP backend
 
 # Web Service Essentials
 
-> **กฎข้อเดียว:** ก่อนเขียน endpoint ธุรกิจตัวแรก service ต้องตอบได้ว่า
-> "ยังอยู่ไหม · พร้อมรับงานไหม · ตอนนี้รันเวอร์ชันอะไร" ถ้าตอบไม่ได้ วันที่ระบบล่มคุณจะต้องเดาล้วน ๆ
+> **The one rule:** before writing the first business endpoint, the service must be able to answer
+> "Are you still alive? · Are you ready for work? · Which version are you running now?" If it cannot, on the day the system goes down you will be guessing blind.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เริ่ม service / REST API / microservice ใหม่
-- มีคนขอ health check, ping, readiness, liveness, version endpoint
-- จะ deploy ขึ้น production ครั้งแรก หรือย้ายเข้า Docker/Kubernetes
-- ต้องกำหนดรูปแบบ error ของ API ให้เหมือนกันทั้งระบบ
+- Starting a new service / REST API / microservice
+- Someone asks for a health check, ping, readiness, liveness, or version endpoint
+- Deploying to production for the first time, or moving into Docker/Kubernetes
+- You must set one API error format for the whole system
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-- ออกแบบ endpoint ทางธุรกิจ ให้ใช้ command `/api-design`
-- รูปแบบ URL · paging · วันที่ · id ของ API ให้ใช้ `api-conventions`
-- รูปแบบ log ให้ใช้ `logging-standards`
-- เลือกสถาปัตยกรรม ให้ใช้ `architecture-patterns`
+- To design business endpoints, use the command `/api-design`
+- For URL style · paging · dates · API ids, use `api-conventions`
+- For log format, use `logging-standards`
+- To choose an architecture, use `architecture-patterns`
 
 ---
 
-## 1 · endpoint พื้นฐาน 4 ตัว
+## 1 · The 4 basic endpoints
 
-| Endpoint | ตอบอะไร | auth | เช็ค dependency | ใครเรียก |
+| Endpoint | What it answers | auth | Checks dependencies | Who calls it |
 |---|---|:---:|:---:|---|
-| `GET /ping` | `pong` (text) | ไม่ | ไม่ | load balancer ทุกวินาที |
-| `GET /health/live` | process ยังอยู่ | ไม่ | **ไม่** | orchestrator (restart ถ้าตาย) |
-| `GET /health/ready` | พร้อมรับ traffic | ไม่ | ใช่ | orchestrator (ตัดออกจาก pool) |
-| `GET /version` | รันอะไรอยู่ | ไม่* | ไม่ | คน ตอนไล่ปัญหา |
+| `GET /ping` | `pong` (text) | no | no | load balancer, every second |
+| `GET /health/live` | the process is still alive | no | **no** | orchestrator (restarts if dead) |
+| `GET /health/ready` | ready to take traffic | no | yes | orchestrator (removes from the pool) |
+| `GET /version` | what is running | no* | no | a person, when tracing a problem |
 
-> **live ห้ามเช็ค dependency** นี่คือความผิดพลาดที่เจอบ่อยที่สุด
-> ถ้า `/health/live` เช็คฐานข้อมูล (database · DB) แล้ว DB ล่มชั่วคราว Kubernetes จะ**ฆ่า pod ทิ้งทั้งหมด**
-> ทั้งที่แอปยังปกติดี พอ DB กลับมาก็ไม่มี pod เหลือรับ traffic แล้ว
-> การเช็ค dependency ต้องอยู่ที่ `/health/ready` ซึ่งแค่ตัด pod ออกจาก pool ชั่วคราว
+> **live must not check dependencies.** This is the most common mistake.
+> If `/health/live` checks the database (DB) and the DB goes down briefly, Kubernetes will **kill every pod**
+> even though the app itself is fine. When the DB comes back, no pod is left to take traffic.
+> The dependency check belongs in `/health/ready`, which only removes a pod from the pool for a while.
 
-\* ถ้าไม่อยากให้คนทั่วไปเห็น commit hash ใน `/version` ให้จำกัดให้เรียกได้เฉพาะเครือข่ายภายใน
+\* If you do not want the public to see the commit hash in `/version`, restrict it so only the internal network can call it.
 
-**ผูกกับ Kubernetes แบบนี้** (ปรับจาก secondsky `health-check-endpoints` · MIT) — live กับ ready ต้องชี้คนละ path ไม่งั้นข้อข้างบนไร้ความหมาย
+**Wire it to Kubernetes like this** (adapted from secondsky `health-check-endpoints` · MIT) — live and ready must point to different paths, or the point above means nothing.
 
 ```yaml
-livenessProbe:            # ตาย → restart container
+livenessProbe:            # dead → restart the container
   httpGet: { path: /health/live, port: 3000 }
-  initialDelaySeconds: 15 # ให้แอปขึ้นก่อน ไม่งั้นโดนฆ่าตั้งแต่ยังไม่ทัน listen
+  initialDelaySeconds: 15 # let the app start first, or it gets killed before it can listen
   periodSeconds: 10
-  failureThreshold: 3     # พลาด 3 ครั้งติด (30 วินาที) ค่อย restart
-readinessProbe:           # ไม่พร้อม → ตัดออกจาก Service ชั่วคราว ไม่ restart
+  failureThreshold: 3     # restart only after 3 failures in a row (30 seconds)
+readinessProbe:           # not ready → remove from the Service for a while, no restart
   httpGet: { path: /health/ready, port: 3000 }
   initialDelaySeconds: 5
   periodSeconds: 10
 ```
 
-แอปที่ warm-up นาน (โหลดโมเดล · cache ใหญ่) เพิ่ม `startupProbe` ชี้ `/health/live` พร้อม `failureThreshold` สูง แทนการยืด `initialDelaySeconds` ของ liveness
+For an app with a long warm-up (loading a model · a big cache), add a `startupProbe` pointing to `/health/live` with a high `failureThreshold`, instead of stretching the liveness `initialDelaySeconds`.
 
-### รูปร่าง response (เหมือนกันทุกภาษา)
+### Response shape (the same in every language)
 
 ```jsonc
-// GET /health/ready → 200 ปกติ · 503 เมื่อ dependency ที่ critical ล่ม
+// GET /health/ready → 200 normally · 503 when a critical dependency is down
 {
   "status": "up",                       // up | degraded | down
   "timestamp": "2026-08-31T09:42:13.482Z",
@@ -79,105 +79,105 @@ readinessProbe:           # ไม่พร้อม → ตัดออกจ�
 }
 ```
 
-**3 สถานะ ไม่ใช่ 2:**
-- `up` — ทุกอย่างปกติ → 200
-- `degraded` — dependency ที่**ไม่ critical** ล่ม (เช่น อีเมล) แต่ยังรับ traffic ได้ → 200
-- `down` — dependency ที่ critical ล่ม (เช่น DB) → **503**
+**3 states, not 2:**
+- `up` — everything is normal → 200
+- `degraded` — a **non-critical** dependency is down (such as email) but the service can still take traffic → 200
+- `down` — a critical dependency is down (such as the DB) → **503**
 
-**ทุก check ต้องมี timeout** (ค่าเริ่มต้น 3 วินาที) ไม่งั้น dependency ที่ค้าง
-จะทำให้ health endpoint ค้างตาม แล้ว orchestrator ตัดสินใจผิดทั้งระบบ
+**Every check must have a timeout** (default 3 seconds). Otherwise a hung dependency
+makes the health endpoint hang too, and the orchestrator makes the wrong decision for the whole system.
 
-**ห้ามส่ง stack trace หรือ connection string ออกทาง endpoint นี้** เพราะ endpoint นี้ใครก็เรียกได้
+**Never send a stack trace or connection string out through these endpoints**, because anyone can call them.
 
 ---
 
-## 2 · รูปแบบ error ที่เหมือนกันทั้งระบบ
+## 2 · One error format for the whole system
 
-ยึด **RFC 9457 (`application/problem+json`)** ซึ่งเป็นมาตรฐานจริง ไม่ต้องคิดเอง
+Follow **RFC 9457 (`application/problem+json`)**, which is a real standard, so you do not invent your own.
 
 ```jsonc
-// 422 — รูปแบบถูก แต่ข้อมูลไม่ผ่านกฎ (ดูตารางล่าง)
+// 422 — the format is right, but the data fails a rule (see the table below)
 {
   "type": "https://api.example.com/errors/validation",
   "title": "ข้อมูลที่ส่งมาไม่ถูกต้อง",
   "status": 422,
   "detail": "จำนวนสินค้าต้องมากกว่า 0",
   "instance": "/api/v1/orders",
-  "requestId": "a3f9c1b2",              // ตรงกับ cid ใน log — ตามเรื่องได้ทันที
-  "errors": [                           // เฉพาะ validation · ครบทุกฟิลด์ในครั้งเดียว
+  "requestId": "a3f9c1b2",              // matches the cid in the log — trace the case at once
+  "errors": [                           // validation only · every field in one response
     { "field": "items[0].qty", "code": "min_value", "message": "ต้องมากกว่า 0" }
   ]
 }
 ```
 
-- `field` เป็นเส้นทางเต็มรวมดัชนีอาเรย์ · `code` ให้โปรแกรมอ่าน · `message` ให้คนอ่าน
+- `field` is the full path including array indexes · `code` is for programs · `message` is for people
 
-| สถานะ | ใช้เมื่อ |
+| Status | Use when |
 |---|---|
-| 400 | ข้อมูลผิดรูป |
-| 401 | ยังไม่ได้ยืนยันตัวตน |
-| 403 | ยืนยันแล้วแต่ไม่มีสิทธิ์ |
-| 404 | ไม่มีสิ่งนี้ |
-| 409 | ชนกับสถานะปัจจุบัน (ซ้ำ, แก้ทับ) |
-| 422 | รูปแบบถูกแต่ผิดกฎธุรกิจ |
-| 429 | เรียกถี่เกิน — ต้องมี `Retry-After` |
-| 500 | ฝั่งเราพัง — **ห้ามส่งรายละเอียดภายในออกไป** ส่ง `requestId` แทน |
+| 400 | Malformed data |
+| 401 | Not yet authenticated |
+| 403 | Authenticated but not allowed |
+| 404 | The thing does not exist |
+| 409 | Conflicts with current state (duplicate, overwrite) |
+| 422 | Format is right but breaks a business rule |
+| 429 | Called too often — must have `Retry-After` |
+| 500 | Our side broke — **never send internal details out**, send `requestId` instead |
 
-> **500 ต้องบอกแค่ "เกิดข้อผิดพลาด กรุณาแจ้ง requestId นี้"** รายละเอียดจริงอยู่ใน log
-> การส่ง stack trace ออกไปก็เหมือนแจกแผนผังระบบให้คนที่กำลังหาช่องโจมตี
+> **A 500 must say only "an error occurred, please report this requestId".** The real details stay in the log.
+> Sending a stack trace out is like handing the system's blueprint to someone looking for a way in.
 
 ---
 
 ## 3 · Request id
 
-- รับจาก header **`X-Request-Id`** เฉพาะเมื่อตรง `^[A-Za-z0-9-]{1,64}$` · ไม่มีหรือไม่ตรง → สร้างใหม่ (uuid ตัด 8 ตัว)
-  ค่านี้ลงทุกบรรทัด log ถ้ารับมาตรง ๆ ผู้ส่งจะแทรกขึ้นบรรทัดใหม่หรือข้อความปลอมลง log ได้ (log injection)
-- **ส่งกลับใน response header ทุกครั้ง** รวมทั้งตอน error
-- ใส่ในทุกบรรทัด log (ดู `logging-standards`) และใน error body
-- ส่งต่อไป service ปลายทางทุกครั้งที่เรียกข้ามระบบ
+- Accept it from the **`X-Request-Id`** header only when it matches `^[A-Za-z0-9-]{1,64}$` · if it is missing or does not match → create a new one (a uuid cut to 8 characters).
+  This value goes into every log line. If you accept it as is, the sender can insert new lines or fake text into the log (log injection).
+- **Return it in a response header every time**, including on errors.
+- Put it in every log line (see `logging-standards`) and in the error body.
+- Pass it on to the downstream service every time you call across systems.
 
-พอลูกค้าโทรมาบอกว่า "มันพัง" ก็ขอ requestId แล้ว `grep` ครั้งเดียวเจอทั้งเรื่อง
+When a customer calls to say "it broke", ask for the requestId and `grep` once to find the whole story.
 
 ---
 
 ## 4 · Graceful shutdown
 
-ตอน deploy ใหม่ orchestrator จะส่ง `SIGTERM` มา ถ้าแอปตายทันที request ที่ทำอยู่จะขาดกลางคัน
+On a new deploy the orchestrator sends `SIGTERM`. If the app dies at once, requests in progress are cut off midway.
 
 ```
-SIGTERM → 1. หยุดรับ request ใหม่ (ให้ /health/ready ตอบ down ทันที)
-          2. รอ request ที่ค้างอยู่ทำงานจบ (timeout 15–30 วิ)
-          3. ปิด DB pool / คิว / ไฟล์
+SIGTERM → 1. Stop accepting new requests (make /health/ready answer down at once)
+          2. Wait for in-flight requests to finish (timeout 15–30 seconds)
+          3. Close the DB pool / queues / files
           4. exit(0)
 ```
 
-> ข้อ 1 สำคัญกว่าที่คิด ต้องให้ `/health/ready` ตอบ `down` **ก่อน** ปิดจริงสัก 5 วินาที
-> เพื่อให้ load balancer ตัดเราออกจาก pool ทัน ไม่งั้นยังมี traffic วิ่งเข้ามาตอนกำลังปิด
+> Step 1 matters more than it looks. `/health/ready` must answer `down` about 5 seconds **before** the real shutdown,
+> so the load balancer removes us from the pool in time. Otherwise traffic keeps arriving while we are closing.
 
 ---
 
-## 5 · สิ่งที่ต้องมีก่อน deploy (ไม่ใช่ทางเลือก)
+## 5 · What must exist before deploy (not optional)
 
-- **Timeout ทุกทาง** ทั้ง request เข้า การเรียกออก และ query DB ถ้าไม่มี timeout ปลายทางช้าเมื่อไร ทั้งระบบจะค้างตาม
-- **จำกัดขนาด body** (เช่น 1MB) เพื่อกัน memory ระเบิดจาก payload ใหญ่
-- **Cross-Origin Resource Sharing (CORS) ระบุ origin ชัดเจน** — `*` ใช้ได้เฉพาะ API สาธารณะที่ไม่มี cookie
-- **Rate limit** อย่างน้อยที่ endpoint ล็อกอินและที่ที่ส่งรหัสผ่านใช้ครั้งเดียว (One-Time Password · OTP)/อีเมล
-- **Security headers**: `X-Content-Type-Options: nosniff` · `Content-Security-Policy: frame-ancestors 'none'` (ตัวแทนของ `X-Frame-Options` ที่เป็น header รุ่นเก่า · ใส่ `X-Frame-Options: DENY` คู่ไว้ให้เบราว์เซอร์เก่า) ·
+- **Timeouts everywhere**: incoming requests, outgoing calls, and DB queries. Without a timeout, the moment a downstream is slow, the whole system hangs with it.
+- **Limit body size** (for example 1MB) to stop memory blowing up from a large payload.
+- **Cross-Origin Resource Sharing (CORS) names the origin explicitly** — `*` is allowed only for a public API with no cookies.
+- **Rate limit** at least on the login endpoint and on anything that sends a one-time password (OTP)/email.
+- **Security headers**: `X-Content-Type-Options: nosniff` · `Content-Security-Policy: frame-ancestors 'none'` (replaces the old `X-Frame-Options` header · also add `X-Frame-Options: DENY` for old browsers) ·
   `Strict-Transport-Security` (HTTP Strict Transport Security · HSTS)
-  Node: `helmet` ตั้งครบในบรรทัดเดียว · .NET: `UseHsts()` ตั้งแค่ HSTS ที่เหลือต้องเขียน middleware สั้น ๆ หรือใช้แพ็กเกจ `NetEscapades.AspNetCore.SecurityHeaders` (ตัวอย่างใน `references/per-stack.md`)
-- **ปิดหน้าโชว์ error เต็ม ๆ ใน production** (`app.UseDeveloperExceptionPage()` เฉพาะ dev)
-- **ตั้งเวอร์ชันไว้ใน path**: `/api/v1/...` ตั้งแต่วันแรก เพราะย้ายทีหลังแพงกว่ามาก
-- **OpenAPI** ที่ generate จากโค้ดจริง ไม่ใช่เขียนมือแล้วลืมอัปเดต
+  Node: `helmet` sets them all in one line · .NET: `UseHsts()` sets only HSTS, and the rest needs a short middleware or the package `NetEscapades.AspNetCore.SecurityHeaders` (example in `references/per-stack.md`)
+- **Turn off the full error page in production** (`app.UseDeveloperExceptionPage()` in dev only)
+- **Put the version in the path**: `/api/v1/...` from day one, because moving later costs much more.
+- **OpenAPI** generated from the real code, not written by hand and then forgotten.
 
 ---
 
-## 6 · โค้ดที่พร้อมใช้
+## 6 · Ready-to-use code
 
-| ไฟล์ | สแต็ก | สถานะ |
+| File | Stack | Status |
 |---|---|---|
-| `assets/health.node.js` | Node / Express | ✓ รันทดสอบครบทั้ง 4 endpoint + เคส degraded/down/timeout |
-| `assets/health_py.py` | Python / FastAPI | ✓ รันทดสอบครบเหมือนกัน ผลตรงกันทุก field |
-| `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | ระวัง ยังไม่ได้คอมไพล์ทดสอบ |
+| `assets/health.node.js` | Node / Express | ✓ all 4 endpoints run and tested, plus the degraded/down/timeout cases |
+| `assets/health_py.py` | Python / FastAPI | ✓ run and tested the same way, results match on every field |
+| `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | Caution: not yet compiled or tested |
 
 ```js
 // Node
@@ -201,7 +201,7 @@ app.include_router(make_health_router(
 
 ---
 
-## 7 · ตรวจงาน
+## 7 · Check the work
 
 ```bash
 curl -i localhost:8080/ping                    # 200 pong
@@ -209,43 +209,43 @@ curl -s localhost:8080/health/live  | jq
 curl -s localhost:8080/health/ready | jq
 curl -s localhost:8080/version      | jq
 
-# ปิด DB แล้วยิงซ้ำ — ready ต้องเป็น 503 แต่ live ต้องยัง 200
+# stop the DB and call again — ready must be 503 but live must still be 200
 docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:8080/health/live
 ```
 
-- [ ] `/health/live` **ไม่** แตะ DB — ปิด DB แล้วยังตอบ 200
-- [ ] `/health/ready` ตอบ 503 เมื่อ dependency ที่ critical ล่ม
-- [ ] dependency ที่ไม่ critical ล่มแล้วได้ `degraded` + 200 (ยังรับ traffic)
-- [ ] ทุก check มี timeout — ลองทำให้ dependency ค้าง แล้ว endpoint ต้องตอบภายใน ~3 วิ
-- [ ] `/version` ตรงกับ commit ที่ deploy จริง
-- [ ] ทุก response มี `X-Request-Id` รวมทั้งตอน 500
-- [ ] ยิง 500 แล้วไม่มี stack trace / connection string หลุดออกมา
-- [ ] `SIGTERM` แล้ว request ที่ค้างอยู่ทำงานจบก่อนแอปปิด
-- [ ] `/ping` ไม่ถูกเขียนลง log (ไม่งั้นไฟล์เต็มไปด้วย ping)
+- [ ] `/health/live` does **not** touch the DB — it still answers 200 with the DB stopped
+- [ ] `/health/ready` answers 503 when a critical dependency is down
+- [ ] When a non-critical dependency is down, the result is `degraded` + 200 (still takes traffic)
+- [ ] Every check has a timeout — make a dependency hang, and the endpoint must answer within ~3 seconds
+- [ ] `/version` matches the commit actually deployed
+- [ ] Every response has `X-Request-Id`, including a 500
+- [ ] Trigger a 500 and confirm no stack trace / connection string leaks out
+- [ ] After `SIGTERM`, in-flight requests finish before the app closes
+- [ ] `/ping` is not written to the log (or the file fills up with pings)
 
 ---
 
 ## 8 · Anti-patterns
 
-- **`/health` ตัวเดียวเช็คทุกอย่าง** — orchestrator แยกไม่ออกว่าควร restart หรือแค่ตัด traffic
-- **liveness เช็ค DB** — DB สะดุด 10 วินาที = pod ตายยกแถว
-- **health check ไม่มี timeout** — dependency ค้าง แล้ว health ค้างตาม
-- **ส่ง stack trace / connection string ใน health หรือ error 500**
-- **health ต้อง login** — orchestrator ไม่มี token ให้
-- **รูปแบบ error ต่างกันทุก endpoint** — client ต้องเขียนโค้ดแกะ 5 แบบ
-- **`/ping` เขียนลง log** — ทุกวินาที × 86400 = ขยะเต็มไฟล์
-- **ไม่มี graceful shutdown** — deploy ทีไรลูกค้าเจอ error ทุกที
-- **`Access-Control-Allow-Origin: *` คู่กับ cookie** — เปิดช่องให้เว็บอื่นยิงแทนผู้ใช้
+- **A single `/health` that checks everything** — the orchestrator cannot tell whether to restart or only cut traffic
+- **liveness checks the DB** — a 10-second DB hiccup = every pod dies together
+- **A health check with no timeout** — a dependency hangs, and health hangs with it
+- **Sending a stack trace / connection string in health or in a 500 error**
+- **Health requires login** — the orchestrator has no token to give
+- **A different error format on every endpoint** — the client must write 5 kinds of parsing code
+- **`/ping` written to the log** — every second × 86400 = a file full of junk
+- **No graceful shutdown** — every deploy, customers see errors
+- **`Access-Control-Allow-Origin: *` together with cookies** — lets other sites send requests as the user
 
 ---
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Links to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---|---|
-| รูปแบบ log และ correlation id | `logging-standards` |
-| test ให้ endpoint พวกนี้ | `testing-standards` |
-| ตรวจ response ตรงกับ OpenAPI ใน CI · contract กับทีม frontend · เช็ค breaking change | `api-conventions` [`references/contract-testing.md`](../api-conventions/references/contract-testing.md) |
-| ออกแบบ endpoint ธุรกิจ | command `/api-design` |
-| runbook ตอน service ล่ม | `incident-runbook-template` |
-| ตรวจความปลอดภัย | `security-engineer` + command `/security-scan` (ทางลัดไป `security-audit` หรือ `security-gate`) |
+| Log format and correlation id | `logging-standards` |
+| Tests for these endpoints | `testing-standards` |
+| Check responses against OpenAPI in CI · contract with the frontend team · breaking-change check | `api-conventions` [`references/contract-testing.md`](../api-conventions/references/contract-testing.md) |
+| Design business endpoints | command `/api-design` |
+| Runbook for when the service is down | `incident-runbook-template` |
+| Security review | `security-engineer` + command `/security-scan` (a shortcut to `security-audit` or `security-gate`) |

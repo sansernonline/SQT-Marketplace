@@ -3,192 +3,192 @@ name: background-jobs
 description: Use when work runs outside the request in queues or schedules
 ---
 
-# งานเบื้องหลัง
+# Background jobs
 
-> **กฎข้อเดียว:** งานเบื้องหลังทุกตัวต้อง**รันซ้ำได้โดยไม่เกิดผลซ้ำ**
-> เพราะมันจะถูกรันซ้ำแน่นอน: เครื่องดับกลางทาง · คนกดใหม่ · ระบบ retry ให้เอง
+> **The one rule:** every background job must be **safe to run again without repeating its effect**,
+> because it will certainly run again: the machine dies halfway · a person clicks again · the system retries by itself.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- งานที่ผู้ใช้ไม่ควรต้องนั่งรอ: ส่งอีเมล สร้างรายงาน นำเข้าไฟล์
-- งานตามเวลา: สรุปรายวัน ปิดยอดสิ้นเดือน ลบข้อมูลที่หมดอายุ
-- เรียกระบบภายนอกที่ช้าหรือล่มบ่อย
-- คิวตันหรือมีงานหายแล้วไม่มีใครรู้
+- Work the user should not have to sit and wait for: sending email, building a report, importing a file
+- Scheduled work: a daily summary, month-end closing, deleting expired data
+- Calling an external system that is slow or often down
+- A jammed queue, or jobs that vanish with nobody noticing
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill, or use it alongside
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| timeout และการ retry ของคำขอปกติ | `error-handling-patterns` | แทน |
-| event ข้ามหลาย service ผ่าน Kafka (หลาย consumer อ่าน event เดียวกัน · เก็บย้อนหลัง) | `kafka-streaming` | แทน |
-| คิวงานผ่าน RabbitMQ (หลาย worker · retry · dead letter · ต้องมี broker จริง) | `rabbitmq-messaging` | แทน |
-| ตัวชี้วัดและการแจ้งเตือน | `observability-basics` | แทน |
-| เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` | แทน |
-| นำเข้าไฟล์ Excel/CSV เป็นเนื้องาน | `data-import-export` | แทน |
-| ส่งอีเมล/SMS เป็นเนื้องาน | `notifications` | แทน |
-| ตารางงานและ index | `database-design` | คู่ |
-| log ของ worker และ correlation id | `logging-standards` | คู่ |
-| งานลบข้อมูลที่หมดอายุ | `pdpa-compliance` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
-| ออกแบบระบบ agent (Loop · Graph · Dynamic · เลือก framework) | `llm-engineering` → [`agent-systems.md`](../llm-engineering/references/agent-systems.md) | คู่ |
+| Timeouts and retries for ordinary requests | `error-handling-patterns` | instead |
+| Events across several services through Kafka (several consumers read the same event · history is kept) | `kafka-streaming` | instead |
+| A job queue through RabbitMQ (several workers · retry · dead letter · needs a real broker) | `rabbitmq-messaging` | instead |
+| Metrics and alerts | `observability-basics` | instead |
+| Choosing the overall architecture | `architecture-patterns` | instead |
+| Importing Excel/CSV files as the main job | `data-import-export` | instead |
+| Sending email/SMS as the main job | `notifications` | instead |
+| The job table and indexes | `database-design` | alongside |
+| Worker logs and correlation id | `logging-standards` | alongside |
+| Jobs that delete expired data | `pdpa-compliance` | alongside |
+| Abbreviations in work that people read | `spell-out-abbreviations` | alongside |
+| Designing an agent system (Loop · Graph · Dynamic · choosing a framework) | `llm-engineering` → [`agent-systems.md`](../llm-engineering/references/agent-systems.md) | alongside |
 
 ---
 
-## 1 · อะไรควรไปอยู่เบื้องหลัง
+## 1 · What belongs in the background
 
-| เอาไปเบื้องหลัง | ทำในคำขอเลย |
+| Send to the background | Do inside the request |
 |---|---|
-| ใช้เวลาเกิน 1–2 วินาที | เร็วและผู้ใช้ต้องเห็นผลทันที |
-| เรียกระบบภายนอกที่ล้มได้ | ตรวจสิทธิ์ · ตรวจข้อมูล |
-| ผู้ใช้ไม่ต้องรอผล (อีเมล แจ้งเตือน) | ผลลัพธ์คือสิ่งที่เขากดมาดู |
-| งานหลายรายการเป็นชุด | |
+| Takes more than 1–2 seconds | Fast, and the user must see the result at once |
+| Calls an external system that can fail | Permission checks · data validation |
+| The user does not wait for the result (email, notification) | The result is what they clicked to see |
+| Many items done as a batch | |
 
-> **อย่าเอาไปเบื้องหลังเพียงเพราะมันช้า** ถ้าผู้ใช้ต้องเห็นผลก่อนไปต่อ
-> การย้ายไปเบื้องหลังจะต้องเพิ่มหน้าจอรอ การแจ้งเตือน และที่เก็บผลลัพธ์
-> บางครั้งแก้ให้เร็วขึ้นถูกกว่ามาก (ดู `lazy-coding`)
+> **Do not move work to the background just because it is slow.** If the user must see the result before moving on,
+> moving it adds a waiting screen, a notification, and a place to store results.
+> Sometimes making it faster is much cheaper (see `lazy-coding`).
 
 ---
 
-## 2 · เลือกกลไก
+## 2 · Choose a mechanism
 
-| กลไก | เหมาะกับ | ระวัง |
+| Mechanism | Fits | Watch out for |
 |---|---|---|
-| **ตารางงานในฐานข้อมูล** | ระบบเล็ก–กลาง · งานไม่เกินหลักพันต่อวัน | ต้องเขียนตัวหยิบงานเอง · ระวัง worker แย่งงานกัน |
-| **คิวจริง** (Redis · RabbitMQ · Amazon Simple Queue Service (SQS)) | งานเยอะ · ต้องการ retry และ dead letter ในตัว | เพิ่มของที่ต้องดูแล |
-| ตัวตั้งเวลาในแอป (cron ในโค้ด) | งานตามเวลาที่มี instance เดียว | **หลาย instance จะรันพร้อมกัน** · ดูข้อ 5 |
-| ตัวตั้งเวลาของแพลตฟอร์ม | งานตามเวลาบนคลาวด์ | |
+| **Job table in the database** | small to medium systems · up to a few thousand jobs a day | you must write the job picker yourself · watch for workers fighting over jobs |
+| **A real queue** (Redis · RabbitMQ · Amazon Simple Queue Service (SQS)) | many jobs · need built-in retry and dead letter | one more thing to look after |
+| In-app scheduler (cron in code) | scheduled work with a single instance | **several instances will run it at the same time** · see section 5 |
+| Platform scheduler | scheduled work on the cloud | |
 
-**ถ้าระบบยังเล็ก ให้เริ่มจากตารางในฐานข้อมูลก่อนเสมอ** เพราะ `SELECT ... FOR UPDATE SKIP LOCKED`
-ของ PostgreSQL ให้หลาย worker หยิบงานพร้อมกันได้อย่างปลอดภัย โดยไม่ต้องเพิ่มระบบใหม่
+**If the system is still small, always start with a table in the database,** because PostgreSQL's `SELECT ... FOR UPDATE SKIP LOCKED`
+lets several workers pick jobs at once safely, with no new system to add.
 
-**ทุกงานต้องมีอย่างน้อย:** `id` · `type` · `payload` · `status` · `attempts` ·
+**Every job needs at least:** `id` · `type` · `payload` · `status` · `attempts` ·
 `run_after` · `locked_by` · `locked_at` · `last_error` · `created_at`
 
 ---
 
-## 3 · รันซ้ำแล้วต้องไม่เกิดผลซ้ำ
+## 3 · Running again must not repeat the effect
 
-ระบบคิวเกือบทั้งหมดรับประกันแค่ว่า "ส่งถึงอย่างน้อย 1 ครั้ง" **ไม่ใช่ 1 ครั้งพอดี**
+Almost every queue system guarantees only "delivered at least once", **not exactly once**.
 
-| วิธี | ใช้ยังไง |
+| Method | How to use it |
 |---|---|
-| **กุญแจกันซ้ำ** | unique constraint บน `(job_type, business_key)` ทำให้งานซ้ำ insert ไม่ผ่าน |
-| **ตรวจสถานะก่อนทำ** | "ถ้าใบสั่งซื้อนี้ส่งอีเมลไปแล้ว ให้จบเลย" |
-| **ส่งต่อ idempotency key** | เวลาเรียก API ภายนอก (ดู `api-conventions`) |
-| **ตั้งค่าให้เป็นค่าใหม่ ไม่บวกเพิ่มจากค่าเดิม** | `set status = 'paid'` ปลอดภัยกว่า `balance = balance + 100` |
+| **Duplicate-blocking key** | a unique constraint on `(job_type, business_key)` makes a duplicate job fail to insert |
+| **Check state before acting** | "if the email for this purchase order was already sent, stop" |
+| **Pass on an idempotency key** | when calling an external API (see `api-conventions`) |
+| **Set a new value, do not add to the old one** | `set status = 'paid'` is safer than `balance = balance + 100` |
 
-> **งานที่บวกค่าหรือส่งของออกไปข้างนอก ถ้ารันซ้ำจะเสียเงินจริง**
-> อีเมล 2 ฉบับแค่น่ารำคาญ แต่โอนเงิน 2 ครั้งเป็นเรื่องใหญ่
+> **A job that adds to a value or sends something outside costs real money if it runs twice.**
+> Two emails are only annoying, but two money transfers are a big problem.
 
 ---
 
-## 4 · retry และงานที่ตายแล้ว
+## 4 · Retry and dead jobs
 
-ตัวเลขนี้สำหรับงานในคิว · ลองใหม่นอกคิวใช้ของ [`error-handling-patterns`](../error-handling-patterns/SKILL.md) §4: service เรียก service ใช้ 3 ครั้ง 1/2/4 วินาที · มีคนรอหน้าจอ → retry ไม่เกิน 1 ครั้งแล้วให้กดเอง
+These numbers are for jobs in a queue · for retries outside a queue use [`error-handling-patterns`](../error-handling-patterns/SKILL.md) §4: service-to-service calls use 3 tries at 1/2/4 seconds · when a person waits on the screen → at most 1 retry, then let them press again
 
 ```
-ล้ม → รอ 1 นาที → ล้ม → รอ 4 นาที → ล้ม → รอ 16 นาที → ล้มครั้งที่ 4 → dead letter
+fail → wait 1 min → fail → wait 4 min → fail → wait 16 min → 4th failure → dead letter
 ```
 
-| กฎ | รายละเอียด |
+| Rule | Detail |
 |---|---|
-| **มีเพดานเสมอ** | 3–5 ครั้ง ถ้า retry ไม่จำกัด งานเดียวก็ทำให้คิวตัน |
-| เว้นเวลาเพิ่มขึ้นทุกรอบ (เท่าตัวคงที่ เช่น ×4) + สุ่มเล็กน้อย | เหมือน `error-handling-patterns` |
-| ข้อมูลผิดไม่ต้อง retry | payload ผิดรูปแบบ ลองอีกกี่ครั้งก็เหมือนเดิม |
-| **งานที่หมดสิทธิ์ต้องไปที่เดียว** | dead letter (ที่เก็บงานที่ล้มจนหมดสิทธิ์) โดยเก็บ payload เต็มและ error ล่าสุด |
-| ต้องมีคนดู dead letter | **แจ้งเตือนเมื่อมีงานเข้าไปใหม่** ไม่ใช่รอให้ลูกค้าทัก |
-| เอากลับมารันใหม่ได้ | แก้ต้นเหตุแล้วสั่งรันใหม่จาก dead letter ได้ โดยไม่ต้องเขียนสคริปต์ |
+| **Always set a cap** | 3–5 tries · with unlimited retries a single job can jam the queue |
+| Increase the wait each round (a fixed multiple such as ×4) + a little randomness | same as `error-handling-patterns` |
+| Bad data needs no retry | a malformed payload stays the same however many times you try |
+| **A job that has run out of tries goes to one place** | dead letter (where jobs that failed until they ran out of tries are kept), keeping the full payload and the last error |
+| A person must watch the dead letter | **alert when a new job arrives there**, do not wait for a customer to complain |
+| It can be run again | after fixing the cause, you can re-run from the dead letter without writing a script |
 
-**งานที่ค้างเพราะ worker ตาย** ต้องมีตัวปลดล็อก
-งานที่ `locked_at` เก่ากว่า N นาที ให้ถือว่าไม่มีใครทำอยู่แล้ว แล้วปลดล็อกให้ worker อื่นหยิบไปทำต่อ
+**A job stuck because a worker died** needs an unlocker.
+If a job's `locked_at` is older than N minutes, treat it as having nobody working on it, and unlock it so another worker picks it up.
 
-**สถานะของงานเป็นเครื่องสถานะ ไม่ใช่ boolean** (แนวคิดจาก wshobson python-background-jobs) — ทุกกลไกในข้อ 2 ต้องตอบได้ว่างานอยู่สถานะไหนใน `queued → running → succeeded` หรือ `running → failed (attempts < เพดาน) → queued` หรือ `failed → dead` · เก็บ `attempts` · `locked_at` · `last_error` · `finished_at` ไว้กับงาน · เดินได้เฉพาะลูกศรข้างบน (งาน `succeeded` กลับไป `running` ไม่ได้ ต้องสร้างงานใหม่) · หน้าจอแอดมินและ dead letter อ่านจากสถานะนี้ที่เดียว
+**Job state is a state machine, not a boolean** (idea from wshobson python-background-jobs) — every mechanism in section 2 must be able to say which state a job is in: `queued → running → succeeded`, or `running → failed (attempts < cap) → queued`, or `failed → dead` · keep `attempts` · `locked_at` · `last_error` · `finished_at` with the job · move only along the arrows above (a `succeeded` job cannot go back to `running`; create a new job) · the admin screen and the dead letter read from this state in one place
 
 ---
 
-## 5 · งานตามเวลา
+## 5 · Scheduled jobs
 
-> **ถ้ามีหลาย instance งานตามเวลาจะรันหลายรอบพร้อมกัน**
-> รายงานสรุปยอดถูกส่ง 3 ฉบับ หรือหักเงิน 3 ครั้ง ก็เพราะข้อนี้
+> **With several instances, a scheduled job runs several times at once.**
+> A summary report sent 3 times, or money charged 3 times, comes from this.
 
-| วิธี | ใช้เมื่อ |
+| Method | Use when |
 |---|---|
-| ล็อกที่ฐานข้อมูล (advisory lock) | ทำได้ทันที ไม่ต้องเพิ่มของ |
-| ตัวตั้งเวลาของแพลตฟอร์มยิงเข้ามาที่ endpoint | บนคลาวด์ · Kubernetes CronJob |
-| ตัวตั้งเวลาที่รองรับหลาย instance โดยตรง | Quartz · Hangfire |
+| Lock in the database (advisory lock) | you can do it right away with nothing added |
+| The platform scheduler calls an endpoint | on the cloud · Kubernetes CronJob |
+| A scheduler that supports several instances directly | Quartz · Hangfire |
 
-**กฎของงานตามเวลา:**
+**Rules for scheduled jobs:**
 
-- **รับช่วงเวลาเป็นพารามิเตอร์** จะได้รันย้อนหลังวันที่พลาดได้โดยไม่ต้องแก้โค้ด
-- ถ้าตกไป 1 รอบ ต้องตามเก็บได้ ไม่ข้ามไปเลย
-- ระบุเขตเวลาให้ชัดว่า "ทุกเที่ยงคืน" ของเขตเวลาไหน (ดู `i18n-and-locale`)
-- **บันทึกว่ารันรอบไหนสำเร็จแล้ว** ไม่ใช่ดูจาก log
+- **Take the time range as a parameter**, so you can re-run missed dates without changing code
+- If a run is missed, you must be able to catch up, not skip it for good
+- State the time zone clearly: "every midnight" in which zone (see `i18n-and-locale`)
+- **Record which runs succeeded**, do not infer it from logs
 
 ---
 
-## 6 · งานยาวที่ผู้ใช้รออยู่
+## 6 · Long jobs the user waits on
 
-| ต้องมี | รายละเอียด |
+| Needed | Detail |
 |---|---|
-| id ของงาน | คืนให้ทันทีที่รับงาน ผู้ใช้เอาไว้ถามความคืบหน้า |
-| สถานะ | `queued` · `running` · `succeeded` · `failed` · `cancelled` |
-| ความคืบหน้า | "ทำแล้ว 340 จาก 1,200 รายการ" ไม่ใช่หมุนเปล่า ๆ |
-| ยกเลิกได้ | งานต้องเช็คสัญญาณยกเลิกเป็นระยะ |
-| ผลลัพธ์ | เก็บไว้ให้ดาวน์โหลดได้ พร้อมวันหมดอายุ |
-| แจ้งเมื่อเสร็จ | อีเมลหรือแจ้งเตือนในระบบ (ดู `notifications`) |
+| Job id | return it the moment the job is accepted · the user uses it to ask about progress |
+| State | `queued` · `running` · `succeeded` · `failed` · `cancelled` |
+| Progress | "340 of 1,200 items done" (ทำแล้ว 340 จาก 1,200 รายการ), not a blind spinner |
+| Cancellable | the job must check for a cancel signal regularly |
+| Result | keep it available to download, with an expiry date |
+| Notify when done | email or an in-system notification (see `notifications`) |
 
-**แบ่งงานใหญ่เป็นชิ้นเล็ก** เช่น นำเข้า 50,000 แถว ให้แบ่งเป็นงานย่อยละ 500 แถว
-เพราะงานเดียวที่ใช้เวลา 40 นาที ถ้าล้มที่นาทีที่ 39 ต้องเริ่มใหม่ทั้งหมด
+**Split a big job into small pieces.** For example, import 50,000 rows as sub-jobs of 500 rows each,
+because a single 40-minute job that fails at minute 39 must start over from the beginning.
 
 ---
 
-## 7 · วัดอะไร
+## 7 · What to measure
 
-| ตัวชี้วัด | เตือนเมื่อ |
+| Metric | Alert when |
 |---|---|
-| จำนวนงานค้างในคิว | โตขึ้นเรื่อย ๆ ไม่ลดลง |
-| เวลารอในคิว (p95 · 95% ของงานรอไม่เกินค่านี้) | เกินที่สัญญาไว้ |
-| อัตราความล้มเหลว | เกินเกณฑ์ |
-| **จำนวนใน dead letter** | **เพิ่มขึ้นแม้แค่ตัวเดียว** |
-| รอบของงานตามเวลาที่ไม่ได้รัน | ข้ามรอบ |
-| งานที่ค้างอยู่ในสถานะ running นานผิดปกติ | เกิน N เท่าของค่าปกติ |
+| Jobs waiting in the queue | keeps growing and does not fall |
+| Wait time in the queue (p95 · 95% of jobs wait no longer than this) | above what was promised |
+| Failure rate | above the threshold |
+| **Count in the dead letter** | **rises, even by just one** |
+| Scheduled runs that did not run | a run was skipped |
+| Jobs stuck in the running state for an unusual time | more than N times the normal |
 
-> **คิวที่ตันจะเงียบสนิท** API ยังตอบ 200 ทุกคำขอ health check เขียวหมด
-> แต่ไม่มีอีเมลออกไป 3 ชั่วโมงแล้ว ต้องวัดถึงจะเห็น
+> **A jammed queue is completely silent.** The API still answers 200 to every request and the health checks are all green,
+> but no email has gone out for 3 hours. You see it only if you measure.
 
 ---
 
 ## 8 · Anti-patterns
 
-- **งานที่รันซ้ำแล้วเกิดผลซ้ำ** — คิวจะรันซ้ำแน่นอน ไม่ใช่อาจจะ
-- **retry ไม่จำกัด** — งานเดียวที่พังทำให้ทั้งคิวตัน
-- **ไม่มี dead letter** — งานหายเงียบ ๆ ไม่มีใครรู้
-- **มี dead letter แต่ไม่มีใครดู** — เท่ากับไม่มี
-- **งานตามเวลาบนหลาย instance โดยไม่มีล็อก** — รันซ้อนกัน
-- **ส่งข้อมูลทั้งก้อนใน payload** — ควรส่ง id แล้วให้งานไปอ่านเอง จะได้ข้อมูลล่าสุดด้วย
-- **งานยาวที่ยกเลิกไม่ได้** — ผู้ใช้กดผิดแล้วต้องรอ 40 นาที
-- **หน้าจอที่หมุนเปล่าโดยไม่บอกความคืบหน้า** — ผู้ใช้จะกดซ้ำ แล้วได้งานซ้ำ
-- **ไม่วัดคิว** — ตันแล้วรู้ตอนลูกค้าโทรมา
+- **A job that repeats its effect when run again** — the queue will certainly run it again, not maybe
+- **Unlimited retry** — one broken job jams the whole queue
+- **No dead letter** — jobs vanish silently and nobody knows
+- **A dead letter that nobody watches** — the same as having none
+- **Scheduled jobs on several instances with no lock** — they run on top of each other
+- **Sending the whole data block in the payload** — send the id and let the job read it itself, so it gets the latest data too
+- **A long job that cannot be cancelled** — the user clicks wrong and waits 40 minutes
+- **A blind spinner that gives no progress** — the user clicks again and gets a duplicate job
+- **Not measuring the queue** — it jams and you find out when a customer calls
 
 ---
 
-## 9 · durable workflow สำหรับงาน agent ที่รันยาวหรือรอคนอนุมัติ
+## 9 · Durable workflow for agent jobs that run long or wait for human approval
 
-งาน agent ที่วิ่งหลายสิบนาที เรียก LLM และ tool หลายรอบ หรือหยุดรอคนอนุมัติข้ามวัน ใช้คิวธรรมดาไม่พอ เพราะถ้าล้มที่ขั้น 8 จาก 10 ต้องเริ่มใหม่และจ่ายค่า token ซ้ำ · ให้ใช้ engine ที่บันทึกผลทุกขั้นแล้วทำต่อจากจุดเดิมได้
+An agent job that runs for tens of minutes, calls an LLM and tools many times, or pauses for approval across days cannot use a plain queue, because a failure at step 8 of 10 means starting over and paying the token cost again · use an engine that records the result of every step and resumes from the same point
 
-| เครื่องมือ | เหมาะกับ | รอคนอนุมัติด้วย | ระวัง |
+| Tool | Fits | Waits for human approval | Watch out for |
 |---|---|---|---|
-| **Temporal** | โค้ด Python และภาษาอื่น · loop ของ agent อยู่ใน workflow ส่วนการเรียก LLM และ tool เป็น activity · มี `OpenAIAgentsPlugin` · `activity_as_tool` | (ยังไม่ได้ตรวจ หน้า signal) | integration กับ OpenAI Agents SDK ยังเป็น Public Preview |
-| **AWS Step Functions** | ขั้นตอนตายตัวบน AWS · fan-out ด้วย `Map` (Inline ขนาน 40 · Distributed 10,000 งานลูก) | `.waitForTaskToken` รอได้ถึง 1 ปีจนมี `SendTaskSuccess` / `SendTaskFailure` · ตั้ง `HeartbeatSeconds` กันค้างเงียบ | งานที่ต้องให้ LLM ตัดสินทาง ต้องให้ Lambda หรือ Bedrock ตัดสินแล้วใช้ `Choice` |
-| **checkpointer ของ framework agent** | ไม่อยากเพิ่ม engine · LangGraph `PostgresSaver` · Microsoft Agent Framework `CheckpointManager` · OpenAI `RunState.to_json()` | LangGraph `interrupt()` · OpenAI `needs_approval` · Microsoft Agent Framework `RequestInfoExecutor` | ตัวเก็บในหน่วยความจำหายเมื่อ process รีสตาร์ต · ใช้ตัวที่เก็บลงฐานข้อมูลใน production |
+| **Temporal** | Python and other languages · the agent loop lives in a workflow, while LLM and tool calls are activities · has `OpenAIAgentsPlugin` · `activity_as_tool` | (`ยังไม่ได้ตรวจ` · see the signal page) | the integration with the OpenAI Agents SDK is still in Public Preview |
+| **AWS Step Functions** | fixed steps on AWS · fan-out with `Map` (Inline in parallel 40 · Distributed 10,000 child jobs) | `.waitForTaskToken` can wait up to 1 year until `SendTaskSuccess` / `SendTaskFailure` arrives · set `HeartbeatSeconds` to prevent a silent hang | when an LLM must choose the route, let Lambda or Bedrock decide, then use `Choice` |
+| **Agent framework checkpointer** | you do not want to add an engine · LangGraph `PostgresSaver` · Microsoft Agent Framework `CheckpointManager` · OpenAI `RunState.to_json()` | LangGraph `interrupt()` · OpenAI `needs_approval` · Microsoft Agent Framework `RequestInfoExecutor` | an in-memory store is lost when the process restarts · use a database-backed store in production |
 
-**กฎของโค้ดที่ต้อง replay ได้** (Temporal · Google ADK · Claude Code workflow ใช้หลักเดียวกัน · ตรวจกับ [Temporal: Workflow Definition](https://docs.temporal.io/workflow-definition) 2026-10-26)
+**Rules for code that must be replayable** (Temporal · Google ADK · Claude Code workflows use the same principle · checked against [Temporal: Workflow Definition](https://docs.temporal.io/workflow-definition) 2026-10-26)
 
-- **ห้ามอ่านเวลาหรือสุ่มค่าในโค้ดที่คุมลำดับงาน** (`Date.now()` · `datetime.now()` · `Math.random()` · `uuid4()`) · ตอน replay ค่าจะต่างจากรอบแรก ลำดับงานเพี้ยน แล้วรีใช้ผลเดิมไม่ได้ · ต้องใช้เวลาหรือค่าสุ่ม ให้ทำใน activity หรือใช้ API ของ SDK ที่ให้มาสำหรับเรื่องนี้
-- **การเรียก LLM เรียก tool และอ่านเขียนข้างนอกทั้งหมดอยู่ใน activity** ผลถูกบันทึกครั้งเดียว ตอน replay อ่านจากบันทึก ไม่เรียกซ้ำ
-- **ลำดับการเรียกต้องเหมือนเดิมทุกรอบ** · แก้ลำดับขั้นในโค้ดที่ยังมีงานค้างอยู่ จะทำให้งานเก่า replay ไม่ผ่าน (Temporal เรียกว่า nondeterminism error) · ต้องเปลี่ยนให้ใช้ versioning หรือ patching ของ engine
-- **ขั้นก่อนจุดหยุดรอต้องรันซ้ำได้** (ข้อ 3) · LangGraph รัน node ที่หยุดไว้ใหม่ตั้งแต่ต้นตอน resume จึงย้ายผลข้างเคียงไปไว้หลังจุดหยุด
-- **state ที่บันทึกไว้ไม่มีการยืนยันตัวตน** (เอกสาร OpenAI เตือนเรื่อง `RunState`) · โหลดจากที่เก็บที่เราคุมเท่านั้น
-- เพดานรอบ งบ token และการหยุดเมื่อไม่ดีขึ้นยังต้องมีเหมือนงานในคิว · รายละเอียดใน [`agent-systems.md`](../llm-engineering/references/agent-systems.md) หัวข้อ 6
+- **Never read the time or draw a random value in code that controls the order of work** (`Date.now()` · `datetime.now()` · `Math.random()` · `uuid4()`) · on replay the value differs from the first run, the order drifts, and the old result cannot be reused · do anything that needs time or randomness in an activity, or use the SDK's own API for it
+- **All LLM calls, tool calls, and outside reads and writes go in activities.** The result is recorded once, and replay reads the record instead of calling again.
+- **The order of calls must be the same on every run** · changing the order of steps in code that still has jobs in flight makes the old jobs fail replay (Temporal calls this a nondeterminism error) · switch to the engine's versioning or patching
+- **The steps before a wait point must be safe to repeat** (section 3) · LangGraph re-runs the paused node from the start on resume, so move side effects to after the wait point
+- **Saved state carries no identity check** (the OpenAI docs warn about `RunState`) · load it only from a store we control
+- The cap on rounds, the token budget, and stopping when there is no improvement are still needed, as for jobs in a queue · details in [`agent-systems.md`](../llm-engineering/references/agent-systems.md) section 6
 
-ที่มา (เปิดอ่าน 2026-10-26): [Temporal · OpenAI Agents SDK](https://docs.temporal.io/ai-cookbook/openai-agents-sdk-python) · [ประกาศ Temporal](https://temporal.io/blog/announcing-openai-agents-sdk-integration) · [Step Functions integration patterns](https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html) · [Step Functions Map](https://docs.aws.amazon.com/step-functions/latest/dg/state-map.html) · [LangGraph interrupts](https://docs.langchain.com/oss/python/langgraph/interrupts) · [OpenAI human in the loop](https://openai.github.io/openai-agents-python/human_in_the_loop/) · [Claude Code workflows](https://code.claude.com/docs/en/workflows)
+Sources (opened 2026-10-26): [Temporal · OpenAI Agents SDK](https://docs.temporal.io/ai-cookbook/openai-agents-sdk-python) · [Temporal announcement](https://temporal.io/blog/announcing-openai-agents-sdk-integration) · [Step Functions integration patterns](https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html) · [Step Functions Map](https://docs.aws.amazon.com/step-functions/latest/dg/state-map.html) · [LangGraph interrupts](https://docs.langchain.com/oss/python/langgraph/interrupts) · [OpenAI human in the loop](https://openai.github.io/openai-agents-python/human_in_the_loop/) · [Claude Code workflows](https://code.claude.com/docs/en/workflows)

@@ -2,7 +2,7 @@
 
 Contents
 1. Self-assessment (English)
-2. แบบประเมินตนเอง (Thai)
+2. Self-assessment (Thai)
 3. Promotion case
 
 ## 1. Self-assessment (English)
@@ -35,7 +35,7 @@ Support I need
 Self-rating: [level] — because [one-sentence justification]
 ```
 
-## 2. แบบประเมินตนเอง (Thai)
+## 2. Self-assessment (Thai)
 
 ```
 รอบการประเมิน: [ม.ค.–ธ.ค. 25xx]   ตำแหน่ง: [ตำแหน่ง]   หัวหน้างาน: [ชื่อ]

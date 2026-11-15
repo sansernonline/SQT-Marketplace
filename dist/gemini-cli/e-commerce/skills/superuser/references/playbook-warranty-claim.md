@@ -1,16 +1,16 @@
-# playbook · warranty-claim — ทะเบียนรับประกันและการเคลม
+# playbook · warranty-claim — warranty register and claims
 
-ใช้เมื่อ: เพิ่งซื้อของที่มีประกัน · อยากเก็บใบเสร็จให้เป็นระบบ · ของเสียและอยากรู้ว่ายังอยู่ในประกันไหม
-skill หลัก: `warranty-tracker`
+Use when: you just bought something with a warranty · you want to keep receipts in order · something broke and you want to know whether it is still under warranty
+Main skills: `warranty-tracker`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. สร้างหรือเปิดทะเบียนตาม `warranty-tracker` — สินค้า · วันที่ซื้อ · ร้าน · หมดประกัน · ที่เก็บใบเสร็จ · ใคร: `consumer-advocate` ตัวใหม่
-2. เพิ่มของที่ผู้ใช้ส่งมา โดยอ่านจากใบเสร็จหรือใบรับประกันจริง · ใคร: `consumer-advocate` ตัวใหม่
-3. ถ้าจะเคลม ให้ตรวจว่ายังอยู่ในประกัน อ่านเงื่อนไขยกเว้น แล้วเตรียมเอกสารและข้อความแจ้งศูนย์ · ใคร: `consumer-advocate` ตัวใหม่ตรวจสิทธิ์และเตรียมเอกสาร
-4. ตั้งเตือนก่อนหมดประกัน 30 วันสำหรับของที่ควรตรวจก่อนหมด · ใคร: หัวหน้าทีม
-5. ตรวจทะเบียน การตั้งเตือน และชุดเคลม (ถ้ามี) ก่อนถึงผู้ใช้ · ใคร: `reviewer` ตัวใหม่
+1. Create or open the register per `warranty-tracker` — product · purchase date · shop · warranty end · where the receipt is kept · ใคร: `consumer-advocate` ตัวใหม่
+2. Add the items the user sent, reading from the real receipt or warranty card · ใคร: `consumer-advocate` ตัวใหม่
+3. If a claim is planned, check that the item is still under warranty, read the exclusion terms, and prepare the documents and the message to the service center · ใคร: `consumer-advocate` ตัวใหม่ checks eligibility and prepares the documents
+4. Set a reminder 30 days before the warranty ends for items worth checking before then · ใคร: หัวหน้าทีม
+5. Check (ตรวจ) the register, the reminders, and the claim pack (if any) before it reaches the user · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-ทะเบียนตรงกับเอกสารจริงทุกแถว และชุดเคลมพร้อมส่ง (ถ้ามี)
+Every row of the register matches the real documents, and the claim pack is ready to send (if there is one).

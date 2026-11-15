@@ -174,7 +174,7 @@ Write a condition as a full sentence with a connector (section 2):
 | 6 | Words by reader | General reader: "ระบบ" "ตรวจขาเข้า" instead of "โค้ด" "Guard" |
 | 6 | No "คน" for non-people | "ให้ระบบตัดสิน" |
 
-Sources: ISO 24495-1 (plain language) · GOV.UK clear language · Microsoft Writing Style Guide · Wikipedia: Signs of AI writing · คู่มือการร่างเอกสารภาษาไทย
+Sources: ISO 24495-1 (plain language) · GOV.UK clear language · Microsoft Writing Style Guide · Wikipedia: Signs of AI writing · คู่มือการร่างเอกสารภาษาไทย (guide to drafting Thai documents)
 
 
 ## reference: strict-review.md

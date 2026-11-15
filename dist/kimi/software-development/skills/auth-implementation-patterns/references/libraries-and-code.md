@@ -1,6 +1,6 @@
 # ไลบรารีและโค้ดตัวอย่าง
 
-โค้ดตัวอย่างการเก็บรหัสผ่าน เครื่องมือจำกัดจำนวนครั้ง และไลบรารีที่แนะนำแยกตามภาษา
+Sample code for storing passwords, rate-limiting tools, and recommended libraries by language
 
 ## Password storage — code
 

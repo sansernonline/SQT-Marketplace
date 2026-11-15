@@ -2,71 +2,71 @@
 
 Use when a mid-task finding needs a decision before going on
 
-# แจ้งสิ่งที่เจอ แล้วเสนอทางไป
+# Flag what you found, then propose a way forward
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write every line of wording following `human-writing`. This skill gives the format and structure. human-writing says how to write so the reader understands.
 
-> **กฎข้อเดียว:** เปิดด้วย**ผลกระทบ** ปิดด้วย**คำถามเดียว**
-> ตรงกลางคือหลักฐานกับข้อเสนอ ไม่ใช่การเล่าว่าเจอมาได้ยังไง
+> **The one rule:** open with the **impact**, close with **one question**.
+> The middle is evidence and proposals, not a story of how you found it.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เจอของที่ทำให้แผนเดิมใช้ไม่ได้ ระหว่างทำงานอย่างอื่นอยู่
-- ตัวเลข ไฟล์ หรือเอกสารไม่ตรงกัน แล้วต้องรู้ว่าจะยึดอันไหน — เฉพาะเมื่อเลือกผิดแล้วย้อนไม่ได้ · ถ้าย้อนได้ ให้เลือกเองแล้วลง [`decision-log`](../decision-log/SKILL.md)
-- มีทางไปต่อหลายทางที่ย้อนไม่ได้ เสียเงินหรือเวลามาก หรือส่งออกไปถึงคนนอก และต้องให้ผู้ใช้เลือกก่อน · ใน SuperUser ทำส่วนอื่นให้ครบก่อน แล้วเขียนเรื่องนี้ใต้ **รออนุมัติ** ตอนจบ ไม่หยุดถามกลางงาน
-- เสนอให้เพิ่มหรือเปลี่ยนอะไรบางอย่าง ที่ผู้ใช้ยังไม่ได้ขอ
+- You find something that makes the original plan unusable while working on something else.
+- Numbers, files or documents disagree, and you must know which to follow. Only when a wrong choice cannot be undone. If it can be undone, choose yourself and log it in [`decision-log`](../decision-log/SKILL.md).
+- There are several ways forward that cannot be undone, cost a lot of money or time, or go out to outsiders, and the user must choose first. In SuperUser, finish the other parts first, then write this under **รออนุมัติ** (awaiting approval) at the end. Do not stop to ask mid-task.
+- You propose adding or changing something the user has not asked for.
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use something else, or use it together
 
-| งาน | skill | |
+| Work | Skill | |
 |---|---|---|
-| ตอบคำถามที่ผู้ใช้ถามมา | `answer-shape` | แทน |
-| ทางเลือกที่ย้อนได้ (เปลี่ยนทีหลังได้ไม่เสียอะไร) | `principle-proceed-on-reversible-work` — ทำเลย แล้วลง `decision-log` | แทน |
-| ข้อเท็จจริงที่ไม่รู้ (ตัวเลข ชื่อ วันที่ งบ) | ใส่ `(รอยืนยัน)` แล้วทำต่อ ไม่ต้องหยุดถาม | แทน |
-| รายงานผลงานที่ทำเสร็จแล้ว | `human-writing` · `status-report` | แทน |
-| อธิบายเรื่องซับซ้อนให้เข้าใจ | `answer-shape` | แทน |
-| เขียนเป็นเอกสารให้คนอื่นอ่าน | `polished-document-style` | แทน |
-| งานพังจริงและต้องแก้ทันที | `targeted-fix` — แก้ก่อน แล้วค่อยรายงาน | แทน |
-| กางตัวย่อและศัพท์เฉพาะในคำตอบ | `spell-out-abbreviations` | คู่ |
-| สิ่งที่เจอคือเหตุขัดข้องของระบบจริง | `incident-runbook-template` · `postmortem-template` (plugin `software-development`) | คู่ |
+| Answer a question the user asked | `answer-shape` | instead |
+| A reversible choice (can be changed later at no cost) | `principle-proceed-on-reversible-work`: do it now, then log it in `decision-log` | instead |
+| An unknown fact (number, name, date, budget) | Put `(รอยืนยัน)` (awaiting confirmation) and keep going; do not stop to ask | instead |
+| Report finished work | `human-writing` · `status-report` | instead |
+| Explain something complex so it is understood | `answer-shape` | instead |
+| Write a document for others to read | `polished-document-style` | instead |
+| Something is really broken and must be fixed now | `targeted-fix`: fix first, then report | instead |
+| Spell out abbreviations and jargon in the answer | `spell-out-abbreviations` | together |
+| What you found is a real system incident | `incident-runbook-template` · `postmortem-template` (plugin `software-development`) | together |
 
 ---
 
-## 1 · โครงคำตอบ 4 บล็อก
+## 1 · The 4-block answer
 
-| บล็อก | ความยาว | กฎ |
+| Block | Length | Rule |
 |---|---|---|
-| 1 · สิ่งที่เจอ + ผลถ้าไม่แก้ | 1–2 บรรทัด | **ขึ้นก่อนเสมอ** ไม่มีคำเกริ่น ไม่ทวนคำถาม |
-| 2 · หลักฐาน | ตาราง ≤ 5 แถว | ตัวเลขที่ขัดกันเท่านั้น ไม่ต้องเล่าวิธีตรวจ |
-| 3 · ข้อเสนอ | ตาราง ≤ 5 แถว | ทำอะไร → **ได้อะไร** ไม่ใช่ทำอะไร → ทำยังไง |
-| 4 · คำถามปิด | 1 คำถาม | คำถามเดียว แบบเลือกคำตอบ ทุกตัวเลือกมีหลักฐาน (ข้อ 6) |
+| 1 · What you found + the result if not fixed | 1–2 lines | **Always first.** No lead-in, no repeating the question |
+| 2 · Evidence | Table, at most 5 rows | Only the numbers that disagree. Do not tell how you checked |
+| 3 · Proposal | Table, at most 5 rows | Do what → **get what**, not do what → how |
+| 4 · Closing question | 1 question | One question, multiple choice, every option backed by evidence (section 6) |
 
-บล็อก 2 ตัดได้ถ้าไม่มีตัวเลข ส่วนบล็อก 3 ตัดได้ถ้ายังไม่มีข้อเสนอจริง ๆ
-**บล็อก 1 กับ 4 ตัดไม่ได้**
+Block 2 can be cut if there are no numbers. Block 3 can be cut if you have no real proposal yet.
+**Blocks 1 and 4 cannot be cut.**
 
-**ทั้งคำตอบควรจบใน 1 หน้าจอ** — ยาวกว่านั้นแปลว่ากำลังอธิบายกระบวนการ ไม่ใช่ขอการตัดสินใจ
+**The whole answer should end within 1 screen.** Longer than that means you are explaining a process, not asking for a decision.
 
 ---
 
-## 2 · บล็อกที่ 1 — สูตรประโยคเดียว
+## 2 · Block 1: the one-sentence formula
 
 ```
 <อะไรผิด> เพราะ <สาเหตุสั้น ๆ> · ต้อง <ทำอะไร> ก่อน <ขั้นถัดไป> ไม่งั้น <ผลเสียที่เป็นรูปธรรม>
 ```
 
-| ผิด: เขียนแบบเล่าเรื่อง | ถูก: เขียนแบบขึ้นด้วยผลกระทบ |
+| Wrong: written as a story | Right: written opening with the impact |
 |---|---|
 | "ระหว่างทำสรุปยอดผมพบว่าไฟล์ยอดขายที่ดึงมาเมื่อเช้านี้นั้นเป็นฉบับก่อนที่ร้านจะแก้ราคา…" | "**สรุปยอดขายใช้ราคาเก่า** เพราะดึงจากไฟล์ก่อนร้านแก้ราคา ต้องดึงใหม่ก่อนส่งบัญชี ไม่งั้นภาษีคำนวณผิด 38 รายการ" |
 
-- **"ไม่งั้น…" ต้องเป็นรูปธรรม** — "ข้าม FR-14.x (Functional Requirement — ความต้องการเชิงฟังก์ชัน ข้อ 14.x) ทั้งชุด" ไม่ใช่ "อาจมีปัญหาตามมา"
-- ไม่ต้องบอกว่าเจอตอนไหนหรือเจอได้ยังไง เว้นแต่วิธีเจอจะเปลี่ยนสิ่งที่ต้องทำ
-- ตัวหนาใช้กับ**คำที่เปลี่ยนการตัดสินใจ**เท่านั้น ไม่ใช่ทุกคำสำคัญ
+- **The "ไม่งั้น…" (otherwise…) part must be concrete.** "ข้าม FR-14.x (Functional Requirement — ความต้องการเชิงฟังก์ชัน ข้อ 14.x) ทั้งชุด" (skips the whole FR-14.x set), not "อาจมีปัญหาตามมา" (may cause problems later).
+- Do not say when or how you found it, unless how you found it changes what must be done.
+- Use bold only for **words that change the decision**, not every important word.
 
 ---
 
-## 3 · ตัวเลขที่ขัดกัน = ตารางเทียบเสมอ
+## 3 · Numbers that disagree: always a comparison table
 
-สองค่าขึ้นไปที่ไม่ตรงกัน อ่านจากประโยคยากกว่าอ่านจากตารางทุกครั้ง
+Two or more values that do not match are always harder to read in a sentence than in a table.
 
 ```markdown
 | | ที่บันทึกไว้ | ของจริง |
@@ -76,16 +76,16 @@ Use when a mid-task finding needs a decision before going on
 | ค่าส่งต่างประเทศ | ไม่มี | **มี** |
 ```
 
-- หัวคอลัมน์บอกว่า**ค่าไหนเชื่อได้** — "ที่บันทึกไว้ / ของจริง" ไม่ใช่ "เก่า / ใหม่"
-- ตัวหนาที่ฝั่งที่ถูกต้อง เพื่อให้กวาดตาแล้วรู้ทันทีว่าต้องยึดอะไร
-- แถวที่ตรงกันอยู่แล้ว **ไม่ต้องใส่**
+- Column headings say **which value can be trusted**: "ที่บันทึกไว้ / ของจริง" (recorded / actual), not "เก่า / ใหม่" (old / new).
+- Bold the correct side, so a glance shows what to follow.
+- Rows that already match: **leave them out.**
 
-**คำถามหรือสมมติฐานเดิมที่ตกไปเพราะข้อมูลใหม่ ให้ตัดทิ้งในหนึ่งบรรทัด**
-เช่น "คำถามข้อ 1 เรื่องยอดไม่ตรง — ตกไปเอง" แล้วไปต่อ อย่าอธิบายว่าทำไมถึงตก
+**Drop an old question or assumption that new data made obsolete, in one line,**
+such as "คำถามข้อ 1 เรื่องยอดไม่ตรง — ตกไปเอง" (question 1 about the mismatched total, dropped by itself), and move on. Do not explain why it dropped.
 
 ---
 
-## 4 · ข้อเสนอเป็นตาราง "ทำอะไร → ได้อะไร"
+## 4 · Proposals as a "do what → get what" table
 
 ```markdown
 | ไฟล์ | ได้อะไร |
@@ -94,70 +94,70 @@ Use when a mid-task finding needs a decision before going on
 | วันที่และฉบับบนหน้าแรกของแต่ละไฟล์ | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอ |
 ```
 
-- คอลัมน์ขวาคือ **ประโยชน์** ไม่ใช่ขั้นตอน — คนอ่านกำลังตัดสินใจว่าคุ้มไหม ไม่ได้กำลังลงมือทำ
-- เรียงจากคุ้มที่สุดลงมา ไม่ใช่เรียงตามลำดับการทำ · "คุ้ม" วัดด้วยสูตร คนหรือไฟล์ที่ได้ประโยชน์ × ผลกระทบ × ความมั่นใจ ÷ แรงงาน: ตั้งแต่ 3 ข้อขึ้นไปใส่ตัวเลขตามแม่แบบ [`templates/priority.json`](templates/priority.json) แล้วรัน `node <plugin>/skills/decision-scoring/scripts/decide.mjs priority priority.json` · ข้อที่ทำให้ผลผิดหรือไม่ปลอดภัยใส่ `"first": true` ให้ขึ้นก่อนเสมอ · มีงบเวลาจำกัดใช้ `knapsack` แทน (`decision-scoring`)
-- **ผูกข้อเสนอกับปัญหาที่เพิ่งเจอถ้าผูกได้** — เป็นเหตุผลที่หนักแน่นที่สุดที่มี
-- เกิน 5 แถวเมื่อไหร่ แปลว่ากำลังเสนอหลายเรื่องปนกัน ให้แยกเป็นคนละรอบ
+- The right column is the **benefit**, not the steps. The reader is deciding whether it is worth it, not doing it.
+- Order from most worthwhile downward, not in the order of doing. "Worthwhile" is measured by the formula: people or files that benefit × impact × confidence ÷ effort. With 3 or more items, fill in numbers using the template [`templates/priority.json`](templates/priority.json) and run `node <plugin>/skills/decision-scoring/scripts/decide.mjs priority priority.json`. Put `"first": true` on any item that makes the result wrong or unsafe so it always comes first. If time is limited, use `knapsack` instead (`decision-scoring`).
+- **Tie the proposal to the problem you just found, if you can.** It is the strongest reason you have.
+- More than 5 rows means you are proposing several things mixed together. Split them into separate rounds.
 
 ---
 
-## 5 · บอกสิ่งที่**ไม่**ทำด้วย
+## 5 · Also say what you will **not** do
 
-หนึ่งบรรทัด พร้อมเหตุผลและเวลาที่ควรทำแทน
+One line, with the reason and when to do it instead.
 
 > รายงานย้อนหลังรายปีไม่ทำตอนนี้ — ทำหลังยอดเดือนนี้ยืนยัน
 
-บรรทัดนี้กัน **"แล้วอันนั้นล่ะ ทำไมไม่ทำ"** ซึ่งเป็นคำถามที่ตามมาเกือบทุกครั้ง
-และบอกกลาย ๆ ว่าคิดครบแล้ว ไม่ได้ลืม
+This line heads off **"แล้วอันนั้นล่ะ ทำไมไม่ทำ"** (what about that one, why not do it), which is the question that follows almost every time.
+It also signals that you thought it through and did not forget.
 
 ---
 
-## 6 · ปิดด้วยคำถามเดียว
+## 6 · Close with one question
 
 ```
 เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วยดึงไฟล์ใหม่ + อัปเดตสรุป
 ```
 
-| กฎ | เหตุผล |
+| Rule | Reason |
 |---|---|
-| **หนึ่งคำถาม** ต่อหนึ่งคำตอบ | ถ้าถามสองคำถามขึ้นไป จะได้คำตอบแค่ข้อเดียว |
-| ตอบได้ด้วยไม่กี่คำ | "ทั้ง 4" · "เริ่มข้อ 2" |
-| มีตัวเลือก "เอาทั้งหมด" ให้ | ส่วนใหญ่ผู้ใช้เลือกอันนี้ ถ้าต้องพิมพ์เองจะเสียเวลา |
-| ถ้ามีลำดับที่แนะนำ ใส่ไว้ในคำถามเลย | เขาจะได้ตอบว่า "ตามนั้น" คำเดียว |
-| **ถามแบบเลือกคำตอบ ทุกตัวเลือกมีหลักฐาน** ตาม `superuser` §6: ตัวเลือก 2–4 ตัว · ตัวแนะนำอยู่บนสุดต่อท้าย `(แนะนำ)` พร้อมเหตุผล 1 บรรทัด | กดเลือกได้เลย และไม่เลือกจากตัวเลือกที่สมมุติขึ้น |
+| **One question** per answer | If you ask two or more, you get an answer to only one |
+| Answerable in a few words | "ทั้ง 4" · "เริ่มข้อ 2" |
+| Offer an "all of them" option | Most users pick it. Typing their own answer costs them time |
+| If there is a recommended order, put it in the question | They can answer "ตามนั้น" in one word |
+| **Ask as multiple choice, every option backed by evidence** per `superuser` §6: 2–4 options · the recommended one on top, ending with `(แนะนำ)` (recommended) and 1 line of reason | They can just pick, and do not choose from options you made up |
 
-**ห้ามปิดด้วยการถามว่า "มีอะไรให้ช่วยเพิ่มไหม"** — ไม่ใช่คำถามที่ขอการตัดสินใจ
+**Never close by asking "มีอะไรให้ช่วยเพิ่มไหม" (anything else I can help with)**. It does not ask for a decision.
 
 ---
 
-## 7 · ตัวอย่างเต็ม
+## 7 · Full example
 
-ตัวอย่างก่อนและหลังแก้ (งานเอกสารความต้องการและแผนงานซอฟต์แวร์) อยู่ใน [`references/example.md`](references/example.md)
+A before-and-after example (a software requirements document and work plan) is in [`references/example.md`](references/example.md)
 
 ---
 
 
 ## 8 · Anti-patterns
 
-- **เปิดด้วย "ระหว่างตรวจผมพบว่า…"** — ผู้อ่านต้องอ่านถึงท้ายย่อหน้าถึงจะรู้ว่าต้องทำอะไร
-- **ตัวเลขที่ขัดกันเขียนเป็นประโยค** — "เดิม 214 ตอนนี้ 245" ตาต้องกระโดดไปมา
-- **อธิบายว่าปัญหาเกิดได้ยังไง** ทั้งที่ไม่เปลี่ยนสิ่งที่ต้องทำ
-- **ข้อเสนอที่บอกวิธีทำแทนที่จะบอกประโยชน์** — ยังตัดสินใจไม่ได้อยู่ดี
-- **ถามสามคำถามในย่อหน้าเดียว** — จะได้คำตอบข้อเดียว แล้วต้องถามซ้ำ
-- **ปิดด้วย "แจ้งได้เลยครับ"** — ไม่ได้ขอการตัดสินใจอะไร
-- **ขอโทษยาว ๆ ที่พลาด** — บอกว่าอะไรผิดและแก้ยังไง พอแล้ว
-- **รายงานอย่างเดียวโดยไม่เสนอ** — ผลักภาระคิดกลับไปให้ผู้ใช้ทั้งหมด
+- **Opening with "ระหว่างตรวจผมพบว่า…" (while checking I found…).** The reader must read to the end of the paragraph to learn what to do.
+- **Disagreeing numbers written as a sentence.** "เดิม 214 ตอนนี้ 245" (was 214, now 245) makes the eye jump back and forth.
+- **Explaining how the problem happened** when it does not change what must be done.
+- **A proposal that says how to do it instead of the benefit.** The reader still cannot decide.
+- **Three questions in one paragraph.** You get one answer and must ask again.
+- **Closing with "แจ้งได้เลยครับ" (just let me know).** It asks for no decision.
+- **A long apology for a mistake.** Say what was wrong and how you fix it. That is enough.
+- **Reporting without proposing.** It pushes all the thinking back to the user.
 
 
 ## reference: example.md
 
-# flag-and-propose — ตัวอย่างเต็ม
+# flag-and-propose — full example
 
-ย้ายมาจาก [SKILL.md](../SKILL.md) §7
+Moved from [SKILL.md](../SKILL.md) §7
 
-ตัวย่อในตัวอย่าง: ความต้องการเชิงฟังก์ชัน (Functional Requirement — FR) · ความต้องการที่ไม่ใช่ฟังก์ชัน (Non-Functional Requirement — NFR) · กรณีทดสอบ (Test Case — TC) · บันทึกการตัดสินใจด้านสถาปัตยกรรม (Architecture Decision Record — ADR) · เอกสารข้อกำหนดเชิงฟังก์ชัน (Functional Specification Document — FSD) · Application Programming Interface (API)
+Abbreviations in the example: Functional Requirement (FR) · Non-Functional Requirement (NFR) · Test Case (TC) · Architecture Decision Record (ADR) · Functional Specification Document (FSD) · Application Programming Interface (API)
 
-**ก่อน — 1 ย่อหน้ายาว 3 ก้อน อ่านจบแล้วยังไม่รู้ว่าต้องตอบอะไร**
+**Before: 1 long paragraph with 3 lumps. After reading it, you still do not know what to answer.**
 
 > เรื่องด่วนที่เจอระหว่างตรวจ — BUILD-PLAN.md ที่สร้างเมื่อเช้านี้อ่านจาก
 > `_to_delete/extracted/*.md` ซึ่งเป็นฉบับก่อนที่ผมจะแก้ มันจึงบันทึกไว้ว่า
@@ -168,7 +168,7 @@ Use when a mid-task finding needs a decision before going on
 > เติม 4 ไฟล์ที่คุ้มที่สุดก่อน คือ docs/README.md เป็นสารบัญบอกว่าอ่านอะไรก่อนและ
 > ใครเป็นเจ้าของ, เพิ่มตารางประวัติการแก้ไขในหน้าแรกของทั้ง 4 docx, …
 
-**หลัง — โครงเดียวกัน 4 บล็อก**
+**After: the same structure in 4 blocks**
 
 > **ด่วน — `BUILD-PLAN.md` ตัวเลขเก่า** เพราะอ่านจาก `_to_delete/extracted/` ฉบับก่อนคุณแก้
 > ต้อง re-extract ก่อนปล่อย agent เขียนโค้ด ไม่งั้นมันสร้างตามสเปกเก่าและข้าม FR-14.x กับ NFR ทั้งชุด
@@ -194,9 +194,9 @@ Use when a mid-task finding needs a decision before going on
 >
 > เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วย re-extract + อัปเดต BUILD-PLAN
 
-**สิ่งที่หายไป ทั้งที่ข้อมูลครบเท่าเดิม:** คำเกริ่น · การเล่าว่าตรวจเจอยังไง ·
-ชื่อไฟล์เต็มที่ไม่ได้ช่วยตัดสินใจ · คำอธิบายว่าทำไมคำถามเดิมถึงตกไป ·
-รายละเอียดวิธีทำของแต่ละข้อเสนอ
+**What disappeared, though the information is just as complete:** the lead-in · the story of how it was found ·
+full file names that do not help the decision · the explanation of why the old question dropped ·
+the how-to details of each proposal
 
 
 ---
@@ -205,37 +205,37 @@ Use when a mid-task finding needs a decision before going on
 
 Use before asking to continue on undoable work
 
-# principle · proceed on reversible work — ย้อนได้ ทำเลย
+# principle · proceed on reversible work: if it can be undone, do it
 
-> ทุกคำถามที่หยุดรอคำตอบ คือเวลาที่ทั้งคนและ agent ไม่ได้ทำงาน
-> ถ้างานย้อนกลับได้ ทำแล้วให้ดูเลยจะเร็วกว่าถามแล้วรอ
+> Every question that stops and waits for an answer is time when both the person and the agent are not working.
+> If the work is reversible, doing it and letting them look is faster than asking and waiting.
 
-## แยกให้ออก
+## Tell them apart
 
-| ย้อนได้ ให้ทำเลย | ย้อนไม่ได้ ให้เตรียมไว้ใน "รออนุมัติ" แล้วทำส่วนอื่นต่อ |
+| Reversible: do it now | Irreversible: prepare it in "รออนุมัติ" (awaiting approval) and carry on with the rest |
 |---|---|
-| แก้ไฟล์ที่มีสำเนาหรือประวัติ (ไฟล์เอกสาร · ชีต · git) | แก้หรือลบข้อมูลจริง (ฐานข้อมูล · ชีตหลัก · ไฟล์ของผู้ใช้) |
-| ร่างเอกสาร · ร่างอีเมลหรือคำตอบลูกค้า (ยังไม่ส่ง) · ร่าง mockup | ส่งอีเมล ข้อความ หรือโพสต์ถึงคนนอก |
-| รัน test · คำนวณ · ลองในสำเนา | ลงระบบจริง (deploy · ประกาศราคา · เผยแพร่) |
-| เลือกระหว่าง 2 ทางที่เปลี่ยนทีหลังได้ | จ่ายเงิน · จอง · ยอมรับเงื่อนไข · ใส่ค่าลับจริง |
-| ย้ายไฟล์ชั่วคราวไป `_to_delete/` | ลบถาวร |
-| โค้ด: commit ใน branch ของงาน เมื่อผู้ใช้อนุญาต | โค้ด: merge เข้า branch หลัก · force-push |
+| Edit a file that has a copy or history (document file · sheet · git) | Edit or delete real data (database · master sheet · the user's files) |
+| Draft a document · draft an email or customer reply (not yet sent) · draft a mockup | Send an email, message or post to outsiders |
+| Run tests · calculate · try in a copy | Release to the real system (deploy · announce a price · publish) |
+| Choose between 2 paths that can be changed later | Pay money · book · accept terms · enter a real secret |
+| Move a temporary file to `_to_delete/` | Delete permanently |
+| Code: commit on the work branch, when the user allows it | Code: merge into the main branch · force-push |
 
-## ก่อนจะถาม — ผ่านสามด่านนี้
+## Before you ask, pass these three gates
 
-1. **ดูได้จากการทดลองไหม** — ถ้าคำตอบคือพฤติกรรม ความเร็ว หน้าตา ผลลัพธ์ ให้ทดลองทำร่างดู (งานโค้ด: playbook `prototype` ใน plugin `software-development`) ไม่ใช่ถาม
-2. **ย้อนได้ไหม** — ถ้าได้ ให้เลือกทางที่ผลกระทบน้อยสุด ลงมือทำ แล้วจดใน [`decision-log`](../decision-log/SKILL.md)
-3. **เป็นข้อเท็จจริงหรือรสนิยมของผู้ใช้ไหม** — ตัวเลข ชื่อ วันที่ งบ ห้ามเดา ให้ใส่ `(รอยืนยัน)` แล้วทำส่วนอื่นต่อ · สีแบรนด์ที่ไม่มีให้ใช้ค่าตั้งต้นของ skill นั้นพร้อม `(รอยืนยัน)` และรวมคำถามไว้ใน "ค้างอยู่" ครั้งเดียว
+1. **Can an experiment show it?** If the answer is behaviour, speed, looks or output, try a draft (code work: playbook `prototype` in plugin `software-development`) instead of asking.
+2. **Is it reversible?** If so, pick the path with the least impact, do it, and note it in [`decision-log`](../decision-log/SKILL.md).
+3. **Is it a fact or the user's taste?** Numbers, names, dates and budgets must never be guessed: put `(รอยืนยัน)` (awaiting confirmation) and carry on with the rest. If the brand colour is missing, use that skill's default with `(รอยืนยัน)` and collect the question into "ค้างอยู่" (pending) once.
 
-ถ้าผ่านทั้ง 3 ด่านแล้วยังต้องถาม ก็ไม่หยุดรอ ให้รวมทุกคำถามไว้ใน "ค้างอยู่" ครั้งเดียว พร้อมทางที่แนะนำ แล้วทำส่วนอื่นต่อ ส่วนงานที่ย้อนไม่ได้ ให้เตรียมคำสั่ง ส่วนที่เปลี่ยน (diff) หรือร่างข้อความไว้ใน "รออนุมัติ" ไม่ทำเอง
+If you pass all 3 gates and still must ask, do not stop and wait. Collect every question into "ค้างอยู่" once, with your recommended path, and carry on with the rest. For irreversible work, prepare the command, the diff or the draft message in "รออนุมัติ" and do not do it yourself.
 
-**ข้อยกเว้นเดียวที่ถามก่อนได้** — ตอนเริ่มงาน ถ้าโจทย์ตีความได้หลายทางจนงานออกมาต่างกันทั้งชุด ให้ถามครั้งเดียวโดยรวมทุกคำถามไว้ในรอบนั้นแบบเลือกคำตอบ ทุกตัวเลือกมีหลักฐาน (skill `superuser` หัวข้อ 6 → `autonomy`) เริ่มแล้วไม่ถามอีก · ทางแยกที่ย้อนไม่ได้ แพง หรือออกไปถึงคนนอก ใช้ [`flag-and-propose`](../flag-and-propose/SKILL.md)
+**The one exception where you may ask first:** at the start of the job, if the brief can be read in so many ways that the whole output would differ, ask once, putting every question of that round together as multiple choice, with evidence for every option (skill `superuser` section 6 → `autonomy`). After you start, do not ask again. For a fork that is irreversible, costly or reaches outsiders, use [`flag-and-propose`](../flag-and-propose/SKILL.md).
 
-## สิ่งที่ห้ามทำ
+## What not to do
 
-- ถาม "ให้ทำต่อไหม" หลังจบแต่ละขั้นของงานที่สั่งไว้แล้ว
-- เสนอแผนแล้วรออนุมัติ ทั้งที่งานชัดและย้อนได้
-- ใช้หลักนี้เป็นข้ออ้างทำสิ่งที่ผู้ใช้ไม่ได้ขอ เพราะ "ทำต่อ" หมายถึงทำงานที่สั่งให้จบ ไม่ใช่ขยายขอบเขตเอง
+- Ask "ให้ทำต่อไหม" (shall I continue?) after each step of a job that was already ordered
+- Offer a plan and wait for approval when the work is clear and reversible
+- Use this principle as an excuse to do things the user did not ask for, because "continue" means finishing the ordered work, not widening the scope yourself
 
 
 ---
@@ -244,202 +244,202 @@ Use before asking to continue on undoable work
 
 Use when a system shows text, dates or money in Thai and English
 
-# ภาษาและรูปแบบท้องถิ่น
+# Language and Locale Formats
 
-> **กฎข้อเดียว:** เก็บเป็นค่ากลาง แปลงตอนแสดงผล
-> เวลาเก็บเป็น UTC ปีเก็บเป็น ค.ศ. ส่วนเงินเก็บเป็นตัวเลขคู่กับรหัสสกุลเงิน
-> อะไรที่ "แปลงไว้ก่อนแล้วค่อยเก็บ" จะกลายเป็นข้อมูลที่แปลงกลับไม่ได้
+> **The one rule:** Store a neutral value, convert at display time.
+> Store time in UTC, store years in C.E. (Common Era), and store money as a number paired with a currency code.
+> Anything "converted first and stored after" becomes data you cannot convert back.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ระบบมีผู้ใช้ทั้งไทยและอังกฤษ หรืออาจมีในอนาคต
-- ต้องแสดงวันที่แบบ พ.ศ. ควบคู่กับการเก็บ ค.ศ.
-- เรียงชื่อภาษาไทยแล้วลำดับไม่ถูก หรือค้นหาแล้วไม่เจอ
-- ข้อความไทยตัดบรรทัดกลางคำ หรือล้นออกนอกปุ่ม
+- The system has Thai and English users, or may have them in the future
+- You must show dates in B.E. (Buddhist Era) while storing C.E.
+- Thai names sort in the wrong order, or search does not find them
+- Thai text breaks a line in the middle of a word, or overflows a button
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-| งาน | ใช้ตัวนี้แทน |
+| Task | Use this instead |
 |---|---|
-| ชนิดข้อมูลวันเวลาในฐานข้อมูล | `database-design` |
-| รูปแบบวันเวลาใน JSON | `api-conventions` |
-| ฟอนต์ไทยและการจัดหน้าเอกสาร | `branded-document-design` |
-| ฟอนต์ไทยบนหน้าจอ | skill แพลตฟอร์ม + `ui-craft` |
+| Date and time data types in the database | `database-design` |
+| Date and time format in JSON | `api-conventions` |
+| Thai fonts and document layout | `branded-document-design` |
+| Thai fonts on screen | the platform skill + `ui-craft` |
 
 ---
 
-## 1 · ข้อความแปล
+## 1 · Translated text
 
-**ห้ามมีข้อความที่ผู้ใช้เห็นฝังอยู่ในโค้ด** แม้โครงการจะมีภาษาเดียววันนี้
+**No user-visible text may be embedded in code**, even if the project has only one language today.
 
 ```
 locales/
-  th.json        ← ภาษาหลัก เป็นแหล่งความจริง
+  th.json        ← main language, the source of truth
   en.json
 ```
 
-| Stack | ไฟล์ข้อความแปล | รูปแบบคีย์ |
+| Stack | Translation files | Key format |
 |---|---|---|
-| เว็บ / ไลบรารีที่ใช้ JSON | `locales/th.json` · `en.json` | จุดคั่นตามที่อยู่ `order.cancel.confirmTitle` |
-| Flutter (`gen-l10n`) | `lib/l10n/app_th.arb` · `app_en.arb` + `l10n.yaml` ที่รากของโฟลเดอร์โค้ด | **camelCase ไม่มีจุด** `orderCancelConfirmTitle` — คีย์ ARB กลายเป็นชื่อ getter ของ Dart จุดจึงใช้ไม่ได้ |
+| Web / libraries that use JSON | `locales/th.json` · `en.json` | Dot-separated by location, `order.cancel.confirmTitle` |
+| Flutter (`gen-l10n`) | `lib/l10n/app_th.arb` · `app_en.arb` + `l10n.yaml` at the root of the code folder | **camelCase, no dots**, `orderCancelConfirmTitle`. An ARB key becomes a Dart getter name, so dots do not work. |
 
-**ตั้งชื่อคีย์ตามที่มันอยู่ ไม่ใช่ตามเนื้อความ:**
+**Name a key by where it lives, not by its content:**
 
 ```jsonc
-// ถูก: เปลี่ยนคำได้โดยไม่ต้องแก้คีย์
+// Right: you can change the wording without changing the key
 "order.cancel.confirmTitle": "ยืนยันการยกเลิกคำสั่งซื้อ"
-// ผิด: พอเปลี่ยนคำ คีย์กับเนื้อหาก็ไม่ตรงกัน
+// Wrong: once the wording changes, the key and the content no longer match
 "ยืนยันการยกเลิก": "ยืนยันการยกเลิกคำสั่งซื้อ"
 ```
 
-| กฎ | เหตุผล |
+| Rule | Reason |
 |---|---|
-| ตัวแปรใช้ชื่อ ไม่ใช่ลำดับ — `"เหลือ {count} รายการ"` | ลำดับคำแต่ละภาษาไม่เหมือนกัน |
-| **ห้ามต่อประโยคจากชิ้นส่วน** | ภาษาอื่นเรียงคำคนละแบบ ประโยคที่ได้จะผิดไวยากรณ์ |
-| คีย์ที่ขาดให้แสดงคีย์ ไม่ใช่ค่าว่าง | ค่าว่างทำให้ปุ่มไม่มีข้อความ และไม่มีใครเห็นว่าพัง |
-| ตรวจใน Continuous Integration (CI) ว่าทุกภาษามีคีย์ครบ | ไม่งั้นจะรู้ตอนลูกค้าเห็นแล้ว |
+| Variables use names, not positions — `"เหลือ {count} รายการ"` | Word order differs in each language |
+| **Never build a sentence from fragments** | Other languages order words differently, so the resulting sentence is ungrammatical |
+| For a missing key, show the key, not an empty value | An empty value leaves a button with no text, and nobody sees that it broke |
+| Check in Continuous Integration (CI) that every language has every key | Otherwise you find out when a customer sees it |
 
 ```
-ผิด: t("มีทั้งหมด") + count + t("รายการ")
-ถูก: t("list.total", { count })
+Wrong: t("มีทั้งหมด") + count + t("รายการ")
+Right: t("list.total", { count })
 ```
 
-**ถ้อยคำในไฟล์ภาษาไทย**
+**Wording in the Thai file**
 
-- เขียนข้อความไทยตรง ๆ จากสิ่งที่หน้าจอต้องบอก ไม่แปลจากคีย์หรือจากข้อความอังกฤษทีละคำ
-- 1 การกระทำ 1 คำทั้งแอป (บันทึก ไม่ใช่ เซฟ ปนกับ บันทึก) · เก็บคู่คำไว้ใน `locales/glossary.md` แล้วตรวจกับไฟล์นี้ทุกครั้งที่เพิ่มคีย์
-- ถ้อยคำบนปุ่ม ป้าย และข้อความ error → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ หน้าจอ
+- Write the Thai text directly from what the screen must say. Do not translate word by word from the key or from English text.
+- 1 action, 1 word across the whole app (บันทึก, not a mix of เซฟ and บันทึก). Keep the word pairs in `locales/glossary.md` and check against that file every time you add a key.
+- For wording on buttons, labels, and error messages, see `human-writing` `references/thai-grammar.md` section 4, screen register.
 
 ---
 
-## 2 · เวลา — เก็บ UTC แสดงตามเขตเวลาผู้ดู
+## 2 · Time — store UTC, show in the viewer's time zone
 
 ```
-เก็บ:   2026-09-25T02:42:13.482Z          (UTC เสมอ)
-แสดง:   25 ก.ย. 2569 09:42                (Asia/Bangkok ของผู้ดู)
+Store:  2026-09-25T02:42:13.482Z          (always UTC)
+Show:   25 ก.ย. 2569 09:42                (viewer's Asia/Bangkok)
 ```
 
-| เรื่อง | กฎ |
+| Topic | Rule |
 |---|---|
-| เวลาที่เกิดเหตุการณ์ | `timestamptz` เก็บเป็น UTC แล้วแปลงตอนแสดง |
-| วันเกิด วันครบกำหนด | `date` ล้วน **ห้ามมีเวลาและโซนเวลา** |
-| "วันนี้" ในรายงาน | ต้องระบุว่าเป็นวันนี้ของเขตเวลาไหน รายงานยอดขายรายวันเพี้ยนเพราะข้อนี้บ่อยมาก |
-| ช่วงเวลาทำการ | เก็บเป็น `time` + เขตเวลาของสาขา |
+| Time an event happened | `timestamptz`, stored as UTC and converted at display time |
+| Birth date, due date | Plain `date`. **No time and no time zone.** |
+| "Today" in a report | Say whose time zone "today" means. Daily sales reports go wrong because of this very often. |
+| Business hours | Store as `time` + the branch's time zone |
 
-> **ไทยไม่มี daylight saving (ปรับเวลาตามฤดู) จึงไม่เคยเจอปัญหา จนถึงวันที่ขายให้ลูกค้าต่างประเทศ**
-> โค้ดที่บวก 7 ชั่วโมงเองจะผิดทันทีที่มีผู้ใช้นอกประเทศ จึงต้องใช้ไลบรารีเขตเวลาเสมอ
+> **Thailand has no daylight saving (seasonal clock change), so it never hits this problem, until the day you sell to a customer abroad.**
+> Code that adds 7 hours by hand breaks the moment a user is outside the country, so always use a time zone library.
 
 ---
 
-## 3 · พุทธศักราช
+## 3 · Buddhist Era
 
-**เก็บ ค.ศ. เสมอ แปลงเป็น พ.ศ. ตอนแสดงผลเท่านั้น** (`พ.ศ. = ค.ศ. + 543`)
+**Always store C.E., and convert to B.E. only at display time.** (`B.E. = C.E. + 543`)
 
-| จุดที่ต้องระวัง | ทำยังไง |
+| Point to watch | What to do |
 |---|---|
-| ผู้ใช้กรอก "2569" | รับเข้ามาแล้วแปลงเป็น 2026 ทันทีที่ชั้นรับข้อมูล |
-| ปี 2 หลัก "69" | **ห้ามเดา** ให้บังคับกรอก 4 หลัก หรือถามให้ชัด · ถ้าสเปกบอกว่าเป็น พ.ศ. 2 หลักแน่ ๆ (เอกสารราชการ) ให้แปลง 2 ขั้นและเขียน test ไว้: `68 → 2568 → 2025` |
-| นำเข้าไฟล์ Excel | ตรวจก่อนว่าคอลัมน์ปีเป็น พ.ศ. หรือ ค.ศ. ถ้าพลาด ปีจะเพี้ยน 543 ปีโดยไม่มี error |
-| ส่งออกให้ระบบอื่น | ส่งเป็น ค.ศ. เสมอ เว้นแต่ปลายทางระบุว่าต้องการ พ.ศ. |
-| เลขไทย ๒๕๖๙ | ใช้แสดงได้ แต่**ห้ามเก็บ** · แปลง ๐–๙ → 0–9 ที่ชั้นรับข้อมูลก่อน parse (ฟอร์มที่ผู้ใช้วางข้อความจากเอกสารราชการเจอบ่อย) |
+| The user enters "2569" | Accept it, then convert to 2026 as soon as it enters the input layer |
+| A 2-digit year "69" | **Never guess.** Force 4 digits, or ask clearly. If the spec says it is definitely a 2-digit B.E. year (official documents), convert in 2 steps and write a test: `68 → 2568 → 2025` |
+| Importing an Excel file | First check whether the year column is B.E. or C.E. If you get it wrong, years are off by 543 with no error |
+| Exporting to another system | Always send C.E., unless the destination says it needs B.E. |
+| Thai digits ๒๕๖๙ | You may display them, but **never store them**. Convert ๐–๙ → 0–9 at the input layer before parsing (forms where users paste text from official documents hit this often) |
 
-**ถ้าระบบมีผู้ใช้ทั้ง 2 แบบ ให้ผู้ใช้เลือกปฏิทินได้** แต่ค่าที่เก็บยังเป็นแบบเดิม
+**If the system has both kinds of users, let the user pick the calendar**, but the stored value stays the same.
 
-**ตัวตรวจ** — เขียนสคริปต์สั้น ๆ กวาดโค้ดหา ข้อความไทยที่ฝังในโค้ดนอกไฟล์แปล · ตัวเลขปี 25xx ที่เขียนตายตัว · `new Date("…")` ที่รับสตริงไม่ระบุเขตเวลา แล้วรันใน CI ก่อน merge (แนวคิดจาก BV thai-date-format: ตัวแปลงต้องมี test ของมันเอง)
+**Checker** — write a short script that sweeps the code for Thai text embedded in code outside the translation files · hard-coded year numbers 25xx · `new Date("…")` that takes a string with no time zone. Run it in CI before merge. (The idea comes from BV thai-date-format: a converter needs its own tests.)
 
 ---
 
-## 4 · การเรียงลำดับและการค้นหาภาษาไทย
+## 4 · Sorting and searching Thai
 
-การเรียงแบบมาตรฐาน (ตามรหัสอักขระ) **ผิดสำหรับภาษาไทย** เพราะสระหน้าอย่าง เ แ โ ใ ไ
-อยู่หน้าพยัญชนะที่มันออกเสียงตาม
+Standard sorting (by character code) **is wrong for Thai**, because leading vowels such as เ แ โ ใ ไ
+sit before the consonant they are pronounced after.
 
-| ต้องการ | ทำยังไง |
+| Need | What to do |
 |---|---|
-| เรียงชื่อไทย | ใช้ collation ของภาษาไทย เช่น PostgreSQL `th-TH-x-icu` และ SQL Server `Thai_100_CI_AS` |
-| เรียงชื่อไทยในแอป Flutter | Dart ไม่มี collation ไทยในตัว (`compareTo` เรียงตามรหัสอักขระ) จึงต้องใช้ `Collator` ของ platform ผ่าน plugin หรือ platform channel ถ้าไม่คุ้มให้เรียงตามเวลาที่สร้างแทนแล้วบอกผู้ใช้ (ยังไม่ได้ตรวจ package ที่ทำเรื่องนี้) |
-| ค้นหาไม่สนตัวพิมพ์และวรรณยุกต์ | normalize ข้อความก่อน แล้วเก็บลงคอลัมน์ค้นหาที่แยกไว้ต่างหาก |
-| ค้นหาคำกลางประโยค | ภาษาไทยไม่มีเว้นวรรค full-text search ที่แบ่งคำด้วยเว้นวรรคจึงใช้ไม่ได้ |
+| Sort Thai names | Use a Thai collation, such as PostgreSQL `th-TH-x-icu` and SQL Server `Thai_100_CI_AS` |
+| Sort Thai names in a Flutter app | Dart has no built-in Thai collation (`compareTo` sorts by character code), so use the platform `Collator` through a plugin or platform channel. If that is not worth it, sort by creation time instead and tell the user. (`ยังไม่ได้ตรวจ` any package that does this) |
+| Search ignoring case and tone marks | Normalize the text first, then store it in a separate search column |
+| Search for a word mid-sentence | Thai has no spaces, so full-text search that splits words on spaces does not work |
 
-> **ภาษาไทยเขียนติดกันไม่มีเว้นวรรคระหว่างคำ** จึงกระทบ 3 เรื่อง:
-> ค้นหา (ต้องมีตัวตัดคำ) · ตัดบรรทัด (เบราว์เซอร์ตัดกลางคำ) · ตัดข้อความด้วย `...`
+> **Thai is written without spaces between words**, which affects 3 things:
+> search (you need a word segmenter) · line breaking (browsers break mid-word) · truncating text with `...`
 >
-> เรื่องตัดบรรทัด: เบราว์เซอร์หลักตัดคำไทยด้วยพจนานุกรมให้อยู่แล้ว **ห้ามใส่ `word-break: break-all`** เพราะจะตัดกลางคำ
-> (`line-break: strict` เปลี่ยนแค่กฎเครื่องหมายวรรคตอนของจีน ญี่ปุ่น เกาหลี ไม่ช่วยภาษาไทย)
-> แล้วทดสอบด้วยข้อความไทยจริง อย่าทดสอบด้วย Lorem ipsum เพราะมีเว้นวรรคทุกคำ
+> On line breaking: major browsers already break Thai with a dictionary. **Never add `word-break: break-all`**, because it breaks mid-word.
+> (`line-break: strict` only changes the punctuation rules for Chinese, Japanese, and Korean, and does not help Thai.)
+> Then test with real Thai text. Do not test with Lorem ipsum, because it has a space after every word.
 >
-> Flutter `Text` ตัดบรรทัดไทยด้วยตัวตัดคำของ engine เอง และไม่มี CSS ให้ตั้ง
-> จึงต้องตรวจด้วยข้อความไทยยาวจริงบนเครื่องจริงทั้ง 2 ขนาดจอ แล้วเผื่อ `maxLines` + `overflow: TextOverflow.ellipsis`
+> Flutter `Text` breaks Thai lines with the engine's own word segmenter and has no CSS to set.
+> So check with real long Thai text on a real device at both screen sizes, and allow for `maxLines` + `overflow: TextOverflow.ellipsis`.
 
 ---
 
-## 5 · ตัวเลข เงิน และหน่วย
+## 5 · Numbers, money, and units
 
-| ข้อมูล | เก็บ | แสดง |
+| Data | Store | Show |
 |---|---|---|
-| เงิน | ทศนิยมแบบตรงตัว ไม่ใช่ float (ฐานข้อมูลใช้ `decimal(19,4)` ตาม `stack-sql`) + รหัสสกุลเงิน | `1,250.00 บาท` หรือ `฿1,250.00` |
-| ตัวคั่นหลักพันและจุดทศนิยม | ไม่เก็บ | ตามท้องถิ่น บางประเทศใช้สลับกับไทย |
-| เปอร์เซ็นต์ | เก็บเป็นสัดส่วนทศนิยม (`0.075`) หรือ basis points (`750` = 7.5%) **เลือกแบบเดียวทั้งระบบ** · ห้ามเก็บเป็นจำนวนเต็มเปอร์เซ็นต์ เพราะ 7.5% จะกลายเป็น 7 หรือ 8 | `7.5%` |
-| ที่อยู่ | แยกฟิลด์ตามโครงของไทย (แขวง/เขต หรือ ตำบล/อำเภอ) | |
-| เบอร์โทร | เก็บรูปแบบสากล `+66812345678` | แสดง `081-234-5678` |
+| Money | Exact decimal, not float (in the database use `decimal(19,4)` per `stack-sql`) + currency code | `1,250.00 บาท` or `฿1,250.00` |
+| Thousands separator and decimal point | Not stored | Per locale. Some countries swap them relative to Thailand. |
+| Percent | Store as a decimal fraction (`0.075`) or basis points (`750` = 7.5%). **Pick one form for the whole system.** Never store as a whole-number percent, because 7.5% would become 7 or 8 | `7.5%` |
+| Address | Separate fields following the Thai structure (แขวง/เขต or ตำบล/อำเภอ — sub-district/district) | |
+| Phone number | Store in international format `+66812345678` | Show `081-234-5678` |
 
-**พหูพจน์และเพศ** — ภาษาไทยไม่มีรูปพหูพจน์ แต่ภาษาอังกฤษมี
-จึงควรให้ไลบรารีจัดการ อย่าเขียน `if (count > 1)` เอง เพราะบางภาษามีมากกว่า 2 รูป
+**Plurals and gender** — Thai has no plural form, but English does.
+So let a library handle it. Do not write `if (count > 1)` yourself, because some languages have more than 2 forms.
 
 ---
 
-## 6 · หน้าจอ
+## 6 · Screens
 
-| เรื่อง | กฎ |
+| Topic | Rule |
 |---|---|
-| ความยาวข้อความ | อังกฤษยาวกว่าไทยได้ถึง 1.5 เท่า จึงต้อง**เผื่อที่ อย่าตรึงความกว้างปุ่ม** |
-| ความสูงบรรทัด | ไทยต้องการมากกว่า เพราะมีสระบนและวรรณยุกต์ซ้อนกัน 2 ชั้น |
-| ฟอนต์ | ต้องมีน้ำหนักครบทั้งไทยและอังกฤษ ไม่งั้นระบบจะวาดตัวหนาปลอมขึ้นเอง |
-| ทดสอบ | ทดสอบด้วยข้อความจริงของทั้ง 2 ภาษา **ไม่ใช่ Lorem ipsum** |
-| สลับภาษา | จำค่าไว้ที่โปรไฟล์ผู้ใช้ ไม่ใช่แค่ใน session ส่วนแอปที่ไม่มีบัญชีผู้ใช้ (แอปมือถือออฟไลน์) ให้เก็บค่าในเครื่อง โดยค่าเริ่มต้นคือ "ตามภาษาของเครื่อง" |
-| ส่งออก CSV ให้คนไทยเปิดใน Excel | ใช้ UTF-8 แบบ**มี BOM** (ไม่งั้นไทยเพี้ยน) ทศนิยมใช้ `.` และเวลาเป็น ISO 8601 UTC เช่น `2026-10-05T03:15:00Z` ดูเพิ่มที่ `data-import-export` |
+| Text length | English can be up to 1.5 times longer than Thai, so **leave room and do not fix a button's width** |
+| Line height | Thai needs more, because upper vowels and tone marks stack 2 levels high |
+| Fonts | Must have every weight for both Thai and English, or the system draws a fake bold |
+| Testing | Test with real text in both languages, **not Lorem ipsum** |
+| Switching language | Save the choice in the user profile, not only in the session. For an app with no user accounts (an offline mobile app), store the value on the device, with the default "follow the device language". |
+| Exporting CSV for Thai users to open in Excel | Use UTF-8 **with a BOM** (otherwise Thai text is garbled). Use `.` for decimals and ISO 8601 UTC for time, such as `2026-10-05T03:15:00Z`. See also `data-import-export`. |
 
 ---
 
 ## 7 · Anti-patterns
 
-- **ข้อความฝังในโค้ด** เพราะ "ตอนนี้มีภาษาเดียว"
-- **ต่อประโยคจากชิ้นส่วน** — ภาษาอื่นเรียงคำคนละแบบ
-- **เก็บ พ.ศ. ลงฐานข้อมูล** — ทุกฟังก์ชันจะคำนวณช่วงเวลาผิด
-- **บวก 7 ชั่วโมงเองในโค้ด** — พังทันทีที่มีผู้ใช้นอกเขตเวลาไทย
-- **เรียงชื่อไทยด้วย collation มาตรฐาน** — ลำดับผิดโดยไม่มี error
-- **ทดสอบหน้าจอด้วย Lorem ipsum** — ไม่เจอปัญหาการตัดบรรทัดของไทยเลย
-- **`if (count > 1) "s"`** — ใช้ได้แค่ภาษาอังกฤษ
-- **ปี 2 หลัก** — "69" คือ 1969, 2069 หรือ 2569
-- **นำเข้า Excel โดยไม่ถามว่าปีเป็น พ.ศ. หรือ ค.ศ.** — ปีเพี้ยน 543 ปีโดยไม่มีอะไรเตือน
-- **คีย์แปลที่หายแล้วแสดงค่าว่าง** — ได้ปุ่มเปล่าที่ไม่มีใครสังเกต
+- **Text embedded in code** because "there is only one language for now"
+- **Building a sentence from fragments** — other languages order words differently
+- **Storing B.E. in the database** — every function will compute time spans wrongly
+- **Adding 7 hours by hand in code** — breaks the moment there are users outside the Thai time zone
+- **Sorting Thai names with the standard collation** — wrong order with no error
+- **Testing screens with Lorem ipsum** — you never see Thai line-breaking problems
+- **`if (count > 1) "s"`** — works only for English
+- **2-digit years** — "69" is 1969, 2069, or 2569
+- **Importing Excel without asking whether the year is B.E. or C.E.** — years are off by 543 with nothing to warn you
+- **A translation key that is missing and shows an empty value** — you get an empty button nobody notices
 
 ---
 
-## 8 · ตัวย่อ
+## 8 · Abbreviations
 
-- **i18n** — internationalization (การทำให้รองรับหลายภาษาและท้องถิ่น ที่ย่อแบบนี้เพราะมีตัวอักษร 18 ตัวระหว่าง i กับ n)
-- **locale** — ชุดค่าประจำท้องถิ่น ได้แก่ ภาษา รูปแบบวันที่ ตัวเลข และสกุลเงิน
-- **collation** — กฎการเรียงลำดับและเปรียบเทียบข้อความของฐานข้อมูล
-- **UTC** — Coordinated Universal Time (เวลามาตรฐานสากล ไทยคือ UTC+7)
-- **ICU** — International Components for Unicode (ไลบรารีมาตรฐานสำหรับกฎภาษาและการเรียงลำดับ)
-- **BCP 47** — Best Current Practice (BCP) 47 มาตรฐานรหัสภาษา เช่น `th-TH`, `en-US`
-- **ARB** — Application Resource Bundle (ไฟล์ข้อความแปลแบบ JSON ที่ Flutter `gen-l10n` ใช้)
-- **BOM** — Byte Order Mark (3 ไบต์ต้นไฟล์ที่บอก Excel ว่าเป็น UTF-8)
+- **i18n** — internationalization (making software support many languages and locales; abbreviated this way because 18 letters sit between i and n)
+- **locale** — the set of local conventions: language, date format, numbers, and currency
+- **collation** — a database's rules for ordering and comparing text
+- **UTC** — Coordinated Universal Time (the world standard time; Thailand is UTC+7)
+- **ICU** — International Components for Unicode (the standard library for language rules and sorting)
+- **BCP 47** — Best Current Practice (BCP) 47, the standard for language codes such as `th-TH`, `en-US`
+- **ARB** — Application Resource Bundle (the JSON-style translation file that Flutter `gen-l10n` uses)
+- **BOM** — Byte Order Mark (the 3 bytes at the start of a file that tell Excel it is UTF-8)
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Links to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use with |
 |---|---|
-| ชนิดข้อมูลวันเวลาและ collation | `database-design` |
-| รูปแบบวันเวลาและเงินใน JSON | `api-conventions` |
-| ข้อความ error ที่ต้องแปล | `error-handling-patterns` |
-| ฟอนต์ไทยบนหน้าจอ | `ui-craft` + skill แพลตฟอร์ม |
-| ฟอนต์ไทยในเอกสารและสไลด์ | `branded-document-design` · `presentation-design` |
-| นำเข้าไฟล์ที่ปีเป็น พ.ศ. · ส่งออก CSV ที่ Excel เปิดแล้วไทยไม่เพี้ยน | `data-import-export` |
-| แม่แบบข้อความแจ้งเตือนหลายภาษา | `notifications` |
-| แปลเอกสารหรือข้อความหน้าจอทั้งชุด ไทย↔อังกฤษ · glossary ต่อโปรเจกต์ | `translate-th-en` (plugin `superuser`) |
-| ตัดคำ · ถอดเสียงเป็นอักษรโรมัน · ตรวจเลขบัตรประชาชน ในโค้ด | [`references/thai-text-tools.md`](references/thai-text-tools.md) |
+| Date and time data types and collation | `database-design` |
+| Date, time, and money format in JSON | `api-conventions` |
+| Error messages that must be translated | `error-handling-patterns` |
+| Thai fonts on screen | `ui-craft` + the platform skill |
+| Thai fonts in documents and slides | `branded-document-design` · `presentation-design` |
+| Importing files with B.E. years · exporting CSV that opens in Excel without garbled Thai | `data-import-export` |
+| Multi-language notification message templates | `notifications` |
+| Translating a whole set of documents or screen text, Thai↔English · a glossary per project | `translate-th-en` (plugin `superuser`) |
+| Word segmentation · transliteration to Roman letters · validating national ID numbers in code | [`references/thai-text-tools.md`](references/thai-text-tools.md) |
 
 
 ## reference: thai-text-tools.md

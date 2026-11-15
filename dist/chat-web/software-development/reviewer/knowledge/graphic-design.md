@@ -4,221 +4,221 @@ Use for a one-off logo or poster, not a full brand kit
 
 # Graphic Design
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Pre-work gate "ด่านก่อนลงมือ" (every time):** read the owner's theme → search live references → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts; the search is for finding the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
-> **กฎข้อเดียวของ skill นี้:** เขียนทิศทางเป็นไฟล์ก่อน แล้วค่อยแตะพิกเซลแรก
-> ทิศทางที่ไม่ได้เขียนไว้ จะถูกลืมตอนทำแผ่นที่ 3
+> **The one rule of this skill:** write the direction into a file first, then touch the first pixel.
+> A direction that is not written down gets forgotten by the third sheet.
 
 ---
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-โลโก้ · ระบบสีและตัวอักษรของแบรนด์ · โปสเตอร์ · ใบปลิว · โพสต์โซเชียล ·
-rich menu ของ LINE Official Account (LINE OA) · ฉลากสินค้า · นามบัตร · ภาพปก
+Logos · a brand's colour and type system · posters · flyers · social posts ·
+rich menus for a LINE Official Account (LINE OA) · product labels · business cards · cover images
 
-รวมถึงตอนรีวิวงานที่ "ดูเหมือน AI ทำ" แต่บอกไม่ถูกว่าเพราะอะไร
+Also when reviewing work that "looks AI-made" and you cannot say why.
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-| งาน | ใช้ตัวนี้แทน |
+| Work | Use this instead |
 |---|---|
-| หน้าจอแอป เว็บ มือถือ Windows | `ui-craft` + skill แพลตฟอร์ม |
-| เลย์เอาต์สไลด์ | `presentation-design` |
-| หน้าตาไฟล์ Word / PowerPoint | `branded-document-design` |
-| ไดอะแกรมซอฟต์แวร์ | `software-diagrams` |
-| กราฟข้อมูล | `web-app-design` → `references/tokens.md` หัวข้อ "สีข้อมูล (กราฟ)" |
-| rich menu ของ LINE OA (ขนาด · พื้นที่กด · JSON) | `graphic-design:line-richmenu` (ถ้าติดตั้ง) |
-| ภาพจาก AI | `image-generation` · `graphic-design:brief-to-image` (ถ้าติดตั้ง) |
+| App, web, mobile or Windows screens | `ui-craft` + the platform skill |
+| Slide layout | `presentation-design` |
+| Look of a Word / PowerPoint file | `branded-document-design` |
+| Software diagrams | `software-diagrams` |
+| Data charts | `web-app-design` → `references/tokens.md` section "สีข้อมูล (กราฟ)" (data colours, charts) |
+| LINE OA rich menu (size · tap areas · JSON) | `graphic-design:line-richmenu` (if installed) |
+| AI images | `image-generation` · `graphic-design:brief-to-image` (if installed) |
 
-**ติดตั้ง plugin `graphic-design` อยู่:** งานออกแบบลึก ๆ (ชุดแบรนด์ · ชุดแคมเปญ · ภาพ AI · วิดีโอ · ตรวจงานออกแบบ) ใช้ `graphic-design:brand-kit` · `graphic-design:campaign-set` · `graphic-design:design-review` และขนาดแต่ละแพลตฟอร์มจาก `graphic-design:social-formats` · ไม่มี plugin นั้น → ทำตาม skill นี้ต่อไป
-
----
-
-## 1 · ลำดับการทำงาน
-
-0. **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `logo` · `social` · `illustration` ตามงาน แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้
-1. **เขียนทิศทางลงไฟล์** — คัดลอก `assets/brand-direction.md` ไปกรอก
-2. **เลือกตำแหน่งบน 4 แกน** (ข้อ 2) แล้วเขียนเหตุผลแกนละ 1 บรรทัด
-3. **เขียนรายการสิ่งที่ไม่เอา** — ส่วนที่มีประโยชน์ที่สุดในไฟล์ทั้งหมด
-4. ทำงานจริง
-5. **รอบสองต้องเป็นการตัดออก ไม่ใช่การเพิ่ม** (ข้อ 8)
-6. เรนเดอร์ดูขนาดจริง (ข้อ 8)
-
-**ข้อ 1–3 ใช้เวลาไม่เกิน 15 นาที** และเป็นสิ่งเดียวที่กันไม่ให้งานชิ้นที่ 2 ถึง 10
-หลุดไปคนละทางกับชิ้นแรก
-
-> ทำงานให้ SQT หรือโปรเจกต์ที่มีไฟล์ทิศทางอยู่แล้ว — **อ่านไฟล์นั้น ไม่ต้องเขียนใหม่**
-> ถ้าเนื้องานขัดกับไฟล์ ให้ทักก่อน อย่าแก้ไฟล์เงียบ ๆ
+**If plugin `graphic-design` is installed:** for deeper design work (brand kit · campaign set · AI images · video · design review), use `graphic-design:brand-kit` · `graphic-design:campaign-set` · `graphic-design:design-review`, and take each platform's sizes from `graphic-design:social-formats`. If that plugin is missing, keep following this skill.
 
 ---
 
-## 2 · สี่แกน — เลือกตำแหน่ง ไม่ใช่บรรยายความรู้สึก
+## 1 · Work sequence
 
-เลือกแกนละ 1 ตำแหน่ง **บอกผู้ใช้ก่อนเริ่มทำ เพื่อให้แย้งได้**
+0. **Search for references first:** take the project's keywords and search live as in `design-references` (plugin `superuser`), type `logo` · `social` · `illustration` as the work needs, then pull colours from the chosen work. Use the stored colour library when live search is not possible.
+1. **Write the direction into a file.** Copy `assets/brand-direction.md` and fill it in.
+2. **Pick a position on the 4 axes** (section 2), then write 1 line of reasoning per axis.
+3. **Write the list of things to avoid.** It is the most useful part of the whole file.
+4. Do the real work.
+5. **The second round must cut, not add** (section 8).
+6. Render it at real size (section 8).
 
-| แกน | ตำแหน่ง |
+**Steps 1–3 take at most 15 minutes.** They are the only thing that stops pieces 2 to 10
+from drifting away from the first piece.
+
+> Working for SQT or a project that already has a direction file: **read that file; do not rewrite it.**
+> If the work conflicts with the file, raise it first. Do not edit the file quietly.
+
+---
+
+## 2 · The four axes: pick a position, do not describe a feeling
+
+Pick 1 position per axis. **Tell the user before you start, so they can object.**
+
+| Axis | Positions |
 |---|---|
-| **น้ำเสียง** | ทางการ · เป็นกันเอง · ขี้เล่น · ท้าทาย |
-| **ความประณีต** | เรียบจัด · เนี้ยบมาตรฐาน · แน่นแบบคุมได้ · แน่นแบบปล่อย |
-| **ความสัมพันธ์กับผู้ชม** | ผู้รู้ · เพื่อนร่วมทาง · เพื่อน · โค้ช |
-| **ความทะเยอทะยาน** | ใช้งานได้ · ตั้งใจ · ต้องจำได้ |
+| **Tone** | formal · friendly · playful · challenging |
+| **Polish** | very clean · standard neat · dense but controlled · dense and loose |
+| **Relationship with the audience** | expert · fellow traveller · friend · coach |
+| **Ambition** | usable · deliberate · must be remembered |
 
-**วิธีเลือก:** ดูว่าคู่แข่งในหมวดเดียวกันอยู่ตรงไหน แล้วเลือกให้ต่าง —
-ถ้าทั้งหมวดดูน่าเบื่อ ความขี้เล่นคือความต่าง ส่วนถ้าทั้งหมวดตะโกนแข่งกัน ความเรียบคือความต่าง
+**How to choose:** look at where competitors in the same category sit, then choose to differ.
+If the whole category looks boring, playfulness is the difference. If the whole category shouts, calm is the difference.
 
-**งานที่เป็นแอป** ให้เทียบตำแหน่งที่เลือกกับบุคลิกแอป 6 แบบใน `ui-craft` → `references/app-character.md` เช่น แอปการเงินไม่ควรอยู่ตำแหน่ง "ขี้เล่น"
+**For app work,** compare the chosen position with the 6 app characters in `ui-craft` → `references/app-character.md`. For example, a finance app should not sit at "playful".
 
-**คู่ที่ขัดกันเอง** ให้ทักก่อนทำ: ใช้งานได้ + ท้าทาย · ผู้รู้ + ใช้งานได้ (มักออกมาเป็นน้ำเสียงสั่งสอน)
-
----
-
-## 3 · ระบบสีและตัวอักษร
-
-**สี 5–8 ค่าพอ** — แบรนด์หลัก 1 · รอง 1–3 · กลาง (เทา/ขาว/ดำ) · สีสถานะ
-
-- **สีกลางกินพื้นที่ 80%** ของงาน ส่วนที่เหลือเป็นสีแบรนด์
-- บันทึกทุกค่าเป็น **Hex · RGB · CMYK · Pantone** ถ้ามีงานพิมพ์
-- ความต่างของสีข้อความกับพื้น (contrast) ต้องผ่าน **4.5:1** สำหรับข้อความปกติ และ **3:1** สำหรับตัวใหญ่หรือหนา
-- ผู้ชายราว 8% ตาบอดสี — **ห้ามให้สีเป็นตัวบอกความหมายอย่างเดียว**
-
-**ตัวอักษร 2 ตระกูลพอ** — ตระกูลเดียวที่มีหลายน้ำหนักยิ่งดี
-
-ใช้สเกลขนาด 5–8 ขั้นที่อัตราส่วนคงที่ และน้ำหนัก 2–3 ค่า **ห้ามใช้ตัวหนาปลอม**
-ที่โปรแกรมสร้างเอง เพราะไทยจะเบลอ (ข้อ 6)
+**Pairs that contradict each other:** raise them before working. Usable + challenging · expert + usable (often comes out as a preachy tone).
 
 ---
 
-## 4 · โลโก้
+## 3 · Colour and type system
 
-โลโก้มี 5 สถาปัตยกรรม (ตัวอักษรล้วน · สัญลักษณ์ + ตัวอักษร · สัญลักษณ์ล้วน · ตัวอักษรเป็นสัญลักษณ์ · อักษรย่อ) · **ชุดที่ใช้งานได้จริงต้องมี 3 แบบ** — ตัวหลักสำหรับพื้นที่กว้าง · อักษรย่อสำหรับช่องสี่เหลี่ยม · ตัวอักษรเป็นสัญลักษณ์สำหรับ favicon และงานปัก
+**5–8 colour values are enough:** 1 main brand colour · 1–3 secondary · neutrals (grey/white/black) · status colours
 
-ตารางห้าสถาปัตยกรรมพร้อมตัวอย่าง · ตารางทดสอบบริบท · วิธีทำโลโก้ให้ "ว้าว" · รัศมีมุมของรูปทรงแท่ง → [`references/logo-design.md`](references/logo-design.md) — เปิดเมื่อออกแบบหรือตรวจโลโก้
+- **Neutrals take 80% of the area** of the piece. The rest is brand colour.
+- Record every value as **Hex · RGB · CMYK · Pantone** if there is print work.
+- Contrast between text and background must pass **4.5:1** for normal text and **3:1** for large or bold text.
+- About 8% of men are colour blind. **Never let colour alone carry the meaning.**
 
-**เก็บไฟล์ที่ `assets/` ที่รากโปรเจกต์** ทั้งไฟล์ต้นทาง `.svg` ทุกตัวและไฟล์ export ทุกขนาด (`.png` · favicon `.ico`) แล้วตั้งชื่อแบบ `<ชื่อแบรนด์>-<แบบ>-<ขนาด>.<นามสกุล>` ส่วนงานที่ไม่ใช่โลโก้ (โปสเตอร์ rich menu) ให้ไปที่ `assets/<ชื่องาน>/` และไฟล์ร่างกับตัวเลือกที่ไม่ได้ใช้ให้ย้ายลง `_to_delete/`
+**2 type families are enough.** One family with many weights is even better.
 
-### ทดสอบบริบท — ตกเกิน 2 ข้อ ตัดทิ้ง
-
-โลโก้ต้องผ่านบริบทจริง **ตกเกิน 2 ข้อ ตัดทิ้ง** — favicon 16px · ไอคอนแอป 28px · ปักเสื้อ 1.5 นิ้ว · ขาวดำ · กลับสี · ป้ายหน้าร้าน · รูปโปรไฟล์ 60–80px (ตัวเลขข้อจำกัดของแต่ละบริบท → `references/logo-design.md`)
-
-### สี่ข้อทดสอบความเรียบ
-
-1. **หรี่ตา** — ตัดตัวอักษรออก เงาที่เหลือยังจำได้ไหม
-2. **วาดจากความจำ** — ให้คนดู 30 วินาทีแล้ววาด ออกมาใกล้เคียงไหม
-3. **หนึ่งสี** — พิมพ์ขาวดำขนาด 1 นิ้ว ยังอ่านออกไหม
-4. **ซ้ำใคร** — ค้นภาพ "โลโก้ + ชื่อหมวดธุรกิจ" ถ้าเจอที่คล้ายกันตั้งแต่ 3 อันขึ้นไป ให้ถือว่าซ้ำ
-
-**โลโก้สื่อได้ 1 ความคิด บางทีได้ 2 แต่ 3 ถือว่ามากไป**
-
-**ทำโลโก้ให้ "ว้าว":** ให้อย่างน้อย 1 แนวมาจากสิ่งที่ผู้ใช้เห็นทุกวัน · ทำ 3 แนวพร้อมกันแล้วเลือกจากภาพจริง · ทำแผ่นตัวอย่าง (preview sheet) ทุกรอบ · แปลงชื่อเป็นเส้นจากฟอนต์เปิด (SIL Open Font License (OFL)) เท่านั้น · ส่งออกครบชุดเดียวกันทุกครั้ง (ชุดเดียวอยู่ใน `references/sizes-and-print.md` ข้อ 4) · รูปทรงแท่งใช้**เหลี่ยมขอบมนรัศมี 0.25–0.35 ของความหนาแท่ง** → ขั้นตอนเต็มและตารางรัศมีใน [`references/logo-design.md`](references/logo-design.md)
+Use a size scale of 5–8 steps at a fixed ratio, and 2–3 weights. **Never use fake bold**
+generated by the software, because Thai turns blurry (section 6).
 
 ---
 
-## 5 · ขนาดงานพิมพ์และโซเชียล
+## 4 · Logo
 
-ตัวเลขทั้งหมดอยู่ใน **`references/sizes-and-print.md`** (ฉบับสำรอง — ติดตั้ง plugin `graphic-design` อยู่ → ต้นฉบับขนาดแพลตฟอร์มคือ `graphic-design:social-formats`) — LINE OA, TikTok, Facebook,
-Instagram, งานพิมพ์ (ระยะตัดตก ความละเอียด ระบบสี)
+A logo has 5 architectures (wordmark only · symbol + wordmark · symbol only · lettermark as symbol · initials). **A usable set needs 3 versions:** the main one for wide areas · the initials version for square slots · the lettermark as symbol for favicons and embroidery.
 
-**3 ข้อที่พลาดบ่อยสุด:**
+The table of the five architectures with examples · the context test table · how to make a logo "wow" · the corner radius for bar shapes → [`references/logo-design.md`](references/logo-design.md). Open it when designing or reviewing a logo.
 
-- **ระยะตัดตก 3 มม. รอบด้าน** และของสำคัญห่างขอบตัดเข้ามาอีก 3–5 มม.
-- **300 จุดต่อนิ้ว ที่ขนาดจริง** ไม่ใช่ 300 จุดต่อนิ้วที่ขนาดย่อแล้วขยาย
-- **ดำสนิทในงานพิมพ์ไม่ใช่ K100** — พื้นดำใหญ่ ๆ ใช้ C60 M40 Y40 K100
-  ส่วนตัวอักษรเล็กใช้ K100 ล้วน ไม่งั้นพิมพ์เหลื่อมแล้วขอบเบลอ
+**Store files in `assets/` at the project root:** every `.svg` source and every size of export (`.png` · favicon `.ico`), named `<brand>-<version>-<size>.<extension>`. Non-logo work (poster, rich menu) goes in `assets/<piece-name>/`. Move drafts and unused options to `_to_delete/`.
 
----
+### Context test: fail more than 2, drop it
 
-## 6 · ภาษาไทยในงานกราฟิก
+A logo must pass real contexts. **Fail more than 2 and drop it:** favicon 16px · app icon 28px · embroidery on a shirt at 1.5 inches · black and white · inverted colours · shop sign · profile picture 60–80px (the limit numbers for each context → `references/logo-design.md`)
 
-**ส่วนนี้ไม่มีในคู่มือออกแบบสากลเล่มไหน** และเป็นจุดที่งานไทยพังบ่อยที่สุด
+### Four simplicity tests
 
-### สระและวรรณยุกต์ซ้อนสองชั้น
+1. **Squint:** remove the lettering. Is the remaining silhouette still recognisable?
+2. **Draw from memory:** let someone look for 30 seconds, then draw it. Does it come out close?
+3. **One colour:** print it in black and white at 1 inch. Is it still readable?
+4. **Who else:** search images for "logo + business category". If you find 3 or more similar ones, count it as a duplicate.
 
-กฎที่ห้ามพลาด:
+**A logo can carry 1 idea, sometimes 2, but 3 is too many.**
 
-- **ความสูงบรรทัดอย่างน้อย 1.5** (เนื้อหา) · **1.4** (หัวใหญ่) · **ห้ามล็อกความสูงกล่องข้อความ** (หรือเผื่อ 25%) ไม่งั้นวรรณยุกต์โดนตัด · ตรวจด้วย **ที่ ปั๊ม ปุ่ม สื่อ ตื้น**
-- ไทยไม่มีช่องว่างระหว่างคำ → **ตัดบรรทัดเองทุกครั้ง** ตรงจุดที่จบใจความ
-- ไทยดูเล็กกว่าละตินที่ขนาดเท่ากัน → บรรทัดปนกันเพิ่มไทย 5–10%
-- **ตระกูลเดียวที่มีทั้งไทยและละติน** · ต้องมีน้ำหนักหนาจริง (ห้ามตัวหนาปลอม) · **ตรวจลิขสิทธิ์ก่อนใช้เชิงพาณิชย์** (Anuphan · LINE Seed Sans TH · IBM Plex Sans Thai · Noto Sans Thai)
-
-คำอธิบายเต็มของแต่ละหัวข้อ → [`references/thai-in-graphics.md`](references/thai-in-graphics.md)
-
+**Making a logo "wow":** have at least 1 direction come from something the user sees every day · make 3 directions at the same time and choose from real images · make a preview sheet every round · convert the name to outlines only from open fonts (SIL Open Font License (OFL)) · export the same full set every time (the set is in `references/sizes-and-print.md` item 4) · for bar shapes use **rounded rectangles with a radius of 0.25–0.35 of the bar thickness** → full steps and the radius table in [`references/logo-design.md`](references/logo-design.md)
 
 ---
 
-## 7 · สิ่งที่ห้ามทำ — พร้อมของที่ใช้แทน
+## 5 · Print and social sizes
 
-ห้ามเฉย ๆ ไม่ได้ผล ต้องบอกว่าใช้อะไรแทน
+All the numbers are in **`references/sizes-and-print.md`** (a backup copy. If plugin `graphic-design` is installed, the source for platform sizes is `graphic-design:social-formats`): LINE OA, TikTok, Facebook,
+Instagram, print (bleed, resolution, colour mode).
 
-| ✗ อย่าทำ | ✓ ใช้แทน |
+**The 3 most common mistakes:**
+
+- **3 mm bleed on all sides,** and important items another 3–5 mm inside the trim edge.
+- **300 dots per inch at actual size,** not 300 dots per inch at a reduced size and then enlarged.
+- **Rich black in print is not K100:** for large black areas use C60 M40 Y40 K100,
+  and for small text use pure K100, otherwise misregistration blurs the edges.
+
+---
+
+## 6 · Thai in graphic work
+
+**No international design handbook covers this part,** and it is where Thai work breaks most often.
+
+### Stacked vowels and tone marks
+
+Rules you must not miss:
+
+- **Line height at least 1.5** (body) · **1.4** (large headings) · **never lock the height of a text box** (or leave 25% spare), otherwise tone marks get clipped · test with **ที่ ปั๊ม ปุ่ม สื่อ ตื้น**
+- Thai has no spaces between words → **always break lines by hand** at a point where the meaning ends.
+- Thai looks smaller than Latin at the same size → in mixed lines, add 5–10% to the Thai.
+- **One family with both Thai and Latin** · it must have a truly bold weight (no fake bold) · **check the licence before commercial use** (Anuphan · LINE Seed Sans TH · IBM Plex Sans Thai · Noto Sans Thai)
+
+Full explanation of each topic → [`references/thai-in-graphics.md`](references/thai-in-graphics.md)
+
+
+---
+
+## 7 · What not to do, with what to use instead
+
+A bare "don't" does not work. Say what to use instead.
+
+| ✗ Don't | ✓ Use instead |
 |---|---|
-| ไล่สีม่วง-น้ำเงิน หรือไล่สีรุ้ง | สีแบรนด์ทึบ · ไล่สีเฉดเดียวที่ต่างกันไม่เกิน 10 องศา · พื้นผิวด้าน · ภาพถ่ายเต็มพื้น |
-| วงกลมเรืองแสงลอย ๆ สื่อถึง "เทคโนโลยี" | ภาพของจริง หรือพื้นที่ว่าง |
-| การ์ดมุมมนที่มีแถบสีคาดซ้าย | แผงเต็มความกว้าง · เลขลำดับ · กรอบตาราง · ทรงตั๋ว |
-| วาดสินค้าเป็น SVG แทนภาพจริง | ภาพถ่ายจริง ถ้าไม่มี ให้บอกว่าไม่มีและใส่กล่องว่างไว้ |
-| อีโมจิเป็นหัวข้อย่อย | จุด เลข หรือหัวข้อที่ใช้ตัวหนา |
-| ฟอนต์ที่ใคร ๆ ก็ใช้ (Inter, Roboto, Montserrat) | เลือกจากข้อ 6 แล้วยืนยันว่าเลือกเพราะอะไร |
-| ตัวเลขปลอมในกราฟเพื่อความสวย | ตัวเลขจริง ถ้ายังไม่มีให้เว้นว่างและระบุว่ารอข้อมูล |
-| สามคอลัมน์ไอคอน-หัวข้อ-คำอธิบาย | เลือกโครงจากเนื้อหา ไม่ใช่จากความเคยชิน |
-| ภาพสต๊อกคนจับมือ ลูกศรพุ่งขึ้น | ภาพงานจริง ของจริง คนจริง |
+| Purple-blue gradients or rainbow gradients | Solid brand colour · a one-hue gradient that differs by no more than 10 degrees · matte texture · a full-bleed photo |
+| Floating glowing circles meaning "technology" | A real image, or empty space |
+| Rounded cards with a coloured stripe on the left | A full-width panel · sequence numbers · table borders · a ticket shape |
+| Drawing the product as an SVG instead of a real image | A real photo. If none exists, say so and leave an empty box |
+| Emoji as bullet points | Dots, numbers, or bold headings |
+| Fonts everyone uses (Inter, Roboto, Montserrat) | Choose from section 6 and confirm why you chose it |
+| Fake numbers in charts to make them look good | Real numbers. If you do not have them yet, leave it empty and say you are waiting for data |
+| Three columns of icon-heading-description | Choose the structure from the content, not from habit |
+| Stock photos of people shaking hands, arrows pointing up | Photos of real work, real things, real people |
 
-**บททดสอบสุดท้าย:** งานนี้ดูเหมือนมาจากนักออกแบบคนหนึ่งที่มีตัวตน
-หรือดูเหมือนออกมาจากเครื่องไหนก็ได้
-
----
-
-## 8 · ตรวจงาน
-
-**รอบสองต้องตัดออก ไม่ใช่เพิ่มเข้า** — ถ้ามือกำลังจะวาดของใหม่ ให้หยุดแล้วถามว่า
-ของที่มีอยู่แล้วทำให้ดีขึ้นได้ยังไง
-
-- [ ] เปิดดูที่**ขนาดใช้จริง** ไม่ใช่ขนาดที่ทำงาน — โปสเตอร์ให้ดูที่ระยะ 2 เมตร ส่วนโพสต์ให้ดูบนจอมือถือ
-- [ ] หรี่ตา — มีของเด้งมาก่อนอย่างเดียวไหม
-- [ ] ข้อความไทยครบ ไม่มีวรรณยุกต์โดนตัด (ทดสอบด้วย ที่ ปั๊ม ปุ่ม สื่อ ตื้น)
-- [ ] บรรทัดไทยตัดตรงจบใจความ ไม่ตัดกลางคำ
-- [ ] contrast ผ่าน 4.5:1
-- [ ] ไม่มีของหลุดขอบ ไม่มีของทับกัน
-- [ ] งานพิมพ์ — ตัดตกครบ 3 มม. · 300 จุดต่อนิ้วที่ขนาดจริง · แปลงเป็น CMYK แล้ว
-- [ ] เทียบกับไฟล์ทิศทาง — ขัดข้อไหนไหม
-- [ ] อ่านรายการสิ่งที่ไม่เอา แล้วดูว่าเผลอใส่เข้าไปไหม
+**Final test:** does this piece look like it came from one designer with a personality,
+or like it could have come out of any machine?
 
 ---
 
-## 9 · เชื่อมกับ skill อื่น
+## 8 · Review
 
-| ต้องการ | ใช้คู่กับ |
+**The second round must cut, not add.** If your hand is about to draw something new, stop and ask how
+to improve what is already there.
+
+- [ ] Open it at **real use size**, not the working size. For a poster, view from 2 metres. For a post, view on a phone screen.
+- [ ] Squint: does only one thing pop out first?
+- [ ] Thai text is complete, with no tone marks clipped (test with ที่ ปั๊ม ปุ่ม สื่อ ตื้น)
+- [ ] Thai lines break where the meaning ends, not in the middle of a word
+- [ ] Contrast passes 4.5:1
+- [ ] Nothing spills over an edge, nothing overlaps
+- [ ] Print work: full 3 mm bleed · 300 dots per inch at actual size · converted to CMYK
+- [ ] Compare with the direction file: does anything contradict it?
+- [ ] Read the list of things to avoid, and check whether you slipped any in
+
+---
+
+## 9 · Links to other skills
+
+| Need | Use together with |
 |---|---|
-| ระยะห่าง ลำดับสายตา 5 สถานะ | `ui-craft` |
-| เอาระบบสีไปใช้ในเอกสาร | `branded-document-design` |
-| เอาไปใช้ในสไลด์ | `presentation-design` |
-| เอาไปใช้บนหน้าจอแอป | `web-app-design` · `mobile-app-design` · `windows-app-design` |
-| ตัดสิ่งที่ไม่จำเป็นออก | `simplicity-first` |
+| Spacing, visual hierarchy, 5 states | `ui-craft` |
+| Apply the colour system in documents | `branded-document-design` |
+| Use it in slides | `presentation-design` |
+| Use it on app screens | `web-app-design` · `mobile-app-design` · `windows-app-design` |
+| Cut out what is not needed | `simplicity-first` |
 
 ---
 
-## ไม่ให้ดูเหมือน AI ทำ
+## Do not look AI-made
 
-ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ทุกงานต้องผ่านด่านตา 3.2 ด้วย (หน้าเว็บตอบเพิ่มข้อ 10–14) เพราะสคริปต์ 0 ข้อยังไม่ใช่ผ่าน · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
+Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script. Every piece must also pass the eye check (ด่านตา) 3.2 (web pages answer items 10–14 as well), because a script result of 0 items does not yet mean a pass. The bans in this file are specific to this work. The full list for every medium is there.
 
-## ตัวย่อ
+## Abbreviations
 
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
+Always spell out an abbreviation in full the first time, then put the abbreviation in brackets, for example Model Context Protocol (MCP).
+After that you can use the abbreviation. For details see the skill `spell-out-abbreviations`.
 
-**อ่านเพิ่มเมื่อต้องใช้:** [`references/designer-outputs.md`](references/designer-outputs.md) — รูปแบบงานส่งของนักออกแบบ
+**Read more when needed:** [`references/designer-outputs.md`](references/designer-outputs.md) — formats for a designer's deliverables
 
 
 ## reference: designer-outputs.md
 
-# แม่แบบงานของ graphic-designer — ไฟล์ทิศทาง · ข้อเสนอโลโก้ · ข้อกำหนดชิ้นงาน · รีวิว
+# graphic-designer templates — direction file · logo proposal · piece spec · review
 
-เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+Open this when you really have to write one of these documents. Mark anything you do not know with `(รอยืนยัน)` (awaiting confirmation).
 
 ## Standard Outputs
 
-### ไฟล์ทิศทาง
-คัดลอก `assets/brand-direction.md` ของ skill นี้ไปไว้ที่รากโปรเจกต์ แล้วกรอก งานทุกชิ้นหลังจากนั้นให้อ้างอิงไฟล์นี้
+### Direction file
+Copy this skill's `assets/brand-direction.md` to the project root and fill it in. Every piece after that refers to this file.
 
-### ข้อเสนอโลโก้
+### Logo proposal
 ```markdown
 ## แบบที่ 01 — [ชื่อ เช่น "ตัวอักษรล้วน เรขาคณิต"]
 
@@ -230,7 +230,7 @@ Instagram, งานพิมพ์ (ระยะตัดตก ความล
 **ทดสอบบริบท:** favicon ✓ · ปัก ✓ · ขาวดำ ✓ · กลับสี ✗ ช่องในตัว ก ตัน · ป้าย ✓ · โปรไฟล์ ✓
 ```
 
-### ข้อกำหนดชิ้นงาน
+### Piece spec
 ```markdown
 ## [ชื่อชิ้นงาน]
 
@@ -242,10 +242,10 @@ Instagram, งานพิมพ์ (ระยะตัดตก ความล
 **เก็บที่:** `assets/` (โลโก้ ไอคอน favicon) หรือ `assets/<ชื่องาน>/` (ชิ้นงานอื่น) — ต้นทาง `.svg` คู่กับไฟล์ export เสมอ
 ```
 
-### รีวิวงาน
-บอกเป็นข้อ ๆ ว่าอะไรผิด และ**ผิดเมื่อเทียบกับอะไร**: ทิศทางที่ตกลงไว้ · ตัวเลขมาตรฐาน · รายการสิ่งที่ไม่เอา
+### Design review
+List the faults one by one, and say **what each is wrong against**: the agreed direction · standard numbers · the list of things to avoid.
 
-ความเห็นส่วนตัวให้บอกว่าเป็นความเห็น
+If something is a personal opinion, say it is an opinion.
 
 
 ## reference: logo-design.md

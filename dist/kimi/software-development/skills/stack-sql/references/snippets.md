@@ -1,28 +1,28 @@
-# ตัวอย่างโค้ดสั้น — เวลาไทย · dynamic SQL
+# Short code examples — Thai time · dynamic SQL
 
-กฎอยู่ใน `SKILL.md` ข้อ 2 และ 7
+The rules are in `SKILL.md` items 2 and 7
 
-## แปลงเวลา UTC เป็นเวลาไทยตอนแสดง (ข้อ 2)
+## Convert UTC to Thai time when displaying (item 2)
 
 ```sql
--- แปลงเวลา UTC เป็นเวลาไทยตอนแสดง
-SELECT created_at AT TIME ZONE 'UTC' AT TIME ZONE 'SE Asia Standard Time'  -- SQL Server (ชื่อโซนแบบ Windows)
+-- Convert UTC time to Thai time when displaying
+SELECT created_at AT TIME ZONE 'UTC' AT TIME ZONE 'SE Asia Standard Time'  -- SQL Server (Windows-style zone name)
 FROM dbo.orders;
-SELECT created_at AT TIME ZONE 'Asia/Bangkok' FROM orders;                  -- PostgreSQL (คอลัมน์ timestamptz)
+SELECT created_at AT TIME ZONE 'Asia/Bangkok' FROM orders;                  -- PostgreSQL (timestamptz column)
 ```
 
-## dynamic SQL ที่ส่งค่าเป็น parameter (ข้อ 7)
+## Dynamic SQL that passes values as parameters (item 7)
 
 ```sql
 -- SQL Server
 EXEC sp_executesql N'SELECT id, name FROM dbo.customers WHERE email = @email',
                    N'@email nvarchar(320)', @email = @input;
--- ชื่อคอลัมน์: QUOTENAME(@column) หลังตรวจกับ allowlist
--- PostgreSQL ใน plpgsql
+-- Column name: QUOTENAME(@column) after checking against an allowlist
+-- PostgreSQL in plpgsql
 EXECUTE format('SELECT id, name FROM %I WHERE email = $1', tbl) USING p_email;
 ```
 
-## ตรวจว่ามี collation ไทยหรือไม่ (ข้อ 2)
+## Check whether a Thai collation exists (item 2)
 
-- PostgreSQL มี `th-TH-x-icu` เมื่อ server build ด้วย International Components for Unicode (ICU) ตรวจได้ด้วย `SELECT collname FROM pg_collation WHERE collname LIKE 'th%'`
-- MySQL ตรวจ collation ไทยที่มีด้วย `SHOW COLLATION LIKE '%thai%'` ก่อนเลือก
+- PostgreSQL has `th-TH-x-icu` when the server is built with International Components for Unicode (ICU). Check with `SELECT collname FROM pg_collation WHERE collname LIKE 'th%'`
+- For MySQL, check which Thai collations exist with `SHOW COLLATION LIKE '%thai%'` before choosing

@@ -4,9 +4,9 @@ Use when building connected devices with MQTT or OTA updates
 
 # iot-systems
 
-ระบบอุปกรณ์ที่ต่ออินเทอร์เน็ต: จัดการอุปกรณ์จำนวนมาก · ประมวลผลที่ edge (เครื่องใกล้อุปกรณ์) · MQTT · firmware
+Internet-connected device systems: managing many devices · processing at the edge (a machine close to the devices) · MQTT · firmware
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทั้งหมด เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้นอยู่แล้ว
+**Open only the files that match the job.** Do not read them all, because each file is already the full guide to its topic.
 
 ## หัวข้อ
 
@@ -18,7 +18,7 @@ Use when building connected devices with MQTT or OTA updates
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน · อ่านสารบัญก่อน แล้วอ่านเฉพาะหัวข้อที่งานใช้
+An agent called in for this area opens its own role file before starting work · read the table of contents first, then read only the sections the job uses
 
 | บทบาท | อ่าน | agent |
 |---|---|---|

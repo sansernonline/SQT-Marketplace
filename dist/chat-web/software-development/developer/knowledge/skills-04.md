@@ -1,415 +1,3 @@
-# skill: stack-python
-
-Use when writing or testing Python code
-
-# stack-python — Python that is easy to read, correctly typed, and safe to rerun
-
-Use the same tools the repo already uses, and every diff must pass ruff · type check · pytest before sending. This file holds only Python-specific matters.
-General matters are elsewhere: writing less → `lazy-coding` · naming → `readable-code` · logging → `logging-standards` · catching errors → `error-handling-patterns`
-
-## 1 · Getting started: see what the repo uses, then use that
-
-| File found | Install | Run a command |
-|---|---|---|
-| `uv.lock` | `uv sync` | `uv run <cmd>` |
-| `poetry.lock` | `poetry install` | `poetry run <cmd>` |
-| `pdm.lock` | `pdm install` | `pdm run <cmd>` |
-| `requirements*.txt` only | `python -m venv .venv` then `pip install -r requirements.txt` | Activate `.venv` first |
-| Nothing at all (new project) | `uv init` then `uv add` | `uv run <cmd>` |
-
-- Always use a virtual environment; never `pip install` into the system Python
-- Never mix tools; for example if the repo uses poetry, do not add a `uv.lock`
-- Read `requires-python` in `pyproject.toml` and never use syntax newer than it
-- Versions (last checked 2026-10-14 · source: https://devguide.python.org/versions/): the newest is 3.15 (released 2026-10-09) · 3.14 still gets bug fixes · 3.11–3.13 get security fixes only · 3.10 has reached end of life (2026-10-01) · the next to end is 3.11 (Oct 2027) · a new project starts at 3.14 or 3.15 if the libraries it uses already support it · check this page again before using
-
-Routine commands (prefix with `uv run` or `poetry run` according to the repo's tool):
-
-```bash
-ruff check .                      # lint
-ruff format --check .             # รูปแบบโค้ด · แก้ด้วย ruff format .
-pyright                           # หรือ mypy . · ดูว่า repo ตั้งตัวไหนใน pyproject.toml
-pytest -q 2>&1 | tail -40         # ทั้งชุด · ดูแค่ท้ายผล (สรุปและ test ที่ล้ม)
-pytest -q tests/test_order.py::test_refund_over_limit   # test เดียวด้วย node id
-pytest -q -k "refund and not slow"                      # เลือกตามชื่อ
-```
-
-- type checker: if the repo has `[tool.pyright]` or `pyrightconfig.json`, use pyright; if it has `[tool.mypy]` or `mypy.ini`, use mypy; if it has neither, ask once; Astral's ty is used only when the repo has already set it up
-- If the repo still uses black · isort · flake8, use them as they are; do not move to ruff in the same task
-
-## 2 · Standard patterns
-
-| Topic | Do this | Do not |
-|---|---|---|
-| type hint | Add to every function and method called from outside the file, using `list[str]` · `X \| None` | `List` · `Optional` from `typing` in new code |
-| Data shape | Inside, use `@dataclass(frozen=True)`; at the system edge use pydantic | A bare `dict` passed across modules |
-| path | `pathlib.Path` | Joining strings with `+ "/"` |
-| Text | f-string | `%` or `.format()` in new code |
-| log | `log.info("ส่งแล้ว order_id=%s", oid)` letting the logger substitute the value | An f-string in a log call (builds the string every time even if the level is off) |
-| File · lock · connection | `with ...:` | Opening and waiting to `close()` yourself |
-| Default value | `None`, then create it new inside the function | `def f(items=[])` (one list shared across every call) |
-| Thai text files | `open(p, encoding="utf-8")` · `p.read_text(encoding="utf-8")` | Not specifying (Windows reads as cp874 or cp1252) |
-| Scripts | Logic in functions, with `if __name__ == "__main__":` calling `main()` | Code that runs at import |
-| Command Line Interface (CLI) | Use what the repo uses; if none, start with `argparse` before typer | Parsing `sys.argv` yourself |
-
-```python
-@dataclass(frozen=True)
-class Refund:
-    order_id: int
-    amount_satang: int
-
-def main() -> int:
-    args = parse_args()
-    return run(args.input_path)
-
-if __name__ == "__main__":
-    raise SystemExit(main())
-```
-
-## 3 · Web: FastAPI and Django
-
-- Data in and out goes through pydantic models at the edge, while inside you use domain types; never pass a raw `request.json()` into a service
-- FastAPI: things that must change during tests (DB session · external client · clock) are taken through `Depends` and swapped with `app.dependency_overrides`
-- `async def` only when the whole call chain is async (httpx `AsyncClient` · an async DB driver); if you use a blocking library (`requests` · `time.sleep` · a sync driver), use a plain `def` so FastAPI runs it in a threadpool, or wrap it with `asyncio.to_thread`
-- 1 DB session per request through a dependency that `yield`s; never keep a session at module level
-- Django Object-Relational Mapping (ORM): if you loop and touch a FK, use `select_related`; if you touch many-to-many or a reverse FK, use `prefetch_related`, then check the query count in tests with `assertNumQueries` or `django_assert_num_queries`
-- migration: read the file `makemigrations` creates every time before commit; if you drop a column or change a type on a big table, split it into several steps per `database-design`
-- For health endpoints · timeouts · the shape of errors sent out, see `web-service-essentials` and `api-conventions`
-
-```python
-def get_db() -> Iterator[Session]:
-    with SessionLocal() as session:
-        yield session
-
-@app.post("/refunds", status_code=201)
-def create_refund(body: RefundIn, db: Session = Depends(get_db)) -> RefundOut:
-    return refund_service.create(db, body.to_domain())
-```
-
-## 4 · Data and AI
-
-| Topic | Do this |
-|---|---|
-| Changing values in a DataFrame | Use `df.loc[mask, "col"] = x`, because pandas 3.x turns Copy-on-Write on by default, so `df["col"][mask] = x` does not change `df` at all |
-| Speed | Use whole-column operations (`df["a"] * df["b"]` · `np.where`) before `apply`; use `iterrows` only when there is no other way |
-| Money | Store as satang of type `int64` or `Decimal`; never use float, and round once at display time |
-| Thai CSV | Try `utf-8-sig` first (Excel adds a BOM); if that fails, try `cp874` (TIS-620), and give the `dtype` of codes that start with 0 as `str` |
-| Reproducible results | `rng = np.random.default_rng(42)` passed along as a parameter; also set the seeds of torch and `random`, and record the seed in the output |
-| notebook | Fine for trying ideas, but move code you will reuse into a module with tests; leave the notebook only calling functions and drawing charts |
-| Large files | Read in parts (`chunksize`) or use parquet instead of CSV when you control the format |
-
-- For LLM calls · prompts · RAG · evaluation, see `llm-engineering`
-- For importing or exporting Excel and Buddhist Era years, see `data-import-export`
-
-## 5 · Common traps
-
-| Trap | Symptom | Fix |
-|---|---|---|
-| datetime without timezone | Time is off by 7 hours, or comparing gives a `TypeError` | Create with `datetime.now(timezone.utc)` (3.11+ can use `datetime.UTC`), store as UTC, display with `ZoneInfo("Asia/Bangkok")`, and never use `utcnow()` |
-| Money as float | `0.1 + 0.2 != 0.3` and the total is short by 1 satang | Use `int` satang, or `Decimal("0.10")` from a string |
-| Closure in a loop | Every callback gets the last value of the loop | Bind the value at creation `lambda i=i: ...` or `functools.partial` |
-| A broad `except Exception:` | Real errors are swallowed | Catch only known types, per `error-handling-patterns` |
-| Circular imports | `ImportError` of the partially initialized kind | Move shared things into a third module, and put imports used only for types under `if TYPE_CHECKING:` |
-| CPU-heavy work in threads | Using several threads does not speed it up, because of the Global Interpreter Lock (GIL) | Use `ProcessPoolExecutor`; threads are for I/O waiting |
-| `subprocess(..., shell=True)` | User input becomes a shell command | Pass a list `["git", "log", ref]`, add `check=True` and set a `timeout` |
-| `pickle.load` of outside data | Runs someone else's code the moment it loads | Use JSON or parquet; for models use `safetensors`; for torch add `weights_only=True` |
-| `yaml.load` | Builds any object from the file | `yaml.safe_load` |
-| The repo uses `uv` but packages are added with `uv pip install` or by hand-editing `pyproject.toml` | `uv.lock` is not updated, other machines run `uv sync` and lack the package | Only `uv add <pkg>` / `uv remove <pkg>` · dev things go in with `uv add --group dev` (`[dependency-groups]`) · run everything through `uv run`, do not activate the venv yourself (idea from trailofbits `modern-python` · CC-BY-SA, rewritten) |
-| A single-file script with a separate `requirements.txt` | The runner forgets to install · versions do not match | Put the dependencies in the file header in PEP 723 form (`# /// script` … `# dependencies = ["httpx"]` … `# ///`), then `uv run script.py` builds the env itself |
-| Blocking inside `async def` | The whole server stalls at the pace of the slowest request | See section 3 |
-
-## 6 · Tests
-
-For pytest setup · fixtures · `parametrize` and examples, see [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#python--pytest); this section keeps only Python-specific traps
-
-- Temporary files use `tmp_path`; never write into the repo's folders · environment values use `monkeypatch.setenv`
-- Time: pass the clock into the function as a parameter first; if you cannot change it, use `time-machine`, but if the repo already uses `freezegun`, keep using it
-- External HTTP: httpx uses `respx` · requests uses `responses` · never hit the real network in a unit test
-- For a real database, use `testcontainers` of the same kind as production; do not use SQLite in place of Postgres
-- For new logic and bugs, write a test that fails (red) first, then fix until it passes (green)
-- Look at coverage only for changed lines: `pytest --cov --cov-report=term-missing`, then go through the lines in the diff that did not run
-
-## 7 · Python-specific security
-
-The 10 principles are in `principle-secure-by-default`; this section is how to do them in Python
-
-- Always lock dependencies (`uv.lock` · `poetry.lock` · `pip-compile --generate-hashes`) and commit the lock file
-- Vulnerability scanning: `pip-audit` (works with every tool); uv has `uv audit` but it is still a preview (the version that first has it (รอยืนยัน) (pending confirmation) · source: https://github.com/astral-sh/uv/blob/main/CHANGELOG.md · checked 22 Oct 2569 BE), so it may be used, but Continuous Integration (CI) still relies on `pip-audit`
-- Before `uv add` or `pip install` of a new package, spell the name exactly as on its PyPI page, check the maintainers and the latest release date, and beware of look-alike names (`reqeusts` · `python-dateutil` versus `dateutil`)
-- SQL passes values through parameters: `cur.execute("... WHERE id = %s", (oid,))`; with SQLAlchemy use `text(...)` with `:name`, and never an f-string
-- File names from users: `(base / name).resolve()` then check `.is_relative_to(base.resolve())`; for uploads see `file-upload-and-storage`
-- Secrets are read from the environment (`os.environ["KEY"]` or pydantic-settings) and checked at startup; keep `.env` in `.gitignore` (see `config-and-secrets`)
-- Django production: `DEBUG = False` · `ALLOWED_HOSTS` with real names · `SECRET_KEY` from the environment · run `python manage.py check --deploy` before release
-
-## 8 · Check before sending
-
-- [ ] `ruff check` has no errors
-- [ ] `ruff format --check` passes (or the formatter the repo uses)
-- [ ] The repo's type checker gives 0 errors in the files you changed
-- [ ] `pytest -q` is green for the whole suite, not just the changed files (long output → `> _to_delete/test.txt 2>&1` then `tail -20`)
-- [ ] Every new behavior has a test that was red before the fix
-- [ ] No `requests` · `time.sleep` · sync driver or blocking I/O inside `async def`
-- [ ] Every place that opens a text file gives `encoding="utf-8"` and stored datetimes have a timezone
-- [ ] Added dependencies are in the lock file and pass `pip-audit`
-
-## 9 · Connecting to other skills
-
-| Task | Open |
-|---|---|
-| Write less, add nothing extra | `lazy-coding` |
-| Names · function shape · where files live | `readable-code` |
-| Choosing a test framework · proportions · test names | `testing-standards` |
-| Log format · correlation id · ready-made Python logger | `logging-standards` |
-| Catching errors · retry · timeout | `error-handling-patterns` |
-| Security rules for every diff | `principle-secure-by-default`, and before sending use `security-gate` |
-| LLM calls · RAG · evaluation | `llm-engineering` |
-| schema · migration | `database-design` |
-| Background jobs (Celery · RQ · cron) | `background-jobs` |
-| Confirm it really works before saying it is done | `principle-prove-it-works` |
-
-
----
-
-# skill: stack-sql
-
-Use when writing or reviewing SQL queries
-
-# stack · SQL — write queries that are correct, fast, and change data safely
-
-> **The one rule:** a query that has never run against a realistic amount of data is not finished
-
-Table design, naming, data types, and expand-and-contract migrations → `database-design`
-
-## 1 · Getting started: know the database before writing the first line
-
-- engine and version: `SELECT @@VERSION` (SQL Server) · `SELECT version()` (PostgreSQL) · `SELECT VERSION()` (MySQL) · on SQL Server also check `SERVERPROPERTY('Edition')`, because many features exist only in Enterprise
-- what the repo runs migrations with: `Migrations/` (EF Core) · `db/migration/V1__*.sql` (Flyway) · Liquibase `changelog` · `alembic/` · `prisma/migrations/` · raw scripts in `sql/`
-- the server's collation and time zone: `SERVERPROPERTY('Collation')` · `SHOW timezone`
-
-- Use the migration tool the repo already uses; never add a second one and never change the schema by hand outside the tool
-- Never run anything on production; prepare the commands for a person to approve instead (see `principle-proceed-on-reversible-work`)
-- Use a local or sandbox database whose row count is close to real (a 100-row table hides every speed problem); if you have none, generate mock data with a script so the volume and value distribution are close to real
-
-## 2 · Write queries that are correct
-
-| Topic | Do this | Trap |
-|---|---|---|
-| Values from users | Always pass as a parameter | Concatenating strings → SQL injection |
-| Columns | Write the full column names | `SELECT *` → pulls too much · a new column breaks code · cannot use a covering index |
-| NULL | `IS NULL` · `NOT EXISTS` | `= NULL` is never true · `NOT IN (subquery)` with a single NULL → 0 rows |
-| JOIN | Count rows before and after the join | Join on the 1-to-many side then `SUM` → doubled totals; fix by summing before the join |
-| GROUP BY | Every non-aggregate column must be in `GROUP BY` | MySQL with `ONLY_FULL_GROUP_BY` off → silently picks a random value |
-| Division | `CAST(a AS decimal(18,4)) / b` and guard against divide by 0 with `NULLIF(b, 0)` | SQL Server and PostgreSQL give `5/2 = 2`, while MySQL gives `5/2 = 2.5000` |
-| Mismatched data types | A parameter of the same type as the column | SQL Server sends `nvarchar` to compare with a `varchar` column → `CONVERT_IMPLICIT` → scans the whole table |
-| Date range | `>= start AND < end` (half-open) | `BETWEEN '2026-01-01' AND '2026-01-31'` → drops all of the 31st after midnight |
-| time zone | Store UTC, convert to Asia/Bangkok when displaying | Storing Thai time with no offset → merging data across systems is off by 7 hours |
-| Buddhist Era (พ.ศ.) year | Always store Common Era (ค.ศ.), convert when displaying | Storing 2569 → age calculation, sorting and export all break |
-| Money | `decimal(19,4)` · `numeric(19,4)` | `float` · `real` → 0.1 + 0.2 does not equal 0.3 |
-| Sorting Thai names | SQL Server `Thai_100_CI_AS` · PostgreSQL `COLLATE "th-TH-x-icu"` | A general collation → leading vowels (เ แ โ ใ ไ) sort wrong with no error |
-
-Convert UTC to Thai time when displaying: SQL Server `AT TIME ZONE 'UTC' AT TIME ZONE 'SE Asia Standard Time'` · PostgreSQL `AT TIME ZONE 'Asia/Bangkok'` (a `timestamptz` column)
-
-- A Thai collation is not on every server, so check before choosing (commands in [`references/snippets.md`](references/snippets.md)) · showing Thai dates and accepting Buddhist Era years from a form → `i18n-and-locale`
-
-## 3 · Make it fast: read the real plan, do not guess
-
-Commands to see the real plan by engine · what to look for in a plan · keyset example · deleting in batches · parameter sniffing fixes step by step → [`references/performance.md`](references/performance.md)
-
-- Short rules: look at the real plan on data close to real volume, do not guess · conditions must be sargable (do not wrap an indexed column in a function) · every index must answer which query it serves · deep paging uses keyset · count N+1 from the Object-Relational Mapper (ORM) log · big UPDATE/DELETE goes in batches — details and examples are only in [`references/performance.md`](references/performance.md)
-
-## 4 · Change data safely
-
-A table of isolation levels · upsert · creating an index without locking the table, by engine, with examples that check row counts → [`references/safe-changes.md`](references/safe-changes.md)
-
-- Short rules: scripts can be rerun · back up before changing a big batch of data · count rows first and check before `COMMIT` · upsert uses the engine's own form · touch tables in the same order to prevent deadlocks · `ALTER TABLE` on a big table needs `lock_timeout` set — details and examples are only in [`references/safe-changes.md`](references/safe-changes.md)
-
-## 5 · Common traps
-
-- `MERGE` (SQL Server) has several bugs, and without `HOLDLOCK` 2 sessions insert duplicates → separate `UPDATE` + `INSERT`, or `MERGE ... WITH (HOLDLOCK)` with a test
-- A trigger hides business rules and breaks on multi-row inserts → keep rules in app code; use triggers only for audit · a cursor/row-by-row loop → a set-based statement
-- `WITH (NOLOCK)` reads uncommitted data, rows go missing or repeat → turn on Read Committed Snapshot Isolation (RCSI) instead · building SQL by string concatenation → parameters (section 7)
-- A collation mismatch in a join → set them equal on the column (putting `COLLATE` in the query stops it using the index)
-- Ids are not always consecutive (identity jumps · a sequence does not go back on rollback) → document numbers that must have no gaps are issued by yourself in a counter table
-- A timestamp with no time zone → PostgreSQL `timestamptz` · SQL Server `datetime2` agreed to be UTC, or `datetimeoffset`
-- A query that always filters a small share of rows (`WHERE status = 'pending'` · `deleted_at IS NULL`) but the index covers every row → the index is big and the planner does not pick it → put that condition into the index itself: PostgreSQL `CREATE INDEX ... WHERE status = 'pending'` · SQL Server filtered index `CREATE INDEX ... WHERE status = 'pending'` (the query must write the same condition for it to be used · idea from supabase/agent-skills · MIT)
-- After deleting or updating many rows, queries get slower though the plan did not change → table and index bloat (dead tuples · split pages) → in PostgreSQL look at `pg_stat_user_tables.n_dead_tup` then `VACUUM (ANALYZE)` or `REINDEX CONCURRENTLY` · in SQL Server look at `sys.dm_db_index_physical_stats` then `ALTER INDEX ... REORGANIZE` (below 30%) or `REBUILD` · check this before blaming the query
-
-Example commands for both of these → [`references/performance.md`](references/performance.md)
-
-## 6 · Tests
-
-- Test queries against a real database of the same kind as production; never use SQLite or in-memory in place of SQL Server/PostgreSQL, because NULL, collation and lock behavior differ
-- Start a fresh database every run with Testcontainers and load seed data with a script · logic in stored procedures uses tSQLt (SQL Server) or pgTAP (PostgreSQL)
-- Check both row counts and values: cases with NULL · date ranges right at the midnight edge · Thai names · money amounts with fractions
-- Run a new migration on a copy of a production-like schema with data close to real volume, then time it and watch the locks
-- To fix a bug, write a test that fails first, then fix it (`principle-fix-root-cause`); for the general test framework see `testing-standards`
-
-## 7 · Database-specific security
-
-- 1 app, 1 database user, with only the permissions it uses; the app must never use `sa` · `postgres` · `root`, and the user that runs migrations must be separate from the user the app uses at run time
-- For dynamic SQL with values from users, pass the values as parameters, and choose table or column names from an allowlist and then quote them
-
-Examples of `sp_executesql` · `QUOTENAME` · plpgsql `format('%I')` → [`references/snippets.md`](references/snippets.md)
-
-- If the data of several companies is in one table, consider row-level security: SQL Server `CREATE SECURITY POLICY` · PostgreSQL `CREATE POLICY` (the table owner bypasses the policy unless `FORCE ROW LEVEL SECURITY`)
-- Personal data columns (national ID number · phone number · address) are not pulled unless used; SQL Server's Dynamic Data Masking helps hide values on display but is not access control; for details see `pdpa-compliance`
-- Changes to important data must leave a trace of who did it (`audit-trail`)
-
-## 8 · Check before sending
-
-- [ ] Every outside value is a parameter · no `SELECT *`
-- [ ] Checked NULL · half-open date ranges · division · parameter types match the columns
-- [ ] Looked at the real plan on near-real data, noted logical reads or time before/after · every new index can say which query it serves
-- [ ] Scripts can be rerun and big data goes in batches
-- [ ] Transaction + check row counts before `COMMIT` · wrote the way back and confirmed a backup exists
-- [ ] There is a test that runs against the same kind of database as production
-
-## 9 · Connecting to other skills
-
-Table design and expand-and-contract migrations → `database-design` · rerunnable scripts → `principle-safe-to-rerun` · Excel/CSV → `data-import-export` · who changed what → `audit-trail` · injection and permissions → `principle-secure-by-default` · Thai Buddhist Era dates, Thai sorting → `i18n-and-locale` · connection string → `config-and-secrets` · migrations in the pipeline → `cicd-and-release`
-
-
-## reference: performance.md
-
-# Making it fast — read the plan · indexes · paging · big jobs (full version)
-
-Read this when a query is slow or you are adding an index · the short rules are in `SKILL.md` section 3
-
-| engine | Command to see the real plan |
-|---|---|
-| SQL Server | `SET STATISTICS IO, TIME ON;` + open the Actual Execution Plan (in SQL Server Management Studio (SSMS) press `Ctrl+M`), then look at logical reads |
-| PostgreSQL | `EXPLAIN (ANALYZE, BUFFERS) SELECT ...` beware that `ANALYZE` really runs the statement; for UPDATE/DELETE wrap it in `BEGIN ... ROLLBACK` |
-| MySQL 8.0.18+ | `EXPLAIN ANALYZE SELECT ...` |
-
-What to look for in a plan: a scan of a whole big table · expected vs actual row counts far apart (stale statistics) · key lookups repeated thousands of times · a sort or hash that spills to disk
-
-- **sargable** means a condition that can use an index; never wrap an indexed column in a function
-  - Wrong: `WHERE YEAR(created_at) = 2026` → right: `WHERE created_at >= '2026-01-01' AND created_at < '2027-01-01'`
-  - Wrong: `WHERE LOWER(email) = @e` → right: store email in lower case from the start, or make an index on an expression (PostgreSQL) or a computed column + index (SQL Server)
-  - Wrong: `WHERE name LIKE '%สมชาย'` cannot use an index; if you must search the middle of a word, use full-text search
-- **covering index**: put the columns the query reads in `INCLUDE (...)` (SQL Server · PostgreSQL 11+) so it need not go back to read the table; MySQL has no `INCLUDE`, so append them to the key instead
-- Every index you add must answer which query it serves, because every index makes INSERT/UPDATE slower
-- **For deep paging** use keyset instead of `OFFSET`, because `OFFSET 100000` must read and throw away 100,000 rows every time
-
-```sql
--- keyset: ส่งค่าแถวสุดท้ายของหน้าก่อนมาเป็น parameter
-SELECT id, created_at, total_amount
-FROM orders
-WHERE (created_at, id) < ($1, $2)   -- PostgreSQL ($1, $2) · MySQL (?, ?) · ส่งค่าแถวสุดท้ายของหน้าก่อน
-ORDER BY created_at DESC, id DESC
-LIMIT 50;
--- SQL Server: WHERE created_at < @c OR (created_at = @c AND id < @id) · ใช้ TOP (50)
-```
-
-- **N+1 from an Object-Relational Mapper (ORM)**: a loop that loads children one row at a time → 1 screen fires 201 queries; turn on the ORM's SQL log and count, then fix with `Include` (EF Core) · `selectinload` (SQLAlchemy) · `include` (Prisma)
-- **parameter sniffing (SQL Server)**: a plan is built from the first value passed and reused with values that are distributed very differently → some customers are fast, some are 100 times slower
-  - Fixes from lightest to heaviest: SQL Server 2022+ compatibility level 160 has Parameter Sensitive Plan optimization · `OPTION (RECOMPILE)` for queries that run rarely · `OPTIMIZE FOR` · force a plan through Query Store
-  - Never fix it by clearing the plan cache of the whole server
-- **statistics**: after loading a big batch of data, run `UPDATE STATISTICS dbo.orders` or, in PostgreSQL, `ANALYZE orders`
-- **Big UPDATE/DELETE** in batches, for example 5,000 rows, because doing a million rows in one batch locks the whole table, grows the log, and takes just as long to roll back
-
-```sql
--- SQL Server: ลบทีละ 5,000 แถวจนหมด
-WHILE 1 = 1
-BEGIN
-    DELETE TOP (5000) FROM dbo.audit_logs WHERE created_at < @cutoff;
-    IF @@ROWCOUNT < 5000 BREAK;
-END
--- PostgreSQL: DELETE FROM audit_logs WHERE id IN (SELECT id FROM audit_logs WHERE created_at < $1 LIMIT 5000); วนจากแอปหรือ procedure
-```
-
-## Indexes for a small share of rows, and bloated tables (SKILL.md section 5)
-
-```sql
--- PostgreSQL · partial index: index เฉพาะแถวที่ query กรองเสมอ
-CREATE INDEX CONCURRENTLY ix_orders_pending ON orders (created_at) WHERE status = 'pending';
--- SQL Server · filtered index แบบเดียวกัน (query ต้องมี WHERE status = 'pending' ตรงตัว)
-CREATE INDEX ix_orders_pending ON dbo.orders (created_at) WHERE status = 'pending';
-
--- PostgreSQL · ตารางบวมหลังลบหรืออัปเดตก้อนใหญ่
-SELECT relname, n_live_tup, n_dead_tup, last_autovacuum
-FROM pg_stat_user_tables WHERE n_dead_tup > 10000 ORDER BY n_dead_tup DESC;
-VACUUM (VERBOSE, ANALYZE) orders;          -- ปกติ
-REINDEX INDEX CONCURRENTLY ix_orders_pending; -- index บวม
-
--- SQL Server · index แตกเป็นชิ้น
-SELECT i.name, s.avg_fragmentation_in_percent, s.page_count
-FROM sys.dm_db_index_physical_stats(DB_ID(), OBJECT_ID('dbo.orders'), NULL, NULL, 'LIMITED') s
-JOIN sys.indexes i ON i.object_id = s.object_id AND i.index_id = s.index_id
-WHERE s.page_count > 1000;
-ALTER INDEX ix_orders_pending ON dbo.orders REORGANIZE; -- < 30%
-ALTER INDEX ix_orders_pending ON dbo.orders REBUILD WITH (ONLINE = ON); -- >= 30% (Enterprise/Azure)
-```
-
-
-## reference: safe-changes.md
-
-# เปลี่ยนข้อมูลอย่างปลอดภัย — ตารางเทียบ engine และตัวอย่าง (ฉบับเต็ม)
-
-อ่านเมื่อเขียนสคริปต์แก้ข้อมูล upsert หรือ ALTER TABLE · กฎย่ออยู่ใน `SKILL.md` ข้อ 4
-
-| เรื่อง | SQL Server | PostgreSQL | MySQL (InnoDB) |
-|---|---|---|---|
-| isolation เริ่มต้น | READ COMMITTED แบบ lock ส่วน Azure SQL Database เปิด Read Committed Snapshot Isolation (RCSI) ให้แล้ว | READ COMMITTED (อ่านจาก snapshot ไม่บล็อกคนเขียน) | REPEATABLE READ |
-| upsert ที่รันซ้ำได้ | `UPDATE` แล้ว `INSERT ... WHERE NOT EXISTS` ใน transaction พร้อม `UPDLOCK, HOLDLOCK` | `INSERT ... ON CONFLICT (...) DO UPDATE` | `INSERT ... ON DUPLICATE KEY UPDATE` |
-| สร้าง index ไม่ล็อกตาราง | `WITH (ONLINE = ON)` ใช้ได้เฉพาะ Enterprise (รวม 2025) | `CREATE INDEX CONCURRENTLY` แต่รันใน transaction ไม่ได้ | `ALGORITHM=INPLACE, LOCK=NONE` |
-
-- ถ้า SQL Server มีคนอ่านบล็อกคนเขียนบ่อย ให้พิจารณาเปิด `READ_COMMITTED_SNAPSHOT ON` แต่จะเพิ่มภาระ tempdb จึงต้องทดสอบก่อน
-- ป้องกัน deadlock: ทุกโค้ดแตะตารางเรียงลำดับเดียวกัน ทำ transaction ให้สั้นที่สุด และไม่รอ API ภายนอกขณะถือ transaction
-- สคริปต์ทุกตัวต้องรันซ้ำได้ (`principle-safe-to-rerun`): `IF NOT EXISTS` · `CREATE INDEX IF NOT EXISTS` (PostgreSQL) · `CREATE OR ALTER` (SQL Server)
-- ก่อนคำสั่งที่ลบหรือแก้ข้อมูลจำนวนมาก: backup ตารางที่โดน หรือยืนยันว่า backup ล่าสุด restore ได้จริง แล้วเขียนวิธีย้อนกลับไว้ก่อนรัน
-- นับแถวที่คาดไว้ก่อน แล้วตรวจก่อน `COMMIT`:
-
-```sql
-BEGIN TRAN;
-UPDATE dbo.orders SET status = 'cancelled'
-WHERE status = 'pending' AND created_at < @cutoff;
-IF @@ROWCOUNT <> @expected
-BEGIN ROLLBACK; THROW 50001, 'จำนวนแถวไม่ตรงกับที่นับไว้', 1; END
-COMMIT;
--- PostgreSQL: ใน DO block ใช้ GET DIAGNOSTICS n = ROW_COUNT; ไม่ตรง → RAISE EXCEPTION
-```
-
-- `ALTER TABLE` บนตารางใหญ่:
-  - PostgreSQL ขอ lock `ACCESS EXCLUSIVE` แล้วรอ query ยาวที่ค้างอยู่ ระหว่างรอ query ใหม่ทุกตัวก็ต่อคิวด้วย จึงต้องตั้ง `SET lock_timeout = '5s'` แล้ว retry
-  - PostgreSQL 11+ เพิ่มคอลัมน์ที่มี default คงที่ได้ทันที แต่การเปลี่ยนชนิดคอลัมน์จะเขียนตารางใหม่ทั้งก้อน
-  - SQL Server เพิ่มคอลัมน์ `NOT NULL` พร้อม default ทำได้ทันทีเฉพาะ Enterprise ส่วน edition อื่นต้องเขียนทุกแถว
-  - ถ้าเปลี่ยนชนิดหรือย้ายข้อมูล ให้ทำแบบ expand-and-contract ตาม `database-design`
-
-
-## reference: snippets.md
-
-# ตัวอย่างโค้ดสั้น — เวลาไทย · dynamic SQL
-
-กฎอยู่ใน `SKILL.md` ข้อ 2 และ 7
-
-## แปลงเวลา UTC เป็นเวลาไทยตอนแสดง (ข้อ 2)
-
-```sql
--- แปลงเวลา UTC เป็นเวลาไทยตอนแสดง
-SELECT created_at AT TIME ZONE 'UTC' AT TIME ZONE 'SE Asia Standard Time'  -- SQL Server (ชื่อโซนแบบ Windows)
-FROM dbo.orders;
-SELECT created_at AT TIME ZONE 'Asia/Bangkok' FROM orders;                  -- PostgreSQL (คอลัมน์ timestamptz)
-```
-
-## dynamic SQL ที่ส่งค่าเป็น parameter (ข้อ 7)
-
-```sql
--- SQL Server
-EXEC sp_executesql N'SELECT id, name FROM dbo.customers WHERE email = @email',
-                   N'@email nvarchar(320)', @email = @input;
--- ชื่อคอลัมน์: QUOTENAME(@column) หลังตรวจกับ allowlist
--- PostgreSQL ใน plpgsql
-EXECUTE format('SELECT id, name FROM %I WHERE email = $1', tbl) USING p_email;
-```
-
-## ตรวจว่ามี collation ไทยหรือไม่ (ข้อ 2)
-
-- PostgreSQL มี `th-TH-x-icu` เมื่อ server build ด้วย International Components for Unicode (ICU) ตรวจได้ด้วย `SELECT collname FROM pg_collation WHERE collname LIKE 'th%'`
-- MySQL ตรวจ collation ไทยที่มีด้วย `SHOW COLLATION LIKE '%thai%'` ก่อนเลือก
-
-
----
-
 # skill: stack-mql
 
 Use when writing MQL4 or MQL5 code for MetaTrader
@@ -520,7 +108,7 @@ Backtest formulas and statistics → agent `quant-analyst` · general tests → 
 
 Use when writing end-to-end tests or fixing flaky ones
 
-> **ใน SuperUser:** ถ้าอยากให้ agent รันแอปและพิสูจน์ผลเอง ให้ใช้ [`app-verifier-setup`](../app-verifier-setup/SKILL.md) ส่วน skill นี้คือหลักออกแบบชุดทดสอบ E2E (end-to-end) ที่ verifier นั้นเรียกใช้
+> **In SuperUser:** to have an agent run the app and prove the result itself, use [`app-verifier-setup`](../app-verifier-setup/SKILL.md). This skill holds the design principles for the E2E (end-to-end) test suite that verifier calls.
 
 # End-to-End Testing Patterns
 
@@ -541,17 +129,17 @@ Use when writing end-to-end tests or fixing flaky ones
 | Writing manual test cases (steps, expected result) | `test-case-template` |
 | Unit or integration tests, test ratio and scope | `testing-standards` |
 
-## อ่านเพิ่มเมื่อ
+## Read more when
 
-| ไฟล์ | เปิดเมื่อ |
+| File | Open when |
 |---|---|
-| [references/page-object-model.md](references/page-object-model.md) | ถ้าจะตั้งโครงชุดทดสอบใหม่ หรือเจอเทสต์ที่ลอกขั้นตอนล็อกอินซ้ำกัน ให้เปิดดูโค้ดเทียบแบบไม่ดีกับแบบ Page Object |
-| [references/test-data-strategies.md](references/test-data-strategies.md) | ตอนเลือกวิธีเตรียมข้อมูลทดสอบ และอยากเห็นข้อดีข้อเสียของทั้ง 4 แบบพร้อมโค้ดตัวอย่าง |
-| [references/flaky-tests.md](references/flaky-tests.md) | ถ้าเทสต์ผ่านบ้างไม่ผ่านบ้าง ให้เปิดดูโค้ดเทียบการรอแบบ sleep กับการรอตามเหตุการณ์ |
-| [references/auth-in-e2e.md](references/auth-in-e2e.md) | ตอนวางวิธีล็อกอินในชุดทดสอบ และต้องการโค้ด `storageState` หรือการฉีด cookie ผ่าน API |
-| [references/ci-and-parallel.md](references/ci-and-parallel.md) | ตอนตั้งการรันขนานหรือแบ่งรอบการรัน E2E ใน CI และต้องรู้ว่าต้องเก็บไฟล์อะไรเมื่อเทสต์ล้ม |
-| [references/coverage-and-libraries.md](references/coverage-and-libraries.md) | ตอนทำตารางความครอบคลุมของเส้นทางผู้ใช้ หรือย้ายคำสั่งระหว่าง Playwright กับ Cypress |
-| [references/oracle-and-mutation.md](references/oracle-and-mutation.md) | ถ้ามีระบบเดิมให้เทียบ (differential) · จะเทียบโครงสร้างหน้าด้วย accessibility tree · อยากรู้ว่าชุดทดสอบจับบั๊กได้จริงไหม (mutation) · หรือต้องบันทึกแล้วเล่นซ้ำคำขอเครือข่ายให้นิ่ง |
+| [references/page-object-model.md](references/page-object-model.md) | You are setting up a new suite structure, or you find tests that copy the same login steps. It shows code comparing the bad way with the Page Object way. |
+| [references/test-data-strategies.md](references/test-data-strategies.md) | You are choosing how to prepare test data and want the pros and cons of all 4 options with sample code. |
+| [references/flaky-tests.md](references/flaky-tests.md) | Tests pass sometimes and fail sometimes. It shows code comparing a sleep wait with an event-based wait. |
+| [references/auth-in-e2e.md](references/auth-in-e2e.md) | You are planning how to log in within the suite and need the `storageState` code or cookie injection through the API. |
+| [references/ci-and-parallel.md](references/ci-and-parallel.md) | You are setting up parallel runs or splitting E2E run rounds in CI, and need to know which files to keep when a test fails. |
+| [references/coverage-and-libraries.md](references/coverage-and-libraries.md) | You are building the user-path coverage table, or translating commands between Playwright and Cypress. |
+| [references/oracle-and-mutation.md](references/oracle-and-mutation.md) | You have an old system to compare against (differential) · you will compare page structure with the accessibility tree · you want to know whether the suite really catches bugs (mutation) · or you must record and replay network requests to keep them stable. |
 
 ## The Testing Pyramid (Get This Right First)
 
@@ -585,7 +173,7 @@ Use when writing end-to-end tests or fixing flaky ones
 
 ## Test Structure: Page Object Model (POM)
 
-ถ้าทุกเทสต์เขียน `page.fill` และ `page.click` ของหน้าเดียวกันซ้ำ ๆ ให้ย้ายขั้นตอนเหล่านั้นไปไว้ในคลาสของหน้านั้น แล้วให้เทสต์เรียกเมธอดแทน โค้ดเทียบอยู่ใน [references/page-object-model.md](references/page-object-model.md)
+If every test repeats the same `page.fill` and `page.click` calls for one page, move those steps into that page's class and have the tests call its methods instead. Comparison code is in [references/page-object-model.md](references/page-object-model.md)
 
 > **One Page Object per page or major component.**
 
@@ -594,25 +182,25 @@ Use when writing end-to-end tests or fixing flaky ones
 ```
 Most resilient ─────────────────────────► Most brittle
 
-ถูก: Role + accessible name      page.getByRole('button', { name: 'Submit' })
-ถูก: Test IDs                     page.getByTestId('submit-btn')
-กลาง: Visible text              page.getByText('Submit')
-กลาง: Label                     page.getByLabel('Email')
-ผิด: CSS classes               page.locator('.btn-primary')
-ผิด: Tag + index               page.locator('button:nth-child(3)')
-ผิด: XPath                        page.locator('//div[2]/button')
+Good:   Role + accessible name   page.getByRole('button', { name: 'Submit' })
+Good:   Test IDs                page.getByTestId('submit-btn')
+Medium: Visible text            page.getByText('Submit')
+Medium: Label                   page.getByLabel('Email')
+Bad:    CSS classes             page.locator('.btn-primary')
+Bad:    Tag + index             page.locator('button:nth-child(3)')
+Bad:    XPath                   page.locator('//div[2]/button')
 ```
 
 **Rule:** Prefer queries that survive refactoring.
 
 ## Test Data Strategy
 
-มี 4 แบบ คือ shared test DB · per-test setup · API setup กับ UI verification · database snapshot กับ rollback
-แบบที่แนะนำคือ **Option 3: API setup, UI verification (best)** — เตรียมข้อมูลผ่าน API ให้เร็วและแน่นอน แล้วค่อยทดสอบ UI จริง ส่วน shared test DB ทำให้เทสต์พึ่งลำดับกัน รันขนานยาก และข้อมูลปนกัน ส่วนข้อดีข้อเสียครบทุกแบบอยู่ใน [references/test-data-strategies.md](references/test-data-strategies.md)
+There are 4 options: shared test DB · per-test setup · API setup with UI verification · database snapshot with rollback.
+The recommended one is **Option 3: API setup, UI verification (best)**. Prepare data through the API so it is fast and certain, then test the real UI. A shared test DB makes tests depend on order, makes parallel runs hard and mixes data. The pros and cons of every option are in [references/test-data-strategies.md](references/test-data-strategies.md)
 
 ## What to Test E2E (Not Everything!)
 
-### ถูก: DO test E2E
+### DO test E2E
 - Critical user journeys (login → checkout → confirmation)
 - Multi-step workflows that span multiple pages
 - Integration with external services (payment, email)
@@ -628,19 +216,19 @@ Most resilient ─────────────────────�
 
 > **Rule of thumb:** If a unit/integration test can verify it, don't add E2E.
 
-ให้ทำตารางความครอบคลุมของเส้นทางผู้ใช้ (Critical Path Coverage Matrix) ที่บอกว่าแต่ละเส้นทางครอบคลุมแล้วหรือยัง และสำคัญระดับ P1 P2 หรือ P3 (scale เดียวกับ `test-case-template` และ tag ด้านล่าง · P1 สำคัญสุด) ตัวอย่างอยู่ใน [references/coverage-and-libraries.md](references/coverage-and-libraries.md)
+Make a Critical Path Coverage Matrix that says whether each path is covered yet and how important it is: P1, P2 or P3 (the same scale as `test-case-template` and the tags below · P1 is most important). An example is in [references/coverage-and-libraries.md](references/coverage-and-libraries.md)
 
 ## Expected Values and Failing Tests
 
-ชุด E2E ที่แปลงมาจากแผนทดสอบ (`test-case-template`):
+For an E2E suite converted from a test plan (`test-case-template`):
 
-- ชื่อ test ขึ้นต้นด้วยรหัส TC · tag `@<module>` `@P1|@P2|@P3` · ใส่ผลที่คาดหวังและ oracle เป็น annotation
+- Start each test name with the TC code · tag `@<module>` `@P1|@P2|@P3` · put the expected result and the oracle in an annotation
   `test.info().annotations.push({ type: 'expected', description: '฿760 · [D] BR-03' })`
-- ค่าที่คาดหวังเป็นค่าคงที่จากแผน · ห้ามอ่านค่าจากหน้าจอแล้ว assert กลับ เช่น อ่านราคาจากการ์ดแล้วเทียบยอดรวม → ผิดทั้งคู่ก็ผ่าน
-- reset ข้อมูลก่อนทุก TC (API reset หรือ seed) · ล็อก "วันนี้" ด้วย `page.clock.setFixedTime()` · `timezoneId` · `locale` ใน config
-- TC ที่มี **Check when** `หลังรีโหลด` → `page.reload()` แล้ว assert อีกครั้ง
-- รันทุกเบราว์เซอร์ที่แผนระบุ · เกณฑ์ผ่านคิดแยกทีละเบราว์เซอร์
-- test ล้ม → ห้ามแก้ค่าที่คาดหวัง · จำแนก `app` / `plan` / `test` ตาม agent `qa-tester` ลง `triage.json` · ใน CI ห้าม retry จนผ่านแล้วถือว่าจบ
+- Expected values are constants from the plan · never read a value from the screen and assert it back, for example reading the price from the card and comparing it with the total → if both are wrong, the test still passes
+- Reset data before every TC (API reset or seed) · lock "today" with `page.clock.setFixedTime()` · `timezoneId` · `locale` in the config
+- A TC with **Check when** `หลังรีโหลด` (after reload) → call `page.reload()` and assert again
+- Run every browser the plan names · judge pass criteria per browser separately
+- When a test fails → never edit the expected value · classify it as `app` / `plan` / `test` per the `qa-tester` agent into `triage.json` · in CI, never retry until green and call it done
 
 ## Fighting Flaky Tests
 
@@ -655,7 +243,7 @@ Most resilient ─────────────────────�
 | Element not stable | `expect(el).toBeVisible()` before interacting |
 | Click times out "not visible/stable" but the site works | The tab may be in the background (`document.visibilityState === "hidden"`, common with Playwright MCP sharing one browser). Check with `browser_evaluate`, switch to the tab, then click. Do not retry blindly |
 
-ห้ามใช้ `page.waitForTimeout` รอแบบกำหนดเวลา ให้รอเหตุการณ์จริง เช่น response ของ API แทน โค้ดเทียบอยู่ใน [references/flaky-tests.md](references/flaky-tests.md)
+Never use `page.waitForTimeout` for a fixed-time wait. Wait for a real event instead, such as the API response. Comparison code is in [references/flaky-tests.md](references/flaky-tests.md)
 
 ### Retry strategy
 - **In CI:** retry at most 1 time, **only to collect a trace** (`retries: 1` + `trace: 'on-first-retry'`)
@@ -666,13 +254,13 @@ Most resilient ─────────────────────�
 
 ## Authentication in E2E
 
-อย่าล็อกอินผ่าน UI ในทุกเทสต์ เพราะช้า เปราะ และโค้ดซ้ำ ให้ล็อกอินครั้งเดียวแล้วแชร์สถานะ (`storageState`) หรือดีกว่านั้นคือล็อกอินผ่าน API แล้วฉีด cookie เข้า browser context โค้ดทั้งสามแบบอยู่ใน [references/auth-in-e2e.md](references/auth-in-e2e.md)
+Do not log in through the UI in every test, because it is slow, brittle and repeats code. Log in once and share the state (`storageState`), or better, log in through the API and inject the cookie into the browser context. Code for all three ways is in [references/auth-in-e2e.md](references/auth-in-e2e.md)
 
 ## Parallelization and CI
 
-เงื่อนไขก่อนรันขนาน (Requirements for safe parallel) อยู่ใน [references/ci-and-parallel.md](references/ci-and-parallel.md)
+The requirements for safe parallel runs are in [references/ci-and-parallel.md](references/ci-and-parallel.md)
 
-แบ่ง E2E ใน CI เป็น 3 รอบ คือ smoke ทุก pull request (PR) บน Chromium ตัวเดียว ที่ล้มแล้วบล็อกการ merge → full ตอน merge เข้า main และทุกคืน บน Chromium + WebKit (จอ iPhone) → pre-prod ก่อน deploy ที่ต้องผ่าน P1 และ P2 บนครบ 3 browser (เพิ่ม Firefox) เมื่อเทสต์ล้มต้องเก็บ screenshot · video · trace · console log · network log ไว้เสมอ ส่วนระดับการรันขนานตาราง browser แต่ละรอบ และรายละเอียดของแต่ละรอบอยู่ใน [references/ci-and-parallel.md](references/ci-and-parallel.md)
+Split E2E in CI into 3 rounds. First, smoke on every pull request (PR) on Chromium only; a failure blocks the merge. Second, full on merge into main and every night, on Chromium + WebKit (iPhone screen). Third, pre-prod before deploy, which must pass P1 and P2 on all 3 browsers (adding Firefox). When a test fails, always keep the screenshot · video · trace · console log · network log. The parallel level, the browser table for each round and the details of each round are in [references/ci-and-parallel.md](references/ci-and-parallel.md)
 
 ## Anti-patterns
 
@@ -693,14 +281,14 @@ Most resilient ─────────────────────�
 - Pass rate in main: > 95%
 - Mean time to fix flake: < 2 days
 
-ตารางเทียบคำสั่งที่ใช้บ่อยของ Playwright กับ Cypress (Library Quick Reference) อยู่ใน [references/coverage-and-libraries.md](references/coverage-and-libraries.md)
+The table comparing common Playwright and Cypress commands (Library Quick Reference) is in [references/coverage-and-libraries.md](references/coverage-and-libraries.md)
 
 
 ## reference: auth-in-e2e.md
 
 # Authentication in E2E — ตัวอย่างการล็อกอินในเทสต์
 
-สามวิธีล็อกอินในชุดทดสอบ เรียงจากแย่ไปดี พร้อมโค้ดตัวอย่างของ Playwright
+Three ways to log in within a test suite, ordered from worst to best, with Playwright code examples
 
 ## Bad: log in via UI every test
 ```
@@ -836,7 +424,7 @@ Pure-logic tests → Chromium alone is enough.
 
 # Critical Path Coverage Matrix และ Library Quick Reference
 
-ตัวอย่างตารางความครอบคลุมของเส้นทางผู้ใช้ และตารางเทียบคำสั่งที่ใช้บ่อยของ Playwright กับ Cypress
+An example user-journey coverage table, and a table comparing commonly used Playwright and Cypress commands
 
 ## Critical Path Coverage Matrix
 
@@ -869,9 +457,9 @@ Priority uses the `test-case-template` scale (P1 = most important, P3 = least), 
 
 ## reference: flaky-tests.md
 
-# Fighting Flaky Tests — ตัวอย่างการรอที่ถูกวิธี
+# Fighting Flaky Tests — examples of waiting the right way
 
-โค้ดเทียบการรอแบบกำหนดเวลากับการรอตามเหตุการณ์ ส่วนตารางสาเหตุและกลยุทธ์การรันซ้ำอยู่ใน `SKILL.md`
+Code comparing a fixed-time wait with an event-based wait. The cause table and the retry strategy are in `SKILL.md`.
 
 ## Bad (sleep hack)
 ```typescript
@@ -974,7 +562,7 @@ Observations:
 
 # Page Object Model (POM) — ตัวอย่างโค้ด
 
-ตัวอย่างเทียบเทสต์ที่ไม่มี abstraction กับเทสต์ที่ใช้ Page Object ใช้ตอนตั้งโครงชุดทดสอบหรือรีวิวเทสต์ที่ลอกขั้นตอนซ้ำกัน
+An example comparing a test with no abstraction and a test that uses a Page Object · use it when setting up a test suite or reviewing tests that copy the same steps
 
 ## Bad (no abstraction)
 ```typescript
@@ -1027,7 +615,7 @@ test('user can login', async ({ page }) => {
 
 # Test Data Strategy — ทางเลือกทั้ง 4 แบบ
 
-ข้อดีข้อเสียของการเตรียมข้อมูลทดสอบแต่ละแบบ พร้อมโค้ดตัวอย่างของแบบที่แนะนำ
+The pros and cons of each way to prepare test data, with code examples of the recommended way
 
 ## Option 1: Shared test DB (popular, problematic)
 ```
@@ -1331,60 +919,60 @@ Use it when the loop chases a metric (match the existing system · match the moc
 
 ## reference: metric-loop.md
 
-# ลูปที่ปรับตามตัวเลข
+# A loop that tunes to a number
 
-ย้ายมาจาก SKILL.md หัวข้อ 10 (2026-11-10) · เปิดอ่านเมื่อลูปไล่ตัวชี้วัด ไม่ได้ปิดทีละข้อกำหนด
+Moved from SKILL.md section 10 (2026-11-10) · open it when the loop chases a metric rather than closing requirements one by one.
 
 
-ใช้เมื่อลูปไม่ได้ปิดทีละข้อกำหนด แต่ไล่ตัวชี้วัด เช่น ตรงกับระบบเดิม ตรงกับ mockup หรือคะแนนที่วัดได้ · ที่มา: บทเรียนโคลนเว็บ 6 บท (Week 03 ของ Teaching_CWN2026) วัดจริงบนแอปที่ต่อเวอร์ชัน · ตัวเลขข้างล่างเป็นผลของงานนั้น ใช้เป็นตัวอย่าง ไม่ใช่เกณฑ์
+Use this when the loop does not close requirements one by one but chases a metric, such as matching the old system, matching a mockup, or a measurable score. Source: the lessons from cloning a website in 6 chapters (Week 03 of Teaching_CWN2026), measured on a real app with chained versions. The numbers below are results from that job. Use them as examples, not as criteria.
 
-**สัญญาของลูป เขียนไว้ก่อนเริ่ม และให้เครื่องตรวจได้ ไม่ใช่แค่ขอร้อง**
+**The loop contract is written before you start, and a machine can check it. It is not just a request.**
 
-| ส่วน | เขียนว่า |
+| Part | Write |
 |---|---|
-| สถานะเริ่ม | โฟลเดอร์ว่าง หรือ tag ของรอบก่อน |
-| ขอบเขต | แก้ไฟล์ไหนได้ · ตรวจด้วยสคริปต์ที่อ่าน `git diff` |
-| ตัววัด | คำสั่งเดียวที่ให้ผ่าน/ไม่ผ่านและตัวเลข · exit 2 = วัดไม่ได้ แยกจาก "ไม่ผ่าน" และไม่นับงบ |
-| กฎเก็บ | เก็บเมื่อผ่านเกณฑ์รวม หรือจำนวนหน่วยย่อยที่ผ่านเพิ่มโดยตัววัดหลักไม่ลด · ไม่ตรง → `git revert` |
-| กฎหยุด | ครบรอบที่ตั้งไว้ หรือถึงเพดาน (ดูด้านล่าง) |
-| งบ | จำนวนรอบ และเวลาต่อรอบ |
+| Start state | An empty folder, or the tag from the previous round |
+| Scope | Which files may change · checked by a script that reads `git diff` |
+| Metric | One command that gives pass/fail and a number · exit 2 = could not measure, kept separate from "fail" and not counted against the budget |
+| Keep rule | Keep the change when it passes the overall bar, or when more sub-units pass without the main metric dropping · if not, `git revert` |
+| Stop rule | The set number of rounds is used up, or a ceiling is reached (see below) |
+| Budget | Number of rounds, and time per round |
 
-**กฎที่เจอว่าต้องมี**
+**Rules found to be necessary**
 
-- **ห้ามถอย** — เพิ่มตัวหนึ่งได้ ตัวอื่นที่เคยผ่านต้องยังผ่าน
-- **นับเป็นหน่วยย่อย** — ผ่าน 27 จาก 31 รายการ แล้วเป็น 30 วัดได้และเก็บงานได้ แม้ยังไม่ผ่านเกณฑ์รวม
-- **เพดานของข้อมูล ไม่ใช่ล้มเหลว** — ข้อที่แก้ได้แค่เพิ่มข้อมูลปลอม แก้ข้อสอบ หรือซ่อนเนื้อหา ให้หยุดไล่ รายงานว่าเป็นเพดาน (รอบจริง: 74 จาก 82 ข้อ)
-- **แยกที่มาของคะแนน** — คะแนนที่กระโดดอาจมาจากการใส่ข้อมูลเพิ่มก่อนวน ไม่ใช่จากการวน (รอบจริง: 51 → 73 จากข้อมูล วนจริงเพิ่ม 1 ข้อ)
-- **คนสร้างไม่อ่านซอร์สของข้อสอบหรือเฉลย** ใช้ได้แค่รายงานผล และไม่ผูกกับตัวระบุที่ข้อสอบเป็นคนตั้ง (ไม่มีหลักฐานว่าใช้คนละโมเดลแล้วลดความผิดพลาดร่วมได้จริง จึงไม่ถือเป็นกฎ)
-- **ข้อสอบของกรรมการต้องผ่านกับต้นฉบับก่อนถึงนับใน gate** — ข้อที่ล้มเพราะข้อสอบเขียนผิดแก้ได้รอบเดียว ข้อที่ล้มเพราะต้นฉบับเปลี่ยนหรือตรวจผ่านหน้าจอไม่ได้ ติดป้าย invalid พร้อมเหตุผลและไม่นับ (ตัวอย่างจากงานนั้น: กรรมการต่างค่ายเขียน 47 ข้อ invalid 25 ข้อ (53%) เหลือ valid 22 ข้อ) · สิ่งที่ช่วยคือ "คำตอบมาจากต้นฉบับ" ไม่ใช่ค่ายของโมเดล: ข้อมูลที่ผิดทั้งสองฝั่ง (ตรงกับจอสดแค่ 278 จาก 300 รายการ) ถูกจับได้เพราะรันซ้ำกับต้นฉบับสด · ไม่มีกลุ่มควบคุม จึงยังไม่รู้ว่าค่ายโมเดลมีผลแค่ไหน · ความน่าเชื่อของข้อสอบดู `test-evidence` ข้อ 5 (ไม่เขียนซ้ำ)
-- **หัวหน้าวัดซ้ำเองทุกตัวเลขหลังรอบจบ** ไม่เชื่อรายงานของ agent ที่แก้
+- **No going backwards.** You may add one item, and the others that passed before must still pass.
+- **Count in sub-units.** Going from 27 of 31 items passing to 30 is measurable and keeps the work, even if the overall bar is not yet met.
+- **A data ceiling is not a failure.** If an item can be fixed only by adding fake data, editing the test, or hiding content, stop chasing it and report it as a ceiling (real round: 74 of 82 items).
+- **Separate where the score came from.** A score that jumps may come from adding data before the loop, not from looping (real round: 51 → 73 from data, the loop itself added 1 item).
+- **The builder does not read the source of the test or the answer key.** It may only see the result report, and it does not bind to identifiers that the test itself defines. (There is no evidence that using a different model reduces shared error, so it is not a rule.)
+- **A judge's test must pass against the original before it counts in the gate.** A test that fails because it was written wrongly can be fixed once. A test that fails because the original changed, or because it cannot be checked through the screen, gets an invalid label with a reason and is not counted. (Example from that job: a judge from another vendor wrote 47 items, 25 invalid (53%), leaving 22 valid.) What helps is "the answer comes from the original", not the model's vendor: data that was wrong on both sides (matching the live screen in only 278 of 300 items) was caught because the tests were rerun against the live original. There was no control group, so we do not yet know how much the model's vendor matters. For how to make a test trustworthy see `test-evidence` item 5 (not repeated here).
+- **The lead re-measures every number itself after the round ends.** Do not trust the report of the agent that made the fix.
 
-**ล็อกโครงสร้างก่อน แล้วค่อยจูนหน้าตา** (สีสัน ระยะ ขนาด)
+**Lock the structure first, then tune the look** (colours, spacing, sizes)
 
-1. ขั้น 1 ทำโครงสร้างและเนื้อหาให้ครบ โดยค่าหน้าตาทั้งหมดอ้างตัวแปรในไฟล์ค่าไฟล์เดียว ห้ามเขียนตัวเลขหรือสีตรง ๆ ในไฟล์อื่น
-2. ล็อก: hash ของต้นไม้โครงสร้างที่ทำให้นิ่งแล้ว · สคริปต์ตรวจ `git diff` ว่าขั้น 2 แตะแต่ไฟล์ค่า · ห้ามเพิ่มหรือลบชื่อตัวแปร
-3. ขั้น 2 จูนเฉพาะค่าในไฟล์นั้น · ตัววัดเร็วต้องตรงตัววัดเต็มทุกพิกเซลก่อนเริ่มและหลัง build ทุกรอบ (รอบจริงเคยเบี่ยง 51,960 กับ 53,255 เพราะน้ำหนักฟอนต์)
+1. Step 1 builds the full structure and content, with all look values referencing variables in a single values file. No numbers or colours are written directly in other files.
+2. Lock: a hash of the settled structure tree · a script checks `git diff` that step 2 touches only the values file · no variable name may be added or removed.
+3. Step 2 tunes only the values in that file · the quick metric must match the full metric pixel for pixel before starting and after every build (a real round once drifted, 51,960 versus 53,255, because of font weight).
 
-เหตุผล: โครงสร้างขยับตัวเลขได้ราว 18 จุด ส่วนหน้าตาราว 2–3 จุด · ข้อจำกัด: จูนได้แค่ค่าต่อเนื่อง ถ้าเลย์เอาต์ผิด (แถวแรกอยู่ y=602 ต้นฉบับอยู่ราว 399) ขั้น 2 ไปไม่ถึง ต้องตรวจเลย์เอาต์ก่อนล็อก
+Reason: structure moves the number by about 18 points, and the look by about 2–3 points. Limit: you can tune only continuous values. If the layout is wrong (the first row is at y=602 where the original is near 399), step 2 cannot reach it, so check the layout before locking.
 
-**ตัวกันไม่ให้เครื่องโกงตัวเลข (Goodhart)** — รอบทดลอง optimizer ลด visual diff ด้วยการดันเนื้อหาพ้นจอ เปลี่ยนสีข้อความให้กลืนภาพ และบีบช่องกรอกจนชื่อเมืองถูกตัด
+**Guards that stop the machine from cheating the number (Goodhart)**: in a trial round the optimizer lowered the visual diff by pushing content off-screen, changing text colour to blend into the image, and squeezing input fields until city names were cut off.
 
-| ตัวกัน | กันอะไร |
+| Guard | What it prevents |
 |---|---|
-| ตัวอักษร ≥ 12 px · contrast ≥ 4.5:1 · ห้ามตัดกลางคำ | ย่อ ทำจาง ซ่อนข้อความ |
-| แถวแรกอยู่ในจอแรก ห่างตำแหน่งตอนล็อกไม่เกิน 150 px | ดันเนื้อหาพ้นจอ |
-| สีข้อความเป็นสีกลาง (saturation ≤ 20%) | เปลี่ยนสีให้กลืน |
-| ข้อความในช่องกรอกไม่ล้น (`scrollWidth ≤ clientWidth`) | บีบช่องกรอก |
-| ห้ามเปลี่ยนตระกูลฟอนต์เป็น monospace หรือฟอนต์ตัวโชว์เพื่อลด diff · คนดูภาพจริงก่อนรับ | ตัวกันเดิมผ่านครบแต่ optimizer เลือกฟอนต์ monospace เพราะ diff ต่ำสุด ผู้สร้างเองบอกว่าดูเหมือนเครื่องพิมพ์ดีด |
-| ลำดับขนาดฟอนต์ต้องคงเดิม | ทำลำดับชั้นตัวอักษรแบน (รอบจริง md/lg/xl เป็น 17 เท่ากันหมด ตัวกันเดิมไม่เห็น) |
+| Text ≥ 12 px · contrast ≥ 4.5:1 · no cutting mid-word | Shrinking, fading, or hiding text |
+| The first row is on the first screen, within 150 px of its position when locked | Pushing content off-screen |
+| Text colour is a neutral colour (saturation ≤ 20%) | Recolouring text to blend in |
+| Text in input fields does not overflow (`scrollWidth ≤ clientWidth`) | Squeezing input fields |
+| Do not change the font family to monospace or a display font to lower the diff · a person looks at the real image before accepting | The earlier guards all passed, but the optimizer chose a monospace font because it gave the lowest diff, and the builder said it looked like a typewriter |
+| The order of font sizes must stay the same | Flattening the type hierarchy (real round: md/lg/xl all became 17, which the earlier guards did not see) |
 
-- เส้นฐานของตัวกันมาจากค่าตอนล็อก ไม่ใช่ตัวเลขตายตัว · องค์ประกอบที่หายจากเส้นฐานต้อง**ล้ม** ไม่ใช่ข้าม
-- ชุดค่าสุดท้ายต้องผ่านจอหรือข้อมูลที่ไม่เคยใช้จูน (รอบจริงจูนกับจอ 1366×900 อย่างเดียว)
-- ตัวกันที่เปลี่ยนหน้าตาแล้วคนต้องตัดสินใจเอง (ย้ายข้อความ ซ่อนช่วงราคา) ให้ถามผู้ใช้ว่ารับได้ไหม ไม่ตัดสินเอง
+- The guards' baseline comes from the values at lock time, not from fixed numbers. An element missing from the baseline must **fail**, not be skipped.
+- The final set of values must pass on screens or data that were never used for tuning (the real round tuned on a 1366×900 screen only).
+- For a guard where a change in look needs a person to decide (moving text, hiding a price range), ask the user whether it is acceptable. Do not decide yourself.
 
-**คำสั่งในลูปใช้ `cd X && cmd` หรือพาธเต็มเสมอ** — ครั้งหนึ่ง `cd` ล้มแล้ว `sed` แก้ประมาณ 20 ไฟล์นอกขอบเขต (รวม 4 ไฟล์ในชุดเครื่องมือ) · เก็บ hash ของโฟลเดอร์ชุดเครื่องมือ (`kit/`) ไว้เป็น manifest แล้วเทียบหลังรันทุกรอบ
+**Commands in the loop always use `cd X && cmd` or full paths.** Once, a `cd` failed and `sed` edited about 20 files outside the scope (including 4 files in the toolkit). Keep a hash of the toolkit folder (`kit/`) as a manifest and compare it after every round.
 
-ข้อสอบและตัววัดของลูปแบบนี้ต้องน่าเชื่อก่อน → `test-evidence` ข้อ 5
+The tests and metrics of a loop like this must be trustworthy first → `test-evidence` item 5
 
 
 ---
@@ -1393,153 +981,153 @@ Use it when the loop chases a metric (match the existing system · match the moc
 
 Use when an agent has no scripted way to run the app
 
-# app-verifier-setup — ให้ agent มีมือและตา
+# app-verifier-setup — give the agent hands and eyes
 
-> ถ้า agent มองไม่เห็นผลงานตัวเอง ก็ปรับงานต่อเองไม่ได้ และคนต้องคอยส่งต่อสิ่งที่เห็นบนจอให้ agent
-> skill นี้สร้างเครื่องมือครั้งเดียว ให้ agent ทุกตัวหลังจากนี้ใช้ซ้ำ
+> If an agent cannot see its own work, it cannot adjust that work, and a person must keep relaying what is on the screen.
+> This skill builds the tool once, so every later agent can reuse it.
 
-**ผลลัพธ์:** 2 ชิ้น คือสคริปต์ที่อยู่กับ test ของโปรเจกต์ และ skill ที่เป็นแค่คู่มือสั้น ๆ ให้ agent
+**Output:** 2 things, a script that lives with the project's tests, and a skill that is only a short guide for agents.
 
 ```
-<โปรเจกต์>/
-├─ <project-name>/test/e2e/verify.*         สคริปต์ขับแอปจริง เปิดและปิดแอปเอง (อยู่ในโฟลเดอร์โค้ด ดู project-bootstrap)
-│                                           รายการฟีเจอร์และ check อยู่ในไฟล์นี้ที่เดียว (แผนที่ฟีเจอร์)
-├─ .claude/skills/verify-<โปรเจกต์>/SKILL.md   รันอย่างไร · อ่านผลอย่างไร · ข้อห้าม (ที่ราก — ที่ Claude Code เปิด)
-└─ _to_delete/verify-runs/                  หลักฐานแต่ละรอบ — สคริปต์หา path จากที่อยู่ของตัวเอง ไม่ขึ้นกับโฟลเดอร์ที่รัน
+<project>/
+├─ <project-name>/test/e2e/verify.*         script that drives the real app and opens and closes it itself (in the code folder, see project-bootstrap)
+│                                           the list of features and checks lives only in this file (the feature map)
+├─ .claude/skills/verify-<project>/SKILL.md   how to run · how to read results · what not to do (at the root, where Claude Code looks)
+└─ _to_delete/verify-runs/                  evidence from each run — the script finds paths from its own location, so it does not depend on the folder it runs from
 ```
 
-(Codex · Gemini ใช้ `.agents/skills/` · `skills/` แทน `.claude/skills/`) ตัวอย่างที่ทำจริงแล้ว: โปรเจกต์ `calculator-demo` (เว็บ) · แอป Flutter Android `Lumio - Light Meter` → `lumio-light-meter/test/e2e/verify.mjs` (Node ขับ `adb` สรุปไว้ใน [`references/android-native.md`](references/android-native.md))
+(Codex · Gemini use `.agents/skills/` · `skills/` instead of `.claude/skills/`.) Examples already built: the `calculator-demo` project (web) · the Flutter Android app `Lumio - Light Meter` → `lumio-light-meter/test/e2e/verify.mjs` (Node driving `adb`, summarized in [`references/android-native.md`](references/android-native.md)).
 
-**ทำไมไม่เขียนขั้นตอนแยกเป็นไฟล์ข้อความ** เพราะลองแล้วในโปรเจกต์ตัวอย่าง ขั้นตอนในไฟล์ `.md` กับใน script ไม่ตรงกันตั้งแต่รอบแรก จึงเก็บข้อมูลไว้ในสคริปต์ที่เดียว แล้วให้ skill ชี้ไปหา
+**Why not write the steps as a separate text file.** In the sample project, the steps in a `.md` file and in the script disagreed from the first round. So keep the information in the script only, and let the skill point to it.
 
 ---
 
-## ขั้นตอน
+## Steps
 
-1. **หาวิธีรันที่มีอยู่แล้ว** จาก README · `package.json` · `Makefile` · `docker-compose` · launch config (`.vscode/launch.json`) · `pubspec.yaml` (Flutter) · `build.gradle(.kts)` / `gradlew` (Android) ถ้ามีของเดิมให้ใช้ของเดิม ไม่สร้างใหม่
-2. **เลือกวิธีขับตามชนิดแอป**
+1. **Find the existing way to run the app** from the README · `package.json` · `Makefile` · `docker-compose` · launch config (`.vscode/launch.json`) · `pubspec.yaml` (Flutter) · `build.gradle(.kts)` / `gradlew` (Android). If one exists, use it and do not build a new one.
+2. **Choose how to drive it by app type**
 
-   | ชนิด | ขับด้วย | อ่านผลจาก |
+   | Type | Drive with | Read results from |
    |---|---|---|
-   | เว็บ | Playwright (ถ้ามี Chromium ติดตั้งอยู่แล้ว ห้ามดาวน์โหลดใหม่) | ภาพหน้าจอ · DOM · console · network |
-   | Electron · desktop | Playwright `_electron` หรือ Chrome DevTools Protocol (CDP) · Windows ใช้ pywinauto (WinAppDriver รุ่นล่าสุดน่าจะออกปี 2020 และยังไม่ยืนยันว่า Microsoft ยังดูแลอยู่ (รอยืนยัน)) | ภาพหน้าจอ · log |
-   | command line · TUI | เรียกคำสั่งจริงพร้อม input ตายตัว | stdout · stderr · exit code · ไฟล์ที่สร้าง |
-   | API · service | `curl` หรือ client ที่ repo ใช้ | status · body · log · ค่าในฐานข้อมูลทดสอบ |
-   | มือถือแบบเว็บ (progressive web app (PWA) · web-wrapped) | Playwright mobile viewport | ภาพหน้าจอ · DOM |
-   | มือถือ native · Flutter (Android) | สคริปต์ Node/Python เรียก `adb` + `uiautomator dump` (แบบ Lumio) · หรือ `integration_test` ของ Flutter · หรือ Maestro · Playwright ขับ APK ไม่ได้ | ภาพ `adb exec-out screencap -p` · ข้อความ/Semantics label จาก `uiautomator` · `dumpsys` · `logcat` |
+   | Web | Playwright (if Chromium is already installed, never download it again) | Screenshot · DOM · console · network |
+   | Electron · desktop | Playwright `_electron` or Chrome DevTools Protocol (CDP) · on Windows use pywinauto (the latest WinAppDriver release was probably in 2020 and it is not confirmed that Microsoft still maintains it (`รอยืนยัน`, awaiting confirmation)) | Screenshot · log |
+   | Command line · TUI | Run the real command with fixed input | stdout · stderr · exit code · created files |
+   | API · service | `curl` or the client the repo uses | Status · body · log · values in the test database |
+   | Web-based mobile (progressive web app (PWA) · web-wrapped) | Playwright mobile viewport | Screenshot · DOM |
+   | Native mobile · Flutter (Android) | A Node/Python script calling `adb` + `uiautomator dump` (the Lumio way) · or Flutter `integration_test` · or Maestro · Playwright cannot drive an APK | Image from `adb exec-out screencap -p` · text/Semantics labels from `uiautomator` · `dumpsys` · `logcat` |
 
-   - ถ้าโปรเจกต์มี `.sandbox/` ให้ขับเบราว์เซอร์ใน container ซึ่งค่าเริ่มคือ headless (ไม่เปิดหน้าต่าง) ถ้าอยากให้คนดูได้ ให้เปิด `up -Browser` (ดู [`docker-sandbox`](../docker-sandbox/SKILL.md) ข้อ 5) ส่วน Android emulator รันใน Docker บน Windows ไม่ได้ (ต้องมี KVM) จึงให้รัน emulator บนเครื่อง host แล้วบอกในรายงาน
-   - หน้าที่มี CAPTCHA ให้ใช้ค่าทดสอบของผู้ให้บริการหรือปิดใน environment ทดสอบ ห้ามเขียนสคริปต์แก้ CAPTCHA
-   - แอปที่อ่าน hardware (sensor · กล้อง · GPS) ให้ป้อนค่าที่รู้ล่วงหน้า ผ่าน emulator (`adb emu sensor set light 420`, กล้องเสมือน) หรือแหล่งข้อมูลปลอมที่เปิดได้เฉพาะ debug build แล้วติดป้ายทุก check ว่า `emulator` หรือ `เครื่องจริง` เพราะความแม่นของ sensor จริงพิสูจน์บน emulator ไม่ได้ ถ้ายังไม่ได้รันบนเครื่องจริง ให้เขียนว่า "ยังไม่ได้ตรวจบนเครื่องจริง"
+   - If the project has `.sandbox/`, drive the browser in the container. The default is headless (no window). To let a person watch, turn on `up -Browser` (see [`docker-sandbox`](../docker-sandbox/SKILL.md) step 5). An Android emulator cannot run in Docker on Windows (it needs KVM), so run the emulator on the host machine and say so in the report.
+   - For a page with CAPTCHA, use the provider's test keys or turn it off in the test environment. Never write a script that solves CAPTCHAs.
+   - For an app that reads hardware (sensor · camera · GPS), feed values known in advance, through the emulator (`adb emu sensor set light 420`, virtual camera) or a fake data source that can be turned on only in a debug build. Label every check `emulator` or `เครื่องจริง` (real device), because real sensor accuracy cannot be proven on an emulator. If it has not run on a real device, write "ยังไม่ได้ตรวจบนเครื่องจริง" (not yet checked on a real device).
 
-3. **เขียน `test/e2e/verify.*`** ให้เปิดแอปเองบนพอร์ตที่ไม่ชน (มือถือ: ติดตั้ง APK แล้วล้างข้อมูลแอป) ใส่ข้อมูลทดสอบ (seed) และรอจนพร้อม**โดยมีเวลาจำกัด** (เว็บ: ถ้าไม่ขึ้นใน 10 วินาทีถือว่าล้ม · มือถือ: ตั้งเวลาแยกสำหรับ build · boot emulator · เปิดแอป · แต่ละ check ดู reference) ปิดแอปเมื่อจบเสมอ และรันซ้ำต้องได้ผลเดิม (`principle-build-a-tool-not-handwork`)
-   - **เว็บหรือ API ที่ต้องเปิดเซิร์ฟเวอร์ก่อน** ใช้ [`scripts/with_server.py`](scripts/with_server.py) เปิด รอพอร์ตพร้อม รันสคริปต์ แล้วปิดให้ครบ เช่น `python -I scripts/with_server.py --server "npm run dev" --port 5173 -- node test/e2e/verify.mjs` (เปิดหลายตัวได้โดยใส่ `--server` กับ `--port` ซ้ำ · log อยู่ใน `--log-dir` ค่าเริ่ม `_to_delete/with-server-logs` ซึ่งสร้างให้เองถ้ายังไม่มี) · ทดสอบบน Windows 2026-11-10 กับ `python -m http.server` แล้วพอร์ตปิดจริงหลังจบ · แอปไดนามิกให้รอ `networkidle` (Playwright `page.wait_for_load_state("networkidle")`) หรือ `data-ready="true"` ก่อนอ่าน DOM ไม่เดา `sleep`
+3. **Write `test/e2e/verify.*`** so it opens the app itself on a port that does not clash (mobile: install the APK and clear app data), seeds test data, and waits until ready **with a time limit** (web: if it is not up in 10 seconds, count it as failed · mobile: set separate times for build · emulator boot · app start · each check, see the reference). Always close the app at the end, and a second run must give the same result (`principle-build-a-tool-not-handwork`).
+   - **For a web app or API that needs a server started first**, use [`scripts/with_server.py`](scripts/with_server.py). It starts the server, waits for the port, runs the script, then shuts everything down. For example `python -I scripts/with_server.py --server "npm run dev" --port 5173 -- node test/e2e/verify.mjs` (start several servers by repeating `--server` and `--port` · logs go to `--log-dir`, default `_to_delete/with-server-logs`, created automatically if missing). Tested on Windows on 2026-11-10 with `python -m http.server`, and the port was really closed afterwards. For dynamic apps, wait for `networkidle` (Playwright `page.wait_for_load_state("networkidle")`) or `data-ready="true"` before reading the DOM. Never guess with `sleep`.
 
-4. **รายการฟีเจอร์เป็นข้อมูลในสคริปต์** ไล่จากเมนู · route · command list · SRS แล้วเขียน 1 กลุ่มต่อฟีเจอร์ 1 บรรทัดต่อ check (`ทำอะไร → ต้องเห็นอะไร`) อย่างน้อย 3 ฟีเจอร์หลัก และกรณีผิดพลาด 1 กรณีต่อฟีเจอร์ **ทุก check เริ่มจากสถานะสะอาด** รันเดี่ยวหรือสลับลำดับได้ และพิมพ์ผล `PASS/FAIL` พร้อม expected กับ actual
-5. **สคริปต์ต้องไม่ผ่านลอย ๆ** (ผ่านทั้งที่ไม่ได้ตรวจอะไรจริง) ถ้าชื่อฟีเจอร์ไม่มีจริงให้ exit 1 ถ้าแอปไม่ขึ้นให้ exit 1 และถ้าไม่มี check ไหนได้รันก็ให้ exit 1 (ตรวจ 0 รายการถือว่าพัง ไม่ใช่ผ่าน)
-   - **check ที่ตรวจว่า "หยุด/ปล่อยแล้ว" ต้องตรวจเงื่อนไขก่อนเสมอ** (เช่น กล้องถูกถืออยู่ก่อนกด Home) ไม่งั้นจะผ่านลอย ๆ และรอผลด้วยการวนตรวจจนหมดเวลา ไม่ใช่ `sleep` ค่าเดา
-   - **ต้องแน่ใจว่าอ่านหน้าจอล่าสุด** โดยลบไฟล์ผลเก่าก่อนอ่านใหม่ และกดเมื่อตำแหน่งเป้าหมายนิ่ง 2 รอบติด ถ้าอ่านหน้าจอไม่ได้เพราะแอปวาดไม่หยุด ถือเป็นบั๊กของแอป ไม่ใช่ของสคริปต์
-6. **พิสูจน์ว่าสคริปต์จับของผิดได้** โดยแก้แอปให้ผิด 1 จุดชั่วคราว รันแล้วต้อง `FAIL` แล้วค่อยคืนค่า
-7. **พิสูจน์ว่า skill ใช้ได้จริง** โดยส่ง agent `qa-tester` ตัวใหม่ที่ไม่เคยเห็นโค้ด ให้ใช้แค่ skill นี้ทดสอบ 1 ฟีเจอร์ตั้งแต่เปิดแอปจนถ่ายภาพผล ติดตรงไหนให้แก้ skill ตรงนั้น
-8. **เก็บหลักฐานไว้ใน `_to_delete/verify-runs/<เวลา>/`** ทั้งภาพหน้าจอและ log ของการทดสอบ ไม่ปนกับโค้ด (เป็นของชั่วคราว ผู้ใช้ลบเองได้เมื่อส่งงานแล้ว · agent ไม่ลบ)
+4. **Keep the feature list as data in the script.** Go through the menu · routes · command list · SRS, and write 1 group per feature with 1 line per check (`what to do → what must be seen`). Cover at least 3 main features and 1 error case per feature. **Every check starts from a clean state**, can run alone or in a different order, and prints `PASS/FAIL` with expected and actual values.
+5. **The script must never pass emptily** (pass without really checking anything). If a feature name does not exist, exit 1. If the app does not come up, exit 1. If no check ran, exit 1 (checking 0 items counts as broken, not as a pass).
+   - **A check that verifies "stopped/released" must check the precondition first** (for example, the camera is held before pressing Home). Otherwise it passes emptily. Wait for the result by polling until a timeout, not with a guessed `sleep`.
+   - **Make sure you read the latest screen**: delete the old result file before each new read, and tap only when the target position has been steady for 2 reads in a row. If the screen cannot be read because the app never stops redrawing, treat it as an app bug, not a script bug.
+6. **Prove the script catches wrong behavior** by breaking the app in 1 place temporarily. Run it, it must `FAIL`, and then restore the change.
+7. **Prove the skill works in practice** by sending a fresh `qa-tester` agent that has never seen the code. It uses only this skill to test 1 feature from opening the app to taking a screenshot of the result. Wherever it gets stuck, fix the skill at that point.
+8. **Keep the evidence in `_to_delete/verify-runs/<time>/`**, both screenshots and test logs, apart from the code (it is temporary, the user can delete it after delivery, and the agent never deletes it).
 
-## สัญญาสำหรับทดสอบ — ใส่ในแอปตั้งแต่หน้าจอแรก
+## Testing contract — build it into the app from the first screen
 
-verify ต้องพึ่งของที่แอปเตรียมไว้ให้ ไม่ใช่เดาจากข้อความหรือ CSS · เขียนสัญญานี้ลงแผนที่ฟีเจอร์ในสคริปต์ และให้ developer ทำตามตั้งแต่ฟีเจอร์แรก
+verify must depend on things the app provides, not guess from text or CSS. Write this contract into the feature map in the script, and have the developer follow it from the first feature.
 
-| สิ่งที่แอปต้องมี | ใช้ทำอะไร | กฎ |
+| What the app must have | What it is for | Rule |
 |---|---|---|
-| `data-testid="<หน้า>-<สิ่งนั้น>"` แบบ kebab-case บนทุกปุ่ม ช่องกรอก ผลลัพธ์ และข้อความ error | หาองค์ประกอบโดยไม่ผูกกับข้อความหรือ CSS → เปลี่ยนภาษาหรือดีไซน์แล้ว check ไม่พัง | เช่น `book-submit` · `summary-total` · `book-error` · ห้ามซ้ำในหน้าเดียว · รายการ testid ทั้งหมดอยู่ในแผนที่ฟีเจอร์ |
-| `<html data-ready="false">` → `"true"` เมื่อหน้าโหลดข้อมูลเสร็จ | รอแบบมีเงื่อนไขแทน `sleep` ค่าเดา (ข้อ 5) | ตั้ง `true` หลังข้อมูลชุดสุดท้ายมาถึง ไม่ใช่ตอน component mount |
-| reset endpoint เช่น `POST /api/test/reset` → ล้างแล้วใส่ seed ใหม่ ภายใน 5 วินาที | ทุก check เริ่มจากสถานะสะอาด (ข้อ 4) | มีเฉพาะเมื่อตั้ง `ALLOW_TEST_RESET=1` · ไม่ตั้ง → ตอบ 404 · ห้ามเปิดใน production |
-| ล็อกนาฬิกา: reset รับ `{"now":"<ISO + offset>"}` แล้วกฎทุกข้ออ่าน "วันนี้" จากโมดูลเดียว (`clock`) | ทดสอบกฎที่ขึ้นกับวันเวลา (หมดอายุ · ยกเลิกก่อน 24 ชั่วโมง) ให้ได้ผลเดิมทุกครั้ง | ไม่ส่ง `now` → ใช้วันเริ่มที่เขียนใน seed · ปิด flag → ใช้เวลาจริง · ห้ามเรียก `Date.now()` / `DateTime.Now` ตรง ๆ ในกฎ |
+| `data-testid="<page>-<thing>"` in kebab-case on every button, input, result, and error message | Find elements without tying to text or CSS, so checks do not break when language or design changes | For example `book-submit` · `summary-total` · `book-error` · no duplicates on one page · the full list of testids lives in the feature map |
+| `<html data-ready="false">` → `"true"` when the page has finished loading data | Wait on a condition instead of a guessed `sleep` (step 5) | Set `true` after the last batch of data arrives, not when the component mounts |
+| A reset endpoint such as `POST /api/test/reset` → clears and re-seeds within 5 seconds | Every check starts from a clean state (step 4) | Exists only when `ALLOW_TEST_RESET=1` is set · if not set, answer 404 · never enable in production |
+| Clock lock: reset accepts `{"now":"<ISO + offset>"}` and every rule reads "today" from one module (`clock`) | Test date-dependent rules (expiry · cancel at least 24 hours ahead) with the same result every time | If `now` is not sent, use the start date written in the seed · flag off, use real time · never call `Date.now()` / `DateTime.Now` directly in a rule |
 
-แอปที่ไม่ใช่เว็บใช้แนวเดียวกัน: Flutter → `Key` / Semantics label ชื่อเดียวกัน · Android → `resource-id` · command line → ตัวเลือก `--now` หรือตัวแปร `APP_NOW` · reset บนมือถือเปิดได้เฉพาะ debug build
+Non-web apps follow the same idea: Flutter → a `Key` / Semantics label with the same name · Android → `resource-id` · command line → a `--now` option or an `APP_NOW` variable · a reset on mobile can be enabled only in a debug build.
 
-## SKILL.md ของ verify skill ต้องมี
+## What the SKILL.md of the verify skill must contain
 
-- description บอกว่าใช้เมื่อ "ต้องพิสูจน์ว่าฟีเจอร์ใช้ได้บนแอปจริง · ทำบั๊กให้เกิดซ้ำ · ตรวจก่อนส่ง"
-- คำสั่งเริ่มด้วย `with_server.py` (ถ้าแอปต้องเปิดเซิร์ฟเวอร์) และกฎรอ `networkidle` หรือ `data-ready` ก่อนอ่าน DOM
-- คำสั่งเริ่ม · หยุด · ข้อมูลทดสอบ (บัญชีทดสอบอยู่ไฟล์ไหน — **ห้ามใส่รหัสผ่านจริง**)
-- ลิงก์ไปแผนที่ฟีเจอร์
-- ข้อห้าม: ไม่แตะฐานข้อมูลจริง · ไม่เรียก API ภายนอกที่เสียเงินหรือส่งข้อความจริง
+- A description saying to use it when you "must prove a feature works on the real app · reproduce a bug · check before shipping".
+- Commands that start with `with_server.py` (if the app needs a server) and the rule to wait for `networkidle` or `data-ready` before reading the DOM.
+- Start · stop commands · test data (which file holds the test accounts — **never put real passwords**).
+- A link to the feature map.
+- Prohibitions: do not touch the real database · do not call external APIs that cost money or send real messages.
 
-## สิ่งที่ห้ามทำ
+## What not to do
 
-| อย่าทำ | เพราะ |
+| Do not | Because |
 |---|---|
-| เขียนขั้นตอนทดสอบเป็นภาษาคนอย่างเดียว ไม่มีสคริปต์ | agent แต่ละตัวจะสร้างวิธีรันใหม่เองทุกครั้ง และแต่ละครั้งไม่เหมือนกัน |
-| ใส่ทุกฟีเจอร์ตั้งแต่วันแรก | แผนที่ใหญ่ที่ไม่ได้ทดสอบ เสียเร็วกว่าแผนที่เล็กที่ใช้ได้จริง |
-| ให้ verify skill ชี้ไปที่ระบบจริง (production) | ตรวจไปตรวจมา กลายเป็นแก้ข้อมูลลูกค้า |
-| บอกว่าเสร็จโดยไม่ได้ทำข้อ 7 | ยังไม่รู้ว่า agent ตัวอื่นใช้ได้หรือไม่ |
+| Write test steps only in human language with no script | Each agent will invent its own way to run them every time, and no two runs are alike. |
+| Put in every feature from day one | A big map that has not been tested decays faster than a small map that really works. |
+| Point the verify skill at the real system (production) | Checking turns into editing customer data. |
+| Say it is done without doing step 7 | You do not yet know whether other agents can use it. |
 
-## เชื่อมกับ skill อื่น
+## Links to other skills
 
-- [`references/builtin-verify.md`](references/builtin-verify.md) — Claude Code มี `/verify` ติดเครื่อง: โปรเจกต์ที่รันบน Claude Code ให้สร้าง skill ชื่อ `verify` ที่ `.claude/skills/verify/SKILL.md` ในรูปแบบนั้น แทน `verify-<โปรเจกต์>`
-- [`app-verifier-upkeep`](../app-verifier-upkeep/SKILL.md) — แก้เมื่อแอปเปลี่ยนจนแผนที่ไม่ตรง
-- `e2e-testing-patterns` — ถ้าจะยกขั้นตอนบางส่วนขึ้นเป็น test อัตโนมัติใน continuous integration (CI)
-- [`superuser`](../superuser/SKILL.md) — playbook `bug-fix` และ `feature` เรียกใช้ skill ที่สร้างจากที่นี่
+- [`references/builtin-verify.md`](references/builtin-verify.md) — Claude Code ships with `/verify`: for a project running on Claude Code, create a skill named `verify` at `.claude/skills/verify/SKILL.md` in that format, instead of `verify-<project>`.
+- [`app-verifier-upkeep`](../app-verifier-upkeep/SKILL.md) — fix it when the app has changed so much that the map no longer matches.
+- `e2e-testing-patterns` — if you want to lift some steps into automated tests in continuous integration (CI).
+- [`superuser`](../superuser/SKILL.md) — the playbooks `bug-fix` and `feature` call the skill built here.
 
 
 ## reference: android-native.md
 
-# ขับแอป Android native / Flutter บน emulator
+# Driving a native Android / Flutter app on an emulator
 
-> สรุปจากแอปจริง `Lumio - Light Meter` (Flutter · Android) · สคริปต์ที่รันผ่านแล้วคือ `lumio-light-meter/test/e2e/verify.mjs`
-> ค่าที่เขียนว่า "วัดแล้ว" มาจาก emulator บน Windows ที่ใช้ GPU แบบซอฟต์แวร์ เครื่องอื่นอาจเร็วกว่า
+> Summarized from a real app, `Lumio - Light Meter` (Flutter · Android). The script that ran and passed is `lumio-light-meter/test/e2e/verify.mjs`.
+> Values marked "measured" come from an emulator on Windows using software GPU rendering. Other machines may be faster.
 
-## เลือกวิธีขับ
+## Choose how to drive
 
-| วิธี | ดีตรงไหน | ข้อจำกัด | ใช้เมื่อ |
+| Method | Strength | Limit | Use when |
 |---|---|---|---|
-| Node/Python เรียก `adb` + `uiautomator dump` | ไม่ต้องลงอะไรเพิ่ม · ขับ sensor และกล้องเสมือนได้ · ตรวจ `dumpsys` ได้ | อ่านหน้าจอ 3–4 วินาทีต่อครั้ง (วัดแล้ว) | ค่าเริ่ม · ทดสอบทั้งเส้นทาง hardware → native → Dart → จอ |
-| Flutter `integration_test` (`flutter test integration_test/`) | หา widget ด้วย `find` ได้ตรง · เร็ว | ป้อนค่า sensor จริงไม่ได้ ต้องใช้แหล่งข้อมูลปลอม · ตรวจสถานะระบบ (กล้องถูกปล่อยไหม) ไม่ได้ | ลำดับหน้าจอยาว ๆ ที่ไม่แตะ hardware |
-| Maestro | เขียน flow เป็น YAML อ่านง่าย | ต้องติดตั้งเพิ่ม · ยังไม่ได้ทดสอบในชุดนี้ | ทีมมี Maestro อยู่แล้ว |
+| Node/Python calling `adb` + `uiautomator dump` | Nothing extra to install · can drive the virtual sensor and camera · can check `dumpsys` | Reading the screen takes 3–4 seconds each time (measured) | Default · tests the whole path hardware → native → Dart → screen |
+| Flutter `integration_test` (`flutter test integration_test/`) | Finds widgets directly with `find` · fast | Cannot feed real sensor values, so it needs a fake data source · cannot check system state (was the camera released?) | Long screen sequences that do not touch hardware |
+| Maestro | Flows written in readable YAML | Needs an extra install · not yet tested in this setup | The team already uses Maestro |
 
-## โครงสคริปต์ (แบบ verify.mjs)
+## Script structure (verify.mjs style)
 
-1. **ตรวจก่อนเริ่ม** ว่ามีเครื่องต่ออยู่ (`adb devices`) และมี APK (`build/app/outputs/flutter-apk/app-debug.apk`) ถ้าไม่ครบ ให้ exit 1 พร้อมบอกคำสั่งที่ต้องรัน
-2. **ติดตั้ง** `adb install -r <apk>` แล้ว **เริ่มสะอาดทุกฟีเจอร์** `adb shell pm clear <package>` → `adb shell am start -n <package>/.MainActivity` → รอข้อความหน้าแรก
-3. **อ่านหน้าจอ** `rm -f /sdcard/ui.xml` → `uiautomator dump /sdcard/ui.xml` → `exec-out cat` → ดึง `text` และ `content-desc` พร้อมจุดกึ่งกลางจาก `bounds`
-4. **กด** `adb shell input tap x y` · **ป้อนค่า** `adb emu sensor set light <lux>` · **ถ่ายภาพ** `adb exec-out screencap -p > shot.png`
-5. **ผล** `PASS/FAIL` พร้อม expected กับ actual และ exit 0 เฉพาะเมื่อมี check ได้รันอย่างน้อย 1 ข้อและผ่านทั้งหมด
+1. **Check before starting** that a device is connected (`adb devices`) and the APK exists (`build/app/outputs/flutter-apk/app-debug.apk`). If either is missing, exit 1 and print the command to run.
+2. **Install** with `adb install -r <apk>`, then **start clean for every feature**: `adb shell pm clear <package>` → `adb shell am start -n <package>/.MainActivity` → wait for the text on the first screen.
+3. **Read the screen**: `rm -f /sdcard/ui.xml` → `uiautomator dump /sdcard/ui.xml` → `exec-out cat` → pull `text` and `content-desc` with the center point from `bounds`.
+4. **Tap** with `adb shell input tap x y` · **feed a value** with `adb emu sensor set light <lux>` · **take a screenshot** with `adb exec-out screencap -p > shot.png`.
+5. **Result**: `PASS/FAIL` with expected and actual values, and exit 0 only when at least 1 check ran and all checks passed.
 
-## กฎที่ได้จากการรันจริง
+## Rules learned from real runs
 
-| เรื่อง | ทำอย่างนี้ | เพราะ |
+| Topic | Do this | Because |
 |---|---|---|
-| ข้อความใน Flutter | ใส่ `Semantics(label: ...)` ให้ค่าที่ต้องตรวจ | label ขึ้นเป็น `content-desc` ใน `uiautomator dump` จึงใช้ตรวจได้ และช่วยผู้ใช้โปรแกรมอ่านจอด้วย |
-| ไฟล์ dump เก่า | ลบ `/sdcard/ui.xml` ก่อน dump ทุกครั้ง | dump ล้มแล้ว**ไม่เขียนทับ**ไฟล์เดิม จะอ่านได้หน้าจอเก่าโดยไม่รู้ตัว |
-| "could not get idle state" | ถือเป็นบั๊กของแอป แก้ที่แอป | แอปวาดใหม่ตลอด (Lumio วาด 5 ครั้ง/วินาทีทั้งที่ค่าไม่เปลี่ยน) ทำให้เปลืองแบต และ TalkBack พูดซ้ำ ให้แก้โดยแจ้ง UI เฉพาะเมื่อค่าที่แสดงเปลี่ยนจริง (sensor ที่ค่าแกว่ง: เปลี่ยนเกิน 1 %) ส่วนค่ารองที่ค่อย ๆ ขยับ ให้อัปเดตราว 1 วินาทีครั้ง |
-| ตำแหน่งที่ขยับ | กดเมื่ออ่าน 2 ครั้งติดได้ตำแหน่งเดียวกัน | dialog เลื่อนขึ้นตอนคีย์บอร์ดเปิด ถ้ากดตำแหน่งเก่าจะโดนฉากหลังแล้ว dialog ปิด (น่าจะเป็นต้นเหตุของ flake (ผลไม่คงที่) ที่เหลือ 1 ครั้ง แต่ยังไม่ได้ตรวจซ้ำ) |
-| สิทธิ์ | `adb shell pm grant <package> android.permission.CAMERA` ก่อน check ที่ไม่ได้ทดสอบหน้าขอสิทธิ์ | หน้าต่างขอสิทธิ์ของระบบไม่ใช่สิ่งที่ check นั้นตรวจ |
-| check "ปล่อยแล้ว" | ตรวจเงื่อนไขก่อน (กล้องถูกถืออยู่) → กด Home → วนตรวจ `dumpsys media.camera` หา "Active Camera Clients" ทุก 1 วินาที นานสุด 20 วินาที | emulator ปล่อยกล้อง 5–8 วินาที (วัดแล้ว) ถ้าไม่ตรวจเงื่อนไขก่อน check จะผ่านทั้งที่ไม่ได้ตรวจอะไร |
-| Git Bash | เรียก `adb` จาก Node/Python (`execFile`) หรือตั้ง `MSYS_NO_PATHCONV=1` | Git Bash แปลง `/sdcard/...` เป็น `C:/Program Files/Git/sdcard/...` |
+| Text in Flutter | Add `Semantics(label: ...)` to every value you must check | The label appears as `content-desc` in `uiautomator dump`, so it can be checked, and it also helps screen-reader users. |
+| Stale dump file | Delete `/sdcard/ui.xml` before every dump | When a dump fails it does **not overwrite** the old file, so you may read an old screen without knowing. |
+| "could not get idle state" | Treat it as an app bug and fix the app | The app redraws constantly (Lumio redrew 5 times per second even when the value did not change). That wastes battery and makes TalkBack repeat itself. Fix it by notifying the UI only when the displayed value really changes (for a jittery sensor: a change over 1 %). For a secondary value that drifts slowly, update about once per second. |
+| Moving targets | Tap only when 2 reads in a row give the same position | A dialog shifts up when the keyboard opens. A tap at the old position hits the backdrop and the dialog closes (probably the cause of the 1 remaining flaky (inconsistent) result, but not yet re-checked). |
+| Permissions | Run `adb shell pm grant <package> android.permission.CAMERA` before any check that does not test the permission screen | The system permission dialog is not what that check is testing. |
+| "Released" check | Check the precondition first (the camera is held) → press Home → poll `dumpsys media.camera` for "Active Camera Clients" every 1 second for up to 20 seconds | The emulator releases the camera in 5–8 seconds (measured). Without the precondition check, the check passes while testing nothing. |
+| Git Bash | Call `adb` from Node/Python (`execFile`) or set `MSYS_NO_PATHCONV=1` | Git Bash rewrites `/sdcard/...` into `C:/Program Files/Git/sdcard/...`. |
 
-## ป้อนค่า hardware
+## Feeding hardware values
 
-| สิ่งที่ป้อน | บน emulator | หมายเหตุ |
+| What to feed | On the emulator | Note |
 |---|---|---|
-| sensor แสง | `adb emu sensor set light <lux>` แล้วแอปได้ค่าผ่าน `Sensor.TYPE_LIGHT` (วัดแล้ว) | sensor อื่นใช้ `adb emu sensor set <ชื่อ> <ค่า>` (ยังไม่ได้ตรวจทีละตัว) |
-| กล้อง | กล้องหน้าเสมือนส่งภาพพร้อม ISO และเวลาเปิดรับแสง (วัดแล้ว) | ภาพเป็นฉากสังเคราะห์ จึงตรวจได้แค่ว่า "มีค่าออกมา" ตรวจความแม่นไม่ได้ |
-| อื่น ๆ หรือ emulator ทำไม่ได้ | แหล่งข้อมูลปลอมที่ compile เข้าเฉพาะ debug build | ห้ามหลุดไป release build |
+| Light sensor | `adb emu sensor set light <lux>`, and the app receives the value through `Sensor.TYPE_LIGHT` (measured) | For other sensors use `adb emu sensor set <name> <value>` (not checked one by one) |
+| Camera | The virtual front camera sends an image with ISO and exposure time (measured) | The image is a synthetic scene, so you can only check that "a value comes out", not its accuracy |
+| Anything else, or what the emulator cannot do | A fake data source compiled into the debug build only | It must never leak into a release build |
 
-ติดป้ายทุก check: `emulator` แปลว่าทางเดินข้อมูลถูก ส่วน `เครื่องจริง` แปลว่าค่าถูก ถ้า check ไหนต้องใช้เครื่องจริงแต่ยังไม่ได้รัน ให้รายงานว่า "ยังไม่ได้ตรวจบนเครื่องจริง"
+Label every check: `emulator` means the data path is right, and `เครื่องจริง` (real device) means the value is right. If a check needs a real device but has not run there, report "ยังไม่ได้ตรวจบนเครื่องจริง" (not yet checked on a real device).
 
-## เวลาและหน่วยความจำ
+## Time and memory
 
-| ขั้น | เวลาที่วัดได้ | ตั้ง timeout แยก |
+| Step | Measured time | Set a separate timeout |
 |---|---|---|
-| Gradle build ครั้งแรก (ดาวน์โหลด NDK · platform) | ~10 นาที | 20 นาที |
-| Gradle build ครั้งต่อไป | 1–2 นาที | 5 นาที |
-| boot emulator | หลายนาที (ยังไม่ได้จับเวลา) | วนตรวจ `adb shell getprop sys.boot_completed` = 1 |
-| เปิดแอปจนเห็นหน้าแรก | ไม่กี่วินาที | 20 วินาที |
-| ต่อ check (รอค่าบนจอ) | 3–4 วินาทีต่อการอ่าน | 15–20 วินาที |
+| First Gradle build (downloads NDK · platform) | ~10 minutes | 20 minutes |
+| Later Gradle builds | 1–2 minutes | 5 minutes |
+| Emulator boot | Several minutes (not timed) | Poll `adb shell getprop sys.boot_completed` = 1 |
+| Open the app until the first screen shows | A few seconds | 20 seconds |
+| Per check (waiting for a value on screen) | 3–4 seconds per read | 15–20 seconds |
 
-- emulator กับ Gradle กินหน่วยความจำมาก จน Claude Code เคยปิด emulator ที่รันเบื้องหลังเพราะหน่วยความจำไม่พอ
-- เปิด emulator ตัวเดียว และหยุด Gradle daemon หลัง build (`gradlew --stop` ใน `android/`)
-- ถ้า emulator ถูกปิดกลางทาง ให้รายงานว่า "ยังไม่ได้รันซ้ำ" พร้อมรายชื่อ check ที่ไม่ได้รัน ห้ามลองใหม่เงียบ ๆ แล้วรายงานเฉพาะผลรอบหลัง
-- ไม่มี Docker: emulator ใน Docker ต้องมี KVM ซึ่ง Docker Desktop บน Windows ไม่มี จึงให้รันบน host
+- The emulator and Gradle use a lot of memory. Claude Code once closed a background emulator because memory ran out.
+- Run one emulator only, and stop the Gradle daemon after the build (`gradlew --stop` in `android/`).
+- If the emulator is closed midway, report "ยังไม่ได้รันซ้ำ" (not yet re-run) with the list of checks that did not run. Never retry silently and report only the later run.
+- No Docker: an emulator in Docker needs KVM, which Docker Desktop on Windows does not have, so run it on the host.
 
 
 ## reference: builtin-verify.md
@@ -1574,3 +1162,381 @@ Source: code.claude.com/docs/en/skills (read 2026-10-23) · the version numbers 
 - monorepo → place it in the package folder that was touched, following the bundled one's rule
 - Codex · Gemini or Claude Code before v2.1.145 (`ยังไม่ได้ตรวจ` — not yet checked which version `/verify` started in) → use the old name `verify-<project>` in `.claude/skills/` · `.agents/skills/` · `skills/`
 - `app-verifier-upkeep` maintains this one file only and does not create a nested `verify-<project>`
+
+
+---
+
+# skill: principle-build-a-tool-not-handwork
+
+Use when the same edit repeats across many files or rows
+
+# principle · build a tool, not handwork — turn mechanical work into a tool
+> Use together with: `principle-small-verifiable-steps` (cut into small pieces that can be checked) · `parallel-split-and-merge` (run several pieces at once)
+
+> Work has 2 parts: the part that needs judgment, and the part that is purely mechanical.
+> For the mechanical part, do not make the agent work out a new method every time. Write it as a program once, and save the thinking effort for the parts that need a decision.
+
+## When to build a tool
+
+| Signal | Tool |
+|---|---|
+| The same change in more than 10 places (files · sheet rows · documents · code) | A script or find-and-replace, tried on a sample first (code: codemod · `sed`) |
+| Many documents from one template (40 quotations) | A template + a script that merges data from the sheet |
+| Checking every screen, every file or every row | A looping check script that prints a result table |
+| Every agent must set up the environment itself before checking | A `start` script in the verify skill (`app-verifier-setup` (plugin `software-development`)) |
+| Moving or importing data | A script that gives the same result when rerun, with a trial mode (dry run) |
+| The claim "everywhere already does it this way" | A grep command or script that proves it |
+| Doing the same job for the 3rd time | Make it a command or a skill |
+
+## Rules for the tool
+
+- **Same result when rerun** — running it twice must not break anything and must not change things twice (`principle-safe-to-rerun` (plugin `software-development`))
+- **Print results that can be checked** — say how many were changed · which items were skipped · which items failed
+- **As small as it can be and still work** — it need not be pretty, and need not handle every future case (`lazy-coding` (plugin `software-development`))
+- **Keep it in the right place** — a one-off script goes in `_to_delete/`, while a script used repeatedly goes in `scripts/` with one line in the README saying when to run it
+- **The skill shrinks to a thin description** — the fixed steps live in the script, while SKILL.md says only when to call it and how to read the result
+
+## When not to bother
+
+A change in 2–3 places that really differ, because writing a script takes longer than editing by hand
+
+
+---
+
+# skill: security-gate
+
+Use when about to ship or merge code, as a security check
+
+# security-gate — a security gate before shipping
+
+> Scanners find issues fast but raise many false alarms. Human reviewers understand context but are slow.
+> This gate lets the tools search first, then the agent confirms every finding against the real code, before it reaches a person.
+
+Use it together with [`principle-secure-by-default`](../principle-secure-by-default/SKILL.md). For an in-depth report, use the `security-engineer` agent.
+
+## Steps
+
+1. **Run in the sandbox** (the project's sandbox) — if the project has `.sandbox/`, run every command through `sandbox.ps1 exec`. Install any missing tool inside the sandbox. Never install on the user's machine.
+2. **Scan 3 areas** (pick what the project has)
+
+   | Area | Recommended tool | Example command |
+   |---|---|---|
+   | Leaked secrets (including git history) | gitleaks 8.19+ | Git history: `gitleaks git . --redact` · uncommitted files: `gitleaks dir . --redact` (`detect`/`protect` are deprecated since v8.19.0 — source github.com/gitleaks/gitleaks/releases/tag/v8.19.0 · checked 22 Oct 2026 (B.E. 2569)) |
+   | Vulnerable dependencies | The language's own tool + trivy or osv-scanner | `npm audit --omit=dev` · `pip-audit` · `dotnet list package --vulnerable --include-transitive` · `trivy fs --scanners vuln .` |
+   | Risky code patterns (static analysis) | semgrep | With internet: `semgrep scan --config p/default --metrics=off` · in a `-Locked` sandbox or without access to semgrep.dev: `semgrep scan --config <this skill>/assets/semgrep-offline.yml --metrics=off` |
+   | Dart / Flutter and Gradle dependencies | osv-scanner (reads `pubspec.lock` and `gradle.lockfile`) | `osv-scanner scan source -r .` (`ยังไม่ได้ตรวจ` on this machine) · use `flutter pub outdated` to see stale versions · if Gradle has no lockfile, turn on `dependencyLocking` before the scan can work |
+   | Dockerfile · compose · IaC (if present) | trivy | `trivy config .` An Android app has none of these, so read `android/app/build.gradle*` by eye instead (signingConfig must not hard-code passwords, and release must enable minify) |
+   | Android app (if present) | Check by eye with [`references/android.md`](references/android.md). For a deeper check, use MobSF (Mobile Security Framework) | — |
+
+   **Android checklist** → [`references/android.md`](references/android.md)
+
+   Keep raw output in `_to_delete/security/`
+   - **Never use `--config auto` together with `--metrics=off`** — semgrep refuses to run (seen in a real sample project).
+   - **Choose semgrep rulesets by the languages found, not `p/default` alone** (idea from trailofbits/skills `semgrep` · CC-BY-SA, rewritten in our own words). For every project, run `p/security-audit` + `p/secrets` once over the whole repo. Then add per language: `p/python` (+`p/django` or `p/flask`) · `p/javascript` + `p/typescript` (+`p/react` · `p/nodejs`) · `p/csharp` · `p/dockerfile`. For several languages, pass several `--config` flags in one command. If a ruleset cannot load (no internet · wrong name), the report must say it did not run. It must not vanish silently.
+   - The offline set has 6 rules that almost never have a safe case (eval · HTML from a variable · shell from a variable · SQL built by concatenation · secrets in code), and it was proven to catch every one in files deliberately written wrong. If any tool cannot run, write `ยังไม่ได้ตรวจ` (not yet checked) with the reason in the report.
+   - **semgrep supports Dart very poorly, and the offline rules were written for web and backend.** If semgrep finds nothing in a Flutter project, that does not mean it is safe. The report must say the Dart code is `ยังไม่ได้ตรวจด้วย static analysis` (not yet checked with static analysis) and rely on `flutter analyze` and reading the code instead. Never conclude `ผ่าน` from an empty result.
+3. **Confirm every finding** — open the real code and see whether it applies (for example, the vulnerability is in a function the project never calls). Then label it `ยืนยันแล้ว` (confirmed) / `แจ้งผิด` (false alarm) / `ยังไม่ยืนยัน` (not yet confirmed) with a reason. Give `ยังไม่ยืนยัน` no severity and say what evidence is missing. If the customer asks for a deep check of the whole system, or you find an item that needs tracing data flow across several files → [`security-audit`](../security-audit/SKILL.md) (the confirmer is a fresh agent, not the one that scanned).
+4. **Rate and decide**
+
+   | Level | What to do |
+   |---|---|
+   | Real secret leaked | **Stop at once and tell the user.** The secret must be rotated at the provider, because deleting it from the file is not enough, and the agent never rewrites git history itself. |
+   | Confirmed critical · high | **Do not ship** until fixed, or until the user accepts the risk in writing in `decision-log`. |
+   | medium | Fix it in this round if the estimate is 1 hour or less (a starting value, not yet measured · adjust per team). If it takes longer, open a separate task in the queue and rank it with `decision-scoring` command `priority` in `rice` mode (people or systems affected × impact × confidence ÷ hours to fix). If the scores are close, let a person choose. |
+   | low · false alarm | Record the reason. No fix needed. |
+
+5. **Fix**
+   - For a vulnerable dependency, update to a fixed version, then run the tests.
+   - For a vulnerability in code, use the playbook `bug-fix` (find the root cause + write a test that fails before the fix + search for other places written the same way).
+   - For a pattern that keeps coming back, pass it to `repeated-mistakes-to-checks` to turn into a lint rule.
+6. **Report** — `qa/security/<year-month-day>-gate.md`, a table `| ระดับ | เรื่อง | ไฟล์:บรรทัด หรือแพ็กเกจ | ยืนยัน | ทำอะไร |` (level · issue · file:line or package · confirmed · action), with a 1-line verdict (`ผ่าน` · `ผ่านหลังแก้` (passed after fixes) · `ไม่ผ่าน`). Never copy secrets into the report (use `--redact` output). Then report status with `status-report` type `ตรวจ` (check).
+   - **The report must have a section "ไม่ได้รัน" (not run)** before the verdict. List by name, with a reason each: tools or rulesets that could not be installed · tools that exited with a non-zero code · languages the scanner does not support (such as Dart) · files or folders skipped. A report that scanned partly but reads as complete is worse than no scan. If this section has any entry, a `ผ่าน` verdict must end with `(ยกเว้นที่ไม่ได้รัน)` (except what was not run).
+   - Before handing over to a customer, or when the contract names OWASP → fill in the per-item report A01–A10 following [`references/owasp-top10.md`](references/owasp-top10.md), as a second file `qa/security/<year-month-day>-owasp.md`. This gate's scan results serve as evidence for items A02 · A03 · A04 · A05 · A08.
+
+## When to run
+
+- Every time before the `ship` playbook and before handing work to a customer.
+- After adding or updating a dependency — if the scan lists findings, follow [`references/dependency-updates.md`](references/dependency-updates.md) (group by real risk · order patch → minor → major · prove · write in CHANGELOG).
+- When the contract or a security requirement says the web app or API must pass OWASP Top 10:2025 → read [`references/owasp-top10.md`](references/owasp-top10.md) (the A01–A10 table to cover and prove · delivery criteria · contract clause [`owasp-contract-clause.md`](references/owasp-contract-clause.md) · per-stack methods [`owasp-stack-checks.md`](references/owasp-stack-checks.md) · report template [`assets/owasp-report.md`](assets/owasp-report.md)).
+- For a project still in use, run it once a week as a scheduled task, because new vulnerabilities are announced every day even when the code does not change.
+
+## Not the job of this skill
+
+- Real penetration testing, or testing someone else's system, because this skill covers only this project's code and test environment.
+- Certifying 100% safety. The report says only what was checked, with what, and what was not checked.
+- Reviewing the logic and design of a diff → `code-review-checklist` (run both before merge).
+
+
+## reference: android.md
+
+# Android checklist — used by `security-gate` step 2
+
+**Android checklist** — Read the merged `AndroidManifest.xml`, not just the source file, because plugins add permissions on their own. The folder changes with the Android Gradle Plugin (AGP) version (`merged_manifests/<variant>/` or `merged_manifest/<variant>/process<Variant>MainManifest/` — `ยังไม่ได้ตรวจ`). After a release build, find it with `find build -path '*merged_manifest*' -name AndroidManifest.xml`.
+- `android:exported` — only the main activity may be `true`. Every other component needs a stated reason.
+- `android:allowBackup` / `dataExtractionRules` — state clearly which data may be backed up. Do not leave the defaults.
+- `android:debuggable` must not appear in release, and `usesCleartextTraffic` must not be `true`.
+- Request only the permissions the app really uses. An offline app must not have `INTERNET`, and you must also check the permissions plugins added.
+- `key.properties` · `*.jks` · `*.keystore` must not be in git (run `git ls-files` and search the output).
+
+
+## reference: dependency-updates.md
+
+# Updating vulnerable dependencies — an extension of `security-gate` step 5
+
+Use when the dependency scan result has entries, or a new dependency was just added · ideas from wshobson `dependency-management` (MIT) and Trail of Bits `supply-chain-risk-auditor` (CC-BY-SA 4.0 — ideas only, rewritten in our own words)
+
+## 1 · Scan — use the tool that comes with the language, then add one that reads lockfiles of every language
+
+| stack | Command | Note |
+|---|---|---|
+| Node | `npm audit --omit=dev --json > _to_delete/security/npm-audit.json` | `--omit=dev` drops things that never reach production · never `npm audit fix --force` because it allows updates across a major version |
+| Python | `pip-audit -r requirements.txt` or `pip-audit` inside the venv | For projects using `uv` / `poetry`, export the lockfile to requirements first |
+| .NET | `dotnet list package --vulnerable --include-transitive` | Without `--include-transitive` you see only directly referenced ones |
+| Every stack | `trivy fs --scanners vuln .` or `osv-scanner scan source -r .` | Reads the lockfiles of every language at once, use it to confirm the results above and to catch Dart · Go · Rust |
+
+**Always commit the lockfile** (`package-lock.json` · `uv.lock` / `poetry.lock` · `packages.lock.json` · `pubspec.lock`) — with no lockfile each machine gets different versions, and the scanner does not know which version is really used
+
+## 2 · Group by real risk, not by the scanner's severity label
+
+Answer 3 questions per entry, then fill the table `| แพ็กเกจ | เวอร์ชัน | ช่องโหว่ | ใช้ถึงโค้ดที่เสี่ยงไหม | ตรง/ผ่านตัวอื่น | มีเวอร์ชันแก้ไหม | ทำอะไร |` (package · version · vulnerability · reaches the risky code · direct/via another · fixed version available · action)
+
+| Question | Look at | Effect on the decision |
+|---|---|---|
+| Does our code call the vulnerable function, and can outside input reach it | `grep` the function name in the advisory · the path of input | Does not reach → may be downgraded, but the reason must be recorded, not closed silently |
+| Referenced directly or through another package (transitive) | `npm ls <pkg>` · `pipdeptree -r -p <pkg>` · `dotnet nuget why <pkg>` | transitive → fix at the parent first, and if the parent has no new version yet, override in the lockfile and note that it must be removed when the parent is fixed |
+| Is there a fixed version | The `fixed in` field of the advisory | None → find a replacement package, or close the input's entry path and record it as an accepted risk in `decision-log` |
+
+Resulting summary: **fix now** (really reached + a fix exists) · **fix next round** (cannot be reached, but a fix exists) · **accept the risk temporarily** (no fix — the user must see it and agree)
+
+## 3 · Update order — small first, split the large ones out so they are visible
+
+1. All **patch** updates in one round (1.2.3 → 1.2.9) — by the semver contract they do not change behaviour, but you still must run tests
+2. **minor** may be combined if in the same group (for example the `@angular/*` set together) · read the release notes for the word deprecated
+3. **major — 1 PR per 1 package**: read the migration guide first, change the code accordingly, then run the whole test set · never bundle 2 majors in one PR, because when it breaks you will not know which one
+4. A package nobody maintains any more (no release over 2 years · open security issues) → open a separate task to find a replacement, do not hide it inside an update PR
+
+Automatic route: turn on **Renovate** or **Dependabot** to file PRs in the order above by themselves (group patch+minor automatically · major in its own PR · set the day of the week) — a person still must read the release notes and merge, and never auto-merge a major
+
+## 4 · Prove it before closing the entry
+
+- The whole test set is green and the build passes from a clean machine with the committed lockfile
+- **Walk the vulnerability's original path again** — if the advisory says input of form X makes it break, really send X in (in a sandbox) and see that it does not break · write it as a test if you can, so it does not regress when someone downgrades
+- Re-run the scanner of item 1, and that entry must be gone, not merely have its version changed in the file
+
+## 5 · Record
+
+- `CHANGELOG.md` under the heading Security: package · from → to · vulnerability ID (CVE or GHSA) · 1 line on whether we reach that vulnerability
+- Entries with an accepted risk or an override in the lockfile → `decision-log` with the date to come back and look
+- That round's gate report (`qa/security/<วัน>-gate.md`) points to the CHANGELOG instead of writing it again
+
+
+## reference: owasp-contract-clause.md
+
+# OWASP Top 10:2025 clause for contracts and the Software Requirements Specification (SRS)
+
+This draft is a starting point, not legal advice. Have `legal-compliance-officer` or the client's lawyer review the real contract. For a full Thai contract draft, use `e-commerce:doc-contract-th`.
+
+## Why the clause must be measurable
+
+"The system must be secure per OWASP" cannot be measured, and the two sides will argue at handover. Write it as **acceptance criteria** that can be checked one item at a time, and state what is out of scope.
+
+## Draft clause (Thai, paste into the contract as written)
+
+> **ข้อ X ความปลอดภัยของระบบ**
+>
+> X.1 ผู้รับจ้างจะพัฒนาระบบโดยมีมาตรการรองรับความเสี่ยงทั้ง 10 ข้อของ Open Worldwide Application Security Project (OWASP) Top 10 ฉบับปี 2025 (A01 ถึง A10)
+>
+> X.2 ก่อนส่งมอบแต่ละงวด ผู้รับจ้างจะส่งรายงานผลการตรวจ OWASP Top 10:2025 ซึ่งระบุ สำหรับแต่ละข้อ (ก) มาตรการที่ใช้ (ข) วิธีตรวจและเครื่องมือที่ใช้ (ค) หลักฐานผลการตรวจ และ (ง) สถานะ ผ่าน · ผ่านโดยการตรวจเอกสารหรือการตั้งค่าพร้อมระบุไฟล์ที่ตรวจ (สำหรับข้อที่ทดสอบอัตโนมัติไม่ได้) · ไม่ผ่าน · ไม่เกี่ยวข้องพร้อมเหตุผล · ยอมรับความเสี่ยงตามข้อ X.4 · ยังไม่ได้ตรวจพร้อมเหตุผล
+>
+> X.3 งวดงานจะถือว่าผ่านเกณฑ์ด้านความปลอดภัยเมื่อ (ก) ไม่มีข้อใดมีสถานะไม่ผ่าน (ข) ไม่มีข้อใดมีสถานะยังไม่ได้ตรวจ และ (ค) ไม่มีช่องโหว่ระดับวิกฤต (Critical) หรือสูง (High) ที่ยืนยันแล้วค้างอยู่ในโค้ดหรือไลบรารีที่ใช้ ณ วันส่งมอบ โดยวัดระดับตามคะแนน Common Vulnerability Scoring System (CVSS) รุ่น 3.1 ขึ้นไป ที่เครื่องมือตรวจในภาคผนวกรายงาน · ช่องโหว่ที่ยังไม่มีเวอร์ชันแก้ไขจากผู้พัฒนาไลบรารี ผู้รับจ้างจะแจ้งพร้อมมาตรการบรรเทา แล้วให้ใช้ข้อ X.4
+>
+> X.4 ข้อใดที่ผู้ว่าจ้างตกลงยอมรับความเสี่ยง ให้บันทึกเป็นลายลักษณ์อักษร พร้อมชื่อผู้อนุมัติและวันที่
+>
+> X.5 ขอบเขตนี้ไม่รวม (ก) การทดสอบเจาะระบบ (penetration test) โดยบุคคลภายนอก เว้นแต่ตกลงไว้ในภาคผนวก (ข) โครงสร้างพื้นฐานและเซิร์ฟเวอร์ที่ผู้ว่าจ้างจัดหาและดูแลเอง (ค) ช่องโหว่ที่ประกาศหลังวันส่งมอบ ซึ่งให้เป็นไปตามข้อตกลงการดูแลรักษาระบบ (ถ้ามี)
+>
+> X.6 การตรวจตามข้อนี้ไม่ใช่การรับรองว่าระบบปลอดภัยโดยสมบูรณ์
+
+## Draft for the SRS — security non-functional requirements (NFR) section (Thai, paste as written)
+
+| รหัส | ความต้องการ | วิธีตรวจรับ |
+|---|---|---|
+| NFR-SEC-01 | ระบบรองรับ OWASP Top 10:2025 ครบ A01–A10 | รายงานผลการตรวจตามข้อ X.2 ผ่านเกณฑ์ข้อ X.3 |
+| NFR-SEC-02 | ทุก endpoint ตรวจสิทธิ์ฝั่ง server และผู้ใช้เข้าถึงได้เฉพาะข้อมูลของตน | ชุด test ด้านสิทธิ์ (A01) ผ่านทั้งหมด |
+| NFR-SEC-03 | ไม่มี dependency ที่มีช่องโหว่ระดับ critical หรือ high (ตาม CVSS) ณ วันส่งมอบ ยกเว้นตามข้อ X.3 | ผลสแกน dependency ในภาคผนวกรายงาน |
+| NFR-SEC-04 | admin และธุรกรรมเงินใช้การยืนยันตัวตนหลายชั้น (MFA) | ชุด test ด้าน login (A07) |
+| NFR-SEC-05 | เหตุการณ์ความปลอดภัยมี log และแจ้งเตือน | ชุด test ด้าน log (A09) + ตัวอย่าง log |
+
+Add or remove rows to fit the system. Every row needs an acceptance check ("วิธีตรวจรับ") that can really be done.
+
+
+## reference: owasp-stack-checks.md
+
+# OWASP Top 10:2025 by the stacks the team uses
+
+Open this file when writing code and when filling in the report. Each item says what to use and what to avoid. Where a framework default is already secure, use it and do not write your own.
+
+- [.NET / ASP.NET Core](#net--aspnet-core)
+- [TypeScript · Node · Angular](#typescript--node--angular)
+- [Python (FastAPI · Django · Flask)](#python-fastapi--django--flask)
+- [SQL (SQL Server · PostgreSQL · MySQL)](#sql-sql-server--postgresql--mysql)
+- [Tools for proving each item](#tools-for-proving-each-item)
+
+---
+
+## .NET / ASP.NET Core
+
+| Item | Use | Avoid |
+|---|---|---|
+| A01 | `FallbackPolicy` so every endpoint requires login, then open only the intended ones with `[AllowAnonymous]` · check record ownership with `IAuthorizationService` + a resource-based policy · old ASP.NET MVC: `[Authorize]` at controller level + a global filter · antiforgery token on every form (`[ValidateAntiForgeryToken]` or `AutoValidateAntiforgeryTokenAttribute` app-wide) · take input through a ViewModel or DTO, never bind an entity directly | Hiding a button in the view and calling that access control · looking up the DB by the id in the URL without filtering by user |
+| A02 | `app.UseExceptionHandler` + `UseHsts` in production · `customErrors mode="RemoteOnly"` (old MVC) · remove the `Server` · `X-Powered-By` headers | Enabling `UseDeveloperExceptionPage` in production · keeping the connection string in a committed `appsettings.json` |
+| A03 | `dotnet list package --vulnerable --include-transitive` · `Directory.Packages.props` to control versions in one place · SBOM: `dotnet CycloneDX` | Using packages nobody maintains any more (check the last release date) |
+| A04 | ASP.NET Core Identity (PBKDF2) or `Rfc2898DeriveBytes.Pbkdf2` · Data Protection API for values that must be decrypted · secrets in User Secrets or Key Vault | `MD5` · `SHA1` · `DES` · writing your own crypto |
+| A05 | EF Core LINQ · `FromSqlInterpolated` · Dapper with parameters · Razor encodes HTML itself | `FromSqlRaw` with string concatenation · `Html.Raw` with user data · `Process.Start` with input |
+| A07 | Identity: `Lockout.MaxFailedAccessAttempts` + `PasswordSignInAsync(..., lockoutOnFailure: true)` (the scaffolded Login page sets it to false) · cookie `HttpOnly` `Secure` `SameSite` · JWT: set `ValidateIssuer` `ValidateAudience` `ValidateLifetime` `ValidateIssuerSigningKey` = true | `ValidateLifetime = false` · accepting algorithm `none` |
+| A08 | `System.Text.Json` · verify webhook Hash-based Message Authentication Code (HMAC) signatures with `CryptographicOperations.FixedTimeEquals` | `BinaryFormatter` · Newtonsoft `TypeNameHandling.All` |
+| A09 | structured `ILogger` (Serilog) · log login results and permission denials · strip secrets with a destructuring policy | Logging the whole request body when it holds passwords |
+| A10 | A central `IExceptionHandler` (.NET 8 and later; register `AddExceptionHandler<T>()` + `AddProblemDetails()` **and** put `app.UseExceptionHandler()` in the pipeline, or the handler never runs) that returns `ProblemDetails` · older .NET: `UseExceptionHandler` with a lambda or path · wrap multi-step work in `TransactionScope` or `BeginTransaction` · `CancellationToken` + an `HttpClient` timeout | An empty `catch { }` · a `catch` that returns `true` from an authorization check |
+
+## TypeScript · Node · Angular
+
+| Item | Use | Avoid |
+|---|---|---|
+| A01 | One authorization middleware on the top-level router (deny by default) · filter every query by the session's `userId` · an Angular route guard only hides pages, so check real permissions at the API · SSRF: allowlist hosts before `fetch` on a user-supplied URL · CSRF token when using cookie sessions · validate the body with a schema (zod), then pick only the allowed fields | Trusting a `role` sent by the client · `Object.assign(entity, req.body)` · `cors({ origin: true, credentials: true })` |
+| A02 | `helmet()` · `NODE_ENV=production` · turn off source maps in the production build · Express `app.disable("x-powered-by")` | Sending `err.stack` back to the client |
+| A03 | `npm ci` + `package-lock.json` · `npm audit --omit=dev` · SBOM: `npx @cyclonedx/cyclonedx-npm` · check `postinstall` of new packages | Running `npm install` on a package whose name looks like a popular one (typosquat) without checking the maintainer |
+| A04 | `argon2` or `bcrypt` · `crypto.randomBytes` · `crypto.timingSafeEqual` | `Math.random()` for tokens · `crypto.createHash("md5")` on passwords |
+| A05 | An ORM (Prisma · TypeORM) or `$1` parameters · Angular escapes by itself · `execFile` with arguments as an array | `innerHTML` · `bypassSecurityTrustHtml` with user data · `eval` · `exec` with string concatenation · `new Function` |
+| A07 | `express-rate-limit` on `/login` · cookie `httpOnly` `secure` `sameSite` · JWT: `jwt.verify(token, key, { algorithms: ["RS256"], issuer, audience })` (fix the algorithm you really use) | Keeping tokens in `localStorage` in a system with sensitive data · `jwt.decode` instead of `verify` |
+| A08 | Verify the webhook signature before `JSON.parse` · Subresource Integrity (SRI) on scripts from a CDN | `node-serialize` · loading a CDN script without `integrity` |
+| A09 | pino or winston in JSON · `redact: ["req.headers.authorization", "*.password"]` | `console.log(req.body)` |
+| A10 | An Express error middleware as the last one · `process.on("unhandledRejection")` logs, then shuts down cleanly · ORM transactions · `AbortSignal.timeout()` with `fetch` | `.catch(() => {})` · a promise nobody awaits |
+
+## Python (FastAPI · Django · Flask)
+
+| Item | Use | Avoid |
+|---|---|---|
+| A01 | FastAPI `Depends(current_user)` at router level · Django `LoginRequiredMixin` + `get_object_or_404(Model, pk=..., owner=request.user)` · SSRF: allowlist hosts before `httpx.get` · keep the Django CSRF middleware on · take input with a Pydantic model or Django `ModelForm(fields=[...])` | `Model.objects.get(pk=id)` without filtering by owner · `fields = "__all__"` · `@csrf_exempt` on a whole view without a reason |
+| A02 | Django `DEBUG=False` · `SECURE_*` settings · `python manage.py check --deploy` · turn off FastAPI `/docs` in production unless it is meant to be open | `DEBUG=True` · `ALLOWED_HOSTS=["*"]` |
+| A03 | A lockfile (`uv.lock` · `poetry.lock` · `requirements.txt` with pinned versions + `--require-hashes`) · `pip-audit` · SBOM: `cyclonedx-py environment` (or `requirements` · `poetry`) | `pip install` from an unknown URL |
+| A04 | `argon2-cffi` · the Django default password hasher · `secrets.token_urlsafe` · `hmac.compare_digest` | `hashlib.md5(password)` · `random` for tokens |
+| A05 | An ORM or `cursor.execute(sql, params)` · Jinja2 `autoescape=True` · `subprocess.run([...])` as a list | An f-string in SQL · `shell=True` with input · `eval` |
+| A07 | `slowapi` or django-axes against rapid login attempts · PyJWT: `jwt.decode(token, key, algorithms=["RS256"], audience=..., issuer=...)` (fix the algorithm you really use) | `jwt.decode(..., options={"verify_signature": False})` |
+| A08 | Verify the webhook signature with `hmac.compare_digest` · `yaml.safe_load` · `json` | `pickle.loads` · `yaml.load` on external data |
+| A09 | Structured `logging` (structlog) · a filter that strips secrets | Logging the whole of `request.headers` |
+| A10 | FastAPI `@app.exception_handler(Exception)` · Django `handler500` · `with transaction.atomic():` · a timeout on every `httpx` call | `except Exception: pass` · an authorization check that does `except` then `return True` |
+
+## SQL (SQL Server · PostgreSQL · MySQL)
+
+| Item | Use | Avoid |
+|---|---|---|
+| A01 | The app's user has only the rights it needs (not `sa` · `postgres` · `root`) · a separate read-only user for reports · Row-Level Security (RLS) in PostgreSQL or SQL Server for multi-tenant systems | Letting the app use the database owner's user |
+| A02 | Close the DB port to the outside · force TLS on connections · turn off `xp_cmdshell` | Exposing the DB to the internet |
+| A04 | Transparent Data Encryption (TDE) or disk-level encryption · encrypt sensitive columns at app level or with Always Encrypted · encrypted backups | Storing national ID numbers or credit card numbers as plain text |
+| A05 | Stored procedures or parameterized queries · if you must build dynamic SQL, use `sp_executesql` with parameters and `QUOTENAME` on object names | `EXEC('... ' + @input)` · building table names from input |
+| A09 | Audit the money and permission tables (trigger or temporal table) · log failed DB logins | Turning off auditing for speed |
+| A10 | `BEGIN TRY ... BEGIN CATCH ... ROLLBACK` · `SET XACT_ABORT ON` · migrations that can run again (`IF NOT EXISTS`) | A migration that fails halfway and leaves half-built tables |
+
+## Tools for proving each item
+
+| Purpose | Tool | Covers |
+|---|---|---|
+| Secrets · dependencies · risky code · Infrastructure as Code (IaC) config files | As in [`security-gate`](../../security-gate/SKILL.md) (gitleaks · npm audit · pip-audit · dotnet · osv-scanner · trivy · semgrep) | A02 · A03 · A04 · A05 · A08 |
+| OWASP-specific semgrep rules | `semgrep scan --config p/owasp-top-ten --metrics=off` (needs internet) · offline, use the `security-gate` ruleset | A01 · A04 · A05 · A08 |
+| Scan a running app (headers · cookies · error pages) | OWASP ZAP (Zed Attack Proxy) baseline, against the project's own test environment only: `docker run --rm -t ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t <test URL>` | A02 · A05 · A07 |
+| SBOM | CycloneDX per language (above), stored in `qa/security/sbom/` | A03 |
+| Tests for permissions · login · errors · webhooks | The project's integration tests, with names starting with the item code (`A01_...`) | A01 · A06 · A07 · A08 · A09 · A10 |
+
+- ZAP sends real attacks. Use it only on a test environment the team deployed itself. Never run it on production or on someone else's system without written permission.
+- If a tool cannot run, write `ยังไม่ได้ตรวจ` (not yet checked) with the reason in the report. Never conclude "pass" from an empty result.
+
+
+## reference: owasp-top10.md
+
+# OWASP Top 10:2025 — a delivered system must pass an item-by-item checklist
+
+An extension of [`SKILL.md`](../SKILL.md) · use when building or delivering a web app or API whose contract or security requirement (NFR) names OWASP Top 10:2025
+
+> A web-app contract may say "must pass OWASP Top 10:2025", but nobody can issue a certificate like that
+> What can really be delivered is **a report that says, item by item A01–A10, what controls it, what checks it, and what evidence there is**
+> This file makes every system the team builds have that report, from design to delivery
+
+Open Worldwide Application Security Project (OWASP) Top 10:2025 is the list of the 10 most common and most serious web-app risks, in its latest edition (original: owasp.org/Top10/2025)
+
+Use together with: [`principle-secure-by-default`](../../principle-secure-by-default/SKILL.md) (writing code) · [`security-gate`](../SKILL.md) (scan before sending) · the command `/software-development:threat-model` (design) · agent `security-engineer` (in-depth report)
+
+---
+
+## 1 · The 10 items, and what the system must have
+
+Each item has 3 parts → **must have** (what code and configuration must do) · **prove with** (a test or tool that can really run) · **business-owner wording** (for explaining to the customer and in the report)
+
+| Item | Risk | Business-owner wording (ภาษาเจ้าของกิจการ) | Must have | Prove with |
+|---|---|---|---|---|
+| A01 | Broken Access Control | ลูกค้าคนหนึ่งเห็นข้อมูลของอีกคนได้ | Check permissions server-side on every endpoint · deny by default · check ownership of the record every time one is read or changed by id · stop the server from fetching internal URLs (Server-Side Request Forgery (SSRF)) with an allowlist · Cross-Origin Resource Sharing (CORS) never `*` together with cookies · a system using cookie sessions must have a token against forged requests on the user's behalf (Cross-Site Request Forgery (CSRF)) · accept input through a Data Transfer Object (DTO) or an allowed-field list, never bind a whole object (stops a client sending `role` · `isAdmin` itself) | integration test per endpoint: not logged in → 401 · wrong role → 403 · another person's id → 403 or 404 · POST with no CSRF token → 403 (cookie-based systems) · sending an extra `role` field → the value in the database does not change |
+| A02 | Security Misconfiguration | ตั้งค่าเซิร์ฟเวอร์หละหลวม เปิดหน้า admin ทิ้งไว้ | Configure by the same script in every environment, differing only in secrets · turn off debug · stack traces · directory listing · sample admin pages · add security headers (Content Security Policy (CSP) including `frame-ancestors` · HTTP Strict Transport Security (HSTS) · X-Content-Type-Options) · no default passwords · cloud storage not public | Scan headers (OWASP ZAP (Zed Attack Proxy) baseline) · `trivy config .` · a test that production returns errors with no stack trace |
+| A03 | Software Supply Chain Failures | ใช้ไลบรารีเก่า หรือมีช่องโหว่ | Lockfiles for every language · a list of software components (Software Bill of Materials (SBOM)) · no dependency with a critical or high vulnerability · cut what is not used · pull only from official registries | `security-gate` dependency side (npm audit · pip-audit · `dotnet list package --vulnerable` · osv-scanner) · SBOM in CycloneDX form |
+| A04 | Cryptographic Failures | ไม่เข้ารหัสรหัสผ่านและข้อมูลสำคัญ | Transport Layer Security (TLS) 1.2 or higher everywhere + HSTS · passwords use Argon2id · bcrypt · PBKDF2 (never MD5 · SHA-1 · plain SHA-256) · sensitive data encrypted at rest · secrets outside code · store only the data you use | semgrep (crypto rules) · a test that passwords in the DB are not the original text · check the TLS of the deployed server |
+| A05 | Injection | กรอกคำสั่งในช่องค้นหา แล้วดึงฐานข้อมูลได้ | SQL only through parameters or an ORM · never concatenate strings into shell commands · HTML-escape on output (stops Cross-Site Scripting (XSS)) · validate input at the system boundary | semgrep · a test sending `' OR 1=1--` · `<script>` · `; rm` which must not take effect |
+| A06 | Insecure Design | ออกแบบผิดตั้งแต่ต้น เช่น ใช้คูปองซ้ำได้ | threat model of login · permissions · money · personal data before writing · business rules enforced at the server (cannot reuse · balance cannot go negative · repeating does not charge twice) · rate limit · file upload: check the type from the file contents, limit size, store outside the web root, rename ([`file-upload-and-storage`](../../file-upload-and-storage/SKILL.md)) | The threat model document · a test uploading a `.php` · `.exe` renamed to `.jpg` → rejected · an abuse-case test, at least 1 per business rule about money or permissions |
+| A07 | Authentication Failures | เดารหัสได้ไม่จำกัด ไม่มี MFA | Limit failed logins · multiple-factor authentication (Multi-Factor Authentication (MFA)) for admin and money work · passwords at least 15 characters (8 if MFA is present per National Institute of Standards and Technology (NIST) Special Publication (SP) 800-63B-4) and check against lists of leaked passwords · a failed-login message does not reveal whether the user exists · session id random from the server and rotated after login · JSON Web Token (JWT) checks `iss` `aud` `exp` and the algorithm | test: N failed logins → delayed or locked · expired token → 401 · the failure message is the same for existing and non-existing users |
+| A08 | Software or Data Integrity Failures | อัปเดตหรือข้อมูลถูกแก้ระหว่างทาง โดยไม่ตรวจ | Never deserialize outside data into an object that can run code · webhooks verify signatures · update files verify a checksum or signature · the automatic delivery pipeline (CI/CD) uses least privilege and has no secrets in logs · prices and amounts are computed at the server and values from the client are not trusted | test a webhook with a wrong signature → rejected · test sending a fake price from the client → the server's price is used |
+| A09 | Security Logging and Alerting Failures | ถูกเจาะแล้วไม่มีใครรู้ ไม่มี log | Log successful and failed logins · permission denials · failed input validation · admin actions · money changes — with time · who · what · result · no passwords, tokens, or ID-card numbers in logs · an alert when logins fail in bursts | a test that a failed login leaves a log line · searching the logs for secrets must find none · see `audit-trail` · `logging-standards` |
+| A10 | Mishandling of Exceptional Conditions | ระบบล่มแล้วแสดงข้อมูลภายใน หรือเปิดช่องให้ผ่าน | Every error is caught, with a global handler as the last gate · on failure **close**, not open (permission check errors → deny) · a transaction that does not complete must roll back · error messages shown to users carry no stack trace or SQL · limit quota · timeout | test: make the DB or an external service fail mid-operation → a normal error, and data is not left half done · permission check throws → 403, not let through |
+
+**Items that do not apply**: write `ไม่เกี่ยว` (not applicable) with a 1-line reason, for example A07 in a system with no login at all · never leave blank
+
+How to write it for the team's stacks (.NET · TypeScript/Node/Angular · Python · SQL) → [`owasp-stack-checks.md`](owasp-stack-checks.md)
+
+---
+
+## 2 · When to use it in the job
+
+| Phase | Do | Get |
+|---|---|---|
+| Taking the job · writing the contract | Put in the requirements and acceptance criteria per [`owasp-contract-clause.md`](owasp-contract-clause.md) · put in the requirements document (Software Requirements Specification (SRS)) security category (`srs-writing`) | Customer and team agree on what "pass" means |
+| Design | threat model of login · permissions · money · personal data (A01 · A06 · A07) · state roles and permissions as a table | `docs/security/threat-model.md` |
+| Writing code | Follow the "must have" column and [`owasp-stack-checks.md`](owasp-stack-checks.md) · make every item that can be so a reusable shared piece (one permission checker · one error handler · one logger) | Code where the safe way is the easiest way |
+| test | Write tests per the "prove with" column, put them in the normal test folder, named starting with the item code, such as `A01_other_user_order_returns_404` | Evidence that can be re-run every time |
+| Before delivery | Run `security-gate`, then fill [`assets/owasp-report.md` (in the security-gate folder)](../assets/owasp-report.md) item by item | `qa/security/<ปี-เดือน-วัน>-owasp.md` |
+
+---
+
+## 3 · The report before delivery — rules
+
+- 1 row per item, all of A01–A10 · status uses only these 6 values
+
+  | Status | Deliverable | Write when |
+  |---|---|---|
+  | `ผ่าน` (pass) | Yes | There is evidence that can be run — test name + run result · tool name + result file |
+  | `ผ่าน (ตรวจด้วยตา)` (pass, checked by eye) | Yes, if it says which file was checked and that item truly cannot have a test written | For example a server configuration the team did not deploy a test for |
+  | `ไม่เกี่ยว — <เหตุผล>` (not applicable — <reason>) | Yes | The system has no such part at all |
+  | `ยอมรับความเสี่ยง — <วันที่ · ใคร>` (risk accepted — <date · who>) | Yes | The customer approved in writing, recorded in `decision-log` |
+  | `ไม่ผ่าน` (fail) | No | A confirmed vulnerability was found |
+  | `ยังไม่ได้ตรวจ — <เหตุผล>` (not yet checked — <reason>) | No | The tool cannot run or it has not been done |
+
+- **Deliverable when** there is no `ไม่ผ่าน` item and no `ยังไม่ได้ตรวจ` item
+- **An item that is `ไม่ผ่าน` is written as a finding block, one per entry** (template in `assets/owasp-report.md` (in the security-gate folder)) — ID `F-01` · file:line · item A0x + the Application Security Verification Standard (ASVS) level it must reach (L1 every system · L2 has personal data or transactions · L3 money, health, critical infrastructure) · impact in business-owner wording · fix · evidence used to confirm (command · test · image) · 1 block per vulnerability, never several spots in one row (idea from agamm/claude-code-owasp (MIT))
+- Always include a section **scope not checked**, for example penetration testing by outsiders · the customer's servers the team did not deploy · libraries with no vulnerability data
+- Never write "100% secure" or "OWASP certified" — OWASP issues no certificates · if it can be delivered, write "passes the OWASP Top 10:2025 criteria per the checklist in this report"
+- The totals count all 6 statuses separately, for example `ผ่าน 7 · ผ่าน (ตรวจด้วยตา) 1 · ไม่เกี่ยว 2 · ยอมรับความเสี่ยง 0 · ไม่ผ่าน 0 · ยังไม่ได้ตรวจ 0`
+- Summarise the status into `docs/BUILD-PLAN.md` with `status-report` of type `ตรวจ` (check) (who did it · who checked · check result `ผ่าน — ผ่าน 8 · ไม่เกี่ยว 2` or `ไม่ผ่าน — A01 · A07`)
+
+---
+
+## 4 · Who does what
+
+| Part | agent |
+|---|---|
+| Contract and SRS requirements | `business-analyst` · legal clauses → `legal-compliance-officer` |
+| threat model · permissions table · design review | `security-engineer` |
+| Code and tests per the "must have" · "prove with" columns | `developer` (and the agent for the stack) |
+| Scan and fill the report | `security-engineer` through `security-gate` |
+| Check the report before sending to the customer | a new `reviewer` — every row marked `ผ่าน` (pass) must have evidence that can really be opened |
+
+---
+
+## 5 · Not this file's job
+
+- Real penetration testing, or testing someone else's system — this file checks only this project's code and test environment
+- Other standards, such as OWASP API Security Top 10 · Application Security Verification Standard (ASVS) · Payment Card Industry Data Security Standard (PCI-DSS) · the Personal Data Protection Act (PDPA) — use the skill for that topic (`fintech-payments` · `pdpa-compliance`), but this report can be used as a common base
+- Mobile apps — use OWASP Mobile Top 10 together with [`android.md`](android.md) · the backend of a mobile app still uses this file

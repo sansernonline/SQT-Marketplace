@@ -1,6 +1,6 @@
-# CHANGELOG — ตัวอย่าง
+# CHANGELOG — examples
 
-อ่านเมื่อเขียน CHANGELOG ครั้งแรกหรือรีวิว · กฎอยู่ใน `SKILL.md` ข้อ 3 · แม่แบบเปล่าอยู่ใน `assets/starter-files.md`
+Read this when writing a CHANGELOG for the first time or reviewing one. The rules are in `SKILL.md` item 3. The blank template is in `assets/starter-files.md`. The sample below is Thai because the CHANGELOG itself is written for Thai users.
 
 ```markdown
 # Changelog
@@ -24,34 +24,34 @@
 ## [1.1.1] — 2026-09-10 [ถอน]
 ```
 
-## หัวข้อและเลขรุ่น
+## Headings and version numbers
 
-| หัวข้อ (Keep a Changelog) | ใช้กับ | ขึ้นเลขรุ่นส่วนไหน (Semantic Versioning) |
+| Heading (Keep a Changelog) | Use for | Version part to bump (Semantic Versioning) |
 |---|---|---|
-| เปลี่ยนที่ทำให้ของเดิมพัง (ของเราเพิ่ม) | ผู้ใช้หรือระบบที่เรียกใช้ต้องแก้ฝั่งตัวเอง | MAJOR · ช่วง `0.y.z` ขึ้น MINOR ได้ |
-| เพิ่ม (Added) | ความสามารถใหม่ | MINOR |
-| เปลี่ยน (Changed) | ของเดิมทำงานต่างไปแต่ไม่พัง | MINOR |
-| จะเลิกใช้ (Deprecated) | ยังใช้ได้ แต่จะเอาออก · บอกรุ่นที่จะเอาออกและของที่ใช้แทน | MINOR |
-| เอาออก (Removed) | เอาออกแล้ว | MAJOR |
-| แก้ (Fixed) | บั๊ก | PATCH |
-| ความปลอดภัย (Security) | ช่องโหว่ที่ปิดแล้ว · ไม่บอกวิธีโจมตี | PATCH หรือตามขนาด |
+| เปลี่ยนที่ทำให้ของเดิมพัง (breaking changes; our own addition) | Users or calling systems must change something on their side | MAJOR · in the `0.y.z` range, MINOR is allowed |
+| เพิ่ม (Added) | New capability | MINOR |
+| เปลี่ยน (Changed) | Existing behavior works differently but does not break | MINOR |
+| จะเลิกใช้ (Deprecated) | Still works but will be removed · name the removal version and the replacement | MINOR |
+| เอาออก (Removed) | Already removed | MAJOR |
+| แก้ (Fixed) | Bugs | PATCH |
+| ความปลอดภัย (Security) | Vulnerabilities already closed · do not describe how to attack | PATCH, or by size |
 
-คอลัมน์ขึ้นเลขรุ่นเป็นข้อเสนอของ skill นี้ · Semantic Versioning บอกไว้แค่ MAJOR = ไม่เข้ากับของเดิม · MINOR = เพิ่มหรือประกาศเลิกใช้แบบเข้ากันได้ · PATCH = แก้บั๊กแบบเข้ากันได้
+The version-bump column is this skill's own proposal. Semantic Versioning says only this: MAJOR = incompatible with the old version · MINOR = backward-compatible additions or deprecation notices · PATCH = backward-compatible bug fixes.
 
-รุ่นที่ปล่อยไปแล้วต้องถอนเพราะบั๊กร้ายหรือช่องโหว่ → ต่อท้ายหัวรุ่นด้วย `[ถอน]` (Keep a Changelog ใช้ `[YANKED]`) ไม่ลบรุ่นนั้นทิ้ง · แหล่ง: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/) · [Semantic Versioning 2.0.0](https://semver.org/) · เปิดอ่าน 2026-11-07
+If a released version must be pulled because of a serious bug or vulnerability, append `[ถอน]` to the version heading (Keep a Changelog uses `[YANKED]`). Do not delete that version. Sources: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/) · [Semantic Versioning 2.0.0](https://semver.org/) · opened 2026-11-07
 
-เขียนเป็นผลที่ผู้ใช้เห็น ไม่ใช่รายการ commit:
+Write what the user sees, not a list of commits:
 
 | ✗ | ✓ |
 |---|---|
 | `- fix(items): change > to >= in withdraw() (#42)` | `- เบิกของเท่ากับจำนวนที่เหลือพอดีได้แล้ว` |
 | `- refactor lowStockReport to read movements once` | `- รายงานของใกล้หมดเปิดได้ในไม่ถึง 1 วินาที (เดิม 50 วินาที)` |
 
-## กฎการเขียน (ฉบับเต็ม)
+## Writing rules (full version)
 
-- เขียนให้**คนใช้งาน**อ่าน ไม่ใช่คัดลอกรายการ commit มาวาง
-- 1 ข้อ = 1 บรรทัด บอกว่าผู้ใช้ได้อะไรหรือเห็นอะไรเปลี่ยน ไม่ใช่ว่าแก้ไฟล์ไหน
-- ไม่ใส่ชื่อไฟล์ ชื่อฟังก์ชัน หรือเลข ticket ยกเว้นผู้อ่านเป็นนักพัฒนาที่เรียก API นั้น
-- ไม่ใส่งานที่ผู้ใช้มองไม่เห็น เช่น ปรับโครงโค้ด เพิ่ม test หรือแก้ CI · ยกเว้นทำให้เร็วขึ้นหรือเสถียรขึ้นจนรู้สึกได้ ให้เขียนเป็นผลที่ได้ ("รายงานของใกล้หมดเปิดได้ในไม่ถึง 1 วินาที")
-- ในแต่ละหัวข้อ เรียงข้อที่กระทบผู้ใช้มากที่สุดไว้บน · หัวข้อไหนไม่มีของให้ตัดหัวข้อนั้นทิ้ง
-- หัวข้อ "เปลี่ยนที่ทำให้ของเดิมพัง" ต้องอยู่**บนสุด**ของเวอร์ชันนั้นเสมอ · ทุกการเลิกใช้ เอาออก และเปลี่ยนที่ทำให้พัง ต้องลงทุกครั้ง แม้เป็นเรื่องเล็ก
+- Write for the **people who use the product**. Do not paste the commit list.
+- 1 item = 1 line. Say what the user gains or sees change, not which file changed.
+- Leave out file names, function names and ticket numbers, unless the reader is a developer who calls that API.
+- Leave out work the user cannot see, such as code restructuring, new tests or CI fixes. The exception is a speed or stability gain big enough to feel. Then write it as the result ("รายงานของใกล้หมดเปิดได้ในไม่ถึง 1 วินาที").
+- Within each heading, put the items that affect users most at the top. Drop any heading that has no items.
+- The heading "เปลี่ยนที่ทำให้ของเดิมพัง" must always sit at the **top** of that version. Every deprecation, removal and breaking change must be listed, even a small one.

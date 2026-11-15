@@ -1,27 +1,27 @@
-# สัญญาอนุญาตและข้อสัญญา
+# Licences and contract terms
 
-ส่วนของ `prior-art-review` ข้อ 4 · ตรวจก่อนลงมือใช้ ไม่ใช่หลังใช้ไปแล้ว
+Part of `prior-art-review` item 4 · check before you start using something, not after.
 
-**เรื่องนี้รู้ช้าเจ็บที่สุด** เพราะต้องรื้อตอนใกล้ส่งมอบ
+**This hurts most when learned late**, because you have to tear things out close to delivery.
 
-| กลุ่ม | ตัวอย่าง | ใช้ในของที่ขายได้ไหม |
+| Group | Examples | Can it go in something sold? |
 |---|---|---|
-| ปล่อยเสรี | MIT · Apache-2.0 · BSD | ได้ แต่ Apache-2.0 มีเงื่อนไขเรื่องสิทธิบัตรเพิ่ม |
-| ต้องเปิดโค้ดต่อ | GPL-3.0 · AGPL-3.0 | ได้แต่**ต้องเปิดโค้ดของเรา** และ AGPL นับรวมการให้บริการผ่านเครือข่ายด้วย |
-| ห้ามเชิงพาณิชย์ | CC BY-NC · โมเดลที่เขียนว่า research only | **ขายไม่ได้** แต่ใช้ทดลองและเทียบผลได้ |
-| ซื้อหรือเช่า (แม่แบบ ภาพ ฟอนต์ บริการ) | ต้องอ่านสัญญาจริง | ดูว่าใช้เชิงพาณิชย์ได้ไหม · เอาข้อมูลออกได้ไหม · ขึ้นราคาหรือเลิกบริการได้เมื่อไหร่ |
+| Permissive | MIT · Apache-2.0 · BSD | Yes, but Apache-2.0 adds patent conditions |
+| Must open the code in turn | GPL-3.0 · AGPL-3.0 | Yes, but **you must open your own code**, and AGPL also counts offering the software as a service over a network |
+| No commercial use | CC BY-NC · models marked research only | **Cannot be sold**, but fine for experiments and comparing results |
+| Bought or rented (templates, images, fonts, services) | Read the actual contract | Check whether commercial use is allowed · whether you can take your data out · when the price can rise or the service can end |
 
-**กฎ 2 ข้อที่พลาดกันบ่อย**
+**2 rules that people often get wrong**
 
-1. **โมเดลปัญญาประดิษฐ์มีสัญญาแยกจากโค้ด** — โค้ดอาจเป็น MIT แต่น้ำหนักโมเดลเป็น non-commercial ก็ได้
-2. **สัญญาตกทอดไปถึงโมเดลที่ต่อยอด** — เช่น โมเดลที่ fine-tune มาจากโมเดล non-commercial ก็ยัง non-commercial
+1. **An AI model has a licence separate from its code.** The code may be MIT while the model weights are non-commercial.
+2. **The licence passes down to models built on top.** For example, a model fine-tuned from a non-commercial model is still non-commercial.
 
-ทุกตัวที่จะใช้จริง ต้อง**เขียนชื่อสัญญาอนุญาตลงไฟล์** ไม่ใช่จำไว้
+For every item you will really use, **write the licence name into a file**. Do not rely on memory.
 
-## ชื่อเต็มของสัญญาอนุญาต
+## Full names of the licences
 
-- **MIT** — Massachusetts Institute of Technology License (สัญญาอนุญาตแบบปล่อยเสรี)
-- **GPL** — General Public License (ใช้ได้แต่ต้องเปิดโค้ดที่ต่อยอด)
-- **AGPL** — Affero General Public License (เหมือน GPL และนับรวมการให้บริการผ่านเครือข่าย)
+- **MIT** — Massachusetts Institute of Technology License (a permissive licence)
+- **GPL** — General Public License (usable, but derived code must be opened)
+- **AGPL** — Affero General Public License (like GPL, and it also counts offering the software as a service over a network)
 - **BSD** — Berkeley Software Distribution License
-- **CC BY-NC** — Creative Commons Attribution-NonCommercial (ห้ามใช้เชิงพาณิชย์)
+- **CC BY-NC** — Creative Commons Attribution-NonCommercial (no commercial use)

@@ -3,81 +3,81 @@ name: database-design
 description: Use when designing or changing a database schema
 ---
 
-# ออกแบบฐานข้อมูล
+# Database design
 
-> **กฎข้อเดียว:** schema คือของที่แก้ยากที่สุดในระบบ
-> โค้ดผิดแก้วันนี้จบวันนี้ แต่ schema ผิดต้องอยู่กับมัน 3 ปี พร้อมข้อมูลจริงอีก 10 ล้านแถวที่ต้องย้ายตาม
+> **One rule:** the schema is the hardest thing in a system to change.
+> A code bug fixed today is done today, but a wrong schema stays for 3 years, with another 10 million real rows to migrate along with it.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ออกแบบฐานข้อมูลของระบบใหม่ หรือ module ใหม่
-- จะเพิ่ม/แก้ตาราง คอลัมน์ ความสัมพันธ์ หรือ index
-- จะเขียน migration โดยเฉพาะตอนที่ระบบมีข้อมูลจริงแล้ว
-- query ช้าแล้วสงสัยว่าเป็นที่ schema หรือที่ index
+- Designing the database of a new system or a new module
+- Adding or changing a table, column, relationship or index
+- Writing a migration, especially once the system holds real data
+- A query is slow and you suspect the schema or an index
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill instead, or together
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` | แทน |
-| ออกแบบ endpoint และรูปร่าง JSON | `api-conventions` | แทน |
-| เก็บรหัสผ่าน token สิทธิ์ผู้ใช้ | `auth-implementation-patterns` | แทน |
-| ที่เก็บ connection string | `config-and-secrets` | แทน |
-| รัน migration ใน pipeline | `cicd-and-release` | แทน |
-| วาดผัง Entity-Relationship (ER) | `diagram-figures` หรือ `markdown-visuals` | คู่ |
-| บันทึกเหตุผลที่เลือกฐานข้อมูลตัวนี้ | `adr-writer` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| Choose the overall architecture | `architecture-patterns` | instead |
+| Design endpoints and JSON shapes | `api-conventions` | instead |
+| Store passwords, tokens, user permissions | `auth-implementation-patterns` | instead |
+| Where to keep connection strings | `config-and-secrets` | instead |
+| Run migrations in a pipeline | `cicd-and-release` | instead |
+| Draw an Entity-Relationship (ER) diagram | `diagram-figures` or `markdown-visuals` | together |
+| Record why this database was chosen | `adr-writer` | together |
+| Abbreviations in work people read | `spell-out-abbreviations` | together |
 
-**ไวยากรณ์เฉพาะแต่ละฐานข้อมูล ชนิดข้อมูลเทียบกัน และคำสั่ง migration ของแต่ละ Object-Relational Mapping (ORM)** อยู่ใน `references/per-stack.md`
+**Syntax specific to each database, data types compared, and the migration commands of each Object-Relational Mapping (ORM) tool** are in `references/per-stack.md`.
 
 ---
 
-## 1 · เลือกชนิดฐานข้อมูลก่อน
+## 1 · Choose the database type first
 
-| เกณฑ์ | Relational (PostgreSQL, SQL Server, MySQL) | Document (MongoDB) |
+| Criterion | Relational (PostgreSQL, SQL Server, MySQL) | Document (MongoDB) |
 |---|---|---|
-| ข้อมูลมีความสัมพันธ์ชัด ต้อง join | ✓ | ✗ ต้องทำมือ |
-| รูปร่างข้อมูลไม่แน่นอน ต่างกันรายตัว | ระวัง ใช้คอลัมน์ JSON | ✓ |
-| ต้องการ transaction ข้ามหลายตาราง | ✓ | ระวัง ได้แต่แพงกว่า |
-| รายงาน ผลรวม การวิเคราะห์ | ✓ | ✗ |
-| เขียนหนักมาก log/telemetry | ระวัง | ✓ หรือใช้ time-series |
+| Data has clear relationships and needs joins | ✓ | ✗ must be done by hand |
+| Data shape is uncertain and differs per record | Careful: use a JSON column | ✓ |
+| Needs transactions across several tables | ✓ | Careful: possible but costlier |
+| Reports, totals, analysis | ✓ | ✗ |
+| Very heavy writes, log/telemetry | Careful | ✓ or use a time-series database |
 
-> **ค่าเริ่มต้นคือ relational** ให้เลือก document เมื่อ**ตอบได้ว่าทำไม**
-> "ยืดหยุ่นกว่า" ไม่ใช่เหตุผล แต่แปลว่ายังไม่ได้ออกแบบ
-> ระบบส่วนใหญ่ที่เลือก document เพราะยืดหยุ่น สุดท้ายเขียนโค้ด join เองในแอป
+> **The default is relational.** Choose document only when you **can answer why**.
+> "More flexible" is not a reason. It means the design is not done yet.
+> Most systems that chose document for flexibility end up writing join code by hand in the app.
 
-**ผสมกันได้**: ใช้ relational เป็นหลัก แล้วเก็บข้อมูลที่รูปร่างไม่แน่นอนเป็นคอลัมน์ `jsonb`
-เกือบทุกกรณี ทางนี้ดีกว่าแยกฐานข้อมูล 2 ตัว
+**You can mix them**: use relational as the base, and store data of uncertain shape in a `jsonb` column.
+In almost every case this is better than running 2 separate databases.
 
 ---
 
-## 2 · กฎตั้งชื่อ — เลือกครั้งเดียว ใช้ทั้งระบบ
+## 2 · Naming rules — choose once, use across the whole system
 
-| สิ่งที่ตั้งชื่อ | รูปแบบ | ตัวอย่าง |
+| What you name | Format | Example |
 |---|---|---|
-| ตาราง | `snake_case` **พหูพจน์** | `orders`, `order_items` |
-| คอลัมน์ | `snake_case` เอกพจน์ | `created_at`, `total_amount` |
+| Table | `snake_case` **plural** | `orders`, `order_items` |
+| Column | `snake_case` singular | `created_at`, `total_amount` |
 | primary key | `id` | `id` |
-| foreign key | `<ตารางเอกพจน์>_id` | `customer_id` |
-| ตารางเชื่อม | `<a>_<b>` เรียงตามตัวอักษร | `role_users` ✓ (ไม่ใช่ `user_roles`) |
-| index | `ix_<ตาราง>_<คอลัมน์>` | `ix_orders_customer_id` |
-| unique | `ux_<ตาราง>_<คอลัมน์>` | `ux_users_email` |
-| foreign key constraint | `fk_<ตาราง>_<ตารางปลายทาง>` | `fk_orders_customers` |
-| check constraint | `ck_<ตาราง>_<เรื่อง>` | `ck_orders_total_non_negative` |
+| foreign key | `<singular table>_id` | `customer_id` |
+| Join table | `<a>_<b>` in alphabetical order | `role_users` ✓ (not `user_roles`) |
+| index | `ix_<table>_<column>` | `ix_orders_customer_id` |
+| unique | `ux_<table>_<column>` | `ux_users_email` |
+| foreign key constraint | `fk_<table>_<target table>` | `fk_orders_customers` |
+| check constraint | `ck_<table>_<topic>` | `ck_orders_total_non_negative` |
 
-**สิ่งที่ห้ามทำ:**
+**Do not:**
 
-- ผิด: ใส่ชนิดข้อมูลในชื่อ เช่น `name_varchar`, `is_active_bit`
-- ผิด: ใส่ชื่อตารางนำหน้าคอลัมน์ เช่น `order_order_date` (มันอยู่ในตาราง `orders` อยู่แล้ว)
-- ผิด: ใช้คำสงวน เช่น `user`, `order`, `group`, `key` ซึ่งต้องใส่เครื่องหมายคำพูดทุกครั้ง ให้ใช้ `users`, `orders` แทน
-- ผิด: ตัวย่อที่คนอ่านไม่ออก เช่น `cst_nm` ประหยัดได้ 8 ตัวอักษร แต่แลกกับความสับสน 3 ปี
+- Wrong: put the data type in the name, such as `name_varchar`, `is_active_bit`
+- Wrong: prefix a column with the table name, such as `order_order_date` (it is already in the `orders` table)
+- Wrong: use reserved words such as `user`, `order`, `group`, `key`, which need quotes every time. Use `users`, `orders` instead.
+- Wrong: use abbreviations people cannot read, such as `cst_nm`. It saves 8 characters but costs 3 years of confusion.
 
-> SQL Server ใช้ `PascalCase` ก็ได้ ถ้าโปรเจกต์เดิมใช้อยู่แล้ว
-> **ใช้แบบเดียวกันทั้งระบบสำคัญกว่าว่าแบบไหนถูก** อย่าเปลี่ยนกลางทาง
+> SQL Server may use `PascalCase` if the existing project already does.
+> **Using one style across the whole system matters more than which style is right.** Do not switch midway.
 
 ---
 
-## 3 · คอลัมน์ที่ทุกตารางต้องมี
+## 3 · Columns every table must have
 
 ```sql
 id           bigint / uuid   PRIMARY KEY
@@ -85,68 +85,68 @@ created_at   timestamptz     NOT NULL DEFAULT now()
 updated_at   timestamptz     NOT NULL DEFAULT now()
 ```
 
-เพิ่มตามความจำเป็น:
+Add these as needed:
 
-| คอลัมน์ | ใส่เมื่อ | หมายเหตุ |
+| Column | Add when | Note |
 |---|---|---|
-| `deleted_at timestamptz` | ต้องกู้ข้อมูลคืนได้ หรือกฎหมายบังคับให้เก็บ | **ทุก query ต้องกรอง** ไม่งั้นข้อมูลที่ลบแล้วโผล่ |
-| `created_by` / `updated_by` | ต้องตอบได้ว่าใครแก้ | เก็บ id ผู้ใช้ ไม่ใช่ชื่อ |
-| `row_version` / `xmin` | มีคนแก้พร้อมกันได้ | ใช้คู่กับ ETag ใน `api-conventions` |
-| `tenant_id` | ระบบหลายผู้เช่า | ดูข้อ 10 |
+| `deleted_at timestamptz` | Data must be recoverable, or the law requires keeping it | **Every query must filter on it**, or deleted data shows up |
+| `created_by` / `updated_by` | You must be able to say who changed it | Store the user id, not the name |
+| `row_version` / `xmin` | Several people can edit at the same time | Use with the ETag in `api-conventions` |
+| `tenant_id` | Multi-tenant system | See section 10 |
 
-> **soft delete (ลบโดยแค่ติดป้าย) มีต้นทุน** คือทุก unique constraint ต้องคิดใหม่
-> `ux_users_email` จะกันไม่ให้สมัครอีเมลเดิมซ้ำ แม้บัญชีเก่าถูกลบไปแล้ว
-> แก้ด้วย partial index: `CREATE UNIQUE INDEX ... WHERE deleted_at IS NULL`
+> **soft delete (delete by only setting a flag) has a cost**: every unique constraint must be rethought.
+> `ux_users_email` will block signing up with the same email again, even though the old account was deleted.
+> Fix it with a partial index: `CREATE UNIQUE INDEX ... WHERE deleted_at IS NULL`
 
 ---
 
-## 4 · เลือกชนิด identifier
+## 4 · Choose the identifier type
 
-| ชนิด | ข้อดี | ข้อเสีย | ใช้เมื่อ |
+| Type | Pros | Cons | Use when |
 |---|---|---|---|
-| `bigint` เรียงเพิ่ม | เล็ก เร็ว index ไม่แตก อ่านง่ายตอนไล่ปัญหา | เดา id ถัดไปได้ · รวมข้อมูลหลายที่แล้วชนกัน | ค่าเริ่มต้น ระบบเดียว ฐานข้อมูลเดียว |
-| **UUIDv7 / ULID** | เรียงตามเวลา · สร้างจากฝั่งแอปได้ · ไม่ชนกัน | 16 ไบต์ · อ่านด้วยตายาก | ระบบกระจาย · ต้องสร้าง id ก่อนบันทึก · id โผล่ใน URL |
-| `UUIDv4` สุ่มล้วน | ไม่ชนกัน เดาไม่ได้ | **index แตกกระจาย เขียนช้าลงชัดเจนเมื่อข้อมูลเยอะ** | เลี่ยงถ้าเลือกได้ |
+| `bigint` auto-increment | Small, fast, index does not fragment, easy to read when tracing problems | Next id can be guessed · ids collide when merging data from several places | Default, single system, single database |
+| **UUIDv7 / ULID** | Sorted by time · can be generated on the app side · no collisions | 16 bytes · hard to read by eye | Distributed system · id needed before saving · id appears in a URL |
+| `UUIDv4` fully random | No collisions, cannot be guessed | **index fragments, and writes get clearly slower with lots of data** | Avoid if you can |
 
-> **UUIDv4 เป็น primary key คือกับดักที่เจอบ่อยที่สุด**
-> ค่าสุ่มล้วนทำให้ทุก insert ไปแทรกกลางโครงสร้าง index
-> ข้อมูลหลักหมื่นยังไม่รู้สึก แต่พอถึงหลักสิบล้านจะช้าจนต้องรื้อ
-> ถ้าต้องใช้ UUID ให้ใช้ **v7** ซึ่งขึ้นต้นด้วยเวลา จึงเรียงเพิ่มเหมือน bigint
+> **UUIDv4 as a primary key is the most common trap.**
+> Fully random values make every insert land in the middle of the index structure.
+> You do not feel it at tens of thousands of rows, but at tens of millions it gets so slow you must rebuild.
+> If you must use a UUID, use **v7**, which starts with the time, so it grows in order like bigint.
 
-**เลขที่คนเห็นไม่ใช่ primary key**: เลขใบสั่งซื้อ `SO-2026-00042` ที่ลูกค้าอ้างถึง
-ให้เก็บเป็นคอลัมน์ต่างหากที่มี unique constraint และไม่เอา primary key ไปโชว์
-
----
-
-## 5 · normalisation แค่ไหนพอ
-
-**เริ่มที่ Third Normal Form (3NF) เสมอ**: ข้อเท็จจริง 1 อย่างเก็บที่เดียว
-
-denormalise (ยอมเก็บข้อมูลซ้ำ) ได้เมื่อครบ 3 ข้อนี้เท่านั้น:
-
-1. วัดแล้วว่าช้าจริง (มีตัวเลข ไม่ใช่ความรู้สึก)
-2. รู้ว่าข้อมูลซ้ำจะถูกอัปเดตยังไงให้ตรงกัน
-3. เขียนเหตุผลไว้ในคอมเมนต์ของตาราง
-
-**ข้อยกเว้นที่ยอมรับกันทั่วไป**: ข้อมูลที่ต้อง "แช่แข็ง" ณ เวลาหนึ่ง
-ราคาสินค้าในใบสั่งซื้อต้องคัดลอกลง `order_items.unit_price`
-ไม่ join ไปหา `products.price` เพราะราคาวันนี้ไม่ใช่ราคาวันที่ลูกค้าซื้อ
+**A number people see is not the primary key**: a purchase order number such as `SO-2026-00042` that the customer refers to
+should be stored as a separate column with a unique constraint, and the primary key should not be shown.
 
 ---
 
-## 6 · สี่ชนิดข้อมูลที่พลาดกันประจำ
+## 5 · How much normalisation is enough
 
-รายละเอียด 4 ชนิดข้อมูลที่พลาดกันประจำ (เงิน · เวลา · enum หรือสถานะ · boolean) พร้อมตัวอย่าง อยู่ใน [`data-types`](references/data-types.md)
+**Always start at Third Normal Form (3NF)**: each fact is stored in one place.
 
-## 7 · index — วางตรงไหนถึงได้ผล
+You may denormalise (accept duplicated data) only when all 3 of these hold:
 
-**ต้องมี:**
+1. You measured and it is truly slow (with numbers, not a feeling).
+2. You know how the duplicated data will be updated so that the copies match.
+3. You wrote the reason in the table comment.
 
-- ทุก foreign key (ฐานข้อมูลส่วนใหญ่ **ไม่สร้างให้อัตโนมัติ**)
-- คอลัมน์ที่อยู่ใน `WHERE` ของ query ที่รันบ่อย
-- คอลัมน์ที่ใช้ `ORDER BY` คู่กับ pagination
+**A commonly accepted exception**: data that must be "frozen" at a point in time.
+The product price in a purchase order must be copied into `order_items.unit_price`
+and not joined to `products.price`, because today's price is not the price on the day the customer bought.
 
-**composite index (index หลายคอลัมน์): ลำดับคอลัมน์สำคัญ**
+---
+
+## 6 · Four data types people get wrong all the time
+
+Details of the 4 data types people get wrong all the time (money · time · enum or status · boolean), with examples, are in [`data-types`](references/data-types.md).
+
+## 7 · index — where to put one so it works
+
+**Must have:**
+
+- Every foreign key (most databases **do not create it automatically**)
+- Columns in the `WHERE` of frequently run queries
+- Columns used in `ORDER BY` together with pagination
+
+**composite index (an index on several columns): column order matters**
 
 ```sql
 -- query: WHERE tenant_id = ? AND status = ? ORDER BY created_at DESC
@@ -154,84 +154,84 @@ CREATE INDEX ix_orders_tenant_status_created
   ON orders (tenant_id, status, created_at DESC);
 ```
 
-เรียงคอลัมน์ตามเงื่อนไข: **เท่ากับ → ช่วง → เรียงลำดับ**
-index `(a, b)` ใช้กับ query ที่กรองด้วย `a` อย่างเดียวได้ แต่กรองด้วย `b` อย่างเดียว**ไม่ได้**
+Order the columns by condition type: **equals → range → sort**.
+An index `(a, b)` works for a query that filters on `a` alone, but **not** for one that filters on `b` alone.
 
-**อย่าใส่ index เมื่อ:**
+**Do not add an index when:**
 
-- ตารางเล็กกว่าไม่กี่พันแถว เพราะฐานข้อมูลอ่านทั้งตารางเร็วกว่า
-- คอลัมน์มีค่าซ้ำเยอะ เช่น `is_active` ที่ 95% เป็น true
-- ตารางเขียนบ่อยกว่าอ่านมาก เพราะทุก index เพิ่มต้นทุนทุกครั้งที่เขียน
+- The table has fewer than a few thousand rows, because the database reads the whole table faster
+- The column has many repeated values, such as `is_active` where 95% are true
+- The table is written far more often than read, because every index adds cost on every write
 
-> **วัดก่อนเดา**: `EXPLAIN ANALYZE` (PostgreSQL) หรือ execution plan (SQL Server)
-> บอกได้ว่า index ถูกใช้จริงไหม ส่วนการเดาว่า "น่าจะช่วย" ผิดบ่อยกว่าถูก
+> **Measure before guessing**: `EXPLAIN ANALYZE` (PostgreSQL) or the execution plan (SQL Server)
+> tells you whether the index is really used. Guessing that it "should help" is wrong more often than right.
 
 ---
 
-## 8 · constraint อยู่ที่ฐานข้อมูล ไม่ใช่แค่ที่แอป
+## 8 · Constraints live in the database, not only in the app
 
-| กฎ | ที่ควรอยู่ |
+| Rule | Where it should live |
 |---|---|
-| อีเมลห้ามซ้ำ | `UNIQUE` ที่ฐานข้อมูล **และ** ตรวจในแอปเพื่อให้ข้อความ error สวย |
-| ยอดเงินห้ามติดลบ | `CHECK (total_amount >= 0)` |
-| ใบสั่งซื้อต้องมีลูกค้าจริง | `FOREIGN KEY` |
-| สถานะต้องเป็นค่าที่กำหนด | `CHECK` หรือ lookup table |
+| Email must not repeat | `UNIQUE` in the database **and** a check in the app so the error message looks nice |
+| Amount must not be negative | `CHECK (total_amount >= 0)` |
+| A purchase order must have a real customer | `FOREIGN KEY` |
+| Status must be one of the defined values | `CHECK` or a lookup table |
 
-> **เหตุผล:** แอปไม่ใช่ทางเดียวที่แตะข้อมูล ยังมี script แก้ข้อมูลด่วน
-> งาน import ตอนตี 3 และ service ตัวที่ 2 ที่เขียนทีหลัง
-> constraint ที่ฐานข้อมูลคือด่านสุดท้ายที่ไม่มีใครข้ามได้
+> **Reason:** the app is not the only thing that touches the data. There are also urgent data-fix scripts,
+> import jobs at 3 a.m., and a 2nd service written later.
+> A constraint in the database is the last gate that nobody can skip.
 
-**`ON DELETE` ต้องเลือกอย่างตั้งใจ:**
+**Choose `ON DELETE` on purpose:**
 
-| ตัวเลือก | ความหมาย | ใช้กับ |
+| Option | Meaning | Use with |
 |---|---|---|
-| `RESTRICT` (ค่าเริ่มต้นที่ควรใช้) | ลบไม่ได้ถ้ายังมีลูก | เกือบทุกกรณี |
-| `CASCADE` | ลบลูกตามทั้งหมด | ของที่เป็นส่วนประกอบจริง ๆ เช่น `order_items` |
-| `SET NULL` | ลูกกลายเป็นไม่มีพ่อ | ความสัมพันธ์ที่ไม่บังคับ |
+| `RESTRICT` (the default you should use) | Cannot delete while children exist | Almost every case |
+| `CASCADE` | Delete all the children too | True components, such as `order_items` |
+| `SET NULL` | Child becomes parentless | Optional relationships |
 
-ถ้าใส่ `CASCADE` ผิดที่เดียว ลบลูกค้า 1 คน แล้วประวัติการซื้อ 10 ปีจะหายตาม
+If you put `CASCADE` in the wrong place just once, deleting 1 customer wipes 10 years of purchase history with it.
 
 ---
 
-## 9 · migration — เปลี่ยน schema โดยไม่ต้องปิดระบบ
+## 9 · migration — change the schema without taking the system down
 
-ขั้นตอน expand-and-contract และตัวอย่าง migration ที่ deploy ได้โดยไม่ปิดระบบ อยู่ใน [`migrations`](references/migrations.md)
+The expand-and-contract steps, and example migrations that deploy without downtime, are in [`migrations`](references/migrations.md).
 
-คลังข้อมูลเพื่อวิเคราะห์ (star schema · SCD · ELT) อยู่ใน [`warehouse-modeling`](references/warehouse-modeling.md) · pipeline ที่รันซ้ำได้ (incremental · backfill · ทดสอบคุณภาพข้อมูล · checklist ก่อนขึ้น production) อยู่ใน [`data-pipeline-patterns`](references/data-pipeline-patterns.md)
+Data warehouses for analysis (star schema · SCD · ELT) are in [`warehouse-modeling`](references/warehouse-modeling.md) · pipelines that can rerun safely (incremental · backfill · data quality tests · checklist before going to production) are in [`data-pipeline-patterns`](references/data-pipeline-patterns.md).
 
-## 10 · ระบบหลายผู้เช่า (multi-tenant)
+## 10 · Multi-tenant systems
 
-| แบบ | แยกกันแค่ไหน | ต้นทุน | เหมาะกับ |
+| Style | How separate | Cost | Fits |
 |---|---|---|---|
-| คอลัมน์ `tenant_id` ในทุกตาราง | ต่ำ พลาดที่เดียวข้อมูลก็รั่วข้ามผู้เช่า | ถูกสุด | ผู้เช่าเยอะ ข้อมูลต่อรายไม่ใหญ่ |
-| schema แยกต่อผู้เช่า | กลาง | migration ต้องวนทุก schema | ผู้เช่าหลักสิบถึงหลักร้อย |
-| ฐานข้อมูลแยกต่อผู้เช่า | สูงสุด | แพงสุด | ลูกค้าองค์กรที่บังคับให้แยก |
+| A `tenant_id` column in every table | Low: one slip and data leaks across tenants | Cheapest | Many tenants, small data per tenant |
+| A separate schema per tenant | Medium | Migrations must loop over every schema | Tens to hundreds of tenants |
+| A separate database per tenant | Highest | Most expensive | Enterprise customers who require separation |
 
-> **สำคัญ:** ถ้าเลือกแบบ `tenant_id` ให้**บังคับที่ชั้นล่างสุด ไม่ใช่ใส่ใน query ทีละตัว**
-> ใช้ row-level security ของฐานข้อมูล หรือ global filter ของ ORM
-> query ที่ลืมใส่ `WHERE tenant_id = ?` แค่ตัวเดียว ก็ทำให้ข้อมูลลูกค้ารายหนึ่งโผล่ให้อีกรายเห็น
-> และไม่มี error ให้เห็นเลย
+> **Important:** if you choose the `tenant_id` style, **enforce it at the lowest layer, not by adding it to each query**.
+> Use the database's row-level security, or the ORM's global filter.
+> A single query that forgets `WHERE tenant_id = ?` shows one customer's data to another,
+> and no error appears at all.
 
 ---
 
-## 11 · ข้อมูลส่วนบุคคล
+## 11 · Personal data
 
-- ทำรายการว่า **คอลัมน์ไหนเป็นข้อมูลส่วนบุคคล** ถ้าไม่มีรายการนี้จะตอบคำถาม "ข้อมูลฉันอยู่ที่ไหนบ้าง" ไม่ได้
-- เลขบัตรประชาชน หมายเลขบัตรเครดิต และข้อมูลสุขภาพ ให้เข้ารหัสระดับคอลัมน์ หรือไม่เก็บเลยถ้าไม่จำเป็น
-- กำหนด **อายุการเก็บ** ต่อตาราง และมีงานลบจริงตามนั้น
-- ต้องลบได้เมื่อเจ้าของขอ และ soft delete อย่างเดียวไม่นับว่าลบ
-- ห้ามคัดลอกข้อมูลจริงลงเครื่อง developer โดยไม่ปิดบัง
+- Keep a list of **which columns are personal data**. Without this list you cannot answer the question "where is my data?".
+- National ID numbers, credit card numbers and health data: encrypt at the column level, or do not store them at all if not needed.
+- Set a **retention period** per table, and have a real job that deletes accordingly.
+- Data must be deletable when the owner asks, and soft delete alone does not count as deleting.
+- Never copy real data onto a developer machine without masking it.
 
 ---
 
 ## 12 · Anti-patterns
 
-- **ตารางเดียวเก็บทุกอย่าง** (`entity` / `attribute` / `value`) query อะไรก็ยากไปหมด
-- **`varchar(255)` ทุกคอลัมน์** ตัวเลขนี้ไม่มีความหมายอะไร ให้กำหนดจากข้อมูลจริง
-- **เก็บหลายค่าในคอลัมน์เดียว** เช่น `"1,4,7"` ค้นไม่ได้ ใส่ constraint ไม่ได้ ให้ใช้ตารางเชื่อม
-- **ไม่มี foreign key เพราะ "แอปดูแลเอง"** สักวันจะมีแถวกำพร้า
-- **index ทุกคอลัมน์เผื่อไว้** เขียนช้าลง พื้นที่บาน โดยไม่มีใครได้ประโยชน์
-- **`SELECT *` ในโค้ดจริง** เพิ่มคอลัมน์ทีไรโค้ดพังทุกที
-- **ตรรกะธุรกิจใน trigger** ไล่ปัญหาไม่เจอ เพราะไม่มีใครเห็นว่ามันทำงาน
-- **migration ที่เขียนข้อมูลด้วย** ปนกับที่เปลี่ยนโครงสร้าง พอ rollback ข้อมูลก็หาย
-- **แก้ schema บน production ด้วยมือ** deploy รอบหน้า schema จะไม่ตรงกัน
+- **One table that stores everything** (`entity` / `attribute` / `value`): every query becomes hard.
+- **`varchar(255)` on every column**: this number means nothing. Set it from real data.
+- **Several values in one column**, such as `"1,4,7"`: cannot search it, cannot add a constraint. Use a join table.
+- **No foreign key because "the app takes care of it"**: one day you will have orphan rows.
+- **An index on every column just in case**: writes get slower and storage bloats, with no one benefiting.
+- **`SELECT *` in real code**: the code breaks every time a column is added.
+- **Business logic in triggers**: problems are untraceable, because nobody sees it running.
+- **A migration that also writes data**, mixed with the structure change: on rollback the data is lost.
+- **Changing the schema on production by hand**: at the next deploy the schema will not match.

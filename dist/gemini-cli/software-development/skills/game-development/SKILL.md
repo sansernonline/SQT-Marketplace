@@ -8,7 +8,7 @@ argument-hint: <game-design | multiplayer-architecture> <details>
 
 งานเกม — สถาปัตยกรรมและ engine · multiplayer · game design · live-ops
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทุกไฟล์ เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้นอยู่แล้ว
+**Open only the files that match the job.** Do not read them all, because each file is the full guide to its topic.
 
 ## หัวข้อ
 
@@ -20,7 +20,7 @@ argument-hint: <game-design | multiplayer-architecture> <details>
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน · อ่านสารบัญก่อน แล้วอ่านเฉพาะหัวข้อที่งานใช้
+An agent called to work in this area opens its own role file before starting · read the table of contents first, then read only the sections the job uses
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -41,7 +41,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 `/software-development:game-development <game-design | multiplayer-architecture> <details>`
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดในเอกสารที่ได้ เขียนตาม `human-writing` — command นี้บอกขั้นตอน ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write every line of wording in the output per `human-writing`. This command gives the steps, while human-writing gives how to write so people can understand.
 
 Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
 

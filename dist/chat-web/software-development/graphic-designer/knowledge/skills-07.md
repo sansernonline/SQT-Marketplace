@@ -4,87 +4,89 @@ Use when a README or PR needs a quick Mermaid diagram
 
 # Software Diagrams
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** every line of wording follows `human-writing`. This skill gives the format and structure, while human-writing says how to write so a reader understands.
 
-> **กฎข้อเดียวของ skill นี้:** ไดอะแกรมตอบ**คำถามเดียว**
-> ถ้าตอบ 2 คำถาม ให้วาด 2 รูป
+> **The one rule of this skill:** a diagram answers **one question**.
+> If it answers 2 questions, draw 2 pictures.
 
-> **ปลายทางตัดสินเครื่องมือ:** skill นี้วาดไดอะแกรมด่วนด้วย Mermaid ธีมประจำบ้าน สำหรับ README · Pull Request · โน้ตในโค้ดเท่านั้น
-> ส่วนรูปในเอกสารโปรเจกต์ (BRD · SRS · FSD · ADR · ER · ผังขั้นตอน) ข้อเสนอลูกค้า สไลด์ และงานพิมพ์ ให้ไปที่ `diagram-figures` · ตารางเลือกทางฉบับเต็มอยู่ที่หัว skill นั้น
+> **The destination decides the tool:** this skill draws quick diagrams with Mermaid in the house theme, only for a README · Pull Request · note in code.
+> For figures in project documents (BRD · SRS · FSD · ADR · ER · process maps), client proposals, slides and print work, go to `diagram-figures`. The full table for choosing is at the top of that skill.
 >
-> **สีในรูปต้องสื่อความหมาย ไม่ใช่ตกแต่ง** และถ้าเอกสารต้นทางประกาศ `doc-theme` ไว้แล้ว ให้ใช้ค่านั้น ไม่ต้องเลือกสีใหม่รายรูป (ค่าเริ่มต้นคือชุดประจำบ้านใน `polished-document-style` · ความหมายของสีดู `branded-document-design/references/tokens-and-type.md`):
-> ไดอะแกรมด่วนใช้ **สีหลักสีเดียว** = "ของที่เรากำลังพูดถึง" · เทา = ระบบภายนอก/ปิดอยู่ · ขาวเส้นเทา (`store`) = ที่เก็บข้อมูล · กล่องอื่นใช้ค่าตั้งต้น (3 คลาส `focus` · `ext` · `store` ใน `assets/mermaid-theme.md`) · ถ้าต้องแยกจุดพัง/ข้อยกเว้น/สำเร็จด้วยสีหลายสี แปลว่าตอบหลายคำถามในรูปเดียว ให้แยกเป็นรูปใหม่หรือใช้ `diagram-figures`
+> **Colour in a figure must carry meaning, not decorate.** If the source document already declares a `doc-theme`, use that value and do not pick new colours per figure (the default is the house set in `polished-document-style` · for the meaning of colours see `branded-document-design/references/tokens-and-type.md`):
+> A quick diagram uses **one main colour** = "the thing we are talking about" · grey = external/closed systems · white with a grey line (`store`) = data stores · other boxes use the defaults (3 classes `focus` · `ext` · `store` in `assets/mermaid-theme.md`). If you need several colours to separate failure points, exceptions and successes, the figure answers several questions. Split it into new figures or use `diagram-figures`.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-ใน README · Pull Request · โน้ตในโค้ด:
+In a README · Pull Request · note in code:
 
-- อธิบายสถาปัตยกรรมระบบ
-- อธิบายลำดับการทำงานข้ามหลายส่วน
-- อธิบายสถานะของข้อมูล
-- ออกแบบฐานข้อมูล
-- บอกว่าอะไรรันอยู่บนเครื่องไหน
-- รีวิวไดอะแกรมที่คนอื่นวาด
+- Explain the system architecture
+- Explain the order of work across several parts
+- Explain the states of data
+- Design a database
+- Say what runs on which machine
+- Review a diagram someone else drew
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use
 
-| งาน | ใช้ตัวนี้แทน |
+| Job | Use this instead |
 |---|---|
-| เลือกว่าจะใช้ภาพแบบไหน (SVG / ASCII / Mermaid) | `markdown-visuals` |
-| ภาพหน้าจอ · wireframe | `ui-craft` + skill แพลตฟอร์ม |
-| กราฟข้อมูล | `web-app-design` → `references/tokens.md` หัวข้อ "สีข้อมูล (กราฟ)" |
-| ตัดสินใจเลือกสถาปัตยกรรม | `architecture-patterns` |
+| Choose which kind of picture to use (SVG / ASCII / Mermaid) | `markdown-visuals` |
+| Screenshots · wireframes | `ui-craft` + the platform skill |
+| Data charts | `web-app-design` → `references/tokens.md` heading "สีข้อมูล (กราฟ)" (data colours, charts) |
+| Choose an architecture | `architecture-patterns` |
 
-## 1 · คำถามไหน วาดแบบไหน
+## 1 · Which question, which diagram
 
-**เริ่มจากคำถาม ไม่ใช่เริ่มจากชนิดไดอะแกรม** — คนวาดผิดเพราะเลือกชนิดก่อนแล้วค่อยยัดเนื้อหาลงไป
+**Start from the question, not from the diagram type.** People draw wrongly because they pick the type first and then stuff content into it.
 
-| คำถามที่ผู้อ่านมีในหัว | ไดอะแกรม |
+| The question in the reader's head | Diagram |
 |---|---|
-| "ระบบนี้คุยกับใครข้างนอกบ้าง" | C4 ระดับ 1 — System Context |
-| "ข้างในระบบมีอะไรบ้าง รันแยกกันไหม" | C4 ระดับ 2 — Container |
-| "ใน service ตัวนี้แบ่งเป็นส่วนอะไร" | C4 ระดับ 3 — Component |
-| "กดปุ่มนี้แล้วเกิดอะไรขึ้นบ้าง ตามลำดับ" | Sequence |
-| "เอกสารนี้เปลี่ยนสถานะยังไงได้บ้าง" | State |
-| "ตารางไหนเชื่อมกับตารางไหน" | Entity Relationship (ER) |
-| "ของจริงรันอยู่บนเครื่องอะไร กี่ตัว" | Deployment |
-| "ใครอนุมัติต่อจากใคร" | Flowchart (ขั้นตอนงาน) |
-| "ผังคลาวด์ใน repo ที่มีโลโก้ AWS / Azure จริง ๆ" | Infrastructure — ข้อ 3 |
-| "อยากได้รูปสวย ๆ ไว้ใส่ข้อเสนอลูกค้า" | ไม่ใช่งานของ skill นี้ — `diagram-figures` |
+| "Who outside does this system talk to?" | C4 level 1 — System Context |
+| "What is inside the system? Do the parts run separately?" | C4 level 2 — Container |
+| "How is this service divided inside?" | C4 level 3 — Component |
+| "When I press this button, what happens, in order?" | Sequence |
+| "How can this document change state?" | State |
+| "Which table links to which table?" | Entity Relationship (ER) |
+| "What machines does the real thing run on, and how many?" | Deployment |
+| "Who approves after whom?" | Flowchart (work steps) |
+| "A cloud diagram in the repo with real AWS / Azure logos" | Infrastructure — section 3 |
+| "I want a nice picture for the client proposal" | Not the job of this skill — `diagram-figures` |
 
-> **C4 model** คือวิธีวาดสถาปัตยกรรมเป็นชั้น ๆ เหมือนซูมแผนที่ —
-> ระดับ 1 มองจากนอกระบบ · ระดับ 2 เปิดฝาดูข้างใน · ระดับ 3 ซูมเข้าไปในกล่องเดียว
-> **วาดระดับ 1 กับ 2 ให้ครบก่อนเสมอ** ระดับ 3 วาดเฉพาะส่วนที่ซับซ้อนจริง
+> The **C4 model** is a way to draw architecture in layers, like zooming a map:
+> level 1 looks from outside the system · level 2 opens the lid and looks inside · level 3 zooms into a single box.
+> **Always draw levels 1 and 2 in full first.** Draw level 3 only for the parts that are truly complex.
 
-## 2 · ธีม — ใช้ชุดเดียวทั้งโปรเจกต์
+## 2 · Theme — one set for the whole project
 
-วางบรรทัด `%%{init: ...}%%` ไว้**บรรทัดแรกสุด**ของทุกไดอะแกรม แล้วใช้สีหลักสีเดียวกับ 3 คลาส `focus` · `ext` · `store` ซึ่งสีหลักสงวนไว้ให้ "ของที่เรากำลังพูดถึง" เท่านั้น
-บรรทัดธีม ตัวแทนค่าสี คลาส และตัวอย่างที่เรนเดอร์แล้วอยู่ใน [`assets/mermaid-theme.md`](assets/mermaid-theme.md) ส่วนตารางที่จับคู่เนื้องานกับโทนสีอยู่ใน `diagram-figures/references/colour-by-domain.md`
+Put the `%%{init: ...}%%` line on the **very first line** of every diagram, and use the one main colour with the 3 classes `focus` · `ext` · `store`. The main colour is reserved for "the thing we are talking about" only.
+The theme line, colour stand-ins, classes and rendered examples are in [`assets/mermaid-theme.md`](assets/mermaid-theme.md). The table that matches kinds of work to colour tones is in `diagram-figures/references/colour-by-domain.md`.
 
-> ระวัง: **`fontFamily` ต้องอยู่นอก `themeVariables`** ถ้าใส่ไว้ข้างใน จะถูกเมินเงียบ ๆ แล้วกลับไปใช้ฟอนต์เริ่มต้นของ Mermaid
+> Warning: **`fontFamily` must sit outside `themeVariables`.** If you put it inside, it is silently ignored and Mermaid falls back to its default font.
 
-**ตรวจด้วยเครื่องก่อนส่งทุกครั้ง** — กฎข้อนี้ถูกลืมบ่อยที่สุด (โปรเจกต์ทดสอบหนึ่งมี 63 จาก 66 รูปที่ไม่มีบรรทัดธีม และไม่มีใครเห็น):
+**Check with a tool before every send.** This rule is forgotten most often (one test project had 63 of 66 figures with no theme line, and nobody noticed):
 
-สคริปต์อยู่ในโฟลเดอร์ `scripts/` ของ skill นี้ — รันด้วย path เต็มของสคริปต์ กับโฟลเดอร์ `docs` ของโปรเจกต์ที่ตรวจ (`<path ของ skill>` = โฟลเดอร์ที่ติดตั้ง skill นี้):
+The scripts are in the `scripts/` folder of this skill. Run them with the script's full path and the `docs` folder of the project being checked (`<path ของ skill>` = the folder where this skill is installed):
 
 ```bash
-node <path ของ skill>/scripts/check-mermaid-theme.mjs docs          # exit 1 พร้อม ไฟล์:บรรทัด ของบล็อกที่ไม่มี %%{init
-node <path ของ skill>/scripts/check-mermaid-theme.mjs --self-test   # พิสูจน์ว่าตัวตรวจยังจับได้
+node <path ของ skill>/scripts/check-mermaid-theme.mjs docs          # exit 1 with file:line of each block that lacks %%{init
+node <path ของ skill>/scripts/check-mermaid-theme.mjs --self-test   # proves the checker still catches it
 ```
 
-agent ที่ไม่มี shell รันเองไม่ได้ → agent หลักรันหลังรับงาน
+An agent with no shell cannot run it → the main agent runs it after taking the work back.
 
-## 3 · ผังที่ต้องมีโลโก้จริง (infrastructure)
+## 3 · Diagrams that need real logos (infrastructure)
 
-ถ้าผังโครงสร้างพื้นฐานที่อยู่ใน repo ต้องมีไอคอน Amazon Web Services (AWS) · Azure · Kubernetes ของจริง ซึ่ง Mermaid วาดให้ไม่ได้ ให้ใช้ไลบรารี **`diagrams`** (Python + Graphviz) โดยเริ่มจาก [`assets/infra-diagram.py`](assets/infra-diagram.py)
-วิธีติดตั้ง กติกา node ที่ใช้บ่อย และกับดักอยู่ใน [`assets/diagrams-python.md`](assets/diagrams-python.md) · ส่วนผังคลาวด์ที่ลูกค้าหรือสไลด์จะเห็น ให้ใช้ `diagram-figures`
+If an infrastructure diagram that lives in the repo needs real Amazon Web Services (AWS) · Azure · Kubernetes icons, which Mermaid cannot draw, use the **`diagrams`** library (Python + Graphviz), starting from [`assets/infra-diagram.py`](assets/infra-diagram.py).
+Install steps, the commonly used node rules and the traps are in [`assets/diagrams-python.md`](assets/diagrams-python.md). For cloud diagrams that a client or a slide will show, use `diagram-figures`.
 
-## 4 · กฎที่ทำให้อ่านรู้เรื่อง
+## 4 · Rules that make it readable
 
-**ไม่เกิน 7 กล่อง** — เกินนี้คนอ่านเลิกอ่าน (นับกล่องจริง ไม่นับ subgraph)
+**No more than 7 boxes.** Past that, readers stop reading (count real boxes, not subgraphs).
 
-**นับกล่องก่อนวาด ไม่ใช่หลังวาด** — ถ้าเกิน 7 ให้**แยกรูปตามลำดับเรื่องก่อนวาด** จดการแยกลง `decision-log` แล้วบอกในคำตอบ
-ห้ามวาดจนครบแล้วค่อยบอกทีหลัง
+**Count boxes before drawing, not after.** If there are more than 7, **split the figure by the order of the story before drawing**. Note the split in `decision-log` and say so in the reply.
+Never draw everything and then say so afterwards.
+
+The sample reply to the Thai user (kept in Thai because it is the text the agent says):
 
 ```
 เนื้อหาที่ให้มามี 20 กล่อง เกินเพดานสามเท่า ขอแยกเป็น 3 รูป:
@@ -94,117 +96,117 @@ agent ที่ไม่มี shell รันเองไม่ได้ → ag
 อยากแบ่งแบบอื่น บอกได้ — แยกใหม่ได้
 ```
 
-> **"แยกคนละไฟล์ก็ได้" แปลว่าต้องแยก** — ถ้าคำขอเปิดช่องให้แยก และเนื้อหาเกินเพดาน
-> ให้ถือว่าเป็นคำสั่งให้แยก ไม่ใช่ทางเลือก
+> **"Separate files are fine" means you must split.** If the request leaves room to split and the content passes the cap,
+> treat it as an order to split, not an option.
 
-**3 อย่างนี้ห้ามอยู่ในไดอะแกรม** — เป็นเนื้อหาของคู่มือ ไม่ใช่รูป และทำให้กล่องบานจนผังเบี้ยว
+**These 3 things do not belong in a diagram.** They are manual content, not a picture, and they swell the boxes until the diagram warps.
 
-| ห้ามใส่ | ไปอยู่ที่ไหน |
+| Do not put in | Where it goes |
 |---|---|
-| ตัวเลือกบรรทัดคำสั่ง `--all` `--resume` `--limit N` | `README` หรือ `docs/cli.md` |
-| รายการ input/output ของหลายตัว | **ตารางข้างรูป** — คอลัมน์: ส่วนประกอบ · รับอะไร · ให้อะไร · เก็บที่ไหน |
-| ชื่อไฟล์หรือ path ครบทุกตัว | ตารางเดียวกัน ใส่ในรูปเฉพาะตัวที่เป็นใจความ |
+| Command-line options `--all` `--resume` `--limit N` | `README` or `docs/cli.md` |
+| Lists of inputs/outputs for several parts | **A table beside the figure** — columns: component · takes what · gives what · stored where |
+| Every file name or path | The same table. Put in the figure only the ones that carry the point |
 
-**คำขอว่า "บอก input/output ด้วย" ไม่ได้แปลว่าให้วาดทุกอย่างเป็นกล่อง** —
-กล่องคือสิ่งที่ *ทำงาน* สิ่งที่ *ไหลผ่าน* เป็นป้ายบนเส้น ส่วน *รายละเอียด* ไปอยู่ในตาราง
+**A request like "show the input/output too" does not mean draw everything as boxes.**
+A box is something that *does work*. What *flows through* is a label on the line. *Detail* goes in the table.
 
-**ระดับรายละเอียดเดียวกันทั้งรูป** — มี `PostgreSQL` กับ `OrderRepository.cs` อยู่ในรูปเดียวกัน
-คือสัญญาณว่าผสม 2 ระดับ
+**One level of detail across the whole figure.** If `PostgreSQL` and `OrderRepository.cs` sit in the same figure,
+that signals a mix of 2 levels.
 
-**ทุกเส้นต้องมีป้าย** และป้ายต้องบอก**อะไรไหลผ่าน** ไม่ใช่ว่าต่อกันอยู่
-
-```
-ผิด: api --> db
-ผิด: api -->|ใช้| db
-ถูก: api -->|SQL · อ่าน-เขียนคำสั่งซื้อ| db
-```
-
-**ทิศทางเดียว** — บนลงล่าง (`TB`) หรือซ้ายไปขวา (`LR`) เลือกแล้วอย่าให้มีเส้นวิ่งย้อน
-เส้นย้อนแปลว่าเรียงลำดับกล่องผิด ไม่ใช่ว่าต้องวาดลูกศร 2 หัว
-
-**ชื่อกล่อง = สิ่งที่มันทำ ไม่ใช่เทคโนโลยี** เทคโนโลยีใส่บรรทัดที่สองตัวเล็ก
+**Every line needs a label,** and the label must say **what flows through**, not that they are connected.
 
 ```
-ผิด: [Redis]
-ถูก: ["ที่พักข้อมูลชั่วคราว<br><small>Redis</small>"]
+Wrong: api --> db
+Wrong: api -->|ใช้| db
+Right: api -->|SQL · อ่าน-เขียนคำสั่งซื้อ| db
 ```
 
-**มีคำอธิบายสัญลักษณ์ (legend) เมื่อใช้สีหรือรูปทรงสื่อความหมาย** —
-ถ้าอธิบายไม่ได้ว่าทำไมกล่องนี้สีต่าง แปลว่าสีนั้นไม่ควรมี
+**One direction.** Top to bottom (`TB`) or left to right (`LR`). Choose one and let no line run backwards.
+A backward line means the boxes are in the wrong order. It does not mean you need a double-headed arrow.
 
-## 5 · ภาษาไทยในไดอะแกรม
+**Box name = what it does, not the technology.** Put the technology on a second line in small type.
 
-- **ป้ายเส้นภาษาไทยยาวเกิน 3 คำจะทับเส้น** — ตัดให้สั้น หรือใส่ `<br>` เอง
-- **ห้ามใช้ `()` `[]` `{}` ในข้อความ** จะไปชนกับไวยากรณ์ Mermaid — ครอบด้วย `"..."` เสมอ
-- **วรรณยุกต์ลอยเหนือกล่อง** เมื่อ `fontSize` เล็กกว่า 12px — อย่าลดต่ำกว่านี้
-- ชื่อตารางและชื่อฟิลด์ในไดอะแกรม ER ใช้ภาษาอังกฤษ (ตรงกับฐานข้อมูลจริง)
-  ส่วนคำอธิบายใช้ไทยได้
+```
+Wrong: [Redis]
+Right: ["ที่พักข้อมูลชั่วคราว<br><small>Redis</small>"]
+```
 
-## 6 · เรนเดอร์ดูจริง — ห้ามข้าม
+**Add a legend when colour or shape carries meaning.**
+If you cannot explain why this box has a different colour, that colour should not be there.
 
-ไดอะแกรมที่ไม่เคยเรนเดอร์ยังเป็นแค่ข้อความ ไม่ใช่รูป เพราะไวยากรณ์ผิดบางแบบ Mermaid ไม่แจ้ง error
-และบ่อยครั้งวาดออกมาไม่ตรงกับที่คิด
+## 5 · Thai in diagrams
+
+- **A Thai line label longer than 3 words overlaps the line.** Shorten it, or add `<br>` yourself.
+- **Do not use `()` `[]` `{}` in text.** They clash with Mermaid syntax. Always wrap the text in `"..."`.
+- **Tone marks float above the box** when `fontSize` is below 12px. Do not go lower.
+- Table and field names in an ER diagram use English (matching the real database).
+  Descriptions can use Thai.
+
+## 6 · Render and look — never skip
+
+A diagram that was never rendered is still only text, not a picture. Some syntax mistakes give no error in Mermaid,
+and the result often does not match what you thought.
 
 ```bash
-# ไม่ติดตั้งลงเครื่อง · pin รุ่นที่ทดสอบธีมไว้ (11.17.0 · รุ่นล่าสุด 12.0.0 ณ 2026-10-14 ยังไม่ได้ทดสอบธีม)
+# not installed on the machine · pin the version the theme was tested on (11.17.0 · the latest 12.0.0 as of 2026-10-14 has not been tested with the theme)
 npx -y @mermaid-js/mermaid-cli@11.17.0 -i diagram.mmd -o diagram.png -b white -s 2
 ```
 
-แล้ว**เปิดไฟล์ภาพดูด้วยตา** ไล่ตามนี้:
+Then **open the image file and look at it with your eyes**. Go through this list:
 
-- [ ] กล่องไม่เกิน 7 ใบใช่ไหม
-- [ ] ทุกเส้นมีป้ายไหม และป้ายบอกว่าอะไรไหลผ่านไหม
-- [ ] มีเส้นวิ่งย้อนทิศไหม
-- [ ] ป้ายทับเส้นหรือทับกล่องไหม
-- [ ] ข้อความไทยครบ ไม่มีสระหาย
-- [ ] ระดับรายละเอียดเดียวกันทั้งรูป
-- [ ] คนที่ไม่เคยเห็นระบบนี้อ่านแล้วตอบคำถามต้นทางได้ไหม
+- [ ] Are there at most 7 boxes?
+- [ ] Does every line have a label, and does the label say what flows through?
+- [ ] Does any line run in the opposite direction?
+- [ ] Does a label overlap a line or a box?
+- [ ] Is the Thai text complete, with no missing vowels?
+- [ ] Is the level of detail the same across the figure?
+- [ ] Can someone who has never seen this system read it and answer the original question?
 
-**ข้อจำกัดของ Mermaid ที่ต้องรู้ก่อนเสียเวลา:**
+**Mermaid limits to know before you waste time:**
 
-| อาการ | สาเหตุ |
+| Symptom | Cause |
 |---|---|
-| `direction LR` ใน subgraph ไม่ทำงาน | ถูกเมินเมื่อ subgraph มีเส้นเชื่อมออกนอก — ต้องจัดลำดับกล่องเอา |
-| กล่องกว้างผิดปกติ | มีข้อความยาวบรรทัดเดียว — ใส่ `<br>` เอง Mermaid ไม่ตัดบรรทัดให้ |
-| เส้นทับกันมั่ว | กล่องเยอะเกินไป — Mermaid ไม่มีการจัดเส้นแบบฉลาด ต้องลดกล่อง |
-| ฟอนต์ไม่เปลี่ยน | `fontFamily` อยู่ผิดที่ (ดูข้อ 2) |
+| `direction LR` inside a subgraph does not work | It is ignored when the subgraph has a line linking out — order the boxes yourself |
+| A box is abnormally wide | One long line of text — add `<br>` yourself, Mermaid does not wrap lines |
+| Lines overlap in a mess | Too many boxes — Mermaid has no smart line routing, so cut boxes |
+| The font does not change | `fontFamily` is in the wrong place (see section 2) |
 
-ถ้าจัดวางเองไม่ได้ดั่งใจจริง ๆ และรูปยังอยู่ในเอกสาร markdown ให้วาด inline SVG ตาม `markdown-visuals` · ส่วนถ้ารูปต้องดูออกแบบมา ให้ไปที่ `diagram-figures`
+If you truly cannot get the layout you want and the figure stays in a markdown document, draw an inline SVG per `markdown-visuals`. If the figure must look designed, go to `diagram-figures`.
 
 ## 7 · Anti-patterns
 
-- **ไดอะแกรมสถาปัตยกรรม 40 กล่อง** — ไม่มีใครอ่าน แยกเป็น C4 หลายระดับ
-- **วาดจนเกินเพดานแล้วค่อยบอก** — ต้องแยกตั้งแต่นับได้ว่าเกิน
-- **ยัดตัวเลือกบรรทัดคำสั่งลงในกล่อง** — กล่องบาน ตัวอักษรเล็ก อ่านไม่ออกทั้งรูป
-- **เส้นไม่มีป้าย** — ผู้อ่านเดาเองว่าอะไรไหลผ่าน แล้วเดาผิด
-- **ผสมระดับรายละเอียด** — `Kubernetes` อยู่ข้าง ๆ `UserService.validate()`
-- **สีรุ้ง** — สีต้องมีความหมาย ไม่ใช่ใส่ให้ไม่น่าเบื่อ
-- **วาดทุกกรณี error ใน sequence เดียว** — วาดทางหลักก่อน แล้วแยกรูปกรณีพิเศษ
-- **ER ที่มีทุกตารางในระบบ** — แยกตามโดเมน
-- **ไดอะแกรมที่ไม่มีวันที่และเจ้าของ** — ผ่านไป 1 ปีไม่มีใครกล้าแก้
-- **ส่งไดอะแกรมโดยไม่เคยเรนเดอร์ดู**
-- **ธีมต่างกันทุกรูปในเอกสารเดียว**
+- **A 40-box architecture diagram** — nobody reads it. Split it into several C4 levels.
+- **Drawing past the cap and then saying so** — split as soon as you count that it is over.
+- **Stuffing command-line options into a box** — the box swells, the letters shrink, and the whole figure is unreadable.
+- **A line with no label** — the reader guesses what flows through, and guesses wrong.
+- **Mixing levels of detail** — `Kubernetes` sitting next to `UserService.validate()`.
+- **Rainbow colours** — colour must carry meaning. Do not add it to avoid boredom.
+- **Drawing every error case in one sequence** — draw the main path first, then split the special cases into separate figures.
+- **An ER diagram with every table in the system** — split by domain.
+- **A diagram with no date and no owner** — after a year nobody dares to edit it.
+- **Sending a diagram that was never rendered**
+- **A different theme in every figure of one document**
 
-## 8 · เชื่อมกับ skill อื่น
+## 8 · Link to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use with |
 |---|---|
-| เลือกรูปแบบภาพในเอกสาร markdown | `markdown-visuals` |
-| เอกสารรอบ ๆ ไดอะแกรม | `polished-document-style` |
-| ฝังในไฟล์ Word / PowerPoint | `branded-document-design` |
-| ไดอะแกรมในเอกสาร SRS | `srs-writing` |
-| เลือกสถาปัตยกรรมก่อนวาด | `architecture-patterns` |
-| รูปที่ต้องดูออกแบบมาหรือต้องเซ็นรับ | `diagram-figures` |
-| บันทึกเหตุผลที่เลือกแบบนี้ | `adr-writer` |
+| Choose the visual format in a markdown document | `markdown-visuals` |
+| The document around the diagram | `polished-document-style` |
+| Embed in a Word / PowerPoint file | `branded-document-design` |
+| A diagram in an SRS document | `srs-writing` |
+| Choose the architecture before drawing | `architecture-patterns` |
+| A figure that must look designed or needs sign-off | `diagram-figures` |
+| Record why this design was chosen | `adr-writer` |
 
-## ไม่ให้ดูเหมือน AI ทำ
+## Do not look AI-made
 
-ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ทุกงานต้องผ่านด่านตา 3.2 ด้วย (หน้าเว็บตอบเพิ่มข้อ 10–14) เพราะสคริปต์ 0 ข้อยังไม่ใช่ผ่าน · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
+Before sending, walk through item 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass eye check 3.2 (web pages also answer items 10–14), because a script result of 0 items is not yet a pass. The bans in this file are specific to this kind of work. The full list for every medium is there.
 
-## ตัวย่อ
+## Abbreviations
 
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
+Always spell an abbreviation out in full the first time, and put the abbreviation in brackets — for example Model Context Protocol (MCP).
+After that you can use the abbreviation. For details see the skill `spell-out-abbreviations`.
 
 
 ---

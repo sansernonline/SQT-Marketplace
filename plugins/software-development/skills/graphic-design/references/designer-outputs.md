@@ -1,13 +1,13 @@
-# แม่แบบงานของ graphic-designer — ไฟล์ทิศทาง · ข้อเสนอโลโก้ · ข้อกำหนดชิ้นงาน · รีวิว
+# graphic-designer templates — direction file · logo proposal · piece spec · review
 
-เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+Open this when you really have to write one of these documents. Mark anything you do not know with `(รอยืนยัน)` (awaiting confirmation).
 
 ## Standard Outputs
 
-### ไฟล์ทิศทาง
-คัดลอก `assets/brand-direction.md` ของ skill นี้ไปไว้ที่รากโปรเจกต์ แล้วกรอก งานทุกชิ้นหลังจากนั้นให้อ้างอิงไฟล์นี้
+### Direction file
+Copy this skill's `assets/brand-direction.md` to the project root and fill it in. Every piece after that refers to this file.
 
-### ข้อเสนอโลโก้
+### Logo proposal
 ```markdown
 ## แบบที่ 01 — [ชื่อ เช่น "ตัวอักษรล้วน เรขาคณิต"]
 
@@ -19,7 +19,7 @@
 **ทดสอบบริบท:** favicon ✓ · ปัก ✓ · ขาวดำ ✓ · กลับสี ✗ ช่องในตัว ก ตัน · ป้าย ✓ · โปรไฟล์ ✓
 ```
 
-### ข้อกำหนดชิ้นงาน
+### Piece spec
 ```markdown
 ## [ชื่อชิ้นงาน]
 
@@ -31,7 +31,7 @@
 **เก็บที่:** `assets/` (โลโก้ ไอคอน favicon) หรือ `assets/<ชื่องาน>/` (ชิ้นงานอื่น) — ต้นทาง `.svg` คู่กับไฟล์ export เสมอ
 ```
 
-### รีวิวงาน
-บอกเป็นข้อ ๆ ว่าอะไรผิด และ**ผิดเมื่อเทียบกับอะไร**: ทิศทางที่ตกลงไว้ · ตัวเลขมาตรฐาน · รายการสิ่งที่ไม่เอา
+### Design review
+List the faults one by one, and say **what each is wrong against**: the agreed direction · standard numbers · the list of things to avoid.
 
-ความเห็นส่วนตัวให้บอกว่าเป็นความเห็น
+If something is a personal opinion, say it is an opinion.

@@ -3,60 +3,60 @@ name: banner-design
 description: Use when making a banner, event cover or web hero
 ---
 
-# banner-design — แบนเนอร์ 3 แนว ขนาดจริง ตรวจแล้วก่อนส่ง
+# banner-design — 3 banner directions at real size, checked before delivery
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
 
-อยู่ใน plugin `graphic-design` · ถ้อยคำเขียนตาม `human-writing` · เจ้าของคือ agent `social-creator` · แนวคิดและไฟล์อ้างอิงจาก nextlevelbuilder/ui-ux-pro-max-skill skill `banner-design` (MIT · ดูหัวข้อที่มา)
+Part of the `graphic-design` plugin. Follow `human-writing` for wording. The owner is the agent `social-creator`. The ideas and reference file come from the skill `banner-design` of nextlevelbuilder/ui-ux-pro-max-skill (MIT · see the Sources section).
 
-> **กฎข้อเดียว:** ส่งแบนเนอร์ 3 แนวที่เรนเดอร์เป็น PNG ขนาดจริงแล้ววางเทียบกัน · แต่ละแนวมีต้นแบบจริงที่เปิดดูในรอบนี้ ไม่ใช่แนวที่คิดเอง
+> **One rule:** deliver 3 banner directions rendered as real-size PNGs and laid side by side. Each direction has a real reference opened in this round, not a direction you made up.
 
-## ใช้เมื่อ
+## Use when
 
-- ปกงานสัมมนา webinar อีเวนต์ · หัวเพจ Facebook LinkedIn YouTube · ภาพ hero หน้าเว็บ · แบนเนอร์โฆษณาบนเว็บ · ป้ายพิมพ์ขนาดใหญ่
+- Seminar, webinar or event covers · page headers for Facebook, LinkedIn, YouTube · web hero images · web ad banners · large printed signs
 
-ไม่ใช้เมื่อ:
+Do not use when:
 
-| สถานการณ์ | ใช้ |
+| Situation | Use |
 |---|---|
-| อยากรู้แค่ขนาดและพื้นที่ปลอดภัยของแพลตฟอร์ม | `social-formats` |
-| แคมเปญหลายชิ้นหลายแพลตฟอร์มจากแนวเดียว | `campaign-set` (เรียก skill นี้ทำชิ้นแบนเนอร์) |
-| ภาพปกคลิป YouTube | `youtube-thumbnail` |
-| ส่งไฟล์ให้โรงพิมพ์ | `print-ready-files` ต่อจากขั้น 5 |
+| You only want platform sizes and safe areas | `social-formats` |
+| A campaign of many pieces across platforms from one direction | `campaign-set` (it calls this skill for the banner piece) |
+| A YouTube video cover | `youtube-thumbnail` |
+| Sending files to a print shop | `print-ready-files`, after step 5 |
 
-## ขั้นตอน
+## Steps
 
-1. **เก็บโจทย์ครั้งเดียว** (ใช้ `AskUserQuestion` · ข้อไหนมีในบทสนทนาแล้วไม่ถาม): ใช้ที่ไหนและขนาด · หัวข้อ ข้อความรอง ปุ่มหรือสิ่งที่ให้ทำ · โลโก้ สี ฟอนต์ของแบรนด์ · วันที่ เวลา สถานที่ · ไม่รู้ข้อมูลจริง ใส่ `(รอยืนยัน)` ไม่แต่งเอง
-2. **หาต้นแบบจริง** ตาม `design-references` (plugin `superuser`): อ่านหัวข้อ "สไตล์ออกแบบที่ชอบ" ใน `~/.claude/superuser-style.md` ก่อน · ค้นอย่างน้อย 1 เว็บหมวด `theme` และ 1 เว็บหมวด `social` (Pinterest · Behance) ด้วยคำค้นแบบ `[จุดประสงค์] banner design [แนว]` · `creative banner layout [วงการ]` (ตัวอย่างคำค้นเพิ่มเติมท้าย [`references/uipro-banner-sizes-and-styles.md`](references/uipro-banner-sizes-and-styles.md)) · เปิดดูทีละหน้า ไม่ใช้สคริปต์ดึง · ได้ภาพ 3–5 ชิ้น
-3. **เลือก 3 แนวศิลป์** จาก 22 แนวในไฟล์อ้างอิง ให้ต่างกันจริง (เช่น เรียบมินิมอล · ตัวอักษรใหญ่เป็นพระเอก · วัตถุ 3 มิติ) · เขียนแนวละ 1 บรรทัดว่าทำไมเหมาะกับงานนี้ และอ้างต้นแบบจากข้อ 2
-4. **ทำเป็น HTML/CSS ขนาดจริง** 1 ไฟล์ต่อแนว · กรอบนอกสุดเป็น `<div class="stage">` กว้างสูงตามขนาดเป๊ะ · ของสำคัญอยู่กลาง 70–80 % ห่างขอบอย่างน้อย 50 px · ฟอนต์ไม่เกิน 2 ตระกูล ต้องมีภาษาไทยครบ (ดู `design-direction-lookup` domain `font`) · หัวข้อไม่ต่ำกว่า 32 px เนื้อไม่ต่ำกว่า 16 px · ปุ่มเดียว สูงอย่างน้อย 44 px · ตัวอักษรกับพื้น contrast อย่างน้อย 4.5:1 · ไอคอนชุดเดียว (`icon-design`) ใส่เป็น `<span class="ic" style="--i:url(icons/x.svg)">`
-   - ภาพประกอบเรียงตามนี้: ของที่ผู้ใช้ให้มา → ภาพที่ใบอนุญาตเปิด (หมวด `3d` · `illustration` ใน `design-references`) → เครื่องมือสร้างภาพที่ session มี (prompt ไม่มีตัวหนังสือในภาพ) → สร้างด้วย CSS และ SVG หลายชั้น (ไล่สี เงานุ่ม ขอบเรือง) · ห้ามวาดไอคอนหรือโลโก้เอง
-   - ข้อความทุกตัวอยู่ใน HTML ไม่อยู่ในภาพ แก้ทีหลังได้
-5. **เรนเดอร์และตรวจขนาด**
+1. **Collect the brief once** (use `AskUserQuestion` · do not ask what the conversation already answers): where it is used and the size · headline, sub-text, button or action · brand logo, colours, fonts · date, time, place · if you do not know the real data, put `(รอยืนยัน)` (awaiting confirmation) and do not invent it
+2. **Find real references** following `design-references` (plugin `superuser`): first read the "สไตล์ออกแบบที่ชอบ" (favourite design styles) section in `~/.claude/superuser-style.md` · search at least 1 site in the `theme` category and 1 in the `social` category (Pinterest · Behance) with queries like `[purpose] banner design [style]` · `creative banner layout [industry]` (more example queries at the end of [`references/uipro-banner-sizes-and-styles.md`](references/uipro-banner-sizes-and-styles.md)) · open each page by hand, no fetch script · collect 3–5 images
+3. **Pick 3 art directions** from the 22 in the reference file, and make them truly different (for example plain minimal · big type as the hero · 3D objects) · write 1 line per direction on why it fits this job, and cite the reference from step 2
+4. **Build real-size HTML/CSS**, 1 file per direction · the outermost frame is `<div class="stage">` with width and height exactly the size · key items sit in the centre 70–80 %, at least 50 px from the edge · at most 2 font families, and both must fully support Thai (see `design-direction-lookup` domain `font`) · headline at least 32 px, body at least 16 px · one button, at least 44 px tall · text against background contrast at least 4.5:1 · one icon set (`icon-design`) inserted as `<span class="ic" style="--i:url(icons/x.svg)">`
+   - Illustrations in this order: what the user supplied → images under an open licence (categories `3d` · `illustration` in `design-references`) → an image tool the session has (the prompt contains no text in the image) → build it with CSS and layered SVG (gradients, soft shadows, glowing edges) · never draw icons or logos yourself
+   - All text lives in the HTML, not in the image, so it can be edited later
+5. **Render and check the size**
    ```bash
    python scripts/render_banner.py <ไฟล์>.html --size 1200x628 --out <ไฟล์>.png --compare <ภาพต้นแบบ>.png
    ```
-   ได้ PNG ความละเอียด 2 เท่า · บอกฟอนต์ที่โหลดได้จริง (ฟอนต์ไทยไม่ขึ้น = ห้ามส่ง) · ขนาดไม่ตรง exit 1 · `--compare` ได้ภาพต้นแบบอยู่บน งานเราอยู่ล่าง · สคริปต์เขียน `<ไฟล์>.built.html` ไว้ข้างไฟล์ต้นทาง (ไอคอนถูกฝังในบรรทัด) ลบทิ้งได้
-6. **ตรวจไม่ให้ดูเหมือน AI ทำ** ตาม `no-ai-look`: รัน `slop_scan.py` กับไฟล์ HTML · สิ่งที่ตั้งใจลอกจากต้นแบบ (ลายเส้น · แสงหลังวัตถุ) เขียน `slop-ok` พร้อมเหตุผล · ส่งภาพเทียบให้ `design-critic` ตัวใหม่หาจุดที่แพ้ต้นแบบ 3 จุด พร้อมคะแนน 1–10 ของงานเราและต้นแบบ (ตอบไม่เกิน 10 บรรทัด) · แก้แล้วเรนเดอร์ซ้ำ
-7. **ส่ง 3 แนวพร้อมกัน** แต่ละแนวมี PNG · ภาพเทียบ · ต้นแบบที่อ้าง · คะแนนจากผู้ตรวจ · จุดที่ยังแพ้ต้นแบบ · ให้ผู้ใช้เลือก 1 แนวแล้วค่อยทำขนาดอื่น
+   You get a PNG at 2x resolution · it reports which fonts really loaded (Thai font not showing = do not send) · a size mismatch exits with 1 · `--compare` puts the reference on top and our work below · the script writes `<ไฟล์>.built.html` beside the source file (icons are inlined) and it can be deleted
+6. **Check it does not look AI-made** following `no-ai-look`: run `slop_scan.py` on the HTML file · for things you deliberately copied from the reference (line pattern · light behind the object) write `slop-ok` with the reason · send the comparison image to a fresh `design-critic` to find 3 points where we lose to the reference, with scores of 1–10 for our work and the reference (answer in at most 10 lines) · fix, then render again
+7. **Deliver the 3 directions together.** Each direction has a PNG · a comparison image · the cited reference · the reviewer's score · the points where it still loses to the reference · let the user pick 1 direction, then make the other sizes
 
-## กฎ
+## Rules
 
-- **ขนาดมาจากแหล่งทางการ** · ขนาดในไฟล์อ้างอิงเป็นของต้นทาง ณ วันที่คัดลอก ก่อนส่งงานจริงเทียบกับ `social-formats` และหน้าทางการของแพลตฟอร์ม · ขัดกัน → ใช้หน้าทางการ
-- ไฟล์อ้างอิงเขียนว่า Meta ลดการแสดงผลโฆษณาที่มีตัวหนังสือเกิน 20 % · ข้อนี้ (รอยืนยัน) กับหน้าทางการของ Meta ก่อนใช้เป็นเหตุผลกับลูกค้า · ตัวหนังสือน้อยยังอ่านง่ายกว่าอยู่ดี
-- ไม่ใส่โลโก้หรือภาพของแบรนด์อื่นที่ไม่ได้รับอนุญาต · โลโก้พันธมิตรต้องเป็นไฟล์จริงจากเจ้าของ
-- งานพิมพ์: 300 dpi · ตัดตก 3–5 mm · CMYK → ส่งต่อ `print-ready-files`
+- **Sizes come from official sources.** The sizes in the reference file are from the source as of the copy date. Before real delivery, compare with `social-formats` and the platform's official page. If they conflict, use the official page.
+- The reference file says Meta reduces delivery of ads with more than 20 % text. Check this `(รอยืนยัน)` against Meta's official page before using it as a reason with a client. Less text is still easier to read anyway.
+- Do not use logos or images of other brands without permission. A partner logo must be a real file from its owner.
+- Print work: 300 dpi · 3–5 mm bleed · CMYK → hand over to `print-ready-files`
 
-## ตรวจก่อนส่ง
+## Check before sending
 
-- [ ] 3 แนว แต่ละแนวมีต้นแบบจริงจากรอบนี้ (มีลิงก์)
-- [ ] `render_banner.py` ทุกแนว: ขนาดตรง · ฟอนต์ไทยโหลดจริง
-- [ ] เปิดดู PNG ทุกภาพด้วยตา · ของสำคัญอยู่ในพื้นที่ปลอดภัย · ย่อเหลือครึ่งยังอ่านหัวข้อออก
-- [ ] `slop_scan.py` P0 0 · P1 0 · P2 ที่เหลือมีเหตุผล `slop-ok`
-- [ ] ผู้ตรวจตัวใหม่ให้คะแนนแล้ว และบอกผู้ใช้ตรง ๆ ว่ายังแพ้ต้นแบบตรงไหน
-- [ ] ข้อมูลที่ไม่รู้เป็น `(รอยืนยัน)` ไม่แต่งเอง
+- [ ] Each of the 3 directions has a real reference from this round (with a link)
+- [ ] `render_banner.py` on every direction: size matches · Thai font really loaded
+- [ ] Open every PNG by eye · key items are in the safe area · shrunk to half, the headline is still readable
+- [ ] `slop_scan.py` P0 0 · P1 0 · remaining P2 have a `slop-ok` reason
+- [ ] The fresh reviewer has scored it, and you told the user plainly where it still loses to the reference
+- [ ] Unknown data is marked `(รอยืนยัน)` and not invented
 
-## ที่มา
+## Sources
 
-- แนวคิดขั้นตอน (โจทย์ → ต้นแบบ → 3 แนว → HTML → ส่งออก → เทียบ) และไฟล์ [`references/uipro-banner-sizes-and-styles.md`](references/uipro-banner-sizes-and-styles.md) (คัดลอกไม่แก้) จาก [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) commit `28b3b8d` · MIT · Copyright (c) 2024 Next Level Builder · ข้อความใบอนุญาตเต็มอยู่ใน [`references/LICENSE-uipro`](references/LICENSE-uipro) · ดู 2026-10-29
-- ส่วนที่เพิ่มเอง: ต้นแบบจากร้านธีมและ Pinterest ตามคำสั่งเจ้าของ 2026-10-29 · ภาษาไทยและฟอนต์ไทย · สคริปต์ `render_banner.py` · ขั้นตรวจ `no-ai-look` และผู้ตรวจตัวใหม่ (จากแบนเนอร์ทดลอง 2026-10-28 ที่ผู้ตรวจให้ 6/10 ต้นแบบ 8.5/10)
+- The idea of the steps (brief → reference → 3 directions → HTML → export → compare) and the file [`references/uipro-banner-sizes-and-styles.md`](references/uipro-banner-sizes-and-styles.md) (copied, unedited) come from [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) commit `28b3b8d` · MIT · Copyright (c) 2024 Next Level Builder · the full licence text is in [`references/LICENSE-uipro`](references/LICENSE-uipro) · viewed 2026-10-29
+- Added by us: references from theme shops and Pinterest on the owner's order of 2026-10-29 · Thai language and Thai fonts · the script `render_banner.py` · the `no-ai-look` check and the fresh reviewer (from the trial banner of 2026-10-28, where the reviewer gave ours 6/10 and the reference 8.5/10)

@@ -83,13 +83,13 @@ What changed: ทำการตรวจสอบ → ตรวจสอบ · 
 
 1. Ask: sender, recipient position, purpose (inform / request / approve), deadline, enclosures, any letter being referred to.
 2. Choose the type (section 1) and salutation/closing pair (section 2).
-3. Fill the template from references; write the body ด้วย → facts → request with a date. ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ ราชการ (and the word table in section 4).
+3. Fill the template from references; write the body ด้วย → facts → request with a date. For the Thai wording → `human-writing` `references/thai-grammar.md`, section 4, the official (ราชการ) register (and the word table in section 4 above).
 4. Check: salutation and closing match; ที่ and date present; enclosures numbered and actually attached; signer's full name in brackets and position under it.
 5. Output .docx on letterhead (styling → `branded-document-design`, plugin `software-development`).
 
 ## Worked example (company to Revenue Department)
 
-เรียน อธิบดีกรมสรรพากร · เรื่อง ขอขยายระยะเวลายื่นเอกสารประกอบการตรวจสอบ · body: ตามที่ … ในการนี้ บริษัทฯ ขอขยายระยะเวลาถึงวันที่ 15 พฤศจิกายน 2569 · จึงเรียนมาเพื่อโปรดพิจารณา · ขอแสดงความนับถือ.
+Salutation: เรียน อธิบดีกรมสรรพากร (Director-General of the Revenue Department) · subject: เรื่อง ขอขยายระยะเวลายื่นเอกสารประกอบการตรวจสอบ (request to extend the deadline for audit documents) · body: ตามที่ … ในการนี้ บริษัทฯ ขอขยายระยะเวลาถึงวันที่ 15 พฤศจิกายน 2569 · closing sentence: จึงเรียนมาเพื่อโปรดพิจารณา · closing: ขอแสดงความนับถือ.
 
 ## Related
 
@@ -106,7 +106,7 @@ Contents
 3. [หนังสือประทับตรา](#3-หนังสือประทับตรา)
 4. [Final checklist](#4-final-checklist)
 
-Layout per ระเบียบสำนักนายกรัฐมนตรีว่าด้วยงานสารบรรณ พ.ศ. 2526 และที่แก้ไขเพิ่มเติม (ฉบับที่ 4) พ.ศ. 2564. Placeholders in {braces}.
+Layout per ระเบียบสำนักนายกรัฐมนตรีว่าด้วยงานสารบรรณ พ.ศ. 2526 และที่แก้ไขเพิ่มเติม (ฉบับที่ 4) พ.ศ. 2564 (Prime Minister's Office Regulation on Correspondence Work, B.E. 2526 [1983], as amended, 4th amendment B.E. 2564 [2021]). Placeholders in {braces}. The templates below are Thai form wording and stay in Thai: copy them as written.
 
 ## 1. หนังสือภายนอก
 

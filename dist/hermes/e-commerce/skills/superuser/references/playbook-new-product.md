@@ -1,17 +1,17 @@
-# playbook · new-product — ลงสินค้าใหม่ครบชุด
+# playbook · new-product — list a new product with the full set
 
-ใช้เมื่อ: มีสินค้าใหม่จะลงขาย 1 หรือหลายแพลตฟอร์ม
-skill หลัก: `product-listing` · `marketplace-fees-pricing` · `multi-shop-stock` · `shipping-compare`
+Use when: a new product will be listed on 1 or more platforms
+Main skills: `product-listing` · `marketplace-fees-pricing` · `multi-shop-stock` · `shipping-compare`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน · Steps (copy into the todo as written)
 
-1. เก็บข้อมูล — สินค้า ต้นทุนต่อชิ้น แพลตฟอร์ม ประเภทร้าน หมวด น้ำหนักและขนาดพัสดุ ข้อไหนไม่มีให้ใส่ `(รอยืนยัน)` · ใคร: หัวหน้าทีม
-2. คิดค่าส่งจริงจากขนาดพัสดุตาม `shipping-compare` (รวมน้ำหนักตามปริมาตร) · ใคร: `shop-manager` ตัวใหม่
-3. ตั้งราคาต่อแพลตฟอร์มด้วยสูตรของ `marketplace-fees-pricing` เป็นตาราง แล้วบอกให้ตรวจอัตรากับ Seller Centre · ใคร: `shop-manager` ตัวใหม่
-4. เขียนชื่อสินค้า คำค้น คำบรรยาย และเช็กลิสต์รูป ต่อแพลตฟอร์มตาม `product-listing` · ใคร: `shop-manager` ตัวใหม่
-5. ตั้ง SKU และใส่ในไฟล์สต็อกหลักตาม `multi-shop-stock` พร้อมจุดสั่งซื้อซ้ำ · ใคร: `shop-manager` ตัวใหม่
-6. ตรวจคำโฆษณาต้องห้าม SKU และขนาดรูปตามแพลตฟอร์ม (`social-formats` ใน graphic-design ถ้าติดตั้ง) · ใคร: `reviewer` ตัวใหม่
+1. Collect the data — product, cost per unit, platforms, shop type, category, parcel weight and size. Mark any missing item `(รอยืนยัน)` (awaiting confirmation) · ใคร: หัวหน้าทีม
+2. Work out the real shipping cost from the parcel size per `shipping-compare` (including volumetric weight) · ใคร: `shop-manager` ตัวใหม่
+3. Set the price per platform with the formula in `marketplace-fees-pricing`, as a table, and tell the user to check the rates against Seller Centre · ใคร: `shop-manager` ตัวใหม่
+4. Write the product name, search keywords, description, and image checklist per platform, following `product-listing` · ใคร: `shop-manager` ตัวใหม่
+5. Set the SKU and enter it in the master stock file per `multi-shop-stock`, with a reorder point · ใคร: `shop-manager` ตัวใหม่
+6. Check (ตรวจ) banned advertising words, the SKU, and image sizes for each platform (`social-formats` in graphic-design, ถ้าติดตั้ง) · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-ตารางราคาที่คำนวณซ้ำแล้ว · listing ทุกแพลตฟอร์มผ่านการตรวจคำต้องห้าม · SKU อยู่ในไฟล์สต็อก · การลงขายจริงอยู่ใน "รออนุมัติ"
+The price table has been recalculated · every platform's listing has passed the banned-word check · the SKU is in the stock file · the actual listing is under "รออนุมัติ" (awaiting approval).

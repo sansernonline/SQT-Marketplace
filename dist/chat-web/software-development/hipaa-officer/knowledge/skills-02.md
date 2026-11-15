@@ -57,230 +57,230 @@ Source of the claims-table idea: skill `verification-before-completion` in obra/
 
 Use when software stores personal data in Thailand
 
-# PDPA — ข้อมูลส่วนบุคคล
+# PDPA — personal data
 
-> **กฎข้อเดียว:** ข้อมูลที่ไม่ได้เก็บ คือข้อมูลที่ไม่รั่ว ไม่ต้องดูแล และไม่ต้องลบ
-> คำถามแรกเสมอคือ "จำเป็นต้องเก็บไหม" ไม่ใช่ "เก็บยังไงให้ปลอดภัย"
+> **The one rule:** data you never collect cannot leak, needs no care and never has to be deleted.
+> The first question is always "do we need to collect it?", not "how do we keep it safe?"
 
-> ระวัง: นี่คือแนวทางสำหรับคนทำระบบ **ไม่ใช่คำแนะนำทางกฎหมาย**
-> เรื่องที่มีผลทางกฎหมายต้องให้ที่ปรึกษากฎหมายตัดสิน
+> Caution: this is guidance for people who build systems. **It is not legal advice.**
+> Anything with legal effect must be decided by a legal adviser.
 
-## ทางลัด — แอปที่ข้อมูลอยู่ในเครื่องผู้ใช้เท่านั้น
+## Shortcut — apps whose data stays on the user's device only
 
-ถ้าแอปไม่มีเซิร์ฟเวอร์ ไม่มีบัญชี และไม่ส่งข้อมูลออก ให้ข้ามหัวข้อเรื่องผู้ประมวลผลและฐานข้อมูลได้ แล้วตรวจแค่ 3 เรื่องนี้
+If the app has no server, no accounts and sends no data out, skip the sections on processors and databases. Then check only these 3 things.
 
-| เรื่อง | ทำไมยังเกี่ยว | ทำอะไร |
+| Item | Why it still matters | What to do |
 |---|---|---|
-| Android Auto Backup | ระบบสำรองข้อมูลแอปขึ้น Google Drive เองโดยค่าเริ่มต้น | ตั้ง `android:allowBackup` และ `android:dataExtractionRules` ให้ตรงกับที่ตั้งใจ แล้วลงเหตุผลไว้ใน `decision-log` |
-| ส่งออก · share sheet (หน้าต่างแชร์ของระบบ) | ข้อมูลออกจากเครื่องทางนี้ทางเดียว | ส่งเฉพาะที่ผู้ใช้เลือก และไม่แนบตำแหน่งหรือ metadata ของภาพโดยไม่บอก |
-| ข้อมูลที่ร้านค้าบังคับให้แจ้ง | Google Play บังคับกรอกแบบฟอร์ม Data safety ทุกแอป | กรอกตามจริง (ไม่เก็บก็ตอบว่าไม่เก็บ) ส่วนเรื่องที่ว่าขอสิทธิ์กล้องแล้วต้องมีนโยบายความเป็นส่วนตัวไหม `(รอยืนยัน)` ให้เตรียมหน้าสั้น ๆ ไว้ก่อน |
+| Android Auto Backup | By default the system backs up app data to Google Drive on its own | Set `android:allowBackup` and `android:dataExtractionRules` to match your intent, and record the reason in `decision-log` |
+| Export · share sheet (the system's share window) | This is the only way data leaves the device | Send only what the user selected, and do not attach location or image metadata without telling them |
+| Data the app store forces you to declare | Google Play requires the Data safety form for every app | Fill it in truthfully (if you collect nothing, say so). Whether requesting camera permission requires a privacy policy is `(รอยืนยัน)` (awaiting confirmation), so prepare a short page first |
 
-ถ้าภายหลังเพิ่ม analytics · crash report หรือบัญชีผู้ใช้ แอปนี้ก็ไม่ใช่แอปในเครื่องอย่างเดียวแล้ว ให้กลับไปใช้ทั้ง skill
+If you later add analytics · crash reports or user accounts, the app is no longer device-only. Go back and apply the whole skill.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ระบบเก็บชื่อ เบอร์โทร อีเมล ที่อยู่ เลขบัตร รูป หรือข้อมูลอื่นที่ระบุตัวบุคคลได้
-- ลูกค้าหรือฝ่ายกฎหมายถามเรื่องความสอดคล้องกับ PDPA
-- ต้องทำหน้าขอความยินยอม หรือหน้าให้ผู้ใช้ขอลบข้อมูล
-- จะส่งข้อมูลให้ผู้ให้บริการภายนอก
+- The system stores names, phone numbers, emails, addresses, ID card numbers, photos or other data that identifies a person
+- A customer or the legal team asks about PDPA compliance
+- You must build a consent page, or a page where users request deletion of their data
+- You will send data to an outside service provider
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-| งาน | ใช้ตัวนี้แทน |
+| Task | Use this instead |
 |---|---|
-| ร่องรอยว่าใครทำอะไรกับข้อมูล | `audit-trail` |
-| ตารางและการเข้ารหัสระดับคอลัมน์ | `database-design` |
-| การยืนยันตัวตนและสิทธิ์ | `auth-implementation-patterns` |
-| ปิดบังข้อมูลใน log | `logging-standards` |
-| ที่เก็บกุญแจ | `config-and-secrets` |
-| แบบฟอร์มยินยอม ประกาศความเป็นส่วนตัว และเอกสาร PDPA ของบริษัท (ไม่ใช่ระบบซอฟต์แวร์) | (ถ้าติดตั้ง plugin `e-commerce`) `e-commerce:pdpa-workflow` ไม่มีก็ใช้ข้อ 3 ของ skill นี้เป็นโครง |
+| A trail of who did what to the data | `audit-trail` |
+| Tables and column-level encryption | `database-design` |
+| Authentication and permissions | `auth-implementation-patterns` |
+| Masking data in logs | `logging-standards` |
+| Where to keep keys | `config-and-secrets` |
+| Consent forms, privacy notices and a company's PDPA documents (not a software system) | (if plugin `e-commerce` is installed) `e-commerce:pdpa-workflow`; if it is not, use item 3 of this skill as the outline |
 
 ---
 
-## 1 · ทำรายการก่อน
+## 1 · Make the inventory first
 
-**ตอบคำถาม "ข้อมูลของฉันอยู่ที่ไหนบ้าง" ไม่ได้ ถ้าไม่มีรายการนี้**
+**Without this inventory you cannot answer "where is my data?"**
 
-| ข้อมูล | เก็บที่ไหน | เก็บทำไม | ฐานทางกฎหมาย | เก็บนานเท่าไหร่ | ใครเห็นได้ | ส่งให้ใครบ้าง |
+| Data | Stored where | Why collected | Legal basis | Kept how long | Who can see it | Sent to whom |
 |---|---|---|---|---|---|---|
-| ชื่อ-นามสกุล | `users.name` | ระบุตัวลูกค้า | สัญญา | 5 ปีหลังปิดบัญชี | ฝ่ายขาย · ผู้ดูแล | — |
-| เบอร์โทร | `users.phone` | แจ้งสถานะจัดส่ง | สัญญา | เหมือนแถวบน | เหมือนแถวบน | ผู้ให้บริการ SMS |
-| เลขบัตรประชาชน | `kyc.id_number` | ยืนยันตัวตนตามกฎหมาย | หน้าที่ตามกฎหมาย | 10 ปี | ฝ่ายปฏิบัติตามกฎเกณฑ์ | — |
+| Full name | `users.name` | Identify the customer | Contract | 5 years after the account closes | Sales · admins | — |
+| Phone number | `users.phone` | Send delivery status | Contract | Same as the row above | Same as the row above | SMS provider |
+| National ID number | `kyc.id_number` | Legally required identity check | Legal obligation | 10 years | Compliance team | — |
 
-**ทำรายการนี้ให้ครบทุกที่จริง ๆ** — ฐานข้อมูลหลัก · ที่สำรอง · log · ระบบวิเคราะห์ ·
-ที่เก็บไฟล์ · สเปรดชีตที่ทีมทำเอง · แอปมือถือ: Android Auto Backup และไฟล์ที่ส่งออกผ่าน share sheet
+**List every place that really holds data**: main database · backups · logs · analytics systems ·
+file storage · spreadsheets the team keeps by hand · mobile apps (Android Auto Backup and files exported through the share sheet)
 
 ---
 
-## 2 · ฐานทางกฎหมาย — ไม่ใช่ทุกอย่างต้องขอความยินยอม
+## 2 · Legal basis — not everything needs consent
 
-| ฐาน | ใช้เมื่อ | ตัวอย่าง |
+| Basis | Use when | Example |
 |---|---|---|
-| **สัญญา** | จำเป็นเพื่อให้บริการตามที่ตกลง | ที่อยู่สำหรับจัดส่ง |
-| **หน้าที่ตามกฎหมาย** | กฎหมายบังคับให้เก็บ | เอกสารภาษี |
-| **ประโยชน์อันชอบธรรม** | จำเป็นและไม่กระทบสิทธิเกินควร | log ความปลอดภัย · ป้องกันการฉ้อโกง |
-| **ความยินยอม** | ทำไม่ได้ด้วยฐานอื่น | การตลาด · cookie ติดตามพฤติกรรม |
+| **Contract** | Needed to provide the agreed service | Delivery address |
+| **Legal obligation** | The law requires you to keep it | Tax documents |
+| **Legitimate interest** | Necessary, and does not harm rights excessively | Security logs · fraud prevention |
+| **Consent** | No other basis works | Marketing · behavior-tracking cookies |
 
-> **ความยินยอมคือฐานที่อ่อนที่สุด เพราะถอนเมื่อไหร่ก็ได้**
-> ถ้าขอความยินยอมสำหรับที่อยู่จัดส่ง แล้วเขาถอน ระบบจะส่งของไม่ได้
-> **ที่อยู่จัดส่งใช้ฐานสัญญา** ไม่ใช่ความยินยอม
+> **Consent is the weakest basis because it can be withdrawn at any time.**
+> If you ask consent for the delivery address and the person withdraws, the system cannot ship.
+> **The delivery address uses the contract basis**, not consent.
 >
-> การกดปุ่ม "ยอมรับทั้งหมด" ที่ทำให้ใช้งานต่อไม่ได้ถ้าไม่กด ไม่ถือว่าเป็นความยินยอมโดยอิสระ
+> A button labeled "accept all" that blocks use of the service unless pressed does not count as freely given consent.
 
 ---
 
-## 3 · ความยินยอมที่ใช้ได้จริง
+## 3 · Consent that works in practice
 
-| ต้องมี | รายละเอียด |
+| Required | Details |
 |---|---|
-| **แยกเป็นเรื่อง ๆ** | การตลาดทางอีเมล · การติดตามพฤติกรรม · การส่งต่อให้พันธมิตร — แยกช่องกัน |
-| ไม่ติ๊กมาให้ล่วงหน้า | ต้องเป็นการกระทำของผู้ใช้เอง |
-| ข้อความที่คนทั่วไปอ่านเข้าใจ | ไม่ใช่ย่อหน้ากฎหมาย 500 คำ |
-| **บันทึกไว้** | ใคร · เรื่องอะไร · เมื่อไหร่ · ข้อความเวอร์ชันไหน · จากช่องทางไหน |
-| ถอนได้ง่ายเท่าที่ให้ | ถ้าให้ได้ด้วย 1 คลิก ก็ต้องถอนได้ด้วย 1 คลิก |
-| ถอนแล้วมีผลจริง | **ต้องมีโค้ดที่หยุดใช้ข้อมูลนั้นจริง** ไม่ใช่แค่เก็บค่าไว้ |
+| **Separate by purpose** | Email marketing · behavior tracking · sharing with partners — separate checkboxes |
+| Not pre-ticked | It must be the user's own action |
+| Text an ordinary person can understand | Not a 500-word legal paragraph |
+| **Recorded** | Who · for what · when · which text version · through which channel |
+| Withdrawing is as easy as giving | If it takes 1 click to give, it must take 1 click to withdraw |
+| Withdrawal takes real effect | **Code must actually stop using that data**, not just store the flag |
 
-ตารางที่ต้องมี: `consent` — `user_id` · `purpose` · `granted` · `granted_at` · `withdrawn_at` ·
+Required table: `consent` — `user_id` · `purpose` · `granted` · `granted_at` · `withdrawn_at` ·
 `policy_version` · `source` · `ip`
-**เก็บเป็นประวัติ ไม่ใช่เขียนทับ** — ต้องพิสูจน์ย้อนหลังได้ว่าตอนนั้นเขายินยอมอะไรไว้
+**Keep it as history, never overwrite.** You must be able to prove later what the person agreed to at that time.
 
 ---
 
-## 4 · สิทธิของเจ้าของข้อมูล
+## 4 · Data subject rights
 
-ระบบต้อง**ทำได้จริง** ไม่ใช่รอทำมือทุกครั้ง โดยทั่วไปต้องตอบสนองภายใน 30 วัน
+The system must be **able to do these for real**, not wait for manual work each time. In general you must respond within 30 days.
 
-| สิทธิ | ระบบต้องทำอะไรได้ |
+| Right | What the system must be able to do |
 |---|---|
-| ขอดู | ออกสำเนาข้อมูลทั้งหมดของคนนั้น |
-| ขอแก้ | แก้ข้อมูลที่ไม่ถูกต้อง แล้ว**ส่งต่อการแก้ไปยังที่ที่เคยส่งข้อมูลไป** |
-| **ขอลบ** | ลบจริงจากทุกที่ที่ใช้งานอยู่ รวม log · ส่วนไฟล์สำรองให้ตัดออกจากการใช้งาน (ถ้ากู้คืนต้องลบซ้ำ) แล้วปล่อยให้หมดอายุตามรอบหมุนเวียน (ดูข้อ 6) พร้อมบอกเจ้าของข้อมูลว่าข้อมูลในไฟล์สำรองจะหายภายในวันที่เท่าไร |
-| ขอให้ระงับใช้ | หยุดใช้ชั่วคราวโดยไม่ลบ |
-| ขอย้ายข้อมูล | ส่งออกในรูปแบบที่เครื่องอ่านได้ |
-| คัดค้าน | หยุดการตลาดหรือการประมวลผลที่คัดค้าน |
+| Access | Produce a copy of all that person's data |
+| Rectification | Correct inaccurate data, then **pass the correction on to every place the data was sent** |
+| **Erasure** | Delete for real from every place in active use, including logs. For backups, take them out of use (if one is restored, delete again) and let them expire through the rotation cycle (see item 6). Tell the data subject by which date the data in backups will be gone. |
+| Restriction | Stop using the data temporarily without deleting it |
+| Portability | Export in a machine-readable format |
+| Objection | Stop the marketing or processing the person objects to |
 
-> **"ขอลบ" คือข้อที่ทำยากที่สุด** — ข้อมูลอยู่ในฐานข้อมูล ที่สำรอง log ระบบวิเคราะห์
-> และผู้ให้บริการภายนอก **ออกแบบให้ลบได้ตั้งแต่วันแรก** ไม่ใช่มาไล่หาทีหลัง
+> **"Erasure" is the hardest one.** Data sits in the database, backups, logs, analytics systems
+> and outside providers. **Design for deletion from day one**, not a hunt afterward.
 >
-> soft delete อย่างเดียว**ไม่นับว่าลบ** ส่วนข้อมูลที่กฎหมายบังคับให้เก็บต่อ (เช่นเอกสารภาษี)
-> เก็บได้ แต่ต้องบอกเจ้าของข้อมูลว่าเก็บอะไรไว้เพราะอะไร
+> Soft delete alone **does not count as deletion**. Data the law requires you to keep (such as tax documents)
+> may be kept, but you must tell the data subject what you keep and why.
 
 ---
 
-## 5 · เก็บเท่าที่จำเป็น
+## 5 · Collect only what you need
 
-| หลัก | ตัวอย่าง |
+| Principle | Example |
 |---|---|
-| **ไม่ถามสิ่งที่ไม่ได้ใช้** | ขายของออนไลน์ ไม่ต้องขอเลขบัตรประชาชน |
-| เก็บช่วงแทนค่าจริง | เก็บช่วงอายุ ไม่ใช่วันเกิด ถ้าใช้แค่แบ่งกลุ่ม |
-| **แฮชหรือทำให้ไม่ระบุตัวตน** สำหรับงานวิเคราะห์ | ระบบสถิติไม่ต้องรู้ว่าใครเป็นใคร |
-| เข้ารหัสระดับคอลัมน์ | เลขบัตร ข้อมูลสุขภาพ |
-| ปิดบังตอนแสดง | `x-xxxx-xxxx-12-3` |
-| **แยกข้อมูลอ่อนไหวออกจากตารางหลัก** | จำกัดสิทธิ์และตรวจสอบง่ายกว่า |
+| **Do not ask for what you do not use** | An online shop does not need the national ID number |
+| Store a range instead of the exact value | Store an age range, not the birth date, if you only use it to group people |
+| **Hash or anonymize** for analytics | A statistics system does not need to know who is who |
+| Column-level encryption | ID numbers, health data |
+| Mask on display | `x-xxxx-xxxx-12-3` |
+| **Keep sensitive data out of the main table** | Easier to restrict and audit |
 
-**ข้อมูลอ่อนไหวเป็นชั้นที่เข้มกว่า** (มาตรา 26) — เช่น เชื้อชาติ เผ่าพันธุ์ ความคิดเห็นทางการเมือง ความเชื่อลัทธิ ศาสนาหรือปรัชญา พฤติกรรมทางเพศ
-ประวัติอาชญากรรม **ข้อมูลสุขภาพ** ความพิการ ข้อมูลสหภาพแรงงาน ข้อมูลพันธุกรรม ข้อมูลชีวภาพ และข้อมูลอื่นที่กระทบเจ้าของข้อมูลในทำนองเดียวกัน
-จึงเก็บได้เมื่อจำเป็นจริงและต้องมีมาตรการเข้มกว่าปกติ (พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 มาตรา 26 ตรวจ 22 ต.ค. 2569)
+**Sensitive data has a stricter tier** (section 26), for example race, ethnic origin, political opinion, creed, religion or philosophy, sexual behavior,
+criminal record, **health data**, disability, trade union data, genetic data, biometric data, and other data that affects the subject in a similar way.
+It may be collected only when truly necessary, and needs stricter measures than usual (พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (Personal Data Protection Act B.E. 2562, 2019) section 26, checked 22 Oct 2026 (B.E. 2569))
 
-**ห้ามใช้ข้อมูลจริงบนเครื่องพัฒนาหรือ staging** — ต้องปิดบังก่อนเสมอ (ดู `cicd-and-release`)
-
----
-
-## 6 · อายุการเก็บ
-
-- กำหนด**ต่อประเภทข้อมูล** ไม่ใช่ทั้งระบบเป็นค่าเดียว
-- **มีงานลบจริงที่รันตามรอบ** — นโยบายที่ไม่มีงานรันคือนโยบายที่ไม่มีอยู่จริง
-- log ที่มีข้อมูลบุคคลก็มีอายุเช่นกัน (ดู `logging-standards`)
-- ไฟล์สำรองข้อมูลต้องมีรอบหมุนเวียนที่ทำให้ข้อมูลเก่าหายไปเองในที่สุด
-- ก่อนลบจริงครั้งแรก ให้แสดงรายการที่จะถูกลบและให้คนอนุมัติ
+**Never use real data on development machines or staging.** Always mask it first (see `cicd-and-release`).
 
 ---
 
-## 7 · ผู้ให้บริการภายนอกและการส่งข้อมูลออกนอกประเทศ
+## 6 · Retention
 
-| เรื่อง | ต้องทำ |
+- Set it **per data type**, not one value for the whole system
+- **Have a real deletion job that runs on a schedule.** A policy with no job running does not exist.
+- Logs that contain personal data also have a lifetime (see `logging-standards`)
+- Data backups need a rotation cycle that makes old data disappear on its own in the end
+- Before the first real deletion, show the list of what will be deleted and have a person approve it
+
+---
+
+## 7 · Outside providers and sending data abroad
+
+| Topic | What to do |
 |---|---|
-| รายชื่อผู้ประมวลผล | ทำรายการว่าส่งข้อมูลอะไรให้ใคร — คลาวด์ · SMS · อีเมล · วิเคราะห์ · แชต |
-| สัญญา | มีข้อตกลงการประมวลผลข้อมูลกับทุกราย |
-| ส่งออกนอกประเทศ | ตรวจว่าประเทศปลายทางมีมาตรฐานเพียงพอ หรือมีข้อสัญญามาตรฐานรองรับ |
-| ตัววัดสถิติและโฆษณา | นับเป็นการส่งข้อมูลออกไป — **ต้องมีฐานทางกฎหมายรองรับ** |
-| ยกเลิกใช้บริการ | ต้องได้ข้อมูลคืนและให้เขาลบจริง |
+| List of processors | List what data goes to whom — cloud · SMS · email · analytics · chat |
+| Contract | Have a data processing agreement with every one |
+| Sending abroad | Check that the destination country has adequate standards, or that standard contract clauses cover it |
+| Analytics and ad trackers | Count as sending data out — **they need a legal basis** |
+| Ending a service | You must get the data back and have them delete it for real |
 
-> **จุดที่คนลืมบ่อยที่สุด** — ปลั๊กอินวัดสถิติที่ใส่ไว้ตั้งแต่วันแรก ส่งข้อมูลพฤติกรรม
-> ผู้ใช้ออกไปต่างประเทศทุกวัน โดยไม่เคยมีใครใส่ไว้ในรายการ
+> **The most commonly forgotten spot:** an analytics plugin added on day one sends users' behavior
+> data abroad every day, and nobody ever put it on the list.
 
 ---
 
-## 8 · เมื่อข้อมูลรั่ว — 72 ชั่วโมงแรก
+## 8 · When data leaks — the first 72 hours
 
-| ลำดับ | ทำอะไร |
+| Order | What to do |
 |---|---|
-| 1 | **หยุดการรั่วก่อน** — เพิกถอนกุญแจ ปิดช่องทาง |
-| 2 | ประเมินขอบเขต — ข้อมูลอะไร กี่คน อ่อนไหวไหม |
-| 3 | เก็บหลักฐาน — log และสถานะระบบ **ก่อน**ที่จะแก้ทับ |
-| 4 | แจ้งผู้รับผิดชอบภายในและที่ปรึกษากฎหมายทันที |
-| 5 | **แจ้งสำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคลภายใน 72 ชั่วโมง** เมื่อเข้าเงื่อนไข |
-| 6 | แจ้งเจ้าของข้อมูล เมื่อมีความเสี่ยงสูงต่อเขา |
-| 7 | บันทึกเหตุการณ์ด้วย `postmortem-template` |
+| 1 | **Stop the leak first** — revoke keys, close the channel |
+| 2 | Assess the scope — what data, how many people, is it sensitive |
+| 3 | Preserve evidence — logs and system state **before** you overwrite anything |
+| 4 | Notify the internal owner and the legal adviser at once |
+| 5 | **Notify the สำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล (Personal Data Protection Committee Office) within 72 hours** when the conditions are met |
+| 6 | Notify the data subjects when the risk to them is high |
+| 7 | Record the incident with `postmortem-template` |
 
-**เตรียมไว้ล่วงหน้า ไม่ใช่ตอนเกิดเรื่อง** — ใครเป็นคนตัดสินใจแจ้ง · เบอร์ที่ปรึกษากฎหมาย ·
-แม่แบบข้อความแจ้ง · วิธีดึงรายชื่อผู้ได้รับผลกระทบ
+**Prepare in advance, not when it happens** — who decides to notify · the legal adviser's phone number ·
+the notification message template · how to pull the list of affected people
 
 ---
 
 ## 9 · Anti-patterns
 
-- **ขอความยินยอมสำหรับทุกอย่าง** — พอเขาถอน ระบบทำงานต่อไม่ได้
-- **ช่องติ๊กที่ติ๊กมาให้แล้ว** — ไม่ถือเป็นความยินยอม
-- **เก็บความยินยอมเป็นค่าเดียว `accepted_terms = true`** — พิสูจน์ย้อนหลังไม่ได้ว่ายินยอมอะไร
-- **soft delete แล้วบอกว่าลบแล้ว**
-- **นโยบายอายุการเก็บที่ไม่มีงานลบจริง**
-- **ใช้ข้อมูลจริงบน staging** — และคัดลอกลงเครื่อง developer
-- **เก็บเลขบัตรประชาชนเพราะ "เผื่อใช้"**
-- **ข้อมูลส่วนบุคคลใน log และในรายงาน crash**
-- **ไม่มีรายการผู้ให้บริการภายนอก** — ตอบไม่ได้ว่าข้อมูลไปที่ไหนบ้าง
-- **ส่งออก Excel ที่มีข้อมูลเต็ม** ให้คนที่ต้องการแค่ยอดรวม
-- **นโยบายความเป็นส่วนตัวที่ไม่ตรงกับสิ่งที่ระบบทำจริง**
+- **Asking consent for everything** — when they withdraw, the system cannot keep working
+- **Pre-ticked checkboxes** — they do not count as consent
+- **Storing consent as one value `accepted_terms = true`** — you cannot prove later what was agreed
+- **Soft delete, then saying it is deleted**
+- **A retention policy with no real deletion job**
+- **Real data on staging** — and copied onto developer machines
+- **Collecting the national ID number "just in case"**
+- **Personal data in logs and crash reports**
+- **No list of outside providers** — you cannot say where the data goes
+- **Exporting a full-data Excel file** for someone who needs only the totals
+- **A privacy policy that does not match what the system really does**
 
 ---
 
-## 10 · มาตราที่อ้างบ่อย และตัวย่อ
+## 10 · Frequently cited sections, and abbreviations
 
-ใช้ตอนลูกค้าหรือฝ่ายกฎหมายถามว่า "ข้อนี้อยู่มาตราไหน" (ตรวจกับฉบับแปลอังกฤษไม่เป็นทางการของ พ.ร.บ. 2562 ราชกิจจานุเบกษา 27 พ.ค. 2562 เมื่อ 23 ต.ค. 2569)
+Use this when a customer or the legal team asks "which section is this?" (checked against the unofficial English translation of the 2019 Act, Royal Gazette 27 May 2019 (B.E. 2562), on 23 Oct 2026 (B.E. 2569))
 
-| เรื่อง (ข้อใน skill นี้) | มาตรา |
+| Topic (item in this skill) | Section |
 |---|---|
-| ความยินยอม (ข้อ 3) | 19 |
-| ฐานทางกฎหมายที่ไม่ต้องขอความยินยอม (ข้อ 2) | 24 |
-| ข้อมูลอ่อนไหว (ข้อ 5) | 26 |
-| ส่งข้อมูลออกนอกประเทศ (ข้อ 7) | 28 |
-| สิทธิเจ้าของข้อมูล (ข้อ 4) — ขอดู · ขอย้าย · คัดค้าน · ขอลบ · ขอระงับ · ขอแก้ | 30 · 31 · 32 · 33 · 34 · 35–36 |
-| มาตรการความปลอดภัย · ระบบลบเมื่อหมดอายุ · แจ้งเหตุรั่วใน 72 ชั่วโมง (ข้อ 6, 8) | 37(1) · 37(3) · 37(4) |
-| บันทึกรายการประมวลผล (ข้อ 1) | 39 |
-| เจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล (DPO) | 41 |
-| ค่าสินไหม · ค่าเสียหายเชิงลงโทษ | 77 · 78 |
-| โทษปรับทางปกครอง สูงสุด 1 · 3 · 5 ล้านบาท | 82 · 83 · 84 |
+| Consent (item 3) | 19 |
+| Legal bases that need no consent (item 2) | 24 |
+| Sensitive data (item 5) | 26 |
+| Sending data abroad (item 7) | 28 |
+| Data subject rights (item 4) — access · portability · objection · erasure · restriction · rectification | 30 · 31 · 32 · 33 · 34 · 35–36 |
+| Security measures · deletion system on expiry · breach notice in 72 hours (items 6, 8) | 37(1) · 37(3) · 37(4) |
+| Records of processing (item 1) | 39 |
+| Data Protection Officer (DPO) | 41 |
+| Compensation · punitive damages | 77 · 78 |
+| Administrative fines, maximum 1 · 3 · 5 million baht | 82 · 83 · 84 |
 
-**ภาคที่มีกฎทับอีกชั้น** — สุขภาพ · การเงิน · โทรคมนาคม มีหน่วยกำกับของตัวเอง (กระทรวงสาธารณสุข · ธปท./ก.ล.ต./คปภ. · กสทช.) ที่เพิ่มเงื่อนไขเรื่องความลับ อายุการเก็บ และการแจ้งเหตุ ให้ตรวจกฎของภาคนั้นก่อนออกแบบ ไม่ใช่ยึด PDPA อย่างเดียว (แนวคิดจาก BV thai-pdpa (MIT))
+**Sectors with a second layer of rules** — health · finance · telecom have their own regulators (กระทรวงสาธารณสุข (Ministry of Public Health) · ธปท. (Bank of Thailand, BOT) / ก.ล.ต. (Securities and Exchange Commission, SEC) / คปภ. (Office of Insurance Commission, OIC) · กสทช. (National Broadcasting and Telecommunications Commission, NBTC)) that add conditions on confidentiality, retention and breach notice. Check that sector's rules before designing, and do not rely on PDPA alone (idea from BV thai-pdpa (MIT))
 
 - **PDPA** — Personal Data Protection Act (พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562)
-- **ข้อมูลส่วนบุคคล** — ข้อมูลที่ระบุตัวบุคคลได้ ไม่ว่าทางตรงหรือทางอ้อม
-- **ข้อมูลอ่อนไหว** — ข้อมูลส่วนบุคคลกลุ่มพิเศษ เช่น สุขภาพ เชื้อชาติ ศาสนา
-- **ผู้ควบคุมข้อมูล** — ผู้ตัดสินใจว่าจะเก็บและใช้ข้อมูลอย่างไร (โดยทั่วไปคือเจ้าของระบบ)
-- **ผู้ประมวลผลข้อมูล** — ผู้ที่ประมวลผลข้อมูลตามคำสั่งของผู้ควบคุม เช่น ผู้ให้บริการคลาวด์
-- **เจ้าของข้อมูล** — บุคคลที่ข้อมูลนั้นเป็นของเขา
+- **Personal data** — data that identifies a person, directly or indirectly
+- **Sensitive data** — the special category of personal data, such as health, race, religion
+- **Data controller** — whoever decides how data is collected and used (usually the system owner)
+- **Data processor** — whoever processes data on the controller's instructions, such as a cloud provider
+- **Data subject** — the person the data belongs to
 
-## 11 · เชื่อมกับ skill อื่น
+## 11 · Links to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use with |
 |---|---|
-| ร่องรอยว่าใครดูหรือแก้ข้อมูล | `audit-trail` |
-| ตาราง การเข้ารหัส และ soft delete | `database-design` |
-| ปิดบังข้อมูลใน log | `logging-standards` |
-| สิทธิ์เข้าถึงและการยืนยันตัวตน | `auth-implementation-patterns` |
-| ปิดบังข้อมูลจริงก่อนลง staging | `cicd-and-release` |
-| การส่งและการยกเลิกรับข้อความการตลาด (เรื่องความยินยอมอยู่ที่ skill นี้) | `notifications` |
-| ปิดบังข้อมูลในไฟล์ส่งออก | `data-import-export` |
-| อายุการเก็บไฟล์แนบ | `file-upload-and-storage` |
-| งานลบข้อมูลที่หมดอายุ | `background-jobs` |
-| บันทึกเหตุการณ์หลังข้อมูลรั่ว | `postmortem-template` · `incident-runbook-template` |
+| A trail of who viewed or changed data | `audit-trail` |
+| Tables, encryption and soft delete | `database-design` |
+| Masking data in logs | `logging-standards` |
+| Access rights and authentication | `auth-implementation-patterns` |
+| Masking real data before loading staging | `cicd-and-release` |
+| Sending and unsubscribing from marketing messages (consent stays in this skill) | `notifications` |
+| Masking data in exported files | `data-import-export` |
+| Retention of attached files | `file-upload-and-storage` |
+| Jobs that delete expired data | `background-jobs` |
+| Recording the incident after a leak | `postmortem-template` · `incident-runbook-template` |

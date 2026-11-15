@@ -2,7 +2,7 @@
 
 **สารบัญ:** Product Vision Statement · Polished Roadmap · Product Requirements Document (PRD) Brief
 
-เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+Open this only when you actually need to write this kind of document · put `(รอยืนยัน)` (awaiting confirmation) on anything you do not know
 
 - [Product Vision Statement](#product-vision-statement)
 - [Polished Roadmap](#polished-roadmap)

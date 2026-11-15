@@ -3,155 +3,155 @@ name: docker-sandbox
 description: Use when a project needs a Docker sandbox for untrusted code
 ---
 
-# docker-sandbox — ห้องทดลองต่อโปรเจกต์
+# docker-sandbox: one lab per project
 
-> เครื่องเราเป็นคนสั่ง ห้องทดลองเป็นที่ลงมือ
-> ข้างในติดตั้ง ลบ รันเซิร์ฟเวอร์ ทำฐานข้อมูลทดสอบได้เต็มที่ เพราะพังแล้วล้างทิ้งสร้างใหม่ได้ในคำสั่งเดียว
-> ข้างนอก (เครื่องจริง · ระบบจริง · บัญชีจริง) แตะไม่ได้ เพราะไม่มีทางเข้าจากข้างใน
+> Our machine gives the orders; the lab is where the work happens.
+> Inside, you can install, delete, run servers, and build test databases freely, because when something breaks you wipe it and rebuild with one command.
+> Outside (the real machine · real systems · real accounts) cannot be touched, because there is no way in from the inside.
 
-ใช้คู่กับ [`superuser`](../superuser/SKILL.md) — โปรเจกต์ที่มี `.sandbox/` งานติดตั้งและรันทุกอย่างทำในห้องนี้
+Use together with [`superuser`](../superuser/SKILL.md). In a project that has `.sandbox/`, all install and run work happens in this lab.
 
-ไม่ใช้เมื่อ: เขียน Dockerfile หรือ image สำหรับ deploy จริง → [`kubernetes-helm`](../kubernetes-helm/SKILL.md) เพราะห้องทดลองเป็นที่รันงานชั่วคราว ไม่ใช่ image ที่ขึ้น production
+Do not use when: writing a Dockerfile or image for a real deploy → [`kubernetes-helm`](../kubernetes-helm/SKILL.md), because the lab is a temporary place to run work, not an image that goes to production.
 
 ---
 
-## 1 · หนึ่งโปรเจกต์ = หนึ่งห้อง
+## 1 · One project = one lab
 
-- **ห้องเดียวต่อโปรเจกต์** ชื่อ `sandbox-agent-<ชื่อโฟลเดอร์>-<วันที่สร้าง>` (เช่น `sandbox-agent-sample-app-20260125`)
-  - ตั้งชื่อครั้งเดียวตอน `up` แรก แล้วเก็บในไฟล์ `.sandbox/.name-<ชื่อโฟลเดอร์>` คำสั่งทีหลังอ่านชื่อจากไฟล์นี้ ชื่อจึงไม่เปลี่ยนตามวัน
-  - prefix `sandbox-agent-` บอกว่า agent สร้างห้องนี้ ไม่ใช่คนตั้ง ส่วนวันที่สร้างเก็บซ้ำไว้ใน label `sqt.created`
-  - ถ้าโปรเจกต์ต้องมีฐานข้อมูล cache หรือเบราว์เซอร์ ให้เพิ่มเป็น service ใน**ห้องเดียวกัน** (stack เดียว) ไม่แยกห้องใหม่
-- **image ฐานใช้ร่วมกันทั้งเครื่อง** — `sqt-sandbox-base:1` (Node · Python · Git · Playwright Chromium · Claude Code) build ครั้งเดียว ส่วน image ของแต่ละโปรเจกต์เพิ่มแค่ชั้นบาง ๆ ที่โปรเจกต์นั้นต้องใช้ จึงไม่กินดิสก์ซ้ำ
-- **ห้องที่หยุดอยู่ไม่กิน CPU และหน่วยความจำ** กินแค่ดิสก์ จบงานแล้วให้ `stop` และเลิกงานทั้งวันให้ `stop-all`
-- **ห้องเพิ่มชั่วคราว** (`-Name <โปรเจกต์>-a1`) ใช้เฉพาะตอนลองหลายทางพร้อมกันที่ต้องแยกเครื่องจริง (งานลองหลายทางทั่วไปใช้ git worktree ต่อตัวตาม `parallel-split-and-merge` เร็วกว่า) แล้ว `destroy` ทิ้งทันทีที่เลือกได้
-- **ไม่รวมหลายโปรเจกต์ไว้ห้องเดียว** — เพราะของที่ติดตั้งจะชนกัน โปรเจกต์หนึ่งพังแล้วลามไปอีกโปรเจกต์ และล้างทีละโปรเจกต์ไม่ได้
+- **One lab per project**, named `sandbox-agent-<folder name>-<creation date>` (e.g. `sandbox-agent-sample-app-20260125`).
+  - The name is set once at the first `up` and stored in the file `.sandbox/.name-<folder name>`. Later commands read the name from this file, so the name does not change with the date.
+  - The prefix `sandbox-agent-` says an agent created this lab, not a person. The creation date is also kept in the label `sqt.created`.
+  - If the project needs a database, cache, or browser, add it as a service in the **same lab** (one stack). Do not create a separate lab.
+- **The base image is shared across the whole machine.** `sqt-sandbox-base:1` (Node · Python · Git · Playwright Chromium · Claude Code) is built once. Each project's image adds only a thin layer the project needs, so disk is not used twice.
+- **A stopped lab uses no CPU or memory**, only disk. Run `stop` when you finish a task, and `stop-all` when you finish for the day.
+- **Extra temporary labs** (`-Name <project>-a1`) are for trying several paths in parallel when they need truly separate machines. (For ordinary multi-path trials, use one git worktree per attempt following `parallel-split-and-merge`; it is faster.) `destroy` them as soon as you pick a path.
+- **Never put several projects in one lab**, because installed things collide, one project's breakage spreads to another, and you cannot wipe one project at a time.
 
-## 2 · สองแบบ เลือกตามงาน
+## 2 · Two modes: choose by the work
 
-| | **mount** (ค่าเริ่ม) | **isolated** (`-Isolated`) |
+| | **mount** (default) | **isolated** (`-Isolated`) |
 |---|---|---|
-| ไฟล์โปรเจกต์ | โฟลเดอร์จริงต่อเข้าไปที่ `/work` แก้แล้วเห็นบนเครื่องทันที | สำเนาอยู่ใน volume โฟลเดอร์จริงต่อเข้าไปแบบอ่านอย่างเดียวที่ `/src` |
-| ใครแก้ไฟล์ | Claude Code บนเครื่องแก้ไฟล์ตามปกติ (`sandbox.ps1 claude` ใช้ไม่ได้ในโหมดนี้) | Claude Code **ในห้อง** (`sandbox.ps1 claude`) |
-| ใครรันคำสั่ง | ส่งเข้าห้องด้วย `sandbox.ps1 exec "..."` | Claude Code ในห้องรันเอง ไม่มีหน้าต่างขออนุญาต |
-| ผลกลับมาอย่างไร | อยู่ในโฟลเดอร์แล้ว | `sandbox.ps1 sync` → patch ใน `_to_delete\sandbox\` แล้วคนสั่ง `git apply` |
-| ใช้เมื่อ | งานประจำวันที่คนดูอยู่ | งานทั้งคืน · งานเสี่ยง · ลองหลายทางที่ต้องแยกเครื่องจริง (ห้องละทาง) |
+| Project files | The real folder is attached at `/work`; edits show on the machine at once | A copy lives in a volume; the real folder is attached read-only at `/src` |
+| Who edits files | Claude Code on the machine edits files as usual (`sandbox.ps1 claude` does not work in this mode) | Claude Code **inside the lab** (`sandbox.ps1 claude`) |
+| Who runs commands | Sent into the lab with `sandbox.ps1 exec "..."` | Claude Code in the lab runs them itself, with no permission prompt |
+| How results come back | Already in the folder | `sandbox.ps1 sync` → a patch in `_to_delete\sandbox\`, then the person runs `git apply` |
+| Use when | Daily work while a person is watching | Overnight work · risky work · trying several paths that need separate machines (one lab per path) |
 
-เพิ่ม `-Locked` ได้ทั้งสองแบบ — ปิดอินเทอร์เน็ตขาออก เหลือเฉพาะโฮสต์ใน `allowlist.txt` เหมาะกับงานที่รันโค้ดที่ยังไม่ไว้ใจ
-
----
-
-## 3 · ตั้งห้องให้โปรเจกต์ (ครั้งแรก)
-
-1. ตรวจว่า Docker Desktop รันอยู่ — `docker version` ต้องเห็นทั้ง Client และ Server ถ้าไม่เห็น ให้บอกผู้ใช้ให้เปิด Docker Desktop แล้วหยุดเฉพาะงานนี้
-2. คัดลอกทุกไฟล์ใน `assets/` ของ skill นี้ไปที่ `<โปรเจกต์>/.sandbox/` (ที่ราก) แล้วประกาศ `.sandbox/` เป็นข้อยกเว้นของรากใน README ของโฟลเดอร์โค้ด ตาม `project-doc-set` ข้อ 1
-3. ปรับ `Dockerfile` (ชั้นของโปรเจกต์)
-   - ถ้าเป็น .NET ให้ตั้ง `INSTALL_DOTNET=1` แล้วเพิ่ม `apt-get install` ของที่โปรเจกต์ต้องใช้
-   - **อย่าแก้ `base.Dockerfile`** ถ้าไม่จำเป็น เพราะทุกโปรเจกต์ใช้ร่วมกัน
-   - ถ้าต้องมีฐานข้อมูลทดสอบ ให้เพิ่มเป็น service ใหม่ใน `compose.yaml` (ไม่เปิด port ออกนอก)
-4. เพิ่ม `.sandbox/.mode-*` และ `.sandbox/.name-*` ใน `.gitignore`
-5. เปิดห้อง — `.\.sandbox\sandbox.ps1 up` (หรือ `up -Isolated` · `up -Browser`) โปรเจกต์แรกของเครื่องต้อง build image ฐานก่อน ใช้เวลาราว 5–15 นาที ส่วนโปรเจกต์ถัดไปจะเร็วขึ้นมาก
-6. **พิสูจน์ว่าใช้ได้** — `sandbox.ps1 exec "node -v && python3 --version && git status"` ถ้าโปรเจกต์มีคำสั่ง test ให้รันผ่าน `exec` 1 ครั้ง ส่วนโหมด `-Locked` ต้องเห็นบรรทัด `check passed`
-7. ลงใน `docs/README.md` ของโปรเจกต์ — ชื่อห้อง (`sandbox-agent-<ชื่อโฟลเดอร์>-<วันที่>`) · โหมด · port · คำสั่ง test ในห้อง
-
-**ทดสอบจริงแล้ว** บน Windows + Docker Desktop 4.46 (2026-10-05, โปรเจกต์ `sample-app`) — build ห้องได้ · unit test ผ่าน 15/15 · e2e บน Chromium ผ่าน 14/14 ในห้อง
-
-บั๊กที่เจอระหว่างทดสอบแก้ในสคริปต์แล้ว: PowerShell 5.1 กับ stderr · Playwright คนละรุ่นกับ image ฐาน · พอร์ตชน
-
-ถ้าสคริปต์พังบนเครื่องอื่น ให้ใช้ playbook `bug-fix` กับตัวสคริปต์
-
-**พอร์ต** — `up` หาพอร์ตว่างเอง เริ่มที่ 3000 แล้วบอกว่าได้พอร์ตไหน
-- ในห้องตั้งตัวแปร `APP_PORT` และ `PORT` เป็นพอร์ตนั้น และ `HOST=0.0.0.0`
-- แอปต้องฟังที่ `HOST` เพราะถ้าฟังแค่ `127.0.0.1` ในห้อง เครื่องจะเข้าไม่ถึง
-- ฝั่งเครื่องยังเปิดแค่ `127.0.0.1` เหมือนเดิม จึงเข้าจากเครื่องที่ `http://127.0.0.1:<พอร์ต>`
-
-**Playwright คนละรุ่น** — image ฐานมี Chromium รุ่นล่าสุด ถ้าโปรเจกต์ล็อก Playwright รุ่นอื่นไว้ ให้รัน `npx playwright install chromium` ในห้อง 1 ครั้งหลัง `npm ci` (ไม่ต้อง `--with-deps` เพราะ image มีให้แล้ว)
+You can add `-Locked` to either mode. It blocks outbound internet, leaving only the hosts in `allowlist.txt`. It suits work that runs code you do not yet trust.
 
 ---
 
-## 4 · ใช้ทุกวัน
+## 3 · Set up the lab for a project (first time)
 
-| ต้องการ | คำสั่ง (รันที่รากโปรเจกต์บนเครื่อง) |
+1. Check that Docker Desktop is running: `docker version` must show both Client and Server. If it does not, tell the user to open Docker Desktop and stop only this task.
+2. Copy every file in this skill's `assets/` to `<project>/.sandbox/` (at the root). Then declare `.sandbox/` as a root exception in the README of the code folder, following `project-doc-set` item 1.
+3. Adjust the `Dockerfile` (the project layer).
+   - For .NET, set `INSTALL_DOTNET=1` and add an `apt-get install` for whatever the project needs.
+   - **Do not edit `base.Dockerfile`** unless necessary, because every project shares it.
+   - If you need a test database, add it as a new service in `compose.yaml` (do not open a port to the outside).
+4. Add `.sandbox/.mode-*` and `.sandbox/.name-*` to `.gitignore`.
+5. Start the lab with `.\.sandbox\sandbox.ps1 up` (or `up -Isolated` · `up -Browser`). The first project on a machine must build the base image first, which takes about 5–15 minutes. Later projects are much faster.
+6. **Prove it works:** `sandbox.ps1 exec "node -v && python3 --version && git status"`. If the project has a test command, run it once through `exec`. In `-Locked` mode you must see the line `check passed`.
+7. Record in the project's `docs/README.md`: the lab name (`sandbox-agent-<folder name>-<date>`) · mode · port · test command in the lab.
+
+**Tested for real** on Windows + Docker Desktop 4.46 (2026-10-05, project `sample-app`): the lab built · unit tests passed 15/15 · e2e on Chromium passed 14/14 in the lab.
+
+Bugs found during testing are already fixed in the script: PowerShell 5.1 with stderr · Playwright a different version from the base image · port collisions.
+
+If the script breaks on another machine, use the `bug-fix` playbook on the script itself.
+
+**Ports:** `up` finds a free port itself, starting at 3000, and says which port it got.
+- Inside the lab it sets the variables `APP_PORT` and `PORT` to that port, and `HOST=0.0.0.0`.
+- The app must listen on `HOST`, because if it listens only on `127.0.0.1` inside the lab, the machine cannot reach it.
+- On the machine side the port is still opened only on `127.0.0.1`, so you reach it from the machine at `http://127.0.0.1:<port>`.
+
+**A different Playwright version:** the base image has the latest Chromium. If the project pins another Playwright version, run `npx playwright install chromium` in the lab once after `npm ci` (no `--with-deps` needed, because the image already has them).
+
+---
+
+## 4 · Daily use
+
+| Need | Command (run at the project root on the machine) |
 |---|---|
-| รันคำสั่งในห้อง (agent ใช้อันนี้) | `.\.sandbox\sandbox.ps1 exec "npm test"` |
-| เปิด shell ในห้อง | `.\.sandbox\sandbox.ps1 shell` |
-| ให้ Claude Code ทำงานในห้องเต็มที่ (**isolated เท่านั้น**) | `.\.sandbox\sandbox.ps1 claude` (ล็อกอินครั้งแรกครั้งเดียว volume เก็บไว้ · โหมด mount สคริปต์จะปฏิเสธ เพราะ `/work` คือโฟลเดอร์จริง) |
-| เอางานจากห้อง isolated ออกมา | `.\.sandbox\sandbox.ps1 sync` แล้วอ่าน patch ก่อน `git apply` |
-| ห้องทั้งหมดในเครื่อง | `.\.sandbox\sandbox.ps1 list` |
-| ล้างห้องให้สะอาด เริ่มใหม่ | `reset` แล้ว `up` |
-| หยุดทุกห้องในเครื่อง คืนหน่วยความจำ | `.\.sandbox\sandbox.ps1 stop-all` |
-| ห้องหลายห้องของโปรเจกต์เดียว | ใส่ `-Name <โปรเจกต์>-a1` ทุกคำสั่ง |
+| Run a command in the lab (agents use this one) | `.\.sandbox\sandbox.ps1 exec "npm test"` |
+| Open a shell in the lab | `.\.sandbox\sandbox.ps1 shell` |
+| Let Claude Code work fully in the lab (**isolated only**) | `.\.sandbox\sandbox.ps1 claude` (log in once the first time; the volume keeps it · in mount mode the script refuses, because `/work` is the real folder) |
+| Bring work out of an isolated lab | `.\.sandbox\sandbox.ps1 sync`, then read the patch before `git apply` |
+| All labs on the machine | `.\.sandbox\sandbox.ps1 list` |
+| Wipe the lab clean and start over | `reset`, then `up` |
+| Stop every lab on the machine and free memory | `.\.sandbox\sandbox.ps1 stop-all` |
+| Several labs for one project | Put `-Name <project>-a1` on every command |
 
-**กฎของ agent เมื่อโปรเจกต์มี `.sandbox/`**
-- install · build · test · dev server · migration และสคริปต์ใด ๆ ให้รันผ่าน `sandbox.ps1 exec` ไม่รันบนเครื่อง
-- skill ตรวจแอปของโปรเจกต์ (`app-verifier-setup`) รัน Playwright ในห้องแบบไม่มีหน้าจอ แล้วคัดภาพออกด้วย `docker compose cp` มาไว้ `_to_delete/`
-- ถ้าห้องหยุดอยู่ ให้ `up` เองได้เลย (ย้อนได้) ถ้าห้องพังจนแก้ไม่ได้ ก็ `reset` เองได้ เพราะของในห้องไม่ใช่ของผู้ใช้ — **ยกเว้น** ห้อง isolated ที่ยังไม่ได้ `sync` ต้อง sync ก่อนแล้วค่อย reset
+**Agent rules when a project has `.sandbox/`**
+- Run install · build · test · dev server · migration and any script through `sandbox.ps1 exec`. Never run them on the machine.
+- The project's app-checking skill (`app-verifier-setup`) runs Playwright headless in the lab, then copies the images out with `docker compose cp` into `_to_delete/`.
+- If the lab is stopped, you may `up` it yourself (reversible). If the lab breaks beyond repair, you may `reset` it yourself, because what is in the lab is not the user's. **Exception:** an isolated lab that has not been `sync`ed must be synced first, then reset.
 
 ---
 
-## 5 · เบราว์เซอร์เสมือนสำหรับทดสอบ
+## 5 · Virtual browser for testing
 
-| แบบ | ใช้เมื่อ | วิธี |
+| Type | Use when | How |
 |---|---|---|
-| headless ในห้อง (ค่าเริ่ม) | test อัตโนมัติ · verify skill · ไม่ต้องมีใครดู | Playwright Chromium มากับ image ฐานแล้ว |
-| **มองเห็นได้** (`up -Browser`) | อยากดู agent กดจริงทีละขั้น · ตรวจหน้าจอด้วยตา · อัดภาพ | เบราว์เซอร์จริงในคอนเทนเนอร์แยก ดูสดที่ `http://127.0.0.1:7900` และ Playwright ในห้องจะขับผ่าน `SELENIUM_REMOTE_URL` ให้เอง (Playwright เรียกความสามารถนี้ว่ายังทดลอง) |
-| ให้ Claude Code ในห้องคุมเบราว์เซอร์เอง | งานสำรวจหน้าเว็บที่ยังไม่มีสคริปต์ | ติดตั้ง Playwright MCP server ในห้อง (`.mcp.json` ของโปรเจกต์) ให้ทำงานแบบ headless |
+| Headless in the lab (default) | Automated tests · verify skill · nobody needs to watch | Playwright Chromium already comes with the base image |
+| **Visible** (`up -Browser`) | You want to watch the agent click step by step · check the screen by eye · record images | A real browser in a separate container, watched live at `http://127.0.0.1:7900`. Playwright in the lab drives it through `SELENIUM_REMOTE_URL` automatically (Playwright calls this capability experimental) |
+| Let Claude Code in the lab control the browser itself | Exploring web pages that have no script yet | Install the Playwright MCP server in the lab (the project's `.mcp.json`) and run it headless |
 
-- เบราว์เซอร์ในห้องไม่มีบัญชี ไม่มีคุกกี้ ไม่มีรหัสผ่านของผู้ใช้ — ล็อกอินด้วยบัญชีทดสอบของโปรเจกต์เท่านั้น
-- ภาพและวิดีโอจากการทดสอบ คัดออกมาที่ `_to_delete/` ด้วย `docker compose cp`
-- Playwright MCP ในห้อง (ตัวอย่างจากงานสอน ยังไม่ใช่เกณฑ์): รันเป็น root ต้องใส่ `--no-sandbox` · ค่า `--browser` ต้องตรงกับ `--help` ของรุ่นที่ลง (`chromium` หรือ `chrome` ถ้าไม่ตรงจะหาเบราว์เซอร์ไม่เจอ) · ภาพ screenshot ที่ตั้งชื่อแบบ relative ไปลงที่ working directory ของ process ไม่ใช่ `--output-dir` ต้องย้ายเอง · คลิกแล้ว timeout "not visible/stable" อาจเป็นแท็บเบื้องหลัง ดู `e2e-testing-patterns`
-- เบราว์เซอร์ของผู้ใช้บนเครื่อง (Chrome ที่ล็อกอินอยู่) ใช้กับเว็บจริงที่ต้องใช้บัญชีจริงเท่านั้น และทำตามกติกาของเครื่องมือนั้น ไม่ใช่ที่ทดสอบ
+- The browser in the lab has no accounts, cookies, or user passwords. Log in only with the project's test accounts.
+- Copy images and videos from tests out to `_to_delete/` with `docker compose cp`.
+- Playwright MCP in the lab (examples from teaching work, not yet a standard): running as root needs `--no-sandbox` · the `--browser` value must match the `--help` of the installed version (`chromium` or `chrome`; if it does not match, it cannot find the browser) · screenshots with a relative file name land in the process's working directory, not `--output-dir`, so move them yourself · a click that times out with "not visible/stable" may be a background tab; see `e2e-testing-patterns`.
+- The user's own browser on the machine (the logged-in Chrome) is for real websites that need a real account, and follows that tool's rules. It is not a place to test.
 
 ## 6 · CAPTCHA
 
-- **ระบบของเราเอง** — CAPTCHA ไม่ควรขวางการทดสอบตั้งแต่ต้น
-  - ใช้ค่าทดสอบ (test site key) ที่ผู้ให้บริการแจกไว้ ซึ่งผ่านทุกครั้ง reCAPTCHA · hCaptcha · Cloudflare Turnstile มีให้ทุกเจ้า ดูค่าได้จากเอกสารผู้ให้บริการ
-  - หรือปิดด้วยค่าตั้งเฉพาะ environment ทดสอบ (`CAPTCHA_ENABLED=false`)
-  - **ค่าทดสอบต้องไม่หลุดไปถึงระบบจริง** — ใส่ตัวตรวจตอนเริ่มระบบว่า production ห้ามใช้ test key (`config-and-secrets`)
-- **เว็บของคนอื่น** — agent **ไม่แก้ CAPTCHA และไม่หาทางหลบ** (ไม่ใช้บริการรับแก้ ไม่ปลอมตัวเป็นคน) ถ้าเจอ CAPTCHA ให้หยุดขั้นนั้น บอกผู้ใช้ให้ทำเอง แล้วทำส่วนอื่นต่อ ถ้าต้องดึงข้อมูลจากเว็บนั้นบ่อย ให้หา API ทางการแทน
-- เหตุผล — CAPTCHA คือเจ้าของเว็บบอกว่า "ห้ามบอท" การหลบจึงเท่ากับฝ่าข้อตกลงของเขา และทำให้ IP หรือบัญชีถูกแบน
+- **Our own system:** a CAPTCHA should not block testing from the start.
+  - Use the test site keys the provider publishes, which pass every time. reCAPTCHA · hCaptcha · Cloudflare Turnstile all have them; see the provider's documentation for the values.
+  - Or turn it off with a setting for the test environment only (`CAPTCHA_ENABLED=false`).
+  - **Test values must never reach the real system.** Add a startup check that production must not use a test key (`config-and-secrets`).
+- **Other people's websites:** the agent **does not solve a CAPTCHA and does not look for a way around it** (no solving services, no pretending to be a person). If you meet a CAPTCHA, stop that step, tell the user to do it themselves, and continue with the other parts. If you need data from that site often, look for an official API instead.
+- Reason: a CAPTCHA is the site owner saying "no bots." Getting around it breaks their terms and gets the IP or account banned.
 
-## 7 · ในห้องทำได้เต็มที่
+## 7 · What you may do freely in the lab
 
-ติดตั้งโปรแกรม (`sudo apt-get` · `npm -g` · `pip`) · ลบไฟล์ในห้อง · รันเซิร์ฟเวอร์และฐานข้อมูลทดสอบ · ดาวน์โหลด dependency · commit ในสำเนาของโหมด isolated · ทดลองทำลายแล้วสร้างใหม่
+Install programs (`sudo apt-get` · `npm -g` · `pip`) · delete files in the lab · run servers and test databases · download dependencies · commit in the copy in isolated mode · try destroying things and rebuild.
 
-เรื่องที่ยังอยู่ใน "รออนุมัติ" แม้อยู่ในห้อง (เตรียมไว้ ไม่ทำเอง) — เพราะผลออกไปนอกห้อง:
-- ส่งข้อมูล อีเมล ข้อความ หรือเรียก API ที่มีผลจริงกับคนหรือระบบภายนอก
-- ใช้บัญชีจริง ค่าลับจริง ฐานข้อมูลจริง
-- push ขึ้น remote · deploy
-- ในโหมด mount — ลบหรือเขียนทับไฟล์ของผู้ใช้ใน `/work` ที่ไม่ใช่ผลงานของรอบนี้ (มันคือโฟลเดอร์จริง)
+These still stay under "รออนุมัติ" (awaiting approval) even inside the lab (prepare them, do not do them yourself), because the result leaves the lab:
+- Sending data, email, or messages, or calling an API that has a real effect on people or outside systems.
+- Using real accounts, real secrets, or the real database.
+- Pushing to a remote · deploying.
+- In mount mode: deleting or overwriting the user's files in `/work` that are not this round's work (it is the real folder).
 
 ---
 
-## 8 · ห้ามแก้ compose ให้มีสิ่งเหล่านี้
+## 8 · Never edit compose to include these
 
-| ห้าม | เพราะ |
+| Never | Because |
 |---|---|
-| `privileged: true` · `pid: host` · `network_mode: host` | ห้องจะมองเห็นและแตะเครื่องจริงได้ |
-| mount `/var/run/docker.sock` หรือ `//./pipe/docker_engine` | คุม Docker ได้ = คุมเครื่องได้ |
-| mount โฟลเดอร์ home · `.ssh` · `.aws` · `.azure` · `.claude` ของเครื่อง · โปรไฟล์เบราว์เซอร์ · ไดรฟ์ทั้งลูก | ค่าลับหลุดได้ทันทีที่โค้ดในห้องอ่าน |
-| เปิด port แบบ `"3000:3000"` (ทุกการ์ดแลน) | คนในเครือข่ายเดียวกันเข้าถึงได้ — ใช้ `127.0.0.1:` เสมอ |
-| ใส่ค่าลับจริงใน `Dockerfile` หรือ image | ค่าลับติดไปกับ image ตลอด |
-| ปิดหรือเพิ่ม limit `cpus` `mem_limit` `pids_limit` จนเครื่องค้าง | ห้องที่วนไม่จบจะกินเครื่องทั้งเครื่อง |
-| mount ของจากเครื่องแบบเขียนได้ ทั้งที่ห้องแค่ต้องอ่าน (`ref/` · ข้อมูลตัวอย่าง · cache SDK ที่แชร์ · ซอร์สต้นทางของโหมด isolated) | โค้ดในห้องที่ถูกหลอกจะเขียนกลับเครื่องได้ — ใส่ `:ro` ทุก mount ที่ไม่ใช่ผลงานของรอบนี้ แล้วให้ห้องคัดลอกเข้าพื้นที่ของตัวเองถ้าต้องแก้ (แนวคิดจาก anthropics/claude-code devcontainer และ trailofbits/skills) |
+| `privileged: true` · `pid: host` · `network_mode: host` | The lab could see and touch the real machine |
+| Mounting `/var/run/docker.sock` or `//./pipe/docker_engine` | Controlling Docker = controlling the machine |
+| Mounting the machine's home folder · `.ssh` · `.aws` · `.azure` · `.claude` · browser profiles · a whole drive | Secrets can leak the moment code in the lab reads them |
+| Opening a port like `"3000:3000"` (every network card) | People on the same network can reach it. Always use `127.0.0.1:` |
+| Putting real secrets in the `Dockerfile` or image | The secret stays in the image forever |
+| Removing or raising the limits `cpus` `mem_limit` `pids_limit` until the machine hangs | A lab stuck in a loop will eat the whole machine |
+| Mounting things from the machine as writable when the lab only needs to read (`ref/` · sample data · a shared SDK cache · the source folder of isolated mode) | Tricked code in the lab can write back to the machine. Add `:ro` to every mount that is not this round's work, and have the lab copy into its own space if it must edit (idea from anthropics/claude-code devcontainer and trailofbits/skills) |
 
-เอกสารของ Claude Code เตือนไว้ว่า แม้ในคอนเทนเนอร์ การรันแบบไม่มีหน้าต่างขออนุญาต (`--dangerously-skip-permissions`) ยังกันไม่ได้ถ้าโค้ดในโปรเจกต์ตั้งใจขโมยของที่อยู่ในห้อง รวมถึง token ของ Claude Code เอง — ใช้กับ repo ที่ไว้ใจเท่านั้น และใช้ `-Locked` เมื่อไม่แน่ใจ
+The Claude Code documentation warns that even in a container, running without permission prompts (`--dangerously-skip-permissions`) cannot stop project code that deliberately steals what is in the lab, including Claude Code's own token. Use it only with a repo you trust, and use `-Locked` when unsure.
 
-`sandbox.ps1 claude` จึงรันได้เฉพาะโหมด isolated — โหมด mount สคริปต์ปฏิเสธ เพราะ `/work` คือโฟลเดอร์จริงของผู้ใช้ (§7 ข้อสุดท้าย)
+So `sandbox.ps1 claude` runs only in isolated mode. In mount mode the script refuses, because `/work` is the user's real folder (§7, last item).
 
-**ขีดจำกัดของ `-Locked`** — DNS ออกได้เฉพาะ resolver ที่ห้องได้รับ (ของ Docker) ไม่ใช่ DNS server ใดก็ได้ แต่ resolver นั้นยังส่งต่อคำถามออกนอก จึงยังแอบส่งข้อมูลผ่าน DNS (DNS tunnelling) ได้ งานที่ห้ามข้อมูลรั่วเด็ดขาดให้รันแบบไม่มีเครือข่ายเลย
+**Limits of `-Locked`:** DNS can go out only through the resolver the lab was given (Docker's), not any DNS server. But that resolver still forwards queries outward, so data can still be smuggled out through DNS (DNS tunnelling). For work where data must never leak, run with no network at all.
 
 ---
 
-## 9 · หมายเหตุ Windows
+## 9 · Windows notes
 
-- Docker Desktop ใช้ WSL 2 ไฟล์บนไดรฟ์ `C:` ที่ mount เข้าไปจึงช้ากว่าไฟล์ใน volume ถ้า build หรือ test ช้ามาก ให้ใช้ `-Isolated` (ตรวจจริง: `npm ci` แค่ 2 แพ็กเกจใช้ 52 วินาทีบนโฟลเดอร์ OneDrive)
-- **โปรเจกต์ในโฟลเดอร์ OneDrive** — โหมด mount จะทำให้ `node_modules` และไฟล์ build ถูก sync ขึ้นคลาวด์ จึงควรใช้ `-Isolated` หรือย้ายโปรเจกต์ออกจาก OneDrive
-- ถ้ารัน `sandbox.ps1` ไม่ได้ ให้ใช้ `powershell -ExecutionPolicy Bypass -File .\.sandbox\sandbox.ps1 <คำสั่ง>`
-- `-Locked` อ่าน IP ของโฮสต์ครั้งเดียวตอนเปิด บริการที่เปลี่ยน IP บ่อยอาจหลุด ให้ `up -Locked` ใหม่
+- Docker Desktop uses WSL 2. Files on drive `C:` that are mounted in are slower than files in a volume. If build or test is very slow, use `-Isolated` (verified: `npm ci` for just 2 packages took 52 seconds on a OneDrive folder).
+- **Projects in a OneDrive folder:** mount mode makes `node_modules` and build files sync to the cloud, so use `-Isolated` or move the project out of OneDrive.
+- If you cannot run `sandbox.ps1`, use `powershell -ExecutionPolicy Bypass -File .\.sandbox\sandbox.ps1 <command>`.
+- `-Locked` reads the host's IP once at startup. A service whose IP changes often may drop out; run `up -Locked` again.
 
-## เชื่อมกับ skill อื่น
+## Links to other skills
 
-- `parallel-attempts-pick-best` — ปกติผู้แข่งใช้ git worktree ต่อตัว · ใช้ห้อง isolated ต่อตัว (`-Name <โปรเจกต์>-a1` …) เฉพาะงานที่ต้องแยกเครื่องจริง
-- [`app-verifier-setup`](../app-verifier-setup/SKILL.md) — สคริปต์ `start` ของ verify skill รันในห้อง
-- `config-and-secrets` — ค่าทดสอบใส่ `.env` ที่ไม่เข้า git และไม่ bake ลง image
-- playbook `housekeeping` ของ `superuser` — เก็บกวาดห้องและ image เก่า
+- `parallel-attempts-pick-best`: normally competitors use one git worktree each. Use one isolated lab each (`-Name <project>-a1` …) only for work that needs truly separate machines.
+- [`app-verifier-setup`](../app-verifier-setup/SKILL.md): the verify skill's `start` script runs in the lab.
+- `config-and-secrets`: put test values in a `.env` that stays out of git, and do not bake them into the image.
+- The `superuser` playbook `housekeeping`: cleans up old labs and images.

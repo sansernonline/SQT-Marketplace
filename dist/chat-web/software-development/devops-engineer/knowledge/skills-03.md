@@ -4,9 +4,9 @@ Use when a Markdown doc needs an image, SVG or ASCII art
 
 # Markdown Visuals
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Pre-work gate (every time):** read the owner's theme → search live references → 3 genuinely different directions → run the `no-ai-look` check before sending · follow the "ด่านก่อนลงมือ" (pre-work gate) section of `design-references` (plugin `superuser`) even when a brand exists (the brand controls colour and fonts, while the search finds the structure of this piece) · close the work with a `ด่านก่อนลงมือ:` line
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write every line of wording per `human-writing`. This skill gives the format and structure; human-writing gives the way to write so people understand.
 
 > **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-development`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
 
@@ -83,7 +83,7 @@ What are you showing?
 
 ### สี
 
-ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น ส่วนถ้ายังไม่มี ให้ค้นต้นแบบตาม `design-references` (plugin `superuser`) ประเภท `document` แล้วถอดสีจากงานที่เลือก · ค้นสดไม่ได้จึงใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม (ลำดับใน `diagram-figures` ข้อ 5 · ตารางโทนตามเนื้องาน [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) ส่วน token ตามหน้าที่ (`bg-canvas` · `accent-primary` · `state-*` …) ดูได้ใน [references/svg-snippets.md](references/svg-snippets.md) และ **1 เอกสารใช้ชุดสีเดียว**
+If the document or project already has a colour palette, use it. If not, search for references per `design-references` (plugin `superuser`), type `document`, and take the colours from the chosen work · if live search is not possible, use the house value `#2A78D6`, mark it `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask (order in `diagram-figures` item 5 · colour-by-domain table [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) · for role-based tokens (`bg-canvas` · `accent-primary` · `state-*` …) see [references/svg-snippets.md](references/svg-snippets.md) · and **1 document uses 1 palette**
 
 ### Reusable snippets
 
@@ -143,14 +143,14 @@ Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
 
 ## 4 · Mermaid
 
-**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams` (plugin `software-development`) ข้อ 1–5 และ `assets/mermaid-theme.md`** · Mermaid ในเอกสารโปรเจกต์ที่ต้องแปลงเป็นรูปลง Word ใช้ตัวแปลงใน `diagram-figures` → `references/engine-mermaid.md`
-ที่นี่บอกแค่ว่า *เมื่อไหร่ควรเลือก Mermaid แทนรูปแบบอื่น*
+**Choosing a diagram type, theme, readability rules and Thai labels is covered in `software-diagrams` (plugin `software-development`) items 1–5 and `assets/mermaid-theme.md`** · for Mermaid in project documents that must be converted to a picture for Word, use the converter in `diagram-figures` → `references/engine-mermaid.md`
+This file only says *when to choose Mermaid over other formats*
 
-| เลือก Mermaid เมื่อ | เลือกอย่างอื่นเมื่อ |
+| Choose Mermaid when | Choose something else when |
 |---|---|
-| เป็นกล่องกับลูกศรที่เครื่องจัดวางให้ได้ | ถ้าต้องคุมตำแหน่งเองให้ใช้ inline SVG ส่วนรูปที่ต้องดูออกแบบมาให้ใช้ `diagram-figures` (HTML layout หรือ engine-svg-python) แล้วฝังเป็นไฟล์ภาพ |
-| อยู่ในไฟล์ที่ต้อง diff ใน git | เป็นภาพหน้าจอจริง ให้ใช้ไฟล์ภาพ |
-| ผู้อ่านเปิดใน GitHub หรือ Notion | ผู้อ่านเปิดในเอกสาร Word หรือสไลด์ ให้ใช้ไฟล์ภาพ |
+| It is boxes and arrows that the engine can lay out | If you must control placement yourself, use inline SVG; for a figure that must look designed, use `diagram-figures` (HTML layout or engine-svg-python) and embed it as an image file |
+| It lives in a file that must be diffed in git | It is a real screenshot: use an image file |
+| Readers open it in GitHub or Notion | Readers open it in a Word document or slides: use an image file |
 
 ## Combining formats in one doc
 
@@ -204,12 +204,12 @@ Not sure a visual will render? Preview it in the viewer the reader will use (Git
 
 ## ไม่ให้ดูเหมือน AI ทำ
 
-ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ทุกงานต้องผ่านด่านตา 3.2 ด้วย (หน้าเว็บตอบเพิ่มข้อ 10–14) เพราะสคริปต์ 0 ข้อยังไม่ใช่ผ่าน · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
+Before sending, go through item 3 of `no-ai-look` — for HTML work, run its script · every piece must also pass eye check 3.2 (a web page adds items 10–14), because a script result of 0 items is not yet a pass · the bans in this file are specific to this work, and the full list for all media is there
 
 ## ตัวย่อ
 
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้เลย ดูรายละเอียดใน skill `spell-out-abbreviations`
+Spell out each abbreviation in full on first use and put the short form in brackets — for example Model Context Protocol (MCP)
+After that, use the short form. Details are in the skill `spell-out-abbreviations`
 
 
 ## reference: ascii-patterns.md
@@ -295,30 +295,30 @@ Don't force everything into one format. Each format is best at something differe
 
 Reusable building blocks for inline SVG pictures of a screen inside .md docs (the real mockup is HTML) · used by [SKILL.md](../SKILL.md) §1
 
-## สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
+## Colour: it comes from the subject, not from a ready-made table
 
-ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น
-ถ้ายังไม่มี ให้ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม และเสนอโทนจากเนื้องานไว้ในรายงาน — การแพทย์เขียว · การเงินน้ำเงินเข้ม ·
-อุตสาหกรรมเหลืองอำพัน · ราชการกรมท่า · ซอฟต์แวร์ทั่วไปน้ำเงิน (ตารางเต็มอยู่ใน [`diagram-figures/references/colour-by-domain.md`](../../diagram-figures/references/colour-by-domain.md))
+If the document or project already has a colour set, use that set.
+If not, use the house value `#2A78D6`, write `(รอยืนยัน)` (awaiting confirmation), and carry on without stopping to ask. Propose a tone drawn from the subject in the report: medical green · finance dark blue ·
+industrial amber · government navy · general software blue (the full table is in [`diagram-figures/references/colour-by-domain.md`](../../diagram-figures/references/colour-by-domain.md))
 
-กำหนดเป็น **token ตามหน้าที่** ไว้บนสุดของเอกสาร แล้วใช้ค่าเดียวกันทุกรูปในเอกสารนั้น:
+Define **tokens by role** at the top of the document, then use the same values in every figure in that document:
 
-| Token | หน้าที่ | ได้มาจาก |
+| Token | Role | Comes from |
 |---|---|---|
-| `bg-canvas` | พื้นหลังของรูป | เฉดเข้มสุด (โหมดมืด) หรืออ่อนสุด (โหมดสว่าง) |
-| `bg-surface` | แผ่น พาเนล การ์ด | ต่างจาก canvas พอให้เห็นขอบโดยไม่ต้องตีเส้น |
-| `bg-elevated` | ไทล์ที่ลอยขึ้นมาอีกชั้น | |
-| `accent-primary` | จุดเน้น สถานะที่กำลังทำงาน | **สีแบรนด์** (ไม่มี → `#2A78D6` + `(รอยืนยัน)`) |
-| `text-primary` | ข้อความหลัก | contrast ≥ 4.5:1 กับพื้นที่มันวางอยู่ |
-| `text-muted` | ข้อความรอง placeholder | `rgba(...,0.55)` ของ `text-primary` |
-| `state-success` · `state-warning` · `state-danger` | สถานะ | **ไม่เปลี่ยนตามแบรนด์** — เขียวคือผ่าน แดงคือไม่ผ่านเสมอ |
+| `bg-canvas` | Background of the figure | The darkest shade (dark mode) or the lightest (light mode) |
+| `bg-surface` | Sheets, panels, cards | Different enough from canvas to show the edge without drawing a line |
+| `bg-elevated` | A tile raised one more layer | |
+| `accent-primary` | Emphasis, the active state | **The brand colour** (none → `#2A78D6` + `(รอยืนยัน)`) |
+| `text-primary` | Main text | Contrast ≥ 4.5:1 against the surface it sits on |
+| `text-muted` | Secondary text, placeholder | `rgba(...,0.55)` of `text-primary` |
+| `state-success` · `state-warning` · `state-danger` | Status | **Does not change with the brand.** Green always means pass and red always means fail |
 
-**1 เอกสารใช้ชุดสีเดียว** — รูป 10 รูปในเอกสารเดียวที่สีไม่ตรงกัน อ่านยากกว่ารูปไม่สวยแต่สีตรงกัน
+**One document, one colour set.** 10 figures in one document with mismatched colours are harder to read than plain figures with matching colours.
 
 ## Snippets
 
-> ตัวอย่างข้างล่างใช้ชุดสีโหมดมืดชุดหนึ่งเป็นตัวแทนเท่านั้น
-> **เปลี่ยนค่าสีให้ตรงกับชุดที่ตกลงไว้ก่อนใช้** โครงสร้างคือสิ่งที่ต้องคัดลอก ไม่ใช่ค่าสี
+> The examples below use one dark-mode colour set as a stand-in only.
+> **Change the colour values to match the agreed set before use.** The structure is what you copy, not the colour values.
 
 **Window chrome (desktop app mockup):**
 ```xml
@@ -381,87 +381,89 @@ Use when a README or PR needs a quick Mermaid diagram
 
 # Software Diagrams
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** every line of wording follows `human-writing`. This skill gives the format and structure, while human-writing says how to write so a reader understands.
 
-> **กฎข้อเดียวของ skill นี้:** ไดอะแกรมตอบ**คำถามเดียว**
-> ถ้าตอบ 2 คำถาม ให้วาด 2 รูป
+> **The one rule of this skill:** a diagram answers **one question**.
+> If it answers 2 questions, draw 2 pictures.
 
-> **ปลายทางตัดสินเครื่องมือ:** skill นี้วาดไดอะแกรมด่วนด้วย Mermaid ธีมประจำบ้าน สำหรับ README · Pull Request · โน้ตในโค้ดเท่านั้น
-> ส่วนรูปในเอกสารโปรเจกต์ (BRD · SRS · FSD · ADR · ER · ผังขั้นตอน) ข้อเสนอลูกค้า สไลด์ และงานพิมพ์ ให้ไปที่ `diagram-figures` · ตารางเลือกทางฉบับเต็มอยู่ที่หัว skill นั้น
+> **The destination decides the tool:** this skill draws quick diagrams with Mermaid in the house theme, only for a README · Pull Request · note in code.
+> For figures in project documents (BRD · SRS · FSD · ADR · ER · process maps), client proposals, slides and print work, go to `diagram-figures`. The full table for choosing is at the top of that skill.
 >
-> **สีในรูปต้องสื่อความหมาย ไม่ใช่ตกแต่ง** และถ้าเอกสารต้นทางประกาศ `doc-theme` ไว้แล้ว ให้ใช้ค่านั้น ไม่ต้องเลือกสีใหม่รายรูป (ค่าเริ่มต้นคือชุดประจำบ้านใน `polished-document-style` · ความหมายของสีดู `branded-document-design/references/tokens-and-type.md`):
-> ไดอะแกรมด่วนใช้ **สีหลักสีเดียว** = "ของที่เรากำลังพูดถึง" · เทา = ระบบภายนอก/ปิดอยู่ · ขาวเส้นเทา (`store`) = ที่เก็บข้อมูล · กล่องอื่นใช้ค่าตั้งต้น (3 คลาส `focus` · `ext` · `store` ใน `assets/mermaid-theme.md`) · ถ้าต้องแยกจุดพัง/ข้อยกเว้น/สำเร็จด้วยสีหลายสี แปลว่าตอบหลายคำถามในรูปเดียว ให้แยกเป็นรูปใหม่หรือใช้ `diagram-figures`
+> **Colour in a figure must carry meaning, not decorate.** If the source document already declares a `doc-theme`, use that value and do not pick new colours per figure (the default is the house set in `polished-document-style` · for the meaning of colours see `branded-document-design/references/tokens-and-type.md`):
+> A quick diagram uses **one main colour** = "the thing we are talking about" · grey = external/closed systems · white with a grey line (`store`) = data stores · other boxes use the defaults (3 classes `focus` · `ext` · `store` in `assets/mermaid-theme.md`). If you need several colours to separate failure points, exceptions and successes, the figure answers several questions. Split it into new figures or use `diagram-figures`.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-ใน README · Pull Request · โน้ตในโค้ด:
+In a README · Pull Request · note in code:
 
-- อธิบายสถาปัตยกรรมระบบ
-- อธิบายลำดับการทำงานข้ามหลายส่วน
-- อธิบายสถานะของข้อมูล
-- ออกแบบฐานข้อมูล
-- บอกว่าอะไรรันอยู่บนเครื่องไหน
-- รีวิวไดอะแกรมที่คนอื่นวาด
+- Explain the system architecture
+- Explain the order of work across several parts
+- Explain the states of data
+- Design a database
+- Say what runs on which machine
+- Review a diagram someone else drew
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use
 
-| งาน | ใช้ตัวนี้แทน |
+| Job | Use this instead |
 |---|---|
-| เลือกว่าจะใช้ภาพแบบไหน (SVG / ASCII / Mermaid) | `markdown-visuals` |
-| ภาพหน้าจอ · wireframe | `ui-craft` + skill แพลตฟอร์ม |
-| กราฟข้อมูล | `web-app-design` → `references/tokens.md` หัวข้อ "สีข้อมูล (กราฟ)" |
-| ตัดสินใจเลือกสถาปัตยกรรม | `architecture-patterns` |
+| Choose which kind of picture to use (SVG / ASCII / Mermaid) | `markdown-visuals` |
+| Screenshots · wireframes | `ui-craft` + the platform skill |
+| Data charts | `web-app-design` → `references/tokens.md` heading "สีข้อมูล (กราฟ)" (data colours, charts) |
+| Choose an architecture | `architecture-patterns` |
 
-## 1 · คำถามไหน วาดแบบไหน
+## 1 · Which question, which diagram
 
-**เริ่มจากคำถาม ไม่ใช่เริ่มจากชนิดไดอะแกรม** — คนวาดผิดเพราะเลือกชนิดก่อนแล้วค่อยยัดเนื้อหาลงไป
+**Start from the question, not from the diagram type.** People draw wrongly because they pick the type first and then stuff content into it.
 
-| คำถามที่ผู้อ่านมีในหัว | ไดอะแกรม |
+| The question in the reader's head | Diagram |
 |---|---|
-| "ระบบนี้คุยกับใครข้างนอกบ้าง" | C4 ระดับ 1 — System Context |
-| "ข้างในระบบมีอะไรบ้าง รันแยกกันไหม" | C4 ระดับ 2 — Container |
-| "ใน service ตัวนี้แบ่งเป็นส่วนอะไร" | C4 ระดับ 3 — Component |
-| "กดปุ่มนี้แล้วเกิดอะไรขึ้นบ้าง ตามลำดับ" | Sequence |
-| "เอกสารนี้เปลี่ยนสถานะยังไงได้บ้าง" | State |
-| "ตารางไหนเชื่อมกับตารางไหน" | Entity Relationship (ER) |
-| "ของจริงรันอยู่บนเครื่องอะไร กี่ตัว" | Deployment |
-| "ใครอนุมัติต่อจากใคร" | Flowchart (ขั้นตอนงาน) |
-| "ผังคลาวด์ใน repo ที่มีโลโก้ AWS / Azure จริง ๆ" | Infrastructure — ข้อ 3 |
-| "อยากได้รูปสวย ๆ ไว้ใส่ข้อเสนอลูกค้า" | ไม่ใช่งานของ skill นี้ — `diagram-figures` |
+| "Who outside does this system talk to?" | C4 level 1 — System Context |
+| "What is inside the system? Do the parts run separately?" | C4 level 2 — Container |
+| "How is this service divided inside?" | C4 level 3 — Component |
+| "When I press this button, what happens, in order?" | Sequence |
+| "How can this document change state?" | State |
+| "Which table links to which table?" | Entity Relationship (ER) |
+| "What machines does the real thing run on, and how many?" | Deployment |
+| "Who approves after whom?" | Flowchart (work steps) |
+| "A cloud diagram in the repo with real AWS / Azure logos" | Infrastructure — section 3 |
+| "I want a nice picture for the client proposal" | Not the job of this skill — `diagram-figures` |
 
-> **C4 model** คือวิธีวาดสถาปัตยกรรมเป็นชั้น ๆ เหมือนซูมแผนที่ —
-> ระดับ 1 มองจากนอกระบบ · ระดับ 2 เปิดฝาดูข้างใน · ระดับ 3 ซูมเข้าไปในกล่องเดียว
-> **วาดระดับ 1 กับ 2 ให้ครบก่อนเสมอ** ระดับ 3 วาดเฉพาะส่วนที่ซับซ้อนจริง
+> The **C4 model** is a way to draw architecture in layers, like zooming a map:
+> level 1 looks from outside the system · level 2 opens the lid and looks inside · level 3 zooms into a single box.
+> **Always draw levels 1 and 2 in full first.** Draw level 3 only for the parts that are truly complex.
 
-## 2 · ธีม — ใช้ชุดเดียวทั้งโปรเจกต์
+## 2 · Theme — one set for the whole project
 
-วางบรรทัด `%%{init: ...}%%` ไว้**บรรทัดแรกสุด**ของทุกไดอะแกรม แล้วใช้สีหลักสีเดียวกับ 3 คลาส `focus` · `ext` · `store` ซึ่งสีหลักสงวนไว้ให้ "ของที่เรากำลังพูดถึง" เท่านั้น
-บรรทัดธีม ตัวแทนค่าสี คลาส และตัวอย่างที่เรนเดอร์แล้วอยู่ใน [`assets/mermaid-theme.md`](assets/mermaid-theme.md) ส่วนตารางที่จับคู่เนื้องานกับโทนสีอยู่ใน `diagram-figures/references/colour-by-domain.md`
+Put the `%%{init: ...}%%` line on the **very first line** of every diagram, and use the one main colour with the 3 classes `focus` · `ext` · `store`. The main colour is reserved for "the thing we are talking about" only.
+The theme line, colour stand-ins, classes and rendered examples are in [`assets/mermaid-theme.md`](assets/mermaid-theme.md). The table that matches kinds of work to colour tones is in `diagram-figures/references/colour-by-domain.md`.
 
-> ระวัง: **`fontFamily` ต้องอยู่นอก `themeVariables`** ถ้าใส่ไว้ข้างใน จะถูกเมินเงียบ ๆ แล้วกลับไปใช้ฟอนต์เริ่มต้นของ Mermaid
+> Warning: **`fontFamily` must sit outside `themeVariables`.** If you put it inside, it is silently ignored and Mermaid falls back to its default font.
 
-**ตรวจด้วยเครื่องก่อนส่งทุกครั้ง** — กฎข้อนี้ถูกลืมบ่อยที่สุด (โปรเจกต์ทดสอบหนึ่งมี 63 จาก 66 รูปที่ไม่มีบรรทัดธีม และไม่มีใครเห็น):
+**Check with a tool before every send.** This rule is forgotten most often (one test project had 63 of 66 figures with no theme line, and nobody noticed):
 
-สคริปต์อยู่ในโฟลเดอร์ `scripts/` ของ skill นี้ — รันด้วย path เต็มของสคริปต์ กับโฟลเดอร์ `docs` ของโปรเจกต์ที่ตรวจ (`<path ของ skill>` = โฟลเดอร์ที่ติดตั้ง skill นี้):
+The scripts are in the `scripts/` folder of this skill. Run them with the script's full path and the `docs` folder of the project being checked (`<path ของ skill>` = the folder where this skill is installed):
 
 ```bash
-node <path ของ skill>/scripts/check-mermaid-theme.mjs docs          # exit 1 พร้อม ไฟล์:บรรทัด ของบล็อกที่ไม่มี %%{init
-node <path ของ skill>/scripts/check-mermaid-theme.mjs --self-test   # พิสูจน์ว่าตัวตรวจยังจับได้
+node <path ของ skill>/scripts/check-mermaid-theme.mjs docs          # exit 1 with file:line of each block that lacks %%{init
+node <path ของ skill>/scripts/check-mermaid-theme.mjs --self-test   # proves the checker still catches it
 ```
 
-agent ที่ไม่มี shell รันเองไม่ได้ → agent หลักรันหลังรับงาน
+An agent with no shell cannot run it → the main agent runs it after taking the work back.
 
-## 3 · ผังที่ต้องมีโลโก้จริง (infrastructure)
+## 3 · Diagrams that need real logos (infrastructure)
 
-ถ้าผังโครงสร้างพื้นฐานที่อยู่ใน repo ต้องมีไอคอน Amazon Web Services (AWS) · Azure · Kubernetes ของจริง ซึ่ง Mermaid วาดให้ไม่ได้ ให้ใช้ไลบรารี **`diagrams`** (Python + Graphviz) โดยเริ่มจาก [`assets/infra-diagram.py`](assets/infra-diagram.py)
-วิธีติดตั้ง กติกา node ที่ใช้บ่อย และกับดักอยู่ใน [`assets/diagrams-python.md`](assets/diagrams-python.md) · ส่วนผังคลาวด์ที่ลูกค้าหรือสไลด์จะเห็น ให้ใช้ `diagram-figures`
+If an infrastructure diagram that lives in the repo needs real Amazon Web Services (AWS) · Azure · Kubernetes icons, which Mermaid cannot draw, use the **`diagrams`** library (Python + Graphviz), starting from [`assets/infra-diagram.py`](assets/infra-diagram.py).
+Install steps, the commonly used node rules and the traps are in [`assets/diagrams-python.md`](assets/diagrams-python.md). For cloud diagrams that a client or a slide will show, use `diagram-figures`.
 
-## 4 · กฎที่ทำให้อ่านรู้เรื่อง
+## 4 · Rules that make it readable
 
-**ไม่เกิน 7 กล่อง** — เกินนี้คนอ่านเลิกอ่าน (นับกล่องจริง ไม่นับ subgraph)
+**No more than 7 boxes.** Past that, readers stop reading (count real boxes, not subgraphs).
 
-**นับกล่องก่อนวาด ไม่ใช่หลังวาด** — ถ้าเกิน 7 ให้**แยกรูปตามลำดับเรื่องก่อนวาด** จดการแยกลง `decision-log` แล้วบอกในคำตอบ
-ห้ามวาดจนครบแล้วค่อยบอกทีหลัง
+**Count boxes before drawing, not after.** If there are more than 7, **split the figure by the order of the story before drawing**. Note the split in `decision-log` and say so in the reply.
+Never draw everything and then say so afterwards.
+
+The sample reply to the Thai user (kept in Thai because it is the text the agent says):
 
 ```
 เนื้อหาที่ให้มามี 20 กล่อง เกินเพดานสามเท่า ขอแยกเป็น 3 รูป:
@@ -471,117 +473,117 @@ agent ที่ไม่มี shell รันเองไม่ได้ → ag
 อยากแบ่งแบบอื่น บอกได้ — แยกใหม่ได้
 ```
 
-> **"แยกคนละไฟล์ก็ได้" แปลว่าต้องแยก** — ถ้าคำขอเปิดช่องให้แยก และเนื้อหาเกินเพดาน
-> ให้ถือว่าเป็นคำสั่งให้แยก ไม่ใช่ทางเลือก
+> **"Separate files are fine" means you must split.** If the request leaves room to split and the content passes the cap,
+> treat it as an order to split, not an option.
 
-**3 อย่างนี้ห้ามอยู่ในไดอะแกรม** — เป็นเนื้อหาของคู่มือ ไม่ใช่รูป และทำให้กล่องบานจนผังเบี้ยว
+**These 3 things do not belong in a diagram.** They are manual content, not a picture, and they swell the boxes until the diagram warps.
 
-| ห้ามใส่ | ไปอยู่ที่ไหน |
+| Do not put in | Where it goes |
 |---|---|
-| ตัวเลือกบรรทัดคำสั่ง `--all` `--resume` `--limit N` | `README` หรือ `docs/cli.md` |
-| รายการ input/output ของหลายตัว | **ตารางข้างรูป** — คอลัมน์: ส่วนประกอบ · รับอะไร · ให้อะไร · เก็บที่ไหน |
-| ชื่อไฟล์หรือ path ครบทุกตัว | ตารางเดียวกัน ใส่ในรูปเฉพาะตัวที่เป็นใจความ |
+| Command-line options `--all` `--resume` `--limit N` | `README` or `docs/cli.md` |
+| Lists of inputs/outputs for several parts | **A table beside the figure** — columns: component · takes what · gives what · stored where |
+| Every file name or path | The same table. Put in the figure only the ones that carry the point |
 
-**คำขอว่า "บอก input/output ด้วย" ไม่ได้แปลว่าให้วาดทุกอย่างเป็นกล่อง** —
-กล่องคือสิ่งที่ *ทำงาน* สิ่งที่ *ไหลผ่าน* เป็นป้ายบนเส้น ส่วน *รายละเอียด* ไปอยู่ในตาราง
+**A request like "show the input/output too" does not mean draw everything as boxes.**
+A box is something that *does work*. What *flows through* is a label on the line. *Detail* goes in the table.
 
-**ระดับรายละเอียดเดียวกันทั้งรูป** — มี `PostgreSQL` กับ `OrderRepository.cs` อยู่ในรูปเดียวกัน
-คือสัญญาณว่าผสม 2 ระดับ
+**One level of detail across the whole figure.** If `PostgreSQL` and `OrderRepository.cs` sit in the same figure,
+that signals a mix of 2 levels.
 
-**ทุกเส้นต้องมีป้าย** และป้ายต้องบอก**อะไรไหลผ่าน** ไม่ใช่ว่าต่อกันอยู่
-
-```
-ผิด: api --> db
-ผิด: api -->|ใช้| db
-ถูก: api -->|SQL · อ่าน-เขียนคำสั่งซื้อ| db
-```
-
-**ทิศทางเดียว** — บนลงล่าง (`TB`) หรือซ้ายไปขวา (`LR`) เลือกแล้วอย่าให้มีเส้นวิ่งย้อน
-เส้นย้อนแปลว่าเรียงลำดับกล่องผิด ไม่ใช่ว่าต้องวาดลูกศร 2 หัว
-
-**ชื่อกล่อง = สิ่งที่มันทำ ไม่ใช่เทคโนโลยี** เทคโนโลยีใส่บรรทัดที่สองตัวเล็ก
+**Every line needs a label,** and the label must say **what flows through**, not that they are connected.
 
 ```
-ผิด: [Redis]
-ถูก: ["ที่พักข้อมูลชั่วคราว<br><small>Redis</small>"]
+Wrong: api --> db
+Wrong: api -->|ใช้| db
+Right: api -->|SQL · อ่าน-เขียนคำสั่งซื้อ| db
 ```
 
-**มีคำอธิบายสัญลักษณ์ (legend) เมื่อใช้สีหรือรูปทรงสื่อความหมาย** —
-ถ้าอธิบายไม่ได้ว่าทำไมกล่องนี้สีต่าง แปลว่าสีนั้นไม่ควรมี
+**One direction.** Top to bottom (`TB`) or left to right (`LR`). Choose one and let no line run backwards.
+A backward line means the boxes are in the wrong order. It does not mean you need a double-headed arrow.
 
-## 5 · ภาษาไทยในไดอะแกรม
+**Box name = what it does, not the technology.** Put the technology on a second line in small type.
 
-- **ป้ายเส้นภาษาไทยยาวเกิน 3 คำจะทับเส้น** — ตัดให้สั้น หรือใส่ `<br>` เอง
-- **ห้ามใช้ `()` `[]` `{}` ในข้อความ** จะไปชนกับไวยากรณ์ Mermaid — ครอบด้วย `"..."` เสมอ
-- **วรรณยุกต์ลอยเหนือกล่อง** เมื่อ `fontSize` เล็กกว่า 12px — อย่าลดต่ำกว่านี้
-- ชื่อตารางและชื่อฟิลด์ในไดอะแกรม ER ใช้ภาษาอังกฤษ (ตรงกับฐานข้อมูลจริง)
-  ส่วนคำอธิบายใช้ไทยได้
+```
+Wrong: [Redis]
+Right: ["ที่พักข้อมูลชั่วคราว<br><small>Redis</small>"]
+```
 
-## 6 · เรนเดอร์ดูจริง — ห้ามข้าม
+**Add a legend when colour or shape carries meaning.**
+If you cannot explain why this box has a different colour, that colour should not be there.
 
-ไดอะแกรมที่ไม่เคยเรนเดอร์ยังเป็นแค่ข้อความ ไม่ใช่รูป เพราะไวยากรณ์ผิดบางแบบ Mermaid ไม่แจ้ง error
-และบ่อยครั้งวาดออกมาไม่ตรงกับที่คิด
+## 5 · Thai in diagrams
+
+- **A Thai line label longer than 3 words overlaps the line.** Shorten it, or add `<br>` yourself.
+- **Do not use `()` `[]` `{}` in text.** They clash with Mermaid syntax. Always wrap the text in `"..."`.
+- **Tone marks float above the box** when `fontSize` is below 12px. Do not go lower.
+- Table and field names in an ER diagram use English (matching the real database).
+  Descriptions can use Thai.
+
+## 6 · Render and look — never skip
+
+A diagram that was never rendered is still only text, not a picture. Some syntax mistakes give no error in Mermaid,
+and the result often does not match what you thought.
 
 ```bash
-# ไม่ติดตั้งลงเครื่อง · pin รุ่นที่ทดสอบธีมไว้ (11.17.0 · รุ่นล่าสุด 12.0.0 ณ 2026-10-14 ยังไม่ได้ทดสอบธีม)
+# not installed on the machine · pin the version the theme was tested on (11.17.0 · the latest 12.0.0 as of 2026-10-14 has not been tested with the theme)
 npx -y @mermaid-js/mermaid-cli@11.17.0 -i diagram.mmd -o diagram.png -b white -s 2
 ```
 
-แล้ว**เปิดไฟล์ภาพดูด้วยตา** ไล่ตามนี้:
+Then **open the image file and look at it with your eyes**. Go through this list:
 
-- [ ] กล่องไม่เกิน 7 ใบใช่ไหม
-- [ ] ทุกเส้นมีป้ายไหม และป้ายบอกว่าอะไรไหลผ่านไหม
-- [ ] มีเส้นวิ่งย้อนทิศไหม
-- [ ] ป้ายทับเส้นหรือทับกล่องไหม
-- [ ] ข้อความไทยครบ ไม่มีสระหาย
-- [ ] ระดับรายละเอียดเดียวกันทั้งรูป
-- [ ] คนที่ไม่เคยเห็นระบบนี้อ่านแล้วตอบคำถามต้นทางได้ไหม
+- [ ] Are there at most 7 boxes?
+- [ ] Does every line have a label, and does the label say what flows through?
+- [ ] Does any line run in the opposite direction?
+- [ ] Does a label overlap a line or a box?
+- [ ] Is the Thai text complete, with no missing vowels?
+- [ ] Is the level of detail the same across the figure?
+- [ ] Can someone who has never seen this system read it and answer the original question?
 
-**ข้อจำกัดของ Mermaid ที่ต้องรู้ก่อนเสียเวลา:**
+**Mermaid limits to know before you waste time:**
 
-| อาการ | สาเหตุ |
+| Symptom | Cause |
 |---|---|
-| `direction LR` ใน subgraph ไม่ทำงาน | ถูกเมินเมื่อ subgraph มีเส้นเชื่อมออกนอก — ต้องจัดลำดับกล่องเอา |
-| กล่องกว้างผิดปกติ | มีข้อความยาวบรรทัดเดียว — ใส่ `<br>` เอง Mermaid ไม่ตัดบรรทัดให้ |
-| เส้นทับกันมั่ว | กล่องเยอะเกินไป — Mermaid ไม่มีการจัดเส้นแบบฉลาด ต้องลดกล่อง |
-| ฟอนต์ไม่เปลี่ยน | `fontFamily` อยู่ผิดที่ (ดูข้อ 2) |
+| `direction LR` inside a subgraph does not work | It is ignored when the subgraph has a line linking out — order the boxes yourself |
+| A box is abnormally wide | One long line of text — add `<br>` yourself, Mermaid does not wrap lines |
+| Lines overlap in a mess | Too many boxes — Mermaid has no smart line routing, so cut boxes |
+| The font does not change | `fontFamily` is in the wrong place (see section 2) |
 
-ถ้าจัดวางเองไม่ได้ดั่งใจจริง ๆ และรูปยังอยู่ในเอกสาร markdown ให้วาด inline SVG ตาม `markdown-visuals` · ส่วนถ้ารูปต้องดูออกแบบมา ให้ไปที่ `diagram-figures`
+If you truly cannot get the layout you want and the figure stays in a markdown document, draw an inline SVG per `markdown-visuals`. If the figure must look designed, go to `diagram-figures`.
 
 ## 7 · Anti-patterns
 
-- **ไดอะแกรมสถาปัตยกรรม 40 กล่อง** — ไม่มีใครอ่าน แยกเป็น C4 หลายระดับ
-- **วาดจนเกินเพดานแล้วค่อยบอก** — ต้องแยกตั้งแต่นับได้ว่าเกิน
-- **ยัดตัวเลือกบรรทัดคำสั่งลงในกล่อง** — กล่องบาน ตัวอักษรเล็ก อ่านไม่ออกทั้งรูป
-- **เส้นไม่มีป้าย** — ผู้อ่านเดาเองว่าอะไรไหลผ่าน แล้วเดาผิด
-- **ผสมระดับรายละเอียด** — `Kubernetes` อยู่ข้าง ๆ `UserService.validate()`
-- **สีรุ้ง** — สีต้องมีความหมาย ไม่ใช่ใส่ให้ไม่น่าเบื่อ
-- **วาดทุกกรณี error ใน sequence เดียว** — วาดทางหลักก่อน แล้วแยกรูปกรณีพิเศษ
-- **ER ที่มีทุกตารางในระบบ** — แยกตามโดเมน
-- **ไดอะแกรมที่ไม่มีวันที่และเจ้าของ** — ผ่านไป 1 ปีไม่มีใครกล้าแก้
-- **ส่งไดอะแกรมโดยไม่เคยเรนเดอร์ดู**
-- **ธีมต่างกันทุกรูปในเอกสารเดียว**
+- **A 40-box architecture diagram** — nobody reads it. Split it into several C4 levels.
+- **Drawing past the cap and then saying so** — split as soon as you count that it is over.
+- **Stuffing command-line options into a box** — the box swells, the letters shrink, and the whole figure is unreadable.
+- **A line with no label** — the reader guesses what flows through, and guesses wrong.
+- **Mixing levels of detail** — `Kubernetes` sitting next to `UserService.validate()`.
+- **Rainbow colours** — colour must carry meaning. Do not add it to avoid boredom.
+- **Drawing every error case in one sequence** — draw the main path first, then split the special cases into separate figures.
+- **An ER diagram with every table in the system** — split by domain.
+- **A diagram with no date and no owner** — after a year nobody dares to edit it.
+- **Sending a diagram that was never rendered**
+- **A different theme in every figure of one document**
 
-## 8 · เชื่อมกับ skill อื่น
+## 8 · Link to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use with |
 |---|---|
-| เลือกรูปแบบภาพในเอกสาร markdown | `markdown-visuals` |
-| เอกสารรอบ ๆ ไดอะแกรม | `polished-document-style` |
-| ฝังในไฟล์ Word / PowerPoint | `branded-document-design` |
-| ไดอะแกรมในเอกสาร SRS | `srs-writing` |
-| เลือกสถาปัตยกรรมก่อนวาด | `architecture-patterns` |
-| รูปที่ต้องดูออกแบบมาหรือต้องเซ็นรับ | `diagram-figures` |
-| บันทึกเหตุผลที่เลือกแบบนี้ | `adr-writer` |
+| Choose the visual format in a markdown document | `markdown-visuals` |
+| The document around the diagram | `polished-document-style` |
+| Embed in a Word / PowerPoint file | `branded-document-design` |
+| A diagram in an SRS document | `srs-writing` |
+| Choose the architecture before drawing | `architecture-patterns` |
+| A figure that must look designed or needs sign-off | `diagram-figures` |
+| Record why this design was chosen | `adr-writer` |
 
-## ไม่ให้ดูเหมือน AI ทำ
+## Do not look AI-made
 
-ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ทุกงานต้องผ่านด่านตา 3.2 ด้วย (หน้าเว็บตอบเพิ่มข้อ 10–14) เพราะสคริปต์ 0 ข้อยังไม่ใช่ผ่าน · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
+Before sending, walk through item 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass eye check 3.2 (web pages also answer items 10–14), because a script result of 0 items is not yet a pass. The bans in this file are specific to this kind of work. The full list for every medium is there.
 
-## ตัวย่อ
+## Abbreviations
 
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
+Always spell an abbreviation out in full the first time, and put the abbreviation in brackets — for example Model Context Protocol (MCP).
+After that you can use the abbreviation. For details see the skill `spell-out-abbreviations`.
 
 
 ---
@@ -592,7 +594,7 @@ Use when writing a runbook or on-call guide
 
 # Incident Runbook Template
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write every line per `human-writing`. This skill gives the format and the structure, while human-writing says how to write so a person can follow it.
 
 ## When to use this skill
 
@@ -602,28 +604,28 @@ Use when writing a runbook or on-call guide
 - After a postmortem finds "we need a runbook for X"
 - Onboarding new on-call engineers
 
-## ไม่ใช้เมื่อ
+## When not to use
 
-| งาน | ใช้ตัวนี้แทน |
+| Task | Use this instead |
 |---|---|
-| เหตุจบแล้ว ต้องสรุปว่าเกิดอะไรและป้องกันยังไง | `postmortem-template` |
-| ตั้ง metric alert หรือ dashboard | `observability-basics` |
+| The incident is over and you must summarise what happened and how to prevent it | `postmortem-template` |
+| Setting up a metric alert or dashboard | `observability-basics` |
 
-## อ่านเพิ่มเมื่อ
+## Read more when
 
-| ไฟล์ | เปิดเมื่อ |
+| File | Open when |
 |---|---|
-| [references/runbook-template.md](references/runbook-template.md) | ทุกครั้งที่เริ่มเขียน runbook ใหม่ ให้คัดลอกแม่แบบเต็มจากไฟล์นี้ไปกรอก |
-| [references/index-and-alert-links.md](references/index-and-alert-links.md) | ถ้าทีมยังไม่มีหน้ารวม runbook หรือ alert ยังไม่มีลิงก์ไปหา runbook ให้เปิดดูตัวอย่างในไฟล์นี้ |
-| [references/game-days.md](references/game-days.md) | ตอนวางแผนซ้อมรับมือเหตุขัดข้องเพื่อทดสอบว่า runbook ใช้ได้จริง |
+| [references/runbook-template.md](references/runbook-template.md) | Every time you start a new runbook. Copy the full template from this file and fill it in |
+| [references/index-and-alert-links.md](references/index-and-alert-links.md) | If the team has no runbook index page, or alerts do not yet link to a runbook, open this file for examples |
+| [references/game-days.md](references/game-days.md) | When planning an incident drill to test that a runbook works in practice |
 
-## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+## 0 · Look for an existing format first (every time)
 
-ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+Before using the structure or template in this file, check whether the user, customer or project already has its own format:
 
-- **ที่ดู:** runbook ที่มีอยู่: `docs/runbooks/` · wiki ของทีม on-call · เครื่องมือแจ้งเตือนที่ใช้ (PagerDuty · Opsgenie · Grafana) และชื่อ alert จริง · ระดับความรุนแรงขององค์กร
-- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
-- **ยังต้องมีทุกแบบ:** ชื่อ alert คำสั่ง และ dashboard ใช้ของจริงจากระบบ ไม่แต่งตัวอย่าง
+- **Where to look:** existing runbooks: `docs/runbooks/` · the on-call team's wiki · the alerting tool in use (PagerDuty · Opsgenie · Grafana) and the real alert names · the organisation's severity levels
+- **Result:** found → use that format (headings, order, field names, numbering) and say in the reply which file's format you used · not found → use the template in this file as a fallback and say that no existing format was found
+- **Still required either way:** alert names, commands and dashboards come from the real system. Do not invent examples.
 
 ## What's a Runbook?
 
@@ -655,33 +657,33 @@ A good runbook is:
 
 ## Runbook Template
 
-แม่แบบเต็มอยู่ใน [references/runbook-template.md](references/runbook-template.md) ทุกฉบับมีส่วนตามลำดับนี้ และแต่ละส่วนต้องมีของต่อไปนี้
+The full template is in [references/runbook-template.md](references/runbook-template.md). Every runbook has these sections in this order, and each section must contain the following.
 
-| ส่วน | ต้องมี |
+| Section | Must contain |
 |---|---|
-| ส่วนหัว | Severity · Service · Owner Team · Last Reviewed · Linked Alert |
-| TL;DR (30 seconds) | ย่อหน้าเดียวว่าอะไรพัง ต้องทำอะไรก่อน และต้องโทรหาใคร |
-| How to Detect | อาการที่ผู้ใช้เห็นและที่เห็นภายใน · alert ที่ดัง · dashboard ที่ต้องเปิด |
-| Diagnosis (60 seconds) | ผัง flowchart ตัดสินใจ และ quick checks ที่เป็นคำสั่งคัดลอกไปรันได้ เรียงตามลำดับ |
-| Mitigation Steps | ขั้นตอนเรียงจากความเสี่ยงต่ำไปสูง (ลำดับเดียวกับ `incident-response` Phase 3) ทุกขั้นบอก Expected effect · **VERIFY** (คำสั่งหรือกราฟที่ต้องดู และค่าที่ต้องเห็น — ไม่เห็นค่านั้นถือว่าขั้นนี้ยังไม่สำเร็จ ห้ามข้ามไปขั้นถัดไปโดยไม่รู้ว่าขั้นก่อนทำอะไร) และ Caveats หรือ If doesn't work · agent แค่เสนอคำสั่งกับผลที่คาด คน on-call เป็นคนรันหรืออนุมัติก่อนแตะ production |
-| Escalation Path | ใครต้องถูกเรียกเมื่อไหร่ เป็นนาทีที่ชัดเจน |
-| Verification | รายการตรวจว่าแก้แล้วจริง |
-| After Resolution | บันทึกในช่องเหตุการณ์ → อัปเดตหน้าสถานะ → เปิดตั๋ว postmortem → อัปเดต runbook นี้ |
-| Related Runbooks · Background | ลิงก์ไป runbook ที่เกี่ยวข้อง และที่มาของปัญหาแบบสั้น (ไม่บังคับ) |
+| Header | Severity · Service · Owner Team · Last Reviewed · Linked Alert |
+| TL;DR (30 seconds) | One paragraph: what broke, what to do first, and whom to call |
+| How to Detect | Symptoms users see and symptoms seen internally · the alert that fires · the dashboard to open |
+| Diagnosis (60 seconds) | A decision flowchart and quick checks written as commands to copy and run, in order |
+| Mitigation Steps | Steps ordered from low risk to high (the same order as `incident-response` Phase 3). Every step states Expected effect · **VERIFY** (the command or graph to look at, and the value to expect. If you do not see that value, the step has not worked yet. Do not move to the next step without knowing what the previous step did) and Caveats or If doesn't work · the agent only proposes commands and expected results, and the on-call person runs them or approves them before anything touches production |
+| Escalation Path | Who is called when, in clear minutes |
+| Verification | A checklist to confirm it is really fixed |
+| After Resolution | Log it in the incident channel → update the status page → open a postmortem ticket → update this runbook |
+| Related Runbooks · Background | Links to related runbooks, and a short background of the problem (optional) |
 
-**ลำดับ mitigation ในแม่แบบ:** Reduce load (low risk) → Scale up (medium risk) → Rollback recent deploy (higher risk) → Failover to backup region (last resort)
+**Mitigation order in the template:** Reduce load (low risk) → Scale up (medium risk) → Rollback recent deploy (higher risk) → Failover to backup region (last resort)
 
-**ลำดับ escalation ในแม่แบบ:** ถ้าแก้ไม่ได้ใน 15 นาที ให้เรียก secondary on-call ถ้าสองคนแก้ไม่ได้ใน 30 นาที ให้เรียกทีมเจ้าของ service ถ้ายังเป็น SEV1 หลัง 45 นาที ให้เรียก incident commander (IC) และถ้า SEV1 เกิน 1 ชั่วโมง ให้เรียกผู้บริหารฝ่ายวิศวกรรม
+**Escalation order in the template:** If it cannot be fixed in 15 minutes, call the secondary on-call. If two people cannot fix it in 30 minutes, call the service's owning team. If it is still SEV1 after 45 minutes, call the incident commander (IC). If SEV1 runs past 1 hour, call the head of engineering.
 
-**ถือว่าแก้แล้วเมื่อ** error rate กลับสู่ระดับปกติ · latency p95 ต่ำกว่าเกณฑ์ · หน้าสถานะเป็น "Operational" · ไม่มี alert ใหม่ · ลูกค้าหยุดแจ้งปัญหา และเฝ้าดูต่ออีก 30 นาทีแล้ว
+**Count it as fixed when** the error rate is back to normal · latency p95 is below the threshold · the status page says "Operational" · there are no new alerts · customers have stopped reporting problems, and you have watched for another 30 minutes.
 
 > Use `postmortem-template` skill for the full analysis
 
 ## Runbook Index and Alert Links
 
-ทำหน้ารวม runbook ไว้ที่เดียว ให้ค้นได้ทั้งตาม service ตามชื่อ alert และตามเหตุที่เกิดบ่อยใน 90 วันล่าสุด
+Keep one index page of runbooks in one place, searchable by service, by alert name, and by the most frequent incidents in the last 90 days.
 
-alert ทุกตัว**ต้อง**มีลิงก์ไป runbook ผ่าน annotation `runbook_url:` ของ alert และควรใส่ `dashboard:` คู่กันด้วย ส่วนตัวอย่างหน้ารวมและตัวอย่าง Prometheus alerting rule อยู่ใน [references/index-and-alert-links.md](references/index-and-alert-links.md)
+Every alert **must** link to a runbook through the alert's `runbook_url:` annotation, and should carry a matching `dashboard:` too. Examples of the index page and a Prometheus alerting rule are in [references/index-and-alert-links.md](references/index-and-alert-links.md).
 
 ## What Makes Runbooks Fail
 
@@ -694,11 +696,11 @@ alert ทุกตัว**ต้อง**มีลิงก์ไป runbook ผ�
 | Not discoverable | Link it from the alert and the index page |
 | No ownership | Each runbook has a team owner |
 | Not tested | Run game days, and follow it during real incidents |
-| Commands rot silently | CI job on every change to `runbooks/`: pull every fenced `bash` block → `bash -n` (parses) · every `./scripts/*.sh` it names exists in the repo · every `kubectl` resource name exists in staging (`kubectl get ... -n staging`) · fail the build on any miss — คำสั่งที่รันไม่ได้ตอนตี 3 แย่กว่าไม่มี runbook (แนวคิดจาก wshobson/agents incident-runbook-templates) |
+| Commands rot silently | CI job on every change to `runbooks/`: pull every fenced `bash` block → `bash -n` (parses) · every `./scripts/*.sh` it names exists in the repo · every `kubectl` resource name exists in staging (`kubectl get ... -n staging`) · fail the build on any miss. A command that cannot run at 3am is worse than no runbook (idea from wshobson/agents incident-runbook-templates) |
 
 ## Game Days
 
-ทดสอบ runbook ด้วยการจำลองเหตุขัดข้องโดยตั้งใจ ทุกไตรมาสให้เลือก runbook หนึ่งฉบับ จำลองเหตุใน staging แล้วให้ on-call ทำตาม จากนั้นอัปเดต runbook ตามช่องโหว่ที่เจอ รายการตรวจเต็มอยู่ใน [references/game-days.md](references/game-days.md)
+Test a runbook by deliberately simulating a failure. Each quarter, pick one runbook, simulate the incident in staging, and have on-call follow it. Then update the runbook for the gaps found. The full checklist is in [references/game-days.md](references/game-days.md).
 
 ## Anti-patterns
 
@@ -727,7 +729,7 @@ Default formatting is not neutral — it reads as unfinished work.
 
 # Game Days
 
-รายการตรวจของการซ้อมรับมือเหตุขัดข้องเพื่อทดสอบ runbook ใช้ตอนวางแผนซ้อมรายไตรมาส
+A checklist for incident-response drills that test a runbook; use it when planning the quarterly drill
 
 Test runbooks by faking failures on purpose:
 
@@ -748,7 +750,7 @@ Quarterly:
 
 # Runbook Index และการผูก runbook กับ alert
 
-ตัวอย่างหน้ารวม runbook และตัวอย่างการใส่ลิงก์ runbook ลงใน alert ใช้ตอนตั้งระบบ runbook ของทีมครั้งแรก
+An example runbook index page and an example of linking a runbook from an alert; use it when setting up the team's runbook system for the first time
 
 ## Runbook Index Pattern
 
@@ -803,9 +805,9 @@ Every alert MUST link to a runbook:
 
 **สารบัญ:** แม่แบบเต็ม 1 บล็อก: TL;DR · How to Detect · Diagnosis · Mitigation Steps (ขั้น 1–5) · Escalation Path · Verification · After Resolution · Related Runbooks · Background
 
-- [แม่แบบทั้งไฟล์](#runbook-template) อยู่ในบล็อกเดียว ให้คัดลอกทั้งบล็อกไปเป็นไฟล์ runbook ใหม่
+- [The whole template](#runbook-template) is in a single block; copy the whole block into a new runbook file
 
-แม่แบบเต็มของ runbook หนึ่งฉบับ ให้คัดลอกไปกรอกต่อได้ทันที ส่วนกฎว่าแต่ละส่วนต้องมีอะไรอยู่ใน `SKILL.md`
+The full template for one runbook, ready to copy and fill in. The rules for what each section must contain are in `SKILL.md`
 
 ````markdown
 # Runbook: <Alert Name or Failure Mode>
@@ -992,199 +994,198 @@ Use when writing or reviewing code that logs
 
 # Logging Standards
 
-> **กฎข้อเดียว:** log มีไว้ให้คนอ่านตอนตี 3 ที่ระบบล่ม ไม่ใช่ตอนเขียนโค้ด
-> ถ้าบรรทัดไหนไม่ช่วยตอบว่า "เกิดอะไรขึ้น กับใคร เมื่อไหร่" ก็อย่าเขียนลงไป
+> **The one rule:** Logs exist for a person to read at 3 a.m. when the system is down, not while writing the code.
+> If a line does not help answer "what happened, to whom, and when", do not write it.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เริ่มโปรเจกต์ใหม่ทุกชนิด (service, API, worker, batch, desktop, frontend)
-- มีคนขอ "ให้มี log file" หรือถามเรื่องรูปแบบและระดับของ log
-- ไล่ปัญหา production แล้วพบว่า log ที่มีอยู่ใช้ไม่ได้
+- Starting any new project (service, API, worker, batch, desktop, frontend)
+- Someone asks for "a log file", or asks about log format and levels
+- You are chasing a production problem and find that the existing logs are unusable
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-- ต้องการ metrics หรือ tracing (Prometheus, OpenTelemetry) เพราะเป็นคนละเรื่องกับ log ให้ไปใช้ `observability-basics`
-- ทำ endpoint สุขภาพของ service ให้ไปใช้ `web-service-essentials`
+- You need metrics or tracing (Prometheus, OpenTelemetry). That is a different topic from logs, so use `observability-basics`.
+- You are building a service health endpoint. Use `web-service-essentials`.
 
 ---
 
-## 1 · รูปแบบบรรทัด — เหมือนกันทุกภาษา
+## 1 · Line format — the same in every language
 
 ```
 2026-08-31 09:42:13.482 +07:00  INFO   [a3f9c1b2] orders  สร้างคำสั่งซื้อสำเร็จ  orderId=1042 userId=57 ms=134
-└────────── เวลา + timezone ──────────┘ └level┘  └ cid ┘ └source┘ └── ข้อความ ──┘ └──── context k=v ────┘
+└───────── time + timezone ─────────┘ └level┘  └ cid ┘ └source┘ └─ message ─┘  └──── context k=v ────┘
 ```
 
-| ส่วน | กฎ |
+| Part | Rule |
 |---|---|
-| เวลา | `YYYY-MM-DD HH:mm:ss.SSS ±HH:MM` — **ต้องมี timezone** ไม่งั้นเทียบ log ข้ามเครื่องไม่ได้ |
-| level | ชิดซ้าย กว้าง 5 ตัวอักษร (`INFO ` `WARN ` `ERROR` `DEBUG` `FATAL`) — คอลัมน์จะได้ตรงกัน |
-| cid | correlation id 8 ตัวในวงเล็บเหลี่ยม ถ้าไม่มีให้ใส่ `[--------]` (8 ตัวเท่ากัน คอลัมน์จะได้ตรง) |
-| source | โมดูลหรือคลาสที่เขียน log ไม่ใช่ชื่อไฟล์ |
-| ข้อความ | ประโยคเดียว ไม่ฝังตัวแปรใน string |
-| context | `key=value` คั่นด้วยช่องว่าง ถ้าค่ามีช่องว่างให้ครอบด้วย `"` |
+| time | `YYYY-MM-DD HH:mm:ss.SSS ±HH:MM` — **the timezone is required**, or you cannot compare logs across machines |
+| level | Left-aligned, 5 characters wide (`INFO ` `WARN ` `ERROR` `DEBUG` `FATAL`), so the columns line up |
+| cid | An 8-character correlation id in square brackets. If there is none, use `[--------]` (also 8 characters, so the columns line up) |
+| source | The module or class that writes the log, not the file name |
+| message | One sentence, with no variables embedded in the string |
+| context | `key=value` separated by spaces. If a value contains a space, wrap it in `"` |
 
-**ทำไมไม่ใช่ JSON:** ไฟล์นี้มีไว้ให้คนเปิดอ่านและ `grep` เป็นหลัก รูปแบบนี้ยัง
-`grep "\[a3f9c1b2\]"` หรือ `awk` ได้อยู่ แต่ตาอ่านออกทันทีโดยไม่ต้องพึ่งเครื่องมือ
-วันที่ต้องส่งเข้าระบบรวม log อย่าง Grafana Loki หรือ Elasticsearch, Logstash, Kibana (ELK) ให้เพิ่ม sink (ปลายทางที่ส่ง log ไป) แบบ JSON อีก 1 ตัว แต่**อย่าทิ้งไฟล์ข้อความ**
+**Why not JSON:** This file is mainly for people to open and `grep`. This format still works with `grep "\[a3f9c1b2\]"` or `awk`, but the eye reads it at once without any tool.
+When you must ship logs to a central system such as Grafana Loki or Elasticsearch, Logstash, Kibana (ELK), add one more JSON sink (the destination logs are sent to). But **do not drop the text file**.
 
-**1 event = 1 บรรทัด** ยกเว้น stack trace ที่ต่อท้ายโดยเยื้อง 4 ช่อง
+**1 event = 1 line**, except a stack trace, which follows indented by 4 spaces.
 
 ---
 
-## 2 · ระดับ log — เขียนให้ตรงความหมาย
+## 2 · Log levels — write them to match their meaning
 
-| ระดับ | ใช้เมื่อ | ตัวอย่าง |
+| Level | Use when | Example |
 |---|---|---|
-| `FATAL` | แอปกำลังจะตาย ทำงานต่อไม่ได้ | ต่อ DB ตอน start ไม่ได้ |
-| `ERROR` | งานนี้ล้มเหลว **และต้องมีคนมาดู** | บันทึกคำสั่งซื้อไม่สำเร็จ |
-| `WARN` | ผิดปกติแต่ระบบยังไปต่อได้ | retry ครั้งที่ 2, disk เหลือ 10% |
-| `INFO` | เหตุการณ์สำคัญทางธุรกิจ | สร้างคำสั่งซื้อ, ผู้ใช้ล็อกอิน, job เริ่ม/จบ |
-| `DEBUG` | รายละเอียดสำหรับไล่ปัญหา — **ปิดใน production** | ค่าที่คำนวณได้ระหว่างทาง |
-| `TRACE` | ละเอียดระดับทุก step — เปิดเฉพาะตอนไล่จริง ๆ | payload ดิบ |
+| `FATAL` | The app is about to die and cannot continue | Cannot connect to the DB at start |
+| `ERROR` | This job failed **and someone must look** | Saving an order failed |
+| `WARN` | Abnormal, but the system can continue | Retry number 2, disk down to 10% |
+| `INFO` | An important business event | Order created, user logged in, job started/finished |
+| `DEBUG` | Details for chasing problems — **off in production** | Values computed along the way |
+| `TRACE` | Step-by-step detail — turn on only when really chasing | Raw payload |
 
-> ระวัง: **`ERROR` ที่ไม่มีใครต้องทำอะไร คือ `WARN`** — ถ้า ERROR ขึ้นทุกนาทีจนคนเลิกดู
-> คุณเพิ่งทำลายระบบเตือนภัยของตัวเอง
+> Warning: **an `ERROR` that nobody needs to act on is a `WARN`.** If ERROR fires every minute until people stop looking,
+> you have just destroyed your own alarm system.
 
-ค่าเริ่มต้นของ dev คือ `DEBUG` ส่วน production คือ `INFO` และปรับได้ด้วย env `LOG_LEVEL` **ไม่ต้อง build ใหม่ แค่ restart (หรือ reload config)** — .NET อ่านจาก `appsettings.json` แทน (ดู `references/per-stack.md`)
+The default is `DEBUG` in dev and `INFO` in production, adjustable with the env var `LOG_LEVEL`. **No new build is needed; just restart (or reload the config).** .NET reads it from `appsettings.json` instead (see `references/per-stack.md`).
 
 ---
 
-## 3 · Correlation id — สิ่งที่ทำให้ log ใช้งานได้จริง
+## 3 · Correlation id — what makes logs usable
 
-1 request ใช้ id เดียวตั้งแต่ต้นจนจบ ทุกบรรทัดที่เกิดจาก request นั้นจึงมี id เดียวกัน
+One request uses one id from start to finish, so every line that comes from that request has the same id.
 
 ```
 Client ──X-Request-Id?── API Gateway ──┬── Service A ──┐
-                        (ไม่มีก็สร้าง)   └── Service B ──┴─→ ทุกบรรทัดมี cid เดียวกัน
+                        (create if none)└── Service B ──┴─→ every line has the same cid
 ```
 
-- รับจาก header **`X-Request-Id`** เฉพาะเมื่อตรง `^[A-Za-z0-9-]{1,64}$` · ไม่มีหรือไม่ตรง → สร้างใหม่ (`uuid v4` ตัด 8 ตัวแรก) · เหตุผลดู `web-service-essentials` ข้อ 3
-- **ส่งกลับใน response header เสมอ** เพื่อให้ลูกค้าส่ง id มาตอนแจ้งปัญหา แล้วเราตามได้ทันที
-- ส่งต่อไปยัง service ปลายทางทุกครั้งที่เรียกข้ามระบบ
-- เก็บด้วยกลไกที่แยกตาม request: `AsyncLocalStorage` (Node) · `ContextVar` (Python)
-  · `IHttpContextAccessor`/`LogContext` (.NET) — **ห้ามใช้ตัวแปร global** เพราะจะปนกันทันทีที่มีหลาย request พร้อมกัน
+- Take it from the header **`X-Request-Id`** only when it matches `^[A-Za-z0-9-]{1,64}$`. If it is missing or does not match, create a new one (`uuid v4`, first 8 characters). For the reason, see `web-service-essentials` item 3.
+- **Always return it in the response header**, so the customer can send the id when reporting a problem and we can trace it at once.
+- Pass it to the downstream service on every cross-system call.
+- Store it with a mechanism that is separate per request: `AsyncLocalStorage` (Node) · `ContextVar` (Python)
+  · `IHttpContextAccessor`/`LogContext` (.NET). **Never use a global variable**, because ids mix as soon as several requests run at once.
 
 ---
 
-## 4 · ไฟล์ log
+## 4 · Log files
 
 ```
 logs/
-  app-20260831.log        ทุกระดับ · หมุนเที่ยงคืน · เก็บ 30 วัน · ไฟล์ละไม่เกิน 100MB
-  error-20260831.log      เฉพาะ ERROR/FATAL · เก็บ 90 วัน
-  fatal.log               exception ที่ไม่ถูกจับ (แอปตาย)
+  app-20260831.log        all levels · rotate at midnight · keep 30 days · max 100MB per file
+  error-20260831.log      ERROR/FATAL only · keep 90 days
+  fatal.log               uncaught exceptions (app died)
 ```
 
-- โฟลเดอร์กำหนดด้วย env `LOG_DIR` — **ห้าม hardcode path**
-- บีบไฟล์เก่า (`.gz`) และ**ต้องมี retention** ไม่อย่างนั้นดิสก์จะเต็มจนระบบล่มเพราะ log ของตัวเอง
-- ใน container ให้ log ออก stdout ด้วย (นอกเหนือจากไฟล์) เพื่อให้ `docker logs` ใช้ได้
-- `logs/` ต้องอยู่ใน `.gitignore`
+- Set the folder with the env var `LOG_DIR`. **Never hardcode the path.**
+- Compress old files (`.gz`) and **retention is required**. Otherwise the disk fills and the system goes down from its own logs.
+- In a container, also log to stdout (besides the file) so `docker logs` works.
+- `logs/` must be in `.gitignore`.
 
 ---
 
-## 5 · สิ่งที่ห้ามลง log เด็ดขาด
+## 5 · What must never go into a log
 
-รหัสผ่าน · token/API key · cookie/Authorization header · OTP/PIN · เลขบัตรเครดิต/CVV ·
-**เลขบัตรประชาชน** · ข้อมูลสุขภาพ · payload เต็มที่มีข้อมูลส่วนบุคคล
+Passwords · tokens/API keys · cookies/Authorization headers · OTP/PIN · credit card numbers/CVV ·
+**national ID numbers** · health data · full payloads that contain personal data
 
-ตัวช่วยที่มีให้แล้ว: ฟังก์ชัน redaction (ปิดค่าลับ) ดู**ว่าชื่อคีย์มีคำต้องห้ามอยู่ข้างในไหม** (`userPassword`, `pwd`,
-`accessToken` โดนหมด) แล้วแทนค่าด้วย `***` โดยตรวจลึกลงไปได้ 4 ชั้นของ object
+Helper already provided: the redaction function (which hides secret values) checks **whether the key name contains a forbidden word** (`userPassword`, `pwd`,
+`accessToken` are all caught) and replaces the value with `***`. It checks up to 4 levels deep inside an object.
 
-> **Log injection** — ค่าที่มาจากผู้ใช้อาจมี `\n` ถ้าปล่อยผ่าน ผู้ใช้จะ "แต่ง" บรรทัด log
-> ปลอมขึ้นมาเองได้ ทำให้คนอ่านเข้าใจผิดและ parser พัง โค้ดที่ให้มาจึงตัด `\r\n\t` ทิ้งจากทุกค่าและจากข้อความหลัก
+> **Log injection** — A value from a user may contain `\n`. If you let it through, the user can "forge" a fake log line,
+> which misleads readers and breaks parsers. So the provided code strips `\r\n\t` from every value and from the main message.
 
 ---
 
-## 6 · โค้ดที่พร้อมใช้
+## 6 · Ready-to-use code
 
-| ไฟล์ | สแต็ก | สถานะ |
+| File | Stack | Status |
 |---|---|---|
-| `assets/logger.node.js` | Node/TS — winston + winston-daily-rotate-file | ✓ รันทดสอบแล้ว 2026-10-25 (Node 22.23.2 · winston 3.19.0 · winston-daily-rotate-file 5.0.0 · ปิดรหัสผ่าน · correlation id · ตัดขึ้นบรรทัดในข้อความหลักและค่า) |
-| `assets/logger_py.py` | Python — stdlib ล้วน ไม่ต้องลงอะไร | ✓ รันทดสอบแล้ว 2026-10-25 (Python 3.13.5 · ชุดทดสอบเดียวกัน) |
-| `references/per-stack.md` | .NET (Serilog) + Angular | ระวัง ยังไม่ได้คอมไพล์ทดสอบ |
+| `assets/logger.node.js` | Node/TS — winston + winston-daily-rotate-file | ✓ Run and tested 2026-10-25 (Node 22.23.2 · winston 3.19.0 · winston-daily-rotate-file 5.0.0 · password redaction · correlation id · strips line breaks in the main message and values) |
+| `assets/logger_py.py` | Python — stdlib only, nothing to install | ✓ Run and tested 2026-10-25 (Python 3.13.5 · same test set) |
+| `references/per-stack.md` | .NET (Serilog) + Angular | Caution: not yet compiled or tested |
 
 ```js
 // Node
 const { withCorrelation } = require('./logger.node');
 const log = withCorrelation(req.id).child({ source: 'orders' });
 log.info('สร้างคำสั่งซื้อสำเร็จ', { orderId: 1042, ms: 134 });
-log.error('บันทึกไม่สำเร็จ', err);          // ส่ง Error ตรง ๆ ได้ stack ให้เอง
+log.error('บันทึกไม่สำเร็จ', err);          // pass an Error directly; the stack is added for you
 ```
 
 ```python
 # Python
 from logger_py import setup_logging, get_logger, set_correlation_id
-setup_logging(app_name="myapi")             # ครั้งเดียวตอนแอปเริ่ม
+setup_logging(app_name="myapi")             # once, when the app starts
 log = get_logger("orders")
 log.info("สร้างคำสั่งซื้อสำเร็จ", extra={"ctx": {"order_id": 1042, "ms": 134}})
-log.exception("บันทึกไม่สำเร็จ")             # ใน except — ได้ stack ให้เอง
+log.exception("บันทึกไม่สำเร็จ")             # inside except — the stack is added for you
 ```
 
 ---
 
-## 7 · ตรวจงาน
+## 7 · Checking the work
 
 ```bash
-# ไม่มี print/console.log หลงเหลือในโค้ด production
+# no leftover print/console.log in production code
 grep -rnE "console\.(log|error)|Console\.WriteLine|^\s*print\(" src/ --include="*.ts" \
   --include="*.js" --include="*.cs" --include="*.py" | grep -v test | head -30
 
-# log ที่ออกมาอ่านได้จริงและ grep ได้
+# the output logs are readable and greppable
 tail -n 50 logs/app-*.log
-grep "a3f9c1b2" logs/app-*.log          # ตาม request เดียวได้ครบทุกบรรทัดไหม
+grep "a3f9c1b2" logs/app-*.log          # does one request show every line?
 ```
 
-- [ ] ทุกบรรทัดมีครบ: เวลา+timezone · level · cid · source
-- [ ] `grep` ด้วย cid เดียวแล้วเห็นเรื่องราวของ request นั้นตั้งแต่ต้นจนจบ
-- [ ] ไม่มีความลับหลุด: ลอง log object ที่มี `password`, `token` แล้วต้องเห็น `***`
-- [ ] ยิงค่าที่มี `\n` เข้าไปแล้วไม่เกิดบรรทัดปลอม
-- [ ] ตั้ง `LOG_LEVEL=INFO` แล้ว DEBUG หายไปจริง
-- [ ] ไฟล์หมุนตามวันและมี retention (ปล่อยไว้ 1 เดือนดิสก์ต้องไม่เต็ม)
-- [ ] `logs/` อยู่ใน `.gitignore`
-- [ ] response ส่ง `X-Request-Id` กลับมาให้ลูกค้า
+- [ ] Every line has all of: time+timezone · level · cid · source
+- [ ] `grep` with one cid shows the story of that request from start to finish
+- [ ] No secrets leak: log an object with `password` and `token`, and you must see `***`
+- [ ] Feeding in a value that contains `\n` produces no fake line
+- [ ] With `LOG_LEVEL=INFO`, DEBUG really disappears
+- [ ] Files rotate daily and have retention (left for 1 month, the disk must not fill)
+- [ ] `logs/` is in `.gitignore`
+- [ ] The response sends `X-Request-Id` back to the customer
 
 ---
 
 ## 8 · Anti-patterns
 
-- **`console.log` / `print()` ในโค้ดจริง** — ไม่มี level ไม่มีเวลา ไม่มี cid ไม่ลงไฟล์
-- **log ทุกอย่าง** — ไฟล์ใหญ่จนหาอะไรไม่เจอ ราคาแพง และช้า
-- **`try { } catch (e) { }` เงียบ ๆ** — ต้อง log อย่างน้อย 1 บรรทัด
-- **log แล้ว throw ต่อ** — ปัญหาเดียวจะโผล่ 3 ครั้งในไฟล์ ให้ log ที่ชั้นบนสุดซึ่งจัดการ error จริงแทน
-- **ตัวแปรฝังในข้อความ** (`` `บันทึก order ${id} ไม่สำเร็จ` ``) — ทำให้ group log ไม่ได้
-  ใช้ข้อความคงที่ + context แทน
-- **log ในลูปที่วนหลายพันรอบ** — ให้สรุปทีเดียวตอนจบลูป
-- **timestamp ไม่มี timezone** — server ใช้ UTC แต่คนไทยอ่านเป็น +07:00 จึงเทียบเวลาผิดไป 7 ชั่วโมง
-- **ไม่มี retention** — วันหนึ่งดิสก์เต็มแล้วระบบล่มเพราะ log ของตัวเอง
+- **`console.log` / `print()` in real code** — no level, no time, no cid, not written to a file
+- **Logging everything** — the file grows so large you cannot find anything, and it is expensive and slow
+- **A silent `try { } catch (e) { }`** — log at least 1 line
+- **Log, then rethrow** — one problem shows up 3 times in the file. Log at the top layer that really handles the error instead.
+- **Variables embedded in the message** (`` `บันทึก order ${id} ไม่สำเร็จ` ``) — you cannot group the logs.
+  Use a fixed message + context instead.
+- **Logging inside a loop that runs thousands of times** — log one summary when the loop ends
+- **A timestamp with no timezone** — the server uses UTC but Thai readers read it as +07:00, so times are compared 7 hours off
+- **No retention** — one day the disk fills and the system goes down from its own logs
 
 ---
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Links to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use with |
 |---|---|
-| endpoint health/ping/version | `web-service-essentials` |
-| เขียน test ให้ครอบคลุม | `testing-standards` |
-| runbook ตอน incident | `incident-runbook-template` |
-| postmortem หลังเหตุ | `postmortem-template` |
+| health/ping/version endpoint | `web-service-essentials` |
+| Writing tests with full coverage | `testing-standards` |
+| Runbook during an incident | `incident-runbook-template` |
+| Postmortem after an incident | `postmortem-template` |
 
 
 ## reference: per-stack.md
 
-# ตั้งค่า logger ให้ได้รูปแบบเดียวกัน — .NET และ Angular
+# Set up the logger to produce the same format — .NET and Angular
 
-> ระวัง: โค้ดในไฟล์นี้ **ยังไม่ได้คอมไพล์ทดสอบ** (ต่างจาก `assets/logger.node.js` และ
-> `assets/logger_py.py` ที่รันจริงแล้ว) โค้ดนี้ใช้การตั้งค่ามาตรฐานของแต่ละไลบรารี
-> ตอน build ครั้งแรกให้เทียบบรรทัดที่ออกมากับรูปแบบใน SKILL.md ข้อ 1
+> Warning: the code in this file is **not yet compiled or tested** (unlike `assets/logger.node.js` and
+> `assets/logger_py.py`, which have really been run). It uses the standard setup of each library.
+> At the first build, compare the output lines with the format in SKILL.md item 1.
 
 ---
 
-## สารบัญ
+## Contents
 
 1. [.NET / C# — Serilog](#net--c--serilog)
 2. [Angular / frontend](#angular--frontend)
-3. [ตารางเทียบ](#ตารางเทียบ)
+3. [Comparison table](#comparison-table)
 
 ---
 
@@ -1195,7 +1196,7 @@ dotnet add package Serilog.AspNetCore
 dotnet add package Serilog.Sinks.File
 ```
 
-`appsettings.json` — เก็บการตั้งค่าไว้นอกโค้ด เปลี่ยนระดับ log ได้โดยไม่ต้อง build ใหม่:
+`appsettings.json` — keeps the settings outside the code, so you can change the log level without a new build:
 
 ```json
 {
@@ -1224,8 +1225,8 @@ const string LineTemplate =
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .Enrich.FromLogContext()
-    .Enrich.WithProperty("CorrelationId", "--------") // ค่าตั้งต้นเมื่อไม่มี request (8 ตัว)
-    .Enrich.WithProperty("Context", "")              // ค่าว่างเมื่อไม่มี context k=v
+    .Enrich.WithProperty("CorrelationId", "--------") // default when there is no request (8 characters)
+    .Enrich.WithProperty("Context", "")              // empty when there is no context k=v
     .WriteTo.Console(outputTemplate: LineTemplate)
     .WriteTo.File(
         path: Path.Combine(Environment.GetEnvironmentVariable("LOG_DIR") ?? "logs", "app-.log"),
@@ -1245,8 +1246,8 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 ```
 
-> `{Level:u5}` คือตัวพิมพ์ใหญ่กว้าง 5 ตัวอักษร จึงได้ `INFO ` `WARN ` `ERROR` ตรงกับสแต็กอื่น
-> `{Message:lj}` และ `{Context:l}` คือไม่ครอบ string ด้วย `"` ซ้ำอีกชั้น
+> `{Level:u5}` means upper case, 5 characters wide, which gives `INFO ` `WARN ` `ERROR` to match the other stacks.
+> `{Message:lj}` and `{Context:l}` mean the string is not wrapped in an extra layer of `"`.
 
 ### Middleware correlation id
 
@@ -1256,49 +1257,50 @@ using System.Text.RegularExpressions;
 public sealed class CorrelationIdMiddleware(RequestDelegate next)
 {
     public const string Header = "X-Request-Id";
-    // รับค่าจากลูกค้าเฉพาะตัวอักษร ตัวเลข และ - ยาวไม่เกิน 36 ตัว — กันคนยัดข้อความยาวหรือ \n เข้า log
+    // accept from the customer only letters, digits, and - up to 36 characters — blocks people stuffing long text or \n into the log
+ into the log
     private static readonly Regex Valid = new("^[A-Za-z0-9-]{1,36}$", RegexOptions.Compiled);
 
     public async Task Invoke(HttpContext ctx)
     {
         var cid = ctx.Request.Headers[Header].FirstOrDefault();
         if (cid is null || !Valid.IsMatch(cid))
-            cid = Guid.NewGuid().ToString("N")[..8];   // ไม่มีหรือไม่ผ่าน → สร้างใหม่
+            cid = Guid.NewGuid().ToString("N")[..8];   // missing or invalid → create a new one
 
-        var logCid = cid.Length > 8 ? cid[..8] : cid;   // log ใช้ 8 ตัวแรกให้ตรงคอลัมน์ cid (เหมือน Node/Python) — header ส่งค่าเต็มกลับ
+        var logCid = cid.Length > 8 ? cid[..8] : cid;   // the log uses the first 8 characters to fit the cid column (same as Node/Python) — the header returns the full value
 
-        ctx.Response.Headers[Header] = cid;          // ส่งกลับให้ลูกค้าอ้างอิงได้
+        ctx.Response.Headers[Header] = cid;          // return it so the customer can quote it
 
-        // LogContext ผูกกับ async flow ของ request นี้เท่านั้น — ไม่ปนกับ request อื่น
+        // LogContext is tied only to this request's async flow — it does not mix with other requests
         using (Serilog.Context.LogContext.PushProperty("CorrelationId", logCid))
             await next(ctx);
     }
 }
 ```
 
-### เขียน log
+### Writing logs
 
 ```csharp
-// ถูก: ข้อความคงที่ + ค่าไปอยู่ใน {Context} เป็น k=v ตามรูปแบบ SKILL.md ข้อ 1
-//    ผลลัพธ์: ... INFO   [a3f9c1b2] Orders  สร้างคำสั่งซื้อสำเร็จ  orderId=1042 ms=134
+// Right: fixed message + values go in {Context} as k=v, per the format in SKILL.md item 1
+//    Output: ... INFO   [a3f9c1b2] Orders  สร้างคำสั่งซื้อสำเร็จ  orderId=1042 ms=134
 using (Serilog.Context.LogContext.PushProperty("Context", $"orderId={orderId} ms={sw.ElapsedMilliseconds}"))
     _logger.LogInformation("สร้างคำสั่งซื้อสำเร็จ");
 
-// ผิด: ตัวแปรฝังใน string — ทุกบรรทัดกลายเป็นข้อความคนละอัน group ไม่ได้
+// Wrong: a variable embedded in the string — every line becomes a different message and cannot be grouped
 _logger.LogInformation($"สร้างคำสั่งซื้อ {orderId} สำเร็จ");
 ```
 
-### ปิดข้อมูลลับ
+### Redacting secrets
 
-Serilog ไม่ปิดค่าลับให้อัตโนมัติ ทางที่ชัวร์ที่สุดคือ**อย่าส่ง object ทั้งก้อนเข้า log**
-ให้เลือกเฉพาะ field ที่ต้องการ ถ้าจำเป็นต้องส่งทั้งก้อนให้เขียน `IDestructuringPolicy`
-หรือใส่ `[NotLogged]` ผ่าน `Destructure.ByTransforming<T>()`
+Serilog does not redact secrets automatically. The surest way is to **never pass a whole object into the log**.
+Pick only the fields you need. If you must pass the whole object, write an `IDestructuringPolicy`
+or add `[NotLogged]` through `Destructure.ByTransforming<T>()`.
 
 ---
 
 ## Angular / frontend
 
-หลักการต่างจาก backend: **เบราว์เซอร์เขียนไฟล์ไม่ได้** log ที่สำคัญจึงต้องส่งขึ้น backend
+The principle differs from the backend: **a browser cannot write files**, so important logs must be sent up to the backend.
 
 ```ts
 // core/logger.service.ts
@@ -1313,15 +1315,15 @@ export class LoggerService {
   private buffer: unknown[] = [];
 
   private write(level: Level, message: string, ctx: Record<string, unknown> = {}) {
-    // dev: ออก console เพื่อไล่ปัญหา — prod: เงียบ ยกเว้น WARN ขึ้นไปที่ส่งขึ้น server
+    // dev: print to the console for chasing problems — prod: silent, except WARN and above, which go to the server
     if (isDevMode()) console[level === 'ERROR' ? 'error' : 'log'](level, message, ctx);
-    if (level === 'DEBUG' || (!isDevMode() && level === 'INFO')) return;   // prod ส่งเฉพาะ WARN ขึ้นไป
+    if (level === 'DEBUG' || (!isDevMode() && level === 'INFO')) return;   // prod sends only WARN and above
 
     this.buffer.push({ ts: new Date().toISOString(), level, message, ctx });
     if (this.buffer.length >= 10 || level === 'ERROR') this.flush();
   }
 
-  /** ส่งเป็นชุด ไม่ยิงทีละบรรทัด — ไม่งั้น network tab เต็มไปด้วย request ของ log เอง */
+  /** Send in batches, not line by line — otherwise the network tab fills with the log's own requests */
   flush() {
     if (!this.buffer.length) return;
     const batch = this.buffer.splice(0);
@@ -1335,7 +1337,7 @@ export class LoggerService {
 }
 ```
 
-จับ error ที่หลุดทุกตัว:
+Catch every uncaught error:
 
 ```ts
 // core/global-error.handler.ts
@@ -1354,7 +1356,7 @@ export class GlobalErrorHandler implements ErrorHandler {
 // app.config.ts → providers: [{ provide: ErrorHandler, useClass: GlobalErrorHandler }]
 ```
 
-ส่ง correlation id ในทุก request เพื่อให้ log ฝั่ง client กับ server ต่อกันติด:
+Send a correlation id with every request so client-side and server-side logs connect:
 
 ```ts
 // core/correlation.interceptor.ts
@@ -1364,22 +1366,22 @@ export const correlationInterceptor: HttpInterceptorFn = (req, next) =>
   next(req.clone({ setHeaders: { 'X-Request-Id': crypto.randomUUID().slice(0, 8) } }));
 ```
 
-**ฝั่ง backend** ต้องมี endpoint `POST /api/client-logs` ที่:
-- จำกัดขนาด body และทำ rate limit ไม่อย่างนั้นจะกลายเป็นช่องให้คนยิง log ถล่ม
-- เขียนลงไฟล์แยก `logs/client-YYYYMMDD.log`
-- **ถือว่าเนื้อหาเป็นข้อมูลที่เชื่อไม่ได้** จึงต้องตัด `\r\n` ออกจากทุกค่าเหมือน log ปกติ
+**On the backend** you need an endpoint `POST /api/client-logs` that:
+- Limits the body size and applies a rate limit. Otherwise it becomes a hole for people to flood you with logs.
+- Writes to a separate file `logs/client-YYYYMMDD.log`
+- **Treats the content as untrusted data**, so strip `\r\n` from every value just like a normal log
 
 ---
 
-## ตารางเทียบ
+## Comparison table
 
-| เรื่อง | .NET | Node | Python | Angular |
+| Topic | .NET | Node | Python | Angular |
 |---|---|---|---|---|
-| ไลบรารี | Serilog | winston | stdlib `logging` | เขียนเอง (บาง) |
-| หมุนไฟล์ | `rollingInterval: Day` | `winston-daily-rotate-file` | `TimedRotatingFileHandler` | — (ส่งขึ้น backend) |
+| Library | Serilog | winston | stdlib `logging` | Hand-written (thin) |
+| File rotation | `rollingInterval: Day` | `winston-daily-rotate-file` | `TimedRotatingFileHandler` | — (sent to the backend) |
 | correlation | `LogContext.PushProperty` | `AsyncLocalStorage` + `child()` | `ContextVar` | header `X-Request-Id` |
-| ระดับ | `LogEventLevel` | `level` | `setLevel` | enum ของตัวเอง |
-| ตั้งค่าจากภายนอก | `appsettings.json` | env `LOG_LEVEL` | env `LOG_LEVEL` | `isDevMode()` |
+| Level | `LogEventLevel` | `level` | `setLevel` | Its own enum |
+| External configuration | `appsettings.json` | env `LOG_LEVEL` | env `LOG_LEVEL` | `isDevMode()` |
 
 
 ---
@@ -1390,61 +1392,61 @@ Use when building or reviewing an HTTP backend
 
 # Web Service Essentials
 
-> **กฎข้อเดียว:** ก่อนเขียน endpoint ธุรกิจตัวแรก service ต้องตอบได้ว่า
-> "ยังอยู่ไหม · พร้อมรับงานไหม · ตอนนี้รันเวอร์ชันอะไร" ถ้าตอบไม่ได้ วันที่ระบบล่มคุณจะต้องเดาล้วน ๆ
+> **The one rule:** before writing the first business endpoint, the service must be able to answer
+> "Are you still alive? · Are you ready for work? · Which version are you running now?" If it cannot, on the day the system goes down you will be guessing blind.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เริ่ม service / REST API / microservice ใหม่
-- มีคนขอ health check, ping, readiness, liveness, version endpoint
-- จะ deploy ขึ้น production ครั้งแรก หรือย้ายเข้า Docker/Kubernetes
-- ต้องกำหนดรูปแบบ error ของ API ให้เหมือนกันทั้งระบบ
+- Starting a new service / REST API / microservice
+- Someone asks for a health check, ping, readiness, liveness, or version endpoint
+- Deploying to production for the first time, or moving into Docker/Kubernetes
+- You must set one API error format for the whole system
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-- ออกแบบ endpoint ทางธุรกิจ ให้ใช้ command `/api-design`
-- รูปแบบ URL · paging · วันที่ · id ของ API ให้ใช้ `api-conventions`
-- รูปแบบ log ให้ใช้ `logging-standards`
-- เลือกสถาปัตยกรรม ให้ใช้ `architecture-patterns`
+- To design business endpoints, use the command `/api-design`
+- For URL style · paging · dates · API ids, use `api-conventions`
+- For log format, use `logging-standards`
+- To choose an architecture, use `architecture-patterns`
 
 ---
 
-## 1 · endpoint พื้นฐาน 4 ตัว
+## 1 · The 4 basic endpoints
 
-| Endpoint | ตอบอะไร | auth | เช็ค dependency | ใครเรียก |
+| Endpoint | What it answers | auth | Checks dependencies | Who calls it |
 |---|---|:---:|:---:|---|
-| `GET /ping` | `pong` (text) | ไม่ | ไม่ | load balancer ทุกวินาที |
-| `GET /health/live` | process ยังอยู่ | ไม่ | **ไม่** | orchestrator (restart ถ้าตาย) |
-| `GET /health/ready` | พร้อมรับ traffic | ไม่ | ใช่ | orchestrator (ตัดออกจาก pool) |
-| `GET /version` | รันอะไรอยู่ | ไม่* | ไม่ | คน ตอนไล่ปัญหา |
+| `GET /ping` | `pong` (text) | no | no | load balancer, every second |
+| `GET /health/live` | the process is still alive | no | **no** | orchestrator (restarts if dead) |
+| `GET /health/ready` | ready to take traffic | no | yes | orchestrator (removes from the pool) |
+| `GET /version` | what is running | no* | no | a person, when tracing a problem |
 
-> **live ห้ามเช็ค dependency** นี่คือความผิดพลาดที่เจอบ่อยที่สุด
-> ถ้า `/health/live` เช็คฐานข้อมูล (database · DB) แล้ว DB ล่มชั่วคราว Kubernetes จะ**ฆ่า pod ทิ้งทั้งหมด**
-> ทั้งที่แอปยังปกติดี พอ DB กลับมาก็ไม่มี pod เหลือรับ traffic แล้ว
-> การเช็ค dependency ต้องอยู่ที่ `/health/ready` ซึ่งแค่ตัด pod ออกจาก pool ชั่วคราว
+> **live must not check dependencies.** This is the most common mistake.
+> If `/health/live` checks the database (DB) and the DB goes down briefly, Kubernetes will **kill every pod**
+> even though the app itself is fine. When the DB comes back, no pod is left to take traffic.
+> The dependency check belongs in `/health/ready`, which only removes a pod from the pool for a while.
 
-\* ถ้าไม่อยากให้คนทั่วไปเห็น commit hash ใน `/version` ให้จำกัดให้เรียกได้เฉพาะเครือข่ายภายใน
+\* If you do not want the public to see the commit hash in `/version`, restrict it so only the internal network can call it.
 
-**ผูกกับ Kubernetes แบบนี้** (ปรับจาก secondsky `health-check-endpoints` · MIT) — live กับ ready ต้องชี้คนละ path ไม่งั้นข้อข้างบนไร้ความหมาย
+**Wire it to Kubernetes like this** (adapted from secondsky `health-check-endpoints` · MIT) — live and ready must point to different paths, or the point above means nothing.
 
 ```yaml
-livenessProbe:            # ตาย → restart container
+livenessProbe:            # dead → restart the container
   httpGet: { path: /health/live, port: 3000 }
-  initialDelaySeconds: 15 # ให้แอปขึ้นก่อน ไม่งั้นโดนฆ่าตั้งแต่ยังไม่ทัน listen
+  initialDelaySeconds: 15 # let the app start first, or it gets killed before it can listen
   periodSeconds: 10
-  failureThreshold: 3     # พลาด 3 ครั้งติด (30 วินาที) ค่อย restart
-readinessProbe:           # ไม่พร้อม → ตัดออกจาก Service ชั่วคราว ไม่ restart
+  failureThreshold: 3     # restart only after 3 failures in a row (30 seconds)
+readinessProbe:           # not ready → remove from the Service for a while, no restart
   httpGet: { path: /health/ready, port: 3000 }
   initialDelaySeconds: 5
   periodSeconds: 10
 ```
 
-แอปที่ warm-up นาน (โหลดโมเดล · cache ใหญ่) เพิ่ม `startupProbe` ชี้ `/health/live` พร้อม `failureThreshold` สูง แทนการยืด `initialDelaySeconds` ของ liveness
+For an app with a long warm-up (loading a model · a big cache), add a `startupProbe` pointing to `/health/live` with a high `failureThreshold`, instead of stretching the liveness `initialDelaySeconds`.
 
-### รูปร่าง response (เหมือนกันทุกภาษา)
+### Response shape (the same in every language)
 
 ```jsonc
-// GET /health/ready → 200 ปกติ · 503 เมื่อ dependency ที่ critical ล่ม
+// GET /health/ready → 200 normally · 503 when a critical dependency is down
 {
   "status": "up",                       // up | degraded | down
   "timestamp": "2026-08-31T09:42:13.482Z",
@@ -1464,105 +1466,105 @@ readinessProbe:           # ไม่พร้อม → ตัดออกจ�
 }
 ```
 
-**3 สถานะ ไม่ใช่ 2:**
-- `up` — ทุกอย่างปกติ → 200
-- `degraded` — dependency ที่**ไม่ critical** ล่ม (เช่น อีเมล) แต่ยังรับ traffic ได้ → 200
-- `down` — dependency ที่ critical ล่ม (เช่น DB) → **503**
+**3 states, not 2:**
+- `up` — everything is normal → 200
+- `degraded` — a **non-critical** dependency is down (such as email) but the service can still take traffic → 200
+- `down` — a critical dependency is down (such as the DB) → **503**
 
-**ทุก check ต้องมี timeout** (ค่าเริ่มต้น 3 วินาที) ไม่งั้น dependency ที่ค้าง
-จะทำให้ health endpoint ค้างตาม แล้ว orchestrator ตัดสินใจผิดทั้งระบบ
+**Every check must have a timeout** (default 3 seconds). Otherwise a hung dependency
+makes the health endpoint hang too, and the orchestrator makes the wrong decision for the whole system.
 
-**ห้ามส่ง stack trace หรือ connection string ออกทาง endpoint นี้** เพราะ endpoint นี้ใครก็เรียกได้
+**Never send a stack trace or connection string out through these endpoints**, because anyone can call them.
 
 ---
 
-## 2 · รูปแบบ error ที่เหมือนกันทั้งระบบ
+## 2 · One error format for the whole system
 
-ยึด **RFC 9457 (`application/problem+json`)** ซึ่งเป็นมาตรฐานจริง ไม่ต้องคิดเอง
+Follow **RFC 9457 (`application/problem+json`)**, which is a real standard, so you do not invent your own.
 
 ```jsonc
-// 422 — รูปแบบถูก แต่ข้อมูลไม่ผ่านกฎ (ดูตารางล่าง)
+// 422 — the format is right, but the data fails a rule (see the table below)
 {
   "type": "https://api.example.com/errors/validation",
   "title": "ข้อมูลที่ส่งมาไม่ถูกต้อง",
   "status": 422,
   "detail": "จำนวนสินค้าต้องมากกว่า 0",
   "instance": "/api/v1/orders",
-  "requestId": "a3f9c1b2",              // ตรงกับ cid ใน log — ตามเรื่องได้ทันที
-  "errors": [                           // เฉพาะ validation · ครบทุกฟิลด์ในครั้งเดียว
+  "requestId": "a3f9c1b2",              // matches the cid in the log — trace the case at once
+  "errors": [                           // validation only · every field in one response
     { "field": "items[0].qty", "code": "min_value", "message": "ต้องมากกว่า 0" }
   ]
 }
 ```
 
-- `field` เป็นเส้นทางเต็มรวมดัชนีอาเรย์ · `code` ให้โปรแกรมอ่าน · `message` ให้คนอ่าน
+- `field` is the full path including array indexes · `code` is for programs · `message` is for people
 
-| สถานะ | ใช้เมื่อ |
+| Status | Use when |
 |---|---|
-| 400 | ข้อมูลผิดรูป |
-| 401 | ยังไม่ได้ยืนยันตัวตน |
-| 403 | ยืนยันแล้วแต่ไม่มีสิทธิ์ |
-| 404 | ไม่มีสิ่งนี้ |
-| 409 | ชนกับสถานะปัจจุบัน (ซ้ำ, แก้ทับ) |
-| 422 | รูปแบบถูกแต่ผิดกฎธุรกิจ |
-| 429 | เรียกถี่เกิน — ต้องมี `Retry-After` |
-| 500 | ฝั่งเราพัง — **ห้ามส่งรายละเอียดภายในออกไป** ส่ง `requestId` แทน |
+| 400 | Malformed data |
+| 401 | Not yet authenticated |
+| 403 | Authenticated but not allowed |
+| 404 | The thing does not exist |
+| 409 | Conflicts with current state (duplicate, overwrite) |
+| 422 | Format is right but breaks a business rule |
+| 429 | Called too often — must have `Retry-After` |
+| 500 | Our side broke — **never send internal details out**, send `requestId` instead |
 
-> **500 ต้องบอกแค่ "เกิดข้อผิดพลาด กรุณาแจ้ง requestId นี้"** รายละเอียดจริงอยู่ใน log
-> การส่ง stack trace ออกไปก็เหมือนแจกแผนผังระบบให้คนที่กำลังหาช่องโจมตี
+> **A 500 must say only "an error occurred, please report this requestId".** The real details stay in the log.
+> Sending a stack trace out is like handing the system's blueprint to someone looking for a way in.
 
 ---
 
 ## 3 · Request id
 
-- รับจาก header **`X-Request-Id`** เฉพาะเมื่อตรง `^[A-Za-z0-9-]{1,64}$` · ไม่มีหรือไม่ตรง → สร้างใหม่ (uuid ตัด 8 ตัว)
-  ค่านี้ลงทุกบรรทัด log ถ้ารับมาตรง ๆ ผู้ส่งจะแทรกขึ้นบรรทัดใหม่หรือข้อความปลอมลง log ได้ (log injection)
-- **ส่งกลับใน response header ทุกครั้ง** รวมทั้งตอน error
-- ใส่ในทุกบรรทัด log (ดู `logging-standards`) และใน error body
-- ส่งต่อไป service ปลายทางทุกครั้งที่เรียกข้ามระบบ
+- Accept it from the **`X-Request-Id`** header only when it matches `^[A-Za-z0-9-]{1,64}$` · if it is missing or does not match → create a new one (a uuid cut to 8 characters).
+  This value goes into every log line. If you accept it as is, the sender can insert new lines or fake text into the log (log injection).
+- **Return it in a response header every time**, including on errors.
+- Put it in every log line (see `logging-standards`) and in the error body.
+- Pass it on to the downstream service every time you call across systems.
 
-พอลูกค้าโทรมาบอกว่า "มันพัง" ก็ขอ requestId แล้ว `grep` ครั้งเดียวเจอทั้งเรื่อง
+When a customer calls to say "it broke", ask for the requestId and `grep` once to find the whole story.
 
 ---
 
 ## 4 · Graceful shutdown
 
-ตอน deploy ใหม่ orchestrator จะส่ง `SIGTERM` มา ถ้าแอปตายทันที request ที่ทำอยู่จะขาดกลางคัน
+On a new deploy the orchestrator sends `SIGTERM`. If the app dies at once, requests in progress are cut off midway.
 
 ```
-SIGTERM → 1. หยุดรับ request ใหม่ (ให้ /health/ready ตอบ down ทันที)
-          2. รอ request ที่ค้างอยู่ทำงานจบ (timeout 15–30 วิ)
-          3. ปิด DB pool / คิว / ไฟล์
+SIGTERM → 1. Stop accepting new requests (make /health/ready answer down at once)
+          2. Wait for in-flight requests to finish (timeout 15–30 seconds)
+          3. Close the DB pool / queues / files
           4. exit(0)
 ```
 
-> ข้อ 1 สำคัญกว่าที่คิด ต้องให้ `/health/ready` ตอบ `down` **ก่อน** ปิดจริงสัก 5 วินาที
-> เพื่อให้ load balancer ตัดเราออกจาก pool ทัน ไม่งั้นยังมี traffic วิ่งเข้ามาตอนกำลังปิด
+> Step 1 matters more than it looks. `/health/ready` must answer `down` about 5 seconds **before** the real shutdown,
+> so the load balancer removes us from the pool in time. Otherwise traffic keeps arriving while we are closing.
 
 ---
 
-## 5 · สิ่งที่ต้องมีก่อน deploy (ไม่ใช่ทางเลือก)
+## 5 · What must exist before deploy (not optional)
 
-- **Timeout ทุกทาง** ทั้ง request เข้า การเรียกออก และ query DB ถ้าไม่มี timeout ปลายทางช้าเมื่อไร ทั้งระบบจะค้างตาม
-- **จำกัดขนาด body** (เช่น 1MB) เพื่อกัน memory ระเบิดจาก payload ใหญ่
-- **Cross-Origin Resource Sharing (CORS) ระบุ origin ชัดเจน** — `*` ใช้ได้เฉพาะ API สาธารณะที่ไม่มี cookie
-- **Rate limit** อย่างน้อยที่ endpoint ล็อกอินและที่ที่ส่งรหัสผ่านใช้ครั้งเดียว (One-Time Password · OTP)/อีเมล
-- **Security headers**: `X-Content-Type-Options: nosniff` · `Content-Security-Policy: frame-ancestors 'none'` (ตัวแทนของ `X-Frame-Options` ที่เป็น header รุ่นเก่า · ใส่ `X-Frame-Options: DENY` คู่ไว้ให้เบราว์เซอร์เก่า) ·
+- **Timeouts everywhere**: incoming requests, outgoing calls, and DB queries. Without a timeout, the moment a downstream is slow, the whole system hangs with it.
+- **Limit body size** (for example 1MB) to stop memory blowing up from a large payload.
+- **Cross-Origin Resource Sharing (CORS) names the origin explicitly** — `*` is allowed only for a public API with no cookies.
+- **Rate limit** at least on the login endpoint and on anything that sends a one-time password (OTP)/email.
+- **Security headers**: `X-Content-Type-Options: nosniff` · `Content-Security-Policy: frame-ancestors 'none'` (replaces the old `X-Frame-Options` header · also add `X-Frame-Options: DENY` for old browsers) ·
   `Strict-Transport-Security` (HTTP Strict Transport Security · HSTS)
-  Node: `helmet` ตั้งครบในบรรทัดเดียว · .NET: `UseHsts()` ตั้งแค่ HSTS ที่เหลือต้องเขียน middleware สั้น ๆ หรือใช้แพ็กเกจ `NetEscapades.AspNetCore.SecurityHeaders` (ตัวอย่างใน `references/per-stack.md`)
-- **ปิดหน้าโชว์ error เต็ม ๆ ใน production** (`app.UseDeveloperExceptionPage()` เฉพาะ dev)
-- **ตั้งเวอร์ชันไว้ใน path**: `/api/v1/...` ตั้งแต่วันแรก เพราะย้ายทีหลังแพงกว่ามาก
-- **OpenAPI** ที่ generate จากโค้ดจริง ไม่ใช่เขียนมือแล้วลืมอัปเดต
+  Node: `helmet` sets them all in one line · .NET: `UseHsts()` sets only HSTS, and the rest needs a short middleware or the package `NetEscapades.AspNetCore.SecurityHeaders` (example in `references/per-stack.md`)
+- **Turn off the full error page in production** (`app.UseDeveloperExceptionPage()` in dev only)
+- **Put the version in the path**: `/api/v1/...` from day one, because moving later costs much more.
+- **OpenAPI** generated from the real code, not written by hand and then forgotten.
 
 ---
 
-## 6 · โค้ดที่พร้อมใช้
+## 6 · Ready-to-use code
 
-| ไฟล์ | สแต็ก | สถานะ |
+| File | Stack | Status |
 |---|---|---|
-| `assets/health.node.js` | Node / Express | ✓ รันทดสอบครบทั้ง 4 endpoint + เคส degraded/down/timeout |
-| `assets/health_py.py` | Python / FastAPI | ✓ รันทดสอบครบเหมือนกัน ผลตรงกันทุก field |
-| `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | ระวัง ยังไม่ได้คอมไพล์ทดสอบ |
+| `assets/health.node.js` | Node / Express | ✓ all 4 endpoints run and tested, plus the degraded/down/timeout cases |
+| `assets/health_py.py` | Python / FastAPI | ✓ run and tested the same way, results match on every field |
+| `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | Caution: not yet compiled or tested |
 
 ```js
 // Node
@@ -1586,7 +1588,7 @@ app.include_router(make_health_router(
 
 ---
 
-## 7 · ตรวจงาน
+## 7 · Check the work
 
 ```bash
 curl -i localhost:8080/ping                    # 200 pong
@@ -1594,55 +1596,55 @@ curl -s localhost:8080/health/live  | jq
 curl -s localhost:8080/health/ready | jq
 curl -s localhost:8080/version      | jq
 
-# ปิด DB แล้วยิงซ้ำ — ready ต้องเป็น 503 แต่ live ต้องยัง 200
+# stop the DB and call again — ready must be 503 but live must still be 200
 docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:8080/health/live
 ```
 
-- [ ] `/health/live` **ไม่** แตะ DB — ปิด DB แล้วยังตอบ 200
-- [ ] `/health/ready` ตอบ 503 เมื่อ dependency ที่ critical ล่ม
-- [ ] dependency ที่ไม่ critical ล่มแล้วได้ `degraded` + 200 (ยังรับ traffic)
-- [ ] ทุก check มี timeout — ลองทำให้ dependency ค้าง แล้ว endpoint ต้องตอบภายใน ~3 วิ
-- [ ] `/version` ตรงกับ commit ที่ deploy จริง
-- [ ] ทุก response มี `X-Request-Id` รวมทั้งตอน 500
-- [ ] ยิง 500 แล้วไม่มี stack trace / connection string หลุดออกมา
-- [ ] `SIGTERM` แล้ว request ที่ค้างอยู่ทำงานจบก่อนแอปปิด
-- [ ] `/ping` ไม่ถูกเขียนลง log (ไม่งั้นไฟล์เต็มไปด้วย ping)
+- [ ] `/health/live` does **not** touch the DB — it still answers 200 with the DB stopped
+- [ ] `/health/ready` answers 503 when a critical dependency is down
+- [ ] When a non-critical dependency is down, the result is `degraded` + 200 (still takes traffic)
+- [ ] Every check has a timeout — make a dependency hang, and the endpoint must answer within ~3 seconds
+- [ ] `/version` matches the commit actually deployed
+- [ ] Every response has `X-Request-Id`, including a 500
+- [ ] Trigger a 500 and confirm no stack trace / connection string leaks out
+- [ ] After `SIGTERM`, in-flight requests finish before the app closes
+- [ ] `/ping` is not written to the log (or the file fills up with pings)
 
 ---
 
 ## 8 · Anti-patterns
 
-- **`/health` ตัวเดียวเช็คทุกอย่าง** — orchestrator แยกไม่ออกว่าควร restart หรือแค่ตัด traffic
-- **liveness เช็ค DB** — DB สะดุด 10 วินาที = pod ตายยกแถว
-- **health check ไม่มี timeout** — dependency ค้าง แล้ว health ค้างตาม
-- **ส่ง stack trace / connection string ใน health หรือ error 500**
-- **health ต้อง login** — orchestrator ไม่มี token ให้
-- **รูปแบบ error ต่างกันทุก endpoint** — client ต้องเขียนโค้ดแกะ 5 แบบ
-- **`/ping` เขียนลง log** — ทุกวินาที × 86400 = ขยะเต็มไฟล์
-- **ไม่มี graceful shutdown** — deploy ทีไรลูกค้าเจอ error ทุกที
-- **`Access-Control-Allow-Origin: *` คู่กับ cookie** — เปิดช่องให้เว็บอื่นยิงแทนผู้ใช้
+- **A single `/health` that checks everything** — the orchestrator cannot tell whether to restart or only cut traffic
+- **liveness checks the DB** — a 10-second DB hiccup = every pod dies together
+- **A health check with no timeout** — a dependency hangs, and health hangs with it
+- **Sending a stack trace / connection string in health or in a 500 error**
+- **Health requires login** — the orchestrator has no token to give
+- **A different error format on every endpoint** — the client must write 5 kinds of parsing code
+- **`/ping` written to the log** — every second × 86400 = a file full of junk
+- **No graceful shutdown** — every deploy, customers see errors
+- **`Access-Control-Allow-Origin: *` together with cookies** — lets other sites send requests as the user
 
 ---
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Links to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---|---|
-| รูปแบบ log และ correlation id | `logging-standards` |
-| test ให้ endpoint พวกนี้ | `testing-standards` |
-| ตรวจ response ตรงกับ OpenAPI ใน CI · contract กับทีม frontend · เช็ค breaking change | `api-conventions` [`references/contract-testing.md`](../api-conventions/references/contract-testing.md) |
-| ออกแบบ endpoint ธุรกิจ | command `/api-design` |
-| runbook ตอน service ล่ม | `incident-runbook-template` |
-| ตรวจความปลอดภัย | `security-engineer` + command `/security-scan` (ทางลัดไป `security-audit` หรือ `security-gate`) |
+| Log format and correlation id | `logging-standards` |
+| Tests for these endpoints | `testing-standards` |
+| Check responses against OpenAPI in CI · contract with the frontend team · breaking-change check | `api-conventions` [`references/contract-testing.md`](../api-conventions/references/contract-testing.md) |
+| Design business endpoints | command `/api-design` |
+| Runbook for when the service is down | `incident-runbook-template` |
+| Security review | `security-engineer` + command `/security-scan` (a shortcut to `security-audit` or `security-gate`) |
 
 
 ## reference: per-stack.md
 
 # .NET และ Angular
 
-> ระวัง: โค้ดในไฟล์นี้ **ยังไม่ได้คอมไพล์ทดสอบ** (ต่างจาก `assets/health.node.js` และ
-> `assets/health_py.py` ที่รันจริงครบทุก endpoint แล้ว) โค้ดนี้เป็นการตั้งค่ามาตรฐานของ
-> ASP.NET Core ตอนรันครั้งแรกให้เทียบ response กับรูปร่างใน SKILL.md ข้อ 1
+> Caution: the code in this file is **not yet compiled or tested** (unlike `assets/health.node.js` and
+> `assets/health_py.py`, which have been run against every endpoint). It is the standard setup of
+> ASP.NET Core. On the first run, compare the response with the shape in SKILL.md section 1.
 
 ---
 
@@ -1710,7 +1712,7 @@ app.MapGet("/version", () => Results.Ok(new
 }));
 ```
 
-ให้ response ตรงรูปแบบเดียวกับสแต็กอื่น:
+Make the response match the same format as the other stacks:
 
 ```csharp
 static Task WriteReady(HttpContext ctx, HealthReport report)
@@ -1746,7 +1748,7 @@ static Task WriteLive(HttpContext ctx, HealthReport _)
 
 ### Error envelope (RFC 9457)
 
-ASP.NET Core มี `ProblemDetails` มาให้อยู่แล้ว ให้ใช้ของที่มี อย่าประดิษฐ์รูปแบบเอง
+ASP.NET Core already ships `ProblemDetails`. Use it, and do not invent your own format.
 
 ```csharp
 builder.Services.AddProblemDetails(o => o.CustomizeProblemDetails = ctx =>
@@ -1762,9 +1764,9 @@ app.UseStatusCodePages();
 
 ### Graceful shutdown
 
-ให้ `/health/ready` ตอบ down ก่อนปิดจริงสักพัก เพื่อให้ load balancer ตัดเราออกจาก pool ทัน
-ใช้ `IHostedLifecycleService.StoppingAsync` (.NET 8 ขึ้นไป) เพราะ host เรียกมัน**ก่อน**หยุด Kestrel (หลัง `ApplicationStopping`)
-จึงรอแบบ `await Task.Delay` ได้โดยไม่บล็อกเธรด และ server ยังตอบ 503 ให้ load balancer เห็น
+Make `/health/ready` answer down for a short while before the real shutdown, so the load balancer removes the instance from its pool in time.
+Use `IHostedLifecycleService.StoppingAsync` (.NET 8 and later), because the host calls it **before** it stops Kestrel (after `ApplicationStopping`).
+So you can wait with `await Task.Delay` without blocking a thread, and the server still answers 503 for the load balancer to see.
 
 ```csharp
 // สถานะร่วม: ตัวรอปิดเขียน · health check อ่าน
@@ -1803,7 +1805,7 @@ builder.Services.Configure<HostOptions>(o =>
 
 ### สิ่งที่ต้องเปิดก่อน deploy
 
-ลงทะเบียน service ได้**ก่อน** `builder.Build()` เท่านั้น — หลัง Build รายการ service เป็นแบบอ่านอย่างเดียว เรียก `builder.Services.Add…` ตอนนั้นจะได้ `InvalidOperationException` ตอนเริ่มแอป
+Register services only **before** `builder.Build()`. After Build the service list is read-only, and calling `builder.Services.Add…` then throws `InvalidOperationException` at app start.
 
 ```csharp
 // ---- ก่อน Build: ลงทะเบียน service ----
@@ -1852,7 +1854,7 @@ export const requestIdInterceptor: HttpInterceptorFn = (req, next) => {
 };
 ```
 
-**แกะ problem+json ให้เป็นข้อความที่ผู้ใช้อ่านรู้เรื่อง**:
+**Turn problem+json into a message the user can understand**:
 
 ```ts
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
@@ -1869,7 +1871,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 };
 ```
 
-**หน้าสถานะระบบ** ให้ทีมซัพพอร์ตเปิดดูเองได้โดยไม่ต้องเรียกนักพัฒนา:
+**System status page**, so the support team can check it without calling a developer:
 
 ```ts
 this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r));

@@ -2,37 +2,37 @@
 
 Use before asking to continue on undoable work
 
-# principle · proceed on reversible work — ย้อนได้ ทำเลย
+# principle · proceed on reversible work: if it can be undone, do it
 
-> ทุกคำถามที่หยุดรอคำตอบ คือเวลาที่ทั้งคนและ agent ไม่ได้ทำงาน
-> ถ้างานย้อนกลับได้ ทำแล้วให้ดูเลยจะเร็วกว่าถามแล้วรอ
+> Every question that stops and waits for an answer is time when both the person and the agent are not working.
+> If the work is reversible, doing it and letting them look is faster than asking and waiting.
 
-## แยกให้ออก
+## Tell them apart
 
-| ย้อนได้ ให้ทำเลย | ย้อนไม่ได้ ให้เตรียมไว้ใน "รออนุมัติ" แล้วทำส่วนอื่นต่อ |
+| Reversible: do it now | Irreversible: prepare it in "รออนุมัติ" (awaiting approval) and carry on with the rest |
 |---|---|
-| แก้ไฟล์ที่มีสำเนาหรือประวัติ (ไฟล์เอกสาร · ชีต · git) | แก้หรือลบข้อมูลจริง (ฐานข้อมูล · ชีตหลัก · ไฟล์ของผู้ใช้) |
-| ร่างเอกสาร · ร่างอีเมลหรือคำตอบลูกค้า (ยังไม่ส่ง) · ร่าง mockup | ส่งอีเมล ข้อความ หรือโพสต์ถึงคนนอก |
-| รัน test · คำนวณ · ลองในสำเนา | ลงระบบจริง (deploy · ประกาศราคา · เผยแพร่) |
-| เลือกระหว่าง 2 ทางที่เปลี่ยนทีหลังได้ | จ่ายเงิน · จอง · ยอมรับเงื่อนไข · ใส่ค่าลับจริง |
-| ย้ายไฟล์ชั่วคราวไป `_to_delete/` | ลบถาวร |
-| โค้ด: commit ใน branch ของงาน เมื่อผู้ใช้อนุญาต | โค้ด: merge เข้า branch หลัก · force-push |
+| Edit a file that has a copy or history (document file · sheet · git) | Edit or delete real data (database · master sheet · the user's files) |
+| Draft a document · draft an email or customer reply (not yet sent) · draft a mockup | Send an email, message or post to outsiders |
+| Run tests · calculate · try in a copy | Release to the real system (deploy · announce a price · publish) |
+| Choose between 2 paths that can be changed later | Pay money · book · accept terms · enter a real secret |
+| Move a temporary file to `_to_delete/` | Delete permanently |
+| Code: commit on the work branch, when the user allows it | Code: merge into the main branch · force-push |
 
-## ก่อนจะถาม — ผ่านสามด่านนี้
+## Before you ask, pass these three gates
 
-1. **ดูได้จากการทดลองไหม** — ถ้าคำตอบคือพฤติกรรม ความเร็ว หน้าตา ผลลัพธ์ ให้ทดลองทำร่างดู (งานโค้ด: playbook `prototype` ใน plugin `software-development`) ไม่ใช่ถาม
-2. **ย้อนได้ไหม** — ถ้าได้ ให้เลือกทางที่ผลกระทบน้อยสุด ลงมือทำ แล้วจดใน [`decision-log`](../decision-log/SKILL.md)
-3. **เป็นข้อเท็จจริงหรือรสนิยมของผู้ใช้ไหม** — ตัวเลข ชื่อ วันที่ งบ ห้ามเดา ให้ใส่ `(รอยืนยัน)` แล้วทำส่วนอื่นต่อ · สีแบรนด์ที่ไม่มีให้ใช้ค่าตั้งต้นของ skill นั้นพร้อม `(รอยืนยัน)` และรวมคำถามไว้ใน "ค้างอยู่" ครั้งเดียว
+1. **Can an experiment show it?** If the answer is behaviour, speed, looks or output, try a draft (code work: playbook `prototype` in plugin `software-development`) instead of asking.
+2. **Is it reversible?** If so, pick the path with the least impact, do it, and note it in [`decision-log`](../decision-log/SKILL.md).
+3. **Is it a fact or the user's taste?** Numbers, names, dates and budgets must never be guessed: put `(รอยืนยัน)` (awaiting confirmation) and carry on with the rest. If the brand colour is missing, use that skill's default with `(รอยืนยัน)` and collect the question into "ค้างอยู่" (pending) once.
 
-ถ้าผ่านทั้ง 3 ด่านแล้วยังต้องถาม ก็ไม่หยุดรอ ให้รวมทุกคำถามไว้ใน "ค้างอยู่" ครั้งเดียว พร้อมทางที่แนะนำ แล้วทำส่วนอื่นต่อ ส่วนงานที่ย้อนไม่ได้ ให้เตรียมคำสั่ง ส่วนที่เปลี่ยน (diff) หรือร่างข้อความไว้ใน "รออนุมัติ" ไม่ทำเอง
+If you pass all 3 gates and still must ask, do not stop and wait. Collect every question into "ค้างอยู่" once, with your recommended path, and carry on with the rest. For irreversible work, prepare the command, the diff or the draft message in "รออนุมัติ" and do not do it yourself.
 
-**ข้อยกเว้นเดียวที่ถามก่อนได้** — ตอนเริ่มงาน ถ้าโจทย์ตีความได้หลายทางจนงานออกมาต่างกันทั้งชุด ให้ถามครั้งเดียวโดยรวมทุกคำถามไว้ในรอบนั้นแบบเลือกคำตอบ ทุกตัวเลือกมีหลักฐาน (skill `superuser` หัวข้อ 6 → `autonomy`) เริ่มแล้วไม่ถามอีก · ทางแยกที่ย้อนไม่ได้ แพง หรือออกไปถึงคนนอก ใช้ [`flag-and-propose`](../flag-and-propose/SKILL.md)
+**The one exception where you may ask first:** at the start of the job, if the brief can be read in so many ways that the whole output would differ, ask once, putting every question of that round together as multiple choice, with evidence for every option (skill `superuser` section 6 → `autonomy`). After you start, do not ask again. For a fork that is irreversible, costly or reaches outsiders, use [`flag-and-propose`](../flag-and-propose/SKILL.md).
 
-## สิ่งที่ห้ามทำ
+## What not to do
 
-- ถาม "ให้ทำต่อไหม" หลังจบแต่ละขั้นของงานที่สั่งไว้แล้ว
-- เสนอแผนแล้วรออนุมัติ ทั้งที่งานชัดและย้อนได้
-- ใช้หลักนี้เป็นข้ออ้างทำสิ่งที่ผู้ใช้ไม่ได้ขอ เพราะ "ทำต่อ" หมายถึงทำงานที่สั่งให้จบ ไม่ใช่ขยายขอบเขตเอง
+- Ask "ให้ทำต่อไหม" (shall I continue?) after each step of a job that was already ordered
+- Offer a plan and wait for approval when the work is clear and reversible
+- Use this principle as an excuse to do things the user did not ask for, because "continue" means finishing the ordered work, not widening the scope yourself
 
 
 ---

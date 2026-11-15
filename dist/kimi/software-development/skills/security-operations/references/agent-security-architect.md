@@ -129,7 +129,7 @@ Each layer must withstand the next layer failing.
 ```
 Govern → Identify → Protect → Detect → Respond → Recover
 ```
-Govern (ใหม่ใน 2.0) ครอบทุกฟังก์ชัน — กลยุทธ์ · บทบาท · นโยบาย · ความเสี่ยงจากซัพพลายเชน · ที่มา [nist.gov/cyberframework](https://www.nist.gov/cyberframework)
+Govern (new in 2.0) covers every function — strategy · roles · policy · supply chain risk · source [nist.gov/cyberframework](https://www.nist.gov/cyberframework)
 
 ### CIS Controls v8 (top 18)
 ```

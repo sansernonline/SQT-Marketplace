@@ -30,7 +30,7 @@ Under the พ.ร.บ.ขายตรงและตลาดแบบตรง 
 - **มาตรา 30–31** — the business must give you sales documents in Thai stating the cancellation right clearly.
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://legardy.com/thai-law/direct-sell-law/direct-sell-law-section-3 · https://www.drthawip.com/book/export/html/3439
-ข้อความมาตราจากเว็บรอง 2 แหล่ง — ตรวจกฎหมายฉบับทางการ: krisdika.go.th (สำนักงานคณะกรรมการกฤษฎีกา) · ocpb.go.th — ยังไม่ได้เปิดตรวจข้อความทางการ (รอยืนยัน)
+Section text comes from 2 secondary websites. Check the official law at krisdika.go.th (Office of the Council of State) · ocpb.go.th. The official text has not been opened and checked yet (รอยืนยัน).
 
 Whether a particular online shop counts as a "direct marketer" under the Act depends on the business (registered ผู้ประกอบธุรกิจตลาดแบบตรง, selling through its own media) — if in doubt, send the notice anyway within 7 days and ask สคบ. 1166.
 
@@ -75,7 +75,7 @@ Consumer court basics (พ.ร.บ.วิธีพิจารณาคดีผ
 - A claim can be filed orally or in writing; a court case officer writes down an oral claim (มาตรา 20)
 - A business suing a consumer must file in the one court whose area covers the consumer's domicile (ภูมิลำเนา), even when another court would otherwise be open to it (มาตรา 17)
 
-ตรวจล่าสุด 2026-10-23 · แหล่งทางการ: ราชกิจจานุเบกษา เล่ม 125 ตอนที่ 38 ก (25 ก.พ. 2551) https://ratchakitcha.soc.go.th/documents/242398.pdf · มาตรา 17 · 18 · 20 ไม่ถูกแก้ (ฉบับที่ 2 พ.ศ. 2556 แก้มาตรา 19 · ฉบับที่ 3 พ.ศ. 2558 แก้มาตรา 49 วรรคสอง 51 และยกเลิก 52–54)
+Last checked 2026-10-23 · official source: Royal Gazette (ราชกิจจานุเบกษา) เล่ม 125 ตอนที่ 38 ก (volume 125, part 38 ก) (25 Feb 2008, B.E. 2551) https://ratchakitcha.soc.go.th/documents/242398.pdf · sections 17 · 18 · 20 have not been amended (Amendment No. 2, B.E. 2556 (2013), amended section 19 · Amendment No. 3, B.E. 2558 (2015), amended section 49 paragraph 2 and section 51, and repealed sections 52–54)
 ยืนยันตรงกัน: ศาลแพ่งตลิ่งชัน https://civiltlc.coj.go.th/th/content/page/index/id/397228 · Veridian E-Journal มหาวิทยาลัยศิลปากร 10(3) 2560 · วิทยานิพนธ์มหาวิทยาลัยธุรกิจบัณฑิตย์ 2560 · https://legardy.com/thai-law/consumer-case-procedure/consumer-case-procedure-filing-section-17-21
 
 Watch the clock: a defect lawsuit is barred 1 year after discovering the defect (ป.พ.พ. มาตรา 474 — see `warranty-tracker`). Don't let steps 1–3 run past it.
