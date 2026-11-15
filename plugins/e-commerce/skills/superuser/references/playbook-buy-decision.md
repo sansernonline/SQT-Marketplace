@@ -1,17 +1,17 @@
-# playbook · buy-decision — ตัดสินใจซื้อของชิ้นใหญ่
+# playbook · buy-decision — deciding on a big purchase
 
-ใช้เมื่อ: จะซื้อเครื่องใช้ไฟฟ้า มือถือ รถ คอร์ส หรือบริการราคาสูง · ลังเลระหว่างหลายตัวเลือก
-skill หลัก: `buy-compare` · `warranty-tracker`
+Use when: buying an appliance, phone, car, course, or high-priced service · torn between several options
+Main skills: `buy-compare` · `warranty-tracker`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน (Steps — copy into the todo exactly)
 
-1. เก็บความต้องการ — ใช้ทำอะไร งบเท่าไร ต้องมีอะไร ห้ามมีอะไร ข้อไหนไม่รู้ให้ใส่ `(รอยืนยัน)` ไม่เดาค่า · ใคร: หัวหน้าทีม
-2. คัดตัวเลือก 2–4 ตัว แล้วเอาสเปกและราคาจากเว็บผู้ผลิตหรือร้านทางการ พร้อมวันที่ดู · ใคร: `consumer-advocate` ตัวใหม่
-3. ทำตารางตัดสินใจถ่วงน้ำหนัก และคำนวณค่าใช้จ่ายรวมตลอดอายุใช้งาน (ราคา · ไฟ · ค่าซ่อม · ของสิ้นเปลือง) · ใคร: `consumer-advocate` ตัวใหม่
-4. ตรวจรีวิวด้วยเกณฑ์รีวิวปลอมของ `buy-compare` ทิ้งรีวิวที่ไม่ผ่าน แล้วบอกว่าทิ้งกี่รีวิวเพราะอะไร · ใคร: `consumer-advocate` ตัวใหม่คัดรีวิว · `reviewer` ตัวใหม่ตรวจว่าการคัดตรงเกณฑ์
-5. เทียบเงื่อนไขรับประกันและช่องทางเคลมด้วย `warranty-tracker` · ใคร: `consumer-advocate` ตัวใหม่
-6. แนะนำ 1 ตัวพร้อมเหตุผล และตัวสำรอง 1 ตัว ส่วนการกดสั่งซื้ออยู่ใน "รออนุมัติ" · ใคร: หัวหน้าทีม · `reviewer` ตัวใหม่ตรวจทั้งชุดก่อนถึงผู้ใช้ (กดสั่งซื้อ: ผู้ใช้)
+1. Gather the needs — what it is for, the budget, what it must have, what it must not have. For any item you do not know, put `(รอยืนยัน)` (to be confirmed) and do not guess a value · ใคร: หัวหน้าทีม
+2. Shortlist 2–4 options, then take the specs and prices from the maker's website or an official shop, with the date viewed · ใคร: `consumer-advocate` ตัวใหม่
+3. Build a weighted decision table and work out the total cost over the useful life (price · electricity · repairs · consumables) · ใคร: `consumer-advocate` ตัวใหม่
+4. Check (ตรวจ) the reviews with the fake-review criteria in `buy-compare`. Drop reviews that fail, and say how many were dropped and why · ใคร: `consumer-advocate` ตัวใหม่ picks the reviews · `reviewer` ตัวใหม่ checks that the picking follows the criteria
+5. Compare the warranty terms and claim channels with `warranty-tracker` · ใคร: `consumer-advocate` ตัวใหม่
+6. Recommend 1 option with the reason, and 1 backup. Placing the order goes under "รออนุมัติ" (awaiting approval) · ใคร: หัวหน้าทีม · `reviewer` ตัวใหม่ checks the whole set before it reaches the user (placing the order: ผู้ใช้)
 
-## จบเมื่อ
+## Done when
 
-มีตารางตัดสินใจที่คำนวณซ้ำแล้ว ทุกราคามีแหล่งและวันที่ และมีคำแนะนำ 1 ตัวพร้อมเหตุผล
+There is a decision table that has been recalculated, every price has a source and a date, and there is 1 recommended option with the reason.

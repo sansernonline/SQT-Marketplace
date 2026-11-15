@@ -1,17 +1,17 @@
-# playbook · line-oa — ตั้งและดูแล LINE Official Account
+# playbook · line-oa — setting up and running a LINE Official Account
 
-ใช้เมื่อ: สร้าง LINE OA · เปิด Messaging API · ทำ chatbot · rich menu · broadcast
-skill หลัก: `line-oa-setup` · `line-chatbot` · `line-broadcast` · `graphic-design:line-richmenu` (ถ้าติดตั้ง) · agent `line-admin`
+Use when: creating a LINE OA · turning on the Messaging API · building a chatbot · rich menu · broadcast
+Main skills: `line-oa-setup` · `line-chatbot` · `line-broadcast` · `graphic-design:line-richmenu` (if installed) · agent `line-admin`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน (Steps — copy into the todo exactly)
 
-1. ตรวจแพ็กเกจและโควตาข้อความของบัญชีจากหน้าทางการของ LINE · ใคร: `line-admin` ตัวใหม่
-2. ตั้ง channel และ webhook ตาม `line-oa-setup` — ตรวจลายเซ็น X-Line-Signature และเก็บค่าลับไว้ในไฟล์ตั้งค่าที่ผู้ใช้ใส่เอง · ใคร: `line-admin` ตัวใหม่ (ผู้ใช้ใส่ค่าลับเอง)
-3. chatbot — จัดกลุ่มคำถามจริงของลูกค้าตามเจตนา (intent) แล้วตอบจากฐานความรู้ ถ้าไม่มั่นใจให้ส่งต่อให้พนักงาน และไม่แต่งราคาหรือสต็อก · ใคร: `line-admin` ตัวใหม่
-4. rich menu — ทำขนาดภาพและพื้นที่กดตาม `graphic-design:line-richmenu` (ไม่ได้ติดตั้ง → ใช้ขนาดจากเอกสารทางการของ LINE แล้วติดป้าย `ยังไม่ได้ตรวจ`) · ใคร: `line-admin` ตัวใหม่
-5. broadcast — คำนวณโควตาก่อนส่ง ส่วนการส่งจริงต้องรออนุมัติ · ใคร: `line-admin` ตัวใหม่คำนวณโควตา แล้วผู้ใช้อนุมัติการส่งจริง
-6. ทดสอบ echo หรือข้อความทดสอบกับบัญชีทดสอบ · ใคร: `line-admin` ตัวใหม่ส่งไปบัญชีทดสอบ · `reviewer` ตัวใหม่ตรวจผลกับ log และการคำนวณโควตา
+1. Check the account's plan and message quota on LINE's official pages · ใคร: `line-admin` ตัวใหม่
+2. Set up the channel and webhook following `line-oa-setup` — verify the X-Line-Signature signature, and keep secrets in a config file that the user fills in personally · ใคร: `line-admin` ตัวใหม่ (the user fills in the secrets personally)
+3. Chatbot — group real customer questions by intent, then answer from the knowledge base. If unsure, hand over to staff, and never invent prices or stock · ใคร: `line-admin` ตัวใหม่
+4. Rich menu — build the image size and tap areas following `graphic-design:line-richmenu` (not installed → use the sizes from LINE's official documents and tag them `ยังไม่ได้ตรวจ` (not yet checked)) · ใคร: `line-admin` ตัวใหม่
+5. Broadcast — calculate the quota before sending. The actual send must wait for approval · ใคร: `line-admin` ตัวใหม่ calculates the quota, then ผู้ใช้อนุมัติ the actual send (the user approves)
+6. Test (ทดสอบ) with an echo or a test message to a test account · ใคร: `line-admin` ตัวใหม่ sends to the test account · `reviewer` ตัวใหม่ checks the result against the log and the quota calculation
 
-## จบเมื่อ
+## Done when
 
-ข้อความทดสอบผ่านจริง ค่าลับไม่อยู่ในโค้ดหรือแชต และโควตาคำนวณแล้ว
+The test message really passed, no secret is in code or chat, and the quota has been calculated.
