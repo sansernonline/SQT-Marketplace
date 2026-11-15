@@ -3,7 +3,7 @@
 ## 3.5.1 — 2026-11-15
 
 - `design-direction-lookup` ฟอนต์ SIPA 14 แถวมีค่า Latin และน้ำหนักจากไฟล์ .ttf (ตรวจจาก mirror ไม่ใช่ต้นทาง SIPA) · TH Charmonman · TH Srisakdi · TH Charm of AU ยังไม่รู้ใบอนุญาต (ไม่ใช่ DIP-SIPA)
-- กฎ `flutter-11` บอกทาง `calendarDelegate` สำหรับ พ.ศ. พร้อมลิงก์ api.flutter.dev · `ux-081` (iOS ซูมช่องกรอกต่ำกว่า 16 px) มีที่มาแต่เป็นแหล่งรอง · `liff-12` ยังไม่มีข้อความทางการบอกสัดส่วน Compact/Tall
+- กฎ `flutter-11` บอกทาง `calendarDelegate` สำหรับ พ.ศ. พร้อมลิงก์ api.flutter.dev · `ux-081` (iOS ซูมช่องกรอกต่ำกว่า 16 px) มีที่มาแต่เป็นแหล่งรอง · `liff-12` ไม่ได้แก้ เพราะหน้า LINE Developers ยังไม่มีข้อความบอกสัดส่วน Compact/Tall (ตรวจ 2026-11-15)
 
 ## 3.5.0 — 2026-11-15
 
