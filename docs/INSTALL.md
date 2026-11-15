@@ -381,7 +381,7 @@ skills:
 
 - skill ทุกตัวเรียกเป็นคำสั่งได้ด้วย `/ชื่อ` · บทบาท (agent) เรียกด้วย `/role-ชื่อ` เช่น `/role-reviewer` เพราะ Hermes ไม่มีไฟล์ subagent
 - อย่าคัดไปไว้ใน `.hermes/skills` ของโปรเจกต์ ตัวสแกนความปลอดภัยของ Hermes จะกัก skill `superuser` (อ่านรายการคำสั่งที่ด่าน guard ห้ามว่าเป็นคำสั่งอันตราย และนับไฟล์เกิน 50) · `external_dirs` ไม่ผ่านตัวสแกนนี้
-- `HERMES.md` เป็นบริบทของโปรเจกต์ คัดไปรากโปรเจกต์ถ้าต้องการ · Hermes อ่านไฟล์บริบทได้ทีละไฟล์ (`.hermes.md` → `AGENTS.md` → `CLAUDE.md`) ถ้าโปรเจกต์มี `AGENTS.md` อยู่แล้ว ไฟล์ `HERMES.md` จะถูกอ่านแทน
+- `HERMES.md` เป็นบริบทของโปรเจกต์ คัดไปรากโปรเจกต์ถ้าต้องการ · Hermes อ่านไฟล์บริบทได้ทีละไฟล์ (`.hermes.md` หรือ `HERMES.md` → `AGENTS.override.md` → `AGENTS.md` → `CLAUDE.md`) ถ้าโปรเจกต์มี `AGENTS.md` อยู่แล้ว ไฟล์ `HERMES.md` จะถูกอ่านแทน
 - Hermes ไม่รัน hook ของเรา → ช่วงที่ใช้ Hermes จะไม่มี log ใน `.claude/superuser/log/`
 
 > รูปแบบตรวจจากเอกสารทางการ hermes-agent.nousresearch.com เมื่อ 2026-11-15 · ลองกับ Hermes v0.23.1 ในเครื่อง: ชุด e-commerce โหลดได้ 84 จาก 85 skill (ตัวที่ไม่ขึ้นคือ `superuser` ตอนวางในโปรเจกต์ ตามข้อบน) · ยังไม่ได้ลองแบบ `external_dirs` กับ Hermes จริง (อ่านจากโค้ดของ Hermes ว่าไม่สแกน)
