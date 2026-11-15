@@ -1,6 +1,6 @@
 ---
 name: social-formats
-description: Use when designing for social platforms by size and ratio
+description: Use for platform sizes, ratios and safe zones before designing
 argument-hint: <path to master asset> [platforms needed]
 ---
 

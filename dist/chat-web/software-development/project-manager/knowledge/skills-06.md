@@ -1,6 +1,6 @@
 # skill: owner-style-capture
 
-Use when agents should learn the owner style from corrections
+Use when the user wants agents to learn their own style
 
 # owner-style-capture — ให้ superuser ทำงานแบบเจ้าของเครื่อง
 

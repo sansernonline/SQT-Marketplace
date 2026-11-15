@@ -1,6 +1,6 @@
 # skill: medication-schedule
 
-Use when building a daily medicine schedule
+Use when building a daily medicine schedule, no dosing advice
 
 # Medication Schedule
 

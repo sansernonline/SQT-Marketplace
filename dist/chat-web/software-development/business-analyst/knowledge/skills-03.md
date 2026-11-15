@@ -588,7 +588,7 @@ npx -y @mermaid-js/mermaid-cli@11.17.0 -i diagram.mmd -o diagram.png -b white -s
 
 # skill: presentation-design
 
-Use when making slides or a deck in any format
+Use when planning a slide deck story and layouts
 
 # Presentation Design
 

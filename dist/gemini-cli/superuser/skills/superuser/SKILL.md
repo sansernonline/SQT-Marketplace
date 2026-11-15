@@ -1,6 +1,6 @@
 ---
 name: superuser
-description: Use when work is big or risky, as team lead
+description: Use when work is big or risky (money, deletes) or says superuser
 ---
 
 # SuperUser — Team Lead

@@ -1,6 +1,6 @@
 ---
 name: owner-style-capture
-description: Use when agents should learn the owner style from corrections
+description: Use when the user wants agents to learn their own style
 ---
 
 # owner-style-capture — ให้ superuser ทำงานแบบเจ้าของเครื่อง

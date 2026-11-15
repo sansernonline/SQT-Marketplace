@@ -823,7 +823,7 @@ Use this pattern by default for showing UI feature states. On GitHub, save the S
 
 # skill: presentation-design
 
-Use when making slides or a deck in any format
+Use when planning a slide deck story and layouts
 
 # Presentation Design
 

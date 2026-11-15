@@ -1,6 +1,6 @@
 # skill: pet-care
 
-Use when a Thai family keeps a dog or cat
+Use when a Thai family keeps a dog or cat, no vet diagnosis
 
 # Pet Care (Thailand)
 

@@ -53,7 +53,7 @@ Use before saying work is done, fixed or working
 
 # skill: ui-craft
 
-Use when a task produces a screen, spec or mockup
+Use with a platform skill when a task produces a screen or mockup
 
 # UI Craft
 
@@ -1206,7 +1206,7 @@ Text parts of a UX spec that sit beside the clickable HTML mockup (`mockup/<CODE
 
 # skill: presentation-design
 
-Use when making slides or a deck in any format
+Use when planning a slide deck story and layouts
 
 # Presentation Design
 

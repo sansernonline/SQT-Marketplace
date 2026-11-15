@@ -104,7 +104,7 @@ Table of policies → have / need / gap per type → overlap and overspend → q
 
 # skill: mutual-fund-picker
 
-Use when choosing Thai mutual funds or reading a factsheet
+Use when picking Thai funds, RMF or ThaiESG, or a factsheet
 
 # Mutual Fund Picker (เลือกกองทุนรวม)
 

@@ -1,6 +1,6 @@
 # skill: doctor-visit-prep
 
-Use when preparing for a doctor visit
+Use when preparing for a doctor visit, with no diagnosis
 
 # Doctor Visit Prep
 

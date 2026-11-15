@@ -1,6 +1,6 @@
 ---
 name: refund-request
-description: Use when the user wants money back or to complain
+description: Use when a buyer wants money back or to complain about a seller
 ---
 
 # Refund Request (Thailand)

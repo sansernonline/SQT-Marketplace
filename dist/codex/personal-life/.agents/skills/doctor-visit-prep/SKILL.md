@@ -1,6 +1,6 @@
 ---
 name: doctor-visit-prep
-description: Use when preparing for a doctor visit
+description: Use when preparing for a doctor visit, with no diagnosis
 argument-hint: <before|after> [reason for visit]
 ---
 

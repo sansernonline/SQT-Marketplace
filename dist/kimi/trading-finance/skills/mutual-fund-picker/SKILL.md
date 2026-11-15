@@ -1,6 +1,6 @@
 ---
 name: mutual-fund-picker
-description: Use when choosing Thai mutual funds or reading a factsheet
+description: Use when picking Thai funds, RMF or ThaiESG, or a factsheet
 ---
 
 # Mutual Fund Picker (เลือกกองทุนรวม)

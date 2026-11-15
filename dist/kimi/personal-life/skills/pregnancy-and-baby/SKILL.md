@@ -1,6 +1,6 @@
 ---
 name: pregnancy-and-baby
-description: Use when a Thai family is expecting or has a baby
+description: Use when a Thai family is expecting or has a baby, no diagnosis
 ---
 
 # Pregnancy and Baby (Thailand)

@@ -1,6 +1,6 @@
 ---
 name: medication-schedule
-description: Use when building a daily medicine schedule
+description: Use when building a daily medicine schedule, no dosing advice
 ---
 
 # Medication Schedule

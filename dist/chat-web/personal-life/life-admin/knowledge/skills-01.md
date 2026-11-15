@@ -1,6 +1,6 @@
 # skill: weekly-review
 
-Use when the week ends for a weekly review
+Use for a Sunday weekly review when busy but not productive
 
 # Weekly Review (ทบทวนประจำสัปดาห์)
 

@@ -1,6 +1,6 @@
 # skill: presentation-design
 
-Use when making slides or a deck in any format
+Use when planning a slide deck story and layouts
 
 # Presentation Design
 
@@ -360,7 +360,7 @@ Use when making slides or a deck in any format
 
 # skill: html-slide-deck
 
-Use when a slide deck is wanted as HTML
+Use when the deck must be HTML or animated, or pptx as HTML
 
 # HTML Slide Deck
 

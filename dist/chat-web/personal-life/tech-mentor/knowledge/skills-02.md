@@ -109,7 +109,7 @@ Read on: <YYYY-MM-DD>
 
 # skill: english-tech-reading
 
-Use when English errors or RFCs need explaining in Thai
+Use when an English error or doc passage needs a Thai explanation
 
 # English Tech Reading
 

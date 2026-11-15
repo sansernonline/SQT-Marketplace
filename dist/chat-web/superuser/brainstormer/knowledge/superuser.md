@@ -1,6 +1,6 @@
 # skill: superuser
 
-Use when work is big or risky, as team lead
+Use when work is big or risky (money, deletes) or says superuser
 
 # SuperUser — Team Lead
 

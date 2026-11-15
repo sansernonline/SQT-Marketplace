@@ -1,6 +1,6 @@
 # skill: sleep-log
 
-Use when sleeping badly and keeping a sleep diary
+Use when sleeping badly and keeping a sleep diary, no diagnosis
 
 # Sleep Log
 

@@ -1,6 +1,6 @@
 # skill: ui-craft
 
-Use when a task produces a screen, spec or mockup
+Use with a platform skill when a task produces a screen or mockup
 
 # UI Craft
 

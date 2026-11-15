@@ -1,6 +1,6 @@
 # skill: social-formats
 
-Use when designing for social platforms by size and ratio
+Use for platform sizes, ratios and safe zones before designing
 
 # Social Formats
 

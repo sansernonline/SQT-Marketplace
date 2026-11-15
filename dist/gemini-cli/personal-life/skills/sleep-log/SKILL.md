@@ -1,6 +1,6 @@
 ---
 name: sleep-log
-description: Use when sleeping badly and keeping a sleep diary
+description: Use when sleeping badly and keeping a sleep diary, no diagnosis
 ---
 
 # Sleep Log

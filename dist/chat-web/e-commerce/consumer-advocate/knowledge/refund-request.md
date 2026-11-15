@@ -1,6 +1,6 @@
 # skill: refund-request
 
-Use when the user wants money back or to complain
+Use when a buyer wants money back or to complain about a seller
 
 # Refund Request (Thailand)
 

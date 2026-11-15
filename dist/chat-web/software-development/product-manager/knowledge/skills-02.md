@@ -1151,7 +1151,7 @@ footer        "หน้า N" กลางหน้า สีเทา 9pt
 
 # skill: presentation-design
 
-Use when making slides or a deck in any format
+Use when planning a slide deck story and layouts
 
 # Presentation Design
 

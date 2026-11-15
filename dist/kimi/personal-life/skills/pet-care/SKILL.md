@@ -1,6 +1,6 @@
 ---
 name: pet-care
-description: Use when a Thai family keeps a dog or cat
+description: Use when a Thai family keeps a dog or cat, no vet diagnosis
 ---
 
 # Pet Care (Thailand)

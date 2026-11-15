@@ -1,6 +1,6 @@
 # skill: pregnancy-and-baby
 
-Use when a Thai family is expecting or has a baby
+Use when a Thai family is expecting or has a baby, no diagnosis
 
 # Pregnancy and Baby (Thailand)
 

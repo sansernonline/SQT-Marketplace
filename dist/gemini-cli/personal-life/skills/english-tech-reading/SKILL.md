@@ -1,6 +1,6 @@
 ---
 name: english-tech-reading
-description: Use when English errors or RFCs need explaining in Thai
+description: Use when an English error or doc passage needs a Thai explanation
 ---
 
 # English Tech Reading
