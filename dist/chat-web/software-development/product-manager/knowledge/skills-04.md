@@ -1,6 +1,6 @@
 # skill: human-writing
 
-Use before writing or editing anything people read (answer, email, report, README, slide, label) in Thai or English. Look → polished-document-style.
+Use before writing anything people read, in Thai or English
 
 # human-writing — write like a person: smooth to read, easy to understand
 
@@ -527,7 +527,7 @@ Applies to slide titles, figure titles, document headings, and box titles in a d
 
 # skill: answer-shape
 
-Use when an answer has structure (options, trade-offs, how parts connect). Prose, table or diagram.
+Use when an answer needs prose, a table or a diagram
 
 # รูปทรงของคำตอบ
 
@@ -637,7 +637,7 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
 
 # skill: spell-out-abbreviations
 
-Use when text people read is heavy with abbreviations or jargon, or needs a glossary.
+Use when text is heavy with abbreviations or jargon
 
 # Spell Out Abbreviations
 

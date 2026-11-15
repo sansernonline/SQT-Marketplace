@@ -1,6 +1,6 @@
 ---
 name: watchlist-setup
-description: Use when starting to follow new stocks or rebuilding a messy watchlist. Thesis, entry, alerts.
+description: Use when following new stocks or rebuilding a watchlist
 argument-hint: <add|review|clean> [symbol or notes]
 ---
 

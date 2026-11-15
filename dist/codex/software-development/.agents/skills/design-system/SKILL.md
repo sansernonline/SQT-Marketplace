@@ -1,6 +1,6 @@
 ---
 name: design-system
-description: Use when authoring design tokens, CSS variables or a Tailwind theme. Existing code → ui-craft.
+description: Use when authoring design tokens or a Tailwind theme
 ---
 
 # Design System — token สามชั้นและสเปกคอมโพเนนต์

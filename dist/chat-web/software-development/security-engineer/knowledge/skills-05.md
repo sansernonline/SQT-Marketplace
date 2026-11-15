@@ -1,6 +1,6 @@
 # skill: pdpa-compliance
 
-Use when software stores personal data of people in Thailand (PDPA).
+Use when software stores personal data in Thailand
 
 # PDPA — ข้อมูลส่วนบุคคล
 
@@ -235,7 +235,7 @@ Use when software stores personal data of people in Thailand (PDPA).
 
 # skill: docker-sandbox
 
-Use when a project needs its own Docker container for untrusted code, or says sandbox.
+Use when a project needs a Docker sandbox for untrusted code
 
 # docker-sandbox — ห้องทดลองต่อโปรเจกต์
 
@@ -395,7 +395,7 @@ Use when a project needs its own Docker container for untrusted code, or says sa
 
 # skill: markdown-visuals
 
-Use when a Markdown doc needs a picture (inline SVG, image, ASCII or Mermaid).
+Use when a Markdown doc needs an image, SVG or ASCII art
 
 # Markdown Visuals
 
@@ -772,7 +772,7 @@ Use this pattern by default for showing UI feature states. On GitHub, save the S
 
 # skill: polished-document-style
 
-Use when a kept doc (report, proposal, Word, PDF) needs headings, tables, theme. Wording → human-writing.
+Use when a kept document needs headings, tables and theme
 
 # Polished Document Style
 

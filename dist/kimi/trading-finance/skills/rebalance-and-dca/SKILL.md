@@ -1,6 +1,6 @@
 ---
 name: rebalance-and-dca
-description: Use when setting up monthly investing (DCA) in Thai funds or stocks, or a portfolio has drifted from its target mix and needs rebalancing.
+description: Use when setting up monthly DCA or rebalancing a portfolio
 ---
 
 # Rebalance and DCA (ลงทุนรายเดือน · ปรับสัดส่วนพอร์ต)

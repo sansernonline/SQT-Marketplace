@@ -1,6 +1,6 @@
 # skill: hiring-th
 
-Use when a Thai employer hires staff (job ad, screening scorecard, interview plan, reference check, offer letter, first week).
+Use when a Thai employer hires staff
 
 # จ้างพนักงาน 1 ตำแหน่ง (ฝั่งนายจ้างไทย)
 
@@ -373,7 +373,7 @@ Applicant data is used only to assess your application. Applicant privacy notice
 
 # skill: thai-business-setup
 
-Use when starting a Thai business (sole trader, partnership or company, DBD registration, after-registration checklist). Imports → import-landed-cost.
+Use when starting a Thai business
 
 # ตั้งธุรกิจในไทย: เลือกรูปแบบและจดทะเบียน
 

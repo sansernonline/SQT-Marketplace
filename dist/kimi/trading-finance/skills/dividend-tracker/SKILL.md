@@ -1,6 +1,6 @@
 ---
 name: dividend-tracker
-description: Use when dividend season comes or the user asks about dividend income, XD dates, yield or dividend tax.
+description: Use when asking about dividend income, XD dates or yield
 ---
 
 # Dividend Tracker (ติดตามเงินปันผล)

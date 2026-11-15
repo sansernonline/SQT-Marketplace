@@ -1,6 +1,6 @@
 ---
 name: bonds-and-deposits
-description: Use when choosing between Thai fixed deposits, government savings bonds, corporate bonds (หุ้นกู้) or money market funds for a lump sum or safe money.
+description: Use when choosing Thai deposits, bonds or money funds
 ---
 
 # Bonds and Deposits (เงินฝาก · พันธบัตรออมทรัพย์ · หุ้นกู้)

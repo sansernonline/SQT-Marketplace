@@ -1,6 +1,6 @@
 # skill: context-budget
 
-Use when a task will read large material (many files, long PDFs, a codebase) or long output.
+Use when a task reads large material or writes long output
 
 # งบ context
 
@@ -211,7 +211,7 @@ subagent มี context ของตัวเอง จึงอ่านไป 
 
 # skill: temp-file-discipline
 
-Use when a task writes temporary files (extracts, backups, scripts) into a project.
+Use when a task writes temporary files into a project
 
 # ระเบียบไฟล์ชั่วคราว
 
@@ -329,7 +329,7 @@ Use when a task writes temporary files (extracts, backups, scripts) into a proje
 
 # skill: status-report
 
-Use when a task that produces or checks work ends, to report status in a table.
+Use when a task ends, to report status in a table
 
 # รายงานสถานะเมื่อจบงาน
 
@@ -607,7 +607,7 @@ Use when a task that produces or checks work ends, to report status in a table.
 
 # skill: handoff
 
-Use when work passes to a subagent, next session, another model or person, or an inbox message lands.
+Use when work passes to a subagent, session or person
 
 # handoff — ส่งงานต่อ ให้คนรับไม่ต้องเดา
 

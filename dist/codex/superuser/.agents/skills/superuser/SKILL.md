@@ -1,6 +1,6 @@
 ---
 name: superuser
-description: Use when work is big or risky (5+ parts, whole repo, research, money, legal, health, personal data, deletes, outsiders) or says superuser. Team lead.
+description: Use when work is big or risky, as team lead
 ---
 
 # SuperUser — Team Lead

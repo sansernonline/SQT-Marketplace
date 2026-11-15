@@ -1,6 +1,6 @@
 # skill: stack-python
 
-Use when writing, reviewing or testing Python (scripts, CSV or Excel with pandas, CLIs, FastAPI, Django, AI code) · เขียนสคริปต์ Python.
+Use when writing or testing Python code
 
 # stack-python — Python ที่อ่านง่าย ถูกชนิด รันซ้ำได้
 
@@ -171,7 +171,7 @@ def create_refund(body: RefundIn, db: Session = Depends(get_db)) -> RefundOut:
 
 # skill: stack-sql
 
-Use when writing or reviewing SQL (SQL Server, PostgreSQL, MySQL queries, procedures).
+Use when writing or reviewing SQL queries
 
 # stack · SQL — เขียน query ให้ถูก เร็ว และเปลี่ยนข้อมูลได้ปลอดภัย
 
@@ -412,7 +412,7 @@ EXECUTE format('SELECT id, name FROM %I WHERE email = $1', tbl) USING p_email;
 
 # skill: api-conventions
 
-Use when adding API endpoints or checking API consistency (URLs, ids).
+Use when adding API endpoints or checking API consistency
 
 # ข้อตกลงของ Application Programming Interface (API)
 
@@ -728,7 +728,7 @@ Retry-After: 42                ← ต้องมีคู่กับ 429 เ�
 
 # skill: data-import-export
 
-Use when a system imports or exports Excel or CSV (row errors, Buddhist years).
+Use when a system imports or exports Excel or CSV
 
 # นำเข้าและส่งออกข้อมูล
 
@@ -954,7 +954,7 @@ Use when a system imports or exports Excel or CSV (row errors, Buddhist years).
 
 # skill: error-handling-patterns
 
-Use when writing or reviewing code that can fail (network, database, services). Retry, timeout.
+Use when writing code that can fail, with retry and timeout
 
 # จัดการข้อผิดพลาด
 

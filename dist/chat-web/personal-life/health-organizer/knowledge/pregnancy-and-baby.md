@@ -1,6 +1,6 @@
 # skill: pregnancy-and-baby
 
-Use when a Thai family is expecting or has a baby (ฝากครรภ์, maternity pay, birth registration, baby vaccines). No diagnosis.
+Use when a Thai family is expecting or has a baby
 
 # Pregnancy and Baby (Thailand)
 

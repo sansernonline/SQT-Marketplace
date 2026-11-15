@@ -1,6 +1,6 @@
 # skill: insurance-systems
 
-Use when building insurance software (policy, quotes, claims, underwriting).
+Use when building insurance policy, quote or claims software
 
 # insurance-systems
 
@@ -2505,7 +2505,7 @@ if monthly_metrics['gini'] < BASELINE * 0.9:
 
 # skill: superuser
 
-Use when software work is big or risky (5+ modules, whole repo, money, personal data, deletes, prod, client delivery) or says superuser.
+Use when software work is big or risky
 
 # SuperUser — Team Lead
 

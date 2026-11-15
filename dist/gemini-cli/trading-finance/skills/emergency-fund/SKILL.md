@@ -1,6 +1,6 @@
 ---
 name: emergency-fund
-description: Use when the user asks how big an emergency fund should be, where to park it, or deposit protection.
+description: Use when sizing an emergency fund or where to keep it
 ---
 
 # Emergency Fund (เงินสำรองฉุกเฉิน)

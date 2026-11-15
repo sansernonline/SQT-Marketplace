@@ -1,6 +1,6 @@
 # skill: database-design
 
-Use when designing or changing a database schema (tables, indexes, migrations).
+Use when designing or changing a database schema
 
 # ออกแบบฐานข้อมูล
 
@@ -859,7 +859,7 @@ Customer table: current_city, previous_city
 
 # skill: superuser
 
-Use when software work is big or risky (5+ modules, whole repo, money, personal data, deletes, prod, client delivery) or says superuser.
+Use when software work is big or risky
 
 # SuperUser — Team Lead
 

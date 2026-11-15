@@ -1,6 +1,6 @@
 ---
 name: social-security-th
-description: Use when asking about Thai social security (sections 33, 39, 40), wage cap, benefits or SSO filings.
+description: Use for Thai social security questions
 ---
 
 # Thai Social Security (ประกันสังคม)

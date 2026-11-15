@@ -1,6 +1,6 @@
 # skill: flag-and-propose
 
-Use when something found mid-task changes what happens next and needs a decision.
+Use when a mid-task finding needs a decision before going on
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 
@@ -203,7 +203,7 @@ Use when something found mid-task changes what happens next and needs a decision
 
 # skill: principle-proceed-on-reversible-work
 
-Use when about to ask shall I continue on work that can be undone. Proceed.
+Use before asking to continue on undoable work
 
 # principle · proceed on reversible work — ย้อนได้ ทำเลย
 
@@ -242,7 +242,7 @@ Use when about to ask shall I continue on work that can be undone. Proceed.
 
 # skill: status-report
 
-Use when a task that produces or checks work ends, to report status in a table.
+Use when a task ends, to report status in a table
 
 # รายงานสถานะเมื่อจบงาน
 
@@ -520,7 +520,7 @@ Use when a task that produces or checks work ends, to report status in a table.
 
 # skill: handoff
 
-Use when work passes to a subagent, next session, another model or person, or an inbox message lands.
+Use when work passes to a subagent, session or person
 
 # handoff — ส่งงานต่อ ให้คนรับไม่ต้องเดา
 

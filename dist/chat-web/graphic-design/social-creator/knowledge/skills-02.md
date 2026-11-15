@@ -1,6 +1,6 @@
 # skill: social-formats
 
-Use when designing for Facebook, Instagram, TikTok, YouTube, LINE OA or X. Sizes, ratios, safe zones.
+Use when designing for social platforms by size and ratio
 
 # Social Formats
 
@@ -156,7 +156,7 @@ Look up live (WebSearch/WebFetch) before using it; if the page will not open, ma
 
 # skill: campaign-set
 
-Use when one campaign (launch, sale, event, festival) needs assets for several platforms from one concept.
+Use when one campaign needs assets for many platforms
 
 # Campaign Set
 

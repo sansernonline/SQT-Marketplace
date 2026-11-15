@@ -1,6 +1,6 @@
 # skill: motion-basics
 
-Use when a non-designer makes motion graphics, animated text, transitions or a moving logo.
+Use when a non-designer makes motion graphics
 
 # Motion Basics
 

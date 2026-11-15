@@ -1,6 +1,6 @@
 ---
 name: developer-experience
-description: Use when the users are developers (hello-world time, error messages, CLI, SDK).
+description: Use when the users are developers
 argument-hint: <dx-audit | sdk-design> <details>
 ---
 

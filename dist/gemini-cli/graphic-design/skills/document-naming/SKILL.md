@@ -1,6 +1,6 @@
 ---
 name: document-naming
-description: Use when creating, renaming or filing a document others keep (name, version, status).
+description: Use when naming or filing a document others keep
 ---
 
 # ตั้งชื่อและจัดเวอร์ชันเอกสาร

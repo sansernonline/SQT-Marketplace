@@ -1,6 +1,6 @@
 # skill: news-impact
 
-Use when the user asks what news matters today for their stocks, what is due next week (งบออก, XD, กนง.), or how to prepare for results.
+Use when asking which news or events matter for my stocks
 
 # News Impact (ข่าวที่กระทบพอร์ตจริง)
 

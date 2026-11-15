@@ -1,6 +1,6 @@
 # skill: product-listing
 
-Use when writing or fixing a product listing on Shopee, Lazada, TikTok Shop, LINE or Facebook (title, banned claims).
+Use when writing or fixing a marketplace product listing
 
 # Product Listing (Thai marketplaces)
 
@@ -239,7 +239,7 @@ General information, not legal advice. Advertising rules come from สำนั�
 
 # skill: marketplace-fees-pricing
 
-Use when a Thai seller asks what to charge, why a product loses money, or how marketplace fees compare.
+Use when a Thai seller sets prices or checks marketplace fees
 
 # Marketplace Fees and Pricing
 

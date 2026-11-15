@@ -1,6 +1,6 @@
 ---
 name: paper-trading
-description: Use when testing a strategy or learning order types without real money, with real SET rules.
+description: Use when practicing trades with no real money
 argument-hint: <log|stats|setup> [trade details]
 ---
 

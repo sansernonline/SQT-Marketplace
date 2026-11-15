@@ -1,6 +1,6 @@
 # skill: game-development
 
-Use when building a game (engine choice, ECS, netcode, live-ops).
+Use when building a game
 
 # game-development
 

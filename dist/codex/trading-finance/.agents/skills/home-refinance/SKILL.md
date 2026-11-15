@@ -1,6 +1,6 @@
 ---
 name: home-refinance
-description: Use when a Thai home loan's fixed or promo rate ends, the user asks refinance vs retention (รีไฟแนนซ์ · รีเทนชั่น), or what MRR means for their loan.
+description: Use when a Thai home loan rate ends or weighing refinance
 ---
 
 # Home Refinance (รีไฟแนนซ์บ้าน · ขอลดดอกเบี้ยธนาคารเดิม)

@@ -1,6 +1,6 @@
 # skill: polished-document-style
 
-Use when a kept doc (report, proposal, Word, PDF) needs headings, tables, theme. Wording → human-writing.
+Use when a kept document needs headings, tables and theme
 
 # Polished Document Style
 
@@ -446,7 +446,7 @@ markdown เองไม่มีสี จึงใช้คำกำกับ�
 
 # skill: branded-document-design
 
-Use when a Word, PowerPoint or PDF deliverable must look designed. Markdown report → markdown-report-docx.
+Use when a Word, PowerPoint or PDF must look designed
 
 # Branded Document Design
 
@@ -1151,7 +1151,7 @@ footer        "หน้า N" กลางหน้า สีเทา 9pt
 
 # skill: presentation-design
 
-Use when making slides or a deck (pitch, plan, progress report, training) in any format · ทำสไลด์. Story, layouts.
+Use when making slides or a deck in any format
 
 # Presentation Design
 

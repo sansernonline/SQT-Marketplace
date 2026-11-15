@@ -1,6 +1,6 @@
 ---
 name: error-handling-patterns
-description: Use when writing or reviewing code that can fail (network, database, services). Retry, timeout.
+description: Use when writing code that can fail, with retry and timeout
 ---
 
 # จัดการข้อผิดพลาด

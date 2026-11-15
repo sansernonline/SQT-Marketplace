@@ -1,6 +1,6 @@
 ---
 name: insurance-review
-description: Use when checking if life, health, critical illness or accident cover is enough, who is named beneficiary (ผู้รับผลประโยชน์), or an OIC complaint.
+description: Use when checking if insurance cover is enough
 ---
 
 # Insurance Review (ทบทวนประกันภัย)

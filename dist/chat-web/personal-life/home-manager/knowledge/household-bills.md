@@ -1,6 +1,6 @@
 # skill: household-bills
 
-Use when reading an electricity or water bill (MEA, PEA, MWA, PWA, Ft), tracking bills, or a bill jumped.
+Use when reading or tracking electricity and water bills
 
 # Household Bills (Thailand)
 

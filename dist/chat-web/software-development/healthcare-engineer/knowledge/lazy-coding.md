@@ -1,6 +1,6 @@
 # skill: lazy-coding
 
-Use when writing, fixing, refactoring or reviewing code, or on bloat complaints. Simplest that works.
+Use when writing or reviewing code, for the simplest that works
 
 # Lazy Coding
 

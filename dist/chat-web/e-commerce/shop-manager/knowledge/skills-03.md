@@ -1,6 +1,6 @@
 # skill: import-landed-cost
 
-Use when a Thai seller imports goods from China (1688, Taobao, shipping agent) and needs the real cost per unit (CIF, duty, VAT, car vs sea).
+Use when importing goods from China and costing each unit
 
 # ต้นทุนนำเข้าจากจีนต่อชิ้น (landed cost)
 
@@ -139,7 +139,7 @@ node scripts/landed-cost.mjs --self-test
 
 # skill: seller-tax-basics
 
-Use when a Thai individual selling online asks about tax (40(8), deemed expenses, PND 90 and 94, VAT).
+Use when a Thai individual online seller asks about tax
 
 # Seller Tax Basics (Thai individual online seller)
 

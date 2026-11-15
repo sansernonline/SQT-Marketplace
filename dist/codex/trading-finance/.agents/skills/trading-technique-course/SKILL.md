@@ -1,6 +1,6 @@
 ---
 name: trading-technique-course
-description: Use when learning trading techniques step by step (trend, breakout, mean reversion, support/resistance) with paper-trade gates (เรียนเทรด).
+description: Use when learning trading techniques step by step
 ---
 
 # Trading Technique Course (หลักสูตรเทคนิคเทรดแบบมีด่าน)

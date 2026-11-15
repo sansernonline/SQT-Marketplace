@@ -1,6 +1,6 @@
 ---
 name: session-lessons-to-skills
-description: Use when a big task ends, the user says reflect or wants lessons, or a skill misled.
+description: Use when a big task ends and lessons should be kept
 ---
 
 # session-lessons-to-skills — ทุกงานใหญ่ทิ้งบทเรียนไว้ในเครื่องมือ

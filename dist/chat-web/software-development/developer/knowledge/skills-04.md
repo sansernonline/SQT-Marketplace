@@ -1,6 +1,6 @@
 # skill: stack-python
 
-Use when writing, reviewing or testing Python (scripts, CSV or Excel with pandas, CLIs, FastAPI, Django, AI code) · เขียนสคริปต์ Python.
+Use when writing or testing Python code
 
 # stack-python — Python ที่อ่านง่าย ถูกชนิด รันซ้ำได้
 
@@ -171,7 +171,7 @@ def create_refund(body: RefundIn, db: Session = Depends(get_db)) -> RefundOut:
 
 # skill: stack-sql
 
-Use when writing or reviewing SQL (SQL Server, PostgreSQL, MySQL queries, procedures).
+Use when writing or reviewing SQL queries
 
 # stack · SQL — เขียน query ให้ถูก เร็ว และเปลี่ยนข้อมูลได้ปลอดภัย
 
@@ -412,7 +412,7 @@ EXECUTE format('SELECT id, name FROM %I WHERE email = $1', tbl) USING p_email;
 
 # skill: stack-mql
 
-Use when writing, reviewing or testing MQL4/MQL5 code for MetaTrader (EAs, indicators).
+Use when writing MQL4 or MQL5 code for MetaTrader
 
 # stack · MQL — Expert Advisor (EA) ที่ส่งออร์เดอร์ถูก ทุกโบรกเกอร์ ทุกครั้ง
 
@@ -518,7 +518,7 @@ Use when writing, reviewing or testing MQL4/MQL5 code for MetaTrader (EAs, indic
 
 # skill: e2e-testing-patterns
 
-Use when writing end-to-end tests (Playwright, Cypress) or fixing flaky ones.
+Use when writing end-to-end tests or fixing flaky ones
 
 > **ใน SuperUser:** ถ้าอยากให้ agent รันแอปและพิสูจน์ผลเอง ให้ใช้ [`app-verifier-setup`](../app-verifier-setup/SKILL.md) ส่วน skill นี้คือหลักออกแบบชุดทดสอบ E2E (end-to-end) ที่ verifier นั้นเรียกใช้
 
@@ -1070,7 +1070,7 @@ Mixed: Requires DB tooling
 
 # skill: spec-to-code-loop
 
-Use when building from a spec and mockups test-first (TDD, failing test, check screen).
+Use when building test-first from a spec and mockups
 
 > **ใน SuperUser:** ลูปนี้คือแกนของ playbook [`feature`](../superuser/references/playbook-feature.md) และ [`new-project`](../superuser/references/playbook-new-project.md) ถ้าเปิด superuser อยู่ ให้ทำตาม playbook แล้วใช้ไฟล์นี้เป็นรายละเอียดของลูป
 
@@ -1391,7 +1391,7 @@ page.screenshot(path="_to_delete/check/login.png")
 
 # skill: app-verifier-setup
 
-Use when a project has no scripted way for an agent to run the app and see results.
+Use when an agent has no scripted way to run the app
 
 # app-verifier-setup — ให้ agent มีมือและตา
 

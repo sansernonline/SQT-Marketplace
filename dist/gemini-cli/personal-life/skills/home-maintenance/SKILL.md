@@ -1,6 +1,6 @@
 ---
 name: home-maintenance
-description: Use when a Thai home needs a seasonal maintenance schedule (aircon, pump, termites, roof) or compares quotes.
+description: Use when a Thai home needs a maintenance schedule
 argument-hint: <"schedule" | job to quote> [house type, aircon count, car details]
 ---
 

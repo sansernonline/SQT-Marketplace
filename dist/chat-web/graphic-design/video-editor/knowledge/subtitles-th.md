@@ -1,6 +1,6 @@
 # skill: subtitles-th
 
-Use when a video needs Thai subtitles (ซับไทย) as an .srt file or burned in, including transcription, timing and line length.
+Use when a video needs Thai subtitles as .srt or burned in
 
 # subtitles-th — ซับไทยเป็นไฟล์: ถอดเสียง ตรวจ แล้วฝังหรือส่งไฟล์
 

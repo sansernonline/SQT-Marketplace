@@ -1,6 +1,6 @@
 ---
 name: design-direction-lookup
-description: Use when a new screen, app or site needs a starting palette and Thai-Latin fonts before ui-craft.
+description: Use for a starting palette and Thai-Latin fonts on a new screen
 ---
 
 # design-direction-lookup — หาจุดเริ่มหน้าตา 3 แนวจากโจทย์ไทยหรืออังกฤษ

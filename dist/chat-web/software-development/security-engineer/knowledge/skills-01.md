@@ -1,6 +1,6 @@
 # skill: healthcare-systems
 
-Use when software handles patient or clinical data (FHIR, EHR, HIPAA).
+Use when software handles patient or clinical data
 
 # healthcare-systems
 
@@ -2189,7 +2189,7 @@ raise Exception(f"Invalid SSN for patient {patient_id}")
 
 # skill: fintech-payments
 
-Use when money moves through software (Stripe, Omise, PromptPay, webhooks, refunds).
+Use when money moves through software via Stripe or PromptPay
 
 # fintech-payments
 
@@ -4266,7 +4266,7 @@ Before QSA arrives:
 
 # skill: security-gate
 
-Use when about to ship, merge or hand over code, or asked for a security check.
+Use when about to ship or merge code, as a security check
 
 # security-gate — ประตูความปลอดภัยก่อนส่งงาน
 
@@ -4607,7 +4607,7 @@ Open Worldwide Application Security Project (OWASP) Top 10:2025 คือรา�
 
 # skill: superuser
 
-Use when software work is big or risky (5+ modules, whole repo, money, personal data, deletes, prod, client delivery) or says superuser.
+Use when software work is big or risky
 
 # SuperUser — Team Lead
 

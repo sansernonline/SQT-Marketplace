@@ -1,6 +1,6 @@
 # skill: llm-engineering
 
-Use when a system calls a large language model (prompts, RAG, embeddings, evals).
+Use when a system calls an LLM with prompts or RAG
 
 # llm-engineering
 
@@ -3195,7 +3195,7 @@ final = await retrieve(refined_query)
 
 # skill: observability-basics
 
-Use when a live system needs metrics, logs, traces or alerts before users complain.
+Use when a live system needs metrics, logs or alerts
 
 # วัดผลและเฝ้าระบบ
 

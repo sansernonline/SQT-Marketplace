@@ -1,6 +1,6 @@
 # skill: code-orientation
 
-Use when about to change code not yet read this session. Maps how it runs.
+Use before changing code you have not yet read
 
 # code-orientation — อ่านโค้ดเดิมให้เข้าใจก่อนแตะ
 
@@ -93,7 +93,7 @@ test ที่ล็อกพฤติกรรมอยู่: <ไฟล์> �
 
 # skill: readable-code
 
-Use when writing or reviewing code for readability (names, function shape, comments, file location).
+Use when writing or reviewing code for readability
 
 # โค้ดที่คนอ่านรู้เรื่อง
 
@@ -345,7 +345,7 @@ src/
 
 # skill: lazy-coding
 
-Use when writing, fixing, refactoring or reviewing code, or on bloat complaints. Simplest that works.
+Use when writing or reviewing code, for the simplest that works
 
 # Lazy Coding
 
@@ -460,7 +460,7 @@ unless asked. Trivial one-liners need no test.
 
 # skill: testing-standards
 
-Use when adding or setting up automated tests, or a test suite is flaky.
+Use when setting up automated tests or fixing flaky ones
 
 # Testing Standards
 
@@ -986,7 +986,7 @@ flutter test integration_test/            # ต้องมี emulator หร�
 
 # skill: code-review-checklist
 
-Use when reviewing a pull request or self-reviewing code before submitting.
+Use when reviewing a pull request or your own code
 
 > **ใน SuperUser:** รีวิวเริ่มจาก playbook [`review`](../superuser/references/playbook-review.md) แล้วใช้ checklist นี้กับรีวิวทั่วไป ส่วนงานเสี่ยงสูงหรือ diff ใหญ่ใช้ `adversarial-review-panel`
 
@@ -1177,7 +1177,7 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 
 # skill: commit-message-format
 
-Use when setting up commitlint or semantic-release. Everyday commits → commit-log.
+Use when setting up commitlint or semantic-release
 
 # Conventional Commit Message Format
 

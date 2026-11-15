@@ -1,6 +1,6 @@
 # skill: principle-secure-by-default
 
-Use when writing or reviewing code, config or scripts, especially input, database, files, logins, money.
+Use when writing or reviewing code for security basics
 
 # principle · secure by default — ปลอดภัยตั้งแต่บรรทัดแรก
 
@@ -76,7 +76,7 @@ Use when writing or reviewing code, config or scripts, especially input, databas
 
 # skill: decision-log
 
-Use when an agent makes its own judgment call in long or unattended work.
+Use when an agent makes its own call in unattended work
 
 # decision-log — ทุกการตัดสินใจเองต้องตรวจย้อนได้
 
@@ -138,7 +138,7 @@ subagent ไม่เขียนตารางเอง แต่**ราย�
 
 # skill: legacy-spec-recovery
 
-Use when a legacy system has code but no spec and must change.
+Use when a legacy system has code but no spec
 
 # Legacy Spec Recovery
 

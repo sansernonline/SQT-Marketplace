@@ -1,6 +1,6 @@
 ---
 name: design-references
-description: Use before any design work (web, app, slide, logo, poster) to search live references and colours.
+description: Use before design work to search live references and colours
 ---
 
 # design-references — ค้นงานจริงก่อนออกแบบ แล้วหยิบสีจากงานที่เลือก

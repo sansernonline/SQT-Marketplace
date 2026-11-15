@@ -1,6 +1,6 @@
 ---
 name: shipping-compare
-description: Use when a Thai seller compares couriers (Flash, Kerry, J&T, Thailand Post, SPX) on cost, COD, weight.
+description: Use when a Thai seller compares couriers
 ---
 
 # Shipping Compare

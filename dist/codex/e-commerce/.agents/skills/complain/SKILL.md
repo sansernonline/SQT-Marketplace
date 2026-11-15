@@ -1,6 +1,6 @@
 ---
 name: "complain"
-description: "Draft a complaint and escalation plan for a faulty product, bad service or refused refund — up to สคบ. 1166."
+description: "Draft a complaint and escalation plan for a faulty product, bad service or refused refund, up to the OCPB hotline 1166."
 ---
 
 Run the `consumer-advocate` agent with the `refund-request` skill: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

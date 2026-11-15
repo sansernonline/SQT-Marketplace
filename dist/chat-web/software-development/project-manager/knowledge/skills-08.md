@@ -1,6 +1,6 @@
 # skill: project-doc-set
 
-Use when deciding a project's doc set or listing open items in one Excel.
+Use when choosing a project doc set or open-items Excel
 
 # ชุดเอกสารโปรเจกต์
 
@@ -619,7 +619,7 @@ Thanks to: @alice, @bob, @charlie
 
 # skill: handoff
 
-Use when work passes to a subagent, next session, another model or person, or an inbox message lands.
+Use when work passes to a subagent, session or person
 
 # handoff — ส่งงานต่อ ให้คนรับไม่ต้องเดา
 

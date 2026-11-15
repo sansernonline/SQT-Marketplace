@@ -1,6 +1,6 @@
 # skill: branded-document-design
 
-Use when a Word, PowerPoint or PDF deliverable must look designed. Markdown report → markdown-report-docx.
+Use when a Word, PowerPoint or PDF must look designed
 
 # Branded Document Design
 
@@ -705,7 +705,7 @@ footer        "หน้า N" กลางหน้า สีเทา 9pt
 
 # skill: srs-writing
 
-Use when writing or reviewing a Software Requirements Specification (SRS).
+Use when writing a Software Requirements Specification
 
 # SRS Writing
 
@@ -1186,7 +1186,7 @@ checklist บอกว่าหัวข้อครบ แต่ไม่บอ
 
 # skill: spell-out-abbreviations
 
-Use when text people read is heavy with abbreviations or jargon, or needs a glossary.
+Use when text is heavy with abbreviations or jargon
 
 # Spell Out Abbreviations
 

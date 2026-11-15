@@ -1,6 +1,6 @@
 ---
 name: shop-daily-briefing
-description: Use when a Thai online seller starts the day and asks what to handle first (late orders, pending returns, unanswered chats, low stock).
+description: Use when a Thai online seller starts the day
 ---
 
 # Shop Daily Briefing

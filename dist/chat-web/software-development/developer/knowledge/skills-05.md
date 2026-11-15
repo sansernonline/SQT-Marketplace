@@ -1,6 +1,6 @@
 # skill: principle-build-a-tool-not-handwork
 
-Use when work has a mechanical part (same edit in many files or rows). Script it once.
+Use when the same edit repeats across many files or rows
 
 # principle · build a tool, not handwork — งานกลไกทำเป็นเครื่องมือ
 > ใช้คู่กัน: `principle-small-verifiable-steps` (ตัดเป็นชิ้นเล็กที่ตรวจได้) · `parallel-split-and-merge` (รันหลายชิ้นพร้อมกัน)
@@ -37,7 +37,7 @@ Use when work has a mechanical part (same edit in many files or rows). Script it
 
 # skill: security-gate
 
-Use when about to ship, merge or hand over code, or asked for a security check.
+Use when about to ship or merge code, as a security check
 
 # security-gate — ประตูความปลอดภัยก่อนส่งงาน
 
@@ -378,7 +378,7 @@ Open Worldwide Application Security Project (OWASP) Top 10:2025 คือรา�
 
 # skill: markdown-visuals
 
-Use when a Markdown doc needs a picture (inline SVG, image, ASCII or Mermaid).
+Use when a Markdown doc needs an image, SVG or ASCII art
 
 # Markdown Visuals
 
@@ -755,7 +755,7 @@ Use this pattern by default for showing UI feature states. On GitHub, save the S
 
 # skill: web-service-essentials
 
-Use when building or reviewing any HTTP backend (health endpoints, RFC 9457 errors).
+Use when building or reviewing an HTTP backend
 
 # Web Service Essentials
 
@@ -1265,7 +1265,7 @@ this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r))
 
 # skill: api-conventions
 
-Use when adding API endpoints or checking API consistency (URLs, ids).
+Use when adding API endpoints or checking API consistency
 
 # ข้อตกลงของ Application Programming Interface (API)
 
@@ -1581,7 +1581,7 @@ Retry-After: 42                ← ต้องมีคู่กับ 429 เ�
 
 # skill: error-handling-patterns
 
-Use when writing or reviewing code that can fail (network, database, services). Retry, timeout.
+Use when writing code that can fail, with retry and timeout
 
 # จัดการข้อผิดพลาด
 

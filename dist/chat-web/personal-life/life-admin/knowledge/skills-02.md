@@ -1,6 +1,6 @@
 # skill: digital-hygiene
 
-Use when securing family accounts (password manager, 2FA, passkeys, backup, SIM swap) or after a takeover.
+Use when securing family accounts or after a takeover
 
 # Digital Hygiene
 
@@ -165,7 +165,7 @@ Write this on a card and stick it on the fridge. Fill in the blanks now.
 
 # skill: goal-and-habit
 
-Use when setting quarterly or new-year goals, starting or stopping a habit, or goals fade by February.
+Use when setting quarterly goals or building a habit
 
 # Goals and Habits
 

@@ -1,6 +1,6 @@
 # skill: doc-contract-th
 
-Use when drafting or checking a Thai contract (employment, lease, hire of work). Stamp duty, red flags.
+Use when drafting or checking a Thai contract
 
 # Thai Basic Contract Draft
 

@@ -1,6 +1,6 @@
 # skill: security-audit
 
-Use when auditing a whole codebase for vulnerabilities before handover. Pre-ship → security-gate.
+Use when auditing a whole codebase before handover
 
 # security-audit — ไล่หาช่องโหว่ทั้งระบบจากโค้ด แล้วยืนยันทุกข้อก่อนรายงาน
 
@@ -1063,7 +1063,7 @@ path และบรรทัดใน location และ trace ชี้ถู�
 
 # skill: code-review-checklist
 
-Use when reviewing a pull request or self-reviewing code before submitting.
+Use when reviewing a pull request or your own code
 
 > **ใน SuperUser:** รีวิวเริ่มจาก playbook [`review`](../superuser/references/playbook-review.md) แล้วใช้ checklist นี้กับรีวิวทั่วไป ส่วนงานเสี่ยงสูงหรือ diff ใหญ่ใช้ `adversarial-review-panel`
 
@@ -1254,7 +1254,7 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 
 # skill: simplify
 
-Use when a deliverable has steps, layers or options nobody needs yet, or a newcomer must follow it. Not Claude Code /simplify.
+Use to cut extras nobody needs yet. Not Claude Code simplify
 
 # simplify — ทำให้ง่าย คนอ่านครั้งแรกก็ตามได้
 
@@ -1305,7 +1305,7 @@ plugin `software-development` มีรายละเอียดของโ�
 
 # skill: auth-implementation-patterns
 
-Use when implementing login or identity (sessions, JWT, OAuth, SSO, MFA).
+Use when building login with sessions, JWT, OAuth or SSO
 
 # Authentication Implementation Patterns
 

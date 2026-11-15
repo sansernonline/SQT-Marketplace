@@ -1,6 +1,6 @@
 ---
 name: marketplace-product-images
-description: Use when product photos go on Shopee, Lazada or TikTok Shop (รูปสินค้า) or a listing image was rejected. Sizes, white background, banned content.
+description: Use when product photos go on Shopee, Lazada or TikTok Shop
 ---
 
 # marketplace-product-images — รูปสินค้าลง Shopee · Lazada · TikTok Shop

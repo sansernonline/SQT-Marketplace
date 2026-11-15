@@ -1,6 +1,6 @@
 # skill: superuser
 
-Use when online selling, buying or Thai back-office work spans several steps (pricing, refund, payroll, tax, PDPA, LINE OA) or says superuser for it.
+Use when online selling or Thai back-office work spans steps
 
 # SuperUser — Team Lead
 

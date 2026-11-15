@@ -1,6 +1,6 @@
 # skill: tax-deduction-planner
 
-Use when cutting Thai income tax before year end, checking deductions, or how much RMF or ThaiESG to buy.
+Use when cutting Thai income tax with deductions
 
 # Tax Deduction Planner (วางแผนลดหย่อนภาษีปลายปี)
 
@@ -243,7 +243,7 @@ Example (made-up numbers): salary 1,500,000 a year. After the expense deduction 
 
 # skill: scam-check
 
-Use when about to send money to an investment or loan app, crypto scheme, LINE group or caller.
+Use before sending money to an investment app or caller
 
 # Scam Check (เช็กก่อนโอน · โดนหลอกแล้วทำอะไรก่อน)
 

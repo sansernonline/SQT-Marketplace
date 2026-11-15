@@ -1,6 +1,6 @@
 ---
 name: course-builder
-description: Use when designing a course, workshop or training day you will teach. Outcomes, session timing, exercises, rubric, feedback form.
+description: Use when designing a course or workshop you will teach
 ---
 
 # course-builder · ออกแบบหลักสูตรฝั่งผู้สอน

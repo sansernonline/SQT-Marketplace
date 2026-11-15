@@ -1,6 +1,6 @@
 ---
 name: job-exit
-description: Use when the user is laid off, asked to resign or sign an exit agreement, or quits and wants the final pay right (เลิกจ้าง, ถูกให้ออก, ลาออก).
+description: Use when laid off, resigning or signing an exit agreement
 ---
 
 # Job Exit — the employee's side (ถูกเลิกจ้าง · ถูกขอให้ลาออก · ลาออกเอง)

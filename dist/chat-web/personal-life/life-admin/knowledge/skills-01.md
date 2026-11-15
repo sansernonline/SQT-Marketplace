@@ -1,6 +1,6 @@
 # skill: weekly-review
 
-Use when the week ends, on Sunday evening, or the user feels busy but not productive. Weekly review.
+Use when the week ends for a weekly review
 
 # Weekly Review (ทบทวนประจำสัปดาห์)
 
@@ -103,7 +103,7 @@ Week of 2026-10-05:
 
 # skill: subscription-audit
 
-Use when finding and cutting recurring charges (streaming, apps, gym, cloud, free trials) from statements.
+Use when cutting recurring subscriptions and charges
 
 # Subscription Audit
 

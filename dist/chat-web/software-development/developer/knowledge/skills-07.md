@@ -1,6 +1,6 @@
 # skill: file-upload-and-storage
 
-Use when users upload files or an app stores and serves files.
+Use when users upload files or an app serves stored files
 
 # รับไฟล์อัปโหลดและการเก็บไฟล์
 
@@ -151,7 +151,7 @@ Use when users upload files or an app stores and serves files.
 
 # skill: notifications
 
-Use when a system sends email, SMS, LINE, push or in-app messages.
+Use when a system sends email, SMS, LINE or push
 
 # การแจ้งเตือนผู้ใช้
 
@@ -326,7 +326,7 @@ templates/
 
 # skill: data-import-export
 
-Use when a system imports or exports Excel or CSV (row errors, Buddhist years).
+Use when a system imports or exports Excel or CSV
 
 # นำเข้าและส่งออกข้อมูล
 
@@ -552,7 +552,7 @@ Use when a system imports or exports Excel or CSV (row errors, Buddhist years).
 
 # skill: observability-basics
 
-Use when a live system needs metrics, logs, traces or alerts before users complain.
+Use when a live system needs metrics, logs or alerts
 
 # วัดผลและเฝ้าระบบ
 
@@ -936,7 +936,7 @@ voice_turn_duration_seconds_bucket{le="…"}   # จากผู้โทรพ�
 
 # skill: i18n-and-locale
 
-Use when a system shows text, dates or money in Thai and English.
+Use when a system shows text, dates or money in Thai and English
 
 # ภาษาและรูปแบบท้องถิ่น
 
@@ -1179,7 +1179,7 @@ locales/
 
 # skill: project-bootstrap
 
-Use when starting a repository or making one easy to run on a new machine.
+Use when starting a repository or setting up a new machine
 
 # ตั้งต้นโปรเจกต์
 

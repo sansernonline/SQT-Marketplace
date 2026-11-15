@@ -1,6 +1,6 @@
 ---
 name: e2e-testing-patterns
-description: Use when writing end-to-end tests (Playwright, Cypress) or fixing flaky ones.
+description: Use when writing end-to-end tests or fixing flaky ones
 ---
 
 > **ใน SuperUser:** ถ้าอยากให้ agent รันแอปและพิสูจน์ผลเอง ให้ใช้ [`app-verifier-setup`](../app-verifier-setup/SKILL.md) ส่วน skill นี้คือหลักออกแบบชุดทดสอบ E2E (end-to-end) ที่ verifier นั้นเรียกใช้

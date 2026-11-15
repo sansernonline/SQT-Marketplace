@@ -1,6 +1,6 @@
 # skill: product-naming
 
-Use when naming a product, shop, app or brand, or checking how it sounds in Thai.
+Use when naming a product, shop, app or brand
 
 # ตั้งชื่อผลิตภัณฑ์
 
@@ -302,7 +302,7 @@ Use when naming a product, shop, app or brand, or checking how it sounds in Thai
 
 # skill: project-bootstrap
 
-Use when starting a repository or making one easy to run on a new machine.
+Use when starting a repository or setting up a new machine
 
 # ตั้งต้นโปรเจกต์
 
@@ -714,7 +714,7 @@ README ของแต่ละงานไม่เหมือนกัน · 
 
 # skill: no-ai-look
 
-Use when making or reviewing anything people look at so it looks made by a person, not AI.
+Use when making visuals so they do not look AI-made
 
 # no-ai-look — งานที่ดูเหมือนคนออกแบบ ไม่ใช่ AI
 

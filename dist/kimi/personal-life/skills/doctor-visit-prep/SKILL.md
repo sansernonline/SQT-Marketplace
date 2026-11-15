@@ -1,6 +1,6 @@
 ---
 name: doctor-visit-prep
-description: Use when preparing for a doctor visit (symptoms, medicines, allergies, questions) or recording it. No diagnosis.
+description: Use when preparing for a doctor visit
 argument-hint: <before|after> [reason for visit]
 ---
 

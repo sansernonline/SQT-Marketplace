@@ -1,6 +1,6 @@
 ---
 name: youtube-thumbnail
-description: Use when a YouTube video needs a thumbnail (ภาพปกคลิป), Thai text on it reads badly on a phone, or the user wants to test several thumbnails.
+description: Use when a YouTube video needs a thumbnail
 ---
 
 # youtube-thumbnail — ภาพปกคลิป YouTube ที่อ่านออกบนจอมือถือ

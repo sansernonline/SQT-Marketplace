@@ -1,6 +1,6 @@
 # skill: docker-sandbox
 
-Use when a project needs its own Docker container for untrusted code, or says sandbox.
+Use when a project needs a Docker sandbox for untrusted code
 
 # docker-sandbox — ห้องทดลองต่อโปรเจกต์
 
@@ -160,7 +160,7 @@ Use when a project needs its own Docker container for untrusted code, or says sa
 
 # skill: project-doc-set
 
-Use when deciding a project's doc set or listing open items in one Excel.
+Use when choosing a project doc set or open-items Excel
 
 # ชุดเอกสารโปรเจกต์
 
@@ -779,7 +779,7 @@ Thanks to: @alice, @bob, @charlie
 
 # skill: temp-file-discipline
 
-Use when a task writes temporary files (extracts, backups, scripts) into a project.
+Use when a task writes temporary files into a project
 
 # ระเบียบไฟล์ชั่วคราว
 
@@ -897,7 +897,7 @@ Use when a task writes temporary files (extracts, backups, scripts) into a proje
 
 # skill: code-gardener
 
-Use when patrolling code for duplication, dead code or naming drift, or says garden.
+Use when patrolling code for duplication or dead code
 
 # code-gardener — คนสวนที่จดก่อน ยังไม่ตัด
 
@@ -946,7 +946,7 @@ Use when patrolling code for duplication, dead code or naming drift, or says gar
 
 # skill: fsd-writing
 
-Use when writing or reviewing a Functional Specification Document (FSD).
+Use when writing or reviewing a Functional Specification Document
 
 # เขียน Functional Specification Document (FSD)
 
@@ -1618,7 +1618,7 @@ Every error body is `application/problem+json` (RFC 9457): `type` · `title` · 
 
 # skill: flag-and-propose
 
-Use when something found mid-task changes what happens next and needs a decision.
+Use when a mid-task finding needs a decision before going on
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 

@@ -1,6 +1,6 @@
 ---
 name: incident-runbook-template
-description: Use when writing a runbook or on-call guide for when something breaks.
+description: Use when writing a runbook or on-call guide
 ---
 
 # Incident Runbook Template

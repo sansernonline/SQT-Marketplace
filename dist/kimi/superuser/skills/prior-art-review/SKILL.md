@@ -1,6 +1,6 @@
 ---
 name: prior-art-review
-description: Use when about to build something that may already exist. Decide adopt, buy or build.
+description: Use before building something that may already exist
 ---
 
 # สำรวจของที่มีอยู่แล้วก่อนลงมือทำ

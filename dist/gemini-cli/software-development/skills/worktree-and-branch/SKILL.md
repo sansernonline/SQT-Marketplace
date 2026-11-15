@@ -1,6 +1,6 @@
 ---
 name: worktree-and-branch
-description: Use when 2+ agents edit one repo at once, or a finished branch must be merged.
+description: Use when 2+ agents edit one repo or a branch must merge
 ---
 
 # worktree-and-branch — แยกที่ทำงานให้ agent แล้วปิด branch ให้จบ

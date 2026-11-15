@@ -1,6 +1,6 @@
 # skill: software-diagrams
 
-Use when a README, PR or code note needs a quick Mermaid diagram. Doc figures → diagram-figures.
+Use when a README or PR needs a quick Mermaid diagram
 
 # Software Diagrams
 
@@ -211,7 +211,7 @@ npx -y @mermaid-js/mermaid-cli@11.17.0 -i diagram.mmd -o diagram.png -b white -s
 
 # skill: simplify
 
-Use when a deliverable has steps, layers or options nobody needs yet, or a newcomer must follow it. Not Claude Code /simplify.
+Use to cut extras nobody needs yet. Not Claude Code simplify
 
 # simplify — ทำให้ง่าย คนอ่านครั้งแรกก็ตามได้
 
@@ -262,7 +262,7 @@ plugin `software-development` มีรายละเอียดของโ�
 
 # skill: no-ai-look
 
-Use when making or reviewing anything people look at so it looks made by a person, not AI.
+Use when making visuals so they do not look AI-made
 
 # no-ai-look — งานที่ดูเหมือนคนออกแบบ ไม่ใช่ AI
 

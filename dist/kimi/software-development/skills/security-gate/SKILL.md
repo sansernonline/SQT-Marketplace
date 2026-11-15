@@ -1,6 +1,6 @@
 ---
 name: security-gate
-description: Use when about to ship, merge or hand over code, or asked for a security check.
+description: Use when about to ship or merge code, as a security check
 ---
 
 # security-gate — ประตูความปลอดภัยก่อนส่งงาน

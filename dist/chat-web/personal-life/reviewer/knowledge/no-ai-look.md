@@ -1,6 +1,6 @@
 # skill: no-ai-look
 
-Use when making or reviewing anything people look at so it looks made by a person, not AI.
+Use when making visuals so they do not look AI-made
 
 # no-ai-look — งานที่ดูเหมือนคนออกแบบ ไม่ใช่ AI
 

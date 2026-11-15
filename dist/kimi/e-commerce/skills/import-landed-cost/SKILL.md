@@ -1,6 +1,6 @@
 ---
 name: import-landed-cost
-description: Use when a Thai seller imports goods from China (1688, Taobao, shipping agent) and needs the real cost per unit (CIF, duty, VAT, car vs sea).
+description: Use when importing goods from China and costing each unit
 ---
 
 # ต้นทุนนำเข้าจากจีนต่อชิ้น (landed cost)

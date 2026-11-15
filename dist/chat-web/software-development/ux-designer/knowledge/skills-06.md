@@ -1,6 +1,6 @@
 # skill: flag-and-propose
 
-Use when something found mid-task changes what happens next and needs a decision.
+Use when a mid-task finding needs a decision before going on
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 
@@ -203,7 +203,7 @@ Use when something found mid-task changes what happens next and needs a decision
 
 # skill: principle-proceed-on-reversible-work
 
-Use when about to ask shall I continue on work that can be undone. Proceed.
+Use before asking to continue on undoable work
 
 # principle · proceed on reversible work — ย้อนได้ ทำเลย
 
@@ -242,7 +242,7 @@ Use when about to ask shall I continue on work that can be undone. Proceed.
 
 # skill: i18n-and-locale
 
-Use when a system shows text, dates or money in Thai and English.
+Use when a system shows text, dates or money in Thai and English
 
 # ภาษาและรูปแบบท้องถิ่น
 

@@ -1,6 +1,6 @@
 # skill: technical-signals
 
-Use when the user asks what a chart says, if now is a good entry, or what RSI, MACD or volume mean.
+Use when asking what a chart or RSI or MACD says
 
 # Technical Signals (อ่านสัญญาณกราฟ)
 

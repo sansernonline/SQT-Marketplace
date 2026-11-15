@@ -1,6 +1,6 @@
 # skill: gift-idea-tracker
 
-Use when a birthday, wedding or holiday is near or the user is stuck on a gift. Past gifts, budget list.
+Use when a gift is needed for a birthday or holiday
 
 # Gift Idea Tracker (ของขวัญและของฝาก)
 
@@ -113,7 +113,7 @@ Bought by: ___  Card signed by: ___
 
 # skill: decision-journal
 
-Use when facing a big personal decision (job change, condo, car, moving, lump sum). Records it, revisits.
+Use when facing a big personal life decision
 
 # Decision Journal
 

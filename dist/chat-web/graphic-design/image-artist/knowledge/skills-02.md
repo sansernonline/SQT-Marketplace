@@ -1,6 +1,6 @@
 # skill: superuser
 
-Use when design work spans several assets (brand kit, campaign, AI image or video series) or the user says superuser for design.
+Use when design work spans several linked assets
 
 # SuperUser — Team Lead
 
@@ -1264,7 +1264,7 @@ claude-security (All rights reserved · เอากลไกอย่างเ�
 
 # skill: principle-prove-it-works
 
-Use when about to say any work is done, fixed or working. Check against the real thing first.
+Use before saying work is done, fixed or working
 
 # principle · prove it works — พิสูจน์กับของจริง
 

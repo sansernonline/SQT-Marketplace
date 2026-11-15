@@ -1,6 +1,6 @@
 ---
 name: weekly-review
-description: Use when the week ends, on Sunday evening, or the user feels busy but not productive. Weekly review.
+description: Use when the week ends for a weekly review
 argument-hint: '[--deep]'
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: user-story-writer
-description: Use when writing user stories with Given-When-Then acceptance criteria.
+description: Use when writing user stories with acceptance criteria
 ---
 
 # User Story Writer

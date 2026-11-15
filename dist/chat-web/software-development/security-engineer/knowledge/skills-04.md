@@ -1,6 +1,6 @@
 # skill: config-and-secrets
 
-Use when settings differ by environment or secrets must stay out of git.
+Use when settings differ by environment or secrets need hiding
 
 # Config และ Secret
 
@@ -474,7 +474,7 @@ $b = New-Object byte[] 48
 
 # skill: audit-trail
 
-Use when a system must record who did what and when (approvals, money, permissions).
+Use when a system must record who did what and when
 
 # ร่องรอยการใช้งาน (audit trail)
 
@@ -641,7 +641,7 @@ audit log ที่เก็บทุกอย่าง มีค่าเท่
 
 # skill: file-upload-and-storage
 
-Use when users upload files or an app stores and serves files.
+Use when users upload files or an app serves stored files
 
 # รับไฟล์อัปโหลดและการเก็บไฟล์
 
@@ -792,7 +792,7 @@ Use when users upload files or an app stores and serves files.
 
 # skill: error-handling-patterns
 
-Use when writing or reviewing code that can fail (network, database, services). Retry, timeout.
+Use when writing code that can fail, with retry and timeout
 
 # จัดการข้อผิดพลาด
 

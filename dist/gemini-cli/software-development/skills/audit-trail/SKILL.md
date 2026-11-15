@@ -1,6 +1,6 @@
 ---
 name: audit-trail
-description: Use when a system must record who did what and when (approvals, money, permissions).
+description: Use when a system must record who did what and when
 ---
 
 # ร่องรอยการใช้งาน (audit trail)

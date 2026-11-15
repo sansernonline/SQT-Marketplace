@@ -1,6 +1,6 @@
 ---
 name: print-ready-files
-description: Use when a flyer, name card, vinyl banner or sticker goes to a print shop (ส่งไฟล์โรงพิมพ์, ร้านป้าย). CMYK, bleed, resolution, Thai fonts, PDF/X.
+description: Use when a flyer or name card goes to a print shop
 ---
 
 # print-ready-files — เตรียมไฟล์ส่งโรงพิมพ์และร้านป้าย

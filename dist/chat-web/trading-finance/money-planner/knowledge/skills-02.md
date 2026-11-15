@@ -1,6 +1,6 @@
 # skill: debt-payoff
 
-Use when the user has several debts (cards, personal or title loans), or asks snowball vs avalanche.
+Use when several debts or snowball vs avalanche
 
 # Debt Payoff (ปลดหนี้)
 
@@ -100,7 +100,7 @@ Avalanche saves about 1,240 baht (1,241 by `payoff.mjs scripts/example.json`, ru
 
 # skill: retirement-plan
 
-Use when the user asks how much they need to retire in Thailand or how PVD, RMF and ThaiESG fit.
+Use when asking how much to save to retire in Thailand
 
 # Retirement Plan (วางแผนเกษียณ)
 

@@ -1,6 +1,6 @@
 ---
 name: speaking-script
-description: Use when writing a script for a person speaking on camera (influencer clip, talking head, พิธีกร, voiceover) — hook, spoken Thai, pacing.
+description: Use when writing a script for a person speaking on camera
 ---
 
 # Speaking Script

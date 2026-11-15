@@ -1,6 +1,6 @@
 # skill: multi-shop-stock
 
-Use when one seller lists the same stock on several marketplaces and oversells. Master stock sheet, SKUs.
+Use when one stock sells on several marketplaces and oversells
 
 # Multi-shop Stock
 

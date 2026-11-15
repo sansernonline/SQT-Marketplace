@@ -1,6 +1,6 @@
 ---
 name: model-scorecard
-description: Use when comparing which model fits which step from a project log (speed, tokens, value).
+description: Use when comparing which model fits which step
 ---
 
 # model-scorecard — model ไหนเหมาะกับขั้นไหน ดูจากงานจริงของโปรเจกต์

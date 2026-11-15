@@ -1,6 +1,6 @@
 ---
 name: task-board
-description: Use when personal tasks are scattered (notes, chat, mail) and the user wants one to-do list, or asks what am I waiting on (งานค้าง, รายการงาน).
+description: Use when scattered tasks need one to-do list
 ---
 
 # Task Board (`tasks.md`)

@@ -1,6 +1,6 @@
 # skill: cloudflare-r2
 
-Use when an app stores files in Cloudflare R2 (S3 API, presigned upload, CORS).
+Use when an app stores files in Cloudflare R2
 
 # cloudflare-r2 — ต่อแอปเข้า Cloudflare R2 แบบ bucket ส่วนตัว สิทธิ์น้อยสุด และคุมเงินได้
 
@@ -169,7 +169,7 @@ Cloudflare R2 docs ดู 2026-11-05: [S3 API](https://developers.cloudflare.com
 
 # skill: backblaze-b2
 
-Use when storing app files or hosting a static site on Backblaze B2 (S3 API, keys).
+Use when storing files or a static site on Backblaze B2
 
 # backblaze-b2 — ต่อแอปเข้า Backblaze B2 แบบ bucket ส่วนตัว สิทธิ์น้อยสุด และไม่ปล่อยเวอร์ชันเก่าค้างคิดเงิน
 
@@ -522,7 +522,7 @@ Backblaze และ Cloudflare ดู 2026-11-05: [Deliver public B2 content thr
 
 # skill: project-bootstrap
 
-Use when starting a repository or making one easy to run on a new machine.
+Use when starting a repository or setting up a new machine
 
 # ตั้งต้นโปรเจกต์
 
@@ -934,7 +934,7 @@ README ของแต่ละงานไม่เหมือนกัน · 
 
 # skill: background-jobs
 
-Use when work runs outside the user request (queues, scheduled jobs, retries).
+Use when work runs outside the request in queues or schedules
 
 # งานเบื้องหลัง
 
@@ -1131,7 +1131,7 @@ Use when work runs outside the user request (queues, scheduled jobs, retries).
 
 # skill: kubernetes-helm
 
-Use when writing a Dockerfile, Kubernetes manifest or Helm chart, or deploying to k8s.
+Use when writing a Dockerfile, Kubernetes manifest or Helm chart
 
 # kubernetes-helm — Dockerfile, manifest, Helm chart และ deploy staging → production
 

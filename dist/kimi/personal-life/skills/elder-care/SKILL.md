@@ -1,6 +1,6 @@
 ---
 name: elder-care
-description: Use when a Thai family cares for an elderly parent (doctor visits, elderly allowance, fall-proofing, handoff).
+description: Use when a Thai family cares for an elderly parent
 ---
 
 # Elder Care (Thailand)

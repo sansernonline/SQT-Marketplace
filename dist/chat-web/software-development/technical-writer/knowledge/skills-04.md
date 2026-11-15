@@ -1,6 +1,6 @@
 # skill: presentation-design
 
-Use when making slides or a deck (pitch, plan, progress report, training) in any format · ทำสไลด์. Story, layouts.
+Use when making slides or a deck in any format
 
 # Presentation Design
 
@@ -360,7 +360,7 @@ Use when making slides or a deck (pitch, plan, progress report, training) in any
 
 # skill: html-slide-deck
 
-Use when a slide deck is wanted as HTML or animated, or a .pptx must play as HTML.
+Use when a slide deck is wanted as HTML
 
 # HTML Slide Deck
 
@@ -632,7 +632,7 @@ python scripts/pptx_to_html.py deck.pptx -o deck.html --insert 9:demo/flow.html 
 
 # skill: answer-shape
 
-Use when an answer has structure (options, trade-offs, how parts connect). Prose, table or diagram.
+Use when an answer needs prose, a table or a diagram
 
 # รูปทรงของคำตอบ
 

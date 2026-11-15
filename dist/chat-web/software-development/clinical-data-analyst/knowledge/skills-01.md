@@ -1,6 +1,6 @@
 # skill: healthcare-systems
 
-Use when software handles patient or clinical data (FHIR, EHR, HIPAA).
+Use when software handles patient or clinical data
 
 # healthcare-systems
 
@@ -2189,7 +2189,7 @@ raise Exception(f"Invalid SSN for patient {patient_id}")
 
 # skill: superuser
 
-Use when software work is big or risky (5+ modules, whole repo, money, personal data, deletes, prod, client delivery) or says superuser.
+Use when software work is big or risky
 
 # SuperUser — Team Lead
 

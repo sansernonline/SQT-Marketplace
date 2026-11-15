@@ -1,6 +1,6 @@
 ---
 name: doc-contract-th
-description: Use when drafting or checking a Thai contract (employment, lease, hire of work). Stamp duty, red flags.
+description: Use when drafting or checking a Thai contract
 argument-hint: <type> <parties> <key terms>
 ---
 

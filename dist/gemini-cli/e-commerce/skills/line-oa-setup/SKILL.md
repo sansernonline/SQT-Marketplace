@@ -1,6 +1,6 @@
 ---
 name: line-oa-setup
-description: Use when creating a LINE Official Account or enabling the Messaging API (tokens, webhook, quotas).
+description: Use when creating a LINE OA or enabling Messaging API
 argument-hint: '[company or OA name]'
 ---
 

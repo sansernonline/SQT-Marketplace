@@ -1,6 +1,6 @@
 # skill: readable-code
 
-Use when writing or reviewing code for readability (names, function shape, comments, file location).
+Use when writing or reviewing code for readability
 
 # โค้ดที่คนอ่านรู้เรื่อง
 
@@ -252,7 +252,7 @@ src/
 
 # skill: principle-secure-by-default
 
-Use when writing or reviewing code, config or scripts, especially input, database, files, logins, money.
+Use when writing or reviewing code for security basics
 
 # principle · secure by default — ปลอดภัยตั้งแต่บรรทัดแรก
 
@@ -328,7 +328,7 @@ Use when writing or reviewing code, config or scripts, especially input, databas
 
 # skill: principle-prove-it-works
 
-Use when about to say any work is done, fixed or working. Check against the real thing first.
+Use before saying work is done, fixed or working
 
 # principle · prove it works — พิสูจน์กับของจริง
 
@@ -381,7 +381,7 @@ Use when about to say any work is done, fixed or working. Check against the real
 
 # skill: testing-standards
 
-Use when adding or setting up automated tests, or a test suite is flaky.
+Use when setting up automated tests or fixing flaky ones
 
 # Testing Standards
 
@@ -907,7 +907,7 @@ flutter test integration_test/            # ต้องมี emulator หร�
 
 # skill: e2e-testing-patterns
 
-Use when writing end-to-end tests (Playwright, Cypress) or fixing flaky ones.
+Use when writing end-to-end tests or fixing flaky ones
 
 > **ใน SuperUser:** ถ้าอยากให้ agent รันแอปและพิสูจน์ผลเอง ให้ใช้ [`app-verifier-setup`](../app-verifier-setup/SKILL.md) ส่วน skill นี้คือหลักออกแบบชุดทดสอบ E2E (end-to-end) ที่ verifier นั้นเรียกใช้
 

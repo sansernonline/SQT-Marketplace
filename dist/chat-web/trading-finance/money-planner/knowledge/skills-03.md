@@ -1,6 +1,6 @@
 # skill: insurance-review
 
-Use when checking if life, health, critical illness or accident cover is enough, who is named beneficiary (ผู้รับผลประโยชน์), or an OIC complaint.
+Use when checking if insurance cover is enough
 
 # Insurance Review (ทบทวนประกันภัย)
 
@@ -104,7 +104,7 @@ Table of policies → have / need / gap per type → overlap and overspend → q
 
 # skill: mutual-fund-picker
 
-Use when choosing Thai mutual funds, reading a factsheet, or picking RMF or ThaiESG. DCA plan → rebalance-and-dca.
+Use when choosing Thai mutual funds or reading a factsheet
 
 # Mutual Fund Picker (เลือกกองทุนรวม)
 

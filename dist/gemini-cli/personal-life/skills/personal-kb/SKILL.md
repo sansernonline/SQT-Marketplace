@@ -1,6 +1,6 @@
 ---
 name: personal-kb
-description: Use when the user cannot find a note they wrote, or wants a personal knowledge base or second brain.
+description: Use when building a personal knowledge base
 ---
 
 # Personal KB (คลังความรู้ส่วนตัว)

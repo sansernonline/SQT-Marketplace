@@ -1,6 +1,6 @@
 # skill: video-editing
 
-Use when editing video or audio with ffmpeg (ตัดต่อ, silences, loudness) or turning slides into video. Thai TTS narration → narration-th.
+Use when editing video or audio with ffmpeg
 
 # video-editing — ตัด ต่อ ปรับเสียง และส่งออกวิดีโอ
 

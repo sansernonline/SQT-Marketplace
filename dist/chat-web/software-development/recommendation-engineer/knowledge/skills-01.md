@@ -1,6 +1,6 @@
 # skill: ecommerce-patterns
 
-Use when building shop software (cart, checkout, orders, promotions). Not running a shop.
+Use when building shop software with cart and checkout
 
 # ecommerce-patterns
 
@@ -2660,7 +2660,7 @@ guardrails = {
 
 # skill: superuser
 
-Use when software work is big or risky (5+ modules, whole repo, money, personal data, deletes, prod, client delivery) or says superuser.
+Use when software work is big or risky
 
 # SuperUser — Team Lead
 

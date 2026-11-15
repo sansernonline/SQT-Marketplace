@@ -1,6 +1,6 @@
 # skill: product-naming
 
-Use when naming a product, shop, app or brand, or checking how it sounds in Thai.
+Use when naming a product, shop, app or brand
 
 # ตั้งชื่อผลิตภัณฑ์
 
@@ -302,7 +302,7 @@ Use when naming a product, shop, app or brand, or checking how it sounds in Thai
 
 # skill: simplicity-first
 
-Use when cutting a software spec or architecture to fewest parts. Code → lazy-coding.
+Use when cutting a spec or architecture to fewest parts
 
 # Simplicity First
 
@@ -397,7 +397,7 @@ auth middleware. Log to the existing system."
 
 # skill: branded-document-design
 
-Use when a Word, PowerPoint or PDF deliverable must look designed. Markdown report → markdown-report-docx.
+Use when a Word, PowerPoint or PDF must look designed
 
 # Branded Document Design
 

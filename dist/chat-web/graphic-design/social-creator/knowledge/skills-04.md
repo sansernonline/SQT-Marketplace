@@ -1,6 +1,6 @@
 # skill: marketplace-product-images
 
-Use when product photos go on Shopee, Lazada or TikTok Shop (รูปสินค้า) or a listing image was rejected. Sizes, white background, banned content.
+Use when product photos go on Shopee, Lazada or TikTok Shop
 
 # marketplace-product-images — รูปสินค้าลง Shopee · Lazada · TikTok Shop
 
@@ -86,7 +86,7 @@ Look up live (WebSearch/WebFetch) before using it; if the page will not open, ma
 
 # skill: speaking-script
 
-Use when writing a script for a person speaking on camera (influencer clip, talking head, พิธีกร, voiceover) — hook, spoken Thai, pacing.
+Use when writing a script for a person speaking on camera
 
 # Speaking Script
 

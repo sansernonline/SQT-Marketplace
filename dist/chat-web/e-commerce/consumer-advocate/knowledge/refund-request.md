@@ -1,6 +1,6 @@
 # skill: refund-request
 
-Use when the user wants money back or to complain (faulty, fake, undelivered item, unknown charge; seller refuses; สคบ. 1166).
+Use when the user wants money back or to complain
 
 # Refund Request (Thailand)
 

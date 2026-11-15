@@ -1,6 +1,6 @@
 # skill: database-design
 
-Use when designing or changing a database schema (tables, indexes, migrations).
+Use when designing or changing a database schema
 
 # ออกแบบฐานข้อมูล
 
@@ -859,7 +859,7 @@ Customer table: current_city, previous_city
 
 # skill: api-conventions
 
-Use when adding API endpoints or checking API consistency (URLs, ids).
+Use when adding API endpoints or checking API consistency
 
 # ข้อตกลงของ Application Programming Interface (API)
 
@@ -1175,7 +1175,7 @@ Retry-After: 42                ← ต้องมีคู่กับ 429 เ�
 
 # skill: web-service-essentials
 
-Use when building or reviewing any HTTP backend (health endpoints, RFC 9457 errors).
+Use when building or reviewing an HTTP backend
 
 # Web Service Essentials
 
@@ -1685,7 +1685,7 @@ this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r))
 
 # skill: error-handling-patterns
 
-Use when writing or reviewing code that can fail (network, database, services). Retry, timeout.
+Use when writing code that can fail, with retry and timeout
 
 # จัดการข้อผิดพลาด
 
@@ -1872,7 +1872,7 @@ catch (SmtpException ex)
 
 # skill: observability-basics
 
-Use when a live system needs metrics, logs, traces or alerts before users complain.
+Use when a live system needs metrics, logs or alerts
 
 # วัดผลและเฝ้าระบบ
 

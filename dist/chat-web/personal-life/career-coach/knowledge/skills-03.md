@@ -1,6 +1,6 @@
 # skill: interview-prep
 
-Use when preparing for a job interview (HR screen, technical, final). STAR stories, questions, thank-you note.
+Use when preparing for a job interview
 
 # Interview Prep
 
@@ -195,7 +195,7 @@ If there is no reply 3 working days after the stated timeline, send one polite f
 
 # skill: new-job-first-90-days
 
-Use when the user starts a new job soon or just started (first day, probation, 30/60/90-day plan, เริ่มงานใหม่, ผ่านโปร).
+Use when starting a new job or probation
 
 # New Job — First 90 Days (เริ่มงานใหม่)
 

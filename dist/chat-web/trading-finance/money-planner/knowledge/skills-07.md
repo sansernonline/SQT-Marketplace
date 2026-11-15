@@ -1,6 +1,6 @@
 # skill: bonds-and-deposits
 
-Use when choosing between Thai fixed deposits, government savings bonds, corporate bonds (หุ้นกู้) or money market funds for a lump sum or safe money.
+Use when choosing Thai deposits, bonds or money funds
 
 # Bonds and Deposits (เงินฝาก · พันธบัตรออมทรัพย์ · หุ้นกู้)
 
@@ -118,7 +118,7 @@ Rates are filled in from each bank's and PDMO's page on the day, with the date (
 
 # skill: home-refinance
 
-Use when a Thai home loan's fixed or promo rate ends, the user asks refinance vs retention (รีไฟแนนซ์ · รีเทนชั่น), or what MRR means for their loan.
+Use when a Thai home loan rate ends or weighing refinance
 
 # Home Refinance (รีไฟแนนซ์บ้าน · ขอลดดอกเบี้ยธนาคารเดิม)
 

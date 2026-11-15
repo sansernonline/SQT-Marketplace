@@ -1,6 +1,6 @@
 ---
 name: e-tax-invoice
-description: Use when a Thai VAT-registered business issues or checks tax invoices (Section 86/4, e-Tax Invoice).
+description: Use when a Thai VAT business issues or checks tax invoices
 ---
 
 # Thai Tax Invoice and e-Tax Invoice

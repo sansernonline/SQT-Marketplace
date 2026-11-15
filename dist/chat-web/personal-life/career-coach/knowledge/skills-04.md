@@ -1,6 +1,6 @@
 # skill: job-exit
 
-Use when the user is laid off, asked to resign or sign an exit agreement, or quits and wants the final pay right (เลิกจ้าง, ถูกให้ออก, ลาออก).
+Use when laid off, resigning or signing an exit agreement
 
 # Job Exit — the employee's side (ถูกเลิกจ้าง · ถูกขอให้ลาออก · ลาออกเอง)
 
@@ -106,7 +106,7 @@ Ideas from anthropics/claude-for-legal `employment-legal/skills/termination-revi
 
 # skill: polite-message-th-en
 
-Use when writing an awkward everyday message in Thai or English (favour, decline, chasing payment).
+Use for an awkward everyday message in Thai or English
 
 # Polite Messages in Thai and English
 

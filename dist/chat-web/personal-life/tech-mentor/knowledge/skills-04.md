@@ -1,6 +1,6 @@
 # skill: side-project-picker
 
-Use when the user wants a practice or portfolio project and has too many ideas or none. Scores, cuts scope.
+Use when choosing a portfolio side project
 
 # Side Project Picker
 
@@ -104,7 +104,7 @@ Each idea is sized to be finishable in about 2 weekends after the scope cuts. Sw
 
 # skill: thesis-writing
 
-Use when writing a thesis, independent study (IS) or research paper (proposal, literature review, citations, Thai .docx typesetting, defense).
+Use when writing a thesis or research paper
 
 # Thesis and Paper Writing
 

@@ -1,6 +1,6 @@
 # skill: graphic-design
 
-Use when a software project needs a one-off logo or poster. Full brand → graphic-design plugin.
+Use when a software project needs a one-off logo or poster
 
 # Graphic Design
 
@@ -453,7 +453,7 @@ Instagram, งานพิมพ์ (ระยะตัดตก ความล
 
 # skill: design-references
 
-Use before any design work (web, app, slide, logo, poster) to search live references and colours.
+Use before design work to search live references and colours
 
 # design-references — ค้นงานจริงก่อนออกแบบ แล้วหยิบสีจากงานที่เลือก
 
@@ -604,7 +604,7 @@ Use before any design work (web, app, slide, logo, poster) to search live refere
 
 # skill: superuser
 
-Use when software work is big or risky (5+ modules, whole repo, money, personal data, deletes, prod, client delivery) or says superuser.
+Use when software work is big or risky
 
 # SuperUser — Team Lead
 

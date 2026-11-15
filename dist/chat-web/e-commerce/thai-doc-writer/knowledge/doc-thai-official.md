@@ -1,6 +1,6 @@
 # skill: doc-thai-official
 
-Use when drafting a formal Thai letter or memo to a government agency or company. Saraban rules.
+Use when drafting a formal Thai letter or memo
 
 # Thai Official Letter (หนังสือราชการ / หนังสือแบบราชการ)
 

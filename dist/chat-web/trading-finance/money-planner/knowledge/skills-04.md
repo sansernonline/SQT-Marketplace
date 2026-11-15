@@ -1,6 +1,6 @@
 # skill: dividend-tracker
 
-Use when dividend season comes or the user asks about dividend income, XD dates, yield or dividend tax.
+Use when asking about dividend income, XD dates or yield
 
 # Dividend Tracker (ติดตามเงินปันผล)
 
@@ -105,7 +105,7 @@ Portfolio value ______   Portfolio net yield ____%
 
 # skill: tax-basics-th
 
-Use when asking about Thai tax on stock gains, dividends, interest, crypto or foreign income (PND 90, 91).
+Use when asking how Thai tax applies to gains or dividends
 
 # Thai Tax Basics for Investors
 

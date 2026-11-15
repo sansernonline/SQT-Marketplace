@@ -1,6 +1,6 @@
 ---
 name: chat-reply-templates
-description: Use when a Thai online seller answers buyer chat (price, stock, size, late parcel) on Shopee, Lazada, TikTok.
+description: Use when a Thai seller replies to buyer chat on marketplaces
 argument-hint: <platform> <what the customer wrote> [order status, photos, shop voice]
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: windows-app-design
-description: Use when building a desktop app or mockup that must look native on Windows 11.
+description: Use when building a native-looking Windows 11 app
 ---
 
 # Windows App Design

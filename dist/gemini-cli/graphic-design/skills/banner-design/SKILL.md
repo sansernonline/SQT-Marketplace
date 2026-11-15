@@ -1,6 +1,6 @@
 ---
 name: banner-design
-description: Use when making a banner (แบนเนอร์) — webinar or event cover, Facebook or LinkedIn header, web hero, display ad. Sizes only → social-formats.
+description: Use when making a banner, event cover or web hero
 ---
 
 # banner-design — แบนเนอร์ 3 แนว ขนาดจริง ตรวจแล้วก่อนส่ง

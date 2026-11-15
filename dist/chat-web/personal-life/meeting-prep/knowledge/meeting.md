@@ -1,6 +1,6 @@
 # skill: meeting
 
-Use when a meeting matters — a prep card 15 minutes before, or afterwards from notes or a transcript — decisions, actions, Thai minutes.
+Use before or after an important meeting for minutes
 
 # Meeting
 

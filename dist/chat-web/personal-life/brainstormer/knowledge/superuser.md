@@ -1,6 +1,6 @@
 # skill: superuser
 
-Use when daily-life work spans several steps (weekly reset, documents, home, health, career, learning, thesis) or says superuser for life admin.
+Use when daily-life admin spans several steps
 
 # SuperUser — Team Lead
 

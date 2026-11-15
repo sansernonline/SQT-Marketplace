@@ -1,6 +1,6 @@
 # skill: doc-leave
 
-Use when an employee or HR needs a Thai leave form (sick, annual, personal, maternity) or leave balance.
+Use when an employee or HR needs a Thai leave form
 
 # Thai Leave Forms and Balances
 

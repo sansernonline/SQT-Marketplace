@@ -1,6 +1,6 @@
 ---
 name: simplify
-description: Use when a deliverable has steps, layers or options nobody needs yet, or a newcomer must follow it. Not Claude Code /simplify.
+description: Use to cut extras nobody needs yet. Not Claude Code simplify
 ---
 
 # simplify — ทำให้ง่าย คนอ่านครั้งแรกก็ตามได้

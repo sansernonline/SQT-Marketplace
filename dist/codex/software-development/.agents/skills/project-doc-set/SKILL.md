@@ -1,6 +1,6 @@
 ---
 name: project-doc-set
-description: Use when deciding a project's doc set or listing open items in one Excel.
+description: Use when choosing a project doc set or open-items Excel
 ---
 
 # ชุดเอกสารโปรเจกต์

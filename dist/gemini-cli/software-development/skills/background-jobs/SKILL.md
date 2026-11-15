@@ -1,6 +1,6 @@
 ---
 name: background-jobs
-description: Use when work runs outside the user request (queues, scheduled jobs, retries).
+description: Use when work runs outside the request in queues or schedules
 ---
 
 # งานเบื้องหลัง

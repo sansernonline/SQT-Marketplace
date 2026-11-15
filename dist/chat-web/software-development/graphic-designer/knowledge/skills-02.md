@@ -1,6 +1,6 @@
 # skill: principle-prove-it-works
 
-Use when about to say any work is done, fixed or working. Check against the real thing first.
+Use before saying work is done, fixed or working
 
 # principle · prove it works — พิสูจน์กับของจริง
 
@@ -53,7 +53,7 @@ Use when about to say any work is done, fixed or working. Check against the real
 
 # skill: ui-craft
 
-Use when a task produces a screen, screen spec or mockup, alongside the platform skill.
+Use when a task produces a screen, spec or mockup
 
 # UI Craft
 
@@ -1206,7 +1206,7 @@ Text parts of a UX spec that sit beside the clickable HTML mockup (`mockup/<CODE
 
 # skill: presentation-design
 
-Use when making slides or a deck (pitch, plan, progress report, training) in any format · ทำสไลด์. Story, layouts.
+Use when making slides or a deck in any format
 
 # Presentation Design
 

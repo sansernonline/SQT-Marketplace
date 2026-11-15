@@ -1,6 +1,6 @@
 # skill: brief-to-image
 
-Use when the AI-image route is chosen and a brief and prompt must be written, or prompts keep missing. Route choice → image-generation.
+Use when writing a brief and prompt for AI images
 
 # Brief to Image
 
@@ -246,7 +246,7 @@ The cream backdrop and orange come from this brief. Cream with a warm orange acc
 
 # skill: style-consistency
 
-Use when a series of AI or shot images must look like one set (product line, posts, recurring character).
+Use when a series of images must look like one set
 
 # Style Consistency
 

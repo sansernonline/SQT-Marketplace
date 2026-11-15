@@ -1,6 +1,6 @@
 ---
 name: file-upload-and-storage
-description: Use when users upload files or an app stores and serves files.
+description: Use when users upload files or an app serves stored files
 ---
 
 # รับไฟล์อัปโหลดและการเก็บไฟล์

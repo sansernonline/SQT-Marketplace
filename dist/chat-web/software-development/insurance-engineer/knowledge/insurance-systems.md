@@ -1,6 +1,6 @@
 # skill: insurance-systems
 
-Use when building insurance software (policy, quotes, claims, underwriting).
+Use when building insurance policy, quote or claims software
 
 # insurance-systems
 

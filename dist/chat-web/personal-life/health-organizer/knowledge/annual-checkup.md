@@ -1,6 +1,6 @@
 # skill: annual-checkup
 
-Use when planning a yearly checkup in Thailand, social security or gold card cover, or comparing packages.
+Use when planning a yearly checkup in Thailand
 
 # Annual Checkup
 

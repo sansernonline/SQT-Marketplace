@@ -1,6 +1,6 @@
 ---
 name: learning-path
-description: Use when the user wants to learn a new language, framework or paradigm properly, with real-project milestones.
+description: Use when learning a new language or framework properly
 argument-hint: <technology or paper> [--depth skim|working|mastery]
 ---
 

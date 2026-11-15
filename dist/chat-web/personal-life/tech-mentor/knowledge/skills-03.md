@@ -1,6 +1,6 @@
 # skill: cert-prep
 
-Use when preparing for a cloud or developer certification (AWS, Azure, GCP, CKA, PSM). Week plan, practice exams.
+Use when preparing for a cloud or developer certification
 
 # Certification Prep
 
@@ -118,7 +118,7 @@ Booking rule: two consecutive practice scores ≥ pass + 10, no domain below pas
 
 # skill: study-drill
 
-Use when the user wants flashcards from notes, or to be quizzed for an exam without being told the answer (ทำบัตรคำ, ติวสอบ, quiz me).
+Use when making flashcards or quizzes for an exam
 
 # Study Drill (บัตรคำและซ้อมถามตอบ)
 

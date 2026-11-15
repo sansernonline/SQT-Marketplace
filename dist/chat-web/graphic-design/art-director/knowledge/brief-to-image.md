@@ -1,6 +1,6 @@
 # skill: brief-to-image
 
-Use when the AI-image route is chosen and a brief and prompt must be written, or prompts keep missing. Route choice → image-generation.
+Use when writing a brief and prompt for AI images
 
 # Brief to Image
 

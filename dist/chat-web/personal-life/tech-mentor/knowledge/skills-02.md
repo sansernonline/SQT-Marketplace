@@ -1,6 +1,6 @@
 # skill: paper-to-practice
 
-Use when the user wants to understand and apply a paper, Request for Comments (RFC) or long article. Minimal working example.
+Use when applying a paper or RFC with a working example
 
 # Paper to Practice
 
@@ -109,7 +109,7 @@ Read on: <YYYY-MM-DD>
 
 # skill: english-tech-reading
 
-Use when an English error message, Request for Comments (RFC) or documentation passage needs explaining in Thai.
+Use when English errors or RFCs need explaining in Thai
 
 # English Tech Reading
 

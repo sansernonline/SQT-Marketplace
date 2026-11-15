@@ -1,6 +1,6 @@
 ---
 name: stack-sql
-description: Use when writing or reviewing SQL (SQL Server, PostgreSQL, MySQL queries, procedures).
+description: Use when writing or reviewing SQL queries
 ---
 
 # stack · SQL — เขียน query ให้ถูก เร็ว และเปลี่ยนข้อมูลได้ปลอดภัย

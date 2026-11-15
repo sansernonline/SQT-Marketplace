@@ -1,6 +1,6 @@
 ---
 name: project-bootstrap
-description: Use when starting a repository or making one easy to run on a new machine.
+description: Use when starting a repository or setting up a new machine
 ---
 
 # ตั้งต้นโปรเจกต์

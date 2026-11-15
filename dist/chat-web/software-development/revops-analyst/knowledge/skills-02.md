@@ -1,6 +1,6 @@
 # skill: principle-prove-it-works
 
-Use when about to say any work is done, fixed or working. Check against the real thing first.
+Use before saying work is done, fixed or working
 
 # principle · prove it works — พิสูจน์กับของจริง
 
@@ -53,7 +53,7 @@ Use when about to say any work is done, fixed or working. Check against the real
 
 # skill: fintech-payments
 
-Use when money moves through software (Stripe, Omise, PromptPay, webhooks, refunds).
+Use when money moves through software via Stripe or PromptPay
 
 # fintech-payments
 

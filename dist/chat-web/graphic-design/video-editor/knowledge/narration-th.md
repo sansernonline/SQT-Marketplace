@@ -1,6 +1,6 @@
 # skill: narration-th
 
-Use when Thai narration must come from a script without recording (TTS, เสียงบรรยาย AI, F5, edge-tts). Cutting, loudness, slides → video-editing.
+Use when Thai narration must come from text-to-speech
 
 # narration-th — เสียงบรรยายไทยจากสคริปต์ (text-to-speech)
 

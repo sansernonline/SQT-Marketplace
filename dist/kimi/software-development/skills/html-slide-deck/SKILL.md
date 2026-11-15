@@ -1,6 +1,6 @@
 ---
 name: html-slide-deck
-description: Use when a slide deck is wanted as HTML or animated, or a .pptx must play as HTML.
+description: Use when a slide deck is wanted as HTML
 ---
 
 # HTML Slide Deck

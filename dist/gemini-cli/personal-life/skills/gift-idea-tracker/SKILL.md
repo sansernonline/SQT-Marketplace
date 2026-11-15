@@ -1,6 +1,6 @@
 ---
 name: gift-idea-tracker
-description: Use when a birthday, wedding or holiday is near or the user is stuck on a gift. Past gifts, budget list.
+description: Use when a gift is needed for a birthday or holiday
 ---
 
 # Gift Idea Tracker (ของขวัญและของฝาก)

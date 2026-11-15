@@ -1,6 +1,6 @@
 ---
 name: inbox-triage
-description: Use when an email inbox is overwhelming or the user asks what mail needs a reply today.
+description: Use when an email inbox is overwhelming
 argument-hint: '[--days 7]'
 ---
 

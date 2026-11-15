@@ -1,6 +1,6 @@
 # skill: line-broadcast
 
-Use when sending a broadcast or targeted message to LINE OA friends. Quota, segments, frequency.
+Use when sending broadcast messages to LINE OA friends
 
 # LINE Broadcast
 

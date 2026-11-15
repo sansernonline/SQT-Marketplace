@@ -1,6 +1,6 @@
 ---
 name: render-deploy
-description: Use when deploying to Render (render.com) web services, workers, cron or Postgres.
+description: Use when deploying to Render
 ---
 
 # render-deploy — ปล่อยแอปขึ้น Render ด้วย render.yaml แล้วตรวจว่าขึ้นจริง

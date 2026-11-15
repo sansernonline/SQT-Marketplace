@@ -1,6 +1,6 @@
 # skill: tech-radar
 
-Use when catching up weekly on changes in followed libraries and tools, from official release notes.
+Use when catching up weekly on library release notes
 
 # Tech Radar
 
@@ -99,7 +99,7 @@ Run the `tech-radar` skill with the `tech-mentor` agent: **$ARGUMENTS**
 
 # skill: learning-path
 
-Use when the user wants to learn a new language, framework or paradigm properly, with real-project milestones.
+Use when learning a new language or framework properly
 
 # Learning Path
 

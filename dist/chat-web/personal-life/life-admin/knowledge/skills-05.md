@@ -1,6 +1,6 @@
 # skill: task-board
 
-Use when personal tasks are scattered (notes, chat, mail) and the user wants one to-do list, or asks what am I waiting on (งานค้าง, รายการงาน).
+Use when scattered tasks need one to-do list
 
 # Task Board (`tasks.md`)
 
@@ -76,7 +76,7 @@ Related: `weekly-review` · `inbox-triage` · `meeting` (action items) · `perso
 
 # skill: legal-help-prep
 
-Use when the user has a dispute or court summons (หมายศาล, ปรึกษาทนาย, rent, debt, wages), asks a deadline or who wins, or preps a lawyer visit.
+Use when facing a dispute or court summons
 
 # Legal Help Prep (เตรียมเรื่องก่อนไปหาทนายหรือหน่วยงาน)
 

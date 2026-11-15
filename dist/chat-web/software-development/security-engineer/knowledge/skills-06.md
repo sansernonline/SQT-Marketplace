@@ -1,6 +1,6 @@
 # skill: branded-document-design
 
-Use when a Word, PowerPoint or PDF deliverable must look designed. Markdown report → markdown-report-docx.
+Use when a Word, PowerPoint or PDF must look designed
 
 # Branded Document Design
 
@@ -705,7 +705,7 @@ footer        "หน้า N" กลางหน้า สีเทา 9pt
 
 # skill: security-operations
 
-Use when running security operations (SOC, SIEM rules, threat hunting).
+Use when running SOC, SIEM rules or threat hunting
 
 # security-operations
 
@@ -2698,7 +2698,7 @@ def is_anomalous(event, baseline):
 
 # skill: flag-and-propose
 
-Use when something found mid-task changes what happens next and needs a decision.
+Use when a mid-task finding needs a decision before going on
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 
@@ -2901,7 +2901,7 @@ Use when something found mid-task changes what happens next and needs a decision
 
 # skill: principle-proceed-on-reversible-work
 
-Use when about to ask shall I continue on work that can be undone. Proceed.
+Use before asking to continue on undoable work
 
 # principle · proceed on reversible work — ย้อนได้ ทำเลย
 

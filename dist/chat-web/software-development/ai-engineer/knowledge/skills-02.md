@@ -1,6 +1,6 @@
 # skill: readable-code
 
-Use when writing or reviewing code for readability (names, function shape, comments, file location).
+Use when writing or reviewing code for readability
 
 # โค้ดที่คนอ่านรู้เรื่อง
 
@@ -252,7 +252,7 @@ src/
 
 # skill: principle-secure-by-default
 
-Use when writing or reviewing code, config or scripts, especially input, database, files, logins, money.
+Use when writing or reviewing code for security basics
 
 # principle · secure by default — ปลอดภัยตั้งแต่บรรทัดแรก
 

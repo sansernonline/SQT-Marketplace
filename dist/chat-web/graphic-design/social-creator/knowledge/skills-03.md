@@ -1,6 +1,6 @@
 # skill: line-richmenu
 
-Use when a LINE OA needs a rich menu built (image sizes, tap areas, JSON, API calls).
+Use when a LINE OA needs a rich menu built
 
 # LINE Rich Menu
 
@@ -116,7 +116,7 @@ Grid: 3 columns × 2 rows. Column widths 833 / 834 / 833, row height 843.
 
 # skill: youtube-thumbnail
 
-Use when a YouTube video needs a thumbnail (ภาพปกคลิป), Thai text on it reads badly on a phone, or the user wants to test several thumbnails.
+Use when a YouTube video needs a thumbnail
 
 # youtube-thumbnail — ภาพปกคลิป YouTube ที่อ่านออกบนจอมือถือ
 

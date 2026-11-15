@@ -1,6 +1,6 @@
 ---
 name: credit-bureau
-description: Use when a loan was refused, the user fears a credit blacklist, or wants to check or dispute their Thai credit bureau (เครดิตบูโร, NCB) report.
+description: Use when a loan is refused or checking an NCB report
 ---
 
 # Credit Bureau (เครดิตบูโร · รายงานข้อมูลเครดิตของตัวเอง)

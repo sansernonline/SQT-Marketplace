@@ -1,6 +1,6 @@
 ---
 name: auth-implementation-patterns
-description: Use when implementing login or identity (sessions, JWT, OAuth, SSO, MFA).
+description: Use when building login with sessions, JWT, OAuth or SSO
 ---
 
 # Authentication Implementation Patterns

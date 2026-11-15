@@ -1,6 +1,6 @@
 ---
 name: vehicle-care
-description: Use when a Thai family owns a car or motorbike (compulsory insurance, annual tax, inspection, servicing).
+description: Use when a Thai family owns a car or motorbike
 ---
 
 # Vehicle Care (Thailand)

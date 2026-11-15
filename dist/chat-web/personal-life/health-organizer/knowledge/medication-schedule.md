@@ -1,6 +1,6 @@
 # skill: medication-schedule
 
-Use when someone needs a daily medicine schedule from Thai drug labels, refills or an allergy list. No dosing.
+Use when building a daily medicine schedule
 
 # Medication Schedule
 

@@ -1,6 +1,6 @@
 # skill: polished-document-style
 
-Use when a kept doc (report, proposal, Word, PDF) needs headings, tables, theme. Wording → human-writing.
+Use when a kept document needs headings, tables and theme
 
 # Polished Document Style
 
@@ -446,7 +446,7 @@ markdown เองไม่มีสี จึงใช้คำกำกับ�
 
 # skill: diagram-figures
 
-Use when a document, plan, slide or spec needs a designed diagram (process, budget flow, BRD).
+Use when a document or slide needs a designed diagram
 
 > **สีหลักของรูป = สีหลักของโปรเจกต์** · หาตามลำดับในข้อ 5 ถ้าหาไม่เจอเลยจึงใช้ชุดสีประจำบ้าน `#2A78D6` ใน `polished-document-style/references/theme-colors.md` ("ค่าตั้งต้นประจำบ้าน")
 
@@ -1232,7 +1232,7 @@ Kubernetes ของจริง แบบผังอ้างอิงที�
 
 # skill: software-diagrams
 
-Use when a README, PR or code note needs a quick Mermaid diagram. Doc figures → diagram-figures.
+Use when a README or PR needs a quick Mermaid diagram
 
 # Software Diagrams
 

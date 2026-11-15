@@ -1,6 +1,6 @@
 # skill: pr-description-template
 
-Use when writing a pull request description or preparing a PR for review.
+Use when writing a pull request description
 
 # Pull Request Description Template
 
@@ -175,7 +175,7 @@ Default formatting is not neutral — it reads as unfinished work.
 
 # skill: principle-fix-root-cause
 
-Use when something is broken or wrong (error, failed step, flaky test). Find the cause. Small known fix → targeted-fix.
+Use when something is broken and the cause is unknown
 
 # principle · fix root cause — แก้ที่ต้นเหตุ
 
@@ -227,7 +227,7 @@ Use when something is broken or wrong (error, failed step, flaky test). Find the
 
 # skill: targeted-fix
 
-Use when feedback says something is wrong (error, typo, not what I asked). Smallest fix. Cause unknown → principle-fix-root-cause.
+Use when feedback says something is wrong and the cause is clear
 
 > **ใน SuperUser:** งานแก้บั๊กเริ่มจาก playbook `bug-fix` (`superuser` → `references/playbook-bug-fix.md` (plugin `software-development`)) และ skill นี้คือขั้น "แก้ให้เล็กที่สุด" ส่วนการหาสาเหตุจริงใช้ [`principle-fix-root-cause`](../principle-fix-root-cause/SKILL.md)
 
@@ -306,7 +306,7 @@ mlflow (Apache-2.0) · `mlflow-agent-improvement/SKILL.md` · ดู 2026-11-10 
 
 # skill: superuser
 
-Use when software work is big or risky (5+ modules, whole repo, money, personal data, deletes, prod, client delivery) or says superuser.
+Use when software work is big or risky
 
 # SuperUser — Team Lead
 
@@ -2071,7 +2071,7 @@ claude-security (All rights reserved · เอากลไกอย่างเ�
 
 # skill: principle-secure-by-default
 
-Use when writing or reviewing code, config or scripts, especially input, database, files, logins, money.
+Use when writing or reviewing code for security basics
 
 # principle · secure by default — ปลอดภัยตั้งแต่บรรทัดแรก
 
@@ -2147,7 +2147,7 @@ Use when writing or reviewing code, config or scripts, especially input, databas
 
 # skill: principle-prove-it-works
 
-Use when about to say any work is done, fixed or working. Check against the real thing first.
+Use before saying work is done, fixed or working
 
 # principle · prove it works — พิสูจน์กับของจริง
 

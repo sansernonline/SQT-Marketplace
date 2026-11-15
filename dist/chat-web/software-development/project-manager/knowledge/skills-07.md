@@ -1,6 +1,6 @@
 # skill: repeated-mistakes-to-checks
 
-Use when the same mistake is corrected twice or reviews keep flagging one issue.
+Use when the same mistake gets corrected twice
 
 # repeated-mistakes-to-checks — ความผิดที่ทำซ้ำ ต้องเกิดไม่ได้อีก
 
@@ -69,7 +69,7 @@ hookify (Apache-2.0) · `agents/conversation-analyzer.md` · ดู 2026-11-10 (
 
 # skill: session-lessons-to-skills
 
-Use when a big task ends, the user says reflect or wants lessons, or a skill misled.
+Use when a big task ends and lessons should be kept
 
 # session-lessons-to-skills — ทุกงานใหญ่ทิ้งบทเรียนไว้ในเครื่องมือ
 
@@ -123,7 +123,7 @@ Use when a big task ends, the user says reflect or wants lessons, or a skill mis
 
 # skill: document-naming
 
-Use when creating, renaming or filing a document others keep (name, version, status).
+Use when naming or filing a document others keep
 
 # ตั้งชื่อและจัดเวอร์ชันเอกสาร
 

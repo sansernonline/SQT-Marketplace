@@ -1,6 +1,6 @@
 # skill: trading-technique-course
 
-Use when learning trading techniques step by step (trend, breakout, mean reversion, support/resistance) with paper-trade gates (เรียนเทรด).
+Use when learning trading techniques step by step
 
 # Trading Technique Course (หลักสูตรเทคนิคเทรดแบบมีด่าน)
 

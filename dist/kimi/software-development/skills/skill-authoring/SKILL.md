@@ -1,6 +1,6 @@
 ---
 name: skill-authoring
-description: Use when creating or changing a skill, agent or playbook in this marketplace, or its evals.
+description: Use when creating or changing a skill, agent or playbook
 ---
 
 # skill-authoring — write skills that get called, can be followed, and can be measured
