@@ -74,7 +74,7 @@ Promo text for the first send (one `!` on the hook only, period and conditions s
 > 25–31 ต.ค. 2569 เฉพาะสั่งหน้าร้าน แสดงข้อความนี้ก่อนชำระเงิน
 > ไม่ร่วมกับโปรโมชันอื่น · สาขา <ชื่อสาขา> เปิด 07:00–18:00
 
-ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ แชตร้าน
+For Thai text → `human-writing` `references/thai-grammar.md`, section 4, shop-chat register.
 
 ## Rules
 

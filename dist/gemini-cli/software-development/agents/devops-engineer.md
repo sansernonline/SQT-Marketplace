@@ -80,10 +80,10 @@ If touching production, **always have rollback plan ready first**.
 - Documents for people outside the team: `polished-document-style` (for deployment plans, runbooks, incident reports) · `branded-document-design` (rendered `.docx` / `.pptx` / PDF — cover page, tinted tables, figure captions at minimum) · Office files in or out → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (don't unpack them yourself)
 - `diagram-figures` — **APPLY TO DEPLOYMENT PLANS / RUNBOOKS / POSTMORTEMS** (project documents) — deployment topology and network zones, deploy/rollback steps, incident timeline and blast radius as house-style figures. On-call engineers read at 3 AM — visuals beat walls of text. `markdown-visuals` / `software-diagrams` (Mermaid) only for README, PR and code notes.
 - `incident-runbook-template` — when writing a runbook that an on-call engineer woken at 3 AM can follow
-- `logging-standards` — เมื่อวาง log pipeline, retention หรือ redaction
-- `web-service-essentials` — เมื่อตั้ง health check, probe, timeout หรือ graceful shutdown
+- `logging-standards` — when setting up a log pipeline, retention, or redaction
+- `web-service-essentials` — when setting up health checks, probes, timeouts, or graceful shutdown
 - Working style: `human-writing` · `answer-shape` · `spell-out-abbreviations` · `context-budget` · `temp-file-discipline` (temp files in `_to_delete/`) · `flag-and-propose` (irreversible, costly or outward-facing forks only; reversible → `principle-proceed-on-reversible-work`) · `status-report` (inside SuperUser the table goes in your report; the lead writes `docs/BUILD-PLAN.md`) · `handoff` — at end of deployment/incident sessions, save state + action items for resume
-- `docker-sandbox` — ตั้ง sandbox แยกต่อโปรเจกต์บน Docker Desktop: โหมด mount · isolated · locked และสิ่งที่ห้าม mount
+- `docker-sandbox` — set up a separate sandbox per project on Docker Desktop: mount · isolated · locked modes and what must never be mounted
 - `cicd-and-release` — when setting up or tearing down a pipeline, choosing how to release a new version, or rehearsing a rollback
 - `config-and-secrets` — when choosing where to store secrets, setting access rights, or planning secret rotation
 - `observability-basics` — when setting up metrics · dashboards · alerts (alert only on things a person must act on)
@@ -91,14 +91,14 @@ If touching production, **always have rollback plan ready first**.
 - `render-deploy` — when deploying an app to Render (render.yaml · failed deploy · rollback); pass the money gate before creating anything that costs money
 - `cloudflare-r2` — when the app must store files on Cloudflare R2 (token · presigned URL · CORS · public access); pass the money gate before creating or deleting
 - `backblaze-b2` — when the app must store files on Backblaze B2 (application key · file versions · lifecycle · presigned URL); pass the money gate before creating or deleting
-- `backblaze-b2` (`references/deploy.md`) — เมื่อปล่อยเว็บ static ขึ้น Backblaze B2 ผ่าน Cloudflare (b2 sync · Transform Rule · ไม่ใช้ --delete ก่อนผู้ใช้อนุมัติ) · มี backend ใช้ `render-deploy`
+- `backblaze-b2` (`references/deploy.md`) — when publishing a static site to Backblaze B2 through Cloudflare (b2 sync · Transform Rule · no --delete before the user approves) · if there is a backend, use `render-deploy`
 - `project-bootstrap` — when setting up the repository structure, lint/format, or writing install commands that actually run
 - `background-jobs` — when looking after queues, scheduled jobs, or stuck jobs
-- `kubernetes-helm` — เมื่อเขียน Dockerfile · manifest · Helm chart · GPU node pool · KEDA
-- `kafka-streaming` — เมื่อ service ส่ง event หากันผ่าน Kafka หรือ consumer lag สูง
-- `rabbitmq-messaging` — เมื่อ service ส่งงานผ่านคิว RabbitMQ หรือข้อความหาย ซ้ำ ค้างใน dead letter
-- `jenkins-pipeline` — เมื่อ pipeline อยู่บน Jenkins (หลักการทั่วไปอ่าน `cicd-and-release` ก่อน)
-- `mcp-server` — เมื่อจะให้ agent ต่อ Kafka · RabbitMQ · Docker · Jenkins · Kubernetes · Prometheus · Grafana ผ่าน MCP ทางการ (เริ่มอ่านอย่างเดียว ไม่ฝังใน plugin)
+- `kubernetes-helm` — when writing a Dockerfile · manifest · Helm chart · GPU node pool · KEDA
+- `kafka-streaming` — when services send events to each other through Kafka, or consumer lag is high
+- `rabbitmq-messaging` — when services pass work through RabbitMQ queues, or messages are lost, duplicated, or stuck in the dead letter queue
+- `jenkins-pipeline` — when the pipeline runs on Jenkins (read `cicd-and-release` first for general principles)
+- `mcp-server` — when connecting an agent to Kafka · RabbitMQ · Docker · Jenkins · Kubernetes · Prometheus · Grafana through the official MCP server (start read-only, do not embed in the plugin)
 
 ## Standard Outputs
 

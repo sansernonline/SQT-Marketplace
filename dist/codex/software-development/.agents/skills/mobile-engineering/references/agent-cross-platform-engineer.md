@@ -1,4 +1,4 @@
-> เดิมคือ agent `cross-platform-engineer` ใน plugin `software-development-mobile` — รวมเข้า agent `mobile-engineer` ใน v2.0.0 แล้ว ตอนนี้ไฟล์นี้ใช้เป็นคู่มือบทบาท
+> This was the agent `cross-platform-engineer` in plugin `software-development-mobile` — merged into agent `mobile-engineer` in v2.0.0. This file now serves as the role guide.
 
 **สารบัญ:** 
 
@@ -50,15 +50,15 @@ You are a **Cross-Platform Mobile Engineer**. You build mobile apps that run on 
 
 | Framework | Pros | Cons | Best for |
 |-----------|------|------|----------|
-| **React Native** | JavaScript, huge ecosystem | งานหนักบน JavaScript thread · ข้ามไป native ถี่ ๆ มีต้นทุน (ใช้ JavaScript Interface, JSI) | Web team adopting mobile |
+| **React Native** | JavaScript, huge ecosystem | heavy work on the JavaScript thread is slow · frequent calls across to native have a cost (uses JavaScript Interface, JSI) | Web team adopting mobile |
 | **Flutter** | Single rendering engine, performance | Dart language adoption | New apps, design-heavy |
-| **Kotlin Multiplatform** | Native UI, share business logic (Compose Multiplatform for iOS เสถียรตั้งแต่ 1.8.0 พ.ค. 2025 — แชร์ UI ได้ด้วย) | ต้องมีความรู้ Kotlin + Xcode ทั้งสองฝั่ง ระบบ library ยังเล็กกว่า RN/Flutter | Existing Android shop |
+| **Kotlin Multiplatform** | Native UI, share business logic (Compose Multiplatform for iOS stable since 1.8.0, May 2025 — UI can be shared too) | needs Kotlin and Xcode knowledge on both sides · library ecosystem still smaller than RN/Flutter | Existing Android shop |
 | **Expo (RN)** | Easier setup, OTA updates | Some native limits | MVPs, easier teams |
 | **Capacitor** | Web tech, easy bridge | Webview overhead | Web app to mobile |
 
 ### Expo vs bare React Native
 
-Decide this before the first commit — moving from bare to Expo later is a rewrite of the native folders (แนวคิดจาก borghei senior-mobile (เขียนใหม่))
+Decide this before the first commit — moving from bare to Expo later is a rewrite of the native folders (idea from borghei senior-mobile, rewritten)
 
 | | Expo (managed) | Bare React Native |
 |---|---|---|
@@ -101,9 +101,9 @@ function ProductList() {
 - React Native Reanimated (animations)
 
 ### New Architecture (Fabric + Turbo Modules)
-- React Native 0.82 (ต.ค. 2568) เป็นเวอร์ชันแรกที่ใช้ New Architecture อย่างเดียว — ตั้ง `newArchEnabled=false` จะถูกเมินแล้ว (reactnative.dev/blog/2025/10/08/react-native-0.82 ตรวจ 22 ต.ค. 2569)
+- React Native 0.82 (Oct 2025) is the first version that uses only the New Architecture — setting `newArchEnabled=false` is now ignored (reactnative.dev/blog/2025/10/08/react-native-0.82 checked 22 Oct 2026)
 - For versions older than 0.82, turn it on yourself or check that version's default
-- Native module เขียนแบบ Turbo Module หรือ Expo Modules ไม่ใช่ `NativeModules` แบบเก่า
+- Write native modules as Turbo Modules or Expo Modules, not the old `NativeModules`
 
 ## Flutter Patterns
 
@@ -132,7 +132,7 @@ class ProductList extends ConsumerWidget {
 - Riverpod (state management)
 - Dio (HTTP)
 - Freezed (data classes)
-- Go Router (navigation — ประกาศเส้นทางในโค้ดด้วย `GoRouter(routes: [...])`)
+- Go Router (navigation — declare routes in code with `GoRouter(routes: [...])`)
 - Drift (local DB)
 
 ## Kotlin Multiplatform Patterns
@@ -158,7 +158,7 @@ class ProductRepository(
 - Performance-critical code
 - Existing native code
 
-### RN native module (Expo Modules API — ใช้ได้กับ New Architecture)
+### RN native module (Expo Modules API — works with the New Architecture)
 ```typescript
 // JS side: modules/my-module/src/index.ts
 import { requireNativeModule } from 'expo';
@@ -182,7 +182,7 @@ public class MyModule: Module {
   }
 }
 ```
-ถ้าไม่ใช้ Expo ให้เขียน Turbo Module ตามคู่มือ reactnative.dev (Codegen spec ใน TypeScript)
+If you do not use Expo, write a Turbo Module by following the reactnative.dev guide (Codegen spec in TypeScript)
 
 ## Build + Distribution
 
@@ -206,7 +206,7 @@ public class MyModule: Module {
 - Lazy load screens
 
 ### Image optimization
-- Use `expo-image` (RN) / cached_network_image (Flutter) — react-native-fast-image ไม่มีคนดูแลแล้ว
+- Use `expo-image` (RN) / cached_network_image (Flutter) — react-native-fast-image is no longer maintained
 - Appropriate sizes per device
 - WebP / AVIF where supported
 

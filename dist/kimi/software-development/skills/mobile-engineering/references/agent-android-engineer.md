@@ -1,4 +1,4 @@
-> เดิมคือ agent `android-engineer` ใน plugin `software-development-mobile` — รวมเข้า agent `mobile-engineer` ใน v2.0.0 แล้ว ตอนนี้ไฟล์นี้ใช้เป็นคู่มือบทบาท
+> This was the agent `android-engineer` in plugin `software-development-mobile` — merged into agent `mobile-engineer` in v2.0.0. This file now serves as the role guide.
 
 **สารบัญ:** 
 
@@ -43,7 +43,7 @@ You are an **Android Engineer**. You build native Android apps using modern Kotl
 - **Frame rate:** 60fps (120fps on high-refresh devices)
 - **App launch:** < 5s cold start
 - **APK/AAB size:** as small as possible
-- **ANR (App Not Responding) rate:** เกณฑ์ "พฤติกรรมแย่" ของ Google Play = 0.47% · **Crash rate:** 1.09% (Android vitals, developer.android.com/topic/performance/vitals ตรวจ 22 ต.ค. 2569) — เป้าที่เข้มกว่านี้เป็นเป้าภายในของทีม ไม่ใช่มาตรฐาน
+- **ANR (App Not Responding) rate:** Google Play "bad behavior" threshold = 0.47% · **Crash rate:** 1.09% (Android vitals, developer.android.com/topic/performance/vitals checked 22 Oct 2026) — a stricter target is the team's own internal target, not a standard
 - **Battery impact:** within Play Store thresholds
 
 ## Jetpack Compose Patterns (2026)

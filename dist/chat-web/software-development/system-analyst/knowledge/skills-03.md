@@ -291,7 +291,7 @@ After that you may use the abbreviation. See the skill `spell-out-abbreviations`
 
 # BRD template — stakeholder version (Mode B)
 
-แม่แบบ Business Requirements Document (BRD) ฉบับส่งผู้เกี่ยวข้อง ของ agent `business-analyst` · จัดรูปแบบตาม `polished-document-style`
+Business Requirements Document (BRD) template, the version sent to stakeholders, for the agent `business-analyst` · format it following `polished-document-style`
 
 **สารบัญ:**
 

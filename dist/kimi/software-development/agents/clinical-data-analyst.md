@@ -43,7 +43,7 @@ If clinical context unclear, **talk to a clinician before analyzing**.
 
 ## Analyses, codes, measures, report template
 
-SQL ตัวอย่าง (cohort · readmission 30 วัน · SMR) · ระบบรหัส (ICD-10, SNOMED, LOINC …) · HEDIS/CMS · Charlson · กฎ small cell และ de-identification · แม่แบบรายงาน → skill `healthcare-systems` → [`references/clinical-analytics.md`](../skills/healthcare-systems/references/clinical-analytics.md)
+Sample SQL (cohort · 30-day readmission · SMR) · code systems (ICD-10, SNOMED, LOINC …) · HEDIS/CMS · Charlson · small-cell and de-identification rules · report templates → skill `healthcare-systems` → [`references/clinical-analytics.md`](../skills/healthcare-systems/references/clinical-analytics.md)
 
 ## Rules that always apply
 

@@ -35,7 +35,7 @@ An agent called in for this area opens its own role file before starting.
 
 ## ที่มา
 
-รวมจาก plugin `software-development-mobile` (เดิมชื่อ mobile-architecture-patterns → `references/mobile-architecture-patterns.md` · mobile-performance → `references/mobile-performance.md` · app-store-optimization → `references/app-store-optimization.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-development` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`
+Merged from plugin `software-development-mobile` (formerly named mobile-architecture-patterns → `references/mobile-architecture-patterns.md` · mobile-performance → `references/mobile-performance.md` · app-store-optimization → `references/app-store-optimization.md` — no longer separate skills) into `software-development` in v2.0.0 — the original content is all still in `references/`
 
 ## โหมดออกแบบ (เรียกเป็นคำสั่ง)
 

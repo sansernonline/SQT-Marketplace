@@ -36,7 +36,7 @@ An agent called in for this area opens its own role file before starting · read
 
 ## ที่มา
 
-รวมจาก plugin `software-development-insurtech` (เดิมชื่อ claims-workflow-patterns → `references/claims-workflow-patterns.md` · underwriting-models → `references/underwriting-models.md` · insurance-compliance → `references/insurance-compliance.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-development` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+Merged from plugin `software-development-insurtech` (formerly named claims-workflow-patterns → `references/claims-workflow-patterns.md` · underwriting-models → `references/underwriting-models.md` · insurance-compliance → `references/insurance-compliance.md` — no longer separate skills) into `software-development` in v2.0.0. The original content is all still in `references/`
 
 ## โหมดออกแบบ (เรียกเป็นคำสั่ง)
 

@@ -34,11 +34,11 @@ An agent called to work in this area opens its own role file before starting · 
 
 ## อ้างอิงภายนอก
 
-- anthropics/healthcare `fhir-developer` (github.com/anthropics/healthcare) — โค้ด validation และ value sets จริง · ToS เท่านั้น ลิงก์ได้ ลอกไม่ได้
+- anthropics/healthcare `fhir-developer` (github.com/anthropics/healthcare) — real validation code and value sets · ToS: link only, do not copy
 
 ## ที่มา
 
-รวมจาก plugin `software-development-healthcare` (เดิมชื่อ clinical-workflows → `references/clinical-workflows.md` · fhir-implementation → `references/fhir-implementation.md` · hipaa-compliance → `references/hipaa-compliance.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-development` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+Merged from plugin `software-development-healthcare` (formerly named clinical-workflows → `references/clinical-workflows.md` · fhir-implementation → `references/fhir-implementation.md` · hipaa-compliance → `references/hipaa-compliance.md` — no longer separate skills) into `software-development` in v2.0.0. The original content is all still in `references/`
 
 ## โหมดออกแบบ (เรียกเป็นคำสั่ง)
 
@@ -609,7 +609,7 @@ The bedside side (all 5 rights: patient, drug, dose, route, time) is in [`clinic
 
 # HIPAA Officer — rules, patient rights, BAAs, breach, risk analysis
 
-คู่มือบทบาทของ agent `hipaa-officer` · safeguard ทั้ง 3 กลุ่ม · การเลือก vendor ที่เซ็น BAA · เกณฑ์แจ้ง breach อยู่ใน [`hipaa-compliance.md`](hipaa-compliance.md)
+Role guide for the agent `hipaa-officer` · all 3 safeguard groups · choosing a vendor that signs a BAA · breach notification criteria are in [`hipaa-compliance.md`](hipaa-compliance.md)
 
 **สารบัญ:**
 
@@ -1422,7 +1422,7 @@ Workflow:
 9. **Produce polished FHIR design** using `polished-document-style`: resource model, endpoints, SMART sequence diagram, sample resources, migration plan
 10. **Hand-off:** implementation → `developer`, HIPAA review → `hipaa-officer`, deployment → `devops-engineer`
 
-Reference for steps 3–8: anthropics/healthcare `fhir-developer` (github.com/anthropics/healthcare) has real validation code and value sets — ToS เท่านั้น ลิงก์ได้ ลอกไม่ได้
+Reference for steps 3–8: anthropics/healthcare `fhir-developer` (github.com/anthropics/healthcare) has real validation code and value sets — ToS: link only, do not copy
 
 ---
 

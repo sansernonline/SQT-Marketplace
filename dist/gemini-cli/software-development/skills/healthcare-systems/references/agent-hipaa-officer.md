@@ -1,6 +1,6 @@
 # HIPAA Officer — rules, patient rights, BAAs, breach, risk analysis
 
-คู่มือบทบาทของ agent `hipaa-officer` · safeguard ทั้ง 3 กลุ่ม · การเลือก vendor ที่เซ็น BAA · เกณฑ์แจ้ง breach อยู่ใน [`hipaa-compliance.md`](hipaa-compliance.md)
+Role guide for the agent `hipaa-officer` · all 3 safeguard groups · choosing a vendor that signs a BAA · breach notification criteria are in [`hipaa-compliance.md`](hipaa-compliance.md)
 
 **สารบัญ:**
 

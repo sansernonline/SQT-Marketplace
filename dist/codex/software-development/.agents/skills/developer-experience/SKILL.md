@@ -35,7 +35,7 @@ An agent called in for this area opens its own role file before starting.
 
 ## ที่มา
 
-รวมจาก plugin `software-development-devtools` (เดิมชื่อ developer-experience → `references/developer-experience.md` · sdk-design-patterns → `references/sdk-design-patterns.md` · technical-content → `references/technical-content.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-development` ใน v2.0.0 และเนื้อหาเดิมอยู่ครบใน `references/`
+Merged from plugin `software-development-devtools` (formerly named developer-experience → `references/developer-experience.md` · sdk-design-patterns → `references/sdk-design-patterns.md` · technical-content → `references/technical-content.md` — no longer separate skills) into `software-development` in v2.0.0, and the original content is all still in `references/`
 
 ## โหมดออกแบบ (เรียกเป็นคำสั่ง)
 

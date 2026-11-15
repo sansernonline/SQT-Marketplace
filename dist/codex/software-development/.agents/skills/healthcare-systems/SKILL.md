@@ -36,11 +36,11 @@ An agent called to work in this area opens its own role file before starting · 
 
 ## อ้างอิงภายนอก
 
-- anthropics/healthcare `fhir-developer` (github.com/anthropics/healthcare) — โค้ด validation และ value sets จริง · ToS เท่านั้น ลิงก์ได้ ลอกไม่ได้
+- anthropics/healthcare `fhir-developer` (github.com/anthropics/healthcare) — real validation code and value sets · ToS: link only, do not copy
 
 ## ที่มา
 
-รวมจาก plugin `software-development-healthcare` (เดิมชื่อ clinical-workflows → `references/clinical-workflows.md` · fhir-implementation → `references/fhir-implementation.md` · hipaa-compliance → `references/hipaa-compliance.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-development` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+Merged from plugin `software-development-healthcare` (formerly named clinical-workflows → `references/clinical-workflows.md` · fhir-implementation → `references/fhir-implementation.md` · hipaa-compliance → `references/hipaa-compliance.md` — no longer separate skills) into `software-development` in v2.0.0. The original content is all still in `references/`
 
 ## โหมดออกแบบ (เรียกเป็นคำสั่ง)
 

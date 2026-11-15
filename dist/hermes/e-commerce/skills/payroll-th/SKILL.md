@@ -82,7 +82,7 @@ Input file: `{ "employees": [ { "name": "...", "gross": 50000, "pvd_employee_pct
 
 The tax brackets, the social security cap and the allowances live in `scripts/rates.json` (it carries the date checked and the source; the script prints them in the result and warns when they are older than 90 days) · the social security cap and the top rate are checked against `scripts/check/facts.json` at the root of the SQT-Marketplace repo (it does not ship with the plugin) · negative net pay, and a PVD value below 1 (for example 0.05 instead of 5), raise a warning · when the tax year changes, edit `rates.json` before running in January · bonuses, mid-year hires and income already paid are not included, so work them out yourself using the bonus section below
 
-**Script path:** ติดตั้งจาก marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/payroll-th/scripts/payroll.mjs | sort -V | tail -1` · ใน repo SQT-Marketplace: `plugins/e-commerce/skills/payroll-th/scripts/payroll.mjs` · Node อย่างเดียว ไม่มี dependency
+**Script path:** Installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/payroll-th/scripts/payroll.mjs | sort -V | tail -1` · In the SQT-Marketplace repo: `plugins/e-commerce/skills/payroll-th/scripts/payroll.mjs` · Node only, no dependencies
 
 The result is supporting information, not tax advice.
 

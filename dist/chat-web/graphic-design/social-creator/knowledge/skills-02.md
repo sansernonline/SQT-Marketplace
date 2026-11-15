@@ -169,7 +169,7 @@ Use when one campaign needs assets for many platforms
 1. **Campaign card** — fill the card below. If you cannot write the 1-sentence summary, stop and get it from the owner
 2. **Asset matrix** (the table of every asset needed) — 1 row per placement, using [asset-matrix-template.md](references/asset-matrix-template.md). Sizes come from `social-formats`
 3. **Cut** — remove any row that does not serve the sentence or the audience's channels
-4. **Style lock** — **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `social` แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้ · then write or reuse a style lock sheet (`style-consistency`) before any generation or shoot
+4. **Style lock** — **ค้นต้นแบบก่อน:** run the project's keywords through a live search per `design-references` (plugin `superuser`), type `social`, then pull the colours from the chosen work · use the stored palette bank only when live search is unavailable · then write or reuse a style lock sheet (`style-consistency`) before any generation or shoot
 5. **Master first** — design the hero at the main placement's ratio (the one that carries most of the campaign), at its largest canvas. Get it approved before deriving anything. Then derive tallest to widest
 6. **Derive in order** — stills by ratio (9:16 → 4:5 → 1:1 → wide) → covers and banners → motion and video last, built from the still's look
 7. **Name** every file with the `asset-organize` pattern, putting the matrix ID in its optional `<id>` token

@@ -34,7 +34,7 @@ An agent called in for this area opens its own role file before starting.
 
 ## ที่มา
 
-รวมจาก plugin `software-development-ecommerce` (เดิมชื่อ checkout-optimization → `references/checkout-optimization.md` · inventory-management → `references/inventory-management.md` · recommendation-systems → `references/recommendation-systems.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-development` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`
+Merged from plugin `software-development-ecommerce` (formerly named checkout-optimization → `references/checkout-optimization.md` · inventory-management → `references/inventory-management.md` · recommendation-systems → `references/recommendation-systems.md` — no longer separate skills) into `software-development` in v2.0.0 — the original content is all still in `references/`
 
 ## โหมดออกแบบ (เรียกเป็นคำสั่ง)
 
@@ -1120,7 +1120,7 @@ stateDiagram-v2
 
 # Recommendation Engineer — algorithms, serving, evaluation
 
-คู่มือบทบาทของ agent `recommendation-engineer` · จุดแสดงผลในร้าน · email · A/B test อยู่ที่ [`recommendation-systems.md`](recommendation-systems.md)
+Role guide for the agent `recommendation-engineer` · in-store placements · email · A/B test are in [`recommendation-systems.md`](recommendation-systems.md)
 
 **สารบัญ:**
 

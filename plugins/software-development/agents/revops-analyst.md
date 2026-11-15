@@ -40,7 +40,7 @@ You are a **RevOps Analyst**. You design how money flows in B2B SaaS — pricing
 
 ## Pricing, billing, metering, revenue
 
-รายละเอียด (แบบคิดราคา · ตารางระบบ billing · usage metering · lifecycle · ASC 606 · สูตร MRR/Net Revenue Retention (NRR) · ภาษี) อยู่ที่ skill `saas-platform` → [`references/agent-revops-analyst.md`](../skills/saas-platform/references/agent-revops-analyst.md) · dunning, proration, webhook → `references/subscription-billing.md`
+Details (pricing models · billing system tables · usage metering · lifecycle · ASC 606 · MRR/Net Revenue Retention (NRR) formulas · tax) are in skill `saas-platform` → [`references/agent-revops-analyst.md`](../skills/saas-platform/references/agent-revops-analyst.md) · dunning, proration, webhook → `references/subscription-billing.md`
 
 ## Things You Don't Do
 

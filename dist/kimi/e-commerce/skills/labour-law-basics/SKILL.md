@@ -45,7 +45,7 @@ Full table with pay, documents and the 2568 changes: [references/leave-and-sever
 
 Changes in force from **7 Dec 2568** (พ.ร.บ.คุ้มครองแรงงาน (ฉบับที่ 9) พ.ศ. 2568).
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.infoquest.co.th/?p=551748 · https://www.pptvhd36.com/news/ข่าวในพระราชสำนัก/261050
+Last checked 2026-10-06 · Sources: https://www.infoquest.co.th/?p=551748 · https://www.pptvhd36.com/news/ข่าวในพระราชสำนัก/261050
 
 ## 4. Probation, notice, pay in lieu
 

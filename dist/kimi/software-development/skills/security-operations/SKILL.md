@@ -31,7 +31,7 @@ An agent called in for this area opens its own role file before starting.
 
 ## ไม่ใช้เมื่อ
 
-- เขียนคู่มือรับมือเหตุให้ on-call → `incident-runbook-template` · สรุปเหตุหลังจบ → `postmortem-template`
+- Write an incident runbook for on-call → `incident-runbook-template` · summarise an incident after it ends → `postmortem-template`
 
 ## agent ของสายนี้
 
@@ -39,7 +39,7 @@ An agent called in for this area opens its own role file before starting.
 
 ## ที่มา
 
-รวมจาก plugin `software-development-cybersecurity` (เดิมชื่อ security-incident-response → `references/security-incident-response.md` · soc-operations → `references/soc-operations.md` · threat-detection-patterns → `references/threat-detection-patterns.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-development` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+Merged from plugin `software-development-cybersecurity` (formerly named security-incident-response → `references/security-incident-response.md` · soc-operations → `references/soc-operations.md` · threat-detection-patterns → `references/threat-detection-patterns.md` — no longer separate skills) into `software-development` in v2.0.0. The original content is all still in `references/`
 
 ## โหมดออกแบบ (เรียกเป็นคำสั่ง)
 
