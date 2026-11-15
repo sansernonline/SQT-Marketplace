@@ -3,101 +3,101 @@ name: stack-mql
 description: Use when writing MQL4 or MQL5 code for MetaTrader
 ---
 
-# stack · MQL — Expert Advisor (EA) ที่ส่งออร์เดอร์ถูก ทุกโบรกเกอร์ ทุกครั้ง
+# stack · MQL — an Expert Advisor (EA) that sends orders correctly, on every broker, every time
 
-> **กฎข้อเดียว:** ทุกออร์เดอร์ผ่านตัวตรวจก่อนส่ง และทุกผลส่งกลับถูกอ่าน · EA ที่ "ทำงานใน tester" แต่ไม่ตรวจ ยังไม่เสร็จ
+> **One rule:** every order goes through the pre-send checker and every returned result is read · an EA that "works in the tester" but does not check is not done.
 
-ใช้กับ EA · indicator · script บน MetaTrader 4 (MT4) และ MetaTrader 5 (MT5) · กลยุทธ์ ความเสี่ยง และเกณฑ์ backtest อยู่ใน spec การเทรดของโปรเจกต์ (ถ้าใช้ชุด prompt ของ repo: `prompt/software-development/prompt-trading-system.md` — ผู้ที่ติดตั้งเฉพาะ plugin จะไม่มีไฟล์นี้ ให้ขอ spec จากเจ้าของ) · หลักทั่วไปอยู่ที่ `lazy-coding` · `readable-code` · `testing-standards` · `logging-standards` · `error-handling-patterns`
+For EAs · indicators · scripts on MetaTrader 4 (MT4) and MetaTrader 5 (MT5) · strategy, risk and backtest criteria live in the project's trading spec (if using the repo's prompt set: `prompt/software-development/prompt-trading-system.md` — someone who installed only the plugin will not have this file; ask the owner for the spec) · general principles are in `lazy-coding` · `readable-code` · `testing-standards` · `logging-standards` · `error-handling-patterns`
 
-## 1 · เริ่มงาน: รู้ว่าเขียนให้แพลตฟอร์มไหน
+## 1 · Start: know which platform you are writing for
 
-- ไฟล์ `.mq4` = MQL4 (MT4) · `.mq5` = MQL5 (MT5) · `.mqh` = include ใช้ร่วมได้ถ้าแยกส่วนที่ต่างไว้หลัง `#ifdef __MQL5__`
-- MQL4 ใส่ `#property strict` ทุกไฟล์ (ไม่ใส่ → compiler ปล่อยบั๊กชนิดข้อมูลผ่าน)
-- compile และ test ต้องมี terminal (Windows หรือ Wine บน macOS / Linux ที่ MetaQuotes แจก) · เครื่องที่ไม่มี → เขียนในรายงานว่า "ยังไม่ได้ compile" ห้ามบอกว่าผ่าน
+- `.mq4` file = MQL4 (MT4) · `.mq5` = MQL5 (MT5) · `.mqh` = an include that can be shared if the differing parts are separated behind `#ifdef __MQL5__`
+- In MQL4 put `#property strict` in every file (without it the compiler lets data-type bugs through)
+- Compiling and testing need a terminal (Windows, or the Wine build MetaQuotes distributes for macOS / Linux) · on a machine without one → write in the report "ยังไม่ได้ compile" (not yet compiled); never say it passed
 
-| ขั้น | MT5 | MT4 |
+| Step | MT5 | MT4 |
 |---|---|---|
 | compile | `metaeditor64.exe /compile:"MQL5\Experts\X.mq5" /log` | `metaeditor.exe /compile:"MQL4\Experts\X.mq4" /log` |
-| ผล compile | ไฟล์ `.log` ข้างไฟล์ต้นทาง · 0 errors 0 warnings | เหมือนกัน |
-| backtest จาก command line | `terminal64.exe /config:"tester.ini"` (หัวข้อ `[Tester]`: `Expert` · `Symbol` · `Period` · `FromDate` · `ToDate` · `Model` · `Report` · `ShutdownTerminal=1`) | `terminal.exe` + ไฟล์ config แบบ MT4 (ตัวเลือกน้อยกว่า) |
+| compile result | a `.log` file next to the source file · 0 errors 0 warnings | same |
+| backtest from the command line | `terminal64.exe /config:"tester.ini"` (section `[Tester]`: `Expert` · `Symbol` · `Period` · `FromDate` · `ToDate` · `Model` · `Report` · `ShutdownTerminal=1`) | `terminal.exe` + an MT4-style config file (fewer options) |
 
-ตรวจล่าสุด 2026-10-20 · แหล่ง: https://www.metatrader5.com/en/terminal/help/start_advanced/start · ก่อนใช้ให้ตรวจหน้านี้ซ้ำ
+Last checked 2026-10-20 · source: https://www.metatrader5.com/en/terminal/help/start_advanced/start · re-check this page before use
 
-## 2 · ความต่างที่ทำให้ port ระหว่าง MT4 กับ MT5 พัง
+## 2 · Differences that break a port between MT4 and MT5
 
-| เรื่อง | MT4 | MT5 |
+| Topic | MT4 | MT5 |
 |---|---|---|
-| โมเดลออร์เดอร์ | ออร์เดอร์ = สถานะ (`OrderSend` · `OrderSelect` · `OrdersTotal`) | แยก order · position · deal · ใช้ `CTrade` (`Trade\Trade.mqh`) |
-| บัญชี | hedging เสมอ | netting หรือ hedging → อ่าน `ACCOUNT_MARGIN_MODE` · netting มีได้ 1 position ต่อ symbol |
-| วิธีเติมออร์เดอร์ | ไม่มีให้เลือก | FOK / IOC อ่านจาก flag ใน `SYMBOL_FILLING_MODE` (Market / Exchange Execution) · RETURN ใช้ได้ทุกโหมดยกเว้น Market Execution · pending order ใช้ RETURN |
-| indicator | คืนค่าทันที (`iMA(...)`) | สร้าง handle ครั้งเดียวใน `OnInit` แล้ว `CopyBuffer` · ปล่อยใน `OnDeinit` |
-| ผลส่งออร์เดอร์ | `GetLastError()` (130 stops ผิด · 134 เงินไม่พอ · 138 requote · 146 trade context busy) | `MqlTradeResult.retcode` (10009 done · 10008 placed (pending order) · 10010 done partial = สำเร็จ · 10004 requote · 10014 volume ผิด · 10015 ราคาผิด · 10016 stops ผิด · 10018 ตลาดปิด · 10019 เงินไม่พอ · 10030 filling ผิด) |
-| เหตุการณ์ออร์เดอร์ | ไม่มี ต้องไล่ดูเอง | `OnTradeTransaction` |
+| order model | an order = a position (`OrderSend` · `OrderSelect` · `OrdersTotal`) | order · position · deal are separate · use `CTrade` (`Trade\Trade.mqh`) |
+| account | always hedging | netting or hedging → read `ACCOUNT_MARGIN_MODE` · netting allows 1 position per symbol |
+| order filling | no choice | FOK / IOC read from the flags in `SYMBOL_FILLING_MODE` (Market / Exchange Execution) · RETURN works in every mode except Market Execution · pending orders use RETURN |
+| indicator | returns the value at once (`iMA(...)`) | create the handle once in `OnInit`, then `CopyBuffer` · release it in `OnDeinit` |
+| order send result | `GetLastError()` (130 invalid stops · 134 not enough money · 138 requote · 146 trade context busy) | `MqlTradeResult.retcode` (10009 done · 10008 placed (pending order) · 10010 done partial = success · 10004 requote · 10014 invalid volume · 10015 invalid price · 10016 invalid stops · 10018 market closed · 10019 not enough money · 10030 invalid filling) |
+| order events | none; you must poll | `OnTradeTransaction` |
 
-## 3 · ตัวตรวจก่อนส่งออร์เดอร์ (ทุกออร์เดอร์ ทุกครั้ง)
+## 3 · The pre-send order checker (every order, every time)
 
-| ตรวจ | ทำแบบนี้ | ไม่ตรวจแล้วเจอ |
+| Check | Do this | What you hit if you skip it |
 |---|---|---|
-| volume | ปัดลงตาม `SYMBOL_VOLUME_STEP` · อยู่ระหว่าง `SYMBOL_VOLUME_MIN` กับ `SYMBOL_VOLUME_MAX` | 10014 · error 131 |
-| ราคา | `NormalizeDouble(price, _Digits)` | 10015 |
-| Stop Loss (SL) / Take Profit (TP) | ห่างราคาปัจจุบันไม่น้อยกว่า `SYMBOL_TRADE_STOPS_LEVEL` × `_Point` | 10016 · error 130 |
-| แก้ออร์เดอร์ | ไม่แก้เมื่อราคาอยู่ในระยะ `SYMBOL_TRADE_FREEZE_LEVEL` · ไม่ส่งค่าเดิมซ้ำ | ถูกปฏิเสธ · 10025 no changes |
-| margin | `OrderCalcMargin` (MT5) · `AccountFreeMarginCheck` (MT4) ก่อนส่ง | 10019 · error 134 |
-| จำนวนออร์เดอร์ | น้อยกว่า `ACCOUNT_LIMIT_ORDERS` (0 = ไม่จำกัด) | ถูกปฏิเสธ |
-| symbol | `SYMBOL_TRADE_MODE` ไม่ใช่ disabled · ตลาดเปิด | 10018 |
-| MT5 ทั้งชุด | `OrderCheck()` ก่อน `OrderSend()` | error ที่บอกไม่ได้ว่าข้อไหนผิด |
+| volume | round down to `SYMBOL_VOLUME_STEP` · between `SYMBOL_VOLUME_MIN` and `SYMBOL_VOLUME_MAX` | 10014 · error 131 |
+| price | `NormalizeDouble(price, _Digits)` | 10015 |
+| Stop Loss (SL) / Take Profit (TP) | at least `SYMBOL_TRADE_STOPS_LEVEL` × `_Point` away from the current price | 10016 · error 130 |
+| modifying an order | do not modify when the price is within `SYMBOL_TRADE_FREEZE_LEVEL` · do not resend the same values | rejected · 10025 no changes |
+| margin | `OrderCalcMargin` (MT5) · `AccountFreeMarginCheck` (MT4) before sending | 10019 · error 134 |
+| order count | less than `ACCOUNT_LIMIT_ORDERS` (0 = unlimited) | rejected |
+| symbol | `SYMBOL_TRADE_MODE` is not disabled · market is open | 10018 |
+| MT5 whole set | `OrderCheck()` before `OrderSend()` | an error that cannot tell which item is wrong |
 
-- ทุกผลส่งกลับต้องอ่าน · requote / off quotes → ลองใหม่ไม่เกิน 3 ครั้ง ราคาใหม่ทุกครั้ง · เงินไม่พอ / stops ผิด → ไม่ลองซ้ำ ลง log แล้วหยุดไม้นั้น
-- pip กับ point ไม่เท่ากัน: ราคา 5 ตำแหน่ง (หรือ 3 ตำแหน่งของคู่ JPY) → 1 pip = 10 point · input ที่ผู้ใช้กรอกเป็น pip ให้แปลงที่จุดเดียว
-- **กับดักที่โค้ดดูถูกแต่พังจริง** (ปรับจาก ThomasPraun/mql-developer · MIT): เทียบ `double` ด้วย `==` ไม่ได้ ให้ `NormalizeDouble` ทั้ง 2 ฝั่งหรือเทียบกับค่าคลาดเคลื่อน · MT4 ปิดหลายออร์เดอร์ต้องวนจาก `OrdersTotal()-1` ลงถึง 0 เพราะปิดแล้ว index เลื่อน · โบรกเกอร์ ECN บางเจ้าไม่รับ SL/TP ใน `OrderSend` ต้องส่งก่อนแล้ว `OrderModify` ตาม · `WebRequest` บล็อกจนกว่าจะตอบ และใช้ใน indicator กับ tester ไม่ได้ · MT4 terminal เดียวเทรดได้ทีละ EA (error 146) ต้องรอแล้วลองใหม่ ไม่ใช่ส่งซ้ำทันที · array แบบ series index 0 = แท่งล่าสุด ให้ `ArraySetAsSeries` กำกับทุกครั้ง ไม่เดาว่าทิศไหน
+- Read every returned result · requote / off quotes → retry at most 3 times, with a new price each time · not enough money / invalid stops → do not retry; log and stop that trade.
+- pip and point are not equal: a 5-digit price (or 3-digit for JPY pairs) → 1 pip = 10 points · if the user enters input in pips, convert at a single place.
+- **Traps where the code looks right but really breaks** (adapted from ThomasPraun/mql-developer · MIT): `double` cannot be compared with `==`; `NormalizeDouble` both sides or compare against a tolerance · in MT4, closing several orders must loop from `OrdersTotal()-1` down to 0 because the index shifts after a close · some ECN brokers do not accept SL/TP in `OrderSend`, so send first and then `OrderModify` · `WebRequest` blocks until it gets a reply and cannot be used in indicators and the tester · one MT4 terminal can trade with only one EA at a time (error 146); wait and retry, do not resend at once · a series array has index 0 = the latest bar; always mark with `ArraySetAsSeries`, never guess the direction.
 
-ตัวอย่างโค้ดตัวตรวจแต่ละข้อ → https://www.mql5.com/en/articles/23204 (อ่านแล้วเขียนเอง ไม่ลอกทั้งไฟล์)
+Sample code for each checker item → https://www.mql5.com/en/articles/23204 (read it and write your own; do not copy the whole file)
 
-## 4 · โครง EA ที่อ่านง่ายและกู้คืนได้
+## 4 · An EA structure that is easy to read and recoverable
 
-- `OnInit` ตรวจ input ทุกตัว (ค่าผิด → `INIT_PARAMETERS_INCORRECT`) · สร้าง handle · `OnDeinit` ปล่อย handle
-- logic หนักทำครั้งเดียวต่อแท่งใหม่ (เทียบ `iTime(_Symbol, _Period, 0)` กับค่าที่จำไว้) ไม่ทำทุก tick
-- magic number ต่อ EA + symbol + กลยุทธ์ · นับและจัดการเฉพาะออร์เดอร์ที่ magic ตรง ห้ามแตะออร์เดอร์มือหรือ EA อื่น
-- **ไม่เก็บ state สำคัญไว้ในตัวแปรอย่างเดียว:** terminal รีสตาร์ท → state หาย · `OnInit` สร้าง state ใหม่จาก position/order ที่ magic ตรง · ค่าที่สร้างใหม่ไม่ได้ (เช่น ยอดขาดทุนวันนี้) เก็บใน `GlobalVariableSet` หรือไฟล์ใน `MQL5\Files` / `MQL4\Files`
-- เวลา: ใช้เวลา server (`TimeCurrent`) ตัดสินแท่งและ session · เวลา server ของแต่ละโบรกเกอร์ไม่เท่ากับเวลาไทย และเลื่อนตาม daylight saving · ใน tester `TimeGMT()` เท่ากับเวลา server จำลองเสมอ (แหล่ง: https://www.mql5.com/en/docs/dateandtime/timegmt) → ตัวกรองข่าวและ session ที่อิง Greenwich Mean Time (GMT) ต้องตั้ง offset เป็น input
-- 1 ฟังก์ชัน 1 หน้าที่: สัญญาณ · ขนาดไม้ · ส่งออร์เดอร์ · จัดการออร์เดอร์ที่เปิดอยู่ แยกกัน · สัญญาณเป็นฟังก์ชันบริสุทธิ์ที่รับข้อมูลแท่งแล้วคืนผล (test ได้ใน script)
-- log ทุกการตัดสินใจที่ส่งหรือไม่ส่งออร์เดอร์: เวลา server · symbol · เหตุผล · ราคา · spread · ผลส่งกลับ · ไม่ log ทุก tick
+- `OnInit` validates every input (wrong value → `INIT_PARAMETERS_INCORRECT`) · create handles · `OnDeinit` releases the handles.
+- Do heavy logic once per new bar (compare `iTime(_Symbol, _Period, 0)` with a remembered value), not on every tick.
+- A magic number per EA + symbol + strategy · count and manage only orders whose magic matches; never touch manual orders or another EA's.
+- **Never keep important state only in a variable:** a terminal restart → state is lost · `OnInit` rebuilds state from the positions/orders with a matching magic · values that cannot be rebuilt (such as today's loss total) are stored with `GlobalVariableSet` or a file in `MQL5\Files` / `MQL4\Files`.
+- Time: use server time (`TimeCurrent`) to decide bars and sessions · each broker's server time is not Thai time and shifts with daylight saving · in the tester `TimeGMT()` always equals the simulated server time (source: https://www.mql5.com/en/docs/dateandtime/timegmt) → news and session filters based on Greenwich Mean Time (GMT) must take the offset as an input.
+- 1 function, 1 job: signal · lot size · sending the order · managing open orders are kept separate · the signal is a pure function that takes bar data and returns a result (testable in a script).
+- Log every decision to send or not send an order: server time · symbol · reason · price · spread · returned result · do not log every tick.
 
 ## 5 · test
 
-- **script test:** ฟังก์ชันสัญญาณและขนาดไม้ test ด้วย script ที่ป้อนข้อมูลตายตัวแล้วเทียบผล (MQL ไม่มี framework test มาตรฐาน)
-- **backtest:** MT5 ใช้โหมด "Every tick based on real ticks" สำหรับผลที่จะใช้ตัดสิน · MT4 รายงาน modelling quality ทุกครั้ง · ค่า spread · commission · swap ตั้งตามบัญชีจริง ไม่ใช่ 0
-- **ทดสอบกับหลายสภาพ:** symbol อย่างน้อย 3 ตัวที่ digits ต่างกัน (เช่น EURUSD · USDJPY · XAUUSD) · timeframe อย่างน้อย 2 ตัว · บัญชี netting และ hedging (MT5) · ทุนน้อยจนส่งไม้ขั้นต่ำไม่ได้
-- **ไม่ตัดสินจากผลที่ optimize มา:** ใช้ forward period ของ MT5 หรือแบ่ง in-sample / out-of-sample เอง · ตัวเลขที่รายงานคือผลช่วงที่ไม่ได้ใช้ optimize
-- `OnTester()` คืนค่าเกณฑ์ที่ spec กำหนด (เช่น profit factor ที่ drawdown ไม่เกินเกณฑ์) เพื่อให้ optimizer เลือกตามเกณฑ์จริง ไม่ใช่กำไรสูงสุด
+- **script test:** test the signal and lot-size functions with a script that feeds fixed data and compares the result (MQL has no standard test framework).
+- **backtest:** MT5 uses the "Every tick based on real ticks" mode for results used to decide · MT4 reports modelling quality every time · spread · commission · swap are set to the real account, not 0.
+- **Test under several conditions:** at least 3 symbols with different digits (such as EURUSD · USDJPY · XAUUSD) · at least 2 timeframes · netting and hedging accounts (MT5) · a capital so small the minimum lot cannot be sent.
+- **Do not judge from optimized results:** use MT5's forward period or split in-sample / out-of-sample yourself · the reported numbers are the results of the period not used for optimizing.
+- `OnTester()` returns the criterion the spec defines (such as profit factor with drawdown under the limit) so the optimizer picks by the real criterion, not maximum profit.
 
-## 6 · ขายบน MQL5 Market
+## 6 · Selling on the MQL5 Market
 
-ตรวจล่าสุด 2026-10-20 · แหล่ง: https://www.metatrader5.com/en/terminal/help/market/market_sell · กฎเปลี่ยนได้ ตรวจซ้ำก่อนส่ง
+Last checked 2026-10-20 · source: https://www.metatrader5.com/en/terminal/help/market/market_sell · the rules can change; re-check before submitting
 
-- ส่งไฟล์ compile แล้วไฟล์เดียว (`.ex5` / `.ex4`) · indicator · เสียง · รูป ฝังเป็น resource · **ห้ามใช้ Dynamic Link Library (DLL)**
-- **ห้ามจำกัดตามเลขบัญชีหรือชนิดบัญชี** · Market ล็อกเครื่องและจำนวน activation ให้เอง · ระบบ license ของเรา (ข้อ 7) ใช้ได้เฉพาะช่องทางขายเอง
-- การตรวจอัตโนมัติรัน EA ใน tester หลาย symbol และ timeframe · EA ต้องส่งออร์เดอร์ได้จริงในทุกสภาพนั้น (ไม่ส่งเลย = ไม่ผ่าน) · ตัวตรวจข้อ 3 ครบทุกข้อคือสิ่งที่ทำให้ผ่าน
-- ห้ามสัญญาผลกำไรในคำบรรยาย · ชื่อสินค้าตัวอักษรละตินไม่เกิน 50 ตัว ไม่มีเลขรุ่น · ระบุถ้าใช้ได้เฉพาะ hedging หรือ netting
+- Submit a single compiled file (`.ex5` / `.ex4`) · indicators · sounds · images embedded as resources · **no Dynamic Link Library (DLL)**
+- **Do not restrict by account number or account type** · the Market locks machines and the number of activations itself · our license system (item 7) is for self-sale channels only.
+- The automatic check runs the EA in the tester on several symbols and timeframes · the EA must really send orders in every one of those conditions (sending none = fail) · having every item of the item 3 checker is what makes it pass.
+- Do not promise profit in the description · the product name in Latin letters is at most 50 characters with no version number · state it if it works only with hedging or netting.
 
-## 7 · ความปลอดภัยและการขายเอง
+## 7 · Security and self-sale
 
-- รหัสผ่านบัญชีเทรด · API key · license key ไม่อยู่ในโค้ดหรือ `.set` · ค่าที่ต้องเก็บใช้ input ที่ผู้ใช้กรอกเองบนเครื่อง
-- `WebRequest` ใช้ได้เฉพาะ URL ที่ผู้ใช้เพิ่มใน allow list ของ terminal เอง · บอกในคู่มือว่าต้องเพิ่ม URL ไหน
-- ขายเอง (ไม่ผ่าน Market): ล็อก license ด้วยเลขบัญชี (`ACCOUNT_LOGIN`) + วันหมดอายุ ตรวจใน `OnInit` · ไม่ส่ง `.mq4` / `.mq5` ให้ลูกค้า · ไฟล์ `.ex4` / `.ex5` ถอดกลับได้บางส่วน อย่าวางกฎลับไว้ในตัว EA อย่างเดียว
+- Trading account passwords · API keys · license keys never go in the code or `.set` · for values that must be kept, use an input the user types on their own machine.
+- `WebRequest` works only with URLs the user added to the terminal's own allow list · say in the manual which URLs must be added.
+- Self-sale (not through the Market): lock the license with the account number (`ACCOUNT_LOGIN`) + an expiry date, checked in `OnInit` · do not give the customer the `.mq4` / `.mq5` · `.ex4` / `.ex5` files can be partly decompiled, so do not put secret rules only inside the EA.
 
-## 8 · รายการตรวจก่อนส่ง
+## 8 · Pre-submit checklist
 
-- [ ] compile ได้ 0 errors 0 warnings (หรือรายงานว่ายังไม่ได้ compile เพราะไม่มี terminal)
-- [ ] ทุกออร์เดอร์ผ่านตัวตรวจข้อ 3 · ทุกผลส่งกลับถูกอ่านและ log
-- [ ] magic number · state สร้างใหม่ได้หลังรีสตาร์ท · ไม่แตะออร์เดอร์ที่ magic ไม่ตรง
-- [ ] input ทุกตัวมีค่า default และช่วงที่ตรวจใน `OnInit`
-- [ ] backtest ใช้ spread · commission · swap จริง · ผลที่รายงานมาจากช่วงที่ไม่ได้ optimize
-- [ ] ทดสอบแล้วอย่างน้อย 3 symbol · 2 timeframe (· netting และ hedging สำหรับ MT5)
-- [ ] ขาย Market: ไม่มี DLL · ไม่ล็อกบัญชีหรือ symbol · คำบรรยายไม่สัญญาผลกำไร
+- [ ] compiles with 0 errors 0 warnings (or the report says it was not compiled because there is no terminal)
+- [ ] every order passes the item 3 checker · every returned result is read and logged
+- [ ] magic number · state can be rebuilt after a restart · orders with a non-matching magic are untouched
+- [ ] every input has a default and a range checked in `OnInit`
+- [ ] backtest uses real spread · commission · swap · the reported result comes from a period not used for optimizing
+- [ ] tested on at least 3 symbols · 2 timeframes (· netting and hedging for MT5)
+- [ ] selling on the Market: no DLL · no account or symbol lock · the description promises no profit
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Link to other skills
 
-มีแค่ `.ex5` ไม่มี `.mq5` (ซอร์สหาย หรืออยากได้ตัวที่เทรดเหมือนเดิม) → `reverse-engineering` ไฟล์ `references/mql5-ex5.md` ถอดพฤติกรรมใน Strategy Tester แล้วเขียนใหม่ตามกฎในไฟล์นี้ · ไม่ decompile
+Only a `.ex5` and no `.mq5` (the source is lost, or you want one that trades the same way) → `reverse-engineering`, file `references/mql5-ex5.md`: extract the behavior in the Strategy Tester and rewrite it under the rules of this file · do not decompile.
 
-สูตรและสถิติ backtest → agent `quant-analyst` · test ทั่วไป → `testing-standards` · log → `logging-standards` · ค่าลับ → `config-and-secrets` · ขั้นตอนเล็กที่ตรวจได้ → `principle-small-verifiable-steps` · ขายและราคา → `prompt/software-development/prompt-sell-product.md` ของ repo (ถ้าใช้ชุด prompt)
+Backtest formulas and statistics → agent `quant-analyst` · general tests → `testing-standards` · logs → `logging-standards` · secrets → `config-and-secrets` · small checkable steps → `principle-small-verifiable-steps` · selling and pricing → the repo's `prompt/software-development/prompt-sell-product.md` (if using the prompt set)

@@ -3,49 +3,49 @@ name: context-budget
 description: Use when a task reads large material or writes long output
 ---
 
-# งบ context
+# Context budget
 
-> **กฎข้อเดียว:** ตัดสินใจ**ก่อน**อ่าน ไม่ใช่อ่านแล้วค่อยเสียดาย
-> token ที่เข้า context แล้วเอาออกไม่ได้ ยกเว้น `/clear` (ทิ้งทุกอย่าง) · `/compact` (ย่อเป็นสรุป) · `/rewind` (ตัดกลับไปจุดก่อนหน้า)
+> **One rule:** decide **before** you read, not regret it after.
+> Tokens that enter context cannot be removed, except by `/clear` (drops everything) · `/compact` (shrinks to a summary) · `/rewind` (cuts back to an earlier point).
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- กำลังจะอ่านของก้อนใหญ่: โฟลเดอร์เอกสาร · PDF ยาว · หน้าเว็บหลายหน้า · ผลค้นหา · โค้ดทั้งโปรเจกต์ · output ของคำสั่งที่อาจยาว
-- เริ่มงานกับโฟลเดอร์หรือโปรเจกต์ที่ยังไม่รู้จักโครงสร้าง
-- context เต็มเร็วผิดปกติ หรือโดน `/compact` บ่อย
-- จะวางกฎให้ทั้งทีมหรือทุกโปรเจกต์
+- About to read something big: a folder of documents · a long PDF · several web pages · search results · a whole code project · output of a command that may be long
+- Starting work on a folder or project whose structure you do not know yet
+- Context fills unusually fast, or `/compact` triggers often
+- Setting rules for the whole team or every project
 
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+## When to use another skill instead, or together
 
-| งาน | skill | |
+| Task | Skill | |
 |---|---|---|
-| ทำให้**คำตอบ**สั้นลง | `answer-shape` | แทน |
-| เก็บสรุปงานข้ามเซสชัน | `handoff` | แทน |
-| ที่วางไฟล์ชั่วคราว | `temp-file-discipline` | แทน |
-| loop เขียนโค้ดที่ต้องรอดจากการสูญเสียบริบท | `spec-to-code-loop` (plugin `software-development`) | แทน |
-| แผนที่โปรเจกต์และโครงโฟลเดอร์ | `project-bootstrap` (plugin `software-development`) | คู่ |
-| แก้บั๊กเฉพาะจุดโดยไม่อ่านทั้งโปรเจกต์ | `targeted-fix` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+| Make the **answer** shorter | `answer-shape` | instead |
+| Keep a work summary across sessions | `handoff` | instead |
+| Where to put temporary files | `temp-file-discipline` | instead |
+| A coding loop that must survive loss of context | `spec-to-code-loop` (plugin `software-development`) | instead |
+| Project map and folder layout | `project-bootstrap` (plugin `software-development`) | together |
+| Fix a bug at one spot without reading the whole project | `targeted-fix` | together |
+| Abbreviations in work people read | `spell-out-abbreviations` | together |
 
 ---
 
-## 1 · อะไรกิน context จริง ๆ
+## 1 · What really eats context
 
-| แหล่ง | ขนาดโดยประมาณ | คุมได้ไหม |
+| Source | Rough size | Can you control it? |
 |---|---|---|
-| **ของที่อ่านเข้ามา** (ไฟล์ · PDF · หน้าเว็บ · ผลค้น · output คำสั่ง) | ใหญ่สุด ชิ้นเดียวเป็นหมื่น token ได้ | คุมได้เต็มที่ ทั้งหน้านี้พูดถึงเรื่องนี้ |
-| tool จาก Model Context Protocol (MCP) server | โหลดแค่ชื่อ tool และคำแนะนำของ server · schema เต็มโหลดเมื่อใช้จริง | มี Command-Line Interface (CLI) ทำได้ใช้ CLI (ไม่มีรายการ tool เลย) · ปิดตัวที่ไม่ใช้ |
-| `CLAUDE.md` | ตามที่เขียน | เขียนให้สั้น |
-| description ของ skill | ~100 token ต่อ skill | ตัดให้กระชับ |
-| ประวัติบทสนทนา | โตเรื่อย ๆ | ระวัง: `/clear` เมื่อเปลี่ยนเรื่อง |
+| **Things you read in** (files · PDFs · web pages · search results · command output) | Biggest; one item can be tens of thousands of tokens | Fully. This whole page is about it |
+| Tools from a Model Context Protocol (MCP) server | Only tool names and the server's instructions load · the full schema loads when used | If a Command-Line Interface (CLI) can do it, use the CLI (no tool list at all) · turn off servers you do not use |
+| `CLAUDE.md` | As long as written | Write it short |
+| Skill descriptions | ~100 tokens per skill | Trim them |
+| Conversation history | Keeps growing | Careful: `/clear` when the topic changes |
 
-> **เห็นชัดว่าควรคุมอะไรก่อน**: ตัด description ของ skill ทั้งชุดได้แค่ไม่กี่พัน token
-> แต่เปิด PDF 200 หน้า หรือ `cat` ไฟล์ 3,000 บรรทัดครั้งเดียวกินมากกว่านั้น
-> **ต้องมีวินัยที่สุดกับแถวบนสุดของตาราง**
+> **What to control first is clear**: trimming the descriptions of the whole skill set saves only a few thousand tokens,
+> but opening a 200-page PDF or running `cat` on a 3,000-line file once costs more than that.
+> **Be most disciplined about the top row of the table.**
 
 ---
 
-## 2 · ต้นไม้ตัดสินใจก่อนอ่าน
+## 2 · Decision tree before reading
 
 ```
 ต้องรู้อะไรจากของก้อนนี้
@@ -55,40 +55,46 @@ description: Use when a task reads large material or writes long output
 └─ ต้องแปลง/รวม/นับข้อมูลจำนวนมาก        → เขียนลงไฟล์แล้วอ่านเฉพาะสรุป (ข้อ 5)
 ```
 
-ถ้าไม่รู้ว่าของใหญ่แค่ไหน ให้**เช็กขนาดก่อนเสมอ**: จำนวนหน้า PDF · จำนวนไฟล์และขนาดในโฟลเดอร์ (`ls -l`, `du -h`) · จำนวนบรรทัด (`wc -l`)
+Tree, in English: what do you need from this item?
+- You know the file, page and line → read only that range (item 3) · several items → read them together in one message
+- You need to find where it is → bounded search (item 3)
+- You must search across many items whose location you do not know → send a subagent (item 4)
+- You must convert, merge or count a lot of data → write to a file and read only the summary (item 5)
+
+If you do not know how big the thing is, **always check the size first**: number of PDF pages · number and size of files in a folder (`ls -l`, `du -h`) · number of lines (`wc -l`).
 
 ---
 
-## 3 · อ่านเฉพาะช่วง และค้นแบบมีขอบเขต
+## 3 · Read only a range, and search with a boundary
 
-กฎตัวเลข 3 ข้อ: **ไฟล์เกิน 300 บรรทัดอ่านเฉพาะช่วง** · **`grep`/`rg` ใส่ `--glob`** · **ปิดท้ายด้วย `| head -50`** (ถ้า `CLAUDE.md` ผู้ใช้ไม่มีหัวข้อ "งบ context" ให้ใช้ 3 ข้อนี้เลย) ส่วนที่เพิ่มจากนั้น:
+3 numeric rules: **read only a range of any file over 300 lines** · **add `--glob` to `grep`/`rg`** · **end with `| head -50`** (if the user's `CLAUDE.md` has no "งบ context" (context budget) section, use these 3 rules as they are). What goes beyond that:
 
-| ของ | อ่านอย่างไร |
+| Thing | How to read it |
 |---|---|
-| โฟลเดอร์เอกสาร | ดูรายชื่อและขนาดก่อน แล้วเปิดเฉพาะไฟล์ที่ชื่อตรงกับคำถาม |
-| PDF · รายงานยาว | อ่านสารบัญก่อน แล้วระบุหน้าหรือบทที่ต้องใช้ |
-| หน้าเว็บ | ขอเฉพาะส่วนที่ต้องการ (ตัวเลข วันที่ หัวข้อเดียว) ไม่ดึงทั้งหน้า |
-| โค้ด | `rg -l` ก่อนเพื่อรู้ว่าอยู่ไฟล์ไหน แล้วค่อยเจาะ · บริบท `-C2` พอ |
-| ไฟล์ session · log `.jsonl` | หนึ่งบรรทัดอาจใหญ่เป็นเมกะไบต์ จึงห้าม `cat` · `wc -l -c <ไฟล์>` ก่อน · หาบรรทัดยาว `awk 'length>100000{print NR": "length}' <ไฟล์> \| head -20` · อ่านทีละช่องด้วย `cut -c1-2000` หรือ `jq` เลือกช่อง |
+| Folder of documents | Look at names and sizes first, then open only files whose names match the question |
+| PDF · long report | Read the table of contents first, then name the pages or chapters you need |
+| Web page | Ask for only the part you need (a number, a date, one heading), do not pull the whole page |
+| Code | `rg -l` first to learn which file, then drill in · `-C2` of context is enough |
+| Session files · `.jsonl` logs | One line can be megabytes, so never `cat` · `wc -l -c <file>` first · find long lines with `awk 'length>100000{print NR": "length}' <file> \| head -20` · read one field at a time with `cut -c1-2000` or `jq` selecting a field |
 
-อ่านทั้งไฟล์ได้เมื่อ: กำลังจะเขียนทับทั้งไฟล์ · ไฟล์สั้น ๆ · ต้องเข้าใจทั้งไฟล์เพื่อแก้ให้ถูก และไม่เกิน ~300 บรรทัด
+Read the whole file when: you are about to overwrite the whole file · the file is short · you must understand the whole file to edit it correctly, and it is under ~300 lines.
 
 ---
 
-## 4 · ส่ง subagent ไปแทน
+## 4 · Send a subagent instead
 
-**นี่คือข้อที่ประหยัดได้มากที่สุดในหน้านี้**
+**This is the biggest saving on this page.**
 
-subagent มี context ของตัวเอง จึงอ่านไป 20 ชิ้นได้
-แล้วส่งกลับมาที่บทสนทนาหลักแค่ย่อหน้าเดียว โดยเนื้อหาที่มันอ่านไม่เข้ามาด้วย
+A subagent has its own context, so it can read 20 items
+and send back only one paragraph to the main conversation, without the content it read coming along.
 
-| ใช้ subagent เมื่อ | ทำเองเมื่อ |
+| Use a subagent when | Do it yourself when |
 |---|---|
-| คาดว่าต้องอ่านเกิน 20k token หรือเกิน 5 ไฟล์ที่ยังไม่รู้ตำแหน่ง (ค่าตั้งต้น ยังไม่ได้วัด · ประเมินขนาดจาก PERT ของขั้นใน `model-scorecard` ถ้ามี) · ต้องค้นข้ามหลายชิ้นเพื่อตอบคำถามเดียว | รู้ไฟล์และตำแหน่งอยู่แล้ว แม้ 4–6 ชิ้น → อ่านพร้อมกันในข้อความเดียว เร็วกว่าเปิด subagent ใหม่ |
-| สำรวจโฟลเดอร์หรือโปรเจกต์ที่ยังไม่รู้จัก | แก้ไฟล์ที่กำลังเปิดอยู่ |
-| ตรวจ/รีวิวข้ามหลายไฟล์ | งานที่ต้องเห็นรายละเอียดเต็มเพื่อทำต่อ |
+| You expect to read over 20k tokens or over 5 files whose location you do not know (default, not measured · estimate the size from the step's PERT in `model-scorecard` if present) · you must search across many items to answer one question | You already know the files and locations, even 4–6 of them → read them together in one message, faster than starting a new subagent |
+| Exploring a folder or project you do not know | Editing the file that is already open |
+| Checking/reviewing across many files | Work that needs the full detail to continue |
 
-**สั่งให้ดีคือบอกว่าต้องการอะไรกลับมา:**
+**To brief it well, say what you want back:**
 
 ```
 ผิด: "ดูสัญญา 12 ฉบับนี้ให้หน่อย"
@@ -99,14 +105,16 @@ subagent มี context ของตัวเอง จึงอ่านไป 
     ไม่ต้องแปะข้อความสัญญา ไม่เกิน 15 บรรทัด"
 ```
 
-(งานโค้ดก็เหมือนกัน: "คืนรายการ ไฟล์:บรรทัด ตามลำดับการเรียก ไม่ต้องแปะโค้ด")
+(The example above, in English: wrong = "Take a look at these 12 contracts" → it may return the whole content. Right = "Find the expiry date, penalty and renewal terms of each contract. Return a table, 1 line per contract, with file:page. Do not paste contract text. At most 15 lines.")
 
-> 🚨 **กำหนดรูปแบบและความยาวของผลลัพธ์เสมอ** ถ้าไม่บอกว่าต้องการอะไร
-> subagent จะส่งรายงานยาว ๆ กลับมา แล้วก็ไม่ได้ประหยัดอะไรเลย
+(Code work is the same: "Return a list of file:line in call order, do not paste code")
+
+> 🚨 **Always set the format and length of the result.** If you do not say what you want,
+> the subagent sends back a long report, and you save nothing.
 
 ---
 
-## 5 · เขียนลงไฟล์ แทนถือไว้ในบทสนทนา
+## 5 · Write to a file instead of holding it in the conversation
 
 ```bash
 # ผิด: output ทั้งหมดเข้า context
@@ -116,56 +124,58 @@ subagent มี context ของตัวเอง จึงอ่านไป 
 <คำสั่งที่ output ยาว> > <โฟลเดอร์ชั่วคราว>/out.log 2>&1; tail -20 <โฟลเดอร์ชั่วคราว>/out.log
 ```
 
-**ใช้กับ**: ข้อความจากเว็บหรือ PDF ที่ดึงมา · ตารางข้อมูลใหญ่ (กรองหรือนับด้วยสคริปต์ ไม่ต้องอ่านทุกแถว) · ผลรัน test · log · ผลจากการแปลงไฟล์
-ไฟล์พวกนี้วางที่ไหน → `temp-file-discipline` · เจออะไรให้จดลงไฟล์ตั้งแต่รอบแรก จะได้ไม่ต้องอ่านซ้ำ
+(Comments above: wrong = the whole output enters context · right = only the summary line enters context. `<คำสั่งที่ output ยาว>` = a command with long output · `<โฟลเดอร์ชั่วคราว>` = temp folder.)
 
-**ทำซ้ำทุกงาน → ให้ hook กรองแทนวินัย** — hook ตัดของยาวก่อนเข้า context ได้ (log หมื่น token เหลือหลักร้อย) · ตัวอย่างงานโค้ด → ส่วนเพิ่มใน plugin `software-development` → `superuser` → `references/code-extensions.md`
+**Use it for**: text pulled from the web or PDFs · big data tables (filter or count with a script, do not read every row) · test run results · logs · results of file conversions
+Where to put these files → `temp-file-discipline` · note what you find into a file from the first pass, so you do not read it again
 
----
-
-## 6 · ทำให้เซสชันหน้าไม่ต้องสำรวจซ้ำ
-
-งานที่กลับมาทำบ่อยต้องมี "แผนที่" สั้น ๆ ที่**โหลดอัตโนมัติ**: ของอยู่ที่ไหน · อะไรห้ามอ่าน · คำสั่งที่ใช้บ่อย
-- งานทั่วไป: หัวข้อ "ของอยู่ที่ไหน" ใน `.claude/superuser/CONTEXT.md` (`superuser` อ่านก่อนเริ่มทุกครั้ง) ไม่เกิน 40 บรรทัด
-- ไฟล์ชื่ออื่น (`notes.md`) ไม่โหลดเอง ต้องสั่งให้อ่านทุกครั้ง จึงเสียเปล่า
-- แผนที่ล้าสมัยแย่กว่าไม่มีแผนที่ เพราะพาไปผิดที่อย่างมั่นใจ ห้ามใส่รายการไฟล์ทั้งหมดหรือประวัติการเปลี่ยนแปลง
-
-งานโค้ด (`CLAUDE.md` ของโปรเจกต์และโฟลเดอร์ ตัวอย่างแผนที่) → ส่วนเพิ่มใน plugin `software-development` → `superuser` → `references/code-extensions.md`
+**Repeats on every task → let a hook filter instead of relying on discipline** — a hook can trim long output before it enters context (a log of tens of thousands of tokens becomes a few hundred) · coding example → the addition in plugin `software-development` → `superuser` → `references/code-extensions.md`
 
 ---
 
-## 7 · ค่าตั้งที่ช่วยได้อีก
+## 6 · So the next session does not explore again
 
-ปิด MCP server และ plugin ที่ไม่ใช้ · เลือกโมเดลและ effort ตั้งแต่ต้น · `/clear` เมื่อเปลี่ยนเรื่อง · `CLAUDE.md` ของโปรเจกต์ไม่เกิน 40 บรรทัด — ตารางเต็มพร้อมเหตุผลอยู่ใน [`settings`](references/settings.md) · ทำงานบน Windows (Git Bash · PowerShell) → กับดักที่เกิดจริงใน [`windows-shell`](references/windows-shell.md)
+Work you return to often needs a short "map" that **loads automatically**: where things are · what must not be read · commands used often
+- General work: the section "ของอยู่ที่ไหน" (where things are) in `.claude/superuser/CONTEXT.md` (`superuser` reads it before every start), at most 40 lines
+- Files with other names (`notes.md`) do not load themselves and must be told to be read every time, so they are wasted
+- An outdated map is worse than no map, because it confidently leads you to the wrong place. Do not put a full file list or change history in it
 
-**compact เองที่ราว 70% ไม่รอให้ระบบทำ** — context ใช้ไปราว 70% และเพิ่งจบขั้นหนึ่ง (test ผ่าน · ไฟล์บันทึกแล้ว · ตรวจผ่าน) → อัปเดต "รับงานต่อ" ใน `CONTEXT.md` ก่อน (`handoff` หัวข้อ 5) แล้ว `/compact` พร้อมบอกว่าให้เก็บอะไร (ไฟล์ที่แก้ · การตัดสินใจ · ขั้นถัดไป) · รอให้ระบบ compact เองมักโดนกลางขั้น ตอนที่ยังไม่มีอะไรจดไว้ (แนวคิดจาก strategic-compact ใน everything-claude-code · MIT · 70% เป็นค่าตั้งต้น ยังไม่ได้วัด)
+Code work (project and folder `CLAUDE.md`, example maps) → the addition in plugin `software-development` → `superuser` → `references/code-extensions.md`
 
 ---
 
-## 7.1 · รอยต่อระหว่างช่วงงาน (phase) — ต่อ · clear · handoff · subagent · compact
+## 7 · Other settings that help
 
-จบช่วงหนึ่งแล้วจะไปช่วงต่อไป ถามเรียงจากข้อ 1 **ข้อแรกที่ตอบว่าใช่ คือทางที่เลือก** แล้วหยุดถาม:
+Turn off MCP servers and plugins you do not use · pick the model and effort at the start · `/clear` when the topic changes · project `CLAUDE.md` at most 40 lines — the full table with reasons is in [`settings`](references/settings.md) · working on Windows (Git Bash · PowerShell) → traps that really happened are in [`windows-shell`](references/windows-shell.md)
 
-| ข้อ | ถามว่า | ถ้าใช่ |
+**Compact yourself at about 70%, do not wait for the system** — when about 70% of context is used and a step has just finished (tests pass · file saved · check passed) → first update "รับงานต่อ" (resume work) in `CONTEXT.md` (`handoff` item 5), then `/compact` and say what to keep (files edited · decisions · next step) · when the system compacts by itself, it often hits mid-step, when nothing has been written down yet (idea from strategic-compact in everything-claude-code · MIT · 70% is a default, not measured)
+
+---
+
+## 7.1 · Seams between phases — continue · clear · handoff · subagent · compact
+
+When a phase ends and the next begins, ask in order from item 1. **The first question answered yes is the route you pick**, then stop asking:
+
+| # | Ask | If yes |
 |---|---|---|
-| 1 | ช่วงต่อไปต้องใช้สิ่งที่อยู่ใน context นี้เป็นต้นทาง และที่ว่างยังเหลือ (ราวเกิน 150k token · ค่าตั้งต้น ยังไม่ได้วัด)? | **ต่อ** ใน session เดิม |
-| 2 | ช่วงต่อไปจะย้ายไปเครื่องมือค่ายอื่น โมเดลอื่น หรือ repo อื่น? | **handoff** — อัปเดต "รับงานต่อ" แล้วเริ่มที่ใหม่ (`handoff` หัวข้อ 5) |
-| 3 | ช่วงต่อไปแยกทำได้โดยไม่ต้องคุยกับเรา (ไม่รอคำตอบผู้ใช้ ไม่ต้องรู้ context นี้เกินที่เขียนในใบสั่งได้)? | **subagent** — ส่งใบสั่งงาน 5 ข้อ |
-| 4 | context นี้ทิ้งได้ทั้งหมด (ทุกอย่างที่ต้องใช้ลงไฟล์แล้ว) และเรื่องใหม่ไม่เกี่ยวกับเรื่องเก่า? | **clear** — ย้อนกลับไม่ได้ ตรวจว่า `notes/` และ "รับงานต่อ" ครบก่อน |
-| 5 | ไม่ตรงข้อไหนเลย | **compact** พร้อมบอกว่าให้เก็บอะไร (หัวข้อ 7 ข้างบน) |
+| 1 | Does the next phase need what is in this context as its source, and is there room left (roughly over 150k tokens · default, not measured)? | **Continue** in the same session |
+| 2 | Will the next phase move to another vendor's tool, another model, or another repo? | **handoff** — update "รับงานต่อ" (resume work) and start in the new place (`handoff` item 5) |
+| 3 | Can the next phase be split off without talking to us (no wait for a user answer, no need to know this context beyond what a brief can say)? | **subagent** — send the 5-part brief |
+| 4 | Can this whole context be dropped (everything needed is already in files) and the new topic is unrelated to the old? | **clear** — cannot be undone; check that `notes/` and "รับงานต่อ" (resume work) are complete first |
+| 5 | None of the above | **compact** and say what to keep (item 7 above) |
 
-ข้อ 4 เป็นข้อเดียวที่ย้อนกลับไม่ได้ จึงตอบใช่เมื่อมีหลักฐานว่าลงไฟล์ครบแล้วเท่านั้น · ไม่แน่ใจ → ไปข้อ 5 · ที่มา: mattpocock-skills (MIT) · PHASE-BOUNDARIES · ดู 2026-11-10
+Item 4 is the only one that cannot be undone, so answer yes only when there is evidence everything is in files · if unsure → go to item 5 · source: mattpocock-skills (MIT) · PHASE-BOUNDARIES · seen 2026-11-10
 
 ---
 
 ## 8 · Anti-patterns
 
-- **เปิดของใหญ่ทั้งก้อนเพื่อ "ดูก่อนว่ามีอะไร"** ทั้งที่สารบัญ หน้าแรก หรือ `head -40` ตอบคำถามเดียวกันได้ด้วยต้นทุน 1%
-- **ค้นโดยไม่จำกัดขอบเขต** (`rg` ไม่ใส่ `--glob` ได้โฟลเดอร์ที่ไม่เกี่ยวมาเต็ม · ค้นเว็บแล้วเปิดทุกลิงก์)
-- **ค้นเองข้าม 10 ชิ้นเพื่อตอบคำถามเดียว** ทั้งที่ควรส่ง subagent
-- **ส่ง subagent ไปอ่านของที่รู้ตำแหน่งแล้ว** ทั้งที่อ่านพร้อมกันเองหรือค้นตรง ๆ เร็วกว่า
-- **สั่ง subagent แบบไม่บอกว่าต้องการอะไรกลับมา** ได้รายงานยาวกลับมา ไม่ได้ประหยัด
-- **ปล่อย output ยาว (test · log · ข้อความที่ดึงมา) เข้า context ทั้งก้อน**
-- **อ่านของเดิมซ้ำเพราะลืมว่าเคยอ่านแล้ว** ให้จดสิ่งที่พบลงไฟล์ตั้งแต่รอบแรก
-- **ไฟล์แผนที่ที่ไม่ได้โหลดอัตโนมัติ** · **`CLAUDE.md` ยาว 300 บรรทัด** ทุกคนในทีมต้องจ่าย token ทุกเซสชัน
-- **เปิด MCP server ไว้ครบทุกตัวตลอดเวลา**
+- **Opening the whole big thing to "see what is in it first"** when the table of contents, the first page, or `head -40` answers the same question at 1% of the cost
+- **Searching without a boundary** (`rg` without `--glob` brings back unrelated folders in bulk · searching the web and opening every link)
+- **Searching across 10 items yourself to answer one question** when you should send a subagent
+- **Sending a subagent to read something whose location you already know** when reading in parallel yourself or a direct search is faster
+- **Briefing a subagent without saying what you want back**, which brings back a long report and saves nothing
+- **Letting long output (tests · logs · pulled text) into context in one lump**
+- **Reading the same thing again because you forgot you read it** — note what you find into a file from the first pass
+- **A map file that does not load automatically** · **a `CLAUDE.md` 300 lines long** that everyone on the team pays tokens for every session
+- **Keeping every MCP server on all the time**

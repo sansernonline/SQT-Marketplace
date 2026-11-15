@@ -200,90 +200,90 @@ F-001 ไป playbook `bug-fix` · test `A01_other_user_order_returns_404` ล�
 
 ## reference: attack-classes.md
 
-# ประเภทการโจมตี — กลุ่มหลัก ของที่มักหลุด และไฟล์ตามสาย
+# Attack classes — main groups, what often slips through, and files by lane
 
-ใช้ตอนสร้าง ledger (เลือก `class` ต่อหน่วย) และตอนประกอบ brief ลูกทีมล่า (วางหัวข้อที่เลือกทั้งก้อน) · เลือกจากขอบเขตที่เจอในขั้นสำรวจ ไม่ใช่เพราะเห็นชื่อไลบรารี · ไม่ใช่ทุกกลุ่มใช้กับทุกระบบ
+Use when building the ledger (pick a `class` per unit) and when assembling the brief for hunting sub-agents (paste the chosen sections whole) · Choose from the scope found in the recon step, not because you saw a library name · Not every group applies to every system
 
-## เลือกไฟล์ตามสาย
+## Pick files by lane
 
-| เจออะไรในขั้นสำรวจ | เปิดไฟล์ |
+| What recon found | Open file |
 |---|---|
-| เว็บแอป · API · login · session · JWT · OAuth · LINE Login · หน้าเว็บที่รัน JavaScript | [`classes-web-auth`](classes-web-auth.md) |
-| ข้อมูลหลายลูกค้าหรือหลายร้านในฐานเดียว · export · backup · ลบข้อมูล · cache · search | [`classes-data-tenant`](classes-data-tenant.md) |
-| เรียก LLM · RAG · AI agent ที่เรียกเครื่องมือ · MCP server หรือ client | [`classes-ai-mcp`](classes-ai-mcp.md) |
-| dependency · CI/CD · Dockerfile · สคริปต์ build · plugin ที่โหลดได้ · ระบบอัปเดต | [`classes-supply-chain`](classes-supply-chain.md) |
-| Terraform · docker-compose · Kubernetes · Helm · ไฟล์ตั้งค่า cloud (IAM · พอร์ต · bucket · การเข้ารหัส · image) | [`infra-checklist`](infra-checklist.md) |
-| webhook (รับหรือส่ง) · คิว · job เบื้องหลัง · gRPC · GraphQL · WebSocket | [`classes-messaging-webhook`](classes-messaging-webhook.md) |
-| LINE OA · LIFF · PromptPay · สลิป · payment gateway ไทย · e-Tax Invoice · เลขบัตรประชาชน | [`classes-thai`](classes-thai.md) |
+| Web app · API · login · session · JWT · OAuth · LINE Login · pages that run JavaScript | [`classes-web-auth`](classes-web-auth.md) |
+| Data of many customers or shops in one database · export · backup · data deletion · cache · search | [`classes-data-tenant`](classes-data-tenant.md) |
+| Calls an LLM · RAG · an AI agent that calls tools · an MCP server or client | [`classes-ai-mcp`](classes-ai-mcp.md) |
+| dependencies · CI/CD · Dockerfile · build scripts · loadable plugins · update system | [`classes-supply-chain`](classes-supply-chain.md) |
+| Terraform · docker-compose · Kubernetes · Helm · cloud config files (IAM · ports · buckets · encryption · images) | [`infra-checklist`](infra-checklist.md) |
+| webhook (incoming or outgoing) · queues · background jobs · gRPC · GraphQL · WebSocket | [`classes-messaging-webhook`](classes-messaging-webhook.md) |
+| LINE OA · LIFF · PromptPay · slips · Thai payment gateways · e-Tax Invoice · national ID numbers | [`classes-thai`](classes-thai.md) |
 
-สายที่ยังไม่มีไฟล์ของตัวเอง ใช้หัวข้อในไฟล์นี้: cloud และ deployment (หัวข้อ 9) · ทรัพยากรหมดหรือระบบล่ม (หัวข้อ 10) · แอปมือถือและ desktop ใช้ `security-gate/references/android.md` ร่วมกับไฟล์ web-auth สำหรับ backend · โค้ด native (C · C++) และไฟล์ไบนารี ส่งต่อ `reverse-engineering`
+Lanes with no file of their own use the sections in this file: cloud and deployment (section 9) · resource exhaustion or outage (section 10) · mobile and desktop apps use `security-gate/references/android.md` together with the web-auth file for the backend · native code (C · C++) and binaries go to `reverse-engineering`
 
-## 1 · injection — input ไปถึงจุดที่ถูกตีความเป็นคำสั่ง
+## 1 · injection — input reaches a point where it is interpreted as a command
 
-- ล่า: SQL ต่อสตริง · คำสั่ง shell · template engine · path ไฟล์ · LDAP · XPath · regex จาก input · HTML ที่ไม่ escape · header ที่มีขึ้นบรรทัดใหม่ · log
-- มักหลุด: ข้อมูลที่เก็บอย่างปลอดภัยแล้ว ถูกโค้ดอีกตัวดึงไปใช้ในที่อันตราย (second-order) · input ที่เป็นชื่อฟิลด์ ชื่อคอลัมน์ ทิศการเรียง ไม่ใช่แค่ค่า · ORM ที่มีช่อง raw (`$queryRawUnsafe` · `FromSqlRaw` · `.extra()`) · ระบบรองที่รับข้อมูลต่อ (search index · ตัวสร้าง PDF · ไฟล์ Excel)
+- Hunt: SQL built by string concatenation · shell commands · template engines · file paths · LDAP · XPath · regex built from input · unescaped HTML · headers containing newlines · logs
+- Often missed: data stored safely and later pulled by other code into a dangerous place (second-order) · input that is a field name, column name, or sort direction, not just a value · an ORM with a raw escape hatch (`$queryRawUnsafe` · `FromSqlRaw` · `.extra()`) · downstream systems that take the data on (search index · PDF generator · Excel file)
 - `class`: `sqli` · `cmdi` · `ssti` · `path-traversal` · `xss-stored` · `xss-reflected` · `header-injection` · `log-injection`
 
-## 2 · access control — ทำได้เกินสิทธิ์ของตัวเอง
+## 2 · access control — doing more than your own permission allows
 
-- ล่า: endpoint ที่ตรวจแค่ว่า login แต่ไม่ตรวจว่ามีสิทธิ์ · ตรวจสิทธิ์ผิดตัว (ตรวจสิทธิ์อ่านแต่ทำการแก้) · ตรวจเจ้าของจาก id ใน body แทน session · ฟิลด์ใน body ที่ทับค่าที่ระบบตั้งใจคุม (`role` · `shopId` · `price`)
-- มักหลุด: ทางคู่ขนานที่ไปถึงผลเดียวกันแต่ตรวจอ่อนกว่า (API รุ่นเก่า · หน้าแอดมิน · batch · export · import) · bulk ที่ตรวจแค่รายการแรก · เปลี่ยน method (`GET` ได้ `DELETE` ไม่ตรวจ) · ทางที่ใช้ตอน error หรือ retry
+- Hunt: an endpoint that checks only that you are logged in but not that you have permission · checking the wrong permission (checks read permission but performs an edit) · checking the owner from an id in the body instead of the session · body fields that overwrite values the system means to control (`role` · `shopId` · `price`)
+- Often missed: parallel paths that reach the same result with weaker checks (old API version · admin page · batch · export · import) · bulk operations that check only the first item · changing the method (`GET` is allowed but `DELETE` is not checked) · paths used on error or retry
 - `class`: `idor` · `missing-authz` · `mass-assignment` · `privilege-escalation` · `authn-bypass`
 
-## 3 · ไฟล์และทรัพยากร
+## 3 · files and resources
 
-- ล่า: path traversal รวมผ่าน symlink และการ encode · เซิร์ฟเวอร์ไปดึง URL ที่ผู้ใช้ส่งมา (SSRF) รวมหลัง redirect · แตก zip แล้วไฟล์ออกนอกโฟลเดอร์ (zip slip) · deserialize ข้อมูลภายนอก · อัปโหลดไฟล์ที่ตรวจแค่นามสกุล · ไฟล์ชั่วคราวที่คนอื่นเดาชื่อได้ · ตรวจแล้วค่อยใช้ห่างกันจนเปลี่ยนได้ระหว่างนั้น
-- มักหลุด: URL สำหรับรับแจ้งเตือนหรือ webhook ที่ผู้ใช้ตั้งเอง · ตัวสร้าง PDF หรือภาพตัวอย่างที่ไปโหลดรูปจาก URL · URL ของ object storage ที่ลงชื่อแล้วแต่ใช้ได้นานหรือกว้างเกิน
+- Hunt: path traversal, including through symlinks and encoding · the server fetching a URL the user sent (SSRF), including after a redirect · extracting a zip so files land outside the folder (zip slip) · deserializing outside data · file uploads checked only by extension · temp files whose names others can guess · check and use far enough apart that the thing can change in between
+- Often missed: notification or webhook URLs the user sets themselves · PDF generators or preview makers that load images from a URL · signed object storage URLs that last too long or are too broad
 - `class`: `ssrf` · `zip-slip` · `unsafe-deserialization` · `upload-type` · `toctou`
 
-## 4 · การเข้ารหัสและค่าลับ
+## 4 · cryptography and secrets
 
-- ล่า: ค่าสุ่มที่ใช้เป็น token มาจากตัวสุ่มที่เดาได้ (`Math.random` · `random.random`) · ค่าลับในโค้ด log ข้อความ error URL หรือ response · ไม่ตรวจ HMAC หรือเทียบแบบเวลาไม่คงที่ · mode เข้ารหัสที่ไม่ตรวจความถูกต้อง · IV คงที่ · รหัสผ่านเก็บด้วย hash เร็ว
-- มักหลุด: ทางที่การเข้ารหัสล้มแล้วโค้ดทำต่อแบบไม่เข้ารหัส · ค่าลับในประวัติ git ที่ลบจากไฟล์แล้ว (ใช้ผล gitleaks)
+- Hunt: random values used as tokens that come from a guessable generator (`Math.random` · `random.random`) · secrets in code, logs, error messages, URLs or responses · HMAC not verified or compared in non-constant time · encryption modes that do not check integrity · fixed IV · passwords stored with a fast hash
+- Often missed: paths where encryption fails and the code carries on unencrypted · secrets in git history that were deleted from the file (use the gitleaks result)
 - `class`: `weak-random` · `secret-exposure` · `signature-bypass` · `weak-crypto` · `password-storage`
 
-## 5 · ตรรกะธุรกิจ — สแกนเนอร์หาไม่เจอ แต่ผลกระทบสูง
+## 5 · business logic — scanners cannot find it, but impact is high
 
-- ล่า: ข้ามขั้นตอน ย้อนขั้น หรือทำขั้นที่จบแล้วซ้ำ · 2 คำขอพร้อมกันได้ผล 2 เท่า (ใช้คูปองซ้ำ · ถอนเงินซ้ำ · ตัดของซ้ำ) · จำนวนติดลบ ศูนย์ ทศนิยม ปัดเศษ หรือตัวเลขที่ส่งเป็นสตริง · หมดอายุตรงวินาทีขอบ · เขตเวลาต่างกันระหว่างส่วนของระบบ
-- มักหลุด: ขั้น 2 ใน 3 ล้มแล้วขั้น 1 ไม่ย้อน · ค่าที่ "ตรวจแล้วตอนเข้า" แต่ถูกเขียนจากทางอื่นที่ไม่ตรวจ · ค่าเริ่มต้นเมื่อ config หาย feature flag ปิด หรือระบบอยู่ระหว่าง migrate
+- Hunt: skipping a step, going back a step, or repeating a finished step · 2 simultaneous requests getting a 2x result (reusing a coupon · withdrawing twice · deducting stock twice) · negative numbers, zero, decimals, rounding, or numbers sent as strings · expiry at the exact boundary second · different time zones between parts of the system
+- Often missed: step 2 of 3 fails and step 1 is not rolled back · a value "checked on entry" but written from another path that does not check · defaults when config is missing, a feature flag is off, or the system is mid-migration
 - `class`: `race-condition` · `workflow-bypass` · `numeric-abuse` · `replay` · `fail-open`
 
-## 6 · ใช้ฟีเจอร์ผิดทาง
+## 6 · using a feature the wrong way
 
-- ล่า: export หรือ backup ที่ได้ข้อมูลเกินสิทธิ์ · import ที่ทับข้อมูลคนอื่นหรือข้าม validation · search filter sort ที่ใช้เดาข้อมูลที่มองไม่เห็น · ข้อความ error เวลา หรือขนาด response ที่ต่างกันจนนับรายชื่อผู้ใช้ได้ · ลิงก์ preview หรือร่างที่เปิดได้กว้างเกิน · cache ที่เก็บหน้าส่วนตัวแล้วเสิร์ฟให้คนอื่น
+- Hunt: export or backup that yields data beyond permission · import that overwrites others' data or skips validation · search, filter, sort used to guess data that is not visible · error messages, timing, or response sizes that differ enough to enumerate users · preview or draft links that open too widely · a cache that stores a private page and serves it to others
 - `class`: `export-scope` · `import-abuse` · `enumeration` · `search-oracle` · `preview-leak`
 
-## 7 · ช่องโหว่ต่อกันเป็นโซ่
+## 7 · vulnerabilities chained together
 
-- ล่า: ของเล็ก 2 อย่างที่แต่ละอย่างไม่ใช่ช่องโหว่ แต่ต่อกันแล้วข้ามขอบเขตได้ · ส่วน A ตรวจแล้วส่งต่อให้ B แต่ B เชื่อมากกว่าที่ A รับประกัน (ตัดความยาว · แปลงชนิด · normalise) · สิทธิ์ที่กว้างขึ้นหลัง refresh token เปลี่ยนบทบาท หรือมอบสิทธิ์ต่อ · กู้คืน ยกเลิก หรือย้อนรุ่น ที่ไม่ตรวจสิทธิ์ปัจจุบัน
-- กติกา: ทุกข้อต่อในโซ่ต้องยืนยันแยกกันได้ ห้ามสมมุติผลขั้นถัดไป · `class`: `chain` + ชื่อปลายทาง เช่น `chain-account-takeover`
+- Hunt: 2 small things that are each not a vulnerability but together cross a boundary · part A checks and passes on to B, but B trusts more than A guarantees (truncating length · type conversion · normalising) · permission that widens after a refresh token changes role, or on delegation · recovery, cancel, or rollback that does not check current permission
+- Rule: every link in the chain must be confirmable separately, never assume the result of the next step · `class`: `chain` + the destination name, such as `chain-account-takeover`
 
-## 8 · หาสิ่งที่ไม่อยู่ในหมวด (wildcard) และของพื้นฐานที่ทุกคนคิดว่ามีคนตรวจแล้ว
+## 8 · find what fits no category (wildcard) and the basics everyone assumes someone checked
 
-**wildcard** — 1 ตัวต่องาน ไม่ได้รับหมวด ให้อ่านโค้ดที่ดูแปลก ครึ่ง ๆ กลาง ๆ หรือชื่อ `temp` `hack` `legacy` · API ที่หน้าเว็บไม่เคยเรียก · route และ header ที่ไม่มีในเอกสาร · ฟีเจอร์ 2 ตัวที่ไม่ได้ออกแบบมาใช้ด้วยกัน · ประวัติ git ที่ถอยการแก้ความปลอดภัย · test ที่ไม่มี (เทียบกรณีที่ dev คิดไว้กับที่ไม่ได้คิด) · คอมเมนต์ที่อธิบายว่าทำไมปลอดภัย ให้ตรวจว่าจริง
+**wildcard** — 1 per job, takes no category: read code that looks odd, half-finished, or named `temp` `hack` `legacy` · APIs the web page never calls · routes and headers not in the docs · 2 features not designed to be used together · git history that rolled back a security fix · tests that are missing (compare the cases the dev thought of with those they did not) · comments explaining why something is safe, check whether it is true
 
-**ของพื้นฐาน** — ตรวจทีละข้อแบบตรงตัว และทุกข้อที่เจอต้องตามเส้นทางจนเห็นผลก่อนเสนอ (cookie ไม่มี `HttpOnly` ต้องดูว่าเก็บอะไร):
+**the basics** — check one by one literally, and every one found must be traced along its path until you see the effect before proposing it (a cookie without `HttpOnly`: look at what it holds):
 
-1. รหัสผ่าน key token ในโค้ด (`password` · `secret` · `apikey` · `Bearer` · `-----BEGIN`) และไฟล์ `.env` `*.pem` `*.key` `credentials.json` ที่ commit
-2. คอมเมนต์ `TODO` `FIXME` `HACK` ที่พูดถึง auth หรือ validate
-3. โหมด debug เปิดได้ใน production ผ่าน env query หรือ header · บัญชีตัวอย่างหรือ seed ที่ใช้ได้จริง
-4. `/debug` `/admin` `/test` `/metrics` `/env` `/.env` `/config` `/swagger` ที่ไม่มีการป้องกัน
-5. `.gitignore` ไม่ครอบไฟล์ลับ ไฟล์อัปโหลด และ config ในเครื่อง
-6. `eval` · `exec` · `child_process` · `Function()` · `vm` · dynamic `import()` ที่รับ input
-7. CORS เปิด `*` คู่กับ credentials หรือสะท้อน Origin กลับโดยไม่ตรวจ
-8. redirect จากพารามิเตอร์ `redirect` `return` `next` `url` `goto` โดยไม่ตรวจปลายทาง
-9. error ใน production ที่ส่ง stack trace path ภายใน หรือ SQL กลับไป
-10. endpoint ที่ยังเป็น HTTP ล้วน
+1. Passwords, keys, tokens in code (`password` · `secret` · `apikey` · `Bearer` · `-----BEGIN`) and committed `.env` `*.pem` `*.key` `credentials.json` files
+2. `TODO` `FIXME` `HACK` comments that mention auth or validation
+3. Debug mode that can be turned on in production through env, query, or header · sample or seed accounts that really work
+4. `/debug` `/admin` `/test` `/metrics` `/env` `/.env` `/config` `/swagger` with no protection
+5. `.gitignore` that does not cover secret files, uploaded files, and local config
+6. `eval` · `exec` · `child_process` · `Function()` · `vm` · dynamic `import()` that takes input
+7. CORS open with `*` together with credentials, or reflecting the Origin back without checking
+8. Redirect from the parameters `redirect` `return` `next` `url` `goto` without checking the destination
+9. Production errors that send back a stack trace, internal paths, or SQL
+10. An endpoint that is still plain HTTP
 
-## 9 · cloud และ deployment (รายการตรวจอยู่ใน [`infra-checklist.md`](infra-checklist.md))
+## 9 · cloud and deployment (the checklist is in [`infra-checklist.md`](infra-checklist.md))
 
-- ล่า: สิทธิ์ของ service account กว้างเกินงาน · แอปเชื่อ header จาก proxy (`X-Forwarded-For` · `X-User-Id`) โดยไม่ตรวจว่ามาจาก proxy จริง · เข้าถึง metadata ของ cloud (`169.254.169.254`) ผ่าน SSRF · bucket หรือ storage ที่เปิดสาธารณะ · ค่าลับที่ workload อื่นอ่านได้ · ระบบตั้งค่าที่ล้มแล้วเปิดทาง
-- ส่วนใหญ่อยู่นอก repo จึงมักเป็น `needs_validation` · IaC ที่อยู่ใน repo (Terraform · compose · Kubernetes YAML) ตรวจได้จริง ใช้ผล `trivy config` เป็น candidate
+- Hunt: service account permissions broader than the job · an app trusting proxy headers (`X-Forwarded-For` · `X-User-Id`) without checking they came from the real proxy · reaching cloud metadata (`169.254.169.254`) through SSRF · public buckets or storage · secrets readable by other workloads · config systems that fail open
+- Mostly outside the repo, so usually `needs_validation` · IaC inside the repo (Terraform · compose · Kubernetes YAML) can really be checked, use the `trivy config` result as a candidate
 
-## 10 · ทรัพยากรหมดหรือระบบล่ม (ยังไม่มีไฟล์ตามสาย)
+## 10 · resource exhaustion or outage (no lane file yet)
 
-- ล่า: regex หรือ parser ที่ช้าแบบทวีคูณกับ input บางแบบ · ไฟล์บีบอัดที่แตกแล้วใหญ่มาก · query ที่ไม่มี limit หรือ N+1 จาก input · งานหนักที่ทำก่อน login · quota ที่นับผิดขอบเขตหรือรีเซ็ตได้ · retry ที่ทวีคูณ · ข้อความเสีย 1 ชิ้นที่ทำคิวค้างทั้งคิว
-- กติกา: ต้องชี้ได้ว่าผู้ใช้คนหนึ่งทำให้คนอื่นใช้ระบบไม่ได้ หรือทำให้เจ้าของเสียเงินค่า cloud หรือ LLM · งานหนักที่กระทบแค่ตัวเองไม่ใช่ finding · ห้ามพิสูจน์ด้วยการยิงระบบจริง ให้วัดในห้องด้วย input เล็กที่เห็นการโตแบบทวีคูณ
+- Hunt: a regex or parser that goes exponentially slow on certain input · compressed files that become huge when extracted · queries with no limit, or N+1 from input · heavy work done before login · quotas counted over the wrong scope or resettable · exponential retries · 1 bad message that stalls the whole queue
+- Rule: you must be able to show that one user makes the system unusable for others, or makes the owner pay cloud or LLM costs · heavy work that affects only themselves is not a finding · never prove it by hitting the live system, measure in the lab with small input that shows exponential growth
 - `class`: `redos` · `decompression-bomb` · `unbounded-query` · `preauth-work` · `quota-bypass` · `poison-message`
 
 
@@ -504,76 +504,76 @@ F-001 ไป playbook `bug-fix` · test `A01_other_user_order_returns_404` ล�
 
 ## reference: classes-thai.md
 
-# สายระบบไทยที่ SME ใช้ — LINE · PromptPay · สลิป · payment gateway ไทย · e-Tax · ข้อมูลส่วนบุคคล
+# Lane: Thai systems used by SMEs — LINE · PromptPay · slips · Thai payment gateways · e-Tax · personal data
 
-เปิดเมื่อระบบต่อ LINE OA หรือ LIFF · รับเงินผ่าน PromptPay หรือ payment gateway ไทย · ยืนยันการโอนด้วยสลิป · ออกใบกำกับภาษีอิเล็กทรอนิกส์ · เก็บเลขบัตรประชาชนหรือเบอร์โทร · ใช้คู่กับ `classes-messaging-webhook` (กติกา webhook ทั่วไป) และ `classes-data-tenant`
+Open when the system connects to a LINE OA or LIFF · takes money through PromptPay or a Thai payment gateway · confirms transfers by slip · issues electronic tax invoices · stores national ID numbers or phone numbers · Use together with `classes-messaging-webhook` (general webhook rules) and `classes-data-tenant`
 
-รายละเอียดเฉพาะผู้ให้บริการในไฟล์นี้ ตรวจจากเอกสารทางการเมื่อ 2026-10-26 · ข้อที่เปิดเอกสารไม่ได้หรือเอกสารไม่บอก ติดป้าย `(ยังไม่ได้ตรวจ)` · ผู้ให้บริการเปลี่ยนวิธีได้ ก่อนตัดสินว่า confirmed ให้ตัวยืนยันเปิดลิงก์ในหัวข้อ "แหล่ง" อีกครั้งถ้าวันที่เกิน 6 เดือน (ตัวยืนยัน `reviewer` ไม่มีเครื่องมือเว็บ หัวหน้าทีมเป็นคนเปิดแล้วส่งข้อความที่เกี่ยวให้)
+The provider-specific details in this file were checked against official docs on 2026-10-26 · Items where the docs could not be opened or do not say carry the label `(ยังไม่ได้ตรวจ)` (not yet checked) · Providers can change their methods; before judging something confirmed, the verifier must open the links in the section "แหล่ง" (Sources) again if the date is over 6 months old (the verifier `reviewer` has no web tool, so the team lead opens them and passes on the relevant text)
 
-## กติกาประจำสาย
+## Lane rules
 
-- เงินจะถือว่าเข้าแล้ว ต้องมาจากช่องทางที่ผู้ใช้ปลอมไม่ได้: webhook ที่ตรวจลายเซ็นแล้ว · การดึงสถานะจาก API ของผู้ให้บริการด้วย key ฝั่ง server · หรือการตรวจกับธนาคาร · ค่าจากหน้าเว็บ แอป หรือรูปสลิป ไม่นับ
-- ตัวตนผู้ใช้ LINE จะถือว่าจริง ต้องมาจาก token ที่ server ตรวจกับ LINE เอง ไม่ใช่ `userId` ที่หน้าเว็บส่งมา
-- ยอดเงินและเลขอ้างอิงคำนวณและเก็บที่ server ตั้งแต่สร้างคำสั่งซื้อ แล้วเทียบกับสิ่งที่ผู้ให้บริการยืนยันทุกครั้ง
-- ข้อมูลส่วนบุคคลของคนไทยที่หลุดข้ามผู้ใช้ ติดป้าย `pdpa` เสมอ และระบุชนิดใน `pdpa.kinds`
+- Money counts as received only if it came through a channel the user cannot forge: a webhook with a verified signature · pulling the status from the provider's API with a server-side key · or checking with the bank · values from a web page, app, or slip image do not count
+- A LINE user's identity counts as real only if it came from a token the server verified with LINE itself, not a `userId` the web page sent
+- Amounts and reference numbers are computed and stored on the server from the moment the order is created, then compared with what the provider confirms every time
+- Thai personal data that leaks across users always gets the `pdpa` label, with the kinds stated in `pdpa.kinds`
 
-## รายการล่า
+## Hunt list
 
-| ประเภท (`class`) | ล่าอะไร | สัญญาณในโค้ด | พิสูจน์อย่างไร | มักแจ้งผิดเมื่อ |
+| Type (`class`) | What to hunt | Signals in code | How to prove | Often falsely reported when |
 |---|---|---|---|---|
-| `line-webhook-signature` | webhook ของ LINE ไม่ตรวจ `x-line-signature` หรือตรวจหลัง parse JSON | ไม่มีการอ่าน header `x-line-signature` · `express.json()` หรือ body parser ครอบ route ก่อนตรวจ · ตรวจกับ `JSON.stringify(req.body)` | test ส่ง event ปลอมที่ลายเซ็นผิด ต้องได้ 401 และบอตไม่ตอบหรือไม่บันทึก · ใช้ channel secret ปลอมในห้อง | ใช้ middleware ของ SDK ทางการที่ตรวจลายเซ็นให้ และวางก่อน body parser (เปิดโค้ด SDK รุ่นที่ใช้ดูว่าตรวจจริง `(ยังไม่ได้ตรวจ)` ว่ารุ่นไหนตรวจ) |
-| `line-userid-trust` | LIFF หรือหน้าเว็บส่ง `userId` หรือ profile มาให้ server แล้ว server เชื่อเลย | body มี `userId` · server ไม่เรียก `/oauth2/v2.1/verify` · ใช้ `liff.getDecodedIDToken()` แล้วส่งผลถอดรหัสไป | test เรียก API ด้วย `userId` ของคนอื่นโดยไม่มี token ต้องถูกปฏิเสธ | server รับ ID token หรือ access token แล้วตรวจกับ LINE ก่อนใช้ |
-| `line-idtoken-binding` | ตรวจ token แล้วแต่ไม่ดูว่าออกให้ channel ของเรา (token จากแอปอื่นของผู้ใช้คนเดียวกันใช้ได้) | ไม่เทียบ channel id หรือ `aud` กับของเรา | ดูพารามิเตอร์ที่ส่งไปตรวจและค่าที่เทียบหลังได้ผล | โค้ดเทียบ channel id แล้ว · ชื่อพารามิเตอร์ของ endpoint verify `(ยังไม่ได้ตรวจ)` เปิดเอกสาร LINE Login เทียบก่อนตัดสิน |
-| `promptpay-client-amount` | ยอดเงินหรือเลขอ้างอิงใน QR มาจาก client · ยืนยันการจ่ายด้วยยอดที่ client ส่ง | สร้าง payload QR จาก `req.body.amount` · ปิดคำสั่งซื้อด้วยยอดจากหน้าเว็บ | test ส่ง amount ต่ำกว่าราคาจริง แล้วดูว่าคำสั่งซื้อถูกปิดว่าจ่ายครบไหม | ยอดคำนวณจากคำสั่งซื้อที่ server (ดูการสร้าง payload ที่ถูกใน `promptpay-qr` ของ plugin e-commerce) |
-| `slip-trust` | ยืนยันการโอนจากรูปสลิปที่ผู้ใช้อัปโหลด โดยดูแค่รูป หรืออ่านด้วย OCR แล้วเชื่อ | ไม่มีการเรียกธนาคารหรือบริการตรวจสลิป · เทียบแค่ยอดที่ OCR อ่านได้ | อัปโหลดรูปสลิปที่แก้ยอดหรือชื่อในห้อง แล้วดูว่าคำสั่งซื้อถูกปิด | ระบบตั้งใจให้แอดมินตรวจด้วยตาก่อนส่งของ และไม่มีทางปิดอัตโนมัติ |
-| `slip-reuse` | สลิปเดียวกันใช้ปิดหลายคำสั่งซื้อ หรือหลายร้าน | ไม่เก็บเลขอ้างอิงธุรกรรมของสลิป · ไม่มี unique index ที่เลขนั้น | ส่งสลิปเดิมกับ 2 คำสั่งซื้อในห้อง | มี unique ที่เลขอ้างอิงธุรกรรมและผูกกับยอดและบัญชีปลายทาง |
-| `slip-wrong-receiver` | สลิปจริงแต่โอนไปบัญชีอื่น หรือยอดไม่ตรง ก็ยังผ่าน | ผลตรวจสลิปไม่ถูกเทียบบัญชีปลายทาง ยอด และเวลา | ใช้ผลตรวจปลอมในห้องที่บัญชีปลายทางไม่ใช่ร้าน | โค้ดเทียบครบทั้ง 3 ค่า |
-| `gateway-webhook-signature` | webhook ของ Omise 2C2P GB Prime Pay หรือ Ksher ไม่ตรวจลายเซ็นตามวิธีของเจ้านั้น | ไม่อ่าน header หรือฟิลด์ลายเซ็น · ใช้ body ที่ parse แล้ว · ตรวจ JWT ด้วย `decode` ไม่ใช่ `verify` | test ส่ง payload ลายเซ็นผิด (secret ปลอมในห้อง) | ใช้ SDK ทางการที่ตรวจให้ และเห็นในโค้ดว่าเรียก |
-| `gateway-no-refetch` | เชื่อสถานะใน webhook โดยไม่ดึงสถานะจาก API หรือไม่เทียบยอดกับคำสั่งซื้อ | `if (body.status === 'successful') markPaid()` | ส่ง payload ที่ลายเซ็นถูกแต่ยอดหรือ order ไม่ตรง | ตรวจลายเซ็นแล้วและเทียบยอดกับคำสั่งซื้อทุกครั้ง (การดึงซ้ำเป็นชั้นเสริม) · ถ้าเจ้านั้นไม่ลงชื่อข้อความแจ้งกลับ (เช่น GB Prime Pay) การดึงซ้ำเป็นทางเดียวที่กันปลอม ไม่ใช่ชั้นเสริม |
-| `gateway-duplicate` | webhook มาซ้ำแล้วตัดสต็อก ส่งของ หรือให้แต้มซ้ำ | ไม่จำ event id หรือ charge id ที่ทำแล้ว · ไม่ตรวจสถานะก่อนเปลี่ยน | ส่ง event เดิม 2 ครั้งในห้อง นับสต็อก | เปลี่ยนสถานะแบบมีเงื่อนไข (`UPDATE ... WHERE status = 'pending'`) แล้วดูจำนวนแถวที่เปลี่ยน |
-| `etax-number` | เลขที่ใบกำกับภาษีซ้ำได้ หรือข้ามเลขได้ · ใบที่ออกแล้วแก้ยอดหรือผู้ซื้อได้ | เลขสร้างจาก `MAX()+1` โดยไม่ล็อก · มี endpoint `PUT` บนใบที่ออกแล้ว | ออก 2 ใบพร้อมกันในห้อง · ลองแก้ใบที่ออกแล้ว | ใบที่ออกแล้วแก้ไม่ได้ ทำได้แค่ออกใบลดหนี้หรือเพิ่มหนี้ (กติกาเอกสารดู `e-tax-invoice` ของ plugin e-commerce) |
-| `csv-formula` | export CSV หรือ Excel ที่ค่าขึ้นต้นด้วย `=` `+` `-` `@` (รวมตัวเต็มความกว้าง เช่น `＝`) แล้วเปิดในโปรแกรมตารางเป็นสูตร | เขียนค่าจากผู้ใช้ (ชื่อ ที่อยู่ หมายเหตุ) ลงไฟล์ตรง ๆ | สร้างคำสั่งซื้อในห้องที่ชื่อขึ้นต้นด้วย `=` แล้ว export ดูว่าค่าถูกกันไหม | ไฟล์ไม่เคยถูกเปิดด้วยโปรแกรมตาราง หรือคนเปิดคือคนกรอกเอง · วิธีกันดู `data-import-export` |
-| `thai-pii-exposure` | เลขบัตรประชาชน 13 หลัก เบอร์โทร หรือที่อยู่ ไปอยู่ใน log · URL · response ที่เกินความจำเป็น · ไฟล์ export ที่คนสิทธิ์กว้างกว่าเปิดได้ | `logger.info(req.body)` · API คืน object ลูกค้าทั้งก้อน · เลขบัตรอยู่ใน query string | ค้น log และ response ในห้องด้วย regex เลข 13 หลัก (`\b\d{13}\b` และรูปมีขีด `\d-\d{4}-\d{5}-\d{2}-\d`) และเบอร์มือถือ (`\b0[689]\d{8}\b`) | ค่าถูกปิดเหลือ 4 ตัวท้ายแล้ว หรือคนอ่านคือเจ้าของข้อมูลเอง |
+| `line-webhook-signature` | A LINE webhook does not verify `x-line-signature`, or verifies after parsing the JSON | No reading of the `x-line-signature` header · `express.json()` or a body parser wraps the route before verification · verifying against `JSON.stringify(req.body)` | A test sends a fake event with a wrong signature, which must get 401 with the bot not replying or not saving · use a fake channel secret in the lab | It uses the official SDK middleware, which verifies the signature, and is placed before the body parser (open the SDK code of the version used to see whether it really verifies; `(ยังไม่ได้ตรวจ)` which versions verify) |
+| `line-userid-trust` | LIFF or a web page sends a `userId` or profile to the server and the server trusts it at once | The body has `userId` · the server does not call `/oauth2/v2.1/verify` · uses `liff.getDecodedIDToken()` and sends the decoded result | A test calls the API with someone else's `userId` and no token, which must be rejected | The server takes an ID token or access token and verifies it with LINE before use |
+| `line-idtoken-binding` | Verifies the token but does not check it was issued for our channel (a token from another app of the same user is accepted) | Does not compare the channel id or `aud` with ours | Look at the parameters sent for verification and the values compared after the result | The code already compares the channel id · the parameter names of the verify endpoint `(ยังไม่ได้ตรวจ)` open the LINE Login docs to compare before judging |
+| `promptpay-client-amount` | The amount or reference number in the QR comes from the client · payment is confirmed using the amount the client sent | Builds the QR payload from `req.body.amount` · closes the order with the amount from the web page | A test sends an amount lower than the real price, then see whether the order is closed as fully paid | The amount is computed from the order on the server (see the correct payload building in `promptpay-qr` of the e-commerce plugin) |
+| `slip-trust` | Confirms a transfer from the slip image the user uploaded, by looking at the image only, or reading it with OCR and trusting it | No call to the bank or a slip-verification service · compares only the amount OCR read | Upload a slip image with an edited amount or name in the lab, then see whether the order is closed | The system intends an admin to check by eye before shipping, and has no way to close automatically |
+| `slip-reuse` | The same slip closes many orders, or many shops | Does not store the slip's transaction reference number · no unique index on that number | Send the same slip with 2 orders in the lab | There is a unique index on the transaction reference number, bound to the amount and destination account |
+| `slip-wrong-receiver` | A real slip transferred to another account, or with a mismatched amount, still passes | The slip verification result is not compared against the destination account, amount, and time | Use a fake verification result in the lab where the destination account is not the shop's | The code compares all 3 values |
+| `gateway-webhook-signature` | A webhook of Omise 2C2P GB Prime Pay or Ksher does not verify the signature by that provider's method | Does not read the signature header or field · uses the already-parsed body · verifies a JWT with `decode`, not `verify` | A test sends a payload with a wrong signature (fake secret in the lab) | Uses the official SDK that verifies, and the code is seen to call it |
+| `gateway-no-refetch` | Trusts the status in the webhook without pulling the status from the API, or does not compare the amount with the order | `if (body.status === 'successful') markPaid()` | Send a payload with a correct signature but a mismatched amount or order | The signature is verified and the amount is compared with the order every time (re-fetching is an extra layer) · if that provider does not sign the callback message (such as GB Prime Pay), re-fetching is the only way to stop forgery, not an extra layer |
+| `gateway-duplicate` | A webhook arrives twice and stock is deducted, goods shipped, or points given twice | Does not remember the event id or charge id already handled · does not check the status before changing it | Send the same event twice in the lab, then count stock | The status change is conditional (`UPDATE ... WHERE status = 'pending'`) and the number of changed rows is checked |
+| `etax-number` | Tax invoice numbers can repeat or be skipped · an issued invoice can have its amount or buyer edited | The number is built from `MAX()+1` with no lock · a `PUT` endpoint on issued invoices | Issue 2 invoices at once in the lab · try editing an issued invoice | An issued invoice cannot be edited, only a credit or debit note can be issued (for document rules see `e-tax-invoice` of the e-commerce plugin) |
+| `csv-formula` | A CSV or Excel export where a value starts with `=` `+` `-` `@` (including full-width forms such as `＝`) and opens as a formula in a spreadsheet program | Writes user values (name, address, notes) straight into the file | Create an order in the lab whose name starts with `=`, then export and see whether the value is neutralized | The file is never opened in a spreadsheet program, or the one opening it is the person who typed it · for the defense see `data-import-export` |
+| `thai-pii-exposure` | A 13-digit national ID number, phone number, or address ends up in a log · URL · response beyond need · an export file that people with wider permission can open | `logger.info(req.body)` · an API returns the whole customer object · the ID number is in the query string | Search logs and responses in the lab with a regex for 13-digit numbers (`\b\d{13}\b` and the dashed form `\d-\d{4}-\d{5}-\d{2}-\d`) and mobile numbers (`\b0[689]\d{8}\b`) | The value is already masked to the last 4 digits, or the reader is the data owner themselves |
 
-## รายละเอียดเฉพาะผู้ให้บริการ
+## Provider-specific details
 
-| ผู้ให้บริการ | วิธีตรวจตามเอกสารทางการ | สถานะ |
+| Provider | How to verify per the official docs | Status |
 |---|---|---|
-| LINE Messaging API | header `x-line-signature` · HMAC-SHA256 ของ body ดิบด้วย channel secret แล้วเข้ารหัส Base64 · เอกสารเตือนว่าห้ามแก้ข้อมูลก่อนตรวจ การ parse แล้ว serialize ใหม่ทำให้ตรวจไม่ผ่าน | ตรวจจากแหล่ง 2026-10-26 |
-| LIFF · LINE Login | เอกสารบอกว่าไม่ให้ส่งข้อมูล profile หรือผลของ `liff.getDecodedIDToken()` ไป server · ให้ส่ง ID token (`liff.getIDToken()`) แล้ว server ตรวจด้วย `POST /oauth2/v2.1/verify` · หรือส่ง access token แล้ว server ตรวจด้วย `GET /oauth2/v2.1/verify` ก่อนเรียก `GET /v2/profile` | ตรวจจากแหล่ง 2026-10-26 |
-| Omise | header `Omise-Signature` (HMAC-SHA256 แบบ hex) และ `Omise-Signature-Timestamp` · ข้อความที่ลงชื่อคือ `<timestamp>.<body ดิบ>` · key คือ webhook secret ที่ถอด Base64 แล้ว · เทียบแบบเวลาคงที่ · ช่วงหมุน secret มี 2 ลายเซ็นคั่นด้วย comma · การดึง event ซ้ำจาก API เอกสารบอกว่าเป็นทางเสริมที่ไม่กันคำขอปลอมเข้า endpoint | ตรวจจากแหล่ง 2026-10-26 |
-| 2C2P | ผลชำระเงินฝั่ง backend ส่งเป็น JWT ลงชื่อแบบ HMAC SHA-256 ด้วย secret key ของร้าน · เอกสารหน้านี้ใช้คำว่า decode และชี้ไปคู่มือ JWT ไม่ได้ระบุขั้นตรวจลายเซ็นเอง · ตัวล่าต้องเห็นว่าโค้ดตรวจลายเซ็นด้วย secret ไม่ใช่แค่ถอด payload (อนุมานจากวิธีลงชื่อ) · หน้านี้ไม่ได้พูดถึงการเรียก Payment Inquiry เพื่อยืนยันสถานะ | วิธีลงชื่อ ตรวจจากแหล่ง 2026-10-26 · การดึงสถานะซ้ำ `(ยังไม่ได้ตรวจ)` |
-| GB Prime Pay | ข้อความที่ส่งเข้า background URL **ไม่มีลายเซ็นหรือ checksum** · ฟิลด์ตามเอกสารคือ `amount` `referenceNo` `gbpReferenceNo` `resultCode` `date` `time` `currencyCode` `detail` ข้อมูลลูกค้า `merchantDefined1`–`5` และ `retryFlag` (`Y` คือส่งซ้ำ) · ใครรู้ URL ก็ยิง `resultCode: "00"` ปลอมได้ · ทางที่กันได้คือดึงสถานะซ้ำด้วย `POST {ENV}/v1/check_status_txn` ส่ง `referenceNo` และ header `Authorization: Basic` + Base64 ของ `{secret_key}:` แล้วเทียบ `txn.status` (`S` ชำระแล้ว · `A` อนุมัติ) และ `txn.amount` กับคำสั่งซื้อ · plugin ทางการ (WooCommerce · Magento 2) เชื่อ `resultCode` ตรง ๆ ไม่ดึงซ้ำ ตัวล่าจึงห้ามถือว่าลอกจาก plugin ทางการแล้วปลอดภัย · checksum HMAC-SHA256 ที่เห็นในโค้ด plugin ใช้กับคำขอที่ร้านส่งไป ไม่ใช่ข้อความแจ้งกลับ | หน้า QR Cash และ Query ตรวจจากแหล่ง 2026-10-26 · plugin ตรวจจริงจาก GitHub ทางการ 2026-10-26 · ช่องทางอื่นตรวจจากหน้าเอกสาร 2026-10-26 ตามแถวถัดไป |
-| GB Prime Pay · ช่องทางอื่น | ทุกช่องทางที่เปิดอ่านเหมือน QR Cash: ตารางข้อความที่ส่งกลับร้านไม่มีฟิลด์ลายเซ็นหรือ checksum · หัวข้อ "Background URL: Response to Merchant" อ่านแล้วในหน้า QR Credit · Wechat Pay · Rabbit LINE Pay · TrueMoney Wallet · ShopeePay · Alipay · Atome · Mobile Banking · Bill Payment · หน้าบัตรใช้หัวข้อ "Web Hook to backgroundUrl" (บัตรเต็มจำนวน 3DS · non-3DS · Recurring) หรือตารางฟิลด์ท้ายหน้า (Installment) ซึ่งก็ไม่มีฟิลด์ลายเซ็น · คำว่า `checksum` ที่เห็นในหน้าบัตรและผ่อนอยู่ในคำขอที่ร้านส่งไป (ลงชื่อด้วย HMAC-SHA256 ของร้านเอง) ไม่ใช่ในข้อความแจ้งกลับ · หน้าตัวอย่างของ Mobile Banking อ่านค่าด้วย `$_POST` (แบบฟอร์ม) ส่วนช่องอื่นเป็น JSON ใน body · ตัวล่าจึงใช้กติกาเดียวกับ QR Cash กับทุกช่องทาง: เห็นโค้ดปิดคำสั่งซื้อจาก `resultCode` ในข้อความที่รับมาโดยไม่ดึงสถานะซ้ำด้วย `/v1/check_status_txn` = ช่องโหว่ | ตรวจจากหน้าเอกสารที่เปิดด้วยเบราว์เซอร์ 2026-10-26 · ฟิลด์ลายเซ็นอื่นนอกเหนือจากที่แสดงในตาราง ถ้าบัญชีร้านมีตั้งค่าเพิ่ม `(ยังไม่ได้ตรวจ)` · หน้า Installment ไม่มีหัวข้อ Web Hook ชื่อเดียวกัน อ่านจากตารางฟิลด์ท้ายหน้า |
-| Ksher (ชุดเอกสาร `.vip.ksher.net`) | webhook (notify) ส่งเป็นคำขอ **GET** ไปที่ URL ที่ตั้งในหน้าจัดการ พร้อม query `type` `instance` (เลขคำสั่งซื้อของร้าน) `code` `message` และ `signature` · เอกสารบอกว่า `apiUrl` ในกติกาลงชื่อคือที่อยู่เต็มของ webhook · ลงชื่อด้วย HMAC-SHA256 ด้วย token ของแอป: เรียงชื่อพารามิเตอร์ตาม ASCII (ไม่รวม `signature`) → ต่อ `ชื่อ+ค่า` ไม่มีตัวคั่น → เอา API path ไว้หน้า → UTF-8 → HMAC-SHA256 → hex (SDK ใช้ตัวพิมพ์ใหญ่) · ตอบ HTTP 200 = สำเร็จ ไม่งั้นส่งซ้ำทุก 5 วินาที สูงสุด 6 ครั้ง · `message` บอกแค่ข้อความสถานะ ไม่มียอดเงิน ตัวล่าจึงต้องเห็นว่าโค้ดดึงสถานะและยอดจาก API ด้วย key ฝั่ง server หลังรับ webhook · ตัวอย่างโค้ดใน SDK ทางการ (`payment_sdk_python` `payment_sdk_php` `payment_sdk_nodejs`) ใช้ลงชื่อคำขอและตรวจ **คำตอบของ API** (`checkSignature` · `verify_ksher_sign`) ไม่มีตัวอย่างตรวจ webhook · ชุดเอกสารใหม่ (`ksher_sdk_nodejs` โดเมน `api.mch.ksher.net` และ `gateway.ksher.com` ใช้ `appid` และ `sign` แบบ RSA-MD5 ตรวจคำตอบด้วย public key) เป็นอีกรุ่นของ API | ชุด `.vip.ksher.net` ตรวจจากแหล่ง 2026-10-26 · รายละเอียดข้อความที่ใช้ลงชื่อของ webhook ตัวอย่างเช่นต้องรวม body หรือไม่ เอกสารไม่ชี้ชัด (ตัวอย่างโค้ด Java และ C# ต่อ body ท้ายสายอักขระ) `(ยังไม่ได้ตรวจ)` · วิธีตรวจ notify ของชุดใหม่ `(ยังไม่ได้ตรวจ)` · โดเมน: เอกสารประกาศปิด `.vip.ksher.net` และให้ระบบใหม่ใช้ `api.ksher.net` ถ้าโค้ดยังเรียกโดเมนเก่า ให้ใส่ใน hardening |
-| บริการตรวจสลิป · ทางธนาคาร | **SCB**: API "Slip Verification" `GET /v1/payment/billpayment/transactions/{transRef}` ใช้ OAuth client credentials · เอกสารใช้ transaction ID จาก mini QR บนสลิป · เอกสารบอกว่าใช้เมื่อลูกค้าจ่ายแล้วแต่ร้านไม่ได้รับการยืนยัน · **KBank**: ผลิตภัณฑ์ "Slip Verification" ใน KBank Open API · ใช้ OAuth 2.0 client credentials (consumer ID และ secret · token อายุราว 29 นาที) · อ่านจากหน้าเอกสารได้เฉพาะส่วนยืนยันตัวตน | SCB ตรวจจากแหล่ง 2026-10-26 (พารามิเตอร์ query และฟิลด์ผลลัพธ์ในหน้านั้นไม่ระบุ) · KBank endpoint · พารามิเตอร์ · ฟิลด์ผลลัพธ์ `(ยังไม่ได้ตรวจ)` เปิดได้เฉพาะหัวข้อยืนยันตัวตน |
-| บริการตรวจสลิป · ผู้ให้บริการกลาง | **EasySlip**: `POST https://api.easyslip.com/v2/verify/bank` · `Authorization: Bearer` · ส่ง `payload` (ข้อความจาก QR) หรือรูป · base64 · URL · ตัวเลือก `matchAccount` (เทียบบัญชีปลายทางกับบัญชีที่ลงทะเบียนไว้) `matchAmount` (ยอดที่คาด · ผลอยู่ใน `isAmountMatched`) `checkDuplicate` (ค่าตั้งต้น **false** ต้องเปิดเอง · ผลอยู่ใน `data.isDuplicate`) · ตัวล่าเห็นแค่ `payload` ลงไปโดยไม่เปิด 3 ตัวเลือกนี้ และไม่เทียบเองในโค้ด = ช่องโหว่ · สลิปธนาคารกรุงเทพที่เพิ่งโอนไม่เกิน 5 นาทีอาจได้ `SLIP_PENDING` ต้องลองใหม่ ไม่ใช่ปลอม · **SlipOK**: ส่ง `data` (ข้อความ QR มุมขวาล่างของสลิป) · `files` · `url` · หน้าบริการบอกว่า**ไม่เก็บข้อมูลให้ รวมถึงสลิปซ้ำ** ร้านต้องเก็บและเช็กซ้ำเอง และต้องเทียบยอดกับที่ร้านเรียกเก็บเอง · เอกสาร changelog มี `amount` (เทียบยอด · error 1013) · สลิปซ้ำ error 1012 · ผู้รับผิดบัญชี error 1014 (เทียบกับบัญชีที่ลงทะเบียนใน LINE LIFF ของ SlipOK) · ทั้งหมดอ่าน QR บนสลิปแล้วส่งไปตรวจกับฝั่งธนาคาร ผลลัพธ์ที่ได้ต้องมาจากการเรียกบริการ ไม่ใช่การอ่าน QR เองในโค้ดร้าน | ตรวจจากแหล่ง 2026-10-26 · SlipOK อธิบายว่าตรวจกับ "ธนาคารแห่งประเทศไทย" ตามหน้าบริการ (ข้อความของผู้ให้บริการ ยังไม่ได้ยืนยันกับ BOT) · EasySlip ลักษณะการตอบเมื่อสลิปซ้ำในรุ่น v2 `(ยังไม่ได้ตรวจ)` (มีแต่ `isDuplicate`) · ราคาและโควตา `(ยังไม่ได้ตรวจ)` |
-| บริการตรวจสลิป · สิ่งที่ตัวล่าต้องเห็นในโค้ด (ทุกเจ้า) | 1) ผลตรวจมาจากการเรียกบริการด้วย key ฝั่ง server ไม่ใช่ QR ที่อ่านเองหรือ OCR · 2) เก็บเลขอ้างอิงธุรกรรม (`transRef`) แล้วมี unique index กันสลิปเดิมปิดหลายคำสั่งซื้อ · 3) เทียบยอดกับยอดคำสั่งซื้อที่เก็บที่ server · 4) เทียบบัญชีปลายทางกับบัญชีของร้าน (ทำเองหรือใช้ตัวเลือกของบริการ) · 5) เทียบเวลาโอนกับเวลาสร้างคำสั่งซื้อ · 6) ผลตรวจที่ผิดพลาด ไม่ตอบ หรือหมดโควตา ต้องไม่ถือว่าผ่าน | อนุมานจากข้อจำกัดที่เอกสารของ SlipOK และ EasySlip บอก (2026-10-26) |
+| LINE Messaging API | header `x-line-signature` · HMAC-SHA256 of the raw body with the channel secret, then Base64-encoded · the docs warn not to modify the data before verifying; parsing and re-serializing makes verification fail | `จากแหล่ง` (from a source) 2026-10-26 |
+| LIFF · LINE Login | The docs say not to send profile data or the result of `liff.getDecodedIDToken()` to the server · send the ID token (`liff.getIDToken()`) and the server verifies it with `POST /oauth2/v2.1/verify` · or send the access token and the server verifies it with `GET /oauth2/v2.1/verify` before calling `GET /v2/profile` | `จากแหล่ง` 2026-10-26 |
+| Omise | headers `Omise-Signature` (HMAC-SHA256 as hex) and `Omise-Signature-Timestamp` · the signed message is `<timestamp>.<raw body>` · the key is the webhook secret after Base64 decoding · compare in constant time · during secret rotation there are 2 signatures separated by a comma · re-fetching the event from the API is, per the docs, an extra route that does not stop forged requests reaching the endpoint | `จากแหล่ง` 2026-10-26 |
+| 2C2P | The backend payment result is sent as a JWT signed with HMAC SHA-256 using the shop's secret key · this docs page uses the word decode and points to the JWT guide, and does not state the signature verification step itself · the hunter must see that the code verifies the signature with the secret, not merely decodes the payload (`อนุมาน` (inferred) from the signing method) · this page does not mention calling Payment Inquiry to confirm the status | Signing method: `จากแหล่ง` 2026-10-26 · re-fetching the status `(ยังไม่ได้ตรวจ)` |
+| GB Prime Pay | The message sent to the background URL has **no signature or checksum** · fields per the docs are `amount` `referenceNo` `gbpReferenceNo` `resultCode` `date` `time` `currencyCode` `detail` customer data `merchantDefined1`–`5` and `retryFlag` (`Y` means resent) · anyone who knows the URL can fire a fake `resultCode: "00"` · the way to stop it is to re-fetch the status with `POST {ENV}/v1/check_status_txn` sending `referenceNo` and the header `Authorization: Basic` + Base64 of `{secret_key}:`, then compare `txn.status` (`S` paid · `A` approved) and `txn.amount` with the order · the official plugins (WooCommerce · Magento 2) trust `resultCode` directly and do not re-fetch, so the hunter must not assume code copied from the official plugin is safe · the HMAC-SHA256 checksum seen in the plugin code applies to requests the shop sends out, not the callback message | QR Cash and Query pages: `จากแหล่ง` 2026-10-26 · plugins really checked from the official GitHub 2026-10-26 · other channels checked from the docs pages 2026-10-26 per the next row |
+| GB Prime Pay · other channels | Every channel opened is like QR Cash: the table of messages sent back to the shop has no signature or checksum field · the heading "Background URL: Response to Merchant" was read on the pages for QR Credit · Wechat Pay · Rabbit LINE Pay · TrueMoney Wallet · ShopeePay · Alipay · Atome · Mobile Banking · Bill Payment · the card pages use the heading "Web Hook to backgroundUrl" (full-amount 3DS · non-3DS · Recurring) or the field table at the page end (Installment), which also has no signature field · the word `checksum` seen on the card and installment pages is in requests the shop sends out (signed with the shop's own HMAC-SHA256), not in the callback message · the Mobile Banking sample page reads values with `$_POST` (form) while other channels use JSON in the body · so the hunter applies the same rule as QR Cash to every channel: seeing code that closes an order from `resultCode` in the received message without re-fetching the status with `/v1/check_status_txn` = a vulnerability | Checked from the docs pages opened in a browser 2026-10-26 · signature fields beyond those shown in the table, if the shop account has extra settings `(ยังไม่ได้ตรวจ)` · the Installment page has no Web Hook heading of the same name, read from the field table at the page end |
+| Ksher (the `.vip.ksher.net` doc set) | The webhook (notify) is sent as a **GET** request to the URL set in the management page with the query `type` `instance` (the shop's order number) `code` `message` and `signature` · the docs say `apiUrl` in the signing rule is the full address of the webhook · signed with HMAC-SHA256 using the app's token: sort parameter names by ASCII (excluding `signature`) → join `name+value` with no separator → put the API path in front → UTF-8 → HMAC-SHA256 → hex (the SDK uses uppercase) · replying HTTP 200 = success, otherwise it resends every 5 seconds, at most 6 times · `message` carries only status text, no amount, so the hunter must see that the code pulls the status and amount from the API with a server-side key after receiving the webhook · the code samples in the official SDKs (`payment_sdk_python` `payment_sdk_php` `payment_sdk_nodejs`) are for signing requests and verifying **API responses** (`checkSignature` · `verify_ksher_sign`), with no sample verifying a webhook · the new doc set (`ksher_sdk_nodejs`, domains `api.mch.ksher.net` and `gateway.ksher.com`, using `appid` and an RSA-MD5 `sign` verifying the response with a public key) is another version of the API | `.vip.ksher.net` set: `จากแหล่ง` 2026-10-26 · the exact message used to sign the sample webhook, such as whether it must include the body, is not clear in the docs (the Java and C# code samples append the body at the end of the string) `(ยังไม่ได้ตรวจ)` · how the new set verifies notify `(ยังไม่ได้ตรวจ)` · domain: the docs announce closing `.vip.ksher.net` and tell the new system to use `api.ksher.net`; if the code still calls the old domain, put it in hardening |
+| Slip verification · banks | **SCB**: API "Slip Verification" `GET /v1/payment/billpayment/transactions/{transRef}` uses OAuth client credentials · the docs use the transaction ID from the mini QR on the slip · the docs say to use it when the customer paid but the shop did not receive confirmation · **KBank**: the product "Slip Verification" in KBank Open API · uses OAuth 2.0 client credentials (consumer ID and secret · token lifetime about 29 minutes) · only the authentication part could be read from the docs page | SCB: `จากแหล่ง` 2026-10-26 (the query parameters and result fields are not specified on that page) · KBank endpoint · parameters · result fields `(ยังไม่ได้ตรวจ)` only the authentication section could be opened |
+| Slip verification · intermediary providers | **EasySlip**: `POST https://api.easyslip.com/v2/verify/bank` · `Authorization: Bearer` · send `payload` (text from the QR) or an image · base64 · URL · options `matchAccount` (compares the destination account with the registered account) `matchAmount` (the expected amount · result in `isAmountMatched`) `checkDuplicate` (default **false**, must be turned on yourself · result in `data.isDuplicate`) · a hunter who sees only `payload` sent without turning on these 3 options and no comparison in code itself = a vulnerability · a Bangkok Bank slip transferred within 5 minutes may get `SLIP_PENDING`, retry, it is not fake · **SlipOK**: send `data` (the QR text at the bottom right of the slip) · `files` · `url` · the service page says it **does not store data, including duplicate slips**, so the shop must store and re-check itself, and must compare the amount with what the shop billed itself · the changelog doc has `amount` (compare amount · error 1013) · duplicate slip error 1012 · wrong receiving account error 1014 (compared with the account registered in SlipOK's LINE LIFF) · all read the QR on the slip and send it to be checked with the bank side · the result obtained must come from calling the service, not from reading the QR in the shop's own code | `จากแหล่ง` 2026-10-26 · SlipOK explains it verifies with the "Bank of Thailand" per the service page (the provider's statement, not confirmed with BOT) · how EasySlip responds to a duplicate slip in v2 `(ยังไม่ได้ตรวจ)` (there is only `isDuplicate`) · price and quota `(ยังไม่ได้ตรวจ)` |
+| Slip verification · what the hunter must see in code (every provider) | 1) The verification result comes from calling the service with a server-side key, not a QR the shop reads itself or OCR · 2) Stores the transaction reference number (`transRef`) and has a unique index to stop the same slip closing many orders · 3) Compares the amount with the order amount stored on the server · 4) Compares the destination account with the shop's account (itself or using the service's option) · 5) Compares the transfer time with the order creation time · 6) A verification that errors, does not answer, or is out of quota must not count as passed | `อนุมาน` (inferred) from the limits stated in the SlipOK and EasySlip docs (2026-10-26) |
 
-ข้อที่ `(ยังไม่ได้ตรวจ)`: ตัวล่าตัดสินได้แค่ว่า "ไม่มีการตรวจอะไรเลย" (confirmed ได้) · ถ้ามีการตรวจแต่ไม่แน่ใจว่าถูกวิธีของเจ้านั้น ให้เป็น `needs_validation` แล้วใส่ใน `check_plan` ว่าต้องเปิดเอกสารทางการของเจ้านั้นเทียบ
+Items marked `(ยังไม่ได้ตรวจ)`: the hunter can only judge "no verification at all" (can be confirmed) · if there is verification but you are unsure it is that provider's correct method, make it `needs_validation` and put in `check_plan` that the provider's official docs must be opened and compared
 
-## วิธีไล่ที่ใช้ได้ทั้งสาย
+## Tracing methods for the whole lane
 
-- วาดเส้นทางเงิน 1 คำสั่งซื้อ: สร้างคำสั่งซื้อ → สร้าง QR หรือ charge → ผู้ใช้จ่าย → ผู้ให้บริการแจ้ง → ปิดคำสั่งซื้อ → ตัดสต็อกหรือส่งของ → ออกใบกำกับ · ทุกเส้นเขียนว่าค่ามาจากไหน และใครปลอมได้
-- นับทุกทางที่ปิดคำสั่งซื้อได้ (webhook · ปุ่มแอดมิน · อัปโหลดสลิป · job ดึงสถานะ · หน้า "ฉันจ่ายแล้ว") ทุกทางต้องตรวจเท่ากัน
-- วาดเส้นทางตัวตน LINE 1 ผู้ใช้: LIFF → token → server → ผูกกับบัญชีในระบบ · ทุกจุดที่ใช้ `userId` ต้องย้อนไปถึงการตรวจกับ LINE ได้
+- Draw the money path of 1 order: create order → create QR or charge → user pays → provider notifies → close order → deduct stock or ship → issue invoice · on every line write where the value comes from, and who can forge it
+- Count every way that can close an order (webhook · admin button · slip upload · a job that pulls status · an "ฉันจ่ายแล้ว" (I have paid) page) · every way must be checked equally
+- Draw the LINE identity path of 1 user: LIFF → token → server → bind to an account in the system · every place that uses `userId` must trace back to a check with LINE
 
-## แหล่ง (เปิดอ่านเมื่อ 2026-10-26)
+## แหล่ง (Sources, opened 2026-10-26)
 
-- LINE ตรวจลายเซ็น webhook — https://developers.line.biz/en/docs/messaging-api/verify-webhook-signature/
-- LINE ส่งข้อมูลผู้ใช้จาก LIFF ไป server — https://developers.line.biz/en/docs/liff/using-user-profile/
+- LINE verify webhook signature — https://developers.line.biz/en/docs/messaging-api/verify-webhook-signature/
+- LINE sending user data from LIFF to the server — https://developers.line.biz/en/docs/liff/using-user-profile/
 - Omise webhooks — https://docs.omise.co/api-webhooks
 - 2C2P Payment Response (Backend) — https://developer.2c2p.com/docs/api-payment-response-backend
-- Ksher เอกสาร (ประกาศโดเมน) — https://doc.vip.ksher.net/
+- Ksher docs (domain announcement) — https://doc.vip.ksher.net/
 - Ksher Webhook — http://doc.vip.ksher.net/docs/user_guide/webhook/ · Signature Algorithm — http://doc.vip.ksher.net/docs/user_guide/signature/
-- Ksher SDK ทางการ — https://github.com/ksher-solutions/payment_sdk_python (`ksherpay/utils.py`) · https://github.com/ksher-solutions/payment_sdk_php (`ksher_pay_sdk.php`) · https://github.com/ksher-solutions/payment_sdk_nodejs (`src/utils.js`) · https://github.com/ksher-solutions/ksher_sdk_nodejs (`src/sdk.js`)
-- GB Prime Pay หน้าช่องทางชำระ (เปิดด้วยเบราว์เซอร์ที่รัน JavaScript ทุกหน้า ใต้ https://doc.gbprimepay.com/): `qrcash` (หัวข้อ Background URL: Response to Merchant) · `qrcredit` · `wechat` · `linepay` · `truewallet` · `shopeepay` · `alipay` · `atome` · `mobilebanking` · `bill-payment` · `full-payment-3d` · `full-payment-non-3d` · `installment` · `recurring`
+- Ksher official SDKs — https://github.com/ksher-solutions/payment_sdk_python (`ksherpay/utils.py`) · https://github.com/ksher-solutions/payment_sdk_php (`ksher_pay_sdk.php`) · https://github.com/ksher-solutions/payment_sdk_nodejs (`src/utils.js`) · https://github.com/ksher-solutions/ksher_sdk_nodejs (`src/sdk.js`)
+- GB Prime Pay payment channel pages (opened in a browser that runs JavaScript, every page under https://doc.gbprimepay.com/): `qrcash` (heading Background URL: Response to Merchant) · `qrcredit` · `wechat` · `linepay` · `truewallet` · `shopeepay` · `alipay` · `atome` · `mobilebanking` · `bill-payment` · `full-payment-3d` · `full-payment-non-3d` · `installment` · `recurring`
 - SCB Developers Thai QR (Slip Verification) — https://developer.scb/#/documents/documentation/qr-payment/thai-qr.html
-- KBank Open API Slip Verification (ส่วนยืนยันตัวตน) — https://apiportal.kasikornbank.com/product/public/All/Slip%20Verification/Documentation
+- KBank Open API Slip Verification (authentication section) — https://apiportal.kasikornbank.com/product/public/All/Slip%20Verification/Documentation
 - EasySlip — https://document.easyslip.com/en/v2/ · https://document.easyslip.com/en/v2/verify/bank/payload · https://document.easyslip.com/en/reference/error-codes
-- SlipOK — https://slipok.com/api/ · https://slipok.com/ (หน้าเอกสาร https://slipok.com/api-doc อ่านได้เฉพาะ changelog)
+- SlipOK — https://slipok.com/api/ · https://slipok.com/ (the docs page https://slipok.com/api-doc could only be read for the changelog)
 - GB Prime Pay Query — https://doc.gbprimepay.com/apiquery
-- plugin ทางการของ GB Prime Pay — https://github.com/GBPrimepay/woocommerce-gbprimepay-checkout (`includes/class-as-gbprimepay-gateway-qrcode.php`) · https://github.com/GBPrimepay/magento2-gbprimepay-checkout (`Controller/Checkout/AfterPlaceQrcodeOrder.php`)
+- GB Prime Pay official plugins — https://github.com/GBPrimepay/woocommerce-gbprimepay-checkout (`includes/class-as-gbprimepay-gateway-qrcode.php`) · https://github.com/GBPrimepay/magento2-gbprimepay-checkout (`Controller/Checkout/AfterPlaceQrcodeOrder.php`)
 - OWASP CSV Injection — https://community.owasp.org/attacks/CSV_Injection
 
 
@@ -778,34 +778,34 @@ F-001 ไป playbook `bug-fix` · test `A01_other_user_order_returns_404` ล�
 
 ## reference: infra-checklist.md
 
-# สาย infrastructure · cloud · container
+# Lane: infrastructure · cloud · container
 
-เปิดเมื่อ repo มี Terraform · OpenTofu · Pulumi · docker-compose · Dockerfile · Kubernetes YAML · Helm chart · ไฟล์ตั้งค่า cloud หรือเมื่อผู้ใช้สั่ง `/security-scan infra` · รายการนี้ย้ายมาจากรายการตรวจ infrastructure เดิมของคำสั่ง `/security-scan` (ก่อน 2026-11-10 อยู่ใน `security-scan/SKILL.md`)
+Open when the repo has Terraform · OpenTofu · Pulumi · docker-compose · Dockerfile · Kubernetes YAML · Helm charts · cloud config files, or when the user runs `/security-scan infra` · This list was moved from the old infrastructure checklist of the `/security-scan` command (before 2026-11-10 it lived in `security-scan/SKILL.md`)
 
-## กติกาประจำสาย
+## Lane rules
 
-- ตรวจจากไฟล์ใน repo เท่านั้น · ห้ามสแกนพอร์ต ห้ามเรียก cloud จริง ห้ามเปิด bucket ของจริงเพื่อพิสูจน์ เว้นแต่ผู้ใช้อนุญาตเป็นข้อความและเป็นสภาพแวดล้อมทดสอบ
-- ผลจาก `trivy config` · `checkov` · `tfsec` · `hadolint` เป็น candidate ของสายนี้ ยังไม่ใช่ finding (หัวข้อ 3 ของ SKILL.md)
-- สภาพจริงบน cloud อาจต่างจากไฟล์ (แก้ในคอนโซลโดยไม่ผ่าน IaC) จึงมักจบที่ `needs_validation` ถ้าไม่มีสิทธิ์อ่านสภาพจริง
-- วิธีเขียนและแก้ IaC อยู่ที่ [`infra-as-code`](../../infra-as-code/SKILL.md) · [`kubernetes-helm`](../../kubernetes-helm/SKILL.md) ไฟล์นี้บอกแค่ว่าล่าอะไร
+- Check from files in the repo only · never scan ports, never call a real cloud, never open a real bucket to prove it, unless the user allows it in writing and it is a test environment
+- Results from `trivy config` · `checkov` · `tfsec` · `hadolint` are candidates for this lane, not findings yet (section 3 of SKILL.md)
+- The real state on the cloud may differ from the files (edited in the console outside IaC), so these usually end at `needs_validation` if you have no permission to read the real state
+- How to write and fix IaC is in [`infra-as-code`](../../infra-as-code/SKILL.md) · [`kubernetes-helm`](../../kubernetes-helm/SKILL.md) · this file only says what to hunt
 
-## รายการล่า
+## Hunt list
 
-| ประเภท (`class`) | ล่าอะไร | สัญญาณในไฟล์ | พิสูจน์อย่างไร | มักแจ้งผิดเมื่อ |
+| Type (`class`) | What to hunt | Signals in files | How to prove | Often falsely reported when |
 |---|---|---|---|---|
-| `exposed-port` | พอร์ตหรือ service ที่เปิดให้ทั้งอินเทอร์เน็ตทั้งที่ควรเป็นวงใน (ฐานข้อมูล · Redis · SSH · หน้า admin) | security group `0.0.0.0/0` · `ports:` ใน compose ที่ bind `0.0.0.0` · Kubernetes `Service` แบบ `LoadBalancer` · NodePort ของฐานข้อมูล | อ่านกฎ ingress แล้วไล่ว่าทางจากอินเทอร์เน็ตถึง service ผ่านได้จริงหรือมีไฟร์วอลล์ชั้นอื่นกั้น | พอร์ต 80 · 443 ของเว็บที่ตั้งใจเปิด · เครื่องในเครือข่ายส่วนตัวที่ไม่มี public IP |
-| `weak-iam` | สิทธิ์ของ role · service account · user กว้างเกินงาน | `"Action": "*"` · `"Resource": "*"` · `AdministratorAccess` · `roles/owner` · `cluster-admin` ผูกกับแอป · สิทธิ์เขียนทั้งที่งานแค่อ่าน | เทียบสิทธิ์ที่ให้กับสิ่งที่โค้ดเรียกจริง ถ้าเกินและโค้ดถูกเจาะได้ ผลคือเข้าถึงทรัพยากรอื่น | role ของ pipeline ที่ตั้งใจให้สิทธิ์กว้างและมีเงื่อนไขกำกับ · role ของผู้ดูแลที่ไม่ผูกกับแอป |
-| `public-storage` | bucket · blob container · ฐานข้อมูลที่เปิดสาธารณะหรือเข้าได้โดยไม่ต้องยืนยันตัวตน | ACL `public-read` · policy `"Principal": "*"` · ปิด block public access · ฐานข้อมูลไม่มีรหัสผ่านหรือเปิด `0.0.0.0` | อ่าน policy ว่ารายการและอ่านออบเจ็กต์ได้โดยไม่มี credential หรือไม่ และเนื้อหาเป็นข้อมูลอะไร | bucket ของเว็บไซต์สาธารณะที่เก็บเฉพาะไฟล์สาธารณะ (CSS · รูปโลโก้) |
-| `unencrypted-data` | storage หรือการส่งที่ไม่เข้ารหัส | `encrypted = false` · ไม่มี `kms_key` · `ssl_enforcement` ปิด · listener `HTTP` ไม่ redirect · เชื่อมฐานข้อมูลโดยไม่ใช้ TLS | อ่านค่าของ resource ที่เก็บข้อมูลส่วนบุคคลหรือค่าลับ แล้วดูว่าชั้นอื่นเข้ารหัสแทนหรือไม่ | ข้อมูลทดสอบ · volume ชั่วคราวที่ไม่เก็บข้อมูลจริง |
-| `missing-security-headers` | เว็บหรือ API ไม่ส่ง header ป้องกันพื้นฐาน | ไม่มี `Strict-Transport-Security` · `Content-Security-Policy` · `X-Content-Type-Options` · `X-Frame-Options` ในตั้งค่า reverse proxy · CDN · ตัวแอป | อ่านตั้งค่า proxy และโค้ดแอปว่ามีที่ไหนใส่ header ให้หรือไม่ | API ที่ไม่มีหน้าเว็บ (CSP ไม่เกี่ยว) · header ที่ CDN ใส่ให้นอก repo |
-| `insecure-default` | ค่าตั้งต้นที่ไม่ปลอดภัยถูกใช้ต่อ | รหัสผ่านตั้งต้น · debug เปิดบน production · CORS `*` พร้อม credential · cluster เปิด anonymous auth · container รันเป็น `root` · `privileged: true` | ดูว่าค่านั้นถูกใช้ในไฟล์ของ production จริง ไม่ใช่เฉพาะไฟล์ dev | ไฟล์ compose สำหรับเครื่อง dev ที่ไม่ได้ deploy |
-| `container-image-risk` | image ที่มีช่องโหว่หรือที่มาไม่น่าเชื่อถือ | `FROM xxx:latest` · base image เก่าที่ผล `trivy image` มี CVE ระดับสูง · ไม่ pin ด้วย digest · ติดตั้งเครื่องมือ build ค้างใน image สุดท้าย · ลืมตั้ง `USER` | รันหรืออ่านผล `trivy image` แล้วเช็กว่า CVE นั้นถึงโค้ดที่ image ใช้จริงหรือไม่ (เหมือน `vulnerable-dep-reachable` ใน [`classes-supply-chain`](classes-supply-chain.md)) | CVE ในแพ็กเกจที่ image ไม่ได้เรียกใช้ · stage แรกของ multi-stage build ที่ไม่ถูกส่งออก |
+| `exposed-port` | A port or service open to the whole internet that should be internal (database · Redis · SSH · admin page) | security group `0.0.0.0/0` · `ports:` in compose that binds `0.0.0.0` · Kubernetes `Service` of type `LoadBalancer` · a database NodePort | Read the ingress rules, then trace whether a path from the internet to the service is really open or another firewall layer blocks it | Port 80 · 443 of a website that is meant to be open · machines in a private network with no public IP |
+| `weak-iam` | Permissions of a role · service account · user broader than the job | `"Action": "*"` · `"Resource": "*"` · `AdministratorAccess` · `roles/owner` · `cluster-admin` bound to an app · write permission when the job only reads | Compare the permissions granted with what the code really calls; if it is more and the code can be breached, the result is access to other resources | A pipeline role that is meant to be broad and is guarded by conditions · an admin role not bound to the app |
+| `public-storage` | A bucket · blob container · database that is public or reachable without authentication | ACL `public-read` · policy `"Principal": "*"` · block public access turned off · a database with no password or open on `0.0.0.0` | Read the policy to see whether objects can be listed and read without credentials, and what data the content is | The bucket of a public website that holds only public files (CSS · logo images) |
+| `unencrypted-data` | Storage or transport that is not encrypted | `encrypted = false` · no `kms_key` · `ssl_enforcement` off · `HTTP` listener with no redirect · database connection without TLS | Read the values of resources that hold personal data or secrets, then see whether another layer encrypts instead | Test data · temporary volumes that hold no real data |
+| `missing-security-headers` | A web app or API does not send the basic protective headers | No `Strict-Transport-Security` · `Content-Security-Policy` · `X-Content-Type-Options` · `X-Frame-Options` in the reverse proxy · CDN · app config | Read the proxy config and app code to see whether anywhere adds the headers | An API with no web pages (CSP is irrelevant) · headers the CDN adds outside the repo |
+| `insecure-default` | An insecure default value carried into use | default password · debug on in production · CORS `*` with credentials · a cluster with anonymous auth on · a container running as `root` · `privileged: true` | See whether that value is used in the real production files, not only in dev files | A compose file for a dev machine that is never deployed |
+| `container-image-risk` | An image with vulnerabilities or an untrustworthy source | `FROM xxx:latest` · an old base image whose `trivy image` result has high-level CVEs · not pinned by digest · build tools left in the final image · forgot to set `USER` | Run or read the `trivy image` result, then check whether that CVE reaches code the image really uses (like `vulnerable-dep-reachable` in [`classes-supply-chain`](classes-supply-chain.md)) | A CVE in a package the image never calls · the first stage of a multi-stage build that is not shipped |
 
-## เกี่ยวกับสายอื่น
+## Relation to other lanes
 
-- build และ CI/CD (workflow · lockfile · registry) อยู่ที่ [`classes-supply-chain`](classes-supply-chain.md)
-- ค่าลับที่หลุดใน IaC ไปที่หัวข้อ 4 ของ [`attack-classes`](attack-classes.md) · SSRF ไปเมตาดาต้าของ cloud อยู่ที่หัวข้อ 9 ของไฟล์เดียวกัน
-- ระดับความรุนแรงใช้ตามหัวข้อ 5 ของ SKILL.md เฉพาะข้อที่ confirmed
+- build and CI/CD (workflows · lockfiles · registries) are in [`classes-supply-chain`](classes-supply-chain.md)
+- Secrets leaked in IaC go to section 4 of [`attack-classes`](attack-classes.md) · SSRF to cloud metadata is in section 9 of the same file
+- Severity levels follow section 5 of SKILL.md, only for confirmed items
 
 
 ## reference: ledger.md
@@ -1256,49 +1256,49 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 
 Use to cut extras nobody needs yet. Not Claude Code simplify
 
-# simplify — ทำให้ง่าย คนอ่านครั้งแรกก็ตามได้
+# simplify — make it simple so a first-time reader can follow
 
-ใช้กับทุกงานที่ส่งให้คน ทั้งโค้ด เอกสาร แผน ดีไซน์ สไลด์ ตาราง และคำตอบ · `human-writing` คุมว่า**เขียนอย่างไร** ส่วน skill นี้คุมว่า**ตัวงานมีอะไรบ้าง** · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
+Use on any work handed to people: code, documents, plans, designs, slides, tables and answers · `human-writing` controls **how it is written**, while this skill controls **what the work contains** · lives only in plugin `superuser`; other plugins share it through `dependencies`
 
-## 1 · หลักใหญ่
+## 1 · Main principles
 
-- **บททดสอบ:** คนที่ไม่ได้อยู่ในงานนี้ เปิดดูอีก 6 เดือนข้างหน้า ต้องเข้าใจและแก้ต่อได้โดยไม่ต้องถามใคร
-- ทำเท่าที่โจทย์ต้องการ ไม่เผื่ออนาคตที่ยังไม่มีใครขอ
-- ตัดก่อนเพิ่ม · ถ้าตัดส่วนไหนออกแล้วความหมายหรือการทำงานไม่เสีย ให้ตัด
-- ของธรรมดาที่คนรู้จักดีกว่าของฉลาดที่ต้องถอดรหัส
-- **ง่ายไม่ใช่มักง่าย** — ห้ามตัดความถูกต้อง ความปลอดภัย การตรวจข้อมูลที่รับจากภายนอก การจัดการ error ที่กันข้อมูลหาย และสิ่งที่ผู้ใช้ขอไว้ชัด ๆ
-- **ง่ายไม่ใช่กองรวม** — ลดจำนวนของ แต่ยังแยกหน้าที่ชัด 1 ส่วนทำ 1 เรื่อง เหมือนงานของมืออาชีพ
+- **The test:** someone not on this work, opening it 6 months from now, must understand it and continue it without asking anyone
+- Do only what the task needs; do not provide for a future nobody has asked for
+- Cut before adding · if removing a part loses neither meaning nor function, cut it
+- Plain things people know beat clever things that need decoding
+- **Simple is not sloppy** — never cut correctness, safety, validation of data from outside, error handling that prevents data loss, or what the user asked for explicitly
+- **Simple is not one big pile** — reduce the number of things, but keep clear separation of duties, 1 part doing 1 thing, as professional work does
 
-## 2 · บันไดก่อนลงมือ — หยุดที่ขั้นแรกที่ใช้ได้
+## 2 · Ladder before starting — stop at the first step that works
 
-1. ต้องมีสิ่งนี้จริงไหม · ไม่จำเป็น → ไม่ทำ แล้วบอก 1 บรรทัดว่าข้ามอะไร
-2. มีของเดิมที่ใช้ได้แล้วไหม (ไฟล์ แม่แบบ ฟังก์ชัน เครื่องมือ ฟีเจอร์ที่ติดมากับระบบ) · มี → ใช้ของเดิม
-3. ทำแบบสั้นที่สุดที่ยังครบและถูก
+1. Do we really need this · not needed → do not do it, and say in 1 line what you skipped
+2. Is there an existing thing that works (file, template, function, tool, a feature that comes with the system) · yes → use the existing thing
+3. Do the shortest version that is still complete and correct
 
-## 3 · ตามชนิดงาน
+## 3 · By kind of work
 
-| งาน | ทำ | เลี่ยง |
+| Work | Do | Avoid |
 |---|---|---|
-| **โค้ด** | ชื่อบอกว่าคืออะไรและมีหน่วย · 1 ฟังก์ชันทำ 1 เรื่อง · คืนค่าออกเร็วแทนการซ้อน `if` · เยื้องไม่เกิน 3 ชั้น · คอมเมนต์บอก "ทำไม" · ตามสไตล์ของโปรเจกต์ | abstraction ที่มีตัวใช้ตัวเดียว · ทางลัดที่ฉลาดแต่อ่านยาก · ไฟล์ก้อนเดียวทำทุกอย่าง · โฟลเดอร์ `utils/` กองรวม · dependency ใหม่เพื่องานไม่กี่บรรทัด |
-| **เอกสาร · รายงาน** | ข้อสรุปขึ้นก่อน · 1 ย่อหน้า 1 เรื่อง · ตัวอย่างประกอบข้อที่เป็นนามธรรม · ตารางสำหรับข้อมูลที่เทียบกัน | ทวนสิ่งที่พูดไปแล้ว · หัวข้อที่ไม่มีเนื้อ · ศัพท์ที่คนอ่านไม่รู้ |
-| **แผน · ขั้นตอน** | 3–5 ข้อสำคัญ · ทุกข้อมีเจ้าของและวัดได้ว่าเสร็จ · ขั้นน้อยที่สุดที่ได้ผล | รายการ 20 ข้อที่ไม่มีลำดับความสำคัญ · ขั้นที่มีไว้ "เผื่อ" |
-| **ดีไซน์ · สไลด์ · รูป** | 1 หน้า 1 ใจความ · ทางสั้นสุดไปถึงเป้าของผู้ใช้ · ใช้แบบที่คนคุ้นเคย | อัดข้อมูลจนต้องเพ่ง · ของตกแต่งที่ไม่ช่วยให้เข้าใจ |
-| **ตาราง · ข้อมูล** | คอลัมน์เท่าที่ใช้ตัดสินใจ · สูตรสั้นที่ตามได้ | คอลัมน์ซ้ำความหมาย · สูตรซ้อนยาวบรรทัดเดียว |
-| **คำตอบ** | ตอบก่อน · ยาวเท่าที่คำถามต้องการ | อธิบายยาวกว่าตัวงาน |
+| **Code** | Names say what it is and carry units · 1 function does 1 thing · return early instead of nesting `if` · at most 3 levels of indentation · comments say "why" · follow the project's style | An abstraction with a single user · a clever shortcut that is hard to read · one big file doing everything · a pile-up `utils/` folder · a new dependency for a few lines of work |
+| **Documents · reports** | Conclusion first · 1 paragraph 1 topic · an example for abstract points · a table for data that is compared | Repeating what was already said · headings with no content · terms the reader does not know |
+| **Plans · procedures** | 3–5 key items · every item has an owner and a way to measure done · the fewest steps that work | A list of 20 items with no priority · steps kept "just in case" |
+| **Designs · slides · figures** | 1 page 1 point · the shortest path to the user's goal · use patterns people are familiar with | Cramming data until people must squint · decoration that does not help understanding |
+| **Tables · data** | Only the columns used to decide · short formulas you can follow | Columns that repeat a meaning · long nested formulas in one line |
+| **Answers** | Answer first · as long as the question needs | An explanation longer than the work itself |
 
-plugin `software-development` มีรายละเอียดของโค้ดและสถาปัตยกรรมเพิ่ม: `lazy-coding` (เขียนให้น้อย) · `readable-code` (ชื่อ รูปร่างฟังก์ชัน โครงไฟล์) · `simplicity-first` (เอกสาร แผน สถาปัตยกรรม) · ถ้าติดตั้งอยู่ให้เปิดคู่กัน
+Plugin `software-development` has more detail on code and architecture: `lazy-coding` (write less) · `readable-code` (names, function shape, file structure) · `simplicity-first` (documents, plans, architecture) · if installed, open them together
 
-## 4 · บอกว่าตั้งใจทำให้ง่าย
+## 4 · Say that you made it simple on purpose
 
-ทางลัดที่ตั้งใจ ให้เขียนไว้ว่าใช้ได้ถึงแค่ไหนและเปลี่ยนเมื่อไร จะได้ไม่ดูเหมือนลืม เช่น `// simple: เก็บใน memory — ย้ายไป Redis เมื่อรันเกิน 1 process` · ในรายงานใส่ 1 บรรทัด `ข้าม: X — เพิ่มเมื่อ Y`
+A deliberate shortcut should be written down with how far it works and when it changes, so it does not look forgotten, for example `// simple: เก็บใน memory — ย้ายไป Redis เมื่อรันเกิน 1 process` (gloss: simple: kept in memory — move to Redis when running more than 1 process) · in the report put 1 line `ข้าม: X — เพิ่มเมื่อ Y` (skipped: X — add when Y)
 
-## 5 · ตรวจก่อนส่ง 5 ข้อ
+## 5 · 5-point check before sending
 
-1. คนนอกเปิดดูครั้งแรกแล้วเข้าใจภายใน 30 วินาทีไหม
-2. มีส่วนไหน ขั้นไหน หรือชั้นไหนตัดออกได้โดยไม่เสียอะไรไหม ถ้ามีให้ตัด
-3. ทุกส่วนที่เพิ่มมา มีเหตุผลว่าต้องใช้ตอนนี้ ไม่ใช่ "เผื่อ" ใช่ไหม
-4. ยังครบเรื่องความถูกต้อง ความปลอดภัย และสิ่งที่ผู้ใช้ขอไหม
-5. ยังแยกหน้าที่ชัด ไม่ได้ยุบหลายเรื่องไว้ที่เดียวเพื่อให้ดูสั้นใช่ไหม
+1. Can an outsider open it for the first time and understand within 30 seconds
+2. Is there any part, step or layer that can be cut with no loss? If so, cut it
+3. Does every part added have a reason it is needed now, not "just in case"
+4. Is it still complete on correctness, safety, and what the user asked for
+5. Are duties still clearly separated, and not several things squashed into one place to look short
 
 
 ---

@@ -1,16 +1,16 @@
-# playbook · learning-path — เรียนเทคโนโลยีใหม่เป็นขั้น
+# playbook · learning-path — learn a new technology step by step
 
-ใช้เมื่อ: อยากเรียนภาษา framework หรือแนวคิดใหม่ให้ใช้เป็นจริง
-skill หลัก: `learning-path` · `english-tech-reading`
+Use when: the user wants to learn a language, framework or concept well enough to use it for real.
+Main skill: `learning-path` · `english-tech-reading`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน (Steps — copy into the todo as written)
 
-1. หาคำตอบจากข้อมูลที่มี: ผู้ใช้รู้อะไรแล้ว · มีโปรเจกต์จริงอะไรที่ผูกได้ · มีเวลาต่อสัปดาห์เท่าไร ข้อไหนไม่รู้ให้ใส่ `(รอยืนยัน)` ไม่เดาค่า · ใคร: หัวหน้าทีม
-2. แตกเป็น milestone เล็ก ๆ ตาม `learning-path` แต่ละขั้นต้องได้ของที่รันได้และผูกกับโปรเจกต์จริง · ใคร: `tech-mentor` ตัวใหม่
-3. ทุก milestone มีแหล่งเรียนทางการ (เอกสารผู้พัฒนา) และจุดตรวจว่าจะไปต่อหรือหยุด · ใคร: `tech-mentor` ตัวใหม่
-4. ทำ milestone แรกให้ดูเป็นตัวอย่าง — โค้ดที่รันจริงพร้อมผล · ใคร: `tech-mentor` ตัวใหม่
-5. ตรวจว่าทุก milestone มีผลลัพธ์ที่ตรวจได้ และเวลารวมไม่เกินที่ผู้ใช้มี · ใคร: `reviewer` ตัวใหม่
+1. Find the answers from the information at hand: what the user already knows · which real project it can tie to · how much time per week. Put `(รอยืนยัน)` (pending confirmation) on anything unknown. Do not guess values · ใคร: หัวหน้าทีม
+2. Break it into small milestones under `learning-path`. Each step must produce something that runs and ties to the real project · ใคร: `tech-mentor` ตัวใหม่
+3. Give every milestone an official learning source (the maker's documentation) and a checkpoint for whether to go on or stop · ใคร: `tech-mentor` ตัวใหม่
+4. Build the first milestone as a worked example — code that really runs, with its output · ใคร: `tech-mentor` ตัวใหม่
+5. ตรวจ that every milestone has a verifiable outcome and that the total time does not exceed what the user has · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-แผนเป็นขั้นที่พอดีเวลา และ milestone แรกรันได้จริง
+The plan is in steps that fit the time, and the first milestone really runs.

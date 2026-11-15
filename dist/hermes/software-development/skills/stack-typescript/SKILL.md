@@ -3,20 +3,20 @@ name: stack-typescript
 description: Use when writing or reviewing TypeScript code
 ---
 
-# stack-typescript — TypeScript ที่ทีมอ่านง่าย และพังยาก
+# stack-typescript — TypeScript the team can read easily and that is hard to break
 
-> **กฎข้อเดียว:** ให้ compiler จับ bug แทนคน `tsc` ผ่าน 0 error ไม่ได้แปลว่าเสร็จ แต่ไม่ผ่านแปลว่ายังไม่เริ่ม
+> **One rule:** let the compiler catch bugs instead of people. `tsc` passing with 0 errors does not mean done, but failing means not started.
 
-ไฟล์นี้มีแค่เรื่องเฉพาะ TypeScript · Node · Angular ส่วนหลักทั่วไปอยู่ใน `lazy-coding` · `readable-code` · `principle-data-shape-first` · `principle-secure-by-default`
+This file covers only what is specific to TypeScript · Node · Angular. The general principles are in `lazy-coding` · `readable-code` · `principle-data-shape-first` · `principle-secure-by-default`.
 
-## 1 · เริ่มงาน — ดู repo ก่อนพิมพ์คำสั่งแรก
+## 1 · Starting work — look at the repo before the first command
 
-| ดูไฟล์ | บอกอะไร | ทำ |
+| Look at | It tells you | Do |
 |---|---|---|
-| `package-lock.json` · `pnpm-lock.yaml` · `yarn.lock` | package manager | ใช้ตัวนั้นตัวเดียว ห้ามมี lockfile 2 ตัว |
-| `.nvmrc` · `engines` ใน `package.json` | Node version | ใช้ตามนั้น ถ้าไม่มีให้ใช้ Long Term Support (LTS) ล่าสุด — ตรวจล่าสุด 2026-10-14 · แหล่ง: https://nodejs.org/en/about/previous-releases : LTS คือ 24 และ 22 · 26 ยังเป็น Current ไม่ใช้ใน production จนกว่าหน้านี้จะขึ้นว่า LTS · ตัวถัดไปที่หมดอายุคือ 22 (2027-04-30 (รอยืนยัน)) · ก่อนใช้ให้ตรวจหน้านี้ซ้ำ · Node 26 น่าจะขึ้น LTS ช่วงปลาย ต.ค. 2569 (รอยืนยัน) ให้ตรวจบรรทัดนี้ใหม่ทันทีหลังวันนั้น |
-| `"type"` ใน `package.json` · `tsconfig` `module` | ECMAScript Modules (ESM) หรือ CommonJS (CJS) | ตามของเดิม ห้ามผสม |
-| `scripts` ใน `package.json` | คำสั่งจริงของ repo | ใช้ script ที่มีอยู่ก่อนจะเดาคำสั่งเอง |
+| `package-lock.json` · `pnpm-lock.yaml` · `yarn.lock` | package manager | Use that one only; never have 2 lockfiles |
+| `.nvmrc` · `engines` in `package.json` | Node version | Follow it. If absent, use the latest Long Term Support (LTS) — last checked 2026-10-14 · source: https://nodejs.org/en/about/previous-releases : LTS is 24 and 22 · 26 is still Current, so do not use it in production until this page lists it as LTS · the next one to expire is 22 (2027-04-30 (รอยืนยัน)) · re-check this page before use · Node 26 will probably become LTS in late Oct 2026 (รอยืนยัน); re-check this line right after that date |
+| `"type"` in `package.json` · `tsconfig` `module` | ECMAScript Modules (ESM) or CommonJS (CJS) | Follow what exists; never mix |
+| `scripts` in `package.json` | the repo's real commands | Use an existing script before guessing a command |
 
 ```bash
 npm ci                      # pnpm install --frozen-lockfile · yarn install --immutable
@@ -25,22 +25,22 @@ npm run lint && npm test && npm run build 2>&1 | tail -40   # ดูแค่ท
 npx vitest run src/order/order.service.test.ts -t "คืนเงินเกินยอด"   # รัน test เดียว
 ```
 
-- Angular ใช้ `ng test --include=src/app/order/**` และดูขนาด bundle ท้าย output ของ `ng build`
-- `npm install <pkg>` จะเปลี่ยน lockfile จึงต้อง commit lockfile ในรอบเดียวกัน
+- For Angular use `ng test --include=src/app/order/**` and check the bundle size at the end of the `ng build` output.
+- `npm install <pkg>` changes the lockfile, so commit the lockfile in the same round.
 
-## 2 · TypeScript แบบเข้ม
+## 2 · Strict TypeScript
 
-| ห้าม | ใช้แทน | เหตุผล |
+| Never | Use instead | Reason |
 |---|---|---|
-| `any` | `unknown` แล้ว narrow ด้วย `typeof` · `in` · type guard | `any` ปิด compiler ทั้งสาย |
-| `value!` เพื่อให้ error เงียบ | เช็ก `if (!value) throw …` หรือแก้ type ต้นทาง | `!` คือการโกหก compiler |
-| `as Order` กับข้อมูลจากข้างนอก | parse ด้วย zod (หรือ library ที่ repo ใช้) | cast ไม่ได้ตรวจอะไรเลย |
-| boolean หลายตัวบอกสถานะ | discriminated union | สถานะที่เป็นไปไม่ได้จะเขียนไม่ได้ |
-| `const x: Config = {...}` จนเสีย literal | `satisfies Config` | ได้ทั้งตรวจ shape และ type แคบ |
+| `any` | `unknown`, then narrow with `typeof` · `in` · a type guard | `any` switches off the compiler along the whole chain |
+| `value!` just to silence an error | check `if (!value) throw …` or fix the source type | `!` is a lie to the compiler |
+| `as Order` on outside data | parse with zod (or the library the repo uses) | a cast checks nothing |
+| several booleans to hold a state | discriminated union | impossible states cannot be written |
+| `const x: Config = {...}` that loses the literal | `satisfies Config` | you get both the shape check and the narrow type |
 
-- `tsconfig`: `"strict": true` · `noUncheckedIndexedAccess` · `noImplicitOverride` ถ้า repo เก่าปิด strict อยู่ ให้เปิดทีละ folder ไม่เปิดทั้ง repo ในงานเดียว
-- จะใช้ `enum` หรือ union ของ string ให้ตามที่ repo ใช้ ส่วน repo ใหม่ใช้ `as const` + union (ไม่สร้าง code ตอน runtime)
-- type ของ API ที่ frontend กับ backend ใช้ร่วมกันให้เก็บไว้ที่เดียว (shared package หรือ generate จาก OpenAPI)
+- `tsconfig`: `"strict": true` · `noUncheckedIndexedAccess` · `noImplicitOverride`. If an old repo has strict off, turn it on one folder at a time, not for the whole repo in one task.
+- For `enum` versus a union of strings, follow what the repo uses. A new repo uses `as const` + union (no runtime code is generated).
+- Keep API types shared by frontend and backend in one place (a shared package, or generated from OpenAPI).
 
 ```ts
 const Order = z.object({ id: z.uuid(), totalSatang: z.number().int().nonnegative() });
@@ -52,12 +52,12 @@ type PayResult =
 // switch (r.status) ครบทุกกรณี · default: const _never: never = r;
 ```
 
-**เช็ก type ใหม่ 4 ข้อ** (แนวคิดจาก type-design-analyzer ของ pr-review-toolkit · claude-plugins-official · Apache-2.0 · ดู 2026-11-10) ใช้กับ type ที่แทนเลขบัตรประชาชน จำนวนเงิน เลขที่เอกสาร:
+**4 new-type checks** (idea from the type-design-analyzer of pr-review-toolkit · claude-plugins-official · Apache-2.0 · viewed 2026-11-10). Apply them to types that stand for a national ID number, an amount of money, a document number:
 
-1. **ซ่อนภายใน** — ผู้ใช้ type สร้างค่าได้ทางเดียว (ฟังก์ชัน `parse`) ไม่ได้แก้ field ตรง ๆ
-2. **กฎอยู่ใน type** — ค่าที่ผิดกฎสร้างไม่ได้ ไม่ใช่เขียนไว้แค่ในเอกสาร
-3. **ตรวจที่ทางเข้า** — ตรวจครั้งเดียวตอนสร้าง แล้วทั้งระบบเชื่อ type ได้
-4. **ไม่เปิด mutable** — `readonly` ทุก field และไม่คืน array ภายในให้คนแก้
+1. **Hide the internals** — users of the type create a value in only one way (a `parse` function) and never edit fields directly.
+2. **The rules live in the type** — a value that breaks the rules cannot be created; the rules are not written only in a document.
+3. **Check at the entrance** — validate once at creation, and then the whole system can trust the type.
+4. **Expose nothing mutable** — `readonly` on every field, and never return an internal array for others to change.
 
 ```ts
 type ThaiNationalId = string & { readonly __brand: 'ThaiNationalId' };  // 13 หลัก + ตรวจเลขท้าย
@@ -69,14 +69,14 @@ const parseNationalId = (s: string): ThaiNationalId | null =>
 
 ## 3 · Node backend (Express · Fastify · NestJS)
 
-- **promise ห้ามลอย** ให้เปิด `@typescript-eslint/no-floating-promises` และ `no-misused-promises` แล้วทุก `async` ต้องถูก `await` หรือ `.catch` ที่ทำอะไรได้จริง
-- Express 4 ไม่ส่ง error จาก `async` handler ต่อเอง จึงต้องใช้ Express 5 หรือห่อ handler ส่วน Fastify และ NestJS จัดการให้แล้ว
-- **config ตรวจตอนเริ่ม** ให้ parse `process.env` ด้วย schema ครั้งเดียว ถ้าขาดหรือผิดก็ไม่ยอม start (รายละเอียดใน `config-and-secrets`)
-- **ปิด server ให้เรียบร้อย**: รับ `SIGTERM` → หยุดรับ request ใหม่ → รอ request ที่ค้าง → ปิด DB pool และตั้งเวลาบังคับปิดไว้
-- ไฟล์ใหญ่ให้ใช้ `stream.pipeline` จาก `node:stream/promises` ห้าม `readFile` ทั้งไฟล์เข้า memory
-- ห้าม `fs.*Sync` · `crypto.*Sync` ที่หนัก · loop ใหญ่ ใน path ของ request เพราะ event loop จะค้างทั้ง server
-- DB ต้อง query แบบ parameter (`$1` · `?`) หรือผ่าน ORM เสมอ ห้ามต่อ string เข้า SQL
-- log แบบมีโครง (pino ใน Fastify · logger ที่ repo มี) ตาม `logging-standards` ไม่ใช้ `console.log` ใน server
+- **No floating promises.** Turn on `@typescript-eslint/no-floating-promises` and `no-misused-promises`, and every `async` must be `await`ed or given a `.catch` that does something real.
+- Express 4 does not forward errors from an `async` handler by itself, so use Express 5 or wrap the handler. Fastify and NestJS already handle it.
+- **Validate config at startup.** Parse `process.env` with a schema once; if a value is missing or wrong, refuse to start (details in `config-and-secrets`).
+- **Shut the server down cleanly**: receive `SIGTERM` → stop accepting new requests → wait for pending requests → close the DB pool, and set a timer to force exit.
+- For large files use `stream.pipeline` from `node:stream/promises`; never `readFile` the whole file into memory.
+- No `fs.*Sync` · heavy `crypto.*Sync` · big loops in a request path, because the event loop would block the whole server.
+- DB access must always use parameterized queries (`$1` · `?`) or an ORM; never concatenate strings into SQL.
+- Use structured logs (pino in Fastify · the repo's logger) per `logging-standards`; no `console.log` in a server.
 
 ```ts
 const server = app.listen(port);
@@ -88,24 +88,24 @@ process.on('SIGTERM', () => {
 
 ## 4 · Angular
 
-ตัวล่าสุดคือ v22 (ออก 3 มิ.ย. 2026 · แหล่ง: https://angular.dev/reference/releases · ตรวจ 22 ต.ค. 2569): app ใหม่เป็น zoneless และ `OnPush` เป็นค่าเริ่มต้น ส่วน Signal Forms ใช้ใน production ได้แล้ว (3 ข้อหลังนี้ (รอยืนยัน) — หน้าแหล่งไม่ได้ระบุ ให้ตรวจ release notes ของ v22 ก่อนอ้าง)
+The latest is v22 (released 3 Jun 2026 · source: https://angular.dev/reference/releases · checked 22 Oct 2026): new apps are zoneless and `OnPush` is the default, and Signal Forms are production-ready (these last 3 points (รอยืนยัน) — the source page does not state them; check the v22 release notes before citing).
 
-| เรื่อง | ทำแบบนี้ | ไม่ทำ |
+| Topic | Do this | Do not |
 |---|---|---|
-| component | standalone · `inject()` | สร้าง NgModule ใหม่ |
-| state | `signal` · `computed` · `input()` · `output()` | `BehaviorSubject` สำหรับ state ใน component |
-| change detection | `OnPush` (v22 เป็นค่าเริ่มต้น) | `Default`/`Eager` โดยไม่มีเหตุผล |
-| template | `@if` · `@for (x of xs; track x.id)` · `@switch` | `*ngIf` · `*ngFor` (deprecated ตั้งแต่ v20) |
-| form | Signal Forms (v22) ส่วน repo เดิมใช้ typed reactive forms | `UntypedFormGroup` |
-| HTTP | `HttpClient` + functional interceptor (`withInterceptors`) | ใส่ header token ทีละที่ |
-| subscription | `async` pipe · `toSignal` · `takeUntilDestroyed()` | `subscribe` แล้วไม่ยกเลิก |
-| route | `loadComponent` · `loadChildren` แบบ lazy | import ทุกหน้าใน route หลัก |
+| component | standalone · `inject()` | create a new NgModule |
+| state | `signal` · `computed` · `input()` · `output()` | `BehaviorSubject` for state inside a component |
+| change detection | `OnPush` (default in v22) | `Default`/`Eager` without a reason |
+| template | `@if` · `@for (x of xs; track x.id)` · `@switch` | `*ngIf` · `*ngFor` (deprecated since v20) |
+| form | Signal Forms (v22); an existing repo uses typed reactive forms | `UntypedFormGroup` |
+| HTTP | `HttpClient` + functional interceptor (`withInterceptors`) | add the token header one place at a time |
+| subscription | `async` pipe · `toSignal` · `takeUntilDestroyed()` | `subscribe` and never unsubscribe |
+| route | lazy `loadComponent` · `loadChildren` | import every page in the root route |
 
-- logic ใน template ให้ย้ายไป `computed` ให้ template มีแค่การแสดงผล และห้ามเรียก function หนักใน binding
-- `DomSanitizer.bypassSecurityTrust*` ห้ามใช้กับข้อมูลที่ผู้ใช้ส่งมา ถ้าต้องใช้จริงให้คอมเมนต์ว่าทำไมปลอดภัย
-- **repo เก่า (v14–19)** ให้เขียนตามแบบที่ repo ใช้อยู่ ใช้ของใหม่ได้เฉพาะที่ version นั้นรองรับ และไม่ migrate ทั้ง repo ในงาน feature ถ้าอยาก migrate ให้เสนอแยกงาน แล้วใช้ `ng generate @angular/core:control-flow` และ schematic อื่นของ Angular
-- React หรือ Vite: เก็บ state ใน component ก่อน `useEffect` ต้องมี cleanup key ใน list เป็น id ไม่ใช่ index และ env ฝั่ง client ใช้ได้เฉพาะ `VITE_*` และถือว่าทุกคนเห็น
-- repo React หรือ Next.js ที่ต้องไล่เรื่องความเร็ว (render ซ้ำ · bundle · data fetching แบบ waterfall) ให้ดึงกฎจาก Vercel `react-best-practices` มาอ่านสด ๆ ตอนทำ: https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices — เป็นลิงก์อย่างเดียว ไม่คัดกฎมาใส่ที่นี่ เพราะยังไม่ได้ตรวจ licence ของ repo นั้น (ตรวจ 23 ต.ค. 2569) · กฎที่ขัดกับข้อ 2 ของ skill นี้ (strict TS) ให้ยึดของเรา
+- Move logic out of templates into `computed` so a template only displays, and never call a heavy function in a binding.
+- Never use `DomSanitizer.bypassSecurityTrust*` on data sent by users. If it is truly needed, comment why it is safe.
+- **Old repo (v14–19)**: write in the style the repo already uses, use new features only where that version supports them, and do not migrate the whole repo inside a feature task. If you want to migrate, propose it as a separate task, then use `ng generate @angular/core:control-flow` and Angular's other schematics.
+- React or Vite: keep state in the component first · `useEffect` needs a cleanup · list keys are ids, not indexes · client-side env may use only `VITE_*`, and treat it as visible to everyone.
+- For a React or Next.js repo where speed must be chased (repeated renders · bundle · waterfall data fetching), pull the rules from Vercel `react-best-practices` and read them live while working: https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices — a link only, no rules copied here, because that repo's licence has not been checked (checked 23 Oct 2026) · a rule that conflicts with item 2 of this skill (strict TS): follow ours.
 
 ```ts
 export class OrderList {
@@ -115,62 +115,62 @@ export class OrderList {
 // <ul>@for (o of unpaid(); track o.id) { <li>{{ o.id }}</li> } @empty { <li>ไม่มีรายการค้างจ่าย</li> }</ul>
 ```
 
-## 5 · กับดักที่เจอบ่อย
+## 5 · Common traps
 
-| กับดัก | อาการ | ทำแบบนี้ |
+| Trap | Symptom | Do this |
 |---|---|---|
-| เวลาและ time zone | วันที่ถอยไป 1 วัน ช่วง 00:00–06:59 เวลาไทย | เก็บและส่ง ISO 8601 แบบ UTC แล้วแสดงด้วย `Intl.DateTimeFormat('th-TH', { timeZone: 'Asia/Bangkok' })` ส่วนปี พ.ศ. ดู `i18n-and-locale` |
-| เงิน | `0.1 + 0.2 !== 0.3` | เก็บเป็นสตางค์ (integer) ถ้าคิดภาษีหรือแปลงสกุลให้ใช้ decimal library ที่ repo ใช้ |
-| `==` | `'0' == false` เป็นจริง | ใช้ `===` เสมอ และเปิด eslint `eqeqeq` |
-| แก้ object ที่แชร์กัน | ค่าเปลี่ยนเองข้ามหน้า | สร้างใหม่ด้วย spread · `structuredClone` · `readonly` ใน type |
-| memory leak | RAM โตเรื่อย ๆ | ยกเลิก subscription · `removeEventListener` · `clearInterval` และ cache ต้องมีเพดาน |
-| import ก้อนใหญ่ | bundle บวมหลายร้อย KB | `import { debounce } from 'lodash-es'` ไม่ใช่ทั้ง lodash แล้วดู bundle หลัง build |
-| เรียงชื่อไทย | สระหน้าเรียงผิด | ใช้ `new Intl.Collator('th').compare` ไม่ใช้ `localeCompare` เปล่า ๆ |
-| `JSON.parse` ไม่มีตรวจ | crash ลึกในโค้ด | parse ด้วย schema ที่ขอบระบบ (ข้อ 2) |
+| time and time zone | the date goes back 1 day between 00:00–06:59 Thai time | store and send ISO 8601 in UTC, then display with `Intl.DateTimeFormat('th-TH', { timeZone: 'Asia/Bangkok' })`; for the Buddhist Era year see `i18n-and-locale` |
+| money | `0.1 + 0.2 !== 0.3` | store as satang (integer); for tax or currency conversion use the decimal library the repo uses |
+| `==` | `'0' == false` is true | always use `===` and turn on eslint `eqeqeq` |
+| mutating a shared object | values change by themselves across pages | create a new one with spread · `structuredClone` · `readonly` in the type |
+| memory leak | RAM keeps growing | cancel subscriptions · `removeEventListener` · `clearInterval`, and caches need a cap |
+| big imports | bundle bloats by hundreds of KB | `import { debounce } from 'lodash-es'`, not all of lodash, and check the bundle after the build |
+| sorting Thai names | leading vowels sort wrong | use `new Intl.Collator('th').compare`, not bare `localeCompare` |
+| `JSON.parse` without checks | crash deep in the code | parse with a schema at the system edge (item 2) |
 
 ## 6 · test
 
-ใช้ framework ที่ repo มี · ตั้งค่า Vitest และ Angular พร้อมตัวอย่าง ดู [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#node--typescript--vitest) ส่วนเบราว์เซอร์ดู `e2e-testing-patterns`
+Use the framework the repo has · for Vitest and Angular setup with examples, see [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#node--typescript--vitest) · for browsers see `e2e-testing-patterns`.
 
-- HTTP API: `supertest` (Express · NestJS) · `fastify.inject()` (Fastify) ไม่ต้องเปิดพอร์ตจริง
-- Angular ตั้งแต่ v21 CLI ใช้ Vitest เป็นค่าเริ่มต้น ไม่ใช่ Karma
+- HTTP API: `supertest` (Express · NestJS) · `fastify.inject()` (Fastify) — no need to open a real port.
+- From Angular v21 the CLI uses Vitest by default, not Karma.
 
-- logic ใหม่หรือแก้ bug ให้เขียน test ที่แดงก่อน แล้วค่อยแก้ให้เขียว
-- snapshot อย่างเดียวไม่นับเป็น test ต้องมี assert ค่าที่สำคัญ
-- signal ใน test ให้อ่านค่าตรง ๆ `component.unpaid()` ไม่ต้องรอ `fakeAsync` ถ้าไม่มี async จริง
+- For new logic or a bug fix, write a test that is red first, then fix it until green.
+- A snapshot alone does not count as a test; it must assert the values that matter.
+- For a signal in a test, read the value directly, `component.unpaid()`; no need to wait with `fakeAsync` if nothing is really async.
 
-## 7 · ความปลอดภัยเฉพาะ stack
+## 7 · Stack-specific security
 
-- **แพ็กเกจใหม่** ต้องตรวจก่อนลง: ชื่อสะกดถูก (typosquat) · ยอดดาวน์โหลด · ผู้ดูแล · วันที่ออกล่าสุด ส่วนชื่อ scope ภายในองค์กรต้องตั้ง registry ใน `.npmrc` กัน dependency confusion
-- รัน `npm audit --omit=dev` ก่อนส่ง lockfile ต้อง commit และ CI ใช้ `npm ci`
-- Cross-Site Scripting (XSS): ห้ามใช้ `innerHTML` · `[innerHTML]` · `dangerouslySetInnerHTML` กับข้อมูลผู้ใช้ ส่วน Angular escape ให้เองถ้าไม่ bypass
-- login ด้วย cookie ต้องตั้ง cookie `HttpOnly` · `Secure` · `SameSite` + กัน Cross-Site Request Forgery (CSRF) (token หรือ `withXsrfConfiguration` ของ Angular)
-- Cross-Origin Resource Sharing (CORS): ระบุ origin ทีละตัว ห้ามใช้ `*` คู่กับ `credentials`
-- secret ห้ามอยู่ใน frontend เพราะทุกอย่างใน `environment.ts` และ `VITE_*` ถูก build เข้า bundle ให้ทุกคนอ่าน
-- header ความปลอดภัยใช้ `helmet` (Express) · `@fastify/helmet` · NestJS ใช้ `helmet` ใน `main.ts`
+- **A new package** must be checked before installing: spelled correctly (typosquat) · download count · maintainer · latest release date. For an organisation-internal scope name, set the registry in `.npmrc` to prevent dependency confusion.
+- Run `npm audit --omit=dev` before sending · the lockfile must be committed and CI uses `npm ci`.
+- Cross-Site Scripting (XSS): never use `innerHTML` · `[innerHTML]` · `dangerouslySetInnerHTML` with user data. Angular escapes for you if you do not bypass.
+- Cookie login must set the cookie `HttpOnly` · `Secure` · `SameSite` + guard against Cross-Site Request Forgery (CSRF) (token or Angular's `withXsrfConfiguration`).
+- Cross-Origin Resource Sharing (CORS): list origins one by one; never use `*` together with `credentials`.
+- Secrets must never be in the frontend, because everything in `environment.ts` and `VITE_*` is built into the bundle for everyone to read.
+- For security headers use `helmet` (Express) · `@fastify/helmet` · in NestJS use `helmet` in `main.ts`.
 
-## 8 · รายการตรวจก่อนส่ง
+## 8 · Pre-submit checklist
 
-- [ ] `tsc --noEmit` 0 error
-- [ ] lint 0 warning ในไฟล์ที่แก้
-- [ ] test ทั้งชุดผ่าน และพฤติกรรมใหม่มี test ที่เคยแดงก่อนแก้
-- [ ] ไม่มี `any` · `as` กับข้อมูลภายนอก · `!` ใหม่ใน diff
-- [ ] ไม่มี promise ลอย และไม่มี subscription ที่ไม่ยกเลิก
-- [ ] งาน frontend เทียบขนาด bundle ก่อนและหลังแล้ว ถ้าโตเกิน 20 KB (gzip) ให้บอกเหตุผลในรายงาน
-- [ ] ถ้า lockfile เปลี่ยน ได้ตรวจแพ็กเกจใหม่ตามข้อ 7 แล้ว
+- [ ] `tsc --noEmit` 0 errors
+- [ ] lint 0 warnings in the files changed
+- [ ] the whole test suite passes, and the new behaviour has a test that was red before the fix
+- [ ] no `any` · `as` on external data · new `!` in the diff
+- [ ] no floating promise and no subscription left uncancelled
+- [ ] frontend work: bundle size compared before and after; if it grew more than 20 KB (gzip), give the reason in the report
+- [ ] if the lockfile changed, the new packages were checked per item 7
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Link to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---|---|
-| โค้ดน้อยที่สุดที่ใช้ได้ | `lazy-coding` |
-| ชื่อ · โครงไฟล์ · คอมเมนต์ | `readable-code` |
-| ออกแบบ type และรูปข้อมูลก่อนเขียน | `principle-data-shape-first` |
-| จับ error ที่ไหน · retry · timeout | `error-handling-patterns` |
-| รูปแบบ log และ correlation id | `logging-standards` |
-| สัดส่วนและการตั้งชื่อ test | `testing-standards` |
-| test ผ่านเบราว์เซอร์ | `e2e-testing-patterns` |
-| หน้าจอ · token สี · layout | `web-app-design` |
-| ข้อบังคับความปลอดภัยทุก diff | `principle-secure-by-default` |
-| env และ secret | `config-and-secrets` |
-| วันที่ไทย · พ.ศ. · เรียงคำไทย | `i18n-and-locale` |
+| the least code that works | `lazy-coding` |
+| names · file layout · comments | `readable-code` |
+| design types and data shape before writing | `principle-data-shape-first` |
+| where to catch errors · retry · timeout | `error-handling-patterns` |
+| log format and correlation id | `logging-standards` |
+| test proportions and naming | `testing-standards` |
+| tests through the browser | `e2e-testing-patterns` |
+| screens · color tokens · layout | `web-app-design` |
+| security rules for every diff | `principle-secure-by-default` |
+| env and secrets | `config-and-secrets` |
+| Thai dates · Buddhist Era · Thai word sorting | `i18n-and-locale` |

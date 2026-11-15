@@ -1,17 +1,17 @@
-# playbook · video — วิดีโอสั้นและงาน motion
+# playbook · video — short video and motion work
 
-ใช้เมื่อ: Reels · TikTok · Shorts · วิดีโอโฆษณา · ข้อความเคลื่อนไหว · โลโก้เคลื่อนไหว · ตัดต่อและใส่ซับจากฟุตเทจที่มี
-skill หลัก: `video-script-to-clip` · `motion-basics` · `style-consistency` · `video-editing` · `narration-th` · `subtitles-th`
+Use when: Reels · TikTok · Shorts · video ads · animated text · animated logos · editing and adding subtitles from existing footage
+Main skills: `video-script-to-clip` · `motion-basics` · `style-consistency` · `video-editing` · `narration-th` · `subtitles-th`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน (Steps) (copy into the todo exactly)
 
-1. เขียนข้อความหลักและ hook 3 วินาที · ใคร: `social-creator` ตัวใหม่ (ข้อความ hook สคริปต์) · ส่วน shot list motion และ brief ทีละช็อตเป็นของ `art-director`
-2. ทำ shot list ตาม `video-script-to-clip` — ภาพ ข้อความบนจอ เสียง เวลา · ใคร: `art-director` ตัวใหม่
-3. ตั้งจังหวะ motion ตาม `motion-basics` — กำหนดเวลาเป็นมิลลิวินาที · เลือกเส้น easing (จังหวะเร่งและชะลอ) · ข้อความบนจออยู่นานพอให้อ่านทัน · ใคร: `art-director` ตัวใหม่
-4. เขียน brief ทีละช็อตสำหรับเครื่องมือวิดีโอหรือการถ่ายด้วยมือถือ · ใคร: `art-director` ตัวใหม่
-5. มีฟุตเทจหรือเสียงแล้ว: ตัด ต่อ ปรับความดัง ต่อสไลด์กับเสียง และส่งออกตาม `video-editing` · ซับไทยตาม `subtitles-th` · ไม่อัดเสียงเอง → เสียงบรรยายจากสคริปต์ตาม `narration-th` (ได้ซับและเวลาสไลด์ในรอบเดียว) · งานที่ส่งแค่ brief ข้ามขั้นนี้ · ใคร: `video-editor` ตัวใหม่
-6. ตรวจว่าซับไทยอ่านทันที่ความเร็วจริง ข้อความไม่ตกนอก safe zone ของแพลตฟอร์ม และไฟล์ที่ส่งออก (ถ้ามี) ยาวและดังตามที่วัดไว้ · ใคร: `design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์)
+1. Write the main message and a 3-second hook · ใคร: `social-creator` ตัวใหม่ (hook text and script) · the motion shot list and the shot-by-shot brief belong to `art-director`
+2. Make a shot list per `video-script-to-clip`: picture · on-screen text · sound · timing · ใคร: `art-director` ตัวใหม่
+3. Set the motion rhythm per `motion-basics`: define timing in milliseconds · choose the easing curve (the pattern of speeding up and slowing down) · keep on-screen text up long enough to read · ใคร: `art-director` ตัวใหม่
+4. Write the shot-by-shot brief for the video tool or for shooting on a phone · ใคร: `art-director` ตัวใหม่
+5. Once footage or audio exists: cut, join, adjust loudness, pair slides with audio, and export per `video-editing` · Thai subtitles per `subtitles-th` · if the user will not record audio → generate narration from the script per `narration-th` (gives subtitles and slide timing in one round) · a job that delivers only a brief skips this step · ใคร: `video-editor` ตัวใหม่
+6. Check (ตรวจ) that the Thai subtitles can be read in time at the real speed, that text does not fall outside the platform's safe zone, and that the exported file (if any) has the length and loudness that were measured · ใคร: `design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์ — read-only, does not edit files)
 
-## จบเมื่อ
+## Done when
 
-shot list และ brief ครบทุกช็อต และซับไทยผ่านการตรวจความเร็วอ่าน · มีขั้น 5 → ไฟล์ส่งออกผ่าน `srt_check.py` และค่าความดังตามเป้าของแพลตฟอร์ม
+The shot list and brief are complete for every shot, and the Thai subtitles pass the reading-speed check · with step 5 → the exported file passes `srt_check.py` and the loudness values hit the platform's target

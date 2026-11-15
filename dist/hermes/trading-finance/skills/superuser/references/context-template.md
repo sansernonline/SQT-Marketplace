@@ -1,14 +1,14 @@
-# แม่แบบไฟล์กลาง — trading-finance
+# Central file template — trading-finance
 
-หัวหน้าทีมใช้แม่แบบนี้ตอนสร้างไฟล์ครั้งแรก กติกาการเขียนอยู่ในหัวข้อ 9 ของ `superuser`
+The team lead uses this template when it first creates the files. The writing rules are in section 9 of `superuser`.
 
-## ค่าของ plugin นี้
+## Values for this plugin
 
-ใส่แทนช่องว่างในแม่แบบด้านล่าง
+Fill the blanks in the template below.
 - ชื่องาน: พอร์ตหุ้น
-- งานนี้คืออะไร: ดูแลเรื่องอะไร (พอร์ต · งบ · ภาษี) สถานะโดยรวม
-- กติกา: ความเสี่ยงต่อไม้ (%) · ไฟล์ทุนอยู่ที่ไหน (ไม่ใส่ยอดเงิน) · ไฟล์บันทึกเทรดอยู่ที่ไหน · กฎของเดือนนี้
-- ตัวอย่างแถว IMPROVEMENTS: เพดานลดหย่อนของกองทุนลดหย่อนภาษีชนิดหนึ่งเปลี่ยนในปีภาษีนี้ · หลักฐาน: เว็บกรมสรรพากร + 2 แหล่ง · ไปรวมที่ `tax-deduction-planner` references/deductions-2569.md
+- งานนี้คืออะไร: what it covers (portfolio · budget · tax) and the overall status
+- กติกา: risk per trade (%) · where the capital file is (no amounts) · where the trade journal file is · this month's rules
+- Example IMPROVEMENTS row: the deduction ceiling of one kind of tax-saving fund changed this tax year · evidence: Revenue Department website + 2 sources · merge into `tax-deduction-planner` references/deductions-2569.md
 
 <!-- superuser:begin context -->
 ## CONTEXT.md

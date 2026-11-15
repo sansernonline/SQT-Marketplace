@@ -1,15 +1,15 @@
-# playbook · meeting — ก่อนและหลังประชุม
+# playbook · meeting — before and after a meeting
 
-ใช้เมื่อ: ก่อนประชุมสำคัญ · หลังประชุมมีโน้ตหรือ transcript
-skill หลัก: `meeting` (ขา 1 ก่อนประชุม · ขา 2 หลังประชุม) · agent `meeting-prep`
+Use when: before an important meeting · after a meeting that has notes or a transcript.
+Main skill: `meeting` (leg 1 before the meeting · leg 2 after the meeting) · agent `meeting-prep`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน (Steps — copy into the todo as written)
 
-1. ก่อนประชุม ทำการ์ด 1 หน้า: เป้าหมาย · คำถาม 3 ข้อ · บริบทที่ต้องจำ · สิ่งที่จะขอ · จุดที่ยอมถอย · ใคร: `meeting-prep` ตัวใหม่
-2. หลังประชุม สรุปการตัดสินใจ งานพร้อมเจ้าของและวันครบกำหนด และคำถามค้าง ตาม `meeting` ขา 2 ถ้าต้องการแบบทางการ ให้ทำเป็นรายงานการประชุมภาษาไทย · ใคร: `meeting-prep` ตัวใหม่
-3. ร่างอีเมลส่งสรุปให้ผู้เข้าประชุม · ใคร: `meeting-prep` ตัวใหม่ (ผู้ใช้เป็นคนส่ง)
-4. ตรวจสรุปและอีเมลว่าทุกงานมีเจ้าของและวันที่ และไม่มีข้อความที่ไม่ได้อยู่ในโน้ตหรือ transcript · ใคร: `reviewer` ตัวใหม่
+1. Before the meeting, make a 1-page card: goal · 3 questions · context to remember · what to ask for · the point where the user will give way · ใคร: `meeting-prep` ตัวใหม่
+2. After the meeting, summarise the decisions, the tasks with owner and due date, and the open questions, under `meeting` leg 2. If the user wants a formal version, make it a Thai meeting minutes report · ใคร: `meeting-prep` ตัวใหม่
+3. Draft an email that sends the summary to the attendees · ใคร: `meeting-prep` ตัวใหม่ (the user sends it)
+4. ตรวจ the summary and the email: every task has an owner and a date, and there is no text that is not in the notes or the transcript · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-การ์ดหรือสรุปพร้อมใช้ ทุกงานมีเจ้าของและวันที่
+The card or summary is ready to use, and every task has an owner and a date.

@@ -1,15 +1,15 @@
-# ตัวอย่าง: คิวส่งอีเมลยืนยันออเดอร์
+# Example: order-confirmation email queue
 
-อยู่ใน `rabbitmq-messaging` · ป้าย `ตัวอย่าง`: เขียนจากเอกสารและความรู้ทั่วไป **ยังไม่ได้รันกับ RabbitMQ จริง** · key ใน policy ตรวจแล้ว 2026-10-27 (`delivery-limit` · `delayed-retry-*` จากเอกสาร quorum queues · `dead-letter-exchange` จากเอกสาร DLX) · ชื่อ method ของ client Python (`pika`) ยังไม่ได้เปิดเอกสารตรวจ `(ยังไม่ได้ตรวจ)` · ตรวจกับเอกสารของ client และของ RabbitMQ รุ่นที่ใช้ก่อนนำไปใช้
+Part of `rabbitmq-messaging` · label `ตัวอย่าง` (example): written from the docs and general knowledge, **not yet run against a real RabbitMQ** · the keys in the policy were checked 2026-10-27 (`delivery-limit` · `delayed-retry-*` from the quorum queues docs · `dead-letter-exchange` from the DLX docs) · the method names of the Python client (`pika`) were not checked against its docs `(ยังไม่ได้ตรวจ)` (not yet checked) · check against the docs of the client and of the RabbitMQ version in use before applying
 
-## สารบัญ
+## Contents
 
-- [1 · ตั้งต้นฝั่ง broker](#1--ตั้งต้นฝั่ง-broker)
-- [2 · producer (relay ของ outbox)](#2--producer-relay-ของ-outbox)
-- [3 · consumer](#3--consumer)
-- [4 · ที่ตัวอย่างนี้ยังไม่ครอบคลุม](#4--ที่ตัวอย่างนี้ยังไม่ครอบคลุม)
+- [1 · Broker-side setup](#1--broker-side-setup)
+- [2 · Producer (outbox relay)](#2--producer-outbox-relay)
+- [3 · Consumer](#3--consumer)
+- [4 · What this example does not cover](#4--what-this-example-does-not-cover)
 
-## 1 · ตั้งต้นฝั่ง broker
+## 1 · Broker-side setup
 
 ```bash
 # user และ vhost แยกต่อแอป (รหัสผ่านมาจาก secrets ไม่พิมพ์ลงไฟล์)
@@ -24,14 +24,14 @@ rabbitmqctl set_policy -p shop email-dlx "^order\.email\." \
   '{"dead-letter-exchange":"order.dlx","delivery-limit":5,"delayed-retry-type":"failed","delayed-retry-min":1000,"delayed-retry-max":30000}' --apply-to quorum_queues
 ```
 
-ประกาศในโค้ดตอนเริ่มระบบ (หรือสคริปต์ตั้งค่าที่รีวิวได้):
+Declare in code at system start (or in a reviewable setup script):
 
-- exchange `order.events` ชนิด direct durable · exchange `order.dlx` ชนิด fanout durable
-- คิว `order.email.send` ประกาศ `x-queue-type=quorum` durable · ผูกกับ `order.events` ด้วย key `email.send`
-- คิว `order.email.dead` ผูกกับ `order.dlx` ไว้เก็บข้อความตาย · ตั้ง alert เมื่อไม่ว่าง
-- ค่า 5 ใน `delivery-limit` เป็นตัวอย่าง ตั้งตามที่ผู้ให้บริการอีเมลรับ retry ได้ (ค่าตั้งต้นของ quorum คือ 20 ตามเอกสาร)
+- exchange `order.events` of type direct, durable · exchange `order.dlx` of type fanout, durable
+- queue `order.email.send` declared with `x-queue-type=quorum`, durable · bound to `order.events` with key `email.send`
+- queue `order.email.dead` bound to `order.dlx` to hold dead messages · set an alert when it is not empty
+- The 5 in `delivery-limit` is an example; set it to what the email provider tolerates as retries (the quorum default is 20 per the docs)
 
-## 2 · producer (relay ของ outbox)
+## 2 · Producer (outbox relay)
 
 ```python
 import json
@@ -65,9 +65,9 @@ def relay_batch(rows):
         mark_sent(sent)                          # ทำเครื่องหมายหลัง confirm เท่านั้น
 ```
 
-หมายเหตุ: `BlockingConnection` รอ confirm ต่อข้อความ ใช้ได้กับปริมาณน้อย · ปริมาณสูงใช้ client แบบ async หรือส่งเป็นชุดแล้วรอ confirm ตามหัวข้อ 3 ของ SKILL.md `(ยังไม่ได้ตรวจ API ที่รองรับ)` · relay ตายหลังส่งก่อนทำเครื่องหมาย = ส่งซ้ำ จึงต้องมี `message_id` และ consumer กันซ้ำ
+Note: `BlockingConnection` waits for a confirm per message, fine for low volume · for high volume use an async client, or send in a batch and then wait for the confirm, per section 3 of SKILL.md `(ยังไม่ได้ตรวจ API ที่รองรับ)` (supporting API not yet checked) · if the relay dies after sending but before marking, the message is sent again, so a `message_id` and a de-duplicating consumer are required.
 
-## 3 · consumer
+## 3 · Consumer
 
 ```python
 def on_message(ch, method, props, body):
@@ -93,10 +93,10 @@ ch.basic_qos(prefetch_count=10)                               # เริ่ม�
 ch.basic_consume("order.email.send", on_message, auto_ack=False)
 ```
 
-- ส่งอีเมลสำเร็จแต่เขียน `mark_processed` ล้ม → ข้อความมาอีกรอบ อีเมลซ้ำได้ · ปิดช่องด้วย idempotency key ของผู้ให้บริการอีเมลถ้ามี `(ยังไม่ได้ตรวจ)`
-- ล้มชั่วคราวใช้ `basic_reject(requeue=True)` ไม่ใช้ `basic_nack` เพราะตั้งแต่ 4.3 มีแค่ reject (และ channel ปิดตอนยังมีข้อความค้าง) ที่นับเข้า `delivery-limit` · nack ไม่นับ จึงวนไม่รู้จบได้ และ `delayed-retry-type: failed` ก็หน่วงเฉพาะข้อความที่นับแล้ว · การหน่วงระหว่างรอบมาจาก `delayed-retry-*` ใน policy ข้างบน (1 ถึง 30 วินาที) ไม่ต้องทำคิวหน่วงเอง (เอกสาร quorum queues · ตรวจ 2026-10-27)
+- If the email is sent but writing `mark_processed` fails → the message arrives again and the email can be duplicated · close the gap with the email provider's idempotency key if it has one `(ยังไม่ได้ตรวจ)` (not yet checked)
+- For a temporary failure use `basic_reject(requeue=True)`, not `basic_nack`, because since 4.3 only reject (and a channel closing while messages are still unacknowledged) counts toward `delivery-limit` · nack does not count, so it can loop forever, and `delayed-retry-type: failed` delays only messages that have been counted · the delay between rounds comes from `delayed-retry-*` in the policy above (1 to 30 seconds); no need to build a delay queue yourself (quorum queues docs · checked 2026-10-27)
 
-## 4 · ที่ตัวอย่างนี้ยังไม่ครอบคลุม
+## 4 · What this example does not cover
 
-- เทสต์: ใช้ RabbitMQ จริงใน Testcontainers หรือ docker compose · 4 เคส: ข้อความเดิมเข้า 2 ครั้ง อีเมลออกครั้งเดียว · consumer ตายก่อน ack แล้วเริ่มใหม่ ข้อความไม่หาย · ข้อความเสียเข้า DLX แล้วคิวไม่ติด · route ไม่ได้ ฝั่งส่งรู้
-- การต่อกลับเมื่อ connection หลุด · การเฝ้าดู · ไม่ได้ลงโค้ดเต็ม
+- Tests: use a real RabbitMQ in Testcontainers or docker compose · 4 cases: the same message arrives twice, only one email goes out · the consumer dies before ack and restarts, no message is lost · a bad message goes to the DLX and the queue does not jam · it cannot be routed, and the sender knows
+- Reconnecting when the connection drops · monitoring · the full code is not included

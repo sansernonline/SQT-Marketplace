@@ -1,30 +1,30 @@
-# รออนุมัติ · อนุญาตไว้ล่วงหน้า · Docker sandbox
+# Awaiting approval · pre-approved · Docker sandbox
 
-## ความเป็นอิสระ — ไม่หยุดงาน
+## Autonomy — do not stop work
 
-ย้ายมาจาก `superuser` หัวข้อ 6 (ลดขนาดไฟล์หลักที่โหลดทุกครั้ง 2026-11-11)
+Moved from `superuser` section 6 (to shrink the main file that loads every time, 2026-11-11)
 
-หลักที่อยู่หลังหัวข้อนี้: `principle-proceed-on-reversible-work`
+Principle behind this section: `principle-proceed-on-reversible-work`
 
-ตัวอย่างงานที่ย้อนได้และลำดับแหล่งข้อมูลทางการของ plugin นี้ → [`examples`](examples.md)
+Examples of reversible work and this plugin's order of official sources → [`examples`](examples.md)
 
-**รออนุมัติ** — งานที่ย้อนกลับไม่ได้หรือกระทบคนนอก agent จะไม่ทำเอง:
-- deploy ขึ้นระบบจริง · แตะฐานข้อมูลจริง · ลบข้อมูลหรือไฟล์ของผู้ใช้
-- ติดตั้งโปรแกรมทั้งเครื่อง · ใช้สิทธิ์ admin
-- `git commit` · `push` (ดูกฎ commit ด้านล่าง)
-- force-push · rewrite ประวัติบน branch ที่คนอื่นใช้ · merge เข้า branch หลัก
-- ส่งข้อความหรืออีเมลถึงลูกค้าหรือคนนอก
-- ใส่ค่าลับจริง · จ่ายเงิน · ยอมรับเงื่อนไขในนามผู้ใช้
-- เจอ CAPTCHA บนเว็บของคนอื่น — ไม่แก้ ไม่หาทางหลบ ให้บอกผู้ใช้ทำเอง ส่วนระบบของเราเองให้ใช้ค่าทดสอบของผู้ให้บริการแทน (ดู `docker-sandbox` ข้อ 6)
+**`รออนุมัติ` (awaiting approval)** — work that cannot be undone or that affects outsiders. The agent does not do it by itself:
+- deploy to production · touch the real database · delete the user's data or files
+- install software machine-wide · use admin rights
+- `git commit` · `push` (see the commit rule below)
+- force-push · rewrite history on a branch others use · merge into the main branch
+- send a message or email to a customer or an outsider
+- enter real secrets · pay money · accept terms on the user's behalf
+- hit a CAPTCHA on someone else's website — do not solve it and do not look for a way around it; tell the user to do it. For our own system, use the provider's test values instead (see `docker-sandbox` item 6)
 
-อนุญาตไว้ล่วงหน้า · ทำได้เต็มที่ใน Docker sandbox → [`approvals`](approvals.md)
+Pre-approved · full freedom inside the Docker sandbox → [`approvals`](approvals.md)
 
-**กฎ commit** — ผู้ใช้สั่ง หรือเขียนอนุญาตไว้ชัดใน `~/.claude/superuser-style.md` หรือ `docs/AGENT-LOOP.md` หรือหัวข้อ "กติกา" ใน `CONTEXT.md` → commit เป็นชิ้นเล็กตาม `commit-message-format` บน branch งาน ไม่ลง branch หลัก · ไม่ได้อนุญาต → ใส่ข้อความ commit ที่แนะนำไว้ในคำตอบ · ไม่เดาว่าได้รับอนุญาตจากเอกสารอื่น (push ไม่ทำเว้นแต่ผู้ใช้สั่งหรือเขียนไว้ในไฟล์เหล่านี้) · playbook ทุกตัวอ้างกฎนี้
+**Commit rule** — if the user orders it, or has clearly written permission in `~/.claude/superuser-style.md` or `docs/AGENT-LOOP.md` or the "กติกา" (rules) section of `CONTEXT.md` → commit in small pieces per `commit-message-format` on the work branch, never on the main branch · if not permitted → put the suggested commit message in the reply · do not guess that other documents grant permission (do not push unless the user orders it or has written it in those files) · every playbook refers to this rule
 
-## อนุญาตไว้ล่วงหน้า · Docker sandbox
+## Pre-approved · Docker sandbox
 
-ต่อจากรายการ "รออนุมัติ" ข้างบน · เปิดเมื่อผู้ใช้เขียนอนุญาตไว้ หรือเมื่อทำงานใน sandbox
+Continues the `รออนุมัติ` (awaiting approval) list above · applies when the user has written the permission, or when working in a sandbox
 
-**อนุญาตไว้ล่วงหน้า** — เขียนใน `~/.claude/superuser-style.md` หรือ `docs/AGENT-LOOP.md` หรือหัวข้อ "กติกา" ใน `CONTEXT.md` ของโปรเจกต์ (ไฟล์ที่ผู้ใช้เขียนเองนับเป็นผู้ใช้สั่ง) เช่น "commit ใน branch งานได้เลย" · "push ใน branch งานได้" (push ต้องเขียนไว้ชัดเท่านั้น) · "deploy ขึ้น staging ได้" ข้อนั้นจะออกจาก "รออนุมัติ" เฉพาะขอบเขตที่เขียนไว้ · **อนุญาตล่วงหน้าไม่ได้:** deploy production · ลบข้อมูลจริง · force-push branch ที่คนอื่นใช้ · จ่ายเงิน · ส่งข้อความในนามผู้ใช้ · CAPTCHA
+**Pre-approved** — written in `~/.claude/superuser-style.md` or `docs/AGENT-LOOP.md` or the "กติกา" (rules) section of the project's `CONTEXT.md` (a file the user wrote counts as the user's order), for example "commit on the work branch freely" · "push on the work branch is allowed" (push must be written explicitly) · "deploy to staging is allowed". That item leaves `รออนุมัติ` only within the written scope. **Cannot be pre-approved:** deploy to production · delete real data · force-push a branch others use · pay money · send messages on the user's behalf · CAPTCHA
 
-**ใน Docker sandbox ของโปรเจกต์ ([`docker-sandbox`](../../docker-sandbox/SKILL.md))** — ติดตั้งโปรแกรม · ลบไฟล์ใน sandbox · รันเซิร์ฟเวอร์ · ล้าง sandbox แล้วสร้างใหม่ ทำได้เต็มที่ เพราะพังแล้วสร้างใหม่ได้ ส่วนสิ่งที่ออกนอก sandbox (ส่งข้อมูล · บัญชีจริง · push · deploy) ยังอยู่ใน "รออนุมัติ"
+**Inside the project's Docker sandbox ([`docker-sandbox`](../../docker-sandbox/SKILL.md))** — installing software · deleting files in the sandbox · running servers · wiping the sandbox and rebuilding are fully allowed, because a break can be rebuilt. Anything that leaves the sandbox (sending data · real accounts · push · deploy) stays in `รออนุมัติ`.

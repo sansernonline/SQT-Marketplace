@@ -1,67 +1,66 @@
-# ระบบออกแบบของรูป — รายละเอียด
+# Figure design system — details
 
-สารบัญ: หัวรูป → ระบบขนาด → ระบบสี → ไอคอนเส้นที่วาดเอง · กฎสั้นอยู่ใน `SKILL.md`
+Contents: figure header → size system → colour system → hand-drawn line icons. The short rules are in `SKILL.md`.
 
-## หัวรูป (จากข้อ 3)
+## Figure header (from item 3)
 
-โลโก้อยู่หน้าชื่อรูป โครงทุกตัวมีช่อง `<img class="logo">` ชี้ไปที่ `assets/logo/` ของโปรเจกต์อยู่แล้ว ให้แก้แค่ชื่อไฟล์ ถ้าโปรเจกต์ยังไม่มีโลโก้ ช่องนี้จะหายไปเอง แต่ต้องจดไว้ในรายงานว่ายังขาดโลโก้ เพราะรูปที่ไม่มีโลโก้ถูกถามเสมอว่า "โลโก้อยู่ไหน"
+The logo goes before the figure title. Every template already has an `<img class="logo">` slot pointing at the project's `assets/logo/`; change only the file name. If the project has no logo yet, the slot disappears by itself, but note in the report that the logo is missing, because a figure without a logo always gets asked "โลโก้อยู่ไหน".
 
-เหตุผลไม่ใช่ความสวย แต่เป็นเพราะรูปสถาปัตยกรรมถูกก๊อปไปวางในอีเมล ในสไลด์ ในเอกสารสัญญา
-แล้วอยู่ต่ออีกเป็นปี **รูปที่ไม่มีวันที่ ไม่มีใครกล้าแก้และไม่มีใครกล้าเชื่อ**
+The reason is not looks. Architecture figures get copied into emails, slides and contracts, and then live on for a year. **A figure with no date is one nobody dares edit and nobody dares trust.**
 
-คำขยายบอกว่า "ของจริงเป็นอย่างไร" ไม่ใช่ขยายชื่อ:
+The sub-title says "what the real thing is", not an expansion of the title:
 
 ```
 ผิด: ภาพรวมระบบ Dr Screening
 ถูก: เครื่องเดียวในห้อง Server ของโรงพยาบาล รันทุกบริการด้วย Docker Compose
 ```
 
-## ระบบขนาด (จากข้อ 4)
+## Size system (from item 4)
 
-| อย่าง | ค่า |
+| Item | Value |
 |---|---|
-| ตัวอักษร | ชื่อรูป 30 · ชื่อกล่อง 16 · คำอธิบาย 13.5 · ป้ายกลุ่ม 12 ตัวใหญ่ |
-| ไอคอน | กรอบ 66px · มุม 18px · ไอคอน 29px · เส้น 1.6px |
-| กล่อง | มุม 20px · ขอบ 1px เทาอ่อน · กล่องซ้อนใน มุม 16px พื้นเทาอ่อนมาก |
-| กล่อง `.focus` | ขอบ 2px สี `--accent` เฉดเข้ม · มุม 22px |
-| เส้นเชื่อม | แนวตั้งหรือแนวนอนเท่านั้น · หักมุมฉากด้วยมุมโค้งรัศมี 10px (SVG/Python engine ใช้ 12–14) · ห้ามเส้นเฉียง ห้ามเส้นโค้งอิสระ ห้ามมุมแหลม |
-| ระยะ | 12 · 20 · 26 · 34 · 48 · ช่องว่างระหว่างคอลัมน์ 130 |
+| Text | Figure title 30 · box title 16 · description 13.5 · group label 12 uppercase |
+| Icon | Frame 66px · corner 18px · icon 29px · stroke 1.6px |
+| Box | Corner 20px · 1px light grey border · nested box corner 16px, very light grey fill |
+| `.focus` box | 2px border in a dark shade of `--accent` · corner 22px |
+| Connector | Vertical or horizontal only · right-angle bends with a rounded corner of radius 10px (SVG/Python engine uses 12–14) · no diagonal lines, no free curves, no sharp corners |
+| Spacing | 12 · 20 · 26 · 34 · 48 · column gap 130 |
 
-> **กรอบไอคอนต้องใหญ่** — 66px คือจุดที่รูปเริ่มดูตั้งใจ ไม่ใช่ผังที่ generate มา
-> ถ้าต่ำกว่า 56px ไอคอนจะกลายเป็นจุดเล็ก ๆ ในกล่องใหญ่ และรูปจะดูโหวง
+> **The icon frame must be big.** 66px is the point where a figure starts to look deliberate, not like a generated diagram.
+> Below 56px the icon becomes a small dot inside a big box and the figure looks hollow.
 
-## ระบบสี (จากข้อ 5)
+## Colour system (from item 5)
 
-ในโครง HTML ให้แก้ที่ `--accent` ใน `:root` ที่เดียว แล้วเฉดอ่อนและเข้มจะคำนวณจากค่านั้น (ส่วน SVG/Python engine แก้ที่ `ACCENT` ใน `theme.py`)
+In the HTML templates, change `--accent` in `:root` in one place; the light and dark shades are computed from it. (In the SVG/Python engine, change `ACCENT` in `theme.py`.)
 
-**สีพื้นของรูปตามดีไซน์ของโปรเจกต์** — ต่อท้ายชื่อไฟล์ด้วย `#accent=<สีหลัก>&bg=<สีพื้น>` ให้ตรงกับเด็คหรือแอป พื้นเข้มหรือสว่างก็ได้ เทาทุกระดับคำนวณจากสีพื้น (ตอนนี้มีใน `figure-flow.html`) ถ้าไม่ใส่ `bg` ได้พื้นขาว
+**Figure background follows the project's design.** Append `#accent=<main colour>&bg=<background colour>` to the file name to match the deck or app. A dark or light background both work. Every grey is computed from the background (currently available in `figure-flow.html`). Without `bg` you get a white background.
 
-ข้อยกเว้นที่ไม่เปลี่ยนตามแบรนด์:
+Exceptions that do not change with the brand:
 
-- **สีโลโก้ผู้ให้บริการ** — AWS ส้ม Azure ฟ้า ต้องเป็นสีจริงของเขา ไม่ใช่สีแบรนด์เรา
-- **เทาโครงสร้าง** — เส้นขอบและพื้นกล่องต้องจางพอที่จะไม่แย่งสายตากับเนื้อหา
+- **Provider logo colours.** AWS orange and Azure blue must be their real colours, not our brand colour.
+- **Structural grey.** Borders and box fills must be faint enough not to compete with the content.
 
-**สีไอคอนมี 7 กลุ่ม และแต่ละกลุ่มต้องมีความหมาย**
+**Icon colour has 7 groups, and each group must mean something.**
 
-| คลาส | ใช้กับ |
+| Class | Use for |
 |---|---|
-| `t-neutral` | คน อุปกรณ์ ของนอกระบบ ที่เก็บไฟล์ธรรมดา |
-| `t-edge` | ทางเข้า-ออก · gateway · API |
-| `t-app` | เครื่องมือที่ผู้ใช้ทำงานด้วย |
-| `t-view` | ส่วนที่ผู้ใช้ใช้ดูหรืออ่านผล |
-| `t-data` | ฐานข้อมูล · สำรองข้อมูล |
-| `t-alert` | คิว งานที่ค้างได้ ของที่พังแล้วเจ็บ |
-| `t-warn` | ของที่มีเงื่อนไข — สัญญาอนุญาต ข้อจำกัดทางกฎหมาย |
+| `t-neutral` | People, devices, things outside the system, plain file storage |
+| `t-edge` | Entry and exit points · gateway · API |
+| `t-app` | Tools the user works with |
+| `t-view` | Parts the user uses to view or read results |
+| `t-data` | Database · backup |
+| `t-alert` | Queues, work that can pile up, things that hurt when they break |
+| `t-warn` | Things with conditions — licences, legal limits |
 
-ทุกกรอบมี**พื้นอ่อนกับขอบในโทนเดียวกัน** ไม่ใช่พื้นสีทึบ เพราะสีทึบจะดึงสายตาไปจากเนื้อหา
-ถ้าอยากได้สีที่ 8 แปลว่ากำลังใช้สีเพื่อความสวย ไม่ใช่เพื่อสื่อความหมาย
+Every frame has a **light fill with a border in the same tone**, not a solid fill, because a solid colour pulls the eye away from the content.
+If you want an 8th colour, you are using colour for looks, not for meaning.
 
-## ไอคอนเส้นที่วาดเอง (จากข้อ 6)
+## Hand-drawn line icons (from item 6)
 
-ไอคอนเส้นที่วาดเอง: `viewBox 0 0 24 24` · `stroke-width 1.6` · ไม่มีพื้น · ปลายเส้นมน
-รูปทรงต้องอ่านออกที่ขนาด 24px เพราะลายละเอียดเกิน 3 เส้นจะกลายเป็นก้อนดำ
+Hand-drawn line icons: `viewBox 0 0 24 24` · `stroke-width 1.6` · no fill · round line caps.
+The shape must be readable at 24px, because detail beyond 3 strokes turns into a black blob.
 
-## ฟอนต์ในรูปที่ฝังเด็ค (จากข้อ 8)
+## Fonts in figures embedded in a deck (from item 8)
 
-  รูปที่จะฝังในเด็ค (`StageDeck` · `html-slide-deck`) ให้ย้าย `"IBM Plex Sans Thai"` ขึ้นเป็นตัวแรก รูปจะได้ฟอนต์เดียวกับเนื้อความของเด็ค · เอกสาร Word ใช้ฟอนต์ไทยของแบรนด์ ถ้าไม่มีจึงใช้ Tahoma ตาม `branded-document-design` ข้อ 2 รูปในนั้นต่างฟอนต์ได้
-  ถ้าเครื่องไม่มีสักตัว จะตกไปใช้ฟอนต์ที่วางสระผิดตำแหน่งแบบเงียบ ๆ ดังนั้น**ต้องเรนเดอร์ดูทุกครั้ง**
+  For a figure that will be embedded in a deck (`StageDeck` · `html-slide-deck`), move `"IBM Plex Sans Thai"` to the first position so the figure gets the same font as the deck body. A Word document uses the brand's Thai font and falls back to Tahoma if it is missing, per `branded-document-design` item 2; a figure inside it may use a different font.
+  If the machine has none of them, the figure silently falls back to a font that places vowels in the wrong position, so **always render and look**.

@@ -1,31 +1,31 @@
-# 9 · migration — เปลี่ยน schema โดยไม่ต้องปิดระบบ
+# 9 · migration — change the schema without taking the system down
 
-**กฎ 3 ข้อ:**
+**3 rules:**
 
-1. **เดินหน้าอย่างเดียว**: migration ที่ merge แล้วห้ามแก้ ถ้าผิดให้เขียนตัวใหม่ทับ
-2. **1 migration ทำเรื่องเดียว**: ไล่ปัญหาง่าย และ rollback ได้ตรงจุด
-3. **โค้ดเวอร์ชันเก่ากับ schema เวอร์ชันใหม่ต้องทำงานด้วยกันได้** เพราะระหว่าง deploy มีโค้ดทั้ง 2 เวอร์ชันรันพร้อมกันเสมอ
+1. **Forward only**: a migration that has been merged must not be edited; if it is wrong, write a new one over it
+2. **1 migration does one thing**: easy to trace problems, and rollback is exact
+3. **Old-version code and the new-version schema must work together**, because during a deploy both versions of the code always run at the same time
 
-### expand / contract — ขั้นตอนมาตรฐานสำหรับการเปลี่ยนที่ทำลายของเดิม
+### expand / contract — the standard steps for a change that destroys something existing
 
-ตัวอย่าง: เปลี่ยนชื่อคอลัมน์ `name` → `full_name`
+Example: rename the column `name` → `full_name`
 
-| รอบ deploy | ฐานข้อมูล | โค้ด |
+| Deploy round | Database | Code |
 |:--:|---|---|
-| **1 · ขยาย** | เพิ่ม `full_name` (nullable) | เขียนลงทั้ง 2 คอลัมน์ · อ่านจาก `name` |
-| **2 · ย้าย** | คัดลอกข้อมูลเก่าเป็นชุด ๆ | อ่านจาก `full_name` ถ้าไม่มีค่อยดู `name` |
-| **3 · บีบ** | ตั้ง `NOT NULL` · ลบ `name` | อ่านและเขียน `full_name` อย่างเดียว |
+| **1 · Expand** | add `full_name` (nullable) | write to both columns · read from `name` |
+| **2 · Migrate** | copy old data in batches | read from `full_name`, fall back to `name` if it has no value |
+| **3 · Contract** | set `NOT NULL` · drop `name` | read and write only `full_name` |
 
-ทำ 3 รอบดูเสียเวลา แต่ทุกรอบ rollback ได้โดยไม่เสียข้อมูล
-ถ้าทำรอบเดียว ก็ต้องยอมรับว่าต้องปิดระบบ
+3 rounds looks slow, but every round can roll back without losing data
+If you do it in one round, you must accept that the system has to go down
 
-**คำสั่งที่ล็อกตารางจนระบบค้าง** (ระวังเป็นพิเศษบนตารางใหญ่):
+**Commands that lock the table until the system hangs** (be extra careful on large tables):
 
-- เพิ่มคอลัมน์ที่มี `DEFAULT` และ `NOT NULL` พร้อมกัน ซึ่ง PostgreSQL รุ่นใหม่ทำได้เร็ว และ MySQL 8.0.12 ขึ้นไปเพิ่มคอลัมน์แบบ INSTANT ได้ (การเปลี่ยนชนิดข้อมูลยังเขียนตารางใหม่)
-- เปลี่ยนชนิดข้อมูล
-- สร้าง index ธรรมดา ให้ใช้ `CREATE INDEX CONCURRENTLY` แทน (PostgreSQL) หรือ `ONLINE = ON` (SQL Server)
+- Adding a column with both `DEFAULT` and `NOT NULL` at once — newer PostgreSQL does this fast, and MySQL 8.0.12 and up can add a column as INSTANT (changing a data type still rewrites the table)
+- Changing a data type
+- Creating a plain index; use `CREATE INDEX CONCURRENTLY` instead (PostgreSQL) or `ONLINE = ON` (SQL Server)
 
-**ทดสอบ migration กับสำเนาข้อมูลจริงเสมอ** เพราะ migration ที่รัน 0.2 วินาทีบนเครื่องตัวเอง
-อาจใช้ 40 นาทีบน production และล็อกตารางไว้ตลอด
+**Always test a migration against a copy of real data**, because a migration that runs in 0.2 seconds on your own machine
+may take 40 minutes on production and hold the table lock the whole time
 
 ---

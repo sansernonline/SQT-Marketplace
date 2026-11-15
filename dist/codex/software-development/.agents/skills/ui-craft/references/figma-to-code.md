@@ -1,111 +1,111 @@
-# Figma เป็นต้นทาง (figma-to-code)
+# Figma as the source (figma-to-code)
 
-ลูกค้าส่งไฟล์ Figma มา → อ่านผ่านเซิร์ฟเวอร์ Model Context Protocol (MCP) ของ Figma แล้วแปลงเป็น mockup HTML ของเรา · ใช้คู่กับ `SKILL.md` ข้อ 0 (หน้าตาของโปรเจกต์ชนะ) และ token ใน `web-app-design` → `references/tokens.md`
-เรื่องเครื่องมือ แผน และโควตา มาจากเอกสารของ Figma ที่เปิดตรวจ 2026-10-23 (ตาราง "ที่มา") · Figma เขียนไว้เองว่าเปลี่ยนโควตาได้ทุกเมื่อ เปิดหน้าเดิมดูอีกครั้งก่อนเสนอแผนให้ลูกค้า
+The customer sends a Figma file → read it through Figma's Model Context Protocol (MCP) server and convert it into our HTML mockup · use together with `SKILL.md` section 0 (the project's look wins) and the tokens in `web-app-design` → `references/tokens.md`
+The tools, plans and quotas come from Figma's documentation, opened and checked 2026-10-23 (the "Sources" table) · Figma itself writes that quotas can change at any time; open the same pages again before proposing a plan to the customer
 
-## สารบัญ
+## Contents
 
-1. [ใช้ Figma หรือข้าม](#1--ใช้-figma-หรือข้าม)
-2. [Figma MCP server มี 2 แบบ](#2--figma-mcp-server-มี-2-แบบ)
-3. [ลำดับดึงของ ทีละหน้าจอ](#3--ลำดับดึงของ-ทีละหน้าจอ)
-4. [variables → token ของเรา](#4--variables--token-ของเรา)
+1. [Use Figma or skip it](#1--use-figma-or-skip-it)
+2. [Figma MCP server comes in 2 kinds](#2--figma-mcp-server-comes-in-2-kinds)
+3. [Pull order, one screen at a time](#3--pull-order-one-screen-at-a-time)
+4. [variables → our tokens](#4--variables--our-tokens)
 5. [component → mockup HTML](#5--component--mockup-html)
-6. [ตรวจด้วยตาหลังแปลง](#6--ตรวจด้วยตาหลังแปลง)
-7. [ข้อห้าม](#7--ข้อห้าม) · [ที่มา](#ที่มา)
+6. [Visual check after conversion](#6--visual-check-after-conversion)
+7. [Prohibitions](#7--prohibitions) · [Sources](#sources)
 
-## 1 · ใช้ Figma หรือข้าม
+## 1 · Use Figma or skip it
 
-| ไฟล์ที่ได้มา | ทำ |
+| The file you got | Do |
 |---|---|
-| ใช้ component · variables · auto layout · ตั้งชื่อ layer ชัด | ดึงผ่าน MCP ตามข้อ 3–5 |
-| ภาพวาดแบน (ชื่อ `Frame1268` `Group5` · ไม่มี variables · วางตำแหน่งตายตัว) | ข้าม MCP · export ภาพไว้ที่ `_to_delete/figma-shots/` ใช้เป็นแอปอ้างอิงตามข้อ 0.1 แล้ววาด mockup เอง |
-| ได้แค่ลิงก์ดู บัญชีเราไม่มีสิทธิ์ในไฟล์ | MCP อ่านได้เฉพาะไฟล์ที่บัญชีเรามีสิทธิ์ · ขอให้ลูกค้าเชิญเข้าไฟล์ หรือขอ export |
-| โปรเจกต์มี mockup หรือโค้ดที่ส่งมอบแล้ว | หน้าตาเดิมชนะ (ข้อ 0) · ใช้ Figma ดูแค่ว่ามีหน้าไหนเพิ่ม |
-| ต้องการแค่สีและฟอนต์ | ขอ style guide หรือค่าสีจากผู้ออกแบบ ไม่ต้องตั้ง MCP |
-| บัญชีที่ใช้ได้มีแค่ที่นั่ง View หรือ Collab | โควตา 20 ครั้งต่อเดือน (ข้อ 2) · ลำดับในข้อ 3 ใช้ราว 4–6 ครั้งต่อหน้าจอ จึงพอดูได้ไม่กี่หน้า · ขอที่นั่ง Dev หรือขอภาพ export แทน |
+| Uses components · variables · auto layout · clearly named layers | Pull through MCP per sections 3–5 |
+| Flat drawing (names like `Frame1268` `Group5` · no variables · fixed positioning) | Skip MCP · export images to `_to_delete/figma-shots/` and use them as the reference app per section 0.1, then draw the mockup yourself |
+| Got only a view link, our account has no permission on the file | MCP reads only files our account has permission on · ask the customer to invite us to the file, or ask for an export |
+| The project has a mockup or already-delivered code | The existing look wins (section 0) · use Figma only to see which pages were added |
+| Need only colors and fonts | Ask the designer for a style guide or the color values; no need to set up MCP |
+| The only account available has just a View or Collab seat | Quota is 20 calls per month (section 2) · the order in section 3 uses about 4–6 calls per screen, so only a few pages can be viewed · ask for a Dev seat or ask for exported images instead |
 
-## 2 · Figma MCP server มี 2 แบบ
+## 2 · Figma MCP server comes in 2 kinds
 
-ชื่อทางการตอนนี้คือ "Figma MCP server" · เป็นช่องทางที่ให้ agent เรียกเครื่องมือของ Figma ได้
+The official name now is "Figma MCP server" · it is the channel that lets an agent call Figma's tools
 
-| | remote (Figma แนะนำ) | desktop |
+| | remote (recommended by Figma) | desktop |
 |---|---|---|
-| ที่อยู่ | `https://mcp.figma.com/mcp` ไม่ต้องเปิดแอป | `http://127.0.0.1:3845/mcp` ผ่านแอป Figma desktop: เปิดไฟล์ → Dev Mode โดยไม่เลือกอะไร → Enable desktop MCP server |
-| แผนและที่นั่ง | ทุกแผน: Starter · Professional · Education · Organization · Government · Enterprise | ที่นั่ง Dev หรือ Full บนแผน Professional · Education · Organization · Government · Enterprise |
-| เขียนกลับลง canvas | ได้ · นอก drafts ต้องที่นั่ง Full · ฟรีช่วง beta แล้วจะคิดเงินตามการใช้ | ไม่ได้ |
-| ต่อ Claude Code | `claude plugin install figma@claude-plugins-official` (ได้ skill ของ Figma มาด้วย) หรือ `claude mcp add --transport http figma https://mcp.figma.com/mcp` แล้ว `/mcp` → Authenticate → Allow access ในเบราว์เซอร์ | `claude mcp add --transport http figma-desktop http://127.0.0.1:3845/mcp` แล้วเปิด Claude Code ใหม่ |
-| หมายเหตุ | ต่อได้เฉพาะ client ที่อยู่ใน Figma MCP catalog | Figma for Government ใช้ได้แบบนี้แบบเดียว |
+| Address | `https://mcp.figma.com/mcp`, no need to open the app | `http://127.0.0.1:3845/mcp` through the Figma desktop app: open a file → Dev Mode with nothing selected → Enable desktop MCP server |
+| Plans and seats | All plans: Starter · Professional · Education · Organization · Government · Enterprise | Dev or Full seat on the Professional · Education · Organization · Government · Enterprise plans |
+| Write back to canvas | Yes · outside drafts it needs a Full seat · free during beta, later billed by usage | No |
+| Connect to Claude Code | `claude plugin install figma@claude-plugins-official` (also gets Figma's skill) or `claude mcp add --transport http figma https://mcp.figma.com/mcp`, then `/mcp` → Authenticate → Allow access in the browser | `claude mcp add --transport http figma-desktop http://127.0.0.1:3845/mcp`, then reopen Claude Code |
+| Note | Connects only clients in the Figma MCP catalog | Figma for Government can use only this kind |
 
-โควตาของเครื่องมืออ่าน ใช้กับทั้ง 2 แบบ (เครื่องมือเขียน เช่น `add_code_connect_map` `create_new_file` `generate_figma_design` และ `whoami` ไม่นับ)
+The quota of the read tools applies to both kinds (write tools such as `add_code_connect_map` `create_new_file` `generate_figma_design` and `whoami` do not count)
 
-| ที่นั่ง | Starter | Professional · Education | Organization | Enterprise |
+| Seat | Starter | Professional · Education | Organization | Enterprise |
 |---|---|---|---|---|
-| View · Collab | 20 ครั้ง/เดือน | 20 ครั้ง/เดือน | 20 ครั้ง/เดือน | 20 ครั้ง/เดือน |
-| Dev · Full | ไม่มี | 200 ครั้ง/วัน · 10 ครั้ง/นาที | 200 ครั้ง/วัน · 15 ครั้ง/นาที | 600 ครั้ง/วัน · 20 ครั้ง/นาที |
+| View · Collab | 20 calls/month | 20 calls/month | 20 calls/month | 20 calls/month |
+| Dev · Full | none | 200 calls/day · 10 calls/minute | 200 calls/day · 15 calls/minute | 600 calls/day · 20 calls/minute |
 
-## 3 · ลำดับดึงของ ทีละหน้าจอ
+## 3 · Pull order, one screen at a time
 
-1. `get_metadata` ดึงโครงร่างย่อของ frame ก่อน · frame ใหญ่ทำให้ช้า error หรือได้ผลไม่ครบ จึงเลือกทีละส่วน (การ์ด · แถบหัว · แถบข้าง)
-2. `get_screenshot` ถ่ายภาพส่วนนั้น เก็บไว้ `_to_delete/figma-shots/` สำหรับเทียบด้วยตาในข้อ 6
-3. `get_variable_defs` ดึง variables และ styles ที่ส่วนนั้นใช้ · สั่งตรง ๆ ว่า "ขอชื่อและค่าของ variables" เพราะ agent เลือกเครื่องมือจากคำสั่ง สั่งกว้างอาจได้โค้ดมาแทน
-4. `get_design_context` ดึงโค้ดของส่วนนั้น · ขอเป็น "plain HTML + CSS" เพราะค่าตั้งต้นคือ React + Tailwind
-5. ลูกค้ามี library → `search_design_system` หา component · variables · styles ที่มีอยู่แล้วก่อนสร้างใหม่
+1. `get_metadata` pulls the short outline of a frame first · a large frame makes it slow, errors, or returns an incomplete result, so pick one part at a time (card · header bar · side bar)
+2. `get_screenshot` takes an image of that part and keeps it in `_to_delete/figma-shots/` for the visual comparison in section 6
+3. `get_variable_defs` pulls the variables and styles that part uses · say plainly "give me the names and values of the variables", because the agent picks a tool from the instruction, and a broad instruction may return code instead
+4. `get_design_context` pulls the code of that part · ask for "plain HTML + CSS", because the default is React + Tailwind
+5. The customer has a library → `search_design_system` looks for existing components · variables · styles before creating new ones
 
-ต้องการ variables ทั้งไฟล์: Variables REST API ใช้ได้เฉพาะที่นั่ง Full ในแผน Enterprise · แผนอื่นดึงทีละส่วนด้วย `get_variable_defs` แล้วรวมเอง
+Need the variables of the whole file: the Variables REST API works only for a Full seat on the Enterprise plan · other plans pull part by part with `get_variable_defs` and merge them yourself
 
-## 4 · variables → token ของเรา
+## 4 · variables → our tokens
 
-เขียนค่าลง `:root` ของไฟล์ css ที่ mockup `<link>` อยู่ ที่เดียว (ข้อ 0) · ใส่ชื่อ variable ของ Figma เป็น comment ข้างค่าให้ย้อนหาได้ · คอมโพเนนต์ใช้ `var(--…)` เท่านั้น
+Write the values into `:root` of the css file the mockup `<link>`s, in that one place (section 0) · put the Figma variable name as a comment beside the value so it can be traced back · components use only `var(--…)`
 
-| ใน Figma | token ของเรา | ระวัง |
+| In Figma | Our token | Watch out |
 |---|---|---|
-| สีปุ่มหลัก · ลิงก์ · แท็บที่เลือก | `--brand` | ต้องผ่าน 4.5:1 (ข้อ 5) · ไม่ผ่านให้ปรับเฉด แล้วจดใต้ **ตัดสินใจเอง** |
-| พื้นหน้า · พื้นการ์ด | `--bg` · `--surface` | การ์ดต่างจากพื้น 2–4% (ข้อ 4) |
-| เส้น | `--line` · `--line-strong` | เส้นอ่อนกว่าที่คิด |
-| มุมโค้ง | `--radius` · `--radius-sm` · `--radius-pill` | 2–3 ค่า · ของข้างในโค้งน้อยกว่าข้างนอก |
-| ระยะห่าง | สเกล 4 8 12 16 24 32 48 64 (ข้อ 1) | ค่านอกสเกลปัดเข้าค่าที่ใกล้สุด แล้วจด |
-| ขนาดตัวอักษร | 5 ขนาด (ข้อ 2) | ไฟล์มีเกิน 5 ขนาด → รวบ |
-| ฟอนต์ | `--font` | ฟอนต์ที่ไม่มีอักษรไทยต้องต่อท้ายด้วย `Noto Sans Thai` |
-| เงา | `--shadow` · `--shadow-lg` | ใช้กับของที่ลอยจริง · การ์ดนิ่งไม่มีเงา ยกเว้น look ที่ภาษาความลึกกำหนด (soft SaaS บนหน้า landing) |
-| สีกราฟ · pill สถานะ | ชุดสีข้อมูลและ pill ใน `tokens.md` | สีบอกสถานะต้องมีไอคอนหรือข้อความคู่ |
+| Primary button color · link · selected tab | `--brand` | must pass 4.5:1 (section 5) · if it fails, adjust the shade and note it under **ตัดสินใจเอง** (decided on my own) |
+| Page background · card background | `--bg` · `--surface` | card differs from the background by 2–4% (section 4) |
+| Lines | `--line` · `--line-strong` | lines are lighter than you think |
+| Corner radius | `--radius` · `--radius-sm` · `--radius-pill` | 2–3 values · inside items have a smaller radius than outside |
+| Spacing | the scale 4 8 12 16 24 32 48 64 (section 1) | round a value outside the scale to the nearest value, and note it |
+| Font size | 5 sizes (section 2) | file has more than 5 sizes → merge |
+| Font | `--font` | a font with no Thai letters must be followed by `Noto Sans Thai` |
+| Shadow | `--shadow` · `--shadow-lg` | use on things that really float · still cards get no shadow, except a look whose depth language says so (soft SaaS on a landing page) |
+| Chart colors · status pill | the data color set and pills in `tokens.md` | a color that signals status must be paired with an icon or text |
 
 ## 5 · component → mockup HTML
 
-- **mockup ก่อนเสมอ** (ข้อ 0): หน้าใหม่ = `<section>` ใหม่ในไฟล์ `mockup/<รหัส>-mockup.html` เดิม ไม่ใช่โปรเจกต์ React
-- โค้ดจาก `get_design_context` เป็นวัตถุดิบ เก็บโครง (ลำดับ · กลุ่ม · ข้อความ) ทิ้ง class ของ Tailwind แล้วใช้ class ที่ mockup มีอยู่ (ปุ่ม · การ์ด · ตาราง · pill)
-- component ที่ซ้ำ ทำเป็น class ครั้งเดียว ไม่คัดลอกโค้ดต่อ instance
-- ภาพจริงจาก Figma ดึงด้วย `download_assets` (remote เท่านั้น) · ไอคอนใช้ชุดของแพลตฟอร์ม
-- ข้อความตัวอย่าง: ของ Figma สมจริงก็ใช้ · เป็น Lorem หรือ "Text" ให้แทนด้วยข้อมูลจริงตามข้อ 0.1
-- 5 สถานะ (ข้อ 6): สถานะที่ Figma ไม่มี ให้วาดเพิ่มเอง แล้วจดว่า "ไม่มีใน Figma" ในกล่องควบคุมของ mockup
-- ลูกค้าผูก component กับโค้ดจริงด้วย Code Connect อยู่แล้ว → `get_code_connect_map` บอกว่า component ไหนคู่กับโค้ดตัวไหน ใช้ตอนเขียนโค้ดจริง ไม่ใช่ตอนทำ mockup
+- **Mockup first, always** (section 0): a new page = a new `<section>` in the existing `mockup/<code>-mockup.html` file, not a React project
+- The code from `get_design_context` is raw material; keep the structure (order · groups · text), drop the Tailwind classes, and use the classes the mockup already has (button · card · table · pill)
+- A repeated component becomes a class once; do not copy the code per instance
+- Real images from Figma are pulled with `download_assets` (remote only) · icons use the platform's set
+- Sample text: if Figma's is realistic, use it · if it is Lorem or "Text", replace it with real data per section 0.1
+- The 5 states (section 6): a state Figma does not have, draw yourself, then note "not in Figma" in the mockup's control box
+- The customer already ties components to real code with Code Connect → `get_code_connect_map` says which component pairs with which code; use it when writing real code, not when making a mockup
 
-## 6 · ตรวจด้วยตาหลังแปลง
+## 6 · Visual check after conversion
 
-| ตรวจ | วิธี |
+| Check | How |
 |---|---|
-| ภาพรวมตรงกับ Figma | ถ่าย mockup ที่ความกว้างเท่า frame วางเคียงภาพจาก `get_screenshot` |
-| ฟอนต์ไทย | เบราว์เซอร์อาจใช้ฟอนต์สำรองแทนฟอนต์ใน Figma → ดูสระและวรรณยุกต์ลอย ตัดบรรทัดผิด |
-| ข้อความยาว | ใส่ข้อความไทยที่ยาวที่สุดของจริง ดูว่าไม่ล้นปุ่มและหัวตาราง |
-| ย่อจอ | auto layout ใน Figma ไม่ใช่ responsive ของเรา → ย่อจอ 3 ขนาด |
-| contrast · ปุ่มทึบ 1 ปุ่ม · ระยะในสเกล | เช็กลิสต์ข้อ 9 |
-| ด่านสวย | ข้อ 9 · ใช้ภาพ Figma เป็นภาพแอปอ้างอิงขนาดเดียวกัน |
+| Overall matches Figma | Screenshot the mockup at the same width as the frame and place it beside the image from `get_screenshot` |
+| Thai fonts | The browser may use a fallback font in place of the Figma font → look for floating vowels and tone marks and wrong line breaks |
+| Long text | Put in the longest real Thai text and see that it does not overflow buttons and table headings |
+| Shrink the window | Figma's auto layout is not our responsive design → shrink to 3 sizes |
+| contrast · 1 solid button · spacing in scale | The section 9 checklist |
+| Beauty gate (`ด่านสวย`) | Section 9 · use the Figma image as the reference app image at the same size |
 
-## 7 · ข้อห้าม
+## 7 · Prohibitions
 
-- ส่งโค้ด React + Tailwind จาก MCP เป็น mockup ตรง ๆ
-- ค่าสีหรือระยะดิบจาก Figma ในคอมโพเนนต์
-- ดึง frame ทั้งหน้าขนาดใหญ่ในครั้งเดียว
-- ทำทั้งระบบด้วยที่นั่ง View หรือ Collab แล้วโควตาหมดกลางทาง
-- ใส่รหัสผ่านหรือ token ของ Figma ลง repo (การเชื่อมต่อใช้การเข้าสู่ระบบผ่านเบราว์เซอร์)
+- Sending the React + Tailwind code from MCP straight as the mockup
+- Raw color or spacing values from Figma in components
+- Pulling a whole large frame in one go
+- Doing the whole system with a View or Collab seat, then running out of quota midway
+- Putting a Figma password or token into the repo (the connection uses a browser login)
 
-## ที่มา
+## Sources
 
-| เรื่อง | URL (เปิดตรวจ 2026-10-23) |
+| Topic | URL (opened and checked 2026-10-23) |
 |---|---|
-| ชื่อ · remote กับ desktop · แผนที่ใช้ได้ | https://developers.figma.com/docs/figma-mcp-server/ · https://help.figma.com/hc/en-us/articles/32132100833559-Guide-to-the-Figma-MCP-server |
-| ต่อ Claude Code แบบ remote | https://developers.figma.com/docs/figma-mcp-server/remote-server-installation/ |
+| Name · remote vs desktop · plans that can use it | https://developers.figma.com/docs/figma-mcp-server/ · https://help.figma.com/hc/en-us/articles/32132100833559-Guide-to-the-Figma-MCP-server |
+| Connect to Claude Code, remote | https://developers.figma.com/docs/figma-mcp-server/remote-server-installation/ |
 | desktop server | https://developers.figma.com/docs/figma-mcp-server/local-server-installation/ |
-| โควตา | https://developers.figma.com/docs/figma-mcp-server/rate-limits-access/ |
-| รายชื่อเครื่องมือ · ค่าตั้งต้น React + Tailwind | https://developers.figma.com/docs/figma-mcp-server/tools-and-prompts/ |
-| frame ใหญ่ · agent เลือกเครื่องมือผิด · จัดไฟล์ให้ได้ผลดี | https://developers.figma.com/docs/figma-mcp-server/avoid-large-frames/ · .../variables-vs-code/ · .../structure-figma-file/ |
+| Quota | https://developers.figma.com/docs/figma-mcp-server/rate-limits-access/ |
+| Tool list · React + Tailwind default | https://developers.figma.com/docs/figma-mcp-server/tools-and-prompts/ |
+| Large frames · agent picks the wrong tool · organizing the file for good results | https://developers.figma.com/docs/figma-mcp-server/avoid-large-frames/ · .../variables-vs-code/ · .../structure-figma-file/ |
 | Variables REST API (Enterprise) | https://developers.figma.com/docs/rest-api/variables/ |

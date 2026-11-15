@@ -1,51 +1,53 @@
-# ตารางสีของธีมเอกสาร
+# Document theme color table
 
-ไฟล์นี้บอกว่าส่วนไหนของเอกสารใครเป็นคนคุมสี และค่าสีตั้งต้นประจำบ้านคืออะไร ใช้ตอนต้องใส่สีจริงลงรูป ไฟล์ .docx หรือสไลด์
+This file says who controls the color of each part of a document, and what the house default colors are. Use it when you must put real colors into a figure, a .docx file or slides.
 
-## ประกาศธีม — ตัดสินใจครั้งเดียว ใช้ทุกที่ในเอกสารนั้น
+## Declare the theme — decide once, use everywhere in that document
 
-เอกสาร 1 ฉบับผ่านหลาย skill: markdown (`polished-document-style`) · รูปจาก `diagram-figures` ·
-ไฟล์ .docx จาก `branded-document-design` · สไลด์จาก `presentation-design` (ทั้งสามอยู่ใน plugin `software-development`)
-ถ้าแต่ละตัวเลือกสีเอง ผู้อ่านจะได้เอกสารที่รูปสีหนึ่ง หัวข้อสีหนึ่ง และสไลด์อีกสีหนึ่ง
+One document passes through several skills: markdown (`polished-document-style`) · figures from `diagram-figures` ·
+.docx files from `branded-document-design` · slides from `presentation-design` (all three are in plugin `software-development`).
+If each one picks its own color, the reader gets a document with figures in one color, headings in another, and slides in a third.
 
-**markdown เป็นต้นฉบับหลัก (source of truth) จึงประกาศธีมไว้ที่นี่** — ใส่ไว้ท้ายส่วนหัวของเอกสารหรือในไฟล์ข้างกัน:
+**Markdown is the main source (source of truth), so the theme is declared here** — put it at the end of the document header or in a file beside it:
 
 ```markdown
 <!-- doc-theme: accent=<สีหลัก> · ที่มา=<แบรนด์ลูกค้า / เสนอจากเนื้องาน> · ยืนยันเมื่อ=YYYY-MM-DD -->
 ```
 
-**สีหลักมาจากเนื้องาน ไม่ใช่จากค่าเริ่มต้นของเครื่องมือ**
-ถ้ามีสีแบรนด์อยู่แล้วให้ใช้สีนั้น ถ้ายังไม่มีให้ค้นต้นแบบตาม `design-references` (plugin `superuser`) ประเภท `document` แล้วถอดสีจากงานที่เลือก · ค้นสดไม่ได้จึงใช้ค่าตั้งต้นประจำบ้าน เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม และเสนอโทนที่เข้ากับเนื้องานไว้ในรายงาน
-(คลังสำรอง: ตารางจับคู่เนื้องานกับโทนสีอยู่ใน `colour-by-domain` ของ skill `diagram-figures` (plugin `software-development`))
+(Keys: `accent` = main color · `ที่มา` = source (client brand / proposed from the work's content) · `ยืนยันเมื่อ` = confirmed on.)
 
-markdown เองไม่มีสี จึงใช้คำกำกับและน้ำหนักตัวอักษรแทน ส่วนไดอะแกรม รูป ไฟล์ .docx และสไลด์อ่านค่าจาก `doc-theme` ถ้า `doc-theme` ยังไม่ประกาศ accent เฉพาะงาน ให้ใช้ค่าตั้งต้นประจำบ้าน ตารางทั้งสองอยู่ข้างล่าง
+**The main color comes from the work's content, not from a tool's default.**
+If a brand color already exists, use it. If not, search for references per `design-references` (plugin `superuser`) of type `document` and extract the color from the chosen work · if live search is not possible, use the house default, write `(รอยืนยัน)` (awaiting confirmation), carry on without stopping to ask, and propose a tone that fits the work's content in the report.
+(Backup: the table matching work content to color tones is in `colour-by-domain` of skill `diagram-figures` (plugin `software-development`).)
 
-**คำสถานะไม่ขึ้นกับธีม** — วิกฤต · ผ่าน ใช้คำเดิมทุกเอกสาร ส่วนสีของสถานะในรูป .docx และสไลด์อยู่ข้างล่าง
+Markdown itself has no color, so use labels and font weight instead. Diagrams, figures, .docx files and slides read the value from `doc-theme`. If `doc-theme` has not declared a work-specific accent, use the house default. Both tables are below.
 
-## ใครคุมสีส่วนไหน
+**Status words do not depend on the theme** — วิกฤต (critical) · ผ่าน (pass) use the same words in every document. Status colors in .docx files and slides are below.
 
-| ส่วนของเอกสาร | ใครคุมสี | อ่านค่าจาก |
+## Who controls the color of which part
+
+| Part of the document | Who controls the color | Read the value from |
 |---|---|---|
-| หัวข้อ ตาราง กล่องข้อความใน markdown | markdown ไม่มีสี ใช้คำกำกับตัวหนาและน้ำหนักตัวอักษรแทน | — |
-| ไดอะแกรม Mermaid | `diagram-figures` → `references/engine-mermaid.md` (README · PR: `software-diagrams` ข้อ 2 ใน plugin `software-development`) | `doc-theme` |
-| รูปที่เป็นไฟล์ภาพ | `diagram-figures` (plugin `software-development`) | `doc-theme` |
-| ไฟล์ .docx / .pdf ที่ส่งออก | `branded-document-design` (plugin `software-development`) ข้อ 0–1 | `doc-theme` |
-| สไลด์ | `presentation-design` (plugin `software-development`) | `doc-theme` |
+| Headings, tables, text boxes in markdown | Markdown has no color; use bold labels and font weight instead | — |
+| Mermaid diagrams | `diagram-figures` → `references/engine-mermaid.md` (README · PR: `software-diagrams` item 2 in plugin `software-development`) | `doc-theme` |
+| Figures that are image files | `diagram-figures` (plugin `software-development`) | `doc-theme` |
+| Exported .docx / .pdf files | `branded-document-design` (plugin `software-development`) items 0–1 | `doc-theme` |
+| Slides | `presentation-design` (plugin `software-development`) | `doc-theme` |
 
-## ค่าตั้งต้นประจำบ้าน (house default)
+## House default
 
-ถ้า `doc-theme` ยังไม่ประกาศ accent เฉพาะงาน ทุก skill ใช้ชุดนี้เป็นค่าตั้งต้น เพื่อให้รูป เอกสาร และสไลด์เป็นชุดสีเดียวกันตั้งแต่แรก ชุดนี้คือชุดเดียวกับ `presentation-design` และ `branded-document-design`:
+If `doc-theme` has not declared a work-specific accent, every skill uses this set as the default, so figures, documents and slides share one palette from the start. This is the same set as `presentation-design` and `branded-document-design`:
 
-| token | ค่า | ใช้กับ |
+| token | Value | Used for |
 |---|---|---|
-| brand | `#2A78D6` | สีหลัก · หัวข้อ · เส้น accent |
-| brand-deep | `#2A4C86` | หัวตาราง · H2 · ชื่อระบบ |
-| brand-2 | `#6A5CD6` | accent รอง (ม่วง) |
-| tint | `#EDF1FB` | พื้นหัวตาราง · พื้นกล่องเน้น |
-| ink / body | `#333B4A` / `#414957` | หัวข้อ / เนื้อความ |
-| muted / faint | `#7D8492` / `#A9AEB9` | คำบรรยาย / หมายเหตุ |
-| line | `#E4E7EE` | เส้นขอบ · เส้นเชื่อม |
-| exception | `#C77A11` | ทาง/โซนที่ไม่ใช่เส้นทางหลัก (ต่างจาก brand เสมอ) |
-| ฟอนต์ | Tahoma (เอกสาร/สไลด์) · Noto Sans Thai → Tahoma (ภาพ) | ทั้งไทยและอังกฤษ |
+| brand | `#2A78D6` | Main color · headings · accent lines |
+| brand-deep | `#2A4C86` | Table headers · H2 · system names |
+| brand-2 | `#6A5CD6` | Secondary accent (purple) |
+| tint | `#EDF1FB` | Table header background · highlight box background |
+| ink / body | `#333B4A` / `#414957` | Headings / body text |
+| muted / faint | `#7D8492` / `#A9AEB9` | Captions / notes |
+| line | `#E4E7EE` | Borders · connector lines |
+| exception | `#C77A11` | A path/zone that is not the main route (always different from brand) |
+| Font | Tahoma (documents/slides) · Noto Sans Thai → Tahoma (images) | Both Thai and English |
 
-เมื่อประกาศ accent เฉพาะงานแล้ว ให้ใช้ค่านั้นแทน brand ส่วนสีอื่นคำนวณจาก accent ตัวนั้น
+Once a work-specific accent is declared, use it in place of brand, and compute the other colors from that accent.

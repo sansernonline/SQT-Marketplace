@@ -1,17 +1,17 @@
-# playbook · complaint — ร้องเรียนตามขั้นบันได
+# playbook · complaint — complaining up the ladder
 
-ใช้เมื่อ: ร้านไม่แก้ ไม่ส่งของ หรือไม่ทำตามที่สัญญา · บริการแย่และอยากร้องเรียน
-skill หลัก: `refund-request` (จดหมายร้องเรียนอยู่ใน `references/complaint-letter.md` · ขอเงินคืนอยู่ในตัว skill)
+Use when: the shop does not fix the problem, does not ship, or does not do what it promised · bad service and the user wants to complain
+Main skill: `refund-request` (the complaint letter is in `references/complaint-letter.md` · the refund request is in the skill itself)
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน (Steps — copy into the todo exactly)
 
-1. เรียงเหตุการณ์เป็นไทม์ไลน์พร้อมวันที่ และทำรายการหลักฐาน ถ้าขาดชิ้นไหนให้บอกผู้ใช้ว่าต้องเก็บอะไร · ใคร: หัวหน้าทีม
-2. ระบุสิ่งที่ต้องการให้ชัด — ซ่อม · เปลี่ยน · คืนเงิน · ขอโทษ · ชดเชย ใช้คำตอบตอนเริ่ม ไม่มีให้เลือกตามความเสียหายแล้วติด `(รอยืนยัน)` · ใคร: หัวหน้าทีม
-3. วางขั้นบันไดตาม `refund-request` (`references/complaint-letter.md`) — ร้าน → แพลตฟอร์ม → หน่วยงานรับเรื่อง → ศาลคดีผู้บริโภค แล้วตรวจช่องทางและกรอบเวลาของแต่ละขั้นจากเว็บทางการ · ใคร: `consumer-advocate` ตัวใหม่
-4. ร่างจดหมายหรือข้อความของขั้นแรกเป็นภาษาไทยสุภาพ ชัด มีกำหนดวันตอบ · ใคร: `consumer-advocate` ตัวใหม่
-5. เตรียมร่างของขั้นถัดไปไว้ล่วงหน้า พร้อมเงื่อนไขว่าจะขึ้นขั้นเมื่อไร · ใคร: `consumer-advocate` ตัวใหม่
-6. ตรวจว่าทุกข้ออ้างชี้หลักฐานได้ วันที่ตรงกับไทม์ไลน์ และไม่มีถ้อยคำข่มขู่หรือหมิ่นประมาท · ใคร: `reviewer` ตัวใหม่
+1. Put the events in a timeline with dates, and make an evidence list. If a piece is missing, tell the user what to collect · ใคร: หัวหน้าทีม
+2. State clearly what is wanted — repair · replacement · refund · apology · compensation. Use the answer given at the start. If there is none, choose according to the damage and mark it `(รอยืนยัน)` (to be confirmed) · ใคร: หัวหน้าทีม
+3. Lay out the ladder following `refund-request` (`references/complaint-letter.md`) — shop → platform → the agency that takes complaints → consumer court. Then check the channel and time limit of each rung on official websites · ใคร: `consumer-advocate` ตัวใหม่
+4. Draft the letter or message for the first rung in polite, clear Thai, with a reply deadline · ใคร: `consumer-advocate` ตัวใหม่
+5. Prepare drafts for the next rungs in advance, with the condition for when to move up a rung · ใคร: `consumer-advocate` ตัวใหม่
+6. Check (ตรวจ) that every claim points to evidence, the dates match the timeline, and there are no threatening or defamatory words · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-ไทม์ไลน์ รายการหลักฐาน และร่างทุกขั้นพร้อมส่ง ส่วนการส่งจริงอยู่ใน "รออนุมัติ"
+The timeline, the evidence list and the drafts for every rung are ready to send. The actual sending goes under "รออนุมัติ" (awaiting approval).

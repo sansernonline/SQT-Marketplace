@@ -1,44 +1,44 @@
-# แอป Android (APK — Android Package)
+# Android apps (APK — Android Package)
 
-แนวคิดดัดแปลงจาก `android-applications.md` ของ REA (MIT · © 2026 morluto) เขียนใหม่ให้ใช้สคริปต์ในเครื่องและ jadx ที่ผู้ใช้ติดตั้งเอง · APK ไม่ถูกติดตั้งหรือรัน ไม่ต้องมี emulator
+Ideas adapted from REA's `android-applications.md` (MIT · © 2026 morluto), rewritten to use local scripts and a jadx the user installed. The APK is never installed or run, so no emulator is needed.
 
-## 1 · ดูภาพรวมก่อน
+## 1 · Get the overview first
 
 ```bash
-python -I scripts/apk_inventory.py <app.apk>                  # สรุป
-python -I scripts/apk_inventory.py <app.apk> --manifest-xml   # พร้อม manifest ที่ถอดแล้วทั้งไฟล์
+python -I scripts/apk_inventory.py <app.apk>                  # summary
+python -I scripts/apk_inventory.py <app.apk> --manifest-xml   # plus the full decoded manifest
 ```
 
-ได้: SHA-256 · ไฟล์ `.dex` · native lib แยกตาม ABI · assembly ของ .NET · framework ที่ใช้ (Flutter · React Native · Xamarin · Unity · Cordova) · มีลายเซ็น v1 (ไฟล์ใน `META-INF/`) หรือ v2/v3 (APK Signing Block) · package · versionName/versionCode · minSdk/targetSdk · permission · activity service receiver provider พร้อมค่า `exported` · ธง `debuggable` `allowBackup` `usesCleartextTraffic`
+It reports: SHA-256 · `.dex` files · native libs by ABI · .NET assemblies · framework used (Flutter · React Native · Xamarin · Unity · Cordova) · signature v1 (files in `META-INF/`) or v2/v3 (APK Signing Block) · package · versionName/versionCode · minSdk/targetSdk · permissions · activities, services, receivers, providers with their `exported` value · flags `debuggable` `allowBackup` `usesCleartextTraffic`
 
-- สคริปต์ถอด `AndroidManifest.xml` แบบ binary XML เองด้วย Python ล้วน ทดลองกับ APK จริงแล้วตรงกับ `aapt dump xmltree` · ถ้าถอดไม่ได้จะบอก `manifest decode failed` แล้วให้ใช้ `aapt2 dump xmltree <apk> --file AndroidManifest.xml` หรือ apktool
-- ไม่แสดงเนื้อใบรับรอง แสดงแค่ชื่อไฟล์และ SHA-256 ส่วนต้น · ดูผู้ลงนามใช้ `apksigner verify --print-certs <apk>` จาก Build-Tools
-- `.aab` (Android App Bundle) เก็บ manifest เป็น protobuf ใต้ `base/manifest/` สคริปต์ไม่ถอด ใช้ `bundletool` ของ Google
+- The script decodes the binary-XML `AndroidManifest.xml` itself in pure Python. Tested on real APKs, it matches `aapt dump xmltree`. If decoding fails it prints `manifest decode failed`; then use `aapt2 dump xmltree <apk> --file AndroidManifest.xml` or apktool.
+- It does not show certificate contents, only file names and the first part of the SHA-256. To see the signer, use `apksigner verify --print-certs <apk>` from Build-Tools.
+- `.aab` (Android App Bundle) keeps its manifest as protobuf under `base/manifest/`. The script does not decode it; use Google's `bundletool`.
 
-## 2 · เลือกทางต่อจาก framework
+## 2 · Pick the next step by framework
 
-| framework | โค้ดอยู่ที่ | เครื่องมือ |
+| framework | where the code is | tool |
 |---|---|---|
-| Java · Kotlin | `classes*.dex` | jadx: `jadx -d _to_delete/re/<ชื่อ>/jadx <apk>` |
-| Xamarin · .NET for Android | `assemblies/*.dll` | `ilspycmd` (ดู [native-binaries](native-binaries.md#2--net)) |
-| Flutter | `lib/<abi>/libapp.so` (Dart ที่ compile แล้ว) | ยาก · ได้แค่ strings และ symbol · `pe_elf_info.py` กับ `libapp.so` |
-| React Native | `assets/index.android.bundle` | JavaScript หรือ Hermes bytecode · JS ใช้ [javascript-electron](javascript-electron.md) |
-| Cordova · Capacitor | `assets/www/` หรือ `assets/public/` | เว็บธรรมดา |
-| native lib อื่น | `lib/<abi>/*.so` | `pe_elf_info.py` แล้ว Ghidra |
+| Java · Kotlin | `classes*.dex` | jadx: `jadx -d _to_delete/re/<name>/jadx <apk>` |
+| Xamarin · .NET for Android | `assemblies/*.dll` | `ilspycmd` (see [native-binaries](native-binaries.md#2--net)) |
+| Flutter | `lib/<abi>/libapp.so` (compiled Dart) | hard · only strings and symbols · `pe_elf_info.py` on `libapp.so` |
+| React Native | `assets/index.android.bundle` | JavaScript or Hermes bytecode · for JS use [javascript-electron](javascript-electron.md) |
+| Cordova · Capacitor | `assets/www/` or `assets/public/` | plain web files |
+| other native libs | `lib/<abi>/*.so` | `pe_elf_info.py`, then Ghidra |
 
-## 3 · อ่านโค้ดที่ jadx ถอดได้
+## 3 · Read the code jadx decompiled
 
-- เริ่มจาก component ที่ `exported=true` ใน manifest เพราะแอปอื่นเรียกได้
-- ค้นด้วย string ที่เห็นในหน้าจอ · URL · ชื่อ permission แล้วไล่ว่าใครเรียก (jadx GUI มี "Find usage" · แบบ command line ใช้ `grep` ในโฟลเดอร์ผล)
-- method ชื่อซ้ำ (overload) ให้ระบุ signature เต็ม ไม่เดาว่าเป็นตัวไหน
-- ตัวเลือกของ jadx ที่ใช้บ่อย: ชื่อถูกทำให้อ่านยาก (`a.b.c`) ใช้ `--deobf` · เอาแค่โค้ดใช้ `--no-res` · method ที่ถอดไม่ครบแต่อยากเห็นใช้ `--show-bad-code` · ถอดไม่ผ่านใช้ `-m fallback` ได้โค้ดที่ใกล้ bytecode (ตรวจจาก README ของ jadx 2026-10-23)
-- jadx ถอดไม่ได้ทุก method · method ที่มีคอมเมนต์ error กำกับห้ามใช้เป็นหลักฐานพฤติกรรม · ชื่อที่ได้จาก `--deobf` เป็นชื่อที่ jadx ตั้งให้ ไม่ใช่ชื่อเดิมของผู้พัฒนา
-- manifest และโค้ดที่ถอดได้เป็น `จากแหล่ง` ไม่ใช่การรันจริง · reflection · โค้ดที่โหลดตอนรัน และการเรียกที่หาไม่เจอ เป็นสิ่งที่ยังไม่รู้
+- Start from components with `exported=true` in the manifest, because other apps can call them.
+- Search by strings seen on screen · URLs · permission names, then trace who calls them (jadx GUI has "Find usage"; on the command line use `grep` in the output folder).
+- For overloaded methods, give the full signature. Do not guess which one it is.
+- Common jadx options: names obfuscated (`a.b.c`) → `--deobf` · code only → `--no-res` · methods not fully decompiled but you want to see them → `--show-bad-code` · decompile fails → `-m fallback` gives code close to bytecode (checked against the jadx README 2026-10-23).
+- jadx cannot decompile every method. A method marked with an error comment must not be used as evidence of behavior. A name from `--deobf` is a name jadx assigned, not the developer's original.
+- The manifest and decompiled code are `จากแหล่ง` (from a source), not a real run. Reflection · code loaded at runtime · calls that cannot be found are unknowns.
 
-## 4 · อุปกรณ์จริงหรือ emulator
+## 4 · Real device or emulator
 
-ทุกคำสั่ง adb (Android Debug Bridge) ที่ติดตั้ง ลบ ส่งไฟล์ เปิดปิดแอป หรืออ่าน log และไฟล์จากเครื่อง ต้องถามผู้ใช้ทุกครั้ง · ใช้ emulator ที่สร้างไว้สำหรับงานนี้ ไม่ใช้โทรศัพท์ส่วนตัว → [runtime-observation](runtime-observation.md)
+Ask the user every time before any adb (Android Debug Bridge) command that installs, removes, pushes files, starts or stops an app, or reads logs and files from the device. Use an emulator created for this job, not a personal phone → [runtime-observation](runtime-observation.md)
 
-- ตอนถาม ให้บอกชื่ออุปกรณ์ (serial จาก `adb devices`) และคำสั่งเต็มที่จะรัน · ทุกคำสั่งใส่ `-s <serial>` ห้ามแตะอุปกรณ์อื่นที่ต่ออยู่
-- จดทุกอย่างที่เปลี่ยนบนอุปกรณ์ (แอปที่ติดตั้ง · ไฟล์ที่ส่ง · ค่าที่ตั้ง) แล้วคืนค่าเมื่อจบ
-- ตรวจว่ามี jadx · apktool · adb ไหมด้วย `node scripts/check-tools.mjs --target android` · ถ้าไม่ได้ตั้ง `ANDROID_HOME` ตัวตรวจอาจหา adb ไม่เจอทั้งที่ติดตั้งแล้ว
+- When asking, give the device name (the serial from `adb devices`) and the full command to be run. Put `-s <serial>` on every command. Never touch any other connected device.
+- Record everything changed on the device (installed apps · pushed files · settings) and restore it at the end.
+- Check whether jadx · apktool · adb exist with `node scripts/check-tools.mjs --target android`. If `ANDROID_HOME` is not set, the checker may fail to find adb even though it is installed.

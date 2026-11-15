@@ -320,67 +320,67 @@ decoder หรือ parser ที่เขียนใหม่ต้องเ�
 
 ## reference: android-apk.md
 
-# แอป Android (APK — Android Package)
+# Android apps (APK — Android Package)
 
-แนวคิดดัดแปลงจาก `android-applications.md` ของ REA (MIT · © 2026 morluto) เขียนใหม่ให้ใช้สคริปต์ในเครื่องและ jadx ที่ผู้ใช้ติดตั้งเอง · APK ไม่ถูกติดตั้งหรือรัน ไม่ต้องมี emulator
+Ideas adapted from REA's `android-applications.md` (MIT · © 2026 morluto), rewritten to use local scripts and a jadx the user installed. The APK is never installed or run, so no emulator is needed.
 
-## 1 · ดูภาพรวมก่อน
+## 1 · Get the overview first
 
 ```bash
-python -I scripts/apk_inventory.py <app.apk>                  # สรุป
-python -I scripts/apk_inventory.py <app.apk> --manifest-xml   # พร้อม manifest ที่ถอดแล้วทั้งไฟล์
+python -I scripts/apk_inventory.py <app.apk>                  # summary
+python -I scripts/apk_inventory.py <app.apk> --manifest-xml   # plus the full decoded manifest
 ```
 
-ได้: SHA-256 · ไฟล์ `.dex` · native lib แยกตาม ABI · assembly ของ .NET · framework ที่ใช้ (Flutter · React Native · Xamarin · Unity · Cordova) · มีลายเซ็น v1 (ไฟล์ใน `META-INF/`) หรือ v2/v3 (APK Signing Block) · package · versionName/versionCode · minSdk/targetSdk · permission · activity service receiver provider พร้อมค่า `exported` · ธง `debuggable` `allowBackup` `usesCleartextTraffic`
+It reports: SHA-256 · `.dex` files · native libs by ABI · .NET assemblies · framework used (Flutter · React Native · Xamarin · Unity · Cordova) · signature v1 (files in `META-INF/`) or v2/v3 (APK Signing Block) · package · versionName/versionCode · minSdk/targetSdk · permissions · activities, services, receivers, providers with their `exported` value · flags `debuggable` `allowBackup` `usesCleartextTraffic`
 
-- สคริปต์ถอด `AndroidManifest.xml` แบบ binary XML เองด้วย Python ล้วน ทดลองกับ APK จริงแล้วตรงกับ `aapt dump xmltree` · ถ้าถอดไม่ได้จะบอก `manifest decode failed` แล้วให้ใช้ `aapt2 dump xmltree <apk> --file AndroidManifest.xml` หรือ apktool
-- ไม่แสดงเนื้อใบรับรอง แสดงแค่ชื่อไฟล์และ SHA-256 ส่วนต้น · ดูผู้ลงนามใช้ `apksigner verify --print-certs <apk>` จาก Build-Tools
-- `.aab` (Android App Bundle) เก็บ manifest เป็น protobuf ใต้ `base/manifest/` สคริปต์ไม่ถอด ใช้ `bundletool` ของ Google
+- The script decodes the binary-XML `AndroidManifest.xml` itself in pure Python. Tested on real APKs, it matches `aapt dump xmltree`. If decoding fails it prints `manifest decode failed`; then use `aapt2 dump xmltree <apk> --file AndroidManifest.xml` or apktool.
+- It does not show certificate contents, only file names and the first part of the SHA-256. To see the signer, use `apksigner verify --print-certs <apk>` from Build-Tools.
+- `.aab` (Android App Bundle) keeps its manifest as protobuf under `base/manifest/`. The script does not decode it; use Google's `bundletool`.
 
-## 2 · เลือกทางต่อจาก framework
+## 2 · Pick the next step by framework
 
-| framework | โค้ดอยู่ที่ | เครื่องมือ |
+| framework | where the code is | tool |
 |---|---|---|
-| Java · Kotlin | `classes*.dex` | jadx: `jadx -d _to_delete/re/<ชื่อ>/jadx <apk>` |
-| Xamarin · .NET for Android | `assemblies/*.dll` | `ilspycmd` (ดู [native-binaries](native-binaries.md#2--net)) |
-| Flutter | `lib/<abi>/libapp.so` (Dart ที่ compile แล้ว) | ยาก · ได้แค่ strings และ symbol · `pe_elf_info.py` กับ `libapp.so` |
-| React Native | `assets/index.android.bundle` | JavaScript หรือ Hermes bytecode · JS ใช้ [javascript-electron](javascript-electron.md) |
-| Cordova · Capacitor | `assets/www/` หรือ `assets/public/` | เว็บธรรมดา |
-| native lib อื่น | `lib/<abi>/*.so` | `pe_elf_info.py` แล้ว Ghidra |
+| Java · Kotlin | `classes*.dex` | jadx: `jadx -d _to_delete/re/<name>/jadx <apk>` |
+| Xamarin · .NET for Android | `assemblies/*.dll` | `ilspycmd` (see [native-binaries](native-binaries.md#2--net)) |
+| Flutter | `lib/<abi>/libapp.so` (compiled Dart) | hard · only strings and symbols · `pe_elf_info.py` on `libapp.so` |
+| React Native | `assets/index.android.bundle` | JavaScript or Hermes bytecode · for JS use [javascript-electron](javascript-electron.md) |
+| Cordova · Capacitor | `assets/www/` or `assets/public/` | plain web files |
+| other native libs | `lib/<abi>/*.so` | `pe_elf_info.py`, then Ghidra |
 
-## 3 · อ่านโค้ดที่ jadx ถอดได้
+## 3 · Read the code jadx decompiled
 
-- เริ่มจาก component ที่ `exported=true` ใน manifest เพราะแอปอื่นเรียกได้
-- ค้นด้วย string ที่เห็นในหน้าจอ · URL · ชื่อ permission แล้วไล่ว่าใครเรียก (jadx GUI มี "Find usage" · แบบ command line ใช้ `grep` ในโฟลเดอร์ผล)
-- method ชื่อซ้ำ (overload) ให้ระบุ signature เต็ม ไม่เดาว่าเป็นตัวไหน
-- ตัวเลือกของ jadx ที่ใช้บ่อย: ชื่อถูกทำให้อ่านยาก (`a.b.c`) ใช้ `--deobf` · เอาแค่โค้ดใช้ `--no-res` · method ที่ถอดไม่ครบแต่อยากเห็นใช้ `--show-bad-code` · ถอดไม่ผ่านใช้ `-m fallback` ได้โค้ดที่ใกล้ bytecode (ตรวจจาก README ของ jadx 2026-10-23)
-- jadx ถอดไม่ได้ทุก method · method ที่มีคอมเมนต์ error กำกับห้ามใช้เป็นหลักฐานพฤติกรรม · ชื่อที่ได้จาก `--deobf` เป็นชื่อที่ jadx ตั้งให้ ไม่ใช่ชื่อเดิมของผู้พัฒนา
-- manifest และโค้ดที่ถอดได้เป็น `จากแหล่ง` ไม่ใช่การรันจริง · reflection · โค้ดที่โหลดตอนรัน และการเรียกที่หาไม่เจอ เป็นสิ่งที่ยังไม่รู้
+- Start from components with `exported=true` in the manifest, because other apps can call them.
+- Search by strings seen on screen · URLs · permission names, then trace who calls them (jadx GUI has "Find usage"; on the command line use `grep` in the output folder).
+- For overloaded methods, give the full signature. Do not guess which one it is.
+- Common jadx options: names obfuscated (`a.b.c`) → `--deobf` · code only → `--no-res` · methods not fully decompiled but you want to see them → `--show-bad-code` · decompile fails → `-m fallback` gives code close to bytecode (checked against the jadx README 2026-10-23).
+- jadx cannot decompile every method. A method marked with an error comment must not be used as evidence of behavior. A name from `--deobf` is a name jadx assigned, not the developer's original.
+- The manifest and decompiled code are `จากแหล่ง` (from a source), not a real run. Reflection · code loaded at runtime · calls that cannot be found are unknowns.
 
-## 4 · อุปกรณ์จริงหรือ emulator
+## 4 · Real device or emulator
 
-ทุกคำสั่ง adb (Android Debug Bridge) ที่ติดตั้ง ลบ ส่งไฟล์ เปิดปิดแอป หรืออ่าน log และไฟล์จากเครื่อง ต้องถามผู้ใช้ทุกครั้ง · ใช้ emulator ที่สร้างไว้สำหรับงานนี้ ไม่ใช้โทรศัพท์ส่วนตัว → [runtime-observation](runtime-observation.md)
+Ask the user every time before any adb (Android Debug Bridge) command that installs, removes, pushes files, starts or stops an app, or reads logs and files from the device. Use an emulator created for this job, not a personal phone → [runtime-observation](runtime-observation.md)
 
-- ตอนถาม ให้บอกชื่ออุปกรณ์ (serial จาก `adb devices`) และคำสั่งเต็มที่จะรัน · ทุกคำสั่งใส่ `-s <serial>` ห้ามแตะอุปกรณ์อื่นที่ต่ออยู่
-- จดทุกอย่างที่เปลี่ยนบนอุปกรณ์ (แอปที่ติดตั้ง · ไฟล์ที่ส่ง · ค่าที่ตั้ง) แล้วคืนค่าเมื่อจบ
-- ตรวจว่ามี jadx · apktool · adb ไหมด้วย `node scripts/check-tools.mjs --target android` · ถ้าไม่ได้ตั้ง `ANDROID_HOME` ตัวตรวจอาจหา adb ไม่เจอทั้งที่ติดตั้งแล้ว
+- When asking, give the device name (the serial from `adb devices`) and the full command to be run. Put `-s <serial>` on every command. Never touch any other connected device.
+- Record everything changed on the device (installed apps · pushed files · settings) and restore it at the end.
+- Check whether jadx · apktool · adb exist with `node scripts/check-tools.mjs --target android`. If `ANDROID_HOME` is not set, the checker may fail to find adb even though it is installed.
 
 
 ## reference: evidence-ledger.md
 
-# สมุดหลักฐาน · การเทียบ · งานใหญ่หลายคำถาม
+# Evidence ledger · comparison · large multi-question jobs
 
-แนวคิดดัดแปลงจาก `evidence-workflows.md` ของ REA (MIT · © 2026 morluto) เขียนใหม่ให้ใช้ไฟล์ markdown และสคริปต์ในเครื่องแทน tool ของ REA
+Ideas adapted from REA's `evidence-workflows.md` (MIT · © 2026 morluto), rewritten to use markdown files and local scripts instead of REA's tools.
 
-| หัวข้อ | |
+| Section | |
 |---|---|
-| [1 · บันทึกสิทธิ์](#1--บันทึกสิทธิ์) | [2 · สมุดหลักฐาน](#2--สมุดหลักฐาน) |
-| [3 · สิ่งที่ยังไม่รู้](#3--สิ่งที่ยังไม่รู้) | [4 · เทียบ 2 รุ่นหรือ 2 ไฟล์](#4--เทียบ-2-รุ่นหรือ-2-ไฟล์) |
-| [5 · งานใหญ่หลายคำถาม](#5--งานใหญ่หลายคำถาม) | [6 · ตรวจของที่สร้างใหม่](#6--ตรวจของที่สร้างใหม่) |
+| [1 · Authorization record](#1--authorization-record) | [2 · Evidence ledger](#2--evidence-ledger) |
+| [3 · Unknowns](#3--unknowns) | [4 · เทียบ 2 รุ่นหรือ 2 ไฟล์](#4--เทียบ-2-รุ่นหรือ-2-ไฟล์) |
+| [5 · Large multi-question jobs](#5--large-multi-question-jobs) | [6 · Check what was rebuilt](#6--check-what-was-rebuilt) |
 
-## 1 · บันทึกสิทธิ์
+## 1 · Authorization record
 
-ไฟล์เดียวต่อเป้าหมาย: `_to_delete/re/<ชื่อเป้าหมาย>/ledger.md` · ส่วนบนเขียนก่อนเปิดไฟล์เป้าหมาย
+One file per target: `_to_delete/re/<ชื่อเป้าหมาย>/ledger.md` · write the top part before opening the target file.
 
 ```markdown
 # <ชื่อเป้าหมาย>
@@ -396,11 +396,11 @@ python -I scripts/apk_inventory.py <app.apk> --manifest-xml   # พร้อม 
 | การรันที่ถูกปฏิเสธ | <คำสั่ง · input> — ห้ามขอซ้ำด้วย input เดิม |
 ```
 
-ขอบเขตเปลี่ยน (ไฟล์ใหม่ · ขอรันเป้าหมาย · อุปกรณ์จริง) ให้ถามผู้ใช้แล้วเพิ่มแถวใหม่ ไม่แก้แถวเดิม
+When the scope changes (new file · asking to run the target · real device), ask the user and add a new row. Do not edit the old row.
 
-## 2 · สมุดหลักฐาน
+## 2 · Evidence ledger
 
-ตารางหลักฐาน 1 แถวต่อ 1 สิ่งที่เห็น · ผลยาวเก็บเป็นไฟล์ข้าง ๆ แล้วชี้ไป
+The evidence table has 1 row per thing seen · keep long output in a side file and point to it.
 
 ```markdown
 ## หลักฐาน
@@ -416,12 +416,12 @@ python -I scripts/apk_inventory.py <app.apk> --manifest-xml   # พร้อม 
 | 2 | ข้อมูลที่ส่งคือรายการสินค้า | E2 + ข้อ 1 + E5 | อนุมาน (จากข้อ 1 และ E5) |
 ```
 
-- ป้าย 4 แบบดูหัวข้อ 6 ของ SKILL.md · `อนุมาน` ชี้ข้อที่เป็นฐานเสมอ
-- pseudocode และโค้ดที่แกะได้เป็นหลักฐาน ไม่ใช่ซอร์สต้นฉบับ
-- สคริปต์ที่จำกัดจำนวนบรรทัด (`--limit`) แปลว่าดูไม่ครบ ให้จดว่าดูกี่รายการจากทั้งหมดเท่าไร
-- เครื่องมือขาด หรืออ่านไฟล์ไม่ได้ (`decode failed` · `unreadable`) = `ยังไม่ได้ตรวจ` ไม่ใช่ "ไม่มี"
+- The 4 labels are in section 6 of SKILL.md · `อนุมาน` (inferred) always points to the items it rests on.
+- Pseudocode and recovered code are evidence, not the original source.
+- A script that limits line count (`--limit`) means the view is incomplete. Note how many items were seen out of the total.
+- A missing tool or an unreadable file (`decode failed` · `unreadable`) = `ยังไม่ได้ตรวจ` (not yet checked), not "none".
 
-## 3 · สิ่งที่ยังไม่รู้
+## 3 · Unknowns
 
 ```markdown
 ## สิ่งที่ยังไม่รู้
@@ -430,84 +430,84 @@ python -I scripts/apk_inventory.py <app.apk> --manifest-xml   # พร้อม 
 | U1 | ค่า % 7 ใน checksum มาจากไหน | E7 | ตัวอย่างไฟล์อีก 3 ชุด หรือรันใน sandbox | เปิด |
 ```
 
-- จดทุกค่าคงที่หรือการออกแบบที่เห็นแต่อธิบายไม่ได้ (เลขแปลก · version field ที่เห็นค่าเดียว)
-- ปิดข้อได้ด้วยหลักฐานที่เห็นจริงเท่านั้น ไม่ปิดเพราะเดาได้
+- Record every constant or design choice that is seen but cannot be explained (odd numbers · a version field with only one value seen).
+- Close an item only with evidence actually seen, never because it can be guessed.
 
 ## 4 · เทียบ 2 รุ่นหรือ 2 ไฟล์
 
-ต้องดูครบทั้ง 2 ฝั่งก่อนจะบอกว่า "เหมือน" "เพิ่ม" หรือ "หาย" ไม่งั้นเป็นสิ่งที่ยังไม่รู้
+Look at both sides completely before saying "same", "added" or "missing". Otherwise it is an unknown.
 
-| เทียบอะไร | ทำอย่างไร | ระวัง |
+| What to compare | How | Watch out |
 |---|---|---|
-| รายการไฟล์ใน archive (ASAR · APK · ZIP) | รัน `asar_extract.py list` หรือ `apk_inventory.py` ทั้ง 2 รุ่นลงไฟล์ แล้ว `diff` | ชื่อเหมือน เนื้อต่างได้ ให้เทียบ SHA-256 |
-| import · export ของ binary | `pe_elf_info.py --json` ทั้ง 2 ไฟล์แล้วเทียบ | ต่างแบบ static เป็นผู้ต้องสงสัย ยังไม่ใช่ต้นเหตุ |
-| method ของ .NET หรือ Java | `compare_members.py` | เทียบชื่อ ไม่ได้เทียบเนื้อ ต้อง diff ต่อ |
-| JavaScript ที่ถูกย่อ | จับคู่ด้วย digest หรือ source map | เลขลำดับ module และชื่อที่ถูกย่อไม่ใช่ตัวตน |
-| static กับ runtime | วางคู่กันในสมุดหลักฐาน | ตรงกันเป็นสมมติฐาน ยังไม่ใช่เหตุและผล |
+| File list in an archive (ASAR · APK · ZIP) | Run `asar_extract.py list` or `apk_inventory.py` on both versions into files, then `diff` | Same name can have different content; compare SHA-256 |
+| Imports · exports of a binary | `pe_elf_info.py --json` on both files, then compare | A static difference is a suspect, not yet the cause |
+| .NET or Java methods | `compare_members.py` | Compares names, not bodies; diff further |
+| Minified JavaScript | Match by digest or source map | Module index numbers and minified names are not identity |
+| static vs runtime | Put side by side in the ledger | A match is a hypothesis, not yet cause and effect |
 
-## 5 · งานใหญ่หลายคำถาม
+## 5 · Large multi-question jobs
 
-1. แตกคำขอเป็นรายการคำถาม พร้อมหลักฐานที่แต่ละข้อต้องใช้
-2. ดูสมุดหลักฐานที่มีอยู่ก่อน ใช้ซ้ำได้ก็ใช้ ไม่แกะซ้ำ
-3. เริ่มจากภาพรวมเล็กที่สุด แล้วไล่ทีละคำถาม: จุดเข้า → ข้อมูลและสถานะที่เปลี่ยน → ผล
-4. อ่าน resource และ config ด้วย parser ของรูปแบบนั้น ไม่เดาจากชื่อไฟล์
-5. ยืนยันด้วยหลักฐานชนิดที่ข้อสรุปต้องใช้ · runtime เฉพาะเมื่อ static ตอบไม่ได้จริงและได้อนุญาตแล้ว
-6. คำถามที่ไม่ขึ้นต่อกันแบ่งให้ subagent ได้ (`superuser` จัดทีม) · บอกขอบเขต เลขหลักฐานที่มี และให้ส่งกลับ ข้อสรุป · หลักฐาน · ช่องว่าง
-7. ก่อนจบ ติดป้ายทุกคำถามว่า ตอบแล้ว · ตอบบางส่วน · ยังไม่ได้คำตอบ
+1. Break the request into a list of questions, with the evidence each one needs.
+2. Check existing ledgers first. Reuse them if possible; do not extract again.
+3. Start from the smallest overview, then go question by question: entry point → data and state changes → result.
+4. Read resources and config with the parser for that format. Do not guess from file names.
+5. Confirm with the kind of evidence the conclusion needs · runtime only when static truly cannot answer and permission was given.
+6. Independent questions can be split among subagents (`superuser` team setup). Give the scope and the evidence numbers already held, and ask them to return: conclusion · evidence · gaps.
+7. Before finishing, label every question: answered · partly answered · not answered.
 
-## 6 · ตรวจของที่สร้างใหม่
+## 6 · Check what was rebuilt
 
-- เขียนพฤติกรรมที่เห็นเป็น spec ทีละข้อ แต่ละข้อชี้เลขหลักฐาน
-- test ของโค้ดใหม่ใช้ตัวอย่างจริงจากเป้าหมาย (ไฟล์ · request · ค่า) ที่ผู้ใช้อนุญาตให้ใช้
-- ผ่าน test = ผ่านเฉพาะข้อที่เขียนไว้ ไม่ใช่เหมือนต้นฉบับทั้งระบบ · ข้อที่ไม่ได้เขียนให้ลงสิ่งที่ยังไม่รู้
+- Write the observed behavior as a spec, item by item, each pointing to evidence numbers.
+- Tests for the new code use real samples from the target (files · requests · values) that the user allowed.
+- Passing the tests = passing only the items written down, not identical to the original system. Items not written go into unknowns.
 
 
 ## reference: firmware.md
 
-# firmware และ filesystem ของอุปกรณ์
+# Firmware and device filesystems
 
-ใช้กับไฟล์ image ของ firmware · archive ที่ฝังอยู่ในอุปกรณ์ · filesystem ที่แตกออกมาแล้ว · อ่านไฟล์อย่างเดียว ไม่เขียนหรือ flash ลงอุปกรณ์
+For firmware image files · archives embedded in a device · filesystems already extracted. Read files only; never write or flash to the device.
 
-## 1 · ก่อนแตก
+## 1 · Before extracting
 
-- ทำกับสำเนาในโฟลเดอร์งาน จด SHA-256 และที่มาของไฟล์ (ดาวน์โหลดจากผู้ผลิต · ดึงจากอุปกรณ์ของผู้ใช้) ลงสมุดหลักฐาน
-- เขียนหรือ flash ลงอุปกรณ์ต้องขออนุญาตแยกทุกครั้ง เพราะอุปกรณ์อาจใช้งานไม่ได้อีก
-- ไฟล์ executable ที่แตกออกมา ห้ามรันบนเครื่องผู้ใช้ ถ้าต้องดูตอนรันให้ทำใน `docker-sandbox` ตาม [runtime-observation](runtime-observation.md)
-- ตรวจเครื่องมือด้วย `node scripts/check-tools.mjs --target firmware` · Binwalk และ Unblob มักติดตั้งใน Linux หรือ WSL ตัวตรวจบน Windows มองไม่เห็นของใน WSL ดังนั้นผล `missing` ไม่ได้แปลว่าไม่มี ให้ถามผู้ใช้
+- Work on a copy in the work folder. Record the file's SHA-256 and origin (downloaded from the maker · pulled from the user's device) in the evidence ledger.
+- Writing or flashing to a device needs separate permission every time, because the device may become unusable.
+- Never run extracted executables on the user's machine. If you need to watch it run, do it in `docker-sandbox` per [runtime-observation](runtime-observation.md).
+- Check tools with `node scripts/check-tools.mjs --target firmware`. Binwalk and Unblob are usually installed in Linux or WSL. The checker on Windows cannot see inside WSL, so a `missing` result does not mean absent; ask the user.
 
-## 2 · คัดแยกก่อนแตก
+## 2 · Triage before extracting
 
-| ดูอะไร | ทำอย่างไร | บอกอะไร |
+| What to look at | How | What it tells you |
 |---|---|---|
-| ขนาดและ magic bytes | `python -I scripts/triage.py <image>` | ชนิดไฟล์ที่รู้จัก หรือเป็น raw binary |
-| signature ที่ฝังอยู่ | `binwalk <image>` | ตำแหน่ง (offset) และชนิดข้อมูล เช่น header ของ bootloader · kernel · squashfs · zip |
-| entropy | `binwalk -E <image>` | ช่วงที่ entropy สูงเกือบตลอดมักถูกบีบอัดหรือเข้ารหัส |
-| partition | ดูจาก signature และเอกสารของอุปกรณ์ | ขอบเขตของแต่ละส่วน |
+| Size and magic bytes | `python -I scripts/triage.py <image>` | A known file type, or a raw binary |
+| Embedded signatures | `binwalk <image>` | Offsets and data types, such as bootloader · kernel · squashfs · zip headers |
+| Entropy | `binwalk -E <image>` | A stretch with high entropy almost throughout is usually compressed or encrypted |
+| Partitions | From signatures and the device's documentation | The boundaries of each part |
 
-signature ที่เจอบอกแค่ว่ามีอะไรอยู่ตรงนั้น ไม่ได้ยืนยันโครงสร้างทั้ง image และเจอผิดได้ ให้ติด `อนุมาน` จนกว่าจะแตกได้จริง
+A signature only says something is there. It does not confirm the structure of the whole image, and it can be a false hit. Label it `อนุมาน` (inferred) until it actually extracts.
 
-## 3 · แตก
+## 3 · Extract
 
 ```bash
 unblob -e _to_delete/re/<ชื่อ>/unblob <image>       # แตกทุกชั้นลงโฟลเดอร์แยก
 binwalk -e -C _to_delete/re/<ชื่อ>/binwalk <image>  # ทางเลือก ถ้ามีแค่ Binwalk
 ```
 
-- แตกลงโฟลเดอร์ใหม่ใต้ `_to_delete/re/` ทุกครั้ง ไม่เขียนทับไฟล์เดิม และดูพื้นที่ดิสก์ก่อน เพราะ image ที่ซ้อนกันหลายชั้นแตกแล้วอาจใหญ่ขึ้นหลายเท่า
-- ยังไม่ได้ทดลองคำสั่งในหัวข้อนี้บนเครื่องที่เขียนเอกสาร เพราะไม่มี Binwalk และ Unblob (`ยังไม่ได้ตรวจ`) ให้ดู `--help` ของรุ่นที่ผู้ใช้ติดตั้งก่อนรัน
+- Always extract into a new folder under `_to_delete/re/`. Never overwrite existing files. Check disk space first, because an image nested in many layers can grow several times when extracted.
+- The commands in this section were not tried on the machine where this document was written, because it has no Binwalk or Unblob (`ยังไม่ได้ตรวจ`, not yet checked). Read `--help` for the version the user installed before running.
 
-## 4 · อ่านผลที่แตก
+## 4 · Read the extracted result
 
-1. ทำรายการไฟล์ทั้งหมดพร้อม SHA-256 ลงไฟล์ แล้วอ่านเฉพาะส่วน
-2. ดู config (`/etc` · ไฟล์ `.conf` · `.ini` · ไฟล์ที่ระบบเริ่มทำงานเรียก) เพื่อรู้ว่าบริการไหนเปิด และพอร์ตไหนฟังอยู่
-3. binary ที่สนใจส่งต่อ [native-binaries](native-binaries.md) · image ที่ไม่มี header ต้องรู้สถาปัตยกรรมและจุดเริ่มก่อน ให้ถามผู้ใช้หรือดูเอกสารของอุปกรณ์
-4. ส่วนที่เข้ารหัสหรือแตกไม่ได้ ให้จดเป็น `ยังไม่ได้ตรวจ` พร้อมบอกว่าต้องมีอะไรถึงจะอ่านได้
+1. Write the full file list with SHA-256 to a file, then read only parts of it.
+2. Read the config (`/etc` · `.conf` · `.ini` files · files called by system startup) to learn which services are on and which ports are listening.
+3. Pass binaries of interest to [native-binaries](native-binaries.md). An image with no header needs its architecture and entry point first; ask the user or read the device documentation.
+4. For parts that are encrypted or cannot be extracted, record them as `ยังไม่ได้ตรวจ` (not yet checked) and say what is needed to read them.
 
-## 5 · รายงาน
+## 5 · Report
 
-- ทุกข้อสรุปชี้ไฟล์ · offset ใน image หรือ path ในโฟลเดอร์ที่แตก
-- ห้ามบอกพฤติกรรมตอนอุปกรณ์รันจากหลักฐาน static อย่างเดียว
-- คีย์ · ใบรับรอง · รหัสผ่านที่ฝังมา รายงานแค่ชื่อและตำแหน่ง ไม่แปะค่า แล้วบอกผู้ใช้ว่าควรเปลี่ยนไหม
+- Every conclusion points to a file · an offset in the image or a path in the extracted folder.
+- Never state the device's runtime behavior from static evidence alone.
+- For embedded keys · certificates · passwords, report only the name and location. Do not paste the value, and tell the user whether to change it.
 
 
 ## reference: javascript-electron.md
@@ -566,75 +566,75 @@ python -I scripts/sourcemap_list.py _to_delete/re/<ชื่อ>/app --extract _
 
 ## reference: mql5-ex5.md
 
-# MetaTrader 5 `.ex5`: ถอดพฤติกรรมแบบกล่องดำ แล้วเขียน MQL5 ใหม่
+# MetaTrader 5 `.ex5`: recover behavior as a black box, then rewrite it in MQL5
 
-ใช้เมื่อมีแค่ไฟล์ `.ex5` (Expert Advisor (EA) · indicator · script) ไม่มี `.mq5` · วิธีเดียวที่ใช้คือ **ดูว่ามันเทรดอย่างไรใน Strategy Tester** แล้วเขียนตัวใหม่ให้เทรดเหมือนกัน · ไม่เปิดเนื้อไฟล์ ไม่ถอดรหัส และไม่แตะการป้องกันลิขสิทธิ์ทุกชนิด · ป้ายหลักฐานและสมุดหลักฐานใช้ตาม SKILL.md หัวข้อ 6 และ [evidence-ledger](evidence-ledger.md) · การรันทุกครั้งต้องถามตาม [runtime-observation](runtime-observation.md)
+Use when you have only an `.ex5` file (Expert Advisor (EA) · indicator · script) and no `.mq5`. The only method is to **watch how it trades in the Strategy Tester**, then write a new one that trades the same way. Never open the file's contents, decrypt it, or touch any kind of copy protection. Evidence labels and the evidence ledger follow SKILL.md section 6 and [evidence-ledger](evidence-ledger.md). Every run needs asking, per [runtime-observation](runtime-observation.md).
 
-| หัวข้อ | |
+| Section | |
 |---|---|
-| [1 · ข้อเท็จจริงที่ต้องรู้ก่อน](#1--ข้อเท็จจริงที่ต้องรู้ก่อน) | [2 · ด่านสิทธิ์ก่อนเริ่ม](#2--ด่านสิทธิ์ก่อนเริ่ม) |
-| [3 · ตรวจความปลอดภัยก่อนรันครั้งแรก](#3--ตรวจความปลอดภัยก่อนรันครั้งแรก) | [4 · ถอดพฤติกรรมใน Strategy Tester](#4--ถอดพฤติกรรมใน-strategy-tester) |
-| [5 · เขียน MQL5 ใหม่ แล้วเทียบผล](#5--เขียน-mql5-ใหม่-แล้วเทียบผล) | [6 · สิ่งที่ห้ามทำ](#6--สิ่งที่ห้ามทำ) |
+| [1 · Facts to know first](#1--facts-to-know-first) | [2 · Permission gate before starting](#2--permission-gate-before-starting) |
+| [3 · Safety checks before the first run](#3--safety-checks-before-the-first-run) | [4 · Recover behavior in the Strategy Tester](#4--recover-behavior-in-the-strategy-tester) |
+| [5 · Rewrite in MQL5, then compare results](#5--rewrite-in-mql5-then-compare-results) | [6 · What must not be done](#6--what-must-not-be-done) |
 
-## 1 · ข้อเท็จจริงที่ต้องรู้ก่อน
+## 1 · Facts to know first
 
-ตรวจทุกข้อเมื่อ 2026-11-10 จากหน้าทางการของ MetaQuotes · ข้อที่เป็นคำอ้างของผู้ผลิตเองเขียนกำกับไว้
+Every item was checked on 2026-11-10 from MetaQuotes' official pages. Items that are the maker's own claims are marked.
 
-| เรื่อง | ข้อเท็จจริง | ป้าย · แหล่ง |
+| Topic | Fact | Label · source |
 |---|---|---|
-| `.ex5` คืออะไร | ไฟล์ที่ MetaEditor compile จาก `.mq5` แล้วรันใน terminal ได้ แจกได้โดยไม่ต้องมีซอร์ส ผู้ผลิตบอกว่าเป็น "รูปแบบเฉพาะที่ซ่อน algorithm เดิม" และ debug ไม่ได้ถ้าไม่มีซอร์ส | จากแหล่ง · [MetaEditor: Compilation](https://www.metatrader5.com/en/metaeditor/help/development/compile) |
-| การป้องกันทั่วไป | MetaQuotes เขียนว่า EX4/EX5 "ป้องกันการ decompile ได้อย่างน่าเชื่อถือ" · เป็นคำอ้างของผู้ผลิต ยังไม่เจอการทดสอบอิสระ | จากแหล่ง (คำอ้างผู้ผลิต) · [MQL5 Cloud Protector](https://www.metatrader5.com/en/metaeditor/help/development/mql5_cloud_protector) |
-| MQL5 Cloud Protector | เปิดให้นักพัฒนาทุกคนตั้งแต่ build 1730 (ประกาศ 22 ธ.ค. 2017) ส่งเฉพาะส่วน executable ไปเข้ารหัสด้วย algorithm แบบอสมมาตรและเซ็นด้วยกุญแจส่วนตัว และ compile เป็น native code แบบเดียวกับสินค้าใน Market · ไฟล์ไม่ผูกกับเครื่อง | จากแหล่ง · [ประกาศ build 1730](https://metatrader5.com/en/news/1732) · [หน้า Cloud Protector](https://www.metatrader5.com/en/metaeditor/help/development/mql5_cloud_protector) |
-| สินค้าจาก MQL5 Market | ผู้ซื้อแต่ละคนได้ "secure version" ที่สร้างให้เครื่องนั้นและสำเนา OS นั้น เปลี่ยนฮาร์ดแวร์แล้วรันไม่ได้ (เรียกว่า Activation) · Market รับเฉพาะไฟล์ EX5/EX4 และห้ามเรียก DLL ทุกตัว | จากแหล่ง · [Market Rules](https://www.mql5.com/en/market/rules) ข้อ IV.1 · IV.2 · IV.15–IV.19 |
-| `.ex5` เริ่มถูกเข้ารหัสตั้งแต่ build ไหน | ไม่เจอเอกสารทางการที่ระบุ build · ที่เจอคือ MT4 build 600 (ก.พ. 2014) ประกาศว่า EX4 จาก Market ได้การป้องกันระดับเดียวกับ MQL5 | (รอยืนยัน) · ผลค้นหาชี้ [ข่าว MT4 build 600](https://www.metaquotes.net/en/metatrader4/news/4207) ยังไม่ได้เปิดอ่านหน้านี้เอง |
+| What `.ex5` is | A file that MetaEditor compiles from `.mq5` and that runs in the terminal. It can be distributed without the source. The maker calls it a "special format that hides the original algorithm", and says it cannot be debugged without the source. | `จากแหล่ง` (from a source) · [MetaEditor: Compilation](https://www.metatrader5.com/en/metaeditor/help/development/compile) |
+| General protection | MetaQuotes writes that EX4/EX5 "reliably protect against decompilation". This is the maker's claim; no independent test found. | `จากแหล่ง` (maker's claim) · [MQL5 Cloud Protector](https://www.metatrader5.com/en/metaeditor/help/development/mql5_cloud_protector) |
+| MQL5 Cloud Protector | Open to all developers since build 1730 (announced 22 Dec 2017). Sends only the executable part to be encrypted with an asymmetric algorithm and signed with a private key, and compiled to native code the same way as Market products. The file is not tied to a machine. | `จากแหล่ง` · [build 1730 announcement](https://metatrader5.com/en/news/1732) · [Cloud Protector page](https://www.metatrader5.com/en/metaeditor/help/development/mql5_cloud_protector) |
+| Products from MQL5 Market | Each buyer gets a "secure version" built for that machine and that OS copy. If the hardware changes, it will not run (called Activation). Market accepts only EX5/EX4 files and forbids calling any DLL. | `จากแหล่ง` · [Market Rules](https://www.mql5.com/en/market/rules) items IV.1 · IV.2 · IV.15–IV.19 |
+| From which build `.ex5` was encrypted | No official document found that names a build. What was found: MT4 build 600 (Feb 2014) announced that EX4 from Market got the same level of protection as MQL5. | `(รอยืนยัน)` (awaiting confirmation) · search results point to [MT4 build 600 news](https://www.metaquotes.net/en/metatrader4/news/4207); this page has not been opened by me |
 
-**ข้อตกลง MQL5 Market ที่ผูกผู้ซื้อ** ([Market Rules](https://www.mql5.com/en/market/rules) · อ่าน 2026-11-10 · หน้าไม่บอกวันแก้ไขล่าสุด):
+**MQL5 Market terms that bind the buyer** ([Market Rules](https://www.mql5.com/en/market/rules) · read 2026-11-10 · the page gives no last-edited date):
 
-| ข้อ | ใจความ |
+| Item | Gist |
 |---|---|
-| III.2 · III.3 | ขายต่อไม่ได้ · การซื้อไม่ได้ซื้อสิทธิ์ในตัวสินค้า ได้มาเพื่อใช้ส่วนตัวเท่านั้น |
-| III.9 | ห้าม decompile และห้ามจ้างคนอื่นทำ · **พยายาม decompile ก็ถือว่าผิดแล้ว ไม่ว่าจะได้ผลหรือไม่** |
-| IX.8 | ห้ามคัดลอก ขาย แจก แก้ ดัดแปลง แปล สร้างงานที่ต่อยอด (derivative products) หรือ reverse engineer · decompile · disassemble เพื่อให้ได้ซอร์ส เว้นแต่ได้รับอนุญาต |
-| IX.9 | ห้ามทำอะไรเพื่อหลบหรือเอาชนะการป้องกันหรือกฎการใช้ของสินค้า |
+| III.2 · III.3 | No resale · buying does not buy rights in the product itself; it is for personal use only |
+| III.9 | No decompiling, and no hiring others to do it · **even attempting to decompile counts as a violation, whether or not it succeeds** |
+| IX.8 | No copying, selling, distributing, modifying, adapting, translating, creating derivative products, or reverse engineering · decompiling · disassembling to obtain source, unless permitted |
+| IX.9 | No doing anything to evade or defeat a product's protection or usage rules |
 
-ข้อเหล่านี้อยู่ในหมวด IX ซึ่งเป็นเหตุให้ MetaQuotes ระงับบริการได้ทันที
+These items are in section IX, which is a reason MetaQuotes can suspend service immediately.
 
-**เครื่องมือหรือบริการที่อ้างว่าแปลง `.ex4`/`.ex5` กลับเป็นซอร์ส**: มีเว็บและผู้ขายอ้างแบบนี้ แต่ไม่เจอหลักฐานที่ตรวจสอบได้ว่าทำได้กับไฟล์รุ่นปัจจุบัน ผู้ผลิตบอกว่าป้องกันไว้ ส่วนผู้ใช้ในฟอรัม mql5.com เขียนว่ายังไม่มีใครพิสูจน์ได้ตั้งแต่ build 600 ซึ่งเป็นแค่ความเห็นในฟอรัม · ป้าย `ยังไม่ได้ตรวจ` · skill นี้ไม่เอ่ยชื่อ ไม่ลิงก์ ไม่แนะนำ ไม่ดาวน์โหลด และไม่ลองเครื่องมือพวกนี้ ไฟล์ที่แจกในนามเครื่องมือเหล่านี้ไม่รู้ที่มา จึงเสี่ยงเป็น malware ด้วย
+**Tools or services that claim to convert `.ex4`/`.ex5` back to source**: websites and sellers make such claims, but no verifiable evidence was found that it works on current files. The maker says the files are protected, and a user on the mql5.com forum wrote that nobody has proven it since build 600 (only a forum opinion). Label `ยังไม่ได้ตรวจ` (not yet checked). This skill does not name, link, recommend, download or try these tools. Files distributed under the name of these tools have unknown origin, so they may also be malware.
 
-## 2 · ด่านสิทธิ์ก่อนเริ่ม
+## 2 · Permission gate before starting
 
-ถามผู้ใช้ 2 ข้อ แล้วจดคำตอบลงบรรทัดแรกของ `_to_delete/re/<ชื่อ EA>/ledger.md` ตามแบบฟอร์มใน [evidence-ledger](evidence-ledger.md) หัวข้อ 1:
+Ask the user 2 questions, then write the answers in the first line of `_to_delete/re/<ชื่อ EA>/ledger.md`, using the form in [evidence-ledger](evidence-ledger.md) section 1:
 
-1. ไฟล์นี้ได้มาจากไหน (เขียนเอง · จ้างเขียน · ซื้อใน MQL5 Market · ซื้อนอก Market · ได้ฟรีจากกลุ่มหรือเว็บ)
-2. จะเอาตัวที่เขียนใหม่ไปทำอะไร (ใช้เองบัญชีเดียว · ใช้ในบริษัท · แจก · ขาย)
+1. Where did this file come from (self-written · commissioned · bought on MQL5 Market · bought outside Market · free from a group or website)
+2. What will the rewrite be used for (own use on one account · use inside a company · distribute · sell)
 
-| ที่มา | ทำได้ | ต้องได้เพิ่มก่อน |
+| Origin | Allowed | Needed first |
 |---|---|---|
-| ผู้ใช้เขียนเอง แต่ซอร์สหาย | ทุกขั้นในหัวข้อ 3–5 | ไม่มี · จดหลักฐานความเป็นเจ้าของที่มี (ซอร์สรุ่นเก่า · ประวัติขาย · บัญชีผู้ขาย) |
-| จ้างคนอื่นเขียน | ทุกขั้น ถ้าสัญญาจ้างให้สิทธิ์ซอร์สหรือสิทธิ์ดัดแปลงกับผู้ใช้ | ถ้าสัญญาไม่ชัด ให้ขอข้อความอนุญาตจากผู้เขียนเป็นลายลักษณ์อักษร |
-| ซื้อจาก MQL5 Market | ทดสอบพฤติกรรมของสำเนาที่ซื้อใน Strategy Tester เพื่อประเมินและตั้งค่าใช้เอง (หัวข้อ 3–4) | **ขั้นเขียนตัวเลียนแบบ (หัวข้อ 5)** ต้องมีข้อความอนุญาตจากผู้ขาย เพราะข้อ IX.8 ห้าม derivative products เว้นแต่ได้รับอนุญาต · ห้ามแจกหรือขายตัวเลียนแบบในทุกกรณี · การเขียนใหม่เพื่อใช้เองอย่างเดียวจะนับเป็น derivative ไหมเป็นคำถามทางกฎหมาย (รอยืนยัน กับผู้ขายหรือนักกฎหมาย) |
-| ซื้อนอก Market | ตามสัญญาอนุญาตที่ได้มา | ไม่มีสัญญาหรือสัญญาห้ามดัดแปลง ให้ทำเฉพาะหัวข้อ 3–4 แล้วถามเจ้าของ |
-| ได้ฟรี · ไม่รู้ที่มา · ไฟล์ที่ถูก crack หรือหลุดมา | **หยุด** | ไฟล์ที่ถูก crack หรือหลุดมาไม่ทำต่อเลย แม้แต่ทดสอบ · ไฟล์ฟรีที่ไม่รู้ที่มาให้ถามหาเจ้าของก่อน |
+| The user wrote it, but the source is lost | Every step in sections 3–5 | Nothing · record the ownership evidence available (an old source version · sales history · seller account) |
+| Commissioned from someone else | Every step, if the contract gives the user source rights or modification rights | If the contract is unclear, ask the author for written permission |
+| Bought from MQL5 Market | Test the behavior of the purchased copy in the Strategy Tester to evaluate it and set it up for own use (sections 3–4) | **The imitation-writing step (section 5)** needs written permission from the seller, because item IX.8 forbids derivative products unless permitted · never distribute or sell the imitation, in any case · whether a rewrite for own use alone counts as derivative is a legal question (`(รอยืนยัน)` with the seller or a lawyer) |
+| Bought outside Market | Per the license obtained | With no license, or a license that forbids modification, do only sections 3–4 and ask the owner |
+| Free · unknown origin · cracked or leaked file | **Stop** | For a cracked or leaked file, do not continue at all, not even testing · for a free file of unknown origin, ask for the owner first |
 
-ไฟล์ล็อกเลขบัญชี วันหมดอายุ หรือเซิร์ฟเวอร์ license จนทดสอบไม่ได้ ให้หยุดแล้วบอกผู้ใช้ให้ขอไฟล์สำหรับทดสอบจากเจ้าของ ไม่หาทางเลี่ยง
+If the file is locked to an account number, an expiry date, or a license server so that testing is impossible, stop and tell the user to ask the owner for a test file. Never look for a way around it.
 
-## 3 · ตรวจความปลอดภัยก่อนรันครั้งแรก
+## 3 · Safety checks before the first run
 
-Strategy Tester รันโค้ดของ `.ex5` จริง จึงต้องถามผู้ใช้ก่อนทุกครั้งตาม SKILL.md หัวข้อ 2 · ผู้ใช้เป็นคนกดใน terminal เอง หรืออนุญาตให้ agent สั่ง `terminal64.exe /config:` เป็นรายครั้ง
+The Strategy Tester runs the `.ex5`'s real code, so ask the user before every run, per SKILL.md section 2. The user clicks in the terminal themselves, or allows the agent to run `terminal64.exe /config:` one run at a time.
 
-| ตรวจอะไร | ทำอย่างไร | ป้าย · แหล่ง |
+| Check | How | Label · source |
 |---|---|---|
-| terminal แยกสำหรับงานนี้ | ติดตั้ง MetaTrader 5 อีกชุดหรือใช้ data folder แยก login **บัญชี demo เท่านั้น** ตลอดงาน · เปิด "Disable automated trading when switching accounts" ไว้ · ไฟล์ที่ยังไม่น่าไว้ใจให้รันใน Windows Sandbox หรือ VM ที่ผู้ใช้เตรียมเอง ([runtime-observation](runtime-observation.md) หัวข้อ 2) | จากแหล่ง · [Platform Settings](https://www.metatrader5.com/en/terminal/help/startworking/settings) |
-| เรียก DLL ไหม | ลากไฟล์ใส่กราฟแล้วดูแท็บ **Dependencies** ในหน้าต่างตั้งค่า · แท็บนี้ขึ้นเมื่อ EA import ฟังก์ชันจาก EX5 หรือ DLL ไอคอนแดงคือ DLL · ปิด **Allow DLL imports** ไว้ (ผู้ผลิตแนะนำให้ปิดกับ EA ที่ไม่รู้จัก) ถ้าปิดอยู่ ปุ่ม OK จะไม่ขึ้นและ EA จะไม่เริ่ม | จากแหล่ง · [Expert Advisors and Custom Indicators](https://www.metatrader5.com/en/terminal/help/algotrading/trade_robots_indicators) |
-| ถ้ามี DLL | จดชื่อ DLL เป็นหลักฐาน · DLL เป็นเป้าหมายใหม่ที่ต้องได้สิทธิ์แยก แล้วดูแบบ static ด้วย `pe_elf_info.py` ตาม [native-binaries](native-binaries.md) ก่อนคิดจะเปิด · DLL ทำได้ทุกอย่างนอก sandbox ของ MQL5 | อนุมาน |
-| ติดต่อเว็บไหม | `WebRequest` เรียกได้เฉพาะ URL ที่ผู้ใช้ใส่ใน Tools → Options → Expert Advisors ซึ่งปิดเป็นค่าเริ่ม · ปล่อยรายการว่างไว้ · เพิ่ม URL ได้ทีละตัวเมื่อผู้ใช้อนุญาตเท่านั้น · ใน Strategy Tester ฟังก์ชันนี้ใช้ไม่ได้ และ indicator เรียกไม่ได้ | จากแหล่ง · [WebRequest](https://www.mql5.com/en/docs/network/webrequest) |
-| เขียนไฟล์ไหน | MQL5 เขียนไฟล์ได้แค่ใน `MQL5\Files` ของ terminal และโฟลเดอร์ Common ที่ใช้ร่วมกัน · เก็บรายชื่อไฟล์ใน 2 ที่นี้ก่อนและหลังรันแล้ว `diff` · ตอนอยู่ใน tester ไฟล์อาจไปอยู่ในโฟลเดอร์ของ tester agent | จากแหล่ง · [File Functions](https://www.mql5.com/en/docs/files) · โฟลเดอร์ของ agent (ยังไม่ได้ตรวจ) |
+| A separate terminal for this job | Install another MetaTrader 5 or use a separate data folder · log in to a **demo account only** for the whole job · keep "Disable automated trading when switching accounts" on · run a file not yet trusted in Windows Sandbox or a VM the user prepares ([runtime-observation](runtime-observation.md) section 2) | `จากแหล่ง` · [Platform Settings](https://www.metatrader5.com/en/terminal/help/startworking/settings) |
+| Does it call DLLs | Drag the file onto a chart and look at the **Dependencies** tab in the settings window · this tab appears when the EA imports functions from an EX5 or DLL · a red icon is a DLL · keep **Allow DLL imports** off (the maker recommends off for unknown EAs) · if it is off, the OK button will not appear and the EA will not start | `จากแหล่ง` · [Expert Advisors and Custom Indicators](https://www.metatrader5.com/en/terminal/help/algotrading/trade_robots_indicators) |
+| If there is a DLL | Record the DLL name as evidence · a DLL is a new target needing separate permission, then look at it statically with `pe_elf_info.py` per [native-binaries](native-binaries.md) before thinking of opening it · a DLL can do anything outside the MQL5 sandbox | `อนุมาน` (inferred) |
+| Does it contact the web | `WebRequest` can call only URLs the user adds in Tools → Options → Expert Advisors, which is off by default · leave the list empty · add a URL one at a time only when the user allows · in the Strategy Tester this function does not work, and an indicator cannot call it | `จากแหล่ง` · [WebRequest](https://www.mql5.com/en/docs/network/webrequest) |
+| Which files it writes | MQL5 can write files only in the terminal's `MQL5\Files` and the shared Common folder · list the files in these 2 places before and after the run, then `diff` · inside the tester, files may go to the tester agent's folder | `จากแหล่ง` · [File Functions](https://www.mql5.com/en/docs/files) · agent folder (`ยังไม่ได้ตรวจ`, not yet checked) |
 
-พฤติกรรมที่พึ่งเว็บ (ตัวกรองข่าว · สัญญาณจากเซิร์ฟเวอร์ · ตรวจ license) จะไม่เกิดใน tester · ให้จดเป็นสิ่งที่ยังไม่รู้ ไม่สรุปว่าไม่มี
+Behavior that depends on the web (news filter · signals from a server · license check) will not occur in the tester. Record it as an unknown; do not conclude it is absent.
 
-## 4 · ถอดพฤติกรรมใน Strategy Tester
+## 4 · Recover behavior in the Strategy Tester
 
-**4.1 ตั้งค่าเดียวกันทุกครั้ง**: โหมด **Every tick based on real ticks** (ใช้ tick จริงที่โบรกเกอร์เก็บไว้ ไม่จำลอง) · เซิร์ฟเวอร์ symbol timeframe ทุน leverage เดียวกันทุกรอบ · จดรุ่น build ของ terminal ลงสมุดหลักฐาน · รันจาก command line ด้วยไฟล์ ini ได้ ([หน้าเอกสาร](https://www.metatrader5.com/en/terminal/help/start_advanced/start) · ตรวจ 2026-11-10):
+**4.1 Same settings every time**: **Every tick based on real ticks** mode (uses real ticks the broker stored, not simulated) · the same server, symbol, timeframe, deposit and leverage every run · record the terminal's build version in the evidence ledger · it can run from the command line with an ini file ([documentation page](https://www.metatrader5.com/en/terminal/help/start_advanced/start) · checked 2026-11-10):
 
 ```ini
 [Tester]
@@ -652,29 +652,29 @@ ReplaceReport=1
 ShutdownTerminal=1
 ```
 
-ไม่ใส่ `Login=` เพื่อปลอมเลขบัญชีให้ EA ที่ล็อกบัญชี เพราะเป็นการเลี่ยง license (หัวข้อ 6)
+Do not put in `Login=` to fake the account number for an EA that locks to an account, because that is evading the license (section 6).
 
-**4.2 หลายช่วงตลาด**: อย่างน้อย 4 ช่วงที่ต่างกัน คือ ขาขึ้น · ขาลง · ไซด์เวย์ผันผวนต่ำ · ช่วงข่าวแรง · และ symbol หรือ timeframe อื่นถ้า EA รองรับ · กันไว้ 1 ช่วงที่**ไม่ใช้ตอนอนุมานกฎ** เพื่อใช้ตัดสินในข้อ 5
+**4.2 Several market periods**: at least 4 different periods: uptrend · downtrend · low-volatility sideways · a strong-news period · and another symbol or timeframe if the EA supports it. Set aside 1 period that is **not used when inferring the rules**, to judge with in section 5.
 
-**4.3 กวาดค่า input**: กด Save ในแท็บ Inputs เก็บค่าเริ่มเป็น `.set` แล้วเปลี่ยนทีละตัว (หรือใช้ optimization แบบ Slow complete algorithm กับ input ตัวเดียว) เพื่อดูว่า input ไหนเปลี่ยนเวลาเข้า ระยะ SL/TP หรือขนาดล็อต
+**4.3 Sweep input values**: click Save in the Inputs tab to keep the defaults as a `.set`, then change one at a time (or use the Slow complete algorithm optimization on a single input) to see which input changes entry time, SL/TP distance or lot size.
 
-**4.4 ส่งออกผล**: ไฟล์ `.htm` ที่ได้จาก `Report=` มีตาราง Orders และ Deals (คอลัมน์ Deals: Time · Deal · Symbol · Type · Direction · Volume · Price · Order · Commission · Swap · Profit · Balance · Comment ตาม [บทความ mql5.com](https://www.mql5.com/en/articles/5436) ซึ่งเป็นชื่อที่ผู้เขียนบทความตั้ง (รอยืนยัน กับรายงานจริง)) · บันทึกจากหน้าจอได้ด้วยคลิกขวาที่แท็บผล → Report → HTML หรือ Open XML (ชื่อเมนูจากคู่มือของบุคคลที่สาม (รอยืนยัน)) · จด SHA-256 ของทุกรายงานเป็นหลักฐาน · terminal ที่ตั้งภาษาไทยอาจได้หัวคอลัมน์เป็นภาษาไทย ให้ตั้ง terminal เป็นภาษาอังกฤษก่อนส่งออก (ยังไม่ได้ตรวจ)
+**4.4 Export results**: the `.htm` file from `Report=` holds Orders and Deals tables (Deals columns: Time · Deal · Symbol · Type · Direction · Volume · Price · Order · Commission · Swap · Profit · Balance · Comment, per an [mql5.com article](https://www.mql5.com/en/articles/5436); these are the names the article's author used (`(รอยืนยัน)` against a real report)). From the screen, right-click the result tab → Report → HTML or Open XML (menu names from a third-party manual (`(รอยืนยัน)`)). Record the SHA-256 of every report as evidence. A terminal set to Thai may give Thai column headings, so set the terminal to English before exporting (`ยังไม่ได้ตรวจ`, not yet checked).
 
-**4.5 ตารางสังเกต**: 1 แถวต่อ 1 ไม้ ลงไฟล์ `_to_delete/re/<ชื่อ EA>/trades.md` หรือ CSV:
+**4.5 Observation table**: 1 row per trade, in the file `_to_delete/re/<ชื่อ EA>/trades.md` or a CSV:
 
-| ช่อง | ดูอะไร |
+| Field | What to look at |
 |---|---|
-| เวลาเข้า | ตรงเวลาเปิดแท่งไหม (เช่น 10:00:00 ทุกไม้ = ตัดสินตอนแท่งใหม่) · มีช่วงเวลาหรือวันที่ไม่เคยเข้าไหม |
-| ทิศ · ราคาเข้า | เข้าตามเทรนด์หรือสวน · เข้าหลังราคาทะลุระดับไหน |
-| indicator ที่น่าจะใช้ | เขียน script ของเราเองดึงค่า indicator ที่สงสัย (MA · RSI · Bollinger · ATR) ณ เวลาเข้าแต่ละไม้ แล้วดูว่าค่าไหนอยู่ในช่วงเดียวกันทุกไม้ |
-| SL · TP | ระยะเป็นจุดคงที่ · เป็นเท่าของ ATR · เลื่อนตาม (trailing) · ไม่มี |
-| ล็อต | คงที่ · ตามสัดส่วนทุน · คูณขึ้นหลังไม้แพ้ (martingale) |
-| จำนวนไม้ที่เปิดพร้อมกัน | เปิดไม้ทิศเดียวกันซ้อนห่างเท่า ๆ กัน = grid |
-| เหตุออก | ชน SL · ชน TP · ปิดตามเวลา · ปิดตามสัญญาณกลับทิศ |
+| Entry time | Does it match the bar open time (for example 10:00:00 on every trade = decides at a new bar)? Are there times or dates it never enters? |
+| Direction · entry price | With the trend or against it · entry after price breaks which level |
+| Likely indicators | Write our own script to pull the suspected indicators' values (MA · RSI · Bollinger · ATR) at each entry time, then see which value is in the same range on every trade |
+| SL · TP | Fixed distance in points · a multiple of ATR · trailing · none |
+| Lots | Fixed · proportional to equity · multiplied after a losing trade (martingale) |
+| Number of simultaneous trades | Stacked same-direction trades at equal spacing = grid |
+| Exit reason | Hit SL · hit TP · closed by time · closed by a reverse signal |
 
-เจอ martingale หรือ grid ให้บอกผู้ใช้ทันที เพราะแบบนี้ทำให้ขาดทุนหนักได้ในช่วงตลาดวิ่งทางเดียว
+If you find martingale or grid, tell the user at once, because this style can cause heavy losses when the market runs one way.
 
-**4.6 สมมติฐานลงสมุดหลักฐาน**: ผลรายงานแต่ละไฟล์เป็น E-id (`จากแหล่ง` หรือ `ตรวจจริง` ถ้าเห็นตอนรันใน tester ที่ได้อนุญาต) · กฎที่เดาจากหลายไม้เป็น `อนุมาน` ชี้ E-id ที่เป็นฐาน · กฎที่อธิบายไม่ได้ลงตาราง "สิ่งที่ยังไม่รู้":
+**4.6 Hypotheses into the evidence ledger**: each report file's result is an E-id (`จากแหล่ง` or `ตรวจจริง` (verified) if seen during a run in a tester that was permitted) · a rule guessed from many trades is `อนุมาน` pointing to the E-ids it rests on · a rule that cannot be explained goes in the "สิ่งที่ยังไม่รู้" (unknowns) table:
 
 ```markdown
 | # | ข้อสรุป | หลักฐาน | ป้าย |
@@ -683,107 +683,107 @@ ShutdownTerminal=1
 | H2 | SL 300 จุดคงที่ทุกไม้ | E3 · E4 | อนุมาน |
 ```
 
-## 5 · เขียน MQL5 ใหม่ แล้วเทียบผล
+## 5 · Rewrite in MQL5, then compare results
 
-1. **ผู้ใช้ยืนยันสมมติฐานก่อน** แล้วเขียน spec ของพฤติกรรมทีละข้อ แต่ละข้อชี้ H-id
-2. **เขียนด้วยโค้ดของเราตาม `stack-mql`** จาก spec ไม่ใช่จากไฟล์ `.ex5` · ไม่ใช้ชื่อสินค้า คำบรรยาย หรือรูปของต้นฉบับ
-3. **ตั้งเกณฑ์ความตรงก่อนรัน** แล้วจดลงสมุดหลักฐาน ไม่ปรับเกณฑ์หลังเห็นผล · ตัวเลขด้านล่างเป็น `ตัวอย่าง` ที่เราเสนอ ไม่ใช่มาตรฐาน:
+1. **The user confirms the hypotheses first**, then write a spec of the behavior item by item, each pointing to an H-id.
+2. **Write with our own code following `stack-mql`**, from the spec and not from the `.ex5` file · do not use the original's product name, description or images.
+3. **Set the match criteria before running** and record them in the evidence ledger. Do not adjust the criteria after seeing results. The numbers below are `ตัวอย่าง` (example) that we propose, not a standard:
 
-| เกณฑ์ | ตัวอย่าง |
+| Criterion | Example |
 |---|---|
-| ไม้เข้าที่ symbol ทิศ และเวลาตรงกัน (ห่างไม่เกิน 60 วินาที) | อย่างน้อย 90% ของจำนวนไม้ที่มากกว่า |
-| ขนาดล็อตตรงกันในไม้ที่จับคู่ได้ | อย่างน้อย 95% |
-| ช่วงที่กันไว้ในข้อ 4.2 | ผ่านเกณฑ์เดียวกัน ถ้าผ่านแค่ช่วงที่ใช้อนุมาน แปลว่ากฎยังจับไม่ครบ |
+| Trades with matching symbol, direction and time (within 60 seconds) | At least 90% of the larger trade count |
+| Lot size matches in matched trades | At least 95% |
+| The period set aside in 4.2 | Must pass the same criteria; if it passes only the period used for inference, the rules are not fully captured yet |
 
-4. **รันทั้ง 2 ตัวด้วยการตั้งค่าเดียวกัน** (เซิร์ฟเวอร์ · ช่วงวันที่ · Model 4 · `.set` ที่ตรงกัน) แล้วเทียบ:
+4. **Run both with the same settings** (server · date range · Model 4 · matching `.set`), then compare:
 
 ```bash
 python -I scripts/compare_trades.py original-2023.htm rewrite-2023.htm --tolerance 60 --threshold 90
 python -I scripts/compare_trades.py original.csv rewrite.csv --leg all --json > _to_delete/re/<ชื่อ EA>/compare.json
 ```
 
-สคริปต์อ่านตาราง Deals จากรายงาน HTML (UTF-16 หรือ UTF-8) หรือ CSV ที่มีหัว Time · Symbol · Type · Direction แล้วจับคู่ไม้ที่ symbol ฝั่ง (buy/sell) และ Direction (in/out) ตรงกัน และเวลาห่างไม่เกิน `--tolerance` · บอก % ที่ตรง · % ล็อตที่ตรง · ไม้ที่มีแต่ฝั่งเดียว · ต่ำกว่า `--threshold` ออก exit 1 · ทดสอบแล้ว 2026-11-10 ด้วย `--self-test` และข้อมูลตัวอย่างที่สร้างเอง 50 ไม้ (2026-11-11 เพิ่มกรณี `--leg all` ที่ไม้เข้ากับไม้ออกฝั่งเดียวกันต้องไม่ถูกจับคู่) ยังไม่ได้ลองกับรายงานจริงจาก terminal (รอยืนยัน)
+The script reads the Deals table from an HTML report (UTF-16 or UTF-8) or a CSV with the headers Time · Symbol · Type · Direction, then pairs trades whose symbol, side (buy/sell) and Direction (in/out) match and whose time differs by no more than `--tolerance`. It reports % matched · % of lots matched · trades present on one side only · below `--threshold` it exits with code 1. Tested 2026-11-10 with `--self-test` and sample data we generated, 50 trades (2026-11-11 added the `--leg all` case where an entry and an exit on the same side must not be paired). Not yet tried on a real report from a terminal (`(รอยืนยัน)`).
 
-5. ไม้ที่มีแต่ฝั่งเดียวคือที่มาของกฎที่ยังขาด ให้ไล่ดูทีละไม้แล้วแก้สมมติฐาน ไม่ปรับโค้ดให้ตรงเป็นรายไม้ · ผ่านเกณฑ์ = ตรงเฉพาะช่วงและการตั้งค่าที่ทดสอบ ไม่ใช่เหมือนต้นฉบับทุกสภาพตลาด
-6. ก่อนผู้ใช้เอาตัวใหม่ไปใช้บัญชีจริง ให้ผ่านรายการตรวจของ `stack-mql` หัวข้อ 8 และรันกับบัญชี demo ช่วงหนึ่งก่อน · การตัดสินใจเปิดบัญชีจริงเป็นของผู้ใช้
+5. Trades present on one side only point to missing rules. Go through them one by one and fix the hypotheses; do not adjust the code to match trade by trade. Passing the criteria = matching only for the periods and settings tested, not identical to the original in every market condition.
+6. Before the user puts the new version on a real account, it must pass the checklist in `stack-mql` section 8 and run on a demo account for a while. The decision to go live belongs to the user.
 
-## 6 · สิ่งที่ห้ามทำ
+## 6 · What must not be done
 
-1. ห้าม decompile · disassemble · เปิด `.ex5` ด้วย hex editor · รัน `triage.py --strings` หรือ `--pattern` กับ `.ex5` · ทำกับ `.ex5` ได้แค่จด SHA-256 ขนาด และที่มา
-2. ห้ามค้น ดาวน์โหลด แนะนำ ลิงก์ หรือจ้างเครื่องมือหรือบริการที่อ้างว่าถอด `.ex4`/`.ex5`
-3. ห้ามถอดรหัสหรือแกะชั้นป้องกันของ MQL5 Cloud Protector หรือ secure version จาก Market
-4. ห้ามปลดหรือเลี่ยง license: ปลอมเลขบัญชี (รวม `Login=` ใน tester ini) · เปลี่ยนเวลาเครื่องหนีวันหมดอายุ · ทำเซิร์ฟเวอร์ license ปลอม · แก้ไฟล์ hosts · ทำ DLL ปลอมมาแทนตัวจริง
-5. ห้ามคัดลอกไฟล์จาก Market ไปเครื่องอื่นเพื่อเลี่ยงจำนวน activation
-6. ห้ามแจกหรือขายตัวที่เขียนเลียนแบบไฟล์ที่ไม่ใช่ของผู้ใช้ เว้นแต่เจ้าของอนุญาตเป็นลายลักษณ์อักษร
-7. ห้ามรันกับบัญชีจริงระหว่างงาน · ห้ามเปิด Allow DLL imports หรือเพิ่ม URL ใน WebRequest ให้ไฟล์ที่ยังไม่น่าไว้ใจ
-8. ห้ามทำต่อกับไฟล์ที่ถูก crack หรือหลุดมา แม้ผู้ใช้จะบอกว่าแค่ทดสอบ
+1. Never decompile · disassemble · open an `.ex5` with a hex editor · run `triage.py --strings` or `--pattern` on an `.ex5`. For an `.ex5`, only record the SHA-256, size and origin.
+2. Never search for, download, recommend, link or hire tools or services that claim to extract `.ex4`/`.ex5`.
+3. Never decrypt or unpack the protection layers of MQL5 Cloud Protector or a Market secure version.
+4. Never remove or evade a license: faking the account number (including `Login=` in the tester ini) · changing the system clock to escape an expiry date · building a fake license server · editing the hosts file · making a fake DLL to replace the real one.
+5. Never copy a file from Market to another machine to evade the activation count.
+6. Never distribute or sell an imitation of a file that is not the user's, unless the owner permits in writing.
+7. Never run against a real account during the job · never turn on Allow DLL imports or add a URL to WebRequest for a file not yet trusted.
+8. Never continue with a cracked or leaked file, even if the user says it is only a test.
 
-## ที่มา
+## Sources
 
-อ่านทุกหน้าเมื่อ 2026-11-10
+All pages read on 2026-11-10
 
 - [MetaEditor: Compilation](https://www.metatrader5.com/en/metaeditor/help/development/compile)
-- [MQL5 Cloud Protector](https://www.metatrader5.com/en/metaeditor/help/development/mql5_cloud_protector) · [ประกาศ build 1730](https://metatrader5.com/en/news/1732)
+- [MQL5 Cloud Protector](https://www.metatrader5.com/en/metaeditor/help/development/mql5_cloud_protector) · [build 1730 announcement](https://metatrader5.com/en/news/1732)
 - [MQL5 Market Rules](https://www.mql5.com/en/market/rules)
-- [Strategy Tester: Testing](https://www.metatrader5.com/en/terminal/help/algotrading/testing) · [Platform start (ไฟล์ ini)](https://www.metatrader5.com/en/terminal/help/start_advanced/start)
+- [Strategy Tester: Testing](https://www.metatrader5.com/en/terminal/help/algotrading/testing) · [Platform start (ini file)](https://www.metatrader5.com/en/terminal/help/start_advanced/start)
 - [Platform Settings](https://www.metatrader5.com/en/terminal/help/startworking/settings) · [Expert Advisors and Custom Indicators](https://www.metatrader5.com/en/terminal/help/algotrading/trade_robots_indicators)
 - [WebRequest](https://www.mql5.com/en/docs/network/webrequest) · [File Functions](https://www.mql5.com/en/docs/files)
-- [Analyzing trading results using HTML reports](https://www.mql5.com/en/articles/5436) (บทความใน mql5.com ไม่ใช่เอกสารทางการ)
+- [Analyzing trading results using HTML reports](https://www.mql5.com/en/articles/5436) (an article on mql5.com, not official documentation)
 
 
 ## reference: native-binaries.md
 
-# native (PE · ELF · Mach-O) และ .NET
+# Native (PE · ELF · Mach-O) and .NET
 
-แนวคิดดัดแปลงจาก `native-and-artifacts.md` ของ REA (MIT · © 2026 morluto) เขียนใหม่ให้ใช้สคริปต์ในเครื่องและ Ghidra ที่ผู้ใช้ติดตั้งเอง
+Ideas adapted from REA's `native-and-artifacts.md` (MIT · © 2026 morluto), rewritten to use local scripts and a Ghidra the user installed.
 
-| หัวข้อ | |
+| Section | |
 |---|---|
-| [1 · native ทีละขั้น](#1--native-ทีละขั้น) | [2 · .NET](#2--net) |
-| [3 · Ghidra headless](#3--ghidra-headless) | [4 · ไฟล์ที่ถูก pack และภาษาเฉพาะ](#4--ไฟล์ที่ถูก-pack-และภาษาเฉพาะ) |
+| [1 · Native, step by step](#1--native-step-by-step) | [2 · .NET](#2--net) |
+| [3 · Ghidra headless](#3--ghidra-headless) | [4 · Packed files and special languages](#4--packed-files-and-special-languages) |
 
-## 1 · native ทีละขั้น
+## 1 · Native, step by step
 
-ทุกขั้นอ่านไฟล์อย่างเดียว ไม่โหลดหรือรัน binary
+Every step only reads the file. The binary is never loaded or run.
 
-| ขั้น | คำสั่ง | ได้อะไร |
+| Step | Command | Result |
 |---|---|---|
-| 1 ชนิดไฟล์ | `python -I scripts/triage.py <file>` | PE / ELF / Mach-O · สถาปัตยกรรม · .NET หรือไม่ |
-| 2 header · section · import · export | `python -I scripts/pe_elf_info.py <file>` (`--limit 0` ดูครบ · `--json` เก็บไว้เทียบ) | DLL หรือ .so ที่ใช้ · ฟังก์ชันที่เรียก · ฟังก์ชันที่เปิดให้คนอื่นเรียก |
-| 3 strings | `python -I scripts/triage.py <file> --pattern '<regex>'` เช่น `https?://` หรือ `select .* from` | URL · SQL · ข้อความ error (ค่าลับถูกปิด) |
-| 4 disassembly ของจุดที่สนใจ | `objdump -d --start-address=0x… --stop-address=0x… <file>` | assembly เฉพาะช่วง (ผลยาว เขียนลงไฟล์) |
-| 5 pseudo-C | Ghidra headless (หัวข้อ 3) | ฟังก์ชันที่อ่านได้ ชื่อหายถ้าไม่มี symbol |
+| 1 File type | `python -I scripts/triage.py <file>` | PE / ELF / Mach-O · architecture · .NET or not |
+| 2 header · section · import · export | `python -I scripts/pe_elf_info.py <file>` (`--limit 0` shows everything · `--json` keeps it for comparing) | DLLs or .so files used · functions called · functions exposed to others |
+| 3 strings | `python -I scripts/triage.py <file> --pattern '<regex>'` such as `https?://` or `select .* from` | URLs · SQL · error messages (secrets are masked) |
+| 4 disassembly of the spot of interest | `objdump -d --start-address=0x… --stop-address=0x… <file>` | Assembly for that range only (long output; write it to a file) |
+| 5 pseudo-C | Ghidra headless (section 3) | Readable functions; names are lost if there are no symbols |
 
-import บอกได้มากโดยไม่ต้อง decompile:
+Imports tell you a lot without decompiling:
 
-| import ที่เห็น | บอกอะไร |
+| Import seen | What it tells you |
 |---|---|
-| `WINHTTP` · `WININET` · `ws2_32` · `libcurl` · `libssl` | ออกเครือข่าย |
-| `bcrypt` · `ncrypt` · `crypt32` · `libcrypto` | เข้ารหัส · ใบรับรอง |
-| `advapi32!Reg*` | อ่านเขียน registry |
-| `sqlite3_*` · `odbc32` | ฐานข้อมูล |
-| `mscoree.dll` เท่านั้น | เป็น .NET ไปหัวข้อ 2 |
+| `WINHTTP` · `WININET` · `ws2_32` · `libcurl` · `libssl` | Goes out to the network |
+| `bcrypt` · `ncrypt` · `crypt32` · `libcrypto` | Encryption · certificates |
+| `advapi32!Reg*` | Reads and writes the registry |
+| `sqlite3_*` · `odbc32` | Database |
+| `mscoree.dll` only | It is .NET; go to section 2 |
 
-- address และ pseudocode เป็นผลวิเคราะห์ ไม่ใช่ซอร์สต้นฉบับ
-- ไม่มี import หรือ symbol ไม่ได้แปลว่าไม่มีการเรียก (อาจโหลดตอนรันด้วย `LoadLibrary` / `dlopen` หรือถูก strip) ให้จดเป็นสิ่งที่ยังไม่รู้
-- delay-load import ของ PE สคริปต์ยังไม่แสดงรายชื่อ บอกแค่ว่ามี · ใช้ `objdump -p` ดูต่อ
-- Mach-O สคริปต์อ่านได้แค่ header และ dylib ที่ลิงก์ · import และ export ใช้ Ghidra
+- Addresses and pseudocode are analysis results, not the original source.
+- No imports or symbols does not mean no calls (they may be loaded at runtime with `LoadLibrary` / `dlopen`, or stripped). Record it as an unknown.
+- For PE delay-load imports, the script does not list names yet; it only says they exist. Use `objdump -p` to go further.
+- For Mach-O, the script reads only the header and linked dylibs. Use Ghidra for imports and exports.
 
 ## 2 · .NET
 
-- ดูโครงก่อนด้วย `python -I scripts/dotnet_meta.py <dll>` — รายชื่อ assembly ที่อ้าง · class · method · P/Invoke (`Type.method -> dll!ชื่อ`) · resource · `--strings` แสดง user string ที่ปิดค่าลับแล้ว · ไม่ต้องติดตั้งอะไร · ไม่รองรับ metadata แบบ `#-` ที่มี pointer table
-- โค้ด C# อ่านได้ใช้ `ilspycmd` (คำสั่งใน SKILL.md หัวข้อ 5.1) · ได้โค้ดเกือบเท่าต้นฉบับ SQL ครบ เสียแค่ comment และชื่อตัวแปร
-- `.pdb` ที่วางข้าง ๆ คืนชื่อไฟล์และเลขบรรทัด · `.dll.config` มีค่าตั้ง (และมักมีความลับ — ชื่ออย่างเดียว)
-- ASP.NET MVC ที่ compile view ไว้: `.cshtml` กลับมาเป็น class ใต้ `<Assembly>.Views.<Controller>`
-- Xamarin หรือ .NET for Android: โค้ด C# อยู่ใน `assemblies/*.dll` ของ APK (บางทีถูกบีบแบบ LZ4 ขึ้นต้น `XALZ`) แกะตัวนั้น ไม่ใช่ `classes.dex`
-- **NativeAOT** compile เป็น machine code แล้ว decompiler ของ .NET ใช้ไม่ได้ · `pe_elf_info.py` จะบอก `dotnet: False` ทั้งที่ strings มีชื่อ namespace ของ .NET · วิเคราะห์แบบ native (หัวข้อ 1 และ 3) · type ที่กู้ได้ไม่ใช่ C# ต้นฉบับ
-- single-file bundle (ไฟล์ exe เดียวที่มี dll ข้างใน) ต้องแตกก่อน ใช้ `ilspycmd -d -o <out> App.exe` · triage เจอ obfuscator ให้หยุดบอกผู้ใช้ก่อน · assembly ที่ถูกทำให้อ่านยากได้แค่โครง ให้บอกตรง ๆ
-- ตัวเลือกของ `ilspycmd` ที่ใช้บ่อย: type เดียวใช้ `-t Namespace.TypeName` · ดู IL แทน C# ใช้ `-il` · รายชื่อ class ใช้ `-l c` · dependency อยู่คนละโฟลเดอร์ใช้ `-r <โฟลเดอร์>` (ตรวจจาก README ของ ICSharpCode.ILSpyCmd 2026-10-23)
-- ReadyToRun ยังมี IL อยู่ decompile ได้ตามปกติ · trimmed build ตัด member ที่ไม่ถูกใช้ทิ้ง โค้ดที่หายจึงไม่ได้แปลว่าไม่เคยมี (2 ข้อนี้มาจากเอกสาร .NET ทั่วไป ยังไม่ได้ตรวจกับ ILSpy)
+- Look at the structure first with `python -I scripts/dotnet_meta.py <dll>`. It lists referenced assemblies · classes · methods · P/Invoke (`Type.method -> dll!name`) · resources. `--strings` shows user strings with secrets masked. Nothing to install. It does not support `#-` metadata with pointer tables.
+- For readable C# code use `ilspycmd` (command in SKILL.md section 5.1). You get code almost equal to the original, with all SQL; only comments and variable names are lost.
+- A `.pdb` placed alongside restores file names and line numbers. `.dll.config` holds settings (and often secrets; report names only).
+- ASP.NET MVC with precompiled views: `.cshtml` comes back as a class under `<Assembly>.Views.<Controller>`.
+- Xamarin or .NET for Android: the C# code is in the APK's `assemblies/*.dll` (sometimes LZ4-compressed, starting with `XALZ`). Extract that, not `classes.dex`.
+- **NativeAOT** compiles to machine code, so .NET decompilers do not work. `pe_elf_info.py` will say `dotnet: False` even though strings contain .NET namespace names. Analyze it as native (sections 1 and 3). Recovered types are not the original C#.
+- A single-file bundle (one exe holding dlls) must be extracted first with `ilspycmd -d -o <out> App.exe`. If triage finds an obfuscator, stop and tell the user first. An obfuscated assembly gives only the outline; say so plainly.
+- Common `ilspycmd` options: one type → `-t Namespace.TypeName` · IL instead of C# → `-il` · class list → `-l c` · dependencies in another folder → `-r <folder>` (checked against the ICSharpCode.ILSpyCmd README 2026-10-23).
+- ReadyToRun still has IL, so it decompiles normally. A trimmed build drops unused members, so missing code does not mean it never existed. (These 2 points come from general .NET documentation and have not been checked against ILSpy.)
 
 ## 3 · Ghidra headless
 
-ใช้เมื่อขั้น 1–4 ตอบคำถามไม่ได้ · Ghidra และ JDK 21 ต้องติดตั้งโดยผู้ใช้ (SKILL.md หัวข้อ 5) · ยังไม่ได้ทดลองบนเครื่องที่เขียนเอกสารนี้ เพราะไม่มี Ghidra (`ยังไม่ได้ตรวจ`)
+Use when steps 1–4 cannot answer the question. The user must install Ghidra and JDK 21 (SKILL.md section 5). Not tried on the machine where this document was written, because it has no Ghidra (`ยังไม่ได้ตรวจ`, not yet checked).
 
 ```bash
 # Windows ใช้ support\analyzeHeadless.bat · project ชั่วคราว ลบทิ้งเมื่อจบ ไม่แก้ byte ของไฟล์เป้าหมาย
@@ -791,23 +791,23 @@ import บอกได้มากโดยไม่ต้อง decompile:
   -scriptPath <โฟลเดอร์สคริปต์ของเรา> -postScript <สคริปต์ส่งออก> _to_delete/re/<ชื่อ>/out -deleteProject
 ```
 
-- ส่งออก pseudo-C เฉพาะฟังก์ชันที่ต้องดู (ตาม address จาก import หรือ string) ไม่ส่งออกทั้งไฟล์ ผลจะยาวเกินอ่าน
-- ชุดที่ควรได้จากการรัน 1 ครั้ง: รายชื่อฟังก์ชันพร้อม address · strings พร้อมจุดที่อ้างถึง (xref) · import และ export · pseudo-C และ disassembly ของฟังก์ชันที่สนใจ · สคริปต์ส่งออกต้องเขียนเองผ่าน API ของ Ghidra
-- อ่าน pseudo-C เทียบกับ disassembly ทุกครั้งก่อนอ้างฟังก์ชันในรายงาน เพราะ decompiler เดา type และยุบโค้ดผิดได้ ส่วน disassembly คือสิ่งที่รันจริง (แนวคิดจาก ghidra-headless ใน trailofbits/skills-curated (CC-BY-SA) เขียนใหม่ด้วยคำของเรา)
-- ตรวจว่ามี Ghidra · IDA · Hopper ไหมด้วย `node scripts/check-tools.mjs --target native`
-- address ของ ELF เป็น virtual address ไม่ใช่ file offset ห้ามบวก image base เอง
-- เป้าหมายที่ไม่น่าไว้ใจ ให้รัน Ghidra ใน `docker-sandbox` ด้วย เพราะ parser ของ Ghidra อ่านไฟล์ด้วยสิทธิ์ผู้ใช้
-- IDA · Hopper · Binary Ninja ใช้แทนได้เฉพาะสัญญาอนุญาตของผู้ใช้เอง เปิดแบบอ่านอย่างเดียว ไม่ save ทับ
+- Export pseudo-C only for the functions you need to see (by address from an import or string), not the whole file. The output would be too long to read.
+- What one run should produce: function list with addresses · strings with where they are referenced (xref) · imports and exports · pseudo-C and disassembly of the functions of interest. The export script must be written yourself through Ghidra's API.
+- Always read pseudo-C against the disassembly before citing a function in the report, because the decompiler can guess types and collapse code wrongly. The disassembly is what actually runs. (Idea from ghidra-headless in trailofbits/skills-curated (CC-BY-SA), rewritten in our own words.)
+- Check whether Ghidra · IDA · Hopper exist with `node scripts/check-tools.mjs --target native`.
+- ELF addresses are virtual addresses, not file offsets. Never add the image base yourself.
+- For an untrusted target, run Ghidra in `docker-sandbox` too, because Ghidra's parser reads the file with the user's privileges.
+- IDA · Hopper · Binary Ninja may be used instead only under the user's own license, opened read-only, never saving over the file.
 
-## 4 · ไฟล์ที่ถูก pack และภาษาเฉพาะ
+## 4 · Packed files and special languages
 
-| เห็นอะไร | หมายถึง | ทำอะไรต่อ |
+| What you see | It means | What to do next |
 |---|---|---|
-| section ชื่อ `UPX0` `UPX1` · section ที่ raw size 0 แต่ virtual size ใหญ่ | ถูก pack | จดตัวตนของไฟล์เดิมและไฟล์ที่แตกแยกกัน · การแตก stub ไม่ได้แปลว่าได้โปรแกรมจริง · ถามผู้ใช้ก่อนแตก |
-| `.gopclntab` (สคริปต์บอก `Go binary`) · string `go1.` | Go | ชื่อฟังก์ชันยังอยู่ใน pclntab · Ghidra รุ่นใหม่อ่านได้ |
-| string `/rustc/` · `.cargo/registry` | Rust | ชื่อ crate จาก path ใน strings · ไม่มี section `.dep-v0` ไม่ได้แปลว่าไม่มี dependency |
-| ไฟล์ไม่มี header (firmware) | raw binary | ต้องรู้สถาปัตยกรรมและจุดเริ่มก่อน ถามผู้ใช้หรือดูเอกสารของอุปกรณ์ · image ที่มีหลายส่วนดู [firmware](firmware.md) |
-| `.wasm` | WebAssembly | WABT (`wasm2wat`) ที่ผู้ใช้ติดตั้ง · WAT ไม่ใช่ซอร์สต้นฉบับ |
+| Sections named `UPX0` `UPX1` · a section with raw size 0 but large virtual size | Packed | Record the identity of the original file and the unpacked file separately · unpacking the stub does not mean you have the real program · ask the user before unpacking |
+| `.gopclntab` (script says `Go binary`) · string `go1.` | Go | Function names remain in pclntab · recent Ghidra versions can read them |
+| String `/rustc/` · `.cargo/registry` | Rust | Crate names come from paths in strings · no `.dep-v0` section does not mean no dependencies |
+| File with no header (firmware) | Raw binary | Need the architecture and entry point first; ask the user or read the device documentation · for an image with several parts see [firmware](firmware.md) |
+| `.wasm` | WebAssembly | WABT (`wasm2wat`) installed by the user · WAT is not the original source |
 
 
 ## reference: packaging-patterns.md
@@ -865,112 +865,112 @@ import บอกได้มากโดยไม่ต้อง decompile:
 
 ## reference: runtime-observation.md
 
-# ดูเป้าหมายตอนรัน
+# Observing the target at runtime
 
-แนวคิดดัดแปลงจาก `runtime-observation.md` ของ REA (MIT · © 2026 morluto) · ต้นฉบับให้ agent เรียก tool ที่รันเป้าหมายได้โดยไม่ต้องขอรายครั้ง ไฟล์นี้เปลี่ยนเป็น **ต้องถามผู้ใช้ทุกครั้ง**
+Ideas adapted from REA's `runtime-observation.md` (MIT · © 2026 morluto). The original lets the agent call tools that run the target without asking each time. This file changes that to **ask the user every time**.
 
-ใช้ runtime เฉพาะเมื่อหลักฐานแบบ static ตอบคำถามไม่ได้จริง และจดเหตุผลไว้ในสมุดหลักฐาน
+Use runtime only when static evidence truly cannot answer the question, and record the reason in the evidence ledger.
 
-## 1 · ก่อนรันอะไรทุกครั้ง
+## 1 · Before running anything
 
-ถามผู้ใช้ด้วยข้อความเดียวที่บอกครบ แล้วรอคำตอบ:
+Ask the user in one message that says everything, then wait for the answer:
 
-- จะรันอะไร (คำสั่งเต็ม) · กับไฟล์หรือแอปไหน · ที่ไหน (container ชื่ออะไร หรือ emulator ตัวไหน) · นานแค่ไหน · จะเก็บอะไรกลับมา
-- เป้าหมายจะออกเครือข่ายได้ไหม (ค่าเริ่ม: ปิด)
+- What will run (full command) · on which file or app · where (which container, or which emulator) · for how long · what will be collected
+- Whether the target may reach the network (default: off)
 
-ผู้ใช้ตอบ no ให้จดลงบันทึกสิทธิ์ช่อง "การรันที่ถูกปฏิเสธ" และห้ามขอซ้ำด้วยคำสั่งเดิม · ทำต่อเท่าที่ static ได้ แล้วจดส่วนที่ขาดเป็นสิ่งที่ยังไม่รู้
+If the user answers no, record it in the authorization record's field "การรันที่ถูกปฏิเสธ" (runs refused) and never ask again with the same command. Continue as far as static work allows, and record the missing part as an unknown.
 
-## 2 · รันที่ไหน
+## 2 · Where to run
 
-| เป้าหมาย | ที่รัน |
+| Target | Where to run |
 |---|---|
-| ไม่รู้ที่มา · ไม่น่าไว้ใจ · malware | container ของ `docker-sandbox` เท่านั้น · ปิดเครือข่าย (`--network none`) เว้นแต่ผู้ใช้อนุญาต · ไม่ mount โฟลเดอร์ของผู้ใช้ นอกจากโฟลเดอร์งานใน `_to_delete/re/` |
-| ของผู้ใช้เอง ที่ผู้ใช้รันอยู่ทุกวันแล้ว | เครื่องผู้ใช้ได้ ถ้าผู้ใช้อนุญาต |
-| แอป Android | emulator ที่สร้างไว้สำหรับงานนี้ ไม่ใช้โทรศัพท์ส่วนตัว |
-| แอป Windows ที่ไม่น่าไว้ใจ | container Linux รันไม่ได้ · ใช้ Windows Sandbox หรือ VM ที่ผู้ใช้เตรียมเอง แล้วให้ผู้ใช้เป็นคนรัน |
+| Unknown origin · untrusted · malware | `docker-sandbox` container only · network off (`--network none`) unless the user allows it · mount no user folder except the work folder in `_to_delete/re/` |
+| The user's own software that the user already runs every day | The user's machine is allowed, if the user permits |
+| Android app | An emulator created for this job, not a personal phone |
+| Untrusted Windows app | A Linux container cannot run it · use Windows Sandbox or a VM the user prepares, and have the user run it |
 
-การดูตอนรันเป็นหลักฐานพฤติกรรม ไม่ใช่การกักขัง · debugger และ Frida ไม่ได้กันเป้าหมายจากเครื่อง
+Runtime observation is behavior evidence, not containment. A debugger and Frida do not keep the target away from the machine.
 
-## 3 · ใครเป็นคนกด
+## 3 · Who clicks
 
-| ผู้ลงมือ | วิธี | ต้องถาม |
+| Actor | Method | Must ask |
 |---|---|---|
-| ผู้ใช้กดเอง agent ดูผล | ผู้ใช้เปิด DevTools หรือบันทึก HAR แล้วส่งไฟล์มา | ถามครั้งเดียวว่าจะดูหน้าไหน ขั้นไหน |
-| agent สั่งเบราว์เซอร์หรือแอปเอง | Playwright ใน `docker-sandbox` ตามขั้นที่ประกาศ | **ทุกครั้ง** · เปิดหน้าใหม่อาจล้างฟอร์มที่ยังไม่ได้บันทึก บอกผู้ใช้ก่อน |
+| The user clicks, the agent reads the result | The user opens DevTools or records a HAR and sends the file | Ask once which page and which step to look at |
+| The agent drives the browser or app itself | Playwright in `docker-sandbox`, following the announced steps | **Every time** · opening a new page may wipe an unsaved form; tell the user first |
 
-รายงานให้ชัดว่าใครกด · การดูเฉย ๆ ห้ามเขียนว่า agent กด เปิดหน้า หรือเห็นสิ่งที่เกิดก่อนเริ่มบันทึก
+Report clearly who clicked. For passive viewing, never write that the agent clicked, opened a page, or saw what happened before recording began.
 
 ## 4 · Electron
 
-- ต่อ DevTools ของ main process ด้วย `--inspect` ได้เฉพาะเมื่อ fuse `EnableNodeCliInspectArguments` เปิดอยู่ · ปิดแล้วแอปจะไม่สน `--inspect` ไม่ต้องหาทางเลี่ยง
-- หน้าต่าง renderer ที่เปิด DevTools ได้ (Ctrl+Shift+I) ให้ผู้ใช้เปิดเอง
-- ห้ามแก้ไฟล์ asar หรือ fuse ของแอปเพื่อเปิดทาง ถือเป็นการแก้เป้าหมาย
+- You may attach DevTools to the main process with `--inspect` only when the fuse `EnableNodeCliInspectArguments` is on. If it is off, the app ignores `--inspect`; do not look for a way around it.
+- For a renderer window that can open DevTools (Ctrl+Shift+I), the user opens it.
+- Never edit the app's asar file or fuses to open a way in. That counts as modifying the target.
 
-## 5 · เครื่องมือรันและเกาะ process
+## 5 · Tools that run and attach to processes
 
-ทุกตัวในตารางนี้ต้องถามทุกครั้ง และผู้ใช้เป็นคนติดตั้งจากแหล่งทางการ
+Every tool in this table needs asking every time, and the user installs it from the official source.
 
-| เครื่องมือ | ใช้ทำอะไร | ติดตั้งจาก |
+| Tool | Used for | Install from |
 |---|---|---|
-| x64dbg · WinDbg | debug โปรแกรม Windows | x64dbg.com · Microsoft Store / learn.microsoft.com |
-| GDB · LLDB | debug Linux · macOS | ตัวจัดการแพ็กเกจของระบบ |
-| Frida | ฉีดสคริปต์เข้า process | `pip install frida-tools` จาก PyPI (ผู้ใช้รันเอง) |
-| adb | สั่งอุปกรณ์ Android | Android SDK Platform-Tools |
-| Process Monitor | ดูไฟล์และ registry ที่โปรแกรมแตะ | Sysinternals (learn.microsoft.com) |
+| x64dbg · WinDbg | Debug Windows programs | x64dbg.com · Microsoft Store / learn.microsoft.com |
+| GDB · LLDB | Debug Linux · macOS | The system package manager |
+| Frida | Inject scripts into a process | `pip install frida-tools` from PyPI (the user runs it) |
+| adb | Control an Android device | Android SDK Platform-Tools |
+| Process Monitor | See files and registry the program touches | Sysinternals (learn.microsoft.com) |
 
-- เกาะ process ที่ผู้ใช้กำลังใช้งาน (เช่น เบราว์เซอร์ที่ login ธนาคารอยู่) ห้ามทำ แม้ผู้ใช้อนุญาต ให้เปิดตัวใหม่ใน sandbox แทน
-- ผลที่เห็นตอนรันติดป้าย `ตรวจจริง` พร้อมคำสั่ง เวลา และที่รัน · ค่าลับที่เห็นในหน่วยความจำหรือ log รายงานแค่ชื่อ
+- Never attach to a process the user is currently using (for example a browser logged in to a bank), even if the user permits. Start a new one in a sandbox instead.
+- Label results seen at runtime `ตรวจจริง` (verified) with the command, time and where it ran. For secrets seen in memory or logs, report only the name.
 
 
 ## reference: web-and-network.md
 
-# เว็บแอป และทราฟฟิกเครือข่าย
+# Web apps and network traffic
 
-แนวคิดดัดแปลงจาก `runtime-observation.md` และ `evidence-workflows.md` ของ REA (MIT · © 2026 morluto) ส่วนไฟล์ทราฟฟิก เขียนใหม่ให้ใช้สคริปต์ในเครื่อง
+Ideas adapted from REA's `runtime-observation.md` and `evidence-workflows.md` (MIT · © 2026 morluto). The traffic-file part is rewritten to use local scripts.
 
-## 1 · เว็บแอปของผู้ใช้
+## 1 · The user's web app
 
-- เป้าหมายต้องเป็นเว็บของผู้ใช้หรือลูกค้าที่มีสัญญา จดโดเมนที่อยู่ในขอบเขตลงบันทึกสิทธิ์ · โดเมนอื่นที่หน้าเว็บเรียก (CDN · analytics · payment) ดูได้แค่ใน capture ไม่ไปยิงเอง
-- โค้ดฝั่งเบราว์เซอร์: เอาจากโฟลเดอร์ build ของผู้ใช้ก่อน ถ้าไม่มีให้ผู้ใช้กด "Save as" หรือส่งไฟล์มา · ต่อด้วย `sourcemap_list.py` และ [javascript-electron](javascript-electron.md)
-- ห้ามยิง request ซ้ำ ห้ามลอง login ห้ามสแกนหาช่องโหว่ ถ้าไม่ได้ตกลงไว้ในขอบเขต · งานทดสอบความปลอดภัยส่งต่อ `security-engineer`
-- หน้าเว็บสาธารณะของคนอื่น อ่านได้แค่หน้าและสคริปต์ที่ใครก็โหลดได้ ตาม robots.txt และเงื่อนไขการใช้งานของเว็บนั้น · ห้ามเข้าส่วนที่ต้อง login ของคนอื่น
-- เจอ CAPTCHA ไม่แก้และไม่หาทางเลี่ยง ให้ผู้ใช้ทำเอง
-- ตรวจว่าเครื่องมีเบราว์เซอร์และ Playwright Core ไหมด้วย `node scripts/check-tools.mjs --target web` · การให้ Playwright กดหรือกรอกเองต้องถามทุกครั้งตาม [runtime-observation](runtime-observation.md)
+- The target must be the web app of the user, or of a customer under contract. Record the in-scope domains in the authorization record. Other domains the page calls (CDN · analytics · payment) may be looked at only in the capture; never send requests to them yourself.
+- Browser-side code: take it from the user's build folder first. If there is none, have the user "Save as" or send the files. Then continue with `sourcemap_list.py` and [javascript-electron](javascript-electron.md).
+- Never replay requests, try logins, or scan for vulnerabilities unless agreed in the scope. Pass security testing work on to `security-engineer`.
+- For someone else's public web page, read only the page and scripts anyone can load, following that site's robots.txt and terms of use. Never enter parts of another party's site that need login.
+- On a CAPTCHA, do not solve it and do not look for a way around it. Let the user do it.
+- Check whether the machine has a browser and Playwright Core with `node scripts/check-tools.mjs --target web`. Letting Playwright click or fill in by itself needs asking every time, per [runtime-observation](runtime-observation.md).
 
-## 2 · ให้ผู้ใช้บันทึก HAR (HTTP Archive) เอง
+## 2 · Have the user record the HAR (HTTP Archive) themselves
 
-ผู้ใช้เป็นคนกด agent ไม่สั่งเบราว์เซอร์เอง:
+The user clicks; the agent does not drive the browser:
 
-1. เปิด DevTools (F12) → แท็บ Network → ติ๊ก "Preserve log"
-2. ทำขั้นตอนที่ต้องการดู 1 รอบ
-3. คลิกขวาในรายการ → "Save all as HAR" (Chrome · Edge) แล้ววางไฟล์ไว้ใน `_to_delete/re/<ชื่อ>/`
+1. Open DevTools (F12) → Network tab → tick "Preserve log"
+2. Do the steps to be observed, once
+3. Right-click in the list → "Save all as HAR" (Chrome · Edge), then put the file in `_to_delete/re/<ชื่อ>/`
 
-**HAR มี cookie token และข้อมูลส่วนตัวเต็ม ๆ** ให้ถือเป็นความลับ เก็บใน `_to_delete/` ไม่ commit ไม่ส่งต่อ และบอกผู้ใช้ให้ลบเมื่อจบงาน · ถ้าใช้ session จริง แนะนำให้ผู้ใช้ logout หลังบันทึก เพื่อให้ token ในไฟล์หมดอายุ
+**A HAR holds cookies, tokens and personal data in full.** Treat it as a secret: keep it in `_to_delete/`, never commit it, never pass it on, and tell the user to delete it when the job ends. If a real session was used, advise the user to log out after recording so the tokens in the file expire.
 
-### 2.1 · บันทึก HAR ด้วยสคริปต์ มี 3 กับดัก (ตัวอย่างจากงานนั้น: เว็บค้นเที่ยวบิน)
+### 2.1 · Recording a HAR with a script: 3 traps (example from that job: a flight search site)
 
-| กับดัก | อาการ | ทางแก้ |
+| Trap | Symptom | Fix |
 |---|---|---|
-| URL มีตัว `\|` ที่ยังไม่ encode (เช่น Google Fonts) | เครื่องมืออ่าน HAR ปฏิเสธไฟล์ดิบ: `HAR schema validation failed ... must match format "uri"` | แปลง `\|` เป็น `%7C` แล้วเขียนเป็นไฟล์ใหม่ ไม่แก้ไฟล์ดิบ |
-| คำขอแบบ stream ที่หน้าเว็บยกเลิกเองเมื่อได้ข้อมูลครบ | HAR ไม่มี body ของคำขอนั้น | ให้สคริปต์เก็บข้อมูลที่ไหลเข้ามาผ่าน CDP (Chrome DevTools Protocol) แล้วเติมลง HAR · เขียนใน `_comment` ของรายการนั้นว่าเติมเอง ไม่ใช่มาจาก HAR ตรง ๆ |
-| Playwright 1.64.1 หา ffmpeg ที่ต้องใช้ไม่เจอ (ในเครื่องมีแค่ ffmpeg-1011) | อัดวิดีโอไม่ได้ | ผูกไว้ที่ 1.64.0-alpha และจดเวอร์ชันลงสมุดหลักฐาน |
+| A URL has an unencoded `\|` (for example Google Fonts) | HAR reading tools reject the raw file: `HAR schema validation failed ... must match format "uri"` | Convert `\|` to `%7C` and write a new file; do not edit the raw file |
+| A streaming request the page cancels itself once it has all the data | The HAR has no body for that request | Have the script collect the incoming data through CDP (Chrome DevTools Protocol) and fill it into the HAR · write in that entry's `_comment` that it was added manually, not from the HAR directly |
+| Playwright 1.64.1 cannot find the ffmpeg it needs (the machine only has ffmpeg-1011) | Cannot record video | Pin to 1.64.0-alpha and record the version in the evidence ledger |
 
-## 3 · สรุป HAR
+## 3 · Summarize a HAR
 
 ```bash
 python -I scripts/har_summary.py <capture.har>                       # ทั้งไฟล์
 python -I scripts/har_summary.py <capture.har> --host api.example.com # เฉพาะ host เดียว
 ```
 
-ได้: host และจำนวนครั้ง · status code · endpoint จัดกลุ่มตาม method + host + รูปแบบ path (เลข id และ uuid กลายเป็น `{id}`) · ชื่อ query parameter · ชนิดข้อมูลที่ตอบ · วิธียืนยันตัวตน
+It reports: hosts and counts · status codes · endpoints grouped by method + host + path pattern (id numbers and uuids become `{id}`) · query parameter names · response content types · authentication method
 
-- ค่าของ header cookie และ query **ถูกตัดทิ้งทั้งหมด** เหลือแค่ชื่อและคำนำหน้าอย่าง `Bearer` `Basic` · ผลจึงแปะในรายงานได้
-- การจัดกลุ่ม path เป็น `อนุมาน` ไม่ใช่ schema ของ server · endpoint ที่ไม่ได้กดใน capture ถือว่ายังไม่รู้ ไม่ใช่ไม่มี
-- ต้องดู body ของ request หรือ response ให้เปิด HAR อ่านเฉพาะ entry ที่ต้องการ แล้วเขียนแต่โครง (ชื่อ field · ชนิด) ลงรายงาน ไม่ใช่ค่า
+- Values of cookie headers and queries are **dropped entirely**, leaving only names and prefixes like `Bearer` `Basic`. So the output can be pasted into a report.
+- The path grouping is `อนุมาน` (inferred), not the server's schema. An endpoint not clicked in the capture is unknown, not absent.
+- To see a request or response body, open the HAR and read only the entries needed, then write only the structure (field names · types) in the report, not the values.
 
-## 4 · ไฟล์ pcap (packet capture)
+## 4 · pcap files (packet capture)
 
-ใช้ Wireshark หรือ tshark ที่ผู้ใช้ติดตั้งจาก wireshark.org (ตรวจด้วย `node scripts/check-tools.mjs --target network`) · การอ่านไฟล์ที่บันทึกแล้วไม่ต้องถามซ้ำ แต่การดักทราฟฟิกสดต้องถามทุกครั้ง · สิทธิ์อ่านไฟล์ที่บันทึกไว้ไม่ได้รวมสิทธิ์ดักใหม่ และห้ามดักหรือถอดรหัสทราฟฟิกของคนอื่น
+Use Wireshark or tshark that the user installed from wireshark.org (check with `node scripts/check-tools.mjs --target network`). Reading an already recorded file needs no repeated asking, but capturing live traffic needs asking every time. Permission to read a saved file does not include permission to capture anew, and never capture or decrypt anyone else's traffic.
 
 ```bash
 tshark -r <file.pcap> -q -z conv,tcp          # ใครคุยกับใคร
@@ -979,27 +979,27 @@ tshark -r <file.pcap> -Y dns -T fields -e dns.qry.name | sort | uniq -c | sort -
 tshark -r <file.pcap> -Y 'tls.handshake.type == 1' -T fields -e tls.handshake.extensions_server_name | sort -u
 ```
 
-- ใส่ display filter (`-Y`) ให้แคบเฉพาะ host หรือ port ของเป้าหมายตั้งแต่แรก ไม่เปิดไฟล์ใหญ่ทั้งไฟล์
+- Put in a display filter (`-Y`) narrowed to the target's host or port from the start. Do not open a whole large file.
 
-- TLS ที่ไม่มี key log อ่านได้แค่ชื่อ host (SNI) และขนาด · อย่าอ้างว่าเห็นเนื้อหา
-- SAZ ของ Fiddler เป็น ZIP ที่มีไฟล์ request/response แยก แตกด้วย `python -m zipfile -e` แล้วอ่านทีละไฟล์
+- TLS without a key log shows only the host name (SNI) and sizes. Never claim to have seen the content.
+- A Fiddler SAZ is a ZIP holding separate request/response files. Extract it with `python -m zipfile -e` and read one file at a time.
 
-## 5 · ดักทราฟฟิกใหม่ผ่าน proxy (mitmproxy)
+## 5 · Capturing new traffic through a proxy (mitmproxy)
 
-ใช้เมื่อไม่มี capture ที่บันทึกไว้ และต้องเห็น request ของแอปที่ไม่ใช่เบราว์เซอร์ · ต้องถามผู้ใช้ทุกครั้ง โดยบอกแอป อุปกรณ์ และช่วงเวลาที่จะดัก
+Use when there is no saved capture and you must see the requests of a non-browser app. Ask the user every time, stating the app, the device and the time window to capture.
 
-- ใช้กับระบบหรือบัญชีทดสอบที่ได้รับอนุญาตเท่านั้น ไม่ใช้บัญชีจริงที่มีข้อมูลลูกค้า
-- บอกผลข้างเคียงก่อนเริ่ม: ต้องติดตั้งใบรับรอง CA ของ mitmproxy ลงเครื่องหรืออุปกรณ์ และต้องตั้ง proxy · แอปที่ตรึงใบรับรองไว้ (certificate pinning) จะเชื่อมต่อไม่ได้ ให้จดเป็นสิ่งที่ยังไม่รู้ ห้ามแก้แอปเพื่อเลี่ยง
-- บันทึกผลลงไฟล์ด้วย `mitmdump -w _to_delete/re/<ชื่อ>/flows.mitm` แล้วอ่านเฉพาะส่วน
-- จบงานแล้วคืนค่าทุกอย่าง: ถอดใบรับรอง CA · ปิด proxy · จดลงสมุดหลักฐานว่าคืนค่าแล้ว
-- ไฟล์ flow มี cookie และ token เหมือน HAR ให้ดูแลแบบเดียวกับหัวข้อ 2
+- Use only on authorized test systems or accounts, never real accounts holding customer data.
+- State the side effects before starting: the mitmproxy CA certificate must be installed on the machine or device, and a proxy must be set. An app with certificate pinning will not connect; record that as an unknown and never modify the app to get around it.
+- Save the results to a file with `mitmdump -w _to_delete/re/<ชื่อ>/flows.mitm`, then read only parts.
+- At the end, restore everything: remove the CA certificate · turn off the proxy · record in the evidence ledger that it was restored.
+- A flow file holds cookies and tokens like a HAR. Handle it the same way as section 2.
 
-## 6 · โปรโตคอลที่ไม่รู้จัก
+## 6 · Unknown protocols
 
-1. เก็บตัวอย่างอย่างน้อย 3 ชุดที่ต่างกันทีละอย่าง (ค่าเดียวเปลี่ยน)
-2. เทียบ byte ต่อ byte หา header · ความยาว · ตัวนับ · checksum
-3. เขียน parser ที่เช็กขนาดก่อนอ่านทุกครั้ง แล้วรันกับตัวอย่างทั้งหมด · ผลตรงทุกชุดจึงติด `ตรวจจริง`
-4. ค่าที่เห็นค่าเดียวในทุกตัวอย่าง จดเป็นสิ่งที่ยังไม่รู้ ไม่ตั้งชื่อให้เอง
+1. Collect at least 3 samples that differ one thing at a time (one value changed).
+2. Compare byte by byte to find headers · lengths · counters · checksums.
+3. Write a parser that checks size before every read, then run it on all the samples. Only when every sample matches, label it `ตรวจจริง` (verified).
+4. For a value that is the same in every sample, record it as an unknown. Do not name it yourself.
 
 
 ---
@@ -1096,46 +1096,46 @@ Applies to slide titles, figure titles, document headings, and box titles in a d
 
 ## reference: headings-and-examples.md
 
-# หัวข้อ · สไลด์ · diagram และตัวอย่าง ก่อน → หลัง (ฉบับเต็ม)
+# Headings, slides, diagrams and before → after examples (full version)
 
-อ่านเมื่อเขียนหัวสไลด์ ชื่อรูป ป้ายใน diagram หรืออยากดูตัวอย่างการแก้ · กฎย่ออยู่ใน `SKILL.md` ข้อ 6–7
+Read when writing a slide title, figure title or diagram label, or when you want examples of fixes. The short rules are in `SKILL.md` sections 6–7.
 
-## สไลด์ และหัวข้อทุกชนิด
+## Slides and headings of every kind
 
-- หัวสไลด์ = ข้อสรุปของหน้า ไม่ใช่ชื่อหัวข้อ: "ยิ่ง Tier 1 เติมค่าเอง Gate ยิ่งมองไม่เห็นค่าผิด"
+- A slide title = the conclusion of the page, not the topic name: "ยิ่ง Tier 1 เติมค่าเอง Gate ยิ่งมองไม่เห็นค่าผิด"
 
-**เขียนหัวให้ลื่น ไม่กำกวม** — ใช้กับหัวสไลด์ ชื่อรูป หัวข้อเอกสาร และหัวกล่องใน diagram
+**Write titles that read smoothly and are not ambiguous.** This applies to slide titles, figure titles, document headings and box titles in a diagram.
 
-- **หัวที่มี 2 ท่อนต้องมีคำเชื่อม** (ส่วน · แต่ · เพราะ · จึง) ห้ามวาง 2 วลีเรียงกันเฉย ๆ เพราะคนอ่านต้องเดาเองว่า 2 ท่อนเกี่ยวกันอย่างไร
-- **คำเชื่อมต้องตรงกับความสัมพันธ์จริง** ใช้ "เพราะ" หรือ "จึง" เฉพาะเมื่อท่อนหนึ่งเป็นเหตุของอีกท่อนจริง ถ้า 2 ท่อนแค่แบ่งหน้าที่กัน ใช้ "ส่วน" ถ้าขัดกัน ใช้ "แต่" · หัวหนึ่งใช้คำเชื่อมได้ 1 คำ ถ้าต้องใช้ 2 คำแปลว่ายัดเกินไป ให้ตัดเหลือเรื่องเดียว
-- **หัวยังต้องสั้น** หัวสไลด์ไม่เกิน 2 บรรทัด (ประมาณ 15 คำ) ถ้ายาวกว่านี้ ให้ตัดรายละเอียดลงไปในเนื้อหน้า อย่าเติมคำเชื่อมจนกลายเป็นย่อหน้า
-- **ใช้วลีที่คนพูดจริง** ถ้าย่อจนกลายเป็นคำนามเรียงกัน เช่น "AI ทำงานภาษา" ให้หากริยาที่คนใช้จริง เช่น "AI ช่วยเขียนคำตอบ"
-- **เลือกคำตามคนอ่าน** ถ้าผู้อ่านไม่ใช่สายเทคนิค ใช้ "ระบบ" แทน "โค้ด" ใช้ "ตรวจขาเข้า" แทน "Guard" ส่วนศัพท์เทคนิคใช้ได้เมื่อผู้อ่านเป็นทีมเทคนิค
-- **กริยาต้องตรงกับสิ่งที่หน้านั้นแสดง** ถ้ากล่องในรูปคือขั้นตรวจ ให้ใช้ "ตรวจ" หรือ "ตัดสิน" ไม่ใช้ "ตัดสินใจ" ซึ่งให้ความรู้สึกว่าเป็นการเลือกทาง
-- **ไม่ใช้ "คน" กับสิ่งที่ไม่ใช่คน**: "ระบบเป็นคนตัดสิน" → "ให้ระบบตัดสิน"
-- **บรรทัดสรุปใต้รูปต้องบอกสิ่งที่รูปไม่ได้บอก** ถ้าเป็นแค่ลูกศรไล่ขั้นซ้ำกับรูป ให้ตัดทิ้ง หรือเปลี่ยนเป็นประโยคเดียวที่บอกว่าทำไมรูปนี้สำคัญ
-- **ทดสอบ**: อ่านหัวให้คนนอกโปรเจกต์ฟังครั้งเดียว ถ้าเขาเล่าต่อด้วยคำของตัวเองไม่ได้ หรือต้องถามว่า "หมายถึงอะไร" ให้เขียนใหม่
-- โครงหน้า: ปัญหา → วิธีแก้ → ผล · แต่ละส่วนอ่านจบในแวบเดียว
-- สคริปต์พูดเขียนแบบที่พูดจริง อ่านออกเสียงได้ไม่สะดุด
+- **A title with 2 parts needs a connector** (ส่วน · แต่ · เพราะ · จึง — as for · but · because · so). Do not just place 2 phrases side by side, because the reader has to guess how the 2 parts relate.
+- **The connector must match the real relationship.** Use "เพราะ" or "จึง" only when one part really is the cause of the other. If the 2 parts just split roles, use "ส่วน". If they contrast, use "แต่". 1 title, 1 connector. If it needs 2, you crammed too much in: cut it down to one topic.
+- **The title must still be short.** A slide title is at most 2 lines (about 15 words). If it is longer, move detail down into the page body. Do not add connectors until the title becomes a paragraph.
+- **Use phrases people actually say.** If shortening leaves a string of nouns such as "AI ทำงานภาษา", find the verb people really use, such as "AI ช่วยเขียนคำตอบ".
+- **Choose words by reader.** If the reader is not technical, use "ระบบ" (system) instead of "โค้ด" (code) and "ตรวจขาเข้า" (check incoming) instead of "Guard". Technical terms are fine when the reader is a technical team.
+- **The verb must match what the page shows.** If a box in the figure is a checking step, use "ตรวจ" (check) or "ตัดสิน" (judge), not "ตัดสินใจ" (decide), which sounds like choosing a path.
+- **Do not use "คน" (person) for things that are not people**: "ระบบเป็นคนตัดสิน" → "ให้ระบบตัดสิน"
+- **The summary line under a figure must say what the figure does not.** If it is only an arrow chain of steps that repeats the figure, cut it, or replace it with 1 sentence saying why this figure matters.
+- **Test**: read the title once to an outsider. If they cannot retell it in their own words, or have to ask "what does that mean", rewrite it.
+- Page structure: problem → fix → result. Each part can be read in one glance.
+- Write a speaking script the way it is actually spoken. It must read aloud without tripping.
 
 ## Diagram
 
-- ป้ายในกล่องเป็นคำนามสั้น 1–4 คำ ที่คนเข้าใจ: "รับข้อมูลเข้า" ไม่ใช่ "Ingress Layer Handler"
-- ป้ายบนลูกศรเป็นกริยา: "ส่งไฟล์" · "ตรวจสิทธิ์" · ลูกศรที่ไม่มีป้ายต้องเดาไม่ผิด
-- คำในรูปต้องตรงกับคำในเอกสารทุกคำ
-- ชื่อรูปเป็นข้อสรุป เหมือนหัวสไลด์ · ใต้รูปมี 1 ประโยคบอกว่าควรดูอะไร
-- ถ้าโปรเจกต์มีแบบรูปประจำ (house style) ให้ใช้ตามนั้น ส่วนวิธีวาดดูใน skill รูปของ plugin นั้น
+- A box label is a short noun of 1–4 words that people understand: "รับข้อมูลเข้า" not "Ingress Layer Handler"
+- An arrow label is a verb: "ส่งไฟล์" · "ตรวจสิทธิ์". An unlabelled arrow must be impossible to misread.
+- Every word in the figure must match the word in the document.
+- The figure title is a conclusion, like a slide title. Under the figure, 1 sentence says what to look at.
+- If the project has a house style, follow it. For how to draw, see the figure skill of that plugin.
 
-## ตัวอย่าง ก่อน → หลัง
+## Before → after examples
 
-เงื่อนไขเขียนเป็นประโยคเต็ม มีคำเชื่อม (ข้อ 2):
+Write a condition as a full sentence with a connector (section 2):
 
-  - ก่อน: `ไม่แน่ใจว่าขนาดไหน → ถือเป็นขนาดที่ใหญ่กว่า 1 ขั้น`
-  - หลัง: `ถ้าไม่แน่ใจว่างานขนาดไหน ให้ถือว่าใหญ่ขึ้นอีก 1 ขั้น`
-  - ก่อน: `ย้อนได้ → ทำเลย · ไม่รู้ → ค้นเอง · ย้อนไม่ได้ → เตรียมไว้ใน "รออนุมัติ"`
-  - หลัง: `งานที่ย้อนได้ให้ทำเลย ไม่รู้ให้ค้นเอง ส่วนงานที่ย้อนไม่ได้ให้เตรียมไว้ใน "รออนุมัติ"`
+  - Before: `ไม่แน่ใจว่าขนาดไหน → ถือเป็นขนาดที่ใหญ่กว่า 1 ขั้น`
+  - After: `ถ้าไม่แน่ใจว่างานขนาดไหน ให้ถือว่าใหญ่ขึ้นอีก 1 ขั้น`
+  - Before: `ย้อนได้ → ทำเลย · ไม่รู้ → ค้นเอง · ย้อนไม่ได้ → เตรียมไว้ใน "รออนุมัติ"`
+  - After: `งานที่ย้อนได้ให้ทำเลย ไม่รู้ให้ค้นเอง ส่วนงานที่ย้อนไม่ได้ให้เตรียมไว้ใน "รออนุมัติ"`
 
-| ก่อน | หลัง |
+| Before | After |
 |---|---|
 | ขอบระบบ (รับ input) → service (กฎธุรกิจ) → data | แยกโค้ด 3 ชั้น: รับข้อมูลเข้า → กฎธุรกิจ → เก็บข้อมูล |
 | ตรวจ input ที่ขอบ · พังแบบปิด | ตรวจข้อมูลจากภายนอกทันทีที่เข้ามา ถ้าเกิดข้อผิดพลาดให้ปฏิเสธไว้ก่อน |
@@ -1153,272 +1153,272 @@ Applies to slide titles, figure titles, document headings, and box titles in a d
 | `${CLAUDE_PLUGIN_ROOT}` คือ path ของ version ที่ติดตั้งอยู่ และจะเปลี่ยนเมื่อ plugin อัปเดต ส่วนโฟลเดอร์เก่าระบบจะลบทิ้งเองภายหลัง [ที่มา] | แต่ละ version ติดตั้งเป็นโฟลเดอร์ของตัวเอง พออัปเดตก็ชี้ไปโฟลเดอร์ใหม่ แล้วลบโฟลเดอร์เก่าทิ้ง |
 | ข้อยกเว้น: plugin จาก marketplace บน claude.ai … จะไม่ถูก pin ด้วยฟิลด์นี้ (แยกย่อหน้า) | … ไม่งั้นเครื่องที่ลงไว้จะใช้ชุดเก่าต่อ (ยกเว้น plugin จาก marketplace บน claude.ai ซึ่งเห็นการแก้ทันที) |
 
-## ตัวอย่างประกอบกฎใน SKILL.md (ย้ายมาจาก SKILL.md)
+## Examples for the rules in SKILL.md (moved from SKILL.md)
 
-| หัวข้อ | กฎ | ตัวอย่าง |
+| Section | Rule | Example |
 |---|---|---|
-| 1 | คำธรรมดา (อังกฤษ) | buy ไม่ใช่ purchase |
-| 2 | `→` ลำดับขั้น | เข้าใจ → วางแผน → ลงมือ |
-| 2 | `·` คั่นคำนาม | ทำอะไร · ได้อะไร · ใช้แรงแค่ไหน |
-| 2 | `:` ตามด้วยรายละเอียด | แยกโค้ด 3 ชั้น: รับข้อมูล → กฎธุรกิจ → เก็บข้อมูล |
-| 2 | ตัวเลขเขียนเป็นเลข | 3 ชั้น · 12 คำ · 1 ระดับ |
-| 2 | ตัวเลขบอกความหมาย | "กำไร 32% ของราคาขาย" ไม่ใช่ "margin 32%" ลอย ๆ |
-| 2 | เทียบให้เห็นภาพ | "เร็วขึ้น 3.2 เท่า" อ่านง่ายกว่า "ลดลง 69%" |
-| 2 | ผลยังไม่แน่นอน | "รันรอบเดียว ยังสรุปไม่ได้" |
-| 3 | คำที่คนพูดจริง | "ยกระดับ" → "ส่งต่อ" · "ผลสุดท้ายขัดกฎ" → "คำตอบไม่ผ่านกฎ" |
-| 3 | ตัวย่อครั้งแรก | Large Language Model (LLM) |
-| 3 | คำที่ตั้งเอง | "hook (สคริปต์จด log อัตโนมัติ)" |
-| 3 | ตัดคำฟุ่มเฟือย | "ทำการตรวจสอบ" → "ตรวจ" · "มีการนำเข้า" → "นำเข้า" |
-| 3 | ออกตัวซ้อน | อาจจะ · น่าจะ · ในบางกรณี ในประโยคเดียว |
-| 4 | ประโยคแรกตอบตรง | ถาม "ใส่ในรายงานดีไหม" → "ควรใส่ครับ" แล้วค่อยเหตุผล |
-| 4 | บอกด้วยผล | "แก้แล้ว 8 จุด เปิดไฟล์ได้ปกติ" |
-| 4 | เหตุต่อผลในย่อหน้าเดียว | "แต่ละ version ติดตั้งแยกโฟลเดอร์ พออัปเดตก็ชี้ไปโฟลเดอร์ใหม่แล้วลบของเก่า skill ที่ลบออกจึงหายไป" |
-| 4 | ป้ายตัวหนา | **ระวัง:** · **สิ่งที่ยังอยู่:** ไม่ใช่ "**ระวัง (เจอบ่อย):**" |
-| 5 | หัวข้อบอกเนื้อหา | "ระบบส่งต่อลดการเรียก LLM ได้ครึ่งหนึ่ง" ดีกว่า "ผลการทดลอง" |
-| 5 | หัวคอลัมน์ | "เรียก LLM" · "คำตอบไม่ผ่านกฎ" |
-| 6 | วลีที่คนพูด | "AI ช่วยเขียนคำตอบ" ไม่ใช่ "AI ทำงานภาษา" |
-| 6 | คำตามคนอ่าน | คนทั่วไป: "ระบบ" "ตรวจขาเข้า" แทน "โค้ด" "Guard" |
-| 6 | ไม่ใช้ "คน" กับสิ่งที่ไม่ใช่คน | "ให้ระบบตัดสิน" |
+| 1 | Plain words (English) | buy, not purchase |
+| 2 | `→` order of steps | เข้าใจ → วางแผน → ลงมือ |
+| 2 | `·` separates nouns | ทำอะไร · ได้อะไร · ใช้แรงแค่ไหน |
+| 2 | `:` introduces detail | แยกโค้ด 3 ชั้น: รับข้อมูล → กฎธุรกิจ → เก็บข้อมูล |
+| 2 | Write numbers as numerals | 3 ชั้น · 12 คำ · 1 ระดับ |
+| 2 | Say what the number means | "กำไร 32% ของราคาขาย" not a bare "margin 32%" |
+| 2 | Compare so it is easy to picture | "เร็วขึ้น 3.2 เท่า" reads easier than "ลดลง 69%" |
+| 2 | Uncertain result | "รันรอบเดียว ยังสรุปไม่ได้" |
+| 3 | Words people actually say | "ยกระดับ" → "ส่งต่อ" · "ผลสุดท้ายขัดกฎ" → "คำตอบไม่ผ่านกฎ" |
+| 3 | Abbreviation at first use | Large Language Model (LLM) |
+| 3 | Coined term | "hook (สคริปต์จด log อัตโนมัติ)" |
+| 3 | Cut padding words | "ทำการตรวจสอบ" → "ตรวจ" · "มีการนำเข้า" → "นำเข้า" |
+| 3 | No stacked hedges | อาจจะ · น่าจะ · ในบางกรณี in one sentence |
+| 4 | First sentence answers directly | Asked "ใส่ในรายงานดีไหม" → "ควรใส่ครับ", then the reason |
+| 4 | Report by result | "แก้แล้ว 8 จุด เปิดไฟล์ได้ปกติ" |
+| 4 | Cause and effect in one paragraph | "แต่ละ version ติดตั้งแยกโฟลเดอร์ พออัปเดตก็ชี้ไปโฟลเดอร์ใหม่แล้วลบของเก่า skill ที่ลบออกจึงหายไป" |
+| 4 | Bold labels | **ระวัง:** · **สิ่งที่ยังอยู่:** not "**ระวัง (เจอบ่อย):**" |
+| 5 | Heading says the content | "ระบบส่งต่อลดการเรียก LLM ได้ครึ่งหนึ่ง" is better than "ผลการทดลอง" |
+| 5 | Column heading | "เรียก LLM" · "คำตอบไม่ผ่านกฎ" |
+| 6 | Phrase people say | "AI ช่วยเขียนคำตอบ" not "AI ทำงานภาษา" |
+| 6 | Words by reader | General reader: "ระบบ" "ตรวจขาเข้า" instead of "โค้ด" "Guard" |
+| 6 | No "คน" for non-people | "ให้ระบบตัดสิน" |
 
-ที่มา: ISO 24495-1 (plain language) · GOV.UK clear language · Microsoft Writing Style Guide · Wikipedia: Signs of AI writing · คู่มือการร่างเอกสารภาษาไทย
+Sources: ISO 24495-1 (plain language) · GOV.UK clear language · Microsoft Writing Style Guide · Wikipedia: Signs of AI writing · คู่มือการร่างเอกสารภาษาไทย
 
 
 ## reference: strict-review.md
 
-# ตรวจเข้ม — สำหรับงานวิจัยและงานที่ส่งคนนอก
+# Strict review — for research and work sent to outsiders
 
-ค่าเริ่มต้นของ `human-writing` คือ **ตรวจปกติ**: ไล่ 7 ข้อในหัวข้อ 8 ของ SKILL.md รอบเดียวแล้วส่ง · ไฟล์นี้ใช้เฉพาะเมื่อสั่ง **ตรวจเข้ม**
+The default for `human-writing` is a **normal check**: go through the 7 points in section 8 of SKILL.md once, then send. Use this file only when the user asks for a **strict review** (ตรวจเข้ม).
 
-**ผ่านกฎ ≠ อ่านลื่น** — รอบตรวจจับได้เฉพาะสิ่งที่มีกฎ (โครงประโยค · คำต้องเลี่ยง · ระดับภาษา) · งานที่ผ่านทุกกฎแต่ไม่มีน้ำเสียง เรียกว่า **อ่านแบน** ให้ติดป้ายไว้ ไม่รายงานว่าผ่าน · คำตัดสินว่าอ่านเป็นภาษาคนไหม เป็นของผู้ใช้ที่อ่านออกเสียง ไม่ใช่ของโมเดลที่ตรวจ (โมเดลที่ร่างกับโมเดลที่ตรวจมีจุดบอดเดียวกัน)
+**Passing the rules ≠ reading smoothly.** The review pass catches only what has a rule (sentence structure · words to avoid · register). Work that passes every rule but has no voice is called **flat** (`อ่านแบน`). Label it as flat. Do not report it as passing. Whether it reads like a person wrote it is for the user to decide by reading aloud, not for the model doing the check (the model that drafted and the model that checks share the same blind spots).
 
-## เปิดเมื่อไหร่
+## When to turn it on
 
-- ผู้ใช้พูดว่า "ตรวจเข้ม" · "ตรวจแบบงานวิจัย" · "ขัดภาษาให้สุด" · "วนตรวจจนไม่เจอที่ผิด" · "strict"
-- หรืองานเป็น วิทยานิพนธ์ · IS · บทความวิจัย · รายงานส่งอาจารย์หรือกรรมการ · หนังสือราชการ แล้วผู้ใช้ไม่ได้บอกว่าขอแบบเร็ว
-- โครงเล่ม บทที่ การอ้างอิง ใช้ skill `thesis-writing` (plugin `personal-life`) คู่กัน · ไฟล์นี้ดูแลเรื่องภาษา
+- The user says "ตรวจเข้ม" · "ตรวจแบบงานวิจัย" · "ขัดภาษาให้สุด" · "วนตรวจจนไม่เจอที่ผิด" · "strict"
+- Or the work is a thesis · independent study (IS) · research article · report for a lecturer or committee · official letter, and the user did not ask for the quick version.
+- For book structure, chapters and citations, use skill `thesis-writing` (plugin `personal-life`) alongside. This file covers language only.
 
-## ขั้นตอน
+## Steps
 
-1. **เปิด [`thai-grammar`](thai-grammar.md) ทั้งไฟล์** และ [`thai-line-breaking`](thai-line-breaking.md) ถ้าส่งออกเป็นไฟล์
-2. **เลือกระดับภาษา** ตามตารางหัวข้อ 4 · งานวิจัยใช้ระดับวิชาการ · บอกระดับที่เลือกไว้บรรทัดแรกของผลตรวจ
-3. **อ่านทั้งชิ้นก่อน 1 รอบ** ยังไม่แก้ · งานเกิน 3,000 คำตรวจทีละบท บอกผู้ใช้ว่าแบ่งอย่างไร แล้วทำต่อเลยไม่ต้องหยุดถาม
-4. **รอบตรวจ** — รัน `python scripts/thai_tells.py <ไฟล์>` ก่อน (จับคำต้องเลี่ยง · คำเชื่อมเกินงบ · จุดกลางย่อหน้า · ๆ ไม่เว้นวรรค ให้เครื่องทำ) แล้วอ่านเองหาสิ่งที่สคริปต์ไม่เห็น · จดทุกจุดเป็นตาราง ห้ามแก้ระหว่างจด
+1. **Open [`thai-grammar`](thai-grammar.md) in full**, and [`thai-line-breaking`](thai-line-breaking.md) if the output is a file.
+2. **Choose the register** from the table in section 4. Research uses the academic register. State the chosen register on the first line of the review result.
+3. **Read the whole piece once first** without editing. For work over 3,000 words, review chapter by chapter. Tell the user how you split it, then carry on without stopping to ask.
+4. **Review pass.** Run `python scripts/thai_tells.py <file>` first (the machine catches words to avoid · connectors over budget · mid-paragraph dots · ๆ with no space), then read it yourself for what the script cannot see. Record every spot in a table. Do not edit while recording.
 
-   | # | รหัสกฎ | ข้อความเดิม | แก้เป็น |
+   | # | Rule code | Original text | Fix |
    |---|---|---|---|
    | 1 | `t-chueung` | …ซึ่งพัฒนาโดย… ซึ่งเปิดเป็น… | … |
 
-   **เรียงตามน้ำหนัก ไม่ใช่ตามลำดับที่เจอ** — จุดที่ทำให้คนอ่านรู้ทันทีว่าเครื่องเขียนอยู่บนสุด: ประโยคเปิดสำเร็จรูป · สรุปซ้ำท้ายย่อหน้า · ชุดละ 3 ทุกที่ · คำโฆษณากว้าง ๆ · โครงประโยคซ้ำติดกัน · แล้วค่อยถึงเรื่องเล็ก (คำเชื่อมเกิน · วรรคตอน) · แก้ 5 ข้อบนก่อน มักทำให้ข้อล่างหายไปเองหลายข้อ · ชิ้นสั้นที่เจอแค่เรื่องเล็ก แก้รอบเดียวจบ ไม่ต้องวน
-   **เทียบกับเสียงผู้เขียน** — ถ้ามีข้อความที่ผู้ใช้เขียนเอง (คู่ `ก่อน → หลัง` ใน `~/.claude/superuser-style.md` · อีเมลหรือบทที่ผู้ใช้เขียนก่อนหน้า) ให้อ่านเทียบ: ความยาวประโยค · สรรพนาม · คำท้าย · คำที่ผู้ใช้ไม่เคยใช้ · จุดที่ต่างจากเสียงผู้ใช้จดเป็นรหัส `v-voice` ในตาราง · ไม่มีตัวอย่าง → ตรวจตามกฎอย่างเดียวแล้วติดป้าย `อ่านแบน` ได้ตามปกติ (แนวคิดจาก humanizer ของ blader · MIT)
-5. **รอบแก้** — แก้ตามตาราง แล้วอ่านใหม่ทั้งชิ้น (ไม่ดูแค่จุดที่แก้ เพราะแก้จุดหนึ่งมักทำให้รอยต่อข้าง ๆ สะดุด)
-6. **วนข้อ 4–5** จนรอบตรวจไม่เจออะไร · **สูงสุด 5 รอบ** · ครบ 5 รอบแล้วยังเหลือ ให้รายงานจุดที่เหลือพร้อมเหตุผลที่ยังไม่แก้
-7. ถ้าทำงานใต้ `superuser` ให้รอบตรวจแต่ละรอบเป็น `reviewer` คนใหม่ (โมเดลเล็ก · effort ต่ำ) ส่วนหัวหน้าเป็นคนแก้ · `reviewer` รายงานได้แค่รหัสกฎที่เจอ ไม่ตัดสินว่าอ่านลื่น · รอบแก้ส่งกฎทั้งชุดให้ไม่ใช่แค่ข้อที่ถูกชี้ (ส่งแค่ข้อที่ชี้ ตัวแก้จะแก้วน)
+   **Sort by weight, not by the order found.** At the top are the spots that tell the reader at once a machine wrote it: canned opening sentences · recap at the end of a paragraph · groups of 3 everywhere · broad ad words · repeated sentence structures side by side. Then the small things (extra connectors · punctuation). Fixing the top 5 first often makes several of the lower ones vanish. A short piece with only small findings is fixed in one pass, with no loop.
+   **Compare with the author's voice.** If there is text the user wrote themselves (`ก่อน → หลัง` pairs in `~/.claude/superuser-style.md` · earlier emails or chapters by the user), read against it: sentence length · pronouns · sentence-final particles · words the user never uses. Record each spot that differs from the user's voice with code `v-voice` in the table. If there are no samples, check against the rules only, and label the result `อ่านแบน` as usual (idea from humanizer by blader · MIT).
+5. **Fix pass.** Fix according to the table, then reread the whole piece (do not look only at the fixed spots, because fixing one spot often makes the neighbouring joins stumble).
+6. **Repeat steps 4–5** until the review pass finds nothing. **At most 5 rounds.** If spots remain after 5 rounds, report them with the reason they were not fixed.
+7. If working under `superuser`, make each review round a new `reviewer` (small model · low effort), and let the lead do the fixing. The `reviewer` may report only the rule codes found, and does not judge whether it reads smoothly. For the fix pass, give the fixer the whole rule set, not just the points flagged (if you give only the flagged points, the fixer will keep going in circles).
 
-## สิ่งที่ตรวจเพิ่มในงานวิจัย
+## Extra checks for research
 
-| รหัส | ตรวจ |
+| Code | Check |
 |---|---|
-| `a-register` | ระดับวิชาการทั้งชิ้น · ไม่มีครับ/ค่ะ · ไม่มี ผม/ฉัน (ใช้ `ผู้วิจัย` หรือละ) · คำฝั่งทางการทุกคู่ในตาราง `r-drift` · `สามารถ…ได้` ครบ |
-| `a-term` | ศัพท์เทคนิคใช้คำเดียวทั้งเล่ม · ครั้งแรกเขียน `ไทย (English)` แล้วใช้ไทยต่อ · ตัวย่อเต็มครั้งแรกทุกบท · ตรงกับศัพท์บัญญัติราชบัณฑิตยสภาถ้ามี |
-| `a-claim` | ข้อความที่อ้างข้อเท็จจริงมีการอ้างอิงทุกจุด · ไม่อ้างแหล่งที่ไม่ได้เปิดอ่าน · ความเห็นผู้วิจัยแยกจากข้อเท็จจริงชัด |
-| `a-hedge` | ออกตัวเท่าที่ข้อมูลรองรับ: ผลจากกลุ่มตัวอย่างเล็กพูดว่า `ในกลุ่มตัวอย่างนี้` · ไม่ออกตัวซ้อน · ไม่ยืนยันเกินผล |
-| `a-number` | ตัวเลขมีหน่วย · ทศนิยมเท่ากันทั้งตาราง · ตัวเลขในเนื้อตรงกับตาราง · ร้อยละบอกฐาน |
-| `a-ref` | ตาราง รูป สมการ มีเลขและถูกอ้างในเนื้อก่อนปรากฏ · ชื่อรูปและตารางเป็นข้อสรุป |
-| `a-cite` | รูปแบบอ้างอิงแบบเดียวทั้งเล่ม (APA 7 หรือตามคณะ) · รายการท้ายเล่มครบตามที่อ้างในเนื้อ |
-| `a-tense` | บทวิธีวิจัยและผลเล่าเป็นสิ่งที่ทำแล้ว · ไม่สลับ `จะ` กับ `ได้` ในบทเดียวกัน |
-| `a-break` | ส่งออกแล้วรัน `scripts/thai_linebreak.py --check` และเปิด PDF ดูทุกหน้า |
+| `a-register` | Academic register throughout · no ครับ/ค่ะ · no ผม/ฉัน (use `ผู้วิจัย` or drop the pronoun) · every formal-side word in the pairs of the `r-drift` table · `สามารถ…ได้` complete |
+| `a-term` | One word per technical term across the whole book · first use written as `ไทย (English)`, then Thai afterwards · abbreviations spelled out at first use in every chapter · matches the Royal Society of Thailand's coined terms where they exist |
+| `a-claim` | Every statement of fact has a citation · no citing a source that was not opened · the researcher's opinion is clearly separated from fact |
+| `a-hedge` | Hedge only as far as the data supports: a result from a small sample says `ในกลุ่มตัวอย่างนี้` · no stacked hedges · no claiming more than the result shows |
+| `a-number` | Numbers have units · same decimals across a table · numbers in the text match the table · percentages state the base |
+| `a-ref` | Tables, figures and equations are numbered and referred to in the text before they appear · figure and table titles are conclusions |
+| `a-cite` | One citation style across the whole book (APA 7 or the faculty's) · the reference list at the end covers everything cited in the text |
+| `a-tense` | The method chapter and results are told as things already done · do not switch between `จะ` and `ได้` in one chapter |
+| `a-break` | After export, run `scripts/thai_linebreak.py --check` and open the PDF to look at every page |
 
-## ผลที่ส่งให้ผู้ใช้
+## What to send the user
 
-- บรรทัดแรก: ระดับภาษาที่ใช้ · จำนวนรอบ · `ผ่านกฎ` หรือ `เหลือ N จุด` · ถ้าอ่านแบนให้บอก `ผ่านกฎ · อ่านแบน` พร้อมย่อหน้าที่ควรอ่านออกเสียงดู
-- ตารางจุดที่แก้ รวมทุกรอบ (รหัสกฎ · เดิม · ใหม่) — ใช้ตอบกรรมการได้ว่าแก้อะไรเพราะอะไร
-- จุดที่ไม่แก้และเหตุผล (เช่น ถ้อยคำตามแบบของคณะ · คำพูดที่ยกมา)
-- ไฟล์ที่แก้แล้ว เขียนทับไฟล์เดิม ต้นฉบับเก็บใน `_to_delete/`
+- First line: the register used · the number of rounds · `ผ่านกฎ` (passed the rules) or `เหลือ N จุด` (N spots left) · if flat, say `ผ่านกฎ · อ่านแบน` with the paragraphs worth reading aloud.
+- A table of fixes across all rounds (rule code · old · new). It lets the user answer the committee about what was changed and why.
+- Spots not fixed, and why (for example wording fixed by the faculty's template · quoted speech).
+- The fixed file overwrites the original. Keep the original in `_to_delete/`.
 
-ที่มาของวิธีวนตรวจ: skill `kode-thai` ใน [chakrit/kien-thai](https://github.com/chakrit/kien-thai) (MIT) · ปรับให้มีเพดานรอบ และใช้เฉพาะเมื่อสั่ง เพราะฉบับเต็มกิน token หลายหมื่นต่อรอบ
+Source of the review loop: skill `kode-thai` in [chakrit/kien-thai](https://github.com/chakrit/kien-thai) (MIT) · adapted with a cap on rounds, and used only on request, because the full version costs tens of thousands of tokens per round.
 
 
 ## reference: thai-examples.md
 
-# ตัวอย่างย่อหน้าภาษาไทย ก่อน → หลัง (ทีละระดับภาษา)
+# Thai paragraph examples, before → after (one register at a time)
 
-เปิดก่อนเขียนย่อหน้าไทยยาว ดูคู่ของระดับภาษาที่จะใช้ · คู่ตัวอย่างสอนได้ดีกว่ากฎ เพราะเห็นทั้งโครงประโยคและน้ำเสียงพร้อมกัน · รหัสกฎอยู่ใน [`thai-grammar`](thai-grammar.md)
+Open before writing a long Thai paragraph, and look at the pair for the register you will use. Example pairs teach better than rules, because you see sentence structure and tone together. Rule codes are in [`thai-grammar`](thai-grammar.md).
 
-**กติกาของไฟล์นี้** — 1 คู่ = ย่อหน้าเดียว · "หลัง" ต้องเป็นข้อความที่เจ้าของงานเขียนหรือแก้เอง ข้อความที่ทีมเขียนติดป้าย `(ชั่วคราว)` จนเจ้าของอ่านแล้วรับ · ไม่เกิน 10 คู่ต่อระดับ · กฎใหม่ดูดซับคู่ไหนแล้วลบคู่นั้น · ทุกคู่บอกที่มาและวันที่
+**Rules of this file.** 1 pair = 1 paragraph. The "after" must be text the owner wrote or edited. Text written by the team is labelled `(ชั่วคราว)` (temporary) until the owner reads it and accepts it. At most 10 pairs per register. When a new rule absorbs a pair, delete that pair. Every pair states its source and date.
 
-## ระดับ อธิบาย — README และเอกสารเทคนิค
+## Register อธิบาย (explain): README and technical docs
 
-**ก่อน**
+**Before**
 
 > ในยุคปัจจุบันที่ข้อมูลมีความสำคัญอย่างมาก ระบบนี้ถูกออกแบบมาเพื่อทำการประมวลผลข้อมูลจากหลายแหล่ง ซึ่งจะช่วยให้ผู้ใช้สามารถเข้าถึงข้อมูลได้อย่างมีประสิทธิภาพ โดยระบบจะทำการดึงข้อมูลทุก 5 นาที ดังนั้นผู้ใช้จึงไม่ต้องกังวลเรื่องข้อมูลไม่อัปเดต
 
-**หลัง**
+**After**
 
 > ระบบนี้รวมข้อมูลจาก 3 แหล่ง (ERP · ไฟล์ Excel ของฝ่ายขาย · API ของขนส่ง) ไว้ที่เดียว ข้อมูลพวกนี้ระบบจะดึงใหม่ทุก 5 นาที เปิดหน้า dashboard เมื่อไหร่ก็เห็นตัวเลขของ 5 นาทีก่อน ถ้าแหล่งไหนล่ม แถวของแหล่งนั้นจะขึ้นเวลาที่ดึงได้ครั้งสุดท้ายแทน
 
-กฎที่ใช้: `t-block` (ในยุคปัจจุบัน) · `t-padding` (ทำการ ×2 · มีความสำคัญ) · `t-thuk` · `t-chueung` · `t-budget` (ซึ่ง โดย ดังนั้น ในย่อหน้าเดียว) · `t-reassure` · `f1` ยกข้อมูลขึ้นก่อน · `f2` เงื่อนไขมาก่อน · "หลายแหล่ง" → 3 แหล่งที่บอกชื่อ · ที่มา: ทีมเขียน 2026-10-22 · เจ้าของอ่านแล้วรับ 2026-10-29
+Rules applied: `t-block` (ในยุคปัจจุบัน) · `t-padding` (ทำการ ×2 · มีความสำคัญ) · `t-thuk` · `t-chueung` · `t-budget` (ซึ่ง โดย ดังนั้น in one paragraph) · `t-reassure` · `f1` put the data first · `f2` condition comes first · "หลายแหล่ง" → the 3 named sources · Source: written by the team 2026-10-22 · owner read and accepted 2026-10-29
 
-## ระดับ ธุรกิจ — ข้อเสนอถึงลูกค้า
+## Register ธุรกิจ (business): proposal to a customer
 
-**ก่อน**
+**Before**
 
 > เรามีความยินดีที่จะนำเสนอโซลูชันที่จะช่วยยกระดับการทำงานของท่าน ไม่ว่าจะเป็นการจัดการเอกสาร การอนุมัติ หรือการรายงาน ซึ่งทั้งหมดนี้จะถูกรวมไว้ในแพลตฟอร์มเดียว โดยทีมงานของเราจะทำการติดตั้งและฝึกอบรมให้อย่างครบถ้วน
 
-**หลัง**
+**After**
 
 > บริษัทฯ เสนอระบบจัดการเอกสาร (Document Management System: DMS) ที่รวมงาน 3 อย่างของฝ่ายจัดซื้อไว้ในหน้าเดียว คือยื่นเอกสาร อนุมัติ และออกรายงาน ติดตั้งและอบรมผู้ใช้ 20 คนให้เสร็จภายใน 15 วันทำการ นับจากวันลงนามในสัญญา ค่าใช้จ่ายและเงื่อนไขอยู่ในหัวข้อ 4
 
-กฎที่ใช้: ระดับ ธุรกิจ (`เรา` `ท่าน` → `บริษัทฯ` และชื่อฝ่าย) · คำโฆษณากว้าง (ยกระดับ · โซลูชัน) → สิ่งที่ทำจริง · `t-mai-wa` · `t-thuk` · `t-padding` · `t-doi` · ศัพท์หลักครั้งแรก `ไทย (English: ตัวย่อ)` · ตัวเลขแทน "อย่างครบถ้วน" · ที่มา: ทีมเขียน 2026-10-22 · เจ้าของอ่านแล้วรับ 2026-10-29
+Rules applied: register ธุรกิจ (`เรา` `ท่าน` → `บริษัทฯ` and the department name) · broad ad words (ยกระดับ · โซลูชัน) → what is actually done · `t-mai-wa` · `t-thuk` · `t-padding` · `t-doi` · key term at first use as `ไทย (English: abbreviation)` · a number replaces "อย่างครบถ้วน" · Source: written by the team 2026-10-22 · owner read and accepted 2026-10-29
 
-## ระดับ ราชการ — มติในรายงานการประชุม
+## Register ราชการ (official): resolution in meeting minutes
 
-**ก่อน**
+**Before**
 
 > ที่ประชุมได้มีการพิจารณาเรื่องการจัดซื้อเครื่องคอมพิวเตอร์ ซึ่งฝ่ายไอทีได้ทำการเสนอราคามาแล้ว โดยที่ประชุมเห็นว่ามีความเหมาะสม ดังนั้นจึงมีมติให้ทำการจัดซื้อต่อไป ทั้งนี้ให้ฝ่ายจัดซื้อดำเนินการให้แล้วเสร็จโดยเร็ว
 
-**หลัง**
+**After**
 
 > ฝ่ายเทคโนโลยีสารสนเทศเสนอจัดซื้อเครื่องคอมพิวเตอร์ 12 เครื่อง วงเงิน 420,000 บาท ตามใบเสนอราคาเลขที่ QT-2569-031 ที่ประชุมพิจารณาแล้วเห็นว่าราคาอยู่ในงบประมาณที่ได้รับอนุมัติ มติที่ประชุม อนุมัติให้จัดซื้อตามที่เสนอ และมอบฝ่ายจัดซื้อดำเนินการให้แล้วเสร็จภายใน 30 วัน นับจากวันที่รับรองรายงานการประชุมฉบับนี้
 
-กฎที่ใช้: `t-padding` (ได้มีการ · ทำการ ×2 · มีความเหมาะสม) · `t-chueung` · `t-doi` · `t-budget` (ดังนั้น · ทั้งนี้) · ระดับราชการเพิ่ม: เรียกฝ่ายตามชื่อจริง · ตัวเลขและเลขที่เอกสาร · `ดำเนินการ` คงไว้เพราะเป็นคำตามแบบ · กำหนดเวลา `ภายใน X วัน นับจาก…` แทน "โดยเร็ว" · ที่มา: ทีมเขียน 2026-10-22 · เจ้าของอ่านแล้วรับ 2026-10-29
+Rules applied: `t-padding` (ได้มีการ · ทำการ ×2 · มีความเหมาะสม) · `t-chueung` · `t-doi` · `t-budget` (ดังนั้น · ทั้งนี้) · extras for the official register: call departments by their real names · figures and document numbers · keep `ดำเนินการ` because it is a standard form word · deadline `ภายใน X วัน นับจาก…` instead of "โดยเร็ว" · Source: written by the team 2026-10-22 · owner read and accepted 2026-10-29
 
-## ระดับ ข่าว — release note
+## Register ข่าว (news): release note
 
-**ก่อน**
+**Before**
 
 > ในเวอร์ชันนี้ เราได้ทำการปรับปรุงประสิทธิภาพในส่วนของการส่งออกรายงาน ซึ่งจะทำให้ผู้ใช้ได้รับประสบการณ์ที่ดียิ่งขึ้น นอกจากนี้ยังมีการแก้ไขข้อผิดพลาดต่าง ๆ อีกมากมาย
 
-**หลัง**
+**After**
 
 > ส่งออกรายงาน 1,000 แถวใช้เวลา 3 วินาที จากเดิม 12 วินาที เพราะเปลี่ยนมาเขียนไฟล์ทีละก้อนแทนสร้างทั้งไฟล์ในหน่วยความจำ แก้บั๊กวันที่ใน Excel แสดงเป็น ค.ศ. ทั้งที่ตั้งค่าเป็น พ.ศ. (ฝ่ายบัญชีแจ้งเมื่อ 2 ต.ค.) เวอร์ชัน 2.4.0 · 22 ต.ค. 2569
 
-กฎที่ใช้: ระดับ ข่าว (ไม่มี `เรา` · ประโยคแรก ใคร ทำอะไร กับอะไร · ปิดด้วยเวอร์ชันและวันที่) · `t-padding` · `t-block` (ในส่วนของ) · `t-chueung` · `f7` (นอกจากนี้) · "ต่าง ๆ อีกมากมาย" → บอกว่าแก้อะไร · ที่มา: ทีมเขียน 2026-10-22 · เจ้าของอ่านแล้วรับ 2026-10-29
+Rules applied: register ข่าว (no `เรา` · first sentence says who does what to what · close with version and date) · `t-padding` · `t-block` (ในส่วนของ) · `t-chueung` · `f7` (นอกจากนี้) · "ต่าง ๆ อีกมากมาย" → say what was fixed · Source: written by the team 2026-10-22 · owner read and accepted 2026-10-29
 
-## ระดับ แชตร้าน — ตอบลูกค้าเรื่องพัสดุช้า
+## Register แชตร้าน (shop chat): replying to a customer about a late parcel
 
-**ก่อน**
+**Before**
 
 > สวัสดีค่ะ ทางร้านต้องขออภัยในความไม่สะดวกเป็นอย่างสูงนะคะ ทางร้านได้ทำการตรวจสอบแล้วพบว่าพัสดุของลูกค้าอยู่ระหว่างการจัดส่ง ทางร้านจะทำการติดตามให้อย่างใกล้ชิด ไม่ต้องกังวลนะคะ
 
-**หลัง**
+**After**
 
 > ขอโทษด้วยนะคะที่ของยังไม่ถึง ร้านเช็กกับ Flash แล้ว พัสดุเลข TH1234 ออกจากศูนย์คัดแยกลาดกระบังเมื่อเช้านี้ ปกติถึงบ้านภายใน 1–2 วันค่ะ ถ้าพรุ่งนี้เย็นยังไม่ได้รับ ทักมาได้เลย ร้านจะเปิดเรื่องตามกับขนส่งให้ทันทีค่ะ
 
-กฎที่ใช้: ระดับ แชตร้าน (`ทางร้าน` ×3 → `ร้าน` ครั้งเดียวต่อประโยค · ค่ะ ทุกข้อความ · คำขอโทษคงไว้ เพราะคำสุภาพไม่ใช่คำฟุ่มเฟือย) · `t-padding` (ทำการ ×2) · `t-reassure` → ขั้นถัดไปที่ลูกค้าทำได้ · "อย่างใกล้ชิด" "อย่างสูง" → ข้อเท็จจริง (เลขพัสดุ · ศูนย์คัดแยก · เวลา) · ที่มา: ทีมเขียน 2026-10-22 · เจ้าของอ่านแล้วรับ 2026-10-29
+Rules applied: register แชตร้าน (`ทางร้าน` ×3 → `ร้าน` once per sentence · ค่ะ in every message · keep the apology, because polite words are not padding) · `t-padding` (ทำการ ×2) · `t-reassure` → the next step the customer can take · "อย่างใกล้ชิด" "อย่างสูง" → facts (parcel number · sorting centre · time) · Source: written by the team 2026-10-22 · owner read and accepted 2026-10-29
 
 ---
 
-ระดับที่ยังไม่มีคู่: การตลาด · ส่วนตัว · วิชาการ · ร้องเรียน · สมัครงาน · หน้าจอ — เพิ่มจากคำแก้ของเจ้าของงานตามกติกาข้างบน (`thai-grammar` หัวข้อ 8) · คู่ที่ทีมเขียนทั้ง 5 ข้างบนรอเจ้าของอ่านออกเสียงแล้วรับหรือแก้
+Registers with no pair yet: marketing · personal · academic · complaint · job application · screen. Add them from the owner's edits under the rules above (`thai-grammar` section 8). The 5 team-written pairs above wait for the owner to read them aloud and accept or edit them.
 
 
 ## reference: thai-grammar.md
 
-# ภาษาไทยให้ลื่น — กรอบเรียบเรียง 7 ข้อ · คำต้องเลี่ยง · ระดับภาษา
+# Smooth Thai: 7-point composition framework · words to avoid · registers
 
-เปิดไฟล์นี้เมื่อเขียนหรือแก้ภาษาไทยตั้งแต่ 1 ย่อหน้าขึ้นไป หรือเมื่อสั่งตรวจเข้ม (ดู [`strict-review`](strict-review.md)) · ข้อความแชตสั้น ป้าย ปุ่ม ชื่อตัวแปร ไม่ต้องเปิด
+Open this file when writing or editing Thai of 1 paragraph or more, or when a strict review is ordered (see [`strict-review`](strict-review.md)). Short chat messages, labels, buttons and variable names do not need it.
 
-ภาษาไทยที่ AI เขียนติดโครงประโยคอังกฤษมา ประโยคเลยยาว ต่อกันด้วย "ซึ่ง" "โดย" และเปิดเรื่องแบบเดียวกันทุกครั้ง การไล่ลบคำต้องห้ามแก้ได้แค่ปลายเหตุ ต้นเหตุอยู่ที่โครงประโยค 7 ข้อข้างล่าง พอโครงถูก กฎย่อยส่วนใหญ่ก็ผ่านเอง
+Thai written by AI carries English sentence structure: sentences run long, are chained with "ซึ่ง" and "โดย", and open the same way every time. Deleting banned words fixes only the symptom. The cause is sentence structure, covered by the 7 points below. Once the structure is right, most of the smaller rules pass by themselves.
 
-ทุกกฎมีรหัส (`f1` · `t-chueung`) ไว้อ้างตอนตรวจ
+Every rule has a code (`f1` · `t-chueung`) to cite during review.
 
-**สารบัญ**
+**Contents**
 
-- [1 · กรอบเรียบเรียง 7 ข้อ](#1--กรอบเรียบเรียง-7-ข้อ)
-- [2 · ท่าที่ AI ชอบใช้ (เจอแล้วแก้)](#2--ท่าที่-ai-ชอบใช้-เจอแล้วแก้)
-- [3 · ไวยากรณ์ที่ AI พลาดบ่อย](#3--ไวยากรณ์ที่-ai-พลาดบ่อย)
-- [4 · ระดับภาษา](#4--ระดับภาษา)
-- [5 · ทับศัพท์ — เลือก 1 แบบต่อคำ แล้วใช้แบบเดียวทั้งชิ้น](#5--ทับศัพท์--เลือก-1-แบบต่อคำ-แล้วใช้แบบเดียวทั้งชิ้น)
-- [6 · ปิดเรื่อง](#6--ปิดเรื่อง)
-- [7 · แปลอังกฤษเป็นไทย](#7--แปลอังกฤษเป็นไทย)
-- [8 · วินัยเพิ่มกฎ และไฟล์ประกอบ](#8--วินัยเพิ่มกฎ-และไฟล์ประกอบ)
+- [1 · The 7-point composition framework](#1--the-7-point-composition-framework)
+- [2 · Moves AI likes to use (fix on sight)](#2--moves-ai-likes-to-use-fix-on-sight)
+- [3 · Grammar AI often gets wrong](#3--grammar-ai-often-gets-wrong)
+- [4 · Registers](#4--registers)
+- [5 · Loanwords: pick 1 form per word, use it throughout](#5--loanwords-pick-1-form-per-word-use-it-throughout)
+- [6 · Closing](#6--closing)
+- [7 · Translating English into Thai](#7--translating-english-into-thai)
+- [8 · Discipline for adding rules, and companion files](#8--discipline-for-adding-rules-and-companion-files)
 
-## 1 · กรอบเรียบเรียง 7 ข้อ
+## 1 · The 7-point composition framework
 
-| รหัส | กรอบ | ก่อน (แปลตรง) | หลัง (ไทย) |
+| Code | Point | Before (literal translation) | After (Thai) |
 |---|---|---|---|
-| `f1` | **ยกเรื่องที่พูดถึงขึ้นก่อน** ไม่ลากประธานยาว ๆ แบบอังกฤษ · เลิกใช้ `การที่…นั้น…` `การที่ X ทำให้ Y` | ระบบประมวลผลข้อมูลพวกนี้ทุก 5 นาที | ข้อมูลพวกนี้ ระบบจะ process ทุก 5 นาที |
-| `f2` | **เงื่อนไขและเวลามาก่อน** ไม่ห้อยท้ายด้วย "เมื่อ…" | DB จะเริ่ม timeout เมื่อ traffic พุ่งสูง | พอ traffic พุ่ง DB ก็เริ่ม timeout |
-| `f3` | **ขึ้นประโยคใหม่ด้วยเว้นวรรคและย่อหน้า** ไม่ใส่จุดทุกประโยค · จุดใช้ท้ายย่อหน้า หรือคั่นประโยคยาว 2 ประโยคที่คนละเรื่องกัน | เร็วขึ้น. ใช้ memory น้อยลง. ทีมพอใจ. | เร็วขึ้น ใช้ memory น้อยลง ทีมพอใจ |
-| `f4` | **ปิดความด้วยคำท้าย** `ด้วย` `แล้ว` `เลย` `อยู่` `อยู่ดี` `ต่างหาก` · ประโยค "ไม่ได้…อย่างเดียว" "ไม่ใช่แค่…" ต้องปิดด้วย `ด้วย` · ประโยค "ไม่ได้อยู่ที่ X อยู่ที่ Y" ต้องปิดด้วย `ต่างหาก` | ปัญหาไม่ได้อยู่ที่ยอดขาย อยู่ที่ต้นทุน | ปัญหาไม่ได้อยู่ที่ยอดขาย อยู่ที่ต้นทุนต่างหาก |
-| `f5` | **ละประธานที่รู้แล้ว ใช้คำชี้แทนสรรพนาม** (`ตัวนี้` `เคสนั้น` `ตรงนี้แหละที่…`) · ไม่ใช้ `มัน` `เขา` `พวกเขา` แทน it/they · ระวังละจนไม่รู้ว่าใครทำ | มันลด memory และมันยังปรับปรุงการทดสอบ | ทั้งลด memory และยังปรับปรุงการทดสอบอีกด้วย |
-| `f6` | **ใช้ "ก็" คุมจังหวะ** `พอ X ก็ Y` · `ถ้า X ก็ Y` · `X แล้วก็ Y` · ลำดับการกระทำเชื่อมด้วย `แล้ว` | ถ่ายรูปบิล ระบบอ่านรายการให้เอง | ถ่ายรูปบิลแล้วระบบจะอ่านรายการให้เอง |
-| `f7` | **เปลี่ยนเรื่องด้วยคำถาม คำชี้ หรือ "แต่"** แทน `อย่างไรก็ตาม` `นอกจากนี้` (ตัดได้ราวครึ่งหนึ่ง) · หลังไล่ปัญหา 2–3 ข้อ ต้องมีจุดเปลี่ยนก่อนเข้าวิธีแก้ | อย่างไรก็ตาม การใช้งานจริงมีข้อจำกัด | แต่พอขึ้น production จริง ก็มีเรื่องให้ปวดหัวอีก |
+| `f1` | **Put the topic first.** Do not drag a long subject along as in English. Stop using `การที่…นั้น…` and `การที่ X ทำให้ Y`. | ระบบประมวลผลข้อมูลพวกนี้ทุก 5 นาที | ข้อมูลพวกนี้ ระบบจะ process ทุก 5 นาที |
+| `f2` | **Condition and time come first.** Do not trail them at the end with "เมื่อ…". | DB จะเริ่ม timeout เมื่อ traffic พุ่งสูง | พอ traffic พุ่ง DB ก็เริ่ม timeout |
+| `f3` | **Start a new sentence with a space or a new paragraph.** Do not put a full stop after every sentence. Use a full stop at the end of a paragraph, or between 2 long sentences on different topics. | เร็วขึ้น. ใช้ memory น้อยลง. ทีมพอใจ. | เร็วขึ้น ใช้ memory น้อยลง ทีมพอใจ |
+| `f4` | **Close the clause with a final word:** `ด้วย` `แล้ว` `เลย` `อยู่` `อยู่ดี` `ต่างหาก`. A "ไม่ได้…อย่างเดียว" or "ไม่ใช่แค่…" sentence must close with `ด้วย`. A "ไม่ได้อยู่ที่ X อยู่ที่ Y" sentence must close with `ต่างหาก`. | ปัญหาไม่ได้อยู่ที่ยอดขาย อยู่ที่ต้นทุน | ปัญหาไม่ได้อยู่ที่ยอดขาย อยู่ที่ต้นทุนต่างหาก |
+| `f5` | **Drop a subject that is already known, and use a demonstrative instead of a pronoun** (`ตัวนี้` `เคสนั้น` `ตรงนี้แหละที่…`). Do not use `มัน` `เขา` `พวกเขา` for it/they. Take care not to drop so much that it is unclear who acts. | มันลด memory และมันยังปรับปรุงการทดสอบ | ทั้งลด memory และยังปรับปรุงการทดสอบอีกด้วย |
+| `f6` | **Use "ก็" to control rhythm:** `พอ X ก็ Y` · `ถ้า X ก็ Y` · `X แล้วก็ Y`. Link a sequence of actions with `แล้ว`. | ถ่ายรูปบิล ระบบอ่านรายการให้เอง | ถ่ายรูปบิลแล้วระบบจะอ่านรายการให้เอง |
+| `f7` | **Change topic with a question, a demonstrative or "แต่"** instead of `อย่างไรก็ตาม` `นอกจากนี้` (this cuts about half of them). After listing 2–3 problems, put a turning point before the fix. | อย่างไรก็ตาม การใช้งานจริงมีข้อจำกัด | แต่พอขึ้น production จริง ก็มีเรื่องให้ปวดหัวอีก |
 
-**"ก็" ไม่ได้ใส่ได้ทุกที่ (`f6-scope`)** — ประโยค `…ทีไร` ไม่ต้องมี ก็ (`ลองทีไร พังทุกที`) · ประโยค `ไม่ว่าจะ…เมื่อไหร่` ต้องมี `ก็จะ` · ผลที่เป็นนิยามของเหตุ (ต้นทุน = ราคาวัตถุดิบ) ไม่ใส่ ก็ (`วัตถุดิบขึ้นเมื่อไหร่ ต้นทุนต่อจานขึ้นตามทันที`)
+**"ก็" does not go everywhere (`f6-scope`).** A `…ทีไร` sentence does not need ก็ (`ลองทีไร พังทุกที`). A `ไม่ว่าจะ…เมื่อไหร่` sentence needs `ก็จะ`. A result that is the definition of its cause (cost = price of raw materials) takes no ก็ (`วัตถุดิบขึ้นเมื่อไหร่ ต้นทุนต่อจานขึ้นตามทันที`).
 
-## 2 · ท่าที่ AI ชอบใช้ (เจอแล้วแก้)
+## 2 · Moves AI likes to use (fix on sight)
 
-| รหัส | ท่า | แก้เป็น |
+| Code | Move | Fix |
 |---|---|---|
-| `t-chueung` | "ซึ่ง" ต่อกันหลายชั้น | ไม่เกิน 1 ซึ่งต่อประโยค · คำนามชัดใช้ "ที่" · หรือแยกประโยค |
-| `t-budget` | คำเชื่อมทางการถี่ | ต่อย่อหน้า: ซึ่ง ≤ 1 · โดย ≤ 1 · ดังนั้น ≤ 1 · `ทั้งนี้` ไม่ใช้เปิดย่อหน้า (ใช้ได้ใกล้ข้อสงวนสิทธิ์หรือคำชวนทำ) · งบนี้**ไม่นับ**คำท้าย `ด้วย` `แล้ว` `เลย` `อยู่` และ `เพื่อ…เพื่อ` ในหนังสือราชการ · คำท้ายอ่านแปลกให้เรียบเรียงประโยคใหม่ ไม่ลบคำ · บทความอธิบายเรียงคำเชื่อม ดังนั้น → นอกจากนี้ (นาน ๆ ครั้ง) → แต่ |
-| `t-doi` | `โดยที่… โดยการ… โดยมี…` | ใช้ ผ่าน · จาก · ด้วย หรือไม่ต้องมีคำเชื่อม |
-| `t-khanathi` | `ในขณะที่` ใช้แปลว่า "ส่วน/แต่" | `A เชื่อ X แต่ B เชื่อ Y` · `ส่วน B กลับเชื่อ Y` (ในขณะที่ = ช่วงเวลาเดียวกัน) |
-| `t-thuk` | ถูก- ทุกประโยค (passive แปลตรง) | ถูก/โดน ใช้กับเรื่องไม่ดีหรือไม่รู้ผู้ทำ · ที่เหลือเขียนว่าใครทำ |
-| `t-padding` | ทำการ · มีการ · ได้มีการ · มีความ + คุณศัพท์ · ที่มีความ | ใช้กริยาตรง ๆ: `ซับซ้อน` ไม่ใช่ `มีความซับซ้อน` · ยกเว้น `เป็นความ + กริยา` (`เป็นความตั้งใจ`) ต้องคงไว้ |
-| `t-khong` | ของ…ของ…ของ | ประกบคำนามตรง ๆ: `การพัฒนาเศรษฐกิจไทย` |
-| `t-nueng-nai` | หนึ่งในที่สุด | `…ที่สุดคนหนึ่ง` |
-| `t-mai-wa` | ไม่ว่าจะเป็น A, B หรือ C (แค่ไล่รายการ) | `A B หรือ C` · `ทั้ง A B และ C` |
-| `t-hedge` | ออกตัวซ้อน `อาจจะมีความเป็นไปได้ที่จะ` | `อาจ` ครั้งเดียว ตรงที่ไม่แน่ใจจริง |
-| `t-pronoun` | เรา…เรา…เรา / ท่าน | ละหลังประโยคแรก · ผู้อ่านใช้ `คุณ` ไม่ใช้ `ท่าน` (ยกเว้นหนังสือราชการ) |
-| `t-mun` | `มันเป็นที่ชัดเจนว่า` | `ชัดเจนว่า` |
-| `t-comma` | ลูกน้ำคั่นคำขยาย `แฮรารี, นักประวัติศาสตร์, แย้งว่า` | เว้นวรรค |
-| `t-dash` | ขีดยาว — และ ; | เว้นวรรค ขึ้นย่อหน้า หรือ ที่/ซึ่ง |
-| `t-particle` | ครับ/ค่ะ ในเนื้อเอกสาร | มีได้ในแชต คำพูดที่ยกมา และบล็อกส่วนตัว (เปิด ปิด และตอนพูดกับคนอ่านตรง ๆ เช่น `มาดูกันครับ`) เท่านั้น |
-| `t-overcut` | ตัดคำจนห้วน: `อยากช่วย` `ใช้ template` `ส่งมา` | ภาษาไทยไม่ได้ "จ่ายค่าเช่า" ให้ทุกคำแบบอังกฤษ `จะ` `ให้` `ก็` `ด้วย` `แล้ว` `ต่างหาก` และคำสุภาพ `ขอ` `รบกวน` `นะ` ทำหน้าที่จริง: `อยากจะช่วย` · `ให้ใช้ template` · `รบกวนส่งมาด้วยนะครับ` · กฎ "ตัดคำ" ของ skill อื่นใช้กับคำฟุ่มเฟือย (`t-padding`) เท่านั้น |
-| `t-reassure` | ปลอบลอย ๆ `ไม่ต้องกังวล` `สบายใจได้` | จบที่ข้อเท็จจริงและขั้นถัดไป: `แอดมินจะแจ้งผลภายในพรุ่งนี้ค่ะ` |
-| `t-force` | `ระบบบังคับให้…` `ระบบไม่อนุญาตให้…` | เล่าเป็นความสามารถหรือลำดับ: `ต้องยืนยันอีเมลก่อน ถึงจะเข้าใช้ได้` (`ถึงจะ` ใช้กับลำดับ · `ก็ต่อเมื่อ` ใช้กับเงื่อนไขเดียว) |
-| `t-samrap` | `สำหรับผมแล้ว ผมคิดว่า` · `สำหรับ…นั้น` เปิดประโยค | `ผมว่า…` · ยกเรื่องขึ้นก่อนตาม `f1` |
-| `t-topology` | เล่าโครงแทนเล่าเคส `มีเส้นทางเชื่อมระหว่าง A กับ B` | เล่าว่าใครทำอะไรแล้วเกิดอะไร: `ลูกค้ากดสั่ง ร้านเห็นรายการทันที` |
-| `t-considered` | `ถูกพิจารณาว่าเป็น` `ถูกมองว่า` (is considered) | `ถือว่าเป็น` · `คนมองว่า` · หรือบอกว่าใครเป็นคนมอง |
+| `t-chueung` | "ซึ่ง" chained several levels deep | At most 1 ซึ่ง per sentence. Use "ที่" when the noun is clear. Or split the sentence. |
+| `t-budget` | Frequent formal connectors | Per paragraph: ซึ่ง ≤ 1 · โดย ≤ 1 · ดังนั้น ≤ 1. `ทั้งนี้` does not open a paragraph (allowed near a disclaimer or a call to action). This budget does **not** count the final words `ด้วย` `แล้ว` `เลย` `อยู่`, nor `เพื่อ…เพื่อ` in official letters. If a final word reads oddly, restructure the sentence, do not delete the word. In an explanatory article, order connectors ดังนั้น → นอกจากนี้ (rarely) → แต่. |
+| `t-doi` | `โดยที่… โดยการ… โดยมี…` | Use ผ่าน · จาก · ด้วย, or no connector at all. |
+| `t-khanathi` | `ในขณะที่` used to mean "while (contrast)" / "but" | `A เชื่อ X แต่ B เชื่อ Y` · `ส่วน B กลับเชื่อ Y` (ในขณะที่ = the same period of time) |
+| `t-thuk` | ถูก- in every sentence (literal passive) | ถูก/โดน is for bad things or an unknown doer. Otherwise say who did it. |
+| `t-padding` | ทำการ · มีการ · ได้มีการ · มีความ + adjective · ที่มีความ | Use the verb directly: `ซับซ้อน` not `มีความซับซ้อน`. Exception: `เป็นความ + verb` (`เป็นความตั้งใจ`) must be kept. |
+| `t-khong` | ของ…ของ…ของ | Join the nouns directly: `การพัฒนาเศรษฐกิจไทย` |
+| `t-nueng-nai` | หนึ่งใน…ที่สุด (one of the most) | `…ที่สุดคนหนึ่ง` |
+| `t-mai-wa` | ไม่ว่าจะเป็น A, B หรือ C (merely listing items) | `A B หรือ C` · `ทั้ง A B และ C` |
+| `t-hedge` | Stacked hedges `อาจจะมีความเป็นไปได้ที่จะ` | A single `อาจ`, exactly where you are truly unsure. |
+| `t-pronoun` | เรา…เรา…เรา / ท่าน | Drop after the first sentence. Address the reader as `คุณ`, not `ท่าน` (except in official letters). |
+| `t-mun` | `มันเป็นที่ชัดเจนว่า` (it is clear that) | `ชัดเจนว่า` |
+| `t-comma` | Commas around a modifier `แฮรารี, นักประวัติศาสตร์, แย้งว่า` | Use spaces. |
+| `t-dash` | Long dash — and ; | Use a space, a new paragraph, or ที่/ซึ่ง. |
+| `t-particle` | ครับ/ค่ะ in document body text | Allowed only in chat, quoted speech and personal blogs (opening, closing, and when speaking to the reader directly, such as `มาดูกันครับ`). |
+| `t-overcut` | Cutting words until it turns curt: `อยากช่วย` `ใช้ template` `ส่งมา` | Thai does not "pay rent" on every word the way English does. `จะ` `ให้` `ก็` `ด้วย` `แล้ว` `ต่างหาก` and the polite words `ขอ` `รบกวน` `นะ` do real work: `อยากจะช่วย` · `ให้ใช้ template` · `รบกวนส่งมาด้วยนะครับ`. The "cut words" rule of other skills applies only to padding words (`t-padding`). |
+| `t-reassure` | Vague soothing `ไม่ต้องกังวล` `สบายใจได้` | End on a fact and the next step: `แอดมินจะแจ้งผลภายในพรุ่งนี้ค่ะ` |
+| `t-force` | `ระบบบังคับให้…` `ระบบไม่อนุญาตให้…` (the system forces… / does not allow…) | Tell it as a capability or a sequence: `ต้องยืนยันอีเมลก่อน ถึงจะเข้าใช้ได้` (`ถึงจะ` for sequence · `ก็ต่อเมื่อ` for a single condition) |
+| `t-samrap` | `สำหรับผมแล้ว ผมคิดว่า` · `สำหรับ…นั้น` opening a sentence | `ผมว่า…` · put the topic first as in `f1` |
+| `t-topology` | Telling structure instead of the case `มีเส้นทางเชื่อมระหว่าง A กับ B` | Tell who does what and what happens: `ลูกค้ากดสั่ง ร้านเห็นรายการทันที` |
+| `t-considered` | `ถูกพิจารณาว่าเป็น` `ถูกมองว่า` (is considered) | `ถือว่าเป็น` · `คนมองว่า` · or say who is looking. |
 
-**คำและวลีต้องเลี่ยง (`t-block`)** — เจอแล้วแก้ทันที ยกเว้นอยู่ใน `` ` `` หรือในเครื่องหมายคำพูด (ยกมาพูดถึง):
+**Words and phrases to avoid (`t-block`).** Fix on sight, unless inside `` ` `` or quotation marks (quoted for discussion):
 
-`ในยุคปัจจุบัน` · `ในโลกปัจจุบัน` · `ในโลกที่…` · `เป็นที่ทราบกันดีว่า` · `เป็นที่รู้กันว่า` · `ปฏิเสธไม่ได้ว่า` · `เป็นสิ่งสำคัญที่ต้องตระหนัก` · `มีความสำคัญ` (ใช้ `สำคัญ`) · `การที่…นั้น` · `ในเรื่องของ` · `ในส่วนของ` · `อย่างมหาศาล` · `อย่างน่าทึ่ง` · `อย่างไม่น่าเชื่อ` · `ทุกสิ่งที่คุณต้องรู้เกี่ยวกับ` · `โดยสรุปแล้ว` · `กล่าวโดยสรุป` · `นั่นเอง!` · `รีบ…เลย!`
+`ในยุคปัจจุบัน` · `ในโลกปัจจุบัน` · `ในโลกที่…` · `เป็นที่ทราบกันดีว่า` · `เป็นที่รู้กันว่า` · `ปฏิเสธไม่ได้ว่า` · `เป็นสิ่งสำคัญที่ต้องตระหนัก` · `มีความสำคัญ` (use `สำคัญ`) · `การที่…นั้น` · `ในเรื่องของ` · `ในส่วนของ` · `อย่างมหาศาล` · `อย่างน่าทึ่ง` · `อย่างไม่น่าเชื่อ` · `ทุกสิ่งที่คุณต้องรู้เกี่ยวกับ` · `โดยสรุปแล้ว` · `กล่าวโดยสรุป` · `นั่นเอง!` · `รีบ…เลย!`
 
-คำโฆษณาที่ยอมได้เมื่อมีตัวเลขประกบ: `อย่างมาก` · `อย่างมีประสิทธิภาพ` (เฉพาะเอกสารธุรกิจ) · `!` ตัวเดียวที่ hook หรือคำชวนทำในหน้าขายของ ที่อื่นไม่ใช้
+Ad words that are acceptable when paired with a number: `อย่างมาก` · `อย่างมีประสิทธิภาพ` (business documents only) · a single `!` at a hook or call to action on a sales page, not elsewhere.
 
-## 3 · ไวยากรณ์ที่ AI พลาดบ่อย
+## 3 · Grammar AI often gets wrong
 
-| รหัส | เรื่อง | ตัวอย่าง |
+| Code | Topic | Example |
 |---|---|---|
-| `g-classifier` | ลักษณนามผิดหรือหาย | server 1 `เครื่อง` · function/parameter 1 `ตัว` · token/record 1 `อัน` · บรรทัด · หน้า · รายการ — ไม่แน่ใจให้เลี่ยงการนับ · ระดับทางการต้องใช้ลักษณนามตรงตัว (ถัง · ฉบับ · ราย) ระดับไม่ทางการใช้ `อัน` `ตัว` ได้ |
-| `g-cha` | ขาด `จะ` ในประโยคอนาคตหรือสมมุติ | `จะเลือกตัวไหนขึ้นอยู่กับ…` · `วิธีนี้จะคุม rate ได้` |
-| `g-function` | คำเชื่อมสั้นผิดหน้าที่ | `จะ` ≠ `จน` · ภาษาไม่ทางการใช้ `เวลา` `ตอนที่` แทน `เมื่อ` · `เหมาะกับ` ต้องมี กับ |
-| `g-verb` | กริยาแปลตรง | burst ≠ `ระเบิด` (ใช้ `ยิง`) · drop ≠ `ทิ้ง` (ใช้ `ปฏิเสธ`) · match ≠ `ซ้ำ` (ใช้ `ตรง`) · cap ≠ `ครอบ` (ใช้ `จำกัดไว้ที่`) · throttle ≠ `บีบคอ` (ใช้ `ชะลอ` `หน่วง`) · กริยาที่เป็นภาพทางกายภาพในอังกฤษ มักต้องใช้กริยาไทยคนละตัว |
-| `g-capability` | สามารถ…ได้ | งานวิชาการ ราชการ ข่าว ใช้ครบ `สามารถ + กริยา + ได้` · งานทั่วไปใช้ `กริยา + ได้` |
-| `g-time` | ช่วงเวลาใช้ ของ | `ในศตวรรษที่ 20` ไม่ใช่ `ของศตวรรษที่ 20` |
-| `g-tirai` | `ทีไร` ต้องปิดด้วย `ทุกที` หรือ `ไม่เคย…สักที` | `ฝนตกทีไร น้ำท่วมทุกที` · `ทุกครั้ง` อ่อนกว่าและหลุดสำนวน · `ทีไร…เสมอ` ก้ำกึ่ง เลี่ยง |
-| `g-quant` | ตัวเลขคู่กับกริยาความรู้สึก | `ตัวเลขไม่ตรงกับที่คาด` ไม่ใช่ `ที่รู้สึก` |
-| `g-yamok` | ไม้ยมกติดคำ `ต่างๆ` `บ่อยๆ` | เว้นวรรคหน้าและหลัง `ต่าง ๆ` `บ่อย ๆ` ทั้งชิ้น · ที่มา: หลักเกณฑ์การเว้นวรรค ข้อ ๑.๒.๑๕.๑ "เว้นวรรคเล็กหน้าและหลังเครื่องหมายไปยาลใหญ่ ไม้ยมก …" ตัวอย่าง `วันหนึ่ง ๆ เขาทำอะไรบ้าง` · สำนักงานราชบัณฑิตยสภา https://www.orst.go.th/iwfm_table.asp?a=36 (ตรวจ 2026-10-26 · royin.go.th เปิดไม่ได้จากเครื่องนี้ เว็บเดียวกันย้ายมาอยู่ที่ orst.go.th) |
+| `g-classifier` | Wrong or missing classifier | server 1 `เครื่อง` · function/parameter 1 `ตัว` · token/record 1 `อัน` · บรรทัด · หน้า · รายการ. If unsure, avoid counting. The official register needs exact classifiers (ถัง · ฉบับ · ราย); informal registers may use `อัน` `ตัว`. |
+| `g-cha` | Missing `จะ` in a future or hypothetical sentence | `จะเลือกตัวไหนขึ้นอยู่กับ…` · `วิธีนี้จะคุม rate ได้` |
+| `g-function` | Short connector used with the wrong function | `จะ` ≠ `จน` · informal language uses `เวลา` `ตอนที่` instead of `เมื่อ` · `เหมาะกับ` needs กับ |
+| `g-verb` | Literally translated verb | burst ≠ `ระเบิด` (use `ยิง`) · drop ≠ `ทิ้ง` (use `ปฏิเสธ`) · match ≠ `ซ้ำ` (use `ตรง`) · cap ≠ `ครอบ` (use `จำกัดไว้ที่`) · throttle ≠ `บีบคอ` (use `ชะลอ` `หน่วง`). A verb that is a physical image in English often needs a different Thai verb. |
+| `g-capability` | สามารถ…ได้ (can) | Academic, official and news writing use the full `สามารถ + verb + ได้`. General writing uses `verb + ได้`. |
+| `g-time` | Period of time takes ของ | `ในศตวรรษที่ 20` not `ของศตวรรษที่ 20` |
+| `g-tirai` | `ทีไร` must close with `ทุกที` or `ไม่เคย…สักที` | `ฝนตกทีไร น้ำท่วมทุกที` · `ทุกครั้ง` is weaker and breaks the idiom · `ทีไร…เสมอ` is borderline, avoid. |
+| `g-quant` | A number paired with a feeling verb | `ตัวเลขไม่ตรงกับที่คาด` not `ที่รู้สึก` |
+| `g-yamok` | Mai yamok attached to the word `ต่างๆ` `บ่อยๆ` | Put a space before and after: `ต่าง ๆ` `บ่อย ๆ` throughout. Source: spacing rules item ๑.๒.๑๕.๑ "เว้นวรรคเล็กหน้าและหลังเครื่องหมายไปยาลใหญ่ ไม้ยมก …" with example `วันหนึ่ง ๆ เขาทำอะไรบ้าง` · Royal Society of Thailand office https://www.orst.go.th/iwfm_table.asp?a=36 (checked 2026-10-26 · royin.go.th could not be opened from this machine; the same site moved to orst.go.th) |
 
-## 4 · ระดับภาษา
+## 4 · Registers
 
-เลือกระดับก่อนเขียน แล้วคงไว้ทั้งชิ้น (`r-drift`) · เปลี่ยนได้ที่หัวข้อใหม่เท่านั้น
+Choose the register before writing, then keep it for the whole piece (`r-drift`). Change only at a new heading.
 
-| งาน | ระดับ | คำท้าย ครับ/ค่ะ | ผู้พูด/ผู้อ่าน |
+| Work | Register | Final particle ครับ/ค่ะ | Speaker/reader |
 |---|---|---|---|
-| เอกสารเทคนิค · README · คู่มือ · บทความอธิบาย | อธิบาย | ไม่มี | `เรา` / `คุณ` |
-| หน้าขายของ · landing page | การตลาด | ไม่มี | `คุณ` เท่านั้นในเนื้อ (ไม่ใช้ `เจ้าของร้าน` `ผู้ใช้` แทนคุณ) |
-| บล็อกส่วนตัว · เล่าประสบการณ์ · ประกาศในทีม | ส่วนตัว | เปิด ปิด และตอนพูดกับคนอ่านตรง ๆ | `ผม` / `ดิฉัน` ตามผู้เขียน (ไม่รู้ ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` แล้วจดลง ตัดสินใจเอง) |
-| ข่าว · release note · ประกาศ · CHANGELOG | ข่าว | ไม่มี | ไม่มีบุรุษที่ 1 · ประโยคแรก ใคร ทำอะไร กับอะไร · ที่มาอยู่ประโยคที่ 2 · ปิดด้วยเวอร์ชัน วันที่ หรือแหล่ง · `ดังนั้น` เฉพาะเมื่อมีเหตุจริง |
-| วิทยานิพนธ์ · IS · บทความวิจัย · บทวิเคราะห์ยาว | วิชาการ | ไม่มี | `ผู้วิจัย` หรือละ · `เรา` เฉพาะประสบการณ์ร่วม |
-| หนังสือราชการ · รายงานการประชุม · นโยบาย | ราชการ | ไม่มี | ไม่มีบุรุษที่ 1 · ใช้ถ้อยคำตามแบบ (ตารางคำข้างล่าง) |
-| หนังสือบริษัทถึงลูกค้า · ข้อเสนอ · BRD FSD SRS · company profile | ธุรกิจ | ไม่มี | `บริษัทฯ` หรือชื่อทีม ไม่ใช้ `เรา` · `คุณ` เฉพาะในขั้นตอนสั่งให้ทำ · ศัพท์หลักครั้งแรก `ไทย (English: ตัวย่อ)` |
-| แชตลูกค้า · ไลฟ์ · ตอบรีวิว · broadcast | แชตร้าน | ทุกข้อความ (ค่ะ หรือ ครับ แบบเดียวทั้งร้าน) | ร้านเรียกตัวเองว่า `ร้าน` หรือ `แอดมิน` ครั้งเดียวต่อข้อความ · ลูกค้า `คุณลูกค้า` หรือละ · จบที่ข้อเท็จจริงและขั้นถัดไป ไม่ปลอบลอย ๆ (`t-reassure`) |
-| จดหมายร้องเรียน · ขอคืนเงิน · ยกเลิกสัญญา | ร้องเรียน | ไม่มี | `ข้าพเจ้า` · ผู้รับ `ท่าน` หรือชื่อบริษัท · ข้อเท็จจริง วันที่ จำนวนเงิน ก่อนข้อเรียกร้อง · กำหนดเวลา `ภายใน X วัน นับจากวันที่ได้รับหนังสือฉบับนี้` · ไม่ขู่ ไม่ขอโทษ |
-| CV · จดหมายสมัครงาน · ต่อรองเงินเดือน · LinkedIn | สมัครงาน | ไม่มีใน CV · มีในจดหมายและข้อความถึง HR | `ผม` / `ดิฉัน` · bullet ใน CV ขึ้นต้นด้วยกริยาและปิดด้วยตัวเลข (`ลดเวลาปิดงบจาก 8 วันเหลือ 5 วัน`) · ไม่มี `ซึ่งทำให้` |
-| ข้อความบนหน้าจอ · ปุ่ม · error · แจ้งเตือน · placeholder | หน้าจอ | ไม่มี | `คุณ` หรือละ · ปุ่มขึ้นต้นด้วยกริยา (`บันทึก` `ส่งคำขอ`) · error = เกิดอะไร + ทำอะไรต่อ ใน 1–2 ประโยค · ไม่ซ้อน `กรุณา` `ท่าน` `ครับ/ค่ะ` · 1 คำต่อ 1 การกระทำทั้งแอป เก็บใน glossary |
+| Technical docs · README · manuals · explanatory articles | อธิบาย (explain) | None | `เรา` / `คุณ` |
+| Sales pages · landing pages | การตลาด (marketing) | None | `คุณ` only in the body (do not use `เจ้าของร้าน` `ผู้ใช้` in place of คุณ) |
+| Personal blog · telling experience · team announcements | ส่วนตัว (personal) | Opening, closing, and when speaking to the reader directly | `ผม` / `ดิฉัน` according to the author (if unknown, use the owner's default in `~/.claude/superuser-style.md` and note it as `ตัดสินใจเอง`) |
+| News · release notes · announcements · CHANGELOG | ข่าว (news) | None | No first person · first sentence says who does what to what · the source goes in sentence 2 · close with the version, date or source · `ดังนั้น` only when there is a real cause |
+| Thesis · IS · research article · long analysis | วิชาการ (academic) | None | `ผู้วิจัย` or drop the pronoun · `เรา` only for shared experience |
+| Official letters · meeting minutes · policy | ราชการ (official) | None | No first person · use standard-form wording (word table below) |
+| Company letter to a customer · proposal · BRD FSD SRS · company profile | ธุรกิจ (business) | None | `บริษัทฯ` or the team name, not `เรา` · `คุณ` only in steps telling the reader to do something · key term at first use `ไทย (English: abbreviation)` |
+| Customer chat · live selling · review replies · broadcast | แชตร้าน (shop chat) | In every message (ค่ะ or ครับ, one style for the whole shop) | The shop calls itself `ร้าน` or `แอดมิน` once per message · customer is `คุณลูกค้า` or dropped · end on a fact and the next step, no vague soothing (`t-reassure`) |
+| Complaint letter · refund request · contract cancellation | ร้องเรียน (complaint) | None | `ข้าพเจ้า` · recipient `ท่าน` or the company name · facts, dates, amounts before the demand · deadline `ภายใน X วัน นับจากวันที่ได้รับหนังสือฉบับนี้` · no threats, no apology |
+| CV · job application letter · salary negotiation · LinkedIn | สมัครงาน (job application) | None in a CV · yes in letters and messages to HR | `ผม` / `ดิฉัน` · a CV bullet starts with a verb and ends with a number (`ลดเวลาปิดงบจาก 8 วันเหลือ 5 วัน`) · no `ซึ่งทำให้` |
+| On-screen text · buttons · errors · notifications · placeholders | หน้าจอ (screen) | None | `คุณ` or dropped · a button starts with a verb (`บันทึก` `ส่งคำขอ`) · an error = what happened + what to do next, in 1–2 sentences · no stacked `กรุณา` `ท่าน` `ครับ/ค่ะ` · 1 word per action across the whole app, kept in a glossary |
 
-**บุรุษและผู้อ่านไม่สลับในย่อหน้าเดียว (`r-deixis`)** — สอนใช้ `เรา` แนะนำใช้ `คุณ` ไม่ปนกันในย่อหน้า · ในข้อความที่พูดกับคนอ่านอยู่ ไม่โผล่ `ใคร` `คน` `ผู้ใช้` แทนเขา: `ขาดทุน แต่ไม่มีใครรู้` → `ขาดทุนโดยไม่รู้ตัว`
+**Person and reader do not switch within a paragraph (`r-deixis`).** Teaching uses `เรา`, advising uses `คุณ`, never mixed in a paragraph. In text that speaks to the reader, `ใคร` `คน` `ผู้ใช้` do not appear in place of the reader: `ขาดทุน แต่ไม่มีใครรู้` → `ขาดทุนโดยไม่รู้ตัว`
 
-**ระดับราชการเพิ่ม** (ชั่วคราว · จากตัวอย่างชุดเดียว รอหนังสือจริงยืนยัน) — ประโยคขั้นตอน = ผู้ทำ + วิธี + สิ่งที่ทำ + ปลายทาง · เรียกเอกสารตามชื่อจริง ไม่ย่อแบบโน้ต (`15/30/45`) · คำสลับ: เซ็น → `ลงนาม` · ทำ → `ดำเนินการ` · เช็ค → `ตรวจสอบ` · ส่งให้ → `ส่งมาเพื่อ…` · คำถามค้าง → `ประเด็นที่ยังต้องการคำชี้แจง` · ระเบียบงานสารบรรณที่ใช้อยู่คือ ฉบับที่ 4 พ.ศ. 2564 (ตรวจ 2026-10-22 ไม่พบฉบับที่ 5)
+**Extra for the official register** (temporary · from one set of examples, waiting for real letters to confirm). A procedure sentence = doer + method + what is done + destination. Call documents by their real names, do not abbreviate like notes (`15/30/45`). Word swaps: เซ็น → `ลงนาม` · ทำ → `ดำเนินการ` · เช็ค → `ตรวจสอบ` · ส่งให้ → `ส่งมาเพื่อ…` · open questions → `ประเด็นที่ยังต้องการคำชี้แจง`. The official correspondence regulation in force is edition 4 of B.E. 2564 (checked 2026-10-22, edition 5 not found).
 
-**ระดับการตลาดเพิ่ม** — `!` ตัวเดียวที่ hook หรือคำชวนทำ · `…` ที่จังหวะพักแบบโค้ช ใช้ได้ในงานการเงิน · ปิดนุ่ม (`ลองได้เลย`) ดีกว่าคำสั่งห้วน · ไม่เปิดด้วยนิยาม `X คือ…` ในหน้าขาย · งานการเงินปิดด้วยคำแนะนำความพอดี 1 ประโยค (`กู้เท่าที่จำเป็นและชำระคืนไหว`) และยุบข้อสงวนสิทธิ์เป็นประโยคในน้ำเสียงเดียวกัน
+**Extra for the marketing register.** A single `!` at a hook or call to action · `…` as a coach-style pause is allowed in financial work · a soft close (`ลองได้เลย`) is better than a curt command · do not open a sales page with a definition `X คือ…` · financial work closes with 1 sentence of advice on moderation (`กู้เท่าที่จำเป็นและชำระคืนไหว`) and folds the disclaimer into a sentence in the same voice.
 
-**คำคู่ที่ต้องเลือกฝั่งเดียวทั้งชิ้น (`r-drift`)**
+**Word pairs where you pick one side for the whole piece (`r-drift`)**
 
-| ไม่ทางการ | ทางการ (วิชาการ · ราชการ) |
+| Informal | Formal (academic · official) |
 |---|---|
 | ยังไง | อย่างไร |
 | คนไหน · แบบไหน | คนใด · รูปแบบใด |
@@ -1427,106 +1427,106 @@ Applies to slide titles, figure titles, document headings, and box titles in a d
 | ตอนนี้ | ขณะนี้ · ปัจจุบัน |
 | อยากรู้ | ต้องการทราบ |
 
-**ระดับวิชาการเพิ่ม** — ประโยคยาวได้แต่ต้องสลับกับประโยคสั้น · `ทว่า` `อย่างไรก็ตาม` `นอกจากนี้` ใช้ได้เฉพาะจุดเปลี่ยนจริง · ยืนยันตรง ๆ ไม่ออกตัวถ้าแหล่งไม่ได้ออกตัว · เปิดด้วยคำถามหรือกรอบของเรื่อง ไม่เปิดกว้าง ๆ · ปิดด้วยการตั้งโจทย์ใหม่ ไม่สรุปซ้ำ
+**Extra for the academic register.** Sentences may be long but must alternate with short ones · `ทว่า` `อย่างไรก็ตาม` `นอกจากนี้` only at real turning points · assert directly, do not hedge if the source did not hedge · open with a question or the frame of the topic, not something broad · close by posing a new question, not by recapping.
 
-## 5 · ทับศัพท์ — เลือก 1 แบบต่อคำ แล้วใช้แบบเดียวทั้งชิ้น
+## 5 · Loanwords: pick 1 form per word, use it throughout
 
-| แบบ | ใช้เมื่อ | ตัวอย่าง |
+| Form | Use when | Example |
 |---|---|---|
-| แปลไทย | มีคำไทยที่คนรู้จัก หรือราชบัณฑิตยสภาบัญญัติไว้ | เสรีภาพ · ผลิตภาพ · ทุนนิยม |
-| เขียนเสียงเป็นไทย | ชื่อเฉพาะ คำใหม่ไม่มีคำไทยตรง | อัลกอริทึม · บล็อกเชน · ซอฟต์แวร์ |
-| คงอักษรอังกฤษ | ชื่อแบรนด์ ตัวย่อ ศัพท์ที่นักพัฒนาใช้เป็นอังกฤษ | Google · API · deploy · query |
-| ตั้งคำไทย + วงเล็บครั้งแรก | แนวคิดหลักที่ใช้ซ้ำ · ตัวย่อ | ระเบียบในจินตนาการ (imagined order) ครั้งต่อไปใช้ไทยอย่างเดียว · ปัญญาประดิษฐ์ (Artificial Intelligence: AI) แล้วใช้ไทยหรือ AI แบบเดียวทั้งชิ้น — รูปนี้เป็นรูปเดียวของทุก plugin (`spell-out-abbreviations` · `srs-writing` · `thesis-writing` อ้างมาที่นี่) |
+| Translate to Thai | A Thai word people know exists, or the Royal Society of Thailand coined one | เสรีภาพ · ผลิตภาพ · ทุนนิยม |
+| Write the sound in Thai | Proper names, new words with no direct Thai word | อัลกอริทึม · บล็อกเชน · ซอฟต์แวร์ |
+| Keep English letters | Brand names, abbreviations, terms developers use in English | Google · API · deploy · query |
+| Coin a Thai term + brackets at first use | A core concept used repeatedly · abbreviations | ระเบียบในจินตนาการ (imagined order), then Thai only afterwards · ปัญญาประดิษฐ์ (Artificial Intelligence: AI), then Thai or AI, one style for the whole piece. This is the one form for every plugin (`spell-out-abbreviations` · `srs-writing` · `thesis-writing` refer here). |
 
-ผสมอังกฤษที่คำนามหรือกริยาเดี่ยว (`deploy โค้ด` `query ตาราง`) ไม่ใช่ `ทำการ deployment ของ code` · เขียนเสียงเป็นไทยตามหลักเกณฑ์การทับศัพท์ของราชบัณฑิตยสภา: ไม่ใส่วรรณยุกต์ เว้นแต่คำนั้นเสียงซ้ำกับคำไทยจนสับสน เช่น `โค้ก` (ข้อ ๕) (`ซอฟต์แวร์` ไม่ใช่ `ซ้อฟต์แว่ร์`) ใส่การันต์ที่ตัวสะกดไม่ออกเสียง (ข้อ ๓.๑) · เลือก 1 ตัวสะกดต่อคำแล้วจดไว้ (ที่มา: ประกาศสำนักนายกรัฐมนตรี เรื่อง หลักเกณฑ์การทับศัพท์ภาษาอังกฤษ ประกาศ ณ วันที่ 26 สิงหาคม พ.ศ. 2532 ราชกิจจานุเบกษา เล่ม 106 ตอนที่ 153 วันที่ 14 กันยายน 2532 · อ่านไฟล์ PDF ที่สำนักงานราชบัณฑิตยสภาเผยแพร่ https://www.orst.go.th/FILEROOM/CABROYINWEB/DRAWER004/GENERAL/DATA0000/00000753.PDF หน้า 1-5 ตรวจ 2026-10-26 · ยังไม่ได้เทียบตารางพยัญชนะ (ตารางที่ 2) ทีละตัว) · ชื่อคนต่างชาติเขียนไทยแล้ววงเล็บอังกฤษครั้งแรก `ไมเคิล แซนเดล (Michael Sandel)` ไม่ใช้ลูกน้ำคั่นคำขยาย
+Mix English only at a single noun or verb (`deploy โค้ด` `query ตาราง`), not `ทำการ deployment ของ code`. Write sounds in Thai following the Royal Society of Thailand's transliteration rules: no tone marks, unless the word's sound collides with a Thai word and causes confusion, such as `โค้ก` (item ๕) (`ซอฟต์แวร์` not `ซ้อฟต์แว่ร์`). Add the silencer mark (karan) on letters that are not pronounced (item ๓.๑). Choose 1 spelling per word and note it. (Source: Office of the Prime Minister announcement, "Rules for transliterating English", announced 26 August B.E. 2532, Royal Gazette volume 106 part 153, 14 September 1989 · read the PDF published by the Royal Society of Thailand https://www.orst.go.th/FILEROOM/CABROYINWEB/DRAWER004/GENERAL/DATA0000/00000753.PDF pages 1-5, checked 2026-10-26 · the consonant table (table 2) has not been compared letter by letter.) Write a foreign person's name in Thai, then English in brackets at first use: `ไมเคิล แซนเดล (Michael Sandel)`. Do not use commas around a modifier.
 
-## 6 · ปิดเรื่อง
+## 6 · Closing
 
-ไม่สรุปซ้ำ (`c-recap`) · จบด้วยสิ่งที่ทำต่อ คำถามที่ตั้งใหม่ หรือหยุดเฉย ๆ
+No recap (`c-recap`). End with what to do next, a newly posed question, or simply stop.
 
-## 7 · แปลอังกฤษเป็นไทย
+## 7 · Translating English into Thai
 
-ใช้เมื่อต้นทางเป็นอังกฤษ (เอกสาร · error message · paper · บทความ) และผลเป็นไทยที่คนอ่าน · เล่าใหม่ทั้งย่อหน้า ไม่แปลทีละประโยค
+Use when the source is English (docs · error messages · papers · articles) and the result is Thai for people to read. Retell the whole paragraph, do not translate sentence by sentence.
 
-1. เรียงใหม่ตามกรอบ `f1` `f2`: ยกเรื่องขึ้นก่อน เงื่อนไขและเวลามาก่อน · passive อังกฤษกลับเป็นใครทำ (`t-thuk`) ยกเว้นเรื่องไม่ดีหรือไม่รู้ผู้ทำ
-2. ไม่เติมสิ่งที่ต้นทางไม่มี: ไม่เติม ครับ/ค่ะ `อาจจะ` หรือคำออกตัวที่ต้นทางไม่ได้ออกตัว · ไม่ตัดตัวเลขหรือเงื่อนไข
-3. สำนวนแปลตามความหมาย ไม่แปลตามคำ · ภาพเปรียบของผู้เขียนที่ใช้ซ้ำทั้งเรื่อง ตั้งเป็นคำไทย 1 คำแล้วใช้คำนั้นตลอด (หัวข้อ 5 แถว 4)
-4. `it is … that …` `there is` `one of the most` ไม่มีรูปไทย: `ชัดเจนว่า` · `มี…` · `…ที่สุดคนหนึ่ง` (`t-mun` `t-nueng-nai`) · `is considered` ไม่ใช่ `ถูกพิจารณาว่า` (`t-considered`)
-5. ตัวเอนที่ใช้เน้นในอังกฤษ กลายเป็นคำท้ายหรือลำดับคำในไทย (`ต่างหาก` `เลย` `แหละ`) ไม่ใช่ตัวเอน · ชื่อคนต่างชาติ `ไมเคิล แซนเดล (Michael Sandel)` ครั้งแรก
-6. ศัพท์เทคนิคคงอังกฤษตามหัวข้อ 5 · กริยาที่เป็นภาพทางกาย (burst · cap · throttle · drop) ใช้กริยาไทยคนละตัว (`g-verb`) · ลักษณนามเลือกเอง ไม่แปล `a` `an`
-7. อ่านออกเสียงทั้งย่อหน้า ถ้าเดาได้ว่าต้นทางเป็นอังกฤษ ให้เรียบเรียงใหม่
+1. Reorder by `f1` `f2`: topic first, condition and time first. Turn English passives back into who-did-it (`t-thuk`), except for bad things or an unknown doer.
+2. Add nothing the source lacks: no ครับ/ค่ะ, no `อาจจะ` or other hedges the source did not make. Do not drop numbers or conditions.
+3. Translate idioms by meaning, not word by word. For an author's metaphor used throughout the piece, coin 1 Thai word and use it every time (section 5, row 4).
+4. `it is … that …` `there is` `one of the most` have no Thai form: `ชัดเจนว่า` · `มี…` · `…ที่สุดคนหนึ่ง` (`t-mun` `t-nueng-nai`) · `is considered` is not `ถูกพิจารณาว่า` (`t-considered`).
+5. English italics used for emphasis become a final word or word order in Thai (`ต่างหาก` `เลย` `แหละ`), not italics. Foreign person's name `ไมเคิล แซนเดล (Michael Sandel)` at first use.
+6. Technical terms stay English per section 5. Verbs that are physical images (burst · cap · throttle · drop) take a different Thai verb each (`g-verb`). Choose classifiers yourself, do not translate `a` `an`.
+7. Read the whole paragraph aloud. If you can tell the source was English, restructure it.
 
-## 8 · วินัยเพิ่มกฎ และไฟล์ประกอบ
+## 8 · Discipline for adding rules, and companion files
 
-- **กฎใหม่ต้องมีที่มา**: คำแก้ของเจ้าของงาน (ก่อน → หลัง) · แหล่งที่เปิดอ่านจริงพร้อมวันที่ · หรือผลรันจริง · ไม่มีให้ติด `(ชั่วคราว)` เหมือนระดับราชการเพิ่มข้างบน
-- **ผู้ใช้แก้ภาษาไทยของ agent** → ก่อนเพิ่มกฎ ค้นไฟล์นี้ว่ากฎมีอยู่แล้วไหม: มีแต่ไม่ได้ใช้ → แก้ถ้อยคำหรือย้ายตำแหน่งกฎ ไม่เพิ่มกฎซ้ำ · ไม่มี → เก็บคู่ก่อน/หลังลง [`thai-examples`](thai-examples.md) ก่อน (ข้อความ "หลัง" ต้องเป็นของผู้ใช้ ไม่ใช่ที่ agent แต่ง) · ซ้ำ 2 ครั้งขึ้นไปค่อยสรุปเป็นกฎ · ไฟล์ตัวอย่างเก็บไม่เกิน 10 คู่ต่อระดับภาษา กฎดูดซับคู่ไหนแล้วลบคู่นั้น
-- **คู่ก่อน/หลังสอนได้ดีกว่ากฎ** — ก่อนเขียนย่อหน้าไทยยาว เปิด [`thai-examples`](thai-examples.md) ดูคู่ของระดับภาษาที่ใช้
-- **ตัวตรวจอัตโนมัติ** `scripts/thai_tells.py` จับ `t-block` `t-budget` `t-padding` `f3` (จุดกลางย่อหน้า) `g-yamok` `t-dash` และ `ทั้งนี้` เปิดย่อหน้า · เตือนอย่างเดียว ไม่ตัดสินว่าอ่านลื่น · สิ่งที่สคริปต์ไม่เห็น (`f1` `f2` `f4`–`f7` ระดับภาษา) ยังต้องอ่านเอง
-- **ตัวอักษรไทยในไฟล์ส่งออก** (ตัดคำ · ช่องไฟ · line-height ต่อสื่อ) อยู่ใน [`thai-line-breaking`](thai-line-breaking.md) ที่เดียว skill อื่นลิงก์มา
+- **A new rule needs a source:** the owner's edit (before → after) · a source actually opened, with its date · or a real run result. If none, tag it `(ชั่วคราว)` (temporary), like the extra official-register rule above.
+- **The user edits an agent's Thai.** Before adding a rule, search this file for whether the rule already exists. If it exists but was not applied, fix the wording or move the rule, and do not add a duplicate. If not, store the before/after pair in [`thai-examples`](thai-examples.md) first (the "after" text must be the user's, not one the agent wrote). Only when it repeats 2 or more times, summarise it into a rule. The examples file keeps at most 10 pairs per register, and a rule that absorbs a pair deletes that pair.
+- **Before/after pairs teach better than rules.** Before writing a long Thai paragraph, open [`thai-examples`](thai-examples.md) and look at the pair for the register in use.
+- **Automatic checker** `scripts/thai_tells.py` catches `t-block` `t-budget` `t-padding` `f3` (mid-paragraph full stops) `g-yamok` `t-dash` and `ทั้งนี้` opening a paragraph. It only warns, and does not judge whether the text reads smoothly. What the script cannot see (`f1` `f2` `f4`–`f7`, register) you still have to read yourself.
+- **Thai letters in exported files** (line breaking · spacing · line-height per medium) live only in [`thai-line-breaking`](thai-line-breaking.md). Other skills link to it.
 
 ---
 
-ที่มา: กลั่นจาก [chakrit/kien-thai](https://github.com/chakrit/kien-thai) (MIT License · Copyright (c) 2026 Chakrit Wichian · ข้อความสัญญาอนุญาตเต็มใน [`THIRD-PARTY-NOTICES`](../THIRD-PARTY-NOTICES.md)) — กรอบ 7 ข้อ · ไฟล์ `ai-tells` · `grammar` · `register` · `style-rules` · `forbidden-phrases` · `decisions/` (คำสุภาพไม่ใช่ AI tell · ภาษาไทยไม่ตัดคำแบบอังกฤษ · ไม่ให้โมเดลตัดสินคุณภาพภาษา · ตัวอย่างคู่ก่อนกฎ) ตรวจเมื่อ 2026-10-22 · ที่มาทางวิชาการตามที่ repo อ้าง: Iwasaki & Ingkaphirom · Takahashi 2023 (ก็) · Olsson 2013 (แล้ว) · หลักเกณฑ์การเว้นวรรค ราชบัณฑิตยสภา · ระดับภาษาเพิ่ม 5 แถว (ธุรกิจ · แชตร้าน · ร้องเรียน · สมัครงาน · หน้าจอ) มาจากการกวาด template ใน plugin ของ SQT-Marketplace 2026-10-22
+Source: distilled from [chakrit/kien-thai](https://github.com/chakrit/kien-thai) (MIT License · Copyright (c) 2026 Chakrit Wichian · full licence text in [`THIRD-PARTY-NOTICES`](../THIRD-PARTY-NOTICES.md)): the 7-point framework · files `ai-tells` · `grammar` · `register` · `style-rules` · `forbidden-phrases` · `decisions/` (polite words are not an AI tell · Thai does not cut words the English way · do not let the model judge language quality · example pairs before rules), checked 2026-10-22. Academic sources as cited by that repo: Iwasaki & Ingkaphirom · Takahashi 2023 (ก็) · Olsson 2013 (แล้ว) · spacing rules of the Royal Society of Thailand. The 5 extra register rows (business · shop chat · complaint · job application · screen) come from sweeping the templates in the SQT-Marketplace plugins on 2026-10-22.
 
 
 ## reference: thai-line-breaking.md
 
-# ตัดคำภาษาไทยให้ขึ้นบรรทัดสวย
+# Breaking Thai words so lines wrap cleanly
 
-ใช้ทุกครั้งที่ส่งออกเอกสารภาษาไทยเป็น Word · PDF · HTML · สไลด์ ที่จัดย่อหน้าชิดสองข้าง หรือเมื่อเห็นบรรทัดที่ตัวอักษรถูกยืดห่างกัน (`เ ท ค โ น โ ล ยี`)
+Use whenever you export a Thai document as Word · PDF · HTML · slides with justified paragraphs, or when you see a line with stretched letter spacing (`เ ท ค โ น โ ล ยี`).
 
-## ทำไมถึงเกิด
+## Why it happens
 
-ภาษาไทยไม่เว้นวรรคระหว่างคำ โปรแกรมต้องเดาจุดตัดเอง ถ้าเดาไม่ได้ (run ติดป้ายภาษาอังกฤษ · ฟอนต์ไม่รองรับ · ไฟล์สร้างจากสคริปต์) ข้อความไทยทั้งก้อนจะกลายเป็นคำเดียวยาว ๆ บรรทัดก่อนหน้าเลยเหลือที่ว่าง แล้วการจัดชิดสองข้างก็ยืดช่องไฟทีละตัวอักษรให้เต็มบรรทัด
+Thai has no spaces between words, so the program must guess where to break. If it cannot guess (a run tagged as English · a font that does not support Thai · a file generated by a script), the whole block of Thai text becomes one long word. The previous line is left with empty space, and justification then stretches the spacing letter by letter to fill the line.
 
-## แก้ตามชนิดไฟล์
+## Fix by file type
 
-| ไฟล์ | วิธีแก้ |
+| File | Fix |
 |---|---|
-| **.docx** (สร้างเองหรือได้มา) | รัน `python scripts/thai_linebreak.py <ไฟล์>.docx` หลังสร้างไฟล์เสร็จ · ใส่จุดตัดที่มองไม่เห็น (U+200B) ระหว่างคำ · ติดป้ายภาษาไทยให้ run · ผูกตัวเลขกับคำข้าง ๆ ("4 ประเด็น" ไม่แยกบรรทัด) · เก็บต้นฉบับไว้ใน `_to_delete/` · ตรวจตัวสคริปต์ด้วย `python -B scripts/thai_linebreak.py --self-test` (ไม่ต้องมี pythainlp) |
-| **.md ก่อนแปลงด้วย pandoc** | รันสคริปต์เดียวกันกับ .md · โค้ดใน `` ` `` ไม่ถูกแตะ |
-| **python-docx / docx-js** | ตั้งภาษาไทยให้ run (`w:lang w:bidi="th-TH"`) และฟอนต์ complex script (`w:rFonts w:cs="TH Sarabun New"`) ตั้งแต่ตอนสร้าง แล้วรันสคริปต์ปิดท้าย |
-| **HTML** | Chrome · Edge · Firefox ตัดคำไทยเองได้ ไม่ต้องใส่ ZWSP · ใส่ `<html lang="th">` · CSS `word-break: normal; overflow-wrap: anywhere; line-break: auto;` · เนื้อหาไทยใช้ `text-align: left` · ห้าม `word-break: break-all` (ตัดกลางคำ) |
-| **PDF** | แก้ที่ต้นทาง (.docx หรือ HTML) แล้วแปลงใหม่ |
-| **สไลด์ .pptx** | กล่องข้อความไทยชิดซ้าย · ข้อความยาวรันสคริปต์ไม่ได้ ให้ขึ้นบรรทัดเองที่รอยต่อวลี |
+| **.docx** (made by you or received) | Run `python scripts/thai_linebreak.py <file>.docx` after the file is built. It inserts invisible break points (U+200B) between words · tags runs as Thai · binds numbers to neighbouring words ("4 ประเด็น" does not split across lines) · keep the original in `_to_delete/` · test the script itself with `python -B scripts/thai_linebreak.py --self-test` (pythainlp not needed). |
+| **.md before converting with pandoc** | Run the same script on the .md · code inside `` ` `` is not touched. |
+| **python-docx / docx-js** | Set the Thai language on the run (`w:lang w:bidi="th-TH"`) and the complex-script font (`w:rFonts w:cs="TH Sarabun New"`) at creation time, then run the script at the end. |
+| **HTML** | Chrome · Edge · Firefox break Thai words on their own, no ZWSP needed · set `<html lang="th">` · CSS `word-break: normal; overflow-wrap: anywhere; line-break: auto;` · use `text-align: left` for Thai content · never `word-break: break-all` (breaks mid-word). |
+| **PDF** | Fix at the source (.docx or HTML), then convert again. |
+| **Slides .pptx** | Thai text boxes left-aligned · long text cannot go through the script, so break lines by hand at phrase boundaries. |
 
-## การจัดย่อหน้า
+## Paragraph alignment
 
-- เนื้อหาภาษาไทยทั่วไป: **ชิดซ้าย** ปลอดภัยที่สุด
-- งานวิชาการหรือราชการที่ต้องชิดสองข้าง: ใช้ "ชิดสองข้าง" (`both`) **หลัง** รันสคริปต์แล้วเท่านั้น
-- ไม่ใช้ "กระจายแบบไทย" (`thaiDistribute`) หรือ "กระจาย" (`distribute`) กับเนื้อหา เพราะยืดตัวอักษรทุกบรรทัด · สคริปต์แจ้งย่อหน้าที่ใช้อยู่ และเปลี่ยนให้ได้ด้วย `--align both` หรือ `--align left`
+- General Thai content: **left-aligned** is the safest.
+- Academic or official work that needs justification: use "ชิดสองข้าง" (justify, `both`) only **after** running the script.
+- Do not use "กระจายแบบไทย" (Thai distribute, `thaiDistribute`) or "กระจาย" (distribute, `distribute`) for body text, because they stretch letters on every line. The script reports paragraphs that use them, and can change them with `--align both` or `--align left`.
 
-## ห้ามตัดตรงนี้
+## Never break here
 
-- ตัวเลขกับหน่วยหรือคำนำหน้า: `4 ประเด็น` · `ตารางที่ 1` · `พ.ศ. 2569` · `50 %`
-- ก่อน `ๆ` `ฯ` และสระหรือวรรณยุกต์ที่ขึ้นต้นบรรทัดไม่ได้
-- ชื่อเฉพาะสั้น ๆ: `IEEE Transactions` ถ้าขึ้นบรรทัดใหม่แล้วอ่านยาก ให้เว้นด้วย non-breaking space
+- A number and its unit or prefix: `4 ประเด็น` · `ตารางที่ 1` · `พ.ศ. 2569` · `50 %`
+- Before `ๆ` `ฯ`, and before vowels or tone marks that cannot start a line.
+- Short proper names: `IEEE Transactions`. If it is hard to read after wrapping onto a new line, hold it together with a non-breaking space.
 
-## ระยะบรรทัดต่อสื่อ (ค่ากลางที่ skill อื่นอ้างมา)
+## Line spacing per medium (the central values other skills refer to)
 
-ภาษาไทยมีสระบน สระล่าง และวรรณยุกต์ซ้อนกันได้ 2 ชั้น จึงต้องการระยะบรรทัดมากกว่าละติน · ละตินล้วนใช้ 1.2–1.4 ได้ ส่วนไทยต่ำกว่าราว 1.4 สระบนกับวรรณยุกต์จะชนกันหรือถูกตัด · ค่าในตารางเป็นค่ากลางที่ skill ในชุดนี้ใช้อยู่ แก้ที่นี่แล้วให้ skill ที่อ้างตามมา
+Thai has upper vowels, lower vowels and tone marks that can stack 2 levels, so it needs more line spacing than Latin. Pure Latin can use 1.2–1.4, but for Thai below about 1.4 the upper vowels and tone marks collide or get clipped. The values in the table are the central values the skills in this set use. Change them here, and the skills that refer to them follow.
 
-| สื่อ | เนื้อความ | หัวข้อ | ที่ใช้อยู่ |
+| Medium | Body text | Headings | Used by |
 |---|---|---|---|
-| หน้าเว็บ (CSS `line-height` คูณขนาดตัวอักษร) | 1.6 · บทความยาว 1.75–1.85 | ไทยไม่ต่ำกว่า 1.4 · หัวใหญ่ที่เป็นละตินล้วนบีบถึง 1.0–1.1 ได้ | `web-app-design` · `dynamic-website` |
-| แอปมือถือ | 1.5–1.75 · จอเล็กยิ่งต้องห่าง | ไม่ต่ำกว่า 1.4 | `mobile-app-design` |
-| แอป Windows | 20px ที่ตัว 14px สำหรับข้อความในหน้าจอ · ย่อหน้ายาว 22px | ตามสเกล Fluent | `windows-app-design` |
-| สไลด์ | ไม่ต่ำกว่า 1.5 | ไม่ต่ำกว่า 1.4 | `presentation-design` |
-| กราฟิก โพสต์ โปสเตอร์ | 1.5–1.7 | ไม่ต่ำกว่า 1.4 | `brand-kit` · `graphic-design` |
-| diagram | ไม่ต่ำกว่า 1.5 | — | `diagram-figures` |
-| Word .docx (ฟอนต์ Tahoma) | 1.3–1.35 แบบ "หลายเท่า" | ตามแม่แบบ | `branded-document-design` |
+| Web page (CSS `line-height` times font size) | 1.6 · long articles 1.75–1.85 | Thai not below 1.4 · large pure-Latin headings can go down to 1.0–1.1 | `web-app-design` · `dynamic-website` |
+| Mobile app | 1.5–1.75 · the smaller the screen, the more spacing | Not below 1.4 | `mobile-app-design` |
+| Windows app | 20px at 14px text for on-screen text · long paragraphs 22px | Follow the Fluent scale | `windows-app-design` |
+| Slides | Not below 1.5 | Not below 1.4 | `presentation-design` |
+| Graphics · posts · posters | 1.5–1.7 | Not below 1.4 | `brand-kit` · `graphic-design` |
+| Diagram | Not below 1.5 | — | `diagram-figures` |
+| Word .docx (Tahoma font) | 1.3–1.35 as "Multiple" (หลายเท่า) | Follow the template | `branded-document-design` |
 
-**Word ไม่ได้นับแบบเดียวกับ CSS:** "หลายเท่า" ใน Word คูณความสูงบรรทัดที่ฟอนต์กำหนดมาเอง ซึ่งฟอนต์ไทยเผื่อที่ให้สระและวรรณยุกต์ไว้แล้ว ตัวเลขใน Word จึงต่ำกว่าบนเว็บได้โดยบรรทัดไม่ชน · เปลี่ยนฟอนต์เมื่อไหร่ให้เปิด PDF ดูทุกหน้าใหม่
+**Word does not count the same way as CSS.** "Multiple" in Word multiplies the line height that the font itself defines, and Thai fonts already reserve room for vowels and tone marks. So the number in Word can be lower than on the web without lines colliding. Whenever you change the font, reopen the PDF and look at every page again.
 
-**หน้าเว็บต้องรับการปรับของผู้ใช้ได้:** WCAG 2.2 ข้อ 1.4.12 (ระดับ AA) กำหนดว่าเมื่อผู้ใช้ตั้งระยะบรรทัดเป็น 1.5 เท่าของขนาดตัวอักษร เนื้อหาต้องไม่ขาดหรือทับกัน · วิธีตรวจอยู่ใน `web-quality-audit`
+**Web pages must tolerate user adjustment.** WCAG 2.2 criterion 1.4.12 (level AA) requires that when the user sets line spacing to 1.5 times the font size, content must not be cut off or overlap. How to check is in `web-quality-audit`.
 
-## ตรวจ
+## Check
 
-1. รัน `--check` ดูจำนวนจุดตัดและย่อหน้าที่จัดแบบกระจาย
-2. แปลงเป็น PDF แล้วเปิดดูทุกหน้า หาบรรทัดที่ตัวอักษรห่างผิดปกติ
-3. ตัวตัดคำ (pythainlp `newmm`) ตัดผิดได้บ้าง เช่น `ท่า|ทางการ` ที่ควรเป็น `ท่าทาง|การ` · จุดตัดผิดไม่ทำให้ข้อความเปลี่ยน แค่อาจขึ้นบรรทัดใหม่กลางคำ ถ้าเจอในบรรทัดจริงให้แก้มือตรงนั้น
+1. Run `--check` to see the number of break points and the paragraphs that are distributed.
+2. Convert to PDF and open every page, looking for lines with abnormally wide letter spacing.
+3. The word segmenter (pythainlp `newmm`) can break wrongly now and then, for example `ท่า|ทางการ` where it should be `ท่าทาง|การ`. A wrong break point does not change the text, it only may start a new line mid-word. If you find it on a real line, fix that spot by hand.
 
-**ข้อควรรู้:** จุดตัดที่มองไม่เห็นอยู่ในไฟล์จริง ค้นคำใน Word ส่วนใหญ่ยังเจอ แต่ถ้าคัดลอกข้อความไปวางในระบบอื่นแล้วค้นไม่เจอ ให้รันสคริปต์กับสำเนาสำหรับพิมพ์เท่านั้น
+**Good to know:** the invisible break points are in the actual file. Searching for a word in Word mostly still finds it, but if you copy text into another system and search fails, run the script on the print copy only.
 
 
 ---
@@ -1535,61 +1535,65 @@ Applies to slide titles, figure titles, document headings, and box titles in a d
 
 Use when an answer needs prose, a table or a diagram
 
-# รูปทรงของคำตอบ
+# The shape of an answer
 
-skill นี้บอกรูปทรงและโครง ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
+This skill gives the shape and structure; every line of wording follows `human-writing` · lives only in plugin `superuser`; other plugins share it through `dependencies`
 
-> **กฎข้อเดียว:** เนื้อหามีโครงสร้างอะไร คำตอบใช้รูปทรงนั้น
-> เปรียบเทียบ → ตาราง · เชื่อมโยง → รูป · เรื่องเดียว → ประโยค
+> **One rule:** whatever structure the content has, the answer uses that shape.
+> Comparison → table · connections → figure · one thing → sentences
 
 ---
 
-## เลือกรูปทรงจากสัญญาณในคำถาม
+## Pick the shape from signals in the question
 
-| สัญญาณ | รูปทรง |
+The quoted signals are Thai user phrasings; English meanings are in brackets.
+
+| Signal | Shape |
 |---|---|
-| "แบบไหนดีกว่า" · "ต่างกันยังไง" · "มีทางเลือกอะไรบ้าง" | **ตารางเปรียบเทียบ** |
-| "อะไรต่อกับอะไร" · "ข้อมูลไหลยังไง" · "ลำดับเป็นยังไง" | **รูป** |
-| "มีอะไรบ้าง" ที่ไม่ได้เทียบกัน | **รายการหัวข้อย่อย** |
-| "ทำไม" · "แปลว่าอะไร" · เรื่องเดียวไม่มีแขนง | **ประโยคธรรมดา** |
-| ตัวเลขหลายตัวที่ต้องดูพร้อมกัน | **ตาราง** |
-| ขั้นตอนที่ต้องทำเรียงกัน | **รายการมีเลข** |
-| ทำต่อไม่ได้ · ต้องรอของจากผู้ใช้ | **รายการสั้น: ติดอะไร → ต้องการอะไร** |
+| "แบบไหนดีกว่า" · "ต่างกันยังไง" · "มีทางเลือกอะไรบ้าง" ("which is better" · "how do they differ" · "what options are there") | **Comparison table** |
+| "อะไรต่อกับอะไร" · "ข้อมูลไหลยังไง" · "ลำดับเป็นยังไง" ("what connects to what" · "how does data flow" · "what is the sequence") | **Figure** |
+| "มีอะไรบ้าง" ("what are there") when the items are not compared | **Bullet list** |
+| "ทำไม" · "แปลว่าอะไร" ("why" · "what does it mean") · one thing with no branches | **Plain sentences** |
+| Several numbers that must be seen together | **Table** |
+| Steps that must be done in order | **Numbered list** |
+| Cannot continue · must wait for something from the user | **Short list: what is blocking → what is needed** |
 
-**สัญญาณสำคัญที่สุดคือมี "สิ่งที่ถูกเทียบ" ตั้งแต่ 2 ตัวขึ้นไป** แบบนี้ให้ใช้ตาราง
-เพราะถ้าเขียนเป็นย่อหน้า ผู้อ่านต้องจำตัวแรกไว้ในหัวระหว่างอ่านตัวที่ 2
+**The most important signal is having 2 or more "things being compared"**; use a table then,
+because in a paragraph the reader must hold the first one in their head while reading the second.
 
 ---
 
-## ตารางที่อ่านง่าย
+## A table that reads easily
 
-- **คอลัมน์แรกคือสิ่งที่ถูกเทียบ** คอลัมน์ถัดไปคือแง่มุมที่เทียบ
-- **3–5 คอลัมน์** เกินนี้อ่านไม่ทัน ส่วนแถวไม่เกิน 8 แถวในคำตอบแชต
-- **ทุกช่องต้องมีเนื้อ** — ช่องว่างแปลว่าคอลัมน์นั้นไม่ควรมี หรือข้อมูลยังไม่ครบ ถ้าไม่มีข้อมูลให้เขียนว่า "ไม่มี" ตรง ๆ · ช่องที่เขียน "ขึ้นอยู่กับ" ทุกช่องก็ไม่มีเนื้อ
-- **ช่องละไม่เกิน 1 บรรทัด** ถ้ายาวกว่านั้นให้ยกไปเขียนใต้ตาราง
-- **เรียงแถวตามน้ำหนัก** ตัวที่แนะนำหรือตัวที่ใช้บ่อยที่สุดอยู่บนสุด ไม่ใช่เรียงตามตัวอักษร
-- **หัวคอลัมน์เป็นคำถามที่ผู้อ่านมีในหัว** ไม่ใช่ชื่อสาขาวิชา
+- **The first column is the thing being compared**, and the next columns are the aspects compared
+- **3–5 columns**; more than that cannot be read in time, and at most 8 rows in a chat answer
+- **Every cell must have content** — an empty cell means that column should not exist, or the data is incomplete; if there is no data, write "ไม่มี" (none) plainly · a table where every cell says "it depends" also has no content
+- **At most 1 line per cell**; if longer, move it below the table
+- **Order rows by weight**: the recommended one or the most used one on top, not alphabetical
+- **Column headings are the questions in the reader's head**, not names of academic fields
 
 ```
 ผิด: | ตัวเลือก | ประสิทธิภาพ | ความซับซ้อน |
 ถูก: | ตัวเลือก | เร็วแค่ไหน | ต้องดูแลมากไหม |
 ```
 
-**ปิดท้ายตารางด้วยข้อสรุป 1 บรรทัดเสมอ** — ตารางบอกข้อมูล ไม่ได้บอกว่าควรเลือกอะไร
+(Gloss: wrong = "Option | Performance | Complexity" · right = "Option | How fast | Does it need much upkeep".)
+
+**Always close a table with a 1-line conclusion** — a table gives data; it does not say what to choose
 
 ---
 
-## เมื่อไหร่รูปชนะตาราง
+## When a figure beats a table
 
-ใช้รูปเมื่อ**ความสัมพันธ์คือคำตอบ** — ตารางบอกคุณสมบัติได้ แต่บอกไม่ได้ว่าอะไรต่อกับอะไร
+Use a figure when **the relationship is the answer** — a table can give properties, but cannot say what connects to what.
 
-| ใช้รูป | ใช้ตาราง |
+| Use a figure | Use a table |
 |---|---|
-| อะไรต่อกับอะไร · อะไรอยู่ในอะไร | ตัวไหนดีกว่าตัวไหนในแง่ใด |
-| ลำดับที่มีทางแยกหรือวนกลับ | ขั้นตอนเรียงตรงไม่มีแขนง (ใช้รายการมีเลขพอ) |
-| สิ่งเดียวกันในหลายสถานะ | สิ่งต่างกันในแง่มุมเดียวกัน |
+| What connects to what · what sits inside what | Which is better than which, and in what respect |
+| A sequence with forks or loops back | A straight sequence of steps with no branches (a numbered list is enough) |
+| The same thing in several states | Different things on the same aspects |
 
-ในแชต **รูปเล็ก ๆ แบบ ASCII หรือ Mermaid สั้น ๆ ก็พอ** — ไม่ต้องเปิดเครื่องมือวาด
+In chat, **a small ASCII figure or a short Mermaid is enough** — no need to open a drawing tool
 
 ```
 กล้อง ──DICOM──▶ Orthanc ──▶ API ──▶ รายงาน
@@ -1597,27 +1601,29 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
                     └──▶ ที่เก็บถาวร
 ```
 
-รูปที่ต้องเป็นไฟล์จริงเพื่อใส่เอกสารหรือสไลด์ ให้ใช้ skill วาดรูปของ plugin นั้น (ถ้ามี)
+(Gloss: กล้อง = camera/scanner · รายงาน = report · ที่เก็บถาวร = permanent storage.)
+
+A figure that must be a real file to go into a document or slides uses the figure-drawing skill of that plugin (if there is one)
 
 ---
 
-## เมื่อไหร่ประโยคชนะทั้งคู่
+## When sentences beat both
 
-- คำตอบสั้นกว่า 3 บรรทัด — ตาราง 2 แถวเป็นแค่การตกแต่ง ไม่ได้อธิบายอะไร
-- คำถามที่ตอบว่า "ใช่" หรือ "ไม่ใช่" แล้วตามด้วยเหตุผล 1 ประโยค
-- เรื่องที่**เหตุผลสำคัญกว่าตัวเลือก** — ตารางจะตัดเหตุผลทิ้งเพื่อให้พอดีช่อง
+- The answer is shorter than 3 lines — a 2-row table is only decoration and explains nothing
+- A question answered "yes" or "no" followed by 1 sentence of reason
+- A matter where **the reason matters more than the options** — a table cuts the reason to fit the cell
 
-> ตารางที่มีแถวเดียวหรือ 2 แถวสั้น ๆ แปลว่าใช้ผิดรูปทรง · รูปที่วาดสิ่งที่ประโยคเดียวบอกได้ก็เช่นกัน
+> A table with one row or 2 short rows means the wrong shape was used · a figure that draws what one sentence can say is the same
 
 ---
 
-## เมื่อทำต่อไม่ได้
+## When you cannot continue
 
-ติดขัดเมื่อไหร่ → บอกเป็นข้อ ๆ แค่ 2 อย่าง: **ติดอะไร** และ **ต้องการอะไรจากผู้ใช้**
+Whenever you are blocked → list only 2 things: **what is blocking** and **what you need from the user**
 
-- ข้อละ 1 บรรทัด · ไม่เกิน 4 ข้อ
-- ไม่เล่าสาเหตุยาว ไม่ตอบเรื่องข้างเคียง ไม่วางแผนงานล่วงหน้า — รอได้ของก่อนค่อยทำ
-- ถ้ามีหลายทางให้ผู้ใช้เลือก → แต่ละทางเป็น 1 ข้อ ทางที่ง่ายสุดอยู่บนสุด
+- 1 line per item · at most 4 items
+- Do not tell the cause at length, do not answer side topics, do not plan the work ahead — wait until you have the thing, then do it
+- If there are several paths for the user to choose → each path is 1 item, the easiest on top
 
 ```
 ผิด: ย่อหน้ายาวเล่าว่า container ใหม่ · โฟลเดอร์ว่าง · OneDrive หาย · แล้ววางแผนแก้ 3 ข้อรอไว้
@@ -1627,16 +1633,18 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
    - แนบ Mockup.html มา หรือบอก path ใหม่
 ```
 
+(Gloss: wrong = a long paragraph telling that the container is new · the folder is empty · OneDrive is gone · and then planning 3 fixes while waiting · right = "Blocked on 1 thing: cannot see the file — the linked folder is empty. Need 1 thing: attach Mockup.html or give the new path.")
+
 ---
 
-## ตัวย่อ
+## Abbreviations
 
-ตัวย่อที่ใช้ในไฟล์นี้ · กฎเขียนตัวย่อ → `spell-out-abbreviations`
+Abbreviations used in this file · rules for writing abbreviations → `spell-out-abbreviations`
 
-- **ASCII** — American Standard Code for Information Interchange (การวาดรูปด้วยตัวอักษรธรรมดา)
-- **Mermaid** — ภาษาเขียนไดอะแกรมเป็นข้อความ แล้วให้โปรแกรมวาดให้
-- **DICOM** — Digital Imaging and Communications in Medicine (มาตรฐานไฟล์และการส่งภาพทางการแพทย์)
-- **API** — Application Programming Interface (ช่องทางที่โปรแกรมหนึ่งเรียกใช้อีกโปรแกรมหนึ่ง)
+- **ASCII** — American Standard Code for Information Interchange (drawing figures with plain characters)
+- **Mermaid** — a language that writes diagrams as text and lets a program draw them
+- **DICOM** — Digital Imaging and Communications in Medicine (a standard for medical image files and transfer)
+- **API** — Application Programming Interface (the channel through which one program calls another)
 
 
 ---

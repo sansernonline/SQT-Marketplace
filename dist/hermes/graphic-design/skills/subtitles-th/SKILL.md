@@ -3,84 +3,84 @@ name: subtitles-th
 description: Use when a video needs Thai subtitles as .srt or burned in
 ---
 
-# subtitles-th — ซับไทยเป็นไฟล์: ถอดเสียง ตรวจ แล้วฝังหรือส่งไฟล์
+# subtitles-th — Thai subtitles as a file: transcribe, check, then burn in or deliver the file
 
-อยู่ใน plugin `graphic-design` · ถ้อยคำเขียนตาม `human-writing` · กฎความยาวบรรทัด ความเร็วอ่าน และเครื่องหมายมีที่เดียวคือตาราง Caption and on-screen text rules ใน `video-script-to-clip` · skill นี้ทำให้ไฟล์ซับเป็นไปตามตารางนั้น
+Lives in plugin `graphic-design` · write wording per `human-writing` · the rules for line length, reading speed, and punctuation live in one place, the Caption and on-screen text rules table in `video-script-to-clip` · this skill makes the subtitle file follow that table
 
-> **กฎข้อเดียว:** ซับจากเครื่องถอดเสียงทุกตัวเป็นแค่ร่าง ชื่อคน ชื่อแบรนด์ ราคา และตัวเลขต้องแก้ด้วยมือ แล้ว `srt_check.py` ต้องผ่าน และต้องเปิดภาพที่ฝังแล้วดูวรรณยุกต์ ก่อนบอกว่าเสร็จ
+> **One rule:** subtitles from any transcription tool are only a draft · names of people, brand names, prices, and numbers must be fixed by hand, `srt_check.py` must pass, and you must open the burned-in image and look at the tone marks, before saying done
 
-## ใช้เมื่อ
+## Use when
 
-- มีคลิปหรือเสียงแล้ว ต้องการซับไทยเป็นไฟล์ `.srt` หรือฝังลงภาพ
-- แก้ซับที่มีอยู่ให้อ่านทัน (บรรทัดยาว · เร็วเกิน · 3 บรรทัด · มีจุดปิดประโยค)
-- ฝังซับไทยแล้วตัวหนังสือเป็นสี่เหลี่ยม หรือวรรณยุกต์ลอยผิดที่
+- There is already a clip or audio, and the user wants Thai subtitles as an `.srt` file or burned into the picture
+- Fixing existing subtitles so they can be read in time (long lines · too fast · 3 lines · a full stop closing the sentence)
+- After burning in Thai subtitles the letters are squares, or the tone marks float in the wrong place
 
-## ไม่ใช้เมื่อ (ใช้ตัวอื่นแทนหรือคู่กัน)
+## Do not use when (use something else instead or together)
 
-| งาน | ใช้ |
+| Job | Use |
 |---|---|
-| ข้อความบนจอที่ออกแบบเป็นกราฟิก (หัวข้อ ราคา โปร) | `video-script-to-clip` (ข้อความบนจอ) · `motion-basics` |
-| ซับอัตโนมัติในแอปตัดต่อ (CapCut · DaVinci Resolve) | `production-tools.md` ข้อ 1 แล้วใช้ข้อ 4–6 ของ skill นี้ตรวจผล |
-| ตัด ต่อ หรือปรับเสียงก่อนทำซับ | `video-editing` (ทำก่อน เพราะเวลาของซับอิงไฟล์สุดท้าย) |
-| แปลซับเป็นภาษาอื่น | `translate-th-en` แล้วตรวจไฟล์ผลด้วยข้อ 4 |
+| On-screen text designed as graphics (headings, prices, promotions) | `video-script-to-clip` (on-screen text) · `motion-basics` |
+| Automatic subtitles in an editing app (CapCut · DaVinci Resolve) | `production-tools.md` item 1, then use items 4–6 of this skill to check the result |
+| Cut, join, or adjust audio before making subtitles | `video-editing` (do it first, because subtitle timing depends on the final file) |
+| Translate subtitles into another language | `translate-th-en`, then check the result file with item 4 |
 
-## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+## 0 · Find an existing pattern first (every time)
 
-ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+Before using the structure or template in this file, check whether the user, client, or project already has a pattern of its own:
 
-- **ที่ดู:** ฟอนต์และสีของแบรนด์ (`brand-kit` · `doc-theme` · ไฟล์แบรนด์ที่ผู้ใช้ให้) · ซับของคลิปก่อนในช่องเดียวกัน · ฟอนต์บนกราฟิกของวิดีโอนี้
-- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
-- **ยังต้องมีทุกแบบ:** ฟอนต์ที่เลือกต้องมีอักษรไทยและใบอนุญาตให้ฝังในวิดีโอได้ · ไม่มีของแบรนด์จึงใช้ค่าเริ่ม IBM Plex Sans Thai
+- **Where to look:** the brand's fonts and colors (`brand-kit` · `doc-theme` · brand files the user gave) · the subtitles of earlier clips on the same channel · the fonts on this video's graphics
+- **Result:** found → use that pattern (headings, order, field names, running numbers) and say in the answer which file's pattern you used · not found → use the template in this file as a fallback and say that no earlier pattern was found
+- **Every pattern still needs:** the chosen font must have Thai letters and a license that allows embedding in video · with no brand font, use the default IBM Plex Sans Thai
 
-## ขั้นตอน
+## Steps
 
-1. **ใช้ไฟล์เสียงชุดสุดท้าย** ตัดต่อเสร็จก่อนทำซับ ตัดทีหลังแล้วเวลาเลื่อนทั้งไฟล์
-2. **ถอดเสียงเป็น `.srt`** ใช้ตัวที่รันในเครื่องได้ฟรีก่อน (ข้อมูลไม่ออกนอกเครื่อง) · การติดตั้งแพ็กเกจและดาวน์โหลดโมเดล (ไฟล์ medium ราว 1.5 GB · large-v3 ราว 2.9 GB) อยู่ใน "รออนุมัติ" · บนเครื่องที่เขียน skill นี้ยังไม่ได้รันตัวไหนจริง
+1. **Use the final audio file.** Finish editing before making subtitles, because cutting afterward shifts the time of the whole file
+2. **Transcribe to `.srt`.** Use one that runs locally for free first (data does not leave the machine) · installing packages and downloading models (the medium file is about 1.5 GB · large-v3 about 2.9 GB) goes under "รออนุมัติ" (awaiting approval) · on the machine where this skill was written, none has actually been run yet
 
-   | ตัวเลือก | ใบอนุญาต | ได้ `.srt` อย่างไร | ภาษาไทย |
+   | Option | License | How to get `.srt` | Thai |
    |---|---|---|---|
-   | openai-whisper (Python) | MIT ทั้งโค้ดและโมเดล | `whisper in.wav --model medium --language Thai --output_format srt --output_dir out` | large-v3 ผิดราว 5.8% ระดับตัวอักษร (Common Voice 15) และ 8.4% (FLEURS) ตามผู้พัฒนา |
-   | whisper.cpp | MIT | แปลงเป็น WAV 16-bit ก่อน `ffmpeg -i in.mp3 -ar 16000 -ac 1 -c:a pcm_s16le in.wav` แล้ว `whisper-cli -m models/ggml-medium.bin -f in.wav -l th -osrt -of out` | โมเดลเดียวกับ Whisper · ค่าตั้งต้นเป็นอังกฤษ ต้องใส่ `-l th` และไม่ใช้โมเดลที่ชื่อลงท้าย `.en` |
-   | faster-whisper | MIT | เป็น library ไม่มีตัวเขียน `.srt` ต้องเขียนจาก `segment.start` · `segment.end` · `segment.text` เอง | เร็วกว่า openai-whisper สูงสุดราว 4 เท่าที่ความแม่นเท่ากัน ตามผู้พัฒนา |
-   | โมเดลที่ปรับมาเพื่อภาษาไทย (biodatlab ม.มหิดล · NECTEC Pathumma · SCB 10X Typhoon) | apache-2.0 หรือ mit · Typhoon มีเงื่อนไข OpenTyphoon เพิ่ม | เป็นโมเดลของ `transformers` ไม่มีตัวเขียน `.srt` · ใช้กับ whisper.cpp หรือ faster-whisper ต้องแปลงก่อน (ยังไม่ได้ทดสอบ) | ผู้พัฒนารายงานว่าผิดน้อยกว่า Whisper เดิม แต่วัดต่างชุดข้อมูลกัน เทียบกันตรง ๆ ไม่ได้ · โมเดลบางตัวบอกว่าไม่ได้ทำมาเพื่อเวลา (timestamp) |
+   | openai-whisper (Python) | MIT for both code and model | `whisper in.wav --model medium --language Thai --output_format srt --output_dir out` | large-v3 errs about 5.8% at character level (Common Voice 15) and 8.4% (FLEURS) per the developers |
+   | whisper.cpp | MIT | convert to 16-bit WAV first `ffmpeg -i in.mp3 -ar 16000 -ac 1 -c:a pcm_s16le in.wav` then `whisper-cli -m models/ggml-medium.bin -f in.wav -l th -osrt -of out` | The same model as Whisper · the default is English, so you must pass `-l th` and not use a model whose name ends in `.en` |
+   | faster-whisper | MIT | A library with no `.srt` writer, so you write it yourself from `segment.start` · `segment.end` · `segment.text` | Up to about 4 times faster than openai-whisper at the same accuracy, per the developers |
+   | Models tuned for Thai (biodatlab Mahidol University · NECTEC Pathumma · SCB 10X Typhoon) | apache-2.0 or mit · Typhoon has an added OpenTyphoon condition | These are `transformers` models with no `.srt` writer · to use with whisper.cpp or faster-whisper they must be converted first (not tested yet) | The developers report fewer errors than the original Whisper, but they were measured on different datasets and cannot be compared directly · some models say they were not made for timestamps |
 
-   เวลาในซับจากทุกตัวต้องตรวจซ้ำในข้อ 4 · ทุกตัวอาจเติมคำที่ไม่ได้พูด (hallucination) ตามคำเตือนของ Whisper เอง
-3. **แก้คำด้วยมือ** ชื่อคน ชื่อแบรนด์ ศัพท์เทคนิค ราคา ตัวเลข และคำที่ฟังคล้ายกัน · มีสคริปต์อยู่แล้ว ให้เทียบกับสคริปต์ทีละซับ
-4. **จัดบรรทัดและเวลา แล้วตรวจ** `python scripts/srt_check.py ep01.srt` ต้องผ่าน:
-   - บรรทัดละไม่เกิน 35 ตัว ไม่นับวรรณยุกต์และสระบนล่าง · ไม่เกิน 2 บรรทัด · ตัดบรรทัดระหว่างคำ ไม่ตัดกลางคำ
-   - อ่านไม่เกิน 17 ตัวต่อวินาที · อยู่บนจอ 5/6 วินาที (ราว 0.83 วินาที) ถึง 7 วินาที · ไม่ทับซับก่อนหน้า
-   - ไม่ปิดประโยคด้วยจุด · ไม่มี `?` หรือขีดในบทพูด · `...` ใช้ `…` ตัวเดียว
-   - ไฟล์เป็น UTF-8 (YouTube ต้องการ UTF-8 ล้วน · ffmpeg อ่านซับเป็น UTF-8 เป็นค่าตั้งต้นและข้าม BOM ให้)
-   เกินความเร็ว → แบ่งเป็น 2 ซับตามจังหวะพูด หรือตัดคำซ้ำ ไม่ย่อจนความหมายเปลี่ยน
-5. **ฝังซับหรือส่งไฟล์** ส่งไฟล์แยก: YouTube รับ `.srt` แบบพื้นฐาน ไม่อ่านสไตล์ (`production-tools.md` ข้อ 3) · ฝังลงภาพ (TikTok · Reels · คลิปที่ดูแบบปิดเสียง):
+   The timing in subtitles from every tool must be rechecked in item 4 · every tool may add words that were not spoken (hallucination), per Whisper's own warning
+3. **Fix words by hand.** Names of people, brand names, technical terms, prices, numbers, and words that sound alike · if a script exists, compare against it cue by cue
+4. **Arrange lines and timing, then check.** `python scripts/srt_check.py ep01.srt` must pass:
+   - At most 35 characters per line, not counting tone marks and upper and lower vowels · at most 2 lines · break lines between words, not in the middle of a word
+   - Read at no more than 17 characters per second · on screen from 5/6 second (about 0.83 second) to 7 seconds · do not overlap the previous subtitle
+   - Do not close a sentence with a full stop · no `?` or dashes in spoken lines · for `...` use the single character `…`
+   - The file is UTF-8 (YouTube needs pure UTF-8 · ffmpeg reads subtitles as UTF-8 by default and skips a BOM)
+   Over the speed → split into 2 subtitles at the speaking rhythm, or cut repeated words, without shrinking until the meaning changes
+5. **Burn in the subtitles or deliver the file.** Delivering a separate file: YouTube accepts basic `.srt` and does not read styles (`production-tools.md` item 3) · burning into the picture (TikTok · Reels · clips watched with the sound off):
    `ffmpeg -i in.mp4 -vf "subtitles=ep01.srt:fontsdir='<โฟลเดอร์ฟอนต์>':shaping=complex:force_style='FontName=IBM Plex Sans Thai,FontSize=22,Outline=2,Shadow=0,MarginV=40'" -c:v libx264 -crf 20 -c:a copy out.mp4`
-   - `shaping=complex` เอกสาร ffmpeg 9.0 บอกว่าจำเป็นสำหรับอักษรไทย (ทดสอบ 2026-10-24: `simple` ทำให้ไม้จัตวาใน "เตี๋ยว" ทับสระอี · `complex` และค่าตั้งต้น `auto` บนเครื่องนี้วางถูก) · ffmpeg ต้องสร้างพร้อม libass ที่มี HarfBuzz
-   - **ฟอนต์ค่าเริ่มต้น IBM Plex Sans Thai** (OFL ใน google/fonts) มีทั้งตัวไทยและตัวละตินในตระกูลเดียว ขนาดเข้ากัน (ละตินเทียบไทย 0.93) · ผู้ใช้เลือกจากภาพเทียบ 7 ฟอนต์ 2026-10-26 · **ห้ามใช้ Noto Sans Thai กับซับที่มีคำอังกฤษ** เพราะไฟล์ชุดจาก notofonts (รุ่น 2.002 ที่ติดตั้งอยู่ในเครื่องนี้) ไม่มีตัวละตินเลย คำอังกฤษจึงไปใช้ฟอนต์สำรองที่ใหญ่กว่าราว 1.3 เท่า (ตรวจตารางตัวอักษรในไฟล์และวัดจากภาพ 2026-10-26) · ไฟล์ชุดบน Google Fonts มีตัวละติน แต่ดูจากชื่อฟอนต์ไม่ออกว่าเครื่องมีชุดไหน จึงไม่ใช้ทั้ง 2 ชุด · ทางเลือกอื่นที่ขนาดเข้ากัน: Anuphan · Sarabun · ฟอนต์ต้องมีใบอนุญาตชัด (`production-tools.md` ข้อ 4) · เครื่องไม่มีฟอนต์ → ให้ผู้ใช้ติดตั้งจาก Google Fonts เอง แล้วชี้ `fontsdir`
-   - `FontName` คือชื่อตระกูลฟอนต์ ไม่ใช่ชื่อไฟล์ · `fontsdir` ชี้โฟลเดอร์ที่มีไฟล์ฟอนต์
-   - Windows: path ในฟิลเตอร์ต้องหนีเครื่องหมาย `:` ของไดรฟ์ เช่น `fontsdir='C\:/Users/<ชื่อ>/AppData/Local/Microsoft/Windows/Fonts'` และรันคำสั่งในโฟลเดอร์เดียวกับไฟล์ `.srt` จะได้ใช้ชื่อไฟล์เปล่า
-   - `FontSize` และ `MarginV` ไม่ใช่ px ของภาพตรง ๆ ฟิลเตอร์อ่าน `.srt` เป็นสคริปต์สูง 288 หน่วย ระยะจริงจึงราว ค่า × ความสูงภาพ ÷ 288 (ทดสอบ 2026-10-24: บนภาพสูง 1920 `MarginV` 40 → ซับห่างขอบล่าง 310 px · 150 → 1044 px · Noto Sans Thai FontSize 22 ได้ตัวพยัญชนะ ก ข ค ง สูง 31 px บนภาพสูง 1080 และ 55 px บนภาพสูง 1920 · รอบเทียบฟอนต์ 2026-10-26 วัดใหม่ที่ FontSize 22 บนภาพสูง 1080: Noto Sans Thai 29 px · IBM Plex Sans Thai 27 px เล็กกว่าเล็กน้อย ถ้าต้องการขนาดเท่าเดิมลอง FontSize 24 ซึ่งคำนวณจากอัตราส่วน ยังไม่ได้วัด) ดึงภาพมาวัดแล้วปรับให้ได้ขนาดตามกฎในตาราง caption ของ `video-script-to-clip`
-   - ตำแหน่งตามสัดส่วนภาพ: แนวนอน 16:9 (YouTube · คลิปสอน) วางล่างกลางได้ `MarginV=40` ได้ซับห่างขอบล่างราว 16% · แนวตั้ง 9:16 (TikTok · Reels · Shorts) ซับต้องพ้นส่วนล่างตามกฎ safe zone (ค้นสดจากคู่มือของแพลตฟอร์ม) ใช้ `MarginV=100` ได้ซับห่างขอบล่าง 37% (ทดสอบ 2026-10-24 บนภาพ 1080×1920) · ห้ามใช้ `Alignment=5` เพื่อวางกลางจอ ฟิลเตอร์นี้ตีความเป็นชิดบน (ทดสอบ 2026-10-24: ซับไปอยู่ที่ 6% จากขอบบน)
-6. **เปิดภาพที่ฝังแล้วดูจริง** `ffmpeg -ss <วินาทีที่มีซับ> -i out.mp4 -frames:v 1 check.png` ดูว่าวรรณยุกต์และสระซ้อนอยู่ถูกที่ (เช่น ก๋วยเตี๋ยว · ติ๊ก · น้ำ) และซับอยู่ใน safe zone (`social-formats`)
+   - `shaping=complex`: the ffmpeg 9.0 docs say it is required for Thai script (tested 2026-10-24: `simple` made the tone mark ไม้จัตวา in "เตี๋ยว" overlap the vowel อี · `complex` and the default `auto` placed it correctly on this machine) · ffmpeg must be built with libass that has HarfBuzz
+   - **The default font is IBM Plex Sans Thai** (OFL in google/fonts), which has both Thai and Latin letters in one family, with matching sizes (Latin to Thai 0.93) · the user chose it from a 7-font comparison image on 2026-10-26 · **do not use Noto Sans Thai for subtitles that contain English words,** because the notofonts file set (version 2.002 installed on this machine) has no Latin letters at all, so English words fall back to a fallback font about 1.3 times larger (checked the glyph table in the file and measured from an image 2026-10-26) · the set on Google Fonts has Latin letters, but you cannot tell from the font name which set the machine has, so neither set is used · other options with matching size: Anuphan · Sarabun · the font must have a clear license (`production-tools.md` item 4) · if the machine lacks the font → have the user install it from Google Fonts themselves, then point `fontsdir` at it
+   - `FontName` is the font family name, not the file name · `fontsdir` points to the folder that has the font files
+   - Windows: a path in the filter must escape the drive's `:` character, for example `fontsdir='C\:/Users/<ชื่อ>/AppData/Local/Microsoft/Windows/Fonts'`, and run the command in the same folder as the `.srt` file so you can use a bare file name
+   - `FontSize` and `MarginV` are not directly px of the image · the filter reads `.srt` as a script 288 units tall, so the real distance is about value × image height ÷ 288 (tested 2026-10-24: on an image 1920 tall `MarginV` 40 → the subtitle sits 310 px from the bottom edge · 150 → 1044 px · Noto Sans Thai FontSize 22 gave consonants ก ข ค ง 31 px tall on a 1080-tall image and 55 px on a 1920-tall image · in the font comparison round of 2026-10-26, re-measured at FontSize 22 on a 1080-tall image: Noto Sans Thai 29 px · IBM Plex Sans Thai 27 px, slightly smaller, and to get the same size try FontSize 24, which is calculated from the ratio and not yet measured) pull a frame, measure, and adjust to reach the size set by the rules in the caption table of `video-script-to-clip`
+   - Position by aspect ratio: landscape 16:9 (YouTube · tutorial clips) place at bottom center, `MarginV=40` puts the subtitle about 16% above the bottom edge · portrait 9:16 (TikTok · Reels · Shorts) the subtitle must clear the bottom part per the safe-zone rules (look up live from the platform's guide), and `MarginV=100` puts the subtitle 37% above the bottom edge (tested 2026-10-24 on a 1080×1920 image) · do not use `Alignment=5` to center it on screen, because this filter reads it as top-aligned (tested 2026-10-24: the subtitle landed at 6% from the top edge)
+6. **Open the burned-in image and really look.** `ffmpeg -ss <second with a subtitle> -i out.mp4 -frames:v 1 check.png` and see that tone marks and stacked vowels are in the right places (for example ก๋วยเตี๋ยว · ติ๊ก · น้ำ) and that the subtitle is inside the safe zone (`social-formats`)
 
-## ตัวอย่างจริง
+## Real example
 
-- **โจทย์:** ฝังซับไทย 2 ซับที่มีวรรณยุกต์ซ้อนสระลงคลิป 1920×1080 บน Windows
-- **สิ่งที่ทำ:** `srt_check.py` (เจอซับที่ 2 อ่าน 18.4 ตัวต่อวินาที เกิน 17) · ฝังด้วย Noto Sans Thai (รอบทดสอบ 2026-10-24 ก่อนเปลี่ยนเป็น IBM Plex Sans Thai) จากโฟลเดอร์ฟอนต์ของผู้ใช้ · ดึงภาพที่วินาทีที่ 4 มาดู
-- **ผล:** "ผู้ใหญ่ใจดี น้ำแข็งใส ก๋วยเตี๋ยว" และ "ติ๊กต่อก ฎีกา ฐาน" วางวรรณยุกต์และสระถูกตำแหน่ง · ตัวตรวจจับความเร็วเกินได้ตรงตามเกณฑ์ (ตรวจจริง 2026-10-24 · ffmpeg 9.0.2 ที่มี libass)
+- **Task:** burn 2 Thai subtitles with tone marks stacked on vowels into a 1920×1080 clip on Windows
+- **What was done:** `srt_check.py` (found subtitle 2 reads at 18.4 characters per second, over 17) · burned in with Noto Sans Thai (test round 2026-10-24, before switching to IBM Plex Sans Thai) from the user's font folder · pulled a frame at second 4 and looked at it
+- **Result:** "ผู้ใหญ่ใจดี น้ำแข็งใส ก๋วยเตี๋ยว" and "ติ๊กต่อก ฎีกา ฐาน" had tone marks and vowels in the right positions · the checker caught the excess speed exactly per the threshold (ตรวจจริง 2026-10-24 · ffmpeg 9.0.2 with libass)
 
-## ตรวจก่อนส่ง
+## Check before sending
 
-- [ ] `srt_check.py` ผ่าน (exit 0)
-- [ ] ชื่อ ราคา ตัวเลข และศัพท์เทคนิคตรวจกับสคริปต์หรือฟังซ้ำแล้ว
-- [ ] ฝังแล้ว: เปิดภาพอย่างน้อย 2 จุดดูวรรณยุกต์ · ซับอยู่ใน safe zone
-- [ ] ฟอนต์มีใบอนุญาตสำหรับงานนี้
-- [ ] ให้ผู้ใช้ดูคลิปแบบปิดเสียง 1 รอบ
+- [ ] `srt_check.py` passes (exit 0)
+- [ ] Names, prices, numbers, and technical terms checked against the script or listened to again
+- [ ] If burned in: opened the image at no fewer than 2 points to look at the tone marks · the subtitle is inside the safe zone
+- [ ] The font has a license for this job
+- [ ] Had the user watch the clip once with the sound off
 
-## ที่มา
+## Sources
 
-- ตาราง Caption and on-screen text rules ใน `video-script-to-clip` (Netflix Thai Timed Text Style Guide · Meta safe zone · ตรวจโดย skill นั้น 2026-10-06)
-- `production-tools.md` ข้อ 3–4 (YouTube รับ SubRip แบบ UTF-8 · ฟอนต์ OFL · ตรวจ 2026-10-23)
-- ffmpeg Filters Documentation: [subtitles](https://ffmpeg.org/ffmpeg-filters.html#subtitles) (`fontsdir` · `force_style` · `shaping` · ต้องมี libass) · [การหนีเครื่องหมายใน filtergraph](https://ffmpeg.org/ffmpeg-filters.html#Notes-on-filtergraph-escaping) · การอ่าน UTF-8 และข้าม BOM จาก source `libavformat/subtitles.c` รุ่น n9.0.2 · libass ต้องมี HarfBuzz ตั้งแต่ 0.15.0 ([Changelog](https://github.com/libass/libass/blob/master/Changelog)) (ดู 2026-10-24)
-- [YouTube supported subtitle and closed caption files](https://support.google.com/youtube/answer/2734698) (SRT ต้องเป็น UTF-8 ล้วน ไม่มีสไตล์ · ดู 2026-10-24)
-- ตัวถอดเสียง: [openai/whisper](https://github.com/openai/whisper) (MIT · ขนาดโมเดล · ตัวเลขภาษาไทย) · [whisper.cpp](https://github.com/ggml-org/whisper.cpp) (MIT · `-osrt` · WAV 16-bit) · [faster-whisper](https://github.com/SYSTRAN/faster-whisper) (MIT) · [biodatlab/whisper-th-large-v3-combined](https://huggingface.co/biodatlab/whisper-th-large-v3-combined) · [nectec/Pathumma-whisper-th-large-v3](https://huggingface.co/nectec/Pathumma-whisper-th-large-v3) · [typhoon-ai/typhoon-whisper-large-v3](https://huggingface.co/typhoon-ai/typhoon-whisper-large-v3) (ดู 2026-10-24 · ไม่ได้ดาวน์โหลดหรือรัน)
-- ผลทดสอบของ skill นี้: หัวข้อ "ตัวอย่างจริง" ด้านบน (รันกับไฟล์ทดสอบที่สร้างขึ้นเอง 2026-10-24 · ffmpeg 9.0.2 บน Windows)
+- The Caption and on-screen text rules table in `video-script-to-clip` (Netflix Thai Timed Text Style Guide · Meta safe zone · checked by that skill 2026-10-06)
+- `production-tools.md` items 3–4 (YouTube accepts UTF-8 SubRip · OFL fonts · checked 2026-10-23)
+- ffmpeg Filters Documentation: [subtitles](https://ffmpeg.org/ffmpeg-filters.html#subtitles) (`fontsdir` · `force_style` · `shaping` · needs libass) · [escaping in a filtergraph](https://ffmpeg.org/ffmpeg-filters.html#Notes-on-filtergraph-escaping) · UTF-8 reading and BOM skipping from the source `libavformat/subtitles.c` version n9.0.2 · libass needs HarfBuzz since 0.15.0 ([Changelog](https://github.com/libass/libass/blob/master/Changelog)) (seen 2026-10-24)
+- [YouTube supported subtitle and closed caption files](https://support.google.com/youtube/answer/2734698) (SRT must be pure UTF-8 with no styles · seen 2026-10-24)
+- Transcription tools: [openai/whisper](https://github.com/openai/whisper) (MIT · model sizes · Thai figures) · [whisper.cpp](https://github.com/ggml-org/whisper.cpp) (MIT · `-osrt` · 16-bit WAV) · [faster-whisper](https://github.com/SYSTRAN/faster-whisper) (MIT) · [biodatlab/whisper-th-large-v3-combined](https://huggingface.co/biodatlab/whisper-th-large-v3-combined) · [nectec/Pathumma-whisper-th-large-v3](https://huggingface.co/nectec/Pathumma-whisper-th-large-v3) · [typhoon-ai/typhoon-whisper-large-v3](https://huggingface.co/typhoon-ai/typhoon-whisper-large-v3) (seen 2026-10-24 · not downloaded or run)
+- This skill's test results: the "Real example" section above (run on self-made test files 2026-10-24 · ffmpeg 9.0.2 on Windows)

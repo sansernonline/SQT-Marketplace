@@ -1,30 +1,30 @@
-# `/verify` ที่มากับ Claude Code — กับ app-verifier ของเรา
+# The `/verify` bundled with Claude Code — versus our app-verifier
 
-ที่มา: code.claude.com/docs/en/skills (อ่าน 2026-10-23) · ตัวเลขรุ่นที่อ้างมาจากหน้านั้น ไม่ได้ทดสอบกับทุกรุ่น
+Source: code.claude.com/docs/en/skills (read 2026-10-23) · the version numbers cited come from that page and were not tested on every version
 
-## สิ่งที่ Claude Code มีอยู่แล้ว
+## What Claude Code already has
 
-- skill ติดเครื่อง 3 ตัวทำงานด้วยกัน: `/run` เปิดและขับแอปให้เห็นว่าการแก้ใช้ได้ · `/verify` build แล้วรันแอปเพื่อยืนยันว่าโค้ดที่แก้ทำสิ่งที่ควรทำ โดยไม่ถอยไปพึ่ง test หรือ type check · `/run-skill-generator` สอน 2 ตัวแรกว่า build และเปิดโปรเจกต์นี้อย่างไร
-- `/verify` และ `/code-review` รันเมื่อผู้ใช้เรียกเท่านั้น (ตั้งแต่ v2.1.215 — ก่อนหน้านั้น Claude เรียกเองได้)
-- `/run-skill-generator` รันจาก environment สะอาด จดสิ่งที่ใช้ได้จริง (คำสั่งติดตั้ง · env · สคริปต์เปิด) แล้ว commit เป็น skill ของโปรเจกต์ที่ `.claude/skills/run-<name>/` — รันครั้งเดียวต่อโปรเจกต์ และอีกครั้งเมื่อวิธี build เปลี่ยน
-- `/verify` จดสูตรของตัวเองได้: ถ้าไม่มีสูตร มันเขียนสิ่งที่ใช้ได้ลง `.claude/skills/verify/SKILL.md` ที่รากโปรเจกต์ (monorepo: ในโฟลเดอร์ package ที่แตะ) · **skill ที่รากชื่อ `verify` แทนที่ `/verify` ติดเครื่อง**
-- session ที่เริ่มโดยมี skill ชื่อ `verify` หรือ `simplify` ของโปรเจกต์ (หรือส่วนตัว · องค์กร · `.claude/commands/`) → คำสั่ง commit ของ Claude Code สั่งให้รันก่อนทุก commit ยกเว้นแก้เฉพาะเอกสารหรือ test · ตัวติดเครื่อง · plugin skill · skill จาก claude.ai ไม่นับ
-- ปิดทั้งชุดได้ด้วย `disableBundledSkills` (เหลือ `/doctor`)
+- 3 bundled skills work together: `/run` opens and drives the app to show that a fix works · `/verify` builds and runs the app to confirm that the changed code does what it should, without falling back on tests or type checks · `/run-skill-generator` teaches the first 2 how to build and open this project
+- `/verify` and `/code-review` run only when the user invokes them (since v2.1.215 — before that Claude could invoke them itself)
+- `/run-skill-generator` runs from a clean environment, records what really works (install commands · env · launch script), and commits it as a project skill at `.claude/skills/run-<name>/` — run once per project, and again when the build method changes
+- `/verify` can record its own recipe: if there is no recipe, it writes what works to `.claude/skills/verify/SKILL.md` at the project root (monorepo: in the package folder that was touched) · **a skill at the root named `verify` replaces the bundled `/verify`**
+- A session that starts with a project skill named `verify` or `simplify` (or personal · organization · `.claude/commands/`) → the Claude Code commit command tells it to run before every commit, except when only docs or tests changed · bundled ones · plugin skills · skills from claude.ai do not count
+- The whole set can be turned off with `disableBundledSkills` (leaving `/doctor`)
 
-## สิ่งที่ `app-verifier-setup` เพิ่มให้
+## What `app-verifier-setup` adds
 
-| ของเรา | ตัวติดเครื่องไม่มี |
+| Ours | The bundled one lacks |
 |---|---|
-| สัญญาสำหรับทดสอบในแอป: `data-testid` · `data-ready` · reset endpoint ใต้ flag · นาฬิกาล็อกได้ (`clock`) | มันขับแอปจากสิ่งที่เห็น ไม่ได้บังคับให้แอปเตรียมที่ยึด |
-| แผนที่ฟีเจอร์เป็นข้อมูลในสคริปต์ `test/e2e/verify.*` พิมพ์ `PASS/FAIL` พร้อม expected กับ actual · ตรวจ 0 รายการ = exit 1 | สูตรเป็นภาษาคนใน SKILL.md |
-| พิสูจน์ว่าจับของผิดได้ (ทำให้พัง 1 จุด ต้อง FAIL) และ agent `qa-tester` ตัวใหม่ใช้ได้จริง | — |
-| หลักฐานทุกรอบใน `_to_delete/verify-runs/` · ขับมือถือ native · CLI · API ได้ ไม่ใช่แค่เว็บ | — |
+| A contract for in-app testing: `data-testid` · `data-ready` · reset endpoint behind a flag · a lockable clock (`clock`) | It drives the app from what it sees and does not force the app to prepare anchors |
+| A feature map as data in the script `test/e2e/verify.*` that prints `PASS/FAIL` with expected and actual · 0 items checked = exit 1 | The recipe is in human language in SKILL.md |
+| Proof that it catches wrong things (break 1 spot and it must FAIL) and a new `qa-tester` agent can really use it | — |
+| Evidence of every run in `_to_delete/verify-runs/` · can drive native mobile · CLI · API, not just web | — |
 
-## ตัดสินใจ
+## Decision
 
-**โปรเจกต์ที่ทำงานบน Claude Code ที่มี `/verify` ติดเครื่อง → `app-verifier-setup` สร้าง skill ของโปรเจกต์ที่ `.claude/skills/verify/SKILL.md` (ชื่อ `verify` ไม่ใช่ `verify-<โปรเจกต์>`) ในรูปแบบสูตรที่ `/verify` จดเอง** — ส่วนแรกคือสูตร build และเปิดแอป (แบบเดียวกับที่ `/run-skill-generator` จด) ต่อด้วยของเรา: คำสั่งรัน `test/e2e/verify.*` · ลิงก์แผนที่ฟีเจอร์ · สัญญาสำหรับทดสอบ · ข้อห้าม (หัวข้อ "SKILL.md ของ verify skill ต้องมี" ใน SKILL.md หลัก) · ได้ 2 อย่างฟรี: แทนที่ตัวติดเครื่อง และถูกรันก่อน commit อัตโนมัติ
+**A project working on a Claude Code that has the bundled `/verify` → `app-verifier-setup` creates a project skill at `.claude/skills/verify/SKILL.md` (named `verify`, not `verify-<project>`) in the recipe format that `/verify` records itself** — the first part is the build and open-the-app recipe (the same kind `/run-skill-generator` records), followed by ours: the command that runs `test/e2e/verify.*` · the link to the feature map · the testing contract · the prohibitions (the section "SKILL.md ของ verify skill ต้องมี", meaning "what the verify skill's SKILL.md must contain", in the main SKILL.md) · you get 2 things free: it replaces the bundled one, and it runs automatically before commit
 
-- ก่อนเขียน ให้อ่าน `.claude/skills/verify/SKILL.md` หรือ `run-<name>/` ที่ `/verify` จดไว้แล้ว (ถ้ามี) แล้วเขียนต่อในรูปแบบเดียวกัน — ฟิลด์ frontmatter ที่ตัวติดเครื่องใช้ยังไม่ได้ตรวจจากเอกสาร (ยังไม่ได้ตรวจ)
-- monorepo → วางในโฟลเดอร์ package ที่แตะ ตามกติกาของตัวติดเครื่อง
-- Codex · Gemini หรือ Claude Code รุ่นก่อน v2.1.145 (ยังไม่ได้ตรวจว่า `/verify` เริ่มรุ่นไหน) → ใช้ชื่อเดิม `verify-<โปรเจกต์>` ใน `.claude/skills/` · `.agents/skills/` · `skills/`
-- `app-verifier-upkeep` ดูแลไฟล์นี้ไฟล์เดียว ไม่สร้าง `verify-<โปรเจกต์>` ซ้อน
+- Before writing, read `.claude/skills/verify/SKILL.md` or `run-<name>/` that `/verify` already recorded (if any), then continue in the same format — the frontmatter fields the bundled one uses have not been checked against the docs (`ยังไม่ได้ตรวจ`, not yet checked)
+- monorepo → place it in the package folder that was touched, following the bundled one's rule
+- Codex · Gemini or Claude Code before v2.1.145 (`ยังไม่ได้ตรวจ` — not yet checked which version `/verify` started in) → use the old name `verify-<project>` in `.claude/skills/` · `.agents/skills/` · `skills/`
+- `app-verifier-upkeep` maintains this one file only and does not create a nested `verify-<project>`

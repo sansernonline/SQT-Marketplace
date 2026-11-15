@@ -1,20 +1,20 @@
-# วิธีทำจริงแยกตามภาษาและเฟรมเวิร์ก
+# Practical how-to by language and framework
 
-**สารบัญ:** 1 .NET / ASP.NET Core · 2 Node.js · 3 Python · 4 Angular และ frontend ทั่วไป · 5 Docker และ Kubernetes · 6 เครื่องมือตรวจ secret ที่หลุดเข้า git · 7 คำสั่งสร้างค่าสุ่มที่ปลอดภัย
+**Contents:** 1 .NET / ASP.NET Core · 2 Node.js · 3 Python · 4 Angular and frontend in general · 5 Docker and Kubernetes · 6 Tools that detect secrets leaked into git · 7 Commands that generate safe random values
 
 1. [.NET / ASP.NET Core](#1--net--aspnet-core)
 2. [Node.js](#2--nodejs)
 3. [Python](#3--python)
-4. [Angular และ frontend ทั่วไป](#4--angular-และ-frontend-ทั่วไป)
-5. [Docker และ Kubernetes](#5--docker-และ-kubernetes)
-6. [เครื่องมือตรวจ secret ที่หลุดเข้า git](#6--เครื่องมือตรวจ-secret-ที่หลุดเข้า-git)
-7. [คำสั่งสร้างค่าสุ่มที่ปลอดภัย](#7--คำสั่งสร้างค่าสุ่มที่ปลอดภัย)
+4. [Angular and frontend in general](#4--angular-and-frontend-in-general)
+5. [Docker and Kubernetes](#5--docker-and-kubernetes)
+6. [Tools that detect secrets leaked into git](#6--tools-that-detect-secrets-leaked-into-git)
+7. [Commands that generate safe random values](#7--commands-that-generate-safe-random-values)
 
 ---
 
 ## 1 · .NET / ASP.NET Core
 
-**บนเครื่องนักพัฒนา เก็บนอกโฟลเดอร์โปรเจกต์ จึงไม่มีทางเข้า git:**
+**On the developer machine, stored outside the project folder so it can never reach git:**
 
 ```bash
 dotnet user-secrets init
@@ -22,7 +22,7 @@ dotnet user-secrets set "ConnectionStrings:Default" "Host=localhost;..."
 dotnet user-secrets list
 ```
 
-**ตรวจตอนบูต:**
+**Validate at boot:**
 
 ```csharp
 public sealed class AppOptions
@@ -41,14 +41,14 @@ builder.Services
     .ValidateOnStart();                   // ← ขาดค่า = แอปไม่ยอมบูต
 ```
 
-**ลำดับที่ ASP.NET Core อ่าน (ค่าหลังทับค่าก่อน):**
+**Order in which ASP.NET Core reads (later values override earlier ones):**
 
 ```
 appsettings.json → appsettings.{Environment}.json → user-secrets (dev)
 → environment variable → อาร์กิวเมนต์บรรทัดคำสั่ง
 ```
 
-ตัวแปรสภาพแวดล้อมใช้ `__` แทนลำดับชั้น เช่น `ConnectionStrings__Default`
+Environment variables use `__` in place of hierarchy levels, for example `ConnectionStrings__Default`
 
 **Azure Key Vault:**
 
@@ -85,10 +85,10 @@ if (!parsed.success) {
 export const env = parsed.data;
 ```
 
-> **ห้ามอ่าน `process.env` กระจายทั่วโค้ด** ให้รวมไว้ที่ไฟล์เดียว
-> จะได้ตอบได้ว่าระบบใช้ค่าอะไรบ้าง โดยไม่ต้องไล่ grep ทั้งโปรเจกต์
+> **Do not read `process.env` scattered through the code.** Gather it in one file
+> so you can answer which values the system uses, without grepping the whole project
 
-Node 20 ขึ้นไปโหลด `.env` ได้เองด้วย `node --env-file=.env` ไม่ต้องพึ่ง `dotenv`
+Node 20 and up can load `.env` itself with `node --env-file=.env`, with no need for `dotenv`
 
 ---
 
@@ -110,19 +110,19 @@ class Settings(BaseSettings):
 settings = Settings()      # ขาดค่า = ValidationError ตั้งแต่ import
 ```
 
-- อ่าน `APP_DATABASE_URL`, `APP_JWT_SECRET` ตาม `env_prefix`
-- import ที่ระดับบนสุดของแอป error จะได้เกิดตอนบูต ไม่ใช่ตอนเรียกใช้ครั้งแรก
+- Reads `APP_DATABASE_URL`, `APP_JWT_SECRET` according to `env_prefix`
+- Import at the top level of the app so the error happens at boot, not at the first use
 
 ---
 
-## 4 · Angular และ frontend ทั่วไป
+## 4 · Angular and frontend in general
 
-> **ทุกอย่างที่อยู่ในไฟล์ที่เบราว์เซอร์โหลด คือสาธารณะ** ไม่มีข้อยกเว้น
+> **Everything in a file the browser loads is public.** No exceptions
 
-**แบบฝังตอน build** (`environment.ts`, `import.meta.env`, `NEXT_PUBLIC_*`):
-ค่าติดไปกับไฟล์ที่ build ได้ เปลี่ยนค่าทีไรต้อง build ใหม่ จึงขัดกับกฎ build ครั้งเดียวแล้วใช้ทุก environment
+**Embedded at build time** (`environment.ts`, `import.meta.env`, `NEXT_PUBLIC_*`):
+The value is baked into the built files. Every change needs a rebuild, which breaks the rule of building once and using in every environment
 
-**แบบโหลดตอนรัน (แนะนำ):**
+**Loaded at run time (recommended):**
 
 ```ts
 // main.ts — โหลดก่อนแอปเริ่ม
@@ -139,13 +139,13 @@ fetch('/config.json', { cache: 'no-store' })
 { "apiBaseUrl": "https://api.example.co", "env": "production", "sentryDsn": "..." }
 ```
 
-ตั้ง header `Cache-Control: no-store` ให้ `/config.json` ไม่งั้นเบราว์เซอร์จะใช้ค่าเก่า
+Set the header `Cache-Control: no-store` on `/config.json`, otherwise the browser will use the old value
 
 ---
 
-## 5 · Docker และ Kubernetes
+## 5 · Docker and Kubernetes
 
-**Docker อย่าใส่ secret ตอน build:**
+**For Docker, do not put secrets in at build time:**
 
 ```dockerfile
 # ผิด: ค่าจะติดอยู่ในชั้นของ image ตลอดไป เห็นได้ด้วย docker history
@@ -161,7 +161,7 @@ docker build --secret id=npmrc,src=$HOME/.npmrc .
 docker run --env-file .env myapp        # ตอนรัน ส่งค่าเข้าไป
 ```
 
-ห้ามเขียน `# comment` ต่อท้ายบรรทัดค่าใน `.env` ที่ใช้กับ `--env-file`: docker เก็บ comment เป็นส่วนของค่า ทำให้ค่าผิดโดยไม่มี error (ทดลองเมื่อ 2026-11-04: `A=value # note` ได้ค่า `value # note`) · วาง comment ไว้บรรทัดของมันเอง
+Do not write a trailing `# comment` on a value line in a `.env` used with `--env-file`: docker keeps the comment as part of the value, making the value wrong with no error (tested 2026-11-04: `A=value # note` gives the value `value # note`) · put the comment on its own line
 
 **Kubernetes:**
 
@@ -172,14 +172,14 @@ env:
       secretKeyRef: { name: app-secrets, key: db-password }
 ```
 
-> **Secret ของ Kubernetes เป็นแค่ base64 ไม่ใช่การเข้ารหัส**
-> ใครมีสิทธิ์ `get secret` ก็อ่านค่าได้ตรง ๆ
-> ต้องเปิด encryption at rest ที่ etcd และคุมสิทธิ์ด้วย RBAC
-> ทางที่ดีกว่า: ให้ External Secrets Operator ดึงค่าจาก Key Vault / Secrets Manager มาสร้าง Secret ให้
+> **A Kubernetes Secret is only base64, not encryption**
+> Anyone with `get secret` permission can read the value directly
+> You must turn on encryption at rest in etcd and control access with RBAC
+> A better way: let External Secrets Operator pull the value from Key Vault / Secrets Manager and create the Secret
 
 ---
 
-## 6 · เครื่องมือตรวจ secret ที่หลุดเข้า git
+## 6 · Tools that detect secrets leaked into git
 
 ```bash
 # ตรวจทั้งประวัติ
@@ -198,7 +198,7 @@ repos:
     hooks: [{ id: gitleaks }]
 ```
 
-**ลบออกจากประวัติ** (ทำหลังเพิกถอนค่าเดิมแล้วเท่านั้น):
+**Remove from history** (only after the old value has been revoked):
 
 ```bash
 pip install git-filter-repo
@@ -209,7 +209,7 @@ git push --force --all
 
 ---
 
-## 7 · คำสั่งสร้างค่าสุ่มที่ปลอดภัย
+## 7 · Commands that generate safe random values
 
 ```bash
 openssl rand -base64 48                 # กุญแจทั่วไป
@@ -229,5 +229,5 @@ $b = New-Object byte[] 48
 # PowerShell 7.4 ขึ้นไป: Get-SecureRandom ก็ใช้ได้
 ```
 
-> ผิด: **อย่าใช้ตัวสุ่มทั่วไป** (`Math.random`, `random.random`, `Random` ของ .NET)
-> เพราะพวกนี้คาดเดาได้ ต้องใช้ตัวสุ่มสำหรับงานเข้ารหัสตามคำสั่งข้างบน
+> Wrong: **do not use a general-purpose random generator** (`Math.random`, `random.random`, .NET `Random`)
+> because they are predictable; use the cryptographic random generator as in the commands above

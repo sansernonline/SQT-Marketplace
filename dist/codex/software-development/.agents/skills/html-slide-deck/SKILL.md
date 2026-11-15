@@ -5,165 +5,165 @@ description: Use when the deck must be HTML or animated, or pptx as HTML
 
 # HTML Slide Deck
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the owner's theme → search live references → 3 genuinely different directions → run `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" (pre-work gate) of `design-references` (plugin `superuser`) even when a brand exists (the brand fixes colors and fonts; the search finds the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` · โครงเรื่องและหัวสไลด์ตาม `presentation-design` — skill นี้บอกวิธีสร้างและหน้าตา
+> **Language:** write every line of wording per `human-writing`; story structure and slide titles per `presentation-design` — this skill covers how to build it and how it looks
 
-> **กฎข้อเดียวของ skill นี้:** เด็คคือไฟล์ .html **ไฟล์เดียว** ที่เปิดในเบราว์เซอร์แล้วนำเสนอได้ทันที
-> รูปฝังในไฟล์ · หัวสไลด์เป็นข้อสรุป · ทุกหน้าผ่าน `check_deck.py` ก่อนส่ง
+> **The one rule of this skill:** the deck is **one** .html file that opens in a browser and can be presented at once.
+> Images embedded in the file · slide titles are conclusions · every page passes `check_deck.py` before sending
 
-ตัวอย่างหน้าตาของ**ค่าประจำบ้าน**มาจากเด็คนำเสนอ X Fitness (45 หน้า 10 นาที) — เป็นตัวอย่างของทิศทางประจำบ้านเท่านั้น ไม่ใช่แม่พิมพ์ของทุกเด็ค (ทิศทางของเด็คจริงเลือกตามข้อ 2): พื้นเข้มสีแบรนด์เดียว · หน้าเปิดส่วนเลขใหญ่ · การ์ดตัวเลข · แผนภาพระบบ · คลิกดูไฟล์จริง · แชตในกรอบโทรศัพท์ · กราฟผลทดสอบ
+The look of the **house defaults** comes from the X Fitness pitch deck (45 slides, 10 minutes). It is an example of the house direction only, not a mold for every deck (a real deck's direction is chosen per step 2): dark background with a single brand color · big-number section openers · number cards · system diagram · click to see the real file · chat in a phone frame · test result chart
 
-## เมื่อไหร่ใช้
+## When to use
 
-- นำเสนอโครงงาน · demo ระบบ · สรุปผลให้ผู้บริหาร ที่คนนำเสนอเปิดจากเครื่องตัวเอง
-- อยากให้คนดูคลิกดูรายละเอียดเองได้ (ไฟล์ โค้ด ผลทดสอบ) ซึ่ง PowerPoint ทำไม่ได้
-- ต้องส่งเด็คทางอีเมลหรือแชตแล้วเปิดได้ทุกเครื่องโดยไม่ต้องลงโปรแกรม
-- **มี .pptx อยู่แล้ว** หรือต้องส่งทั้ง .pptx และ .html หน้าตาเดียวกัน จากต้นฉบับเดียว (animation ทีละคลิก · โน้ต · สารบัญ · หน้าโต้ตอบ) → ทางเข้าจาก .pptx อ่าน [`references/from-pptx.md`](references/from-pptx.md) แทนข้อ 1 · แก้ที่ .pptx แล้วแปลงใหม่ ไม่แก้ .html ที่แปลงแล้ว
+- Presenting a project · system demo · executive summary, where the presenter opens it from their own machine
+- You want viewers to click and see details themselves (files, code, test results), which PowerPoint cannot do
+- The deck must be sent by email or chat and open on any machine without installing anything
+- **A .pptx already exists**, or both .pptx and .html with the same look must come from one source (click-by-click animation · notes · table of contents · interactive pages) → for the entry from .pptx read [`references/from-pptx.md`](references/from-pptx.md) instead of step 1 · fix the .pptx and convert again; do not edit the converted .html
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use
 
-| งาน | ใช้ |
+| Task | Use |
 |---|---|
-| สั่ง "ทำ slide deck" เฉย ๆ ไม่บอกว่า html · ลูกค้าต้องได้ .pptx ไปแก้ต่อ | `branded-document-design` · `StageDeck` (หน้าตาชุดเดียวกัน ไม่มี animation) — กฎเลือกชนิดไฟล์อยู่ใน `presentation-design` |
-| ยังไม่มีโครงเรื่อง | `presentation-design` ข้อ 1–3 ก่อน แล้วค่อยกลับมา |
-| รายงานคู่กันเป็น .docx | `markdown-report-docx` (ใช้สีชุดเดียวกัน) |
+| Just told "make a slide deck" without saying html · the customer needs a .pptx to edit further | `branded-document-design` · `StageDeck` (same look, no animation) — the rules for choosing a file type are in `presentation-design` |
+| No story structure yet | `presentation-design` steps 1–3 first, then come back |
+| A companion report as .docx | `markdown-report-docx` (same colors) |
 
 ---
 
-## 1 · ขั้นตอน
+## 1 · Steps
 
-1. เขียนโครงเรื่องตาม `presentation-design`: หัวสไลด์ทุกหน้าเป็นข้อสรุป · แบ่งส่วน · เวลาต่อหน้า
-2. **โปรเจกต์มี `docs/deck/` หรือเด็ค .html อยู่แล้ว → เพิ่ม `<section>` ใน `slides.html` เดิม และใช้ shell · css · `--brand` ชุดเดิม ไม่เริ่มไฟล์ใหม่** (หลักเดียวกับ `ui-craft` (plugin `software-development`) ข้อ 0) · ยังไม่มี → คัดลอก `assets/slides-example.html` ไปไว้ใน `docs/deck/slides.html` ของโปรเจกต์ · เก็บเฉพาะ `<section>` ของเลย์เอาต์ที่ใช้ (ข้อ 3) แล้วใส่เนื้อหา
-3. สร้างไฟล์:
+1. Write the story structure per `presentation-design`: every slide title is a conclusion · sections · time per page
+2. **The project already has `docs/deck/` or an .html deck → add `<section>` to the existing `slides.html` and use the same shell · css · `--brand`; do not start a new file** (same principle as `ui-craft` (plugin `software-development`) step 0) · none yet → copy `assets/slides-example.html` to the project's `docs/deck/slides.html` · keep only the `<section>` of the layouts you use (step 3) and fill in the content
+3. Build the file:
    ```bash
    python scripts/build_deck.py docs/deck/slides.html -o docs/<PRJ>-DECK-v1.0-DRAFT.html \
           --title "<ชื่อเด็ค>" --theme bright --brand <สีหลัก>,<สีสว่าง>,<สีรอง>
    ```
-   ค่า `--theme` และ `--brand` คัดจากผลของ `presentation-design/scripts/source_palette.py <ไฟล์ต้นทาง>` · `--css` / `--js` สำหรับของเฉพาะเด็คนี้ · `--data` ใส่ JSON ให้ JS เพิ่มเติมอ่าน · รูปที่อ้างด้วย path ในเครื่องถูกฝังให้เอง
-4. ตรวจ: `python scripts/check_deck.py docs/<ไฟล์>.html --out _to_delete/deck-check` → แก้จน**ปัญหา 0 จุด** แล้ว**เปิด `sheet-*.png` ดูทุกแผ่น**
-5. ซ้อมจริง 1 รอบด้วยนาฬิกา (กด T · กด S เปิดหน้าต่างผู้พูด) · หน้าไหนเลยเวลาเกิน 30 วินาที นาฬิกาเปลี่ยนสี → ตัดเนื้อหาหน้านั้น
+   Pick the `--theme` and `--brand` values from the output of `presentation-design/scripts/source_palette.py <source file>` · `--css` / `--js` for things specific to this deck · `--data` passes JSON for extra JS to read · images referenced by a local path are embedded automatically
+4. Check: `python scripts/check_deck.py docs/<ไฟล์>.html --out _to_delete/deck-check` → fix until **0 problems**, then **open every `sheet-*.png` and look**
+5. Rehearse once with the clock (press T · press S to open the speaker window) · a page that runs over 30 seconds turns the clock a different color → cut that page's content
 
-ตัวเด็คต้องสร้างจากสคริปต์ได้ทุกครั้ง: ข้อมูลที่เปลี่ยนบ่อย (ผลทดสอบ ตัวเลข) ให้สคริปต์ของโปรเจกต์อ่านจากไฟล์ผลจริงแล้วเขียนลง `slides.html` หรือ `--data` ไม่พิมพ์ตัวเลขเอง
+The deck must be buildable from script every time: for data that changes often (test results, numbers), the project's script reads it from the real result file and writes it into `slides.html` or `--data`; never type the numbers by hand.
 
-## 2 · ธีม — เลือกทิศทางก่อนเปิดไฟล์
+## 2 · Theme — choose the direction before opening any file
 
-**ทิศทางภาพของเด็คมาจาก `presentation-design` ข้อ 1 ขั้น 0 เสมอ** และกฎเรื่องสีกับอารมณ์อยู่ใน [deck-theme](../presentation-design/references/deck-theme.md) · ถ้าข้ามมาที่ skill นี้โดยยังไม่มีทิศทาง ให้ย้อนไปทำก่อน · ลำดับเลือก: งานต้นทางที่นำมาทำเด็ค → ดีไซน์ที่โปรเจกต์มีอยู่ → ต้นแบบที่ผู้ใช้แนบมา → ต้นแบบที่ค้นสดตาม `design-references` (plugin `superuser`) ประเภท `slide` → ค่าประจำบ้าน · **ค่าประจำบ้านคือตัวสำรองเมื่อไม่มีข้อมูลอะไรเลย ไม่ใช่กฎ** เด็ค 2 ใบของงานต่างกันควรหน้าตาต่างกัน
+**The visual direction of the deck always comes from `presentation-design` step 1, stage 0**, and the rules on color and mood are in [deck-theme](../presentation-design/references/deck-theme.md) · if you jumped to this skill without a direction, go back and do that first · selection order: the source work the deck is made from → the design the project already has → a reference the user attached → a reference searched live per `design-references` (plugin `superuser`) type `slide` → house defaults · **house defaults are a fallback for when there is no information at all, not a rule.** Two decks for different jobs should look different.
 
-`build_deck.py` มีธีม 2 แบบ เลือกด้วย `--theme`
+`build_deck.py` has 2 themes, chosen with `--theme`
 
-| `--theme` | หน้าตา | ใช้เมื่อ |
+| `--theme` | Look | Use when |
 |---|---|---|
-| `bright` | พื้นขาว การ์ดอมสีหลักจาง ๆ · ปก หน้าเปิดส่วน และหน้าปิดเป็นสีหลักทึบเต็มแผ่น · สีเน้นถูกปรับให้อ่านได้ที่ 4.5:1 · ตัวอักษรบนพื้นทึบใช้ขาวเมื่อขาวได้ ≥ 4.5:1 ถ้าไม่ได้ใช้ตัวเกือบดำ และถ้ายังไม่ถึงใช้ดำล้วน | เด็คใหม่ทุกใบ เว้นแต่งานต้นทางเป็นพื้นเข้ม |
-| `dark` (ค่าเดิมเมื่อไม่ใส่) | พื้นเข้ม ปกไล่สีมืด | งานต้นทางหรือแอปที่เป็นพื้นเข้ม · เด็คเก่าที่ build ไว้แล้ว (ไม่ใส่ `--theme` หน้าตาเหมือนเดิม) |
+| `bright` | White background, cards tinted faintly with the main color · cover, section openers and closing page are full-bleed solid main color · accent colors are adjusted to read at 4.5:1 · text on solid backgrounds is white when white gives ≥ 4.5:1; if not, near-black; if still short, pure black | Every new deck, unless the source work has a dark background |
+| `dark` (the default when omitted) | Dark background, dark gradient cover | Source work or app that has a dark background · old decks already built (without `--theme` the look stays the same) |
 
-- `--brand สีหลัก,สีเน้น,สีรอง` · สีเน้นใช้กับตัวเลขใหญ่และ kicker (ธีม `bright` เข้มสีนี้ขึ้นเองจนอ่านได้บนการ์ด) · ใส่สีรองเมื่องานต้นทางมีสีรองจริงเท่านั้น · หน้าที่ต้องการสีรองทั้งแผ่นให้ใส่ `data-tone="2"` ที่ `<section>` (ใช้ได้กับธีม `bright`)
-- ฟอนต์เปลี่ยนได้ในไฟล์ `--css` โดยเลือกตระกูลที่มีทั้งไทยและอังกฤษ และมีตัวหนาจริง (กฎใน `presentation-design` ข้อ 8) · แล้วเปิด `sheet-*.png` ตรวจคอนทราสต์ทุกแผ่น
+- `--brand main,accent,secondary` · the accent color is used for big numbers and the kicker (theme `bright` darkens this color automatically until it reads on a card) · give a secondary color only when the source work really has one · a page that needs a full-bleed secondary color gets `data-tone="2"` on its `<section>` (works with theme `bright`)
+- Fonts can be changed in the `--css` file by choosing a family that has both Thai and English and has a real bold (rule in `presentation-design` step 8) · then open `sheet-*.png` and check contrast on every sheet
 
-**สีของเด็ค = สีของงานต้นทาง** ถอดสีจากไฟล์ต้นทางด้วย `presentation-design/scripts/source_palette.py <ไฟล์ต้นทาง>` · ถ้าต้นทางไม่มีสี ให้ใช้ลำดับใน `diagram-figures` ข้อ 5 (ระบบสี) · ถ้ายังไม่เจอ ให้ใช้สีที่ถอดจากต้นแบบประเภท `slide` · ถ้าค้นสดไม่ได้ ให้ใช้ `--theme bright` โดยไม่ใส่ `--brand` (ได้ `2A78D6,1F5FAF` ซึ่งเป็นค่าประจำบ้าน) แล้วเขียน `(รอยืนยัน)` ในรายงานและทำต่อ · ห้ามคัดลอกสีจากตารางตัวอย่างข้างล่าง
+**Deck colors = colors of the source work.** Extract colors from the source file with `presentation-design/scripts/source_palette.py <source file>` · if the source has no colors, use the order in `diagram-figures` step 5 (color system) · if still nothing, use colors extracted from references of type `slide` · if live search is not possible, use `--theme bright` without `--brand` (gives `2A78D6,1F5FAF`, the house default), write `(รอยืนยัน)` (pending confirmation) in the report, and carry on · never copy colors from the example table below.
 
-| token | ค่าตัวอย่าง (เด็คต้นแบบ — ไม่ใช่ค่าเริ่มต้น) | ใช้กับ |
+| token | Example value (the reference deck — not a default) | Used for |
 |---|---|---|
-| `--accent` | `#e10613` | แถบใต้ชื่อปก · ฟองแชตผู้ใช้ |
-| `--accent2` | `#ff2536` | kicker · ตัวเลขใหญ่ · เลขหน้าเปิดส่วน · ของที่เลือกอยู่ |
-| `--accent-deep` · `--accent-tint` | `#2a0a0d` · `#1d0d10` | พื้นไล่สีปก/หน้าเปิดส่วน · พื้นของที่เลือก |
-| `--bg` · `--panel` · `--line` | `#09090a` · `#16161a` · `#2a2a30` | พื้น · การ์ด · เส้น — ไม่เปลี่ยนตาม `--brand` · พื้นเข้มคือค่าเริ่มต้นของ shell (ห้องนำเสนอมืด ภาพหน้าจอและแผนภาพเด่น) ไม่ใช่ข้อบังคับ (เด็คที่แปลงจาก .pptx ใช้พื้นตาม .pptx ดู `references/from-pptx.md`) |
+| `--accent` | `#e10613` | Bar under the cover title · user chat bubble |
+| `--accent2` | `#ff2536` | kicker · big numbers · section-opener page number · the selected item |
+| `--accent-deep` · `--accent-tint` | `#2a0a0d` · `#1d0d10` | Gradient background of cover/section opener · background of the selected item |
+| `--bg` · `--panel` · `--line` | `#09090a` · `#16161a` · `#2a2a30` | Background · card · line — do not change with `--brand` · a dark background is the shell's default (dark presentation room, screenshots and diagrams stand out), not a requirement (a deck converted from .pptx uses the .pptx background, see `references/from-pptx.md`) |
 
-- ตารางข้างบนคือค่าของธีม `dark` · `--brand` คำนวณ deep/tint ให้ · ธีม `dark` สีสว่างต้องอ่านชัดบนพื้นเข้มเอง (contrast ≥ 4.5:1) ส่วน `bright` สคริปต์ปรับให้
-- **ที่มาของตัวเลขคอนทราสต์ประจำบ้าน:** สีสว่างประจำบ้าน `5B9BE6` อ่านได้บนพื้นเข้ม (6.9:1) แต่บนพื้นขาวได้แค่ 2.89:1 จึงต้องเปลี่ยนเป็น `--brand 2A78D6,1F5FAF` (สีที่สองบนพื้นขาว 6.34:1 · สีหลัก `2A78D6` ได้ 4.42:1 จึงใช้กับแถบ เส้น หรือตัวใหญ่ ไม่ใช้กับข้อความเล็ก · คำนวณตามสูตร WCAG 2026-10-26)
-- ฟอนต์ประจำบ้าน (ใช้เมื่อไม่มีทิศทางอื่นจากข้อ 2): หัวข้อ **Chakra Petch** · เนื้อความ **IBM Plex Sans Thai** · โค้ด **JetBrains Mono** (Google Fonts · ไม่มีเน็ต → Tahoma) · ทิศทางของเด็คกำหนดฟอนต์อื่น → ใช้ของทิศทางนั้น (มีไทย+อังกฤษในตระกูลเดียว มีตัวหนาจริง)
-- **สีหลัก 1 สี บวกสีรองจากงานต้นทางไม่เกิน 2 สี** · เขียว `ok` น้ำเงิน `blue` ส้ม `warn` ใช้เฉพาะความหมาย (ผ่าน · ข้อมูล · เตือน)
+- The table above holds the values of theme `dark` · `--brand` computes deep/tint for you · in theme `dark` the bright color must read clearly on the dark background by itself (contrast ≥ 4.5:1), while for `bright` the script adjusts it
+- **Where the house contrast numbers come from:** the house bright color `5B9BE6` reads on a dark background (6.9:1) but only 2.89:1 on white, so it must change to `--brand 2A78D6,1F5FAF` (the second color on white is 6.34:1 · the main color `2A78D6` gets 4.42:1, so use it for bars, lines or large text, not small text · computed with the WCAG formula 2026-10-26)
+- House fonts (use when step 2 gives no other direction): headings **Chakra Petch** · body **IBM Plex Sans Thai** · code **JetBrains Mono** (Google Fonts · offline → Tahoma) · if the deck's direction sets other fonts → use those of that direction (Thai + English in one family, real bold)
+- **One main color plus at most 2 secondary colors from the source work** · green `ok`, blue `blue`, orange `warn` are used only for their meaning (pass · info · warning)
 
-## 3 · เลย์เอาต์ (ทุกแบบอยู่ใน `slides-example.html`)
+## 3 · Layouts (all are in `slides-example.html`)
 
-หน้าตาของ 4 หน้าแรกที่สร้างด้วย `build_deck.py` ดูได้ที่ `assets/slides-example-preview.webp`
+The look of the first 4 pages built with `build_deck.py` is in `assets/slides-example-preview.webp`
 
-| # | เลย์เอาต์ | class / attribute | ใช้เมื่อ |
+| # | Layout | class / attribute | Use when |
 |---|---|---|---|
-| 1 | ปก | `.slide.hero` · `h1` · `.rule` · `.lead` | หน้าแรก: ชื่อ + ประโยคเดียวที่อยากให้จำ |
-| 2 | การ์ดคน/ทางเลือก | `.row` > `.card.grow` | ทีม · เทียบ 2–3 อย่าง |
-| 3 | สารบัญคลิกได้ | `.toc` > `a[data-goto]` · `.p` เติมเลขหน้าเอง | เด็คเกิน 12 หน้า |
-| 4 | เปิดส่วน | `.slide.divider` · `.num` · `data-part` | ต้นทุกส่วน (เมนูจัดกลุ่มตาม `data-part`) |
-| 5 | ตัวเลขใหญ่ | `.card` > `.big[data-count]` | 1–4 ตัวเลขที่ต้องจำ (นับขึ้นเองตอนเข้าหน้า) |
-| 6 | ตาราง | `table.tbl` · `td.m` = ฟอนต์โค้ด | เทคโนโลยี · เปรียบเทียบ ≤ 8 แถว |
-| 7 | แผนภาพระบบ + ทัวร์ทีละขั้น | `.map` > `svg` ลูกศร (`id`) + `.box` · `.layer` (`data-key`) · `ol.tour-steps` > `li[data-on][data-path]` + `div.tourbar` | ใครต่อกับอะไร แล้วกด ▶ ไล่ทางเดินของคำขอ 1 ครั้ง (วางตำแหน่ง px ในกรอบกว้าง 1664) |
-| 8 | คลิกดูรายละเอียด | `[data-pick="g"]` + `<template>` · แผง `#d-g` | ไฟล์ · กฎ · เคส ที่มีรายละเอียดยาว |
-| 9 | โค้ด | `pre.code` · `<em>` คำสำคัญ · `<i>` คอมเมนต์ | โค้ดหลัก ≤ 12 บรรทัด |
-| 10 | สาธิตแชต | `.phone` > `.chatlog[data-chat]` > `p[data-u]` / `p[data-a]` | แชตเล่นซ้ำพร้อมพิมพ์ทีละตัวเมื่อเข้าหน้า |
-| 11 | ไฮไลต์วนทีละขั้น | `[data-loop]` | ขั้นตอน 3–6 ขั้นที่อยากให้ตาไล่ตาม |
-| 12 | กราฟแท่ง | `.bars` > `div[data-v][data-l][data-c]` | ผลรายข้อ · เวลาตอบ |
-| 13 | ปิด | `.slide.close` | สรุป 1 ประโยค + ขอบคุณ · ถาม-ตอบ |
+| 1 | Cover | `.slide.hero` · `h1` · `.rule` · `.lead` | First page: title + the one sentence to remember |
+| 2 | Person/option cards | `.row` > `.card.grow` | Team · compare 2–3 things |
+| 3 | Clickable table of contents | `.toc` > `a[data-goto]` · `.p` page numbers filled in by hand | Decks over 12 pages |
+| 4 | Section opener | `.slide.divider` · `.num` · `data-part` | Start of every section (the menu groups by `data-part`) |
+| 5 | Big numbers | `.card` > `.big[data-count]` | 1–4 numbers to remember (count up on entering the page) |
+| 6 | Table | `table.tbl` · `td.m` = code font | Technology · comparison ≤ 8 rows |
+| 7 | System diagram + step-by-step tour | `.map` > `svg` arrows (`id`) + `.box` · `.layer` (`data-key`) · `ol.tour-steps` > `li[data-on][data-path]` + `div.tourbar` | Who connects to what, then press ▶ to walk the path of 1 request (place positions in px in a 1664-wide frame) |
+| 8 | Click for details | `[data-pick="g"]` + `<template>` · panel `#d-g` | Files · rules · cases with long details |
+| 9 | Code | `pre.code` · `<em>` key word · `<i>` comment | Core code ≤ 12 lines |
+| 10 | Chat demo | `.phone` > `.chatlog[data-chat]` > `p[data-u]` / `p[data-a]` | A replayed chat typed one character at a time on entering the page |
+| 11 | Step-by-step looping highlight | `[data-loop]` | 3–6 steps you want the eye to follow |
+| 12 | Bar chart | `.bars` > `div[data-v][data-l][data-c]` | Per-item results · response time |
+| 13 | Closing | `.slide.close` | 1-sentence summary + thanks · Q&A |
 
-ทุกหน้ามี `<p class="foot">ชื่องาน · หัวข้อ · ที่มาของข้อมูล</p><p class="pg"></p>` · เลขหน้าเติมเอง
+Every page has `<p class="foot">ชื่องาน · หัวข้อ · ที่มาของข้อมูล</p><p class="pg"></p>` · page numbers fill in by themselves
 
-## 4 · สิ่งที่ shell ทำให้ (ไม่ต้องเขียนเอง)
+## 4 · What the shell does for you (no need to write it yourself)
 
-| ปุ่ม | ทำอะไร |
+| Key | What it does |
 |---|---|
-| ← → · PageUp PageDown · คลิกขอบซ้ายขวา · ปัดจอ | เปลี่ยนหน้าเท่านั้น ไม่ไปยุ่งกับ player ในหน้า |
-| Space | เล่น / หยุด player ของหน้านั้น (ทัวร์แผนภาพ) · หน้าที่ไม่มี player ไม่ทำอะไร |
-| ↓ · ↑ | player ขั้นถัดไป · ขั้นก่อนหน้า |
-| M | เมนูทุกหน้า จัดกลุ่มตาม `data-part` |
-| N | บันทึกผู้พูดจาก `<aside>` ของหน้านั้น |
-| T | นาฬิกาเริ่ม/หยุด · แสดง "เวลาที่ใช้ / `data-at`" |
-| S | หน้าต่างผู้พูด (เปิดบนจอโน้ตบุ๊ก จอฉายเปิดไฟล์เดียวกัน): หน้านี้ + หน้าถัดไป · บันทึกผู้พูด · เวลาที่ใช้ / `data-at` · นาฬิกา — กดปุ่มในหน้าต่างนั้นแล้วจอฉายเปลี่ยนตาม (แนวคิดจาก lewislulu/html-ppt-skill (MIT)) |
-| F | เต็มจอ |
-| แถบล่าง | 1 ช่องต่อหน้า · ชี้ดูชื่อหน้า · คลิกกระโดด |
-| `#12` ท้าย URL | เปิดที่หน้า 12 · `[data-goto="id"]` กระโดดไปหน้าตาม id |
-| คลิก `img.shot` | ขยายเต็มจอ |
+| ← → · PageUp PageDown · click left/right edge · swipe | Change page only, never touches the player on the page |
+| Space | Play / pause the player on that page (diagram tour) · does nothing on pages with no player |
+| ↓ · ↑ | Next step · previous step of the player |
+| M | Menu of all pages, grouped by `data-part` |
+| N | Speaker notes from the page's `<aside>` |
+| T | Clock start/stop · shows "time used / `data-at`" |
+| S | Speaker window (open on the laptop screen, the projector opens the same file): this page + next page · speaker notes · time used / `data-at` · clock — press a button in that window and the projector follows (idea from lewislulu/html-ppt-skill (MIT)) |
+| F | Full screen |
+| Bottom bar | 1 cell per page · hover to see the page name · click to jump |
+| `#12` at the end of the URL | Opens at page 12 · `[data-goto="id"]` jumps to the page with that id |
+| Click `img.shot` | Enlarge to full screen |
 
-### Animation (เลือกเปิดทีละหน้า — ค่าเริ่มต้นนิ่ง)
+### Animation (switch on per page — the default is still)
 
-เนื้อหาเลื่อนขึ้นทีละชิ้นทุกหน้า ตัวเลขนับขึ้น และแสงวนไม่หยุด เป็นสัญญาณ AI ใน `no-ai-look` (fade-up ทุกชิ้น · glow · ตัวเลขยักษ์) shell จึงไม่ใส่ให้ทุกหน้า: ใส่ `data-anim` ที่ `<section>` เฉพาะหน้าที่การเคลื่อนไหวช่วยให้ตาไล่ตามเรื่อง (ผังระบบที่ลูกศรต้องลากตามลำดับ · หน้าเปิดส่วน) · `data-count` · `data-loop` · `.bars` · `data-chat` ทำงานเฉพาะชิ้นที่ใส่ไว้
+Content sliding up piece by piece on every page, numbers counting up, and glow that loops forever are AI signals in `no-ai-look` (fade-up on every piece · glow · giant numbers), so the shell does not add them to every page: put `data-anim` on the `<section>` only for pages where motion helps the eye follow the story (a system map where arrows must be drawn in order · section openers) · `data-count` · `data-loop` · `.bars` · `data-chat` work only on the pieces where they are set
 
-| เกิดอะไร | ที่ไหน |
+| What happens | Where |
 |---|---|
-| เนื้อหาเลื่อนขึ้นทีละชิ้น 70 ms ต่อชิ้น (หน้าที่มี `data-anim`) | ลูกของหน้า · `.row` `.list` `.toc` `.pills` · แถว `.tbl` |
-| เลขหน้าเปิดส่วนพุ่งเข้าจากซ้าย (หน้าที่มี `data-anim`) | `.divider .num` |
-| กล่องเด้งขึ้น · ลูกศรค่อย ๆ ลากเส้นทีละเส้น (หน้าที่มี `data-anim`) | `.box` `.layer` · `.map svg>path` |
-| ตัวเลขนับขึ้นจาก 0 — ใส่เฉพาะ 1 ตัวเลขที่ต้องจำ ไม่ใส่ทุกการ์ด | `[data-count="10"]` หรือ `"9/10"` |
-| แท่งกราฟโตขึ้น | `.bars` |
-| ไฮไลต์วนทีละขั้น (แสงรอบกะพริบครั้งเดียวต่อขั้น ไม่วนไม่หยุด) | `[data-loop]` |
-| ทัวร์แผนภาพ (player): กล่องสว่าง ลูกศรเปลี่ยนสี มีจุดวิ่งตามเส้น · กด Space แล้วเดินเองทุก 3.2 วินาที | `ol.tour-steps` + `.tourbar` |
-| แชตพิมพ์ทีละตัวพร้อมจุด "กำลังพิมพ์" | `[data-chat]` |
+| Content slides up piece by piece, 70 ms per piece (pages with `data-anim`) | Children of the page · `.row` `.list` `.toc` `.pills` · `.tbl` rows |
+| Section-opener page number flies in from the left (pages with `data-anim`) | `.divider .num` |
+| Boxes pop up · arrows draw line by line (pages with `data-anim`) | `.box` `.layer` · `.map svg>path` |
+| Number counts up from 0 — use on only 1 number to remember, not on every card | `[data-count="10"]` or `"9/10"` |
+| Chart bars grow | `.bars` |
+| Looping step highlight (the glow around blinks once per step, does not loop forever) | `[data-loop]` |
+| Diagram tour (player): box lights up, arrow changes color, a dot runs along the line · press Space and it advances by itself every 3.2 seconds | `ol.tour-steps` + `.tourbar` |
+| Chat typed one character at a time with a "typing" dot | `[data-chat]` |
 
-ทุกอย่างเล่นใหม่ทุกครั้งที่เข้าหน้า · player กลับไปขั้นเริ่มต้นและหยุดทุกครั้งที่เปลี่ยนหน้า · ปิดเองเมื่อเครื่องตั้ง reduced motion · ไม่ใส่ animation เพิ่มที่ไม่ได้ช่วยให้ตาไล่ตามเรื่อง
+Everything replays every time the page is entered · the player returns to the starting step and stops on every page change · turns itself off when the machine is set to reduced motion · add no animation that does not help the eye follow the story
 
-## 5 · กฎหน้าตา
+## 5 · Look rules
 
-- ขอบสไลด์ 128 px ซ้ายขวา · เนื้อหาไม่ลงไปในแถบล่าง 120 px (ที่อยู่ของ foot)
-- ตัวอักษรบนสไลด์ไม่เล็กกว่า 16 px บนเวที 1920 · เนื้อความหลัก 24–32 px · หัวสไลด์ 56 px ไม่เกิน 2 บรรทัด
-- 1 หน้า 1 ข้อสรุป · รายละเอียดยาวใส่ใน `<template>` ให้คลิกดู ไม่อัดลงหน้า
-- บันทึกผู้พูดใน `<aside>` เขียนแบบที่พูดจริง: ใช้ ครับ/ค่ะ และ ก็ ได้ ไม่ใช่ภาษาเอกสาร
-- ภาพหน้าจอจริงดีกว่าภาพวาด · กว้าง ≥ 1600 px ก่อนย่อ · ไม่ใช้รูป stock
-- เนื้อหาทุกตัวเลขบอกที่มาใน foot (`qa/results/…` · วันที่ทดสอบ)
+- Slide margin 128 px left and right · content does not go into the bottom 120 px band (where the foot lives)
+- Text on a slide is no smaller than 16 px on a 1920 stage · main body 24–32 px · slide title 56 px, at most 2 lines
+- 1 page, 1 conclusion · long details go in a `<template>` for click-to-view, not crammed onto the page
+- Speaker notes in `<aside>` are written the way people actually speak: use ครับ/ค่ะ and ก็, not document language
+- A real screenshot beats a drawing · width ≥ 1600 px before shrinking · no stock images
+- Every number in the content states its source in the foot (`qa/results/…` · test date)
 
-## 6 · ตรวจก่อนส่ง
+## 6 · Check before sending
 
-- [ ] `check_deck.py` ปัญหา 0 จุด (ทั้งหน้าสูงเกิน 1080 · ล้นขอบ · ทับแถบล่าง · ล้นกล่อง · ตัวเล็ก · รูปไม่ขึ้น) — วัดจากเบราว์เซอร์จริง ไม่ใช่นับบรรทัด
-- [ ] เปิด `sheet-*.png` ดูทุกแผ่น: สีแบรนด์เดียว · ไม่มีหน้าโล่งครึ่งจอ · หัวสไลด์อ่านต่อกันแล้วได้เรื่อง
-- [ ] เปิดไฟล์โดยถอดเน็ต: รูปขึ้นครบ ฟอนต์ fallback อ่านได้
-- [ ] ทุกหน้ามี `<aside>` บันทึกผู้พูด และ `data-at` เวลารวมไม่เกินเวลาที่ได้
-- [ ] ข้อมูลส่วนตัวหรือของจริงของลูกค้าไม่อยู่ในไฟล์ (ใช้ข้อมูลจำลองและบอกใน foot)
+- [ ] `check_deck.py` shows 0 problems (page taller than 1080 · overflow past the edge · overlap with the bottom bar · box overflow · small text · broken image) — measured in a real browser, not by counting lines
+- [ ] Open every `sheet-*.png` and look: one brand color · no page half empty · the slide titles read in sequence make a story
+- [ ] Open the file with the network off: all images show, fallback fonts are readable
+- [ ] Every page has an `<aside>` of speaker notes, and `data-at` times add up to no more than the time given
+- [ ] No personal data or real customer data in the file (use mock data and say so in the foot)
 
 ## 7 · Anti-patterns
 
-- **แก้ไฟล์ .html ที่ build แล้ว** — รอบหน้าหาย · แก้ `slides.html` แล้ว build ใหม่
-- **แต่งสีรองเองที่ไม่มีในงานต้นทาง** — ดูไม่เป็นชุด · สีรองต้องมาจาก `source_palette.py`
-- **เด็คใหม่ไม่ใส่ `--theme bright` ทั้งที่งานต้นทางพื้นสว่าง** — ได้พื้นเข้มที่ไม่เข้ากับงาน
-- **หัวสไลด์เป็นชื่อหัวข้อ** ("สถาปัตยกรรม") — ต้องเป็นข้อสรุป ("แอปเดียวรับทั้งเว็บและ LINE")
-- **ลิงก์รูปจากเว็บ** — เปิดในห้องที่ไม่มีเน็ตแล้วหาย · ใช้ไฟล์ในเครื่องให้ build ฝัง
-- **demo สดอย่างเดียว** — ใช้แชตเล่นซ้ำ (`data-chat`) จากผลทดสอบจริงเป็นแผนสำรองเสมอ
+- **Editing the built .html file** — lost on the next build · edit `slides.html` and build again
+- **Inventing a secondary color that is not in the source work** — looks like it does not belong · secondary colors must come from `source_palette.py`
+- **A new deck without `--theme bright` when the source work has a light background** — gets a dark background that does not fit the work
+- **A slide title that is a topic name** ("สถาปัตยกรรม", meaning "architecture") — it must be a conclusion ("แอปเดียวรับทั้งเว็บและ LINE", meaning "One app serves both the web and LINE")
+- **Linking images from the web** — they disappear in a room with no network · use local files and let the build embed them
+- **Live demo only** — always keep a replayed chat (`data-chat`) from real test results as the backup plan
 
-## 8 · เชื่อมกับ skill อื่น
+## 8 · Connecting to other skills
 
-| ต้องการ | ใช้ |
+| Need | Use |
 |---|---|
-| โครงเรื่อง หัวสไลด์ งบข้อความ | `presentation-design` |
-| รายงาน .docx ชุดเดียวกัน | `markdown-report-docx` |
-| ผังระบบที่ซับซ้อนเกิน `.map` | `diagram-figures` แล้วฝังเป็นรูป |
-| ชื่อไฟล์และเวอร์ชัน | `document-naming` |
+| Story structure, slide titles, text budget | `presentation-design` |
+| A .docx report in the same set | `markdown-report-docx` |
+| A system diagram too complex for `.map` | `diagram-figures`, then embed as an image |
+| File names and versions | `document-naming` |
 
-## ไม่ให้ดูเหมือน AI ทำ
+## Not looking AI-made (`ไม่ให้ดูเหมือน AI ทำ`)
 
-ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ทุกงานต้องผ่านด่านตา 3.2 ด้วย (หน้าเว็บตอบเพิ่มข้อ 10–14) เพราะสคริปต์ 0 ข้อยังไม่ใช่ผ่าน · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
+Before sending, go through item 3 of `no-ai-look` — HTML work runs its script · every job must also pass the eye gate 3.2 (web pages also answer items 10–14), because a script result of 0 items is not yet a pass · the prohibitions in this file are specific to this job; the full list for every medium is there

@@ -1,53 +1,53 @@
-# โลโก้ — รายละเอียด
+# Logos — details
 
-สารบัญ: ห้าสถาปัตยกรรม → ทดสอบบริบท → ทำโลโก้ให้ "ว้าว" → รูปทรงแท่ง · กฎสั้นและสี่ข้อทดสอบความเรียบอยู่ใน `SKILL.md`
+Contents: five architectures → context tests → making a logo "wow" → bar shapes · the short rules and the four simplicity tests are in `SKILL.md`
 
-## ห้าสถาปัตยกรรม
+## Five architectures
 
-| แบบ | คือ | ตัวอย่าง |
+| Type | What it is | Example |
 |---|---|---|
-| ตัวอักษรล้วน | ชื่อแบรนด์เป็นตัวอักษรอย่างเดียว | Stripe · Google |
-| สัญลักษณ์ + ตัวอักษร | รูปคู่กับชื่อ | Slack · Airbnb |
-| สัญลักษณ์ล้วน | รูปอย่างเดียว | Apple · Target |
-| ตัวอักษรเป็นสัญลักษณ์ | อักษรตัวเดียวที่ถูกออกแบบจนเป็นรูป | Beats · McDonald's |
-| อักษรย่อ | 2–3 ตัวประกอบกัน | Chanel · Gucci |
+| Wordmark | The brand name as letters only | Stripe · Google |
+| Symbol + wordmark | A picture paired with the name | Slack · Airbnb |
+| Symbol only | A picture only | Apple · Target |
+| Lettermark as symbol | A single letter designed until it becomes a picture | Beats · McDonald's |
+| Monogram | 2–3 letters combined | Chanel · Gucci |
 
-**ชุดที่ใช้งานได้จริงต้องมี 3 แบบ** — ตัวหลักสำหรับพื้นที่กว้าง · อักษรย่อสำหรับช่องสี่เหลี่ยม ·
-ตัวอักษรเป็นสัญลักษณ์สำหรับ favicon และงานปัก
+**A set that works in real use needs 3 types** — the main one for wide spaces · the monogram for square slots ·
+the lettermark as symbol for favicons and embroidery
 
-| บริบท | ข้อจำกัดจริง |
+| Context | Real limit |
 |---|---|
-| favicon 16px | องค์ประกอบไม่เกิน **4–6 ชิ้น** · เส้นบางกว่า **2px หายไป** · สีไม่เกิน 3–4 |
-| ไอคอนแอป 28px | องค์ประกอบ 4–8 ชิ้น · เส้นบางกว่า 3px หาย |
-| ปักเสื้อ 1.5 นิ้ว | ด้าย **4–6 สี** · เส้นบางสุด ~1 มม. · **ตัวอักษรต่ำกว่า 2 มม. ปักไม่ออก** |
-| ขาวดำ | ต้องอ่านออกโดยไม่พึ่งสี |
-| กลับสี (ขาวบนดำ) | ช่องว่างในตัวอักษรต้องไม่ตัน |
-| ป้ายหน้าร้าน | อ่านที่ระยะ 15–60 เมตร · ระบุสี **Pantone ไม่ใช่ hex** |
-| รูปโปรไฟล์โซเชียล | โดนครอบวงกลม · ต้องอ่านออกที่ **60–80px** ในฟีดแจ้งเตือน |
+| favicon 16px | No more than **4–6 elements** · lines thinner than **2px disappear** · no more than 3–4 colors |
+| App icon 28px | 4–8 elements · lines thinner than 3px disappear |
+| Shirt embroidery 1.5 inches | **4–6 thread colors** · thinnest line ~1 mm · **text under 2 mm cannot be embroidered** |
+| Black and white | Must read without relying on color |
+| Inverted (white on black) | Counters inside letters must not fill in |
+| Storefront sign | Read at 15–60 meters · specify the **Pantone color, not hex** |
+| Social profile picture | Cropped to a circle · must read at **60–80px** in the notification feed |
 
-## ทำโลโก้ให้ "ว้าว" — วิธีที่ผ่านมาแล้ว
+## Making a logo "wow" — methods that have worked
 
-โลโก้ที่ถูกตีกลับว่า "ไม่สวย ไม่ว้าว" มักเป็นสัญลักษณ์ที่ใช้กันทั่วไป เช่น `>_` ของโปรแกรม terminal หรือตัวอักษรแบนสีเดียว ทางที่ได้ผลคือ:
+A logo rejected as "not beautiful, not wow" is usually a commonly used symbol, such as the `>_` of a terminal program or a flat single-color wordmark. What works:
 
-1. **ให้อย่างน้อย 1 แนวมาจากสิ่งที่ผู้ใช้เห็นทุกวันในตัวงาน** เช่น เคอร์เซอร์ขีดล่างของ terminal สำหรับแอป telnet/SSH เพราะเจ้าของงานมักผูกแบรนด์กับภาพนั้น (เจ้าของงานจริงเลือกแนวเคอร์เซอร์หลังผ่านมาแล้ว 2 รอบ)
-2. **ทำ 3 แนวพร้อมกัน** แต่ละแนวมีความคิดคนละแบบ เช่น เส้นเชื่อมต่อ · ตัวอักษรเป็นชั้นซ้อน · รูปทรงเรขาคณิตเรียบ แล้วเลือกจากภาพจริงที่วางเทียบกัน (`parallel-attempts-pick-best`)
-3. **มีมิติแบบที่ผ่าน `SKILL.md` ข้อ 7** — ชั้นซ้อนของรูปทรง · น้ำหนักเส้นต่างกัน · ไล่สีเฉดเดียวที่ต่างกันไม่เกิน 10 องศา · **ไม่ใช้แสงเรืองและไม่ไล่หลายสี** และที่ 16px ต้องยังเหลือเงาที่อ่านออก
-   - แสงเรืองหรือชั้นแสงใช้ได้เฉพาะเมื่อผู้ใช้ขอแนวนั้นเอง (opt-in) และต้องเขียนไว้ในไฟล์ทิศทาง
-4. **ทำแผ่นตัวอย่าง (preview sheet) ทุกรอบ** — ขนาด 16 · 24 · 32 · 48 · 64 · 128 · 256 บนพื้นเข้มและพื้นขาว · ชุดโลโก้คู่ชื่อทั้ง 2 พื้น · แบบสีเดียว · ในแถบงานของ Windows และแถบชื่อหน้าต่างแอป แล้วเปิดดูด้วยตาและแก้อย่างน้อย 3 รอบ (ตัวอย่างแผ่นที่ผ่านแล้ว: `assets/logo-preview-sheet-example.webp`)
-5. **ชื่อแบรนด์แปลงเป็นเส้นจากฟอนต์เปิด** (SIL Open Font License (OFL) เช่น Space Grotesk · Manrope · IBM Plex Sans — ไม่ใช้ Inter เพราะอยู่ในรายการฟอนต์ที่ใคร ๆ ก็ใช้ใน `SKILL.md` ข้อ 7) ด้วย fontTools และเก็บไฟล์สัญญาอนุญาตไว้ด้วย ห้ามใช้ฟอนต์ของระบบปฏิบัติการ เช่น Segoe เพราะสัญญาอนุญาตไม่ครอบคลุมการทำโลโก้
-6. **ส่งออกครบชุดเดียวกันทุกครั้ง** — ใช้ชุดเดียวใน [`sizes-and-print.md` ข้อ 4](sizes-and-print.md#4--ไฟล์ที่ต้องส่งมอบ) (SVG · PDF · PNG พื้นใส · ICO · 4 เวอร์ชันสี) ถ้าแนวที่ผู้ใช้เลือกมี filter (opt-in) ให้ใช้ไฟล์ PNG ในที่ที่ตัววาดภาพไม่รองรับ filter เช่น Word
-7. **โลโก้ที่มีส่วนเคลื่อนไหวได้** (เช่น เคอร์เซอร์) ใน sprite SVG ให้แยก `<g id="…-body">` กับ `<g id="…-cursor">` แล้วให้ symbol หลักใช้ทั้งสองส่วน หน้าแรกจะได้กระพริบเฉพาะเคอร์เซอร์ได้ ส่วนที่อื่นยังใช้ symbol เดิม ให้กระพริบเฉพาะในหน้าแรก และหยุดเมื่อเครื่องตั้งลดการเคลื่อนไหว (`prefers-reduced-motion`)
+1. **Make at least 1 direction come from what users see every day in the work**, for example the underscore cursor of a terminal for a telnet/SSH app, because the work's owner often ties the brand to that picture (the real owner picked the cursor direction after 2 rounds)
+2. **Make 3 directions at the same time**, each with a different idea, such as connection lines · letters as stacked layers · plain geometric shapes, then choose from real images placed side by side (`parallel-attempts-pick-best`)
+3. **Have depth in a form that passes `SKILL.md` section 7** — stacked layers of shapes · different line weights · a gradient of one hue whose shades differ by no more than 10 degrees · **no glow and no multi-color gradients**, and at 16px a readable silhouette must remain
+   - Glow or light layers are allowed only when the user asks for that direction (opt-in) and it must be written in the direction file
+4. **Make a preview sheet every round** — sizes 16 · 24 · 32 · 48 · 64 · 128 · 256 on dark and white backgrounds · the logo + name lockup on both backgrounds · single-color version · in the Windows taskbar and the app window title bar, then look at it with your own eyes and revise at least 3 rounds (an example of a sheet that passed: `assets/logo-preview-sheet-example.webp`)
+5. **Convert the brand name to outlines from an open font** (SIL Open Font License (OFL), such as Space Grotesk · Manrope · IBM Plex Sans — do not use Inter, because it is on the list of fonts everyone uses in `SKILL.md` section 7) with fontTools, and keep the license file too; never use operating system fonts such as Segoe, because their license does not cover making logos
+6. **Export the same complete set every time** — use the one set in [`sizes-and-print.md` step 4](sizes-and-print.md#4--ไฟล์ที่ต้องส่งมอบ) (SVG · PDF · transparent PNG · ICO · 4 color versions); if the direction the user chose has a filter (opt-in), use a PNG file wherever the drawing program does not support filters, such as Word
+7. **A logo with a moving part** (such as a cursor): in the sprite SVG, split `<g id="…-body">` from `<g id="…-cursor">` and have the main symbol use both parts, so the home page can blink only the cursor while elsewhere the original symbol is still used; blink only on the home page, and stop when the machine is set to reduce motion (`prefers-reduced-motion`)
 
-## รูปทรงแท่ง — เหลี่ยมขอบมน ไม่ใช่ปลายมน
+## Bar shapes — rounded rectangles, not round ends
 
-ตัวอักษรหรือสัญลักษณ์ที่สร้างจากแท่ง (เช่น T · `_` · `>`) ให้ใช้**แท่งเหลี่ยมขอบมน** เจ้าของงานจริงขอเปลี่ยนจากปลายมนเป็นแบบนี้ เพราะดูทันสมัยกว่า
+For letters or symbols built from bars (such as T · `_` · `>`), use **rounded-rectangle bars**. The real owner asked to change from round ends to this because it looks more modern.
 
-| รัศมีมุม เทียบกับความหนาแท่ง | ผล |
+| Corner radius relative to bar thickness | Result |
 |---|---|
-| ต่ำกว่า 0.2 | แข็ง ดูเหมือนยังไม่ได้ออกแบบ |
-| **0.25–0.35** (ค่าตั้งต้น 0.3) | เหลี่ยมชัดแต่ขอบนุ่ม เข้ากับฟอนต์ geometric และไอคอนแบบ Windows 11 |
-| 0.4 ขึ้นไป | เริ่มกลับเป็นปลายมนครึ่งวงกลม ดูนิ่มเหมือนเม็ดยาหรือของเล่น |
+| Below 0.2 | Stiff, looks undesigned |
+| **0.25–0.35** (default 0.3) | Clearly angular but soft-edged, fits geometric fonts and Windows 11 style icons |
+| 0.4 and up | Starts turning back into half-circle round ends, looks soft like a pill or a toy |
 
-- ใช้รัศมีเดียวกันทุกแท่ง ทั้งตัวอักษร เคอร์เซอร์ และขอบแสงที่ล้อมแท่ง
-- รอยต่อระหว่างแท่ง (เช่น ขาตัว T ชนคานบน) ให้ต่อเป็นเหลี่ยมตรง ไม่ใส่มุมมนด้านใน เพราะจะเกิดส่วนโป่ง
-- มุมมนจะหายไปที่ 16px ซึ่งไม่เป็นไร ขอแค่ยังอ่านเป็นตัวอักษรได้ ส่วนการตัดสินว่ารัศมีสวยไหม ให้ดูที่ 64px ขึ้นไป
+- Use the same radius on every bar, including letters, the cursor, and the glow edge that surrounds the bars
+- Joins between bars (such as the stem of a T meeting the top bar) are joined as straight angles, with no rounded inner corner, because that creates a bulge
+- The rounded corners disappear at 16px, which is fine as long as it still reads as a letter; judge whether the radius looks good at 64px and up

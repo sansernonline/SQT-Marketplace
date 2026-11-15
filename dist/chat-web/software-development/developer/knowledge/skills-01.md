@@ -95,110 +95,110 @@ test ที่ล็อกพฤติกรรมอยู่: <ไฟล์> �
 
 Use when writing or reviewing code for readability
 
-# โค้ดที่คนอ่านรู้เรื่อง
+# Code that people can read and understand
 
-> **กฎข้อเดียว:** ชื่อที่ต้องเปิดดูข้างในถึงจะเข้าใจ คือชื่อที่ตั้งผิด
+> **The one rule:** a name you must open up to understand is a badly chosen name
 
 ---
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เขียนโค้ดใหม่ · ตั้งชื่อตัวแปร ฟังก์ชัน ไฟล์ หรือโฟลเดอร์
-- รีวิวโค้ดแล้วรู้สึกว่า "ทำงานถูกแต่อ่านยาก"
-- คนใหม่เข้าโปรเจกต์แล้วหาไฟล์ไม่เจอ
-- โฟลเดอร์ `utils/` เริ่มกลายเป็นถังขยะ
+- Writing new code · naming variables, functions, files, or folders
+- Reviewing code that feels "correct but hard to read"
+- A newcomer joins the project and cannot find files
+- The `utils/` folder is starting to become a junk drawer
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use
 
-| สถานการณ์ | ใช้แทน |
+| Situation | Use instead |
 |---|---|
-| ต้องการเขียนโค้ด**น้อยลง** | `lazy-coding` |
-| โครงโฟลเดอร์**ระดับ repo** · README · linter | `project-bootstrap` |
-| รีวิวเรื่องความถูกต้อง ความปลอดภัย การทดสอบ | `code-review-checklist` |
-| ตั้งชื่อ**ไฟล์เอกสาร** | `document-naming` |
-| ตั้งชื่อ**ผลิตภัณฑ์หรือแบรนด์** | `product-naming` |
+| You want to write **less** code | `lazy-coding` |
+| **Repo-level** folder structure · README · linter | `project-bootstrap` |
+| Reviewing for correctness, security, testing | `code-review-checklist` |
+| Naming **documentation files** | `document-naming` |
+| Naming a **product or brand** | `product-naming` |
 
 ---
 
-## 1 · ชื่อต้องตอบสามคำถามโดยไม่ต้องเปิดดูข้างใน
+## 1 · A name must answer three questions without opening it
 
-**มันคืออะไร · หน่วยอะไร · ใช้ได้ตอนไหน**
+**What is it · what unit · when can it be used**
 
-| ✗ | ✓ | ที่ต่างคือ |
+| ✗ | ✓ | The difference |
 |---|---|---|
-| `d` | `daysSinceLastLogin` | มีหน่วย มีจุดอ้างอิง |
-| `list` | `overdueInvoices` | บอกว่าข้างในคืออะไร |
-| `data` | `csvRows` | `data` ไม่ได้ตัดอะไรออกเลย |
-| `temp` | `swapBuffer` | บอกหน้าที่ ไม่ใช่บอกว่าชั่วคราว |
-| `flag` | `hasUnpaidBalance` | อ่านแล้วรู้ว่า `true` แปลว่าอะไร |
-| `timeout` | `timeoutMs` | 30 คือวินาทีหรือมิลลิวินาที |
-| `price` | `priceSatang` | เลขเงินที่ไม่มีหน่วยคือบั๊กรอเกิด |
-| `checkUser()` | `isUserActive()` | `check` ไม่บอกว่าคืน boolean หรือโยน error |
-| `process()` | `normalizePhoneNumber()` | `process` แปลว่าอะไรก็ได้ |
-| `getUser()` ที่ยิง API | `fetchUser()` | `get` แปลว่าเร็วและไม่ล้มเหลว |
+| `d` | `daysSinceLastLogin` | Has a unit and a reference point |
+| `list` | `overdueInvoices` | Says what is inside |
+| `data` | `csvRows` | `data` rules nothing out |
+| `temp` | `swapBuffer` | Names the role, not that it is temporary |
+| `flag` | `hasUnpaidBalance` | You can tell what `true` means |
+| `timeout` | `timeoutMs` | Is 30 seconds or milliseconds? |
+| `price` | `priceSatang` | A money number with no unit is a bug waiting to happen |
+| `checkUser()` | `isUserActive()` | `check` does not say whether it returns a boolean or throws an error |
+| `process()` | `normalizePhoneNumber()` | `process` can mean anything |
+| `getUser()` that calls an API | `fetchUser()` | `get` means fast and never fails |
 
-> **เลขที่มีหน่วยต้องมีหน่วยในชื่อ เสมอ** — `Ms` · `Seconds` · `Bytes` · `Satang` · `Percent` · `Ratio`
-> บั๊กเรื่องหน่วยไม่มีใครเห็นตอนรีวิว แต่จะเห็นตอนลูกค้าโทรมา
-
----
-
-## 2 · คำนำหน้าฟังก์ชัน — หนึ่งคำ หนึ่งความหมาย
-
-**เลือกคำแล้วใช้ให้ตรงทั้งโปรเจกต์** ถ้า `get` บางตัวยิงเน็ต คนอ่านจะเลิกเชื่อชื่อทั้งหมด
-
-ตารางคำนำหน้าทั้ง 10 กลุ่ม (สัญญาว่าอะไร · ล้มเหลวได้ไหม · มีผลข้างเคียงไหม) อยู่ที่ [`assets/naming-reference.md`](assets/naming-reference.md) ข้อ 2 — เช่น `get` ไม่ยิงเน็ต · `validate` โยน error · `ensure` เรียกซ้ำได้
-
-**กฎประกอบ:**
-
-- **boolean ห้ามตั้งชื่อเชิงปฏิเสธ** — `isNotReady` ทำให้เกิด `if (!isNotReady)` ที่ไม่มีใครอ่านออก
-- **collection เป็นพหูพจน์ และบอกชนิดข้างใน** — `userIds` ไม่ใช่ `users` ถ้าข้างในเป็นเลข
-- **ชื่อฟังก์ชันที่มีคำว่า `and` คือฟังก์ชัน 2 ตัว** — `saveAndNotify()` ควรแยกเป็น 2 ตัว
-- **ค่าคงที่ใช้ตัวพิมพ์ใหญ่เฉพาะค่าที่ตั้งครั้งเดียวจริง ๆ** ส่วนค่าที่อ่านจาก config ไม่ใช่ค่าคงที่
-- **ชื่อฟังก์ชันเรียง กริยา → บริบทใหญ่ → บริบทย่อย** — `getUserMessages` (get · user · messages) · `shouldDisplayBanner` · เรียงแบบเดียวกันทั้งโปรเจกต์ คนอ่านจะเดาชื่อที่ยังไม่เคยเห็นถูก
-- **boolean ขึ้นต้นด้วย `is` `has` `should` `can`** — อ่านเป็นคำถามที่ตอบได้แค่ใช่หรือไม่ (`hasUnpaidBalance` · `canRetry`)
-- **ไม่ซ้ำบริบทที่ชื่อรอบนอกบอกแล้ว** — `user.userName` → `user.name` · `Invoice.invoiceTotal` → `Invoice.total`
-
-(3 ข้อท้าย — แนวคิดจาก kettanaito/naming-cheatsheet (MIT) เขียนใหม่ด้วยคำเรา)
+> **A number with a unit must have the unit in its name, always** — `Ms` · `Seconds` · `Bytes` · `Satang` · `Percent` · `Ratio`
+> Nobody sees a unit bug at review, but they will see it when the customer calls
 
 ---
 
-## 3 · ชื่อยาวแค่ไหน ขึ้นกับว่ามันมีชีวิตอยู่กี่บรรทัด
+## 2 · Function prefixes — one word, one meaning
 
-| ระยะจากที่ประกาศถึงที่ใช้ครั้งสุดท้าย | ความยาวชื่อที่เหมาะ | ตัวอย่าง |
+**Pick a word and use it consistently across the whole project.** If some `get` calls hit the network, readers stop trusting every name.
+
+The table of all 10 prefix groups (what each promises · can it fail · does it have side effects) is at [`assets/naming-reference.md`](assets/naming-reference.md) step 2 — for example `get` never hits the network · `validate` throws an error · `ensure` can be called repeatedly
+
+**Combining rules:**
+
+- **Never name a boolean in the negative** — `isNotReady` produces `if (!isNotReady)`, which nobody can read
+- **A collection is plural and says the type inside** — `userIds`, not `users`, if what is inside is numbers
+- **A function name containing `and` is 2 functions** — `saveAndNotify()` should be split into 2
+- **Constants use upper case only for values truly set once**; a value read from config is not a constant
+- **Order function names verb → big context → small context** — `getUserMessages` (get · user · messages) · `shouldDisplayBanner` · with the same order across the project, readers can guess names they have never seen
+- **A boolean starts with `is` `has` `should` `can`** — it reads as a question that can be answered only yes or no (`hasUnpaidBalance` · `canRetry`)
+- **Do not repeat context the surrounding name already gives** — `user.userName` → `user.name` · `Invoice.invoiceTotal` → `Invoice.total`
+
+(The last 3 — idea from kettanaito/naming-cheatsheet (MIT), rewritten in our own words)
+
+---
+
+## 3 · How long a name is depends on how many lines it lives
+
+| Distance from declaration to last use | Suitable name length | Example |
 |---|---|---|
-| ≤ 5 บรรทัด (ตัวนับใน loop) | 1 ตัวอักษร พอ | `i` · `r` · `x` |
-| ในฟังก์ชันเดียว | 1–2 คำ | `total` · `rawRows` |
-| ทั้งคลาสหรือทั้งไฟล์ | 2–3 คำ | `pendingApprovals` |
-| export ออกนอกไฟล์ | เต็ม ไม่ย่อ | `calculateWithholdingTax` |
+| ≤ 5 lines (a loop counter) | 1 character is enough | `i` · `r` · `x` |
+| Within one function | 1–2 words | `total` · `rawRows` |
+| Whole class or whole file | 2–3 words | `pendingApprovals` |
+| Exported outside the file | Full, no abbreviations | `calculateWithholdingTax` |
 
-> **ชื่อยาวขึ้นตามระยะห่างระหว่างที่ประกาศกับที่ใช้** — `i` ใน loop 3 บรรทัดชัดเจนกว่า `currentIndex`
-> แต่ `i` ที่เป็น field ของคลาสคือชื่อที่ไม่มีใครตามได้
-
----
-
-## 4 · คำต้องห้าม — ใส่แล้วไม่ได้ตัดความหมายอะไรออกเลย
-
-**ห้าม `data` `info` `manager` `helper` `util` `do` `temp` และตัวย่อที่คิดเอง** — ทุกอย่างในโปรแกรมคือข้อมูล ชื่อที่ทำอะไรก็ได้คือชื่อที่ไม่บอกอะไร · ตารางเต็มพร้อมคำแทนอยู่ที่ [`assets/naming-reference.md`](assets/naming-reference.md) ข้อ 4
-
-**ข้อยกเว้น:** ตัวย่อที่คนทั้งวงการใช้ — `id` · `url` · `http` · `db` · `api` · `ui` — ใช้ได้เลย ไม่ต้องกาง
-ส่วนชื่อที่ platform หรือ framework ตั้งมาแล้ว (`SensorManager` · Android `Service` · `ChangeNotifier`) ก็ใช้ตามนั้น
-เพราะคำต้องห้ามใช้กับชื่อที่**เราตั้งเอง**เท่านั้น
+> **A name gets longer as the distance between declaration and use grows** — `i` in a 3-line loop is clearer than `currentIndex`
+> but an `i` that is a class field is a name nobody can follow
 
 ---
 
-## 5 · รูปร่างของฟังก์ชัน
+## 4 · Forbidden words — adding them removes no meaning at all
 
-- **หนึ่งฟังก์ชัน หนึ่งระดับนามธรรม** — ฟังก์ชันที่มีทั้ง "ส่งอีเมล" และ "ต่อสตริง SQL" อ่านยากเพราะสมองต้องสลับระดับ
-- **พารามิเตอร์ไม่เกิน 3 ตัว** ถ้าเกินนั้นให้รับเป็น object ที่มีชื่อฟิลด์
-- **ห้ามรับ boolean เป็นพารามิเตอร์** — `render(true)` ที่จุดเรียกอ่านไม่ออกว่า `true` คืออะไร
-  ให้แยกเป็น `renderDraft()` กับ `renderFinal()` หรือรับ `{ mode: "draft" }`
-  **ยกเว้น named parameter** ที่จุดเรียกเห็นชื่อ เช่น `TextField(obscureText: true)` ใน Dart หรือ `enabled: true` ซึ่งอ่านออกอยู่แล้ว
-- **คืนค่าก่อนดีกว่าซ้อน `else`** — เงื่อนไขที่ตัดจบได้ ให้ `return` ทันที ทางหลักจะได้ไม่เยื้อง
-- **ถ้าเยื้องเกิน 3 ชั้น ต้องแตกฟังก์ชัน** ไม่ใช่เพราะกฎ แต่เพราะสมองตามเงื่อนไขซ้อน 4 ชั้นไม่ไหว
+**Do not use `data` `info` `manager` `helper` `util` `do` `temp` or self-invented abbreviations** — everything in a program is data; a name that can do anything is a name that says nothing · the full table with replacement words is at [`assets/naming-reference.md`](assets/naming-reference.md) step 4
+
+**Exception:** abbreviations the whole field uses — `id` · `url` · `http` · `db` · `api` · `ui` — are fine, no need to spell out
+and names already set by a platform or framework (`SensorManager` · Android `Service` · `ChangeNotifier`) are used as they are,
+because the forbidden words apply only to names **we choose ourselves**
 
 ---
 
-## 6 · คอมเมนต์ — เขียน "ทำไม" ไม่ใช่ "ทำอะไร"
+## 5 · The shape of a function
+
+- **One function, one level of abstraction** — a function holding both "send email" and "concatenate an SQL string" is hard to read because the brain must switch levels
+- **No more than 3 parameters**; beyond that, take an object with named fields
+- **Never take a boolean as a parameter** — at the call site, `render(true)` does not show what `true` is
+  split into `renderDraft()` and `renderFinal()`, or take `{ mode: "draft" }`
+  **except a named parameter** where the call site shows the name, such as `TextField(obscureText: true)` in Dart or `enabled: true`, which already reads clearly
+- **Return early rather than nest `else`** — a condition that can end the function should `return` at once, so the main path is not indented
+- **If indentation goes past 3 levels, split the function** — not because of a rule, but because the brain cannot follow conditions nested 4 deep
+
+---
+
+## 6 · Comments — write "why", not "what"
 
 ```ts
 // ผิด: เพิ่มค่า i ทีละ 1
@@ -209,40 +209,40 @@ Use when writing or reviewing code for readability
 // ถูก: ต้องเรียงลำดับนี้เท่านั้น — เรียก validate ก่อน normalize จะได้เบอร์ที่ผิดรูปแบบ
 ```
 
-**คอมเมนต์ที่อธิบายว่าโค้ดทำอะไร คือสัญญาณว่าชื่อตั้งผิด** ให้แก้ชื่อแล้วลบคอมเมนต์
+**A comment that explains what the code does is a sign the name is wrong.** Fix the name and delete the comment.
 
-**4 แบบที่ควรมีคอมเมนต์:**
+**4 kinds that should have a comment:**
 
-| แบบ | ตัวอย่าง |
+| Kind | Example |
 |---|---|
-| ข้อจำกัดจากภายนอก | ข้อกำหนดของ API ที่เรียก · กฎหมาย · ข้อจำกัดของฮาร์ดแวร์ |
-| การตัดสินใจที่ดูแปลกแต่ตั้งใจ | "ไม่ใช้ index ที่นี่เพราะตารางเขียนบ่อยกว่าอ่าน" |
-| สูตรหรือกฎธุรกิจที่มีที่มา | อ้างเลขข้อในเอกสาร ไม่ใช่เล่าสูตรซ้ำ |
-| `TODO` ที่มีเจ้าของและเงื่อนไข | `TODO(somchai): ย้ายไป Redis เมื่อรันเกิน 1 process` |
+| An external constraint | Requirements of the API you call · law · hardware limits |
+| A decision that looks odd but is deliberate | "ไม่ใช้ index ที่นี่เพราะตารางเขียนบ่อยกว่าอ่าน" (no index here because the table is written more often than read) |
+| A formula or business rule with a source | Cite the clause number in the document; do not retell the formula |
+| A `TODO` with an owner and a condition | `TODO(somchai): ย้ายไป Redis เมื่อรันเกิน 1 process` (move to Redis when running more than 1 process) |
 
-> **คอมเมนต์ที่โกหกอันตรายกว่าไม่มีคอมเมนต์** ถ้าแก้โค้ดต้องแก้คอมเมนต์ในรอบเดียวกัน
+> **A lying comment is more dangerous than no comment.** If you change the code, change the comment in the same round.
 
-### รอบคัดคอมเมนต์ก่อนรีวิว
+### Comment sorting pass before review
 
-ก่อนส่งรีวิว ไล่ทุกคอมเมนต์ที่ diff เพิ่มหรือแก้ แล้วจัดเข้า 1 ใน 4 ทางในตารางนี้ ถ้า diff ใหญ่ให้ subagent ระดับกลางอ่านอย่างเดียวแล้วทำรายการ ส่วน agent หลักเป็นคนตัดสิน
+Before sending for review, go through every comment the diff adds or edits, and put each into 1 of the 4 ways in this table. If the diff is large, have a mid-level subagent read only and make the list, while the main agent decides.
 
-| คอมเมนต์ | ทำ |
+| Comment | Do |
 |---|---|
-| แปลโค้ดเป็นภาษาคน · ล้าสมัย · โค้ดที่ถูกคอมเมนต์ทิ้ง | ลบ |
-| อธิบายว่าตัวแปรหรือฟังก์ชันคืออะไร | เปลี่ยนชื่อให้บอกเอง แล้วลบ |
-| อ้างข้อจำกัด ("ห้าม null" · "ต้องเรียกหลัง init" · "ค่าไม่เกิน 100") | เปลี่ยนเป็นของที่ตรวจได้ เช่น type · assert · test · lint (`repeated-mistakes-to-checks`) แล้วลบ |
-| 4 แบบในตารางข้างบน | เก็บ |
+| Translates code into human language · outdated · commented-out code | Delete |
+| Explains what a variable or function is | Rename so it says so itself, then delete |
+| States a constraint ("no null" · "must be called after init" · "value at most 100") | Turn it into something checkable, such as a type · assert · test · lint (`repeated-mistakes-to-checks`), then delete |
+| The 4 kinds in the table above | Keep |
 
-รายงานผลเป็นตัวเลข: ลบกี่อัน · เปลี่ยนชื่อกี่อัน · กลายเป็นการตรวจกี่อัน · เก็บกี่อัน
+Report the result as numbers: how many deleted · how many renamed · how many became checks · how many kept
 
 ---
 
-## 7 · โครงสร้างไฟล์ที่คนใหม่หาเจอ
+## 7 · File structure a newcomer can find their way in
 
-**บททดสอบ:** คนที่เพิ่งเข้าโปรเจกต์ ได้ bug report ว่า *"ปุ่มบันทึกใบแจ้งหนี้ไม่ทำงาน"*
-ต้องเดาโฟลเดอร์ถูก**ภายใน 30 วินาที** โดยไม่ต้องถามใคร
+**The test:** a person who just joined the project gets a bug report: *"The save-invoice button does not work"*
+They must guess the right folder **within 30 seconds** without asking anyone.
 
-### จัดตามฟีเจอร์ ไม่ใช่ตามชนิดไฟล์
+### Organize by feature, not by file type
 
 ```
 ผิด: จัดตามชนิด — แก้ฟีเจอร์เดียวต้องเปิด 5 โฟลเดอร์
@@ -260,85 +260,85 @@ src/
   shared/        money.ts  thai-date.ts  http-client.ts
 ```
 
-**กฎ:**
+**Rules:**
 
-- **ชื่อไฟล์คือชื่อของสิ่งที่มัน export เป็นหลัก** — `InvoiceRenderer` อยู่ใน `invoice-renderer.ts`
-  รูปแบบตัวพิมพ์ตามธรรมเนียมของภาษา: Dart/Python ใช้ snake_case (`invoice_renderer.dart`) ส่วน .NET ใช้ `InvoiceRenderer.cs`
-- **ไฟล์ทดสอบอยู่ข้างไฟล์ที่มันทดสอบ** ไม่ใช่ใน `tests/` ที่ต้องไล่หาคู่
-  **ยกเว้น stack ที่เครื่องมือบังคับโฟลเดอร์ทดสอบ** เช่น Flutter (`flutter test` หาใน `test/` และ test ใน `lib/` จะลาก `flutter_test` เข้าแอป) · .NET (โปรเจกต์ทดสอบแยกใน `tests/`) — ตาราง `project-bootstrap` ข้อ 1
-  ให้ใช้โครงโฟลเดอร์ใน `test/` เหมือน `lib/` เป๊ะ เช่น `lib/invoice/renderer.dart` ↔ `test/invoice/renderer_test.dart`
-- **ไม่มี `utils/` ก้อนเดียว** เพราะถ้าของ 2 ชิ้นไม่เกี่ยวกัน ก็ไม่ควรอยู่ไฟล์เดียวกัน
-  `shared/` ยอมได้ แต่ข้างในต้องแตกตามเรื่อง ไม่ใช่กองรวม
-- **`index` ที่ re-export ทั้งโฟลเดอร์ ทำให้ "ไปที่นิยาม" ในเครื่องมือแก้โค้ดพัง** จึงใช้เท่าที่จำเป็นจริง
-- **โฟลเดอร์ที่มีไฟล์เดียวคือโฟลเดอร์ที่ยังไม่ควรมี**
-
----
-
-## 8 · ขนาดและลำดับข้างในไฟล์
-
-- **ไฟล์เกิน ~300 บรรทัด เป็นสัญญาณ ไม่ใช่กฎ** ถ้าเลื่อนหาของเจอง่ายก็ปล่อยไว้
-- **ลำดับในไฟล์: import → ค่าคงที่ → type → สิ่งที่ export → helper ส่วนตัว**
-- **ฟังก์ชันที่ถูกเรียก อยู่ใต้ฟังก์ชันที่เรียกมัน** จะได้อ่านจากบนลงล่างได้เหมือนบทความ
-  ของสำคัญอยู่บน รายละเอียดอยู่ล่าง คนอ่านหยุดตรงไหนก็เข้าใจภาพรวมแล้ว
+- **A file name is the name of what it mainly exports** — `InvoiceRenderer` lives in `invoice-renderer.ts`
+  Letter case follows the language's convention: Dart/Python use snake_case (`invoice_renderer.dart`), while .NET uses `InvoiceRenderer.cs`
+- **A test file sits beside the file it tests**, not in a `tests/` folder where you must hunt for its pair
+  **except stacks where the tooling forces a test folder**, such as Flutter (`flutter test` looks in `test/`, and a test in `lib/` drags `flutter_test` into the app) · .NET (a separate test project in `tests/`) — table in `project-bootstrap` step 1
+  use a folder layout in `test/` that mirrors `lib/` exactly, e.g. `lib/invoice/renderer.dart` ↔ `test/invoice/renderer_test.dart`
+- **No single `utils/` lump**, because if 2 things are unrelated, they should not be in the same file
+  `shared/` is acceptable, but inside it must split by topic, not be a heap
+- **An `index` that re-exports a whole folder breaks "go to definition" in code editors**, so use it only where truly needed
+- **A folder with a single file is a folder that should not exist yet**
 
 ---
 
-## 9 · ภาษาไทยกับอังกฤษในโค้ด
+## 8 · File size and order inside the file
 
-| อะไร | ภาษา |
+- **A file over ~300 lines is a signal, not a rule.** If you can scroll and find things easily, leave it.
+- **Order in a file: import → constants → types → what is exported → private helpers**
+- **A function that is called sits below the function that calls it**, so it reads from top to bottom like an article
+  the important parts on top, the details below; wherever the reader stops, they already understand the overall picture
+
+---
+
+## 9 · Thai and English in code
+
+| What | Language |
 |---|---|
-| ชื่อตัวแปร ฟังก์ชัน คลาส ไฟล์ โฟลเดอร์ ตาราง คอลัมน์ | **อังกฤษเสมอ** |
-| คอมเมนต์ | ไทยได้ ถ้าทีมอ่านไทย |
-| ข้อความที่ผู้ใช้เห็น | ไทย แต่ไม่ฝังในโค้ด (`i18n-and-locale`) |
-| commit message · ชื่อ branch | ตามที่ทีมตกลง เลือกแล้วใช้ให้ตรงกันทั้งทีม |
+| Names of variables, functions, classes, files, folders, tables, columns | **Always English** |
+| Comments | Thai is fine if the team reads Thai |
+| Text users see | Thai, but not embedded in code (`i18n-and-locale`) |
+| Commit message · branch name | As the team agrees; pick one and use it consistently across the team |
 
-- **ห้ามปนครึ่งคำ** — `checkบัตร` · `userชื่อ` อ่านยากและพังใน terminal บางตัว
-- **คำเฉพาะทางไทยที่ไม่มีคำอังกฤษตรง ๆ** ให้หาคำอังกฤษที่ใกล้ที่สุดก่อน
+- **Never mix half-words** — `checkบัตร` · `userชื่อ` are hard to read and break in some terminals
+- **For Thai technical terms with no direct English word**, look for the closest English word first
   (`เลขประจำตัวผู้เสียภาษี` → `taxId` · `ภาษีหัก ณ ที่จ่าย` → `withholdingTax`)
-  ถ้าไม่มีจริง ๆ ให้ใช้ทับศัพท์เต็มคำ แล้วอธิบายไว้ที่ `DATA-DICTIONARY.md`
+  if there really is none, use a full-word transliteration and explain it in `DATA-DICTIONARY.md`
 
 ---
 
-## 10 · รายการตรวจก่อนส่งโค้ด
+## 10 · Checklist before submitting code
 
-ใช้รายการตรวจ 12 ข้อใน [`assets/naming-reference.md`](assets/naming-reference.md) ข้อ 5 — ไล่ทุกข้อก่อนส่ง ข้อไหนไม่ผ่านกลับไปแก้ตามข้อของ skill นี้
+Use the 12-item checklist in [`assets/naming-reference.md`](assets/naming-reference.md) step 5 — go through every item before sending; for any item that fails, go back and fix it by the matching step of this skill.
 
 ---
 
 ## 11 · Anti-patterns
 
-- **แก้ชื่อทั้งไฟล์ในคอมมิตเดียวกับที่แก้ตรรกะ** — รีวิวไม่ได้ว่าอะไรเปลี่ยนจริง ให้แยกคอมมิต
-- **`utils.ts` ที่มี 40 ฟังก์ชันไม่เกี่ยวกัน**
-- **คอมเมนต์หัวไฟล์ที่ generate มาแล้วไม่มีใครอัปเดต** — `@author` `@version` ที่ git บอกได้ดีกว่า
-- **โค้ดที่ถูกคอมเมนต์ทิ้งไว้ "เผื่อได้ใช้"** — git เก็บให้แล้ว ให้ลบทิ้ง
-- **ตั้งชื่อตาม pattern แทนตามหน้าที่** — `InvoiceFactoryStrategyImpl` บอกว่าใช้ pattern อะไร ไม่ได้บอกว่าทำอะไร
-- **เปลี่ยนแบบการตั้งชื่อกลางโปรเจกต์** — ความไม่สม่ำเสมอแย่กว่าแบบที่ไม่สวย
-- **ย่อชื่อเพราะบรรทัดยาวเกิน** — ให้ขึ้นบรรทัดใหม่ อย่าตัดชื่อ
+- **Renaming a whole file in the same commit as a logic change** — reviewers cannot tell what really changed; split the commits
+- **A `utils.ts` with 40 unrelated functions**
+- **A generated file-header comment that nobody updates** — `@author` `@version`, which git tells better
+- **Code commented out "in case it's needed"** — git keeps it already; delete it
+- **Naming by pattern instead of by role** — `InvoiceFactoryStrategyImpl` says which pattern is used, not what it does
+- **Changing the naming style midway through a project** — inconsistency is worse than a style that is not pretty
+- **Abbreviating a name because the line is too long** — wrap the line; do not cut the name
 
 ---
 
-## 12 · ตัวย่อ
+## 12 · Abbreviations
 
 - **API** — Application Programming Interface
 - **SQL** — Structured Query Language
 - **SMS** — Short Message Service
-- **TODO** — สิ่งที่ยังไม่ได้ทำและตั้งใจจะทำ
+- **TODO** — something not yet done that you intend to do
 - **YAGNI** — You Aren't Gonna Need It
 
 ---
 
-## 13 · เชื่อมกับ skill อื่น
+## 13 · Connecting to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---|---|
-| เขียนโค้ดให้น้อยลง | `lazy-coding` |
-| โครง repo · README · linter | `project-bootstrap` |
-| รีวิวความถูกต้องและความปลอดภัย | `code-review-checklist` |
-| รูปแบบ log และชื่อ field ใน log | `logging-standards` |
-| ชื่อตารางและคอลัมน์ในฐานข้อมูล | `database-design` |
-| ชื่อ endpoint และ field ใน API | `api-conventions` |
-| ข้อความที่ผู้ใช้เห็น ไทย-อังกฤษ | `i18n-and-locale` |
-| ตารางอ้างอิงแบบหน้าเดียว | `assets/naming-reference.md` |
+| Write less code | `lazy-coding` |
+| Repo structure · README · linter | `project-bootstrap` |
+| Review for correctness and security | `code-review-checklist` |
+| Log format and field names in logs | `logging-standards` |
+| Table and column names in a database | `database-design` |
+| Endpoint names and fields in an API | `api-conventions` |
+| Text users see, Thai-English | `i18n-and-locale` |
+| One-page reference table | `assets/naming-reference.md` |
 
 
 ---
@@ -464,53 +464,53 @@ Use when setting up automated tests or fixing flaky ones
 
 # Testing Standards
 
-> **กฎข้อเดียว:** test ที่ไม่มีใครเชื่อถือ แย่กว่าไม่มี test
-> test ที่แดงสลับเขียวเองจะถูก `skip` ภายใน 2 สัปดาห์ แล้วทั้งชุดจะตายตามกันไป
+> **One rule:** a test nobody trusts is worse than no test.
+> A test that flips between red and green on its own gets `skip`ped within 2 weeks, and then the whole suite dies with it.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- เริ่มวาง test ในโปรเจกต์ใหม่ หรือเพิ่ม test ให้โค้ดที่มีอยู่
-- มีคนขอ "ให้มี unit test / automate test"
-- ชุด test เดิมช้า แดง ๆ เขียว ๆ หรือไม่มีใครดูแล้ว
+- Starting tests in a new project, or adding tests to existing code
+- Someone asks "have unit tests / automate the tests"
+- The existing suite is slow, flips red and green, or nobody maintains it
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use it
 
-- E2E ผ่านเบราว์เซอร์ (Playwright/Cypress) ให้ใช้ `e2e-testing-patterns`
-- ขับแอปมือถือจริงบน emulator ให้ใช้ `app-verifier-setup` (`references/android-native.md`)
-- ออกแบบ test case เชิงธุรกิจก่อนลงมือเขียน ให้ใช้ `test-case-template`
+- E2E through a browser (Playwright/Cypress): use `e2e-testing-patterns`
+- Driving a real mobile app on an emulator: use `app-verifier-setup` (`references/android-native.md`)
+- Designing business-level test cases before writing: use `test-case-template`
 
 ---
 
-## 1 · ขั้นแรก: ใช้ของที่มี ถามเฉพาะตอนต้องเพิ่มตัวใหม่
+## 1 · First: use what exists; ask only when a new one must be added
 
-- **ถ้าโปรเจกต์มี framework อยู่แล้ว หรือสแต็กมี test library มากับ SDK** (Flutter `flutter_test` · Angular CLI) ให้ใช้เลย ไม่ต้องถาม
-- **ถ้าต้องลงแพ็กเกจ test ตัวใหม่** ให้ใส่คำถามนี้ไว้ในการถามครั้งเดียวก่อนเริ่มงาน (ถ้าเครื่องมือมีหน้าต่างให้เลือกคำตอบ เช่น `AskUserQuestion` ก็ใช้ตัวนั้น) เพราะถ้าเลือกผิดแล้วย้ายทีหลังจะแพงมาก
-- ถ้าเริ่มงานไปแล้วเพิ่งรู้ว่าต้องเลือก ให้เลือกตัว**แนะนำ**ในตารางแล้วทำต่อ จากนั้นบันทึกไว้ในหัวข้อ "ตัดสินใจเอง" ของรายงาน ไม่ต้องหยุดถามกลางทาง
+- **If the project already has a framework, or the stack ships a test library with its SDK** (Flutter `flutter_test` · Angular CLI), use it. Do not ask.
+- **If a new test package must be installed**, put this question into the single round of questions before starting (if the tool has a picker for answers, such as `AskUserQuestion`, use it), because switching later after a wrong choice is very expensive.
+- If you only discover mid-work that a choice is needed, pick the **recommended** one in the table and continue, then record it under the "ตัดสินใจเอง" (decided on my own) heading of the report. Do not stop to ask midway.
 
-2 เรื่องที่ต้องตกลง:
+2 things to settle:
 
-**ข้อ 1 — framework**
+**Item 1 — framework**
 
-| สแต็ก | ตัวเลือกที่ควรเสนอ |
+| Stack | Options to offer |
 |---|---|
-| .NET | **xUnit** (แนะนำ · เป็นมาตรฐานของ .NET ยุคใหม่) · NUnit (ทีมมาจาก NUnit เดิม) · MSTest (องค์กรที่ผูกกับ VS) |
-| Node/TS | **Vitest** (แนะนำ · เร็ว ตั้งค่าน้อย ใช้ ESM/TS ได้เลย) · Jest (ระบบนิเวศใหญ่ที่สุด) · `node:test` (ไม่อยากลงอะไรเลย) |
-| Python | **pytest** (แนะนำ) · `unittest` (stdlib ล้วน ห้ามลงแพ็กเกจเพิ่ม) |
-| Angular | **Vitest ที่มากับ Angular CLI** (`ng test` · แนะนำ · ค่าเริ่มต้นของโปรเจกต์ใหม่) + Testing Library ถ้าต้องการ · Jasmine + Karma (ค่าเริ่มต้นเดิม ยังใช้ได้) · รุ่นเก่ามากใช้ Analog |
-| Flutter · Dart | **`flutter_test`** (มากับ SDK ไม่ต้องถาม) · fake ด้วยคลาสที่ `implements` ของจริง ก่อนจะลง `mocktail` |
+| .NET | **xUnit** (recommended · the standard of modern .NET) · NUnit (a team coming from NUnit) · MSTest (organizations tied to VS) |
+| Node/TS | **Vitest** (recommended · fast, little setup, ESM/TS work out of the box) · Jest (largest ecosystem) · `node:test` (when you want to install nothing) |
+| Python | **pytest** (recommended) · `unittest` (pure stdlib; no extra packages allowed) |
+| Angular | **Vitest that ships with Angular CLI** (`ng test` · recommended · default for new projects) + Testing Library if wanted · Jasmine + Karma (the old default, still usable) · very old versions use Analog |
+| Flutter · Dart | **`flutter_test`** (ships with the SDK, no need to ask) · fake with a class that `implements` the real one, before installing `mocktail` |
 
-**ข้อ 2 — ขอบเขตที่ต้องการตอนนี้**
+**Item 2 — the scope wanted now**
 
-- unit อย่างเดียว (เร็ว ไม่แตะ DB/network)
-- unit + integration (แตะ DB จริงผ่าน Testcontainers ใช้ DB ชนิดเดียวกับ production · SQLite in-memory ใช้ได้เฉพาะเมื่อ production ก็เป็น SQLite)
-- ครบชุดรวม E2E (ต่อยอดไป `e2e-testing-patterns`)
+- unit only (fast, touches no DB/network)
+- unit + integration (touches a real DB through Testcontainers, using the same DB type as production · in-memory SQLite is allowed only when production is also SQLite)
+- the full set including E2E (continue to `e2e-testing-patterns`)
 
-> ถ้าโปรเจกต์**มี framework อยู่แล้ว** ก็ไม่ต้องถาม ใช้ของเดิมไป เพราะการมี 2 ระบบในโปรเจกต์เดียว
-> แย่กว่าใช้ของที่ไม่ถูกใจนัก
+> If the project **already has a framework**, do not ask; use the existing one, because having 2 systems in one project
+> is worse than using one you do not quite like.
 
 ---
 
-## 2 · พีระมิด — สัดส่วนที่ยั่งยืน
+## 2 · The pyramid — a ratio that lasts
 
 ```
         ▲  E2E  5%      ช้า เปราะ แพง — เอาไว้ทดสอบ "เส้นทางที่ทำเงิน" เท่านั้น
@@ -521,36 +521,36 @@ Use when setting up automated tests or fixing flaky ones
    ╱_________╲
 ```
 
-**แอปมือถือมีชั้น widget test (Flutter) หรือ component test (React Native)** อยู่ระหว่าง unit กับ E2E ชั้นนี้สร้างหน้าจอจริงในหน่วยความจำ แล้วกดและอ่านได้โดยไม่ต้องมี emulator แอปมือถือส่วนใหญ่ไม่มี integration ที่ต่อ DB จึงใช้ชั้นนี้เป็นชั้นกลางหลักแทน
+**A mobile app has a widget test layer (Flutter) or component test layer (React Native)** between unit and E2E. This layer builds the real screen in memory, then taps and reads it without an emulator. Most mobile apps have no integration tests that connect to a DB, so this layer is used as the main middle layer instead.
 
-**ชุด unit ทั้งหมดต้องรันจบใน 10 วินาที** (Flutter: นับหลังคอมไพล์เสร็จ เพราะแค่เริ่ม `flutter test` ก็กินหลายวินาที · ตัวเลขนี้รอยืนยันบนเครื่องจริง)
-ถ้าเกินนี้ คนจะเลิกรันก่อน commit แล้ว test ที่พังจะไปเจอที่ CI เท่านั้น ซึ่งช้าเกินไป
-
----
-
-## 3 · อะไรควรมี test / อะไรไม่ต้อง
-
-**ต้องมี**
-- ตรรกะทางธุรกิจ: การคำนวณ, เงื่อนไขสิทธิ์, การเปลี่ยนสถานะ
-- ทุกกรณีขอบ: ค่าว่าง, ศูนย์, ติดลบ, ขอบเขตล่าง/บน, ค่าซ้ำ
-- **ทุกบั๊กที่เคยเกิด** — เขียน test ที่แดงก่อน แล้วค่อยแก้ (regression test)
-- สัญญาที่คนอื่นพึ่งพา: รูปแบบ response ของ API, schema ของ event
-
-**ไม่ต้องมี**
-- getter/setter, DTO, mapping ตรง ๆ
-- โค้ดของเฟรมเวิร์ก (ไม่ต้อง test ว่า EF Core บันทึกได้ไหม)
-- ไลบรารีของคนอื่น
-- UI ที่แค่แสดงผลโดยไม่มีตรรกะ
-
-> **Coverage ที่ซื่อสัตย์: 70–80% ของ business logic** ไม่ใช่ 100% ของทั้งโปรเจกต์
-> ไล่ตาม 100% จะได้ test ปลอม ๆ ที่เขียนเพื่อให้ตัวเลขสวยเต็มไปหมด
-> ตั้ง gate ที่ "ห้ามลดลงจากเดิม" มีประโยชน์กว่าตั้งเลขเป้า
+**The whole unit suite must finish in 10 seconds** (Flutter: count after compilation finishes, because merely starting `flutter test` takes several seconds · this number is รอยืนยัน (to be confirmed) on a real machine).
+If it takes longer, people stop running it before commit, and a broken test is only found in CI, which is too late.
 
 ---
 
-## 4 · เขียนยังไง
+## 3 · What needs a test / what does not
 
-**ตั้งชื่อ** — อ่านชื่อแล้วต้องรู้ว่าพังอะไรโดยไม่ต้องเปิดโค้ด
+**Must have**
+- Business logic: calculations, permission conditions, state transitions
+- Every edge case: empty value, zero, negative, lower/upper bound, duplicates
+- **Every bug that has happened** — write a test that is red first, then fix (regression test)
+- Contracts others depend on: the API response shape, the event schema
+
+**Not needed**
+- getters/setters, DTOs, direct mappings
+- framework code (no need to test whether EF Core can save)
+- other people's libraries
+- UI that only displays with no logic
+
+> **Honest coverage: 70–80% of business logic**, not 100% of the whole project.
+> Chasing 100% gives you fake tests written just to make the number look good.
+> A gate of "must not drop below the current level" is more useful than a target number.
+
+---
+
+## 4 · How to write
+
+**Naming** — reading the name must tell you what broke, without opening the code
 
 ```
 MethodName_Scenario_ExpectedResult
@@ -560,9 +560,9 @@ CreateOrder_WhenStockIsZero_ThrowsOutOfStock
 ParseDate_WhenInputIsEmpty_ReturnsNull
 ```
 
-ภาษาที่ชื่อ test เป็นข้อความ (Dart · Vitest · Jest) ใช้ `group('<สิ่งที่ทดสอบ>')` + `test('<สถานการณ์> → <ผลที่ต้องได้>')` เป็นประโยค เช่น `group('verdict')` · `test('below 50 lux is too dark for reading')`
+In languages where the test name is a string (Dart · Vitest · Jest), use `group('<what is tested>')` + `test('<scenario> → <expected result>')` as a sentence, e.g. `group('verdict')` · `test('below 50 lux is too dark for reading')`
 
-**โครง AAA** — เว้นบรรทัดคั่น 3 ส่วนให้เห็นชัด
+**AAA structure** — separate the 3 parts with blank lines so they are clearly visible
 
 ```
 // Arrange   เตรียมข้อมูลและ dependency
@@ -570,35 +570,35 @@ ParseDate_WhenInputIsEmpty_ReturnsNull
 // Assert    ตรวจผล
 ```
 
-**1 test = 1 เหตุผลที่จะพัง** ถ้ามี assert 5 อันที่ไม่เกี่ยวกัน ให้แยกเป็น 5 test
+**1 test = 1 reason to break.** If there are 5 unrelated asserts, split into 5 tests.
 
-**บอกให้ได้ก่อนเขียนว่าโค้ดเปลี่ยนตรงไหนแล้ว test นี้จะแดง** (ปรับจาก superpowers `test-driven-development` · MIT)
-- บอกไม่ได้ → test นี้ไม่ได้จับพฤติกรรม เขียนใหม่ให้จับผลที่สังเกตได้
-- คำตอบคือ "ข้อความในไฟล์ต้นฉบับเปลี่ยน" → กำลังทดสอบตัวอักษร ให้รันของจริงแล้วตรวจผลแทน
-- แดงเฉพาะตอนคนตั้งใจเปลี่ยนค่า (เช่น เปลี่ยนสี label) → เป็นตัวจับการเปลี่ยน ไม่ใช่ test พฤติกรรม ย้ายไปทดสอบสิ่งที่ค่านั้นกระทบแทน
+**Be able to say, before writing, which code change makes this test go red** (adapted from superpowers `test-driven-development` · MIT)
+- Cannot say → this test does not catch behavior. Rewrite it to catch an observable result.
+- The answer is "the text in the source file changes" → you are testing characters. Run the real thing and check the result instead.
+- It goes red only when someone deliberately changes a value (e.g. changes a label color) → it is a change detector, not a behavior test. Move to testing what that value affects.
 
-**ห้ามมี logic ใน test** — ไม่มี `if`, ไม่มีลูปที่คำนวณค่าคาดหวัง
-ถ้าอยากรันหลายเคส ใช้ parameterized test (`[Theory]` / `test.each` / `@pytest.mark.parametrize`)
+**No logic in tests** — no `if`, no loop that computes the expected value.
+To run several cases, use a parameterized test (`[Theory]` / `test.each` / `@pytest.mark.parametrize`).
 
-**ทำให้ผลเหมือนเดิมทุกครั้ง**
-- เวลา: inject `TimeProvider` (.NET 8+) หรือ `now()` ไม่เรียก `DateTime.Now` ตรง ๆ ในโค้ดที่ทดสอบ
-- สุ่ม: fix seed
-- ลำดับ: test ต้องรันสลับลำดับได้ ห้ามพึ่งสถานะที่ test ก่อนหน้าทิ้งไว้
-- **ห้าม `sleep`** เพื่อรอ async — ใช้ fake timer หรือรอ signal จริง
+**Make results the same every time**
+- Time: inject `TimeProvider` (.NET 8+) or `now()`; do not call `DateTime.Now` directly in the code under test.
+- Randomness: fix the seed.
+- Order: tests must run in any order; never depend on state a previous test left behind.
+- **No `sleep`** to wait for async — use a fake timer or wait for a real signal.
 
-**Mock เท่าที่จำเป็น** — mock ขอบเขตนอกระบบ (HTTP, คิว, เวลา, ไฟล์)
-ไม่ mock คลาสของตัวเองที่คำนวณล้วน ๆ ถ้า mock เยอะเกินไป แปลว่า test ผูกกับวิธีเขียนโค้ด
-พอ refactor ทีเดียว test แดงทั้งชุด ทั้งที่พฤติกรรมไม่เปลี่ยน
+**Mock only what is necessary** — mock boundaries outside the system (HTTP, queues, time, files).
+Do not mock your own purely computational classes. If you mock too much, the test is tied to how the code is written;
+one refactor turns the whole suite red even though behavior did not change.
 
 ---
 
 ## 5 · Integration test
 
-- ใช้ **DB จริงชนิดเดียวกับ production** (Testcontainers) ไม่ใช่ SQLite แทน PostgreSQL
-  เพราะ SQL ที่ผ่านบน SQLite อาจพังบนของจริง
-- แต่ละ test เริ่มจากสถานะที่รู้แน่ — transaction rollback หรือ truncate ทุกครั้ง
-- แยก command ออกจาก unit เพื่อให้รันแยกกันได้ (`npm run test:unit` / `test:integration`)
-- ทดสอบ **สัญญา** ของ API: status code, รูปร่าง JSON, header สำคัญ — ไม่ใช่แค่ "ไม่ error"
+- Use a **real DB of the same type as production** (Testcontainers), not SQLite instead of PostgreSQL,
+  because SQL that passes on SQLite may break on the real one.
+- Each test starts from a known state — transaction rollback or truncate every time.
+- Separate the command from unit so they can run separately (`npm run test:unit` / `test:integration`).
+- Test the API **contract**: status code, JSON shape, important headers — not just "no error".
 
 ---
 
@@ -608,54 +608,54 @@ ParseDate_WhenInputIsEmpty_ReturnsNull
 push / PR → lint → unit (< 10 วินาที) → integration → build
 ```
 
-- **test แดง = merge ไม่ได้** ไม่มีข้อยกเว้น
-- ห้ามมี `skip`/`ignore` ค้างในสาขาหลัก — ถ้าจะ skip ต้องมีลิงก์ issue กำกับ
-- test ที่ flaky (แดงสลับเขียวเอง) ต้อง**แก้หรือลบ** ห้าม retry จนกว่าจะเขียว เพราะนั่นคือการซ่อนบั๊ก
-- รายงาน coverage ในหน้า PR ให้เห็นว่าเพิ่มหรือลด
+- **Red test = cannot merge**, no exceptions.
+- No `skip`/`ignore` left in the main branch — to skip, an issue link must be attached.
+- A flaky test (flips red and green on its own) must be **fixed or deleted**; never retry until green, because that hides a bug.
+- Show the coverage report on the PR page so it is visible whether it rose or fell.
 
-รายละเอียดคำสั่งและไฟล์ config ของแต่ละ framework อยู่ใน `references/per-stack.md`
+Command details and config files for each framework are in `references/per-stack.md`.
 
 ---
 
-## 7 · ตรวจงาน
+## 7 · Review
 
-- [ ] ใช้ framework ของเดิมหรือที่มากับสแต็ก ถ้าลงตัวใหม่ ต้องถามแล้วหรือบันทึกไว้ใน "ตัดสินใจเอง"
-- [ ] `npm test` / `dotnet test` / `pytest` / `flutter test` รันผ่านจากเครื่องเปล่าโดยไม่ต้องตั้งค่าอะไรเพิ่ม (ผลยาว → `> _to_delete/test.txt 2>&1` แล้ว `tail -20`)
-- [ ] ชุด unit รันจบใน 10 วินาที
-- [ ] ลองสลับลำดับ test แล้วยังเขียวหมด (pytest: ลง `pytest-randomly` แล้วรัน `pytest` ธรรมดา · Vitest: `--sequence.shuffle` · Jest: `--randomize` · Flutter: `--test-randomize-ordering-seed random`)
-- [ ] รันซ้ำ 3 รอบได้ผลเหมือนเดิม (ไม่ flaky)
-- [ ] แก้โค้ดให้พังโดยตั้งใจ 1 จุด แล้ว test **ต้องแดง** — ถ้ายังเขียว แปลว่า test ไม่ได้ทดสอบอะไร
-- [ ] **ลองพังในหัวก่อนปิดไฟล์ test** — ไล่ 5 แบบ: ค่าคงที่หรือ argument ผิด · เข้า branch ผิด · ลืมเปลี่ยน state หรือ side effect · คืนค่าว่างหรือค่าเริ่มต้น · ไม่ตรวจ 0 · ว่าง · null · ไม่มีสิทธิ์ · รูปแบบผิด — แบบไหนไม่มี test แดง แปลว่าพฤติกรรมนั้นยังไม่มีใครคุ้ม
-- [ ] ชื่อ test อ่านแล้วรู้ว่าพังอะไรโดยไม่ต้องเปิดโค้ด
-- [ ] ไม่มี `sleep` / `Thread.Sleep` ในชุด test
-- [ ] ไม่มี test ที่ถูก skip ค้างโดยไม่มีเหตุผลกำกับ
+- [ ] Used the existing framework or the one that ships with the stack; if a new one was installed, it was asked or recorded under "ตัดสินใจเอง"
+- [ ] `npm test` / `dotnet test` / `pytest` / `flutter test` passes from a clean machine with no extra setup (long output → `> _to_delete/test.txt 2>&1` then `tail -20`)
+- [ ] The unit suite finishes in 10 seconds
+- [ ] Shuffling the test order still gives all green (pytest: install `pytest-randomly` then run plain `pytest` · Vitest: `--sequence.shuffle` · Jest: `--randomize` · Flutter: `--test-randomize-ordering-seed random`)
+- [ ] 3 repeated runs give the same result (not flaky)
+- [ ] Break the code deliberately in 1 spot, and the test **must go red** — if still green, the test tests nothing
+- [ ] **Try breaking it in your head before closing the test file** — go through 5 ways: wrong constant or argument · entering the wrong branch · forgetting to change state or a side effect · returning empty or a default · not checking 0 · empty · null · no permission · wrong format — any way that makes no test red means that behavior is not yet protected by anyone
+- [ ] Reading the test name tells you what broke, without opening the code
+- [ ] No `sleep` / `Thread.Sleep` in the test suite
+- [ ] No test left skipped without a reason attached
 
 ---
 
 ## 8 · Anti-patterns
 
-- **เขียน test หลังจบงานเพื่อให้ผ่าน gate** — ได้ test ที่ยืนยันว่าโค้ดทำสิ่งที่มันทำ
-  ไม่ใช่สิ่งที่มันควรทำ
-- **assert ว่า "ไม่ throw"** เฉย ๆ — ไม่ได้ทดสอบอะไรเลย
-- **test ที่พึ่ง test ก่อนหน้า** — พอรันเดี่ยว ๆ แดงทันที
-- **mock ทุกอย่างจน test ทดสอบแค่ mock**
-- **`sleep(1000)` รอ async** — ช้าและยังเปราะอยู่ดี
-- **retry flaky test จนเขียว** — คุณเพิ่งซ่อนบั๊กที่เกิดจริงใน production
-- **ไล่ coverage 100%** — เขียน test ให้ getter เพื่อตัวเลข
-- **ข้อมูลทดสอบเป็นข้อมูลลูกค้าจริง** — ผิดกฎหมายและหลุดง่าย ใช้ตัวสร้างข้อมูลปลอม
+- **Writing tests after the work is done just to pass the gate** — you get tests that confirm the code does what it does,
+  not what it should do
+- **Asserting only "does not throw"** — tests nothing at all
+- **A test that depends on the previous test** — red at once when run alone
+- **Mocking everything until the test tests only the mock**
+- **`sleep(1000)` to wait for async** — slow and still brittle
+- **Retrying a flaky test until green** — you just hid a bug that really happens in production
+- **Chasing 100% coverage** — writing tests for getters for the number
+- **Test data that is real customer data** — illegal and easy to leak; use a fake-data generator
 
 ---
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Link to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---|---|
-| E2E ผ่านเบราว์เซอร์ | `e2e-testing-patterns` |
-| E2E แอปมือถือ (`integration_test` · `adb`) | `app-verifier-setup` |
-| ออกแบบ test case ก่อนเขียนโค้ด | `test-case-template` |
-| ทดสอบ endpoint health/ping | `web-service-essentials` |
-| log ที่ช่วยไล่ปัญหาตอน test แดง | `logging-standards` |
-| review โค้ด test | `code-review-checklist` |
+| E2E through a browser | `e2e-testing-patterns` |
+| E2E for a mobile app (`integration_test` · `adb`) | `app-verifier-setup` |
+| Design test cases before writing code | `test-case-template` |
+| Test health/ping endpoints | `web-service-essentials` |
+| Logs that help trace a problem when a test is red | `logging-standards` |
+| Review test code | `code-review-checklist` |
 
 
 ## reference: per-stack.md

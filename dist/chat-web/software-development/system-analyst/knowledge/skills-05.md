@@ -106,27 +106,27 @@ Use when a task ends, to report status in a table
 
 ## reference: build-plan-rules.md
 
-# แบบสำหรับโปรเจกต์ที่มี docs/BUILD-PLAN.md
+# Format for projects that have docs/BUILD-PLAN.md
 
-ย้ายมาจาก `SKILL.md` ข้อ 3 · เปิดเมื่อโปรเจกต์มี `docs/BUILD-PLAN.md`
+Moved from `SKILL.md` item 3 · open it when the project has `docs/BUILD-PLAN.md`
 
-เขียน 2 หัวข้อนี้ในไฟล์นั้นแทน `CONTEXT.md` · ไม่มีไฟล์ → สร้างไฟล์ที่มีแค่ชื่อโปรเจกต์ แล้ว copy จาก [`assets/build-plan-status.md`](../assets/build-plan-status.md) (ห้ามแต่งโครงเอง) · **ห้ามแตะตารางงานหรือหัวข้ออื่น**
-ลำดับหัวข้อ: `## สถานะล่าสุด` → ตารางงาน → `## ประวัติสถานะ` → `## ตัดสินใจเอง` (`decision-log`)
+Write these 2 sections in that file instead of `CONTEXT.md` · no file → create a file holding only the project name, then copy from [`assets/build-plan-status.md`](../assets/build-plan-status.md) (never invent the structure) · **never touch the job table or other sections**
+Section order: `## สถานะล่าสุด` (latest status) → job table → `## ประวัติสถานะ` (status history) → `## ตัดสินใจเอง` (decisions made on your own, `decision-log`)
 
-- `## สถานะล่าสุด` — **เขียนทับทั้งหัวข้อ** ทุกครั้ง เป็นภาพปัจจุบันภาพเดียว
-- `## ประวัติสถานะ` — **เพิ่ม 1 บรรทัดบนสุด** ต่อ 1 งาน ไม่ลบของเดิม รูปแบบ `วันที่ เวลา · งาน · สถานะ · ผล · ทำ <agent> · ตรวจ <agent> · ค้างกี่ข้อ` (ถ้ารอบนั้นตัดสินใจเองต่อท้าย `· ตัดสินใจเอง <จำนวน>`)
+- `## สถานะล่าสุด` — **overwrite the whole section** every time, as the single current picture
+- `## ประวัติสถานะ` — **add 1 line at the very top** per job, never delete the old ones, in the format `วันที่ เวลา · งาน · สถานะ · ผล · ทำ <agent> · ตรวจ <agent> · ค้างกี่ข้อ` (date time · job · status · result · made by <agent> · checked by <agent> · how many items pending; if you decided anything on your own that round, append `· ตัดสินใจเอง <count>`)
 
-หัวข้อ `## สถานะล่าสุด` มี: บรรทัดอัปเดต (วันที่เวลา · งานล่าสุด) · **ภาพรวม** (เสร็จ N/ทั้งหมด · ทำอยู่ · ติด · ไม่ผ่านตรวจ — นับจากตารางและต้องตรงกัน) · ตาราง `| รายการ | ประเภท | สถานะ | ใครทำ | ใครตรวจ | ผลตรวจ | ค้าง / หมายเหตุ |` · **ทีมตอนนี้** (1 แถวต่อ agent ที่ใช้รอบนี้ · ไม่มี subagent ไม่ต้องใส่ · เริ่มรอบใหม่ล้างแถวเก่า) · ค้างอยู่ · รออนุมัติ · ถัดไป (ไม่เกิน 3) · ข้อเสนอ
+Section `## สถานะล่าสุด` holds: an update line (date and time · latest job) · **ภาพรวม** (overview: done N/total · in progress · blocked · failed check — counted from the table and must match) · a table `| รายการ | ประเภท | สถานะ | ใครทำ | ใครตรวจ | ผลตรวจ | ค้าง / หมายเหตุ |` (item · type · status · made by · checked by · check result · pending / note) · **ทีมตอนนี้** (team now: 1 row per agent used this round · no subagent, leave it out · starting a new round clears the old rows) · ค้างอยู่ (pending) · รออนุมัติ (awaiting approval) · ถัดไป (next, at most 3) · ข้อเสนอ (proposals)
 
-| คอลัมน์ | ค่าที่ใช้ได้ |
+| Column | Allowed values |
 |---|---|
-| ประเภท | `เอกสาร` · `ตรวจ` · `ส่งมอบ` · `โค้ด` · `build` |
-| สถานะ (เอกสาร) | `ยังไม่เริ่ม` · `Draft` · `Review` · `Approved` · `Archived` (ชุดเดียวกับ `polished-document-style`) — `Approved` มีแต่คนที่เปลี่ยนได้ agent ตั้งได้สูงสุด `Review` |
-| สถานะ (อื่น ๆ) | 5 คำใน `SKILL.md` ข้อ 2 |
-| ผลตรวจ | `ผ่าน — <หลักฐาน>` · `ไม่ผ่าน — <สิ่งที่ไม่ผ่าน>` · `ยังไม่ได้ตรวจ` · `—` |
+| ประเภท (type) | `เอกสาร` (document) · `ตรวจ` (check) · `ส่งมอบ` (delivery) · `โค้ด` (code) · `build` |
+| สถานะ (status), documents | `ยังไม่เริ่ม` (not started) · `Draft` · `Review` · `Approved` · `Archived` (the same set as `polished-document-style`) — `Approved` belongs only to someone who can change it, and an agent may set at most `Review` |
+| สถานะ (status), others | the 5 words in `SKILL.md` item 2 |
+| ผลตรวจ (check result) | `ผ่าน — <evidence>` · `ไม่ผ่าน — <what failed>` · `ยังไม่ได้ตรวจ` · `—` |
 
-ตารางมีทุกรายการของโปรเจกต์ ไม่ใช่แค่งานรอบนี้ (รายการที่ไม่ได้แตะคัดลอกค่าเดิม) ไม่เกิน 25 แถว
-งานโค้ด (ตัวอย่างตารางเต็ม · ประเภท `build`/`ส่งมอบ` · หลักฐานแอปมือถือ) → ส่วนเพิ่มใน plugin `software-development` → `superuser` → `references/code-extensions.md`
+The table holds every item of the project, not just this round's work (items not touched copy their old values), at most 25 rows
+Code work (a full example table · type `build`/`ส่งมอบ` · mobile app evidence) → the extension in plugin `software-development` → `superuser` → `references/code-extensions.md`
 
 
 ## reference: project-plan-and-weekly-status.md
@@ -661,9 +661,9 @@ For every table, document:
 
 ## reference: data-types.md
 
-# 6 · สี่ชนิดข้อมูลที่พลาดกันประจำ
+# 6 · Four data types that are routinely got wrong
 
-### เงิน
+### Money
 
 ```sql
 total_amount   numeric(19,4)   NOT NULL      -- ถูก:
@@ -671,71 +671,71 @@ currency       char(3)         NOT NULL      -- ถูก: ISO 4217 เช่น
 total_amount   float / double                -- ผิด: 0.1 + 0.2 ไม่เท่ากับ 0.3
 ```
 
-> ผิด: **float กับเงินคือบั๊กที่หาไม่เจอ** ยอดรวมเพี้ยนรายการละ 1 สตางค์
-> ปิดงบสิ้นเดือนถึงรู้ แล้วไล่ย้อนไม่ได้ว่าเพี้ยนตรงไหน
+> Wrong: **float for money is a bug you cannot find.** The total drifts by 1 satang per line
+> You only learn at month-end close, and cannot trace back where it drifted
 
-### เวลา
+### Time
 
-| เก็บ | ใช้ | เหตุผล |
+| Store | Use | Reason |
 |---|---|---|
-| เวลาที่เกิดเหตุการณ์ | `timestamptz` (SQL Server ใช้ `datetimeoffset`) เก็บเป็น UTC | ประเทศไทยไม่มี daylight saving แต่ระบบที่ขายต่างประเทศมี |
-| วันเกิด วันครบกำหนด | `date` | ไม่มีเวลา ไม่มีโซนเวลา |
-| ช่วงเวลาเปิดร้าน | `time` + คอลัมน์โซนเวลาแยก | |
+| Time an event happened | `timestamptz` (SQL Server uses `datetimeoffset`) stored as UTC | Thailand has no daylight saving, but systems sold abroad do |
+| Birth date, due date | `date` | no time, no time zone |
+| Shop opening hours | `time` + a separate time zone column | |
 
-**กฎ:** เก็บ UTC แล้วแปลงเป็น `+07:00` ตอนแสดงผลเท่านั้น ห้ามเก็บเวลาไทยดิบ ๆ ใน `timestamp` ที่ไม่มีโซน
+**Rule:** store UTC and convert to `+07:00` only at display time; never store raw Thai time in a `timestamp` that has no zone
 
-**พุทธศักราช**: เก็บเป็น ค.ศ. เสมอ แล้วแปลงเป็น พ.ศ. ตอนแสดงผล
-ถ้าเก็บปี 2569 ลงฐานข้อมูล ทุกฟังก์ชันจะคำนวณช่วงเวลาผิด
+**Buddhist Era (BE)**: always store Common Era (CE), then convert to BE at display time
+If you store the year 2569 in the database, every function will compute durations wrongly
 
-### enum / สถานะ
+### enum / status
 
-| วิธี | ดีเมื่อ | เสียเมื่อ |
+| Approach | Good when | Bad when |
 |---|---|---|
-| ตาราง lookup + foreign key | ค่าเพิ่มได้โดยไม่ deploy มีชื่อไทย/อังกฤษ และมีลำดับการแสดง | ต้อง join |
-| `check constraint` เป็นข้อความ | ค่าคงที่ ไม่ค่อยเปลี่ยน | เพิ่มค่าต้อง migration |
-| ชนิด `enum` ของ PostgreSQL | เร็ว เล็ก | **ลบค่าออกไม่ได้** เปลี่ยนลำดับไม่ได้ |
-| `int` ดิบ ๆ | — | ✗ อ่าน `status = 3` แล้วไม่มีใครรู้ว่าอะไร |
+| Lookup table + foreign key | values can be added without a deploy, has Thai/English names, and has a display order | needs a join |
+| `check constraint` as text | constant values that rarely change | adding a value needs a migration |
+| PostgreSQL `enum` type | fast, small | **a value cannot be removed** and the order cannot be changed |
+| raw `int` | — | ✗ reading `status = 3`, nobody knows what it means |
 
 ### boolean
 
-- ตั้งชื่อเป็นประโยคบอกเล่าเชิงบวก: `is_active` (ถูก) · `is_not_disabled` (ผิด)
-- **ถ้าอาจมีสถานะที่ 3 ในอนาคต อย่าใช้ boolean** เพราะ `is_approved` จะกลายเป็น `approval_status`
-  ภายใน 6 เดือน เมื่อมี "รออนุมัติ" เพิ่มมา
+- Name it as a positive statement: `is_active` (right) · `is_not_disabled` (wrong)
+- **If a third state might appear in the future, do not use boolean**, because `is_approved` will become `approval_status`
+  within 6 months, once "รออนุมัติ" (awaiting approval) is added
 
 ---
 
 
 ## reference: migrations.md
 
-# 9 · migration — เปลี่ยน schema โดยไม่ต้องปิดระบบ
+# 9 · migration — change the schema without taking the system down
 
-**กฎ 3 ข้อ:**
+**3 rules:**
 
-1. **เดินหน้าอย่างเดียว**: migration ที่ merge แล้วห้ามแก้ ถ้าผิดให้เขียนตัวใหม่ทับ
-2. **1 migration ทำเรื่องเดียว**: ไล่ปัญหาง่าย และ rollback ได้ตรงจุด
-3. **โค้ดเวอร์ชันเก่ากับ schema เวอร์ชันใหม่ต้องทำงานด้วยกันได้** เพราะระหว่าง deploy มีโค้ดทั้ง 2 เวอร์ชันรันพร้อมกันเสมอ
+1. **Forward only**: a migration that has been merged must not be edited; if it is wrong, write a new one over it
+2. **1 migration does one thing**: easy to trace problems, and rollback is exact
+3. **Old-version code and the new-version schema must work together**, because during a deploy both versions of the code always run at the same time
 
-### expand / contract — ขั้นตอนมาตรฐานสำหรับการเปลี่ยนที่ทำลายของเดิม
+### expand / contract — the standard steps for a change that destroys something existing
 
-ตัวอย่าง: เปลี่ยนชื่อคอลัมน์ `name` → `full_name`
+Example: rename the column `name` → `full_name`
 
-| รอบ deploy | ฐานข้อมูล | โค้ด |
+| Deploy round | Database | Code |
 |:--:|---|---|
-| **1 · ขยาย** | เพิ่ม `full_name` (nullable) | เขียนลงทั้ง 2 คอลัมน์ · อ่านจาก `name` |
-| **2 · ย้าย** | คัดลอกข้อมูลเก่าเป็นชุด ๆ | อ่านจาก `full_name` ถ้าไม่มีค่อยดู `name` |
-| **3 · บีบ** | ตั้ง `NOT NULL` · ลบ `name` | อ่านและเขียน `full_name` อย่างเดียว |
+| **1 · Expand** | add `full_name` (nullable) | write to both columns · read from `name` |
+| **2 · Migrate** | copy old data in batches | read from `full_name`, fall back to `name` if it has no value |
+| **3 · Contract** | set `NOT NULL` · drop `name` | read and write only `full_name` |
 
-ทำ 3 รอบดูเสียเวลา แต่ทุกรอบ rollback ได้โดยไม่เสียข้อมูล
-ถ้าทำรอบเดียว ก็ต้องยอมรับว่าต้องปิดระบบ
+3 rounds looks slow, but every round can roll back without losing data
+If you do it in one round, you must accept that the system has to go down
 
-**คำสั่งที่ล็อกตารางจนระบบค้าง** (ระวังเป็นพิเศษบนตารางใหญ่):
+**Commands that lock the table until the system hangs** (be extra careful on large tables):
 
-- เพิ่มคอลัมน์ที่มี `DEFAULT` และ `NOT NULL` พร้อมกัน ซึ่ง PostgreSQL รุ่นใหม่ทำได้เร็ว และ MySQL 8.0.12 ขึ้นไปเพิ่มคอลัมน์แบบ INSTANT ได้ (การเปลี่ยนชนิดข้อมูลยังเขียนตารางใหม่)
-- เปลี่ยนชนิดข้อมูล
-- สร้าง index ธรรมดา ให้ใช้ `CREATE INDEX CONCURRENTLY` แทน (PostgreSQL) หรือ `ONLINE = ON` (SQL Server)
+- Adding a column with both `DEFAULT` and `NOT NULL` at once — newer PostgreSQL does this fast, and MySQL 8.0.12 and up can add a column as INSTANT (changing a data type still rewrites the table)
+- Changing a data type
+- Creating a plain index; use `CREATE INDEX CONCURRENTLY` instead (PostgreSQL) or `ONLINE = ON` (SQL Server)
 
-**ทดสอบ migration กับสำเนาข้อมูลจริงเสมอ** เพราะ migration ที่รัน 0.2 วินาทีบนเครื่องตัวเอง
-อาจใช้ 40 นาทีบน production และล็อกตารางไว้ตลอด
+**Always test a migration against a copy of real data**, because a migration that runs in 0.2 seconds on your own machine
+may take 40 minutes on production and hold the table lock the whole time
 
 ---
 
@@ -1411,39 +1411,39 @@ Retry-After: 42                ← ต้องมีคู่กับ 429 เ�
 
 ## reference: contract-testing.md
 
-# Contract testing — OpenAPI คือสัญญา แล้วให้ CI ตรวจว่าของจริงตรง
+# Contract testing — OpenAPI is the contract, and CI checks that the real thing matches
 
-เอกสาร `docs/API-CONVENTIONS.md` บอกกติกา · ไฟล์ OpenAPI บอกรูปร่างของแต่ละ endpoint · contract test คือสิ่งที่ทำให้ 2 อย่างนี้ไม่เป็นแค่เอกสาร
+The document `docs/API-CONVENTIONS.md` states the rules · the OpenAPI file states the shape of each endpoint · contract tests are what keep these 2 from being just documents
 
-## 1 · OpenAPI เป็นสัญญา
+## 1 · OpenAPI as the contract
 
-- สร้างจากโค้ดจริง (annotation · decorator · generator ของ framework) แล้ว commit ไฟล์ที่ได้ — ไม่เขียนมือแยก · เมื่อ 2 ฝั่งต่างกัน ฝั่งโค้ดคือความจริง และ diff ในไฟล์คือสิ่งที่ reviewer เห็น
-- ทุก response มี schema รวมถึง error (`web-service-essentials` §2) · ทุกฟิลด์มี `format` ของวันที่ · id · เงิน ตาม §6 ของ SKILL.md หลัก
+- Generate it from the real code (annotations · decorators · the framework's generator) and commit the resulting file — do not hand-write it separately · when the 2 sides differ, the code side is the truth, and the diff in the file is what the reviewer sees
+- Every response has a schema, including errors (`web-service-essentials` §2) · every field has a `format` for dates · ids · money, per §6 of the main SKILL.md
 
-## 2 · ตรวจ response กับ spec ใน CI (provider side)
+## 2 · Check responses against the spec in CI (provider side)
 
-| เครื่องมือ | ทำอะไร | licence | หมายเหตุ (ตรวจ 2026-10-23) |
+| Tool | What it does | licence | Note (checked 2026-10-23) |
 |---|---|---|---|
-| Schemathesis | อ่าน OpenAPI แล้วสร้าง request จาก schema ยิงใส่ service จริง ตรวจว่า response ตรง spec และไม่ 500 · `schemathesis run <url ของ openapi.json>` | MIT | ยิงจริง สร้างและลบข้อมูล → ชี้ไป dev หรือ staging เท่านั้น · Python |
-| Prism (Stoplight) | `prism mock <spec>` ให้ frontend ใช้ก่อน backend เสร็จ · `prism proxy <spec> <upstream>` ตรวจ traffic จริงกับ spec | Apache-2.0 | Node ≥ 18.20 · โหมด proxy ใส่หน้า service ใน test environment ได้ |
-| Dredd | ตรวจ API กับ API Blueprint / OpenAPI 2 (OpenAPI 3 ทดลอง) | MIT | **เลิกดูแลแล้ว** (archived 2024-11-08) — ไม่เริ่มใช้ใหม่ |
+| Schemathesis | reads OpenAPI, builds requests from the schema, fires them at the real service, and checks that responses match the spec and are not 500 · `schemathesis run <url of openapi.json>` | MIT | really fires, creates and deletes data → point it only at dev or staging · Python |
+| Prism (Stoplight) | `prism mock <spec>` lets the frontend work before the backend is done · `prism proxy <spec> <upstream>` checks real traffic against the spec | Apache-2.0 | Node ≥ 18.20 · proxy mode can sit in front of the service in a test environment |
+| Dredd | checks an API against API Blueprint / OpenAPI 2 (OpenAPI 3 experimental) | MIT | **no longer maintained** (archived 2024-11-08) — do not start using it |
 
-ค่าเริ่มของเรา: Schemathesis ใน job ของ CI หลัง service ขึ้นด้วยข้อมูลทดสอบ (reset endpoint จาก `app-verifier-setup`) · ล้ม = ไม่ merge
+Our default: Schemathesis in a CI job after the service is up with test data (the reset endpoint from `app-verifier-setup`) · failure = no merge
 
-## 3 · Consumer-driven contract — เมื่อทีม frontend หรือผู้เรียกแยกจาก backend
+## 3 · Consumer-driven contract — when the frontend team or callers are separate from the backend
 
-- Pact (pact-foundation · MIT): ฝั่งผู้เรียกเขียน test ว่าใช้ request/response คู่ไหนบ้าง → ได้ไฟล์ pact → ฝั่ง provider รันตรวจกับไฟล์นั้นใน CI ของตัวเอง · provider เปลี่ยนส่วนที่ไม่มีใครใช้ได้โดย test ไม่พัง
-- ใช้เมื่อ: ทีมคนละชุด ปล่อยคนละรอบ หรือมีผู้เรียกมากกว่า 1 ราย (mobile + web + partner) · ทีมเดียวทำทั้ง 2 ฝั่ง → ข้อ 2 พอ
-- ไฟล์ pact แลกกันผ่าน Pact Broker หรือ commit ลง repo ของ provider — ตกลงที่เดียวใน `API-CONVENTIONS.md`
+- Pact (pact-foundation · MIT): the caller side writes tests of which request/response pairs it uses → produces a pact file → the provider side runs a check against that file in its own CI · the provider can change parts nobody uses without breaking tests
+- Use when: the teams are different, release separately, or there is more than 1 caller (mobile + web + partner) · one team does both sides → item 2 is enough
+- Pact files are exchanged through a Pact Broker or committed to the provider's repo — agree on one way in `API-CONVENTIONS.md`
 
-## 4 · เช็ค breaking change ทุก PR
+## 4 · Check for breaking changes on every PR
 
-- `oasdiff breaking <spec เดิม> <spec ใหม่>` (Apache-2.0 · Go · มี Docker image) รายงานเฉพาะการเปลี่ยนที่ทำให้ผู้เรียกเดิมพัง: ลบ endpoint หรือฟิลด์ · ฟิลด์กลายเป็น required · type เปลี่ยน · enum หาย
-- ใน CI: spec เดิม = ของ branch หลัก · spec ใหม่ = ของ PR · เจอ breaking → ต้องขึ้นเวอร์ชันใหม่ตาม §3 หรือ deprecate ตาม §10 ของ SKILL.md หลัก — ไม่ใช่ปิด check
-- เพิ่มฟิลด์ optional · เพิ่ม endpoint · เพิ่มค่า enum ที่ผู้เรียกไม่ switch ตาย = ไม่ breaking
+- `oasdiff breaking <old spec> <new spec>` (Apache-2.0 · Go · has a Docker image) reports only changes that break existing callers: removing an endpoint or field · a field becoming required · a type change · an enum value removed
+- In CI: old spec = the main branch's · new spec = the PR's · on a breaking change → bump to a new version per §3, or deprecate per §10 of the main SKILL.md — do not turn off the check
+- Adding an optional field · adding an endpoint · adding an enum value that callers do not crash on in a switch = not breaking
 
-## ตรวจก่อนส่ง
+## Check before handing over
 
-- [ ] OpenAPI อยู่ใน repo และสร้างจากโค้ด · CI ล้มถ้าไฟล์ไม่ตรงโค้ด
-- [ ] Schemathesis (หรือเทียบเท่า) รันกับ service ที่ขึ้นด้วยข้อมูลทดสอบ · `oasdiff breaking` รันทุก PR
-- [ ] ผู้เรียกแยกทีม → มี pact อย่างน้อย 1 ไฟล์ต่อผู้เรียก และ provider ตรวจใน CI
+- [ ] OpenAPI is in the repo and generated from code · CI fails if the file does not match the code
+- [ ] Schemathesis (or equivalent) runs against a service brought up with test data · `oasdiff breaking` runs on every PR
+- [ ] Callers in a separate team → at least 1 pact file per caller, and the provider checks it in CI

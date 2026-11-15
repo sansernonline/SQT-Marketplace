@@ -1,34 +1,34 @@
-# ออกแบบ tool ให้ agent — ชื่อ · พารามิเตอร์ · error · แบ่งหน้า · idempotency
+# Designing tools for an agent — names · parameters · errors · pagination · idempotency
 
-> เรียบเรียงจากสเปก MCP 2026-07-28 (server/tools) · Python SDK v2 docs · `mcp-builder` ของ Anthropic (Apache-2.0 · เขียนใหม่ ไม่คัดลอก) · ตรวจ 2026-10-23 · ตัวอย่างโค้ดเป็น Python SDK v2 (`mcp` ≥ 2) · TypeScript ทำเหมือนกันด้วย Zod
+> Compiled from the MCP spec 2026-07-28 (server/tools) · Python SDK v2 docs · Anthropic's `mcp-builder` (Apache-2.0 · rewritten, not copied) · Checked 2026-10-23 · Code examples use Python SDK v2 (`mcp` ≥ 2) · TypeScript does the same with Zod
 
-## สารบัญ
+## Contents
 
-1. [ชื่อ](#1-ชื่อ)
-2. [พารามิเตอร์](#2-พารามิเตอร์)
-3. [คำอธิบาย tool](#3-คำอธิบาย-tool)
-4. [ผลลัพธ์](#4-ผลลัพธ์)
-5. [error เป็นข้อมูล](#5-error-เป็นข้อมูล)
-6. [แบ่งหน้า](#6-แบ่งหน้า)
-7. [idempotency และ tool เขียน](#7-idempotency-และ-tool-เขียน)
-8. [annotations](#8-annotations)
-9. [ขนาดผลลัพธ์](#9-ขนาดผลลัพธ์)
-10. [ตัวอย่างชุด tool คลังสินค้า](#10-ตัวอย่างชุด-tool-คลังสินค้า)
-11. [แหล่งที่มา](#11-แหล่งที่มา)
+1. [Names](#1-names)
+2. [Parameters](#2-parameters)
+3. [Tool description](#3-tool-description)
+4. [Results](#4-results)
+5. [Errors as data](#5-errors-as-data)
+6. [Pagination](#6-pagination)
+7. [Idempotency and write tools](#7-idempotency-and-write-tools)
+8. [Annotations](#8-annotations)
+9. [Result size](#9-result-size)
+10. [Example inventory tool set](#10-example-inventory-tool-set)
+11. [Sources](#11-sources)
 
-## 1 · ชื่อ
+## 1 · Names
 
-| กฎ | ดี | ไม่ดี | เพราะ |
+| Rule | Good | Bad | Because |
 |---|---|---|---|
-| `<ระบบ>_<กริยา>_<สิ่งของ>` snake_case | `inventory_search_products` | `searchProducts` · `products` | prefix กันชนกับ server อื่นใน client เดียวกัน · กริยาบอกผลข้างเคียง |
-| กริยาชุดเดียวทั้ง server | `get` (1 ตัว) · `search`/`list` (หลายตัว) · `create` · `update` · `delete` | `fetch` ปนกับ `get` · `find` ปนกับ `search` | โมเดลเดาชื่อ tool ถัดไปได้จากแบบแผน |
-| สิ่งของเป็นพหูพจน์เมื่อคืนรายการ | `list_low_stock_items` | `list_low_stock_item` | บอกว่าคืน array |
-| ไม่ใส่เลขรุ่นหรือชื่อเทคโนโลยี | `erp_get_invoice` | `erp_get_invoice_v2` · `sql_get_invoice` | เปลี่ยนข้างในได้โดยไม่เปลี่ยนชื่อ |
-| ยาวไม่เกิน ~40 ตัวอักษร | `inventory_get_stock` | `inventory_get_current_stock_level_for_sku` | client บางตัวแสดงชื่อเต็ม |
+| `<system>_<verb>_<thing>` snake_case | `inventory_search_products` | `searchProducts` · `products` | The prefix avoids clashes with other servers in the same client · the verb tells the side effect |
+| One set of verbs across the whole server | `get` (1 item) · `search`/`list` (many) · `create` · `update` · `delete` | `fetch` mixed with `get` · `find` mixed with `search` | The model can guess the next tool name from the pattern |
+| The thing is plural when returning a list | `list_low_stock_items` | `list_low_stock_item` | Says it returns an array |
+| No version number or technology name | `erp_get_invoice` | `erp_get_invoice_v2` · `sql_get_invoice` | You can change the inside without changing the name |
+| At most ~40 characters | `inventory_get_stock` | `inventory_get_current_stock_level_for_sku` | Some clients show the full name |
 
-ชื่อ server: Python `<ระบบ>_mcp` หรือโฟลเดอร์ `<ระบบ>-mcp` · Node `<ระบบ>-mcp-server` · ไม่มีเลขรุ่น (แนว `mcp-builder`)
+Server name: Python `<system>_mcp` or folder `<system>-mcp` · Node `<system>-mcp-server` · no version number (the `mcp-builder` pattern)
 
-## 2 · พารามิเตอร์
+## 2 · Parameters
 
 ```python
 from typing import Annotated, Literal
@@ -44,121 +44,121 @@ def erp_search_invoices(
 ) -> dict: ...
 ```
 
-- **ทุกตัวมี type · ขอบเขต · description** — SDK แปลงเป็น JSON Schema ให้ client และปฏิเสธ input ผิดก่อนถึงโค้ดเรา
-- **ค่าที่มีชุดจำกัดใช้ `Literal`/enum** ไม่ใช่ str อิสระ — โมเดลเลือกจากรายการแทนการสะกดเอง
-- **วันที่เป็น ISO ค.ศ.** ในพารามิเตอร์และผลลัพธ์ · แปลงเป็น พ.ศ. ที่หน้าจอ ไม่ใช่ที่ tool (`i18n-and-locale`)
-- **ไม่รับ `dict` หรือ `Any`** — ถ้าต้องรับโครงซ้อน ใช้ Pydantic model ที่มี field ชัด
-- **ค่าเริ่มต้นปลอดภัย** — `limit` เล็ก · `status="open"` · ไม่มีค่าเริ่มต้นที่แปลว่า "ทั้งหมด"
-- **id เป็น str ที่มี pattern** แม้ข้างในเป็นเลข — กันโมเดลส่ง `1` แทน `"SKU-0001"`
-- พารามิเตอร์ ≤ 6 ตัวต่อ tool · เกินนั้นแตก tool หรือรวมเป็น model เดียว
+- **Every parameter has a type · bounds · description** — the SDK converts them to JSON Schema for the client and rejects bad input before it reaches our code
+- **Values from a limited set use `Literal`/enum**, not a free str — the model picks from a list instead of spelling it itself
+- **Dates are ISO in Common Era (ค.ศ.)** in parameters and results · convert to Buddhist Era (พ.ศ.) on screen, not in the tool (`i18n-and-locale`)
+- **Never accept `dict` or `Any`** — if you must accept a nested shape, use a Pydantic model with clear fields
+- **Safe defaults** — small `limit` · `status="open"` · no default that means "everything"
+- **An id is a str with a pattern** even if it is a number inside — stops the model from sending `1` instead of `"SKU-0001"`
+- At most 6 parameters per tool · beyond that, split the tool or combine them into one model
 
-## 3 · คำอธิบาย tool
+## 3 · Tool description
 
-docstring (Python) หรือ `description` (TypeScript) คือสิ่งที่โมเดลอ่านเพื่อเลือก tool — เขียน 1–2 ประโยค:
+The docstring (Python) or `description` (TypeScript) is what the model reads to pick a tool — write 1–2 sentences:
 
-1. ทำอะไร คืนอะไร — "หาใบแจ้งหนี้ของลูกค้า 1 รายตามสถานะ · คืน items · total · has_more"
-2. เมื่อไหร่ใช้ / ไม่ใช้ ถ้ามี tool คล้ายกัน — "ถ้ารู้เลขใบแจ้งหนี้แล้ว ใช้ erp_get_invoice แทน"
-3. ไม่เขียน "This tool…" · ไม่เล่าวิธีทำงานข้างใน · ไม่ใส่ตัวอย่าง JSON ยาว (schema บอกอยู่แล้ว)
+1. What it does and what it returns — "หาใบแจ้งหนี้ของลูกค้า 1 รายตามสถานะ · คืน items · total · has_more" (finds one customer's invoices by status · returns items · total · has_more)
+2. When to use / not use it, if a similar tool exists — "ถ้ารู้เลขใบแจ้งหนี้แล้ว ใช้ erp_get_invoice แทน" (if you already know the invoice number, use erp_get_invoice instead)
+3. Do not write "This tool…" · do not describe how it works inside · do not add long JSON examples (the schema already says it)
 
-`title` เป็นชื่อให้คนอ่านใน UI (ไทยได้) · `name` เป็นของโมเดล (อังกฤษ snake_case)
+`title` is the name for people to read in the UI (Thai is fine) · `name` belongs to the model (English snake_case)
 
-## 4 · ผลลัพธ์
+## 4 · Results
 
-| คืนจากฟังก์ชัน | `structured_content` | `content` (ข้อความ) |
+| Function returns | `structured_content` | `content` (text) |
 |---|---|---|
-| `dict[str, …]` · Pydantic model · TypedDict · dataclass | object นั้นตรง ๆ | JSON ของ object เดียวกัน |
-| `int` · `str` · `float` · `bool` | `{"result": ค่า}` | ค่าเป็นข้อความ |
-| `list[…]` | `{"result": [...]}` | TextContent ทีละรายการ |
+| `dict[str, …]` · Pydantic model · TypedDict · dataclass | The object itself | JSON of the same object |
+| `int` · `str` · `float` · `bool` | `{"result": value}` | The value as text |
+| `list[…]` | `{"result": [...]}` | One TextContent per item |
 
-(พฤติกรรม Python SDK v2 · servers/structured-output · ตรวจ 2026-10-23)
+(Python SDK v2 behavior · servers/structured-output · checked 2026-10-23)
 
-- **คืน dict เสมอ** สำหรับ tool จริง — ได้ field ชื่อชัดและเติม field ใหม่ได้โดยไม่พังของเก่า · ไม่คืน list เปล่า (จะถูกห่อเป็น `result` และแตกเป็นหลาย content block)
-- ชื่อ field snake_case ชุดเดียวทั้ง server · เวลาเป็น ISO 8601 · เงินเป็นเลขทศนิยม + `currency` · ไม่มี `null` ที่แปลว่า "ไม่ส่ง" ปนกับ "ไม่มีค่า"
-- รายการใช้โครงเดียวทั้ง server: `{"items": [...], "total": n, "has_more": bool, "next_offset": n}` (หรือ `next_cursor`)
-- ประกาศ output schema เมื่อ client ต้อง validate (`outputSchema` ในสเปก) — Python SDK สร้างจาก return type ของ model ให้ · dict เปล่าไม่มี schema
-- `response_format: Literal["json", "markdown"]` เป็นพารามิเตอร์ เมื่อ tool เดียวกันต้องให้ทั้งโมเดลคำนวณต่อ (json) และคนอ่าน (markdown) — ถ้าไม่มีกรณีคนอ่าน ไม่ต้องมี
+- **Always return a dict** for real tools — you get clearly named fields and can add new fields without breaking old ones · never return a bare list (it gets wrapped in `result` and split into many content blocks)
+- Field names in one snake_case style across the server · time as ISO 8601 · money as a decimal number + `currency` · no `null` that means "not sent" mixed with "no value"
+- Lists use one shape across the server: `{"items": [...], "total": n, "has_more": bool, "next_offset": n}` (or `next_cursor`)
+- Declare an output schema when the client must validate (`outputSchema` in the spec) — the Python SDK builds it from a model's return type · a bare dict has no schema
+- `response_format: Literal["json", "markdown"]` is a parameter, when the same tool must serve both the model computing further (json) and a person reading (markdown) — if there is no human-reader case, leave it out
 
-## 5 · error เป็นข้อมูล
+## 5 · Errors as data
 
-สเปกแยก error 2 ชั้น (server/tools → Error Handling):
+The spec separates errors into 2 layers (server/tools → Error Handling):
 
-| ชั้น | ใช้เมื่อ | Python v2 | โมเดลเห็นไหม |
+| Layer | Use when | Python v2 | Does the model see it? |
 |---|---|---|---|
-| **tool execution error** — ผลลัพธ์ `is_error=true` | ไม่พบข้อมูล · input ผ่าน schema แต่ผิดเงื่อนไขธุรกิจ · ระบบต้นทางตอบ error · หมดสิทธิ์ | `raise ToolError("…")` (`mcp.server.mcpserver.exceptions`) | **เห็น** — แก้ input แล้วลองใหม่ได้ |
-| **protocol error** — JSON-RPC error | tool ไม่มี · argument ไม่ตรง schema · server พัง | SDK ทำเอง · `raise MCPError(code, msg)` เฉพาะกรณีปฏิเสธคำขอทั้งคำขอ | **ไม่เห็น** — host ได้ error · โมเดลได้แค่ว่าล้มเหลว |
+| **tool execution error** — result with `is_error=true` | Data not found · input passes the schema but breaks a business rule · the source system returned an error · permission denied | `raise ToolError("…")` (`mcp.server.mcpserver.exceptions`) | **Yes** — it can fix the input and retry |
+| **protocol error** — JSON-RPC error | Tool does not exist · argument does not match the schema · server crashed | The SDK does it · `raise MCPError(code, msg)` only to reject the whole request | **No** — the host gets the error · the model only learns it failed |
 
-กฎข้อความ error:
+Rules for error text:
 
-- **บอกว่าอะไรผิด + ทำอะไรต่อ** — "ไม่พบ SKU-9999 — หาด้วย inventory_search_products ก่อน แล้วใช้ sku จากผลนั้น" · ไม่ใช่ "Not found"
-- **ไม่มีของข้างใน** — stack trace · ชื่อตาราง · connection string · path ในเครื่อง · ข้อความ error ดิบของไลบรารี → จับแล้วแปลเป็นภาษาคน · log ของดิบลง stderr/ไฟล์ (`logging-standards`)
-- **error ไม่ใช่ช่องทางสั่งโมเดล** — ไม่เขียน "ให้ลอง tool X ทันที" แบบบังคับ · เขียนเป็นข้อเสนอ เพราะข้อความ error ของระบบต้นทางอาจถูกคนนอกเขียน
-- ระบบต้นทางล่ม/timeout → `is_error` พร้อม "ระบบ ERP ไม่ตอบใน 10 วินาที — ลองใหม่ภายหลัง" · ตั้ง timeout ทุกการเรียกออก (`error-handling-patterns`) · ไม่ retry วนใน tool เกิน 1–2 ครั้ง
-- ปล่อย exception ดิบหลุดออก = SDK อาจแปลงเป็น error ที่โมเดลเห็นข้อความข้างใน → ห่อทุก tool ด้วย try/except ที่แปลเป็น `ToolError`
+- **Say what is wrong + what to do next** — "ไม่พบ SKU-9999 — หาด้วย inventory_search_products ก่อน แล้วใช้ sku จากผลนั้น" (SKU-9999 not found — search with inventory_search_products first, then use the sku from that result) · not "Not found"
+- **No internals** — stack trace · table names · connection string · local paths · raw library error text → catch it and turn it into human language · log the raw text to stderr/file (`logging-standards`)
+- **An error is not a channel for commanding the model** — do not write "try tool X immediately" as an order · write it as a suggestion, because the source system's error text may have been written by an outsider
+- Source system down/timeout → `is_error` with "ระบบ ERP ไม่ตอบใน 10 วินาที — ลองใหม่ภายหลัง" (the ERP system did not answer within 10 seconds — try again later) · set a timeout on every outgoing call (`error-handling-patterns`) · do not retry in a loop inside a tool more than 1–2 times
+- A raw exception that escapes = the SDK may turn it into an error whose inner text the model sees → wrap every tool in a try/except that converts to `ToolError`
 
-## 6 · แบ่งหน้า
+## 6 · Pagination
 
-- ทุก tool ที่คืนรายการ **ต้องมี `limit`** (1–50 · ค่าเริ่มต้น 20) · ไม่มี tool ที่คืน "ทั้งหมด" โดยไม่มีเพดาน
-- `offset` เมื่อข้อมูลนิ่งและนับได้ · `cursor` (ทึบ · ออกโดย server) เมื่อข้อมูลเปลี่ยนบ่อยหรือมาจาก API ที่ใช้ cursor อยู่แล้ว · ไม่ผสม 2 แบบใน server เดียว
-- คืน `has_more` เสมอ · `next_offset`/`next_cursor` เมื่อ `has_more=true` · `total` เมื่อนับได้ถูกในราคาถูก (SQL `COUNT`) · ไม่คืน `total` ที่ประมาณ
-- query ใช้ `LIMIT ? OFFSET ?` ที่ฐานข้อมูล — ไม่ดึงทั้งตารางมาตัดใน Python
-- โมเดลมักไม่ไล่หน้าเอง → ให้ตัวกรองที่ดี (สถานะ · ช่วงวันที่ · หมวด) สำคัญกว่าหน้าถัดไป
+- Every tool that returns a list **must have `limit`** (1–50 · default 20) · no tool returns "everything" without a cap
+- `offset` when the data is stable and countable · `cursor` (opaque · issued by the server) when the data changes often or comes from an API that already uses cursors · do not mix the 2 styles in one server
+- Always return `has_more` · `next_offset`/`next_cursor` when `has_more=true` · `total` when it can be counted correctly and cheaply (SQL `COUNT`) · never return an estimated `total`
+- Queries use `LIMIT ? OFFSET ?` in the database — do not pull the whole table and cut it in Python
+- The model often does not page by itself → good filters (status · date range · category) matter more than the next page
 
-## 7 · idempotency และ tool เขียน
+## 7 · Idempotency and write tools
 
-| ประเภท | ตัวอย่าง | ออกแบบ |
+| Type | Example | Design |
 |---|---|---|
-| อ่าน | `get` · `search` · `list` | ไม่มีผลข้างเคียง · `read_only_hint=True` · `idempotent_hint=True` · เรียกซ้ำกี่ครั้งก็เหมือนเดิม |
-| เขียนแบบซ้ำได้ | `update_stock(sku, qty=50)` ตั้งค่า · `set_status` | รับ "ค่าปลายทาง" ไม่ใช่ "ส่วนต่าง" (`qty=50` ไม่ใช่ `delta=-3`) · `idempotent_hint=True` · เรียกซ้ำแล้วผลเท่าเดิม |
-| เขียนแบบซ้ำไม่ได้ | `create_purchase_order` · `send_line_message` | รับ `idempotency_key` จากผู้เรียก · server จำ key 24 ชั่วโมง คืนผลเดิมเมื่อซ้ำ (`principle-safe-to-rerun`) · `idempotent_hint=False` |
-| ทำลาย | `delete` · `cancel` · ส่งเงิน | `destructive_hint=True` · ต้องมี `confirm: Literal[True]` หรือ 2 ขั้น (เตรียม → ยืนยันด้วย id ที่ได้จากขั้นแรก) · audit log ก่อนและหลัง (`audit-trail`) |
+| Read | `get` · `search` · `list` | No side effect · `read_only_hint=True` · `idempotent_hint=True` · calling any number of times gives the same result |
+| Repeatable write | `update_stock(sku, qty=50)` set a value · `set_status` | Takes the "final value", not the "difference" (`qty=50`, not `delta=-3`) · `idempotent_hint=True` · calling again gives the same result |
+| Non-repeatable write | `create_purchase_order` · `send_line_message` | Takes an `idempotency_key` from the caller · the server remembers the key for 24 hours and returns the earlier result on a repeat (`principle-safe-to-rerun`) · `idempotent_hint=False` |
+| Destructive | `delete` · `cancel` · send money | `destructive_hint=True` · needs `confirm: Literal[True]` or 2 steps (prepare → confirm with the id from the first step) · audit log before and after (`audit-trail`) |
 
-- **tool เขียนทุกตัวอยู่หลัง env flag** (`<SERVER>_ALLOW_WRITE=1`) และลงทะเบียนในไฟล์แยก — server ที่ลูกค้ารันโดยไม่ตั้ง flag ไม่มี tool เขียนให้เห็นเลย
-- โมเดลเรียก tool เขียนซ้ำได้เสมอเมื่อ connection หลุดหรือมันไม่แน่ใจ → ออกแบบให้ "เรียกซ้ำแล้วไม่เสียหาย" เป็นค่าเริ่มต้น ไม่ใช่ข้อยกเว้น
-- ผลของ tool เขียนต้องคืน **สถานะหลังเขียน** (แถวที่อัปเดต · id ที่สร้าง) ไม่ใช่แค่ `"ok"` — โมเดลใช้ยืนยันกับผู้ใช้
+- **Every write tool sits behind an env flag** (`<SERVER>_ALLOW_WRITE=1`) and is registered in a separate file — a server the customer runs without the flag shows no write tools at all
+- The model can always call a write tool again when the connection drops or it is unsure → design "calling again does no harm" as the default, not the exception
+- A write tool's result must return the **state after the write** (the updated row · the created id), not just `"ok"` — the model uses it to confirm with the user
 
-## 8 · annotations
+## 8. Annotations
 
-| annotation | ค่าเริ่มต้นตามสเปก | ตั้งเป็น | หมายเหตุ |
+| Annotation | Spec default | Set to | Notes |
 |---|---|---|---|
-| `read_only_hint` | `false` | `True` ทุก tool อ่าน | client อาจไม่ถามยืนยันซ้ำ |
-| `destructive_hint` | `true` | `False` เมื่อเขียนแบบเพิ่ม/ตั้งค่า · `True` เมื่อลบหรือเปลี่ยนกลับไม่ได้ | มีผลเฉพาะเมื่อ `read_only_hint=False` |
-| `idempotent_hint` | `false` | `True` เมื่อเรียกซ้ำไม่เพิ่มผล | ดูข้อ 7 |
-| `open_world_hint` | `true` | `False` เมื่อ tool คุยกับระบบปิดของเรา (ฐานข้อมูล · ERP) · `True` เมื่อออกอินเทอร์เน็ต (ค้นเว็บ · เรียก API คนอื่น) | client ใช้ตัดสินความเสี่ยง |
+| `read_only_hint` | `false` | `True` for every read tool | The client may skip asking for confirmation again |
+| `destructive_hint` | `true` | `False` for additive/set writes · `True` for delete or irreversible change | Matters only when `read_only_hint=False` |
+| `idempotent_hint` | `false` | `True` when calling again adds no effect | See section 7 |
+| `open_world_hint` | `true` | `False` when the tool talks to our closed system (database · ERP) · `True` when it goes out to the internet (web search · calling others' APIs) | The client uses it to judge risk |
 
-- Python v2: `annotations=ToolAnnotations(read_only_hint=True, open_world_hint=False)` จาก `mcp.types` · ชื่อ snake_case (v1 เป็น camelCase)
-- เป็น**คำใบ้** — สเปกบอกให้ client ถือว่าไม่น่าเชื่อถือเว้นแต่ server ไว้ใจได้ · การป้องกันจริงคือบัญชีอ่านอย่างเดียว · flag · audit log
+- Python v2: `annotations=ToolAnnotations(read_only_hint=True, open_world_hint=False)` from `mcp.types` · snake_case names (v1 was camelCase)
+- They are **hints** — the spec tells clients to treat them as untrusted unless the server is trusted · real protection is a read-only account · flags · the audit log
 
-## 9 · ขนาดผลลัพธ์
+## 9 · Result size
 
-- Claude Code เตือนเมื่อผล tool เกิน 10,000 token · เพดานเริ่มต้น 25,000 (`MAX_MCP_OUTPUT_TOKENS`) · ข้อความสำเร็จยาวเกิน 50,000 ตัวอักษรถูกเก็บลงไฟล์แทน (code.claude.com/docs/en/mcp · 2026-10-23)
-- เป้า: ผลปกติ < 2,000 token · ผลใหญ่สุด < 10,000 — วัดด้วย Inspector แล้วจดในตาราง tool ของ README
-- วิธีลด: เลือกคอลัมน์ (`fields` พารามิเตอร์เมื่อจำเป็น) · ตัดข้อความอิสระที่ 200–500 ตัวอักษรพร้อม `…` และ `truncated: true` · ไม่ส่ง base64 ของไฟล์ — ส่ง `resource_link` หรือ path ให้ client อ่านเอง
-- ถ้าโมเดลต้องสรุปข้อมูลใหญ่ ให้ tool สรุปให้ (`count` · `sum` · `group by`) แทนส่งแถวดิบ
+- Claude Code warns when a tool result exceeds 10,000 tokens · default cap 25,000 (`MAX_MCP_OUTPUT_TOKENS`) · a successful text longer than 50,000 characters is saved to a file instead (code.claude.com/docs/en/mcp · 2026-10-23)
+- Target: normal results < 2,000 tokens · the largest result < 10,000 — measure with the Inspector and note it in the README's tool table
+- How to reduce: choose columns (a `fields` parameter when needed) · cut free text at 200–500 characters with `…` and `truncated: true` · do not send base64 of a file — send a `resource_link` or a path for the client to read itself
+- If the model must summarize big data, let the tool summarize (`count` · `sum` · `group by`) instead of sending raw rows
 
-## 10 · ตัวอย่างชุด tool คลังสินค้า
+## 10 · Example inventory tool set
 
-ชุดจริงสำหรับระบบคลังของลูกค้า SME (ต่อยอดจาก `assets/inventory-mcp/` ที่มี 3 ตัวแรก):
+A real set for an SME customer's inventory system (extending `assets/inventory-mcp/`, which has the first 3):
 
-| # | tool | ประเภท | annotations | พารามิเตอร์หลัก |
+| # | tool | Type | annotations | Main parameters |
 |---|---|---|---|---|
-| 1 | `inventory_search_products` | อ่าน | read_only · idempotent | `query_text` · `category?` · `limit` · `offset` |
-| 2 | `inventory_get_stock` | อ่าน | read_only · idempotent | `sku` |
-| 3 | `inventory_list_low_stock` | อ่าน | read_only · idempotent | `limit` |
-| 4 | `inventory_get_movements` | อ่าน | read_only · idempotent | `sku` · `since` (ISO) · `limit` |
-| 5 | `inventory_get_supplier` | อ่าน (มีข้อมูลติดต่อ → PDPA) | read_only · idempotent | `supplier_code` · เหตุผลที่ต้องเห็นเบอร์ติดต่อเขียนใน README |
-| 6 | `inventory_set_reorder_point` | เขียนแบบซ้ำได้ (flag) | destructive=False · idempotent | `sku` · `reorder_point` |
-| 7 | `inventory_create_purchase_order` | เขียนซ้ำไม่ได้ (flag) | destructive=False · idempotent=False | `supplier_code` · `lines[]` · `idempotency_key` |
-| 8 | `inventory_cancel_purchase_order` | ทำลาย (flag) | destructive=True | `po_id` · `confirm: Literal[True]` · `reason` |
+| 1 | `inventory_search_products` | read | read_only · idempotent | `query_text` · `category?` · `limit` · `offset` |
+| 2 | `inventory_get_stock` | read | read_only · idempotent | `sku` |
+| 3 | `inventory_list_low_stock` | read | read_only · idempotent | `limit` |
+| 4 | `inventory_get_movements` | read | read_only · idempotent | `sku` · `since` (ISO) · `limit` |
+| 5 | `inventory_get_supplier` | read (has contact data → PDPA) | read_only · idempotent | `supplier_code` · the reason contact numbers must be shown is written in the README |
+| 6 | `inventory_set_reorder_point` | repeatable write (flag) | destructive=False · idempotent | `sku` · `reorder_point` |
+| 7 | `inventory_create_purchase_order` | non-repeatable write (flag) | destructive=False · idempotent=False | `supplier_code` · `lines[]` · `idempotency_key` |
+| 8 | `inventory_cancel_purchase_order` | destructive (flag) | destructive=True | `po_id` · `confirm: Literal[True]` · `reason` |
 
-8 tool · ชื่อแบบแผนเดียว · 5 อ่าน 3 เขียน · ทุกตัวมี `limit` เมื่อคืนรายการ · tool 6–8 ลงทะเบียนเฉพาะเมื่อ `INVENTORY_ALLOW_WRITE=1`
+8 tools · one naming pattern · 5 read 3 write · every one has `limit` when it returns a list · tools 6–8 are registered only when `INVENTORY_ALLOW_WRITE=1`
 
-## 11 · แหล่งที่มา
+## 11 · Sources
 
-| เรื่อง | ที่มา (ตรวจ 2026-10-23) |
+| Topic | Source (checked 2026-10-23) |
 |---|---|
-| tool definition · result · `isError` 2 ชั้น · annotations default · server MUST validate | modelcontextprotocol.io/specification/2025-06-18/server/tools (รุ่น 2026-07-28 ขยาย schema ให้รับ JSON Schema 2020-12 ทุก keyword — changelog) |
+| tool definition · result · `isError` 2 layers · annotations default · server MUST validate | modelcontextprotocol.io/specification/2025-06-18/server/tools (version 2026-07-28 widens the schema to accept every JSON Schema 2020-12 keyword — changelog) |
 | `ToolError` vs `MCPError` · structured output wrapping | py.sdk.modelcontextprotocol.io → servers/handling-errors · servers/structured-output · servers/tools |
-| ชื่อ `{service}_{action}_{resource}` · pagination 20–50 · `response_format` · error มีขั้นถัดไป · annotations table · ชื่อ server | github.com/anthropics/skills → skills/mcp-builder/reference/mcp_best_practices.md (Apache-2.0 · เรียบเรียงใหม่) |
-| เพดาน token ของผล tool | code.claude.com/docs/en/mcp |
-| idempotency key · 2 ขั้นสำหรับงานทำลาย | แนวทางทีม + `principle-safe-to-rerun` · ไม่ใช่ข้อกำหนดสเปก |
-| ตัวเลขเป้า < 2,000 / < 10,000 token · พารามิเตอร์ ≤ 6 · ข้อความอิสระ 200–500 ตัว | ค่าตั้งต้นของทีม · ยังไม่ได้วัดกับงานจริง |
+| Naming `{service}_{action}_{resource}` · pagination 20–50 · `response_format` · errors with a next step · annotations table · server name | github.com/anthropics/skills → skills/mcp-builder/reference/mcp_best_practices.md (Apache-2.0 · rewritten) |
+| Token cap of a tool result | code.claude.com/docs/en/mcp |
+| idempotency key · 2 steps for destructive work | Team guidance + `principle-safe-to-rerun` · not a spec requirement |
+| Target numbers < 2,000 / < 10,000 tokens · parameters ≤ 6 · free text 200–500 characters | Team starting values · not yet measured on real work |

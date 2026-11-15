@@ -1,16 +1,16 @@
-# playbook · portfolio-check — ดูพอร์ตและเงินปันผล
+# playbook · portfolio-check — check the portfolio and dividends
 
-ใช้เมื่อ: "พอร์ตตอนนี้เป็นอย่างไร" · สิ้นเดือน · ฤดูปันผล
-skill หลัก: `portfolio-snapshot` · `dividend-tracker` · `news-impact` · agent `market-analyst`
+Use when: "how is the portfolio now" · end of the month · dividend season.
+Main skill: `portfolio-snapshot` · `dividend-tracker` · `news-impact` · agent `market-analyst`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน (Steps — copy into the todo as written)
 
-1. อ่านรายการถือครองจากไฟล์ของผู้ใช้ และดึงราคาปัจจุบันพร้อมเวลา ส่งกลับเป็นตาราง ไม่เกิน 20 แถว · ใคร: `market-analyst` ตัวใหม่
-2. ทำหน้าเดียวตาม `portfolio-snapshot` — สัดส่วน กำไรขาดทุน เงินสด รายได้ การกระจุกตัว · ใคร: `market-analyst` ตัวใหม่
-3. สรุปปันผลตาม `dividend-tracker`: วันขึ้น XD · วันจ่าย · ยอดหลังภาษี · ใคร: `market-analyst` ตัวใหม่
-4. เลือกข่าวที่กระทบตัวที่ถือ ไม่เกิน 5 ข่าว · ใคร: `market-analyst` ตัวใหม่
-5. ตรวจ — มูลค่ารวมตรงกับผลรวมรายตัว และทุกราคามีเวลา · ใคร: `reviewer` ตัวใหม่
+1. Read the holdings from the user's file and fetch current prices with their time, returned as a table of at most 20 rows · ใคร: `market-analyst` ตัวใหม่
+2. Make a single page under `portfolio-snapshot` — weights · profit and loss · cash · income · concentration · ใคร: `market-analyst` ตัวใหม่
+3. Summarise dividends under `dividend-tracker`: XD date · payment date · amount after tax · ใคร: `market-analyst` ตัวใหม่
+4. Pick the news that affects the holdings, at most 5 items · ใคร: `market-analyst` ตัวใหม่
+5. ตรวจ that the total value matches the sum of the individual holdings and that every price has a time · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-หน้าสรุปพอร์ตที่ตัวเลขรวมตรงกัน ทุกราคามีเวลาอ้างอิง
+A portfolio summary page whose totals match, and every price has a reference time.

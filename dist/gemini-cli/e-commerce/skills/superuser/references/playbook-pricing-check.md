@@ -1,16 +1,16 @@
-# playbook · pricing-check — ตรวจกำไรและตั้งราคาใหม่
+# playbook · pricing-check — checking profit and repricing
 
-ใช้เมื่อ: ขายแล้วไม่เหลือกำไร · ค่าธรรมเนียมเปลี่ยน · จะจัดโปรลดราคา
-skill หลัก: `marketplace-fees-pricing` · `shipping-compare` · `seller-tax-basics`
+Use when: selling without profit left · fees changed · about to run a discount promotion
+Main skills: `marketplace-fees-pricing` · `shipping-compare` · `seller-tax-basics`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน (Steps — copy into the todo exactly)
 
-1. คัดต้นทุนและราคาขายปัจจุบันของทุก SKU ที่เกี่ยว · ใคร: `shop-manager` ตัวใหม่
-2. คิดกำไรจริงต่อชิ้นต่อแพลตฟอร์มหลังหักค่าธรรมเนียมทุกตัว ค่าส่ง และส่วนลด · ใคร: `shop-manager` ตัวใหม่
-3. ทำราคาใหม่หรือเพดานส่วนลดที่ยังได้กำไรตามเป้า (margin) · ใคร: `shop-manager` ตัวใหม่
-4. ถ้ายอดขายใกล้เกณฑ์จด VAT ให้ชี้ไป `seller-tax-basics` · ใคร: หัวหน้าทีม
-5. ตรวจโดยคำนวณซ้ำด้วยสูตรในสเปรดชีต ตัวเลขต้องตรงกันทุกแถว · ใคร: `reviewer` ตัวใหม่
+1. Pull the current cost and selling price of every SKU involved · ใคร: `shop-manager` ตัวใหม่
+2. Work out the real profit per item per platform after every fee, shipping and discounts · ใคร: `shop-manager` ตัวใหม่
+3. Make the new price or the discount cap that still meets the target margin · ใคร: `shop-manager` ตัวใหม่
+4. If sales are near the VAT registration threshold, point to `seller-tax-basics` · ใคร: หัวหน้าทีม
+5. Check (ตรวจ) by recalculating with the spreadsheet formulas. The numbers must match on every row · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-ตารางกำไรต่อ SKU ต่อแพลตฟอร์ม และราคาใหม่ที่ผ่านเป้า margin
+A profit table per SKU per platform, and new prices that meet the target margin.

@@ -1,24 +1,24 @@
-# playbook ของงานซอฟต์แวร์
+# Software work playbooks
 
-ย้ายมาจาก `superuser` หัวข้อ 2 (ลดขนาดไฟล์หลักที่โหลดทุกครั้ง 2026-11-11) · หัวหน้าทีมเปิดไฟล์นี้เมื่องานขนาดกลางขึ้นไป
+Moved from `superuser` section 2 (to shrink the main file that loads every time, 2026-11-11) · the team lead opens this file when the work is medium size or bigger.
 
-งานขนาดกลางขึ้นไป เลือก **1** ตัว หรือประกอบตาม `playbook-template` แล้วอ่านทั้งไฟล์ก่อนเริ่ม · เข้าได้ 2 ตัว → ท้าย [`triggers`](triggers.md)
+For medium-size work and up, choose **1** playbook, or compose one per `playbook-template`, and read the whole file before starting · if 2 apply → the end of [`triggers`](triggers.md)
 
-| playbook | ใช้เมื่อ |
+| playbook | Use when |
 |---|---|
-| [`investigation`](playbook-investigation.md) | คำถามอ่านอย่างเดียว — X ทำงานอย่างไร · ทำไมถึงทำแบบนี้ · ควรวางไว้ที่ไหน · เรื่องนอกโค้ด → `prior-art-review` · `reference-app-research` ([`triggers`](triggers.md)) |
-| [`pickup-and-pause`](playbook-pickup-and-pause.md) | ทำต่อจากที่ค้าง · รับงานต่อจาก agent อื่น · หยุดงานให้รับต่อได้ |
-| [`new-project`](playbook-new-project.md) | เริ่มโปรเจกต์ใหม่ที่ยังไม่มีโค้ด จนรันและพิสูจน์ได้ |
-| [`feature`](playbook-feature.md) | เพิ่มหรือเปลี่ยนพฤติกรรมของโปรแกรมที่มีอยู่ |
-| [`bug-fix`](playbook-bug-fix.md) | มีของพัง — error · test ล้ม · หน้าจอผิด · หน่วยความจำรั่ว · ผู้ใช้แจ้ง |
-| [`refactor`](playbook-refactor.md) | เปลี่ยนโครงสร้างโดยพฤติกรรมเท่าเดิม · ย้ายระบบ |
-| [`performance`](playbook-performance.md) | ช้า · กินเครื่อง · อยากให้ตัวเลขตัวหนึ่งดีขึ้นถึงเป้า |
-| [`visual-parity`](playbook-visual-parity.md) | หน้าจอจริงต้องตรงกับ mockup หรือระบบเดิม |
-| [`prototype`](playbook-prototype.md) | มีทางเลือกที่ตอบได้ด้วยการลองรันจริง ไม่ต้องถามคน |
-| [`review`](playbook-review.md) | ตรวจโค้ด ดีไซน์ หรือเอกสาร ก่อนส่ง |
-| [`ship`](playbook-ship.md) | เปิด Pull Request (PR) · ดูแลจน Continuous Integration (CI) เขียว · แก้ตามรีวิว · เตรียม merge |
-| [`project-docs`](playbook-project-docs.md) | เอกสารโปรเจกต์ตามชุด prompt ของ SQT-Marketplace — Business Requirements Document (BRD) · Software Requirements Specification (SRS) · mockup · Functional Specification Document (FSD) · คู่มือ |
-| [`unattended-run`](playbook-unattended-run.md) | งานยาวหรือหลายเฟสที่คนไม่อยู่ดู — "ทำให้เสร็จ เดี๋ยวกลับมาดู" · "ทำทั้งคืน" |
-| [`skill-authoring`](playbook-skill-authoring.md) | เขียนหรือแก้ skill · agent · prompt แล้วทดสอบว่าช่วยจริง |
-| [`learn-from-session`](playbook-learn-from-session.md) | ผู้ใช้สั่ง "รวมบทเรียน" · "reflect" · แก้ทีมเรื่องเดิมซ้ำ |
-| [`housekeeping`](playbook-housekeeping.md) | เก็บกวาด worktree · branch · sandbox · image เก่า |
+| [`investigation`](playbook-investigation.md) | A read-only question — how X works · why it is done this way · where something should go · for matters outside the code → `prior-art-review` · `reference-app-research` ([`triggers`](triggers.md)) |
+| [`pickup-and-pause`](playbook-pickup-and-pause.md) | Continue from where it was left · take over from another agent · pause so someone can take over |
+| [`new-project`](playbook-new-project.md) | Start a new project that has no code yet, until it runs and can be proven |
+| [`feature`](playbook-feature.md) | Add or change the behavior of an existing program |
+| [`bug-fix`](playbook-bug-fix.md) | Something is broken — an error · a failing test · a wrong screen · a memory leak · a user report |
+| [`refactor`](playbook-refactor.md) | Change the structure with the same behavior · migrate a system |
+| [`performance`](playbook-performance.md) | Slow · heavy on the machine · you want one number to improve to a target |
+| [`visual-parity`](playbook-visual-parity.md) | The real screen must match a mockup or the old system |
+| [`prototype`](playbook-prototype.md) | A choice that can be answered by trying it for real, without asking a person |
+| [`review`](playbook-review.md) | Check code, a design or a document before sending |
+| [`ship`](playbook-ship.md) | Open a Pull Request (PR) · keep it going until Continuous Integration (CI) is green · fix per review · prepare to merge |
+| [`project-docs`](playbook-project-docs.md) | Project documents following the SQT-Marketplace prompt set — Business Requirements Document (BRD) · Software Requirements Specification (SRS) · mockup · Functional Specification Document (FSD) · manual |
+| [`unattended-run`](playbook-unattended-run.md) | Long or multi-phase work with nobody watching — "finish it, I'll come back to look" · "do it overnight" |
+| [`skill-authoring`](playbook-skill-authoring.md) | Write or edit a skill · agent · prompt and test that it really helps |
+| [`learn-from-session`](playbook-learn-from-session.md) | The user orders "collect the lessons" · "reflect" · the team keeps fixing the same issue |
+| [`housekeeping`](playbook-housekeeping.md) | Clean up old worktrees · branches · sandboxes · images |

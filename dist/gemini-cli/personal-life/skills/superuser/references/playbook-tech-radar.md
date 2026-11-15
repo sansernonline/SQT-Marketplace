@@ -1,16 +1,16 @@
-# playbook · tech-radar — เรดาร์เทคโนโลยีประจำสัปดาห์
+# playbook · tech-radar — weekly technology radar
 
-ใช้เมื่อ: ตามข่าวของไลบรารีและเครื่องมือที่ใช้ · "สัปดาห์นี้มีอะไรเปลี่ยน"
-skill หลัก: `tech-radar`
+Use when: following news of the libraries and tools in use · "what changed this week"
+Main skill: `tech-radar`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน (Steps — copy into the todo as written)
 
-1. อ่านรายการที่ติดตามจากไฟล์เรดาร์ของผู้ใช้ ถ้ายังไม่มีไฟล์ ให้สร้างจาก dependency ของโปรเจกต์ผู้ใช้ · ใคร: หัวหน้าทีม
-2. ดู release notes และ changelog ทางการของแต่ละตัว นับจากรอบที่แล้วถึงวันนี้ · ใคร: `tech-mentor` ตัวใหม่
-3. คัดเหลือเฉพาะที่กระทบงานของผู้ใช้ — breaking change · ช่องโหว่ · ฟีเจอร์ที่ช่วยงานตรง ๆ · ใคร: `tech-mentor` ตัวใหม่
-4. เขียนรายงานเรดาร์ตามแม่แบบ — เปลี่ยนอะไร · สำคัญอย่างไร · ทำอะไรต่อ · อะไรข้ามได้ · ใคร: `tech-mentor` ตัวใหม่
-5. ตรวจว่าทุกข้อมีลิงก์ทางการและเลขเวอร์ชัน · ใคร: `reviewer` ตัวใหม่
+1. Read the tracked items from the user's radar file. If there is no file yet, build it from the dependencies of the user's project · ใคร: หัวหน้าทีม
+2. Read the official release notes and changelog of each item, from the last round to today · ใคร: `tech-mentor` ตัวใหม่
+3. Keep only what affects the user's work — breaking changes · vulnerabilities · features that directly help the work · ใคร: `tech-mentor` ตัวใหม่
+4. Write the radar report from the template — what changed · why it matters · what to do next · what can be skipped · ใคร: `tech-mentor` ตัวใหม่
+5. ตรวจ that every item has an official link and a version number · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-รายงานเรดาร์ที่ทุกข้อมีลิงก์ทางการ และไฟล์เรดาร์อัปเดตวันที่รอบนี้
+A radar report where every item has an official link, and the radar file is updated with this round's date.

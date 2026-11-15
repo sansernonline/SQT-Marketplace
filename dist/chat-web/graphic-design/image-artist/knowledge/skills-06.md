@@ -2,56 +2,56 @@
 
 Use when a task writes temporary files into a project
 
-# ระเบียบไฟล์ชั่วคราว
+# Temporary file discipline
 
-> **กฎข้อเดียว:** อะไรที่ไม่ใช่ผลงานจริง ต้องอยู่ใน `_to_delete/` เท่านั้น
-> ห้ามวางไว้ที่รากโปรเจกต์ ห้ามวางปนกับไฟล์งาน
+> **One rule:** anything that is not a real work product must live only in `_to_delete/`.
+> Never leave it in the project root, and never mix it with work files.
 
 ---
 
-## เลือกที่วาง
+## Choose where to put it
 
-| ไฟล์นั้นคืออะไร | วางที่ |
+| What the file is | Put it in |
 |---|---|
-| ของชั่วคราวของงานในโปรเจกต์ผู้ใช้ (ภาพตรวจ · log · สคริปต์ครั้งเดียว · ผลรัน) | `_to_delete/<โฟลเดอร์งาน>/` ที่รากโปรเจกต์ (หัวข้อ "วิธีใช้") ผู้ใช้จะได้ตรวจย้อนได้ |
-| ขั้นกลางที่ไม่ผูกกับโปรเจกต์ใด (ไม่ได้ทำงานในโฟลเดอร์ผู้ใช้) | พื้นที่ทำงานของเซสชัน |
-| ผลงานที่ผู้ใช้จะเก็บไว้ | โฟลเดอร์ปลายทางของงานนั้น |
+| Temporary items of work in the user's project (check images · logs · one-off scripts · run results) | `_to_delete/<task folder>/` at the project root (section "How to use"), so the user can check back later |
+| An intermediate step not tied to any project (not working in the user's folder) | The session's workspace |
+| A work product the user will keep | The destination folder of that work |
 
-**รากโปรเจกต์ต้องไม่มีไฟล์ชั่วคราวเลย**
-- ถ้า agent สร้างไฟล์ชั่วคราวแล้วไปตกที่ราก (log · ภาพ · สคริปต์ลอง) ให้ย้ายเข้า `_to_delete/` ทันที
-- ถ้าไม่แน่ใจว่าผู้ใช้สร้างหรือใช้ไฟล์นั้นอยู่ ไม่ต้องย้ายเอง ให้บอกผู้ใช้
-- รันจากในโฟลเดอร์ย่อย (เช่น โฟลเดอร์โค้ด ดู `project-bootstrap` ใน plugin `software-development`) ให้เขียนของชั่วคราวไปที่ `_to_delete/` ของ**รากโปรเจกต์** ไม่สร้างซ้อน
-
----
-
-## อะไรคือไฟล์ชั่วคราว
-
-- ไฟล์บีบอัดที่ส่งผ่านแชทเพื่อเอาไฟล์ลงเครื่อง และโฟลเดอร์ที่แตกออกมา
-- ภาพที่เรนเดอร์ไว้ตรวจงาน · ภาพหน้าจอ · ไฟล์ตัวอย่างที่ทำไว้เทียบ
-- สำเนาสำรองของไฟล์ที่กำลังแก้ · ไฟล์ `.bak` `.old` `.tmp` `ไฟล์ (1).xlsx`
-- สคริปต์ที่เขียนขึ้นใช้ครั้งเดียว · ไฟล์ log จากการรันครั้งเดียว
-- ไฟล์รูปแบบกลางระหว่างแปลง เช่น `.svg` ที่แปลงต่อเป็น `.png` แล้ว
-- **เอกสารที่แปลงรูปแบบมาเพื่อให้อ่านหรือประมวลผลง่าย** — `.docx` หรือ `.pdf` ที่แปลงเป็น `.md`
-  ต้นฉบับคือของจริง ส่วนตัวที่แปลงคือของชั่วคราว **ห้ามวางปนกันในโฟลเดอร์เอกสาร**
-  ไม่งั้นอีก 3 เดือนไม่มีใครรู้ว่าไฟล์ไหนคือฉบับที่ลูกค้าเซ็นรับ
-- เวอร์ชันเก่าของไฟล์ที่เพิ่งแทนที่ไป
-
-**ไฟล์ที่เลิกใช้แล้วก็คือไฟล์ชั่วคราว** — เมื่อแทนที่ไฟล์เก่าด้วยของใหม่แล้ว ให้ย้ายตัวเก่าเข้า `_to_delete/`
-ไม่ทิ้งไว้ข้าง ๆ กัน
+**The project root must hold no temporary files at all.**
+- If an agent creates a temporary file and it lands in the root (log · image · trial script), move it into `_to_delete/` right away
+- If you are not sure whether the user created or is using that file, do not move it yourself; tell the user
+- When running from inside a subfolder (for example the code folder, see `project-bootstrap` in plugin `software-development`), write temporary things to the **project root's** `_to_delete/`, and do not create a nested one
 
 ---
 
-## อะไรไม่ใช่
+## What counts as a temporary file
 
-- ผลงานที่ผู้ใช้ขอ
-- ไฟล์ต้นทางของผลงาน เช่น ไฟล์ออกแบบ `.psd` `.fig` · `.py` ที่ผลิตรูป · `.html` ที่เป็นแหล่งที่มาของภาพ —
-  **ปีหน้าจะแก้ก็ต้องมีไฟล์ต้นทาง** จึงเก็บไว้ในโฟลเดอร์ย่อยข้างผลงาน ไม่ใช่ `_to_delete/`
-- ไฟล์ที่ผู้ใช้วางไว้เอง แม้จะดูเหมือนขยะ — **ห้ามย้ายของผู้ใช้โดยไม่ถาม**
-- output ของเครื่องมือ build (`build/` · `node_modules/`) — ปล่อยไว้ ตรวจว่าอยู่ใน `.gitignore` และห้ามย้ายเข้า `_to_delete/`
+- A compressed file sent through chat to get files onto the machine, and the folder it was extracted to
+- Images rendered to check work · screenshots · sample files made for comparison
+- Backup copies of a file being edited · files `.bak` `.old` `.tmp` `ไฟล์ (1).xlsx` (`ไฟล์` = "file")
+- Scripts written for one use · log files from a one-time run
+- Intermediate-format files during a conversion, such as an `.svg` already converted to `.png`
+- **Documents converted to another format to make them easier to read or process** — a `.docx` or `.pdf` converted to `.md`
+  The original is the real thing and the converted one is temporary. **Never mix them in the documents folder**,
+  or in 3 months nobody knows which file is the version the client signed off
+- Old versions of a file that was just replaced
+
+**A file no longer in use is a temporary file** — when you replace an old file with a new one, move the old one into `_to_delete/`
+and do not leave them side by side.
 
 ---
 
-## วิธีใช้
+## What does not count
+
+- A work product the user asked for
+- Source files of a work product, such as design files `.psd` `.fig` · a `.py` that produces an image · an `.html` that is the source of an image —
+  **if you will edit next year, you need the source file**, so keep it in a subfolder beside the work product, not in `_to_delete/`
+- Files the user placed themselves, even if they look like junk — **never move the user's things without asking**
+- Output of build tools (`build/` · `node_modules/`) — leave it, check that it is in `.gitignore`, and never move it into `_to_delete/`
+
+---
+
+## How to use
 
 ```
 โปรเจกต์/
@@ -66,52 +66,54 @@ Use when a task writes temporary files into a project
     └── superuser-lock/            ← ของเครื่องมือ ไม่ใช่ของงาน
 ```
 
-- มีโฟลเดอร์ `_to_delete/` เดียวที่**รากของโปรเจกต์** · ข้างในแบ่ง **1 โฟลเดอร์ต่อ 1 งาน** ของจะได้ไม่ปนกัน และลบทั้งงานได้ในครั้งเดียว
-- **ชื่อโฟลเดอร์งาน** `YYYY-MM-DD-<เรื่อง>` · วันที่คือวันเริ่มงาน · เรื่องเป็นอังกฤษตัวเล็กคั่น `-` ยาว 2–5 คำ บอกว่าทำอะไร (`2026-11-06-temp-task-folders` ไม่ใช่ `2026-11-06-task1`) · เรียงตามชื่อแล้วได้ลำดับเวลาเลย
-- **ตั้งโฟลเดอร์ตอนเริ่มงาน** ก่อนเขียนไฟล์ชั่วคราวไฟล์แรก · งานเดิมที่สั่งต่อหลายรอบหรือข้าม session ใช้โฟลเดอร์เดิม (หาจาก `find _to_delete -mindepth 1 -maxdepth 1 -type d -printf '%f\n'`) · เรื่องใหม่ตั้งโฟลเดอร์ใหม่ · งานแตกให้ลูกทีม ลูกทีมเขียนลงโฟลเดอร์งานของหัวหน้า บอก path ในใบสั่งงาน
-- **ห้ามวางไฟล์ไว้ตรง `_to_delete/`** · ยกเว้นของที่เครื่องมือหรือ hook สร้างเองที่ตำแหน่งตายตัว (`superuser-lock/` · `STOP`) และแผนลบ `delete-plan.txt` (สคริปต์ตรวจบังคับให้อยู่ตรง `_to_delete/`) ซึ่งไม่ย้าย
-- **skill อื่นเขียน `_to_delete/<x>`** (เช่น `_to_delete/screenshots/` · `_to_delete/deck-check`) ให้อ่านเป็น `_to_delete/<โฟลเดอร์งาน>/<x>` เสมอ · สคริปต์ที่มีค่าเริ่มต้นเป็น `_to_delete/...` ส่ง `--out` ชี้เข้าโฟลเดอร์งาน
-- โฟลเดอร์ย่อยมาตรฐาน**ในโฟลเดอร์งาน** ที่ skill อื่นใช้ — ใช้ชื่อเดียวกันนี้เท่านั้น:
+(Gloss: `โปรเจกต์/` = project · `ผลงานจริง` = real work products · `ของเครื่องมือ ไม่ใช่ของงาน` = belongs to the tool, not to a task.)
 
-  | โฟลเดอร์ย่อย | ใส่อะไร | skill ที่ใช้ |
+- There is exactly one `_to_delete/` folder at the **project root** · inside, **1 folder per task**, so things do not mix and a whole task can be deleted at once
+- **Task folder name** `YYYY-MM-DD-<topic>` · the date is the day the task started · the topic is lowercase English joined by `-`, 2–5 words, saying what is being done (`2026-11-06-temp-task-folders`, not `2026-11-06-task1`) · sorting by name gives time order directly
+- **Create the folder when the task starts**, before writing the first temporary file · a task that continues over several rounds or across sessions uses the same folder (find it with `find _to_delete -mindepth 1 -maxdepth 1 -type d -printf '%f\n'`) · a new topic gets a new folder · when the task is split to sub-agents, they write into the lead's task folder, and the path is given in the brief
+- **Never place a file directly in `_to_delete/`** · except things a tool or hook creates itself at a fixed location (`superuser-lock/` · `STOP`) and the delete plan `delete-plan.txt` (the check script requires it directly in `_to_delete/`), which do not move
+- **When another skill writes `_to_delete/<x>`** (for example `_to_delete/screenshots/` · `_to_delete/deck-check`), always read it as `_to_delete/<task folder>/<x>` · for a script whose default is `_to_delete/...`, pass `--out` pointing into the task folder
+- Standard subfolders **inside the task folder** that other skills use — use only these names:
+
+  | Subfolder | What goes in | Skill that uses it |
   |---|---|---|
-  | `drafts/` | ร่างชั่วคราวที่ยังไม่ใช่ต้นฉบับ (ต้นฉบับ markdown ที่ render ซ้ำอยู่ถาวรที่ `docs/src/<เรื่อง>.md`) | `superuser:document-naming` |
-  | `attempts-<เรื่อง>/` | งานของแต่ละตัวที่แข่งกัน | [`parallel-attempts-pick-best`](../parallel-attempts-pick-best/SKILL.md) |
-  | `screenshots/` | ภาพเรนเดอร์ของดีไซน์ mockup หรือภาพตรวจงาน | skill ออกแบบทุกตัว |
-  | `logs/` | log จากการรันครั้งเดียว | ทุกตัว |
+  | `drafts/` | Temporary drafts that are not the original (the markdown original that is re-rendered lives permanently at `docs/src/<topic>.md`) | `superuser:document-naming` |
+  | `attempts-<topic>/` | Work of each competing agent | [`parallel-attempts-pick-best`](../parallel-attempts-pick-best/SKILL.md) |
+  | `screenshots/` | Rendered images of a design mockup or images for checking work | every design skill |
+  | `logs/` | Logs from a one-time run | every skill |
 
-  งานโค้ด (`verify-runs/` · `security/` · `check/`) → ส่วนเพิ่มใน plugin `software-development` → `superuser` → `references/code-extensions.md`
-- ใส่ `_to_delete/` ลงใน `.gitignore` ทุกโปรเจกต์ที่ใช้ git — ตรวจก่อน ถ้ายังไม่มีให้เพิ่ม
-- โปรเจกต์ที่ README ระบุโฟลเดอร์ชั่วคราวอื่นไว้แล้ว (เช่น `tmp/` `scratch/`) → ใช้ตามนั้น แล้วจด 1 แถวในตาราง "การตัดสินใจ" · ไม่มีระบุ → `_to_delete/` · ห้ามใช้ `.cache/` (เป็นของเครื่องมือ ปนกับสถานะของเครื่องมือได้)
+  Code work (`verify-runs/` · `security/` · `check/`) → the addition in plugin `software-development` → `superuser` → `references/code-extensions.md`
+- Put `_to_delete/` into `.gitignore` in every project that uses git — check first, and add it if missing
+- A project whose README already names another temporary folder (for example `tmp/` `scratch/`) → follow that, then record 1 row in the "การตัดสินใจ" (decisions) table · none named → `_to_delete/` · never use `.cache/` (it belongs to tools and can mix with tool state)
 
 ---
 
-## ตอนจบงาน
+## At the end of the work
 
-1. **บอกว่าของชั่วคราวของงานนี้อยู่โฟลเดอร์ไหน** เป็นบรรทัดเดียว (`_to_delete/2026-11-06-login-page-redesign/`) ไม่ต้องลงรายการยาว
-2. **ห้ามลบเอง** — ลบเมื่อผู้ใช้สั่งเท่านั้น การลบในโฟลเดอร์ผู้ใช้กู้คืนไม่ได้
-3. **ผู้ใช้สั่งลบ** → ย้ายเข้า `_to_delete/` ก่อน (ตามกฎกลาง) แล้วบอกผู้ใช้ · ลบจริงเฉพาะของใน `_to_delete/` เมื่อผู้ใช้สั่งตรง ๆ โดยทำ 3 ขั้น:
-   1. เขียนแผนลงไฟล์ `_to_delete/delete-plan.txt` 1 พาธต่อบรรทัด นับจากรากโปรเจกต์ (`_to_delete/2026-11-06-login-page-redesign`) · ลบทั้งงานใส่โฟลเดอร์งานบรรทัดเดียว
-   2. รัน `node <โฟลเดอร์ skill นี้>/scripts/delete-plan-check.mjs _to_delete/delete-plan.txt` → พิมพ์รายการลบกับรายการเก็บมาเทียบ · พาธไหนหลุดออกนอก `_to_delete/` (`..` · พาธเต็ม · ลิงก์ชี้ออกข้างนอก) จะ exit 1 ห้ามลบ
-   3. ผ่านแล้วจึงลบตามรายการ "ลบ" ทีละบรรทัด สคริปต์ไม่ลบเอง · อย่าสร้างรายการจาก `ls` (บน Windows อาจมี `/` ต่อท้ายชื่อ ดู `context-budget` → [`windows-shell`](../context-budget/references/windows-shell.md))
-4. **ก่อนบอกว่าจบงาน** รัน `node <โฟลเดอร์ skill นี้>/scripts/root-check.mjs <รากโปรเจกต์>` → ลงรายการของที่รากนอกรายการอนุญาต (`ref` `docs` `mockup` `assets` `qa` `_to_delete` `.claude` โฟลเดอร์โค้ด และของใน `.gitignore`) · ของที่โปรเจกต์ตั้งใจวางไว้ที่ราก ใส่ `--allow README.md,LICENSE`
+1. **Say where this task's temporary things are**, in one line (`_to_delete/2026-11-06-login-page-redesign/`), with no long list
+2. **Never delete on your own** — delete only when the user orders it; deletion in the user's folder cannot be undone
+3. **When the user orders deletion** → move into `_to_delete/` first (per the central rule), then tell the user · actually delete only things inside `_to_delete/` when the user orders it directly, in 3 steps:
+   1. Write the plan into the file `_to_delete/delete-plan.txt`, 1 path per line, counted from the project root (`_to_delete/2026-11-06-login-page-redesign`) · to delete a whole task, put the task folder on one line
+   2. Run `node <this skill's folder>/scripts/delete-plan-check.mjs _to_delete/delete-plan.txt` → it prints the delete list and the keep list to compare · any path that escapes `_to_delete/` (`..` · full path · a link pointing outside) makes it exit 1, and you must not delete
+   3. Only after it passes, delete line by line from the "delete" list; the script does not delete by itself · never build the list from `ls` (on Windows names may end in `/`, see `context-budget` → [`windows-shell`](../context-budget/references/windows-shell.md))
+4. **Before saying the work is finished**, run `node <this skill's folder>/scripts/root-check.mjs <project root>` → it lists things in the root outside the allowed list (`ref` `docs` `mockup` `assets` `qa` `_to_delete` `.claude` the code folder, and things in `.gitignore`) · for things the project deliberately keeps in the root, add `--allow README.md,LICENSE`
 
 ---
 
 ## Anti-patterns
 
-- **แตกไฟล์ zip ลงรากโปรเจกต์** แล้วค่อยเก็บกวาดทีหลัง — ทีหลังไม่เคยมาถึง
-- **ตั้งชื่อ `ไฟล์-v2` `ไฟล์-final` `ไฟล์-ใหม่จริง`** วางไว้ข้างของเดิม
-- **ลบไฟล์ผู้ใช้เพราะคิดว่าไม่ใช้แล้ว**
-- **ทิ้งไฟล์ชั่วคราวของงานในโปรเจกต์ไว้ในพื้นที่เซสชัน** — เซสชันจบแล้วผู้ใช้ตรวจย้อนไม่ได้
-- **ตั้งโฟลเดอร์ย่อยชื่อใหม่ให้ของเดิม** (`shots/` `img-check/`) — ใช้ชื่อในตารางข้างบน
-- **วางไฟล์ตรง `_to_delete/` หรือใช้ `screenshots/` ร่วมกันหลายงาน** — อีกสัปดาห์ไม่มีใครรู้ว่าภาพไหนของงานไหน ลบงานเดียวก็ไม่ได้
-- **เก็บไฟล์ต้นทางของผลงานไว้ใน `_to_delete/`** — นั่นไม่ใช่ของชั่วคราว
-- **ทิ้งไฟล์ค้างโดยไม่บอก** — ผู้ใช้จะมาเจอเองอีกหลายเดือนถัดไป
+- **Extracting a zip into the project root** and cleaning up later — later never comes
+- **Naming files `file-v2` `file-final` `file-really-new`** (Thai: `ไฟล์-v2` `ไฟล์-final` `ไฟล์-ใหม่จริง`) and leaving them beside the original
+- **Deleting a user's file because you think it is no longer used**
+- **Leaving a project task's temporary files in the session workspace** — after the session ends the user cannot check back
+- **Making a new subfolder name for an existing kind of thing** (`shots/` `img-check/`) — use the names in the table above
+- **Placing files directly in `_to_delete/` or sharing `screenshots/` across several tasks** — a week later nobody knows which image belongs to which task, and you cannot delete one task alone
+- **Keeping a work product's source file in `_to_delete/`** — that is not temporary
+- **Leaving stray files without telling anyone** — the user will find them on their own months later
 
 ---
 
-ตัวย่อและศัพท์เทคนิคในข้อความถึงผู้ใช้ เขียนตาม `spell-out-abbreviations`
+Abbreviations and technical terms in messages to the user follow `spell-out-abbreviations`.
 
 
 ---
@@ -224,27 +226,27 @@ Use when a task ends, to report status in a table
 
 ## reference: build-plan-rules.md
 
-# แบบสำหรับโปรเจกต์ที่มี docs/BUILD-PLAN.md
+# Format for projects that have docs/BUILD-PLAN.md
 
-ย้ายมาจาก `SKILL.md` ข้อ 3 · เปิดเมื่อโปรเจกต์มี `docs/BUILD-PLAN.md`
+Moved from `SKILL.md` item 3 · open it when the project has `docs/BUILD-PLAN.md`
 
-เขียน 2 หัวข้อนี้ในไฟล์นั้นแทน `CONTEXT.md` · ไม่มีไฟล์ → สร้างไฟล์ที่มีแค่ชื่อโปรเจกต์ แล้ว copy จาก [`assets/build-plan-status.md`](../assets/build-plan-status.md) (ห้ามแต่งโครงเอง) · **ห้ามแตะตารางงานหรือหัวข้ออื่น**
-ลำดับหัวข้อ: `## สถานะล่าสุด` → ตารางงาน → `## ประวัติสถานะ` → `## ตัดสินใจเอง` (`decision-log`)
+Write these 2 sections in that file instead of `CONTEXT.md` · no file → create a file holding only the project name, then copy from [`assets/build-plan-status.md`](../assets/build-plan-status.md) (never invent the structure) · **never touch the job table or other sections**
+Section order: `## สถานะล่าสุด` (latest status) → job table → `## ประวัติสถานะ` (status history) → `## ตัดสินใจเอง` (decisions made on your own, `decision-log`)
 
-- `## สถานะล่าสุด` — **เขียนทับทั้งหัวข้อ** ทุกครั้ง เป็นภาพปัจจุบันภาพเดียว
-- `## ประวัติสถานะ` — **เพิ่ม 1 บรรทัดบนสุด** ต่อ 1 งาน ไม่ลบของเดิม รูปแบบ `วันที่ เวลา · งาน · สถานะ · ผล · ทำ <agent> · ตรวจ <agent> · ค้างกี่ข้อ` (ถ้ารอบนั้นตัดสินใจเองต่อท้าย `· ตัดสินใจเอง <จำนวน>`)
+- `## สถานะล่าสุด` — **overwrite the whole section** every time, as the single current picture
+- `## ประวัติสถานะ` — **add 1 line at the very top** per job, never delete the old ones, in the format `วันที่ เวลา · งาน · สถานะ · ผล · ทำ <agent> · ตรวจ <agent> · ค้างกี่ข้อ` (date time · job · status · result · made by <agent> · checked by <agent> · how many items pending; if you decided anything on your own that round, append `· ตัดสินใจเอง <count>`)
 
-หัวข้อ `## สถานะล่าสุด` มี: บรรทัดอัปเดต (วันที่เวลา · งานล่าสุด) · **ภาพรวม** (เสร็จ N/ทั้งหมด · ทำอยู่ · ติด · ไม่ผ่านตรวจ — นับจากตารางและต้องตรงกัน) · ตาราง `| รายการ | ประเภท | สถานะ | ใครทำ | ใครตรวจ | ผลตรวจ | ค้าง / หมายเหตุ |` · **ทีมตอนนี้** (1 แถวต่อ agent ที่ใช้รอบนี้ · ไม่มี subagent ไม่ต้องใส่ · เริ่มรอบใหม่ล้างแถวเก่า) · ค้างอยู่ · รออนุมัติ · ถัดไป (ไม่เกิน 3) · ข้อเสนอ
+Section `## สถานะล่าสุด` holds: an update line (date and time · latest job) · **ภาพรวม** (overview: done N/total · in progress · blocked · failed check — counted from the table and must match) · a table `| รายการ | ประเภท | สถานะ | ใครทำ | ใครตรวจ | ผลตรวจ | ค้าง / หมายเหตุ |` (item · type · status · made by · checked by · check result · pending / note) · **ทีมตอนนี้** (team now: 1 row per agent used this round · no subagent, leave it out · starting a new round clears the old rows) · ค้างอยู่ (pending) · รออนุมัติ (awaiting approval) · ถัดไป (next, at most 3) · ข้อเสนอ (proposals)
 
-| คอลัมน์ | ค่าที่ใช้ได้ |
+| Column | Allowed values |
 |---|---|
-| ประเภท | `เอกสาร` · `ตรวจ` · `ส่งมอบ` · `โค้ด` · `build` |
-| สถานะ (เอกสาร) | `ยังไม่เริ่ม` · `Draft` · `Review` · `Approved` · `Archived` (ชุดเดียวกับ `polished-document-style`) — `Approved` มีแต่คนที่เปลี่ยนได้ agent ตั้งได้สูงสุด `Review` |
-| สถานะ (อื่น ๆ) | 5 คำใน `SKILL.md` ข้อ 2 |
-| ผลตรวจ | `ผ่าน — <หลักฐาน>` · `ไม่ผ่าน — <สิ่งที่ไม่ผ่าน>` · `ยังไม่ได้ตรวจ` · `—` |
+| ประเภท (type) | `เอกสาร` (document) · `ตรวจ` (check) · `ส่งมอบ` (delivery) · `โค้ด` (code) · `build` |
+| สถานะ (status), documents | `ยังไม่เริ่ม` (not started) · `Draft` · `Review` · `Approved` · `Archived` (the same set as `polished-document-style`) — `Approved` belongs only to someone who can change it, and an agent may set at most `Review` |
+| สถานะ (status), others | the 5 words in `SKILL.md` item 2 |
+| ผลตรวจ (check result) | `ผ่าน — <evidence>` · `ไม่ผ่าน — <what failed>` · `ยังไม่ได้ตรวจ` · `—` |
 
-ตารางมีทุกรายการของโปรเจกต์ ไม่ใช่แค่งานรอบนี้ (รายการที่ไม่ได้แตะคัดลอกค่าเดิม) ไม่เกิน 25 แถว
-งานโค้ด (ตัวอย่างตารางเต็ม · ประเภท `build`/`ส่งมอบ` · หลักฐานแอปมือถือ) → ส่วนเพิ่มใน plugin `software-development` → `superuser` → `references/code-extensions.md`
+The table holds every item of the project, not just this round's work (items not touched copy their old values), at most 25 rows
+Code work (a full example table · type `build`/`ส่งมอบ` · mobile app evidence) → the extension in plugin `software-development` → `superuser` → `references/code-extensions.md`
 
 
 ## reference: project-plan-and-weekly-status.md

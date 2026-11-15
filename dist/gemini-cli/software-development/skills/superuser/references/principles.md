@@ -1,44 +1,44 @@
-# เกณฑ์โค้ด และดัชนี principle
+# Code criteria and the principle index
 
-## เกณฑ์โค้ด — ทุก diff ต้องผ่านทั้ง 3 ข้อ
+## Code criteria — every diff must pass all 3
 
-ย้ายมาจาก `SKILL.md` หัวข้อ 4
+Moved from `SKILL.md` section 4
 
-| ข้อ | ผ่านเมื่อ | skill |
+| Criterion | Passes when | skill |
 |---|---|---|
-| **เรียบง่าย** | ไม่มีของที่ยังไม่ต้องใช้ · ไลบรารีมาตรฐานก่อนเขียนเอง · ไม่เพิ่ม dependency เพื่อไม่กี่บรรทัด · ไม่สร้าง interface ที่มี implementation ตัวเดียว · diff สั้นที่สุดที่ยังถูก | `lazy-coding` |
-| **โครงแบบวิศวกร** | โฟลเดอร์ตามฟีเจอร์ · 1 ไฟล์ 1 หน้าที่ · แยกโค้ด 3 ชั้น: รับข้อมูลเข้า → กฎธุรกิจ → เก็บข้อมูล · ค่าตั้งอยู่นอกโค้ด · test อยู่ข้างโค้ด · ชื่อบอกความหมาย · คนใหม่อ่านตามได้ใน 6 เดือน | `readable-code` |
-| **ปลอดภัยตั้งแต่ต้น** | ตรวจข้อมูลจากภายนอกทันทีที่เข้ามา · SQL ใช้ parameter · ตรวจสิทธิ์ฝั่งเซิร์ฟเวอร์ · ค่าลับอยู่นอกโค้ด · log ไม่มีของลับ · ถ้าเกิดข้อผิดพลาดให้ปฏิเสธไว้ก่อน | [`principle-secure-by-default`](../../principle-secure-by-default/SKILL.md) |
+| **Simple** | Nothing not yet needed · standard library before writing your own · no dependency added to save a few lines · no interface with only one implementation · the shortest diff that is still correct | `lazy-coding` |
+| **Engineer-style structure** | Folders by feature · 1 file, 1 responsibility · code split into 3 layers: input → business rules → storage · config lives outside the code · tests sit next to the code · names carry meaning · a newcomer can follow it in 6 months | `readable-code` |
+| **Secure from the start** | Check outside data the moment it enters · SQL uses parameters · check permissions on the server side · secrets live outside the code · logs hold no secrets · if an error occurs, deny by default | [`principle-secure-by-default`](../../principle-secure-by-default/SKILL.md) |
 
-เรียบง่ายไม่ได้แปลว่ายัดทุกอย่างไว้ไฟล์เดียว มีโครงไม่ได้แปลว่าต้องมีชั้นเผื่ออนาคต และปลอดภัยไม่ได้แปลว่าต้องมีชั้นครอบเพิ่ม 3 ข้อนี้ไปด้วยกัน เพราะโค้ดที่น้อยและเป็นระเบียบตรวจความปลอดภัยได้ง่ายที่สุด · ถ้าทางที่ diff สั้นกว่าทำให้ผู้ใช้ลำบากขึ้น ให้ `principle-user-experience-first` ชนะ
+Simple does not mean cramming everything into one file, having structure does not mean adding layers for the future, and secure does not mean adding wrapper layers. The 3 go together, because code that is small and orderly is the easiest to check for security · if the path with the shorter diff makes things harder for the user, let `principle-user-experience-first` win.
 
-## ดัชนี
+## Index
 
-จะใช้ข้อไหน ให้เปิด SKILL.md ของข้อนั้นอ่านทั้งไฟล์ก่อน
+To use an item, open that item's SKILL.md and read the whole file first.
 
-**ความปลอดภัย**
-- [`principle-secure-by-default`](../../principle-secure-by-default/SKILL.md) — ใช้กับทุก diff และเข้มขึ้นเมื่อแตะ input login ไฟล์ เงิน ข้อมูลส่วนบุคคล
-- [`security-gate`](../../security-gate/SKILL.md) — สแกนค่าลับ · dependency · โค้ด ก่อนส่งงานทุกครั้ง
+**Security**
+- [`principle-secure-by-default`](../../principle-secure-by-default/SKILL.md) — applies to every diff and gets stricter when touching input, login, files, money, personal data
+- [`security-gate`](../../security-gate/SKILL.md) — scan secrets · dependencies · code before every delivery
 
-**ออกแบบ**
-- [`principle-data-shape-first`](../../principle-data-shape-first/SKILL.md) — กำหนด type และรูปข้อมูลก่อน ตรวจข้อมูลตอนเข้าระบบ แล้วข้างในก็เชื่อได้
-- [`principle-replace-then-delete`](../../principle-replace-then-delete/SKILL.md) — ย้ายทุกจุดที่เรียกใช้ไปของใหม่ แล้วลบของเก่าในรอบเดียว ไม่เหลือชั้นรองรับของเก่า
-- `principle-user-experience-first` — ทำน้อยแต่เสร็จจริง และความสะดวกของคนสร้างไม่ใช่เหตุผลในการเลือก
+**Design**
+- [`principle-data-shape-first`](../../principle-data-shape-first/SKILL.md) — define types and data shapes first, check data when it enters the system, then the inside can be trusted
+- [`principle-replace-then-delete`](../../principle-replace-then-delete/SKILL.md) — move every caller to the new thing, then delete the old thing in one round, leaving no layer that supports the old one
+- `principle-user-experience-first` — do less but really finish, and the builder's convenience is not a reason to choose
 
-**พิสูจน์**
-- `principle-prove-it-works` — ก่อนบอกว่าเสร็จ ตรวจกับของจริง ไม่ใช่ "compile ผ่าน"
-- `principle-fix-root-cause` — ตอนแก้บั๊ก ทำให้เกิดซ้ำก่อน แล้วแก้ที่ต้นเหตุ ใช้คู่กับ `targeted-fix`
-- `principle-small-verifiable-steps` — ตัดเป็นชิ้นเล็ก ตรวจผ่านทีละชิ้นก่อนไปต่อ
-- [`principle-safe-to-rerun`](../../principle-safe-to-rerun/SKILL.md) — รันซ้ำหรือหยุดกลางทางแล้วรันใหม่ ผลเหมือนเดิม
-- [`blast-radius`](../../blast-radius/SKILL.md) — ถ้าแก้ของที่ใช้ร่วม ให้หาทุกจุดที่กระทบ แล้วพิสูจน์จุดที่เสี่ยงสุด
+**Proving**
+- `principle-prove-it-works` — before saying done, check against the real thing, not "it compiles"
+- `principle-fix-root-cause` — when fixing a bug, reproduce it first, then fix the root cause · use together with `targeted-fix`
+- `principle-small-verifiable-steps` — cut into small pieces and pass each check before moving on
+- [`principle-safe-to-rerun`](../../principle-safe-to-rerun/SKILL.md) — running again, or stopping midway and running again, gives the same result
+- [`blast-radius`](../../blast-radius/SKILL.md) — if you change something shared, find every spot affected, then prove the riskiest spot
 
-**ความเรียบง่าย**
-- `lazy-coding` — โค้ดน้อยที่สุดที่ใช้ได้จริง
-- `simplicity-first` — เอกสาร · ดีไซน์ · แผน ที่ง่ายที่สุดแต่ใช้ได้
-- `readable-code` — คนใหม่อ่านแล้วตามทัน
+**Simplicity**
+- `lazy-coding` — the least code that really works
+- `simplicity-first` — documents · designs · plans that are as simple as possible but usable
+- `readable-code` — a newcomer can read and keep up
 
-**การทำงาน**
-- `principle-proceed-on-reversible-work` — งานที่ย้อนได้ให้ทำเลย ส่วนงานที่ย้อนไม่ได้ให้เตรียมไว้ใน "รออนุมัติ" แล้วทำส่วนอื่นต่อ
-- `principle-build-a-tool-not-handwork` — งานซ้ำ ๆ แบบกลไกให้ทำเป็นสคริปต์ที่รันซ้ำได้
-- `repeated-mistakes-to-checks` — กฎที่ต้องพูดซ้ำให้ทำเป็นการตรวจอัตโนมัติ
-- `context-budget` — งานใหญ่ให้ส่ง subagent ทำ แล้วเก็บแค่สรุปไว้ในบทสนทนาหลัก
+**Working**
+- `principle-proceed-on-reversible-work` — do reversible work at once, and prepare irreversible work under "รออนุมัติ" (awaiting approval) while carrying on with other parts
+- `principle-build-a-tool-not-handwork` — turn repetitive mechanical work into a script that can be re-run
+- `repeated-mistakes-to-checks` — turn a rule you must keep repeating into an automatic check
+- `context-budget` — send big work to subagents and keep only the summary in the main conversation

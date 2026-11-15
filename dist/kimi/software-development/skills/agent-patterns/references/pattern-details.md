@@ -1,117 +1,117 @@
-# agent-patterns — วิธีทำทีละรูปแบบ
+# agent-patterns — how to run each pattern
 
-เปิดไฟล์นี้เมื่อจะใช้รูปแบบไหนเป็นครั้งแรกในงาน หรือไม่แน่ใจขั้นตอน
+Open this file the first time you use a pattern in a task, or when you are unsure of the steps.
 
-- สารบัญ: [1 Planning](#1--planning--วางแผนก่อน-แล้วทำทีละข้อ) · [2 ReAct](#2--react--คิด--ทำ--ดูผล-วนจนเสร็จ) · [3 Reflection](#3--reflection--ทำเสร็จ--อีกตัวตรวจ--แก้) · [4 Multi-Agent](#4--multi-agent--หลาย-agent-คนละงาน-ส่งต่อเป็นสาย) · [5 MoA](#5--mixture-of-agents-moa--งานเดียวกัน-คนละมุม-แล้วรวม) · [6 Reranker](#6--reranker--ให้คะแนน-แล้วเลือกชิ้นที่ตรงที่สุด) · [7 ledger](#7--บัญชีข้อกล่าวอ้าง-claim-ledger--เมื่อข้อสรุปต้องพิสูจน์ทีละข้อ) · [รอลูกทีม](#รอลูกทีมแบบไม่ต้องถามในแชต)
+- Contents: [1 Planning](#1--planning--plan-first-then-work-one-item-at-a-time) · [2 ReAct](#2--react--think--act--check-result-repeat-until-done) · [3 Reflection](#3--reflection--do--another-agent-checks--fix) · [4 Multi-Agent](#4--multi-agent--several-agents-one-job-each-handed-along-a-chain) · [5 MoA](#5--mixture-of-agents-moa--same-task-different-angles-then-merge) · [6 Reranker](#6--reranker--score-then-pick-the-best-match) · [7 ledger](#7--claim-ledger--when-a-conclusion-must-be-proved-item-by-item) · [wait for sub-agents](#waiting-for-sub-agents-without-asking-in-chat)
 
-## 1 · Planning — วางแผนก่อน แล้วทำทีละข้อ
+## 1 · Planning — plan first, then work one item at a time
 
-1. playbook ที่เลือกคือแผน ให้คัดขั้นตอนลง todo ตรงตัว ถ้าไม่มี playbook ที่ตรง ให้เขียนแผนตามโครง เข้าใจ → วางแผน → ลงมือ → พิสูจน์ → รายงาน
-2. ทุกข้อในแผนมี "เสร็จเมื่อ" ที่ตรวจได้ ข้อไหนเขียนเงื่อนไขไม่ได้ให้แตกให้เล็กลง
-3. ทำทีละข้อตามลำดับ ถ้าระหว่างทางเจอว่าแผนผิด ให้ปรับแผนตามหัวข้อ "ปรับแผน" ข้างล่างก่อน ห้ามทำนอกแผนเงียบ ๆ
-4. ถ้างานยาวหรือหลายวัน ให้เขียนแผนลงไฟล์ (`docs/BUILD-PLAN.md` หรือ `CONTEXT.md`) ไม่เก็บไว้ในแชต
-5. งานที่แก้หลายไฟล์เป็นชุด ลบหรือย้ายของ หรือย้อนยาก → เขียนรายการสิ่งที่จะเปลี่ยน (ไฟล์ · เปลี่ยนอะไร · ตรวจด้วยอะไร) แล้วตรวจรายการด้วยสคริปต์ก่อนแตะของจริง · ไม่แทนขั้นตรวจหลังลงมือ · อธิบาย diff ได้ใน 1 ประโยค → ข้าม
+1. The playbook you chose is the plan: copy its steps into the todo list as they are. If no playbook fits, write the plan in this shape: understand → plan → do → prove → report
+2. Every item in the plan has a checkable "เสร็จเมื่อ" (done when). If you cannot write the condition for an item, split it smaller
+3. Work one item at a time, in order. If you find mid-way that the plan is wrong, adjust the plan under "Re-plan" below first. Never go off-plan silently
+4. If the work is long or takes several days, write the plan to a file (`docs/BUILD-PLAN.md` or `CONTEXT.md`), not keep it in chat
+5. Work that edits many files as a set, deletes or moves things, or is hard to undo → write a list of what will change (file · what changes · how to check it) and check the list with a script before touching the real thing · it does not replace the check after the work · if the diff can be explained in 1 sentence → skip
 
-กับดัก: แผนละเอียดเกินจนไม่ได้ลงมือ ทั้งที่แผน 3 ข้อก็พอสำหรับงานครึ่งชั่วโมง
+Trap: a plan so detailed that you never start, when a 3-item plan is enough for half an hour of work.
 
-### ปรับแผน (แบบ Dynamic) — เมื่อของจริงไม่เป็นอย่างที่คิด
+### Re-plan (Dynamic) — when reality is not what you thought
 
-จบทุกชิ้น หัวหน้าทีมถามตัวเองข้อเดียว: **แผนที่เหลือยังพาไปถึงเป้าไหม** ถ้ายังได้ก็ทำต่อ ถ้าไม่ได้ให้ปรับแผน แต่ปรับได้เฉพาะเมื่อเข้าเหตุใดเหตุหนึ่งใน 3 ข้อนี้ เพราะการปรับโดยไม่มีเหตุทำให้งานวนโดยไม่คืบ
+After every piece, the team lead asks itself one question: **does the remaining plan still reach the goal?** If yes, carry on. If not, re-plan. But re-plan only for one of these 3 reasons, because re-planning without a reason makes the work loop without progress.
 
-1. ผลของชิ้นที่ทำแล้วเผยงานที่แผนไม่มี (เช่น ข้อมูลสกปรกต้องทำความสะอาดก่อน)
-2. ชิ้นหนึ่งทำตามแผนไม่ได้ (ลองครบตาม ReAct ข้อ 4 แล้ว)
-3. ผู้ใช้หรือเจ้าของงานส่งข้อมูลใหม่ที่ทำให้ข้อกำหนดเปลี่ยน
+1. The result of a finished piece reveals work the plan does not have (for example, dirty data must be cleaned first)
+2. One piece cannot be done as planned (all of ReAct item 4 has been tried)
+3. The user or the owner sends new information that changes the requirements
 
-**คำถามประจำรอบ (progress ledger)** — งานยาวหรือหลายลูกทีม ให้ตอบ 5 ข้อสั้น ๆ หลังทุกชิ้น: เสร็จทั้งงานหรือยัง · วนซ้ำที่เดิมไหม · คืบหน้าไหม · ชิ้นต่อไปใครทำ · สั่งอะไร · ถ้า "ไม่คืบ" 2 ชิ้นติดกัน นับเป็นเหตุข้อ 2 แล้วปรับแผน (แนวคิดจาก Magentic-One และ Microsoft Agent Framework ที่นับ stall แล้ว re-plan และมีเพดาน reset)
+**Per-round questions (progress ledger)** — for long work or many sub-agents, answer 5 short questions after every piece: is the whole job done · are we looping in the same place · is there progress · who does the next piece · what do we tell them · if "no progress" twice in a row, count it as reason 2 and re-plan (idea from Magentic-One and Microsoft Agent Framework, which count stalls, then re-plan, and have a reset cap)
 
-แผนใหม่ขึ้นเลขรุ่น (v2 · v3) แล้วเขียน 4 ช่องลงไฟล์แผนหรือ `CONTEXT.md`:
+Number the new plan (v2 · v3) and write 4 fields into the plan file or `CONTEXT.md`:
 
-| ช่อง | เขียนอะไร |
+| Field | What to write |
 |---|---|
-| เหตุ | เข้าเหตุข้อไหนใน 3 ข้อ และเห็นจากผลอะไร |
-| เปลี่ยนอะไร | เพิ่ม · ตัด · แยก · รวม · เรียงใหม่ · เปลี่ยนชิ้นที่ต้องรอ |
-| กระทบอะไร | ชิ้นไหนต้องทำใหม่ · ไล่จากคอลัมน์ "ต้องรอชิ้นไหน" ของตารางแบ่งงาน |
-| ใช้ต่อได้ | ชิ้นที่เสร็จแล้วและไม่กระทบ เก็บไว้ใช้ต่อ ห้ามทำซ้ำ · พิสูจน์ว่าใช้ต่อจริง: เก็บ hash ของผลเดิม แล้วดู event log ว่าชิ้นนั้นไม่ถูกรันอีก ไม่ใช่แค่เขียนว่า "ใช้ต่อ" (แนวจาก lab 04_Basic_AI_WORFLOW ช่อง `no_duplicate_execution` · `artifact_hashes_valid` · ข้อควรระวัง: ตัวตรวจเขียนโดย agent ตัวเดียวกับที่ทำงาน และรันในแชตเดียวด้วยบทบาทจำลอง จึงเป็นข้อมูลอ้าง ไม่ใช่ผลวัดจริง) |
+| Reason | Which of the 3 reasons, and what result shows it |
+| What changes | Add · cut · split · merge · reorder · change which pieces must wait |
+| What it affects | Which pieces must be redone · trace from the "ต้องรอชิ้นไหน" (waits for which piece) column of the task-split table |
+| Reusable | Pieces already done and not affected: keep and reuse, never redo · prove the reuse is real: store a hash of the old result, then check the event log that the piece was not run again, not just write "reused" (idea from lab 04_Basic_AI_WORFLOW fields `no_duplicate_execution` · `artifact_hashes_valid` · caution: the checker is written by the same agent that does the work and runs in the same chat with a simulated role, so it is a claim, not a real measurement) |
 
-- ชิ้นที่ตัดทิ้งติดสถานะ `ตัดออก` พร้อมเหตุผล ไม่ลบหายจากแผน · ข้อกำหนดของผู้ใช้ห้ามตัดเงียบ ๆ
-- ปรับได้ไม่เกิน 3 ครั้งต่องาน ครบแล้วยังไม่ลงตัว ให้หยุดปรับ ทำส่วนที่ทำได้ให้จบ แล้วรายงานเรื่องที่ยังตัดสินไม่ได้
-- **ข้อกำหนดเปลี่ยนกลางงาน** (เหตุข้อ 3): เก็บผลเดิมไว้ก่อน (ย้ายหรือคัดลอกไป `_to_delete/` หรือโฟลเดอร์ของรอบแรก) → ตรวจผลเดิมด้วยเกณฑ์ใหม่ว่าข้อไหนตก → ทำใหม่เฉพาะชิ้นที่ตก → นับเป็นการปรับแผน 1 ครั้ง
-- จดการปรับแผนเป็น 1 แถวใน "การตัดสินใจ" ด้วย (`decision-log`)
+- A piece that is cut gets the status `ตัดออก` (cut) with a reason and is not deleted from the plan · never cut a user requirement silently
+- At most 3 re-plans per job. When used up and it still does not settle, stop re-planning, finish the parts that can be done, and report what is still undecided
+- **Requirements change mid-job** (reason 3): keep the old result first (move or copy to `_to_delete/` or the first round's folder) → check the old result against the new criteria to see which items fail → redo only the failing pieces → count as 1 re-plan
+- Also record the re-plan as 1 row in "การตัดสินใจ" (decisions) (`decision-log`)
 
-งานที่รู้ทางชัดตั้งแต่ต้นไม่ต้องทำส่วนนี้ ถ้าแผนไม่เคยต้องปรับ ไม่ต้องสร้าง v2 เพื่อโชว์
+Work whose path is clear from the start does not need this part. If the plan never needs adjusting, do not create a v2 for show.
 
-## 2 · ReAct — คิด → ทำ → ดูผล วนจนเสร็จ
+## 2 · ReAct — think → act → check result, repeat until done
 
-1. **คิด** — ขั้นนี้จะทำอะไร คาดว่าจะเห็นผลอะไร (เขียน 1 บรรทัด)
-2. **ทำ** — ลงมือ 1 การกระทำ: รันคำสั่ง · ค้นเว็บ · อ่านไฟล์ · คำนวณ
-3. **ดูผล** — อ่านผลจริงแล้วเทียบกับที่คาด ถ้าตรงก็ไปขั้นถัดไป ถ้าไม่ตรงให้กลับไปคิดใหม่จากผลที่เห็น
-4. พัง 2 รอบ → แตกเป็นขั้นย่อยหรือเปลี่ยนวิธี ไม่ลองแบบเดิมซ้ำ · ครบ 3 รอบ → ใส่สถานะ "ติด" แล้วไปข้ออื่น
+1. **Think** — what will this step do, and what result do you expect to see (write 1 line)
+2. **Act** — do 1 action: run a command · search the web · read a file · calculate
+3. **Check result** — read the real result and compare it with what you expected. If it matches, go to the next step. If not, go back and think again from the result you saw
+4. Fails 2 rounds → split into smaller steps or change method, do not retry the same way · reaches 3 rounds → mark the status "ติด" (blocked) and move to other items
 
-กับดัก: ทำหลายอย่างรวดเดียวแล้วค่อยดูผล พอพังก็ไม่รู้ว่าพังที่ไหน · เชื่อผลที่ "น่าจะ" ได้ โดยไม่เปิดดูผลจริง
+Traps: doing many things at once and only then looking at results, so when it breaks you do not know where · trusting a result that "should" have come out without opening the real result.
 
-## 3 · Reflection — ทำเสร็จ → อีกตัวตรวจ → แก้
+## 3 · Reflection — do → another agent checks → fix
 
-1. คนทำส่งงานพร้อมเกณฑ์ตรวจ (เกณฑ์ 3 ข้อในหัวข้อ 4 ของ `superuser` ของ plugin นั้น)
-2. **คนตรวจต้องเป็น `reviewer` (หรือผู้ตรวจเฉพาะทาง) ตัวใหม่ที่ไม่เห็นงานมาก่อน** เพราะการตรวจตัวเองในบริบทเดิมจะเห็นแต่สิ่งที่ตั้งใจทำ ไม่เห็นสิ่งที่ทำจริง
-3. คนตรวจส่งกลับเป็นรายการ: ปัญหา · ชี้จุดในงานได้ · หลักฐาน · ระดับ (สูง · กลาง · ต่ำ)
-4. หัวหน้าทีมยืนยันทุกข้อก่อนสั่งแก้ ข้อที่ยืนยันไม่ได้ให้ทิ้ง
-5. **ตัวตรวจต้องเทียบกับของจริง** — ผล test · ไฟล์ที่เปิดอ่าน · แหล่งที่ค้น · ภาพหน้าจอ ไม่ใช่ความเห็นลอย ๆ เพราะงานวิจัยพบว่าโมเดลที่แก้คำตอบตัวเองโดยไม่มีของจริงให้เทียบ มักแย่ลง (GPT-3.5 บน CommonSenseQA ได้ 75.8 ก่อนแก้ เหลือ 38.1 หลังแก้รอบแรก · Huang et al. ICLR 2024) · เกณฑ์ข้อไหนหาหลักฐานไม่ได้ให้นับว่าไม่ผ่าน และบอกว่าขาดอะไร
-6. แก้แล้วส่ง reviewer **ตัวใหม่**ตรวจซ้ำ ตามกฎวนตรวจใน `team-roles` ของ `superuser` (ไม่เหลือข้อระดับสูงและกลาง · ครบเพดานรอบ (งานกลาง 3 · งานใหญ่หรืองานเสี่ยง 5) ยังไม่ผ่าน → หยุดวน ทำส่วนอื่นให้จบ แล้วรายงานข้อที่เหลือ)
+1. The doer hands in the work with the checking criteria (the 3 criteria in item 4 of `superuser` of that plugin)
+2. **The checker must be a fresh `reviewer` (or a specialist reviewer) who has not seen the work**, because checking yourself in the same context sees only what you meant to do, not what you did
+3. The checker returns a list: problem · where in the work it points · evidence · level (สูง · กลาง · ต่ำ — high · medium · low)
+4. The team lead confirms every item before ordering a fix. Drop items that cannot be confirmed
+5. **The checker must compare against the real thing** — test results · files opened and read · sources searched · screenshots, not loose opinion, because research found that a model that corrects its own answer without real material to compare against usually gets worse (GPT-3.5 on CommonSenseQA scored 75.8 before correction and 38.1 after the first correction round · Huang et al. ICLR 2024) · a criterion with no evidence counts as failed, and say what is missing
+6. After fixing, send a **fresh** reviewer to check again, following the check-loop rule in `team-roles` of `superuser` (no high or medium items left · when the round cap (medium work 3 · large or risky work 5) is reached and it still does not pass → stop looping, finish the other parts, and report the remaining items)
 
-7. **คนแก้ขยับตามรอบ** — รอบแก้ 1–3 ใช้ตัวเดิมของชิ้นนั้น · รอบ 4–5 (งานใหญ่หรืองานเสี่ยงเท่านั้น) เปลี่ยนเป็นตัวใหม่ที่ระดับสูงขึ้น 1 ขั้นตามบันไดใน `superuser` หัวข้อ 5 พร้อมรายงานทุกรอบ · ข้อกลางและต่ำที่เลือกไม่แก้ลงบัญชีข้อที่เลื่อนใน "ค้างอยู่" แล้วไล่ปิดตอนจบ (รายละเอียดใน `team-roles` "รอบตรวจ")
+7. **The fixer moves up with the rounds** — fix rounds 1–3 use the same agent as that piece · rounds 4–5 (large or risky work only) switch to a fresh agent one level higher on the ladder in `superuser` item 5, with a report every round · medium and low items chosen not to be fixed go into the deferred-items ledger under "ค้างอยู่" (pending) and are closed at the end (details in `team-roles` "รอบตรวจ" (review rounds))
 
-ระดับโมเดลของคนตรวจ: เท่าหรือสูงกว่าคนทำ (รอบ 2 ขึ้นไปของงานกลางใช้ระดับกลางตาม `team-roles` "รอบตรวจ") ไม่ใช้ตัวเล็กตรวจงานของตัวใหญ่ (โมเดลชอบงานแบบที่ตัวเองเขียน) · คำสั่งถึงคนตรวจไม่ใส่ความเห็นของหัวหน้าทีม
+Model level of the checker: equal to or higher than the doer (from round 2 up of medium work, use the middle level per `team-roles` "รอบตรวจ") · never use a small model to check a large model's work (models like work written the way they write it) · the instruction to the checker does not include the team lead's opinion.
 
-## 4 · Multi-Agent — หลาย agent คนละงาน ส่งต่อเป็นสาย
+## 4 · Multi-Agent — several agents, one job each, handed along a chain
 
-1. หัวหน้าทีมแบ่งงานเป็นชิ้น 1 ชิ้นต่อ 1 agent ตามบทบาท แล้วบอกว่าชิ้นนี้รับอะไรจากชิ้นก่อน และส่งอะไรให้ชิ้นถัดไป
-2. ส่งต่อด้วยไฟล์ ไม่ส่งต่อด้วยความจำ: agent A เขียนผลลงไฟล์ → agent B อ่านไฟล์นั้น
-3. ชิ้นที่ไม่พึ่งกันให้ส่งพร้อมกัน ส่วนชิ้นที่พึ่งกันให้เรียงตามสาย
-4. หัวหน้าทีมตรวจผลของทุกชิ้นก่อนส่งต่อ เพราะถ้าชิ้นก่อนผิด ชิ้นหลังจะผิดตามทั้งสาย
-5. ห้ามให้ 2 agent เขียนไฟล์เดียวกันพร้อมกัน
-6. **ตกลงรูปข้อมูลก่อนแยก** — ชิ้นแรกกำหนดชื่อข้อมูล รูปไฟล์ หรือ interface ที่ทุกชิ้นใช้ร่วม แล้วทุกชิ้นส่งกลับในรูปเดียวกัน: สถานะ (`เสร็จ` · `ติด`) · ผล (path) · สมมติฐานที่ใช้ · ชิ้นที่ไม่ได้ตกลงกันก่อนมักใช้ชื่อคนละแบบ แล้วไปพังตอนรวม
-7. **ชิ้นไหนพร้อมก็ปล่อยเลย** — ชิ้นที่งานที่ต้องรอเสร็จครบแล้ว ส่งได้ทันทีโดยไม่ต้องรอทั้งรอบ (งานวิจัย LLMCompiler พบว่าเร็วกว่าทำทีละขั้นสูงสุด 3.7 เท่า)
-8. **งานที่ต้องตัดสินใจย่อยให้สอดคล้องกันมาก** (โค้ดส่วนเดียวกัน · เนื้อเรื่องต่อเนื่อง) อย่าแยกขนาน ให้ทำสายเดียว หรือส่ง "ของกลาง" ที่ชัดพอให้ทุกชิ้นตัดสินแบบเดียวกัน เพราะลูกทีมที่ไม่เห็นงานกันมักเลือกต่างกันแล้วพังตอนรวม (Cognition "Don't Build Multi-Agents" · ต่างจากงานค้นและอ่านที่แยกขนานได้ดี · Anthropic multi-agent research system)
-9. **ข้อกำหนดขัดกันเอง** — ถ้าชิ้นแรกเจอข้อกำหนดของเจ้าของงานที่ขัดกัน ให้แยกเป็นชิ้น "เก็บข้อขัดแย้ง" ที่บันทึกทั้ง 2 ฝั่งพร้อมหลักฐานโดยไม่เลือกข้าง ติด `(รอยืนยัน)` และให้ขั้นรวมรอชิ้นนี้ด้วย · ขั้นรวมใช้ได้เฉพาะชิ้นที่ `เสร็จ` และส่งกลับครบรูป
+1. The team lead splits the work into pieces, 1 piece per agent by role, and says what this piece takes from the previous piece and what it hands to the next
+2. Hand over through files, not memory: agent A writes the result to a file → agent B reads that file
+3. Pieces that do not depend on each other go out at the same time, and pieces that depend on each other go in chain order
+4. The team lead checks the result of every piece before handing on, because if an earlier piece is wrong, every later piece is wrong with it
+5. Never let 2 agents write the same file at the same time
+6. **Agree on the data shape before splitting** — the first piece fixes the data names, file shape or interface that all pieces share, and then every piece returns the same shape: status (`เสร็จ` · `ติด`) · result (path) · assumptions used · pieces that did not agree beforehand often use different names and then break at merge time
+7. **Release a piece as soon as it is ready** — a piece whose awaited work is all done can go out right away, without waiting for the whole round (the LLMCompiler research found up to 3.7 times faster than going step by step)
+8. **Work with many small decisions that must stay consistent** (the same part of the code · a continuous story) should not be split in parallel. Do it in one chain, or send a "shared artifact" clear enough that every piece decides the same way, because sub-agents that cannot see each other's work often choose differently and then break at merge time (Cognition "Don't Build Multi-Agents" · different from searching and reading, which split well in parallel · Anthropic multi-agent research system)
+9. **Requirements that contradict each other** — if the first piece finds the owner's requirements contradict each other, split out a "collect the conflict" piece that records both sides with evidence without picking a side, tag it `(รอยืนยัน)` (awaiting confirmation), and make the merge step wait for this piece too · the merge step may use only pieces that are `เสร็จ` and returned in full shape
 
-กับดัก: แบ่งงานละเอียดเกินจนเสียเวลาส่งต่อมากกว่าทำ · agent ตัวหลังเดาว่าตัวก่อนทำอะไร แทนที่จะอ่านไฟล์
+Traps: splitting so finely that handover costs more time than doing the work · a later agent guesses what the earlier one did instead of reading the file.
 
-## 5 · Mixture-of-Agents (MoA) — งานเดียวกัน คนละมุม แล้วรวม
+## 5 · Mixture-of-Agents (MoA) — same task, different angles, then merge
 
-1. ตั้งโจทย์เดียวกันให้ 3 ตัว (งานแพงไม่เกิน 4) และต้องตั้งใจใส่ความต่าง: มุมมองต่างกัน หรือข้อจำกัดต่างกัน หรือระดับโมเดลต่างกัน
-2. เขียนเกณฑ์ตัดสินก่อนปล่อย เกณฑ์อยู่กับหัวหน้าทีม ไม่ส่งให้ตัวที่ทำงาน
-3. ส่งทุกตัวพร้อมกัน แต่ละตัวส่งผลกลับ หัวหน้าทีมเก็บลงไฟล์แล้วส่ง path ให้ตัวรวม
-4. **รวม (aggregate)** — ตัวรวมเป็น agent ใหม่ (`brainstormer`) ที่อ่านทุกคำตอบ ให้คะแนนตามเกณฑ์ เรียงเป็นตารางเดียว และชี้ทุกจุดที่ขัดกัน แต่ไม่ตัดทางและไม่เลือกแทน — หัวหน้าทีมเลือก แล้วยืมข้อดีของทางอื่นมาเสริม
-5. ผลเป็นทางเลือกบนกระดาษ → ไม่ต้องเข้ารอบตรวจ · ผลเป็นชิ้นงานที่ถึงมือคนอื่น → ผ่าน Reflection ก่อนส่ง
+1. Give the same task to 3 agents (at most 4 for costly work), and put in a difference on purpose: different viewpoints, or different constraints, or different model levels
+2. Write the judging criteria before release. The criteria stay with the team lead and are not sent to the agents doing the work
+3. Send all agents at the same time. Each sends its result back. The team lead saves them to files and passes the paths to the aggregator
+4. **Aggregate** — the aggregator is a new agent (`brainstormer`) that reads every answer, scores it by the criteria, lays them out in one table, and points out every conflict, but does not cut off any path and does not choose for you — the team lead chooses, then borrows the strengths of the other paths to add
+5. If the result is an on-paper option → no need to enter a review round · if the result is a work product that reaches other people → pass Reflection before sending
 
-ต้นทุน: ใช้แรง 3–5 เท่าของทำครั้งเดียว จึงใช้เฉพาะเรื่องที่เลือกผิดแล้วแพง
+Cost: 3–5 times the effort of doing it once, so use it only where a wrong choice is expensive.
 
-## 6 · Reranker — ให้คะแนน แล้วเลือกชิ้นที่ตรงที่สุด
+## 6 · Reranker — score, then pick the best match
 
-1. **รวบรวมกว้าง** — ค้นหรือ list มาก่อน 10–30 ชิ้น (แหล่งข้อมูล · ไฟล์ · ตัวเลือก · ประกาศงาน · สินค้า)
-2. **ตั้งเกณฑ์ 3–4 ข้อ** ให้คะแนนข้อละ 0–3 เช่น ตรงคำถาม · น่าเชื่อถือ (ทางการ > มาตรฐาน > ผู้ดูแลเครื่องมือ > อื่น ๆ) · ใหม่พอ · ครบ
-3. **ให้คะแนนทีละชิ้น** — ถ้าชิ้นเยอะ ให้ subagent ระดับเล็กให้คะแนนรอบแรก พอรอบท้ายเหลือ 5–8 ชิ้น ให้ระดับกลางหรือใหญ่ให้คะแนนซ้ำ
-4. **เลือก top-k** (ปกติ 3–5) แล้วอ่านเต็มเฉพาะชิ้นที่เลือก ชิ้นที่ทิ้งไม่ต้องอ่าน · เทียบทีละคู่ให้ตัดสิน 2 รอบโดยสลับลำดับ ผลไม่ตรงกันนับเสมอ (ตัวตัดสินที่เป็นโมเดลเอนตามลำดับและชอบคำตอบยาว)
-5. แสดงตารางคะแนนในรายงานหรือภาคผนวก: ชิ้น · คะแนนแต่ละเกณฑ์ · รวม · เลือกหรือไม่ เพื่อให้คนอ่านเห็นว่าทำไมเลือกชิ้นนี้
+1. **Collect wide** — search or list 10–30 items first (sources · files · options · job ads · products)
+2. **Set 3–4 criteria**, score each 0–3, for example matches the question · trustworthy (official > standard > tool maintainer > others) · recent enough · complete
+3. **Score one item at a time** — if there are many items, have a small-level sub-agent score the first round, and when 5–8 items remain for the last round, have a middle or large level score again
+4. **Pick top-k** (normally 3–5), then read in full only the chosen items, and do not read the dropped ones · for pairwise comparison, judge 2 rounds with the order swapped; results that disagree always count (model judges lean by order and favour long answers)
+5. Show the score table in the report or appendix: item · score per criterion · total · chosen or not, so the reader sees why this one was chosen
 
-ใช้คู่กับกฎ "≥ 3 แหล่งยืนยันตรงกัน" ของ `superuser` โดย Reranker เลือกแหล่ง ส่วนกฎ 3 แหล่งตัดสินว่าเชื่อได้ไหม
-ถ้าเป็นระบบที่ผู้ใช้สร้าง (Retrieval-Augmented Generation (RAG) ในแอปจริง) ให้ใช้ reranker แบบโมเดลจริงตาม `llm-engineering` ของ software-development เพราะไฟล์นี้พูดถึงวิธีทำงานของทีม agent เท่านั้น
+Use together with the "≥ 3 sources confirm the same" rule of `superuser`, where the Reranker picks the sources and the 3-source rule decides whether to believe them.
+If it is a system the user builds (Retrieval-Augmented Generation (RAG) in a real app), use a real model-based reranker per `llm-engineering` of software-development, because this file covers only how an agent team works.
 
-## 7 · บัญชีข้อกล่าวอ้าง (claim ledger) — เมื่อข้อสรุปต้องพิสูจน์ทีละข้อ
+## 7 · Claim ledger — when a conclusion must be proved item by item
 
-ใช้เมื่อผลของงานเป็นข้อกล่าวอ้างหลายข้อที่ต้องจริงทั้งหมด (ข้อสรุปของการค้น · การวิเคราะห์ · การอ้างว่าโค้ดทำสิ่งนั้น ๆ) แทนรายการข้อพบแบบ Reflection ธรรมดา
+Use when the work's result is several claims that must all be true (conclusions of a search · an analysis · claims that code does certain things), instead of the plain Reflection list of findings.
 
-1. จดทุกข้อกล่าวอ้างที่ข้อสรุปพึ่งพา: `node scripts/ledger.mjs add <ไฟล์.json> <id> "<ข้อความ>"` · สถานะตั้งต้นคือ `OPEN`
-2. ผู้ตรวจ**ตัวใหม่**ตรวจทีละข้อแล้วลงผล: `mark <ไฟล์.json> <id> PROVED|REFUTED|OPEN --evidence "<ไฟล์:บรรทัด หรือผลรัน>"` · `PROVED` และ `REFUTED` ต้องมีหลักฐาน ไม่มีหลักฐาน = ยังเป็น `OPEN`
-3. ถามสคริปต์ว่าทำอะไรต่อ: `next <ไฟล์.json>` พิมพ์ 1 บรรทัดว่าข้อไหนต้องตรวจต่อ · ข้อไหนต้องตรวจซ้ำ · ข้อไหนต้องถอนออกจากข้อสรุป · หรือจบได้ · ทำตามบรรทัดนั้น
-4. **ขั้นต่ำ 2 รอบ** — ข้อที่ `PROVED` ด้วยการตรวจครั้งเดียวยังไม่จบ ต้องมีผู้ตรวจตัวใหม่อีกคนพยายามหักล้างและไม่เจอ (`--min-rounds` ปรับได้ · ค่าตั้งเอง ยังไม่ได้วัด) เพราะคนที่พิสูจน์เองมักมั่นใจเกินจริง
-5. `REFUTED` → ถอนข้อนั้นออกจากข้อสรุป แล้ว `close <ไฟล์.json> <id>` · `OPEN` ครบ 4 ตรวจ (`--max-rounds`) → หยุด รายงานว่าไม่ได้พิสูจน์และขาดอะไร
-6. ทดสอบ: `node --test scripts/ledger.test.mjs`
+1. Record every claim the conclusion depends on: `node scripts/ledger.mjs add <file.json> <id> "<text>"` · the starting status is `OPEN`
+2. A **fresh** checker checks one item at a time and records the result: `mark <file.json> <id> PROVED|REFUTED|OPEN --evidence "<file:line or run result>"` · `PROVED` and `REFUTED` need evidence · no evidence = still `OPEN`
+3. Ask the script what to do next: `next <file.json>` prints 1 line saying which item to check next · which to check again · which to withdraw from the conclusion · or that you can finish · do what that line says
+4. **Minimum 2 rounds** — an item `PROVED` by a single check is not done. Another fresh checker must try to refute it and fail (`--min-rounds` is adjustable · own default, not measured), because the one who proves it usually feels overconfident
+5. `REFUTED` → withdraw that item from the conclusion, then `close <file.json> <id>` · `OPEN` after 4 checks (`--max-rounds`) → stop and report that it was not proved and what is missing
+6. Test: `node --test scripts/ledger.test.mjs`
 
-## รอลูกทีมแบบไม่ต้องถามในแชต
+## Waiting for sub-agents without asking in chat
 
-`node scripts/keep-waiting.mjs --until-file <ไฟล์รายงาน> --seconds 100` หลับสั้นกว่า timeout ของ Bash (120 วินาที) แล้วพิมพ์ `KEEP WAITING` ให้รันซ้ำ หรือ `DONE` เมื่อไฟล์ปรากฏ · ใช้กับ Node บน Windows ได้โดยไม่ต้องมี shell อื่น
+`node scripts/keep-waiting.mjs --until-file <report file> --seconds 100` sleeps for less than the Bash timeout (120 seconds), then prints `KEEP WAITING` (run it again) or `DONE` when the file appears · works with Node on Windows without any other shell
 
-ที่มา: ReAct (Yao et al., 2022) · Reflexion (Shinn et al., 2023) · Plan-and-Solve (Wang et al., 2023) · Mixture-of-Agents (Wang et al., 2024) · multi-agent frameworks (AutoGen · MetaGPT) · cross-encoder reranking · [Huang et al. 2023 · LLMs cannot self-correct reasoning yet](https://arxiv.org/abs/2310.01798) · [LLMCompiler](https://arxiv.org/abs/2312.04511) · [ADaPT](https://arxiv.org/abs/2311.05772) · [Anthropic: multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) · แม่แบบ Loop · Graph · Dynamic ของคอร์ส AI Workflow (CWN2026) ของเจ้าของ repo · เปิดอ่าน 2026-10-26
+Sources: ReAct (Yao et al., 2022) · Reflexion (Shinn et al., 2023) · Plan-and-Solve (Wang et al., 2023) · Mixture-of-Agents (Wang et al., 2024) · multi-agent frameworks (AutoGen · MetaGPT) · cross-encoder reranking · [Huang et al. 2023 · LLMs cannot self-correct reasoning yet](https://arxiv.org/abs/2310.01798) · [LLMCompiler](https://arxiv.org/abs/2312.04511) · [ADaPT](https://arxiv.org/abs/2311.05772) · [Anthropic: multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) · the Loop · Graph · Dynamic templates of the AI Workflow course (CWN2026) by the repo owner · read 2026-10-26
 
-ที่มาเพิ่ม (ดู 2026-11-10): รอบแก้ที่ขยับคน และบัญชีข้อที่เลื่อน: superpowers (MIT) · `skills/subagent-driven-development/` · บัญชีข้อกล่าวอ้างและขั้นต่ำกี่รอบ: math-proof (LICENSE มี ยังไม่ได้ระบุชนิด · เอากลไกอย่างเดียว) · `agents/math-proof-judge.md` · `keep-waiting`: claude-security (All rights reserved · เอากลไกอย่างเดียว) · `scripts/keep-waiting.sh`
+More sources (see 2026-11-10): fix rounds that move the agent, and the deferred-items ledger: superpowers (MIT) · `skills/subagent-driven-development/` · the claim ledger and the minimum rounds: math-proof (has a LICENSE, type not yet identified · took the mechanism only) · `agents/math-proof-judge.md` · `keep-waiting`: claude-security (All rights reserved · took the mechanism only) · `scripts/keep-waiting.sh`

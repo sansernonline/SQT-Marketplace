@@ -3,34 +3,34 @@ name: design-direction-lookup
 description: Use for a starting palette and Thai-Latin fonts on a new screen
 ---
 
-# design-direction-lookup — หาจุดเริ่มหน้าตา 3 แนวจากโจทย์ไทยหรืออังกฤษ
+# design-direction-lookup — find 3 starting looks from a Thai or English brief
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the owner's theme → search live references → 3 genuinely different directions → run `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" (pre-work gate) of `design-references` (plugin `superuser`) even when a brand exists (the brand fixes colors and fonts; the search finds the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
-อยู่ใน plugin `software-development` · ถ้อยคำเขียนตาม `human-writing` · ใช้ก่อน `ui-craft` ข้อ 0.1 ขั้น 3 (ทำ 3 แนวขนานกัน)
+Lives in plugin `software-development` · wording follows `human-writing` · used before `ui-craft` step 0.1 stage 3 (make 3 directions in parallel)
 
-> **กฎข้อเดียว:** ตัวร่างให้จุดเริ่ม ไม่ตัดสินแทนด่านสวย — ทุกแนวที่ได้ต้องไปเป็น mockup แล้วเลือกที่ด่านสวยของ `ui-craft` ข้อ 9 เสมอ · ถ้าตัวค้นตอบว่าไม่พบ ให้บอกตรง ๆ ห้ามแต่งสีหรือฟอนต์แล้วเล่าว่ามาจากข้อมูล
+> **The one rule:** the draft gives a starting point; it does not replace the beauty gate — every direction produced must become a mockup and be chosen at the beauty gate of `ui-craft` step 9 · if the search says nothing was found, say so plainly; never invent colors or fonts and claim they came from data
 
-## ใช้เมื่อ
+## Use when
 
-- เริ่มโปรเจกต์หน้าจอใหม่ หรือผู้ใช้สั่งออกแบบใหม่ แล้วยังไม่มีทิศทางภาพ (`ui-craft` ข้อ 0 บอกให้ทำข้อ 0.1)
-- ต้องการพาเลต 2 โหมด คู่ฟอนต์ไทย-ละติน หรือกฎ UX ไทยที่เข้ากับธุรกิจ เช่น "ทำเว็บคลินิกทันตกรรม อยากได้โทนสีกับฟอนต์ไทยที่เข้ากัน"
-- อยากรู้ว่าข้อมูลแบบนี้ใช้กราฟอะไร · หน้าแรกควรเรียง section อย่างไร · เฟรมเวิร์กนี้มีกฎหน้าตาอะไร
+- Starting a new screen project, or the user orders a new design, and there is no visual direction yet (`ui-craft` step 0 says to do step 0.1)
+- You need a 2-mode palette, a Thai-Latin font pair, or Thai UX rules that fit the business, e.g. "ทำเว็บคลินิกทันตกรรม อยากได้โทนสีกับฟอนต์ไทยที่เข้ากัน" (a dental clinic website, wants a matching color tone and Thai font)
+- You want to know which chart fits this kind of data · how the home page should order its sections · what look rules a framework has
 
-ไม่ใช้เมื่อ: โปรเจกต์มีหน้าตาที่ผ่านด่านสวยแล้ว (ลอกหน้าพี่น้องตาม `ui-craft` ข้อ 0) · ทำแบรนด์ทั้งชุด โลโก้ หรือสีองค์กร (`brand-kit`) · ตรวจงานที่เสร็จแล้วว่าดูเหมือน AI ทำไหม (`no-ai-look`)
+Do not use when: the project already has a look that passed the beauty gate (copy the sibling page per `ui-craft` step 0) · making a whole brand set, logo, or corporate colors (`brand-kit`) · checking finished work for looking AI-made (`no-ai-look`)
 
-## ใช้ตัวอื่นแทนหรือคู่กัน
+## Use another skill instead or alongside
 
-| สถานการณ์ | ใช้ | เหตุผล |
+| Situation | Use | Reason |
 |---|---|---|
-| ได้ 3 แนวแล้ว ต้องทำ mockup และเลือก | `ui-craft` ข้อ 0.1 ขั้น 3–5 และข้อ 9 | skill นี้หยุดที่จุดเริ่ม ขั้นเลือกอยู่ที่นั่น |
-| หน้าจอเว็บแอป แดชบอร์ด ระบบหลังบ้าน | `web-app-design` | โครงหน้าและคอมโพเนนต์ของแพลตฟอร์ม |
-| แอปมือถือ PWA | `mobile-app-design` | ขนาดจอเล็ก ระยะนิ้ว กฎไทยบนจอเล็ก |
-| แอปเดสก์ท็อป Windows | `windows-app-design` | token Fluent ของจริงชนะพาเลตจากที่นี่ |
-| ตรวจ mockup ก่อนส่ง | `no-ai-look` (`slop_scan.py`) | ตัวร่างตรวจแค่สีและฟอนต์ ไม่ได้ตรวจหน้าจอทั้งหน้า |
-| ลูกค้ามีแบรนด์อยู่แล้ว หรือต้องทำแบรนด์ใหม่ | `graphic-design:brand-kit` | สีและฟอนต์แบรนด์ชนะข้อมูลที่นี่เสมอ |
+| Got the 3 directions, need to mock up and choose | `ui-craft` step 0.1 stages 3–5 and step 9 | This skill stops at the starting point; the choosing stage is there |
+| Web app screens, dashboards, back-office systems | `web-app-design` | Page structure and components of the platform |
+| Mobile app PWA | `mobile-app-design` | Small screen size, finger distance, Thai rules on small screens |
+| Windows desktop app | `windows-app-design` | Real Fluent tokens beat palettes from here |
+| Check the mockup before sending | `no-ai-look` (`slop_scan.py`) | The draft checks only colors and fonts, not the whole screen |
+| The customer already has a brand, or a new brand must be made | `graphic-design:brand-kit` | Brand colors and fonts always beat the data here |
 
-## 1 · ค้นทีละเรื่อง
+## 1 · Search one topic at a time
 
 ```bash
 python scripts/design_search.py "ร้านทองออนไลน์" --domain industry
@@ -38,102 +38,102 @@ python scripts/design_search.py "ช่องวันที่ พ.ศ." --doma
 python scripts/design_search.py "ฟอร์ม validation" --domain stack --stack blazor --json
 ```
 
-- domain: `industry` · `palette` (คลังสำรอง ผลขึ้นต้นด้วยคำเตือนให้ค้นสดก่อน) · `font` · `look` · `ux` · `chart` · `landing` · `stack`
-- domain จาก ui-ux-pro-max-skill (ภาษาอังกฤษ · [`data/upstream/uipro/README.md`](data/upstream/uipro/README.md)): `style` (88 สไตล์ มีค่าสี เงา การเคลื่อนไหว CSS ใช้กับอะไร ห้ามใช้กับอะไร) · `product` (192 ประเภทสินค้า → รูปแบบหน้า สไตล์ อารมณ์สีและตัวอักษร สิ่งที่ห้ามทำ) · `motion` · `slide` · `slide-strategy` · `slide-copy` · ใช้คู่กับ `look` และ `industry` ของเราตอนเลือก 3 แนว สีจากไฟล์ต้นทางไม่ได้ตรวจ contrast · วิธีเลือกคำค้นและอ่านผล → [`references/query-guide.md`](references/query-guide.md)
-- 1 ครั้ง 1 เจตนา 2–5 คำ · ไทย อังกฤษ หรือปนกันก็ได้ · ค้นซ้ำด้วยคำอื่นได้ 1 ครั้ง ไม่เจอให้บอกผู้ใช้
-- ตัวค้นตัดคำไทยด้วยพจนานุกรมจากคอลัมน์ keywords ของข้อมูล และขยายคำค้นด้วยตารางคำพ้องไทย-อังกฤษ จึงค้น `ร้านกาแฟมินิมอล` ได้โดยไม่ต้องเว้นวรรค
+- domain: `industry` · `palette` (backup store; results start with a warning to search live first) · `font` · `look` · `ux` · `chart` · `landing` · `stack`
+- domains from ui-ux-pro-max-skill (English · [`data/upstream/uipro/README.md`](data/upstream/uipro/README.md)): `style` (88 styles with color values, shadow, motion, CSS, what to use it with, what not to use it with) · `product` (192 product types → page pattern, style, color and type mood, things to avoid) · `motion` · `slide` · `slide-strategy` · `slide-copy` · use together with our `look` and `industry` when choosing the 3 directions; colors from a source file are not contrast-checked · how to choose queries and read results → [`references/query-guide.md`](references/query-guide.md)
+- 1 run, 1 intent, 2–5 words · Thai, English or mixed all work · you may search again with different words once; if still not found, tell the user
+- The search segments Thai words with a dictionary built from the keywords column of the data and expands the query with a Thai-English synonym table, so `ร้านกาแฟมินิมอล` can be searched without spaces
 
-## 2 · ค้นสีสดก่อน แล้วถอดสีจากงานจริง
+## 2 · Search colors live first, then extract colors from real work
 
-ทำทุกครั้งที่มีเน็ต ก่อนร่าง 3 แนว · เทรนด์สีเปลี่ยนเร็ว พาเลตใน `data/` จึงเป็นคลังสำรองสำหรับตอนค้นสดไม่ได้ ไม่ใช่ตัวหลัก · สีที่ส่งเข้าตัวร่างด้วย `--palette` หรือ `--extra-palettes` ชนะคลังเสมอ
+Do this every time there is a network, before drafting the 3 directions · color trends change fast, so the palettes in `data/` are a backup store for when live search is not possible, not the main source · colors passed to the draft with `--palette` or `--extra-palettes` always beat the store
 
-0. **ค้นสดตาม skill `design-references` ของ `superuser`** หางานต้นแบบปีนี้และเว็บธุรกิจจริงในวงการ แล้วจดว่าเห็นโทนสีอะไร
-1. **เลือกเว็บ 3–5 เจ้าในวงการเดียวกับโจทย์:** ธุรกิจไทย 2–4 เจ้า และเจ้าใหญ่ต่างประเทศ 1 เจ้า · เลือกเฉพาะเว็บที่ยังใช้งานและเพิ่งปรับหน้าตา ดูจากปี copyright ท้ายหน้า ข่าว หรือโพสต์ล่าสุด · เว็บที่ปีเก่ากว่า 2 ปีให้ข้าม
-2. **ดูงานออกแบบปีนี้อย่างน้อย 1 แหล่ง** จากแหล่งที่ `ui-craft` ข้อ 0.1 ขั้น 2 ใช้ (Siteinspire หรือ Awwwards) กรองตามวงการหรือสไตล์ แล้วจดว่าเห็นอะไรที่ต่างจากคลังสำรอง
-3. **ดึงสี:**
+0. **Search live per the `design-references` skill of `superuser`:** find this year's reference work and real business sites in the field, and note which color tones you see
+1. **Choose 3–5 sites in the same field as the brief:** 2–4 Thai businesses and 1 large foreign one · choose only sites that are still active and recently redesigned, judged by the copyright year in the footer, news, or latest post · skip sites older than 2 years
+2. **Look at this year's design work from at least 1 source** among those used by `ui-craft` step 0.1 stage 2 (Siteinspire or Awwwards), filtered by field or style, and note what you see that differs from the backup store
+3. **Extract colors:**
    ```bash
    python scripts/brand_colors.py https://a.co.th https://b.co.th https://c.com
    python scripts/brand_colors.py <url เดิม> --palette web-<วงการ> > _to_delete/web-palettes.csv
    ```
-   ผลต่อเว็บคือสีแบรนด์อันดับ 1–4 พร้อมน้ำหนักและที่มา (theme-color · ตัวแปร CSS เช่น `--primary` · ความถี่ใน CSS) สีพื้นและสีตัวอักษร และวันที่ดึง · ตัวดึงอ่านแค่ HTML และ CSS ไม่รัน JavaScript เว็บที่ต้องรัน JavaScript ก่อนถึงจะมีเนื้อ ตัวดึงบอกว่าดึงไม่ได้ ให้รายงานตามนั้น ห้ามเดาสีแทน
-4. **สร้างพาเลตใหม่ 1–2 ชุด** ด้วย `--palette` · ตัวสร้างใช้สีที่หลายเว็บใช้ร่วมกันเป็น primary และ accent เลื่อนเฉดเล็กน้อยไม่ให้ตรงกับแบรนด์ใด แล้วคิดสีพื้น ตัวอักษร ขอบ และสีสถานะให้ผ่าน contrast ทั้ง 2 โหมด · ถ้าอยากได้ 2 ชุด ให้รันอีกครั้งกับเว็บอีกกลุ่ม (เช่น กลุ่มพรีเมียม กับกลุ่มราคาเข้าถึงง่าย) แล้วต่อไฟล์ CSV
-5. **ส่งเข้าตัวร่าง:**
+   The result per site is brand colors ranked 1–4 with weight and source (theme-color · CSS variables such as `--primary` · frequency in CSS), the background and text colors, and the extraction date · the extractor reads only HTML and CSS and does not run JavaScript; for a site that needs JavaScript before it has content, the extractor says it could not extract; report that as is and never guess colors instead
+4. **Build 1–2 new palettes** with `--palette` · the builder uses colors shared by many sites as primary and accent, shifts the hue slightly so it matches no single brand, then works out background, text, border and status colors that pass contrast in both modes · to get 2 sets, run again with another group of sites (for example a premium group and an affordable group) and append the CSV files
+5. **Feed them to the draft:**
    ```bash
    python scripts/design_draft.py "<โจทย์>" --extra-palettes _to_delete/web-palettes.csv
    python scripts/design_draft.py "<โจทย์>" --palette "ร้านเก่า:bg=#FAF7F2,surface=#FFFFFF,text=#2B2118,text_muted=#6B5A48,primary=#8A3B12,secondary=#D9B26F,accent=#2F6F6A,border=#D8CBB8"
    ```
-   `--palette` ใส่ซ้ำได้หลายชุด รับ 3 แบบ: 8 หน้าที่แบบมีชื่อ (ตามตัวอย่าง · `secondary` ไม่ใส่ก็ได้) · สี 8 ตัวเรียงตามลำดับ bg surface text text_muted primary secondary accent border · หรือสีแบรนด์ 1–7 ตัว (ตัวแรกเป็นสีหลัก) · โหมดสว่างใช้สีที่ส่งมาตรง ๆ ส่วน on_primary สีสถานะ และโหมดมืดตัวร่างคิดให้ผ่าน contrast · `secondary` ไม่มีช่องในตาราง ถูกบันทึกใน notes · สีที่ contrast ไม่ผ่านหรือเป็นสีตั้งต้นของ Tailwind ถูกปฏิเสธพร้อมบอกเหตุ
-   `--palettes` เลือกและเรียงบางชุดเป็นแนว ก ข ค · ถ้าโจทย์ไม่ตรงอุตสาหกรรมไหนในข้อมูล ตัวร่างใช้อุตสาหกรรมชั่วคราว `custom` แล้วเลือก look และคู่ฟอนต์จากคำในโจทย์แทนการหยุด
-   พาเลตที่ contrast ตกไม่หยุดคำสั่ง ตัวร่างลองปรับ on_primary เป็นขาวหรือดำก่อน ยังตกก็ตัดแล้วจดใต้ "ที่ตัดออกก่อนร่าง" · สีที่ถอดจากงานของคนอื่นใส่ `--reference-colors [องศา]` (ค่าตั้งต้น 8) เพื่อเลื่อนเฉดและให้ DESIGN.md บอกที่มาตามจริง (เลื่อนแล้ว contrast ตก ตัวร่างปรับความสว่างไม่เกิน 10% ก่อนค่อยตัด) · ถ้าอุตสาหกรรม 2 อันดับคะแนนใกล้กัน ผลจะบอกทั้ง 2 ชื่อ ให้เลือกด้วย `--industry` · ฟอนต์หัวไม่ซ้ำกันใน 3 แนว · `--voice rounded|angular|modern|formal|classic|hand` ให้แนว ก ได้คู่ฟอนต์บุคลิกที่เลือกจากพื้นฐานโปรเจกต์ (`ui-craft/references/font-voice.md` · คอลัมน์ `voice` ใน `font-pairs.csv`)
-6. **จดลง DESIGN.md:** URL ทุกเว็บที่ดู แหล่งงานออกแบบที่ดู วันที่ดูของทุกแหล่ง สีที่ได้ และเว็บที่ดึงไม่ได้
+   `--palette` can be repeated for several sets and takes 3 forms: 8 named roles (as in the example · `secondary` may be omitted) · 8 colors in the order bg surface text text_muted primary secondary accent border · or 1–7 brand colors (the first is the main color) · light mode uses the colors passed in as they are, while on_primary, status colors and dark mode are worked out by the draft to pass contrast · `secondary` has no column in the table and is recorded in notes · colors that fail contrast or are Tailwind defaults are rejected with the reason
+   `--palettes` selects and orders some sets as directions A B C · if the brief matches no industry in the data, the draft uses a temporary industry `custom` and picks the look and font pair from words in the brief instead of stopping
+   A palette that fails contrast does not stop the command: the draft first tries setting on_primary to white or black, and if it still fails, drops it and notes it under "dropped before drafting" (`ที่ตัดออกก่อนร่าง`) · colors extracted from other people's work go in `--reference-colors [degrees]` (default 8) to shift the hue and make DESIGN.md state the source truthfully (if contrast fails after shifting, the draft adjusts lightness by at most 10% before dropping) · if 2 industries score close, the result names both; choose with `--industry` · the heading font does not repeat across the 3 directions · `--voice rounded|angular|modern|formal|classic|hand` gives direction A a font pair with the chosen personality, picked from the project's basics (`ui-craft/references/font-voice.md` · column `voice` in `font-pairs.csv`)
+6. **Record in DESIGN.md:** the URL of every site viewed, the design sources viewed, the viewing date of every source, the colors obtained, and sites that could not be extracted
 
-ไม่มีเน็ต หรือดึงสีไม่ได้ทุกเว็บ → ข้ามไปหัวข้อ 3 โดยไม่ส่งสี ตัวร่างใช้คลังสำรองใน `data/` พร้อมคำเตือนในจอและใน DESIGN.md ว่า "ใช้คลังสีสำรอง ค้นสดตาม design-references จะทันสมัยกว่า"
+No network, or colors cannot be extracted from any site → skip to section 3 without passing colors; the draft uses the backup store in `data/` with a warning on screen and in DESIGN.md saying "ใช้คลังสีสำรอง ค้นสดตาม design-references จะทันสมัยกว่า" (using the backup color store; a live search per design-references would be more current)
 
-## 3 · ร่าง 3 แนวในคำสั่งเดียว
+## 3 · Draft 3 directions in one command
 
 ```bash
 python scripts/design_draft.py "<โจทย์>" --out docs/DESIGN.md --html docs/design/<รหัส>-design-directions.html
 ```
 
-ตัวร่างทำตามลำดับนี้:
+The draft works in this order:
 
-1. หาอุตสาหกรรมจากโจทย์ ถ้าไม่พบ ตัวร่างใช้อุตสาหกรรมชั่วคราว `custom` แล้วเลือก look และฟอนต์จากคำในโจทย์ (ไม่เดาสี)
-2. เรียงแนวตามที่แถวอุตสาหกรรมกำหนด (look · พาเลต · คู่ฟอนต์ ตำแหน่งเดียวกัน) ถ้ามีสีสดส่งมา พาเลตเรียงตามที่ส่ง แล้วตรวจทีละแนว
-3. **ตัดแนวที่ไม่ผ่าน แล้วหยิบตัวถัดไป:** contrast ไม่ถึง 4.5:1 สำหรับข้อความหรือ 3:1 สำหรับปุ่มและขอบ ในโหมดใดโหมดหนึ่ง · มีสีตั้งต้นของ Tailwind (slate gray zinc neutral indigo violet) · Inter หรือ Geist เป็นฟอนต์แรก · ฟอนต์ไทยที่ไม่มีคู่ละติน เช่น Noto Sans Thai เดี่ยว
-4. look ของ 3 แนวต้องไม่ซ้ำกัน · ถ้าแนวที่อุตสาหกรรมกำหนดไม่พอ ตัวร่างเติมจาก look ที่ค้นได้จากคำของอุตสาหกรรม
-   · สีหลักของ 2 แนวต้องห่างทั้งระยะ RGB และเฉดสี (ไม่ถึง 20 องศาถือว่าโทนเดียวกัน) · แต่ละแนวใช้โครงหน้าต่างกันตาม look: ตัวอักษรใหญ่ชิดซ้าย (editorial) · กล่องหลายขนาด (bento) · แถบเครื่องมือกับตารางแน่น (dense)
-5. หากฎ UX ที่เกี่ยว 5 ข้อ (กฎไทยขึ้นก่อนเมื่อคะแนนใกล้กัน)
-6. เขียน `docs/DESIGN.md` และหน้าเทียบ HTML (swatch 2 โหมด · หัวและเนื้อภาษาไทยในฟอนต์จริง · บรรทัดตรวจสระและวรรณยุกต์ · ปุ่ม · ป้ายสถานะ) · **มีไฟล์อยู่แล้วไม่เขียนทับ** ถ้าไม่ใส่ `--force`
+1. Find the industry from the brief; if not found, the draft uses a temporary industry `custom` and picks the look and fonts from words in the brief (does not guess colors)
+2. Order the directions as the industry row sets (look · palette · font pair, same position); if live colors were passed in, palettes are ordered as passed; then check each direction
+3. **Drop directions that fail, then take the next one:** contrast below 4.5:1 for text or 3:1 for buttons and borders in either mode · has a Tailwind default color (slate gray zinc neutral indigo violet) · Inter or Geist as the first font · a Thai font with no Latin partner, such as Noto Sans Thai alone
+4. The looks of the 3 directions must not repeat · if the directions set by the industry are not enough, the draft fills in from looks found by the industry's words
+   · the main colors of any 2 directions must be far apart in both RGB distance and hue (under 20 degrees counts as the same tone) · each direction uses a different page structure per look: large left-aligned type (editorial) · boxes of several sizes (bento) · toolbar with a dense table (dense)
+5. Find 5 related UX rules (Thai rules go first when scores are close)
+6. Write `docs/DESIGN.md` and the HTML comparison page (2-mode swatches · Thai headings and body in the real font · a line that checks vowels and tone marks · buttons · status badges) · **an existing file is not overwritten** unless `--force` is given
 
-ข้อความที่ตัวร่างสร้างผ่านตัวกรองคำโฆษณา (ยกระดับ · ไร้รอยต่อ · seamless · elevate ฯลฯ) ถ้าข้อมูลต้นทางมีคำเหล่านี้ ตัวร่างหยุดและบอกให้แก้ข้อมูล
+Text the draft generates passes the ad-word filter (ยกระดับ · ไร้รอยต่อ · seamless · elevate etc.; the Thai words mean "elevate" and "seamless") · if the source data has these words, the draft stops and tells you to fix the data
 
-## 4 · หลังได้ร่าง
+## 4 · After you have the draft
 
-1. เปิดหน้าเทียบดูทั้ง 2 โหมดเอง อย่าเชื่อแค่ตัวเลข contrast · ฟอนต์ไทยบางตัวสระบนชนบรรทัดก่อนหน้า ต้องเห็นด้วยตา
-2. ส่ง 3 แนวเข้า `ui-craft` ข้อ 0.1 ขั้น 3 (subagent ตัวใหม่แนวละตัว · agent ที่เรียกลูกทีมไม่ได้ให้ทำเองทีละแนว และจดไว้ใน "ตัดสินใจเอง") · แต่ละแนวเพิ่มความกล้า 1 จุดเอง ตัวร่างไม่ได้เลือกให้
-3. ลูกค้ามีสีหรือฟอนต์แบรนด์ ให้แทนค่าในแนวนั้น ๆ แล้วรันตัวตรวจ contrast ใหม่ (`no-ai-look/scripts/slop_scan.py`)
-4. เลือกแนวที่ด่านสวย แล้วลงเหตุผลใน `## ตัดสินใจเอง` ของ `docs/BUILD-PLAN.md`
+1. Open the comparison page and look at both modes yourself; do not trust the contrast numbers alone · in some Thai fonts the upper vowels hit the previous line, which you must see with your eyes
+2. Send the 3 directions to `ui-craft` step 0.1 stage 3 (a fresh subagent per direction · an agent that cannot call a sub-team does each direction itself in turn and notes it under "ตัดสินใจเอง" (own decisions)) · each direction adds 1 bold move of its own; the draft does not choose it for you
+3. If the customer has brand colors or fonts, substitute the values in each direction and rerun the contrast check (`no-ai-look/scripts/slop_scan.py`)
+4. Choose the direction that passes the beauty gate, and write the reason under `## ตัดสินใจเอง` (own decisions) of `docs/BUILD-PLAN.md`
 
-## 5 · ข้อมูล
+## 5 · Data
 
-**พาเลตในชุดนี้เป็นคลังสำรองสำหรับตอนค้นสดไม่ได้ · look และคู่ฟอนต์ก็เป็นค่าสำรอง ทบทวนทุก 6 เดือน** ให้ตรงเทรนด์ปัจจุบัน (ครั้งหน้า 2027-04-26 · `scripts/check/expiry.json` เตือนเมื่อใกล้ถึงวัน) · มีเน็ตให้เริ่มจากข้อ 2 เสมอ
+**The palettes in this set are a backup store for when live search is not possible · the looks and font pairs are also backup values, reviewed every 6 months** to match current trends (next review 2027-04-26 · `scripts/check/expiry.json` warns when the date is near) · with a network, always start from step 2
 
-**ไม่มีในชุดนี้โดยตั้งใจ** · ไอคอน: ใช้ชุดเดียวทั้งแอปตาม `ui-craft` และ `no-ai-look` ไม่ต้องค้นจากตาราง · การเคลื่อนไหว: แต่ละ look มีช่อง motion แล้ว รายละเอียดอยู่ใน `ui-craft/references/depth-and-flourish.md` และ `graphic-design:motion-basics` · ฟอนต์ละตินล้วน: คู่ฟอนต์ระบุตัวละตินไว้แล้ว ส่วนรายชื่อทั้งหมดดูที่ fonts.google.com · stack อื่นนอก 7 ตัว (Next.js · Vue · SwiftUI ฯลฯ) เพิ่มเมื่อมีงานจริง ไม่ทำล่วงหน้า
+**Left out of this set on purpose** · icons: use one set across the whole app per `ui-craft` and `no-ai-look`, no table search needed · motion: each look already has a motion slot, details are in `ui-craft/references/depth-and-flourish.md` and `graphic-design:motion-basics` · Latin-only fonts: the font pairs already name the Latin font, and for the full list see fonts.google.com · stacks other than the 7 (Next.js · Vue · SwiftUI etc.) are added when real work needs them, not ahead of time
 
-ไฟล์ CSV ใน `data/` (คั่นช่องหลายค่าด้วย `;`) ตรวจด้วย `scripts/check_data.py` · ตัวค้นอ่านทุกไฟล์ตอนเริ่ม ไม่ต้องสร้างดัชนีล่วงหน้า
+The CSV files in `data/` (multi-value fields separated by `;`) are checked by `scripts/check_data.py` · the search reads every file at startup, no need to build an index ahead of time
 
-| ไฟล์ | มีอะไร |
+| File | Contents |
 |---|---|
-| `industries.csv` | อุตสาหกรรม → บุคลิก · look · พาเลต · คู่ฟอนต์ · ข้อควรระวัง · กฎตัดสิน |
-| `palettes.csv` | คลังสีสำรอง ตามบทบาทสี 2 แถวต่อ id (light · dark) · ใช้เมื่อไม่มีสีจากการค้นสด |
-| `font-pairs.csv` · `thai-fonts.csv` | คู่ไทย-ละติน · ขนาดเนื้อเล็กสุด · line-height · licence |
-| `looks.csv` | look ของ `ui-craft/references/web-looks.md` · ความลึก · การเคลื่อนไหว · ข้อห้าม |
-| `ux-rules.csv` · `charts.csv` · `landing.csv` · `stacks/<stack>.csv` | กฎ UX รวมกฎไทย · กราฟ · ลำดับ section · กฎรายเฟรมเวิร์ก |
+| `industries.csv` | Industry → personality · look · palette · font pair · cautions · deciding rules |
+| `palettes.csv` | Backup color store by color role, 2 rows per id (light · dark) · used when there are no colors from a live search |
+| `font-pairs.csv` · `thai-fonts.csv` | Thai-Latin pairs · smallest body size · line-height · licence |
+| `looks.csv` | Looks of `ui-craft/references/web-looks.md` · depth · motion · prohibitions |
+| `ux-rules.csv` · `charts.csv` · `landing.csv` · `stacks/<stack>.csv` | UX rules including Thai rules · charts · section order · per-framework rules |
 
-เพิ่มแถวใหม่แล้วค้นไม่เจอด้วยคำไทย ให้ใส่คำนั้นในคอลัมน์ keywords ของแถว เพราะพจนานุกรมตัดคำมาจากคอลัมน์นี้
+If you add a new row and cannot find it with Thai words, put that word in the row's keywords column, because the dictionary segmentation is built from this column.
 
-## ตัวอย่างจริง
+## A real example
 
-**โจทย์:** "เว็บขายทองรูปพรรณ ร้านเก่าในเยาวราช ลูกค้า 35–60 ซื้อผ่านมือถือ"
+**Brief:** "เว็บขายทองรูปพรรณ ร้านเก่าในเยาวราช ลูกค้า 35–60 ซื้อผ่านมือถือ" (a website selling gold jewelry, an old shop in Yaowarat, customers aged 35–60 buying on mobile)
 
-**ทำ:** `python scripts/design_draft.py "<โจทย์>" --out _to_delete/gold/DESIGN.md --html _to_delete/gold/gold-design-directions.html`
+**Run:** `python scripts/design_draft.py "<โจทย์>" --out _to_delete/gold/DESIGN.md --html _to_delete/gold/gold-design-directions.html`
 
-**ผล (รัน 2026-10-26):** จับ `gold-shop` ได้อันดับ 1 · แนว ก luxury + พาเลต `gold-leaf` + ฟอนต์ Chonburi/Taviraj · แนว ข editorial + `yaowarat-red` + Trirong/Taviraj · แนว ค Thai craft + `thai-silk` + Anuphan/IBM Plex Sans Thai · ทุกพาเลตผ่าน contrast ทั้ง 2 โหมด · กฎ UX 5 ข้อ เช่น ตัวเลขยอดเงินใช้ tabular-nums และบอกเวลาอัปเดตล่าสุดของราคา · ท้าย DESIGN.md บอกว่าตัดพาเลต `night-vault` เพราะสีหลักบนพื้นสว่างได้ 2.91:1 · หน้าเทียบผ่าน `slop_scan.py` โดยไม่มีข้อฟ้อง
+**Result (run 2026-10-26):** matched `gold-shop` as rank 1 · direction A luxury + palette `gold-leaf` + fonts Chonburi/Taviraj · direction B editorial + `yaowarat-red` + Trirong/Taviraj · direction C Thai craft + `thai-silk` + Anuphan/IBM Plex Sans Thai · every palette passes contrast in both modes · 5 UX rules, for example money amounts use tabular-nums and show the last update time of the price · the end of DESIGN.md says palette `night-vault` was dropped because its main color on a light background got 2.91:1 · the comparison page passed `slop_scan.py` with no findings
 
-## ตรวจก่อนส่ง
+## Check before sending
 
-- [ ] `python scripts/design_search.py --self-test` · `python scripts/design_draft.py --self-test` · `python scripts/brand_colors.py --self-test` ผ่านทุกข้อ
-- [ ] มีเน็ต → ค้นสดตาม `design-references` แล้ว DESIGN.md จด URL ของเว็บธุรกิจจริงและแหล่งงานออกแบบที่ดู พร้อมวันที่ดูทุกแหล่ง · ไม่มีเน็ต → DESIGN.md มีคำเตือนคลังสำรอง
-- [ ] แก้ตัวค้นหรือข้อมูล → รัน `--eval references/relevance-cases.json` แล้ว holdout ยังไม่ต่ำกว่า 85 %
-- [ ] DESIGN.md มี 3 แนวที่ look ไม่ซ้ำ และบอกว่าเป็นจุดเริ่ม ไม่ใช่คำตัดสิน
-- [ ] หน้าเทียบไม่มี Inter เป็นฟอนต์หลัก ไม่มีสีตั้งต้นของ Tailwind และไม่มีฟอนต์ไทยที่ไม่มีคู่ละติน
-- [ ] ไม่ได้เขียนทับ DESIGN.md เดิมของโปรเจกต์โดยไม่ได้ตั้งใจ (ไม่ใส่ `--force` ถ้าไม่จำเป็น)
+- [ ] `python scripts/design_search.py --self-test` · `python scripts/design_draft.py --self-test` · `python scripts/brand_colors.py --self-test` all pass
+- [ ] With a network → searched live per `design-references`, and DESIGN.md notes the URLs of real business sites and design sources viewed, with the viewing date of every source · with no network → DESIGN.md has the backup-store warning
+- [ ] If you changed the search or the data → run `--eval references/relevance-cases.json` and the holdout is still not below 85 %
+- [ ] DESIGN.md has 3 directions with distinct looks and says they are a starting point, not a verdict
+- [ ] The comparison page has no Inter as the main font, no Tailwind default colors, and no Thai font without a Latin partner
+- [ ] Did not overwrite the project's existing DESIGN.md by accident (no `--force` unless necessary)
 
-## ที่มา
+## Sources
 
-- `data/upstream/uipro/` คัดลอกไม่แก้จาก ui-ux-pro-max-skill commit `28b3b8d` (MIT · 2026-10-29) ตามที่เจ้าของสั่งให้ลอกมาปรับปรุง
-- แนวคิดชุดข้อมูลที่ค้นได้ ตัวค้น BM25 พร้อมเกณฑ์งดตอบ และตัวสร้าง design system มาจาก nextlevelbuilder/ui-ux-pro-max-skill (MIT · https://github.com/nextlevelbuilder/ui-ux-pro-max-skill · ดู 2026-10-26) · โค้ดและข้อมูลที่นี่เขียนใหม่ทั้งหมด ไม่ได้คัดลอก · ส่วนที่ทำต่างจากต้นทาง: ตัดคำไทย · 3 แนวแทน 1 คำตอบ · ตัดสีตั้งต้นของ framework · คู่ฟอนต์ไทย-ละติน
-- BM25 เป็นวิธีจัดอันดับที่เปิดเผยทั่วไป เขียนเองใน `scripts/design_search.py` · ค่า k1 1.5 และ b 0.75
-- เกณฑ์ contrast 4.5:1 และ 3:1 ตาม `ui-craft` ข้อ 5 (WCAG 2.2 ข้อ 1.4.3 และ 1.4.11)
-- 3 แนว · look · บุคลิกแอป จาก `ui-craft` ข้อ 0.1 · `ui-craft/references/web-looks.md` · `ui-craft/references/app-character.md`
-- กฎสีและฟอนต์ที่ตัดออก ตรงกับกฎ `framework-default` และ `overused-font` ของ `no-ai-look/scripts/slop_scan.py`
+- `data/upstream/uipro/` copied unchanged from ui-ux-pro-max-skill commit `28b3b8d` (MIT · 2026-10-29), as the owner ordered it copied for improvement
+- The idea of a searchable dataset, the BM25 search with an abstain threshold, and the design-system generator come from nextlevelbuilder/ui-ux-pro-max-skill (MIT · https://github.com/nextlevelbuilder/ui-ux-pro-max-skill · viewed 2026-10-26) · the code and data here are entirely rewritten, not copied · what is done differently from the source: Thai word segmentation · 3 directions instead of 1 answer · dropping framework default colors · Thai-Latin font pairs
+- BM25 is a widely published ranking method, written by us in `scripts/design_search.py` · k1 1.5 and b 0.75
+- The contrast thresholds 4.5:1 and 3:1 follow `ui-craft` step 5 (WCAG 2.2 criteria 1.4.3 and 1.4.11)
+- 3 directions · look · app personality from `ui-craft` step 0.1 · `ui-craft/references/web-looks.md` · `ui-craft/references/app-character.md`
+- The color and font rules that are dropped match the rules `framework-default` and `overused-font` of `no-ai-look/scripts/slop_scan.py`

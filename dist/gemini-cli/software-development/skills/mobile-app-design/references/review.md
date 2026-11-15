@@ -1,8 +1,8 @@
-# ตรวจงาน ข้อห้าม และข้อจำกัด — ส่วนขยายของ `mobile-app-design`
+# Review, anti-patterns and limits — extension of `mobile-app-design`
 
-เปิดตอนทำข้อ 7 · 8 · 9 ของ `SKILL.md`
+Open this when doing items 7 · 8 · 9 of `SKILL.md`.
 
-## คำสั่งและเช็กลิสต์ตรวจงาน (ข้อ 7)
+## Review commands and checklist (item 7)
 
 ```bash
 # 1. หน้าตาถูกทุกขนาดจอไหม
@@ -17,40 +17,40 @@ node tools/check-design-tokens.mjs src/theme.css src/app \
   --require "--bg,--surface,--ink,--soft,--faint,--line,--signal,--repair,--hint,--ui,--dis,--text,--mono,--r-tile,--r-card,--app-max,--gutter"
 ```
 
-> ข้อยกเว้นเดียวที่ยอมให้มีสีดิบ: `<meta name="theme-color">` ใน `index.html` —
-> เบราว์เซอร์อ่าน meta ก่อน CSS โหลด จึงใช้ `var()` ไม่ได้
+> The only exception where a raw color is allowed: `<meta name="theme-color">` in `index.html` —
+> the browser reads meta before CSS loads, so `var()` cannot be used.
 
-เปิดภาพดูจริง ตรวจ:
+Open the screenshots and check by eye:
 
-- [ ] แถบบน/ล่างไม่โดนรอยบากหรือ home indicator ทับ
-- [ ] เลื่อนแล้วแถบบน/ล่างอยู่นิ่ง ไม่เลื่อนตาม
-- [ ] จอ 360px (Android เล็ก) ป้ายแท็บไม่ตัดคำ และไทล์ไม่ล้น
-- [ ] ปุ่มทุกอันแตะได้จริง ≥ 44×44 pt (iOS) · 48×48 dp (Android)
-- [ ] ข้อความไทยไม่ล้นปุ่ม วรรณยุกต์ไม่ชนสระ
-- [ ] คอนทราสต์ ≥ 4.5:1 (`--faint` บนพื้นขาวคือจุดที่เฉียดสุด — ใช้กับข้อความประกอบเท่านั้น)
-- [ ] มี empty state (`.blank`) ทุกที่ที่รายการอาจว่าง
-- [ ] สลับทุกธีมที่แอปมี (เช่น สว่าง/มืด · ธีมเรียบ/ไล่สี) แล้วไม่มีข้อความกลืนพื้น
-- [ ] ทุกช่องทางป้อนข้อมูลที่พึ่ง hardware มีทางเลือกสำรอง (เช่น แอปพูดมีทาง "พิมพ์แทนพูด" ส่วนแอปที่ใช้ sensor ให้ใช้กล้องหรือป้อนเองได้)
-- [ ] สิทธิ์ที่ถูกปฏิเสธและ hardware ที่ไม่มี มีหน้าจอบอกพร้อมทางไปต่อ
+- [ ] Top/bottom bars are not covered by the notch or home indicator
+- [ ] When scrolling, top/bottom bars stay fixed and do not scroll with the content
+- [ ] At 360px (small Android) tab labels do not break mid-word and tiles do not overflow
+- [ ] Every button is really tappable: ≥ 44×44 pt (iOS) · 48×48 dp (Android)
+- [ ] Thai text does not overflow buttons, and tone marks do not collide with vowels
+- [ ] Contrast ≥ 4.5:1 (`--faint` on white is the closest call — use it for supporting text only)
+- [ ] An empty state (`.blank`) exists wherever a list can be empty
+- [ ] Switch every theme the app has (e.g. light/dark · plain/gradient) and no text blends into the background
+- [ ] Every input channel that depends on hardware has a fallback (e.g. a speaking app has a "พิมพ์แทนพูด" ("type instead of speaking") path; an app that uses a sensor lets the user use the camera or enter data by hand)
+- [ ] A denied permission and missing hardware each have a screen that says so and offers a way forward
 
-## Anti-patterns (ข้อ 8)
+## Anti-patterns (item 8)
 
-- **`100vh`** — ใช้ `100dvh`
-- **ลืม `env(safe-area-inset-*)`** หรือลืม `viewport-fit=cover`
-- **ยัด 6+ แท็บในแถบล่าง** — 3–5 พอ ที่เหลือไปอยู่ในหน้า "เพิ่มเติม"
-- **modal เล็ก ๆ สำหรับงานที่ใช้เวลานาน** — ใช้ `.overlay` เต็มจอ
-- **ยุบฟอนต์เหลือตระกูลเดียวในแอปที่มีเนื้อหาให้อ่าน** — ผู้ใช้แยกเนื้อหาออกจาก chrome (แถบ ปุ่ม เมนูของแอป) ไม่ออก
-- **ไล่สีหลังข้อความยาว** — ไล่สีอยู่บน chrome และปุ่มหลักเท่านั้น
-- **พึ่งสีอย่างเดียวบอกความหมาย** — `del`/`ins` มีรูปแบบขีดของตัวเองอยู่แล้ว
-- **ไม่มี `:active` feedback** — มือถือไม่มี hover ถ้ากดแล้วไม่ขยับ ผู้ใช้จะกดซ้ำ
-- **ส่ง mockup โดยไม่เคยเรนเดอร์ดูที่ขนาดจริง**
+- **`100vh`** — use `100dvh`
+- **Forgetting `env(safe-area-inset-*)`** or forgetting `viewport-fit=cover`
+- **Cramming 6+ tabs into the bottom bar** — 3–5 is enough; put the rest on a "เพิ่มเติม" ("More") page
+- **A small modal for a long task** — use the full-screen `.overlay`
+- **Collapsing to one font family in an app that has content to read** — users can no longer tell content from chrome (the app's bars, buttons, menus)
+- **A gradient behind long text** — gradients go on chrome and primary buttons only
+- **Relying on color alone to carry meaning** — `del`/`ins` already have their own strike/underline styles
+- **No `:active` feedback** — mobile has no hover; if nothing moves on press, users press again
+- **Handing over a mockup that was never rendered at real size**
 
-## ข้อจำกัดที่ต้องรู้ (ข้อ 9)
+## Limits to know (item 9)
 
-- ค่าทั้งหมด **ตรวจแล้วบน HTML/CSS** — ตาราง React Native ใน `references/tokens.md`
-  **ยังไม่ได้ build ทดสอบ** ส่วน Flutter ใช้แนวข้อ 4.1 ทำแอปจริงแล้ว 1 ตัว (Lumio)
-  ค่าโอนได้ตรง ๆ แต่ให้ดูหน้าจอจริงบนเครื่องอีกรอบ
-- ฟอนต์โหลดจาก Google Fonts ใน mockup — แอปจริงควร bundle ไฟล์ฟอนต์ไปเลย
-  ไม่งั้นเปิดครั้งแรกตอนเน็ตช้าจะเห็นฟอนต์ระบบก่อนแล้วค่อยกระตุก
-- `assets/speakgo.css` มีแค่ **โหมดสว่าง** — โหมดมืดต้องเพิ่มชุด token ใหม่ครบทุกตัว
-  (พื้น `--bg`/`--surface` สลับลำดับ และ `--ink` ต้องไม่ใช่ขาวสนิท) แล้วตรวจคอนทราสต์ AA ทุกคู่
+- All values were **verified on HTML/CSS** — the React Native table in `references/tokens.md`
+  **has not been built and tested**. Flutter has been used with the item 4.1 approach on 1 real app (Lumio).
+  The values transfer directly, but check the real screen on a device once more.
+- Fonts load from Google Fonts in the mockup — a real app should bundle the font files.
+  Otherwise on first launch with a slow network the user sees the system font first, then a visible jump.
+- `assets/speakgo.css` has **light mode only** — dark mode needs a complete new set of every token
+  (the `--bg`/`--surface` backgrounds swap order and `--ink` must not be pure white), then check AA contrast on every pair.

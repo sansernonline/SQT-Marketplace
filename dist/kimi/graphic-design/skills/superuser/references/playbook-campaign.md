@@ -1,18 +1,18 @@
-# playbook · campaign — ชุดชิ้นงานแคมเปญหลายแพลตฟอร์ม
+# playbook · campaign — a multi-platform campaign piece set
 
-ใช้เมื่อ: เปิดตัวสินค้า · โปรลดราคา · งานอีเวนต์ · โปรโมชันตามเทศกาล ที่ต้องใช้หลายขนาด
-skill หลัก: `campaign-set` · `social-formats` · `brief-to-image` · `style-consistency` · agent `social-creator`
+Use when: a product launch · a discount promotion · an event · a seasonal promotion, that needs many sizes
+Main skills: `campaign-set` · `social-formats` · `brief-to-image` · `style-consistency` · agent `social-creator`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน (Steps) (copy into the todo exactly)
 
-1. เขียนแนวคิดหลัก 1 ประโยค และข้อความหลักที่ต้องเห็นใน 3 วินาที · ใคร: หัวหน้าทีม (`brainstormer` ตัวใหม่เสนอ 2–3 แนวคิดก่อน)
-2. ทำตาราง asset ตาม `campaign-set` — แพลตฟอร์ม · ตำแหน่งวาง · ขนาด · ชื่อไฟล์ แล้วตรวจขนาดและ safe zone กับหน้าช่วยเหลือของแพลตฟอร์มตาม `social-formats` · ใคร: `social-creator` ตัวใหม่
-3. ทำชิ้นแม่ก่อน — ภาพจาก AI ใช้ `brief-to-image` และล็อกสไตล์ด้วย `style-consistency` · ใคร: `social-creator` ตัวใหม่ (ภาพจาก AI: `art-director` ตัวใหม่เขียน brief และล็อกสไตล์)
-4. ทำขนาดอื่นต่อจากชิ้นแม่ตามลำดับในตาราง โดยข้อความต้องอยู่ใน safe zone · ใคร: `social-creator` ตัวใหม่
-5. รัน `design-review` ทุกชิ้น แล้วตรวจกับ brand kit · ใคร: `design-critic` ตัวใหม่ แล้ว `brand-keeper` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์)
-6. แก้ 3 ข้อสำคัญสุดที่หัวหน้าทีมยืนยันแล้วก่อน · ใคร: `social-creator` ตัวใหม่
-7. รอบตรวจ — ดูข้อเดิมทุกข้อและจุดที่เปลี่ยน ตาม [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
+1. Write the core idea in 1 sentence, and the main message that must be seen within 3 seconds · ใคร: หัวหน้าทีม (`brainstormer` ตัวใหม่ proposes 2–3 ideas first)
+2. Build the asset table per `campaign-set`: platform · placement · size · file name, then check sizes and safe zones against the platform's help page per `social-formats` · ใคร: `social-creator` ตัวใหม่
+3. Make the master piece first: for AI images use `brief-to-image` and lock the style with `style-consistency` · ใคร: `social-creator` ตัวใหม่ (for AI images: `art-director` ตัวใหม่ writes the brief and locks the style)
+4. Make the other sizes from the master piece in the table's order, with the text inside the safe zone · ใคร: `social-creator` ตัวใหม่
+5. Run `design-review` on every piece, then check (ตรวจ) against the brand kit · ใคร: `design-critic` ตัวใหม่ then `brand-keeper` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์ — read-only, does not edit files)
+6. Fix the 3 most important items that the lead has confirmed first · ใคร: `social-creator` ตัวใหม่
+7. Review round: check (ตรวจ) every earlier item and the changed spots, per [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
 
-## จบเมื่อ
+## Done when
 
-ทุกแถวในตาราง asset มีไฟล์ที่ export จริง ขนาดถูก และผ่าน `design-review` ส่วนการโพสต์หรือยิงแอดอยู่ใน "รออนุมัติ"
+Every row of the asset table has a really exported file, with the right size, that passes `design-review` · posting or running ads goes under "รออนุมัติ" (awaiting approval)

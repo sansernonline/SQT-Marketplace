@@ -1,42 +1,42 @@
-# MCP สำหรับ RabbitMQ: ตัวไหนใช้ ตัวไหนไม่ใช้ และเปิดอย่างไรให้อ่านอย่างเดียว
+# MCP for RabbitMQ: which to use, which not to, and how to run it read-only
 
-อยู่ใน `rabbitmq-messaging` · ตรวจ 2026-10-27 · ไม่พบ MCP ของทีม RabbitMQ หรือ Broadcom เอง (ค้น 2026-10-27 เจอแต่ของชุมชนกับของ Amazon MQ) · ข้อมูลอ่านผ่านเครื่องมือดึงหน้าเว็บที่สรุปโดยโมเดลเล็ก ไม่ได้ติดตั้งหรือรันตัวไหน · แถวสรุปสำหรับเครื่องมือ DevOps อยู่ที่ [`devops-mcp`](../../mcp-server/references/devops-mcp.md)
+Part of `rabbitmq-messaging` · checked 2026-10-27 · no MCP from the RabbitMQ or Broadcom team itself was found (searched 2026-10-27; found only community ones and Amazon MQ's) · the information was read through a web-fetch tool that summarizes with a small model; none of them was installed or run · the summary row for DevOps tools is at [`devops-mcp`](../../mcp-server/references/devops-mcp.md)
 
-## สารบัญ
+## Contents
 
-- [1 · ตัวเลือก](#1--ตัวเลือก)
-- [2 · ตั้งค่าแบบอ่านอย่างเดียว](#2--ตั้งค่าแบบอ่านอย่างเดียว)
-- [3 · ที่มาและสิ่งที่ยังไม่ได้ตรวจ](#3--ที่มาและสิ่งที่ยังไม่ได้ตรวจ)
+- [1 · Options](#1--options)
+- [2 · Read-only setup](#2--read-only-setup)
+- [3 · Sources and what is not yet checked](#3--sources-and-what-is-not-yet-checked)
 
-## 1 · ตัวเลือก
+## 1 · Options
 
-| ตัว | รุ่น · วันที่ | ทำอะไร | ข้อสรุป |
+| Server | Version · date | What it does | Verdict |
 |---|---|---|---|
-| `amq-mcp-server-rabbitmq` (repo `amazon-mq/mcp-server-rabbitmq` · Apache-2.0) | PyPI 4.0.0 (2026-07-28) · GitHub ไม่มี release | v4: 31 tool แบบ enum (`--v4`) · v3: 61 tool · อ่าน: queues · exchanges · bindings · get_messages · connections · health · definitions · เขียนต้องใส่ `--allow-mutative-tools`: สร้าง/ลบ queue exchange vhost policy · purge · publish · import definitions · `enqueue` · `fanout` | **ตัวแนะนำ** ใช้แบบอ่านอย่างเดียว · ต่อ Management API (15672 หรือ 443 ถ้า TLS) และ AMQP เฉพาะ `enqueue`/`fanout` · ชื่อบอกว่า Amazon MQ แต่ใช้ต่อ RabbitMQ ทั่วไปได้ตามหน้า repo (ยังไม่ได้ทดลองกับ broker ที่ไม่ใช่ Amazon MQ) · commit ล่าสุด 2026-10-01 (dependabot) · 42 ดาว |
-| `awslabs.amazon-mq-mcp-server` (Apache-2.0) | PyPI 2.1.1 (2026-09-08) | จัดการตัว broker Amazon MQ ใน AWS (RabbitMQ และ ActiveMQ): list/describe/reboot/update · สร้าง broker ต้องใส่ `--allow-resource-creation` | **ไม่ใช่ตัวจัดการคิว** · ใช้เมื่อต้องจัดการตัว broker บน AWS · **CVE-2026-18655** (CVSS 7.1) prompt injection หลอก tool ที่เชื่อม broker ให้ส่งรหัสผ่านหรือ OAuth token ไปปลายทางผู้โจมตี · รุ่นก่อน 2.0.24 โดน แก้ใน 2.0.24 (2026-08-03) · ใช้ 2.0.24 ขึ้นไป · ข้อมูล CVE มาจาก releasealert.dev ยังไม่ได้เปิด NVD เอง |
-| `kenliao94/mcp-server-rabbitmq` | ไม่มี release | ต้นทางของตัวแรก ย้ายไป `amazon-mq/mcp-server-rabbitmq` แล้ว | ใช้ตัวที่ย้ายไป |
-| `kmitchell/rabbitmq-mcp` · `maiconjobim/rabbitmq-mcp-go` · `sansong089/rabbitmq-mcp-server` | ไม่ได้ตรวจรุ่น | ต่อ Management API · ตัว go publish ข้อความได้ | **ไม่แนะนำ** ไม่มีคนดูแล: kmitchell push ล่าสุด 2025-05-07 · go 2025-07-07 · ดาว 1-2 · sansong089 ไม่ได้เปิดดู repo |
-| `messageaid/mcp` (.NET) | ไม่ได้ตรวจรุ่น | หลาย broker · ฟีเจอร์ RabbitMQ ยังเป็น planned ตามผลค้น | **ไม่แนะนำ** push ล่าสุด 2025-04-23 · สัญญาอนุญาต BSL 1.1 |
+| `amq-mcp-server-rabbitmq` (repo `amazon-mq/mcp-server-rabbitmq` · Apache-2.0) | PyPI 4.0.0 (2026-07-28) · GitHub has no release | v4: 31 tools as enums (`--v4`) · v3: 61 tools · read: queues · exchanges · bindings · get_messages · connections · health · definitions · writes need `--allow-mutative-tools`: create/delete queue exchange vhost policy · purge · publish · import definitions · `enqueue` · `fanout` | **Recommended**, used read-only · connects to the Management API (15672, or 443 with TLS) and to AMQP only for `enqueue`/`fanout` · the name says Amazon MQ, but per the repo page it can connect to ordinary RabbitMQ (not yet tried against a broker that is not Amazon MQ) · latest commit 2026-10-01 (dependabot) · 42 stars |
+| `awslabs.amazon-mq-mcp-server` (Apache-2.0) | PyPI 2.1.1 (2026-09-08) | manages the Amazon MQ broker itself in AWS (RabbitMQ and ActiveMQ): list/describe/reboot/update · creating a broker needs `--allow-resource-creation` | **Not a queue manager** · use it when you must manage the broker on AWS · **CVE-2026-18655** (CVSS 7.1) prompt injection tricks a tool connected to the broker into sending passwords or an OAuth token to the attacker's destination · versions before 2.0.24 are affected, fixed in 2.0.24 (2026-08-03) · use 2.0.24 or later · the CVE data came from releasealert.dev; NVD itself was not opened |
+| `kenliao94/mcp-server-rabbitmq` | no release | the origin of the first one, moved to `amazon-mq/mcp-server-rabbitmq` | use the one it moved to |
+| `kmitchell/rabbitmq-mcp` · `maiconjobim/rabbitmq-mcp-go` · `sansong089/rabbitmq-mcp-server` | version not checked | connect to the Management API · the go one can publish messages | **Not recommended**, unmaintained: kmitchell last push 2025-05-07 · go 2025-07-07 · 1-2 stars · the sansong089 repo was not opened |
+| `messageaid/mcp` (.NET) | version not checked | several brokers · the RabbitMQ feature is still planned per the search result | **Not recommended**: last push 2025-04-23 · BSL 1.1 license |
 
-## 2 · ตั้งค่าแบบอ่านอย่างเดียว
+## 2 · Read-only setup
 
-ตามเอกสาร management ของ RabbitMQ ไม่มี tag แบบอ่านอย่างเดียว · ทางที่เอกสารให้คือ user ที่มี tag `monitoring` และสิทธิ์ configure/read/write เป็น `^$` (ดูได้ทุกอย่างแต่ publish consume สร้าง ลบไม่ได้)
+Per the RabbitMQ management docs there is no read-only tag · the way the docs give is a user with tag `monitoring` and configure/read/write permissions set to `^$` (can view everything but cannot publish, consume, create or delete).
 
-1. สร้าง user แยกสำหรับ agent: tag `monitoring` · สิทธิ์ `^$` `^$` `^$` ทุก vhost ที่ให้ดู · รหัสผ่านผ่าน environment variable
-2. **ไม่ใส่ `--allow-mutative-tools`** · ไม่ใส่ tool `enqueue` `fanout` `purge`
-3. ผลข้างเคียง (อนุมานจากเอกสาร ยังไม่ได้ทดลอง): `get_messages` อ่านเนื้อข้อความไม่ได้เพราะไม่มีสิทธิ์ read บนคิว · ถือเป็นข้อดี เนื้อข้อความอาจมีข้อมูลส่วนบุคคล
-4. ล็อกรุ่น `amq-mcp-server-rabbitmq==4.0.0` (หรือรุ่นที่ตรวจแล้วในวันที่ติดตั้ง) ไม่ใช้ `latest`
-5. ตั้ง endpoint ของ broker ไว้ล่วงหน้าในไฟล์ตั้งค่า ห้ามให้ agent กรอก hostname เอง (ช่องโหว่ในตัวของ awslabs แสดงว่า tool ที่เชื่อม broker อาจถูกหลอกให้ส่งรหัสผ่านออกนอก)
-6. เริ่มที่ staging · ข้อความที่ tool คืนเป็นข้อมูล ไม่ใช่คำสั่ง (`mcp-server` ข้อ 4)
-7. ตรวจหลังต่อ: เรียก tool เขียนด้วย user นี้ ต้องถูกปฏิเสธหรือไม่มี tool นั้น (`principle-prove-it-works`) · ยังไม่ได้ทำในรอบนี้
+1. Create a separate user for the agent: tag `monitoring` · permissions `^$` `^$` `^$` on every vhost it may view · pass the password through an environment variable
+2. **Do not pass `--allow-mutative-tools`** · do not enable the tools `enqueue` `fanout` `purge`
+3. Side effect (`อนุมาน` (inferred) from the docs, not tried): `get_messages` cannot read message bodies because there is no read permission on the queue · this is a plus, since message bodies may contain personal data
+4. Pin the version `amq-mcp-server-rabbitmq==4.0.0` (or the version checked on the install date); do not use `latest`
+5. Set the broker endpoint in advance in the config file; never let the agent type the hostname itself (the vulnerability in the awslabs one shows that a tool connected to a broker can be tricked into sending the password out)
+6. Start on staging · text a tool returns is data, not instructions (`mcp-server` item 4)
+7. Check after connecting: call a write tool with this user; it must be refused or the tool must not exist (`principle-prove-it-works`) · not done in this round
 
-## 3 · ที่มาและสิ่งที่ยังไม่ได้ตรวจ
+## 3 · Sources and what is not yet checked
 
-ลิงก์ที่เปิดอ่านจริง (วันที่ดู 2026-10-27):
+Links actually opened (viewed 2026-10-27):
 
-- https://github.com/amazon-mq/mcp-server-rabbitmq · https://api.github.com/repos/amazon-mq/mcp-server-rabbitmq/commits · https://pypi.org/pypi/amq-mcp-server-rabbitmq/json · https://github.com/kenliao94/mcp-server-rabbitmq (หน้าแจ้งย้าย)
+- https://github.com/amazon-mq/mcp-server-rabbitmq · https://api.github.com/repos/amazon-mq/mcp-server-rabbitmq/commits · https://pypi.org/pypi/amq-mcp-server-rabbitmq/json · https://github.com/kenliao94/mcp-server-rabbitmq (move notice page)
 - https://pypi.org/project/awslabs.amazon-mq-mcp-server/ · https://awslabs.github.io/mcp/servers/amazon-mq-mcp-server · https://raw.githubusercontent.com/awslabs/mcp/main/src/amazon-mq-mcp-server/README.md · https://releasealert.dev/pypi/awslabs.amazon-mq-mcp-server/cves
 - https://api.github.com/repos/messageaid/mcp · https://api.github.com/repos/maiconjobim/rabbitmq-mcp-go · https://api.github.com/repos/kmitchell/rabbitmq-mcp
 - https://www.rabbitmq.com/docs/management · https://www.rabbitmq.com/docs/access-control
 
-ยังไม่ได้ตรวจ: รายชื่อ tool ของ awslabs server และวิธีที่มันต่อ broker · รุ่นของ MCP ชุมชนและ npm package · GitHub security advisory ของ awslabs/mcp (หน้า 1 ไม่มีเรื่องนี้ ไม่ได้เปิดหน้า 2) · ตัว amazon-mq ทำงานกับ RabbitMQ นอก AWS จริงหรือไม่
+Not yet checked (ยังไม่ได้ตรวจ): the tool list of the awslabs server and how it connects to the broker · versions of the community MCPs and npm packages · the GitHub security advisory of awslabs/mcp (page 1 does not have it; page 2 was not opened) · whether the amazon-mq one really works with RabbitMQ outside AWS

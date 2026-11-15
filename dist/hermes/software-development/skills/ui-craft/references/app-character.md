@@ -1,50 +1,50 @@
-# บุคลิกแอป — เลือกสี มุม ความแน่น และการเคลื่อนไหวจากการใช้งาน
+# App character — choose color, corners, density and motion from how the app is used
 
-แอปที่ใช้ทำงานจริงจังควรเรียบและสงบ แอปบันเทิงควรสดใสและขี้เล่น ให้เลือกบุคลิก **1 แบบ** ก่อนวาดหน้าแรก แล้วใช้ค่าชุดเดียวกันกับทุกอย่างของโปรเจกต์ ทั้ง mockup, หน้า home ของ mockup, ปกเอกสาร และโลโก้
+An app used for serious work should be plain and calm. An entertainment app should be bright and playful. Choose **1 character** before drawing the first page, then use the same set of values for everything in the project: the mockup, the mockup's home page, the document cover and the logo.
 
-ภาพเทียบ: [`../assets/app-character-sheet.webp`](../assets/app-character-sheet.webp) แสดงการ์ดรายการเดียวกันใน 6 บุคลิก ต้นฉบับ HTML อยู่ที่ [`../assets/app-character-sheet.html`](../assets/app-character-sheet.html) ใช้เป็นจุดเริ่มต้นได้
+Comparison image: [`../assets/app-character-sheet.webp`](../assets/app-character-sheet.webp) shows the same list card in the 6 characters. The HTML source is at [`../assets/app-character-sheet.html`](../assets/app-character-sheet.html) and can be used as a starting point.
 
-## 1 · เลือกจาก 4 คำถาม (ตอบจากเอกสารความต้องการทางธุรกิจ (Business Requirements Document · BRD) หรือคำขอของผู้ใช้)
+## 1 · Choose from 4 questions (answer from the Business Requirements Document (BRD) or the user's request)
 
-| คำถาม | เอียงไปทาง เรียบและสงบ | เอียงไปทาง สดใสและขี้เล่น |
+| Question | Leans plain and calm | Leans bright and playful |
 |---|---|---|
-| ใครใช้ | คนทำงาน ผู้เชี่ยวชาญ | คนทั่วไป วัยรุ่น เด็ก |
-| ใช้บ่อยแค่ไหน และนานเท่าไร | ทุกวัน วันละหลายชั่วโมง | นาน ๆ ครั้ง ครั้งละไม่กี่นาที |
-| ถ้ากดพลาดเสียอะไร | เงิน ข้อมูล สุขภาพ งาน | แทบไม่เสียอะไร |
-| ใช้ที่ไหน | โต๊ะทำงาน จอใหญ่ | มือถือ ระหว่างเดินทาง |
+| Who uses it | Working people, experts | General public, teenagers, children |
+| How often and how long | Every day, several hours a day | Occasionally, a few minutes at a time |
+| What is lost if they tap wrong | Money, data, health, work | Almost nothing |
+| Where it is used | Desk, large screen | Phone, while traveling |
 
-**ถ้าคำตอบขัดกัน ให้ข้อ "ถ้ากดพลาดเสียอะไร" ชนะ** เช่น แอปการเงินสำหรับวัยรุ่นใช้แบบที่ 2 แล้วเพิ่มสีรองที่สดขึ้นได้ 1 ระดับ แต่มุมโค้ง ความแน่น และน้ำเสียงต้องยังเป็นแบบที่ 2
+**If the answers conflict, the question "what is lost if they tap wrong" wins.** For example, a finance app for teenagers uses character 2 and may add a secondary color that is 1 level brighter, but the corner radius, density and tone must still be character 2.
 
-## 2 · 6 บุคลิก
+## 2 · The 6 characters
 
-| | 1 เครื่องมือทำงาน | 2 การเงิน สุขภาพ ราชการ | 3 ไลฟ์สไตล์ ช้อปปิ้ง อาหาร | 4 บันเทิง โซเชียล เกมเบา | 5 เด็ก การเรียนรู้ | 6 พรีเมียม สร้างสรรค์ |
+| | 1 Work tool | 2 Finance, health, government | 3 Lifestyle, shopping, food | 4 Entertainment, social, casual games | 5 Children, learning | 6 Premium, creative |
 |---|---|---|---|---|---|---|
-| ตัวอย่าง | dev tool, admin, ERP, terminal | ธนาคาร, ประกัน, โรงพยาบาล, e-service | ร้านอาหาร, ท่องเที่ยว, ช้อป | เพลง, วิดีโอ, แชต, ควิซ | แอปเรียน, เกมฝึกทักษะ | แฟชั่น, portfolio, โรงแรมหรู |
-| สีกลางกินพื้นที่ | 85–90% | 80% | 70% | 50–60% | 60% | 85–90% (ขาว ดำ) |
-| สีแบรนด์ | 1 สี อิ่มกลาง | 1 สีลึก อิ่มต่ำ (น้ำเงิน เขียวเข้ม) | 1 สีอุ่น + รอง 1–2 | 2–4 สีอิ่มจัด ไล่สีได้ | สีสดแต่นุ่ม + 1 สีเข้มสำหรับปุ่ม | ไม่มี หรือมี 1 สีโลหะ (ทอง) |
-| ธีมเริ่มต้น | มืดสำหรับ dev tool, สว่างสำหรับ admin | สว่าง | สว่าง พื้นอุ่น | สว่าง หรือไล่สี | สว่าง | มืด หรือขาวล้วน |
-| มุมโค้ง | 4–8px | 8–10px | 12–16px | 20–24px หรือแคปซูล | 20–28px | 0–2px |
-| ความแน่น (`ui-craft` ข้อ 8) | แน่น 32–36px | ปกติ 44px | โปร่ง 48px | โปร่ง 50px | โปร่งมาก 56–60px | โปร่ง และที่ว่างเยอะ |
-| ตัวอักษร | sans ธรรมดา เนื้อ 13–14px น้ำหนัก 400/600 | sans เนื้อ 15–16px | sans เนื้อ 15px หัวหนา | sans หัวมน (Nunito ฯลฯ) หัว 800 | หัวมนตัวใหญ่ เนื้อ 18px ขึ้นไป | หัว serif, เนื้อ sans บาง |
-| ไอคอน | เส้น 16px สีเดียว | เส้น ในกล่องสีอ่อน | สีเต็มหรือ emoji | ในวงกลมไล่สี, emoji ได้ | ใหญ่ 40px ขึ้นไป สีเต็ม | น้อยที่สุด หรือไม่มี |
-| เงา | ไม่มี ใช้เส้น | เส้นบาง | เงานุ่มอุ่น | เงาสีแบรนด์ | กรอบหนาแทนเงา | ไม่มี |
-| การเคลื่อนไหว (`ui-craft` ข้อ 7) | 100–150ms เฉพาะตอบสนอง | 150ms น้อยที่สุด | 200ms | 250–400ms เด้งได้ | ฉลองเมื่อทำสำเร็จ | fade ช้า 300ms |
-| ภาพประกอบ | ไม่มี | น้อยมาก | ภาพถ่ายนำ | ภาพวาด, mascot | mascot, ดาว, รางวัล | ภาพถ่ายใหญ่ |
-| น้ำเสียงข้อความ | ตรง สั้น ศัพท์เทคนิคได้ | สุภาพ ชัด ไม่มีศัพท์ชวนตกใจ | เป็นกันเอง | ขี้เล่น ใช้ emoji ได้ | คำง่าย ชมบ่อย | น้อยคำ เลือกคำ |
+| Examples | dev tool, admin, ERP, terminal | bank, insurance, hospital, e-service | restaurant, travel, shopping | music, video, chat, quiz | learning app, skill game | fashion, portfolio, luxury hotel |
+| Neutral color share of area | 85–90% | 80% | 70% | 50–60% | 60% | 85–90% (white, black) |
+| Brand color | 1 color, medium saturation | 1 deep color, low saturation (blue, dark green) | 1 warm color + 1–2 secondary | 2–4 highly saturated colors, gradients allowed | bright but soft colors + 1 dark color for buttons | none, or 1 metallic color (gold) |
+| Default theme | dark for dev tool, light for admin | light | light, warm background | light, or gradient | light | dark, or plain white |
+| Corner radius | 4–8px | 8–10px | 12–16px | 20–24px or capsule | 20–28px | 0–2px |
+| Density (`ui-craft` section 8) | dense 32–36px | normal 44px | airy 48px | airy 50px | very airy 56–60px | airy, with a lot of empty space |
+| Type | plain sans, body 13–14px, weights 400/600 | sans, body 15–16px | sans, body 15px, bold headings | rounded sans (Nunito etc.), heading 800 | large rounded headings, body 18px and up | serif headings, thin sans body |
+| Icons | line, 16px, single color | line, in a light-colored box | full color or emoji | in a gradient circle, emoji allowed | large 40px and up, full color | the fewest, or none |
+| Shadow | none, use lines | thin line | soft warm shadow | brand-colored shadow | thick border instead of shadow | none |
+| Motion (`ui-craft` section 7) | 100–150ms, response only | 150ms, the least | 200ms | 250–400ms, bounce allowed | celebrate on success | slow 300ms fade |
+| Illustration | none | very little | photos lead | drawings, mascot | mascot, stars, rewards | large photos |
+| Message tone | direct, short, technical terms allowed | polite, clear, no alarming terms | friendly | playful, emoji allowed | easy words, praise often | few words, chosen words |
 
-แกนน้ำเสียงและความประณีตของแบรนด์ ให้เลือกตาม `graphic-design` ข้อ 2 แล้วเทียบกับตารางนี้ ถ้าไม่เข้ากัน (เช่น แบรนด์ "ท้าทาย" ในแอปแบบที่ 2) ให้แจ้งผู้ใช้
+Choose the brand's tone axis and level of polish per `graphic-design` section 2, then compare with this table. If they do not fit (for example a "challenging" brand in a character-2 app), tell the user.
 
-## 3 · ที่ไม่เปลี่ยนไม่ว่าบุคลิกไหน
+## 3 · What does not change in any character
 
-- **ความต่างของสี:** ข้อความต้องผ่าน 4.5:1 ตัวใหญ่ต้องผ่าน 3:1 (`ui-craft` ข้อ 5) โดยเฉพาะตัวหนังสือบนพื้นไล่สีหรือพื้นพาสเทล
-- **สเกล:** ใช้สเกลระยะห่างและสเกลตัวอักษรชุดเดียวทั้งแอป บุคลิกเปลี่ยนแค่ค่าที่เลือก
-- **5 สถานะ:** ทุกหน้าจอต้องมีครบ 5 สถานะ ข้อความ error ในแอปขี้เล่นก็ต้องบอกว่าเกิดอะไรและต้องทำอะไรต่อ
-- **สีสถานะ:** ใช้ความหมายเดิม แดงคือผิดพลาด ห้ามใช้สีแบรนด์ที่บังเอิญเป็นสีแดงมาทำปุ่มปกติ
-- **การเคลื่อนไหว:** ต้องปิดได้ตาม `prefers-reduced-motion`
-- **ขี้เล่นไม่ได้แปลว่ารก:** หน้าจอหนึ่งยังมีของสำคัญได้อย่างเดียว (`ui-craft` ข้อ 3)
+- **Color contrast:** text must pass 4.5:1 and large text 3:1 (`ui-craft` section 5), especially text on gradient or pastel backgrounds
+- **Scale:** use one spacing scale and one type scale for the whole app; the character changes only the chosen values
+- **5 states:** every screen must have all 5 states; an error message in a playful app must still say what happened and what to do next
+- **Status colors:** keep the usual meanings; red means error; never use a brand color that happens to be red for a normal button
+- **Motion:** must be switchable off per `prefers-reduced-motion`
+- **Playful does not mean cluttered:** a screen still has only one important thing (`ui-craft` section 3)
 
-## 4 · บันทึกไว้ให้ทุกชิ้นงานใช้ตาม
+## 4 · Record it so every piece follows it
 
-- เขียนบุคลิกที่เลือกเป็นคอมเมนต์บรรทัดแรกของไฟล์ token เช่น `/* app-character: 1 work-tool */` และลงตาราง "ตัดสินใจเอง" ใน `docs/BUILD-PLAN.md` พร้อมคำตอบของ 4 คำถาม
-- **เอกสาร Word (`branded-document-design`):** ใช้สีแบรนด์ชุดเดียวกัน แต่ตัวเอกสารยังเป็นแบบทางการเสมอ เพราะคนอ่านคือผู้อนุมัติ แอปแบบที่ 4–5 เปลี่ยนได้แค่หน้าปก ให้ใช้สีสดขึ้นและมุมโค้งขึ้น
-- **โลโก้ (`graphic-design`):** รูปทรงต้องไปทางเดียวกัน แบบที่ 1–2 ใช้แท่งเหลี่ยมขอบมน แบบที่ 4–5 ใช้มนมากหรือมี mascot
+- Write the chosen character as the first-line comment of the token file, for example `/* app-character: 1 work-tool */`, and put it in the `ตัดสินใจเอง` (decided on my own) table in `docs/BUILD-PLAN.md` with the answers to the 4 questions
+- **Word documents (`branded-document-design`):** use the same brand color set, but the document body stays formal, because the readers are the approvers. Apps of character 4–5 may change only the cover, which can use brighter colors and rounder corners.
+- **Logo (`graphic-design`):** the shape must lean the same way. Characters 1–2 use a square block with rounded edges. Characters 4–5 use very round shapes or a mascot.

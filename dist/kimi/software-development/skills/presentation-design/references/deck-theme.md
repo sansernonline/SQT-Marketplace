@@ -1,72 +1,72 @@
-# ธีมของเด็ค — สดใส และเข้ากับงานที่นำมาทำ
+# Deck theme: bright, and fitted to the source work
 
-ไฟล์กลางของ skill สไลด์ทุกตัว (`presentation-design` · `html-slide-deck` (รวมทางเข้าจาก .pptx) · `StageDeck` ใน `branded-document-design`) · เปิดตอนข้อ 1 ขั้น 0 ก่อนเปิดโปรแกรม
+The central file for every slide skill (`presentation-design` · `html-slide-deck` (including the entry from .pptx) · `StageDeck` in `branded-document-design`). Open it at item 1 step 0, before opening the program.
 
-> **กฎข้อเดียว:** เด็คต้องหน้าตาเหมือนมาจากงานที่นำมาทำ ทั้งสีและอารมณ์ · คนเห็นเด็คข้างเอกสารต้นทางแล้วต้องรู้ว่าเป็นงานเดียวกัน
+> **The one rule:** the deck must look like it came from the source work, in both colour and mood. Someone who sees the deck next to the source document must know it is the same work.
 
-## 1 · สีมาจากงานต้นทางก่อน
+## 1 · Colour comes from the source work first
 
-"งานต้นทาง" คือของที่ผู้ใช้ให้มาทำเป็นเด็ค เช่น รายงาน .docx · .pdf · .pptx เดิม · เว็บหรือแอป · โปสเตอร์ · โลโก้ · ภาพสินค้า หาสีตามลำดับนี้ เจอที่ไหนให้หยุดที่นั่น:
+"Source work" is what the user gave you to turn into a deck, such as a report .docx · .pdf · an existing .pptx · a website or app · a poster · a logo · a product photo. Find the colour in this order and stop at the first hit:
 
-1. **ถ้างานต้นทางมีสีของตัวเอง ให้ถอดด้วยสคริปต์** ไม่กะด้วยตา:
+1. **If the source work has its own colours, extract them with the script**, not by eye:
    ```bash
    python scripts/source_palette.py <ไฟล์ต้นทาง> [โลโก้] [ภาพหน้าจอ]
    ```
-   สคริปต์บอกสีหลัก สีรองไม่เกิน 2 สี และพื้นต้นทางว่าเข้มหรือสว่าง แล้วพิมพ์ค่าที่ใส่ใน `build_deck.py` · `StageDeck` · `pptx_to_html.py` ให้เลย · อ่านได้ทั้ง .pptx .docx .xlsx .html .css .svg รูป และ .pdf (ต้องมี `pdftoppm`) · สีที่ไม่นับ: เทา ขาว ดำ · ธีมตั้งต้นของ Office (สีที่ผู้ทำไม่ได้เลือกเอง) · สไตล์ Word ที่เนื้อหาไม่ได้ใช้ · สีที่โผล่ไม่ถึง 3 ครั้งหรือไม่ถึง 10% ของสีหลัก
-2. ถ้าต้นทางไม่มีสี (ข้อความล้วน · เอกสารขาวดำ) ให้ใช้สีของโปรเจกต์ตามลำดับใน `diagram-figures` ข้อ 5 (`doc-theme` แล้วจึงสีแบรนด์ในโค้ดหรือโลโก้)
-3. ถ้ายังไม่มีเลย ให้ค้นต้นแบบตาม `design-references` ประเภท `slide` ด้วยคำของงาน แล้วถอดสีจากงานที่เลือก (รันสคริปต์เดียวกันกับภาพหน้าจอต้นแบบได้)
-4. ถ้าค้นสดไม่ได้ ให้ใช้สีประจำบ้าน `#2A78D6` แล้วเขียน `(รอยืนยัน)` ในรายงาน
+   The script reports the main colour, up to 2 secondary colours, and whether the source background is dark or light, then prints values ready to put into `build_deck.py` · `StageDeck` · `pptx_to_html.py`. It reads .pptx .docx .xlsx .html .css .svg images and .pdf (needs `pdftoppm`). Colours it ignores: grey, white, black · the default Office theme (colours the author did not choose) · Word styles the content does not use · colours that appear fewer than 3 times or under 10% of the main colour
+2. If the source has no colour (plain text · black-and-white documents), use the project's colour in the order in `diagram-figures` item 5 (`doc-theme`, then the brand colour in code or the logo)
+3. If there is still none, search for a reference per `design-references`, type `slide`, with the work's keywords, then extract colours from the chosen work (the same script works on a screenshot of the reference)
+4. If live search is not possible, use the house colour `#2A78D6` and write `(รอยืนยัน)` (to be confirmed) in the report
 
-ผลของสคริปต์ยังต้องเปิดดูด้วยตา 1 ครั้ง: สีหลักที่ได้ต้องเป็นสีที่คนจำงานนั้นได้ (สีโลโก้ · สีปก) ถ้าได้สีของภาพประกอบหรือรูปหน้าจอที่บังเอิญกินพื้นที่มาก ให้ส่งไฟล์โลโก้หรือปกเข้าไปแทน
+You must still open and look at the script result once: the main colour it gives must be one that people remember the work by (logo colour · cover colour). If it picked the colour of an illustration or a screenshot that happens to cover a large area, feed it the logo or cover file instead.
 
-**ห้ามแต่งสีรองเอง** — สีรองต้องมาจากงานต้นทาง ถ้าต้นทางมีสีเดียวก็ใช้สีเดียว แล้วทำให้สดด้วยข้อ 3 แทน
+**Never invent a secondary colour.** The secondary colour must come from the source work. If the source has one colour, use one colour, and make it vivid with item 3 instead.
 
-## 2 · อารมณ์มาจากเนื้องาน
+## 2 · Mood comes from the content
 
-ดูว่างานต้นทางพูดถึงอะไรและใครฟัง แล้วเลือกจากตาราง · ของที่ใช้ทำภาพต้องมาจากโลกของงานนั้นเอง (ภาพสินค้าจริง · หน้าจอจริง · วัสดุ · ป้ายในวงการ) ไม่ใช่ไอคอนสำเร็จรูป
+Look at what the source work is about and who is listening, then choose from the table. Material used for visuals must come from that work's own world (real product photos · real screens · materials · signs of the trade), not ready-made icons.
 
-| เนื้องาน | อารมณ์ | พื้น | รูปทรงและภาพ | ความหนาแน่น |
+| Content | Mood | Background | Shapes and images | Density |
 |---|---|---|---|---|
-| กีฬา · ฟิตเนส · กิจกรรม · เปิดตัวสินค้า | พลังสูง | สว่าง แต่ปกและหน้าเปิดส่วนเป็นสีหลักทึบ | ภาพคนหรือสินค้าตัดชิดขอบ · ตัวเลขใหญ่ | ต่ำ 1 ประเด็นต่อแผ่น |
-| เด็ก · การศึกษา · อบรม · ชุมชน | เป็นกันเอง | สว่าง | มุมมนมาก · ใช้สีรองแยกส่วนบทเรียน · ภาพจริงจากห้องเรียนหรืองาน | กลาง |
-| อาหาร · ท่องเที่ยว · ร้านค้า · ไลฟ์สไตล์ | อยากลอง | สว่างอุ่นหรือภาพเต็มแผ่น | ภาพถ่ายจริงเต็มครึ่งแผ่นขึ้นไป · ข้อความวางบนแถบสีทึบ | ต่ำ |
-| การแพทย์ · สุขภาพ | ไว้ใจได้ | สว่างสะอาด | มุมมนน้อย · เน้นด้วยสีหลักทีละจุด · ไม่มีภาพที่ทำให้กลัว | กลาง |
-| การเงิน · กฎหมาย · ราชการ · ผู้บริหาร | มั่นคง | สว่าง | เส้นตรง · ตารางและกราฟเป็นพระเอก · สีหลักเต็มแผ่นเฉพาะปกและหน้าข้อสรุป | กลางถึงสูง |
-| ซอฟต์แวร์ · เทคนิค · demo ระบบ | ชัดและเป็นระบบ | ตามดีไซน์ของแอป (แอปพื้นมืดใช้พื้นมืดได้) | ภาพหน้าจอจริง · ผังระบบ · โค้ดสั้น | กลาง |
-| งานวิจัย · วิทยานิพนธ์ · สอบโครงงาน | น่าเชื่อถือ | สว่าง | กราฟผลจริง · สีหลักใช้เน้นผลที่เป็นประเด็น | กลางถึงสูง |
-| ไว้อาลัย · ภัยพิบัติ · ข่าวร้าย | สงบ | สว่างหรือเทาอ่อน | ไม่ใช้สีจัดเต็มแผ่น · ภาพน้อย | ต่ำ |
+| Sport · fitness · events · product launches | High energy | Light, but the cover and section openers are solid main colour | People or product photos cut to the edge · big numbers | Low, 1 point per slide |
+| Children · education · training · community | Friendly | Light | Very rounded corners · secondary colour separates lesson sections · real photos from the classroom or event | Medium |
+| Food · travel · shops · lifestyle | Makes you want to try | Warm light, or full-slide photo | Real photos covering half a slide or more · text on a solid colour band | Low |
+| Medical · health | Trustworthy | Clean light | Slightly rounded corners · emphasise with the main colour one spot at a time · no frightening images | Medium |
+| Finance · law · government · executives | Stable | Light | Straight lines · tables and charts are the stars · full-slide main colour only on the cover and conclusion slides | Medium to high |
+| Software · technical · system demos | Clear and systematic | Follows the app's design (a dark app may use a dark background) | Real screenshots · system diagrams · short code | Medium |
+| Research · theses · project defences | Credible | Light | Real result charts · main colour used to highlight the result that matters | Medium to high |
+| Memorials · disasters · bad news | Calm | Light or light grey | No full-slide saturated colour · few images | Low |
 
-งานที่ตรงหลายแถว ให้ยึดคนฟังเป็นหลัก (ฟิตเนสแต่ขอเงินผู้บริหาร → แถวการเงิน แล้วใส่ภาพของงานฟิตเนส) · ไม่ตรงแถวไหน → เลือกแถวที่ใกล้สุดแล้วเขียนเหตุผล 1 บรรทัดไว้หัวงาน
+If the work matches several rows, go by the audience (fitness but asking executives for money → the finance row, then add fitness images) · if it matches no row, choose the closest row and write a 1-line reason at the head of the work.
 
-## 3 · "สดใส" แปลว่าอะไรบนสไลด์
+## 3 · What "bright" means on a slide
 
-ผู้ใช้พูดว่า "สดใส" "น่าดู" "ไม่จืด" หรือไม่ได้พูดอะไรเลย ให้ทำตามนี้เป็นค่าเริ่มต้น (`no-ai-look` ห้ามสั่งด้วยคำคุณศัพท์ลอย ๆ จึงแปลงเป็นกฎที่ตรวจได้):
+When the user says "สดใส" (bright) "น่าดู" (good to look at) "ไม่จืด" (not flat), or says nothing at all, do the following by default (`no-ai-look` forbids ordering by free-floating adjectives, so this is turned into rules that can be checked):
 
-1. **พื้นสว่างเป็นค่าเริ่มต้น** — ใช้พื้นเข้มเฉพาะเมื่องานต้นทางหรือแอปเป็นพื้นเข้ม (สคริปต์บอก `พื้นต้นทาง … (เข้ม)`)
-2. **สีหลักเต็มแผ่น** ที่ปก หน้าเปิดส่วน และหน้าปิด · `build_deck.py --theme bright` ทำให้ทั้ง 3 แบบ (`.hero` `.divider` `.close`) · `StageDeck(block=True)` ทำให้ปกกับหน้าคั่นบท (ไม่มีหน้าปิดแยก) · หน้าเนื้อหาใช้พื้นสว่าง การ์ดอมสีหลักจาง ๆ
-   - **โลโก้บนหน้าสีทึบใช้แบบขาวล้วนหรือดำล้วน** ตามสีตัวอักษรของหน้านั้น เพราะโลโก้สีเดียวกับพื้นหรือสีใกล้กันจะหายไป · ถ้ามีแต่โลโก้สี ให้วางบนกล่องขาวมุมมน หรือย้ายโลโก้ไปหน้าเนื้อหาแผ่นแรก
-3. **สีรองจากต้นทาง** (ถ้ามี) ใช้แยกส่วน เช่น หน้าเปิดส่วนที่ 2 เป็นสีรองทั้งแผ่น หรือเน้นตัวเลขที่ต่างความหมายจากสีหลัก · ทั้งเด็คมีสีไม่เกิน 3 สีบวกสีสถานะ
-4. **มีภาพจริงในเด็คอย่างน้อย 1 ใน 3 ของแผ่น** — ภาพจากงานต้นทาง ภาพหน้าจอ ภาพสินค้า หรือภาพที่ทำตาม `image-generation` · หน้าข้อความล้วนติดกันไม่เกิน 3 แผ่น
-5. **เลย์เอาต์ไม่ซ้ำกันเกิน 2 แผ่นติด** (`no-ai-look` ข้อ 3.2 ข้อ 5)
-6. **ห้ามใช้ความสดแทนความอ่านง่าย** — ตัวอักษรทุกขนาดบนพื้นสีทึบต้องได้ ≥ 4.5:1 · `build_deck.py --theme bright` และ `StageDeck(block=True)` เลือกให้เอง: ใช้ขาวเมื่อขาวได้ 4.5:1 ถ้าไม่ได้ ใช้ตัวเกือบดำ (เช่นบนเหลือง) และถ้าเกือบดำยังไม่ถึงก็ใช้ดำล้วน (เช่นบนส้ม เขียวอมฟ้า และน้ำเงินประจำบ้าน) · แล้วยังต้องเปิดภาพทุกแผ่นตรวจตามข้อ 7 ของ `presentation-design`
+1. **Light background by default.** Use a dark background only when the source work or app is dark (the script says `พื้นต้นทาง … (เข้ม)`)
+2. **Full-slide main colour** on the cover, section openers and closing page · `build_deck.py --theme bright` does all 3 types (`.hero` `.divider` `.close`) · `StageDeck(block=True)` does the cover and chapter dividers (no separate closing page) · content pages use a light background, with cards tinted faintly with the main colour
+   - **Logos on solid-colour pages use a pure white or pure black version** to match that page's text colour, because a logo the same colour as the background, or close to it, disappears · if you only have a coloured logo, place it on a white rounded box, or move the logo to the first content page
+3. **Secondary colour from the source** (if any) separates sections, for example section 2's opener is fully the secondary colour, or it emphasises numbers whose meaning differs from the main colour · the whole deck has at most 3 colours plus status colours
+4. **Real images in at least 1 of every 3 slides.** Images from the source work, screenshots, product photos, or images made per `image-generation` · no more than 3 text-only slides in a row
+5. **No layout repeated more than 2 slides in a row** (`no-ai-look` item 3.2 item 5)
+6. **Never use vividness in place of readability.** Text of every size on a solid colour must reach ≥ 4.5:1 · `build_deck.py --theme bright` and `StageDeck(block=True)` choose for you: white when white reaches 4.5:1; if not, near-black (for example on yellow); and if near-black still falls short, pure black (for example on orange, teal and the house blue) · you must still open every slide image and check per item 7 of `presentation-design`
 
-ไม่นับเป็นความสด และยังห้ามตาม `no-ai-look`: ไล่สีม่วง-ฟ้า · ตัวอักษรไล่สี · นีออนหรือแสงเรือง · สีพาสเทลหลายสีที่ไม่มีในงานต้นทาง · ไอคอนประดับทุกการ์ด · animation ทุกชิ้น
+Do not count as vividness, and still forbidden per `no-ai-look`: purple-blue gradients · gradient text · neon or glow · several pastel colours not in the source work · decorative icons on every card · every animation
 
-งานในแถว "มั่นคง" "สงบ" ของข้อ 2 ใช้แค่ข้อ 1 2 4 5 6 · ข้อ 3 ใช้เมื่อต้นทางมีสีรองจริง และสีหลักเต็มแผ่นเหลือเฉพาะปกกับหน้าปิด
+Work in the "stable" and "calm" rows of item 2 uses only items 1 2 4 5 6 · use item 3 when the source really has a secondary colour, and full-slide main colour is left only on the cover and closing page.
 
-## 4 · ใส่ลงเครื่องมือ
+## 4 · Put it into the tools
 
-| เครื่องมือ | ใส่อะไร |
+| Tool | What to put in |
 |---|---|
-| `html-slide-deck` | `build_deck.py … --theme bright --brand <สีหลัก>,<สีสว่าง>,<สีรอง>` · หน้าที่ใช้สีรองทั้งแผ่นใส่ `data-tone="2"` ที่ `<section>` · พื้นต้นทางเข้มใช้ `--theme dark` |
-| `StageDeck` (.pptx) | `StageDeck(accent="<สีหลัก>", bg="FFFFFF", block=True)` เมื่อพื้นสว่าง (`block=True` ทำปกและหน้าคั่นบทเป็นสีหลักทึบเต็มแผ่น) · สีรองใช้กับรูปและกราฟที่ส่งเข้า (`diagram-figures` `#accent=`) |
-| `html-slide-deck` ทางเข้าจาก .pptx | หน้าตามาจาก .pptx · ทำ .pptx ตามไฟล์นี้ก่อน แล้ว `--accent <สีหลัก>` |
-| รูปผังในเด็ค | `diagram-figures` ด้วย `#accent=<สีหลัก>&bg=<สีพื้นเด็ค>` |
+| `html-slide-deck` | `build_deck.py … --theme bright --brand <main colour>,<light colour>,<secondary colour>` · pages that use the secondary colour full-slide get `data-tone="2"` on `<section>` · a dark source background uses `--theme dark` |
+| `StageDeck` (.pptx) | `StageDeck(accent="<main colour>", bg="FFFFFF", block=True)` when the background is light (`block=True` makes the cover and chapter dividers solid full-slide main colour) · the secondary colour is used for figures and charts passed in (`diagram-figures` `#accent=`) |
+| `html-slide-deck` entry from .pptx | The look comes from the .pptx · make the .pptx per this file first, then `--accent <main colour>` |
+| Diagram figures in the deck | `diagram-figures` with `#accent=<main colour>&bg=<deck background colour>` |
 
-## 5 · ตรวจก่อนส่ง
+## 5 · Check before sending
 
-- [ ] วางภาพย่อเด็คข้างงานต้นทาง: สีหลักตรงกัน และเห็นว่าเป็นงานเดียวกัน
-- [ ] สีทุกสีในเด็คมาจากงานต้นทางหรือลำดับในข้อ 1 · รายงานบอกว่ามาจากไฟล์ไหน
-- [ ] อารมณ์ตรงแถวในข้อ 2 และเขียนเหตุผลไว้หัวงานแล้ว
-- [ ] ข้อ 3 ครบ: พื้นตามต้นทาง · สีหลักเต็มแผ่นในหน้าเปลี่ยนส่วน · ภาพจริง ≥ 1 ใน 3 · ไม่มีหน้าข้อความล้วนเกิน 3 แผ่นติด
-- [ ] `check_deck.py` หรือ `check_html_deck.py` ปัญหา 0 จุด แล้วเปิด `sheet-*.png` ดูทุกแผ่น
+- [ ] Place the deck thumbnails next to the source work: the main colours match and it is clearly the same work
+- [ ] Every colour in the deck comes from the source work or the order in item 1 · the report says which file
+- [ ] The mood matches a row in item 2 and the reason is written at the head of the work
+- [ ] Item 3 is complete: background follows the source · full-slide main colour on section-change pages · real images ≥ 1 in 3 · no more than 3 text-only slides in a row
+- [ ] `check_deck.py` or `check_html_deck.py` reports 0 problems, then open `sheet-*.png` and look at every slide

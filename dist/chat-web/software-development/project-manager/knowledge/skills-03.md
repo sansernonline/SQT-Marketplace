@@ -4,175 +4,175 @@ Use when a Word, PowerPoint or PDF must look designed
 
 # Branded Document Design
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the owner's theme → search live for reference designs → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" (pre-work gate) of `design-references` (plugin `superuser`) even when a brand exists (the brand controls color and fonts; the search is for finding this piece's structure) · close the job with the line `ด่านก่อนลงมือ:`
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **Language:** write all wording per `human-writing`. This skill gives format and structure; human-writing gives how to write so people can understand.
 
-> **กฎข้อเดียวของ skill นี้:** เอกสารที่ส่งออกไปต้องดูออกว่าตั้งใจออกแบบ คือมีชุดสี ชุดขนาดตัวอักษร
-> และช่องไฟที่เหมือนกันทุกหน้า ไม่ใช่เปิด Word แล้วพิมพ์เลย
+> **The one rule of this skill:** an exported document must look intentionally designed: one color set, one set of type sizes
+> and spacing that is the same on every page. It must not look like someone opened Word and just typed.
 
-## เมื่อไหร่ใช้ skill นี้
+## When to use this skill
 
-- ผลลัพธ์คือ **.docx / .pptx / .pdf** (ใบเสนอราคา · แผนธุรกิจ · รายงาน · สัญญา · เอกสารซอฟต์แวร์ เช่น SRS) ที่ลูกค้า ผู้บริหาร หรือทีมอื่นจะเปิดดู
-- เอกสารต้อง **เซ็นอนุมัติ** หรือแนบไปกับสัญญา/ข้อเสนอ
-- เอกสารไทย–อังกฤษปนกัน (ถ้าตั้งฟอนต์ไม่ครบจะพังง่ายมาก)
-- ต้องออกเอกสารแบบเดียวกันซ้ำ ๆ และอยากให้ทุกฉบับหน้าตาเหมือนกัน
+- The output is a **.docx / .pptx / .pdf** (quotation · business plan · report · contract · software document such as an SRS) that a customer, executive or another team will open
+- The document must be **signed off** or attached to a contract/proposal
+- Mixed Thai–English documents (they break very easily if fonts are not fully set)
+- The same kind of document is issued repeatedly and every copy should look the same
 
-## เมื่อไหร่ **ไม่** ใช้
+## When **not** to use
 
-- ผลลัพธ์เป็น markdown (ในรีโปหรือโฟลเดอร์งาน) ให้ใช้ `polished-document-style`
-- ต้องแค่ **อ่าน/แกะ** ไฟล์ Office ที่ได้รับมา ให้ใช้ `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf`
-- ไดอะแกรมในเอกสาร markdown ให้ใช้ `markdown-visuals`
-- รายงานทั้งเล่มจาก Markdown ไฟล์เดียว (ปกโลโก้กลาง · สารบัญ · ตาราง · รูป) ให้ใช้ `markdown-report-docx` ซึ่งมีสคริปต์ md → docx พร้อมแล้ว
+- The output is markdown (in the repo or work folder): use `polished-document-style`
+- You only need to **read/extract** a received Office file: use `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf`
+- Diagrams in a markdown document: use `markdown-visuals`
+- A whole-book report from a single Markdown file (shared logo cover · table of contents · tables · figures): use `markdown-report-docx`, which has a ready md → docx script
 
-**ลำดับที่ถูกต้อง:** เขียนเนื้อหาเป็น markdown ก่อน (polished-document-style)
-→ ค่อยใช้ skill นี้ render เป็นไฟล์ส่งมอบ และแก้เนื้อหาที่ markdown เสมอ (markdown คือต้นฉบับ)
-
----
-
-**ติดตั้งก่อนใช้:** `pip install python-docx python-pptx` · LibreOffice (`soffice`) สำหรับแปลงเป็น PDF · `pdftoppm` (poppler) สำหรับแปลงเป็นภาพ
-
-## 0 · สีมาจากโปรเจกต์ — หาตามลำดับ ไม่หยุดรอ
-
-**ถ้า markdown ต้นทางมี `doc-theme` อยู่แล้ว ให้ใช้ค่านั้น อย่าถามซ้ำ อย่าตั้งใหม่**
-(ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร")
-
-ถ้ายังไม่มี ให้หาตามลำดับใน `diagram-figures` ข้อ 5 ที่เดียว (`doc-theme` → สีแบรนด์ในโค้ด โลโก้ ชุดแบรนด์ → ยังไม่มีเลย)
-ยังไม่มีเลย → **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `document` แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้ · ค้นสดไม่ได้ → ใช้สีประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` ไว้ในรายงาน แล้วทำต่อ ไม่หยุดถาม · เสนอโทนตามเนื้องาน (ดูบรรทัดถัดไป) ไว้ในรายงานให้ผู้ใช้เลือกทีหลัง
-ได้สีแล้ว**เขียนกลับลง `doc-theme`** ในไฟล์ markdown เพื่อให้เอกสาร รูป และสไลด์ใช้สีเดียวกัน
-
-โทนที่เสนอตามเนื้องาน (การแพทย์ · การเงิน · ราชการ ฯลฯ · คลังสำรอง ใช้เมื่อค้นสดไม่ได้) → [`references/palette-examples.md`](references/palette-examples.md) · ลูกค้ามีแบรนด์แล้วใช้สีแบรนด์เสมอ
-
-**สีหลักมีสีเดียว** เฉดอ่อนและเข้มทั้งหมดคำนวณจากสีนั้น ไม่เลือกเพิ่มทีละสี
-สีที่ไม่ผูกกับสีหลักมีแค่สีสถานะ (สำเร็จ · เตือน · ผิดพลาด) และต้องคงความหมายเดิมเสมอ
-
-
-## 0.1 · หน้าตาเอกสารต่อจากหน้าตาของแบรนด์หรือแอป — ทำก่อน render ครั้งแรก
-
-> ค่าตั้งต้นของ skill นี้ (Tahoma · ปกแถบสีทึบ · ตารางมีเส้นทุกช่อง) คือ**พื้น** ไม่ใช่หน้าตาส่งมอบ
-> ใช้ค่าตั้งต้นตรง ๆ = เอกสารที่ดูเหมือนพิมพ์จาก Word ทุกบริษัท ทั้งที่แบรนด์หรือแอปของงานนั้นผ่านด่านสวยแล้ว
-
-1. **มีตัวตนอยู่แล้วไหม** — ดู brand kit เดิม (`graphic-design:brand-kit` ถ้าติดตั้ง ใช้สีและฟอนต์จากชุดนั้น) · `assets/logo/` · `docs/design/` · งานซอฟต์แวร์: mockup ที่ผ่านด่านสวย (คะแนนใน `docs/BUILD-PLAN.md`) · `docs/README.md` ช่อง `doc-theme` → มี: เอกสารต้องใช้โลโก้ (ปก + หัวหน้า) สีแบรนด์ และลวดลายเดียวกับแอป · ไม่มี: ทำตามข้อ 0
-2. **ทำ 1 แนวก่อน** · ถ้าผู้ใช้ไม่ว้าวหรือขอหลายแนว จึงทำ **3 แนวขนานกัน** (ค่าแรง 3–5 เท่า · `parallel-attempts-pick-best` · agent ที่มี Bash ตัวใหม่แนวละตัว · ปกใช้วิธีโหวต 3 แนวในหัวข้อ 0.2) — แต่ละแนวทำ HTML จำลองหน้า A4: ปก · หน้าเนื้อหาที่มีตารางข้อกำหนดจริง 4 แถว + callout · หน้าสารบัญหรือหน้ารูป · **รูป 1 รูปทำใหม่ตามแนว** (ใช้ `diagram-figures`) · หัวไฟล์บอกวิธีทำแต่ละชิ้นใน Word จริง · เมื่อทำหลายแนว แนวต้องต่างกันจริง เช่น ปกมืดต่อจากแอป / รายงานสว่างแบบบรรณาธิการ / สเปกวิศวกรรม
-3. **ผู้ตรวจ 2 ตัวที่ไม่ได้ทำ** (ถ้ามีแนวเดียว ให้คะแนนแนวนั้นอย่างเดียว ไม่ต้องผสม) ให้คะแนน 1–5 (ผ่าน = 4): ความประทับใจแรก · ต่อเนื่องกับแอป · ความประณีต (ตารางไทยยาว 60 แถว ไม่ตัดกลางคำ · สเกลตัวอักษร · คอนทราสต์) · รูปอ่านออกเมื่อวางจริง · สร้างใน Word ได้จริง → **ผสมได้** (ปกจากแนวหนึ่ง เนื้อจากอีกแนว) ถ้าผู้ตรวจระบุชิ้นชัด
-4. ลงมือที่ตัว render (ไม่แก้ทีละไฟล์ .docx) → render ทุกฉบับ → **ด่านสวยของเอกสาร**: ผู้ตรวจ 2 ตัวใหม่ดูภาพหน้าจริง (ปก · สารบัญ · หน้าเปิดบท · หน้าตารางยาว · หน้ารูป) ใช้ 5 แกนข้างบน ใช้คะแนนที่ต่ำกว่า · เพดาน **3 รอบ** (รายละเอียดเพิ่มที่ `ui-craft/references/states-and-checks.md` ใน plugin `software-development` ถ้าติดตั้ง) · คะแนนทุกรอบลง `docs/BUILD-PLAN.md`
-5. **ฟอนต์:** ใช้ฟอนต์ไทยของแบรนด์ที่ติดตั้งในเครื่องและฝังในไฟล์ (`embed_fonts`) · Tahoma เป็นทางสำรองเมื่อฝังไม่ได้ · **ห้ามตั้งข้อความไทยด้วยฟอนต์ mono** (Cascadia/Consolas ไม่มีอักษรไทย) — mono ใช้กับรหัส คีย์ ตัวเลขเท่านั้น
-6. **รูปในเอกสาร · กฎที่ด่านสวยจับได้บ่อย · ปก** (ขนาดพิกเซลขั้นต่ำ กฎใน `check` ของตัว render สูตรปก) → [`references/word-layout.md`](references/word-layout.md) หัวข้อท้ายไฟล์
-
-## 0.2 · ปกที่ต้องเป็นของเอกสารชุดนี้ — ทำ 3 แนวแล้วโหวต 2 ใน 3
-
-ใช้เมื่อชุดเอกสาร (ข้อเสนอ · รายงาน · แผนธุรกิจ) ต้องมีปกของตัวเอง และปกตั้งต้นดูเหมือนของงานอื่น · ทำแนวเดียวก่อน ถ้าผู้ใช้ไม่ว้าวหรือขอหลายแนวจึงใช้ (ค่าแรง 3–5 เท่า) · ขั้นเต็ม (หาของจริงมาจับ · ผู้ออกแบบ 3 ตัว · ผู้ตรวจ 3 ตัว · เกณฑ์โหวต · ข้อความบนปก) อยู่ใน [`cover-vote`](references/cover-vote.md)
+**The correct order:** write the content as markdown first (polished-document-style)
+→ then use this skill to render it into the deliverable file, and always fix content in the markdown (markdown is the source).
 
 ---
 
-## 1 · Design tokens — ห้าม hardcode สีนอกตารางนี้
+**Install before use:** `pip install python-docx python-pptx` · LibreOffice (`soffice`) to convert to PDF · `pdftoppm` (poppler) to convert to images
 
-ตารางนี้กำหนด**หน้าที่**ของแต่ละ token ไม่ได้กำหนดค่าสี · ค่าจริงมาจากข้อ 0 แล้วตั้งครั้งเดียวด้วย `use_brand(...)`
+## 0 · Colors come from the project — look in order, do not stop and wait
 
-- token: `brand` · `brand_2` · `brand_deep` · `brand_tint` · `brand_tint_2` · `text` · `text_body` · `text_muted` · `line` + สีสถานะ 6 ตัว (สำเร็จ · ข้อมูล · เตือน · ผิดพลาด · เน้น · เป็นกลาง) ที่**ไม่เปลี่ยนตามแบรนด์**
-- เลือกสีตามความหมาย ไม่ใช่ตามความสวย (แดง = อันตราย/ผิดจริงเท่านั้น) · ใช้ชุดความหมายเดียวกับไดอะแกรม
-- เกณฑ์ที่ต้องผ่านทุกชุดสี: เนื้อความและ `text_muted` บนพื้น ≥ 4.5:1 · H2 และหัวตาราง (`brand_deep`) ≥ 7:1 · H1 และตัวเลข KPI (`brand` ตัวใหญ่) ≥ 3:1 · `use_brand()` ตรวจให้และหยุดถ้าไม่ผ่าน · พิมพ์ขาวดำแล้วยังแยกลำดับชั้นออก · ไม่ผ่านให้ปรับความเข้ม ไม่เปลี่ยนสี
-- ตัวอักษรไม่ใช้ดำสนิท (ใช้ `text_body`) · **อย่าเพิ่มขนาดตัวอักษรนอกสเกล** (เนื้อความ Word 11pt · สไลด์ 17pt)
+**If the source markdown already has a `doc-theme`, use that value. Do not ask again, do not set a new one.**
+(See `polished-document-style`, section "ธีมของเอกสาร" (document theme).)
 
-ตาราง token เต็ม · ตารางความหมายของสี · สเกลตัวอักษร (pt) · องค์ประกอบที่ใช้ซ้ำ + เมธอด → [`references/tokens-and-type.md`](references/tokens-and-type.md) — เปิดเมื่อตั้งธีมหรือเลือกขนาด/สี · ตัวอย่างชุดสีที่เคยใช้ → [`references/palette-examples.md`](references/palette-examples.md)
+If there is none yet, look in the order given in `diagram-figures` item 5, in that one place (`doc-theme` → brand colors in code, logo, brand kit → nothing at all).
+Nothing at all → **search for reference designs first:** take the project's keywords to a live search per `design-references` (plugin `superuser`), type `document`, then extract colors from the chosen work. The stored palette library is used when a live search is impossible. Live search impossible → use the house color `#2A78D6`, write `(รอยืนยัน)` (awaiting confirmation) in the report, and carry on without stopping to ask. Put a tone suggested by the content of the work (see the next line) in the report for the user to choose later.
+Once you have the colors, **write them back into `doc-theme`** in the markdown file so the document, figures and slides use the same colors.
 
----
+Tones suggested by the content of the work (medical · finance · government etc. · fallback library, used when live search is impossible) → [`references/palette-examples.md`](references/palette-examples.md) · if the customer already has a brand, always use the brand colors.
 
-## 2 · ฟอนต์และภาษาไทย — จุดที่พังบ่อยที่สุด
+**There is only one main color.** All light and dark shades are computed from it; do not pick more one by one.
+The only colors not tied to the main color are the status colors (success · warning · error), and they must always keep their meaning.
 
-ใช้ฟอนต์ไทยของแบรนด์ตามข้อ 0.1 ข้อ 5 ก่อน · ไม่มีหรือฝังไม่ได้ ใช้ **Tahoma** เป็นทางสำรอง · กฎที่ห้ามพลาด:
 
-- Word ถือว่าไทยเป็น *complex script* — **ห้ามตั้งฟอนต์/ขนาด/ตัวหนาเองด้วยมือ** ใช้ `style_run()` ใน `brandkit.py` (ตั้ง `w:szCs` `w:bCs` `w:iCs` และ `w:rFonts` ครบ 4 ช่อง)
-- ฟอนต์ละตินกับไทยคนละตัว → ตั้ง `bk.FONT` กับ `bk.LATIN_FONT` แล้วเรียก `bk.thai_runs(doc.element.body)` กับทุก header/footer ก่อน `save()`
-- ระยะบรรทัด 1.3–1.35 (Tahoma) (ค่ากลางอยู่ใน `human-writing` `references/thai-line-breaking.md`) · **ห้าม justify** ย่อหน้าไทย · ส่ง PDF ให้ export จาก Word จริง หรือเปิดตรวจด้วยตาก่อน (LibreOffice ตัดคำไทยต่างจาก Word)
-- Linux ไม่มี Tahoma → Loma/Sarabun · ReportLab จัดวรรณยุกต์ผิด
+## 0.1 · The document's look continues from the brand's or app's look — do this before the first render
 
-รายละเอียดกับดักฟอนต์คู่ · ฝังฟอนต์ · ฟอนต์ variable · ตัวไทยดูเล็กบน Linux → [`references/thai-fonts.md`](references/thai-fonts.md) — เปิดเมื่อตั้งฟอนต์หรือ PDF เพี้ยน
+> This skill's defaults (Tahoma · solid color band cover · table with lines in every cell) are the **floor**, not the deliverable look.
+> Using the defaults as is = a document that looks printed from Word at every company, even though the brand or app of that job already passed a beauty gate.
 
----
+1. **Is there an identity already?** Look at the existing brand kit (`graphic-design:brand-kit` if installed; use the colors and fonts from that kit) · `assets/logo/` · `docs/design/` · software work: a mockup that passed the beauty gate (score in `docs/BUILD-PLAN.md`) · field `doc-theme` in `docs/README.md` → if there is: the document must use the same logo (cover + page header), brand colors and patterns as the app · if not: follow item 0
+2. **Do 1 direction first.** Only if the user is not wowed, or asks for several directions, do **3 directions in parallel** (3–5 times the labor · `parallel-attempts-pick-best` · a new agent with Bash per direction · for the cover use the 3-direction vote method in section 0.2). Each direction makes an HTML mock of A4 pages: cover · a content page with a real 4-row requirements table + callout · a table-of-contents page or a figure page · **1 figure redone for the direction** (use `diagram-figures`) · the file header says how to build each piece in real Word. When doing several directions they must really differ, for example a dark cover continuing from the app / a light editorial report / an engineering spec.
+3. **2 reviewers who did not do the work** (if there is only one direction, score that one only; no mixing) score 1–5 (pass = 4): first impression · continuity with the app · craftsmanship (a long Thai table of 60 rows without breaking mid-word · type scale · contrast) · figures readable when placed for real · really buildable in Word → **mixing is allowed** (cover from one direction, body from another) if the reviewers name the pieces clearly.
+4. Work on the render script (do not edit .docx files one by one) → render every copy → **document beauty gate (`ด่านสวย`)**: 2 new reviewers look at images of the real pages (cover · table of contents · chapter opener · long table page · figure page) using the 5 axes above, and take the lower score · ceiling **3 rounds** (more detail in `ui-craft/references/states-and-checks.md` in plugin `software-development` if installed) · record every round's score in `docs/BUILD-PLAN.md`
+5. **Fonts:** use the brand's Thai font installed on the machine and embedded in the file (`embed_fonts`) · Tahoma is the fallback when embedding is impossible · **never set Thai text in a mono font** (Cascadia/Consolas have no Thai letters). Mono is for code, keys and numbers only.
+6. **Figures in documents · rules the beauty gate often catches · cover** (minimum pixel sizes, rules in the render script's `check`, cover recipe) → [`references/word-layout.md`](references/word-layout.md), section at the end of the file
 
-## 3 · โครงหน้าเอกสาร Word
+## 0.2 · A cover that belongs to this document set — make 3 directions, then vote 2 of 3
 
-โครงเอกสาร: หน้าปก (โปรเจกต์มีโลโก้และ mockup แล้ว → ปกเฉพาะโปรเจกต์ตามหัวข้อ 0.2 · ไม่มีตัวตนใช้แบบตั้งต้น) → สารบัญ (field TOC) → เนื้อหา (H1 มีเลขข้อ · keep-with-next ทุกหัวข้อ) → ตารางลงนามอนุมัติ · footer "หน้า N" กลางหน้า สีเทา 9pt · โครงเต็มทีละบรรทัด → [`references/word-layout.md`](references/word-layout.md) หัวข้อ "โครงหน้าเอกสาร"
-
-**ปกเข้ม** (แอปหรือแบรนด์ใช้หน้าจอสีเข้ม) → `doc.cover(..., style="night")` · ตัวอย่าง `scripts/example_srs.py` · ภาพ `examples/example_srs-preview.png` · รายละเอียดและบทเรียนจากเจ้าของงาน → [`references/word-layout.md`](references/word-layout.md) กฎที่ต้องจำทุกครั้ง:
-- ภาพพื้นปกและโลโก้ห้ามอยู่ใน header หน้าแรก (Word แสดงจางตอนแก้ไฟล์) — ยึดกับย่อหน้าแรกของปก
-
-**หัวตารางหน้าใน ห้ามใช้พื้นสีเข้มเต็มแถบ** · พื้นปกเข้ม ขนาดโลโก้ ตัวหนังสือเล็ก เส้นแสงใต้ชื่อ → [`references/word-layout.md`](references/word-layout.md)
-
-หน้ากระดาษ A4 · ขอบ บน/ล่าง 2.2 ซม. · ซ้าย/ขวา 2.0 ซม. ได้ความกว้างเนื้อหา **17 ซม. = 9638 twips** (`BODY_TWIPS`)
-(ใช้ตัวเลขนี้ตั้งความกว้างคอลัมน์ตารางให้รวมกันพอดี)
+Use when a document set (proposal · report · business plan) needs its own cover and the default cover looks like another job's. Do one direction first; only if the user is not wowed, or asks for several directions, use this (3–5 times the labor). The full steps (find real examples to hold up · 3 designers · 3 reviewers · voting criteria · cover text) are in [`cover-vote`](references/cover-vote.md).
 
 ---
 
-## 4 · องค์ประกอบที่ใช้ซ้ำ
+## 1 · Design tokens — never hardcode colors outside this table
 
-องค์ประกอบ (`cover()` · `table()` · `pill_table()` · `kpi_row()` · `callout()` · `figure()` · `code()` · `signoff()`) หน้าตาและเมธอดครบ → [`references/tokens-and-type.md`](references/tokens-and-type.md)
+This table defines each token's **role**, not the color value. The real values come from item 0, then are set once with `use_brand(...)`.
 
-**สัดส่วนที่พอดี:** callout ไม่เกิน 3–5 กล่องต่อ 10 หน้า · KPI strip 3–5 ช่อง · ตารางเกิน 6 คอลัมน์ให้เปลี่ยนเป็นหน้าแนวนอน (`landscape_section()`)
+- tokens: `brand` · `brand_2` · `brand_deep` · `brand_tint` · `brand_tint_2` · `text` · `text_body` · `text_muted` · `line` + 6 status colors (success · info · warning · error · accent · neutral) that **do not change with the brand**
+- Choose colors by meaning, not by looks (red = danger/real error only) · use the same meaning set as diagrams
+- Thresholds every color set must pass: body text and `text_muted` on the background ≥ 4.5:1 · H2 and table headers (`brand_deep`) ≥ 7:1 · H1 and KPI numbers (`brand`, large) ≥ 3:1 · `use_brand()` checks and stops if it fails · printed in black and white, the hierarchy must still be distinguishable · if it fails, adjust the darkness, do not change the color
+- Text is never pure black (use `text_body`) · **do not add type sizes outside the scale** (Word body 11pt · slides 17pt)
 
----
-
-## 5 · วิธีใช้ brandkit
-
-นำเข้า: `from brandkit import BrandDoc, use_brand, to_pdf` (วาง `scripts/` ไว้ใน path หรือ copy `brandkit.py` มาข้างงาน) · สไลด์ → `brandkit_pptx.BrandDeck` · เด็คพูด → `brandkit_stage.StageDeck`
-
-โค้ดตัวอย่างครบ (Word · สไลด์ · เด็ค Stage) → [`references/brandkit-usage.md`](references/brandkit-usage.md) · เมธอดทั้งหมด → `references/api.md` · สคริปต์ที่รันได้ `scripts/example_srs.py` · `scripts/example_deck.py`
-
-**เด็ค Stage** (ค่าเริ่มต้นของเด็คที่ใช้พูด): สี `accent`/`bg` ถอดจากงานต้นทางตาม `presentation-design` `references/deck-theme.md` (`source_palette.py` พิมพ์บรรทัด `StageDeck(...)` ให้) · ต้นทางไม่มีสี ให้หาตาม `diagram-figures` ข้อ 5 · พื้นสว่าง `FFFFFF` คู่ `block=True` (ปกและหน้าคั่นบทเป็นสีหลักทึบ) เป็นค่าเริ่มต้น ใช้พื้นเข้มเมื่องานต้นทางเข้ม · ไม่มีสีเลยใช้ `#2A78D6` พื้น `FFFFFF` + `(รอยืนยัน)` · รายละเอียด → `references/brandkit-usage.md`
+Full token table · color meaning table · type scale (pt) · reusable elements + methods → [`references/tokens-and-type.md`](references/tokens-and-type.md). Open it when setting the theme or choosing sizes/colors · examples of color sets used before → [`references/palette-examples.md`](references/palette-examples.md)
 
 ---
 
-## 6 · ตรวจงานด้วยตา — ขั้นตอนที่ห้ามข้าม
+## 2 · Fonts and Thai — where it breaks most often
 
-เอกสารที่ยังไม่มีใครเปิดดูหน้าจริง ถือว่ายังไม่เสร็จ เพราะอาจมีตารางล้นขอบ หัวข้อค้างท้ายหน้า
-วรรณยุกต์ลอย ปัญหาเหล่านี้ดูจากโค้ดไม่เห็น
-render เป็น PDF แล้วแปลงเป็นภาพ แล้ว **เปิดภาพดูจริงทุกหน้า** (Read tool) ก่อนส่งมอบ · คำสั่ง `soffice` · `pdftoppm` และรายการตรวจ 7 ข้อ → [`references/visual-check.md`](references/visual-check.md)
+Use the brand's Thai font per item 0.1 step 5 first · if absent or not embeddable, use **Tahoma** as the fallback · rules that must not be missed:
+
+- Word treats Thai as a *complex script*: **never set font/size/bold by hand.** Use `style_run()` in `brandkit.py` (it sets `w:szCs` `w:bCs` `w:iCs` and all 4 slots of `w:rFonts`)
+- When the Latin and Thai fonts differ → set `bk.FONT` and `bk.LATIN_FONT`, then call `bk.thai_runs(doc.element.body)` and on every header/footer before `save()`
+- Line spacing 1.3–1.35 (Tahoma) (the middle value is in `human-writing` `references/thai-line-breaking.md`) · **never justify** Thai paragraphs · to send a PDF, export it from real Word or check by eye first (LibreOffice breaks Thai words differently from Word)
+- Linux has no Tahoma → Loma/Sarabun · ReportLab places tone marks wrongly
+
+Details on dual-font traps · embedding fonts · variable fonts · Thai looking small on Linux → [`references/thai-fonts.md`](references/thai-fonts.md). Open it when setting fonts or when a PDF looks off.
+
+---
+
+## 3 · Word page structure
+
+Document structure: cover page (project has a logo and mockup already → a project-specific cover per section 0.2 · no identity → use the default) → table of contents (TOC field) → body (H1 with section numbers · keep-with-next on every heading) → sign-off table · footer "หน้า N" (page N) centered, gray 9pt · full structure line by line → [`references/word-layout.md`](references/word-layout.md), section "Page structure"
+
+**Dark cover** (the app or brand uses a dark screen) → `doc.cover(..., style="night")` · example `scripts/example_srs.py` · image `examples/example_srs-preview.png` · details and lessons from the work's owner → [`references/word-layout.md`](references/word-layout.md). Rule to remember every time:
+- The cover background image and logo must not be in the first-page header (Word shows them faded while editing the file). Anchor them to the cover's first paragraph.
+
+**Inner-page table headers must not use a full-width solid dark fill.** Dark cover background · logo size · small text · glow line under the title → [`references/word-layout.md`](references/word-layout.md)
+
+Paper A4 · margins top/bottom 2.2 cm · left/right 2.0 cm give a content width of **17 cm = 9638 twips** (`BODY_TWIPS`)
+(use this number to set table column widths so they add up exactly)
+
+---
+
+## 4 · Reusable elements
+
+Elements (`cover()` · `table()` · `pill_table()` · `kpi_row()` · `callout()` · `figure()` · `code()` · `signoff()`): full look and methods → [`references/tokens-and-type.md`](references/tokens-and-type.md)
+
+**Right proportions:** at most 3–5 callout boxes per 10 pages · KPI strip of 3–5 cells · a table over 6 columns should become a landscape page (`landscape_section()`)
+
+---
+
+## 5 · How to use brandkit
+
+Import: `from brandkit import BrandDoc, use_brand, to_pdf` (put `scripts/` on the path or copy `brandkit.py` next to the work) · slides → `brandkit_pptx.BrandDeck` · speaking deck → `brandkit_stage.StageDeck`
+
+Full sample code (Word · slides · Stage deck) → [`references/brandkit-usage.md`](references/brandkit-usage.md) · all methods → `references/api.md` · runnable scripts `scripts/example_srs.py` · `scripts/example_deck.py`
+
+**Stage deck** (the default for a deck used for speaking): the colors `accent`/`bg` are extracted from the source work per `presentation-design` `references/deck-theme.md` (`source_palette.py` prints the `StageDeck(...)` line for you) · if the source has no color, look per `diagram-figures` item 5 · a light background `FFFFFF` with `block=True` (cover and chapter dividers in solid main color) is the default; use a dark background when the source work is dark · no color at all → use `#2A78D6` with background `FFFFFF` + `(รอยืนยัน)` (awaiting confirmation) · details → `references/brandkit-usage.md`
+
+---
+
+## 6 · Check the work by eye — a step that must not be skipped
+
+A document that nobody has opened to look at the real pages is not finished, because there may be tables overflowing the margin, headings stranded at the page bottom,
+floating tone marks. These problems cannot be seen from the code.
+Render to PDF, convert to images, then **open and look at every page** (Read tool) before delivery · `soffice` and `pdftoppm` commands and the 7-point checklist → [`references/visual-check.md`](references/visual-check.md)
 
 ---
 
 ## 7 · Anti-patterns
 
-- **ใช้ Heading style ที่มากับ Word** → ใช้ `h1()/h2()/h3()`
-- **เส้นตารางดำหนาแบบค่าเริ่มต้น** → เส้น `line` 0.5pt
-- **ตัวอักษรสีดำสนิท** → ใช้ `text_body`
-- **หัวตารางตัวหนาแต่ไม่มีพื้นสี**
-- **ปล่อยความกว้างคอลัมน์ให้ Word คิดเอง** → `fixed_widths()` เสมอ
-- **อีโมจิเยอะเกิน**
-- **ส่งไฟล์โดยไม่เคย render ดู**
-- **ใช้หน้าตาตั้งต้นของ skill เป็นเอกสารส่งมอบ ทั้งที่แอปมีตัวตนแล้ว** → ทำข้อ 0.1
-- **รูปกว้าง 2000px วางในหน้าแนวตั้ง 17 ซม. โดยไม่คิดขนาดตัวอักษร** → ตัวอักษรเหลือราว 5pt (ข้อ 0.1 ข้อ 6)
-- **ภาพตกแต่งบนปกที่ไม่มีใครบอกว่าว้าว** → ตัดออก ให้ตัวอักษรเป็นจุดเด่น (references/word-layout.md ข้อ 8)
-- **สร้าง .docx โดยไม่เก็บ markdown ต้นฉบับ**
+- **Using Word's built-in Heading styles** → use `h1()/h2()/h3()`
+- **Thick black default table lines** → `line` 0.5pt lines
+- **Pure black text** → use `text_body`
+- **Bold table headers with no fill color**
+- **Letting Word decide column widths** → always `fixed_widths()`
+- **Too many emoji**
+- **Sending a file never rendered for a look**
+- **Using the skill's default look as the deliverable when the app already has an identity** → do item 0.1
+- **A 2000px-wide figure placed on a 17 cm portrait page without thinking about type size** → the text ends up around 5pt (item 0.1 step 6)
+- **A decorative image on the cover that nobody said wows** → cut it, let the type be the highlight (references/word-layout.md item 8)
+- **Creating a .docx without keeping the source markdown**
 
-เหตุผลและสิ่งที่ใช้แทนของแต่ละข้อ → [`references/anti-patterns.md`](references/anti-patterns.md)
+Reasons and replacements for each item → [`references/anti-patterns.md`](references/anti-patterns.md)
 
 ---
 
-## 8 · เชื่อมกับ skill อื่น
+## 8 · Linking with other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---------|-----------|
-| โครงเนื้อหา/สำนวนเอกสารทางการ · **ธีมสีของเอกสาร** | `polished-document-style` |
-| ไดอะแกรมที่จะเอามาแปะเป็นรูป | `diagram-figures` (รูปออกแบบ) · `software-diagrams` (plugin `software-development`) (Mermaid) → export PNG → `figure()` |
-| อ่านไฟล์ Office ที่ลูกค้าส่งมา | `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` |
-| สเปรดชีตส่งมอบ | `anthropic-skills:xlsx` (โทเคนสีชุดเดียวกันใช้ได้) |
-| เนื้อหาและความครบถ้วนของเอกสาร SRS | `srs-writing` (plugin `software-development`) |
-| โครงเรื่องและเลย์เอาต์ของสไลด์ | `presentation-design` |
-| เด็คนำเสนอเป็น .html ไฟล์เดียว | `html-slide-deck` (มี .pptx แล้วใช้ทางเข้าจาก .pptx ใน skill เดียวกัน) |
-| ไดอะแกรมที่วาดด้วย Mermaid ธีมเดียวกัน | `software-diagrams` (plugin `software-development`) |
-| ที่มาของระบบสีและตัวอักษร · โลโก้ | `graphic-design` (plugin `software-development`) |
+| Content structure/wording of formal documents · **the document's color theme** | `polished-document-style` |
+| Diagrams to paste in as figures | `diagram-figures` (designed figures) · `software-diagrams` (plugin `software-development`) (Mermaid) → export PNG → `figure()` |
+| Read Office files a customer sent | `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` |
+| Spreadsheet deliverable | `anthropic-skills:xlsx` (the same color tokens can be used) |
+| Content and completeness of an SRS document | `srs-writing` (plugin `software-development`) |
+| Slide storyline and layout | `presentation-design` |
+| A presentation deck as a single .html file | `html-slide-deck` (when a .pptx exists, use the entry from .pptx in the same skill) |
+| Diagrams drawn in Mermaid with the same theme | `software-diagrams` (plugin `software-development`) |
+| Origin of the color and type system · logo | `graphic-design` (plugin `software-development`) |
 
 ---
 
-## ไม่ให้ดูเหมือน AI ทำ
+## Do not look AI-made
 
-ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ทุกงานต้องผ่านด่านตา 3.2 ด้วย (หน้าเว็บตอบเพิ่มข้อ 10–14) เพราะสคริปต์ 0 ข้อยังไม่ใช่ผ่าน · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
+Before sending, go through item 3 of `no-ai-look`. For HTML work, run its script. Every job must also pass the eye gate 3.2 (web pages answer items 10–14 in addition), because 0 script findings is not yet a pass. The prohibitions in this file are the parts specific to this work; the full list for all media is there.
 
-## ตัวย่อ
+## Abbreviations
 
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
+Always spell out an abbreviation in full the first time, then put the abbreviation in brackets, for example Model Context Protocol (MCP).
+After that the abbreviation may be used. See the skill `spell-out-abbreviations` for details.
 
 
 ## reference: anti-patterns.md
@@ -195,159 +195,159 @@ render เป็น PDF แล้วแปลงเป็นภาพ แล้�
 
 ## reference: api.md
 
-# brandkit API — อ้างอิงเมธอด
+# brandkit API — method reference
 
-ทุกเมธอดคืนอ็อบเจกต์ที่สร้าง (paragraph / table / slide) จึงปรับแต่งต่อได้
+Every method returns the object it created (paragraph / table / slide), so you can customize it further.
 
-## สารบัญ
+## Contents
 
 1. [brandkit.py — Word (.docx)](#brandkitpy--word-docx)
-2. [brandkit_pptx.py — สไลด์ (.pptx)](#brandkit_pptxpy--สไลด์-pptx)
-3. [brandkit_stage.py — เด็ค Stage (.pptx)](#brandkit_stagepy--เด็ค-stage-pptx)
-4. [สูตรความกว้างคอลัมน์ (Word)](#สูตรความกว้างคอลัมน์-word)
+2. [brandkit_pptx.py — slides (.pptx)](#brandkit_pptxpy--slides-pptx)
+3. [brandkit_stage.py — Stage deck (.pptx)](#brandkit_stagepy--stage-deck-pptx)
+4. [Column width formulas (Word)](#column-width-formulas-word)
 
 ---
 
 ## brandkit.py — Word (.docx)
 
-### สร้างเอกสาร
+### Create a document
 
 ```python
 BrandDoc(path_template=None, page="A4", margins_cm=(2.2, 2.0, 2.2, 2.0),
          footer_text="หน้า")
 ```
 
-| พารามิเตอร์ | ความหมาย |
+| Parameter | Meaning |
 |-------------|----------|
-| `path_template` | ไฟล์ .docx/.dotx ที่ใช้เป็นแม่แบบ (มี header/logo ขององค์กรอยู่แล้ว) |
-| `page` | `"A4"` หรือ `"Letter"` |
-| `margins_cm` | (บน, ขวา, ล่าง, ซ้าย) |
-| `footer_text` | คำนำหน้าเลขหน้า · `""` = เลขเปล่า |
+| `path_template` | A .docx/.dotx file used as the template (already holds the organization's header/logo) |
+| `page` | `"A4"` or `"Letter"` |
+| `margins_cm` | (top, right, bottom, left) |
+| `footer_text` | Prefix before the page number · `""` = bare number |
 
-### บล็อกระดับหน้า
+### Page-level blocks
 
-| เมธอด | หมายเหตุ |
+| Method | Note |
 |-------|----------|
-| `cover(title, subtitle, meta, note, logo, logo_width_cm=None, eyebrow=None, meta_rows=None, top_space_pt=24, page_break=True, style="light", art_colors=None)` | โลโก้รับได้ทั้ง .png และ .emf แต่ **.svg ใช้ไม่ได้ใน python-docx** ต้องแปลงเป็น PNG ก่อน (`rsvg-convert -w 600` หรือ `cairosvg`) |
-| `cover(..., style="night")` | **ปกเข้มเต็มหน้า** (ดูตัวอย่าง `examples/example_srs-preview.png`): พื้นเทาเข้ม `#1C1C22` + แสงจางสีแบรนด์ · `logo` (ไม่ใส่ = ไม่มีโลโก้) เล็กมุมซ้ายบน กว้าง 4.6 ซม. · `eyebrow` → ชื่อเอกสาร (32pt · ยาวเกิน 2 บรรทัดลดเป็น 26pt) → `subtitle` → เส้นแสงเต็มแนวข้อความ · `meta_rows` ค่าสั้น (≤18 ตัวอักษร ไม่เกิน 4 ค่า) เป็นตาราง 4 ช่อง ที่เหลือเป็นแถว ป้าย/ค่า · `note` ท้ายสุด · ปกไม่มี footer · `art_colors=(สี1, สี2, สี3)` สีเส้นแสงจากซ้ายไปขวา และแสงพื้น (ค่าเริ่มต้น `brand_2` → `brand` → `brand` อ่อน) · ภาพพื้น/โลโก้/เส้นยึดกับย่อหน้าในเนื้อหา ไม่ใช่ header · ต้องมี numpy + pillow (`cover_art.py`) · `logo_width_cm` ค่าเริ่มต้น 2.6 (light) / 4.6 (night) |
-| `toc(heading="สารบัญ", levels="1-3")` | แทรก field TOC แล้วใน Word กด **Ctrl+A แล้ว F9** เพื่อให้รายการขึ้น (ตอนสร้างจะยังว่าง) |
+| `cover(title, subtitle, meta, note, logo, logo_width_cm=None, eyebrow=None, meta_rows=None, top_space_pt=24, page_break=True, style="light", art_colors=None)` | The logo accepts .png and .emf, but **.svg does not work in python-docx**; convert to PNG first (`rsvg-convert -w 600` or `cairosvg`) |
+| `cover(..., style="night")` | **Full-page dark cover** (see the example `examples/example_srs-preview.png`): dark gray background `#1C1C22` + a faint brand-colored glow · `logo` (omitted = no logo) small at top left, 4.6 cm wide · `eyebrow` → document title (32pt · if longer than 2 lines, reduce to 26pt) → `subtitle` → a glow line the full width of the text · `meta_rows` short values (≤18 characters, at most 4 values) go in a 4-cell table, the rest as label/value rows · `note` last · the cover has no footer · `art_colors=(color1, color2, color3)` colors of the glow line from left to right and of the background glow (default `brand_2` → `brand` → light `brand`) · the background image/logo/line are anchored to a paragraph in the body, not the header · needs numpy + pillow (`cover_art.py`) · `logo_width_cm` default 2.6 (light) / 4.6 (night) |
+| `toc(heading="สารบัญ", levels="1-3")` | Inserts a TOC field; then in Word press **Ctrl+A then F9** so the entries appear (it is empty when created) |
 | `page_break()` | |
-| `landscape_section()` | เปิดส่วนแนวนอนสำหรับตารางกว้าง |
+| `landscape_section()` | Opens a landscape section for wide tables |
 
-### หัวข้อและข้อความ
+### Headings and text
 
-| เมธอด | ผลลัพธ์ |
+| Method | Result |
 |-------|---------|
-| `h1(text)` `h2(text)` `h3(text)` | 16 / 12.5 / 11.5 pt · bold · brand / brand_deep / text · ตั้ง `outlineLvl` ให้ TOC เห็น |
-| `para(text, size, color, bold, italic, align, space_after)` | `align` = `"center"｜"right"｜"justify"` (ไทยอย่าใช้ justify) |
-| `rich([(text, opts), ...])` | หลายรูปแบบในย่อหน้าเดียว เช่น `[("สถานะ: ", {"bold": True}), ("อนุมัติ", {"color": "green"})]` |
-| `bullets([...], style="List Bullet")` | `style="List Number"` สำหรับเลขลำดับ |
-| `code(text)` | บล็อกโค้ดพื้นเทา |
+| `h1(text)` `h2(text)` `h3(text)` | 16 / 12.5 / 11.5 pt · bold · brand / brand_deep / text · sets `outlineLvl` so the TOC sees them |
+| `para(text, size, color, bold, italic, align, space_after)` | `align` = `"center"｜"right"｜"justify"` (do not justify Thai) |
+| `rich([(text, opts), ...])` | Several formats in one paragraph, e.g. `[("สถานะ: ", {"bold": True}), ("อนุมัติ", {"color": "green"})]` |
+| `bullets([...], style="List Bullet")` | `style="List Number"` for numbered lists |
+| `code(text)` | Gray-background code block |
 
-### ตารางและข้อมูล
+### Tables and data
 
-| เมธอด | หมายเหตุ |
+| Method | Note |
 |-------|----------|
-| `table(headers, rows, widths=None, zebra=False, align=None, first_col_bold=False, size=None, header_style="tint")` | `widths` หน่วย twips รวม **9638** (`BODY_TWIPS`) สำหรับ A4 ขอบ 2 ซม. · `align` = list ต่อคอลัมน์ · `header_style="tint"` (ค่าเริ่มต้น) หัวพื้น `brand` ผสมขาว 80% ตัวหนา `brand_deep` ไม่มีเส้นบน เส้น `brand` 1.5pt ใต้หัวเส้นเดียว เส้นแถวบาง ไม่มีเส้นตั้ง · `"classic"` = แบบเดิม (หัว `brand_tint` กริดเทาบาง) |
-| `pill_table(headers, rows, status_col, palette, widths)` | `palette = {"เสร็จ": "green", "ค้าง": "red"}` · โทนที่ใช้ได้: green blue amber red violet grey |
-| `kpi_row([(value, label), ...])` | 3–5 ช่องพอดี |
-| `signoff([(role, name), ...])` | ตารางเซ็นอนุมัติ |
+| `table(headers, rows, widths=None, zebra=False, align=None, first_col_bold=False, size=None, header_style="tint")` | `widths` in twips totaling **9638** (`BODY_TWIPS`) for A4 with 2 cm margins · `align` = a list per column · `header_style="tint"` (default) header filled with `brand` mixed 80% with white, bold `brand_deep` text, no top line, a single 1.5pt `brand` line under the header, thin row lines, no vertical lines · `"classic"` = the old style (`brand_tint` header, thin gray grid) |
+| `pill_table(headers, rows, status_col, palette, widths)` | `palette = {"เสร็จ": "green", "ค้าง": "red"}` · available tones: green blue amber red violet grey |
+| `kpi_row([(value, label), ...])` | Exactly 3–5 cells |
+| `signoff([(role, name), ...])` | Sign-off table |
 
-### อื่น ๆ
+### Other
 
-| เมธอด | หมายเหตุ |
+| Method | Note |
 |-------|----------|
 | `callout(kind, title, body)` | kind = `tip｜note｜warning｜critical｜success｜question` |
-| `figure(image_path, caption, width_cm=15.5, number=None)` | `number=1` จะขึ้นต้นคำบรรยายว่า "รูปที่ 1 — " |
+| `figure(image_path, caption, width_cm=15.5, number=None)` | `number=1` prefixes the caption with "รูปที่ 1 — " (Figure 1) |
 | `save(path)` | |
 
-### ฟังก์ชันระดับโมดูล
+### Module-level functions
 
-| ฟังก์ชัน | ใช้เมื่อ |
+| Function | Use when |
 |----------|---------|
-| `use_brand(**tokens)` | เปลี่ยนชุดสีทั้งชุด ต้องเรียก **ก่อน** สร้าง `BrandDoc` |
-| `style_run(run, size, color, bold, italic, mono)` | ตั้งฟอนต์เอง (ครอบคลุม complex-script ให้แล้ว) |
-| `shade(cell, token)` · `left_accent(cell, token, size)` | ระบายพื้น / แถบสีซ้ายของเซลล์ |
-| `fixed_widths(table, widths)` | บังคับความกว้างคอลัมน์ |
-| `set_borders(table)` · `row_borders(table)` · `no_borders(table)` · `cell_border(cell, edge, color, size)` | `row_borders` = เส้นแนวนอนอย่างเดียว · `cell_border(..., color=None)` = ไม่มีเส้นด้านนั้น |
-| `mix(color, other="FFFFFF", amount=0.5)` | ผสมสีทำสีอ่อน/เข้มจาก palette |
+| `use_brand(**tokens)` | Change the whole color set; must be called **before** creating `BrandDoc` |
+| `style_run(run, size, color, bold, italic, mono)` | Set the font yourself (complex-script is already covered) |
+| `shade(cell, token)` · `left_accent(cell, token, size)` | Fill a cell / add a colored bar on its left |
+| `fixed_widths(table, widths)` | Force column widths |
+| `set_borders(table)` · `row_borders(table)` · `no_borders(table)` · `cell_border(cell, edge, color, size)` | `row_borders` = horizontal lines only · `cell_border(..., color=None)` = no line on that side |
+| `mix(color, other="FFFFFF", amount=0.5)` | Mix colors to make lighter/darker shades from the palette |
 | `repeat_header(row)` · `keep_with_next(paragraph)` | |
-| `add_field(paragraph, "PAGE")` | แทรก field ของ Word |
-| `to_pdf(docx_path, outdir)` | เรียก LibreOffice แปลงเป็น PDF |
+| `add_field(paragraph, "PAGE")` | Insert a Word field |
+| `to_pdf(docx_path, outdir)` | Calls LibreOffice to convert to PDF |
 
 ---
 
-## brandkit_pptx.py — สไลด์ (.pptx)
+## brandkit_pptx.py — slides (.pptx)
 
 ```python
-BrandDeck(template=None)      # 16:9 (13.333 × 7.5 นิ้ว)
+BrandDeck(template=None)      # 16:9 (13.333 × 7.5 inches)
 ```
 
-| เมธอด | สไลด์ที่ได้ |
+| Method | Resulting slide |
 |-------|-------------|
-| `title_slide(title, subtitle, meta)` | พื้นฟ้าอ่อน + เส้นแบรนด์คั่น |
-| `section(title, kicker=None)` | แถบแบรนด์แนวตั้งซ้าย + ชื่อส่วน |
-| `bullets_slide(title, items, subtitle=None)` | หัวข้อ + ขีดม่วงใต้หัวข้อ + bullet 17pt |
-| `kpi_slide(title, items, subtitle=None)` | การ์ดตัวเลข |
-| `table_slide(title, headers, rows, col_widths, subtitle, status_col, palette)` | `col_widths` เป็นสัดส่วน เช่น `[1, 4, 2, 2]` |
-| `image_slide(title, image_path, caption, subtitle)` | รูปกลางสไลด์ พอดีกรอบอัตโนมัติ |
-| `quote_slide(text, source)` | สไลด์คำพูด/ข้อสรุป |
+| `title_slide(title, subtitle, meta)` | Light blue background + a brand divider line |
+| `section(title, kicker=None)` | Vertical brand bar on the left + section name |
+| `bullets_slide(title, items, subtitle=None)` | Title + purple dash under the title + 17pt bullets |
+| `kpi_slide(title, items, subtitle=None)` | Number cards |
+| `table_slide(title, headers, rows, col_widths, subtitle, status_col, palette)` | `col_widths` are proportions, e.g. `[1, 4, 2, 2]` |
+| `image_slide(title, image_path, caption, subtitle)` | Image centered on the slide, fitted to the frame automatically |
+| `quote_slide(text, source)` | Quote/conclusion slide |
 | `save(path)` | |
 
-**ข้อจำกัดที่ต้องรู้**
+**Limits to know**
 
-- สไลด์ทุกอันสร้างจาก layout ว่าง (`slide_layouts[6]`) จึงไม่มีช่อง placeholder ให้แก้ใน PowerPoint
-  แบบเทมเพลตปกติ ถ้าลูกค้าต้องแก้เองเยอะ ให้ส่ง `template=` เป็นไฟล์ .pptx ขององค์กรแทน
-- ตารางใน python-pptx ไม่มี API ปิดเส้นขอบตรง ๆ ถ้าอยากได้ตารางไม่มีเส้น ให้เรียงกล่องข้อความแทน
-- ความสูงแถวตารางเป็นค่าต่ำสุด ข้อความยาวจะดันแถวสูงขึ้นเอง ให้เผื่อพื้นที่
+- Every slide is built from the blank layout (`slide_layouts[6]`), so there are no placeholders to edit in PowerPoint
+  as in a normal template. If the customer will edit a lot themselves, pass `template=` as the organization's .pptx file instead.
+- Tables in python-pptx have no API to turn off borders directly. If you want a table without lines, arrange text boxes instead.
+- Table row height is a minimum. Long text pushes the row taller by itself, so leave room.
 
 ---
 
-## brandkit_stage.py — เด็ค Stage (.pptx)
+## brandkit_stage.py — Stage deck (.pptx)
 
 ```python
 StageDeck(accent="2A78D6", bg="09090A", project="", template=None,
           head_font="Chakra Petch", body_font="IBM Plex Sans Thai", block=False, **colors)
-# accent / bg = สีหลักกับสีพื้นจากดีไซน์ของโปรเจกต์ · colors = สีที่โปรเจกต์กำหนดไว้แล้ว เช่น text="1B2430"
-# block=True = cover() และ section() เป็นพื้นสีหลักทึบเต็มแผ่น ตัวอักษรบนนั้นได้ ≥ 4.5:1 (ขาว เกือบดำ หรือดำ)
+# accent / bg = main color and background color from the project's design · colors = colors the project already fixed, e.g. text="1B2430"
+# block=True = cover() and section() are a solid main-color full sheet, text on it gets ≥ 4.5:1 (white, near black or black)
 ```
 
-ทุกแผ่นยกเว้นปกและคั่นบทมี: สี่เหลี่ยมสีหลัก + ชื่อหมวด (`kicker`) · หัวสไลด์ 28 pt · เส้นท้ายกระดาษ · `PROJECT · หมวด` · เลขหน้า 2 หลัก
+Every sheet except the cover and chapter divider has: a main-color square + category name (`kicker`) · 28 pt slide title · a line at the foot of the page · `PROJECT · category` · 2-digit page number
 
-| เมธอด | สไลด์ที่ได้ |
+| Method | Resulting slide |
 |-------|-------------|
-| `cover(title, lines, meta, logo=None, mark=None)` | ชื่อ 60 pt + ขีดสีหลัก · `lines[1]` เป็นสีหลัก · `mark` = สัญลักษณ์ใหญ่จางทางขวา (ไม่ใส่ = วงแหวนจาง) |
-| `section(number, title, note)` | คั่นบท — เลขใหญ่สีหลัก |
-| `figure(kicker, title, image, caption, subtitle)` | รูปผังเต็มแผ่น (เรนเดอร์ด้วย `#bg=` เดียวกับเด็ค) |
-| `compare(kicker, title, headers, rows, widths=(1, 1.85, 1.95))` | ตารางเส้นคั่นแถว · คอลัมน์ 1 เทา 2 หนาขาว 3 เนื้อความ · ไม่เกิน 5 แถว |
-| `stats(kicker, title, items, subtitle)` | ตัวเลขใหญ่ 2–4 ช่อง + ตัวอย่างถาม/ตอบใต้ตัวเลข |
-| `steps(kicker, title, rows, example_head, note)` | ขั้นตอนมีเลข · `rows = [(ชื่อ, ทำอะไร, ตัวอย่าง)]` ไม่เกิน 6 ขั้น |
-| `points(kicker, title, points, image, caption, side, side_caption)` | ภาพซ้าย + ใจความมีขีดสีหลัก · `side` = ภาพเล็กขวา เช่น QR |
-| `statement(kicker, text, sub)` | ข้อความเดียวกลางแผ่น |
+| `cover(title, lines, meta, logo=None, mark=None)` | 60 pt title + a main-color dash · `lines[1]` is in the main color · `mark` = a large faint symbol on the right (omitted = a faint ring) |
+| `section(number, title, note)` | Chapter divider: a large number in the main color |
+| `figure(kicker, title, image, caption, subtitle)` | Full-sheet diagram image (rendered with the same `#bg=` as the deck) |
+| `compare(kicker, title, headers, rows, widths=(1, 1.85, 1.95))` | Table with row separator lines · column 1 gray, 2 bold white, 3 body text · at most 5 rows |
+| `stats(kicker, title, items, subtitle)` | 2–4 big numbers + a sample question/answer under each number |
+| `steps(kicker, title, rows, example_head, note)` | Numbered steps · `rows = [(name, what it does, example)]` at most 6 steps |
+| `points(kicker, title, points, image, caption, side, side_caption)` | Image on the left + gist with a main-color dash · `side` = a small image on the right, e.g. a QR code |
+| `statement(kicker, text, sub)` | A single statement centered on the sheet |
 | `save(path)` | |
 
-ตัวช่วยสี: `make_theme(accent, bg)` คืนชุดสีทั้งหมด · `fit(color, bg)` ปรับความสว่างโดยคงความสดจนอ่านออกบนพื้นนั้น · `is_dark(bg)` · `contrast(a, b)`
+Color helpers: `make_theme(accent, bg)` returns the whole color set · `fit(color, bg)` adjusts lightness while keeping vividness until readable on that background · `is_dark(bg)` · `contrast(a, b)`
 
 ---
 
-## สูตรความกว้างคอลัมน์ (Word)
+## Column width formulas (Word)
 
-| จำนวนคอลัมน์ | ตัวอย่าง widths (รวม 9638) |
+| Columns | Example widths (total 9638) |
 |:---:|---|
-| 2 | `[2600, 7038]` — หัวข้อ/รายละเอียด |
-| 3 | `[1400, 6238, 2000]` — รหัส/รายการ/ผู้รับผิดชอบ |
-| 4 | `[1100, 4478, 1900, 2160]` — รหัส/รายการ/ผู้รับผิดชอบ/สถานะ |
+| 2 | `[2600, 7038]` — heading/detail |
+| 3 | `[1400, 6238, 2000]` — code/item/owner |
+| 4 | `[1100, 4478, 1900, 2160]` — code/item/owner/status |
 | 5 | `[1000, 1800, 2838, 2000, 2000]` |
-| 6 ขึ้นไป | ใช้ `landscape_section()` (พื้นที่ 14570 twips) |
+| 6 or more | Use `landscape_section()` (area 14570 twips) |
 
 
 ## reference: brandkit-usage.md
 
-# วิธีใช้ brandkit — โค้ดตัวอย่าง
+# How to use brandkit — sample code
 
-อ่านเมื่อเริ่มเขียนสคริปต์สร้างไฟล์จริง · เมธอดทั้งหมดอยู่ใน `api.md`
+Read when you start writing a script that builds real files · all methods are in `api.md`
 
-## เอกสาร Word (`brandkit.py`)
+## Word document (`brandkit.py`)
 
 ```python
 import sys; sys.path.insert(0, "scripts")     # หรือ copy brandkit.py มาไว้ข้างงาน
@@ -374,9 +374,9 @@ doc.signoff([("Product Owner", "—"), ("Tech Lead", "—")])
 doc.save("SRS.docx")
 ```
 
-## สไลด์ (`brandkit_pptx.py`)
+## Slides (`brandkit_pptx.py`)
 
-สไลด์ใช้ `brandkit_pptx.py` ซึ่งกินโทเคนชุดเดียวกัน:
+Slides use `brandkit_pptx.py`, which takes the same token set:
 
 ```python
 from brandkit_pptx import BrandDeck
@@ -391,13 +391,13 @@ d.image_slide("สถาปัตยกรรม", "diagrams/arch.png", caption=
 d.save("deck.pptx")
 ```
 
-เมธอดทั้งหมดอยู่ใน `references/api.md` ส่วนไฟล์ตัวอย่างที่รันได้จริงคือ
-`scripts/example_srs.py` (เอกสาร) · `scripts/example_deck.py` (สไลด์ `BrandDeck`)
+All methods are in `references/api.md`. The runnable example files are
+`scripts/example_srs.py` (document) · `scripts/example_deck.py` (`BrandDeck` slides)
 
-## เด็ค "Stage" (`brandkit_stage.py`) — ค่าเริ่มต้นของเด็คที่ใช้พูด
+## "Stage" deck (`brandkit_stage.py`) — the default for a deck used for speaking
 
-`brandkit_stage.py` ทำเด็คโครงเดียวกับต้นแบบ หัวเรื่อง Chakra Petch เนื้อความ IBM Plex Sans Thai ส่วน**สีพื้นและสีหลักมาจากดีไซน์ของโปรเจกต์** พื้นเข้มหรือสว่างก็ได้
-(ต้นแบบด้านโครงเด็คเท่านั้น: X Fitness Chatbot Summary v1.2 · ตัวอย่างที่รันแล้ว `examples/example_stage.pptx`)
+`brandkit_stage.py` makes a deck with the same structure as the model deck: headings in Chakra Petch, body in IBM Plex Sans Thai, while the **background and main colors come from the project's design**, dark or light.
+(The model is for deck structure only: X Fitness Chatbot Summary v1.2 · an example already run: `examples/example_stage.pptx`)
 
 ```python
 from brandkit_stage import StageDeck
@@ -409,41 +409,41 @@ d.figure("องค์ประกอบของระบบ", "แอปเด
 d.save("deck.pptx")
 ```
 
-- **สีมาจากดีไซน์ของโปรเจกต์ 2 ค่า** คือ `accent` (สีหลัก) กับ `bg` (สีพื้น) หาตามลำดับใน `diagram-figures` ข้อ 5 (`doc-theme` → ดีไซน์ในโค้ด เช่น `--primary` · `--background` · ธีม Tailwind · โหมดมืด/สว่างของแอป → โลโก้และชุดแบรนด์ → ยังไม่มีเลยใช้สีประจำบ้าน `#2A78D6` พื้น `FFFFFF` แล้วเขียน `(รอยืนยัน)`) ห้ามใช้สีของต้นแบบ · งานที่นำมาทำเด็คมีสีของตัวเอง ให้ถอดด้วย `presentation-design/scripts/source_palette.py` ก่อน · เด็คพื้นสว่างใส่ `block=True` ให้ปกและหน้าคั่นบทเป็นสีหลักทึบเต็มแผ่น (`presentation-design` `references/deck-theme.md`)
-- เทาทุกระดับคำนวณจาก `bg` (พื้นเข้มผสมขาว พื้นสว่างผสมดำ) จึงอมโทนเดียวกับพื้นของโปรเจกต์ · `accent_hi` คือสีหลักที่ปรับความสว่างจนอ่านออกบนพื้นนั้น ใช้กับตัวเลขใหญ่ เลขลำดับ และคำเน้น · โปรเจกต์ที่กำหนดสีตัวหนังสือไว้แล้ว ส่งทับได้ เช่น `text="1B2430"`
-- ฟอนต์ใช้ของโปรเจกต์ได้ (`head_font=` · `body_font=`) ถ้าโปรเจกต์ยังไม่มี ใช้ Chakra Petch + IBM Plex Sans Thai
-- **รูปผังต้องใช้สีพื้นเดียวกับเด็ค** — เรนเดอร์ `diagram-figures` ด้วย `#accent=<สีหลัก>&bg=<สีพื้น>` (ตอนนี้มีใน `figure-flow.html`)
-- **ต้องติดตั้งฟอนต์ Chakra Petch และ IBM Plex Sans Thai** (Google Fonts · ใช้ฟรี) ในเครื่องที่เปิดไฟล์ ถ้าเครื่องปลายทางไม่มี ให้ส่ง PDF คู่ไปด้วย หรือสร้างใหม่ด้วย `head_font="Tahoma", body_font="Tahoma"`
-- ถ้าจะพิมพ์ ให้สร้างอีกชุดด้วย `bg="FFFFFF"` แทนการใช้พื้นเข้มเปลืองหมึก · `BrandDeck` (แถบสีด้านบน) ยังใช้ได้กับรายงานที่ส่งให้อ่านเอง
+- **2 colors come from the project's design:** `accent` (main color) and `bg` (background color). Look in the order given in `diagram-figures` item 5 (`doc-theme` → design in code, such as `--primary` · `--background` · the Tailwind theme · the app's dark/light mode → logo and brand kit → nothing at all: use the house color `#2A78D6` with background `FFFFFF` and write `(รอยืนยัน)` (awaiting confirmation)). Never use the model deck's colors · if the work being made into a deck has its own colors, extract them first with `presentation-design/scripts/source_palette.py` · for a light-background deck, set `block=True` so the cover and chapter dividers are a solid main-color full sheet (`presentation-design` `references/deck-theme.md`)
+- Every gray level is computed from `bg` (dark background mixed with white, light background mixed with black), so it carries the same tone as the project's background · `accent_hi` is the main color with lightness adjusted until readable on that background; use it for big numbers, sequence numbers and emphasis words · a project that already fixed a text color can override it, e.g. `text="1B2430"`
+- Fonts of the project can be used (`head_font=` · `body_font=`); if the project has none, use Chakra Petch + IBM Plex Sans Thai
+- **Diagram images must use the same background color as the deck** — render `diagram-figures` with `#accent=<main color>&bg=<background color>` (now available in `figure-flow.html`)
+- **The fonts Chakra Petch and IBM Plex Sans Thai must be installed** (Google Fonts · free to use) on the machine that opens the file. If the destination machine lacks them, send a PDF along, or rebuild with `head_font="Tahoma", body_font="Tahoma"`
+- For printing, build another set with `bg="FFFFFF"` instead of using a dark background that wastes ink · `BrandDeck` (color bar on top) is still usable for reports sent to be read on their own
 
 
 ## reference: cover-vote.md
 
-# ปกที่ต้องเป็นของเอกสารชุดนี้ — ทำ 3 แนวแล้วโหวต 2 ใน 3
+# A cover that belongs to this document set — make 3 directions, then vote 2 of 3
 
-เปิดเมื่อชุดเอกสารต้องมีปกของตัวเอง
+Open when a document set needs its own cover.
 
-ใช้เมื่อชุดเอกสาร (ข้อเสนอ · รายงาน · แผนธุรกิจ) ต้องมีปกของตัวเอง และปกตั้งต้นดูเหมือนของงานอื่น · ทำแนวเดียวก่อน ถ้าผู้ใช้ไม่ว้าวหรือขอหลายแนวจึงใช้ (ค่าแรง 3–5 เท่า)
+Use when a document set (proposal · report · business plan) needs its own cover and the default cover looks like another job's. Do one direction first; use this only if the user is not wowed or asks for several directions (3–5 times the labor).
 
-1. **หาของจริงมาจับ** — โลโก้ ชื่อ กริยาหลักของงาน (เสนอ · วิเคราะห์ · ขาย) หรือภาพจริงของงาน · ดูปกจริงของคนอื่นอย่างน้อย 6 ใบ · ทุกรูปบนปกต้องชี้กลับไปที่ของจริงได้ ไม่งั้นตัดออก
-2. **ผู้ออกแบบ 3 ตัว (ใช้ `parallel-attempts-pick-best`)** โจทย์เดียวกัน ต่างกันที่แนว: A วาดจากข้อมูลจริงของงาน · B ภาพจริงของงานเป็นพระเอก (หน้าจอ ภาพถ่าย ตัวอย่างผลงาน) · C รูปทรงโลโก้หรือตัวอักษรเป็นโครง ไม่มีภาพวาด · agent ต้องมี Bash เพื่อ render แล้วเปิดดูภาพเอง
-3. **ผู้ตรวจ 3 ตัวใหม่ ไม่เคยเห็นงาน คนละมุม** — ผู้กำกับศิลป์ (ว้าวจริงไหม ดูเป็นงาน AI ไหม) · แบรนด์และลูกค้า (จำได้ไหม รู้ว่างานเกี่ยวกับอะไรไหม ไปด้วยกันทั้งชุดไหม) · การผลิตใน Word (ทำซ้ำได้ไหม ข้อความแก้ได้ไหม) · ให้ใส่ปกเดิมเป็นตัวเลือกด้วย
-4. **เกณฑ์ที่ให้คะแนน 1–5 แล้วโหวต** ว้าวเทียบปกเดิม · ไม่ซ้ำงานอื่น · บอกความจริงของงาน · เข้ากับทั้งชุด · ความประณีต (ไทย คอนทราสต์ ตัวเล็กสุด) · สร้างใน Word ได้และทำซ้ำได้ · แนวที่ได้ **2 ใน 3 เสียงชนะ** · ยกส่วนเด่นของแนวที่แพ้มาได้ไม่เกิน 2 ชิ้น · เสียงแตก 3 ทาง ให้ "ทำซ้ำได้" ตัดสิน
-5. **ข้อความบนปกเป็นข้อความ Word แก้ได้** (ชื่อ เวอร์ชัน วันที่) · ภาพพื้นไม่ฝังตัวหนังสือ · ยึดภาพกับย่อหน้าแรก ไม่วางใน header
-6. **เฉพาะชุดเอกสารซอฟต์แวร์** (BRD · SRS · FSD ที่ปกต้องมาจากรูปทรงโลโก้หรือ mockup จริง · ใช้เครื่องสร้างปก) → ถ้ามี plugin `software-development` ดู `doc-cover-design` เพิ่ม · ไม่มีก็ทำตามข้อ 1–5 ได้ครบ
+1. **Find the real thing to hold on to:** logo, name, the main verb of the job (propose · analyze · sell), or real images of the work · look at at least 6 real covers by others · every image on the cover must point back to something real, otherwise cut it.
+2. **3 designers (use `parallel-attempts-pick-best`).** Same brief, different directions: A drawn from the job's real data · B a real image of the work is the hero (screen, photo, sample of the output) · C the logo shape or lettering is the structure, no drawn image · each agent needs Bash to render and open the image itself.
+3. **3 new reviewers who have not seen the work, each from a different angle:** art director (is it truly wow, does it look AI-made) · brand and customer (is it memorable, does it show what the work is about, does it go with the whole set) · Word production (is it repeatable, can the text be edited) · include the old cover as an option too.
+4. **Criteria scored 1–5, then vote:** wow compared with the old cover · not a repeat of other work · tells the truth of the work · fits the whole set · craftsmanship (Thai, contrast, smallest text) · buildable and repeatable in Word · the direction with **2 of 3 votes wins** · borrow at most 2 strong pieces from a losing direction · if the votes split 3 ways, "repeatable" decides.
+5. **Text on the cover is editable Word text** (title, version, date) · the background image has no lettering baked in · anchor the image to the first paragraph, not in the header.
+6. **Software document sets only** (BRD · SRS · FSD whose cover must come from the logo shape or a real mockup · uses the cover generator) → if plugin `software-development` is present, also see `doc-cover-design` · without it, items 1–5 are complete on their own.
 
 
 ## reference: palette-examples.md
 
-# ตัวอย่างชุดสีที่เคยใช้จริง
+# Color sets that were actually used (examples)
 
-> ระวัง: **นี่คือตัวอย่าง ไม่ใช่ค่ามาตรฐาน**
-> เลือกสีจากเนื้องานตามข้อ 0 ของ `SKILL.md` ก่อนเสมอ
-> ใช้ไฟล์นี้เพื่อดูว่าชุดที่ครบและผ่านเกณฑ์ contrast (ตรวจด้วยสคริปต์แล้ว 22 ต.ค. 2569) หน้าตาเป็นอย่างไร ไม่ใช่เพื่อคัดลอก
+> Warning: **these are examples, not standard values.**
+> Always choose colors from the content of the work first, per item 0 of `SKILL.md`.
+> Use this file to see what a complete set that passes the contrast thresholds looks like (checked with the script on 22 Oct 2026 (2569 BE)), not to copy.
 
-## ชุด A — น้ำเงิน–ม่วง (ซอฟต์แวร์ทั่วไป · สกัดจาก Apps Track)
+## Set A — blue–violet (general software · extracted from Apps Track)
 
-โทนสว่าง โปร่ง นุ่มนวล ตัวอักษรเทาเย็น
+Light tone, airy, soft, cool gray text
 
 ```python
 use_brand(
@@ -453,7 +453,7 @@ use_brand(
 )
 ```
 
-## ชุด B — เขียวอมฟ้า (การแพทย์ · สุขภาพ)
+## Set B — teal green (medical · health)
 
 ```python
 use_brand(
@@ -463,7 +463,7 @@ use_brand(
 )
 ```
 
-## ชุด C — กรมท่า (ราชการ · กฎหมาย)
+## Set C — navy (government · legal)
 
 ```python
 use_brand(
@@ -473,9 +473,9 @@ use_brand(
 )
 ```
 
-## ชุด D — เหลืองอำพัน + เทาเหล็ก (อุตสาหกรรม · โรงงาน)
+## Set D — amber yellow + steel gray (industrial · factory)
 
-accent อุ่นบนโครงเทาเย็น — ใช้ accent เฉพาะจุดที่ต้องการให้สังเกต ไม่ใช่ทั้งหน้า
+A warm accent on a cool gray frame. Use the accent only at the spots that need attention, not across the whole page.
 
 ```python
 use_brand(
@@ -485,74 +485,74 @@ use_brand(
 )
 ```
 
-## สีสถานะ — ชุดเดียวกันทุกแบรนด์
+## Status colors — the same set for every brand
 
-สีสถานะ**ไม่เปลี่ยนตามแบรนด์** เพราะความหมายของมันคงที่
+Status colors **do not change with the brand**, because their meaning is fixed.
 
-| สถานะ | พื้น | ตัวอักษร |
+| Status | Background | Text |
 |---|---|---|
-| สำเร็จ | `E9F7EF` | `17794A` |
-| ข้อมูล | `EAF2FD` | `2160AB` |
-| เตือน | `FDF5E4` | `96660D` |
-| ผิดพลาด | `FDEDEC` | `A63A34` |
-| เน้น | `F1EEFC` | `52439F` |
-| เป็นกลาง | `F2F4F8` | `626A7A` |
+| Success | `E9F7EF` | `17794A` |
+| Info | `EAF2FD` | `2160AB` |
+| Warning | `FDF5E4` | `96660D` |
+| Error | `FDEDEC` | `A63A34` |
+| Accent | `F1EEFC` | `52439F` |
+| Neutral | `F2F4F8` | `626A7A` |
 
-> ถ้าสีแบรนด์ชนกับสีสถานะตัวใดตัวหนึ่ง (เช่น แบรนด์เป็นเขียว) ให้เปลี่ยน**สีแบรนด์ในบริบทนั้น**
-> อย่าเปลี่ยนสีสถานะ — ผู้อ่านตีความเขียวว่าผ่านไปแล้วก่อนอ่านข้อความ
+> If the brand color clashes with one of the status colors (for example the brand is green), change the **brand color in that context**.
+> Do not change the status color. Readers interpret green as "passed" before reading the text.
 
-## วิธีตรวจก่อนใช้
+## How to check before use
 
-1. เนื้อความและ `text_muted` บนพื้นขาวและพื้น `brand_tint` ≥ 4.5:1 · `brand_deep` (H2 และหัวตาราง) บนพื้นขาวและ `brand_tint` ≥ 7:1 · `brand` (H1 16pt ตัวหนา และตัวเลข KPI นับเป็นตัวใหญ่) ≥ 3:1
-2. พิมพ์ขาวดำแล้วยังแยกหัวข้อกับเนื้อความออก
-3. เปิดไฟล์ที่เรนเดอร์แล้วดูด้วยตา ไม่ใช่เชื่อค่าในตาราง
+1. Body text and `text_muted` on a white background and on a `brand_tint` background ≥ 4.5:1 · `brand_deep` (H2 and table headers) on white and `brand_tint` ≥ 7:1 · `brand` (H1 16pt bold, and KPI numbers count as large text) ≥ 3:1
+2. Printed in black and white, headings must still be distinguishable from body text
+3. Open the rendered file and look by eye; do not trust the values in the table
 
-## โทนที่เสนอตามเนื้องาน (ใช้เมื่อไม่มีสีแบรนด์ให้ยึด)
+## Tones suggested by the content of the work (use when there is no brand color to hold on to)
 
-| เนื้องาน | โทนที่เสนอ | เหตุผล |
+| Content of the work | Suggested tone | Reason |
 |---|---|---|
-| การแพทย์ · สุขภาพ | เขียวอมฟ้า · เขียว | ความสะอาด ความปลอดภัย |
-| การเงิน · ธนาคาร | น้ำเงินเข้ม · เทาเงิน | ความมั่นคง |
-| อุตสาหกรรม · โรงงาน | เหลืองอำพัน · เทาเหล็ก | เครื่องจักร การเตือน |
-| การศึกษา | ม่วง · ส้มอ่อน | ความกระตือรือร้น |
-| ค้าปลีก · อาหาร | ส้ม · แดงอมชมพู | ความอบอุ่น ความอยาก |
-| ราชการ · กฎหมาย | กรมท่า · เลือดหมู | ความเป็นทางการ |
-| ซอฟต์แวร์ทั่วไป | น้ำเงิน | ค่ากลางเมื่อไม่มีบริบทอื่น |
+| Medical · health | Teal green · green | Cleanliness, safety |
+| Finance · banking | Dark blue · silver gray | Stability |
+| Industrial · factory | Amber yellow · steel gray | Machinery, warning |
+| Education | Purple · light orange | Enthusiasm |
+| Retail · food | Orange · pinkish red | Warmth, appetite |
+| Government · legal | Navy · oxblood | Formality |
+| General software | Blue | A neutral default when there is no other context |
 
-ถ้าลูกค้ามีแบรนด์อยู่แล้ว ให้ใช้สีแบรนด์ ตารางนี้ใช้เฉพาะตอนไม่มีอะไรให้ยึด
+If the customer already has a brand, use the brand colors. This table is used only when there is nothing to hold on to.
 
 
 ## reference: thai-fonts.md
 
-# ฟอนต์และภาษาไทย — รายละเอียด
+# Fonts and Thai — details
 
-กฎที่ห้ามพลาดย่อไว้ใน `SKILL.md`
+The rules that must not be missed are abbreviated in `SKILL.md`
 
-ใช้ **Tahoma** เป็นค่าเริ่มต้น: มีทุกเครื่อง Windows/Office · วรรณยุกต์ไม่ชนสระ ·
-bold อ่านออกชัด · ความสูง x-height ไทยกับอังกฤษใกล้เคียงกัน
+Use **Tahoma** as the default: on every Windows/Office machine · tone marks do not collide with vowels ·
+bold reads clearly · the x-height of Thai and English is close.
 
-> **กับดัก complex script:** Word ถือว่าภาษาไทยเป็น *complex script* คนละชุดกับ latin
-> ถ้าตั้งแค่ `run.font.size` / `run.font.bold` ตัวอักษรไทยจะ **ไม่เปลี่ยนตาม**
-> ต้องตั้ง `w:szCs`, `w:bCs`, `w:iCs` และ `w:rFonts` ให้ครบทั้ง `ascii/hAnsi/cs/eastAsia`
-> ฟังก์ชัน `style_run()` ใน `brandkit.py` จัดการให้แล้ว **ห้ามตั้งฟอนต์เองด้วยมือ**
+> **Complex script trap:** Word treats Thai as a *complex script*, a separate set from Latin.
+> If you set only `run.font.size` / `run.font.bold`, Thai text will **not follow**.
+> You must set `w:szCs`, `w:bCs`, `w:iCs` and `w:rFonts` in all of `ascii/hAnsi/cs/eastAsia`.
+> The function `style_run()` in `brandkit.py` handles this. **Never set fonts by hand.**
 
-> **กับดักฟอนต์คู่:** ถ้าใช้ฟอนต์ละตินกับฟอนต์ไทยคนละตัว เช่น Noto Sans + Noto Sans Thai
-> การตั้งช่อง `cs` อย่างเดียวไม่พอ Word จะวาดตัวไทยด้วยฟอนต์ช่องละตินถ้าฟอนต์นั้นมีตัวไทย ถ้าไม่มีจะตกไปใช้ Browallia New แบบเงียบ ๆ
-> ให้ตั้ง `bk.FONT` (ไทย) กับ `bk.LATIN_FONT` (ละติน) แล้วเรียก `bk.thai_runs(doc.element.body)` กับทุก header และ footer ก่อน `save()`
-> ฟังก์ชันนี้แยกข้อความไทยออกเป็น run ของตัวเอง และตั้งทั้ง 4 ช่องเป็นฟอนต์ไทย
-> ฟอนต์ที่ไม่ได้มีทุกเครื่องให้เรียก `bk.embed_fonts(doc)` เพื่อฝังฟอนต์ในไฟล์ ซึ่งทำได้เฉพาะฟอนต์ที่สัญญาอนุญาตยอมให้ฝัง เช่น OFL แต่ไฟล์จะใหญ่ขึ้นหลาย MB
-> ฟอนต์ variable เช่น Cascadia Mono จะกลายเป็น Calibri เมื่อ Word export เป็น PDF ให้ใช้ Consolas กับโค้ด
+> **Dual-font trap:** if the Latin font and the Thai font differ, such as Noto Sans + Noto Sans Thai,
+> setting only the `cs` slot is not enough. Word draws Thai with the font in the Latin slot if that font has Thai glyphs; if not, it silently falls back to Browallia New.
+> Set `bk.FONT` (Thai) and `bk.LATIN_FONT` (Latin), then call `bk.thai_runs(doc.element.body)` and on every header and footer before `save()`.
+> This function splits Thai text into runs of its own and sets all 4 slots to the Thai font.
+> For fonts that are not on every machine, call `bk.embed_fonts(doc)` to embed the fonts in the file. This works only for fonts whose license allows embedding, such as OFL, and the file grows by several MB.
+> Variable fonts such as Cascadia Mono become Calibri when Word exports to PDF. Use Consolas for code.
 
-กฎอื่นสำหรับเอกสารไทย:
+Other rules for Thai documents:
 
-- ระยะบรรทัด **1.3–1.35** สำหรับ Tahoma (อังกฤษล้วนใช้ 1.15 ได้ แต่ไทยมีวรรณยุกต์และสระบน–ล่าง ต้องเว้นที่) · ฟอนต์ตระกูล Noto มีความสูงบรรทัดในตัว 1.36–1.51 em จึงใช้ **1.1–1.15** ก็ได้ระยะเท่ากัน — ตัดสินจากหน้า PDF จริง ไม่ใช่จากตัวเลข
-- **ห้ามจัดชิดขอบ 2 ด้าน (justify)** กับย่อหน้าไทย เพราะไทยไม่มีช่องว่างระหว่างคำ Word จะยืดคำจนเป็นรู
-- LibreOffice ตัดคำไทยไม่เหมือน Word ถ้าจะส่ง PDF ให้ export จาก Word จริง
-  หรืออย่างน้อยเปิด PDF ตรวจด้วยตาก่อนส่ง
-- สร้าง PDF บน Linux ที่ไม่มี Tahoma ให้ใช้ **Loma** หรือ **Sarabun** แทน
-  (ReportLab จัดวรรณยุกต์ไทยผิด ให้ใช้ python-docx→LibreOffice หรือ WeasyPrint แทน)
-- เวลา preview บน Linux ตัวอักษรไทยจะดู **เล็กกว่า** latin เพราะฟอนต์แทนที่มี x-height ต่ำกว่า
-  ไม่ใช่บั๊กของขนาดฟอนต์ บน Windows ที่มี Tahoma จริงจะสูงเท่ากัน จึงให้ตรวจรอบสุดท้ายจาก Word
+- Line spacing **1.3–1.35** for Tahoma (English only can use 1.15, but Thai has tone marks and upper–lower vowels that need room) · Noto family fonts have a built-in line height of 1.36–1.51 em, so **1.1–1.15** gives the same spacing. Decide from the real PDF page, not from the numbers.
+- **Never justify** Thai paragraphs, because Thai has no spaces between words and Word stretches words until holes appear.
+- LibreOffice breaks Thai words differently from Word. To send a PDF, export it from real Word,
+  or at least open the PDF and check by eye before sending.
+- To create a PDF on Linux without Tahoma, use **Loma** or **Sarabun** instead
+  (ReportLab places Thai tone marks wrongly; use python-docx→LibreOffice or WeasyPrint instead).
+- When previewing on Linux, Thai text looks **smaller** than Latin because the substitute font has a lower x-height.
+  It is not a bug in the font size. On Windows with real Tahoma the heights are equal, so do the final check from Word.
 
 
 ## reference: tokens-and-type.md
@@ -635,53 +635,53 @@ bold อ่านออกชัด · ความสูง x-height ไทย�
 
 ## reference: visual-check.md
 
-# ตรวจเอกสารด้วยตา — คำสั่งและรายการตรวจ
+# Check a document by eye — commands and checklist
 
 ```bash
 soffice --headless --convert-to pdf --outdir _to_delete/preview SRS.docx
 pdftoppm -png -r 80 _to_delete/preview/SRS.pdf _to_delete/preview/page      # ได้ page-1.png หรือ page-01.png (เลขเติมศูนย์ตามจำนวนหน้าทั้งหมด)
 ```
 
-แล้ว **เปิดภาพดูจริงทุกหน้า** (Read tool) ก่อนส่งมอบ ตรวจตามนี้:
+Then **open and look at every page image** (Read tool) before delivery. Check these:
 
-- [ ] ไม่มีตารางล้นขอบกระดาษ คอลัมน์กว้างพอดี ไม่มีคำถูกบีบขึ้นบรรทัดใหม่แปลก ๆ
-- [ ] ไม่มีหัวข้อค้างอยู่บรรทัดสุดท้ายของหน้า
-- [ ] วรรณยุกต์/สระไทยไม่ชนกัน และไม่มีตัวอักษรกลายเป็นกล่องสี่เหลี่ยม
-- [ ] หน้าปกไม่มีข้อความล้นหรือตกขอบ · **หน้า 2 ไม่ว่าง** (ปกเต็มหน้าแล้วย่อหน้าตัวแบ่งหน้าตกไปหน้า 2 — `cover()` ใส่ตัวแบ่งไว้ท้ายย่อหน้าสุดท้ายแล้ว ถ้าเขียนปกเองต้องทำแบบเดียวกัน)
-- [ ] ช่องไฟก่อน/หลังตารางและ callout เท่ากันทั้งเอกสาร
-- [ ] footer เลขหน้าครบทุกหน้า
-- [ ] ไม่มี TBD / Lorem ipsum / placeholder หลงเหลือ (ยกเว้น `(รอยืนยัน)` ที่อยู่ในรายการรอยืนยันของรายงาน)
+- [ ] No table overflows the paper edge; columns are wide enough; no word is squeezed onto a strange new line
+- [ ] No heading stranded on the last line of a page
+- [ ] Thai tone marks/vowels do not collide, and no character turns into a square box
+- [ ] The cover has no overflowing or edge-cut text · **page 2 is not blank** (a full-page cover, then the page-break paragraph falls onto page 2; `cover()` puts the break at the end of the last paragraph already, and a hand-written cover must do the same)
+- [ ] Spacing before/after tables and callouts is the same across the document
+- [ ] Footer page numbers on every page
+- [ ] No TBD / Lorem ipsum / leftover placeholder (except `(รอยืนยัน)` (awaiting confirmation) that is in the report's awaiting-confirmation list)
 
 
 ## reference: word-layout.md
 
-# ปกเข้มและหัวตาราง — รายละเอียดจากงานจริง
+# Dark cover and table headers — details from real jobs
 
-อ่านเมื่อทำปกแบบเข้ม หรือปรับหัวตารางในหน้าใน · กฎย่อที่ต้องใช้ทุกครั้งอยู่ใน `SKILL.md` ข้อ 3
+Read when making a dark cover or adjusting table headers on inner pages · the short rules to use every time are in `SKILL.md` item 3.
 
-## แบบปกเข้ม
+## Dark cover style
 
-**แบบปกเข้ม (เมื่อแอปหรือแบรนด์ใช้หน้าจอสีเข้ม):** ปกเต็มหน้าสีเทาเข้มเกือบดำแบบกลาง ๆ (เช่น `#1C1C22`) มีแสงเรืองสีแบรนด์จางมาก (ไม่เกิน 15%) — แสงม่วงเข้มเต็มมุมทำให้ปกดูเป็นสีม่วง เจ้าของงานขอกลับเป็นเทาเข้ม ·
-ชื่อเอกสาร ชื่อรอง และเส้นใต้ชื่อ วาง**ชิดใต้โลโก้** ไม่ใช่กลางหรือล่างหน้า ส่วนตารางข้อมูลเอกสารอยู่ค่อนไปทางล่าง ·
-โลโก้แบบตัวอักษรสว่าง (light-on-dark) มุมซ้ายบน · ชื่อเอกสาร 28–32pt · ตารางข้อมูลเอกสาร 4 ช่อง
-(รหัสเอกสาร · เวอร์ชัน · วันที่ · สถานะ) · หน้าในเป็นพื้นขาว บล็อกโค้ดสีเข้ม header มีโลโก้เล็ก ชื่อเอกสาร และรหัสเอกสาร
-footer มีชื่อระบบกับ "หน้า / ทั้งหมด" — สีเข้มอยู่ที่ปกหน้าเดียว จึงยังพิมพ์ได้ ขนาดชื่อเอกสารบนปกแบบนี้เกินสเกลข้อ 1 ได้
-โลโก้บนปกใช้**ขนาดเล็ก (กว้างราว 4.5 ซม.) มุมซ้ายบน เหนือชื่อเอกสาร** — เคยลองขยายสัญลักษณ์เป็นภาพหลักกลางปก เจ้าของงานขอกลับเป็นขนาดเล็ก
-ถ้าต้องการลูกเล่น ให้ลากแสงสีของโลโก้เป็นเส้นยาวเท่าแนวข้อความ (เว้นขอบซ้ายขวาเท่าระยะขอบกระดาษ — เส้นที่ชนขอบกระดาษถูกขอให้เว้นขอบ) เป็นแท่งหนาสม่ำเสมอ **ปลายตัดตรง มุมมนเล็กน้อย** (หนาราว 0.7 มม. มุมราว 0.25 มม.) — ปลายเรียวแหลมถูกทักว่าแหลมไป · แสงเรืองต้องจางเป็นศูนย์ก่อนถึงขอบภาพ ไม่อย่างนั้นจะเห็นขอบกล่องของภาพ แทนเส้นใต้ชื่อเอกสาร (ยึดภาพเส้นกับย่อหน้าใต้ชื่อ เพื่อให้ตามได้ทั้งชื่อ 1 และ 2 บรรทัด) · เส้นต้องเป็น**ภาพเดียวต่อเนื่อง** ความหนาและแสงเท่ากันตลอด ไล่สีแบบ smoothstep ปลายสองข้างจางลงนุ่ม ๆ และวาดที่ 300 dpi — ห้ามวางแถบสั้นซ้อนบนเส้นยาว เพราะจะเห็นเป็นก้อนหนาที่สีไม่ต่อกัน (เจ้าของงานทักว่า "เส้นสีไม่ smooth")
-> **ภาพพื้นปกและโลโก้บนปก ห้ามวางใน header ของหน้าแรก** — Word แสดงทุกอย่างใน header เป็นสีจางระหว่างอ่านหรือแก้ตัวเอกสาร ปกเข้มทั้งหน้าจึงดูซีด (ใน PDF ไม่จาง จึงตรวจจาก PDF อย่างเดียวไม่เจอ — เจ้าของงานทักว่า "ดูซีด ๆ") ให้ยึดภาพแบบลอยหลังข้อความไว้กับย่อหน้าแรกของปกแทน และตั้ง `relativeHeight` แบบที่ Word ใช้ (ภาพพื้น 251658240 · ภาพที่อยู่เหนือขึ้นไปเพิ่มทีละ 1024) เพราะ Word จะเรียงเลขน้อย ๆ อย่าง 1, 2, 3 ใหม่ตอนบันทึก แล้วภาพพื้นจะทับโลโก้
+**Dark cover style (when the app or brand uses a dark screen):** a full-page cover in a neutral near-black dark gray (for example `#1C1C22`) with a very faint brand-colored glow (at most 15%). A deep purple glow filling the corner made the cover look purple, and the work's owner asked to go back to dark gray ·
+The document title, subtitle and the line under the title go **right under the logo**, not in the middle or at the bottom of the page. The document-info table sits toward the bottom ·
+A light-on-dark lettering logo at top left · document title 28–32pt · a 4-cell document-info table
+(document code · version · date · status) · inner pages have a white background and dark code blocks; the header has a small logo, the document title and the document code;
+the footer has the system name and "หน้า / ทั้งหมด" (page / total). The dark color is on the cover page only, so it can still be printed. The title size on this kind of cover may exceed the scale in item 1.
+The logo on the cover uses a **small size (about 4.5 cm wide) at top left, above the document title**. Enlarging the symbol into the main image in the middle of the cover was tried, and the work's owner asked to go back to small.
+If you want a flourish, stretch the logo's color glow into a long line as wide as the text (leave left and right margins equal to the paper margins; a line touching the paper edge was asked to be set in from the edge) as a bar of even thickness **with straight-cut ends and slightly rounded corners** (about 0.7 mm thick, corners about 0.25 mm). Tapered pointed ends were criticized as too sharp · the glow must fade to zero before the image edge, otherwise the box edge of the image shows. Use it instead of an underline below the document title (anchor the line image to the paragraph under the title so it follows both 1-line and 2-line titles) · the line must be **one continuous image** with the same thickness and glow throughout, a smoothstep gradient with both ends fading softly, drawn at 300 dpi. Never lay short bars over a long line, because it shows as a thick lump with colors that do not join (the work's owner said "the colored line is not smooth").
+> **The cover background image and the logo on the cover must not be placed in the first page's header.** Word shows everything in the header as faded while reading or editing the document, so a full-page dark cover looks washed out (it is not faded in the PDF, so checking from the PDF alone will not find it; the work's owner said "looks washed out"). Anchor the floating behind-text image to the cover's first paragraph instead, and set `relativeHeight` the way Word does (background image 251658240 · images above it increase by 1024 each), because Word re-orders small numbers like 1, 2, 3 on save, and then the background image covers the logo.
 
-ตัวหนังสือเล็กบนปกเข้ม (ป้ายกำกับ ข้อมูลผู้เขียน หมายเหตุ) ใช้ขนาด**อย่างน้อย 8.5pt** และสีเทาอ่อน `#CFCCDE` ขึ้นไป ชื่อรองใช้สีอ่อนเกือบขาว — ตัว 7.5pt สีเทากลางบนพื้นเข้มดูจาง
+Small text on a dark cover (labels, author info, notes) uses a size **of at least 8.5pt** and a light gray from `#CFCCDE` up; the subtitle uses a near-white light color. 7.5pt mid-gray text on a dark background looks faint.
 
-**ใช้ในโค้ด:** `doc.cover(title, subtitle=..., eyebrow=..., meta_rows=[...], logo="logo.png", style="night")` — โลโก้ไม่บังคับ · สีเส้นแสงปรับได้ด้วย `art_colors=(สี1, สี2, สี3)` · หน้าตาที่ได้: `examples/example_srs-preview.png` (ปก + หน้าใน) · ตัวอย่างเรียก: `scripts/example_srs.py` · `table()` ใช้หัวตารางแบบนี้เป็นค่าเริ่มต้น (`header_style="classic"` = แบบเดิม)
+**Use in code:** `doc.cover(title, subtitle=..., eyebrow=..., meta_rows=[...], logo="logo.png", style="night")`. The logo is optional · the glow line colors can be adjusted with `art_colors=(color1, color2, color3)` · the resulting look: `examples/example_srs-preview.png` (cover + inner page) · the example call: `scripts/example_srs.py` · `table()` uses this table header style by default (`header_style="classic"` = the old style)
 
-## หัวตารางในหน้าใน
+## Table headers on inner pages
 
-**หัวตารางในหน้าใน ห้ามใช้พื้นสีเข้มเต็มแถบ** แม้ปกจะสีเข้มก็ตาม เพราะตารางมีทุกหน้า สีเข้มจึงหนักตาและเปลืองหมึก (เจ้าของงานขอเปลี่ยนจริงในงานหนึ่ง)
-ให้ใช้พื้นอ่อนของสีแบรนด์ที่ยังเห็นชัดว่าเป็นแถวหัว เช่น `#E4DCFD` (พื้นที่อ่อนกว่านี้อย่าง `#F5F3FF` เจ้าของงานบอกว่าจางไป) ตัวหนังสือสีเข้มของแบรนด์ตัวหนา
-เส้นขอบมีเส้นเดียว คือเส้นสีแบรนด์ 1.5pt ใต้แถวหัว ไม่มีเส้นด้านบน (เส้นดำด้านบนดูหนักและถูกขอให้ปรับ) และไม่เว้นช่องขาวระหว่างช่องหัว เพราะจะทำให้เส้นใต้หัวขาดเป็นช่วง
-Word วาดเส้นขอบไล่สีไม่ได้ ถ้าใส่ไล่สี สีจะเปลี่ยนเป็นช่วงตามคอลัมน์
+**Table headers on inner pages must not use a full-width solid dark fill**, even when the cover is dark, because tables are on every page, so dark color is heavy on the eye and wastes ink (the work's owner really asked for this change in one job).
+Use a light fill of the brand color that still clearly reads as the header row, such as `#E4DCFD` (a lighter fill like `#F5F3FF` was called too faint by the work's owner), with bold dark brand-colored text.
+There is only one border: a 1.5pt brand-colored line under the header row. No line on top (a black top line looks heavy and was asked to be changed), and no white gaps between header cells, because that would break the line under the header into segments.
+Word cannot draw gradient borders; if you add a gradient, the color changes in steps along the columns.
 
-## โครงหน้าเอกสาร (ย้ายมาจาก `SKILL.md` ข้อ 3 — ไม่แก้ถ้อยคำ)
+## Page structure (moved from `SKILL.md` item 3; wording not changed)
 
 ```
 หน้าปก        โลโก้กลาง → ชื่อเอกสาร (brand, bold) → ชื่อระบบ (text, bold)
@@ -694,11 +694,11 @@ Word วาดเส้นขอบไล่สีไม่ได้ ถ้า�
 footer        "หน้า N" กลางหน้า สีเทา 9pt
 ```
 
-## รูปในเอกสาร · กฎด่านสวย · ปก (ย้ายมาจาก SKILL.md §0.1 ข้อ 6–8)
+## Figures in documents · beauty-gate rules · cover (moved from SKILL.md §0.1 items 6–8)
 
-6. **รูปในเอกสาร:** ตัวอักษรเล็กสุดหลังวางจริง ≥ 7pt → พิกเซลขั้นต่ำบนผ้าใบ = `0.247 × ความกว้างผ้าใบ(px) ÷ ความกว้างที่วาง(ซม.)` (ผ้าใบ 2000px วางกว้าง 17 ซม. = 29px · วางบนหน้าแนวนอน 25.7 ซม. = 20px · ใช้ 26px ให้ได้ 9pt) · รูปกว้างให้วางหน้าแนวนอนเต็มความกว้างคอลัมน์ (≥ 95%) · ใช้**ฉบับวางในเอกสารที่ไม่มีหัวรูป** เพราะคำบรรยายใน Word บอกเลขและชื่อรูปแล้ว · คำบรรยายรูป ≥ 9pt สีเนื้อความ · หลังรูปขึ้น section ใหม่ ห้ามย่อหน้าถัดไปไหลมาหน้ารูป
-7. **สิ่งที่ด่านสวยจับได้บ่อย (ใส่เป็นกฎใน `check` ของตัว render):** เครื่องหมาย markdown หลุด (`**` · backtick) · ข้อความไทยในฟอนต์ mono · ตารางล้นคอลัมน์ข้อความ · สารบัญเหลือรายการเดียวตกหน้าถัดไป · รายการรหัสถูกตัดกลางรหัส (ให้บรรทัดละ 1 รหัส ฟอนต์เดียวทั้งคอลัมน์) · ป้าย "(รอยืนยัน)" ใช้สีเตือน ไม่ใช่สีแบรนด์ · ตัวตนหายหลังหน้าปก (หน้าเปิดบทใช้แถบสีแบรนด์ของแอป) · มีปกสว่างไว้พิมพ์คู่กับปกมืด
-8. **ปก — ตัวอักษรล้วนก่อน ภาพทีหลัง** (ปกเฉพาะโปรเจกต์ที่ใช้รูปทรงโลโก้หรือหน้าจอจริง แทนภาพตกแต่ง → `doc-cover-design` (plugin `software-development`))**:** ภาพประกอบบนปกไม่บังคับ และปกโล่งที่จัดตัวอักษรดีชนะภาพที่ไม่ว้าวเสมอ · แบบที่ผ่านด่าน: ชนิดเอกสาร (SRS · FSD · ARCH) ตัวใหญ่ 150–200px สีแบรนด์เป็นจุดเด่นเดียว (กว้างไม่เกิน ~85% ของคอลัมน์ · ชื่อเกิน 5 ตัวอย่าง TESTPLAN แยก 2 บรรทัด ไม่ย่อจนเล็กกว่าฉบับอื่น — ทั้งชุดต้องดูขนาดเท่ากัน) → เส้นสั้นสีแบรนด์ → ชื่อไทย → ชื่ออังกฤษ → บรรทัดสรุป 1 ประโยค (≥ 12pt คอลัมน์แคบ) → แถวข้อมูลท้ายหน้า (ป้าย ≥ 10pt) · ที่เหลือปล่อยว่าง · ส่วนที่ตำแหน่งตายตัว (โลโก้ · ชนิดเอกสาร · เส้น · ป้ายสถานะ) วาดลงภาพพื้นปก ส่วนชื่อและข้อมูลเป็นข้อความ Word ให้ค้นและแก้ได้ · ป้าย `(รอยืนยัน)` บนพื้นมืดใช้สีเตือนแบบสว่าง ไม่ใส่พื้นไฮไลต์ · **ผู้ใช้บอกปกไม่สวย → ตัดภาพตกแต่งออกก่อน** (เส้นโค้ง จุดเรือง gradient) แล้วทำปกตัวอักษรล้วน 3 แนวให้เลือก (โปรเจกต์มีโลโก้หรือ mockup → ใช้ `doc-cover-design` ข้อ 7 แทน)
+6. **Figures in documents:** the smallest text after real placement ≥ 7pt → minimum pixels on the canvas = `0.247 × canvas width(px) ÷ placed width(cm)` (a 2000px canvas placed 17 cm wide = 29px · placed on a 25.7 cm landscape page = 20px · use 26px to get 9pt) · a wide figure should go on a landscape page at the full column width (≥ 95%) · use the **version placed in the document without a figure title**, because the Word caption already gives the number and the figure's name · figure caption ≥ 9pt in body text color · after a figure, start a new section; the next paragraph must not flow onto the figure's page.
+7. **What the beauty gate (`ด่านสวย`) often catches (put them as rules in the render script's `check`):** stray markdown marks (`**` · backtick) · Thai text in a mono font · a table overflowing a text column · a table of contents with a single entry stranded on the next page · a code list cut in the middle of a code (one code per line, one font for the whole column) · the "(รอยืนยัน)" tag uses the warning color, not the brand color · identity lost after the cover (chapter opener pages use the app's brand color bar) · a light cover available to print alongside the dark cover.
+8. **Cover — plain lettering first, images later** (a project-specific cover that uses the logo shape or a real screen instead of decorative images → `doc-cover-design` (plugin `software-development`))**:** an illustration on the cover is optional, and an open cover with well-set lettering always beats an image that does not wow · a design that passed the gate: the document type (SRS · FSD · ARCH) large at 150–200px in the brand color as the only highlight (width at most ~85% of the column · a name over 5 letters such as TESTPLAN splits into 2 lines, never shrunk smaller than other copies, since the whole set must look the same size) → a short brand-colored line → Thai title → English title → a 1-sentence summary line (≥ 12pt, narrow column) → an info row at the page foot (labels ≥ 10pt) · leave the rest empty · parts with fixed positions (logo · document type · line · status tag) are drawn into the cover background image, while the title and info are Word text that can be searched and edited · the `(รอยืนยัน)` (awaiting confirmation) tag on a dark background uses a bright warning color, with no highlight fill · **if the user says the cover is not beautiful → cut the decorative images first** (curves, glowing dots, gradients), then make 3 plain-lettering covers to choose from (project has a logo or mockup → use `doc-cover-design` item 7 instead)
 
 
 ---
@@ -795,46 +795,46 @@ Applies to slide titles, figure titles, document headings, and box titles in a d
 
 ## reference: headings-and-examples.md
 
-# หัวข้อ · สไลด์ · diagram และตัวอย่าง ก่อน → หลัง (ฉบับเต็ม)
+# Headings, slides, diagrams and before → after examples (full version)
 
-อ่านเมื่อเขียนหัวสไลด์ ชื่อรูป ป้ายใน diagram หรืออยากดูตัวอย่างการแก้ · กฎย่ออยู่ใน `SKILL.md` ข้อ 6–7
+Read when writing a slide title, figure title or diagram label, or when you want examples of fixes. The short rules are in `SKILL.md` sections 6–7.
 
-## สไลด์ และหัวข้อทุกชนิด
+## Slides and headings of every kind
 
-- หัวสไลด์ = ข้อสรุปของหน้า ไม่ใช่ชื่อหัวข้อ: "ยิ่ง Tier 1 เติมค่าเอง Gate ยิ่งมองไม่เห็นค่าผิด"
+- A slide title = the conclusion of the page, not the topic name: "ยิ่ง Tier 1 เติมค่าเอง Gate ยิ่งมองไม่เห็นค่าผิด"
 
-**เขียนหัวให้ลื่น ไม่กำกวม** — ใช้กับหัวสไลด์ ชื่อรูป หัวข้อเอกสาร และหัวกล่องใน diagram
+**Write titles that read smoothly and are not ambiguous.** This applies to slide titles, figure titles, document headings and box titles in a diagram.
 
-- **หัวที่มี 2 ท่อนต้องมีคำเชื่อม** (ส่วน · แต่ · เพราะ · จึง) ห้ามวาง 2 วลีเรียงกันเฉย ๆ เพราะคนอ่านต้องเดาเองว่า 2 ท่อนเกี่ยวกันอย่างไร
-- **คำเชื่อมต้องตรงกับความสัมพันธ์จริง** ใช้ "เพราะ" หรือ "จึง" เฉพาะเมื่อท่อนหนึ่งเป็นเหตุของอีกท่อนจริง ถ้า 2 ท่อนแค่แบ่งหน้าที่กัน ใช้ "ส่วน" ถ้าขัดกัน ใช้ "แต่" · หัวหนึ่งใช้คำเชื่อมได้ 1 คำ ถ้าต้องใช้ 2 คำแปลว่ายัดเกินไป ให้ตัดเหลือเรื่องเดียว
-- **หัวยังต้องสั้น** หัวสไลด์ไม่เกิน 2 บรรทัด (ประมาณ 15 คำ) ถ้ายาวกว่านี้ ให้ตัดรายละเอียดลงไปในเนื้อหน้า อย่าเติมคำเชื่อมจนกลายเป็นย่อหน้า
-- **ใช้วลีที่คนพูดจริง** ถ้าย่อจนกลายเป็นคำนามเรียงกัน เช่น "AI ทำงานภาษา" ให้หากริยาที่คนใช้จริง เช่น "AI ช่วยเขียนคำตอบ"
-- **เลือกคำตามคนอ่าน** ถ้าผู้อ่านไม่ใช่สายเทคนิค ใช้ "ระบบ" แทน "โค้ด" ใช้ "ตรวจขาเข้า" แทน "Guard" ส่วนศัพท์เทคนิคใช้ได้เมื่อผู้อ่านเป็นทีมเทคนิค
-- **กริยาต้องตรงกับสิ่งที่หน้านั้นแสดง** ถ้ากล่องในรูปคือขั้นตรวจ ให้ใช้ "ตรวจ" หรือ "ตัดสิน" ไม่ใช้ "ตัดสินใจ" ซึ่งให้ความรู้สึกว่าเป็นการเลือกทาง
-- **ไม่ใช้ "คน" กับสิ่งที่ไม่ใช่คน**: "ระบบเป็นคนตัดสิน" → "ให้ระบบตัดสิน"
-- **บรรทัดสรุปใต้รูปต้องบอกสิ่งที่รูปไม่ได้บอก** ถ้าเป็นแค่ลูกศรไล่ขั้นซ้ำกับรูป ให้ตัดทิ้ง หรือเปลี่ยนเป็นประโยคเดียวที่บอกว่าทำไมรูปนี้สำคัญ
-- **ทดสอบ**: อ่านหัวให้คนนอกโปรเจกต์ฟังครั้งเดียว ถ้าเขาเล่าต่อด้วยคำของตัวเองไม่ได้ หรือต้องถามว่า "หมายถึงอะไร" ให้เขียนใหม่
-- โครงหน้า: ปัญหา → วิธีแก้ → ผล · แต่ละส่วนอ่านจบในแวบเดียว
-- สคริปต์พูดเขียนแบบที่พูดจริง อ่านออกเสียงได้ไม่สะดุด
+- **A title with 2 parts needs a connector** (ส่วน · แต่ · เพราะ · จึง — as for · but · because · so). Do not just place 2 phrases side by side, because the reader has to guess how the 2 parts relate.
+- **The connector must match the real relationship.** Use "เพราะ" or "จึง" only when one part really is the cause of the other. If the 2 parts just split roles, use "ส่วน". If they contrast, use "แต่". 1 title, 1 connector. If it needs 2, you crammed too much in: cut it down to one topic.
+- **The title must still be short.** A slide title is at most 2 lines (about 15 words). If it is longer, move detail down into the page body. Do not add connectors until the title becomes a paragraph.
+- **Use phrases people actually say.** If shortening leaves a string of nouns such as "AI ทำงานภาษา", find the verb people really use, such as "AI ช่วยเขียนคำตอบ".
+- **Choose words by reader.** If the reader is not technical, use "ระบบ" (system) instead of "โค้ด" (code) and "ตรวจขาเข้า" (check incoming) instead of "Guard". Technical terms are fine when the reader is a technical team.
+- **The verb must match what the page shows.** If a box in the figure is a checking step, use "ตรวจ" (check) or "ตัดสิน" (judge), not "ตัดสินใจ" (decide), which sounds like choosing a path.
+- **Do not use "คน" (person) for things that are not people**: "ระบบเป็นคนตัดสิน" → "ให้ระบบตัดสิน"
+- **The summary line under a figure must say what the figure does not.** If it is only an arrow chain of steps that repeats the figure, cut it, or replace it with 1 sentence saying why this figure matters.
+- **Test**: read the title once to an outsider. If they cannot retell it in their own words, or have to ask "what does that mean", rewrite it.
+- Page structure: problem → fix → result. Each part can be read in one glance.
+- Write a speaking script the way it is actually spoken. It must read aloud without tripping.
 
 ## Diagram
 
-- ป้ายในกล่องเป็นคำนามสั้น 1–4 คำ ที่คนเข้าใจ: "รับข้อมูลเข้า" ไม่ใช่ "Ingress Layer Handler"
-- ป้ายบนลูกศรเป็นกริยา: "ส่งไฟล์" · "ตรวจสิทธิ์" · ลูกศรที่ไม่มีป้ายต้องเดาไม่ผิด
-- คำในรูปต้องตรงกับคำในเอกสารทุกคำ
-- ชื่อรูปเป็นข้อสรุป เหมือนหัวสไลด์ · ใต้รูปมี 1 ประโยคบอกว่าควรดูอะไร
-- ถ้าโปรเจกต์มีแบบรูปประจำ (house style) ให้ใช้ตามนั้น ส่วนวิธีวาดดูใน skill รูปของ plugin นั้น
+- A box label is a short noun of 1–4 words that people understand: "รับข้อมูลเข้า" not "Ingress Layer Handler"
+- An arrow label is a verb: "ส่งไฟล์" · "ตรวจสิทธิ์". An unlabelled arrow must be impossible to misread.
+- Every word in the figure must match the word in the document.
+- The figure title is a conclusion, like a slide title. Under the figure, 1 sentence says what to look at.
+- If the project has a house style, follow it. For how to draw, see the figure skill of that plugin.
 
-## ตัวอย่าง ก่อน → หลัง
+## Before → after examples
 
-เงื่อนไขเขียนเป็นประโยคเต็ม มีคำเชื่อม (ข้อ 2):
+Write a condition as a full sentence with a connector (section 2):
 
-  - ก่อน: `ไม่แน่ใจว่าขนาดไหน → ถือเป็นขนาดที่ใหญ่กว่า 1 ขั้น`
-  - หลัง: `ถ้าไม่แน่ใจว่างานขนาดไหน ให้ถือว่าใหญ่ขึ้นอีก 1 ขั้น`
-  - ก่อน: `ย้อนได้ → ทำเลย · ไม่รู้ → ค้นเอง · ย้อนไม่ได้ → เตรียมไว้ใน "รออนุมัติ"`
-  - หลัง: `งานที่ย้อนได้ให้ทำเลย ไม่รู้ให้ค้นเอง ส่วนงานที่ย้อนไม่ได้ให้เตรียมไว้ใน "รออนุมัติ"`
+  - Before: `ไม่แน่ใจว่าขนาดไหน → ถือเป็นขนาดที่ใหญ่กว่า 1 ขั้น`
+  - After: `ถ้าไม่แน่ใจว่างานขนาดไหน ให้ถือว่าใหญ่ขึ้นอีก 1 ขั้น`
+  - Before: `ย้อนได้ → ทำเลย · ไม่รู้ → ค้นเอง · ย้อนไม่ได้ → เตรียมไว้ใน "รออนุมัติ"`
+  - After: `งานที่ย้อนได้ให้ทำเลย ไม่รู้ให้ค้นเอง ส่วนงานที่ย้อนไม่ได้ให้เตรียมไว้ใน "รออนุมัติ"`
 
-| ก่อน | หลัง |
+| Before | After |
 |---|---|
 | ขอบระบบ (รับ input) → service (กฎธุรกิจ) → data | แยกโค้ด 3 ชั้น: รับข้อมูลเข้า → กฎธุรกิจ → เก็บข้อมูล |
 | ตรวจ input ที่ขอบ · พังแบบปิด | ตรวจข้อมูลจากภายนอกทันทีที่เข้ามา ถ้าเกิดข้อผิดพลาดให้ปฏิเสธไว้ก่อน |
@@ -852,272 +852,272 @@ Applies to slide titles, figure titles, document headings, and box titles in a d
 | `${CLAUDE_PLUGIN_ROOT}` คือ path ของ version ที่ติดตั้งอยู่ และจะเปลี่ยนเมื่อ plugin อัปเดต ส่วนโฟลเดอร์เก่าระบบจะลบทิ้งเองภายหลัง [ที่มา] | แต่ละ version ติดตั้งเป็นโฟลเดอร์ของตัวเอง พออัปเดตก็ชี้ไปโฟลเดอร์ใหม่ แล้วลบโฟลเดอร์เก่าทิ้ง |
 | ข้อยกเว้น: plugin จาก marketplace บน claude.ai … จะไม่ถูก pin ด้วยฟิลด์นี้ (แยกย่อหน้า) | … ไม่งั้นเครื่องที่ลงไว้จะใช้ชุดเก่าต่อ (ยกเว้น plugin จาก marketplace บน claude.ai ซึ่งเห็นการแก้ทันที) |
 
-## ตัวอย่างประกอบกฎใน SKILL.md (ย้ายมาจาก SKILL.md)
+## Examples for the rules in SKILL.md (moved from SKILL.md)
 
-| หัวข้อ | กฎ | ตัวอย่าง |
+| Section | Rule | Example |
 |---|---|---|
-| 1 | คำธรรมดา (อังกฤษ) | buy ไม่ใช่ purchase |
-| 2 | `→` ลำดับขั้น | เข้าใจ → วางแผน → ลงมือ |
-| 2 | `·` คั่นคำนาม | ทำอะไร · ได้อะไร · ใช้แรงแค่ไหน |
-| 2 | `:` ตามด้วยรายละเอียด | แยกโค้ด 3 ชั้น: รับข้อมูล → กฎธุรกิจ → เก็บข้อมูล |
-| 2 | ตัวเลขเขียนเป็นเลข | 3 ชั้น · 12 คำ · 1 ระดับ |
-| 2 | ตัวเลขบอกความหมาย | "กำไร 32% ของราคาขาย" ไม่ใช่ "margin 32%" ลอย ๆ |
-| 2 | เทียบให้เห็นภาพ | "เร็วขึ้น 3.2 เท่า" อ่านง่ายกว่า "ลดลง 69%" |
-| 2 | ผลยังไม่แน่นอน | "รันรอบเดียว ยังสรุปไม่ได้" |
-| 3 | คำที่คนพูดจริง | "ยกระดับ" → "ส่งต่อ" · "ผลสุดท้ายขัดกฎ" → "คำตอบไม่ผ่านกฎ" |
-| 3 | ตัวย่อครั้งแรก | Large Language Model (LLM) |
-| 3 | คำที่ตั้งเอง | "hook (สคริปต์จด log อัตโนมัติ)" |
-| 3 | ตัดคำฟุ่มเฟือย | "ทำการตรวจสอบ" → "ตรวจ" · "มีการนำเข้า" → "นำเข้า" |
-| 3 | ออกตัวซ้อน | อาจจะ · น่าจะ · ในบางกรณี ในประโยคเดียว |
-| 4 | ประโยคแรกตอบตรง | ถาม "ใส่ในรายงานดีไหม" → "ควรใส่ครับ" แล้วค่อยเหตุผล |
-| 4 | บอกด้วยผล | "แก้แล้ว 8 จุด เปิดไฟล์ได้ปกติ" |
-| 4 | เหตุต่อผลในย่อหน้าเดียว | "แต่ละ version ติดตั้งแยกโฟลเดอร์ พออัปเดตก็ชี้ไปโฟลเดอร์ใหม่แล้วลบของเก่า skill ที่ลบออกจึงหายไป" |
-| 4 | ป้ายตัวหนา | **ระวัง:** · **สิ่งที่ยังอยู่:** ไม่ใช่ "**ระวัง (เจอบ่อย):**" |
-| 5 | หัวข้อบอกเนื้อหา | "ระบบส่งต่อลดการเรียก LLM ได้ครึ่งหนึ่ง" ดีกว่า "ผลการทดลอง" |
-| 5 | หัวคอลัมน์ | "เรียก LLM" · "คำตอบไม่ผ่านกฎ" |
-| 6 | วลีที่คนพูด | "AI ช่วยเขียนคำตอบ" ไม่ใช่ "AI ทำงานภาษา" |
-| 6 | คำตามคนอ่าน | คนทั่วไป: "ระบบ" "ตรวจขาเข้า" แทน "โค้ด" "Guard" |
-| 6 | ไม่ใช้ "คน" กับสิ่งที่ไม่ใช่คน | "ให้ระบบตัดสิน" |
+| 1 | Plain words (English) | buy, not purchase |
+| 2 | `→` order of steps | เข้าใจ → วางแผน → ลงมือ |
+| 2 | `·` separates nouns | ทำอะไร · ได้อะไร · ใช้แรงแค่ไหน |
+| 2 | `:` introduces detail | แยกโค้ด 3 ชั้น: รับข้อมูล → กฎธุรกิจ → เก็บข้อมูล |
+| 2 | Write numbers as numerals | 3 ชั้น · 12 คำ · 1 ระดับ |
+| 2 | Say what the number means | "กำไร 32% ของราคาขาย" not a bare "margin 32%" |
+| 2 | Compare so it is easy to picture | "เร็วขึ้น 3.2 เท่า" reads easier than "ลดลง 69%" |
+| 2 | Uncertain result | "รันรอบเดียว ยังสรุปไม่ได้" |
+| 3 | Words people actually say | "ยกระดับ" → "ส่งต่อ" · "ผลสุดท้ายขัดกฎ" → "คำตอบไม่ผ่านกฎ" |
+| 3 | Abbreviation at first use | Large Language Model (LLM) |
+| 3 | Coined term | "hook (สคริปต์จด log อัตโนมัติ)" |
+| 3 | Cut padding words | "ทำการตรวจสอบ" → "ตรวจ" · "มีการนำเข้า" → "นำเข้า" |
+| 3 | No stacked hedges | อาจจะ · น่าจะ · ในบางกรณี in one sentence |
+| 4 | First sentence answers directly | Asked "ใส่ในรายงานดีไหม" → "ควรใส่ครับ", then the reason |
+| 4 | Report by result | "แก้แล้ว 8 จุด เปิดไฟล์ได้ปกติ" |
+| 4 | Cause and effect in one paragraph | "แต่ละ version ติดตั้งแยกโฟลเดอร์ พออัปเดตก็ชี้ไปโฟลเดอร์ใหม่แล้วลบของเก่า skill ที่ลบออกจึงหายไป" |
+| 4 | Bold labels | **ระวัง:** · **สิ่งที่ยังอยู่:** not "**ระวัง (เจอบ่อย):**" |
+| 5 | Heading says the content | "ระบบส่งต่อลดการเรียก LLM ได้ครึ่งหนึ่ง" is better than "ผลการทดลอง" |
+| 5 | Column heading | "เรียก LLM" · "คำตอบไม่ผ่านกฎ" |
+| 6 | Phrase people say | "AI ช่วยเขียนคำตอบ" not "AI ทำงานภาษา" |
+| 6 | Words by reader | General reader: "ระบบ" "ตรวจขาเข้า" instead of "โค้ด" "Guard" |
+| 6 | No "คน" for non-people | "ให้ระบบตัดสิน" |
 
-ที่มา: ISO 24495-1 (plain language) · GOV.UK clear language · Microsoft Writing Style Guide · Wikipedia: Signs of AI writing · คู่มือการร่างเอกสารภาษาไทย
+Sources: ISO 24495-1 (plain language) · GOV.UK clear language · Microsoft Writing Style Guide · Wikipedia: Signs of AI writing · คู่มือการร่างเอกสารภาษาไทย
 
 
 ## reference: strict-review.md
 
-# ตรวจเข้ม — สำหรับงานวิจัยและงานที่ส่งคนนอก
+# Strict review — for research and work sent to outsiders
 
-ค่าเริ่มต้นของ `human-writing` คือ **ตรวจปกติ**: ไล่ 7 ข้อในหัวข้อ 8 ของ SKILL.md รอบเดียวแล้วส่ง · ไฟล์นี้ใช้เฉพาะเมื่อสั่ง **ตรวจเข้ม**
+The default for `human-writing` is a **normal check**: go through the 7 points in section 8 of SKILL.md once, then send. Use this file only when the user asks for a **strict review** (ตรวจเข้ม).
 
-**ผ่านกฎ ≠ อ่านลื่น** — รอบตรวจจับได้เฉพาะสิ่งที่มีกฎ (โครงประโยค · คำต้องเลี่ยง · ระดับภาษา) · งานที่ผ่านทุกกฎแต่ไม่มีน้ำเสียง เรียกว่า **อ่านแบน** ให้ติดป้ายไว้ ไม่รายงานว่าผ่าน · คำตัดสินว่าอ่านเป็นภาษาคนไหม เป็นของผู้ใช้ที่อ่านออกเสียง ไม่ใช่ของโมเดลที่ตรวจ (โมเดลที่ร่างกับโมเดลที่ตรวจมีจุดบอดเดียวกัน)
+**Passing the rules ≠ reading smoothly.** The review pass catches only what has a rule (sentence structure · words to avoid · register). Work that passes every rule but has no voice is called **flat** (`อ่านแบน`). Label it as flat. Do not report it as passing. Whether it reads like a person wrote it is for the user to decide by reading aloud, not for the model doing the check (the model that drafted and the model that checks share the same blind spots).
 
-## เปิดเมื่อไหร่
+## When to turn it on
 
-- ผู้ใช้พูดว่า "ตรวจเข้ม" · "ตรวจแบบงานวิจัย" · "ขัดภาษาให้สุด" · "วนตรวจจนไม่เจอที่ผิด" · "strict"
-- หรืองานเป็น วิทยานิพนธ์ · IS · บทความวิจัย · รายงานส่งอาจารย์หรือกรรมการ · หนังสือราชการ แล้วผู้ใช้ไม่ได้บอกว่าขอแบบเร็ว
-- โครงเล่ม บทที่ การอ้างอิง ใช้ skill `thesis-writing` (plugin `personal-life`) คู่กัน · ไฟล์นี้ดูแลเรื่องภาษา
+- The user says "ตรวจเข้ม" · "ตรวจแบบงานวิจัย" · "ขัดภาษาให้สุด" · "วนตรวจจนไม่เจอที่ผิด" · "strict"
+- Or the work is a thesis · independent study (IS) · research article · report for a lecturer or committee · official letter, and the user did not ask for the quick version.
+- For book structure, chapters and citations, use skill `thesis-writing` (plugin `personal-life`) alongside. This file covers language only.
 
-## ขั้นตอน
+## Steps
 
-1. **เปิด [`thai-grammar`](thai-grammar.md) ทั้งไฟล์** และ [`thai-line-breaking`](thai-line-breaking.md) ถ้าส่งออกเป็นไฟล์
-2. **เลือกระดับภาษา** ตามตารางหัวข้อ 4 · งานวิจัยใช้ระดับวิชาการ · บอกระดับที่เลือกไว้บรรทัดแรกของผลตรวจ
-3. **อ่านทั้งชิ้นก่อน 1 รอบ** ยังไม่แก้ · งานเกิน 3,000 คำตรวจทีละบท บอกผู้ใช้ว่าแบ่งอย่างไร แล้วทำต่อเลยไม่ต้องหยุดถาม
-4. **รอบตรวจ** — รัน `python scripts/thai_tells.py <ไฟล์>` ก่อน (จับคำต้องเลี่ยง · คำเชื่อมเกินงบ · จุดกลางย่อหน้า · ๆ ไม่เว้นวรรค ให้เครื่องทำ) แล้วอ่านเองหาสิ่งที่สคริปต์ไม่เห็น · จดทุกจุดเป็นตาราง ห้ามแก้ระหว่างจด
+1. **Open [`thai-grammar`](thai-grammar.md) in full**, and [`thai-line-breaking`](thai-line-breaking.md) if the output is a file.
+2. **Choose the register** from the table in section 4. Research uses the academic register. State the chosen register on the first line of the review result.
+3. **Read the whole piece once first** without editing. For work over 3,000 words, review chapter by chapter. Tell the user how you split it, then carry on without stopping to ask.
+4. **Review pass.** Run `python scripts/thai_tells.py <file>` first (the machine catches words to avoid · connectors over budget · mid-paragraph dots · ๆ with no space), then read it yourself for what the script cannot see. Record every spot in a table. Do not edit while recording.
 
-   | # | รหัสกฎ | ข้อความเดิม | แก้เป็น |
+   | # | Rule code | Original text | Fix |
    |---|---|---|---|
    | 1 | `t-chueung` | …ซึ่งพัฒนาโดย… ซึ่งเปิดเป็น… | … |
 
-   **เรียงตามน้ำหนัก ไม่ใช่ตามลำดับที่เจอ** — จุดที่ทำให้คนอ่านรู้ทันทีว่าเครื่องเขียนอยู่บนสุด: ประโยคเปิดสำเร็จรูป · สรุปซ้ำท้ายย่อหน้า · ชุดละ 3 ทุกที่ · คำโฆษณากว้าง ๆ · โครงประโยคซ้ำติดกัน · แล้วค่อยถึงเรื่องเล็ก (คำเชื่อมเกิน · วรรคตอน) · แก้ 5 ข้อบนก่อน มักทำให้ข้อล่างหายไปเองหลายข้อ · ชิ้นสั้นที่เจอแค่เรื่องเล็ก แก้รอบเดียวจบ ไม่ต้องวน
-   **เทียบกับเสียงผู้เขียน** — ถ้ามีข้อความที่ผู้ใช้เขียนเอง (คู่ `ก่อน → หลัง` ใน `~/.claude/superuser-style.md` · อีเมลหรือบทที่ผู้ใช้เขียนก่อนหน้า) ให้อ่านเทียบ: ความยาวประโยค · สรรพนาม · คำท้าย · คำที่ผู้ใช้ไม่เคยใช้ · จุดที่ต่างจากเสียงผู้ใช้จดเป็นรหัส `v-voice` ในตาราง · ไม่มีตัวอย่าง → ตรวจตามกฎอย่างเดียวแล้วติดป้าย `อ่านแบน` ได้ตามปกติ (แนวคิดจาก humanizer ของ blader · MIT)
-5. **รอบแก้** — แก้ตามตาราง แล้วอ่านใหม่ทั้งชิ้น (ไม่ดูแค่จุดที่แก้ เพราะแก้จุดหนึ่งมักทำให้รอยต่อข้าง ๆ สะดุด)
-6. **วนข้อ 4–5** จนรอบตรวจไม่เจออะไร · **สูงสุด 5 รอบ** · ครบ 5 รอบแล้วยังเหลือ ให้รายงานจุดที่เหลือพร้อมเหตุผลที่ยังไม่แก้
-7. ถ้าทำงานใต้ `superuser` ให้รอบตรวจแต่ละรอบเป็น `reviewer` คนใหม่ (โมเดลเล็ก · effort ต่ำ) ส่วนหัวหน้าเป็นคนแก้ · `reviewer` รายงานได้แค่รหัสกฎที่เจอ ไม่ตัดสินว่าอ่านลื่น · รอบแก้ส่งกฎทั้งชุดให้ไม่ใช่แค่ข้อที่ถูกชี้ (ส่งแค่ข้อที่ชี้ ตัวแก้จะแก้วน)
+   **Sort by weight, not by the order found.** At the top are the spots that tell the reader at once a machine wrote it: canned opening sentences · recap at the end of a paragraph · groups of 3 everywhere · broad ad words · repeated sentence structures side by side. Then the small things (extra connectors · punctuation). Fixing the top 5 first often makes several of the lower ones vanish. A short piece with only small findings is fixed in one pass, with no loop.
+   **Compare with the author's voice.** If there is text the user wrote themselves (`ก่อน → หลัง` pairs in `~/.claude/superuser-style.md` · earlier emails or chapters by the user), read against it: sentence length · pronouns · sentence-final particles · words the user never uses. Record each spot that differs from the user's voice with code `v-voice` in the table. If there are no samples, check against the rules only, and label the result `อ่านแบน` as usual (idea from humanizer by blader · MIT).
+5. **Fix pass.** Fix according to the table, then reread the whole piece (do not look only at the fixed spots, because fixing one spot often makes the neighbouring joins stumble).
+6. **Repeat steps 4–5** until the review pass finds nothing. **At most 5 rounds.** If spots remain after 5 rounds, report them with the reason they were not fixed.
+7. If working under `superuser`, make each review round a new `reviewer` (small model · low effort), and let the lead do the fixing. The `reviewer` may report only the rule codes found, and does not judge whether it reads smoothly. For the fix pass, give the fixer the whole rule set, not just the points flagged (if you give only the flagged points, the fixer will keep going in circles).
 
-## สิ่งที่ตรวจเพิ่มในงานวิจัย
+## Extra checks for research
 
-| รหัส | ตรวจ |
+| Code | Check |
 |---|---|
-| `a-register` | ระดับวิชาการทั้งชิ้น · ไม่มีครับ/ค่ะ · ไม่มี ผม/ฉัน (ใช้ `ผู้วิจัย` หรือละ) · คำฝั่งทางการทุกคู่ในตาราง `r-drift` · `สามารถ…ได้` ครบ |
-| `a-term` | ศัพท์เทคนิคใช้คำเดียวทั้งเล่ม · ครั้งแรกเขียน `ไทย (English)` แล้วใช้ไทยต่อ · ตัวย่อเต็มครั้งแรกทุกบท · ตรงกับศัพท์บัญญัติราชบัณฑิตยสภาถ้ามี |
-| `a-claim` | ข้อความที่อ้างข้อเท็จจริงมีการอ้างอิงทุกจุด · ไม่อ้างแหล่งที่ไม่ได้เปิดอ่าน · ความเห็นผู้วิจัยแยกจากข้อเท็จจริงชัด |
-| `a-hedge` | ออกตัวเท่าที่ข้อมูลรองรับ: ผลจากกลุ่มตัวอย่างเล็กพูดว่า `ในกลุ่มตัวอย่างนี้` · ไม่ออกตัวซ้อน · ไม่ยืนยันเกินผล |
-| `a-number` | ตัวเลขมีหน่วย · ทศนิยมเท่ากันทั้งตาราง · ตัวเลขในเนื้อตรงกับตาราง · ร้อยละบอกฐาน |
-| `a-ref` | ตาราง รูป สมการ มีเลขและถูกอ้างในเนื้อก่อนปรากฏ · ชื่อรูปและตารางเป็นข้อสรุป |
-| `a-cite` | รูปแบบอ้างอิงแบบเดียวทั้งเล่ม (APA 7 หรือตามคณะ) · รายการท้ายเล่มครบตามที่อ้างในเนื้อ |
-| `a-tense` | บทวิธีวิจัยและผลเล่าเป็นสิ่งที่ทำแล้ว · ไม่สลับ `จะ` กับ `ได้` ในบทเดียวกัน |
-| `a-break` | ส่งออกแล้วรัน `scripts/thai_linebreak.py --check` และเปิด PDF ดูทุกหน้า |
+| `a-register` | Academic register throughout · no ครับ/ค่ะ · no ผม/ฉัน (use `ผู้วิจัย` or drop the pronoun) · every formal-side word in the pairs of the `r-drift` table · `สามารถ…ได้` complete |
+| `a-term` | One word per technical term across the whole book · first use written as `ไทย (English)`, then Thai afterwards · abbreviations spelled out at first use in every chapter · matches the Royal Society of Thailand's coined terms where they exist |
+| `a-claim` | Every statement of fact has a citation · no citing a source that was not opened · the researcher's opinion is clearly separated from fact |
+| `a-hedge` | Hedge only as far as the data supports: a result from a small sample says `ในกลุ่มตัวอย่างนี้` · no stacked hedges · no claiming more than the result shows |
+| `a-number` | Numbers have units · same decimals across a table · numbers in the text match the table · percentages state the base |
+| `a-ref` | Tables, figures and equations are numbered and referred to in the text before they appear · figure and table titles are conclusions |
+| `a-cite` | One citation style across the whole book (APA 7 or the faculty's) · the reference list at the end covers everything cited in the text |
+| `a-tense` | The method chapter and results are told as things already done · do not switch between `จะ` and `ได้` in one chapter |
+| `a-break` | After export, run `scripts/thai_linebreak.py --check` and open the PDF to look at every page |
 
-## ผลที่ส่งให้ผู้ใช้
+## What to send the user
 
-- บรรทัดแรก: ระดับภาษาที่ใช้ · จำนวนรอบ · `ผ่านกฎ` หรือ `เหลือ N จุด` · ถ้าอ่านแบนให้บอก `ผ่านกฎ · อ่านแบน` พร้อมย่อหน้าที่ควรอ่านออกเสียงดู
-- ตารางจุดที่แก้ รวมทุกรอบ (รหัสกฎ · เดิม · ใหม่) — ใช้ตอบกรรมการได้ว่าแก้อะไรเพราะอะไร
-- จุดที่ไม่แก้และเหตุผล (เช่น ถ้อยคำตามแบบของคณะ · คำพูดที่ยกมา)
-- ไฟล์ที่แก้แล้ว เขียนทับไฟล์เดิม ต้นฉบับเก็บใน `_to_delete/`
+- First line: the register used · the number of rounds · `ผ่านกฎ` (passed the rules) or `เหลือ N จุด` (N spots left) · if flat, say `ผ่านกฎ · อ่านแบน` with the paragraphs worth reading aloud.
+- A table of fixes across all rounds (rule code · old · new). It lets the user answer the committee about what was changed and why.
+- Spots not fixed, and why (for example wording fixed by the faculty's template · quoted speech).
+- The fixed file overwrites the original. Keep the original in `_to_delete/`.
 
-ที่มาของวิธีวนตรวจ: skill `kode-thai` ใน [chakrit/kien-thai](https://github.com/chakrit/kien-thai) (MIT) · ปรับให้มีเพดานรอบ และใช้เฉพาะเมื่อสั่ง เพราะฉบับเต็มกิน token หลายหมื่นต่อรอบ
+Source of the review loop: skill `kode-thai` in [chakrit/kien-thai](https://github.com/chakrit/kien-thai) (MIT) · adapted with a cap on rounds, and used only on request, because the full version costs tens of thousands of tokens per round.
 
 
 ## reference: thai-examples.md
 
-# ตัวอย่างย่อหน้าภาษาไทย ก่อน → หลัง (ทีละระดับภาษา)
+# Thai paragraph examples, before → after (one register at a time)
 
-เปิดก่อนเขียนย่อหน้าไทยยาว ดูคู่ของระดับภาษาที่จะใช้ · คู่ตัวอย่างสอนได้ดีกว่ากฎ เพราะเห็นทั้งโครงประโยคและน้ำเสียงพร้อมกัน · รหัสกฎอยู่ใน [`thai-grammar`](thai-grammar.md)
+Open before writing a long Thai paragraph, and look at the pair for the register you will use. Example pairs teach better than rules, because you see sentence structure and tone together. Rule codes are in [`thai-grammar`](thai-grammar.md).
 
-**กติกาของไฟล์นี้** — 1 คู่ = ย่อหน้าเดียว · "หลัง" ต้องเป็นข้อความที่เจ้าของงานเขียนหรือแก้เอง ข้อความที่ทีมเขียนติดป้าย `(ชั่วคราว)` จนเจ้าของอ่านแล้วรับ · ไม่เกิน 10 คู่ต่อระดับ · กฎใหม่ดูดซับคู่ไหนแล้วลบคู่นั้น · ทุกคู่บอกที่มาและวันที่
+**Rules of this file.** 1 pair = 1 paragraph. The "after" must be text the owner wrote or edited. Text written by the team is labelled `(ชั่วคราว)` (temporary) until the owner reads it and accepts it. At most 10 pairs per register. When a new rule absorbs a pair, delete that pair. Every pair states its source and date.
 
-## ระดับ อธิบาย — README และเอกสารเทคนิค
+## Register อธิบาย (explain): README and technical docs
 
-**ก่อน**
+**Before**
 
 > ในยุคปัจจุบันที่ข้อมูลมีความสำคัญอย่างมาก ระบบนี้ถูกออกแบบมาเพื่อทำการประมวลผลข้อมูลจากหลายแหล่ง ซึ่งจะช่วยให้ผู้ใช้สามารถเข้าถึงข้อมูลได้อย่างมีประสิทธิภาพ โดยระบบจะทำการดึงข้อมูลทุก 5 นาที ดังนั้นผู้ใช้จึงไม่ต้องกังวลเรื่องข้อมูลไม่อัปเดต
 
-**หลัง**
+**After**
 
 > ระบบนี้รวมข้อมูลจาก 3 แหล่ง (ERP · ไฟล์ Excel ของฝ่ายขาย · API ของขนส่ง) ไว้ที่เดียว ข้อมูลพวกนี้ระบบจะดึงใหม่ทุก 5 นาที เปิดหน้า dashboard เมื่อไหร่ก็เห็นตัวเลขของ 5 นาทีก่อน ถ้าแหล่งไหนล่ม แถวของแหล่งนั้นจะขึ้นเวลาที่ดึงได้ครั้งสุดท้ายแทน
 
-กฎที่ใช้: `t-block` (ในยุคปัจจุบัน) · `t-padding` (ทำการ ×2 · มีความสำคัญ) · `t-thuk` · `t-chueung` · `t-budget` (ซึ่ง โดย ดังนั้น ในย่อหน้าเดียว) · `t-reassure` · `f1` ยกข้อมูลขึ้นก่อน · `f2` เงื่อนไขมาก่อน · "หลายแหล่ง" → 3 แหล่งที่บอกชื่อ · ที่มา: ทีมเขียน 2026-10-22 · เจ้าของอ่านแล้วรับ 2026-10-29
+Rules applied: `t-block` (ในยุคปัจจุบัน) · `t-padding` (ทำการ ×2 · มีความสำคัญ) · `t-thuk` · `t-chueung` · `t-budget` (ซึ่ง โดย ดังนั้น in one paragraph) · `t-reassure` · `f1` put the data first · `f2` condition comes first · "หลายแหล่ง" → the 3 named sources · Source: written by the team 2026-10-22 · owner read and accepted 2026-10-29
 
-## ระดับ ธุรกิจ — ข้อเสนอถึงลูกค้า
+## Register ธุรกิจ (business): proposal to a customer
 
-**ก่อน**
+**Before**
 
 > เรามีความยินดีที่จะนำเสนอโซลูชันที่จะช่วยยกระดับการทำงานของท่าน ไม่ว่าจะเป็นการจัดการเอกสาร การอนุมัติ หรือการรายงาน ซึ่งทั้งหมดนี้จะถูกรวมไว้ในแพลตฟอร์มเดียว โดยทีมงานของเราจะทำการติดตั้งและฝึกอบรมให้อย่างครบถ้วน
 
-**หลัง**
+**After**
 
 > บริษัทฯ เสนอระบบจัดการเอกสาร (Document Management System: DMS) ที่รวมงาน 3 อย่างของฝ่ายจัดซื้อไว้ในหน้าเดียว คือยื่นเอกสาร อนุมัติ และออกรายงาน ติดตั้งและอบรมผู้ใช้ 20 คนให้เสร็จภายใน 15 วันทำการ นับจากวันลงนามในสัญญา ค่าใช้จ่ายและเงื่อนไขอยู่ในหัวข้อ 4
 
-กฎที่ใช้: ระดับ ธุรกิจ (`เรา` `ท่าน` → `บริษัทฯ` และชื่อฝ่าย) · คำโฆษณากว้าง (ยกระดับ · โซลูชัน) → สิ่งที่ทำจริง · `t-mai-wa` · `t-thuk` · `t-padding` · `t-doi` · ศัพท์หลักครั้งแรก `ไทย (English: ตัวย่อ)` · ตัวเลขแทน "อย่างครบถ้วน" · ที่มา: ทีมเขียน 2026-10-22 · เจ้าของอ่านแล้วรับ 2026-10-29
+Rules applied: register ธุรกิจ (`เรา` `ท่าน` → `บริษัทฯ` and the department name) · broad ad words (ยกระดับ · โซลูชัน) → what is actually done · `t-mai-wa` · `t-thuk` · `t-padding` · `t-doi` · key term at first use as `ไทย (English: abbreviation)` · a number replaces "อย่างครบถ้วน" · Source: written by the team 2026-10-22 · owner read and accepted 2026-10-29
 
-## ระดับ ราชการ — มติในรายงานการประชุม
+## Register ราชการ (official): resolution in meeting minutes
 
-**ก่อน**
+**Before**
 
 > ที่ประชุมได้มีการพิจารณาเรื่องการจัดซื้อเครื่องคอมพิวเตอร์ ซึ่งฝ่ายไอทีได้ทำการเสนอราคามาแล้ว โดยที่ประชุมเห็นว่ามีความเหมาะสม ดังนั้นจึงมีมติให้ทำการจัดซื้อต่อไป ทั้งนี้ให้ฝ่ายจัดซื้อดำเนินการให้แล้วเสร็จโดยเร็ว
 
-**หลัง**
+**After**
 
 > ฝ่ายเทคโนโลยีสารสนเทศเสนอจัดซื้อเครื่องคอมพิวเตอร์ 12 เครื่อง วงเงิน 420,000 บาท ตามใบเสนอราคาเลขที่ QT-2569-031 ที่ประชุมพิจารณาแล้วเห็นว่าราคาอยู่ในงบประมาณที่ได้รับอนุมัติ มติที่ประชุม อนุมัติให้จัดซื้อตามที่เสนอ และมอบฝ่ายจัดซื้อดำเนินการให้แล้วเสร็จภายใน 30 วัน นับจากวันที่รับรองรายงานการประชุมฉบับนี้
 
-กฎที่ใช้: `t-padding` (ได้มีการ · ทำการ ×2 · มีความเหมาะสม) · `t-chueung` · `t-doi` · `t-budget` (ดังนั้น · ทั้งนี้) · ระดับราชการเพิ่ม: เรียกฝ่ายตามชื่อจริง · ตัวเลขและเลขที่เอกสาร · `ดำเนินการ` คงไว้เพราะเป็นคำตามแบบ · กำหนดเวลา `ภายใน X วัน นับจาก…` แทน "โดยเร็ว" · ที่มา: ทีมเขียน 2026-10-22 · เจ้าของอ่านแล้วรับ 2026-10-29
+Rules applied: `t-padding` (ได้มีการ · ทำการ ×2 · มีความเหมาะสม) · `t-chueung` · `t-doi` · `t-budget` (ดังนั้น · ทั้งนี้) · extras for the official register: call departments by their real names · figures and document numbers · keep `ดำเนินการ` because it is a standard form word · deadline `ภายใน X วัน นับจาก…` instead of "โดยเร็ว" · Source: written by the team 2026-10-22 · owner read and accepted 2026-10-29
 
-## ระดับ ข่าว — release note
+## Register ข่าว (news): release note
 
-**ก่อน**
+**Before**
 
 > ในเวอร์ชันนี้ เราได้ทำการปรับปรุงประสิทธิภาพในส่วนของการส่งออกรายงาน ซึ่งจะทำให้ผู้ใช้ได้รับประสบการณ์ที่ดียิ่งขึ้น นอกจากนี้ยังมีการแก้ไขข้อผิดพลาดต่าง ๆ อีกมากมาย
 
-**หลัง**
+**After**
 
 > ส่งออกรายงาน 1,000 แถวใช้เวลา 3 วินาที จากเดิม 12 วินาที เพราะเปลี่ยนมาเขียนไฟล์ทีละก้อนแทนสร้างทั้งไฟล์ในหน่วยความจำ แก้บั๊กวันที่ใน Excel แสดงเป็น ค.ศ. ทั้งที่ตั้งค่าเป็น พ.ศ. (ฝ่ายบัญชีแจ้งเมื่อ 2 ต.ค.) เวอร์ชัน 2.4.0 · 22 ต.ค. 2569
 
-กฎที่ใช้: ระดับ ข่าว (ไม่มี `เรา` · ประโยคแรก ใคร ทำอะไร กับอะไร · ปิดด้วยเวอร์ชันและวันที่) · `t-padding` · `t-block` (ในส่วนของ) · `t-chueung` · `f7` (นอกจากนี้) · "ต่าง ๆ อีกมากมาย" → บอกว่าแก้อะไร · ที่มา: ทีมเขียน 2026-10-22 · เจ้าของอ่านแล้วรับ 2026-10-29
+Rules applied: register ข่าว (no `เรา` · first sentence says who does what to what · close with version and date) · `t-padding` · `t-block` (ในส่วนของ) · `t-chueung` · `f7` (นอกจากนี้) · "ต่าง ๆ อีกมากมาย" → say what was fixed · Source: written by the team 2026-10-22 · owner read and accepted 2026-10-29
 
-## ระดับ แชตร้าน — ตอบลูกค้าเรื่องพัสดุช้า
+## Register แชตร้าน (shop chat): replying to a customer about a late parcel
 
-**ก่อน**
+**Before**
 
 > สวัสดีค่ะ ทางร้านต้องขออภัยในความไม่สะดวกเป็นอย่างสูงนะคะ ทางร้านได้ทำการตรวจสอบแล้วพบว่าพัสดุของลูกค้าอยู่ระหว่างการจัดส่ง ทางร้านจะทำการติดตามให้อย่างใกล้ชิด ไม่ต้องกังวลนะคะ
 
-**หลัง**
+**After**
 
 > ขอโทษด้วยนะคะที่ของยังไม่ถึง ร้านเช็กกับ Flash แล้ว พัสดุเลข TH1234 ออกจากศูนย์คัดแยกลาดกระบังเมื่อเช้านี้ ปกติถึงบ้านภายใน 1–2 วันค่ะ ถ้าพรุ่งนี้เย็นยังไม่ได้รับ ทักมาได้เลย ร้านจะเปิดเรื่องตามกับขนส่งให้ทันทีค่ะ
 
-กฎที่ใช้: ระดับ แชตร้าน (`ทางร้าน` ×3 → `ร้าน` ครั้งเดียวต่อประโยค · ค่ะ ทุกข้อความ · คำขอโทษคงไว้ เพราะคำสุภาพไม่ใช่คำฟุ่มเฟือย) · `t-padding` (ทำการ ×2) · `t-reassure` → ขั้นถัดไปที่ลูกค้าทำได้ · "อย่างใกล้ชิด" "อย่างสูง" → ข้อเท็จจริง (เลขพัสดุ · ศูนย์คัดแยก · เวลา) · ที่มา: ทีมเขียน 2026-10-22 · เจ้าของอ่านแล้วรับ 2026-10-29
+Rules applied: register แชตร้าน (`ทางร้าน` ×3 → `ร้าน` once per sentence · ค่ะ in every message · keep the apology, because polite words are not padding) · `t-padding` (ทำการ ×2) · `t-reassure` → the next step the customer can take · "อย่างใกล้ชิด" "อย่างสูง" → facts (parcel number · sorting centre · time) · Source: written by the team 2026-10-22 · owner read and accepted 2026-10-29
 
 ---
 
-ระดับที่ยังไม่มีคู่: การตลาด · ส่วนตัว · วิชาการ · ร้องเรียน · สมัครงาน · หน้าจอ — เพิ่มจากคำแก้ของเจ้าของงานตามกติกาข้างบน (`thai-grammar` หัวข้อ 8) · คู่ที่ทีมเขียนทั้ง 5 ข้างบนรอเจ้าของอ่านออกเสียงแล้วรับหรือแก้
+Registers with no pair yet: marketing · personal · academic · complaint · job application · screen. Add them from the owner's edits under the rules above (`thai-grammar` section 8). The 5 team-written pairs above wait for the owner to read them aloud and accept or edit them.
 
 
 ## reference: thai-grammar.md
 
-# ภาษาไทยให้ลื่น — กรอบเรียบเรียง 7 ข้อ · คำต้องเลี่ยง · ระดับภาษา
+# Smooth Thai: 7-point composition framework · words to avoid · registers
 
-เปิดไฟล์นี้เมื่อเขียนหรือแก้ภาษาไทยตั้งแต่ 1 ย่อหน้าขึ้นไป หรือเมื่อสั่งตรวจเข้ม (ดู [`strict-review`](strict-review.md)) · ข้อความแชตสั้น ป้าย ปุ่ม ชื่อตัวแปร ไม่ต้องเปิด
+Open this file when writing or editing Thai of 1 paragraph or more, or when a strict review is ordered (see [`strict-review`](strict-review.md)). Short chat messages, labels, buttons and variable names do not need it.
 
-ภาษาไทยที่ AI เขียนติดโครงประโยคอังกฤษมา ประโยคเลยยาว ต่อกันด้วย "ซึ่ง" "โดย" และเปิดเรื่องแบบเดียวกันทุกครั้ง การไล่ลบคำต้องห้ามแก้ได้แค่ปลายเหตุ ต้นเหตุอยู่ที่โครงประโยค 7 ข้อข้างล่าง พอโครงถูก กฎย่อยส่วนใหญ่ก็ผ่านเอง
+Thai written by AI carries English sentence structure: sentences run long, are chained with "ซึ่ง" and "โดย", and open the same way every time. Deleting banned words fixes only the symptom. The cause is sentence structure, covered by the 7 points below. Once the structure is right, most of the smaller rules pass by themselves.
 
-ทุกกฎมีรหัส (`f1` · `t-chueung`) ไว้อ้างตอนตรวจ
+Every rule has a code (`f1` · `t-chueung`) to cite during review.
 
-**สารบัญ**
+**Contents**
 
-- [1 · กรอบเรียบเรียง 7 ข้อ](#1--กรอบเรียบเรียง-7-ข้อ)
-- [2 · ท่าที่ AI ชอบใช้ (เจอแล้วแก้)](#2--ท่าที่-ai-ชอบใช้-เจอแล้วแก้)
-- [3 · ไวยากรณ์ที่ AI พลาดบ่อย](#3--ไวยากรณ์ที่-ai-พลาดบ่อย)
-- [4 · ระดับภาษา](#4--ระดับภาษา)
-- [5 · ทับศัพท์ — เลือก 1 แบบต่อคำ แล้วใช้แบบเดียวทั้งชิ้น](#5--ทับศัพท์--เลือก-1-แบบต่อคำ-แล้วใช้แบบเดียวทั้งชิ้น)
-- [6 · ปิดเรื่อง](#6--ปิดเรื่อง)
-- [7 · แปลอังกฤษเป็นไทย](#7--แปลอังกฤษเป็นไทย)
-- [8 · วินัยเพิ่มกฎ และไฟล์ประกอบ](#8--วินัยเพิ่มกฎ-และไฟล์ประกอบ)
+- [1 · The 7-point composition framework](#1--the-7-point-composition-framework)
+- [2 · Moves AI likes to use (fix on sight)](#2--moves-ai-likes-to-use-fix-on-sight)
+- [3 · Grammar AI often gets wrong](#3--grammar-ai-often-gets-wrong)
+- [4 · Registers](#4--registers)
+- [5 · Loanwords: pick 1 form per word, use it throughout](#5--loanwords-pick-1-form-per-word-use-it-throughout)
+- [6 · Closing](#6--closing)
+- [7 · Translating English into Thai](#7--translating-english-into-thai)
+- [8 · Discipline for adding rules, and companion files](#8--discipline-for-adding-rules-and-companion-files)
 
-## 1 · กรอบเรียบเรียง 7 ข้อ
+## 1 · The 7-point composition framework
 
-| รหัส | กรอบ | ก่อน (แปลตรง) | หลัง (ไทย) |
+| Code | Point | Before (literal translation) | After (Thai) |
 |---|---|---|---|
-| `f1` | **ยกเรื่องที่พูดถึงขึ้นก่อน** ไม่ลากประธานยาว ๆ แบบอังกฤษ · เลิกใช้ `การที่…นั้น…` `การที่ X ทำให้ Y` | ระบบประมวลผลข้อมูลพวกนี้ทุก 5 นาที | ข้อมูลพวกนี้ ระบบจะ process ทุก 5 นาที |
-| `f2` | **เงื่อนไขและเวลามาก่อน** ไม่ห้อยท้ายด้วย "เมื่อ…" | DB จะเริ่ม timeout เมื่อ traffic พุ่งสูง | พอ traffic พุ่ง DB ก็เริ่ม timeout |
-| `f3` | **ขึ้นประโยคใหม่ด้วยเว้นวรรคและย่อหน้า** ไม่ใส่จุดทุกประโยค · จุดใช้ท้ายย่อหน้า หรือคั่นประโยคยาว 2 ประโยคที่คนละเรื่องกัน | เร็วขึ้น. ใช้ memory น้อยลง. ทีมพอใจ. | เร็วขึ้น ใช้ memory น้อยลง ทีมพอใจ |
-| `f4` | **ปิดความด้วยคำท้าย** `ด้วย` `แล้ว` `เลย` `อยู่` `อยู่ดี` `ต่างหาก` · ประโยค "ไม่ได้…อย่างเดียว" "ไม่ใช่แค่…" ต้องปิดด้วย `ด้วย` · ประโยค "ไม่ได้อยู่ที่ X อยู่ที่ Y" ต้องปิดด้วย `ต่างหาก` | ปัญหาไม่ได้อยู่ที่ยอดขาย อยู่ที่ต้นทุน | ปัญหาไม่ได้อยู่ที่ยอดขาย อยู่ที่ต้นทุนต่างหาก |
-| `f5` | **ละประธานที่รู้แล้ว ใช้คำชี้แทนสรรพนาม** (`ตัวนี้` `เคสนั้น` `ตรงนี้แหละที่…`) · ไม่ใช้ `มัน` `เขา` `พวกเขา` แทน it/they · ระวังละจนไม่รู้ว่าใครทำ | มันลด memory และมันยังปรับปรุงการทดสอบ | ทั้งลด memory และยังปรับปรุงการทดสอบอีกด้วย |
-| `f6` | **ใช้ "ก็" คุมจังหวะ** `พอ X ก็ Y` · `ถ้า X ก็ Y` · `X แล้วก็ Y` · ลำดับการกระทำเชื่อมด้วย `แล้ว` | ถ่ายรูปบิล ระบบอ่านรายการให้เอง | ถ่ายรูปบิลแล้วระบบจะอ่านรายการให้เอง |
-| `f7` | **เปลี่ยนเรื่องด้วยคำถาม คำชี้ หรือ "แต่"** แทน `อย่างไรก็ตาม` `นอกจากนี้` (ตัดได้ราวครึ่งหนึ่ง) · หลังไล่ปัญหา 2–3 ข้อ ต้องมีจุดเปลี่ยนก่อนเข้าวิธีแก้ | อย่างไรก็ตาม การใช้งานจริงมีข้อจำกัด | แต่พอขึ้น production จริง ก็มีเรื่องให้ปวดหัวอีก |
+| `f1` | **Put the topic first.** Do not drag a long subject along as in English. Stop using `การที่…นั้น…` and `การที่ X ทำให้ Y`. | ระบบประมวลผลข้อมูลพวกนี้ทุก 5 นาที | ข้อมูลพวกนี้ ระบบจะ process ทุก 5 นาที |
+| `f2` | **Condition and time come first.** Do not trail them at the end with "เมื่อ…". | DB จะเริ่ม timeout เมื่อ traffic พุ่งสูง | พอ traffic พุ่ง DB ก็เริ่ม timeout |
+| `f3` | **Start a new sentence with a space or a new paragraph.** Do not put a full stop after every sentence. Use a full stop at the end of a paragraph, or between 2 long sentences on different topics. | เร็วขึ้น. ใช้ memory น้อยลง. ทีมพอใจ. | เร็วขึ้น ใช้ memory น้อยลง ทีมพอใจ |
+| `f4` | **Close the clause with a final word:** `ด้วย` `แล้ว` `เลย` `อยู่` `อยู่ดี` `ต่างหาก`. A "ไม่ได้…อย่างเดียว" or "ไม่ใช่แค่…" sentence must close with `ด้วย`. A "ไม่ได้อยู่ที่ X อยู่ที่ Y" sentence must close with `ต่างหาก`. | ปัญหาไม่ได้อยู่ที่ยอดขาย อยู่ที่ต้นทุน | ปัญหาไม่ได้อยู่ที่ยอดขาย อยู่ที่ต้นทุนต่างหาก |
+| `f5` | **Drop a subject that is already known, and use a demonstrative instead of a pronoun** (`ตัวนี้` `เคสนั้น` `ตรงนี้แหละที่…`). Do not use `มัน` `เขา` `พวกเขา` for it/they. Take care not to drop so much that it is unclear who acts. | มันลด memory และมันยังปรับปรุงการทดสอบ | ทั้งลด memory และยังปรับปรุงการทดสอบอีกด้วย |
+| `f6` | **Use "ก็" to control rhythm:** `พอ X ก็ Y` · `ถ้า X ก็ Y` · `X แล้วก็ Y`. Link a sequence of actions with `แล้ว`. | ถ่ายรูปบิล ระบบอ่านรายการให้เอง | ถ่ายรูปบิลแล้วระบบจะอ่านรายการให้เอง |
+| `f7` | **Change topic with a question, a demonstrative or "แต่"** instead of `อย่างไรก็ตาม` `นอกจากนี้` (this cuts about half of them). After listing 2–3 problems, put a turning point before the fix. | อย่างไรก็ตาม การใช้งานจริงมีข้อจำกัด | แต่พอขึ้น production จริง ก็มีเรื่องให้ปวดหัวอีก |
 
-**"ก็" ไม่ได้ใส่ได้ทุกที่ (`f6-scope`)** — ประโยค `…ทีไร` ไม่ต้องมี ก็ (`ลองทีไร พังทุกที`) · ประโยค `ไม่ว่าจะ…เมื่อไหร่` ต้องมี `ก็จะ` · ผลที่เป็นนิยามของเหตุ (ต้นทุน = ราคาวัตถุดิบ) ไม่ใส่ ก็ (`วัตถุดิบขึ้นเมื่อไหร่ ต้นทุนต่อจานขึ้นตามทันที`)
+**"ก็" does not go everywhere (`f6-scope`).** A `…ทีไร` sentence does not need ก็ (`ลองทีไร พังทุกที`). A `ไม่ว่าจะ…เมื่อไหร่` sentence needs `ก็จะ`. A result that is the definition of its cause (cost = price of raw materials) takes no ก็ (`วัตถุดิบขึ้นเมื่อไหร่ ต้นทุนต่อจานขึ้นตามทันที`).
 
-## 2 · ท่าที่ AI ชอบใช้ (เจอแล้วแก้)
+## 2 · Moves AI likes to use (fix on sight)
 
-| รหัส | ท่า | แก้เป็น |
+| Code | Move | Fix |
 |---|---|---|
-| `t-chueung` | "ซึ่ง" ต่อกันหลายชั้น | ไม่เกิน 1 ซึ่งต่อประโยค · คำนามชัดใช้ "ที่" · หรือแยกประโยค |
-| `t-budget` | คำเชื่อมทางการถี่ | ต่อย่อหน้า: ซึ่ง ≤ 1 · โดย ≤ 1 · ดังนั้น ≤ 1 · `ทั้งนี้` ไม่ใช้เปิดย่อหน้า (ใช้ได้ใกล้ข้อสงวนสิทธิ์หรือคำชวนทำ) · งบนี้**ไม่นับ**คำท้าย `ด้วย` `แล้ว` `เลย` `อยู่` และ `เพื่อ…เพื่อ` ในหนังสือราชการ · คำท้ายอ่านแปลกให้เรียบเรียงประโยคใหม่ ไม่ลบคำ · บทความอธิบายเรียงคำเชื่อม ดังนั้น → นอกจากนี้ (นาน ๆ ครั้ง) → แต่ |
-| `t-doi` | `โดยที่… โดยการ… โดยมี…` | ใช้ ผ่าน · จาก · ด้วย หรือไม่ต้องมีคำเชื่อม |
-| `t-khanathi` | `ในขณะที่` ใช้แปลว่า "ส่วน/แต่" | `A เชื่อ X แต่ B เชื่อ Y` · `ส่วน B กลับเชื่อ Y` (ในขณะที่ = ช่วงเวลาเดียวกัน) |
-| `t-thuk` | ถูก- ทุกประโยค (passive แปลตรง) | ถูก/โดน ใช้กับเรื่องไม่ดีหรือไม่รู้ผู้ทำ · ที่เหลือเขียนว่าใครทำ |
-| `t-padding` | ทำการ · มีการ · ได้มีการ · มีความ + คุณศัพท์ · ที่มีความ | ใช้กริยาตรง ๆ: `ซับซ้อน` ไม่ใช่ `มีความซับซ้อน` · ยกเว้น `เป็นความ + กริยา` (`เป็นความตั้งใจ`) ต้องคงไว้ |
-| `t-khong` | ของ…ของ…ของ | ประกบคำนามตรง ๆ: `การพัฒนาเศรษฐกิจไทย` |
-| `t-nueng-nai` | หนึ่งในที่สุด | `…ที่สุดคนหนึ่ง` |
-| `t-mai-wa` | ไม่ว่าจะเป็น A, B หรือ C (แค่ไล่รายการ) | `A B หรือ C` · `ทั้ง A B และ C` |
-| `t-hedge` | ออกตัวซ้อน `อาจจะมีความเป็นไปได้ที่จะ` | `อาจ` ครั้งเดียว ตรงที่ไม่แน่ใจจริง |
-| `t-pronoun` | เรา…เรา…เรา / ท่าน | ละหลังประโยคแรก · ผู้อ่านใช้ `คุณ` ไม่ใช้ `ท่าน` (ยกเว้นหนังสือราชการ) |
-| `t-mun` | `มันเป็นที่ชัดเจนว่า` | `ชัดเจนว่า` |
-| `t-comma` | ลูกน้ำคั่นคำขยาย `แฮรารี, นักประวัติศาสตร์, แย้งว่า` | เว้นวรรค |
-| `t-dash` | ขีดยาว — และ ; | เว้นวรรค ขึ้นย่อหน้า หรือ ที่/ซึ่ง |
-| `t-particle` | ครับ/ค่ะ ในเนื้อเอกสาร | มีได้ในแชต คำพูดที่ยกมา และบล็อกส่วนตัว (เปิด ปิด และตอนพูดกับคนอ่านตรง ๆ เช่น `มาดูกันครับ`) เท่านั้น |
-| `t-overcut` | ตัดคำจนห้วน: `อยากช่วย` `ใช้ template` `ส่งมา` | ภาษาไทยไม่ได้ "จ่ายค่าเช่า" ให้ทุกคำแบบอังกฤษ `จะ` `ให้` `ก็` `ด้วย` `แล้ว` `ต่างหาก` และคำสุภาพ `ขอ` `รบกวน` `นะ` ทำหน้าที่จริง: `อยากจะช่วย` · `ให้ใช้ template` · `รบกวนส่งมาด้วยนะครับ` · กฎ "ตัดคำ" ของ skill อื่นใช้กับคำฟุ่มเฟือย (`t-padding`) เท่านั้น |
-| `t-reassure` | ปลอบลอย ๆ `ไม่ต้องกังวล` `สบายใจได้` | จบที่ข้อเท็จจริงและขั้นถัดไป: `แอดมินจะแจ้งผลภายในพรุ่งนี้ค่ะ` |
-| `t-force` | `ระบบบังคับให้…` `ระบบไม่อนุญาตให้…` | เล่าเป็นความสามารถหรือลำดับ: `ต้องยืนยันอีเมลก่อน ถึงจะเข้าใช้ได้` (`ถึงจะ` ใช้กับลำดับ · `ก็ต่อเมื่อ` ใช้กับเงื่อนไขเดียว) |
-| `t-samrap` | `สำหรับผมแล้ว ผมคิดว่า` · `สำหรับ…นั้น` เปิดประโยค | `ผมว่า…` · ยกเรื่องขึ้นก่อนตาม `f1` |
-| `t-topology` | เล่าโครงแทนเล่าเคส `มีเส้นทางเชื่อมระหว่าง A กับ B` | เล่าว่าใครทำอะไรแล้วเกิดอะไร: `ลูกค้ากดสั่ง ร้านเห็นรายการทันที` |
-| `t-considered` | `ถูกพิจารณาว่าเป็น` `ถูกมองว่า` (is considered) | `ถือว่าเป็น` · `คนมองว่า` · หรือบอกว่าใครเป็นคนมอง |
+| `t-chueung` | "ซึ่ง" chained several levels deep | At most 1 ซึ่ง per sentence. Use "ที่" when the noun is clear. Or split the sentence. |
+| `t-budget` | Frequent formal connectors | Per paragraph: ซึ่ง ≤ 1 · โดย ≤ 1 · ดังนั้น ≤ 1. `ทั้งนี้` does not open a paragraph (allowed near a disclaimer or a call to action). This budget does **not** count the final words `ด้วย` `แล้ว` `เลย` `อยู่`, nor `เพื่อ…เพื่อ` in official letters. If a final word reads oddly, restructure the sentence, do not delete the word. In an explanatory article, order connectors ดังนั้น → นอกจากนี้ (rarely) → แต่. |
+| `t-doi` | `โดยที่… โดยการ… โดยมี…` | Use ผ่าน · จาก · ด้วย, or no connector at all. |
+| `t-khanathi` | `ในขณะที่` used to mean "while (contrast)" / "but" | `A เชื่อ X แต่ B เชื่อ Y` · `ส่วน B กลับเชื่อ Y` (ในขณะที่ = the same period of time) |
+| `t-thuk` | ถูก- in every sentence (literal passive) | ถูก/โดน is for bad things or an unknown doer. Otherwise say who did it. |
+| `t-padding` | ทำการ · มีการ · ได้มีการ · มีความ + adjective · ที่มีความ | Use the verb directly: `ซับซ้อน` not `มีความซับซ้อน`. Exception: `เป็นความ + verb` (`เป็นความตั้งใจ`) must be kept. |
+| `t-khong` | ของ…ของ…ของ | Join the nouns directly: `การพัฒนาเศรษฐกิจไทย` |
+| `t-nueng-nai` | หนึ่งใน…ที่สุด (one of the most) | `…ที่สุดคนหนึ่ง` |
+| `t-mai-wa` | ไม่ว่าจะเป็น A, B หรือ C (merely listing items) | `A B หรือ C` · `ทั้ง A B และ C` |
+| `t-hedge` | Stacked hedges `อาจจะมีความเป็นไปได้ที่จะ` | A single `อาจ`, exactly where you are truly unsure. |
+| `t-pronoun` | เรา…เรา…เรา / ท่าน | Drop after the first sentence. Address the reader as `คุณ`, not `ท่าน` (except in official letters). |
+| `t-mun` | `มันเป็นที่ชัดเจนว่า` (it is clear that) | `ชัดเจนว่า` |
+| `t-comma` | Commas around a modifier `แฮรารี, นักประวัติศาสตร์, แย้งว่า` | Use spaces. |
+| `t-dash` | Long dash — and ; | Use a space, a new paragraph, or ที่/ซึ่ง. |
+| `t-particle` | ครับ/ค่ะ in document body text | Allowed only in chat, quoted speech and personal blogs (opening, closing, and when speaking to the reader directly, such as `มาดูกันครับ`). |
+| `t-overcut` | Cutting words until it turns curt: `อยากช่วย` `ใช้ template` `ส่งมา` | Thai does not "pay rent" on every word the way English does. `จะ` `ให้` `ก็` `ด้วย` `แล้ว` `ต่างหาก` and the polite words `ขอ` `รบกวน` `นะ` do real work: `อยากจะช่วย` · `ให้ใช้ template` · `รบกวนส่งมาด้วยนะครับ`. The "cut words" rule of other skills applies only to padding words (`t-padding`). |
+| `t-reassure` | Vague soothing `ไม่ต้องกังวล` `สบายใจได้` | End on a fact and the next step: `แอดมินจะแจ้งผลภายในพรุ่งนี้ค่ะ` |
+| `t-force` | `ระบบบังคับให้…` `ระบบไม่อนุญาตให้…` (the system forces… / does not allow…) | Tell it as a capability or a sequence: `ต้องยืนยันอีเมลก่อน ถึงจะเข้าใช้ได้` (`ถึงจะ` for sequence · `ก็ต่อเมื่อ` for a single condition) |
+| `t-samrap` | `สำหรับผมแล้ว ผมคิดว่า` · `สำหรับ…นั้น` opening a sentence | `ผมว่า…` · put the topic first as in `f1` |
+| `t-topology` | Telling structure instead of the case `มีเส้นทางเชื่อมระหว่าง A กับ B` | Tell who does what and what happens: `ลูกค้ากดสั่ง ร้านเห็นรายการทันที` |
+| `t-considered` | `ถูกพิจารณาว่าเป็น` `ถูกมองว่า` (is considered) | `ถือว่าเป็น` · `คนมองว่า` · or say who is looking. |
 
-**คำและวลีต้องเลี่ยง (`t-block`)** — เจอแล้วแก้ทันที ยกเว้นอยู่ใน `` ` `` หรือในเครื่องหมายคำพูด (ยกมาพูดถึง):
+**Words and phrases to avoid (`t-block`).** Fix on sight, unless inside `` ` `` or quotation marks (quoted for discussion):
 
-`ในยุคปัจจุบัน` · `ในโลกปัจจุบัน` · `ในโลกที่…` · `เป็นที่ทราบกันดีว่า` · `เป็นที่รู้กันว่า` · `ปฏิเสธไม่ได้ว่า` · `เป็นสิ่งสำคัญที่ต้องตระหนัก` · `มีความสำคัญ` (ใช้ `สำคัญ`) · `การที่…นั้น` · `ในเรื่องของ` · `ในส่วนของ` · `อย่างมหาศาล` · `อย่างน่าทึ่ง` · `อย่างไม่น่าเชื่อ` · `ทุกสิ่งที่คุณต้องรู้เกี่ยวกับ` · `โดยสรุปแล้ว` · `กล่าวโดยสรุป` · `นั่นเอง!` · `รีบ…เลย!`
+`ในยุคปัจจุบัน` · `ในโลกปัจจุบัน` · `ในโลกที่…` · `เป็นที่ทราบกันดีว่า` · `เป็นที่รู้กันว่า` · `ปฏิเสธไม่ได้ว่า` · `เป็นสิ่งสำคัญที่ต้องตระหนัก` · `มีความสำคัญ` (use `สำคัญ`) · `การที่…นั้น` · `ในเรื่องของ` · `ในส่วนของ` · `อย่างมหาศาล` · `อย่างน่าทึ่ง` · `อย่างไม่น่าเชื่อ` · `ทุกสิ่งที่คุณต้องรู้เกี่ยวกับ` · `โดยสรุปแล้ว` · `กล่าวโดยสรุป` · `นั่นเอง!` · `รีบ…เลย!`
 
-คำโฆษณาที่ยอมได้เมื่อมีตัวเลขประกบ: `อย่างมาก` · `อย่างมีประสิทธิภาพ` (เฉพาะเอกสารธุรกิจ) · `!` ตัวเดียวที่ hook หรือคำชวนทำในหน้าขายของ ที่อื่นไม่ใช้
+Ad words that are acceptable when paired with a number: `อย่างมาก` · `อย่างมีประสิทธิภาพ` (business documents only) · a single `!` at a hook or call to action on a sales page, not elsewhere.
 
-## 3 · ไวยากรณ์ที่ AI พลาดบ่อย
+## 3 · Grammar AI often gets wrong
 
-| รหัส | เรื่อง | ตัวอย่าง |
+| Code | Topic | Example |
 |---|---|---|
-| `g-classifier` | ลักษณนามผิดหรือหาย | server 1 `เครื่อง` · function/parameter 1 `ตัว` · token/record 1 `อัน` · บรรทัด · หน้า · รายการ — ไม่แน่ใจให้เลี่ยงการนับ · ระดับทางการต้องใช้ลักษณนามตรงตัว (ถัง · ฉบับ · ราย) ระดับไม่ทางการใช้ `อัน` `ตัว` ได้ |
-| `g-cha` | ขาด `จะ` ในประโยคอนาคตหรือสมมุติ | `จะเลือกตัวไหนขึ้นอยู่กับ…` · `วิธีนี้จะคุม rate ได้` |
-| `g-function` | คำเชื่อมสั้นผิดหน้าที่ | `จะ` ≠ `จน` · ภาษาไม่ทางการใช้ `เวลา` `ตอนที่` แทน `เมื่อ` · `เหมาะกับ` ต้องมี กับ |
-| `g-verb` | กริยาแปลตรง | burst ≠ `ระเบิด` (ใช้ `ยิง`) · drop ≠ `ทิ้ง` (ใช้ `ปฏิเสธ`) · match ≠ `ซ้ำ` (ใช้ `ตรง`) · cap ≠ `ครอบ` (ใช้ `จำกัดไว้ที่`) · throttle ≠ `บีบคอ` (ใช้ `ชะลอ` `หน่วง`) · กริยาที่เป็นภาพทางกายภาพในอังกฤษ มักต้องใช้กริยาไทยคนละตัว |
-| `g-capability` | สามารถ…ได้ | งานวิชาการ ราชการ ข่าว ใช้ครบ `สามารถ + กริยา + ได้` · งานทั่วไปใช้ `กริยา + ได้` |
-| `g-time` | ช่วงเวลาใช้ ของ | `ในศตวรรษที่ 20` ไม่ใช่ `ของศตวรรษที่ 20` |
-| `g-tirai` | `ทีไร` ต้องปิดด้วย `ทุกที` หรือ `ไม่เคย…สักที` | `ฝนตกทีไร น้ำท่วมทุกที` · `ทุกครั้ง` อ่อนกว่าและหลุดสำนวน · `ทีไร…เสมอ` ก้ำกึ่ง เลี่ยง |
-| `g-quant` | ตัวเลขคู่กับกริยาความรู้สึก | `ตัวเลขไม่ตรงกับที่คาด` ไม่ใช่ `ที่รู้สึก` |
-| `g-yamok` | ไม้ยมกติดคำ `ต่างๆ` `บ่อยๆ` | เว้นวรรคหน้าและหลัง `ต่าง ๆ` `บ่อย ๆ` ทั้งชิ้น · ที่มา: หลักเกณฑ์การเว้นวรรค ข้อ ๑.๒.๑๕.๑ "เว้นวรรคเล็กหน้าและหลังเครื่องหมายไปยาลใหญ่ ไม้ยมก …" ตัวอย่าง `วันหนึ่ง ๆ เขาทำอะไรบ้าง` · สำนักงานราชบัณฑิตยสภา https://www.orst.go.th/iwfm_table.asp?a=36 (ตรวจ 2026-10-26 · royin.go.th เปิดไม่ได้จากเครื่องนี้ เว็บเดียวกันย้ายมาอยู่ที่ orst.go.th) |
+| `g-classifier` | Wrong or missing classifier | server 1 `เครื่อง` · function/parameter 1 `ตัว` · token/record 1 `อัน` · บรรทัด · หน้า · รายการ. If unsure, avoid counting. The official register needs exact classifiers (ถัง · ฉบับ · ราย); informal registers may use `อัน` `ตัว`. |
+| `g-cha` | Missing `จะ` in a future or hypothetical sentence | `จะเลือกตัวไหนขึ้นอยู่กับ…` · `วิธีนี้จะคุม rate ได้` |
+| `g-function` | Short connector used with the wrong function | `จะ` ≠ `จน` · informal language uses `เวลา` `ตอนที่` instead of `เมื่อ` · `เหมาะกับ` needs กับ |
+| `g-verb` | Literally translated verb | burst ≠ `ระเบิด` (use `ยิง`) · drop ≠ `ทิ้ง` (use `ปฏิเสธ`) · match ≠ `ซ้ำ` (use `ตรง`) · cap ≠ `ครอบ` (use `จำกัดไว้ที่`) · throttle ≠ `บีบคอ` (use `ชะลอ` `หน่วง`). A verb that is a physical image in English often needs a different Thai verb. |
+| `g-capability` | สามารถ…ได้ (can) | Academic, official and news writing use the full `สามารถ + verb + ได้`. General writing uses `verb + ได้`. |
+| `g-time` | Period of time takes ของ | `ในศตวรรษที่ 20` not `ของศตวรรษที่ 20` |
+| `g-tirai` | `ทีไร` must close with `ทุกที` or `ไม่เคย…สักที` | `ฝนตกทีไร น้ำท่วมทุกที` · `ทุกครั้ง` is weaker and breaks the idiom · `ทีไร…เสมอ` is borderline, avoid. |
+| `g-quant` | A number paired with a feeling verb | `ตัวเลขไม่ตรงกับที่คาด` not `ที่รู้สึก` |
+| `g-yamok` | Mai yamok attached to the word `ต่างๆ` `บ่อยๆ` | Put a space before and after: `ต่าง ๆ` `บ่อย ๆ` throughout. Source: spacing rules item ๑.๒.๑๕.๑ "เว้นวรรคเล็กหน้าและหลังเครื่องหมายไปยาลใหญ่ ไม้ยมก …" with example `วันหนึ่ง ๆ เขาทำอะไรบ้าง` · Royal Society of Thailand office https://www.orst.go.th/iwfm_table.asp?a=36 (checked 2026-10-26 · royin.go.th could not be opened from this machine; the same site moved to orst.go.th) |
 
-## 4 · ระดับภาษา
+## 4 · Registers
 
-เลือกระดับก่อนเขียน แล้วคงไว้ทั้งชิ้น (`r-drift`) · เปลี่ยนได้ที่หัวข้อใหม่เท่านั้น
+Choose the register before writing, then keep it for the whole piece (`r-drift`). Change only at a new heading.
 
-| งาน | ระดับ | คำท้าย ครับ/ค่ะ | ผู้พูด/ผู้อ่าน |
+| Work | Register | Final particle ครับ/ค่ะ | Speaker/reader |
 |---|---|---|---|
-| เอกสารเทคนิค · README · คู่มือ · บทความอธิบาย | อธิบาย | ไม่มี | `เรา` / `คุณ` |
-| หน้าขายของ · landing page | การตลาด | ไม่มี | `คุณ` เท่านั้นในเนื้อ (ไม่ใช้ `เจ้าของร้าน` `ผู้ใช้` แทนคุณ) |
-| บล็อกส่วนตัว · เล่าประสบการณ์ · ประกาศในทีม | ส่วนตัว | เปิด ปิด และตอนพูดกับคนอ่านตรง ๆ | `ผม` / `ดิฉัน` ตามผู้เขียน (ไม่รู้ ใช้ค่าตั้งต้นของเจ้าของใน `~/.claude/superuser-style.md` แล้วจดลง ตัดสินใจเอง) |
-| ข่าว · release note · ประกาศ · CHANGELOG | ข่าว | ไม่มี | ไม่มีบุรุษที่ 1 · ประโยคแรก ใคร ทำอะไร กับอะไร · ที่มาอยู่ประโยคที่ 2 · ปิดด้วยเวอร์ชัน วันที่ หรือแหล่ง · `ดังนั้น` เฉพาะเมื่อมีเหตุจริง |
-| วิทยานิพนธ์ · IS · บทความวิจัย · บทวิเคราะห์ยาว | วิชาการ | ไม่มี | `ผู้วิจัย` หรือละ · `เรา` เฉพาะประสบการณ์ร่วม |
-| หนังสือราชการ · รายงานการประชุม · นโยบาย | ราชการ | ไม่มี | ไม่มีบุรุษที่ 1 · ใช้ถ้อยคำตามแบบ (ตารางคำข้างล่าง) |
-| หนังสือบริษัทถึงลูกค้า · ข้อเสนอ · BRD FSD SRS · company profile | ธุรกิจ | ไม่มี | `บริษัทฯ` หรือชื่อทีม ไม่ใช้ `เรา` · `คุณ` เฉพาะในขั้นตอนสั่งให้ทำ · ศัพท์หลักครั้งแรก `ไทย (English: ตัวย่อ)` |
-| แชตลูกค้า · ไลฟ์ · ตอบรีวิว · broadcast | แชตร้าน | ทุกข้อความ (ค่ะ หรือ ครับ แบบเดียวทั้งร้าน) | ร้านเรียกตัวเองว่า `ร้าน` หรือ `แอดมิน` ครั้งเดียวต่อข้อความ · ลูกค้า `คุณลูกค้า` หรือละ · จบที่ข้อเท็จจริงและขั้นถัดไป ไม่ปลอบลอย ๆ (`t-reassure`) |
-| จดหมายร้องเรียน · ขอคืนเงิน · ยกเลิกสัญญา | ร้องเรียน | ไม่มี | `ข้าพเจ้า` · ผู้รับ `ท่าน` หรือชื่อบริษัท · ข้อเท็จจริง วันที่ จำนวนเงิน ก่อนข้อเรียกร้อง · กำหนดเวลา `ภายใน X วัน นับจากวันที่ได้รับหนังสือฉบับนี้` · ไม่ขู่ ไม่ขอโทษ |
-| CV · จดหมายสมัครงาน · ต่อรองเงินเดือน · LinkedIn | สมัครงาน | ไม่มีใน CV · มีในจดหมายและข้อความถึง HR | `ผม` / `ดิฉัน` · bullet ใน CV ขึ้นต้นด้วยกริยาและปิดด้วยตัวเลข (`ลดเวลาปิดงบจาก 8 วันเหลือ 5 วัน`) · ไม่มี `ซึ่งทำให้` |
-| ข้อความบนหน้าจอ · ปุ่ม · error · แจ้งเตือน · placeholder | หน้าจอ | ไม่มี | `คุณ` หรือละ · ปุ่มขึ้นต้นด้วยกริยา (`บันทึก` `ส่งคำขอ`) · error = เกิดอะไร + ทำอะไรต่อ ใน 1–2 ประโยค · ไม่ซ้อน `กรุณา` `ท่าน` `ครับ/ค่ะ` · 1 คำต่อ 1 การกระทำทั้งแอป เก็บใน glossary |
+| Technical docs · README · manuals · explanatory articles | อธิบาย (explain) | None | `เรา` / `คุณ` |
+| Sales pages · landing pages | การตลาด (marketing) | None | `คุณ` only in the body (do not use `เจ้าของร้าน` `ผู้ใช้` in place of คุณ) |
+| Personal blog · telling experience · team announcements | ส่วนตัว (personal) | Opening, closing, and when speaking to the reader directly | `ผม` / `ดิฉัน` according to the author (if unknown, use the owner's default in `~/.claude/superuser-style.md` and note it as `ตัดสินใจเอง`) |
+| News · release notes · announcements · CHANGELOG | ข่าว (news) | None | No first person · first sentence says who does what to what · the source goes in sentence 2 · close with the version, date or source · `ดังนั้น` only when there is a real cause |
+| Thesis · IS · research article · long analysis | วิชาการ (academic) | None | `ผู้วิจัย` or drop the pronoun · `เรา` only for shared experience |
+| Official letters · meeting minutes · policy | ราชการ (official) | None | No first person · use standard-form wording (word table below) |
+| Company letter to a customer · proposal · BRD FSD SRS · company profile | ธุรกิจ (business) | None | `บริษัทฯ` or the team name, not `เรา` · `คุณ` only in steps telling the reader to do something · key term at first use `ไทย (English: abbreviation)` |
+| Customer chat · live selling · review replies · broadcast | แชตร้าน (shop chat) | In every message (ค่ะ or ครับ, one style for the whole shop) | The shop calls itself `ร้าน` or `แอดมิน` once per message · customer is `คุณลูกค้า` or dropped · end on a fact and the next step, no vague soothing (`t-reassure`) |
+| Complaint letter · refund request · contract cancellation | ร้องเรียน (complaint) | None | `ข้าพเจ้า` · recipient `ท่าน` or the company name · facts, dates, amounts before the demand · deadline `ภายใน X วัน นับจากวันที่ได้รับหนังสือฉบับนี้` · no threats, no apology |
+| CV · job application letter · salary negotiation · LinkedIn | สมัครงาน (job application) | None in a CV · yes in letters and messages to HR | `ผม` / `ดิฉัน` · a CV bullet starts with a verb and ends with a number (`ลดเวลาปิดงบจาก 8 วันเหลือ 5 วัน`) · no `ซึ่งทำให้` |
+| On-screen text · buttons · errors · notifications · placeholders | หน้าจอ (screen) | None | `คุณ` or dropped · a button starts with a verb (`บันทึก` `ส่งคำขอ`) · an error = what happened + what to do next, in 1–2 sentences · no stacked `กรุณา` `ท่าน` `ครับ/ค่ะ` · 1 word per action across the whole app, kept in a glossary |
 
-**บุรุษและผู้อ่านไม่สลับในย่อหน้าเดียว (`r-deixis`)** — สอนใช้ `เรา` แนะนำใช้ `คุณ` ไม่ปนกันในย่อหน้า · ในข้อความที่พูดกับคนอ่านอยู่ ไม่โผล่ `ใคร` `คน` `ผู้ใช้` แทนเขา: `ขาดทุน แต่ไม่มีใครรู้` → `ขาดทุนโดยไม่รู้ตัว`
+**Person and reader do not switch within a paragraph (`r-deixis`).** Teaching uses `เรา`, advising uses `คุณ`, never mixed in a paragraph. In text that speaks to the reader, `ใคร` `คน` `ผู้ใช้` do not appear in place of the reader: `ขาดทุน แต่ไม่มีใครรู้` → `ขาดทุนโดยไม่รู้ตัว`
 
-**ระดับราชการเพิ่ม** (ชั่วคราว · จากตัวอย่างชุดเดียว รอหนังสือจริงยืนยัน) — ประโยคขั้นตอน = ผู้ทำ + วิธี + สิ่งที่ทำ + ปลายทาง · เรียกเอกสารตามชื่อจริง ไม่ย่อแบบโน้ต (`15/30/45`) · คำสลับ: เซ็น → `ลงนาม` · ทำ → `ดำเนินการ` · เช็ค → `ตรวจสอบ` · ส่งให้ → `ส่งมาเพื่อ…` · คำถามค้าง → `ประเด็นที่ยังต้องการคำชี้แจง` · ระเบียบงานสารบรรณที่ใช้อยู่คือ ฉบับที่ 4 พ.ศ. 2564 (ตรวจ 2026-10-22 ไม่พบฉบับที่ 5)
+**Extra for the official register** (temporary · from one set of examples, waiting for real letters to confirm). A procedure sentence = doer + method + what is done + destination. Call documents by their real names, do not abbreviate like notes (`15/30/45`). Word swaps: เซ็น → `ลงนาม` · ทำ → `ดำเนินการ` · เช็ค → `ตรวจสอบ` · ส่งให้ → `ส่งมาเพื่อ…` · open questions → `ประเด็นที่ยังต้องการคำชี้แจง`. The official correspondence regulation in force is edition 4 of B.E. 2564 (checked 2026-10-22, edition 5 not found).
 
-**ระดับการตลาดเพิ่ม** — `!` ตัวเดียวที่ hook หรือคำชวนทำ · `…` ที่จังหวะพักแบบโค้ช ใช้ได้ในงานการเงิน · ปิดนุ่ม (`ลองได้เลย`) ดีกว่าคำสั่งห้วน · ไม่เปิดด้วยนิยาม `X คือ…` ในหน้าขาย · งานการเงินปิดด้วยคำแนะนำความพอดี 1 ประโยค (`กู้เท่าที่จำเป็นและชำระคืนไหว`) และยุบข้อสงวนสิทธิ์เป็นประโยคในน้ำเสียงเดียวกัน
+**Extra for the marketing register.** A single `!` at a hook or call to action · `…` as a coach-style pause is allowed in financial work · a soft close (`ลองได้เลย`) is better than a curt command · do not open a sales page with a definition `X คือ…` · financial work closes with 1 sentence of advice on moderation (`กู้เท่าที่จำเป็นและชำระคืนไหว`) and folds the disclaimer into a sentence in the same voice.
 
-**คำคู่ที่ต้องเลือกฝั่งเดียวทั้งชิ้น (`r-drift`)**
+**Word pairs where you pick one side for the whole piece (`r-drift`)**
 
-| ไม่ทางการ | ทางการ (วิชาการ · ราชการ) |
+| Informal | Formal (academic · official) |
 |---|---|
 | ยังไง | อย่างไร |
 | คนไหน · แบบไหน | คนใด · รูปแบบใด |
@@ -1126,106 +1126,106 @@ Applies to slide titles, figure titles, document headings, and box titles in a d
 | ตอนนี้ | ขณะนี้ · ปัจจุบัน |
 | อยากรู้ | ต้องการทราบ |
 
-**ระดับวิชาการเพิ่ม** — ประโยคยาวได้แต่ต้องสลับกับประโยคสั้น · `ทว่า` `อย่างไรก็ตาม` `นอกจากนี้` ใช้ได้เฉพาะจุดเปลี่ยนจริง · ยืนยันตรง ๆ ไม่ออกตัวถ้าแหล่งไม่ได้ออกตัว · เปิดด้วยคำถามหรือกรอบของเรื่อง ไม่เปิดกว้าง ๆ · ปิดด้วยการตั้งโจทย์ใหม่ ไม่สรุปซ้ำ
+**Extra for the academic register.** Sentences may be long but must alternate with short ones · `ทว่า` `อย่างไรก็ตาม` `นอกจากนี้` only at real turning points · assert directly, do not hedge if the source did not hedge · open with a question or the frame of the topic, not something broad · close by posing a new question, not by recapping.
 
-## 5 · ทับศัพท์ — เลือก 1 แบบต่อคำ แล้วใช้แบบเดียวทั้งชิ้น
+## 5 · Loanwords: pick 1 form per word, use it throughout
 
-| แบบ | ใช้เมื่อ | ตัวอย่าง |
+| Form | Use when | Example |
 |---|---|---|
-| แปลไทย | มีคำไทยที่คนรู้จัก หรือราชบัณฑิตยสภาบัญญัติไว้ | เสรีภาพ · ผลิตภาพ · ทุนนิยม |
-| เขียนเสียงเป็นไทย | ชื่อเฉพาะ คำใหม่ไม่มีคำไทยตรง | อัลกอริทึม · บล็อกเชน · ซอฟต์แวร์ |
-| คงอักษรอังกฤษ | ชื่อแบรนด์ ตัวย่อ ศัพท์ที่นักพัฒนาใช้เป็นอังกฤษ | Google · API · deploy · query |
-| ตั้งคำไทย + วงเล็บครั้งแรก | แนวคิดหลักที่ใช้ซ้ำ · ตัวย่อ | ระเบียบในจินตนาการ (imagined order) ครั้งต่อไปใช้ไทยอย่างเดียว · ปัญญาประดิษฐ์ (Artificial Intelligence: AI) แล้วใช้ไทยหรือ AI แบบเดียวทั้งชิ้น — รูปนี้เป็นรูปเดียวของทุก plugin (`spell-out-abbreviations` · `srs-writing` · `thesis-writing` อ้างมาที่นี่) |
+| Translate to Thai | A Thai word people know exists, or the Royal Society of Thailand coined one | เสรีภาพ · ผลิตภาพ · ทุนนิยม |
+| Write the sound in Thai | Proper names, new words with no direct Thai word | อัลกอริทึม · บล็อกเชน · ซอฟต์แวร์ |
+| Keep English letters | Brand names, abbreviations, terms developers use in English | Google · API · deploy · query |
+| Coin a Thai term + brackets at first use | A core concept used repeatedly · abbreviations | ระเบียบในจินตนาการ (imagined order), then Thai only afterwards · ปัญญาประดิษฐ์ (Artificial Intelligence: AI), then Thai or AI, one style for the whole piece. This is the one form for every plugin (`spell-out-abbreviations` · `srs-writing` · `thesis-writing` refer here). |
 
-ผสมอังกฤษที่คำนามหรือกริยาเดี่ยว (`deploy โค้ด` `query ตาราง`) ไม่ใช่ `ทำการ deployment ของ code` · เขียนเสียงเป็นไทยตามหลักเกณฑ์การทับศัพท์ของราชบัณฑิตยสภา: ไม่ใส่วรรณยุกต์ เว้นแต่คำนั้นเสียงซ้ำกับคำไทยจนสับสน เช่น `โค้ก` (ข้อ ๕) (`ซอฟต์แวร์` ไม่ใช่ `ซ้อฟต์แว่ร์`) ใส่การันต์ที่ตัวสะกดไม่ออกเสียง (ข้อ ๓.๑) · เลือก 1 ตัวสะกดต่อคำแล้วจดไว้ (ที่มา: ประกาศสำนักนายกรัฐมนตรี เรื่อง หลักเกณฑ์การทับศัพท์ภาษาอังกฤษ ประกาศ ณ วันที่ 26 สิงหาคม พ.ศ. 2532 ราชกิจจานุเบกษา เล่ม 106 ตอนที่ 153 วันที่ 14 กันยายน 2532 · อ่านไฟล์ PDF ที่สำนักงานราชบัณฑิตยสภาเผยแพร่ https://www.orst.go.th/FILEROOM/CABROYINWEB/DRAWER004/GENERAL/DATA0000/00000753.PDF หน้า 1-5 ตรวจ 2026-10-26 · ยังไม่ได้เทียบตารางพยัญชนะ (ตารางที่ 2) ทีละตัว) · ชื่อคนต่างชาติเขียนไทยแล้ววงเล็บอังกฤษครั้งแรก `ไมเคิล แซนเดล (Michael Sandel)` ไม่ใช้ลูกน้ำคั่นคำขยาย
+Mix English only at a single noun or verb (`deploy โค้ด` `query ตาราง`), not `ทำการ deployment ของ code`. Write sounds in Thai following the Royal Society of Thailand's transliteration rules: no tone marks, unless the word's sound collides with a Thai word and causes confusion, such as `โค้ก` (item ๕) (`ซอฟต์แวร์` not `ซ้อฟต์แว่ร์`). Add the silencer mark (karan) on letters that are not pronounced (item ๓.๑). Choose 1 spelling per word and note it. (Source: Office of the Prime Minister announcement, "Rules for transliterating English", announced 26 August B.E. 2532, Royal Gazette volume 106 part 153, 14 September 1989 · read the PDF published by the Royal Society of Thailand https://www.orst.go.th/FILEROOM/CABROYINWEB/DRAWER004/GENERAL/DATA0000/00000753.PDF pages 1-5, checked 2026-10-26 · the consonant table (table 2) has not been compared letter by letter.) Write a foreign person's name in Thai, then English in brackets at first use: `ไมเคิล แซนเดล (Michael Sandel)`. Do not use commas around a modifier.
 
-## 6 · ปิดเรื่อง
+## 6 · Closing
 
-ไม่สรุปซ้ำ (`c-recap`) · จบด้วยสิ่งที่ทำต่อ คำถามที่ตั้งใหม่ หรือหยุดเฉย ๆ
+No recap (`c-recap`). End with what to do next, a newly posed question, or simply stop.
 
-## 7 · แปลอังกฤษเป็นไทย
+## 7 · Translating English into Thai
 
-ใช้เมื่อต้นทางเป็นอังกฤษ (เอกสาร · error message · paper · บทความ) และผลเป็นไทยที่คนอ่าน · เล่าใหม่ทั้งย่อหน้า ไม่แปลทีละประโยค
+Use when the source is English (docs · error messages · papers · articles) and the result is Thai for people to read. Retell the whole paragraph, do not translate sentence by sentence.
 
-1. เรียงใหม่ตามกรอบ `f1` `f2`: ยกเรื่องขึ้นก่อน เงื่อนไขและเวลามาก่อน · passive อังกฤษกลับเป็นใครทำ (`t-thuk`) ยกเว้นเรื่องไม่ดีหรือไม่รู้ผู้ทำ
-2. ไม่เติมสิ่งที่ต้นทางไม่มี: ไม่เติม ครับ/ค่ะ `อาจจะ` หรือคำออกตัวที่ต้นทางไม่ได้ออกตัว · ไม่ตัดตัวเลขหรือเงื่อนไข
-3. สำนวนแปลตามความหมาย ไม่แปลตามคำ · ภาพเปรียบของผู้เขียนที่ใช้ซ้ำทั้งเรื่อง ตั้งเป็นคำไทย 1 คำแล้วใช้คำนั้นตลอด (หัวข้อ 5 แถว 4)
-4. `it is … that …` `there is` `one of the most` ไม่มีรูปไทย: `ชัดเจนว่า` · `มี…` · `…ที่สุดคนหนึ่ง` (`t-mun` `t-nueng-nai`) · `is considered` ไม่ใช่ `ถูกพิจารณาว่า` (`t-considered`)
-5. ตัวเอนที่ใช้เน้นในอังกฤษ กลายเป็นคำท้ายหรือลำดับคำในไทย (`ต่างหาก` `เลย` `แหละ`) ไม่ใช่ตัวเอน · ชื่อคนต่างชาติ `ไมเคิล แซนเดล (Michael Sandel)` ครั้งแรก
-6. ศัพท์เทคนิคคงอังกฤษตามหัวข้อ 5 · กริยาที่เป็นภาพทางกาย (burst · cap · throttle · drop) ใช้กริยาไทยคนละตัว (`g-verb`) · ลักษณนามเลือกเอง ไม่แปล `a` `an`
-7. อ่านออกเสียงทั้งย่อหน้า ถ้าเดาได้ว่าต้นทางเป็นอังกฤษ ให้เรียบเรียงใหม่
+1. Reorder by `f1` `f2`: topic first, condition and time first. Turn English passives back into who-did-it (`t-thuk`), except for bad things or an unknown doer.
+2. Add nothing the source lacks: no ครับ/ค่ะ, no `อาจจะ` or other hedges the source did not make. Do not drop numbers or conditions.
+3. Translate idioms by meaning, not word by word. For an author's metaphor used throughout the piece, coin 1 Thai word and use it every time (section 5, row 4).
+4. `it is … that …` `there is` `one of the most` have no Thai form: `ชัดเจนว่า` · `มี…` · `…ที่สุดคนหนึ่ง` (`t-mun` `t-nueng-nai`) · `is considered` is not `ถูกพิจารณาว่า` (`t-considered`).
+5. English italics used for emphasis become a final word or word order in Thai (`ต่างหาก` `เลย` `แหละ`), not italics. Foreign person's name `ไมเคิล แซนเดล (Michael Sandel)` at first use.
+6. Technical terms stay English per section 5. Verbs that are physical images (burst · cap · throttle · drop) take a different Thai verb each (`g-verb`). Choose classifiers yourself, do not translate `a` `an`.
+7. Read the whole paragraph aloud. If you can tell the source was English, restructure it.
 
-## 8 · วินัยเพิ่มกฎ และไฟล์ประกอบ
+## 8 · Discipline for adding rules, and companion files
 
-- **กฎใหม่ต้องมีที่มา**: คำแก้ของเจ้าของงาน (ก่อน → หลัง) · แหล่งที่เปิดอ่านจริงพร้อมวันที่ · หรือผลรันจริง · ไม่มีให้ติด `(ชั่วคราว)` เหมือนระดับราชการเพิ่มข้างบน
-- **ผู้ใช้แก้ภาษาไทยของ agent** → ก่อนเพิ่มกฎ ค้นไฟล์นี้ว่ากฎมีอยู่แล้วไหม: มีแต่ไม่ได้ใช้ → แก้ถ้อยคำหรือย้ายตำแหน่งกฎ ไม่เพิ่มกฎซ้ำ · ไม่มี → เก็บคู่ก่อน/หลังลง [`thai-examples`](thai-examples.md) ก่อน (ข้อความ "หลัง" ต้องเป็นของผู้ใช้ ไม่ใช่ที่ agent แต่ง) · ซ้ำ 2 ครั้งขึ้นไปค่อยสรุปเป็นกฎ · ไฟล์ตัวอย่างเก็บไม่เกิน 10 คู่ต่อระดับภาษา กฎดูดซับคู่ไหนแล้วลบคู่นั้น
-- **คู่ก่อน/หลังสอนได้ดีกว่ากฎ** — ก่อนเขียนย่อหน้าไทยยาว เปิด [`thai-examples`](thai-examples.md) ดูคู่ของระดับภาษาที่ใช้
-- **ตัวตรวจอัตโนมัติ** `scripts/thai_tells.py` จับ `t-block` `t-budget` `t-padding` `f3` (จุดกลางย่อหน้า) `g-yamok` `t-dash` และ `ทั้งนี้` เปิดย่อหน้า · เตือนอย่างเดียว ไม่ตัดสินว่าอ่านลื่น · สิ่งที่สคริปต์ไม่เห็น (`f1` `f2` `f4`–`f7` ระดับภาษา) ยังต้องอ่านเอง
-- **ตัวอักษรไทยในไฟล์ส่งออก** (ตัดคำ · ช่องไฟ · line-height ต่อสื่อ) อยู่ใน [`thai-line-breaking`](thai-line-breaking.md) ที่เดียว skill อื่นลิงก์มา
+- **A new rule needs a source:** the owner's edit (before → after) · a source actually opened, with its date · or a real run result. If none, tag it `(ชั่วคราว)` (temporary), like the extra official-register rule above.
+- **The user edits an agent's Thai.** Before adding a rule, search this file for whether the rule already exists. If it exists but was not applied, fix the wording or move the rule, and do not add a duplicate. If not, store the before/after pair in [`thai-examples`](thai-examples.md) first (the "after" text must be the user's, not one the agent wrote). Only when it repeats 2 or more times, summarise it into a rule. The examples file keeps at most 10 pairs per register, and a rule that absorbs a pair deletes that pair.
+- **Before/after pairs teach better than rules.** Before writing a long Thai paragraph, open [`thai-examples`](thai-examples.md) and look at the pair for the register in use.
+- **Automatic checker** `scripts/thai_tells.py` catches `t-block` `t-budget` `t-padding` `f3` (mid-paragraph full stops) `g-yamok` `t-dash` and `ทั้งนี้` opening a paragraph. It only warns, and does not judge whether the text reads smoothly. What the script cannot see (`f1` `f2` `f4`–`f7`, register) you still have to read yourself.
+- **Thai letters in exported files** (line breaking · spacing · line-height per medium) live only in [`thai-line-breaking`](thai-line-breaking.md). Other skills link to it.
 
 ---
 
-ที่มา: กลั่นจาก [chakrit/kien-thai](https://github.com/chakrit/kien-thai) (MIT License · Copyright (c) 2026 Chakrit Wichian · ข้อความสัญญาอนุญาตเต็มใน [`THIRD-PARTY-NOTICES`](../THIRD-PARTY-NOTICES.md)) — กรอบ 7 ข้อ · ไฟล์ `ai-tells` · `grammar` · `register` · `style-rules` · `forbidden-phrases` · `decisions/` (คำสุภาพไม่ใช่ AI tell · ภาษาไทยไม่ตัดคำแบบอังกฤษ · ไม่ให้โมเดลตัดสินคุณภาพภาษา · ตัวอย่างคู่ก่อนกฎ) ตรวจเมื่อ 2026-10-22 · ที่มาทางวิชาการตามที่ repo อ้าง: Iwasaki & Ingkaphirom · Takahashi 2023 (ก็) · Olsson 2013 (แล้ว) · หลักเกณฑ์การเว้นวรรค ราชบัณฑิตยสภา · ระดับภาษาเพิ่ม 5 แถว (ธุรกิจ · แชตร้าน · ร้องเรียน · สมัครงาน · หน้าจอ) มาจากการกวาด template ใน plugin ของ SQT-Marketplace 2026-10-22
+Source: distilled from [chakrit/kien-thai](https://github.com/chakrit/kien-thai) (MIT License · Copyright (c) 2026 Chakrit Wichian · full licence text in [`THIRD-PARTY-NOTICES`](../THIRD-PARTY-NOTICES.md)): the 7-point framework · files `ai-tells` · `grammar` · `register` · `style-rules` · `forbidden-phrases` · `decisions/` (polite words are not an AI tell · Thai does not cut words the English way · do not let the model judge language quality · example pairs before rules), checked 2026-10-22. Academic sources as cited by that repo: Iwasaki & Ingkaphirom · Takahashi 2023 (ก็) · Olsson 2013 (แล้ว) · spacing rules of the Royal Society of Thailand. The 5 extra register rows (business · shop chat · complaint · job application · screen) come from sweeping the templates in the SQT-Marketplace plugins on 2026-10-22.
 
 
 ## reference: thai-line-breaking.md
 
-# ตัดคำภาษาไทยให้ขึ้นบรรทัดสวย
+# Breaking Thai words so lines wrap cleanly
 
-ใช้ทุกครั้งที่ส่งออกเอกสารภาษาไทยเป็น Word · PDF · HTML · สไลด์ ที่จัดย่อหน้าชิดสองข้าง หรือเมื่อเห็นบรรทัดที่ตัวอักษรถูกยืดห่างกัน (`เ ท ค โ น โ ล ยี`)
+Use whenever you export a Thai document as Word · PDF · HTML · slides with justified paragraphs, or when you see a line with stretched letter spacing (`เ ท ค โ น โ ล ยี`).
 
-## ทำไมถึงเกิด
+## Why it happens
 
-ภาษาไทยไม่เว้นวรรคระหว่างคำ โปรแกรมต้องเดาจุดตัดเอง ถ้าเดาไม่ได้ (run ติดป้ายภาษาอังกฤษ · ฟอนต์ไม่รองรับ · ไฟล์สร้างจากสคริปต์) ข้อความไทยทั้งก้อนจะกลายเป็นคำเดียวยาว ๆ บรรทัดก่อนหน้าเลยเหลือที่ว่าง แล้วการจัดชิดสองข้างก็ยืดช่องไฟทีละตัวอักษรให้เต็มบรรทัด
+Thai has no spaces between words, so the program must guess where to break. If it cannot guess (a run tagged as English · a font that does not support Thai · a file generated by a script), the whole block of Thai text becomes one long word. The previous line is left with empty space, and justification then stretches the spacing letter by letter to fill the line.
 
-## แก้ตามชนิดไฟล์
+## Fix by file type
 
-| ไฟล์ | วิธีแก้ |
+| File | Fix |
 |---|---|
-| **.docx** (สร้างเองหรือได้มา) | รัน `python scripts/thai_linebreak.py <ไฟล์>.docx` หลังสร้างไฟล์เสร็จ · ใส่จุดตัดที่มองไม่เห็น (U+200B) ระหว่างคำ · ติดป้ายภาษาไทยให้ run · ผูกตัวเลขกับคำข้าง ๆ ("4 ประเด็น" ไม่แยกบรรทัด) · เก็บต้นฉบับไว้ใน `_to_delete/` · ตรวจตัวสคริปต์ด้วย `python -B scripts/thai_linebreak.py --self-test` (ไม่ต้องมี pythainlp) |
-| **.md ก่อนแปลงด้วย pandoc** | รันสคริปต์เดียวกันกับ .md · โค้ดใน `` ` `` ไม่ถูกแตะ |
-| **python-docx / docx-js** | ตั้งภาษาไทยให้ run (`w:lang w:bidi="th-TH"`) และฟอนต์ complex script (`w:rFonts w:cs="TH Sarabun New"`) ตั้งแต่ตอนสร้าง แล้วรันสคริปต์ปิดท้าย |
-| **HTML** | Chrome · Edge · Firefox ตัดคำไทยเองได้ ไม่ต้องใส่ ZWSP · ใส่ `<html lang="th">` · CSS `word-break: normal; overflow-wrap: anywhere; line-break: auto;` · เนื้อหาไทยใช้ `text-align: left` · ห้าม `word-break: break-all` (ตัดกลางคำ) |
-| **PDF** | แก้ที่ต้นทาง (.docx หรือ HTML) แล้วแปลงใหม่ |
-| **สไลด์ .pptx** | กล่องข้อความไทยชิดซ้าย · ข้อความยาวรันสคริปต์ไม่ได้ ให้ขึ้นบรรทัดเองที่รอยต่อวลี |
+| **.docx** (made by you or received) | Run `python scripts/thai_linebreak.py <file>.docx` after the file is built. It inserts invisible break points (U+200B) between words · tags runs as Thai · binds numbers to neighbouring words ("4 ประเด็น" does not split across lines) · keep the original in `_to_delete/` · test the script itself with `python -B scripts/thai_linebreak.py --self-test` (pythainlp not needed). |
+| **.md before converting with pandoc** | Run the same script on the .md · code inside `` ` `` is not touched. |
+| **python-docx / docx-js** | Set the Thai language on the run (`w:lang w:bidi="th-TH"`) and the complex-script font (`w:rFonts w:cs="TH Sarabun New"`) at creation time, then run the script at the end. |
+| **HTML** | Chrome · Edge · Firefox break Thai words on their own, no ZWSP needed · set `<html lang="th">` · CSS `word-break: normal; overflow-wrap: anywhere; line-break: auto;` · use `text-align: left` for Thai content · never `word-break: break-all` (breaks mid-word). |
+| **PDF** | Fix at the source (.docx or HTML), then convert again. |
+| **Slides .pptx** | Thai text boxes left-aligned · long text cannot go through the script, so break lines by hand at phrase boundaries. |
 
-## การจัดย่อหน้า
+## Paragraph alignment
 
-- เนื้อหาภาษาไทยทั่วไป: **ชิดซ้าย** ปลอดภัยที่สุด
-- งานวิชาการหรือราชการที่ต้องชิดสองข้าง: ใช้ "ชิดสองข้าง" (`both`) **หลัง** รันสคริปต์แล้วเท่านั้น
-- ไม่ใช้ "กระจายแบบไทย" (`thaiDistribute`) หรือ "กระจาย" (`distribute`) กับเนื้อหา เพราะยืดตัวอักษรทุกบรรทัด · สคริปต์แจ้งย่อหน้าที่ใช้อยู่ และเปลี่ยนให้ได้ด้วย `--align both` หรือ `--align left`
+- General Thai content: **left-aligned** is the safest.
+- Academic or official work that needs justification: use "ชิดสองข้าง" (justify, `both`) only **after** running the script.
+- Do not use "กระจายแบบไทย" (Thai distribute, `thaiDistribute`) or "กระจาย" (distribute, `distribute`) for body text, because they stretch letters on every line. The script reports paragraphs that use them, and can change them with `--align both` or `--align left`.
 
-## ห้ามตัดตรงนี้
+## Never break here
 
-- ตัวเลขกับหน่วยหรือคำนำหน้า: `4 ประเด็น` · `ตารางที่ 1` · `พ.ศ. 2569` · `50 %`
-- ก่อน `ๆ` `ฯ` และสระหรือวรรณยุกต์ที่ขึ้นต้นบรรทัดไม่ได้
-- ชื่อเฉพาะสั้น ๆ: `IEEE Transactions` ถ้าขึ้นบรรทัดใหม่แล้วอ่านยาก ให้เว้นด้วย non-breaking space
+- A number and its unit or prefix: `4 ประเด็น` · `ตารางที่ 1` · `พ.ศ. 2569` · `50 %`
+- Before `ๆ` `ฯ`, and before vowels or tone marks that cannot start a line.
+- Short proper names: `IEEE Transactions`. If it is hard to read after wrapping onto a new line, hold it together with a non-breaking space.
 
-## ระยะบรรทัดต่อสื่อ (ค่ากลางที่ skill อื่นอ้างมา)
+## Line spacing per medium (the central values other skills refer to)
 
-ภาษาไทยมีสระบน สระล่าง และวรรณยุกต์ซ้อนกันได้ 2 ชั้น จึงต้องการระยะบรรทัดมากกว่าละติน · ละตินล้วนใช้ 1.2–1.4 ได้ ส่วนไทยต่ำกว่าราว 1.4 สระบนกับวรรณยุกต์จะชนกันหรือถูกตัด · ค่าในตารางเป็นค่ากลางที่ skill ในชุดนี้ใช้อยู่ แก้ที่นี่แล้วให้ skill ที่อ้างตามมา
+Thai has upper vowels, lower vowels and tone marks that can stack 2 levels, so it needs more line spacing than Latin. Pure Latin can use 1.2–1.4, but for Thai below about 1.4 the upper vowels and tone marks collide or get clipped. The values in the table are the central values the skills in this set use. Change them here, and the skills that refer to them follow.
 
-| สื่อ | เนื้อความ | หัวข้อ | ที่ใช้อยู่ |
+| Medium | Body text | Headings | Used by |
 |---|---|---|---|
-| หน้าเว็บ (CSS `line-height` คูณขนาดตัวอักษร) | 1.6 · บทความยาว 1.75–1.85 | ไทยไม่ต่ำกว่า 1.4 · หัวใหญ่ที่เป็นละตินล้วนบีบถึง 1.0–1.1 ได้ | `web-app-design` · `dynamic-website` |
-| แอปมือถือ | 1.5–1.75 · จอเล็กยิ่งต้องห่าง | ไม่ต่ำกว่า 1.4 | `mobile-app-design` |
-| แอป Windows | 20px ที่ตัว 14px สำหรับข้อความในหน้าจอ · ย่อหน้ายาว 22px | ตามสเกล Fluent | `windows-app-design` |
-| สไลด์ | ไม่ต่ำกว่า 1.5 | ไม่ต่ำกว่า 1.4 | `presentation-design` |
-| กราฟิก โพสต์ โปสเตอร์ | 1.5–1.7 | ไม่ต่ำกว่า 1.4 | `brand-kit` · `graphic-design` |
-| diagram | ไม่ต่ำกว่า 1.5 | — | `diagram-figures` |
-| Word .docx (ฟอนต์ Tahoma) | 1.3–1.35 แบบ "หลายเท่า" | ตามแม่แบบ | `branded-document-design` |
+| Web page (CSS `line-height` times font size) | 1.6 · long articles 1.75–1.85 | Thai not below 1.4 · large pure-Latin headings can go down to 1.0–1.1 | `web-app-design` · `dynamic-website` |
+| Mobile app | 1.5–1.75 · the smaller the screen, the more spacing | Not below 1.4 | `mobile-app-design` |
+| Windows app | 20px at 14px text for on-screen text · long paragraphs 22px | Follow the Fluent scale | `windows-app-design` |
+| Slides | Not below 1.5 | Not below 1.4 | `presentation-design` |
+| Graphics · posts · posters | 1.5–1.7 | Not below 1.4 | `brand-kit` · `graphic-design` |
+| Diagram | Not below 1.5 | — | `diagram-figures` |
+| Word .docx (Tahoma font) | 1.3–1.35 as "Multiple" (หลายเท่า) | Follow the template | `branded-document-design` |
 
-**Word ไม่ได้นับแบบเดียวกับ CSS:** "หลายเท่า" ใน Word คูณความสูงบรรทัดที่ฟอนต์กำหนดมาเอง ซึ่งฟอนต์ไทยเผื่อที่ให้สระและวรรณยุกต์ไว้แล้ว ตัวเลขใน Word จึงต่ำกว่าบนเว็บได้โดยบรรทัดไม่ชน · เปลี่ยนฟอนต์เมื่อไหร่ให้เปิด PDF ดูทุกหน้าใหม่
+**Word does not count the same way as CSS.** "Multiple" in Word multiplies the line height that the font itself defines, and Thai fonts already reserve room for vowels and tone marks. So the number in Word can be lower than on the web without lines colliding. Whenever you change the font, reopen the PDF and look at every page again.
 
-**หน้าเว็บต้องรับการปรับของผู้ใช้ได้:** WCAG 2.2 ข้อ 1.4.12 (ระดับ AA) กำหนดว่าเมื่อผู้ใช้ตั้งระยะบรรทัดเป็น 1.5 เท่าของขนาดตัวอักษร เนื้อหาต้องไม่ขาดหรือทับกัน · วิธีตรวจอยู่ใน `web-quality-audit`
+**Web pages must tolerate user adjustment.** WCAG 2.2 criterion 1.4.12 (level AA) requires that when the user sets line spacing to 1.5 times the font size, content must not be cut off or overlap. How to check is in `web-quality-audit`.
 
-## ตรวจ
+## Check
 
-1. รัน `--check` ดูจำนวนจุดตัดและย่อหน้าที่จัดแบบกระจาย
-2. แปลงเป็น PDF แล้วเปิดดูทุกหน้า หาบรรทัดที่ตัวอักษรห่างผิดปกติ
-3. ตัวตัดคำ (pythainlp `newmm`) ตัดผิดได้บ้าง เช่น `ท่า|ทางการ` ที่ควรเป็น `ท่าทาง|การ` · จุดตัดผิดไม่ทำให้ข้อความเปลี่ยน แค่อาจขึ้นบรรทัดใหม่กลางคำ ถ้าเจอในบรรทัดจริงให้แก้มือตรงนั้น
+1. Run `--check` to see the number of break points and the paragraphs that are distributed.
+2. Convert to PDF and open every page, looking for lines with abnormally wide letter spacing.
+3. The word segmenter (pythainlp `newmm`) can break wrongly now and then, for example `ท่า|ทางการ` where it should be `ท่าทาง|การ`. A wrong break point does not change the text, it only may start a new line mid-word. If you find it on a real line, fix that spot by hand.
 
-**ข้อควรรู้:** จุดตัดที่มองไม่เห็นอยู่ในไฟล์จริง ค้นคำใน Word ส่วนใหญ่ยังเจอ แต่ถ้าคัดลอกข้อความไปวางในระบบอื่นแล้วค้นไม่เจอ ให้รันสคริปต์กับสำเนาสำหรับพิมพ์เท่านั้น
+**Good to know:** the invisible break points are in the actual file. Searching for a word in Word mostly still finds it, but if you copy text into another system and search fails, run the script on the print copy only.
 
 
 ---
@@ -1234,61 +1234,65 @@ Applies to slide titles, figure titles, document headings, and box titles in a d
 
 Use when an answer needs prose, a table or a diagram
 
-# รูปทรงของคำตอบ
+# The shape of an answer
 
-skill นี้บอกรูปทรงและโครง ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
+This skill gives the shape and structure; every line of wording follows `human-writing` · lives only in plugin `superuser`; other plugins share it through `dependencies`
 
-> **กฎข้อเดียว:** เนื้อหามีโครงสร้างอะไร คำตอบใช้รูปทรงนั้น
-> เปรียบเทียบ → ตาราง · เชื่อมโยง → รูป · เรื่องเดียว → ประโยค
+> **One rule:** whatever structure the content has, the answer uses that shape.
+> Comparison → table · connections → figure · one thing → sentences
 
 ---
 
-## เลือกรูปทรงจากสัญญาณในคำถาม
+## Pick the shape from signals in the question
 
-| สัญญาณ | รูปทรง |
+The quoted signals are Thai user phrasings; English meanings are in brackets.
+
+| Signal | Shape |
 |---|---|
-| "แบบไหนดีกว่า" · "ต่างกันยังไง" · "มีทางเลือกอะไรบ้าง" | **ตารางเปรียบเทียบ** |
-| "อะไรต่อกับอะไร" · "ข้อมูลไหลยังไง" · "ลำดับเป็นยังไง" | **รูป** |
-| "มีอะไรบ้าง" ที่ไม่ได้เทียบกัน | **รายการหัวข้อย่อย** |
-| "ทำไม" · "แปลว่าอะไร" · เรื่องเดียวไม่มีแขนง | **ประโยคธรรมดา** |
-| ตัวเลขหลายตัวที่ต้องดูพร้อมกัน | **ตาราง** |
-| ขั้นตอนที่ต้องทำเรียงกัน | **รายการมีเลข** |
-| ทำต่อไม่ได้ · ต้องรอของจากผู้ใช้ | **รายการสั้น: ติดอะไร → ต้องการอะไร** |
+| "แบบไหนดีกว่า" · "ต่างกันยังไง" · "มีทางเลือกอะไรบ้าง" ("which is better" · "how do they differ" · "what options are there") | **Comparison table** |
+| "อะไรต่อกับอะไร" · "ข้อมูลไหลยังไง" · "ลำดับเป็นยังไง" ("what connects to what" · "how does data flow" · "what is the sequence") | **Figure** |
+| "มีอะไรบ้าง" ("what are there") when the items are not compared | **Bullet list** |
+| "ทำไม" · "แปลว่าอะไร" ("why" · "what does it mean") · one thing with no branches | **Plain sentences** |
+| Several numbers that must be seen together | **Table** |
+| Steps that must be done in order | **Numbered list** |
+| Cannot continue · must wait for something from the user | **Short list: what is blocking → what is needed** |
 
-**สัญญาณสำคัญที่สุดคือมี "สิ่งที่ถูกเทียบ" ตั้งแต่ 2 ตัวขึ้นไป** แบบนี้ให้ใช้ตาราง
-เพราะถ้าเขียนเป็นย่อหน้า ผู้อ่านต้องจำตัวแรกไว้ในหัวระหว่างอ่านตัวที่ 2
+**The most important signal is having 2 or more "things being compared"**; use a table then,
+because in a paragraph the reader must hold the first one in their head while reading the second.
 
 ---
 
-## ตารางที่อ่านง่าย
+## A table that reads easily
 
-- **คอลัมน์แรกคือสิ่งที่ถูกเทียบ** คอลัมน์ถัดไปคือแง่มุมที่เทียบ
-- **3–5 คอลัมน์** เกินนี้อ่านไม่ทัน ส่วนแถวไม่เกิน 8 แถวในคำตอบแชต
-- **ทุกช่องต้องมีเนื้อ** — ช่องว่างแปลว่าคอลัมน์นั้นไม่ควรมี หรือข้อมูลยังไม่ครบ ถ้าไม่มีข้อมูลให้เขียนว่า "ไม่มี" ตรง ๆ · ช่องที่เขียน "ขึ้นอยู่กับ" ทุกช่องก็ไม่มีเนื้อ
-- **ช่องละไม่เกิน 1 บรรทัด** ถ้ายาวกว่านั้นให้ยกไปเขียนใต้ตาราง
-- **เรียงแถวตามน้ำหนัก** ตัวที่แนะนำหรือตัวที่ใช้บ่อยที่สุดอยู่บนสุด ไม่ใช่เรียงตามตัวอักษร
-- **หัวคอลัมน์เป็นคำถามที่ผู้อ่านมีในหัว** ไม่ใช่ชื่อสาขาวิชา
+- **The first column is the thing being compared**, and the next columns are the aspects compared
+- **3–5 columns**; more than that cannot be read in time, and at most 8 rows in a chat answer
+- **Every cell must have content** — an empty cell means that column should not exist, or the data is incomplete; if there is no data, write "ไม่มี" (none) plainly · a table where every cell says "it depends" also has no content
+- **At most 1 line per cell**; if longer, move it below the table
+- **Order rows by weight**: the recommended one or the most used one on top, not alphabetical
+- **Column headings are the questions in the reader's head**, not names of academic fields
 
 ```
 ผิด: | ตัวเลือก | ประสิทธิภาพ | ความซับซ้อน |
 ถูก: | ตัวเลือก | เร็วแค่ไหน | ต้องดูแลมากไหม |
 ```
 
-**ปิดท้ายตารางด้วยข้อสรุป 1 บรรทัดเสมอ** — ตารางบอกข้อมูล ไม่ได้บอกว่าควรเลือกอะไร
+(Gloss: wrong = "Option | Performance | Complexity" · right = "Option | How fast | Does it need much upkeep".)
+
+**Always close a table with a 1-line conclusion** — a table gives data; it does not say what to choose
 
 ---
 
-## เมื่อไหร่รูปชนะตาราง
+## When a figure beats a table
 
-ใช้รูปเมื่อ**ความสัมพันธ์คือคำตอบ** — ตารางบอกคุณสมบัติได้ แต่บอกไม่ได้ว่าอะไรต่อกับอะไร
+Use a figure when **the relationship is the answer** — a table can give properties, but cannot say what connects to what.
 
-| ใช้รูป | ใช้ตาราง |
+| Use a figure | Use a table |
 |---|---|
-| อะไรต่อกับอะไร · อะไรอยู่ในอะไร | ตัวไหนดีกว่าตัวไหนในแง่ใด |
-| ลำดับที่มีทางแยกหรือวนกลับ | ขั้นตอนเรียงตรงไม่มีแขนง (ใช้รายการมีเลขพอ) |
-| สิ่งเดียวกันในหลายสถานะ | สิ่งต่างกันในแง่มุมเดียวกัน |
+| What connects to what · what sits inside what | Which is better than which, and in what respect |
+| A sequence with forks or loops back | A straight sequence of steps with no branches (a numbered list is enough) |
+| The same thing in several states | Different things on the same aspects |
 
-ในแชต **รูปเล็ก ๆ แบบ ASCII หรือ Mermaid สั้น ๆ ก็พอ** — ไม่ต้องเปิดเครื่องมือวาด
+In chat, **a small ASCII figure or a short Mermaid is enough** — no need to open a drawing tool
 
 ```
 กล้อง ──DICOM──▶ Orthanc ──▶ API ──▶ รายงาน
@@ -1296,27 +1300,29 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
                     └──▶ ที่เก็บถาวร
 ```
 
-รูปที่ต้องเป็นไฟล์จริงเพื่อใส่เอกสารหรือสไลด์ ให้ใช้ skill วาดรูปของ plugin นั้น (ถ้ามี)
+(Gloss: กล้อง = camera/scanner · รายงาน = report · ที่เก็บถาวร = permanent storage.)
+
+A figure that must be a real file to go into a document or slides uses the figure-drawing skill of that plugin (if there is one)
 
 ---
 
-## เมื่อไหร่ประโยคชนะทั้งคู่
+## When sentences beat both
 
-- คำตอบสั้นกว่า 3 บรรทัด — ตาราง 2 แถวเป็นแค่การตกแต่ง ไม่ได้อธิบายอะไร
-- คำถามที่ตอบว่า "ใช่" หรือ "ไม่ใช่" แล้วตามด้วยเหตุผล 1 ประโยค
-- เรื่องที่**เหตุผลสำคัญกว่าตัวเลือก** — ตารางจะตัดเหตุผลทิ้งเพื่อให้พอดีช่อง
+- The answer is shorter than 3 lines — a 2-row table is only decoration and explains nothing
+- A question answered "yes" or "no" followed by 1 sentence of reason
+- A matter where **the reason matters more than the options** — a table cuts the reason to fit the cell
 
-> ตารางที่มีแถวเดียวหรือ 2 แถวสั้น ๆ แปลว่าใช้ผิดรูปทรง · รูปที่วาดสิ่งที่ประโยคเดียวบอกได้ก็เช่นกัน
+> A table with one row or 2 short rows means the wrong shape was used · a figure that draws what one sentence can say is the same
 
 ---
 
-## เมื่อทำต่อไม่ได้
+## When you cannot continue
 
-ติดขัดเมื่อไหร่ → บอกเป็นข้อ ๆ แค่ 2 อย่าง: **ติดอะไร** และ **ต้องการอะไรจากผู้ใช้**
+Whenever you are blocked → list only 2 things: **what is blocking** and **what you need from the user**
 
-- ข้อละ 1 บรรทัด · ไม่เกิน 4 ข้อ
-- ไม่เล่าสาเหตุยาว ไม่ตอบเรื่องข้างเคียง ไม่วางแผนงานล่วงหน้า — รอได้ของก่อนค่อยทำ
-- ถ้ามีหลายทางให้ผู้ใช้เลือก → แต่ละทางเป็น 1 ข้อ ทางที่ง่ายสุดอยู่บนสุด
+- 1 line per item · at most 4 items
+- Do not tell the cause at length, do not answer side topics, do not plan the work ahead — wait until you have the thing, then do it
+- If there are several paths for the user to choose → each path is 1 item, the easiest on top
 
 ```
 ผิด: ย่อหน้ายาวเล่าว่า container ใหม่ · โฟลเดอร์ว่าง · OneDrive หาย · แล้ววางแผนแก้ 3 ข้อรอไว้
@@ -1326,13 +1332,15 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
    - แนบ Mockup.html มา หรือบอก path ใหม่
 ```
 
+(Gloss: wrong = a long paragraph telling that the container is new · the folder is empty · OneDrive is gone · and then planning 3 fixes while waiting · right = "Blocked on 1 thing: cannot see the file — the linked folder is empty. Need 1 thing: attach Mockup.html or give the new path.")
+
 ---
 
-## ตัวย่อ
+## Abbreviations
 
-ตัวย่อที่ใช้ในไฟล์นี้ · กฎเขียนตัวย่อ → `spell-out-abbreviations`
+Abbreviations used in this file · rules for writing abbreviations → `spell-out-abbreviations`
 
-- **ASCII** — American Standard Code for Information Interchange (การวาดรูปด้วยตัวอักษรธรรมดา)
-- **Mermaid** — ภาษาเขียนไดอะแกรมเป็นข้อความ แล้วให้โปรแกรมวาดให้
-- **DICOM** — Digital Imaging and Communications in Medicine (มาตรฐานไฟล์และการส่งภาพทางการแพทย์)
-- **API** — Application Programming Interface (ช่องทางที่โปรแกรมหนึ่งเรียกใช้อีกโปรแกรมหนึ่ง)
+- **ASCII** — American Standard Code for Information Interchange (drawing figures with plain characters)
+- **Mermaid** — a language that writes diagrams as text and lets a program draw them
+- **DICOM** — Digital Imaging and Communications in Medicine (a standard for medical image files and transfer)
+- **API** — Application Programming Interface (the channel through which one program calls another)

@@ -232,62 +232,62 @@ Ends with a README you can read in 5 minutes and a v1 version tag.
 
 ## reference: brand-guidelines.md
 
-# Brand guidelines — เอกสารแนวทางแบรนด์ฉบับเต็ม
+# Brand guidelines — the full brand guidelines document
 
-ส่วนยาวของหัวข้อ "เขียนเป็นเอกสาร" ใน `SKILL.md` · ใช้เมื่อองค์กรหรือทีมต้องมีคู่มือเต็ม: น้ำเสียง ข้อความหลัก กติกาอนุมัติงาน การเก็บไฟล์ หรือต้องซิงก์สีเข้า token
+The long part of the "write it as a document" section in `SKILL.md` · use it when an organisation or team needs a full manual: voice, key messages, work-approval rules, file storage, or needs colours synced into tokens.
 
-> **กฎข้อเดียว:** แนวทางแบรนด์ต้องเป็นไฟล์เดียว `docs/brand-guidelines.md` ที่ทุกคนและทุก agent อ่านจากที่เดียว · สีและฟอนต์ในนั้นเป็นต้นทาง ไฟล์ token ทำตามนั้น ไม่ใช่กลับกัน
+> **The one rule:** brand guidelines must be one file, `docs/brand-guidelines.md`, that every person and every agent reads from one place · the colours and fonts in it are the source, and the token file follows them, not the other way round.
 
-ลอกและปรับจาก ui-ux-pro-max-skill (MIT · commit `b7d5353` · ดู 2026-11-05) · เนื้อต้นฉบับอังกฤษคงไว้ที่ `data/upstream/` ไม่แก้ · สัญญาอนุญาต `data/upstream/LICENSE`
+Copied and adapted from ui-ux-pro-max-skill (MIT · commit `b7d5353` · viewed 2026-11-05) · the original English text is kept unchanged in `data/upstream/` · licence at `data/upstream/LICENSE`
 
-## เลือกงานให้ถูก
+## Choose the right job
 
-| งาน | ใช้ |
+| Job | Use |
 |---|---|
-| ร้านเล็ก ต้องการชุดแบรนด์อ่านจบใน 5 นาที (โลโก้ 4 แบบ สีตามบทบาท ฟอนต์ไทย) | `SKILL.md` ส่วน Workflow |
-| องค์กรหรือทีมที่ต้องมีคู่มือเต็ม: น้ำเสียง ข้อความหลัก กติกาอนุมัติงาน การเก็บไฟล์ | ไฟล์นี้ |
-| อ่านโค้ดที่มีอยู่แล้วสรุปเป็น token | `ui-craft` → `design_tokens.py` (plugin `software-development`) |
-| เขียน token สามชั้นและสร้าง CSS | `design-system` (plugin `software-development`) |
-| ตรวจคอนทราสต์ของคู่สี | ตารางตัวอย่างใน `SKILL.md` |
+| Small shop that wants a brand kit readable in 5 minutes (4 logo versions, colours by role, Thai fonts) | `SKILL.md` section Workflow |
+| Organisation or team that needs a full manual: voice, key messages, work-approval rules, file storage | This file |
+| Read existing code and summarise it into tokens | `ui-craft` → `design_tokens.py` (plugin `software-development`) |
+| Write three-layer tokens and generate CSS | `design-system` (plugin `software-development`) |
+| Check the contrast of a colour pair | The example table in `SKILL.md` |
 
-## ขั้นตอน
+## Steps
 
-1. **เริ่มจากแม่แบบ** `templates/brand-guidelines-starter.md` → คัดลอกเป็น `docs/brand-guidelines.md` แล้วเติมข้อมูลจริงของแบรนด์ · ข้อมูลที่ยังไม่มีใส่ `(รอยืนยัน)` ไม่แต่งเอง
-2. **เติมทีละหัวข้อ** ตามตารางด้านล่าง · อ่านไฟล์ต้นฉบับเฉพาะหัวข้อที่กำลังทำ
-3. **สีและฟอนต์เป็นตัวเลขที่ตรวจได้** · ฟอนต์ไทยเลือกตาม `thai-fonts.md` ไม่ใช้ตัวอย่างฟอนต์อังกฤษของต้นฉบับกับงานไทย
-4. **ซิงก์เข้า token** (เมื่อมีแอปหรือเว็บ): `node scripts/sync-brand-to-tokens.cjs` → ได้ `assets/design-tokens.json` · สร้าง `design-tokens.css` ให้อัตโนมัติถ้า skill `design-system` ติดตั้งอยู่ข้างกัน ไม่มี → สคริปต์เตือนและเขียนแค่ JSON · มี token หรือ `:root` เดิมในโปรเจกต์ สคริปต์หยุดและรายงาน ไม่เขียนทับ (`--force` เฉพาะไฟล์ที่ซิงก์เองรอบก่อน)
-5. **ตรวจงานก่อนส่ง:** `node scripts/validate-asset.cjs <ไฟล์>` (ชื่อไฟล์ ขนาด ชนิด) · `node scripts/extract-colors.cjs <ภาพ>` เทียบสีภาพกับพาเลตต์ · `node scripts/inject-brand-context.cjs` พิมพ์สรุปแบรนด์ไว้แปะใน prompt ของ agent
+1. **Start from the template** `templates/brand-guidelines-starter.md` → copy it to `docs/brand-guidelines.md` and fill in the brand's real information · information not yet available gets `(รอยืนยัน)` (pending confirmation), never made up.
+2. **Fill in one section at a time** by the table below · read the source file only for the section you are working on.
+3. **Colours and fonts are numbers that can be checked** · choose Thai fonts by `thai-fonts.md`, and do not apply the upstream's English font examples to Thai work.
+4. **Sync into tokens** (when there is an app or website): `node scripts/sync-brand-to-tokens.cjs` → gives `assets/design-tokens.json` · it creates `design-tokens.css` automatically if skill `design-system` is installed alongside, and if not, the script warns and writes only the JSON · if the project already has tokens or a `:root`, the script stops and reports, and does not overwrite (`--force` only for files it synced itself last time).
+5. **Check the work before sending:** `node scripts/validate-asset.cjs <file>` (file name, size, type) · `node scripts/extract-colors.cjs <image>` compares the image's colours with the palette · `node scripts/inject-brand-context.cjs` prints a brand summary to paste into an agent's prompt.
 
-สคริปต์ทั้ง 4 อยู่ใน `scripts/` ของ skill `brand-kit` เป็น Node ไม่ติดตั้งแพ็กเกจเพิ่ม ไม่ต่อเน็ต · อ่านและเขียนไฟล์ตามโฟลเดอร์ที่รัน (ราก project) ไม่ใช่โฟลเดอร์ skill
+All 4 scripts are in `scripts/` of skill `brand-kit`, written in Node, installing no extra packages and making no network connection · they read and write files relative to the folder they run in (the project root), not the skill folder.
 
-## หัวข้อและไฟล์ต้นฉบับ
+## Sections and source files
 
-| หัวข้อ | ไฟล์ใน `data/upstream/` |
+| Section | File in `data/upstream/` |
 |---|---|
-| น้ำเสียง | `voice-framework.md` |
-| ข้อความหลัก | `messaging-framework.md` |
-| ภาพลักษณ์ | `visual-identity.md` · `logo-usage-rules.md` |
-| สีและตัวอักษร | `color-palette-management.md` · `typography-specifications.md` |
-| ไฟล์งานและการอนุมัติ | `asset-organization.md` · `approval-checklist.md` |
-| ตรวจความสม่ำเสมอ | `consistency-checklist.md` |
-| ปรับแบรนด์แล้วซิงก์ทุกที่ | `update.md` |
-| โครงเอกสาร | `brand-guideline-template.md` |
+| Voice | `voice-framework.md` |
+| Key messages | `messaging-framework.md` |
+| Visual identity | `visual-identity.md` · `logo-usage-rules.md` |
+| Colours and type | `color-palette-management.md` · `typography-specifications.md` |
+| Work files and approval | `asset-organization.md` · `approval-checklist.md` |
+| Consistency check | `consistency-checklist.md` |
+| Change the brand and sync everywhere | `update.md` |
+| Document structure | `brand-guideline-template.md` |
 
-## ข้อจำกัดที่ต้องรู้
+## Limits to know
 
-- ต้นฉบับเขียนภาษาอังกฤษและตัวอย่างเป็นสีฟ้า-ม่วงแบบ SaaS · ใช้เป็นโครงเท่านั้น สีจริงมาจากแบรนด์ (`no-ai-look` ข้อ 1)
-- `update.md` เป็นคำสั่งของ ClaudeKit ต้นทาง (`/brand update`) ยังไม่มีคำสั่งนี้ใน marketplace เรา ให้ทำตามขั้นตอนในไฟล์ด้วยมือ
-- ไม่มีตัวสร้างโลโก้หรือไอคอน — เจ้าของเลือกไม่ใช้งานที่ agent วาดเอง ถามหาตัวอย่างอ้างอิงก่อนเสมอ (`icon-design`)
+- The upstream is written in English and its examples are SaaS-style blue-purple · use it as a skeleton only, real colours come from the brand (`no-ai-look` item 1)
+- `update.md` is a command from the original ClaudeKit (`/brand update`), which our marketplace does not have yet, so follow the steps in the file by hand
+- There is no logo or icon generator — the owner chose not to use work an agent draws itself, so always ask for reference examples first (`icon-design`)
 
-## ตรวจก่อนส่ง
+## Check before sending
 
-1. `docs/brand-guidelines.md` ไม่มีค่าที่ไม่ได้มาจากเจ้าของแบรนด์ (ไม่มีที่ไม่รู้ให้ `(รอยืนยัน)`)
-2. ทุกคู่สีข้อความ/พื้นผ่าน 4.5:1 (ข้อความปกติ)
-3. ถ้าซิงก์ token แล้ว เปิด `assets/design-tokens.json` เทียบสีกับเอกสาร 1 ครั้ง
+1. `docs/brand-guidelines.md` has no value that did not come from the brand owner (where unknown, use `(รอยืนยัน)`)
+2. Every text/background colour pair passes 4.5:1 (normal text)
+3. If tokens were synced, open `assets/design-tokens.json` and compare the colours with the document once
 
-## ที่มา
+## Sources
 
-- nextlevelbuilder/ui-ux-pro-max-skill `.claude/skills/brand` · MIT · commit `b7d5353` · ดู 2026-11-05 · ไฟล์ใน `data/upstream/` `scripts/` `templates/` คัดลอกไม่แก้
+- nextlevelbuilder/ui-ux-pro-max-skill `.claude/skills/brand` · MIT · commit `b7d5353` · viewed 2026-11-05 · files in `data/upstream/` `scripts/` `templates/` copied without changes
 
 
 ## reference: kit-template.md

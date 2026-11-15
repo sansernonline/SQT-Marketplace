@@ -1,115 +1,115 @@
-# Token map — ค่าเดียวกัน สามสแต็ก
+# Token map: the same values across three stacks
 
-> **ค่ากลาง (พื้น ข้อความ เส้น เงา ขนาด ระยะ) คือ Fluent 2 ที่วัดจาก Windows 11 จริง — คัดลอกไปใช้ได้เลย ห้ามปรับเอง**
-> ระยะ: ขอบเนื้อหา 36 กับระยะระหว่าง section 40 อยู่ในรายการยกเว้นของ `ui-craft` (`references/scales.md`) · padding · margin · gap อื่นที่ไม่มีในตารางนี้ใช้สเกล 4/8/12/16/24/32/48/64 ของ `ui-craft`
-> **กรอบหน้าต่างเป็นสีกลาง** — Mica/Acrylic ไม่ย้อมสี · accent ใช้กับขีดเลือก ปุ่มหลัก ข้อมูล และลิงก์เท่านั้น
-> **`accent` เป็นสีเดียวที่เปลี่ยนตามงาน** ให้ใช้สีแบรนด์ของลูกค้า ถ้ายังไม่มีให้ใช้ค่าเริ่มต้นของ Windows ในไฟล์นี้ เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม
-> ค่า accent ที่อยู่ในไฟล์นี้คือค่าเริ่มต้นของ Windows ใช้ได้เมื่อยังไม่มีแบรนด์ ไม่ใช่ค่าบังคับ
+> **The shared values (background, text, lines, shadows, sizes, spacing) are Fluent 2 as measured from a real Windows 11. Copy them as they are; never adjust them yourself.**
+> Spacing: the content margin 36 and the section gap 40 are in the exception list of `ui-craft` (`references/scales.md`) · any other padding · margin · gap not in this table uses the 4/8/12/16/24/32/48/64 scale of `ui-craft`
+> **The window frame is a neutral colour.** Mica/Acrylic are not tinted · accent is used only for the selection bar, the primary button, data and links
+> **`accent` is the only colour that changes per job.** Use the customer's brand colour; if there is none yet, use the Windows default in this file, write `(รอยืนยัน)` (to be confirmed), and carry on without stopping to ask
+> The accent values in this file are the Windows defaults, usable when there is no brand yet; they are not mandatory
 
-ค่าทั้งหมดวัดจาก Windows 11 dark theme จริง (สุ่มพิกเซลจากหน้า Windows Security)
-แก้ที่ `assets/fluent.css` แล้วแก้ให้ตรงกันในไฟล์ XAML/AXAML ด้วยเสมอ
+All values were measured from a real Windows 11 dark theme (pixels sampled from the Windows Security page)
+Edit `assets/fluent.css`, then always edit the XAML/AXAML files to match.
 
-## สารบัญ
+## Contents
 
-1. [สี — dark / light](#สี--dark--light)
-2. [สถานะ](#สถานะ)
-3. [Type ramp (Fluent 2) — ห้ามคิดขนาดใหม่นอกชุดนี้](#type-ramp-fluent-2--ห้ามคิดขนาดใหม่นอกชุดนี้)
-4. [รูปทรง · ระยะ · เลย์เอาต์](#รูปทรง--ระยะ--เลย์เอาต์)
-5. [จุดตัดขนาดหน้าต่าง (Fluent breakpoints)](#จุดตัดขนาดหน้าต่าง-fluent-breakpoints)
-6. [ไอคอน](#ไอคอน)
+1. [Colour: dark / light](#colour--dark--light)
+2. [Status](#status)
+3. [Type ramp (Fluent 2): never invent sizes outside this set](#type-ramp-fluent-2-never-invent-sizes-outside-this-set)
+4. [Shape · spacing · layout](#shape--spacing--layout)
+5. [Window breakpoints (Fluent breakpoints)](#window-breakpoints-fluent-breakpoints)
+6. [Icons](#icons)
 
 ---
 
-## สี — dark / light
+## Colour: dark / light
 
-| ความหมาย | Dark | Light | CSS | WinUI 3 | Avalonia |
+| Meaning | Dark | Light | CSS | WinUI 3 | Avalonia |
 |---|---|---|---|---|---|
-| พื้นหน้าต่าง | `#202020` | `#F3F3F3` | `--win-bg` | `AppBackgroundBrush` | `AppBackgroundBrush` |
-| พื้น nav / เนื้อหา | `#272727` | `#F9F9F9` | `--win-layer` | `AppLayerBrush` | `AppLayerBrush` |
-| การ์ด | `#2B2B2B` | `#FFFFFF` | `--win-card` | `AppCardBrush` | `AppCardBrush` |
-| ข้อความหลัก | `#FFFFFF` | `#1A1A1A` | `--win-text` | `TextFillColorPrimaryBrush` ✱ | `AppTextBrush` |
-| ข้อความรอง | `#CCCCCC` | `#5D5D5D` | `--win-text-secondary` | `TextFillColorSecondaryBrush` ✱ | `AppTextSecondaryBrush` |
-| ข้อความจาง | `#9D9D9D` | `#8B8B8B` | `--win-text-tertiary` | `TextFillColorTertiaryBrush` ✱ | `AppTextTertiaryBrush` |
-| accent (พื้นปุ่ม, แถบเลือก) | `#4CC2FF` | `#005FB8` | `--win-accent` | `AccentFillColorDefaultBrush` ✱ | `SystemAccentColor` ✱ |
-| accent (ตัวหนังสือ/ลิงก์) | `#99EBFF` | `#003E92` | `--win-accent-text` | `AccentTextFillColorPrimaryBrush` ✱ | `AppAccentTextBrush` |
-| ตัวอักษรบนพื้น accent | `#000000` | `#FFFFFF` | `--win-on-accent` | `TextOnAccentFillColorPrimaryBrush` ✱ | `AppOnAccentBrush` |
-| พื้นปุ่มปกติ | `#333333` | `#FFFFFF` | `--win-control` | `ControlFillColorDefaultBrush` ✱ | `AppControlBrush` |
-| แถวที่เลือกใน nav | `#FFFFFF15` | `#00000010` | `--win-subtle-selected` | `SubtleFillColorSecondaryBrush` ✱ | `AppSubtleSelectedBrush` |
-| เส้นคั่น | `#3A3A3A` | `#E5E5E5` | `--win-divider` | `AppDividerBrush` | `AppDividerBrush` |
+| Window background | `#202020` | `#F3F3F3` | `--win-bg` | `AppBackgroundBrush` | `AppBackgroundBrush` |
+| nav / content background | `#272727` | `#F9F9F9` | `--win-layer` | `AppLayerBrush` | `AppLayerBrush` |
+| Card | `#2B2B2B` | `#FFFFFF` | `--win-card` | `AppCardBrush` | `AppCardBrush` |
+| Primary text | `#FFFFFF` | `#1A1A1A` | `--win-text` | `TextFillColorPrimaryBrush` ✱ | `AppTextBrush` |
+| Secondary text | `#CCCCCC` | `#5D5D5D` | `--win-text-secondary` | `TextFillColorSecondaryBrush` ✱ | `AppTextSecondaryBrush` |
+| Faint text | `#9D9D9D` | `#8B8B8B` | `--win-text-tertiary` | `TextFillColorTertiaryBrush` ✱ | `AppTextTertiaryBrush` |
+| accent (button fill, selection bar) | `#4CC2FF` | `#005FB8` | `--win-accent` | `AccentFillColorDefaultBrush` ✱ | `SystemAccentColor` ✱ |
+| accent (text/link) | `#99EBFF` | `#003E92` | `--win-accent-text` | `AccentTextFillColorPrimaryBrush` ✱ | `AppAccentTextBrush` |
+| Text on accent fill | `#000000` | `#FFFFFF` | `--win-on-accent` | `TextOnAccentFillColorPrimaryBrush` ✱ | `AppOnAccentBrush` |
+| Normal button fill | `#333333` | `#FFFFFF` | `--win-control` | `ControlFillColorDefaultBrush` ✱ | `AppControlBrush` |
+| Selected row in nav | `#FFFFFF15` | `#00000010` | `--win-subtle-selected` | `SubtleFillColorSecondaryBrush` ✱ | `AppSubtleSelectedBrush` |
+| Divider | `#3A3A3A` | `#E5E5E5` | `--win-divider` | `AppDividerBrush` | `AppDividerBrush` |
 
-ค่า Dark คือ Windows 11 ปกติ (Mica) · แบบพื้นดำสนิทของ Windows Security (`#000000` · การ์ด `#0F0F0F` · เส้นคั่น `#2D2D2D`) เปิดด้วย `data-backdrop="black"` ใน `fluent.css`
+The Dark values are normal Windows 11 (Mica) · the pure-black style of Windows Security (`#000000` · card `#0F0F0F` · divider `#2D2D2D`) is turned on with `data-backdrop="black"` in `fluent.css`
 
-✱ = key มาตรฐานของเฟรมเวิร์ก ถ้า override แล้วคอนโทรลสำเร็จรูปจะเปลี่ยนตามทั้งแอป
-ส่วน key ที่ขึ้นต้น `App*` เป็นของเราเอง ต้องอ้างเองใน XAML
+✱ = a standard framework key; if overridden, ready-made controls change across the whole app
+Keys starting with `App*` are our own and must be referenced by hand in XAML
 
-## สถานะ
+## Status
 
-| สถานะ | Dark fg / bg | Light fg / bg | CSS |
+| Status | Dark fg / bg | Light fg / bg | CSS |
 |---|---|---|---|
-| สำเร็จ | `#6CCB5F` / `#393D1B` | `#0F7B0F` / `#DFF6DD` | `--win-success` / `-bg` |
-| เตือน | `#FCE100` / `#433519` | `#9D5D00` / `#FFF4CE` | `--win-caution` / `-bg` |
-| ผิดพลาด | `#FF99A4` / `#442726` | `#C42B1C` / `#FDE7E9` | `--win-critical` / `-bg` |
-| ข้อมูล | `#60CDFF` / `#2E2E2E` | `#005FB8` / `#F4F9FF` | `--win-info` / `-bg` |
+| Success | `#6CCB5F` / `#393D1B` | `#0F7B0F` / `#DFF6DD` | `--win-success` / `-bg` |
+| Warning | `#FCE100` / `#433519` | `#9D5D00` / `#FFF4CE` | `--win-caution` / `-bg` |
+| Error | `#FF99A4` / `#442726` | `#C42B1C` / `#FDE7E9` | `--win-critical` / `-bg` |
+| Info | `#60CDFF` / `#2E2E2E` | `#005FB8` / `#F4F9FF` | `--win-info` / `-bg` |
 
-> พื้นของ InfoBar ในโหมดมืดเป็นโทน **กลาง** ไม่ใช่สีอิ่มตัว — ถ้าใช้สีจัดเป็นพื้น
-> แถบเดียวจะแย่งสายตาจากทั้งหน้า
+> The InfoBar background in dark mode is a **neutral** tone, not a saturated colour. If a vivid colour is used as the fill,
+> a single bar competes for attention with the whole page
 
-## Type ramp (Fluent 2) — ห้ามคิดขนาดใหม่นอกชุดนี้
+## Type ramp (Fluent 2): never invent sizes outside this set
 
-| ระดับ | ขนาด/บรรทัด | น้ำหนัก | CSS class | WinUI style | ใช้กับ |
+| Level | Size/line | Weight | CSS class | WinUI style | Use for |
 |---|---|---|---|---|---|
-| Caption | 12 / 16 | 400 | `.win-caption` | `CaptionTextBlockStyle` | ป้ายกำกับ, คำอธิบายในแถวตั้งค่า |
-| Body | 14 / 20 | 400 | `.win-body` | `BodyTextBlockStyle` | เนื้อความทั้งหมด |
-| Body Strong | 14 / 20 | 600 | `.win-body-strong` | `BodyStrongTextBlockStyle` | หัวข้อย่อยในการ์ด |
-| Body Large | 18 / 24 | 400 | `.win-body-large` | `BodyLargeTextBlockStyle` | ข้อความนำ |
-| Subtitle | 20 / 28 | 600 | `.win-subtitle` | `SubtitleTextBlockStyle` | หัวข้อกลุ่มในหน้า |
-| Title | 28 / 36 | 600 | `.win-title` | `TitleTextBlockStyle` | ชื่อหน้า (หน้าละ 1 อัน) |
-| Title Large | 40 / 52 | 600 | `.win-title-large` | `TitleLargeTextBlockStyle` | หน้า hero เท่านั้น |
+| Caption | 12 / 16 | 400 | `.win-caption` | `CaptionTextBlockStyle` | Labels, descriptions in settings rows |
+| Body | 14 / 20 | 400 | `.win-body` | `BodyTextBlockStyle` | All body text |
+| Body Strong | 14 / 20 | 600 | `.win-body-strong` | `BodyStrongTextBlockStyle` | Sub-headings in cards |
+| Body Large | 18 / 24 | 400 | `.win-body-large` | `BodyLargeTextBlockStyle` | Lead text |
+| Subtitle | 20 / 28 | 600 | `.win-subtitle` | `SubtitleTextBlockStyle` | Group headings in a page |
+| Title | 28 / 36 | 600 | `.win-title` | `TitleTextBlockStyle` | Page title (1 per page) |
+| Title Large | 40 / 52 | 600 | `.win-title-large` | `TitleLargeTextBlockStyle` | Hero pages only |
 
-ฟอนต์: **Segoe UI Variable** (Text สำหรับ ≤18px, Display สำหรับ ≥20px)
-Segoe UI Variable **ไม่มีอักษรไทย** แต่ Windows จะ fallback ไป **Leelawadee UI** ให้เอง
-ส่วนบน web-wrapped ต้องเขียน fallback เองใน `font-family`
+Font: **Segoe UI Variable** (Text for ≤18px, Display for ≥20px)
+Segoe UI Variable **has no Thai letters**, but Windows falls back to **Leelawadee UI** by itself
+On web-wrapped apps you must write the fallback yourself in `font-family`
 
-## รูปทรง · ระยะ · เลย์เอาต์
+## Shape · spacing · layout
 
-| ค่า | ตัวเลข | ใช้กับ |
+| Value | Number | Use for |
 |---|---|---|
-| มุมคอนโทรล | 4px | ปุ่ม, textbox, checkbox, combo |
-| มุมการ์ด | 8px | card, expander, flyout, dialog |
-| Title bar | 48px | แบบ Windows 11 (32px = แบบคลาสสิก) |
-| ปุ่มหน้าต่าง | 46 × 48px | ย่อ/ขยาย/ปิด — ห้ามเปลี่ยนขนาด |
-| NavigationView เปิด | 320px | ค่ามาตรฐาน |
-| NavigationView ย่อ | 48px | เหลือไอคอน |
-| แถวเมนู nav | สูง 40px | ไอคอน 16px · ช่องไฟไอคอน–ข้อความ 16px |
-| แถบบอกหน้าที่เลือก | 3 × 16px มุมมน 2px | ชิดซ้ายสุด สี accent |
-| ความกว้างเนื้อหาสูงสุด | 1064px | กว้างกว่านี้ตาไล่บรรทัดยาก |
-| ขอบเนื้อหาซ้าย/ขวา | 36px | 16px เมื่อหน้าต่าง ≤ 640px · ยกเว้นสเกลระยะของ `ui-craft` |
-| ระยะระหว่าง section | 40px | ยกเว้นสเกลระยะของ `ui-craft` |
-| ปุ่ม | สูง 32px · กว้างต่ำสุด 120px | |
-| ปุ่ม/เป้าคลิกเล็กสุด | 32 × 32px | เดสก์ท็อป (ไม่ใช่ 48px แบบมือถือ) |
+| Control corner | 4px | Button, textbox, checkbox, combo |
+| Card corner | 8px | card, expander, flyout, dialog |
+| Title bar | 48px | Windows 11 style (32px = classic style) |
+| Window buttons | 46 × 48px | Minimise/maximise/close; never change the size |
+| NavigationView open | 320px | Standard value |
+| NavigationView collapsed | 48px | Icons only |
+| nav menu row | 40px tall | 16px icon · 16px gap between icon and text |
+| Selected-page indicator bar | 3 × 16px, 2px rounded corners | Flush left, accent colour |
+| Maximum content width | 1064px | Wider than this and the eye struggles to track long lines |
+| Content left/right margin | 36px | 16px when the window is ≤ 640px · an exception to the spacing scale of `ui-craft` |
+| Gap between sections | 40px | An exception to the spacing scale of `ui-craft` |
+| Button | 32px tall · minimum width 120px | |
+| Smallest button/click target | 32 × 32px | Desktop (not the 48px of mobile) |
 
-## จุดตัดขนาดหน้าต่าง (Fluent breakpoints)
+## Window breakpoints (Fluent breakpoints)
 
-| ช่วง | ชื่อ | พฤติกรรม |
+| Range | Name | Behaviour |
 |---|---|---|
-| ≤ 640px | Small | nav เป็น overlay · ขอบ 16px · คอลัมน์เดียว |
-| 641–1007px | Medium | nav ย่อเหลือไอคอน · คอลัมน์ขวาตกลงมาล่าง |
-| ≥ 1008px | Large | nav เปิดเต็ม · 2 คอลัมน์ |
+| ≤ 640px | Small | nav is an overlay · 16px margin · single column |
+| 641–1007px | Medium | nav collapses to icons · the right column drops below |
+| ≥ 1008px | Large | nav fully open · 2 columns |
 
-## ไอคอน
+## Icons
 
-ใช้ **Segoe Fluent Icons** (มากับ Windows 11) ขนาด 16px ใน nav, 20px ในหัวข้อ section,
-24px ในหัวหน้า และห้ามผสมชุดไอคอนอื่นในแอปเดียวกัน
+Use **Segoe Fluent Icons** (ships with Windows 11) at 16px in the nav, 20px in section headings,
+24px in page headers, and never mix in other icon sets within the same app
 
-| ใช้ | โค้ด | | ใช้ | โค้ด |
+| Use | Code | | Use | Code |
 |---|---|---|---|---|
-| หน้าแรก | `E80F` | | ตั้งค่า | `E713` |
-| แฮมเบอร์เกอร์ | `E700` | | ย้อนกลับ | `E72B` |
-| ย่อ / ขยาย / ปิด | `E921` `E922` `E8BB` | | รีเฟรช | `E72C` |
-| โล่ (ความปลอดภัย) | `EA18` | | เตือน | `E7BA` |
-| ผู้ใช้ | `E77B` | | ประวัติ | `E81C` |
-| เครือข่าย | `EC05` | | อัปเดต | `E895` |
+| Home | `E80F` | | Settings | `E713` |
+| Hamburger | `E700` | | Back | `E72B` |
+| Minimise / maximise / close | `E921` `E922` `E8BB` | | Refresh | `E72C` |
+| Shield (security) | `EA18` | | Warning | `E7BA` |
+| User | `E77B` | | History | `E81C` |
+| Network | `EC05` | | Update | `E895` |
 
-ดูรายการเต็ม: Microsoft Learn → "Segoe Fluent Icons font"
-เครื่องที่ไม่ใช่ Windows ไม่มีฟอนต์นี้ ไอคอนจึงกลายเป็นสี่เหลี่ยม ดังนั้น mockup ที่จะให้
-คนดูบน Mac/Linux ต้องสลับไปใช้ inline SVG แทน
+For the full list: Microsoft Learn → "Segoe Fluent Icons font"
+Non-Windows machines do not have this font, so icons turn into squares; therefore a mockup meant to be
+viewed on Mac/Linux must switch to inline SVG instead

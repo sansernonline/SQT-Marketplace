@@ -29,19 +29,19 @@ Use after the refund route in SKILL.md fails or the seller will not fix, deliver
 
 1. Write the timeline and gather evidence (above).
 2. Decide what you want: repair · replacement · refund · partial refund · compensation for a specific cost. One primary request.
-3. Check time-limited rights first → ขั้น 1 ใน SKILL.md.
+3. Check time-limited rights first → step 1 in SKILL.md.
 4. Draft the step-1 letter with the template; send in writing (platform chat, email, or registered mail ไปรษณีย์ลงทะเบียนตอบรับ for a shop with no online channel).
 5. Diary the deadline. If it passes, move one step up, attaching the earlier letter.
 6. At สคบ.: file online or call 1166; keep the complaint number; reply quickly to any request for documents.
 
-แบบจดหมายอยู่ด้านล่างของไฟล์นี้
+The letter templates are at the bottom of this file.
 
 ## Tone rules
 
 - Facts and dates, no insults, no threats beyond the next lawful step.
 - One request, one deadline.
 - Public reviews: facts only ("ordered on …, received …, seller did not reply by …"). Exaggeration can expose the user to a defamation claim (หมิ่นประมาท).
-- ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ ร้องเรียน · กำหนดเวลาเขียนเป็นจำนวนวันนับจากวันที่ได้รับหนังสือ ไม่ใช่วันที่ตายตัว · ขั้นถัดไปบอกตรง ("จะร้องเรียนต่อ … โดยไม่แจ้งอีก") ไม่ใช่ "จำเป็นต้องดำเนินการ…ต่อไป"
+- Thai text → `human-writing` `references/thai-grammar.md` section 4, the complaint register · write the deadline as a number of days from the date the letter is received, not a fixed date · state the next step directly ("จะร้องเรียนต่อ … โดยไม่แจ้งอีก"), not "จำเป็นต้องดำเนินการ…ต่อไป"
 
 ## Complaint Templates
 

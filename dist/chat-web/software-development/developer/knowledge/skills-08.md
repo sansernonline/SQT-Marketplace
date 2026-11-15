@@ -373,91 +373,91 @@ ADR Architecture Decision Record · BRD Business Requirements Document · FSD Fu
 
 ## reference: docs-site.md
 
-# เว็บเอกสาร (docs site)
+# Docs site
 
-เลือกตัวสร้างเว็บเอกสารเมื่อคู่มือหรือเอกสารนักพัฒนาต้องขึ้นเว็บ ค้นหาได้ และมีหลายรุ่น · ใช้คู่กับ `SKILL.md` ข้อ 1 (เอกสารอยู่ไหน) และแม่แบบใน [`writer-templates.md`](writer-templates.md)
-ข้อเท็จจริงตรวจ 2026-10-23 จากเอกสารทางการ · npm · PyPI · GitHub และการทดสอบจริง (ตาราง "ที่มา")
-ตัวย่อ: Application Programming Interface (API) · Software Development Kit (SDK) · Architecture Decision Record (ADR) · SIL Open Font License (OFL) · Software as a Service (SaaS) · user interface (UI)
+Pick a docs-site generator when a manual or developer documentation must go on the web, be searchable, and have several versions · use with `SKILL.md` item 1 (where the documents live) and the templates in [`writer-templates.md`](writer-templates.md).
+Facts checked 2026-10-23 from official docs · npm · PyPI · GitHub and real tests (section "Sources").
+Abbreviations: Application Programming Interface (API) · Software Development Kit (SDK) · Architecture Decision Record (ADR) · SIL Open Font License (OFL) · Software as a Service (SaaS) · user interface (UI)
 
-## 1 · ต้องมีเว็บเอกสารไหม
+## 1 · Is a docs site needed
 
-| สถานการณ์ | ใช้ |
+| Situation | Use |
 |---|---|
-| คนนอกทีมอ่านบ่อย (API สาธารณะ · SDK · คู่มือที่อัปเดตทุกรุ่น) · ต้องค้นหา · มีหลายรุ่นพร้อมกัน | เว็บเอกสาร (ไฟล์นี้) |
-| ทีมอ่านเอง | `README.md` + `docs/*.md` บน GitHub พอ |
-| ลูกค้าเซ็นรับ | `.docx` ตาม `SKILL.md` ข้อ 2.1 · เว็บเอกสารไม่แทนเอกสารส่งมอบ |
+| People outside the team read often (public API · SDK · a manual updated every release) · search needed · several versions at once | a docs site (this file) |
+| The team reads it themselves | `README.md` + `docs/*.md` on GitHub is enough |
+| The customer signs for acceptance | `.docx` per `SKILL.md` item 2.1 · a docs site does not replace the handover document |
 
-## 2 · เทียบ 4 ตัว
+## 2 · Comparing the 4 generators
 
 | | MkDocs Material | Docusaurus | Starlight | VitePress |
 |---|---|---|---|---|
-| ต้องมี | Python | Node · React | Node · Astro | Node · Vue |
-| รุ่นล่าสุด | 9.7.7 | 3.10.2 | 0.42.6 (ยังไม่ถึง 1.0) | 1.6.4 · รุ่น 2.0 ยังเป็น alpha |
-| ค้นหาในตัว | มี · lunr.js + lunr-languages (ตั้ง `lang: th` ได้) | ไม่มี · ตัวทางการคือ Algolia DocSearch · ค้นในเครื่องใช้ปลั๊กอินชุมชน | มี · Pagefind เปิดเองไม่ต้องตั้ง | มี · MiniSearch (`provider: 'local'`) หรือ Algolia |
-| หลายรุ่น (versioning) | ผ่าน `mike` ซึ่งเป็นเครื่องมือภายนอก | ในตัว `docusaurus docs:version` | ปลั๊กอินชุมชน `starlight-versions` | ไม่มี · issue #109 ยังเปิด |
-| หลายภาษา (i18n) | แปล UI ได้ (มี `th`) · เว็บหลายภาษา = โปรเจกต์ละภาษา + ตัวเลือกภาษา | ในตัว | ในตัว · มี UI ภาษาไทยมาให้ | ในตัว |
+| Requires | Python | Node · React | Node · Astro | Node · Vue |
+| Latest version | 9.7.7 | 3.10.2 | 0.42.6 (not yet 1.0) | 1.6.4 · 2.0 is still alpha |
+| Built-in search | yes · lunr.js + lunr-languages (can set `lang: th`) | no · the official one is Algolia DocSearch · local search uses a community plugin | yes · Pagefind is on by default, no setup | yes · MiniSearch (`provider: 'local'`) or Algolia |
+| Versioning | via `mike`, an external tool | built in, `docusaurus docs:version` | community plugin `starlight-versions` | none · issue #109 is still open |
+| Multiple languages (i18n) | the UI can be translated (`th` exists) · a multilingual site = one project per language + a language switcher | built in | built in · a Thai UI is included | built in |
 | licence | MIT | MIT | MIT | MIT |
 
-MkDocs Material: ผู้สร้างประกาศว่าดูแลเฉพาะจุดวิกฤตถึง 5 พ.ค. 2027 และให้ย้ายไป Zensical (รุ่น 0.0.71 · สถานะ Alpha · MIT) · โปรเจกต์ใหม่ที่ต้องอยู่หลายปีให้เขียนเรื่องนี้ลง ADR
-เลือกเร็ว: ทีม Python → MkDocs Material (วางแผนย้าย) · ต้องหลายรุ่นในตัว → Docusaurus · อยากได้เว็บเบา ตั้งค่าน้อย → Starlight · ทีม Vue → VitePress
+MkDocs Material: the maintainers announced they will maintain only critical fixes until 5 May 2027 and told users to move to Zensical (version 0.0.71 · status Alpha · MIT) · a new project that must live for years should record this in an ADR.
+Quick pick: Python team → MkDocs Material (plan a move) · need built-in versioning → Docusaurus · want a light site with little setup → Starlight · Vue team → VitePress
 
-## 3 · ค้นหาภาษาไทย ทดสอบจริง
+## 3 · Thai search, tested for real
 
-ภาษาไทยไม่เว้นวรรคระหว่างคำ ตัวค้นหาที่แยกคำด้วยช่องว่างจะหาคำกลางประโยคไม่เจอ · ทดสอบ 2026-10-23 ด้วยหน้าไทย 2 หน้า ค้น 9 คำ: ภาษี · กำกับ · สต็อก · สินค้า · ร้านค้า · ภาษีมูลค่าเพิ่ม · อิเล็กทรอนิกส์ · ตัดสต็อก · ทะเบียน
+Thai has no spaces between words, so a search engine that splits words on spaces cannot find a word in the middle of a sentence · tested 2026-10-23 with 2 Thai pages, searching 9 words: ภาษี · กำกับ · สต็อก · สินค้า · ร้านค้า · ภาษีมูลค่าเพิ่ม · อิเล็กทรอนิกส์ · ตัดสต็อก · ทะเบียน
 
-| ตัวค้นหา (รุ่นที่ทดสอบ) | ใช้ใน | เอกสารบอกเรื่องไทย | เจอ |
+| Search engine (version tested) | Used in | What the docs say about Thai | Found |
 |---|---|---|---|
-| Pagefind 1.5.2 (สร้าง index แล้วค้นในเบราว์เซอร์) | Starlight | มี `th` · ไม่มี stemming · หัวข้อตัดคำพูดถึงแค่จีน ญี่ปุ่น เกาหลี | 6/9 · พลาด กำกับ · ทะเบียน · ภาษีมูลค่าเพิ่ม |
-| lunr 2.3.9 + lunr-languages 1.23.0 `th` (ตัดคำด้วย wordcut · ทดสอบใน Node ไม่ใช่ในธีม) | MkDocs Material · ปลั๊กอิน `@easyops-cn/docusaurus-search-local` (รับทุกภาษาของ lunr-languages) | Material รับ `lang: th` | 6/9 · พลาด ร้านค้า · ตัดสต็อก · ภาษีมูลค่าเพิ่ม |
-| MiniSearch 7.2.0 ค่าตั้งต้น (prefix + fuzzy แบบ VitePress) | VitePress | VitePress ตัดคำด้วย `Intl.Segmenter` เฉพาะจีนกับญี่ปุ่น | 0/9 |
-| MiniSearch + `tokenize` ที่ใช้ `Intl.Segmenter('th', { granularity: 'word' })` | VitePress (`options.miniSearch.options.tokenize`) | ตั้ง `tokenize` เองได้ | 9/9 (ทดสอบใน Node 22 · ยังไม่ได้ทดสอบใน VitePress ทั้งเว็บ) |
-| Algolia DocSearch | Docusaurus · Starlight · VitePress | ตารางภาษาของ Algolia: Thai segmentation "Not supported" | ไม่ได้ทดสอบ |
+| Pagefind 1.5.2 (builds an index, searches in the browser) | Starlight | has `th` · no stemming · the word-segmentation section mentions only Chinese, Japanese, Korean | 6/9 · missed กำกับ · ทะเบียน · ภาษีมูลค่าเพิ่ม |
+| lunr 2.3.9 + lunr-languages 1.23.0 `th` (word splitting with wordcut · tested in Node, not in the theme) | MkDocs Material · plugin `@easyops-cn/docusaurus-search-local` (accepts every lunr-languages language) | Material accepts `lang: th` | 6/9 · missed ร้านค้า · ตัดสต็อก · ภาษีมูลค่าเพิ่ม |
+| MiniSearch 7.2.0 defaults (prefix + fuzzy as in VitePress) | VitePress | VitePress segments with `Intl.Segmenter` only for Chinese and Japanese | 0/9 |
+| MiniSearch + a `tokenize` that uses `Intl.Segmenter('th', { granularity: 'word' })` | VitePress (`options.miniSearch.options.tokenize`) | `tokenize` can be set by yourself | 9/9 (tested in Node 22 · not yet tested in a whole VitePress site) |
+| Algolia DocSearch | Docusaurus · Starlight · VitePress | Algolia's language table: Thai segmentation "Not supported" | not tested |
 
-- ผลขึ้นกับคำศัพท์ของโปรเจกต์ → ก่อนส่ง ค้นคำจริง 20 คำ แล้วจดผลใน README ของเว็บเอกสาร
-- DocSearch ฟรีเฉพาะเอกสารเทคนิคและบล็อกเทคนิคที่เปิดสาธารณะ เว็บต้องพร้อมใช้งานจริงและไม่มีเนื้อหาที่ไม่ใช่เทคนิค
+- Results depend on the project's vocabulary → before delivery, search 20 real terms and record the results in the docs site's README.
+- DocSearch is free only for technical documentation and technical blogs that are public. The site must be live and have no non-technical content.
 
-## 4 · ที่วาง
+## 4 · Hosting
 
 | | GitHub Pages | Cloudflare |
 |---|---|---|
-| ราคา | ฟรี · บัญชีฟรีต้องใช้ repo public | Pages มีแผนฟรี · Workers static assets: คำขอไฟล์ static ฟรีไม่จำกัด |
-| ขีดจำกัด | เว็บ ≤ 1 GB · bandwidth 100 GB/เดือน (soft) · build 10 ครั้ง/ชม. (soft · ไม่นับ build ผ่าน GitHub Actions) · deploy เกิน 10 นาทีล้ม | Pages แผนฟรี: 500 build/เดือน · build ทีละ 1 · ไม่เกิน 20 นาที · 20,000 ไฟล์ · ไฟล์ละ ≤ 25 MiB |
-| เงื่อนไข | ห้ามใช้เป็นโฮสต์ฟรีของธุรกิจออนไลน์หรือ SaaS · เว็บเป็นสาธารณะแม้ repo เป็น private | หน้า Pages บอกให้โปรเจกต์ใหม่เริ่มที่ Workers |
+| Price | free · a free account needs a public repo | Pages has a free plan · Workers static assets: static file requests are free and unlimited |
+| Limits | site ≤ 1 GB · bandwidth 100 GB/month (soft) · build 10 times/hour (soft · builds through GitHub Actions do not count) · a deploy over 10 minutes fails | Pages free plan: 500 builds/month · 1 build at a time · max 20 minutes · 20,000 files · each file ≤ 25 MiB |
+| Conditions | must not be used as free hosting for an online business or SaaS · the site is public even if the repo is private | the Pages page tells new projects to start on Workers |
 
-เอกสารที่ห้ามคนนอกเห็นไม่ขึ้นเว็บสาธารณะ เก็บเป็น `docs/*.md` ใน repo (วิธีจำกัดสิทธิ์ผู้อ่านของแต่ละเจ้ายังไม่ได้ตรวจ)
+A document that outsiders must not see does not go on a public site. Keep it as `docs/*.md` in the repo (how each host restricts readers has not been checked).
 
-## 5 · ฟอนต์ไทย
+## 5 · Thai fonts
 
-- ใช้ฟอนต์เดียวกับแอป: `Inter` + `Noto Sans Thai` (`web-app-design` → `references/tokens.md`) · ตัวเลือกอื่นใน Google Fonts ที่มีอักษรไทยและเป็น OFL: Sarabun · IBM Plex Sans Thai · Anuphan
-- โหลดผ่าน Google Fonts CSS2 API ใส่ `display=swap` · API แยกบล็อก `/* thai */` ด้วย `unicode-range: U+0E01-0E5B …` ให้เอง เบราว์เซอร์จึงโหลดเฉพาะส่วนที่หน้าใช้ (ดูจาก CSS ที่ API ส่งกลับ 2026-10-23)
-- line-height ของภาษาไทยบวก 0.1 จากค่าของอังกฤษ (`ui-craft` ข้อ 2)
-- ตั้งฟอนต์ตามช่องที่ธีมเปิดให้ · ชื่อตัวตั้งค่าและตัวแปร CSS ของแต่ละธีมยังไม่ได้ตรวจ
+- Use the same fonts as the app: `Inter` + `Noto Sans Thai` (`web-app-design` → `references/tokens.md`) · other Google Fonts choices that have Thai letters and are OFL: Sarabun · IBM Plex Sans Thai · Anuphan
+- Load through the Google Fonts CSS2 API with `display=swap` · the API splits out the `/* thai */` block with `unicode-range: U+0E01-0E5B …` by itself, so the browser loads only the parts the page uses (seen in the CSS the API returned 2026-10-23)
+- Thai line-height is the English value plus 0.1 (`ui-craft` item 2)
+- Set the font in the slot the theme exposes · the setting names and CSS variables of each theme have not been checked
 
-## 6 · เนื้อหาอยู่ใน repo ข้างโค้ด
+## 6 · Content lives in the repo beside the code
 
-- ต้นฉบับของเว็บเอกสารอยู่ในโฟลเดอร์โค้ด `<project-name>/docs/` พร้อมไฟล์ตั้งค่าของตัวสร้าง (ผังแบบ A ของ `project-bootstrap` ข้อ 1) · โค้ดกับคู่มือเปลี่ยนใน pull request เดียวกัน
-- โปรเจกต์แบบ B: `.docx` ส่งมอบ · ADR · runbook · BUILD-PLAN ยังอยู่ `docs/` ที่ราก · เว็บเอกสารรับแค่ของที่คนนอกอ่าน (คู่มือ · tutorial · API reference · release notes) · เนื้อหาเดียวกันห้ามอยู่ 2 ที่
-- build ใน Continuous Integration (CI) ทุก pull request และ deploy เมื่อ merge (`cicd-and-release`)
-- ข้อยกเว้นของรากประกาศใน README ของโฟลเดอร์โค้ด (`SKILL.md` ข้อ 1)
+- The docs site source lives in the code folder `<project-name>/docs/` with the generator's config file (layout A of `project-bootstrap` item 1) · code and manual change in the same pull request
+- Type B projects: the handover `.docx` · ADR · runbook · BUILD-PLAN stay in `docs/` at the root · the docs site takes only what outsiders read (manual · tutorial · API reference · release notes) · the same content must never live in 2 places
+- Build in Continuous Integration (CI) on every pull request and deploy on merge (`cicd-and-release`)
+- An exception to the root is declared in the code folder's README (`SKILL.md` item 1)
 
-## ที่มา
+## Sources
 
-| เรื่อง | URL หรือหลักฐาน (2026-10-23) |
+| Topic | URL or evidence (2026-10-23) |
 |---|---|
-| MkDocs Material | https://squidfunk.github.io/mkdocs-material/ (สถานะ · Zensical) · .../plugins/search/ · .../setup/changing-the-language/ · .../setup/setting-up-versioning/ |
+| MkDocs Material | https://squidfunk.github.io/mkdocs-material/ (status · Zensical) · .../plugins/search/ · .../setup/changing-the-language/ · .../setup/setting-up-versioning/ |
 | Docusaurus | https://docusaurus.io/docs/search · https://docusaurus.io/docs/versioning · https://docusaurus.io/docs/i18n/introduction |
 | Starlight | https://starlight.astro.build/guides/site-search/ · .../guides/i18n/ · .../resources/plugins/ |
 | VitePress | https://vitepress.dev/reference/default-theme-search · https://vitepress.dev/guide/i18n · https://github.com/vuejs/vitepress/issues/109 |
 | Pagefind | https://pagefind.app/docs/multilingual/ |
-| lunr-languages | https://github.com/MihaiValentin/lunr-languages (ไฟล์ `lunr.th.js` ใช้ wordcut) |
+| lunr-languages | https://github.com/MihaiValentin/lunr-languages (file `lunr.th.js` uses wordcut) |
 | MiniSearch | https://lucaong.github.io/minisearch/types/MiniSearch.Options.html |
 | Algolia | https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/ · https://docsearch.algolia.com/docs/who-can-apply/ |
-| ปลั๊กอินค้นในเครื่องของ Docusaurus | https://github.com/easyops-cn/docusaurus-search-local |
-| รุ่นและ licence | registry.npmjs.org · pypi.org · api.github.com (Zensical: GitHub = MIT · PyPI = Alpha) |
+| Docusaurus local-search plugin | https://github.com/easyops-cn/docusaurus-search-local |
+| Versions and licence | registry.npmjs.org · pypi.org · api.github.com (Zensical: GitHub = MIT · PyPI = Alpha) |
 | GitHub Pages | https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits · .../creating-a-github-pages-site |
 | Cloudflare | https://developers.cloudflare.com/pages/platform/limits/ · https://developers.cloudflare.com/pages/ · https://developers.cloudflare.com/workers/static-assets/billing-and-limitations/ |
-| Google Fonts | https://developers.google.com/fonts/docs/css2 · `METADATA.pb` ใน https://github.com/google/fonts · CSS จริงจาก fonts.googleapis.com |
-| ทดสอบค้นไทย | Pagefind ผ่าน `npx pagefind@1.5.2` + เบราว์เซอร์ · lunr และ MiniSearch ผ่าน Node 22 · หน้าทดสอบ 2 หน้า คำค้น 9 คำในข้อ 3 |
+| Google Fonts | https://developers.google.com/fonts/docs/css2 · `METADATA.pb` in https://github.com/google/fonts · real CSS from fonts.googleapis.com |
+| Thai search test | Pagefind via `npx pagefind@1.5.2` + a browser · lunr and MiniSearch via Node 22 · 2 test pages, the 9 search words in item 3 |
 
 
 ## reference: ecosystem.md
@@ -554,17 +554,17 @@ MkDocs Material: ผู้สร้างประกาศว่าดูแล
 
 ## reference: writer-templates.md
 
-# แม่แบบของ technical-writer — README · tutorial · API reference · release notes
+# technical-writer templates — README · tutorial · API reference · release notes
 
-**สารบัญ:** README · Tutorial Template · API Reference Template · Release Notes Template
+**Contents:** README · Tutorial Template · API Reference Template · Release Notes Template
 
-เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+Open when you actually have to write this kind of document · put `(รอยืนยัน)` (to be confirmed) on any part you do not know.
 
 ## Standard Outputs
 
 ### README
 
-ไม่มีแม่แบบ README ที่นี่ — ใช้แม่แบบเดียวของ `project-bootstrap` (`SKILL.md` ข้อ 2 และ `assets/starter-files.md`) โครง 15 หัวข้อ (9 มีเสมอ · 6 มีเมื่อโปรเจกต์มีของนั้น) อยู่ใน `references/readme-skeleton.md` · คำสั่งต่อภาษาใน `references/readme-by-stack.md`
+There is no README template here — use the single template of `project-bootstrap` (`SKILL.md` item 2 and `assets/starter-files.md`). The 15-section skeleton (9 always present · 6 present when the project has that thing) is in `references/readme-skeleton.md` · commands per language are in `references/readme-by-stack.md`.
 
 ### Tutorial Template
 
@@ -676,7 +676,7 @@ const res = await fetch('/api/v1/resource', {
 
 ### Release Notes Template
 
-> Breaking Changes ต้องอยู่ก่อนหัวข้ออื่นเสมอ (ต่อจาก Highlights) — กฎเต็มของ release notes อยู่ใน skill `release-notes`
+> Breaking Changes must always come before the other sections (right after Highlights) — the full release notes rules are in the skill `release-notes`.
 
 ````markdown
 # Release v2.1.0 — YYYY-MM-DD
@@ -733,9 +733,9 @@ command --new-flag
 Thanks to: @alice, @bob, @charlie
 ````
 
-### Release Notes Template (ภาษาไทย)
+### Release Notes Template (Thai)
 
-> โครงเดียวกับฉบับอังกฤษ · ถ้อยคำใช้ระดับ ข่าว (`human-writing` `references/thai-grammar.md` หัวข้อ 4): ไม่มีบุรุษที่ 1 · แต่ละบรรทัด ประธาน + กริยา + กรรม · ตัวเลขต้องวัดจริง ไม่มีก็ไม่ใส่ · ตัวอย่าง ถูก/ผิด อยู่ใน skill `release-notes` ข้อ 4
+> Same structure as the English version · wording at news register (`human-writing` `references/thai-grammar.md` section 4): no first person · each line has subject + verb + object · numbers must be measured, and if there are none, leave them out · right/wrong examples are in the skill `release-notes` item 4.
 
 ````markdown
 # เวอร์ชัน 2.1.0 — YYYY-MM-DD
@@ -781,56 +781,56 @@ Thanks to: @alice, @bob, @charlie
 
 Use when a task writes temporary files into a project
 
-# ระเบียบไฟล์ชั่วคราว
+# Temporary file discipline
 
-> **กฎข้อเดียว:** อะไรที่ไม่ใช่ผลงานจริง ต้องอยู่ใน `_to_delete/` เท่านั้น
-> ห้ามวางไว้ที่รากโปรเจกต์ ห้ามวางปนกับไฟล์งาน
+> **One rule:** anything that is not a real work product must live only in `_to_delete/`.
+> Never leave it in the project root, and never mix it with work files.
 
 ---
 
-## เลือกที่วาง
+## Choose where to put it
 
-| ไฟล์นั้นคืออะไร | วางที่ |
+| What the file is | Put it in |
 |---|---|
-| ของชั่วคราวของงานในโปรเจกต์ผู้ใช้ (ภาพตรวจ · log · สคริปต์ครั้งเดียว · ผลรัน) | `_to_delete/<โฟลเดอร์งาน>/` ที่รากโปรเจกต์ (หัวข้อ "วิธีใช้") ผู้ใช้จะได้ตรวจย้อนได้ |
-| ขั้นกลางที่ไม่ผูกกับโปรเจกต์ใด (ไม่ได้ทำงานในโฟลเดอร์ผู้ใช้) | พื้นที่ทำงานของเซสชัน |
-| ผลงานที่ผู้ใช้จะเก็บไว้ | โฟลเดอร์ปลายทางของงานนั้น |
+| Temporary items of work in the user's project (check images · logs · one-off scripts · run results) | `_to_delete/<task folder>/` at the project root (section "How to use"), so the user can check back later |
+| An intermediate step not tied to any project (not working in the user's folder) | The session's workspace |
+| A work product the user will keep | The destination folder of that work |
 
-**รากโปรเจกต์ต้องไม่มีไฟล์ชั่วคราวเลย**
-- ถ้า agent สร้างไฟล์ชั่วคราวแล้วไปตกที่ราก (log · ภาพ · สคริปต์ลอง) ให้ย้ายเข้า `_to_delete/` ทันที
-- ถ้าไม่แน่ใจว่าผู้ใช้สร้างหรือใช้ไฟล์นั้นอยู่ ไม่ต้องย้ายเอง ให้บอกผู้ใช้
-- รันจากในโฟลเดอร์ย่อย (เช่น โฟลเดอร์โค้ด ดู `project-bootstrap` ใน plugin `software-development`) ให้เขียนของชั่วคราวไปที่ `_to_delete/` ของ**รากโปรเจกต์** ไม่สร้างซ้อน
-
----
-
-## อะไรคือไฟล์ชั่วคราว
-
-- ไฟล์บีบอัดที่ส่งผ่านแชทเพื่อเอาไฟล์ลงเครื่อง และโฟลเดอร์ที่แตกออกมา
-- ภาพที่เรนเดอร์ไว้ตรวจงาน · ภาพหน้าจอ · ไฟล์ตัวอย่างที่ทำไว้เทียบ
-- สำเนาสำรองของไฟล์ที่กำลังแก้ · ไฟล์ `.bak` `.old` `.tmp` `ไฟล์ (1).xlsx`
-- สคริปต์ที่เขียนขึ้นใช้ครั้งเดียว · ไฟล์ log จากการรันครั้งเดียว
-- ไฟล์รูปแบบกลางระหว่างแปลง เช่น `.svg` ที่แปลงต่อเป็น `.png` แล้ว
-- **เอกสารที่แปลงรูปแบบมาเพื่อให้อ่านหรือประมวลผลง่าย** — `.docx` หรือ `.pdf` ที่แปลงเป็น `.md`
-  ต้นฉบับคือของจริง ส่วนตัวที่แปลงคือของชั่วคราว **ห้ามวางปนกันในโฟลเดอร์เอกสาร**
-  ไม่งั้นอีก 3 เดือนไม่มีใครรู้ว่าไฟล์ไหนคือฉบับที่ลูกค้าเซ็นรับ
-- เวอร์ชันเก่าของไฟล์ที่เพิ่งแทนที่ไป
-
-**ไฟล์ที่เลิกใช้แล้วก็คือไฟล์ชั่วคราว** — เมื่อแทนที่ไฟล์เก่าด้วยของใหม่แล้ว ให้ย้ายตัวเก่าเข้า `_to_delete/`
-ไม่ทิ้งไว้ข้าง ๆ กัน
+**The project root must hold no temporary files at all.**
+- If an agent creates a temporary file and it lands in the root (log · image · trial script), move it into `_to_delete/` right away
+- If you are not sure whether the user created or is using that file, do not move it yourself; tell the user
+- When running from inside a subfolder (for example the code folder, see `project-bootstrap` in plugin `software-development`), write temporary things to the **project root's** `_to_delete/`, and do not create a nested one
 
 ---
 
-## อะไรไม่ใช่
+## What counts as a temporary file
 
-- ผลงานที่ผู้ใช้ขอ
-- ไฟล์ต้นทางของผลงาน เช่น ไฟล์ออกแบบ `.psd` `.fig` · `.py` ที่ผลิตรูป · `.html` ที่เป็นแหล่งที่มาของภาพ —
-  **ปีหน้าจะแก้ก็ต้องมีไฟล์ต้นทาง** จึงเก็บไว้ในโฟลเดอร์ย่อยข้างผลงาน ไม่ใช่ `_to_delete/`
-- ไฟล์ที่ผู้ใช้วางไว้เอง แม้จะดูเหมือนขยะ — **ห้ามย้ายของผู้ใช้โดยไม่ถาม**
-- output ของเครื่องมือ build (`build/` · `node_modules/`) — ปล่อยไว้ ตรวจว่าอยู่ใน `.gitignore` และห้ามย้ายเข้า `_to_delete/`
+- A compressed file sent through chat to get files onto the machine, and the folder it was extracted to
+- Images rendered to check work · screenshots · sample files made for comparison
+- Backup copies of a file being edited · files `.bak` `.old` `.tmp` `ไฟล์ (1).xlsx` (`ไฟล์` = "file")
+- Scripts written for one use · log files from a one-time run
+- Intermediate-format files during a conversion, such as an `.svg` already converted to `.png`
+- **Documents converted to another format to make them easier to read or process** — a `.docx` or `.pdf` converted to `.md`
+  The original is the real thing and the converted one is temporary. **Never mix them in the documents folder**,
+  or in 3 months nobody knows which file is the version the client signed off
+- Old versions of a file that was just replaced
+
+**A file no longer in use is a temporary file** — when you replace an old file with a new one, move the old one into `_to_delete/`
+and do not leave them side by side.
 
 ---
 
-## วิธีใช้
+## What does not count
+
+- A work product the user asked for
+- Source files of a work product, such as design files `.psd` `.fig` · a `.py` that produces an image · an `.html` that is the source of an image —
+  **if you will edit next year, you need the source file**, so keep it in a subfolder beside the work product, not in `_to_delete/`
+- Files the user placed themselves, even if they look like junk — **never move the user's things without asking**
+- Output of build tools (`build/` · `node_modules/`) — leave it, check that it is in `.gitignore`, and never move it into `_to_delete/`
+
+---
+
+## How to use
 
 ```
 โปรเจกต์/
@@ -845,52 +845,54 @@ Use when a task writes temporary files into a project
     └── superuser-lock/            ← ของเครื่องมือ ไม่ใช่ของงาน
 ```
 
-- มีโฟลเดอร์ `_to_delete/` เดียวที่**รากของโปรเจกต์** · ข้างในแบ่ง **1 โฟลเดอร์ต่อ 1 งาน** ของจะได้ไม่ปนกัน และลบทั้งงานได้ในครั้งเดียว
-- **ชื่อโฟลเดอร์งาน** `YYYY-MM-DD-<เรื่อง>` · วันที่คือวันเริ่มงาน · เรื่องเป็นอังกฤษตัวเล็กคั่น `-` ยาว 2–5 คำ บอกว่าทำอะไร (`2026-11-06-temp-task-folders` ไม่ใช่ `2026-11-06-task1`) · เรียงตามชื่อแล้วได้ลำดับเวลาเลย
-- **ตั้งโฟลเดอร์ตอนเริ่มงาน** ก่อนเขียนไฟล์ชั่วคราวไฟล์แรก · งานเดิมที่สั่งต่อหลายรอบหรือข้าม session ใช้โฟลเดอร์เดิม (หาจาก `find _to_delete -mindepth 1 -maxdepth 1 -type d -printf '%f\n'`) · เรื่องใหม่ตั้งโฟลเดอร์ใหม่ · งานแตกให้ลูกทีม ลูกทีมเขียนลงโฟลเดอร์งานของหัวหน้า บอก path ในใบสั่งงาน
-- **ห้ามวางไฟล์ไว้ตรง `_to_delete/`** · ยกเว้นของที่เครื่องมือหรือ hook สร้างเองที่ตำแหน่งตายตัว (`superuser-lock/` · `STOP`) และแผนลบ `delete-plan.txt` (สคริปต์ตรวจบังคับให้อยู่ตรง `_to_delete/`) ซึ่งไม่ย้าย
-- **skill อื่นเขียน `_to_delete/<x>`** (เช่น `_to_delete/screenshots/` · `_to_delete/deck-check`) ให้อ่านเป็น `_to_delete/<โฟลเดอร์งาน>/<x>` เสมอ · สคริปต์ที่มีค่าเริ่มต้นเป็น `_to_delete/...` ส่ง `--out` ชี้เข้าโฟลเดอร์งาน
-- โฟลเดอร์ย่อยมาตรฐาน**ในโฟลเดอร์งาน** ที่ skill อื่นใช้ — ใช้ชื่อเดียวกันนี้เท่านั้น:
+(Gloss: `โปรเจกต์/` = project · `ผลงานจริง` = real work products · `ของเครื่องมือ ไม่ใช่ของงาน` = belongs to the tool, not to a task.)
 
-  | โฟลเดอร์ย่อย | ใส่อะไร | skill ที่ใช้ |
+- There is exactly one `_to_delete/` folder at the **project root** · inside, **1 folder per task**, so things do not mix and a whole task can be deleted at once
+- **Task folder name** `YYYY-MM-DD-<topic>` · the date is the day the task started · the topic is lowercase English joined by `-`, 2–5 words, saying what is being done (`2026-11-06-temp-task-folders`, not `2026-11-06-task1`) · sorting by name gives time order directly
+- **Create the folder when the task starts**, before writing the first temporary file · a task that continues over several rounds or across sessions uses the same folder (find it with `find _to_delete -mindepth 1 -maxdepth 1 -type d -printf '%f\n'`) · a new topic gets a new folder · when the task is split to sub-agents, they write into the lead's task folder, and the path is given in the brief
+- **Never place a file directly in `_to_delete/`** · except things a tool or hook creates itself at a fixed location (`superuser-lock/` · `STOP`) and the delete plan `delete-plan.txt` (the check script requires it directly in `_to_delete/`), which do not move
+- **When another skill writes `_to_delete/<x>`** (for example `_to_delete/screenshots/` · `_to_delete/deck-check`), always read it as `_to_delete/<task folder>/<x>` · for a script whose default is `_to_delete/...`, pass `--out` pointing into the task folder
+- Standard subfolders **inside the task folder** that other skills use — use only these names:
+
+  | Subfolder | What goes in | Skill that uses it |
   |---|---|---|
-  | `drafts/` | ร่างชั่วคราวที่ยังไม่ใช่ต้นฉบับ (ต้นฉบับ markdown ที่ render ซ้ำอยู่ถาวรที่ `docs/src/<เรื่อง>.md`) | `superuser:document-naming` |
-  | `attempts-<เรื่อง>/` | งานของแต่ละตัวที่แข่งกัน | [`parallel-attempts-pick-best`](../parallel-attempts-pick-best/SKILL.md) |
-  | `screenshots/` | ภาพเรนเดอร์ของดีไซน์ mockup หรือภาพตรวจงาน | skill ออกแบบทุกตัว |
-  | `logs/` | log จากการรันครั้งเดียว | ทุกตัว |
+  | `drafts/` | Temporary drafts that are not the original (the markdown original that is re-rendered lives permanently at `docs/src/<topic>.md`) | `superuser:document-naming` |
+  | `attempts-<topic>/` | Work of each competing agent | [`parallel-attempts-pick-best`](../parallel-attempts-pick-best/SKILL.md) |
+  | `screenshots/` | Rendered images of a design mockup or images for checking work | every design skill |
+  | `logs/` | Logs from a one-time run | every skill |
 
-  งานโค้ด (`verify-runs/` · `security/` · `check/`) → ส่วนเพิ่มใน plugin `software-development` → `superuser` → `references/code-extensions.md`
-- ใส่ `_to_delete/` ลงใน `.gitignore` ทุกโปรเจกต์ที่ใช้ git — ตรวจก่อน ถ้ายังไม่มีให้เพิ่ม
-- โปรเจกต์ที่ README ระบุโฟลเดอร์ชั่วคราวอื่นไว้แล้ว (เช่น `tmp/` `scratch/`) → ใช้ตามนั้น แล้วจด 1 แถวในตาราง "การตัดสินใจ" · ไม่มีระบุ → `_to_delete/` · ห้ามใช้ `.cache/` (เป็นของเครื่องมือ ปนกับสถานะของเครื่องมือได้)
+  Code work (`verify-runs/` · `security/` · `check/`) → the addition in plugin `software-development` → `superuser` → `references/code-extensions.md`
+- Put `_to_delete/` into `.gitignore` in every project that uses git — check first, and add it if missing
+- A project whose README already names another temporary folder (for example `tmp/` `scratch/`) → follow that, then record 1 row in the "การตัดสินใจ" (decisions) table · none named → `_to_delete/` · never use `.cache/` (it belongs to tools and can mix with tool state)
 
 ---
 
-## ตอนจบงาน
+## At the end of the work
 
-1. **บอกว่าของชั่วคราวของงานนี้อยู่โฟลเดอร์ไหน** เป็นบรรทัดเดียว (`_to_delete/2026-11-06-login-page-redesign/`) ไม่ต้องลงรายการยาว
-2. **ห้ามลบเอง** — ลบเมื่อผู้ใช้สั่งเท่านั้น การลบในโฟลเดอร์ผู้ใช้กู้คืนไม่ได้
-3. **ผู้ใช้สั่งลบ** → ย้ายเข้า `_to_delete/` ก่อน (ตามกฎกลาง) แล้วบอกผู้ใช้ · ลบจริงเฉพาะของใน `_to_delete/` เมื่อผู้ใช้สั่งตรง ๆ โดยทำ 3 ขั้น:
-   1. เขียนแผนลงไฟล์ `_to_delete/delete-plan.txt` 1 พาธต่อบรรทัด นับจากรากโปรเจกต์ (`_to_delete/2026-11-06-login-page-redesign`) · ลบทั้งงานใส่โฟลเดอร์งานบรรทัดเดียว
-   2. รัน `node <โฟลเดอร์ skill นี้>/scripts/delete-plan-check.mjs _to_delete/delete-plan.txt` → พิมพ์รายการลบกับรายการเก็บมาเทียบ · พาธไหนหลุดออกนอก `_to_delete/` (`..` · พาธเต็ม · ลิงก์ชี้ออกข้างนอก) จะ exit 1 ห้ามลบ
-   3. ผ่านแล้วจึงลบตามรายการ "ลบ" ทีละบรรทัด สคริปต์ไม่ลบเอง · อย่าสร้างรายการจาก `ls` (บน Windows อาจมี `/` ต่อท้ายชื่อ ดู `context-budget` → [`windows-shell`](../context-budget/references/windows-shell.md))
-4. **ก่อนบอกว่าจบงาน** รัน `node <โฟลเดอร์ skill นี้>/scripts/root-check.mjs <รากโปรเจกต์>` → ลงรายการของที่รากนอกรายการอนุญาต (`ref` `docs` `mockup` `assets` `qa` `_to_delete` `.claude` โฟลเดอร์โค้ด และของใน `.gitignore`) · ของที่โปรเจกต์ตั้งใจวางไว้ที่ราก ใส่ `--allow README.md,LICENSE`
+1. **Say where this task's temporary things are**, in one line (`_to_delete/2026-11-06-login-page-redesign/`), with no long list
+2. **Never delete on your own** — delete only when the user orders it; deletion in the user's folder cannot be undone
+3. **When the user orders deletion** → move into `_to_delete/` first (per the central rule), then tell the user · actually delete only things inside `_to_delete/` when the user orders it directly, in 3 steps:
+   1. Write the plan into the file `_to_delete/delete-plan.txt`, 1 path per line, counted from the project root (`_to_delete/2026-11-06-login-page-redesign`) · to delete a whole task, put the task folder on one line
+   2. Run `node <this skill's folder>/scripts/delete-plan-check.mjs _to_delete/delete-plan.txt` → it prints the delete list and the keep list to compare · any path that escapes `_to_delete/` (`..` · full path · a link pointing outside) makes it exit 1, and you must not delete
+   3. Only after it passes, delete line by line from the "delete" list; the script does not delete by itself · never build the list from `ls` (on Windows names may end in `/`, see `context-budget` → [`windows-shell`](../context-budget/references/windows-shell.md))
+4. **Before saying the work is finished**, run `node <this skill's folder>/scripts/root-check.mjs <project root>` → it lists things in the root outside the allowed list (`ref` `docs` `mockup` `assets` `qa` `_to_delete` `.claude` the code folder, and things in `.gitignore`) · for things the project deliberately keeps in the root, add `--allow README.md,LICENSE`
 
 ---
 
 ## Anti-patterns
 
-- **แตกไฟล์ zip ลงรากโปรเจกต์** แล้วค่อยเก็บกวาดทีหลัง — ทีหลังไม่เคยมาถึง
-- **ตั้งชื่อ `ไฟล์-v2` `ไฟล์-final` `ไฟล์-ใหม่จริง`** วางไว้ข้างของเดิม
-- **ลบไฟล์ผู้ใช้เพราะคิดว่าไม่ใช้แล้ว**
-- **ทิ้งไฟล์ชั่วคราวของงานในโปรเจกต์ไว้ในพื้นที่เซสชัน** — เซสชันจบแล้วผู้ใช้ตรวจย้อนไม่ได้
-- **ตั้งโฟลเดอร์ย่อยชื่อใหม่ให้ของเดิม** (`shots/` `img-check/`) — ใช้ชื่อในตารางข้างบน
-- **วางไฟล์ตรง `_to_delete/` หรือใช้ `screenshots/` ร่วมกันหลายงาน** — อีกสัปดาห์ไม่มีใครรู้ว่าภาพไหนของงานไหน ลบงานเดียวก็ไม่ได้
-- **เก็บไฟล์ต้นทางของผลงานไว้ใน `_to_delete/`** — นั่นไม่ใช่ของชั่วคราว
-- **ทิ้งไฟล์ค้างโดยไม่บอก** — ผู้ใช้จะมาเจอเองอีกหลายเดือนถัดไป
+- **Extracting a zip into the project root** and cleaning up later — later never comes
+- **Naming files `file-v2` `file-final` `file-really-new`** (Thai: `ไฟล์-v2` `ไฟล์-final` `ไฟล์-ใหม่จริง`) and leaving them beside the original
+- **Deleting a user's file because you think it is no longer used**
+- **Leaving a project task's temporary files in the session workspace** — after the session ends the user cannot check back
+- **Making a new subfolder name for an existing kind of thing** (`shots/` `img-check/`) — use the names in the table above
+- **Placing files directly in `_to_delete/` or sharing `screenshots/` across several tasks** — a week later nobody knows which image belongs to which task, and you cannot delete one task alone
+- **Keeping a work product's source file in `_to_delete/`** — that is not temporary
+- **Leaving stray files without telling anyone** — the user will find them on their own months later
 
 ---
 
-ตัวย่อและศัพท์เทคนิคในข้อความถึงผู้ใช้ เขียนตาม `spell-out-abbreviations`
+Abbreviations and technical terms in messages to the user follow `spell-out-abbreviations`.
 
 
 ---

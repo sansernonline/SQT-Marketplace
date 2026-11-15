@@ -2,27 +2,27 @@
 
 Use when writing or testing Python code
 
-# stack-python — Python ที่อ่านง่าย ถูกชนิด รันซ้ำได้
+# stack-python — Python that is easy to read, correctly typed, and safe to rerun
 
-ใช้เครื่องมือเดียวกับที่ repo ใช้อยู่ และทุก diff ต้องผ่าน ruff · type check · pytest ก่อนส่ง ไฟล์นี้เก็บเฉพาะเรื่องของ Python
-เรื่องทั่วไปอยู่ที่อื่น: เขียนให้น้อยดู `lazy-coding` · ตั้งชื่อดู `readable-code` · log ดู `logging-standards` · จับ error ดู `error-handling-patterns`
+Use the same tools the repo already uses, and every diff must pass ruff · type check · pytest before sending. This file holds only Python-specific matters.
+General matters are elsewhere: writing less → `lazy-coding` · naming → `readable-code` · logging → `logging-standards` · catching errors → `error-handling-patterns`
 
-## 1 · เริ่มงาน: ดูว่า repo ใช้อะไร แล้วใช้ตัวนั้น
+## 1 · Getting started: see what the repo uses, then use that
 
-| เจอไฟล์ | ติดตั้ง | รันคำสั่ง |
+| File found | Install | Run a command |
 |---|---|---|
 | `uv.lock` | `uv sync` | `uv run <cmd>` |
 | `poetry.lock` | `poetry install` | `poetry run <cmd>` |
 | `pdm.lock` | `pdm install` | `pdm run <cmd>` |
-| `requirements*.txt` อย่างเดียว | `python -m venv .venv` แล้ว `pip install -r requirements.txt` | เปิด `.venv` ก่อน |
-| ไม่มีอะไรเลย (โปรเจกต์ใหม่) | `uv init` แล้ว `uv add` | `uv run <cmd>` |
+| `requirements*.txt` only | `python -m venv .venv` then `pip install -r requirements.txt` | Activate `.venv` first |
+| Nothing at all (new project) | `uv init` then `uv add` | `uv run <cmd>` |
 
-- ใช้ virtual environment เสมอ ห้าม `pip install` ลง Python ของระบบ
-- ห้ามผสมเครื่องมือ เช่น ถ้า repo ใช้ poetry ก็ไม่สร้าง `uv.lock` เพิ่ม
-- อ่าน `requires-python` ใน `pyproject.toml` แล้วห้ามใช้ syntax ที่ใหม่กว่านั้น
-- เวอร์ชัน (ตรวจล่าสุด 2026-10-14 · แหล่ง: https://devguide.python.org/versions/): ตัวล่าสุด 3.15 (ออก 2026-10-09) · 3.14 ยังรับแก้ bug · 3.11–3.13 รับแค่แก้ช่องโหว่ · 3.10 หมดอายุแล้ว (2026-10-01) · ตัวถัดไปที่หมดอายุคือ 3.11 (ต.ค. 2027) · โปรเจกต์ใหม่เริ่มที่ 3.14 หรือ 3.15 ถ้า library ที่ใช้รองรับแล้ว · ก่อนใช้ให้ตรวจหน้านี้ซ้ำ
+- Always use a virtual environment; never `pip install` into the system Python
+- Never mix tools; for example if the repo uses poetry, do not add a `uv.lock`
+- Read `requires-python` in `pyproject.toml` and never use syntax newer than it
+- Versions (last checked 2026-10-14 · source: https://devguide.python.org/versions/): the newest is 3.15 (released 2026-10-09) · 3.14 still gets bug fixes · 3.11–3.13 get security fixes only · 3.10 has reached end of life (2026-10-01) · the next to end is 3.11 (Oct 2027) · a new project starts at 3.14 or 3.15 if the libraries it uses already support it · check this page again before using
 
-คำสั่งประจำ (ใส่ `uv run` หรือ `poetry run` นำหน้าตามเครื่องมือของ repo):
+Routine commands (prefix with `uv run` or `poetry run` according to the repo's tool):
 
 ```bash
 ruff check .                      # lint
@@ -33,23 +33,23 @@ pytest -q tests/test_order.py::test_refund_over_limit   # test เดียว�
 pytest -q -k "refund and not slow"                      # เลือกตามชื่อ
 ```
 
-- type checker: ถ้า repo มี `[tool.pyright]` หรือ `pyrightconfig.json` ให้ใช้ pyright ถ้ามี `[tool.mypy]` หรือ `mypy.ini` ให้ใช้ mypy ถ้าไม่มีทั้งคู่ให้ถามครั้งเดียว ส่วน ty ของ Astral ใช้เมื่อ repo ตั้งไว้แล้วเท่านั้น
-- ถ้า repo ยังใช้ black · isort · flake8 ให้ใช้ตามนั้น ไม่ย้ายไป ruff ในงานเดียวกัน
+- type checker: if the repo has `[tool.pyright]` or `pyrightconfig.json`, use pyright; if it has `[tool.mypy]` or `mypy.ini`, use mypy; if it has neither, ask once; Astral's ty is used only when the repo has already set it up
+- If the repo still uses black · isort · flake8, use them as they are; do not move to ruff in the same task
 
-## 2 · แบบแผนประจำ
+## 2 · Standard patterns
 
-| เรื่อง | ทำแบบนี้ | ไม่ทำ |
+| Topic | Do this | Do not |
 |---|---|---|
-| type hint | ใส่ทุกฟังก์ชันและ method ที่เรียกจากนอกไฟล์ ใช้ `list[str]` · `X \| None` | `List` · `Optional` จาก `typing` ในโค้ดใหม่ |
-| รูปร่างข้อมูล | ข้างในใช้ `@dataclass(frozen=True)` ส่วนที่ขอบระบบใช้ pydantic | `dict` ลอย ๆ ส่งข้ามโมดูล |
-| path | `pathlib.Path` | ต่อ string ด้วย `+ "/"` |
-| ข้อความ | f-string | `%` หรือ `.format()` ในโค้ดใหม่ |
-| log | `log.info("ส่งแล้ว order_id=%s", oid)` ให้ logger แทนค่าเอง | f-string ใน log (สร้าง string ทุกครั้งแม้ level ปิด) |
-| ไฟล์ · lock · connection | `with ...:` | เปิดแล้วรอ `close()` เอง |
-| ค่า default | `None` แล้วสร้างใหม่ในตัวฟังก์ชัน | `def f(items=[])` (list เดียวใช้ร่วมทุกครั้งที่เรียก) |
-| ไฟล์ข้อความภาษาไทย | `open(p, encoding="utf-8")` · `p.read_text(encoding="utf-8")` | ไม่ระบุ (Windows อ่านเป็น cp874 หรือ cp1252) |
-| สคริปต์ | logic อยู่ในฟังก์ชัน แล้วให้ `if __name__ == "__main__":` เรียก `main()` | โค้ดทำงานตอน import |
-| Command Line Interface (CLI) | ใช้ตัวที่ repo ใช้ ถ้าไม่มีให้เริ่มที่ `argparse` ก่อน typer | parse `sys.argv` เอง |
+| type hint | Add to every function and method called from outside the file, using `list[str]` · `X \| None` | `List` · `Optional` from `typing` in new code |
+| Data shape | Inside, use `@dataclass(frozen=True)`; at the system edge use pydantic | A bare `dict` passed across modules |
+| path | `pathlib.Path` | Joining strings with `+ "/"` |
+| Text | f-string | `%` or `.format()` in new code |
+| log | `log.info("ส่งแล้ว order_id=%s", oid)` letting the logger substitute the value | An f-string in a log call (builds the string every time even if the level is off) |
+| File · lock · connection | `with ...:` | Opening and waiting to `close()` yourself |
+| Default value | `None`, then create it new inside the function | `def f(items=[])` (one list shared across every call) |
+| Thai text files | `open(p, encoding="utf-8")` · `p.read_text(encoding="utf-8")` | Not specifying (Windows reads as cp874 or cp1252) |
+| Scripts | Logic in functions, with `if __name__ == "__main__":` calling `main()` | Code that runs at import |
+| Command Line Interface (CLI) | Use what the repo uses; if none, start with `argparse` before typer | Parsing `sys.argv` yourself |
 
 ```python
 @dataclass(frozen=True)
@@ -65,15 +65,15 @@ if __name__ == "__main__":
     raise SystemExit(main())
 ```
 
-## 3 · Web: FastAPI และ Django
+## 3 · Web: FastAPI and Django
 
-- ข้อมูลเข้าและออกผ่าน pydantic model ที่ขอบ ส่วนข้างในใช้ type ของโดเมน ไม่ส่ง `request.json()` ดิบเข้า service
-- FastAPI: ของที่ต้องเปลี่ยนตอน test (DB session · client ภายนอก · นาฬิกา) รับผ่าน `Depends` แล้วสลับด้วย `app.dependency_overrides`
-- `async def` เฉพาะเมื่อทั้งสายเรียกเป็น async (httpx `AsyncClient` · driver DB แบบ async) ถ้าใช้ไลบรารีที่บล็อก (`requests` · `time.sleep` · driver sync) ให้ใช้ `def` ธรรมดาให้ FastAPI รันใน threadpool หรือห่อด้วย `asyncio.to_thread`
-- DB session 1 ตัวต่อ 1 request ผ่าน dependency ที่ `yield` ห้ามเก็บ session ไว้ระดับโมดูล
-- Django Object-Relational Mapping (ORM): ถ้าวนลูปแล้วแตะ FK ให้ใช้ `select_related` ถ้าแตะ many-to-many หรือ reverse FK ให้ใช้ `prefetch_related` แล้วตรวจจำนวน query ใน test ด้วย `assertNumQueries` หรือ `django_assert_num_queries`
-- migration: อ่านไฟล์ที่ `makemigrations` สร้างทุกครั้งก่อน commit ถ้าลบคอลัมน์หรือเปลี่ยนชนิดบนตารางใหญ่ ให้แยกเป็นหลายขั้นตาม `database-design`
-- endpoint สุขภาพ · timeout · รูป error ที่ส่งออก ดู `web-service-essentials` และ `api-conventions`
+- Data in and out goes through pydantic models at the edge, while inside you use domain types; never pass a raw `request.json()` into a service
+- FastAPI: things that must change during tests (DB session · external client · clock) are taken through `Depends` and swapped with `app.dependency_overrides`
+- `async def` only when the whole call chain is async (httpx `AsyncClient` · an async DB driver); if you use a blocking library (`requests` · `time.sleep` · a sync driver), use a plain `def` so FastAPI runs it in a threadpool, or wrap it with `asyncio.to_thread`
+- 1 DB session per request through a dependency that `yield`s; never keep a session at module level
+- Django Object-Relational Mapping (ORM): if you loop and touch a FK, use `select_related`; if you touch many-to-many or a reverse FK, use `prefetch_related`, then check the query count in tests with `assertNumQueries` or `django_assert_num_queries`
+- migration: read the file `makemigrations` creates every time before commit; if you drop a column or change a type on a big table, split it into several steps per `database-design`
+- For health endpoints · timeouts · the shape of errors sent out, see `web-service-essentials` and `api-conventions`
 
 ```python
 def get_db() -> Iterator[Session]:
@@ -85,86 +85,86 @@ def create_refund(body: RefundIn, db: Session = Depends(get_db)) -> RefundOut:
     return refund_service.create(db, body.to_domain())
 ```
 
-## 4 · Data และ AI
+## 4 · Data and AI
 
-| เรื่อง | ทำแบบนี้ |
+| Topic | Do this |
 |---|---|
-| แก้ค่าใน DataFrame | ใช้ `df.loc[mask, "col"] = x` เพราะ pandas 3.x เปิด Copy-on-Write เป็นค่าเริ่มต้น ทำให้ `df["col"][mask] = x` ไม่แก้ `df` เลย |
-| ความเร็ว | ใช้ operation ทั้งคอลัมน์ (`df["a"] * df["b"]` · `np.where`) ก่อน `apply` ส่วน `iterrows` ใช้เมื่อไม่มีทางอื่น |
-| เงิน | เก็บเป็นสตางค์ชนิด `int64` หรือ `Decimal` ห้ามใช้ float และปัดเศษครั้งเดียวตอนแสดงผล |
-| CSV ภาษาไทย | ลอง `utf-8-sig` ก่อน (มี BOM จาก Excel) ถ้าไม่ผ่านให้ลอง `cp874` (TIS-620) และระบุ `dtype` ของรหัสที่ขึ้นต้นด้วย 0 เป็น `str` |
-| ผลซ้ำได้ | `rng = np.random.default_rng(42)` ส่งต่อเป็นพารามิเตอร์ ตั้ง seed ของ torch และ `random` ด้วย แล้วจด seed ในผลลัพธ์ |
-| notebook | ใช้ลองไอเดียได้ แต่โค้ดที่จะใช้ซ้ำให้ย้ายเข้าโมดูลพร้อม test ให้ notebook เหลือแค่เรียกฟังก์ชันและวาดกราฟ |
-| ไฟล์ใหญ่ | อ่านทีละส่วน (`chunksize`) หรือใช้ parquet แทน CSV เมื่อคุมรูปแบบได้ |
+| Changing values in a DataFrame | Use `df.loc[mask, "col"] = x`, because pandas 3.x turns Copy-on-Write on by default, so `df["col"][mask] = x` does not change `df` at all |
+| Speed | Use whole-column operations (`df["a"] * df["b"]` · `np.where`) before `apply`; use `iterrows` only when there is no other way |
+| Money | Store as satang of type `int64` or `Decimal`; never use float, and round once at display time |
+| Thai CSV | Try `utf-8-sig` first (Excel adds a BOM); if that fails, try `cp874` (TIS-620), and give the `dtype` of codes that start with 0 as `str` |
+| Reproducible results | `rng = np.random.default_rng(42)` passed along as a parameter; also set the seeds of torch and `random`, and record the seed in the output |
+| notebook | Fine for trying ideas, but move code you will reuse into a module with tests; leave the notebook only calling functions and drawing charts |
+| Large files | Read in parts (`chunksize`) or use parquet instead of CSV when you control the format |
 
-- เรื่องเรียก LLM · prompt · RAG · วัดผล ดู `llm-engineering`
-- เรื่องนำเข้าหรือส่งออก Excel และปี พ.ศ. ดู `data-import-export`
+- For LLM calls · prompts · RAG · evaluation, see `llm-engineering`
+- For importing or exporting Excel and Buddhist Era years, see `data-import-export`
 
-## 5 · กับดักที่เจอบ่อย
+## 5 · Common traps
 
-| กับดัก | อาการ | แก้ |
+| Trap | Symptom | Fix |
 |---|---|---|
-| datetime ไม่มี timezone | เวลาเพี้ยน 7 ชั่วโมง หรือเทียบกันแล้วได้ `TypeError` | สร้างด้วย `datetime.now(timezone.utc)` (3.11+ ใช้ `datetime.UTC` ได้) เก็บเป็น UTC แสดงด้วย `ZoneInfo("Asia/Bangkok")` และห้ามใช้ `utcnow()` |
-| เงินเป็น float | `0.1 + 0.2 != 0.3` และยอดรวมขาด 1 สตางค์ | ใช้ `int` สตางค์ หรือ `Decimal("0.10")` จาก string |
-| closure ในลูป | callback ทุกตัวได้ค่าสุดท้ายของลูป | ผูกค่าตอนสร้าง `lambda i=i: ...` หรือ `functools.partial` |
-| `except Exception:` กว้าง | error จริงถูกกลืน | จับเฉพาะชนิดที่รู้จัก ตามหลัก `error-handling-patterns` |
-| import วนกัน | `ImportError` แบบ partially initialized | ย้ายของที่ใช้ร่วมไปโมดูลที่ 3 ส่วน import ที่ใช้แค่ใน type ให้ใส่ใต้ `if TYPE_CHECKING:` |
-| งานหนัก CPU ใน thread | ใช้ thread หลายตัวแล้วไม่เร็วขึ้น เพราะ Global Interpreter Lock (GIL) | ใช้ `ProcessPoolExecutor` ส่วน thread ใช้กับงานรอ I/O |
-| `subprocess(..., shell=True)` | input ผู้ใช้กลายเป็นคำสั่ง shell | ส่งเป็น list `["git", "log", ref]` ใส่ `check=True` และตั้ง `timeout` |
-| `pickle.load` ข้อมูลภายนอก | รันโค้ดของคนอื่นได้ทันทีที่โหลด | ใช้ JSON หรือ parquet ถ้าเป็นโมเดลใช้ `safetensors` ถ้าเป็น torch ใส่ `weights_only=True` |
-| `yaml.load` | สร้าง object อะไรก็ได้จากไฟล์ | `yaml.safe_load` |
-| repo ใช้ `uv` แต่เพิ่มแพ็กเกจด้วย `uv pip install` หรือแก้ `pyproject.toml` มือ | `uv.lock` ไม่อัปเดต เครื่องอื่น `uv sync` แล้วไม่มีแพ็กเกจ | `uv add <pkg>` / `uv remove <pkg>` เท่านั้น · ของ dev ใส่ `uv add --group dev` (`[dependency-groups]`) · รันทุกอย่างผ่าน `uv run` ไม่ activate venv เอง (แนวคิดจาก trailofbits `modern-python` · CC-BY-SA เขียนใหม่) |
-| สคริปต์ไฟล์เดียวมี `requirements.txt` แยกต่างหาก | คนรันลืมติดตั้ง · เวอร์ชันไม่ตรง | ใส่ dependency ไว้ในหัวไฟล์แบบ PEP 723 (`# /// script` … `# dependencies = ["httpx"]` … `# ///`) แล้ว `uv run script.py` สร้าง env ให้เอง |
-| blocking ใน `async def` | ทั้ง server ค้างตาม request ที่ช้าที่สุด | ดูข้อ 3 |
+| datetime without timezone | Time is off by 7 hours, or comparing gives a `TypeError` | Create with `datetime.now(timezone.utc)` (3.11+ can use `datetime.UTC`), store as UTC, display with `ZoneInfo("Asia/Bangkok")`, and never use `utcnow()` |
+| Money as float | `0.1 + 0.2 != 0.3` and the total is short by 1 satang | Use `int` satang, or `Decimal("0.10")` from a string |
+| Closure in a loop | Every callback gets the last value of the loop | Bind the value at creation `lambda i=i: ...` or `functools.partial` |
+| A broad `except Exception:` | Real errors are swallowed | Catch only known types, per `error-handling-patterns` |
+| Circular imports | `ImportError` of the partially initialized kind | Move shared things into a third module, and put imports used only for types under `if TYPE_CHECKING:` |
+| CPU-heavy work in threads | Using several threads does not speed it up, because of the Global Interpreter Lock (GIL) | Use `ProcessPoolExecutor`; threads are for I/O waiting |
+| `subprocess(..., shell=True)` | User input becomes a shell command | Pass a list `["git", "log", ref]`, add `check=True` and set a `timeout` |
+| `pickle.load` of outside data | Runs someone else's code the moment it loads | Use JSON or parquet; for models use `safetensors`; for torch add `weights_only=True` |
+| `yaml.load` | Builds any object from the file | `yaml.safe_load` |
+| The repo uses `uv` but packages are added with `uv pip install` or by hand-editing `pyproject.toml` | `uv.lock` is not updated, other machines run `uv sync` and lack the package | Only `uv add <pkg>` / `uv remove <pkg>` · dev things go in with `uv add --group dev` (`[dependency-groups]`) · run everything through `uv run`, do not activate the venv yourself (idea from trailofbits `modern-python` · CC-BY-SA, rewritten) |
+| A single-file script with a separate `requirements.txt` | The runner forgets to install · versions do not match | Put the dependencies in the file header in PEP 723 form (`# /// script` … `# dependencies = ["httpx"]` … `# ///`), then `uv run script.py` builds the env itself |
+| Blocking inside `async def` | The whole server stalls at the pace of the slowest request | See section 3 |
 
-## 6 · test
+## 6 · Tests
 
-ตั้งค่า pytest · fixture · `parametrize` และตัวอย่าง ดู [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#python--pytest) ส่วนนี้เหลือแค่กับดักเฉพาะ Python
+For pytest setup · fixtures · `parametrize` and examples, see [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#python--pytest); this section keeps only Python-specific traps
 
-- ไฟล์ชั่วคราวใช้ `tmp_path` ห้ามเขียนลงโฟลเดอร์ของ repo · ค่า environment ใช้ `monkeypatch.setenv`
-- เวลา: ส่งนาฬิกาเข้าฟังก์ชันเป็นพารามิเตอร์ก่อน ถ้าแก้ไม่ได้ใช้ `time-machine` แต่ถ้า repo ใช้ `freezegun` อยู่ก็ใช้ต่อ
-- HTTP ภายนอก: httpx ใช้ `respx` · requests ใช้ `responses` · ห้ามยิงเน็ตจริงใน unit test
-- ฐานข้อมูลจริงใช้ `testcontainers` ตัวเดียวกับ production ไม่ใช้ SQLite แทน Postgres
-- logic ใหม่และบั๊กให้เขียน test ที่แดงก่อน แล้วค่อยแก้จนเขียว
-- coverage ดูเฉพาะบรรทัดที่เปลี่ยน: `pytest --cov --cov-report=term-missing` แล้วไล่บรรทัดใน diff ที่ยังไม่ถูกรัน
+- Temporary files use `tmp_path`; never write into the repo's folders · environment values use `monkeypatch.setenv`
+- Time: pass the clock into the function as a parameter first; if you cannot change it, use `time-machine`, but if the repo already uses `freezegun`, keep using it
+- External HTTP: httpx uses `respx` · requests uses `responses` · never hit the real network in a unit test
+- For a real database, use `testcontainers` of the same kind as production; do not use SQLite in place of Postgres
+- For new logic and bugs, write a test that fails (red) first, then fix until it passes (green)
+- Look at coverage only for changed lines: `pytest --cov --cov-report=term-missing`, then go through the lines in the diff that did not run
 
-## 7 · ความปลอดภัยเฉพาะ Python
+## 7 · Python-specific security
 
-หลัก 10 ข้ออยู่ที่ `principle-secure-by-default` ส่วนนี้คือวิธีทำใน Python
+The 10 principles are in `principle-secure-by-default`; this section is how to do them in Python
 
-- lock dependency เสมอ (`uv.lock` · `poetry.lock` · `pip-compile --generate-hashes`) แล้ว commit lock file
-- สแกนช่องโหว่: `pip-audit` (ใช้ได้กับทุกเครื่องมือ) ส่วน uv มี `uv audit` แต่ยังเป็น preview (เวอร์ชันที่เริ่มมี (รอยืนยัน) · แหล่ง: https://github.com/astral-sh/uv/blob/main/CHANGELOG.md · ตรวจ 22 ต.ค. 2569) จึงใช้ได้ แต่ Continuous Integration (CI) ยังพึ่ง `pip-audit`
-- ก่อน `uv add` หรือ `pip install` แพ็กเกจใหม่ ให้สะกดชื่อตรงกับหน้า PyPI ดูคนดูแลและวันปล่อยล่าสุด และระวังชื่อคล้าย (`reqeusts` · `python-dateutil` กับ `dateutil`)
-- SQL ส่งค่าผ่าน parameter: `cur.execute("... WHERE id = %s", (oid,))` ส่วน SQLAlchemy ใช้ `text(...)` กับ `:name` และห้ามใช้ f-string
-- ชื่อไฟล์จากผู้ใช้: `(base / name).resolve()` แล้วเช็ก `.is_relative_to(base.resolve())` ส่วนเรื่องอัปโหลดดู `file-upload-and-storage`
-- ค่าลับอ่านจาก environment (`os.environ["KEY"]` หรือ pydantic-settings) แล้วตรวจตอนเริ่ม ให้ `.env` อยู่ใน `.gitignore` (ดู `config-and-secrets`)
-- Django production: `DEBUG = False` · `ALLOWED_HOSTS` ระบุชื่อจริง · `SECRET_KEY` จาก environment · รัน `python manage.py check --deploy` ก่อนปล่อย
+- Always lock dependencies (`uv.lock` · `poetry.lock` · `pip-compile --generate-hashes`) and commit the lock file
+- Vulnerability scanning: `pip-audit` (works with every tool); uv has `uv audit` but it is still a preview (the version that first has it (รอยืนยัน) (pending confirmation) · source: https://github.com/astral-sh/uv/blob/main/CHANGELOG.md · checked 22 Oct 2569 BE), so it may be used, but Continuous Integration (CI) still relies on `pip-audit`
+- Before `uv add` or `pip install` of a new package, spell the name exactly as on its PyPI page, check the maintainers and the latest release date, and beware of look-alike names (`reqeusts` · `python-dateutil` versus `dateutil`)
+- SQL passes values through parameters: `cur.execute("... WHERE id = %s", (oid,))`; with SQLAlchemy use `text(...)` with `:name`, and never an f-string
+- File names from users: `(base / name).resolve()` then check `.is_relative_to(base.resolve())`; for uploads see `file-upload-and-storage`
+- Secrets are read from the environment (`os.environ["KEY"]` or pydantic-settings) and checked at startup; keep `.env` in `.gitignore` (see `config-and-secrets`)
+- Django production: `DEBUG = False` · `ALLOWED_HOSTS` with real names · `SECRET_KEY` from the environment · run `python manage.py check --deploy` before release
 
-## 8 · รายการตรวจก่อนส่ง
+## 8 · Check before sending
 
-- [ ] `ruff check` ไม่มีข้อผิดพลาด
-- [ ] `ruff format --check` ผ่าน (หรือ formatter ที่ repo ใช้)
-- [ ] type checker ของ repo ได้ 0 error ในไฟล์ที่แก้
-- [ ] `pytest -q` เขียวทั้งชุด ไม่ใช่แค่ไฟล์ที่แก้ (ผลยาว → `> _to_delete/test.txt 2>&1` แล้ว `tail -20`)
-- [ ] พฤติกรรมใหม่ทุกอย่างมี test ที่เคยแดงก่อนแก้
-- [ ] ไม่มี `requests` · `time.sleep` · driver sync หรือ I/O ที่บล็อกอยู่ใน `async def`
-- [ ] เปิดไฟล์ข้อความทุกจุดระบุ `encoding="utf-8"` และ datetime ที่เก็บมี timezone
-- [ ] dependency ที่เพิ่มอยู่ใน lock file และผ่าน `pip-audit`
+- [ ] `ruff check` has no errors
+- [ ] `ruff format --check` passes (or the formatter the repo uses)
+- [ ] The repo's type checker gives 0 errors in the files you changed
+- [ ] `pytest -q` is green for the whole suite, not just the changed files (long output → `> _to_delete/test.txt 2>&1` then `tail -20`)
+- [ ] Every new behavior has a test that was red before the fix
+- [ ] No `requests` · `time.sleep` · sync driver or blocking I/O inside `async def`
+- [ ] Every place that opens a text file gives `encoding="utf-8"` and stored datetimes have a timezone
+- [ ] Added dependencies are in the lock file and pass `pip-audit`
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Connecting to other skills
 
-| งาน | เปิด |
+| Task | Open |
 |---|---|
-| เขียนให้น้อย ไม่เพิ่มของเกิน | `lazy-coding` |
-| ชื่อ · รูปฟังก์ชัน · ที่อยู่ไฟล์ | `readable-code` |
-| เลือก framework test · สัดส่วน · ชื่อ test | `testing-standards` |
-| รูปแบบ log · correlation id · logger Python สำเร็จรูป | `logging-standards` |
-| จับ error · retry · timeout | `error-handling-patterns` |
-| กฎปลอดภัยทุก diff | `principle-secure-by-default` และก่อนส่งใช้ `security-gate` |
-| เรียก LLM · RAG · วัดผล | `llm-engineering` |
+| Write less, add nothing extra | `lazy-coding` |
+| Names · function shape · where files live | `readable-code` |
+| Choosing a test framework · proportions · test names | `testing-standards` |
+| Log format · correlation id · ready-made Python logger | `logging-standards` |
+| Catching errors · retry · timeout | `error-handling-patterns` |
+| Security rules for every diff | `principle-secure-by-default`, and before sending use `security-gate` |
+| LLM calls · RAG · evaluation | `llm-engineering` |
 | schema · migration | `database-design` |
-| งานเบื้องหลัง (Celery · RQ · cron) | `background-jobs` |
-| ยืนยันว่าทำงานจริงก่อนบอกว่าเสร็จ | `principle-prove-it-works` |
+| Background jobs (Celery · RQ · cron) | `background-jobs` |
+| Confirm it really works before saying it is done | `principle-prove-it-works` |
 
 
 ---
@@ -173,122 +173,122 @@ def create_refund(body: RefundIn, db: Session = Depends(get_db)) -> RefundOut:
 
 Use when writing or reviewing SQL queries
 
-# stack · SQL — เขียน query ให้ถูก เร็ว และเปลี่ยนข้อมูลได้ปลอดภัย
+# stack · SQL — write queries that are correct, fast, and change data safely
 
-> **กฎข้อเดียว:** query ที่ยังไม่เคยรันกับข้อมูลจำนวนเท่าของจริง ถือว่ายังไม่เสร็จ
+> **The one rule:** a query that has never run against a realistic amount of data is not finished
 
-ออกแบบตาราง ตั้งชื่อ ชนิดข้อมูล และ migration แบบ expand-and-contract → `database-design`
+Table design, naming, data types, and expand-and-contract migrations → `database-design`
 
-## 1 · เริ่มงาน: รู้จักฐานข้อมูลก่อนเขียนบรรทัดแรก
+## 1 · Getting started: know the database before writing the first line
 
-- engine และรุ่น: `SELECT @@VERSION` (SQL Server) · `SELECT version()` (PostgreSQL) · `SELECT VERSION()` (MySQL) · SQL Server ดู `SERVERPROPERTY('Edition')` ด้วย เพราะหลายความสามารถมีเฉพาะ Enterprise
-- repo รัน migration ด้วยอะไร: `Migrations/` (EF Core) · `db/migration/V1__*.sql` (Flyway) · Liquibase `changelog` · `alembic/` · `prisma/migrations/` · สคริปต์ดิบใน `sql/`
-- collation และ time zone ของ server: `SERVERPROPERTY('Collation')` · `SHOW timezone`
+- engine and version: `SELECT @@VERSION` (SQL Server) · `SELECT version()` (PostgreSQL) · `SELECT VERSION()` (MySQL) · on SQL Server also check `SERVERPROPERTY('Edition')`, because many features exist only in Enterprise
+- what the repo runs migrations with: `Migrations/` (EF Core) · `db/migration/V1__*.sql` (Flyway) · Liquibase `changelog` · `alembic/` · `prisma/migrations/` · raw scripts in `sql/`
+- the server's collation and time zone: `SERVERPROPERTY('Collation')` · `SHOW timezone`
 
-- ใช้เครื่องมือ migration ที่ repo ใช้อยู่ ห้ามเพิ่มตัวที่ 2 และห้ามแก้ schema ด้วยมือนอกเครื่องมือ
-- ห้ามรันอะไรกับ production ให้เตรียมคำสั่งให้คนอนุมัติแทน (ดู `principle-proceed-on-reversible-work`)
-- ใช้ฐานข้อมูล local หรือ sandbox ที่จำนวนแถวใกล้ของจริง (ตาราง 100 แถวซ่อนปัญหาความเร็วทุกอย่าง) ไม่มีก็สร้างข้อมูลจำลองด้วยสคริปต์ให้จำนวนและการกระจายค่าใกล้จริง
+- Use the migration tool the repo already uses; never add a second one and never change the schema by hand outside the tool
+- Never run anything on production; prepare the commands for a person to approve instead (see `principle-proceed-on-reversible-work`)
+- Use a local or sandbox database whose row count is close to real (a 100-row table hides every speed problem); if you have none, generate mock data with a script so the volume and value distribution are close to real
 
-## 2 · เขียน query ให้ถูก
+## 2 · Write queries that are correct
 
-| เรื่อง | ทำแบบนี้ | กับดัก |
+| Topic | Do this | Trap |
 |---|---|---|
-| ค่าจากผู้ใช้ | ส่งเป็น parameter เสมอ | ต่อ string → SQL injection |
-| คอลัมน์ | เขียนชื่อคอลัมน์ครบ | `SELECT *` → ดึงเกิน · คอลัมน์ใหม่ทำโค้ดพัง · ใช้ covering index ไม่ได้ |
-| NULL | `IS NULL` · `NOT EXISTS` | `= NULL` ไม่เคยจริง · `NOT IN (subquery)` ที่มี NULL 1 ตัว → ได้ 0 แถว |
-| JOIN | นับแถวก่อนและหลัง join | join ฝั่ง 1-ต่อ-หลาย แล้ว `SUM` → ยอดเบิ้ล แก้โดยรวมยอดก่อน join |
-| GROUP BY | ทุกคอลัมน์ที่ไม่ใช่ aggregate ต้องอยู่ใน `GROUP BY` | MySQL ที่ปิด `ONLY_FULL_GROUP_BY` → สุ่มค่าให้เงียบ ๆ |
-| หาร | `CAST(a AS decimal(18,4)) / b` และกันหาร 0 ด้วย `NULLIF(b, 0)` | SQL Server และ PostgreSQL ได้ `5/2 = 2` ส่วน MySQL ได้ `5/2 = 2.5000` |
-| ชนิดข้อมูลไม่ตรง | parameter ชนิดเดียวกับคอลัมน์ | SQL Server ส่ง `nvarchar` ไปเทียบคอลัมน์ `varchar` → `CONVERT_IMPLICIT` → scan ทั้งตาราง |
-| ช่วงวันที่ | `>= start AND < end` (ครึ่งเปิด) | `BETWEEN '2026-01-01' AND '2026-01-31'` → หลุดทั้งวันที่ 31 หลังเที่ยงคืน |
-| time zone | เก็บ UTC แล้วแปลงเป็น Asia/Bangkok ตอนแสดง | เก็บเวลาไทยไม่มี offset → รวมข้อมูลข้ามระบบแล้วเพี้ยน 7 ชั่วโมง |
-| ปี พ.ศ. | เก็บ ค.ศ. เสมอ แล้วแปลงตอนแสดง | เก็บ 2569 → คำนวณอายุ เรียง และ export พังหมด |
-| เงิน | `decimal(19,4)` · `numeric(19,4)` | `float` · `real` → 0.1 + 0.2 ไม่เท่ากับ 0.3 |
-| เรียงชื่อไทย | SQL Server `Thai_100_CI_AS` · PostgreSQL `COLLATE "th-TH-x-icu"` | collation ทั่วไป → สระหน้า (เ แ โ ใ ไ) เรียงผิดโดยไม่มี error |
+| Values from users | Always pass as a parameter | Concatenating strings → SQL injection |
+| Columns | Write the full column names | `SELECT *` → pulls too much · a new column breaks code · cannot use a covering index |
+| NULL | `IS NULL` · `NOT EXISTS` | `= NULL` is never true · `NOT IN (subquery)` with a single NULL → 0 rows |
+| JOIN | Count rows before and after the join | Join on the 1-to-many side then `SUM` → doubled totals; fix by summing before the join |
+| GROUP BY | Every non-aggregate column must be in `GROUP BY` | MySQL with `ONLY_FULL_GROUP_BY` off → silently picks a random value |
+| Division | `CAST(a AS decimal(18,4)) / b` and guard against divide by 0 with `NULLIF(b, 0)` | SQL Server and PostgreSQL give `5/2 = 2`, while MySQL gives `5/2 = 2.5000` |
+| Mismatched data types | A parameter of the same type as the column | SQL Server sends `nvarchar` to compare with a `varchar` column → `CONVERT_IMPLICIT` → scans the whole table |
+| Date range | `>= start AND < end` (half-open) | `BETWEEN '2026-01-01' AND '2026-01-31'` → drops all of the 31st after midnight |
+| time zone | Store UTC, convert to Asia/Bangkok when displaying | Storing Thai time with no offset → merging data across systems is off by 7 hours |
+| Buddhist Era (พ.ศ.) year | Always store Common Era (ค.ศ.), convert when displaying | Storing 2569 → age calculation, sorting and export all break |
+| Money | `decimal(19,4)` · `numeric(19,4)` | `float` · `real` → 0.1 + 0.2 does not equal 0.3 |
+| Sorting Thai names | SQL Server `Thai_100_CI_AS` · PostgreSQL `COLLATE "th-TH-x-icu"` | A general collation → leading vowels (เ แ โ ใ ไ) sort wrong with no error |
 
-แปลง UTC เป็นเวลาไทยตอนแสดง: SQL Server `AT TIME ZONE 'UTC' AT TIME ZONE 'SE Asia Standard Time'` · PostgreSQL `AT TIME ZONE 'Asia/Bangkok'` (คอลัมน์ `timestamptz`)
+Convert UTC to Thai time when displaying: SQL Server `AT TIME ZONE 'UTC' AT TIME ZONE 'SE Asia Standard Time'` · PostgreSQL `AT TIME ZONE 'Asia/Bangkok'` (a `timestamptz` column)
 
-- collation ไทยไม่มีทุก server ตรวจก่อนเลือก (คำสั่งใน [`references/snippets.md`](references/snippets.md)) · แสดงวันที่ไทยและรับปี พ.ศ. จากฟอร์ม → `i18n-and-locale`
+- A Thai collation is not on every server, so check before choosing (commands in [`references/snippets.md`](references/snippets.md)) · showing Thai dates and accepting Buddhist Era years from a form → `i18n-and-locale`
 
-## 3 · ให้เร็ว: อ่าน plan จริง ไม่เดา
+## 3 · Make it fast: read the real plan, do not guess
 
-คำสั่งดู plan จริงแยกตาม engine · สิ่งที่ต้องดูใน plan · ตัวอย่าง keyset · ลบทีละชุด · ทางแก้ parameter sniffing ทีละขั้น → [`references/performance.md`](references/performance.md)
+Commands to see the real plan by engine · what to look for in a plan · keyset example · deleting in batches · parameter sniffing fixes step by step → [`references/performance.md`](references/performance.md)
 
-- กฎย่อ: ดู plan จริงบนข้อมูลจำนวนใกล้ของจริง ไม่เดา · เงื่อนไขต้อง sargable (ไม่ครอบคอลัมน์ที่มี index ด้วย function) · ทุก index ตอบได้ว่ารับ query ไหน · แบ่งหน้าลึกใช้ keyset · นับ N+1 จาก log ของ Object-Relational Mapper (ORM) · UPDATE/DELETE ก้อนใหญ่ทำทีละชุด — รายละเอียดและตัวอย่างอยู่ใน [`references/performance.md`](references/performance.md) ที่เดียว
+- Short rules: look at the real plan on data close to real volume, do not guess · conditions must be sargable (do not wrap an indexed column in a function) · every index must answer which query it serves · deep paging uses keyset · count N+1 from the Object-Relational Mapper (ORM) log · big UPDATE/DELETE goes in batches — details and examples are only in [`references/performance.md`](references/performance.md)
 
-## 4 · เปลี่ยนข้อมูลอย่างปลอดภัย
+## 4 · Change data safely
 
-ตาราง isolation · upsert · สร้าง index ไม่ล็อกตาราง แยกตาม engine พร้อมตัวอย่างตรวจจำนวนแถว → [`references/safe-changes.md`](references/safe-changes.md)
+A table of isolation levels · upsert · creating an index without locking the table, by engine, with examples that check row counts → [`references/safe-changes.md`](references/safe-changes.md)
 
-- กฎย่อ: สคริปต์รันซ้ำได้ · backup ก่อนแก้ข้อมูลก้อนใหญ่ · นับแถวก่อนแล้วตรวจก่อน `COMMIT` · upsert ใช้แบบของ engine · แตะตารางเรียงลำดับเดียวกันกัน deadlock · `ALTER TABLE` ตารางใหญ่ต้องตั้ง `lock_timeout` — รายละเอียดและตัวอย่างอยู่ใน [`references/safe-changes.md`](references/safe-changes.md) ที่เดียว
+- Short rules: scripts can be rerun · back up before changing a big batch of data · count rows first and check before `COMMIT` · upsert uses the engine's own form · touch tables in the same order to prevent deadlocks · `ALTER TABLE` on a big table needs `lock_timeout` set — details and examples are only in [`references/safe-changes.md`](references/safe-changes.md)
 
-## 5 · กับดักที่เจอบ่อย
+## 5 · Common traps
 
-- `MERGE` (SQL Server) มี bug หลายตัว และไม่ใส่ `HOLDLOCK` แล้ว 2 session insert ซ้ำ → `UPDATE` + `INSERT` แยก หรือ `MERGE ... WITH (HOLDLOCK)` พร้อม test
-- trigger ซ่อนกฎธุรกิจและพังเมื่อ insert หลายแถว → กฎอยู่ในโค้ดแอป trigger ใช้กับ audit เท่านั้น · cursor/loop ทีละแถว → คำสั่งแบบ set-based
-- `WITH (NOLOCK)` อ่านของที่ยังไม่ commit แถวหายหรือซ้ำ → เปิด Read Committed Snapshot Isolation (RCSI) แทน · ต่อ string เป็น SQL → parameter (ข้อ 7)
-- collation ไม่ตรงตอน join → ตั้งให้ตรงที่คอลัมน์ (ใส่ `COLLATE` ใน query ทำให้ไม่ใช้ index)
-- id ไม่เรียงต่อเนื่องเสมอ (identity กระโดด · sequence ไม่ย้อนเมื่อ rollback) → เลขเอกสารที่ห้ามขาดออกเองในตารางนับเลข
-- timestamp ไม่มี time zone → PostgreSQL `timestamptz` · SQL Server `datetime2` ที่ตกลงว่าเป็น UTC หรือ `datetimeoffset`
-- query ที่กรองแถวส่วนน้อยเสมอ (`WHERE status = 'pending'` · `deleted_at IS NULL`) แต่ index ครอบทุกแถว → index ใหญ่และ planner ไม่หยิบ → ใส่เงื่อนไขนั้นลงใน index เลย: PostgreSQL `CREATE INDEX ... WHERE status = 'pending'` · SQL Server filtered index `CREATE INDEX ... WHERE status = 'pending'` (query ต้องเขียนเงื่อนไขตรงกันถึงจะใช้ได้ · แนวคิดจาก supabase/agent-skills · MIT)
-- ลบหรืออัปเดตแถวจำนวนมากแล้ว query ช้าลงทั้งที่ plan ไม่เปลี่ยน → ตารางและ index บวม (dead tuple · page แตก) → PostgreSQL ดู `pg_stat_user_tables.n_dead_tup` แล้ว `VACUUM (ANALYZE)` หรือ `REINDEX CONCURRENTLY` · SQL Server ดู `sys.dm_db_index_physical_stats` แล้ว `ALTER INDEX ... REORGANIZE` (ต่ำกว่า 30%) หรือ `REBUILD` · ตรวจข้อนี้ก่อนโทษ query
+- `MERGE` (SQL Server) has several bugs, and without `HOLDLOCK` 2 sessions insert duplicates → separate `UPDATE` + `INSERT`, or `MERGE ... WITH (HOLDLOCK)` with a test
+- A trigger hides business rules and breaks on multi-row inserts → keep rules in app code; use triggers only for audit · a cursor/row-by-row loop → a set-based statement
+- `WITH (NOLOCK)` reads uncommitted data, rows go missing or repeat → turn on Read Committed Snapshot Isolation (RCSI) instead · building SQL by string concatenation → parameters (section 7)
+- A collation mismatch in a join → set them equal on the column (putting `COLLATE` in the query stops it using the index)
+- Ids are not always consecutive (identity jumps · a sequence does not go back on rollback) → document numbers that must have no gaps are issued by yourself in a counter table
+- A timestamp with no time zone → PostgreSQL `timestamptz` · SQL Server `datetime2` agreed to be UTC, or `datetimeoffset`
+- A query that always filters a small share of rows (`WHERE status = 'pending'` · `deleted_at IS NULL`) but the index covers every row → the index is big and the planner does not pick it → put that condition into the index itself: PostgreSQL `CREATE INDEX ... WHERE status = 'pending'` · SQL Server filtered index `CREATE INDEX ... WHERE status = 'pending'` (the query must write the same condition for it to be used · idea from supabase/agent-skills · MIT)
+- After deleting or updating many rows, queries get slower though the plan did not change → table and index bloat (dead tuples · split pages) → in PostgreSQL look at `pg_stat_user_tables.n_dead_tup` then `VACUUM (ANALYZE)` or `REINDEX CONCURRENTLY` · in SQL Server look at `sys.dm_db_index_physical_stats` then `ALTER INDEX ... REORGANIZE` (below 30%) or `REBUILD` · check this before blaming the query
 
-ตัวอย่างคำสั่งทั้ง 2 ข้อ → [`references/performance.md`](references/performance.md)
+Example commands for both of these → [`references/performance.md`](references/performance.md)
 
-## 6 · test
+## 6 · Tests
 
-- test query กับฐานข้อมูลจริงชนิดเดียวกับ production ห้ามใช้ SQLite หรือ in-memory แทน SQL Server/PostgreSQL เพราะพฤติกรรม NULL collation และ lock ต่างกัน
-- เปิดฐานข้อมูลใหม่ทุกรอบด้วย Testcontainers แล้วใส่ข้อมูลตั้งต้นด้วยสคริปต์ · logic ใน stored procedure ใช้ tSQLt (SQL Server) หรือ pgTAP (PostgreSQL)
-- ตรวจทั้งจำนวนแถวและค่า: กรณีมี NULL · ช่วงวันที่ตรงขอบเที่ยงคืน · ชื่อไทย · ยอดเงินมีเศษ
-- migration ใหม่ให้รันขึ้นบนสำเนา schema ที่เหมือน production พร้อมข้อมูลจำนวนใกล้จริง แล้วจับเวลาและดู lock
-- แก้ bug ให้เขียน test ที่ fail ก่อน แล้วค่อยแก้ (`principle-fix-root-cause`) ส่วนกรอบ test ทั่วไปดู `testing-standards`
+- Test queries against a real database of the same kind as production; never use SQLite or in-memory in place of SQL Server/PostgreSQL, because NULL, collation and lock behavior differ
+- Start a fresh database every run with Testcontainers and load seed data with a script · logic in stored procedures uses tSQLt (SQL Server) or pgTAP (PostgreSQL)
+- Check both row counts and values: cases with NULL · date ranges right at the midnight edge · Thai names · money amounts with fractions
+- Run a new migration on a copy of a production-like schema with data close to real volume, then time it and watch the locks
+- To fix a bug, write a test that fails first, then fix it (`principle-fix-root-cause`); for the general test framework see `testing-standards`
 
-## 7 · ความปลอดภัยเฉพาะฐานข้อมูล
+## 7 · Database-specific security
 
-- 1 แอป 1 user ฐานข้อมูล ให้สิทธิ์เท่าที่ใช้ แอปห้ามใช้ `sa` · `postgres` · `root` และ user ที่รัน migration ต้องแยกจาก user ที่แอปใช้ตอนทำงาน
-- dynamic SQL ที่มีค่าจากผู้ใช้ให้ส่งค่าเป็น parameter ส่วนชื่อตารางหรือคอลัมน์ให้เลือกจาก allowlist แล้ว quote
+- 1 app, 1 database user, with only the permissions it uses; the app must never use `sa` · `postgres` · `root`, and the user that runs migrations must be separate from the user the app uses at run time
+- For dynamic SQL with values from users, pass the values as parameters, and choose table or column names from an allowlist and then quote them
 
-ตัวอย่าง `sp_executesql` · `QUOTENAME` · plpgsql `format('%I')` → [`references/snippets.md`](references/snippets.md)
+Examples of `sp_executesql` · `QUOTENAME` · plpgsql `format('%I')` → [`references/snippets.md`](references/snippets.md)
 
-- ถ้ามีข้อมูลหลายบริษัทในตารางเดียว ให้พิจารณา row-level security: SQL Server `CREATE SECURITY POLICY` · PostgreSQL `CREATE POLICY` (เจ้าของตารางข้าม policy ได้ ถ้าไม่ `FORCE ROW LEVEL SECURITY`)
-- คอลัมน์ข้อมูลส่วนบุคคล (เลขบัตรประชาชน · เบอร์โทร · ที่อยู่) ไม่ดึงถ้าไม่ใช้ ส่วน Dynamic Data Masking ของ SQL Server ช่วยซ่อนตอนแสดง แต่ไม่ใช่การกันสิทธิ์ รายละเอียดดู `pdpa-compliance`
-- การแก้ข้อมูลสำคัญต้องมีร่องรอยว่าใครทำ (`audit-trail`)
+- If the data of several companies is in one table, consider row-level security: SQL Server `CREATE SECURITY POLICY` · PostgreSQL `CREATE POLICY` (the table owner bypasses the policy unless `FORCE ROW LEVEL SECURITY`)
+- Personal data columns (national ID number · phone number · address) are not pulled unless used; SQL Server's Dynamic Data Masking helps hide values on display but is not access control; for details see `pdpa-compliance`
+- Changes to important data must leave a trace of who did it (`audit-trail`)
 
-## 8 · รายการตรวจก่อนส่ง
+## 8 · Check before sending
 
-- [ ] ทุกค่าจากภายนอกเป็น parameter · ไม่มี `SELECT *`
-- [ ] ตรวจ NULL · ช่วงวันที่แบบครึ่งเปิด · หาร · ชนิด parameter ตรงกับคอลัมน์
-- [ ] ดู plan จริงบนข้อมูลใกล้ของจริง จด logical reads หรือเวลาก่อน/หลัง · index ใหม่ทุกตัวบอกได้ว่ารับ query ไหน
-- [ ] สคริปต์รันซ้ำได้ และข้อมูลก้อนใหญ่ทำทีละชุด
-- [ ] transaction + ตรวจจำนวนแถวก่อน `COMMIT` · เขียนวิธีย้อนกลับและยืนยัน backup แล้ว
-- [ ] มี test ที่รันกับฐานข้อมูลชนิดเดียวกับ production
+- [ ] Every outside value is a parameter · no `SELECT *`
+- [ ] Checked NULL · half-open date ranges · division · parameter types match the columns
+- [ ] Looked at the real plan on near-real data, noted logical reads or time before/after · every new index can say which query it serves
+- [ ] Scripts can be rerun and big data goes in batches
+- [ ] Transaction + check row counts before `COMMIT` · wrote the way back and confirmed a backup exists
+- [ ] There is a test that runs against the same kind of database as production
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Connecting to other skills
 
-ออกแบบตารางและ migration แบบ expand-and-contract → `database-design` · สคริปต์รันซ้ำได้ → `principle-safe-to-rerun` · Excel/CSV → `data-import-export` · ใครแก้อะไร → `audit-trail` · injection และสิทธิ์ → `principle-secure-by-default` · วันที่ไทย พ.ศ. การเรียงไทย → `i18n-and-locale` · connection string → `config-and-secrets` · migration ใน pipeline → `cicd-and-release`
+Table design and expand-and-contract migrations → `database-design` · rerunnable scripts → `principle-safe-to-rerun` · Excel/CSV → `data-import-export` · who changed what → `audit-trail` · injection and permissions → `principle-secure-by-default` · Thai Buddhist Era dates, Thai sorting → `i18n-and-locale` · connection string → `config-and-secrets` · migrations in the pipeline → `cicd-and-release`
 
 
 ## reference: performance.md
 
-# ให้เร็ว — อ่าน plan · index · แบ่งหน้า · งานก้อนใหญ่ (ฉบับเต็ม)
+# Making it fast — read the plan · indexes · paging · big jobs (full version)
 
-อ่านเมื่อ query ช้าหรือกำลังเพิ่ม index · กฎย่ออยู่ใน `SKILL.md` ข้อ 3
+Read this when a query is slow or you are adding an index · the short rules are in `SKILL.md` section 3
 
-| engine | คำสั่งดู plan จริง |
+| engine | Command to see the real plan |
 |---|---|
-| SQL Server | `SET STATISTICS IO, TIME ON;` + เปิด Actual Execution Plan (SQL Server Management Studio (SSMS) กด `Ctrl+M`) แล้วดู logical reads |
-| PostgreSQL | `EXPLAIN (ANALYZE, BUFFERS) SELECT ...` ระวังว่า `ANALYZE` รันคำสั่งจริง ถ้าเป็น UPDATE/DELETE ให้ห่อด้วย `BEGIN ... ROLLBACK` |
+| SQL Server | `SET STATISTICS IO, TIME ON;` + open the Actual Execution Plan (in SQL Server Management Studio (SSMS) press `Ctrl+M`), then look at logical reads |
+| PostgreSQL | `EXPLAIN (ANALYZE, BUFFERS) SELECT ...` beware that `ANALYZE` really runs the statement; for UPDATE/DELETE wrap it in `BEGIN ... ROLLBACK` |
 | MySQL 8.0.18+ | `EXPLAIN ANALYZE SELECT ...` |
 
-สิ่งที่ต้องดูใน plan: scan ทั้งตารางที่ใหญ่ · จำนวนแถวที่คาด vs ได้จริงต่างกันมาก (statistics เก่า) · key lookup ซ้ำหลายพันครั้ง · sort หรือ hash ที่ล้นลง disk
+What to look for in a plan: a scan of a whole big table · expected vs actual row counts far apart (stale statistics) · key lookups repeated thousands of times · a sort or hash that spills to disk
 
-- **sargable** คือเงื่อนไขที่ใช้ index ได้ ห้ามครอบคอลัมน์ที่มี index ด้วย function
-  - ผิด: `WHERE YEAR(created_at) = 2026` → ถูก: `WHERE created_at >= '2026-01-01' AND created_at < '2027-01-01'`
-  - ผิด: `WHERE LOWER(email) = @e` → ถูก: เก็บ email ตัวเล็กตั้งแต่แรก หรือทำ index บน expression (PostgreSQL) หรือ computed column + index (SQL Server)
-  - ผิด: `WHERE name LIKE '%สมชาย'` ใช้ index ไม่ได้ ถ้าต้องค้นกลางคำให้ใช้ full-text search
-- **covering index**: ใส่คอลัมน์ที่ query อ่านไว้ใน `INCLUDE (...)` (SQL Server · PostgreSQL 11+) จะได้ไม่ต้องย้อนไปอ่านตาราง ส่วน MySQL ไม่มี `INCLUDE` ให้ต่อท้ายใน key แทน
-- ทุก index ที่เพิ่มต้องตอบได้ว่ารับ query ไหน เพราะ index ทำให้ INSERT/UPDATE ช้าลงทุกตัว
-- **แบ่งหน้าลึก** ใช้ keyset แทน `OFFSET` เพราะ `OFFSET 100000` ต้องอ่านทิ้ง 100,000 แถวทุกครั้ง
+- **sargable** means a condition that can use an index; never wrap an indexed column in a function
+  - Wrong: `WHERE YEAR(created_at) = 2026` → right: `WHERE created_at >= '2026-01-01' AND created_at < '2027-01-01'`
+  - Wrong: `WHERE LOWER(email) = @e` → right: store email in lower case from the start, or make an index on an expression (PostgreSQL) or a computed column + index (SQL Server)
+  - Wrong: `WHERE name LIKE '%สมชาย'` cannot use an index; if you must search the middle of a word, use full-text search
+- **covering index**: put the columns the query reads in `INCLUDE (...)` (SQL Server · PostgreSQL 11+) so it need not go back to read the table; MySQL has no `INCLUDE`, so append them to the key instead
+- Every index you add must answer which query it serves, because every index makes INSERT/UPDATE slower
+- **For deep paging** use keyset instead of `OFFSET`, because `OFFSET 100000` must read and throw away 100,000 rows every time
 
 ```sql
 -- keyset: ส่งค่าแถวสุดท้ายของหน้าก่อนมาเป็น parameter
@@ -300,12 +300,12 @@ LIMIT 50;
 -- SQL Server: WHERE created_at < @c OR (created_at = @c AND id < @id) · ใช้ TOP (50)
 ```
 
-- **N+1 จาก Object-Relational Mapper (ORM)**: loop แล้วโหลดลูกทีละแถว → 1 หน้าจอยิง 201 query ให้เปิด log SQL ของ ORM แล้วนับ แล้วแก้ด้วย `Include` (EF Core) · `selectinload` (SQLAlchemy) · `include` (Prisma)
-- **parameter sniffing (SQL Server)**: plan ถูกสร้างจากค่าแรกที่ส่งมา แล้วใช้ซ้ำกับค่าที่กระจายต่างกันมาก → บางลูกค้าเร็ว บางลูกค้าช้า 100 เท่า
-  - ทางแก้เรียงจากเบาไปหนัก: SQL Server 2022+ compatibility level 160 มี Parameter Sensitive Plan optimization · `OPTION (RECOMPILE)` กับ query ที่รันไม่บ่อย · `OPTIMIZE FOR` · บังคับ plan ผ่าน Query Store
-  - ห้ามแก้ด้วยการลบ plan cache ทั้ง server
-- **statistics**: หลังโหลดข้อมูลก้อนใหญ่ให้รัน `UPDATE STATISTICS dbo.orders` หรือ PostgreSQL `ANALYZE orders`
-- **UPDATE/DELETE ก้อนใหญ่** ทำทีละชุด เช่น 5,000 แถว เพราะถ้าทำชุดเดียวล้านแถวจะ lock ทั้งตาราง log โต และ rollback นานเท่ากัน
+- **N+1 from an Object-Relational Mapper (ORM)**: a loop that loads children one row at a time → 1 screen fires 201 queries; turn on the ORM's SQL log and count, then fix with `Include` (EF Core) · `selectinload` (SQLAlchemy) · `include` (Prisma)
+- **parameter sniffing (SQL Server)**: a plan is built from the first value passed and reused with values that are distributed very differently → some customers are fast, some are 100 times slower
+  - Fixes from lightest to heaviest: SQL Server 2022+ compatibility level 160 has Parameter Sensitive Plan optimization · `OPTION (RECOMPILE)` for queries that run rarely · `OPTIMIZE FOR` · force a plan through Query Store
+  - Never fix it by clearing the plan cache of the whole server
+- **statistics**: after loading a big batch of data, run `UPDATE STATISTICS dbo.orders` or, in PostgreSQL, `ANALYZE orders`
+- **Big UPDATE/DELETE** in batches, for example 5,000 rows, because doing a million rows in one batch locks the whole table, grows the log, and takes just as long to roll back
 
 ```sql
 -- SQL Server: ลบทีละ 5,000 แถวจนหมด
@@ -317,7 +317,7 @@ END
 -- PostgreSQL: DELETE FROM audit_logs WHERE id IN (SELECT id FROM audit_logs WHERE created_at < $1 LIMIT 5000); วนจากแอปหรือ procedure
 ```
 
-## index เฉพาะแถวส่วนน้อย และตารางบวม (SKILL.md ข้อ 5)
+## Indexes for a small share of rows, and bloated tables (SKILL.md section 5)
 
 ```sql
 -- PostgreSQL · partial index: index เฉพาะแถวที่ query กรองเสมอ
@@ -686,42 +686,42 @@ Retry-After: 42                ← ต้องมีคู่กับ 429 เ�
 
 ## reference: contract-testing.md
 
-# Contract testing — OpenAPI คือสัญญา แล้วให้ CI ตรวจว่าของจริงตรง
+# Contract testing — OpenAPI is the contract, and CI checks that the real thing matches
 
-เอกสาร `docs/API-CONVENTIONS.md` บอกกติกา · ไฟล์ OpenAPI บอกรูปร่างของแต่ละ endpoint · contract test คือสิ่งที่ทำให้ 2 อย่างนี้ไม่เป็นแค่เอกสาร
+The document `docs/API-CONVENTIONS.md` states the rules · the OpenAPI file states the shape of each endpoint · contract tests are what keep these 2 from being just documents
 
-## 1 · OpenAPI เป็นสัญญา
+## 1 · OpenAPI as the contract
 
-- สร้างจากโค้ดจริง (annotation · decorator · generator ของ framework) แล้ว commit ไฟล์ที่ได้ — ไม่เขียนมือแยก · เมื่อ 2 ฝั่งต่างกัน ฝั่งโค้ดคือความจริง และ diff ในไฟล์คือสิ่งที่ reviewer เห็น
-- ทุก response มี schema รวมถึง error (`web-service-essentials` §2) · ทุกฟิลด์มี `format` ของวันที่ · id · เงิน ตาม §6 ของ SKILL.md หลัก
+- Generate it from the real code (annotations · decorators · the framework's generator) and commit the resulting file — do not hand-write it separately · when the 2 sides differ, the code side is the truth, and the diff in the file is what the reviewer sees
+- Every response has a schema, including errors (`web-service-essentials` §2) · every field has a `format` for dates · ids · money, per §6 of the main SKILL.md
 
-## 2 · ตรวจ response กับ spec ใน CI (provider side)
+## 2 · Check responses against the spec in CI (provider side)
 
-| เครื่องมือ | ทำอะไร | licence | หมายเหตุ (ตรวจ 2026-10-23) |
+| Tool | What it does | licence | Note (checked 2026-10-23) |
 |---|---|---|---|
-| Schemathesis | อ่าน OpenAPI แล้วสร้าง request จาก schema ยิงใส่ service จริง ตรวจว่า response ตรง spec และไม่ 500 · `schemathesis run <url ของ openapi.json>` | MIT | ยิงจริง สร้างและลบข้อมูล → ชี้ไป dev หรือ staging เท่านั้น · Python |
-| Prism (Stoplight) | `prism mock <spec>` ให้ frontend ใช้ก่อน backend เสร็จ · `prism proxy <spec> <upstream>` ตรวจ traffic จริงกับ spec | Apache-2.0 | Node ≥ 18.20 · โหมด proxy ใส่หน้า service ใน test environment ได้ |
-| Dredd | ตรวจ API กับ API Blueprint / OpenAPI 2 (OpenAPI 3 ทดลอง) | MIT | **เลิกดูแลแล้ว** (archived 2024-11-08) — ไม่เริ่มใช้ใหม่ |
+| Schemathesis | reads OpenAPI, builds requests from the schema, fires them at the real service, and checks that responses match the spec and are not 500 · `schemathesis run <url of openapi.json>` | MIT | really fires, creates and deletes data → point it only at dev or staging · Python |
+| Prism (Stoplight) | `prism mock <spec>` lets the frontend work before the backend is done · `prism proxy <spec> <upstream>` checks real traffic against the spec | Apache-2.0 | Node ≥ 18.20 · proxy mode can sit in front of the service in a test environment |
+| Dredd | checks an API against API Blueprint / OpenAPI 2 (OpenAPI 3 experimental) | MIT | **no longer maintained** (archived 2024-11-08) — do not start using it |
 
-ค่าเริ่มของเรา: Schemathesis ใน job ของ CI หลัง service ขึ้นด้วยข้อมูลทดสอบ (reset endpoint จาก `app-verifier-setup`) · ล้ม = ไม่ merge
+Our default: Schemathesis in a CI job after the service is up with test data (the reset endpoint from `app-verifier-setup`) · failure = no merge
 
-## 3 · Consumer-driven contract — เมื่อทีม frontend หรือผู้เรียกแยกจาก backend
+## 3 · Consumer-driven contract — when the frontend team or callers are separate from the backend
 
-- Pact (pact-foundation · MIT): ฝั่งผู้เรียกเขียน test ว่าใช้ request/response คู่ไหนบ้าง → ได้ไฟล์ pact → ฝั่ง provider รันตรวจกับไฟล์นั้นใน CI ของตัวเอง · provider เปลี่ยนส่วนที่ไม่มีใครใช้ได้โดย test ไม่พัง
-- ใช้เมื่อ: ทีมคนละชุด ปล่อยคนละรอบ หรือมีผู้เรียกมากกว่า 1 ราย (mobile + web + partner) · ทีมเดียวทำทั้ง 2 ฝั่ง → ข้อ 2 พอ
-- ไฟล์ pact แลกกันผ่าน Pact Broker หรือ commit ลง repo ของ provider — ตกลงที่เดียวใน `API-CONVENTIONS.md`
+- Pact (pact-foundation · MIT): the caller side writes tests of which request/response pairs it uses → produces a pact file → the provider side runs a check against that file in its own CI · the provider can change parts nobody uses without breaking tests
+- Use when: the teams are different, release separately, or there is more than 1 caller (mobile + web + partner) · one team does both sides → item 2 is enough
+- Pact files are exchanged through a Pact Broker or committed to the provider's repo — agree on one way in `API-CONVENTIONS.md`
 
-## 4 · เช็ค breaking change ทุก PR
+## 4 · Check for breaking changes on every PR
 
-- `oasdiff breaking <spec เดิม> <spec ใหม่>` (Apache-2.0 · Go · มี Docker image) รายงานเฉพาะการเปลี่ยนที่ทำให้ผู้เรียกเดิมพัง: ลบ endpoint หรือฟิลด์ · ฟิลด์กลายเป็น required · type เปลี่ยน · enum หาย
-- ใน CI: spec เดิม = ของ branch หลัก · spec ใหม่ = ของ PR · เจอ breaking → ต้องขึ้นเวอร์ชันใหม่ตาม §3 หรือ deprecate ตาม §10 ของ SKILL.md หลัก — ไม่ใช่ปิด check
-- เพิ่มฟิลด์ optional · เพิ่ม endpoint · เพิ่มค่า enum ที่ผู้เรียกไม่ switch ตาย = ไม่ breaking
+- `oasdiff breaking <old spec> <new spec>` (Apache-2.0 · Go · has a Docker image) reports only changes that break existing callers: removing an endpoint or field · a field becoming required · a type change · an enum value removed
+- In CI: old spec = the main branch's · new spec = the PR's · on a breaking change → bump to a new version per §3, or deprecate per §10 of the main SKILL.md — do not turn off the check
+- Adding an optional field · adding an endpoint · adding an enum value that callers do not crash on in a switch = not breaking
 
-## ตรวจก่อนส่ง
+## Check before handing over
 
-- [ ] OpenAPI อยู่ใน repo และสร้างจากโค้ด · CI ล้มถ้าไฟล์ไม่ตรงโค้ด
-- [ ] Schemathesis (หรือเทียบเท่า) รันกับ service ที่ขึ้นด้วยข้อมูลทดสอบ · `oasdiff breaking` รันทุก PR
-- [ ] ผู้เรียกแยกทีม → มี pact อย่างน้อย 1 ไฟล์ต่อผู้เรียก และ provider ตรวจใน CI
+- [ ] OpenAPI is in the repo and generated from code · CI fails if the file does not match the code
+- [ ] Schemathesis (or equivalent) runs against a service brought up with test data · `oasdiff breaking` runs on every PR
+- [ ] Callers in a separate team → at least 1 pact file per caller, and the provider checks it in CI
 
 
 ---
@@ -867,86 +867,86 @@ Use when a system imports or exports Excel or CSV
 
 ## reference: thai-accounting-apis.md
 
-# ต่อโปรแกรมบัญชี SME ไทยผ่าน API
+# Connecting to Thai SME accounting software through API
 
-ใช้เมื่อระบบของเราต้องส่งเอกสารขายหรือซื้อเข้าโปรแกรมบัญชีของลูกค้า แทนการ export Excel ให้คีย์ซ้ำ · กฎของ `SKILL.md` ใช้เหมือนเดิม: ตรวจให้จบก่อนเขียน · มีหน้าสรุปก่อนยืนยัน · batch id · audit
-ข้อเท็จจริงทุกข้อมาจากเอกสารของผู้ผลิตที่เปิดตรวจ 2026-10-23 · ราคาและค่า API ตรวจซ้ำ 2026-10-26 (ตาราง "ที่มา") · ราคาและเงื่อนไขเปลี่ยนบ่อย ยืนยันกับผู้ขายก่อนเสนอราคาลูกค้า
-ตัวย่อ: small and medium enterprises (SME) · Application Programming Interface (API) · User Acceptance Testing (UAT) คือระบบทดสอบ · Hash-based Message Authentication Code (HMAC) คือลายเซ็นที่สร้างจากกุญแจลับ · Software Development Kit (SDK)
+Use when our system must push sales or purchase documents into the customer's accounting software, instead of exporting Excel for them to re-key. The rules of `SKILL.md` still apply: validate everything before writing · summary page before confirming · batch id · audit.
+Every fact comes from the vendors' documents, opened 2026-10-23. Prices and API fees were rechecked 2026-10-26 (table "Sources"). Prices and terms change often: confirm with the vendor before quoting a customer.
+Abbreviations: small and medium enterprises (SME) · Application Programming Interface (API) · User Acceptance Testing (UAT) is the test system · Hash-based Message Authentication Code (HMAC) is a signature made from a secret key · Software Development Kit (SDK).
 
-## 1 · เลือกทาง
+## 1 · Choose a route
 
-| ทาง | ใช้เมื่อ |
+| Route | Use when |
 |---|---|
-| ส่งไฟล์ตามแม่แบบนำเข้าของโปรแกรมบัญชี (รูปแบบไฟล์ของแต่ละเจ้ายังไม่ได้ตรวจ) | เอกสารน้อย · แพ็กเกจของลูกค้าไม่เปิด API |
-| ต่อ API ตรง (ข้อ 2–3) | เอกสารหลายร้อยใบต่อเดือน · ต้องการสถานะกลับ เช่น ชำระแล้ว |
-| ผ่านแอปพาร์ทเนอร์ที่โปรแกรมบัญชีรับรอง (PEAK: เมนู ตั้งค่า > การเชื่อมต่อแอปพลิเคชันภายนอก) | ร้านค้าออนไลน์ที่ใช้ระบบหลังร้านอยู่แล้ว → `ecommerce-patterns` `references/thai-marketplace-apis.md` |
+| Send a file using the accounting software's import template (file format of each vendor not yet checked) | Few documents · the customer's package has no API |
+| Connect to the API directly (sections 2–3) | Hundreds of documents per month · need status back, such as paid |
+| Through a partner app the accounting software certifies (PEAK: menu ตั้งค่า > การเชื่อมต่อแอปพลิเคชันภายนอก, i.e. Settings > External application connections) | Online shop that already uses a back-office system → `ecommerce-patterns` `references/thai-marketplace-apis.md` |
 
 ## 2 · PEAK
 
-| เรื่อง | ข้อมูล |
+| Topic | Information |
 |---|---|
-| เอกสาร | developers.peakaccount.com (API Integration Guide · ไฟล์ `llms.txt` รวมลิงก์ทุกหน้า) · มี Postman collection |
-| แพ็กเกจ | PEAK PRO Plus (12,000 บาท/ปี) ขึ้นไป · ราคา PEAK PRO Plus ตามหน้า developers เมื่อ 2026-10-26 · ค่าบริการ API จ่ายก่อนขึ้นระบบจริงตามเงื่อนไขแพ็กเกจที่ตกลง เอกสารไม่ระบุจำนวนเงิน (รอยืนยัน · เอกสาร go-live ให้ยืนยันค่า API จำนวนรายการ และเงื่อนไขทดลองกับทีม PEAK ก่อนใส่ในใบเสนอราคา) |
-| ขอสิทธิ์ | กรอกแบบฟอร์ม ทีมงานติดต่อกลับใน 3 วันทำการ · ได้ Connect ID + Application Code · credential ของ UAT กับระบบจริงแยกกัน |
-| ยืนยันตัวตน | Client Token อายุ 24 ชม. (`POST /api/v1/ClientToken`) · User Token ต่อกิจการ ลูกค้ากดสร้างเองในเมนู เชื่อมต่อแอปพลิเคชันภายนอก ด้วย Application Code · header `Time-Stamp` (yyyyMMddHHmmss เวลา UTC) · `Time-Signature` = HMAC-SHA1 ของ Time-Stamp ใช้ connectId เป็นกุญแจ |
-| ของที่ทำได้ | contacts · products (มี adjust) · services · quotations · invoices · billing notes · receipts · credit notes · purchase orders · expenses · daily journals · รับชำระ · void · approve · แนบไฟล์ |
-| e-Tax | มี endpoint ส่ง e-Tax Invoice ของ invoice และ receipt · ส่ง e-Receipt |
-| UAT | `http://peakengineapidev.azurewebsites.net/api/v1` (เป็น http ไม่ใช่ https) · ฟรี 3 เดือน · เปิด จ.–ศ. 08:00–22:00 |
-| ระบบจริง | `https://api.peakaccount.com/api/v1` · ก่อนขึ้นต้องผ่าน Final UAT Review (test case · error case · duplicate case · ผลทางบัญชี) |
-| rate limit | ขอ ClientToken 10 ครั้ง/นาที/IP · รายงานงบทดลอง (`GET /api/v1/FinancialReports/trialbalance`) 10 ครั้ง/นาที และพร้อมกัน 1 · ต่อ User Token: GET พร้อมกัน 20 · POST พร้อมกัน 10 · แนบไฟล์พร้อมกัน 10 · เกิน → HTTP 429 `RATE_LIMITED` พร้อม `retryAfterSeconds` |
-| คิดเงินตาม | POST Create ที่สำเร็จเท่านั้น (invoice · receipt · quotation · billing note · purchase order · expense · daily journal) |
-| webhook | event Create · Edit · Void · PaidPayment · VoidPayment ของเอกสารหลัก (contact · product ได้แค่ Create · Edit) · ตั้ง custom header ต่อ endpoint ได้ เช่น `x-api-key` · เอกสารไม่พูดถึงลายเซ็นและการส่งซ้ำ |
+| Docs | developers.peakaccount.com (API Integration Guide · file `llms.txt` links every page) · has a Postman collection |
+| Package | PEAK PRO Plus (12,000 baht/year) or higher · PEAK PRO Plus price per the developers page on 2026-10-26 · API fee is paid before go-live under the agreed package terms; the docs state no amount (`รอยืนยัน`, pending confirmation · per the go-live document, confirm the API fee, the number of items, and the trial terms with the PEAK team before putting them in a quotation) |
+| Get access | Fill in the form, the team replies within 3 working days · you get Connect ID + Application Code · UAT and production credentials are separate |
+| Authentication | Client Token valid 24 hours (`POST /api/v1/ClientToken`) · User Token per business, the customer creates it in the menu เชื่อมต่อแอปพลิเคชันภายนอก (External application connections) with the Application Code · header `Time-Stamp` (yyyyMMddHHmmss, UTC) · `Time-Signature` = HMAC-SHA1 of the Time-Stamp, with connectId as the key |
+| What it can do | contacts · products (has adjust) · services · quotations · invoices · billing notes · receipts · credit notes · purchase orders · expenses · daily journals · receive payment · void · approve · attach files |
+| e-Tax | Has an endpoint to send e-Tax Invoice for invoice and receipt · sends e-Receipt |
+| UAT | `http://peakengineapidev.azurewebsites.net/api/v1` (http, not https) · free for 3 months · open Mon–Fri 08:00–22:00 |
+| Production | `https://api.peakaccount.com/api/v1` · before go-live must pass the Final UAT Review (test case · error case · duplicate case · accounting result) |
+| rate limit | ClientToken request 10 times/minute/IP · trial balance report (`GET /api/v1/FinancialReports/trialbalance`) 10 times/minute and 1 concurrent · per User Token: GET 20 concurrent · POST 10 concurrent · file attach 10 concurrent · over the limit → HTTP 429 `RATE_LIMITED` with `retryAfterSeconds` |
+| Billed by | Only successful POST Create (invoice · receipt · quotation · billing note · purchase order · expense · daily journal) |
+| webhook | Events Create · Edit · Void · PaidPayment · VoidPayment of the main documents (contact · product only Create · Edit) · can set a custom header per endpoint, such as `x-api-key` · the docs say nothing about signatures or redelivery |
 
 ## 3 · FlowAccount
 
-| เรื่อง | ข้อมูล |
+| Topic | Information |
 |---|---|
-| เอกสาร | developers.flowaccount.com · spec ที่ใช้อยู่จริง `https://developers.flowaccount.com/swagger.yml` (OpenAPI 3.0.2 · 130 path) · SDK หลายภาษาใน github.com/flowaccount |
-| แพ็กเกจ | เฉพาะ Pro Business ที่มี Open API (หน้าราคา 2026-10-26: ฿457/เดือน · ฿5,490/ปี) · Free · Standard (฿1,990/ปี) · Pro (฿2,990/ปี) ไม่มี API · หน้าราคาไม่ระบุค่า API แยก · นำเข้าไม่เกิน 5,000 รายการ/เดือน เกินคิดราคาพิเศษ · หน้า API เขียนว่า "Pay when you go live" ไม่ระบุจำนวนเงิน (รอยืนยัน) |
-| ขอสิทธิ์ | แบบฟอร์ม request-openapi · ทีมติดต่อใน 1–2 วันทำการ · sandbox ใช้ได้ 30 วัน · credential จริงส่งอีเมลเจ้าของกิจการใน 3 วันทำการหลังยืนยันแพ็กเกจ |
-| ยืนยันตัวตน | OAuth 2.0 · Client Credentials = 1 client ต่อ 1 กิจการ · OpenID = พาร์ทเนอร์ 1 client หลายกิจการ (scope `flowaccount-api offline_access` · refresh token ราว 30 วันนับจากครั้งล่าสุด) · token ที่ `https://openapi.flowaccount.com/{test หรือ v1}/token` อายุ 86,400 วินาที · ส่งใน header `Authorization: Bearer` |
-| base URL | sandbox `https://openapi.flowaccount.com/test` · ระบบจริง `https://openapi.flowaccount.com/v1` |
-| ของที่ทำได้ | contacts · products · quotations · billing-notes · tax-invoices · receipts · cash-invoices · purchases · purchases-orders · expenses · withholding-taxes · journal-entries · chart-of-accounts · เปลี่ยนสถานะ · รับชำระ · แนบไฟล์ · export PDF · ส่งอีเมล |
-| อ้างอิงข้ามระบบ | ฟิลด์ `externalDocumentId` "รหัสเอกสารอ้างอิงจากระบบภายนอก" |
-| e-Tax · rate limit · webhook | ไม่พบใน swagger.yml (ค้นคำ webhook · etax · rate limit · 429 ได้ 0 รายการ) และหน้า developers.flowaccount.com · flowaccount.com/en/developers เมื่อ 2026-10-26 (ยังไม่ได้ตรวจกับผู้ขาย · ติดต่อ developer_support@flowaccount.com) |
+| Docs | developers.flowaccount.com · the spec actually in use `https://developers.flowaccount.com/swagger.yml` (OpenAPI 3.0.2 · 130 paths) · SDKs in several languages at github.com/flowaccount |
+| Package | Only Pro Business has Open API (price page 2026-10-26: ฿457/month · ฿5,490/year) · Free · Standard (฿1,990/year) · Pro (฿2,990/year) have no API · the price page lists no separate API fee · import up to 5,000 items/month, beyond that special pricing · the API page says "Pay when you go live" and gives no amount (`รอยืนยัน`, pending confirmation) |
+| Get access | Form request-openapi · team replies within 1–2 working days · sandbox usable for 30 days · real credentials are emailed to the business owner within 3 working days after the package is confirmed |
+| Authentication | OAuth 2.0 · Client Credentials = 1 client per business · OpenID = partner with 1 client for many businesses (scope `flowaccount-api offline_access` · refresh token about 30 days from the last use) · token at `https://openapi.flowaccount.com/{test or v1}/token` valid 86,400 seconds · sent in header `Authorization: Bearer` |
+| base URL | sandbox `https://openapi.flowaccount.com/test` · production `https://openapi.flowaccount.com/v1` |
+| What it can do | contacts · products · quotations · billing-notes · tax-invoices · receipts · cash-invoices · purchases · purchases-orders · expenses · withholding-taxes · journal-entries · chart-of-accounts · change status · receive payment · attach files · export PDF · send email |
+| Cross-system reference | Field `externalDocumentId` "รหัสเอกสารอ้างอิงจากระบบภายนอก" (document id referenced from an external system) |
+| e-Tax · rate limit · webhook | Not found in swagger.yml (searching webhook · etax · rate limit · 429 gave 0 hits) nor on the pages developers.flowaccount.com · flowaccount.com/en/developers on 2026-10-26 (not yet checked with the vendor · contact developer_support@flowaccount.com) |
 
-## 4 · เจ้าอื่น
+## 4 · Other vendors
 
-| โปรแกรม | สิ่งที่พบ |
+| Software | What was found |
 |---|---|
-| TRCLOUD | หน้า API ของผู้ผลิตบอกว่ามี RESTful API · สร้าง API Key จากเมนูตั้งค่า · มี Custom API & Webhook · ไม่พบเอกสารนักพัฒนาสาธารณะ ต้องขอคู่มือจากทีมขาย |
-| AccRevo | ไม่พบ API สาธารณะ · เว็บมีบทความเปิดตัว AccRevoX × MCP (ทำงานกับ Claude) |
-| Express | ค้น 2 รอบไม่พบเว็บผู้ผลิตและไม่พบ API สาธารณะ |
+| TRCLOUD | The vendor's API page says it has a RESTful API · create an API Key from the settings menu · has Custom API & Webhook · no public developer docs found, ask the sales team for the manual |
+| AccRevo | No public API found · the website has a launch article about AccRevoX × MCP (works with Claude) |
+| Express | Searched twice, found no vendor website and no public API |
 
 ## 5 · e-Tax Invoice
 
-- เลือกระบบเดียวเป็นผู้ออกเลขที่ใบกำกับภาษี · ห้ามระบบเรากับโปรแกรมบัญชีออกเลขซ้อนกัน
-- ส่งเข้าโปรแกรมบัญชีเป็นเอกสารต้นทาง แล้วให้โปรแกรมบัญชีออก e-Tax · PEAK มี endpoint ส่ง e-Tax · FlowAccount ไม่พบใน spec ต้องถามผู้ขาย
-- กฎของใบกำกับ (มาตรา 86/4 · e-Tax Invoice & e-Receipt กับ by Email) → `e-commerce:e-tax-invoice` (ถ้าติดตั้ง)
+- Pick one system to issue the tax invoice number · our system and the accounting software must not both issue numbers
+- Send into the accounting software as the source document, then let the accounting software issue the e-Tax · PEAK has an endpoint to send e-Tax · FlowAccount not found in the spec, ask the vendor
+- Tax invoice rules (section 86/4 · e-Tax Invoice & e-Receipt vs by Email) → `e-commerce:e-tax-invoice` (if installed)
 
-## 6 · กันซ้ำและกระทบยอด
+## 6 · Prevent duplicates and reconcile
 
-- เก็บตาราง mapping: รหัสฝั่งเรา ↔ รหัสฝั่งโปรแกรมบัญชี · PEAK แนะนำให้เก็บ External Reference และ mapping เพื่อกันเอกสารซ้ำ · FlowAccount ใช้ `externalDocumentId` เก็บรหัสฝั่งเรา
-- เอกสารของทั้ง 2 เจ้าไม่มี idempotency key → ค้น mapping ก่อน POST create ทุกครั้ง (`principle-safe-to-rerun`)
-- timeout ไม่ได้แปลว่าล้มเหลว · ดึงรายการตามช่วงวันที่มาเทียบก่อนส่งซ้ำ
-- ได้ 429 → รอตาม `retryAfterSeconds` หรือถอยแบบ exponential (1 · 2 · 4 · 8 วินาที ตามที่ PEAK แนะนำ)
-- กระทบยอดทุกวัน: จำนวนเอกสารและยอดรวมของ 2 ระบบต้องตรงกัน → `fintech-payments` (`references/agent-payment-integration.md` หัวข้อ Settlement Reconciliation)
-- ทุกการส่งลง audit: ใครส่ง · เอกสารไหน · รหัสปลายทาง · ผล → `audit-trail`
-- Client Token · client secret · connectId อยู่นอกโค้ด → `config-and-secrets` · UAT ของ PEAK เป็น http จึงใช้ข้อมูลทดสอบเท่านั้น
+- Keep a mapping table: our id ↔ the accounting software's id · PEAK recommends keeping External Reference and a mapping to prevent duplicate documents · FlowAccount uses `externalDocumentId` to hold our id
+- Neither vendor's docs have an idempotency key → look up the mapping before every POST create (`principle-safe-to-rerun`)
+- A timeout does not mean failure · pull the list by date range and compare before resending
+- On 429 → wait per `retryAfterSeconds` or back off exponentially (1 · 2 · 4 · 8 seconds, as PEAK recommends)
+- Reconcile every day: the document count and total of the 2 systems must match → `fintech-payments` (`references/agent-payment-integration.md`, section Settlement Reconciliation)
+- Log every send to audit: who sent · which document · destination id · result → `audit-trail`
+- Client Token · client secret · connectId stay outside the code → `config-and-secrets` · PEAK UAT is http, so use test data only
 
-## ที่มา
+## Sources
 
-| เรื่อง | URL (เปิดตรวจ 2026-10-23) |
+| Topic | URL (opened 2026-10-23) |
 |---|---|
-| PEAK แพ็กเกจ · UAT ฟรี 3 เดือน · คู่มือ | https://www.peakaccount.com/developers · https://developers.peakaccount.com/reference/api-integration-guide |
-| PEAK รายการหน้า API ทั้งหมด | https://developers.peakaccount.com/llms.txt |
-| PEAK token · ลายเซ็น | https://developers.peakaccount.com/reference/peak-api-client-token-guide.md |
-| PEAK rate limit · การนับเงิน · ขึ้นระบบจริง | https://developers.peakaccount.com/reference/copy-of-api-rate-limiting-concurrency-control.md · .../peak-api-transaction-counting.md · .../peak-api-implementation-go-live-guide.md |
-| PEAK webhook · สิทธิ์ API | https://developers.peakaccount.com/reference/webhook.md · .../api-access-rights.md |
-| PEAK ศูนย์ช่วยเหลือ (แพ็กเกจ · User Token) | https://intercom.help/peak/en/articles/13176287 · https://intercom.help/peak/en/articles/10078711 |
-| FlowAccount หน้า API · ราคา (ตรวจซ้ำ 2026-10-26) | https://flowaccount.com/en/developers · https://flowaccount.com/en/pricing |
-| FlowAccount การเชื่อมต่อ · token | https://developers.flowaccount.com/tutorial/connect-open-api · .../tutorial/connect/client-credentials-flow · .../tutorial/connect/open-id-flow |
-| FlowAccount spec · SDK | https://developers.flowaccount.com/swagger.yml · https://github.com/flowaccount/open-api (README ชี้ว่า swagger.yml คือ spec ที่ใช้จริง) |
+| PEAK packages · UAT free 3 months · guide | https://www.peakaccount.com/developers · https://developers.peakaccount.com/reference/api-integration-guide |
+| PEAK list of all API pages | https://developers.peakaccount.com/llms.txt |
+| PEAK token · signature | https://developers.peakaccount.com/reference/peak-api-client-token-guide.md |
+| PEAK rate limit · billing count · go-live | https://developers.peakaccount.com/reference/copy-of-api-rate-limiting-concurrency-control.md · .../peak-api-transaction-counting.md · .../peak-api-implementation-go-live-guide.md |
+| PEAK webhook · API access rights | https://developers.peakaccount.com/reference/webhook.md · .../api-access-rights.md |
+| PEAK help center (packages · User Token) | https://intercom.help/peak/en/articles/13176287 · https://intercom.help/peak/en/articles/10078711 |
+| FlowAccount API page · price (rechecked 2026-10-26) | https://flowaccount.com/en/developers · https://flowaccount.com/en/pricing |
+| FlowAccount connection · token | https://developers.flowaccount.com/tutorial/connect-open-api · .../tutorial/connect/client-credentials-flow · .../tutorial/connect/open-id-flow |
+| FlowAccount spec · SDK | https://developers.flowaccount.com/swagger.yml · https://github.com/flowaccount/open-api (README says swagger.yml is the spec in actual use) |
 | TRCLOUD · AccRevo | https://www.trcloud.co/api.php · https://www.accrevo.com/ |
 
 

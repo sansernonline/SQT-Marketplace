@@ -1,6 +1,6 @@
-# Parallelization และ CI Integration
+# Parallelization and CI Integration
 
-ระดับการรันขนาน รอบการรัน end-to-end (E2E) ใน continuous integration (CI) และไฟล์ที่ต้องเก็บไว้เมื่อเทสต์ล้ม
+Parallelism levels, the end-to-end (E2E) run tiers in continuous integration (CI), and the files to keep when a test fails.
 
 ## Parallelization
 
@@ -16,15 +16,15 @@
 - Unique test data per test
 - Database/external services support concurrency
 
-**ตกลงกติกาก่อนรันพร้อมกันหลาย agent หรือหลาย worker** (ตัวอย่างจากงานทดสอบร้านค้าออนไลน์ ที่ reset ล้างข้อมูลทั้งเซิร์ฟเวอร์ รันพร้อมกัน 6 agent):
+**Agree on rules before running many agents or workers at once** (example from an online-shop test job where a reset wipes the data of the whole server, run with 6 agents at once):
 
-| กติกา | กันอะไร |
+| Rule | Prevents |
 |---|---|
-| reset ครั้งเดียวก่อนเริ่มรันรวม ระหว่างรันไม่มี agent ไหน reset (ตั้งตัวแปร เช่น `PP_SKIP_RESET=1`) และแต่ละ agent เก็บผลในโฟลเดอร์ของตัวเอง | ลบข้อมูลและไฟล์ผลของกัน |
-| test ที่ซื้อของใช้สินค้าคนละตัว ไม่ใช้ตัวที่ test อื่นตรวจสต็อกอยู่ | สต็อกชนกัน |
-| อีเมลบัญชีใหม่ใส่ `{run}` (ชื่อ project + เวลาเริ่มรอบ) | รันรอบ 2 ได้ "อีเมลนี้ถูกใช้แล้ว" (แผนหนึ่งมี 30 test ที่รันซ้ำไม่ได้ เหลือ 0 หลังแก้) |
-| test ที่ชน rate limit ใช้บัญชีของตัวเอง และรันท้ายสุด | ตัวนับค้างข้าม test |
-| test ที่ใช้สถานะกลางร่วมกันและแยกไม่ได้ → `workers: 1` · `fullyParallel: false` | ผลเพี้ยนแบบสุ่ม |
+| Reset once before the combined run starts; no agent resets during the run (set a variable such as `PP_SKIP_RESET=1`), and each agent keeps its results in its own folder | deleting each other's data and result files |
+| Tests that buy things use different products, and never one that another test is checking stock on | stock collisions |
+| New-account emails include `{run}` (project name + run start time) | a second run getting "อีเมลนี้ถูกใช้แล้ว" ("this email is already used") (one plan had 30 tests that could not be re-run; 0 after the fix) |
+| Tests that hit the rate limit use their own account and run last | counters carrying over across tests |
+| Tests that use shared central state and cannot be separated → `workers: 1` · `fullyParallel: false` | randomly wrong results |
 
 ## CI Integration
 
@@ -48,17 +48,17 @@
 
 ### Browser matrix
 
-ไม่ต้องรันครบ 3 browser ทุกรอบ → เวลา CI เพิ่ม ~3 เท่า และเทสต์ flaky เพิ่มตามจำนวน browser
+Do not run all 3 browsers every round → CI time grows ~3x and flaky tests grow with the number of browsers.
 
-| Browser | ครอบคลุม | รันตอนไหน |
+| Browser | Covers | When to run |
 |---------|----------|-----------|
-| Chromium | Chrome · Edge (ผู้ใช้ส่วนใหญ่) | ทุกรอบ |
-| WebKit | ทุก browser บน iPhone/iPad (รวม Chrome บน iOS) | merge to main · nightly · pre-prod |
-| Firefox | ส่วนแบ่งน้อย | pre-prod เท่านั้น · ตัดได้ถ้าลูกค้าไม่ใช้ |
+| Chromium | Chrome · Edge (most users) | every round |
+| WebKit | every browser on iPhone/iPad (including Chrome on iOS) | merge to main · nightly · pre-prod |
+| Firefox | small share | pre-prod only · can be dropped if the customer does not use it |
 
-ปรับตามผู้ใช้จริง → ดู analytics ก่อน ถ้าลูกค้าองค์กรบังคับ Firefox ให้ย้ายขึ้นไปรอบ nightly
+Adjust to real users → look at analytics first; if an enterprise customer mandates Firefox, move it up to the nightly round.
 
-ตั้งเป็น project ใน Playwright แล้วเลือกด้วย `--project`
+Set them up as projects in Playwright and pick with `--project`.
 
 ```ts
 // playwright.config.ts
@@ -75,16 +75,16 @@ npx playwright test --project=chromium --project=webkit-mobile  # main · nightl
 npx playwright test                                             # pre-prod (ครบ 3)
 ```
 
-**เทสต์ที่ควรรันข้าม browser** (tag `@cross-browser`) → จุดที่มักพังต่าง browser:
+**Tests that should run across browsers** (tag `@cross-browser`) → places that often break differently per browser:
 - date/time input
-- อัปโหลดไฟล์ · clipboard
-- จัดรูปแบบวันที่/ตัวเลขด้วย `Intl`
+- file upload · clipboard
+- date/number formatting with `Intl`
 - CSS layout · scroll · sticky
-- autoplay วิดีโอ/เสียง
+- video/audio autoplay
 
-เทสต์ที่เป็น logic ล้วน → Chromium ตัวเดียวพอ
+Pure-logic tests → Chromium alone is enough.
 
-> WebKit ของ Playwright ไม่ใช่ Safari ตัวจริง 100% → งานที่ลูกค้าใช้ iPhone เยอะ ให้ลองบนเครื่องจริงก่อน release อีกรอบ
+> Playwright's WebKit is not 100% the real Safari → for work where customers use iPhone a lot, try on a real device once more before release.
 
 ### Artifacts to capture
 - Screenshots on failure

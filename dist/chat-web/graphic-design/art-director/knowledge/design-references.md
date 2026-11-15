@@ -2,146 +2,146 @@
 
 Use before design work to search live references and colours
 
-# design-references — ค้นงานจริงก่อนออกแบบ แล้วหยิบสีจากงานที่เลือก
+# design-references — search real work before designing, then take colors from the chosen work
 
-อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies` · ถ้อยคำเขียนตาม `human-writing` · ใช้ก่อน skill ออกแบบทุกตัว (`ui-craft` · `presentation-design` · `branded-document-design` · `icon-design` · `brand-kit` · `social-formats` ฯลฯ)
+Lives only in plugin `superuser`; other plugins share it through `dependencies`. Wording follows `human-writing`. Use it before every design skill (`ui-craft` · `presentation-design` · `branded-document-design` · `icon-design` · `brand-kit` · `social-formats`, and so on).
 
-> **กฎข้อเดียว:** ทุกงานออกแบบเริ่มจากเอาคำของโปรเจกต์ไปค้นสดในเว็บที่เก่งงานประเภทนั้น แล้วหยิบสไตล์และสีจากงานที่ใกล้ที่สุดมาเป็นต้นแบบ · ไม่ออกแบบจากความจำหรือคลังที่เก็บไว้ เพราะเทรนด์เปลี่ยนเร็ว (ผู้ใช้ตัดสิน 2026-10-27) · skill นี้เก็บแค่รายชื่อเว็บ ไม่เก็บตัวอย่างงาน
+> **One rule:** every design job starts by taking the project's words and searching live on sites strong in that type of work, then taking style and colors from the closest work as the reference. Do not design from memory or from a stored library, because trends change fast (user's decision 2026-10-27). This skill keeps only a list of sites, not sample work.
 
 **Order of the first answer to any design request:** (1) search queries from the project's own words (2) links to real works you opened this round on sites strong in that type, such as Awwwards · Land-book · Dribbble · Behance (3) if the owner is present and did not say "don't ask", the board and the pick question from gate item 3 below; otherwise colours or shapes, each colour naming where it came from (a reference opened this round, or the locked brand guide) · Hex codes and `<svg>` come after step 2, never before · "Just make it, don't ask" skips the questions, not the search · No web tool in this session → give the queries and site links, and say the colours will be taken from the work the owner picks (eval 2026-11-10: drew SVG or picked colours before searching 3/3 in every case)
 
-## ด่านก่อนลงมือ — ทุกงานสร้างสรรค์ ทุกครั้ง
+## Gate before starting (`ด่านก่อนลงมือ`) — every creative job, every time
 
-เจ้าของสั่ง 2026-11-06: สั่งงานสร้างสรรค์เมื่อไร ต้องอ่านธีมและค้นต้นแบบก่อนลงมือเสมอ · skill ออกแบบทุกตัวชี้มาที่หัวข้อนี้ · ข้ามข้อไหนต้องเขียนเหตุผลในบรรทัดหลักฐาน
+Owner's order 2026-11-06: whenever a creative job is ordered, always read the theme and search references before starting. Every design skill points to this section. If you skip any item, write the reason in the evidence line.
 
-1. **อ่านธีม** — หัวข้อ "สไตล์ออกแบบที่ชอบ" ใน `~/.claude/superuser-style.md` (รวมหัวข้อย่อย "บันทึกการเลือก") และของที่ล็อกไว้แล้วในโปรเจกต์ (คู่มือแบรนด์ · `DESIGN.md` · style lock · หน้าพี่น้อง) · ไม่มีหัวข้อนั้น จดว่า `ไม่มี` แล้วเดินต่อ ไม่หยุดถาม
-2. **ค้นต้นแบบสด** ตามหัวข้อ "ขั้นตอน" ข้างล่าง **แม้มีแบรนด์หรือหน้าพี่น้องแล้ว** และก่อนถามเจ้าของเรื่องใด ๆ (รันสคริปต์ไม่ได้ ใช้ `WebSearch` แทน ตามขั้นตอนข้อ 2) · ของที่ล็อกไว้คุมสีและฟอนต์ การค้นใช้หาโครง องค์ประกอบ และวิธีเล่า ของชิ้นที่กำลังทำ
-   - ต้นแบบที่นับได้ต้องเห็นโครงชัดในขนาดที่เปิดดู · ภาพย่อที่เห็นแค่สี หรือช่องว่างที่ภาพยังไม่โหลด ไม่นับ · เว็บร้านธีมกันบอทเป็นเรื่องปกติ (ThemeForest · TemplateMonster กันบอท 2026-11-06) ให้ลองร้านที่เปิดได้ เช่น wordpress.org/themes แล้วจดว่าเว็บไหนเปิดไม่ได้
-3. **ให้เจ้าของเลือกต้นแบบจากภาพ** — agent เลือกเองจากภาพย่อมักได้แนวกลาง ๆ (2026-10-28: agent ทำรูปเอง เจ้าของว่า "จืด" · เจ้าของเลือก Stripe จากหน้ารวมภาพ งานผ่าน)
-   - คัดต้นแบบที่เปิดได้และต่างกันจริง 4–8 ชิ้น แล้วรัน `board <ประเภท> "<คำค้น>" --ref <URL> ...` จะได้หน้าเดียวที่มีภาพหน้าจอติดเลข
-   - เปิดดูภาพทุกชิ้นก่อน ถ้าป๊อปอัปหรือแบนเนอร์คุกกี้บัง หรือภาพว่าง ให้ตัดออกหรือเปลี่ยนชิ้นแล้วรันใหม่
-   - ถามด้วย `AskUserQuestion` แบบเลือกหลายข้อ ให้ติ๊ก 1–2 ชิ้น ใส่ path ของหน้า board ในคำถาม · 1 คำถามมีได้ 4 ตัวเลือก ถ้ามี 5–8 ชิ้นให้แบ่งเป็น 2 คำถามจำนวนใกล้กัน (5 ชิ้นแบ่ง 3 กับ 2 · 8 ชิ้นแบ่ง 4 กับ 4) และคำถามอื่นของงานในรอบนี้เหลือได้ 2 · ไม่ต้องมีตัว `(แนะนำ)` เพราะเป็นเรื่องรสนิยมของเจ้าของ
-   - ชิ้นที่ติ๊กนับเป็นชอบ ชิ้นที่ไม่ติ๊กนับเป็นเฉย ๆ · นับเป็นไม่ชอบเฉพาะที่เจ้าของพิมพ์บอกเอง
-   - งานออกแบบถามเจ้าของได้ 2 จุดเท่านั้น: หน้า board ตอนเริ่ม (รวมคำถามอื่นของงานไว้ในรอบนี้) และ 3 แนวรวมเป็นคำถามเดียวตอนจบตาม `autonomy` หัวข้อ "เริ่มแล้วไม่หยุดถาม" · ระหว่างนั้นไม่ถาม
-   - ไม่ถามเมื่อเจ้าของสั่งไม่ต้องถาม ทำงานตอนเจ้าของไม่อยู่ (`unattended-run`) หรือชิ้นนี้ใช้แนวที่เจ้าของเลือกไว้แล้ว · ถามแล้วไม่ได้คำตอบ ให้ทำเหมือนกรณีไม่ถาม · กรณีนี้ยังสร้างหน้า board เป็นหลักฐานให้เจ้าของเปิดดูย้อนหลัง แล้ว agent เลือกต้นแบบที่เข้า "สไตล์ออกแบบที่ชอบ" และจดใต้ **ตัดสินใจเอง**
-   - ถ้าคนทำเป็น subagent ที่ไม่มี `AskUserQuestion` ให้ส่ง path ของหน้า board กลับไปให้หัวหน้า หัวหน้าเป็นคนถามเจ้าของแล้วส่งคำตอบกลับมา
-   - เจ้าของตอบแล้ว จดตามหัวข้อ "จำรสนิยมของเจ้าของ" ทันที
-4. **ทำ 3 แนวที่ต่างกันจริง** ต่างที่โครงและองค์ประกอบ ไม่ใช่แค่สี · แต่ละแนวอ้างต้นแบบ 1 ชิ้นที่เปิดดูในรอบนี้ (ชิ้นที่เจ้าของเลือกก่อน) · ถ้าเจ้าของอยู่ ให้เลือกในคำถามตอนจบ หลัง 3 แนวผ่านการตรวจด้วยตาในข้อ 5 แล้ว · ถ้าไม่อยู่ ให้เลือกเองตาม `parallel-attempts-pick-best` แล้วจดใน **ตัดสินใจเอง** · ทำ 1 แนวได้เมื่อหน้าตาถูกล็อกแล้ว (ชิ้นที่แตกจาก master · ชุดที่มี style lock ผ่านแล้ว · แก้ภาพเดิม · ตรวจงาน) และเขียนเหตุผลไว้
-5. **ก่อนส่งตรวจตาม `no-ai-look`** — สคริปต์กับไฟล์ HTML/CSS และด่านตาทุกงาน · ด่านตาต้องมี agent ตัวใหม่ที่ไม่ได้ทำงานชิ้นนี้เปิดดูภาพจริง (`no-ai-look` ย่อหน้า "คนที่ไม่ได้ทำต้องตรวจด้วยตา" ในข้อ 3.2) · คนทำตรวจเองนับไม่ได้ · ถ้าคนทำเป็น subagent ที่เรียก agent อื่นไม่ได้ ให้ส่งภาพกลับไปให้หัวหน้าเรียก `design-critic` และเขียนช่องตรวจตาว่า `รอหัวหน้า`
-6. **บรรทัดหลักฐาน** ท้ายคำตอบ: `ด่านก่อนลงมือ: ธีม <อ่านแล้ว · ไม่มี> · ต้นแบบ <n> ชิ้น <ลิงก์> · เลือกโดย <เจ้าของ ชิ้น n · agent เพราะ…> · แนว <3 · 1 เพราะ…> · no-ai-look <ผล> · ตรวจตา <ชื่อ agent ที่ตรวจ · รอหัวหน้า · ข้าม เพราะ…> · จดรสนิยม <n บรรทัด · ไม่มีการเลือก>` · ไม่มีบรรทัดนี้ = ยังไม่ผ่านด่าน
+1. **Read the theme** — the section "สไตล์ออกแบบที่ชอบ" (preferred design styles) in `~/.claude/superuser-style.md` (including its subsection "บันทึกการเลือก", the choice log) and anything already locked in the project (brand guide · `DESIGN.md` · style lock · sibling pages). If that section does not exist, note `ไม่มี` (none) and carry on; do not stop to ask.
+2. **Search live references** per the "Steps" section below, **even when a brand or sibling page exists**, and before asking the owner anything (if you cannot run the script, use `WebSearch` instead, per step 2 of the steps). What is locked controls colors and fonts; the search is for the structure, elements and storytelling of the piece being made.
+   - A reference only counts if its structure is clearly visible at the size you opened it. A thumbnail that shows only color, or a blank space where the image has not loaded, does not count. Theme stores blocking bots is normal (ThemeForest · TemplateMonster blocked bots 2026-11-06); try a store that opens, such as wordpress.org/themes, and note which site would not open.
+3. **Let the owner pick references from images** — an agent picking from thumbnails on its own tends to land on a middle-of-the-road style (2026-10-28: the agent made the image itself, the owner said "bland"; the owner picked Stripe from the image board and the work passed).
+   - Select 4–8 references that open and really differ, then run `board <ประเภท> "<คำค้น>" --ref <URL> ...` to get one page with numbered screenshots.
+   - Open every image first. If a pop-up or cookie banner covers one, or the image is blank, drop it or swap it and run again.
+   - Ask with `AskUserQuestion` as multi-select, tick 1–2 pieces, and put the board page's path in the question. 1 question can have 4 options; with 5–8 pieces split into 2 questions of close size (5 pieces split 3 and 2 · 8 pieces split 4 and 4), and the job's other questions this round can have 2 left. Do not add a `(แนะนำ)` (recommended) option, because it is a matter of the owner's taste.
+   - A ticked piece counts as liked; an unticked piece counts as neutral. Count as disliked only what the owner types themselves.
+   - A design job may ask the owner at 2 points only: the board page at the start (with the job's other questions this round) and the 3 directions as one question at the end per `autonomy` section "เริ่มแล้วไม่หยุดถาม" (start and do not stop to ask). Do not ask in between.
+   - Do not ask when the owner says don't ask, when working while the owner is away (`unattended-run`), or when this piece uses a style the owner already chose. If you asked and got no answer, act as if you did not ask. In these cases still build the board page as evidence for the owner to open later, and the agent picks the references that fit "สไตล์ออกแบบที่ชอบ" and notes them under **ตัดสินใจเอง** (decided on my own).
+   - If the worker is a subagent without `AskUserQuestion`, send the board page's path back to the lead; the lead asks the owner and sends the answer back.
+   - Once the owner answers, record it at once per the section "Remember the owner's taste".
+4. **Make 3 really different directions**, different in structure and elements, not only color. Each direction cites 1 reference opened this round (the owner's picks first). If the owner is present, pick in the end-of-job question, after the 3 directions pass the eye check in item 5. If not present, pick yourself per `parallel-attempts-pick-best` and note it under **ตัดสินใจเอง**. You may make 1 direction when the look is already locked (a piece split off a master · a set with a passed style lock · editing an existing image · reviewing work) and write the reason.
+5. **Before sending, check per `no-ai-look`** — the script on HTML/CSS files and the eye gate on every job. The eye gate needs a fresh agent that did not do this piece to open the real image (`no-ai-look` paragraph "คนที่ไม่ได้ทำต้องตรวจด้วยตา" (someone who did not make it must check by eye) in item 3.2). The maker's own check does not count. If the worker is a subagent that cannot call another agent, send the image back to the lead to call `design-critic`, and write `รอหัวหน้า` (waiting for the lead) in the eye-check field.
+6. **Evidence line** at the end of the answer: `ด่านก่อนลงมือ: ธีม <อ่านแล้ว · ไม่มี> · ต้นแบบ <n> ชิ้น <ลิงก์> · เลือกโดย <เจ้าของ ชิ้น n · agent เพราะ…> · แนว <3 · 1 เพราะ…> · no-ai-look <ผล> · ตรวจตา <ชื่อ agent ที่ตรวจ · รอหัวหน้า · ข้าม เพราะ…> · จดรสนิยม <n บรรทัด · ไม่มีการเลือก>` (keep this line in Thai). No such line = the gate has not passed.
 
-## ใช้เมื่อ
+## Use when
 
-- เริ่มงานที่คนต้องมอง: หน้าเว็บ · แอป · แดชบอร์ด · สไลด์ · เอกสาร · ไอคอน · โลโก้ · โพสต์ · ภาพประกอบ · motion
-- ต้องเลือกสีหรือธีม · มีแบรนด์แล้วก็ยังค้น เพื่อหาโครงและองค์ประกอบของชิ้นใหม่
-- ผู้ใช้บอกว่างานดูทั่วไป ดูเหมือน AI ทำ หรือ "ไปดูตัวอย่างจริงมาก่อน"
+- Starting work people must look at: web page · app · dashboard · slide · document · icon · logo · post · illustration · motion
+- Having to choose colors or a theme. Even with a brand, still search, to find the structure and elements of the new piece.
+- The user says the work looks generic, looks AI-made, or says "go look at real examples first"
 
-ค้นน้อยลงได้ ไม่ข้าม: โปรเจกต์มีหน้าตาที่ผ่านด่านสวยแล้ว (ลอกหน้าพี่น้องตาม `ui-craft` ข้อ 0 · ค้นเฉพาะโครงของส่วนที่ยังไม่มีในหน้าพี่น้อง) · ลูกค้ามีคู่มือแบรนด์ (ใช้สีและฟอนต์ตามคู่มือ ค้นเฉพาะเลย์เอาต์) · ไม่ใช้เลย: งานที่ไม่มีใครมอง (โค้ดหลังบ้าน · ข้อความล้วน)
+You may search less but not skip when: the project already has a look that passed the gate and looks good (copy the sibling page per `ui-craft` item 0 · search only the structure of parts the sibling page lacks) · the client has a brand guide (use the guide's colors and fonts, search only layout). Do not use at all for: work nobody looks at (back-end code · plain text).
 
-## ใช้ตัวอื่นแทนหรือคู่กัน
+## Use another skill instead or together
 
-| สถานการณ์ | ใช้ | เหตุผล |
+| Situation | Use | Reason |
 |---|---|---|
-| ได้สีและต้นแบบแล้ว ต้องทำ 3 แนวหน้าจอ | `design-direction-lookup` (software-development) รับสีผ่าน `--palette` | ตรวจ contrast ฟอนต์ไทย และกฎ UX ต่อ |
-| ไอคอน | `icon-design` (graphic-design) | กฎขนาดและใบอนุญาตของไอคอน |
-| ตรวจงานที่ทำเสร็จ | `no-ai-look` | skill นี้หาต้นแบบ ไม่ได้ตรวจผล |
+| Have the colors and reference, need 3 screen directions | `design-direction-lookup` (software-development) takes colors through `--palette` | Goes on to check contrast, Thai fonts and UX rules |
+| Icons | `icon-design` (graphic-design) | Size rules and icon licenses |
+| Checking finished work | `no-ai-look` | This skill finds references; it does not check results |
 
-## ขั้นตอน
+## Steps
 
-ฉบับเต็มพร้อมคำสั่ง ตัวอย่าง และกรณีเว็บกันบอท อยู่ใน [`references/search-steps.md`](references/search-steps.md) · เปิดอ่านก่อนค้นครั้งแรกของ session · ข้อที่เป็นตัวหนาข้างล่างห้ามข้าม
+The full version with commands, examples and the bot-blocking cases is in [`references/search-steps.md`](references/search-steps.md). Read it before the first search of a session. Items in bold below cannot be skipped.
 
-1. **ตั้งคำค้น 3 ชุด** ไทยและอังกฤษ: ตรงตัว · คู่แข่งหรือใกล้เคียง · อารมณ์ (เจ้าของมี "สไตล์ออกแบบที่ชอบ" ให้ใช้คำจากหัวข้อนั้น) · ถ้าสไตล์ที่ชอบชนข้อห้ามของ `no-ai-look` ข้อ 2 ให้ใช้ลำดับ คู่มือแบรนด์ที่อนุมัติ → คำสั่งตรงของเจ้าของในงานนี้ → ข้อห้าม → สไตล์ที่ชอบ
-2. **ค้นสด** `python scripts/find_refs.py links <ประเภท> "<คำค้น>"` · **ค้นอย่างน้อย 1 เว็บ `theme` และ 1 เว็บ `social` ทุกครั้ง** · **รันสคริปต์ไม่ได้ยังต้องค้น** ด้วย `WebSearch` `site:<เว็บ> <คำค้น>` · **ตอบโดยต้นแบบ 0 ชิ้นทั้งที่ยังค้นเว็บได้ = ไม่ผ่านด่าน** แม้ผู้ใช้บอกให้ทำเลยหรือขอแค่แผน
-3. **คัด 4–8 ชิ้นจากหน้างานจริงที่เปิดในรอบนี้** และจดที่มาของชื่อ (ลิงก์ค้นไหน หรือ `จากความรู้ของ agent`) · ถ้า 3 ใน 4 ชิ้นแรกหน้าตาเหมือนกัน ให้ค้นรอบ 2 จากโลกของสินค้าหรือหมวดข้างเคียง แล้วใช้ต้นแบบจากรอบ 2 อย่างน้อย 1 ชิ้น
-4. **ถอดสี 8 หน้าที่** `python scripts/find_refs.py palette-from <URL หรือภาพหน้าจอ>` จากหน้างานรายชิ้น ไม่ใช่หน้าผลค้น · เปิดภาพที่จับไว้ดูทุกครั้ง
-5. **รวมเป็นหน้า board** `python scripts/find_refs.py board <ประเภท> "<คำค้น>" --ref <URL> ...` ให้เจ้าของเลือกตามด่านข้อ 3
-6. **ออกแบบเป็นของเรา** · **สีแบรนด์ของต้นแบบห้ามยกค่ามาตรงตัว** ให้เลื่อนเฉดจนแยกด้วยตาออก แล้วตรวจ contrast ใหม่
+1. **Make 3 sets of search terms**, Thai and English: exact · competitor or close · mood (if the owner has "สไตล์ออกแบบที่ชอบ", use terms from that section). If the preferred style clashes with a ban in `no-ai-look` item 2, use this order: approved brand guide → the owner's direct instruction for this job → the ban → preferred style.
+2. **Search live** `python scripts/find_refs.py links <ประเภท> "<คำค้น>"`. **Search at least 1 `theme` site and 1 `social` site every time.** **If you cannot run the script, still search** with `WebSearch` `site:<site> <search term>`. **Answering with 0 references while web search is still possible = fails the gate**, even if the user says just do it or asks only for a plan.
+3. **Pick 4–8 pieces from real work pages opened this round** and note where each name came from (which search link, or `จากความรู้ของ agent` (from the agent's own knowledge)). If 3 of the first 4 look the same, search a 2nd round from the product's world or a neighbouring category, and use at least 1 reference from round 2.
+4. **Extract the 8-role colors** `python scripts/find_refs.py palette-from <URL หรือภาพหน้าจอ>` from each work's page, not the search results page. Open the captured image and look at it every time.
+5. **Combine into a board page** `python scripts/find_refs.py board <ประเภท> "<คำค้น>" --ref <URL> ...` for the owner to pick per gate item 3.
+6. **Design it as our own.** **Never copy a reference's brand colors as they are**: shift the hue until the eye can tell them apart, then check contrast again.
 
-เจ้าของยังไม่มี "สไตล์ออกแบบที่ชอบ" หรือสั่งให้เลือกแนวใหม่ ให้ทำตามหัวข้อ "ให้เจ้าของเลือกแนวที่ชอบ" ใน [`references/search-steps.md`](references/search-steps.md)
+If the owner has no "สไตล์ออกแบบที่ชอบ" yet or orders a new style pick, follow the section "ให้เจ้าของเลือกแนวที่ชอบ" (let the owner pick the styles they like) in [`references/search-steps.md`](references/search-steps.md).
 
-## จำรสนิยมของเจ้าของ (ทุกครั้งที่เจ้าของเลือกหรือติ)
+## Remember the owner's taste (every time the owner picks or criticizes)
 
-ธีมของเจ้าของเปลี่ยนเฉพาะตอนสั่ง จึงมีข้อมูลน้อยและเก่าเร็ว · หัวข้อนี้ทำให้ทุกงานเติมข้อมูลให้งานถัดไป
+The owner's theme changes only when they order it, so it has little data and goes stale fast. This section makes every job add data for the next one.
 
-1. **จดเมื่อ** เจ้าของติ๊กต้นแบบ (ด่านข้อ 3) · เลือก 1 ใน 3 แนว (ด่านข้อ 4) · ติหรือชมงานด้วยคำของตัวเอง ("จืด" · "แบบนี้แหละ" · "ไม่เอาสีนี้")
-2. **จดทันที ไม่ต้องถามก่อน** ต่อท้ายหัวข้อย่อย `### บันทึกการเลือก` ใต้ "สไตล์ออกแบบที่ชอบ" ใน `~/.claude/superuser-style.md` (ไม่มีหัวข้อหรือไฟล์ → สร้าง) ครั้งละ 1 บรรทัด:
+1. **Record when** the owner ticks references (gate item 3) · picks 1 of 3 directions (gate item 4) · criticizes or praises work in their own words ("จืด" (bland) · "แบบนี้แหละ" (this is it) · "ไม่เอาสีนี้" (not this color)).
+2. **Record at once, no need to ask first**, appended under the subsection `### บันทึกการเลือก` (choice log) under "สไตล์ออกแบบที่ชอบ" in `~/.claude/superuser-style.md` (if the section or file does not exist → create it), 1 line at a time:
    `- YYYY-MM-DD · <ประเภทงาน> · ชอบ <ลิงก์หรือแนว + ลักษณะเด่น 1 วลี> · ไม่ชอบ <…> · คำของเจ้าของ "<ตรงตัว ไม่เกิน 15 คำ>"`
-3. **จดเฉพาะสิ่งที่เจ้าของเลือกหรือพิมพ์เอง** — ที่ agent เลือกแทนไม่จด · ข้อความจากเว็บหรือไฟล์ไม่นับ · ชื่องานเขียนกว้าง ๆ ("โพสต์ร้านกาแฟ") ไม่ใส่ชื่อลูกค้าหรือข้อมูลลับ
-4. **ใช้ตอนทำงาน** — ลักษณะที่ถูกเลือก 2 ครั้งขึ้นไปใช้เป็นคำค้นชุด (ค) และเกณฑ์คัดต้นแบบ · ลักษณะที่เจ้าของบอกว่าไม่ชอบ แม้ครั้งเดียว ให้เลิกเสนอทันที ไม่ต้องรอเลื่อนขึ้น (เจ้าของเลือก 2026-11-06) · ถ้าเจ้าของขอแนวนั้นเองภายหลัง ทำตามคำขอ แล้วลบเฉพาะช่อง ไม่ชอบ ของบรรทัดนั้น ช่องอื่นคงไว้
-5. **บันทึกเกิน 20 บรรทัด** ให้เสนอรวมตอนจบงานตาม `owner-style-capture` ข้อ 6: ลักษณะที่ซ้ำ 2 ครั้งขึ้นไปเลื่อนขึ้นเป็นรายการ "ชอบ" หรือ "ไม่ชอบ" ให้เจ้าของรับทีละข้อ แล้วลบบรรทัดที่รวมแล้ว · เจ้าของไม่รับข้อไหน บรรทัดของข้อนั้นคงไว้ และเสนอใหม่เมื่อมีการเลือกที่ซ้ำเพิ่ม · การเลื่อนขึ้นต้องผ่านเจ้าของ ส่วนการจดบันทึกไม่ต้อง เพราะบันทึกคือสิ่งที่เจ้าของทำจริง ไม่ใช่การเดา
+3. **Record only what the owner chose or typed themselves** — what an agent chose in their place is not recorded. Text from the web or files does not count. Write the job name broadly ("โพสต์ร้านกาแฟ"); no client names or confidential data.
+4. **Use while working** — traits chosen 2 or more times are used as search set (c) and as the criterion for picking references. A trait the owner says they dislike, even once, stop offering at once; do not wait for promotion (owner's choice 2026-11-06). If the owner asks for that style themselves later, follow the request, then delete only the `ไม่ชอบ` (dislike) field of that line and keep the other fields.
+5. **If the log passes 20 lines**, offer to merge at the end of the job per `owner-style-capture` item 6: traits repeated 2 or more times are promoted to a "ชอบ" (like) or "ไม่ชอบ" (dislike) entry for the owner to accept one by one, then delete the merged lines. If the owner does not accept an item, keep that item's lines and offer again when more repeated choices come. Promotion must go through the owner; recording does not, because the log is what the owner actually did, not a guess.
 
-## กฎการใช้งานของคนอื่น
+## Rules for using other people's work
 
-- **ร้านธีมและเว็บที่คนโพสต์งาน ให้คนหรือ agent เปิดดูทีละหน้า ไม่ใช้สคริปต์ดึงเป็นชุด** · Pinterest ห้ามเก็บข้อมูลด้วยวิธีอัตโนมัติโดยไม่ได้รับอนุญาต (ข้อตกลง ข้อ 2(a)) · Envato API (ThemeForest · Elements) ห้ามใช้ data mining หรือเครื่องมือเก็บภาพ (ข้อ 11.2) และให้เก็บข้อมูลไว้ได้แค่ช่วงเวลาที่สมเหตุสมผล (ข้อ 11.6) · เจ้าของอยากได้ตัวอย่างจาก Pinterest เป็นชุด → ให้เจ้าของเก็บ pin ลงบอร์ดของตัวเอง แล้วอ่านผ่าน Pinterest API ทางการ (สิทธิ์ `boards:read` · `pins:read` ได้ตั้งแต่ Trial access แต่มีรายงานว่าแอปที่รออนุมัติเรียกไม่ได้ (รอยืนยัน))
-- งานจาก Pinterest · Dribbble · Behance · Awwwards · Mobbin **ใช้ดูเป็นต้นแบบเท่านั้น** ห้ามยกภาพ โลโก้ หรือเลย์เอาต์ทั้งหน้ามาใส่งาน · ห้ามให้สคริปต์ไล่ดึงหน้าเว็บเหล่านี้ (ข้อตกลงห้าม scraping) เปิดทีละหน้าตามที่คนเลือก
-- ของที่ใช้ตรงได้มีแค่ชุดที่ใบอนุญาตเปิด (คอลัมน์ `use` ใน `sites.csv`) · Canva และ Freepik ห้ามใช้ทำเครื่องหมายการค้า · ชุด CC BY ต้องใส่เครดิต
-- **คลังสำรอง** `data/palettes-fallback.csv` (2,360 ชุด 8 หน้าที่ · Wada MIT + color-palettes-sd CC BY 4.0) ใช้เมื่อค้นสดไม่ได้เท่านั้น: `python scripts/find_refs.py fallback "<คำ>"` แล้วบอกผู้ใช้ว่าใช้คลังสำรอง
+- **Theme stores and sites where people post work: have a person or agent open them one page at a time; do not pull them in batches with a script.** Pinterest forbids collecting data by automated means without permission (terms, item 2(a)). The Envato API (ThemeForest · Elements) forbids data mining or image-collecting tools (item 11.2) and lets you keep data only for a reasonable period (item 11.6). If the owner wants Pinterest examples as a set → have the owner save pins to their own board, then read through the official Pinterest API (scopes `boards:read` · `pins:read` are available from Trial access, but there are reports that an app awaiting approval cannot call them (รอยืนยัน, awaiting confirmation)).
+- Work from Pinterest · Dribbble · Behance · Awwwards · Mobbin **is for viewing as a reference only.** Never lift images, logos or a whole page's layout into the work. Never let a script crawl these sites (the terms ban scraping); open one page at a time as a person picks.
+- The only things you can use directly are sets whose license allows it (the `use` column in `sites.csv`). Canva and Freepik may not be used to make trademarks. CC BY sets need credit.
+- **Fallback library** `data/palettes-fallback.csv` (2,360 sets of 8 roles · Wada MIT + color-palettes-sd CC BY 4.0), used only when live search is impossible: `python scripts/find_refs.py fallback "<คำ>"`, and tell the user the fallback library was used.
 
-## ตัวอย่างจริง
+## Real example
 
-**โจทย์ (2026-10-27):** เว็บร้านกาแฟ specialty · **ทำ:** `links web "ร้านกาแฟ specialty"` ได้ลิงก์ 6 เว็บ · `palette-from https://www.bluebottlecoffee.com` สคริปต์แจ้งว่าเว็บกันบอท จึงใช้ภาพหน้าจอแทน ได้ 8 หน้าที่ (พื้นขาว · สีหลักแดง #bf2a2c contrast 5.9:1) · ส่ง `--palette` เข้า `design_draft.py` ได้ 3 แนว (editorial · bento · paper-print) ผ่าน contrast ทุกคู่ · **ไม่มีอะไรบันทึกถาวร** นอกจากลิงก์ในเอกสารโปรเจกต์
+**Brief (2026-10-27):** a specialty coffee shop website. **Did:** `links web "ร้านกาแฟ specialty"` gave links to 6 sites · `palette-from https://www.bluebottlecoffee.com`: the script said the site blocks bots, so a screenshot was used instead and gave 8 roles (white background · main color red #bf2a2c, contrast 5.9:1) · passing `--palette` into `design_draft.py` gave 3 directions (editorial · bento · paper-print) that pass contrast on every pair. **Nothing is stored permanently** except links in the project's document.
 
-## ตรวจก่อนส่ง
+## Check before sending
 
-- [ ] อ่านหัวข้อ "สไตล์ออกแบบที่ชอบ" แล้ว · คำตอบมีบรรทัด `ด่านก่อนลงมือ:` ครบ 7 ช่อง
-- [ ] ถ้าเจ้าของอยู่ เจ้าของได้เลือกต้นแบบจากหน้า board แล้ว · ถ้าไม่อยู่ หรือถามแล้วไม่ได้คำตอบ จดเหตุผลใต้ **ตัดสินใจเอง** แล้ว
-- [ ] ด่านตาตรวจโดย agent ตัวใหม่ที่ไม่ได้ทำชิ้นนี้ · การเลือกหรือคำติของเจ้าของจดลง "บันทึกการเลือก" แล้ว
-- [ ] คำค้นมาจากโปรเจกต์จริง ครบ 3 ชุด · ต้นแบบที่เลือกมีลิงก์ทุกชิ้น เปิดหน้าจริงในรอบนี้แล้ว และจดที่มาของชื่อ (ลิงก์ค้นไหน หรือ `จากความรู้ของ agent`)
-- [ ] ต้นแบบไม่ได้หน้าตาเหมือนกัน 3 ใน 4 ชิ้น ถ้าเหมือน ค้นรอบ 2 แล้วและใช้ต้นแบบจากรอบ 2 อย่างน้อย 1 ชิ้น
-- [ ] สีมาจากงานต้นแบบหรือเว็บธุรกิจจริงที่ค้นในรอบนี้ ถ้าใช้คลังสำรองบอกผู้ใช้แล้ว · สีหลักและสีเน้นไม่ตรงกับ hex ของต้นแบบชิ้นไหน
-- [ ] สไตล์ที่เจ้าของชอบไม่ได้พาสัญญาณที่ห้ามใน `no-ai-look` ข้อ 2 เข้ามา ยกเว้นเจ้าของสั่งตรงและมี `slop-ok` แล้ว
-- [ ] ไม่มีภาพของคนอื่นในงานส่ง ยกเว้นชุดที่ใบอนุญาตเปิดและใส่เครดิตแล้ว
-- [ ] `python scripts/find_refs.py --self-test` ผ่าน
+- [ ] Read the "สไตล์ออกแบบที่ชอบ" section · the answer has the `ด่านก่อนลงมือ:` line with all 7 fields
+- [ ] If the owner is present, the owner picked references from the board page. If not present, or asked with no answer, the reason is noted under **ตัดสินใจเอง**.
+- [ ] The eye gate was checked by a fresh agent that did not make this piece · the owner's choice or criticism is recorded in "บันทึกการเลือก" (choice log)
+- [ ] Search terms come from the real project, all 3 sets · every chosen reference has a link, a real page opened this round, and a noted source of the name (which search link, or `จากความรู้ของ agent`)
+- [ ] References do not look the same on 3 of 4 pieces. If they do, a 2nd round was searched and at least 1 reference from round 2 is used.
+- [ ] Colors come from reference work or real business sites searched this round; if the fallback library was used, the user was told · the main and accent colors do not match the hex of any reference
+- [ ] The owner's preferred style did not bring in a signal banned in `no-ai-look` item 2, unless the owner ordered it directly and `slop-ok` exists
+- [ ] No one else's images in the delivered work, except sets whose license allows it and credit is given
+- [ ] `python scripts/find_refs.py --self-test` passes
 
-## ที่มา
+## Sources
 
-- รายชื่อเว็บและข้อตกลงการใช้: ค้นและเปิดอ่าน 2026-10-27 (Iconify API · Openverse API · หน้าข้อตกลงของ Dribbble · Behance/Adobe · Pinterest · Canva · Freepik/Magnific · unDraw) · รูปแบบลิงก์ค้นของบางเว็บยังไม่ได้ตรวจทีละเว็บ ถ้าลิงก์ไม่พาไปหน้าผลค้น ให้เปิดหน้าแรกของเว็บแล้วค้นเอง (ยังไม่ได้ตรวจ)
-- ข้อตกลงที่เปิดอ่าน 2026-10-29: [Pinterest Terms](https://policy.pinterest.com/en/terms-of-service) (มีผล 2025-04-30) · [Envato API Terms](https://build.envato.com/terms/) (แก้ 2025-03-11) · [Pinterest access tiers](https://developers.pinterest.com/docs/key-concepts/access-tiers/) (ดูผ่านผลค้น ยังไม่ได้เปิดหน้าเต็ม) · 85 เว็บที่เพิ่ม 2026-10-29 ตรวจด้วย curl: เปิดได้ 70 · กันบอทหรือจำกัดคำขอ 12 (น่าจะเปิดในเบราว์เซอร์ได้ ยังไม่ได้ตรวจทีละเว็บ) · ลิงก์ 404 แก้แล้ว 3
-- เกณฑ์ contrast 4.5:1 และ 3:1: WCAG 2.2 ข้อ 1.4.3 และ 1.4.11
-- คลังสำรอง: mattdesl/dictionary-of-colour-combinations (MIT) · huggingface-projects/color-palettes-sd (CC BY 4.0) · ดูไฟล์ `data/palettes-fallback-LICENSE.md`
+- Site list and terms of use: searched and read 2026-10-27 (Iconify API · Openverse API · terms pages of Dribbble · Behance/Adobe · Pinterest · Canva · Freepik/Magnific · unDraw). The search-link format of some sites has not been checked one by one; if a link does not lead to a results page, open the site's home page and search yourself (ยังไม่ได้ตรวจ, not yet checked).
+- Terms read 2026-10-29: [Pinterest Terms](https://policy.pinterest.com/en/terms-of-service) (effective 2025-04-30) · [Envato API Terms](https://build.envato.com/terms/) (amended 2025-03-11) · [Pinterest access tiers](https://developers.pinterest.com/docs/key-concepts/access-tiers/) (seen through search results, full page not opened) · 85 sites added 2026-10-29 checked with curl: 70 open · 12 bot-blocked or rate-limited (probably open in a browser, not checked one by one) · 3 links with 404 fixed
+- Contrast thresholds 4.5:1 and 3:1: WCAG 2.2 items 1.4.3 and 1.4.11
+- Fallback library: mattdesl/dictionary-of-colour-combinations (MIT) · huggingface-projects/color-palettes-sd (CC BY 4.0) · see file `data/palettes-fallback-LICENSE.md`
 
 
 ## reference: search-steps.md
 
-# design-references — ขั้นตอนค้นต้นแบบฉบับเต็ม
+# design-references — full reference-search steps
 
-> ส่วนขยายของ `SKILL.md` หัวข้อ "ขั้นตอน" · กฎที่ห้ามข้าม (ด่านก่อนลงมือ · ต้นแบบ 0 ชิ้น = ไม่ผ่าน · ค้น `theme` + `social` ทุกครั้ง · ไม่ยกสีต้นแบบตรงตัว) อยู่ใน `SKILL.md` · คำสั่งในไฟล์นี้รันจากโฟลเดอร์ของ skill (`scripts/find_refs.py`)
+> Extension of the "Steps" section of `SKILL.md`. The rules that cannot be skipped (gate before starting · 0 references = fail · search `theme` + `social` every time · never copy a reference's colors as they are) are in `SKILL.md`. Commands in this file run from the skill's folder (`scripts/find_refs.py`).
 
-## สารบัญ
+## Contents
 
-- ขั้นตอนค้นและถอดสี (ข้อ 1–6)
-- ให้เจ้าของเลือกแนวที่ชอบ (ทำครั้งแรก หรือเมื่อสั่ง)
+- Search and extract colors (steps 1–6)
+- Let the owner pick the styles they like (do it the first time, or when asked)
 
-## ขั้นตอนค้นและถอดสี
+## Search and extract colors
 
-1. **ตั้งคำค้น 3 ชุด** จากโปรเจกต์ ทั้งไทยและอังกฤษ: (ก) ตรงตัว เช่น "ร้านกาแฟ specialty" (ข) ใกล้เคียงหรือคู่แข่ง เช่น "third wave coffee · Blue Bottle" (ค) อารมณ์ที่อยากได้ เช่น "อบอุ่น มินิมอล" · สคริปต์แปลงคำไทยที่พบบ่อยเป็นอังกฤษให้
-   - **เจ้าของมีสไตล์ที่ชอบ** (หัวข้อ "สไตล์ออกแบบที่ชอบ" ใน `~/.claude/superuser-style.md`) → ชุด (ค) ใช้คำค้นจากหัวข้อนั้น และตอนคัดงานในข้อ 3 เลือกงานที่เข้าแนวนั้นก่อน · ลูกค้ามีคู่มือแบรนด์ ยืมแค่เลย์เอาต์ ไม่ยืมสี · ผู้ใช้ส่งภาพที่ชอบมาใหม่ → ถอดเป็นคำค้นและลักษณะเด่นแล้วเพิ่มในหัวข้อนั้น ไม่เก็บภาพ
-   - **สไตล์ที่ชอบชนข้อห้ามของ `no-ai-look` ข้อ 2** (เช่น ไล่สีม่วง-น้ำเงิน · กระจกฝ้าทั้งหน้า · ฮีโร่กลางจอ) ให้ใช้ลำดับนี้: คู่มือแบรนด์หรือหน้าตาที่อนุมัติแล้ว → คำสั่งตรงของเจ้าของในงานนี้ → ข้อห้ามของ `no-ai-look` → สไตล์ที่ชอบ · แปลว่าสไตล์ที่ชอบใช้เลือกแนว (โครง ความแน่น อารมณ์) แต่ตัวสัญญาณที่ห้ามไม่ยกมา · ถ้าเจ้าของสั่งตรงในงานนี้ให้ใช้สัญญาณนั้น ให้ใช้ได้ แล้วเขียน `slop-ok: <กฎ> เจ้าของสั่ง <วันที่>` ในไฟล์
-2. **เปิดลิงก์ค้นของเว็บที่เก่งงานประเภทนั้น**
+1. **Make 3 sets of search terms** from the project, in both Thai and English: (a) exact, such as "ร้านกาแฟ specialty" (b) close or competitor, such as "third wave coffee · Blue Bottle" (c) the mood wanted, such as "อบอุ่น มินิมอล". The script converts common Thai terms to English.
+   - **The owner has a preferred style** (section "สไตล์ออกแบบที่ชอบ" (preferred design styles) in `~/.claude/superuser-style.md`) → set (c) uses search terms from that section, and when picking work in step 3, choose work that fits that style first. If the client has a brand guide, borrow only the layout, not the colors. If the user sends a new image they like → turn it into search terms and key traits and add them to that section; do not store the image.
+   - **The preferred style clashes with a ban in `no-ai-look` item 2** (such as purple-blue gradients · frosted glass across the whole page · a centered hero) use this order: brand guide or approved look → the owner's direct instruction for this job → `no-ai-look` bans → preferred style. This means the preferred style is used to choose the direction (structure, density, mood), but the banned signal itself is not brought in. If the owner directly orders that signal in this job, it may be used; write `slop-ok: <rule> เจ้าของสั่ง <date>` in the file.
+2. **Open the search links of sites that are good at that kind of work**
    ```bash
    python scripts/find_refs.py links <ประเภท> "<คำค้น>"
    ```
-   ประเภท: `web` · `app` · `dashboard` · `theme` (ร้านขายธีมและแม่แบบ) · `slide` · `document` · `social` (Pinterest · Dribbble · Behance และคลังภาพที่คนโพสต์งาน) · `poster` · `product` (บรรจุภัณฑ์) · `banner` · `logo` · `icon` · `illustration` · `3d` · `color` · `font` · `motion` (136 เว็บใน [`data/sites.csv`](../data/sites.csv) ไฟล์เดียวที่ skill นี้เก็บ) · **ค้นอย่างน้อย 1 เว็บจาก `theme` และ 1 เว็บจาก `social` ทุกครั้ง** เพราะเป็นที่ที่งานขายจริงและงานที่นักออกแบบโพสต์อยู่ (เจ้าของสั่ง 2026-10-29) · เว็บในประเภทนั้นเปิดไม่ได้ (กันบอท) ให้ลองเว็บถัดไปในประเภทเดียวกัน ครบทุกเว็บแล้วยังเปิดไม่ได้ ให้จดว่าเปิดไม่ได้แล้วเดินต่อ · ไอคอนและภาพที่ใบอนุญาตเปิดค้นสดได้ด้วย `icons` และ `openverse`
-   - **รันสคริปต์ไม่ได้ (ไม่มี Bash) ยังต้องค้น** — ใช้ `WebSearch` ตรง ๆ ด้วย `site:<เว็บ> <คำค้นอังกฤษ>` อย่างน้อย 1 เว็บ `theme` และ 1 เว็บ `social` แล้ว `WebFetch` หน้างานที่ได้ · ไม่เห็น `WebSearch` ในรายการเครื่องมือ ให้โหลดด้วย `ToolSearch` ก่อน · สีถอดจาก CSS หรือรหัสสีในหน้าที่เปิด หรือบอกว่าจะถอดจากชิ้นที่เลือก ไม่เสนอรหัสสีจากความรู้สึก
-   - **ตอบโดยต้นแบบ 0 ชิ้นทั้งที่ยังค้นเว็บได้ = ไม่ผ่านด่าน** แม้ผู้ใช้บอกให้ทำเลย ขอแค่แผน หรือ skill ของงานบอกให้ถามเจ้าของก่อน · ค้นก่อน แล้วถามพร้อมต้นแบบที่ค้นได้ (eval 2026-11-10: เปิด skill แล้วตอบทันทีโดยไม่ค้น เสนอสี 4 ชุดจากความรู้สึก 2 ใน 2 รอบ)
-3. **คัดงาน 4–8 ชิ้นที่ใกล้โปรเจกต์ที่สุด** (จำนวนเดียวกับด่านข้อ 3 ใน `SKILL.md`) ดูจากของจริง (เปิดหน้างานรายชิ้นหรือจับภาพ) ไม่ใช่จากชื่อ · เก็บลิงก์ไว้ในเอกสารของโปรเจกต์ ไม่ใส่ใน skill · เปิดเว็บเองไม่พอจะคัด ให้ส่งหน้า `board` ที่มีแต่ลิงก์ (ข้อ 5 ไม่ใส่ `--ref`) ให้ผู้ใช้กดดูแล้วเลือกเอง · สคริปต์แปลงคำไทยที่พบบ่อยให้ ถ้าลิงก์ยังมีคำไทยค้าง ให้ตั้งคำอังกฤษเองแล้วรันใหม่
-   - **เปิดหน้าเว็บต้นแบบจริงทุกชิ้นในรอบนี้** (เบราว์เซอร์ จับภาพ หรือ `palette-from`) แล้วจดที่มาของชื่อข้างลิงก์: ได้จากลิงก์ค้นของเว็บไหนด้วยคำค้นอะไร หรือ `จากความรู้ของ agent` · ชื่อคู่แข่งที่นึกได้เองใช้ได้ แต่ต้องเปิดหน้าจริงและจดว่ามาจากความรู้ ห้ามเขียนว่าค้นมา · ยังไม่ได้เปิดหน้าจริง = ยังไม่ใช่ต้นแบบ
-   - **ต้นแบบ 3 ใน 4 ชิ้นแรกหน้าตาเหมือนกันไหม** (พื้น สีหลัก และโครงส่วนเปิดแบบเดียวกัน เช่น dev-tool ที่พื้นมืด + นีออนทุกชิ้น) · ใช่ = ได้ค่าเฉลี่ยของหมวด ไม่ใช่ต้นแบบ ให้ค้นรอบ 2 จากโลกของสินค้า (ของที่ผู้ใช้จับจริง ป้าย คู่มือ เอกสารในวงการ) หรือหมวดข้างเคียง (เช่น dev-tool → สำนักพิมพ์ · คู่มือเครื่องจักร · ร้านเครื่องมือช่าง) · ต้นแบบที่ใช้จริงอย่างน้อย 1 ชิ้นต้องมาจากรอบ 2
-4. **ถอดสี 8 หน้าที่จากงานที่เลือก**
+   Types: `web` · `app` · `dashboard` · `theme` (stores that sell themes and templates) · `slide` · `document` · `social` (Pinterest · Dribbble · Behance and galleries where people post work) · `poster` · `product` (packaging) · `banner` · `logo` · `icon` · `illustration` · `3d` · `color` · `font` · `motion` (136 sites in [`data/sites.csv`](../data/sites.csv), the one file this skill keeps). **Search at least 1 site from `theme` and 1 from `social` every time**, because that is where work that really sells and work designers post lives (owner's order 2026-10-29). If a site of that type will not open (bot blocking), try the next site of the same type. If every site fails, note that it could not be opened and carry on. Icons and licensed images can be searched live with `icons` and `openverse`.
+   - **Cannot run the script (no Bash) — still must search.** Use `WebSearch` directly with `site:<site> <English search term>` on at least 1 `theme` site and 1 `social` site, then `WebFetch` the work pages found. If `WebSearch` is not in the tool list, load it with `ToolSearch` first. Take colors from CSS or color codes on the opened page, or say you will extract them from the chosen piece; never offer color codes from a feeling.
+   - **Answering with 0 references while web search is still possible = fails the gate**, even if the user says just do it, asks only for a plan, or the job's skill says ask the owner first. Search first, then ask with the references found (eval 2026-11-10: opened the skill and answered at once without searching, offered 4 color sets from feeling, 2 of 2 rounds).
+3. **Pick 4–8 pieces closest to the project** (the same count as gate item 3 in `SKILL.md`), judged from the real thing (open each work page or capture it), not from the name. Keep the links in the project's document, not in the skill. If opening the sites yourself is not enough to pick, send the `board` page with links only (step 5 without `--ref`) for the user to click through and choose. The script converts common Thai terms; if the links still have Thai words left, write English terms yourself and run again.
+   - **Open the real reference web page of every piece in this round** (browser, capture, or `palette-from`) and note beside the link where the name came from: which site's search link with which search term, or `จากความรู้ของ agent` (from the agent's own knowledge). Competitor names you think of yourself are fine, but you must open the real page and note that it came from knowledge; never write that it was searched. Page not yet really opened = not yet a reference.
+   - **Do 3 of the first 4 references look the same?** (same background, main color and opening structure, such as dev-tools with a dark background + neon on every piece) If yes, you have the category average, not a reference. Search a 2nd round from the product's world (things the user really touches, labels, manuals, documents of the field) or a neighbouring category (such as dev-tool → publishers · machine manuals · hardware stores). At least 1 reference actually used must come from round 2.
+4. **Extract the 8-role colors from the chosen work**
    ```bash
    python scripts/find_refs.py palette-from <URL หรือไฟล์ภาพหน้าจอ>
    ```
-   ได้ พื้น · พื้นรอง · ตัวหนังสือ · ตัวหนังสือรอง · สีหลัก · สีรอง · สีเน้น · เส้นขอบ พร้อมค่า contrast (ตัวหนังสือ 4.5:1 · สีหลัก 3:1 ปรับให้อัตโนมัติ) และบรรทัด `--palette` ส่งเข้า `design_draft.py` ได้เลย · **ถอดจากหน้างานรายชิ้นหรือภาพหน้าจองานที่เลือก ไม่ถอดจากหน้าผลค้น** เพราะจะได้สีของเว็บนั้นเอง · เปิดภาพที่จับไว้ดูทุกครั้ง · สคริปต์เตือนเมื่อเจอหน้ากันบอท หรือเมื่อได้สีเทาเกือบทั้งหมด (มักเป็นแบนเนอร์คุกกี้หรือหน้าที่ยังโหลดไม่ขึ้น) ให้ผู้ใช้จับภาพหน้าจอเองแล้วส่งไฟล์ภาพแทน
-5. **รวมเป็นหน้าเดียวให้ผู้ใช้ดู**
+   You get background · secondary background · text · secondary text · main color · secondary color · accent color · border, with contrast values (text 4.5:1 · main color 3:1, adjusted automatically) and a `--palette` line that goes straight into `design_draft.py`. **Extract from each work's page or a screenshot of the chosen work, not from the search results page**, because that gives the site's own colors. Open the captured image and look at it every time. The script warns when it meets a bot-blocking page, or when almost everything comes out gray (usually a cookie banner or a page that has not loaded). Then have the user take a screenshot themselves and send the image file instead.
+5. **Combine into one page for the user to see**
    ```bash
    python scripts/find_refs.py board <ประเภท> "<คำค้น>" --ref <URL> --ref <URL> --out _to_delete/refs/board.html
    ```
-   ให้เจ้าของเลือกต้นแบบจากหน้านี้ตามข้อ 3 ของ "ด่านก่อนลงมือ" ใน `SKILL.md` ก่อนลงมือ
-6. **ออกแบบเป็นของเรา** ด้วยสีและธีมที่เลือก ตาม skill ของงานนั้น · **สีแบรนด์ของต้นแบบห้ามยกค่ามาตรงตัว** ให้เลื่อนเฉดจนแยกด้วยตาออก แล้วตรวจ contrast ใหม่ (แบบเดียวกับที่ `design-direction-lookup` ทำกับสีจาก `brand_colors.py`) · ตรวจ: ค่า hex สีหลักและสีเน้นตรงกับสีของต้นแบบชิ้นไหนไหม ถ้าตรง = ยังไม่เลื่อน · เอกสารของโปรเจกต์เขียนที่มาตามจริงว่า "เลื่อนเฉดจากต้นแบบ <ลิงก์>" ไม่เขียนว่าผู้ใช้ส่งสีมา
+   Let the owner pick references from this page per item 3 of the "gate before starting" in `SKILL.md`, before starting work.
+6. **Design it as our own** with the chosen colors and theme, following that job's skill. **Never copy a reference's brand colors as they are**: shift the hue until the eye can tell them apart, then check contrast again (the same way `design-direction-lookup` treats colors from `brand_colors.py`). Check: does the hex of the main or accent color match any reference's color? If it does, it has not been shifted. The project's document records the source truthfully as "shifted hue from reference <link>"; do not write that the user sent the colors.
 
-## ให้เจ้าของเลือกแนวที่ชอบ (ทำครั้งแรก หรือเมื่อสั่ง)
+## Let the owner pick the styles they like (do it the first time, or when asked)
 
-1. เลือกเว็บจริง 10–14 แห่งที่แนวต่างกันชัด (พื้นขาวองค์กร · มืดเรืองแสง · ขาวดำเส้นตาราง · อบอุ่นแบบนิตยสาร · ภาพวาดมือ · สีจัด · โปรดักต์ 3 มิติ ฯลฯ) · เว็บบริษัทจับภาพได้ดีกว่า Dribbble (กันบอท)
-2. `board <ประเภท> "<คำ>" --ref <URL> ...` ได้หน้าเดียวที่มีภาพหน้าจอติดเลขและสี 8 หน้าที่ · เปิดดูภาพทุกชิ้น ชิ้นที่ป๊อปอัปหรือแบนเนอร์คุกกี้บังให้ตัดออกแล้วสร้างใหม่
-3. เจ้าของตอบเป็นเลข "ชอบ · ไม่ชอบ" → จดลงหัวข้อ "สไตล์ออกแบบที่ชอบ" ใน `~/.claude/superuser-style.md` ข้อละบรรทัด: ลิงก์ · ลักษณะเด่น · คำค้น · แนวที่ไม่ชอบจดสั้น ๆ แล้วใช้ตามหัวข้อ "จำรสนิยมของเจ้าของ" ข้อ 4 ใน `SKILL.md`
-4. ตอนทำงาน: เปิดลิงก์แนวที่ชอบดูเป็นตัวอย่างก่อน → ใช้คำค้นของแนวนั้นค้นสดตามขั้นตอนข้างบน หางานที่ตรงโจทย์โปรเจกต์ในแนวเดียวกัน → ถอดสีจากงานที่ค้นได้ ไม่ใช้สีจากเว็บในรายการตรง ๆ · ลิงก์ตายหรือหน้าเว็บเปลี่ยนแนวแล้ว บอกเจ้าของและเสนอเลือกใหม่
+1. Pick 10–14 real sites with clearly different styles (corporate white · glowing dark · black-and-white grid lines · warm magazine · hand drawn · saturated color · 3D product, and so on). Company sites capture better than Dribbble (bot blocking).
+2. `board <ประเภท> "<คำ>" --ref <URL> ...` gives one page with numbered screenshots and the 8-role colors. Open every image; if a pop-up or cookie banner covers one, drop it and build again.
+3. The owner answers with numbers, "like · dislike" → write them under the section "สไตล์ออกแบบที่ชอบ" (preferred design styles) in `~/.claude/superuser-style.md`, one line per item: link · key traits · search terms. Write disliked styles briefly and use them per item 4 of "จำรสนิยมของเจ้าของ" (remember the owner's taste) in `SKILL.md`.
+4. While working: open the links of the liked style as examples first → use that style's search terms to search live per the steps above, find work in the same style that fits the project's brief → extract colors from the work found, never use colors straight from the sites in the list. If a link is dead or the site has changed style, tell the owner and offer a new pick.

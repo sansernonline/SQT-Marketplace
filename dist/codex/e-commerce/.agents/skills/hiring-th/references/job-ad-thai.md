@@ -1,6 +1,6 @@
-# แม่แบบประกาศรับสมัคร (ภาษาไทย)
+# Job ad template (Thai)
 
-ย้ายมาจาก `SKILL.md` หัวข้อ 2 · ฉบับภาษาอังกฤษอยู่ใน [job-ad-english.md](job-ad-english.md)
+Moved from `SKILL.md` section 2 · the English version is in [job-ad-english.md](job-ad-english.md)
 
 ```
 ตำแหน่ง: {ชื่อตำแหน่ง} · {แผนก} · รายงานต่อ {ตำแหน่งหัวหน้า}

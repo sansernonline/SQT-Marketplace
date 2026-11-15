@@ -2,136 +2,136 @@
 
 Use when an app or brand needs icons or a favicon
 
-# icon-design — ไอคอนที่คนออกแบบจริงทำ ไม่ใช่รูปทรงที่โค้ดวาด
+# icon-design — icons a real designer would make, not shapes drawn by code
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Gate before starting (every time):** read the owner's theme → search live prototypes → 3 genuinely different directions → check `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" (Gate before starting) of `design-references` (plugin `superuser`) even when a brand already exists (the brand sets color and font, while the search is for finding this piece's structure) · close the work with a line `ด่านก่อนลงมือ:` (Gate before starting:)
 
-อยู่ใน plugin `graphic-design` · ถ้อยคำเขียนตาม `human-writing` · ตัวเลขทุกแพลตฟอร์มอยู่ใน [`references/specs.md`](references/specs.md) · ชุดไอคอนฟรีกับใบอนุญาตอยู่ใน [`references/icon-sets.md`](references/icon-sets.md) · ชุดมีมิติ 3 มิติ และภาพประกอบที่หยิบมาปรับได้อยู่ใน [`references/asset-sets.md`](references/asset-sets.md)
+Lives in plugin `graphic-design` · write wording per `human-writing` · numbers for every platform are in [`references/specs.md`](references/specs.md) · free icon sets and licenses are in [`references/icon-sets.md`](references/icon-sets.md) · sets with depth, 3D, and illustrations that can be picked and adapted are in [`references/asset-sets.md`](references/asset-sets.md)
 
-> **กฎข้อเดียว:** ไอคอนทุกชนิดเริ่มจากของที่คนออกแบบไว้แล้ว (ชุดไอคอนสำเร็จรูปสำหรับหน้าจอ ตัวอย่างที่ผู้ใช้ชอบสำหรับแบรนด์) ไม่ใช่ SVG ที่ agent เขียนทีละเส้นจากศูนย์ เพราะได้แค่รูปทรงพื้นฐานที่แข็งและดูออกว่า AI ทำ (ไอคอน plugin 3 แนวที่ทำแบบนี้ถูกปฏิเสธทั้งหมด 2026-10-26)
+> **One rule:** every kind of icon starts from something a designer already made (a ready-made icon set for screens, an example the user likes for a brand), not an SVG the agent writes stroke by stroke from zero, because that gives only stiff basic shapes that look AI-made (3 plugin icon directions made this way were all rejected on 2026-10-26)
 
-## ใช้เมื่อ
+## Use when
 
-- หน้าจอแอปหรือเว็บต้องมีไอคอนเมนู ปุ่ม สถานะ หรือมีไอคอนปนกันหลายแบบ
-- ต้องทำไอคอนแอป (iOS · Android · Windows) · favicon · ไอคอน plugin · เครื่องหมายโลโก้แบบรูป
-- ผู้ใช้บอกว่าไอคอนไม่สวย ดูทั่วไป หรือดูเหมือน AI ทำ
-- ผู้ใช้มีไฟล์ SVG อยู่แล้ว อยากให้ตรวจ → ข้ามไปข้อ 4 ได้เลย
+- An app or web screen needs menu, button, or status icons, or has a mix of many icon styles
+- You must make an app icon (iOS · Android · Windows) · favicon · plugin icon · pictorial logo mark
+- The user says the icons are not nice, look generic, or look AI-made
+- The user already has an SVG file and wants it checked → skip to section 4
 
-ไม่ใช้เมื่อ: ทำแบรนด์ทั้งชุด (สี ฟอนต์ กฎโลโก้) → `brand-kit` · ภาพประกอบหรือรูปถ่าย → `image-generation` · ตรวจหน้าจอทั้งหน้าว่าดูเหมือน AI ทำไหม → `no-ai-look`
+Do not use when: making a whole brand set (color, font, logo rules) → `brand-kit` · illustrations or photos → `image-generation` · checking whether a whole screen looks AI-made → `no-ai-look`
 
-## ใช้ตัวอื่นแทนหรือคู่กัน
+## Use something else instead or together
 
-| สถานการณ์ | ใช้ | เหตุผล |
+| Situation | Use | Reason |
 |---|---|---|
-| เริ่มร่างไอคอนทุกครั้ง | `design-references` (plugin `superuser`) | **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `icon` แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้ |
-| ไอคอนอยู่ในระบบแบรนด์ | `brand-kit` | สีและกฎการใช้โลโก้มาจากที่นั่น skill นี้ทำแค่ตัวไอคอน |
-| ไอคอนในหน้าจอแอป | `ui-craft` ของ software-development (ถ้าติดตั้ง) | ขนาดปุ่ม ระยะ และ token ของหน้าจออยู่ที่นั่น |
-| ต้องให้คนเลือกระหว่างหลายแนว | `parallel-attempts-pick-best` ข้อ 0 | ต้องมีตัวอย่างที่ผู้ใช้ชอบก่อนแข่งทุกครั้ง |
-| ตรวจไอคอนก่อนส่ง | `design-critic` agent · `design-review` | ได้สายตาใหม่ที่ไม่ได้ทำงานนี้ |
+| Starting any icon sketch | `design-references` (plugin `superuser`) | **Search prototypes first:** search live with the project's words per `design-references` (plugin `superuser`), type `icon`, then pull colors from the chosen work · the stored color library is for when a live search is not possible |
+| The icon is inside a brand system | `brand-kit` | Colors and logo-use rules come from there, this skill does only the icon itself |
+| Icons in an app screen | `ui-craft` of software-development (if installed) | Button size, spacing, and screen tokens live there |
+| A person must choose among several directions | `parallel-attempts-pick-best` step 0 | There must be an example the user likes before every competition |
+| Checking the icon before sending | `design-critic` agent · `design-review` | Gives fresh eyes that did not do this work |
 
-## 1 · แยกงานก่อน: ไอคอนหน้าจอ หรือไอคอนแบรนด์
+## 1 · Split the job first: screen icon or brand icon
 
-| | ไอคอนหน้าจอ (UI icon) | ไอคอนแบรนด์ (ไอคอนแอป · favicon · plugin · เครื่องหมาย) |
+| | Screen icon (UI icon) | Brand icon (app icon · favicon · plugin · mark) |
 |---|---|---|
-| เป้า | อ่านเร็ว เหมือนกันทั้งชุด ไม่แย่งความสนใจ | จำได้ เป็นของตัวเอง ไม่ซ้ำคนอื่น |
-| เริ่มจาก | ชุดไอคอนฟรีที่ใบอนุญาตใช้ได้ (ข้อ 2) | ตัวอย่างที่ผู้ใช้ชอบ (ข้อ 3) |
-| วาดเองไหม | วาดเฉพาะตัวที่ขาด ตามกฎของชุดนั้น | วาดหรือสร้างใหม่ แต่ไม่เขียน SVG ทีละเส้นจากศูนย์ |
+| Goal | Read fast, look the same across the set, do not steal attention | Memorable, its own, not a repeat of others |
+| Start from | A free icon set whose license allows use (section 2) | An example the user likes (section 3) |
+| Draw yourself? | Draw only the missing ones, by that set's rules | Draw or generate new, but do not write SVG stroke by stroke from zero |
 
-## 2 · ไอคอนหน้าจอ: ใช้ชุดเดียวทั้งแอป
+## 2 · Screen icons: use one set across the whole app
 
-1. เลือก 1 ชุดจาก [`icon-sets.md`](references/icon-sets.md) ตามแพลตฟอร์ม (เว็บทั่วไป Lucide หรือ Tabler · Android Material Symbols · Windows Fluent) · ห้ามผสม 2 ชุด · ผู้ใช้ไม่บอกแพลตฟอร์ม ให้ใช้ Lucide แล้วบอกว่าเลือกเพราะอะไร ไม่ต้องหยุดถาม (เปลี่ยนชุดทีหลังได้ง่าย)
-2. ทำรายการไอคอนที่ต้องใช้ แล้วหาชื่อในชุด · ตั้งชื่อตามรูป ไม่ใช่ตามหน้าที่ (Fluent: "Shield, not security")
-3. ตัวที่ไม่มีในชุด: คัดตัวที่ใกล้ที่สุดมาแก้ ตามกริด เส้น มุม และช่องว่างของชุดนั้น (ตัวเลขใน `specs.md`) · ถามก่อนว่าต้องมีไอคอนนี้จริงไหม เพราะป้ายข้อความอย่างเดียวอาจชัดกว่า
-4. ใส่ป้ายข้อความที่มองเห็นตลอดข้างไอคอน ยกเว้น home · print · search (NN/g)
-5. จดชื่อชุด รุ่น และใบอนุญาตไว้ใน README หรือ NOTICE
+1. Pick 1 set from [`icon-sets.md`](references/icon-sets.md) by platform (general web Lucide or Tabler · Android Material Symbols · Windows Fluent) · never mix 2 sets · if the user does not name a platform, use Lucide and say why you chose it, without stopping to ask (switching sets later is easy)
+2. List the icons needed, then find the names in the set · name by the picture, not by the function (Fluent: "Shield, not security")
+3. For an icon not in the set: take the closest one and edit it by that set's grid, stroke, corners, and gaps (numbers in `specs.md`) · first ask whether this icon is really needed, because a text label alone may be clearer
+4. Put an always-visible text label beside the icon, except home · print · search (NN/g)
+5. Record the set name, version, and license in README or NOTICE
 
-## 3 · ไอคอนแบรนด์: ค้นหมวด แล้วขอตัวอย่าง แล้วค่อยร่าง
+## 3 · Brand icons: research the category, then ask for examples, then sketch
 
-1. **ค้นหมวดเองก่อนถามผู้ใช้ แบบที่นักออกแบบทำ** ตาม [`category-research.md`](references/category-research.md) แล้วสรุปเป็น 3–4 แนว แนวละ 2 ตัวอย่างจริงพร้อมลิงก์ · ไม่ค้นแล้วเสนอแนวจากความรู้สึก = เดารสนิยมแทนผู้ใช้
-   - ไอคอนจะไปอยู่ร้านไหน และเพื่อนบ้านในร้านหน้าตาอย่างไร · หน้าร้านที่ต้องรัน JavaScript ให้จับภาพด้วย Playwright ถ้ามี ไม่มีให้บอกว่ายังไม่ได้เห็นรูปจริง
-   - กฎทางการของปลายทาง และตระกูลไอคอนที่มีหลายตัวแต่ดูเป็นชุดผูกกันด้วยวิธีไหน
-   - แนวที่ใช้จนเฝือในหมวดนั้น · แนวที่แยกตัวที่ 16 px ด้วยสีหรือตัวอักษรอย่างเดียวเสนอได้ แต่เขียนคำเตือนกำกับ
-2. **ขอตัวอย่าง 2–3 ชิ้นที่ผู้ใช้ชอบ** (ไอคอนแอปหรือโลโก้ของใครก็ได้) และถามว่าชอบตรงไหน · ถ้าผู้ใช้เลือกแนวจากข้อ 1 แล้ว หรือเอ่ยชื่องานจริงที่ชอบ เช่น "แบบไอคอน Microsoft ใหม่ ๆ" ถือว่าได้ตัวอย่างแล้ว ไม่ต้องขอซ้ำ · ไม่มีตัวอย่าง ให้เลือกจาก 3–4 แนวที่ค้นมาในข้อ 1 โดยส่งเป็นชื่อแอปกับลิงก์หน้าร้านแอปหรือเว็บ ไม่คัดลอกรูปของแบรนด์อื่นมาใส่งาน · ถามรวมครั้งเดียวด้วย `AskUserQuestion` (agent ที่ไม่มีเครื่องมือนี้ เขียนเป็นข้อให้ตอบเป็นเลข)
-   - รอบแรกนี้ส่ง metaphor ที่คิดไว้เป็นคำ 2–3 อย่างต่อไอคอนไปด้วย ผู้ใช้จะเห็นทิศทางก่อนตอบ
-   - ในข้อความเดียวกันบอกขนาดไฟล์และ safe zone ของปลายทางที่ขอด้วย (เช่น iOS 1024 · Android 108dp เนื้อหาใน 66dp ตาม `specs.md`) ผู้ใช้จะได้รู้ว่าต้องได้ไฟล์อะไรบ้าง
-   - **ผู้ใช้สั่ง "ทำมาเลย" ไม่อยากตอบ:** ยังไม่วาดอยู่ดี ถามคำถามเดียวแบบเลือกตอบว่าชอบแนวไหนจากแนวที่ค้นมาในข้อ 1 แล้วจบรอบนั้น · ส่งได้แค่ทางเลือกเป็นคำกับ metaphor ที่คิดไว้ (ข้อ 3) ติด `(รอยืนยัน)` ว่ายังไม่มีตัวอย่างจากผู้ใช้ ไม่ส่ง SVG
-3. **หา metaphor 10 อย่างขึ้นไปเป็นคำ ยังไม่วาด** เริ่มจากสิ่งที่ผู้ใช้ทำกับผลิตภัณฑ์ · ผสมสิ่งที่คนคุ้น อย่าใช้สิ่งที่คุ้นในความหมายใหม่ · เลี่ยงภาพจำนักท่องเที่ยว · ตัดเหลือ 3 ที่สื่อได้โดยไม่ต้องอธิบาย (ทดสอบ: คนนอกเดาได้ใน 5 วินาทีไหม)
-4. **เลือกเครื่องมือตามของที่มีในเครื่อง** (ตรวจก่อน ไม่สมมุติ):
+1. **Research the category yourself before asking the user, the way a designer does,** following [`category-research.md`](references/category-research.md), then sum up as 3–4 directions, 2 real examples per direction with links · proposing a direction from gut feeling without researching = guessing the user's taste for them
+   - Where will the icon sit, and what do the neighbors in that store look like · for a store page that needs JavaScript to run, capture it with Playwright if available, and if not, say you have not seen the real picture
+   - The destination's official rules, and how icon families with many members that read as a set tie together
+   - Styles overused in that category · a direction that separates at 16 px by color or letters alone may be offered, but attach a warning
+2. **Ask for 2–3 examples the user likes** (anyone's app icon or logo) and ask what they like about them · if the user already chose a direction from step 1, or names real work they like, such as "like the new Microsoft icons", that counts as having examples, so do not ask again · with no examples, choose from the 3–4 directions researched in step 1, sending the app name and a link to the app store or web page, and do not copy other brands' images into the work · ask everything at once with `AskUserQuestion` (an agent without this tool writes numbered items to answer by number)
+   - In this first round, also send the metaphors you thought of, as words, 2–3 per icon, so the user sees the direction before answering
+   - In the same message, state the file sizes and safe zone of the requested destination (for example iOS 1024 · Android 108dp with content inside 66dp per `specs.md`) so the user knows which files they will get
+   - **The user orders "just make it" and does not want to answer:** still do not draw · ask one multiple-choice question on which direction from step 1 they like, then end that round · you may send only the choices as words and the metaphors you thought of (step 3), tagged `(รอยืนยัน)` (awaiting confirmation) that there is no example from the user yet, and no SVG
+3. **Find 10 or more metaphors as words, do not draw yet.** Start from what the user does with the product · mix familiar things, do not use familiar things in a new meaning · avoid tourist clichés · cut down to 3 that communicate without explanation (test: can an outsider guess within 5 seconds?)
+4. **Choose tools by what is on the machine** (check first, do not assume):
 
-   | มี | ทำอย่างไร |
+   | Have | What to do |
    |---|---|
-   | ตัวสร้างภาพ AI ที่ใช้ได้ | สร้างจาก brief ที่มีตัวอย่างของผู้ใช้และแนวที่ค้นมาแนบ ตาม `image-generation` แล้วให้คนหรือโปรแกรมเวกเตอร์แปลงเป็นเส้น |
-   | โปรแกรมเวกเตอร์ (Inkscape · Figma ผ่าน MCP) | ร่างบนกริด 24 หรือ 64 ใช้ keyline shapes และรวมรูปด้วย boolean จริง |
-   | มีแค่โค้ด SVG และตัวอย่างของผู้ใช้เป็นแนวแบนเรียบ (ตัวอักษร · รูปทรงเรขาคณิต · ทึบสีเดียว) | ใช้เป็นจุดเริ่มสัดส่วนจากชุดไอคอนที่ใบอนุญาตให้ดัดแปลง (ไม่ใช่ Remix หรือ SF Symbols) แล้วดัดแปลงจนเป็นของตัวเอง · บอกผู้ใช้ตรง ๆ ว่างานแบรนด์ระดับดีควรให้นักออกแบบเกลาต่อ |
-   | มีแค่โค้ด SVG แต่อยากได้แนวมีมิติ หลายสี 3 มิติ หรือภาพประกอบ | ห้ามเอาเส้นแบนมาใส่เงาหรือไล่สีแทน (ลองแล้ว 2026-10-27 ได้หน้าตาพลาสติก ผู้ใช้ไม่ชอบ) · หยิบชุดที่นักออกแบบทำแนวนั้นไว้จาก [`asset-sets.md`](references/asset-sets.md) แล้วปรับเป็นของแบรนด์ตามขั้นตอนในไฟล์นั้น (เปลี่ยนสีด้วย `scripts/recolor_icon.py`) · ไม่มีชุดที่เข้ากัน ให้บอกตั้งแต่แรกว่าต้องใช้ตัวสร้างภาพหรือนักออกแบบ ไม่ลองวาดหลายรอบ · ไอคอนไม่บังคับต้องมีเสมอไป (เช่น plugin ของ Claude Code) |
-5. ร่าง 3 metaphor · แต่ละแบบต้องผ่าน: อ่านออกที่ 16 px · ไม่ตัด บาก หรือดัดรูปทรงกรอบไอคอน (ร้านและระบบตัดรูปทรงให้เอง ตัดแล้วดูแหว่ง ผู้ใช้ปฏิเสธ 2026-10-27) ความเป็นชุดให้มาจากสี สัญลักษณ์ และน้ำหนักเส้น · กฎนี้ใช้กับกรอบเท่านั้น รอยบากในตัวสัญลักษณ์ทำได้ · ผู้ใช้คนปัจจุบันยืนยันจะบากกรอบหลังได้ฟังเหตุผล 1 ครั้ง ให้ทำตามผู้ใช้ · ไม่มีข้อความในไอคอนแอป (Apple) · ไม่ใส่เงา bevel glow เองในไอคอนแอป · เนื้อหาอยู่ใน safe zone ของปลายทาง
-6. ให้ผู้ใช้เลือก 1 แบบจากหน้าเทียบ แล้วค่อยทำไฟล์ทุกขนาดตาม `specs.md`
-   - ข้อเสนอจากผู้ตรวจ (`design-critic`) ที่เปลี่ยนหน้าตาและไม่มีตัวอย่างงานจริงรองรับ ให้ถามผู้ใช้ก่อนใส่ ไม่รับมาเองแล้วแนะนำต่อ
+   | A usable AI image generator | Generate from a brief that attaches the user's examples and the researched directions, per `image-generation`, then have a person or a vector program convert it to lines |
+   | A vector program (Inkscape · Figma via MCP) | Sketch on a 24 or 64 grid, use keyline shapes, and combine shapes with real boolean operations |
+   | Only SVG code, and the user's examples are flat and plain (letters · geometric shapes · single solid color) | Use proportions from an icon set whose license allows modification (not Remix or SF Symbols) as the starting point, then modify until it is its own · tell the user plainly that good brand work should be refined by a designer |
+   | Only SVG code, but the user wants depth, multi-color, 3D, or illustration | Do not add shadows or gradients to flat lines as a substitute (tried 2026-10-27, it gave a plastic look the user disliked) · pick a set a designer made in that style from [`asset-sets.md`](references/asset-sets.md) and adapt it to the brand by the steps in that file (recolor with `scripts/recolor_icon.py`) · if no set fits, say from the start that an image generator or a designer is needed, and do not try drawing in many rounds · an icon is not always mandatory (for example a Claude Code plugin) |
+5. Sketch 3 metaphors · each must pass: readable at 16 px · do not cut, notch, or bend the icon's frame shape (stores and systems cut the shape themselves, and a pre-cut one looks chipped, the user rejected this 2026-10-27), and let the set feel come from color, symbol, and stroke weight · this rule applies to the frame only, notches in the symbol itself are fine · if the current user confirms they will notch the frame after hearing the reason once, follow the user · no text in app icons (Apple) · do not add your own shadow, bevel, or glow to app icons · content inside the destination's safe zone
+6. Let the user pick 1 from a comparison page, then make the files at every size per `specs.md`
+   - A suggestion from the reviewer (`design-critic`) that changes the look and has no real work backing it: ask the user before applying, and do not accept it yourself and recommend onward
 
-## ตัวอย่างจริง (รอบแดง · ก่อนมี skill นี้)
+## Real example (red round · before this skill existed)
 
-**โจทย์ 2026-10-26:** ไอคอนประจำ plugin 6 ตัว ให้ผู้ใช้เลือก 3 แนว · **ทำ:** agent 3 ตัวเขียน SVG ทีละเส้นเองแนวละตัว (เรขาคณิต · ของใช้ไทย · ตัวอักษรย่อ) โดยไม่มีตัวอย่างจากผู้ใช้ · ทุกตัวผ่าน `slop_scan` และ `icon_check` · **ผล:** ผู้ใช้ปฏิเสธทั้ง 3 แนว "ไม่สวยเลย" · **บทเรียน:** ขาดตัวอย่างที่ผู้ใช้ชอบ และใช้เครื่องมือที่วาดได้แค่รูปทรงพื้นฐาน ตัวตรวจอัตโนมัติจับได้แค่ความผิดทางเทคนิค
+**Task 2026-10-26:** icons for 6 plugins, with 3 directions for the user to choose from · **What was done:** 3 agents each wrote SVG stroke by stroke for one direction (geometric · Thai everyday objects · initials) with no examples from the user · all passed `slop_scan` and `icon_check` · **Result:** the user rejected all 3 directions, "not nice at all" · **Lesson:** missing examples the user likes, and the tool used could draw only basic shapes · automatic checkers catch only technical faults
 
-## 4 · ตรวจก่อนส่ง
+## 4 · Check before sending
 
 ```bash
 python scripts/icon_check.py <ไฟล์.svg ...> --out _to_delete/icon-check --brand "#สีแบรนด์"
 ```
 
-สคริปต์ตรวจ viewBox จัตุรัส · ไม่มีตัวอักษรหรือรูปบิตแมปในไฟล์ · stroke-width เท่ากันทั้งชุด · พิกัดชิดกริด แล้วทำหน้าเทียบทุกขนาด (16 · 24 · 32 · 48 · 128) บนพื้นขาว มืด และสีแบรนด์ พร้อมภาพเบลอ (blur test ของ Lucide: ตัวไหนเป็นก้อนเข้มแน่นกว่าเพื่อน แปลว่ารายละเอียดมากไป) · **ตรวจผ่านไม่ได้แปลว่าสวย** ไอคอนที่ผู้ใช้ปฏิเสธวันที่ 2026-10-26 ก็ตรวจผ่าน · ต้องเปิดภาพดูเองและส่ง `design-critic` ตัวใหม่ดูทุกครั้ง (ตอบไม่เกิน 10 บรรทัด)
+The script checks a square viewBox · no text or bitmap images in the file · equal stroke-width across the set · coordinates on the grid, then builds a comparison page at every size (16 · 24 · 32 · 48 · 128) on white, dark, and the brand color, with a blurred image (Lucide's blur test: an icon that is a denser dark blob than its neighbors has too much detail) · **passing the check does not mean it is nice** the icons the user rejected on 2026-10-26 also passed · always open the image yourself and send a fresh `design-critic` to look (answer in at most 10 lines)
 
-- [ ] ไอคอนหน้าจอมาจากชุดเดียว บันทึกใบอนุญาตแล้ว · ไอคอนแบรนด์มีผลค้นหมวดพร้อมลิงก์ และตัวอย่างจากผู้ใช้กำกับ
-- [ ] ไม่มีแนวที่ดูออกว่า AI ทำ (gradient ม่วง · sparkle · หกเหลี่ยมหมุน · หุ่นยนต์ · `category-research.md` ข้อ 4) · ทุกตัวในชุดแยกออกที่ 16 px ด้วยรูปทรง
-- [ ] ดูภาพจริงที่ 16 px บน 3 พื้นแล้ว · ภาพเบลอไม่มีตัวไหนหนักกว่าเพื่อนชัดเจน
-- [ ] ความชัดมาก่อนสมดุล สมดุลมาก่อนความเหมือนกันทั้งชุด (Lucide)
-- [ ] ไฟล์ปลายทางครบขนาดและ safe zone ตาม `specs.md` (iOS 1024 ไม่ตัดมุม · Android 108dp เนื้อหาใน 66 · เว็บ ICO 32 + SVG + 180 + 192 + 512)
-- [ ] ไม่ใช้ Remix Icon หรือ SF Symbols ทำโลโก้ · ไม่ใช้โลโก้ของแบรนด์อื่น
-- [ ] กรอบไอคอนเต็ม ไม่มีรอยตัดหรือบาก (ยกเว้นผู้ใช้ยืนยันหลังได้ฟังเหตุผล) · ชุดที่หยิบมาปรับมีชื่อชุด รุ่น และใบอนุญาตใน NOTICE
+- [ ] Screen icons come from one set, license recorded · brand icons have category research results with links, and the user's examples noted
+- [ ] No direction that looks AI-made (purple gradient · sparkle · rotating hexagon · robot · `category-research.md` section 4) · every icon in the set is distinguishable at 16 px by shape
+- [ ] Looked at the real image at 16 px on 3 backgrounds · in the blurred image no icon is clearly heavier than its neighbors
+- [ ] Clarity before balance, balance before sameness across the set (Lucide)
+- [ ] Destination files complete in sizes and safe zones per `specs.md` (iOS 1024 uncut corners · Android 108dp with content inside 66 · web ICO 32 + SVG + 180 + 192 + 512)
+- [ ] Remix Icon or SF Symbols not used for a logo · no other brand's logo used
+- [ ] The icon frame is full, with no cut or notch (unless the user confirmed after hearing the reason) · a picked-and-adapted set has its set name, version, and license in NOTICE
 
-## ที่มา
+## Sources
 
-- ตัวเลขและกฎทั้งหมด: Material Design 1 · Lucide design principles · Atlassian · Fluent 2 · Apple HIG · Android Developers · Microsoft Learn · Evil Martians · Google Search Central · NN/g — ลิงก์อยู่ใน [`references/specs.md`](references/specs.md) · เปิดอ่าน 2026-10-26
-- วิธีทำงานของนักออกแบบ: Adobe Design "How to design effective icons" (หา metaphor · เก็บทุกรอบ) · Sketch "How we redesigned the Sketch icon for Big Sur" (ร่างราว 50 แบบ เหลือ 2) — เปิดอ่าน 2026-10-26
-- ใบอนุญาตชุดไอคอน: README และไฟล์ LICENSE ใน repo ทางการ · [`references/icon-sets.md`](references/icon-sets.md)
-- ไม่พบบทความของนักออกแบบที่ระบุชื่อว่าด้วยไอคอนที่ดูเหมือน AI ทำ · กฎในหัวข้อ 3 มาจากรอบที่ล้มจริงวันนี้ (ยังไม่ได้ตรวจกับงานวิจัย)
+- All numbers and rules: Material Design 1 · Lucide design principles · Atlassian · Fluent 2 · Apple HIG · Android Developers · Microsoft Learn · Evil Martians · Google Search Central · NN/g — links are in [`references/specs.md`](references/specs.md) · read 2026-10-26
+- How designers work: Adobe Design "How to design effective icons" (find the metaphor · keep every round) · Sketch "How we redesigned the Sketch icon for Big Sur" (about 50 sketches, down to 2) — read 2026-10-26
+- Icon set licenses: README and LICENSE files in the official repos · [`references/icon-sets.md`](references/icon-sets.md)
+- No named designer's article on icons that look AI-made was found · the rules in section 3 come from the round that actually failed today (not checked against research)
 
 
 ## reference: asset-sets.md
 
-# ชุดงานที่นักออกแบบทำไว้ หยิบมาปรับแทนการวาดเอง
+# Designer-made asset sets: pick one and adapt it instead of drawing your own
 
-ใช้เมื่อผู้ใช้อยากได้แนวที่โค้ดวาดเองไม่ถึง (มีมิติ · หลายสี · 3 มิติ · ภาพประกอบ) และไม่มีตัวสร้างภาพหรือนักออกแบบ · ทุกแถวอ่านจากไฟล์ LICENSE หรือหน้าใบอนุญาตจริงเมื่อ 2026-10-27 · ใบอนุญาตเปลี่ยนได้ ก่อนใช้งานจริงให้เปิดลิงก์ตรวจซ้ำ · จำนวนจาก `info.json` ของแพ็กเกจ `@iconify-json/<ชุด>`
+Use when the user wants a style that code-drawn icons cannot reach (depth · multi-color · 3D · illustration) and there is no image generator or designer. Every row was read from the actual LICENSE file or license page on 2026-10-27 · licenses can change, so open the link and re-check before real use · counts come from `info.json` of the `@iconify-json/<set>` package.
 
-## 1 · เลือกตามแนวที่ผู้ใช้อยากได้
+## 1 · Pick by the style the user wants
 
-| แนว | ชุด | ใบอนุญาต | ไฟล์ · ติดตั้ง | หมายเหตุ |
+| Style | Set | License | File · install | Notes |
 |---|---|---|---|---|
-| สีมีมิติ (ชิ้นซ้อน ไล่แสง) | Fluent UI System Icons แบบ color | MIT | SVG แก้สีได้ · `@fluentui/svg-icons` (ไฟล์ `*_color.svg`) หรือ `@iconify-json/fluent-color` | 890 ตัว · สีเดิมหลายตัวเป็นม่วงชมพูแบบ Copilot ให้เปลี่ยนสีก่อนใช้ · บางตัวมีแค่ขนาด 16–24 |
-| สีมีมิติ | IconPark ธีม multi-color · two-tone | Apache 2.0 | SVG | 2,658 ตัว |
-| สีแบน | Icons8 Flat Color | MIT | SVG | 329 ตัว |
-| 3 มิติ | Fluent Emoji 3D | MIT | PNG 256 แก้สีไม่ได้ · ตัวเดียวกันมีแบบ Color และ Flat เป็น SVG | แบบ Color 3,126 ตัว |
-| 3 มิติ | 3dicons.co | CC0 | (ยังไม่ได้ตรวจรูปแบบไฟล์) | |
-| เส้นสองน้ำหนัก (duotone) | Phosphor | MIT | SVG · `@phosphor-icons/core` | 9,072 ตัวรวม 6 น้ำหนัก |
-| เส้น | Lucide · Tabler · Iconoir · Material Symbols | ISC · MIT · MIT · Apache 2.0 | SVG | ไอคอนหน้าจอ ดู [`icon-sets.md`](icon-sets.md) |
-| ภาพประกอบ | Open Peeps · Humaaans · Open Doodles | CC0 | SVG · PNG | |
-| ภาพประกอบ | unDraw | ใบอนุญาตของ unDraw | SVG เปลี่ยนสีได้บนเว็บ | ไม่ต้องให้เครดิต แต่ห้ามรวมเป็นแพ็กแจกต่อ ห้ามทำบริการเลียนแบบ ห้ามใช้ฝึกโมเดล AI |
-| อีโมจิ | Noto Emoji | ภาพ Apache 2.0 · ฟอนต์ OFL 1.1 | SVG · PNG | 3,729 ตัว |
+| Color with depth (layered pieces, gradients) | Fluent UI System Icons, color variant | MIT | SVG, recolorable · `@fluentui/svg-icons` (files `*_color.svg`) or `@iconify-json/fluent-color` | 890 icons · many original colors are the Copilot purple-pink, so change the colors before use · some exist only at 16–24 size |
+| Color with depth | IconPark, multi-color · two-tone themes | Apache 2.0 | SVG | 2,658 icons |
+| Flat color | Icons8 Flat Color | MIT | SVG | 329 icons |
+| 3D | Fluent Emoji 3D | MIT | PNG 256, cannot be recolored · the same icon also comes as Color and Flat SVG | Color variant has 3,126 icons |
+| 3D | 3dicons.co | CC0 | (file format not checked yet) | |
+| Two-weight line (duotone) | Phosphor | MIT | SVG · `@phosphor-icons/core` | 9,072 icons across 6 weights |
+| Line | Lucide · Tabler · Iconoir · Material Symbols | ISC · MIT · MIT · Apache 2.0 | SVG | Screen icons, see [`icon-sets.md`](icon-sets.md) |
+| Illustration | Open Peeps · Humaaans · Open Doodles | CC0 | SVG · PNG | |
+| Illustration | unDraw | unDraw's own license | SVG, recolorable on the web | No credit needed, but you must not bundle it into a pack for redistribution, build a competing service, or use it to train AI models |
+| Emoji | Noto Emoji | Images Apache 2.0 · font OFL 1.1 | SVG · PNG | 3,729 icons |
 
-**ต้องใส่เครดิต:** Twemoji (ภาพ CC BY 4.0) · Streamline ชุดฟรี (CC BY 4.0)
+**Credit required:** Twemoji (images CC BY 4.0) · Streamline free set (CC BY 4.0)
 
-**ไม่เหมาะทำไอคอนแอปหรือโลโก้:** Remix Icon (ใบอนุญาต v1.0 ม.ค. 2026 ข้อ 3.3 ห้ามแม้เปลี่ยนสีหรือหมุน) · OpenMoji (CC BY-SA 4.0 งานดัดแปลงต้องปล่อยใบอนุญาตเดียวกัน) · SF Symbols
+**Not suitable for app icons or logos:** Remix Icon (license v1.0 of Jan 2026, clause 3.3 forbids use even after recoloring or rotating) · OpenMoji (CC BY-SA 4.0, derivative works must carry the same license) · SF Symbols
 
-**ข้อควรรู้:** MIT · Apache · CC0 · CC BY ไม่ให้สิทธิ์ผูกขาด คนอื่นใช้ภาพเดียวกันได้ ถ้าจะจดเครื่องหมายการค้า ไม่ควรใช้ภาพจากชุดตรง ๆ (ความเห็นทั่วไป ยังไม่ได้ตรวจกับแหล่งกฎหมาย)
+**Good to know:** MIT · Apache · CC0 · CC BY give no exclusive rights, so others can use the same image. If the user will register a trademark, do not use an image straight from a set (general opinion, not checked against a legal source).
 
-## 2 · ขั้นตอนหยิบมาปรับ
+## 2 · Steps to pick and adapt
 
-1. ค้นในชุดที่ตรงแนว เลือกตัวที่ใกล้ metaphor ที่สุด 2–3 ตัวต่อไอคอน · แพ็กเกจ `@iconify-json/<ชุด>` ให้ SVG ทั้งชุดใน `icons.json` และชื่อใบอนุญาตใน `info.json`
-2. ดาวน์โหลดลง `_to_delete/` แล้ววางในกรอบจริง เทียบทั้งพื้นสว่างและพื้นมืดที่ 16 · 48 · 128 px
-3. ปรับเป็นของแบรนด์: เปลี่ยนสีด้วย `scripts/recolor_icon.py --hex "<สีแบรนด์>"` ซึ่งคงความสว่างและแสงเงาของนักออกแบบไว้ หมุนแค่เฉดสี · ชุดที่แต่ละตัวต้องสีต่างกัน รันทีละตัวด้วย `--hex` ของตัวนั้น · ในชุดไม่มีตัวที่ตรง metaphor ให้ลองชุดถัดไปในแถวเดียวกัน ไม่วาดเติมเอง · วางในกรอบเดียวกันทั้งชุด · ไม่ตัด บาก หรือดัดรูปทรงกรอบ
-4. รัน `icon_check.py` แล้วเปิดภาพดูเอง · ส่ง `design-critic` ตัวใหม่ดู
-5. จดชื่อชุด รุ่น ใบอนุญาต และสิ่งที่ดัดแปลงไว้ใน NOTICE หรือ README
+1. Search the set that matches the style and pick the 2–3 icons closest to the metaphor for each icon · the `@iconify-json/<set>` package gives the whole set's SVGs in `icons.json` and the license name in `info.json`.
+2. Download into `_to_delete/`, then place in the real frame and compare on both light and dark backgrounds at 16 · 48 · 128 px.
+3. Make it the brand's own: recolor with `scripts/recolor_icon.py --hex "<brand color>"`, which keeps the designer's lightness and shading and rotates only the hue · for a set where each icon needs a different color, run it one icon at a time with that icon's `--hex` · if no icon in the set fits the metaphor, try the next set in the same row and do not draw extra pieces yourself · place the whole set in the same frame · do not cut, notch, or bend the frame's shape.
+4. Run `icon_check.py` and open the image yourself · send it to a fresh `design-critic`.
+5. Record the set name, version, license, and what you changed in NOTICE or README.
 
-## แหล่ง (เปิดอ่าน 2026-10-27)
+## Sources (read 2026-10-27)
 
 - Fluent UI System Icons — https://github.com/microsoft/fluentui-system-icons/blob/main/LICENSE
 - Fluent Emoji — https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE
@@ -154,57 +154,57 @@ python scripts/icon_check.py <ไฟล์.svg ...> --out _to_delete/icon-check 
 
 ## reference: category-research.md
 
-# ค้นหมวดก่อนออกแบบไอคอนแบรนด์
+# Research the category before designing a brand icon
 
-นักออกแบบไม่เริ่มจากกระดาษเปล่า แต่เริ่มจากดูว่าของในหมวดเดียวกันหน้าตาเป็นอย่างไร ใช้กฎอะไร และอะไรที่ใช้กันจนเฝือ · ไฟล์นี้คือผลค้นรอบแรก (เปิดอ่าน 2026-10-26) ใช้เป็นจุดเริ่ม แต่ละงานต้องค้นหมวดของตัวเองเพิ่ม
+Designers do not start from a blank page. They first look at what things in the same category look like, what rules they follow, and what has become overused · this file is the first round of research (read 2026-10-26), a starting point only · each job must research its own category further.
 
-## 1 · ค้นอะไรบ้าง (ทำทุกงาน ใช้เวลาไม่นาน)
+## 1 · What to research (every job, takes little time)
 
-| ค้น | ตัวอย่างคำค้นหรือที่ดู | ได้อะไร |
+| Look up | Example queries or where to look | What you get |
 |---|---|---|
-| ร้านหรือหน้ารายการที่ไอคอนจะไปอยู่ | Raycast Store · VS Code Marketplace · JetBrains Marketplace · Chrome Web Store · App Store หมวดเดียวกัน | ขนาด กรอบ พื้นมืดหรือสว่าง และหน้าตาของเพื่อนบ้านที่จะวางข้างกัน |
-| กฎทางการของปลายทาง | หน้า guideline ของร้านนั้น (ตารางข้อ 3) | ข้อห้ามที่ทำให้ถูกปฏิเสธ |
-| ตระกูลไอคอนที่มีหลายตัวแต่ดูเป็นชุด | ชุดแอปของ Microsoft · Adobe · Atlassian · JetBrains · Google | วิธีผูกให้เป็นชุด (ข้อ 2) |
-| บทความ redesign ที่นักออกแบบระบุชื่อ | "behind the design" + ชื่อแบรนด์ · "new icons" + ปี | วิธีคิดและบทเรียน ไม่ใช่แค่รูป |
-| แนวที่ใช้กันจนเฝือในหมวดนั้น | "AI logo trend" · "<หมวด> icon cliché" | สิ่งที่ต้องเลี่ยง (ข้อ 4) |
+| The store or listing page where the icon will sit | Raycast Store · VS Code Marketplace · JetBrains Marketplace · Chrome Web Store · App Store, same category | Size, frame, dark or light background, and how the neighbors beside it look |
+| The destination's official rules | That store's guideline page (table in section 3) | The bans that get an icon rejected |
+| Icon families with many members that still read as a set | Microsoft, Adobe, Atlassian, JetBrains, Google app suites | How to tie icons into a set (section 2) |
+| Redesign articles where the designer is named | "behind the design" + brand name · "new icons" + year | The thinking and the lessons, not just the pictures |
+| Styles overused in that category | "AI logo trend" · "<category> icon cliché" | What to avoid (section 4) |
 
-ผลส่งผู้ใช้เป็นลิงก์ให้กดดูเอง ไม่คัดลอกรูปแบรนด์อื่นมาเก็บหรือใส่งาน · อ่านแค่ข้อความยังไม่พอ ถ้ามีเครื่องมือจับภาพหน้าจอ ให้เปิดดูหน้าตาจริงก่อนสรุปแนว
+Give the results to the user as links to open themselves. Do not copy other brands' images to keep or put in the work · reading text alone is not enough, so if a screenshot tool exists, open the real page and look before deciding on a style.
 
-## 2 · วิธีผูกไอคอนหลายตัวให้เป็นชุด
+## 2 · Ways to tie several icons into a set
 
-| วิธี | ตัวอย่าง | ระวัง |
+| Method | Example | Watch out |
 |---|---|---|
-| รูปทรงและผิวเหมือนกัน ต่างที่สี | Microsoft 365 ชุด 2025 (ต้นแบบคือไอคอน Copilot · Jon Friedman 2025-10-01) | สีอย่างเดียวแยกตัวไม่พอสำหรับคนตาบอดสี |
-| กรอบเดียวกัน ใส่อักษรย่อ | Adobe Creative Cloud · JetBrains IDE | ผู้ใช้บ่นว่าแยกตัวไม่ออกเมื่อมีหลายตัว (Adobe 2020 · ฟอรัม JetBrains) |
-| สีชุดเดียวกันทุกตัว | Google Workspace 2020 | ถูกวิจารณ์ว่าแยกไม่ออก ปี 2026 ทำใหม่และเลิกบังคับ 4 สี |
-| สัญลักษณ์เล่าเรื่องของแต่ละตัว บนโครงเดียวกัน | Atlassian 2017 · ระบบไอคอน Atlassian 2025 | ต้องคุมน้ำหนักเส้นและกริดให้เท่ากัน |
+| Same shape and surface, different color | Microsoft 365 2025 set (prototype was the Copilot icon · Jon Friedman 2025-10-01) | Color alone is not enough to tell icons apart for color-blind people |
+| Same frame, with an initial inside | Adobe Creative Cloud · JetBrains IDEs | Users complain they cannot tell them apart when there are many (Adobe 2020 · JetBrains forum) |
+| One color set for every icon | Google Workspace 2020 | Criticized as indistinguishable · redone in 2026 and dropped the forced 4 colors |
+| A symbol that tells each product's story, on one shared frame | Atlassian 2017 · Atlassian icon system 2025 | Stroke weight and grid must be kept equal |
 
-บทเรียนร่วม: ทุกตัวในชุดต้องแยกออกที่ 16 px ด้วยรูปทรง ไม่ใช่ด้วยสีหรือตัวอักษรอย่างเดียว
+Shared lesson: every icon in a set must be distinguishable at 16 px by shape, not by color or letters alone.
 
-## 3 · กฎของปลายทางที่ไอคอน plugin มักไปอยู่
+## 3 · Rules of the destinations where plugin icons usually go
 
-| ปลายทาง | ไฟล์ | กฎสำคัญ |
+| Destination | File | Key rules |
 |---|---|---|
-| Claude Code (ช่อง `icon` ใน `plugin.json`) | path รูปใน plugin · ด่าน directory รับ PNG JPEG GIF WebP SVG | ไม่กำหนดขนาดหรือรูปทรง · Claude Code ไม่อ่าน ใช้แค่หน้า directory |
-| Raycast | PNG 512 | ต้องดูดีทั้งธีมมืดและสว่าง (มี `icon@dark.png` แยกได้) · ใช้ไอคอนตั้งต้นจะถูกปฏิเสธ |
-| JetBrains | SVG 40 · ภาพอยู่ใน 36 | ห้ามโลโก้ที่เป็นตัวอักษรล้วน · ห้ามคล้ายแบรนด์อื่น · ต้องชัดทั้ง 2 พื้น |
-| VS Code | PNG อย่างน้อย 128 (256 สำหรับจอ Retina) | ห้าม SVG |
-| Chrome | PNG 128 ภาพจริง 96 เว้นขอบด้านละ 16 | ห้ามขอบ · เลี่ยงเงาตกใหญ่ · หันหน้าตรง |
+| Claude Code (`icon` field in `plugin.json`) | Image path inside the plugin · the directory gate accepts PNG JPEG GIF WebP SVG | No size or shape set · Claude Code does not read it, only the directory page uses it |
+| Raycast | PNG 512 | Must look good on both dark and light themes (a separate `icon@dark.png` is allowed) · the default starter icon is rejected |
+| JetBrains | SVG 40 · artwork within 36 | No pure-text logos · must not resemble another brand · must be clear on both backgrounds |
+| VS Code | PNG at least 128 (256 for Retina screens) | No SVG |
+| Chrome | PNG 128, real artwork 96 with 16 margin on each side | No border · avoid large drop shadows · face front |
 
-กฎที่หลายแหล่งตรงกัน: อ่านออกทั้ง 2 พื้น · ไม่ใส่ข้อความ · ไม่มีขอบและเงาใหญ่ · เว้นขอบโปร่งใส · น้ำหนักภาพเท่ากันทั้งชุด · ไม่คล้ายแบรนด์อื่น · ไฟล์ต้นแบบหนึ่งชุดส่งออกได้ทุกปลายทาง (PNG 512 · PNG 128 · SVG 40)
+Rules that several sources agree on: readable on both backgrounds · no text · no border or large shadow · keep a transparent margin · equal visual weight across the set · not similar to another brand · one master file exports to every destination (PNG 512 · PNG 128 · SVG 40)
 
-## 4 · แนวที่ดูออกว่า AI ทำ (เลี่ยง)
+## 4 · Styles that look AI-made (avoid)
 
-| แนว | แหล่งที่วิจารณ์ |
+| Style | Source of the criticism |
 |---|---|
-| gradient ม่วงน้ำเงิน · starburst · แสงเรือง | Allen · UX Collective (2024-06) |
-| ประกาย sparkle ✦ ที่กลายเป็นป้าย "beta" | Josh Clark · Big Medium (2024-09) · Fast Company (2024) |
-| หกเหลี่ยมหรือเกลียวหมุน · หุ่นยนต์ตาโต | Fast Company (2023) |
-| วงกลม gradient มีรูกลาง | Radek Sienkiewicz (2025-04) |
+| Purple-blue gradient · starburst · glow | Allen · UX Collective (2024-06) |
+| Sparkle ✦ that became a "beta" tag | Josh Clark · Big Medium (2024-09) · Fast Company (2024) |
+| Hexagon or swirl · big-eyed robot | Fast Company (2023) |
+| Gradient circle with a hole in the middle | Radek Sienkiewicz (2025-04) |
 
-โลโก้ Claude ตั้งใจหนีแนวเหล่านี้ (DesignRush) · "สมอง" ยังไม่พบแหล่งที่ระบุชื่อ (ยังไม่ได้ตรวจ)
+The Claude logo deliberately avoids these styles (DesignRush) · "brain" has no named source yet (ยังไม่ได้ตรวจ — not checked).
 
-## แหล่ง (เปิดอ่าน 2026-10-26)
+## Sources (read 2026-10-26)
 
 - Microsoft Design · Fluid forms, vibrant colors — https://microsoft.design/articles/fluid-forms-vibrant-colors/
 - Adobe Design · Behind the design: Adobe's updated app icons — https://adobe.design/ideas/behind-the-design-adobe-s-updated-app-icons
@@ -223,75 +223,75 @@ python scripts/icon_check.py <ไฟล์.svg ...> --out _to_delete/icon-check 
 - Claude Code · Plugins reference — https://code.claude.com/docs/en/plugins-reference · Claude · Submit a plugin — https://claude.com/docs/plugins/submit
 - Raycast · Prepare an extension for the Store — https://developers.raycast.com/basics/prepare-an-extension-for-store
 - JetBrains · Plugin icon file — https://plugins.jetbrains.com/docs/intellij/plugin-icon-file.html
-- JetBrains Marketplace · Best practices for listing (ห้ามโลโก้ที่เป็นแค่ชื่อ · ห้ามคล้ายแบรนด์อื่น) — https://plugins.jetbrains.com/docs/marketplace/best-practices-for-listing.html
+- JetBrains Marketplace · Best practices for listing (no name-only logos · must not resemble another brand) — https://plugins.jetbrains.com/docs/marketplace/best-practices-for-listing.html
 - VS Code · Extension manifest — https://code.visualstudio.com/api/references/extension-manifest
-- VS Code · Publishing extensions (ไอคอนใน package.json ห้ามเป็น SVG) — https://code.visualstudio.com/api/working-with-extensions/publishing-extension
+- VS Code · Publishing extensions (icon in package.json must not be SVG) — https://code.visualstudio.com/api/working-with-extensions/publishing-extension
 - Chrome Web Store · Images — https://developer.chrome.com/docs/webstore/images
 
 
 ## reference: icon-sets.md
 
-# ชุดไอคอนฟรีที่ใช้ทำงานจริงได้
+# Free icon sets usable in real work
 
-อ่านจาก README และไฟล์ใบอนุญาตใน repo ทางการเมื่อ 2026-10-26 · ใบอนุญาตเปลี่ยนได้ ก่อนส่งงานลูกค้าให้เปิดไฟล์ LICENSE ของรุ่นที่ใช้จริงอีกครั้ง
+Read from the README and license files in the official repos on 2026-10-26 · licenses can change, so before delivering to a client, open the LICENSE file of the version actually used again.
 
-| ชุด | ใบอนุญาต | จำนวน | กริด · เส้น | ใช้ในแอป | ใช้ทำโลโก้ |
+| Set | License | Count | Grid · stroke | Use in an app | Use for a logo |
 |---|---|---|---|---|---|
-| [Lucide](https://github.com/lucide-icons/lucide) | ISC | 1,600+ | 24 · เส้น 2 · มีกฎออกแบบละเอียดที่สุด ใช้วาดตัวที่ขาดได้ | ได้ คงข้อความลิขสิทธิ์ | ได้ตามใบอนุญาต แต่คนอื่นใช้ไอคอนเดียวกันได้ จึงไม่เป็นเอกลักษณ์ |
-| [Tabler](https://github.com/tabler/tabler-icons) | MIT | 6,238 (เส้น 5,184 · ทึบ 1,054) | 24 · เส้น 2 | ได้ | เหมือน Lucide |
-| [Phosphor](https://github.com/phosphor-icons/core) | MIT | ราว 1,248 | 6 น้ำหนัก thin ถึง duotone · ออกแบบที่ 16 (ยังไม่ได้ยืนยันกับเว็บหลัก) | ได้ เหมาะเมื่ออยากได้น้ำหนักให้เลือก | เหมือน Lucide |
-| [Material Symbols](https://github.com/google/material-design-icons) | Apache 2.0 | 2,500–3,800+ (เอกสารให้ตัวเลขขัดกัน) | 24 · variable font ปรับ fill · weight · grade · optical size | ได้ ไม่บังคับเครดิต | ได้ ยกเว้นโลโก้บุคคลที่สามที่อยู่ในชุด |
-| [Heroicons](https://github.com/tailwindlabs/heroicons) | MIT | 316 | 24 เส้น · 24 · 20 · 16 ทึบ | ได้ ชุดเล็ก | เหมือน Lucide |
-| [Iconoir](https://github.com/iconoir-icons/iconoir) | MIT | 1,383 | 24 | ได้ | เหมือน Lucide |
-| [Fluent System Icons](https://github.com/microsoft/fluentui-system-icons) | MIT | ไม่ระบุใน repo | regular · filled | ได้ เข้ากับแอป Windows | เหมือน Lucide |
-| [Remix Icon](https://github.com/Remix-Design/RemixIcon) | Remix Icon License v1.0 (ไม่ใช่ MIT · แก้ ม.ค. 2026) | 3,200+ | 24 | ได้ ปรับสี ขนาด เส้น | **ห้าม** แม้แก้เล็กน้อย · ห้ามแจกหรือขายเป็นชุด |
-| SF Symbols | ข้อตกลงของ Apple | — | — | เฉพาะแอปบนแพลตฟอร์ม Apple | **ห้าม** ใช้ในไอคอนแอปหรือโลโก้ตาม HIG |
+| [Lucide](https://github.com/lucide-icons/lucide) | ISC | 1,600+ | 24 · stroke 2 · most detailed design rules, usable for drawing missing icons | Yes, keep the copyright notice | Allowed by the license, but others can use the same icon, so it is not distinctive |
+| [Tabler](https://github.com/tabler/tabler-icons) | MIT | 6,238 (stroke 5,184 · solid 1,054) | 24 · stroke 2 | Yes | Same as Lucide |
+| [Phosphor](https://github.com/phosphor-icons/core) | MIT | about 1,248 | 6 weights, thin to duotone · designed at 16 (not confirmed with the main site) | Yes, good when you want a choice of weights | Same as Lucide |
+| [Material Symbols](https://github.com/google/material-design-icons) | Apache 2.0 | 2,500–3,800+ (docs give conflicting numbers) | 24 · variable font adjusts fill · weight · grade · optical size | Yes, no credit required | Yes, except third-party logos included in the set |
+| [Heroicons](https://github.com/tailwindlabs/heroicons) | MIT | 316 | 24 stroke · 24 · 20 · 16 solid | Yes, small set | Same as Lucide |
+| [Iconoir](https://github.com/iconoir-icons/iconoir) | MIT | 1,383 | 24 | Yes | Same as Lucide |
+| [Fluent System Icons](https://github.com/microsoft/fluentui-system-icons) | MIT | Not stated in the repo | regular · filled | Yes, fits Windows apps | Same as Lucide |
+| [Remix Icon](https://github.com/Remix-Design/RemixIcon) | Remix Icon License v1.0 (not MIT · changed Jan 2026) | 3,200+ | 24 | Yes, you may adjust color, size, stroke | **Forbidden** even with small edits · you must not distribute or sell it as a set |
+| SF Symbols | Apple's agreement | — | — | Only in apps on Apple platforms | **Forbidden** in app icons or logos per the HIG |
 
-## เลือกชุดอย่างไร
+## How to choose a set
 
-1. **1 แอป 1 ชุด** · ไอคอนที่ขาดให้วาดตามกฎของชุดนั้น (กริด เส้น มุม) โดยเริ่มจากไอคอนในชุดที่ใกล้ที่สุด ไม่ผสม 2 ชุด
-2. เว็บหรือแอปทั่วไปเริ่มที่ Lucide หรือ Tabler · อยากได้หลายน้ำหนักใช้ Phosphor · แอป Android หรือเว็บแนว Material ใช้ Material Symbols · แอป Windows ใช้ Fluent
-3. โลโก้หรือไอคอนแอปที่ต้องเป็นของแบรนด์เอง ไม่ใช้ไอคอนจากชุดตรง ๆ เพราะคนอื่นใช้รูปเดียวกันได้ ใช้เป็นจุดตั้งต้นของสัดส่วนได้ แต่ต้องดัดแปลงจนเป็นของตัวเอง
-4. จดชื่อชุด รุ่น และใบอนุญาตไว้ใน README หรือ NOTICE ของโปรเจกต์
+1. **1 app, 1 set** · draw a missing icon by that set's rules (grid, stroke, corners), starting from the closest icon in the set, and do not mix 2 sets.
+2. For a general web or app, start with Lucide or Tabler · use Phosphor when you want several weights · use Material Symbols for an Android app or a Material-style web · use Fluent for a Windows app.
+3. For a logo or app icon that must be the brand's own, do not use an icon straight from a set, because others can use the same image · it can serve as a starting point for proportions, but must be modified until it is the brand's own.
+4. Record the set name, version, and license in the project's README or NOTICE.
 
 
 ## reference: specs.md
 
-# ตัวเลขและขนาดไอคอนตามแพลตฟอร์ม
+# Icon numbers and sizes by platform
 
-ทุกแถวเปิดแหล่งอ่านเมื่อ 2026-10-26 · ตัวเลขเปลี่ยนตามรุ่นของแพลตฟอร์ม ก่อนส่งงานจริงให้เปิดลิงก์ตรวจซ้ำ
+Every row's source was opened and read on 2026-10-26 · numbers change with platform versions, so open the link and re-check before real delivery.
 
-## ไอคอนในหน้าจอ (UI icon)
+## Screen icons (UI icon)
 
-| เรื่อง | ค่า | แหล่ง |
+| Topic | Value | Source |
 |---|---|---|
-| ขนาดแสดงผล | 24 · หนาแน่น 20 · Atlassian ใช้ 16 | Material 1 · Atlassian |
-| พื้นที่วาด (live area) | 20×20 ใน 24 (เว้นขอบ 2 ด้านละ) · Lucide เว้นอย่างน้อย 1 | Material 1 · Lucide |
-| keyline shapes บนกริด 24 | วงกลม 20 · จัตุรัส 18 · แนวตั้ง 16×20 · แนวนอน 20×16 · วงกลมใหญ่กว่าจัตุรัสเพราะตาเห็นวงกลมเล็กกว่าจริง | Material 1 |
-| น้ำหนักเส้น | 2 ทั้งชุด · ชิ้นซับซ้อนลดเป็น 1.5 ได้ · Atlassian ใช้ 1.5 บนกริด 16 | Material 1 · Lucide · Atlassian |
-| มุม | มุมนอกโค้ง radius 2 (รูปเล็กกว่า 8 ใช้ 1) · มุมในแหลม · จุดที่เส้นมาชนกันเกิน 2 เส้นคงมุมแหลม | Lucide · Material 1 · Atlassian |
-| ช่องว่าง | ระหว่างชิ้นอย่างน้อย 2 · ช่องในรูปต้องใส่วงกว้าง 2 ได้ | Lucide |
-| พิกัด | ชิดพิกเซล (กริด 24 ลงที่ .0 หรือ .5 เมื่อเส้นหนา 2 จัดกึ่งกลางเส้น) แต่ห้ามแลกกับการจดจำหรือสมดุล | Lucide · Material 1 |
-| ลำดับความสำคัญ | ความชัด → สมดุลภาพ → ความสม่ำเสมอกับชุด | Lucide |
-| พื้นที่กด | ไอคอน 24 → เป้ากด 48 · 20 → 40 | Material 1 |
-| ป้ายข้อความ | ใส่ป้ายข้อความที่มองเห็นตลอดข้างไอคอน แม้ไอคอนมาตรฐาน · ไอคอนที่คนทั่วโลกเข้าใจตรงกันมีแค่ home · print · search | NN/g (2014-07-27) |
-| metaphor | ตั้งชื่อตามรูป ไม่ใช่ตามหน้าที่ ("Shield, not security") · ตัวเสริม (modifier) อยู่มุมขวาล่าง · ตรวจความหมายทางวัฒนธรรม | Fluent 2 |
-| Apple | น้ำหนัก 9 ระดับและ scale 3 ระดับเทียบตัวอักษรข้าง ๆ · custom symbol เริ่มจาก template ของ symbol ใกล้เคียง · ห้ามใช้ SF Symbols ในไอคอนแอปหรือโลโก้ | HIG SF Symbols |
+| Display size | 24 · dense 20 · Atlassian uses 16 | Material 1 · Atlassian |
+| Drawing area (live area) | 20×20 inside 24 (2 margin on each side) · Lucide keeps at least 1 | Material 1 · Lucide |
+| Keyline shapes on the 24 grid | circle 20 · square 18 · portrait 16×20 · landscape 20×16 · the circle is larger than the square because the eye sees a circle as smaller than it is | Material 1 |
+| Stroke weight | 2 across the set · complex pieces may drop to 1.5 · Atlassian uses 1.5 on a 16 grid | Material 1 · Lucide · Atlassian |
+| Corners | outer corners rounded with radius 2 (shapes smaller than 8 use 1) · inner corners sharp · where more than 2 strokes meet, keep the corner sharp | Lucide · Material 1 · Atlassian |
+| Gaps | at least 2 between pieces · a gap inside a shape must fit a circle of width 2 | Lucide |
+| Coordinates | pixel-aligned (on the 24 grid, land on .0 or .5 when a 2-thick stroke is centered on its line) but do not trade this against recognition or balance | Lucide · Material 1 |
+| Priority order | clarity → visual balance → consistency with the set | Lucide |
+| Touch area | icon 24 → touch target 48 · 20 → 40 | Material 1 |
+| Text label | Put an always-visible text label beside the icon, even a standard icon · the only icons everyone worldwide understands the same way are home · print · search | NN/g (2014-07-27) |
+| metaphor | Name it by the picture, not by the function ("Shield, not security") · the modifier sits at the bottom right · check cultural meaning | Fluent 2 |
+| Apple | 9 weights and 3 scales matched to the neighboring text · a custom symbol starts from the template of a nearby symbol · do not use SF Symbols in app icons or logos | HIG SF Symbols |
 
-## ไอคอนแอป โลโก้ favicon
+## App icons, logos, favicons
 
-| ปลายทาง | ไฟล์และขนาด | ข้อห้าม | แหล่ง |
+| Destination | File and size | Bans | Source |
 |---|---|---|---|
-| iOS · iPadOS · macOS | 1024×1024 จัตุรัส ไม่ตัดมุมเอง ระบบใส่ mask ให้ · พื้นทึบเต็มขอบ · variant default · dark · clear · tinted | ห้ามใส่เงา bevel glow เอง · เลี่ยงข้อความ เส้นบาง มุมแหลม | HIG App icons (แก้ล่าสุด 2026-06-08) |
-| watchOS · visionOS | 1088 · 1024 · ระบบใส่ mask วงกลม | watchOS เลี่ยงพื้นดำล้วน | เหมือนข้างบน |
-| Android adaptive | เลเยอร์ละ 108×108dp · เนื้อหาหลักอยู่ใน 66×66dp กลาง (ขั้นต่ำ 48) · ต้องมีเลเยอร์ monochrome สำหรับ themed icon | ห้ามใส่ mask หรือเงาในไฟล์ OEM เป็นคนตัด | Android Developers |
-| Windows | อย่างน้อย 16 · 24 · 32 · 48 · 256 · ไฟล์ `targetsize-N` แบบ unplated ทั้งธีมมืดและสว่าง ไม่งั้นระบบใส่แผ่นรอง | — | Microsoft Learn (แก้ 2026-08-05) |
-| เว็บ | `favicon.ico` 32 (เพิ่ม 16 ถ้า 32 ย่อแล้วเบลอ) · `icon.svg` รองรับธีมมืดด้วย media query · `apple-touch-icon.png` 180 มี padding และสีพื้น · `icon-192.png` · `icon-512.png` · maskable 512 ลายอยู่ใน 409 กลาง | Google Search ไม่รับ SVG อย่างเดียว ต้องมี PNG หรือ ICO · ขั้นต่ำ 8×8 แนะนำเกิน 48 | Evil Martians (Andrey Sitnik · 2026-01-21) · Google Search Central |
-| plugin ของ Claude Code | ช่อง `icon` ใน `plugin.json` ชี้ไฟล์รูปใน plugin เช่น `./logo.png` · ใช้แค่หน้ารายการตอน `claude.ai/directory/manage` Claude Code ไม่อ่าน | เอกสารไม่กำหนดขนาด รูปทรง หรือธีม (ตรวจ 2026-10-26) · ด่าน directory รับ PNG JPEG GIF WebP SVG · ทำต้นแบบ SVG แล้วส่งออก PNG 512 ไว้ก่อน ใช้กับ Raycast ได้ด้วย | code.claude.com plugins-reference · publish |
+| iOS · iPadOS · macOS | 1024×1024 square, do not cut the corners yourself, the system applies the mask · solid fill to the edge · variants default · dark · clear · tinted | Do not add your own shadow, bevel, or glow · avoid text, thin strokes, sharp corners | HIG App icons (last updated 2026-06-08) |
+| watchOS · visionOS | 1088 · 1024 · the system applies a circular mask | watchOS: avoid a pure black background | Same as above |
+| Android adaptive | each layer 108×108dp · main content inside the central 66×66dp (minimum 48) · must have a monochrome layer for themed icons | Do not put a mask or shadow in the file, the OEM does the cutting | Android Developers |
+| Windows | at least 16 · 24 · 32 · 48 · 256 · `targetsize-N` files, unplated, for both dark and light themes, otherwise the system adds a backplate | — | Microsoft Learn (updated 2026-08-05) |
+| Web | `favicon.ico` 32 (add 16 if 32 scaled down looks blurry) · `icon.svg` supporting dark theme with a media query · `apple-touch-icon.png` 180 with padding and a background color · `icon-192.png` · `icon-512.png` · maskable 512 with the artwork inside the central 409 | Google Search does not accept SVG alone, it needs PNG or ICO · minimum 8×8, recommended over 48 | Evil Martians (Andrey Sitnik · 2026-01-21) · Google Search Central |
+| Claude Code plugin | `icon` field in `plugin.json` points to an image file in the plugin, such as `./logo.png` · used only on the listing page at `claude.ai/directory/manage`, Claude Code does not read it | Docs set no size, shape, or theme (checked 2026-10-26) · the directory gate accepts PNG JPEG GIF WebP SVG · make an SVG master, then export PNG 512 up front, which also works for Raycast | code.claude.com plugins-reference · publish |
 
-## แหล่ง
+## Sources
 
-- Material Design 1 · Icons — https://m1.material.io/style/icons.html (M3 เปิดอ่านไม่ได้เพราะหน้าต้องรัน JavaScript ตัวเลขจึงมาจาก M1)
+- Material Design 1 · Icons — https://m1.material.io/style/icons.html (M3 could not be read because the page needs JavaScript to run, so the numbers come from M1)
 - Lucide · Design principles — https://lucide.dev/contribute/icons/design-principles
 - Atlassian · Iconography — https://atlassian.design/foundations/iconography/
 - Microsoft Fluent 2 · Iconography — https://fluent2.microsoft.design/iconography
@@ -311,46 +311,46 @@ python scripts/icon_check.py <ไฟล์.svg ...> --out _to_delete/icon-check 
 
 Use to cut extras nobody needs yet. Not Claude Code simplify
 
-# simplify — ทำให้ง่าย คนอ่านครั้งแรกก็ตามได้
+# simplify — make it simple so a first-time reader can follow
 
-ใช้กับทุกงานที่ส่งให้คน ทั้งโค้ด เอกสาร แผน ดีไซน์ สไลด์ ตาราง และคำตอบ · `human-writing` คุมว่า**เขียนอย่างไร** ส่วน skill นี้คุมว่า**ตัวงานมีอะไรบ้าง** · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
+Use on any work handed to people: code, documents, plans, designs, slides, tables and answers · `human-writing` controls **how it is written**, while this skill controls **what the work contains** · lives only in plugin `superuser`; other plugins share it through `dependencies`
 
-## 1 · หลักใหญ่
+## 1 · Main principles
 
-- **บททดสอบ:** คนที่ไม่ได้อยู่ในงานนี้ เปิดดูอีก 6 เดือนข้างหน้า ต้องเข้าใจและแก้ต่อได้โดยไม่ต้องถามใคร
-- ทำเท่าที่โจทย์ต้องการ ไม่เผื่ออนาคตที่ยังไม่มีใครขอ
-- ตัดก่อนเพิ่ม · ถ้าตัดส่วนไหนออกแล้วความหมายหรือการทำงานไม่เสีย ให้ตัด
-- ของธรรมดาที่คนรู้จักดีกว่าของฉลาดที่ต้องถอดรหัส
-- **ง่ายไม่ใช่มักง่าย** — ห้ามตัดความถูกต้อง ความปลอดภัย การตรวจข้อมูลที่รับจากภายนอก การจัดการ error ที่กันข้อมูลหาย และสิ่งที่ผู้ใช้ขอไว้ชัด ๆ
-- **ง่ายไม่ใช่กองรวม** — ลดจำนวนของ แต่ยังแยกหน้าที่ชัด 1 ส่วนทำ 1 เรื่อง เหมือนงานของมืออาชีพ
+- **The test:** someone not on this work, opening it 6 months from now, must understand it and continue it without asking anyone
+- Do only what the task needs; do not provide for a future nobody has asked for
+- Cut before adding · if removing a part loses neither meaning nor function, cut it
+- Plain things people know beat clever things that need decoding
+- **Simple is not sloppy** — never cut correctness, safety, validation of data from outside, error handling that prevents data loss, or what the user asked for explicitly
+- **Simple is not one big pile** — reduce the number of things, but keep clear separation of duties, 1 part doing 1 thing, as professional work does
 
-## 2 · บันไดก่อนลงมือ — หยุดที่ขั้นแรกที่ใช้ได้
+## 2 · Ladder before starting — stop at the first step that works
 
-1. ต้องมีสิ่งนี้จริงไหม · ไม่จำเป็น → ไม่ทำ แล้วบอก 1 บรรทัดว่าข้ามอะไร
-2. มีของเดิมที่ใช้ได้แล้วไหม (ไฟล์ แม่แบบ ฟังก์ชัน เครื่องมือ ฟีเจอร์ที่ติดมากับระบบ) · มี → ใช้ของเดิม
-3. ทำแบบสั้นที่สุดที่ยังครบและถูก
+1. Do we really need this · not needed → do not do it, and say in 1 line what you skipped
+2. Is there an existing thing that works (file, template, function, tool, a feature that comes with the system) · yes → use the existing thing
+3. Do the shortest version that is still complete and correct
 
-## 3 · ตามชนิดงาน
+## 3 · By kind of work
 
-| งาน | ทำ | เลี่ยง |
+| Work | Do | Avoid |
 |---|---|---|
-| **โค้ด** | ชื่อบอกว่าคืออะไรและมีหน่วย · 1 ฟังก์ชันทำ 1 เรื่อง · คืนค่าออกเร็วแทนการซ้อน `if` · เยื้องไม่เกิน 3 ชั้น · คอมเมนต์บอก "ทำไม" · ตามสไตล์ของโปรเจกต์ | abstraction ที่มีตัวใช้ตัวเดียว · ทางลัดที่ฉลาดแต่อ่านยาก · ไฟล์ก้อนเดียวทำทุกอย่าง · โฟลเดอร์ `utils/` กองรวม · dependency ใหม่เพื่องานไม่กี่บรรทัด |
-| **เอกสาร · รายงาน** | ข้อสรุปขึ้นก่อน · 1 ย่อหน้า 1 เรื่อง · ตัวอย่างประกอบข้อที่เป็นนามธรรม · ตารางสำหรับข้อมูลที่เทียบกัน | ทวนสิ่งที่พูดไปแล้ว · หัวข้อที่ไม่มีเนื้อ · ศัพท์ที่คนอ่านไม่รู้ |
-| **แผน · ขั้นตอน** | 3–5 ข้อสำคัญ · ทุกข้อมีเจ้าของและวัดได้ว่าเสร็จ · ขั้นน้อยที่สุดที่ได้ผล | รายการ 20 ข้อที่ไม่มีลำดับความสำคัญ · ขั้นที่มีไว้ "เผื่อ" |
-| **ดีไซน์ · สไลด์ · รูป** | 1 หน้า 1 ใจความ · ทางสั้นสุดไปถึงเป้าของผู้ใช้ · ใช้แบบที่คนคุ้นเคย | อัดข้อมูลจนต้องเพ่ง · ของตกแต่งที่ไม่ช่วยให้เข้าใจ |
-| **ตาราง · ข้อมูล** | คอลัมน์เท่าที่ใช้ตัดสินใจ · สูตรสั้นที่ตามได้ | คอลัมน์ซ้ำความหมาย · สูตรซ้อนยาวบรรทัดเดียว |
-| **คำตอบ** | ตอบก่อน · ยาวเท่าที่คำถามต้องการ | อธิบายยาวกว่าตัวงาน |
+| **Code** | Names say what it is and carry units · 1 function does 1 thing · return early instead of nesting `if` · at most 3 levels of indentation · comments say "why" · follow the project's style | An abstraction with a single user · a clever shortcut that is hard to read · one big file doing everything · a pile-up `utils/` folder · a new dependency for a few lines of work |
+| **Documents · reports** | Conclusion first · 1 paragraph 1 topic · an example for abstract points · a table for data that is compared | Repeating what was already said · headings with no content · terms the reader does not know |
+| **Plans · procedures** | 3–5 key items · every item has an owner and a way to measure done · the fewest steps that work | A list of 20 items with no priority · steps kept "just in case" |
+| **Designs · slides · figures** | 1 page 1 point · the shortest path to the user's goal · use patterns people are familiar with | Cramming data until people must squint · decoration that does not help understanding |
+| **Tables · data** | Only the columns used to decide · short formulas you can follow | Columns that repeat a meaning · long nested formulas in one line |
+| **Answers** | Answer first · as long as the question needs | An explanation longer than the work itself |
 
-plugin `software-development` มีรายละเอียดของโค้ดและสถาปัตยกรรมเพิ่ม: `lazy-coding` (เขียนให้น้อย) · `readable-code` (ชื่อ รูปร่างฟังก์ชัน โครงไฟล์) · `simplicity-first` (เอกสาร แผน สถาปัตยกรรม) · ถ้าติดตั้งอยู่ให้เปิดคู่กัน
+Plugin `software-development` has more detail on code and architecture: `lazy-coding` (write less) · `readable-code` (names, function shape, file structure) · `simplicity-first` (documents, plans, architecture) · if installed, open them together
 
-## 4 · บอกว่าตั้งใจทำให้ง่าย
+## 4 · Say that you made it simple on purpose
 
-ทางลัดที่ตั้งใจ ให้เขียนไว้ว่าใช้ได้ถึงแค่ไหนและเปลี่ยนเมื่อไร จะได้ไม่ดูเหมือนลืม เช่น `// simple: เก็บใน memory — ย้ายไป Redis เมื่อรันเกิน 1 process` · ในรายงานใส่ 1 บรรทัด `ข้าม: X — เพิ่มเมื่อ Y`
+A deliberate shortcut should be written down with how far it works and when it changes, so it does not look forgotten, for example `// simple: เก็บใน memory — ย้ายไป Redis เมื่อรันเกิน 1 process` (gloss: simple: kept in memory — move to Redis when running more than 1 process) · in the report put 1 line `ข้าม: X — เพิ่มเมื่อ Y` (skipped: X — add when Y)
 
-## 5 · ตรวจก่อนส่ง 5 ข้อ
+## 5 · 5-point check before sending
 
-1. คนนอกเปิดดูครั้งแรกแล้วเข้าใจภายใน 30 วินาทีไหม
-2. มีส่วนไหน ขั้นไหน หรือชั้นไหนตัดออกได้โดยไม่เสียอะไรไหม ถ้ามีให้ตัด
-3. ทุกส่วนที่เพิ่มมา มีเหตุผลว่าต้องใช้ตอนนี้ ไม่ใช่ "เผื่อ" ใช่ไหม
-4. ยังครบเรื่องความถูกต้อง ความปลอดภัย และสิ่งที่ผู้ใช้ขอไหม
-5. ยังแยกหน้าที่ชัด ไม่ได้ยุบหลายเรื่องไว้ที่เดียวเพื่อให้ดูสั้นใช่ไหม
+1. Can an outsider open it for the first time and understand within 30 seconds
+2. Is there any part, step or layer that can be cut with no loss? If so, cut it
+3. Does every part added have a reason it is needed now, not "just in case"
+4. Is it still complete on correctness, safety, and what the user asked for
+5. Are duties still clearly separated, and not several things squashed into one place to look short

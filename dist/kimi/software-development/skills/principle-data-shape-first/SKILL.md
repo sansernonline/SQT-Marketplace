@@ -3,34 +3,34 @@ name: principle-data-shape-first
 description: Use when logic crosses functions or modules
 ---
 
-# principle · data shape first — ได้รูปข้อมูลก่อน โค้ดจะตามมาเอง
+# principle · data shape first — get the data shape first and the code follows
 
-> โค้ดที่ยุ่งส่วนใหญ่ไม่ได้มาจาก logic ยาก แต่มาจากรูปข้อมูลที่ผิดตั้งแต่ต้น
-> ถ้าได้ type และโครงข้อมูลที่ถูก if ส่วนใหญ่จะหายไปเอง
+> Most messy code does not come from hard logic but from the wrong data shape from the start
+> With the right types and data structure, most `if`s disappear by themselves
 
-## ก่อนเขียนบรรทัดแรก ตอบให้ได้ 4 ข้อ
+## Before writing the first line, be able to answer 4 questions
 
-| ถาม | ได้อะไร |
+| Ask | What you get |
 |---|---|
-| ข้อมูลหลักของงานนี้คืออะไร มี field อะไร | type หรือ schema ที่เขียนออกมาจริง ไม่ใช่อยู่ในหัว |
-| สถานะที่เป็นไปได้มีกี่แบบ | union หรือ enum ตัวเดียว แทน boolean หลายตัวที่ขัดกันได้ |
-| ข้อมูลเข้ามาจากนอกระบบตรงไหน | จุดเดียวที่แปลง (parse) และตรวจ แล้วข้างในเชื่อ type |
-| ใครเขียนข้อมูลนี้พร้อมกันบ้าง | แยกให้ไม่ต้องแชร์กันก่อน แล้วค่อยใช้ล็อกหรือคิวเฉพาะเมื่อต้องมีผู้เขียนคนเดียวจริง ๆ |
+| What is the main data of this work, and what fields does it have | a type or schema actually written out, not in your head |
+| How many possible states are there | one union or enum, instead of several booleans that can contradict each other |
+| Where does data enter from outside the system | a single point that parses and validates, then trust the types inside |
+| Who writes this data at the same time | separate them so they do not have to share, then use a lock or queue only when there truly must be a single writer |
 
-## กฎ
+## Rules
 
-- **สถานะที่ผิดต้องสร้างไม่ได้** — `{ status: 'paid', paidAt }` ไม่ใช่ `isPaid` + `paidAt?` ที่ขัดกันได้
-- **ค่าที่มีความหมายมี type ของมัน** — `OrderId` ไม่ใช่ `string` เปล่า ส่วนเงินใช้ type ทศนิยมแบบตรงตัว (exact decimal) ไม่ใช้ float เด็ดขาด · ในฐานข้อมูลใช้ `decimal(19,4)` ตาม `stack-sql` · จำนวนเต็มสตางค์ใช้ได้เฉพาะในหน่วยความจำหรือ JSON ที่ส่งให้ payment gateway ที่ขอแบบนั้น
-- **กฎธุรกิจอยู่ในโครงสร้าง ไม่กระจายเป็น if** — ใช้ตาราง map · state machine · lookup แทน `if (type === ...)` ซ้ำหลายไฟล์
-- **ตรวจตอนข้อมูลเข้าระบบ แล้วข้างในเชื่อได้** — ข้อมูลจาก CLI · config · request · ไฟล์ · API ภายนอก ให้แปลงด้วย schema ทันทีที่เข้ามา โค้ดข้างในจึงไม่ต้องเช็ก null ซ้ำ
-- **ไม่โกหก compiler** — ไม่ใช้ `any` · `as` · `!` เพื่อให้ compile ผ่าน และ `switch` ต้องครบทุกกรณีโดยมีตัวตรวจ (exhaustive check)
-- **type มาจากแหล่งเดียว** — สร้างจาก schema ฐานข้อมูลหรือ OpenAPI ไม่เขียนซ้ำด้วยมือ
-- **ความต้องการใหม่ไม่เข้ากับรูปข้อมูลเดิม** — ให้ออกแบบรูปใหม่ให้เหมือนรู้ตั้งแต่วันแรก ไม่แปะ flag เพิ่ม
+- **An invalid state must be impossible to create** — `{ status: 'paid', paidAt }`, not `isPaid` + `paidAt?` that can contradict
+- **A value with meaning gets its own type** — `OrderId`, not a bare `string` · for money use an exact decimal type and never float · in the database use `decimal(19,4)` per `stack-sql` · integer satang is allowed only in memory or in JSON sent to a payment gateway that asks for it
+- **Business rules live in the structure, not scattered as `if`s** — use a map table · state machine · lookup instead of repeating `if (type === ...)` across files
+- **Validate when data enters the system, then trust it inside** — data from the CLI · config · requests · files · external APIs: convert with a schema the moment it arrives, so inner code does not re-check null
+- **Do not lie to the compiler** — no `any` · `as` · `!` just to make it compile, and a `switch` must cover every case with an exhaustive check
+- **Types come from one source** — generate from the database schema or OpenAPI, do not rewrite them by hand
+- **A new requirement does not fit the old data shape** — design the new shape as if you had known from day one, do not bolt on another flag
 
-## ในงาน
+## In the work
 
-playbook `feature` และ `new-project` ให้เขียนรูปข้อมูลลง todo ก่อนลงมือ ถ้ามีตารางใหม่ให้ใช้ `database-design` ส่วน API ใช้ `api-conventions`
+The `feature` and `new-project` playbooks say to write the data shape into the todo before starting · for a new table use `database-design`, and for APIs use `api-conventions`
 
-## ไม่ต้องทำเมื่อ
+## When not to do this
 
-สคริปต์ใช้ครั้งเดียว หรือแก้ภายในฟังก์ชันเดียวที่ไม่เปลี่ยนรูปข้อมูล
+A one-off script, or a change inside a single function that does not change the data shape

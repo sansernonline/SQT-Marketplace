@@ -250,200 +250,200 @@ Instagram, งานพิมพ์ (ระยะตัดตก ความล
 
 ## reference: logo-design.md
 
-# โลโก้ — รายละเอียด
+# Logos — details
 
-สารบัญ: ห้าสถาปัตยกรรม → ทดสอบบริบท → ทำโลโก้ให้ "ว้าว" → รูปทรงแท่ง · กฎสั้นและสี่ข้อทดสอบความเรียบอยู่ใน `SKILL.md`
+Contents: five architectures → context tests → making a logo "wow" → bar shapes · the short rules and the four simplicity tests are in `SKILL.md`
 
-## ห้าสถาปัตยกรรม
+## Five architectures
 
-| แบบ | คือ | ตัวอย่าง |
+| Type | What it is | Example |
 |---|---|---|
-| ตัวอักษรล้วน | ชื่อแบรนด์เป็นตัวอักษรอย่างเดียว | Stripe · Google |
-| สัญลักษณ์ + ตัวอักษร | รูปคู่กับชื่อ | Slack · Airbnb |
-| สัญลักษณ์ล้วน | รูปอย่างเดียว | Apple · Target |
-| ตัวอักษรเป็นสัญลักษณ์ | อักษรตัวเดียวที่ถูกออกแบบจนเป็นรูป | Beats · McDonald's |
-| อักษรย่อ | 2–3 ตัวประกอบกัน | Chanel · Gucci |
+| Wordmark | The brand name as letters only | Stripe · Google |
+| Symbol + wordmark | A picture paired with the name | Slack · Airbnb |
+| Symbol only | A picture only | Apple · Target |
+| Lettermark as symbol | A single letter designed until it becomes a picture | Beats · McDonald's |
+| Monogram | 2–3 letters combined | Chanel · Gucci |
 
-**ชุดที่ใช้งานได้จริงต้องมี 3 แบบ** — ตัวหลักสำหรับพื้นที่กว้าง · อักษรย่อสำหรับช่องสี่เหลี่ยม ·
-ตัวอักษรเป็นสัญลักษณ์สำหรับ favicon และงานปัก
+**A set that works in real use needs 3 types** — the main one for wide spaces · the monogram for square slots ·
+the lettermark as symbol for favicons and embroidery
 
-| บริบท | ข้อจำกัดจริง |
+| Context | Real limit |
 |---|---|
-| favicon 16px | องค์ประกอบไม่เกิน **4–6 ชิ้น** · เส้นบางกว่า **2px หายไป** · สีไม่เกิน 3–4 |
-| ไอคอนแอป 28px | องค์ประกอบ 4–8 ชิ้น · เส้นบางกว่า 3px หาย |
-| ปักเสื้อ 1.5 นิ้ว | ด้าย **4–6 สี** · เส้นบางสุด ~1 มม. · **ตัวอักษรต่ำกว่า 2 มม. ปักไม่ออก** |
-| ขาวดำ | ต้องอ่านออกโดยไม่พึ่งสี |
-| กลับสี (ขาวบนดำ) | ช่องว่างในตัวอักษรต้องไม่ตัน |
-| ป้ายหน้าร้าน | อ่านที่ระยะ 15–60 เมตร · ระบุสี **Pantone ไม่ใช่ hex** |
-| รูปโปรไฟล์โซเชียล | โดนครอบวงกลม · ต้องอ่านออกที่ **60–80px** ในฟีดแจ้งเตือน |
+| favicon 16px | No more than **4–6 elements** · lines thinner than **2px disappear** · no more than 3–4 colors |
+| App icon 28px | 4–8 elements · lines thinner than 3px disappear |
+| Shirt embroidery 1.5 inches | **4–6 thread colors** · thinnest line ~1 mm · **text under 2 mm cannot be embroidered** |
+| Black and white | Must read without relying on color |
+| Inverted (white on black) | Counters inside letters must not fill in |
+| Storefront sign | Read at 15–60 meters · specify the **Pantone color, not hex** |
+| Social profile picture | Cropped to a circle · must read at **60–80px** in the notification feed |
 
-## ทำโลโก้ให้ "ว้าว" — วิธีที่ผ่านมาแล้ว
+## Making a logo "wow" — methods that have worked
 
-โลโก้ที่ถูกตีกลับว่า "ไม่สวย ไม่ว้าว" มักเป็นสัญลักษณ์ที่ใช้กันทั่วไป เช่น `>_` ของโปรแกรม terminal หรือตัวอักษรแบนสีเดียว ทางที่ได้ผลคือ:
+A logo rejected as "not beautiful, not wow" is usually a commonly used symbol, such as the `>_` of a terminal program or a flat single-color wordmark. What works:
 
-1. **ให้อย่างน้อย 1 แนวมาจากสิ่งที่ผู้ใช้เห็นทุกวันในตัวงาน** เช่น เคอร์เซอร์ขีดล่างของ terminal สำหรับแอป telnet/SSH เพราะเจ้าของงานมักผูกแบรนด์กับภาพนั้น (เจ้าของงานจริงเลือกแนวเคอร์เซอร์หลังผ่านมาแล้ว 2 รอบ)
-2. **ทำ 3 แนวพร้อมกัน** แต่ละแนวมีความคิดคนละแบบ เช่น เส้นเชื่อมต่อ · ตัวอักษรเป็นชั้นซ้อน · รูปทรงเรขาคณิตเรียบ แล้วเลือกจากภาพจริงที่วางเทียบกัน (`parallel-attempts-pick-best`)
-3. **มีมิติแบบที่ผ่าน `SKILL.md` ข้อ 7** — ชั้นซ้อนของรูปทรง · น้ำหนักเส้นต่างกัน · ไล่สีเฉดเดียวที่ต่างกันไม่เกิน 10 องศา · **ไม่ใช้แสงเรืองและไม่ไล่หลายสี** และที่ 16px ต้องยังเหลือเงาที่อ่านออก
-   - แสงเรืองหรือชั้นแสงใช้ได้เฉพาะเมื่อผู้ใช้ขอแนวนั้นเอง (opt-in) และต้องเขียนไว้ในไฟล์ทิศทาง
-4. **ทำแผ่นตัวอย่าง (preview sheet) ทุกรอบ** — ขนาด 16 · 24 · 32 · 48 · 64 · 128 · 256 บนพื้นเข้มและพื้นขาว · ชุดโลโก้คู่ชื่อทั้ง 2 พื้น · แบบสีเดียว · ในแถบงานของ Windows และแถบชื่อหน้าต่างแอป แล้วเปิดดูด้วยตาและแก้อย่างน้อย 3 รอบ (ตัวอย่างแผ่นที่ผ่านแล้ว: `assets/logo-preview-sheet-example.webp`)
-5. **ชื่อแบรนด์แปลงเป็นเส้นจากฟอนต์เปิด** (SIL Open Font License (OFL) เช่น Space Grotesk · Manrope · IBM Plex Sans — ไม่ใช้ Inter เพราะอยู่ในรายการฟอนต์ที่ใคร ๆ ก็ใช้ใน `SKILL.md` ข้อ 7) ด้วย fontTools และเก็บไฟล์สัญญาอนุญาตไว้ด้วย ห้ามใช้ฟอนต์ของระบบปฏิบัติการ เช่น Segoe เพราะสัญญาอนุญาตไม่ครอบคลุมการทำโลโก้
-6. **ส่งออกครบชุดเดียวกันทุกครั้ง** — ใช้ชุดเดียวใน [`sizes-and-print.md` ข้อ 4](sizes-and-print.md#4--ไฟล์ที่ต้องส่งมอบ) (SVG · PDF · PNG พื้นใส · ICO · 4 เวอร์ชันสี) ถ้าแนวที่ผู้ใช้เลือกมี filter (opt-in) ให้ใช้ไฟล์ PNG ในที่ที่ตัววาดภาพไม่รองรับ filter เช่น Word
-7. **โลโก้ที่มีส่วนเคลื่อนไหวได้** (เช่น เคอร์เซอร์) ใน sprite SVG ให้แยก `<g id="…-body">` กับ `<g id="…-cursor">` แล้วให้ symbol หลักใช้ทั้งสองส่วน หน้าแรกจะได้กระพริบเฉพาะเคอร์เซอร์ได้ ส่วนที่อื่นยังใช้ symbol เดิม ให้กระพริบเฉพาะในหน้าแรก และหยุดเมื่อเครื่องตั้งลดการเคลื่อนไหว (`prefers-reduced-motion`)
+1. **Make at least 1 direction come from what users see every day in the work**, for example the underscore cursor of a terminal for a telnet/SSH app, because the work's owner often ties the brand to that picture (the real owner picked the cursor direction after 2 rounds)
+2. **Make 3 directions at the same time**, each with a different idea, such as connection lines · letters as stacked layers · plain geometric shapes, then choose from real images placed side by side (`parallel-attempts-pick-best`)
+3. **Have depth in a form that passes `SKILL.md` section 7** — stacked layers of shapes · different line weights · a gradient of one hue whose shades differ by no more than 10 degrees · **no glow and no multi-color gradients**, and at 16px a readable silhouette must remain
+   - Glow or light layers are allowed only when the user asks for that direction (opt-in) and it must be written in the direction file
+4. **Make a preview sheet every round** — sizes 16 · 24 · 32 · 48 · 64 · 128 · 256 on dark and white backgrounds · the logo + name lockup on both backgrounds · single-color version · in the Windows taskbar and the app window title bar, then look at it with your own eyes and revise at least 3 rounds (an example of a sheet that passed: `assets/logo-preview-sheet-example.webp`)
+5. **Convert the brand name to outlines from an open font** (SIL Open Font License (OFL), such as Space Grotesk · Manrope · IBM Plex Sans — do not use Inter, because it is on the list of fonts everyone uses in `SKILL.md` section 7) with fontTools, and keep the license file too; never use operating system fonts such as Segoe, because their license does not cover making logos
+6. **Export the same complete set every time** — use the one set in [`sizes-and-print.md` step 4](sizes-and-print.md#4--ไฟล์ที่ต้องส่งมอบ) (SVG · PDF · transparent PNG · ICO · 4 color versions); if the direction the user chose has a filter (opt-in), use a PNG file wherever the drawing program does not support filters, such as Word
+7. **A logo with a moving part** (such as a cursor): in the sprite SVG, split `<g id="…-body">` from `<g id="…-cursor">` and have the main symbol use both parts, so the home page can blink only the cursor while elsewhere the original symbol is still used; blink only on the home page, and stop when the machine is set to reduce motion (`prefers-reduced-motion`)
 
-## รูปทรงแท่ง — เหลี่ยมขอบมน ไม่ใช่ปลายมน
+## Bar shapes — rounded rectangles, not round ends
 
-ตัวอักษรหรือสัญลักษณ์ที่สร้างจากแท่ง (เช่น T · `_` · `>`) ให้ใช้**แท่งเหลี่ยมขอบมน** เจ้าของงานจริงขอเปลี่ยนจากปลายมนเป็นแบบนี้ เพราะดูทันสมัยกว่า
+For letters or symbols built from bars (such as T · `_` · `>`), use **rounded-rectangle bars**. The real owner asked to change from round ends to this because it looks more modern.
 
-| รัศมีมุม เทียบกับความหนาแท่ง | ผล |
+| Corner radius relative to bar thickness | Result |
 |---|---|
-| ต่ำกว่า 0.2 | แข็ง ดูเหมือนยังไม่ได้ออกแบบ |
-| **0.25–0.35** (ค่าตั้งต้น 0.3) | เหลี่ยมชัดแต่ขอบนุ่ม เข้ากับฟอนต์ geometric และไอคอนแบบ Windows 11 |
-| 0.4 ขึ้นไป | เริ่มกลับเป็นปลายมนครึ่งวงกลม ดูนิ่มเหมือนเม็ดยาหรือของเล่น |
+| Below 0.2 | Stiff, looks undesigned |
+| **0.25–0.35** (default 0.3) | Clearly angular but soft-edged, fits geometric fonts and Windows 11 style icons |
+| 0.4 and up | Starts turning back into half-circle round ends, looks soft like a pill or a toy |
 
-- ใช้รัศมีเดียวกันทุกแท่ง ทั้งตัวอักษร เคอร์เซอร์ และขอบแสงที่ล้อมแท่ง
-- รอยต่อระหว่างแท่ง (เช่น ขาตัว T ชนคานบน) ให้ต่อเป็นเหลี่ยมตรง ไม่ใส่มุมมนด้านใน เพราะจะเกิดส่วนโป่ง
-- มุมมนจะหายไปที่ 16px ซึ่งไม่เป็นไร ขอแค่ยังอ่านเป็นตัวอักษรได้ ส่วนการตัดสินว่ารัศมีสวยไหม ให้ดูที่ 64px ขึ้นไป
+- Use the same radius on every bar, including letters, the cursor, and the glow edge that surrounds the bars
+- Joins between bars (such as the stem of a T meeting the top bar) are joined as straight angles, with no rounded inner corner, because that creates a bulge
+- The rounded corners disappear at 16px, which is fine as long as it still reads as a letter; judge whether the radius looks good at 64px and up
 
 
 ## reference: sizes-and-print.md
 
-# ขนาดงานโซเชียลและงานพิมพ์
+# Social media sizes and print work
 
-> ระวัง: **ตัวเลขแพลตฟอร์มเปลี่ยนได้** — บันทึกเมื่อ ก.ย. 2569
-> ก่อนส่งงานจริงให้เปิดเอกสารของแพลตฟอร์มยืนยันอีกครั้ง
-> ส่วนตัวเลขงานพิมพ์ (ข้อ 3) เป็นมาตรฐานอุตสาหกรรม ไม่ค่อยเปลี่ยน
+> Caution: **platform numbers can change** — recorded Sep 2569 (Buddhist Era)
+> Before sending real work, open the platform's documents and confirm again
+> The print numbers (section 3) are industry standards and rarely change
 >
-> ข้อ 1–2 เป็นฉบับสำรองสำหรับตอนไม่ได้ติดตั้ง plugin `graphic-design` — ติดตั้งอยู่ → ใช้ `graphic-design:social-formats` (ให้ค้นพื้นที่ปลอดภัยสดจากคู่มือของแพลตฟอร์ม ลิงก์อยู่ใน `social-formats/references/platform-sizes.md`) และถ้าตัวเลขต่างกัน ให้ถือของ plugin นั้น
+> Sections 1–2 are a backup version for when the plugin `graphic-design` is not installed — if it is installed → use `graphic-design:social-formats` (it searches the platform guides live for safe areas, links are in `social-formats/references/platform-sizes.md`), and if the numbers differ, treat the plugin's as correct
 
-## สารบัญ
+## Contents
 
-| # | หัวข้อ |
+| # | Heading |
 |---|---|
 | 1 | [LINE Official Account](#1--line-official-account-line-oa) |
-| 2 | [โซเชียลอื่น](#2--โซเชียลอื่น) |
-| 3 | [งานพิมพ์](#3--งานพิมพ์) |
-| 4 | [ไฟล์ที่ต้องส่งมอบ](#4--ไฟล์ที่ต้องส่งมอบ) |
+| 2 | [Other social platforms](#2--other-social-platforms) |
+| 3 | [Print work](#3--print-work) |
+| 4 | [ไฟล์ที่ต้องส่งมอบ](#4--ไฟล์ที่ต้องส่งมอบ) (files to deliver) |
 
 ---
 
 ## 1 · LINE Official Account (LINE OA)
 
-| ของ | ขนาด | หมายเหตุ |
+| Item | Size | Note |
 |---|---|---|
-| Rich menu ใหญ่ | 2500 × 1686 px | template ใน LINE Official Account Manager แบ่งได้ถึง 6 ช่อง · ถ้าตั้งผ่าน Messaging API กำหนดจุดกดได้สูงสุด 20 จุด |
-| Rich menu เล็ก | 2500 × 843 px | template แบ่งได้ถึง 3 ช่อง · ผ่าน Messaging API สูงสุด 20 จุดเช่นกัน |
-| Rich message | 1040 × 1040 px | สี่เหลี่ยมจัตุรัส |
-| รูปโปรไฟล์ | 640 × 640 px | โดนครอบวงกลม |
-| ภาพพื้นหลังหน้าบัญชี | 1080 × 878 px | ส่วนบนโดนบังด้วยชื่อบัญชี |
+| Large rich menu | 2500 × 1686 px | The template in LINE Official Account Manager splits into up to 6 cells · if set through the Messaging API, up to 20 tap areas can be defined |
+| Small rich menu | 2500 × 843 px | The template splits into up to 3 cells · through the Messaging API also up to 20 tap areas |
+| Rich message | 1040 × 1040 px | Square |
+| Profile picture | 640 × 640 px | Cropped to a circle |
+| Account page background image | 1080 × 878 px | The top part is covered by the account name |
 
-> ตรวจ 2026-10-14: จำนวน 20 จุด และขนาดรูปที่รับ (2500×1686, 2500×843, 1200×810, 1200×405, 800×540, 800×270 · ไฟล์ไม่เกิน 1 MB) มาจากเอกสารรองที่อ้าง Messaging API reference (bottender.js.org, dev.classmethod.jp) เพราะหน้า developers.line.biz/en/reference/messaging-api/#rich-menu-object โหลดเนื้อหาด้วย JavaScript อ่านอัตโนมัติไม่ได้ (รอยืนยัน) กับหน้าทางการก่อนใช้งานจริง
+> Checked 2026-10-14: the figure of 20 tap areas and the accepted image sizes (2500×1686, 2500×843, 1200×810, 1200×405, 800×540, 800×270 · file no more than 1 MB) come from secondary documents that cite the Messaging API reference (bottender.js.org, dev.classmethod.jp), because the page developers.line.biz/en/reference/messaging-api/#rich-menu-object loads its content with JavaScript and cannot be read automatically · (รอยืนยัน) (pending confirmation) against the official page before real use
 
-**ข้อควรระวังของ rich menu** — ผู้ใช้กดด้วยนิ้ว ช่องเล็กสุดจึงควรกว้างไม่ต่ำกว่า
-1/3 ของความกว้าง และข้อความในช่องต้องอ่านออกตอนย่อลงเหลือความกว้างจอมือถือจริง
-(ประมาณ 1/3 ของ 2500 px)
+**Cautions for rich menus** — users tap with a finger, so the smallest cell should be no narrower than
+1/3 of the width, and the text in the cell must stay readable when scaled down to a real phone screen width
+(about 1/3 of 2500 px)
 
 ---
 
-## 2 · โซเชียลอื่น
+## 2 · Other social platforms
 
-| แพลตฟอร์ม | ของ | ขนาด |
+| Platform | Item | Size |
 |---|---|---|
-| TikTok | วิดีโอ · ภาพปก | 1080 × 1920 px (9:16) |
-| Facebook | โพสต์สี่เหลี่ยม | 1080 × 1080 px |
-| Facebook | ภาพลิงก์ | 1200 × 630 px |
-| Facebook | ภาพปกเพจ | 1640 × 856 px |
-| Instagram | ฟีดแนวตั้ง | 1080 × 1350 px (4:5) |
-| Instagram | สตอรี · รีล | 1080 × 1920 px |
-| YouTube | ภาพปกคลิป | 1280 × 720 px |
+| TikTok | Video · cover image | 1080 × 1920 px (9:16) |
+| Facebook | Square post | 1080 × 1080 px |
+| Facebook | Link image | 1200 × 630 px |
+| Facebook | Page cover image | 1640 × 856 px |
+| Instagram | Vertical feed | 1080 × 1350 px (4:5) |
+| Instagram | Story · reel | 1080 × 1920 px |
+| YouTube | Video thumbnail | 1280 × 720 px |
 
-**พื้นที่ปลอดภัยของคลิปแนวตั้ง** — เว้นบน 15% และล่าง 20% ไว้
-เพราะโดนปุ่มและคำบรรยายของแอปทับ
+**Safe area of a vertical clip** — keep the top 15% and bottom 20% clear,
+because the app's buttons and captions cover them
 
-**ภาพลิงก์ 1200 × 630** — ตัวอักษรต้องใหญ่พอให้อ่านออกตอนแสดงที่ความกว้างประมาณ 500 px
+**Link image 1200 × 630** — text must be large enough to read when shown at a width of about 500 px
 
 ---
 
-## 3 · งานพิมพ์
+## 3 · Print work
 
-| เรื่อง | ค่า |
+| Topic | Value |
 |---|---|
-| ความละเอียด | **300 จุดต่อนิ้ว ที่ขนาดจริง** |
-| ระยะตัดตก (bleed) | **3 มม. รอบด้าน** |
-| ระยะปลอดภัยจากขอบตัด | 3–5 มม. |
-| ระบบสี | ใช้ CMYK สำหรับออฟเซ็ต และระบุ Pantone ถ้าสีแบรนด์สำคัญ |
-| ดำสนิทพื้นใหญ่ | C60 M40 Y40 K100 |
-| ดำของตัวอักษรเล็ก | **K100 ล้วน** |
-| เส้นบางสุด | 0.25 pt |
-| ตัวอักษรเล็กสุด | 6 pt (ไทยควร 7 pt ขึ้นไป เพราะสระล่างจะตัน) |
+| Resolution | **300 dots per inch at actual size** |
+| Bleed | **3 mm on all sides** |
+| Safe distance from the trim edge | 3–5 mm |
+| Color system | Use CMYK for offset and specify Pantone if the brand color matters |
+| Rich black on large areas | C60 M40 Y40 K100 |
+| Black for small text | **K100 only** |
+| Thinnest line | 0.25 pt |
+| Smallest text | 6 pt (Thai should be 7 pt and up, because the lower vowels fill in) |
 
-**ผิดบ่อยสุด 3 ข้อ**
+**The 3 most common mistakes**
 
-1. **ย่อ-ขยายแล้วยังคิดว่า 300 จุดต่อนิ้ว** — ภาพ 300 จุดต่อนิ้วที่ 10 ซม.
-   พอขยายเป็น 20 ซม. เหลือ 150 จุดต่อนิ้ว
-2. **ลืมตัดตก** — งานที่ทำพอดีขอบ พอเครื่องตัดเหลื่อม 1 มม. จะเห็นขอบขาว
-3. **ส่งไฟล์ RGB ให้โรงพิมพ์** — สีสดบนจอหลายสีพิมพ์ไม่ออกใน CMYK
-   โดยเฉพาะน้ำเงินสด เขียวนีออน ส้มสด
+1. **Scaling up or down and still thinking it is 300 dots per inch** — an image at 300 dots per inch at 10 cm
+   drops to 150 dots per inch when enlarged to 20 cm
+2. **Forgetting bleed** — work made exactly to the edge shows a white edge when the cutter shifts by 1 mm
+3. **Sending an RGB file to the printer** — many vivid colors on screen cannot be printed in CMYK,
+   especially bright blue, neon green, vivid orange
 
-**ขนาดมาตรฐานไทย**
+**Standard Thai sizes**
 
-| ของ | ขนาดสำเร็จ | ขนาดรวมตัดตก |
+| Item | Finished size | Size with bleed |
 |---|---|---|
-| นามบัตร | 90 × 54 มม. | 96 × 60 มม. |
-| A4 | 210 × 297 มม. | 216 × 303 มม. |
-| A5 | 148 × 210 มม. | 154 × 216 มม. |
-| โปสเตอร์ A3 | 297 × 420 มม. | 303 × 426 มม. |
+| Business card | 90 × 54 mm | 96 × 60 mm |
+| A4 | 210 × 297 mm | 216 × 303 mm |
+| A5 | 148 × 210 mm | 154 × 216 mm |
+| A3 poster | 297 × 420 mm | 303 × 426 mm |
 
 ---
 
 ## 4 · ไฟล์ที่ต้องส่งมอบ
 
-**โลโก้** — ส่งแค่ไฟล์ภาพแบบจุดไม่พอ
+**Logo** — sending only a pixel-based image file is not enough
 
-| ไฟล์ | ใช้ทำอะไร |
+| File | What it is for |
 |---|---|
-| SVG | ต้นฉบับที่ขยายได้ไม่แตก ใช้บนเว็บได้ |
-| PDF | ส่งโรงพิมพ์ |
-| PNG พื้นใส | 64 · 256 · 512 · 1024 · 2048 px · ชุดโลโก้คู่ชื่อเพิ่ม @2x |
-| ICO | ทำจากภาพ raster รวม 16 · 32 · 48 · 256 px ในไฟล์เดียว |
+| SVG | The original that scales without breaking, usable on the web |
+| PDF | Sent to the printer |
+| Transparent PNG | 64 · 256 · 512 · 1024 · 2048 px · the logo + name lockup also adds @2x |
+| ICO | Made from raster images, with 16 · 32 · 48 · 256 px together in one file |
 
-**นี่คือชุดส่งออกชุดเดียว** — `logo-design.md` ข้อ 6 ลิงก์มาที่ตารางนี้ แก้ที่นี่ที่เดียว
+**This is the single export set** — `logo-design.md` step 6 links to this table; edit only here
 
-**แต่ละแบบต้องมี 4 เวอร์ชัน** — สีปกติ · กลับสี (ขาว) · ดำล้วน · ขาวล้วน
+**Each type must have 4 versions** — normal color · inverted (white) · solid black · solid white
 
-**เอกสารกำกับ** — พื้นที่ว่างรอบโลโก้ · ขนาดเล็กสุด (px และ มม.) · สิ่งที่ห้ามทำ
+**Accompanying document** — clear space around the logo · smallest size (px and mm) · what not to do
 
-**บททดสอบว่าส่งครบไหม** — ถ้าคนรับเปิดโฟลเดอร์แล้วต้องถามกลับว่า
-"มีเวอร์ชันขาวไหม" แปลว่ายังไม่ครบ
+**Test for whether the delivery is complete** — if the recipient opens the folder and has to ask back
+"Is there a white version?", it is not complete yet
 
 
 ## reference: thai-in-graphics.md
 
-# ภาษาไทยในงานกราฟิก — รายละเอียด
+# Thai in graphic work — details
 
-กฎสั้นอยู่ใน `SKILL.md`
+The short rules are in `SKILL.md`
 
-ไทยมีสระบน (ิ ี ึ ื ั) แล้วยังมีวรรณยุกต์ (่ ้ ๊ ๋) ซ้อนทับอีกชั้น และมีสระล่าง (ุ ู)
+Thai has upper vowels (ิ ี ึ ื ั), and tone marks (่ ้ ๊ ๋) stack on top of them as another layer, and it also has lower vowels (ุ ู)
 
-- **ความสูงบรรทัดอย่างน้อย 1.5** สำหรับเนื้อหา และ **1.4** สำหรับหัวใหญ่
-  (ละติน 1.2–1.4 พอ แต่ไทยไม่พอ)
-- **กล่องข้อความที่ล็อกความสูงไว้จะตัดวรรณยุกต์หาย** — ตั้งความสูงอัตโนมัติเสมอ
-  หรือเผื่อ 25% จากที่คำนวณด้วยละติน
-- ตรวจด้วยคำที่มีครบทั้ง 3 ชั้น: **ที่ ปั๊ม ปุ่ม สื่อ ตื้น**
+- **Line height at least 1.5** for body text and **1.4** for large headings
+  (Latin is fine at 1.2–1.4, but Thai is not)
+- **A text box with a locked height will cut off tone marks** — always set automatic height,
+  or add 25% to what you calculated with Latin
+- Test with words that have all 3 layers: **ที่ ปั๊ม ปุ่ม สื่อ ตื้น**
 
-## ไทยไม่มีช่องว่างระหว่างคำ
+## Thai has no spaces between words
 
-โปรแกรมจะตัดบรรทัดกลางคำ — **ตัดบรรทัดเองทุกครั้งในงานกราฟิก**
-ตัดตรงจุดที่จบใจความ ไม่ใช่ตรงที่พอดีขอบ
+Programs will break a line in the middle of a word — **always break lines yourself in graphic work**
+Break where the meaning ends, not where it happens to fit the edge
 
-## ขนาดที่ตาเห็นไม่เท่ากัน
+## Sizes that the eye sees as unequal
 
-ที่ขนาดจุดเท่ากัน **ไทยดูเล็กกว่าละติน** — บรรทัดที่ปนกันให้เพิ่มไทย 5–10%
-หรือใช้ตระกูลเดียวที่ออกแบบมาให้ 2 ภาษาสมดุลกันแล้ว
+At the same point size, **Thai looks smaller than Latin** — on mixed lines, enlarge the Thai by 5–10%
+or use a single family designed to balance the 2 scripts
 
-## ฟอนต์
+## Fonts
 
-- **ใช้ตระกูลเดียวที่มีทั้งไทยและละติน** — จับคู่คนละตระกูลแล้วความสูงตัวอักษรไม่ตรงกัน
-  บรรทัดจะดูเอียง
-- **ต้องมีน้ำหนักหนาจริง** ตัวหนาที่โปรแกรมปลอมขึ้นทำให้สระและวรรณยุกต์เบลอติดกัน
-- ตระกูลที่เข้ากับงานเรียบแบบเรขาคณิต: **Anuphan · LINE Seed Sans TH · IBM Plex Sans Thai · Noto Sans Thai**
-- **ตรวจลิขสิทธิ์ก่อนใช้เชิงพาณิชย์** ฟอนต์ไทยฟรีหลายตัวห้ามใช้ในงานขาย
+- **Use a single family that has both Thai and Latin** — pair different families and the letter heights do not match,
+  and the line looks tilted
+- **It must have a real bold weight**; a bold faked by the program makes vowels and tone marks blur together
+- Families that suit plain geometric work: **Anuphan · LINE Seed Sans TH · IBM Plex Sans Thai · Noto Sans Thai**
+- **Check the license before commercial use**; many free Thai fonts forbid use in work that is sold

@@ -1,156 +1,156 @@
-# catalog — สัญญาณที่ทำให้งานดูเหมือน AI ทำ (ฉบับเต็ม)
+# catalog — signals that make work look AI-made (full version)
 
-ส่วนขยายของ `no-ai-look` · เปิดเมื่อสคริปต์รายงานกฎที่ไม่คุ้น หรือต้องตรวจสื่อที่สคริปต์ไม่เห็น
-คอลัมน์ "กฎ" คือชื่อใน `scripts/slop_scan.py` (ว่าง = ตรวจด้วยด่านตา ข้อ 3.2) · คอลัมน์ "ที่มา" ใช้รหัสในหัวข้อ 9 · เก็บเฉพาะข้อที่มีอย่างน้อย 2 แหล่ง ยกเว้นที่เขียนว่า (1 แหล่ง)
+Extension of `no-ai-look`. Open it when the script reports an unfamiliar rule, or when you must check media the script cannot see.
+The "Rule" column is the name in `scripts/slop_scan.py` (empty = checked by the eye gate, item 3.2). The "Source" column uses the codes in section 9. Only items with at least 2 sources are kept, except those marked (1 source).
 
-## สารบัญ
+## Contents
 
-1. [สีและพื้นผิว](#1--สีและพื้นผิว)
-2. [การ์ด กล่อง และโครงหน้า](#2--การ์ด-กล่อง-และโครงหน้า)
-3. [ตัวอักษรและหัวข้อ](#3--ตัวอักษรและหัวข้อ)
-4. [การเคลื่อนไหว](#4--การเคลื่อนไหว)
-5. [คำในหน้าจอ สไลด์ และโฆษณา](#5--คำในหน้าจอ-สไลด์-และโฆษณา)
-6. [รูป AI โลโก้ โปสเตอร์ โพสต์](#6--รูป-ai-โลโก้-โปสเตอร์-โพสต์)
-7. [สไลด์ เอกสาร diagram](#7--สไลด์-เอกสาร-diagram)
-8. [คุณภาพพื้นฐาน (ไม่ใช่ AI แต่พังจริง)](#8--คุณภาพพื้นฐาน)
-9. [ที่มา](#9--ที่มา)
+1. [Colors and surfaces](#1--colors-and-surfaces)
+2. [Cards, boxes and page structure](#2--cards-boxes-and-page-structure)
+3. [Type and headings](#3--type-and-headings)
+4. [Motion](#4--motion)
+5. [Words on screens, slides and ads](#5--words-on-screens-slides-and-ads)
+6. [AI images, logos, posters, posts](#6--ai-images-logos-posters-posts)
+7. [Slides, documents, diagrams](#7--slides-documents-diagrams)
+8. [Basic quality (not AI, but really broken)](#8--basic-quality)
+9. [Sources](#9--sources)
 
 ---
 
-## 1 · สีและพื้นผิว
+## 1 · Colors and surfaces
 
-| สัญญาณ | ทำไมดูเป็น AI | ใช้แทน | กฎ | ที่มา |
+| Signal | Why it looks AI | Use instead | Rule | Source |
 |---|---|---|---|---|
-| ไล่สีม่วง-น้ำเงิน-ฟ้า หรือชมพู | ค่าตั้งต้นจาก tutorial และ framework ไม่มีใครเลือก | สีแบรนด์ 1 สีที่ผูกกับธุรกิจ | `ai-palette` | IM · CM · UN · VP |
-| ปุ่มและลิงก์สี indigo `#6366f1` | indigo-500 ของ Tailwind ที่ tutorial และโค้ดที่ AI สร้างใช้บ่อย (ค่าตั้งต้นของ shadcn/ui เป็นเทาเข้มเกือบดำ ไม่ใช่ indigo — ตรวจ 22 ต.ค. 2569) | ตั้ง token สีเอง | `framework-default` | CM · UN · SK · VP · 21 |
-| ตัวอักษรไล่สี | เน้นแบบประดับ ไม่ได้บอกอะไร | สีทึบ + ขนาดหรือน้ำหนัก | `gradient-text` | IM · DC |
-| นีออน/เงาเรืองบนพื้นมืด | สูตร "cyberpunk" ตั้งต้น | ลด glow ให้ข้อมูลเด่นแทน | `neon-glow` | IM · DC |
-| แสงฟุ้งวงกลมหลังเนื้อหา | ฉากหลัง AI ที่เห็นบ่อยสุด | ระยะห่าง คอนทราสต์ หัวข้อชัด | `radial-halo` | IM · DC |
-| พื้นครีม/เบจ + เซอริฟ + เขียวขี้ม้า | "รสนิยมดี" ที่กลายเป็นสูตรใหม่ | เลือกจากบริบทโปรเจกต์ | `cream-palette` | IM · UN · SK |
-| พื้นครีม (ราว `#F4F1EA`) + สีเน้นส้มอิฐ (terracotta) + หัวข้อเซอริฟคอนทราสต์สูง เป็นชุดตั้งต้น | ชุด "อบอุ่น มีรสนิยม" ที่โมเดลหยิบเมื่อ brief ไม่ได้กำหนดสี · ส้มอิฐใกล้สีแบรนด์ของ Anthropic เอง งานลูกค้าจึงฟ้องง่าย | สีจากธุรกิจและวัสดุจริงของโปรเจกต์ · ใช้ครีมได้เมื่อแบรนด์หรือ brief สั่ง | `cream-palette` บางส่วน (จับพื้นครีม ไม่จับส้มอิฐ) | AN (1 แหล่ง · anthropics/skills `frontend-design` Apache-2.0 · ตรวจ 2026-10-23) |
-| ดำอมสี (`#111` · `#0B0B0B`) แทนดำทุกงาน คู่สีเน้นอุ่น 1 สี เป็นค่าตั้งต้น | ท่าตกแต่งของ template ที่ใส่ไม่ว่างานเรื่องอะไร ดูตั้งใจแต่ไม่มีใครเลือก | ดำจริง หรือเฉดเข้มของสีแบรนด์ที่มีเหตุผลจากงาน · จดเหตุผลไว้ข้าง token | | AN (1 แหล่ง · หัวข้อ template chrome ของ `frontend-design` · ตรวจ 2026-10-23) |
-| กระจกฝ้าทั่วหน้า | ใช้ประดับ ไม่ได้แก้ปัญหาชั้นซ้อน | ใช้เฉพาะของที่ลอยทับเนื้อหาจริง | `glassmorphism` | IM · DC |
-| ลายกริดหรือลายทางตกแต่งพื้น | เติมที่ว่างด้วยเส้น | พื้นเรียบ · กริดเฉพาะ canvas/แผนที่ | `grid-bg` `stripes` | IM (1 แหล่ง) |
-| ค่าตั้งต้นของ shadcn ทั้งชุด (เทา slate · มุมเดียวทั้งแอป · `rounded-2xl shadow-lg p-6` · `max-w-7xl`) | หน้าตาของ framework ไม่ใช่การตัดสินใจ | ตั้ง token สี มุม เงา ระยะ ก่อนสร้าง | `framework-default` บางส่วน | CM · UN · SK · VP · CV |
-| ใช้ทั้งคอนทราสต์ต่ำและสีเทาบนพื้นสี | ดู "สะอาด" แต่อ่านไม่ออก | ≥ 4.5:1 · ใช้เฉดเข้มของสีพื้น | `low-contrast` | IM (1 แหล่ง) |
+| Purple-blue-cyan or pink gradient | Default from tutorials and frameworks; nobody chose it | 1 brand color tied to the business | `ai-palette` | IM · CM · UN · VP |
+| Buttons and links in indigo `#6366f1` | Tailwind's indigo-500, often used by tutorials and AI-generated code (shadcn/ui's default is near-black dark gray, not indigo — checked 22 Oct 2026) | Set your own color tokens | `framework-default` | CM · UN · SK · VP · 21 |
+| Gradient text | Decorative emphasis that says nothing | Solid color + size or weight | `gradient-text` | IM · DC |
+| Neon/glow shadows on dark backgrounds | The default "cyberpunk" recipe | Reduce glow so the data stands out | `neon-glow` | IM · DC |
+| A circular glow behind the content | The most common AI backdrop | Spacing, contrast, clear headings | `radial-halo` | IM · DC |
+| Cream/beige background + serif + olive green | "Good taste" that became the new recipe | Choose from the project's context | `cream-palette` | IM · UN · SK |
+| Cream background (about `#F4F1EA`) + terracotta accent + high-contrast serif headings as the starting set | The "warm, tasteful" set the model grabs when the brief fixes no colors. Terracotta is close to Anthropic's own brand color, so client work gives it away easily | Colors from the business and the project's real materials · cream is fine when the brand or brief orders it | `cream-palette` in part (catches the cream background, not the terracotta) | AN (1 source · anthropics/skills `frontend-design` Apache-2.0 · checked 2026-10-23) |
+| Tinted black (`#111` · `#0B0B0B`) instead of black on every job, with 1 warm accent color as the default | A template's decorating habit applied whatever the subject; looks deliberate but nobody chose it | True black, or a dark shade of a brand color with a reason from the job · note the reason beside the token | | AN (1 source · the template chrome section of `frontend-design` · checked 2026-10-23) |
+| Frosted glass across the whole page | Decoration; does not solve a layering problem | Use only for things that really float over content | `glassmorphism` | IM · DC |
+| Decorative grid or stripe pattern on the background | Fills empty space with lines | Plain background · grid only for canvas/maps | `grid-bg` `stripes` | IM (1 source) |
+| The whole shadcn default set (slate gray · one corner radius across the app · `rounded-2xl shadow-lg p-6` · `max-w-7xl`) | The look of a framework, not a decision | Set tokens for color, corners, shadow, spacing before building | `framework-default` in part | CM · UN · SK · VP · CV |
+| Both low contrast and gray on a colored background | Looks "clean" but cannot be read | ≥ 4.5:1 · use a dark shade of the background color | `low-contrast` | IM (1 source) |
 
-## 2 · การ์ด กล่อง และโครงหน้า
+## 2 · Cards, boxes and page structure
 
-| สัญญาณ | ทำไมดูเป็น AI | ใช้แทน | กฎ | ที่มา |
+| Signal | Why it looks AI | Use instead | Rule | Source |
 |---|---|---|---|---|
-| แถบสีหนาข้างการ์ดมุมมน | ทำให้การ์ดธรรมดาดูเหมือนคำเตือน | เอาออกถ้าไม่ได้บอกสถานะ · ป้ายพื้นทึบ | `side-tab` | IM · GD (ข้อ 7) |
-| การ์ดซ้อนการ์ด | ชั้นลึกเกิน ที่ทำงานเหลือน้อย | ระยะห่าง ตัวอักษร เส้นคั่น | `nested-cards` | IM (1 แหล่ง) |
-| เส้น 1px + เงากว้างบนกล่องเดียว | กำหนดขอบซ้ำ 2 ทาง | เลือกอย่างเดียว | `hairline-shadow` | IM (1 แหล่ง) |
-| มุมโค้งใหญ่เกินกล่อง | ทุกการ์ดเป็นก้อนเหมือนกัน | ลดตามขนาดกล่อง | `huge-radius` | IM (1 แหล่ง) |
-| กริดการ์ดไอคอน-หัว-ข้อความเหมือนกัน | ทุกข้อน้ำหนักเท่ากัน | จัดกลุ่ม · ให้ข้อสำคัญใหญ่กว่า | | IM · GD |
-| ตัวเลขยักษ์ + ป้ายเล็ก + สถิติ 3 ช่อง | template หน้าขาย | ใช้ตัวเลขเมื่อช่วยอธิบาย พร้อมบริบท | | IM (1 แหล่ง) |
-| โครงหน้าตายตัว: ฮีโร่กลาง → การ์ด 3 → โลโก้ลูกค้า → ราคา → FAQ → footer 4 คอลัมน์ | ลำดับของ template ไม่ใช่ของหน้า | สร้างจากเป้าหมายของหน้าและสิ่งแรกที่คนอ่านต้องทำ | | CM · UN · VP · SK |
-| ระยะห่างเท่ากันหมด | แยกไม่ออกว่าอะไรอยู่กลุ่มเดียวกัน | ใกล้ในกลุ่ม ห่างระหว่างกลุ่ม | | IM (1 แหล่ง) |
-| สมมาตรทุกอย่าง จัดกลางทุกอย่าง | ไม่มีจุดตั้งใจ | อสมมาตร · ช่องใหญ่ 1 ช่อง · ฮีโร่เยื้อง | | 21 · AN · GA |
-| เนื้อหาตั้งค่ายัดใน modal | ที่ไม่พอ | หน้าแยก | | IM (1 แหล่ง) |
+| A thick colored bar on the side of a rounded card | Makes an ordinary card look like a warning | Remove it if it does not show status · a solid-color label | `side-tab` | IM · GD (item 7) |
+| Cards inside cards | Too deep; little room left to work | Spacing, type, divider lines | `nested-cards` | IM (1 source) |
+| A 1px line + wide shadow on one box | Defines the edge twice | Choose one | `hairline-shadow` | IM (1 source) |
+| Corner radius too big for the box | Every card is the same blob | Reduce by box size | `huge-radius` | IM (1 source) |
+| A grid of identical icon-heading-text cards | Every item has the same weight | Group · make the important item bigger | | IM · GD |
+| Giant number + small label + 3-box stats | A sales-page template | Use numbers when they help explain, with context | | IM (1 source) |
+| Fixed page structure: centered hero → 3 cards → customer logos → pricing → FAQ → 4-column footer | The order of a template, not of the page | Build from the page's goal and what the reader must do first | | CM · UN · VP · SK |
+| Identical spacing everywhere | Cannot tell what is in the same group | Close within a group, far between groups | | IM (1 source) |
+| Everything symmetric, everything centered | No point of intent | Asymmetry · 1 large cell · an off-center hero | | 21 · AN · GA |
+| Settings content crammed in a modal | Not enough room | A separate page | | IM (1 source) |
 
-## 3 · ตัวอักษรและหัวข้อ
+## 3 · Type and headings
 
-| สัญญาณ | ทำไมดูเป็น AI | ใช้แทน | กฎ | ที่มา |
+| Signal | Why it looks AI | Use instead | Rule | Source |
 |---|---|---|---|---|
-| Inter/Geist ทุกงาน | ทำให้สินค้าต่างกันดูเหมือนกัน | ฟอนต์ตามบุคลิก · คงไว้ถ้าเป็นฟอนต์แบรนด์ | `overused-font` | IM · GD · AN |
-| เปลี่ยนไป Space Grotesk ทุกงานแทน | ค่าตั้งต้นตัวใหม่ | มีเหตุผลจากโปรเจกต์ | | UN · SK |
-| เซอริฟตัวเอียงขนาดยักษ์ | ทางลัดสู่ "editorial" | แบบอักษรตามบุคลิกสินค้า | `italic-serif-display` | IM (1 แหล่ง) |
-| ป้ายเล็กเหนือหัวข้อ ("Introducing" · "New") | เพิ่มบรรทัดที่ไม่บอกอะไร ดูเหมือนกดได้ | ใส่คำนั้นในหัวข้อเลย หรือตัด | `eyebrow-badge` | IM (1 แหล่ง) |
-| ไอคอนในกรอบมนเหนือหัวข้อการ์ด | pattern การ์ดฟีเจอร์ของ AI | ไอคอนข้างหัวข้อ หรือเอากรอบออก | `icon-tile` | IM (1 แหล่ง) |
-| เลข 01/02/03 ที่ไม่มีลำดับ | รกโดยไม่บอกอะไร | ใช้เมื่อมีขั้นตอนจริง | `numbered-labels` | IM (1 แหล่ง) |
-| หัวข้อยาวขนาด display กินจอแรก | ไม่เหลือที่อธิบาย | สั้นลงหรือเล็กลง | | IM (1 แหล่ง) |
-| หัวกับเนื้อหาขนาดใกล้กัน | สแกนไม่ได้ | ต่างกันชัดด้วยขนาด น้ำหนัก ระยะ | | IM (1 แหล่ง) |
-| บีบระยะตัวอักษรแรง | ตัวติดกันอ่านยาก | ไม่ต่ำกว่า -0.03em | `crushed-tracking` | IM (1 แหล่ง) |
-| อีโมจิในหัวข้อหรือแทนไอคอน | ไม่มีระบบไอคอน | ชุด SVG ชุดเดียว | `emoji-heading` | CM · UN · WW |
-| ไอคอนเส้นบางชุดเดียว (เช่น Lucide) ขนาด 16 ทุกที่ | ซ้ำกับทุกสินค้า | เลือกชุดที่ตั้งใจ · ใช้ภาพหน้าจอ/กราฟจริงแทน | | BL · 2S |
+| Inter/Geist on every job | Makes different products look the same | A font by personality · keep it if it is the brand font | `overused-font` | IM · GD · AN |
+| Switching to Space Grotesk on every job instead | The new default | A reason from the project | | UN · SK |
+| Giant italic serif | A shortcut to "editorial" | A typeface by the product's personality | `italic-serif-display` | IM (1 source) |
+| A small badge above the heading ("Introducing" · "New") | Adds a line that says nothing and looks clickable | Put that word in the heading, or cut it | `eyebrow-badge` | IM (1 source) |
+| An icon in a rounded tile above a card heading | The AI feature-card pattern | An icon beside the heading, or remove the tile | `icon-tile` | IM (1 source) |
+| Numbers 01/02/03 with no sequence | Clutter that says nothing | Use when there are real steps | `numbered-labels` | IM (1 source) |
+| A long display-size heading eating the first screen | No room left to explain | Shorter or smaller | | IM (1 source) |
+| Heading and body at close sizes | Cannot be scanned | Clear difference in size, weight, spacing | | IM (1 source) |
+| Strongly squeezed letter spacing | Letters touch and are hard to read | Not below -0.03em | `crushed-tracking` | IM (1 source) |
+| Emoji in headings or in place of icons | No icon system | One SVG set | `emoji-heading` | CM · UN · WW |
+| One thin-line icon set (such as Lucide) at size 16 everywhere | Repeats across every product | Choose a set on purpose · use real screenshots/charts instead | | BL · 2S |
 
-## 4 · การเคลื่อนไหว
+## 4 · Motion
 
-| สัญญาณ | ใช้แทน | กฎ | ที่มา |
+| Signal | Use instead | Rule | Source |
 |---|---|---|---|
-| fade-up และ hover-scale ทุกชิ้น | ขยับเฉพาะที่มีความหมาย 150–300 ms ease-out · เว็บที่ต้องมีชีวิตใช้ทางเข้า 4 แบบสลับกัน ไม่ซ้ำแบบเดียวทุกจุด (`dynamic-website` ใน software-development) | | UN · SK · BL |
-| จุดสถานะกระพริบไม่หยุด | นิ่ง · ขยับเมื่อสถานะเปลี่ยน | `pulsing-dot` | IM (1 แหล่ง) |
-| เคอร์เซอร์กระพริบในข้อความนิ่ง | เก็บไว้ในช่องที่พิมพ์ได้ | `blinking-cursor` | IM (1 แหล่ง) |
-| ตัวอักษร/โลโก้เลื่อนเอง | นิ่ง หรือมีปุ่มหยุด | `marquee` | IM (1 แหล่ง) |
-| easing เด้งหรือยืด | settle เร็ว · เด้งเฉพาะช่วงที่เข้ากับสินค้า | `bounce-easing` | IM · GD motion-basics |
-| animate ความกว้าง ระยะ หรือ `transition: all` | transform/opacity | `layout-animation` | IM (1 แหล่ง) |
-| รูปซูมหรือหมุนเมื่อชี้ | นิ่ง เว้นแต่บอกว่ากดได้ | `hover-zoom-image` | IM (1 แหล่ง) |
-| เนื้อหาซ่อนรอ animation ถ้า script ไม่ทำงานก็ไม่โผล่ | มองเห็นเป็นค่าตั้งต้น | | IM (1 แหล่ง) |
+| fade-up and hover-scale on every piece | Move only what has meaning, 150–300 ms ease-out · a site that must feel alive uses 4 entrance styles in turn, not the same one everywhere (`dynamic-website` in software-development) | | UN · SK · BL |
+| A status dot that blinks nonstop | Still · moves when the status changes | `pulsing-dot` | IM (1 source) |
+| A blinking cursor in still text | Keep it in typeable fields | `blinking-cursor` | IM (1 source) |
+| Text/logos that scroll by themselves | Still, or with a stop button | `marquee` | IM (1 source) |
+| Bouncy or stretchy easing | Settle fast · bounce only where it fits the product | `bounce-easing` | IM · GD motion-basics |
+| Animating width, spacing, or `transition: all` | transform/opacity | `layout-animation` | IM (1 source) |
+| An image that zooms or rotates on hover | Still, unless it says it can be clicked | `hover-zoom-image` | IM (1 source) |
+| Content hidden waiting for an animation, and if the script fails it never appears | Visible by default | | IM (1 source) |
 
-## 5 · คำในหน้าจอ สไลด์ และโฆษณา
+## 5 · Words on screens, slides and ads
 
-หลักใหญ่อยู่ใน `human-writing` ข้อ 3 · ตารางนี้เก็บเฉพาะที่เจอในงานออกแบบ
+The main principles are in `human-writing` item 3. This table keeps only what shows up in design work.
 
-| สัญญาณ | ใช้แทน | กฎ | ที่มา |
+| Signal | Use instead | Rule | Source |
 |---|---|---|---|
-| คำโฆษณากว้าง ๆ (supercharge · world-class · seamless · ยกระดับ · ไร้รอยต่อ · ล้ำสมัย) | บอกว่าผู้ใช้ทำอะไรได้ ดีขึ้นแค่ไหน | `buzzword` | IM · WW · 2S |
-| "Not a feature. A platform." · "ไม่ใช่แค่… แต่คือ…" | อธิบายตรง ๆ | `forced-contrast` | IM · human-writing |
-| ขีดยาวทุกประโยค | อังกฤษ: แยกเป็นประโยคด้วยจุด · ไทย: เว้นวรรคหรือขึ้นย่อหน้า ไม่ใส่จุดกลางย่อหน้า (`thai-grammar` `f3` `t-dash`) | `em-dash-overuse` | IM · WW |
-| ประโยคเปิดสำเร็จรูป ("In today's fast-paced world" · "ในยุคดิจิทัลที่…") | เปิดด้วยสิ่งที่สินค้านี้ทำได้คนเดียว | `stock-opener` | 2S · WW |
-| ท่อนสั้นมีจุดคั่น ("Fast. Simple. Powerful.") · ชุดละ 3 · ชื่อฟีเจอร์ 2 คำนาม | ประโยคเต็มที่มีข้อมูล | | SJ · CM · WW · OW |
-| ไม่มีชื่อ ตัวเลข วันที่ · คำอ้างที่ใช้กับคู่แข่งได้ | 1 คำอ้างที่มีแค่เรา พร้อมตัวเลข | | 21 · GA · CP |
-| หลักฐานปลอม: รูปทีมที่ไม่ใช่ทีม · โลโก้ที่ไม่ใช่ลูกค้า · persona แต่ง | คนจริง ลูกค้าจริงเท่านั้น | | 21 · WW · CP |
-| อีโมจิเรียงในบรรทัดโปรโมต | ไม่ใส่ หรือ 1 ตัวที่มีความหมาย | | WW · CM |
-| "theater" ใช้ปัดตก | บอกว่าอะไรไม่ได้ผลและเพราะอะไร | `theater` | IM (1 แหล่ง) |
-| คำทางการเกินจำเป็น (utilize · facilitate) · คำเชื่อมแข็ง (Moreover) · ออกตัว ("It's important to note") | คำธรรมดา | `stock-opener` บางส่วน | WW · TS |
-| ภาษาไทย: ระดับภาษาผิดที่ · ครับ/ค่ะ/สรรพนามไม่เข้ากับคนอ่าน · สำนวนแปลตรงตัว · ลำดับคำแบบอังกฤษ · ตัดคำจนห้วน | อ่านออกเสียง · ระดับภาษาจากตาราง `human-writing` `references/thai-grammar.md` หัวข้อ 4 · โครงประโยคตามหัวข้อ 1–2 ของไฟล์เดียวกัน · รัน `scripts/thai_tells.py` ของ `human-writing` | | 1S · `thai-grammar` |
+| Broad ad words (supercharge · world-class · seamless · ยกระดับ · ไร้รอยต่อ · ล้ำสมัย) | Say what the user can do and how much better | `buzzword` | IM · WW · 2S |
+| "Not a feature. A platform." · "ไม่ใช่แค่… แต่คือ…" | Explain directly | `forced-contrast` | IM · human-writing |
+| A long dash in every sentence | English: split into sentences with a full stop · Thai: a space or a new paragraph, no full stop mid-paragraph (`thai-grammar` `f3` `t-dash`) | `em-dash-overuse` | IM · WW |
+| Canned opening sentences ("In today's fast-paced world" · "ในยุคดิจิทัลที่…") | Open with what only this product can do | `stock-opener` | 2S · WW |
+| Short fragments split by full stops ("Fast. Simple. Powerful.") · sets of 3 · feature names of 2 nouns | A full sentence that carries information | | SJ · CM · WW · OW |
+| No names, numbers or dates · claims a competitor could also make | 1 claim only we have, with a number | | 21 · GA · CP |
+| Fake proof: a team photo that is not the team · logos that are not clients · invented personas | Real people, real clients only | | 21 · WW · CP |
+| Emoji lined up in a promo line | None, or 1 that means something | | WW · CM |
+| "theater" used to wave things off | Say what does not work and why | `theater` | IM (1 source) |
+| Overly formal words (utilize · facilitate) · stiff connectors (Moreover) · hedges ("It's important to note") | Ordinary words | `stock-opener` in part | WW · TS |
+| Thai: wrong register · ครับ/ค่ะ/pronouns that do not fit the reader · literal-translation idioms · English word order · cutting words until curt | Read aloud · register from the table in `human-writing` `references/thai-grammar.md` section 4 · sentence structure per sections 1–2 of the same file · run `scripts/thai_tells.py` of `human-writing` | | 1S · `thai-grammar` |
 
-## 6 · รูป AI โลโก้ โปสเตอร์ โพสต์
+## 6 · AI images, logos, posters, posts
 
-| สัญญาณ | ใช้แทน | ที่มา |
+| Signal | Use instead | Source |
 |---|---|---|
-| ผิวเนียนไร้รูขุมขน · ทุกวัสดุมันวาวแบบเดียว | เก็บพื้นผิวและร่องรอยจริง | KR · BK · MF |
-| สีอิ่ม แสงทองหรือแสงดราม่าทุกฉาก แม้ในอาคาร | แสงจากแหล่งเดียวที่มีเหตุผล เงาตรงกัน | BK · GC · KR |
-| โทนเขียวอมฟ้า-ส้ม (ยิ่ง prompt สั้นยิ่งเป็น) | ระบุพาเลต หรือสั่งไม่เอา | FL · 2S |
-| คนหน้าตาเฉลี่ย สมบูรณ์แบบ เป็นภาพเหมารวม | รายละเอียดจากการสังเกต: สถานที่ เวลา คนแบบไหน | BK · KR · CP |
-| ฉากสะอาดเหมือนโชว์รูม | รอยยับ ร่องรอยใช้งาน แสงธรรมดา | MF · KR |
-| ฟิสิกส์ผิด: เงาไม่ตรงแสง เงาสะท้อนผิด เส้นบิด ขนาดไม่สมจริง | ตรวจด้วยตาก่อนใช้ | KR · MF |
-| มือ ฟัน ตัวหนังสือมั่ว ฝูงคนซ้ำหน้า | ซูม 200 % ตรวจ · ตัวหนังสือใส่เป็นชั้นแยก | KR · FL · MR |
-| ใช้ภาพแรกที่ได้ ไม่แก้ | ครอป ตัดต่อ ปรับ (1 แหล่ง แต่ตรงกับหลักข้อ "แก้ ไม่รับเฉย ๆ") | CP |
-| 3D ดินปั้น / isometric / มันวาว | แนวที่เข้ากับแบรนด์ · ภาพจริง | 2S · MF · doc-cover-design ข้อ 9 |
-| สั่งด้วยคำคุณศัพท์ ("premium" · "vibrant") | แนวที่มีชื่อ + ภาพอ้างอิง + hex | MR · VP · CP |
-| โลโก้วงกลมไล่สีมีรูกลาง · เส้นโค้งพุ่ง · อินฟินิตี้ · ลายวงจร | รูปทรงจากสิ่งเฉพาะ (วาฬของ DeepSeek · เรือใบของ Midjourney) | QW · BU |
-| ตัวอักษรเกือบเป็นตัว ละลาย สมมาตรเพี้ยน รายละเอียดหายที่ขนาดเล็ก ไฟล์ raster อย่างเดียว | vector · ทดสอบที่ขนาด favicon · ตัวอักษรจริง | BU · KR · MR |
-| โปสเตอร์อัดเต็มขอบ ไม่มีที่ว่าง ย่อหน้าตัวจิ๋ว | ของเด่น 1 ชิ้น · ที่ว่างเยอะ · ตัดคำให้คำสำคัญใหญ่ได้ | MR · KR |
-| หลายฟอนต์ หลายสไตล์ภาพในกรอบเดียว (flat + 3D สมจริง + ตัวอักษรมีลาย) | 2–3 ฟอนต์ ภาษาภาพเดียว | MR · KR |
-| ตัวหนังสือฝังในภาพ | ชั้นข้อความที่แก้ได้ | KR · MR |
-| ฟีดโพสต์แต่ละโพสต์คนละสไตล์ | ระบบแบรนด์เดียวทุกโพสต์ | KR · PN · 2S |
-| วงกลมเรืองแสงลอย ๆ สื่อ "เทคโนโลยี" · ภาพสต็อกจับมือ ลูกศรพุ่ง | ของจริง หรือพื้นที่ว่าง | GD (ข้อ 7) (1 แหล่ง) |
+| Smooth pore-free skin · every material glossy in the same way | Keep real texture and marks | KR · BK · MF |
+| Saturated color, golden or dramatic light in every scene, even indoors | One light source with a reason, matching shadows | BK · GC · KR |
+| Teal-orange tone (the shorter the prompt, the more it happens) | Specify the palette, or order it away | FL · 2S |
+| Average-looking, perfect, stereotyped people | Details from observation: place, time, what kind of people | BK · KR · CP |
+| A showroom-clean scene | Wrinkles, signs of use, ordinary light | MF · KR |
+| Wrong physics: shadows not matching light, wrong reflections, bent lines, unrealistic scale | Check by eye before use | KR · MF |
+| Hands, teeth, garbled text, crowds with repeated faces | Zoom to 200% to check · put text in a separate layer | KR · FL · MR |
+| Using the first image you get without editing | Crop, edit, adjust (1 source, but matches the principle "edit, do not just accept") | CP |
+| Clay 3D / isometric / glossy | A style that fits the brand · real photos | 2S · MF · doc-cover-design item 9 |
+| Prompting with adjectives ("premium" · "vibrant") | A named style + reference image + hex | MR · VP · CP |
+| A gradient circle logo with a hole in the middle · swoosh curves · infinity · circuit patterns | A shape from something specific (DeepSeek's whale · Midjourney's sailboat) | QW · BU |
+| Letters that are almost letters, melting, off symmetry, details lost at small size, raster file only | Vector · test at favicon size · real lettering | BU · KR · MR |
+| A poster packed edge to edge, no blank space, tiny paragraphs | 1 hero item · lots of white space · cut words so the key word can be big | MR · KR |
+| Many fonts and many image styles in one frame (flat + realistic 3D + textured lettering) | 2–3 fonts, one visual language | MR · KR |
+| Text embedded in the image | An editable text layer | KR · MR |
+| A feed where each post has a different style | One brand system across every post | KR · PN · 2S |
+| Floating glowing circles meaning "technology" · stock photos of handshakes · arrows shooting up | The real thing, or empty space | GD (item 7) (1 source) |
 
-## 7 · สไลด์ เอกสาร diagram
+## 7 · Slides, documents, diagrams
 
-| สัญญาณ | ใช้แทน | กฎ | ที่มา |
+| Signal | Use instead | Rule | Source |
 |---|---|---|---|
-| ทุกสไลด์เลย์เอาต์เดียว 3–4 bullet ยาวเท่ากัน | เปลี่ยนตามเนื้อหา · มีหน้าประโยคเดียวบ้าง | | 2S · GA |
-| หัวสไลด์รูปแบบเดียว (ยาวเท่ากัน · Title Case · มีโคลอน) | หัว = ข้อสรุป (`human-writing` ข้อ 6) | | 2S · TS |
-| ไอคอนเส้นและภาพกลาง ๆ ที่ใช้กับหัวข้อไหนก็ได้ | ภาพจริง กราฟ ภาพหน้าจอ | | 2S · GA |
-| ไม่มีข้อมูลจริง รายละเอียดลูกค้า หรือแบรนด์ | ใส่ข้อมูลจริง หรือ `(รอยืนยัน)` | | GA · 21 |
-| ทุก bullet ขึ้นต้นตัวหนา | ร้อยแก้ว หรือรายการธรรมดา | `bold-first-bullets` | TF · TS |
-| อีโมจิหน้าหัวข้อ · ตัวหนาเยอะ · bullet สัญลักษณ์แปลก | หัวข้อเรียบ · ตัวหนา 2–3 จุด | `emoji-heading` | TS · WW · 2S |
-| จัดรูปแบบเกินงาน: รายการทุกที่ หัวข้อ 4 ชั้น ตารางในโน้ตสั้น | รวมส่วน ตัดหัวข้อ | | TS · UM |
-| จบทุกส่วนด้วยสรุปหรือความเห็น | จบเมื่อพูดครบ | | TS · WW |
-| อ้างอิงหรือคอมโพเนนต์ที่ไม่มีจริง (ลิงก์ตาย · DOI ปลอม · service ที่ระบบไม่มี) | ตรวจกับแหล่งหรือโค้ดทุกตัว | | TS · IL |
-| Mermaid หน้าตาตั้งต้น: วางเอง ลูกศรพันไม่มีป้าย รวมหลาย flow ในรูปเดียว | house style ของโปรเจกต์ · ป้ายทุกลูกศร · 1 flow ต่อรูป | | YM · IL |
-| ข้อความ Lorem หรือ "ตัวอย่าง" | เนื้อหาสมจริง | `lorem` | IM · ui-craft |
+| Every slide has one layout with 3–4 bullets of equal length | Change with the content · have some one-sentence pages | | 2S · GA |
+| One title pattern across slides (equal length · Title Case · with a colon) | Title = the conclusion (`human-writing` item 6) | | 2S · TS |
+| Line icons and middling images that fit any topic | Real photos, charts, screenshots | | 2S · GA |
+| No real data, client details or brand | Put in real data, or `(รอยืนยัน)` | | GA · 21 |
+| Every bullet starts in bold | Prose, or a plain list | `bold-first-bullets` | TF · TS |
+| Emoji before headings · lots of bold · odd bullet symbols | Plain headings · bold in 2–3 places | `emoji-heading` | TS · WW · 2S |
+| Over-formatting: lists everywhere, 4 levels of headings, tables in a short note | Merge sections, cut headings | | TS · UM |
+| Ending every section with a summary or opinion | End when it has all been said | | TS · WW |
+| References or components that do not exist (dead links · fake DOIs · services the system does not have) | Check every one against the source or code | | TS · IL |
+| Default-looking Mermaid: self-placed, tangled arrows with no labels, several flows in one picture | The project's house style · a label on every arrow · 1 flow per picture | | YM · IL |
+| Lorem text or "ตัวอย่าง" | Realistic content | `lorem` | IM · ui-craft |
 
-## 8 · คุณภาพพื้นฐาน
+## 8 · Basic quality
 
-ไม่ใช่สัญญาณ AI โดยตรง แต่พังจริง และสคริปต์ตรวจให้: ช่องกรอกมีแค่ placeholder (`placeholder-label`) · รูปไม่มี src (`broken-image`) · ข้ามระดับหัวข้อ (`skipped-heading`) · ตัวอักษรต่ำกว่า 11 px (`tiny-text`) · ระยะบรรทัดเนื้อหาต่ำกว่า 1.3 (`tight-leading`) · จัดชิดสองข้าง (`justified`) · ถ่างตัวอักษรในเนื้อหา (`wide-body-tracking`) · ย่อหน้าตัวพิมพ์ใหญ่ (`all-caps-body`) · ทับรูปด้วยสีเกือบทึบ (`image-overlay`)
-ตรวจจากหน้าที่เรนเดอร์แล้วเท่านั้น (สคริปต์ไม่เห็น): ข้อความถูกทับ · ล้นกรอบ · เมนูโดนตัด · บรรทัดยาวเกิน 75 ตัวอักษร · คอลัมน์แรกยาวไม่เท่ากัน · error ของ JavaScript ตอนโหลด
+Not AI signals directly, but really broken, and the script checks them: an input with only a placeholder (`placeholder-label`) · an image with no src (`broken-image`) · a skipped heading level (`skipped-heading`) · text under 11 px (`tiny-text`) · body line spacing under 1.3 (`tight-leading`) · justified alignment (`justified`) · letter-spaced body text (`wide-body-tracking`) · an all-caps paragraph (`all-caps-body`) · a nearly opaque color over an image (`image-overlay`)
+Check only from the rendered page (the script cannot see): text overlapped · overflowing its frame · a menu cut off · lines longer than 75 characters · the first column of uneven length · JavaScript errors on load
 
-**ไม่ใช่สัญญาณ** (ข้อมูลไม่สนับสนุน อย่าไล่ตัด): bento grid · พื้นไล่สีแบบ mesh/blob (UN)
+**Not signals** (the data does not support them; do not hunt to cut): bento grid · mesh/blob gradient backgrounds (UN)
 
 ---
 
-## 9 · ที่มา
+## 9 · Sources
 
-ค้นเมื่อ ต.ค. 2026
+Searched Oct 2026
 
-| รหัส | แหล่ง |
+| Code | Source |
 |---|---|
-| IM | Impeccable — impeccable.style/slop (กฎตรวจ 61 ข้อบนเว็บ · 62 ข้อใน README ณ 2026-10-23 · ตอนเก็บแคตตาล็อกนี้มี 59 + 6 ข้อรีวิว) |
-| AN | Anthropic frontend-design skill — skills.sh/anthropics/claude-code/frontend-design · หัวข้อ Process (ร่างเลย์เอาต์ ASCII หลายแบบแล้วเทียบกับ brief) จาก github.com/anthropics/skills/tree/main/skills/frontend-design · Apache-2.0 · ดู 2026-11-10 |
+| IM | Impeccable — impeccable.style/slop (61 check rules on the web · 62 in the README as of 2026-10-23 · when this catalog was gathered there were 59 + 6 review items) |
+| AN | Anthropic frontend-design skill — skills.sh/anthropics/claude-code/frontend-design · the Process section (draft several ASCII layouts, then compare with the brief) from github.com/anthropics/skills/tree/main/skills/frontend-design · Apache-2.0 · seen 2026-11-10 |
 | CM | codemyspec.com/blog/vibe-coded-websites-look-the-same |
 | UN | claudecodehq.com/playbooks/unslop-ui |
 | SK | skills.cat/skills/funboy322/avoid-ai-design |
@@ -160,23 +160,23 @@
 | BL | blode.co/writing/you-dont-have-to-make-ai-slop |
 | 2S | 2slides.com/blog/can-ai-make-slides-that-dont-look-ai-generated |
 | GA | gamma.app/explore/content/guides/what-ai-makes-presentations-that-dont-look-ai-generated |
-| CP | creativepool.com (บทความเรื่องงานภาพ AI ที่เหมือนกันหมด) |
+| CP | creativepool.com (an article on AI images that all look alike) |
 | WW | writewithai.substack.com/p/10-dead-giveaways-your-content-screams |
 | SJ | seojuice.com/tools/vibe-coded |
 | OW | onlinewritingclub.com |
-| TS | techspot.com/news/109186 (สรุปหน้า Wikipedia "Signs of AI writing") |
+| TS | techspot.com/news/109186 (a summary of the Wikipedia page "Signs of AI writing") |
 | TF | tropes.fyi/tropes/bold-first-bullets |
 | UM | unmarkdown.com/blog/how-to-make-chatgpt-output-look-professional |
 | IL | ilograph.com/blog/posts/diagrams-ai-can-and-cannot-generate |
 | YM | yomotherboard.com/?p=585548 |
 | KR | krumzi.com/blog/is-this-image-ai-generated |
-| BK | ischool.berkeley.edu (Hany Farid เรื่องภาพ AI) |
+| BK | ischool.berkeley.edu (Hany Farid on AI images) |
 | MF | meltflexai.com/blog/why-ai-renders-look-fake |
 | GC | getcoai.com |
-| FL | datalab.flitto.com (โทนส้ม-เขียวอมฟ้าในภาพ AI) |
-| MR | mikareyes.com (วิธีจับและแก้โปสเตอร์ AI) |
+| FL | datalab.flitto.com (orange-teal tone in AI images) |
+| MR | mikareyes.com (how to spot and fix AI posters) |
 | QW | qwe.edu.pl/tutorial/ai-company-logos-look-like-buttholes-2025 |
 | BU | bushe.co/answers/how-to-detect-ai-generated-logos |
 | PN | postnitro.ai blog |
 | 1S | 1stopasia.com/blog/english-to-thai-ai-translation |
-| GD | skill `graphic-design` ของ `software-development` ข้อ 7 (กฎเดิมของชุดนี้) |
+| GD | skill `graphic-design` of `software-development` item 7 (this set's original rules) |

@@ -1,20 +1,20 @@
-# ทดสอบด้วยผู้อ่านใหม่ — ใช้กับ SRS · FSD · BRD ก่อนส่งลูกค้า
+# Fresh-reader test — for SRS · FSD · BRD before sending to the customer
 
-checklist บอกว่าหัวข้อครบ แต่ไม่บอกว่าคนอ่านเข้าใจตรงกับที่เราตั้งใจไหม วิธีนี้ให้ตัวที่ไม่เคยเห็นการประชุมอ่านแล้วตอบ จุดที่ตอบผิดหรือตอบว่า "ไม่รู้" คือช่องว่างในเอกสาร (เรียบเรียงจาก Stage 3 Reader Testing ของ `doc-coauthoring` ใน anthropics/skills · ดู 2026-11-10 · ไม่แปลตรง)
+A checklist says the sections are all there. It does not say the reader understood what we meant. In this method, an agent that never saw the meeting reads the document and answers questions. A wrong answer, or an answer of "don't know", marks a gap in the document. (Adapted from Stage 3 Reader Testing of `doc-coauthoring` in anthropics/skills · viewed 2026-11-10 · not a literal translation)
 
-## ขั้นตอน
+## Steps
 
-1. **เขียนคำถาม 8–10 ข้อ ก่อนเปิดเอกสารให้ใคร** — คำถามที่ developer และ QA จะถามจริง เช่น "ถ้าจองซ้ำเวลาเดิมเกิดอะไร" · "สถานะไหนย้อนกลับได้" · "ยอดปัดเศษอย่างไร" · "ใครมีสิทธิ์ยกเลิก" · แต่ละข้อจดคำตอบที่ถูกไว้ก่อน (จากเรา)
-2. **ส่งให้ agent ตัวใหม่ที่ได้เฉพาะไฟล์เอกสาร** — ไม่ให้ประวัติแชต ไม่ให้โค้ด ไม่ให้ไฟล์อื่น (`handoff` · โฟลเดอร์ว่าง) · ให้ตอบทีละข้อพร้อมอ้างหัวข้อที่ใช้ตอบ
-3. **เทียบกับคำตอบที่ถูก** — ผิด · ตอบ "ไม่รู้" · ตอบถูกแต่ต้องเดา = ช่องว่าง 1 จุด
-4. **แก้เอกสารที่จุดนั้น แล้วถามข้อเดิมกับ agent ตัวใหม่อีกตัว** — ไม่แก้คำตอบให้ตรง
-5. **ไม่ผ่านก็ไม่ส่งลูกค้า** — ผ่านเมื่อทุกข้อตอบถูกโดยไม่ต้องเดา
+1. **Write 8–10 questions before showing the document to anyone** — questions a developer and QA would really ask, such as "what happens on a double booking of the same time" · "which statuses can be reversed" · "how is the amount rounded" · "who may cancel". Write down the correct answer to each first (from us).
+2. **Send to a new agent that gets only the document file** — no chat history, no code, no other files (`handoff` · empty folder). It answers one question at a time and cites the section it used.
+3. **Compare with the correct answers** — wrong · answered "don't know" · right but had to guess = 1 gap.
+4. **Fix the document at that point, then ask the same question again to another new agent** — do not change the answer to match.
+5. **If it fails, do not send to the customer** — it passes when every question is answered right without guessing.
 
-## คำถามเฉพาะไทย (เพิ่มอย่างน้อย 2 ข้อ)
+## Thai-specific questions (add at least 2)
 
-- ปีในหน้าจอและรายงานเป็น พ.ศ. หรือ ค.ศ. ช่องไหนเก็บเป็นอะไรในฐานข้อมูล
-- เลขที่เอกสาร (ใบเสนอราคา · ใบกำกับภาษี) รูปแบบอะไร เริ่มนับใหม่เมื่อไร
+- Are years on screens and reports in Buddhist Era (พ.ศ.) or Common Era (ค.ศ.)? Which field is stored as which in the database?
+- What format do document numbers (quotations · tax invoices) use, and when does the count restart?
 
-## เอกสารสองภาษา
+## Bilingual documents
 
-ให้ agent ตัวใหม่คนละตัวอ่านฉบับไทยและฉบับอังกฤษ ตอบชุดคำถามเดียวกัน แล้วเทียบคำตอบ · ต่างกัน = 2 ฉบับไม่ตรงกัน
+Have a different new agent read the Thai version and the English version, answer the same set of questions, then compare the answers. A difference = the 2 versions do not match.

@@ -2,51 +2,53 @@
 
 Use before saying work is done, fixed or working
 
-# principle · prove it works — พิสูจน์กับของจริง
+# principle · prove it works — prove it against the real thing
 
-> "เสร็จแล้ว" ที่ไม่มีหลักฐาน คือการโยนงานตรวจไปให้คนอื่น
+> A "done" with no evidence throws the checking onto someone else.
 
-## กฎ
+## Rule
 
-ก่อนใช้คำว่า เสร็จ · แก้แล้ว · ผ่าน · ใช้ได้ · ส่งแล้ว ต้องเห็นผลจากของจริงด้วยตาตัวเองในรอบนี้ก่อน
+Before using the words done (`เสร็จ`) · fixed · passed (`ผ่าน`) · works · sent, you must have seen the result from the real thing yourself in this round.
 
-ข้อที่ยังไม่เห็นผล ให้เขียนแยกว่าทำอะไรไปแล้วกับผลเป็นอย่างไร เช่น "CSV: แก้โค้ดแล้ว ยังไม่ได้เปิดใน Excel" · อย่าเขียน "แก้เสร็จแล้ว แต่ยังไม่ได้ลอง" เพราะคนอ่านจำคำว่าเสร็จ ไม่จำคำว่าแต่ (eval 2026-11-09: แขนมี skill เขียนแบบนี้ 2 ใน 3 รอบ)
+For an item whose result you have not seen, write separately what was done and what the result is, for example "CSV: code changed, not yet opened in Excel" · do not write "fixed, but not tried yet", because readers remember the word done and forget the word but (eval 2026-11-09: the arm with the skill wrote it this way in 2 of 3 rounds)
 
-| งาน | หลักฐานที่นับ | ไม่นับ |
+| Work | Evidence that counts | Does not count |
 |---|---|---|
-| เอกสาร · รายงาน | reviewer ตัวใหม่เปิดไฟล์ที่ render แล้ว ตรวจข้อกำหนดทีละข้อ (ตัวที่เขียนไม่อ่านงานตัวเองซ้ำ) | เขียนไฟล์สำเร็จ |
-| ตัวเลข · สูตร · ยอดเงิน | คำนวณซ้ำอีกวิธีกับ 2–3 แถว และยอดรวมตรงกับต้นทาง (ใบเสร็จ · statement) | สูตรไม่ขึ้น error |
-| ข้อความถึงลูกค้า · อีเมล · การจอง | อ่านเทียบกับคำถามเดิม ชื่อ · ยอด · วันที่ ตรงข้อมูลจริง และการจองเห็นหน้ายืนยัน | ร่างแล้วดูดี · กดปุ่มแล้วไม่มี error |
-| ฟีเจอร์ในแอป | กดบนแอปที่รันอยู่ด้วย skill ตรวจแอป เห็นผลตามเกณฑ์ | compile ผ่าน · อ่านโค้ดแล้วดูถูก |
-| แก้ปัญหา · บั๊ก | ทำกรณีที่เคยล้มซ้ำทางเดิมแล้วผ่าน | ส่วนอื่นผ่าน |
-| test · การตรวจ | ตัวเลขผ่าน/ล้มมาจากบรรทัดสรุปของคำสั่งที่รันรอบนี้ (หรือ `node scripts/test-verdict.mjs <ไฟล์ผล TAP หรือ JUnit> --expect <จำนวน>` ที่อ่านไฟล์ผลแล้วฟันธง PROVEN · PARTLY · NOT PROVEN) ไม่ใช่จำนวนที่พิมพ์เอง · แล้วทำให้โค้ดพัง 1 บรรทัดในสำเนา (กลับเงื่อนไข · return ก่อน) test ที่คุมบรรทัดนั้นต้องล้ม · ไม่ล้ม = test ยังพิสูจน์อะไรไม่ได้ | ผ่านอย่างเดียว · จำนวน test ที่จำมา |
-| ภาพหน้าจอ · ผล render | ตัดสินจากพิกเซลของภาพที่เปิดดูเอง ไม่ใช่จากคำบรรยาย · ดูอาการล้มก่อน (จอแดง จอว่าง กล่องหรือ dialog บังเนื้อหา) แล้วเทียบ log · กำกวมถือว่าไม่ผ่าน · มีกล่องบังให้ถ่ายใหม่ · หลักฐานระบุชื่อไฟล์ภาพ | อ่านโค้ดแล้วเชื่อว่าหน้าตาถูก · บอกว่าภาพ "ดูโอเค" โดยไม่ระบุไฟล์ |
-| mockup | เปิดในเบราว์เซอร์ กดทุกปุ่ม ไม่มีปุ่มหลอก | HTML ถูกไวยากรณ์ |
-| ค่าที่วัด (เซนเซอร์ · lux · ระยะ · น้ำหนัก) | เทียบเครื่องมือวัดอ้างอิงที่สอบเทียบแล้ว · ตัวจำลองพิสูจน์ได้แค่เส้นทางงาน (ป้าย `emulator`) ความแม่นต้องของจริง (ป้าย `เครื่องจริง <รุ่น>`) ไม่มีเครื่องมือ → `ยังไม่ได้ตรวจ` | วัดครั้งเดียว · เทียบกับตัวเอง |
-| ข้ออ้างว่าใช้ได้บนระบบอื่น (Windows · macOS · เครื่องอื่น) ใน PR หรือรายงาน | ติดป้ายทุกข้อ: `observed` (รันแล้วเห็นผลบนระบบนั้น) หรือ `reasoned` (คิดเอา) · รันผ่านบนเครื่องตัวเองเป็นหลักฐานที่อ่อนที่สุดสำหรับระบบอื่น | เขียนว่า "ใช้ได้ทุกระบบ" ไม่มีป้าย |
-| งานของ subagent | อ่านผลงานและรันเอง | subagent รายงานว่าเสร็จ |
+| Document · report | A fresh reviewer opens the rendered file and checks the requirements one by one (the writer does not reread its own work) | The file was written successfully |
+| Numbers · formulas · amounts | Recompute another way on 2–3 rows, and the total matches the source (receipt · statement) | The formula shows no error |
+| Message to a customer · email · booking | Read it against the original question; name · amount · date match the real data, and for a booking you see the confirmation page | The draft looks good · a button was pressed and no error appeared |
+| Feature in an app | Click it in the running app using the app-checking skill, and see the result meet the criteria | It compiles · reading the code looks right |
+| Fix of a problem · bug | Repeat the case that failed before, by the same path, and it passes | Other parts pass |
+| Test · check | The pass/fail numbers come from the summary line of the command run this round (or `node scripts/test-verdict.mjs <TAP or JUnit result file> --expect <count>`, which reads the result file and gives a verdict PROVEN · PARTLY · NOT PROVEN), not a count typed by hand · then break 1 line of code in a copy (invert a condition · return early); the test that covers that line must fail · if it does not fail = the test proves nothing yet | Only "pass" · a test count recalled from memory |
+| Screenshot · render result | Judge from the pixels of the image you opened yourself, not from a description · look for failure signs first (red screen, blank screen, a box or dialog covering content), then compare with the log · ambiguous counts as failed · if a box covers it, take it again · the evidence names the image file | Reading the code and believing the look is right · saying the image "looks OK" without naming the file |
+| mockup | Open in a browser, click every button, no fake buttons | The HTML has valid syntax |
+| Measured values (sensor · lux · distance · weight) | Compare with a calibrated reference instrument · an emulator proves only the work path (label `emulator`), accuracy needs the real thing (label `เครื่องจริง <รุ่น>`, real device <model>) · no instrument → `ยังไม่ได้ตรวจ` (not yet checked) | One measurement · comparing against itself |
+| A claim that it works on another system (Windows · macOS · another machine) in a PR or report | Label every claim: `observed` (ran it and saw the result on that system) or `reasoned` (worked out by thought) · a pass on your own machine is the weakest evidence for another system | Writing "works on every system" with no label |
+| Sub-agent work | Read the work and run it yourself | The sub-agent reports it is done |
 
-## วิธีทำ
+## How to do it
 
-1. ก่อนลงมือ เขียนว่า "จะรู้ได้อย่างไรว่าเสร็จ" ในรูปที่ตรวจได้
-2. หลังทำ ให้ตรวจตามนั้นกับของจริง แล้วบันทึกผลดิบ (ตัวเลข · ภาพ · output)
-3. ถ้าตรวจไม่ได้จริง ๆ (ไม่มีสภาพแวดล้อม · ต้องใช้บัญชีจริง) ให้บอกตรง ๆ ว่า `ยังไม่ได้ตรวจ` และขาดอะไร ห้ามเขียน `ผ่าน`
+1. Before starting, write "how will I know it is done" in a checkable form
+2. After the work, check against that on the real thing, and record the raw result (numbers · images · output)
+3. If you truly cannot check (no environment · needs a real account), say plainly `ยังไม่ได้ตรวจ` (not yet checked) and what is missing; never write `ผ่าน` (pass)
 
-## ข้ออ้างที่ไม่นับเป็นหลักฐาน
+## Claims that do not count as evidence
 
-| ข้ออ้าง | ทำไมไม่นับ | ต้องทำแทน |
+The first column quotes Thai claims as examples; English meanings are in brackets.
+
+| Claim | Why it does not count | Do this instead |
 |---|---|---|
-| "น่าจะใช้ได้" · "ควรจะผ่าน" · "ในทางทฤษฎี" · "เหมือนครั้งก่อน" | คำออกตัวแปลว่ายังไม่ได้ดู — เจอในรายงานจบงาน = ธงแดง ให้กลับไปตรวจก่อนส่ง | รันหรือเปิดดู แล้วแปะผลดิบ |
-| "test ผ่านแล้ว" โดยไม่มี output | ผ่านในความจำกับผ่านตอนนี้คนละอย่าง | แปะบรรทัดสรุปผลรันรอบนี้ |
-| "แก้ตามที่บอกแล้ว" · "ไม่มี error" | ไม่มี error ≠ ได้ผลที่ต้องการ | ทำกรณีที่เคยล้มซ้ำให้เห็นว่าผ่าน |
-| subagent รายงานว่าเสร็จ | รายงานคือคำพูด ไม่ใช่ชิ้นงาน | ดู diff หรือเปิดไฟล์ที่เปลี่ยนเอง |
-| คำสั่งจบด้วย exit 0 · สถานะขึ้น `running` | exit 0 บอกแค่ว่าโปรแกรมจบ ไม่ได้บอกว่าได้ผล · ตัวอย่างจาก skill `vastai` ของคอร์ส: CLI `vastai` คืน 0 แม้ API ตอบ error · `running` ยังไม่พร้อมใช้ (ต้อง `ssh … true` ได้ rc 0) · สั่งสร้างซ้ำตอน timeout ได้เครื่องซ้ำเสียเงินสองเท่า | ตรวจผลปลายทางด้วยคำสั่งดูรายการหรือคำสั่งที่ใช้งานจริง · สั่งซ้ำเฉพาะเมื่อยืนยันแล้วว่าครั้งแรกไม่เกิด |
-| ส่งคำสั่งให้ผู้ใช้ไปรันเอง ทั้งที่เรารันได้ · ตรวจแค่ส่วนง่ายแล้วสรุปว่าผ่านทั้งหมด | โยนงานตรวจให้คนอื่น | รันเองให้ครบก่อนใช้คำว่าเสร็จ |
-| ร่างข้อความถึงลูกค้าหรือคนนอกว่า "แก้แล้ว" ไว้ให้ส่งได้เลย ทั้งที่ยังตรวจไม่เสร็จ (แม้เขียนต่อท้ายว่ากำลังทดสอบ เช่น "ทีมเราแก้ไขในระบบแล้ว ตอนนี้กำลังทดสอบอีกรอบ" ซึ่งเห็นใน eval 3 จาก 3 รอบ 2026-11-09) | คนรับเชื่อคำว่าแก้แล้วทันที ถ้าผลตรวจไม่ผ่านต้องถอนคำ | ร่างไว้ 1 ฉบับพร้อมเงื่อนไขว่าส่งหลังเห็นผลตรวจ · ฉบับที่ส่งตอนนี้ได้ห้ามมีคำว่าแก้แล้ว แก้ไขแล้ว หรือเรียบร้อย ไม่ว่ารูปไหน บอกได้แค่ "ได้รับเรื่องแล้ว ทีมกำลังตรวจ จะแจ้งผลภายใน (เวลา)" |
+| "น่าจะใช้ได้" · "ควรจะผ่าน" · "ในทางทฤษฎี" · "เหมือนครั้งก่อน" ("should work" · "ought to pass" · "in theory" · "same as last time") | Hedge words mean you have not looked — finding them in a final report = a red flag, go back and check before sending | Run or open it, then paste the raw result |
+| "test ผ่านแล้ว" ("tests passed") with no output | Passed in memory and passing now are different things | Paste the summary line of this round's run |
+| "แก้ตามที่บอกแล้ว" · "ไม่มี error" ("fixed as told" · "no errors") | No error ≠ the wanted result | Repeat the case that failed before and show it passes |
+| A sub-agent reports it is done | A report is words, not a work product | Look at the diff or open the changed files yourself |
+| A command ended with exit 0 · status shows `running` | exit 0 says only that the program ended, not that it worked · example from the course's `vastai` skill: the `vastai` CLI returns 0 even when the API answers with an error · `running` is not yet ready to use (`ssh … true` must return rc 0) · re-issuing the create command on a timeout got duplicate machines, paying twice | Check the end result with a list command or a command that really uses it · re-issue only after confirming the first one did not happen |
+| Sending the user a command to run themselves when we could run it · checking only the easy part and concluding everything passed | Throws the checking onto someone else | Run it all yourself before using the word done |
+| Drafting a message to a customer or outsider saying "fixed" so it can be sent right away, while the check is not finished (even with a trailing note that testing is in progress, such as "ทีมเราแก้ไขในระบบแล้ว ตอนนี้กำลังทดสอบอีกรอบ" ("our team fixed it in the system, now testing once more"), seen in eval 3 of 3 rounds 2026-11-09) | The recipient believes the word fixed at once, and if the check fails the words must be withdrawn | Draft 1 version with the condition that it is sent after the check result is seen · the version that can be sent now must not contain "แก้แล้ว" (fixed), "แก้ไขแล้ว" (has been fixed) or "เรียบร้อย" (all done) in any form; it may say only "ได้รับเรื่องแล้ว ทีมกำลังตรวจ จะแจ้งผลภายใน (เวลา)" (received, the team is checking, will report within (time)) |
 
-ที่มาของแถวภาพหน้าจอ · expo · .claude/skills/expo-skill-eval/agents/visual-grader.md · ดู 2026-11-10 · แถว test (สคริปต์ฟันธง + ทำโค้ดพังหนึ่งบรรทัด) · code-modernization · commands/modernize-verify.md · ดู 2026-11-10 · แถว observed/reasoned · claude-remember (ห้ามแจกจ่ายซ้ำ · เอาแค่กลไก) · CONTRIBUTING.md · ดู 2026-11-10 · เลนส์และแพ็กเกจของผู้ตรวจ → [`review-lenses`](../superuser/references/review-lenses.md)
+Sources of the screenshot row · expo · .claude/skills/expo-skill-eval/agents/visual-grader.md · seen 2026-11-10 · the test row (verdict script + break one line of code) · code-modernization · commands/modernize-verify.md · seen 2026-11-10 · the observed/reasoned row · claude-remember (do not redistribute · took the mechanism only) · CONTRIBUTING.md · seen 2026-11-10 · reviewer lenses and packages → [`review-lenses`](../superuser/references/review-lenses.md)
 
-ที่มาของแนวคิดตารางข้ออ้าง: skill `verification-before-completion` ใน obra/superpowers (MIT) · เขียนใหม่ให้ครอบงานนอกโค้ด
+Source of the claims-table idea: skill `verification-before-completion` in obra/superpowers (MIT) · rewritten to cover work outside code.
 
 
 ---
@@ -55,49 +57,49 @@ Use before saying work is done, fixed or working
 
 Use to cut extras nobody needs yet. Not Claude Code simplify
 
-# simplify — ทำให้ง่าย คนอ่านครั้งแรกก็ตามได้
+# simplify — make it simple so a first-time reader can follow
 
-ใช้กับทุกงานที่ส่งให้คน ทั้งโค้ด เอกสาร แผน ดีไซน์ สไลด์ ตาราง และคำตอบ · `human-writing` คุมว่า**เขียนอย่างไร** ส่วน skill นี้คุมว่า**ตัวงานมีอะไรบ้าง** · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
+Use on any work handed to people: code, documents, plans, designs, slides, tables and answers · `human-writing` controls **how it is written**, while this skill controls **what the work contains** · lives only in plugin `superuser`; other plugins share it through `dependencies`
 
-## 1 · หลักใหญ่
+## 1 · Main principles
 
-- **บททดสอบ:** คนที่ไม่ได้อยู่ในงานนี้ เปิดดูอีก 6 เดือนข้างหน้า ต้องเข้าใจและแก้ต่อได้โดยไม่ต้องถามใคร
-- ทำเท่าที่โจทย์ต้องการ ไม่เผื่ออนาคตที่ยังไม่มีใครขอ
-- ตัดก่อนเพิ่ม · ถ้าตัดส่วนไหนออกแล้วความหมายหรือการทำงานไม่เสีย ให้ตัด
-- ของธรรมดาที่คนรู้จักดีกว่าของฉลาดที่ต้องถอดรหัส
-- **ง่ายไม่ใช่มักง่าย** — ห้ามตัดความถูกต้อง ความปลอดภัย การตรวจข้อมูลที่รับจากภายนอก การจัดการ error ที่กันข้อมูลหาย และสิ่งที่ผู้ใช้ขอไว้ชัด ๆ
-- **ง่ายไม่ใช่กองรวม** — ลดจำนวนของ แต่ยังแยกหน้าที่ชัด 1 ส่วนทำ 1 เรื่อง เหมือนงานของมืออาชีพ
+- **The test:** someone not on this work, opening it 6 months from now, must understand it and continue it without asking anyone
+- Do only what the task needs; do not provide for a future nobody has asked for
+- Cut before adding · if removing a part loses neither meaning nor function, cut it
+- Plain things people know beat clever things that need decoding
+- **Simple is not sloppy** — never cut correctness, safety, validation of data from outside, error handling that prevents data loss, or what the user asked for explicitly
+- **Simple is not one big pile** — reduce the number of things, but keep clear separation of duties, 1 part doing 1 thing, as professional work does
 
-## 2 · บันไดก่อนลงมือ — หยุดที่ขั้นแรกที่ใช้ได้
+## 2 · Ladder before starting — stop at the first step that works
 
-1. ต้องมีสิ่งนี้จริงไหม · ไม่จำเป็น → ไม่ทำ แล้วบอก 1 บรรทัดว่าข้ามอะไร
-2. มีของเดิมที่ใช้ได้แล้วไหม (ไฟล์ แม่แบบ ฟังก์ชัน เครื่องมือ ฟีเจอร์ที่ติดมากับระบบ) · มี → ใช้ของเดิม
-3. ทำแบบสั้นที่สุดที่ยังครบและถูก
+1. Do we really need this · not needed → do not do it, and say in 1 line what you skipped
+2. Is there an existing thing that works (file, template, function, tool, a feature that comes with the system) · yes → use the existing thing
+3. Do the shortest version that is still complete and correct
 
-## 3 · ตามชนิดงาน
+## 3 · By kind of work
 
-| งาน | ทำ | เลี่ยง |
+| Work | Do | Avoid |
 |---|---|---|
-| **โค้ด** | ชื่อบอกว่าคืออะไรและมีหน่วย · 1 ฟังก์ชันทำ 1 เรื่อง · คืนค่าออกเร็วแทนการซ้อน `if` · เยื้องไม่เกิน 3 ชั้น · คอมเมนต์บอก "ทำไม" · ตามสไตล์ของโปรเจกต์ | abstraction ที่มีตัวใช้ตัวเดียว · ทางลัดที่ฉลาดแต่อ่านยาก · ไฟล์ก้อนเดียวทำทุกอย่าง · โฟลเดอร์ `utils/` กองรวม · dependency ใหม่เพื่องานไม่กี่บรรทัด |
-| **เอกสาร · รายงาน** | ข้อสรุปขึ้นก่อน · 1 ย่อหน้า 1 เรื่อง · ตัวอย่างประกอบข้อที่เป็นนามธรรม · ตารางสำหรับข้อมูลที่เทียบกัน | ทวนสิ่งที่พูดไปแล้ว · หัวข้อที่ไม่มีเนื้อ · ศัพท์ที่คนอ่านไม่รู้ |
-| **แผน · ขั้นตอน** | 3–5 ข้อสำคัญ · ทุกข้อมีเจ้าของและวัดได้ว่าเสร็จ · ขั้นน้อยที่สุดที่ได้ผล | รายการ 20 ข้อที่ไม่มีลำดับความสำคัญ · ขั้นที่มีไว้ "เผื่อ" |
-| **ดีไซน์ · สไลด์ · รูป** | 1 หน้า 1 ใจความ · ทางสั้นสุดไปถึงเป้าของผู้ใช้ · ใช้แบบที่คนคุ้นเคย | อัดข้อมูลจนต้องเพ่ง · ของตกแต่งที่ไม่ช่วยให้เข้าใจ |
-| **ตาราง · ข้อมูล** | คอลัมน์เท่าที่ใช้ตัดสินใจ · สูตรสั้นที่ตามได้ | คอลัมน์ซ้ำความหมาย · สูตรซ้อนยาวบรรทัดเดียว |
-| **คำตอบ** | ตอบก่อน · ยาวเท่าที่คำถามต้องการ | อธิบายยาวกว่าตัวงาน |
+| **Code** | Names say what it is and carry units · 1 function does 1 thing · return early instead of nesting `if` · at most 3 levels of indentation · comments say "why" · follow the project's style | An abstraction with a single user · a clever shortcut that is hard to read · one big file doing everything · a pile-up `utils/` folder · a new dependency for a few lines of work |
+| **Documents · reports** | Conclusion first · 1 paragraph 1 topic · an example for abstract points · a table for data that is compared | Repeating what was already said · headings with no content · terms the reader does not know |
+| **Plans · procedures** | 3–5 key items · every item has an owner and a way to measure done · the fewest steps that work | A list of 20 items with no priority · steps kept "just in case" |
+| **Designs · slides · figures** | 1 page 1 point · the shortest path to the user's goal · use patterns people are familiar with | Cramming data until people must squint · decoration that does not help understanding |
+| **Tables · data** | Only the columns used to decide · short formulas you can follow | Columns that repeat a meaning · long nested formulas in one line |
+| **Answers** | Answer first · as long as the question needs | An explanation longer than the work itself |
 
-plugin `software-development` มีรายละเอียดของโค้ดและสถาปัตยกรรมเพิ่ม: `lazy-coding` (เขียนให้น้อย) · `readable-code` (ชื่อ รูปร่างฟังก์ชัน โครงไฟล์) · `simplicity-first` (เอกสาร แผน สถาปัตยกรรม) · ถ้าติดตั้งอยู่ให้เปิดคู่กัน
+Plugin `software-development` has more detail on code and architecture: `lazy-coding` (write less) · `readable-code` (names, function shape, file structure) · `simplicity-first` (documents, plans, architecture) · if installed, open them together
 
-## 4 · บอกว่าตั้งใจทำให้ง่าย
+## 4 · Say that you made it simple on purpose
 
-ทางลัดที่ตั้งใจ ให้เขียนไว้ว่าใช้ได้ถึงแค่ไหนและเปลี่ยนเมื่อไร จะได้ไม่ดูเหมือนลืม เช่น `// simple: เก็บใน memory — ย้ายไป Redis เมื่อรันเกิน 1 process` · ในรายงานใส่ 1 บรรทัด `ข้าม: X — เพิ่มเมื่อ Y`
+A deliberate shortcut should be written down with how far it works and when it changes, so it does not look forgotten, for example `// simple: เก็บใน memory — ย้ายไป Redis เมื่อรันเกิน 1 process` (gloss: simple: kept in memory — move to Redis when running more than 1 process) · in the report put 1 line `ข้าม: X — เพิ่มเมื่อ Y` (skipped: X — add when Y)
 
-## 5 · ตรวจก่อนส่ง 5 ข้อ
+## 5 · 5-point check before sending
 
-1. คนนอกเปิดดูครั้งแรกแล้วเข้าใจภายใน 30 วินาทีไหม
-2. มีส่วนไหน ขั้นไหน หรือชั้นไหนตัดออกได้โดยไม่เสียอะไรไหม ถ้ามีให้ตัด
-3. ทุกส่วนที่เพิ่มมา มีเหตุผลว่าต้องใช้ตอนนี้ ไม่ใช่ "เผื่อ" ใช่ไหม
-4. ยังครบเรื่องความถูกต้อง ความปลอดภัย และสิ่งที่ผู้ใช้ขอไหม
-5. ยังแยกหน้าที่ชัด ไม่ได้ยุบหลายเรื่องไว้ที่เดียวเพื่อให้ดูสั้นใช่ไหม
+1. Can an outsider open it for the first time and understand within 30 seconds
+2. Is there any part, step or layer that can be cut with no loss? If so, cut it
+3. Does every part added have a reason it is needed now, not "just in case"
+4. Is it still complete on correctness, safety, and what the user asked for
+5. Are duties still clearly separated, and not several things squashed into one place to look short
 
 
 ---
@@ -106,34 +108,34 @@ plugin `software-development` มีรายละเอียดของโ�
 
 Use for a starting palette and Thai-Latin fonts on a new screen
 
-# design-direction-lookup — หาจุดเริ่มหน้าตา 3 แนวจากโจทย์ไทยหรืออังกฤษ
+# design-direction-lookup — find 3 starting looks from a Thai or English brief
 
-> **ด่านก่อนลงมือ (ทุกครั้ง):** อ่านธีมเจ้าของ → ค้นต้นแบบสด → 3 แนวที่ต่างกันจริง → ตรวจ `no-ai-look` ก่อนส่ง · ทำตามหัวข้อ "ด่านก่อนลงมือ" ของ `design-references` (plugin `superuser`) แม้มีแบรนด์แล้ว (แบรนด์คุมสีและฟอนต์ ส่วนการค้นใช้หาโครงของชิ้นนี้) · ปิดงานด้วยบรรทัด `ด่านก่อนลงมือ:`
+> **Pre-work gate (`ด่านก่อนลงมือ`, every time):** read the owner's theme → search live references → 3 genuinely different directions → run `no-ai-look` before sending · follow the section "ด่านก่อนลงมือ" (pre-work gate) of `design-references` (plugin `superuser`) even when a brand exists (the brand fixes colors and fonts; the search finds the structure of this piece) · close the work with the line `ด่านก่อนลงมือ:`
 
-อยู่ใน plugin `software-development` · ถ้อยคำเขียนตาม `human-writing` · ใช้ก่อน `ui-craft` ข้อ 0.1 ขั้น 3 (ทำ 3 แนวขนานกัน)
+Lives in plugin `software-development` · wording follows `human-writing` · used before `ui-craft` step 0.1 stage 3 (make 3 directions in parallel)
 
-> **กฎข้อเดียว:** ตัวร่างให้จุดเริ่ม ไม่ตัดสินแทนด่านสวย — ทุกแนวที่ได้ต้องไปเป็น mockup แล้วเลือกที่ด่านสวยของ `ui-craft` ข้อ 9 เสมอ · ถ้าตัวค้นตอบว่าไม่พบ ให้บอกตรง ๆ ห้ามแต่งสีหรือฟอนต์แล้วเล่าว่ามาจากข้อมูล
+> **The one rule:** the draft gives a starting point; it does not replace the beauty gate — every direction produced must become a mockup and be chosen at the beauty gate of `ui-craft` step 9 · if the search says nothing was found, say so plainly; never invent colors or fonts and claim they came from data
 
-## ใช้เมื่อ
+## Use when
 
-- เริ่มโปรเจกต์หน้าจอใหม่ หรือผู้ใช้สั่งออกแบบใหม่ แล้วยังไม่มีทิศทางภาพ (`ui-craft` ข้อ 0 บอกให้ทำข้อ 0.1)
-- ต้องการพาเลต 2 โหมด คู่ฟอนต์ไทย-ละติน หรือกฎ UX ไทยที่เข้ากับธุรกิจ เช่น "ทำเว็บคลินิกทันตกรรม อยากได้โทนสีกับฟอนต์ไทยที่เข้ากัน"
-- อยากรู้ว่าข้อมูลแบบนี้ใช้กราฟอะไร · หน้าแรกควรเรียง section อย่างไร · เฟรมเวิร์กนี้มีกฎหน้าตาอะไร
+- Starting a new screen project, or the user orders a new design, and there is no visual direction yet (`ui-craft` step 0 says to do step 0.1)
+- You need a 2-mode palette, a Thai-Latin font pair, or Thai UX rules that fit the business, e.g. "ทำเว็บคลินิกทันตกรรม อยากได้โทนสีกับฟอนต์ไทยที่เข้ากัน" (a dental clinic website, wants a matching color tone and Thai font)
+- You want to know which chart fits this kind of data · how the home page should order its sections · what look rules a framework has
 
-ไม่ใช้เมื่อ: โปรเจกต์มีหน้าตาที่ผ่านด่านสวยแล้ว (ลอกหน้าพี่น้องตาม `ui-craft` ข้อ 0) · ทำแบรนด์ทั้งชุด โลโก้ หรือสีองค์กร (`brand-kit`) · ตรวจงานที่เสร็จแล้วว่าดูเหมือน AI ทำไหม (`no-ai-look`)
+Do not use when: the project already has a look that passed the beauty gate (copy the sibling page per `ui-craft` step 0) · making a whole brand set, logo, or corporate colors (`brand-kit`) · checking finished work for looking AI-made (`no-ai-look`)
 
-## ใช้ตัวอื่นแทนหรือคู่กัน
+## Use another skill instead or alongside
 
-| สถานการณ์ | ใช้ | เหตุผล |
+| Situation | Use | Reason |
 |---|---|---|
-| ได้ 3 แนวแล้ว ต้องทำ mockup และเลือก | `ui-craft` ข้อ 0.1 ขั้น 3–5 และข้อ 9 | skill นี้หยุดที่จุดเริ่ม ขั้นเลือกอยู่ที่นั่น |
-| หน้าจอเว็บแอป แดชบอร์ด ระบบหลังบ้าน | `web-app-design` | โครงหน้าและคอมโพเนนต์ของแพลตฟอร์ม |
-| แอปมือถือ PWA | `mobile-app-design` | ขนาดจอเล็ก ระยะนิ้ว กฎไทยบนจอเล็ก |
-| แอปเดสก์ท็อป Windows | `windows-app-design` | token Fluent ของจริงชนะพาเลตจากที่นี่ |
-| ตรวจ mockup ก่อนส่ง | `no-ai-look` (`slop_scan.py`) | ตัวร่างตรวจแค่สีและฟอนต์ ไม่ได้ตรวจหน้าจอทั้งหน้า |
-| ลูกค้ามีแบรนด์อยู่แล้ว หรือต้องทำแบรนด์ใหม่ | `graphic-design:brand-kit` | สีและฟอนต์แบรนด์ชนะข้อมูลที่นี่เสมอ |
+| Got the 3 directions, need to mock up and choose | `ui-craft` step 0.1 stages 3–5 and step 9 | This skill stops at the starting point; the choosing stage is there |
+| Web app screens, dashboards, back-office systems | `web-app-design` | Page structure and components of the platform |
+| Mobile app PWA | `mobile-app-design` | Small screen size, finger distance, Thai rules on small screens |
+| Windows desktop app | `windows-app-design` | Real Fluent tokens beat palettes from here |
+| Check the mockup before sending | `no-ai-look` (`slop_scan.py`) | The draft checks only colors and fonts, not the whole screen |
+| The customer already has a brand, or a new brand must be made | `graphic-design:brand-kit` | Brand colors and fonts always beat the data here |
 
-## 1 · ค้นทีละเรื่อง
+## 1 · Search one topic at a time
 
 ```bash
 python scripts/design_search.py "ร้านทองออนไลน์" --domain industry
@@ -141,105 +143,105 @@ python scripts/design_search.py "ช่องวันที่ พ.ศ." --doma
 python scripts/design_search.py "ฟอร์ม validation" --domain stack --stack blazor --json
 ```
 
-- domain: `industry` · `palette` (คลังสำรอง ผลขึ้นต้นด้วยคำเตือนให้ค้นสดก่อน) · `font` · `look` · `ux` · `chart` · `landing` · `stack`
-- domain จาก ui-ux-pro-max-skill (ภาษาอังกฤษ · [`data/upstream/uipro/README.md`](data/upstream/uipro/README.md)): `style` (88 สไตล์ มีค่าสี เงา การเคลื่อนไหว CSS ใช้กับอะไร ห้ามใช้กับอะไร) · `product` (192 ประเภทสินค้า → รูปแบบหน้า สไตล์ อารมณ์สีและตัวอักษร สิ่งที่ห้ามทำ) · `motion` · `slide` · `slide-strategy` · `slide-copy` · ใช้คู่กับ `look` และ `industry` ของเราตอนเลือก 3 แนว สีจากไฟล์ต้นทางไม่ได้ตรวจ contrast · วิธีเลือกคำค้นและอ่านผล → [`references/query-guide.md`](references/query-guide.md)
-- 1 ครั้ง 1 เจตนา 2–5 คำ · ไทย อังกฤษ หรือปนกันก็ได้ · ค้นซ้ำด้วยคำอื่นได้ 1 ครั้ง ไม่เจอให้บอกผู้ใช้
-- ตัวค้นตัดคำไทยด้วยพจนานุกรมจากคอลัมน์ keywords ของข้อมูล และขยายคำค้นด้วยตารางคำพ้องไทย-อังกฤษ จึงค้น `ร้านกาแฟมินิมอล` ได้โดยไม่ต้องเว้นวรรค
+- domain: `industry` · `palette` (backup store; results start with a warning to search live first) · `font` · `look` · `ux` · `chart` · `landing` · `stack`
+- domains from ui-ux-pro-max-skill (English · [`data/upstream/uipro/README.md`](data/upstream/uipro/README.md)): `style` (88 styles with color values, shadow, motion, CSS, what to use it with, what not to use it with) · `product` (192 product types → page pattern, style, color and type mood, things to avoid) · `motion` · `slide` · `slide-strategy` · `slide-copy` · use together with our `look` and `industry` when choosing the 3 directions; colors from a source file are not contrast-checked · how to choose queries and read results → [`references/query-guide.md`](references/query-guide.md)
+- 1 run, 1 intent, 2–5 words · Thai, English or mixed all work · you may search again with different words once; if still not found, tell the user
+- The search segments Thai words with a dictionary built from the keywords column of the data and expands the query with a Thai-English synonym table, so `ร้านกาแฟมินิมอล` can be searched without spaces
 
-## 2 · ค้นสีสดก่อน แล้วถอดสีจากงานจริง
+## 2 · Search colors live first, then extract colors from real work
 
-ทำทุกครั้งที่มีเน็ต ก่อนร่าง 3 แนว · เทรนด์สีเปลี่ยนเร็ว พาเลตใน `data/` จึงเป็นคลังสำรองสำหรับตอนค้นสดไม่ได้ ไม่ใช่ตัวหลัก · สีที่ส่งเข้าตัวร่างด้วย `--palette` หรือ `--extra-palettes` ชนะคลังเสมอ
+Do this every time there is a network, before drafting the 3 directions · color trends change fast, so the palettes in `data/` are a backup store for when live search is not possible, not the main source · colors passed to the draft with `--palette` or `--extra-palettes` always beat the store
 
-0. **ค้นสดตาม skill `design-references` ของ `superuser`** หางานต้นแบบปีนี้และเว็บธุรกิจจริงในวงการ แล้วจดว่าเห็นโทนสีอะไร
-1. **เลือกเว็บ 3–5 เจ้าในวงการเดียวกับโจทย์:** ธุรกิจไทย 2–4 เจ้า และเจ้าใหญ่ต่างประเทศ 1 เจ้า · เลือกเฉพาะเว็บที่ยังใช้งานและเพิ่งปรับหน้าตา ดูจากปี copyright ท้ายหน้า ข่าว หรือโพสต์ล่าสุด · เว็บที่ปีเก่ากว่า 2 ปีให้ข้าม
-2. **ดูงานออกแบบปีนี้อย่างน้อย 1 แหล่ง** จากแหล่งที่ `ui-craft` ข้อ 0.1 ขั้น 2 ใช้ (Siteinspire หรือ Awwwards) กรองตามวงการหรือสไตล์ แล้วจดว่าเห็นอะไรที่ต่างจากคลังสำรอง
-3. **ดึงสี:**
+0. **Search live per the `design-references` skill of `superuser`:** find this year's reference work and real business sites in the field, and note which color tones you see
+1. **Choose 3–5 sites in the same field as the brief:** 2–4 Thai businesses and 1 large foreign one · choose only sites that are still active and recently redesigned, judged by the copyright year in the footer, news, or latest post · skip sites older than 2 years
+2. **Look at this year's design work from at least 1 source** among those used by `ui-craft` step 0.1 stage 2 (Siteinspire or Awwwards), filtered by field or style, and note what you see that differs from the backup store
+3. **Extract colors:**
    ```bash
    python scripts/brand_colors.py https://a.co.th https://b.co.th https://c.com
    python scripts/brand_colors.py <url เดิม> --palette web-<วงการ> > _to_delete/web-palettes.csv
    ```
-   ผลต่อเว็บคือสีแบรนด์อันดับ 1–4 พร้อมน้ำหนักและที่มา (theme-color · ตัวแปร CSS เช่น `--primary` · ความถี่ใน CSS) สีพื้นและสีตัวอักษร และวันที่ดึง · ตัวดึงอ่านแค่ HTML และ CSS ไม่รัน JavaScript เว็บที่ต้องรัน JavaScript ก่อนถึงจะมีเนื้อ ตัวดึงบอกว่าดึงไม่ได้ ให้รายงานตามนั้น ห้ามเดาสีแทน
-4. **สร้างพาเลตใหม่ 1–2 ชุด** ด้วย `--palette` · ตัวสร้างใช้สีที่หลายเว็บใช้ร่วมกันเป็น primary และ accent เลื่อนเฉดเล็กน้อยไม่ให้ตรงกับแบรนด์ใด แล้วคิดสีพื้น ตัวอักษร ขอบ และสีสถานะให้ผ่าน contrast ทั้ง 2 โหมด · ถ้าอยากได้ 2 ชุด ให้รันอีกครั้งกับเว็บอีกกลุ่ม (เช่น กลุ่มพรีเมียม กับกลุ่มราคาเข้าถึงง่าย) แล้วต่อไฟล์ CSV
-5. **ส่งเข้าตัวร่าง:**
+   The result per site is brand colors ranked 1–4 with weight and source (theme-color · CSS variables such as `--primary` · frequency in CSS), the background and text colors, and the extraction date · the extractor reads only HTML and CSS and does not run JavaScript; for a site that needs JavaScript before it has content, the extractor says it could not extract; report that as is and never guess colors instead
+4. **Build 1–2 new palettes** with `--palette` · the builder uses colors shared by many sites as primary and accent, shifts the hue slightly so it matches no single brand, then works out background, text, border and status colors that pass contrast in both modes · to get 2 sets, run again with another group of sites (for example a premium group and an affordable group) and append the CSV files
+5. **Feed them to the draft:**
    ```bash
    python scripts/design_draft.py "<โจทย์>" --extra-palettes _to_delete/web-palettes.csv
    python scripts/design_draft.py "<โจทย์>" --palette "ร้านเก่า:bg=#FAF7F2,surface=#FFFFFF,text=#2B2118,text_muted=#6B5A48,primary=#8A3B12,secondary=#D9B26F,accent=#2F6F6A,border=#D8CBB8"
    ```
-   `--palette` ใส่ซ้ำได้หลายชุด รับ 3 แบบ: 8 หน้าที่แบบมีชื่อ (ตามตัวอย่าง · `secondary` ไม่ใส่ก็ได้) · สี 8 ตัวเรียงตามลำดับ bg surface text text_muted primary secondary accent border · หรือสีแบรนด์ 1–7 ตัว (ตัวแรกเป็นสีหลัก) · โหมดสว่างใช้สีที่ส่งมาตรง ๆ ส่วน on_primary สีสถานะ และโหมดมืดตัวร่างคิดให้ผ่าน contrast · `secondary` ไม่มีช่องในตาราง ถูกบันทึกใน notes · สีที่ contrast ไม่ผ่านหรือเป็นสีตั้งต้นของ Tailwind ถูกปฏิเสธพร้อมบอกเหตุ
-   `--palettes` เลือกและเรียงบางชุดเป็นแนว ก ข ค · ถ้าโจทย์ไม่ตรงอุตสาหกรรมไหนในข้อมูล ตัวร่างใช้อุตสาหกรรมชั่วคราว `custom` แล้วเลือก look และคู่ฟอนต์จากคำในโจทย์แทนการหยุด
-   พาเลตที่ contrast ตกไม่หยุดคำสั่ง ตัวร่างลองปรับ on_primary เป็นขาวหรือดำก่อน ยังตกก็ตัดแล้วจดใต้ "ที่ตัดออกก่อนร่าง" · สีที่ถอดจากงานของคนอื่นใส่ `--reference-colors [องศา]` (ค่าตั้งต้น 8) เพื่อเลื่อนเฉดและให้ DESIGN.md บอกที่มาตามจริง (เลื่อนแล้ว contrast ตก ตัวร่างปรับความสว่างไม่เกิน 10% ก่อนค่อยตัด) · ถ้าอุตสาหกรรม 2 อันดับคะแนนใกล้กัน ผลจะบอกทั้ง 2 ชื่อ ให้เลือกด้วย `--industry` · ฟอนต์หัวไม่ซ้ำกันใน 3 แนว · `--voice rounded|angular|modern|formal|classic|hand` ให้แนว ก ได้คู่ฟอนต์บุคลิกที่เลือกจากพื้นฐานโปรเจกต์ (`ui-craft/references/font-voice.md` · คอลัมน์ `voice` ใน `font-pairs.csv`)
-6. **จดลง DESIGN.md:** URL ทุกเว็บที่ดู แหล่งงานออกแบบที่ดู วันที่ดูของทุกแหล่ง สีที่ได้ และเว็บที่ดึงไม่ได้
+   `--palette` can be repeated for several sets and takes 3 forms: 8 named roles (as in the example · `secondary` may be omitted) · 8 colors in the order bg surface text text_muted primary secondary accent border · or 1–7 brand colors (the first is the main color) · light mode uses the colors passed in as they are, while on_primary, status colors and dark mode are worked out by the draft to pass contrast · `secondary` has no column in the table and is recorded in notes · colors that fail contrast or are Tailwind defaults are rejected with the reason
+   `--palettes` selects and orders some sets as directions A B C · if the brief matches no industry in the data, the draft uses a temporary industry `custom` and picks the look and font pair from words in the brief instead of stopping
+   A palette that fails contrast does not stop the command: the draft first tries setting on_primary to white or black, and if it still fails, drops it and notes it under "dropped before drafting" (`ที่ตัดออกก่อนร่าง`) · colors extracted from other people's work go in `--reference-colors [degrees]` (default 8) to shift the hue and make DESIGN.md state the source truthfully (if contrast fails after shifting, the draft adjusts lightness by at most 10% before dropping) · if 2 industries score close, the result names both; choose with `--industry` · the heading font does not repeat across the 3 directions · `--voice rounded|angular|modern|formal|classic|hand` gives direction A a font pair with the chosen personality, picked from the project's basics (`ui-craft/references/font-voice.md` · column `voice` in `font-pairs.csv`)
+6. **Record in DESIGN.md:** the URL of every site viewed, the design sources viewed, the viewing date of every source, the colors obtained, and sites that could not be extracted
 
-ไม่มีเน็ต หรือดึงสีไม่ได้ทุกเว็บ → ข้ามไปหัวข้อ 3 โดยไม่ส่งสี ตัวร่างใช้คลังสำรองใน `data/` พร้อมคำเตือนในจอและใน DESIGN.md ว่า "ใช้คลังสีสำรอง ค้นสดตาม design-references จะทันสมัยกว่า"
+No network, or colors cannot be extracted from any site → skip to section 3 without passing colors; the draft uses the backup store in `data/` with a warning on screen and in DESIGN.md saying "ใช้คลังสีสำรอง ค้นสดตาม design-references จะทันสมัยกว่า" (using the backup color store; a live search per design-references would be more current)
 
-## 3 · ร่าง 3 แนวในคำสั่งเดียว
+## 3 · Draft 3 directions in one command
 
 ```bash
 python scripts/design_draft.py "<โจทย์>" --out docs/DESIGN.md --html docs/design/<รหัส>-design-directions.html
 ```
 
-ตัวร่างทำตามลำดับนี้:
+The draft works in this order:
 
-1. หาอุตสาหกรรมจากโจทย์ ถ้าไม่พบ ตัวร่างใช้อุตสาหกรรมชั่วคราว `custom` แล้วเลือก look และฟอนต์จากคำในโจทย์ (ไม่เดาสี)
-2. เรียงแนวตามที่แถวอุตสาหกรรมกำหนด (look · พาเลต · คู่ฟอนต์ ตำแหน่งเดียวกัน) ถ้ามีสีสดส่งมา พาเลตเรียงตามที่ส่ง แล้วตรวจทีละแนว
-3. **ตัดแนวที่ไม่ผ่าน แล้วหยิบตัวถัดไป:** contrast ไม่ถึง 4.5:1 สำหรับข้อความหรือ 3:1 สำหรับปุ่มและขอบ ในโหมดใดโหมดหนึ่ง · มีสีตั้งต้นของ Tailwind (slate gray zinc neutral indigo violet) · Inter หรือ Geist เป็นฟอนต์แรก · ฟอนต์ไทยที่ไม่มีคู่ละติน เช่น Noto Sans Thai เดี่ยว
-4. look ของ 3 แนวต้องไม่ซ้ำกัน · ถ้าแนวที่อุตสาหกรรมกำหนดไม่พอ ตัวร่างเติมจาก look ที่ค้นได้จากคำของอุตสาหกรรม
-   · สีหลักของ 2 แนวต้องห่างทั้งระยะ RGB และเฉดสี (ไม่ถึง 20 องศาถือว่าโทนเดียวกัน) · แต่ละแนวใช้โครงหน้าต่างกันตาม look: ตัวอักษรใหญ่ชิดซ้าย (editorial) · กล่องหลายขนาด (bento) · แถบเครื่องมือกับตารางแน่น (dense)
-5. หากฎ UX ที่เกี่ยว 5 ข้อ (กฎไทยขึ้นก่อนเมื่อคะแนนใกล้กัน)
-6. เขียน `docs/DESIGN.md` และหน้าเทียบ HTML (swatch 2 โหมด · หัวและเนื้อภาษาไทยในฟอนต์จริง · บรรทัดตรวจสระและวรรณยุกต์ · ปุ่ม · ป้ายสถานะ) · **มีไฟล์อยู่แล้วไม่เขียนทับ** ถ้าไม่ใส่ `--force`
+1. Find the industry from the brief; if not found, the draft uses a temporary industry `custom` and picks the look and fonts from words in the brief (does not guess colors)
+2. Order the directions as the industry row sets (look · palette · font pair, same position); if live colors were passed in, palettes are ordered as passed; then check each direction
+3. **Drop directions that fail, then take the next one:** contrast below 4.5:1 for text or 3:1 for buttons and borders in either mode · has a Tailwind default color (slate gray zinc neutral indigo violet) · Inter or Geist as the first font · a Thai font with no Latin partner, such as Noto Sans Thai alone
+4. The looks of the 3 directions must not repeat · if the directions set by the industry are not enough, the draft fills in from looks found by the industry's words
+   · the main colors of any 2 directions must be far apart in both RGB distance and hue (under 20 degrees counts as the same tone) · each direction uses a different page structure per look: large left-aligned type (editorial) · boxes of several sizes (bento) · toolbar with a dense table (dense)
+5. Find 5 related UX rules (Thai rules go first when scores are close)
+6. Write `docs/DESIGN.md` and the HTML comparison page (2-mode swatches · Thai headings and body in the real font · a line that checks vowels and tone marks · buttons · status badges) · **an existing file is not overwritten** unless `--force` is given
 
-ข้อความที่ตัวร่างสร้างผ่านตัวกรองคำโฆษณา (ยกระดับ · ไร้รอยต่อ · seamless · elevate ฯลฯ) ถ้าข้อมูลต้นทางมีคำเหล่านี้ ตัวร่างหยุดและบอกให้แก้ข้อมูล
+Text the draft generates passes the ad-word filter (ยกระดับ · ไร้รอยต่อ · seamless · elevate etc.; the Thai words mean "elevate" and "seamless") · if the source data has these words, the draft stops and tells you to fix the data
 
-## 4 · หลังได้ร่าง
+## 4 · After you have the draft
 
-1. เปิดหน้าเทียบดูทั้ง 2 โหมดเอง อย่าเชื่อแค่ตัวเลข contrast · ฟอนต์ไทยบางตัวสระบนชนบรรทัดก่อนหน้า ต้องเห็นด้วยตา
-2. ส่ง 3 แนวเข้า `ui-craft` ข้อ 0.1 ขั้น 3 (subagent ตัวใหม่แนวละตัว · agent ที่เรียกลูกทีมไม่ได้ให้ทำเองทีละแนว และจดไว้ใน "ตัดสินใจเอง") · แต่ละแนวเพิ่มความกล้า 1 จุดเอง ตัวร่างไม่ได้เลือกให้
-3. ลูกค้ามีสีหรือฟอนต์แบรนด์ ให้แทนค่าในแนวนั้น ๆ แล้วรันตัวตรวจ contrast ใหม่ (`no-ai-look/scripts/slop_scan.py`)
-4. เลือกแนวที่ด่านสวย แล้วลงเหตุผลใน `## ตัดสินใจเอง` ของ `docs/BUILD-PLAN.md`
+1. Open the comparison page and look at both modes yourself; do not trust the contrast numbers alone · in some Thai fonts the upper vowels hit the previous line, which you must see with your eyes
+2. Send the 3 directions to `ui-craft` step 0.1 stage 3 (a fresh subagent per direction · an agent that cannot call a sub-team does each direction itself in turn and notes it under "ตัดสินใจเอง" (own decisions)) · each direction adds 1 bold move of its own; the draft does not choose it for you
+3. If the customer has brand colors or fonts, substitute the values in each direction and rerun the contrast check (`no-ai-look/scripts/slop_scan.py`)
+4. Choose the direction that passes the beauty gate, and write the reason under `## ตัดสินใจเอง` (own decisions) of `docs/BUILD-PLAN.md`
 
-## 5 · ข้อมูล
+## 5 · Data
 
-**พาเลตในชุดนี้เป็นคลังสำรองสำหรับตอนค้นสดไม่ได้ · look และคู่ฟอนต์ก็เป็นค่าสำรอง ทบทวนทุก 6 เดือน** ให้ตรงเทรนด์ปัจจุบัน (ครั้งหน้า 2027-04-26 · `scripts/check/expiry.json` เตือนเมื่อใกล้ถึงวัน) · มีเน็ตให้เริ่มจากข้อ 2 เสมอ
+**The palettes in this set are a backup store for when live search is not possible · the looks and font pairs are also backup values, reviewed every 6 months** to match current trends (next review 2027-04-26 · `scripts/check/expiry.json` warns when the date is near) · with a network, always start from step 2
 
-**ไม่มีในชุดนี้โดยตั้งใจ** · ไอคอน: ใช้ชุดเดียวทั้งแอปตาม `ui-craft` และ `no-ai-look` ไม่ต้องค้นจากตาราง · การเคลื่อนไหว: แต่ละ look มีช่อง motion แล้ว รายละเอียดอยู่ใน `ui-craft/references/depth-and-flourish.md` และ `graphic-design:motion-basics` · ฟอนต์ละตินล้วน: คู่ฟอนต์ระบุตัวละตินไว้แล้ว ส่วนรายชื่อทั้งหมดดูที่ fonts.google.com · stack อื่นนอก 7 ตัว (Next.js · Vue · SwiftUI ฯลฯ) เพิ่มเมื่อมีงานจริง ไม่ทำล่วงหน้า
+**Left out of this set on purpose** · icons: use one set across the whole app per `ui-craft` and `no-ai-look`, no table search needed · motion: each look already has a motion slot, details are in `ui-craft/references/depth-and-flourish.md` and `graphic-design:motion-basics` · Latin-only fonts: the font pairs already name the Latin font, and for the full list see fonts.google.com · stacks other than the 7 (Next.js · Vue · SwiftUI etc.) are added when real work needs them, not ahead of time
 
-ไฟล์ CSV ใน `data/` (คั่นช่องหลายค่าด้วย `;`) ตรวจด้วย `scripts/check_data.py` · ตัวค้นอ่านทุกไฟล์ตอนเริ่ม ไม่ต้องสร้างดัชนีล่วงหน้า
+The CSV files in `data/` (multi-value fields separated by `;`) are checked by `scripts/check_data.py` · the search reads every file at startup, no need to build an index ahead of time
 
-| ไฟล์ | มีอะไร |
+| File | Contents |
 |---|---|
-| `industries.csv` | อุตสาหกรรม → บุคลิก · look · พาเลต · คู่ฟอนต์ · ข้อควรระวัง · กฎตัดสิน |
-| `palettes.csv` | คลังสีสำรอง ตามบทบาทสี 2 แถวต่อ id (light · dark) · ใช้เมื่อไม่มีสีจากการค้นสด |
-| `font-pairs.csv` · `thai-fonts.csv` | คู่ไทย-ละติน · ขนาดเนื้อเล็กสุด · line-height · licence |
-| `looks.csv` | look ของ `ui-craft/references/web-looks.md` · ความลึก · การเคลื่อนไหว · ข้อห้าม |
-| `ux-rules.csv` · `charts.csv` · `landing.csv` · `stacks/<stack>.csv` | กฎ UX รวมกฎไทย · กราฟ · ลำดับ section · กฎรายเฟรมเวิร์ก |
+| `industries.csv` | Industry → personality · look · palette · font pair · cautions · deciding rules |
+| `palettes.csv` | Backup color store by color role, 2 rows per id (light · dark) · used when there are no colors from a live search |
+| `font-pairs.csv` · `thai-fonts.csv` | Thai-Latin pairs · smallest body size · line-height · licence |
+| `looks.csv` | Looks of `ui-craft/references/web-looks.md` · depth · motion · prohibitions |
+| `ux-rules.csv` · `charts.csv` · `landing.csv` · `stacks/<stack>.csv` | UX rules including Thai rules · charts · section order · per-framework rules |
 
-เพิ่มแถวใหม่แล้วค้นไม่เจอด้วยคำไทย ให้ใส่คำนั้นในคอลัมน์ keywords ของแถว เพราะพจนานุกรมตัดคำมาจากคอลัมน์นี้
+If you add a new row and cannot find it with Thai words, put that word in the row's keywords column, because the dictionary segmentation is built from this column.
 
-## ตัวอย่างจริง
+## A real example
 
-**โจทย์:** "เว็บขายทองรูปพรรณ ร้านเก่าในเยาวราช ลูกค้า 35–60 ซื้อผ่านมือถือ"
+**Brief:** "เว็บขายทองรูปพรรณ ร้านเก่าในเยาวราช ลูกค้า 35–60 ซื้อผ่านมือถือ" (a website selling gold jewelry, an old shop in Yaowarat, customers aged 35–60 buying on mobile)
 
-**ทำ:** `python scripts/design_draft.py "<โจทย์>" --out _to_delete/gold/DESIGN.md --html _to_delete/gold/gold-design-directions.html`
+**Run:** `python scripts/design_draft.py "<โจทย์>" --out _to_delete/gold/DESIGN.md --html _to_delete/gold/gold-design-directions.html`
 
-**ผล (รัน 2026-10-26):** จับ `gold-shop` ได้อันดับ 1 · แนว ก luxury + พาเลต `gold-leaf` + ฟอนต์ Chonburi/Taviraj · แนว ข editorial + `yaowarat-red` + Trirong/Taviraj · แนว ค Thai craft + `thai-silk` + Anuphan/IBM Plex Sans Thai · ทุกพาเลตผ่าน contrast ทั้ง 2 โหมด · กฎ UX 5 ข้อ เช่น ตัวเลขยอดเงินใช้ tabular-nums และบอกเวลาอัปเดตล่าสุดของราคา · ท้าย DESIGN.md บอกว่าตัดพาเลต `night-vault` เพราะสีหลักบนพื้นสว่างได้ 2.91:1 · หน้าเทียบผ่าน `slop_scan.py` โดยไม่มีข้อฟ้อง
+**Result (run 2026-10-26):** matched `gold-shop` as rank 1 · direction A luxury + palette `gold-leaf` + fonts Chonburi/Taviraj · direction B editorial + `yaowarat-red` + Trirong/Taviraj · direction C Thai craft + `thai-silk` + Anuphan/IBM Plex Sans Thai · every palette passes contrast in both modes · 5 UX rules, for example money amounts use tabular-nums and show the last update time of the price · the end of DESIGN.md says palette `night-vault` was dropped because its main color on a light background got 2.91:1 · the comparison page passed `slop_scan.py` with no findings
 
-## ตรวจก่อนส่ง
+## Check before sending
 
-- [ ] `python scripts/design_search.py --self-test` · `python scripts/design_draft.py --self-test` · `python scripts/brand_colors.py --self-test` ผ่านทุกข้อ
-- [ ] มีเน็ต → ค้นสดตาม `design-references` แล้ว DESIGN.md จด URL ของเว็บธุรกิจจริงและแหล่งงานออกแบบที่ดู พร้อมวันที่ดูทุกแหล่ง · ไม่มีเน็ต → DESIGN.md มีคำเตือนคลังสำรอง
-- [ ] แก้ตัวค้นหรือข้อมูล → รัน `--eval references/relevance-cases.json` แล้ว holdout ยังไม่ต่ำกว่า 85 %
-- [ ] DESIGN.md มี 3 แนวที่ look ไม่ซ้ำ และบอกว่าเป็นจุดเริ่ม ไม่ใช่คำตัดสิน
-- [ ] หน้าเทียบไม่มี Inter เป็นฟอนต์หลัก ไม่มีสีตั้งต้นของ Tailwind และไม่มีฟอนต์ไทยที่ไม่มีคู่ละติน
-- [ ] ไม่ได้เขียนทับ DESIGN.md เดิมของโปรเจกต์โดยไม่ได้ตั้งใจ (ไม่ใส่ `--force` ถ้าไม่จำเป็น)
+- [ ] `python scripts/design_search.py --self-test` · `python scripts/design_draft.py --self-test` · `python scripts/brand_colors.py --self-test` all pass
+- [ ] With a network → searched live per `design-references`, and DESIGN.md notes the URLs of real business sites and design sources viewed, with the viewing date of every source · with no network → DESIGN.md has the backup-store warning
+- [ ] If you changed the search or the data → run `--eval references/relevance-cases.json` and the holdout is still not below 85 %
+- [ ] DESIGN.md has 3 directions with distinct looks and says they are a starting point, not a verdict
+- [ ] The comparison page has no Inter as the main font, no Tailwind default colors, and no Thai font without a Latin partner
+- [ ] Did not overwrite the project's existing DESIGN.md by accident (no `--force` unless necessary)
 
-## ที่มา
+## Sources
 
-- `data/upstream/uipro/` คัดลอกไม่แก้จาก ui-ux-pro-max-skill commit `28b3b8d` (MIT · 2026-10-29) ตามที่เจ้าของสั่งให้ลอกมาปรับปรุง
-- แนวคิดชุดข้อมูลที่ค้นได้ ตัวค้น BM25 พร้อมเกณฑ์งดตอบ และตัวสร้าง design system มาจาก nextlevelbuilder/ui-ux-pro-max-skill (MIT · https://github.com/nextlevelbuilder/ui-ux-pro-max-skill · ดู 2026-10-26) · โค้ดและข้อมูลที่นี่เขียนใหม่ทั้งหมด ไม่ได้คัดลอก · ส่วนที่ทำต่างจากต้นทาง: ตัดคำไทย · 3 แนวแทน 1 คำตอบ · ตัดสีตั้งต้นของ framework · คู่ฟอนต์ไทย-ละติน
-- BM25 เป็นวิธีจัดอันดับที่เปิดเผยทั่วไป เขียนเองใน `scripts/design_search.py` · ค่า k1 1.5 และ b 0.75
-- เกณฑ์ contrast 4.5:1 และ 3:1 ตาม `ui-craft` ข้อ 5 (WCAG 2.2 ข้อ 1.4.3 และ 1.4.11)
-- 3 แนว · look · บุคลิกแอป จาก `ui-craft` ข้อ 0.1 · `ui-craft/references/web-looks.md` · `ui-craft/references/app-character.md`
-- กฎสีและฟอนต์ที่ตัดออก ตรงกับกฎ `framework-default` และ `overused-font` ของ `no-ai-look/scripts/slop_scan.py`
+- `data/upstream/uipro/` copied unchanged from ui-ux-pro-max-skill commit `28b3b8d` (MIT · 2026-10-29), as the owner ordered it copied for improvement
+- The idea of a searchable dataset, the BM25 search with an abstain threshold, and the design-system generator come from nextlevelbuilder/ui-ux-pro-max-skill (MIT · https://github.com/nextlevelbuilder/ui-ux-pro-max-skill · viewed 2026-10-26) · the code and data here are entirely rewritten, not copied · what is done differently from the source: Thai word segmentation · 3 directions instead of 1 answer · dropping framework default colors · Thai-Latin font pairs
+- BM25 is a widely published ranking method, written by us in `scripts/design_search.py` · k1 1.5 and b 0.75
+- The contrast thresholds 4.5:1 and 3:1 follow `ui-craft` step 5 (WCAG 2.2 criteria 1.4.3 and 1.4.11)
+- 3 directions · look · app personality from `ui-craft` step 0.1 · `ui-craft/references/web-looks.md` · `ui-craft/references/app-character.md`
+- The color and font rules that are dropped match the rules `framework-default` and `overused-font` of `no-ai-look/scripts/slop_scan.py`
 
 
 ## reference: query-guide.md

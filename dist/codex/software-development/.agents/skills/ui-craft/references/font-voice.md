@@ -1,33 +1,33 @@
-# บุคลิกตัวอักษร (font voice)
+# Font voice
 
-ใช้ใน `SKILL.md` ข้อ 0.1 ขั้น 3 · ตัวอักษรต้องบอกอารมณ์เดียวกับสีและเลย์เอาต์ (ตัวโค้งไปทางเป็นมิตร ตัวเหลี่ยมไปทางเร็วและแรง) ถ้าบุคลิกตัวอักษรไม่ตรงกับพื้นฐานของโปรเจกต์ หน้าจะดูขัดกันทั้งที่สีและเลย์เอาต์ถูกแล้ว · คู่ฟอนต์ทุกคู่ในตารางมีใน `design-direction-lookup/data/font-pairs.csv` คอลัมน์ `voice` พร้อมใบอนุญาตที่ตรวจแล้ว
+Used in `SKILL.md` section 0.1 step 3 · the type must convey the same mood as the color and layout (rounded type leans friendly, angular type leans fast and strong). If the font voice does not match the project's basics, the page looks inconsistent even when the color and layout are right · every font pair in the table is in `design-direction-lookup/data/font-pairs.csv`, column `voice`, with a checked license
 
-## เลือกจากพื้นฐานโปรเจกต์ ไม่ใช่จากความชอบของคนทำ
+## Choose from the project basics, not from the maker's taste
 
-ถามทีละข้อ ข้อแรกที่ได้คำตอบชัดคือบุคลิกที่ใช้
+Ask one question at a time. The first question with a clear answer gives the voice to use.
 
-1. **แบรนด์มีฟอนต์อยู่แล้วไหม** มี → ใช้ฟอนต์ของแบรนด์ แล้วจบที่ข้อนี้
-2. **สินค้าอยากให้คนรู้สึกอย่างไรในวินาทีแรก** (เป็นมิตร · เร็วแรง · น่าเชื่อถือ · หรู · ขี้เล่น) แล้วดูตารางข้างล่าง
-3. **ใครอ่าน และอ่านนานแค่ไหน** ผู้สูงวัย เอกสารยาว และฟอร์มราชการ ให้ความอ่านง่ายชนะอารมณ์ → `formal` ที่เนื้อความ ส่วนหัวข้อยังใช้บุคลิกจากข้อ 2 ได้
-4. **look ที่เลือกบังคับอะไรไหม** ใช้คอลัมน์ "ตัวอักษร" ใน [`web-looks.md`](web-looks.md) เช่น neobrutalism ไปทาง `angular` · luxury ไปทาง `classic` · claymorphism และ playful ไปทาง `rounded`
+1. **Does the brand already have a font?** Yes → use the brand's font and stop at this question
+2. **What should the product make people feel in the first second?** (friendly · fast and strong · trustworthy · luxurious · playful), then look at the table below
+3. **Who reads, and for how long?** Elderly readers, long documents and government forms: readability beats mood → `formal` for the body text, while the headings may still use the voice from question 2
+4. **Does the chosen look force anything?** Use the "type" column in [`web-looks.md`](web-looks.md); for example neobrutalism leans `angular` · luxury leans `classic` · claymorphism and playful lean `rounded`
 
-ได้บุคลิกแล้วส่ง `--voice <ค่า>` เข้า `design_draft.py` แนว ก จะได้คู่ฟอนต์ของบุคลิกนั้น · แนว ค (กล้ากว่า) ลองบุคลิกที่ติดกันได้ (`modern` → `angular` หรือ `rounded`) แต่ห้ามกระโดดไปบุคลิกตรงข้าม เช่นงานธนาคารใช้ `hand`
+Once you have the voice, pass `--voice <value>` into `design_draft.py`; direction (a) gets that voice's font pair · direction (c) (bolder) may try an adjacent voice (`modern` → `angular` or `rounded`) but must not jump to the opposite voice, for example a bank using `hand`
 
-## 6 บุคลิก
+## The 6 voices
 
-รูปทรงในคอลัมน์ "หน้าตา" มาจาก `notes_th` ของ `thai-fonts.csv` · ข้อห้ามมาจาก `font-pairs.csv` และ `no-ai-look`
+The shapes in the "look" column come from `notes_th` of `thai-fonts.csv` · the cautions come from `font-pairs.csv` and `no-ai-look`
 
-| voice | หน้าตา | ใช้เมื่อพื้นฐานโปรเจกต์เป็น | คู่ใน data (ครบทุกคู่) | ระวัง |
+| voice | Look | Use when the project basics are | Pairs in data (all pairs) | Watch out |
 |---|---|---|---|---|
-| `rounded` โค้งนุ่ม | หัวโค้งมน กลมหนา หรือทรงเรขาคณิตที่เป็นมิตร (Mitr กลมหนา · K2D โค้งมน · Kodchasan หัวกว้างกลม · LINE Seed กลม · Niramit โค้งอ่อน · Prompt เรขาคณิต) | อาหาร คาเฟ่ คลินิก การศึกษา แชตร้านค้า ชุมชน | `mitr-sarabun` · `line-seed` · `line-seed-sarabun` · `kodchasan-k2d` · `k2d-plex-health` · `niramit-warm` · `prompt-noto-looped` | งานการเงินและกฎหมายไม่มีคู่บุคลิกนี้ใน data (ใช้ `modern` หรือ `classic`) · `line-seed` ต้อง self-host และห้ามสื่อว่าเป็นของ LINE |
-| `angular` เหลี่ยมเร็ว | หัวทรงเหลี่ยม (Bai Jamjuree) หรือเหลี่ยมตัดมุม (Chakra Petch) · Kanit ไม่มีหัวปลายตัด หนาได้ถึง 900 อยู่กลุ่มนี้เพราะใช้เป็นหัวโปรโมชันและกีฬา | เกม อีสปอร์ต กีฬา ยานยนต์ อุตสาหกรรม โปรโมชันลดราคา งานที่อยากให้ตื่นเต้น | `chakra-plex` · `bai-jamjuree-plex` · `kanit-sarabun` | ใช้ที่หัวข้อ เนื้อความในทุกคู่เป็นตัวเรียบ (Plex · Sarabun) · Kanit ใช้ซ้ำมากในงานไทย เลือกเมื่อแบรนด์ต้องการหัวหนักจริง |
-| `modern` เรียบทันสมัย | ไม่มีหัว · IBM Plex Sans Thai ออกแบบคู่กับละติน Plex · Anuphan ทรงเรขาคณิต · Noto Sans Thai ต้องประกาศ Noto Sans คู่ | ซอฟต์แวร์ธุรกิจ เครื่องมือนักพัฒนา ฟินเทค สตาร์ตอัป หลังบ้าน ธนาคาร ระบบหลายภาษา แอป Android | `plex-sans` · `dense-admin` · `noto-sans` · `dev-terminal` · `anuphan-plex` · `anuphan-sarabun` · `anuphan-krub` · `google-sans-android` | เลือกตัวนี้แล้ว ความกล้าของแนวต้องมาจากที่อื่น (ขนาดหัวข้อ · ภาพพระเอก) · `google-sans-android` ทำให้ดูเป็นของ Google ใช้เมื่อแอปอยู่ใน Android จริง |
-| `formal` อ่านง่ายทางการ | มีหัว (looped) สำหรับเนื้อความยาว ผู้สูงวัย และเอกสารราชการ · Atkinson Hyperlegible แยก I l 1 O 0 ชัด | ราชการ โรงพยาบาล ประกัน ผู้สูงวัย ฟอร์มยาว ผู้มีสายตาเลือนราง | `sarabun-gov` · `noto-looped` · `plex-looped-read` · `atkinson-access` | ใช้กับเนื้อความเป็นหลัก หัวข้อใช้บุคลิกจากข้อ 2 ได้ |
-| `classic` คลาสสิกหรู | มีหัวแบบตัวพิมพ์ไทยดั้งเดิม serif หรือคอนทราสต์เส้น (Trirong คอนทราสต์สูง · Taviraj serif · Chonburi didone · Fahkwang คอนทราสต์กลาง · Thasadith เส้นเรียบ · Pridi slab serif · Maitree serif อ่านยาว) | โรงแรม สปา ความงาม ร้านทอง แฟชั่น สื่อ หนังสือ กฎหมาย พิธีการ งานแต่ง | `trirong-taviraj` · `trirong-sarabun` · `chonburi-luxe` · `fahkwang-athiti` · `thasadith-athiti` · `charmonman-ceremony` · `taviraj-legal` · `noto-serif-editorial` · `maitree-longform` · `pridi-news` | เซอริฟตัวเอียงขนาดยักษ์เป็นทางลัดของ AI (`no-ai-look` `italic-serif-display`) · Chonburi ห้ามใช้ต่ำกว่า 24px |
-| `hand` ลายมือ | ลายมือ (Mali ลายมือเด็ก · Itim หัวกลม · Sriracha ปากกาเมจิก · Playpen) หรือหัวเอียงแบบป้ายร้าน (Pattaya) · ส่วนใหญ่น้ำหนักเดียว | งานเด็ก การเรียนรู้ หัตถกรรม สตรีทฟู้ด คาเฟ่ เบเกอรี | `mali-kids` · `playpen-kids` · `itim-craft` · `sriracha-prompt` · `pattaya-mitr` | ลายมือ 1 จุดต่อหน้า ที่เหลือใช้ตัวอ่านง่าย · Sriracha และ Pattaya ห้ามใช้เป็นเนื้อความ |
+| `rounded` (soft round) | Rounded heads, thick round, or friendly geometric shapes (Mitr thick round · K2D rounded · Kodchasan wide round heads · LINE Seed round · Niramit soft curves · Prompt geometric) | food, cafe, clinic, education, shop chat, community | `mitr-sarabun` · `line-seed` · `line-seed-sarabun` · `kodchasan-k2d` · `k2d-plex-health` · `niramit-warm` · `prompt-noto-looped` | finance and legal work have no pair of this voice in the data (use `modern` or `classic`) · `line-seed` must be self-hosted and must not imply it belongs to LINE |
+| `angular` (fast angular) | Squared heads (Bai Jamjuree) or cut-corner squares (Chakra Petch) · Kanit has no cut-end heads and goes as thick as 900; it sits in this group because it is used for promotion and sports headings | games, esports, sports, automotive, industry, sale promotions, work meant to excite | `chakra-plex` · `bai-jamjuree-plex` · `kanit-sarabun` | use at headings; body text in every pair is a plain face (Plex · Sarabun) · Kanit is heavily reused in Thai work; choose it when the brand really needs a heavy heading |
+| `modern` (plain modern) | No heads (loopless) · IBM Plex Sans Thai is designed to pair with Latin Plex · Anuphan geometric · Noto Sans Thai must declare a Noto Sans pair | business software, developer tools, fintech, startups, back office, banks, multilingual systems, Android apps | `plex-sans` · `dense-admin` · `noto-sans` · `dev-terminal` · `anuphan-plex` · `anuphan-sarabun` · `anuphan-krub` · `google-sans-android` | once you choose this, the direction's boldness must come from elsewhere (heading size · hero image) · `google-sans-android` makes it look like Google; use it when the app really lives on Android |
+| `formal` (readable, formal) | Has heads (looped) for long body text, elderly readers and official documents · Atkinson Hyperlegible clearly separates I l 1 O 0 | government, hospital, insurance, elderly users, long forms, low-vision users | `sarabun-gov` · `noto-looped` · `plex-looped-read` · `atkinson-access` | use mainly for body text; headings may use the voice from question 2 |
+| `classic` (classic luxury) | Has heads, traditional Thai type forms, serif or stroke contrast (Trirong high contrast · Taviraj serif · Chonburi didone · Fahkwang medium contrast · Thasadith plain strokes · Pridi slab serif · Maitree serif for long reading) | hotel, spa, beauty, gold shop, fashion, media, books, law, ceremonies, weddings | `trirong-taviraj` · `trirong-sarabun` · `chonburi-luxe` · `fahkwang-athiti` · `thasadith-athiti` · `charmonman-ceremony` · `taviraj-legal` · `noto-serif-editorial` · `maitree-longform` · `pridi-news` | giant italic serif is an AI shortcut (`no-ai-look` `italic-serif-display`) · never use Chonburi below 24px |
+| `hand` (handwriting) | Handwriting (Mali children's hand · Itim round heads · Sriracha marker pen · Playpen) or slanted shop-sign heads (Pattaya) · mostly a single weight | children's work, learning, crafts, street food, cafe, bakery | `mali-kids` · `playpen-kids` · `itim-craft` · `sriracha-prompt` · `pattaya-mitr` | 1 handwriting spot per page, the rest in a readable face · never use Sriracha and Pattaya for body text |
 
-## ตรวจก่อนส่ง
+## Check before sending
 
-- ปิดสีแล้วดูภาพหน้าจอขาวดำ หัวข้อยังบอกอารมณ์เดียวกับประโยคหน้าจอพระเอก (ข้อ 0.1 ขั้น 1) ไหม · ไม่บอก = บุคลิกตัวอักษรไม่ตรง
-- มุมโค้งของกล่องไปทางเดียวกับตัวอักษร: `rounded` คู่กับมุมมน · `angular` คู่กับมุมเล็กหรือตัดมุม · ตัวโค้งในกล่องเหลี่ยมจัด หรือตัวเหลี่ยมในการ์ดมนมาก ต้องมีเหตุผลจากแบรนด์
-- ตัวไทยขนาดใหญ่ซูมดูสระบนและวรรณยุกต์ตาม `no-ai-look` ข้อ 8 · หัวข้อตัวหนาที่ line-height แน่นมักทำวรรณยุกต์ชนบรรทัดบน
+- Turn off the color and look at a black-and-white screenshot: does the heading still convey the same mood as the hero-screen sentence (section 0.1 step 1)? · If not, the font voice does not match
+- The box corner radius leans the same way as the type: `rounded` pairs with round corners · `angular` pairs with small or cut corners · rounded type in very square boxes, or angular type in very round cards, needs a reason from the brand
+- Zoom in on large Thai type to check the upper vowels and tone marks per `no-ai-look` item 8 · bold headings with tight line-height often make tone marks hit the line above

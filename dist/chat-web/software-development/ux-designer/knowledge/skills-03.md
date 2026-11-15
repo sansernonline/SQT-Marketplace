@@ -205,152 +205,152 @@ python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screen
 
 ## reference: tokens.md
 
-# Token reference — ระบบดีไซน์เว็บแอปสไตล์ Apps Track
+# Token reference — Apps Track-style web app design system
 
-> ระวัง: **ค่าสีในไฟล์นี้เป็นตัวอย่างที่ประกอบครบแล้ว ไม่ใช่ค่ามาตรฐาน**
-> เลือกสีจากเนื้องานก่อนเสมอ (ดูข้อ "สีมาจากเนื้องาน" ใน `SKILL.md`)
-> สิ่งที่ให้ยึดจากไฟล์นี้คือ **รายชื่อ token และหน้าที่ของมัน** ไม่ใช่ค่า
-> สี ฟอนต์ ขนาดตัวอักษร มุม เงา และความกว้างเลย์เอาต์เป็นค่าสำรอง ค่าของงานอยู่ใน `theme.css` (`SKILL.md` ข้อ 2) · ระยะห่างและ breakpoint ใช้ตามไฟล์นี้
+> Warning: **the color values in this file are a finished example, not a standard.**
+> Always pick colors from the work itself first (see the item "colors come from the work" in `SKILL.md`).
+> What to take from this file is **the list of tokens and their roles**, not the values.
+> Colors, fonts, type sizes, radii, shadows and layout widths are fallbacks. The project's values live in `theme.css` (`SKILL.md` item 2) · spacing and breakpoints follow this file.
 
-นิยามทั้งหมดอยู่ใน `assets/appstrack.css` บล็อก `:root`
-**ทุกอย่างใต้บรรทัด `=== base ===` ห้ามมีสีดิบ** เพราะตัวตรวจใช้บรรทัดนั้นเป็นเส้นแบ่ง
+All definitions are in `assets/appstrack.css`, in the `:root` block.
+**Nothing below the `=== base ===` line may contain a raw color**, because the checker uses that line as the boundary.
 
-## สารบัญ
+## Contents
 
-1. [แบรนด์ — สีทึบ](#แบรนด์--สีทึบ)
-2. [พื้นผิว · เส้น · เงา](#พื้นผิว--เส้น--เงา)
-3. [ตัวอักษร](#ตัวอักษร)
-4. [สีข้อมูล (กราฟ) — ทึบเสมอ](#สีข้อมูล-กราฟ--ทึบเสมอ)
-5. [Pill (สถานะ) — สามค่าเป็นชุด](#pill-สถานะ--สามค่าเป็นชุด)
-6. [เลย์เอาต์](#เลย์เอาต์)
-7. [เปลี่ยนธีม / เปลี่ยนแบรนด์](#เปลี่ยนธีม--เปลี่ยนแบรนด์)
-8. [คลาสคอมโพเนนต์ที่มีให้แล้ว](#คลาสคอมโพเนนต์ที่มีให้แล้ว)
+1. [Brand — solid color](#brand--solid-color)
+2. [Surfaces · lines · shadows](#surfaces--lines--shadows)
+3. [Typography](#typography)
+4. [Data colors (charts) — always solid](#data-colors-charts--always-solid)
+5. [Pill (status) — three values as a set](#pill-status--three-values-as-a-set)
+6. [Layout](#layout)
+7. [Switching theme / brand](#switching-theme--brand)
+8. [Ready-made component classes](#ready-made-component-classes)
 
 ---
 
-## แบรนด์ — สีทึบ
+## Brand — solid color
 
-| Token | ค่า | ใช้กับ |
+| Token | Value | Used for |
 |---|---|---|
-| `--brand` | `#226cc6` (เฉดเข้มของค่าประจำบ้าน `#2A78D6`) | ปุ่มหลัก · chip ที่เลือก · แถบ progress · ลิงก์ · แท็บที่เลือก · ขีดเลือกเมนู · เส้นขอบตอนโฟกัส · โลโก้ |
-| `--brand-2` | `#6a5cd6` | สีข้อมูลชุดที่ 2 คู่กับ `--brand` (กราฟ) |
-| `--brand-50` | `#eef4fd` | พื้น avatar · mention · วงแหวนโฟกัส |
-| `--brand-100` | `#dde9fb` | รางของ spinner |
+| `--brand` | `#226cc6` (a darker shade of the house default `#2A78D6`) | primary button · selected chip · progress bar · link · selected tab · menu selection bar · border on focus · logo |
+| `--brand-2` | `#6a5cd6` | 2nd data color paired with `--brand` (charts) |
+| `--brand-50` | `#eef4fd` | avatar · mention background · focus ring |
+| `--brand-100` | `#dde9fb` | spinner track |
 
-> **ไม่มี gradient** — ปุ่ม chip progress และกราฟใช้ `--brand` ทึบ (`no-ai-look`: ไล่สีม่วง-น้ำเงิน → สีแบรนด์ทึบ 1 สี)
-> **`--brand` ต้องผ่าน 4.5:1** ทั้งตัวขาวบนพื้น brand (`#226cc6` = 5.21) · brand บน `--bg` (4.87) · brand บน `--brand-50` (4.71) — ตรวจ 22 ต.ค. 2569
+> **No gradient** — buttons, chips, progress and charts use solid `--brand` (`no-ai-look`: purple-blue gradient → 1 solid brand color)
+> **`--brand` must pass 4.5:1** for white text on a brand background (`#226cc6` = 5.21) · brand on `--bg` (4.87) · brand on `--brand-50` (4.71) — checked 22 Oct 2026
 
-## พื้นผิว · เส้น · เงา
+## Surfaces · lines · shadows
 
-| Token | ค่า | ใช้กับ |
+| Token | Value | Used for |
 |---|---|---|
-| `--bg` | `#f6f7fb` | พื้นหน้า |
-| `--surface` | `#ffffff` | การ์ด · input · ปุ่มปกติ |
-| `--line` | `#eef0f5` | เส้นในการ์ด · เส้นตาราง |
-| `--line-strong` | `#e4e7ee` | ขอบ input · ขอบปุ่ม |
-| `--skeleton` | `#e4e7ee` | โครงร่างตอนโหลด (`.skeleton`) |
-| `--shadow` | เงา 2 ชั้นบาง | dropdown · tooltip (ของที่ลอยเล็ก ๆ) |
-| `--shadow-lg` | เงา 2 ชั้นลึก | modal · toast · เมนูลอย |
-| `--radius` / `--radius-sm` / `--radius-pill` | `14px` / `9px` / `99px` | การ์ด / ปุ่ม·input / pill·chip |
-| `--ease` | `cubic-bezier(.16, 1, .3, 1)` | ของที่โผล่เข้ามา (dropdown · toast · modal) — พุ่งเร็วแล้วค่อยหยุด (expo-out) |
-| `--ease-io` | `cubic-bezier(.65, 0, .35, 1)` | ของที่ย้ายที่ (เลื่อนแผง · สลับแท็บ) · ระยะเวลาใช้ตาม `ui-craft` ข้อ 7 |
+| `--bg` | `#f6f7fb` | page background |
+| `--surface` | `#ffffff` | cards · inputs · normal buttons |
+| `--line` | `#eef0f5` | lines inside cards · table lines |
+| `--line-strong` | `#e4e7ee` | input border · button border |
+| `--skeleton` | `#e4e7ee` | loading placeholder (`.skeleton`) |
+| `--shadow` | thin 2-layer shadow | dropdown · tooltip (small floating things) |
+| `--shadow-lg` | deep 2-layer shadow | modal · toast · floating menu |
+| `--radius` / `--radius-sm` / `--radius-pill` | `14px` / `9px` / `99px` | card / button·input / pill·chip |
+| `--ease` | `cubic-bezier(.16, 1, .3, 1)` | things that appear (dropdown · toast · modal) — shoots fast then settles (expo-out) |
+| `--ease-io` | `cubic-bezier(.65, 0, .35, 1)` | things that move (sliding a panel · switching tabs) · durations follow `ui-craft` item 7 |
 
-> **การ์ดไม่มีเงา** — การ์ดนิ่งไม่ได้ลอย แยกจากพื้นหน้าด้วยเส้น `--line` + พื้น `--surface` บน `--bg` (`ui-craft` ข้อ 4) · topbar พื้น `--surface` ทึบ ไม่ใช้กระจกฝ้า
+> **Cards have no shadow** — a still card does not float; it is separated from the page by the `--line` border + `--surface` fill on `--bg` (`ui-craft` item 4) · the topbar is a solid `--surface` fill, no frosted glass
 
-**เงา 2 ส่วนจากสีเดียว:** `--shadow` และ `--shadow-lg` ข้างบนเป็นเงา 2 ชั้นสี `rgba(20, 30, 55)` อยู่แล้ว · โปรเจกต์ที่พื้นไม่ใช่เทาฟ้า (ครีม เขียว ธีมมืด) หรือต้องการ 3 ระดับ ให้เพิ่มชุดนี้ใน `:root` ของโปรเจกต์ (ยังไม่อยู่ใน `appstrack.css`)
+**2-part shadow from one color:** `--shadow` and `--shadow-lg` above are already 2-layer shadows in the color `rgba(20, 30, 55)` · for a project whose background is not blue-gray (cream, green, dark theme) or that needs 3 levels, add this set to the project's `:root` (not yet in `appstrack.css`).
 
-| Token | ค่า | ใช้กับ |
+| Token | Value | Used for |
 |---|---|---|
-| `--shadow-color` | `223 47% 15%` (ช่อง HSL ของ `rgba(20, 30, 55)`) | สีของเงาทุกชั้น · เปลี่ยน hue ให้ตรงสีพื้น ไม่ใช้ดำโปร่ง |
-| `--elev-1` | `0 1px 2px hsl(var(--shadow-color) / .12), 0 2px 6px hsl(var(--shadow-color) / .06)` | ชิ้นเล็กที่ยกขึ้น: หัวตารางติดบนตอนเลื่อน · ปุ่มเลื่อนของ switch |
-| `--elev-2` | `0 1px 3px hsl(var(--shadow-color) / .14), 0 8px 20px hsl(var(--shadow-color) / .08)` | dropdown · tooltip (แทน `--shadow`) |
-| `--elev-3` | `0 2px 4px hsl(var(--shadow-color) / .12), 0 18px 40px hsl(var(--shadow-color) / .12)` | modal · toast (แทน `--shadow-lg`) |
+| `--shadow-color` | `223 47% 15%` (the HSL channels of `rgba(20, 30, 55)`) | the color of every shadow layer · change the hue to match the background; do not use translucent black |
+| `--elev-1` | `0 1px 2px hsl(var(--shadow-color) / .12), 0 2px 6px hsl(var(--shadow-color) / .06)` | small raised pieces: a table header that sticks to the top while scrolling · a switch knob |
+| `--elev-2` | `0 1px 3px hsl(var(--shadow-color) / .14), 0 8px 20px hsl(var(--shadow-color) / .08)` | dropdown · tooltip (replaces `--shadow`) |
+| `--elev-3` | `0 2px 4px hsl(var(--shadow-color) / .12), 0 18px 40px hsl(var(--shadow-color) / .12)` | modal · toast (replaces `--shadow-lg`) |
 
-ชั้นแรกแคบและเข้มกว่า (ใต้ชิ้นที่แสงเข้าไม่ถึง) ชั้นที่ 2 กว้างและจาง (แสงรอบตัว) · ระดับสูงขึ้น ชั้นกว้างเยื้องลงมากขึ้นทิศเดียวกัน · การ์ดนิ่งยังไม่มีเงา · เงาซ้อนหลายชั้น ขอบโปร่ง และภาษาความลึกอื่น → `ui-craft` → `references/depth-and-flourish.md`
+The first layer is narrow and darker (under the piece, where light cannot reach); the second is wide and faint (ambient light) · at higher levels the wide layer is offset further down in the same direction · a still card still has no shadow · for layered shadows, translucent edges and other depth language → `ui-craft` → `references/depth-and-flourish.md`
 
-**มุมซ้อน:** มุมใน = มุมนอก − ระยะจากขอบนอกถึงของข้างใน (padding) ให้เส้นโค้ง 2 ชั้นขนานกัน เช่น การ์ด `--radius` 14 มีรูปห่างขอบ 6 → รูปโค้ง 8 · ผลเป็น 0 หรือติดลบ (padding ≥ มุมนอก) → ใช้ `--radius-sm` เพราะ 2 มุมห่างกันจนตาไม่เทียบแล้ว · ที่มา vercel-labs/web-interface-guidelines หัวข้อ nested radii (MIT · ตรวจ 2026-10-23)
+**Nested corners:** inner radius = outer radius − the distance from the outer edge to the inner item (padding), so the 2 curves are parallel, e.g. a `--radius` 14 card with an image 6 from the edge → the image radius is 8 · if the result is 0 or negative (padding ≥ outer radius) → use `--radius-sm`, because the 2 corners are so far apart the eye no longer compares them · source: vercel-labs/web-interface-guidelines, section nested radii (MIT · checked 2026-10-23)
 
-## ตัวอักษร
+## Typography
 
-| Token | ค่า | ใช้กับ |
+| Token | Value | Used for |
 |---|---|---|
-| `--text` | `#333b4a` | หัวข้อ · ตัวเลขตัวชี้วัดหลัก (Key Performance Indicator · KPI) |
-| `--text-body` | `#414957` | เนื้อความ (ค่าเริ่มต้นของ body) |
-| `--text-muted` | `#5f6673` | label · คำอธิบาย · หัวตาราง · empty state · เมนูที่ไม่ active |
-| `--text-faint` | `#69707d` | timestamp · หัวกลุ่มเมนู · ข้อความประกอบ |
+| `--text` | `#333b4a` | headings · main metric numbers (Key Performance Indicator · KPI) |
+| `--text-body` | `#414957` | body text (the default for body) |
+| `--text-muted` | `#5f6673` | labels · descriptions · table headers · empty state · inactive menu |
+| `--text-faint` | `#69707d` | timestamps · menu group headings · supporting text |
 
-contrast (Web Content Accessibility Guidelines (WCAG) 2.2 ระดับ AA ต้อง ≥ 4.5:1 · ตรวจ 22 ต.ค. 2569): `--text-muted` บนขาว 5.78 · บน `--bg` 5.40 · `--text-faint` บนขาว 4.98 · บน `--bg` 4.65 ← ต่ำสุดของระบบ ห้ามทำให้จางกว่านี้
+Contrast (Web Content Accessibility Guidelines (WCAG) 2.2 level AA needs ≥ 4.5:1 · checked 22 Oct 2026): `--text-muted` on white 5.78 · on `--bg` 5.40 · `--text-faint` on white 4.98 · on `--bg` 4.65 ← the lowest in the system; never make it fainter
 
-สเกล 5 ขนาด ตรงกับ `ui-craft` ข้อ 2 (lg 22 · md 15 · base 13 · sm 12 · xs 11 · เล็กสุด 11):
+A 5-size scale, matching `ui-craft` item 2 (lg 22 · md 15 · base 13 · sm 12 · xs 11 · smallest 11):
 
-| ระดับ | ขนาด | |
+| Level | Size | |
 |---|---|---|
-| h1 · ตัวเลข KPI | 22px / 500 · KPI 600 | ชื่อหน้า · KPI ใช้ `letter-spacing:-.4px` + `tabular-nums` |
-| h2 | 15px / 500 | หัวการ์ด · ชื่อแอปใน sidebar |
-| body · h3 | 13px / 1.6 · h3 หนา 500 | เนื้อความ · input · tab · เมนู · หัวข้อย่อย |
-| ปุ่ม · คำอธิบายใต้ h1 | 12px | |
-| label · pill · หัวตาราง · faint | 11px | หัวตารางเป็นตัวพิมพ์ใหญ่ letter-spacing .4px (เฉพาะอังกฤษ) |
+| h1 · KPI number | 22px / 500 · KPI 600 | page title · KPI uses `letter-spacing:-.4px` + `tabular-nums` |
+| h2 | 15px / 500 | card heading · app name in the sidebar |
+| body · h3 | 13px / 1.6 · h3 bold 500 | body text · input · tab · menu · sub-heading |
+| button · description under h1 | 12px | |
+| label · pill · table header · faint | 11px | table headers are uppercase with letter-spacing .4px (English only) |
 
-ฟอนต์ตั้งต้นใช้ `Inter` + `Noto Sans Thai` — เลือก Inter เพราะอ่านง่ายที่ขนาด 11–13px ในหน้าจอข้อมูลแน่น (`graphic-design` ข้อ 6 ให้บอกเหตุผลเมื่อใช้ฟอนต์ที่คนใช้กันมาก) · โปรเจกต์ที่มีฟอนต์แบรนด์ ใช้ของโปรเจกต์ · **Inter ไม่มีอักษรไทย** ถ้าลืมใส่ Noto Sans Thai
-เบราว์เซอร์จะใช้ฟอนต์ระบบแทน (fallback) ซึ่งความสูงไม่เข้ากัน ตัวไทยจะดูเล็กและเตี้ยกว่าอังกฤษ
+The default font is `Inter` + `Noto Sans Thai` — Inter is chosen because it reads easily at 11–13px in dense data screens (`graphic-design` item 6 says to give a reason when using a widely used font) · a project with a brand font uses the project's · **Inter has no Thai letters**; if you forget to add Noto Sans Thai
+the browser uses a system font as fallback, whose height does not match, and Thai looks smaller and shorter than English.
 
-ตัวเลขทุกที่ที่เรียงเป็นคอลัมน์ต้องใส่ `.num` (`tabular-nums`) ไม่งั้นหลักจะไม่ตรงกัน
+Every number laid out in a column must use `.num` (`tabular-nums`), otherwise the digits will not line up.
 
-## สีข้อมูล (กราฟ) — ทึบเสมอ
+## Data colors (charts) — always solid
 
 `--c-blue #4a8ee0` · `--c-teal #2bbd8a` · `--c-amber #f0ad2e` · `--c-green #1f9d3f` ·
 `--c-violet #6a5cc9` · `--c-red #e87f7c` · `--c-grey #c8ced9`
-คู่แผน/จริง: `--c-plan #e0eaf8` vs `--c-actual #5a97e0` · เลยกำหนด `--c-late #e58079`
+Plan/actual pair: `--c-plan #e0eaf8` vs `--c-actual #5a97e0` · overdue is defined as `--c-late #e58079`
 
-## Pill (สถานะ) — สามค่าเป็นชุด
+## Pill (status) — three values as a set
 
-| โทน | พื้น | ตัวอักษร | เส้น | ใช้กับ |
+| Tone | Background | Text | Line | Used for |
 |---|---|---|---|---|
-| green | `#e9f7ef` | `#17794a` | `#d6efe1` | เสร็จ · ปกติ |
-| blue | `#eaf2fd` | `#2160ab` | `#d8e7fb` | รีวิว · กำลังดำเนินการ |
-| amber | `#fdf5e4` | `#96660d` | `#f7e9c9` | รอ · เตือน |
-| orange | `#fdefe6` | `#a2541b` | `#f8ddcb` | ใกล้เกินกำหนด |
-| red | `#fdedec` | `#a63a34` | `#f8d9d7` | ค้าง · ผิดพลาด |
-| violet | `#f1eefc` | `#52439f` | `#e3ddf8` | ประเภทพิเศษ |
-| grey | `#f2f4f8` | `#626a7a` | `#e7eaf1` | ปิด · ยังไม่เริ่ม |
+| green | `#e9f7ef` | `#17794a` | `#d6efe1` | done · normal |
+| blue | `#eaf2fd` | `#2160ab` | `#d8e7fb` | review · in progress |
+| amber | `#fdf5e4` | `#96660d` | `#f7e9c9` | waiting · warning |
+| orange | `#fdefe6` | `#a2541b` | `#f8ddcb` | nearly overdue |
+| red | `#fdedec` | `#a63a34` | `#f8d9d7` | stuck · error |
+| violet | `#f1eefc` | `#52439f` | `#e3ddf8` | special type |
+| grey | `#f2f4f8` | `#626a7a` | `#e7eaf1` | closed · not started |
 
-## เลย์เอาต์
+## Layout
 
-| Token | ค่า |
+| Token | Value |
 |---|---|
-| `--sidebar-w` | `232px` (≤1024px หด 64px · ≤720px เป็น drawer 240px) |
+| `--sidebar-w` | `232px` (≤1024px shrinks to 64px · ≤720px becomes a 240px drawer) |
 | `--topbar-h` | `56px` |
 | `--content-max` | `1160px` |
 
-จุดตัด: **1024px** sidebar หดเหลือไอคอน · **720px** sidebar เป็น drawer (`body.nav-open`)
-ถ้าตารางกว้างเกินจอ ให้เลื่อนแนวนอน**เฉพาะใน `.tb-wrap`** ห้ามให้ทั้งหน้าเลื่อน
+Breakpoints: **1024px** the sidebar shrinks to icons · **720px** the sidebar becomes a drawer (`body.nav-open`)
+If a table is wider than the screen, scroll horizontally **only inside `.tb-wrap`**; never let the whole page scroll.
 
-## เปลี่ยนธีม / เปลี่ยนแบรนด์
+## Switching theme / brand
 
-**สลับ accent ทั้งแอป** — `body[data-theme]`: ว่าง (ocean `#226cc6`) · `emerald #097a54` · `sunset #b8501a` · `plum #7a4ee8` · `graphite #0a7a90`
-แต่ละธีมแก้แค่ 4 token (`--brand --brand-2 --brand-50 --brand-100`) · ทุก `--brand` ผ่าน 4.5:1 กับตัวขาว · `--bg` · `--brand-50` ของธีมตัวเอง
+**Switch the accent across the whole app** — `body[data-theme]`: empty (ocean `#226cc6`) · `emerald #097a54` · `sunset #b8501a` · `plum #7a4ee8` · `graphite #0a7a90`
+Each theme changes only 4 tokens (`--brand --brand-2 --brand-50 --brand-100`) · every `--brand` passes 4.5:1 with white text · `--bg` · the theme's own `--brand-50`
 
-**sidebar สว่าง/เข้ม** — `body[data-side='dark']` เปลี่ยน 9 token ของ sidebar · พื้นเข้มคือ `--sidebar-dark-bg #1f2329` เทากลาง ไม่ย้อมสีแบรนด์
-เมนู active: โหมดสว่าง = พื้นเทา `--sidebar-active-bg` + ขีดสีแบรนด์ 3px (`--sidebar-active-bar`) · โหมดเข้ม = แผ่นทับโปร่ง `--on-brand-veil` + ขีดขาว
-กรอบแอปเป็นสีกลาง — สีแบรนด์ในกรอบมีได้แค่ขีดเลือกกับโลโก้
+**Light/dark sidebar** — `body[data-side='dark']` changes 9 sidebar tokens · the dark background is `--sidebar-dark-bg #1f2329`, a neutral gray, not tinted with the brand color
+Active menu: light mode = a gray fill `--sidebar-active-bg` + a 3px brand-colored bar (`--sidebar-active-bar`) · dark mode = a translucent overlay `--on-brand-veil` + a white bar
+The app frame is neutral — the brand color inside the frame appears only in the selection bar and the logo.
 
-**แบรนด์ลูกค้าใหม่** ให้คัดลอกบล็อก `body[data-theme='…']` แล้วใส่ 4 ค่าของลูกค้า (สีลูกค้าสว่างเกิน → ใช้เฉดเข้มที่ผ่าน 4.5:1 เป็น `--brand` เก็บสีเดิมไว้ที่โลโก้และกราฟ)
-ไม่ต้องแตะคอมโพเนนต์แม้แต่บรรทัดเดียว
+**For a new customer brand**, copy a `body[data-theme='…']` block and put in the customer's 4 values (if the customer's color is too bright → use a darker shade that passes 4.5:1 as `--brand`, and keep the original color for the logo and charts)
+You do not touch a single line of any component.
 
-## คลาสคอมโพเนนต์ที่มีให้แล้ว
+## Ready-made component classes
 
-| กลุ่ม | คลาส |
+| Group | Classes |
 |---|---|
-| โครง | `.app-shell` `.app-sidebar` `.nav-link(.on)` `.app-topbar` `.app-main > .inner` `.page-head` |
-| การ์ด | `.card` `.card-head` `.card-body` |
+| Structure | `.app-shell` `.app-sidebar` `.nav-link(.on)` `.app-topbar` `.app-main > .inner` `.page-head` |
+| Card | `.card` `.card-head` `.card-body` |
 | KPI | `.stat-grid` `.card.stat` (`.label` `.value` `.foot`) |
-| สถานะ | `.pill.pill-green/blue/amber/orange/red/violet/grey` |
-| ปุ่ม | `.btn` `.btn-primary` `.btn-ghost` `.btn-danger` `.btn-sm` |
-| ฟอร์ม | `.field > label` `.input` `.select` `.textarea` `.err` |
-| ตาราง | `.tb-wrap > .tb` (`.right`) |
-| ตัวกรอง | `.chips > .chip(.on)` · `.tabs > .tab(.on)` |
-| อื่น | `.prog > i` `.ava(.ava-lg)` `.md-html` `.empty` `.skeleton(.lg)` (โหลดเนื้อหา) `.spinner` (รอสั้น ๆ ในปุ่ม) `.toasts > .toast(.ok/.err)` `.backdrop + .modal` |
-| ยูทิลิตี | `.row` `.row-between` `.col` `.grow` `.ellipsis` `.wrap` `.mt-*` `.mb-*` `.gap-*` `.num` `.muted` `.faint` |
+| Status | `.pill.pill-green/blue/amber/orange/red/violet/grey` |
+| Button | `.btn` `.btn-primary` `.btn-ghost` `.btn-danger` `.btn-sm` |
+| Form | `.field > label` `.input` `.select` `.textarea` `.err` |
+| Table | `.tb-wrap > .tb` (`.right`) |
+| Filter | `.chips > .chip(.on)` · `.tabs > .tab(.on)` |
+| Other | `.prog > i` `.ava(.ava-lg)` `.md-html` `.empty` `.skeleton(.lg)` (loading content) `.spinner` (a short wait inside a button) `.toasts > .toast(.ok/.err)` `.backdrop + .modal` |
+| Utility | `.row` `.row-between` `.col` `.grow` `.ellipsis` `.wrap` `.mt-*` `.mb-*` `.gap-*` `.num` `.muted` `.faint` |
 
 
 ---
@@ -553,11 +553,11 @@ token ทั้งหมดอยู่ใน `assets/speakgo.css` ส่วน�
 
 ## reference: review.md
 
-# ตรวจงาน ข้อห้าม และข้อจำกัด — ส่วนขยายของ `mobile-app-design`
+# Review, anti-patterns and limits — extension of `mobile-app-design`
 
-เปิดตอนทำข้อ 7 · 8 · 9 ของ `SKILL.md`
+Open this when doing items 7 · 8 · 9 of `SKILL.md`.
 
-## คำสั่งและเช็กลิสต์ตรวจงาน (ข้อ 7)
+## Review commands and checklist (item 7)
 
 ```bash
 # 1. หน้าตาถูกทุกขนาดจอไหม
@@ -572,43 +572,43 @@ node tools/check-design-tokens.mjs src/theme.css src/app \
   --require "--bg,--surface,--ink,--soft,--faint,--line,--signal,--repair,--hint,--ui,--dis,--text,--mono,--r-tile,--r-card,--app-max,--gutter"
 ```
 
-> ข้อยกเว้นเดียวที่ยอมให้มีสีดิบ: `<meta name="theme-color">` ใน `index.html` —
-> เบราว์เซอร์อ่าน meta ก่อน CSS โหลด จึงใช้ `var()` ไม่ได้
+> The only exception where a raw color is allowed: `<meta name="theme-color">` in `index.html` —
+> the browser reads meta before CSS loads, so `var()` cannot be used.
 
-เปิดภาพดูจริง ตรวจ:
+Open the screenshots and check by eye:
 
-- [ ] แถบบน/ล่างไม่โดนรอยบากหรือ home indicator ทับ
-- [ ] เลื่อนแล้วแถบบน/ล่างอยู่นิ่ง ไม่เลื่อนตาม
-- [ ] จอ 360px (Android เล็ก) ป้ายแท็บไม่ตัดคำ และไทล์ไม่ล้น
-- [ ] ปุ่มทุกอันแตะได้จริง ≥ 44×44 pt (iOS) · 48×48 dp (Android)
-- [ ] ข้อความไทยไม่ล้นปุ่ม วรรณยุกต์ไม่ชนสระ
-- [ ] คอนทราสต์ ≥ 4.5:1 (`--faint` บนพื้นขาวคือจุดที่เฉียดสุด — ใช้กับข้อความประกอบเท่านั้น)
-- [ ] มี empty state (`.blank`) ทุกที่ที่รายการอาจว่าง
-- [ ] สลับทุกธีมที่แอปมี (เช่น สว่าง/มืด · ธีมเรียบ/ไล่สี) แล้วไม่มีข้อความกลืนพื้น
-- [ ] ทุกช่องทางป้อนข้อมูลที่พึ่ง hardware มีทางเลือกสำรอง (เช่น แอปพูดมีทาง "พิมพ์แทนพูด" ส่วนแอปที่ใช้ sensor ให้ใช้กล้องหรือป้อนเองได้)
-- [ ] สิทธิ์ที่ถูกปฏิเสธและ hardware ที่ไม่มี มีหน้าจอบอกพร้อมทางไปต่อ
+- [ ] Top/bottom bars are not covered by the notch or home indicator
+- [ ] When scrolling, top/bottom bars stay fixed and do not scroll with the content
+- [ ] At 360px (small Android) tab labels do not break mid-word and tiles do not overflow
+- [ ] Every button is really tappable: ≥ 44×44 pt (iOS) · 48×48 dp (Android)
+- [ ] Thai text does not overflow buttons, and tone marks do not collide with vowels
+- [ ] Contrast ≥ 4.5:1 (`--faint` on white is the closest call — use it for supporting text only)
+- [ ] An empty state (`.blank`) exists wherever a list can be empty
+- [ ] Switch every theme the app has (e.g. light/dark · plain/gradient) and no text blends into the background
+- [ ] Every input channel that depends on hardware has a fallback (e.g. a speaking app has a "พิมพ์แทนพูด" ("type instead of speaking") path; an app that uses a sensor lets the user use the camera or enter data by hand)
+- [ ] A denied permission and missing hardware each have a screen that says so and offers a way forward
 
-## Anti-patterns (ข้อ 8)
+## Anti-patterns (item 8)
 
-- **`100vh`** — ใช้ `100dvh`
-- **ลืม `env(safe-area-inset-*)`** หรือลืม `viewport-fit=cover`
-- **ยัด 6+ แท็บในแถบล่าง** — 3–5 พอ ที่เหลือไปอยู่ในหน้า "เพิ่มเติม"
-- **modal เล็ก ๆ สำหรับงานที่ใช้เวลานาน** — ใช้ `.overlay` เต็มจอ
-- **ยุบฟอนต์เหลือตระกูลเดียวในแอปที่มีเนื้อหาให้อ่าน** — ผู้ใช้แยกเนื้อหาออกจาก chrome (แถบ ปุ่ม เมนูของแอป) ไม่ออก
-- **ไล่สีหลังข้อความยาว** — ไล่สีอยู่บน chrome และปุ่มหลักเท่านั้น
-- **พึ่งสีอย่างเดียวบอกความหมาย** — `del`/`ins` มีรูปแบบขีดของตัวเองอยู่แล้ว
-- **ไม่มี `:active` feedback** — มือถือไม่มี hover ถ้ากดแล้วไม่ขยับ ผู้ใช้จะกดซ้ำ
-- **ส่ง mockup โดยไม่เคยเรนเดอร์ดูที่ขนาดจริง**
+- **`100vh`** — use `100dvh`
+- **Forgetting `env(safe-area-inset-*)`** or forgetting `viewport-fit=cover`
+- **Cramming 6+ tabs into the bottom bar** — 3–5 is enough; put the rest on a "เพิ่มเติม" ("More") page
+- **A small modal for a long task** — use the full-screen `.overlay`
+- **Collapsing to one font family in an app that has content to read** — users can no longer tell content from chrome (the app's bars, buttons, menus)
+- **A gradient behind long text** — gradients go on chrome and primary buttons only
+- **Relying on color alone to carry meaning** — `del`/`ins` already have their own strike/underline styles
+- **No `:active` feedback** — mobile has no hover; if nothing moves on press, users press again
+- **Handing over a mockup that was never rendered at real size**
 
-## ข้อจำกัดที่ต้องรู้ (ข้อ 9)
+## Limits to know (item 9)
 
-- ค่าทั้งหมด **ตรวจแล้วบน HTML/CSS** — ตาราง React Native ใน `references/tokens.md`
-  **ยังไม่ได้ build ทดสอบ** ส่วน Flutter ใช้แนวข้อ 4.1 ทำแอปจริงแล้ว 1 ตัว (Lumio)
-  ค่าโอนได้ตรง ๆ แต่ให้ดูหน้าจอจริงบนเครื่องอีกรอบ
-- ฟอนต์โหลดจาก Google Fonts ใน mockup — แอปจริงควร bundle ไฟล์ฟอนต์ไปเลย
-  ไม่งั้นเปิดครั้งแรกตอนเน็ตช้าจะเห็นฟอนต์ระบบก่อนแล้วค่อยกระตุก
-- `assets/speakgo.css` มีแค่ **โหมดสว่าง** — โหมดมืดต้องเพิ่มชุด token ใหม่ครบทุกตัว
-  (พื้น `--bg`/`--surface` สลับลำดับ และ `--ink` ต้องไม่ใช่ขาวสนิท) แล้วตรวจคอนทราสต์ AA ทุกคู่
+- All values were **verified on HTML/CSS** — the React Native table in `references/tokens.md`
+  **has not been built and tested**. Flutter has been used with the item 4.1 approach on 1 real app (Lumio).
+  The values transfer directly, but check the real screen on a device once more.
+- Fonts load from Google Fonts in the mockup — a real app should bundle the font files.
+  Otherwise on first launch with a slow network the user sees the system font first, then a visible jump.
+- `assets/speakgo.css` has **light mode only** — dark mode needs a complete new set of every token
+  (the `--bg`/`--surface` backgrounds swap order and `--ink` must not be pure white), then check AA contrast on every pair.
 
 
 ## reference: screen-and-components.md
@@ -667,160 +667,160 @@ node tools/check-design-tokens.mjs src/theme.css src/app \
 
 ## reference: tokens.md
 
-# Token reference — ระบบดีไซน์แอปมือถือสไตล์ Speak Go
+# Token reference — Speak Go-style mobile app design system
 
-> ระวัง: **ค่าสีในไฟล์นี้เป็นตัวอย่างที่ประกอบครบแล้ว ไม่ใช่ค่ามาตรฐาน**
-> เลือกสีจากเนื้องานก่อนเสมอ (ดู `SKILL.md` ข้อ 2 · Design tokens)
-> สิ่งที่ให้ยึดจากไฟล์นี้คือ **รายชื่อ token และหน้าที่ของมัน** ไม่ใช่ค่า
-> สี ฟอนต์ มุม เงา และความกว้างเป็นค่าสำรอง ค่าของงานอยู่ใน `theme.css` (`SKILL.md` ข้อ 2) · ระยะห่าง ขนาดตัวอักษร และ breakpoint ใช้ตามไฟล์นี้
+> Warning: **the color values in this file are a finished example, not a standard.**
+> Always pick colors from the work itself first (see `SKILL.md` item 2 · Design tokens).
+> What to take from this file is **the list of tokens and their roles**, not the values.
+> Colors, fonts, radii, shadows and widths are fallbacks. The project's values live in `theme.css` (`SKILL.md` item 2) · spacing, type sizes and breakpoints follow this file.
 
-นิยามทั้งหมดอยู่ใน `assets/speakgo.css` บล็อก `:root`
-**ทุกอย่างใต้บรรทัด `=== base ===` ห้ามมีสีดิบ** — ใช้ตัวตรวจตัวเดียวกับ `web-app-design` ได้
+All definitions are in `assets/speakgo.css`, in the `:root` block.
+**Nothing below the `=== base ===` line may contain a raw color** — the same checker as `web-app-design` works here.
 
-## สารบัญ
+## Contents
 
-1. [สี](#สี)
-2. [ฟอนต์ — 4 ตระกูล 4 หน้าที่](#ฟอนต์--4-ตระกูล-4-หน้าที่)
-3. [สเกลตัวอักษร](#สเกลตัวอักษร)
-4. [รูปทรง](#รูปทรง)
-5. [เลย์เอาต์และ safe area](#เลย์เอาต์และ-safe-area)
-6. [ธีม](#ธีม)
-7. [ย้ายไปสแต็กอื่น](#ย้ายไปสแต็กอื่น)
-8. [คลาสที่มีให้แล้ว](#คลาสที่มีให้แล้ว)
+1. [Colors](#colors)
+2. [Fonts — 4 families, 4 roles](#fonts--4-families-4-roles)
+3. [Type scale](#type-scale)
+4. [Shapes](#shapes)
+5. [Layout and safe area](#layout-and-safe-area)
+6. [Themes](#themes)
+7. [Moving to another stack](#moving-to-another-stack)
+8. [Ready-made classes](#ready-made-classes)
 
 ---
 
-## สี
+## Colors
 
-| Token | ค่า | ใช้กับ |
+| Token | Value | Used for |
 |---|---|---|
-| `--bg` | `#F2F4F6` | พื้นหน้าจอ — เทาอ่อน ไม่ใช่ขาว การ์ดจะได้ลอยขึ้นมา |
-| `--surface` | `#FFF` | การ์ด · แถบล่าง · ช่องกรอก |
-| `--ink` | `#131A21` | ข้อความหลัก · พื้นปุ่มหลัก · บับเบิลของผู้ใช้ |
-| `--soft` | `#66727E` | ข้อความรอง · คำอธิบาย |
-| `--faint` | `#98A3AD` | ป้ายกำกับ · meta · ไอคอนที่ไม่ active |
-| `--line` | `#E2E7EB` | เส้นขอบ · รางแถบความคืบหน้า |
-| `--signal` | `#2A78D6` (ค่าประจำบ้าน ใช้เมื่อไม่มีสีแบรนด์) | แท็บที่เลือก · ความคืบหน้า · ไมค์ตอนอัด · เป็นพื้นปุ่มที่มีตัวอักษรขาวให้ใช้ `--signal-strong` (ขาวบน `#2A78D6` ได้แค่ 4.42:1 ไม่ถึง 4.5:1) |
-| `--signal-strong` | `#226CC6` | พื้นปุ่มที่มีตัวอักษรขาว (ขาวบนสีนี้ 5.21:1) — ถ้ามีสีแบรนด์ ให้ใช้สีแบรนด์ที่เข้มพอให้ขาวได้ ≥ 4.5:1 |
-| `--signal-soft` | `#E8F1FB` | พื้นป้ายระดับ |
-| `--repair` / `-bg` | `#C0392B` / `#FBEDEB` | จุดที่ต้องแก้ |
-| `--hint` / `-bg` | `#8A6D1F` / `#FBF4E3` | คำใบ้ |
-| `--fav` | `#D9455F` | หัวใจ / ถูกใจ |
-| `--tile1` → `--tile2` | `#0B7076` → `#4338A8` | ไล่สีบนไทล์หมวดหมู่ |
+| `--bg` | `#F2F4F6` | Screen background — light gray, not white, so cards stand out |
+| `--surface` | `#FFF` | Cards · bottom bar · input fields |
+| `--ink` | `#131A21` | Main text · primary button background · user bubble |
+| `--soft` | `#66727E` | Secondary text · descriptions |
+| `--faint` | `#98A3AD` | Labels · meta · inactive icons |
+| `--line` | `#E2E7EB` | Borders · progress bar track |
+| `--signal` | `#2A78D6` (house default, used when there is no brand color) | Selected tab · progress · mic while recording · for a button background with white text use `--signal-strong` instead (white on `#2A78D6` gives only 4.42:1, below 4.5:1) |
+| `--signal-strong` | `#226CC6` | Button background with white text (white on this color is 5.21:1) — if there is a brand color, use a brand color dark enough for white text to reach ≥ 4.5:1 |
+| `--signal-soft` | `#E8F1FB` | Level badge background |
+| `--repair` / `-bg` | `#C0392B` / `#FBEDEB` | Spots that need fixing |
+| `--hint` / `-bg` | `#8A6D1F` / `#FBF4E3` | Hints |
+| `--fav` | `#D9455F` | Heart / like |
+| `--tile1` → `--tile2` | `#0B7076` → `#4338A8` | Gradient on category tiles |
 
-> ชื่อ token ตั้งตาม **หน้าที่** ไม่ใช่ตามสี — `--repair` ไม่ใช่ `--red`
-> พอเปลี่ยนใจว่า "จุดที่ต้องแก้" ควรเป็นสีส้ม ก็แก้ที่เดียวโดยชื่อยังถูกอยู่
+> Token names follow the **role**, not the color — `--repair`, not `--red`.
+> If you later decide "spots that need fixing" should be orange, you change it in one place and the name is still correct.
 
-## ฟอนต์ — 4 ตระกูล 4 หน้าที่
+## Fonts — 4 families, 4 roles
 
-นี่คือสิ่งที่ทำให้ระบบนี้ต่างจากแอปทั่วไป **อย่ายุบให้เหลือตระกูลเดียว**
+This is what sets this system apart from ordinary apps. **Do not collapse it to one family.**
 
-| Token | ฟอนต์ | ใช้กับ |
+| Token | Font | Used for |
 |---|---|---|
-| `--ui` | IBM Plex Sans Thai | ส่วนควบคุมทั้งหมด — ปุ่ม เมนู ป้าย ชื่อหน้า |
-| `--dis` | Space Grotesk | ตัวเลขใหญ่ — คะแนน สถิติ (`.score b`, `.mini b`, `.stat b`) |
-| `--text` | Source Serif 4 | เนื้อหาที่ผู้ใช้ต้อง **อ่าน** — บับเบิล ประโยคตัวอย่าง |
-| `--mono` | system mono | ป้ายกำกับตัวพิมพ์ใหญ่ + `letter-spacing:.14em` — META, LEVEL, TURN 5/12 |
+| `--ui` | IBM Plex Sans Thai | All controls — buttons, menus, labels, page titles |
+| `--dis` | Space Grotesk | Large numbers — scores, stats (`.score b`, `.mini b`, `.stat b`) |
+| `--text` | Source Serif 4 | Content the user must **read** — bubbles, example sentences |
+| `--mono` | system mono | Uppercase labels + `letter-spacing:.14em` — META, LEVEL, TURN 5/12 |
 
-`body[data-lang="en"]` สลับ `--ui` เป็น Space Grotesk
-(IBM Plex Sans Thai มีอักษรละตินแต่หน้าตาไม่คมเท่าเมื่อไม่มีไทยปน)
+`body[data-lang="en"]` switches `--ui` to Space Grotesk
+(IBM Plex Sans Thai has Latin letters, but they look less crisp when no Thai is mixed in).
 
-**ทำไม serif กับบับเบิล:** เนื้อหาที่ต้องอ่านยาวและอ่านซ้ำ serif ช่วยแยกตัวอักษรได้ดีกว่า
-และแยก "สิ่งที่แอปพูด" ออกจาก "ปุ่มของแอป" ได้ทันทีโดยไม่ต้องใช้สี
+**Why serif for bubbles:** for content read at length and re-read, serif separates letters better,
+and it tells "what the app says" apart from "the app buttons" at once, without using color.
 
-## สเกลตัวอักษร
+## Type scale
 
-| ขนาด | ตระกูล | ใช้กับ |
+| Size | Family | Used for |
 |---|---|---|
-| 60 / 44 | dis | คะแนนใหญ่ · verdict |
-| 24 | ui 700 | ชื่อหน้าใน appbar |
-| 19–24 | dis 700 | ตัวเลขสถิติ |
-| 17 | text | บับเบิลสนทนา |
-| 15.5–16 | text | ประโยคตัวอย่าง · กล่องแก้ไข |
-| 16 | ui 600 | ชื่อรายการในการ์ด |
-| 15 | ui | ช่องกรอก · ปุ่มหลัก |
-| 13–14 | ui | เนื้อความ · ปุ่มรอง |
-| 11–12 | ui | คำอธิบาย · ป้ายกำกับ |
-| 9–10 | mono uppercase | meta · LEVEL · ชื่อผู้พูด |
+| 60 / 44 | dis | Big score · verdict |
+| 24 | ui 700 | Page title in appbar |
+| 19–24 | dis 700 | Stat numbers |
+| 17 | text | Conversation bubble |
+| 15.5–16 | text | Example sentences · edit box |
+| 16 | ui 600 | Item title in a card |
+| 15 | ui | Input fields · primary button |
+| 13–14 | ui | Body text · secondary button |
+| 11–12 | ui | Descriptions · labels |
+| 9–10 | mono uppercase | meta · LEVEL · speaker name |
 
-## รูปทรง
+## Shapes
 
-| Token | ค่า | ใช้กับ |
+| Token | Value | Used for |
 |---|---|---|
-| `--r-tile` | 16px | ไทล์ · การ์ดสถิติ · ปุ่ม CTA |
-| `--r-card` | 18px | การ์ดรายการ · บับเบิล · กล่องใหญ่ |
-| `--r-field` | 13px | ช่องกรอก · ปุ่ม outline |
-| `--r-pill` | 22px | ชิป · ช่องค้นหา |
-| — | 50% | ปุ่มไอคอน · หัวใจ · ไมค์ |
+| `--r-tile` | 16px | Tiles · stat cards · CTA buttons |
+| `--r-card` | 18px | List cards · bubbles · large boxes |
+| `--r-field` | 13px | Input fields · outline buttons |
+| `--r-pill` | 22px | Chips · search field |
+| — | 50% | Icon buttons · heart · mic |
 
-**บับเบิลสนทนา** ใช้ 18px ทุกมุม **ยกเว้น** มุมที่ชี้เข้าหาผู้พูดเหลือ **5px**
-(`border-bottom-left-radius` ฝั่ง AI · `border-bottom-right-radius` ฝั่งผู้ใช้)
-เป็นสัญญาณว่าใครพูดโดยไม่ต้องวาดหางบับเบิล
+**Conversation bubbles** use 18px on every corner **except** the corner pointing at the speaker, which is **5px**
+(`border-bottom-left-radius` on the AI side · `border-bottom-right-radius` on the user side).
+This shows who is speaking without drawing a bubble tail.
 
-## เลย์เอาต์และ safe area
+## Layout and safe area
 
-| ค่า | ตัวเลข |
+| Item | Number |
 |---|---|
-| ความกว้างแอปสูงสุด | 430px (iPhone Pro Max) |
-| ขอบซ้าย/ขวา | 16px (`--gutter`) ทุกหน้า |
-| ปุ่มไมค์ | 66px |
-| ปุ่มไอคอน | 38px |
-| ไทล์ | สูงต่ำสุด 118px · 2 คอลัมน์ gap 8px |
-| แถบแท็บ | ไอคอน 22px + ป้าย 10px |
+| Max app width | 430px (iPhone Pro Max) |
+| Left/right margin | 16px (`--gutter`) on every page |
+| Mic button | 66px |
+| Icon button | 38px |
+| Tile | min height 118px · 2 columns, gap 8px |
+| Tab bar | icon 22px + label 10px |
 
-> ตัวอักษร 9–10 ใช้ได้เฉพาะป้าย mono อังกฤษใน mockup เพราะในแอปจริงเล็กสุดคือ 11
+> 9–10 type is allowed only for English mono labels in the mockup, because in a real app the smallest is 11.
 
-**safe area — ห้ามลืม** ไม่อย่างนั้นเนื้อหาจะชนรอยบากด้านบนหรือ home indicator ด้านล่าง:
+**Safe area — never forget it**, or content will hit the notch at the top or the home indicator at the bottom:
 
 ```css
 .appbar  { padding-top:    calc(12px + env(safe-area-inset-top)); }
 .tabbar  { padding-bottom: calc(8px  + env(safe-area-inset-bottom)); }
 .dock    { padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
 ```
-และต้องมี `<meta name="viewport" content="…,viewport-fit=cover">` ไม่งั้น `env()` เป็น 0
+The page also needs `<meta name="viewport" content="…,viewport-fit=cover">`, otherwise `env()` is 0.
 
-ใช้ **`100dvh`** ไม่ใช่ `100vh` — `vh` ไม่หดตามแถบที่อยู่ของเบราว์เซอร์บนมือถือ
-เนื้อหาท่อนล่างจะโดนบัง
+Use **`100dvh`**, not `100vh` — `vh` does not shrink for the browser address bar on mobile,
+so the bottom part of the content gets covered.
 
-## ธีม
+## Themes
 
-| ธีม | เปิดด้วย | ต่างกันตรงไหน |
+| Theme | Enabled by | What differs |
 |---|---|---|
-| เรียบ (ค่าเริ่มต้น) | — | chrome (แถบและปุ่มของแอป) ขาว/เทา · accent ฟ้า (`--signal` = `#2A78D6`) |
-| ไล่สี | `body[data-theme="grad"]` | appbar/ovbar/CTA/ไมค์/บับเบิลผู้ใช้เป็นไล่สี · `--signal` เปลี่ยนเป็นม่วง · คะแนนเป็นตัวอักษรไล่สี |
+| Plain (default) | — | chrome (the app bars and buttons) white/gray · blue accent (`--signal` = `#2A78D6`) |
+| Gradient | `body[data-theme="grad"]` | appbar/ovbar/CTA/mic/user bubble are gradients · `--signal` changes to purple · score is gradient text |
 
-**กฎของธีมไล่สี:** ไล่สีอยู่บน **chrome และปุ่มหลัก** เท่านั้น พื้นที่เนื้อหายังเรียบเสมอ
-ถ้าไล่สีไปอยู่หลังข้อความยาว จะอ่านยากและคอนทราสต์ควบคุมไม่ได้
+**Rule of the gradient theme:** gradients go on **chrome and primary buttons** only. The content area stays plain.
+If a gradient sits behind long text, it is hard to read and the contrast cannot be controlled.
 
-## ย้ายไปสแต็กอื่น
+## Moving to another stack
 
-CSS คือต้นฉบับ ค่าเดียวกันใช้ได้ทุกที่ — ที่ต้องระวังคือกลไก ไม่ใช่ตัวเลข
+CSS is the source. The same values work everywhere — what needs care is the mechanism, not the numbers.
 
-| เรื่อง | React Native | Flutter |
+| Topic | React Native | Flutter |
 |---|---|---|
-| token | ไฟล์ `tokens.ts` เป็น object แล้ว import (ไม่มี CSS variable) | `ThemeExtension` หรือ class `AppTokens` ค่าคงที่ |
+| token | a `tokens.ts` file as an object, then import it (no CSS variables) | `ThemeExtension` or an `AppTokens` class of constants |
 | safe area | `react-native-safe-area-context` → `useSafeAreaInsets()` | `SafeArea` / `MediaQuery.padding` |
-| ฟอนต์ | ต้อง link ไฟล์ฟอนต์เข้าโปรเจกต์ ไม่มี fallback อัตโนมัติ | `pubspec.yaml` → `fontFamily` |
-| ไล่สี | `expo-linear-gradient` | `BoxDecoration(gradient: LinearGradient(...))` |
-| เงา | `shadowColor/Offset/Opacity/Radius` (iOS) + `elevation` (Android) | `BoxShadow` |
-| มุมไม่เท่ากัน | `borderBottomLeftRadius` ฯลฯ | `BorderRadius.only(...)` |
-| กดแล้วยุบ | `Pressable` + `Animated.spring` scale .98 | `InkWell` / `AnimatedScale` |
-| ตัวเลขเรียงหลัก | `fontVariant: ['tabular-nums']` | `FontFeature.tabularFigures()` |
+| fonts | link the font files into the project; there is no automatic fallback | `pubspec.yaml` → `fontFamily` |
+| gradient | `expo-linear-gradient` | `BoxDecoration(gradient: LinearGradient(...))` |
+| shadow | `shadowColor/Offset/Opacity/Radius` (iOS) + `elevation` (Android) | `BoxShadow` |
+| uneven corners | `borderBottomLeftRadius` etc. | `BorderRadius.only(...)` |
+| shrink on press | `Pressable` + `Animated.spring` scale .98 | `InkWell` / `AnimatedScale` |
+| tabular numbers | `fontVariant: ['tabular-nums']` | `FontFeature.tabularFigures()` |
 
-> **ข้อจำกัดที่ต้องรู้:** ตัวเลขในตารางนี้ตรวจแล้วบน HTML/CSS เท่านั้น
-> ส่วน RN/Flutter เป็นการเทียบกลไกที่ **ยังไม่ได้ build ทดสอบ** — ค่าโอนไปใช้ได้ แต่ให้ตรวจหน้าตาจริงบนเครื่องอีกรอบ
+> **Limit to know:** the numbers in this table were verified on HTML/CSS only.
+> The RN/Flutter column is a mechanism comparison that **has not been built and tested** — the values transfer, but check the real look on a device once more.
 
-## คลาสที่มีให้แล้ว
+## Ready-made classes
 
-| กลุ่ม | คลาส |
+| Group | Classes |
 |---|---|
-| โครง | `#app` `.appbar` `.screen(.on)` `.tabbar > .tab(.on)` `.overlay(.on)` `.ovbar` |
-| รายการ | `.tiles > .tile` `.card` `.sg` `.heart(.on)` `.lvl` `.grouphead` `.welcome` `.blank` |
-| ตัวควบคุม | `.chips > .chip(.on)` `.lvlchip(.on)` `#search` `.iconbtn` `.cta(.alt)` `.outline(.danger)` `.seg > button(.on)` |
-| ตั้งค่า | `.sect` `.group > .r2 / .rcol` |
-| สนทนา | `#thread` `.turn(.ai/.me)` `.who` `.bub(.masked)` `.repair` `del` `ins` `.note` `.tag` `.clean` `.hintbox` `.acts > .actbtn(.hintb)` `.sys` `.dots` |
-| แถบไมค์ | `.dock` `#interim` `.dockrow` `#mic(.live/.busy)` `.typerow(.on)` `.txtbtn` |
-| สรุปผล | `.report` `.score` `.mini` `.bar` `.verdict` `.wk` `.stat` `.g4` `.drillrow` `.fixrow` `.dnote` |
+| Structure | `#app` `.appbar` `.screen(.on)` `.tabbar > .tab(.on)` `.overlay(.on)` `.ovbar` |
+| Lists | `.tiles > .tile` `.card` `.sg` `.heart(.on)` `.lvl` `.grouphead` `.welcome` `.blank` |
+| Controls | `.chips > .chip(.on)` `.lvlchip(.on)` `#search` `.iconbtn` `.cta(.alt)` `.outline(.danger)` `.seg > button(.on)` |
+| Settings | `.sect` `.group > .r2 / .rcol` |
+| Conversation | `#thread` `.turn(.ai/.me)` `.who` `.bub(.masked)` `.repair` `del` `ins` `.note` `.tag` `.clean` `.hintbox` `.acts > .actbtn(.hintb)` `.sys` `.dots` |
+| Mic bar | `.dock` `#interim` `.dockrow` `#mic(.live/.busy)` `.typerow(.on)` `.txtbtn` |
+| Result summary | `.report` `.score` `.mini` `.bar` `.verdict` `.wk` `.stat` `.g4` `.drillrow` `.fixrow` `.dnote` |
 
 
 ---
@@ -1032,11 +1032,11 @@ python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screen
 
 ## reference: frame-and-components.md
 
-# โครงหน้าต่างและคอมโพเนนต์ใน fluent.css — ส่วนขยายของ `windows-app-design`
+# Window frame and components in fluent.css: extension of `windows-app-design`
 
-เปิดตอนวางหน้าตั้งค่า/dashboard (ข้อ 3) หรือหาคลาสที่มีให้แล้ว (ข้อ 4) · แอปเครื่องมือที่ข้อมูลแน่นดู `patterns.md`
+Open when laying out a settings page/dashboard (item 3) or looking for ready-made classes (item 4) · for data-dense tool apps see `patterns.md`
 
-## โครงหน้าต่าง หน้าตั้งค่าและ dashboard (ข้อ 3)
+## Window frame, settings page and dashboard (item 3)
 
 ```
 ┌──────────────────────────────────────────────── 48px title bar ─┐
@@ -1054,102 +1054,102 @@ python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screen
    ↑ ล่างสุดเสมอ        ↑ ขอบซ้าย/ขวา 36px · ระยะระหว่าง section 40px
 ```
 
-## คอมโพเนนต์ที่มีให้แล้วใน fluent.css (ข้อ 4)
+## Components already in fluent.css (item 4)
 
-| องค์ประกอบ | คลาส | หมายเหตุ |
+| Element | Class | Note |
 |---|---|---|
-| Title bar + ปุ่มหน้าต่าง | `.win-titlebar` | Electron: มี `-webkit-app-region: drag` ให้แล้ว |
-| NavigationView | `.win-nav` / `.nav-item.selected` | ย่อเป็นไอคอนอัตโนมัติเมื่อ < 1008px |
-| การ์ด | `.win-card` | |
-| แถวตั้งค่าแบบ Windows | `.win-setting` | ไอคอน + ชื่อ + คำอธิบาย + คอนโทรลขวา |
-| InfoBar | `.win-infobar.success/caution/critical` | **ใช้แทน `alert()` เสมอ** |
+| Title bar + window buttons | `.win-titlebar` | Electron: `-webkit-app-region: drag` is already included |
+| NavigationView | `.win-nav` / `.nav-item.selected` | Collapses to icons automatically below 1008px |
+| Card | `.win-card` | |
+| Windows-style settings row | `.win-setting` | Icon + name + description + control on the right |
+| InfoBar | `.win-infobar.success/caution/critical` | **Always use it instead of `alert()`** |
 | Status pill | `.win-pill.success/caution/critical` | |
-| KPI | `.win-kpis .kpi` | 3–5 ช่อง · เกินนั้นตัวเลขเล็กจนไม่เด่น |
+| KPI | `.win-kpis .kpi` | 3–5 slots · more than that and the numbers get too small to stand out |
 | Toggle switch | `.win-toggle` | |
-| ตาราง | `.win-table` | |
-| ลิงก์ | `.win-link` | สี accent-text ไม่ใช่ accent |
+| Table | `.win-table` | |
+| Link | `.win-link` | accent-text colour, not accent |
 
 
 ## reference: patterns.md
 
-# แบบหน้าจอที่ใช้บ่อย — แอป Windows
+# Common screen patterns: Windows apps
 
-> token และกฎขนาดอยู่ใน `tokens.md` · ไฟล์นี้ตอบคำถามว่า **จัดหน้าจอยังไงให้ดูเป็นแอปจริง**
-> ทุกแบบมีตัวอย่างที่กดได้ใน `assets/tool-app-template.html` (แอปเครื่องมือ) หรือ `assets/mockup-template.html` (หน้าตั้งค่า/dashboard)
+> Tokens and size rules are in `tokens.md` · this file answers the question **how to lay out a screen so it looks like a real app**
+> Every pattern has a clickable example in `assets/tool-app-template.html` (tool apps) or `assets/mockup-template.html` (settings page/dashboard)
 
-ที่มา: หน้าจอที่ผ่านเช็กลิสต์ครบทุกข้อ (token ถูก ขนาดถูก contrast ผ่าน) แต่ยังดูเหมือน wireframe
-มักพลาดซ้ำ 6 อย่าง ได้แก่ ปุ่มทึบทุกแถว · ไม่มีไอคอน · จอว่างครึ่งล่าง · หัวกลุ่มตัวพิมพ์ใหญ่เล็กจิ๋ว · ป้ายสีแบบเว็บ · กล่องมีกรอบเต็มหน้า
-แบบในไฟล์นี้แก้ทั้ง 6 อย่าง
+Background: screens that pass every item of the checklist (tokens right, sizes right, contrast passes) but still look like a wireframe
+usually repeat the same 6 mistakes: solid buttons on every row · no icons · the bottom half of the screen empty · tiny uppercase group headings · web-style coloured badges · bordered boxes over the whole page.
+The patterns in this file fix all 6.
 
-**สารบัญ**
+**Contents**
 
-- [0 · เลือกโครงก่อนวาด](#0--เลือกโครงก่อนวาด)
-- [1 · รายการที่มีปุ่มในแต่ละแถว](#1--รายการที่มีปุ่มในแต่ละแถว)
-- [2 · รายการ + แผงรายละเอียด](#2--รายการ--แผงรายละเอียด-list-detail)
+- [0 · Choose the structure before drawing](#0--choose-the-structure-before-drawing)
+- [1 · Lists with buttons in each row](#1--lists-with-buttons-in-each-row)
+- [2 · List + detail panel (list-detail)](#2--list--detail-panel-list-detail)
 - [3 · Command bar](#3--command-bar)
-- [4 · หัวกลุ่มในรายการ](#4--หัวกลุ่มในรายการ)
-- [5 · Tab ใน title bar](#5--tab-ใน-title-bar-แบบ-windows-terminal)
+- [4 · Group headings in a list](#4--group-headings-in-a-list)
+- [5 · Tabs in the title bar (Windows Terminal style)](#5--tabs-in-the-title-bar-windows-terminal-style)
 - [6 · Icon rail](#6--icon-rail)
 - [7 · Status bar](#7--status-bar)
-- [8 · หน้าเริ่มต้น](#8--หน้าเริ่มต้น-welcome--start)
-- [9 · ไอคอน — ต้องมีที่ไหน](#9--ไอคอน--ต้องมีที่ไหน)
-- [ตรวจด้วยตา](#ตรวจด้วยตา--นับได้-ไม่ต้องใช้ความรู้สึก)
+- [8 · Start page (welcome / start)](#8--start-page-welcome--start)
+- [9 · Icons: where they are required](#9--icons-where-they-are-required)
+- [Check by eye: countable, no gut feeling](#check-by-eye-countable-no-gut-feeling)
 
 ---
 
-## 0 · เลือกโครงก่อนวาด
+## 0 · Choose the structure before drawing
 
-| แอปเป็นแบบไหน | โครง | template |
+| What kind of app | Structure | template |
 |---|---|---|
-| ตั้งค่า · dashboard · แอปที่เปิดนาน ๆ ที | NavigationView 320px + เนื้อหากว้างไม่เกิน 1064px | `mockup-template.html` |
-| เครื่องมือที่ข้อมูลแน่น (terminal client · file manager · admin tool) | icon rail 48px + รายการ + แผงรายละเอียด 360px | `tool-app-template.html` |
-| เอกสารหลายชิ้นเปิดพร้อมกัน (editor · terminal · browser) | tab ใน title bar แบบ Windows Terminal | `tool-app-template.html` ส่วน title bar |
+| Settings · dashboard · an app opened only now and then | NavigationView 320px + content no wider than 1064px | `mockup-template.html` |
+| Data-dense tool (terminal client · file manager · admin tool) | icon rail 48px + list + detail panel 360px | `tool-app-template.html` |
+| Several documents open at once (editor · terminal · browser) | Tabs in the title bar, Windows Terminal style | `tool-app-template.html`, title bar part |
 
-**ห้ามเอา template หน้าตั้งค่าไปทำแอปเครื่องมือ** — ได้หน้าจอที่เนื้อหาลอยอยู่ครึ่งบน และพื้นที่ขวาว่าง
+**Never use the settings-page template to make a tool app.** You get a screen where the content floats in the top half and the right side is empty
 
-### 0.1 · เทียบกับแอปจริงบน Windows 11 และคอนโทรล WinUI 3
+### 0.1 · Compare with real apps on Windows 11 and WinUI 3 controls
 
-ปรับจาก microsoft/winappCli `winui-design` (MIT · ตรวจ LICENSE ในสำเนา repo 23 ต.ค. 2569) — ใช้ตอนเลือกโครง และตอนส่งต่อ mockup ให้คนเขียน XAML จะได้ไม่ต้องเดาชื่อคอนโทรล
+Adapted from microsoft/winappCli `winui-design` (MIT · LICENSE checked in the repo copy on 23 Oct 2026). Use it when choosing the structure, and when handing a mockup to the person writing XAML so they need not guess control names
 
-**เลือกเงาแอปจริงก่อนวาง layout** — แถวไหนใกล้แอปที่จะทำที่สุด ให้ยึดโครงนั้น
+**Choose a real-app model before laying out.** Whichever row is closest to the app you will make, follow that structure
 
-| แอปเป็นแบบไหน | คอนโทรลหลัก (WinUI 3) | แอปจริงที่ดูเป็นตัวอย่าง |
+| What kind of app | Main controls (WinUI 3) | Real app to look at as an example |
 |---|---|---|
-| ตั้งค่า · config | `NavigationView` ซ้าย + `SettingsCard` / `SettingsExpander` | Windows Settings |
-| แก้เอกสารหรือ session | `TabView` + เนื้อหาเต็มหน้าต่าง กรอบน้อย | Windows Terminal · Notepad · VS Code |
-| ท่องโครงสร้างเป็นชั้น | `TreeView` + `ListView` + `BreadcrumbBar` | File Explorer · Outlook |
-| เครื่องมือนักพัฒนา · dashboard | `NavigationView` + การ์ด | Dev Home · GitHub Desktop |
-| เครื่องมือจุดประสงค์เดียว | ตัวสลับโหมด + ตารางปุ่มแน่น | Calculator · Snipping Tool |
-| สื่อ · canvas · ภาพใหญ่ | `Grid` มีพื้นผิว hero + ปุ่มลอย **ไม่มี** `NavigationView` | Photos · Clipchamp |
+| Settings · config | `NavigationView` on the left + `SettingsCard` / `SettingsExpander` | Windows Settings |
+| Editing documents or sessions | `TabView` + content filling the window, minimal chrome | Windows Terminal · Notepad · VS Code |
+| Browsing a layered structure | `TreeView` + `ListView` + `BreadcrumbBar` | File Explorer · Outlook |
+| Developer tools · dashboard | `NavigationView` + cards | Dev Home · GitHub Desktop |
+| Single-purpose tool | Mode switcher + dense button grid | Calculator · Snipping Tool |
+| Media · canvas · large images | `Grid` with a hero surface + floating buttons, **no** `NavigationView` | Photos · Clipchamp |
 
-**แปลงความต้องการเป็นคอนโทรล** — กันสัญชาตญาณจากเว็บ (`<select>` · `<input type=date>` · DataGrid ของ WPF)
+**Turn requirements into controls.** This guards against web instincts (`<select>` · `<input type=date>` · WPF's DataGrid)
 
-| ต้องการ | ใช้ |
+| Need | Use |
 |---|---|
-| นำทาง 2–7 หมวด | `NavigationView` · tab เอกสาร → `TabView` · เส้นทาง → `BreadcrumbBar` · 2–3 โหมด → `SelectorBar` |
-| รายการแนวตั้ง · ตารางกระเบื้อง · ต้นไม้ | `ListView` · `GridView` หรือ `ItemsRepeater` + `UniformGridLayout` · `TreeView` |
-| ตารางข้อมูล | `ListView` ที่ `ItemTemplate` เป็น `Grid` + หัวตารางเป็น `Grid` อีกตัว — WinUI 3 ไม่มี `DataGrid` และตัวของ CommunityToolkit ใช้ `x:Bind` ในคอลัมน์ไม่ได้ |
-| รายการ + รายละเอียด | `ListView` + `Grid` ฝั่งรายละเอียด |
-| กรอกข้อความ · ตัวเลข · ค้นหา · วันที่ · เปิดปิด | `TextBox` · `NumberBox` · `AutoSuggestBox` · `CalendarDatePicker` · `ToggleSwitch` |
-| เลือก 1 จาก 2–3 · เลือก 1 จาก 4 ขึ้นไป | `RadioButtons` · `ComboBox` |
-| ต้องตัดสินใจก่อนไปต่อ · เมนูตามบริบท · คำแนะนำครั้งแรก | `ContentDialog` · `Flyout` / `MenuFlyout` · `TeachingTip` |
-| สถานะในหน้า · กำลังทำงาน | `InfoBar` (ตรงกับกฎ InfoBar แทน `alert()` ในข้อ 4 ของ SKILL.md) · แจ้งเตือนระบบ → `AppNotification` |
+| Navigate 2–7 categories | `NavigationView` · document tabs → `TabView` · path → `BreadcrumbBar` · 2–3 modes → `SelectorBar` |
+| Vertical list · tile grid · tree | `ListView` · `GridView` or `ItemsRepeater` + `UniformGridLayout` · `TreeView` |
+| Data table | `ListView` whose `ItemTemplate` is a `Grid`, + the table header as another `Grid`. WinUI 3 has no `DataGrid`, and the CommunityToolkit one cannot use `x:Bind` in columns |
+| List + detail | `ListView` + a `Grid` on the detail side |
+| Enter text · numbers · search · dates · on/off | `TextBox` · `NumberBox` · `AutoSuggestBox` · `CalendarDatePicker` · `ToggleSwitch` |
+| Choose 1 of 2–3 · choose 1 of 4 or more | `RadioButtons` · `ComboBox` |
+| Must decide before continuing · context menu · first-time tip | `ContentDialog` · `Flyout` / `MenuFlyout` · `TeachingTip` |
+| In-page status · in progress | `InfoBar` (matches the rule InfoBar instead of `alert()` in item 4 of SKILL.md) · system notification → `AppNotification` |
 
-**ขนาดหน้าต่างเริ่มต้น** — WinUI 3 ไม่มี `SizeToContent` ถ้าไม่ตั้ง จะได้ประมาณ 1024×768 ซึ่งใหญ่เกินสำหรับเครื่องมือส่วนใหญ่ ให้คำนวณใน constructor ของ `MainWindow`
+**Initial window size.** WinUI 3 has no `SizeToContent`. If not set, you get about 1024×768, which is too big for most tools. Compute it in the `MainWindow` constructor
 
-| ค่า | วิธีคิด |
+| Value | How to work it out |
 |---|---|
-| กว้าง | แถวที่กว้างสุด + 48 (ขอบ) แล้วปัดขึ้นเป็นหลัก 20 |
-| สูง | 32 (title bar) + ความสูงทุกแถว + ระยะห่างทุกช่อง + 48 (ขอบ) แล้วปัดขึ้นเป็นหลัก 20 |
-| ปัดทางไหน | ปัดขึ้นเสมอ — เนื้อหาโดนตัดแย่กว่าหน้าต่างกว้างไปนิด |
-| ช่วงที่มักได้ | เครื่องมือจุดประสงค์เดียว 440–560 กว้าง · ฟอร์มหน้าเดียว 600–800 × 640–800 · nav + เนื้อหา 1100–1300 × 720–840 · editor สื่อหรือเอกสาร 1280+ กว้าง |
-| กับดัก | `AppWindow.Resize` รับ **พิกเซลจริง** ไม่ใช่ DIP ต้องคูณ DPI scale ของจอ (`GetDpiForWindow(hwnd) / 96.0`) · ห้ามตั้ง `Width`/`Height` ที่ `Grid` ราก เพราะตัดเนื้อหา ไม่ได้ย่อหน้าต่าง |
+| Width | The widest row + 48 (margins), then round up to a multiple of 20 |
+| Height | 32 (title bar) + the height of every row + every gap + 48 (margins), then round up to a multiple of 20 |
+| Which way to round | Always up: clipped content is worse than a slightly wide window |
+| Ranges you usually get | Single-purpose tool 440–560 wide · single-page form 600–800 × 640–800 · nav + content 1100–1300 × 720–840 · media or document editor 1280+ wide |
+| Trap | `AppWindow.Resize` takes **real pixels**, not DIPs; multiply by the screen's DPI scale (`GetDpiForWindow(hwnd) / 96.0`) · never set `Width`/`Height` on the root `Grid`, because that clips content and does not shrink the window |
 
-mockup HTML ของเราจึงควรตั้ง `width`/`height` ของ `.window` ตามรูบริกนี้ ไม่ใช่เต็ม viewport เสมอ
+So our HTML mockup should set `width`/`height` of `.window` per this rubric, not always fill the viewport
 
 ---
 
-## 1 · รายการที่มีปุ่มในแต่ละแถว
+## 1 · Lists with buttons in each row
 
 ```
 ผิด: ทุกแถวมี [Connect] สีทึบ + [Edit]       → ปุ่มทึบ 8 ปุ่มแย่งกันเด่น
@@ -1157,19 +1157,19 @@ mockup HTML ของเราจึงควรตั้ง `width`/`height` �
    ปุ่มหลัก (สีทึบ) อยู่ที่แผงรายละเอียดของแถวที่เลือก · ดับเบิลคลิก = ทำงานหลัก
 ```
 
-- ปุ่มในแถว: `btn subtle icon` 32×32 · ซ่อนด้วย `visibility: hidden` (ไม่ใช่ `display: none` ไม่งั้นคอลัมน์จะขยับ)
-- คอลัมน์ปุ่มกว้างตายตัว (ราว 112px ต่อ 3 ปุ่ม) ไม่งั้นคอลัมน์ "ล่าสุด" จะไม่ตรงกับปุ่ม
-- แถวที่เลือก: พื้น `--win-subtle-selected` + ขีด accent 3px ชิดซ้าย
+- Buttons in a row: `btn subtle icon` 32×32 · hide with `visibility: hidden` (not `display: none`, otherwise columns shift)
+- The button column has a fixed width (about 112px for 3 buttons), otherwise the "Latest" column will not line up with the buttons
+- Selected row: `--win-subtle-selected` fill + a 3px accent bar flush left
 
-## 2 · รายการ + แผงรายละเอียด (list-detail)
+## 2 · List + detail panel (list-detail)
 
-ใช้เมื่อหน้าต่างกว้าง ≥ 1100px และรายการมีข้อมูลมากกว่าที่แถวเดียวแสดงได้
+Use when the window is ≥ 1100px wide and the list has more data than a single row can show
 
-- แผงขวากว้าง 360px พื้น `--win-card` · padding 24px · ระยะระหว่างส่วน 24px
-- บนลงล่าง: ไอคอน 48px + ชื่อ 20px → ปุ่มหลัก (ยืดเต็มแถว) + ปุ่มรอง → คู่ ชื่อ/ค่า (label 112px) → ประวัติ (แถว 32px มีเส้นคั่น) → หมายเหตุ
-- หน้าต่างแคบกว่า 1100px ให้ซ่อนแผง แล้วเปิดเป็นหน้าใหม่แทน
+- The right panel is 360px wide, `--win-card` fill · 24px padding · 24px gap between parts
+- Top to bottom: 48px icon + 20px name → primary button (stretched full row) + secondary button → name/value pairs (label 112px) → history (32px rows with dividers) → notes
+- When the window is narrower than 1100px, hide the panel and open it as a new page instead
 
-**จอว่างเกินครึ่งคือสัญญาณว่าควรใช้แบบนี้** ไม่ใช่สัญญาณให้ยืดตาราง
+**A screen more than half empty is the signal to use this pattern,** not a signal to stretch the table
 
 ## 3 · Command bar
 
@@ -1177,79 +1177,79 @@ mockup HTML ของเราจึงควรตั้ง `width`/`height` �
 [+ สร้างใหม่] [📁 กลุ่มใหม่] │ [⇥ นำเข้า] [↦ ส่งออก]          [ทั้งหมด|SSH|RDP]  [🔍 กรอง…]
 ```
 
-- ปุ่มทุกปุ่มเป็น subtle + ไอคอน 16px + ข้อความ · คั่นกลุ่มด้วยเส้นตั้ง 1×20px
-- ไม่มีปุ่มทึบใน command bar ถ้าหน้านั้นมีแผงรายละเอียด (ปุ่มหลักอยู่ในแผง)
-- ช่องค้นหาชิดขวา กว้าง 240–320px · มีไอคอนแว่นขยายนำหน้า
+- Every button is subtle + 16px icon + text · separate groups with a 1×20px vertical line
+- No solid button in the command bar if the page has a detail panel (the primary button lives in the panel)
+- The search box is flush right, 240–320px wide · has a magnifier icon in front
 
-## 4 · หัวกลุ่มในรายการ
+## 4 · Group headings in a list
 
 ```
 ผิด: PRODUCTION · 3      (11px ตัวพิมพ์ใหญ่ สีจาง — แบบเว็บ)
 ถูก: ⌄ Production  3     (14px semibold · ตัวเลขสีรอง · แถว 32–40px · กดพับได้)
 ```
 
-## 5 · Tab ใน title bar (แบบ Windows Terminal)
+## 5 · Tabs in the title bar (Windows Terminal style)
 
-- tab สูง 32px ชิดล่างของ title bar 40px · มุมบน 8px
-- tab ที่เลือก = พื้นเดียวกับเนื้อหาด้านล่าง (ดูต่อกันเป็นแผ่นเดียว) · tab อื่นพื้นใส
-- สถานะบอกด้วยจุด 8px + ข้อความ/tooltip **ไม่ใช้เส้นสีบน tab** (ดูเหมือน error)
-- ท้าย tab มี `+` และ `⌄` (รายการ tab)
+- Tabs are 32px tall, flush with the bottom of a 40px title bar · 8px top corners
+- The selected tab = the same fill as the content below (so they look like one sheet) · other tabs have a transparent fill
+- Status is shown with an 8px dot + text/tooltip, **never a coloured line on the tab** (it looks like an error)
+- At the end of the tabs there are `+` and `⌄` (tab list)
 
 ## 6 · Icon rail
 
-- กว้าง 48px · ปุ่ม 40×40 · ไอคอน 18px · ห่างกัน 4px
-- ที่เลือก: พื้น `--win-subtle-selected` + ขีด accent 3×16px ชิดซ้าย
-- ตั้งค่าอยู่ล่างสุดเสมอ · ทุกปุ่มมี `title` (tooltip) เพราะไม่มีข้อความ
+- 48px wide · 40×40 buttons · 18px icons · 4px apart
+- Selected: `--win-subtle-selected` fill + a 3×16px accent bar flush left
+- Settings always at the very bottom · every button has a `title` (tooltip) because there is no text
 
 ## 7 · Status bar
 
-- สูง 24px · ข้อความ 12px สีรอง · ห่างกัน 16px
-- สถานะใช้จุด 6–8px + ข้อความ **ไม่ใช้ป้ายพื้นสีทึบ** (เป็นแบบเว็บ) — `ui-craft` ด่านสวยแกน "พลังของสี" ยกเว้นข้อนี้ให้ Windows แล้ว (สีมาทางขีดเลือก · หน้าจอพระเอก · ตัวเลขตัวชี้วัดหลัก (Key Performance Indicator · KPI) · ปุ่มหลัก)
+- 24px tall · 12px text in secondary colour · 16px apart
+- Status uses a 6–8px dot + text, **never a solid-colour badge** (that is a web style) · the "colour power" axis of the `ui-craft` beauty gate already exempts this item for Windows (colour comes through the selection bar · the hero screen · the main Key Performance Indicator (KPI) numbers · the primary button)
 
-## 8 · หน้าเริ่มต้น (welcome / start)
+## 8 · Start page (welcome / start)
 
-> ข้อนี้ใช้กับหน้าเริ่มต้นในแอป ส่วนหน้าแรกของ mockup (`#s-start`) ที่คนรีวิวเปิดดูเป็นสารบัญ ใช้การ์ดพร้อมภาพย่อได้ ดู `ui-craft` → `references/mockup-start-page.md`
+> This item applies to the start page inside the app. The first page of a mockup (`#s-start`), which reviewers open as a table of contents, may use cards with thumbnails; see `ui-craft` → `references/mockup-start-page.md`
 
-- เนื้อหากว้างไม่เกิน 1064px อยู่กลาง · บนสุดคือช่องค้นหาช่องเดียวที่ทำได้ทั้งค้นหาและเชื่อมต่อ (ไม่แยก 2 ช่อง)
-- ทางลัดเป็นแถวปุ่มสูง 40px (ไอคอน + ข้อความ + ปุ่มลัด) **ไม่ใช่การ์ดใหญ่ 4 ใบ**
-- กล่องมีกรอบได้ไม่เกิน 2 กล่อง (เช่น ล่าสุด · รายการโปรด) · ข่าวสารเป็นแถบ 40px พื้นกลาง ไม่ใช้สีแบรนด์
+- Content no wider than 1064px, centred · at the top is a single search box that does both search and connect (do not split into 2 boxes)
+- Shortcuts are 40px-tall button rows (icon + text + hotkey), **not 4 big cards**
+- At most 2 bordered boxes (for example Recent · Favourites) · news is a 40px neutral-fill strip, not in the brand colour
 
-## 9 · ไอคอน — ต้องมีที่ไหน
+## 9 · Icons: where they are required
 
-| ที่ | ต้องมี | ขนาด |
+| Where | Required | Size |
 |---|---|---|
-| ปุ่มใน nav / rail | ✓ | 16 / 18px |
-| ปุ่มใน command bar | ✓ คู่ข้อความ | 16px |
-| ปุ่มในแถว | ✓ ไอคอนอย่างเดียว + tooltip | 16px |
-| ชนิดของรายการ (SSH · ไฟล์ · RDP) | ✓ ในกล่อง 24px มุม 4px | 14px |
-| หัวแผงรายละเอียด | ✓ กล่อง 48px มุม 8px | 24px |
-| ปุ่มหลักใน dialog | ไม่จำเป็น | — |
+| Buttons in nav / rail | ✓ | 16 / 18px |
+| Buttons in the command bar | ✓ together with text | 16px |
+| Buttons in a row | ✓ icon only + tooltip | 16px |
+| Item type (SSH · file · RDP) | ✓ in a 24px box with 4px corners | 14px |
+| Detail panel header | ✓ 48px box with 8px corners | 24px |
+| Primary button in a dialog | Not required | — |
 
-รหัสที่ใช้บ่อย (Segoe Fluent Icons): เพิ่ม `E710` · ค้นหา `E721` · ตั้งค่า `E713` · แก้ไข `E70F` · อื่น ๆ `E712` · เล่น/เปิด `E768`
-· โฟลเดอร์ `E8B7` · กลุ่มใหม่ `E8F4` · นำเข้า `E8B5` · ส่งออก `EDE1` · terminal `E756` · จอ `E7F4` · ลิงก์ `E71B` · กุญแจ `E8D7`
-· clipboard `E77F` · ลูกโลก `E774` · ประวัติ `E81C` · ดาว `E734` / `E735` · บ้าน `E80F` · ลูกศรลง `E70D` · ลูกศรขวา `E76C` · ปิด `E8BB`
+Commonly used codes (Segoe Fluent Icons): add `E710` · search `E721` · settings `E713` · edit `E70F` · more `E712` · play/open `E768`
+· folder `E8B7` · new group `E8F4` · import `E8B5` · export `EDE1` · terminal `E756` · screen `E7F4` · link `E71B` · key `E8D7`
+· clipboard `E77F` · globe `E774` · history `E81C` · star `E734` / `E735` · home `E80F` · down arrow `E70D` · right arrow `E76C` · close `E8BB`
 
 ---
 
-## ตรวจด้วยตา — นับได้ ไม่ต้องใช้ความรู้สึก
+## Check by eye: countable, no gut feeling
 
-| ข้อ | ผ่านเมื่อ |
+| Item | Passes when |
 |---|---|
-| ปุ่มทึบสี accent | ≤ 1 ต่อหน้าจอ (`grep -c "btn primary"` ต่อ section) |
-| ไอคอน | ครบทุกที่ในตารางข้อ 9 |
-| พื้นที่ว่าง | เนื้อหาใช้พื้นที่ ≥ 60% ของความสูงหน้าต่างที่ 1440×900 หรือมีเหตุผล (หน้าว่างที่ตั้งใจ) |
-| ความสูงแถว | แถวชนิดเดียวกันสูงเท่ากันทุกการ์ดในหน้า |
-| กล่องมีกรอบ | ≤ 3 กล่องต่อหน้า · ไม่มีกล่องซ้อนกล่อง |
-| ส่วนควบคุมของ mockup | ไม่ติดในภาพ (`screenshot.py --hide`) |
+| Solid accent-colour buttons | ≤ 1 per screen (`grep -c "btn primary"` per section) |
+| Icons | Present everywhere in the table of item 9 |
+| Empty space | Content uses ≥ 60% of the window height at 1440×900, or has a reason (a deliberately empty page) |
+| Row height | Rows of the same kind have equal height on every card in the page |
+| Bordered boxes | ≤ 3 boxes per page · no box inside a box |
+| Mockup controls | Not in the image (`screenshot.py --hide`) |
 
 
 ## reference: review.md
 
-# ตรวจงาน วิจารณ์ ข้อห้าม และข้อจำกัด — ส่วนขยายของ `windows-app-design`
+# Review, critique, prohibitions and limits: extension of `windows-app-design`
 
-เปิดตอนทำข้อ 6 · 7 · 8 ของ `SKILL.md`
+Open when doing items 6 · 7 · 8 of `SKILL.md`
 
-## คำสั่งตัวตรวจ token (ข้อ 6)
+## Token checker command (item 6)
 
 ```bash
 # ไฟล์ token แยก (web-wrapped · mockup ที่ยังวางคู่ fluent.css)
@@ -1260,9 +1260,9 @@ node ../web-app-design/scripts/check-design-tokens.mjs src/fluent.css src --ext 
 node ../web-app-design/scripts/check-design-tokens.mjs mockup/<รหัส>-mockup.html mockup --ext html --marker "Type ramp" --require "…"
 ```
 
-  แอปเพิ่ม token ของตัวเอง (เช่น `--telex-…`) → ต่อท้าย `--require` ด้วย · ตั้งชื่อ section ในหน้า mockup ขึ้นต้น `s-` (`#s-login`) ไม่ให้ชื่ออย่าง `#add` `#feed` ถูกอ่านเป็นสี
+  If the app adds its own tokens (for example `--telex-…`) → append them to `--require` too · name the sections in the mockup page starting with `s-` (`#s-login`) so names like `#add` `#feed` are not read as colours
 
-## ข้อความสั่งงานผู้วิจารณ์ (ข้อ 6.1)
+## Reviewer instruction message (item 6.1)
 
 ```
 ดูภาพ <path dark/light> ของแอป Windows 11 (<ชนิดแอป>) เป้าคือดูเหมือน Windows Terminal / Settings / File Explorer
@@ -1270,154 +1270,154 @@ node ../web-app-design/scripts/check-design-tokens.mjs mockup/<รหัส>-moc
 แต่ละข้อมีวิธีแก้ระดับ CSS (ขนาด px · องค์ประกอบไหน) · ไม่ต้องชม · ไม่เกิน 250 คำ
 ```
 
-## Anti-patterns (ข้อ 7)
+## Anti-patterns (item 7)
 
-- **ระบายพื้น accent ทั้งแถวเมนูที่เลือก** — Windows ใช้ขีดเล็กชิดซ้าย
-- **ย้อมสีแบรนด์ที่กรอบหน้าต่าง** (แถบชื่อ · nav · rail · command bar · Mica/Acrylic · เส้นขอบ · ไอคอนเมนู) — กรอบเป็นเทา-ดำตามธีม Windows · accent อยู่ที่ขีดเลือก ปุ่มหลัก และข้อมูล · ย้อมได้เฉพาะเมื่อผู้ใช้สั่ง
-- **มุมโค้ง 12–16px** — นั่นคือหน้าตาเว็บ/มือถือ ส่วน Windows ใช้ 4px กับ 8px
-- **เงาใต้การ์ด** — Windows 11 ใช้เส้นขอบบาง ๆ เงาสงวนไว้ให้ flyout/dialog เท่านั้น
-- **`alert()` / `confirm()`** ในแอปที่ห่อเว็บ — ใช้ InfoBar หรือ ContentDialog
-- **ทำเฉพาะโหมดมืดเพราะภาพต้นแบบเป็นมืด** — Windows 11 ตั้งต้นเป็นโหมดสว่าง และผู้ใช้เลือกได้ทั้งสองแบบ ต้องผ่านทั้งคู่
-- **ฮาร์ดโค้ดสี accent เป็นน้ำเงิน** — ถ้าอยากตามสีที่ผู้ใช้ตั้งไว้ ต้องอ่านจากระบบ
-  (WinUI: อย่า override `AccentFillColorDefaultBrush` · web: `AccentColor` ของ CSS)
-- **แถบเมนูกว้างตามใจ** — 320px เปิด / 48px ย่อ เท่านั้น
-- **ส่ง mockup โดยไม่เคยเรนเดอร์ดู** — ดูข้อ 6
-- **ปุ่มทึบสี accent ทุกแถวของตาราง** — ปุ่มในแถวเป็นไอคอนที่โผล่เมื่อชี้ ปุ่มหลักอยู่ในแผงรายละเอียด (patterns.md ข้อ 1)
-- **ปุ่มและเมนูเป็นข้อความล้วน ไม่มีไอคอน** — ดูเป็น wireframe
-- **เนื้อหาอยู่ครึ่งบน ครึ่งล่างว่าง · ตารางยืดเต็มจอจนคอลัมน์ห่างกัน 400px** — ใช้ list-detail (patterns.md ข้อ 2)
-- **หัวกลุ่ม 11px ตัวพิมพ์ใหญ่ · ป้ายพื้นสีทึบใน status bar · เส้นสีบน tab** — เป็นแบบเว็บ
-- **การ์ดใหญ่หลายใบเรียงกันในหน้าเริ่มต้นของแอป** — ดูเป็น dashboard ของ SaaS ใช้แถวปุ่มทางลัดแทน (หน้าแรกของ mockup ไม่นับ ดู `ui-craft`)
-- **แถบควบคุมของ mockup (รหัสข้อกำหนดเชิงหน้าที่ (Functional Requirement · FR) · ตัวสลับสถานะ) ติดในภาพที่ส่งรีวิว** — ใช้ `screenshot.py --hide`
-- **ทำทุกหน้าในรอบเดียวโดยไม่มีหน้าหลักเป็นแบบ** — ดูข้อ 1
+- **Filling the whole selected menu row with the accent colour.** Windows uses a small bar flush left
+- **Tinting the window frame with the brand colour** (title bar · nav · rail · command bar · Mica/Acrylic · borders · menu icons). The frame is grey-black following the Windows theme · the accent lives in the selection bar, the primary button and the data · tint only when the user orders it
+- **12–16px rounded corners.** That is the look of web/mobile; Windows uses 4px and 8px
+- **Shadows under cards.** Windows 11 uses thin borders; shadows are reserved for flyouts/dialogs only
+- **`alert()` / `confirm()`** in a web-wrapped app: use InfoBar or ContentDialog
+- **Doing only dark mode because the reference image is dark.** Windows 11 defaults to light mode and users can choose either, so both must pass
+- **Hard-coding the accent colour as blue.** To follow the colour the user has set, read it from the system
+  (WinUI: do not override `AccentFillColorDefaultBrush` · web: CSS `AccentColor`)
+- **A menu bar of arbitrary width.** Only 320px open / 48px collapsed
+- **Sending a mockup that was never rendered and looked at.** See item 6
+- **Solid accent-colour buttons on every table row.** Buttons in a row are icons that appear on hover; the primary button lives in the detail panel (patterns.md item 1)
+- **Buttons and menus that are text only, with no icons.** They look like a wireframe
+- **Content in the top half and the bottom half empty · a table stretched across the screen until columns are 400px apart.** Use list-detail (patterns.md item 2)
+- **11px uppercase group headings · solid-colour badges in the status bar · coloured lines on tabs.** These are web styles
+- **Several big cards in a row on the app's start page.** It looks like a SaaS dashboard; use a row of shortcut buttons instead (the first page of a mockup does not count, see `ui-craft`)
+- **The mockup's control bar (Functional Requirement (FR) code · state switcher) left in the image sent for review.** Use `screenshot.py --hide`
+- **Doing every page in one round with no main page as the model.** See item 1
 
-## ข้อจำกัดที่ต้องรู้ (ข้อ 8)
+## Limits to know (item 8)
 
-- ไฟล์ `.xaml` / `.axaml` ในนี้ **ยังไม่ผ่านการคอมไพล์ทดสอบ** ในไฟล์มีแต่ค่า token
-  (Color / SolidColorBrush / x:Double / CornerRadius / Thickness) ที่ใช้ไวยากรณ์
-  มาตรฐาน ตอน build ครั้งแรกให้ดูว่ามี key ไหนชนกับของเฟรมเวิร์กหรือไม่
-- WinUI ต้องเมิร์จ `FluentTokens.xaml` **หลัง** `XamlControlsResources` ไม่งั้นค่าถูกทับ
-- ชื่อ theme dictionary ต่างกัน: WinUI ใช้ `Default`/`Light`/`HighContrast`
-  ส่วน Avalonia ใช้ `Default`/`Light`/`Dark`
-- **โหมดคอนทราสต์สูง** ห้ามใส่สีตายตัว ต้องดึงจากสีระบบ (มีตัวอย่างในไฟล์ XAML)
-- Mica / Acrylic ทำได้จริงเฉพาะ WinUI/Avalonia บน Windows ส่วนบน web-wrapped
-  ให้ใช้สีทึบตาม token แทน อย่าเลียนแบบด้วย `backdrop-filter` เพราะได้ไม่เหมือน
-  และกินเครื่อง
+- The `.xaml` / `.axaml` files here **have not been compile-tested.** The files hold only token values
+  (Color / SolidColorBrush / x:Double / CornerRadius / Thickness) using standard syntax.
+  On the first build, check whether any key collides with the framework's own
+- WinUI must merge `FluentTokens.xaml` **after** `XamlControlsResources`, otherwise the values are overwritten
+- Theme dictionary names differ: WinUI uses `Default`/`Light`/`HighContrast`
+  while Avalonia uses `Default`/`Light`/`Dark`
+- **High-contrast mode:** never put fixed colours; pull them from system colours (there is an example in the XAML files)
+- Mica / Acrylic really work only in WinUI/Avalonia on Windows. For web-wrapped apps,
+  use solid colours per the tokens instead. Do not imitate them with `backdrop-filter`, because the result is not the same
+  and it is heavy on the machine
 
 
 ## reference: tokens.md
 
-# Token map — ค่าเดียวกัน สามสแต็ก
+# Token map: the same values across three stacks
 
-> **ค่ากลาง (พื้น ข้อความ เส้น เงา ขนาด ระยะ) คือ Fluent 2 ที่วัดจาก Windows 11 จริง — คัดลอกไปใช้ได้เลย ห้ามปรับเอง**
-> ระยะ: ขอบเนื้อหา 36 กับระยะระหว่าง section 40 อยู่ในรายการยกเว้นของ `ui-craft` (`references/scales.md`) · padding · margin · gap อื่นที่ไม่มีในตารางนี้ใช้สเกล 4/8/12/16/24/32/48/64 ของ `ui-craft`
-> **กรอบหน้าต่างเป็นสีกลาง** — Mica/Acrylic ไม่ย้อมสี · accent ใช้กับขีดเลือก ปุ่มหลัก ข้อมูล และลิงก์เท่านั้น
-> **`accent` เป็นสีเดียวที่เปลี่ยนตามงาน** ให้ใช้สีแบรนด์ของลูกค้า ถ้ายังไม่มีให้ใช้ค่าเริ่มต้นของ Windows ในไฟล์นี้ เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม
-> ค่า accent ที่อยู่ในไฟล์นี้คือค่าเริ่มต้นของ Windows ใช้ได้เมื่อยังไม่มีแบรนด์ ไม่ใช่ค่าบังคับ
+> **The shared values (background, text, lines, shadows, sizes, spacing) are Fluent 2 as measured from a real Windows 11. Copy them as they are; never adjust them yourself.**
+> Spacing: the content margin 36 and the section gap 40 are in the exception list of `ui-craft` (`references/scales.md`) · any other padding · margin · gap not in this table uses the 4/8/12/16/24/32/48/64 scale of `ui-craft`
+> **The window frame is a neutral colour.** Mica/Acrylic are not tinted · accent is used only for the selection bar, the primary button, data and links
+> **`accent` is the only colour that changes per job.** Use the customer's brand colour; if there is none yet, use the Windows default in this file, write `(รอยืนยัน)` (to be confirmed), and carry on without stopping to ask
+> The accent values in this file are the Windows defaults, usable when there is no brand yet; they are not mandatory
 
-ค่าทั้งหมดวัดจาก Windows 11 dark theme จริง (สุ่มพิกเซลจากหน้า Windows Security)
-แก้ที่ `assets/fluent.css` แล้วแก้ให้ตรงกันในไฟล์ XAML/AXAML ด้วยเสมอ
+All values were measured from a real Windows 11 dark theme (pixels sampled from the Windows Security page)
+Edit `assets/fluent.css`, then always edit the XAML/AXAML files to match.
 
-## สารบัญ
+## Contents
 
-1. [สี — dark / light](#สี--dark--light)
-2. [สถานะ](#สถานะ)
-3. [Type ramp (Fluent 2) — ห้ามคิดขนาดใหม่นอกชุดนี้](#type-ramp-fluent-2--ห้ามคิดขนาดใหม่นอกชุดนี้)
-4. [รูปทรง · ระยะ · เลย์เอาต์](#รูปทรง--ระยะ--เลย์เอาต์)
-5. [จุดตัดขนาดหน้าต่าง (Fluent breakpoints)](#จุดตัดขนาดหน้าต่าง-fluent-breakpoints)
-6. [ไอคอน](#ไอคอน)
+1. [Colour: dark / light](#colour--dark--light)
+2. [Status](#status)
+3. [Type ramp (Fluent 2): never invent sizes outside this set](#type-ramp-fluent-2-never-invent-sizes-outside-this-set)
+4. [Shape · spacing · layout](#shape--spacing--layout)
+5. [Window breakpoints (Fluent breakpoints)](#window-breakpoints-fluent-breakpoints)
+6. [Icons](#icons)
 
 ---
 
-## สี — dark / light
+## Colour: dark / light
 
-| ความหมาย | Dark | Light | CSS | WinUI 3 | Avalonia |
+| Meaning | Dark | Light | CSS | WinUI 3 | Avalonia |
 |---|---|---|---|---|---|
-| พื้นหน้าต่าง | `#202020` | `#F3F3F3` | `--win-bg` | `AppBackgroundBrush` | `AppBackgroundBrush` |
-| พื้น nav / เนื้อหา | `#272727` | `#F9F9F9` | `--win-layer` | `AppLayerBrush` | `AppLayerBrush` |
-| การ์ด | `#2B2B2B` | `#FFFFFF` | `--win-card` | `AppCardBrush` | `AppCardBrush` |
-| ข้อความหลัก | `#FFFFFF` | `#1A1A1A` | `--win-text` | `TextFillColorPrimaryBrush` ✱ | `AppTextBrush` |
-| ข้อความรอง | `#CCCCCC` | `#5D5D5D` | `--win-text-secondary` | `TextFillColorSecondaryBrush` ✱ | `AppTextSecondaryBrush` |
-| ข้อความจาง | `#9D9D9D` | `#8B8B8B` | `--win-text-tertiary` | `TextFillColorTertiaryBrush` ✱ | `AppTextTertiaryBrush` |
-| accent (พื้นปุ่ม, แถบเลือก) | `#4CC2FF` | `#005FB8` | `--win-accent` | `AccentFillColorDefaultBrush` ✱ | `SystemAccentColor` ✱ |
-| accent (ตัวหนังสือ/ลิงก์) | `#99EBFF` | `#003E92` | `--win-accent-text` | `AccentTextFillColorPrimaryBrush` ✱ | `AppAccentTextBrush` |
-| ตัวอักษรบนพื้น accent | `#000000` | `#FFFFFF` | `--win-on-accent` | `TextOnAccentFillColorPrimaryBrush` ✱ | `AppOnAccentBrush` |
-| พื้นปุ่มปกติ | `#333333` | `#FFFFFF` | `--win-control` | `ControlFillColorDefaultBrush` ✱ | `AppControlBrush` |
-| แถวที่เลือกใน nav | `#FFFFFF15` | `#00000010` | `--win-subtle-selected` | `SubtleFillColorSecondaryBrush` ✱ | `AppSubtleSelectedBrush` |
-| เส้นคั่น | `#3A3A3A` | `#E5E5E5` | `--win-divider` | `AppDividerBrush` | `AppDividerBrush` |
+| Window background | `#202020` | `#F3F3F3` | `--win-bg` | `AppBackgroundBrush` | `AppBackgroundBrush` |
+| nav / content background | `#272727` | `#F9F9F9` | `--win-layer` | `AppLayerBrush` | `AppLayerBrush` |
+| Card | `#2B2B2B` | `#FFFFFF` | `--win-card` | `AppCardBrush` | `AppCardBrush` |
+| Primary text | `#FFFFFF` | `#1A1A1A` | `--win-text` | `TextFillColorPrimaryBrush` ✱ | `AppTextBrush` |
+| Secondary text | `#CCCCCC` | `#5D5D5D` | `--win-text-secondary` | `TextFillColorSecondaryBrush` ✱ | `AppTextSecondaryBrush` |
+| Faint text | `#9D9D9D` | `#8B8B8B` | `--win-text-tertiary` | `TextFillColorTertiaryBrush` ✱ | `AppTextTertiaryBrush` |
+| accent (button fill, selection bar) | `#4CC2FF` | `#005FB8` | `--win-accent` | `AccentFillColorDefaultBrush` ✱ | `SystemAccentColor` ✱ |
+| accent (text/link) | `#99EBFF` | `#003E92` | `--win-accent-text` | `AccentTextFillColorPrimaryBrush` ✱ | `AppAccentTextBrush` |
+| Text on accent fill | `#000000` | `#FFFFFF` | `--win-on-accent` | `TextOnAccentFillColorPrimaryBrush` ✱ | `AppOnAccentBrush` |
+| Normal button fill | `#333333` | `#FFFFFF` | `--win-control` | `ControlFillColorDefaultBrush` ✱ | `AppControlBrush` |
+| Selected row in nav | `#FFFFFF15` | `#00000010` | `--win-subtle-selected` | `SubtleFillColorSecondaryBrush` ✱ | `AppSubtleSelectedBrush` |
+| Divider | `#3A3A3A` | `#E5E5E5` | `--win-divider` | `AppDividerBrush` | `AppDividerBrush` |
 
-ค่า Dark คือ Windows 11 ปกติ (Mica) · แบบพื้นดำสนิทของ Windows Security (`#000000` · การ์ด `#0F0F0F` · เส้นคั่น `#2D2D2D`) เปิดด้วย `data-backdrop="black"` ใน `fluent.css`
+The Dark values are normal Windows 11 (Mica) · the pure-black style of Windows Security (`#000000` · card `#0F0F0F` · divider `#2D2D2D`) is turned on with `data-backdrop="black"` in `fluent.css`
 
-✱ = key มาตรฐานของเฟรมเวิร์ก ถ้า override แล้วคอนโทรลสำเร็จรูปจะเปลี่ยนตามทั้งแอป
-ส่วน key ที่ขึ้นต้น `App*` เป็นของเราเอง ต้องอ้างเองใน XAML
+✱ = a standard framework key; if overridden, ready-made controls change across the whole app
+Keys starting with `App*` are our own and must be referenced by hand in XAML
 
-## สถานะ
+## Status
 
-| สถานะ | Dark fg / bg | Light fg / bg | CSS |
+| Status | Dark fg / bg | Light fg / bg | CSS |
 |---|---|---|---|
-| สำเร็จ | `#6CCB5F` / `#393D1B` | `#0F7B0F` / `#DFF6DD` | `--win-success` / `-bg` |
-| เตือน | `#FCE100` / `#433519` | `#9D5D00` / `#FFF4CE` | `--win-caution` / `-bg` |
-| ผิดพลาด | `#FF99A4` / `#442726` | `#C42B1C` / `#FDE7E9` | `--win-critical` / `-bg` |
-| ข้อมูล | `#60CDFF` / `#2E2E2E` | `#005FB8` / `#F4F9FF` | `--win-info` / `-bg` |
+| Success | `#6CCB5F` / `#393D1B` | `#0F7B0F` / `#DFF6DD` | `--win-success` / `-bg` |
+| Warning | `#FCE100` / `#433519` | `#9D5D00` / `#FFF4CE` | `--win-caution` / `-bg` |
+| Error | `#FF99A4` / `#442726` | `#C42B1C` / `#FDE7E9` | `--win-critical` / `-bg` |
+| Info | `#60CDFF` / `#2E2E2E` | `#005FB8` / `#F4F9FF` | `--win-info` / `-bg` |
 
-> พื้นของ InfoBar ในโหมดมืดเป็นโทน **กลาง** ไม่ใช่สีอิ่มตัว — ถ้าใช้สีจัดเป็นพื้น
-> แถบเดียวจะแย่งสายตาจากทั้งหน้า
+> The InfoBar background in dark mode is a **neutral** tone, not a saturated colour. If a vivid colour is used as the fill,
+> a single bar competes for attention with the whole page
 
-## Type ramp (Fluent 2) — ห้ามคิดขนาดใหม่นอกชุดนี้
+## Type ramp (Fluent 2): never invent sizes outside this set
 
-| ระดับ | ขนาด/บรรทัด | น้ำหนัก | CSS class | WinUI style | ใช้กับ |
+| Level | Size/line | Weight | CSS class | WinUI style | Use for |
 |---|---|---|---|---|---|
-| Caption | 12 / 16 | 400 | `.win-caption` | `CaptionTextBlockStyle` | ป้ายกำกับ, คำอธิบายในแถวตั้งค่า |
-| Body | 14 / 20 | 400 | `.win-body` | `BodyTextBlockStyle` | เนื้อความทั้งหมด |
-| Body Strong | 14 / 20 | 600 | `.win-body-strong` | `BodyStrongTextBlockStyle` | หัวข้อย่อยในการ์ด |
-| Body Large | 18 / 24 | 400 | `.win-body-large` | `BodyLargeTextBlockStyle` | ข้อความนำ |
-| Subtitle | 20 / 28 | 600 | `.win-subtitle` | `SubtitleTextBlockStyle` | หัวข้อกลุ่มในหน้า |
-| Title | 28 / 36 | 600 | `.win-title` | `TitleTextBlockStyle` | ชื่อหน้า (หน้าละ 1 อัน) |
-| Title Large | 40 / 52 | 600 | `.win-title-large` | `TitleLargeTextBlockStyle` | หน้า hero เท่านั้น |
+| Caption | 12 / 16 | 400 | `.win-caption` | `CaptionTextBlockStyle` | Labels, descriptions in settings rows |
+| Body | 14 / 20 | 400 | `.win-body` | `BodyTextBlockStyle` | All body text |
+| Body Strong | 14 / 20 | 600 | `.win-body-strong` | `BodyStrongTextBlockStyle` | Sub-headings in cards |
+| Body Large | 18 / 24 | 400 | `.win-body-large` | `BodyLargeTextBlockStyle` | Lead text |
+| Subtitle | 20 / 28 | 600 | `.win-subtitle` | `SubtitleTextBlockStyle` | Group headings in a page |
+| Title | 28 / 36 | 600 | `.win-title` | `TitleTextBlockStyle` | Page title (1 per page) |
+| Title Large | 40 / 52 | 600 | `.win-title-large` | `TitleLargeTextBlockStyle` | Hero pages only |
 
-ฟอนต์: **Segoe UI Variable** (Text สำหรับ ≤18px, Display สำหรับ ≥20px)
-Segoe UI Variable **ไม่มีอักษรไทย** แต่ Windows จะ fallback ไป **Leelawadee UI** ให้เอง
-ส่วนบน web-wrapped ต้องเขียน fallback เองใน `font-family`
+Font: **Segoe UI Variable** (Text for ≤18px, Display for ≥20px)
+Segoe UI Variable **has no Thai letters**, but Windows falls back to **Leelawadee UI** by itself
+On web-wrapped apps you must write the fallback yourself in `font-family`
 
-## รูปทรง · ระยะ · เลย์เอาต์
+## Shape · spacing · layout
 
-| ค่า | ตัวเลข | ใช้กับ |
+| Value | Number | Use for |
 |---|---|---|
-| มุมคอนโทรล | 4px | ปุ่ม, textbox, checkbox, combo |
-| มุมการ์ด | 8px | card, expander, flyout, dialog |
-| Title bar | 48px | แบบ Windows 11 (32px = แบบคลาสสิก) |
-| ปุ่มหน้าต่าง | 46 × 48px | ย่อ/ขยาย/ปิด — ห้ามเปลี่ยนขนาด |
-| NavigationView เปิด | 320px | ค่ามาตรฐาน |
-| NavigationView ย่อ | 48px | เหลือไอคอน |
-| แถวเมนู nav | สูง 40px | ไอคอน 16px · ช่องไฟไอคอน–ข้อความ 16px |
-| แถบบอกหน้าที่เลือก | 3 × 16px มุมมน 2px | ชิดซ้ายสุด สี accent |
-| ความกว้างเนื้อหาสูงสุด | 1064px | กว้างกว่านี้ตาไล่บรรทัดยาก |
-| ขอบเนื้อหาซ้าย/ขวา | 36px | 16px เมื่อหน้าต่าง ≤ 640px · ยกเว้นสเกลระยะของ `ui-craft` |
-| ระยะระหว่าง section | 40px | ยกเว้นสเกลระยะของ `ui-craft` |
-| ปุ่ม | สูง 32px · กว้างต่ำสุด 120px | |
-| ปุ่ม/เป้าคลิกเล็กสุด | 32 × 32px | เดสก์ท็อป (ไม่ใช่ 48px แบบมือถือ) |
+| Control corner | 4px | Button, textbox, checkbox, combo |
+| Card corner | 8px | card, expander, flyout, dialog |
+| Title bar | 48px | Windows 11 style (32px = classic style) |
+| Window buttons | 46 × 48px | Minimise/maximise/close; never change the size |
+| NavigationView open | 320px | Standard value |
+| NavigationView collapsed | 48px | Icons only |
+| nav menu row | 40px tall | 16px icon · 16px gap between icon and text |
+| Selected-page indicator bar | 3 × 16px, 2px rounded corners | Flush left, accent colour |
+| Maximum content width | 1064px | Wider than this and the eye struggles to track long lines |
+| Content left/right margin | 36px | 16px when the window is ≤ 640px · an exception to the spacing scale of `ui-craft` |
+| Gap between sections | 40px | An exception to the spacing scale of `ui-craft` |
+| Button | 32px tall · minimum width 120px | |
+| Smallest button/click target | 32 × 32px | Desktop (not the 48px of mobile) |
 
-## จุดตัดขนาดหน้าต่าง (Fluent breakpoints)
+## Window breakpoints (Fluent breakpoints)
 
-| ช่วง | ชื่อ | พฤติกรรม |
+| Range | Name | Behaviour |
 |---|---|---|
-| ≤ 640px | Small | nav เป็น overlay · ขอบ 16px · คอลัมน์เดียว |
-| 641–1007px | Medium | nav ย่อเหลือไอคอน · คอลัมน์ขวาตกลงมาล่าง |
-| ≥ 1008px | Large | nav เปิดเต็ม · 2 คอลัมน์ |
+| ≤ 640px | Small | nav is an overlay · 16px margin · single column |
+| 641–1007px | Medium | nav collapses to icons · the right column drops below |
+| ≥ 1008px | Large | nav fully open · 2 columns |
 
-## ไอคอน
+## Icons
 
-ใช้ **Segoe Fluent Icons** (มากับ Windows 11) ขนาด 16px ใน nav, 20px ในหัวข้อ section,
-24px ในหัวหน้า และห้ามผสมชุดไอคอนอื่นในแอปเดียวกัน
+Use **Segoe Fluent Icons** (ships with Windows 11) at 16px in the nav, 20px in section headings,
+24px in page headers, and never mix in other icon sets within the same app
 
-| ใช้ | โค้ด | | ใช้ | โค้ด |
+| Use | Code | | Use | Code |
 |---|---|---|---|---|
-| หน้าแรก | `E80F` | | ตั้งค่า | `E713` |
-| แฮมเบอร์เกอร์ | `E700` | | ย้อนกลับ | `E72B` |
-| ย่อ / ขยาย / ปิด | `E921` `E922` `E8BB` | | รีเฟรช | `E72C` |
-| โล่ (ความปลอดภัย) | `EA18` | | เตือน | `E7BA` |
-| ผู้ใช้ | `E77B` | | ประวัติ | `E81C` |
-| เครือข่าย | `EC05` | | อัปเดต | `E895` |
+| Home | `E80F` | | Settings | `E713` |
+| Hamburger | `E700` | | Back | `E72B` |
+| Minimise / maximise / close | `E921` `E922` `E8BB` | | Refresh | `E72C` |
+| Shield (security) | `EA18` | | Warning | `E7BA` |
+| User | `E77B` | | History | `E81C` |
+| Network | `EC05` | | Update | `E895` |
 
-ดูรายการเต็ม: Microsoft Learn → "Segoe Fluent Icons font"
-เครื่องที่ไม่ใช่ Windows ไม่มีฟอนต์นี้ ไอคอนจึงกลายเป็นสี่เหลี่ยม ดังนั้น mockup ที่จะให้
-คนดูบน Mac/Linux ต้องสลับไปใช้ inline SVG แทน
+For the full list: Microsoft Learn → "Segoe Fluent Icons font"
+Non-Windows machines do not have this font, so icons turn into squares; therefore a mockup meant to be
+viewed on Mac/Linux must switch to inline SVG instead

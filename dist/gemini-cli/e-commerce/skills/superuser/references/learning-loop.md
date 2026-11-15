@@ -1,51 +1,51 @@
-# รอบเรียนรู้และคิวกลาง — รายละเอียด
+# Learning round and central queue — details
 
-ไฟล์นี้เหมือนกันทุก plugin · ต้นฉบับอยู่ที่ plugin `superuser` · รอบเรียนรู้ปกติใช้สรุปใน `modules` ของแกน `superuser:superuser` (ลิงก์จาก `SKILL.md` หัวข้อ 9) พอ · เปิดไฟล์นี้เมื่อ: ตั้งโฟลเดอร์ทีมครั้งแรก · เขียนบรรทัด `review` ครั้งแรก · รอบตรวจสุดท้ายไม่ผ่าน · ผู้ใช้สั่ง "รวมบทเรียน"
+This file is identical in every plugin. The original lives in plugin `superuser`. For a normal learning round, the summary in `modules` of the core `superuser:superuser` is enough (linked from `SKILL.md` section 9). Open this file when: setting up the team folder for the first time · writing the first `review` line · the final check round fails · the user says "รวมบทเรียน" (merge the lessons).
 
-## รอบเรียนรู้ตอนจบงาน — `.claude/superuser/learn/`
+## End-of-job learning round — `.claude/superuser/learn/`
 
-`IMPROVEMENTS.md` จดความรู้ที่เจอระหว่างงาน · รอบเรียนรู้ดูว่าทีมทำงานพลาดตรงไหน แล้วเสนอปรับทีม (skill · playbook · agent · ตัวตรวจ · กฎ)
+`IMPROVEMENTS.md` records knowledge found during the work. The learning round looks at where the team went wrong, then proposes changes to the team (skill · playbook · agent · checker · rule).
 
-1. **ระหว่างงาน** — สร้างโฟลเดอร์ `.claude/superuser/` ตั้งแต่งานแรก (ข้างใน `CONTEXT.md` · `log/` · `inbox/` · `learn/` · อะไร commit ดู [`team-files`](team-files.md) · ของชั่วคราวไป `_to_delete/`)
-   - **hook จด log เอง** — เมื่อมีโฟลเดอร์นี้แล้ว hook ของ plugin จดทุกการทำลง `.claude/superuser/log/<วันที่>/<agent>.jsonl` (1 ไฟล์ต่อ agent ส่วน `main` คือหัวหน้าทีมและข้อความผู้ใช้) และเขียนสรุปให้คนอ่านที่ `log/SUMMARY.md` ทุกครั้งที่หัวหน้าทีมจบรอบ
-   - **ธงผู้ใช้แก้** — hook ติด `correction: true` เมื่อข้อความผู้ใช้ฟังเหมือนการแก้ (ไม่ใช่ · ผิด · อย่า · บอกแล้ว · แก้ใหม่)
-   - **log อยู่ในเครื่องผู้ใช้เท่านั้น** และตัดค่าลับออกแล้ว · โปรเจกต์เก่าที่มี `.superuser/` ที่ราก hook ยังอ่านได้ ย้ายเข้า `.claude/superuser/` เมื่อสะดวก
-   - **ผู้ใช้เปลี่ยนทิศงาน** → จด 1 แถวในบันทึกการตัดสินใจ (ตาราง "การตัดสินใจ" ใน `CONTEXT.md` หรือ `decision-log` ใน `docs/BUILD-PLAN.md`) ช่องเหตุผลขึ้นต้นว่า `ผู้ใช้แก้ —`
-   - **บรรทัดส่งงาน** — เมื่อหัวหน้าทีมส่งงานให้ subagent hook จดเพิ่ม `role` (ชนิด agent) · `role_model` · `spawned_id` (id ย่อ 8 ตัว) และทุกบรรทัดของ subagent มี `id` ของตัวเอง จึงแยกได้ว่า reviewer รอบไหนทำอะไร แม้ชนิดเดียวกันจะเขียนลงไฟล์เดียวกัน
-   - **บรรทัดผลตรวจ** — hook ไม่รู้ผลตรวจ หัวหน้าทีมจึงเขียนเองทุกครั้งที่ได้ผลจาก reviewer 1 บรรทัดต่อรอบ ต่อท้าย `.claude/superuser/log/<วันที่>/main.jsonl` (เขียนได้แม้ hook ไม่ทำงาน เช่น รันจาก cloud):
-     `{"ts":"<เวลาท้องถิ่นแบบ International Organization for Standardization (ISO) 8601>","event":"review","agent":"main","task":"<งาน>","round":2,"by":"<ชนิด agent ที่ตรวจ>","by_id":"<id ย่อ>","result":"ผ่าน|ไม่ผ่าน","high":0,"mid":4,"low":8,"report":"<path รายงาน>"}`
-2. **ตอนจบ ส่ง agent `learning-reviewer` ตัวใหม่ (ระดับกลาง) พร้อม `reviewer` รอบที่คาดว่าสุดท้าย** (ข้อความเดียวกัน ไม่รอแยกอีกรอบ)
-   - **ส่งอะไร** — สรุปงาน 5–10 บรรทัด: เป้า · ขนาด · playbook (เลือก ปรับ หรือประกอบเอง) · skill ที่ใช้ · จุดที่ผู้ใช้แก้ · ผลที่ส่ง agent ตัวนี้จะอ่าน log · บันทึกการตัดสินใจ · `IMPROVEMENTS.md` · บันทึกเก่าใน `.claude/superuser/learn/` แล้วเขียน `.claude/superuser/learn/<วันที่>-<งาน>.md`
-   - **ข้าม** — งานที่ผู้ใช้ไม่ได้แก้และไม่มี **ตัดสินใจเอง** ส่ง `reviewer` รอบแรกตัวเดียวก่อน · ผ่าน → ข้ามแล้วจดใน log ว่าข้ามเพราะอะไร · ไม่ผ่าน → ส่ง `learning-reviewer` พร้อมรอบถัดไป
-   - **รอบที่ส่งพร้อมกันไม่ผ่าน** → ใช้บันทึกของ `learning-reviewer` ได้เลย ไม่ส่งใหม่ · หัวหน้าทีมเติม 1 บรรทัดท้ายไฟล์ `learn/` ว่าตรวจรวมกี่รอบและผลสุดท้าย
-   - **บทเรียนที่ทิ้งไว้ระหว่างทาง** — ใครเจอบทเรียนตอนไหนก็วาง 1 ข้อ 1 ไฟล์ใน `learn/drop/<วันที่>-<คำสั้น>.md` (เกิดอะไร · หลักฐาน · ควรแก้ที่ไหน) ไม่ต้องตัดสินตอนเขียนว่าคุ้มไหม — ลังเลคือสิ่งที่ทำให้บทเรียนหาย · ตอนจบงานส่งโฟลเดอร์นี้ให้ `learning-reviewer` อ่านรวมกัน ข้อที่ซ้ำหรือชนิดเดียวกันรวมเป็นข้อเดียว แล้วย้ายไฟล์ที่ใช้แล้วไป `learn/drop/used/`
-3. **หัวหน้าทีมตรวจหลักฐานทุกข้อ** แล้วใส่ข้อที่ผ่านไม่เกิน 3 ข้อในหัวข้อ "ควรปรับทีม" ของคำตอบตอนจบ ถ้าไม่มีข้อไหนมีหลักฐานก็ไม่ต้องใส่หัวข้อนี้
-4. **ผู้ใช้ตรวจทีละข้อ (human review)** — ถามครั้งเดียวในคำตอบตอนจบ ใช้เครื่องมือถามแบบตัวเลือกถ้ามี (ไม่มีก็ให้ตอบเป็นเลขข้อ) แต่ละข้อมี 3 ทาง:
+1. **During the work.** Create the folder `.claude/superuser/` from the first job (inside: `CONTEXT.md` · `log/` · `inbox/` · `learn/` · see [`team-files`](team-files.md) for what gets committed · temporary things go to `_to_delete/`).
+   - **The hook logs by itself.** Once this folder exists, the plugin's hook records every action to `.claude/superuser/log/<date>/<agent>.jsonl` (1 file per agent; `main` is the lead and the user's messages) and writes a human-readable summary to `log/SUMMARY.md` each time the lead finishes a round.
+   - **User-correction flag.** The hook sets `correction: true` when a user message sounds like a correction (ไม่ใช่ · ผิด · อย่า · บอกแล้ว · แก้ใหม่ — "no" · "wrong" · "don't" · "I told you" · "redo").
+   - **The log stays on the user's machine only** and secrets are already stripped. Old projects that have `.superuser/` at the root can still be read by the hook; move it into `.claude/superuser/` when convenient.
+   - **The user changes direction** → record 1 row in the decision log (the "การตัดสินใจ" (decisions) table in `CONTEXT.md`, or `decision-log` in `docs/BUILD-PLAN.md`). The reason field starts with `ผู้ใช้แก้ —` (user corrected —).
+   - **Dispatch line.** When the lead sends work to a subagent, the hook also records `role` (agent type) · `role_model` · `spawned_id` (8-character short id), and every subagent line has its own `id`. This tells apart which reviewer round did what, even when the same type writes to the same file.
+   - **Review-result line.** The hook does not know the check result, so the lead writes it itself every time it gets a result from a reviewer: 1 line per round, appended to `.claude/superuser/log/<date>/main.jsonl` (writable even if the hook does not run, for example when run from the cloud):
+     `{"ts":"<local time in International Organization for Standardization (ISO) 8601 format>","event":"review","agent":"main","task":"<task>","round":2,"by":"<agent type that checked>","by_id":"<short id>","result":"ผ่าน|ไม่ผ่าน","high":0,"mid":4,"low":8,"report":"<report path>"}`
+2. **At the end, send a fresh `learning-reviewer` agent (medium tier) together with the `reviewer` for the round expected to be the last** (same message, no separate round).
+   - **What to send.** A 5–10 line job summary: goal · size · playbook (chosen, adapted, or self-assembled) · skills used · where the user corrected · the result delivered. This agent will read the log · the decision record · `IMPROVEMENTS.md` · old notes in `.claude/superuser/learn/`, then write `.claude/superuser/learn/<date>-<task>.md`.
+   - **Skip.** For a job where the user made no correction and there was no **`ตัดสินใจเอง`** (decided on my own), send the first-round `reviewer` alone first. If it passes → skip and note in the log why it was skipped. If it fails → send `learning-reviewer` with the next round.
+   - **The round sent together fails** → use the `learning-reviewer` note as is, do not send again. The lead adds 1 line at the end of the `learn/` file saying how many check rounds in total and the final result.
+   - **Lessons dropped along the way.** Whoever finds a lesson at any time drops 1 item as 1 file in `learn/drop/<date>-<short-word>.md` (what happened · evidence · where it should be fixed). Do not judge while writing whether it is worth it — hesitation is what makes lessons get lost. At the end of the job, send this folder to `learning-reviewer` to read together. Duplicate or same-type items merge into one, and used files move to `learn/drop/used/`.
+3. **The lead checks the evidence for every item**, then puts items that pass (at most 3) under the heading "ควรปรับทีม" (team should change) in the end-of-job answer. If no item has evidence, omit this heading.
+4. **The user reviews item by item (human review).** Ask once, in the end-of-job answer, using a choice-style question tool if there is one (if not, ask them to answer with item numbers). Each item has 3 paths:
 
-   | ผู้ใช้เลือก | ช่อง "ควรรวมไหม" ในคิวกลาง | ต่อจากนั้น |
+   | User chooses | "ควรรวมไหม" (should merge?) field in the central queue | What follows |
    |---|---|---|
-   | `รับ + ทำเลย` | `ควรรวม` | หัวหน้าทีมเปิด playbook [`learn-from-session`](playbook-learn-from-session.md) ต่อในรอบนั้นเฉพาะข้อนี้ ไม่ต้องรอผู้ใช้สั่ง "รวมบทเรียน" |
-   | `รับ` | `ควรรวม` | ผู้ใช้สั่งต่อได้ทันที หรือรอ "รวมบทเรียน" รอบหน้า · hook แจ้งจำนวนข้อที่รับแล้วรอรวมตอนเริ่ม session |
-   | `ไม่รับ` | `ไม่รวม (<เหตุผลของผู้ใช้>)` | ไม่เสนอเรื่องนี้ซ้ำ เว้นแต่มีหลักฐานใหม่ · ถ้าเป็นแนวคิดที่ควรจำถาวร เขียน 1 ไฟล์ใน `out-of-scope/` (แม่แบบ `OUT-OF-SCOPE.md`) · ก่อนเสนอข้อใหม่ จับคู่กับไฟล์ในโฟลเดอร์นั้นตามแนวคิดก่อน เจอ → บอกการตัดสินเดิมแทนการเสนอซ้ำ |
-   | `ไว้ทีหลัง` หรือไม่ตอบ | `ใหม่` | รอในคิว |
+   | `รับ + ทำเลย` (accept + do now) | `ควรรวม` (should merge) | The lead opens the playbook [`learn-from-session`](playbook-learn-from-session.md) in that round for this item only, without waiting for the user to say "รวมบทเรียน" |
+   | `รับ` (accept) | `ควรรวม` | The user can order it right away, or wait for the next "รวมบทเรียน" · at session start the hook reports how many accepted items are waiting to be merged |
+   | `ไม่รับ` (decline) | `ไม่รวม (<the user's reason>)` (do not merge) | Do not propose this again unless there is new evidence · if it is an idea to remember permanently, write 1 file in `out-of-scope/` (template `OUT-OF-SCOPE.md`) · before proposing a new item, match it by idea against the files in that folder first; if found → give the earlier decision instead of proposing again |
+   | `ไว้ทีหลัง` (later) or no answer | `ใหม่` (new) | Waits in the queue |
 
-   **ลำดับเวลา** — ตอนส่งคำตอบจดทุกข้อในคิวกลางเป็น `ใหม่` ก่อน · ผู้ใช้ตอบเมื่อไร (รอบนี้หรือรอบหน้า) หัวหน้าทีมแก้แถวเดิมตามตาราง · ถ้าถามด้วยเครื่องมือตัวเลือกได้ก่อนส่งคำตอบ ก็จดค่าจริงได้เลย
+   **Timing.** When sending the answer, record every item in the central queue as `ใหม่` first. Whenever the user answers (this round or the next), the lead edits the existing row per the table. If you can ask with a choice tool before sending the answer, you can record the real value straight away.
 
-   ของใหม่ต้องได้ `รับ` ก่อนจึงสร้าง: playbook ใหม่ → [`playbook-template`](playbook-template.md) · skill หรือ agent ใหม่ → playbook เขียน skill ของ plugin นั้น (ถ้ามี) ไม่งั้นลอกโครงจาก skill หรือ agent ที่มีอยู่ในสาขาเดียวกัน · กฎผู้ใช้ → 1 บรรทัดใน `~/.claude/superuser-style.md` ทำได้จากทุกโปรเจกต์
-5. **แก้ไฟล์จริง** — ผู้ใช้สั่ง "รวมบทเรียน" หรือ "reflect" → playbook [`learn-from-session`](playbook-learn-from-session.md) ถ้าไม่สั่ง บันทึกก็รอไว้ และไม่มีใครแก้ skill
+   Anything new must get `รับ` before it is created: a new playbook → [`playbook-template`](playbook-template.md) · a new skill or agent → the plugin's skill-writing playbook (if any), otherwise copy the structure from an existing skill or agent in the same branch · a user rule → 1 line in `~/.claude/superuser-style.md`, which works from every project.
+5. **Edit the real files.** The user says "รวมบทเรียน" or "reflect" → playbook [`learn-from-session`](playbook-learn-from-session.md). If the user does not say so, the notes wait, and nobody edits a skill.
 
-## คิวกลางของเครื่อง — `~/.claude/superuser/IMPROVEMENTS.md`
+## The machine's central queue — `~/.claude/superuser/IMPROVEMENTS.md`
 
-ข้อเสนอปรับทีมจากทุกโปรเจกต์มารวมที่ไฟล์เดียว จึงรวมได้ทีเดียว และเห็นเรื่องที่ซ้ำข้ามโปรเจกต์
+Team-change proposals from every project gather in one file, so they can be merged in one go and repeats across projects are visible.
 
-- **เขียนเมื่อ** — ทุกครั้งที่จดแถวใหม่ใน `IMPROVEMENTS.md` หรือใส่ข้อ "ควรปรับทีม" ในคำตอบตอนจบ หัวหน้าทีมต้องเพิ่ม 1 แถวในคิวกลางด้วย (เริ่มที่ `ใหม่` แล้วแก้ตามที่ผู้ใช้เลือกในข้อ 4) ถ้ายังไม่มีไฟล์ให้สร้างตาม[แม่แบบ](../templates/improvements-queue.md)
-- **เรื่องเดิมซ้ำ** — บวกช่อง "ครั้ง" และต่อที่มาในแถวเดิม ไม่เพิ่มแถว
-- **เก็บแค่ดัชนี** — หลักฐานเต็มอยู่ในไฟล์ของโปรเจกต์ · ห้ามใส่ชื่อลูกค้า ข้อมูลส่วนตัว ตัวเลขเงิน หรือค่าลับ
-- **ใครรวม** — เมื่อผู้ใช้เปิด SQT-Marketplace แล้วสั่ง "รวมบทเรียน" ให้อ่านคิวนี้ก่อน โดยเรียงตามจำนวนครั้ง รวมเสร็จแล้วใส่ช่อง "รวมแล้ว" ส่วนระหว่างทำงานอื่นห้ามแก้ skill เอง
-- Windows: `%USERPROFILE%/.claude/superuser/IMPROVEMENTS.md` · Claude Code อาจถามสิทธิ์ครั้งแรกที่เขียนนอกโฟลเดอร์งาน ให้อนุญาตเฉพาะโฟลเดอร์ `~/.claude/superuser/`
-- **ไฟล์เดิมชื่อตัวเล็ก** (`improvements.md`) — Windows ไม่แยกตัวเล็กตัวใหญ่ ใช้ต่อได้เลย · macOS และ Linux ให้เปลี่ยนชื่อเป็น `IMPROVEMENTS.md` ก่อนเขียนแถวใหม่
+- **When to write.** Every time you record a new row in `IMPROVEMENTS.md` or put a "ควรปรับทีม" item in the end-of-job answer, the lead must also add 1 row to the central queue (start at `ใหม่`, then update to what the user chose in step 4). If the file does not exist, create it from the [template](../templates/improvements-queue.md).
+- **The same issue again.** Add to the "ครั้ง" (times) column and append the source in the existing row. Do not add a row.
+- **Keep only an index.** Full evidence stays in the project's files. Never put in customer names, personal data, money figures, or secrets.
+- **Who merges.** When the user opens SQT-Marketplace and says "รวมบทเรียน", read this queue first, sorted by number of times. When done merging, fill the "รวมแล้ว" (merged) column. While doing other work, never edit a skill on your own.
+- Windows: `%USERPROFILE%/.claude/superuser/IMPROVEMENTS.md` · Claude Code may ask for permission the first time it writes outside the work folder; allow only the `~/.claude/superuser/` folder.
+- **An old lowercase file** (`improvements.md`) — Windows does not distinguish case, so keep using it · on macOS and Linux, rename it to `IMPROVEMENTS.md` before writing a new row.
 
-แม่แบบคอลัมน์และค่าที่ใช้ในแต่ละช่องอยู่ใน[แม่แบบคิว](../templates/improvements-queue.md) ที่เดียว
+The column template and the values used in each field live in one place, the [queue template](../templates/improvements-queue.md).
 
-- **คาดว่า · ตรวจวันที่ · ผลหลังรวม** — ทุกแถวเป็นสมมติฐาน: คาดว่าความผิดลดลงแค่ไหน และตรวจเมื่อไร (ปกติหลังงานคล้ายกัน 5 งาน) · ถึงวันตรวจ หัวหน้าทีมดู log และ `learn/` ของโปรเจกต์ที่เปิดอยู่ว่าความผิดเดิมเกิดอีกกี่ครั้ง (บอกว่านับจากกี่โปรเจกต์) แล้วใส่ "ผลหลังรวม" · รวมแล้วยังเกิดอีก 2 ครั้ง → ทำเป็นตัวตรวจหรือถอยการแก้กลับ ไม่เขียนเตือนเพิ่ม
-- **บทเรียนอยู่ที่จุดใช้งาน** — คิวเป็นแค่ที่พัก บทเรียนที่รวมแล้วต้องไปอยู่ใน skill ตัวตรวจ หรือ playbook ที่ถูกเปิดตอนทำงาน ไม่ใช่รายการที่ต้องไปค้นเอง
+- **Expected · check date · result after merge.** Every row is a hypothesis: how much the mistakes are expected to drop, and when to check (normally after 5 similar jobs). On the check date, the lead looks at the log and `learn/` of the open projects to see how many times the same mistake happened again (say how many projects were counted), then fills "ผลหลังรวม" (result after merge). Merged and still happened 2 more times → turn it into a checker or roll the fix back, and do not write more warnings.
+- **Lessons live at the point of use.** The queue is only a holding place. A merged lesson must end up in a skill, a checker, or a playbook that gets opened during the work, not in a list someone must go and search.

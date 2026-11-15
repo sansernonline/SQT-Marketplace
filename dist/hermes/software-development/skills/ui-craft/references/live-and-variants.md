@@ -1,31 +1,31 @@
-# ลองค่าสดในเบราว์เซอร์ และทำหลายแบบของชิ้นเดียว — ส่วนขยายของ `ui-craft` ข้อ 9
+# Try live values in the browser, and make several variants of one piece — an extension of `ui-craft` section 9
 
-> ใช้เมื่อหน้าผ่านเช็กลิสต์แล้วแต่ชิ้นใดชิ้นหนึ่งยังไม่ลงตัว (hero · การ์ดสินค้า · แถบบน · ตารางหลัก) · ทั้งหน้าไม่ลงตัว → กลับไปข้อ 0.1 ทำ 3 แนวใหม่
-> แนวคิดจากคำสั่ง `live` และ `generate` ของ pbakaus/impeccable (Apache-2.0 · ตรวจ 2026-10-25) เขียนใหม่ด้วยคำของเรา ไม่ได้คัดข้อความหรือโค้ด
+> Use when a page passed the checklist but one piece still does not fit (hero · product card · top bar · main table) · the whole page does not fit → go back to section 0.1 and make 3 new directions
+> The idea comes from the `live` and `generate` commands of pbakaus/impeccable (Apache-2.0 · checked 2026-10-25), rewritten in our own words; no text or code was copied
 
-## 1 · ลองค่าสด — แก้ในเบราว์เซอร์ก่อน แก้ไฟล์ทีหลัง
+## 1 · Try live values — edit in the browser first, edit the file later
 
-ลองค่าในหน้าที่เปิดอยู่เร็วกว่าแก้ไฟล์แล้วโหลดใหม่ทีละรอบ และไม่ทิ้งค่าที่ลองแล้วไม่ดีไว้ในโค้ด
+Trying values in the open page is faster than editing the file and reloading each round, and it leaves no failed trial values in the code.
 
-1. เปิดหน้าด้วยเครื่องมือเบราว์เซอร์ของ session (Playwright MCP · Claude in Chrome) ที่ความกว้างที่ใช้รีวิว · ถ่ายภาพ **ก่อน**
-2. ลองค่าด้วยการรัน JavaScript ในหน้า (`browser_evaluate` ของ Playwright) — เปลี่ยน token ที่ราก ไม่ใช่ใส่ style ทีละกล่อง:
+1. Open the page with the session's browser tool (Playwright MCP · Claude in Chrome) at the width used for review · take a screenshot **before**
+2. Try values by running JavaScript in the page (`browser_evaluate` of Playwright) — change the token at the root, do not put a style on each box:
    ```js
    document.documentElement.style.setProperty('--radius', '10px');
    document.documentElement.style.setProperty('--accent', '#0b6e4f');
    ```
-3. ลองได้ไม่เกิน 3 ค่าต่อเรื่อง ถ่ายภาพทุกค่าที่ความกว้างเดิม วางเทียบกับภาพก่อน
-4. ค่าที่ชนะ **เขียนลงไฟล์ต้นทาง** (token ใน css เดิมตามข้อ 0 · ไม่ใช่ไฟล์ใหม่) แล้วโหลดหน้าใหม่ถ่ายอีกครั้ง — ภาพหลังโหลดต้องตรงกับภาพที่เลือก
-5. ทุกค่าต้องยังอยู่ในสเกลข้อ 1–2 · ค่านอกสเกลที่ชนะ = สเกลผิด ให้บอกผู้ใช้ ไม่แอบใส่
+3. Try no more than 3 values per issue; take a screenshot of every value at the same width and compare with the before image
+4. **Write the winning value into the source file** (the token in the existing css per section 0 · not a new file), then reload the page and take another screenshot — the after-reload image must match the chosen image
+5. Every value must still be in the scale of sections 1–2 · a winning value outside the scale = the scale is wrong; tell the user, do not slip it in
 
-ห้ามส่งงานที่ค่าอยู่แค่ในเบราว์เซอร์ — ปิดแท็บแล้วหาย
+Never deliver work whose values live only in the browser — they vanish when the tab closes.
 
-## 2 · หลายแบบของชิ้นเดียว
+## 2 · Several variants of one piece
 
-ใช้กับชิ้นที่มีหลายทางและเลือกผิดแล้วแพง (hero · การ์ดหลัก · หน้าว่าง) · ชิ้นเล็ก (สีปุ่ม · มุมโค้ง) ใช้หัวข้อ 1 พอ
+Use for a piece with several routes where choosing wrong is costly (hero · main card · empty page) · for small pieces (button color · corner radius) section 1 is enough
 
-1. ตั้งชื่อชิ้นให้ชัด 1 ชิ้น (เช่น `การ์ดสินค้าในหน้ารายการ`) และสิ่งที่ห้ามเปลี่ยน (token · ข้อมูลตัวอย่าง · ขนาดกล่อง)
-2. ทำ **3 แบบที่ต่างกันจริง** — ต่างที่โครง (ภาพบน/ภาพข้าง · ราคาเด่น/ชื่อเด่น) ไม่ใช่ต่างแค่สี · ชิ้นใหญ่ส่ง subagent ตัวใหม่แบบละตัวตาม `parallel-attempts-pick-best`
-3. วางทั้ง 3 แบบในไฟล์ mockup เดิม สลับด้วย attribute ไม่ใช่ทำ 3 ไฟล์:
+1. Name exactly 1 piece (for example `product card in the list page`) and what must not change (tokens · sample data · box size)
+2. Make **3 genuinely different variants** — different in structure (image on top/beside · price prominent/name prominent), not just in color · for a large piece, send one new subagent per variant per `parallel-attempts-pick-best`
+3. Put all 3 variants in the existing mockup file and switch with an attribute; do not make 3 files:
    ```html
    <div class="variants" data-show="a">
      <article data-variant="a"> … </article>
@@ -39,16 +39,16 @@
    .variants[data-show="b"] > [data-variant="b"],
    .variants[data-show="c"] > [data-variant="c"] { display: block; }
    ```
-   ตัวสลับเปลี่ยนแค่ `data-show` ของกล่องนอก
-   ปุ่มสลับแบบอยู่ในกล่องควบคุมของ mockup เท่านั้น (ข้อ 9 · ห้ามติดในภาพที่ส่งรีวิว)
-4. ถ่ายภาพทุกแบบที่ความกว้างเดียวกัน ส่งให้ผู้ตรวจด่านสวยตัวใหม่ (ลำดับผู้ตรวจตามข้อ 9) ให้คะแนน 7 แกนและตอบว่าแบบไหน "กล้าพอโดยไม่ดัง"
-5. เก็บแบบที่ชนะ ลบอีก 2 แบบและตัวสลับออกจากไฟล์ · จดใต้ **ตัดสินใจเอง**: เลือกแบบไหน · ไม่เลือกอะไร · คะแนน
+   The switcher changes only the `data-show` of the outer box
+   The switch buttons live only in the mockup's control box (section 9 · never stuck into the image sent for review)
+4. Take screenshots of every variant at the same width, send them to a new beauty-gate (`ด่านสวย`) reviewer (reviewer order per section 9) to score the 7 axes and answer which variant is "bold enough without being loud"
+5. Keep the winning variant, delete the other 2 and the switcher from the file · note under `ตัดสินใจเอง` (decided on my own): which was chosen · which was not · the scores
 
-## 3 · กับดัก
+## 3 · Traps
 
-| กับดัก | ทำไมพัง | แทนด้วย |
+| Trap | Why it breaks | Replace with |
 |---|---|---|
-| ลองค่าทีละกล่องด้วย style ในบรรทัด | ค่าชนะแล้วต้องไล่แก้หลายจุด และหลุดสเกล | เปลี่ยน token ที่ราก |
-| 3 แบบต่างกันแค่สี | ผู้ตรวจเลือกตามรสนิยม ไม่ได้คำตอบเรื่องโครง | ต่างที่โครงหรือลำดับสายตา |
-| ทิ้งแบบที่แพ้ไว้ในไฟล์ "เผื่อใช้" | ไฟล์ส่งมอบมีของที่ไม่มีใครใช้ คนต่อไปสับสน | ลบ · ภาพเก็บไว้ใน `_to_delete/` |
-| ให้คนทำเป็นคนเลือก | มองงานตัวเองดีกว่าความจริงเสมอ (ข้อ 9) | ผู้ตรวจตัวใหม่ |
+| Trying values box by box with inline style | A winning value means chasing many edits, and it falls off the scale | Change the token at the root |
+| 3 variants that differ only in color | The reviewer chooses by taste and gives no answer on structure | Differ in structure or visual order |
+| Leaving the losing variants in the file "just in case" | The deliverable holds things nobody uses, and the next person gets confused | Delete · keep the images in `_to_delete/` |
+| Letting the maker be the one to choose | They always see their own work as better than the truth (section 9) | A new reviewer |

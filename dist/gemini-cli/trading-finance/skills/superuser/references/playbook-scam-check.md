@@ -1,15 +1,15 @@
-# playbook · scam-check — ตรวจก่อนโอน หรือหลังโดนหลอก
+# playbook · scam-check — check before transferring, or after being scammed
 
-ใช้เมื่อ: จะโอนเงินให้การลงทุน แอป กลุ่ม LINE หรือคนที่อ้างว่าเป็นเจ้าหน้าที่ · เพิ่งโอนไปแล้วสงสัยว่าโดนหลอก
-skill หลัก: `scam-check`
+Use when: about to transfer money to an investment, an app, a LINE group, or someone claiming to be an official · just transferred and suspects a scam.
+Main skill: `scam-check`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน (Steps — copy into the todo as written)
 
-1. ถ้าโอนไปแล้ว ให้ทำขั้นตอนเร่งด่วนใน `scam-check` ก่อนอย่างอื่น (แจ้งอายัดบัญชี · ติดต่อธนาคาร · เก็บหลักฐาน) · ใคร: หัวหน้าทีม (คุยกับผู้ใช้ทันที)
-2. ถ้ายังไม่โอน ให้ตรวจสัญญาณอันตรายตาม `scam-check` และตรวจใบอนุญาตจากเว็บหน่วยงานกำกับ · ใคร: `money-planner` ตัวใหม่
-3. สรุปผล: ระดับความเสี่ยง · สัญญาณที่เจอ · หลักฐาน · ใคร: `money-planner` ตัวใหม่สรุป · `reviewer` ตัวใหม่ตรวจหลักฐานก่อนถึงผู้ใช้
-4. ร่างข้อความแจ้งความหรือแจ้งธนาคาร และรายการหลักฐาน · ใคร: หัวหน้าทีมร่าง · `reviewer` ตัวใหม่ตรวจร่าง แล้วผู้ใช้เป็นคนส่ง
+1. If the money has already been transferred, do the urgent steps in `scam-check` before anything else (report to freeze the account · contact the bank · keep evidence) · ใคร: หัวหน้าทีม (talk to the user at once)
+2. If not yet transferred, ตรวจ the warning signs under `scam-check` and check the licence on the regulator's website · ใคร: `money-planner` ตัวใหม่
+3. Summarise the result: risk level · signs found · evidence · ใคร: `money-planner` ตัวใหม่ summarises · `reviewer` ตัวใหม่ checks the evidence before it reaches the user
+4. Draft the message to the police or the bank, and a list of evidence · ใคร: หัวหน้าทีม drafts · `reviewer` ตัวใหม่ checks the draft, then the user sends it
 
-## จบเมื่อ
+## Done when
 
-ผลตรวจพร้อมหลักฐาน และขั้นตอนถัดไปที่ผู้ใช้ทำได้ทันที
+The check result comes with evidence, and the next steps the user can take at once.

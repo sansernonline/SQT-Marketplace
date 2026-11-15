@@ -1,37 +1,37 @@
-# ชุดงานที่นักออกแบบทำไว้ หยิบมาปรับแทนการวาดเอง
+# Designer-made asset sets: pick one and adapt it instead of drawing your own
 
-ใช้เมื่อผู้ใช้อยากได้แนวที่โค้ดวาดเองไม่ถึง (มีมิติ · หลายสี · 3 มิติ · ภาพประกอบ) และไม่มีตัวสร้างภาพหรือนักออกแบบ · ทุกแถวอ่านจากไฟล์ LICENSE หรือหน้าใบอนุญาตจริงเมื่อ 2026-10-27 · ใบอนุญาตเปลี่ยนได้ ก่อนใช้งานจริงให้เปิดลิงก์ตรวจซ้ำ · จำนวนจาก `info.json` ของแพ็กเกจ `@iconify-json/<ชุด>`
+Use when the user wants a style that code-drawn icons cannot reach (depth · multi-color · 3D · illustration) and there is no image generator or designer. Every row was read from the actual LICENSE file or license page on 2026-10-27 · licenses can change, so open the link and re-check before real use · counts come from `info.json` of the `@iconify-json/<set>` package.
 
-## 1 · เลือกตามแนวที่ผู้ใช้อยากได้
+## 1 · Pick by the style the user wants
 
-| แนว | ชุด | ใบอนุญาต | ไฟล์ · ติดตั้ง | หมายเหตุ |
+| Style | Set | License | File · install | Notes |
 |---|---|---|---|---|
-| สีมีมิติ (ชิ้นซ้อน ไล่แสง) | Fluent UI System Icons แบบ color | MIT | SVG แก้สีได้ · `@fluentui/svg-icons` (ไฟล์ `*_color.svg`) หรือ `@iconify-json/fluent-color` | 890 ตัว · สีเดิมหลายตัวเป็นม่วงชมพูแบบ Copilot ให้เปลี่ยนสีก่อนใช้ · บางตัวมีแค่ขนาด 16–24 |
-| สีมีมิติ | IconPark ธีม multi-color · two-tone | Apache 2.0 | SVG | 2,658 ตัว |
-| สีแบน | Icons8 Flat Color | MIT | SVG | 329 ตัว |
-| 3 มิติ | Fluent Emoji 3D | MIT | PNG 256 แก้สีไม่ได้ · ตัวเดียวกันมีแบบ Color และ Flat เป็น SVG | แบบ Color 3,126 ตัว |
-| 3 มิติ | 3dicons.co | CC0 | (ยังไม่ได้ตรวจรูปแบบไฟล์) | |
-| เส้นสองน้ำหนัก (duotone) | Phosphor | MIT | SVG · `@phosphor-icons/core` | 9,072 ตัวรวม 6 น้ำหนัก |
-| เส้น | Lucide · Tabler · Iconoir · Material Symbols | ISC · MIT · MIT · Apache 2.0 | SVG | ไอคอนหน้าจอ ดู [`icon-sets.md`](icon-sets.md) |
-| ภาพประกอบ | Open Peeps · Humaaans · Open Doodles | CC0 | SVG · PNG | |
-| ภาพประกอบ | unDraw | ใบอนุญาตของ unDraw | SVG เปลี่ยนสีได้บนเว็บ | ไม่ต้องให้เครดิต แต่ห้ามรวมเป็นแพ็กแจกต่อ ห้ามทำบริการเลียนแบบ ห้ามใช้ฝึกโมเดล AI |
-| อีโมจิ | Noto Emoji | ภาพ Apache 2.0 · ฟอนต์ OFL 1.1 | SVG · PNG | 3,729 ตัว |
+| Color with depth (layered pieces, gradients) | Fluent UI System Icons, color variant | MIT | SVG, recolorable · `@fluentui/svg-icons` (files `*_color.svg`) or `@iconify-json/fluent-color` | 890 icons · many original colors are the Copilot purple-pink, so change the colors before use · some exist only at 16–24 size |
+| Color with depth | IconPark, multi-color · two-tone themes | Apache 2.0 | SVG | 2,658 icons |
+| Flat color | Icons8 Flat Color | MIT | SVG | 329 icons |
+| 3D | Fluent Emoji 3D | MIT | PNG 256, cannot be recolored · the same icon also comes as Color and Flat SVG | Color variant has 3,126 icons |
+| 3D | 3dicons.co | CC0 | (file format not checked yet) | |
+| Two-weight line (duotone) | Phosphor | MIT | SVG · `@phosphor-icons/core` | 9,072 icons across 6 weights |
+| Line | Lucide · Tabler · Iconoir · Material Symbols | ISC · MIT · MIT · Apache 2.0 | SVG | Screen icons, see [`icon-sets.md`](icon-sets.md) |
+| Illustration | Open Peeps · Humaaans · Open Doodles | CC0 | SVG · PNG | |
+| Illustration | unDraw | unDraw's own license | SVG, recolorable on the web | No credit needed, but you must not bundle it into a pack for redistribution, build a competing service, or use it to train AI models |
+| Emoji | Noto Emoji | Images Apache 2.0 · font OFL 1.1 | SVG · PNG | 3,729 icons |
 
-**ต้องใส่เครดิต:** Twemoji (ภาพ CC BY 4.0) · Streamline ชุดฟรี (CC BY 4.0)
+**Credit required:** Twemoji (images CC BY 4.0) · Streamline free set (CC BY 4.0)
 
-**ไม่เหมาะทำไอคอนแอปหรือโลโก้:** Remix Icon (ใบอนุญาต v1.0 ม.ค. 2026 ข้อ 3.3 ห้ามแม้เปลี่ยนสีหรือหมุน) · OpenMoji (CC BY-SA 4.0 งานดัดแปลงต้องปล่อยใบอนุญาตเดียวกัน) · SF Symbols
+**Not suitable for app icons or logos:** Remix Icon (license v1.0 of Jan 2026, clause 3.3 forbids use even after recoloring or rotating) · OpenMoji (CC BY-SA 4.0, derivative works must carry the same license) · SF Symbols
 
-**ข้อควรรู้:** MIT · Apache · CC0 · CC BY ไม่ให้สิทธิ์ผูกขาด คนอื่นใช้ภาพเดียวกันได้ ถ้าจะจดเครื่องหมายการค้า ไม่ควรใช้ภาพจากชุดตรง ๆ (ความเห็นทั่วไป ยังไม่ได้ตรวจกับแหล่งกฎหมาย)
+**Good to know:** MIT · Apache · CC0 · CC BY give no exclusive rights, so others can use the same image. If the user will register a trademark, do not use an image straight from a set (general opinion, not checked against a legal source).
 
-## 2 · ขั้นตอนหยิบมาปรับ
+## 2 · Steps to pick and adapt
 
-1. ค้นในชุดที่ตรงแนว เลือกตัวที่ใกล้ metaphor ที่สุด 2–3 ตัวต่อไอคอน · แพ็กเกจ `@iconify-json/<ชุด>` ให้ SVG ทั้งชุดใน `icons.json` และชื่อใบอนุญาตใน `info.json`
-2. ดาวน์โหลดลง `_to_delete/` แล้ววางในกรอบจริง เทียบทั้งพื้นสว่างและพื้นมืดที่ 16 · 48 · 128 px
-3. ปรับเป็นของแบรนด์: เปลี่ยนสีด้วย `scripts/recolor_icon.py --hex "<สีแบรนด์>"` ซึ่งคงความสว่างและแสงเงาของนักออกแบบไว้ หมุนแค่เฉดสี · ชุดที่แต่ละตัวต้องสีต่างกัน รันทีละตัวด้วย `--hex` ของตัวนั้น · ในชุดไม่มีตัวที่ตรง metaphor ให้ลองชุดถัดไปในแถวเดียวกัน ไม่วาดเติมเอง · วางในกรอบเดียวกันทั้งชุด · ไม่ตัด บาก หรือดัดรูปทรงกรอบ
-4. รัน `icon_check.py` แล้วเปิดภาพดูเอง · ส่ง `design-critic` ตัวใหม่ดู
-5. จดชื่อชุด รุ่น ใบอนุญาต และสิ่งที่ดัดแปลงไว้ใน NOTICE หรือ README
+1. Search the set that matches the style and pick the 2–3 icons closest to the metaphor for each icon · the `@iconify-json/<set>` package gives the whole set's SVGs in `icons.json` and the license name in `info.json`.
+2. Download into `_to_delete/`, then place in the real frame and compare on both light and dark backgrounds at 16 · 48 · 128 px.
+3. Make it the brand's own: recolor with `scripts/recolor_icon.py --hex "<brand color>"`, which keeps the designer's lightness and shading and rotates only the hue · for a set where each icon needs a different color, run it one icon at a time with that icon's `--hex` · if no icon in the set fits the metaphor, try the next set in the same row and do not draw extra pieces yourself · place the whole set in the same frame · do not cut, notch, or bend the frame's shape.
+4. Run `icon_check.py` and open the image yourself · send it to a fresh `design-critic`.
+5. Record the set name, version, license, and what you changed in NOTICE or README.
 
-## แหล่ง (เปิดอ่าน 2026-10-27)
+## Sources (read 2026-10-27)
 
 - Fluent UI System Icons — https://github.com/microsoft/fluentui-system-icons/blob/main/LICENSE
 - Fluent Emoji — https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE

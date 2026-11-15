@@ -1,54 +1,54 @@
-# ค้นหมวดก่อนออกแบบไอคอนแบรนด์
+# Research the category before designing a brand icon
 
-นักออกแบบไม่เริ่มจากกระดาษเปล่า แต่เริ่มจากดูว่าของในหมวดเดียวกันหน้าตาเป็นอย่างไร ใช้กฎอะไร และอะไรที่ใช้กันจนเฝือ · ไฟล์นี้คือผลค้นรอบแรก (เปิดอ่าน 2026-10-26) ใช้เป็นจุดเริ่ม แต่ละงานต้องค้นหมวดของตัวเองเพิ่ม
+Designers do not start from a blank page. They first look at what things in the same category look like, what rules they follow, and what has become overused · this file is the first round of research (read 2026-10-26), a starting point only · each job must research its own category further.
 
-## 1 · ค้นอะไรบ้าง (ทำทุกงาน ใช้เวลาไม่นาน)
+## 1 · What to research (every job, takes little time)
 
-| ค้น | ตัวอย่างคำค้นหรือที่ดู | ได้อะไร |
+| Look up | Example queries or where to look | What you get |
 |---|---|---|
-| ร้านหรือหน้ารายการที่ไอคอนจะไปอยู่ | Raycast Store · VS Code Marketplace · JetBrains Marketplace · Chrome Web Store · App Store หมวดเดียวกัน | ขนาด กรอบ พื้นมืดหรือสว่าง และหน้าตาของเพื่อนบ้านที่จะวางข้างกัน |
-| กฎทางการของปลายทาง | หน้า guideline ของร้านนั้น (ตารางข้อ 3) | ข้อห้ามที่ทำให้ถูกปฏิเสธ |
-| ตระกูลไอคอนที่มีหลายตัวแต่ดูเป็นชุด | ชุดแอปของ Microsoft · Adobe · Atlassian · JetBrains · Google | วิธีผูกให้เป็นชุด (ข้อ 2) |
-| บทความ redesign ที่นักออกแบบระบุชื่อ | "behind the design" + ชื่อแบรนด์ · "new icons" + ปี | วิธีคิดและบทเรียน ไม่ใช่แค่รูป |
-| แนวที่ใช้กันจนเฝือในหมวดนั้น | "AI logo trend" · "<หมวด> icon cliché" | สิ่งที่ต้องเลี่ยง (ข้อ 4) |
+| The store or listing page where the icon will sit | Raycast Store · VS Code Marketplace · JetBrains Marketplace · Chrome Web Store · App Store, same category | Size, frame, dark or light background, and how the neighbors beside it look |
+| The destination's official rules | That store's guideline page (table in section 3) | The bans that get an icon rejected |
+| Icon families with many members that still read as a set | Microsoft, Adobe, Atlassian, JetBrains, Google app suites | How to tie icons into a set (section 2) |
+| Redesign articles where the designer is named | "behind the design" + brand name · "new icons" + year | The thinking and the lessons, not just the pictures |
+| Styles overused in that category | "AI logo trend" · "<category> icon cliché" | What to avoid (section 4) |
 
-ผลส่งผู้ใช้เป็นลิงก์ให้กดดูเอง ไม่คัดลอกรูปแบรนด์อื่นมาเก็บหรือใส่งาน · อ่านแค่ข้อความยังไม่พอ ถ้ามีเครื่องมือจับภาพหน้าจอ ให้เปิดดูหน้าตาจริงก่อนสรุปแนว
+Give the results to the user as links to open themselves. Do not copy other brands' images to keep or put in the work · reading text alone is not enough, so if a screenshot tool exists, open the real page and look before deciding on a style.
 
-## 2 · วิธีผูกไอคอนหลายตัวให้เป็นชุด
+## 2 · Ways to tie several icons into a set
 
-| วิธี | ตัวอย่าง | ระวัง |
+| Method | Example | Watch out |
 |---|---|---|
-| รูปทรงและผิวเหมือนกัน ต่างที่สี | Microsoft 365 ชุด 2025 (ต้นแบบคือไอคอน Copilot · Jon Friedman 2025-10-01) | สีอย่างเดียวแยกตัวไม่พอสำหรับคนตาบอดสี |
-| กรอบเดียวกัน ใส่อักษรย่อ | Adobe Creative Cloud · JetBrains IDE | ผู้ใช้บ่นว่าแยกตัวไม่ออกเมื่อมีหลายตัว (Adobe 2020 · ฟอรัม JetBrains) |
-| สีชุดเดียวกันทุกตัว | Google Workspace 2020 | ถูกวิจารณ์ว่าแยกไม่ออก ปี 2026 ทำใหม่และเลิกบังคับ 4 สี |
-| สัญลักษณ์เล่าเรื่องของแต่ละตัว บนโครงเดียวกัน | Atlassian 2017 · ระบบไอคอน Atlassian 2025 | ต้องคุมน้ำหนักเส้นและกริดให้เท่ากัน |
+| Same shape and surface, different color | Microsoft 365 2025 set (prototype was the Copilot icon · Jon Friedman 2025-10-01) | Color alone is not enough to tell icons apart for color-blind people |
+| Same frame, with an initial inside | Adobe Creative Cloud · JetBrains IDEs | Users complain they cannot tell them apart when there are many (Adobe 2020 · JetBrains forum) |
+| One color set for every icon | Google Workspace 2020 | Criticized as indistinguishable · redone in 2026 and dropped the forced 4 colors |
+| A symbol that tells each product's story, on one shared frame | Atlassian 2017 · Atlassian icon system 2025 | Stroke weight and grid must be kept equal |
 
-บทเรียนร่วม: ทุกตัวในชุดต้องแยกออกที่ 16 px ด้วยรูปทรง ไม่ใช่ด้วยสีหรือตัวอักษรอย่างเดียว
+Shared lesson: every icon in a set must be distinguishable at 16 px by shape, not by color or letters alone.
 
-## 3 · กฎของปลายทางที่ไอคอน plugin มักไปอยู่
+## 3 · Rules of the destinations where plugin icons usually go
 
-| ปลายทาง | ไฟล์ | กฎสำคัญ |
+| Destination | File | Key rules |
 |---|---|---|
-| Claude Code (ช่อง `icon` ใน `plugin.json`) | path รูปใน plugin · ด่าน directory รับ PNG JPEG GIF WebP SVG | ไม่กำหนดขนาดหรือรูปทรง · Claude Code ไม่อ่าน ใช้แค่หน้า directory |
-| Raycast | PNG 512 | ต้องดูดีทั้งธีมมืดและสว่าง (มี `icon@dark.png` แยกได้) · ใช้ไอคอนตั้งต้นจะถูกปฏิเสธ |
-| JetBrains | SVG 40 · ภาพอยู่ใน 36 | ห้ามโลโก้ที่เป็นตัวอักษรล้วน · ห้ามคล้ายแบรนด์อื่น · ต้องชัดทั้ง 2 พื้น |
-| VS Code | PNG อย่างน้อย 128 (256 สำหรับจอ Retina) | ห้าม SVG |
-| Chrome | PNG 128 ภาพจริง 96 เว้นขอบด้านละ 16 | ห้ามขอบ · เลี่ยงเงาตกใหญ่ · หันหน้าตรง |
+| Claude Code (`icon` field in `plugin.json`) | Image path inside the plugin · the directory gate accepts PNG JPEG GIF WebP SVG | No size or shape set · Claude Code does not read it, only the directory page uses it |
+| Raycast | PNG 512 | Must look good on both dark and light themes (a separate `icon@dark.png` is allowed) · the default starter icon is rejected |
+| JetBrains | SVG 40 · artwork within 36 | No pure-text logos · must not resemble another brand · must be clear on both backgrounds |
+| VS Code | PNG at least 128 (256 for Retina screens) | No SVG |
+| Chrome | PNG 128, real artwork 96 with 16 margin on each side | No border · avoid large drop shadows · face front |
 
-กฎที่หลายแหล่งตรงกัน: อ่านออกทั้ง 2 พื้น · ไม่ใส่ข้อความ · ไม่มีขอบและเงาใหญ่ · เว้นขอบโปร่งใส · น้ำหนักภาพเท่ากันทั้งชุด · ไม่คล้ายแบรนด์อื่น · ไฟล์ต้นแบบหนึ่งชุดส่งออกได้ทุกปลายทาง (PNG 512 · PNG 128 · SVG 40)
+Rules that several sources agree on: readable on both backgrounds · no text · no border or large shadow · keep a transparent margin · equal visual weight across the set · not similar to another brand · one master file exports to every destination (PNG 512 · PNG 128 · SVG 40)
 
-## 4 · แนวที่ดูออกว่า AI ทำ (เลี่ยง)
+## 4 · Styles that look AI-made (avoid)
 
-| แนว | แหล่งที่วิจารณ์ |
+| Style | Source of the criticism |
 |---|---|
-| gradient ม่วงน้ำเงิน · starburst · แสงเรือง | Allen · UX Collective (2024-06) |
-| ประกาย sparkle ✦ ที่กลายเป็นป้าย "beta" | Josh Clark · Big Medium (2024-09) · Fast Company (2024) |
-| หกเหลี่ยมหรือเกลียวหมุน · หุ่นยนต์ตาโต | Fast Company (2023) |
-| วงกลม gradient มีรูกลาง | Radek Sienkiewicz (2025-04) |
+| Purple-blue gradient · starburst · glow | Allen · UX Collective (2024-06) |
+| Sparkle ✦ that became a "beta" tag | Josh Clark · Big Medium (2024-09) · Fast Company (2024) |
+| Hexagon or swirl · big-eyed robot | Fast Company (2023) |
+| Gradient circle with a hole in the middle | Radek Sienkiewicz (2025-04) |
 
-โลโก้ Claude ตั้งใจหนีแนวเหล่านี้ (DesignRush) · "สมอง" ยังไม่พบแหล่งที่ระบุชื่อ (ยังไม่ได้ตรวจ)
+The Claude logo deliberately avoids these styles (DesignRush) · "brain" has no named source yet (ยังไม่ได้ตรวจ — not checked).
 
-## แหล่ง (เปิดอ่าน 2026-10-26)
+## Sources (read 2026-10-26)
 
 - Microsoft Design · Fluid forms, vibrant colors — https://microsoft.design/articles/fluid-forms-vibrant-colors/
 - Adobe Design · Behind the design: Adobe's updated app icons — https://adobe.design/ideas/behind-the-design-adobe-s-updated-app-icons
@@ -67,7 +67,7 @@
 - Claude Code · Plugins reference — https://code.claude.com/docs/en/plugins-reference · Claude · Submit a plugin — https://claude.com/docs/plugins/submit
 - Raycast · Prepare an extension for the Store — https://developers.raycast.com/basics/prepare-an-extension-for-store
 - JetBrains · Plugin icon file — https://plugins.jetbrains.com/docs/intellij/plugin-icon-file.html
-- JetBrains Marketplace · Best practices for listing (ห้ามโลโก้ที่เป็นแค่ชื่อ · ห้ามคล้ายแบรนด์อื่น) — https://plugins.jetbrains.com/docs/marketplace/best-practices-for-listing.html
+- JetBrains Marketplace · Best practices for listing (no name-only logos · must not resemble another brand) — https://plugins.jetbrains.com/docs/marketplace/best-practices-for-listing.html
 - VS Code · Extension manifest — https://code.visualstudio.com/api/references/extension-manifest
-- VS Code · Publishing extensions (ไอคอนใน package.json ห้ามเป็น SVG) — https://code.visualstudio.com/api/working-with-extensions/publishing-extension
+- VS Code · Publishing extensions (icon in package.json must not be SVG) — https://code.visualstudio.com/api/working-with-extensions/publishing-extension
 - Chrome Web Store · Images — https://developer.chrome.com/docs/webstore/images

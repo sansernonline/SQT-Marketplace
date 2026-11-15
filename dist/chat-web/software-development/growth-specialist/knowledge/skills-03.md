@@ -2567,91 +2567,91 @@ guardrails = {
 
 ## reference: thai-marketplace-apis.md
 
-# API ของ marketplace ไทย (Shopee · Lazada · TikTok Shop · LINE)
+# Thai marketplace APIs (Shopee · Lazada · TikTok Shop · LINE)
 
-ใช้เมื่อสร้างระบบที่ดึงออเดอร์ ตัดสต็อก หรือสั่งส่งของผ่าน marketplace · ใช้คู่กับ [`inventory-management.md`](inventory-management.md) (sync หลายช่องทาง · จองสต็อก) · ผู้ขายที่ไม่ได้เขียนโปรแกรม → `e-commerce:multi-shop-stock` (ถ้าติดตั้ง)
-ข้อเท็จจริงทุกข้อมาจากเอกสารของผู้ให้บริการที่เปิดตรวจ 2026-10-23 (ตาราง "ที่มา") · ช่องที่เปิดหาแล้วไม่พบติดป้าย (ยังไม่ได้ตรวจ) · ตรวจซ้ำ 2026-10-26 ด้วยเบราว์เซอร์จริง (หน้า Shopee · Lazada · TikTok Shop ต้องรันสคริปต์ ไม่ต้องล็อกอินจึงเห็นเอกสาร)
-ตัวย่อ: Application Programming Interface (API) · Independent Software Vendor (ISV) คือบริษัทที่ทำระบบให้หลายร้าน · Hash-based Message Authentication Code (HMAC) คือลายเซ็นจากกุญแจลับ
+Use when building a system that pulls orders, deducts stock, or ships goods through a marketplace · use with [`inventory-management.md`](inventory-management.md) (multi-channel sync · stock reservation) · for sellers who do not program → `e-commerce:multi-shop-stock` (if installed)
+Every fact comes from the provider's documentation, opened and checked 2026-10-23 (section "Sources") · a field that was searched for and not found is labeled (ยังไม่ได้ตรวจ) (not yet checked) · re-checked 2026-10-26 with a real browser (the Shopee · Lazada · TikTok Shop pages need scripts to run; no login is needed to see the docs)
+Abbreviations: Application Programming Interface (API) · Independent Software Vendor (ISV) is a company that builds a system for many shops · Hash-based Message Authentication Code (HMAC) is a signature made from a secret key
 
-## 1 · เขียนเองหรือใช้ระบบสำเร็จรูป
+## 1 · Build it yourself or use a ready-made system
 
-- ร้านเดียวที่ขายหลายช่องทาง → ระบบหลังร้านที่ต่อไว้แล้ว (ข้อ 7) เร็วกว่าเขียนเอง
-- เขียนเองเมื่อเป็นระบบจัดการออเดอร์ (Order Management System · OMS) หรือ Enterprise Resource Planning (ERP) ที่มีลูกค้าหลายร้าน หรือมีกฎธุรกิจที่ระบบสำเร็จรูปทำไม่ได้
-- เช็กคุณสมบัติก่อนรับงาน: ร้านไทยที่จะใช้ Shopee Open Platform เองต้องเป็น Mall Seller หรือ Managed Seller
+- One shop that sells on several channels → an already-connected back-office system (item 7) is faster than building it yourself.
+- Build it yourself when it is an Order Management System (OMS) or Enterprise Resource Planning (ERP) with many shop customers, or has business rules a ready-made system cannot do.
+- Check eligibility before taking the job: a Thai shop that will use Shopee Open Platform itself must be a Mall Seller or Managed Seller.
 
-## 2 · สมัครและประเภทบัญชี
+## 2 · Sign-up and account types
 
 | | Shopee Open Platform | Lazada Open Platform | TikTok Shop Partner Center |
 |---|---|---|---|
-| ประเภท | Individual Seller · Registered Business Seller (ใช้กับร้านตัวเองเท่านั้น) · Third-party Partner Platform (ISV) | Software Developer (เรียก API ของร้านตัวเอง) · Service Provider (ขายบริการให้ร้าน · เลือกแล้วเปลี่ยนไม่ได้) | Seller developer (custom app ร้านตัวเอง) · App developer / ISV (public app) |
-| ISV ต้องมี | บริษัทจดทะเบียน · ผลิตภัณฑ์ใช้งานจริงพร้อมบัญชีทดลองที่เปิดทุกฟีเจอร์ · URL เป็น HTTPS · Transport Layer Security (TLS) 1.2 ขึ้นไป · เกรดความปลอดภัย "A" | ชื่อบริการ · โลโก้ 200×200 px · บัญชีรับเงินถ้าขายใน Service Market | ใบรับรองธุรกิจตรงกับ region ที่ลงทะเบียน · partner ในประเทศเลือกตลาดของตัวเอง |
-| ร้านทำเอง | ร้านไทย: Mall Seller หรือ Managed Seller | ไม่พบเงื่อนไขเฉพาะไทย · หน้าบทบาทผู้พัฒนา (docId=108001 ตรวจ 2026-10-26) แค่ให้ลงทะเบียนบทบาท Software Developer แล้วกรอกข้อมูล · ไม่ได้ตรวจกับทีม Lazada ว่ามีเกณฑ์นอกเอกสาร | ร้านเปิดแล้ว · มี Account Manager · ใช้อีเมลเดียวกับบัญชีร้าน |
+| Types | Individual Seller · Registered Business Seller (own shop only) · Third-party Partner Platform (ISV) | Software Developer (calls the API of its own shop) · Service Provider (sells services to shops · cannot be changed once chosen) | Seller developer (custom app for its own shop) · App developer / ISV (public app) |
+| An ISV needs | a registered company · a working product with a trial account that has every feature open · HTTPS URLs · Transport Layer Security (TLS) 1.2 or higher · security grade "A" | service name · 200×200 px logo · a payout account if selling in Service Market | a business certificate matching the registered region · a partner in a country picks its own market |
+| Shop doing it itself | Thai shop: Mall Seller or Managed Seller | no Thai-specific condition found · the developer-role page (docId=108001, checked 2026-10-26) only says to register the Software Developer role and fill in the details · not checked with the Lazada team whether there are criteria outside the docs | shop already open · has an Account Manager · uses the same email as the shop account |
 
-## 3 · ลายเซ็นและสิทธิ์จากร้าน
-
-| | Shopee | Lazada | TikTok Shop |
-|---|---|---|---|
-| ลายเซ็น | HMAC-SHA256 ด้วย partner key ของ partner_id + api path + timestamp + access_token + shop_id · hex | เรียงพารามิเตอร์ตาม ASCII ต่อชื่อกับค่า นำหน้าด้วยชื่อ API ต่อท้ายด้วย body · HMAC-SHA256 ด้วย app secret · hex ตัวใหญ่ | เรียง query (ไม่รวม sign และ access_token) ต่อกัน นำหน้าด้วย path ต่อท้ายด้วย body (ยกเว้น multipart) ห่อด้วย app secret หัวท้าย · HMAC-SHA256 |
-| เวลา | timestamp ใช้ได้ 5 นาที | timestamp ต่างจากเวลา UTC ไม่เกิน 7200 วินาที (2 ชม. · open.lazada.com หน้า API GetSellerItemLimit ตรวจ 2026-10-26) | timestamp ต้องอยู่ในช่วง 5 นาทีจากเวลาที่แพลตฟอร์มรับ เป็น Unix 10 หลัก (sign-your-api-request ตรวจ 2026-10-26) |
-| ร้านอนุญาต | ลิงก์ authorize → `code` ใช้ครั้งเดียว อายุ 10 นาที | OAuth 2.0 แบบ code-for-token ที่ `auth.lazada.com` | `auth_code` อายุ 30 นาที ใช้ครั้งเดียว → `auth.tiktok-shops.com/api/v2/token/get` |
-| access token | 4 ชม. · ตัวเก่ายังใช้ได้อีก 5 นาทีหลัง refresh | ตัวอย่างในเอกสาร 864,000 วินาที (10 วัน) | ค่าตั้งต้น 7 วัน · ส่งใน header `x-tts-access-token` |
-| refresh token · อายุสิทธิ์ | refresh 30 วัน · ร้านอนุญาตได้นานสุด 365 วัน | ตัวอย่าง 4,320,000 วินาที (50 วัน) · หมดแล้วร้านต้องอนุญาตใหม่ | เท่ากับระยะที่ร้านอนุญาต |
-| host | เลือกตามที่ตั้งเซิร์ฟเวอร์ · ใกล้สิงคโปร์ใช้ `https://partner.shopeemobile.com` | `https://api.lazada.co.th/rest` | `https://open-api.tiktokglobalshop.com` |
-
-## 4 · endpoint หลัก
-
-| งาน | Shopee (Open API v2) | Lazada | TikTok Shop (รุ่นอยู่ใน path · ใช้รุ่นล่าสุดที่หน้าอ้างอิงแสดง) |
-|---|---|---|---|
-| ออเดอร์ | `get_order_list` (`/api/v2/order/get_order_list` · ช่วงวันที่ไม่เกิน 15 วัน) · `get_order_detail` · `cancel_order` | GetOrders (`/orders/get`) · GetOrder · GetOrderItems | Get Order List (`/order/202309/orders/search`) · Get Order Detail |
-| สินค้า | `add_item` · `get_item_list` · `get_item_base_info` · `get_model_list` | CreateProduct · GetProducts | Create Product · Search Products |
-| สต็อก · ราคา | `update_stock` · `update_price` | UpdatePriceQuantity · UpdateSellableQuantity | Update Inventory · Update Price |
-| ส่งของ | `get_shipping_parameter` · `ship_order` · `get_tracking_number` · `create_shipping_document` | Pack · ReadyToShip · GetShipmentProvider · PrintAWB · GetOrderTrace | Ship Package · Batch Ship Packages · Get Package Shipping Document |
-
-## 5 · webhook · rate limit · sandbox
+## 3 · Signature and permission from the shop
 
 | | Shopee | Lazada | TikTok Shop |
 |---|---|---|---|
-| webhook | Push Mechanism: Order Status (code 3) · Order TrackingNo (4) · Reserved Stock Change (8) · Shop Authorization Canceled (2) · Authorization Expiry (12 · ล่วงหน้า 7 วัน) · ตอบ 2xx · บอกแค่ว่าข้อมูลเปลี่ยน ต้องเรียก API ดึงของจริง | Lazada Push Mechanism: trade order · reverse order (คืน · คืนเงิน) · callback ต้องเป็น HTTPS ใบรับรองระดับ Organization Validation (OV) หรือ Extended Validation (EV) · ระดับ Domain Validation (DV) ใช้ไม่ได้ | ORDER_STATUS_CHANGE · PACKAGE_UPDATE · PRODUCT_STATUS_CHANGE · SELLER_DEAUTHORIZATION · UPCOMING_AUTHORIZATION_EXPIRATION (ล่วงหน้า 30 วัน แล้วทุกวัน) |
-| ตรวจ webhook | header `Authorization` = hex HMAC-SHA256 ของ URL ต่อด้วย `\|` แล้วต่อ body ด้วย partner key | header `Authorization` = hex HMAC-SHA256 ของ app_key + body ด้วย app secret | header `Authorization` = hex ตัวเล็ก HMAC-SHA256 ของ app_key + body ดิบ ด้วย app secret · กันซ้ำด้วย `tts_notification_id` |
-| rate limit | ไม่พบตัวเลขในหน้า developer-guide 12 · 16 และ FAQ ที่เปิด 2026-10-26 (ยังไม่ได้ตรวจ · ถามทีม Shopee หรือทดสอบใน sandbox) | ไม่มีเพดานรวม · GetSellerItemLimit ระบุ 10 qps ต่อร้าน · หน้า GetOrders ไม่ระบุตัวเลข · เอกสาร push เตือนว่าเรียก GetOrders ถี่จะโดน throttle | queries per second (QPS) ปรับแบบพลวัตตามจำนวนร้านที่อนุญาตและภาระของ endpoint · ไม่มีค่าตายตัวรวม (rate-limits ตรวจ 2026-10-26) · จุดเริ่มที่แนะนำต่อแอป × ร้าน: เขียนหนัก 0.2–1 ครั้ง/วินาที · เขียนปกติ 1–3 · อ่าน 3–10 · อ่านเบา 5–20 · เฝ้า 429 และ 36009002 |
-| sandbox | Sandbox V2 `https://openplatform.sandbox.test-stable.shopee.sg/` · สร้างร้านและออเดอร์ทดสอบได้ · partner_id ทดสอบใช้ได้แค่ sandbox | ยืมบัญชีทดสอบ · ออเดอร์ทดสอบเป็นเก็บเงินปลายทาง (COD) · 10 case/วัน/app key · ระบบจริงคือข้อมูลร้านจริง | Development Shops: Core Function (ไม่จ่ายเงินจริง · เลื่อนสถานะออเดอร์ด้วยเครื่องมือ) · Full Function (จ่ายจริงด้วยราคาต่ำ) |
+| Signature | HMAC-SHA256 with the partner key of partner_id + api path + timestamp + access_token + shop_id · hex | sort the parameters in ASCII order and join name with value, prefix with the API name, append the body · HMAC-SHA256 with the app secret · uppercase hex | sort the query (excluding sign and access_token) and join, prefix with the path, append the body (except multipart), wrap with the app secret at both ends · HMAC-SHA256 |
+| Time | timestamp valid for 5 minutes | timestamp differs from UTC time by at most 7200 seconds (2 hours · open.lazada.com, page of the GetSellerItemLimit API, checked 2026-10-26) | timestamp must be within 5 minutes of the time the platform receives it, 10-digit Unix (sign-your-api-request, checked 2026-10-26) |
+| Shop authorizes | authorize link → `code`, single use, valid 10 minutes | OAuth 2.0 code-for-token at `auth.lazada.com` | `auth_code` valid 30 minutes, single use → `auth.tiktok-shops.com/api/v2/token/get` |
+| access token | 4 hours · the old one works for 5 more minutes after refresh | the docs example is 864,000 seconds (10 days) | default 7 days · sent in the header `x-tts-access-token` |
+| refresh token · permission lifetime | refresh 30 days · a shop can authorize for at most 365 days | example 4,320,000 seconds (50 days) · after that the shop must authorize again | equals the period the shop authorized |
+| host | choose by server location · near Singapore use `https://partner.shopeemobile.com` | `https://api.lazada.co.th/rest` | `https://open-api.tiktokglobalshop.com` |
 
-## 6 · LINE และ PromptPay
+## 4 · Main endpoints
 
-- **LINE SHOPPING / MyShop ยังเปิดอยู่** (lineshoppingseller.com · เปิดร้านฟรีผ่าน LINE Official Account) · LINE SHOPPING API เปิดให้พาร์ทเนอร์แพลตฟอร์มเท่านั้น ไม่พบเอกสารสาธารณะ → ร้านต่อผ่านพาร์ทเนอร์ในหน้า Partners (รวมราว 20 ราย เช่น ZORT · BigSeller · BentoWeb · PEAK)
-- **LINE Pay ไทย** ใช้ชื่อ "LINE Pay" (pay-th.line.me · ร้านค้าสมัครแล้วรอพิจารณา · รับชำระออนไลน์ผ่าน API) · ลิงก์ช่วยเหลือด้านเทคนิคพาไป developers-pay.line.me: Online API v3 (`/v3/payments/request` · `confirm` · `refund`) · header `X-LINE-ChannelId` · `X-LINE-Authorization-Nonce` · `X-LINE-Authorization` (HMAC-SHA256) · sandbox `sandbox-api-pay.line.me`
-- หน้าเอกสาร LINE Pay ไม่ได้ระบุประเทศไทย และ change log ล่าสุด (พ.ย. 2025) เป็นของไต้หวัน · LINE Pay ญี่ปุ่นปิดแล้ว → ยืนยันกับ LINE Pay ไทยก่อนเชื่อมตรง (รอยืนยัน) · ทางที่ง่ายกว่าคือรับผ่าน payment gateway (`fintech-payments`)
-- PromptPay QR บนหน้าชำระเงิน → `e-commerce:promptpay-qr` (ถ้าติดตั้ง)
+| Task | Shopee (Open API v2) | Lazada | TikTok Shop (the version is in the path · use the latest version the reference page shows) |
+|---|---|---|---|
+| Orders | `get_order_list` (`/api/v2/order/get_order_list` · date range at most 15 days) · `get_order_detail` · `cancel_order` | GetOrders (`/orders/get`) · GetOrder · GetOrderItems | Get Order List (`/order/202309/orders/search`) · Get Order Detail |
+| Products | `add_item` · `get_item_list` · `get_item_base_info` · `get_model_list` | CreateProduct · GetProducts | Create Product · Search Products |
+| Stock · price | `update_stock` · `update_price` | UpdatePriceQuantity · UpdateSellableQuantity | Update Inventory · Update Price |
+| Shipping | `get_shipping_parameter` · `ship_order` · `get_tracking_number` · `create_shipping_document` | Pack · ReadyToShip · GetShipmentProvider · PrintAWB · GetOrderTrace | Ship Package · Batch Ship Packages · Get Package Shipping Document |
 
-## 7 · ระบบหลังร้านที่ผู้ขายไทยใช้แทนการเขียนเอง
+## 5 · Webhook · rate limit · sandbox
 
-| ระบบ | จากเว็บผู้ผลิต |
+| | Shopee | Lazada | TikTok Shop |
+|---|---|---|---|
+| webhook | Push Mechanism: Order Status (code 3) · Order TrackingNo (4) · Reserved Stock Change (8) · Shop Authorization Canceled (2) · Authorization Expiry (12 · 7 days ahead) · reply 2xx · it only says the data changed; call the API to fetch the real data | Lazada Push Mechanism: trade order · reverse order (return · refund) · the callback must be HTTPS with an Organization Validation (OV) or Extended Validation (EV) certificate · Domain Validation (DV) level cannot be used | ORDER_STATUS_CHANGE · PACKAGE_UPDATE · PRODUCT_STATUS_CHANGE · SELLER_DEAUTHORIZATION · UPCOMING_AUTHORIZATION_EXPIRATION (30 days ahead, then every day) |
+| verify the webhook | header `Authorization` = hex HMAC-SHA256 of the URL followed by `\|` then the body, with the partner key | header `Authorization` = hex HMAC-SHA256 of app_key + body with the app secret | header `Authorization` = lowercase hex HMAC-SHA256 of app_key + raw body with the app secret · de-duplicate with `tts_notification_id` |
+| rate limit | no number found on developer-guide pages 12 · 16 and the FAQ opened 2026-10-26 (ยังไม่ได้ตรวจ · ask the Shopee team or test in the sandbox) | no overall cap · GetSellerItemLimit states 10 qps per shop · the GetOrders page gives no number · the push docs warn that calling GetOrders too often gets throttled | queries per second (QPS) adjusts dynamically with the number of authorized shops and the endpoint's load · no fixed overall value (rate-limits, checked 2026-10-26) · suggested starting point per app × shop: heavy writes 0.2–1 per second · normal writes 1–3 · reads 3–10 · light reads 5–20 · watch for 429 and 36009002 |
+| sandbox | Sandbox V2 `https://openplatform.sandbox.test-stable.shopee.sg/` · can create test shops and orders · a test partner_id works only in the sandbox | borrow a test account · test orders are cash on delivery (COD) · 10 cases/day/app key · the live system means real shop data | Development Shops: Core Function (no real payment · advance order status with a tool) · Full Function (real payment at a low price) |
+
+## 6 · LINE and PromptPay
+
+- **LINE SHOPPING / MyShop is still open** (lineshoppingseller.com · open a shop free through a LINE Official Account) · the LINE SHOPPING API is open to platform partners only, and no public docs were found → a shop connects through a partner on the Partners page (about 20 in total, such as ZORT · BigSeller · BentoWeb · PEAK)
+- **LINE Pay Thailand** uses the name "LINE Pay" (pay-th.line.me · a merchant applies and waits for review · accepts online payment through an API) · the technical help link goes to developers-pay.line.me: Online API v3 (`/v3/payments/request` · `confirm` · `refund`) · headers `X-LINE-ChannelId` · `X-LINE-Authorization-Nonce` · `X-LINE-Authorization` (HMAC-SHA256) · sandbox `sandbox-api-pay.line.me`
+- The LINE Pay docs do not name Thailand, and the latest change log (Nov 2025) belongs to Taiwan · LINE Pay Japan has closed → confirm with LINE Pay Thailand before connecting directly (รอยืนยัน) · the easier way is to accept through a payment gateway (`fintech-payments`)
+- PromptPay QR on the payment page → `e-commerce:promptpay-qr` (if installed)
+
+## 7 · Back-office systems Thai sellers use instead of building their own
+
+| System | From the vendor's website |
 |---|---|
-| ZORT | ระบบจัดการออเดอร์และสต๊อกทุกช่องทาง · มี API ที่ `https://open-api.zortout.com/v4` (header `storename` · `apikey` · `apisecret` · sync สินค้า ใบสั่งซื้อ ออเดอร์) |
-| BentoWeb | ระบบอีคอมเมิร์ซครบวงจร · เชื่อม Lazada · Shopee · LINE Shopping · TikTok Shop · ส่งข้อมูลสินค้า สต็อก ออเดอร์เข้า ERP ผ่าน API |
-| BigSeller | ระบบหลังบ้านจัดการสินค้า ออเดอร์ สต๊อก มีแบบฟรี · เชื่อมมากกว่า 16 แพลตฟอร์ม เช่น Shopee · Lazada · TikTok Shop |
+| ZORT | order and stock management system for every channel · has an API at `https://open-api.zortout.com/v4` (headers `storename` · `apikey` · `apisecret` · syncs products, purchase orders, orders) |
+| BentoWeb | all-in-one e-commerce system · connects Lazada · Shopee · LINE Shopping · TikTok Shop · sends product, stock and order data into an ERP through an API |
+| BigSeller | back-office system for products, orders, stock · has a free tier · connects more than 16 platforms such as Shopee · Lazada · TikTok Shop |
 
-## 8 · กฎที่ใช้ทุกเจ้า
+## 8 · Rules that apply to every provider
 
-- webhook ไม่ใช่ความจริงชุดเดียว → poll กระทบยอดตามรอบด้วย (TikTok เขียนไว้ตรง ๆ · Shopee บอกให้เรียก API ดึงของจริง)
-- ตรวจลายเซ็น webhook ก่อนทำอะไร · ตอบ 2xx ทันที แล้วทำงานต่อในคิว (`background-jobs`)
-- กันงานซ้ำด้วยรหัส notification หรือรหัสออเดอร์ (`principle-safe-to-rerun`)
-- เก็บ token แยกต่อร้าน · refresh ก่อนหมด · เตือนร้านก่อนสิทธิ์หมด (Shopee 365 วัน · Lazada refresh 50 วัน · TikTok แจ้งล่วงหน้า 30 วัน)
-- สต็อกกันขายเกินด้วยการจองตาม [`inventory-management.md`](inventory-management.md) · partner key และ app secret อยู่นอกโค้ด (`config-and-secrets`)
+- A webhook is not the single source of truth → also poll to reconcile on a schedule (TikTok says so directly · Shopee says to call the API to fetch the real data)
+- Verify the webhook signature before doing anything · reply 2xx at once, then continue the work in a queue (`background-jobs`)
+- Prevent duplicate work with the notification id or order id (`principle-safe-to-rerun`)
+- Store tokens per shop · refresh before they expire · warn the shop before the permission expires (Shopee 365 days · Lazada refresh 50 days · TikTok notifies 30 days ahead)
+- Prevent overselling with reservation per [`inventory-management.md`](inventory-management.md) · keep the partner key and app secret outside the code (`config-and-secrets`)
 
-## ที่มา
+## Sources
 
-| เรื่อง | URL (เปิดตรวจ 2026-10-23) |
+| Topic | URL (opened and checked 2026-10-23) |
 |---|---|
-| Shopee สมัคร · เกณฑ์ไทย · ISV | https://open.shopee.com/developer-guide/12 |
-| Shopee host · ลายเซ็น · token | https://open.shopee.com/developer-guide/16 · https://open.shopee.com/developer-guide/20 |
-| Shopee push · sandbox · endpoint | https://open.shopee.com/developer-guide/18 · https://open.shopee.com/developer-guide/644 · https://open.shopee.com/documents/v2/v2.order.get_order_list?module=94&type=1 (รายชื่อ API ในแถบข้าง) |
-| Lazada ลายเซ็น · host · บทบาท | https://open.lazada.com/apps/doc/doc?nodeId=10450&docId=108068 · ...docId=108065 · ...docId=108001 |
-| Lazada สิทธิ์จากร้าน · ทดสอบ · push | ...nodeId=10777&docId=108260 · ...docId=121061 · ...nodeId=29524&docId=120168 · https://open.lazada.com/apps/doc/api?path=%2Forders%2Fget |
-| TikTok Shop ประเภท · สมัคร · token | https://partner.tiktokshop.com/docv2/page/tts-developer-types · .../developer-onboarding · .../authorization-overview-202407 |
-| TikTok Shop ลายเซ็น · host · รุ่น · rate limit | .../sign-your-api-request · .../methods-and-endpoints · .../api-versioning · .../rate-limits · .../regions-and-languages |
+| Shopee sign-up · Thai criteria · ISV | https://open.shopee.com/developer-guide/12 |
+| Shopee host · signature · token | https://open.shopee.com/developer-guide/16 · https://open.shopee.com/developer-guide/20 |
+| Shopee push · sandbox · endpoint | https://open.shopee.com/developer-guide/18 · https://open.shopee.com/developer-guide/644 · https://open.shopee.com/documents/v2/v2.order.get_order_list?module=94&type=1 (the API list in the side bar) |
+| Lazada signature · host · roles | https://open.lazada.com/apps/doc/doc?nodeId=10450&docId=108068 · ...docId=108065 · ...docId=108001 |
+| Lazada shop permission · testing · push | ...nodeId=10777&docId=108260 · ...docId=121061 · ...nodeId=29524&docId=120168 · https://open.lazada.com/apps/doc/api?path=%2Forders%2Fget |
+| TikTok Shop types · sign-up · token | https://partner.tiktokshop.com/docv2/page/tts-developer-types · .../developer-onboarding · .../authorization-overview-202407 |
+| TikTok Shop signature · host · version · rate limit | .../sign-your-api-request · .../methods-and-endpoints · .../api-versioning · .../rate-limits · .../regions-and-languages |
 | TikTok Shop webhook · sandbox · endpoint | .../tts-webhooks-overview · .../seller-center-development-shops · .../get-order-list-202309 |
-| LINE SHOPPING · พาร์ทเนอร์ | https://lineshoppingseller.com/ · https://lineshoppingseller.com/new-features/partner-api |
+| LINE SHOPPING · partners | https://lineshoppingseller.com/ · https://lineshoppingseller.com/new-features/partner-api |
 | LINE Pay | https://pay-th.line.me/portal/th/main · .../business/payment-service · https://developers-pay.line.me/online-api-v3 · https://developers-pay.line.me/api-change-log |
 | ZORT · BentoWeb · BigSeller | https://zortout.com/ · https://developers.zortout.com/ · https://www.bentoweb.com/th · https://www.bigseller.com/th_TH/index.htm |
 

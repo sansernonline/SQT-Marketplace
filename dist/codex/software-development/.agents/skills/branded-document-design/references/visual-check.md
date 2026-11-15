@@ -1,16 +1,16 @@
-# ตรวจเอกสารด้วยตา — คำสั่งและรายการตรวจ
+# Check a document by eye — commands and checklist
 
 ```bash
 soffice --headless --convert-to pdf --outdir _to_delete/preview SRS.docx
 pdftoppm -png -r 80 _to_delete/preview/SRS.pdf _to_delete/preview/page      # ได้ page-1.png หรือ page-01.png (เลขเติมศูนย์ตามจำนวนหน้าทั้งหมด)
 ```
 
-แล้ว **เปิดภาพดูจริงทุกหน้า** (Read tool) ก่อนส่งมอบ ตรวจตามนี้:
+Then **open and look at every page image** (Read tool) before delivery. Check these:
 
-- [ ] ไม่มีตารางล้นขอบกระดาษ คอลัมน์กว้างพอดี ไม่มีคำถูกบีบขึ้นบรรทัดใหม่แปลก ๆ
-- [ ] ไม่มีหัวข้อค้างอยู่บรรทัดสุดท้ายของหน้า
-- [ ] วรรณยุกต์/สระไทยไม่ชนกัน และไม่มีตัวอักษรกลายเป็นกล่องสี่เหลี่ยม
-- [ ] หน้าปกไม่มีข้อความล้นหรือตกขอบ · **หน้า 2 ไม่ว่าง** (ปกเต็มหน้าแล้วย่อหน้าตัวแบ่งหน้าตกไปหน้า 2 — `cover()` ใส่ตัวแบ่งไว้ท้ายย่อหน้าสุดท้ายแล้ว ถ้าเขียนปกเองต้องทำแบบเดียวกัน)
-- [ ] ช่องไฟก่อน/หลังตารางและ callout เท่ากันทั้งเอกสาร
-- [ ] footer เลขหน้าครบทุกหน้า
-- [ ] ไม่มี TBD / Lorem ipsum / placeholder หลงเหลือ (ยกเว้น `(รอยืนยัน)` ที่อยู่ในรายการรอยืนยันของรายงาน)
+- [ ] No table overflows the paper edge; columns are wide enough; no word is squeezed onto a strange new line
+- [ ] No heading stranded on the last line of a page
+- [ ] Thai tone marks/vowels do not collide, and no character turns into a square box
+- [ ] The cover has no overflowing or edge-cut text · **page 2 is not blank** (a full-page cover, then the page-break paragraph falls onto page 2; `cover()` puts the break at the end of the last paragraph already, and a hand-written cover must do the same)
+- [ ] Spacing before/after tables and callouts is the same across the document
+- [ ] Footer page numbers on every page
+- [ ] No TBD / Lorem ipsum / leftover placeholder (except `(รอยืนยัน)` (awaiting confirmation) that is in the report's awaiting-confirmation list)

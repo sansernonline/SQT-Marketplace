@@ -1,31 +1,33 @@
-# playbook · team-project — งาน XL หลายวัน มีคนและ agent ร่วมทีม
+# playbook · team-project — XL multi-day work with people and agents on the team
 
-ใช้เมื่อ: งานใหญ่ที่จบไม่ได้ใน session เดียว · มี milestone หลายอัน · มีคนจริง (เพื่อนร่วมทีม) รับชิ้นงานไปทำคู่กับ agent · "โปรเจกต์นี้ทำกับทีม" · "งานเป็นเดือน"
-ผลลัพธ์: `docs/BRIEF.md` + `docs/BUILD-PLAN.md` ที่แตกเป็น milestone และชิ้น · ใบ `handoff/<id>.md` ครบทุกชิ้น · งานรับต่อข้ามวันได้โดยไม่ต้องถาม
-รูปแบบหลัก: Planning → Multi-Agent → Reflection ต่อ milestone (`agent-patterns`)
+Use when: big work that cannot finish in one session · several milestones · real people (teammates) take pieces and work alongside agents · "โปรเจกต์นี้ทำกับทีม" (this project is done with a team) · "งานเป็นเดือน" (month-long work)
+Result: `docs/BRIEF.md` + `docs/BUILD-PLAN.md` split into milestones and pieces · a `handoff/<id>.md` note for every piece · work that can be picked up across days without asking
+Main patterns: Planning → Multi-Agent → Reflection per milestone (`agent-patterns`)
 
-**บทบาท 3 แบบ ห้ามสลับ** — **เจ้าของงาน** (ผู้ใช้: ตัดสินรออนุมัติ ไม่ทำขั้นกลาง) · **ผู้ร่วมทีม** (คน: รับใบ `handoff` ไปทำเหมือนลูกทีม เขียนใบส่งงานกลับเหมือนกัน) · **ลูกทีม** (agent: ตาม `team-roles`) · คนและ agent ใช้ใบสั่งงานแบบเดียวกัน ต่างแค่ช่อง `to:` เป็นชื่อคน
+**3 roles, never swap them.** The **owner** (the user: decides what awaits approval, does not do middle steps) · the **teammate** (a person: takes a `handoff` note and works like a worker, and writes the handover note back the same way) · the **worker** (an agent: per `team-roles`). People and agents use the same work order; only the `to:` field differs, holding a person's name.
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน — Steps (copy into the todo exactly)
 
-1. เข้าใจ — อ่านโจทย์ · ของเดิมในโปรเจกต์ · ข้อจำกัด (งบ · คน · เวลา) · ถามเจ้าของงานแบบเลือกคำตอบครั้งเดียว · ใคร: หัวหน้าทีม
-2. วางทาง — `brainstormer` ตัวใหม่เสนอ 2–3 ทาง (ทางสำคัญมากใช้ MoA) → หัวหน้าเลือก 1 → เขียน brief ตาม `brief-template` ลง `docs/BRIEF.md` · ใคร: `brainstormer` ตัวใหม่ → หัวหน้าทีม
-3. แตก milestone — แต่ละ milestone ต้องจบด้วยของที่ตรวจได้และส่งให้เจ้าของงานดูได้ · ลงตาราง "สถานะล่าสุด" ใน `docs/BUILD-PLAN.md` ตาม `status-report` · ใคร: หัวหน้าทีม
-4. วางของกลาง + ตารางแบ่งงาน — โครงเรื่อง · รูปข้อมูล · แม่แบบ · กติการ่วม (ภาษา · ตั้งชื่อ · commit) หัวหน้าทำคนเดียว · ตาราง `ชิ้น | ไฟล์ที่แตะ | ขนาด | ต้องรอชิ้นไหน | ใคร (คน/agent) · ระดับ` ชี้ชัดว่าชิ้นไหนให้ผู้ร่วมทีมคนไหน · ใคร: หัวหน้าทีม
-5. เขียนใบทุกชิ้น — งาน XL ทุกชิ้นต้องเป็นไฟล์ `handoff/<id>.md` ตาม skill `handoff` (เพราะข้าม session แน่) ไม่ใช่แค่ข้อความในแชต · ใคร: หัวหน้าทีม
-6. ลงมือ — ชิ้นของ agent ส่งพร้อมกันในข้อความเดียว ตาม rank และความกว้างของกราฟ (`team-roles` "แบ่งงาน" · พร้อมกันเกิน 8 → `parallel-split-and-merge`) · ชิ้นของคนส่ง path ใบให้ผู้ร่วมทีมพร้อมกำหนดส่งใบกลับ · ชิ้นที่ต้องรอกันลงรอบถัดไป · ใคร: ลูกทีมตัวใหม่ต่อชิ้น · ผู้ร่วมทีมตามใบ
-7. พิสูจน์ ต่อ milestone — รวมชิ้นของ milestone แล้ว `reviewer` ตัวใหม่ตรวจทั้ง milestone รวดเดียวกับ "เสร็จเมื่อ" ใน brief · งานเสี่ยง (เงิน · กฎหมาย · สุขภาพ · ส่งคนนอก) ใช้ `adversarial-review-panel` · ไม่ผ่าน → แก้ → ตรวจซ้ำ ตามเพดานรอบใน `team-roles` · ใคร: `reviewer` ตัวใหม่
-8. sync ปิดวัน — เก็บใบส่งงานที่เข้ามา (คนและ agent เท่ากัน) · อัปเดต BUILD-PLAN + "ความคืบหน้า" และ "รับงานต่อ" ใน `CONTEXT.md` ตาม playbook `pickup-and-pause` · การตัดสินใจลง `decision-log` · ใคร: หัวหน้าทีม
-9. รายงานเจ้าของงาน — จบ milestone หรือจบสัปดาห์ด้วย `status-report` · รายการที่ใช้เงินหรือย้อนไม่ได้ลง "รออนุมัติ" ไม่ขวางชิ้นอื่น · ใคร: หัวหน้าทีม
+Labels kept in Thai because the validator matches them: `ใคร:` = who · `หัวหน้าทีม` = the lead · `ตัวใหม่` = fresh (a new instance) · `ตัวเดิม (ถือ …)` = the same agent, holding something.
 
-## จบเมื่อ
+1. Understand: read the brief · what already exists in the project · constraints (budget · people · time) · ask the owner once, with answer choices · ใคร: หัวหน้าทีม
+2. Choose a path: `brainstormer` ตัวใหม่ proposes 2–3 paths (a very important path uses MoA) → the lead picks 1 → write the brief per `brief-template` into `docs/BRIEF.md` · ใคร: `brainstormer` ตัวใหม่ → the lead
+3. Split into milestones: each milestone must end in something checkable that can be shown to the owner · record in the "สถานะล่าสุด" (latest status) table in `docs/BUILD-PLAN.md` per `status-report` · ใคร: หัวหน้าทีม
+4. Lay out the shared things + the work split table: outline · data shape · templates · shared conventions (language · naming · commit), done by the lead alone · a table `ชิ้น | ไฟล์ที่แตะ | ขนาด | ต้องรอชิ้นไหน | ใคร (คน/agent) · ระดับ` (piece | files touched | size | must wait for which piece | who (person/agent) · tier) makes clear which piece goes to which teammate · ใคร: หัวหน้าทีม
+5. Write a note for every piece: every XL piece must be a file `handoff/<id>.md` per the skill `handoff` (because it surely crosses sessions), not just a chat message · ใคร: หัวหน้าทีม
+6. Do the work: agent pieces are sent together in one message, by rank and graph width (`team-roles` "แบ่งงาน" (splitting the work) · more than 8 at once → `parallel-split-and-merge`) · for a person's piece, send the note's path to the teammate with a due date for the returned note · pieces that must wait on others go in the next round · ใคร: ลูกทีมตัวใหม่ (a worker) per piece · ผู้ร่วมทีม (the teammate) per the note
+7. Prove (พิสูจน์), per milestone: merge the milestone's pieces, then `reviewer` ตัวใหม่ checks the whole milestone in one go against the brief's "เสร็จเมื่อ" (done when) · risky work (money · law · health · sent to outsiders) uses `adversarial-review-panel` · fail → fix → recheck, up to the round ceiling in `team-roles` · ใคร: `reviewer` ตัวใหม่
+8. End-of-day sync: collect incoming handover notes (people and agents equal) · update BUILD-PLAN + "ความคืบหน้า" (progress) and "รับงานต่อ" (pick up the work) in `CONTEXT.md` per playbook `pickup-and-pause` · record decisions in `decision-log` · ใคร: หัวหน้าทีม
+9. Report to the owner: at the end of a milestone or week, with `status-report` · items that cost money or cannot be reversed go under "รออนุมัติ" without blocking other pieces · ใคร: หัวหน้าทีม
 
-ทุก milestone ในตาราง "สถานะล่าสุด" เป็น `เสร็จ` พร้อมหลักฐานตรวจ และคนหรือ bot ตัวใหม่อ่าน `CONTEXT.md` ไฟล์เดียวแล้วรับงานต่อได้โดยไม่ถาม
+## Done when
+
+Every milestone in the "สถานะล่าสุด" table is `เสร็จ` with check evidence, and a fresh person or bot can read the single file `CONTEXT.md` and pick up the work without asking
 
 ---
 
-กฎเฉพาะงาน XL
-- **ตรวจต่อ milestone ไม่ใช่ตอนท้ายงาน** — งานเป็นเดือนที่ตรวจครั้งเดียวตอนจบ ค้นจุดพังช้าเกินแก้
-- **ชิ้นของคนกับ agent อย่าแตะไฟล์เดียวกัน** — ตารางแบ่งงานต้องระบุ `files_allowed` ไม่ทับกันเด็ดขาด · ไฟล์กลางหัวหน้าเขียนคนเดียว (`team-files`)
-- **คนส่งงานช้ากว่า agent** — ออกแบบให้ชิ้นของคนไม่ขวางชิ้นของ agent (คนรับชิ้นที่ต้องการดุลยพินิจ · agent รับชิ้นกลไก) · ชิ้นของคนที่ `ติด` หรือเกินกำหนด → หัวหน้าเสนอรับมาทำเองหรือส่งลูกทีมใน "รออนุมัติ"
-- **ทุกวันต้องจบที่จุดรับต่อได้** — ไม่มีวันไหนที่งานค้างอยู่ในแชตล้วน ๆ
+Rules specific to XL work
+- **Check per milestone, not at the end of the job.** For month-long work checked only once at the end, finding the break point is too late to fix.
+- **A person's and an agent's pieces must not touch the same file.** The split table must state `files_allowed` with no overlap at all · shared files are written by the lead alone (`team-files`).
+- **People deliver slower than agents.** Design so a person's piece does not block an agent's piece (people take pieces needing judgement · agents take mechanical pieces) · a person's piece that is `ติด` or overdue → the lead proposes, under "รออนุมัติ", taking it over or sending it to a worker.
+- **Every day must end at a point where work can be picked up.** No day leaves work sitting purely in chat.

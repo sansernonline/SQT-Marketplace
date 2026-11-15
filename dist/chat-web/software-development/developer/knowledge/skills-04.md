@@ -2,27 +2,27 @@
 
 Use when writing or testing Python code
 
-# stack-python — Python ที่อ่านง่าย ถูกชนิด รันซ้ำได้
+# stack-python — Python that is easy to read, correctly typed, and safe to rerun
 
-ใช้เครื่องมือเดียวกับที่ repo ใช้อยู่ และทุก diff ต้องผ่าน ruff · type check · pytest ก่อนส่ง ไฟล์นี้เก็บเฉพาะเรื่องของ Python
-เรื่องทั่วไปอยู่ที่อื่น: เขียนให้น้อยดู `lazy-coding` · ตั้งชื่อดู `readable-code` · log ดู `logging-standards` · จับ error ดู `error-handling-patterns`
+Use the same tools the repo already uses, and every diff must pass ruff · type check · pytest before sending. This file holds only Python-specific matters.
+General matters are elsewhere: writing less → `lazy-coding` · naming → `readable-code` · logging → `logging-standards` · catching errors → `error-handling-patterns`
 
-## 1 · เริ่มงาน: ดูว่า repo ใช้อะไร แล้วใช้ตัวนั้น
+## 1 · Getting started: see what the repo uses, then use that
 
-| เจอไฟล์ | ติดตั้ง | รันคำสั่ง |
+| File found | Install | Run a command |
 |---|---|---|
 | `uv.lock` | `uv sync` | `uv run <cmd>` |
 | `poetry.lock` | `poetry install` | `poetry run <cmd>` |
 | `pdm.lock` | `pdm install` | `pdm run <cmd>` |
-| `requirements*.txt` อย่างเดียว | `python -m venv .venv` แล้ว `pip install -r requirements.txt` | เปิด `.venv` ก่อน |
-| ไม่มีอะไรเลย (โปรเจกต์ใหม่) | `uv init` แล้ว `uv add` | `uv run <cmd>` |
+| `requirements*.txt` only | `python -m venv .venv` then `pip install -r requirements.txt` | Activate `.venv` first |
+| Nothing at all (new project) | `uv init` then `uv add` | `uv run <cmd>` |
 
-- ใช้ virtual environment เสมอ ห้าม `pip install` ลง Python ของระบบ
-- ห้ามผสมเครื่องมือ เช่น ถ้า repo ใช้ poetry ก็ไม่สร้าง `uv.lock` เพิ่ม
-- อ่าน `requires-python` ใน `pyproject.toml` แล้วห้ามใช้ syntax ที่ใหม่กว่านั้น
-- เวอร์ชัน (ตรวจล่าสุด 2026-10-14 · แหล่ง: https://devguide.python.org/versions/): ตัวล่าสุด 3.15 (ออก 2026-10-09) · 3.14 ยังรับแก้ bug · 3.11–3.13 รับแค่แก้ช่องโหว่ · 3.10 หมดอายุแล้ว (2026-10-01) · ตัวถัดไปที่หมดอายุคือ 3.11 (ต.ค. 2027) · โปรเจกต์ใหม่เริ่มที่ 3.14 หรือ 3.15 ถ้า library ที่ใช้รองรับแล้ว · ก่อนใช้ให้ตรวจหน้านี้ซ้ำ
+- Always use a virtual environment; never `pip install` into the system Python
+- Never mix tools; for example if the repo uses poetry, do not add a `uv.lock`
+- Read `requires-python` in `pyproject.toml` and never use syntax newer than it
+- Versions (last checked 2026-10-14 · source: https://devguide.python.org/versions/): the newest is 3.15 (released 2026-10-09) · 3.14 still gets bug fixes · 3.11–3.13 get security fixes only · 3.10 has reached end of life (2026-10-01) · the next to end is 3.11 (Oct 2027) · a new project starts at 3.14 or 3.15 if the libraries it uses already support it · check this page again before using
 
-คำสั่งประจำ (ใส่ `uv run` หรือ `poetry run` นำหน้าตามเครื่องมือของ repo):
+Routine commands (prefix with `uv run` or `poetry run` according to the repo's tool):
 
 ```bash
 ruff check .                      # lint
@@ -33,23 +33,23 @@ pytest -q tests/test_order.py::test_refund_over_limit   # test เดียว�
 pytest -q -k "refund and not slow"                      # เลือกตามชื่อ
 ```
 
-- type checker: ถ้า repo มี `[tool.pyright]` หรือ `pyrightconfig.json` ให้ใช้ pyright ถ้ามี `[tool.mypy]` หรือ `mypy.ini` ให้ใช้ mypy ถ้าไม่มีทั้งคู่ให้ถามครั้งเดียว ส่วน ty ของ Astral ใช้เมื่อ repo ตั้งไว้แล้วเท่านั้น
-- ถ้า repo ยังใช้ black · isort · flake8 ให้ใช้ตามนั้น ไม่ย้ายไป ruff ในงานเดียวกัน
+- type checker: if the repo has `[tool.pyright]` or `pyrightconfig.json`, use pyright; if it has `[tool.mypy]` or `mypy.ini`, use mypy; if it has neither, ask once; Astral's ty is used only when the repo has already set it up
+- If the repo still uses black · isort · flake8, use them as they are; do not move to ruff in the same task
 
-## 2 · แบบแผนประจำ
+## 2 · Standard patterns
 
-| เรื่อง | ทำแบบนี้ | ไม่ทำ |
+| Topic | Do this | Do not |
 |---|---|---|
-| type hint | ใส่ทุกฟังก์ชันและ method ที่เรียกจากนอกไฟล์ ใช้ `list[str]` · `X \| None` | `List` · `Optional` จาก `typing` ในโค้ดใหม่ |
-| รูปร่างข้อมูล | ข้างในใช้ `@dataclass(frozen=True)` ส่วนที่ขอบระบบใช้ pydantic | `dict` ลอย ๆ ส่งข้ามโมดูล |
-| path | `pathlib.Path` | ต่อ string ด้วย `+ "/"` |
-| ข้อความ | f-string | `%` หรือ `.format()` ในโค้ดใหม่ |
-| log | `log.info("ส่งแล้ว order_id=%s", oid)` ให้ logger แทนค่าเอง | f-string ใน log (สร้าง string ทุกครั้งแม้ level ปิด) |
-| ไฟล์ · lock · connection | `with ...:` | เปิดแล้วรอ `close()` เอง |
-| ค่า default | `None` แล้วสร้างใหม่ในตัวฟังก์ชัน | `def f(items=[])` (list เดียวใช้ร่วมทุกครั้งที่เรียก) |
-| ไฟล์ข้อความภาษาไทย | `open(p, encoding="utf-8")` · `p.read_text(encoding="utf-8")` | ไม่ระบุ (Windows อ่านเป็น cp874 หรือ cp1252) |
-| สคริปต์ | logic อยู่ในฟังก์ชัน แล้วให้ `if __name__ == "__main__":` เรียก `main()` | โค้ดทำงานตอน import |
-| Command Line Interface (CLI) | ใช้ตัวที่ repo ใช้ ถ้าไม่มีให้เริ่มที่ `argparse` ก่อน typer | parse `sys.argv` เอง |
+| type hint | Add to every function and method called from outside the file, using `list[str]` · `X \| None` | `List` · `Optional` from `typing` in new code |
+| Data shape | Inside, use `@dataclass(frozen=True)`; at the system edge use pydantic | A bare `dict` passed across modules |
+| path | `pathlib.Path` | Joining strings with `+ "/"` |
+| Text | f-string | `%` or `.format()` in new code |
+| log | `log.info("ส่งแล้ว order_id=%s", oid)` letting the logger substitute the value | An f-string in a log call (builds the string every time even if the level is off) |
+| File · lock · connection | `with ...:` | Opening and waiting to `close()` yourself |
+| Default value | `None`, then create it new inside the function | `def f(items=[])` (one list shared across every call) |
+| Thai text files | `open(p, encoding="utf-8")` · `p.read_text(encoding="utf-8")` | Not specifying (Windows reads as cp874 or cp1252) |
+| Scripts | Logic in functions, with `if __name__ == "__main__":` calling `main()` | Code that runs at import |
+| Command Line Interface (CLI) | Use what the repo uses; if none, start with `argparse` before typer | Parsing `sys.argv` yourself |
 
 ```python
 @dataclass(frozen=True)
@@ -65,15 +65,15 @@ if __name__ == "__main__":
     raise SystemExit(main())
 ```
 
-## 3 · Web: FastAPI และ Django
+## 3 · Web: FastAPI and Django
 
-- ข้อมูลเข้าและออกผ่าน pydantic model ที่ขอบ ส่วนข้างในใช้ type ของโดเมน ไม่ส่ง `request.json()` ดิบเข้า service
-- FastAPI: ของที่ต้องเปลี่ยนตอน test (DB session · client ภายนอก · นาฬิกา) รับผ่าน `Depends` แล้วสลับด้วย `app.dependency_overrides`
-- `async def` เฉพาะเมื่อทั้งสายเรียกเป็น async (httpx `AsyncClient` · driver DB แบบ async) ถ้าใช้ไลบรารีที่บล็อก (`requests` · `time.sleep` · driver sync) ให้ใช้ `def` ธรรมดาให้ FastAPI รันใน threadpool หรือห่อด้วย `asyncio.to_thread`
-- DB session 1 ตัวต่อ 1 request ผ่าน dependency ที่ `yield` ห้ามเก็บ session ไว้ระดับโมดูล
-- Django Object-Relational Mapping (ORM): ถ้าวนลูปแล้วแตะ FK ให้ใช้ `select_related` ถ้าแตะ many-to-many หรือ reverse FK ให้ใช้ `prefetch_related` แล้วตรวจจำนวน query ใน test ด้วย `assertNumQueries` หรือ `django_assert_num_queries`
-- migration: อ่านไฟล์ที่ `makemigrations` สร้างทุกครั้งก่อน commit ถ้าลบคอลัมน์หรือเปลี่ยนชนิดบนตารางใหญ่ ให้แยกเป็นหลายขั้นตาม `database-design`
-- endpoint สุขภาพ · timeout · รูป error ที่ส่งออก ดู `web-service-essentials` และ `api-conventions`
+- Data in and out goes through pydantic models at the edge, while inside you use domain types; never pass a raw `request.json()` into a service
+- FastAPI: things that must change during tests (DB session · external client · clock) are taken through `Depends` and swapped with `app.dependency_overrides`
+- `async def` only when the whole call chain is async (httpx `AsyncClient` · an async DB driver); if you use a blocking library (`requests` · `time.sleep` · a sync driver), use a plain `def` so FastAPI runs it in a threadpool, or wrap it with `asyncio.to_thread`
+- 1 DB session per request through a dependency that `yield`s; never keep a session at module level
+- Django Object-Relational Mapping (ORM): if you loop and touch a FK, use `select_related`; if you touch many-to-many or a reverse FK, use `prefetch_related`, then check the query count in tests with `assertNumQueries` or `django_assert_num_queries`
+- migration: read the file `makemigrations` creates every time before commit; if you drop a column or change a type on a big table, split it into several steps per `database-design`
+- For health endpoints · timeouts · the shape of errors sent out, see `web-service-essentials` and `api-conventions`
 
 ```python
 def get_db() -> Iterator[Session]:
@@ -85,86 +85,86 @@ def create_refund(body: RefundIn, db: Session = Depends(get_db)) -> RefundOut:
     return refund_service.create(db, body.to_domain())
 ```
 
-## 4 · Data และ AI
+## 4 · Data and AI
 
-| เรื่อง | ทำแบบนี้ |
+| Topic | Do this |
 |---|---|
-| แก้ค่าใน DataFrame | ใช้ `df.loc[mask, "col"] = x` เพราะ pandas 3.x เปิด Copy-on-Write เป็นค่าเริ่มต้น ทำให้ `df["col"][mask] = x` ไม่แก้ `df` เลย |
-| ความเร็ว | ใช้ operation ทั้งคอลัมน์ (`df["a"] * df["b"]` · `np.where`) ก่อน `apply` ส่วน `iterrows` ใช้เมื่อไม่มีทางอื่น |
-| เงิน | เก็บเป็นสตางค์ชนิด `int64` หรือ `Decimal` ห้ามใช้ float และปัดเศษครั้งเดียวตอนแสดงผล |
-| CSV ภาษาไทย | ลอง `utf-8-sig` ก่อน (มี BOM จาก Excel) ถ้าไม่ผ่านให้ลอง `cp874` (TIS-620) และระบุ `dtype` ของรหัสที่ขึ้นต้นด้วย 0 เป็น `str` |
-| ผลซ้ำได้ | `rng = np.random.default_rng(42)` ส่งต่อเป็นพารามิเตอร์ ตั้ง seed ของ torch และ `random` ด้วย แล้วจด seed ในผลลัพธ์ |
-| notebook | ใช้ลองไอเดียได้ แต่โค้ดที่จะใช้ซ้ำให้ย้ายเข้าโมดูลพร้อม test ให้ notebook เหลือแค่เรียกฟังก์ชันและวาดกราฟ |
-| ไฟล์ใหญ่ | อ่านทีละส่วน (`chunksize`) หรือใช้ parquet แทน CSV เมื่อคุมรูปแบบได้ |
+| Changing values in a DataFrame | Use `df.loc[mask, "col"] = x`, because pandas 3.x turns Copy-on-Write on by default, so `df["col"][mask] = x` does not change `df` at all |
+| Speed | Use whole-column operations (`df["a"] * df["b"]` · `np.where`) before `apply`; use `iterrows` only when there is no other way |
+| Money | Store as satang of type `int64` or `Decimal`; never use float, and round once at display time |
+| Thai CSV | Try `utf-8-sig` first (Excel adds a BOM); if that fails, try `cp874` (TIS-620), and give the `dtype` of codes that start with 0 as `str` |
+| Reproducible results | `rng = np.random.default_rng(42)` passed along as a parameter; also set the seeds of torch and `random`, and record the seed in the output |
+| notebook | Fine for trying ideas, but move code you will reuse into a module with tests; leave the notebook only calling functions and drawing charts |
+| Large files | Read in parts (`chunksize`) or use parquet instead of CSV when you control the format |
 
-- เรื่องเรียก LLM · prompt · RAG · วัดผล ดู `llm-engineering`
-- เรื่องนำเข้าหรือส่งออก Excel และปี พ.ศ. ดู `data-import-export`
+- For LLM calls · prompts · RAG · evaluation, see `llm-engineering`
+- For importing or exporting Excel and Buddhist Era years, see `data-import-export`
 
-## 5 · กับดักที่เจอบ่อย
+## 5 · Common traps
 
-| กับดัก | อาการ | แก้ |
+| Trap | Symptom | Fix |
 |---|---|---|
-| datetime ไม่มี timezone | เวลาเพี้ยน 7 ชั่วโมง หรือเทียบกันแล้วได้ `TypeError` | สร้างด้วย `datetime.now(timezone.utc)` (3.11+ ใช้ `datetime.UTC` ได้) เก็บเป็น UTC แสดงด้วย `ZoneInfo("Asia/Bangkok")` และห้ามใช้ `utcnow()` |
-| เงินเป็น float | `0.1 + 0.2 != 0.3` และยอดรวมขาด 1 สตางค์ | ใช้ `int` สตางค์ หรือ `Decimal("0.10")` จาก string |
-| closure ในลูป | callback ทุกตัวได้ค่าสุดท้ายของลูป | ผูกค่าตอนสร้าง `lambda i=i: ...` หรือ `functools.partial` |
-| `except Exception:` กว้าง | error จริงถูกกลืน | จับเฉพาะชนิดที่รู้จัก ตามหลัก `error-handling-patterns` |
-| import วนกัน | `ImportError` แบบ partially initialized | ย้ายของที่ใช้ร่วมไปโมดูลที่ 3 ส่วน import ที่ใช้แค่ใน type ให้ใส่ใต้ `if TYPE_CHECKING:` |
-| งานหนัก CPU ใน thread | ใช้ thread หลายตัวแล้วไม่เร็วขึ้น เพราะ Global Interpreter Lock (GIL) | ใช้ `ProcessPoolExecutor` ส่วน thread ใช้กับงานรอ I/O |
-| `subprocess(..., shell=True)` | input ผู้ใช้กลายเป็นคำสั่ง shell | ส่งเป็น list `["git", "log", ref]` ใส่ `check=True` และตั้ง `timeout` |
-| `pickle.load` ข้อมูลภายนอก | รันโค้ดของคนอื่นได้ทันทีที่โหลด | ใช้ JSON หรือ parquet ถ้าเป็นโมเดลใช้ `safetensors` ถ้าเป็น torch ใส่ `weights_only=True` |
-| `yaml.load` | สร้าง object อะไรก็ได้จากไฟล์ | `yaml.safe_load` |
-| repo ใช้ `uv` แต่เพิ่มแพ็กเกจด้วย `uv pip install` หรือแก้ `pyproject.toml` มือ | `uv.lock` ไม่อัปเดต เครื่องอื่น `uv sync` แล้วไม่มีแพ็กเกจ | `uv add <pkg>` / `uv remove <pkg>` เท่านั้น · ของ dev ใส่ `uv add --group dev` (`[dependency-groups]`) · รันทุกอย่างผ่าน `uv run` ไม่ activate venv เอง (แนวคิดจาก trailofbits `modern-python` · CC-BY-SA เขียนใหม่) |
-| สคริปต์ไฟล์เดียวมี `requirements.txt` แยกต่างหาก | คนรันลืมติดตั้ง · เวอร์ชันไม่ตรง | ใส่ dependency ไว้ในหัวไฟล์แบบ PEP 723 (`# /// script` … `# dependencies = ["httpx"]` … `# ///`) แล้ว `uv run script.py` สร้าง env ให้เอง |
-| blocking ใน `async def` | ทั้ง server ค้างตาม request ที่ช้าที่สุด | ดูข้อ 3 |
+| datetime without timezone | Time is off by 7 hours, or comparing gives a `TypeError` | Create with `datetime.now(timezone.utc)` (3.11+ can use `datetime.UTC`), store as UTC, display with `ZoneInfo("Asia/Bangkok")`, and never use `utcnow()` |
+| Money as float | `0.1 + 0.2 != 0.3` and the total is short by 1 satang | Use `int` satang, or `Decimal("0.10")` from a string |
+| Closure in a loop | Every callback gets the last value of the loop | Bind the value at creation `lambda i=i: ...` or `functools.partial` |
+| A broad `except Exception:` | Real errors are swallowed | Catch only known types, per `error-handling-patterns` |
+| Circular imports | `ImportError` of the partially initialized kind | Move shared things into a third module, and put imports used only for types under `if TYPE_CHECKING:` |
+| CPU-heavy work in threads | Using several threads does not speed it up, because of the Global Interpreter Lock (GIL) | Use `ProcessPoolExecutor`; threads are for I/O waiting |
+| `subprocess(..., shell=True)` | User input becomes a shell command | Pass a list `["git", "log", ref]`, add `check=True` and set a `timeout` |
+| `pickle.load` of outside data | Runs someone else's code the moment it loads | Use JSON or parquet; for models use `safetensors`; for torch add `weights_only=True` |
+| `yaml.load` | Builds any object from the file | `yaml.safe_load` |
+| The repo uses `uv` but packages are added with `uv pip install` or by hand-editing `pyproject.toml` | `uv.lock` is not updated, other machines run `uv sync` and lack the package | Only `uv add <pkg>` / `uv remove <pkg>` · dev things go in with `uv add --group dev` (`[dependency-groups]`) · run everything through `uv run`, do not activate the venv yourself (idea from trailofbits `modern-python` · CC-BY-SA, rewritten) |
+| A single-file script with a separate `requirements.txt` | The runner forgets to install · versions do not match | Put the dependencies in the file header in PEP 723 form (`# /// script` … `# dependencies = ["httpx"]` … `# ///`), then `uv run script.py` builds the env itself |
+| Blocking inside `async def` | The whole server stalls at the pace of the slowest request | See section 3 |
 
-## 6 · test
+## 6 · Tests
 
-ตั้งค่า pytest · fixture · `parametrize` และตัวอย่าง ดู [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#python--pytest) ส่วนนี้เหลือแค่กับดักเฉพาะ Python
+For pytest setup · fixtures · `parametrize` and examples, see [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#python--pytest); this section keeps only Python-specific traps
 
-- ไฟล์ชั่วคราวใช้ `tmp_path` ห้ามเขียนลงโฟลเดอร์ของ repo · ค่า environment ใช้ `monkeypatch.setenv`
-- เวลา: ส่งนาฬิกาเข้าฟังก์ชันเป็นพารามิเตอร์ก่อน ถ้าแก้ไม่ได้ใช้ `time-machine` แต่ถ้า repo ใช้ `freezegun` อยู่ก็ใช้ต่อ
-- HTTP ภายนอก: httpx ใช้ `respx` · requests ใช้ `responses` · ห้ามยิงเน็ตจริงใน unit test
-- ฐานข้อมูลจริงใช้ `testcontainers` ตัวเดียวกับ production ไม่ใช้ SQLite แทน Postgres
-- logic ใหม่และบั๊กให้เขียน test ที่แดงก่อน แล้วค่อยแก้จนเขียว
-- coverage ดูเฉพาะบรรทัดที่เปลี่ยน: `pytest --cov --cov-report=term-missing` แล้วไล่บรรทัดใน diff ที่ยังไม่ถูกรัน
+- Temporary files use `tmp_path`; never write into the repo's folders · environment values use `monkeypatch.setenv`
+- Time: pass the clock into the function as a parameter first; if you cannot change it, use `time-machine`, but if the repo already uses `freezegun`, keep using it
+- External HTTP: httpx uses `respx` · requests uses `responses` · never hit the real network in a unit test
+- For a real database, use `testcontainers` of the same kind as production; do not use SQLite in place of Postgres
+- For new logic and bugs, write a test that fails (red) first, then fix until it passes (green)
+- Look at coverage only for changed lines: `pytest --cov --cov-report=term-missing`, then go through the lines in the diff that did not run
 
-## 7 · ความปลอดภัยเฉพาะ Python
+## 7 · Python-specific security
 
-หลัก 10 ข้ออยู่ที่ `principle-secure-by-default` ส่วนนี้คือวิธีทำใน Python
+The 10 principles are in `principle-secure-by-default`; this section is how to do them in Python
 
-- lock dependency เสมอ (`uv.lock` · `poetry.lock` · `pip-compile --generate-hashes`) แล้ว commit lock file
-- สแกนช่องโหว่: `pip-audit` (ใช้ได้กับทุกเครื่องมือ) ส่วน uv มี `uv audit` แต่ยังเป็น preview (เวอร์ชันที่เริ่มมี (รอยืนยัน) · แหล่ง: https://github.com/astral-sh/uv/blob/main/CHANGELOG.md · ตรวจ 22 ต.ค. 2569) จึงใช้ได้ แต่ Continuous Integration (CI) ยังพึ่ง `pip-audit`
-- ก่อน `uv add` หรือ `pip install` แพ็กเกจใหม่ ให้สะกดชื่อตรงกับหน้า PyPI ดูคนดูแลและวันปล่อยล่าสุด และระวังชื่อคล้าย (`reqeusts` · `python-dateutil` กับ `dateutil`)
-- SQL ส่งค่าผ่าน parameter: `cur.execute("... WHERE id = %s", (oid,))` ส่วน SQLAlchemy ใช้ `text(...)` กับ `:name` และห้ามใช้ f-string
-- ชื่อไฟล์จากผู้ใช้: `(base / name).resolve()` แล้วเช็ก `.is_relative_to(base.resolve())` ส่วนเรื่องอัปโหลดดู `file-upload-and-storage`
-- ค่าลับอ่านจาก environment (`os.environ["KEY"]` หรือ pydantic-settings) แล้วตรวจตอนเริ่ม ให้ `.env` อยู่ใน `.gitignore` (ดู `config-and-secrets`)
-- Django production: `DEBUG = False` · `ALLOWED_HOSTS` ระบุชื่อจริง · `SECRET_KEY` จาก environment · รัน `python manage.py check --deploy` ก่อนปล่อย
+- Always lock dependencies (`uv.lock` · `poetry.lock` · `pip-compile --generate-hashes`) and commit the lock file
+- Vulnerability scanning: `pip-audit` (works with every tool); uv has `uv audit` but it is still a preview (the version that first has it (รอยืนยัน) (pending confirmation) · source: https://github.com/astral-sh/uv/blob/main/CHANGELOG.md · checked 22 Oct 2569 BE), so it may be used, but Continuous Integration (CI) still relies on `pip-audit`
+- Before `uv add` or `pip install` of a new package, spell the name exactly as on its PyPI page, check the maintainers and the latest release date, and beware of look-alike names (`reqeusts` · `python-dateutil` versus `dateutil`)
+- SQL passes values through parameters: `cur.execute("... WHERE id = %s", (oid,))`; with SQLAlchemy use `text(...)` with `:name`, and never an f-string
+- File names from users: `(base / name).resolve()` then check `.is_relative_to(base.resolve())`; for uploads see `file-upload-and-storage`
+- Secrets are read from the environment (`os.environ["KEY"]` or pydantic-settings) and checked at startup; keep `.env` in `.gitignore` (see `config-and-secrets`)
+- Django production: `DEBUG = False` · `ALLOWED_HOSTS` with real names · `SECRET_KEY` from the environment · run `python manage.py check --deploy` before release
 
-## 8 · รายการตรวจก่อนส่ง
+## 8 · Check before sending
 
-- [ ] `ruff check` ไม่มีข้อผิดพลาด
-- [ ] `ruff format --check` ผ่าน (หรือ formatter ที่ repo ใช้)
-- [ ] type checker ของ repo ได้ 0 error ในไฟล์ที่แก้
-- [ ] `pytest -q` เขียวทั้งชุด ไม่ใช่แค่ไฟล์ที่แก้ (ผลยาว → `> _to_delete/test.txt 2>&1` แล้ว `tail -20`)
-- [ ] พฤติกรรมใหม่ทุกอย่างมี test ที่เคยแดงก่อนแก้
-- [ ] ไม่มี `requests` · `time.sleep` · driver sync หรือ I/O ที่บล็อกอยู่ใน `async def`
-- [ ] เปิดไฟล์ข้อความทุกจุดระบุ `encoding="utf-8"` และ datetime ที่เก็บมี timezone
-- [ ] dependency ที่เพิ่มอยู่ใน lock file และผ่าน `pip-audit`
+- [ ] `ruff check` has no errors
+- [ ] `ruff format --check` passes (or the formatter the repo uses)
+- [ ] The repo's type checker gives 0 errors in the files you changed
+- [ ] `pytest -q` is green for the whole suite, not just the changed files (long output → `> _to_delete/test.txt 2>&1` then `tail -20`)
+- [ ] Every new behavior has a test that was red before the fix
+- [ ] No `requests` · `time.sleep` · sync driver or blocking I/O inside `async def`
+- [ ] Every place that opens a text file gives `encoding="utf-8"` and stored datetimes have a timezone
+- [ ] Added dependencies are in the lock file and pass `pip-audit`
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Connecting to other skills
 
-| งาน | เปิด |
+| Task | Open |
 |---|---|
-| เขียนให้น้อย ไม่เพิ่มของเกิน | `lazy-coding` |
-| ชื่อ · รูปฟังก์ชัน · ที่อยู่ไฟล์ | `readable-code` |
-| เลือก framework test · สัดส่วน · ชื่อ test | `testing-standards` |
-| รูปแบบ log · correlation id · logger Python สำเร็จรูป | `logging-standards` |
-| จับ error · retry · timeout | `error-handling-patterns` |
-| กฎปลอดภัยทุก diff | `principle-secure-by-default` และก่อนส่งใช้ `security-gate` |
-| เรียก LLM · RAG · วัดผล | `llm-engineering` |
+| Write less, add nothing extra | `lazy-coding` |
+| Names · function shape · where files live | `readable-code` |
+| Choosing a test framework · proportions · test names | `testing-standards` |
+| Log format · correlation id · ready-made Python logger | `logging-standards` |
+| Catching errors · retry · timeout | `error-handling-patterns` |
+| Security rules for every diff | `principle-secure-by-default`, and before sending use `security-gate` |
+| LLM calls · RAG · evaluation | `llm-engineering` |
 | schema · migration | `database-design` |
-| งานเบื้องหลัง (Celery · RQ · cron) | `background-jobs` |
-| ยืนยันว่าทำงานจริงก่อนบอกว่าเสร็จ | `principle-prove-it-works` |
+| Background jobs (Celery · RQ · cron) | `background-jobs` |
+| Confirm it really works before saying it is done | `principle-prove-it-works` |
 
 
 ---
@@ -173,122 +173,122 @@ def create_refund(body: RefundIn, db: Session = Depends(get_db)) -> RefundOut:
 
 Use when writing or reviewing SQL queries
 
-# stack · SQL — เขียน query ให้ถูก เร็ว และเปลี่ยนข้อมูลได้ปลอดภัย
+# stack · SQL — write queries that are correct, fast, and change data safely
 
-> **กฎข้อเดียว:** query ที่ยังไม่เคยรันกับข้อมูลจำนวนเท่าของจริง ถือว่ายังไม่เสร็จ
+> **The one rule:** a query that has never run against a realistic amount of data is not finished
 
-ออกแบบตาราง ตั้งชื่อ ชนิดข้อมูล และ migration แบบ expand-and-contract → `database-design`
+Table design, naming, data types, and expand-and-contract migrations → `database-design`
 
-## 1 · เริ่มงาน: รู้จักฐานข้อมูลก่อนเขียนบรรทัดแรก
+## 1 · Getting started: know the database before writing the first line
 
-- engine และรุ่น: `SELECT @@VERSION` (SQL Server) · `SELECT version()` (PostgreSQL) · `SELECT VERSION()` (MySQL) · SQL Server ดู `SERVERPROPERTY('Edition')` ด้วย เพราะหลายความสามารถมีเฉพาะ Enterprise
-- repo รัน migration ด้วยอะไร: `Migrations/` (EF Core) · `db/migration/V1__*.sql` (Flyway) · Liquibase `changelog` · `alembic/` · `prisma/migrations/` · สคริปต์ดิบใน `sql/`
-- collation และ time zone ของ server: `SERVERPROPERTY('Collation')` · `SHOW timezone`
+- engine and version: `SELECT @@VERSION` (SQL Server) · `SELECT version()` (PostgreSQL) · `SELECT VERSION()` (MySQL) · on SQL Server also check `SERVERPROPERTY('Edition')`, because many features exist only in Enterprise
+- what the repo runs migrations with: `Migrations/` (EF Core) · `db/migration/V1__*.sql` (Flyway) · Liquibase `changelog` · `alembic/` · `prisma/migrations/` · raw scripts in `sql/`
+- the server's collation and time zone: `SERVERPROPERTY('Collation')` · `SHOW timezone`
 
-- ใช้เครื่องมือ migration ที่ repo ใช้อยู่ ห้ามเพิ่มตัวที่ 2 และห้ามแก้ schema ด้วยมือนอกเครื่องมือ
-- ห้ามรันอะไรกับ production ให้เตรียมคำสั่งให้คนอนุมัติแทน (ดู `principle-proceed-on-reversible-work`)
-- ใช้ฐานข้อมูล local หรือ sandbox ที่จำนวนแถวใกล้ของจริง (ตาราง 100 แถวซ่อนปัญหาความเร็วทุกอย่าง) ไม่มีก็สร้างข้อมูลจำลองด้วยสคริปต์ให้จำนวนและการกระจายค่าใกล้จริง
+- Use the migration tool the repo already uses; never add a second one and never change the schema by hand outside the tool
+- Never run anything on production; prepare the commands for a person to approve instead (see `principle-proceed-on-reversible-work`)
+- Use a local or sandbox database whose row count is close to real (a 100-row table hides every speed problem); if you have none, generate mock data with a script so the volume and value distribution are close to real
 
-## 2 · เขียน query ให้ถูก
+## 2 · Write queries that are correct
 
-| เรื่อง | ทำแบบนี้ | กับดัก |
+| Topic | Do this | Trap |
 |---|---|---|
-| ค่าจากผู้ใช้ | ส่งเป็น parameter เสมอ | ต่อ string → SQL injection |
-| คอลัมน์ | เขียนชื่อคอลัมน์ครบ | `SELECT *` → ดึงเกิน · คอลัมน์ใหม่ทำโค้ดพัง · ใช้ covering index ไม่ได้ |
-| NULL | `IS NULL` · `NOT EXISTS` | `= NULL` ไม่เคยจริง · `NOT IN (subquery)` ที่มี NULL 1 ตัว → ได้ 0 แถว |
-| JOIN | นับแถวก่อนและหลัง join | join ฝั่ง 1-ต่อ-หลาย แล้ว `SUM` → ยอดเบิ้ล แก้โดยรวมยอดก่อน join |
-| GROUP BY | ทุกคอลัมน์ที่ไม่ใช่ aggregate ต้องอยู่ใน `GROUP BY` | MySQL ที่ปิด `ONLY_FULL_GROUP_BY` → สุ่มค่าให้เงียบ ๆ |
-| หาร | `CAST(a AS decimal(18,4)) / b` และกันหาร 0 ด้วย `NULLIF(b, 0)` | SQL Server และ PostgreSQL ได้ `5/2 = 2` ส่วน MySQL ได้ `5/2 = 2.5000` |
-| ชนิดข้อมูลไม่ตรง | parameter ชนิดเดียวกับคอลัมน์ | SQL Server ส่ง `nvarchar` ไปเทียบคอลัมน์ `varchar` → `CONVERT_IMPLICIT` → scan ทั้งตาราง |
-| ช่วงวันที่ | `>= start AND < end` (ครึ่งเปิด) | `BETWEEN '2026-01-01' AND '2026-01-31'` → หลุดทั้งวันที่ 31 หลังเที่ยงคืน |
-| time zone | เก็บ UTC แล้วแปลงเป็น Asia/Bangkok ตอนแสดง | เก็บเวลาไทยไม่มี offset → รวมข้อมูลข้ามระบบแล้วเพี้ยน 7 ชั่วโมง |
-| ปี พ.ศ. | เก็บ ค.ศ. เสมอ แล้วแปลงตอนแสดง | เก็บ 2569 → คำนวณอายุ เรียง และ export พังหมด |
-| เงิน | `decimal(19,4)` · `numeric(19,4)` | `float` · `real` → 0.1 + 0.2 ไม่เท่ากับ 0.3 |
-| เรียงชื่อไทย | SQL Server `Thai_100_CI_AS` · PostgreSQL `COLLATE "th-TH-x-icu"` | collation ทั่วไป → สระหน้า (เ แ โ ใ ไ) เรียงผิดโดยไม่มี error |
+| Values from users | Always pass as a parameter | Concatenating strings → SQL injection |
+| Columns | Write the full column names | `SELECT *` → pulls too much · a new column breaks code · cannot use a covering index |
+| NULL | `IS NULL` · `NOT EXISTS` | `= NULL` is never true · `NOT IN (subquery)` with a single NULL → 0 rows |
+| JOIN | Count rows before and after the join | Join on the 1-to-many side then `SUM` → doubled totals; fix by summing before the join |
+| GROUP BY | Every non-aggregate column must be in `GROUP BY` | MySQL with `ONLY_FULL_GROUP_BY` off → silently picks a random value |
+| Division | `CAST(a AS decimal(18,4)) / b` and guard against divide by 0 with `NULLIF(b, 0)` | SQL Server and PostgreSQL give `5/2 = 2`, while MySQL gives `5/2 = 2.5000` |
+| Mismatched data types | A parameter of the same type as the column | SQL Server sends `nvarchar` to compare with a `varchar` column → `CONVERT_IMPLICIT` → scans the whole table |
+| Date range | `>= start AND < end` (half-open) | `BETWEEN '2026-01-01' AND '2026-01-31'` → drops all of the 31st after midnight |
+| time zone | Store UTC, convert to Asia/Bangkok when displaying | Storing Thai time with no offset → merging data across systems is off by 7 hours |
+| Buddhist Era (พ.ศ.) year | Always store Common Era (ค.ศ.), convert when displaying | Storing 2569 → age calculation, sorting and export all break |
+| Money | `decimal(19,4)` · `numeric(19,4)` | `float` · `real` → 0.1 + 0.2 does not equal 0.3 |
+| Sorting Thai names | SQL Server `Thai_100_CI_AS` · PostgreSQL `COLLATE "th-TH-x-icu"` | A general collation → leading vowels (เ แ โ ใ ไ) sort wrong with no error |
 
-แปลง UTC เป็นเวลาไทยตอนแสดง: SQL Server `AT TIME ZONE 'UTC' AT TIME ZONE 'SE Asia Standard Time'` · PostgreSQL `AT TIME ZONE 'Asia/Bangkok'` (คอลัมน์ `timestamptz`)
+Convert UTC to Thai time when displaying: SQL Server `AT TIME ZONE 'UTC' AT TIME ZONE 'SE Asia Standard Time'` · PostgreSQL `AT TIME ZONE 'Asia/Bangkok'` (a `timestamptz` column)
 
-- collation ไทยไม่มีทุก server ตรวจก่อนเลือก (คำสั่งใน [`references/snippets.md`](references/snippets.md)) · แสดงวันที่ไทยและรับปี พ.ศ. จากฟอร์ม → `i18n-and-locale`
+- A Thai collation is not on every server, so check before choosing (commands in [`references/snippets.md`](references/snippets.md)) · showing Thai dates and accepting Buddhist Era years from a form → `i18n-and-locale`
 
-## 3 · ให้เร็ว: อ่าน plan จริง ไม่เดา
+## 3 · Make it fast: read the real plan, do not guess
 
-คำสั่งดู plan จริงแยกตาม engine · สิ่งที่ต้องดูใน plan · ตัวอย่าง keyset · ลบทีละชุด · ทางแก้ parameter sniffing ทีละขั้น → [`references/performance.md`](references/performance.md)
+Commands to see the real plan by engine · what to look for in a plan · keyset example · deleting in batches · parameter sniffing fixes step by step → [`references/performance.md`](references/performance.md)
 
-- กฎย่อ: ดู plan จริงบนข้อมูลจำนวนใกล้ของจริง ไม่เดา · เงื่อนไขต้อง sargable (ไม่ครอบคอลัมน์ที่มี index ด้วย function) · ทุก index ตอบได้ว่ารับ query ไหน · แบ่งหน้าลึกใช้ keyset · นับ N+1 จาก log ของ Object-Relational Mapper (ORM) · UPDATE/DELETE ก้อนใหญ่ทำทีละชุด — รายละเอียดและตัวอย่างอยู่ใน [`references/performance.md`](references/performance.md) ที่เดียว
+- Short rules: look at the real plan on data close to real volume, do not guess · conditions must be sargable (do not wrap an indexed column in a function) · every index must answer which query it serves · deep paging uses keyset · count N+1 from the Object-Relational Mapper (ORM) log · big UPDATE/DELETE goes in batches — details and examples are only in [`references/performance.md`](references/performance.md)
 
-## 4 · เปลี่ยนข้อมูลอย่างปลอดภัย
+## 4 · Change data safely
 
-ตาราง isolation · upsert · สร้าง index ไม่ล็อกตาราง แยกตาม engine พร้อมตัวอย่างตรวจจำนวนแถว → [`references/safe-changes.md`](references/safe-changes.md)
+A table of isolation levels · upsert · creating an index without locking the table, by engine, with examples that check row counts → [`references/safe-changes.md`](references/safe-changes.md)
 
-- กฎย่อ: สคริปต์รันซ้ำได้ · backup ก่อนแก้ข้อมูลก้อนใหญ่ · นับแถวก่อนแล้วตรวจก่อน `COMMIT` · upsert ใช้แบบของ engine · แตะตารางเรียงลำดับเดียวกันกัน deadlock · `ALTER TABLE` ตารางใหญ่ต้องตั้ง `lock_timeout` — รายละเอียดและตัวอย่างอยู่ใน [`references/safe-changes.md`](references/safe-changes.md) ที่เดียว
+- Short rules: scripts can be rerun · back up before changing a big batch of data · count rows first and check before `COMMIT` · upsert uses the engine's own form · touch tables in the same order to prevent deadlocks · `ALTER TABLE` on a big table needs `lock_timeout` set — details and examples are only in [`references/safe-changes.md`](references/safe-changes.md)
 
-## 5 · กับดักที่เจอบ่อย
+## 5 · Common traps
 
-- `MERGE` (SQL Server) มี bug หลายตัว และไม่ใส่ `HOLDLOCK` แล้ว 2 session insert ซ้ำ → `UPDATE` + `INSERT` แยก หรือ `MERGE ... WITH (HOLDLOCK)` พร้อม test
-- trigger ซ่อนกฎธุรกิจและพังเมื่อ insert หลายแถว → กฎอยู่ในโค้ดแอป trigger ใช้กับ audit เท่านั้น · cursor/loop ทีละแถว → คำสั่งแบบ set-based
-- `WITH (NOLOCK)` อ่านของที่ยังไม่ commit แถวหายหรือซ้ำ → เปิด Read Committed Snapshot Isolation (RCSI) แทน · ต่อ string เป็น SQL → parameter (ข้อ 7)
-- collation ไม่ตรงตอน join → ตั้งให้ตรงที่คอลัมน์ (ใส่ `COLLATE` ใน query ทำให้ไม่ใช้ index)
-- id ไม่เรียงต่อเนื่องเสมอ (identity กระโดด · sequence ไม่ย้อนเมื่อ rollback) → เลขเอกสารที่ห้ามขาดออกเองในตารางนับเลข
-- timestamp ไม่มี time zone → PostgreSQL `timestamptz` · SQL Server `datetime2` ที่ตกลงว่าเป็น UTC หรือ `datetimeoffset`
-- query ที่กรองแถวส่วนน้อยเสมอ (`WHERE status = 'pending'` · `deleted_at IS NULL`) แต่ index ครอบทุกแถว → index ใหญ่และ planner ไม่หยิบ → ใส่เงื่อนไขนั้นลงใน index เลย: PostgreSQL `CREATE INDEX ... WHERE status = 'pending'` · SQL Server filtered index `CREATE INDEX ... WHERE status = 'pending'` (query ต้องเขียนเงื่อนไขตรงกันถึงจะใช้ได้ · แนวคิดจาก supabase/agent-skills · MIT)
-- ลบหรืออัปเดตแถวจำนวนมากแล้ว query ช้าลงทั้งที่ plan ไม่เปลี่ยน → ตารางและ index บวม (dead tuple · page แตก) → PostgreSQL ดู `pg_stat_user_tables.n_dead_tup` แล้ว `VACUUM (ANALYZE)` หรือ `REINDEX CONCURRENTLY` · SQL Server ดู `sys.dm_db_index_physical_stats` แล้ว `ALTER INDEX ... REORGANIZE` (ต่ำกว่า 30%) หรือ `REBUILD` · ตรวจข้อนี้ก่อนโทษ query
+- `MERGE` (SQL Server) has several bugs, and without `HOLDLOCK` 2 sessions insert duplicates → separate `UPDATE` + `INSERT`, or `MERGE ... WITH (HOLDLOCK)` with a test
+- A trigger hides business rules and breaks on multi-row inserts → keep rules in app code; use triggers only for audit · a cursor/row-by-row loop → a set-based statement
+- `WITH (NOLOCK)` reads uncommitted data, rows go missing or repeat → turn on Read Committed Snapshot Isolation (RCSI) instead · building SQL by string concatenation → parameters (section 7)
+- A collation mismatch in a join → set them equal on the column (putting `COLLATE` in the query stops it using the index)
+- Ids are not always consecutive (identity jumps · a sequence does not go back on rollback) → document numbers that must have no gaps are issued by yourself in a counter table
+- A timestamp with no time zone → PostgreSQL `timestamptz` · SQL Server `datetime2` agreed to be UTC, or `datetimeoffset`
+- A query that always filters a small share of rows (`WHERE status = 'pending'` · `deleted_at IS NULL`) but the index covers every row → the index is big and the planner does not pick it → put that condition into the index itself: PostgreSQL `CREATE INDEX ... WHERE status = 'pending'` · SQL Server filtered index `CREATE INDEX ... WHERE status = 'pending'` (the query must write the same condition for it to be used · idea from supabase/agent-skills · MIT)
+- After deleting or updating many rows, queries get slower though the plan did not change → table and index bloat (dead tuples · split pages) → in PostgreSQL look at `pg_stat_user_tables.n_dead_tup` then `VACUUM (ANALYZE)` or `REINDEX CONCURRENTLY` · in SQL Server look at `sys.dm_db_index_physical_stats` then `ALTER INDEX ... REORGANIZE` (below 30%) or `REBUILD` · check this before blaming the query
 
-ตัวอย่างคำสั่งทั้ง 2 ข้อ → [`references/performance.md`](references/performance.md)
+Example commands for both of these → [`references/performance.md`](references/performance.md)
 
-## 6 · test
+## 6 · Tests
 
-- test query กับฐานข้อมูลจริงชนิดเดียวกับ production ห้ามใช้ SQLite หรือ in-memory แทน SQL Server/PostgreSQL เพราะพฤติกรรม NULL collation และ lock ต่างกัน
-- เปิดฐานข้อมูลใหม่ทุกรอบด้วย Testcontainers แล้วใส่ข้อมูลตั้งต้นด้วยสคริปต์ · logic ใน stored procedure ใช้ tSQLt (SQL Server) หรือ pgTAP (PostgreSQL)
-- ตรวจทั้งจำนวนแถวและค่า: กรณีมี NULL · ช่วงวันที่ตรงขอบเที่ยงคืน · ชื่อไทย · ยอดเงินมีเศษ
-- migration ใหม่ให้รันขึ้นบนสำเนา schema ที่เหมือน production พร้อมข้อมูลจำนวนใกล้จริง แล้วจับเวลาและดู lock
-- แก้ bug ให้เขียน test ที่ fail ก่อน แล้วค่อยแก้ (`principle-fix-root-cause`) ส่วนกรอบ test ทั่วไปดู `testing-standards`
+- Test queries against a real database of the same kind as production; never use SQLite or in-memory in place of SQL Server/PostgreSQL, because NULL, collation and lock behavior differ
+- Start a fresh database every run with Testcontainers and load seed data with a script · logic in stored procedures uses tSQLt (SQL Server) or pgTAP (PostgreSQL)
+- Check both row counts and values: cases with NULL · date ranges right at the midnight edge · Thai names · money amounts with fractions
+- Run a new migration on a copy of a production-like schema with data close to real volume, then time it and watch the locks
+- To fix a bug, write a test that fails first, then fix it (`principle-fix-root-cause`); for the general test framework see `testing-standards`
 
-## 7 · ความปลอดภัยเฉพาะฐานข้อมูล
+## 7 · Database-specific security
 
-- 1 แอป 1 user ฐานข้อมูล ให้สิทธิ์เท่าที่ใช้ แอปห้ามใช้ `sa` · `postgres` · `root` และ user ที่รัน migration ต้องแยกจาก user ที่แอปใช้ตอนทำงาน
-- dynamic SQL ที่มีค่าจากผู้ใช้ให้ส่งค่าเป็น parameter ส่วนชื่อตารางหรือคอลัมน์ให้เลือกจาก allowlist แล้ว quote
+- 1 app, 1 database user, with only the permissions it uses; the app must never use `sa` · `postgres` · `root`, and the user that runs migrations must be separate from the user the app uses at run time
+- For dynamic SQL with values from users, pass the values as parameters, and choose table or column names from an allowlist and then quote them
 
-ตัวอย่าง `sp_executesql` · `QUOTENAME` · plpgsql `format('%I')` → [`references/snippets.md`](references/snippets.md)
+Examples of `sp_executesql` · `QUOTENAME` · plpgsql `format('%I')` → [`references/snippets.md`](references/snippets.md)
 
-- ถ้ามีข้อมูลหลายบริษัทในตารางเดียว ให้พิจารณา row-level security: SQL Server `CREATE SECURITY POLICY` · PostgreSQL `CREATE POLICY` (เจ้าของตารางข้าม policy ได้ ถ้าไม่ `FORCE ROW LEVEL SECURITY`)
-- คอลัมน์ข้อมูลส่วนบุคคล (เลขบัตรประชาชน · เบอร์โทร · ที่อยู่) ไม่ดึงถ้าไม่ใช้ ส่วน Dynamic Data Masking ของ SQL Server ช่วยซ่อนตอนแสดง แต่ไม่ใช่การกันสิทธิ์ รายละเอียดดู `pdpa-compliance`
-- การแก้ข้อมูลสำคัญต้องมีร่องรอยว่าใครทำ (`audit-trail`)
+- If the data of several companies is in one table, consider row-level security: SQL Server `CREATE SECURITY POLICY` · PostgreSQL `CREATE POLICY` (the table owner bypasses the policy unless `FORCE ROW LEVEL SECURITY`)
+- Personal data columns (national ID number · phone number · address) are not pulled unless used; SQL Server's Dynamic Data Masking helps hide values on display but is not access control; for details see `pdpa-compliance`
+- Changes to important data must leave a trace of who did it (`audit-trail`)
 
-## 8 · รายการตรวจก่อนส่ง
+## 8 · Check before sending
 
-- [ ] ทุกค่าจากภายนอกเป็น parameter · ไม่มี `SELECT *`
-- [ ] ตรวจ NULL · ช่วงวันที่แบบครึ่งเปิด · หาร · ชนิด parameter ตรงกับคอลัมน์
-- [ ] ดู plan จริงบนข้อมูลใกล้ของจริง จด logical reads หรือเวลาก่อน/หลัง · index ใหม่ทุกตัวบอกได้ว่ารับ query ไหน
-- [ ] สคริปต์รันซ้ำได้ และข้อมูลก้อนใหญ่ทำทีละชุด
-- [ ] transaction + ตรวจจำนวนแถวก่อน `COMMIT` · เขียนวิธีย้อนกลับและยืนยัน backup แล้ว
-- [ ] มี test ที่รันกับฐานข้อมูลชนิดเดียวกับ production
+- [ ] Every outside value is a parameter · no `SELECT *`
+- [ ] Checked NULL · half-open date ranges · division · parameter types match the columns
+- [ ] Looked at the real plan on near-real data, noted logical reads or time before/after · every new index can say which query it serves
+- [ ] Scripts can be rerun and big data goes in batches
+- [ ] Transaction + check row counts before `COMMIT` · wrote the way back and confirmed a backup exists
+- [ ] There is a test that runs against the same kind of database as production
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Connecting to other skills
 
-ออกแบบตารางและ migration แบบ expand-and-contract → `database-design` · สคริปต์รันซ้ำได้ → `principle-safe-to-rerun` · Excel/CSV → `data-import-export` · ใครแก้อะไร → `audit-trail` · injection และสิทธิ์ → `principle-secure-by-default` · วันที่ไทย พ.ศ. การเรียงไทย → `i18n-and-locale` · connection string → `config-and-secrets` · migration ใน pipeline → `cicd-and-release`
+Table design and expand-and-contract migrations → `database-design` · rerunnable scripts → `principle-safe-to-rerun` · Excel/CSV → `data-import-export` · who changed what → `audit-trail` · injection and permissions → `principle-secure-by-default` · Thai Buddhist Era dates, Thai sorting → `i18n-and-locale` · connection string → `config-and-secrets` · migrations in the pipeline → `cicd-and-release`
 
 
 ## reference: performance.md
 
-# ให้เร็ว — อ่าน plan · index · แบ่งหน้า · งานก้อนใหญ่ (ฉบับเต็ม)
+# Making it fast — read the plan · indexes · paging · big jobs (full version)
 
-อ่านเมื่อ query ช้าหรือกำลังเพิ่ม index · กฎย่ออยู่ใน `SKILL.md` ข้อ 3
+Read this when a query is slow or you are adding an index · the short rules are in `SKILL.md` section 3
 
-| engine | คำสั่งดู plan จริง |
+| engine | Command to see the real plan |
 |---|---|
-| SQL Server | `SET STATISTICS IO, TIME ON;` + เปิด Actual Execution Plan (SQL Server Management Studio (SSMS) กด `Ctrl+M`) แล้วดู logical reads |
-| PostgreSQL | `EXPLAIN (ANALYZE, BUFFERS) SELECT ...` ระวังว่า `ANALYZE` รันคำสั่งจริง ถ้าเป็น UPDATE/DELETE ให้ห่อด้วย `BEGIN ... ROLLBACK` |
+| SQL Server | `SET STATISTICS IO, TIME ON;` + open the Actual Execution Plan (in SQL Server Management Studio (SSMS) press `Ctrl+M`), then look at logical reads |
+| PostgreSQL | `EXPLAIN (ANALYZE, BUFFERS) SELECT ...` beware that `ANALYZE` really runs the statement; for UPDATE/DELETE wrap it in `BEGIN ... ROLLBACK` |
 | MySQL 8.0.18+ | `EXPLAIN ANALYZE SELECT ...` |
 
-สิ่งที่ต้องดูใน plan: scan ทั้งตารางที่ใหญ่ · จำนวนแถวที่คาด vs ได้จริงต่างกันมาก (statistics เก่า) · key lookup ซ้ำหลายพันครั้ง · sort หรือ hash ที่ล้นลง disk
+What to look for in a plan: a scan of a whole big table · expected vs actual row counts far apart (stale statistics) · key lookups repeated thousands of times · a sort or hash that spills to disk
 
-- **sargable** คือเงื่อนไขที่ใช้ index ได้ ห้ามครอบคอลัมน์ที่มี index ด้วย function
-  - ผิด: `WHERE YEAR(created_at) = 2026` → ถูก: `WHERE created_at >= '2026-01-01' AND created_at < '2027-01-01'`
-  - ผิด: `WHERE LOWER(email) = @e` → ถูก: เก็บ email ตัวเล็กตั้งแต่แรก หรือทำ index บน expression (PostgreSQL) หรือ computed column + index (SQL Server)
-  - ผิด: `WHERE name LIKE '%สมชาย'` ใช้ index ไม่ได้ ถ้าต้องค้นกลางคำให้ใช้ full-text search
-- **covering index**: ใส่คอลัมน์ที่ query อ่านไว้ใน `INCLUDE (...)` (SQL Server · PostgreSQL 11+) จะได้ไม่ต้องย้อนไปอ่านตาราง ส่วน MySQL ไม่มี `INCLUDE` ให้ต่อท้ายใน key แทน
-- ทุก index ที่เพิ่มต้องตอบได้ว่ารับ query ไหน เพราะ index ทำให้ INSERT/UPDATE ช้าลงทุกตัว
-- **แบ่งหน้าลึก** ใช้ keyset แทน `OFFSET` เพราะ `OFFSET 100000` ต้องอ่านทิ้ง 100,000 แถวทุกครั้ง
+- **sargable** means a condition that can use an index; never wrap an indexed column in a function
+  - Wrong: `WHERE YEAR(created_at) = 2026` → right: `WHERE created_at >= '2026-01-01' AND created_at < '2027-01-01'`
+  - Wrong: `WHERE LOWER(email) = @e` → right: store email in lower case from the start, or make an index on an expression (PostgreSQL) or a computed column + index (SQL Server)
+  - Wrong: `WHERE name LIKE '%สมชาย'` cannot use an index; if you must search the middle of a word, use full-text search
+- **covering index**: put the columns the query reads in `INCLUDE (...)` (SQL Server · PostgreSQL 11+) so it need not go back to read the table; MySQL has no `INCLUDE`, so append them to the key instead
+- Every index you add must answer which query it serves, because every index makes INSERT/UPDATE slower
+- **For deep paging** use keyset instead of `OFFSET`, because `OFFSET 100000` must read and throw away 100,000 rows every time
 
 ```sql
 -- keyset: ส่งค่าแถวสุดท้ายของหน้าก่อนมาเป็น parameter
@@ -300,12 +300,12 @@ LIMIT 50;
 -- SQL Server: WHERE created_at < @c OR (created_at = @c AND id < @id) · ใช้ TOP (50)
 ```
 
-- **N+1 จาก Object-Relational Mapper (ORM)**: loop แล้วโหลดลูกทีละแถว → 1 หน้าจอยิง 201 query ให้เปิด log SQL ของ ORM แล้วนับ แล้วแก้ด้วย `Include` (EF Core) · `selectinload` (SQLAlchemy) · `include` (Prisma)
-- **parameter sniffing (SQL Server)**: plan ถูกสร้างจากค่าแรกที่ส่งมา แล้วใช้ซ้ำกับค่าที่กระจายต่างกันมาก → บางลูกค้าเร็ว บางลูกค้าช้า 100 เท่า
-  - ทางแก้เรียงจากเบาไปหนัก: SQL Server 2022+ compatibility level 160 มี Parameter Sensitive Plan optimization · `OPTION (RECOMPILE)` กับ query ที่รันไม่บ่อย · `OPTIMIZE FOR` · บังคับ plan ผ่าน Query Store
-  - ห้ามแก้ด้วยการลบ plan cache ทั้ง server
-- **statistics**: หลังโหลดข้อมูลก้อนใหญ่ให้รัน `UPDATE STATISTICS dbo.orders` หรือ PostgreSQL `ANALYZE orders`
-- **UPDATE/DELETE ก้อนใหญ่** ทำทีละชุด เช่น 5,000 แถว เพราะถ้าทำชุดเดียวล้านแถวจะ lock ทั้งตาราง log โต และ rollback นานเท่ากัน
+- **N+1 from an Object-Relational Mapper (ORM)**: a loop that loads children one row at a time → 1 screen fires 201 queries; turn on the ORM's SQL log and count, then fix with `Include` (EF Core) · `selectinload` (SQLAlchemy) · `include` (Prisma)
+- **parameter sniffing (SQL Server)**: a plan is built from the first value passed and reused with values that are distributed very differently → some customers are fast, some are 100 times slower
+  - Fixes from lightest to heaviest: SQL Server 2022+ compatibility level 160 has Parameter Sensitive Plan optimization · `OPTION (RECOMPILE)` for queries that run rarely · `OPTIMIZE FOR` · force a plan through Query Store
+  - Never fix it by clearing the plan cache of the whole server
+- **statistics**: after loading a big batch of data, run `UPDATE STATISTICS dbo.orders` or, in PostgreSQL, `ANALYZE orders`
+- **Big UPDATE/DELETE** in batches, for example 5,000 rows, because doing a million rows in one batch locks the whole table, grows the log, and takes just as long to roll back
 
 ```sql
 -- SQL Server: ลบทีละ 5,000 แถวจนหมด
@@ -317,7 +317,7 @@ END
 -- PostgreSQL: DELETE FROM audit_logs WHERE id IN (SELECT id FROM audit_logs WHERE created_at < $1 LIMIT 5000); วนจากแอปหรือ procedure
 ```
 
-## index เฉพาะแถวส่วนน้อย และตารางบวม (SKILL.md ข้อ 5)
+## Indexes for a small share of rows, and bloated tables (SKILL.md section 5)
 
 ```sql
 -- PostgreSQL · partial index: index เฉพาะแถวที่ query กรองเสมอ
@@ -414,104 +414,104 @@ EXECUTE format('SELECT id, name FROM %I WHERE email = $1', tbl) USING p_email;
 
 Use when writing MQL4 or MQL5 code for MetaTrader
 
-# stack · MQL — Expert Advisor (EA) ที่ส่งออร์เดอร์ถูก ทุกโบรกเกอร์ ทุกครั้ง
+# stack · MQL — an Expert Advisor (EA) that sends orders correctly, on every broker, every time
 
-> **กฎข้อเดียว:** ทุกออร์เดอร์ผ่านตัวตรวจก่อนส่ง และทุกผลส่งกลับถูกอ่าน · EA ที่ "ทำงานใน tester" แต่ไม่ตรวจ ยังไม่เสร็จ
+> **One rule:** every order goes through the pre-send checker and every returned result is read · an EA that "works in the tester" but does not check is not done.
 
-ใช้กับ EA · indicator · script บน MetaTrader 4 (MT4) และ MetaTrader 5 (MT5) · กลยุทธ์ ความเสี่ยง และเกณฑ์ backtest อยู่ใน spec การเทรดของโปรเจกต์ (ถ้าใช้ชุด prompt ของ repo: `prompt/software-development/prompt-trading-system.md` — ผู้ที่ติดตั้งเฉพาะ plugin จะไม่มีไฟล์นี้ ให้ขอ spec จากเจ้าของ) · หลักทั่วไปอยู่ที่ `lazy-coding` · `readable-code` · `testing-standards` · `logging-standards` · `error-handling-patterns`
+For EAs · indicators · scripts on MetaTrader 4 (MT4) and MetaTrader 5 (MT5) · strategy, risk and backtest criteria live in the project's trading spec (if using the repo's prompt set: `prompt/software-development/prompt-trading-system.md` — someone who installed only the plugin will not have this file; ask the owner for the spec) · general principles are in `lazy-coding` · `readable-code` · `testing-standards` · `logging-standards` · `error-handling-patterns`
 
-## 1 · เริ่มงาน: รู้ว่าเขียนให้แพลตฟอร์มไหน
+## 1 · Start: know which platform you are writing for
 
-- ไฟล์ `.mq4` = MQL4 (MT4) · `.mq5` = MQL5 (MT5) · `.mqh` = include ใช้ร่วมได้ถ้าแยกส่วนที่ต่างไว้หลัง `#ifdef __MQL5__`
-- MQL4 ใส่ `#property strict` ทุกไฟล์ (ไม่ใส่ → compiler ปล่อยบั๊กชนิดข้อมูลผ่าน)
-- compile และ test ต้องมี terminal (Windows หรือ Wine บน macOS / Linux ที่ MetaQuotes แจก) · เครื่องที่ไม่มี → เขียนในรายงานว่า "ยังไม่ได้ compile" ห้ามบอกว่าผ่าน
+- `.mq4` file = MQL4 (MT4) · `.mq5` = MQL5 (MT5) · `.mqh` = an include that can be shared if the differing parts are separated behind `#ifdef __MQL5__`
+- In MQL4 put `#property strict` in every file (without it the compiler lets data-type bugs through)
+- Compiling and testing need a terminal (Windows, or the Wine build MetaQuotes distributes for macOS / Linux) · on a machine without one → write in the report "ยังไม่ได้ compile" (not yet compiled); never say it passed
 
-| ขั้น | MT5 | MT4 |
+| Step | MT5 | MT4 |
 |---|---|---|
 | compile | `metaeditor64.exe /compile:"MQL5\Experts\X.mq5" /log` | `metaeditor.exe /compile:"MQL4\Experts\X.mq4" /log` |
-| ผล compile | ไฟล์ `.log` ข้างไฟล์ต้นทาง · 0 errors 0 warnings | เหมือนกัน |
-| backtest จาก command line | `terminal64.exe /config:"tester.ini"` (หัวข้อ `[Tester]`: `Expert` · `Symbol` · `Period` · `FromDate` · `ToDate` · `Model` · `Report` · `ShutdownTerminal=1`) | `terminal.exe` + ไฟล์ config แบบ MT4 (ตัวเลือกน้อยกว่า) |
+| compile result | a `.log` file next to the source file · 0 errors 0 warnings | same |
+| backtest from the command line | `terminal64.exe /config:"tester.ini"` (section `[Tester]`: `Expert` · `Symbol` · `Period` · `FromDate` · `ToDate` · `Model` · `Report` · `ShutdownTerminal=1`) | `terminal.exe` + an MT4-style config file (fewer options) |
 
-ตรวจล่าสุด 2026-10-20 · แหล่ง: https://www.metatrader5.com/en/terminal/help/start_advanced/start · ก่อนใช้ให้ตรวจหน้านี้ซ้ำ
+Last checked 2026-10-20 · source: https://www.metatrader5.com/en/terminal/help/start_advanced/start · re-check this page before use
 
-## 2 · ความต่างที่ทำให้ port ระหว่าง MT4 กับ MT5 พัง
+## 2 · Differences that break a port between MT4 and MT5
 
-| เรื่อง | MT4 | MT5 |
+| Topic | MT4 | MT5 |
 |---|---|---|
-| โมเดลออร์เดอร์ | ออร์เดอร์ = สถานะ (`OrderSend` · `OrderSelect` · `OrdersTotal`) | แยก order · position · deal · ใช้ `CTrade` (`Trade\Trade.mqh`) |
-| บัญชี | hedging เสมอ | netting หรือ hedging → อ่าน `ACCOUNT_MARGIN_MODE` · netting มีได้ 1 position ต่อ symbol |
-| วิธีเติมออร์เดอร์ | ไม่มีให้เลือก | FOK / IOC อ่านจาก flag ใน `SYMBOL_FILLING_MODE` (Market / Exchange Execution) · RETURN ใช้ได้ทุกโหมดยกเว้น Market Execution · pending order ใช้ RETURN |
-| indicator | คืนค่าทันที (`iMA(...)`) | สร้าง handle ครั้งเดียวใน `OnInit` แล้ว `CopyBuffer` · ปล่อยใน `OnDeinit` |
-| ผลส่งออร์เดอร์ | `GetLastError()` (130 stops ผิด · 134 เงินไม่พอ · 138 requote · 146 trade context busy) | `MqlTradeResult.retcode` (10009 done · 10008 placed (pending order) · 10010 done partial = สำเร็จ · 10004 requote · 10014 volume ผิด · 10015 ราคาผิด · 10016 stops ผิด · 10018 ตลาดปิด · 10019 เงินไม่พอ · 10030 filling ผิด) |
-| เหตุการณ์ออร์เดอร์ | ไม่มี ต้องไล่ดูเอง | `OnTradeTransaction` |
+| order model | an order = a position (`OrderSend` · `OrderSelect` · `OrdersTotal`) | order · position · deal are separate · use `CTrade` (`Trade\Trade.mqh`) |
+| account | always hedging | netting or hedging → read `ACCOUNT_MARGIN_MODE` · netting allows 1 position per symbol |
+| order filling | no choice | FOK / IOC read from the flags in `SYMBOL_FILLING_MODE` (Market / Exchange Execution) · RETURN works in every mode except Market Execution · pending orders use RETURN |
+| indicator | returns the value at once (`iMA(...)`) | create the handle once in `OnInit`, then `CopyBuffer` · release it in `OnDeinit` |
+| order send result | `GetLastError()` (130 invalid stops · 134 not enough money · 138 requote · 146 trade context busy) | `MqlTradeResult.retcode` (10009 done · 10008 placed (pending order) · 10010 done partial = success · 10004 requote · 10014 invalid volume · 10015 invalid price · 10016 invalid stops · 10018 market closed · 10019 not enough money · 10030 invalid filling) |
+| order events | none; you must poll | `OnTradeTransaction` |
 
-## 3 · ตัวตรวจก่อนส่งออร์เดอร์ (ทุกออร์เดอร์ ทุกครั้ง)
+## 3 · The pre-send order checker (every order, every time)
 
-| ตรวจ | ทำแบบนี้ | ไม่ตรวจแล้วเจอ |
+| Check | Do this | What you hit if you skip it |
 |---|---|---|
-| volume | ปัดลงตาม `SYMBOL_VOLUME_STEP` · อยู่ระหว่าง `SYMBOL_VOLUME_MIN` กับ `SYMBOL_VOLUME_MAX` | 10014 · error 131 |
-| ราคา | `NormalizeDouble(price, _Digits)` | 10015 |
-| Stop Loss (SL) / Take Profit (TP) | ห่างราคาปัจจุบันไม่น้อยกว่า `SYMBOL_TRADE_STOPS_LEVEL` × `_Point` | 10016 · error 130 |
-| แก้ออร์เดอร์ | ไม่แก้เมื่อราคาอยู่ในระยะ `SYMBOL_TRADE_FREEZE_LEVEL` · ไม่ส่งค่าเดิมซ้ำ | ถูกปฏิเสธ · 10025 no changes |
-| margin | `OrderCalcMargin` (MT5) · `AccountFreeMarginCheck` (MT4) ก่อนส่ง | 10019 · error 134 |
-| จำนวนออร์เดอร์ | น้อยกว่า `ACCOUNT_LIMIT_ORDERS` (0 = ไม่จำกัด) | ถูกปฏิเสธ |
-| symbol | `SYMBOL_TRADE_MODE` ไม่ใช่ disabled · ตลาดเปิด | 10018 |
-| MT5 ทั้งชุด | `OrderCheck()` ก่อน `OrderSend()` | error ที่บอกไม่ได้ว่าข้อไหนผิด |
+| volume | round down to `SYMBOL_VOLUME_STEP` · between `SYMBOL_VOLUME_MIN` and `SYMBOL_VOLUME_MAX` | 10014 · error 131 |
+| price | `NormalizeDouble(price, _Digits)` | 10015 |
+| Stop Loss (SL) / Take Profit (TP) | at least `SYMBOL_TRADE_STOPS_LEVEL` × `_Point` away from the current price | 10016 · error 130 |
+| modifying an order | do not modify when the price is within `SYMBOL_TRADE_FREEZE_LEVEL` · do not resend the same values | rejected · 10025 no changes |
+| margin | `OrderCalcMargin` (MT5) · `AccountFreeMarginCheck` (MT4) before sending | 10019 · error 134 |
+| order count | less than `ACCOUNT_LIMIT_ORDERS` (0 = unlimited) | rejected |
+| symbol | `SYMBOL_TRADE_MODE` is not disabled · market is open | 10018 |
+| MT5 whole set | `OrderCheck()` before `OrderSend()` | an error that cannot tell which item is wrong |
 
-- ทุกผลส่งกลับต้องอ่าน · requote / off quotes → ลองใหม่ไม่เกิน 3 ครั้ง ราคาใหม่ทุกครั้ง · เงินไม่พอ / stops ผิด → ไม่ลองซ้ำ ลง log แล้วหยุดไม้นั้น
-- pip กับ point ไม่เท่ากัน: ราคา 5 ตำแหน่ง (หรือ 3 ตำแหน่งของคู่ JPY) → 1 pip = 10 point · input ที่ผู้ใช้กรอกเป็น pip ให้แปลงที่จุดเดียว
-- **กับดักที่โค้ดดูถูกแต่พังจริง** (ปรับจาก ThomasPraun/mql-developer · MIT): เทียบ `double` ด้วย `==` ไม่ได้ ให้ `NormalizeDouble` ทั้ง 2 ฝั่งหรือเทียบกับค่าคลาดเคลื่อน · MT4 ปิดหลายออร์เดอร์ต้องวนจาก `OrdersTotal()-1` ลงถึง 0 เพราะปิดแล้ว index เลื่อน · โบรกเกอร์ ECN บางเจ้าไม่รับ SL/TP ใน `OrderSend` ต้องส่งก่อนแล้ว `OrderModify` ตาม · `WebRequest` บล็อกจนกว่าจะตอบ และใช้ใน indicator กับ tester ไม่ได้ · MT4 terminal เดียวเทรดได้ทีละ EA (error 146) ต้องรอแล้วลองใหม่ ไม่ใช่ส่งซ้ำทันที · array แบบ series index 0 = แท่งล่าสุด ให้ `ArraySetAsSeries` กำกับทุกครั้ง ไม่เดาว่าทิศไหน
+- Read every returned result · requote / off quotes → retry at most 3 times, with a new price each time · not enough money / invalid stops → do not retry; log and stop that trade.
+- pip and point are not equal: a 5-digit price (or 3-digit for JPY pairs) → 1 pip = 10 points · if the user enters input in pips, convert at a single place.
+- **Traps where the code looks right but really breaks** (adapted from ThomasPraun/mql-developer · MIT): `double` cannot be compared with `==`; `NormalizeDouble` both sides or compare against a tolerance · in MT4, closing several orders must loop from `OrdersTotal()-1` down to 0 because the index shifts after a close · some ECN brokers do not accept SL/TP in `OrderSend`, so send first and then `OrderModify` · `WebRequest` blocks until it gets a reply and cannot be used in indicators and the tester · one MT4 terminal can trade with only one EA at a time (error 146); wait and retry, do not resend at once · a series array has index 0 = the latest bar; always mark with `ArraySetAsSeries`, never guess the direction.
 
-ตัวอย่างโค้ดตัวตรวจแต่ละข้อ → https://www.mql5.com/en/articles/23204 (อ่านแล้วเขียนเอง ไม่ลอกทั้งไฟล์)
+Sample code for each checker item → https://www.mql5.com/en/articles/23204 (read it and write your own; do not copy the whole file)
 
-## 4 · โครง EA ที่อ่านง่ายและกู้คืนได้
+## 4 · An EA structure that is easy to read and recoverable
 
-- `OnInit` ตรวจ input ทุกตัว (ค่าผิด → `INIT_PARAMETERS_INCORRECT`) · สร้าง handle · `OnDeinit` ปล่อย handle
-- logic หนักทำครั้งเดียวต่อแท่งใหม่ (เทียบ `iTime(_Symbol, _Period, 0)` กับค่าที่จำไว้) ไม่ทำทุก tick
-- magic number ต่อ EA + symbol + กลยุทธ์ · นับและจัดการเฉพาะออร์เดอร์ที่ magic ตรง ห้ามแตะออร์เดอร์มือหรือ EA อื่น
-- **ไม่เก็บ state สำคัญไว้ในตัวแปรอย่างเดียว:** terminal รีสตาร์ท → state หาย · `OnInit` สร้าง state ใหม่จาก position/order ที่ magic ตรง · ค่าที่สร้างใหม่ไม่ได้ (เช่น ยอดขาดทุนวันนี้) เก็บใน `GlobalVariableSet` หรือไฟล์ใน `MQL5\Files` / `MQL4\Files`
-- เวลา: ใช้เวลา server (`TimeCurrent`) ตัดสินแท่งและ session · เวลา server ของแต่ละโบรกเกอร์ไม่เท่ากับเวลาไทย และเลื่อนตาม daylight saving · ใน tester `TimeGMT()` เท่ากับเวลา server จำลองเสมอ (แหล่ง: https://www.mql5.com/en/docs/dateandtime/timegmt) → ตัวกรองข่าวและ session ที่อิง Greenwich Mean Time (GMT) ต้องตั้ง offset เป็น input
-- 1 ฟังก์ชัน 1 หน้าที่: สัญญาณ · ขนาดไม้ · ส่งออร์เดอร์ · จัดการออร์เดอร์ที่เปิดอยู่ แยกกัน · สัญญาณเป็นฟังก์ชันบริสุทธิ์ที่รับข้อมูลแท่งแล้วคืนผล (test ได้ใน script)
-- log ทุกการตัดสินใจที่ส่งหรือไม่ส่งออร์เดอร์: เวลา server · symbol · เหตุผล · ราคา · spread · ผลส่งกลับ · ไม่ log ทุก tick
+- `OnInit` validates every input (wrong value → `INIT_PARAMETERS_INCORRECT`) · create handles · `OnDeinit` releases the handles.
+- Do heavy logic once per new bar (compare `iTime(_Symbol, _Period, 0)` with a remembered value), not on every tick.
+- A magic number per EA + symbol + strategy · count and manage only orders whose magic matches; never touch manual orders or another EA's.
+- **Never keep important state only in a variable:** a terminal restart → state is lost · `OnInit` rebuilds state from the positions/orders with a matching magic · values that cannot be rebuilt (such as today's loss total) are stored with `GlobalVariableSet` or a file in `MQL5\Files` / `MQL4\Files`.
+- Time: use server time (`TimeCurrent`) to decide bars and sessions · each broker's server time is not Thai time and shifts with daylight saving · in the tester `TimeGMT()` always equals the simulated server time (source: https://www.mql5.com/en/docs/dateandtime/timegmt) → news and session filters based on Greenwich Mean Time (GMT) must take the offset as an input.
+- 1 function, 1 job: signal · lot size · sending the order · managing open orders are kept separate · the signal is a pure function that takes bar data and returns a result (testable in a script).
+- Log every decision to send or not send an order: server time · symbol · reason · price · spread · returned result · do not log every tick.
 
 ## 5 · test
 
-- **script test:** ฟังก์ชันสัญญาณและขนาดไม้ test ด้วย script ที่ป้อนข้อมูลตายตัวแล้วเทียบผล (MQL ไม่มี framework test มาตรฐาน)
-- **backtest:** MT5 ใช้โหมด "Every tick based on real ticks" สำหรับผลที่จะใช้ตัดสิน · MT4 รายงาน modelling quality ทุกครั้ง · ค่า spread · commission · swap ตั้งตามบัญชีจริง ไม่ใช่ 0
-- **ทดสอบกับหลายสภาพ:** symbol อย่างน้อย 3 ตัวที่ digits ต่างกัน (เช่น EURUSD · USDJPY · XAUUSD) · timeframe อย่างน้อย 2 ตัว · บัญชี netting และ hedging (MT5) · ทุนน้อยจนส่งไม้ขั้นต่ำไม่ได้
-- **ไม่ตัดสินจากผลที่ optimize มา:** ใช้ forward period ของ MT5 หรือแบ่ง in-sample / out-of-sample เอง · ตัวเลขที่รายงานคือผลช่วงที่ไม่ได้ใช้ optimize
-- `OnTester()` คืนค่าเกณฑ์ที่ spec กำหนด (เช่น profit factor ที่ drawdown ไม่เกินเกณฑ์) เพื่อให้ optimizer เลือกตามเกณฑ์จริง ไม่ใช่กำไรสูงสุด
+- **script test:** test the signal and lot-size functions with a script that feeds fixed data and compares the result (MQL has no standard test framework).
+- **backtest:** MT5 uses the "Every tick based on real ticks" mode for results used to decide · MT4 reports modelling quality every time · spread · commission · swap are set to the real account, not 0.
+- **Test under several conditions:** at least 3 symbols with different digits (such as EURUSD · USDJPY · XAUUSD) · at least 2 timeframes · netting and hedging accounts (MT5) · a capital so small the minimum lot cannot be sent.
+- **Do not judge from optimized results:** use MT5's forward period or split in-sample / out-of-sample yourself · the reported numbers are the results of the period not used for optimizing.
+- `OnTester()` returns the criterion the spec defines (such as profit factor with drawdown under the limit) so the optimizer picks by the real criterion, not maximum profit.
 
-## 6 · ขายบน MQL5 Market
+## 6 · Selling on the MQL5 Market
 
-ตรวจล่าสุด 2026-10-20 · แหล่ง: https://www.metatrader5.com/en/terminal/help/market/market_sell · กฎเปลี่ยนได้ ตรวจซ้ำก่อนส่ง
+Last checked 2026-10-20 · source: https://www.metatrader5.com/en/terminal/help/market/market_sell · the rules can change; re-check before submitting
 
-- ส่งไฟล์ compile แล้วไฟล์เดียว (`.ex5` / `.ex4`) · indicator · เสียง · รูป ฝังเป็น resource · **ห้ามใช้ Dynamic Link Library (DLL)**
-- **ห้ามจำกัดตามเลขบัญชีหรือชนิดบัญชี** · Market ล็อกเครื่องและจำนวน activation ให้เอง · ระบบ license ของเรา (ข้อ 7) ใช้ได้เฉพาะช่องทางขายเอง
-- การตรวจอัตโนมัติรัน EA ใน tester หลาย symbol และ timeframe · EA ต้องส่งออร์เดอร์ได้จริงในทุกสภาพนั้น (ไม่ส่งเลย = ไม่ผ่าน) · ตัวตรวจข้อ 3 ครบทุกข้อคือสิ่งที่ทำให้ผ่าน
-- ห้ามสัญญาผลกำไรในคำบรรยาย · ชื่อสินค้าตัวอักษรละตินไม่เกิน 50 ตัว ไม่มีเลขรุ่น · ระบุถ้าใช้ได้เฉพาะ hedging หรือ netting
+- Submit a single compiled file (`.ex5` / `.ex4`) · indicators · sounds · images embedded as resources · **no Dynamic Link Library (DLL)**
+- **Do not restrict by account number or account type** · the Market locks machines and the number of activations itself · our license system (item 7) is for self-sale channels only.
+- The automatic check runs the EA in the tester on several symbols and timeframes · the EA must really send orders in every one of those conditions (sending none = fail) · having every item of the item 3 checker is what makes it pass.
+- Do not promise profit in the description · the product name in Latin letters is at most 50 characters with no version number · state it if it works only with hedging or netting.
 
-## 7 · ความปลอดภัยและการขายเอง
+## 7 · Security and self-sale
 
-- รหัสผ่านบัญชีเทรด · API key · license key ไม่อยู่ในโค้ดหรือ `.set` · ค่าที่ต้องเก็บใช้ input ที่ผู้ใช้กรอกเองบนเครื่อง
-- `WebRequest` ใช้ได้เฉพาะ URL ที่ผู้ใช้เพิ่มใน allow list ของ terminal เอง · บอกในคู่มือว่าต้องเพิ่ม URL ไหน
-- ขายเอง (ไม่ผ่าน Market): ล็อก license ด้วยเลขบัญชี (`ACCOUNT_LOGIN`) + วันหมดอายุ ตรวจใน `OnInit` · ไม่ส่ง `.mq4` / `.mq5` ให้ลูกค้า · ไฟล์ `.ex4` / `.ex5` ถอดกลับได้บางส่วน อย่าวางกฎลับไว้ในตัว EA อย่างเดียว
+- Trading account passwords · API keys · license keys never go in the code or `.set` · for values that must be kept, use an input the user types on their own machine.
+- `WebRequest` works only with URLs the user added to the terminal's own allow list · say in the manual which URLs must be added.
+- Self-sale (not through the Market): lock the license with the account number (`ACCOUNT_LOGIN`) + an expiry date, checked in `OnInit` · do not give the customer the `.mq4` / `.mq5` · `.ex4` / `.ex5` files can be partly decompiled, so do not put secret rules only inside the EA.
 
-## 8 · รายการตรวจก่อนส่ง
+## 8 · Pre-submit checklist
 
-- [ ] compile ได้ 0 errors 0 warnings (หรือรายงานว่ายังไม่ได้ compile เพราะไม่มี terminal)
-- [ ] ทุกออร์เดอร์ผ่านตัวตรวจข้อ 3 · ทุกผลส่งกลับถูกอ่านและ log
-- [ ] magic number · state สร้างใหม่ได้หลังรีสตาร์ท · ไม่แตะออร์เดอร์ที่ magic ไม่ตรง
-- [ ] input ทุกตัวมีค่า default และช่วงที่ตรวจใน `OnInit`
-- [ ] backtest ใช้ spread · commission · swap จริง · ผลที่รายงานมาจากช่วงที่ไม่ได้ optimize
-- [ ] ทดสอบแล้วอย่างน้อย 3 symbol · 2 timeframe (· netting และ hedging สำหรับ MT5)
-- [ ] ขาย Market: ไม่มี DLL · ไม่ล็อกบัญชีหรือ symbol · คำบรรยายไม่สัญญาผลกำไร
+- [ ] compiles with 0 errors 0 warnings (or the report says it was not compiled because there is no terminal)
+- [ ] every order passes the item 3 checker · every returned result is read and logged
+- [ ] magic number · state can be rebuilt after a restart · orders with a non-matching magic are untouched
+- [ ] every input has a default and a range checked in `OnInit`
+- [ ] backtest uses real spread · commission · swap · the reported result comes from a period not used for optimizing
+- [ ] tested on at least 3 symbols · 2 timeframes (· netting and hedging for MT5)
+- [ ] selling on the Market: no DLL · no account or symbol lock · the description promises no profit
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · Link to other skills
 
-มีแค่ `.ex5` ไม่มี `.mq5` (ซอร์สหาย หรืออยากได้ตัวที่เทรดเหมือนเดิม) → `reverse-engineering` ไฟล์ `references/mql5-ex5.md` ถอดพฤติกรรมใน Strategy Tester แล้วเขียนใหม่ตามกฎในไฟล์นี้ · ไม่ decompile
+Only a `.ex5` and no `.mq5` (the source is lost, or you want one that trades the same way) → `reverse-engineering`, file `references/mql5-ex5.md`: extract the behavior in the Strategy Tester and rewrite it under the rules of this file · do not decompile.
 
-สูตรและสถิติ backtest → agent `quant-analyst` · test ทั่วไป → `testing-standards` · log → `logging-standards` · ค่าลับ → `config-and-secrets` · ขั้นตอนเล็กที่ตรวจได้ → `principle-small-verifiable-steps` · ขายและราคา → `prompt/software-development/prompt-sell-product.md` ของ repo (ถ้าใช้ชุด prompt)
+Backtest formulas and statistics → agent `quant-analyst` · general tests → `testing-standards` · logs → `logging-standards` · secrets → `config-and-secrets` · small checkable steps → `principle-small-verifiable-steps` · selling and pricing → the repo's `prompt/software-development/prompt-sell-product.md` (if using the prompt set)
 
 
 ---
@@ -736,9 +736,9 @@ async function login(page, user) {
 
 ## reference: ci-and-parallel.md
 
-# Parallelization และ CI Integration
+# Parallelization and CI Integration
 
-ระดับการรันขนาน รอบการรัน end-to-end (E2E) ใน continuous integration (CI) และไฟล์ที่ต้องเก็บไว้เมื่อเทสต์ล้ม
+Parallelism levels, the end-to-end (E2E) run tiers in continuous integration (CI), and the files to keep when a test fails.
 
 ## Parallelization
 
@@ -754,15 +754,15 @@ async function login(page, user) {
 - Unique test data per test
 - Database/external services support concurrency
 
-**ตกลงกติกาก่อนรันพร้อมกันหลาย agent หรือหลาย worker** (ตัวอย่างจากงานทดสอบร้านค้าออนไลน์ ที่ reset ล้างข้อมูลทั้งเซิร์ฟเวอร์ รันพร้อมกัน 6 agent):
+**Agree on rules before running many agents or workers at once** (example from an online-shop test job where a reset wipes the data of the whole server, run with 6 agents at once):
 
-| กติกา | กันอะไร |
+| Rule | Prevents |
 |---|---|
-| reset ครั้งเดียวก่อนเริ่มรันรวม ระหว่างรันไม่มี agent ไหน reset (ตั้งตัวแปร เช่น `PP_SKIP_RESET=1`) และแต่ละ agent เก็บผลในโฟลเดอร์ของตัวเอง | ลบข้อมูลและไฟล์ผลของกัน |
-| test ที่ซื้อของใช้สินค้าคนละตัว ไม่ใช้ตัวที่ test อื่นตรวจสต็อกอยู่ | สต็อกชนกัน |
-| อีเมลบัญชีใหม่ใส่ `{run}` (ชื่อ project + เวลาเริ่มรอบ) | รันรอบ 2 ได้ "อีเมลนี้ถูกใช้แล้ว" (แผนหนึ่งมี 30 test ที่รันซ้ำไม่ได้ เหลือ 0 หลังแก้) |
-| test ที่ชน rate limit ใช้บัญชีของตัวเอง และรันท้ายสุด | ตัวนับค้างข้าม test |
-| test ที่ใช้สถานะกลางร่วมกันและแยกไม่ได้ → `workers: 1` · `fullyParallel: false` | ผลเพี้ยนแบบสุ่ม |
+| Reset once before the combined run starts; no agent resets during the run (set a variable such as `PP_SKIP_RESET=1`), and each agent keeps its results in its own folder | deleting each other's data and result files |
+| Tests that buy things use different products, and never one that another test is checking stock on | stock collisions |
+| New-account emails include `{run}` (project name + run start time) | a second run getting "อีเมลนี้ถูกใช้แล้ว" ("this email is already used") (one plan had 30 tests that could not be re-run; 0 after the fix) |
+| Tests that hit the rate limit use their own account and run last | counters carrying over across tests |
+| Tests that use shared central state and cannot be separated → `workers: 1` · `fullyParallel: false` | randomly wrong results |
 
 ## CI Integration
 
@@ -786,17 +786,17 @@ async function login(page, user) {
 
 ### Browser matrix
 
-ไม่ต้องรันครบ 3 browser ทุกรอบ → เวลา CI เพิ่ม ~3 เท่า และเทสต์ flaky เพิ่มตามจำนวน browser
+Do not run all 3 browsers every round → CI time grows ~3x and flaky tests grow with the number of browsers.
 
-| Browser | ครอบคลุม | รันตอนไหน |
+| Browser | Covers | When to run |
 |---------|----------|-----------|
-| Chromium | Chrome · Edge (ผู้ใช้ส่วนใหญ่) | ทุกรอบ |
-| WebKit | ทุก browser บน iPhone/iPad (รวม Chrome บน iOS) | merge to main · nightly · pre-prod |
-| Firefox | ส่วนแบ่งน้อย | pre-prod เท่านั้น · ตัดได้ถ้าลูกค้าไม่ใช้ |
+| Chromium | Chrome · Edge (most users) | every round |
+| WebKit | every browser on iPhone/iPad (including Chrome on iOS) | merge to main · nightly · pre-prod |
+| Firefox | small share | pre-prod only · can be dropped if the customer does not use it |
 
-ปรับตามผู้ใช้จริง → ดู analytics ก่อน ถ้าลูกค้าองค์กรบังคับ Firefox ให้ย้ายขึ้นไปรอบ nightly
+Adjust to real users → look at analytics first; if an enterprise customer mandates Firefox, move it up to the nightly round.
 
-ตั้งเป็น project ใน Playwright แล้วเลือกด้วย `--project`
+Set them up as projects in Playwright and pick with `--project`.
 
 ```ts
 // playwright.config.ts
@@ -813,16 +813,16 @@ npx playwright test --project=chromium --project=webkit-mobile  # main · nightl
 npx playwright test                                             # pre-prod (ครบ 3)
 ```
 
-**เทสต์ที่ควรรันข้าม browser** (tag `@cross-browser`) → จุดที่มักพังต่าง browser:
+**Tests that should run across browsers** (tag `@cross-browser`) → places that often break differently per browser:
 - date/time input
-- อัปโหลดไฟล์ · clipboard
-- จัดรูปแบบวันที่/ตัวเลขด้วย `Intl`
+- file upload · clipboard
+- date/number formatting with `Intl`
 - CSS layout · scroll · sticky
-- autoplay วิดีโอ/เสียง
+- video/audio autoplay
 
-เทสต์ที่เป็น logic ล้วน → Chromium ตัวเดียวพอ
+Pure-logic tests → Chromium alone is enough.
 
-> WebKit ของ Playwright ไม่ใช่ Safari ตัวจริง 100% → งานที่ลูกค้าใช้ iPhone เยอะ ให้ลองบนเครื่องจริงก่อน release อีกรอบ
+> Playwright's WebKit is not 100% the real Safari → for work where customers use iPhone a lot, try on a real device once more before release.
 
 ### Artifacts to capture
 - Screenshots on failure
@@ -891,83 +891,83 @@ await expect(page.getByText('Success')).toBeVisible();
 
 ## reference: oracle-and-mutation.md
 
-# Oracle, เทียบโครงสร้าง และ mutation — ใช้เมื่อมีระบบเดิมให้เทียบ
+# Oracle, structure comparison and mutation — use when an existing system is available to compare against
 
-ที่มา: บทเรียนโคลนเว็บ 6 บท (Week 03 ของ Teaching_CWN2026) วัดบนแอป 5 เวอร์ชัน · ตัวเลขเป็นผลของงานนั้น ใช้เป็นตัวอย่าง ไม่ใช่เกณฑ์ · เนื้อหาเฉพาะเว็บที่ใช้โคลน (ข้อมูลเที่ยวบิน พอร์ต container) ไม่เอามา
+Source: lessons from a 6-chapter web-clone course (Week 03 of Teaching_CWN2026), measured on 5 app versions · the numbers are results of that job, used as examples, not as criteria · content specific to the cloned website (flight data, container ports) is not carried over.
 
-## 1 · ใช้ระบบเดิมเป็นเฉลย (differential testing)
+## 1 · Use the existing system as the answer key (differential testing)
 
-ทำสถานการณ์เดียวกันกับระบบเดิมและแอปของเรา แล้วเทียบผลทีละช่อง แทนการเขียนค่าคาดหวังมือ
+Run the same scenario on the existing system and on our app, then compare the results field by field, instead of writing expected values by hand.
 
-- ผลต้องตรงทุกช่องที่เทียบจึงผ่าน (ตัวอย่าง: จำนวน + ราคา + ชื่อ + เวลา ทีละตำแหน่ง)
-- ค่าคาดหวังดึงจากระบบเดิมตอนรัน ไม่ฝังตัวเลขในโค้ดเทียบ เว้นแต่พารามิเตอร์ที่มาจากโจทย์
-- สถานการณ์ที่ระบบเดิมตอบเองไม่ได้ ใช้ **เฉลยอนุมาน** (คำนวณเอง) ได้ แต่ต้องพิสูจน์วิธีกับกรณีที่มีเฉลยจริงก่อน · ถ้าลำดับเชื่อไม่ได้ ตัดสินจากจำนวนและชุดข้อมูล · เขียนบอกตรง ๆ ว่าเกณฑ์อ่อนกว่า (รอบจริง: S2 ผ่านทั้งที่มี 10 ใบ)
-- รายงานผลต่างเป็นตำแหน่ง แถว ช่อง ไม่ใช่แค่ตก · รอบจริง 4 สถานการณ์มีสาเหตุเดียว แก้จุดเดียว (ข้อมูล 310 บรรทัด โค้ด 7 บรรทัด) ได้ 4/8 → 8/8
-- ตัดสิ่งที่ตั้งใจให้ต่างก่อนเทียบ (แบนเนอร์ ชื่อแบรนด์ ลิงก์โดเมนอื่น ป้ายข้อมูลจำลอง)
+- The result passes only if every compared field matches (example: count + price + name + time, position by position).
+- Fetch expected values from the existing system at run time; do not hard-code numbers in the comparison code, except parameters that come from the task.
+- For a scenario the existing system cannot answer itself, an **inferred answer key** (computed by yourself) may be used, but first prove the method on cases that have a real answer key · if the order cannot be trusted, judge by count and data set · say plainly that the criterion is weaker (real round: S2 passed even though it had 10 tickets).
+- Report a difference as position, row, field, not just "failed" · in the real round, 4 scenarios had one cause, fixed in one place (310 lines of data, 7 lines of code), going from 4/8 → 8/8.
+- Remove what is meant to differ before comparing (banners, brand names, links to other domains, mock-data labels).
 
-### ถ้าต้องบันทึกแล้วเล่นซ้ำ (record-replay) ให้ระบบเดิมนิ่ง
+### If you must record and replay (record-replay), keep the existing system stable
 
-| กับดัก | ทำ |
+| Trap | Do |
 |---|---|
-| URL ไม่ตรงตัวอักษรกับที่บันทึก (`+` กับ `%20`) | `routeFromHAR` จับคู่ URL + method + body ตรงตัว · ต้องมี route เองสำหรับกรณีที่ไม่ตรง |
-| ค่าสุ่มใน URL หรือ body | จับคู่ POST ด้วย body และเลือกคีย์ที่นิ่ง |
-| ผลต่างกันทุกรอบ | ตรึงนาฬิกา (`context.clock.setFixedTime`) · ปิด telemetry · ตัดเน็ตด้วย abort ชั้นสุดท้าย |
-| นับแถวตอนกล่องตัวกรองยังเปิดอยู่ | รอให้จำนวนนิ่งก่อนนับ |
-| ลำดับ route | Playwright ลองตัวที่ลงทะเบียนทีหลังก่อน |
-| ไม่มีไฟล์บันทึก | ห้ามเปิดของจริงสดแทน เสียความนิ่ง |
+| The URL does not match the recorded one character for character (`+` vs `%20`) | `routeFromHAR` matches URL + method + body exactly · you need your own route for the cases that do not match |
+| Random values in the URL or body | match POST by body and pick stable keys |
+| Results differ every round | freeze the clock (`context.clock.setFixedTime`) · turn off telemetry · cut the network with a last-layer abort |
+| Counting rows while the filter box is still open | wait for the count to settle before counting |
+| Route order | Playwright tries the one registered later first |
+| No recording file | never open the real live site instead; stability is lost |
 
-- ตรวจว่านิ่งจริงด้วยรัน 3 รอบแล้วผลเหมือนกัน
-- ข้อจำกัด: ตอบได้เฉพาะที่บันทึกไว้ ถ้าจะให้ครอบคลุมต้องบันทึกให้ครบสถานการณ์ก่อน
-- ไฟล์บันทึกมี cookie และ token ห้าม commit ห้ามนำออกนอกเครื่อง
+- Check that it is really stable by running 3 rounds and getting the same result.
+- Limit: it can answer only what was recorded; for full coverage, record every scenario first.
+- The recording file contains cookies and tokens: do not commit it and do not take it off the machine.
 
-## 2 · เทียบโครงสร้างหน้าด้วย accessibility tree (`ariaSnapshot`)
+## 2 · Compare page structure with the accessibility tree (`ariaSnapshot`)
 
-เทียบพิกเซลเปราะและให้ผลหลอกได้ (พื้นขาวตรงกัน) การเทียบโครงสร้างบอกว่า "ขาดอะไร" เป็นรายการ
+Pixel comparison is brittle and can mislead (matching white backgrounds). Structure comparison tells you "what is missing" as a list.
 
-1. เก็บหน้าในสถานะเดียวกัน
-2. ตัดสิ่งที่ตั้งใจให้ต่างออกก่อนเทียบ (แบนเนอร์ ลิงก์โดเมนอื่น ชื่อแบรนด์ ป้ายข้อมูลจำลอง)
-3. ทำชื่อให้เป็นมาตรฐาน: ตัดสัญลักษณ์ ตัวเลขเป็น `#`
-4. ทำโทเคน `role | ชื่อ` (button, combobox, textbox นับเป็น control เดียวกันได้)
-5. คิด Jaccard ของโทเคน (ส่วนร่วม ÷ ส่วนรวม)
-6. เช็กรายการองค์ประกอบสำคัญที่เลือกจากระบบเดิม (รอบจริง 38 ข้อ) · ระบบเดิมต้องผ่านครบก่อน ไม่งั้นรายการผิดเอง
-7. คะแนนรวม = เฉลี่ยของสองตัว · ผลให้เป็นรายการสิ่งที่ยังขาด
+1. Capture the page in the same state.
+2. Remove what is meant to differ before comparing (banners, links to other domains, brand names, mock-data labels).
+3. Normalize names: strip symbols, turn numbers into `#`.
+4. Make `role | name` tokens (button, combobox, textbox can count as one control kind).
+5. Compute the Jaccard score of the tokens (intersection ÷ union).
+6. Check a list of key elements chosen from the existing system (38 items in the real round) · the existing system must pass all of them first, otherwise the list itself is wrong.
+7. Total score = average of the two · give the result as a list of what is still missing.
 
-ข้อควรระวัง: ภาษาไทยไม่เว้นวรรค ตัดคำด้วยช่องว่างพลาด ใช้ `Intl.Segmenter('th')` · ครึ่งหนึ่งของคะแนนขึ้นกับรายการที่เลือกเอง
+Caution: Thai has no spaces, so splitting by whitespace fails; use `Intl.Segmenter('th')` · half of the score depends on the list you chose yourself.
 
-## 3 · Mutation testing — สอบ "ชุดทดสอบ" ด้วยบั๊กจงใจ
+## 3 · Mutation testing — examine the test suite with deliberate bugs
 
-ฝังบั๊กทีละจุดในแอปที่ผ่านแล้ว แล้วดูว่าชุดทดสอบจับได้ไหม
+Plant bugs one at a time in an app that already passes, then see whether the test suite catches them.
 
-**นับ "จับได้" เป็น pass → fail เทียบฐาน ไม่ใช่ "ล้มอย่างน้อย 1 ข้อ"** ถ้าฐานมีข้อแดงค้างอยู่แล้ว เกณฑ์หลังจะผ่านอัตโนมัติ (รอบจริง: คะแนนดิบ 10/10 ทั้งสองชุด แต่เกณฑ์เข้ม acceptance 8/10 และ differential 4/10 · ตัวที่รอดเพราะข้อที่เกี่ยวแดงอยู่แล้ว) · ต้องทำฐานให้เขียวก่อนจึงอ่านคะแนนได้
+**Count "caught" as pass → fail against the baseline, not "at least 1 failure".** If the baseline already has a red test, the latter criterion passes automatically (real round: raw score 10/10 for both suites, but the strict criterion gave acceptance 8/10 and differential 4/10 · the survivors survived because the related test was already red) · make the baseline green first, then the score can be read.
 
-ขั้นตอน:
+Steps:
 
-1. คัดลอกโค้ดฐานเป็น `mutants/base` · เขียน `manifest.json` เก็บข้อความก่อนและหลังของทุกบั๊ก (ไฟล์ + บรรทัด) · แก้ 1 จุดต่อ 1 บั๊ก ไม่รวมกัน
-2. รันฐานก่อน บันทึกชุดข้อที่ล้ม
-3. ต่อบั๊ก: สร้าง compose project ชื่อแยก → รอ health endpoint (วนจำกัดรอบ) → รันทุกชุดทดสอบ → `down -v --remove-orphans` ใน `finally` เสมอ
-4. ไม่แก้ test ให้ชี้เป้าใหม่ ให้ห่อ: โหลด `endpoint.cjs` ด้วย `node --require` เปลี่ยนแค่ baseURL · หรือเขียนตัวรันเพิ่มที่เรียกสถานการณ์เดิม
-5. คำนวณทั้งเกณฑ์ดิบและเกณฑ์ pass → fail · บันทึกข้อที่ล้มเพิ่มรายตัว
-6. ตรวจ SHA-256 ของไฟล์ test ก่อนและหลัง · สร้างรายงานจากสคริปต์ ไม่เขียนมือ
-7. บอกผู้ใช้เรื่องเวลาล่วงหน้า (รอบจริง 11 รอบ × 2 ชุด ใช้ 46 นาที เพราะ build Docker ทุกรอบ)
+1. Copy the base code to `mutants/base` · write `manifest.json` holding the before and after text of every bug (file + line) · change 1 spot per bug, never combined.
+2. Run the baseline first and record the set of failing tests.
+3. Per bug: create a compose project with a separate name → wait for the health endpoint (loop with a limited count) → run every test suite → always `down -v --remove-orphans` in `finally`.
+4. Do not edit tests to point at a new target; wrap them: load `endpoint.cjs` with `node --require` to change only the baseURL · or write an extra runner that calls the same scenarios.
+5. Compute both the raw criterion and the pass → fail criterion · record the additionally failing tests one by one.
+6. Check the SHA-256 of the test files before and after · generate the report from a script, not by hand.
+7. Tell the user the duration in advance (real round: 11 rounds × 2 suites took 46 minutes because Docker is built every round).
 
-บั๊กที่ควรมี: เรียงกลับด้าน · ปิดตัวกรองทีละตัว · จำนวนผลขาด 1 · โหลดเพิ่มเหลือ 299 · `<` แทน `≤` · เวลาเลื่อน 1 ชั่วโมง · รหัสผิด
+Bugs worth having: reversed sorting · turning off filters one at a time · result count short by 1 · load-more ending at 299 · `<` instead of `≤` · time shifted by 1 hour · wrong code.
 
-ข้อสังเกต:
-- บั๊กที่รอด `<` แทน `≤` เพราะค่าขอบไม่มีในข้อมูลทดสอบ ต้องมี test ค่าขอบเฉพาะ
-- ชุดที่ต่างชนิดจับบั๊กคนละกลุ่ม (acceptance จับข้อมูลหลายตัวที่ differential จับใหม่ไม่ได้ ส่วน differential บอกแถวและช่องที่ผิด) ใช้คู่กัน
-- 80% และ 40% เป็นขอบล่าง ไม่ได้แปลว่าบั๊กที่ไม่มีข้อใหม่ล้มหลุดแน่นอน
-- รอบจริงยังไม่ได้รัน mutation ซ้ำกับเวอร์ชันที่ differential เขียวแล้ว และมีแค่ 10 บั๊ก
+Observations:
+- The surviving bug was `<` instead of `≤`, because the boundary value was not in the test data; a dedicated boundary-value test is needed.
+- Different kinds of suites catch different groups of bugs (acceptance catches several data bugs that differential cannot newly catch, while differential tells the wrong row and field) · use them together.
+- 80% and 40% are lower bounds; they do not mean that a bug with no newly failing test certainly slipped through.
+- The real round has not yet re-run mutation against the version where differential is green, and had only 10 bugs.
 
-## 4 · ตัวรันที่ใช้ซ้ำได้
+## 4 · Reusable runner
 
-- 1 test ต่อ 1 รายการ context ใหม่ทุกข้อ ไม่ retry ไม่ลดเกณฑ์ ห้ามแก้ test
-- กันออกนอกขอบเขต: route ยกเลิกคำขอ navigate ข้าม origin
-- locator ต้องเจาะจง: รอบจริงข้อสอบที่ผ่านเพราะเห็นแค่ 10 แถวพังทันทีเมื่อข้อมูลครบและเจอ 2 แถว
-- ตั้งสวิตช์โหมดหลักฐาน (เช่น `EVIDENCE=1`): ปกติรันเร็วหลาย worker ไม่อัดวิดีโอ โหมดหลักฐานลด worker เพิ่ม timeout และอัดวิดีโอ
-- ตัวหาองค์ประกอบกลาง (control/choice) ที่รองรับทั้ง `select` และเมนูกด ทำให้ชุดเทสต์เดียวรันกับสองแอปที่เขียนต่างกัน · project ต่างกันแค่ `baseURL`
-- เทสต์ต้องไม่เพิ่มของที่ไม่ลบ (สร้าง booking ใหม่ทุกครั้งที่รัน = ไม่ idempotent)
-- ป๊อปอัปบังการกด ต้องมีขั้นปิดป๊อปอัปก่อน · ดูภาพและ snapshot ของข้อที่ตก ไม่ใช่แค่ข้อความ error (รอบจริง "กดปุ่มไม่ได้" ที่แท้คือป๊อปอัปบัง สาเหตุราก: re-render ถอด listener ของปุ่ม Escape)
-- วัดหน้าเปล่าแล้วรอ timeout ทุกขั้น ใช้ 24 นาที ควร fail-fast
+- 1 test per item · a fresh context for every test · no retry · no lowering of criteria · never edit a test.
+- Keep it inside the scope: a route cancels navigate requests across origins.
+- Locators must be specific: in the real round, a test that passed because it saw only 10 rows broke at once when the data was complete and it found 2 rows.
+- Set an evidence-mode switch (e.g. `EVIDENCE=1`): normally run fast with many workers and no video; evidence mode lowers workers, raises timeouts and records video.
+- A neutral element finder (control/choice) that supports both `select` and a tap menu lets one test suite run against two apps written differently · the projects differ only in `baseURL`.
+- A test must not add things it does not delete (creating a new booking on every run = not idempotent).
+- A popup that blocks a click needs a step that closes the popup first · look at the screenshot and snapshot of the failed test, not only the error text (real round: "cannot click the button" was really a popup blocking; root cause: a re-render removed the Escape key listener).
+- Measuring an empty page and waiting for the timeout at every step took 24 minutes; it should fail fast.
 
 
 ## reference: page-object-model.md
@@ -1072,32 +1072,32 @@ Mixed: Requires DB tooling
 
 Use when building test-first from a spec and mockups
 
-> **ใน SuperUser:** ลูปนี้คือแกนของ playbook [`feature`](../superuser/references/playbook-feature.md) และ [`new-project`](../superuser/references/playbook-new-project.md) ถ้าเปิด superuser อยู่ ให้ทำตาม playbook แล้วใช้ไฟล์นี้เป็นรายละเอียดของลูป
+> **In SuperUser:** this loop is the core of the playbooks [`feature`](../superuser/references/playbook-feature.md) and [`new-project`](../superuser/references/playbook-new-project.md). If superuser is open, follow the playbook and use this file as the detail of the loop.
 
-# วงรอบจากข้อกำหนดไปเป็นโค้ด
+# The loop from requirements to code
 
-> **กฎข้อเดียว:** วงรอบต้องมีเงื่อนไขหยุดที่**รันแล้วรู้ผลทันที**
-> "ทำตามข้อกำหนดให้เสร็จ" เครื่องตรวจไม่ได้ ส่วน "test ทั้ง 47 ตัวเขียว" ตรวจได้
+> **The one rule:** the loop needs a stop condition that **gives a result the moment you run it**.
+> "Finish implementing the requirements" cannot be checked by a machine, while "all 47 tests are green" can.
 
 ---
 
-## ต้องมีครบก่อนเริ่ม
+## What you must have before starting
 
-| สิ่งที่ต้องมี | ถ้าไม่มี |
+| What you need | If missing |
 |---|---|
-| ข้อกำหนดที่แต่ละข้อทดสอบได้ มีรหัสกำกับ เช่น `FR-AUTH-010` (FR = ข้อกำหนดเชิงหน้าที่ Functional Requirement) | หยุด ใช้ `srs-writing` ทำให้ทดสอบได้ก่อน |
-| คำสั่งรัน test 1 บรรทัดที่รันได้จริง | หยุด ตั้งค่าโครง test ก่อน ใช้ `testing-standards` |
-| คำสั่งรันแอปขึ้นมาดูได้ (ถ้ามีหน้าจอ) | ข้ามขั้นเทียบภาพไปก่อน แล้วบอกผู้ใช้ว่าข้าม |
-| ภาพ mockup ที่ตั้งชื่อตรงกับหน้าจอ | ขอจากผู้ใช้ ไม่งั้น UI จะไม่มีวันตรง |
+| Requirements that are each testable, with an ID such as `FR-AUTH-010` (FR = Functional Requirement) | Stop and use `srs-writing` to make them testable first |
+| A 1-line test command that really runs | Stop and set up the test skeleton first, using `testing-standards` |
+| A command to run the app and look at it (if there are screens) | Skip the image-comparison step for now, and tell the user it was skipped |
+| Mockup images named to match the screens | Ask the user, otherwise the UI will never match |
 
-**ถ้าไม่ครบแล้วยังเริ่ม ก็เท่ากับเขียนโค้ดที่ไม่มีใครรู้ว่าถูกหรือผิด**
+**Starting without all of these amounts to writing code that nobody can tell is right or wrong**
 
 ---
 
-## 1 · รอบที่ศูนย์ — วางแผน ยังไม่เขียนโค้ด
+## 1 · Round zero — plan, no code yet
 
-อ่านข้อกำหนดและ mockup ให้ครบก่อน แล้วแตกเป็นงานย่อย **งานละ 1 ข้อกำหนด**
-เขียนลง `docs/BUILD-PLAN.md`
+Read the requirements and mockups in full, then break them into sub-tasks, **1 requirement per task**
+and write them to `docs/BUILD-PLAN.md`
 
 ```markdown
 | # | รหัส | milestone | สิ่งที่ต้องได้ | ไฟล์ที่จะแตะ | test ที่จะเขียน | สถานะ | commit |
@@ -1106,37 +1106,37 @@ Use when building test-first from a spec and mockups
 | 2 | FR-AUTH-020 | M2 | ล็อกผู้ใช้หลังผิด 5 ครั้ง | auth/lockout.ts | lockout_FR-AUTH-020 | ค้างอยู่ | |
 ```
 
-คอลัมน์ `milestone` ใส่รหัส `M…` จากแผนโครงการหรือไทม์ไลน์ใน `BUILD-PLAN.md` (playbook `new-project` ขั้น 1) · ไม่มีไทม์ไลน์ → ว่างได้
+The `milestone` column takes an `M…` ID from the project plan or the timeline in `BUILD-PLAN.md` (playbook `new-project` step 1) · no timeline → may be empty
 
-**เอกสารขัดกัน → ยึดตามลำดับ ไม่เดา** — เขียนลำดับความสำคัญของเอกสาร 1 บรรทัดไว้บนสุดของ `BUILD-PLAN.md` ก่อนแตกงาน เช่น `ลำดับเอกสาร: TEST-DATA.md > REQUIREMENTS.md > DESIGN.md > mockup`
-- ผู้ใช้กำหนดลำดับมาแล้ว → ใช้ตามนั้น
-- ไม่ได้กำหนด → ใช้ค่าเริ่ม: ข้อมูลทดสอบที่มีค่าคาดหวัง (ตัวเลขชัดที่สุด) > ข้อกำหนด (Software Requirements Specification — SRS) > เอกสารออกแบบ > mockup แล้วลง `decision-log` พร้อม `(รอยืนยัน)`
-- เจอจุดที่ขัดกันจริง → ทำตามเอกสารที่อยู่ลำดับสูงกว่า แล้วจดคู่ที่ขัด (ไฟล์ · หัวข้อ · ค่าทั้ง 2 ฝั่ง) ไว้ใน "ค้างอยู่" ให้เจ้าของแก้ต้นฉบับ · ห้ามแก้เอกสารต้นฉบับเอง
+**Documents conflict → follow the order, do not guess** — write a 1-line priority order of the documents at the very top of `BUILD-PLAN.md` before splitting the work, for example `ลำดับเอกสาร: TEST-DATA.md > REQUIREMENTS.md > DESIGN.md > mockup` (document order: …)
+- The user has already set an order → use it
+- Not set → use the default: test data with expected values (the clearest numbers) > requirements (Software Requirements Specification — SRS) > design document > mockup, and log it in `decision-log` with `(รอยืนยัน)` (awaiting confirmation)
+- A real conflict found → follow the higher-ranked document, and record the conflicting pair (file · section · both values) under "ค้างอยู่" (pending) for the owner to fix the source · never edit the source documents yourself
 
-**ข้อไหนกำกวมจนเขียน test ไม่ได้ ห้ามเดา** — รวมเป็นรายการคำถามไว้ท้ายไฟล์ และใส่ในหัวข้อ **"ค้างอยู่"** ครั้งเดียว แล้วทำข้ออื่นต่อ
+**If an item is so ambiguous that you cannot write a test, do not guess** — collect it into a list of questions at the end of the file, put it under the heading **"ค้างอยู่"** (pending) once, and carry on with the other items
 
-> คำถามที่ต้องถามแทนการเดา: ค่าขอบเขตเป็นเท่าไหร่ · ผิดแล้วต้องเกิดอะไร ·
-> ใครเห็นข้อมูลนี้ได้บ้าง · ถ้าของเดิมมีอยู่แล้วจะทับหรือจะเตือน
+> Questions to ask instead of guessing: what is the boundary value · what must happen on failure ·
+> who may see this data · if the item already exists, overwrite or warn
 
-**ตรวจแผนเองก่อนส่ง — 5 ข้อ ทำเองไม่ต้องส่ง agent** (ปรับจาก superpowers `writing-plans` · MIT)
+**Check the plan yourself before sending — 5 items, do it yourself, no need to send an agent** (adapted from superpowers `writing-plans` · MIT)
 
-| ข้อ | ถาม | เจอแล้วทำ |
+| Item | Ask | If found, do |
 |---|---|---|
-| ครบ | ไล่ทุกข้อกำหนดใน SRS หรือ FSD ชี้แถวในตารางได้ไหม | ชี้ไม่ได้ → เพิ่มแถว |
-| ขนาด | แต่ละแถวให้คนเขียนได้ 1 อย่างที่สมเหตุสมผล ไม่กว้างจนเดา ไม่ละเอียดจนเป็นโค้ด | กว้าง → แตก · ละเอียด → เหลือลายเซ็นกับชื่อ test |
-| ชื่อตรงกัน | type · ฟังก์ชัน · คอลัมน์ ที่แถวหลังอ้าง สะกดเหมือนที่แถวแรกตั้ง | ต่างกัน → แก้ให้เป็นชื่อเดียว |
-| เคสที่กัด | input แต่ละแบบและทางล้มที่ข้อกำหนดบอกเป็นนัย มี test ในแถวไหน | ไม่มี → เพิ่มชื่อ test ในแถวเจ้าของ |
-| สัดส่วน | แผนยาวกว่าข้อกำหนดหลายเท่า = ถอดโค้ดล่วงหน้า ไม่ใช่แผน | ตัดเนื้อโค้ดเหลือลายเซ็นและ assertion |
+| Complete | Going through every requirement in the SRS or FSD, can you point to a row in the table | Cannot point → add a row |
+| Size | Each row gives a writer 1 sensible thing, not so wide they must guess, not so detailed it becomes code | Wide → split · detailed → leave the signature and the test name |
+| Names match | The types · functions · columns that later rows reference are spelled as the first row set them | Different → fix to one name |
+| Biting cases | Each kind of input and failure path the requirement implies: which row has a test for it | None → add a test name to the owning row |
+| Proportion | A plan many times longer than the requirements = pre-written code, not a plan | Cut the code body to signatures and assertions |
 
-เจอแล้วแก้ในที่ ไม่ต้องตรวจซ้ำอีกรอบ
+Fix in place when found, no need to check again
 
-จบรอบที่ศูนย์ **ต้องหยุด** ให้ผู้ใช้อ่านแผนก่อน — อย่าไหลต่อไปเขียนโค้ดเอง
+At the end of round zero you **must stop** and let the user read the plan first — do not flow on to write code yourself
 
-ถ้าสร้างจากพรอมต์สร้างระบบ (build prompt) ฉบับเดียว: อ่านพรอมต์ให้จบก่อนวาง ตรงไหนไม่ตรงกับข้อกำหนดให้แก้ก่อน แล้ววางในเซสชันใหม่ที่ความจำว่าง เพื่อพิสูจน์ว่าพรอมต์ครบจริง (บอกเล่าจากงานสอน ไม่ได้วัดเทียบ)
+If building from a single build prompt: read the prompt through before pasting, fix anything that does not match the requirements first, then paste in a fresh session with empty memory to prove the prompt is really complete (reported from the training exercise, not measured against a baseline)
 
 ---
 
-## 2 · วงรอบต่อหนึ่งข้อกำหนด
+## 2 · The loop per requirement
 
 ```
 อ่าน BUILD-PLAN.md  →  หยิบข้อแรกที่ยังไม่ทำ
@@ -1149,49 +1149,49 @@ Use when building test-first from a spec and mockups
   →  วนข้อถัดไป
 ```
 
-**ขั้นที่ 2 คนข้ามบ่อยที่สุด และพลาดแล้วแพงที่สุด** — test ที่ไม่เคยเห็นแดง
-อาจผ่านตลอดไม่ว่าโค้ดจะถูกหรือผิด
+**Step 2 is the one people skip most, and the costliest to get wrong** — a test that has never been seen red
+may pass forever whether the code is right or wrong
 
-**ถ้าผู้ใช้พูดว่า TDD · test-driven · "เขียน test ก่อน"** — คือวงรอบนี้เอง ไม่ต้องหาวิธีอื่น: red = ขั้น 1–2 (test ที่ตั้งชื่อด้วยรหัสข้อกำหนด และต้องเห็นแดงจริง) · green = ขั้น 3 (โค้ดน้อยที่สุดที่ทำให้เขียว ตาม `lazy-coding`) · refactor = ทำระหว่างขั้น 4 โดย test ทั้งชุดยังเขียว ไม่เพิ่มพฤติกรรมใหม่ในรอบนั้น · หน่วยของ 1 รอบคือ 1 ข้อกำหนด ไม่ใช่ 1 ฟังก์ชัน จึงเล็กกว่าที่คนคิดและใหญ่กว่า TDD ตำรา · โครง test · คำสั่งรัน · สัดส่วน unit กับ integration ดู `testing-standards` · ไม่มีข้อกำหนดที่ทดสอบได้ → ยังทำ TDD ไม่ได้ กลับไป "ต้องมีครบก่อนเริ่ม"
-
----
-
-## 3 · กฎเหล็ก
-
-1. **ห้ามแก้หรือลบ test เพื่อให้ผ่าน** — test แดงแปลว่าโค้ดผิด ไม่ใช่ test ผิด
-   จะแก้ test ได้ต่อเมื่อพิสูจน์ได้ว่า test เขียนผิดจากข้อกำหนด และต้องบอกผู้ใช้ทุกครั้ง
-2. **1 ข้อต่อ 1 รอบ** — ห้ามรวบหลายข้อเพราะ "มันคล้ายกัน"
-3. **ข้อเดียวลองได้ไม่เกิน 3 รอบ** — พัง 2 รอบ → แตกเป็นขั้นย่อย ไม่ลองแบบเดิมซ้ำ · ครบ 3 รอบ → **ลงเป็น `ติด` แล้วทำตาม "หลังติด" ข้างล่าง** อย่าลองต่อไปเรื่อย ๆ
-4. **ห้าม mock สิ่งที่กำลังทดสอบ** — mock ของข้างนอกได้ mock ตัวเองไม่ได้
-5. **ห้ามข้ามไปทำข้อที่ง่ายกว่า** ก่อนลองครบ 3 รอบ — ลำดับในแผนคือลำดับจริง ข้ามได้เฉพาะข้อที่ลง `ติด` แล้ว
-
-### หลังติด — 5 ขั้น
-
-1. **จดว่าติดเพราะอะไร** ใน "ค้างอยู่": ลองอะไรไปแล้วทั้ง 3 รอบ · คิดว่าปัญหาอยู่ตรงไหน · ต้องได้อะไรถึงจะไปต่อ (คำตอบ · ข้อมูล · สิทธิ์)
-2. **ถอยกลับไปจุดที่ test เขียวล่าสุด** — เก็บงานค้างไว้ใน branch `stuck/<รหัส>` (ไม่ได้รับอนุญาตให้ commit → เก็บเป็น patch ใน `_to_delete/patches/stuck-<รหัส>.patch` แทน) แล้วคืนสายงานให้ test ทั้งชุดเขียว test ของข้อที่ติดอยู่ใน branch หรือ patch นั้นด้วย ห้ามลบ
-3. **ข้อที่ต้องรอข้อที่ติด** ลงเป็น `ติด` เหตุผล `รอ <รหัส>` โดยไม่ต้องลอง แล้วไปข้อถัดไปตามลำดับในแผนที่ไม่ต้องรอข้อนั้น
-4. **ลองอีก 1 รอบตอนท้าย** — ทำข้ออื่นหมดแล้ว ให้ agent ตัวใหม่ที่ใช้โมเดลขนาดใหญ่ขึ้นลอง 1 รอบจาก branch `stuck/<รหัส>` (หรือ patch ที่เก็บไว้) และบันทึกในขั้น 1 · มีคำตอบใน inbox (`.claude/superuser/inbox/`) แล้ว → เริ่มจากคำตอบนั้น
-5. **ยังติด** → คง `ติด` ไว้ในรายงานปิดงาน พร้อมบอกว่าต้องการอะไรจากผู้ใช้ · ผู้ใช้ตอบทีหลัง → ทำต่อจากข้อนั้นตาม playbook `pickup-and-pause`
+**If the user says TDD · test-driven · "write the test first"** — that is this very loop, no need to look for another way: red = steps 1–2 (a test named with the requirement ID, which must really be seen red) · green = step 3 (the least code that makes it green, per `lazy-coding`) · refactor = done during step 4 with the whole test set still green, adding no new behaviour in that round · the unit of 1 round is 1 requirement, not 1 function, so it is smaller than people think and larger than textbook TDD · for test skeleton · run command · ratio of unit to integration see `testing-standards` · no testable requirement → you cannot do TDD yet, go back to "What you must have before starting"
 
 ---
 
-## 4 · ไฟล์สถานะ — context หมดแน่นอน
+## 3 · Iron rules
 
-วงรอบยาวเกินกว่าที่ 1 รอบสนทนาจะจำได้เสมอ **สถานะต้องอยู่ในไฟล์ ไม่ใช่ในหัว**
+1. **Never edit or delete a test to make it pass** — a red test means the code is wrong, not the test
+   A test may be edited only when you can prove it was written wrongly against the requirement, and you must tell the user every time
+2. **1 requirement per round** — never bundle several because "they are similar"
+3. **A single requirement may be tried at most 3 rounds** — fails 2 rounds → split into sub-steps, do not retry the same way · 3 rounds reached → **mark it `ติด` (blocked) and follow "After stuck" below**, do not keep trying on and on
+4. **Never mock the thing under test** — you may mock external things, you may not mock yourself
+5. **Never skip to an easier requirement** before trying 3 rounds — the order in the plan is the real order, and only items already marked `ติด` (blocked) may be skipped
 
-- `docs/BUILD-PLAN.md` — แผนและสถานะ **อ่านไฟล์นี้ก่อนเริ่มทุกรอบ**
-  นี่คือไฟล์เดียวที่วงรอบนี้เพิ่มเข้าไปในโฟลเดอร์เอกสารหลัก
-- สถานะมี 5 ค่าเท่านั้น (ชุดเดียวกับ `superuser`): `เสร็จ` · `ทำอยู่` · `ติด` · `รออนุมัติ` · `ค้างอยู่` — งานที่ยังไม่เริ่มใช้ `ค้างอยู่`
-- `ติด` ต้องมีเหตุผลต่อท้าย 1 บรรทัด
-- ทุกข้อที่ `เสร็จ` ต้องมีเลข commit — ไม่มีเลข แปลว่ายังไม่เสร็จจริง · ยกเว้นยังไม่ได้รับอนุญาตให้ commit (commit เมื่อได้รับอนุญาตเท่านั้น): ใส่ข้อความ commit ที่แนะนำ + `(รอ commit)` และหลักฐาน test (ชื่อ test + ผลรัน) แทนเลข แล้วถือว่า `เสร็จ` ได้
-- จบแต่ละรอบให้อัปเดตหัวข้อ `## สถานะล่าสุด` และ `## ประวัติสถานะ` บนสุดของไฟล์ตาม `status-report` — ตารางงานกับตารางสถานะอยู่ไฟล์เดียวกันแต่คนละหัวข้อ
+### After stuck — 5 steps
 
-**เริ่มรอบใหม่โดยไม่อ่านไฟล์นี้ก่อน คือสาเหตุอันดับ 1 ที่งานต้องทำซ้ำ**
+1. **Record why it is stuck** under "ค้างอยู่" (pending): what was tried across all 3 rounds · where you think the problem is · what you need to go on (an answer · data · permission)
+2. **Go back to the last point where tests were green** — keep the pending work in a branch `stuck/<ID>` (if not permitted to commit → keep it as a patch at `_to_delete/patches/stuck-<ID>.patch` instead) and return the line of work to where the whole test set is green. The test of the stuck item stays in that branch or patch too, never delete it
+3. **Items that wait on the stuck item** are marked `ติด` (blocked) with the reason `รอ <ID>` (waiting for <ID>) without trying, then go to the next item in plan order that does not wait on it
+4. **Try 1 more round at the end** — once everything else is done, have a new agent on a larger model try 1 round from branch `stuck/<ID>` (or the kept patch) and record it in step 1 · if an answer is already in the inbox (`.claude/superuser/inbox/`) → start from that answer
+5. **Still stuck** → keep `ติด` (blocked) in the closing report, stating what is needed from the user · if the user answers later → continue from that item per the playbook `pickup-and-pause`
 
-### ไฟล์ที่วงรอบสร้างขึ้นระหว่างทาง — ไปที่ `_to_delete/` ทั้งหมด
+---
 
-เอกสารข้อกำหนดมักเป็น `.docx` หรือ `.pdf` ต้องแปลงเป็นข้อความก่อนจึงอ่านซ้ำได้ถูก
-**ไฟล์ที่แปลงออกมาไม่ใช่เอกสาร** เป็นของใช้ชั่วคราวของวงรอบ
+## 4 · The status file — context will certainly run out
+
+A loop is always longer than one conversation can remember. **State must live in a file, not in the head**
+
+- `docs/BUILD-PLAN.md` — the plan and status. **Read this file before starting every round**
+  This is the only file this loop adds to the main documents folder
+- Status has only 5 values (the same set as `superuser`): `เสร็จ` (done) · `ทำอยู่` (in progress) · `ติด` (blocked) · `รออนุมัติ` (awaiting approval) · `ค้างอยู่` (pending) — work not yet started uses `ค้างอยู่`
+- `ติด` must have a 1-line reason after it
+- Every `เสร็จ` item must have a commit number — no number means not really done · except when not yet permitted to commit (commit only when permitted): put the recommended commit message + `(รอ commit)` (awaiting commit) and test evidence (test name + run result) in place of the number, and it may count as `เสร็จ`
+- At the end of each round, update the headings `## สถานะล่าสุด` (latest status) and `## ประวัติสถานะ` (status history) at the top of the file per `status-report` — the task table and the status table are in the same file under different headings
+
+**Starting a new round without reading this file first is the number 1 cause of rework**
+
+### Files the loop creates along the way — all go to `_to_delete/`
+
+Requirements documents are often `.docx` or `.pdf` and must be converted to text before they can be re-read correctly.
+**A converted file is not a document**, it is a temporary working item of the loop
 
 ```
 _to_delete/
@@ -1200,24 +1200,24 @@ _to_delete/
   logs/            ← ผลรัน test ที่เก็บไว้ดูย้อนหลัง
 ```
 
-| ไฟล์ | ไปไหน |
+| File | Goes where |
 |---|---|
-| เอกสารที่แปลงรูปแบบมาให้อ่านง่าย | `_to_delete/extracted/` |
-| ภาพหน้าจอที่ถ่ายไว้ตรวจ | `_to_delete/check/` |
-| ผลรัน test · log | `_to_delete/logs/` |
-| แผนและสถานะ `BUILD-PLAN.md` | `docs/` — เป็นเอกสารจริง |
-| โค้ดและ test | โฟลเดอร์โปรเจกต์ |
+| Documents converted to a readable format | `_to_delete/extracted/` |
+| Screenshots taken for checking | `_to_delete/check/` |
+| Test run results · logs | `_to_delete/logs/` |
+| The plan and status `BUILD-PLAN.md` | `docs/` — it is a real document |
+| Code and tests | The project folder |
 
-**ห้ามเขียนไฟล์แปลงลง `docs/` ปนกับเอกสารต้นฉบับ** — อีก 3 เดือนไม่มีใครรู้ว่า
-ไฟล์ไหนคือของจริงที่ลูกค้าเซ็นรับ และไฟล์ไหนคือของที่เครื่องแปลงมา
+**Never write converted files into `docs/` mixed with the original documents** — in 3 months nobody will know
+which file is the real one the customer signed and which a machine converted
 
-รายละเอียดเต็มอยู่ใน `temp-file-discipline`
+Full detail is in `temp-file-discipline`
 
 ---
 
-## 5 · เทียบ mockup ด้วยภาพจริง
+## 5 · Compare to the mockup with a real image
 
-อ่านโค้ดแล้วบอกว่า "ตรงแล้ว" ใช้ไม่ได้ ต้องเปิดจริงแล้วดู
+Reading the code and saying "it matches" does not work. You must really open it and look
 
 ```python
 page.set_viewport_size({"width": 1280, "height": 900})   # ให้เท่ากับความกว้าง mockup
@@ -1225,108 +1225,108 @@ page.goto(url); page.wait_for_timeout(500)
 page.screenshot(path="_to_delete/check/login.png")
 ```
 
-แล้วเปิดทั้ง 2 ภาพดูเทียบกันตาม 5 ข้อนี้:
+Then open both images and compare by these 5 items:
 
-- [ ] ลำดับและการจัดกลุ่มขององค์ประกอบตรงกันไหม
-- [ ] ระยะห่างและขนาดตัวอักษรใกล้เคียงไหม (ไม่ต้องเป๊ะพิกเซล)
-- [ ] สถานะที่ mockup แสดงไว้ มีครบไหม — ว่าง · กำลังโหลด · ผิดพลาด
-- [ ] ข้อความตรงกับ mockup ไหม หรือไปแต่งเอง
-- [ ] ภาษาไทยตกบรรทัดหรือสระหายไหม
+- [ ] Do the order and grouping of elements match
+- [ ] Are spacing and font size close (not pixel-exact)
+- [ ] Are all the states the mockup shows present — empty · loading · error
+- [ ] Does the text match the mockup, or was it made up
+- [ ] Does Thai wrap badly or lose vowels
 
-ต่างตรงไหน**บอกเป็นรายการ** อย่าเงียบแล้วเคลมว่าเสร็จ
-ภาพที่ถ่ายไว้ตรวจเป็นไฟล์ชั่วคราว — ไปที่ `_to_delete/` ตาม `temp-file-discipline`
-
----
-
-## 6 · การสืบย้อน
-
-ชื่อ test ต้องมีรหัสข้อกำหนดอยู่ในชื่อ เช่น `test_lockout_after_5_failures_FR_AUTH_020`
-จะได้ค้นด้วยคำสั่งเดียวว่าข้อไหนยังไม่มี test ครอบ
-
-ปิดงานด้วยตารางสืบย้อน: ข้อกำหนดทุกข้อ → test ที่ครอบ → ผลล่าสุด
-
-> **ข้อไหนไม่มี test ครอบ ให้บอกตรง ๆ ว่าไม่มี** — ห้ามเขียน test ตื้น ๆ มาเติมให้ตารางเต็ม
-> ตารางที่เต็มเพราะเติมเอง อันตรายกว่าตารางที่มีช่องว่าง
+Wherever they differ, **say so as a list**; do not stay silent and claim done
+Screenshots taken for checking are temporary files — they go to `_to_delete/` per `temp-file-discipline`
 
 ---
 
-## 7 · เมื่อไหร่แตกหลาย agent
+## 6 · Traceability
 
-**เกณฑ์เดียว: ไฟล์ที่จะแตะต้องไม่ทับกันเลย** — ดูคอลัมน์ "ไฟล์ที่จะแตะ" ในแผน
+A test name must contain the requirement ID, for example `test_lockout_after_5_failures_FR_AUTH_020`
+so one command can search which requirement has no test covering it
 
-| แตกได้ | แตกไม่ได้ |
+Close the job with a traceability table: every requirement → the test that covers it → the latest result
+
+> **For any requirement with no test covering it, say plainly that there is none** — never write a shallow test to fill the table
+> A table that is full because you filled it yourself is more dangerous than a table with gaps
+
+---
+
+## 7 · When to split into multiple agents
+
+**One criterion: the files to be touched must not overlap at all** — see the "files to touch" column in the plan
+
+| Can split | Cannot split |
 |---|---|
-| คนละโมดูล คนละหน้าจอ ไฟล์ไม่ทับกัน | แตะไฟล์เดียวกันแม้แต่ไฟล์เดียว — งานจะทับกัน |
-| agent ตรวจงานแบบ**อ่านอย่างเดียว** วิ่งคู่กับ agent ที่เขียนโค้ด | งานที่ต้องรอผลจากอีกงานอยู่แล้ว |
-| แปลงข้อกำหนดเป็น test หลายโมดูลพร้อมกัน | ตอนยังไม่มีแผน — ต้องมีแผนก่อนถึงจะรู้ว่าแตกตรงไหนได้ |
+| Different modules, different screens, files that do not overlap | Touching the same file, even just one — the work will overwrite each other |
+| A **read-only** checking agent running alongside an agent that writes code | Work that already has to wait for the result of another task |
+| Turning requirements into tests for several modules at once | When there is no plan yet — you need a plan first to know where you can split |
 
-**agent ที่เขียนไฟล์แต่ละตัวต้องได้ worktree ของตัวเอง** ตามสูตรใน `superuser/references/code-extensions.md` หัวข้อ "parallel-split-and-merge" (รวมวิธีจัดการงานที่ยังไม่ commit)
+**Each agent that writes files must get its own worktree**, per the recipe in `superuser/references/code-extensions.md` section "parallel-split-and-merge" (including how to handle uncommitted work)
 
-ทุก agent ที่แตกออกไปต้องได้รับ: รหัสข้อที่รับผิดชอบ · รายการไฟล์ที่แตะได้ ·
-คำสั่งรัน test · และกฎข้อ 3 ทั้งหมด
+Every agent that is split off must receive: the IDs of the requirements it owns · the list of files it may touch ·
+the test command · and all of rule 3
 
-**ห้ามให้ agent ที่แตกออกไปแก้ `BUILD-PLAN.md` เอง** — ให้รายงานกลับ แล้วตัวหลักเขียนไฟล์เดียว
-ไม่งั้นไฟล์สถานะจะพังก่อนโค้ด
+**Never let a split-off agent edit `BUILD-PLAN.md` itself** — have it report back, and the main agent writes the one file
+otherwise the status file breaks before the code does
 
 ---
 
-## 8 · สัญญาณว่าวงรอบกำลังพัง
+## 8 · Signs the loop is breaking
 
-| อาการ | ความหมายจริง |
+| Symptom | What it really means |
 |---|---|
-| test เขียวหมดตั้งแต่รอบแรกโดยไม่เคยแดง | test ไม่ได้ทดสอบอะไร |
-| จำนวน test เพิ่มเร็วกว่าจำนวนข้อกำหนดที่ปิด | กำลังเขียน test ให้ตัวเองผ่าน |
-| commit เดียวแตะ 15 ไฟล์ | รวบหลายข้อ ย้อนกลับไม่ได้แล้วเมื่อพัง |
-| ข้อเดิมวนเกิน 3 รอบ | ข้อกำหนดกำกวม ไม่ใช่โค้ดยาก ให้กลับไปถาม |
-| ไม่มีใครอัปเดต `BUILD-PLAN.md` มา 2 รอบ | สถานะอยู่ในหัว รอบหน้าจะทำซ้ำ |
-| ตัวเลขดีขึ้น แต่คนใช้ไม่ได้ (ข้อความพ้นจอ สีจาง ช่องกรอกตัดคำ) | ลูปกำลังไล่ตัวชี้วัด ไม่ได้แก้ปัญหา → ข้อ 10 เรื่องตัวกัน |
-| ข้อที่เหลือแก้ได้ด้วยการเพิ่มข้อมูลปลอมหรือซ่อนเนื้อหาเท่านั้น | ถึงเพดานของข้อมูลแล้ว → ข้อ 10 เรื่องกฎหยุด |
+| All tests green from the first round without ever being red | The tests test nothing |
+| The number of tests grows faster than the number of requirements closed | Writing tests to make itself pass |
+| One commit touches 15 files | Several requirements bundled, cannot be reverted when it breaks |
+| The same item loops past 3 rounds | The requirement is ambiguous, not the code hard, so go back and ask |
+| Nobody has updated `BUILD-PLAN.md` for 2 rounds | State is in the head, the next round will redo work |
+| Numbers improve but people cannot use it (text off-screen, pale colours, input fields cutting words) | The loop is chasing the metric, not solving the problem → item 10 on guards |
+| The remaining items can be fixed only by adding fake data or hiding content | The ceiling of the data has been reached → item 10 on stop rules |
 
 ---
 
 ## 9 · Anti-patterns
 
-- **โยนข้อกำหนดทั้งฉบับให้รอบเดียว** — สาเหตุอันดับ 1 ที่ได้โค้ดมั่ว
-- **เขียนโค้ดก่อนแล้วค่อยเขียน test ตาม** — ได้ test ที่ยืนยันสิ่งที่เพิ่งเขียน ไม่ใช่สิ่งที่ต้องการ
-- **เดาเมื่อข้อกำหนดกำกวม** — ผิดตั้งแต่ต้น แต่มารู้ตอนส่งมอบ
-- **แก้ test ให้ผ่าน** แล้วรายงานว่าเสร็จ
-- **แตก agent ขนานบนไฟล์เดียวกัน**
-- **เคลมว่า UI ตรง mockup โดยไม่เคยเปิดดู**
-- **ปิดงานโดยไม่มีตารางสืบย้อน** — ไม่มีใครรู้ว่าอะไรยังไม่ได้ทำ
-- **ปลอมข้อมูล ซ่อนเนื้อหา หรือผ่อนเกณฑ์** ให้ตัวเลขดี
+- **Throwing the whole requirements document in one round** — the number 1 cause of messy code
+- **Writing the code first and the tests after** — you get tests that confirm what was just written, not what is needed
+- **Guessing when a requirement is ambiguous** — wrong from the start, but discovered at delivery
+- **Editing a test to make it pass** and then reporting done
+- **Splitting parallel agents on the same file**
+- **Claiming the UI matches the mockup without ever opening it**
+- **Closing the job with no traceability table** — nobody knows what is not yet done
+- **Faking data, hiding content, or relaxing the criteria** to make numbers look good
 
 ---
 
-## 10 · ลูปที่ปรับตามตัวเลข
+## 10 · A loop that adjusts by numbers
 
-ใช้เมื่อลูปไล่ตัวชี้วัด (ตรงกับระบบเดิม · ตรงกับ mockup · คะแนนที่วัดได้) ไม่ได้ปิดทีละข้อกำหนด · สัญญาของลูป ตัวกันการโกงตัวเลข กฎหยุด และตัวอย่างวัดจริง อยู่ใน [`references/metric-loop.md`](references/metric-loop.md) · ต้องเปิดอ่านก่อนเริ่มลูปแบบนี้
+Use it when the loop chases a metric (match the existing system · match the mockup · a measurable score) rather than closing requirement by requirement · the loop's contract, the guards against gaming the numbers, the stop rules, and a real measured example are in [`references/metric-loop.md`](references/metric-loop.md) · it must be opened and read before starting this kind of loop
 
 ---
 
-## 11 · เชื่อมกับ skill อื่น
+## 11 · Connecting to other skills
 
-| ต้องการ | ใช้คู่กับ |
+| Need | Use together with |
 |---|---|
-| ทำข้อกำหนดให้ทดสอบได้ก่อน | `srs-writing` |
-| แปลงข้อกำหนดเป็น test case | `test-case-template` |
-| โครง test กรอบทดสอบ ชื่อ ความครอบคลุม | `testing-standards` |
-| test ระดับเปิดเบราว์เซอร์จริง | `e2e-testing-patterns` |
-| เขียนโค้ดให้เรียบง่ายที่สุดที่ใช้ได้ | `lazy-coding` |
-| แก้เมื่อ test แดงหรือผลไม่ตรง | `targeted-fix` |
-| รูปแบบข้อความ commit | `commit-message-format` |
-| ไฟล์ภาพที่ถ่ายไว้ตรวจ | `temp-file-discipline` |
-| ข้อสอบและตัววัดของลูปที่ไล่ตัวเลข | `test-evidence` ข้อ 5 · `e2e-testing-patterns` (oracle-and-mutation) |
-| บันทึกสถานะข้ามรอบสนทนา | `handoff` |
-| ตารางสรุปสถานะเมื่อจบรอบ | `status-report` |
+| Make requirements testable first | `srs-writing` |
+| Turn requirements into test cases | `test-case-template` |
+| Test skeleton, test framework, names, coverage | `testing-standards` |
+| Tests that open a real browser | `e2e-testing-patterns` |
+| Write the simplest code that works | `lazy-coding` |
+| Fix when a test is red or the result does not match | `targeted-fix` |
+| Commit message format | `commit-message-format` |
+| Screenshot files taken for checking | `temp-file-discipline` |
+| Test sets and metrics for a number-chasing loop | `test-evidence` item 5 · `e2e-testing-patterns` (oracle-and-mutation) |
+| Record state across conversation rounds | `handoff` |
+| Status summary table at the end of a round | `status-report` |
 
 ---
 
-## ตัวย่อ
+## Abbreviations
 
-- **test** — ชุดทดสอบอัตโนมัติ
-- **mockup** — ภาพต้นแบบหน้าจอ
-- **commit** — การบันทึกการเปลี่ยนแปลงลงระบบควบคุมเวอร์ชัน
-- **UI** — User Interface (ส่วนติดต่อผู้ใช้)
+- **test** — an automated test suite
+- **mockup** — a prototype image of a screen
+- **commit** — recording a change into the version control system
+- **UI** — User Interface
 
 
 ## reference: metric-loop.md
@@ -1544,33 +1544,33 @@ verify ต้องพึ่งของที่แอปเตรียมไ�
 
 ## reference: builtin-verify.md
 
-# `/verify` ที่มากับ Claude Code — กับ app-verifier ของเรา
+# The `/verify` bundled with Claude Code — versus our app-verifier
 
-ที่มา: code.claude.com/docs/en/skills (อ่าน 2026-10-23) · ตัวเลขรุ่นที่อ้างมาจากหน้านั้น ไม่ได้ทดสอบกับทุกรุ่น
+Source: code.claude.com/docs/en/skills (read 2026-10-23) · the version numbers cited come from that page and were not tested on every version
 
-## สิ่งที่ Claude Code มีอยู่แล้ว
+## What Claude Code already has
 
-- skill ติดเครื่อง 3 ตัวทำงานด้วยกัน: `/run` เปิดและขับแอปให้เห็นว่าการแก้ใช้ได้ · `/verify` build แล้วรันแอปเพื่อยืนยันว่าโค้ดที่แก้ทำสิ่งที่ควรทำ โดยไม่ถอยไปพึ่ง test หรือ type check · `/run-skill-generator` สอน 2 ตัวแรกว่า build และเปิดโปรเจกต์นี้อย่างไร
-- `/verify` และ `/code-review` รันเมื่อผู้ใช้เรียกเท่านั้น (ตั้งแต่ v2.1.215 — ก่อนหน้านั้น Claude เรียกเองได้)
-- `/run-skill-generator` รันจาก environment สะอาด จดสิ่งที่ใช้ได้จริง (คำสั่งติดตั้ง · env · สคริปต์เปิด) แล้ว commit เป็น skill ของโปรเจกต์ที่ `.claude/skills/run-<name>/` — รันครั้งเดียวต่อโปรเจกต์ และอีกครั้งเมื่อวิธี build เปลี่ยน
-- `/verify` จดสูตรของตัวเองได้: ถ้าไม่มีสูตร มันเขียนสิ่งที่ใช้ได้ลง `.claude/skills/verify/SKILL.md` ที่รากโปรเจกต์ (monorepo: ในโฟลเดอร์ package ที่แตะ) · **skill ที่รากชื่อ `verify` แทนที่ `/verify` ติดเครื่อง**
-- session ที่เริ่มโดยมี skill ชื่อ `verify` หรือ `simplify` ของโปรเจกต์ (หรือส่วนตัว · องค์กร · `.claude/commands/`) → คำสั่ง commit ของ Claude Code สั่งให้รันก่อนทุก commit ยกเว้นแก้เฉพาะเอกสารหรือ test · ตัวติดเครื่อง · plugin skill · skill จาก claude.ai ไม่นับ
-- ปิดทั้งชุดได้ด้วย `disableBundledSkills` (เหลือ `/doctor`)
+- 3 bundled skills work together: `/run` opens and drives the app to show that a fix works · `/verify` builds and runs the app to confirm that the changed code does what it should, without falling back on tests or type checks · `/run-skill-generator` teaches the first 2 how to build and open this project
+- `/verify` and `/code-review` run only when the user invokes them (since v2.1.215 — before that Claude could invoke them itself)
+- `/run-skill-generator` runs from a clean environment, records what really works (install commands · env · launch script), and commits it as a project skill at `.claude/skills/run-<name>/` — run once per project, and again when the build method changes
+- `/verify` can record its own recipe: if there is no recipe, it writes what works to `.claude/skills/verify/SKILL.md` at the project root (monorepo: in the package folder that was touched) · **a skill at the root named `verify` replaces the bundled `/verify`**
+- A session that starts with a project skill named `verify` or `simplify` (or personal · organization · `.claude/commands/`) → the Claude Code commit command tells it to run before every commit, except when only docs or tests changed · bundled ones · plugin skills · skills from claude.ai do not count
+- The whole set can be turned off with `disableBundledSkills` (leaving `/doctor`)
 
-## สิ่งที่ `app-verifier-setup` เพิ่มให้
+## What `app-verifier-setup` adds
 
-| ของเรา | ตัวติดเครื่องไม่มี |
+| Ours | The bundled one lacks |
 |---|---|
-| สัญญาสำหรับทดสอบในแอป: `data-testid` · `data-ready` · reset endpoint ใต้ flag · นาฬิกาล็อกได้ (`clock`) | มันขับแอปจากสิ่งที่เห็น ไม่ได้บังคับให้แอปเตรียมที่ยึด |
-| แผนที่ฟีเจอร์เป็นข้อมูลในสคริปต์ `test/e2e/verify.*` พิมพ์ `PASS/FAIL` พร้อม expected กับ actual · ตรวจ 0 รายการ = exit 1 | สูตรเป็นภาษาคนใน SKILL.md |
-| พิสูจน์ว่าจับของผิดได้ (ทำให้พัง 1 จุด ต้อง FAIL) และ agent `qa-tester` ตัวใหม่ใช้ได้จริง | — |
-| หลักฐานทุกรอบใน `_to_delete/verify-runs/` · ขับมือถือ native · CLI · API ได้ ไม่ใช่แค่เว็บ | — |
+| A contract for in-app testing: `data-testid` · `data-ready` · reset endpoint behind a flag · a lockable clock (`clock`) | It drives the app from what it sees and does not force the app to prepare anchors |
+| A feature map as data in the script `test/e2e/verify.*` that prints `PASS/FAIL` with expected and actual · 0 items checked = exit 1 | The recipe is in human language in SKILL.md |
+| Proof that it catches wrong things (break 1 spot and it must FAIL) and a new `qa-tester` agent can really use it | — |
+| Evidence of every run in `_to_delete/verify-runs/` · can drive native mobile · CLI · API, not just web | — |
 
-## ตัดสินใจ
+## Decision
 
-**โปรเจกต์ที่ทำงานบน Claude Code ที่มี `/verify` ติดเครื่อง → `app-verifier-setup` สร้าง skill ของโปรเจกต์ที่ `.claude/skills/verify/SKILL.md` (ชื่อ `verify` ไม่ใช่ `verify-<โปรเจกต์>`) ในรูปแบบสูตรที่ `/verify` จดเอง** — ส่วนแรกคือสูตร build และเปิดแอป (แบบเดียวกับที่ `/run-skill-generator` จด) ต่อด้วยของเรา: คำสั่งรัน `test/e2e/verify.*` · ลิงก์แผนที่ฟีเจอร์ · สัญญาสำหรับทดสอบ · ข้อห้าม (หัวข้อ "SKILL.md ของ verify skill ต้องมี" ใน SKILL.md หลัก) · ได้ 2 อย่างฟรี: แทนที่ตัวติดเครื่อง และถูกรันก่อน commit อัตโนมัติ
+**A project working on a Claude Code that has the bundled `/verify` → `app-verifier-setup` creates a project skill at `.claude/skills/verify/SKILL.md` (named `verify`, not `verify-<project>`) in the recipe format that `/verify` records itself** — the first part is the build and open-the-app recipe (the same kind `/run-skill-generator` records), followed by ours: the command that runs `test/e2e/verify.*` · the link to the feature map · the testing contract · the prohibitions (the section "SKILL.md ของ verify skill ต้องมี", meaning "what the verify skill's SKILL.md must contain", in the main SKILL.md) · you get 2 things free: it replaces the bundled one, and it runs automatically before commit
 
-- ก่อนเขียน ให้อ่าน `.claude/skills/verify/SKILL.md` หรือ `run-<name>/` ที่ `/verify` จดไว้แล้ว (ถ้ามี) แล้วเขียนต่อในรูปแบบเดียวกัน — ฟิลด์ frontmatter ที่ตัวติดเครื่องใช้ยังไม่ได้ตรวจจากเอกสาร (ยังไม่ได้ตรวจ)
-- monorepo → วางในโฟลเดอร์ package ที่แตะ ตามกติกาของตัวติดเครื่อง
-- Codex · Gemini หรือ Claude Code รุ่นก่อน v2.1.145 (ยังไม่ได้ตรวจว่า `/verify` เริ่มรุ่นไหน) → ใช้ชื่อเดิม `verify-<โปรเจกต์>` ใน `.claude/skills/` · `.agents/skills/` · `skills/`
-- `app-verifier-upkeep` ดูแลไฟล์นี้ไฟล์เดียว ไม่สร้าง `verify-<โปรเจกต์>` ซ้อน
+- Before writing, read `.claude/skills/verify/SKILL.md` or `run-<name>/` that `/verify` already recorded (if any), then continue in the same format — the frontmatter fields the bundled one uses have not been checked against the docs (`ยังไม่ได้ตรวจ`, not yet checked)
+- monorepo → place it in the package folder that was touched, following the bundled one's rule
+- Codex · Gemini or Claude Code before v2.1.145 (`ยังไม่ได้ตรวจ` — not yet checked which version `/verify` started in) → use the old name `verify-<project>` in `.claude/skills/` · `.agents/skills/` · `skills/`
+- `app-verifier-upkeep` maintains this one file only and does not create a nested `verify-<project>`

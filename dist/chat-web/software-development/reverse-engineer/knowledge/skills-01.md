@@ -162,51 +162,53 @@ Use when a project needs a Docker sandbox for untrusted code
 
 Use before saying work is done, fixed or working
 
-# principle · prove it works — พิสูจน์กับของจริง
+# principle · prove it works — prove it against the real thing
 
-> "เสร็จแล้ว" ที่ไม่มีหลักฐาน คือการโยนงานตรวจไปให้คนอื่น
+> A "done" with no evidence throws the checking onto someone else.
 
-## กฎ
+## Rule
 
-ก่อนใช้คำว่า เสร็จ · แก้แล้ว · ผ่าน · ใช้ได้ · ส่งแล้ว ต้องเห็นผลจากของจริงด้วยตาตัวเองในรอบนี้ก่อน
+Before using the words done (`เสร็จ`) · fixed · passed (`ผ่าน`) · works · sent, you must have seen the result from the real thing yourself in this round.
 
-ข้อที่ยังไม่เห็นผล ให้เขียนแยกว่าทำอะไรไปแล้วกับผลเป็นอย่างไร เช่น "CSV: แก้โค้ดแล้ว ยังไม่ได้เปิดใน Excel" · อย่าเขียน "แก้เสร็จแล้ว แต่ยังไม่ได้ลอง" เพราะคนอ่านจำคำว่าเสร็จ ไม่จำคำว่าแต่ (eval 2026-11-09: แขนมี skill เขียนแบบนี้ 2 ใน 3 รอบ)
+For an item whose result you have not seen, write separately what was done and what the result is, for example "CSV: code changed, not yet opened in Excel" · do not write "fixed, but not tried yet", because readers remember the word done and forget the word but (eval 2026-11-09: the arm with the skill wrote it this way in 2 of 3 rounds)
 
-| งาน | หลักฐานที่นับ | ไม่นับ |
+| Work | Evidence that counts | Does not count |
 |---|---|---|
-| เอกสาร · รายงาน | reviewer ตัวใหม่เปิดไฟล์ที่ render แล้ว ตรวจข้อกำหนดทีละข้อ (ตัวที่เขียนไม่อ่านงานตัวเองซ้ำ) | เขียนไฟล์สำเร็จ |
-| ตัวเลข · สูตร · ยอดเงิน | คำนวณซ้ำอีกวิธีกับ 2–3 แถว และยอดรวมตรงกับต้นทาง (ใบเสร็จ · statement) | สูตรไม่ขึ้น error |
-| ข้อความถึงลูกค้า · อีเมล · การจอง | อ่านเทียบกับคำถามเดิม ชื่อ · ยอด · วันที่ ตรงข้อมูลจริง และการจองเห็นหน้ายืนยัน | ร่างแล้วดูดี · กดปุ่มแล้วไม่มี error |
-| ฟีเจอร์ในแอป | กดบนแอปที่รันอยู่ด้วย skill ตรวจแอป เห็นผลตามเกณฑ์ | compile ผ่าน · อ่านโค้ดแล้วดูถูก |
-| แก้ปัญหา · บั๊ก | ทำกรณีที่เคยล้มซ้ำทางเดิมแล้วผ่าน | ส่วนอื่นผ่าน |
-| test · การตรวจ | ตัวเลขผ่าน/ล้มมาจากบรรทัดสรุปของคำสั่งที่รันรอบนี้ (หรือ `node scripts/test-verdict.mjs <ไฟล์ผล TAP หรือ JUnit> --expect <จำนวน>` ที่อ่านไฟล์ผลแล้วฟันธง PROVEN · PARTLY · NOT PROVEN) ไม่ใช่จำนวนที่พิมพ์เอง · แล้วทำให้โค้ดพัง 1 บรรทัดในสำเนา (กลับเงื่อนไข · return ก่อน) test ที่คุมบรรทัดนั้นต้องล้ม · ไม่ล้ม = test ยังพิสูจน์อะไรไม่ได้ | ผ่านอย่างเดียว · จำนวน test ที่จำมา |
-| ภาพหน้าจอ · ผล render | ตัดสินจากพิกเซลของภาพที่เปิดดูเอง ไม่ใช่จากคำบรรยาย · ดูอาการล้มก่อน (จอแดง จอว่าง กล่องหรือ dialog บังเนื้อหา) แล้วเทียบ log · กำกวมถือว่าไม่ผ่าน · มีกล่องบังให้ถ่ายใหม่ · หลักฐานระบุชื่อไฟล์ภาพ | อ่านโค้ดแล้วเชื่อว่าหน้าตาถูก · บอกว่าภาพ "ดูโอเค" โดยไม่ระบุไฟล์ |
-| mockup | เปิดในเบราว์เซอร์ กดทุกปุ่ม ไม่มีปุ่มหลอก | HTML ถูกไวยากรณ์ |
-| ค่าที่วัด (เซนเซอร์ · lux · ระยะ · น้ำหนัก) | เทียบเครื่องมือวัดอ้างอิงที่สอบเทียบแล้ว · ตัวจำลองพิสูจน์ได้แค่เส้นทางงาน (ป้าย `emulator`) ความแม่นต้องของจริง (ป้าย `เครื่องจริง <รุ่น>`) ไม่มีเครื่องมือ → `ยังไม่ได้ตรวจ` | วัดครั้งเดียว · เทียบกับตัวเอง |
-| ข้ออ้างว่าใช้ได้บนระบบอื่น (Windows · macOS · เครื่องอื่น) ใน PR หรือรายงาน | ติดป้ายทุกข้อ: `observed` (รันแล้วเห็นผลบนระบบนั้น) หรือ `reasoned` (คิดเอา) · รันผ่านบนเครื่องตัวเองเป็นหลักฐานที่อ่อนที่สุดสำหรับระบบอื่น | เขียนว่า "ใช้ได้ทุกระบบ" ไม่มีป้าย |
-| งานของ subagent | อ่านผลงานและรันเอง | subagent รายงานว่าเสร็จ |
+| Document · report | A fresh reviewer opens the rendered file and checks the requirements one by one (the writer does not reread its own work) | The file was written successfully |
+| Numbers · formulas · amounts | Recompute another way on 2–3 rows, and the total matches the source (receipt · statement) | The formula shows no error |
+| Message to a customer · email · booking | Read it against the original question; name · amount · date match the real data, and for a booking you see the confirmation page | The draft looks good · a button was pressed and no error appeared |
+| Feature in an app | Click it in the running app using the app-checking skill, and see the result meet the criteria | It compiles · reading the code looks right |
+| Fix of a problem · bug | Repeat the case that failed before, by the same path, and it passes | Other parts pass |
+| Test · check | The pass/fail numbers come from the summary line of the command run this round (or `node scripts/test-verdict.mjs <TAP or JUnit result file> --expect <count>`, which reads the result file and gives a verdict PROVEN · PARTLY · NOT PROVEN), not a count typed by hand · then break 1 line of code in a copy (invert a condition · return early); the test that covers that line must fail · if it does not fail = the test proves nothing yet | Only "pass" · a test count recalled from memory |
+| Screenshot · render result | Judge from the pixels of the image you opened yourself, not from a description · look for failure signs first (red screen, blank screen, a box or dialog covering content), then compare with the log · ambiguous counts as failed · if a box covers it, take it again · the evidence names the image file | Reading the code and believing the look is right · saying the image "looks OK" without naming the file |
+| mockup | Open in a browser, click every button, no fake buttons | The HTML has valid syntax |
+| Measured values (sensor · lux · distance · weight) | Compare with a calibrated reference instrument · an emulator proves only the work path (label `emulator`), accuracy needs the real thing (label `เครื่องจริง <รุ่น>`, real device <model>) · no instrument → `ยังไม่ได้ตรวจ` (not yet checked) | One measurement · comparing against itself |
+| A claim that it works on another system (Windows · macOS · another machine) in a PR or report | Label every claim: `observed` (ran it and saw the result on that system) or `reasoned` (worked out by thought) · a pass on your own machine is the weakest evidence for another system | Writing "works on every system" with no label |
+| Sub-agent work | Read the work and run it yourself | The sub-agent reports it is done |
 
-## วิธีทำ
+## How to do it
 
-1. ก่อนลงมือ เขียนว่า "จะรู้ได้อย่างไรว่าเสร็จ" ในรูปที่ตรวจได้
-2. หลังทำ ให้ตรวจตามนั้นกับของจริง แล้วบันทึกผลดิบ (ตัวเลข · ภาพ · output)
-3. ถ้าตรวจไม่ได้จริง ๆ (ไม่มีสภาพแวดล้อม · ต้องใช้บัญชีจริง) ให้บอกตรง ๆ ว่า `ยังไม่ได้ตรวจ` และขาดอะไร ห้ามเขียน `ผ่าน`
+1. Before starting, write "how will I know it is done" in a checkable form
+2. After the work, check against that on the real thing, and record the raw result (numbers · images · output)
+3. If you truly cannot check (no environment · needs a real account), say plainly `ยังไม่ได้ตรวจ` (not yet checked) and what is missing; never write `ผ่าน` (pass)
 
-## ข้ออ้างที่ไม่นับเป็นหลักฐาน
+## Claims that do not count as evidence
 
-| ข้ออ้าง | ทำไมไม่นับ | ต้องทำแทน |
+The first column quotes Thai claims as examples; English meanings are in brackets.
+
+| Claim | Why it does not count | Do this instead |
 |---|---|---|
-| "น่าจะใช้ได้" · "ควรจะผ่าน" · "ในทางทฤษฎี" · "เหมือนครั้งก่อน" | คำออกตัวแปลว่ายังไม่ได้ดู — เจอในรายงานจบงาน = ธงแดง ให้กลับไปตรวจก่อนส่ง | รันหรือเปิดดู แล้วแปะผลดิบ |
-| "test ผ่านแล้ว" โดยไม่มี output | ผ่านในความจำกับผ่านตอนนี้คนละอย่าง | แปะบรรทัดสรุปผลรันรอบนี้ |
-| "แก้ตามที่บอกแล้ว" · "ไม่มี error" | ไม่มี error ≠ ได้ผลที่ต้องการ | ทำกรณีที่เคยล้มซ้ำให้เห็นว่าผ่าน |
-| subagent รายงานว่าเสร็จ | รายงานคือคำพูด ไม่ใช่ชิ้นงาน | ดู diff หรือเปิดไฟล์ที่เปลี่ยนเอง |
-| คำสั่งจบด้วย exit 0 · สถานะขึ้น `running` | exit 0 บอกแค่ว่าโปรแกรมจบ ไม่ได้บอกว่าได้ผล · ตัวอย่างจาก skill `vastai` ของคอร์ส: CLI `vastai` คืน 0 แม้ API ตอบ error · `running` ยังไม่พร้อมใช้ (ต้อง `ssh … true` ได้ rc 0) · สั่งสร้างซ้ำตอน timeout ได้เครื่องซ้ำเสียเงินสองเท่า | ตรวจผลปลายทางด้วยคำสั่งดูรายการหรือคำสั่งที่ใช้งานจริง · สั่งซ้ำเฉพาะเมื่อยืนยันแล้วว่าครั้งแรกไม่เกิด |
-| ส่งคำสั่งให้ผู้ใช้ไปรันเอง ทั้งที่เรารันได้ · ตรวจแค่ส่วนง่ายแล้วสรุปว่าผ่านทั้งหมด | โยนงานตรวจให้คนอื่น | รันเองให้ครบก่อนใช้คำว่าเสร็จ |
-| ร่างข้อความถึงลูกค้าหรือคนนอกว่า "แก้แล้ว" ไว้ให้ส่งได้เลย ทั้งที่ยังตรวจไม่เสร็จ (แม้เขียนต่อท้ายว่ากำลังทดสอบ เช่น "ทีมเราแก้ไขในระบบแล้ว ตอนนี้กำลังทดสอบอีกรอบ" ซึ่งเห็นใน eval 3 จาก 3 รอบ 2026-11-09) | คนรับเชื่อคำว่าแก้แล้วทันที ถ้าผลตรวจไม่ผ่านต้องถอนคำ | ร่างไว้ 1 ฉบับพร้อมเงื่อนไขว่าส่งหลังเห็นผลตรวจ · ฉบับที่ส่งตอนนี้ได้ห้ามมีคำว่าแก้แล้ว แก้ไขแล้ว หรือเรียบร้อย ไม่ว่ารูปไหน บอกได้แค่ "ได้รับเรื่องแล้ว ทีมกำลังตรวจ จะแจ้งผลภายใน (เวลา)" |
+| "น่าจะใช้ได้" · "ควรจะผ่าน" · "ในทางทฤษฎี" · "เหมือนครั้งก่อน" ("should work" · "ought to pass" · "in theory" · "same as last time") | Hedge words mean you have not looked — finding them in a final report = a red flag, go back and check before sending | Run or open it, then paste the raw result |
+| "test ผ่านแล้ว" ("tests passed") with no output | Passed in memory and passing now are different things | Paste the summary line of this round's run |
+| "แก้ตามที่บอกแล้ว" · "ไม่มี error" ("fixed as told" · "no errors") | No error ≠ the wanted result | Repeat the case that failed before and show it passes |
+| A sub-agent reports it is done | A report is words, not a work product | Look at the diff or open the changed files yourself |
+| A command ended with exit 0 · status shows `running` | exit 0 says only that the program ended, not that it worked · example from the course's `vastai` skill: the `vastai` CLI returns 0 even when the API answers with an error · `running` is not yet ready to use (`ssh … true` must return rc 0) · re-issuing the create command on a timeout got duplicate machines, paying twice | Check the end result with a list command or a command that really uses it · re-issue only after confirming the first one did not happen |
+| Sending the user a command to run themselves when we could run it · checking only the easy part and concluding everything passed | Throws the checking onto someone else | Run it all yourself before using the word done |
+| Drafting a message to a customer or outsider saying "fixed" so it can be sent right away, while the check is not finished (even with a trailing note that testing is in progress, such as "ทีมเราแก้ไขในระบบแล้ว ตอนนี้กำลังทดสอบอีกรอบ" ("our team fixed it in the system, now testing once more"), seen in eval 3 of 3 rounds 2026-11-09) | The recipient believes the word fixed at once, and if the check fails the words must be withdrawn | Draft 1 version with the condition that it is sent after the check result is seen · the version that can be sent now must not contain "แก้แล้ว" (fixed), "แก้ไขแล้ว" (has been fixed) or "เรียบร้อย" (all done) in any form; it may say only "ได้รับเรื่องแล้ว ทีมกำลังตรวจ จะแจ้งผลภายใน (เวลา)" (received, the team is checking, will report within (time)) |
 
-ที่มาของแถวภาพหน้าจอ · expo · .claude/skills/expo-skill-eval/agents/visual-grader.md · ดู 2026-11-10 · แถว test (สคริปต์ฟันธง + ทำโค้ดพังหนึ่งบรรทัด) · code-modernization · commands/modernize-verify.md · ดู 2026-11-10 · แถว observed/reasoned · claude-remember (ห้ามแจกจ่ายซ้ำ · เอาแค่กลไก) · CONTRIBUTING.md · ดู 2026-11-10 · เลนส์และแพ็กเกจของผู้ตรวจ → [`review-lenses`](../superuser/references/review-lenses.md)
+Sources of the screenshot row · expo · .claude/skills/expo-skill-eval/agents/visual-grader.md · seen 2026-11-10 · the test row (verdict script + break one line of code) · code-modernization · commands/modernize-verify.md · seen 2026-11-10 · the observed/reasoned row · claude-remember (do not redistribute · took the mechanism only) · CONTRIBUTING.md · seen 2026-11-10 · reviewer lenses and packages → [`review-lenses`](../superuser/references/review-lenses.md)
 
-ที่มาของแนวคิดตารางข้ออ้าง: skill `verification-before-completion` ใน obra/superpowers (MIT) · เขียนใหม่ให้ครอบงานนอกโค้ด
+Source of the claims-table idea: skill `verification-before-completion` in obra/superpowers (MIT) · rewritten to cover work outside code.
 
 
 ---
@@ -399,67 +401,67 @@ decoder หรือ parser ที่เขียนใหม่ต้องเ�
 
 ## reference: android-apk.md
 
-# แอป Android (APK — Android Package)
+# Android apps (APK — Android Package)
 
-แนวคิดดัดแปลงจาก `android-applications.md` ของ REA (MIT · © 2026 morluto) เขียนใหม่ให้ใช้สคริปต์ในเครื่องและ jadx ที่ผู้ใช้ติดตั้งเอง · APK ไม่ถูกติดตั้งหรือรัน ไม่ต้องมี emulator
+Ideas adapted from REA's `android-applications.md` (MIT · © 2026 morluto), rewritten to use local scripts and a jadx the user installed. The APK is never installed or run, so no emulator is needed.
 
-## 1 · ดูภาพรวมก่อน
+## 1 · Get the overview first
 
 ```bash
-python -I scripts/apk_inventory.py <app.apk>                  # สรุป
-python -I scripts/apk_inventory.py <app.apk> --manifest-xml   # พร้อม manifest ที่ถอดแล้วทั้งไฟล์
+python -I scripts/apk_inventory.py <app.apk>                  # summary
+python -I scripts/apk_inventory.py <app.apk> --manifest-xml   # plus the full decoded manifest
 ```
 
-ได้: SHA-256 · ไฟล์ `.dex` · native lib แยกตาม ABI · assembly ของ .NET · framework ที่ใช้ (Flutter · React Native · Xamarin · Unity · Cordova) · มีลายเซ็น v1 (ไฟล์ใน `META-INF/`) หรือ v2/v3 (APK Signing Block) · package · versionName/versionCode · minSdk/targetSdk · permission · activity service receiver provider พร้อมค่า `exported` · ธง `debuggable` `allowBackup` `usesCleartextTraffic`
+It reports: SHA-256 · `.dex` files · native libs by ABI · .NET assemblies · framework used (Flutter · React Native · Xamarin · Unity · Cordova) · signature v1 (files in `META-INF/`) or v2/v3 (APK Signing Block) · package · versionName/versionCode · minSdk/targetSdk · permissions · activities, services, receivers, providers with their `exported` value · flags `debuggable` `allowBackup` `usesCleartextTraffic`
 
-- สคริปต์ถอด `AndroidManifest.xml` แบบ binary XML เองด้วย Python ล้วน ทดลองกับ APK จริงแล้วตรงกับ `aapt dump xmltree` · ถ้าถอดไม่ได้จะบอก `manifest decode failed` แล้วให้ใช้ `aapt2 dump xmltree <apk> --file AndroidManifest.xml` หรือ apktool
-- ไม่แสดงเนื้อใบรับรอง แสดงแค่ชื่อไฟล์และ SHA-256 ส่วนต้น · ดูผู้ลงนามใช้ `apksigner verify --print-certs <apk>` จาก Build-Tools
-- `.aab` (Android App Bundle) เก็บ manifest เป็น protobuf ใต้ `base/manifest/` สคริปต์ไม่ถอด ใช้ `bundletool` ของ Google
+- The script decodes the binary-XML `AndroidManifest.xml` itself in pure Python. Tested on real APKs, it matches `aapt dump xmltree`. If decoding fails it prints `manifest decode failed`; then use `aapt2 dump xmltree <apk> --file AndroidManifest.xml` or apktool.
+- It does not show certificate contents, only file names and the first part of the SHA-256. To see the signer, use `apksigner verify --print-certs <apk>` from Build-Tools.
+- `.aab` (Android App Bundle) keeps its manifest as protobuf under `base/manifest/`. The script does not decode it; use Google's `bundletool`.
 
-## 2 · เลือกทางต่อจาก framework
+## 2 · Pick the next step by framework
 
-| framework | โค้ดอยู่ที่ | เครื่องมือ |
+| framework | where the code is | tool |
 |---|---|---|
-| Java · Kotlin | `classes*.dex` | jadx: `jadx -d _to_delete/re/<ชื่อ>/jadx <apk>` |
-| Xamarin · .NET for Android | `assemblies/*.dll` | `ilspycmd` (ดู [native-binaries](native-binaries.md#2--net)) |
-| Flutter | `lib/<abi>/libapp.so` (Dart ที่ compile แล้ว) | ยาก · ได้แค่ strings และ symbol · `pe_elf_info.py` กับ `libapp.so` |
-| React Native | `assets/index.android.bundle` | JavaScript หรือ Hermes bytecode · JS ใช้ [javascript-electron](javascript-electron.md) |
-| Cordova · Capacitor | `assets/www/` หรือ `assets/public/` | เว็บธรรมดา |
-| native lib อื่น | `lib/<abi>/*.so` | `pe_elf_info.py` แล้ว Ghidra |
+| Java · Kotlin | `classes*.dex` | jadx: `jadx -d _to_delete/re/<name>/jadx <apk>` |
+| Xamarin · .NET for Android | `assemblies/*.dll` | `ilspycmd` (see [native-binaries](native-binaries.md#2--net)) |
+| Flutter | `lib/<abi>/libapp.so` (compiled Dart) | hard · only strings and symbols · `pe_elf_info.py` on `libapp.so` |
+| React Native | `assets/index.android.bundle` | JavaScript or Hermes bytecode · for JS use [javascript-electron](javascript-electron.md) |
+| Cordova · Capacitor | `assets/www/` or `assets/public/` | plain web files |
+| other native libs | `lib/<abi>/*.so` | `pe_elf_info.py`, then Ghidra |
 
-## 3 · อ่านโค้ดที่ jadx ถอดได้
+## 3 · Read the code jadx decompiled
 
-- เริ่มจาก component ที่ `exported=true` ใน manifest เพราะแอปอื่นเรียกได้
-- ค้นด้วย string ที่เห็นในหน้าจอ · URL · ชื่อ permission แล้วไล่ว่าใครเรียก (jadx GUI มี "Find usage" · แบบ command line ใช้ `grep` ในโฟลเดอร์ผล)
-- method ชื่อซ้ำ (overload) ให้ระบุ signature เต็ม ไม่เดาว่าเป็นตัวไหน
-- ตัวเลือกของ jadx ที่ใช้บ่อย: ชื่อถูกทำให้อ่านยาก (`a.b.c`) ใช้ `--deobf` · เอาแค่โค้ดใช้ `--no-res` · method ที่ถอดไม่ครบแต่อยากเห็นใช้ `--show-bad-code` · ถอดไม่ผ่านใช้ `-m fallback` ได้โค้ดที่ใกล้ bytecode (ตรวจจาก README ของ jadx 2026-10-23)
-- jadx ถอดไม่ได้ทุก method · method ที่มีคอมเมนต์ error กำกับห้ามใช้เป็นหลักฐานพฤติกรรม · ชื่อที่ได้จาก `--deobf` เป็นชื่อที่ jadx ตั้งให้ ไม่ใช่ชื่อเดิมของผู้พัฒนา
-- manifest และโค้ดที่ถอดได้เป็น `จากแหล่ง` ไม่ใช่การรันจริง · reflection · โค้ดที่โหลดตอนรัน และการเรียกที่หาไม่เจอ เป็นสิ่งที่ยังไม่รู้
+- Start from components with `exported=true` in the manifest, because other apps can call them.
+- Search by strings seen on screen · URLs · permission names, then trace who calls them (jadx GUI has "Find usage"; on the command line use `grep` in the output folder).
+- For overloaded methods, give the full signature. Do not guess which one it is.
+- Common jadx options: names obfuscated (`a.b.c`) → `--deobf` · code only → `--no-res` · methods not fully decompiled but you want to see them → `--show-bad-code` · decompile fails → `-m fallback` gives code close to bytecode (checked against the jadx README 2026-10-23).
+- jadx cannot decompile every method. A method marked with an error comment must not be used as evidence of behavior. A name from `--deobf` is a name jadx assigned, not the developer's original.
+- The manifest and decompiled code are `จากแหล่ง` (from a source), not a real run. Reflection · code loaded at runtime · calls that cannot be found are unknowns.
 
-## 4 · อุปกรณ์จริงหรือ emulator
+## 4 · Real device or emulator
 
-ทุกคำสั่ง adb (Android Debug Bridge) ที่ติดตั้ง ลบ ส่งไฟล์ เปิดปิดแอป หรืออ่าน log และไฟล์จากเครื่อง ต้องถามผู้ใช้ทุกครั้ง · ใช้ emulator ที่สร้างไว้สำหรับงานนี้ ไม่ใช้โทรศัพท์ส่วนตัว → [runtime-observation](runtime-observation.md)
+Ask the user every time before any adb (Android Debug Bridge) command that installs, removes, pushes files, starts or stops an app, or reads logs and files from the device. Use an emulator created for this job, not a personal phone → [runtime-observation](runtime-observation.md)
 
-- ตอนถาม ให้บอกชื่ออุปกรณ์ (serial จาก `adb devices`) และคำสั่งเต็มที่จะรัน · ทุกคำสั่งใส่ `-s <serial>` ห้ามแตะอุปกรณ์อื่นที่ต่ออยู่
-- จดทุกอย่างที่เปลี่ยนบนอุปกรณ์ (แอปที่ติดตั้ง · ไฟล์ที่ส่ง · ค่าที่ตั้ง) แล้วคืนค่าเมื่อจบ
-- ตรวจว่ามี jadx · apktool · adb ไหมด้วย `node scripts/check-tools.mjs --target android` · ถ้าไม่ได้ตั้ง `ANDROID_HOME` ตัวตรวจอาจหา adb ไม่เจอทั้งที่ติดตั้งแล้ว
+- When asking, give the device name (the serial from `adb devices`) and the full command to be run. Put `-s <serial>` on every command. Never touch any other connected device.
+- Record everything changed on the device (installed apps · pushed files · settings) and restore it at the end.
+- Check whether jadx · apktool · adb exist with `node scripts/check-tools.mjs --target android`. If `ANDROID_HOME` is not set, the checker may fail to find adb even though it is installed.
 
 
 ## reference: evidence-ledger.md
 
-# สมุดหลักฐาน · การเทียบ · งานใหญ่หลายคำถาม
+# Evidence ledger · comparison · large multi-question jobs
 
-แนวคิดดัดแปลงจาก `evidence-workflows.md` ของ REA (MIT · © 2026 morluto) เขียนใหม่ให้ใช้ไฟล์ markdown และสคริปต์ในเครื่องแทน tool ของ REA
+Ideas adapted from REA's `evidence-workflows.md` (MIT · © 2026 morluto), rewritten to use markdown files and local scripts instead of REA's tools.
 
-| หัวข้อ | |
+| Section | |
 |---|---|
-| [1 · บันทึกสิทธิ์](#1--บันทึกสิทธิ์) | [2 · สมุดหลักฐาน](#2--สมุดหลักฐาน) |
-| [3 · สิ่งที่ยังไม่รู้](#3--สิ่งที่ยังไม่รู้) | [4 · เทียบ 2 รุ่นหรือ 2 ไฟล์](#4--เทียบ-2-รุ่นหรือ-2-ไฟล์) |
-| [5 · งานใหญ่หลายคำถาม](#5--งานใหญ่หลายคำถาม) | [6 · ตรวจของที่สร้างใหม่](#6--ตรวจของที่สร้างใหม่) |
+| [1 · Authorization record](#1--authorization-record) | [2 · Evidence ledger](#2--evidence-ledger) |
+| [3 · Unknowns](#3--unknowns) | [4 · เทียบ 2 รุ่นหรือ 2 ไฟล์](#4--เทียบ-2-รุ่นหรือ-2-ไฟล์) |
+| [5 · Large multi-question jobs](#5--large-multi-question-jobs) | [6 · Check what was rebuilt](#6--check-what-was-rebuilt) |
 
-## 1 · บันทึกสิทธิ์
+## 1 · Authorization record
 
-ไฟล์เดียวต่อเป้าหมาย: `_to_delete/re/<ชื่อเป้าหมาย>/ledger.md` · ส่วนบนเขียนก่อนเปิดไฟล์เป้าหมาย
+One file per target: `_to_delete/re/<ชื่อเป้าหมาย>/ledger.md` · write the top part before opening the target file.
 
 ```markdown
 # <ชื่อเป้าหมาย>
@@ -475,11 +477,11 @@ python -I scripts/apk_inventory.py <app.apk> --manifest-xml   # พร้อม 
 | การรันที่ถูกปฏิเสธ | <คำสั่ง · input> — ห้ามขอซ้ำด้วย input เดิม |
 ```
 
-ขอบเขตเปลี่ยน (ไฟล์ใหม่ · ขอรันเป้าหมาย · อุปกรณ์จริง) ให้ถามผู้ใช้แล้วเพิ่มแถวใหม่ ไม่แก้แถวเดิม
+When the scope changes (new file · asking to run the target · real device), ask the user and add a new row. Do not edit the old row.
 
-## 2 · สมุดหลักฐาน
+## 2 · Evidence ledger
 
-ตารางหลักฐาน 1 แถวต่อ 1 สิ่งที่เห็น · ผลยาวเก็บเป็นไฟล์ข้าง ๆ แล้วชี้ไป
+The evidence table has 1 row per thing seen · keep long output in a side file and point to it.
 
 ```markdown
 ## หลักฐาน
@@ -495,12 +497,12 @@ python -I scripts/apk_inventory.py <app.apk> --manifest-xml   # พร้อม 
 | 2 | ข้อมูลที่ส่งคือรายการสินค้า | E2 + ข้อ 1 + E5 | อนุมาน (จากข้อ 1 และ E5) |
 ```
 
-- ป้าย 4 แบบดูหัวข้อ 6 ของ SKILL.md · `อนุมาน` ชี้ข้อที่เป็นฐานเสมอ
-- pseudocode และโค้ดที่แกะได้เป็นหลักฐาน ไม่ใช่ซอร์สต้นฉบับ
-- สคริปต์ที่จำกัดจำนวนบรรทัด (`--limit`) แปลว่าดูไม่ครบ ให้จดว่าดูกี่รายการจากทั้งหมดเท่าไร
-- เครื่องมือขาด หรืออ่านไฟล์ไม่ได้ (`decode failed` · `unreadable`) = `ยังไม่ได้ตรวจ` ไม่ใช่ "ไม่มี"
+- The 4 labels are in section 6 of SKILL.md · `อนุมาน` (inferred) always points to the items it rests on.
+- Pseudocode and recovered code are evidence, not the original source.
+- A script that limits line count (`--limit`) means the view is incomplete. Note how many items were seen out of the total.
+- A missing tool or an unreadable file (`decode failed` · `unreadable`) = `ยังไม่ได้ตรวจ` (not yet checked), not "none".
 
-## 3 · สิ่งที่ยังไม่รู้
+## 3 · Unknowns
 
 ```markdown
 ## สิ่งที่ยังไม่รู้
@@ -509,84 +511,84 @@ python -I scripts/apk_inventory.py <app.apk> --manifest-xml   # พร้อม 
 | U1 | ค่า % 7 ใน checksum มาจากไหน | E7 | ตัวอย่างไฟล์อีก 3 ชุด หรือรันใน sandbox | เปิด |
 ```
 
-- จดทุกค่าคงที่หรือการออกแบบที่เห็นแต่อธิบายไม่ได้ (เลขแปลก · version field ที่เห็นค่าเดียว)
-- ปิดข้อได้ด้วยหลักฐานที่เห็นจริงเท่านั้น ไม่ปิดเพราะเดาได้
+- Record every constant or design choice that is seen but cannot be explained (odd numbers · a version field with only one value seen).
+- Close an item only with evidence actually seen, never because it can be guessed.
 
 ## 4 · เทียบ 2 รุ่นหรือ 2 ไฟล์
 
-ต้องดูครบทั้ง 2 ฝั่งก่อนจะบอกว่า "เหมือน" "เพิ่ม" หรือ "หาย" ไม่งั้นเป็นสิ่งที่ยังไม่รู้
+Look at both sides completely before saying "same", "added" or "missing". Otherwise it is an unknown.
 
-| เทียบอะไร | ทำอย่างไร | ระวัง |
+| What to compare | How | Watch out |
 |---|---|---|
-| รายการไฟล์ใน archive (ASAR · APK · ZIP) | รัน `asar_extract.py list` หรือ `apk_inventory.py` ทั้ง 2 รุ่นลงไฟล์ แล้ว `diff` | ชื่อเหมือน เนื้อต่างได้ ให้เทียบ SHA-256 |
-| import · export ของ binary | `pe_elf_info.py --json` ทั้ง 2 ไฟล์แล้วเทียบ | ต่างแบบ static เป็นผู้ต้องสงสัย ยังไม่ใช่ต้นเหตุ |
-| method ของ .NET หรือ Java | `compare_members.py` | เทียบชื่อ ไม่ได้เทียบเนื้อ ต้อง diff ต่อ |
-| JavaScript ที่ถูกย่อ | จับคู่ด้วย digest หรือ source map | เลขลำดับ module และชื่อที่ถูกย่อไม่ใช่ตัวตน |
-| static กับ runtime | วางคู่กันในสมุดหลักฐาน | ตรงกันเป็นสมมติฐาน ยังไม่ใช่เหตุและผล |
+| File list in an archive (ASAR · APK · ZIP) | Run `asar_extract.py list` or `apk_inventory.py` on both versions into files, then `diff` | Same name can have different content; compare SHA-256 |
+| Imports · exports of a binary | `pe_elf_info.py --json` on both files, then compare | A static difference is a suspect, not yet the cause |
+| .NET or Java methods | `compare_members.py` | Compares names, not bodies; diff further |
+| Minified JavaScript | Match by digest or source map | Module index numbers and minified names are not identity |
+| static vs runtime | Put side by side in the ledger | A match is a hypothesis, not yet cause and effect |
 
-## 5 · งานใหญ่หลายคำถาม
+## 5 · Large multi-question jobs
 
-1. แตกคำขอเป็นรายการคำถาม พร้อมหลักฐานที่แต่ละข้อต้องใช้
-2. ดูสมุดหลักฐานที่มีอยู่ก่อน ใช้ซ้ำได้ก็ใช้ ไม่แกะซ้ำ
-3. เริ่มจากภาพรวมเล็กที่สุด แล้วไล่ทีละคำถาม: จุดเข้า → ข้อมูลและสถานะที่เปลี่ยน → ผล
-4. อ่าน resource และ config ด้วย parser ของรูปแบบนั้น ไม่เดาจากชื่อไฟล์
-5. ยืนยันด้วยหลักฐานชนิดที่ข้อสรุปต้องใช้ · runtime เฉพาะเมื่อ static ตอบไม่ได้จริงและได้อนุญาตแล้ว
-6. คำถามที่ไม่ขึ้นต่อกันแบ่งให้ subagent ได้ (`superuser` จัดทีม) · บอกขอบเขต เลขหลักฐานที่มี และให้ส่งกลับ ข้อสรุป · หลักฐาน · ช่องว่าง
-7. ก่อนจบ ติดป้ายทุกคำถามว่า ตอบแล้ว · ตอบบางส่วน · ยังไม่ได้คำตอบ
+1. Break the request into a list of questions, with the evidence each one needs.
+2. Check existing ledgers first. Reuse them if possible; do not extract again.
+3. Start from the smallest overview, then go question by question: entry point → data and state changes → result.
+4. Read resources and config with the parser for that format. Do not guess from file names.
+5. Confirm with the kind of evidence the conclusion needs · runtime only when static truly cannot answer and permission was given.
+6. Independent questions can be split among subagents (`superuser` team setup). Give the scope and the evidence numbers already held, and ask them to return: conclusion · evidence · gaps.
+7. Before finishing, label every question: answered · partly answered · not answered.
 
-## 6 · ตรวจของที่สร้างใหม่
+## 6 · Check what was rebuilt
 
-- เขียนพฤติกรรมที่เห็นเป็น spec ทีละข้อ แต่ละข้อชี้เลขหลักฐาน
-- test ของโค้ดใหม่ใช้ตัวอย่างจริงจากเป้าหมาย (ไฟล์ · request · ค่า) ที่ผู้ใช้อนุญาตให้ใช้
-- ผ่าน test = ผ่านเฉพาะข้อที่เขียนไว้ ไม่ใช่เหมือนต้นฉบับทั้งระบบ · ข้อที่ไม่ได้เขียนให้ลงสิ่งที่ยังไม่รู้
+- Write the observed behavior as a spec, item by item, each pointing to evidence numbers.
+- Tests for the new code use real samples from the target (files · requests · values) that the user allowed.
+- Passing the tests = passing only the items written down, not identical to the original system. Items not written go into unknowns.
 
 
 ## reference: firmware.md
 
-# firmware และ filesystem ของอุปกรณ์
+# Firmware and device filesystems
 
-ใช้กับไฟล์ image ของ firmware · archive ที่ฝังอยู่ในอุปกรณ์ · filesystem ที่แตกออกมาแล้ว · อ่านไฟล์อย่างเดียว ไม่เขียนหรือ flash ลงอุปกรณ์
+For firmware image files · archives embedded in a device · filesystems already extracted. Read files only; never write or flash to the device.
 
-## 1 · ก่อนแตก
+## 1 · Before extracting
 
-- ทำกับสำเนาในโฟลเดอร์งาน จด SHA-256 และที่มาของไฟล์ (ดาวน์โหลดจากผู้ผลิต · ดึงจากอุปกรณ์ของผู้ใช้) ลงสมุดหลักฐาน
-- เขียนหรือ flash ลงอุปกรณ์ต้องขออนุญาตแยกทุกครั้ง เพราะอุปกรณ์อาจใช้งานไม่ได้อีก
-- ไฟล์ executable ที่แตกออกมา ห้ามรันบนเครื่องผู้ใช้ ถ้าต้องดูตอนรันให้ทำใน `docker-sandbox` ตาม [runtime-observation](runtime-observation.md)
-- ตรวจเครื่องมือด้วย `node scripts/check-tools.mjs --target firmware` · Binwalk และ Unblob มักติดตั้งใน Linux หรือ WSL ตัวตรวจบน Windows มองไม่เห็นของใน WSL ดังนั้นผล `missing` ไม่ได้แปลว่าไม่มี ให้ถามผู้ใช้
+- Work on a copy in the work folder. Record the file's SHA-256 and origin (downloaded from the maker · pulled from the user's device) in the evidence ledger.
+- Writing or flashing to a device needs separate permission every time, because the device may become unusable.
+- Never run extracted executables on the user's machine. If you need to watch it run, do it in `docker-sandbox` per [runtime-observation](runtime-observation.md).
+- Check tools with `node scripts/check-tools.mjs --target firmware`. Binwalk and Unblob are usually installed in Linux or WSL. The checker on Windows cannot see inside WSL, so a `missing` result does not mean absent; ask the user.
 
-## 2 · คัดแยกก่อนแตก
+## 2 · Triage before extracting
 
-| ดูอะไร | ทำอย่างไร | บอกอะไร |
+| What to look at | How | What it tells you |
 |---|---|---|
-| ขนาดและ magic bytes | `python -I scripts/triage.py <image>` | ชนิดไฟล์ที่รู้จัก หรือเป็น raw binary |
-| signature ที่ฝังอยู่ | `binwalk <image>` | ตำแหน่ง (offset) และชนิดข้อมูล เช่น header ของ bootloader · kernel · squashfs · zip |
-| entropy | `binwalk -E <image>` | ช่วงที่ entropy สูงเกือบตลอดมักถูกบีบอัดหรือเข้ารหัส |
-| partition | ดูจาก signature และเอกสารของอุปกรณ์ | ขอบเขตของแต่ละส่วน |
+| Size and magic bytes | `python -I scripts/triage.py <image>` | A known file type, or a raw binary |
+| Embedded signatures | `binwalk <image>` | Offsets and data types, such as bootloader · kernel · squashfs · zip headers |
+| Entropy | `binwalk -E <image>` | A stretch with high entropy almost throughout is usually compressed or encrypted |
+| Partitions | From signatures and the device's documentation | The boundaries of each part |
 
-signature ที่เจอบอกแค่ว่ามีอะไรอยู่ตรงนั้น ไม่ได้ยืนยันโครงสร้างทั้ง image และเจอผิดได้ ให้ติด `อนุมาน` จนกว่าจะแตกได้จริง
+A signature only says something is there. It does not confirm the structure of the whole image, and it can be a false hit. Label it `อนุมาน` (inferred) until it actually extracts.
 
-## 3 · แตก
+## 3 · Extract
 
 ```bash
 unblob -e _to_delete/re/<ชื่อ>/unblob <image>       # แตกทุกชั้นลงโฟลเดอร์แยก
 binwalk -e -C _to_delete/re/<ชื่อ>/binwalk <image>  # ทางเลือก ถ้ามีแค่ Binwalk
 ```
 
-- แตกลงโฟลเดอร์ใหม่ใต้ `_to_delete/re/` ทุกครั้ง ไม่เขียนทับไฟล์เดิม และดูพื้นที่ดิสก์ก่อน เพราะ image ที่ซ้อนกันหลายชั้นแตกแล้วอาจใหญ่ขึ้นหลายเท่า
-- ยังไม่ได้ทดลองคำสั่งในหัวข้อนี้บนเครื่องที่เขียนเอกสาร เพราะไม่มี Binwalk และ Unblob (`ยังไม่ได้ตรวจ`) ให้ดู `--help` ของรุ่นที่ผู้ใช้ติดตั้งก่อนรัน
+- Always extract into a new folder under `_to_delete/re/`. Never overwrite existing files. Check disk space first, because an image nested in many layers can grow several times when extracted.
+- The commands in this section were not tried on the machine where this document was written, because it has no Binwalk or Unblob (`ยังไม่ได้ตรวจ`, not yet checked). Read `--help` for the version the user installed before running.
 
-## 4 · อ่านผลที่แตก
+## 4 · Read the extracted result
 
-1. ทำรายการไฟล์ทั้งหมดพร้อม SHA-256 ลงไฟล์ แล้วอ่านเฉพาะส่วน
-2. ดู config (`/etc` · ไฟล์ `.conf` · `.ini` · ไฟล์ที่ระบบเริ่มทำงานเรียก) เพื่อรู้ว่าบริการไหนเปิด และพอร์ตไหนฟังอยู่
-3. binary ที่สนใจส่งต่อ [native-binaries](native-binaries.md) · image ที่ไม่มี header ต้องรู้สถาปัตยกรรมและจุดเริ่มก่อน ให้ถามผู้ใช้หรือดูเอกสารของอุปกรณ์
-4. ส่วนที่เข้ารหัสหรือแตกไม่ได้ ให้จดเป็น `ยังไม่ได้ตรวจ` พร้อมบอกว่าต้องมีอะไรถึงจะอ่านได้
+1. Write the full file list with SHA-256 to a file, then read only parts of it.
+2. Read the config (`/etc` · `.conf` · `.ini` files · files called by system startup) to learn which services are on and which ports are listening.
+3. Pass binaries of interest to [native-binaries](native-binaries.md). An image with no header needs its architecture and entry point first; ask the user or read the device documentation.
+4. For parts that are encrypted or cannot be extracted, record them as `ยังไม่ได้ตรวจ` (not yet checked) and say what is needed to read them.
 
-## 5 · รายงาน
+## 5 · Report
 
-- ทุกข้อสรุปชี้ไฟล์ · offset ใน image หรือ path ในโฟลเดอร์ที่แตก
-- ห้ามบอกพฤติกรรมตอนอุปกรณ์รันจากหลักฐาน static อย่างเดียว
-- คีย์ · ใบรับรอง · รหัสผ่านที่ฝังมา รายงานแค่ชื่อและตำแหน่ง ไม่แปะค่า แล้วบอกผู้ใช้ว่าควรเปลี่ยนไหม
+- Every conclusion points to a file · an offset in the image or a path in the extracted folder.
+- Never state the device's runtime behavior from static evidence alone.
+- For embedded keys · certificates · passwords, report only the name and location. Do not paste the value, and tell the user whether to change it.
 
 
 ## reference: javascript-electron.md
@@ -645,75 +647,75 @@ python -I scripts/sourcemap_list.py _to_delete/re/<ชื่อ>/app --extract _
 
 ## reference: mql5-ex5.md
 
-# MetaTrader 5 `.ex5`: ถอดพฤติกรรมแบบกล่องดำ แล้วเขียน MQL5 ใหม่
+# MetaTrader 5 `.ex5`: recover behavior as a black box, then rewrite it in MQL5
 
-ใช้เมื่อมีแค่ไฟล์ `.ex5` (Expert Advisor (EA) · indicator · script) ไม่มี `.mq5` · วิธีเดียวที่ใช้คือ **ดูว่ามันเทรดอย่างไรใน Strategy Tester** แล้วเขียนตัวใหม่ให้เทรดเหมือนกัน · ไม่เปิดเนื้อไฟล์ ไม่ถอดรหัส และไม่แตะการป้องกันลิขสิทธิ์ทุกชนิด · ป้ายหลักฐานและสมุดหลักฐานใช้ตาม SKILL.md หัวข้อ 6 และ [evidence-ledger](evidence-ledger.md) · การรันทุกครั้งต้องถามตาม [runtime-observation](runtime-observation.md)
+Use when you have only an `.ex5` file (Expert Advisor (EA) · indicator · script) and no `.mq5`. The only method is to **watch how it trades in the Strategy Tester**, then write a new one that trades the same way. Never open the file's contents, decrypt it, or touch any kind of copy protection. Evidence labels and the evidence ledger follow SKILL.md section 6 and [evidence-ledger](evidence-ledger.md). Every run needs asking, per [runtime-observation](runtime-observation.md).
 
-| หัวข้อ | |
+| Section | |
 |---|---|
-| [1 · ข้อเท็จจริงที่ต้องรู้ก่อน](#1--ข้อเท็จจริงที่ต้องรู้ก่อน) | [2 · ด่านสิทธิ์ก่อนเริ่ม](#2--ด่านสิทธิ์ก่อนเริ่ม) |
-| [3 · ตรวจความปลอดภัยก่อนรันครั้งแรก](#3--ตรวจความปลอดภัยก่อนรันครั้งแรก) | [4 · ถอดพฤติกรรมใน Strategy Tester](#4--ถอดพฤติกรรมใน-strategy-tester) |
-| [5 · เขียน MQL5 ใหม่ แล้วเทียบผล](#5--เขียน-mql5-ใหม่-แล้วเทียบผล) | [6 · สิ่งที่ห้ามทำ](#6--สิ่งที่ห้ามทำ) |
+| [1 · Facts to know first](#1--facts-to-know-first) | [2 · Permission gate before starting](#2--permission-gate-before-starting) |
+| [3 · Safety checks before the first run](#3--safety-checks-before-the-first-run) | [4 · Recover behavior in the Strategy Tester](#4--recover-behavior-in-the-strategy-tester) |
+| [5 · Rewrite in MQL5, then compare results](#5--rewrite-in-mql5-then-compare-results) | [6 · What must not be done](#6--what-must-not-be-done) |
 
-## 1 · ข้อเท็จจริงที่ต้องรู้ก่อน
+## 1 · Facts to know first
 
-ตรวจทุกข้อเมื่อ 2026-11-10 จากหน้าทางการของ MetaQuotes · ข้อที่เป็นคำอ้างของผู้ผลิตเองเขียนกำกับไว้
+Every item was checked on 2026-11-10 from MetaQuotes' official pages. Items that are the maker's own claims are marked.
 
-| เรื่อง | ข้อเท็จจริง | ป้าย · แหล่ง |
+| Topic | Fact | Label · source |
 |---|---|---|
-| `.ex5` คืออะไร | ไฟล์ที่ MetaEditor compile จาก `.mq5` แล้วรันใน terminal ได้ แจกได้โดยไม่ต้องมีซอร์ส ผู้ผลิตบอกว่าเป็น "รูปแบบเฉพาะที่ซ่อน algorithm เดิม" และ debug ไม่ได้ถ้าไม่มีซอร์ส | จากแหล่ง · [MetaEditor: Compilation](https://www.metatrader5.com/en/metaeditor/help/development/compile) |
-| การป้องกันทั่วไป | MetaQuotes เขียนว่า EX4/EX5 "ป้องกันการ decompile ได้อย่างน่าเชื่อถือ" · เป็นคำอ้างของผู้ผลิต ยังไม่เจอการทดสอบอิสระ | จากแหล่ง (คำอ้างผู้ผลิต) · [MQL5 Cloud Protector](https://www.metatrader5.com/en/metaeditor/help/development/mql5_cloud_protector) |
-| MQL5 Cloud Protector | เปิดให้นักพัฒนาทุกคนตั้งแต่ build 1730 (ประกาศ 22 ธ.ค. 2017) ส่งเฉพาะส่วน executable ไปเข้ารหัสด้วย algorithm แบบอสมมาตรและเซ็นด้วยกุญแจส่วนตัว และ compile เป็น native code แบบเดียวกับสินค้าใน Market · ไฟล์ไม่ผูกกับเครื่อง | จากแหล่ง · [ประกาศ build 1730](https://metatrader5.com/en/news/1732) · [หน้า Cloud Protector](https://www.metatrader5.com/en/metaeditor/help/development/mql5_cloud_protector) |
-| สินค้าจาก MQL5 Market | ผู้ซื้อแต่ละคนได้ "secure version" ที่สร้างให้เครื่องนั้นและสำเนา OS นั้น เปลี่ยนฮาร์ดแวร์แล้วรันไม่ได้ (เรียกว่า Activation) · Market รับเฉพาะไฟล์ EX5/EX4 และห้ามเรียก DLL ทุกตัว | จากแหล่ง · [Market Rules](https://www.mql5.com/en/market/rules) ข้อ IV.1 · IV.2 · IV.15–IV.19 |
-| `.ex5` เริ่มถูกเข้ารหัสตั้งแต่ build ไหน | ไม่เจอเอกสารทางการที่ระบุ build · ที่เจอคือ MT4 build 600 (ก.พ. 2014) ประกาศว่า EX4 จาก Market ได้การป้องกันระดับเดียวกับ MQL5 | (รอยืนยัน) · ผลค้นหาชี้ [ข่าว MT4 build 600](https://www.metaquotes.net/en/metatrader4/news/4207) ยังไม่ได้เปิดอ่านหน้านี้เอง |
+| What `.ex5` is | A file that MetaEditor compiles from `.mq5` and that runs in the terminal. It can be distributed without the source. The maker calls it a "special format that hides the original algorithm", and says it cannot be debugged without the source. | `จากแหล่ง` (from a source) · [MetaEditor: Compilation](https://www.metatrader5.com/en/metaeditor/help/development/compile) |
+| General protection | MetaQuotes writes that EX4/EX5 "reliably protect against decompilation". This is the maker's claim; no independent test found. | `จากแหล่ง` (maker's claim) · [MQL5 Cloud Protector](https://www.metatrader5.com/en/metaeditor/help/development/mql5_cloud_protector) |
+| MQL5 Cloud Protector | Open to all developers since build 1730 (announced 22 Dec 2017). Sends only the executable part to be encrypted with an asymmetric algorithm and signed with a private key, and compiled to native code the same way as Market products. The file is not tied to a machine. | `จากแหล่ง` · [build 1730 announcement](https://metatrader5.com/en/news/1732) · [Cloud Protector page](https://www.metatrader5.com/en/metaeditor/help/development/mql5_cloud_protector) |
+| Products from MQL5 Market | Each buyer gets a "secure version" built for that machine and that OS copy. If the hardware changes, it will not run (called Activation). Market accepts only EX5/EX4 files and forbids calling any DLL. | `จากแหล่ง` · [Market Rules](https://www.mql5.com/en/market/rules) items IV.1 · IV.2 · IV.15–IV.19 |
+| From which build `.ex5` was encrypted | No official document found that names a build. What was found: MT4 build 600 (Feb 2014) announced that EX4 from Market got the same level of protection as MQL5. | `(รอยืนยัน)` (awaiting confirmation) · search results point to [MT4 build 600 news](https://www.metaquotes.net/en/metatrader4/news/4207); this page has not been opened by me |
 
-**ข้อตกลง MQL5 Market ที่ผูกผู้ซื้อ** ([Market Rules](https://www.mql5.com/en/market/rules) · อ่าน 2026-11-10 · หน้าไม่บอกวันแก้ไขล่าสุด):
+**MQL5 Market terms that bind the buyer** ([Market Rules](https://www.mql5.com/en/market/rules) · read 2026-11-10 · the page gives no last-edited date):
 
-| ข้อ | ใจความ |
+| Item | Gist |
 |---|---|
-| III.2 · III.3 | ขายต่อไม่ได้ · การซื้อไม่ได้ซื้อสิทธิ์ในตัวสินค้า ได้มาเพื่อใช้ส่วนตัวเท่านั้น |
-| III.9 | ห้าม decompile และห้ามจ้างคนอื่นทำ · **พยายาม decompile ก็ถือว่าผิดแล้ว ไม่ว่าจะได้ผลหรือไม่** |
-| IX.8 | ห้ามคัดลอก ขาย แจก แก้ ดัดแปลง แปล สร้างงานที่ต่อยอด (derivative products) หรือ reverse engineer · decompile · disassemble เพื่อให้ได้ซอร์ส เว้นแต่ได้รับอนุญาต |
-| IX.9 | ห้ามทำอะไรเพื่อหลบหรือเอาชนะการป้องกันหรือกฎการใช้ของสินค้า |
+| III.2 · III.3 | No resale · buying does not buy rights in the product itself; it is for personal use only |
+| III.9 | No decompiling, and no hiring others to do it · **even attempting to decompile counts as a violation, whether or not it succeeds** |
+| IX.8 | No copying, selling, distributing, modifying, adapting, translating, creating derivative products, or reverse engineering · decompiling · disassembling to obtain source, unless permitted |
+| IX.9 | No doing anything to evade or defeat a product's protection or usage rules |
 
-ข้อเหล่านี้อยู่ในหมวด IX ซึ่งเป็นเหตุให้ MetaQuotes ระงับบริการได้ทันที
+These items are in section IX, which is a reason MetaQuotes can suspend service immediately.
 
-**เครื่องมือหรือบริการที่อ้างว่าแปลง `.ex4`/`.ex5` กลับเป็นซอร์ส**: มีเว็บและผู้ขายอ้างแบบนี้ แต่ไม่เจอหลักฐานที่ตรวจสอบได้ว่าทำได้กับไฟล์รุ่นปัจจุบัน ผู้ผลิตบอกว่าป้องกันไว้ ส่วนผู้ใช้ในฟอรัม mql5.com เขียนว่ายังไม่มีใครพิสูจน์ได้ตั้งแต่ build 600 ซึ่งเป็นแค่ความเห็นในฟอรัม · ป้าย `ยังไม่ได้ตรวจ` · skill นี้ไม่เอ่ยชื่อ ไม่ลิงก์ ไม่แนะนำ ไม่ดาวน์โหลด และไม่ลองเครื่องมือพวกนี้ ไฟล์ที่แจกในนามเครื่องมือเหล่านี้ไม่รู้ที่มา จึงเสี่ยงเป็น malware ด้วย
+**Tools or services that claim to convert `.ex4`/`.ex5` back to source**: websites and sellers make such claims, but no verifiable evidence was found that it works on current files. The maker says the files are protected, and a user on the mql5.com forum wrote that nobody has proven it since build 600 (only a forum opinion). Label `ยังไม่ได้ตรวจ` (not yet checked). This skill does not name, link, recommend, download or try these tools. Files distributed under the name of these tools have unknown origin, so they may also be malware.
 
-## 2 · ด่านสิทธิ์ก่อนเริ่ม
+## 2 · Permission gate before starting
 
-ถามผู้ใช้ 2 ข้อ แล้วจดคำตอบลงบรรทัดแรกของ `_to_delete/re/<ชื่อ EA>/ledger.md` ตามแบบฟอร์มใน [evidence-ledger](evidence-ledger.md) หัวข้อ 1:
+Ask the user 2 questions, then write the answers in the first line of `_to_delete/re/<ชื่อ EA>/ledger.md`, using the form in [evidence-ledger](evidence-ledger.md) section 1:
 
-1. ไฟล์นี้ได้มาจากไหน (เขียนเอง · จ้างเขียน · ซื้อใน MQL5 Market · ซื้อนอก Market · ได้ฟรีจากกลุ่มหรือเว็บ)
-2. จะเอาตัวที่เขียนใหม่ไปทำอะไร (ใช้เองบัญชีเดียว · ใช้ในบริษัท · แจก · ขาย)
+1. Where did this file come from (self-written · commissioned · bought on MQL5 Market · bought outside Market · free from a group or website)
+2. What will the rewrite be used for (own use on one account · use inside a company · distribute · sell)
 
-| ที่มา | ทำได้ | ต้องได้เพิ่มก่อน |
+| Origin | Allowed | Needed first |
 |---|---|---|
-| ผู้ใช้เขียนเอง แต่ซอร์สหาย | ทุกขั้นในหัวข้อ 3–5 | ไม่มี · จดหลักฐานความเป็นเจ้าของที่มี (ซอร์สรุ่นเก่า · ประวัติขาย · บัญชีผู้ขาย) |
-| จ้างคนอื่นเขียน | ทุกขั้น ถ้าสัญญาจ้างให้สิทธิ์ซอร์สหรือสิทธิ์ดัดแปลงกับผู้ใช้ | ถ้าสัญญาไม่ชัด ให้ขอข้อความอนุญาตจากผู้เขียนเป็นลายลักษณ์อักษร |
-| ซื้อจาก MQL5 Market | ทดสอบพฤติกรรมของสำเนาที่ซื้อใน Strategy Tester เพื่อประเมินและตั้งค่าใช้เอง (หัวข้อ 3–4) | **ขั้นเขียนตัวเลียนแบบ (หัวข้อ 5)** ต้องมีข้อความอนุญาตจากผู้ขาย เพราะข้อ IX.8 ห้าม derivative products เว้นแต่ได้รับอนุญาต · ห้ามแจกหรือขายตัวเลียนแบบในทุกกรณี · การเขียนใหม่เพื่อใช้เองอย่างเดียวจะนับเป็น derivative ไหมเป็นคำถามทางกฎหมาย (รอยืนยัน กับผู้ขายหรือนักกฎหมาย) |
-| ซื้อนอก Market | ตามสัญญาอนุญาตที่ได้มา | ไม่มีสัญญาหรือสัญญาห้ามดัดแปลง ให้ทำเฉพาะหัวข้อ 3–4 แล้วถามเจ้าของ |
-| ได้ฟรี · ไม่รู้ที่มา · ไฟล์ที่ถูก crack หรือหลุดมา | **หยุด** | ไฟล์ที่ถูก crack หรือหลุดมาไม่ทำต่อเลย แม้แต่ทดสอบ · ไฟล์ฟรีที่ไม่รู้ที่มาให้ถามหาเจ้าของก่อน |
+| The user wrote it, but the source is lost | Every step in sections 3–5 | Nothing · record the ownership evidence available (an old source version · sales history · seller account) |
+| Commissioned from someone else | Every step, if the contract gives the user source rights or modification rights | If the contract is unclear, ask the author for written permission |
+| Bought from MQL5 Market | Test the behavior of the purchased copy in the Strategy Tester to evaluate it and set it up for own use (sections 3–4) | **The imitation-writing step (section 5)** needs written permission from the seller, because item IX.8 forbids derivative products unless permitted · never distribute or sell the imitation, in any case · whether a rewrite for own use alone counts as derivative is a legal question (`(รอยืนยัน)` with the seller or a lawyer) |
+| Bought outside Market | Per the license obtained | With no license, or a license that forbids modification, do only sections 3–4 and ask the owner |
+| Free · unknown origin · cracked or leaked file | **Stop** | For a cracked or leaked file, do not continue at all, not even testing · for a free file of unknown origin, ask for the owner first |
 
-ไฟล์ล็อกเลขบัญชี วันหมดอายุ หรือเซิร์ฟเวอร์ license จนทดสอบไม่ได้ ให้หยุดแล้วบอกผู้ใช้ให้ขอไฟล์สำหรับทดสอบจากเจ้าของ ไม่หาทางเลี่ยง
+If the file is locked to an account number, an expiry date, or a license server so that testing is impossible, stop and tell the user to ask the owner for a test file. Never look for a way around it.
 
-## 3 · ตรวจความปลอดภัยก่อนรันครั้งแรก
+## 3 · Safety checks before the first run
 
-Strategy Tester รันโค้ดของ `.ex5` จริง จึงต้องถามผู้ใช้ก่อนทุกครั้งตาม SKILL.md หัวข้อ 2 · ผู้ใช้เป็นคนกดใน terminal เอง หรืออนุญาตให้ agent สั่ง `terminal64.exe /config:` เป็นรายครั้ง
+The Strategy Tester runs the `.ex5`'s real code, so ask the user before every run, per SKILL.md section 2. The user clicks in the terminal themselves, or allows the agent to run `terminal64.exe /config:` one run at a time.
 
-| ตรวจอะไร | ทำอย่างไร | ป้าย · แหล่ง |
+| Check | How | Label · source |
 |---|---|---|
-| terminal แยกสำหรับงานนี้ | ติดตั้ง MetaTrader 5 อีกชุดหรือใช้ data folder แยก login **บัญชี demo เท่านั้น** ตลอดงาน · เปิด "Disable automated trading when switching accounts" ไว้ · ไฟล์ที่ยังไม่น่าไว้ใจให้รันใน Windows Sandbox หรือ VM ที่ผู้ใช้เตรียมเอง ([runtime-observation](runtime-observation.md) หัวข้อ 2) | จากแหล่ง · [Platform Settings](https://www.metatrader5.com/en/terminal/help/startworking/settings) |
-| เรียก DLL ไหม | ลากไฟล์ใส่กราฟแล้วดูแท็บ **Dependencies** ในหน้าต่างตั้งค่า · แท็บนี้ขึ้นเมื่อ EA import ฟังก์ชันจาก EX5 หรือ DLL ไอคอนแดงคือ DLL · ปิด **Allow DLL imports** ไว้ (ผู้ผลิตแนะนำให้ปิดกับ EA ที่ไม่รู้จัก) ถ้าปิดอยู่ ปุ่ม OK จะไม่ขึ้นและ EA จะไม่เริ่ม | จากแหล่ง · [Expert Advisors and Custom Indicators](https://www.metatrader5.com/en/terminal/help/algotrading/trade_robots_indicators) |
-| ถ้ามี DLL | จดชื่อ DLL เป็นหลักฐาน · DLL เป็นเป้าหมายใหม่ที่ต้องได้สิทธิ์แยก แล้วดูแบบ static ด้วย `pe_elf_info.py` ตาม [native-binaries](native-binaries.md) ก่อนคิดจะเปิด · DLL ทำได้ทุกอย่างนอก sandbox ของ MQL5 | อนุมาน |
-| ติดต่อเว็บไหม | `WebRequest` เรียกได้เฉพาะ URL ที่ผู้ใช้ใส่ใน Tools → Options → Expert Advisors ซึ่งปิดเป็นค่าเริ่ม · ปล่อยรายการว่างไว้ · เพิ่ม URL ได้ทีละตัวเมื่อผู้ใช้อนุญาตเท่านั้น · ใน Strategy Tester ฟังก์ชันนี้ใช้ไม่ได้ และ indicator เรียกไม่ได้ | จากแหล่ง · [WebRequest](https://www.mql5.com/en/docs/network/webrequest) |
-| เขียนไฟล์ไหน | MQL5 เขียนไฟล์ได้แค่ใน `MQL5\Files` ของ terminal และโฟลเดอร์ Common ที่ใช้ร่วมกัน · เก็บรายชื่อไฟล์ใน 2 ที่นี้ก่อนและหลังรันแล้ว `diff` · ตอนอยู่ใน tester ไฟล์อาจไปอยู่ในโฟลเดอร์ของ tester agent | จากแหล่ง · [File Functions](https://www.mql5.com/en/docs/files) · โฟลเดอร์ของ agent (ยังไม่ได้ตรวจ) |
+| A separate terminal for this job | Install another MetaTrader 5 or use a separate data folder · log in to a **demo account only** for the whole job · keep "Disable automated trading when switching accounts" on · run a file not yet trusted in Windows Sandbox or a VM the user prepares ([runtime-observation](runtime-observation.md) section 2) | `จากแหล่ง` · [Platform Settings](https://www.metatrader5.com/en/terminal/help/startworking/settings) |
+| Does it call DLLs | Drag the file onto a chart and look at the **Dependencies** tab in the settings window · this tab appears when the EA imports functions from an EX5 or DLL · a red icon is a DLL · keep **Allow DLL imports** off (the maker recommends off for unknown EAs) · if it is off, the OK button will not appear and the EA will not start | `จากแหล่ง` · [Expert Advisors and Custom Indicators](https://www.metatrader5.com/en/terminal/help/algotrading/trade_robots_indicators) |
+| If there is a DLL | Record the DLL name as evidence · a DLL is a new target needing separate permission, then look at it statically with `pe_elf_info.py` per [native-binaries](native-binaries.md) before thinking of opening it · a DLL can do anything outside the MQL5 sandbox | `อนุมาน` (inferred) |
+| Does it contact the web | `WebRequest` can call only URLs the user adds in Tools → Options → Expert Advisors, which is off by default · leave the list empty · add a URL one at a time only when the user allows · in the Strategy Tester this function does not work, and an indicator cannot call it | `จากแหล่ง` · [WebRequest](https://www.mql5.com/en/docs/network/webrequest) |
+| Which files it writes | MQL5 can write files only in the terminal's `MQL5\Files` and the shared Common folder · list the files in these 2 places before and after the run, then `diff` · inside the tester, files may go to the tester agent's folder | `จากแหล่ง` · [File Functions](https://www.mql5.com/en/docs/files) · agent folder (`ยังไม่ได้ตรวจ`, not yet checked) |
 
-พฤติกรรมที่พึ่งเว็บ (ตัวกรองข่าว · สัญญาณจากเซิร์ฟเวอร์ · ตรวจ license) จะไม่เกิดใน tester · ให้จดเป็นสิ่งที่ยังไม่รู้ ไม่สรุปว่าไม่มี
+Behavior that depends on the web (news filter · signals from a server · license check) will not occur in the tester. Record it as an unknown; do not conclude it is absent.
 
-## 4 · ถอดพฤติกรรมใน Strategy Tester
+## 4 · Recover behavior in the Strategy Tester
 
-**4.1 ตั้งค่าเดียวกันทุกครั้ง**: โหมด **Every tick based on real ticks** (ใช้ tick จริงที่โบรกเกอร์เก็บไว้ ไม่จำลอง) · เซิร์ฟเวอร์ symbol timeframe ทุน leverage เดียวกันทุกรอบ · จดรุ่น build ของ terminal ลงสมุดหลักฐาน · รันจาก command line ด้วยไฟล์ ini ได้ ([หน้าเอกสาร](https://www.metatrader5.com/en/terminal/help/start_advanced/start) · ตรวจ 2026-11-10):
+**4.1 Same settings every time**: **Every tick based on real ticks** mode (uses real ticks the broker stored, not simulated) · the same server, symbol, timeframe, deposit and leverage every run · record the terminal's build version in the evidence ledger · it can run from the command line with an ini file ([documentation page](https://www.metatrader5.com/en/terminal/help/start_advanced/start) · checked 2026-11-10):
 
 ```ini
 [Tester]
@@ -731,29 +733,29 @@ ReplaceReport=1
 ShutdownTerminal=1
 ```
 
-ไม่ใส่ `Login=` เพื่อปลอมเลขบัญชีให้ EA ที่ล็อกบัญชี เพราะเป็นการเลี่ยง license (หัวข้อ 6)
+Do not put in `Login=` to fake the account number for an EA that locks to an account, because that is evading the license (section 6).
 
-**4.2 หลายช่วงตลาด**: อย่างน้อย 4 ช่วงที่ต่างกัน คือ ขาขึ้น · ขาลง · ไซด์เวย์ผันผวนต่ำ · ช่วงข่าวแรง · และ symbol หรือ timeframe อื่นถ้า EA รองรับ · กันไว้ 1 ช่วงที่**ไม่ใช้ตอนอนุมานกฎ** เพื่อใช้ตัดสินในข้อ 5
+**4.2 Several market periods**: at least 4 different periods: uptrend · downtrend · low-volatility sideways · a strong-news period · and another symbol or timeframe if the EA supports it. Set aside 1 period that is **not used when inferring the rules**, to judge with in section 5.
 
-**4.3 กวาดค่า input**: กด Save ในแท็บ Inputs เก็บค่าเริ่มเป็น `.set` แล้วเปลี่ยนทีละตัว (หรือใช้ optimization แบบ Slow complete algorithm กับ input ตัวเดียว) เพื่อดูว่า input ไหนเปลี่ยนเวลาเข้า ระยะ SL/TP หรือขนาดล็อต
+**4.3 Sweep input values**: click Save in the Inputs tab to keep the defaults as a `.set`, then change one at a time (or use the Slow complete algorithm optimization on a single input) to see which input changes entry time, SL/TP distance or lot size.
 
-**4.4 ส่งออกผล**: ไฟล์ `.htm` ที่ได้จาก `Report=` มีตาราง Orders และ Deals (คอลัมน์ Deals: Time · Deal · Symbol · Type · Direction · Volume · Price · Order · Commission · Swap · Profit · Balance · Comment ตาม [บทความ mql5.com](https://www.mql5.com/en/articles/5436) ซึ่งเป็นชื่อที่ผู้เขียนบทความตั้ง (รอยืนยัน กับรายงานจริง)) · บันทึกจากหน้าจอได้ด้วยคลิกขวาที่แท็บผล → Report → HTML หรือ Open XML (ชื่อเมนูจากคู่มือของบุคคลที่สาม (รอยืนยัน)) · จด SHA-256 ของทุกรายงานเป็นหลักฐาน · terminal ที่ตั้งภาษาไทยอาจได้หัวคอลัมน์เป็นภาษาไทย ให้ตั้ง terminal เป็นภาษาอังกฤษก่อนส่งออก (ยังไม่ได้ตรวจ)
+**4.4 Export results**: the `.htm` file from `Report=` holds Orders and Deals tables (Deals columns: Time · Deal · Symbol · Type · Direction · Volume · Price · Order · Commission · Swap · Profit · Balance · Comment, per an [mql5.com article](https://www.mql5.com/en/articles/5436); these are the names the article's author used (`(รอยืนยัน)` against a real report)). From the screen, right-click the result tab → Report → HTML or Open XML (menu names from a third-party manual (`(รอยืนยัน)`)). Record the SHA-256 of every report as evidence. A terminal set to Thai may give Thai column headings, so set the terminal to English before exporting (`ยังไม่ได้ตรวจ`, not yet checked).
 
-**4.5 ตารางสังเกต**: 1 แถวต่อ 1 ไม้ ลงไฟล์ `_to_delete/re/<ชื่อ EA>/trades.md` หรือ CSV:
+**4.5 Observation table**: 1 row per trade, in the file `_to_delete/re/<ชื่อ EA>/trades.md` or a CSV:
 
-| ช่อง | ดูอะไร |
+| Field | What to look at |
 |---|---|
-| เวลาเข้า | ตรงเวลาเปิดแท่งไหม (เช่น 10:00:00 ทุกไม้ = ตัดสินตอนแท่งใหม่) · มีช่วงเวลาหรือวันที่ไม่เคยเข้าไหม |
-| ทิศ · ราคาเข้า | เข้าตามเทรนด์หรือสวน · เข้าหลังราคาทะลุระดับไหน |
-| indicator ที่น่าจะใช้ | เขียน script ของเราเองดึงค่า indicator ที่สงสัย (MA · RSI · Bollinger · ATR) ณ เวลาเข้าแต่ละไม้ แล้วดูว่าค่าไหนอยู่ในช่วงเดียวกันทุกไม้ |
-| SL · TP | ระยะเป็นจุดคงที่ · เป็นเท่าของ ATR · เลื่อนตาม (trailing) · ไม่มี |
-| ล็อต | คงที่ · ตามสัดส่วนทุน · คูณขึ้นหลังไม้แพ้ (martingale) |
-| จำนวนไม้ที่เปิดพร้อมกัน | เปิดไม้ทิศเดียวกันซ้อนห่างเท่า ๆ กัน = grid |
-| เหตุออก | ชน SL · ชน TP · ปิดตามเวลา · ปิดตามสัญญาณกลับทิศ |
+| Entry time | Does it match the bar open time (for example 10:00:00 on every trade = decides at a new bar)? Are there times or dates it never enters? |
+| Direction · entry price | With the trend or against it · entry after price breaks which level |
+| Likely indicators | Write our own script to pull the suspected indicators' values (MA · RSI · Bollinger · ATR) at each entry time, then see which value is in the same range on every trade |
+| SL · TP | Fixed distance in points · a multiple of ATR · trailing · none |
+| Lots | Fixed · proportional to equity · multiplied after a losing trade (martingale) |
+| Number of simultaneous trades | Stacked same-direction trades at equal spacing = grid |
+| Exit reason | Hit SL · hit TP · closed by time · closed by a reverse signal |
 
-เจอ martingale หรือ grid ให้บอกผู้ใช้ทันที เพราะแบบนี้ทำให้ขาดทุนหนักได้ในช่วงตลาดวิ่งทางเดียว
+If you find martingale or grid, tell the user at once, because this style can cause heavy losses when the market runs one way.
 
-**4.6 สมมติฐานลงสมุดหลักฐาน**: ผลรายงานแต่ละไฟล์เป็น E-id (`จากแหล่ง` หรือ `ตรวจจริง` ถ้าเห็นตอนรันใน tester ที่ได้อนุญาต) · กฎที่เดาจากหลายไม้เป็น `อนุมาน` ชี้ E-id ที่เป็นฐาน · กฎที่อธิบายไม่ได้ลงตาราง "สิ่งที่ยังไม่รู้":
+**4.6 Hypotheses into the evidence ledger**: each report file's result is an E-id (`จากแหล่ง` or `ตรวจจริง` (verified) if seen during a run in a tester that was permitted) · a rule guessed from many trades is `อนุมาน` pointing to the E-ids it rests on · a rule that cannot be explained goes in the "สิ่งที่ยังไม่รู้" (unknowns) table:
 
 ```markdown
 | # | ข้อสรุป | หลักฐาน | ป้าย |
@@ -762,107 +764,107 @@ ShutdownTerminal=1
 | H2 | SL 300 จุดคงที่ทุกไม้ | E3 · E4 | อนุมาน |
 ```
 
-## 5 · เขียน MQL5 ใหม่ แล้วเทียบผล
+## 5 · Rewrite in MQL5, then compare results
 
-1. **ผู้ใช้ยืนยันสมมติฐานก่อน** แล้วเขียน spec ของพฤติกรรมทีละข้อ แต่ละข้อชี้ H-id
-2. **เขียนด้วยโค้ดของเราตาม `stack-mql`** จาก spec ไม่ใช่จากไฟล์ `.ex5` · ไม่ใช้ชื่อสินค้า คำบรรยาย หรือรูปของต้นฉบับ
-3. **ตั้งเกณฑ์ความตรงก่อนรัน** แล้วจดลงสมุดหลักฐาน ไม่ปรับเกณฑ์หลังเห็นผล · ตัวเลขด้านล่างเป็น `ตัวอย่าง` ที่เราเสนอ ไม่ใช่มาตรฐาน:
+1. **The user confirms the hypotheses first**, then write a spec of the behavior item by item, each pointing to an H-id.
+2. **Write with our own code following `stack-mql`**, from the spec and not from the `.ex5` file · do not use the original's product name, description or images.
+3. **Set the match criteria before running** and record them in the evidence ledger. Do not adjust the criteria after seeing results. The numbers below are `ตัวอย่าง` (example) that we propose, not a standard:
 
-| เกณฑ์ | ตัวอย่าง |
+| Criterion | Example |
 |---|---|
-| ไม้เข้าที่ symbol ทิศ และเวลาตรงกัน (ห่างไม่เกิน 60 วินาที) | อย่างน้อย 90% ของจำนวนไม้ที่มากกว่า |
-| ขนาดล็อตตรงกันในไม้ที่จับคู่ได้ | อย่างน้อย 95% |
-| ช่วงที่กันไว้ในข้อ 4.2 | ผ่านเกณฑ์เดียวกัน ถ้าผ่านแค่ช่วงที่ใช้อนุมาน แปลว่ากฎยังจับไม่ครบ |
+| Trades with matching symbol, direction and time (within 60 seconds) | At least 90% of the larger trade count |
+| Lot size matches in matched trades | At least 95% |
+| The period set aside in 4.2 | Must pass the same criteria; if it passes only the period used for inference, the rules are not fully captured yet |
 
-4. **รันทั้ง 2 ตัวด้วยการตั้งค่าเดียวกัน** (เซิร์ฟเวอร์ · ช่วงวันที่ · Model 4 · `.set` ที่ตรงกัน) แล้วเทียบ:
+4. **Run both with the same settings** (server · date range · Model 4 · matching `.set`), then compare:
 
 ```bash
 python -I scripts/compare_trades.py original-2023.htm rewrite-2023.htm --tolerance 60 --threshold 90
 python -I scripts/compare_trades.py original.csv rewrite.csv --leg all --json > _to_delete/re/<ชื่อ EA>/compare.json
 ```
 
-สคริปต์อ่านตาราง Deals จากรายงาน HTML (UTF-16 หรือ UTF-8) หรือ CSV ที่มีหัว Time · Symbol · Type · Direction แล้วจับคู่ไม้ที่ symbol ฝั่ง (buy/sell) และ Direction (in/out) ตรงกัน และเวลาห่างไม่เกิน `--tolerance` · บอก % ที่ตรง · % ล็อตที่ตรง · ไม้ที่มีแต่ฝั่งเดียว · ต่ำกว่า `--threshold` ออก exit 1 · ทดสอบแล้ว 2026-11-10 ด้วย `--self-test` และข้อมูลตัวอย่างที่สร้างเอง 50 ไม้ (2026-11-11 เพิ่มกรณี `--leg all` ที่ไม้เข้ากับไม้ออกฝั่งเดียวกันต้องไม่ถูกจับคู่) ยังไม่ได้ลองกับรายงานจริงจาก terminal (รอยืนยัน)
+The script reads the Deals table from an HTML report (UTF-16 or UTF-8) or a CSV with the headers Time · Symbol · Type · Direction, then pairs trades whose symbol, side (buy/sell) and Direction (in/out) match and whose time differs by no more than `--tolerance`. It reports % matched · % of lots matched · trades present on one side only · below `--threshold` it exits with code 1. Tested 2026-11-10 with `--self-test` and sample data we generated, 50 trades (2026-11-11 added the `--leg all` case where an entry and an exit on the same side must not be paired). Not yet tried on a real report from a terminal (`(รอยืนยัน)`).
 
-5. ไม้ที่มีแต่ฝั่งเดียวคือที่มาของกฎที่ยังขาด ให้ไล่ดูทีละไม้แล้วแก้สมมติฐาน ไม่ปรับโค้ดให้ตรงเป็นรายไม้ · ผ่านเกณฑ์ = ตรงเฉพาะช่วงและการตั้งค่าที่ทดสอบ ไม่ใช่เหมือนต้นฉบับทุกสภาพตลาด
-6. ก่อนผู้ใช้เอาตัวใหม่ไปใช้บัญชีจริง ให้ผ่านรายการตรวจของ `stack-mql` หัวข้อ 8 และรันกับบัญชี demo ช่วงหนึ่งก่อน · การตัดสินใจเปิดบัญชีจริงเป็นของผู้ใช้
+5. Trades present on one side only point to missing rules. Go through them one by one and fix the hypotheses; do not adjust the code to match trade by trade. Passing the criteria = matching only for the periods and settings tested, not identical to the original in every market condition.
+6. Before the user puts the new version on a real account, it must pass the checklist in `stack-mql` section 8 and run on a demo account for a while. The decision to go live belongs to the user.
 
-## 6 · สิ่งที่ห้ามทำ
+## 6 · What must not be done
 
-1. ห้าม decompile · disassemble · เปิด `.ex5` ด้วย hex editor · รัน `triage.py --strings` หรือ `--pattern` กับ `.ex5` · ทำกับ `.ex5` ได้แค่จด SHA-256 ขนาด และที่มา
-2. ห้ามค้น ดาวน์โหลด แนะนำ ลิงก์ หรือจ้างเครื่องมือหรือบริการที่อ้างว่าถอด `.ex4`/`.ex5`
-3. ห้ามถอดรหัสหรือแกะชั้นป้องกันของ MQL5 Cloud Protector หรือ secure version จาก Market
-4. ห้ามปลดหรือเลี่ยง license: ปลอมเลขบัญชี (รวม `Login=` ใน tester ini) · เปลี่ยนเวลาเครื่องหนีวันหมดอายุ · ทำเซิร์ฟเวอร์ license ปลอม · แก้ไฟล์ hosts · ทำ DLL ปลอมมาแทนตัวจริง
-5. ห้ามคัดลอกไฟล์จาก Market ไปเครื่องอื่นเพื่อเลี่ยงจำนวน activation
-6. ห้ามแจกหรือขายตัวที่เขียนเลียนแบบไฟล์ที่ไม่ใช่ของผู้ใช้ เว้นแต่เจ้าของอนุญาตเป็นลายลักษณ์อักษร
-7. ห้ามรันกับบัญชีจริงระหว่างงาน · ห้ามเปิด Allow DLL imports หรือเพิ่ม URL ใน WebRequest ให้ไฟล์ที่ยังไม่น่าไว้ใจ
-8. ห้ามทำต่อกับไฟล์ที่ถูก crack หรือหลุดมา แม้ผู้ใช้จะบอกว่าแค่ทดสอบ
+1. Never decompile · disassemble · open an `.ex5` with a hex editor · run `triage.py --strings` or `--pattern` on an `.ex5`. For an `.ex5`, only record the SHA-256, size and origin.
+2. Never search for, download, recommend, link or hire tools or services that claim to extract `.ex4`/`.ex5`.
+3. Never decrypt or unpack the protection layers of MQL5 Cloud Protector or a Market secure version.
+4. Never remove or evade a license: faking the account number (including `Login=` in the tester ini) · changing the system clock to escape an expiry date · building a fake license server · editing the hosts file · making a fake DLL to replace the real one.
+5. Never copy a file from Market to another machine to evade the activation count.
+6. Never distribute or sell an imitation of a file that is not the user's, unless the owner permits in writing.
+7. Never run against a real account during the job · never turn on Allow DLL imports or add a URL to WebRequest for a file not yet trusted.
+8. Never continue with a cracked or leaked file, even if the user says it is only a test.
 
-## ที่มา
+## Sources
 
-อ่านทุกหน้าเมื่อ 2026-11-10
+All pages read on 2026-11-10
 
 - [MetaEditor: Compilation](https://www.metatrader5.com/en/metaeditor/help/development/compile)
-- [MQL5 Cloud Protector](https://www.metatrader5.com/en/metaeditor/help/development/mql5_cloud_protector) · [ประกาศ build 1730](https://metatrader5.com/en/news/1732)
+- [MQL5 Cloud Protector](https://www.metatrader5.com/en/metaeditor/help/development/mql5_cloud_protector) · [build 1730 announcement](https://metatrader5.com/en/news/1732)
 - [MQL5 Market Rules](https://www.mql5.com/en/market/rules)
-- [Strategy Tester: Testing](https://www.metatrader5.com/en/terminal/help/algotrading/testing) · [Platform start (ไฟล์ ini)](https://www.metatrader5.com/en/terminal/help/start_advanced/start)
+- [Strategy Tester: Testing](https://www.metatrader5.com/en/terminal/help/algotrading/testing) · [Platform start (ini file)](https://www.metatrader5.com/en/terminal/help/start_advanced/start)
 - [Platform Settings](https://www.metatrader5.com/en/terminal/help/startworking/settings) · [Expert Advisors and Custom Indicators](https://www.metatrader5.com/en/terminal/help/algotrading/trade_robots_indicators)
 - [WebRequest](https://www.mql5.com/en/docs/network/webrequest) · [File Functions](https://www.mql5.com/en/docs/files)
-- [Analyzing trading results using HTML reports](https://www.mql5.com/en/articles/5436) (บทความใน mql5.com ไม่ใช่เอกสารทางการ)
+- [Analyzing trading results using HTML reports](https://www.mql5.com/en/articles/5436) (an article on mql5.com, not official documentation)
 
 
 ## reference: native-binaries.md
 
-# native (PE · ELF · Mach-O) และ .NET
+# Native (PE · ELF · Mach-O) and .NET
 
-แนวคิดดัดแปลงจาก `native-and-artifacts.md` ของ REA (MIT · © 2026 morluto) เขียนใหม่ให้ใช้สคริปต์ในเครื่องและ Ghidra ที่ผู้ใช้ติดตั้งเอง
+Ideas adapted from REA's `native-and-artifacts.md` (MIT · © 2026 morluto), rewritten to use local scripts and a Ghidra the user installed.
 
-| หัวข้อ | |
+| Section | |
 |---|---|
-| [1 · native ทีละขั้น](#1--native-ทีละขั้น) | [2 · .NET](#2--net) |
-| [3 · Ghidra headless](#3--ghidra-headless) | [4 · ไฟล์ที่ถูก pack และภาษาเฉพาะ](#4--ไฟล์ที่ถูก-pack-และภาษาเฉพาะ) |
+| [1 · Native, step by step](#1--native-step-by-step) | [2 · .NET](#2--net) |
+| [3 · Ghidra headless](#3--ghidra-headless) | [4 · Packed files and special languages](#4--packed-files-and-special-languages) |
 
-## 1 · native ทีละขั้น
+## 1 · Native, step by step
 
-ทุกขั้นอ่านไฟล์อย่างเดียว ไม่โหลดหรือรัน binary
+Every step only reads the file. The binary is never loaded or run.
 
-| ขั้น | คำสั่ง | ได้อะไร |
+| Step | Command | Result |
 |---|---|---|
-| 1 ชนิดไฟล์ | `python -I scripts/triage.py <file>` | PE / ELF / Mach-O · สถาปัตยกรรม · .NET หรือไม่ |
-| 2 header · section · import · export | `python -I scripts/pe_elf_info.py <file>` (`--limit 0` ดูครบ · `--json` เก็บไว้เทียบ) | DLL หรือ .so ที่ใช้ · ฟังก์ชันที่เรียก · ฟังก์ชันที่เปิดให้คนอื่นเรียก |
-| 3 strings | `python -I scripts/triage.py <file> --pattern '<regex>'` เช่น `https?://` หรือ `select .* from` | URL · SQL · ข้อความ error (ค่าลับถูกปิด) |
-| 4 disassembly ของจุดที่สนใจ | `objdump -d --start-address=0x… --stop-address=0x… <file>` | assembly เฉพาะช่วง (ผลยาว เขียนลงไฟล์) |
-| 5 pseudo-C | Ghidra headless (หัวข้อ 3) | ฟังก์ชันที่อ่านได้ ชื่อหายถ้าไม่มี symbol |
+| 1 File type | `python -I scripts/triage.py <file>` | PE / ELF / Mach-O · architecture · .NET or not |
+| 2 header · section · import · export | `python -I scripts/pe_elf_info.py <file>` (`--limit 0` shows everything · `--json` keeps it for comparing) | DLLs or .so files used · functions called · functions exposed to others |
+| 3 strings | `python -I scripts/triage.py <file> --pattern '<regex>'` such as `https?://` or `select .* from` | URLs · SQL · error messages (secrets are masked) |
+| 4 disassembly of the spot of interest | `objdump -d --start-address=0x… --stop-address=0x… <file>` | Assembly for that range only (long output; write it to a file) |
+| 5 pseudo-C | Ghidra headless (section 3) | Readable functions; names are lost if there are no symbols |
 
-import บอกได้มากโดยไม่ต้อง decompile:
+Imports tell you a lot without decompiling:
 
-| import ที่เห็น | บอกอะไร |
+| Import seen | What it tells you |
 |---|---|
-| `WINHTTP` · `WININET` · `ws2_32` · `libcurl` · `libssl` | ออกเครือข่าย |
-| `bcrypt` · `ncrypt` · `crypt32` · `libcrypto` | เข้ารหัส · ใบรับรอง |
-| `advapi32!Reg*` | อ่านเขียน registry |
-| `sqlite3_*` · `odbc32` | ฐานข้อมูล |
-| `mscoree.dll` เท่านั้น | เป็น .NET ไปหัวข้อ 2 |
+| `WINHTTP` · `WININET` · `ws2_32` · `libcurl` · `libssl` | Goes out to the network |
+| `bcrypt` · `ncrypt` · `crypt32` · `libcrypto` | Encryption · certificates |
+| `advapi32!Reg*` | Reads and writes the registry |
+| `sqlite3_*` · `odbc32` | Database |
+| `mscoree.dll` only | It is .NET; go to section 2 |
 
-- address และ pseudocode เป็นผลวิเคราะห์ ไม่ใช่ซอร์สต้นฉบับ
-- ไม่มี import หรือ symbol ไม่ได้แปลว่าไม่มีการเรียก (อาจโหลดตอนรันด้วย `LoadLibrary` / `dlopen` หรือถูก strip) ให้จดเป็นสิ่งที่ยังไม่รู้
-- delay-load import ของ PE สคริปต์ยังไม่แสดงรายชื่อ บอกแค่ว่ามี · ใช้ `objdump -p` ดูต่อ
-- Mach-O สคริปต์อ่านได้แค่ header และ dylib ที่ลิงก์ · import และ export ใช้ Ghidra
+- Addresses and pseudocode are analysis results, not the original source.
+- No imports or symbols does not mean no calls (they may be loaded at runtime with `LoadLibrary` / `dlopen`, or stripped). Record it as an unknown.
+- For PE delay-load imports, the script does not list names yet; it only says they exist. Use `objdump -p` to go further.
+- For Mach-O, the script reads only the header and linked dylibs. Use Ghidra for imports and exports.
 
 ## 2 · .NET
 
-- ดูโครงก่อนด้วย `python -I scripts/dotnet_meta.py <dll>` — รายชื่อ assembly ที่อ้าง · class · method · P/Invoke (`Type.method -> dll!ชื่อ`) · resource · `--strings` แสดง user string ที่ปิดค่าลับแล้ว · ไม่ต้องติดตั้งอะไร · ไม่รองรับ metadata แบบ `#-` ที่มี pointer table
-- โค้ด C# อ่านได้ใช้ `ilspycmd` (คำสั่งใน SKILL.md หัวข้อ 5.1) · ได้โค้ดเกือบเท่าต้นฉบับ SQL ครบ เสียแค่ comment และชื่อตัวแปร
-- `.pdb` ที่วางข้าง ๆ คืนชื่อไฟล์และเลขบรรทัด · `.dll.config` มีค่าตั้ง (และมักมีความลับ — ชื่ออย่างเดียว)
-- ASP.NET MVC ที่ compile view ไว้: `.cshtml` กลับมาเป็น class ใต้ `<Assembly>.Views.<Controller>`
-- Xamarin หรือ .NET for Android: โค้ด C# อยู่ใน `assemblies/*.dll` ของ APK (บางทีถูกบีบแบบ LZ4 ขึ้นต้น `XALZ`) แกะตัวนั้น ไม่ใช่ `classes.dex`
-- **NativeAOT** compile เป็น machine code แล้ว decompiler ของ .NET ใช้ไม่ได้ · `pe_elf_info.py` จะบอก `dotnet: False` ทั้งที่ strings มีชื่อ namespace ของ .NET · วิเคราะห์แบบ native (หัวข้อ 1 และ 3) · type ที่กู้ได้ไม่ใช่ C# ต้นฉบับ
-- single-file bundle (ไฟล์ exe เดียวที่มี dll ข้างใน) ต้องแตกก่อน ใช้ `ilspycmd -d -o <out> App.exe` · triage เจอ obfuscator ให้หยุดบอกผู้ใช้ก่อน · assembly ที่ถูกทำให้อ่านยากได้แค่โครง ให้บอกตรง ๆ
-- ตัวเลือกของ `ilspycmd` ที่ใช้บ่อย: type เดียวใช้ `-t Namespace.TypeName` · ดู IL แทน C# ใช้ `-il` · รายชื่อ class ใช้ `-l c` · dependency อยู่คนละโฟลเดอร์ใช้ `-r <โฟลเดอร์>` (ตรวจจาก README ของ ICSharpCode.ILSpyCmd 2026-10-23)
-- ReadyToRun ยังมี IL อยู่ decompile ได้ตามปกติ · trimmed build ตัด member ที่ไม่ถูกใช้ทิ้ง โค้ดที่หายจึงไม่ได้แปลว่าไม่เคยมี (2 ข้อนี้มาจากเอกสาร .NET ทั่วไป ยังไม่ได้ตรวจกับ ILSpy)
+- Look at the structure first with `python -I scripts/dotnet_meta.py <dll>`. It lists referenced assemblies · classes · methods · P/Invoke (`Type.method -> dll!name`) · resources. `--strings` shows user strings with secrets masked. Nothing to install. It does not support `#-` metadata with pointer tables.
+- For readable C# code use `ilspycmd` (command in SKILL.md section 5.1). You get code almost equal to the original, with all SQL; only comments and variable names are lost.
+- A `.pdb` placed alongside restores file names and line numbers. `.dll.config` holds settings (and often secrets; report names only).
+- ASP.NET MVC with precompiled views: `.cshtml` comes back as a class under `<Assembly>.Views.<Controller>`.
+- Xamarin or .NET for Android: the C# code is in the APK's `assemblies/*.dll` (sometimes LZ4-compressed, starting with `XALZ`). Extract that, not `classes.dex`.
+- **NativeAOT** compiles to machine code, so .NET decompilers do not work. `pe_elf_info.py` will say `dotnet: False` even though strings contain .NET namespace names. Analyze it as native (sections 1 and 3). Recovered types are not the original C#.
+- A single-file bundle (one exe holding dlls) must be extracted first with `ilspycmd -d -o <out> App.exe`. If triage finds an obfuscator, stop and tell the user first. An obfuscated assembly gives only the outline; say so plainly.
+- Common `ilspycmd` options: one type → `-t Namespace.TypeName` · IL instead of C# → `-il` · class list → `-l c` · dependencies in another folder → `-r <folder>` (checked against the ICSharpCode.ILSpyCmd README 2026-10-23).
+- ReadyToRun still has IL, so it decompiles normally. A trimmed build drops unused members, so missing code does not mean it never existed. (These 2 points come from general .NET documentation and have not been checked against ILSpy.)
 
 ## 3 · Ghidra headless
 
-ใช้เมื่อขั้น 1–4 ตอบคำถามไม่ได้ · Ghidra และ JDK 21 ต้องติดตั้งโดยผู้ใช้ (SKILL.md หัวข้อ 5) · ยังไม่ได้ทดลองบนเครื่องที่เขียนเอกสารนี้ เพราะไม่มี Ghidra (`ยังไม่ได้ตรวจ`)
+Use when steps 1–4 cannot answer the question. The user must install Ghidra and JDK 21 (SKILL.md section 5). Not tried on the machine where this document was written, because it has no Ghidra (`ยังไม่ได้ตรวจ`, not yet checked).
 
 ```bash
 # Windows ใช้ support\analyzeHeadless.bat · project ชั่วคราว ลบทิ้งเมื่อจบ ไม่แก้ byte ของไฟล์เป้าหมาย
@@ -870,23 +872,23 @@ import บอกได้มากโดยไม่ต้อง decompile:
   -scriptPath <โฟลเดอร์สคริปต์ของเรา> -postScript <สคริปต์ส่งออก> _to_delete/re/<ชื่อ>/out -deleteProject
 ```
 
-- ส่งออก pseudo-C เฉพาะฟังก์ชันที่ต้องดู (ตาม address จาก import หรือ string) ไม่ส่งออกทั้งไฟล์ ผลจะยาวเกินอ่าน
-- ชุดที่ควรได้จากการรัน 1 ครั้ง: รายชื่อฟังก์ชันพร้อม address · strings พร้อมจุดที่อ้างถึง (xref) · import และ export · pseudo-C และ disassembly ของฟังก์ชันที่สนใจ · สคริปต์ส่งออกต้องเขียนเองผ่าน API ของ Ghidra
-- อ่าน pseudo-C เทียบกับ disassembly ทุกครั้งก่อนอ้างฟังก์ชันในรายงาน เพราะ decompiler เดา type และยุบโค้ดผิดได้ ส่วน disassembly คือสิ่งที่รันจริง (แนวคิดจาก ghidra-headless ใน trailofbits/skills-curated (CC-BY-SA) เขียนใหม่ด้วยคำของเรา)
-- ตรวจว่ามี Ghidra · IDA · Hopper ไหมด้วย `node scripts/check-tools.mjs --target native`
-- address ของ ELF เป็น virtual address ไม่ใช่ file offset ห้ามบวก image base เอง
-- เป้าหมายที่ไม่น่าไว้ใจ ให้รัน Ghidra ใน `docker-sandbox` ด้วย เพราะ parser ของ Ghidra อ่านไฟล์ด้วยสิทธิ์ผู้ใช้
-- IDA · Hopper · Binary Ninja ใช้แทนได้เฉพาะสัญญาอนุญาตของผู้ใช้เอง เปิดแบบอ่านอย่างเดียว ไม่ save ทับ
+- Export pseudo-C only for the functions you need to see (by address from an import or string), not the whole file. The output would be too long to read.
+- What one run should produce: function list with addresses · strings with where they are referenced (xref) · imports and exports · pseudo-C and disassembly of the functions of interest. The export script must be written yourself through Ghidra's API.
+- Always read pseudo-C against the disassembly before citing a function in the report, because the decompiler can guess types and collapse code wrongly. The disassembly is what actually runs. (Idea from ghidra-headless in trailofbits/skills-curated (CC-BY-SA), rewritten in our own words.)
+- Check whether Ghidra · IDA · Hopper exist with `node scripts/check-tools.mjs --target native`.
+- ELF addresses are virtual addresses, not file offsets. Never add the image base yourself.
+- For an untrusted target, run Ghidra in `docker-sandbox` too, because Ghidra's parser reads the file with the user's privileges.
+- IDA · Hopper · Binary Ninja may be used instead only under the user's own license, opened read-only, never saving over the file.
 
-## 4 · ไฟล์ที่ถูก pack และภาษาเฉพาะ
+## 4 · Packed files and special languages
 
-| เห็นอะไร | หมายถึง | ทำอะไรต่อ |
+| What you see | It means | What to do next |
 |---|---|---|
-| section ชื่อ `UPX0` `UPX1` · section ที่ raw size 0 แต่ virtual size ใหญ่ | ถูก pack | จดตัวตนของไฟล์เดิมและไฟล์ที่แตกแยกกัน · การแตก stub ไม่ได้แปลว่าได้โปรแกรมจริง · ถามผู้ใช้ก่อนแตก |
-| `.gopclntab` (สคริปต์บอก `Go binary`) · string `go1.` | Go | ชื่อฟังก์ชันยังอยู่ใน pclntab · Ghidra รุ่นใหม่อ่านได้ |
-| string `/rustc/` · `.cargo/registry` | Rust | ชื่อ crate จาก path ใน strings · ไม่มี section `.dep-v0` ไม่ได้แปลว่าไม่มี dependency |
-| ไฟล์ไม่มี header (firmware) | raw binary | ต้องรู้สถาปัตยกรรมและจุดเริ่มก่อน ถามผู้ใช้หรือดูเอกสารของอุปกรณ์ · image ที่มีหลายส่วนดู [firmware](firmware.md) |
-| `.wasm` | WebAssembly | WABT (`wasm2wat`) ที่ผู้ใช้ติดตั้ง · WAT ไม่ใช่ซอร์สต้นฉบับ |
+| Sections named `UPX0` `UPX1` · a section with raw size 0 but large virtual size | Packed | Record the identity of the original file and the unpacked file separately · unpacking the stub does not mean you have the real program · ask the user before unpacking |
+| `.gopclntab` (script says `Go binary`) · string `go1.` | Go | Function names remain in pclntab · recent Ghidra versions can read them |
+| String `/rustc/` · `.cargo/registry` | Rust | Crate names come from paths in strings · no `.dep-v0` section does not mean no dependencies |
+| File with no header (firmware) | Raw binary | Need the architecture and entry point first; ask the user or read the device documentation · for an image with several parts see [firmware](firmware.md) |
+| `.wasm` | WebAssembly | WABT (`wasm2wat`) installed by the user · WAT is not the original source |
 
 
 ## reference: packaging-patterns.md
@@ -944,112 +946,112 @@ import บอกได้มากโดยไม่ต้อง decompile:
 
 ## reference: runtime-observation.md
 
-# ดูเป้าหมายตอนรัน
+# Observing the target at runtime
 
-แนวคิดดัดแปลงจาก `runtime-observation.md` ของ REA (MIT · © 2026 morluto) · ต้นฉบับให้ agent เรียก tool ที่รันเป้าหมายได้โดยไม่ต้องขอรายครั้ง ไฟล์นี้เปลี่ยนเป็น **ต้องถามผู้ใช้ทุกครั้ง**
+Ideas adapted from REA's `runtime-observation.md` (MIT · © 2026 morluto). The original lets the agent call tools that run the target without asking each time. This file changes that to **ask the user every time**.
 
-ใช้ runtime เฉพาะเมื่อหลักฐานแบบ static ตอบคำถามไม่ได้จริง และจดเหตุผลไว้ในสมุดหลักฐาน
+Use runtime only when static evidence truly cannot answer the question, and record the reason in the evidence ledger.
 
-## 1 · ก่อนรันอะไรทุกครั้ง
+## 1 · Before running anything
 
-ถามผู้ใช้ด้วยข้อความเดียวที่บอกครบ แล้วรอคำตอบ:
+Ask the user in one message that says everything, then wait for the answer:
 
-- จะรันอะไร (คำสั่งเต็ม) · กับไฟล์หรือแอปไหน · ที่ไหน (container ชื่ออะไร หรือ emulator ตัวไหน) · นานแค่ไหน · จะเก็บอะไรกลับมา
-- เป้าหมายจะออกเครือข่ายได้ไหม (ค่าเริ่ม: ปิด)
+- What will run (full command) · on which file or app · where (which container, or which emulator) · for how long · what will be collected
+- Whether the target may reach the network (default: off)
 
-ผู้ใช้ตอบ no ให้จดลงบันทึกสิทธิ์ช่อง "การรันที่ถูกปฏิเสธ" และห้ามขอซ้ำด้วยคำสั่งเดิม · ทำต่อเท่าที่ static ได้ แล้วจดส่วนที่ขาดเป็นสิ่งที่ยังไม่รู้
+If the user answers no, record it in the authorization record's field "การรันที่ถูกปฏิเสธ" (runs refused) and never ask again with the same command. Continue as far as static work allows, and record the missing part as an unknown.
 
-## 2 · รันที่ไหน
+## 2 · Where to run
 
-| เป้าหมาย | ที่รัน |
+| Target | Where to run |
 |---|---|
-| ไม่รู้ที่มา · ไม่น่าไว้ใจ · malware | container ของ `docker-sandbox` เท่านั้น · ปิดเครือข่าย (`--network none`) เว้นแต่ผู้ใช้อนุญาต · ไม่ mount โฟลเดอร์ของผู้ใช้ นอกจากโฟลเดอร์งานใน `_to_delete/re/` |
-| ของผู้ใช้เอง ที่ผู้ใช้รันอยู่ทุกวันแล้ว | เครื่องผู้ใช้ได้ ถ้าผู้ใช้อนุญาต |
-| แอป Android | emulator ที่สร้างไว้สำหรับงานนี้ ไม่ใช้โทรศัพท์ส่วนตัว |
-| แอป Windows ที่ไม่น่าไว้ใจ | container Linux รันไม่ได้ · ใช้ Windows Sandbox หรือ VM ที่ผู้ใช้เตรียมเอง แล้วให้ผู้ใช้เป็นคนรัน |
+| Unknown origin · untrusted · malware | `docker-sandbox` container only · network off (`--network none`) unless the user allows it · mount no user folder except the work folder in `_to_delete/re/` |
+| The user's own software that the user already runs every day | The user's machine is allowed, if the user permits |
+| Android app | An emulator created for this job, not a personal phone |
+| Untrusted Windows app | A Linux container cannot run it · use Windows Sandbox or a VM the user prepares, and have the user run it |
 
-การดูตอนรันเป็นหลักฐานพฤติกรรม ไม่ใช่การกักขัง · debugger และ Frida ไม่ได้กันเป้าหมายจากเครื่อง
+Runtime observation is behavior evidence, not containment. A debugger and Frida do not keep the target away from the machine.
 
-## 3 · ใครเป็นคนกด
+## 3 · Who clicks
 
-| ผู้ลงมือ | วิธี | ต้องถาม |
+| Actor | Method | Must ask |
 |---|---|---|
-| ผู้ใช้กดเอง agent ดูผล | ผู้ใช้เปิด DevTools หรือบันทึก HAR แล้วส่งไฟล์มา | ถามครั้งเดียวว่าจะดูหน้าไหน ขั้นไหน |
-| agent สั่งเบราว์เซอร์หรือแอปเอง | Playwright ใน `docker-sandbox` ตามขั้นที่ประกาศ | **ทุกครั้ง** · เปิดหน้าใหม่อาจล้างฟอร์มที่ยังไม่ได้บันทึก บอกผู้ใช้ก่อน |
+| The user clicks, the agent reads the result | The user opens DevTools or records a HAR and sends the file | Ask once which page and which step to look at |
+| The agent drives the browser or app itself | Playwright in `docker-sandbox`, following the announced steps | **Every time** · opening a new page may wipe an unsaved form; tell the user first |
 
-รายงานให้ชัดว่าใครกด · การดูเฉย ๆ ห้ามเขียนว่า agent กด เปิดหน้า หรือเห็นสิ่งที่เกิดก่อนเริ่มบันทึก
+Report clearly who clicked. For passive viewing, never write that the agent clicked, opened a page, or saw what happened before recording began.
 
 ## 4 · Electron
 
-- ต่อ DevTools ของ main process ด้วย `--inspect` ได้เฉพาะเมื่อ fuse `EnableNodeCliInspectArguments` เปิดอยู่ · ปิดแล้วแอปจะไม่สน `--inspect` ไม่ต้องหาทางเลี่ยง
-- หน้าต่าง renderer ที่เปิด DevTools ได้ (Ctrl+Shift+I) ให้ผู้ใช้เปิดเอง
-- ห้ามแก้ไฟล์ asar หรือ fuse ของแอปเพื่อเปิดทาง ถือเป็นการแก้เป้าหมาย
+- You may attach DevTools to the main process with `--inspect` only when the fuse `EnableNodeCliInspectArguments` is on. If it is off, the app ignores `--inspect`; do not look for a way around it.
+- For a renderer window that can open DevTools (Ctrl+Shift+I), the user opens it.
+- Never edit the app's asar file or fuses to open a way in. That counts as modifying the target.
 
-## 5 · เครื่องมือรันและเกาะ process
+## 5 · Tools that run and attach to processes
 
-ทุกตัวในตารางนี้ต้องถามทุกครั้ง และผู้ใช้เป็นคนติดตั้งจากแหล่งทางการ
+Every tool in this table needs asking every time, and the user installs it from the official source.
 
-| เครื่องมือ | ใช้ทำอะไร | ติดตั้งจาก |
+| Tool | Used for | Install from |
 |---|---|---|
-| x64dbg · WinDbg | debug โปรแกรม Windows | x64dbg.com · Microsoft Store / learn.microsoft.com |
-| GDB · LLDB | debug Linux · macOS | ตัวจัดการแพ็กเกจของระบบ |
-| Frida | ฉีดสคริปต์เข้า process | `pip install frida-tools` จาก PyPI (ผู้ใช้รันเอง) |
-| adb | สั่งอุปกรณ์ Android | Android SDK Platform-Tools |
-| Process Monitor | ดูไฟล์และ registry ที่โปรแกรมแตะ | Sysinternals (learn.microsoft.com) |
+| x64dbg · WinDbg | Debug Windows programs | x64dbg.com · Microsoft Store / learn.microsoft.com |
+| GDB · LLDB | Debug Linux · macOS | The system package manager |
+| Frida | Inject scripts into a process | `pip install frida-tools` from PyPI (the user runs it) |
+| adb | Control an Android device | Android SDK Platform-Tools |
+| Process Monitor | See files and registry the program touches | Sysinternals (learn.microsoft.com) |
 
-- เกาะ process ที่ผู้ใช้กำลังใช้งาน (เช่น เบราว์เซอร์ที่ login ธนาคารอยู่) ห้ามทำ แม้ผู้ใช้อนุญาต ให้เปิดตัวใหม่ใน sandbox แทน
-- ผลที่เห็นตอนรันติดป้าย `ตรวจจริง` พร้อมคำสั่ง เวลา และที่รัน · ค่าลับที่เห็นในหน่วยความจำหรือ log รายงานแค่ชื่อ
+- Never attach to a process the user is currently using (for example a browser logged in to a bank), even if the user permits. Start a new one in a sandbox instead.
+- Label results seen at runtime `ตรวจจริง` (verified) with the command, time and where it ran. For secrets seen in memory or logs, report only the name.
 
 
 ## reference: web-and-network.md
 
-# เว็บแอป และทราฟฟิกเครือข่าย
+# Web apps and network traffic
 
-แนวคิดดัดแปลงจาก `runtime-observation.md` และ `evidence-workflows.md` ของ REA (MIT · © 2026 morluto) ส่วนไฟล์ทราฟฟิก เขียนใหม่ให้ใช้สคริปต์ในเครื่อง
+Ideas adapted from REA's `runtime-observation.md` and `evidence-workflows.md` (MIT · © 2026 morluto). The traffic-file part is rewritten to use local scripts.
 
-## 1 · เว็บแอปของผู้ใช้
+## 1 · The user's web app
 
-- เป้าหมายต้องเป็นเว็บของผู้ใช้หรือลูกค้าที่มีสัญญา จดโดเมนที่อยู่ในขอบเขตลงบันทึกสิทธิ์ · โดเมนอื่นที่หน้าเว็บเรียก (CDN · analytics · payment) ดูได้แค่ใน capture ไม่ไปยิงเอง
-- โค้ดฝั่งเบราว์เซอร์: เอาจากโฟลเดอร์ build ของผู้ใช้ก่อน ถ้าไม่มีให้ผู้ใช้กด "Save as" หรือส่งไฟล์มา · ต่อด้วย `sourcemap_list.py` และ [javascript-electron](javascript-electron.md)
-- ห้ามยิง request ซ้ำ ห้ามลอง login ห้ามสแกนหาช่องโหว่ ถ้าไม่ได้ตกลงไว้ในขอบเขต · งานทดสอบความปลอดภัยส่งต่อ `security-engineer`
-- หน้าเว็บสาธารณะของคนอื่น อ่านได้แค่หน้าและสคริปต์ที่ใครก็โหลดได้ ตาม robots.txt และเงื่อนไขการใช้งานของเว็บนั้น · ห้ามเข้าส่วนที่ต้อง login ของคนอื่น
-- เจอ CAPTCHA ไม่แก้และไม่หาทางเลี่ยง ให้ผู้ใช้ทำเอง
-- ตรวจว่าเครื่องมีเบราว์เซอร์และ Playwright Core ไหมด้วย `node scripts/check-tools.mjs --target web` · การให้ Playwright กดหรือกรอกเองต้องถามทุกครั้งตาม [runtime-observation](runtime-observation.md)
+- The target must be the web app of the user, or of a customer under contract. Record the in-scope domains in the authorization record. Other domains the page calls (CDN · analytics · payment) may be looked at only in the capture; never send requests to them yourself.
+- Browser-side code: take it from the user's build folder first. If there is none, have the user "Save as" or send the files. Then continue with `sourcemap_list.py` and [javascript-electron](javascript-electron.md).
+- Never replay requests, try logins, or scan for vulnerabilities unless agreed in the scope. Pass security testing work on to `security-engineer`.
+- For someone else's public web page, read only the page and scripts anyone can load, following that site's robots.txt and terms of use. Never enter parts of another party's site that need login.
+- On a CAPTCHA, do not solve it and do not look for a way around it. Let the user do it.
+- Check whether the machine has a browser and Playwright Core with `node scripts/check-tools.mjs --target web`. Letting Playwright click or fill in by itself needs asking every time, per [runtime-observation](runtime-observation.md).
 
-## 2 · ให้ผู้ใช้บันทึก HAR (HTTP Archive) เอง
+## 2 · Have the user record the HAR (HTTP Archive) themselves
 
-ผู้ใช้เป็นคนกด agent ไม่สั่งเบราว์เซอร์เอง:
+The user clicks; the agent does not drive the browser:
 
-1. เปิด DevTools (F12) → แท็บ Network → ติ๊ก "Preserve log"
-2. ทำขั้นตอนที่ต้องการดู 1 รอบ
-3. คลิกขวาในรายการ → "Save all as HAR" (Chrome · Edge) แล้ววางไฟล์ไว้ใน `_to_delete/re/<ชื่อ>/`
+1. Open DevTools (F12) → Network tab → tick "Preserve log"
+2. Do the steps to be observed, once
+3. Right-click in the list → "Save all as HAR" (Chrome · Edge), then put the file in `_to_delete/re/<ชื่อ>/`
 
-**HAR มี cookie token และข้อมูลส่วนตัวเต็ม ๆ** ให้ถือเป็นความลับ เก็บใน `_to_delete/` ไม่ commit ไม่ส่งต่อ และบอกผู้ใช้ให้ลบเมื่อจบงาน · ถ้าใช้ session จริง แนะนำให้ผู้ใช้ logout หลังบันทึก เพื่อให้ token ในไฟล์หมดอายุ
+**A HAR holds cookies, tokens and personal data in full.** Treat it as a secret: keep it in `_to_delete/`, never commit it, never pass it on, and tell the user to delete it when the job ends. If a real session was used, advise the user to log out after recording so the tokens in the file expire.
 
-### 2.1 · บันทึก HAR ด้วยสคริปต์ มี 3 กับดัก (ตัวอย่างจากงานนั้น: เว็บค้นเที่ยวบิน)
+### 2.1 · Recording a HAR with a script: 3 traps (example from that job: a flight search site)
 
-| กับดัก | อาการ | ทางแก้ |
+| Trap | Symptom | Fix |
 |---|---|---|
-| URL มีตัว `\|` ที่ยังไม่ encode (เช่น Google Fonts) | เครื่องมืออ่าน HAR ปฏิเสธไฟล์ดิบ: `HAR schema validation failed ... must match format "uri"` | แปลง `\|` เป็น `%7C` แล้วเขียนเป็นไฟล์ใหม่ ไม่แก้ไฟล์ดิบ |
-| คำขอแบบ stream ที่หน้าเว็บยกเลิกเองเมื่อได้ข้อมูลครบ | HAR ไม่มี body ของคำขอนั้น | ให้สคริปต์เก็บข้อมูลที่ไหลเข้ามาผ่าน CDP (Chrome DevTools Protocol) แล้วเติมลง HAR · เขียนใน `_comment` ของรายการนั้นว่าเติมเอง ไม่ใช่มาจาก HAR ตรง ๆ |
-| Playwright 1.64.1 หา ffmpeg ที่ต้องใช้ไม่เจอ (ในเครื่องมีแค่ ffmpeg-1011) | อัดวิดีโอไม่ได้ | ผูกไว้ที่ 1.64.0-alpha และจดเวอร์ชันลงสมุดหลักฐาน |
+| A URL has an unencoded `\|` (for example Google Fonts) | HAR reading tools reject the raw file: `HAR schema validation failed ... must match format "uri"` | Convert `\|` to `%7C` and write a new file; do not edit the raw file |
+| A streaming request the page cancels itself once it has all the data | The HAR has no body for that request | Have the script collect the incoming data through CDP (Chrome DevTools Protocol) and fill it into the HAR · write in that entry's `_comment` that it was added manually, not from the HAR directly |
+| Playwright 1.64.1 cannot find the ffmpeg it needs (the machine only has ffmpeg-1011) | Cannot record video | Pin to 1.64.0-alpha and record the version in the evidence ledger |
 
-## 3 · สรุป HAR
+## 3 · Summarize a HAR
 
 ```bash
 python -I scripts/har_summary.py <capture.har>                       # ทั้งไฟล์
 python -I scripts/har_summary.py <capture.har> --host api.example.com # เฉพาะ host เดียว
 ```
 
-ได้: host และจำนวนครั้ง · status code · endpoint จัดกลุ่มตาม method + host + รูปแบบ path (เลข id และ uuid กลายเป็น `{id}`) · ชื่อ query parameter · ชนิดข้อมูลที่ตอบ · วิธียืนยันตัวตน
+It reports: hosts and counts · status codes · endpoints grouped by method + host + path pattern (id numbers and uuids become `{id}`) · query parameter names · response content types · authentication method
 
-- ค่าของ header cookie และ query **ถูกตัดทิ้งทั้งหมด** เหลือแค่ชื่อและคำนำหน้าอย่าง `Bearer` `Basic` · ผลจึงแปะในรายงานได้
-- การจัดกลุ่ม path เป็น `อนุมาน` ไม่ใช่ schema ของ server · endpoint ที่ไม่ได้กดใน capture ถือว่ายังไม่รู้ ไม่ใช่ไม่มี
-- ต้องดู body ของ request หรือ response ให้เปิด HAR อ่านเฉพาะ entry ที่ต้องการ แล้วเขียนแต่โครง (ชื่อ field · ชนิด) ลงรายงาน ไม่ใช่ค่า
+- Values of cookie headers and queries are **dropped entirely**, leaving only names and prefixes like `Bearer` `Basic`. So the output can be pasted into a report.
+- The path grouping is `อนุมาน` (inferred), not the server's schema. An endpoint not clicked in the capture is unknown, not absent.
+- To see a request or response body, open the HAR and read only the entries needed, then write only the structure (field names · types) in the report, not the values.
 
-## 4 · ไฟล์ pcap (packet capture)
+## 4 · pcap files (packet capture)
 
-ใช้ Wireshark หรือ tshark ที่ผู้ใช้ติดตั้งจาก wireshark.org (ตรวจด้วย `node scripts/check-tools.mjs --target network`) · การอ่านไฟล์ที่บันทึกแล้วไม่ต้องถามซ้ำ แต่การดักทราฟฟิกสดต้องถามทุกครั้ง · สิทธิ์อ่านไฟล์ที่บันทึกไว้ไม่ได้รวมสิทธิ์ดักใหม่ และห้ามดักหรือถอดรหัสทราฟฟิกของคนอื่น
+Use Wireshark or tshark that the user installed from wireshark.org (check with `node scripts/check-tools.mjs --target network`). Reading an already recorded file needs no repeated asking, but capturing live traffic needs asking every time. Permission to read a saved file does not include permission to capture anew, and never capture or decrypt anyone else's traffic.
 
 ```bash
 tshark -r <file.pcap> -q -z conv,tcp          # ใครคุยกับใคร
@@ -1058,24 +1060,24 @@ tshark -r <file.pcap> -Y dns -T fields -e dns.qry.name | sort | uniq -c | sort -
 tshark -r <file.pcap> -Y 'tls.handshake.type == 1' -T fields -e tls.handshake.extensions_server_name | sort -u
 ```
 
-- ใส่ display filter (`-Y`) ให้แคบเฉพาะ host หรือ port ของเป้าหมายตั้งแต่แรก ไม่เปิดไฟล์ใหญ่ทั้งไฟล์
+- Put in a display filter (`-Y`) narrowed to the target's host or port from the start. Do not open a whole large file.
 
-- TLS ที่ไม่มี key log อ่านได้แค่ชื่อ host (SNI) และขนาด · อย่าอ้างว่าเห็นเนื้อหา
-- SAZ ของ Fiddler เป็น ZIP ที่มีไฟล์ request/response แยก แตกด้วย `python -m zipfile -e` แล้วอ่านทีละไฟล์
+- TLS without a key log shows only the host name (SNI) and sizes. Never claim to have seen the content.
+- A Fiddler SAZ is a ZIP holding separate request/response files. Extract it with `python -m zipfile -e` and read one file at a time.
 
-## 5 · ดักทราฟฟิกใหม่ผ่าน proxy (mitmproxy)
+## 5 · Capturing new traffic through a proxy (mitmproxy)
 
-ใช้เมื่อไม่มี capture ที่บันทึกไว้ และต้องเห็น request ของแอปที่ไม่ใช่เบราว์เซอร์ · ต้องถามผู้ใช้ทุกครั้ง โดยบอกแอป อุปกรณ์ และช่วงเวลาที่จะดัก
+Use when there is no saved capture and you must see the requests of a non-browser app. Ask the user every time, stating the app, the device and the time window to capture.
 
-- ใช้กับระบบหรือบัญชีทดสอบที่ได้รับอนุญาตเท่านั้น ไม่ใช้บัญชีจริงที่มีข้อมูลลูกค้า
-- บอกผลข้างเคียงก่อนเริ่ม: ต้องติดตั้งใบรับรอง CA ของ mitmproxy ลงเครื่องหรืออุปกรณ์ และต้องตั้ง proxy · แอปที่ตรึงใบรับรองไว้ (certificate pinning) จะเชื่อมต่อไม่ได้ ให้จดเป็นสิ่งที่ยังไม่รู้ ห้ามแก้แอปเพื่อเลี่ยง
-- บันทึกผลลงไฟล์ด้วย `mitmdump -w _to_delete/re/<ชื่อ>/flows.mitm` แล้วอ่านเฉพาะส่วน
-- จบงานแล้วคืนค่าทุกอย่าง: ถอดใบรับรอง CA · ปิด proxy · จดลงสมุดหลักฐานว่าคืนค่าแล้ว
-- ไฟล์ flow มี cookie และ token เหมือน HAR ให้ดูแลแบบเดียวกับหัวข้อ 2
+- Use only on authorized test systems or accounts, never real accounts holding customer data.
+- State the side effects before starting: the mitmproxy CA certificate must be installed on the machine or device, and a proxy must be set. An app with certificate pinning will not connect; record that as an unknown and never modify the app to get around it.
+- Save the results to a file with `mitmdump -w _to_delete/re/<ชื่อ>/flows.mitm`, then read only parts.
+- At the end, restore everything: remove the CA certificate · turn off the proxy · record in the evidence ledger that it was restored.
+- A flow file holds cookies and tokens like a HAR. Handle it the same way as section 2.
 
-## 6 · โปรโตคอลที่ไม่รู้จัก
+## 6 · Unknown protocols
 
-1. เก็บตัวอย่างอย่างน้อย 3 ชุดที่ต่างกันทีละอย่าง (ค่าเดียวเปลี่ยน)
-2. เทียบ byte ต่อ byte หา header · ความยาว · ตัวนับ · checksum
-3. เขียน parser ที่เช็กขนาดก่อนอ่านทุกครั้ง แล้วรันกับตัวอย่างทั้งหมด · ผลตรงทุกชุดจึงติด `ตรวจจริง`
-4. ค่าที่เห็นค่าเดียวในทุกตัวอย่าง จดเป็นสิ่งที่ยังไม่รู้ ไม่ตั้งชื่อให้เอง
+1. Collect at least 3 samples that differ one thing at a time (one value changed).
+2. Compare byte by byte to find headers · lengths · counters · checksums.
+3. Write a parser that checks size before every read, then run it on all the samples. Only when every sample matches, label it `ตรวจจริง` (verified).
+4. For a value that is the same in every sample, record it as an unknown. Do not name it yourself.

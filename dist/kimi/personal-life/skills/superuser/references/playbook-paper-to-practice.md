@@ -1,16 +1,16 @@
-# playbook · paper-to-practice — จาก paper หรือบทความ สู่โค้ดที่รันได้
+# playbook · paper-to-practice — from a paper or article to code that runs
 
-ใช้เมื่อ: อยากเข้าใจ paper · RFC · บทความยาว จนใช้งานได้
-skill หลัก: `paper-to-practice` · `english-tech-reading`
+Use when: the user wants to understand a paper · RFC · long article well enough to use it.
+Main skill: `paper-to-practice` · `english-tech-reading`
 
-## ขั้นตอน (คัดลง todo ตรงตัว)
+## ขั้นตอน (Steps — copy into the todo as written)
 
-1. อ่านส่วน abstract · ข้อเสนอหลัก · ผลทดลอง แล้วเขียนแนวคิดหลักเป็นภาษาง่าย 3 ประโยค · ใคร: `tech-mentor` ตัวใหม่
-2. ถ้าเจอศัพท์หรือประโยคยาก ให้ใช้ `english-tech-reading` และเวลาอ่าน RFC ให้ระวังความต่างของคำ MUST · SHOULD · MAY · ใคร: `tech-mentor` ตัวใหม่
-3. เขียนตัวอย่างโค้ดขนาดเล็กที่สุดที่แสดงแนวคิดหลัก ด้วยไลบรารีมาตรฐานก่อน · ใคร: `tech-mentor` ตัวใหม่
-4. รันจริง และทดลอง 1 กรณีที่แนวคิดนี้ใช้ไม่ได้ เพื่อเห็นขอบเขต · ใคร: `tech-mentor` ตัวใหม่เขียนและรันกรณีที่ใช้ไม่ได้ · `reviewer` ตัวใหม่รันซ้ำและตรวจผล
-5. เขียนบันทึกสั้นตามแม่แบบของ `paper-to-practice` — ใช้เมื่อไร ไม่ควรใช้เมื่อไร · ใคร: `tech-mentor` ตัวใหม่ · `reviewer` ตัวใหม่ตรวจกับผลที่รันจริง
+1. Read the abstract · main proposal · experiment results, then write the main idea in plain language in 3 sentences · ใคร: `tech-mentor` ตัวใหม่
+2. If there is a hard term or sentence, use `english-tech-reading`. When reading an RFC, watch the difference between MUST · SHOULD · MAY · ใคร: `tech-mentor` ตัวใหม่
+3. Write the smallest sample code that shows the main idea, using the standard library first · ใคร: `tech-mentor` ตัวใหม่
+4. Run it for real, and try 1 case where the idea does not work, to see its limits · ใคร: `tech-mentor` ตัวใหม่ writes and runs the failing case · `reviewer` ตัวใหม่ reruns it and ตรวจ the result
+5. Write a short note using the `paper-to-practice` template — when to use it, when not to · ใคร: `tech-mentor` ตัวใหม่ · `reviewer` ตัวใหม่ checks it against the real run
 
-## จบเมื่อ
+## Done when
 
-ตัวอย่างโค้ดรันผ่านพร้อมผล และบันทึก 1 หน้า
+The sample code runs and passes with its output, and there is a 1-page note.

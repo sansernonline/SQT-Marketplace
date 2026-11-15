@@ -1,21 +1,21 @@
-# แบบสำหรับโปรเจกต์ที่มี docs/BUILD-PLAN.md
+# Format for projects that have docs/BUILD-PLAN.md
 
-ย้ายมาจาก `SKILL.md` ข้อ 3 · เปิดเมื่อโปรเจกต์มี `docs/BUILD-PLAN.md`
+Moved from `SKILL.md` item 3 · open it when the project has `docs/BUILD-PLAN.md`
 
-เขียน 2 หัวข้อนี้ในไฟล์นั้นแทน `CONTEXT.md` · ไม่มีไฟล์ → สร้างไฟล์ที่มีแค่ชื่อโปรเจกต์ แล้ว copy จาก [`assets/build-plan-status.md`](../assets/build-plan-status.md) (ห้ามแต่งโครงเอง) · **ห้ามแตะตารางงานหรือหัวข้ออื่น**
-ลำดับหัวข้อ: `## สถานะล่าสุด` → ตารางงาน → `## ประวัติสถานะ` → `## ตัดสินใจเอง` (`decision-log`)
+Write these 2 sections in that file instead of `CONTEXT.md` · no file → create a file holding only the project name, then copy from [`assets/build-plan-status.md`](../assets/build-plan-status.md) (never invent the structure) · **never touch the job table or other sections**
+Section order: `## สถานะล่าสุด` (latest status) → job table → `## ประวัติสถานะ` (status history) → `## ตัดสินใจเอง` (decisions made on your own, `decision-log`)
 
-- `## สถานะล่าสุด` — **เขียนทับทั้งหัวข้อ** ทุกครั้ง เป็นภาพปัจจุบันภาพเดียว
-- `## ประวัติสถานะ` — **เพิ่ม 1 บรรทัดบนสุด** ต่อ 1 งาน ไม่ลบของเดิม รูปแบบ `วันที่ เวลา · งาน · สถานะ · ผล · ทำ <agent> · ตรวจ <agent> · ค้างกี่ข้อ` (ถ้ารอบนั้นตัดสินใจเองต่อท้าย `· ตัดสินใจเอง <จำนวน>`)
+- `## สถานะล่าสุด` — **overwrite the whole section** every time, as the single current picture
+- `## ประวัติสถานะ` — **add 1 line at the very top** per job, never delete the old ones, in the format `วันที่ เวลา · งาน · สถานะ · ผล · ทำ <agent> · ตรวจ <agent> · ค้างกี่ข้อ` (date time · job · status · result · made by <agent> · checked by <agent> · how many items pending; if you decided anything on your own that round, append `· ตัดสินใจเอง <count>`)
 
-หัวข้อ `## สถานะล่าสุด` มี: บรรทัดอัปเดต (วันที่เวลา · งานล่าสุด) · **ภาพรวม** (เสร็จ N/ทั้งหมด · ทำอยู่ · ติด · ไม่ผ่านตรวจ — นับจากตารางและต้องตรงกัน) · ตาราง `| รายการ | ประเภท | สถานะ | ใครทำ | ใครตรวจ | ผลตรวจ | ค้าง / หมายเหตุ |` · **ทีมตอนนี้** (1 แถวต่อ agent ที่ใช้รอบนี้ · ไม่มี subagent ไม่ต้องใส่ · เริ่มรอบใหม่ล้างแถวเก่า) · ค้างอยู่ · รออนุมัติ · ถัดไป (ไม่เกิน 3) · ข้อเสนอ
+Section `## สถานะล่าสุด` holds: an update line (date and time · latest job) · **ภาพรวม** (overview: done N/total · in progress · blocked · failed check — counted from the table and must match) · a table `| รายการ | ประเภท | สถานะ | ใครทำ | ใครตรวจ | ผลตรวจ | ค้าง / หมายเหตุ |` (item · type · status · made by · checked by · check result · pending / note) · **ทีมตอนนี้** (team now: 1 row per agent used this round · no subagent, leave it out · starting a new round clears the old rows) · ค้างอยู่ (pending) · รออนุมัติ (awaiting approval) · ถัดไป (next, at most 3) · ข้อเสนอ (proposals)
 
-| คอลัมน์ | ค่าที่ใช้ได้ |
+| Column | Allowed values |
 |---|---|
-| ประเภท | `เอกสาร` · `ตรวจ` · `ส่งมอบ` · `โค้ด` · `build` |
-| สถานะ (เอกสาร) | `ยังไม่เริ่ม` · `Draft` · `Review` · `Approved` · `Archived` (ชุดเดียวกับ `polished-document-style`) — `Approved` มีแต่คนที่เปลี่ยนได้ agent ตั้งได้สูงสุด `Review` |
-| สถานะ (อื่น ๆ) | 5 คำใน `SKILL.md` ข้อ 2 |
-| ผลตรวจ | `ผ่าน — <หลักฐาน>` · `ไม่ผ่าน — <สิ่งที่ไม่ผ่าน>` · `ยังไม่ได้ตรวจ` · `—` |
+| ประเภท (type) | `เอกสาร` (document) · `ตรวจ` (check) · `ส่งมอบ` (delivery) · `โค้ด` (code) · `build` |
+| สถานะ (status), documents | `ยังไม่เริ่ม` (not started) · `Draft` · `Review` · `Approved` · `Archived` (the same set as `polished-document-style`) — `Approved` belongs only to someone who can change it, and an agent may set at most `Review` |
+| สถานะ (status), others | the 5 words in `SKILL.md` item 2 |
+| ผลตรวจ (check result) | `ผ่าน — <evidence>` · `ไม่ผ่าน — <what failed>` · `ยังไม่ได้ตรวจ` · `—` |
 
-ตารางมีทุกรายการของโปรเจกต์ ไม่ใช่แค่งานรอบนี้ (รายการที่ไม่ได้แตะคัดลอกค่าเดิม) ไม่เกิน 25 แถว
-งานโค้ด (ตัวอย่างตารางเต็ม · ประเภท `build`/`ส่งมอบ` · หลักฐานแอปมือถือ) → ส่วนเพิ่มใน plugin `software-development` → `superuser` → `references/code-extensions.md`
+The table holds every item of the project, not just this round's work (items not touched copy their old values), at most 25 rows
+Code work (a full example table · type `build`/`ส่งมอบ` · mobile app evidence) → the extension in plugin `software-development` → `superuser` → `references/code-extensions.md`

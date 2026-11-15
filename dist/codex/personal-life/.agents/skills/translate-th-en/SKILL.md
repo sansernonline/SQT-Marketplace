@@ -3,86 +3,86 @@ name: translate-th-en
 description: Use when translating Thai and English or syncing files
 ---
 
-# translate-th-en — แปลไทย-อังกฤษให้อ่านเหมือนเขียนในภาษานั้นตั้งแต่แรก
+# translate-th-en — translate Thai-English so it reads as if written in that language from the start
 
-อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies` · ถ้อยคำของผลแปลเขียนตาม `human-writing` · ที่นี่มีเฉพาะกฎที่ `human-writing` ยังไม่มี ไม่เขียนซ้ำ
+Lives only in plugin `superuser`; other plugins share it through `dependencies` · wording of the translation follows `human-writing` · this file holds only rules `human-writing` does not have, and does not repeat it
 
-> **กฎข้อเดียว:** แปลความหมายทีละย่อหน้า ไม่แปลคำทีละคำ · 1 ศัพท์ = 1 คำแปลทั้งโปรเจกต์ จดไว้ใน `docs/glossary.md`
+> **One rule:** translate meaning one paragraph at a time, not word by word · 1 term = 1 translation across the whole project, recorded in `docs/glossary.md`
 
-## ใช้เมื่อ
+## Use when
 
-- แปลเอกสาร README คู่มือ ข้อเสนอ อีเมล หรือแชต จากไทยเป็นอังกฤษ หรืออังกฤษเป็นไทย
-- แปลข้อความหน้าจอ (ปุ่ม · ป้าย · error · แจ้งเตือน) ลงไฟล์ภาษา
-- โปรเจกต์มีไฟล์คู่ไทย/อังกฤษ และต้องแก้ให้ตรงกัน
+- Translating a document, README, manual, proposal, email or chat from Thai to English, or English to Thai
+- Translating screen text (buttons · labels · errors · notifications) into language files
+- The project has paired Thai/English files that must be edited to match
 
-ไม่ใช้เมื่อ: เขียนใหม่ในภาษาเดียว → `human-writing` · เก็บและแสดงวันที่ ตัวเลข เงินในโค้ด → `i18n-and-locale` (plugin `software-development`)
+Do not use when: writing fresh in one language → `human-writing` · storing and showing dates, numbers, money in code → `i18n-and-locale` (plugin `software-development`)
 
-## ใช้ตัวอื่นแทนหรือคู่กัน
+## Use another skill instead, or together
 
-| งาน | ใช้ |
+| Task | Use |
 |---|---|
-| อังกฤษเป็นไทย — โครงประโยค สำนวน ท่า AI | `human-writing` `references/thai-grammar.md` หัวข้อ 7 (รายการตรวจ 7 ข้อ) · ระดับภาษาไทยเลือกจากหัวข้อ 4 ก่อนเลือกคำ ไม่แน่ใจเลือกทางการกว่าต้นทาง 1 ขั้น และไม่สลับระดับในย่อหน้าเดียว |
-| ทับศัพท์ ชื่อคนต่างชาติ ตัวย่อ | `thai-grammar` หัวข้อ 5 · `spell-out-abbreviations` |
-| ข้อความที่พูดยาก (ปฏิเสธ · ทวงเงิน) 2 ภาษา | `polite-message-th-en` |
-| รูปแบบวันที่ ตัวเลข สกุลเงิน ปี พ.ศ. ในระบบ | `i18n-and-locale` หัวข้อ 2–4 · เครื่องมือตัดคำและถอดเสียงไทย → `i18n-and-locale/references/thai-text-tools.md` |
-| CV · จดหมายสมัครงาน 2 ภาษา | `resume-th-en` (plugin `career`) |
+| English to Thai — sentence structure, idiom, AI habits | `human-writing` `references/thai-grammar.md` item 7 (the 7-point checklist) · pick the Thai register from item 4 before choosing words; if unsure, pick 1 step more formal than the source, and never switch register inside one paragraph |
+| Transliteration, foreign personal names, abbreviations | `thai-grammar` item 5 · `spell-out-abbreviations` |
+| Hard-to-say messages (refusal · debt reminder) in 2 languages | `polite-message-th-en` |
+| Date, number, currency, Buddhist Era (พ.ศ.) formats in a system | `i18n-and-locale` items 2–4 · Thai word-segmentation and transliteration tools → `i18n-and-locale/references/thai-text-tools.md` |
+| CV · job application letter in 2 languages | `resume-th-en` (plugin `career`) |
 
-## 1 · ไทยเป็นอังกฤษ — สิ่งที่ต้องเปลี่ยน ไม่ใช่แค่สลับคำ
+## 1 · Thai to English — what must change, not just swap words
 
-| ไทยมี อังกฤษไม่มี | ทำอย่างไร | ตัวอย่าง |
+| Thai has it, English does not | What to do | Example |
 |---|---|---|
-| คำท้าย ครับ ค่ะ นะ จ้ะ เลย | ตัดทิ้ง · ความสุภาพย้ายไปอยู่ที่น้ำเสียงประโยค (`please` ครั้งเดียว ไม่ซ้ำทุกประโยค) | `ส่งไฟล์ให้ด้วยนะคะ` → `Please send me the file.` |
-| ประธานละได้ | ใส่ประธานทุกประโยค · ดูจากบริบทว่าใคร ไม่แน่ใจ → `(รอยืนยัน)` ไม่เดา | `ส่งแล้ว` → `We sent it.` หรือ `I sent it.` |
-| คำนำหน้าและคำเรียก (คุณ · พี่ · ท่าน · อาจารย์ · นาย/นาง) | ใช้ `Mr`, `Ms`, `Dr` ตามตำแหน่งจริง · `พี่/น้อง` เป็นชื่อเฉย ๆ · `ท่าน` ในหนังสือราชการ → `you` หรือตำแหน่ง (`the Director`) | `พี่สมชายบอกว่า` → `Somchai said` |
-| ปี พ.ศ. | แปลงเป็น ค.ศ. (ลบ 543) ทุกครั้ง · วันที่ในเนื้อหาเขียน `15 November 2026` · ในชื่อไฟล์หรือข้อมูลที่เครื่องอ่าน `2026-11-15` | `ปีงบประมาณ 2569` → `fiscal year 2026` |
-| ชื่อคนไทย | ใช้ตัวสะกดที่เจ้าของชื่อใช้เอง (นามบัตร · อีเมล · LinkedIn) ก่อน · ไม่มี → ถอดตามหลักราชบัณฑิตยสภา (Royal Thai General System of Transcription: RTGS) แล้วติดป้าย `(รอยืนยัน)` · ชื่อเดียวสะกดเดียวทั้งชุด | `สันเสริญ` → `Sansern` (สะกดของเจ้าของ) ไม่ใช่ `Sansoen` |
-| ชื่อหน่วยงาน กฎหมาย แบบฟอร์ม | ใช้ชื่ออังกฤษทางการของหน่วยงานนั้น (ดูจากเว็บทางการ) · ไม่มี → ทับศัพท์แล้ววงเล็บคำแปล · ตัวย่อไทย (ภ.ง.ด. · สคบ.) เขียนเต็มครั้งแรก | `กรมสรรพากร` → `the Revenue Department` · `ภ.ง.ด.53` → `PND 53 (withholding tax return)` |
-| เงิน | `THB 1,500` หรือ `1,500 baht` แบบเดียวทั้งชุด · ไม่ใช้ `฿` ในเอกสารอังกฤษ | |
-| ประโยคยาวต่อด้วย ซึ่ง โดย จึง | แยกเป็น 2–3 ประโยค ประโยคละ 1 ความคิด ไม่เกิน 25 คำ | |
-| คำซ้ำเพื่อเน้น (ดี ๆ · เร็ว ๆ) และคำลงเสียง (จัง · มาก ๆ) | แปลเป็นคำเดียวที่ตรงระดับ หรือตัดถ้าไม่เปลี่ยนความหมาย | `รีบ ๆ หน่อยนะ` → `Please hurry.` |
+| Sentence-final particles ครับ ค่ะ นะ จ้ะ เลย | Drop them · politeness moves into the tone of the sentence (`please` once, not in every sentence) | `ส่งไฟล์ให้ด้วยนะคะ` → `Please send me the file.` |
+| The subject can be dropped | Put a subject in every sentence · work out who from context; if unsure → `(รอยืนยัน)` (awaiting confirmation), do not guess | `ส่งแล้ว` → `We sent it.` or `I sent it.` |
+| Titles and forms of address (คุณ · พี่ · ท่าน · อาจารย์ · นาย/นาง) | Use `Mr`, `Ms`, `Dr` by the real position · `พี่/น้อง` is just a name · `ท่าน` in an official letter → `you` or the position (`the Director`) | `พี่สมชายบอกว่า` → `Somchai said` |
+| Buddhist Era (พ.ศ.) years | Convert to Common Era (CE) (subtract 543) every time · in body text write dates as `15 November 2026` · in file names or machine-read data use `2026-11-15` | `ปีงบประมาณ 2569` → `fiscal year 2026` |
+| Thai personal names | Use the spelling the owner uses (business card · email · LinkedIn) first · none → transliterate by the Royal Institute's rule (Royal Thai General System of Transcription: RTGS) and tag `(รอยืนยัน)` (awaiting confirmation) · one name, one spelling across the set | `สันเสริญ` → `Sansern` (the owner's spelling), not `Sansoen` |
+| Names of agencies, laws, forms | Use that agency's official English name (check the official website) · none → transliterate and put the translation in brackets · Thai abbreviations (ภ.ง.ด. · สคบ.) are written in full the first time | `กรมสรรพากร` → `the Revenue Department` · `ภ.ง.ด.53` → `PND 53 (withholding tax return)` |
+| Money | `THB 1,500` or `1,500 baht`, one style across the set · do not use `฿` in English documents | |
+| A long sentence chained with ซึ่ง โดย จึง | Split into 2–3 sentences, 1 idea each, at most 25 words | |
+| Repeated words for emphasis (ดี ๆ · เร็ว ๆ) and softening words (จัง · มาก ๆ) | Translate as one word of the right strength, or drop it if the meaning does not change | `รีบ ๆ หน่อยนะ` → `Please hurry.` |
 
-เสร็จแล้วอ่านใหม่ทั้งย่อหน้า: ถ้าคนอังกฤษอ่านแล้วเดาได้ว่าต้นทางเป็นไทย (ประโยคไม่มีประธาน · `very` ซ้อน · `already` ปิดทุกประโยคแทน `แล้ว`) ให้เรียบเรียงใหม่ — กฎเดียวกับ `thai-grammar` หัวข้อ 7 ข้อ 7 แต่กลับทาง
+When done, reread the whole paragraph: if an English reader could guess that the source was Thai (sentences with no subject · stacked `very` · `already` closing every sentence in place of `แล้ว`), rewrite it — the same rule as `thai-grammar` item 7 point 7, but in the other direction.
 
-## 2 · Glossary ต่อโปรเจกต์ — `docs/glossary.md`
+## 2 · Glossary per project — `docs/glossary.md`
 
-- เปิดก่อนแปลทุกครั้ง · ไม่มี → สร้างจากศัพท์ที่เจอในงานชิ้นแรก
-- 1 ศัพท์ = 1 คำแปล = 1 ตัวสะกด ทั้งเอกสาร หน้าจอ และแชต · เจอคำเดิมแปลต่างกัน 2 แบบ → แก้ให้เหลือแบบเดียว ไม่ปล่อยไว้
-- ตาราง `| ไทย | English | ใช้เมื่อ · ไม่ใช้ |` · ใส่ชื่อสินค้า ชื่อหน้าจอ ชื่อฟีเจอร์ สถานะงาน และคำที่ตั้งใจไม่แปล (หัวข้อ 5)
-- โปรเจกต์โค้ดที่มี `locales/glossary.md` ตาม `i18n-and-locale` อยู่แล้ว ใช้ไฟล์นั้น ไม่สร้างซ้ำ · ใส่ลิงก์ไว้ที่ `docs/glossary.md` บรรทัดเดียว
+- Open it before every translation · none → create it from the terms found in the first piece of work
+- 1 term = 1 translation = 1 spelling across documents, screens and chat · if the same word is translated 2 ways, fix it to one, do not leave it
+- Table `| ไทย | English | ใช้เมื่อ · ไม่ใช้ |` (Thai | English | use when · do not use) · include product names, screen names, feature names, work statuses, and words deliberately left untranslated (item 5)
+- A code project that already has `locales/glossary.md` per `i18n-and-locale` uses that file and does not create another · put a one-line link in `docs/glossary.md`
 
-## 3 · ไฟล์คู่ — ไทยกับอังกฤษแก้รอบเดียวกัน
+## 3 · Paired files — edit Thai and English in the same round
 
-- ไฟล์ที่เป็นคู่กัน (`README.md` / `README.th.md` · `brd-th.md` / `brd-en.md` · `th.json` / `en.json`) แก้ครบทุกไฟล์ในรอบเดียว · แก้ข้างเดียวแล้วส่ง = งานยังไม่เสร็จ
-- ลำดับหัวข้อ เลขข้อ และจำนวนแถวในตารางต้องตรงกัน คนอ่านสลับไฟล์แล้วหาตำแหน่งเดิมเจอ · หัวข้อที่มีในภาษาเดียว ติดป้าย `(ยังไม่มีฉบับ EN)` ไม่ปล่อยให้หาย
-- ภาษาหลัก 1 ภาษา อีกภาษาแปลตาม · บอกไว้บรรทัดแรกของไฟล์แปลว่า `แปลจาก README.md รุ่น 2026-10-23` เพื่อให้รู้ว่าตามทันหรือยัง
-- ลิงก์ ชื่อไฟล์ รูป และโค้ดบล็อกเหมือนกันทั้ง 2 ไฟล์ ยกเว้นข้อความในรูปที่มีคนละภาษา
+- Files that are a pair (`README.md` / `README.th.md` · `brd-th.md` / `brd-en.md` · `th.json` / `en.json`) are all edited in the same round · editing one side and sending = the work is not done
+- Heading order, item numbers and the number of table rows must match, so a reader who switches files finds the same spot · a heading that exists in one language only is tagged `(ยังไม่มีฉบับ EN)` (no EN version yet) and not left to vanish
+- 1 main language, the other follows · say on the first line of the translated file `แปลจาก README.md รุ่น 2026-10-23` (translated from README.md version 2026-10-23) so people know whether it is up to date
+- Links, file names, images and code blocks are the same in both files, except text inside images that are in different languages
 
-## 4 · ข้อความหน้าจอ
+## 4 · Screen text
 
-- **งบความยาวต่อภาษา** — ไทยมักยาวกว่าอังกฤษ 20–40% ในความกว้างเท่ากัน (ยังไม่ได้ตรวจ ตัวเลขทั่วไป วัดจากหน้าจอจริงก่อนเชื่อ) · ปุ่มและป้ายเมนูตั้งงบเป็นจำนวนตัวอักษรต่อภาษา แล้วตัดด้วยการลดคำตาม `human-writing` หัวข้อ 3 ไม่ตัดคำทำหน้าที่
-- **ไม่ต่อสตริง** — ประโยคเต็มอยู่ในคีย์เดียว ใส่ตัวแทนค่า (`{count}` · `{name}`) ให้ย้ายตำแหน่งได้ เพราะลำดับคำไทยกับอังกฤษไม่เหมือนกัน (ตัวอย่างใน `i18n-and-locale` หัวข้อ 1)
-- **ตัวแทนค่าคงชื่อเดิม** ทั้ง 2 ภาษา · นับจำนวนตัวแทนค่าให้เท่ากันทุกคีย์ (`{count}` หายไปข้างหนึ่ง = บั๊ก) · ไฟล์ JSON ตรวจด้วย `node <โฟลเดอร์ skill นี้>/scripts/i18n-pair-check.mjs th.json en.json` ได้คีย์ขาด คีย์เกิน และตัวแทนค่าที่ไม่ตรงทุกคีย์ในรอบเดียว
-- พหูพจน์: อังกฤษมี 2 รูป ไทยรูปเดียว · ใช้กลไก plural ของไลบรารี ไม่เขียน `(s)`
-- ระดับภาษาไทยของหน้าจอ = แถว "หน้าจอ" ใน `thai-grammar` หัวข้อ 4 · อังกฤษใช้ sentence case กริยานำ (`Save` · `Send request`) ไม่ใช้ Title Case ทุกคำ
-- คีย์ตั้งตามที่อยู่และความหมาย (`order.status.shipped`) ไม่ตั้งตามข้อความอังกฤษ
+- **Length budget per language** — Thai is often 20–40% longer than English at the same width (not checked, a general figure, measure on a real screen before trusting) · for buttons and menu labels, set a budget as a character count per language, then cut by reducing words per `human-writing` item 3, never cutting function words
+- **Do not concatenate strings** — a full sentence lives in one key, with placeholders (`{count}` · `{name}`) that can move, because Thai and English word order differ (example in `i18n-and-locale` item 1)
+- **Placeholders keep the same name** in both languages · count the placeholders so they are equal in every key (`{count}` missing on one side = a bug) · check JSON files with `node <this skill's folder>/scripts/i18n-pair-check.mjs th.json en.json` to get missing keys, extra keys and mismatched placeholders for every key in one pass
+- Plurals: English has 2 forms, Thai has one · use the library's plural mechanism, do not write `(s)`
+- Thai register of screens = the "หน้าจอ" (screen) row in `thai-grammar` item 4 · English uses sentence case, verb first (`Save` · `Send request`), not Title Case on every word
+- Keys are named by place and meaning (`order.status.shipped`), not by the English text
 
-## 5 · ไม่แปล
+## 5 · Do not translate
 
-โค้ด ชื่อตัวแปร คำสั่ง path และข้อความในโค้ดบล็อก · ชื่อสินค้า ชื่อแบรนด์ ชื่อบริษัท (ใช้รูปที่เจ้าของใช้) · เลขข้อสัญญาและชื่อมาตรา (`ข้อ 7.2` คงเป็น `Clause 7.2` ไม่เรียงใหม่) · ชื่อกฎหมายและแบบฟอร์มทางการคงชื่อทางการ (หัวข้อ 1) · ชื่อไฟล์และ URL · ศัพท์ที่วงการใช้อังกฤษอยู่แล้ว (API · deploy · token — ตาม `thai-grammar` หัวข้อ 5) · คำที่ glossary ระบุว่าไม่แปล
+Code, variable names, commands, paths and text inside code blocks · product names, brand names, company names (use the form the owner uses) · contract clause numbers and section names (`ข้อ 7.2` stays `Clause 7.2`, not renumbered) · official names of laws and forms stay as the official name (item 1) · file names and URLs · terms the field already uses in English (API · deploy · token — per `thai-grammar` item 5) · words the glossary marks as untranslated
 
-## 6 · ตรวจก่อนส่ง 6 ข้อ
+## 6 · 6-point check before sending
 
-1. **ความหมายครบ** — ตัวเลข วันที่ เงื่อนไข ชื่อ และข้อยกเว้นในต้นทางอยู่ครบ ไม่เพิ่มคำออกตัวหรือคำสุภาพที่ต้นทางไม่มี (ไล่เทียบย่อหน้าต่อย่อหน้า)
-2. **ปีและเงิน** — พ.ศ. กับ ค.ศ. แปลงถูกทุกจุด · รูปแบบเงินและวันที่แบบเดียวทั้งชุด
-3. **Glossary** — ทุกศัพท์ในตารางใช้ตรงตาราง · ศัพท์ใหม่เพิ่มลงตารางแล้ว
-4. **ชื่อคนและหน่วยงาน** — สะกดตามเจ้าของหรือชื่อทางการ · ที่ยังไม่ยืนยันติด `(รอยืนยัน)`
-5. **อ่านเหมือนเขียนในภาษานั้น** — อ่านออกเสียงทั้งย่อหน้า · อังกฤษ: ประธานครบ ประโยคไม่เกิน 25 คำ · ไทย: ผ่านรายการ `thai-grammar` หัวข้อ 7 และรัน `human-writing/scripts/thai_tells.py`
-6. **ไฟล์คู่และหน้าจอ** — ไฟล์คู่แก้ครบ ลำดับหัวข้อตรง · สตริงหน้าจอตัวแทนค่าเท่ากันทุกคีย์ และไม่เกินงบความยาว
+1. **Meaning complete** — numbers, dates, conditions, names and exceptions in the source are all there, and no hedging or polite words are added that the source does not have (compare paragraph by paragraph)
+2. **Years and money** — Buddhist Era to Common Era converted correctly everywhere · one style for money and dates across the set
+3. **Glossary** — every term in the table is used exactly as in the table · new terms are added to the table
+4. **Names of people and agencies** — spelled as the owner or the official name · unconfirmed ones tagged `(รอยืนยัน)` (awaiting confirmation)
+5. **Reads as if written in that language** — read the whole paragraph aloud · English: every subject present, sentences at most 25 words · Thai: passes the `thai-grammar` item 7 checklist and run `human-writing/scripts/thai_tells.py`
+6. **Paired files and screens** — paired files all edited, heading order matches · screen strings have equal placeholders in every key and stay within the length budget
 
-ส่งงาน: ไฟล์ที่แปล · glossary ที่อัปเดต · รายการ `(รอยืนยัน)` แยกหัวข้อ · ไม่แปะต้นทางกลับมาในคำตอบ
+Deliver: the translated files · the updated glossary · the `(รอยืนยัน)` list under its own heading · do not paste the source back into the answer
 
-## ที่มา
+## Sources
 
-- แนวคิด "เลือกระดับภาษาและความสัมพันธ์ก่อนเลือกคำ · คำท้าย ครับ/ค่ะ ไม่มีคู่ในอังกฤษ · สรรพนาม I/you ไม่มีคำแปล 1 ต่อ 1 · คำไหนคงอังกฤษ" ปรับมาจาก `thai-translate` และเครื่องมือตัดคำ ถอดเสียง จัดเรียงจาก `thai-text-processing` ใน [Boom-Vitt/claude-thai-skills](https://github.com/Boom-Vitt/claude-thai-skills) (MIT · เรียบเรียงใหม่ ไม่คัดลอก · ดู 2026-10-23) · ส่วนปี พ.ศ. ชื่อคน ไฟล์คู่ และข้อความหน้าจอ ไม่มีในต้นทาง เขียนเพิ่มเอง
-- หลักเกณฑ์การถอดอักษรไทยเป็นโรมัน (RTGS) — ราชบัณฑิตยสภา ฉบับ พ.ศ. 2542 (ยังไม่ได้ตรวจจากราชกิจจานุเบกษาฉบับจริง)
-- กฎอังกฤษเป็นไทย ระดับภาษา และทับศัพท์ — `human-writing/references/thai-grammar.md` หัวข้อ 4 5 7 (ไฟล์ใน repo นี้ ไม่เขียนซ้ำ)
+- The idea "choose the register and the relationship before choosing words · the final particles ครับ/ค่ะ have no English counterpart · the pronouns I/you have no 1-to-1 translation · which words stay English" is adapted from `thai-translate`, and the word-segmentation, transliteration and sorting tools from `thai-text-processing`, in [Boom-Vitt/claude-thai-skills](https://github.com/Boom-Vitt/claude-thai-skills) (MIT · reworded, not copied · seen 2026-10-23) · the parts on Buddhist Era years, personal names, paired files and screen text are not in the source and were written fresh
+- Rules for transcribing Thai letters into Roman (RTGS) — Royal Society of Thailand, 1999 edition (B.E. 2542) (not checked against the real Royal Gazette issue)
+- English-to-Thai rules, register, and transliteration — `human-writing/references/thai-grammar.md` items 4 5 7 (a file in this repo, not repeated)
