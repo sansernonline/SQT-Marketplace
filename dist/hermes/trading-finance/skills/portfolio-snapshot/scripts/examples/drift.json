@@ -1,0 +1,8 @@
+{
+  "_note": "rebalance-and-dca worked example · target in % (sums to 100) · bandPoints 5 and maxMonths 12 are starting values, not yet measured",
+  "holdings": { "Equity": 780000, "Bonds": 320000 },
+  "target": { "Equity": 60, "Bonds": 40 },
+  "monthlyDca": 10000,
+  "bandPoints": 5,
+  "maxMonths": 12
+}

@@ -1,0 +1,90 @@
+---
+name: personal-kb
+description: Use when building a personal knowledge base
+---
+
+# Personal KB (คลังความรู้ส่วนตัว)
+
+A knowledge base works only if search finds the note in ten seconds. Plain Markdown files, so it survives any app change. When a notes plugin or app (Obsidian, Notion, Apple Notes) is installed, write there and keep this as the naming and tagging convention.
+
+## Layout
+
+```
+kb/
+  index.md            ← evergreen notes by category, refreshed monthly
+  names.md            ← short decoder of nicknames, relatives and home words (≤ 100 lines)
+  inbox/              ← quick captures, emptied weekly
+  people/             ← one note per person (context, last talk, preferences)
+  projects/           ← one folder per active project; archive when done
+  reference/          ← how-tos, recipes, manuals, addresses, procedures
+  journal/            ← dated notes, meeting notes, weekly reviews
+  archive/
+```
+
+Two levels deep at most. A note's home is decided in two seconds: *is it about a person, a project, a reusable fact, or a day?*
+
+## Naming
+
+| Kind | Pattern | Example |
+|---|---|---|
+| Dated | `YYYY-MM-DD topic.md` | `2026-10-06 condo committee.md` |
+| Evergreen | `topic.md` — noun first | `aircon service – Daikin bedroom.md` |
+| Person | `firstname lastname.md` (plus Thai name in the note) | `ploy srisuk.md` |
+
+## The Thai search problem
+
+Thai has no spaces between words, so many tools match Thai words badly ("ภาษี" may not find "ภาษีเงินได้" in some apps, or finds too much). Fix:
+
+- **File names in English or transliteration** (`tax 2569 deductions.md`), Thai content inside
+- **Tags line at the top in both languages**: `tags: #tax #ภาษี #ลดหย่อน #deduction`
+- **One spelling** — pick `Ploy` not `Ploi/พลอย/Ploy S.` and keep an alias line: `aliases: พลอย, Ploi`
+- Dates always ค.ศ. `YYYY-MM-DD` in names — sorting and search break with mixed พ.ศ./ค.ศ.
+
+### `names.md` — the decoder read first
+
+Thai family talk is full of nicknames and kin words that match no file name ("ป้าน้อย" · "บ้านสวน" · "พี่หมู ที่ทำงาน"). Keep one short file, read before any search:
+
+```markdown
+ป้าน้อย = พี่สาวแม่ · ชื่อจริง สมศรี · → people/somsri.md
+บ้านสวน = ที่ดินราชบุรี · → reference/ratchaburi land.md
+พี่หมู = หัวหน้าทีมบัญชี (งาน) · → people/kittipong.md
+```
+
+Keep it under about 100 lines. A name used every week goes up here; one not used for months moves down into its people note's `aliases:` line. Never put ID numbers, phone numbers or health details in it.
+
+## Note template
+
+```markdown
+# [Title]
+tags: #area #คำไทย
+aliases: [other names people use]
+source: [link / book / person] · created YYYY-MM-DD
+
+[One idea, in your own words. Max ~1 screen.]
+
+Related: [[other note]]
+```
+
+## Workflow
+
+1. **Capture (< 1 minute)** — drop into `kb/inbox/` with a dated name; formatting optional.
+2. **Weekly sort (10 minutes, in `weekly-review`)** — for each inbox note: delete · merge into an existing note · file it with a proper name and tags.
+3. **Split** notes over one screen into one-idea notes and link them.
+4. **Index and lint monthly** — add new evergreen notes to `kb/index.md` under their category, then run the lint: notes with no `tags:` line (`grep -rL '^tags:' kb --include=*.md`) · inbox notes older than 14 days · two notes with the same title · `[[links]]` to notes that do not exist · people notes with no "last talk" date. Fix or delete each hit in the same sitting; a lint list that is carried over is a to-do list, not a knowledge base.
+5. **Retrieval** — decode the words with `names.md` first, then search by file name, then tags, then full text. When a note was hard to find, rename it or add the alias you searched for — that is the maintenance loop.
+6. **Answering from notes** — every answer names the note and its date ("จาก `2025-05-11 notes.md`"). A note used for a status (who is doing what, a balance, a booking) that is older than 1 month, or for a fact older than 1 year, gets the line "โน้ตนี้อายุ … อาจเปลี่ยนแล้ว". **Two notes that disagree → show both with their dates**; never pick one silently.
+
+## Worked example
+
+User: "I wrote down how to reset the water pump last year." Search `pump` → nothing; full-text `ปั๊ม` → 14 hits in chat exports. Found it in `2025-05-11 notes.md`, mixed with a shopping list. Fix: move into `reference/water pump – reset and service.md`, tags `#home #ปั๊มน้ำ #pump`, alias "Mitsubishi pump", link from `index.md` under Home. Next search: 2 seconds.
+
+## Rules
+
+- Capture is fast; organisation happens weekly, not at capture time
+- **Never store passwords, OTPs, recovery codes, full ID or card numbers** — they go to a password manager (`digital-hygiene`)
+- Notes about other people: facts and preferences they shared with you, not gossip or health details they did not want written
+- Back up the `kb/` folder with the rest of the user's files (3-2-1 rule in `digital-hygiene`)
+
+Source for `names.md` and the answering rules: ideas from anthropics/knowledge-work-plugins `productivity/skills/memory-management` and `enterprise-search/skills/knowledge-synthesis` (Apache-2.0, rewritten, viewed 2026-11-10).
+
+Related: `meeting` (Leg 2 summaries file into `journal/`) · `important-docs` (documents, not notes) · `weekly-review`.

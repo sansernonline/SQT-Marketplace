@@ -10,6 +10,7 @@
 | OpenAI Codex CLI | `codex/<plugin>/` | คัดลอกเนื้อในโฟลเดอร์ไปไว้รากโปรเจกต์ |
 | Gemini CLI | `gemini-cli/<plugin>/` | `gemini extensions install <โฟลเดอร์>` |
 | Kimi Code CLI | `kimi/<plugin>/` | `/plugins install <โฟลเดอร์>` ในหน้าจอ Kimi |
+| Hermes Agent | `hermes/<plugin>/` | ใส่ `<โฟลเดอร์>/skills` ใน `skills.external_dirs` ของ `~/.hermes/config.yaml` แล้ว `/reload-skills` · คัด `HERMES.md` ไปรากโปรเจกต์ถ้าต้องการบริบท |
 | ChatGPT Custom GPT / Gemini Gem | `chat-web/<plugin>/<บทบาท>/` | ดู `chat-web/README.md` |
 
 | plugin | รุ่น | skill | บทบาท | คำสั่ง | ขนาด zip |
@@ -21,4 +22,6 @@
 | `superuser` | 3.42.0 | 39 | 4 | 0 | 1.0 MB |
 | `trading-finance` | 0.22.0 | 62 | 9 | 1 | 1.1 MB |
 
-ไฟล์ .zip ภายใน skill (เช่นคลังไอคอน) ไม่อยู่ใน `claude-web/` เพราะหน้าเว็บแตกไฟล์ไม่ได้ · ชุด codex · gemini-cli · kimi มีครบ
+ไฟล์ .zip ภายใน skill (เช่นคลังไอคอน) ไม่อยู่ใน `claude-web/` เพราะหน้าเว็บแตกไฟล์ไม่ได้ · ชุด codex · gemini-cli · kimi · hermes มีครบ
+
+Hermes: อย่าวางใน `.hermes/skills` ของโปรเจกต์ ตัวสแกนของ Hermes กัก skill `superuser` ไว้ (อ่านรายการคำสั่งที่ด่าน guard ห้าม เช่น `rm -rf` ว่าเป็นคำสั่งอันตราย และไฟล์เกิน 50 ไฟล์) · `skills.external_dirs` ไม่ผ่านตัวสแกนนี้ (ตรวจกับ Hermes v0.23.1 วันที่ 2026-11-15) · skill กลางอยู่ในทุก plugin ใส่หลาย plugin แล้วชื่อซ้ำ Hermes จะเลือกตัวเดียว

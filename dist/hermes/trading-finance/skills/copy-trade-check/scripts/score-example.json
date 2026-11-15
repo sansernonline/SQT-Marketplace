@@ -1,0 +1,101 @@
+{
+  "_note": "ตัวอย่าง (ตัวเลขสมมติ): เทียบผู้ให้สัญญาณ MQL5 · กฎเหล็กตัดก่อน · ไม่ใช้ Growth เป็นเกณฑ์ · flag martingale ของ GoldRush Pro ใส่จากการเดาเพราะยังไม่มีประวัติ",
+  "criteria": [
+    {
+      "name": "Sharpe",
+      "weight": 0.3,
+      "better": "high"
+    },
+    {
+      "name": "Equity drawdown %",
+      "weight": 0.3,
+      "better": "low"
+    },
+    {
+      "name": "Recovery factor",
+      "weight": 0.2,
+      "better": "high"
+    },
+    {
+      "name": "Weeks",
+      "weight": 0.2,
+      "better": "high"
+    }
+  ],
+  "must": [
+    {
+      "criterion": "Real (1 = real)",
+      "equals": 1
+    },
+    {
+      "criterion": "Weeks",
+      "min": 26
+    },
+    {
+      "criterion": "Trades",
+      "min": 30
+    },
+    {
+      "criterion": "Max deposit load %",
+      "max": 30
+    },
+    {
+      "criterion": "Martingale or grid flag (1 = yes)",
+      "equals": 0
+    }
+  ],
+  "options": [
+    {
+      "name": "GoldRush Pro",
+      "values": {
+        "Sharpe": 0.9,
+        "Equity drawdown %": 78,
+        "Recovery factor": 1.6,
+        "Weeks": 14,
+        "Real (1 = real)": 1,
+        "Trades": 410,
+        "Max deposit load %": 92,
+        "Martingale or grid flag (1 = yes)": 1
+      }
+    },
+    {
+      "name": "Steady EU",
+      "values": {
+        "Sharpe": 0.21,
+        "Equity drawdown %": 14,
+        "Recovery factor": 4.1,
+        "Weeks": 104,
+        "Real (1 = real)": 1,
+        "Trades": 620,
+        "Max deposit load %": 12,
+        "Martingale or grid flag (1 = yes)": 0
+      }
+    },
+    {
+      "name": "Swing FX",
+      "values": {
+        "Sharpe": 0.35,
+        "Equity drawdown %": 33,
+        "Recovery factor": 2.2,
+        "Weeks": 40,
+        "Real (1 = real)": 0,
+        "Trades": 95,
+        "Max deposit load %": 25,
+        "Martingale or grid flag (1 = yes)": 0
+      }
+    },
+    {
+      "name": "Calm Yen",
+      "values": {
+        "Sharpe": 0.28,
+        "Equity drawdown %": 22,
+        "Recovery factor": 3.0,
+        "Weeks": 60,
+        "Real (1 = real)": 1,
+        "Trades": 240,
+        "Max deposit load %": 18,
+        "Martingale or grid flag (1 = yes)": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+reverse-engineering skill — third-party notice
+
+Some workflow ideas in this skill (authorization record before opening a target,
+evidence ledger with observation / inference / unknown labels, keeping scope on the
+declared target, per-target playbooks, asking before anything runs the target) are
+adapted from the skill ".agents/skills/reverse-engineer-anything" of
+REA (Reverse Engineer Anything), https://github.com/morluto/rea,
+commit cf0a38ad9774ee9acff3164052688f7a58a1c72c (2026-10-14), package version 6.5.0.
+
+No REA code is included. The text was rewritten in Thai for local tools only
+(no MCP server, no runtime download) by Square Tech Solutions Co., Ltd.
+The scripts in scripts/ are original work.
+
+The original licence:
+
+MIT License
+
+Copyright (c) 2026 morluto
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

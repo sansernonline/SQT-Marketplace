@@ -1,0 +1,14 @@
+{
+  "rows": [
+    {
+      "coverage_id": "C-1",
+      "entrypoint": "src/routes/orders.js#GET /orders/:id",
+      "boundary": "ลูกค้า → คำสั่งซื้อ",
+      "class": "idor",
+      "status": "checked",
+      "finding_ids": [
+        "F-001"
+      ]
+    }
+  ]
+}

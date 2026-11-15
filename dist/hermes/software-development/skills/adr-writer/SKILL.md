@@ -1,0 +1,88 @@
+---
+name: adr-writer
+description: Use when recording why an architecture choice was made
+---
+
+# Architecture Decision Record (ADR) Writer
+
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+
+## When to use this skill
+
+- Choosing between two or more technical options
+- Significant change to existing architecture
+- Deprecating a technology or pattern
+- Documenting "why" for future team members
+
+## 0 · หาแบบที่มีอยู่ก่อน (ทุกครั้ง)
+
+ก่อนใช้โครงหรือแม่แบบในไฟล์นี้ ดูก่อนว่าผู้ใช้ ลูกค้า หรือโปรเจกต์มีแบบของตัวเองหรือยัง:
+
+- **ที่ดู:** ADR (Architecture Decision Record) ที่มีอยู่: `docs/adr/` · `docs/decisions/` · `doc/architecture/decisions/` · `adr/` · ไฟล์ `.adr-dir` → ดูรูปแบบ (Nygard · MADR · Y-statement) ชื่อไฟล์ และเลขล่าสุด
+- **ผล:** เจอ → ใช้แบบนั้น (หัวข้อ ลำดับ ชื่อฟิลด์ เลขรัน) แล้วบอกในคำตอบว่าใช้แบบจากไฟล์ไหน · ไม่เจอ → ใช้แม่แบบในไฟล์นี้เป็นค่าสำรอง และบอกว่าไม่พบแบบเดิม
+- **ยังต้องมีทุกแบบ:** ต่อเลขจากไฟล์ล่าสุด · ใช้ชื่อสถานะเดิมของทีม
+
+## ADR Numbering
+
+- Sequential: ADR-0001, ADR-0002, ...
+- Never reuse numbers, even if ADR is superseded
+- Save as `docs/decisions/ADR-NNNN-<slug>.md` (see `document-naming` and `project-doc-set`)
+- Keep an index at `docs/decisions/README.md` — one table `| ADR | Decision | Status | Date |` — add a row when an ADR is created and edit the row when its status changes, so nobody has to open 20 files to find the live decisions (idea from wshobson architecture-decision-records)
+
+## Status Lifecycle
+
+```
+Proposed → Accepted → Deprecated/Superseded
+              ↓
+           Rejected (if not accepted)
+```
+
+## Output Template
+
+Copy **[`assets/adr.md`](assets/adr.md)** and fill it in. Do not write the outline from memory.
+
+- Do not add, remove or reorder headings and `**fields:**`. A section marked `<!-- optional -->` may be deleted whole when it does not apply.
+- A value you do not know yet → `(รอยืนยัน)`, never a guess and never the template's placeholder.
+- Before handing over, run the shared checker until it passes (paths from this skill's folder):
+
+  ```bash
+  python <โฟลเดอร์ skill polished-document-style ใน plugin superuser>/scripts/check_outline.py assets/adr.md <your ADR file>
+  ```
+
+  It flags missing or reordered headings, missing fields, changed table headers, and anything still unfilled (`<...>`, `YYYY-MM-DD`, `XXXX`, `...`, a field still listing every option).
+
+## Quality Checklist
+
+Before finalizing:
+
+- [ ] Title clearly states the decision (not just the topic)
+- [ ] Context explains WHY this decision is needed now
+- [ ] At least 2 options considered (even if one is "do nothing")
+- [ ] Trade-offs are honest — every choice has downsides
+- [ ] Consequences include both positive AND negative
+- [ ] Consequences name **one way to confirm the decision is still followed** — a test, a lint or dependency rule, or a review-checklist line (MADR calls this Confirmation); "we will be careful" is not one
+- [ ] Could a new team member understand this in 6 months?
+- [ ] `check_outline.py` passes
+
+## Anti-patterns
+
+- Writing ADR after implementation is done (write BEFORE)
+- Listing only the chosen option (need real alternatives)
+- Vague titles like "Database Decision" (be specific: "Use PostgreSQL over MongoDB for user data")
+- Skipping "Negative consequences" (every decision has trade-offs)
+- Editing accepted ADRs (create new one that supersedes it instead)
+
+---
+
+## Document Look
+
+This skill decides **what goes in** the document. It does not decide **how it looks** —
+load the matching skill before writing, not after:
+
+| What is being handed over | Load |
+|---|---|
+| Markdown someone reads (repo, wiki, issue tracker) | `polished-document-style` |
+| A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `branded-document-design` |
+| The point needs a picture to land | `markdown-visuals`, then `diagram-figures` for project documents (`software-diagrams` only for README / PR notes) |
+
+Default formatting is not neutral — it reads as unfinished work.

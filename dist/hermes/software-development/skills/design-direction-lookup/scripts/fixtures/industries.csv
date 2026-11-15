@@ -1,0 +1,4 @@
+id,name_th,name_en,keywords_th,keywords_en,personality,looks,palette_ids,font_pair_ids,cautions_th,decision_rule_th
+gold-shop,ร้านทอง,gold shop,ร้านทอง;ทองรูปพรรณ;ทองคำแท่ง;เยาวราช;เครื่องประดับ,gold;jewelry;jewellery;bullion,6;3,luxury;editorial;luxury;thai-craft,tw-indigo;gold-ink;jade-paper;low-contrast,inter-pair;noto-only;plex-pair;trirong-pair,ราคาทองต้องบอกเวลาประกาศทุกครั้ง,ลูกค้าสูงวัยใช้ตัวเนื้อ 18px ขึ้นไป
+coffee-shop,ร้านกาแฟ,coffee shop,ร้านกาแฟ;คาเฟ่;กาแฟสด,cafe;coffee;espresso,3,editorial;bento;playful,jade-paper;gold-ink,plex-pair;trirong-pair,ภาพเมนูต้องเป็นของจริง,ใช้ภาพถ่ายนำ
+dental-clinic,คลินิกทันตกรรม,dental clinic,คลินิกทันตกรรม;ทำฟัน;จัดฟัน,dental;dentist;clinic,2,quiet-utility;bento;editorial,jade-paper,plex-pair,ห้ามใช้ภาพฟันก่อนหลังที่ไม่ได้รับอนุญาต,จองคิวต้องอยู่บนสุด

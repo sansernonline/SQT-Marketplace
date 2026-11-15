@@ -1,0 +1,14 @@
+{
+  "_note": "เพดานของ rich menu ที่ richmenu_check.py ใช้ · ต้นทางเดียวกับตารางข้อ 1 ใน SKILL.md ถ้าแก้ที่หนึ่งต้องแก้อีกที่",
+  "checked": "2026-10-26",
+  "recheck_by": "2027-04-26",
+  "source": "https://developers.line.biz/en/reference/messaging-api/ (Requirements for rich menu image · rich menu object)",
+  "image_formats": ["png", "jpeg"],
+  "width_range": [800, 2500],
+  "min_height": 250,
+  "min_aspect_ratio": 1.45,
+  "max_file_bytes": 1000000,
+  "max_file_bytes_note": "หน้า LINE เขียน 1 MB · ตีความเป็น 1,000,000 ไบต์ (เข้มกว่า) ยังไม่ได้ยืนยันว่า LINE นับ 1,048,576",
+  "max_areas": 20,
+  "chat_bar_text_max": 14
+}

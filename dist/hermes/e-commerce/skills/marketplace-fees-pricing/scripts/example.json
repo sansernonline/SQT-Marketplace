@@ -1,0 +1,7 @@
+{
+  "rates_checked": "2026-10-06",
+  "items": [
+    { "name": "กระเป๋าผ้า Shopee ไม่จด VAT", "cost": 120, "shipping": 15, "fixed": 1.07, "margin_pct": 20, "vat_registered": false, "fees_pct": { "commission": 10.7, "transaction": 3.21 } },
+    { "name": "กระเป๋าผ้า Shopee จด VAT", "cost": 120, "shipping": 15, "fixed": 1.07, "margin_pct": 20, "vat_registered": true, "fees_pct": { "commission": 10.7, "transaction": 3.21 }, "campaign": { "extra_pct": 3, "voucher": 20 } }
+  ]
+}

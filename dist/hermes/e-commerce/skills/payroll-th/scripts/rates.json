@@ -1,0 +1,19 @@
+{
+  "checked": "2026-10-06",
+  "source": "payroll-th/SKILL.md ส่วน 2 · https://www.rd.go.th (อัตราภาษีเงินได้บุคคลธรรมดา, ม.48) · เพดานประกันสังคม https://www.infoquest.co.th/2025/550753",
+  "sso": { "rate_pct": 5, "wage_floor": 1650, "wage_floor_source": "social-security-th/SKILL.md บรรทัด Workflow ข้อ 2: min(max(ค่าจ้าง, 1,650), เพดาน) x 5% ปัดเป็นบาท",
+          "wage_cap": 17500, "note": "ฐานค่าจ้างสูงสุด 17,500 บาท เงินสมทบสูงสุด 875 ต่อเดือน (ตรงกับ scripts/check/facts.json sso-wage-cap-2569)" },
+  "expense": { "rate_pct": 50, "max": 100000 },
+  "allowance": { "personal": 60000, "spouse": 60000, "child": 30000, "child_2nd_plus_born_2561": 60000, "parent": 30000 },
+  "pvd": { "max_pct_of_wage": 15, "retirement_cap": 500000 },
+  "brackets": [
+    { "up_to": 150000, "rate_pct": 0 },
+    { "up_to": 300000, "rate_pct": 5 },
+    { "up_to": 500000, "rate_pct": 10 },
+    { "up_to": 750000, "rate_pct": 15 },
+    { "up_to": 1000000, "rate_pct": 20 },
+    { "up_to": 2000000, "rate_pct": 25 },
+    { "up_to": 5000000, "rate_pct": 30 },
+    { "up_to": null, "rate_pct": 35 }
+  ]
+}

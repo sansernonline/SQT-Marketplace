@@ -1,0 +1,173 @@
+{
+  "audit": {
+    "date": "2026-10-26",
+    "repo": "example-shop",
+    "commit": "a1b2c3d",
+    "profile": "quick"
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "fingerprint": "14ac27e2d6be558b",
+      "verdict": "confirmed",
+      "severity": "high",
+      "title": "ดูคำสั่งซื้อของลูกค้าคนอื่นได้ด้วยการเปลี่ยนเลข id",
+      "class": "idor",
+      "owasp": "A01",
+      "cwe": "CWE-639",
+      "location": {
+        "file": "src/orders/order-service.js",
+        "line": 42,
+        "symbol": "getOrder"
+      },
+      "entrypoint": "src/routes/orders.js#GET /orders/:id",
+      "trace": [
+        {
+          "file": "src/routes/orders.js",
+          "line": 12,
+          "note": "รับ id จาก URL แล้วส่งต่อโดยไม่ตรวจเจ้าของ"
+        },
+        {
+          "file": "src/orders/order-service.js",
+          "line": 42,
+          "note": "ค้นด้วย id อย่างเดียว ไม่มีเงื่อนไข customer_id"
+        }
+      ],
+      "preconditions": [
+        "ล็อกอินเป็นลูกค้าคนใดก็ได้"
+      ],
+      "impact": "ลูกค้าที่ล็อกอินแล้วอ่านชื่อ ที่อยู่ เบอร์โทร ของคำสั่งซื้อทุกรายการได้",
+      "owner_impact_th": "ลูกค้าคนหนึ่งเห็นชื่อ ที่อยู่ และเบอร์โทรของลูกค้าทุกคน ต้องแจ้งเหตุตาม PDPA ถ้าถูกใช้จริง",
+      "pdpa": {
+        "personal_data": true,
+        "kinds": [
+          "ชื่อ",
+          "ที่อยู่",
+          "เบอร์โทร"
+        ]
+      },
+      "evidence": "GET /orders/1002 ด้วย session ของลูกค้า 1001 ได้ 200 และข้อมูลของลูกค้า 1002 (รันใน docker-sandbox)",
+      "missing": null,
+      "check_plan": null,
+      "reject_reason": null,
+      "fix": "เพิ่มเงื่อนไข customer_id = ผู้ใช้ปัจจุบัน ใน getOrder และคืน 404 เมื่อไม่ใช่เจ้าของ",
+      "verified_by": "verifier-1",
+      "hunted_by": "hunter-auth",
+      "coverage_ids": [
+        "C-orders-read-idor"
+      ]
+    },
+    {
+      "id": "F-002",
+      "fingerprint": "6d79fdfa375bdca3",
+      "verdict": "confirmed",
+      "severity": "medium",
+      "title": "ช่องค้นหาสินค้าต่อสตริงเป็นคำสั่ง SQL",
+      "class": "sqli",
+      "owasp": "A05",
+      "cwe": "CWE-89",
+      "location": {
+        "file": "src/products/search.js",
+        "line": 18,
+        "symbol": "searchProducts"
+      },
+      "entrypoint": "src/routes/products.js#GET /products?q=",
+      "trace": [
+        {
+          "file": "src/routes/products.js",
+          "line": 7,
+          "note": "ส่ง q จาก query string ตรง ๆ"
+        },
+        {
+          "file": "src/products/search.js",
+          "line": 18,
+          "note": "ต่อ q ลงในคำสั่ง LIKE"
+        }
+      ],
+      "preconditions": [],
+      "impact": "อ่านตารางสินค้าได้ทั้งหมดรวมสินค้าที่ซ่อน · ฐานข้อมูลใช้สิทธิ์อ่านอย่างเดียวจึงแก้ข้อมูลไม่ได้",
+      "owner_impact_th": "คนนอกเห็นราคาทุนและสินค้าที่ยังไม่เปิดขาย",
+      "pdpa": {
+        "personal_data": false,
+        "kinds": []
+      },
+      "evidence": "q=%' UNION SELECT name,cost FROM products-- คืนราคาทุน (รันใน docker-sandbox)",
+      "fix": "ใช้ parameter แทนการต่อสตริง",
+      "verified_by": "verifier-2",
+      "hunted_by": "hunter-injection",
+      "coverage_ids": [
+        "C-products-search-sqli"
+      ]
+    },
+    {
+      "id": "F-003",
+      "fingerprint": "cbb90034f8012c6b",
+      "verdict": "needs_validation",
+      "severity": null,
+      "title": "หน้า admin อาจเปิดจากอินเทอร์เน็ตได้",
+      "class": "exposed-admin",
+      "owasp": "A02",
+      "cwe": "CWE-284",
+      "location": {
+        "file": "deploy/nginx.conf",
+        "line": 30,
+        "symbol": null
+      },
+      "entrypoint": "deploy/nginx.conf#location /admin",
+      "trace": [
+        {
+          "file": "deploy/nginx.conf",
+          "line": 30,
+          "note": "ไม่มี allow/deny ตาม IP"
+        }
+      ],
+      "preconditions": [],
+      "impact": "ถ้าเปิดจริง คนนอกเดารหัส admin ได้",
+      "owner_impact_th": "อาจมีคนนอกเข้าหลังร้านได้",
+      "pdpa": {
+        "personal_data": false,
+        "kinds": []
+      },
+      "evidence": "โค้ดไม่จำกัด IP แต่ไม่รู้ว่า firewall หน้าเครื่องกันไว้หรือไม่",
+      "missing": "กฎ firewall ของเครื่องจริง",
+      "check_plan": "เจ้าของเปิด https://<โดเมน>/admin จากเน็ตมือถือ ถ้าเห็นหน้า login แปลว่าเปิด",
+      "hunted_by": "hunter-config",
+      "coverage_ids": [
+        "C-admin-exposure"
+      ]
+    },
+    {
+      "id": "F-004",
+      "fingerprint": "96dadef9c0e48321",
+      "verdict": "rejected",
+      "title": "อัปโหลดรูปโปรไฟล์รับไฟล์ .php",
+      "class": "unrestricted-upload",
+      "owasp": "A06",
+      "cwe": "CWE-434",
+      "location": {
+        "file": "src/profile/upload.js",
+        "line": 25,
+        "symbol": "saveAvatar"
+      },
+      "entrypoint": "src/routes/profile.js#POST /profile/avatar",
+      "trace": [
+        {
+          "file": "src/routes/profile.js",
+          "line": 9,
+          "note": "รับไฟล์"
+        }
+      ],
+      "pdpa": {
+        "personal_data": false,
+        "kinds": []
+      },
+      "evidence": "ไฟล์ถูกตั้งชื่อใหม่เป็น uuid.jpg และเก็บนอก web root",
+      "reject_reason": "ตรวจชนิดจากเนื้อไฟล์และเก็บนอก web root จึงรันไม่ได้",
+      "hunted_by": "hunter-upload",
+      "verified_by": "verifier-1",
+      "coverage_ids": [
+        "C-profile-upload"
+      ]
+    }
+  ]
+}
