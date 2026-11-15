@@ -1,5 +1,10 @@
 # Changelog — software-development
 
+## 3.5.1 — 2026-11-15
+
+- `design-direction-lookup` ฟอนต์ SIPA 14 แถวมีค่า Latin และน้ำหนักจากไฟล์ .ttf (ตรวจจาก mirror ไม่ใช่ต้นทาง SIPA) · TH Charmonman · TH Srisakdi · TH Charm of AU ยังไม่รู้ใบอนุญาต (ไม่ใช่ DIP-SIPA)
+- กฎ `flutter-11` บอกทาง `calendarDelegate` สำหรับ พ.ศ. พร้อมลิงก์ api.flutter.dev · `ux-081` (iOS ซูมช่องกรอกต่ำกว่า 16 px) มีที่มาแต่เป็นแหล่งรอง · `liff-12` ยังไม่มีข้อความทางการบอกสัดส่วน Compact/Tall
+
 ## 3.5.0 — 2026-11-15
 
 - description ของ skill ทั้ง 104 ตัวเป็นภาษาอังกฤษประโยคเดียว ยาวไม่เกิน 65 ตัวอักษร · รายการ skill ของ plugin นี้ลดจาก 12,867 เหลือ 9,642 ตัวอักษร · รวมทุก plugin เหลือ 24,071 ตัว ต่ำกว่างบตั้งต้น 30,000 ของ Claude Code จึงไม่ต้องตั้ง `skillListingBudgetFraction` แล้ว (ผู้ใช้สั่ง 2026-11-15)
